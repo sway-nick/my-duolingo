@@ -8,15 +8,16 @@ const API_VERSION = 'v1';
  */
 const ROUTES = {
   v1: {
-    health: healthEndpoint,
+    health: {
+      get: healthEndpoint,
+    },
 
-    // Reserved routes
-    auth: notImplementedEndpoint,
-    lessons: notImplementedEndpoint,
-    words: notImplementedEndpoint,
-    review: notImplementedEndpoint,
-    stats: notImplementedEndpoint,
-    settings: notImplementedEndpoint,
+    auth: {},
+    lessons: {},
+    words: {},
+    review: {},
+    stats: {},
+    settings: {},
   },
 };
 
@@ -33,32 +34,18 @@ function routeGet(e) {
   const api = ROUTES[version];
 
   if (!api) {
-    return jsonResponse({
-      success: false,
-      error: `API version '${version}' is not supported.`,
-    });
+    return errorResponse(`API version '${version}' is not supported.`, 404);
   }
 
   const handler = api[route];
 
   if (!handler) {
-    return jsonResponse({
-      success: false,
-      error: `Route '${route}' not found.`,
-    });
+    return errorResponse(`Route '${route}' not found.`, 404);
   }
 
-  return handler(e);
-}
+  if (typeof handler.get !== 'function') {
+    return errorResponse('GET method is not supported.', 405);
+  }
 
-/**
- * Placeholder endpoint.
- *
- * @returns {GoogleAppsScript.Content.TextOutput}
- */
-function notImplementedEndpoint() {
-  return jsonResponse({
-    success: false,
-    error: 'Not implemented yet.',
-  });
+  return handler.get(e);
 }
