@@ -2,55 +2,46 @@ function renderAppLayout() {
   const app = document.querySelector('#app');
 
   app.innerHTML = `
-    <header class="app-header">
-      <div class="logo">
-        <h2>English Trainer</h2>
-        <p>Учите слова легко!</p>
-      </div>
+    <div class="mobile-app">
 
-      <nav class="navigation">
-        <button>🎓 Тренировка</button>
-        <button>♡ Избранное</button>
-        <button>📊 Статистика</button>
-        <button>📖 Словарь</button>
-        <button>⚙</button>
-        <button>☀</button>
+      <header class="mobile-header">
+        <div class="brand">
+          <span class="brand-icon">📖</span>
+          <div>
+            <h2>English Trainer</h2>
+            <small>Учите слова легко!</small>
+          </div>
+        </div>
+        <div class="header-icons">
+          <button>⚙</button>
+          <button>☀</button>
+        </div>
+      </header>
+
+      <main class="training-screen">
+        <div id="training"></div>
+      </main>
+
+      <nav class="bottom-nav">
+        <button>
+          🎓
+          <span>Тренировка</span>
+        </button>
+        <button>
+          ♡
+          <span>Избранное</span>
+        </button>
+        <button>
+          📊
+          <span>Статистика</span>
+        </button>
+        <button>
+          📖
+          <span>Словарь</span>
+        </button>
       </nav>
-    </header>
 
-    <main class="app-layout">
-
-      <aside class="sidebar left-sidebar">
-        <div class="panel">
-          <h3>Режим</h3>
-        </div>
-
-        <div class="panel">
-          <h3>Сегодня</h3>
-        </div>
-
-        <div class="panel">
-          <h3>Прогресс</h3>
-        </div>
-      </aside>
-
-
-      <section class="training-area">
-        <div id="words"></div>
-      </section>
-
-
-      <aside class="sidebar right-sidebar">
-        <div class="panel">
-          <h3>Действия</h3>
-        </div>
-
-        <div class="panel">
-          <h3>Статистика слова</h3>
-        </div>
-      </aside>
-
-    </main>
+    </div>
   `;
 }
 
