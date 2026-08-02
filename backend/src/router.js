@@ -12,9 +12,14 @@ const ROUTES = {
       get: healthEndpoint,
     },
 
-    auth: {},
+    auth: {
+      post: loginPost,
+    },
+
     lessons: {},
-    words: {},
+    words: {
+      get: wordsGet,
+    },
     review: {},
     stats: {},
     settings: {},

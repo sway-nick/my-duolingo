@@ -1,0 +1,10 @@
+### Health (GET)
+
+GET https://script.google.com/macros/s/AKfycbxygtzp1X2RThCt7hN-0_CXh1uR_J7HDWG3sC5zeJZdFltXp395tAlpYuMlHh9SKuIpLw/exec?route=health
+
+
+###
+
+### Words (GET)
+
+GET https://script.google.com/macros/s/AKfycbxygtzp1X2RThCt7hN-0_CXh1uR_J7HDWG3sC5zeJZdFltXp395tAlpYuMlHh9SKuIpLw/exec?route=words
