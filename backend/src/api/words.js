@@ -3,7 +3,7 @@ function wordsGet() {
 
   const values = sheet.getDataRange().getValues();
 
-  const headers = values.shift();
+  values.shift();
 
   const words = values.map((row) => {
     return {

@@ -5,7 +5,13 @@
  * @returns {GoogleAppsScript.Content.TextOutput}
  */
 function doGet(e) {
-  return routeGet(e);
+  try {
+    return routeGet(e);
+  } catch (error) {
+    console.error(error);
+
+    return errorResponse(error.message || 'Internal server error.', 500);
+  }
 }
 
 /**
@@ -23,7 +29,13 @@ function doPost(e) {
     console.log('Cannot stringify event object.');
   }
 
-  return routePost(e);
+  try {
+    return routePost(e);
+  } catch (error) {
+    console.error(error);
+
+    return errorResponse(error.message || 'Internal server error.', 500);
+  }
 }
 
 /**
