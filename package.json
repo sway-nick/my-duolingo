@@ -14,5 +14,8 @@
     "url": "https://github.com/sway-nick/my-duolingo.git"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^3.3.0"
+  }
 }
