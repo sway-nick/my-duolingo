@@ -1,0 +1,35 @@
+# Auto detect text files and normalize line endings
+* text=auto eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Batch files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.svg text
+
+# Fonts
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+
+# Documents
+*.pdf binary
+
+# Google Apps Script
+*.gs text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.md text eol=lf
