@@ -12,10 +12,11 @@
 
     <p id="status">Проверка API...</p>
 
-    <pre id="words"></pre>
+    <div id="words"></div>
 
     <script type="module">
       import { getHealth, getWords } from './services/api.js';
+      import { renderWordList } from './components/wordList.js';
 
       async function init() {
         const health = await getHealth();
@@ -24,7 +25,7 @@
 
         const words = await getWords();
 
-        document.querySelector('#words').textContent = JSON.stringify(words.data, null, 2);
+        renderWordList(words.data);
       }
 
       init();
