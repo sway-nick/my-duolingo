@@ -10,20 +10,22 @@
   </head>
 
   <body>
-    <h1>My Duolingo</h1>
-
-    <p id="status">Проверка API...</p>
-
-    <div id="words"></div>
+    <div id="app"></div>
 
     <script type="module">
       import { getHealth, getWords } from './services/api.js';
+      import { renderAppLayout } from './components/layout/AppLayout.js';
       import { renderWordList } from './components/wordList.js';
 
       async function init() {
+        renderAppLayout();
+
         const health = await getHealth();
 
-        document.querySelector('#status').textContent = health.data.status;
+        const status = document.createElement('p');
+        status.textContent = health.data.status;
+
+        document.querySelector('.app-header').appendChild(status);
 
         const words = await getWords();
 
