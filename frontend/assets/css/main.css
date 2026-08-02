@@ -1,0 +1,33 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+#words {
+  display: grid;
+  gap: 16px;
+}
+
+.word-card {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.word-card h3 {
+  margin: 0 0 8px;
+}
+
+.word-card p {
+  margin: 4px 0;
+}
+
+.word-card small {
+  color: #666;
+}
