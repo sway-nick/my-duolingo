@@ -12,6 +12,22 @@
 
     <p id="status">Проверка API...</p>
 
-    <script type="module" src="./services/api.js"></script>
+    <pre id="words"></pre>
+
+    <script type="module">
+      import { getHealth, getWords } from './services/api.js';
+
+      async function init() {
+        const health = await getHealth();
+
+        document.querySelector('#status').textContent = health.data.status;
+
+        const words = await getWords();
+
+        document.querySelector('#words').textContent = JSON.stringify(words.data, null, 2);
+      }
+
+      init();
+    </script>
   </body>
 </html>
