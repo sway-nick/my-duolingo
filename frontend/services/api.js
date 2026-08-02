@@ -1,5 +1,5 @@
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbxygtzp1X2RThCt7hN-0_CXh1uR_J7HDWG3sC5zeJZdFltXp395tAlpYuMlHh9SKuIpLw/exec';
+  'https://script.google.com/macros/s/AKfycby0lLhpcGJOddZ6L64_D5i14zcU1ZdCtkgA3sj1G9w36eelkGPP4M6k2iTZekTGFAHhFg/exec';
 
 async function checkHealth() {
   const response = await fetch(`${API_URL}?route=health`);
