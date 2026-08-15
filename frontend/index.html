@@ -1,65 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="stylesheet" href="./assets/css/main.css" />
-
-    <title>English Trainer</title>
-  </head>
-
-  <body>
-    <div id="app"></div>
-
-    <script type="module">
-      import { getHealth, getWords } from './services/api.js';
-      import { renderAppLayout } from './components/layout/AppLayout.js';
-      import { renderTrainingCard } from './components/training/TrainingCard.js';
-
-      async function init() {
-        try {
-          // Создаём структуру приложения
-          renderAppLayout();
-
-          // Проверяем API
-          const health = await getHealth();
-          console.log('API status:', health);
-
-          // Загружаем слова
-          const words = await getWords();
-
-          // Проверяем, что слова загрузились
-          if (words?.data?.length > 0) {
-            // Отображаем карточку обучения с первым словом
-            renderTrainingCard(words.data[0]);
-          } else {
-            console.warn('Слова не загружены или список пуст');
-            // Здесь можно показать сообщение пользователю
-            const app = document.getElementById('app');
-            app.innerHTML += `
-              <div style="text-align: center; padding: 2rem; color: #666;">
-                <p>😕 Слова временно недоступны</p>
-                <p style="font-size: 0.9rem;">Попробуйте обновить страницу</p>
-              </div>
-            `;
-          }
-        } catch (error) {
-          console.error('Ошибка при инициализации:', error);
-
-          // Показываем сообщение об ошибке пользователю
-          const app = document.getElementById('app');
-          app.innerHTML += `
-            <div style="text-align: center; padding: 2rem; color: #d32f2f;">
-              <p>⚠️ Ошибка загрузки данных</p>
-              <p style="font-size: 0.9rem;">Проверьте подключение к серверу</p>
-            </div>
-          `;
-        }
-      }
-
-      // Запускаем приложение
-      init();
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Современное веб-приложение для изучения английского языка">
+  <meta name="theme-color" content="#58cc02">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./assets/css/main.css">
+  <title>English Trainer — Учите английский</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="./app.js"></script>
+</body>
 </html>
