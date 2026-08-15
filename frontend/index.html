@@ -9,7 +9,6 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <script>
-    // Принудительное удаление старых Service Worker и кэша при загрузке
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(function(registrations) {
         for (var i = 0; i < registrations.length; i++) {
@@ -26,11 +25,11 @@
     }
   </script>
   <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="./assets/css/app.css?v=3.0">
+  <link rel="stylesheet" href="./assets/css/app.css?v=4.0">
   <title>English Trainer — Изучение английского языка</title>
 </head>
 <body>
   <div id="app"></div>
-  <script type="module" src="./main.js?v=3.0"></script>
+  <script type="module" src="./main.js?v=4.0"></script>
 </body>
 </html>
