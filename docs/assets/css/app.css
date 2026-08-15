@@ -96,6 +96,9 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -105,12 +108,17 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button, input, select, textarea {
   font-family: inherit;
   color: inherit;
+  max-width: 100%;
 }
 
 button {
@@ -1601,53 +1609,133 @@ a {
 
 /* Mobile (< 768px) */
 @media (max-width: 768px) {
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden !important;
+  }
+
   .app-sidebar-left {
     display: none;
   }
 
   .app-viewport-area {
     margin-left: 0;
+    width: 100%;
+    max-width: 100%;
     padding-bottom: 84px;
+    overflow-x: hidden;
   }
 
   .app-header-bar {
-    padding: 0 16px;
+    padding: 0 12px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .header-brand {
     display: flex;
+    font-size: 15px;
+  }
+
+  .header-stats-group {
+    gap: 6px;
+  }
+
+  .header-stat-badge {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .header-stat-badge .stat-icon {
+    font-size: 14px;
+  }
+
+  .header-level-badge {
+    display: none; /* Hide level badge on small screens to prevent topbar overflow */
   }
 
   .app-main-viewport {
-    padding: 20px 16px;
+    padding: 16px 12px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .dashboard-hero {
-    padding: 24px 20px;
+    padding: 20px 16px;
+    width: 100%;
   }
 
   .hero-title {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .hero-stats-row {
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 12px 20px;
   }
 
   .dashboard-sidebar-right {
     grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .module-card {
-    padding: 20px;
+    padding: 18px 16px;
+    width: 100%;
+  }
+
+  .module-lessons-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .lesson-chip {
+    padding: 12px 14px;
+    width: 100%;
   }
 
   .mc-options {
     grid-template-columns: 1fr;
   }
 
+  .mp-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .mp-card {
+    min-height: 54px;
+    padding: 12px 10px;
+    font-size: 15px;
+  }
+
   .stats-overview {
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-card-value {
+    font-size: 24px;
+  }
+
+  .feedback-bar {
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .feedback-bar .check-button {
+    margin-top: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   /* Floating Mobile Bottom Navigation */
@@ -1657,7 +1745,7 @@ a {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 68px;
+    height: 64px;
     background-color: var(--bg-glass);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -1665,21 +1753,24 @@ a {
     justify-content: space-around;
     align-items: center;
     z-index: 99;
-    padding: 0 8px;
+    padding: 0 4px;
+    width: 100%;
+    max-width: 100vw;
   }
 
   .mobile-nav-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
     color: var(--text-muted);
     font-size: 18px;
     font-weight: 600;
+    flex: 1;
   }
 
   .mobile-nav-btn .m-label {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .mobile-nav-btn.active {
