@@ -1,35 +1,31 @@
-const CACHE_NAME = 'my-duolingo-v1';
+const CACHE_NAME = 'my-duolingo-v2.1';
 const APP_SHELL_FILES = [
   './index.html',
-  './assets/css/main.css',
+  './assets/css/main.css?v=2.1',
   './manifest.json',
-  // Note: Add all necessary JS module paths here.
-  // './js/app.js',
-  // './js/initialData.js',
-  // './js/storageService.js'
+  './app.js?v=2.1'
 ];
 
 // Install Event
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Install');
+  console.log('[Service Worker] Install v2.1');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[Service Worker] Caching App Shell');
       return cache.addAll(APP_SHELL_FILES);
     })
   );
   self.skipWaiting();
 });
 
-// Activate Event
+// Activate Event - purge all old caches
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activate');
+  console.log('[Service Worker] Activate & Purge Old Caches');
   event.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[Service Worker] Removing old cache', key);
+            console.log('[Service Worker] Removing old cache:', key);
             return caches.delete(key);
           }
         })
@@ -39,45 +35,24 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event
+// Fetch Event - Network First strategy for dev & updates
 self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET') return;
 
-  // Cache-first for local static assets (App Shell)
-  if (url.origin === location.origin) {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request).then((fetchResponse) => {
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, fetchResponse.clone());
-            return fetchResponse;
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
           });
-        });
+        }
+        return networkResponse;
       })
-    );
-  } else {
-    // Network-first for API calls or external resources
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, response.clone());
-            return response;
-          });
-        })
-        .catch(() => {
-          return caches.match(event.request).then((response) => {
-            if (response) {
-              return response;
-            }
-            // Offline fallback for API
-            if (event.request.headers.get('accept').includes('application/json')) {
-              return new Response(JSON.stringify({ success: true, offline: true }), {
-                headers: { 'Content-Type': 'application/json' }
-              });
-            }
-          });
-        })
-    );
-  }
+      .catch(() => {
+        // Fallback to cache when offline
+        return caches.match(event.request);
+      })
+  );
 });

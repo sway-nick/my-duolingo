@@ -205,7 +205,12 @@ function initApp() {
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').catch(() => {
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+                for (let registration of registrations) {
+                    registration.update();
+                }
+            });
+            navigator.serviceWorker.register('./sw.js?v=2.1').catch(() => {
                 console.log('Service worker registration failed');
             });
         });
