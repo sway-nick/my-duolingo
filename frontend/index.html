@@ -8,12 +8,29 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <script>
+    // Принудительное удаление старых Service Worker и кэша при загрузке
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var i = 0; i < registrations.length; i++) {
+          registrations[i].unregister();
+        }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        for (var i = 0; i < names.length; i++) {
+          caches.delete(names[i]);
+        }
+      });
+    }
+  </script>
   <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="./assets/css/main.css?v=2.1">
+  <link rel="stylesheet" href="./assets/css/app.css?v=3.0">
   <title>English Trainer — Изучение английского языка</title>
 </head>
 <body>
   <div id="app"></div>
-  <script type="module" src="./app.js?v=2.1"></script>
+  <script type="module" src="./main.js?v=3.0"></script>
 </body>
 </html>
