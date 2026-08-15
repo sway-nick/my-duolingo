@@ -1588,26 +1588,61 @@ a {
 }
 
 /* ==========================================================================
-   RESPONSIVE BREAKPOINTS (MOBILE, TABLET & DESKTOP)
+   RESPONSIVE BREAKPOINTS (375px / 768px / 1440px)
    ========================================================================== */
 
-/* Tablet (768px - 1024px) */
-@media (max-width: 1024px) {
+/* 1. Large Desktop (>= 1440px) */
+@media (min-width: 1440px) {
+  :root {
+    --max-content-w: 1380px;
+  }
+
+  .premium-dashboard {
+    grid-template-columns: 1fr 350px;
+    gap: 48px;
+  }
+
+  .module-lessons-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 14px;
+  }
+
+  .stats-overview {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 2. Tablet & Mid-Desktop (769px to 1439px) */
+@media (min-width: 769px) and (max-width: 1439px) {
+  .app-sidebar-left {
+    width: 220px;
+  }
+
+  .app-viewport-area {
+    margin-left: 220px;
+  }
+
   .premium-dashboard {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
 
   .dashboard-sidebar-right {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .module-lessons-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .stats-overview {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Mobile (< 768px) */
+/* 3. Mobile Range (<= 768px) */
 @media (max-width: 768px) {
   html, body {
     width: 100%;
@@ -1628,52 +1663,32 @@ a {
   }
 
   .app-header-bar {
-    padding: 0 12px;
+    padding: 0 14px;
     width: 100%;
-    max-width: 100%;
   }
 
   .header-brand {
     display: flex;
-    font-size: 15px;
-  }
-
-  .header-stats-group {
-    gap: 6px;
-  }
-
-  .header-stat-badge {
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-
-  .header-stat-badge .stat-icon {
-    font-size: 14px;
-  }
-
-  .header-level-badge {
-    display: none; /* Hide level badge on small screens to prevent topbar overflow */
+    font-size: 16px;
   }
 
   .app-main-viewport {
-    padding: 16px 12px;
+    padding: 20px 14px;
     width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
   }
 
   .dashboard-hero {
-    padding: 20px 16px;
+    padding: 24px 20px;
     width: 100%;
   }
 
   .hero-title {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .hero-stats-row {
     flex-wrap: wrap;
-    gap: 12px 20px;
+    gap: 14px 24px;
   }
 
   .dashboard-sidebar-right {
@@ -1682,7 +1697,7 @@ a {
   }
 
   .module-card {
-    padding: 18px 16px;
+    padding: 20px 18px;
     width: 100%;
   }
 
@@ -1692,7 +1707,7 @@ a {
   }
 
   .lesson-chip {
-    padding: 12px 14px;
+    padding: 14px 16px;
     width: 100%;
   }
 
@@ -1702,26 +1717,12 @@ a {
 
   .mp-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .mp-card {
-    min-height: 54px;
-    padding: 12px 10px;
-    font-size: 15px;
+    gap: 12px;
   }
 
   .stats-overview {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .stat-card {
-    padding: 16px;
-  }
-
-  .stat-card-value {
-    font-size: 24px;
+    gap: 12px;
   }
 
   .feedback-bar {
@@ -1738,7 +1739,7 @@ a {
     max-width: 100%;
   }
 
-  /* Floating Mobile Bottom Navigation */
+  /* Floating Mobile Bottom Bar */
   .mobile-bottom-bar {
     display: flex;
     position: fixed;
@@ -1776,6 +1777,160 @@ a {
   .mobile-nav-btn.active {
     color: var(--color-brand);
     font-weight: 700;
+  }
+}
+
+/* 4. Small Mobile Fluid / Rubber Range (<= 375px) */
+@media (max-width: 375px) {
+  html, body {
+    font-size: 15px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden !important;
+  }
+
+  .app-header-bar {
+    padding: 0 8px;
+    height: 56px;
+  }
+
+  .header-brand {
+    font-size: 14px;
+  }
+
+  .header-brand .brand-name {
+    display: none; /* Hide text, keep symbol icon on ultra-small screens */
+  }
+
+  .header-stats-group {
+    gap: 4px;
+  }
+
+  .header-stat-badge {
+    padding: 3px 6px;
+    font-size: 11px;
+    gap: 3px;
+  }
+
+  .header-stat-badge .stat-icon {
+    font-size: 12px;
+  }
+
+  .header-level-badge {
+    display: none;
+  }
+
+  .app-main-viewport {
+    padding: 12px 8px;
+    width: 100%;
+  }
+
+  .dashboard-hero {
+    padding: 16px 12px;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-badge {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-title {
+    font-size: 20px;
+    letter-spacing: -0.4px;
+  }
+
+  .hero-desc {
+    font-size: 13px;
+  }
+
+  .hero-stats-row {
+    gap: 10px 16px;
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .hero-stat-val {
+    font-size: 18px;
+  }
+
+  .hero-stat-lbl {
+    font-size: 11px;
+  }
+
+  .module-card {
+    padding: 14px 10px;
+    border-radius: var(--radius-md);
+  }
+
+  .module-title {
+    font-size: 18px;
+  }
+
+  .module-description {
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  .lesson-chip {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .lesson-chip-title {
+    font-size: 13px;
+  }
+
+  .lesson-chip-number {
+    font-size: 11px;
+  }
+
+  .mc-option {
+    padding: 16px 12px;
+    font-size: 16px;
+  }
+
+  .mp-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .mp-card {
+    min-height: 48px;
+    padding: 10px 6px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+  }
+
+  .stats-overview {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px 10px;
+  }
+
+  .stat-card-title {
+    font-size: 10px;
+  }
+
+  .stat-card-value {
+    font-size: 20px;
+  }
+
+  .mobile-bottom-bar {
+    height: 58px;
+    padding: 0 2px;
+  }
+
+  .mobile-nav-btn {
+    font-size: 16px;
+    gap: 1px;
+  }
+
+  .mobile-nav-btn .m-label {
+    font-size: 9px;
   }
 }
 
