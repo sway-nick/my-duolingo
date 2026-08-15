@@ -1591,15 +1591,26 @@ a {
    RESPONSIVE BREAKPOINTS (375px / 768px / 1440px)
    ========================================================================== */
 
-/* 1. Large Desktop (>= 1440px) */
-@media (min-width: 1440px) {
+/* Hide right sidebar widgets by default on mobile & tablet */
+.dashboard-sidebar-right {
+  display: none !important;
+}
+
+/* 1. Large Desktop (>= 1200px) */
+@media (min-width: 1200px) {
   :root {
     --max-content-w: 1380px;
   }
 
   .premium-dashboard {
     grid-template-columns: 1fr 350px;
-    gap: 48px;
+    gap: 40px;
+  }
+
+  .dashboard-sidebar-right {
+    display: flex !important;
+    flex-direction: column;
+    gap: 20px;
   }
 
   .module-lessons-grid {
@@ -1612,8 +1623,8 @@ a {
   }
 }
 
-/* 2. Tablet & Mid-Desktop (769px to 1439px) */
-@media (min-width: 769px) and (max-width: 1439px) {
+/* 2. Tablet & Mid-Desktop (769px to 1199px) */
+@media (min-width: 769px) and (max-width: 1199px) {
   .app-sidebar-left {
     width: 220px;
   }
@@ -1625,12 +1636,6 @@ a {
   .premium-dashboard {
     grid-template-columns: 1fr;
     gap: 32px;
-  }
-
-  .dashboard-sidebar-right {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
   }
 
   .module-lessons-grid {
