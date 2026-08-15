@@ -6,25 +6,25 @@ export function renderHeader() {
     
     container.innerHTML = `
         <div class="header-inner">
-            <div class="header-logo">
-                <span class="logo-icon">🦜</span>
-                <span class="logo-text">duolingo</span>
+            <div class="header-brand">
+                <span class="header-logo-icon">✦</span>
+                <span class="header-logo-text">English Trainer</span>
             </div>
-            <div class="header-stats">
-                <div class="stat-item streak" title="Серия дней">
+            <div class="header-stats-group">
+                <div class="header-stat-badge streak-badge" title="Серия дней">
                     <span class="stat-icon">🔥</span>
-                    <span id="header-streak" class="stat-value">0</span>
+                    <span id="header-streak" class="stat-num">0</span>
                 </div>
-                <div class="stat-item xp" title="Очки опыта">
+                <div class="header-stat-badge xp-badge" title="Очки опыта">
                     <span class="stat-icon">⚡</span>
-                    <span id="header-xp" class="stat-value">0</span>
+                    <span id="header-xp" class="stat-num">0</span>
                 </div>
-                <div class="stat-item hearts" title="Жизни" id="header-hearts-container">
+                <div class="header-stat-badge hearts-badge" title="Жизни" id="header-hearts-container">
                     <span class="stat-icon">❤️</span>
-                    <span id="header-hearts-count" class="stat-value">5</span>
+                    <span id="header-hearts-count" class="stat-num">5</span>
                 </div>
-                <div class="stat-item level" title="Уровень">
-                    <span class="level-badge" id="header-level">1 ур.</span>
+                <div class="header-level-badge" id="header-level" title="Уровень">
+                    Уровень 1
                 </div>
             </div>
         </div>
@@ -45,6 +45,6 @@ export function updateHeader() {
     if (levelEl) {
         const xp = StorageService.getXP() || 0;
         const level = Math.floor(xp / 100) + 1;
-        levelEl.textContent = `${level} ур.`;
+        levelEl.textContent = `Уровень ${level}`;
     }
 }

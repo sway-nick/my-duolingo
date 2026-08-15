@@ -14,63 +14,89 @@ function initApp() {
     if (!appElement) return;
 
     appElement.innerHTML = `
-        <div class="duo-app-wrapper">
-            <!-- Desktop Left Sidebar -->
-            <aside class="duo-sidebar-left" id="duo-sidebar-left">
-                <div class="duo-brand">
-                    <span class="brand-logo">🦜</span>
-                    <span class="brand-title">duolingo</span>
+        <div class="app-layout-root">
+            <!-- Left Navigation Sidebar (Desktop & Tablet) -->
+            <aside class="app-sidebar-left" id="app-sidebar-left">
+                <div class="sidebar-brand-box">
+                    <div class="brand-symbol">✦</div>
+                    <div class="brand-meta">
+                        <span class="brand-name">English</span>
+                        <span class="brand-tag">PRO</span>
+                    </div>
                 </div>
-                <nav class="duo-sidebar-nav">
-                    <button data-view="learn" class="duo-nav-btn active">
+
+                <nav class="sidebar-nav-menu">
+                    <button data-view="learn" class="nav-item-btn active">
                         <span class="nav-icon">🎓</span>
-                        <span class="nav-label">ОБУЧЕНИЕ</span>
+                        <span class="nav-text">Обучение</span>
                     </button>
-                    <button data-view="vocabulary" class="duo-nav-btn">
+                    <button data-view="vocabulary" class="nav-item-btn">
                         <span class="nav-icon">📖</span>
-                        <span class="nav-label">СЛОВАРЬ</span>
+                        <span class="nav-text">Словарь</span>
                     </button>
-                    <button data-view="stats" class="duo-nav-btn">
+                    <button data-view="stats" class="nav-item-btn">
                         <span class="nav-icon">📊</span>
-                        <span class="nav-label">СТАТИСТИКА</span>
+                        <span class="nav-text">Статистика</span>
                     </button>
-                    <button data-view="favorites" class="duo-nav-btn">
+                    <button data-view="favorites" class="nav-item-btn">
                         <span class="nav-icon">❤️</span>
-                        <span class="nav-label">ИЗБРАННОЕ</span>
+                        <span class="nav-text">Избранное</span>
                     </button>
-                    <button data-view="settings" class="duo-nav-btn">
+                    <button data-view="settings" class="nav-item-btn">
                         <span class="nav-icon">⚙️</span>
-                        <span class="nav-label">НАСТРОЙКИ</span>
+                        <span class="nav-text">Настройки</span>
                     </button>
                 </nav>
-                <div class="duo-sidebar-footer">
-                    <button id="theme-toggle-btn" class="theme-toggle-btn" title="Сменить тему">
-                        <span id="theme-icon">🌙</span> <span class="theme-label">Тема</span>
+
+                <div class="sidebar-bottom-panel">
+                    <button id="theme-toggle-btn" class="theme-switch-btn" title="Сменить тему оформления">
+                        <span id="theme-icon">🌙</span>
+                        <span class="theme-label">Тема</span>
                     </button>
                 </div>
             </aside>
 
-            <div class="duo-main-area">
-                <header class="app-header" id="app-header"></header>
-                <main class="main-content" id="main-content"></main>
+            <!-- Main Work Area -->
+            <div class="app-viewport-area">
+                <!-- Top Navigation & Stats Bar -->
+                <header class="app-header-bar" id="app-header"></header>
+                
+                <!-- Central Page View -->
+                <main class="app-main-viewport" id="main-content"></main>
             </div>
 
-            <!-- Mobile Bottom Nav -->
-            <nav class="bottom-nav" id="bottom-nav">
-                <button data-view="learn" class="nav-btn active"><span>🎓</span><small>Учиться</small></button>
-                <button data-view="vocabulary" class="nav-btn"><span>📖</span><small>Словарь</small></button>
-                <button data-view="stats" class="nav-btn"><span>📊</span><small>Статистика</small></button>
-                <button data-view="favorites" class="nav-btn"><span>❤️</span><small>Избранное</small></button>
-                <button data-view="settings" class="nav-btn"><span>⚙️</span><small>Настройки</small></button>
+            <!-- Mobile Bottom Bar Navigation -->
+            <nav class="mobile-bottom-bar" id="bottom-nav">
+                <button data-view="learn" class="mobile-nav-btn active">
+                    <span class="m-icon">🎓</span>
+                    <span class="m-label">Уроки</span>
+                </button>
+                <button data-view="vocabulary" class="mobile-nav-btn">
+                    <span class="m-icon">📖</span>
+                    <span class="m-label">Словарь</span>
+                </button>
+                <button data-view="stats" class="mobile-nav-btn">
+                    <span class="m-icon">📊</span>
+                    <span class="m-label">Прогресс</span>
+                </button>
+                <button data-view="favorites" class="mobile-nav-btn">
+                    <span class="m-icon">❤️</span>
+                    <span class="m-label">Избранное</span>
+                </button>
+                <button data-view="settings" class="mobile-nav-btn">
+                    <span class="m-icon">⚙️</span>
+                    <span class="m-label">Опции</span>
+                </button>
             </nav>
         </div>
     `;
 
     const mainContent = document.getElementById('main-content');
     const bottomNav = document.getElementById('bottom-nav');
-    const leftSidebar = document.getElementById('duo-sidebar-left');
+    const leftSidebar = document.getElementById('app-sidebar-left');
     const appHeader = document.getElementById('app-header');
 
+    // Lazy initialize Web Audio API on first interaction
     const initAudio = () => {
         AudioService.init();
         document.removeEventListener('click', initAudio);
@@ -107,14 +133,14 @@ function initApp() {
     renderHeader();
     renderSkillPath(mainContent);
 
-    // Synchronize navigation across desktop sidebar and mobile bottom-bar
+    // View Routing
     const switchView = (view) => {
         if (view === 'settings') {
             showSettingsModal();
             return;
         }
 
-        document.querySelectorAll('.duo-nav-btn, .nav-btn').forEach(btn => {
+        document.querySelectorAll('.nav-item-btn, .mobile-nav-btn').forEach(btn => {
             if (btn.dataset.view === view) {
                 btn.classList.add('active');
             } else {
@@ -141,9 +167,10 @@ function initApp() {
                 break;
         }
         updateHeader();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    document.querySelectorAll('.duo-nav-btn, .nav-btn').forEach(btn => {
+    document.querySelectorAll('.nav-item-btn, .mobile-nav-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const view = e.currentTarget.dataset.view;
             if (view) switchView(view);
@@ -153,7 +180,7 @@ function initApp() {
     document.addEventListener('start-lesson', (e) => {
         const { lessonId } = e.detail;
         if (bottomNav) bottomNav.style.display = 'none';
-        if (leftSidebar) leftSidebar.classList.add('lesson-mode');
+        if (leftSidebar) leftSidebar.classList.add('in-lesson-mode');
         if (appHeader) appHeader.style.display = 'none';
         renderLesson(mainContent, lessonId);
     });
@@ -168,7 +195,7 @@ function initApp() {
 
     const restoreNav = () => {
         if (bottomNav) bottomNav.style.display = '';
-        if (leftSidebar) leftSidebar.classList.remove('lesson-mode');
+        if (leftSidebar) leftSidebar.classList.remove('in-lesson-mode');
         if (appHeader) appHeader.style.display = '';
         switchView('learn');
     };
