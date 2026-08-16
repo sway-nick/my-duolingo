@@ -142,12 +142,6 @@
           return;
         }
 
-        try {
-          userSettings = await getUserSettings();
-        } catch (e) {
-          console.warn('Failed to load settings:', e);
-        }
-
         function sanitizeCategory(cat) {
           if (!cat) return 'Общие';
           return String(cat)
@@ -216,14 +210,14 @@
           currentMethod,
           selectedCategory,
           categories,
-          onMethodChange: async (newMethod) => {
+          onMethodChange: (newMethod) => {
             userSettings.preferredMethod = newMethod;
-            await saveUserSettings(userSettings);
+            saveUserSettings(userSettings);
             renderTrainingTab();
           },
-          onCategoryChange: async (newCategory) => {
+          onCategoryChange: (newCategory) => {
             userSettings.category = newCategory;
-            await saveUserSettings(userSettings);
+            saveUserSettings(userSettings);
             currentWordIndex = 0;
             renderTrainingTab();
           },
