@@ -222,8 +222,28 @@
           }
         } else if (currentMethod === 'quiz') {
           activeWords = getQueueForQuiz(categoryWords, userProgress);
+          // If all words in Quiz queue are completed (5/5), automatically transition to Pairs!
+          if (activeWords.length === 0) {
+            const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
+            if (pairsQueue.length > 0) {
+              userSettings.preferredMethod = 'pairs';
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              return renderTrainingTab();
+            }
+          }
         } else if (currentMethod === 'pairs') {
           activeWords = getQueueForPairs(categoryWords, userProgress, favList);
+          // If all words in Pairs queue are completed (5/5), automatically transition to Test!
+          if (activeWords.length === 0) {
+            const testQueue = getQueueForTest(categoryWords, userProgress, favList);
+            if (testQueue.length > 0) {
+              userSettings.preferredMethod = 'input';
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              return renderTrainingTab();
+            }
+          }
         } else if (currentMethod === 'input') {
           activeWords = getQueueForTest(categoryWords, userProgress, favList);
         }
