@@ -16,24 +16,34 @@ function speakWord(text, wordId = null, lang = 'en-US') {
     return false;
   }
 
-  window.speechSynthesis.cancel(); // Stop any ongoing speech
-
-  const key = wordId || text;
-  if (currentWordKey === key) {
-    clickCount += 1;
-  } else {
-    currentWordKey = key;
-    clickCount = 1;
+  // Prevent browser warning if page is freshly opened and user hasn't tapped yet
+  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+    return false;
   }
 
-  const isTurtleMode = clickCount >= 3;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  utterance.rate = isTurtleMode ? 0.40 : 0.80; // Turtle rate: 0.40, Normal: 0.80
+  try {
+    window.speechSynthesis.cancel(); // Stop any ongoing speech
 
-  window.speechSynthesis.speak(utterance);
+    const key = wordId || text;
+    if (currentWordKey === key) {
+      clickCount += 1;
+    } else {
+      currentWordKey = key;
+      clickCount = 1;
+    }
 
-  return isTurtleMode;
+    const isTurtleMode = clickCount >= 3;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = isTurtleMode ? 0.40 : 0.80; // Turtle rate: 0.40, Normal: 0.80
+
+    window.speechSynthesis.speak(utterance);
+
+    return isTurtleMode;
+  } catch (e) {
+    console.warn('SpeechSynthesis speak warning:', e);
+    return false;
+  }
 }
 
 function resetAudioCounter() {
