@@ -2,6 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=8.0';
 import { getCurrentUser, logoutUser } from '../../services/authService.js?v=8.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=8.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=8.0';
+import { speakWord } from '../../services/audioService.js?v=15.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -44,6 +45,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           </button>
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
             🌙 Тёмная тема
+          </button>
+        </div>
+      </div>
+
+      <!-- Voice Selection Card -->
+      <div class="settings-card">
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🗣️ Голос озвучки</h3>
+        <div class="voice-options-row">
+          <button class="voice-option-btn" id="voice-female-btn">
+            👩 Женский
+          </button>
+          <button class="voice-option-btn" id="voice-male-btn">
+            👨 Мужской
           </button>
         </div>
       </div>
@@ -92,12 +106,26 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   goalSelect.value = String(settings.dailyGoal || 10);
 
+  // Setup Voice Selection
+  let currentVoice = settings.voiceGender || 'female';
+  const femaleVoiceBtn = container.querySelector('#voice-female-btn');
+  const maleVoiceBtn = container.querySelector('#voice-male-btn');
+
+  function updateVoiceButtons() {
+    if (femaleVoiceBtn && maleVoiceBtn) {
+      femaleVoiceBtn.classList.toggle('active', currentVoice === 'female');
+      maleVoiceBtn.classList.toggle('active', currentVoice === 'male');
+    }
+  }
+  updateVoiceButtons();
+
   // Helper: auto-save function
   async function triggerAutoSave() {
     const newSettings = {
       ...settings,
       dailyGoal: Number(goalSelect.value),
       theme: getSavedTheme(),
+      voiceGender: currentVoice,
     };
 
     if (autoSaveStatus) {
@@ -136,6 +164,23 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     lightBtn.classList.remove('active');
     triggerAutoSave();
   });
+
+  // Bind voice buttons with preview speech
+  if (femaleVoiceBtn && maleVoiceBtn) {
+    femaleVoiceBtn.addEventListener('click', () => {
+      currentVoice = 'female';
+      updateVoiceButtons();
+      speakWord('Hello! Female voice activated.', null, 'en-US', 'female');
+      triggerAutoSave();
+    });
+
+    maleVoiceBtn.addEventListener('click', () => {
+      currentVoice = 'male';
+      updateVoiceButtons();
+      speakWord('Hello! Male voice activated.', null, 'en-US', 'male');
+      triggerAutoSave();
+    });
+  }
 }
 
 export { renderSettingsView };

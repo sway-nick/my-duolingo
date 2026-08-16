@@ -128,6 +128,83 @@ function playErrorSound() {
   }
 }
 
+let cachedVoices = [];
+
+function loadVoices() {
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    const list = window.speechSynthesis.getVoices();
+    if (list && list.length > 0) {
+      cachedVoices = list;
+    }
+  }
+}
+
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  loadVoices();
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+}
+
+function getSavedVoiceGender() {
+  try {
+    const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
+    const userId = user ? user.id : 'guest';
+    const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
+    return settings.voiceGender || 'female';
+  } catch (e) {
+    return 'female';
+  }
+}
+
+function getPreferredVoice(gender = 'female') {
+  loadVoices();
+  const englishVoices = cachedVoices.filter((v) => v.lang && v.lang.startsWith('en'));
+  if (englishVoices.length === 0) return null;
+
+  const target = (gender || 'female').toLowerCase();
+
+  if (target === 'male') {
+    const maleVoice = englishVoices.find((v) => {
+      const name = (v.name || '').toLowerCase();
+      return (
+        name.includes('male') ||
+        name.includes('david') ||
+        name.includes('guy') ||
+        name.includes('alex') ||
+        name.includes('daniel') ||
+        name.includes('george') ||
+        name.includes('mark') ||
+        name.includes('arthur') ||
+        name.includes('ryan') ||
+        name.includes('oliver') ||
+        name.includes('stefan') ||
+        name.includes('thomas')
+      );
+    });
+    if (maleVoice) return maleVoice;
+  } else {
+    const femaleVoice = englishVoices.find((v) => {
+      const name = (v.name || '').toLowerCase();
+      return (
+        name.includes('female') ||
+        name.includes('zira') ||
+        name.includes('samantha') ||
+        name.includes('victoria') ||
+        name.includes('karen') ||
+        name.includes('jenny') ||
+        name.includes('aria') ||
+        name.includes('susan') ||
+        name.includes('catherine') ||
+        name.includes('fiona')
+      );
+    });
+    if (femaleVoice) return femaleVoice;
+  }
+
+  return englishVoices[0];
+}
+
 /**
  * Speaks the given text using SpeechSynthesis.
  * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
@@ -135,9 +212,10 @@ function playErrorSound() {
  * @param {string} text - The word or text to pronounce (e.g. English word)
  * @param {string} wordId - Optional unique ID for tracking consecutive clicks on the same word
  * @param {string} lang - Language code (default 'en-US')
+ * @param {string} voiceGenderOverride - Optional gender override ('male' | 'female')
  * @returns {boolean} isTurtleMode - True if playing in slow speed
  */
-function speakWord(text, wordId = null, lang = 'en-US') {
+function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = null) {
   if (!('speechSynthesis' in window)) {
     console.warn('SpeechSynthesis is not supported in this browser.');
     return false;
@@ -162,7 +240,19 @@ function speakWord(text, wordId = null, lang = 'en-US') {
     const isTurtleMode = clickCount >= 3;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = lang;
-    utterance.rate = isTurtleMode ? 0.40 : 0.80; // Turtle rate: 0.40, Normal: 0.80
+    utterance.rate = isTurtleMode ? 0.40 : 0.82; // Turtle rate: 0.40, Normal: 0.82
+
+    const gender = voiceGenderOverride || getSavedVoiceGender();
+    const voice = getPreferredVoice(gender);
+    if (voice) {
+      utterance.voice = voice;
+    }
+
+    if (gender === 'male') {
+      utterance.pitch = 0.85; // Deeper natural pitch
+    } else {
+      utterance.pitch = 1.05; // Clear feminine pitch
+    }
 
     window.speechSynthesis.speak(utterance);
 

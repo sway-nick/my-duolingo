@@ -110,31 +110,44 @@ body.dark-theme,
   justify-content: center;
 }
 
-.theme-options-row {
+.theme-options-row,
+.voice-options-row {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
-.theme-option-btn {
+.theme-option-btn,
+.voice-option-btn {
   flex: 1;
-  padding: 12px;
+  padding: 10px 12px;
+  min-height: 44px;
   border: 2px solid var(--border-color);
-  background: var(--card-bg);
+  background: var(--card-bg, #ffffff);
   color: var(--text-main);
   border-radius: var(--radius-md);
   font-weight: 600;
+  font-size: 14.5px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
 }
 
-.theme-option-btn.active {
+.theme-option-btn.active,
+.voice-option-btn.active {
   border-color: var(--primary-color);
   background: #eff6ff;
   color: var(--primary-color);
+  font-weight: 700;
 }
 
-.dark-theme .theme-option-btn.active {
-  background: #1e3a8a;
+.dark-theme .theme-option-btn.active,
+.dark-theme .voice-option-btn.active {
+  background: rgba(37, 99, 235, 0.25);
   color: #93c5fd;
+  border-color: #3b82f6;
 }
 
 * {
