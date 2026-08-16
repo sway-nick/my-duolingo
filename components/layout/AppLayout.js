@@ -24,7 +24,7 @@ function toggleTheme() {
   return next;
 }
 
-function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
+function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, onLogoClick = () => {}) {
   const app = document.querySelector('#app');
   const user = getCurrentUser();
   const currentTheme = getSavedTheme();
@@ -34,7 +34,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <header class="mobile-header">
-        <div class="brand">
+        <div class="brand" id="brand-logo" style="cursor: pointer;" title="Перейти на главную (режим Тест)">
           <span class="brand-icon">🦉</span>
           <div>
             <h2>English Trainer</h2>
@@ -83,6 +83,14 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
   `;
 
   applyTheme(currentTheme);
+
+  // Bind logo click (navigate to Test mode on Training tab)
+  const brandLogo = app.querySelector('#brand-logo');
+  if (brandLogo) {
+    brandLogo.addEventListener('click', () => {
+      onLogoClick();
+    });
+  }
 
   // Bind theme toggle button in header
   const themeBtn = app.querySelector('#theme-toggle-btn');
