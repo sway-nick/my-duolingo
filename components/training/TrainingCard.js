@@ -66,6 +66,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }
   });
 
+  // Auto-pronounce word on initial card appearance
+  setTimeout(() => {
+    try {
+      const isTurtle = speakWord(currentWord.word, currentWord.id);
+      if (turtleIndicator) {
+        turtleIndicator.style.display = isTurtle ? 'inline-block' : 'none';
+      }
+    } catch (e) {
+      console.warn('Auto-speak failed:', e);
+    }
+  }, 100);
+
   // Bind favorite toggle
   const favBtn = container.querySelector('#fav-toggle-btn');
   favBtn.addEventListener('click', async () => {
