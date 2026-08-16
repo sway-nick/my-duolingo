@@ -40,7 +40,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       
       <!-- Top card bar: Mode Switch (Карточки / Квиз / Пары / Тест) on Left, Favorite Heart on Right in ONE single horizontal row -->
       <div class="card-header-bar">
-        <div class="mode-switch-pills">
+        <div class="mode-switch-pills" id="mode-switch-pills">
+          <div class="mode-pill-glider" id="mode-pill-glider"></div>
           <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
             Карточки
           </button>
@@ -108,15 +109,49 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     </section>
   `;
 
-  // Bind mode switcher pills (Карточки / Квиз / Пары / Тест)
+  // Bind mode switcher pills with animated smooth sliding glider
+  const pillBar = container.querySelector('#mode-switch-pills');
+  const glider = container.querySelector('#mode-pill-glider');
   const modePills = container.querySelectorAll('.mode-pill-btn');
+
+  function positionGlider(targetBtn, animate = true) {
+    if (!targetBtn || !glider || !pillBar) return;
+    const barRect = pillBar.getBoundingClientRect();
+    const btnRect = targetBtn.getBoundingClientRect();
+    if (barRect.width === 0 || btnRect.width === 0) return;
+    const offsetLeft = btnRect.left - barRect.left;
+    const btnWidth = btnRect.width;
+
+    if (!animate) {
+      glider.style.transition = 'none';
+    } else {
+      glider.style.transition = 'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
+    }
+
+    glider.style.transform = `translateX(${offsetLeft}px)`;
+    glider.style.width = `${btnWidth}px`;
+  }
+
+  // Initial positioning
+  const initialActive = container.querySelector('.mode-pill-btn.active');
+  if (initialActive) {
+    requestAnimationFrame(() => {
+      positionGlider(initialActive, false);
+    });
+  }
+
   modePills.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       const selectedMode = btn.getAttribute('data-mode');
-      if (selectedMode) {
-        onMethodChange(selectedMode);
+      if (selectedMode && selectedMode !== currentMethod) {
+        modePills.forEach((p) => p.classList.remove('active'));
+        btn.classList.add('active');
+        positionGlider(btn, true);
+        setTimeout(() => {
+          onMethodChange(selectedMode);
+        }, 150);
       }
     });
   });
