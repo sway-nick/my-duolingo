@@ -1,4 +1,4 @@
-const USER_HEADERS = ['id', 'email', 'name', 'password', 'createdAt'];
+const USER_HEADERS = ['id', 'email', 'passwordHash', 'createdAt', 'status', 'name'];
 
 /**
  * Computes SHA-256 hash of password with a fixed salt.
@@ -12,7 +12,6 @@ function hashPassword(password) {
     const raw = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + password);
     return raw.map((b) => (b < 0 ? b + 256 : b).toString(16).padStart(2, '0')).join('');
   }
-  // Fallback for non-GAS environments
   return 'hashed_' + password;
 }
 
@@ -24,7 +23,7 @@ function hashPassword(password) {
  */
 function registerPost(e) {
   const body = getJsonBody(e);
-  validateRequired(body, ['email', 'password', 'name']);
+  validateRequired(body, ['email', 'password']);
 
   const email = String(body.email).toLowerCase().trim();
   const users = getSheetData('Users', USER_HEADERS);
@@ -36,13 +35,15 @@ function registerPost(e) {
 
   const userId = 'u_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
   const hashedPassword = hashPassword(String(body.password));
+  const userName = String(body.name || email.split('@')[0]).trim();
 
   const newUser = {
     id: userId,
     email: email,
-    name: String(body.name).trim(),
-    password: hashedPassword,
+    passwordHash: hashedPassword,
     createdAt: new Date().toISOString(),
+    status: 'active',
+    name: userName,
   };
 
   appendSheetRow('Users', newUser, USER_HEADERS);
@@ -71,7 +72,11 @@ function loginPost(e) {
   const inputHashed = hashPassword(String(body.password));
 
   const users = getSheetData('Users', USER_HEADERS);
-  const user = users.find((u) => String(u.email).toLowerCase() === email && String(u.password) === inputHashed);
+  const user = users.find(
+    (u) =>
+      String(u.email).toLowerCase() === email &&
+      (String(u.passwordHash) === inputHashed || String(u.password) === inputHashed || String(u.password) === String(body.password)),
+  );
 
   if (!user) {
     return errorResponse('Неверный email или пароль', 401);
@@ -81,7 +86,7 @@ function loginPost(e) {
     user: {
       id: user.id,
       email: user.email,
-      name: user.name,
+      name: user.name || user.email.split('@')[0],
     },
     token: 'tok_' + user.id,
   });
