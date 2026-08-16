@@ -587,6 +587,8 @@ async function getUserStats(customWords = null) {
     masteredCount,
     learningCount,
     totalAttempted,
+    totalAnswers: correct + errors,
+    correctAnswers: correct,
     accuracy,
     streakDays: 1,
     categoryBreakdown,

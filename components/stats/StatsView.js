@@ -1,5 +1,5 @@
-import { getUserStats } from '../../services/api.js?v=8.0';
-import { getCurrentUser } from '../../services/authService.js?v=8.0';
+import { getUserStats } from '../../services/api.js?v=16.0';
+import { getCurrentUser } from '../../services/authService.js?v=16.0';
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];
@@ -40,7 +40,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
     container.innerHTML = `
       <div class="page-header" style="margin-bottom: 14px;">
-        <h2 style="font-size: 22px; margin: 0;">📊 Ваши достижения!</h2>
+        <h2 style="font-size: 22px; margin: 0;">📊 Ваши достижения</h2>
       </div>
 
       <div id="stats-content">
@@ -50,7 +50,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">🎓</span>
             <div class="stat-info">
               <h3 id="stat-mastered">${stats.masteredCount || 0}</h3>
-              <p>Выучено (3x Тест)</p>
+              <p>Выучено</p>
             </div>
           </div>
 
@@ -65,7 +65,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           <div class="stat-card">
             <span class="stat-icon">🎯</span>
             <div class="stat-info">
-              <h3 id="stat-accuracy">${stats.accuracy || 0}%</h3>
+              <h3 id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
               <p>Точность ответов</p>
             </div>
           </div>
