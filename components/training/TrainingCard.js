@@ -90,7 +90,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             : `
             <div class="word-header-row">
               <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
-              <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
+              <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                 <span class="training-word-text">${currentWord.word}</span>
               </h2>
               <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
