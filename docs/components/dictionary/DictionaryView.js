@@ -8,6 +8,15 @@ function sanitizeCategory(cat) {
     .trim() || String(cat).trim();
 }
 
+function formatWordCount(count) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod100 >= 11 && mod100 <= 19) return `${count} слов`;
+  if (mod10 === 1) return `${count} слово`;
+  if (mod10 >= 2 && mod10 <= 4) return `${count} слова`;
+  return `${count} слов`;
+}
+
 function renderDictionaryView(words = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
@@ -22,7 +31,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   container.innerHTML = `
     <div class="dictionary-page">
       <div class="page-header">
-        <h2>📖 Словарь (${words.length} слов)</h2>
+        <h2 id="dict-header-title">📖 Словарь (<span id="dict-word-count">${formatWordCount(words.length)}</span>)</h2>
         <p class="subtitle">Изучайте слова, слушайте произношение и отслеживайте выученные</p>
       </div>
 
@@ -49,7 +58,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   uniqueCats.forEach((cat) => {
     const opt = document.createElement('option');
     opt.value = cat;
-    opt.textContent = cat;
+    const catCount = words.filter((w) => sanitizeCategory(w.category) === cat).length;
+    opt.textContent = `${cat} (${catCount})`;
     if (cat === savedDictCat) {
       opt.selected = true;
     }
@@ -64,6 +74,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   const grid = container.querySelector('#dict-grid');
   const searchInput = container.querySelector('#dict-search');
+  const wordCountEl = container.querySelector('#dict-word-count');
 
   const renderList = () => {
     const query = searchInput.value.trim().toLowerCase();
@@ -78,6 +89,11 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       const matchCat = selectedCat === 'All' || catClean === selectedCat;
       return matchQuery && matchCat;
     });
+
+    // Update dynamically to show count of words in selected category/filter
+    if (wordCountEl) {
+      wordCountEl.textContent = formatWordCount(filtered.length);
+    }
 
     if (filtered.length === 0) {
       grid.innerHTML = '<p class="empty-state">Слова не найдены.</p>';
