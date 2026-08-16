@@ -257,15 +257,14 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     const voice = getPreferredVoice(gender);
     if (voice) {
       utterance.voice = voice;
-      if (voice.lang) utterance.lang = voice.lang;
     }
 
     if (gender === 'male') {
-      utterance.pitch = 0.65; // Noticeably deep, masculine resonance
-      utterance.rate = isTurtleMode ? 0.38 : 0.78;
+      utterance.pitch = 0.82; // Warm, natural masculine depth
+      utterance.rate = isTurtleMode ? 0.40 : 0.82;
     } else {
-      utterance.pitch = 1.30; // Noticeably bright, feminine resonance
-      utterance.rate = isTurtleMode ? 0.42 : 0.86;
+      utterance.pitch = 1.0; // Natural, pleasant, intelligent feminine tone
+      utterance.rate = isTurtleMode ? 0.40 : 0.84;
     }
 
     window.speechSynthesis.speak(utterance);
