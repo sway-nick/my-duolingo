@@ -87,6 +87,16 @@ function migrateGuestData(newUserId) {
 }
 
 function getCurrentUser() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_USER);
+    if (saved) {
+      currentUser = JSON.parse(saved);
+    } else {
+      currentUser = null;
+    }
+  } catch (e) {
+    console.warn('Failed reading current user from storage:', e);
+  }
   return currentUser;
 }
 
@@ -104,6 +114,11 @@ function setCurrentUser(user, token) {
     localStorage.removeItem(STORAGE_KEY_USER);
     localStorage.removeItem(STORAGE_KEY_TOKEN);
   }
+
+  // Dispatch global event for instant UI reaction without page refresh
+  try {
+    window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user } }));
+  } catch (e) {}
 }
 
 function logoutUser() {

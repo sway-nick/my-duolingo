@@ -1,5 +1,7 @@
-import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT } from '../../services/authService.js?v=8.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=8.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT } from '../../services/authService.js?v=16.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
+
+let globalAuthChangedCallback = () => {};
 
 function getSavedTheme() {
   return localStorage.getItem('myduo_theme') || 'light';
@@ -25,6 +27,8 @@ function toggleTheme() {
 }
 
 function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, onLogoClick = () => {}) {
+  globalAuthChangedCallback = onUserAuthChanged;
+
   const app = document.querySelector('#app');
   const user = getCurrentUser();
   const currentTheme = getSavedTheme();
@@ -38,9 +42,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
           <span class="brand-icon">🦉</span>
           <div>
             <h2>English Trainer</h2>
-            <small class="user-status-text" id="header-user-status">
-              ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
-            </small>
+            <div class="user-status" id="header-user-status">${
+              user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`
+            }</div>
           </div>
         </div>
         
@@ -57,34 +61,37 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
       </header>
 
-      <main class="app-main-content">
-        <div id="app-content"></div>
+      <main class="mobile-main" id="app-content">
+        <!-- Tab Content dynamically injected here -->
       </main>
 
-      <nav class="bottom-nav">
-        <button class="nav-tab active" data-tab="training" title="Тренировка">
-          <span class="tab-icon">🎓</span>
+      <nav class="mobile-nav">
+        <button class="nav-tab active" data-tab="training" title="Тренировки">
+          <span class="nav-icon">🎓</span>
+          <span class="nav-label">Учить</span>
         </button>
         <button class="nav-tab" data-tab="favorites" title="Избранное">
-          <span class="tab-icon">❤️</span>
+          <span class="nav-icon">❤️</span>
+          <span class="nav-label">Избранное</span>
         </button>
-        <button class="nav-tab" data-tab="stats" title="Прогресс">
-          <span class="tab-icon">📊</span>
+        <button class="nav-tab" data-tab="stats" title="Статистика">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Прогресс</span>
         </button>
         <button class="nav-tab" data-tab="dictionary" title="Словарь">
-          <span class="tab-icon">📖</span>
+          <span class="nav-icon">📖</span>
+          <span class="nav-label">Словарь</span>
         </button>
         <button class="nav-tab" data-tab="settings" title="Настройки">
-          <span class="tab-icon">⚙️</span>
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Настройки</span>
         </button>
       </nav>
 
     </div>
   `;
 
-  applyTheme(currentTheme);
-
-  // Bind logo click (navigate to Test mode on Training tab)
+  // Bind Brand Logo Click
   const brandLogo = app.querySelector('#brand-logo');
   if (brandLogo) {
     brandLogo.addEventListener('click', () => {
@@ -92,7 +99,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   }
 
-  // Bind theme toggle button in header
+  // Bind Theme Toggle Button
   const themeBtn = app.querySelector('#theme-toggle-btn');
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
@@ -116,7 +123,10 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const loginHeaderBtn = app.querySelector('#login-header-btn');
   if (loginHeaderBtn) {
     loginHeaderBtn.addEventListener('click', () => {
-      renderAuthModal(() => onUserAuthChanged());
+      renderAuthModal(async () => {
+        updateHeaderUser();
+        await globalAuthChangedCallback();
+      });
     });
   }
 
@@ -129,7 +139,11 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   }
 }
 
-function updateHeaderUser(onUserAuthChanged = () => {}) {
+function updateHeaderUser(onUserAuthChanged) {
+  if (typeof onUserAuthChanged === 'function') {
+    globalAuthChangedCallback = onUserAuthChanged;
+  }
+
   const user = getCurrentUser();
   const guestCount = getGuestTrainingCount();
   const statusEl = document.querySelector('#header-user-status');
@@ -163,7 +177,10 @@ function updateHeaderUser(onUserAuthChanged = () => {}) {
     const loginHeaderBtn = actionsContainer.querySelector('#login-header-btn');
     if (loginHeaderBtn) {
       loginHeaderBtn.addEventListener('click', () => {
-        renderAuthModal(() => onUserAuthChanged());
+        renderAuthModal(async () => {
+          updateHeaderUser();
+          await globalAuthChangedCallback();
+        });
       });
     }
 
@@ -175,6 +192,16 @@ function updateHeaderUser(onUserAuthChanged = () => {}) {
       });
     }
   }
+}
+
+// Automatically react to global auth changes anywhere in the app
+if (typeof window !== 'undefined') {
+  window.addEventListener('myduo:auth_changed', () => {
+    updateHeaderUser();
+    if (typeof globalAuthChangedCallback === 'function') {
+      globalAuthChangedCallback();
+    }
+  });
 }
 
 export { renderAppLayout, updateHeaderUser, applyTheme, getSavedTheme, toggleTheme };
