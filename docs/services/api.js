@@ -474,18 +474,66 @@ function getQueueForCards(words, progress) {
   });
 }
 
-function getQueueForQuiz(words, progress) {
-  return words.filter((w) => {
+function getQueueForQuiz(words, progress, favorites = []) {
+  const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return p?.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
   });
+
+  if (!favorites || favorites.length === 0 || base.length === 0) {
+    return base;
+  }
+
+  const favSet = new Set(favorites.map(String));
+  const candidateFavs = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id)) && !isWordMastered(p);
+  });
+
+  // Sort candidate favorites by lastPracticed ASC (oldest practiced first, then newer)
+  candidateFavs.sort((a, b) => {
+    const pA = progress[a.id] || progress[String(a.id)];
+    const pB = progress[b.id] || progress[String(b.id)];
+    const tA = pA?.lastPracticed || 0;
+    const tB = pB?.lastPracticed || 0;
+    return tA - tB;
+  });
+
+  const favCount = Math.max(1, Math.round(base.length * 0.15));
+  const injectedFavs = candidateFavs.slice(0, favCount);
+
+  return [...base, ...injectedFavs];
 }
 
-function getQueueForPairs(words, progress) {
-  return words.filter((w) => {
+function getQueueForPairs(words, progress, favorites = []) {
+  const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return (p?.quizCorrect || 0) >= 5 && (p?.pairsCorrect || 0) < 2 && !isWordMastered(p);
   });
+
+  if (!favorites || favorites.length === 0 || base.length === 0) {
+    return base;
+  }
+
+  const favSet = new Set(favorites.map(String));
+  const candidateFavs = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id)) && !isWordMastered(p);
+  });
+
+  // Sort candidate favorites by lastPracticed ASC (oldest practiced first, then newer)
+  candidateFavs.sort((a, b) => {
+    const pA = progress[a.id] || progress[String(a.id)];
+    const pB = progress[b.id] || progress[String(b.id)];
+    const tA = pA?.lastPracticed || 0;
+    const tB = pB?.lastPracticed || 0;
+    return tA - tB;
+  });
+
+  const favCount = Math.max(1, Math.round(base.length * 0.15));
+  const injectedFavs = candidateFavs.slice(0, favCount);
+
+  return [...base, ...injectedFavs];
 }
 
 function getQueueForTest(words, progress) {

@@ -219,6 +219,8 @@
           });
         }
 
+        const favListForMixing = isFavPracticeActive ? [] : favList;
+
         if (currentMethod === 'cards') {
           activeWords = getQueueForCards(categoryWords, userProgress);
           // If all words in category were already sorted, allow reviewing all unmastered words in cards
@@ -226,9 +228,9 @@
             activeWords = categoryWords.filter((w) => !isWordMastered(userProgress[w.id]));
           }
         } else if (currentMethod === 'quiz') {
-          activeWords = getQueueForQuiz(categoryWords, userProgress);
+          activeWords = getQueueForQuiz(categoryWords, userProgress, favListForMixing);
         } else if (currentMethod === 'pairs') {
-          activeWords = getQueueForPairs(categoryWords, userProgress);
+          activeWords = getQueueForPairs(categoryWords, userProgress, favListForMixing);
         } else if (currentMethod === 'input') {
           activeWords = getQueueForTest(categoryWords, userProgress);
         }
@@ -420,8 +422,8 @@
             (currentWord.word && favSet.has(String(currentWord.word).toLowerCase().trim())));
 
         const cardsQueue = getQueueForCards(categoryWords, userProgress);
-        const quizQueue = getQueueForQuiz(categoryWords, userProgress);
-        const pairsQueue = getQueueForPairs(categoryWords, userProgress);
+        const quizQueue = getQueueForQuiz(categoryWords, userProgress, favListForMixing);
+        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favListForMixing);
         const testQueue = getQueueForTest(categoryWords, userProgress);
 
         const availableModes = {
