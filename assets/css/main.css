@@ -605,29 +605,36 @@ body {
   animation: pairShake 0.4s ease;
 }
 
-/* Casino 3D Horizontal Flip Animation on All Pairs Matched (Dollar Green / White) */
+/* Casino 3D Horizontal Flip Animation on All Pairs Matched (Dollar Emerald Green / White) */
 @-webkit-keyframes casinoCardFlipX {
   0% {
     -webkit-transform: rotateX(0deg) scale(1);
     transform: rotateX(0deg) scale(1);
-    background: #ffffff !important;
-    border-color: #22c55e !important;
-    color: #15803d !important;
-  }
-  20% {
     background: #16a34a !important;
     border-color: #4ade80 !important;
     color: #ffffff !important;
   }
-  50% {
-    -webkit-transform: rotateX(180deg) scale(0.88);
-    transform: rotateX(180deg) scale(0.88);
+  30% {
     background: #15803d !important;
     border-color: #86efac !important;
     color: #ffffff !important;
-    box-shadow: 0 0 26px rgba(34, 197, 94, 0.9) !important;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.95) !important;
   }
-  80% {
+  50% {
+    -webkit-transform: rotateX(180deg) scale(0.88);
+    transform: rotateX(180deg) scale(0.88);
+    background: #14532d !important;
+    border-color: #86efac !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 35px rgba(34, 197, 94, 1) !important;
+  }
+  70% {
+    background: #15803d !important;
+    border-color: #86efac !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.95) !important;
+  }
+  92% {
     background: #16a34a !important;
     border-color: #4ade80 !important;
     color: #ffffff !important;
@@ -646,24 +653,31 @@ body {
   0% {
     -webkit-transform: rotateX(0deg) scale(1);
     transform: rotateX(0deg) scale(1);
-    background: #ffffff !important;
-    border-color: #22c55e !important;
-    color: #15803d !important;
-  }
-  20% {
     background: #16a34a !important;
     border-color: #4ade80 !important;
     color: #ffffff !important;
   }
-  50% {
-    -webkit-transform: rotateX(180deg) scale(0.88);
-    transform: rotateX(180deg) scale(0.88);
+  30% {
     background: #15803d !important;
     border-color: #86efac !important;
     color: #ffffff !important;
-    box-shadow: 0 0 26px rgba(34, 197, 94, 0.9) !important;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.95) !important;
   }
-  80% {
+  50% {
+    -webkit-transform: rotateX(180deg) scale(0.88);
+    transform: rotateX(180deg) scale(0.88);
+    background: #14532d !important;
+    border-color: #86efac !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 35px rgba(34, 197, 94, 1) !important;
+  }
+  70% {
+    background: #15803d !important;
+    border-color: #86efac !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.95) !important;
+  }
+  92% {
     background: #16a34a !important;
     border-color: #4ade80 !important;
     color: #ffffff !important;
@@ -679,6 +693,9 @@ body {
 }
 
 .pairs-card.casino-flipping {
+  background: #16a34a !important;
+  color: #ffffff !important;
+  border-color: #4ade80 !important;
   -webkit-animation: casinoCardFlipX 0.95s cubic-bezier(0.35, 0.05, 0.25, 1) forwards !important;
   animation: casinoCardFlipX 0.95s cubic-bezier(0.35, 0.05, 0.25, 1) forwards !important;
   pointer-events: none !important;

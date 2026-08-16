@@ -339,15 +339,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }, idx * 80);
           });
 
-          // Play realistic metallic coin drop sound at the very end of the roll
+          // Play realistic metallic ringing coin drop sound at the end of the roll
           setTimeout(() => {
             playCoinDropSound();
-          }, 1550);
+          }, 1350);
 
           // Advance to next round smoothly
           setTimeout(() => {
             onNext();
-          }, 2100);
+          }, 2050);
         }
       } else {
         playErrorSound();

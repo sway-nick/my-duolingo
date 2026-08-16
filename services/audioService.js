@@ -174,7 +174,7 @@ function speakWord(text, wordId = null, lang = 'en-US') {
 }
 
 /**
- * Plays a realistic metallic ringing coin drop and bounce sound (Web Audio API)
+ * Plays a loud, realistic ringing metallic coin drop sound (Web Audio API)
  */
 function playCoinDropSound() {
   try {
@@ -183,13 +183,13 @@ function playCoinDropSound() {
 
     const now = ctx.currentTime;
 
-    // Realistic heavy coin dropping & spinning clatter
+    // Rich metallic coin drop with unmistakable bright ringing resonance
     const bounces = [
-      { delay: 0.00, f1: 3480, f2: 5200, f3: 1740, vol: 0.30, dur: 0.40 }, // Primary hard metal coin drop
-      { delay: 0.09, f1: 3920, f2: 5870, f3: 1960, vol: 0.22, dur: 0.28 }, // First rebound clink
-      { delay: 0.16, f1: 4400, f2: 6590, f3: 2200, vol: 0.16, dur: 0.20 }, // Second bounce
-      { delay: 0.22, f1: 4940, f2: 7400, f3: 2470, vol: 0.10, dur: 0.14 }, // Third bounce
-      { delay: 0.27, f1: 5540, f2: 8300, f3: 2770, vol: 0.06, dur: 0.10 }, // Settle spin ping
+      { delay: 0.00, f1: 2093.0, f2: 4186.0, f3: 6279.0, vol: 0.45, dur: 0.45 }, // Strong initial coin drop clink (C7 / C8)
+      { delay: 0.09, f1: 2349.3, f2: 4698.6, f3: 7048.0, vol: 0.32, dur: 0.32 }, // 1st bounce
+      { delay: 0.17, f1: 2637.0, f2: 5274.0, f3: 7911.0, vol: 0.22, dur: 0.22 }, // 2nd bounce
+      { delay: 0.23, f1: 2960.0, f2: 5920.0, f3: 8880.0, vol: 0.14, dur: 0.16 }, // 3rd bounce
+      { delay: 0.28, f1: 3322.0, f2: 6644.0, f3: 9966.0, vol: 0.08, dur: 0.12 }, // Settle spin
     ];
 
     bounces.forEach(({ delay, f1, f2, f3, vol, dur }) => {
@@ -199,12 +199,12 @@ function playCoinDropSound() {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
 
-        osc.type = idx === 2 ? 'triangle' : 'sine';
+        osc.type = idx === 0 ? 'sine' : (idx === 1 ? 'triangle' : 'sine');
         osc.frequency.setValueAtTime(freq, strikeTime);
 
-        const v = idx === 2 ? vol * 0.7 : vol;
+        const v = vol / (idx === 0 ? 1 : 1.5);
         gain.gain.setValueAtTime(0.0001, strikeTime);
-        gain.gain.linearRampToValueAtTime(v, strikeTime + 0.002);
+        gain.gain.linearRampToValueAtTime(v, strikeTime + 0.003);
         gain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + dur);
 
         osc.connect(gain);
