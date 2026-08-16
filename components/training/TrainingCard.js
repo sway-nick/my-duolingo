@@ -292,13 +292,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
 
     practiceArea.querySelector('#btn-repeat').addEventListener('click', async () => {
-      await saveProgress(currentWord.id, false, 'cards');
-      onNext();
+      const prog = await saveProgress(currentWord.id, false, 'cards');
+      if (prog && prog.autoFavorited) {
+        onFavoriteToggle(currentWord.id, true);
+        const favBtn = container.querySelector('#fav-toggle-btn');
+        if (favBtn) {
+          favBtn.textContent = '❤️';
+          favBtn.classList.add('is-favorite');
+        }
+      }
+      onNext({ repeatSoon: true });
     });
 
     practiceArea.querySelector('#btn-easy').addEventListener('click', async () => {
       await saveProgress(currentWord.id, true, 'cards');
-      onNext();
+      onNext({ repeatSoon: false });
     });
   }
 }

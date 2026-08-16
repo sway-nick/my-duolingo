@@ -210,9 +210,16 @@
           },
           isFavorite: favoriteIds.has(currentWord.id),
           onFavoriteToggle: handleFavoriteToggle,
-          onNext: () => {
+          onNext: (opts = {}) => {
             incrementGuestTrainingCount();
             updateHeaderUser();
+
+            if (opts && opts.repeatSoon) {
+              // Re-insert hard word 3 positions later so the user repeats it soon in this session
+              const insertPos = Math.min(currentWordIndex + 3, activeWords.length);
+              activeWords.splice(insertPos, 0, currentWord);
+            }
+
             currentWordIndex += 1;
             renderTrainingTab();
           },

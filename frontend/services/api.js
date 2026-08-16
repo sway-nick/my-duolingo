@@ -191,8 +191,10 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
   const key = `progress_${userId}`;
   const local = JSON.parse(localStorage.getItem(key) || '{}');
   if (!local[wordId]) {
-    local[wordId] = { correct: 0, error: 0, inputCorrect: 0, mastered: false };
+    local[wordId] = { correct: 0, error: 0, inputCorrect: 0, hardCount: 0, mastered: false };
   }
+
+  let autoFavorited = false;
 
   if (isCorrect) {
     local[wordId].correct = (local[wordId].correct || 0) + 1;
@@ -202,8 +204,18 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
         local[wordId].mastered = true;
       }
     }
+    if (local[wordId].hardCount > 0) {
+      local[wordId].hardCount = 0;
+    }
   } else {
     local[wordId].error = (local[wordId].error || 0) + 1;
+    if (method === 'cards') {
+      local[wordId].hardCount = (local[wordId].hardCount || 0) + 1;
+      if (local[wordId].hardCount >= 3) {
+        await toggleFavoriteApi(wordId, true);
+        autoFavorited = true;
+      }
+    }
   }
 
   localStorage.setItem(key, JSON.stringify(local));
@@ -216,6 +228,7 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
     isCorrect,
     method,
     inputCorrect: local[wordId].inputCorrect || 0,
+    hardCount: local[wordId].hardCount || 0,
     mastered: local[wordId].mastered || false,
   });
 
@@ -223,7 +236,7 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
     flushProgressQueue();
   }
 
-  return local[wordId];
+  return { ...local[wordId], autoFavorited };
 }
 
 async function flushProgressQueue() {
