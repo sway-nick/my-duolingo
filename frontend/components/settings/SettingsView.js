@@ -76,15 +76,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const loginBtn = container.querySelector('#login-modal-btn');
   if (loginBtn) {
     loginBtn.addEventListener('click', () => {
-      renderAuthModal(() => onUserChange());
+      renderAuthModal(async () => {
+        await onUserChange();
+        await renderSettingsView(containerSelector, onUserChange);
+      });
     });
   }
 
   const logoutBtn = container.querySelector('#logout-btn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
+    logoutBtn.addEventListener('click', async () => {
       logoutUser();
-      onUserChange();
+      await onUserChange();
+      await renderSettingsView(containerSelector, onUserChange);
     });
   }
 
