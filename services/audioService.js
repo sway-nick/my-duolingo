@@ -173,47 +173,36 @@ function speakWord(text, wordId = null, lang = 'en-US') {
   }
 }
 
+let coinAudio = null;
+
+function getCoinAudio() {
+  if (!coinAudio && typeof window !== 'undefined') {
+    try {
+      coinAudio = new Audio('./assets/audio/coin.mp3');
+      coinAudio.preload = 'auto';
+    } catch (e) {
+      console.warn('Failed to initialize coin audio:', e);
+    }
+  }
+  return coinAudio;
+}
+
 /**
- * Plays a loud, realistic ringing metallic coin drop sound (Web Audio API)
+ * Plays the exact metallic coin sound provided by user (coin.mp3)
  */
 function playCoinDropSound() {
   try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    const now = ctx.currentTime;
-
-    // Rich metallic coin drop with unmistakable bright ringing resonance
-    const bounces = [
-      { delay: 0.00, f1: 2093.0, f2: 4186.0, f3: 6279.0, vol: 0.45, dur: 0.45 }, // Strong initial coin drop clink (C7 / C8)
-      { delay: 0.09, f1: 2349.3, f2: 4698.6, f3: 7048.0, vol: 0.32, dur: 0.32 }, // 1st bounce
-      { delay: 0.17, f1: 2637.0, f2: 5274.0, f3: 7911.0, vol: 0.22, dur: 0.22 }, // 2nd bounce
-      { delay: 0.23, f1: 2960.0, f2: 5920.0, f3: 8880.0, vol: 0.14, dur: 0.16 }, // 3rd bounce
-      { delay: 0.28, f1: 3322.0, f2: 6644.0, f3: 9966.0, vol: 0.08, dur: 0.12 }, // Settle spin
-    ];
-
-    bounces.forEach(({ delay, f1, f2, f3, vol, dur }) => {
-      const strikeTime = now + delay;
-
-      [f1, f2, f3].forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = idx === 0 ? 'sine' : (idx === 1 ? 'triangle' : 'sine');
-        osc.frequency.setValueAtTime(freq, strikeTime);
-
-        const v = vol / (idx === 0 ? 1 : 1.5);
-        gain.gain.setValueAtTime(0.0001, strikeTime);
-        gain.gain.linearRampToValueAtTime(v, strikeTime + 0.003);
-        gain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + dur);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(strikeTime);
-        osc.stop(strikeTime + dur);
-      });
-    });
+    const audio = getCoinAudio();
+    if (audio) {
+      audio.currentTime = 0;
+      audio.volume = 1.0;
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((e) => {
+          console.warn('Coin audio play prevented:', e);
+        });
+      }
+    }
   } catch (e) {
     console.warn('Coin drop sound skipped:', e);
   }
