@@ -67,11 +67,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         ${
           isPairsMode
             ? `
-            <div class="pairs-header-box" style="margin-bottom: 6px;">
-              <h2 class="training-word" style="font-size: 20px; margin: 2px 0 4px;">🧩 Найдите пары слов</h2>
-              <p class="training-transcription" style="margin: 0; font-size: 13px; color: var(--text-muted);">
-                Соедините английские слова с их переводом
-              </p>
+            <div class="pairs-header-box" style="margin: 4px 0 6px;">
+              <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 Найдите пары слов</h2>
             </div>
           `
             : isInputMode
