@@ -165,10 +165,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     function getQuizFontSize(text) {
       if (!text) return '17.5px';
       const len = text.length;
-      if (len > 45) return '12.5px';
-      if (len > 32) return '14px';
-      if (len > 20) return '15.5px';
-      return '17.5px';
+      if (len > 55) return '12px';
+      if (len > 38) return '13.5px';
+      if (len > 24) return '15px';
+      return '17px';
     }
 
     practiceArea.innerHTML = `
