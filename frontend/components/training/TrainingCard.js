@@ -199,8 +199,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // Delay: 1.45s on correct (1.5x faster), 12.6s on error
-        const delay = isCorrect ? 1450 : 12600;
+        // Fast delay: 650ms on correct, 12.6s on error
+        const delay = isCorrect ? 650 : 12600;
         setTimeout(() => {
           onNext();
         }, delay);
@@ -299,7 +299,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (celeb) celeb.style.display = 'block';
           setTimeout(() => {
             onNext();
-          }, 800);
+          }, 450);
         }
       } else {
         curLeft.classList.add('wrong');
@@ -393,8 +393,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         `;
       }
 
-      // Delay: 1.65s (2.3s on 3/3 mastered) on correct (1.5x faster), 14.4s on error
-      const delay = isCorrect ? (inputCount >= 3 ? 2300 : 1650) : 14400;
+      // Fast delay: 750ms (1200ms on 3/3 mastered) on correct, 14.4s on error
+      const delay = isCorrect ? (inputCount >= 3 ? 1200 : 750) : 14400;
       setTimeout(() => {
         onNext();
       }, delay);
