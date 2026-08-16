@@ -42,9 +42,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
           <span class="brand-icon">🦉</span>
           <div>
             <h2>English Trainer</h2>
-            <div class="user-status" id="header-user-status">${
-              user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`
-            }</div>
+            <small class="user-status-text" id="header-user-status">
+              ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
+            </small>
           </div>
         </div>
         
@@ -61,35 +61,32 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
       </header>
 
-      <main class="mobile-main" id="app-content">
-        <!-- Tab Content dynamically injected here -->
+      <main class="app-main-content">
+        <div id="app-content"></div>
       </main>
 
-      <nav class="mobile-nav">
-        <button class="nav-tab active" data-tab="training" title="Тренировки">
-          <span class="nav-icon">🎓</span>
-          <span class="nav-label">Учить</span>
+      <nav class="bottom-nav">
+        <button class="nav-tab active" data-tab="training" title="Тренировка">
+          <span class="tab-icon">🎓</span>
         </button>
         <button class="nav-tab" data-tab="favorites" title="Избранное">
-          <span class="nav-icon">❤️</span>
-          <span class="nav-label">Избранное</span>
+          <span class="tab-icon">❤️</span>
         </button>
-        <button class="nav-tab" data-tab="stats" title="Статистика">
-          <span class="nav-icon">📊</span>
-          <span class="nav-label">Прогресс</span>
+        <button class="nav-tab" data-tab="stats" title="Прогресс">
+          <span class="tab-icon">📊</span>
         </button>
         <button class="nav-tab" data-tab="dictionary" title="Словарь">
-          <span class="nav-icon">📖</span>
-          <span class="nav-label">Словарь</span>
+          <span class="tab-icon">📖</span>
         </button>
         <button class="nav-tab" data-tab="settings" title="Настройки">
-          <span class="nav-icon">⚙️</span>
-          <span class="nav-label">Настройки</span>
+          <span class="tab-icon">⚙️</span>
         </button>
       </nav>
 
     </div>
   `;
+
+  applyTheme(currentTheme);
 
   // Bind Brand Logo Click
   const brandLogo = app.querySelector('#brand-logo');
