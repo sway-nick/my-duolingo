@@ -332,22 +332,28 @@ async function getUserStats() {
 async function getUserSettings() {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
-  try {
-    const response = await fetch(`${API_URL}?route=settings&userId=${encodeURIComponent(userId)}`);
-    const data = await response.json();
-    if (data && data.success && data.data) return data.data;
-  } catch (e) {
-    console.warn('Using local settings', e);
-  }
   const key = `settings_${userId}`;
   const saved = localStorage.getItem(key);
-  if (saved) return JSON.parse(saved);
+  if (saved) {
+    try {
+      return {
+        userId,
+        dailyGoal: 10,
+        theme: 'light',
+        level: 'All',
+        category: 'All',
+        preferredMethod: 'quiz',
+        ...JSON.parse(saved),
+      };
+    } catch (e) {}
+  }
   return {
     userId,
     dailyGoal: 10,
-    enabledMethods: 'cards,quiz,input',
     theme: 'light',
     level: 'All',
+    category: 'All',
+    preferredMethod: 'quiz',
   };
 }
 
@@ -358,6 +364,7 @@ async function saveUserSettings(settings) {
     route: 'settings',
     action: 'settings',
     ...settings,
+    preferredMethod: settings.preferredMethod || 'quiz',
     category: settings.category || settings.level || 'All',
     level: settings.category || settings.level || 'All',
     userId,

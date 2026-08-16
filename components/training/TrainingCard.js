@@ -50,18 +50,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         <!-- Mode Switcher (Карточки, Квиз, Тест) + Favorite Heart -->
         <div class="card-header-right">
           <div class="mode-switch-pills">
-            <button class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
+            <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
               Карточки
             </button>
-            <button class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
+            <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
               Квиз
             </button>
-            <button class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
+            <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
               Тест
             </button>
           </div>
 
-          <button class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+          <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
             ${favorited ? '❤️' : '🤍'}
           </button>
         </div>
@@ -73,16 +73,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         ${
           isInputMode
             ? `
-            <div class="sound-placeholder" style="height: 48px; display: flex; align-items: center; justify-content: center;">
-              <small style="color: var(--text-muted); font-size: 13px;">🎧 Озвучка после ответа</small>
+            <div class="sound-placeholder" style="height: 38px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+              <small style="color: var(--text-muted); font-size: 12px;">🎧 Озвучка после ответа</small>
             </div>
-            <h1 class="training-word" style="color: var(--text-main); font-size: 26px; line-height: 1.3;">
+            <h1 class="training-word" style="color: var(--text-main); font-size: 24px; line-height: 1.25;">
               ${currentWord.translation}
             </h1>
-            <p class="training-transcription" style="visibility: hidden; margin: 4px 0;">—</p>
           `
             : `
-            <button class="sound-button" id="speak-btn" title="Прослушать слово">
+            <button type="button" class="sound-button" id="speak-btn" title="Прослушать слово">
               🔊
             </button>
             <span class="turtle-indicator" id="turtle-indicator" style="display: none;">🐢 Медленно</span>
@@ -109,9 +108,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   // Bind mode switcher pills (Карточки / Квиз / Тест)
   const modePills = container.querySelectorAll('.mode-pill-btn');
   modePills.forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const selectedMode = btn.getAttribute('data-mode');
-      onMethodChange(selectedMode);
+      if (selectedMode) {
+        onMethodChange(selectedMode);
+      }
     });
   });
 
@@ -142,17 +145,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   // Bind favorite toggle
   const favBtn = container.querySelector('#fav-toggle-btn');
-  favBtn.addEventListener('click', async () => {
-    favorited = !favorited;
-    favBtn.textContent = favorited ? '❤️' : '🤍';
-    favBtn.classList.toggle('is-favorite', favorited);
-    await toggleFavoriteApi(currentWord.id, favorited);
-    onFavoriteToggle(currentWord.id, favorited);
-  });
+  if (favBtn) {
+    favBtn.addEventListener('click', async () => {
+      favorited = !favorited;
+      favBtn.textContent = favorited ? '❤️' : '🤍';
+      favBtn.classList.toggle('is-favorite', favorited);
+      await toggleFavoriteApi(currentWord.id, favorited);
+      onFavoriteToggle(currentWord.id, favorited);
+    });
+  }
 
   const practiceArea = container.querySelector('#practice-area');
 
-  // --- RENDER ACCORDING TO CURRENT METHOD ---
+  // --- RENDER ACCORDING TO CURRENT METHOD (Without boilerplate hint texts) ---
 
   if (currentMethod === 'quiz') {
     // Generate 4 multiple-choice options
@@ -163,12 +168,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
 
     practiceArea.innerHTML = `
-      <p class="hint">Выберите правильный перевод:</p>
       <div class="quiz-grid">
         ${choices
           .map(
             (choice) => `
-          <button class="quiz-option" data-choice="${choice}">${choice}</button>
+          <button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>
         `,
           )
           .join('')}
@@ -201,12 +205,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } else if (currentMethod === 'input') {
     // Test mode: Russian prompt on top -> user types in English
     practiceArea.innerHTML = `
-      <p class="hint">Напишите перевод на английском языке:</p>
       <div class="input-form-row">
         <input class="answer-input" id="answer-input" placeholder="Введите на английском..." autocomplete="off" autocapitalize="none" spellcheck="false" />
-        <button class="check-button" id="check-answer-btn">Проверить</button>
+        <button type="button" class="check-button" id="check-answer-btn">Проверить</button>
       </div>
-      <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 14px; font-weight: 600; text-align: center; font-size: 16px;"></div>
+      <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 10px; font-weight: 600; text-align: center; font-size: 15px;"></div>
     `;
 
     const input = practiceArea.querySelector('#answer-input');
@@ -258,15 +261,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     // Flashcard Mode ('cards')
     practiceArea.innerHTML = `
       <div class="flashcard-box" id="flashcard">
-        <p class="hint">Нажмите на карточку, чтобы увидеть перевод</p>
+        <p style="margin: 0 0 8px; color: var(--text-muted); font-size: 13px;">Нажмите, чтобы увидеть перевод</p>
         <div class="flashcard-back" id="flashcard-back" style="display:none;">
-          <h2 class="card-translation">${currentWord.translation}</h2>
+          <h2 class="card-translation" style="font-size: 24px; margin: 4px 0;">${currentWord.translation}</h2>
         </div>
       </div>
       
-      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none;">
-        <button class="btn-repeat" id="btn-repeat">🔴 Сложно</button>
-        <button class="btn-easy" id="btn-easy">🟢 Легко</button>
+      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 10px;">
+        <button type="button" class="btn-repeat" id="btn-repeat">🔴 Сложно</button>
+        <button type="button" class="btn-easy" id="btn-easy">🟢 Легко</button>
       </div>
     `;
 

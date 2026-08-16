@@ -69,41 +69,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
-      <!-- Methods Configuration Card -->
-      <div class="settings-card">
-        <h3>🎯 Доступные методы обучения</h3>
-        <p class="card-desc">Включите форматы, которые хотите использовать во время тренировок:</p>
-        
-        <div class="methods-checkbox-list">
-          <label class="checkbox-label">
-            <input type="checkbox" id="method-cards" value="cards" />
-            <span class="custom-check"></span>
-            <div class="label-text">
-              <strong>Карточки слов (Flashcards)</strong>
-              <small>Поворот карточки: «Сложно» / «Легко»</small>
-            </div>
-          </label>
-
-          <label class="checkbox-label">
-            <input type="checkbox" id="method-quiz" value="quiz" />
-            <span class="custom-check"></span>
-            <div class="label-text">
-              <strong>Квиз (Выбор варианта)</strong>
-              <small>4 варианта перевода</small>
-            </div>
-          </label>
-
-          <label class="checkbox-label">
-            <input type="checkbox" id="method-input" value="input" />
-            <span class="custom-check"></span>
-            <div class="label-text">
-              <strong>Тест (Текстовый перевод)</strong>
-              <small>Набор перевода на английском с клавиатуры</small>
-            </div>
-          </label>
-        </div>
-      </div>
-
     </div>
   `;
 
@@ -125,35 +90,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   // Load current user settings
   const settings = await getUserSettings();
-  const enabledList = (settings.enabledMethods || 'cards,quiz,input').split(',');
-
-  const quizCheck = container.querySelector('#method-quiz');
-  const cardsCheck = container.querySelector('#method-cards');
-  const inputCheck = container.querySelector('#method-input');
   const goalSelect = container.querySelector('#daily-goal-select');
   const autoSaveStatus = container.querySelector('#autosave-status');
 
-  quizCheck.checked = enabledList.includes('quiz');
-  cardsCheck.checked = enabledList.includes('cards');
-  inputCheck.checked = enabledList.includes('input');
   goalSelect.value = String(settings.dailyGoal || 10);
 
   // Helper: auto-save function
   async function triggerAutoSave() {
-    const selectedMethods = [];
-    if (cardsCheck.checked) selectedMethods.push('cards');
-    if (quizCheck.checked) selectedMethods.push('quiz');
-    if (inputCheck.checked) selectedMethods.push('input');
-
-    if (selectedMethods.length === 0) {
-      cardsCheck.checked = true;
-      selectedMethods.push('cards');
-    }
-
     const newSettings = {
       ...settings,
       dailyGoal: Number(goalSelect.value),
-      enabledMethods: selectedMethods.join(','),
       theme: getSavedTheme(),
     };
 
@@ -173,10 +119,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     }
   }
 
-  // Bind change listeners for auto-save
-  quizCheck.addEventListener('change', triggerAutoSave);
-  cardsCheck.addEventListener('change', triggerAutoSave);
-  inputCheck.addEventListener('change', triggerAutoSave);
+  // Bind change listener for goal
   goalSelect.addEventListener('change', triggerAutoSave);
 
   // Bind theme buttons with auto-save
