@@ -216,14 +216,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       roundWords.map((w) => ({ id: w.id, text: w.translation, word: w.word, side: 'right' }))
     );
 
+    function getPairFontSize(text) {
+      if (!text) return '17px';
+      const len = text.length;
+      if (len > 32) return '12.5px';
+      if (len > 22) return '14px';
+      if (len > 15) return '15.5px';
+      return '17px';
+    }
+
     practiceArea.innerHTML = `
       <div class="pairs-grid">
         <div class="pairs-col" id="pairs-left-col">
           ${leftItems
             .map(
               (item) => `
-            <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}">
-              ${item.text}
+            <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
+              <span class="pairs-card-inner">${item.text}</span>
             </button>
           `
             )
@@ -233,8 +242,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           ${rightItems
             .map(
               (item) => `
-            <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}">
-              ${item.text}
+            <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
+              <span class="pairs-card-inner">${item.text}</span>
             </button>
           `
             )
