@@ -210,7 +210,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           );
 
     const otherWords = categoryFilteredWords.filter((w) => w.id !== currentWord.id);
-    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 7)];
+    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 6)];
     const leftItems = shuffleArray(
       roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
     );

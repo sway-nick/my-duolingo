@@ -460,32 +460,32 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .pairs-col {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 9px;
 }
 
 .pairs-card {
   background: #ffffff;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 10px 8px;
-  font-size: 13.5px;
+  padding: 11px 10px;
+  font-size: 15.5px;
   font-weight: 600;
   text-align: center;
   color: var(--text-main);
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
-  min-height: 44px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.2;
+  line-height: 1.25;
   box-shadow: var(--shadow-sm);
 }
 
