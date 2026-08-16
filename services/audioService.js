@@ -16,7 +16,7 @@ function getAudioContext() {
 }
 
 /**
- * Plays a pleasant celebratory chime upon correct answer (Web Audio API)
+ * Plays a cute, sweet sparkling crystal bell chime upon correct answer (Web Audio API)
  */
 function playSuccessSound() {
   try {
@@ -25,33 +25,31 @@ function playSuccessSound() {
 
     const now = ctx.currentTime;
 
-    // Dual-tone harmonious pleasant chime (Duolingo-style ding)
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-    const gainNode = ctx.createGain();
+    // Sweet sparkling crystal bell chord: C6 (1046.5Hz) -> E6 (1318.5Hz) -> G6 (1567.98Hz) -> C7 (2093Hz)
+    const notes = [
+      { freq: 1046.5, delay: 0.00, vol: 0.14 },
+      { freq: 1318.5, delay: 0.04, vol: 0.15 },
+      { freq: 1567.98, delay: 0.08, vol: 0.16 },
+      { freq: 2093.0, delay: 0.12, vol: 0.12 },
+    ];
 
-    osc1.type = 'sine';
-    osc2.type = 'sine';
+    notes.forEach(({ freq, delay, vol }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-    // Tone 1: E5 (659.25Hz) -> Tone 2: A5 (880Hz)
-    osc1.frequency.setValueAtTime(659.25, now);
-    osc1.frequency.setValueAtTime(880, now + 0.08);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + delay);
 
-    osc2.frequency.setValueAtTime(1318.5, now); // Higher harmonic (E6)
-    osc2.frequency.setValueAtTime(1760, now + 0.08); // (A6)
+      gain.gain.setValueAtTime(0.001, now + delay);
+      gain.gain.linearRampToValueAtTime(vol, now + delay + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.45);
 
-    gainNode.gain.setValueAtTime(0.01, now);
-    gainNode.gain.linearRampToValueAtTime(0.20, now + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
 
-    osc1.connect(gainNode);
-    osc2.connect(gainNode);
-    gainNode.connect(ctx.destination);
-
-    osc1.start(now);
-    osc2.start(now);
-    osc1.stop(now + 0.35);
-    osc2.stop(now + 0.35);
+      osc.start(now + delay);
+      osc.stop(now + delay + 0.45);
+    });
   } catch (e) {
     console.warn('Audio effect playback skipped:', e);
   }
