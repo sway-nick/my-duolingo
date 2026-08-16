@@ -125,11 +125,50 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
   }
 }
 
-function updateHeaderUser() {
+function updateHeaderUser(onUserAuthChanged = () => {}) {
   const user = getCurrentUser();
   const statusEl = document.querySelector('#header-user-status');
   if (statusEl) {
     statusEl.textContent = user ? `👤 ${user.name}` : 'Гостевой режим';
+  }
+
+  const actionsContainer = document.querySelector('.header-right-actions');
+  if (actionsContainer) {
+    const currentTheme = getSavedTheme();
+    actionsContainer.innerHTML = `
+      <button class="theme-toggle-btn" id="theme-toggle-btn" title="Переключить тему">
+        ${currentTheme === 'dark' ? '☀️' : '🌙'}
+      </button>
+
+      ${
+        user
+          ? `<button class="header-profile-badge" id="profile-btn" title="Ваш профиль">👤</button>`
+          : `<button class="header-auth-btn" id="login-header-btn">Войти</button>`
+      }
+    `;
+
+    const themeBtn = actionsContainer.querySelector('#theme-toggle-btn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const newTheme = toggleTheme();
+        themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      });
+    }
+
+    const loginHeaderBtn = actionsContainer.querySelector('#login-header-btn');
+    if (loginHeaderBtn) {
+      loginHeaderBtn.addEventListener('click', () => {
+        renderAuthModal(() => onUserAuthChanged());
+      });
+    }
+
+    const profileBtn = actionsContainer.querySelector('#profile-btn');
+    if (profileBtn) {
+      profileBtn.addEventListener('click', () => {
+        const settingsTab = document.querySelector('.nav-tab[data-tab="settings"]');
+        if (settingsTab) settingsTab.click();
+      });
+    }
   }
 }
 

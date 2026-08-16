@@ -1,4 +1,4 @@
-import { getCurrentUser } from './authService.js?v=8.1';
+import { getCurrentUser } from './authService.js?v=8.0';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycby0lLhpcGJOddZ6L64_D5i14zcU1ZdCtkgA3sj1G9w36eelkGPP4M6k2iTZekTGFAHhFg/exec';
 
@@ -56,8 +56,8 @@ async function getWords() {
 async function registerUser(email, password, name) {
   const cleanEmail = email.toLowerCase().trim();
 
+  // 1. Try POST to Google Apps Script backend
   try {
-    // Pass route & action inside body to survive Google Apps Script 302 redirects
     const response = await fetch(`${API_URL}?route=register`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -75,18 +75,31 @@ async function registerUser(email, password, name) {
       saveLocalUser({ ...res.data.user, password });
       return res;
     }
+  } catch (e) {
+    console.warn('POST registration fallback to GET query string', e);
+  }
 
-    if (res && res.error) {
+  // 2. Try GET query string fallback to survive 302 redirect parameter stripping
+  try {
+    const getUrl = `${API_URL}?route=register&action=register&email=${encodeURIComponent(cleanEmail)}&password=${encodeURIComponent(password)}&name=${encodeURIComponent(name)}`;
+    const response = await fetch(getUrl);
+    const res = await response.json();
+
+    if (res && res.success && res.data?.user) {
+      saveLocalUser({ ...res.data.user, password });
+      return res;
+    }
+    if (res && res.error && !res.error.includes('not found')) {
       throw new Error(res.error);
     }
   } catch (e) {
     if (e.message && !e.message.includes('fetch') && !e.message.includes('Unexpected') && !e.message.includes('not found')) {
       throw e;
     }
-    console.warn('Backend API connection pending, saving user account locally', e);
+    console.warn('Backend API connection offline, creating local user account', e);
   }
 
-  // Local fallback registration
+  // 3. Local fallback registration
   const newUser = {
     id: 'u_' + Date.now(),
     email: cleanEmail,
@@ -124,6 +137,17 @@ async function loginUser(email, password) {
     }
   } catch (e) {
     console.warn('Backend login fallback', e);
+  }
+
+  try {
+    const getUrl = `${API_URL}?route=login&action=login&email=${encodeURIComponent(cleanEmail)}&password=${encodeURIComponent(password)}`;
+    const response = await fetch(getUrl);
+    const res = await response.json();
+    if (res && res.success && res.data?.user) {
+      return res;
+    }
+  } catch (e) {
+    console.warn('Backend GET login fallback', e);
   }
 
   const localUsers = getLocalUsers();

@@ -16,16 +16,25 @@ function hashPassword(password) {
 }
 
 /**
- * Register endpoint.
+ * Register endpoint. Handles both POST body and GET query parameters.
  *
  * @param {Object} e
  * @returns {GoogleAppsScript.Content.TextOutput}
  */
 function registerPost(e) {
-  const body = getJsonBody(e);
-  validateRequired(body, ['email', 'password']);
+  let body = {};
+  try {
+    body = getJsonBody(e);
+  } catch (err) {}
 
-  const email = String(body.email).toLowerCase().trim();
+  const email = String(body.email || e?.parameter?.email || '').toLowerCase().trim();
+  const password = String(body.password || e?.parameter?.password || '');
+  const rawName = String(body.name || e?.parameter?.name || '').trim();
+
+  if (!email || !password) {
+    return errorResponse('Заполните необходимые поля: email, пароль', 400);
+  }
+
   const users = getSheetData('Users', USER_HEADERS);
 
   const existing = users.find((u) => String(u.email).toLowerCase() === email);
@@ -34,8 +43,8 @@ function registerPost(e) {
   }
 
   const userId = 'u_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-  const hashedPassword = hashPassword(String(body.password));
-  const userName = String(body.name || email.split('@')[0]).trim();
+  const hashedPassword = hashPassword(password);
+  const userName = rawName || email.split('@')[0];
 
   const newUser = {
     id: userId,
@@ -59,23 +68,31 @@ function registerPost(e) {
 }
 
 /**
- * Login endpoint.
+ * Login endpoint. Handles both POST body and GET query parameters.
  *
  * @param {Object} e
  * @returns {GoogleAppsScript.Content.TextOutput}
  */
 function loginPost(e) {
-  const body = getJsonBody(e);
-  validateRequired(body, ['email', 'password']);
+  let body = {};
+  try {
+    body = getJsonBody(e);
+  } catch (err) {}
 
-  const email = String(body.email).toLowerCase().trim();
-  const inputHashed = hashPassword(String(body.password));
+  const email = String(body.email || e?.parameter?.email || '').toLowerCase().trim();
+  const password = String(body.password || e?.parameter?.password || '');
+
+  if (!email || !password) {
+    return errorResponse('Заполните поля email и пароль', 400);
+  }
+
+  const inputHashed = hashPassword(password);
 
   const users = getSheetData('Users', USER_HEADERS);
   const user = users.find(
     (u) =>
       String(u.email).toLowerCase() === email &&
-      (String(u.passwordHash) === inputHashed || String(u.password) === inputHashed || String(u.password) === String(body.password)),
+      (String(u.passwordHash) === inputHashed || String(u.password) === inputHashed || String(u.password) === password),
   );
 
   if (!user) {
