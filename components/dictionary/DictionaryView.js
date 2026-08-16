@@ -16,6 +16,9 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const favSet = new Set(favoriteIds.map(String));
   const userProgress = getUserProgress();
 
+  // Load saved dictionary category filter from localStorage
+  const savedDictCat = localStorage.getItem('myduo_dict_category') || 'All';
+
   container.innerHTML = `
     <div class="dictionary-page">
       <div class="page-header">
@@ -47,8 +50,17 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     const opt = document.createElement('option');
     opt.value = cat;
     opt.textContent = cat;
+    if (cat === savedDictCat) {
+      opt.selected = true;
+    }
     categorySelect.appendChild(opt);
   });
+
+  if (savedDictCat === 'All') {
+    categorySelect.value = 'All';
+  } else if (uniqueCats.includes(savedDictCat)) {
+    categorySelect.value = savedDictCat;
+  }
 
   const grid = container.querySelector('#dict-grid');
   const searchInput = container.querySelector('#dict-search');
@@ -143,7 +155,11 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   };
 
   searchInput.addEventListener('input', renderList);
-  categorySelect.addEventListener('change', renderList);
+  categorySelect.addEventListener('change', () => {
+    // Remember chosen category persistently
+    localStorage.setItem('myduo_dict_category', categorySelect.value);
+    renderList();
+  });
 
   renderList();
 }
