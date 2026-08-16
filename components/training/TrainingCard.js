@@ -195,7 +195,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       </div>
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none;">
-        <button class="btn-repeat" id="btn-repeat">🔴 Не помню</button>
+        <button class="btn-repeat" id="btn-repeat">🔴 Сложно</button>
         <button class="btn-easy" id="btn-easy">🟢 Легко</button>
       </div>
     `;
