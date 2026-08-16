@@ -180,11 +180,11 @@
                 Вы уже отобрали <strong>${learningCount} из ${dailyGoal}</strong> слов для изучения.<br/>
                 Выучите часть слов (в режимах <strong>Квиз</strong>, <strong>Пары</strong> и <strong>Тест</strong>), чтобы освободить место для новых!
               </p>
-              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <button class="primary-button" id="go-quiz-btn" style="max-width: 220px;">
+              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
+                <button class="primary-button" id="go-quiz-btn">
                   🎯 Перейти в Квиз
                 </button>
-                <button class="secondary-button" id="go-settings-btn" style="max-width: 220px;">
+                <button class="secondary-button" id="go-settings-btn">
                   ⚙️ Настройки лимита
                 </button>
               </div>
@@ -258,9 +258,11 @@
               <p style="color: var(--text-muted); margin-bottom: 24px;">
                 Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в режиме Тест)!
               </p>
-              <button class="primary-button" id="review-all-btn" style="max-width: 280px; margin: 0 auto;">
-                🔄 Повторить категорию заново
-              </button>
+              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
+                <button class="primary-button" id="review-all-btn">
+                  🔄 Повторить категорию заново
+                </button>
+              </div>
             </div>
           `;
 
@@ -321,9 +323,11 @@
               <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">
                 ${emptyMsg}
               </p>
-              <button class="primary-button" id="go-next-mode-btn" style="max-width: 280px; margin: 0 auto;">
-                ${nextBtnLabel}
-              </button>
+              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
+                <button class="primary-button" id="go-next-mode-btn">
+                  ${nextBtnLabel}
+                </button>
+              </div>
             </div>
           `;
 
