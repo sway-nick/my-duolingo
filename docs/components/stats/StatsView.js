@@ -1,85 +1,26 @@
 import { getUserStats } from '../../services/api.js?v=8.0';
 import { getCurrentUser } from '../../services/authService.js?v=8.0';
 
-async function renderStatsView(containerSelector = '#app-content') {
+async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
+  let allWords = [];
+  let containerSelector = '#app-content';
+
+  if (Array.isArray(allWordsOrContainer)) {
+    allWords = allWordsOrContainer;
+    containerSelector = maybeContainer;
+  } else if (typeof allWordsOrContainer === 'string') {
+    containerSelector = allWordsOrContainer;
+  }
+
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
-  container.innerHTML = `
-      <div class="page-header" style="margin-bottom: 14px;">
-        <h2 style="font-size: 22px; margin: 0;">📊 Ваши достижения!</h2>
-      </div>
-
-      <div class="stats-loading" id="stats-loading">
-        Загрузка статистики...
-      </div>
-
-      <div id="stats-content" style="display: none;">
-        <!-- Top Stats Widgets Grid -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-icon">🎓</span>
-            <div class="stat-info">
-              <h3 id="stat-mastered">0</h3>
-              <p>Выучено (3x Тест)</p>
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <span class="stat-icon">📖</span>
-            <div class="stat-info">
-              <h3 id="stat-learning">0</h3>
-              <p>Слов на изучении</p>
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <span class="stat-icon">🎯</span>
-            <div class="stat-info">
-              <h3 id="stat-accuracy">0%</h3>
-              <p>Точность ответов</p>
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <span class="stat-icon">🔥</span>
-            <div class="stat-info">
-              <h3 id="stat-streak">0 дней</h3>
-              <p>Серия тренировок</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Relocated Curriculum / Program Section -->
-        <div class="curriculum-block">
-          <div class="section-title-row">
-            <h3>📚 Программа обучения по категориям</h3>
-            <span class="total-words-badge" id="stat-total-words">Всего слов: 0</span>
-          </div>
-          
-          <div class="category-progress-list" id="category-list">
-            <!-- Dynamic categories rendered here -->
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
   try {
-    const stats = await getUserStats();
-    container.querySelector('#stats-loading').style.display = 'none';
-    const content = container.querySelector('#stats-content');
-    content.style.display = 'block';
+    const stats = await getUserStats(allWords);
 
-    content.querySelector('#stat-mastered').textContent = stats.masteredCount || 0;
-    content.querySelector('#stat-learning').textContent = stats.learningCount || 0;
-    content.querySelector('#stat-accuracy').textContent = `${stats.accuracy || 0}%`;
-    content.querySelector('#stat-streak').textContent = `${stats.streakDays || 1} d`;
-    content.querySelector('#stat-total-words').textContent = `Всего в программе: ${stats.totalWords || 0} слов`;
-
-    const catList = content.querySelector('#category-list');
+    let categoriesHtml = '<p class="empty-state">Категории появятся после первых пройденных уроков.</p>';
     if (stats.categoryBreakdown && stats.categoryBreakdown.length > 0) {
-      catList.innerHTML = stats.categoryBreakdown
+      categoriesHtml = stats.categoryBreakdown
         .map((cat) => {
           const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
           return `
@@ -95,12 +36,65 @@ async function renderStatsView(containerSelector = '#app-content') {
           `;
         })
         .join('');
-    } else {
-      catList.innerHTML = '<p class="empty-state">Категории появятся после первых пройденных уроков.</p>';
     }
+
+    container.innerHTML = `
+      <div class="page-header" style="margin-bottom: 14px;">
+        <h2 style="font-size: 22px; margin: 0;">📊 Ваши достижения!</h2>
+      </div>
+
+      <div id="stats-content">
+        <!-- Top Stats Widgets Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">🎓</span>
+            <div class="stat-info">
+              <h3 id="stat-mastered">${stats.masteredCount || 0}</h3>
+              <p>Выучено (3x Тест)</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">📖</span>
+            <div class="stat-info">
+              <h3 id="stat-learning">${stats.learningCount || 0}</h3>
+              <p>Слов на изучении</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">🎯</span>
+            <div class="stat-info">
+              <h3 id="stat-accuracy">${stats.accuracy || 0}%</h3>
+              <p>Точность ответов</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">🔥</span>
+            <div class="stat-info">
+              <h3 id="stat-streak">${stats.streakDays || 1} дн</h3>
+              <p>Серия тренировок</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Relocated Curriculum / Program Section -->
+        <div class="curriculum-block">
+          <div class="section-title-row">
+            <h3>📚 Программа обучения по категориям</h3>
+            <span class="total-words-badge" id="stat-total-words">Всего в программе: ${stats.totalWords || 0} слов</span>
+          </div>
+          
+          <div class="category-progress-list" id="category-list">
+            ${categoriesHtml}
+          </div>
+        </div>
+      </div>
+    `;
   } catch (err) {
     console.error('Failed to load stats view:', err);
-    container.querySelector('#stats-loading').textContent = 'Ошибка загрузки статистики.';
+    container.innerHTML = '<p class="empty-state">Ошибка загрузки статистики.</p>';
   }
 }
 

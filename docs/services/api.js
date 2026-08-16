@@ -40,17 +40,48 @@ async function getHealth() {
   }
 }
 
-async function getWords() {
+let cachedWordsList = null;
+
+async function getWords(forceRefresh = false) {
+  if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
+    return { success: true, data: cachedWordsList };
+  }
+
+  // Check localStorage cache first for instant startup
+  if (!forceRefresh) {
+    try {
+      const localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+      if (Array.isArray(localCached) && localCached.length > 0) {
+        cachedWordsList = localCached;
+        // Asynchronously refresh in background without blocking UI
+        fetch(`${API_URL}?route=words`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+              cachedWordsList = data.data;
+              localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
+            }
+          })
+          .catch(() => {});
+        return { success: true, data: cachedWordsList };
+      }
+    } catch (e) {}
+  }
+
   try {
     const response = await fetch(`${API_URL}?route=words`);
     const data = await response.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      cachedWordsList = data.data;
+      try {
+        localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
+      } catch (e) {}
       return data;
     }
   } catch (error) {
     console.warn('API error, using default word list', error);
   }
-  return { success: true, data: MOCK_WORDS };
+  return { success: true, data: cachedWordsList || MOCK_WORDS };
 }
 
 async function registerUser(email, password, name) {
@@ -429,13 +460,20 @@ function getQueueForTest(words, progress, favorites = []) {
   return [...base, ...injectedFavs];
 }
 
-async function getUserStats() {
+async function getUserStats(customWords = null) {
   const userId = getEffectiveUserId();
   const key = `progress_${userId}`;
   const localProg = JSON.parse(localStorage.getItem(key) || '{}');
 
-  const allWordsRes = await getWords();
-  const wordsList = allWordsRes.data || MOCK_WORDS;
+  let wordsList = customWords;
+  if (!wordsList || wordsList.length === 0) {
+    if (cachedWordsList && cachedWordsList.length > 0) {
+      wordsList = cachedWordsList;
+    } else {
+      const allWordsRes = await getWords();
+      wordsList = allWordsRes.data || MOCK_WORDS;
+    }
+  }
 
   let masteredCount = 0;
   let learningCount = 0;

@@ -384,7 +384,7 @@
         if (tabName === 'training') {
           await renderTrainingTab();
         } else if (tabName === 'stats') {
-          await renderStatsView('#app-content');
+          await renderStatsView(allWords, '#app-content');
         } else if (tabName === 'favorites') {
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
