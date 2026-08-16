@@ -507,10 +507,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     input.focus();
   } else {
     practiceArea.innerHTML = `
-      <div class="flashcard-box" id="flashcard" style="cursor: pointer; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border-color); text-align: center; background: var(--bg-card, #ffffff); transition: all 0.2s ease;">
-        <p id="flashcard-hint" style="margin: 0; color: var(--text-muted); font-size: 13px;">Нажмите на карточку, чтобы увидеть перевод</p>
-        <div class="flashcard-back" id="flashcard-back" style="display:none;">
-          <h2 class="card-translation" style="font-size: 20px; margin: 4px 0 2px; color: var(--text-main); font-weight: 600;">${currentWord.translation}</h2>
+      <div class="flashcard-box" id="flashcard">
+        <p id="flashcard-hint" class="flashcard-hint">Нажмите на карточку, чтобы увидеть перевод</p>
+        <div class="flashcard-back" id="flashcard-back" style="display:none; width: 100%;">
+          <h2 class="card-translation">${currentWord.translation}</h2>
         </div>
       </div>
       
@@ -533,8 +533,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (flashcardHint) flashcardHint.style.display = 'none';
       flashcardBack.style.display = 'block';
       feedbackBtns.style.display = 'flex';
-      flashcard.style.borderStyle = 'solid';
-      flashcard.style.borderColor = 'var(--primary-color, #2563eb)';
+      flashcard.classList.add('flipped');
     });
 
     practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
