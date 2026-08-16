@@ -6,10 +6,8 @@ async function renderStatsView(containerSelector = '#app-content') {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="stats-page">
-      <div class="page-header">
-        <h2>📊 Прогресс и Программа обучения</h2>
-        <p class="subtitle">Ваши персональные достижения и детализация по темам</p>
+      <div class="page-header" style="margin-bottom: 14px;">
+        <h2 style="font-size: 22px; margin: 0;">📊 Ваши достижения!</h2>
       </div>
 
       <div class="stats-loading" id="stats-loading">
