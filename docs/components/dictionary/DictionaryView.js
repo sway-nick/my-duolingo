@@ -37,7 +37,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
       <!-- Controls: Search & Category Filter -->
       <div class="dictionary-controls">
-        <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова или перевода..." />
+        <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова" />
         
         <select id="dict-category" class="filter-select">
           <option value="All">Все категории</option>
@@ -50,7 +50,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     </div>
   `;
 
-  // Populate categories (cleaned of A1/A2 suffixes)
+  // Populate categories without numbers in parentheses
   const categorySelect = container.querySelector('#dict-category');
   const uniqueCats = Array.from(
     new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean))
@@ -58,8 +58,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   uniqueCats.forEach((cat) => {
     const opt = document.createElement('option');
     opt.value = cat;
-    const catCount = words.filter((w) => sanitizeCategory(w.category) === cat).length;
-    opt.textContent = `${cat} (${catCount})`;
+    opt.textContent = cat;
     if (cat === savedDictCat) {
       opt.selected = true;
     }

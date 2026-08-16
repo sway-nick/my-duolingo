@@ -1425,13 +1425,13 @@ body {
 }
 
 .search-input {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1 1 120px;
+  min-width: 95px;
   height: 42px;
-  padding: 0 12px;
+  padding: 0 10px;
   border-radius: var(--radius-md);
   border: 1.5px solid var(--border-color);
-  font-size: 14px;
+  font-size: 13.5px;
   background: var(--bg-card, #ffffff);
   color: var(--text-main);
   box-sizing: border-box;
@@ -1444,15 +1444,14 @@ body {
 }
 
 .filter-select {
-  flex: 0 0 115px;
-  width: 115px;
-  min-width: 0;
-  max-width: 125px;
+  flex: 1.25 1 155px;
+  min-width: 140px;
+  max-width: 190px;
   height: 42px;
   padding: 0 8px;
   border-radius: var(--radius-md);
   border: 1.5px solid var(--border-color);
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
   background: var(--bg-card, #ffffff);
   color: var(--text-main);
