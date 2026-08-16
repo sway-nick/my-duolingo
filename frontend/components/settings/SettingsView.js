@@ -12,12 +12,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   container.innerHTML = `
     <div class="settings-page">
-      <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
-        <div>
-          <h2>⚙️ Настройки</h2>
-          <p class="subtitle">Настройки сохраняются автоматически в вашем профиле</p>
-        </div>
-        <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap; margin-top: 4px;">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="margin: 0;">⚙️ Настройки</h2>
+        <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap;">
           ✓ Сохранено
         </span>
       </div>
@@ -26,21 +23,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       <div class="settings-card profile-card">
         <div class="profile-avatar">👤</div>
         <div class="profile-details">
-          <h3>${user ? user.name : 'Гостевой режим'}</h3>
-          <p>${user ? user.email : 'Авторизуйтесь, чтобы синхронизировать настройки с Google Таблицей'}</p>
+          <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : 'Гостевой режим'}</h3>
+          <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : 'Авторизуйтесь для синхронизации'}</p>
         </div>
         <div>
           ${
             user
-              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 10px 18px; min-height: 42px; height: 42px; font-size: 14.5px;">Выйти</button>`
-              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 10px 18px; min-height: 42px; height: 42px; font-size: 14.5px;">Войти</button>`
+              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Выйти</button>`
+              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Войти</button>`
           }
         </div>
       </div>
 
       <!-- Theme Switcher Card -->
       <div class="settings-card">
-        <h3>🎨 Тема оформления</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Тема оформления</h3>
         <div class="theme-options-row">
           <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
             ☀️ Светлая тема
@@ -53,7 +50,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Goals Card -->
       <div class="settings-card">
-        <h3 style="margin-bottom: 14px;">📌 Задача на день</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">📌 Задача на день</h3>
         <select id="daily-goal-select" class="settings-select">
           <option value="10">10 слов</option>
           <option value="20">20 слов</option>

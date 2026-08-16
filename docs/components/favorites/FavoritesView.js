@@ -27,13 +27,14 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   }
 
   container.innerHTML = `
-    <div class="favorites-page">
-      <div class="page-header-row">
+      <div class="page-header-row" style="margin-bottom: 14px;">
         <div>
-          <h2>❤️ Избранные слова (${favoriteWords.length})</h2>
-          <p class="subtitle">Персональная подборка для регулярного повторения</p>
+          <h2 style="font-size: 20px; margin: 0 0 2px;">❤️ Избранные слова (${favoriteWords.length})</h2>
+          <p class="subtitle" style="font-size: 13px; margin: 0;">Персональная подборка для регулярного повторения</p>
         </div>
-        <button class="primary-button" id="start-fav-practice-btn">🎓 Тренировать избранные</button>
+        <button class="primary-button" id="start-fav-practice-btn" style="width: auto; padding: 8px 14px; min-height: 38px; height: 38px; font-size: 13.5px; font-weight: 700; white-space: nowrap;">
+          Тренировать избранное
+        </button>
       </div>
 
       <div class="favorites-grid" id="favorites-grid">
