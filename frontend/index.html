@@ -1,24 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>English Trainer — Изучайте английский легко</title>
-    <link rel="stylesheet" href="./assets/css/main.css" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=7.0" />
   </head>
 
   <body>
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings } from './services/api.js';
-      import { getCurrentUser } from './services/authService.js';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js';
-      import { renderTrainingCard } from './components/training/TrainingCard.js';
-      import { renderStatsView } from './components/stats/StatsView.js';
-      import { renderSettingsView } from './components/settings/SettingsView.js';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js';
+      import { getWords, getUserSettings } from './services/api.js?v=7.0';
+      import { getCurrentUser } from './services/authService.js?v=7.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=7.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=7.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=7.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=7.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=7.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=7.0';
 
       let allWords = [];
       let favoriteIds = new Set();
@@ -47,7 +50,6 @@
         if (isFav) favoriteIds.add(wordId);
         else favoriteIds.delete(wordId);
 
-        // If on favorites tab, re-render
         if (activeTab === 'favorites') {
           renderTab(activeTab);
         }
@@ -125,7 +127,6 @@
           }
         );
 
-        // Initial tab render
         renderTab('training');
       }
 

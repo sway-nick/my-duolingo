@@ -1,35 +1,136 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Премиальное веб-приложение для изучения английского языка">
-  <meta name="theme-color" content="#6366f1">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for (var i = 0; i < registrations.length; i++) {
-          registrations[i].unregister();
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>English Trainer — Изучайте английский легко</title>
+    <link rel="stylesheet" href="./assets/css/main.css?v=7.0" />
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { getWords, getUserSettings } from './services/api.js?v=7.0';
+      import { getCurrentUser } from './services/authService.js?v=7.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=7.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=7.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=7.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=7.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=7.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=7.0';
+
+      let allWords = [];
+      let favoriteIds = new Set();
+      let currentWordIndex = 0;
+      let activeTab = 'training';
+      let userSettings = { enabledMethods: 'quiz,cards,input' };
+
+      async function loadData() {
+        try {
+          const wordsRes = await getWords();
+          if (wordsRes && wordsRes.data && wordsRes.data.length > 0) {
+            allWords = wordsRes.data;
+          }
+        } catch (e) {
+          console.warn('Failed to load words:', e);
         }
-      });
-    }
-    if ('caches' in window) {
-      caches.keys().then(function(names) {
-        for (var i = 0; i < names.length; i++) {
-          caches.delete(names[i]);
+
+        try {
+          userSettings = await getUserSettings();
+        } catch (e) {
+          console.warn('Failed to load settings:', e);
         }
-      });
-    }
-  </script>
-  <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="./assets/css/app.css?v=6.0">
-  <title>English Trainer — Изучение английского языка</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="./main.js?v=6.0"></script>
-</body>
+      }
+
+      function handleFavoriteToggle(wordId, isFav) {
+        if (isFav) favoriteIds.add(wordId);
+        else favoriteIds.delete(wordId);
+
+        if (activeTab === 'favorites') {
+          renderTab(activeTab);
+        }
+      }
+
+      function renderTrainingTab() {
+        const content = document.querySelector('#app-content');
+        if (!content) return;
+        content.innerHTML = '<div id="training"></div>';
+
+        if (allWords.length === 0) {
+          content.innerHTML = '<p class="empty-state">Нет доступных слов для тренировки.</p>';
+          return;
+        }
+
+        const currentWord = allWords[currentWordIndex % allWords.length];
+        const enabledMethods = (userSettings.enabledMethods || 'quiz,cards,input').split(',');
+
+        renderTrainingCard(currentWord, allWords, {
+          enabledMethods,
+          isFavorite: favoriteIds.has(currentWord.id),
+          onFavoriteToggle: handleFavoriteToggle,
+          onNext: () => {
+            currentWordIndex += 1;
+            renderTrainingTab();
+          },
+        });
+      }
+
+      async function renderTab(tabName) {
+        activeTab = tabName;
+        const content = document.querySelector('#app-content');
+
+        if (tabName === 'training') {
+          renderTrainingTab();
+        } else if (tabName === 'stats') {
+          await renderStatsView('#app-content');
+        } else if (tabName === 'favorites') {
+          const favWords = allWords.filter((w) => favoriteIds.has(w.id));
+          renderFavoritesView(favWords, '#app-content', {
+            onFavoriteToggle: handleFavoriteToggle,
+            onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
+            onStartFavoritePractice: (practiceWords) => {
+              allWords = practiceWords;
+              currentWordIndex = 0;
+              const tabBtn = document.querySelector('.nav-tab[data-tab="training"]');
+              if (tabBtn) tabBtn.click();
+            },
+          });
+        } else if (tabName === 'dictionary') {
+          renderDictionaryView(allWords, '#app-content', {
+            favoriteIds: Array.from(favoriteIds),
+            onFavoriteToggle: handleFavoriteToggle,
+          });
+        } else if (tabName === 'settings') {
+          await renderSettingsView('#app-content', async () => {
+            updateHeaderUser();
+            await loadData();
+            renderTab(activeTab);
+          });
+        }
+      }
+
+      async function init() {
+        await loadData();
+
+        renderAppLayout(
+          (tabName) => {
+            renderTab(tabName);
+          },
+          async () => {
+            updateHeaderUser();
+            await loadData();
+            renderTab(activeTab);
+          }
+        );
+
+        renderTab('training');
+      }
+
+      init();
+    </script>
+  </body>
 </html>
