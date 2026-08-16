@@ -165,13 +165,15 @@ body.dark-theme,
 }
 
 .theme-options-row,
-.voice-options-row {
+.voice-options-row,
+.sound-options-row {
   display: flex;
   gap: 10px;
 }
 
 .theme-option-btn,
-.voice-option-btn {
+.voice-option-btn,
+.sound-option-btn {
   flex: 1;
   padding: 10px 12px;
   min-height: 44px;
@@ -190,13 +192,15 @@ body.dark-theme,
 }
 
 .theme-option-btn:hover:not(.active),
-.voice-option-btn:hover:not(.active) {
+.voice-option-btn:hover:not(.active),
+.sound-option-btn:hover:not(.active) {
   background: #e2e8f0;
   border-color: #94a3b8;
 }
 
 .theme-option-btn.active,
-.voice-option-btn.active {
+.voice-option-btn.active,
+.sound-option-btn.active {
   border-color: #16a34a;
   background: #ecfdf5;
   color: #15803d;
@@ -204,14 +208,16 @@ body.dark-theme,
 }
 
 .dark-theme .theme-option-btn,
-.dark-theme .voice-option-btn {
+.dark-theme .voice-option-btn,
+.dark-theme .sound-option-btn {
   background: #1e293b;
   border-color: #334155;
   color: #f8fafc;
 }
 
 .dark-theme .theme-option-btn.active,
-.dark-theme .voice-option-btn.active {
+.dark-theme .voice-option-btn.active,
+.dark-theme .sound-option-btn.active {
   background: rgba(22, 163, 74, 0.25);
   color: #4ade80;
   border-color: #22c55e;

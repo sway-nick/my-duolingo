@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=16.0'
 import { getCurrentUser, logoutUser } from '../../services/authService.js?v=16.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=16.0';
-import { speakWord, setSavedVoiceGender } from '../../services/audioService.js?v=16.0';
+import { speakWord, setSavedVoiceGender, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=16.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -45,6 +45,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           </button>
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
             ☾ Тёмная тема
+          </button>
+        </div>
+      </div>
+
+      <!-- Sound Mode Card -->
+      <div class="settings-card">
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🔊 Звук и эффекты</h3>
+        <div class="sound-options-row">
+          <button class="sound-option-btn" id="sound-on-btn">
+            🔊 Со звуком
+          </button>
+          <button class="sound-option-btn" id="sound-off-btn">
+            🔇 Без звука
           </button>
         </div>
       </div>
@@ -106,6 +119,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   goalSelect.value = String(settings.dailyGoal || 10);
 
+  // Setup Sound / Silent Mode Selection
+  let isSilent = isAudioMuted() || Boolean(settings.silentMode);
+  const soundOnBtn = container.querySelector('#sound-on-btn');
+  const soundOffBtn = container.querySelector('#sound-off-btn');
+
+  function updateSoundButtons() {
+    if (soundOnBtn && soundOffBtn) {
+      soundOnBtn.classList.toggle('active', !isSilent);
+      soundOffBtn.classList.toggle('active', isSilent);
+    }
+  }
+  updateSoundButtons();
+
   // Setup Voice Selection
   let currentVoice = settings.voiceGender || 'female';
   const femaleVoiceBtn = container.querySelector('#voice-female-btn');
@@ -126,6 +152,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       dailyGoal: Number(goalSelect.value),
       theme: getSavedTheme(),
       voiceGender: currentVoice,
+      silentMode: isSilent,
     };
 
     if (autoSaveStatus) {
@@ -165,13 +192,31 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     triggerAutoSave();
   });
 
+  // Bind sound buttons
+  if (soundOnBtn && soundOffBtn) {
+    soundOnBtn.addEventListener('click', () => {
+      isSilent = false;
+      setSavedSilentMode(false);
+      updateSoundButtons();
+      playSuccessSound();
+      triggerAutoSave();
+    });
+
+    soundOffBtn.addEventListener('click', () => {
+      isSilent = true;
+      setSavedSilentMode(true);
+      updateSoundButtons();
+      triggerAutoSave();
+    });
+  }
+
   // Bind voice buttons with preview speech
   if (femaleVoiceBtn && maleVoiceBtn) {
     femaleVoiceBtn.addEventListener('click', () => {
       currentVoice = 'female';
       setSavedVoiceGender('female');
       updateVoiceButtons();
-      speakWord('Hello! This is the female voice.', null, 'en-US', 'female');
+      speakWord('Hello! This is the female voice.', null, 'en-US', 'female', true);
       triggerAutoSave();
     });
 
@@ -179,7 +224,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       currentVoice = 'male';
       setSavedVoiceGender('male');
       updateVoiceButtons();
-      speakWord('Hello! This is the male voice.', null, 'en-US', 'male');
+      speakWord('Hello! This is the male voice.', null, 'en-US', 'male', true);
       triggerAutoSave();
     });
   }

@@ -2,6 +2,25 @@ let currentWordKey = null;
 let clickCount = 0;
 let audioCtx = null;
 
+function isAudioMuted() {
+  try {
+    const direct = localStorage.getItem('myduo_silent_mode');
+    if (direct !== null) return direct === 'true';
+    const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
+    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
+    const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
+    return Boolean(settings.silentMode);
+  } catch (e) {
+    return false;
+  }
+}
+
+function setSavedSilentMode(silent) {
+  try {
+    localStorage.setItem('myduo_silent_mode', silent ? 'true' : 'false');
+  } catch (e) {}
+}
+
 function getAudioContext() {
   if (!audioCtx && typeof window !== 'undefined') {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -19,6 +38,7 @@ function getAudioContext() {
  * Plays a cute, sweet sparkling crystal bell chime upon correct answer (Web Audio API)
  */
 function playSuccessSound() {
+  if (isAudioMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -59,6 +79,7 @@ function playSuccessSound() {
  * Plays a casino slot machine reel spinning / cascading ratchet sound (Web Audio API)
  */
 function playCasinoRollSound() {
+  if (isAudioMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -98,6 +119,7 @@ function playCasinoRollSound() {
  * Plays a gentle, distinct error sound upon incorrect answer (Web Audio API)
  */
 function playErrorSound() {
+  if (isAudioMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -233,7 +255,11 @@ function getPreferredVoice(gender = 'female') {
  * @param {string} voiceGenderOverride - Optional gender override ('male' | 'female')
  * @returns {boolean} isTurtleMode - True if playing in slow speed
  */
-function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = null) {
+function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = null, forcePlay = false) {
+  if (isAudioMuted() && !forcePlay) {
+    return false;
+  }
+
   if (!('speechSynthesis' in window)) {
     console.warn('SpeechSynthesis is not supported in this browser.');
     return false;
@@ -296,6 +322,7 @@ function getCoinAudio() {
  * Plays the exact metallic coin sound provided by user (coin.mp3)
  */
 function playCoinDropSound() {
+  if (isAudioMuted()) return;
   try {
     const audio = getCoinAudio();
     if (audio) {
@@ -327,4 +354,6 @@ export {
   playCoinDropSound,
   setSavedVoiceGender,
   getSavedVoiceGender,
+  isAudioMuted,
+  setSavedSilentMode,
 };
