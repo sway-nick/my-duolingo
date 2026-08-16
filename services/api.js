@@ -13,6 +13,8 @@ const MOCK_WORDS = [
   { id: '8', word: 'friendship', transcription: '[ˈfrend.ʃɪp]', translation: 'дружба', category: 'Отношения', level: 'A2' },
 ];
 
+let pendingProgressQueue = [];
+
 function getLocalUsers() {
   try {
     return JSON.parse(localStorage.getItem('myduo_registered_users') || '[]');
@@ -55,7 +57,6 @@ async function registerUser(email, password, name) {
   const cleanEmail = email.toLowerCase().trim();
 
   try {
-    // Attempt backend registration call
     const response = await fetch(`${API_URL}?route=register`, {
       method: 'POST',
       body: JSON.stringify({ email: cleanEmail, password, name, action: 'register' }),
@@ -69,7 +70,6 @@ async function registerUser(email, password, name) {
     console.warn('Backend API unavailable, saving account locally', e);
   }
 
-  // Check local users
   const localUsers = getLocalUsers();
   const existing = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
   if (existing) {
@@ -122,7 +122,6 @@ async function loginUser(email, password) {
     };
   }
 
-  // Fallback demo login for new users if not found locally
   const demoUser = {
     id: 'u_' + Date.now(),
     email: cleanEmail,
@@ -139,22 +138,54 @@ async function loginUser(email, password) {
   };
 }
 
+/**
+ * Saves answer progress. Uses batching to avoid network lag on every click.
+ */
 async function saveProgress(wordId, isCorrect) {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
-  try {
-    await fetch(`${API_URL}?route=progress`, {
-      method: 'POST',
-      body: JSON.stringify({ userId, wordId, isCorrect }),
-    });
-  } catch (e) {
-    const key = `progress_${userId}`;
-    const local = JSON.parse(localStorage.getItem(key) || '{}');
-    if (!local[wordId]) local[wordId] = { correct: 0, error: 0 };
-    if (isCorrect) local[wordId].correct += 1;
-    else local[wordId].error += 1;
-    localStorage.setItem(key, JSON.stringify(local));
+
+  // 1. Instant local state update
+  const key = `progress_${userId}`;
+  const local = JSON.parse(localStorage.getItem(key) || '{}');
+  if (!local[wordId]) local[wordId] = { correct: 0, error: 0 };
+  if (isCorrect) local[wordId].correct += 1;
+  else local[wordId].error += 1;
+  localStorage.setItem(key, JSON.stringify(local));
+
+  // 2. Queue for batched sync to backend
+  pendingProgressQueue.push({ userId, wordId, isCorrect });
+
+  // Flush backend every 5 items
+  if (pendingProgressQueue.length >= 5) {
+    flushProgressQueue();
   }
+}
+
+async function flushProgressQueue() {
+  if (pendingProgressQueue.length === 0) return;
+  const batch = [...pendingProgressQueue];
+  pendingProgressQueue = [];
+
+  for (const item of batch) {
+    try {
+      await fetch(`${API_URL}?route=progress`, {
+        method: 'POST',
+        body: JSON.stringify(item),
+      });
+    } catch (e) {
+      console.warn('Failed to sync progress item to server:', item, e);
+    }
+  }
+}
+
+// Flush pending queue when tab is closed or hidden
+if (typeof window !== 'undefined') {
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      flushProgressQueue();
+    }
+  });
 }
 
 async function toggleFavoriteApi(wordId, isFavorite) {
@@ -258,6 +289,7 @@ export {
   registerUser,
   loginUser,
   saveProgress,
+  flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,
   getUserSettings,
