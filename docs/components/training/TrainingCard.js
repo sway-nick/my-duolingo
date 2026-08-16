@@ -36,22 +36,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const isCardsMode = currentMethod === 'cards';
 
   container.innerHTML = `
-    <section class="training-card" aria-label="Карточка изучения слова">
+    <section class="word-card-container">
       
-      <!-- Top Action Bar: Categories & Favorite -->
-      <div class="card-action-bar">
-        <!-- Training Mode Switcher Tabs (Pills) -->
-        <div class="mode-pill-bar">
-          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards">
+      <!-- Top card bar: Mode Switch (Карточки / Квиз / Пары / Тест) on Left, Favorite Heart on Right in ONE single horizontal row -->
+      <div class="card-header-bar">
+        <div class="mode-switch-pills">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
             Карточки
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
             Квиз
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs" title="Режим Пары">
             Пары
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
             Тест
           </button>
         </div>
