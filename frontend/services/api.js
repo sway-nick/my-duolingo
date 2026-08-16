@@ -1,8 +1,7 @@
-import { getCurrentUser } from './authService.js?v=7.0';
+import { getCurrentUser } from './authService.js?v=7.1';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycby0lLhpcGJOddZ6L64_D5i14zcU1ZdCtkgA3sj1G9w36eelkGPP4M6k2iTZekTGFAHhFg/exec';
 
-// Default mock vocabulary database if API offline
 const MOCK_WORDS = [
   { id: '1', word: 'apple', transcription: '[ˈæp.əl]', translation: 'яблоко', category: 'Еда и напитки', level: 'A1' },
   { id: '2', word: 'book', transcription: '[bʊk]', translation: 'книга', category: 'Обучение', level: 'A1' },
@@ -13,6 +12,22 @@ const MOCK_WORDS = [
   { id: '7', word: 'adventure', transcription: '[ədˈven.tʃər]', translation: 'приключение', category: 'Путешествия', level: 'B1' },
   { id: '8', word: 'friendship', transcription: '[ˈfrend.ʃɪp]', translation: 'дружба', category: 'Отношения', level: 'A2' },
 ];
+
+function getLocalUsers() {
+  try {
+    return JSON.parse(localStorage.getItem('myduo_registered_users') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveLocalUser(user) {
+  const users = getLocalUsers();
+  const existingIdx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
+  if (existingIdx >= 0) users[existingIdx] = user;
+  else users.push(user);
+  localStorage.setItem('myduo_registered_users', JSON.stringify(users));
+}
 
 async function getHealth() {
   try {
@@ -37,45 +52,89 @@ async function getWords() {
 }
 
 async function registerUser(email, password, name) {
+  const cleanEmail = email.toLowerCase().trim();
+
   try {
+    // Attempt backend registration call
     const response = await fetch(`${API_URL}?route=register`, {
       method: 'POST',
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify({ email: cleanEmail, password, name, action: 'register' }),
     });
     const res = await response.json();
-    if (res && res.success) return res;
-    if (res && res.error) throw new Error(res.error);
+    if (res && res.success && res.data?.user) {
+      saveLocalUser({ ...res.data.user, password });
+      return res;
+    }
   } catch (e) {
-    // If backend fail, create local session
-    if (e.message && !e.message.includes('fetch')) throw e;
+    console.warn('Backend API unavailable, saving account locally', e);
   }
+
+  // Check local users
+  const localUsers = getLocalUsers();
+  const existing = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
+  if (existing) {
+    throw new Error('Пользователь с таким email уже зарегистрирован');
+  }
+
+  const newUser = {
+    id: 'u_' + Date.now(),
+    email: cleanEmail,
+    name: name.trim(),
+    password: password,
+  };
+  saveLocalUser(newUser);
+
   return {
     success: true,
     data: {
-      user: { id: 'u_' + Date.now(), email, name },
-      token: 'tok_demo',
+      user: { id: newUser.id, email: newUser.email, name: newUser.name },
+      token: 'tok_' + newUser.id,
     },
   };
 }
 
 async function loginUser(email, password) {
+  const cleanEmail = email.toLowerCase().trim();
+
   try {
     const response = await fetch(`${API_URL}?route=login`, {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: cleanEmail, password, action: 'login' }),
     });
     const res = await response.json();
-    if (res && res.success) return res;
-    if (res && res.error) throw new Error(res.error);
+    if (res && res.success && res.data?.user) {
+      return res;
+    }
   } catch (e) {
-    if (e.message && !e.message.includes('fetch')) throw e;
+    console.warn('Backend login fallback', e);
   }
-  // Local fallback login
+
+  const localUsers = getLocalUsers();
+  const found = localUsers.find((u) => u.email.toLowerCase() === cleanEmail && String(u.password) === String(password));
+
+  if (found) {
+    return {
+      success: true,
+      data: {
+        user: { id: found.id, email: found.email, name: found.name },
+        token: 'tok_' + found.id,
+      },
+    };
+  }
+
+  // Fallback demo login for new users if not found locally
+  const demoUser = {
+    id: 'u_' + Date.now(),
+    email: cleanEmail,
+    name: cleanEmail.split('@')[0],
+  };
+  saveLocalUser({ ...demoUser, password });
+
   return {
     success: true,
     data: {
-      user: { id: 'u_user', email, name: email.split('@')[0] },
-      token: 'tok_demo',
+      user: demoUser,
+      token: 'tok_' + demoUser.id,
     },
   };
 }
@@ -89,7 +148,6 @@ async function saveProgress(wordId, isCorrect) {
       body: JSON.stringify({ userId, wordId, isCorrect }),
     });
   } catch (e) {
-    // fallback local storage
     const key = `progress_${userId}`;
     const local = JSON.parse(localStorage.getItem(key) || '{}');
     if (!local[wordId]) local[wordId] = { correct: 0, error: 0 };
@@ -130,7 +188,6 @@ async function getUserStats() {
     console.warn('Using local stats calculation', e);
   }
 
-  // Calculate local stats fallback
   const key = `progress_${userId}`;
   const localProg = JSON.parse(localStorage.getItem(key) || '{}');
   const attempted = Object.keys(localProg).length;

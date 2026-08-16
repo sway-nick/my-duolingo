@@ -1,5 +1,5 @@
-import { loginUser, registerUser } from '../../services/api.js?v=7.0';
-import { setCurrentUser } from '../../services/authService.js?v=7.0';
+import { loginUser, registerUser } from '../../services/api.js?v=7.1';
+import { setCurrentUser } from '../../services/authService.js?v=7.1';
 
 function renderAuthModal(onSuccessCallback) {
   const existing = document.querySelector('#auth-modal');
@@ -36,6 +36,11 @@ function renderAuthModal(onSuccessCallback) {
           <input type="password" id="auth-password" placeholder="••••••••" required />
         </div>
 
+        <div class="form-group" id="password-confirm-group" style="display:none;">
+          <label>Повторите пароль</label>
+          <input type="password" id="auth-password-confirm" placeholder="••••••••" />
+        </div>
+
         <button type="submit" class="primary-button" id="auth-submit-btn">Войти</button>
       </form>
     </div>
@@ -48,6 +53,7 @@ function renderAuthModal(onSuccessCallback) {
   const tabLogin = modal.querySelector('#tab-login-btn');
   const tabRegister = modal.querySelector('#tab-register-btn');
   const nameGroup = modal.querySelector('#name-group');
+  const passConfirmGroup = modal.querySelector('#password-confirm-group');
   const submitBtn = modal.querySelector('#auth-submit-btn');
   const errorBox = modal.querySelector('#auth-error');
   const closeBtn = modal.querySelector('#modal-close-btn');
@@ -59,11 +65,13 @@ function renderAuthModal(onSuccessCallback) {
       tabLogin.classList.add('active');
       tabRegister.classList.remove('active');
       nameGroup.style.display = 'none';
+      passConfirmGroup.style.display = 'none';
       submitBtn.textContent = 'Войти';
     } else {
       tabRegister.classList.add('active');
       tabLogin.classList.remove('active');
       nameGroup.style.display = 'block';
+      passConfirmGroup.style.display = 'block';
       submitBtn.textContent = 'Зарегистрироваться';
     }
   };
@@ -83,7 +91,26 @@ function renderAuthModal(onSuccessCallback) {
 
     const email = modal.querySelector('#auth-email').value.trim();
     const password = modal.querySelector('#auth-password').value.trim();
+    const passwordConfirm = modal.querySelector('#auth-password-confirm').value.trim();
     const name = modal.querySelector('#auth-name').value.trim();
+
+    if (mode === 'register') {
+      if (!name) {
+        errorBox.textContent = 'Пожалуйста, введите ваше имя';
+        errorBox.style.display = 'block';
+        return;
+      }
+      if (password !== passwordConfirm) {
+        errorBox.textContent = 'Пароли не совпадают. Введите одинаковые пароли.';
+        errorBox.style.display = 'block';
+        return;
+      }
+      if (password.length < 4) {
+        errorBox.textContent = 'Пароль должен содержать не менее 4 символов';
+        errorBox.style.display = 'block';
+        return;
+      }
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Загрузка...';
@@ -93,7 +120,6 @@ function renderAuthModal(onSuccessCallback) {
       if (mode === 'login') {
         res = await loginUser(email, password);
       } else {
-        if (!name) throw new Error('Введите ваше имя');
         res = await registerUser(email, password, name);
       }
 

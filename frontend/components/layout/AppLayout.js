@@ -1,12 +1,36 @@
-import { getCurrentUser } from '../../services/authService.js?v=7.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=7.0';
+import { getCurrentUser } from '../../services/authService.js?v=7.1';
+import { renderAuthModal } from '../auth/AuthModal.js?v=7.1';
+
+function getSavedTheme() {
+  return localStorage.getItem('myduo_theme') || 'light';
+}
+
+function applyTheme(theme) {
+  localStorage.setItem('myduo_theme', theme);
+  const app = document.querySelector('.mobile-app');
+  if (theme === 'dark') {
+    document.body.classList.add('dark-theme');
+    if (app) app.classList.add('dark-theme');
+  } else {
+    document.body.classList.remove('dark-theme');
+    if (app) app.classList.remove('dark-theme');
+  }
+}
+
+function toggleTheme() {
+  const current = getSavedTheme();
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  return next;
+}
 
 function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
   const app = document.querySelector('#app');
   const user = getCurrentUser();
+  const currentTheme = getSavedTheme();
 
   app.innerHTML = `
-    <div class="mobile-app">
+    <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <header class="mobile-header">
         <div class="brand">
@@ -20,6 +44,10 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
         </div>
         
         <div class="header-right-actions">
+          <button class="theme-toggle-btn" id="theme-toggle-btn" title="Переключить тему">
+            ${currentTheme === 'dark' ? '☀️' : '🌙'}
+          </button>
+
           ${
             user
               ? `<button class="header-profile-badge" id="profile-btn" title="Ваш профиль">👤</button>`
@@ -58,6 +86,17 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
     </div>
   `;
 
+  applyTheme(currentTheme);
+
+  // Bind theme toggle button in header
+  const themeBtn = app.querySelector('#theme-toggle-btn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const newTheme = toggleTheme();
+      themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+  }
+
   // Bind tab switching
   const tabs = app.querySelectorAll('.nav-tab');
   tabs.forEach((tab) => {
@@ -80,7 +119,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
   const profileBtn = app.querySelector('#profile-btn');
   if (profileBtn) {
     profileBtn.addEventListener('click', () => {
-      // Navigate to settings tab
       const settingsTab = app.querySelector('.nav-tab[data-tab="settings"]');
       if (settingsTab) settingsTab.click();
     });
@@ -95,4 +133,4 @@ function updateHeaderUser() {
   }
 }
 
-export { renderAppLayout, updateHeaderUser };
+export { renderAppLayout, updateHeaderUser, applyTheme, getSavedTheme, toggleTheme };

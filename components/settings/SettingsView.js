@@ -1,18 +1,20 @@
-import { getUserSettings, saveUserSettings } from '../../services/api.js?v=7.0';
-import { getCurrentUser, logoutUser } from '../../services/authService.js?v=7.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=7.0';
+import { getUserSettings, saveUserSettings } from '../../services/api.js?v=7.1';
+import { getCurrentUser, logoutUser } from '../../services/authService.js?v=7.1';
+import { renderAuthModal } from '../auth/AuthModal.js?v=7.1';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=7.1';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
   const user = getCurrentUser();
+  const currentTheme = getSavedTheme();
 
   container.innerHTML = `
     <div class="settings-page">
       <div class="page-header">
         <h2>⚙️ Персональные настройки</h2>
-        <p class="subtitle">Управляйте вашим профилем и методами обучения</p>
+        <p class="subtitle">Управляйте вашим профилем, темой и методами обучения</p>
       </div>
 
       <!-- User Profile Card -->
@@ -28,6 +30,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
               ? `<button class="secondary-button" id="logout-btn">Выйти</button>`
               : `<button class="primary-button" id="login-modal-btn">Войти / Регистрация</button>`
           }
+        </div>
+      </div>
+
+      <!-- Theme Switcher Card -->
+      <div class="settings-card">
+        <h3>🎨 Тема оформления</h3>
+        <div class="theme-options-row">
+          <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
+            ☀️ Светлая тема
+          </button>
+          <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
+            🌙 Тёмная тема
+          </button>
         </div>
       </div>
 
@@ -99,6 +114,22 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     </div>
   `;
 
+  // Bind theme buttons
+  const lightBtn = container.querySelector('#theme-light-btn');
+  const darkBtn = container.querySelector('#theme-dark-btn');
+
+  lightBtn.addEventListener('click', () => {
+    applyTheme('light');
+    lightBtn.classList.add('active');
+    darkBtn.classList.remove('active');
+  });
+
+  darkBtn.addEventListener('click', () => {
+    applyTheme('dark');
+    darkBtn.classList.add('active');
+    lightBtn.classList.remove('active');
+  });
+
   // Bind auth buttons
   const loginBtn = container.querySelector('#login-modal-btn');
   if (loginBtn) {
@@ -150,6 +181,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       dailyGoal: Number(goalSelect.value),
       enabledMethods: selectedMethods.join(','),
       level: levelSelect.value,
+      theme: getSavedTheme(),
     };
 
     saveBtn.disabled = true;

@@ -15,6 +15,116 @@
   --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
+body.dark-theme,
+.mobile-app.dark-theme {
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .mobile-app {
+  background: #0f172a;
+}
+
+.dark-theme .mobile-header,
+.dark-theme .bottom-nav,
+.dark-theme .word-card-container,
+.dark-theme .stat-card,
+.dark-theme .curriculum-block,
+.dark-theme .settings-card,
+.dark-theme .fav-card,
+.dark-theme .dict-card,
+.dark-theme .modal-content,
+.dark-theme .empty-favorites-box {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.dark-theme .quiz-option {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.dark-theme .quiz-option:hover:not(:disabled) {
+  background: #334155;
+  border-color: #3b82f6;
+}
+
+.dark-theme .flashcard-box {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+.dark-theme .category-badge,
+.dark-theme .total-words-badge,
+.dark-theme .sound-button-sm,
+.dark-theme .secondary-button,
+.dark-theme .profile-avatar {
+  background: #334155;
+  color: #cbd5e1;
+  border-color: #475569;
+}
+
+.dark-theme .answer-input,
+.dark-theme .settings-select,
+.dark-theme .search-input,
+.dark-theme .filter-select,
+.dark-theme .form-group input {
+  background: #0f172a;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+.dark-theme .training-word {
+  color: #f8fafc;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-options-row {
+  display: flex;
+  gap: 12px;
+}
+
+.theme-option-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.theme-option-btn.active {
+  border-color: var(--primary-color);
+  background: #eff6ff;
+  color: var(--primary-color);
+}
+
+.dark-theme .theme-option-btn.active {
+  background: #1e3a8a;
+  color: #93c5fd;
+}
+
 * {
   box-sizing: border-box;
 }
