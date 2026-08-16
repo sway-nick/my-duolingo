@@ -79,9 +79,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ? `
             <div class="word-header-row">
               <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
-              <h1 class="training-word test-word-prompt" style="color: var(--text-main); font-size: 22px; font-weight: 500; line-height: 1.3; margin: 0;">
+              <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                 ${currentWord.translation}
-              </h1>
+              </h2>
               <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
                 ${favorited ? '❤️' : '🤍'}
               </button>
