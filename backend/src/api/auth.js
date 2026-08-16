@@ -1,4 +1,4 @@
-const USER_HEADERS = ['id', 'email', 'name', 'passwordHash', 'createdAt', 'status'];
+const USER_HEADERS = ['id', 'email', 'userName', 'passwordHash', 'createdAt', 'status'];
 
 /**
  * Computes SHA-256 hash of password with a fixed salt.
@@ -29,7 +29,7 @@ function registerPost(e) {
 
   const email = String(body.email || e?.parameter?.email || '').toLowerCase().trim();
   const password = String(body.password || e?.parameter?.password || '');
-  const rawName = String(body.name || e?.parameter?.name || '').trim();
+  const rawName = String(body.userName || body.name || e?.parameter?.userName || e?.parameter?.name || '').trim();
 
   if (!email || !password) {
     return errorResponse('Заполните необходимые поля: email, пароль', 400);
@@ -49,6 +49,7 @@ function registerPost(e) {
   const newUser = {
     id: userId,
     email: email,
+    userName: userName,
     name: userName,
     passwordHash: hashedPassword,
     createdAt: new Date().toISOString(),
@@ -61,7 +62,7 @@ function registerPost(e) {
     user: {
       id: newUser.id,
       email: newUser.email,
-      name: newUser.name,
+      name: newUser.userName,
     },
     token: 'tok_' + userId,
   });
@@ -80,7 +81,7 @@ function googleAuthPost(e) {
   } catch (err) {}
 
   const email = String(body.email || e?.parameter?.email || '').toLowerCase().trim();
-  const rawName = String(body.name || e?.parameter?.name || '').trim();
+  const rawName = String(body.userName || body.name || e?.parameter?.userName || e?.parameter?.name || '').trim();
 
   if (!email) {
     return errorResponse('Email обязателен для авторизации Google', 400);
@@ -91,12 +92,16 @@ function googleAuthPost(e) {
   const userName = rawName || email.split('@')[0];
 
   if (existing) {
+    const existingName = existing.userName || existing.username || existing.name || existing.Name;
     // If existing user lacks name in the sheet, update it
-    if ((!existing.name || existing.name === existing.email.split('@')[0]) && rawName) {
+    if ((!existingName || existingName === existing.email.split('@')[0]) && rawName) {
       try {
         const sheet = getSheet('Users', USER_HEADERS);
         const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-        const nameColIndex = headers.indexOf('name') + 1;
+        let nameColIndex = headers.indexOf('userName') + 1;
+        if (nameColIndex <= 0) nameColIndex = headers.indexOf('name') + 1;
+        if (nameColIndex <= 0) nameColIndex = headers.indexOf('UserName') + 1;
+
         if (nameColIndex > 0 && existing._rowIndex) {
           sheet.getRange(existing._rowIndex, nameColIndex).setValue(rawName);
         }
@@ -109,7 +114,7 @@ function googleAuthPost(e) {
       user: {
         id: existing.id,
         email: existing.email,
-        name: existing.name || userName,
+        name: existingName || userName,
       },
       token: 'tok_' + existing.id,
     });
@@ -119,6 +124,7 @@ function googleAuthPost(e) {
   const newUser = {
     id: userId,
     email: email,
+    userName: userName,
     name: userName,
     passwordHash: 'google_oauth',
     createdAt: new Date().toISOString(),
@@ -131,7 +137,7 @@ function googleAuthPost(e) {
     user: {
       id: newUser.id,
       email: newUser.email,
-      name: newUser.name,
+      name: newUser.userName,
     },
     token: 'tok_' + userId,
   });
@@ -169,11 +175,13 @@ function loginPost(e) {
     return errorResponse('Неверный email или пароль', 401);
   }
 
+  const resolvedName = user.userName || user.username || user.name || user.Name || user.email.split('@')[0];
+
   return successResponse({
     user: {
       id: user.id,
       email: user.email,
-      name: user.name || user.email.split('@')[0],
+      name: resolvedName,
     },
     token: 'tok_' + user.id,
   });
