@@ -122,6 +122,31 @@ body.dark-theme,
   border-color: #94a3b8;
 }
 
+.dark-theme .theme-toggle-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #7c3aed; /* dark violet / purple */
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.dark-theme .theme-toggle-btn:hover {
+  background: #334155;
+  border-color: #7c3aed;
+  color: #8b5cf6;
+}
+
+.dark-theme .header-profile-badge {
+  background: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+.dark-theme .header-profile-badge:hover {
+  background: #334155;
+  border-color: #94a3b8;
+}
+
 .theme-options-row,
 .voice-options-row {
   display: flex;
