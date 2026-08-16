@@ -307,7 +307,18 @@ async function getUserSettings() {
 async function saveUserSettings(settings) {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
-  const payload = { route: 'settings', action: 'settings', ...settings, userId };
+  const payload = {
+    route: 'settings',
+    action: 'settings',
+    ...settings,
+    category: settings.category || settings.level || 'All',
+    level: settings.category || settings.level || 'All',
+    userId,
+  };
+
+  const key = `settings_${userId}`;
+  localStorage.setItem(key, JSON.stringify(payload));
+
   try {
     await fetch(`${API_URL}?route=settings`, {
       method: 'POST',
@@ -315,8 +326,7 @@ async function saveUserSettings(settings) {
       body: JSON.stringify(payload),
     });
   } catch (e) {
-    const key = `settings_${userId}`;
-    localStorage.setItem(key, JSON.stringify(payload));
+    console.warn('Settings saved locally, sync pending', e);
   }
 }
 

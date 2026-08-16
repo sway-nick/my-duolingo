@@ -88,7 +88,17 @@
           console.warn('Failed to load settings:', e);
         }
 
-        const currentWord = allWords[currentWordIndex % allWords.length];
+        // Apply category filter from settings
+        const selectedCategory = userSettings.category || userSettings.level || 'All';
+        let trainingWords = allWords;
+        if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'Все категории') {
+          const filtered = allWords.filter((w) => w.category === selectedCategory);
+          if (filtered.length > 0) {
+            trainingWords = filtered;
+          }
+        }
+
+        const currentWord = trainingWords[currentWordIndex % trainingWords.length];
         const rawMethods = userSettings.enabledMethods || 'quiz,cards,input';
         const enabledMethods = rawMethods
           .split(',')
@@ -136,11 +146,14 @@
             onFavoriteToggle: handleFavoriteToggle,
           });
         } else if (tabName === 'settings') {
-          await renderSettingsView('#app-content', async () => {
-            updateHeaderUser();
-            await loadData();
-            renderTab(activeTab);
-          });
+          await renderSettingsView(
+            '#app-content',
+            async () => {
+              updateHeaderUser();
+              await loadData();
+            },
+            allWords
+          );
         }
       }
 
