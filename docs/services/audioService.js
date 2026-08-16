@@ -104,25 +104,26 @@ function playErrorSound() {
 
     const now = ctx.currentTime;
 
-    // Dual descending low tone (subtle buzz indicating error)
+    // Descending tone with rich harmonic buzz
     const osc = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
     osc.type = 'sawtooth';
 
-    // Descending frequency: 180Hz -> 110Hz
-    osc.frequency.setValueAtTime(180, now);
-    osc.frequency.exponentialRampToValueAtTime(110, now + 0.28);
+    // Descending frequency: 190Hz -> 95Hz
+    osc.frequency.setValueAtTime(190, now);
+    osc.frequency.exponentialRampToValueAtTime(95, now + 0.32);
 
+    // Boosted volume: peak 0.28 (up from 0.12)
     gainNode.gain.setValueAtTime(0.01, now);
-    gainNode.gain.linearRampToValueAtTime(0.12, now + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
+    gainNode.gain.linearRampToValueAtTime(0.28, now + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
     osc.connect(gainNode);
     gainNode.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.30);
+    osc.stop(now + 0.35);
   } catch (e) {
     console.warn('Audio error effect playback skipped:', e);
   }
