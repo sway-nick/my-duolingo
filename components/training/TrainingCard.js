@@ -180,11 +180,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   // --- RENDER ACCORDING TO CURRENT METHOD ---
 
   if (currentMethod === 'quiz') {
-    // Generate 4 multiple-choice options
-    const otherTranslations = allWords
+    // Generate 6 multiple-choice options (1 correct + 5 incorrect)
+    const categoryFilteredWords =
+      selectedCategory === 'All' || selectedCategory === 'Все категории'
+        ? allWords
+        : allWords.filter(
+            (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)
+          );
+
+    const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
+    const otherTranslations = pool
       .filter((w) => w.id !== currentWord.id)
       .map((w) => w.translation);
-    const shuffledOthers = shuffleArray(otherTranslations).slice(0, 3);
+    const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
     const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
 
     practiceArea.innerHTML = `
