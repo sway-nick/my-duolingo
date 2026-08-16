@@ -200,9 +200,58 @@ function speakWord(text, wordId = null, lang = 'en-US') {
   }
 }
 
+/**
+ * Plays a realistic metallic ringing coin drop and bounce sound (Web Audio API)
+ */
+function playCoinDropSound() {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    // Realistic gold/silver metallic coin clink & bouncing resonance
+    const bounces = [
+      { delay: 0.00, f1: 2637, f2: 3951, vol: 0.22, dur: 0.38 }, // Initial crisp hit (E7 / B7)
+      { delay: 0.10, f1: 2960, f2: 4435, vol: 0.15, dur: 0.26 }, // Secondary rebound
+      { delay: 0.18, f1: 3322, f2: 4978, vol: 0.09, dur: 0.18 }, // Third tap
+      { delay: 0.24, f1: 3729, f2: 5587, vol: 0.05, dur: 0.12 }  // Settle clink
+    ];
+
+    bounces.forEach(({ delay, f1, f2, vol, dur }) => {
+      const strikeTime = now + delay;
+
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+
+      osc1.frequency.setValueAtTime(f1, strikeTime);
+      osc2.frequency.setValueAtTime(f2, strikeTime);
+
+      gain.gain.setValueAtTime(0.001, strikeTime);
+      gain.gain.linearRampToValueAtTime(vol, strikeTime + 0.003);
+      gain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + dur);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc1.start(strikeTime);
+      osc2.start(strikeTime);
+      osc1.stop(strikeTime + dur);
+      osc2.stop(strikeTime + dur);
+    });
+  } catch (e) {
+    console.warn('Coin sound skipped:', e);
+  }
+}
+
 function resetAudioCounter() {
   currentWordKey = null;
   clickCount = 0;
 }
 
-export { speakWord, resetAudioCounter, playSuccessSound, playErrorSound, playCasinoRollSound };
+export { speakWord, resetAudioCounter, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound };

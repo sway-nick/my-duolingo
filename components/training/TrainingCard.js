@@ -1,4 +1,4 @@
-import { speakWord, playSuccessSound, playErrorSound, playCasinoRollSound } from '../../services/audioService.js?v=14.0';
+import { speakWord, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound } from '../../services/audioService.js?v=14.0';
 import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=14.0';
 
 function sanitizeCategory(cat) {
@@ -328,18 +328,24 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           // Authentic casino slot machine reel roll sound
           playCasinoRollSound();
 
-          // Cascade 3D flip animation across horizontal axis
+          // Cascade 3D flip animation across horizontal axis (Dollar green / white)
           const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
           allCards.forEach((card, idx) => {
             card.classList.remove('matched', 'selected');
             setTimeout(() => {
               card.classList.add('casino-flipping');
-            }, idx * 70);
+            }, idx * 90);
           });
 
+          // Play realistic metallic coin drop sound at the very end of the roll
+          setTimeout(() => {
+            playCoinDropSound();
+          }, 1850);
+
+          // Advance to next round smoothly
           setTimeout(() => {
             onNext();
-          }, 1600);
+          }, 2350);
         }
       } else {
         playErrorSound();
