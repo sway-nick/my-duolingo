@@ -41,10 +41,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Тема оформления</h3>
         <div class="theme-options-row">
           <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
-            ☀️ Светлая тема
+            ☼ Светлая тема
           </button>
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
-            🌙 Тёмная тема
+            ☾ Тёмная тема
           </button>
         </div>
       </div>
@@ -54,10 +54,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🗣️ Голос озвучки</h3>
         <div class="voice-options-row">
           <button class="voice-option-btn" id="voice-female-btn">
-            👩 Женский
+            ♀ Женский
           </button>
           <button class="voice-option-btn" id="voice-male-btn">
-            👨 Мужской
+            ♂ Мужской
           </button>
         </div>
       </div>

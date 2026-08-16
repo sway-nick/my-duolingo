@@ -46,7 +46,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         
         <div class="header-right-actions">
           <button class="theme-toggle-btn" id="theme-toggle-btn" title="Переключить тему">
-            ${currentTheme === 'dark' ? '☀️' : '🌙'}
+            ${currentTheme === 'dark' ? '☼' : '☾'}
           </button>
 
           ${
@@ -97,7 +97,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
       const newTheme = toggleTheme();
-      themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      themeBtn.textContent = newTheme === 'dark' ? '☼' : '☾';
     });
   }
 
@@ -142,7 +142,7 @@ function updateHeaderUser(onUserAuthChanged = () => {}) {
     const currentTheme = getSavedTheme();
     actionsContainer.innerHTML = `
       <button class="theme-toggle-btn" id="theme-toggle-btn" title="Переключить тему">
-        ${currentTheme === 'dark' ? '☀️' : '🌙'}
+        ${currentTheme === 'dark' ? '☼' : '☾'}
       </button>
 
       ${
@@ -156,7 +156,7 @@ function updateHeaderUser(onUserAuthChanged = () => {}) {
     if (themeBtn) {
       themeBtn.addEventListener('click', () => {
         const newTheme = toggleTheme();
-        themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        themeBtn.textContent = newTheme === 'dark' ? '☼' : '☾';
       });
     }
 
