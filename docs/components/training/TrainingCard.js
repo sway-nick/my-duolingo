@@ -498,29 +498,29 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } else {
     practiceArea.innerHTML = `
       <div class="flashcard-box" id="flashcard" style="cursor: pointer; padding: 20px; border-radius: var(--radius-md); border: 2px dashed var(--border-color); text-align: center; background: var(--bg-card, #ffffff); transition: all 0.2s ease;">
-        <p style="margin: 0 0 6px; color: var(--text-muted); font-size: 13px;">Нажмите на карточку, чтобы увидеть перевод</p>
-        <div class="flashcard-back" id="flashcard-back" style="display:none; margin-top: 8px;">
+        <p id="flashcard-hint" style="margin: 0; color: var(--text-muted); font-size: 13px;">Нажмите на карточку, чтобы увидеть перевод</p>
+        <div class="flashcard-back" id="flashcard-back" style="display:none;">
           <h2 class="card-translation" style="font-size: 24px; margin: 4px 0 2px; color: var(--text-main); font-weight: 700;">${currentWord.translation}</h2>
         </div>
       </div>
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 14px; gap: 12px;">
-        <button type="button" class="btn-learn" id="btn-learn" style="flex: 1; padding: 12px 8px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
-          <span>🔄 Ещё учить</span>
-          <span style="font-size: 11px; font-weight: 500; opacity: 0.85;">В Квиз (0/5)</span>
+        <button type="button" class="btn-learn" id="btn-learn" style="flex: 1; padding: 14px 16px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          Учить
         </button>
-        <button type="button" class="btn-know" id="btn-know" style="flex: 1; padding: 12px 8px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #dcfce7; color: #166534; border: 1.5px solid #22c55e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
-          <span>✓ Знаю</span>
-          <span style="font-size: 11px; font-weight: 500; opacity: 0.85;">Сразу в Пары</span>
+        <button type="button" class="btn-know" id="btn-know" style="flex: 1; padding: 14px 16px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #dcfce7; color: #166534; border: 1.5px solid #22c55e; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          Знаю
         </button>
       </div>
     `;
 
     const flashcard = practiceArea.querySelector('#flashcard');
+    const flashcardHint = practiceArea.querySelector('#flashcard-hint');
     const flashcardBack = practiceArea.querySelector('#flashcard-back');
     const feedbackBtns = practiceArea.querySelector('#card-feedback-btns');
 
     flashcard.addEventListener('click', () => {
+      if (flashcardHint) flashcardHint.style.display = 'none';
       flashcardBack.style.display = 'block';
       feedbackBtns.style.display = 'flex';
       flashcard.style.borderStyle = 'solid';
