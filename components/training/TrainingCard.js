@@ -377,16 +377,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         input.classList.add('correct');
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
-        if (inputCount >= 3) {
-          feedback.textContent = `🎉 Слово выучено! (3/3) и убрано из обучения!`;
-        } else {
-          feedback.textContent = `✓ Верно! (${inputCount}/3 для выучивания)`;
-        }
+        feedback.innerHTML = `
+          <div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">
+            ${inputCount >= 3 ? '🎉 Слово выучено! (3/3) и убрано из обучения!' : `✓ Верно! (${inputCount}/3 для выучивания)`}
+          </div>
+        `;
       } else {
         input.classList.add('wrong');
         feedback.style.display = 'block';
-        feedback.style.color = 'var(--error-color, #dc2626)';
-        feedback.textContent = `Правильно: ${currentWord.word} (${currentWord.transcription || ''})`;
+        feedback.innerHTML = `
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Правильно:</div>
+          <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
+            ${currentWord.word}
+          </div>
+          ${currentWord.transcription ? `<div style="font-size: 17px; color: var(--text-muted); margin-top: 4px;">${currentWord.transcription}</div>` : ''}
+        `;
       }
 
       // Delay: 1.65s (2.3s on 3/3 mastered) on correct (1.5x faster), 14.4s on error
