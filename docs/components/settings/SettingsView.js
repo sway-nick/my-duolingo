@@ -188,6 +188,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     saveBtn.textContent = 'Сохранение...';
 
     await saveUserSettings(newSettings);
+    onUserChange();
 
     saveBtn.disabled = false;
     saveBtn.textContent = 'Сохранить настройки';

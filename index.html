@@ -72,7 +72,7 @@
         }
       }
 
-      function renderTrainingTab() {
+      async function renderTrainingTab() {
         const content = document.querySelector('#app-content');
         if (!content) return;
         content.innerHTML = '<div id="training"></div>';
@@ -82,11 +82,25 @@
           return;
         }
 
+        try {
+          userSettings = await getUserSettings();
+        } catch (e) {
+          console.warn('Failed to load settings:', e);
+        }
+
         const currentWord = allWords[currentWordIndex % allWords.length];
-        const enabledMethods = (userSettings.enabledMethods || 'quiz,cards,input').split(',');
+        const rawMethods = userSettings.enabledMethods || 'quiz,cards,input';
+        const enabledMethods = rawMethods
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+        // Pick active method among user's enabled methods
+        const activeMethod = enabledMethods[Math.floor(Math.random() * enabledMethods.length)] || 'quiz';
 
         renderTrainingCard(currentWord, allWords, {
           enabledMethods,
+          forcedMethod: activeMethod,
           isFavorite: favoriteIds.has(currentWord.id),
           onFavoriteToggle: handleFavoriteToggle,
           onNext: () => {
@@ -101,7 +115,7 @@
         const content = document.querySelector('#app-content');
 
         if (tabName === 'training') {
-          renderTrainingTab();
+          await renderTrainingTab();
         } else if (tabName === 'stats') {
           await renderStatsView('#app-content');
         } else if (tabName === 'favorites') {

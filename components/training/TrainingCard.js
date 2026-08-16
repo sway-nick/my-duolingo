@@ -17,9 +17,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } = options;
 
   // Determine current method mode out of enabled methods
-  let currentMethod = options.forcedMethod || enabledMethods[0] || 'quiz';
-  if (!enabledMethods.includes(currentMethod) && enabledMethods.length > 0) {
-    currentMethod = enabledMethods[0];
+  let currentMethod = options.forcedMethod;
+  if (!currentMethod || !enabledMethods.includes(currentMethod)) {
+    currentMethod = enabledMethods[0] || 'quiz';
   }
 
   let favorited = isFavorite;
