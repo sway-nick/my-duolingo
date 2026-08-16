@@ -205,8 +205,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // Lightning-fast delay: 160ms on correct (cut in half), 12.6s on error
-        const delay = isCorrect ? 160 : 12600;
+        // Balanced delay: 650ms on correct (comfortable visual feedback + sound), 2400ms on error
+        const delay = isCorrect ? 650 : 2400;
         setTimeout(() => {
           onNext();
         }, delay);
@@ -418,8 +418,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         `;
       }
 
-      // Fast delay: 750ms (1200ms on 3/3 mastered) on correct, 14.4s on error
-      const delay = isCorrect ? (inputCount >= 3 ? 1200 : 750) : 14400;
+      // Balanced delay: 750ms on correct (1200ms on 3/3 mastered), 3200ms on error
+      const delay = isCorrect ? (inputCount >= 3 ? 1200 : 750) : 3200;
       setTimeout(() => {
         onNext();
       }, delay);
