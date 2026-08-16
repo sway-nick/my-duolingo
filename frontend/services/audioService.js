@@ -170,16 +170,18 @@ function setSavedVoiceGender(gender) {
 }
 
 const MALE_VOICE_KEYWORDS = [
-  'male', 'david', 'guy', 'alex', 'daniel', 'mark', 'george', 'arthur', 'fred',
+  'google uk english male', 'microsoft david', 'david', 'microsoft guy', 'guy',
+  'microsoft mark', 'mark', 'daniel', 'alex', 'george', 'arthur', 'fred',
   'ryan', 'oliver', 'stefan', 'thomas', 'matthew', 'james', 'john', 'richard',
-  'brian', 'steven', 'tom', 'steve', 'martin', 'google uk english male', 'en-us-x-sfg#male',
+  'brian', 'steven', 'tom', 'steve', 'martin', 'male', 'en-us-x-sfg#male',
   'en-us-x-tpf#male', 'en-us-x-iom#male'
 ];
 
 const FEMALE_VOICE_KEYWORDS = [
-  'female', 'zira', 'samantha', 'victoria', 'karen', 'jenny', 'aria', 'susan',
-  'catherine', 'fiona', 'hazel', 'moira', 'tessa', 'ava', 'allison', 'kate',
-  'google us english', 'google uk english female', 'en-us-x-sfg#female', 'en-us-x-tpf#female'
+  'microsoft zira', 'zira', 'microsoft jenny', 'jenny', 'samantha', 'victoria',
+  'karen', 'aria', 'susan', 'catherine', 'fiona', 'hazel', 'moira', 'tessa', 'ava',
+  'allison', 'kate', 'google us english', 'google uk english female', 'female',
+  'en-us-x-sfg#female', 'en-us-x-tpf#female'
 ];
 
 function getPreferredVoice(gender = 'female') {
@@ -195,12 +197,11 @@ function getPreferredVoice(gender = 'female') {
   const target = (gender || 'female').toLowerCase();
 
   if (target === 'male') {
-    // 1. Explicit male voice match
-    const maleVoice = englishVoices.find((v) => {
-      const name = (v.name || '').toLowerCase();
-      return MALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
-    });
-    if (maleVoice) return maleVoice;
+    // 1. Explicit male voice match by priority
+    for (const kw of MALE_VOICE_KEYWORDS) {
+      const found = englishVoices.find((v) => (v.name || '').toLowerCase().includes(kw));
+      if (found) return found;
+    }
 
     // 2. Non-female voice
     const nonFemale = englishVoices.find((v) => {
@@ -211,12 +212,11 @@ function getPreferredVoice(gender = 'female') {
 
     return englishVoices[0];
   } else {
-    // 1. Explicit female voice match
-    const femaleVoice = englishVoices.find((v) => {
-      const name = (v.name || '').toLowerCase();
-      return FEMALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
-    });
-    if (femaleVoice) return femaleVoice;
+    // 1. Explicit female voice match by priority
+    for (const kw of FEMALE_VOICE_KEYWORDS) {
+      const found = englishVoices.find((v) => (v.name || '').toLowerCase().includes(kw));
+      if (found) return found;
+    }
 
     return englishVoices[0];
   }
@@ -257,13 +257,14 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     const voice = getPreferredVoice(gender);
     if (voice) {
       utterance.voice = voice;
+      if (voice.lang) utterance.lang = voice.lang;
     }
 
     if (gender === 'male') {
-      utterance.pitch = 0.82; // Warm, natural masculine depth
-      utterance.rate = isTurtleMode ? 0.40 : 0.82;
+      utterance.pitch = 0.70; // Deep, solid masculine baritone
+      utterance.rate = isTurtleMode ? 0.38 : 0.80;
     } else {
-      utterance.pitch = 1.0; // Natural, pleasant, intelligent feminine tone
+      utterance.pitch = 1.05; // Natural, clear feminine tone
       utterance.rate = isTurtleMode ? 0.40 : 0.84;
     }
 
