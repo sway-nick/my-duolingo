@@ -23,7 +23,7 @@ async function renderStatsView(containerSelector = '#app-content') {
             <span class="stat-icon">🎓</span>
             <div class="stat-info">
               <h3 id="stat-mastered">0</h3>
-              <p>Выучено слов</p>
+              <p>Выучено (3x Тест)</p>
             </div>
           </div>
 
@@ -31,7 +31,7 @@ async function renderStatsView(containerSelector = '#app-content') {
             <span class="stat-icon">📖</span>
             <div class="stat-info">
               <h3 id="stat-learning">0</h3>
-              <p>В процессе изучения</p>
+              <p>Слов на изучении</p>
             </div>
           </div>
 

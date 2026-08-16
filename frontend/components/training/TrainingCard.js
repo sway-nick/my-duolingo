@@ -455,18 +455,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
     input.focus();
   } else {
-    // Flashcard Mode ('cards')
     practiceArea.innerHTML = `
-      <div class="flashcard-box" id="flashcard">
-        <p style="margin: 0 0 8px; color: var(--text-muted); font-size: 13px;">Нажмите, чтобы увидеть перевод</p>
-        <div class="flashcard-back" id="flashcard-back" style="display:none;">
-          <h2 class="card-translation" style="font-size: 24px; margin: 4px 0;">${currentWord.translation}</h2>
+      <div class="flashcard-box" id="flashcard" style="cursor: pointer; padding: 20px; border-radius: var(--radius-md); border: 2px dashed var(--border-color); text-align: center; background: var(--bg-card, #ffffff); transition: all 0.2s ease;">
+        <p style="margin: 0 0 6px; color: var(--text-muted); font-size: 13px;">Нажмите на карточку, чтобы увидеть перевод</p>
+        <div class="flashcard-back" id="flashcard-back" style="display:none; margin-top: 8px;">
+          <h2 class="card-translation" style="font-size: 24px; margin: 4px 0 2px; color: var(--text-main); font-weight: 700;">${currentWord.translation}</h2>
         </div>
       </div>
       
-      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 10px;">
-        <button type="button" class="btn-repeat" id="btn-repeat">🔴 Сложно</button>
-        <button type="button" class="btn-easy" id="btn-easy">🟢 Легко</button>
+      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 14px; gap: 12px;">
+        <button type="button" class="btn-learn" id="btn-learn" style="flex: 1; padding: 12px 8px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+          <span>🔄 Ещё учить</span>
+          <span style="font-size: 11px; font-weight: 500; opacity: 0.85;">В Квиз (0/5)</span>
+        </button>
+        <button type="button" class="btn-know" id="btn-know" style="flex: 1; padding: 12px 8px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #dcfce7; color: #166534; border: 1.5px solid #22c55e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+          <span>✓ Знаю</span>
+          <span style="font-size: 11px; font-weight: 500; opacity: 0.85;">Сразу в Пары</span>
+        </button>
       </div>
     `;
 
@@ -477,24 +482,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     flashcard.addEventListener('click', () => {
       flashcardBack.style.display = 'block';
       feedbackBtns.style.display = 'flex';
+      flashcard.style.borderStyle = 'solid';
+      flashcard.style.borderColor = 'var(--primary-color, #2563eb)';
     });
 
-    practiceArea.querySelector('#btn-repeat').addEventListener('click', async () => {
-      const prog = await saveProgress(currentWord.id, false, 'cards');
-      if (prog && prog.autoFavorited) {
-        onFavoriteToggle(currentWord.id, true);
-        const favBtn = container.querySelector('#fav-toggle-btn');
-        if (favBtn) {
-          favBtn.textContent = '❤️';
-          favBtn.classList.add('is-favorite');
-        }
-      }
-      onNext({ repeatSoon: true });
+    practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
+      await saveProgress(currentWord.id, true, 'cards_learn');
+      onNext();
     });
 
-    practiceArea.querySelector('#btn-easy').addEventListener('click', async () => {
-      await saveProgress(currentWord.id, true, 'cards');
-      onNext({ repeatSoon: false });
+    practiceArea.querySelector('#btn-know').addEventListener('click', async () => {
+      playSuccessSound();
+      await saveProgress(currentWord.id, true, 'cards_know');
+      onNext();
     });
   }
 }

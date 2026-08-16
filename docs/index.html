@@ -41,8 +41,8 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings } from './services/api.js?v=13.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=13.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest } from './services/api.js?v=14.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=14.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=13.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=13.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=13.0';
@@ -162,14 +162,29 @@
           }
         }
 
-        // Filter out words mastered 3x in text input mode
         const userProgress = getUserProgress();
-        const activeWords = categoryWords.filter((w) => {
-          const prog = userProgress[w.id];
-          return !(prog && (prog.inputCorrect >= 3 || prog.mastered));
-        });
+        const currentMethod = userSettings.preferredMethod || 'cards';
+        const favList = Array.from(favoriteIds);
 
-        if (activeWords.length === 0) {
+        // Filter words strictly based on the active training method queue
+        let activeWords = [];
+        if (currentMethod === 'cards') {
+          activeWords = getQueueForCards(categoryWords, userProgress);
+          // If all words in category were already sorted, allow reviewing all unmastered words in cards
+          if (activeWords.length === 0) {
+            activeWords = categoryWords.filter((w) => !isWordMastered(userProgress[w.id]));
+          }
+        } else if (currentMethod === 'quiz') {
+          activeWords = getQueueForQuiz(categoryWords, userProgress);
+        } else if (currentMethod === 'pairs') {
+          activeWords = getQueueForPairs(categoryWords, userProgress, favList);
+        } else if (currentMethod === 'input') {
+          activeWords = getQueueForTest(categoryWords, userProgress, favList);
+        }
+
+        // Check if all words in category are mastered (3x in Test)
+        const unmasteredCount = categoryWords.filter((w) => !isWordMastered(userProgress[w.id])).length;
+        if (unmasteredCount === 0 && categoryWords.length > 0) {
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
               <div style="font-size: 56px; margin-bottom: 16px;">🏆</div>
@@ -189,6 +204,9 @@
               categoryWords.forEach((w) => {
                 if (userProgress[w.id]) {
                   userProgress[w.id].inputCorrect = 0;
+                  userProgress[w.id].quizCorrect = 0;
+                  userProgress[w.id].pairsCorrect = 0;
+                  userProgress[w.id].seenInCards = false;
                   userProgress[w.id].mastered = false;
                 }
               });
@@ -202,9 +220,61 @@
           return;
         }
 
+        // If queue for the current mode is empty, show intuitive step guidance ("Cold Start")
+        if (activeWords.length === 0) {
+          let emptyIcon = '🗂️';
+          let emptyTitle = 'Очередь пуста';
+          let emptyMsg = 'Сначала отберите слова в режиме «Карточки»!';
+          let nextMode = 'cards';
+          let nextBtnLabel = '🗂️ Открыть Карточки';
+
+          if (currentMethod === 'quiz') {
+            emptyIcon = '🎯';
+            emptyTitle = 'Нет слов для Квиза';
+            emptyMsg = 'В Квиз попадают слова, отобранные в <strong>Карточках</strong> по кнопке «Ещё учить».';
+            nextMode = 'cards';
+            nextBtnLabel = '🗂️ Отобрать слова в Карточках';
+          } else if (currentMethod === 'pairs') {
+            emptyIcon = '🧩';
+            emptyTitle = 'Нет слов для режима «Пары»';
+            emptyMsg = 'В Пары попадают слова, отгаданные <strong>5 раз в Квизе</strong> или отмеченные как <strong>«Знаю»</strong> в Карточках.';
+            nextMode = 'quiz';
+            nextBtnLabel = '🎯 Перейти в Квиз';
+          } else if (currentMethod === 'input') {
+            emptyIcon = '✍️';
+            emptyTitle = 'Нет слов для режима «Тест»';
+            emptyMsg = 'В Тест попадают слова, успешно собранные <strong>5 раз в режиме «Пары»</strong>.';
+            nextMode = 'pairs';
+            nextBtnLabel = '🧩 Перейти в Пары';
+          }
+
+          content.innerHTML = `
+            <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
+              <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
+              <h2 style="font-size: 22px; margin-bottom: 8px;">${emptyTitle}</h2>
+              <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">
+                ${emptyMsg}
+              </p>
+              <button class="primary-button" id="go-next-mode-btn" style="max-width: 280px; margin: 0 auto;">
+                ${nextBtnLabel}
+              </button>
+            </div>
+          `;
+
+          const goBtn = content.querySelector('#go-next-mode-btn');
+          if (goBtn) {
+            goBtn.addEventListener('click', () => {
+              userSettings.preferredMethod = nextMode;
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              renderTrainingTab();
+            });
+          }
+          return;
+        }
+
         content.innerHTML = '<div id="training"></div>';
         const currentWord = activeWords[currentWordIndex % activeWords.length];
-        const currentMethod = userSettings.preferredMethod || 'quiz';
 
         renderTrainingCard(currentWord, allWords, {
           currentMethod,
@@ -213,6 +283,7 @@
           onMethodChange: (newMethod) => {
             userSettings.preferredMethod = newMethod;
             saveUserSettings(userSettings);
+            currentWordIndex = 0;
             renderTrainingTab();
           },
           onCategoryChange: (newCategory) => {

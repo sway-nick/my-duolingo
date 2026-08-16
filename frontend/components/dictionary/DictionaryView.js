@@ -110,20 +110,28 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
         const isMastered = isWordMastered(prog);
         const cleanCat = sanitizeCategory(w.category);
+        const quizCount = prog?.quizCorrect || 0;
+        const pairsCount = prog?.pairsCorrect || 0;
         const testCount = prog?.inputCorrect || 0;
+        const seen = prog?.seenInCards;
+
+        let stageBadge = '';
+        if (isMastered) {
+          stageBadge = `<span class="mastered-badge">🏆 Выучено</span>`;
+        } else if (pairsCount >= 5) {
+          stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/3</span>`;
+        } else if (quizCount >= 5) {
+          stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/5</span>`;
+        } else if (seen) {
+          stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
+        }
 
         return `
         <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
           <div class="dict-card-header">
             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
               <span class="category-badge">${cleanCat}</span>
-              ${
-                isMastered
-                  ? `<span class="mastered-badge">✓ Выучено</span>`
-                  : testCount > 0
-                  ? `<span class="in-progress-badge">🎯 Тест: ${testCount}/3</span>`
-                  : ''
-              }
+              ${stageBadge}
             </div>
             <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
               ${isFav ? '❤️' : '🤍'}

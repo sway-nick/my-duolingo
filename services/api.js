@@ -191,30 +191,71 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
   const key = `progress_${userId}`;
   const local = JSON.parse(localStorage.getItem(key) || '{}');
   if (!local[wordId]) {
-    local[wordId] = { correct: 0, error: 0, inputCorrect: 0, hardCount: 0, mastered: false };
+    local[wordId] = {
+      correct: 0,
+      error: 0,
+      quizCorrect: 0,
+      pairsCorrect: 0,
+      inputCorrect: 0,
+      seenInCards: false,
+      hardCount: 0,
+      mastered: false,
+      lastPracticed: 0,
+    };
   }
 
+  const prog = local[wordId];
+  prog.lastPracticed = Date.now();
   let autoFavorited = false;
 
-  if (isCorrect) {
-    local[wordId].correct = (local[wordId].correct || 0) + 1;
-    if (method === 'input') {
-      local[wordId].inputCorrect = (local[wordId].inputCorrect || 0) + 1;
-      if (local[wordId].inputCorrect >= 3) {
-        local[wordId].mastered = true;
-      }
-    }
-    if (local[wordId].hardCount > 0) {
-      local[wordId].hardCount = 0;
-    }
-  } else {
-    local[wordId].error = (local[wordId].error || 0) + 1;
-    if (method === 'cards') {
-      local[wordId].hardCount = (local[wordId].hardCount || 0) + 1;
-      if (local[wordId].hardCount >= 3) {
+  if (method === 'cards_learn') {
+    prog.seenInCards = true;
+    prog.stage = 'quiz';
+    if (!prog.quizCorrect) prog.quizCorrect = 0;
+  } else if (method === 'cards_know') {
+    prog.seenInCards = true;
+    prog.quizCorrect = Math.max(prog.quizCorrect || 0, 5);
+    prog.stage = 'pairs';
+    if (!prog.pairsCorrect) prog.pairsCorrect = 0;
+  } else if (method === 'cards') {
+    prog.seenInCards = true;
+    if (!isCorrect) {
+      prog.hardCount = (prog.hardCount || 0) + 1;
+      if (prog.hardCount >= 3) {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
       }
+    }
+  } else if (method === 'quiz') {
+    if (isCorrect) {
+      prog.correct = (prog.correct || 0) + 1;
+      prog.quizCorrect = (prog.quizCorrect || 0) + 1;
+      if (prog.quizCorrect >= 5) {
+        prog.stage = 'pairs';
+      }
+    } else {
+      prog.error = (prog.error || 0) + 1;
+    }
+  } else if (method === 'pairs') {
+    if (isCorrect) {
+      prog.correct = (prog.correct || 0) + 1;
+      prog.pairsCorrect = (prog.pairsCorrect || 0) + 1;
+      if (prog.pairsCorrect >= 5) {
+        prog.stage = 'test';
+      }
+    } else {
+      prog.error = (prog.error || 0) + 1;
+    }
+  } else if (method === 'input') {
+    if (isCorrect) {
+      prog.correct = (prog.correct || 0) + 1;
+      prog.inputCorrect = (prog.inputCorrect || 0) + 1;
+      if (prog.inputCorrect >= 3) {
+        prog.mastered = true;
+        prog.stage = 'mastered';
+      }
+    } else {
+      prog.error = (prog.error || 0) + 1;
     }
   }
 
@@ -227,16 +268,20 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
     wordId,
     isCorrect,
     method,
-    inputCorrect: local[wordId].inputCorrect || 0,
-    hardCount: local[wordId].hardCount || 0,
-    mastered: local[wordId].mastered || false,
+    quizCorrect: prog.quizCorrect || 0,
+    pairsCorrect: prog.pairsCorrect || 0,
+    inputCorrect: prog.inputCorrect || 0,
+    seenInCards: prog.seenInCards || false,
+    hardCount: prog.hardCount || 0,
+    mastered: prog.mastered || false,
+    lastPracticed: prog.lastPracticed,
   });
 
   if (pendingProgressQueue.length >= 5) {
     flushProgressQueue();
   }
 
-  return { ...local[wordId], autoFavorited };
+  return { ...prog, autoFavorited };
 }
 
 async function flushProgressQueue() {
@@ -307,11 +352,81 @@ function isWordMastered(prog) {
 
 function isWordLearning(prog) {
   if (!prog || isWordMastered(prog)) return false;
-  return Boolean(
-    (prog.correct && prog.correct > 0) ||
-    (prog.error && prog.error > 0) ||
-    (prog.inputCorrect && prog.inputCorrect > 0)
+  return Boolean(prog.seenInCards === true);
+}
+
+function getWordStage(prog) {
+  if (!prog) return 'new';
+  if (isWordMastered(prog)) return 'mastered';
+  if ((prog.pairsCorrect || 0) >= 5) return 'test';
+  if ((prog.quizCorrect || 0) >= 5) return 'pairs';
+  if (prog.seenInCards) return 'quiz';
+  return 'new';
+}
+
+function getQueueForCards(words, progress) {
+  return words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return !p?.seenInCards && !isWordMastered(p);
+  });
+}
+
+function getQueueForQuiz(words, progress) {
+  return words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return p?.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
+  });
+}
+
+function getQueueForPairs(words, progress, favorites = []) {
+  const base = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return (p?.quizCorrect || 0) >= 5 && (p?.pairsCorrect || 0) < 5 && !isWordMastered(p);
+  });
+
+  const favSet = new Set(favorites.map(String));
+  const candidateFavs = words.filter(
+    (w) => favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id))
   );
+
+  // Sort favorites by lastPracticed ASC (oldest repeated first)
+  candidateFavs.sort((a, b) => {
+    const pA = progress[a.id] || progress[String(a.id)];
+    const pB = progress[b.id] || progress[String(b.id)];
+    const tA = pA?.lastPracticed || 0;
+    const tB = pB?.lastPracticed || 0;
+    return tA - tB;
+  });
+
+  const favCount = Math.max(1, Math.round(base.length * 0.15));
+  const injectedFavs = candidateFavs.slice(0, favCount);
+
+  return [...base, ...injectedFavs];
+}
+
+function getQueueForTest(words, progress, favorites = []) {
+  const base = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return (p?.pairsCorrect || 0) >= 5 && (p?.inputCorrect || 0) < 3 && !isWordMastered(p);
+  });
+
+  const favSet = new Set(favorites.map(String));
+  const candidateFavs = words.filter(
+    (w) => favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id))
+  );
+
+  candidateFavs.sort((a, b) => {
+    const pA = progress[a.id] || progress[String(a.id)];
+    const pB = progress[b.id] || progress[String(b.id)];
+    const tA = pA?.lastPracticed || 0;
+    const tB = pB?.lastPracticed || 0;
+    return tA - tB;
+  });
+
+  const favCount = Math.max(1, Math.round(base.length * 0.15));
+  const injectedFavs = candidateFavs.slice(0, favCount);
+
+  return [...base, ...injectedFavs];
 }
 
 async function getUserStats() {
@@ -431,6 +546,11 @@ export {
   getUserFavorites,
   isWordMastered,
   isWordLearning,
+  getWordStage,
+  getQueueForCards,
+  getQueueForQuiz,
+  getQueueForPairs,
+  getQueueForTest,
   flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,
