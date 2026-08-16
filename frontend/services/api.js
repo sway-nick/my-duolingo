@@ -659,6 +659,27 @@ async function saveUserSettings(settings) {
   }
 }
 
+function resetWordsProgressForPractice(words) {
+  const userId = getEffectiveUserId();
+  const progressKey = `progress_${userId}`;
+  const localProg = JSON.parse(localStorage.getItem(progressKey) || '{}');
+  if (Array.isArray(words)) {
+    words.forEach((w) => {
+      const id = w.id || w;
+      localProg[id] = {
+        ...(localProg[id] || {}),
+        seenInCards: true,
+        quizCorrect: 0,
+        pairsCorrect: 0,
+        inputCorrect: 0,
+        mastered: false,
+      };
+    });
+  }
+  localStorage.setItem(progressKey, JSON.stringify(localProg));
+  return localProg;
+}
+
 export {
   getHealth,
   getWords,
@@ -680,4 +701,6 @@ export {
   getUserStats,
   getUserSettings,
   saveUserSettings,
+  resetWordsProgressForPractice,
+  getEffectiveUserId,
 };

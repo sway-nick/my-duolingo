@@ -41,7 +41,7 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest } from './services/api.js?v=16.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice } from './services/api.js?v=16.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=16.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=16.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=16.0';
@@ -508,21 +508,7 @@
             onStartFavoritePractice: (practiceWords) => {
               if (practiceWords && practiceWords.length > 0) {
                 favoritePracticeWords = [...practiceWords];
-                const userId = getEffectiveUserId();
-                const progressKey = `progress_${userId}`;
-                const localProg = JSON.parse(localStorage.getItem(progressKey) || '{}');
-                practiceWords.forEach((w) => {
-                  localProg[w.id] = {
-                    ...(localProg[w.id] || {}),
-                    seenInCards: true,
-                    quizCorrect: 0,
-                    pairsCorrect: 0,
-                    inputCorrect: 0,
-                    mastered: false,
-                  };
-                  userProgress[w.id] = localProg[w.id];
-                });
-                localStorage.setItem(progressKey, JSON.stringify(localProg));
+                resetWordsProgressForPractice(practiceWords);
               } else {
                 favoritePracticeWords = null;
               }
@@ -530,7 +516,11 @@
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               const tabBtn = document.querySelector('.nav-tab[data-tab="training"]');
-              if (tabBtn) tabBtn.click();
+              if (tabBtn) {
+                tabBtn.click();
+              } else {
+                renderTab('training');
+              }
             },
           });
         } else if (tabName === 'dictionary') {
