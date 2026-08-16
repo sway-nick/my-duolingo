@@ -159,15 +159,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const otherTranslations = pool
       .filter((w) => w.id !== currentWord.id)
       .map((w) => w.translation);
-    const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
-    const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
+    function getQuizFontSize(text) {
+      if (!text) return '17.5px';
+      const len = text.length;
+      if (len > 45) return '12.5px';
+      if (len > 32) return '14px';
+      if (len > 20) return '15.5px';
+      return '17.5px';
+    }
 
     practiceArea.innerHTML = `
       <div class="quiz-grid">
         ${choices
           .map(
             (choice) => `
-          <button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>
+          <button type="button" class="quiz-option" data-choice="${choice}" style="font-size: ${getQuizFontSize(choice)};">
+            <span class="quiz-option-inner">${choice}</span>
+          </button>
         `,
           )
           .join('')}
