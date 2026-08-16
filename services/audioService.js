@@ -132,24 +132,30 @@ let cachedVoices = [];
 
 function loadVoices() {
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    const list = window.speechSynthesis.getVoices();
-    if (list && list.length > 0) {
-      cachedVoices = list;
-    }
+    try {
+      const list = window.speechSynthesis.getVoices();
+      if (list && list.length > 0) {
+        cachedVoices = list;
+      }
+    } catch (e) {}
   }
 }
 
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   loadVoices();
   if (window.speechSynthesis.onvoiceschanged !== undefined) {
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+    window.speechSynthesis.onvoiceschanged = () => {
+      loadVoices();
+    };
   }
 }
 
 function getSavedVoiceGender() {
   try {
+    const direct = localStorage.getItem('myduo_voice_gender');
+    if (direct) return direct;
     const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
-    const userId = user ? user.id : 'guest';
+    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
     const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
     return settings.voiceGender || 'female';
   } catch (e) {
@@ -157,52 +163,63 @@ function getSavedVoiceGender() {
   }
 }
 
+function setSavedVoiceGender(gender) {
+  try {
+    localStorage.setItem('myduo_voice_gender', gender);
+  } catch (e) {}
+}
+
+const MALE_VOICE_KEYWORDS = [
+  'male', 'david', 'guy', 'alex', 'daniel', 'mark', 'george', 'arthur', 'fred',
+  'ryan', 'oliver', 'stefan', 'thomas', 'matthew', 'james', 'john', 'richard',
+  'brian', 'steven', 'tom', 'steve', 'martin', 'google uk english male', 'en-us-x-sfg#male',
+  'en-us-x-tpf#male', 'en-us-x-iom#male'
+];
+
+const FEMALE_VOICE_KEYWORDS = [
+  'female', 'zira', 'samantha', 'victoria', 'karen', 'jenny', 'aria', 'susan',
+  'catherine', 'fiona', 'hazel', 'moira', 'tessa', 'ava', 'allison', 'kate',
+  'google us english', 'google uk english female', 'en-us-x-sfg#female', 'en-us-x-tpf#female'
+];
+
 function getPreferredVoice(gender = 'female') {
   loadVoices();
-  const englishVoices = cachedVoices.filter((v) => v.lang && v.lang.startsWith('en'));
-  if (englishVoices.length === 0) return null;
+  const englishVoices = cachedVoices.filter(
+    (v) => v.lang && (v.lang.toLowerCase().startsWith('en') || v.lang.toLowerCase().startsWith('en-'))
+  );
+  if (englishVoices.length === 0) {
+    if (cachedVoices.length === 0) return null;
+    return cachedVoices[0];
+  }
 
   const target = (gender || 'female').toLowerCase();
 
   if (target === 'male') {
+    // 1. Explicit male voice match
     const maleVoice = englishVoices.find((v) => {
       const name = (v.name || '').toLowerCase();
-      return (
-        name.includes('male') ||
-        name.includes('david') ||
-        name.includes('guy') ||
-        name.includes('alex') ||
-        name.includes('daniel') ||
-        name.includes('george') ||
-        name.includes('mark') ||
-        name.includes('arthur') ||
-        name.includes('ryan') ||
-        name.includes('oliver') ||
-        name.includes('stefan') ||
-        name.includes('thomas')
-      );
+      return MALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
     });
     if (maleVoice) return maleVoice;
+
+    // 2. Non-female voice
+    const nonFemale = englishVoices.find((v) => {
+      const name = (v.name || '').toLowerCase();
+      return !FEMALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
+    });
+    if (nonFemale) return nonFemale;
+
+    return englishVoices[0];
   } else {
+    // 1. Explicit female voice match
     const femaleVoice = englishVoices.find((v) => {
       const name = (v.name || '').toLowerCase();
-      return (
-        name.includes('female') ||
-        name.includes('zira') ||
-        name.includes('samantha') ||
-        name.includes('victoria') ||
-        name.includes('karen') ||
-        name.includes('jenny') ||
-        name.includes('aria') ||
-        name.includes('susan') ||
-        name.includes('catherine') ||
-        name.includes('fiona')
-      );
+      return FEMALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
     });
     if (femaleVoice) return femaleVoice;
-  }
 
-  return englishVoices[0];
+    return englishVoices[0];
+  }
 }
 
 /**
@@ -221,11 +238,6 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     return false;
   }
 
-  // Prevent browser warning if page is freshly opened and user hasn't tapped yet
-  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
-    return false;
-  }
-
   try {
     window.speechSynthesis.cancel(); // Stop any ongoing speech
 
@@ -240,18 +252,20 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     const isTurtleMode = clickCount >= 3;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = lang;
-    utterance.rate = isTurtleMode ? 0.40 : 0.82; // Turtle rate: 0.40, Normal: 0.82
 
     const gender = voiceGenderOverride || getSavedVoiceGender();
     const voice = getPreferredVoice(gender);
     if (voice) {
       utterance.voice = voice;
+      if (voice.lang) utterance.lang = voice.lang;
     }
 
     if (gender === 'male') {
-      utterance.pitch = 0.85; // Deeper natural pitch
+      utterance.pitch = 0.65; // Noticeably deep, masculine resonance
+      utterance.rate = isTurtleMode ? 0.38 : 0.78;
     } else {
-      utterance.pitch = 1.05; // Clear feminine pitch
+      utterance.pitch = 1.30; // Noticeably bright, feminine resonance
+      utterance.rate = isTurtleMode ? 0.42 : 0.86;
     }
 
     window.speechSynthesis.speak(utterance);
@@ -303,4 +317,13 @@ function resetAudioCounter() {
   clickCount = 0;
 }
 
-export { speakWord, resetAudioCounter, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound };
+export {
+  speakWord,
+  resetAudioCounter,
+  playSuccessSound,
+  playErrorSound,
+  playCasinoRollSound,
+  playCoinDropSound,
+  setSavedVoiceGender,
+  getSavedVoiceGender,
+};

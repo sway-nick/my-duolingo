@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=8.0';
 import { getCurrentUser, logoutUser } from '../../services/authService.js?v=8.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=8.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=8.0';
-import { speakWord } from '../../services/audioService.js?v=15.0';
+import { speakWord, setSavedVoiceGender } from '../../services/audioService.js?v=15.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -169,15 +169,17 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   if (femaleVoiceBtn && maleVoiceBtn) {
     femaleVoiceBtn.addEventListener('click', () => {
       currentVoice = 'female';
+      setSavedVoiceGender('female');
       updateVoiceButtons();
-      speakWord('Hello! Female voice activated.', null, 'en-US', 'female');
+      speakWord('Hello! This is the female voice.', null, 'en-US', 'female');
       triggerAutoSave();
     });
 
     maleVoiceBtn.addEventListener('click', () => {
       currentVoice = 'male';
+      setSavedVoiceGender('male');
       updateVoiceButtons();
-      speakWord('Hello! Male voice activated.', null, 'en-US', 'male');
+      speakWord('Hello! This is the male voice.', null, 'en-US', 'male');
       triggerAutoSave();
     });
   }
