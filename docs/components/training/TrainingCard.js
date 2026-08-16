@@ -216,7 +216,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           );
 
     const otherWords = categoryFilteredWords.filter((w) => w.id !== currentWord.id);
-    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 6)];
+    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 5)];
     const leftItems = shuffleArray(
       roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
     );
@@ -225,12 +225,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     );
 
     function getPairFontSize(text) {
-      if (!text) return '17px';
+      if (!text) return '17.5px';
       const len = text.length;
-      if (len > 32) return '12.5px';
-      if (len > 22) return '14px';
-      if (len > 15) return '15.5px';
-      return '17px';
+      if (len > 35) return '13.5px';
+      if (len > 24) return '15px';
+      if (len > 16) return '16.5px';
+      return '17.5px';
     }
 
     practiceArea.innerHTML = `
