@@ -173,11 +173,10 @@
         // In Cards mode: if user reached their daily learning limit, show warning and block adding new words!
         if (currentMethod === 'cards' && learningCount >= dailyGoal) {
           content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
-              <div style="font-size: 52px; margin-bottom: 12px;">🛑</div>
-              <h2 style="font-size: 22px; margin-bottom: 8px;">Лимит слов на изучении достигнут!</h2>
-              <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">
-                Вы уже отобрали <strong>${learningCount} из ${dailyGoal}</strong> слов для изучения.<br/>
+            <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+              <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
+              <p style="color: var(--text-main); font-size: 16.5px; font-weight: 500; margin-bottom: 26px; line-height: 1.5;">
+                Вы уже отобрали <strong>${learningCount} слов</strong> для изучения.<br/>
                 Выучите часть слов (в режимах <strong>Квиз</strong>, <strong>Пары</strong> и <strong>Тест</strong>), чтобы освободить место для новых!
               </p>
               <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
