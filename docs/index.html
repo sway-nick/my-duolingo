@@ -41,7 +41,7 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest } from './services/api.js?v=14.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest } from './services/api.js?v=15.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=14.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=13.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=13.0';
