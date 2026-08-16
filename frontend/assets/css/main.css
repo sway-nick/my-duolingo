@@ -599,6 +599,30 @@ body {
   animation: pairShake 0.4s ease;
 }
 
+/* Casino 3D Horizontal Flip Animation on All Pairs Matched */
+@keyframes casinoCardFlipX {
+  0% {
+    transform: perspective(600px) rotateX(0deg) scale(0.98);
+  }
+  50% {
+    transform: perspective(600px) rotateX(90deg) scale(0.92);
+    background: #fef08a !important;
+    border-color: #eab308 !important;
+    color: #854d0e !important;
+    box-shadow: 0 0 16px rgba(234, 179, 8, 0.6);
+  }
+  100% {
+    transform: perspective(600px) rotateX(0deg) scale(1);
+    background: #ffffff !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+  }
+}
+
+.pairs-card.casino-flipping {
+  animation: casinoCardFlipX 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 .dark-theme .pairs-card {
   background: #1e293b;
   border-color: #334155;

@@ -56,6 +56,72 @@ function playSuccessSound() {
 }
 
 /**
+ * Plays a casino slot machine reel spinning / cascading ratchet sound with a jackpot chime
+ */
+function playCasinoRollSound() {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const clickCount = 14;
+    const interval = 0.045; // 45ms between clicks
+
+    // 1. Rapid slot machine mechanical ratchet reel ticks
+    for (let i = 0; i < clickCount; i++) {
+      const clickTime = now + i * interval;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      // Rising pitch like an accelerating/spinning slot machine wheel
+      const freq = 450 + i * 45;
+      osc.frequency.setValueAtTime(freq, clickTime);
+      osc.frequency.exponentialRampToValueAtTime(freq + 60, clickTime + 0.03);
+
+      gain.gain.setValueAtTime(0.001, clickTime);
+      gain.gain.linearRampToValueAtTime(0.16, clickTime + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.001, clickTime + 0.035);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(clickTime);
+      osc.stop(clickTime + 0.035);
+    }
+
+    // 2. Victory jackpot chime at the end of the roll
+    const chimeStart = now + clickCount * interval;
+    const victoryNotes = [
+      { freq: 1046.5, delay: 0.00, vol: 0.15 },
+      { freq: 1318.5, delay: 0.05, vol: 0.16 },
+      { freq: 1567.98, delay: 0.10, vol: 0.18 },
+      { freq: 2093.0, delay: 0.15, vol: 0.15 },
+    ];
+
+    victoryNotes.forEach(({ freq, delay, vol }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, chimeStart + delay);
+
+      gain.gain.setValueAtTime(0.001, chimeStart + delay);
+      gain.gain.linearRampToValueAtTime(vol, chimeStart + delay + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, chimeStart + delay + 0.50);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(chimeStart + delay);
+      osc.stop(chimeStart + delay + 0.50);
+    });
+  } catch (e) {
+    console.warn('Casino audio effect skipped:', e);
+  }
+}
+
+/**
  * Plays a gentle, distinct error sound upon incorrect answer (Web Audio API)
  */
 function playErrorSound() {
@@ -139,4 +205,4 @@ function resetAudioCounter() {
   clickCount = 0;
 }
 
-export { speakWord, resetAudioCounter, playSuccessSound, playErrorSound };
+export { speakWord, resetAudioCounter, playSuccessSound, playErrorSound, playCasinoRollSound };

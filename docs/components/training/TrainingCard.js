@@ -1,4 +1,4 @@
-import { speakWord, playSuccessSound, playErrorSound } from '../../services/audioService.js?v=14.0';
+import { speakWord, playSuccessSound, playErrorSound, playCasinoRollSound } from '../../services/audioService.js?v=14.0';
 import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=14.0';
 
 function sanitizeCategory(cat) {
@@ -320,10 +320,25 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         if (matchedCount === totalPairs) {
           const celeb = practiceArea.querySelector('#pairs-celebration');
-          if (celeb) celeb.style.display = 'block';
+          if (celeb) {
+            celeb.innerHTML = '🎰 <strong>Отлично! Все пары найдены!</strong>';
+            celeb.style.display = 'block';
+          }
+
+          // Authentic casino slot machine reel roll sound
+          playCasinoRollSound();
+
+          // Cascade 3D flip animation across horizontal axis
+          const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
+          allCards.forEach((card, idx) => {
+            setTimeout(() => {
+              card.classList.add('casino-flipping');
+            }, idx * 60);
+          });
+
           setTimeout(() => {
             onNext();
-          }, 450);
+          }, 1400);
         }
       } else {
         playErrorSound();
