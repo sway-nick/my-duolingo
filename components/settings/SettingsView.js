@@ -12,9 +12,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   container.innerHTML = `
     <div class="settings-page">
-      <div class="page-header">
-        <h2>⚙️ Персональные настройки</h2>
-        <p class="subtitle">Настройки сохраняются автоматически в вашем профиле</p>
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+        <div>
+          <h2>⚙️ Персональные настройки</h2>
+          <p class="subtitle">Настройки сохраняются автоматически в вашем профиле</p>
+        </div>
+        <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap; margin-top: 4px;">
+          ✓ Сохранено
+        </span>
       </div>
 
       <!-- User Profile Card -->
@@ -27,17 +32,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <div>
           ${
             user
-              ? `<button class="secondary-button" id="logout-btn">Выйти</button>`
-              : `<button class="primary-button" id="login-modal-btn">Войти / Регистрация</button>`
+              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 10px 18px; min-height: 42px; height: 42px; font-size: 14.5px;">Выйти</button>`
+              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 10px 18px; min-height: 42px; height: 42px; font-size: 14.5px;">Войти</button>`
           }
         </div>
-      </div>
-
-      <!-- Auto-save notification indicator -->
-      <div class="autosave-bar">
-        <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease;">
-          ✓ Сохранено в профиле
-        </span>
       </div>
 
       <!-- Theme Switcher Card -->
