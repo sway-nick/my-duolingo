@@ -208,41 +208,18 @@
         // Filter words strictly based on the active training method queue
         let activeWords = [];
         if (isFavPracticeActive) {
-          activeWords = favoritePracticeWords;
           categoryWords = favoritePracticeWords;
+          // Ensure favorite words are unlocked for Quiz
+          categoryWords.forEach((w) => {
+            if (!userProgress[w.id]) {
+              userProgress[w.id] = { seenInCards: true, quizCorrect: 0, pairsCorrect: 0, inputCorrect: 0 };
+            } else if (!userProgress[w.id].seenInCards) {
+              userProgress[w.id].seenInCards = true;
+            }
+          });
+        }
 
-          if (currentWordIndex >= activeWords.length) {
-            content.innerHTML = `
-              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 56px; margin-bottom: 16px;">🎉</div>
-                <h2 style="margin: 0 0 10px;">Тренировка завершена!</h2>
-                <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; line-height: 1.45;">
-                  Вы успешно повторили все <strong>${favoritePracticeWords.length}</strong> избранных слов в режиме «Тест»!
-                </p>
-                <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
-                  <button class="primary-button btn-green" id="repeat-favs-btn" style="min-height: 46px;">
-                    🔄 Повторить ещё раз
-                  </button>
-                  <button class="secondary-button" id="exit-favs-btn" style="min-height: 46px;">
-                    Вернуться в общую программу
-                  </button>
-                </div>
-              </div>
-            `;
-
-            content.querySelector('#repeat-favs-btn')?.addEventListener('click', () => {
-              currentWordIndex = 0;
-              renderTrainingTab();
-            });
-
-            content.querySelector('#exit-favs-btn')?.addEventListener('click', () => {
-              favoritePracticeWords = null;
-              currentWordIndex = 0;
-              renderTrainingTab();
-            });
-            return;
-          }
-        } else if (currentMethod === 'cards') {
+        if (currentMethod === 'cards') {
           activeWords = getQueueForCards(categoryWords, userProgress);
           // If all words in category were already sorted, allow reviewing all unmastered words in cards
           if (activeWords.length === 0) {
@@ -256,23 +233,45 @@
           activeWords = getQueueForTest(categoryWords, userProgress, favList);
         }
 
-        // Check if all words in category are mastered (3x in Test)
+        // Check if all words in category/favorites are mastered (3x in Test)
         const unmasteredCount = categoryWords.filter((w) => !isWordMastered(userProgress[w.id])).length;
-        if (!isFavPracticeActive && unmasteredCount === 0 && categoryWords.length > 0) {
+        if (unmasteredCount === 0 && categoryWords.length > 0) {
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-              <div style="font-size: 56px; margin-bottom: 16px;">🏆</div>
-              <h2>Поздравляем!</h2>
-              <p style="color: var(--text-muted); margin-bottom: 24px;">
-                Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в режиме Тест)!
+              <div style="font-size: 56px; margin-bottom: 16px;">🎉</div>
+              <h2 style="margin: 0 0 10px;">${isFavPracticeActive ? 'Все избранные слова изучены!' : 'Поздравляем!'}</h2>
+              <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; line-height: 1.45;">
+                ${
+                  isFavPracticeActive
+                    ? `Вы успешно изучили все <strong>${favoritePracticeWords.length}</strong> избранных слов (3x в режиме Тест)!`
+                    : `Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в режиме Тест)!`
+                }
               </p>
-              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                <button class="primary-button" id="review-all-btn">
-                  🔄 Повторить категорию заново
+              <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
+                <button class="primary-button btn-green" id="review-all-btn" style="min-height: 46px;">
+                  🔄 Повторить заново
                 </button>
+                ${
+                  isFavPracticeActive
+                    ? `
+                  <button class="secondary-button" id="exit-favs-btn" style="min-height: 46px;">
+                    Вернуться в общую программу
+                  </button>
+                `
+                    : ''
+                }
               </div>
             </div>
           `;
+
+          const exitFavsBtn = content.querySelector('#exit-favs-btn');
+          if (exitFavsBtn) {
+            exitFavsBtn.addEventListener('click', () => {
+              favoritePracticeWords = null;
+              currentWordIndex = 0;
+              renderTrainingTab();
+            });
+          }
 
           const reviewBtn = content.querySelector('#review-all-btn');
           if (reviewBtn) {
@@ -282,7 +281,7 @@
                   userProgress[w.id].inputCorrect = 0;
                   userProgress[w.id].quizCorrect = 0;
                   userProgress[w.id].pairsCorrect = 0;
-                  userProgress[w.id].seenInCards = false;
+                  userProgress[w.id].seenInCards = true;
                   userProgress[w.id].mastered = false;
                 }
               });
@@ -479,7 +478,7 @@
             onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
             onStartFavoritePractice: (practiceWords) => {
               favoritePracticeWords = practiceWords && practiceWords.length > 0 ? [...practiceWords] : null;
-              userSettings.preferredMethod = 'input';
+              userSettings.preferredMethod = 'quiz';
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               const tabBtn = document.querySelector('.nav-tab[data-tab="training"]');

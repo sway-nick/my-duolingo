@@ -463,6 +463,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const prog = await saveProgress(currentWord.id, isCorrect, 'input');
       const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
 
+      if (prog?.autoFavorited) {
+        favorited = true;
+        const favBtn = container.querySelector('#fav-toggle-btn');
+        if (favBtn) {
+          favBtn.textContent = '❤️';
+          favBtn.classList.add('is-favorite');
+        }
+        onFavoriteToggle(currentWord.id, true);
+      }
+
       if (isCorrect) {
         input.classList.add('correct');
         feedback.style.display = 'block';
@@ -497,7 +507,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     input.focus();
   } else {
     practiceArea.innerHTML = `
-      <div class="flashcard-box" id="flashcard" style="cursor: pointer; padding: 20px; border-radius: var(--radius-md); border: 2px dashed var(--border-color); text-align: center; background: var(--bg-card, #ffffff); transition: all 0.2s ease;">
+      <div class="flashcard-box" id="flashcard" style="cursor: pointer; padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border-color); text-align: center; background: var(--bg-card, #ffffff); transition: all 0.2s ease;">
         <p id="flashcard-hint" style="margin: 0; color: var(--text-muted); font-size: 13px;">Нажмите на карточку, чтобы увидеть перевод</p>
         <div class="flashcard-back" id="flashcard-back" style="display:none;">
           <h2 class="card-translation" style="font-size: 20px; margin: 4px 0 2px; color: var(--text-main); font-weight: 600;">${currentWord.translation}</h2>
