@@ -58,6 +58,40 @@ function playSuccessSound() {
 }
 
 /**
+ * Plays a gentle, distinct error sound upon incorrect answer (Web Audio API)
+ */
+function playErrorSound() {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    // Dual descending low tone (subtle buzz indicating error)
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    osc.type = 'sawtooth';
+
+    // Descending frequency: 180Hz -> 110Hz
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.28);
+
+    gainNode.gain.setValueAtTime(0.01, now);
+    gainNode.gain.linearRampToValueAtTime(0.12, now + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
+
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.30);
+  } catch (e) {
+    console.warn('Audio error effect playback skipped:', e);
+  }
+}
+
+/**
  * Speaks the given text using SpeechSynthesis.
  * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
  *
@@ -107,4 +141,4 @@ function resetAudioCounter() {
   clickCount = 0;
 }
 
-export { speakWord, resetAudioCounter, playSuccessSound };
+export { speakWord, resetAudioCounter, playSuccessSound, playErrorSound };

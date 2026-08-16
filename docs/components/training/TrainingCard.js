@@ -1,4 +1,4 @@
-import { speakWord, playSuccessSound } from '../../services/audioService.js?v=14.0';
+import { speakWord, playSuccessSound, playErrorSound } from '../../services/audioService.js?v=14.0';
 import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=14.0';
 
 function sanitizeCategory(cat) {
@@ -199,6 +199,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         if (isCorrect) {
           playSuccessSound();
+        } else {
+          playErrorSound();
         }
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
