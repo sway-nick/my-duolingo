@@ -11,18 +11,28 @@ const ROUTES = {
     health: {
       get: healthEndpoint,
     },
-
-    auth: {
+    register: {
+      post: registerPost,
+    },
+    login: {
       post: loginPost,
     },
-
-    lessons: {},
     words: {
       get: wordsGet,
     },
-    review: {},
-    stats: {},
-    settings: {},
+    stats: {
+      get: statsGet,
+    },
+    progress: {
+      post: progressPost,
+    },
+    favorite: {
+      post: favoritePost,
+    },
+    settings: {
+      get: settingsGet,
+      post: settingsPost,
+    },
   },
 };
 

@@ -1,0 +1,44 @@
+let currentWordKey = null;
+let clickCount = 0;
+
+/**
+ * Speaks the given text using SpeechSynthesis.
+ * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
+ *
+ * @param {string} text - The word or text to pronounce (e.g. English word)
+ * @param {string} wordId - Optional unique ID for tracking consecutive clicks on the same word
+ * @param {string} lang - Language code (default 'en-US')
+ * @returns {boolean} isTurtleMode - True if playing in slow speed
+ */
+function speakWord(text, wordId = null, lang = 'en-US') {
+  if (!('speechSynthesis' in window)) {
+    console.warn('SpeechSynthesis is not supported in this browser.');
+    return false;
+  }
+
+  window.speechSynthesis.cancel(); // Stop any ongoing speech
+
+  const key = wordId || text;
+  if (currentWordKey === key) {
+    clickCount += 1;
+  } else {
+    currentWordKey = key;
+    clickCount = 1;
+  }
+
+  const isTurtleMode = clickCount >= 3;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = isTurtleMode ? 0.55 : 0.95; // Normal: ~1.0, Turtle: ~0.55
+
+  window.speechSynthesis.speak(utterance);
+
+  return isTurtleMode;
+}
+
+function resetAudioCounter() {
+  currentWordKey = null;
+  clickCount = 0;
+}
+
+export { speakWord, resetAudioCounter };
