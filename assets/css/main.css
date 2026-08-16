@@ -471,6 +471,103 @@ body {
   color: #7f1d1d;
 }
 
+/* Pairs Matching Mode */
+.pairs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.pairs-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pairs-card {
+  background: #f8fafc;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.pairs-card:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background: #f0f7ff;
+}
+
+.pairs-card.selected {
+  background: #eff6ff !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+
+.pairs-card.matched {
+  background: #dcfce7 !important;
+  border-color: #22c55e !important;
+  color: #15803d !important;
+  opacity: 0.35;
+  pointer-events: none;
+  cursor: default;
+  transform: scale(0.97);
+}
+
+.pairs-card.wrong {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #b91c1c !important;
+  animation: pairShake 0.4s ease;
+}
+
+.dark-theme .pairs-card {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+.dark-theme .pairs-card:hover:not(:disabled) {
+  background: #334155;
+  border-color: #3b82f6;
+}
+
+.dark-theme .pairs-card.selected {
+  background: #1e3a8a !important;
+  border-color: #60a5fa !important;
+  color: #93c5fd !important;
+}
+
+.dark-theme .pairs-card.matched {
+  background: rgba(16, 185, 129, 0.25) !important;
+  border-color: #10b981 !important;
+  color: #6ee7b7 !important;
+}
+
+.dark-theme .pairs-card.wrong {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+@keyframes pairShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
 /* Flashcard */
 .flashcard-box {
   background: #f8fafc;

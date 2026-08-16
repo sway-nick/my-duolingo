@@ -28,15 +28,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } = options;
 
   const isInputMode = currentMethod === 'input';
+  const isPairsMode = currentMethod === 'pairs';
   let favorited = isFavorite;
 
   container.innerHTML = `
     <section class="word-card-container">
       
-      <!-- Top card bar: Category Filter Dropdown on Left, Mode Switch (Карточки / Квиз / Тест) & Favorite on Right -->
+      <!-- Top card bar: Category Filter Dropdown on Left, Mode Switch (Карточки / Квиз / Пары / Тест) & Favorite on Right -->
       <div class="card-header-bar">
         
-        <!-- Category Dropdown (Only category name, without A1/A2) -->
+        <!-- Category Dropdown -->
         <div class="category-select-wrapper">
           <select id="training-category-select" class="category-pill-select" title="Выбрать категорию">
             <option value="All" ${selectedCategory === 'All' || selectedCategory === 'Все категории' ? 'selected' : ''}>
@@ -54,7 +55,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           </select>
         </div>
 
-        <!-- Mode Switcher (Карточки, Квиз, Тест) + Favorite Heart -->
+        <!-- Mode Switcher in order: Карточки, Квиз, Пары, Тест + Favorite Heart -->
         <div class="card-header-right">
           <div class="mode-switch-pills">
             <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
@@ -62,6 +63,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </button>
             <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
               Квиз
+            </button>
+            <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs" title="Режим Пары">
+              Пары
             </button>
             <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
               Тест
@@ -78,7 +82,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <!-- Word Display & Audio Button -->
       <div class="word-main-display">
         ${
-          isInputMode
+          isPairsMode
+            ? `
+            <div class="pairs-header-box" style="margin-bottom: 6px;">
+              <h2 class="training-word" style="font-size: 20px; margin: 2px 0 4px;">🧩 Найдите пары слов</h2>
+              <p class="training-transcription" style="margin: 0; font-size: 13px; color: var(--text-muted);">
+                Соедините английские слова с их переводом
+              </p>
+            </div>
+          `
+            : isInputMode
             ? `
             <div class="sound-placeholder" style="height: 38px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
               <small style="color: var(--text-muted); font-size: 12px;">🎧 Озвучка после ответа</small>
@@ -112,7 +125,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
   }
 
-  // Bind mode switcher pills (Карточки / Квиз / Тест)
+  // Bind mode switcher pills (Карточки / Квиз / Пары / Тест)
   const modePills = container.querySelectorAll('.mode-pill-btn');
   modePills.forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -125,11 +138,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
   });
 
-  // Bind audio speak button (for non-input modes)
+  // Bind audio speak button (for cards/quiz modes)
   const speakBtn = container.querySelector('#speak-btn');
   const turtleIndicator = container.querySelector('#turtle-indicator');
 
-  if (speakBtn) {
+  if (speakBtn && !isPairsMode) {
     speakBtn.addEventListener('click', () => {
       const isTurtle = speakWord(currentWord.word, currentWord.id);
       if (turtleIndicator) {
@@ -137,7 +150,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     });
 
-    // Auto-pronounce word on card appearance only if NOT in text input mode (so no spoiler)
+    // Auto-pronounce word on card appearance only if NOT in text input or pairs mode
     setTimeout(() => {
       try {
         const isTurtle = speakWord(currentWord.word, currentWord.id);
@@ -164,7 +177,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const practiceArea = container.querySelector('#practice-area');
 
-  // --- RENDER ACCORDING TO CURRENT METHOD (Without boilerplate hint texts) ---
+  // --- RENDER ACCORDING TO CURRENT METHOD ---
 
   if (currentMethod === 'quiz') {
     // Generate 4 multiple-choice options
@@ -203,11 +216,134 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // 2x Increased delays: 2.2s on correct, 4.2s on error to comfortably study the result
+        // 2.2s on correct, 4.2s on error to comfortably study the result
         const delay = isCorrect ? 2200 : 4200;
         setTimeout(() => {
           onNext();
         }, delay);
+      });
+    });
+  } else if (currentMethod === 'pairs') {
+    // Pairs Matching Mode (5 words per round)
+    const otherWords = allWords.filter((w) => w.id !== currentWord.id);
+    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 4)];
+    const leftItems = shuffleArray(
+      roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
+    );
+    const rightItems = shuffleArray(
+      roundWords.map((w) => ({ id: w.id, text: w.translation, word: w.word, side: 'right' }))
+    );
+
+    practiceArea.innerHTML = `
+      <div class="pairs-grid">
+        <div class="pairs-col" id="pairs-left-col">
+          ${leftItems
+            .map(
+              (item) => `
+            <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}">
+              ${item.text}
+            </button>
+          `
+            )
+            .join('')}
+        </div>
+        <div class="pairs-col" id="pairs-right-col">
+          ${rightItems
+            .map(
+              (item) => `
+            <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}">
+              ${item.text}
+            </button>
+          `
+            )
+            .join('')}
+        </div>
+      </div>
+      <div id="pairs-celebration" style="display: none; margin-top: 12px; font-weight: 700; color: var(--success-color, #16a34a); text-align: center; font-size: 16px;">
+        🎉 Отлично! Все пары найдены!
+      </div>
+    `;
+
+    let selectedLeft = null;
+    let selectedRight = null;
+    let matchedCount = 0;
+    const totalPairs = roundWords.length;
+
+    const leftBtns = practiceArea.querySelectorAll('.pairs-card[data-side="left"]');
+    const rightBtns = practiceArea.querySelectorAll('.pairs-card[data-side="right"]');
+
+    const checkPairMatch = async () => {
+      if (!selectedLeft || !selectedRight) return;
+
+      const leftId = selectedLeft.getAttribute('data-id');
+      const rightId = selectedRight.getAttribute('data-id');
+      const leftWord = selectedLeft.getAttribute('data-word');
+
+      const isMatch = String(leftId) === String(rightId);
+
+      const curLeft = selectedLeft;
+      const curRight = selectedRight;
+      selectedLeft = null;
+      selectedRight = null;
+
+      if (isMatch) {
+        curLeft.classList.remove('selected');
+        curRight.classList.remove('selected');
+        curLeft.classList.add('matched');
+        curRight.classList.add('matched');
+
+        speakWord(leftWord, leftId);
+        await saveProgress(leftId, true, 'pairs');
+        matchedCount++;
+
+        if (matchedCount === totalPairs) {
+          const celeb = practiceArea.querySelector('#pairs-celebration');
+          if (celeb) celeb.style.display = 'block';
+          setTimeout(() => {
+            onNext();
+          }, 1200);
+        }
+      } else {
+        curLeft.classList.add('wrong');
+        curRight.classList.add('wrong');
+        await saveProgress(leftId, false, 'pairs');
+
+        setTimeout(() => {
+          curLeft.classList.remove('wrong', 'selected');
+          curRight.classList.remove('wrong', 'selected');
+        }, 650);
+      }
+    };
+
+    leftBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
+
+        leftBtns.forEach((b) => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedLeft = btn;
+
+        const w = btn.getAttribute('data-word');
+        const id = btn.getAttribute('data-id');
+        speakWord(w, id);
+
+        if (selectedRight) {
+          checkPairMatch();
+        }
+      });
+    });
+
+    rightBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
+
+        rightBtns.forEach((b) => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedRight = btn;
+
+        if (selectedLeft) {
+          checkPairMatch();
+        }
       });
     });
   } else if (currentMethod === 'input') {
@@ -254,7 +390,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedback.textContent = `Правильно: ${currentWord.word} (${currentWord.transcription || ''})`;
       }
 
-      // 2x Increased delays: 2.5s / 3.5s on correct, 4.8s on error for listening & reading
+      // 2.5s / 3.5s on correct, 4.8s on error for listening & reading
       const delay = isCorrect ? (inputCount >= 3 ? 3500 : 2500) : 4800;
       setTimeout(() => {
         onNext();
@@ -311,4 +447,4 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   }
 }
 
-export { renderTrainingCard };
+export { renderTrainingCard, sanitizeCategory };
