@@ -1,19 +1,26 @@
-import { speakWord } from '../../services/audioService.js?v=8.0';
-import { toggleFavoriteApi, getUserProgress } from '../../services/api.js?v=8.0';
+import { speakWord } from '../../services/audioService.js?v=10.0';
+import { toggleFavoriteApi, getUserProgress } from '../../services/api.js?v=10.0';
+
+function sanitizeCategory(cat) {
+  if (!cat) return 'Общие';
+  return String(cat)
+    .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
+    .trim() || String(cat).trim();
+}
 
 function renderDictionaryView(words = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
   const { favoriteIds = [], onFavoriteToggle = () => {} } = options;
-  const favSet = new Set(favoriteIds);
+  const favSet = new Set(favoriteIds.map(String));
   const userProgress = getUserProgress();
 
   container.innerHTML = `
     <div class="dictionary-page">
       <div class="page-header">
         <h2>📖 Словарь (${words.length} слов)</h2>
-        <p class="subtitle">Изучайте новые слова, слушайте произношение и добавляйте в избранное</p>
+        <p class="subtitle">Изучайте слова, слушайте произношение и отслеживайте выученные</p>
       </div>
 
       <!-- Controls: Search & Category Filter -->
@@ -31,10 +38,12 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     </div>
   `;
 
-  // Populate categories
+  // Populate categories (cleaned of A1/A2 suffixes)
   const categorySelect = container.querySelector('#dict-category');
-  const categories = Array.from(new Set(words.map((w) => w.category).filter(Boolean)));
-  categories.forEach((cat) => {
+  const uniqueCats = Array.from(
+    new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean))
+  );
+  uniqueCats.forEach((cat) => {
     const opt = document.createElement('option');
     opt.value = cat;
     opt.textContent = cat;
@@ -46,14 +55,15 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   const renderList = () => {
     const query = searchInput.value.trim().toLowerCase();
-    const cat = categorySelect.value;
+    const selectedCat = categorySelect.value;
 
     const filtered = words.filter((w) => {
+      const catClean = sanitizeCategory(w.category);
       const matchQuery =
         !query ||
         w.word.toLowerCase().includes(query) ||
         w.translation.toLowerCase().includes(query);
-      const matchCat = cat === 'All' || (w.category || 'Общие') === cat;
+      const matchCat = selectedCat === 'All' || catClean === selectedCat;
       return matchQuery && matchCat;
     });
 
@@ -64,18 +74,36 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
     grid.innerHTML = filtered
       .map((w) => {
-        const isFav = favSet.has(w.id);
-        const prog = userProgress[w.id];
-        const isMastered = prog && (prog.inputCorrect >= 3 || prog.mastered);
+        const isFav = favSet.has(String(w.id));
+        const prog =
+          userProgress[w.id] ||
+          userProgress[String(w.id)] ||
+          (w.word ? userProgress[w.word.toLowerCase().trim()] : null);
+
+        const isMastered = Boolean(
+          prog && (
+            prog.mastered === true ||
+            (prog.inputCorrect !== undefined && prog.inputCorrect >= 3) ||
+            (prog.correct !== undefined && prog.correct >= 3)
+          )
+        );
+
+        const cleanCat = sanitizeCategory(w.category);
 
         return `
         <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
           <div class="dict-card-header">
             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-              <span class="category-badge">${w.category || 'Общие'}</span>
-              ${isMastered ? `<span class="mastered-badge">✓ Выучено</span>` : ''}
+              <span class="category-badge">${cleanCat}</span>
+              ${
+                isMastered
+                  ? `<span class="mastered-badge">✓ Выучено</span>`
+                  : prog && prog.correct > 0
+                  ? `<span class="in-progress-badge">🎯 ${prog.inputCorrect || prog.correct}/3</span>`
+                  : ''
+              }
             </div>
-            <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}">
+            <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
               ${isFav ? '❤️' : '🤍'}
             </button>
           </div>
@@ -92,7 +120,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       })
       .join('');
 
-    // Bind listeners
+    // Bind audio listeners
     grid.querySelectorAll('.sound-button-sm').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         const word = e.target.getAttribute('data-word');
@@ -101,14 +129,15 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       });
     });
 
+    // Bind favorite listeners
     grid.querySelectorAll('.fav-icon-btn').forEach((btn) => {
       btn.addEventListener('click', async (e) => {
         const id = e.target.getAttribute('data-id');
-        const isCurrentlyFav = favSet.has(id);
+        const isCurrentlyFav = favSet.has(String(id));
         const nextFav = !isCurrentlyFav;
 
-        if (nextFav) favSet.add(id);
-        else favSet.delete(id);
+        if (nextFav) favSet.add(String(id));
+        else favSet.delete(String(id));
 
         btn.textContent = nextFav ? '❤️' : '🤍';
         btn.classList.toggle('active', nextFav);
@@ -125,4 +154,4 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   renderList();
 }
 
-export { renderDictionaryView };
+export { renderDictionaryView, sanitizeCategory };

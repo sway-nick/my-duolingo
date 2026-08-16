@@ -1,5 +1,12 @@
-import { speakWord } from '../../services/audioService.js?v=8.0';
-import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=8.0';
+import { speakWord } from '../../services/audioService.js?v=10.0';
+import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=10.0';
+
+function sanitizeCategory(cat) {
+  if (!cat) return 'Общие';
+  return String(cat)
+    .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
+    .trim() || String(cat).trim();
+}
 
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -39,7 +46,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               .map(
                 (cat) => `
               <option value="${cat}" ${cat === selectedCategory ? 'selected' : ''}>
-                📂 ${cat} (${allWords.filter((w) => w.category === cat).length})
+                📂 ${sanitizeCategory(cat)} (${allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(cat)).length})
               </option>
             `,
               )
