@@ -566,8 +566,8 @@ body {
 }
 
 .training-word {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 700;
   margin: 0;
   color: var(--text-main);
   line-height: 1.25;
