@@ -29,7 +29,7 @@ function speakWord(text, wordId = null, lang = 'en-US') {
   const isTurtleMode = clickCount >= 3;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
-  utterance.rate = isTurtleMode ? 0.45 : 0.80; // Slower, clearer pronunciation: ~0.80, Turtle: ~0.45
+  utterance.rate = isTurtleMode ? 0.32 : 0.78; // Extra slow turtle: 0.32, Normal comfortable: 0.78
 
   window.speechSynthesis.speak(utterance);
 

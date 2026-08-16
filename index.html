@@ -25,22 +25,22 @@
     </script>
     <title>English Trainer — Изучайте английский легко</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦉</text></svg>" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=11.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=12.0" />
   </head>
 
   <body>
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings } from './services/api.js?v=10.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=10.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=10.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=10.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=10.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=10.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=10.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=10.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=10.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings } from './services/api.js?v=12.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=12.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=12.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=12.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=12.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=12.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=12.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=12.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=12.0';
 
       let allWords = [];
       let favoriteIds = new Set();

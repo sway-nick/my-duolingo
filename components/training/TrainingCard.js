@@ -193,8 +193,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // 2.2s on correct, 4.2s on error to comfortably study the result
-        const delay = isCorrect ? 2200 : 4200;
+        // 3x Increased delay on error: 12.6s to thoroughly study the right answer (2.2s on correct)
+        const delay = isCorrect ? 2200 : 12600;
         setTimeout(() => {
           onNext();
         }, delay);
@@ -291,10 +291,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         curRight.classList.add('wrong');
         await saveProgress(leftId, false, 'pairs');
 
+        // 3x Increased delay on wrong mismatch: 1950ms
         setTimeout(() => {
           curLeft.classList.remove('wrong', 'selected');
           curRight.classList.remove('wrong', 'selected');
-        }, 650);
+        }, 1950);
       }
     };
 
@@ -373,8 +374,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedback.textContent = `Правильно: ${currentWord.word} (${currentWord.transcription || ''})`;
       }
 
-      // 2.5s / 3.5s on correct, 4.8s on error for listening & reading
-      const delay = isCorrect ? (inputCount >= 3 ? 3500 : 2500) : 4800;
+      // 3x Increased delay on error: 14.4s (2.5s / 3.5s on correct)
+      const delay = isCorrect ? (inputCount >= 3 ? 3500 : 2500) : 14400;
       setTimeout(() => {
         onNext();
       }, delay);
