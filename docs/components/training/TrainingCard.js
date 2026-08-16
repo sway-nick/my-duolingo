@@ -10,17 +10,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (!container) return;
 
   const {
-    enabledMethods = ['cards', 'quiz', 'input'],
+    currentMethod = 'quiz',
+    selectedCategory = 'All',
+    categories = [],
+    onMethodChange = () => {},
+    onCategoryChange = () => {},
     onNext = () => {},
     onFavoriteToggle = () => {},
     isFavorite = false,
   } = options;
-
-  // Determine current method mode out of enabled methods
-  let currentMethod = options.forcedMethod;
-  if (!currentMethod || !enabledMethods.includes(currentMethod)) {
-    currentMethod = enabledMethods[0] || 'quiz';
-  }
 
   const isInputMode = currentMethod === 'input';
   let favorited = isFavorite;
@@ -28,15 +26,46 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   container.innerHTML = `
     <section class="word-card-container">
       
-      <!-- Top card bar: Category & Favorite toggle -->
+      <!-- Top card bar: Category Filter Dropdown on Left, Mode Switch (Карточки / Квиз / Тест) & Favorite on Right -->
       <div class="card-header-bar">
-        <span class="category-badge">
-          📂 ${currentWord.category || 'Общие'} • ${currentWord.level || 'A1'}
-        </span>
         
-        <button class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
-          ${favorited ? '❤️' : '🤍'}
-        </button>
+        <!-- Category Dropdown (Only category name, without A1/A2) -->
+        <div class="category-select-wrapper">
+          <select id="training-category-select" class="category-pill-select" title="Выбрать категорию">
+            <option value="All" ${selectedCategory === 'All' || selectedCategory === 'Все категории' ? 'selected' : ''}>
+              📂 Все (${allWords.length})
+            </option>
+            ${categories
+              .map(
+                (cat) => `
+              <option value="${cat}" ${cat === selectedCategory ? 'selected' : ''}>
+                📂 ${cat} (${allWords.filter((w) => w.category === cat).length})
+              </option>
+            `,
+              )
+              .join('')}
+          </select>
+        </div>
+
+        <!-- Mode Switcher (Карточки, Квиз, Тест) + Favorite Heart -->
+        <div class="card-header-right">
+          <div class="mode-switch-pills">
+            <button class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
+              Карточки
+            </button>
+            <button class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
+              Квиз
+            </button>
+            <button class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
+              Тест
+            </button>
+          </div>
+
+          <button class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+            ${favorited ? '❤️' : '🤍'}
+          </button>
+        </div>
+
       </div>
 
       <!-- Word Display & Audio Button -->
@@ -47,8 +76,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             <div class="sound-placeholder" style="height: 48px; display: flex; align-items: center; justify-content: center;">
               <small style="color: var(--text-muted); font-size: 13px;">🎧 Озвучка после ответа</small>
             </div>
-            <h1 class="training-word" style="color: var(--text-main);">${currentWord.translation}</h1>
-            <p class="training-transcription" style="visibility: hidden;">—</p>
+            <h1 class="training-word" style="color: var(--text-main); font-size: 26px; line-height: 1.3;">
+              ${currentWord.translation}
+            </h1>
+            <p class="training-transcription" style="visibility: hidden; margin: 4px 0;">—</p>
           `
             : `
             <button class="sound-button" id="speak-btn" title="Прослушать слово">
@@ -67,6 +98,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     </section>
   `;
 
+  // Bind category switcher
+  const catSelect = container.querySelector('#training-category-select');
+  if (catSelect) {
+    catSelect.addEventListener('change', (e) => {
+      onCategoryChange(e.target.value);
+    });
+  }
+
+  // Bind mode switcher pills (Карточки / Квиз / Тест)
+  const modePills = container.querySelectorAll('.mode-pill-btn');
+  modePills.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const selectedMode = btn.getAttribute('data-mode');
+      onMethodChange(selectedMode);
+    });
+  });
+
   // Bind audio speak button (for non-input modes)
   const speakBtn = container.querySelector('#speak-btn');
   const turtleIndicator = container.querySelector('#turtle-indicator');
@@ -79,7 +127,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     });
 
-    // Auto-pronounce word on initial card appearance only if NOT in text input mode (so it's not a spoiler)
+    // Auto-pronounce word on card appearance only if NOT in text input mode (so no spoiler)
     setTimeout(() => {
       try {
         const isTurtle = speakWord(currentWord.word, currentWord.id);
@@ -151,7 +199,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'input') {
-    // Russian prompt on top -> user types in English
+    // Test mode: Russian prompt on top -> user types in English
     practiceArea.innerHTML = `
       <p class="hint">Напишите перевод на английском языке:</p>
       <div class="input-form-row">
@@ -173,7 +221,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       input.disabled = true;
       checkBtn.disabled = true;
 
-      // Pronounce the English word now (since answer was submitted)
+      // Pronounce English word after answer submission
       speakWord(currentWord.word, currentWord.id);
 
       const prog = await saveProgress(currentWord.id, isCorrect, 'input');
@@ -184,9 +232,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
         if (inputCount >= 3) {
-          feedback.textContent = `🎉 Отлично! Слово полностью выучено (${inputCount}/3) и убрано из обучения!`;
+          feedback.textContent = `🎉 Слово выучено! (3/3) и убрано из обучения!`;
         } else {
-          feedback.textContent = `✓ Верно! (${inputCount}/3 для полного выучивания)`;
+          feedback.textContent = `✓ Верно! (${inputCount}/3 для выучивания)`;
         }
       } else {
         input.classList.add('wrong');

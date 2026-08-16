@@ -87,8 +87,9 @@
           console.warn('Failed to load settings:', e);
         }
 
-        // Apply category filter from settings
-        const selectedCategory = userSettings.category || userSettings.level || 'All';
+        const categories = Array.from(new Set(allWords.map((w) => w.category).filter(Boolean)));
+        const selectedCategory = userSettings.category || 'All';
+
         let categoryWords = allWords;
         if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'Все категории') {
           const filtered = allWords.filter((w) => w.category === selectedCategory);
@@ -110,7 +111,7 @@
               <div style="font-size: 56px; margin-bottom: 16px;">🏆</div>
               <h2>Поздравляем!</h2>
               <p style="color: var(--text-muted); margin-bottom: 24px;">
-                Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в текстовом переводе)!
+                Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в режиме Тест)!
               </p>
               <button class="primary-button" id="review-all-btn" style="max-width: 280px; margin: 0 auto;">
                 🔄 Повторить категорию заново
@@ -139,18 +140,23 @@
 
         content.innerHTML = '<div id="training"></div>';
         const currentWord = activeWords[currentWordIndex % activeWords.length];
-        const rawMethods = userSettings.enabledMethods || 'quiz,cards,input';
-        const enabledMethods = rawMethods
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean);
-
-        // Pick active method among user's enabled methods
-        const activeMethod = enabledMethods[Math.floor(Math.random() * enabledMethods.length)] || 'quiz';
+        const currentMethod = userSettings.preferredMethod || 'quiz';
 
         renderTrainingCard(currentWord, allWords, {
-          enabledMethods,
-          forcedMethod: activeMethod,
+          currentMethod,
+          selectedCategory,
+          categories,
+          onMethodChange: async (newMethod) => {
+            userSettings.preferredMethod = newMethod;
+            await saveUserSettings(userSettings);
+            renderTrainingTab();
+          },
+          onCategoryChange: async (newCategory) => {
+            userSettings.category = newCategory;
+            await saveUserSettings(userSettings);
+            currentWordIndex = 0;
+            renderTrainingTab();
+          },
           isFavorite: favoriteIds.has(currentWord.id),
           onFavoriteToggle: handleFavoriteToggle,
           onNext: () => {

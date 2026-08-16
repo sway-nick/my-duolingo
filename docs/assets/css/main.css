@@ -283,7 +283,84 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 20px;
+}
+
+.category-select-wrapper {
+  flex-shrink: 1;
+  max-width: 170px;
+}
+
+.category-pill-select {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: #f8fafc;
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.dark-theme .category-pill-select {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+.category-pill-select:hover {
+  border-color: var(--primary-color);
+}
+
+.card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mode-switch-pills {
+  display: inline-flex;
+  background: #f1f5f9;
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .mode-switch-pills {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.mode-pill-btn {
+  padding: 5px 9px;
+  border-radius: 16px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mode-pill-btn:hover {
+  color: var(--text-main);
+}
+
+.mode-pill-btn.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25);
 }
 
 .category-badge {
@@ -298,9 +375,13 @@ body {
 .favorite-button {
   background: transparent;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
 }
 
 .favorite-button:hover {
