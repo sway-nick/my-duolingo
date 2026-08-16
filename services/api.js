@@ -179,22 +179,53 @@ async function loginUser(email, password) {
   };
 }
 
-async function saveProgress(wordId, isCorrect) {
+function getUserProgress() {
+  const user = getCurrentUser();
+  const userId = user ? user.id : 'guest';
+  const key = `progress_${userId}`;
+  return JSON.parse(localStorage.getItem(key) || '{}');
+}
+
+async function saveProgress(wordId, isCorrect, method = 'quiz') {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
 
   const key = `progress_${userId}`;
   const local = JSON.parse(localStorage.getItem(key) || '{}');
-  if (!local[wordId]) local[wordId] = { correct: 0, error: 0 };
-  if (isCorrect) local[wordId].correct += 1;
-  else local[wordId].error += 1;
+  if (!local[wordId]) {
+    local[wordId] = { correct: 0, error: 0, inputCorrect: 0, mastered: false };
+  }
+
+  if (isCorrect) {
+    local[wordId].correct = (local[wordId].correct || 0) + 1;
+    if (method === 'input') {
+      local[wordId].inputCorrect = (local[wordId].inputCorrect || 0) + 1;
+      if (local[wordId].inputCorrect >= 3) {
+        local[wordId].mastered = true;
+      }
+    }
+  } else {
+    local[wordId].error = (local[wordId].error || 0) + 1;
+  }
+
   localStorage.setItem(key, JSON.stringify(local));
 
-  pendingProgressQueue.push({ route: 'progress', action: 'progress', userId, wordId, isCorrect });
+  pendingProgressQueue.push({
+    route: 'progress',
+    action: 'progress',
+    userId,
+    wordId,
+    isCorrect,
+    method,
+    inputCorrect: local[wordId].inputCorrect || 0,
+    mastered: local[wordId].mastered || false,
+  });
 
   if (pendingProgressQueue.length >= 5) {
     flushProgressQueue();
   }
+
+  return local[wordId];
 }
 
 async function flushProgressQueue() {
@@ -247,38 +278,54 @@ async function toggleFavoriteApi(wordId, isFavorite) {
 async function getUserStats() {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
-  try {
-    const response = await fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`);
-    const data = await response.json();
-    if (data && data.success && data.data) return data.data;
-  } catch (e) {
-    console.warn('Using local stats calculation', e);
-  }
-
   const key = `progress_${userId}`;
   const localProg = JSON.parse(localStorage.getItem(key) || '{}');
-  const attempted = Object.keys(localProg).length;
+
+  const allWordsRes = await getWords();
+  const wordsList = allWordsRes.data || MOCK_WORDS;
+
+  let masteredCount = 0;
+  let learningCount = 0;
   let correct = 0;
   let errors = 0;
-  Object.values(localProg).forEach((p) => {
-    correct += p.correct || 0;
-    errors += p.error || 0;
+
+  Object.entries(localProg).forEach(([wordId, prog]) => {
+    correct += prog.correct || 0;
+    errors += prog.error || 0;
+    if (prog.inputCorrect >= 3 || prog.mastered) {
+      masteredCount += 1;
+    } else if (prog.correct > 0 || prog.error > 0) {
+      learningCount += 1;
+    }
   });
+
+  const totalAttempted = Object.keys(localProg).length;
   const accuracy = correct + errors > 0 ? Math.round((correct / (correct + errors)) * 100) : 0;
 
+  const categoryMap = {};
+  wordsList.forEach((w) => {
+    const cat = w.category || 'Общие';
+    if (!categoryMap[cat]) categoryMap[cat] = { total: 0, learned: 0 };
+    categoryMap[cat].total += 1;
+    if (localProg[w.id] && (localProg[w.id].inputCorrect >= 3 || localProg[w.id].mastered)) {
+      categoryMap[cat].learned += 1;
+    }
+  });
+
+  const categoryBreakdown = Object.entries(categoryMap).map(([category, stats]) => ({
+    category,
+    total: stats.total,
+    learned: stats.learned,
+  }));
+
   return {
-    totalWords: MOCK_WORDS.length,
-    masteredCount: Math.min(attempted, 3),
-    learningCount: attempted,
-    totalAttempted: attempted,
+    totalWords: wordsList.length,
+    masteredCount,
+    learningCount,
+    totalAttempted,
     accuracy,
     streakDays: 1,
-    categoryBreakdown: [
-      { category: 'Еда и напитки', total: 1, learned: localProg['1'] ? 1 : 0 },
-      { category: 'Обучение', total: 1, learned: localProg['2'] ? 1 : 0 },
-      { category: 'Путешествия', total: 2, learned: (localProg['3'] || localProg['7']) ? 1 : 0 },
-      { category: 'Природа', total: 1, learned: localProg['5'] ? 1 : 0 },
-    ],
+    categoryBreakdown,
   };
 }
 
@@ -336,6 +383,7 @@ export {
   registerUser,
   loginUser,
   saveProgress,
+  getUserProgress,
   flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,

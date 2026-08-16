@@ -22,6 +22,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     currentMethod = enabledMethods[0] || 'quiz';
   }
 
+  const isInputMode = currentMethod === 'input';
   let favorited = isFavorite;
 
   container.innerHTML = `
@@ -40,13 +41,24 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       <!-- Word Display & Audio Button -->
       <div class="word-main-display">
-        <button class="sound-button" id="speak-btn" title="Прослушать слово">
-          🔊
-        </button>
-        <span class="turtle-indicator" id="turtle-indicator" style="display: none;">🐢 Медленно</span>
-
-        <h1 class="training-word">${currentWord.word}</h1>
-        <p class="training-transcription">${currentWord.transcription || ''}</p>
+        ${
+          isInputMode
+            ? `
+            <div class="sound-placeholder" style="height: 48px; display: flex; align-items: center; justify-content: center;">
+              <small style="color: var(--text-muted); font-size: 13px;">🎧 Озвучка после ответа</small>
+            </div>
+            <h1 class="training-word" style="color: var(--text-main);">${currentWord.translation}</h1>
+            <p class="training-transcription" style="visibility: hidden;">—</p>
+          `
+            : `
+            <button class="sound-button" id="speak-btn" title="Прослушать слово">
+              🔊
+            </button>
+            <span class="turtle-indicator" id="turtle-indicator" style="display: none;">🐢 Медленно</span>
+            <h1 class="training-word">${currentWord.word}</h1>
+            <p class="training-transcription">${currentWord.transcription || ''}</p>
+          `
+        }
       </div>
 
       <!-- Practice Area based on active method -->
@@ -55,28 +67,30 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     </section>
   `;
 
-  // Bind audio speak button (3rd click auto-turtle mode!)
+  // Bind audio speak button (for non-input modes)
   const speakBtn = container.querySelector('#speak-btn');
   const turtleIndicator = container.querySelector('#turtle-indicator');
 
-  speakBtn.addEventListener('click', () => {
-    const isTurtle = speakWord(currentWord.word, currentWord.id);
-    if (turtleIndicator) {
-      turtleIndicator.style.display = isTurtle ? 'inline-block' : 'none';
-    }
-  });
-
-  // Auto-pronounce word on initial card appearance
-  setTimeout(() => {
-    try {
+  if (speakBtn) {
+    speakBtn.addEventListener('click', () => {
       const isTurtle = speakWord(currentWord.word, currentWord.id);
       if (turtleIndicator) {
         turtleIndicator.style.display = isTurtle ? 'inline-block' : 'none';
       }
-    } catch (e) {
-      console.warn('Auto-speak failed:', e);
-    }
-  }, 100);
+    });
+
+    // Auto-pronounce word on initial card appearance only if NOT in text input mode (so it's not a spoiler)
+    setTimeout(() => {
+      try {
+        const isTurtle = speakWord(currentWord.word, currentWord.id);
+        if (turtleIndicator) {
+          turtleIndicator.style.display = isTurtle ? 'inline-block' : 'none';
+        }
+      } catch (e) {
+        console.warn('Auto-speak failed:', e);
+      }
+    }, 100);
+  }
 
   // Bind favorite toggle
   const favBtn = container.querySelector('#fav-toggle-btn');
@@ -114,7 +128,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     `;
 
     practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', async (e) => {
         const selected = e.target.getAttribute('data-choice');
         const isCorrect = selected === currentWord.translation;
 
@@ -128,9 +142,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
         });
 
-        saveProgress(currentWord.id, isCorrect);
+        await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // Auto-advance: fast on correct (500ms), slightly longer on error so user sees the correct answer (1200ms)
         const delay = isCorrect ? 500 : 1200;
         setTimeout(() => {
           onNext();
@@ -138,42 +151,51 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'input') {
+    // Russian prompt on top -> user types in English
     practiceArea.innerHTML = `
-      <p class="hint">Введите перевод слова на русский:</p>
+      <p class="hint">Напишите перевод на английском языке:</p>
       <div class="input-form-row">
-        <input class="answer-input" id="answer-input" placeholder="Перевод..." autocomplete="off" />
+        <input class="answer-input" id="answer-input" placeholder="Введите на английском..." autocomplete="off" autocapitalize="none" spellcheck="false" />
         <button class="check-button" id="check-answer-btn">Проверить</button>
       </div>
-      <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 12px; font-weight: 600;"></div>
+      <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 14px; font-weight: 600; text-align: center; font-size: 16px;"></div>
     `;
 
     const input = practiceArea.querySelector('#answer-input');
     const checkBtn = practiceArea.querySelector('#check-answer-btn');
     const feedback = practiceArea.querySelector('#input-feedback');
 
-    const handleCheck = () => {
+    const handleCheck = async () => {
       const userAns = input.value.trim().toLowerCase();
-      const correctAns = currentWord.translation.trim().toLowerCase();
+      const correctAns = currentWord.word.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
 
       input.disabled = true;
       checkBtn.disabled = true;
 
+      // Pronounce the English word now (since answer was submitted)
+      speakWord(currentWord.word, currentWord.id);
+
+      const prog = await saveProgress(currentWord.id, isCorrect, 'input');
+      const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
+
       if (isCorrect) {
         input.classList.add('correct');
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
-        feedback.textContent = '✓ Верно!';
+        if (inputCount >= 3) {
+          feedback.textContent = `🎉 Отлично! Слово полностью выучено (${inputCount}/3) и убрано из обучения!`;
+        } else {
+          feedback.textContent = `✓ Верно! (${inputCount}/3 для полного выучивания)`;
+        }
       } else {
         input.classList.add('wrong');
         feedback.style.display = 'block';
         feedback.style.color = 'var(--error-color, #dc2626)';
-        feedback.textContent = `Правильно: ${currentWord.translation}`;
+        feedback.textContent = `Правильно: ${currentWord.word} (${currentWord.transcription || ''})`;
       }
 
-      saveProgress(currentWord.id, isCorrect);
-
-      const delay = isCorrect ? 500 : 1400;
+      const delay = isCorrect ? (inputCount >= 3 ? 1200 : 700) : 1800;
       setTimeout(() => {
         onNext();
       }, delay);
@@ -209,13 +231,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       feedbackBtns.style.display = 'flex';
     });
 
-    practiceArea.querySelector('#btn-repeat').addEventListener('click', () => {
-      saveProgress(currentWord.id, false);
+    practiceArea.querySelector('#btn-repeat').addEventListener('click', async () => {
+      await saveProgress(currentWord.id, false, 'cards');
       onNext();
     });
 
-    practiceArea.querySelector('#btn-easy').addEventListener('click', () => {
-      saveProgress(currentWord.id, true);
+    practiceArea.querySelector('#btn-easy').addEventListener('click', async () => {
+      await saveProgress(currentWord.id, true, 'cards');
       onNext();
     });
   }

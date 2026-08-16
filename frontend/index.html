@@ -31,7 +31,7 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings } from './services/api.js?v=8.0';
+      import { getWords, getUserSettings, getUserProgress } from './services/api.js?v=8.0';
       import { getCurrentUser } from './services/authService.js?v=8.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=8.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=8.0';
@@ -75,7 +75,6 @@
       async function renderTrainingTab() {
         const content = document.querySelector('#app-content');
         if (!content) return;
-        content.innerHTML = '<div id="training"></div>';
 
         if (allWords.length === 0) {
           content.innerHTML = '<p class="empty-state">Нет доступных слов для тренировки.</p>';
@@ -90,15 +89,56 @@
 
         // Apply category filter from settings
         const selectedCategory = userSettings.category || userSettings.level || 'All';
-        let trainingWords = allWords;
+        let categoryWords = allWords;
         if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'Все категории') {
           const filtered = allWords.filter((w) => w.category === selectedCategory);
           if (filtered.length > 0) {
-            trainingWords = filtered;
+            categoryWords = filtered;
           }
         }
 
-        const currentWord = trainingWords[currentWordIndex % trainingWords.length];
+        // Filter out words mastered 3x in text input mode
+        const userProgress = getUserProgress();
+        const activeWords = categoryWords.filter((w) => {
+          const prog = userProgress[w.id];
+          return !(prog && (prog.inputCorrect >= 3 || prog.mastered));
+        });
+
+        if (activeWords.length === 0) {
+          content.innerHTML = `
+            <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+              <div style="font-size: 56px; margin-bottom: 16px;">🏆</div>
+              <h2>Поздравляем!</h2>
+              <p style="color: var(--text-muted); margin-bottom: 24px;">
+                Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в текстовом переводе)!
+              </p>
+              <button class="primary-button" id="review-all-btn" style="max-width: 280px; margin: 0 auto;">
+                🔄 Повторить категорию заново
+              </button>
+            </div>
+          `;
+
+          const reviewBtn = content.querySelector('#review-all-btn');
+          if (reviewBtn) {
+            reviewBtn.addEventListener('click', () => {
+              categoryWords.forEach((w) => {
+                if (userProgress[w.id]) {
+                  userProgress[w.id].inputCorrect = 0;
+                  userProgress[w.id].mastered = false;
+                }
+              });
+              const user = getCurrentUser();
+              const userId = user ? user.id : 'guest';
+              localStorage.setItem(`progress_${userId}`, JSON.stringify(userProgress));
+              currentWordIndex = 0;
+              renderTrainingTab();
+            });
+          }
+          return;
+        }
+
+        content.innerHTML = '<div id="training"></div>';
+        const currentWord = activeWords[currentWordIndex % activeWords.length];
         const rawMethods = userSettings.enabledMethods || 'quiz,cards,input';
         const enabledMethods = rawMethods
           .split(',')
