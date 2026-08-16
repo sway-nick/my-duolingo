@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=8.0';
-import { toggleFavoriteApi } from '../../services/api.js?v=8.0';
+import { toggleFavoriteApi, getUserProgress } from '../../services/api.js?v=8.0';
 
 function renderDictionaryView(words = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -7,6 +7,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   const { favoriteIds = [], onFavoriteToggle = () => {} } = options;
   const favSet = new Set(favoriteIds);
+  const userProgress = getUserProgress();
 
   container.innerHTML = `
     <div class="dictionary-page">
@@ -32,7 +33,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   // Populate categories
   const categorySelect = container.querySelector('#dict-category');
-  const categories = Array.from(new Set(words.map((w) => w.category || 'Общие')));
+  const categories = Array.from(new Set(words.map((w) => w.category).filter(Boolean)));
   categories.forEach((cat) => {
     const opt = document.createElement('option');
     opt.value = cat;
@@ -64,10 +65,16 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     grid.innerHTML = filtered
       .map((w) => {
         const isFav = favSet.has(w.id);
+        const prog = userProgress[w.id];
+        const isMastered = prog && (prog.inputCorrect >= 3 || prog.mastered);
+
         return `
-        <div class="dict-card" data-id="${w.id}">
+        <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
           <div class="dict-card-header">
-            <span class="category-badge">${w.category || 'Общие'} • ${w.level || 'A1'}</span>
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span class="category-badge">${w.category || 'Общие'}</span>
+              ${isMastered ? `<span class="mastered-badge">✓ Выучено</span>` : ''}
+            </div>
             <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}">
               ${isFav ? '❤️' : '🤍'}
             </button>
