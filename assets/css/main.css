@@ -448,34 +448,75 @@ body {
 /* Input Form */
 .input-form-row {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
 .answer-input {
-  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
   padding: 14px 16px;
-  font-size: 16px;
+  font-size: 17px;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--text-main);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.dark-theme .answer-input {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
 }
 
 .answer-input:focus {
   outline: none;
   border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.answer-input.correct {
+  border-color: var(--success-color) !important;
+  background: #dcfce7 !important;
+  color: #14532d !important;
+}
+
+.dark-theme .answer-input.correct {
+  border-color: #22c55e !important;
+  background: #14532d !important;
+  color: #bbf7d0 !important;
+}
+
+.answer-input.wrong {
+  border-color: var(--error-color) !important;
+  background: #fee2e2 !important;
+  color: #7f1d1d !important;
+}
+
+.dark-theme .answer-input.wrong {
+  border-color: #ef4444 !important;
+  background: #7f1d1d !important;
+  color: #fecaca !important;
 }
 
 .check-button, .primary-button {
+  width: 100%;
+  box-sizing: border-box;
   background: var(--primary-color);
   color: #ffffff;
   border: none;
-  padding: 12px 20px;
+  padding: 14px 20px;
   border-radius: var(--radius-md);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.check-button:hover, .primary-button:hover {
+.check-button:hover:not(:disabled), .primary-button:hover:not(:disabled) {
   background: var(--primary-hover);
 }
 
