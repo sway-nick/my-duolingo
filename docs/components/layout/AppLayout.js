@@ -1,5 +1,5 @@
-import { getCurrentUser } from '../../services/authService.js';
-import { renderAuthModal } from '../auth/AuthModal.js';
+import { getCurrentUser } from '../../services/authService.js?v=7.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=7.0';
 
 function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
   const app = document.querySelector('#app');

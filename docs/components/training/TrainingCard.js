@@ -1,5 +1,5 @@
-import { speakWord } from '../../services/audioService.js';
-import { saveProgress, toggleFavoriteApi } from '../../services/api.js';
+import { speakWord } from '../../services/audioService.js?v=7.0';
+import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=7.0';
 
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);

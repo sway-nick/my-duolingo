@@ -1,5 +1,5 @@
-import { getUserStats } from '../../services/api.js';
-import { getCurrentUser } from '../../services/authService.js';
+import { getUserStats } from '../../services/api.js?v=7.0';
+import { getCurrentUser } from '../../services/authService.js?v=7.0';
 
 async function renderStatsView(containerSelector = '#app-content') {
   const container = document.querySelector(containerSelector);

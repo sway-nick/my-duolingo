@@ -1,4 +1,4 @@
-import { StorageService } from '../services/storageService.js';
+import { StorageService } from '../services/storageService.js?v=7.0';
 
 export function renderSettings(container) {
     if (!container) return;

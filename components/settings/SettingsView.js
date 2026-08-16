@@ -1,6 +1,6 @@
-import { getUserSettings, saveUserSettings } from '../../services/api.js';
-import { getCurrentUser, logoutUser } from '../../services/authService.js';
-import { renderAuthModal } from '../auth/AuthModal.js';
+import { getUserSettings, saveUserSettings } from '../../services/api.js?v=7.0';
+import { getCurrentUser, logoutUser } from '../../services/authService.js?v=7.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=7.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);

@@ -1,5 +1,5 @@
-import { speakWord } from '../../services/audioService.js';
-import { toggleFavoriteApi } from '../../services/api.js';
+import { speakWord } from '../../services/audioService.js?v=7.0';
+import { toggleFavoriteApi } from '../../services/api.js?v=7.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);

@@ -1,4 +1,4 @@
-import AudioService from '../../services/audioService.js';
+import AudioService from '../../services/audioService.js?v=7.0';
 
 let currentKeyHandler = null;
 

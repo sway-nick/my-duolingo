@@ -1,5 +1,5 @@
-import { loginUser, registerUser } from '../../services/api.js';
-import { setCurrentUser } from '../../services/authService.js';
+import { loginUser, registerUser } from '../../services/api.js?v=7.0';
+import { setCurrentUser } from '../../services/authService.js?v=7.0';
 
 function renderAuthModal(onSuccessCallback) {
   const existing = document.querySelector('#auth-modal');
