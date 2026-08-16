@@ -51,9 +51,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           </button>
         </div>
 
-        <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
-          ${favorited ? '❤️' : '🤍'}
-        </button>
+        ${
+          !isPairsMode
+            ? `
+          <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+            ${favorited ? '❤️' : '🤍'}
+          </button>
+        `
+            : ''
+        }
       </div>
 
       <!-- Word Display & Audio Button -->
