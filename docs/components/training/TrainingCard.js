@@ -159,6 +159,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const otherTranslations = pool
       .filter((w) => w.id !== currentWord.id)
       .map((w) => w.translation);
+    const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
+    const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
+
     function getQuizFontSize(text) {
       if (!text) return '17.5px';
       const len = text.length;
