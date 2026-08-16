@@ -33,13 +33,14 @@
 
     <script type="module">
       import { getWords, getUserSettings, getUserProgress, saveUserSettings } from './services/api.js?v=8.0';
-      import { getCurrentUser } from './services/authService.js?v=8.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=8.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=8.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=8.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=8.0';
       import { renderSettingsView } from './components/settings/SettingsView.js?v=8.0';
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=8.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=8.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=8.0';
 
       let allWords = [];
       let favoriteIds = new Set();
@@ -76,6 +77,48 @@
       async function renderTrainingTab() {
         const content = document.querySelector('#app-content');
         if (!content) return;
+
+        // Check if Guest limit (100 words) has been reached
+        if (isGuestLimitReached()) {
+          content.innerHTML = `
+            <div class="guest-limit-card" style="text-align: center; padding: 32px 18px; background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+              <div style="font-size: 52px; margin-bottom: 12px;">🎉</div>
+              <h2 style="margin: 0 0 10px; font-size: 20px;">Демо-режим завершен</h2>
+              <p style="color: var(--text-muted); font-size: 14px; line-height: 1.45; margin: 0 0 20px;">
+                Вы отлично позанимались и прошли <strong>${GUEST_WORD_LIMIT} слов</strong>! Чтобы продолжить обучение <strong>без ограничений</strong> и сохранить весь ваш прогресс — зарегистрируйтесь бесплатно.
+              </p>
+              <button class="primary-button" id="guest-signup-btn" style="margin-bottom: 10px; padding: 12px 16px; font-size: 15px;">
+                ✨ Зарегистрироваться бесплатно
+              </button>
+              <button class="secondary-button" id="guest-login-btn" style="width: 100%; padding: 10px 16px;">
+                Уже есть аккаунт? Войти
+              </button>
+            </div>
+          `;
+
+          const signupBtn = content.querySelector('#guest-signup-btn');
+          if (signupBtn) {
+            signupBtn.addEventListener('click', () => {
+              renderAuthModal(async () => {
+                updateHeaderUser();
+                await loadData();
+                renderTrainingTab();
+              });
+            });
+          }
+
+          const loginBtn = content.querySelector('#guest-login-btn');
+          if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+              renderAuthModal(async () => {
+                updateHeaderUser();
+                await loadData();
+                renderTrainingTab();
+              });
+            });
+          }
+          return;
+        }
 
         if (allWords.length === 0) {
           content.innerHTML = '<p class="empty-state">Нет доступных слов для тренировки.</p>';
@@ -161,6 +204,8 @@
           isFavorite: favoriteIds.has(currentWord.id),
           onFavoriteToggle: handleFavoriteToggle,
           onNext: () => {
+            incrementGuestTrainingCount();
+            updateHeaderUser();
             currentWordIndex += 1;
             renderTrainingTab();
           },

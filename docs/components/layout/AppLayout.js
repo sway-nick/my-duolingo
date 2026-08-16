@@ -1,4 +1,4 @@
-import { getCurrentUser } from '../../services/authService.js?v=8.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT } from '../../services/authService.js?v=8.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=8.0';
 
 function getSavedTheme() {
@@ -28,6 +28,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
   const app = document.querySelector('#app');
   const user = getCurrentUser();
   const currentTheme = getSavedTheme();
+  const guestCount = getGuestTrainingCount();
 
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
@@ -38,7 +39,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
           <div>
             <h2>English Trainer</h2>
             <small class="user-status-text" id="header-user-status">
-              ${user ? `👤 ${user.name}` : 'Гостевой режим'}
+              ${user ? `👤 ${user.name}` : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
             </small>
           </div>
         </div>
@@ -127,9 +128,10 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}) {
 
 function updateHeaderUser(onUserAuthChanged = () => {}) {
   const user = getCurrentUser();
+  const guestCount = getGuestTrainingCount();
   const statusEl = document.querySelector('#header-user-status');
   if (statusEl) {
-    statusEl.textContent = user ? `👤 ${user.name}` : 'Гостевой режим';
+    statusEl.textContent = user ? `👤 ${user.name}` : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
   }
 
   const actionsContainer = document.querySelector('.header-right-actions');

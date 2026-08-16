@@ -1,4 +1,4 @@
-import { getCurrentUser } from './authService.js?v=8.0';
+import { getCurrentUser, getEffectiveUserId } from './authService.js?v=8.0';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
@@ -180,15 +180,13 @@ async function loginUser(email, password) {
 }
 
 function getUserProgress() {
-  const user = getCurrentUser();
-  const userId = user ? user.id : 'guest';
+  const userId = getEffectiveUserId();
   const key = `progress_${userId}`;
   return JSON.parse(localStorage.getItem(key) || '{}');
 }
 
 async function saveProgress(wordId, isCorrect, method = 'quiz') {
-  const user = getCurrentUser();
-  const userId = user ? user.id : 'guest';
+  const userId = getEffectiveUserId();
 
   const key = `progress_${userId}`;
   const local = JSON.parse(localStorage.getItem(key) || '{}');
@@ -255,8 +253,7 @@ if (typeof window !== 'undefined') {
 }
 
 async function toggleFavoriteApi(wordId, isFavorite) {
-  const user = getCurrentUser();
-  const userId = user ? user.id : 'guest';
+  const userId = getEffectiveUserId();
   try {
     await fetch(`${API_URL}?route=favorite`, {
       method: 'POST',
@@ -276,8 +273,7 @@ async function toggleFavoriteApi(wordId, isFavorite) {
 }
 
 async function getUserStats() {
-  const user = getCurrentUser();
-  const userId = user ? user.id : 'guest';
+  const userId = getEffectiveUserId();
   const key = `progress_${userId}`;
   const localProg = JSON.parse(localStorage.getItem(key) || '{}');
 
@@ -330,8 +326,7 @@ async function getUserStats() {
 }
 
 async function getUserSettings() {
-  const user = getCurrentUser();
-  const userId = user ? user.id : 'guest';
+  const userId = getEffectiveUserId();
   const key = `settings_${userId}`;
   const saved = localStorage.getItem(key);
   if (saved) {
@@ -358,8 +353,7 @@ async function getUserSettings() {
 }
 
 async function saveUserSettings(settings) {
-  const user = getCurrentUser();
-  const userId = user ? user.id : 'guest';
+  const userId = getEffectiveUserId();
   const payload = {
     route: 'settings',
     action: 'settings',
