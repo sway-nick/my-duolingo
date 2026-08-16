@@ -162,9 +162,51 @@
           }
         }
 
-        const userProgress = getUserProgress();
-        const currentMethod = userSettings.preferredMethod || 'cards';
-        const favList = Array.from(favoriteIds);
+        const dailyGoal = Number(userSettings.dailyGoal) || 10;
+        const totalLearningWords = allWords.filter((w) => isWordLearning(userProgress[w.id]));
+        const learningCount = totalLearningWords.length;
+
+        // In Cards mode: if user reached their daily learning limit, show warning and block adding new words!
+        if (currentMethod === 'cards' && learningCount >= dailyGoal) {
+          content.innerHTML = `
+            <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
+              <div style="font-size: 52px; margin-bottom: 12px;">🛑</div>
+              <h2 style="font-size: 22px; margin-bottom: 8px;">Лимит слов на изучении достигнут!</h2>
+              <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">
+                Вы уже отобрали <strong>${learningCount} из ${dailyGoal}</strong> слов для изучения.<br/>
+                Выучите часть слов (в режимах <strong>Квиз</strong>, <strong>Пары</strong> и <strong>Тест</strong>), чтобы освободить место для новых!
+              </p>
+              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="primary-button" id="go-quiz-btn" style="max-width: 220px;">
+                  🎯 Перейти в Квиз
+                </button>
+                <button class="secondary-button" id="go-settings-btn" style="max-width: 220px;">
+                  ⚙️ Настройки лимита
+                </button>
+              </div>
+            </div>
+          `;
+
+          const goQuizBtn = content.querySelector('#go-quiz-btn');
+          if (goQuizBtn) {
+            goQuizBtn.addEventListener('click', () => {
+              userSettings.preferredMethod = 'quiz';
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              renderTrainingTab();
+            });
+          }
+
+          const goSettingsBtn = content.querySelector('#go-settings-btn');
+          if (goSettingsBtn) {
+            goSettingsBtn.addEventListener('click', () => {
+              const tabBtn = document.querySelector('.nav-tab[data-tab="settings"]');
+              if (tabBtn) tabBtn.click();
+              else renderTab('settings');
+            });
+          }
+          return;
+        }
 
         // Filter words strictly based on the active training method queue
         let activeWords = [];
@@ -280,6 +322,9 @@
           currentMethod,
           selectedCategory,
           categories,
+          activeWords,
+          learningCount,
+          dailyGoal,
           onMethodChange: (newMethod) => {
             userSettings.preferredMethod = newMethod;
             saveUserSettings(userSettings);

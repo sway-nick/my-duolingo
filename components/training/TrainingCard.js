@@ -20,33 +20,38 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     currentMethod = 'quiz',
     selectedCategory = 'All',
     categories = [],
+    isFavorite = false,
+    onFavoriteToggle = () => {},
     onMethodChange = () => {},
     onCategoryChange = () => {},
     onNext = () => {},
-    onFavoriteToggle = () => {},
-    isFavorite = false,
+    activeWords = [],
+    learningCount = 0,
+    dailyGoal = 10,
   } = options;
 
+  let favorited = isFavorite;
   const isInputMode = currentMethod === 'input';
   const isPairsMode = currentMethod === 'pairs';
-  let favorited = isFavorite;
+  const isCardsMode = currentMethod === 'cards';
 
   container.innerHTML = `
-    <section class="word-card-container">
+    <section class="training-card" aria-label="Карточка изучения слова">
       
-      <!-- Top card bar: Mode Switch (Карточки / Квиз / Пары / Тест) on Left, Favorite Heart on Right -->
-      <div class="card-header-bar">
-        <div class="mode-switch-pills">
-          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
+      <!-- Top Action Bar: Categories & Favorite -->
+      <div class="card-action-bar">
+        <!-- Training Mode Switcher Tabs (Pills) -->
+        <div class="mode-pill-bar">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards">
             Карточки
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz">
             Квиз
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs" title="Режим Пары">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs">
             Пары
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input">
             Тест
           </button>
         </div>
@@ -64,6 +69,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       <!-- Word Display & Audio Button -->
       <div class="word-main-display">
+        ${
+          isCardsMode
+            ? `
+            <div style="font-size: 13px; font-weight: 600; color: #2563eb; margin-bottom: 8px; background: rgba(37, 99, 235, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+              🎯 В обучении: <strong>${learningCount} / ${dailyGoal}</strong> слов
+            </div>
+          `
+            : ''
+        }
         ${
           isPairsMode
             ? `
@@ -213,16 +227,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'pairs') {
-    // Pairs Matching Mode (8 words per round strictly from selected category)
-    const categoryFilteredWords =
-      selectedCategory === 'All' || selectedCategory === 'Все категории'
-        ? allWords
-        : allWords.filter(
-            (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)
-          );
-
-    const otherWords = categoryFilteredWords.filter((w) => w.id !== currentWord.id);
-    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 5)];
+    // Pairs Matching Mode: strictly use words eligible for Pairs (quiz >= 5 or 'know' + favorites)
+    const eligiblePool = activeWords && activeWords.length > 0 ? activeWords : allWords;
+    const otherWords = eligiblePool.filter((w) => String(w.id) !== String(currentWord.id));
+    const countNeeded = Math.min(5, otherWords.length);
+    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, countNeeded)];
     const leftItems = shuffleArray(
       roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
     );

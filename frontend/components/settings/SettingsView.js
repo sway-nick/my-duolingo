@@ -55,16 +55,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Goals Card -->
       <div class="settings-card">
-        <h3>📌 Дневная цель обучения</h3>
+        <h3>📌 Лимит слов на изучении</h3>
+        <p style="color: var(--text-muted); font-size: 13px; margin: 4px 0 12px;">
+          Максимальное количество слов, находящихся в процессе изучения одновременно.
+        </p>
         
         <div class="setting-field">
-          <label for="daily-goal-select">Количество новых слов в день:</label>
+          <label for="daily-goal-select">Лимит активных слов:</label>
           <select id="daily-goal-select" class="settings-select">
-            <option value="10">10 слов в день</option>
-            <option value="20">20 слов в день</option>
-            <option value="30">30 слов в день</option>
-            <option value="40">40 слов в день</option>
-            <option value="50">50 слов в день</option>
+            <option value="10">10 слов</option>
+            <option value="20">20 слов</option>
+            <option value="30">30 слов</option>
+            <option value="40">40 слов</option>
+            <option value="50">50 слов</option>
+            <option value="75">75 слов</option>
+            <option value="100">100 слов</option>
           </select>
         </div>
       </div>
