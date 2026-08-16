@@ -314,9 +314,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             .join('')}
         </div>
       </div>
-      <div id="pairs-celebration" style="display: none; margin-top: 12px; font-weight: 700; color: var(--success-color, #16a34a); text-align: center; font-size: 16px;">
-        🎉 Отлично! Все пары найдены!
-      </div>
     `;
 
     // Dynamically auto-fit font size so all text 100% fits inside card without clipping
@@ -371,12 +368,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         matchedCount++;
 
         if (matchedCount === totalPairs) {
-          const celeb = practiceArea.querySelector('#pairs-celebration');
-          if (celeb) {
-            celeb.innerHTML = '🎰 <strong>Отлично! Все пары найдены!</strong>';
-            celeb.style.display = 'block';
-          }
-
           // Authentic casino slot machine reel roll sound
           playCasinoRollSound();
 
