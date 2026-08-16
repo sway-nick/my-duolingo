@@ -345,6 +345,15 @@
         content.innerHTML = '<div id="training"></div>';
         const currentWord = activeWords[currentWordIndex % activeWords.length];
 
+        const favList = getUserFavorites();
+        const favSet = new Set(favList.map(String));
+        favoriteIds = favSet;
+
+        const isFav =
+          Boolean(currentWord) &&
+          (favSet.has(String(currentWord.id)) ||
+            (currentWord.word && favSet.has(String(currentWord.word).toLowerCase().trim())));
+
         renderTrainingCard(currentWord, allWords, {
           currentMethod,
           selectedCategory,
@@ -364,7 +373,7 @@
             currentWordIndex = 0;
             renderTrainingTab();
           },
-          isFavorite: favoriteIds.has(currentWord.id),
+          isFavorite: isFav,
           onFavoriteToggle: handleFavoriteToggle,
           onNext: (opts = {}) => {
             incrementGuestTrainingCount();
