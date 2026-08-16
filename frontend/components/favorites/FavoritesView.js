@@ -10,9 +10,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   if (!favoriteWords || favoriteWords.length === 0) {
     container.innerHTML = `
       <div class="favorites-page">
-        <div class="page-header">
-          <h2>❤️ Избранные слова</h2>
-          <p class="subtitle">Ваш персональный список слов для повторения</p>
+        <div class="page-header" style="margin-bottom: 14px;">
+          <h2 style="font-size: 22px; margin: 0;">❤️ Избранные слова</h2>
         </div>
         <div class="empty-favorites-box">
           <span class="empty-icon" style="font-size: 40px; display: block; margin-bottom: 8px;">🤍</span>
@@ -27,12 +26,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   }
 
   container.innerHTML = `
-      <div class="page-header-row" style="margin-bottom: 14px;">
-        <div>
-          <h2 style="font-size: 20px; margin: 0 0 2px;">❤️ Избранные слова (${favoriteWords.length})</h2>
-          <p class="subtitle" style="font-size: 13px; margin: 0;">Персональная подборка для регулярного повторения</p>
-        </div>
-        <button class="primary-button" id="start-fav-practice-btn" style="width: auto; padding: 8px 14px; min-height: 38px; height: 38px; font-size: 13.5px; font-weight: 700; white-space: nowrap;">
+    <div class="favorites-page">
+      <div class="page-header" style="margin-bottom: 14px;">
+        <h2 style="font-size: 22px; margin: 0 0 12px; white-space: nowrap;">❤️ Избранные слова (${favoriteWords.length})</h2>
+        <button class="primary-button" id="start-fav-practice-btn" style="width: 100%; min-height: 48px; height: 48px; font-size: 15.5px; font-weight: 700;">
           Тренировать избранное
         </button>
       </div>
