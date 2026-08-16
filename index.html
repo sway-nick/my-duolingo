@@ -209,14 +209,6 @@
         let activeWords = [];
         if (isFavPracticeActive) {
           categoryWords = favoritePracticeWords;
-          // Ensure favorite words are unlocked for Quiz
-          categoryWords.forEach((w) => {
-            if (!userProgress[w.id]) {
-              userProgress[w.id] = { seenInCards: true, quizCorrect: 0, pairsCorrect: 0, inputCorrect: 0 };
-            } else if (!userProgress[w.id].seenInCards) {
-              userProgress[w.id].seenInCards = true;
-            }
-          });
         }
 
         const favListForMixing = isFavPracticeActive ? [] : favList;
