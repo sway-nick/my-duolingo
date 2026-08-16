@@ -184,15 +184,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
       btn.addEventListener('click', async (e) => {
-        const selected = e.target.getAttribute('data-choice');
-        const isCorrect = selected === currentWord.translation;
+        const optionBtn = e.currentTarget || btn;
+        const selected = optionBtn.getAttribute('data-choice');
+        const isCorrect = String(selected).trim() === String(currentWord.translation).trim();
 
         // Disable all options immediately to prevent double-clicks
         practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
           b.disabled = true;
           if (b.getAttribute('data-choice') === currentWord.translation) {
             b.classList.add('correct');
-          } else if (b === e.target && !isCorrect) {
+          } else if (b === optionBtn && !isCorrect) {
             b.classList.add('wrong');
           }
         });
