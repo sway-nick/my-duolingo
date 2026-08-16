@@ -1,7 +1,7 @@
-import { getUserSettings, saveUserSettings } from '../../services/api.js?v=7.1';
-import { getCurrentUser, logoutUser } from '../../services/authService.js?v=7.1';
-import { renderAuthModal } from '../auth/AuthModal.js?v=7.1';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=7.1';
+import { getUserSettings, saveUserSettings } from '../../services/api.js?v=8.0';
+import { getCurrentUser, logoutUser } from '../../services/authService.js?v=8.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=8.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=8.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);

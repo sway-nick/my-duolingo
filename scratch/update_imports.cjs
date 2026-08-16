@@ -3,8 +3,8 @@ const path = require('path');
 
 function updateImportsInFile(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
-  const updated = content.replace(/from\s+['"](\.[^'"]+\.js)(?!\?v=)['"]/g, (match, p1) => {
-    return `from '${p1}?v=7.0'`;
+  const updated = content.replace(/from\s+['"](\.[^'"]+\.js)(?:\?v=[\d\.]+)?['"]/g, (match, p1) => {
+    return `from '${p1}?v=8.0'`;
   });
   fs.writeFileSync(filePath, updated, 'utf8');
 }
@@ -21,4 +21,4 @@ function processDir(dir) {
 processDir('./frontend/components');
 processDir('./frontend/services');
 
-console.log('Updated import statements in frontend/');
+console.log('Updated import statements in frontend/ to v=8.0');

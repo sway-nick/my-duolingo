@@ -1,5 +1,5 @@
-import { getCurrentUser } from '../../services/authService.js?v=7.1';
-import { renderAuthModal } from '../auth/AuthModal.js?v=7.1';
+import { getCurrentUser } from '../../services/authService.js?v=8.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=8.0';
 
 function getSavedTheme() {
   return localStorage.getItem('myduo_theme') || 'light';

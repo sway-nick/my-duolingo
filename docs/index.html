@@ -6,22 +6,39 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <script>
+      // Clear legacy Service Worker & CacheStorage to ensure users get latest version instantly
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(names) {
+          for (var i = 0; i < names.length; i++) {
+            caches.delete(names[i]);
+          }
+        });
+      }
+    </script>
     <title>English Trainer — Изучайте английский легко</title>
-    <link rel="stylesheet" href="./assets/css/main.css?v=7.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=8.0" />
   </head>
 
   <body>
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings } from './services/api.js?v=7.0';
-      import { getCurrentUser } from './services/authService.js?v=7.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=7.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=7.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=7.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=7.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=7.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=7.0';
+      import { getWords, getUserSettings } from './services/api.js?v=8.0';
+      import { getCurrentUser } from './services/authService.js?v=8.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=8.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=8.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=8.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=8.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=8.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=8.0';
 
       let allWords = [];
       let favoriteIds = new Set();

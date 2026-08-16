@@ -1,5 +1,5 @@
-import { speakWord } from '../../services/audioService.js?v=7.0';
-import { toggleFavoriteApi } from '../../services/api.js?v=7.0';
+import { speakWord } from '../../services/audioService.js?v=8.0';
+import { toggleFavoriteApi } from '../../services/api.js?v=8.0';
 
 function renderDictionaryView(words = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
