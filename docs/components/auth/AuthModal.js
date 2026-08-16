@@ -39,7 +39,7 @@ function renderAuthModal(onSuccessCallback) {
 
       <!-- Google Official One-Tap & Sign-In -->
       <div class="social-auth-section">
-        <div id="google-btn-wrapper" style="width: 100%; display: flex; justify-content: center; min-height: 44px;">
+        <div class="google-auth-container" id="google-auth-container">
           <button type="button" class="google-auth-btn" id="google-auth-btn" title="Войти через аккаунт Google">
             <svg width="20" height="20" viewBox="0 0 18 18">
               <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.616z"/>
@@ -49,6 +49,7 @@ function renderAuthModal(onSuccessCallback) {
             </svg>
             <span id="google-btn-label">Продолжить с Google</span>
           </button>
+          <div id="google-overlay-btn" class="google-overlay-wrapper"></div>
         </div>
       </div>
 
@@ -94,7 +95,7 @@ function renderAuthModal(onSuccessCallback) {
   const passConfirmGroup = modal.querySelector('#password-confirm-group');
   const submitBtn = modal.querySelector('#auth-submit-btn');
   const googleBtn = modal.querySelector('#google-auth-btn');
-  const googleBtnWrapper = modal.querySelector('#google-btn-wrapper');
+  const googleOverlayBtn = modal.querySelector('#google-overlay-btn');
   const errorBox = modal.querySelector('#auth-error');
   const closeBtn = modal.querySelector('#modal-close-btn');
 
@@ -179,17 +180,16 @@ function renderAuthModal(onSuccessCallback) {
           cancel_on_tap_outside: true,
         });
 
-        // Render official native Google button inside wrapper
-        if (googleBtnWrapper) {
-          googleBtnWrapper.innerHTML = '';
-          window.google.accounts.id.renderButton(googleBtnWrapper, {
+        // Render official native Google button inside invisible overlay
+        if (googleOverlayBtn) {
+          googleOverlayBtn.innerHTML = '';
+          window.google.accounts.id.renderButton(googleOverlayBtn, {
             theme: 'outline',
             size: 'large',
             type: 'standard',
             shape: 'rectangular',
             text: 'continue_with',
-            logo_alignment: 'left',
-            width: 320,
+            width: 380,
             locale: 'ru',
           });
         }
