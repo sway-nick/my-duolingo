@@ -87,7 +87,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             <button type="button" class="sound-button" id="speak-btn" title="Прослушать слово">
               🔊
             </button>
-            <span class="turtle-indicator" id="turtle-indicator" style="display: none;">🐢 Медленно</span>
             <h1 class="training-word">${currentWord.word}</h1>
             <p class="training-transcription">${currentWord.transcription || ''}</p>
           `
@@ -115,23 +114,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   // Bind audio speak button (for cards/quiz modes)
   const speakBtn = container.querySelector('#speak-btn');
-  const turtleIndicator = container.querySelector('#turtle-indicator');
 
   if (speakBtn && !isPairsMode) {
     speakBtn.addEventListener('click', () => {
-      const isTurtle = speakWord(currentWord.word, currentWord.id);
-      if (turtleIndicator) {
-        turtleIndicator.style.display = isTurtle ? 'inline-block' : 'none';
-      }
+      speakWord(currentWord.word, currentWord.id);
     });
 
     // Auto-pronounce word on card appearance only if NOT in text input or pairs mode
     setTimeout(() => {
       try {
-        const isTurtle = speakWord(currentWord.word, currentWord.id);
-        if (turtleIndicator) {
-          turtleIndicator.style.display = isTurtle ? 'inline-block' : 'none';
-        }
+        speakWord(currentWord.word, currentWord.id);
       } catch (e) {
         console.warn('Auto-speak failed:', e);
       }
