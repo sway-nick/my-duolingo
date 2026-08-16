@@ -81,11 +81,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </h1>
           `
             : `
-            <button type="button" class="sound-button" id="speak-btn" title="Прослушать слово">
-              🔊
-            </button>
-            <h1 class="training-word">${currentWord.word}</h1>
-            <p class="training-transcription">${currentWord.transcription || ''}</p>
+            <div class="clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
+              <h1 class="training-word">
+                <span>${currentWord.word}</span>
+                <span class="word-audio-indicator" style="font-size: 18px; opacity: 0.45; margin-left: 6px;">🔊</span>
+              </h1>
+              <p class="training-transcription">${currentWord.transcription || ''}</p>
+            </div>
           `
         }
       </div>
@@ -109,11 +111,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
   });
 
-  // Bind audio speak button (for cards/quiz modes)
-  const speakBtn = container.querySelector('#speak-btn');
+  // Bind audio speak trigger (tapping directly on the word in cards/quiz modes)
+  const speakTrigger = container.querySelector('#speak-word-trigger');
 
-  if (speakBtn && !isPairsMode) {
-    speakBtn.addEventListener('click', () => {
+  if (speakTrigger && !isPairsMode) {
+    speakTrigger.addEventListener('click', () => {
       speakWord(currentWord.word, currentWord.id);
     });
 
