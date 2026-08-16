@@ -49,10 +49,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
         
         <div class="header-right-actions">
-          <button class="theme-toggle-btn" id="theme-toggle-btn" title="Переключить тему">
-            ${currentTheme === 'dark' ? '☼' : '☾'}
-          </button>
-
           ${
             user
               ? `<button class="header-profile-badge" id="profile-btn" title="Ваш профиль">👤</button>`
@@ -93,15 +89,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   if (brandLogo) {
     brandLogo.addEventListener('click', () => {
       onLogoClick();
-    });
-  }
-
-  // Bind Theme Toggle Button
-  const themeBtn = app.querySelector('#theme-toggle-btn');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const newTheme = toggleTheme();
-      themeBtn.textContent = newTheme === 'dark' ? '☼' : '☾';
     });
   }
 
@@ -150,26 +137,13 @@ function updateHeaderUser(onUserAuthChanged) {
 
   const actionsContainer = document.querySelector('.header-right-actions');
   if (actionsContainer) {
-    const currentTheme = getSavedTheme();
     actionsContainer.innerHTML = `
-      <button class="theme-toggle-btn" id="theme-toggle-btn" title="Переключить тему">
-        ${currentTheme === 'dark' ? '☼' : '☾'}
-      </button>
-
       ${
         user
           ? `<button class="header-profile-badge" id="profile-btn" title="Ваш профиль">👤</button>`
           : `<button class="header-auth-btn" id="login-header-btn">Войти</button>`
       }
     `;
-
-    const themeBtn = actionsContainer.querySelector('#theme-toggle-btn');
-    if (themeBtn) {
-      themeBtn.addEventListener('click', () => {
-        const newTheme = toggleTheme();
-        themeBtn.textContent = newTheme === 'dark' ? '☼' : '☾';
-      });
-    }
 
     const loginHeaderBtn = actionsContainer.querySelector('#login-header-btn');
     if (loginHeaderBtn) {
