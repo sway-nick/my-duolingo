@@ -52,9 +52,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <!-- Practice Area based on active method -->
       <div id="practice-area" class="practice-area"></div>
 
-      <!-- Feedback / Result Section -->
-      <div id="result-box" class="result-card" style="display: none;"></div>
-
     </section>
   `;
 
@@ -80,23 +77,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   });
 
   const practiceArea = container.querySelector('#practice-area');
-  const resultBox = container.querySelector('#result-box');
-
-  const showResult = (isCorrect, correctTranslation) => {
-    saveProgress(currentWord.id, isCorrect);
-
-    resultBox.style.display = 'block';
-    resultBox.className = `result-card ${isCorrect ? 'result-success' : 'result-error'}`;
-    resultBox.innerHTML = `
-      <h3>${isCorrect ? '✓ Отлично, правильно!' : '✕ Не совсем верно'}</h3>
-      <p><strong>${currentWord.word}</strong> — ${correctTranslation}</p>
-      <button class="next-button" id="next-word-btn">Следующее слово →</button>
-    `;
-
-    resultBox.querySelector('#next-word-btn').addEventListener('click', () => {
-      onNext();
-    });
-  };
 
   // --- RENDER ACCORDING TO CURRENT METHOD ---
 
@@ -126,6 +106,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const selected = e.target.getAttribute('data-choice');
         const isCorrect = selected === currentWord.translation;
 
+        // Disable all options immediately to prevent double-clicks
         practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
           b.disabled = true;
           if (b.getAttribute('data-choice') === currentWord.translation) {
@@ -135,7 +116,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
         });
 
-        showResult(isCorrect, currentWord.translation);
+        saveProgress(currentWord.id, isCorrect);
+
+        // Auto-advance: fast on correct (500ms), slightly longer on error so user sees the correct answer (1200ms)
+        const delay = isCorrect ? 500 : 1200;
+        setTimeout(() => {
+          onNext();
+        }, delay);
       });
     });
   } else if (currentMethod === 'input') {
@@ -145,18 +132,39 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         <input class="answer-input" id="answer-input" placeholder="Перевод..." autocomplete="off" />
         <button class="check-button" id="check-answer-btn">Проверить</button>
       </div>
+      <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 12px; font-weight: 600;"></div>
     `;
 
     const input = practiceArea.querySelector('#answer-input');
     const checkBtn = practiceArea.querySelector('#check-answer-btn');
+    const feedback = practiceArea.querySelector('#input-feedback');
 
     const handleCheck = () => {
       const userAns = input.value.trim().toLowerCase();
       const correctAns = currentWord.translation.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
+
       input.disabled = true;
       checkBtn.disabled = true;
-      showResult(isCorrect, currentWord.translation);
+
+      if (isCorrect) {
+        input.classList.add('correct');
+        feedback.style.display = 'block';
+        feedback.style.color = 'var(--success-color, #16a34a)';
+        feedback.textContent = '✓ Верно!';
+      } else {
+        input.classList.add('wrong');
+        feedback.style.display = 'block';
+        feedback.style.color = 'var(--error-color, #dc2626)';
+        feedback.textContent = `Правильно: ${currentWord.translation}`;
+      }
+
+      saveProgress(currentWord.id, isCorrect);
+
+      const delay = isCorrect ? 500 : 1400;
+      setTimeout(() => {
+        onNext();
+      }, delay);
     };
 
     checkBtn.addEventListener('click', handleCheck);
@@ -190,11 +198,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
 
     practiceArea.querySelector('#btn-repeat').addEventListener('click', () => {
-      showResult(false, currentWord.translation);
+      saveProgress(currentWord.id, false);
+      onNext();
     });
 
     practiceArea.querySelector('#btn-easy').addEventListener('click', () => {
-      showResult(true, currentWord.translation);
+      saveProgress(currentWord.id, true);
+      onNext();
     });
   }
 }

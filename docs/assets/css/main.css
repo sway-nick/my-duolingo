@@ -56,6 +56,18 @@ body.dark-theme,
   border-color: #3b82f6;
 }
 
+.dark-theme .quiz-option.correct {
+  background: #14532d !important;
+  border-color: #22c55e !important;
+  color: #bbf7d0 !important;
+}
+
+.dark-theme .quiz-option.wrong {
+  background: #7f1d1d !important;
+  border-color: #ef4444 !important;
+  color: #fecaca !important;
+}
+
 .dark-theme .flashcard-box {
   background: #0f172a;
   border-color: #475569;
