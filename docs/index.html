@@ -164,7 +164,7 @@
         }
 
         const userProgress = getUserProgress();
-        const currentMethod = userSettings.preferredMethod || 'cards';
+        let currentMethod = userSettings.preferredMethod || 'cards';
         const favList = getUserFavorites();
         const favSet = new Set(favList.map(String));
         favoriteIds = favSet;
@@ -175,6 +175,39 @@
 
         // Check if practicing favorites mode is active
         const isFavPracticeActive = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+        if (isFavPracticeActive) {
+          categoryWords = favoritePracticeWords;
+        }
+
+        const favListForMixing = isFavPracticeActive ? [] : favList;
+
+        const cardsQueue = getQueueForCards(categoryWords, userProgress);
+        const quizQueue = getQueueForQuiz(categoryWords, userProgress, favListForMixing);
+        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favListForMixing);
+        const testQueue = getQueueForTest(categoryWords, userProgress);
+
+        function isMethodAvailable(method) {
+          if (method === 'cards') return !isFavPracticeActive && (cardsQueue.length > 0 && learningCount < dailyGoal);
+          if (method === 'quiz') return quizQueue.length > 0;
+          if (method === 'pairs') return pairsQueue.length > 0;
+          if (method === 'input') return testQueue.length > 0;
+          return false;
+        }
+
+        // If current method has 0 words, switch to first non-empty mode in order (cards -> quiz -> pairs -> input)
+        if (!isMethodAvailable(currentMethod)) {
+          const priorityOrder = ['cards', 'quiz', 'pairs', 'input'];
+          const firstAvailable = priorityOrder.find((m) => isMethodAvailable(m));
+          if (firstAvailable) {
+            currentMethod = firstAvailable;
+            userSettings.preferredMethod = currentMethod;
+            saveUserSettings(userSettings);
+          } else {
+            currentMethod = isFavPracticeActive ? 'quiz' : 'cards';
+            userSettings.preferredMethod = currentMethod;
+            saveUserSettings(userSettings);
+          }
+        }
 
         // In Cards mode: if user reached their daily learning limit, show warning and block adding new words!
         if (!isFavPracticeActive && currentMethod === 'cards' && learningCount >= dailyGoal) {
@@ -207,12 +240,6 @@
 
         // Filter words strictly based on the active training method queue
         let activeWords = [];
-        if (isFavPracticeActive) {
-          categoryWords = favoritePracticeWords;
-        }
-
-        const favListForMixing = isFavPracticeActive ? [] : favList;
-
         if (currentMethod === 'cards') {
           activeWords = getQueueForCards(categoryWords, userProgress);
           // If all words in category were already sorted, allow reviewing all unmastered words in cards
@@ -220,11 +247,11 @@
             activeWords = categoryWords.filter((w) => !isWordMastered(userProgress[w.id]));
           }
         } else if (currentMethod === 'quiz') {
-          activeWords = getQueueForQuiz(categoryWords, userProgress, favListForMixing);
+          activeWords = quizQueue;
         } else if (currentMethod === 'pairs') {
-          activeWords = getQueueForPairs(categoryWords, userProgress, favListForMixing);
+          activeWords = pairsQueue;
         } else if (currentMethod === 'input') {
-          activeWords = getQueueForTest(categoryWords, userProgress);
+          activeWords = testQueue;
         }
 
         // Check if all words in category/favorites are mastered (3x in Test)
