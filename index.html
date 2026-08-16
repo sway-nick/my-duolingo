@@ -228,9 +228,9 @@
         } else if (currentMethod === 'quiz') {
           activeWords = getQueueForQuiz(categoryWords, userProgress);
         } else if (currentMethod === 'pairs') {
-          activeWords = getQueueForPairs(categoryWords, userProgress, favList);
+          activeWords = getQueueForPairs(categoryWords, userProgress);
         } else if (currentMethod === 'input') {
-          activeWords = getQueueForTest(categoryWords, userProgress, favList);
+          activeWords = getQueueForTest(categoryWords, userProgress);
         }
 
         // Check if all words in category/favorites are mastered (3x in Test)
@@ -421,8 +421,8 @@
 
         const cardsQueue = getQueueForCards(categoryWords, userProgress);
         const quizQueue = getQueueForQuiz(categoryWords, userProgress);
-        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
-        const testQueue = getQueueForTest(categoryWords, userProgress, favList);
+        const pairsQueue = getQueueForPairs(categoryWords, userProgress);
+        const testQueue = getQueueForTest(categoryWords, userProgress);
 
         const availableModes = {
           cards: isFavPracticeActive ? false : (cardsQueue.length > 0 && learningCount < dailyGoal),
@@ -490,7 +490,26 @@
             onFavoriteToggle: handleFavoriteToggle,
             onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
             onStartFavoritePractice: (practiceWords) => {
-              favoritePracticeWords = practiceWords && practiceWords.length > 0 ? [...practiceWords] : null;
+              if (practiceWords && practiceWords.length > 0) {
+                favoritePracticeWords = [...practiceWords];
+                const userId = getEffectiveUserId();
+                const progressKey = `progress_${userId}`;
+                const localProg = JSON.parse(localStorage.getItem(progressKey) || '{}');
+                practiceWords.forEach((w) => {
+                  localProg[w.id] = {
+                    ...(localProg[w.id] || {}),
+                    seenInCards: true,
+                    quizCorrect: 0,
+                    pairsCorrect: 0,
+                    inputCorrect: 0,
+                    mastered: false,
+                  };
+                  userProgress[w.id] = localProg[w.id];
+                });
+                localStorage.setItem(progressKey, JSON.stringify(localProg));
+              } else {
+                favoritePracticeWords = null;
+              }
               userSettings.preferredMethod = 'quiz';
               saveUserSettings(userSettings);
               currentWordIndex = 0;

@@ -481,55 +481,18 @@ function getQueueForQuiz(words, progress) {
   });
 }
 
-function getQueueForPairs(words, progress, favorites = []) {
-  const base = words.filter((w) => {
+function getQueueForPairs(words, progress) {
+  return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return (p?.quizCorrect || 0) >= 5 && (p?.pairsCorrect || 0) < 2 && !isWordMastered(p);
   });
-
-  const favSet = new Set(favorites.map(String));
-  const candidateFavs = words.filter(
-    (w) => favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id))
-  );
-
-  // Sort favorites by lastPracticed ASC (oldest repeated first)
-  candidateFavs.sort((a, b) => {
-    const pA = progress[a.id] || progress[String(a.id)];
-    const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA?.lastPracticed || 0;
-    const tB = pB?.lastPracticed || 0;
-    return tA - tB;
-  });
-
-  const favCount = Math.max(1, Math.round(base.length * 0.15));
-  const injectedFavs = candidateFavs.slice(0, favCount);
-
-  return [...base, ...injectedFavs];
 }
 
-function getQueueForTest(words, progress, favorites = []) {
-  const base = words.filter((w) => {
+function getQueueForTest(words, progress) {
+  return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return (p?.pairsCorrect || 0) >= 2 && (p?.inputCorrect || 0) < 3 && !isWordMastered(p);
   });
-
-  const favSet = new Set(favorites.map(String));
-  const candidateFavs = words.filter(
-    (w) => favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id))
-  );
-
-  candidateFavs.sort((a, b) => {
-    const pA = progress[a.id] || progress[String(a.id)];
-    const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA?.lastPracticed || 0;
-    const tB = pB?.lastPracticed || 0;
-    return tA - tB;
-  });
-
-  const favCount = Math.max(1, Math.round(base.length * 0.15));
-  const injectedFavs = candidateFavs.slice(0, favCount);
-
-  return [...base, ...injectedFavs];
 }
 
 async function getUserStats(customWords = null) {
