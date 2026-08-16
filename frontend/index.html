@@ -250,28 +250,8 @@
           }
         } else if (currentMethod === 'quiz') {
           activeWords = getQueueForQuiz(categoryWords, userProgress);
-          // If all words in Quiz queue are completed (5/5), automatically transition to Pairs!
-          if (activeWords.length === 0) {
-            const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
-            if (pairsQueue.length > 0) {
-              userSettings.preferredMethod = 'pairs';
-              saveUserSettings(userSettings);
-              currentWordIndex = 0;
-              return renderTrainingTab();
-            }
-          }
         } else if (currentMethod === 'pairs') {
           activeWords = getQueueForPairs(categoryWords, userProgress, favList);
-          // If all words in Pairs queue are completed (5/5), automatically transition to Test!
-          if (activeWords.length === 0) {
-            const testQueue = getQueueForTest(categoryWords, userProgress, favList);
-            if (testQueue.length > 0) {
-              userSettings.preferredMethod = 'input';
-              saveUserSettings(userSettings);
-              currentWordIndex = 0;
-              return renderTrainingTab();
-            }
-          }
         } else if (currentMethod === 'input') {
           activeWords = getQueueForTest(categoryWords, userProgress, favList);
         }
@@ -316,8 +296,69 @@
           return;
         }
 
-        // If queue for the current mode is empty, show intuitive step guidance ("Cold Start")
+        // If queue for the current mode is empty, show intuitive step guidance
         if (activeWords.length === 0) {
+          const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
+          const testQueue = getQueueForTest(categoryWords, userProgress, favList);
+
+          // If words completed Quiz -> show completion card with button to Pairs (like Cards mode)
+          if (currentMethod === 'quiz' && pairsQueue.length > 0) {
+            content.innerHTML = `
+              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
+                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
+                  Отлично!<br/>
+                  Все слова в этом режиме изучены!
+                </p>
+                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
+                  <button class="primary-button btn-green" id="go-pairs-btn">
+                    Перейти в Пары
+                  </button>
+                </div>
+              </div>
+            `;
+
+            const goPairsBtn = content.querySelector('#go-pairs-btn');
+            if (goPairsBtn) {
+              goPairsBtn.addEventListener('click', () => {
+                userSettings.preferredMethod = 'pairs';
+                saveUserSettings(userSettings);
+                currentWordIndex = 0;
+                renderTrainingTab();
+              });
+            }
+            return;
+          }
+
+          // If words completed Pairs -> show completion card with button to Test
+          if (currentMethod === 'pairs' && testQueue.length > 0) {
+            content.innerHTML = `
+              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
+                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
+                  Отлично!<br/>
+                  Все слова в этом режиме изучены!
+                </p>
+                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
+                  <button class="primary-button btn-green" id="go-test-btn">
+                    Перейти в Тест
+                  </button>
+                </div>
+              </div>
+            `;
+
+            const goTestBtn = content.querySelector('#go-test-btn');
+            if (goTestBtn) {
+              goTestBtn.addEventListener('click', () => {
+                userSettings.preferredMethod = 'input';
+                saveUserSettings(userSettings);
+                currentWordIndex = 0;
+                renderTrainingTab();
+              });
+            }
+            return;
+          }
+
           let emptyIcon = '🗂️';
           let emptyTitle = 'Очередь пуста';
           let emptyMsg = 'Сначала отберите слова в режиме «Карточки»!';
