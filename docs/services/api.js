@@ -1,4 +1,4 @@
-import { getCurrentUser } from './authService.js?v=8.0';
+import { getCurrentUser } from './authService.js?v=8.1';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycby0lLhpcGJOddZ6L64_D5i14zcU1ZdCtkgA3sj1G9w36eelkGPP4M6k2iTZekTGFAHhFg/exec';
 
@@ -56,26 +56,32 @@ async function getWords() {
 async function registerUser(email, password, name) {
   const cleanEmail = email.toLowerCase().trim();
 
+  // Always attempt primary backend database registration first
   try {
     const response = await fetch(`${API_URL}?route=register`, {
       method: 'POST',
       body: JSON.stringify({ email: cleanEmail, password, name, action: 'register' }),
     });
     const res = await response.json();
+    
     if (res && res.success && res.data?.user) {
       saveLocalUser({ ...res.data.user, password });
       return res;
     }
+    
+    if (res && res.error) {
+      // If server explicitly returned error (e.g. user already in Google Sheet), throw it
+      throw new Error(res.error);
+    }
   } catch (e) {
-    console.warn('Backend API unavailable, saving account locally', e);
+    // Rethrow if it's a real user error message from server
+    if (e.message && !e.message.includes('fetch') && !e.message.includes('Unexpected')) {
+      throw e;
+    }
+    console.warn('Backend API connection offline/pending, creating local account fallback', e);
   }
 
-  const localUsers = getLocalUsers();
-  const existing = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
-  if (existing) {
-    throw new Error('Пользователь с таким email уже зарегистрирован');
-  }
-
+  // Local fallback registration if server is unreachable
   const newUser = {
     id: 'u_' + Date.now(),
     email: cleanEmail,
@@ -138,14 +144,10 @@ async function loginUser(email, password) {
   };
 }
 
-/**
- * Saves answer progress. Uses batching to avoid network lag on every click.
- */
 async function saveProgress(wordId, isCorrect) {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
 
-  // 1. Instant local state update
   const key = `progress_${userId}`;
   const local = JSON.parse(localStorage.getItem(key) || '{}');
   if (!local[wordId]) local[wordId] = { correct: 0, error: 0 };
@@ -153,10 +155,8 @@ async function saveProgress(wordId, isCorrect) {
   else local[wordId].error += 1;
   localStorage.setItem(key, JSON.stringify(local));
 
-  // 2. Queue for batched sync to backend
   pendingProgressQueue.push({ userId, wordId, isCorrect });
 
-  // Flush backend every 5 items
   if (pendingProgressQueue.length >= 5) {
     flushProgressQueue();
   }
@@ -179,7 +179,6 @@ async function flushProgressQueue() {
   }
 }
 
-// Flush pending queue when tab is closed or hidden
 if (typeof window !== 'undefined') {
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
