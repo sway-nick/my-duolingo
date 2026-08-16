@@ -252,8 +252,27 @@ if (typeof window !== 'undefined') {
   });
 }
 
+function getUserFavorites() {
+  const userId = getEffectiveUserId();
+  const key = `favs_${userId}`;
+  return JSON.parse(localStorage.getItem(key) || '[]');
+}
+
 async function toggleFavoriteApi(wordId, isFavorite) {
   const userId = getEffectiveUserId();
+  const key = `favs_${userId}`;
+  const favs = JSON.parse(localStorage.getItem(key) || '[]');
+  const wordIdStr = String(wordId);
+  const exists = favs.map(String).includes(wordIdStr);
+
+  if (isFavorite && !exists) {
+    favs.push(wordId);
+  } else if (!isFavorite && exists) {
+    const idx = favs.map(String).indexOf(wordIdStr);
+    if (idx >= 0) favs.splice(idx, 1);
+  }
+  localStorage.setItem(key, JSON.stringify(favs));
+
   try {
     await fetch(`${API_URL}?route=favorite`, {
       method: 'POST',
@@ -261,14 +280,7 @@ async function toggleFavoriteApi(wordId, isFavorite) {
       body: JSON.stringify({ route: 'favorite', action: 'favorite', userId, wordId, isFavorite }),
     });
   } catch (e) {
-    const key = `favs_${userId}`;
-    const favs = JSON.parse(localStorage.getItem(key) || '[]');
-    if (isFavorite && !favs.includes(wordId)) favs.push(wordId);
-    if (!isFavorite) {
-      const idx = favs.indexOf(wordId);
-      if (idx >= 0) favs.splice(idx, 1);
-    }
-    localStorage.setItem(key, JSON.stringify(favs));
+    console.warn('Favorite saved locally, remote sync pending:', e);
   }
 }
 
@@ -385,6 +397,7 @@ export {
   loginUser,
   saveProgress,
   getUserProgress,
+  getUserFavorites,
   flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,
