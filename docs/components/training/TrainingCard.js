@@ -224,8 +224,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'pairs') {
-    // Pairs Matching Mode (8 words per round)
-    const otherWords = allWords.filter((w) => w.id !== currentWord.id);
+    // Pairs Matching Mode (8 words per round strictly from selected category)
+    const categoryFilteredWords =
+      selectedCategory === 'All' || selectedCategory === 'Все категории'
+        ? allWords
+        : allWords.filter(
+            (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)
+          );
+
+    const otherWords = categoryFilteredWords.filter((w) => w.id !== currentWord.id);
     const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 7)];
     const leftItems = shuffleArray(
       roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
@@ -277,7 +284,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       const leftId = selectedLeft.getAttribute('data-id');
       const rightId = selectedRight.getAttribute('data-id');
-      const leftWord = selectedLeft.getAttribute('data-word');
 
       const isMatch = String(leftId) === String(rightId);
 
@@ -292,7 +298,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         curLeft.classList.add('matched');
         curRight.classList.add('matched');
 
-        speakWord(leftWord, leftId);
+        // No duplicate audio call here: English word is already spoken when tapped
         await saveProgress(leftId, true, 'pairs');
         matchedCount++;
 
