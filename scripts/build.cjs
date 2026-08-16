@@ -30,6 +30,13 @@ function build() {
   copyRecursiveSync('./frontend/services', './services');
   copyRecursiveSync('./frontend/assets', './assets');
 
+  // 4. Generate all-in-one backend bundle for Google Apps Script
+  try {
+    require('./bundle_backend.cjs');
+  } catch (e) {
+    console.warn('Backend bundle step skipped or failed:', e);
+  }
+
   console.log('✅ Build successful! Single source of truth (frontend/) synchronized to docs/ and root.');
 }
 
