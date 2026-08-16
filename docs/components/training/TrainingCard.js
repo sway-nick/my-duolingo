@@ -28,6 +28,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     activeWords = [],
     learningCount = 0,
     dailyGoal = 10,
+    availableModes = { cards: true, quiz: true, pairs: true, input: true },
   } = options;
 
   let favorited = isFavorite;
@@ -42,16 +43,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <div class="card-header-bar">
         <div class="mode-switch-pills" id="mode-switch-pills">
           <div class="mode-pill-glider" id="mode-pill-glider"></div>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''} ${!availableModes.cards && currentMethod !== 'cards' ? 'disabled-mode' : ''}" data-mode="cards" ${!availableModes.cards && currentMethod !== 'cards' ? 'disabled' : ''} title="Режим Карточки">
             Карточки
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz && currentMethod !== 'quiz' ? 'disabled-mode' : ''}" data-mode="quiz" ${!availableModes.quiz && currentMethod !== 'quiz' ? 'disabled' : ''} title="Режим Квиз">
             Квиз
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs" title="Режим Пары">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''} ${!availableModes.pairs && currentMethod !== 'pairs' ? 'disabled-mode' : ''}" data-mode="pairs" ${!availableModes.pairs && currentMethod !== 'pairs' ? 'disabled' : ''} title="Режим Пары">
             Пары
           </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''} ${!availableModes.input && currentMethod !== 'input' ? 'disabled-mode' : ''}" data-mode="input" ${!availableModes.input && currentMethod !== 'input' ? 'disabled' : ''} title="Режим Тест">
             Тест
           </button>
         </div>
@@ -185,6 +186,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const favBtn = container.querySelector('#fav-toggle-btn');
   if (favBtn) {
     favBtn.addEventListener('click', async () => {
+      favBtn.classList.remove('heart-hint-blink');
       favorited = !favorited;
       favBtn.textContent = favorited ? '❤️' : '🤍';
       favBtn.classList.toggle('is-favorite', favorited);
@@ -491,6 +493,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ${currentWord.word}
           </div>
         `;
+
+        // Shimmer / blink heart as a prompt to favorite difficult word
+        const favBtn = container.querySelector('#fav-toggle-btn');
+        if (favBtn && !favorited) {
+          favBtn.classList.add('heart-hint-blink');
+        }
       }
 
       // Exact delay: 1s (1000ms) on correct, 2s (2000ms) on error

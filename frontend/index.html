@@ -419,6 +419,18 @@
           (favSet.has(String(currentWord.id)) ||
             (currentWord.word && favSet.has(String(currentWord.word).toLowerCase().trim())));
 
+        const cardsQueue = getQueueForCards(categoryWords, userProgress);
+        const quizQueue = getQueueForQuiz(categoryWords, userProgress);
+        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
+        const testQueue = getQueueForTest(categoryWords, userProgress, favList);
+
+        const availableModes = {
+          cards: isFavPracticeActive ? false : (cardsQueue.length > 0 && learningCount < dailyGoal),
+          quiz: quizQueue.length > 0,
+          pairs: pairsQueue.length > 0,
+          input: testQueue.length > 0,
+        };
+
         renderTrainingCard(currentWord, allWords, {
           currentMethod,
           selectedCategory,
@@ -426,6 +438,7 @@
           activeWords,
           learningCount,
           dailyGoal,
+          availableModes,
           onMethodChange: (newMethod) => {
             userSettings.preferredMethod = newMethod;
             saveUserSettings(userSettings);
