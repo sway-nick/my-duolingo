@@ -941,6 +941,20 @@ body {
   transform: translateY(1px);
 }
 
+.btn-green {
+  background: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.btn-green:hover:not(:disabled) {
+  background: #15803d !important;
+  transform: translateY(-1px);
+}
+
+.btn-green:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
 .secondary-button {
   width: 100%;
   min-height: 52px;
