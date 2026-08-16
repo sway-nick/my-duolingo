@@ -1,5 +1,5 @@
-import { speakWord } from '../../services/audioService.js?v=8.0';
-import { toggleFavoriteApi } from '../../services/api.js?v=8.0';
+import { speakWord } from '../../services/audioService.js?v=14.0';
+import { toggleFavoriteApi } from '../../services/api.js?v=14.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -15,9 +15,11 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           <p class="subtitle">Ваш персональный список слов для повторения</p>
         </div>
         <div class="empty-favorites-box">
-          <span class="empty-icon">🤍</span>
-          <h3>У вас пока нет избранных слов</h3>
-          <p>Нажимайте на сердечко ❤️ во время тренировок, чтобы добавлять сложные слова сюда.</p>
+          <span class="empty-icon" style="font-size: 40px; display: block; margin-bottom: 8px;">🤍</span>
+          <h3 style="margin: 4px 0 8px;">У вас пока нет избранных слов</h3>
+          <p style="color: var(--text-muted); font-size: 14px; margin: 0;">
+            Нажимайте на сердечко ❤️ в Словаре или во время тренировок, чтобы добавлять слова сюда.
+          </p>
         </div>
       </div>
     `;
@@ -83,6 +85,11 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       const card = container.querySelector(`.fav-card[data-id="${id}"]`);
       if (card) card.remove();
       onRemoveFavorite(id);
+
+      const remainingCards = container.querySelectorAll('.fav-card');
+      if (remainingCards.length === 0) {
+        renderFavoritesView([], containerSelector, options);
+      }
     });
   });
 }

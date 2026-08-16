@@ -67,15 +67,16 @@
 
         try {
           const favList = getUserFavorites();
-          favoriteIds = new Set(favList);
+          favoriteIds = new Set(favList.map(String));
         } catch (e) {
           console.warn('Failed to load favorites:', e);
         }
       }
 
       function handleFavoriteToggle(wordId, isFav) {
-        if (isFav) favoriteIds.add(wordId);
-        else favoriteIds.delete(wordId);
+        const idStr = String(wordId);
+        if (isFav) favoriteIds.add(idStr);
+        else favoriteIds.delete(idStr);
 
         if (activeTab === 'favorites') {
           renderTab(activeTab);
@@ -245,7 +246,9 @@
         } else if (tabName === 'stats') {
           await renderStatsView('#app-content');
         } else if (tabName === 'favorites') {
-          const favWords = allWords.filter((w) => favoriteIds.has(w.id));
+          const favList = getUserFavorites();
+          favoriteIds = new Set(favList.map(String));
+          const favWords = allWords.filter((w) => favoriteIds.has(String(w.id)));
           renderFavoritesView(favWords, '#app-content', {
             onFavoriteToggle: handleFavoriteToggle,
             onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
