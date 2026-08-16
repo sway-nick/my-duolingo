@@ -11,6 +11,18 @@ const ROUTES = {
     health: {
       get: healthEndpoint,
     },
+    auth: {
+      post: function (e) {
+        let body = {};
+        try {
+          body = getJsonBody(e);
+        } catch (err) {}
+        if (body.action === 'register' || body.route === 'register') {
+          return registerPost(e);
+        }
+        return loginPost(e);
+      },
+    },
     register: {
       post: registerPost,
     },

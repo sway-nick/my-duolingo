@@ -56,32 +56,37 @@ async function getWords() {
 async function registerUser(email, password, name) {
   const cleanEmail = email.toLowerCase().trim();
 
-  // Always attempt primary backend database registration first
   try {
+    // Pass route & action inside body to survive Google Apps Script 302 redirects
     const response = await fetch(`${API_URL}?route=register`, {
       method: 'POST',
-      body: JSON.stringify({ email: cleanEmail, password, name, action: 'register' }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        route: 'register',
+        action: 'register',
+        email: cleanEmail,
+        password: password,
+        name: name,
+      }),
     });
     const res = await response.json();
-    
+
     if (res && res.success && res.data?.user) {
       saveLocalUser({ ...res.data.user, password });
       return res;
     }
-    
+
     if (res && res.error) {
-      // If server explicitly returned error (e.g. user already in Google Sheet), throw it
       throw new Error(res.error);
     }
   } catch (e) {
-    // Rethrow if it's a real user error message from server
-    if (e.message && !e.message.includes('fetch') && !e.message.includes('Unexpected')) {
+    if (e.message && !e.message.includes('fetch') && !e.message.includes('Unexpected') && !e.message.includes('not found')) {
       throw e;
     }
-    console.warn('Backend API connection offline/pending, creating local account fallback', e);
+    console.warn('Backend API connection pending, saving user account locally', e);
   }
 
-  // Local fallback registration if server is unreachable
+  // Local fallback registration
   const newUser = {
     id: 'u_' + Date.now(),
     email: cleanEmail,
@@ -105,7 +110,13 @@ async function loginUser(email, password) {
   try {
     const response = await fetch(`${API_URL}?route=login`, {
       method: 'POST',
-      body: JSON.stringify({ email: cleanEmail, password, action: 'login' }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        route: 'login',
+        action: 'login',
+        email: cleanEmail,
+        password: password,
+      }),
     });
     const res = await response.json();
     if (res && res.success && res.data?.user) {
@@ -155,7 +166,7 @@ async function saveProgress(wordId, isCorrect) {
   else local[wordId].error += 1;
   localStorage.setItem(key, JSON.stringify(local));
 
-  pendingProgressQueue.push({ userId, wordId, isCorrect });
+  pendingProgressQueue.push({ route: 'progress', action: 'progress', userId, wordId, isCorrect });
 
   if (pendingProgressQueue.length >= 5) {
     flushProgressQueue();
@@ -171,6 +182,7 @@ async function flushProgressQueue() {
     try {
       await fetch(`${API_URL}?route=progress`, {
         method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(item),
       });
     } catch (e) {
@@ -193,7 +205,8 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   try {
     await fetch(`${API_URL}?route=favorite`, {
       method: 'POST',
-      body: JSON.stringify({ userId, wordId, isFavorite }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ route: 'favorite', action: 'favorite', userId, wordId, isFavorite }),
     });
   } catch (e) {
     const key = `favs_${userId}`;
@@ -270,10 +283,11 @@ async function getUserSettings() {
 async function saveUserSettings(settings) {
   const user = getCurrentUser();
   const userId = user ? user.id : 'guest';
-  const payload = { ...settings, userId };
+  const payload = { route: 'settings', action: 'settings', ...settings, userId };
   try {
     await fetch(`${API_URL}?route=settings`, {
       method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
     });
   } catch (e) {
