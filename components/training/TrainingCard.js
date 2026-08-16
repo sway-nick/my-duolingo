@@ -1,5 +1,5 @@
-import { speakWord } from '../../services/audioService.js?v=10.0';
-import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=10.0';
+import { speakWord, playSuccessSound } from '../../services/audioService.js?v=14.0';
+import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=14.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -197,10 +197,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
         });
 
+        if (isCorrect) {
+          playSuccessSound();
+        }
+
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // Fast delay: 650ms on correct, 12.6s on error
-        const delay = isCorrect ? 650 : 12600;
+        // Super-fast delay: 320ms on correct (cut in half), 12.6s on error
+        const delay = isCorrect ? 320 : 12600;
         setTimeout(() => {
           onNext();
         }, delay);
