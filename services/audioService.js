@@ -56,7 +56,7 @@ function playSuccessSound() {
 }
 
 /**
- * Plays a casino slot machine reel spinning / cascading ratchet sound with a jackpot chime
+ * Plays a casino slot machine reel spinning / cascading ratchet sound (Web Audio API)
  */
 function playCasinoRollSound() {
   try {
@@ -64,23 +64,23 @@ function playCasinoRollSound() {
     if (!ctx) return;
 
     const now = ctx.currentTime;
-    const clickCount = 14;
+    const clickCount = 18;
     const interval = 0.045; // 45ms between clicks
 
-    // 1. Rapid slot machine mechanical ratchet reel ticks
+    // Rapid slot machine mechanical ratchet reel ticks
     for (let i = 0; i < clickCount; i++) {
       const clickTime = now + i * interval;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
       osc.type = 'triangle';
-      // Rising pitch like an accelerating/spinning slot machine wheel
-      const freq = 450 + i * 45;
+      // Rising pitch like an accelerating/spinning mechanical slot machine wheel
+      const freq = 420 + i * 42;
       osc.frequency.setValueAtTime(freq, clickTime);
       osc.frequency.exponentialRampToValueAtTime(freq + 60, clickTime + 0.03);
 
       gain.gain.setValueAtTime(0.001, clickTime);
-      gain.gain.linearRampToValueAtTime(0.16, clickTime + 0.005);
+      gain.gain.linearRampToValueAtTime(0.16, clickTime + 0.004);
       gain.gain.exponentialRampToValueAtTime(0.001, clickTime + 0.035);
 
       osc.connect(gain);
@@ -89,33 +89,6 @@ function playCasinoRollSound() {
       osc.start(clickTime);
       osc.stop(clickTime + 0.035);
     }
-
-    // 2. Victory jackpot chime at the end of the roll
-    const chimeStart = now + clickCount * interval;
-    const victoryNotes = [
-      { freq: 1046.5, delay: 0.00, vol: 0.15 },
-      { freq: 1318.5, delay: 0.05, vol: 0.16 },
-      { freq: 1567.98, delay: 0.10, vol: 0.18 },
-      { freq: 2093.0, delay: 0.15, vol: 0.15 },
-    ];
-
-    victoryNotes.forEach(({ freq, delay, vol }) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, chimeStart + delay);
-
-      gain.gain.setValueAtTime(0.001, chimeStart + delay);
-      gain.gain.linearRampToValueAtTime(vol, chimeStart + delay + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0001, chimeStart + delay + 0.50);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(chimeStart + delay);
-      osc.stop(chimeStart + delay + 0.50);
-    });
   } catch (e) {
     console.warn('Casino audio effect skipped:', e);
   }
@@ -210,42 +183,39 @@ function playCoinDropSound() {
 
     const now = ctx.currentTime;
 
-    // Realistic gold/silver metallic coin clink & bouncing resonance
+    // Realistic heavy coin dropping & spinning clatter
     const bounces = [
-      { delay: 0.00, f1: 2637, f2: 3951, vol: 0.22, dur: 0.38 }, // Initial crisp hit (E7 / B7)
-      { delay: 0.10, f1: 2960, f2: 4435, vol: 0.15, dur: 0.26 }, // Secondary rebound
-      { delay: 0.18, f1: 3322, f2: 4978, vol: 0.09, dur: 0.18 }, // Third tap
-      { delay: 0.24, f1: 3729, f2: 5587, vol: 0.05, dur: 0.12 }  // Settle clink
+      { delay: 0.00, f1: 3480, f2: 5200, f3: 1740, vol: 0.30, dur: 0.40 }, // Primary hard metal coin drop
+      { delay: 0.09, f1: 3920, f2: 5870, f3: 1960, vol: 0.22, dur: 0.28 }, // First rebound clink
+      { delay: 0.16, f1: 4400, f2: 6590, f3: 2200, vol: 0.16, dur: 0.20 }, // Second bounce
+      { delay: 0.22, f1: 4940, f2: 7400, f3: 2470, vol: 0.10, dur: 0.14 }, // Third bounce
+      { delay: 0.27, f1: 5540, f2: 8300, f3: 2770, vol: 0.06, dur: 0.10 }, // Settle spin ping
     ];
 
-    bounces.forEach(({ delay, f1, f2, vol, dur }) => {
+    bounces.forEach(({ delay, f1, f2, f3, vol, dur }) => {
       const strikeTime = now + delay;
 
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const gain = ctx.createGain();
+      [f1, f2, f3].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-      osc1.type = 'sine';
-      osc2.type = 'sine';
+        osc.type = idx === 2 ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(freq, strikeTime);
 
-      osc1.frequency.setValueAtTime(f1, strikeTime);
-      osc2.frequency.setValueAtTime(f2, strikeTime);
+        const v = idx === 2 ? vol * 0.7 : vol;
+        gain.gain.setValueAtTime(0.0001, strikeTime);
+        gain.gain.linearRampToValueAtTime(v, strikeTime + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + dur);
 
-      gain.gain.setValueAtTime(0.001, strikeTime);
-      gain.gain.linearRampToValueAtTime(vol, strikeTime + 0.003);
-      gain.gain.exponentialRampToValueAtTime(0.0001, strikeTime + dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-      osc1.connect(gain);
-      osc2.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc1.start(strikeTime);
-      osc2.start(strikeTime);
-      osc1.stop(strikeTime + dur);
-      osc2.stop(strikeTime + dur);
+        osc.start(strikeTime);
+        osc.stop(strikeTime + dur);
+      });
     });
   } catch (e) {
-    console.warn('Coin sound skipped:', e);
+    console.warn('Coin drop sound skipped:', e);
   }
 }
 

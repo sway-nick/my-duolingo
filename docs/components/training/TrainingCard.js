@@ -308,7 +308,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       selectedRight = null;
 
       if (isMatch) {
-        playSuccessSound();
+        if (matchedCount + 1 < totalPairs) {
+          playSuccessSound();
+        }
         curLeft.classList.remove('selected');
         curRight.classList.remove('selected');
         curLeft.classList.add('matched');
@@ -331,21 +333,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           // Cascade 3D flip animation across horizontal axis (Dollar green / white)
           const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
           allCards.forEach((card, idx) => {
-            card.classList.remove('matched', 'selected');
+            card.classList.remove('matched', 'selected', 'wrong');
             setTimeout(() => {
               card.classList.add('casino-flipping');
-            }, idx * 90);
+            }, idx * 80);
           });
 
           // Play realistic metallic coin drop sound at the very end of the roll
           setTimeout(() => {
             playCoinDropSound();
-          }, 1850);
+          }, 1550);
 
           // Advance to next round smoothly
           setTimeout(() => {
             onNext();
-          }, 2350);
+          }, 2100);
         }
       } else {
         playErrorSound();
