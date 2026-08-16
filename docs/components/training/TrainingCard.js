@@ -291,6 +291,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       selectedRight = null;
 
       if (isMatch) {
+        playSuccessSound();
         curLeft.classList.remove('selected');
         curRight.classList.remove('selected');
         curLeft.classList.add('matched');
@@ -308,6 +309,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }, 450);
         }
       } else {
+        playErrorSound();
         curLeft.classList.add('wrong');
         curRight.classList.add('wrong');
         await saveProgress(leftId, false, 'pairs');
