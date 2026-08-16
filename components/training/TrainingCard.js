@@ -390,7 +390,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
             ${currentWord.word}
           </div>
-          ${currentWord.transcription ? `<div style="font-size: 17px; color: var(--text-muted); margin-top: 4px;">${currentWord.transcription}</div>` : ''}
         `;
       }
 
