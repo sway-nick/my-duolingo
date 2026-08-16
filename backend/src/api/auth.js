@@ -1,4 +1,4 @@
-const USER_HEADERS = ['id', 'email', 'passwordHash', 'createdAt', 'status', 'name'];
+const USER_HEADERS = ['id', 'email', 'name', 'passwordHash', 'createdAt', 'status'];
 
 /**
  * Computes SHA-256 hash of password with a fixed salt.
@@ -49,10 +49,80 @@ function registerPost(e) {
   const newUser = {
     id: userId,
     email: email,
+    name: userName,
     passwordHash: hashedPassword,
     createdAt: new Date().toISOString(),
     status: 'active',
+  };
+
+  appendSheetRow('Users', newUser, USER_HEADERS);
+
+  return successResponse({
+    user: {
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+    },
+    token: 'tok_' + userId,
+  });
+}
+
+/**
+ * Google OAuth endpoint. Authenticates or automatically registers Google user.
+ *
+ * @param {Object} e
+ * @returns {GoogleAppsScript.Content.TextOutput}
+ */
+function googleAuthPost(e) {
+  let body = {};
+  try {
+    body = getJsonBody(e);
+  } catch (err) {}
+
+  const email = String(body.email || e?.parameter?.email || '').toLowerCase().trim();
+  const rawName = String(body.name || e?.parameter?.name || '').trim();
+
+  if (!email) {
+    return errorResponse('Email обязателен для авторизации Google', 400);
+  }
+
+  const users = getSheetData('Users', USER_HEADERS);
+  const existing = users.find((u) => String(u.email).toLowerCase() === email);
+  const userName = rawName || email.split('@')[0];
+
+  if (existing) {
+    // If existing user lacks name in the sheet, update it
+    if ((!existing.name || existing.name === existing.email.split('@')[0]) && rawName) {
+      try {
+        const sheet = getSheet('Users', USER_HEADERS);
+        const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+        const nameColIndex = headers.indexOf('name') + 1;
+        if (nameColIndex > 0 && existing._rowIndex) {
+          sheet.getRange(existing._rowIndex, nameColIndex).setValue(rawName);
+        }
+      } catch (err) {
+        console.warn('Failed to update existing user name:', err);
+      }
+    }
+
+    return successResponse({
+      user: {
+        id: existing.id,
+        email: existing.email,
+        name: existing.name || userName,
+      },
+      token: 'tok_' + existing.id,
+    });
+  }
+
+  const userId = 'u_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+  const newUser = {
+    id: userId,
+    email: email,
     name: userName,
+    passwordHash: 'google_oauth',
+    createdAt: new Date().toISOString(),
+    status: 'active',
   };
 
   appendSheetRow('Users', newUser, USER_HEADERS);

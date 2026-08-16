@@ -10,6 +10,18 @@ function getSheet(sheetName, defaultHeaders = []) {
   if (!sheet && defaultHeaders.length > 0) {
     sheet = db.insertSheet(sheetName);
     sheet.appendRow(defaultHeaders);
+  } else if (sheet && defaultHeaders.length > 0) {
+    const lastCol = sheet.getLastColumn();
+    if (lastCol > 0) {
+      const existingHeaders = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+      defaultHeaders.forEach((dh) => {
+        if (!existingHeaders.includes(dh)) {
+          sheet.getRange(1, sheet.getLastColumn() + 1).setValue(dh);
+        }
+      });
+    } else {
+      sheet.appendRow(defaultHeaders);
+    }
   }
   return sheet;
 }
@@ -32,7 +44,8 @@ function getSheetData(sheetName, defaultHeaders = []) {
 
 function appendSheetRow(sheetName, rowObject, defaultHeaders = []) {
   const sheet = getSheet(sheetName, defaultHeaders);
-  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn() || defaultHeaders.length).getValues()[0];
+  const lastCol = sheet.getLastColumn() || defaultHeaders.length;
+  const headers = sheet.getRange(1, 1, 1, Math.max(lastCol, 1)).getValues()[0];
   const rowValues = headers.map((h) => (rowObject[h] !== undefined ? rowObject[h] : ''));
   sheet.appendRow(rowValues);
 }

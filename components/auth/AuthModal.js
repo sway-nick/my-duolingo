@@ -1,5 +1,5 @@
-import { loginUser, registerUser } from '../../services/api.js?v=13.0';
-import { setCurrentUser } from '../../services/authService.js?v=13.0';
+import { loginUser, registerUser, googleAuthUser } from '../../services/api.js?v=14.0';
+import { setCurrentUser } from '../../services/authService.js?v=14.0';
 
 const GOOGLE_CLIENT_ID = '971261131396-00l4rv6n0c4plrd9ie10qb8tvrme2emk.apps.googleusercontent.com';
 
@@ -143,16 +143,13 @@ function renderAuthModal(onSuccessCallback) {
     submitBtn.textContent = 'Авторизация через Google...';
 
     try {
-      let res = await loginUser(email, 'google_oauth_pass');
-      if (!res || !res.success || !res.data?.user) {
-        res = await registerUser(email, 'google_oauth_pass', name);
-      }
+      const res = await googleAuthUser(email, name, picture);
 
       if (res && res.success && res.data?.user) {
         const userWithGoogle = {
           ...res.data.user,
           provider: 'google',
-          name: name,
+          name: res.data.user.name || name,
           email: email,
           avatar: picture,
         };

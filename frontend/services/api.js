@@ -210,6 +210,73 @@ async function loginUser(email, password) {
   };
 }
 
+async function googleAuthUser(email, name, avatar) {
+  const cleanEmail = email.toLowerCase().trim();
+  const cleanName = (name || cleanEmail.split('@')[0]).trim();
+
+  // 1. Try POST to Google Apps Script backend
+  try {
+    const response = await fetch(`${API_URL}?route=google_auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        route: 'google_auth',
+        action: 'google_auth',
+        email: cleanEmail,
+        name: cleanName,
+        avatar: avatar || '',
+      }),
+    });
+    const res = await response.json();
+    if (res && res.success && res.data?.user) {
+      saveLocalUser({ ...res.data.user, password: 'google_oauth_pass' });
+      return res;
+    }
+    if (res && res.error) {
+      throw new Error(res.error);
+    }
+  } catch (e) {
+    console.warn('POST google_auth fallback to GET query string', e);
+  }
+
+  // 2. Try GET query string fallback
+  try {
+    const getUrl = `${API_URL}?route=google_auth&action=google_auth&email=${encodeURIComponent(cleanEmail)}&name=${encodeURIComponent(cleanName)}&avatar=${encodeURIComponent(avatar || '')}`;
+    const response = await fetch(getUrl);
+    const res = await response.json();
+    if (res && res.success && res.data?.user) {
+      saveLocalUser({ ...res.data.user, password: 'google_oauth_pass' });
+      return res;
+    }
+    if (res && res.error) {
+      throw new Error(res.error);
+    }
+  } catch (e) {
+    console.warn('Backend google_auth offline, fallback to local', e);
+  }
+
+  // 3. Local fallback if completely offline
+  const localUsers = getLocalUsers();
+  let user = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
+  if (!user) {
+    user = {
+      id: 'u_' + Date.now(),
+      email: cleanEmail,
+      name: cleanName,
+      password: 'google_oauth_pass',
+    };
+    saveLocalUser(user);
+  }
+
+  return {
+    success: true,
+    data: {
+      user: { id: user.id, email: user.email, name: user.name || cleanName },
+      token: 'tok_' + user.id,
+    },
+  };
+}
+
 function getUserProgress() {
   const userId = getEffectiveUserId();
   const key = `progress_${userId}`;
@@ -579,6 +646,7 @@ export {
   getWords,
   registerUser,
   loginUser,
+  googleAuthUser,
   saveProgress,
   getUserProgress,
   getUserFavorites,

@@ -24,10 +24,20 @@ const ROUTES = {
       },
     },
     register: {
+      get: registerPost,
       post: registerPost,
     },
     login: {
+      get: loginPost,
       post: loginPost,
+    },
+    google_auth: {
+      get: googleAuthPost,
+      post: googleAuthPost,
+    },
+    googleauth: {
+      get: googleAuthPost,
+      post: googleAuthPost,
     },
     words: {
       get: wordsGet,
