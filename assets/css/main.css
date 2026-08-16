@@ -475,33 +475,33 @@ body {
 .pairs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 6px;
   margin-top: 2px;
 }
 
 .pairs-col {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .pairs-card {
   background: #f8fafc;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 8px 6px;
-  font-size: 13px;
+  padding: 6px 4px;
+  font-size: 12.5px;
   font-weight: 600;
   text-align: center;
   color: var(--text-main);
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
-  min-height: 40px;
+  min-height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .pairs-card:hover:not(:disabled) {

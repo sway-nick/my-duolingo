@@ -224,9 +224,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'pairs') {
-    // Pairs Matching Mode (5 words per round)
+    // Pairs Matching Mode (8 words per round)
     const otherWords = allWords.filter((w) => w.id !== currentWord.id);
-    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 4)];
+    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, 7)];
     const leftItems = shuffleArray(
       roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
     );
