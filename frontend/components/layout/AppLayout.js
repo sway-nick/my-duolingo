@@ -39,7 +39,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
           <div>
             <h2>English Trainer</h2>
             <small class="user-status-text" id="header-user-status">
-              ${user ? `👤 ${user.name}` : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
+              ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
             </small>
           </div>
         </div>
@@ -134,7 +134,7 @@ function updateHeaderUser(onUserAuthChanged = () => {}) {
   const guestCount = getGuestTrainingCount();
   const statusEl = document.querySelector('#header-user-status');
   if (statusEl) {
-    statusEl.textContent = user ? `👤 ${user.name}` : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
+    statusEl.textContent = user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
   }
 
   const actionsContainer = document.querySelector('.header-right-actions');
