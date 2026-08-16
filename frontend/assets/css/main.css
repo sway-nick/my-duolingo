@@ -137,13 +137,13 @@ body.dark-theme,
 }
 
 .dark-theme .header-profile-badge {
-  background: #1e293b;
-  border-color: #334155;
-  color: #cbd5e1;
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
 }
 
 .dark-theme .header-profile-badge:hover {
-  background: #334155;
+  background: #475569;
   border-color: #94a3b8;
 }
 
@@ -279,14 +279,14 @@ body {
 }
 
 .header-profile-badge {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  min-height: 38px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   border: 1.5px solid var(--border-color);
-  background: #f1f5f9;
-  font-size: 17px;
+  background: #e2e8f0;
+  font-size: 20px;
   color: var(--text-main);
   cursor: pointer;
   display: flex;
@@ -299,7 +299,7 @@ body {
 }
 
 .header-profile-badge:hover {
-  background: #e2e8f0;
+  background: #cbd5e1;
   border-color: #94a3b8;
 }
 
@@ -885,10 +885,11 @@ body {
 }
 
 .card-translation {
-  color: var(--success-color);
-  font-size: 32px;
-  font-weight: 800;
+  color: var(--text-main);
+  font-size: 20px;
+  font-weight: 600;
   margin: 0;
+  line-height: 1.3;
 }
 
 .difficulty-buttons {

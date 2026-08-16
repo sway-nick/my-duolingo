@@ -500,7 +500,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <div class="flashcard-box" id="flashcard" style="cursor: pointer; padding: 20px; border-radius: var(--radius-md); border: 2px dashed var(--border-color); text-align: center; background: var(--bg-card, #ffffff); transition: all 0.2s ease;">
         <p id="flashcard-hint" style="margin: 0; color: var(--text-muted); font-size: 13px;">Нажмите на карточку, чтобы увидеть перевод</p>
         <div class="flashcard-back" id="flashcard-back" style="display:none;">
-          <h2 class="card-translation" style="font-size: 24px; margin: 4px 0 2px; color: var(--text-main); font-weight: 700;">${currentWord.translation}</h2>
+          <h2 class="card-translation" style="font-size: 20px; margin: 4px 0 2px; color: var(--text-main); font-weight: 600;">${currentWord.translation}</h2>
         </div>
       </div>
       
