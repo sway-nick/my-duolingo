@@ -164,7 +164,9 @@
 
         const userProgress = getUserProgress();
         const currentMethod = userSettings.preferredMethod || 'cards';
-        const favList = Array.from(favoriteIds);
+        const favList = getUserFavorites();
+        const favSet = new Set(favList.map(String));
+        favoriteIds = favSet;
 
         const dailyGoal = Number(userSettings.dailyGoal) || 10;
         const totalLearningWords = allWords.filter((w) => isWordLearning(userProgress[w.id]));
@@ -344,10 +346,6 @@
 
         content.innerHTML = '<div id="training"></div>';
         const currentWord = activeWords[currentWordIndex % activeWords.length];
-
-        const favList = getUserFavorites();
-        const favSet = new Set(favList.map(String));
-        favoriteIds = favSet;
 
         const isFav =
           Boolean(currentWord) &&
