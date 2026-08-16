@@ -1391,21 +1391,62 @@ body {
 
 .dictionary-controls {
   display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .search-input {
-  flex: 1;
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  font-size: 14px;
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
 }
 
 .filter-select {
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  flex: 0 0 115px;
+  width: 115px;
+  min-width: 0;
+  max-width: 125px;
+  height: 42px;
+  padding: 0 8px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main);
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: border-color 0.2s ease;
+}
+
+.filter-select:focus {
+  border-color: var(--primary-color);
+}
+
+.dark-theme .search-input,
+.dark-theme .filter-select {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
 }
 
 /* Auth Modal */
