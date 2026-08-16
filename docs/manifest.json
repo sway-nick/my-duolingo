@@ -1,10 +1,10 @@
 {
   "name": "English Trainer",
-  "short_name": "English PRO",
+  "short_name": "English Trainer",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#090d16",
-  "theme_color": "#6366f1",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "./assets/icons/icon-192x192.png",
@@ -18,6 +18,6 @@
     }
   ],
   "categories": ["education", "language", "learning"],
-  "description": "Премиальное веб-приложение для изучения английского языка.",
+  "description": "Интерактивный тренажёр английских слов.",
   "lang": "ru"
 }
