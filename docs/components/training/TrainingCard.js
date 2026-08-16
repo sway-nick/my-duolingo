@@ -38,7 +38,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   container.innerHTML = `
     <section class="word-card-container">
       
-      <!-- Top card bar: Mode Switch (Карточки / Квиз / Пары / Тест) on Left, Favorite Heart on Right in ONE single horizontal row -->
+      <!-- Top card bar: Mode Switch full width -->
       <div class="card-header-bar">
         <div class="mode-switch-pills" id="mode-switch-pills">
           <div class="mode-pill-glider" id="mode-pill-glider"></div>
@@ -55,16 +55,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             Тест
           </button>
         </div>
-
-        ${
-          !isPairsMode
-            ? `
-          <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
-            ${favorited ? '❤️' : '🤍'}
-          </button>
-        `
-            : ''
-        }
       </div>
 
       <!-- Word Display & Audio Button -->
@@ -72,7 +62,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         ${
           isCardsMode
             ? `
-            <div style="font-size: 13px; font-weight: 600; color: #2563eb; margin-bottom: 8px; background: rgba(37, 99, 235, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
               🎯 В обучении: <strong>${learningCount} / ${dailyGoal}</strong> слов
             </div>
           `
@@ -87,18 +77,27 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isInputMode
             ? `
-            <h1 class="training-word" style="color: var(--text-main); font-size: 28px; line-height: 1.25; margin: 12px 0 6px;">
-              ${currentWord.translation}
-            </h1>
+            <div class="word-header-row">
+              <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
+              <h1 class="training-word" style="color: var(--text-main); font-size: 28px; line-height: 1.25; margin: 0;">
+                ${currentWord.translation}
+              </h1>
+              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+                ${favorited ? '❤️' : '🤍'}
+              </button>
+            </div>
           `
             : `
-            <div class="clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
-              <h1 class="training-word">
+            <div class="word-header-row">
+              <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
+              <h1 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
                 <span class="training-word-text">${currentWord.word}</span>
-                <span class="word-audio-indicator">🔊</span>
               </h1>
-              <p class="training-transcription">${currentWord.transcription || ''}</p>
+              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+                ${favorited ? '❤️' : '🤍'}
+              </button>
             </div>
+            <p class="training-transcription">${currentWord.transcription || ''}</p>
           `
         }
       </div>
@@ -156,15 +155,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
   });
 
-  // Bind audio speak trigger (tapping directly on the word in cards/quiz modes)
+  // Bind audio speak trigger (tapping word or sound icon)
   const speakTrigger = container.querySelector('#speak-word-trigger');
+  const soundBtn = container.querySelector('#speak-sound-btn');
+
+  const handleSpeak = () => {
+    speakWord(currentWord.word, currentWord.id);
+  };
 
   if (speakTrigger && !isPairsMode) {
-    speakTrigger.addEventListener('click', () => {
-      speakWord(currentWord.word, currentWord.id);
-    });
+    speakTrigger.addEventListener('click', handleSpeak);
+  }
+  if (soundBtn && !isPairsMode) {
+    soundBtn.addEventListener('click', handleSpeak);
+  }
 
-    // Auto-pronounce word on card appearance only if NOT in text input or pairs mode
+  if (!isPairsMode && !isInputMode) {
+    // Auto-pronounce word on card appearance
     setTimeout(() => {
       try {
         speakWord(currentWord.word, currentWord.id);
