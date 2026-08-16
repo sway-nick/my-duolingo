@@ -403,11 +403,13 @@ body {
 .clickable-word-box {
   cursor: pointer;
   display: inline-block;
-  padding: 6px 14px;
+  padding: 6px 16px;
   border-radius: var(--radius-md);
   transition: all 0.15s ease;
   user-select: none;
   margin-top: 4px;
+  text-align: center;
+  position: relative;
 }
 
 .clickable-word-box:hover {
@@ -416,7 +418,7 @@ body {
 
 .clickable-word-box:hover .word-audio-indicator {
   opacity: 1 !important;
-  transform: scale(1.15);
+  transform: translateY(-50%) scale(1.15);
 }
 
 .clickable-word-box:active {
@@ -438,12 +440,28 @@ body {
   margin: 4px 0 2px;
   color: var(--text-main);
   line-height: 1.25;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.word-audio-indicator {
+  position: absolute;
+  left: calc(100% + 7px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .training-transcription {
   color: var(--text-muted);
   font-size: 17px;
   margin: 0;
+  text-align: center;
 }
 
 /* Quiz Options 2x2 Grid */

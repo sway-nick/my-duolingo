@@ -83,8 +83,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             : `
             <div class="clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
               <h1 class="training-word">
-                <span>${currentWord.word}</span>
-                <span class="word-audio-indicator" style="font-size: 18px; opacity: 0.45; margin-left: 6px;">🔊</span>
+                <span class="training-word-text">${currentWord.word}</span>
+                <span class="word-audio-indicator">🔊</span>
               </h1>
               <p class="training-transcription">${currentWord.transcription || ''}</p>
             </div>
