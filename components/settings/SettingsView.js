@@ -14,7 +14,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     <div class="settings-page">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
         <div>
-          <h2>⚙️ Персональные настройки</h2>
+          <h2>⚙️ Настройки</h2>
           <p class="subtitle">Настройки сохраняются автоматически в вашем профиле</p>
         </div>
         <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap; margin-top: 4px;">
@@ -53,23 +53,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Goals Card -->
       <div class="settings-card">
-        <h3>📌 Лимит слов на изучении</h3>
-        <p style="color: var(--text-muted); font-size: 13px; margin: 4px 0 12px;">
-          Максимальное количество слов, находящихся в процессе изучения одновременно.
-        </p>
-        
-        <div class="setting-field">
-          <label for="daily-goal-select">Лимит активных слов:</label>
-          <select id="daily-goal-select" class="settings-select">
-            <option value="10">10 слов</option>
-            <option value="20">20 слов</option>
-            <option value="30">30 слов</option>
-            <option value="40">40 слов</option>
-            <option value="50">50 слов</option>
-            <option value="75">75 слов</option>
-            <option value="100">100 слов</option>
-          </select>
-        </div>
+        <h3 style="margin-bottom: 14px;">📌 Задача на день</h3>
+        <select id="daily-goal-select" class="settings-select">
+          <option value="10">10 слов</option>
+          <option value="20">20 слов</option>
+          <option value="30">30 слов</option>
+          <option value="40">40 слов</option>
+          <option value="50">50 слов</option>
+          <option value="75">75 слов</option>
+          <option value="100">100 слов</option>
+        </select>
       </div>
 
     </div>
