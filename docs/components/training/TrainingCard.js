@@ -331,14 +331,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           // Cascade 3D flip animation across horizontal axis
           const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
           allCards.forEach((card, idx) => {
+            card.classList.remove('matched', 'selected');
             setTimeout(() => {
               card.classList.add('casino-flipping');
-            }, idx * 60);
+            }, idx * 70);
           });
 
           setTimeout(() => {
             onNext();
-          }, 1400);
+          }, 1600);
         }
       } else {
         playErrorSound();

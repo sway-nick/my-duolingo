@@ -526,12 +526,16 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 6px;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
 }
 
 .pairs-col {
   display: flex;
   flex-direction: column;
   gap: 9px;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
 }
 
 .pairs-card {
@@ -556,6 +560,8 @@ body {
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   box-sizing: border-box;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
 .pairs-card-inner {
@@ -600,19 +606,44 @@ body {
 }
 
 /* Casino 3D Horizontal Flip Animation on All Pairs Matched */
-@keyframes casinoCardFlipX {
+@-webkit-keyframes casinoCardFlipX {
   0% {
-    transform: perspective(600px) rotateX(0deg) scale(0.98);
+    -webkit-transform: rotateX(0deg);
+    transform: rotateX(0deg);
   }
   50% {
-    transform: perspective(600px) rotateX(90deg) scale(0.92);
+    -webkit-transform: rotateX(180deg) scale(0.88);
+    transform: rotateX(180deg) scale(0.88);
     background: #fef08a !important;
     border-color: #eab308 !important;
     color: #854d0e !important;
-    box-shadow: 0 0 16px rgba(234, 179, 8, 0.6);
+    box-shadow: 0 0 16px rgba(234, 179, 8, 0.7) !important;
   }
   100% {
-    transform: perspective(600px) rotateX(0deg) scale(1);
+    -webkit-transform: rotateX(360deg) scale(1);
+    transform: rotateX(360deg) scale(1);
+    background: #ffffff !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+  }
+}
+
+@keyframes casinoCardFlipX {
+  0% {
+    -webkit-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+  }
+  50% {
+    -webkit-transform: rotateX(180deg) scale(0.88);
+    transform: rotateX(180deg) scale(0.88);
+    background: #fef08a !important;
+    border-color: #eab308 !important;
+    color: #854d0e !important;
+    box-shadow: 0 0 16px rgba(234, 179, 8, 0.7) !important;
+  }
+  100% {
+    -webkit-transform: rotateX(360deg) scale(1);
+    transform: rotateX(360deg) scale(1);
     background: #ffffff !important;
     border-color: var(--primary-color) !important;
     color: var(--primary-color) !important;
@@ -620,7 +651,8 @@ body {
 }
 
 .pairs-card.casino-flipping {
-  animation: casinoCardFlipX 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  -webkit-animation: casinoCardFlipX 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+  animation: casinoCardFlipX 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
 }
 
 .dark-theme .pairs-card {
