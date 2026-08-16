@@ -36,7 +36,11 @@ function getSheetData(sheetName, defaultHeaders = []) {
   return values.slice(1).map((row, rowIndex) => {
     const item = { _rowIndex: rowIndex + 2 };
     headers.forEach((header, colIndex) => {
-      item[header] = row[colIndex];
+      const val = row[colIndex];
+      item[header] = val;
+      if (typeof header === 'string') {
+        item[header.toLowerCase()] = val;
+      }
     });
     return item;
   });
@@ -46,7 +50,11 @@ function appendSheetRow(sheetName, rowObject, defaultHeaders = []) {
   const sheet = getSheet(sheetName, defaultHeaders);
   const lastCol = sheet.getLastColumn() || defaultHeaders.length;
   const headers = sheet.getRange(1, 1, 1, Math.max(lastCol, 1)).getValues()[0];
-  const rowValues = headers.map((h) => (rowObject[h] !== undefined ? rowObject[h] : ''));
+  const rowValues = headers.map((h) => {
+    if (rowObject[h] !== undefined) return rowObject[h];
+    if (typeof h === 'string' && rowObject[h.toLowerCase()] !== undefined) return rowObject[h.toLowerCase()];
+    return '';
+  });
   sheet.appendRow(rowValues);
 }
 
