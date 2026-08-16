@@ -205,8 +205,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // Balanced delay: 650ms on correct (comfortable visual feedback + sound), 2400ms on error
-        const delay = isCorrect ? 650 : 2400;
+        // Exact delay: 1s (1000ms) on correct, 2s (2000ms) on error
+        const delay = isCorrect ? 1000 : 2000;
         setTimeout(() => {
           onNext();
         }, delay);
@@ -418,8 +418,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         `;
       }
 
-      // Balanced delay: 750ms on correct (1200ms on 3/3 mastered), 3200ms on error
-      const delay = isCorrect ? (inputCount >= 3 ? 1200 : 750) : 3200;
+      // Exact delay: 1s (1000ms) on correct, 2s (2000ms) on error
+      const delay = isCorrect ? (inputCount >= 3 ? 1500 : 1000) : 2000;
       setTimeout(() => {
         onNext();
       }, delay);
