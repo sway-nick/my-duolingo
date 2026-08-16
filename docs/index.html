@@ -138,12 +138,21 @@
           console.warn('Failed to load settings:', e);
         }
 
-        const categories = Array.from(new Set(allWords.map((w) => w.category).filter(Boolean)));
-        const selectedCategory = userSettings.category || 'All';
+        function sanitizeCategory(cat) {
+          if (!cat) return 'Общие';
+          return String(cat)
+            .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
+            .trim() || String(cat).trim();
+        }
+
+        const categories = Array.from(new Set(allWords.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
+        const selectedCategory = localStorage.getItem('myduo_dict_category') || userSettings.category || 'All';
 
         let categoryWords = allWords;
         if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'Все категории') {
-          const filtered = allWords.filter((w) => w.category === selectedCategory);
+          const filtered = allWords.filter(
+            (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)
+          );
           if (filtered.length > 0) {
             categoryWords = filtered;
           }

@@ -34,49 +34,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   container.innerHTML = `
     <section class="word-card-container">
       
-      <!-- Top card bar: Category Filter Dropdown on Left, Mode Switch (Карточки / Квиз / Пары / Тест) & Favorite on Right -->
+      <!-- Top card bar: Mode Switch (Карточки / Квиз / Пары / Тест) on Left, Favorite Heart on Right -->
       <div class="card-header-bar">
-        
-        <!-- Category Dropdown -->
-        <div class="category-select-wrapper">
-          <select id="training-category-select" class="category-pill-select" title="Выбрать категорию">
-            <option value="All" ${selectedCategory === 'All' || selectedCategory === 'Все категории' ? 'selected' : ''}>
-              📂 Все (${allWords.length})
-            </option>
-            ${categories
-              .map(
-                (cat) => `
-              <option value="${cat}" ${cat === selectedCategory ? 'selected' : ''}>
-                📂 ${sanitizeCategory(cat)} (${allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(cat)).length})
-              </option>
-            `,
-              )
-              .join('')}
-          </select>
-        </div>
-
-        <!-- Mode Switcher in order: Карточки, Квиз, Пары, Тест + Favorite Heart -->
-        <div class="card-header-right">
-          <div class="mode-switch-pills">
-            <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
-              Карточки
-            </button>
-            <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
-              Квиз
-            </button>
-            <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs" title="Режим Пары">
-              Пары
-            </button>
-            <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
-              Тест
-            </button>
-          </div>
-
-          <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
-            ${favorited ? '❤️' : '🤍'}
+        <div class="mode-switch-pills">
+          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''}" data-mode="cards" title="Режим Карточки">
+            Карточки
+          </button>
+          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''}" data-mode="quiz" title="Режим Квиз">
+            Квиз
+          </button>
+          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''}" data-mode="pairs" title="Режим Пары">
+            Пары
+          </button>
+          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''}" data-mode="input" title="Режим Тест">
+            Тест
           </button>
         </div>
 
+        <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+          ${favorited ? '❤️' : '🤍'}
+        </button>
       </div>
 
       <!-- Word Display & Audio Button -->
@@ -116,14 +93,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     </section>
   `;
-
-  // Bind category switcher
-  const catSelect = container.querySelector('#training-category-select');
-  if (catSelect) {
-    catSelect.addEventListener('change', (e) => {
-      onCategoryChange(e.target.value);
-    });
-  }
 
   // Bind mode switcher pills (Карточки / Квиз / Пары / Тест)
   const modePills = container.querySelectorAll('.mode-pill-btn');
