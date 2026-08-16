@@ -76,10 +76,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isInputMode
             ? `
-            <div class="sound-placeholder" style="height: 38px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
-              <small style="color: var(--text-muted); font-size: 12px;">🎧 Озвучка после ответа</small>
-            </div>
-            <h1 class="training-word" style="color: var(--text-main); font-size: 24px; line-height: 1.25;">
+            <h1 class="training-word" style="color: var(--text-main); font-size: 28px; line-height: 1.25; margin: 12px 0 6px;">
               ${currentWord.translation}
             </h1>
           `
