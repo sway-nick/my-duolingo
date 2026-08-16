@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=10.0';
-import { toggleFavoriteApi, getUserProgress } from '../../services/api.js?v=10.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered } from '../../services/api.js?v=10.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -80,15 +80,9 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
           userProgress[String(w.id)] ||
           (w.word ? userProgress[w.word.toLowerCase().trim()] : null);
 
-        const isMastered = Boolean(
-          prog && (
-            prog.mastered === true ||
-            (prog.inputCorrect !== undefined && prog.inputCorrect >= 3) ||
-            (prog.correct !== undefined && prog.correct >= 3)
-          )
-        );
-
+        const isMastered = isWordMastered(prog);
         const cleanCat = sanitizeCategory(w.category);
+        const testCount = prog?.inputCorrect || 0;
 
         return `
         <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
@@ -98,8 +92,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
               ${
                 isMastered
                   ? `<span class="mastered-badge">✓ Выучено</span>`
-                  : prog && prog.correct > 0
-                  ? `<span class="in-progress-badge">🎯 ${prog.inputCorrect || prog.correct}/3</span>`
+                  : testCount > 0
+                  ? `<span class="in-progress-badge">🎯 Тест: ${testCount}/3</span>`
                   : ''
               }
             </div>

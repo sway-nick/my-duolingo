@@ -284,6 +284,23 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   }
 }
 
+function isWordMastered(prog) {
+  if (!prog) return false;
+  return Boolean(
+    prog.mastered === true ||
+    (prog.inputCorrect !== undefined && Number(prog.inputCorrect) >= 3)
+  );
+}
+
+function isWordLearning(prog) {
+  if (!prog || isWordMastered(prog)) return false;
+  return Boolean(
+    (prog.correct && prog.correct > 0) ||
+    (prog.error && prog.error > 0) ||
+    (prog.inputCorrect && prog.inputCorrect > 0)
+  );
+}
+
 async function getUserStats() {
   const userId = getEffectiveUserId();
   const key = `progress_${userId}`;
@@ -300,9 +317,9 @@ async function getUserStats() {
   Object.entries(localProg).forEach(([wordId, prog]) => {
     correct += prog.correct || 0;
     errors += prog.error || 0;
-    if (prog.inputCorrect >= 3 || prog.mastered) {
+    if (isWordMastered(prog)) {
       masteredCount += 1;
-    } else if (prog.correct > 0 || prog.error > 0) {
+    } else if (isWordLearning(prog)) {
       learningCount += 1;
     }
   });
@@ -312,10 +329,11 @@ async function getUserStats() {
 
   const categoryMap = {};
   wordsList.forEach((w) => {
-    const cat = w.category || 'Общие';
+    const cat = w.category ? String(w.category).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() : 'Общие';
     if (!categoryMap[cat]) categoryMap[cat] = { total: 0, learned: 0 };
     categoryMap[cat].total += 1;
-    if (localProg[w.id] && (localProg[w.id].inputCorrect >= 3 || localProg[w.id].mastered)) {
+    const prog = localProg[w.id] || localProg[String(w.id)];
+    if (isWordMastered(prog)) {
       categoryMap[cat].learned += 1;
     }
   });
@@ -398,6 +416,8 @@ export {
   saveProgress,
   getUserProgress,
   getUserFavorites,
+  isWordMastered,
+  isWordLearning,
   flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,
