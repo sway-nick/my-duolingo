@@ -269,6 +269,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       </div>
     `;
 
+    // Dynamically auto-fit font size so all text 100% fits inside card without clipping
+    requestAnimationFrame(() => {
+      practiceArea.querySelectorAll('.pairs-card').forEach((card) => {
+        const inner = card.querySelector('.pairs-card-inner');
+        if (!inner) return;
+
+        let size = parseFloat(window.getComputedStyle(card).fontSize) || 17.5;
+        const maxHeight = card.clientHeight - 8;
+        const maxWidth = card.clientWidth - 8;
+
+        while ((inner.scrollHeight > maxHeight || inner.scrollWidth > maxWidth) && size > 9.5) {
+          size -= 0.5;
+          card.style.fontSize = `${size}px`;
+        }
+      });
+    });
+
     let selectedLeft = null;
     let selectedRight = null;
     let matchedCount = 0;
