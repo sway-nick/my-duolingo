@@ -181,12 +181,9 @@
                 Отлично!<br/>
                 Вы отобрали ${learningCount} слов на сегодня!
               </p>
-              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
+              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
                 <button class="primary-button btn-green" id="go-quiz-btn">
-                  🎯 Перейти в Квиз
-                </button>
-                <button class="secondary-button" id="go-settings-btn">
-                  ⚙️ Настройки лимита
+                  Перейти в Квиз
                 </button>
               </div>
             </div>
@@ -199,15 +196,6 @@
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               renderTrainingTab();
-            });
-          }
-
-          const goSettingsBtn = content.querySelector('#go-settings-btn');
-          if (goSettingsBtn) {
-            goSettingsBtn.addEventListener('click', () => {
-              const tabBtn = document.querySelector('.nav-tab[data-tab="settings"]');
-              if (tabBtn) tabBtn.click();
-              else renderTab('settings');
             });
           }
           return;
