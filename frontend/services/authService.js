@@ -125,6 +125,10 @@ function logoutUser() {
   setCurrentUser(null, null);
 }
 
+function getAuthToken() {
+  return localStorage.getItem(STORAGE_KEY_TOKEN) || null;
+}
+
 function getUserAvatar(targetUserId) {
   const userId = targetUserId || getEffectiveUserId();
   const saved = localStorage.getItem(`avatar_${userId}`);
