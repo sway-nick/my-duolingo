@@ -163,10 +163,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
       <!-- Scoring rules mini-banner -->
       <div class="scoring-rules-banner">
-        <div class="rule-chip">🎯 Квиз <strong>+1 XP</strong></div>
-        <div class="rule-chip">🧩 Пары без ошибок <strong>+3 XP</strong></div>
-        <div class="rule-chip">✍️ Тест <strong>+3 XP</strong></div>
-        <div class="rule-chip error-chip">Ошибка <strong class="error-xp-val">-5 XP</strong></div>
+        <div class="rule-chip"><span class="rule-chip-icon">🎯</span> Квиз <strong class="rule-chip-val">+1&nbsp;XP</strong></div>
+        <div class="rule-chip"><span class="rule-chip-icon">🧩</span> Пары без ошибок <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
+        <div class="rule-chip"><span class="rule-chip-icon">✍️</span> Тест <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
+        <div class="rule-chip error-chip">Ошибка <strong class="error-xp-val">-5&nbsp;XP</strong></div>
       </div>
 
       <!-- Instant 0ms Content -->
