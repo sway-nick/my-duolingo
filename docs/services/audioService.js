@@ -222,48 +222,20 @@ const FEMALE_VOICE_KEYWORDS = [
   'susan', 'catherine', 'hazel', 'female'
 ];
 
-function getSavedVoiceName() {
-  try {
-    return localStorage.getItem('myduo_voice_name') || '';
-  } catch (e) {
-    return '';
-  }
-}
-
-function setSavedVoiceName(name) {
-  try {
-    if (name) {
-      localStorage.setItem('myduo_voice_name', name);
-    } else {
-      localStorage.removeItem('myduo_voice_name');
-    }
-  } catch (e) {}
-}
-
-function getAvailableEnglishVoices() {
+function getPreferredVoice(gender = 'female') {
   loadVoices();
-  return cachedVoices.filter((v) => {
+  // Filter out non-English and legacy robotic voices
+  const englishVoices = cachedVoices.filter((v) => {
     if (!v.lang || (!v.lang.toLowerCase().startsWith('en') && !v.lang.toLowerCase().startsWith('en-'))) {
       return false;
     }
     const name = (v.name || '').toLowerCase();
     return !ROBOTIC_NOVELTY_VOICES.some((rv) => name.includes(rv));
   });
-}
-
-function getPreferredVoice(gender = 'female') {
-  const englishVoices = getAvailableEnglishVoices();
 
   if (englishVoices.length === 0) {
     if (cachedVoices.length === 0) return null;
     return cachedVoices[0];
-  }
-
-  // Check if a specific voice on device is chosen by the user
-  const savedSpecificVoice = getSavedVoiceName();
-  if (savedSpecificVoice) {
-    const direct = englishVoices.find((v) => v.name === savedSpecificVoice || v.voiceURI === savedSpecificVoice);
-    if (direct) return direct;
   }
 
   const target = (gender || 'female').toLowerCase();
@@ -401,7 +373,4 @@ export {
   getSavedVoiceGender,
   isAudioMuted,
   setSavedSilentMode,
-  getAvailableEnglishVoices,
-  getSavedVoiceName,
-  setSavedVoiceName,
 };

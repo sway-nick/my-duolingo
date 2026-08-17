@@ -2,17 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=16.0'
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=16.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=16.0';
-import {
-  speakWord,
-  setSavedVoiceGender,
-  getSavedVoiceGender,
-  isAudioMuted,
-  setSavedSilentMode,
-  playSuccessSound,
-  getAvailableEnglishVoices,
-  getSavedVoiceName,
-  setSavedVoiceName,
-} from '../../services/audioService.js?v=16.0';
+import { speakWord, setSavedVoiceGender, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=16.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=16.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
@@ -22,9 +12,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const user = getCurrentUser();
   const avatar = getUserAvatar();
   const currentTheme = getSavedTheme();
-  const availableVoices = getAvailableEnglishVoices();
-  const savedVoiceName = getSavedVoiceName();
-  const currentVoiceGender = getSavedVoiceGender();
 
   container.innerHTML = `
     <div class="settings-page">
@@ -93,22 +80,12 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           Голос озвучки
         </h3>
         <div class="voice-options-row">
-          <button class="voice-option-btn ${!savedVoiceName && currentVoiceGender === 'female' ? 'active' : ''}" id="voice-female-btn">
+          <button class="voice-option-btn" id="voice-female-btn">
             ♀ Женский
           </button>
-          <button class="voice-option-btn ${!savedVoiceName && currentVoiceGender === 'male' ? 'active' : ''}" id="voice-male-btn">
+          <button class="voice-option-btn" id="voice-male-btn">
             ♂ Мужской
           </button>
-        </div>
-        
-        <div style="margin-top: 12px;" id="device-voices-wrapper">
-          <label for="device-voice-select" style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:5px;">
-            🎤 Диктор на вашем устройстве:
-          </label>
-          <select id="device-voice-select" class="settings-select" style="width: 100%; font-size: 13px;">
-            <option value="">✨ Автоматический подбор (Рекомендуется)</option>
-            ${availableVoices.map((v) => `<option value="${v.name}" ${savedVoiceName === v.name ? 'selected' : ''}>${v.name} (${v.lang})</option>`).join('')}
-          </select>
         </div>
       </div>
 
@@ -264,30 +241,12 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind device voice select
-  const deviceVoiceSelect = container.querySelector('#device-voice-select');
-  if (deviceVoiceSelect) {
-    deviceVoiceSelect.addEventListener('change', () => {
-      const selectedName = deviceVoiceSelect.value;
-      setSavedVoiceName(selectedName);
-      if (femaleVoiceBtn && maleVoiceBtn) {
-        femaleVoiceBtn.classList.toggle('active', !selectedName && currentVoice === 'female');
-        maleVoiceBtn.classList.toggle('active', !selectedName && currentVoice === 'male');
-      }
-      speakWord('Hello! This is my pronunciation in English.', null, 'en-US', null, true);
-      triggerAutoSave();
-    });
-  }
-
   // Bind voice buttons with preview speech
   if (femaleVoiceBtn && maleVoiceBtn) {
     femaleVoiceBtn.addEventListener('click', () => {
       currentVoice = 'female';
       setSavedVoiceGender('female');
-      setSavedVoiceName('');
-      if (deviceVoiceSelect) deviceVoiceSelect.value = '';
-      femaleVoiceBtn.classList.add('active');
-      maleVoiceBtn.classList.remove('active');
+      updateVoiceButtons();
       speakWord('Hello! This is the female voice.', null, 'en-US', 'female', true);
       triggerAutoSave();
     });
@@ -295,10 +254,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     maleVoiceBtn.addEventListener('click', () => {
       currentVoice = 'male';
       setSavedVoiceGender('male');
-      setSavedVoiceName('');
-      if (deviceVoiceSelect) deviceVoiceSelect.value = '';
-      maleVoiceBtn.classList.add('active');
-      femaleVoiceBtn.classList.remove('active');
+      updateVoiceButtons();
       speakWord('Hello! This is the male voice.', null, 'en-US', 'male', true);
       triggerAutoSave();
     });
