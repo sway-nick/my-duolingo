@@ -43,8 +43,7 @@ function renderHeaderRightActions(user) {
   const xpBadgeHtml = `
     <button class="header-xp-badge" id="header-xp-btn" title="Ваш недельный опыт (XP). Нажмите, чтобы открыть рейтинг">
       <span class="xp-badge-icon">💎</span>
-      <span class="xp-badge-val" id="header-xp-val">${xp}</span>
-      <span class="xp-badge-unit">XP</span>
+      <span class="xp-badge-text"><span id="header-xp-val">${xp}</span> XP</span>
     </button>
   `;
 

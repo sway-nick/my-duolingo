@@ -339,7 +339,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
   background: transparent;
   border: none;
   padding: 0 4px;
@@ -371,8 +371,8 @@ body {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
 }
 
-.xp-badge-val {
-  font-size: 15.5px;
+.xp-badge-text {
+  font-size: 16px;
   font-weight: 800;
   color: #f59e0b;
   line-height: 1;
@@ -381,22 +381,7 @@ body {
   letter-spacing: -0.2px;
 }
 
-.dark-theme .xp-badge-val {
-  color: #fbbf24;
-}
-
-.xp-badge-unit {
-  font-size: 13px;
-  font-weight: 800;
-  color: #f59e0b;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  opacity: 0.95;
-  margin-left: 1px;
-}
-
-.dark-theme .xp-badge-unit {
+.dark-theme .xp-badge-text {
   color: #fbbf24;
 }
 
