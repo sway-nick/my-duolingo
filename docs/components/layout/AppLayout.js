@@ -40,10 +40,11 @@ function renderHeaderRightActions(user) {
     badgeContent = user.name.trim().charAt(0).toUpperCase();
   }
 
+  const formattedXp = Number(xp || 0).toLocaleString('ru-RU');
   const xpBadgeHtml = `
     <button class="header-xp-badge" id="header-xp-btn" title="Ваш недельный опыт (XP). Нажмите, чтобы открыть рейтинг">
       <span class="xp-badge-icon">💎</span>
-      <span class="xp-badge-text"><span id="header-xp-val">${xp}</span> XP</span>
+      <span class="xp-badge-text"><span id="header-xp-val">${formattedXp}</span>&nbsp;XP</span>
     </button>
   `;
 
@@ -209,7 +210,7 @@ if (typeof window !== 'undefined') {
     const xpValEl = document.querySelector('#header-xp-val');
     const xpBtnEl = document.querySelector('#header-xp-btn');
     if (xpValEl && e.detail && typeof e.detail.xp !== 'undefined') {
-      xpValEl.textContent = e.detail.xp;
+      xpValEl.textContent = Number(e.detail.xp || 0).toLocaleString('ru-RU');
     }
     if (xpBtnEl && e.detail && e.detail.delta) {
       xpBtnEl.classList.remove('xp-bump-up', 'xp-bump-down');
