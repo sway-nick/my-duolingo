@@ -166,7 +166,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         <div class="rule-chip">🎯 Квиз <strong>+1 XP</strong></div>
         <div class="rule-chip">🧩 Пары без ошибок <strong>+1 XP</strong></div>
         <div class="rule-chip">✍️ Тест <strong>+3 XP</strong></div>
-        <div class="rule-chip error-chip">❌ Ошибка <strong>-1 XP</strong></div>
+        <div class="rule-chip error-chip">Ошибка <strong class="error-xp-val">-1 XP</strong></div>
       </div>
 
       <!-- Instant 0ms Content -->

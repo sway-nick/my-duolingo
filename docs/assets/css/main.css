@@ -2155,13 +2155,23 @@ body {
 .rule-chip.error-chip {
   border-color: #e2e8f0;
   background: #ffffff;
-  color: #ef4444;
+  color: var(--text-main);
 }
 
 .dark-theme .rule-chip.error-chip {
   background: #0f172a;
   border-color: #334155;
+  color: #f1f5f9;
+}
+
+.rule-chip.error-chip .error-xp-val {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.dark-theme .rule-chip.error-chip .error-xp-val {
   color: #f87171;
+  margin-left: 4px;
 }
 
 /* Podium Top 4 Grid */
