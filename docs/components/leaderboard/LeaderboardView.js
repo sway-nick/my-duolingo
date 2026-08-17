@@ -1,4 +1,4 @@
-import { getLeaderboard, getIsoWeekKey } from '../../services/api.js?v=16.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey } from '../../services/api.js?v=16.0';
 import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=16.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 
@@ -18,20 +18,16 @@ function getTimeUntilSundayEnd() {
 
 function renderPodiumCard(player, rank) {
   let badgeIcon = '💎';
-  let badgeLabel = 'Алмаз';
   let rankClass = 'rank-diamond';
 
   if (rank === 2) {
     badgeIcon = '🥇';
-    badgeLabel = 'Золото';
     rankClass = 'rank-gold';
   } else if (rank === 3) {
     badgeIcon = '🥈';
-    badgeLabel = 'Серебро';
     rankClass = 'rank-silver';
   } else if (rank === 4) {
     badgeIcon = '🥉';
-    badgeLabel = 'Бронза';
     rankClass = 'rank-bronze';
   }
 
@@ -58,12 +54,97 @@ function renderPodiumCard(player, rank) {
   `;
 }
 
+function buildLeaderboardBodyHtml(players, currentUser) {
+  const top4 = players.slice(0, 4);
+  const rest = players.slice(4);
+
+  const myRankIndex = players.findIndex((p) => p.isCurrentUser);
+  const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
+  const myPlayer = myRankIndex >= 0 ? players[myRankIndex] : null;
+
+  const podiumHtml = `
+    <div class="podium-grid">
+      ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
+    </div>
+  `;
+
+  let restListHtml = '';
+  if (rest.length > 0) {
+    restListHtml = `
+      <div class="leaderboard-table">
+        ${rest
+          .map((p, idx) => {
+            const rank = idx + 5;
+            const isMe = p.isCurrentUser;
+            const avatarSrc = p.avatar || '';
+            const initial = p.name ? p.name.trim().charAt(0).toUpperCase() : '👤';
+
+            return `
+            <div class="leaderboard-row ${isMe ? 'is-me' : ''}">
+              <div class="row-rank">#${rank}</div>
+              <div class="row-avatar-wrapper">
+                ${
+                  avatarSrc
+                    ? `<img src="${avatarSrc}" alt="${p.name}" class="row-avatar-img" />`
+                    : `<div class="row-avatar-placeholder">${initial}</div>`
+                }
+              </div>
+              <div class="row-name">
+                ${p.name || 'Ученик'}${isMe ? ' <span class="me-tag">(Вы)</span>' : ''}
+              </div>
+              <div class="row-xp">${p.xp} XP</div>
+            </div>
+          `;
+          })
+          .join('')}
+      </div>
+    `;
+  }
+
+  let myStickyBarHtml = '';
+  if (myPlayer && (myRank > 4 || !currentUser)) {
+    const myAvatar = getUserAvatar();
+    myStickyBarHtml = `
+      <div class="my-leaderboard-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="my-rank-badge">#${myRank || '-'}</span>
+          ${
+            myAvatar
+              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" />`
+              : `<div class="my-bar-avatar-placeholder">${currentUser && currentUser.name ? currentUser.name.charAt(0) : '👤'}</div>`
+          }
+          <div>
+            <div style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : 'Вы (Гость)'}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">
+              ${currentUser ? 'Ваш текущий результат' : 'Войдите, чтобы закрепить результат'}
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="my-bar-xp">${myPlayer.xp} XP</span>
+          ${
+            !currentUser
+              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">Войти</button>`
+              : ''
+          }
+        </div>
+      </div>
+    `;
+  }
+
+  return `${podiumHtml}${restListHtml}${myStickyBarHtml}`;
+}
+
 async function renderLeaderboardView(containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
   const currentUser = getCurrentUser();
   const weekTime = getTimeUntilSundayEnd();
+
+  // 1. Instant 0ms cached data load
+  const cachedRes = getCachedLeaderboard();
+  const initialPlayers = cachedRes.data || [];
 
   container.innerHTML = `
     <div class="leaderboard-page">
@@ -89,105 +170,16 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         <div class="rule-chip error-chip">❌ Ошибка <strong>-1 XP</strong></div>
       </div>
 
-      <!-- Loading skeleton -->
+      <!-- Instant 0ms Content -->
       <div id="leaderboard-content" style="min-height: 280px;">
-        <div style="text-align: center; padding: 40px 0; color: var(--text-muted);">
-          Загрузка рейтинга...
-        </div>
+        ${buildLeaderboardBodyHtml(initialPlayers, currentUser)}
       </div>
     </div>
   `;
 
   const contentEl = container.querySelector('#leaderboard-content');
 
-  try {
-    const res = await getLeaderboard();
-    const players = res.data || [];
-
-    const top4 = players.slice(0, 4);
-    const rest = players.slice(4);
-
-    const myRankIndex = players.findIndex((p) => p.isCurrentUser);
-    const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
-    const myPlayer = myRankIndex >= 0 ? players[myRankIndex] : null;
-
-    let podiumHtml = `
-      <div class="podium-grid">
-        ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
-      </div>
-    `;
-
-    let restListHtml = '';
-    if (rest.length > 0) {
-      restListHtml = `
-        <div class="leaderboard-table">
-          ${rest
-            .map((p, idx) => {
-              const rank = idx + 5;
-              const isMe = p.isCurrentUser;
-              const avatarSrc = p.avatar || '';
-              const initial = p.name ? p.name.trim().charAt(0).toUpperCase() : '👤';
-
-              return `
-              <div class="leaderboard-row ${isMe ? 'is-me' : ''}">
-                <div class="row-rank">#${rank}</div>
-                <div class="row-avatar-wrapper">
-                  ${
-                    avatarSrc
-                      ? `<img src="${avatarSrc}" alt="${p.name}" class="row-avatar-img" />`
-                      : `<div class="row-avatar-placeholder">${initial}</div>`
-                  }
-                </div>
-                <div class="row-name">
-                  ${p.name || 'Ученик'}${isMe ? ' <span class="me-tag">(Вы)</span>' : ''}
-                </div>
-                <div class="row-xp">${p.xp} XP</div>
-              </div>
-            `;
-            })
-            .join('')}
-        </div>
-      `;
-    }
-
-    let myStickyBarHtml = '';
-    if (myPlayer && (myRank > 4 || !currentUser)) {
-      const myAvatar = getUserAvatar();
-      myStickyBarHtml = `
-        <div class="my-leaderboard-bar">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="my-rank-badge">#${myRank || '-'}</span>
-            ${
-              myAvatar
-                ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" />`
-                : `<div class="my-bar-avatar-placeholder">${currentUser && currentUser.name ? currentUser.name.charAt(0) : '👤'}</div>`
-            }
-            <div>
-              <div style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : 'Вы (Гость)'}</div>
-              <div style="font-size: 12px; color: var(--text-muted);">
-                ${currentUser ? 'Ваш текущий результат' : 'Войдите, чтобы закрепить результат'}
-              </div>
-            </div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="my-bar-xp">${myPlayer.xp} XP</span>
-            ${
-              !currentUser
-                ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">Войти</button>`
-                : ''
-            }
-          </div>
-        </div>
-      `;
-    }
-
-    contentEl.innerHTML = `
-      ${podiumHtml}
-      ${restListHtml}
-      ${myStickyBarHtml}
-    `;
-
-    // Login prompt listener
+  function bindListeners() {
     const loginBtn = contentEl.querySelector('#leaderboard-login-btn');
     if (loginBtn) {
       loginBtn.addEventListener('click', () => {
@@ -197,13 +189,17 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         });
       });
     }
-  } catch (e) {
-    contentEl.innerHTML = `
-      <div class="empty-state-card" style="text-align: center; padding: 30px;">
-        <p style="color: var(--text-muted);">Не удалось загрузить данные рейтинга.</p>
-      </div>
-    `;
   }
+
+  bindListeners();
+
+  // 2. Background fresh sync (non-blocking)
+  getLeaderboard().then((freshRes) => {
+    if (freshRes && freshRes.data && contentEl) {
+      contentEl.innerHTML = buildLeaderboardBodyHtml(freshRes.data, currentUser);
+      bindListeners();
+    }
+  }).catch(() => {});
 }
 
 export { renderLeaderboardView };

@@ -324,7 +324,7 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
   } catch (e) {}
 }
 
-async function getLeaderboard(weekKey = null) {
+function getCachedLeaderboard(weekKey = null) {
   const wKey = weekKey || getIsoWeekKey();
   const currentUser = getCurrentUser();
   const currentUserId = getEffectiveUserId();
@@ -334,14 +334,9 @@ async function getLeaderboard(weekKey = null) {
 
   let list = [];
   try {
-    const res = await fetch(`${API_URL}?route=leaderboard&weekKey=${wKey}`);
-    const data = await res.json();
-    if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
-      list = data.data;
-    }
-  } catch (e) {
-    console.warn('Leaderboard API fetch error:', e);
-  }
+    const raw = localStorage.getItem(`cache_leaderboard_${wKey}`);
+    if (raw) list = JSON.parse(raw);
+  } catch (e) {}
 
   if (!list || list.length === 0) {
     // Engaging realistic initial league participants
@@ -378,6 +373,27 @@ async function getLeaderboard(weekKey = null) {
   list.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
 
   return { success: true, data: list, weekKey: wKey, userXP };
+}
+
+async function getLeaderboard(weekKey = null) {
+  const wKey = weekKey || getIsoWeekKey();
+  const cached = getCachedLeaderboard(wKey);
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3500);
+    const res = await fetch(`${API_URL}?route=leaderboard&weekKey=${wKey}`, { signal: controller.signal });
+    clearTimeout(timer);
+    const data = await res.json();
+    if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(data.data));
+      return getCachedLeaderboard(wKey);
+    }
+  } catch (e) {
+    // Graceful fallback to instant cache on network timeout
+  }
+
+  return cached;
 }
 
 function getUserProgress() {
@@ -824,6 +840,7 @@ export {
   resetWordsProgressForPractice,
   getEffectiveUserId,
   getLeaderboard,
+  getCachedLeaderboard,
   getUserWeeklyXP,
   addWeeklyXP,
   getIsoWeekKey,
