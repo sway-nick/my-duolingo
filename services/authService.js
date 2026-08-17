@@ -191,6 +191,8 @@ function compressAndCropAvatar(file, size = 128) {
   });
 }
 
+const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png`);
+
 export {
   getCurrentUser,
   setCurrentUser,
@@ -207,4 +209,5 @@ export {
   saveUserAvatar,
   removeUserAvatar,
   compressAndCropAvatar,
+  VECTOR_AVATARS,
 };
