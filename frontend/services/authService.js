@@ -132,7 +132,12 @@ function getAuthToken() {
 function getUserAvatar(targetUserId) {
   const userId = targetUserId || getEffectiveUserId();
   const saved = localStorage.getItem(`avatar_${userId}`);
-  if (saved) return saved;
+  if (saved) {
+    if (saved.startsWith('./assets/avatars/avatar_') && !saved.includes('?v=')) {
+      return `${saved}?v=18.0`;
+    }
+    return saved;
+  }
   const user = getCurrentUser();
   if (user && (user.picture || user.avatar)) {
     return user.picture || user.avatar;
@@ -195,7 +200,7 @@ function compressAndCropAvatar(file, size = 128) {
   });
 }
 
-const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png`);
+const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png?v=18.0`);
 
 export {
   getCurrentUser,

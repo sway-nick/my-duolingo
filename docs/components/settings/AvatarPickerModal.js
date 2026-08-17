@@ -24,7 +24,7 @@ function renderAvatarPickerModal(onAvatarSelected = () => {}) {
 
       <div class="avatar-grid-picker">
         ${VECTOR_AVATARS.map((avatarPath, index) => {
-          const isSelected = currentAvatar === avatarPath;
+          const isSelected = Boolean(currentAvatar && (currentAvatar === avatarPath || currentAvatar.split('?')[0] === avatarPath.split('?')[0]));
           return `
             <div class="avatar-grid-item ${isSelected ? 'selected' : ''}" data-path="${avatarPath}" role="button" tabindex="0" title="Персонаж ${index + 1}">
               <img src="${avatarPath}" alt="Аватар ${index + 1}" class="avatar-grid-img" />
