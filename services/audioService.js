@@ -193,7 +193,7 @@ function setSavedVoiceGender(gender) {
 }
 
 const MALE_VOICE_KEYWORDS = [
-  'google uk english male', 'microsoft david', 'david', 'microsoft guy', 'guy',
+  'microsoft david', 'david', 'microsoft guy', 'guy', 'google uk english male',
   'microsoft mark', 'mark', 'daniel', 'alex', 'george', 'arthur', 'fred',
   'ryan', 'oliver', 'stefan', 'thomas', 'matthew', 'james', 'john', 'richard',
   'brian', 'steven', 'tom', 'steve', 'martin', 'male', 'en-us-x-sfg#male',
@@ -201,10 +201,10 @@ const MALE_VOICE_KEYWORDS = [
 ];
 
 const FEMALE_VOICE_KEYWORDS = [
-  'microsoft zira', 'zira', 'microsoft jenny', 'jenny', 'samantha', 'victoria',
-  'karen', 'aria', 'susan', 'catherine', 'fiona', 'hazel', 'moira', 'tessa', 'ava',
-  'allison', 'kate', 'google us english', 'google uk english female', 'female',
-  'en-us-x-sfg#female', 'en-us-x-tpf#female'
+  'google us english', 'microsoft zira', 'microsoft jenny', 'zira', 'jenny',
+  'samantha', 'victoria', 'karen', 'aria', 'susan', 'catherine', 'fiona',
+  'hazel', 'moira', 'tessa', 'ava', 'allison', 'kate', 'google uk english female',
+  'female', 'en-us-x-sfg#female', 'en-us-x-tpf#female'
 ];
 
 function getPreferredVoice(gender = 'female') {
@@ -288,10 +288,10 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     }
 
     if (gender === 'male') {
-      utterance.pitch = 0.70; // Deep, solid masculine baritone
-      utterance.rate = isTurtleMode ? 0.38 : 0.80;
+      utterance.pitch = 0.85; // Warm, natural masculine depth without synthetic distortion
+      utterance.rate = isTurtleMode ? 0.40 : 0.82;
     } else {
-      utterance.pitch = 1.05; // Natural, clear feminine tone
+      utterance.pitch = 1.0; // 100% natural, clear, pleasant feminine tone
       utterance.rate = isTurtleMode ? 0.40 : 0.84;
     }
 
