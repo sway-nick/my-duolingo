@@ -1,5 +1,5 @@
-import { speakWord } from '../../services/audioService.js?v=14.0';
-import { toggleFavoriteApi } from '../../services/api.js?v=14.0';
+import { speakWord } from '../../services/audioService.js?v=16.0';
+import { toggleFavoriteApi } from '../../services/api.js?v=16.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -54,7 +54,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
               <button class="sound-button-sm" data-word="${word.word}" data-id="${word.id}">🔊 Слушать</button>
             </div>
           </div>
-        `,
+        `
           )
           .join('')}
       </div>
@@ -66,30 +66,37 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     onStartFavoritePractice(favoriteWords);
   });
 
-  // Bind sound buttons
-  container.querySelectorAll('.sound-button-sm').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      const w = e.target.getAttribute('data-word');
-      const id = e.target.getAttribute('data-id');
-      speakWord(w, id);
-    });
-  });
+  // High-performance single event delegation on grid
+  const favGrid = container.querySelector('#favorites-grid');
+  if (favGrid) {
+    favGrid.addEventListener('click', async (e) => {
+      // 1. Audio button
+      const soundBtn = e.target.closest('.sound-button-sm');
+      if (soundBtn) {
+        e.stopPropagation();
+        const w = soundBtn.getAttribute('data-word');
+        const id = soundBtn.getAttribute('data-id');
+        speakWord(w, id);
+        return;
+      }
 
-  // Bind remove favorite buttons
-  container.querySelectorAll('.remove-fav-btn').forEach((btn) => {
-    btn.addEventListener('click', async (e) => {
-      const id = e.target.getAttribute('data-id');
-      await toggleFavoriteApi(id, false);
-      const card = container.querySelector(`.fav-card[data-id="${id}"]`);
-      if (card) card.remove();
-      onRemoveFavorite(id);
+      // 2. Remove favorite button
+      const removeBtn = e.target.closest('.remove-fav-btn');
+      if (removeBtn) {
+        e.stopPropagation();
+        const id = removeBtn.getAttribute('data-id');
+        await toggleFavoriteApi(id, false);
+        const card = container.querySelector(`.fav-card[data-id="${id}"]`);
+        if (card) card.remove();
+        onRemoveFavorite(id);
 
-      const remainingCards = container.querySelectorAll('.fav-card');
-      if (remainingCards.length === 0) {
-        renderFavoritesView([], containerSelector, options);
+        const remainingCards = container.querySelectorAll('.fav-card');
+        if (remainingCards.length === 0) {
+          renderFavoritesView([], containerSelector, options);
+        }
       }
     });
-  });
+  }
 }
 
 export { renderFavoritesView };

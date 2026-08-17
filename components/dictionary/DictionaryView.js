@@ -1,11 +1,13 @@
-import { speakWord } from '../../services/audioService.js?v=10.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered } from '../../services/api.js?v=10.0';
+import { speakWord } from '../../services/audioService.js?v=16.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered } from '../../services/api.js?v=16.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
-  return String(cat)
-    .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
-    .trim() || String(cat).trim();
+  return (
+    String(cat)
+      .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
+      .trim() || String(cat).trim()
+  );
 }
 
 function formatWordCount(count) {
@@ -15,6 +17,50 @@ function formatWordCount(count) {
   if (mod10 === 1) return `${count} слово`;
   if (mod10 >= 2 && mod10 <= 4) return `${count} слова`;
   return `${count} слов`;
+}
+
+const BATCH_SIZE = 35; // Render 35 cards at a time for instant 60fps performance
+
+function renderWordCardHtml(w, isFav, prog) {
+  const isMastered = isWordMastered(prog);
+  const cleanCat = sanitizeCategory(w.category);
+  const quizCount = prog?.quizCorrect || 0;
+  const pairsCount = prog?.pairsCorrect || 0;
+  const testCount = prog?.inputCorrect || 0;
+  const seen = prog?.seenInCards;
+
+  let stageBadge = '';
+  if (isMastered) {
+    stageBadge = `<span class="mastered-badge">🏆 Выучено</span>`;
+  } else if (pairsCount >= 5) {
+    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/3</span>`;
+  } else if (quizCount >= 5) {
+    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/5</span>`;
+  } else if (seen) {
+    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
+  }
+
+  return `
+    <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
+      <div class="dict-card-header">
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <span class="category-badge">${cleanCat}</span>
+          ${stageBadge}
+        </div>
+        <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
+          ${isFav ? '❤️' : '🤍'}
+        </button>
+      </div>
+      
+      <div class="dict-card-body">
+        <h3>${w.word}</h3>
+        <p class="dict-transcription">${w.transcription || ''}</p>
+        <p class="dict-translation">${w.translation}</p>
+      </div>
+
+      <button class="sound-button-sm" data-word="${w.word}" data-id="${w.id}">🔊 Произношение</button>
+    </div>
+  `;
 }
 
 function renderDictionaryView(words = [], containerSelector = '#app-content', options = {}) {
@@ -37,7 +83,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
       <!-- Controls: Search & Category Filter -->
       <div class="dictionary-controls">
-        <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова" />
+        <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова" autocomplete="off" />
         
         <select id="dict-category" class="filter-select">
           <option value="All">Все категории</option>
@@ -45,16 +91,15 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       </div>
 
       <div class="dictionary-grid" id="dict-grid">
-        <!-- Rendered dynamically -->
+        <!-- Rendered in ultra-fast batches -->
       </div>
+      <div id="dict-scroll-sentinel" style="height: 40px; text-align: center; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px;"></div>
     </div>
   `;
 
-  // Populate categories without numbers in parentheses
+  // Populate categories
   const categorySelect = container.querySelector('#dict-category');
-  const uniqueCats = Array.from(
-    new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean))
-  );
+  const uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
   uniqueCats.forEach((cat) => {
     const opt = document.createElement('option');
     opt.value = cat;
@@ -74,117 +119,147 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const grid = container.querySelector('#dict-grid');
   const searchInput = container.querySelector('#dict-search');
   const wordCountEl = container.querySelector('#dict-word-count');
+  const sentinel = container.querySelector('#dict-scroll-sentinel');
 
-  const renderList = () => {
-    const query = searchInput.value.trim().toLowerCase();
-    const selectedCat = categorySelect.value;
+  let filteredWords = [];
+  let renderedCount = 0;
+  let observer = null;
 
-    const filtered = words.filter((w) => {
-      const catClean = sanitizeCategory(w.category);
-      const matchQuery =
-        !query ||
-        w.word.toLowerCase().includes(query) ||
-        w.translation.toLowerCase().includes(query);
-      const matchCat = selectedCat === 'All' || catClean === selectedCat;
-      return matchQuery && matchCat;
-    });
-
-    // Update dynamically to show count of words in selected category/filter
-    if (wordCountEl) {
-      wordCountEl.textContent = formatWordCount(filtered.length);
-    }
-
-    if (filtered.length === 0) {
-      grid.innerHTML = '<p class="empty-state">Слова не найдены.</p>';
+  function renderBatch() {
+    if (renderedCount >= filteredWords.length) {
+      if (sentinel) sentinel.style.display = 'none';
       return;
     }
 
-    grid.innerHTML = filtered
+    const nextBatch = filteredWords.slice(renderedCount, renderedCount + BATCH_SIZE);
+    const fragmentHtml = nextBatch
       .map((w) => {
         const isFav = favSet.has(String(w.id));
         const prog =
           userProgress[w.id] ||
           userProgress[String(w.id)] ||
           (w.word ? userProgress[w.word.toLowerCase().trim()] : null);
-
-        const isMastered = isWordMastered(prog);
-        const cleanCat = sanitizeCategory(w.category);
-        const quizCount = prog?.quizCorrect || 0;
-        const pairsCount = prog?.pairsCorrect || 0;
-        const testCount = prog?.inputCorrect || 0;
-        const seen = prog?.seenInCards;
-
-        let stageBadge = '';
-        if (isMastered) {
-          stageBadge = `<span class="mastered-badge">🏆 Выучено</span>`;
-        } else if (pairsCount >= 5) {
-          stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/3</span>`;
-        } else if (quizCount >= 5) {
-          stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/5</span>`;
-        } else if (seen) {
-          stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
-        }
-
-        return `
-        <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
-          <div class="dict-card-header">
-            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-              <span class="category-badge">${cleanCat}</span>
-              ${stageBadge}
-            </div>
-            <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
-              ${isFav ? '❤️' : '🤍'}
-            </button>
-          </div>
-          
-          <div class="dict-card-body">
-            <h3>${w.word}</h3>
-            <p class="dict-transcription">${w.transcription || ''}</p>
-            <p class="dict-translation">${w.translation}</p>
-          </div>
-
-          <button class="sound-button-sm" data-word="${w.word}" data-id="${w.id}">🔊 Произношение</button>
-        </div>
-      `;
+        return renderWordCardHtml(w, isFav, prog);
       })
       .join('');
 
-    // Bind audio listeners
-    grid.querySelectorAll('.sound-button-sm').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        const word = e.target.getAttribute('data-word');
-        const id = e.target.getAttribute('data-id');
-        speakWord(word, id);
+    grid.insertAdjacentHTML('beforeend', fragmentHtml);
+    renderedCount += nextBatch.length;
+
+    if (sentinel) {
+      if (renderedCount < filteredWords.length) {
+        sentinel.style.display = 'flex';
+        sentinel.textContent = 'Загрузка слов...';
+      } else {
+        sentinel.style.display = 'none';
+      }
+    }
+  }
+
+  function setupInfiniteScroll() {
+    if (observer) observer.disconnect();
+    if (!sentinel) return;
+
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && renderedCount < filteredWords.length) {
+            renderBatch();
+          }
+        },
+        { rootMargin: '250px' }
+      );
+      observer.observe(sentinel);
+    } else {
+      // Fallback scroll listener
+      window.addEventListener('scroll', () => {
+        if (
+          window.innerHeight + window.scrollY >= document.body.offsetHeight - 300 &&
+          renderedCount < filteredWords.length
+        ) {
+          renderBatch();
+        }
       });
+    }
+  }
+
+  const filterAndResetList = () => {
+    const query = searchInput.value.trim().toLowerCase();
+    const selectedCat = categorySelect.value;
+
+    filteredWords = words.filter((w) => {
+      const catClean = sanitizeCategory(w.category);
+      const matchQuery =
+        !query ||
+        (w.word && w.word.toLowerCase().includes(query)) ||
+        (w.translation && w.translation.toLowerCase().includes(query));
+      const matchCat = selectedCat === 'All' || catClean === selectedCat;
+      return matchQuery && matchCat;
     });
 
-    // Bind favorite listeners
-    grid.querySelectorAll('.fav-icon-btn').forEach((btn) => {
-      btn.addEventListener('click', async (e) => {
-        const id = e.target.getAttribute('data-id');
-        const isCurrentlyFav = favSet.has(String(id));
-        const nextFav = !isCurrentlyFav;
+    if (wordCountEl) {
+      wordCountEl.textContent = formatWordCount(filteredWords.length);
+    }
 
-        if (nextFav) favSet.add(String(id));
-        else favSet.delete(String(id));
+    grid.innerHTML = '';
+    renderedCount = 0;
 
-        btn.textContent = nextFav ? '❤️' : '🤍';
-        btn.classList.toggle('active', nextFav);
+    if (filteredWords.length === 0) {
+      grid.innerHTML = '<p class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px 0;">Слова не найдены.</p>';
+      if (sentinel) sentinel.style.display = 'none';
+      return;
+    }
 
-        await toggleFavoriteApi(id, nextFav);
-        onFavoriteToggle(id, nextFav);
-      });
-    });
+    // Render initial fast batch (instant page load)
+    renderBatch();
+    setupInfiniteScroll();
   };
 
-  searchInput.addEventListener('input', renderList);
-  categorySelect.addEventListener('change', () => {
-    // Remember chosen category persistently
-    localStorage.setItem('myduo_dict_category', categorySelect.value);
-    renderList();
+  // High-performance Event Delegation on grid (zero individual listeners)
+  grid.addEventListener('click', async (e) => {
+    // 1. Audio button click
+    const soundBtn = e.target.closest('.sound-button-sm');
+    if (soundBtn) {
+      e.stopPropagation();
+      const word = soundBtn.getAttribute('data-word');
+      const id = soundBtn.getAttribute('data-id');
+      speakWord(word, id);
+      return;
+    }
+
+    // 2. Favorite button click
+    const favBtn = e.target.closest('.fav-icon-btn');
+    if (favBtn) {
+      e.stopPropagation();
+      const id = favBtn.getAttribute('data-id');
+      const isCurrentlyFav = favSet.has(String(id));
+      const nextFav = !isCurrentlyFav;
+
+      if (nextFav) favSet.add(String(id));
+      else favSet.delete(String(id));
+
+      favBtn.textContent = nextFav ? '❤️' : '🤍';
+      favBtn.classList.toggle('active', nextFav);
+
+      await toggleFavoriteApi(id, nextFav);
+      onFavoriteToggle(id, nextFav);
+    }
   });
 
-  renderList();
+  // Debounced search input
+  let searchTimeout = null;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(filterAndResetList, 120);
+  });
+
+  categorySelect.addEventListener('change', () => {
+    localStorage.setItem('myduo_dict_category', categorySelect.value);
+    filterAndResetList();
+  });
+
+  // Initial fast render
+  filterAndResetList();
 }
 
-export { renderDictionaryView, sanitizeCategory };
+export { renderDictionaryView };
