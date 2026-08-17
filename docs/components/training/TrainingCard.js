@@ -270,8 +270,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         await saveProgress(currentWord.id, isCorrect, 'quiz');
 
-        // Exact delay: 1s (1000ms) on correct, 2s (2000ms) on error
-        const delay = isCorrect ? 1000 : 2000;
+        // Exact delay: 1s (1000ms) on correct, 4s (4000ms) on error (doubled for comfortable reading)
+        const delay = isCorrect ? 1000 : 4000;
         setTimeout(() => {
           onNext();
         }, delay);
@@ -509,8 +509,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // Exact delay: 1s (1000ms) on correct, 2s (2000ms) on error
-      const delay = isCorrect ? (inputCount >= 3 ? 1500 : 1000) : 2000;
+      // Exact delay: 1s (1000ms) on correct, 4s (4000ms) on error (doubled for comfortable reading)
+      const delay = isCorrect ? (inputCount >= 3 ? 1500 : 1000) : 4000;
       setTimeout(() => {
         onNext();
       }, delay);
