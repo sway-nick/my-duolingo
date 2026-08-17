@@ -277,13 +277,116 @@ async function googleAuthUser(email, name, avatar) {
   };
 }
 
+function getIsoWeekKey(d = new Date()) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+}
+
+function getUserWeeklyXP(userId = null, weekKey = null) {
+  const uId = userId || getEffectiveUserId();
+  const wKey = weekKey || getIsoWeekKey();
+  const key = `xp_${uId}_${wKey}`;
+  return Math.max(0, Number(localStorage.getItem(key) || 0));
+}
+
+function addWeeklyXP(delta, userId = null, weekKey = null) {
+  const uId = userId || getEffectiveUserId();
+  const wKey = weekKey || getIsoWeekKey();
+  const key = `xp_${uId}_${wKey}`;
+  const current = Math.max(0, Number(localStorage.getItem(key) || 0));
+  const next = Math.max(0, current + delta);
+  localStorage.setItem(key, String(next));
+
+  // Sync to backend asynchronously
+  const user = getCurrentUser();
+  const userName = user && user.name ? user.name : 'Гость';
+  const avatar = localStorage.getItem(`avatar_${uId}`) || (user && user.avatar) || '';
+
+  syncWeeklyXpApi(uId, wKey, next, userName, avatar);
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: next, delta } }));
+  }
+
+  return { currentXP: next, delta };
+}
+
+async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
+  try {
+    fetch(`${API_URL}?route=leaderboard`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ route: 'leaderboard', action: 'leaderboard', userId, weekKey, xp, name, avatar }),
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+async function getLeaderboard(weekKey = null) {
+  const wKey = weekKey || getIsoWeekKey();
+  const currentUser = getCurrentUser();
+  const currentUserId = getEffectiveUserId();
+  const userXP = getUserWeeklyXP(currentUserId, wKey);
+  const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
+  const userName = currentUser && currentUser.name ? currentUser.name : 'Вы (Гость)';
+
+  let list = [];
+  try {
+    const res = await fetch(`${API_URL}?route=leaderboard&weekKey=${wKey}`);
+    const data = await res.json();
+    if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      list = data.data;
+    }
+  } catch (e) {
+    console.warn('Leaderboard API fetch error:', e);
+  }
+
+  if (!list || list.length === 0) {
+    // Engaging realistic initial league participants
+    list = [
+      { userId: 'bot_1', name: 'Alex Smith', avatar: './assets/avatars/avatar_1.png', xp: 54 },
+      { userId: 'bot_2', name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.png', xp: 42 },
+      { userId: 'bot_3', name: 'Mark Davis', avatar: './assets/avatars/avatar_6.png', xp: 35 },
+      { userId: 'bot_4', name: 'Anna Novak', avatar: './assets/avatars/avatar_8.png', xp: 28 },
+      { userId: 'bot_5', name: 'Dmitry K.', avatar: './assets/avatars/avatar_11.png', xp: 21 },
+      { userId: 'bot_6', name: 'Sophie L.', avatar: './assets/avatars/avatar_14.png', xp: 16 },
+      { userId: 'bot_7', name: 'John Doe', avatar: './assets/avatars/avatar_2.png', xp: 11 },
+      { userId: 'bot_8', name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.png', xp: 6 },
+    ];
+  }
+
+  // Merge current user's profile and live XP
+  const myIdx = list.findIndex((u) => String(u.userId) === String(currentUserId));
+  if (myIdx >= 0) {
+    list[myIdx].xp = Math.max(Number(list[myIdx].xp || 0), userXP);
+    list[myIdx].name = userName;
+    if (userAvatar) list[myIdx].avatar = userAvatar;
+    list[myIdx].isCurrentUser = true;
+  } else {
+    list.push({
+      userId: currentUserId,
+      name: userName,
+      avatar: userAvatar,
+      xp: userXP,
+      isCurrentUser: true,
+    });
+  }
+
+  // Sort descending by XP
+  list.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+
+  return { success: true, data: list, weekKey: wKey, userXP };
+}
+
 function getUserProgress() {
   const userId = getEffectiveUserId();
   const key = `progress_${userId}`;
   return JSON.parse(localStorage.getItem(key) || '{}');
 }
 
-async function saveProgress(wordId, isCorrect, method = 'quiz') {
+async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   const userId = getEffectiveUserId();
 
   const key = `progress_${userId}`;
@@ -305,6 +408,9 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
   const prog = local[wordId];
   prog.lastPracticed = Date.now();
   let autoFavorited = false;
+
+  // Calculate XP change based on mode and correctness
+  let xpDelta = 0;
 
   if (method === 'cards_learn') {
     prog.seenInCards = true;
@@ -331,8 +437,10 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
       if (prog.quizCorrect >= 5) {
         prog.stage = 'pairs';
       }
+      xpDelta = 1; // +1 XP for correct quiz answer
     } else {
       prog.error = (prog.error || 0) + 1;
+      xpDelta = -1; // -1 XP for wrong quiz answer
     }
   } else if (method === 'pairs') {
     if (isCorrect) {
@@ -341,8 +449,12 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
       if (prog.pairsCorrect >= 2) {
         prog.stage = 'test';
       }
+      if (options && options.perfectRound) {
+        xpDelta = 1; // +1 XP for complete group of pairs without mistakes
+      }
     } else {
       prog.error = (prog.error || 0) + 1;
+      xpDelta = -1; // -1 XP for mistake in pairs
     }
   } else if (method === 'input') {
     if (isCorrect) {
@@ -352,6 +464,7 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
         prog.mastered = true;
         prog.stage = 'mastered';
       }
+      xpDelta = 3; // +3 XP for correct word typing
     } else {
       prog.error = (prog.error || 0) + 1;
       prog.inputMistakes = (prog.inputMistakes || 0) + 1;
@@ -359,7 +472,13 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
       }
+      xpDelta = -1; // -1 XP for wrong word typing
     }
+  }
+
+  let xpInfo = null;
+  if (xpDelta !== 0) {
+    xpInfo = addWeeklyXP(xpDelta, userId);
   }
 
   localStorage.setItem(key, JSON.stringify(local));
@@ -378,6 +497,7 @@ async function saveProgress(wordId, isCorrect, method = 'quiz') {
     hardCount: prog.hardCount || 0,
     mastered: prog.mastered || false,
     lastPracticed: prog.lastPracticed,
+    xpDelta,
   });
 
   if (pendingProgressQueue.length >= 5) {
@@ -703,4 +823,8 @@ export {
   saveUserSettings,
   resetWordsProgressForPractice,
   getEffectiveUserId,
+  getLeaderboard,
+  getUserWeeklyXP,
+  addWeeklyXP,
+  getIsoWeekKey,
 };

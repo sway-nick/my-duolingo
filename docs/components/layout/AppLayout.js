@@ -85,14 +85,17 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         <button class="nav-tab active" data-tab="training" title="Тренировка">
           <span class="tab-icon">🎓</span>
         </button>
+        <button class="nav-tab" data-tab="leaderboard" title="Рейтинг недели">
+          <span class="tab-icon">🏆</span>
+        </button>
+        <button class="nav-tab" data-tab="dictionary" title="Словарь">
+          <span class="tab-icon">📖</span>
+        </button>
         <button class="nav-tab" data-tab="favorites" title="Избранное">
           <span class="tab-icon">❤️</span>
         </button>
         <button class="nav-tab" data-tab="stats" title="Прогресс">
           <span class="tab-icon">📊</span>
-        </button>
-        <button class="nav-tab" data-tab="dictionary" title="Словарь">
-          <span class="tab-icon">📖</span>
         </button>
       </nav>
 

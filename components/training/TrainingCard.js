@@ -346,6 +346,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     let selectedLeft = null;
     let selectedRight = null;
     let matchedCount = 0;
+    let errorsInRound = 0;
     const totalPairs = roundWords.length;
 
     const leftBtns = practiceArea.querySelectorAll('.pairs-card[data-side="left"]');
@@ -378,6 +379,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         matchedCount++;
 
         if (matchedCount === totalPairs) {
+          // Award +1 XP if whole round was completed with 0 errors
+          await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
+
           // Authentic casino slot machine reel roll sound
           playCasinoRollSound();
 
@@ -401,10 +405,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }, 2050);
         }
       } else {
+        errorsInRound++;
         playErrorSound();
         curLeft.classList.add('wrong');
         curRight.classList.add('wrong');
-        await saveProgress(leftId, false, 'pairs');
+        // Deduct 1 XP for mistake
+        await saveProgress(leftId, false, 'pairs', { isPairMistake: true });
 
         // 3x Increased delay on wrong mismatch: 1950ms
         setTimeout(() => {

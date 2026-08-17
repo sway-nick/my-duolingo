@@ -49,6 +49,7 @@
       import { renderSettingsView } from './components/settings/SettingsView.js?v=16.0';
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=16.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=16.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=16.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=16.0';
 
       let allWords = [];
@@ -521,6 +522,13 @@
               } else {
                 renderTab('training');
               }
+            },
+          });
+        } else if (tabName === 'leaderboard') {
+          await renderLeaderboardView('#app-content', {
+            onUserChange: async () => {
+              updateHeaderUser();
+              await loadData();
             },
           });
         } else if (tabName === 'dictionary') {
