@@ -215,6 +215,14 @@ body.dark-theme,
   color: #f8fafc;
 }
 
+.dark-theme .theme-option-btn:hover:not(.active),
+.dark-theme .voice-option-btn:hover:not(.active),
+.dark-theme .sound-option-btn:hover:not(.active) {
+  background: #334155;
+  border-color: #475569;
+  color: #f8fafc;
+}
+
 .dark-theme .theme-option-btn.active,
 .dark-theme .voice-option-btn.active,
 .dark-theme .sound-option-btn.active {
