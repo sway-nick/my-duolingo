@@ -493,9 +493,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         input.classList.add('correct');
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
+
+        let successMsg = '';
+        if (favorited) {
+          successMsg = '✓ Правильно! Слово в Избранном ❤️';
+        } else if (inputCount >= 3) {
+          successMsg = '🎉 Слово выучено! (3/3) и убрано из обучения!';
+        } else {
+          successMsg = `✓ Верно! (${inputCount}/3 для выучивания)`;
+        }
+
         feedback.innerHTML = `
           <div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">
-            ${inputCount >= 3 ? '🎉 Слово выучено! (3/3) и убрано из обучения!' : `✓ Верно! (${inputCount}/3 для выучивания)`}
+            ${successMsg}
           </div>
         `;
       } else {
@@ -516,7 +526,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       // Exact delay: 1s (1000ms) on correct, 4s (4000ms) on error (doubled for comfortable reading)
-      const delay = isCorrect ? (inputCount >= 3 ? 1500 : 1000) : 4000;
+      const delay = isCorrect ? (inputCount >= 3 && !favorited ? 1500 : 1000) : 4000;
       setTimeout(() => {
         onNext();
       }, delay);
