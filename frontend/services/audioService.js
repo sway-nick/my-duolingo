@@ -192,26 +192,47 @@ function setSavedVoiceGender(gender) {
   } catch (e) {}
 }
 
+const ROBOTIC_NOVELTY_VOICES = [
+  'fred', 'albert', 'bad news', 'bahh', 'bells', 'boing', 'bubbles', 'cellos',
+  'deranged', 'good news', 'hysterical', 'pipe organ', 'trinoids', 'whisper',
+  'zarvox', 'junior', 'ralph', 'grandma', 'grandpa', 'organ'
+];
+
 const MALE_VOICE_KEYWORDS = [
-  'microsoft david', 'david', 'microsoft guy', 'guy', 'google uk english male',
-  'microsoft mark', 'mark', 'daniel', 'alex', 'george', 'arthur', 'fred',
-  'ryan', 'oliver', 'stefan', 'thomas', 'matthew', 'james', 'john', 'richard',
-  'brian', 'steven', 'tom', 'steve', 'martin', 'male', 'en-us-x-sfg#male',
-  'en-us-x-tpf#male', 'en-us-x-iom#male'
+  // Android Google TTS Male high-quality engines
+  'en-us-x-iom', 'en-us-x-tpf', 'en-gb-x-rjs', 'google uk english male', 'en-au-x-aub',
+  'en-in-x-cfl', 'en-us-x-sfg#male', 'en-us-x-tpf#male', 'en-us-x-iom#male',
+  // iOS / macOS natural Apple male voices
+  'aaron', 'arthur', 'daniel', 'rishi', 'oliver', 'gordon', 'george', 'nathan', 'evan',
+  // Windows / Desktop natural voices
+  'microsoft david', 'david', 'microsoft guy', 'guy', 'microsoft mark', 'mark',
+  'microsoft ryan', 'alex', 'matthew', 'james', 'john', 'richard', 'brian',
+  'steven', 'tom', 'steve', 'martin', 'male'
 ];
 
 const FEMALE_VOICE_KEYWORDS = [
-  'google us english', 'microsoft zira', 'microsoft jenny', 'zira', 'jenny',
-  'samantha', 'victoria', 'karen', 'aria', 'susan', 'catherine', 'fiona',
-  'hazel', 'moira', 'tessa', 'ava', 'allison', 'kate', 'google uk english female',
-  'female', 'en-us-x-sfg#female', 'en-us-x-tpf#female'
+  // Android Google TTS Female high-quality engines
+  'google us english', 'google uk english female', 'en-us-x-sfg', 'en-us-x-tpc',
+  'en-gb-x-fis', 'en-au-x-afh', 'en-us-x-sfg#female', 'en-us-x-tpf#female',
+  // iOS / macOS natural Apple female voices
+  'samantha', 'siri', 'karen', 'moira', 'tessa', 'fiona', 'victoria', 'ava',
+  'allison', 'kate', 'serena', 'stephanie', 'zoe', 'nicky',
+  // Windows / Desktop natural voices
+  'microsoft zira', 'zira', 'microsoft jenny', 'jenny', 'microsoft aria', 'aria',
+  'susan', 'catherine', 'hazel', 'female'
 ];
 
 function getPreferredVoice(gender = 'female') {
   loadVoices();
-  const englishVoices = cachedVoices.filter(
-    (v) => v.lang && (v.lang.toLowerCase().startsWith('en') || v.lang.toLowerCase().startsWith('en-'))
-  );
+  // Filter out non-English and legacy robotic voices
+  const englishVoices = cachedVoices.filter((v) => {
+    if (!v.lang || (!v.lang.toLowerCase().startsWith('en') && !v.lang.toLowerCase().startsWith('en-'))) {
+      return false;
+    }
+    const name = (v.name || '').toLowerCase();
+    return !ROBOTIC_NOVELTY_VOICES.some((rv) => name.includes(rv));
+  });
+
   if (englishVoices.length === 0) {
     if (cachedVoices.length === 0) return null;
     return cachedVoices[0];
@@ -220,13 +241,13 @@ function getPreferredVoice(gender = 'female') {
   const target = (gender || 'female').toLowerCase();
 
   if (target === 'male') {
-    // 1. Explicit male voice match by priority
+    // 1. Explicit male voice match by priority order
     for (const kw of MALE_VOICE_KEYWORDS) {
       const found = englishVoices.find((v) => (v.name || '').toLowerCase().includes(kw));
       if (found) return found;
     }
 
-    // 2. Non-female voice
+    // 2. Non-female voice fallback
     const nonFemale = englishVoices.find((v) => {
       const name = (v.name || '').toLowerCase();
       return !FEMALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
@@ -235,7 +256,7 @@ function getPreferredVoice(gender = 'female') {
 
     return englishVoices[0];
   } else {
-    // 1. Explicit female voice match by priority
+    // 1. Explicit female voice match by priority order
     for (const kw of FEMALE_VOICE_KEYWORDS) {
       const found = englishVoices.find((v) => (v.name || '').toLowerCase().includes(kw));
       if (found) return found;
@@ -287,13 +308,9 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
       if (voice.lang) utterance.lang = voice.lang;
     }
 
-    if (gender === 'male') {
-      utterance.pitch = 0.85; // Warm, natural masculine depth without synthetic distortion
-      utterance.rate = isTurtleMode ? 0.40 : 0.82;
-    } else {
-      utterance.pitch = 1.0; // 100% natural, clear, pleasant feminine tone
-      utterance.rate = isTurtleMode ? 0.40 : 0.84;
-    }
+    // Natural 1.0 pitch for 100% pure acoustic clarity without DSP robotic artifacts
+    utterance.pitch = 1.0;
+    utterance.rate = isTurtleMode ? 0.40 : (gender === 'male' ? 0.82 : 0.84);
 
     window.speechSynthesis.speak(utterance);
 
