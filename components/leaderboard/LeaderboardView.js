@@ -44,7 +44,6 @@ function renderPodiumCard(player, rank) {
             ? `<img src="${avatarSrc}" alt="${player.name}" class="podium-avatar-img" />`
             : `<div class="podium-avatar-placeholder">${initial}</div>`
         }
-        <span class="podium-rank-num">#${rank}</span>
       </div>
       <div class="podium-info">
         <h4 class="podium-name">${player.name || 'Ученик'}</h4>
