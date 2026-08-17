@@ -31,24 +31,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
               : `<div class="profile-avatar-placeholder">${user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤'}</div>`
           }
           <div class="avatar-edit-badge" title="Выбрать персонажа">🎭</div>
-          <input type="file" id="avatar-file-input" accept="image/png, image/jpeg, image/webp, image/gif, image/heic" style="display: none;" />
         </div>
         <div class="profile-details">
           <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : 'Гостевой режим'}</h3>
           <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : 'Авторизуйтесь для синхронизации'}</p>
-          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px;">
-            <button type="button" class="avatar-action-link" id="choose-character-btn">
-              🎭 Выбрать персонажа
-            </button>
-            <button type="button" class="avatar-action-link" id="upload-avatar-btn">
-              📁 Своё фото
-            </button>
-            ${
-              avatar
-                ? `<button type="button" class="avatar-action-link delete-link" id="delete-avatar-btn">✕ Удалить</button>`
-                : ''
-            }
-          </div>
         </div>
         <div>
           ${
@@ -145,70 +131,20 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const goalSelect = container.querySelector('#daily-goal-select');
   const autoSaveStatus = container.querySelector('#autosave-status');
 
-  // Bind Avatar Upload / Change / Remove / Character Picker
+  // Bind Avatar Picker on avatar click
   const avatarTrigger = container.querySelector('#change-avatar-trigger');
-  const chooseCharBtn = container.querySelector('#choose-character-btn');
-  const uploadAvatarBtn = container.querySelector('#upload-avatar-btn');
-  const fileInput = container.querySelector('#avatar-file-input');
-  const deleteAvatarBtn = container.querySelector('#delete-avatar-btn');
-
-  const openCharacterPicker = () => {
-    renderAvatarPickerModal(async () => {
-      if (autoSaveStatus) {
-        autoSaveStatus.textContent = '✓ Персонаж выбран';
-        autoSaveStatus.style.opacity = '1';
-        setTimeout(() => {
-          if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
-        }, 1500);
-      }
-      await renderSettingsView(containerSelector, onUserChange);
-    });
-  };
-
-  const openFilePicker = () => {
-    if (fileInput) fileInput.click();
-  };
-
-  if (avatarTrigger) avatarTrigger.addEventListener('click', openCharacterPicker);
-  if (chooseCharBtn) chooseCharBtn.addEventListener('click', openCharacterPicker);
-  if (uploadAvatarBtn) uploadAvatarBtn.addEventListener('click', openFilePicker);
-
-  if (fileInput) {
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      try {
+  if (avatarTrigger) {
+    avatarTrigger.addEventListener('click', () => {
+      renderAvatarPickerModal(async () => {
         if (autoSaveStatus) {
-          autoSaveStatus.textContent = 'Обработка фото...';
+          autoSaveStatus.textContent = '✓ Аватар обновлен';
           autoSaveStatus.style.opacity = '1';
-        }
-        const compressedBase64 = await compressAndCropAvatar(file, 128);
-        saveUserAvatar(getEffectiveUserId(), compressedBase64);
-        if (autoSaveStatus) {
-          autoSaveStatus.textContent = '✓ Аватар сохранен';
           setTimeout(() => {
             if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
           }, 1500);
         }
         await renderSettingsView(containerSelector, onUserChange);
-      } catch (err) {
-        console.error('Failed processing avatar image:', err);
-        alert('Не удалось загрузить изображение. Попробуйте другой файл (PNG, JPG, WebP).');
-      }
-    });
-  }
-
-  if (deleteAvatarBtn) {
-    deleteAvatarBtn.addEventListener('click', async () => {
-      removeUserAvatar(getEffectiveUserId());
-      if (autoSaveStatus) {
-        autoSaveStatus.textContent = '✓ Фото удалено';
-        autoSaveStatus.style.opacity = '1';
-        setTimeout(() => {
-          if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
-        }, 1500);
-      }
-      await renderSettingsView(containerSelector, onUserChange);
+      });
     });
   }
 

@@ -34,11 +34,16 @@ function renderAvatarPickerModal(onAvatarSelected = () => {}) {
         }).join('')}
       </div>
 
-      <div class="avatar-modal-footer">
-        <label class="primary-button btn-blue upload-custom-avatar-btn" style="display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin: 0;">
+      <div class="avatar-modal-footer" style="display: flex; flex-direction: column; gap: 8px; align-items: stretch;">
+        <label class="primary-button btn-blue upload-custom-avatar-btn" style="display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin: 0; width: 100%;">
           📁 Загрузить своё фото
           <input type="file" id="modal-avatar-file-input" accept="image/png, image/jpeg, image/webp, image/gif, image/heic" style="display: none;" />
         </label>
+        ${
+          currentAvatar
+            ? `<button class="secondary-button" id="modal-reset-avatar-btn" style="font-size: 12.5px; padding: 6px 12px; min-height: 34px; height: 34px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">✕ Сбросить на стандартный</button>`
+            : ''
+        }
       </div>
     </div>
   `;
@@ -66,6 +71,16 @@ function renderAvatarPickerModal(onAvatarSelected = () => {}) {
       }
     });
   });
+
+  // Reset avatar button handler
+  const resetBtn = modalOverlay.querySelector('#modal-reset-avatar-btn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      saveUserAvatar(getEffectiveUserId(), null);
+      onAvatarSelected(null);
+      closeModal();
+    });
+  }
 
   // Upload custom file handler
   const fileInput = modalOverlay.querySelector('#modal-avatar-file-input');
