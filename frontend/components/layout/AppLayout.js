@@ -2,6 +2,7 @@ import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT } from '../../s
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 
 let globalAuthChangedCallback = () => {};
+let globalTabChangeCallback = () => {};
 
 function getSavedTheme() {
   return localStorage.getItem('myduo_theme') || 'light';
@@ -28,6 +29,7 @@ function toggleTheme() {
 
 function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, onLogoClick = () => {}) {
   globalAuthChangedCallback = onUserAuthChanged;
+  globalTabChangeCallback = onTabChange;
 
   const app = document.querySelector('#app');
   const user = getCurrentUser();
@@ -51,8 +53,11 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         <div class="header-right-actions">
           ${
             user
-              ? `<button class="header-profile-badge" id="profile-btn" title="Ваш профиль">👤</button>`
-              : `<button class="header-auth-btn" id="login-header-btn">Войти</button>`
+              ? `<button class="header-profile-badge" id="profile-btn" title="Настройки">👤</button>`
+              : `<div style="display:flex; align-items:center; gap:8px;">
+                  <button class="header-auth-btn" id="login-header-btn">Войти</button>
+                  <button class="header-profile-badge" id="profile-btn" title="Настройки">⚙️</button>
+                </div>`
           }
         </div>
       </header>
@@ -114,8 +119,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const profileBtn = app.querySelector('#profile-btn');
   if (profileBtn) {
     profileBtn.addEventListener('click', () => {
-      tabs.forEach((t) => t.classList.remove('active'));
-      onTabChange('settings');
+      const navTabs = document.querySelectorAll('.nav-tab');
+      navTabs.forEach((t) => t.classList.remove('active'));
+      globalTabChangeCallback('settings');
     });
   }
 }
@@ -137,8 +143,11 @@ function updateHeaderUser(onUserAuthChanged) {
     actionsContainer.innerHTML = `
       ${
         user
-          ? `<button class="header-profile-badge" id="profile-btn" title="Ваш профиль">👤</button>`
-          : `<button class="header-auth-btn" id="login-header-btn">Войти</button>`
+          ? `<button class="header-profile-badge" id="profile-btn" title="Настройки">👤</button>`
+          : `<div style="display:flex; align-items:center; gap:8px;">
+              <button class="header-auth-btn" id="login-header-btn">Войти</button>
+              <button class="header-profile-badge" id="profile-btn" title="Настройки">⚙️</button>
+            </div>`
       }
     `;
 
@@ -155,8 +164,9 @@ function updateHeaderUser(onUserAuthChanged) {
     const profileBtn = actionsContainer.querySelector('#profile-btn');
     if (profileBtn) {
       profileBtn.addEventListener('click', () => {
-        const settingsTab = document.querySelector('.nav-tab[data-tab="settings"]');
-        if (settingsTab) settingsTab.click();
+        const navTabs = document.querySelectorAll('.nav-tab');
+        navTabs.forEach((t) => t.classList.remove('active'));
+        globalTabChangeCallback('settings');
       });
     }
   }
