@@ -456,7 +456,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       xpDelta = 1; // +1 XP for correct quiz answer
     } else {
       prog.error = (prog.error || 0) + 1;
-      xpDelta = -1; // -1 XP for wrong quiz answer
+      xpDelta = -5; // -5 XP for wrong quiz answer
     }
   } else if (method === 'pairs') {
     if (isCorrect) {
@@ -466,11 +466,11 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
         prog.stage = 'test';
       }
       if (options && options.perfectRound) {
-        xpDelta = 1; // +1 XP for complete group of pairs without mistakes
+        xpDelta = 3; // +3 XP for complete group of pairs without mistakes
       }
     } else {
       prog.error = (prog.error || 0) + 1;
-      xpDelta = -1; // -1 XP for mistake in pairs
+      xpDelta = -5; // -5 XP for mistake in pairs
     }
   } else if (method === 'input') {
     if (isCorrect) {
@@ -488,7 +488,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
       }
-      xpDelta = -1; // -1 XP for wrong word typing
+      xpDelta = -5; // -5 XP for wrong word typing
     }
   }
 
