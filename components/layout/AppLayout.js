@@ -1,4 +1,5 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=16.0';
+import { getUserWeeklyXP } from '../../services/api.js?v=16.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 
 let globalAuthChangedCallback = () => {};
@@ -29,6 +30,7 @@ function toggleTheme() {
 
 function renderHeaderRightActions(user) {
   const avatar = getUserAvatar();
+  const xp = getUserWeeklyXP();
   let badgeContent = '⚙️';
   let extraClass = '';
   if (avatar) {
@@ -38,11 +40,25 @@ function renderHeaderRightActions(user) {
     badgeContent = user.name.trim().charAt(0).toUpperCase();
   }
 
+  const xpBadgeHtml = `
+    <button class="header-xp-badge" id="header-xp-btn" title="Ваш недельный опыт (XP). Нажмите, чтобы открыть рейтинг">
+      <span class="xp-badge-icon">💎</span>
+      <span class="xp-badge-val" id="header-xp-val">${xp}</span>
+      <span class="xp-badge-unit">XP</span>
+    </button>
+  `;
+
   if (user) {
-    return `<button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>`;
+    return `
+      <div style="display:flex; align-items:center; gap:8px;">
+        ${xpBadgeHtml}
+        <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
+      </div>
+    `;
   }
   return `
     <div style="display:flex; align-items:center; gap:8px;">
+      ${xpBadgeHtml}
       <button class="header-auth-btn" id="login-header-btn">Войти</button>
       <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
     </div>
@@ -123,8 +139,22 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   });
 
-  // Bind auth buttons
-  const loginHeaderBtn = app.querySelector('#login-header-btn');
+  bindHeaderActionButtons(app);
+}
+
+function bindHeaderActionButtons(container) {
+  if (!container) return;
+
+  const xpBtn = container.querySelector('#header-xp-btn');
+  if (xpBtn) {
+    xpBtn.addEventListener('click', () => {
+      const navTabs = document.querySelectorAll('.nav-tab');
+      navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'leaderboard'));
+      globalTabChangeCallback('leaderboard');
+    });
+  }
+
+  const loginHeaderBtn = container.querySelector('#login-header-btn');
   if (loginHeaderBtn) {
     loginHeaderBtn.addEventListener('click', () => {
       renderAuthModal(async () => {
@@ -134,7 +164,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   }
 
-  const profileBtn = app.querySelector('#profile-btn');
+  const profileBtn = container.querySelector('#profile-btn');
   if (profileBtn) {
     profileBtn.addEventListener('click', () => {
       const navTabs = document.querySelectorAll('.nav-tab');
@@ -159,29 +189,11 @@ function updateHeaderUser(onUserAuthChanged) {
   const actionsContainer = document.querySelector('.header-right-actions');
   if (actionsContainer) {
     actionsContainer.innerHTML = renderHeaderRightActions(user);
-
-    const loginHeaderBtn = actionsContainer.querySelector('#login-header-btn');
-    if (loginHeaderBtn) {
-      loginHeaderBtn.addEventListener('click', () => {
-        renderAuthModal(async () => {
-          updateHeaderUser();
-          await globalAuthChangedCallback();
-        });
-      });
-    }
-
-    const profileBtn = actionsContainer.querySelector('#profile-btn');
-    if (profileBtn) {
-      profileBtn.addEventListener('click', () => {
-        const navTabs = document.querySelectorAll('.nav-tab');
-        navTabs.forEach((t) => t.classList.remove('active'));
-        globalTabChangeCallback('settings');
-      });
-    }
+    bindHeaderActionButtons(actionsContainer);
   }
 }
 
-// Automatically react to global auth & avatar changes anywhere in the app
+// Automatically react to global auth, avatar, and XP changes anywhere in the app
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:auth_changed', () => {
     updateHeaderUser();
@@ -192,6 +204,22 @@ if (typeof window !== 'undefined') {
 
   window.addEventListener('myduo:avatar_changed', () => {
     updateHeaderUser();
+  });
+
+  window.addEventListener('myduo:xp_changed', (e) => {
+    const xpValEl = document.querySelector('#header-xp-val');
+    const xpBtnEl = document.querySelector('#header-xp-btn');
+    if (xpValEl && e.detail && typeof e.detail.xp !== 'undefined') {
+      xpValEl.textContent = e.detail.xp;
+    }
+    if (xpBtnEl && e.detail && e.detail.delta) {
+      xpBtnEl.classList.remove('xp-bump-up', 'xp-bump-down');
+      void xpBtnEl.offsetWidth; // trigger reflow
+      xpBtnEl.classList.add(e.detail.delta > 0 ? 'xp-bump-up' : 'xp-bump-down');
+      setTimeout(() => {
+        xpBtnEl.classList.remove('xp-bump-up', 'xp-bump-down');
+      }, 700);
+    }
   });
 }
 
