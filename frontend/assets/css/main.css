@@ -2110,14 +2110,21 @@ body {
 }
 
 .scoring-rules-banner {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   margin-bottom: 16px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   background: #f8fafc;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
+  box-sizing: border-box;
+}
+
+@media (max-width: 440px) {
+  .scoring-rules-banner {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .dark-theme .scoring-rules-banner {
@@ -2129,9 +2136,14 @@ body {
   font-size: 12px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  padding: 3px 8px;
+  padding: 6px 4px;
   border-radius: 6px;
   color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .dark-theme .rule-chip {
@@ -2141,15 +2153,15 @@ body {
 }
 
 .rule-chip.error-chip {
-  border-color: #fca5a5;
-  background: #fef2f2;
-  color: #b91c1c;
+  border-color: #ef4444;
+  background: #ffffff;
+  color: #ef4444;
 }
 
 .dark-theme .rule-chip.error-chip {
-  background: rgba(239, 68, 68, 0.15);
+  background: #0f172a;
   border-color: #ef4444;
-  color: #fca5a5;
+  color: #f87171;
 }
 
 /* Podium Top 4 Grid */
@@ -2171,7 +2183,7 @@ body {
   background: #ffffff;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 14px 10px 12px;
+  padding: 14px 8px 12px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -2232,10 +2244,11 @@ body {
 
 .podium-badge {
   position: absolute;
-  top: -8px;
-  right: -6px;
-  font-size: 20px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  top: 6px;
+  right: 6px;
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
 }
 
 .podium-avatar-wrapper {
@@ -2293,14 +2306,26 @@ body {
   border-color: #1e293b;
 }
 
+.podium-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .podium-name {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
-  margin: 0 0 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100px;
+  margin: 0 0 4px;
+  width: 100%;
+  line-height: 1.25;
+  word-break: normal;
+  overflow-wrap: break-word;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .podium-xp {
