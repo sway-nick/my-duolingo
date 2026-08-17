@@ -1,4 +1,4 @@
-import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT } from '../../services/authService.js?v=16.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=16.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 
 let globalAuthChangedCallback = () => {};
@@ -27,6 +27,28 @@ function toggleTheme() {
   return next;
 }
 
+function renderHeaderRightActions(user) {
+  const avatar = getUserAvatar();
+  let badgeContent = '⚙️';
+  let extraClass = '';
+  if (avatar) {
+    badgeContent = `<img src="${avatar}" alt="Avatar" class="header-avatar-img" />`;
+    extraClass = 'has-avatar';
+  } else if (user && user.name) {
+    badgeContent = user.name.trim().charAt(0).toUpperCase();
+  }
+
+  if (user) {
+    return `<button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>`;
+  }
+  return `
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="header-auth-btn" id="login-header-btn">Войти</button>
+      <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
+    </div>
+  `;
+}
+
 function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, onLogoClick = () => {}) {
   globalAuthChangedCallback = onUserAuthChanged;
   globalTabChangeCallback = onTabChange;
@@ -51,14 +73,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
         
         <div class="header-right-actions">
-          ${
-            user
-              ? `<button class="header-profile-badge" id="profile-btn" title="Настройки">👤</button>`
-              : `<div style="display:flex; align-items:center; gap:8px;">
-                  <button class="header-auth-btn" id="login-header-btn">Войти</button>
-                  <button class="header-profile-badge" id="profile-btn" title="Настройки">⚙️</button>
-                </div>`
-          }
+          ${renderHeaderRightActions(user)}
         </div>
       </header>
 
@@ -140,16 +155,7 @@ function updateHeaderUser(onUserAuthChanged) {
 
   const actionsContainer = document.querySelector('.header-right-actions');
   if (actionsContainer) {
-    actionsContainer.innerHTML = `
-      ${
-        user
-          ? `<button class="header-profile-badge" id="profile-btn" title="Настройки">👤</button>`
-          : `<div style="display:flex; align-items:center; gap:8px;">
-              <button class="header-auth-btn" id="login-header-btn">Войти</button>
-              <button class="header-profile-badge" id="profile-btn" title="Настройки">⚙️</button>
-            </div>`
-      }
-    `;
+    actionsContainer.innerHTML = renderHeaderRightActions(user);
 
     const loginHeaderBtn = actionsContainer.querySelector('#login-header-btn');
     if (loginHeaderBtn) {
@@ -172,13 +178,17 @@ function updateHeaderUser(onUserAuthChanged) {
   }
 }
 
-// Automatically react to global auth changes anywhere in the app
+// Automatically react to global auth & avatar changes anywhere in the app
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:auth_changed', () => {
     updateHeaderUser();
     if (typeof globalAuthChangedCallback === 'function') {
       globalAuthChangedCallback();
     }
+  });
+
+  window.addEventListener('myduo:avatar_changed', () => {
+    updateHeaderUser();
   });
 }
 

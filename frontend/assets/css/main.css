@@ -1319,19 +1319,123 @@ body {
 
 .profile-card {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
 }
 
-.profile-avatar {
-  font-size: 24px;
-  background: #eff6ff;
-  width: 44px;
-  height: 44px;
+/* Avatar styles */
+.header-avatar-img {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.header-profile-badge.has-avatar {
+  padding: 0;
+  overflow: hidden;
+  border-color: #22c55e;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 2px solid var(--primary-color);
+  transition: filter 0.2s ease;
+}
+
+.profile-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: var(--text-main);
+  font-size: 22px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1.5px dashed var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.dark-theme .profile-avatar-placeholder {
+  background: #334155;
+  color: #f8fafc;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.15s ease;
+}
+
+.dark-theme .avatar-edit-badge {
+  border-color: #1e293b;
+}
+
+.profile-avatar-wrapper:hover .avatar-edit-badge {
+  transform: scale(1.15);
+}
+
+.profile-avatar-wrapper:hover .profile-avatar-img {
+  filter: brightness(0.9);
+}
+
+.profile-avatar-wrapper:hover .profile-avatar-placeholder {
+  border-color: var(--primary-color);
+  background: #eff6ff;
+}
+
+.dark-theme .profile-avatar-wrapper:hover .profile-avatar-placeholder {
+  background: #475569;
+}
+
+.avatar-action-link {
+  font-size: 12px;
+  color: var(--primary-color);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+}
+
+.avatar-action-link:hover {
+  opacity: 0.8;
+}
+
+.avatar-action-link.delete-link {
+  color: #ef4444;
 }
 
 .profile-details {

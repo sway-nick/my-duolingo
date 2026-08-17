@@ -125,8 +125,70 @@ function logoutUser() {
   setCurrentUser(null, null);
 }
 
-function getAuthToken() {
-  return localStorage.getItem(STORAGE_KEY_TOKEN) || null;
+function getUserAvatar(targetUserId) {
+  const userId = targetUserId || getEffectiveUserId();
+  const saved = localStorage.getItem(`avatar_${userId}`);
+  if (saved) return saved;
+  const user = getCurrentUser();
+  if (user && (user.picture || user.avatar)) {
+    return user.picture || user.avatar;
+  }
+  return null;
+}
+
+function saveUserAvatar(userId, base64Data) {
+  const id = userId || getEffectiveUserId();
+  if (!base64Data) {
+    localStorage.removeItem(`avatar_${id}`);
+  } else {
+    localStorage.setItem(`avatar_${id}`, base64Data);
+  }
+  try {
+    window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: id, avatar: base64Data } }));
+  } catch (e) {}
+}
+
+function removeUserAvatar(userId) {
+  saveUserAvatar(userId, null);
+}
+
+function compressAndCropAvatar(file, size = 128) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith('image/')) {
+      return reject(new Error('Selected file is not an image'));
+    }
+
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Failed reading file'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Failed loading image'));
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('Canvas context not available'));
+
+        // Center crop square from original dimensions
+        const minDim = Math.min(img.width, img.height);
+        const startX = (img.width - minDim) / 2;
+        const startY = (img.height - minDim) / 2;
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, startX, startY, minDim, minDim, 0, 0, size, size);
+
+        let resultData = canvas.toDataURL('image/webp', 0.85);
+        if (!resultData.startsWith('data:image/webp')) {
+          resultData = canvas.toDataURL('image/jpeg', 0.85);
+        }
+        resolve(resultData);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 export {
@@ -141,4 +203,8 @@ export {
   isGuestLimitReached,
   migrateGuestData,
   GUEST_WORD_LIMIT,
+  getUserAvatar,
+  saveUserAvatar,
+  removeUserAvatar,
+  compressAndCropAvatar,
 };
