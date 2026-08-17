@@ -498,9 +498,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (favorited) {
           successMsg = '✓ Правильно! Слово в Избранном ❤️';
         } else if (inputCount >= 3) {
-          successMsg = '🎉 Слово выучено! (3/3) и убрано из обучения!';
+          successMsg = '🎉 Слово выучено!';
         } else {
-          successMsg = `✓ Верно! (${inputCount}/3 для выучивания)`;
+          successMsg = '✓ Верно!';
         }
 
         feedback.innerHTML = `
