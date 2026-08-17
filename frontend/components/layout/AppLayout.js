@@ -39,78 +39,57 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
-      <nav class="bottom-nav app-navigation">
-        <div class="nav-brand-desktop" id="desktop-brand-logo" title="Главная">🦉</div>
-        <div class="nav-tabs-group">
-          <button class="nav-tab active" data-tab="training" title="Тренировка">
-            <span class="tab-icon">🎓</span>
-            <span class="tab-label">Обучение</span>
-          </button>
-          <button class="nav-tab" data-tab="favorites" title="Избранное">
-            <span class="tab-icon">❤️</span>
-            <span class="tab-label">Избранное</span>
-          </button>
-          <button class="nav-tab" data-tab="stats" title="Прогресс">
-            <span class="tab-icon">📊</span>
-            <span class="tab-label">Прогресс</span>
-          </button>
-          <button class="nav-tab" data-tab="dictionary" title="Словарь">
-            <span class="tab-icon">📖</span>
-            <span class="tab-label">Словарь</span>
-          </button>
+      <header class="mobile-header">
+        <div class="brand" id="brand-logo" style="cursor: pointer;" title="Перейти на главную (режим Тест)">
+          <span class="brand-icon">🦉</span>
+          <div>
+            <h2>English Trainer</h2>
+            <small class="user-status-text" id="header-user-status">
+              ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
+            </small>
+          </div>
         </div>
-        <div class="nav-footer-desktop">
-          <button class="nav-tab desktop-only-tab" data-tab="settings" title="Настройки">
-            <span class="tab-icon">⚙️</span>
-            <span class="tab-label">Настройки</span>
-          </button>
+        
+        <div class="header-right-actions">
+          ${
+            user
+              ? `<button class="header-profile-badge" id="profile-btn" title="Настройки">👤</button>`
+              : `<div style="display:flex; align-items:center; gap:8px;">
+                  <button class="header-auth-btn" id="login-header-btn">Войти</button>
+                  <button class="header-profile-badge" id="profile-btn" title="Настройки">⚙️</button>
+                </div>`
+          }
         </div>
+      </header>
+
+      <main class="app-main-content">
+        <div id="app-content"></div>
+      </main>
+
+      <nav class="bottom-nav">
+        <button class="nav-tab active" data-tab="training" title="Тренировка">
+          <span class="tab-icon">🎓</span>
+        </button>
+        <button class="nav-tab" data-tab="favorites" title="Избранное">
+          <span class="tab-icon">❤️</span>
+        </button>
+        <button class="nav-tab" data-tab="stats" title="Прогресс">
+          <span class="tab-icon">📊</span>
+        </button>
+        <button class="nav-tab" data-tab="dictionary" title="Словарь">
+          <span class="tab-icon">📖</span>
+        </button>
       </nav>
-
-      <div class="app-main-wrapper">
-        <header class="mobile-header">
-          <div class="brand" id="brand-logo" style="cursor: pointer;" title="Перейти на главную (режим Тест)">
-            <span class="brand-icon">🦉</span>
-            <div>
-              <h2>English Trainer</h2>
-              <small class="user-status-text" id="header-user-status">
-                ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
-              </small>
-            </div>
-          </div>
-          
-          <div class="header-right-actions">
-            ${
-              user
-                ? `<button class="header-profile-badge" id="profile-btn" title="Настройки">👤</button>`
-                : `<div style="display:flex; align-items:center; gap:8px;">
-                    <button class="header-auth-btn" id="login-header-btn">Войти</button>
-                    <button class="header-profile-badge" id="profile-btn" title="Настройки">⚙️</button>
-                  </div>`
-            }
-          </div>
-        </header>
-
-        <main class="app-main-content">
-          <div id="app-content"></div>
-        </main>
-      </div>
 
     </div>
   `;
 
   applyTheme(currentTheme);
 
-  // Bind Brand Logo Click (both mobile and desktop)
+  // Bind Brand Logo Click
   const brandLogo = app.querySelector('#brand-logo');
   if (brandLogo) {
     brandLogo.addEventListener('click', () => {
-      onLogoClick();
-    });
-  }
-  const desktopBrandLogo = app.querySelector('#desktop-brand-logo');
-  if (desktopBrandLogo) {
-    desktopBrandLogo.addEventListener('click', () => {
       onLogoClick();
     });
   }
