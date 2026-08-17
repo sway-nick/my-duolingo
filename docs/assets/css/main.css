@@ -261,7 +261,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--border-color);
   background: #ffffff;
   position: sticky;
@@ -293,7 +293,7 @@ body {
 .header-right-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 .header-auth-btn {
