@@ -9,13 +9,13 @@ function renderAvatarPickerModal(onAvatarSelected = () => {}) {
 
   const modalOverlay = document.createElement('div');
   modalOverlay.id = 'avatar-picker-modal';
-  modalOverlay.className = 'modal-overlay active';
+  modalOverlay.className = 'modal-backdrop';
 
   modalOverlay.innerHTML = `
     <div class="modal-content avatar-picker-modal-content">
       <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <h3 style="margin: 0; font-size: 17px; font-weight: 700;">🎭 Выберите персонажа</h3>
-        <button class="modal-close-btn" id="close-avatar-modal-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); line-height: 1;">✕</button>
+        <button class="modal-close-btn" id="close-avatar-modal-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); line-height: 1; padding: 4px;">✕</button>
       </div>
 
       <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 16px; line-height: 1.4;">
