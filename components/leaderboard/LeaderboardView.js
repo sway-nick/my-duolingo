@@ -47,7 +47,7 @@ function renderPodiumCard(player, rank) {
         <span class="podium-rank-num">#${rank}</span>
       </div>
       <div class="podium-info">
-        <h4 class="podium-name">${player.name || 'Ученик'}${isMe ? ' (Вы)' : ''}</h4>
+        <h4 class="podium-name">${player.name || 'Ученик'}</h4>
         <span class="podium-xp">${player.xp} XP</span>
       </div>
     </div>
@@ -90,7 +90,7 @@ function buildLeaderboardBodyHtml(players, currentUser) {
                 }
               </div>
               <div class="row-name">
-                ${p.name || 'Ученик'}${isMe ? ' <span class="me-tag">(Вы)</span>' : ''}
+                ${p.name || 'Ученик'}
               </div>
               <div class="row-xp">${p.xp} XP</div>
             </div>

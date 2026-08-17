@@ -2153,14 +2153,14 @@ body {
 }
 
 .rule-chip.error-chip {
-  border-color: #ef4444;
+  border-color: #e2e8f0;
   background: #ffffff;
   color: #ef4444;
 }
 
 .dark-theme .rule-chip.error-chip {
   background: #0f172a;
-  border-color: #ef4444;
+  border-color: #334155;
   color: #f87171;
 }
 
@@ -2205,7 +2205,7 @@ body {
 
 .dark-theme .podium-card.rank-diamond {
   border-color: #0284c7;
-  background: linear-gradient(180deg, rgba(14, 165, 233, 0.15) 0%, #1e293b 100%);
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.15) 0%, #1e293b 100%);
 }
 
 .podium-card.rank-gold {
@@ -2244,9 +2244,9 @@ body {
 
 .podium-badge {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 22px;
+  top: 7px;
+  right: 7px;
+  font-size: 26px;
   line-height: 1;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
 }
