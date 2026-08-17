@@ -116,11 +116,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   function positionGlider(targetBtn, animate = true) {
     if (!targetBtn || !glider || !pillBar) return;
-    const barRect = pillBar.getBoundingClientRect();
-    const btnRect = targetBtn.getBoundingClientRect();
-    if (barRect.width === 0 || btnRect.width === 0) return;
-    const offsetLeft = btnRect.left - barRect.left;
-    const btnWidth = btnRect.width;
+    const offsetLeft = targetBtn.offsetLeft;
+    const btnWidth = targetBtn.offsetWidth;
+    if (btnWidth === 0) return;
 
     if (!animate) {
       glider.style.transition = 'none';
@@ -138,7 +136,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     requestAnimationFrame(() => {
       positionGlider(initialActive, false);
     });
+    setTimeout(() => {
+      positionGlider(initialActive, false);
+    }, 50);
   }
+
+  // Handle responsive resizing / device orientation changes
+  const handleResize = () => {
+    const activeBtn = container.querySelector('.mode-pill-btn.active');
+    if (activeBtn) positionGlider(activeBtn, false);
+  };
+  window.addEventListener('resize', handleResize, { passive: true });
 
   modePills.forEach((btn) => {
     btn.addEventListener('click', (e) => {
