@@ -334,70 +334,86 @@ body {
   border-color: #94a3b8;
 }
 
-/* Header XP Pill Badge */
+/* Header Center Action */
+.header-center-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header XP Badge */
 .header-xp-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #f0fdf4;
-  border: 1.5px solid #86efac;
-  color: #15803d;
-  padding: 0 12px;
-  height: 40px;
-  min-height: 40px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
+  background: transparent;
+  border: none;
+  color: #d97706;
+  padding: 4px 8px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   box-sizing: border-box;
-  transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .header-xp-badge:hover {
-  background: #dcfce7;
-  border-color: #22c55e;
-  transform: translateY(-1px);
+  background: transparent;
+  transform: scale(1.06);
+  opacity: 0.9;
 }
 
 .dark-theme .header-xp-badge {
-  background: rgba(34, 197, 94, 0.12);
-  border-color: #22c55e;
-  color: #4ade80;
+  background: transparent;
+  border: none;
+  color: #fbbf24;
 }
 
 .dark-theme .header-xp-badge:hover {
-  background: rgba(34, 197, 94, 0.24);
-  border-color: #4ade80;
+  background: transparent;
+  opacity: 0.9;
 }
 
 .xp-badge-icon {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
 }
 
 .xp-badge-val {
-  font-size: 14.5px;
+  font-size: 16px;
   font-weight: 800;
+  color: #d97706;
   letter-spacing: -0.2px;
 }
 
+.dark-theme .xp-badge-val {
+  color: #fbbf24;
+}
+
 .xp-badge-unit {
-  font-size: 11px;
-  font-weight: 700;
-  opacity: 0.85;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #d97706;
+  opacity: 0.9;
   margin-left: 1px;
+}
+
+.dark-theme .xp-badge-unit {
+  color: #fbbf24;
 }
 
 @keyframes xpPopUp {
   0% { transform: scale(1); }
-  35% { transform: scale(1.18); border-color: #16a34a; background: #bbf7d0; }
+  35% { transform: scale(1.28); filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8)); }
   100% { transform: scale(1); }
 }
 
 @keyframes xpPopDown {
   0% { transform: scale(1); }
-  35% { transform: scale(0.92); border-color: #ef4444; background: #fee2e2; color: #dc2626; }
+  35% { transform: scale(0.9); color: #ef4444; }
   100% { transform: scale(1); }
 }
 

@@ -151,7 +151,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     }
 
     let myStickyBarHtml = '';
-    if (myPlayer) {
+    if (myPlayer && (myRank > 4 || !currentUser)) {
       const myAvatar = getUserAvatar();
       myStickyBarHtml = `
         <div class="my-leaderboard-bar">
