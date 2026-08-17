@@ -28,19 +28,9 @@ function toggleTheme() {
   return next;
 }
 
-function renderHeaderCenterAction() {
-  const xp = getUserWeeklyXP();
-  return `
-    <button class="header-xp-badge" id="header-xp-btn" title="Ваш недельный опыт (XP). Нажмите, чтобы открыть рейтинг">
-      <span class="xp-badge-icon">💎</span>
-      <span class="xp-badge-val" id="header-xp-val">${xp}</span>
-      <span class="xp-badge-unit">XP</span>
-    </button>
-  `;
-}
-
 function renderHeaderRightActions(user) {
   const avatar = getUserAvatar();
+  const xp = getUserWeeklyXP();
   let badgeContent = '⚙️';
   let extraClass = '';
   if (avatar) {
@@ -50,11 +40,25 @@ function renderHeaderRightActions(user) {
     badgeContent = user.name.trim().charAt(0).toUpperCase();
   }
 
+  const xpBadgeHtml = `
+    <button class="header-xp-badge" id="header-xp-btn" title="Ваш недельный опыт (XP). Нажмите, чтобы открыть рейтинг">
+      <span class="xp-badge-icon">💎</span>
+      <span class="xp-badge-val" id="header-xp-val">${xp}</span>
+      <span class="xp-badge-unit">XP</span>
+    </button>
+  `;
+
   if (user) {
-    return `<button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>`;
+    return `
+      <div style="display:flex; align-items:center; gap:10px;">
+        ${xpBadgeHtml}
+        <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
+      </div>
+    `;
   }
   return `
-    <div style="display:flex; align-items:center; gap:8px;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      ${xpBadgeHtml}
       <button class="header-auth-btn" id="login-header-btn">Войти</button>
       <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
     </div>
@@ -82,10 +86,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
             </small>
           </div>
-        </div>
-
-        <div class="header-center-action" id="header-center-action">
-          ${renderHeaderCenterAction()}
         </div>
         
         <div class="header-right-actions">
@@ -184,12 +184,6 @@ function updateHeaderUser(onUserAuthChanged) {
   const statusEl = document.querySelector('#header-user-status');
   if (statusEl) {
     statusEl.textContent = user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
-  }
-
-  const centerContainer = document.querySelector('#header-center-action');
-  if (centerContainer) {
-    centerContainer.innerHTML = renderHeaderCenterAction();
-    bindHeaderActionButtons(centerContainer);
   }
 
   const actionsContainer = document.querySelector('.header-right-actions');
