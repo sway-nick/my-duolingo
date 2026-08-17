@@ -22,7 +22,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- User Profile Card -->
       <div class="settings-card profile-card">
-        <div class="profile-avatar">👤</div>
         <div class="profile-details">
           <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : 'Гостевой режим'}</h3>
           <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : 'Авторизуйтесь для синхронизации'}</p>
@@ -64,7 +63,12 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Voice Selection Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🗣️ Голос озвучки</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#d4a373" style="flex-shrink: 0;">
+            <path d="M12 3a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4zm-6 16a6 6 0 0 1 12 0H6zm14.5-9a4.5 4.5 0 0 1 0 6.36l-1.06-1.06a3 3 0 0 0 0-4.24l1.06-1.06zm2.5-2.5a8 8 0 0 1 0 11.31l-1.06-1.06a6.5 6.5 0 0 0 0-9.19l1.06-1.06z"/>
+          </svg>
+          Голос озвучки
+        </h3>
         <div class="voice-options-row">
           <button class="voice-option-btn" id="voice-female-btn">
             ♀ Женский

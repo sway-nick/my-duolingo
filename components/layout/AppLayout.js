@@ -74,9 +74,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         <button class="nav-tab" data-tab="dictionary" title="Словарь">
           <span class="tab-icon">📖</span>
         </button>
-        <button class="nav-tab" data-tab="settings" title="Настройки">
-          <span class="tab-icon">⚙️</span>
-        </button>
       </nav>
 
     </div>
@@ -117,8 +114,8 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const profileBtn = app.querySelector('#profile-btn');
   if (profileBtn) {
     profileBtn.addEventListener('click', () => {
-      const settingsTab = app.querySelector('.nav-tab[data-tab="settings"]');
-      if (settingsTab) settingsTab.click();
+      tabs.forEach((t) => t.classList.remove('active'));
+      onTabChange('settings');
     });
   }
 }
