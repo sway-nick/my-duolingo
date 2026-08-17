@@ -417,6 +417,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       seenInCards: false,
       hardCount: 0,
       mastered: false,
+      masteredAt: null,
       lastPracticed: 0,
     };
   }
@@ -478,6 +479,9 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       prog.inputCorrect = (prog.inputCorrect || 0) + 1;
       if (prog.inputCorrect >= 3) {
         prog.mastered = true;
+        if (!prog.masteredAt) {
+          prog.masteredAt = Date.now();
+        }
         prog.stage = 'mastered';
       }
       xpDelta = 3; // +3 XP for correct word typing
@@ -512,6 +516,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     seenInCards: prog.seenInCards || false,
     hardCount: prog.hardCount || 0,
     mastered: prog.mastered || false,
+    masteredAt: prog.masteredAt || null,
     lastPracticed: prog.lastPracticed,
     xpDelta,
   });
