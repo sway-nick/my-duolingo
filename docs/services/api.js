@@ -434,8 +434,11 @@ async function getLeaderboard(weekKey = null) {
 
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 3500);
-    const res = await fetch(`${API_URL}?route=leaderboard&weekKey=${wKey}`, { signal: controller.signal });
+    const timer = setTimeout(() => controller.abort(), 4500);
+    const res = await fetch(`${API_URL}?route=leaderboard&weekKey=${wKey}&_t=${Date.now()}`, {
+      signal: controller.signal,
+      cache: 'no-store',
+    });
     clearTimeout(timer);
     const data = await res.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {

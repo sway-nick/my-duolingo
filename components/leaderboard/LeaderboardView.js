@@ -152,13 +152,8 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
           <h2 style="margin: 0; font-size: 22px; display: flex; align-items: center; gap: 8px;">
             🏆 Лига недели
           </h2>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" class="refresh-leaderboard-btn" id="refresh-leaderboard-btn" title="Обновить таблицу лидеров">
-              🔄
-            </button>
-            <div class="league-timer-badge">
-              ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
-            </div>
+          <div class="league-timer-badge">
+            ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
           </div>
         </div>
       </div>
@@ -179,7 +174,6 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   `;
 
   const contentEl = container.querySelector('#leaderboard-content');
-  const refreshBtn = container.querySelector('#refresh-leaderboard-btn');
 
   function bindListeners() {
     const loginBtn = contentEl.querySelector('#leaderboard-login-btn');
@@ -196,7 +190,6 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   bindListeners();
 
   async function loadFreshData() {
-    if (refreshBtn) refreshBtn.classList.add('is-loading');
     try {
       const freshRes = await getLeaderboard();
       if (freshRes && freshRes.data && contentEl) {
@@ -204,20 +197,39 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         bindListeners();
       }
     } catch (e) {
-      console.warn('Leaderboard refresh failed:', e);
-    } finally {
-      if (refreshBtn) refreshBtn.classList.remove('is-loading');
+      console.warn('Leaderboard auto-sync error:', e);
     }
   }
 
-  if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => {
-      loadFreshData();
-    });
+  // Clear any existing polling timer on container
+  if (container._leaderboardTimer) {
+    clearInterval(container._leaderboardTimer);
+    container._leaderboardTimer = null;
   }
 
-  // Background fresh sync on initial open
+  // 1. Background fresh sync on initial open
   loadFreshData();
+
+  // 2. Automatic background sync every 45 seconds while viewing leaderboard
+  container._leaderboardTimer = setInterval(() => {
+    // Only fetch if tab content is still active in the DOM
+    if (document.body.contains(contentEl)) {
+      loadFreshData();
+    } else {
+      clearInterval(container._leaderboardTimer);
+      container._leaderboardTimer = null;
+    }
+  }, 45000);
+
+  // 3. Listen to local XP changes to update current user's row immediately
+  const handleXpChanged = () => {
+    const updatedCache = getCachedLeaderboard();
+    if (updatedCache && updatedCache.data && contentEl) {
+      contentEl.innerHTML = buildLeaderboardBodyHtml(updatedCache.data, currentUser);
+      bindListeners();
+    }
+  };
+  window.addEventListener('myduo:xp_changed', handleXpChanged, { once: true });
 }
 
 export { renderLeaderboardView };

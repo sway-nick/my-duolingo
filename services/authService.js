@@ -81,6 +81,29 @@ function migrateGuestData(newUserId) {
     const userSet = JSON.parse(localStorage.getItem(userSetKey) || '{}');
     const mergedSet = { ...guestSet, ...userSet, userId: newUserId };
     localStorage.setItem(userSetKey, JSON.stringify(mergedSet));
+
+    // 4. Migrate Weekly XP & Avatar
+    const allKeys = Object.keys(localStorage);
+    allKeys.forEach((k) => {
+      if (k.startsWith(`xp_${guestId}_`) || k.startsWith('xp_guest_')) {
+        const wKey = k.startsWith(`xp_${guestId}_`)
+          ? k.replace(`xp_${guestId}_`, '')
+          : k.replace('xp_guest_', '');
+        const guestXp = Number(localStorage.getItem(k) || 0);
+        const userXpKey = `xp_${newUserId}_${wKey}`;
+        const userXp = Number(localStorage.getItem(userXpKey) || 0);
+        const totalXp = Math.max(guestXp, userXp);
+        if (totalXp > 0) {
+          localStorage.setItem(userXpKey, String(totalXp));
+        }
+      }
+      if (k === `avatar_${guestId}` || k === 'avatar_guest') {
+        const guestAvatar = localStorage.getItem(k);
+        if (guestAvatar && !localStorage.getItem(`avatar_${newUserId}`)) {
+          localStorage.setItem(`avatar_${newUserId}`, guestAvatar);
+        }
+      }
+    });
   } catch (e) {
     console.warn('Failed migrating guest data to user:', e);
   }
