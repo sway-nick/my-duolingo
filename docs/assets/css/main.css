@@ -2817,34 +2817,25 @@ body {
 .podium-sticky-wrapper {
   position: -webkit-sticky;
   position: sticky;
-  top: var(--podium-sticky-top, 59px);
+  top: var(--podium-sticky-top, 58px);
   z-index: 25;
   background: var(--bg-main, #ffffff);
-  padding: 6px 0 8px;
-  margin-bottom: 8px;
-  transition: padding 0.2s ease, box-shadow 0.2s ease;
+  padding: calc(6px - 5px * var(--p, 0)) 0 calc(8px - 3px * var(--p, 0));
+  margin-bottom: calc(8px - 3px * var(--p, 0));
+  box-shadow: 0 calc(4px * var(--p, 0)) calc(14px * var(--p, 0)) rgba(0, 0, 0, calc(0.08 * var(--p, 0)));
 }
 
 .dark-theme .podium-sticky-wrapper {
   background: #0f172a;
-}
-
-.podium-sticky-wrapper.is-compact {
-  padding: 1px 0 5px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.dark-theme .podium-sticky-wrapper.is-compact {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 calc(4px * var(--p, 0)) calc(16px * var(--p, 0)) rgba(0, 0, 0, calc(0.45 * var(--p, 0)));
 }
 
 /* Podium Top 4 Grid */
 .podium-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: calc(8px - 2px * var(--p, 0));
   margin-bottom: 0;
-  transition: gap 0.25s ease;
 }
 
 @media (min-width: 520px) {
@@ -2857,19 +2848,13 @@ body {
   position: relative;
   background: #ffffff;
   border: 1.5px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 10px 6px 8px;
+  border-radius: calc(12px - 4px * var(--p, 0));
+  padding: calc(10px - 5px * var(--p, 0)) calc(6px - 2px * var(--p, 0)) calc(8px - 4px * var(--p, 0));
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.podium-sticky-wrapper.is-compact .podium-card {
-  padding: 5px 4px 4px;
-  border-radius: 8px;
 }
 
 .dark-theme .podium-card {
@@ -2924,33 +2909,19 @@ body {
 
 .podium-badge {
   position: absolute;
-  top: 2px;
-  right: 4px;
-  font-size: 30px;
+  top: calc(2px - 1px * var(--p, 0));
+  right: calc(4px - 2px * var(--p, 0));
+  font-size: calc(30px - 12px * var(--p, 0));
   line-height: 1;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.28));
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.podium-sticky-wrapper.is-compact .podium-badge {
-  font-size: 18px;
-  top: 1px;
-  right: 2px;
 }
 
 .podium-avatar-wrapper {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: calc(48px - 16px * var(--p, 0));
+  height: calc(48px - 16px * var(--p, 0));
   border-radius: 50%;
-  margin-bottom: 5px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.podium-sticky-wrapper.is-compact .podium-avatar-wrapper {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 1px;
+  margin-bottom: calc(5px - 4px * var(--p, 0));
 }
 
 .podium-avatar-img {
@@ -2958,13 +2929,8 @@ body {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ffffff;
+  border: calc(2px - 0.5px * var(--p, 0)) solid #ffffff;
   background: #f1f5f9;
-  transition: border-width 0.25s ease;
-}
-
-.podium-sticky-wrapper.is-compact .podium-avatar-img {
-  border-width: 1.5px;
 }
 
 .dark-theme .podium-avatar-img {
@@ -2982,14 +2948,8 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 18px;
-  border: 2px solid #ffffff;
-  transition: all 0.25s ease;
-}
-
-.podium-sticky-wrapper.is-compact .podium-avatar-placeholder {
-  font-size: 13px;
-  border-width: 1.5px;
+  font-size: calc(18px - 5px * var(--p, 0));
+  border: calc(2px - 0.5px * var(--p, 0)) solid #ffffff;
 }
 
 .podium-rank-num {
@@ -3016,48 +2976,29 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: all 0.25s ease;
 }
 
 .podium-name {
-  font-size: 12px;
+  font-size: calc(12px - 1px * var(--p, 0));
   font-weight: 700;
-  margin: 0 0 2px;
+  margin: 0 0 calc(2px - 2px * var(--p, 0));
   width: 100%;
-  line-height: 1.2;
+  line-height: 1.15;
   word-break: normal;
   overflow-wrap: break-word;
-  min-height: 24px;
+  min-height: calc(24px - 10px * var(--p, 0));
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.podium-sticky-wrapper.is-compact .podium-name {
-  font-size: 11px;
-  min-height: unset;
-  margin: 0;
-  line-height: 1.1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 90%;
-  display: block;
 }
 
 .podium-xp {
-  font-size: 13px;
+  font-size: calc(13px - 1.5px * var(--p, 0));
   font-weight: 800;
   color: #16a34a;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.podium-sticky-wrapper.is-compact .podium-xp {
-  font-size: 11.5px;
   line-height: 1.1;
-  margin-top: 1px;
+  margin-top: calc(1px * var(--p, 0));
 }
 
 .dark-theme .podium-xp {

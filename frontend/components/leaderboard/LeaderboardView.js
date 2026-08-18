@@ -189,21 +189,32 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       });
     }
 
-    // Dynamic compact mode precisely when podium touches the sticky header
+    // Dynamic progressive interpolation precisely when podium touches and sticks to the header
     const headerEl = document.querySelector('.mobile-header');
-    const updateCompactPodium = () => {
-      const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
-      if (stickyWrapper && document.body.contains(stickyWrapper)) {
-        const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
-        // Leave a precise 1px visible gap under the header
-        const stickyTopOffset = Math.ceil(headerBottom) + 1;
-        stickyWrapper.style.setProperty('--podium-sticky-top', `${stickyTopOffset}px`);
+    let ticking = false;
 
-        const wrapperRect = stickyWrapper.getBoundingClientRect();
-        // Compress only when the top edge of the cards reaches the header
-        const isTouchingHeader = wrapperRect.top <= (stickyTopOffset + 1);
-        stickyWrapper.classList.toggle('is-compact', isTouchingHeader);
-      }
+    const updateCompactPodium = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
+        if (stickyWrapper && document.body.contains(stickyWrapper)) {
+          const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
+          // Exact 0px gap under header
+          const stickyTopOffset = Math.round(headerBottom);
+          stickyWrapper.style.setProperty('--podium-sticky-top', `${stickyTopOffset}px`);
+
+          // Calculate continuous scroll progress past the touch point
+          const contentTop = contentEl.getBoundingClientRect().top;
+          const scrollPast = Math.max(0, stickyTopOffset - contentTop);
+          const compressDistance = 50; // Smoothly interpolates across 50px of scroll
+          const progress = Math.min(1, Math.max(0, scrollPast / compressDistance));
+
+          // Set progressive ratio directly to CSS variables
+          stickyWrapper.style.setProperty('--p', progress.toFixed(3));
+        }
+      });
     };
 
     if (container._onLeaderboardScroll) {
