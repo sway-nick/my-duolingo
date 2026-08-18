@@ -390,9 +390,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         matchedCount++;
 
         if (matchedCount === totalPairs) {
-          // Award +1 XP if whole round was completed with 0 errors
-          await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
-
           // Authentic casino slot machine reel roll sound
           playCasinoRollSound();
 
@@ -405,9 +402,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }, idx * 80);
           });
 
-          // Play realistic metallic ringing coin drop sound at the end of the roll
-          setTimeout(() => {
+          // Play realistic metallic ringing coin drop sound and award XP simultaneously
+          setTimeout(async () => {
             playCoinDropSound();
+            await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
           }, 1350);
 
           // Advance to next round smoothly
