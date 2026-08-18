@@ -464,11 +464,76 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const input = practiceArea.querySelector('#answer-input');
     const checkBtn = practiceArea.querySelector('#check-answer-btn');
     const feedback = practiceArea.querySelector('#input-feedback');
+    let hasSecondChance = false;
+
+    function calculateLevenshtein(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+            ? matrix[i - 1][j - 1]
+            : Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    function renderDiffHtml(userText, targetText) {
+      let html = '';
+      const maxLen = Math.max(userText.length, targetText.length);
+      for (let i = 0; i < maxLen; i++) {
+        const u = userText[i] || '';
+        const t = targetText[i] || '';
+        if (i < userText.length) {
+          if (u === t) {
+            html += `<span class="diff-char match">${u}</span>`;
+          } else {
+            html += `<span class="diff-char mismatch">${u}</span>`;
+          }
+        } else {
+          html += `<span class="diff-char missing">_</span>`;
+        }
+      }
+      return html;
+    }
 
     const handleCheck = async () => {
       const userAns = input.value.trim().toLowerCase();
       const correctAns = currentWord.word.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
+
+      // Check for typo and give Second Chance if mistake is minor (< 40% of word length)
+      if (!isCorrect && !hasSecondChance && userAns.length > 0) {
+        const lev = calculateLevenshtein(userAns, correctAns);
+        const maxAllowedDistance = Math.max(2, Math.floor(correctAns.length * 0.38));
+
+        if (lev <= maxAllowedDistance) {
+          hasSecondChance = true;
+          playErrorSound();
+
+          input.classList.remove('shake-input');
+          void input.offsetWidth; // trigger reflow
+          input.classList.add('shake-input');
+
+          feedback.style.display = 'block';
+          feedback.innerHTML = `
+            <div class="input-typo-hint">
+              <div class="input-typo-label">
+                <span>⚠️ Опечатка! Исправьте ошибку:</span>
+              </div>
+              <div class="diff-letters-row">
+                ${renderDiffHtml(userAns, correctAns)}
+              </div>
+            </div>
+          `;
+
+          checkBtn.textContent = 'Исправить (-1 XP)';
+          input.focus();
+          return;
+        }
+      }
 
       input.disabled = true;
       checkBtn.disabled = true;
@@ -476,7 +541,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       // Pronounce English word after answer submission
       speakWord(currentWord.word, currentWord.id);
 
-      const prog = await saveProgress(currentWord.id, isCorrect, 'input');
+      const isSecondChanceFix = isCorrect && hasSecondChance;
+      const prog = await saveProgress(currentWord.id, isCorrect, 'input', { secondChanceFix: isSecondChanceFix });
       const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
 
       if (prog?.autoFavorited) {
@@ -490,17 +556,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       if (isCorrect) {
+        input.classList.remove('wrong', 'shake-input');
         input.classList.add('correct');
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
 
         let successMsg = '';
-        if (favorited) {
+        if (isSecondChanceFix) {
+          successMsg = '✓ Исправлено! (-1 XP)';
+        } else if (favorited) {
           successMsg = '✓ Правильно! Слово в Избранном ❤️';
         } else if (inputCount >= 3) {
           successMsg = '🎉 Слово выучено!';
         } else {
-          successMsg = '✓ Верно!';
+          successMsg = '✓ Верно! (+3 XP)';
         }
 
         feedback.innerHTML = `
@@ -525,7 +594,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // Exact delay: 1s (1000ms) on correct, 4s (4000ms) on error (doubled for comfortable reading)
+      // Exact delay: 1s on correct, 4s on error
       const delay = isCorrect ? (inputCount >= 3 && !favorited ? 1500 : 1000) : 4000;
       setTimeout(() => {
         onNext();

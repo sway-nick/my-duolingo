@@ -542,16 +542,22 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     }
   } else if (method === 'input') {
     if (isCorrect) {
-      prog.correct = (prog.correct || 0) + 1;
-      prog.inputCorrect = (prog.inputCorrect || 0) + 1;
-      if (prog.inputCorrect >= 3) {
-        prog.mastered = true;
-        if (!prog.masteredAt) {
-          prog.masteredAt = Date.now();
+      if (options && options.secondChanceFix) {
+        // Second chance fix: deduct 1 point as penalty instead of 5
+        xpDelta = -1;
+        prog.inputMistakes = (prog.inputMistakes || 0) + 1;
+      } else {
+        prog.correct = (prog.correct || 0) + 1;
+        prog.inputCorrect = (prog.inputCorrect || 0) + 1;
+        if (prog.inputCorrect >= 3) {
+          prog.mastered = true;
+          if (!prog.masteredAt) {
+            prog.masteredAt = Date.now();
+          }
+          prog.stage = 'mastered';
         }
-        prog.stage = 'mastered';
+        xpDelta = 3; // +3 XP for first-try correct word typing
       }
-      xpDelta = 3; // +3 XP for correct word typing
     } else {
       prog.error = (prog.error || 0) + 1;
       prog.inputMistakes = (prog.inputMistakes || 0) + 1;

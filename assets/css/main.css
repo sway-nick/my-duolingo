@@ -1181,6 +1181,117 @@ body {
   color: #fecaca !important;
 }
 
+/* Second Chance & Typo Diff Styles */
+.input-typo-hint {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1.5px dashed rgba(239, 68, 68, 0.4);
+  border-radius: var(--radius-md);
+  text-align: center;
+  animation: fadeInHint 0.2s ease-out;
+}
+
+.dark-theme .input-typo-hint {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.input-typo-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ef4444;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.dark-theme .input-typo-label {
+  color: #f87171;
+}
+
+.diff-letters-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.diff-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 34px;
+  padding: 0 4px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.diff-char.match {
+  color: #15803d;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
+
+.dark-theme .diff-char.match {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+.diff-char.mismatch {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1.5px solid #f87171;
+  text-decoration: underline;
+}
+
+.dark-theme .diff-char.mismatch {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.28);
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.diff-char.missing {
+  color: #d97706;
+  background: #fef3c7;
+  border: 1px dashed #f59e0b;
+  animation: pulseMissing 1s infinite alternate;
+}
+
+.dark-theme .diff-char.missing {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+@keyframes pulseMissing {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+@keyframes shakeInput {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake-input {
+  animation: shakeInput 0.35s ease-in-out;
+}
+
+@keyframes fadeInHint {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .check-button {
   width: 100%;
   height: 56px;
