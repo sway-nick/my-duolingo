@@ -721,10 +721,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${currentWord.translation}</h2>
-              <p class="flashcard-subword">${currentWord.word}</p>
-            </div>
-            <div class="flashcard-face-bottom">
-              <span class="flashcard-flip-prompt">🔄 Нажми, чтобы перевернуть обратно</span>
             </div>
           </div>
         </div>

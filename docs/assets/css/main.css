@@ -1225,13 +1225,25 @@ body {
   font-weight: 500;
 }
 
+.flashcard-back .flashcard-face-body {
+  overflow-y: auto;
+  max-height: 135px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  scrollbar-width: thin;
+}
+
 .flashcard-translation {
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 600;
   color: #15803d;
-  margin: 0 0 4px;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
+  margin: 0;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .dark-theme .flashcard-translation {
