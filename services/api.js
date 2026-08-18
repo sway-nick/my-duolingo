@@ -1137,6 +1137,59 @@ async function getUserStats(customWords = null) {
     learned: stats.learned,
   }));
 
+  // Word of the Day: word with most mistakes across users over last 3 days
+  let wordOfTheDay = null;
+
+  try {
+    const cloudStatsRaw = localStorage.getItem('myduo_cached_cloud_stats');
+    if (cloudStatsRaw) {
+      const cloudStats = JSON.parse(cloudStatsRaw);
+      if (cloudStats && cloudStats.wordOfTheDayId) {
+        wordOfTheDay = wordsList.find((w) => String(w.id) === String(cloudStats.wordOfTheDayId));
+      }
+    }
+  } catch (e) {}
+
+  if (!wordOfTheDay) {
+    let mostMistakenWordId = null;
+    let maxErrors = 0;
+    Object.entries(localProg).forEach(([wId, p]) => {
+      const errs = (p.error || 0) + (p.inputMistakes || 0) + (p.hardCount || 0);
+      if (errs > maxErrors) {
+        maxErrors = errs;
+        mostMistakenWordId = wId;
+      }
+    });
+    if (mostMistakenWordId) {
+      wordOfTheDay = wordsList.find((w) => String(w.id) === String(mostMistakenWordId));
+    }
+  }
+
+  if (!wordOfTheDay && wordsList.length > 0) {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    let dateHash = 0;
+    for (let i = 0; i < todayStr.length; i++) {
+      dateHash = ((dateHash << 5) - dateHash) + todayStr.charCodeAt(i);
+      dateHash |= 0;
+    }
+    const trickyPool = wordsList.filter((w) => w.level === 'B1' || w.level === 'B2' || w.level === 'Intermediate' || (w.word && w.word.length >= 6));
+    const pool = trickyPool.length > 0 ? trickyPool : wordsList;
+    const idx = Math.abs(dateHash) % pool.length;
+    wordOfTheDay = pool[idx];
+  }
+
+  // Fetch fresh stats from backend in background to keep word of the day updated
+  if (typeof fetch !== 'undefined') {
+    fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.success && data.data) {
+          localStorage.setItem('myduo_cached_cloud_stats', JSON.stringify(data.data));
+        }
+      })
+      .catch(() => {});
+  }
+
   return {
     totalWords: wordsList.length,
     masteredCount,
@@ -1147,6 +1200,7 @@ async function getUserStats(customWords = null) {
     accuracy,
     streakDays: 1,
     categoryBreakdown,
+    wordOfTheDay,
   };
 }
 

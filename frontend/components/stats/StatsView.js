@@ -1,5 +1,6 @@
-import { getUserStats } from '../../services/api.js?v=18.0';
+import { getUserStats, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=18.0';
 import { getCurrentUser } from '../../services/authService.js?v=18.0';
+import { playAudio } from '../../services/audioService.js?v=18.0';
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];
@@ -38,12 +39,70 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         .join('');
     }
 
+    const wotd = stats.wordOfTheDay;
+    let wotdHtml = '';
+    let isWotdFav = false;
+
+    if (wotd) {
+      const favList = getUserFavorites();
+      const favSet = new Set(favList.map(String));
+      isWotdFav = favSet.has(String(wotd.id));
+
+      wotdHtml = `
+        <!-- Word of the Day Section -->
+        <div class="curriculum-block wotd-block" style="margin-top: 14px;">
+          <div class="section-title-row" style="margin-bottom: 12px;">
+            <h3 style="display: flex; align-items: center; gap: 6px; margin: 0; font-size: 16.5px;">
+              <span>🔥</span> Слово дня
+            </h3>
+            <span class="total-words-badge" style="font-size: 11.5px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.25);">
+              Самое коварное за 3 дня
+            </span>
+          </div>
+
+          <div class="flashcard-3d-wrapper" style="margin: 0 auto; max-width: 100%;">
+            <div class="flashcard-3d" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
+              <!-- Front Face: English word -->
+              <div class="flashcard-face flashcard-front">
+                <div class="flashcard-face-top">
+                  <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔊</button>
+                  <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
+                    ${isWotdFav ? '❤️' : '🤍'}
+                  </button>
+                </div>
+                <div class="flashcard-face-body">
+                  <h2 class="flashcard-word">${wotd.word}</h2>
+                  ${wotd.transcription ? `<p class="flashcard-transcription">${wotd.transcription}</p>` : ''}
+                </div>
+                <div class="flashcard-face-bottom">
+                  <span class="flashcard-flip-prompt">🔄 Нажми, чтобы увидеть перевод</span>
+                </div>
+              </div>
+
+              <!-- Back Face: Russian translation -->
+              <div class="flashcard-face flashcard-back">
+                <div class="flashcard-face-top">
+                  <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔊</button>
+                  <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
+                    ${isWotdFav ? '❤️' : '🤍'}
+                  </button>
+                </div>
+                <div class="flashcard-face-body">
+                  <h2 class="flashcard-translation">${wotd.translation}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     container.innerHTML = `
       <div class="page-header" style="margin-bottom: 14px;">
         <h2 style="font-size: 22px; margin: 0;">📊 Ваши достижения</h2>
       </div>
 
-      <div id="stats-content">
+      <div id="stats-content" style="padding-bottom: 24px;">
         <!-- Top Stats Widgets Grid (2x2) -->
         <div class="stats-grid">
           <div class="stat-card">
@@ -79,7 +138,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           </div>
         </div>
 
-        <!-- Relocated Curriculum / Program Section -->
+        <!-- Categories Section -->
         <div class="curriculum-block">
           <div class="section-title-row">
             <h3>Категории</h3>
@@ -90,8 +149,49 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             ${categoriesHtml}
           </div>
         </div>
+
+        <!-- Word of the Day Section -->
+        ${wotdHtml}
       </div>
     `;
+
+    if (wotd) {
+      const flashcard = container.querySelector('#wotd-flashcard-3d');
+      if (flashcard) {
+        let isFlipped = false;
+        flashcard.addEventListener('click', (e) => {
+          if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
+            return;
+          }
+          isFlipped = !isFlipped;
+          flashcard.classList.toggle('is-flipped', isFlipped);
+          if (!isFlipped) {
+            playAudio(wotd.word);
+          }
+        });
+
+        const speakButtons = container.querySelectorAll('#wotd-sound-front, #wotd-sound-back');
+        speakButtons.forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playAudio(wotd.word);
+          });
+        });
+
+        const favButtons = container.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
+        favButtons.forEach((btn) => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            isWotdFav = !isWotdFav;
+            await toggleFavoriteApi(wotd.id, isWotdFav);
+            favButtons.forEach((b) => {
+              b.classList.toggle('is-favorite', isWotdFav);
+              b.innerHTML = isWotdFav ? '❤️' : '🤍';
+            });
+          });
+        });
+      }
+    }
   } catch (err) {
     console.error('Failed to load stats view:', err);
     container.innerHTML = '<p class="empty-state">Ошибка загрузки статистики.</p>';

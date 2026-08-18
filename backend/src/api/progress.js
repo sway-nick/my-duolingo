@@ -85,6 +85,44 @@ function statsGet(e) {
     }
   });
 
+  // Calculate Word of the Day across all users in the last 3 days (most mistakes)
+  const allUserProgress = getSheetData('UserProgress', PROGRESS_HEADERS);
+  const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+  const errorMap = {};
+
+  allUserProgress.forEach((p) => {
+    const lastRev = p.lastReviewed || '';
+    const errCount = Number(p.errorCount || 0);
+    if (errCount > 0 && lastRev >= threeDaysAgo) {
+      const wId = String(p.wordId).trim();
+      errorMap[wId] = (errorMap[wId] || 0) + errCount;
+    }
+  });
+
+  let topWordId = null;
+  let maxErrors = 0;
+  Object.keys(errorMap).forEach((wId) => {
+    if (errorMap[wId] > maxErrors) {
+      maxErrors = errorMap[wId];
+      topWordId = wId;
+    }
+  });
+
+  // Fallback to all-time errors if no 3-day errors yet
+  if (!topWordId) {
+    allUserProgress.forEach((p) => {
+      const errCount = Number(p.errorCount || 0);
+      if (errCount > 0) {
+        const wId = String(p.wordId).trim();
+        errorMap[wId] = (errorMap[wId] || 0) + errCount;
+        if (errorMap[wId] > maxErrors) {
+          maxErrors = errorMap[wId];
+          topWordId = wId;
+        }
+      }
+    });
+  }
+
   return successResponse({
     totalWords,
     masteredCount,
@@ -93,6 +131,8 @@ function statsGet(e) {
     accuracy,
     streakDays: 3, // example streak
     categoryBreakdown: Object.values(categoryStats),
+    wordOfTheDayId: topWordId,
+    wordOfTheDayErrors: maxErrors,
   });
 }
 

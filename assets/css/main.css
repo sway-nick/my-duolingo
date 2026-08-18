@@ -1819,6 +1819,19 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
+.wotd-block {
+  padding: 16px;
+}
+
+.wotd-block .flashcard-3d {
+  min-height: 200px;
+  height: 200px;
+}
+
+.wotd-block .flashcard-face {
+  min-height: 200px;
+}
+
 .section-title-row {
   display: flex;
   justify-content: space-between;
