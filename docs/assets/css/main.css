@@ -1156,6 +1156,45 @@ body {
   border-color: rgba(239, 68, 68, 0.3);
 }
 
+@keyframes heartShimmer45 {
+  0% {
+    background: rgba(100, 116, 139, 0.08);
+    box-shadow: 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+  25% {
+    background: linear-gradient(45deg, #ef4444, #f43f5e, #fda4af, #ef4444);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
+    transform: scale(1.22);
+  }
+  50% {
+    background: linear-gradient(45deg, #ef4444, #f43f5e, #fda4af, #ef4444);
+    background-size: 200% 200%;
+    background-position: 100% 50%;
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.8);
+    transform: scale(1.28) rotate(-8deg);
+  }
+  75% {
+    background: linear-gradient(45deg, #ef4444, #f43f5e, #fda4af, #ef4444);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+    transform: scale(1.18) rotate(8deg);
+  }
+  100% {
+    background: rgba(100, 116, 139, 0.08);
+    box-shadow: 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.heart-shimmer-45 {
+  animation: heartShimmer45 1.4s ease-in-out forwards;
+  border-color: rgba(239, 68, 68, 0.6) !important;
+}
+
 .flashcard-face-body {
   flex: 1;
   display: flex;

@@ -67,10 +67,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               🎯 В обучении: <strong>${learningCount} / ${dailyGoal}</strong> слов
             </div>
           `
-            : ''
-        }
-        ${
-          isPairsMode
+            : isPairsMode
             ? `
             <div class="pairs-header-box" style="margin: 4px 0 6px;">
               <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 Найдите пары слов</h2>
@@ -681,6 +678,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const flashcard = practiceArea.querySelector('#flashcard-3d');
     const feedbackBtns = practiceArea.querySelector('#card-feedback-btns');
     let isFlipped = false;
+    let flipCount = 0;
+    let shimmerTriggered = false;
 
     flashcard.addEventListener('click', (e) => {
       // Ignore clicks on inner sound or favorite buttons to prevent accidental flip
@@ -688,9 +687,25 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         return;
       }
       isFlipped = !isFlipped;
+      flipCount++;
       flashcard.classList.toggle('is-flipped', isFlipped);
+      
       if (feedbackBtns.style.display === 'none') {
         feedbackBtns.style.display = 'flex';
+      }
+
+      // If user flips card more than 2 times, shimmer heart with red 45deg gradient once
+      if (flipCount > 2 && !shimmerTriggered && !favorited) {
+        shimmerTriggered = true;
+        const favFront = practiceArea.querySelector('#fc-fav-front');
+        const favBack = practiceArea.querySelector('#fc-fav-back');
+        if (favFront) favFront.classList.add('heart-shimmer-45');
+        if (favBack) favBack.classList.add('heart-shimmer-45');
+      }
+
+      // Pronounce English word whenever card flips back to English front side
+      if (!isFlipped) {
+        speakWord(currentWord.word, currentWord.id);
       }
     });
 
