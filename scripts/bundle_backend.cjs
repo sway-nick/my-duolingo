@@ -26,29 +26,36 @@ const filesOrder = [
   'api/progress.js',
   'api/favorite.js',
   'api/settings.js',
+  'api/leaderboard.js',
   'router.js',
   'postRouter.js',
   'Code.js',
 ];
 
-let bundleContent = `/**
+function generateBackendBundle() {
+  let bundleContent = `/**
  * My Duolingo Backend - All In One Bundle
  * Generated on: ${new Date().toISOString()}
  * 
  * Paste this entire file into your Google Apps Script editor (Code.gs)
  */\n\n`;
 
-for (const relPath of filesOrder) {
-  const fullPath = path.join(srcDir, relPath);
-  if (fs.existsSync(fullPath)) {
-    const code = fs.readFileSync(fullPath, 'utf8');
-    bundleContent += `// ==========================================\n`;
-    bundleContent += `// FILE: ${relPath}\n`;
-    bundleContent += `// ==========================================\n`;
-    bundleContent += code + '\n\n';
+  for (const relPath of filesOrder) {
+    const fullPath = path.join(srcDir, relPath);
+    if (fs.existsSync(fullPath)) {
+      const code = fs.readFileSync(fullPath, 'utf8');
+      bundleContent += `// ==========================================\n`;
+      bundleContent += `// FILE: ${relPath}\n`;
+      bundleContent += `// ==========================================\n`;
+      bundleContent += code + '\n\n';
+    }
   }
+
+  const outputPath = path.join(distDir, 'Code.gs');
+  fs.writeFileSync(outputPath, bundleContent, 'utf8');
+  console.log('✅ Backend bundle generated at:', outputPath);
 }
 
-const outputPath = path.join(distDir, 'Code.gs');
-fs.writeFileSync(outputPath, bundleContent, 'utf8');
-console.log('✅ Backend bundle generated at:', outputPath);
+generateBackendBundle();
+module.exports = { generateBackendBundle };
+

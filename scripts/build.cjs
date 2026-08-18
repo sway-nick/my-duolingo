@@ -32,7 +32,10 @@ function build() {
 
   // 4. Generate all-in-one backend bundle for Google Apps Script
   try {
-    require('./bundle_backend.cjs');
+    const bundle = require('./bundle_backend.cjs');
+    if (typeof bundle.generateBackendBundle === 'function') {
+      bundle.generateBackendBundle();
+    }
   } catch (e) {
     console.warn('Backend bundle step skipped or failed:', e);
   }
