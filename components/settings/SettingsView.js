@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=18.0'
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=18.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=18.0';
-import { speakWord, setSavedVoiceGender, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=18.0';
+import { speakWord, setSavedVoiceGender, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=21.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=18.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {

@@ -1,4 +1,4 @@
-import { playFanfareSound } from '../../services/audioService.js?v=18.0';
+import { playFanfareSound } from '../../services/audioService.js?v=21.0';
 
 function getPrizeDetails(rank) {
   switch (rank) {

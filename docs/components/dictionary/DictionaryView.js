@@ -1,4 +1,4 @@
-import { speakWord } from '../../services/audioService.js?v=18.0';
+import { speakWord } from '../../services/audioService.js?v=21.0';
 import { toggleFavoriteApi, getUserProgress, isWordMastered } from '../../services/api.js?v=18.0';
 
 function sanitizeCategory(cat) {

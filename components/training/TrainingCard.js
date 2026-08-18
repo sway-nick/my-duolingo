@@ -1,5 +1,5 @@
-import { speakWord, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound } from '../../services/audioService.js?v=14.0';
-import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=14.0';
+import { speakWord, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound } from '../../services/audioService.js?v=21.0';
+import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
