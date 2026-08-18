@@ -1250,7 +1250,7 @@ body {
   justify-content: center;
   text-align: center;
   box-sizing: border-box;
-  padding: 46px 18px 16px;
+  padding: 16px 18px;
   overflow-y: auto;
   scrollbar-width: thin;
 }
