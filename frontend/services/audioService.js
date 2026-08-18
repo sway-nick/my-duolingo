@@ -360,7 +360,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     } catch (e) {}
   }
 
-  // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on 3rd click)
+  // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on 3rd click, then alternating fast/slow)
   const key = wordId || text;
   if (currentWordKey === key) {
     clickCount += 1;
@@ -369,7 +369,8 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     clickCount = 1;
   }
 
-  const isTurtleMode = clickCount >= 3;
+  // 1st: Normal, 2nd: Normal, 3rd: Slow, 4th: Normal, 5th: Slow, 6th: Normal...
+  const isTurtleMode = clickCount >= 3 && (clickCount % 2 === 1);
   const accent = voiceAccentOverride || getSavedVoiceAccent();
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const voiceType = isUk ? 1 : 2; // Type 1 = 🇬🇧 British English, Type 2 = 🇺🇸 American English
