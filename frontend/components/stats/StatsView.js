@@ -44,7 +44,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       </div>
 
       <div id="stats-content">
-        <!-- Top Stats Widgets Grid -->
+        <!-- Top Stats Widgets Grid (2x2) -->
         <div class="stats-grid">
           <div class="stat-card">
             <span class="stat-icon">🎓</span>
@@ -58,7 +58,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">📖</span>
             <div class="stat-info">
               <h3 id="stat-learning">${stats.learningCount || 0}</h3>
-              <p>Слов на изучении</p>
+              <p>На изучении</p>
             </div>
           </div>
 
@@ -66,7 +66,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">🎯</span>
             <div class="stat-info">
               <h3 id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
-              <p>Точность ответов</p>
+              <p>Точность</p>
             </div>
           </div>
 
@@ -74,7 +74,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">🔥</span>
             <div class="stat-info">
               <h3 id="stat-streak">${stats.streakDays || 1} дн</h3>
-              <p>Серия тренировок</p>
+              <p>Серия</p>
             </div>
           </div>
         </div>

@@ -1739,35 +1739,39 @@ body {
 /* Stats Page & Curriculum Block */
 .stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .stat-card {
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 14px 12px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   box-shadow: var(--shadow-sm);
 }
 
 .stat-icon {
-  font-size: 28px;
+  font-size: 26px;
+  flex-shrink: 0;
 }
 
 .stat-info h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 1.2;
 }
 
 .stat-info p {
   margin: 2px 0 0;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .curriculum-block {
@@ -3232,7 +3236,29 @@ body {
 }
 
 @media (max-width: 480px) {
-  .stats-grid, .favorites-grid, .dictionary-grid {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 10px 8px;
+    gap: 8px;
+  }
+
+  .stat-icon {
+    font-size: 22px;
+  }
+
+  .stat-info h3 {
+    font-size: 16px;
+  }
+
+  .stat-info p {
+    font-size: 11.5px;
+  }
+
+  .favorites-grid, .dictionary-grid {
     grid-template-columns: 1fr;
   }
 }
