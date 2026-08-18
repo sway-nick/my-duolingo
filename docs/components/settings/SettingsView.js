@@ -204,15 +204,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   }
   updateSoundButtons();
 
-  // Setup Voice Selection
-  let currentVoice = settings.voiceGender || 'female';
-  const femaleVoiceBtn = container.querySelector('#voice-female-btn');
-  const maleVoiceBtn = container.querySelector('#voice-male-btn');
+  // Setup Voice Accent Selection (🇬🇧 UK / 🇺🇸 US)
+  let currentAccent = getSavedVoiceAccent();
+  const ukVoiceBtn = container.querySelector('#voice-uk-btn');
+  const usVoiceBtn = container.querySelector('#voice-us-btn');
 
   function updateVoiceButtons() {
-    if (femaleVoiceBtn && maleVoiceBtn) {
-      femaleVoiceBtn.classList.toggle('active', currentVoice === 'female');
-      maleVoiceBtn.classList.toggle('active', currentVoice === 'male');
+    if (ukVoiceBtn && usVoiceBtn) {
+      ukVoiceBtn.classList.toggle('active', currentAccent === 'uk');
+      usVoiceBtn.classList.toggle('active', currentAccent === 'us');
     }
   }
   updateVoiceButtons();
@@ -223,7 +223,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       ...settings,
       dailyGoal: currentGoal,
       theme: getSavedTheme(),
-      voiceGender: currentVoice,
+      voiceAccent: currentAccent,
+      voiceGender: currentAccent === 'uk' ? 'male' : 'female',
       silentMode: isSilent,
     };
 
@@ -280,18 +281,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   }
 
   // Bind voice accent buttons (🇬🇧 UK / 🇺🇸 US) with preview speech
-  let currentAccent = getSavedVoiceAccent();
-  const ukVoiceBtn = container.querySelector('#voice-uk-btn');
-  const usVoiceBtn = container.querySelector('#voice-us-btn');
-
-  const updateVoiceButtons = () => {
-    if (ukVoiceBtn && usVoiceBtn) {
-      ukVoiceBtn.classList.toggle('active', currentAccent === 'uk');
-      usVoiceBtn.classList.toggle('active', currentAccent === 'us');
-    }
-  };
-  updateVoiceButtons();
-
   if (ukVoiceBtn && usVoiceBtn) {
     ukVoiceBtn.addEventListener('click', () => {
       currentAccent = 'uk';
