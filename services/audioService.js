@@ -290,42 +290,16 @@ function getPreferredVoice(gender = 'female') {
   }
 }
 
-/**
- * Speaks the given text using SpeechSynthesis.
- * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
- *
- * @param {string} text - The word or text to pronounce (e.g. English word)
- * @param {string} wordId - Optional unique ID for tracking consecutive clicks on the same word
- * @param {string} lang - Language code (default 'en-US')
- * @param {string} voiceGenderOverride - Optional gender override ('male' | 'female')
- * @returns {boolean} isTurtleMode - True if playing in slow speed
- */
-function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = null, forcePlay = false) {
-  if (isAudioMuted() && !forcePlay) {
-    return false;
-  }
+let currentAudioPlayer = null;
+const audioUrlCache = new Map();
 
-  if (!('speechSynthesis' in window)) {
-    console.warn('SpeechSynthesis is not supported in this browser.');
-    return false;
-  }
-
+function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
   try {
-    window.speechSynthesis.cancel(); // Stop any ongoing speech
-
-    const key = wordId || text;
-    if (currentWordKey === key) {
-      clickCount += 1;
-    } else {
-      currentWordKey = key;
-      clickCount = 1;
-    }
-
-    const isTurtleMode = clickCount >= 3;
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = lang;
 
-    const gender = voiceGenderOverride || getSavedVoiceGender();
     const voice = getPreferredVoice(gender);
     if (voice) {
       utterance.voice = voice;
@@ -333,20 +307,96 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     }
 
     if (gender === 'male') {
-      utterance.pitch = 0.70; // Deep, solid masculine baritone
+      utterance.pitch = 0.70;
       utterance.rate = isTurtleMode ? 0.38 : 0.80;
     } else {
-      utterance.pitch = 1.05; // Natural, clear feminine tone
+      utterance.pitch = 1.05;
       utterance.rate = isTurtleMode ? 0.40 : 0.84;
     }
 
     window.speechSynthesis.speak(utterance);
-
-    return isTurtleMode;
   } catch (e) {
-    console.warn('SpeechSynthesis speak warning:', e);
+    console.warn('SpeechSynthesis fallback warning:', e);
+  }
+}
+
+/**
+ * Speaks the given text using high-definition natural Cloud Audio,
+ * with automatic fallback to SpeechSynthesis when offline.
+ * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
+ *
+ * @param {string} text - The word or text to pronounce
+ * @param {string} wordId - Optional unique ID for tracking consecutive clicks
+ * @param {string} lang - Language code (default 'en-US')
+ * @param {string} voiceGenderOverride - Optional gender override ('male' | 'female')
+ * @param {boolean} forcePlay - Play even if silent mode is enabled
+ * @returns {boolean} isTurtleMode - True if playing in slow speed
+ */
+function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = null, forcePlay = false) {
+  if (!text || (isAudioMuted() && !forcePlay)) {
     return false;
   }
+
+  // 1. Stop any currently playing audio
+  if (currentAudioPlayer) {
+    try {
+      currentAudioPlayer.pause();
+      currentAudioPlayer.currentTime = 0;
+    } catch (e) {}
+    currentAudioPlayer = null;
+  }
+
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+
+  // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on 3rd click)
+  const key = wordId || text;
+  if (currentWordKey === key) {
+    clickCount += 1;
+  } else {
+    currentWordKey = key;
+    clickCount = 1;
+  }
+
+  const isTurtleMode = clickCount >= 3;
+  const gender = voiceGenderOverride || getSavedVoiceGender();
+  const cleanText = text.trim();
+
+  // 3. Try high-definition natural cloud audio stream
+  try {
+    const cloudUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(cleanText)}`;
+    const audio = new Audio(cloudUrl);
+    currentAudioPlayer = audio;
+
+    // Pitch-corrected slow down in turtle mode
+    audio.playbackRate = isTurtleMode ? 0.62 : 1.0;
+
+    let hasFallbackRun = false;
+    const runFallback = () => {
+      if (hasFallbackRun) return;
+      hasFallbackRun = true;
+      speakWithSpeechSynthesis(cleanText, lang, isTurtleMode, gender);
+    };
+
+    audio.onerror = () => {
+      runFallback();
+    };
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        // Fallback to SpeechSynthesis if network/CORS or autoplay restricted
+        runFallback();
+      });
+    }
+  } catch (err) {
+    speakWithSpeechSynthesis(cleanText, lang, isTurtleMode, gender);
+  }
+
+  return isTurtleMode;
 }
 
 let coinAudio = null;
