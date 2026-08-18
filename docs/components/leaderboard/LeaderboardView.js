@@ -156,17 +156,14 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
             ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
           </div>
         </div>
-        <p class="subtitle" style="margin-top: 4px;">
-          Соревнуйтесь за алмазный кубок! Рейтинг обновляется каждую неделю.
-        </p>
       </div>
 
       <!-- Scoring rules mini-banner -->
       <div class="scoring-rules-banner">
         <div class="rule-chip"><span class="rule-chip-icon">🎯</span> Квиз <strong class="rule-chip-val">+1&nbsp;XP</strong></div>
-        <div class="rule-chip"><span class="rule-chip-icon">🧩</span> Пары без ошибок <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
+        <div class="rule-chip"><span class="rule-chip-icon">🧩</span> Пары <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
         <div class="rule-chip"><span class="rule-chip-icon">✍️</span> Тест <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
-        <div class="rule-chip error-chip">Ошибка <strong class="error-xp-val">-5&nbsp;XP</strong></div>
+        <div class="rule-chip error-chip"><span class="rule-chip-icon">🪲</span> Ошибка <strong class="error-xp-val">-5&nbsp;XP</strong></div>
       </div>
 
       <!-- Instant 0ms Content -->
