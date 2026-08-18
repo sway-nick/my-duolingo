@@ -1,5 +1,5 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=16.0';
-import { getUserWeeklyXP } from '../../services/api.js?v=16.0';
+import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=16.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=16.0';
 
 let globalAuthChangedCallback = () => {};
@@ -28,9 +28,23 @@ function toggleTheme() {
   return next;
 }
 
+function getHeaderRankBadge(rank, xp) {
+  const numXp = Number(xp) || 0;
+  if (numXp <= 0 || !rank) {
+    return { isIcon: false, content: 'Lv -', title: 'Лига недели (0 XP)' };
+  }
+  if (rank === 1) return { isIcon: true, content: '💎', title: '1 место в Лиге недели (Алмаз)' };
+  if (rank === 2) return { isIcon: true, content: '🥇', title: '2 место в Лиге недели (Золото)' };
+  if (rank === 3) return { isIcon: true, content: '🥈', title: '3 место в Лиге недели (Серебро)' };
+  if (rank === 4) return { isIcon: true, content: '🥉', title: '4 место в Лиге недели (Бронза)' };
+  return { isIcon: false, content: `Lv ${rank}`, title: `${rank} место в Лиге недели` };
+}
+
 function renderHeaderRightActions(user) {
   const avatar = getUserAvatar();
   const xp = getUserWeeklyXP();
+  const rank = getUserWeeklyRank();
+  const rankBadge = getHeaderRankBadge(rank, xp);
   let badgeContent = '⚙️';
   let extraClass = '';
   if (avatar) {
@@ -40,10 +54,14 @@ function renderHeaderRightActions(user) {
     badgeContent = user.name.trim().charAt(0).toUpperCase();
   }
 
-  const formattedXp = Number(xp || 0).toLocaleString('ru-RU');
+  const formattedXp = formatCompactXp(xp);
+  const iconHtml = rankBadge.isIcon
+    ? `<span class="xp-badge-icon" id="header-xp-icon">${rankBadge.content}</span>`
+    : `<span class="xp-badge-level" id="header-xp-icon">${rankBadge.content}</span>`;
+
   const xpBadgeHtml = `
-    <button class="header-xp-badge" id="header-xp-btn" title="Ваш недельный опыт (XP). Нажмите, чтобы открыть рейтинг">
-      <span class="xp-badge-icon">💎</span>
+    <button class="header-xp-badge" id="header-xp-btn" title="${rankBadge.title}. Нажмите, чтобы открыть рейтинг">
+      ${iconHtml}
       <span class="xp-badge-text"><span id="header-xp-val">${formattedXp}</span>&nbsp;XP</span>
     </button>
   `;
@@ -209,9 +227,23 @@ if (typeof window !== 'undefined') {
   window.addEventListener('myduo:xp_changed', (e) => {
     const xpValEl = document.querySelector('#header-xp-val');
     const xpBtnEl = document.querySelector('#header-xp-btn');
-    if (xpValEl && e.detail && typeof e.detail.xp !== 'undefined') {
-      xpValEl.textContent = Number(e.detail.xp || 0).toLocaleString('ru-RU');
+    const xpIconEl = document.querySelector('#header-xp-icon');
+    const newXp = e.detail && typeof e.detail.xp !== 'undefined' ? e.detail.xp : getUserWeeklyXP();
+
+    if (xpValEl) {
+      xpValEl.textContent = formatCompactXp(newXp);
     }
+
+    const rank = getUserWeeklyRank();
+    const rankBadge = getHeaderRankBadge(rank, newXp);
+    if (xpIconEl) {
+      xpIconEl.textContent = rankBadge.content;
+      xpIconEl.className = rankBadge.isIcon ? 'xp-badge-icon' : 'xp-badge-level';
+      if (xpBtnEl) {
+        xpBtnEl.title = `${rankBadge.title}. Нажмите, чтобы открыть рейтинг`;
+      }
+    }
+
     if (xpBtnEl && e.detail && e.detail.delta) {
       xpBtnEl.classList.remove('xp-bump-up', 'xp-bump-down');
       void xpBtnEl.offsetWidth; // trigger reflow

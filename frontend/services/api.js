@@ -375,6 +375,36 @@ function getCachedLeaderboard(weekKey = null) {
   return { success: true, data: list, weekKey: wKey, userXP };
 }
 
+function getUserWeeklyRank(userId = null, weekKey = null) {
+  const currentUserId = userId || getEffectiveUserId();
+  const res = getCachedLeaderboard(weekKey);
+  const list = res.data || [];
+  const myIdx = list.findIndex((u) => String(u.userId) === String(currentUserId));
+  const userXP = getUserWeeklyXP(currentUserId, weekKey);
+  if (userXP <= 0 || myIdx < 0) {
+    return null;
+  }
+  return myIdx + 1;
+}
+
+function formatCompactXp(xp) {
+  const num = Number(xp) || 0;
+  if (num < 1000) return String(num);
+  if (num < 1_000_000) {
+    const kVal = num / 1000;
+    const formatted = kVal.toFixed(3).replace(/\.?0+$/, '').replace('.', ',');
+    return `${formatted}K`;
+  }
+  if (num < 1_000_000_000) {
+    const mVal = num / 1_000_000;
+    const formatted = mVal.toFixed(3).replace(/\.?0+$/, '').replace('.', ',');
+    return `${formatted}M`;
+  }
+  const bVal = num / 1_000_000_000;
+  const formatted = bVal.toFixed(3).replace(/\.?0+$/, '').replace('.', ',');
+  return `${formatted}B`;
+}
+
 async function getLeaderboard(weekKey = null) {
   const wKey = weekKey || getIsoWeekKey();
   const cached = getCachedLeaderboard(wKey);
@@ -852,5 +882,7 @@ export {
   getCachedLeaderboard,
   getUserWeeklyXP,
   addWeeklyXP,
+  getUserWeeklyRank,
+  formatCompactXp,
   getIsoWeekKey,
 };

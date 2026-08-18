@@ -362,13 +362,35 @@ body {
 }
 
 .xp-badge-icon {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transform: translateY(-0.5px);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+.xp-badge-level {
+  font-size: 12px;
+  font-weight: 800;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+
+.dark-theme .xp-badge-level {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
 }
 
 .xp-badge-text {
