@@ -2028,6 +2028,33 @@ body {
   transition: border-color 0.2s ease;
 }
 
+.dict-dropdown {
+  flex: 1.25 1 155px;
+  min-width: 140px;
+  max-width: 190px;
+  position: relative;
+}
+
+.dict-dropdown .custom-dropdown-trigger {
+  height: 42px;
+  min-height: 42px;
+  padding: 0 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.dict-dropdown-menu {
+  right: 0;
+  left: auto;
+  min-width: 165px;
+  max-width: 220px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
 .filter-select:focus {
   border-color: var(--primary-color);
 }

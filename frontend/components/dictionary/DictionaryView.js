@@ -73,6 +73,17 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   // Load saved dictionary category filter from localStorage, defaulting to 'Elementary'
   const savedDictCat = localStorage.getItem('myduo_dict_category') || 'Elementary';
+  const uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
+  const allCategories = ['All', ...uniqueCats];
+
+  let currentCategory = savedDictCat;
+  if (currentCategory !== 'All' && !uniqueCats.includes(currentCategory)) {
+    currentCategory = uniqueCats.includes('Elementary') ? 'Elementary' : 'All';
+  }
+
+  function getCatDisplayName(cat) {
+    return cat === 'All' ? 'Все категории' : cat;
+  }
 
   container.innerHTML = `
     <div class="dictionary-page">
@@ -85,9 +96,13 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       <div class="dictionary-controls">
         <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова" autocomplete="off" />
         
-        <select id="dict-category" class="filter-select">
-          <option value="All">Все категории</option>
-        </select>
+        <div class="custom-dropdown dict-dropdown" id="dict-cat-dropdown">
+          <button type="button" class="custom-dropdown-trigger" id="dict-cat-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="dict-cat-label">${getCatDisplayName(currentCategory)}</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="custom-dropdown-menu dict-dropdown-menu" id="dict-cat-menu" role="listbox"></div>
+        </div>
       </div>
 
       <div class="dictionary-grid" id="dict-grid">
@@ -97,25 +112,48 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     </div>
   `;
 
-  // Populate categories
-  const categorySelect = container.querySelector('#dict-category');
-  const uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
-  uniqueCats.forEach((cat) => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    if (cat === savedDictCat) {
-      opt.selected = true;
-    }
-    categorySelect.appendChild(opt);
-  });
+  const dictDropdown = container.querySelector('#dict-cat-dropdown');
+  const dictTrigger = container.querySelector('#dict-cat-trigger');
+  const dictLabel = container.querySelector('#dict-cat-label');
+  const dictMenu = container.querySelector('#dict-cat-menu');
 
-  if (savedDictCat === 'All') {
-    categorySelect.value = 'All';
-  } else if (uniqueCats.includes(savedDictCat)) {
-    categorySelect.value = savedDictCat;
-  } else if (uniqueCats.includes('Elementary')) {
-    categorySelect.value = 'Elementary';
+  function renderCategoryOptions() {
+    if (!dictMenu) return;
+    dictMenu.innerHTML = allCategories
+      .map(
+        (cat) => `
+      <div class="dropdown-item ${cat === currentCategory ? 'selected' : ''}" data-value="${cat}">
+        ${getCatDisplayName(cat)}
+      </div>
+    `
+      )
+      .join('');
+
+    if (dictLabel) dictLabel.textContent = getCatDisplayName(currentCategory);
+
+    dictMenu.querySelectorAll('.dropdown-item').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentCategory = item.dataset.value;
+        localStorage.setItem('myduo_dict_category', currentCategory);
+        renderCategoryOptions();
+        dictDropdown.classList.remove('open');
+        filterAndResetList();
+      });
+    });
+  }
+
+  renderCategoryOptions();
+
+  if (dictTrigger && dictDropdown) {
+    dictTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dictDropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      dictDropdown.classList.remove('open');
+    });
   }
 
   const grid = container.querySelector('#dict-grid');
@@ -140,7 +178,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
         const prog =
           userProgress[w.id] ||
           userProgress[String(w.id)] ||
-          (w.word ? userProgress[w.word.toLowerCase().trim()] : null);
+          (userProgress && typeof userProgress === 'object' ? userProgress[w.id] : null);
         return renderWordCardHtml(w, isFav, prog);
       })
       .join('');
@@ -148,35 +186,41 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     grid.insertAdjacentHTML('beforeend', fragmentHtml);
     renderedCount += nextBatch.length;
 
-    if (sentinel) {
-      if (renderedCount < filteredWords.length) {
-        sentinel.style.display = 'flex';
+    if (renderedCount < filteredWords.length) {
+      if (sentinel) {
+        sentinel.style.display = 'block';
         sentinel.textContent = 'Загрузка слов...';
-      } else {
-        sentinel.style.display = 'none';
       }
+    } else {
+      if (sentinel) sentinel.style.display = 'none';
     }
   }
 
   function setupInfiniteScroll() {
-    if (observer) observer.disconnect();
+    if (observer) {
+      observer.disconnect();
+    }
+
     if (!sentinel) return;
 
     if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting && renderedCount < filteredWords.length) {
-            renderBatch();
-          }
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && renderedCount < filteredWords.length) {
+              renderBatch();
+            }
+          });
         },
-        { rootMargin: '250px' }
+        { root: null, rootMargin: '300px', threshold: 0.05 }
       );
       observer.observe(sentinel);
     } else {
-      // Fallback scroll listener
       window.addEventListener('scroll', () => {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const bodyHeight = document.body.offsetHeight;
         if (
-          window.innerHeight + window.scrollY >= document.body.offsetHeight - 300 &&
+          bodyHeight - scrollPosition < 400 &&
           renderedCount < filteredWords.length
         ) {
           renderBatch();
@@ -187,7 +231,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   const filterAndResetList = () => {
     const query = searchInput.value.trim().toLowerCase();
-    const selectedCat = categorySelect.value;
+    const selectedCat = currentCategory;
 
     filteredWords = words.filter((w) => {
       const catClean = sanitizeCategory(w.category);
@@ -253,11 +297,6 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(filterAndResetList, 120);
-  });
-
-  categorySelect.addEventListener('change', () => {
-    localStorage.setItem('myduo_dict_category', categorySelect.value);
-    filterAndResetList();
   });
 
   // Initial fast render
