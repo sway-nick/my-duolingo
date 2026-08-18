@@ -478,6 +478,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     let hasSecondChance = false;
 
     function placeCaretAtEnd(el) {
+      if (!el) return;
       el.focus();
       try {
         const range = document.createRange();
@@ -487,6 +488,48 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         sel.removeAllRanges();
         sel.addRange(range);
       } catch (e) {}
+    }
+
+    function placeCaretAfterFirstMismatch(el) {
+      if (!el) return;
+      el.focus();
+      try {
+        const firstMismatch = el.querySelector('.diff-char-inline.mismatch, .diff-char-inline.missing');
+        if (firstMismatch) {
+          const range = document.createRange();
+          if (firstMismatch.classList.contains('missing')) {
+            range.setStartBefore(firstMismatch);
+          } else {
+            range.setStartAfter(firstMismatch);
+          }
+          range.collapse(true);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          return;
+        }
+      } catch (e) {
+        console.warn('Error placing caret after mismatch:', e);
+      }
+      placeCaretAtEnd(el);
+    }
+
+    function focusAndPlaceCaret(el) {
+      if (!el) return;
+      el.focus();
+      placeCaretAtEnd(el);
+      requestAnimationFrame(() => {
+        el.focus();
+        placeCaretAtEnd(el);
+      });
+      setTimeout(() => {
+        el.focus();
+        placeCaretAtEnd(el);
+      }, 50);
+      setTimeout(() => {
+        el.focus();
+        placeCaretAtEnd(el);
+      }, 150);
     }
 
     function calculateLevenshtein(a, b) {
@@ -548,7 +591,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           feedback.innerHTML = '';
 
           checkBtn.textContent = 'Исправить (-1 XP)';
-          placeCaretAtEnd(input);
+          
+          // Place cursor automatically after the first incorrect letter!
+          placeCaretAfterFirstMismatch(input);
+          requestAnimationFrame(() => placeCaretAfterFirstMismatch(input));
+          setTimeout(() => placeCaretAfterFirstMismatch(input), 50);
           return;
         }
       }
@@ -635,9 +682,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       document.execCommand('insertText', false, text);
     });
 
-    setTimeout(() => {
-      placeCaretAtEnd(input);
-    }, 100);
+    focusAndPlaceCaret(input);
   } else {
     // 3D Vertical Flippable Flashcard
     practiceArea.innerHTML = `
