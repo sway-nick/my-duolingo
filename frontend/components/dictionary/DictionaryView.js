@@ -47,18 +47,18 @@ function renderWordCardHtml(w, isFav, prog) {
           <span class="category-badge">${cleanCat}</span>
           ${stageBadge}
         </div>
-        <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
-          ${isFav ? '❤️' : '🤍'}
-        </button>
+        <div class="dict-card-actions">
+          <button class="dict-audio-btn" data-word="${w.word}" data-id="${w.id}" title="Слушать произношение">🎙️</button>
+          <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
+            ${isFav ? '❤️' : '🤍'}
+          </button>
+        </div>
       </div>
       
       <div class="dict-card-body">
         <h3>${w.word}</h3>
-        <p class="dict-transcription">${w.transcription || ''}</p>
         <p class="dict-translation">${w.translation}</p>
       </div>
-
-      <button class="sound-button-sm" data-word="${w.word}" data-id="${w.id}">🔊 Произношение</button>
     </div>
   `;
 }
@@ -92,7 +92,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
         <p class="subtitle">Изучайте слова, слушайте произношение и отслеживайте выученные</p>
       </div>
 
-      <!-- Controls: Search & Category Filter -->
+      <!-- Controls: Sticky Search & Category Filter -->
       <div class="dictionary-controls">
         <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова" autocomplete="off" />
         
@@ -111,6 +111,17 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       <div id="dict-scroll-sentinel" style="height: 40px; text-align: center; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px;"></div>
     </div>
   `;
+
+  const headerEl = document.querySelector('.mobile-header');
+  const dictControls = container.querySelector('.dictionary-controls');
+  const updateDictStickyTop = () => {
+    if (dictControls) {
+      const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
+      dictControls.style.setProperty('--dict-sticky-top', `${Math.round(headerBottom)}px`);
+    }
+  };
+  updateDictStickyTop();
+  window.addEventListener('resize', updateDictStickyTop, { passive: true });
 
   const dictDropdown = container.querySelector('#dict-cat-dropdown');
   const dictTrigger = container.querySelector('#dict-cat-trigger');
@@ -264,7 +275,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   // High-performance Event Delegation on grid (zero individual listeners)
   grid.addEventListener('click', async (e) => {
     // 1. Audio button click
-    const soundBtn = e.target.closest('.sound-button-sm');
+    const soundBtn = e.target.closest('.dict-audio-btn, .sound-button-sm');
     if (soundBtn) {
       e.stopPropagation();
       const word = soundBtn.getAttribute('data-word');
