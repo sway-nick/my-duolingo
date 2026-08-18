@@ -363,11 +363,14 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
 
   const isTurtleMode = clickCount >= 3;
   const gender = voiceGenderOverride || getSavedVoiceGender();
-  const cleanText = text.trim();
+  const voiceType = gender === 'male' ? 1 : 2;
 
-  // 3. Try high-definition natural studio cloud audio stream (American/British native speaker)
+  // Clean text from punctuation (punctuation like ! or ? breaks dictionary audio endpoints)
+  const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
+
+  // 3. Try high-definition natural studio cloud audio stream (Type 1 = Male UK/Standard, Type 2 = Female US)
   try {
-    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanText)}&type=2`;
+    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`;
     const audio = new Audio(cloudUrl);
     currentAudioPlayer = audio;
 
@@ -378,7 +381,7 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     const runFallback = () => {
       if (hasFallbackRun) return;
       hasFallbackRun = true;
-      speakWithSpeechSynthesis(cleanText, lang, isTurtleMode, gender);
+      speakWithSpeechSynthesis(text, lang, isTurtleMode, gender);
     };
 
     audio.onerror = () => {
@@ -393,7 +396,7 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
       });
     }
   } catch (err) {
-    speakWithSpeechSynthesis(cleanText, lang, isTurtleMode, gender);
+    speakWithSpeechSynthesis(text, lang, isTurtleMode, gender);
   }
 
   return isTurtleMode;

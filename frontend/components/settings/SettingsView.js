@@ -285,7 +285,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       currentVoice = 'female';
       setSavedVoiceGender('female');
       updateVoiceButtons();
-      speakWord('Hello! This is the female voice.', null, 'en-US', 'female', true);
+      speakWord('Hello', null, 'en-US', 'female', true);
       triggerAutoSave();
     });
 
@@ -293,7 +293,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       currentVoice = 'male';
       setSavedVoiceGender('male');
       updateVoiceButtons();
-      speakWord('Hello! This is the male voice.', null, 'en-US', 'male', true);
+      speakWord('Hello', null, 'en-US', 'male', true);
       triggerAutoSave();
     });
   }
