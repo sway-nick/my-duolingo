@@ -11,20 +11,13 @@ if (!fs.existsSync(distDir)) {
 
 // Order of inclusion
 const filesOrder = [
-  'config/constants.js',
   'utils/response.js',
   'utils/request.js',
   'services/spreadsheet.js',
-  'models/user.js',
-  'models/word.js',
-  'models/progress.js',
-  'models/stats.js',
   'api/health.js',
   'api/auth.js',
   'api/words.js',
-  'api/stats.js',
   'api/progress.js',
-  'api/favorite.js',
   'api/settings.js',
   'api/leaderboard.js',
   'router.js',
