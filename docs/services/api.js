@@ -485,6 +485,10 @@ async function getLeaderboard(weekKey = null) {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
       }
 
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: data.data } }));
+      }
+
       return getCachedLeaderboard(wKey);
     }
   } catch (e) {

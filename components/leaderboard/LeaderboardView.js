@@ -207,10 +207,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     container._leaderboardTimer = null;
   }
 
-  // 1. Background fresh sync on initial open
+  // 1. Fresh sync on initial open
   loadFreshData();
 
-  // 2. Automatic background sync every 45 seconds while viewing leaderboard
+  // 2. Real-time background sync every 12 seconds while viewing leaderboard
   container._leaderboardTimer = setInterval(() => {
     // Only fetch if tab content is still active in the DOM
     if (document.body.contains(contentEl)) {
@@ -219,17 +219,27 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       clearInterval(container._leaderboardTimer);
       container._leaderboardTimer = null;
     }
-  }, 45000);
+  }, 12000);
 
-  // 3. Listen to local XP changes to update current user's row immediately
-  const handleXpChanged = () => {
+  // 3. Listen to local XP and remote leaderboard changes to update table immediately
+  const handleLiveUpdate = () => {
     const updatedCache = getCachedLeaderboard();
-    if (updatedCache && updatedCache.data && contentEl) {
+    if (updatedCache && updatedCache.data && contentEl && document.body.contains(contentEl)) {
       contentEl.innerHTML = buildLeaderboardBodyHtml(updatedCache.data, currentUser);
       bindListeners();
     }
   };
-  window.addEventListener('myduo:xp_changed', handleXpChanged, { once: true });
+
+  window.addEventListener('myduo:xp_changed', handleLiveUpdate);
+  window.addEventListener('myduo:leaderboard_updated', handleLiveUpdate);
+
+  // 4. When user tabs back to the app, immediately refresh
+  const handleVisibility = () => {
+    if (document.visibilityState === 'visible' && document.body.contains(contentEl)) {
+      loadFreshData();
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibility);
 }
 
 export { renderLeaderboardView };
