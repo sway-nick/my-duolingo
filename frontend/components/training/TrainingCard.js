@@ -402,9 +402,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }, idx * 80);
           });
 
-          // Play realistic metallic ringing coin drop sound and award XP simultaneously
+          // Play realistic metallic ringing coin drop sound and award XP simultaneously (only on error-free perfect round)
           setTimeout(async () => {
-            playCoinDropSound();
+            if (errorsInRound === 0) {
+              playCoinDropSound();
+            }
             await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
           }, 1350);
 
