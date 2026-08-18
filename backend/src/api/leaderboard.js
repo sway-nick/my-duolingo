@@ -121,19 +121,9 @@ function leaderboardGet(e) {
 
   const weekList = Object.values(weekMap);
 
-  // If few participants, add engaging initial league participants
-  const defaultBots = [
-    { userId: 'bot_1', name: 'Alex Smith', avatar: './assets/avatars/avatar_1.png', xp: 54 },
-    { userId: 'bot_2', name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.png', xp: 42 },
-    { userId: 'bot_3', name: 'Mark Davis', avatar: './assets/avatars/avatar_6.png', xp: 35 },
-    { userId: 'bot_4', name: 'Anna Novak', avatar: './assets/avatars/avatar_8.png', xp: 28 },
-    { userId: 'bot_5', name: 'Dmitry K.', avatar: './assets/avatars/avatar_11.png', xp: 21 },
-    { userId: 'bot_6', name: 'Sophie L.', avatar: './assets/avatars/avatar_14.png', xp: 16 },
-    { userId: 'bot_7', name: 'John Doe', avatar: './assets/avatars/avatar_2.png', xp: 11 },
-    { userId: 'bot_8', name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.png', xp: 6 },
-  ];
-
-  defaultBots.forEach((bot) => {
+  // Dynamic 50 realistic league participants with daily progression (0-200 XP/day)
+  const dynamicBots = generateDynamicBots(weekKey);
+  dynamicBots.forEach((bot) => {
     if (!weekList.some((p) => String(p.userId) === String(bot.userId))) {
       weekList.push(bot);
     }
@@ -143,6 +133,101 @@ function leaderboardGet(e) {
   weekList.sort((a, b) => b.xp - a.xp);
 
   return successResponse(weekList);
+}
+
+const BOT_PROFILES = [
+  { name: 'Alex Smith', avatar: './assets/avatars/avatar_1.png' },
+  { name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.png' },
+  { name: 'Mark Davis', avatar: './assets/avatars/avatar_6.png' },
+  { name: 'Anna Novak', avatar: './assets/avatars/avatar_8.png' },
+  { name: 'Dmitry Kuznetsov', avatar: './assets/avatars/avatar_11.png' },
+  { name: 'Sophie Laurent', avatar: './assets/avatars/avatar_14.png' },
+  { name: 'John Doe', avatar: './assets/avatars/avatar_2.png' },
+  { name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.png' },
+  { name: 'Carlos Mendes', avatar: './assets/avatars/avatar_4.png' },
+  { name: 'Emma Watson', avatar: './assets/avatars/avatar_5.png' },
+  { name: 'Liam O\'Connor', avatar: './assets/avatars/avatar_7.png' },
+  { name: 'Yuki Tanaka', avatar: './assets/avatars/avatar_9.png' },
+  { name: 'Oliver Brown', avatar: './assets/avatars/avatar_10.png' },
+  { name: 'Chloe Dubois', avatar: './assets/avatars/avatar_12.png' },
+  { name: 'Lucas Silva', avatar: './assets/avatars/avatar_13.png' },
+  { name: 'Maximilian Becker', avatar: './assets/avatars/avatar_16.png' },
+  { name: 'Mia Andersen', avatar: './assets/avatars/avatar_1.png' },
+  { name: 'Noah Johnson', avatar: './assets/avatars/avatar_2.png' },
+  { name: 'Zoe Martin', avatar: './assets/avatars/avatar_3.png' },
+  { name: 'Artem Sokolov', avatar: './assets/avatars/avatar_4.png' },
+  { name: 'Isabella Rossi', avatar: './assets/avatars/avatar_5.png' },
+  { name: 'Viktor Orlov', avatar: './assets/avatars/avatar_6.png' },
+  { name: 'Hannah Schmidt', avatar: './assets/avatars/avatar_7.png' },
+  { name: 'Gabriel Santos', avatar: './assets/avatars/avatar_8.png' },
+  { name: 'Polina Smirnova', avatar: './assets/avatars/avatar_9.png' },
+  { name: 'Daniel Miller', avatar: './assets/avatars/avatar_10.png' },
+  { name: 'Laura Garcia', avatar: './assets/avatars/avatar_11.png' },
+  { name: 'Sergey Volkov', avatar: './assets/avatars/avatar_12.png' },
+  { name: 'Emily Clark', avatar: './assets/avatars/avatar_13.png' },
+  { name: 'Mateo Fernandez', avatar: './assets/avatars/avatar_14.png' },
+  { name: 'Alina Morozova', avatar: './assets/avatars/avatar_15.png' },
+  { name: 'William Taylor', avatar: './assets/avatars/avatar_16.png' },
+  { name: 'Camille Bernard', avatar: './assets/avatars/avatar_1.png' },
+  { name: 'Ivan Popov', avatar: './assets/avatars/avatar_2.png' },
+  { name: 'Freja Nielsen', avatar: './assets/avatars/avatar_3.png' },
+  { name: 'Ethan Wright', avatar: './assets/avatars/avatar_4.png' },
+  { name: 'Daria Lebedeva', avatar: './assets/avatars/avatar_5.png' },
+  { name: 'Leo Moreau', avatar: './assets/avatars/avatar_6.png' },
+  { name: 'Victoria Hall', avatar: './assets/avatars/avatar_7.png' },
+  { name: 'Ksenia Fedorova', avatar: './assets/avatars/avatar_8.png' },
+  { name: 'James Wilson', avatar: './assets/avatars/avatar_9.png' },
+  { name: 'Clara Meyer', avatar: './assets/avatars/avatar_10.png' },
+  { name: 'Ilya Kozlov', avatar: './assets/avatars/avatar_11.png' },
+  { name: 'Sara Lind', avatar: './assets/avatars/avatar_12.png' },
+  { name: 'Mason Evans', avatar: './assets/avatars/avatar_13.png' },
+  { name: 'Anastasia Romanova', avatar: './assets/avatars/avatar_14.png' },
+  { name: 'Hugo Lefebvre', avatar: './assets/avatars/avatar_15.png' },
+  { name: 'Evelyn Moore', avatar: './assets/avatars/avatar_16.png' },
+  { name: 'Mikhail Pavlov', avatar: './assets/avatars/avatar_1.png' },
+  { name: 'Olivia King', avatar: './assets/avatars/avatar_2.png' }
+];
+
+function generateDynamicBots(weekKey) {
+  const now = new Date();
+  let dayOfWeek = now.getUTCDay();
+  if (dayOfWeek === 0) dayOfWeek = 7; // Monday = 1 ... Sunday = 7
+  const hour = now.getUTCHours();
+
+  function hashStr(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+  }
+
+  return BOT_PROFILES.map((bot, index) => {
+    const userId = 'bot_' + (index + 1);
+    const tier = index % 5;
+    const maxDaily = [190, 140, 95, 60, 30][tier];
+    const minDaily = [70, 40, 20, 5, 0][tier];
+
+    let botXP = 0;
+    for (let d = 1; d <= dayOfWeek; d++) {
+      const seed = hashStr(weekKey + '_' + userId + '_day_' + d);
+      const dayGain = minDaily + (seed % (maxDaily - minDaily + 1));
+      if (d < dayOfWeek) {
+        botXP += dayGain;
+      } else {
+        const fraction = Math.min(1.0, Math.max(0.1, (hour + 1) / 21));
+        botXP += Math.floor(dayGain * fraction);
+      }
+    }
+
+    return {
+      userId: userId,
+      name: bot.name,
+      avatar: bot.avatar,
+      xp: botXP,
+      isBot: true,
+    };
+  });
 }
 
 function leaderboardPost(e) {
