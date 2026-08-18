@@ -30,7 +30,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       <div class="page-header" style="margin-bottom: 14px;">
         <h2 style="font-size: 22px; margin: 0 0 12px; white-space: nowrap;">❤️ Избранные слова (${favoriteWords.length})</h2>
         <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-height: 48px; height: 48px; font-size: 16px; font-weight: 700;">
-          Учить
+          Повторить
         </button>
       </div>
 
