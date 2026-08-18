@@ -298,7 +298,7 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
+    utterance.lang = lang || 'en-US';
 
     const voice = getPreferredVoice(gender);
     if (voice) {
@@ -307,11 +307,11 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
     }
 
     if (gender === 'male') {
-      utterance.pitch = 0.70;
-      utterance.rate = isTurtleMode ? 0.38 : 0.80;
+      utterance.pitch = 0.92; // Clean natural masculine pitch (no distortion)
+      utterance.rate = isTurtleMode ? 0.45 : 0.88;
     } else {
-      utterance.pitch = 1.05;
-      utterance.rate = isTurtleMode ? 0.40 : 0.84;
+      utterance.pitch = 1.02; // Clean natural feminine pitch
+      utterance.rate = isTurtleMode ? 0.45 : 0.90;
     }
 
     window.speechSynthesis.speak(utterance);
@@ -321,8 +321,8 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
 }
 
 /**
- * Speaks the given text using high-definition natural Cloud Audio,
- * with automatic fallback to SpeechSynthesis when offline.
+ * Speaks the given text using high-definition natural Cloud Audio for female voice,
+ * and clean natural masculine voice for male voice, with automatic offline fallback.
  * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
  *
  * @param {string} text - The word or text to pronounce
@@ -363,14 +363,18 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
 
   const isTurtleMode = clickCount >= 3;
   const gender = voiceGenderOverride || getSavedVoiceGender();
-  const voiceType = gender === 'male' ? 1 : 2;
 
-  // Clean text from punctuation (punctuation like ! or ? breaks dictionary audio endpoints)
+  // 3. For Male voice: use clean natural masculine voice engine
+  if (gender === 'male') {
+    speakWithSpeechSynthesis(text, lang, isTurtleMode, 'male');
+    return isTurtleMode;
+  }
+
+  // 4. For Female voice: use high-definition studio native recording
   const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
 
-  // 3. Try high-definition natural studio cloud audio stream (Type 1 = Male UK/Standard, Type 2 = Female US)
   try {
-    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`;
+    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=2`;
     const audio = new Audio(cloudUrl);
     currentAudioPlayer = audio;
 
@@ -381,7 +385,7 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     const runFallback = () => {
       if (hasFallbackRun) return;
       hasFallbackRun = true;
-      speakWithSpeechSynthesis(text, lang, isTurtleMode, gender);
+      speakWithSpeechSynthesis(text, lang, isTurtleMode, 'female');
     };
 
     audio.onerror = () => {
@@ -390,13 +394,12 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.catch((err) => {
-        // Fallback to SpeechSynthesis if network/CORS or autoplay restricted
+      playPromise.catch(() => {
         runFallback();
       });
     }
   } catch (err) {
-    speakWithSpeechSynthesis(text, lang, isTurtleMode, gender);
+    speakWithSpeechSynthesis(text, lang, isTurtleMode, 'female');
   }
 
   return isTurtleMode;
