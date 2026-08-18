@@ -302,6 +302,10 @@ const audioUrlCache = new Map();
 
 function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  // Respect modern browser Autoplay Policy: only speak if user has interacted with the page
+  if (typeof navigator !== 'undefined' && navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+    return;
+  }
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
