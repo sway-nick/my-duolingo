@@ -533,12 +533,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           // Highlight letters directly inside the input window!
           input.innerHTML = renderDiffHtml(userAns, correctAns);
 
-          feedback.style.display = 'block';
-          feedback.innerHTML = `
-            <div style="font-size: 14px; font-weight: 700; color: #ef4444;">
-              ⚠️ Опечатка! Исправьте красные буквы прямо в поле ввода
-            </div>
-          `;
+          feedback.style.display = 'none';
+          feedback.innerHTML = '';
 
           checkBtn.textContent = 'Исправить (-1 XP)';
           placeCaretAtEnd(input);
