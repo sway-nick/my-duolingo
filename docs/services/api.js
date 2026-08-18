@@ -346,12 +346,24 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 }
 
 async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
+  if (!userId) return;
+  const cleanName = name || 'Гость';
+  const cleanAvatar = avatar || '';
+  const cleanXp = Math.max(0, Number(xp || 0));
+
+  // 1. Send via POST (text/plain)
   try {
     fetch(`${API_URL}?route=leaderboard`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ route: 'leaderboard', action: 'leaderboard', userId, weekKey, xp, name, avatar }),
+      body: JSON.stringify({ route: 'leaderboard', action: 'leaderboard', userId, weekKey, xp: cleanXp, name: cleanName, avatar: cleanAvatar }),
     }).catch(() => {});
+  } catch (e) {}
+
+  // 2. Also send via GET query string for 100% reliability on mobile webviews / iOS Safari
+  try {
+    const queryUrl = `${API_URL}?route=leaderboard&action=sync&userId=${encodeURIComponent(userId)}&weekKey=${encodeURIComponent(weekKey)}&xp=${cleanXp}&name=${encodeURIComponent(cleanName)}&avatar=${encodeURIComponent(cleanAvatar)}&_t=${Date.now()}`;
+    fetch(queryUrl).catch(() => {});
   } catch (e) {}
 }
 

@@ -12,6 +12,29 @@ function leaderboardGet(e) {
   const query = getQuery(e);
   const weekKey = query.weekKey || getIsoWeekKey();
 
+  if (query.userId && query.xp !== undefined) {
+    const userId = String(query.userId);
+    const xp = Math.max(0, Number(query.xp || 0));
+    const name = query.name || 'Ученик';
+    const avatar = query.avatar || '';
+    const updatedAt = new Date().toISOString();
+
+    const sheet = getSheet('Leaderboard', LEADERBOARD_HEADERS);
+    const list = getSheetData('Leaderboard', LEADERBOARD_HEADERS);
+
+    const existingIdx = list.findIndex(
+      (item) => String(item.userId) === userId && item.weekKey === weekKey
+    );
+
+    if (existingIdx >= 0) {
+      const item = list[existingIdx];
+      const rowIndex = item._rowIndex;
+      sheet.getRange(rowIndex, 3, 1, 4).setValues([[name, avatar, xp, updatedAt]]);
+    } else {
+      appendSheetRow('Leaderboard', { userId, weekKey, name, avatar, xp, updatedAt }, LEADERBOARD_HEADERS);
+    }
+  }
+
   const leaderboardList = getSheetData('Leaderboard', LEADERBOARD_HEADERS);
   const usersList = getSheetData('Users', USER_HEADERS);
 
