@@ -2817,12 +2817,12 @@ body {
 .podium-sticky-wrapper {
   position: -webkit-sticky;
   position: sticky;
-  top: 57px;
+  top: var(--podium-sticky-top, 64px);
   z-index: 25;
   background: var(--bg-main, #ffffff);
   padding: 6px 0 8px;
   margin-bottom: 8px;
-  transition: padding 0.25s ease, box-shadow 0.25s ease;
+  transition: padding 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dark-theme .podium-sticky-wrapper {

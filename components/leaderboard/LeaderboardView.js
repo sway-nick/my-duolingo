@@ -189,12 +189,20 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       });
     }
 
-    // Dynamic compact mode when scrolling down
+    // Dynamic compact mode precisely when podium touches the sticky header
+    const headerEl = document.querySelector('.mobile-header');
     const updateCompactPodium = () => {
       const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
       if (stickyWrapper && document.body.contains(stickyWrapper)) {
-        const isScrolled = window.scrollY > 30 || document.documentElement.scrollTop > 30;
-        stickyWrapper.classList.toggle('is-compact', isScrolled);
+        const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
+        // Leave a clean 4px visible gap under the header
+        const stickyTopOffset = Math.ceil(headerBottom) + 4;
+        stickyWrapper.style.setProperty('--podium-sticky-top', `${stickyTopOffset}px`);
+
+        const wrapperRect = stickyWrapper.getBoundingClientRect();
+        // Compress only when the top edge of the cards reaches the header
+        const isTouchingHeader = wrapperRect.top <= (stickyTopOffset + 2);
+        stickyWrapper.classList.toggle('is-compact', isTouchingHeader);
       }
     };
 
