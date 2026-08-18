@@ -2374,13 +2374,13 @@ body {
   align-items: center;
 }
 
-.dict-card-actions {
+.fav-card-actions, .dict-card-actions {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-.dict-audio-btn, .remove-fav-btn, .fav-icon-btn {
+.fav-audio-btn, .dict-audio-btn, .remove-fav-btn, .fav-icon-btn {
   background: transparent;
   border: none;
   font-size: 18px;
@@ -2396,17 +2396,33 @@ body {
   line-height: 1;
 }
 
-.dict-audio-btn:hover, .remove-fav-btn:hover, .fav-icon-btn:hover {
+.fav-audio-btn:hover, .dict-audio-btn:hover, .remove-fav-btn:hover, .fav-icon-btn:hover {
   background: rgba(0, 0, 0, 0.06);
   transform: scale(1.12);
 }
 
-.dict-audio-btn:active, .remove-fav-btn:active, .fav-icon-btn:active {
+.fav-audio-btn:active, .dict-audio-btn:active, .remove-fav-btn:active, .fav-icon-btn:active {
   transform: scale(0.92);
 }
 
-.dark-theme .dict-audio-btn:hover, .dark-theme .remove-fav-btn:hover, .dark-theme .fav-icon-btn:hover {
+.dark-theme .fav-audio-btn:hover, .dark-theme .dict-audio-btn:hover, .dark-theme .remove-fav-btn:hover, .dark-theme .fav-icon-btn:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.fav-sticky-controls {
+  position: -webkit-sticky;
+  position: sticky;
+  top: var(--fav-sticky-top, 58px);
+  z-index: 25;
+  background: var(--bg-main, #ffffff);
+  padding: 4px 0 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.dark-theme .fav-sticky-controls {
+  background: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .fav-word, .dict-card h3 {

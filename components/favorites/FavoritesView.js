@@ -27,9 +27,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
   container.innerHTML = `
     <div class="favorites-page">
-      <div class="page-header" style="margin-bottom: 14px;">
-        <h2 style="font-size: 22px; margin: 0 0 12px; white-space: nowrap;">❤️ Избранные слова (${favoriteWords.length})</h2>
-        <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-height: 48px; height: 48px; font-size: 16px; font-weight: 700;">
+      <div class="page-header" style="margin-bottom: 8px;">
+        <h2 style="font-size: 22px; margin: 0; white-space: nowrap;">❤️ Избранные слова (${favoriteWords.length})</h2>
+      </div>
+
+      <!-- Sticky Repeat Button -->
+      <div class="fav-sticky-controls">
+        <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-height: 44px; height: 44px; font-size: 16px; font-weight: 700;">
           Повторить
         </button>
       </div>
@@ -41,17 +45,15 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           <div class="fav-card" data-id="${word.id}">
             <div class="fav-card-top">
               <span class="category-badge">${word.category || 'Общие'}</span>
-              <button class="remove-fav-btn" data-id="${word.id}" title="Удалить из избранного">❤️</button>
+              <div class="fav-card-actions">
+                <button class="fav-audio-btn" data-word="${word.word}" data-id="${word.id}" title="Слушать произношение">🔊</button>
+                <button class="remove-fav-btn" data-id="${word.id}" title="Удалить из избранного">❤️</button>
+              </div>
             </div>
             
             <div class="fav-card-body">
               <h3 class="fav-word">${word.word}</h3>
-              <p class="fav-transcription">${word.transcription || ''}</p>
               <p class="fav-translation">${word.translation}</p>
-            </div>
-
-            <div class="fav-card-actions">
-              <button class="sound-button-sm" data-word="${word.word}" data-id="${word.id}">🔊 Слушать</button>
             </div>
           </div>
         `
@@ -60,6 +62,17 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       </div>
     </div>
   `;
+
+  const headerEl = document.querySelector('.mobile-header');
+  const favControls = container.querySelector('.fav-sticky-controls');
+  const updateFavStickyTop = () => {
+    if (favControls) {
+      const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
+      favControls.style.setProperty('--fav-sticky-top', `${Math.round(headerBottom)}px`);
+    }
+  };
+  updateFavStickyTop();
+  window.addEventListener('resize', updateFavStickyTop, { passive: true });
 
   // Bind practice button
   container.querySelector('#start-fav-practice-btn')?.addEventListener('click', () => {
@@ -71,7 +84,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   if (favGrid) {
     favGrid.addEventListener('click', async (e) => {
       // 1. Audio button
-      const soundBtn = e.target.closest('.sound-button-sm');
+      const soundBtn = e.target.closest('.fav-audio-btn, .sound-button-sm');
       if (soundBtn) {
         e.stopPropagation();
         const w = soundBtn.getAttribute('data-word');
