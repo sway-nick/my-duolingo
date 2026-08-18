@@ -1,5 +1,4 @@
 const LEADERBOARD_HEADERS = ['userId', 'weekKey', 'name', 'avatar', 'xp', 'updatedAt'];
-const USER_HEADERS = ['id', 'userName', 'email', 'passwordHash', 'createdAt', 'status'];
 
 function getIsoWeekKey(d = new Date()) {
   const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
