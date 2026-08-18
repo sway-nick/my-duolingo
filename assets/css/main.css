@@ -2437,7 +2437,7 @@ body {
 
 .podium-badge {
   position: absolute;
-  top: 0px;
+  top: 1px;
   right: 3px;
   font-size: 36px;
   line-height: 1;
