@@ -1,6 +1,6 @@
 import { getUserStats, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=18.0';
 import { getCurrentUser } from '../../services/authService.js?v=18.0';
-import { playAudio } from '../../services/audioService.js?v=18.0';
+import { speakWord } from '../../services/audioService.js?v=18.0';
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];
@@ -166,7 +166,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           isFlipped = !isFlipped;
           flashcard.classList.toggle('is-flipped', isFlipped);
           if (!isFlipped) {
-            playAudio(wotd.word);
+            speakWord(wotd.word, wotd.id);
           }
         });
 
@@ -174,7 +174,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         speakButtons.forEach((btn) => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            playAudio(wotd.word);
+            speakWord(wotd.word, wotd.id);
           });
         });
 

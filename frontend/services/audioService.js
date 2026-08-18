@@ -457,8 +457,11 @@ function resetAudioCounter() {
   clickCount = 0;
 }
 
+const playAudio = speakWord;
+
 export {
   speakWord,
+  playAudio,
   resetAudioCounter,
   playSuccessSound,
   playErrorSound,
