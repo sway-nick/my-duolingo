@@ -1137,9 +1137,10 @@ async function getUserStats(customWords = null) {
     learned: stats.learned,
   }));
 
-  // Word of the Day: word with most mistakes across users over last 3 days
+  // Word of the Day: 100% globally unified across ALL players
   let wordOfTheDay = null;
 
+  // 1. Check if cloud stats provided the global most mistaken word
   try {
     const cloudStatsRaw = localStorage.getItem('myduo_cached_cloud_stats');
     if (cloudStatsRaw) {
@@ -1150,21 +1151,7 @@ async function getUserStats(customWords = null) {
     }
   } catch (e) {}
 
-  if (!wordOfTheDay) {
-    let mostMistakenWordId = null;
-    let maxErrors = 0;
-    Object.entries(localProg).forEach(([wId, p]) => {
-      const errs = (p.error || 0) + (p.inputMistakes || 0) + (p.hardCount || 0);
-      if (errs > maxErrors) {
-        maxErrors = errs;
-        mostMistakenWordId = wId;
-      }
-    });
-    if (mostMistakenWordId) {
-      wordOfTheDay = wordsList.find((w) => String(w.id) === String(mostMistakenWordId));
-    }
-  }
-
+  // 2. Global deterministic calendar seed (identical for ALL players worldwide on today's date)
   if (!wordOfTheDay && wordsList.length > 0) {
     const todayStr = new Date().toISOString().slice(0, 10);
     let dateHash = 0;

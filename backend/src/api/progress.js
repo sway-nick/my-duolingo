@@ -123,6 +123,20 @@ function statsGet(e) {
     });
   }
 
+  // Fallback to global date seed if no errors in sheet at all
+  if (!topWordId && vocabulary.length > 0) {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    let dateHash = 0;
+    for (let i = 0; i < todayStr.length; i++) {
+      dateHash = ((dateHash << 5) - dateHash) + todayStr.charCodeAt(i);
+      dateHash |= 0;
+    }
+    const trickyPool = vocabulary.filter((w) => w.level === 'B1' || w.level === 'B2' || w.level === 'Intermediate' || (w.word && w.word.length >= 6));
+    const pool = trickyPool.length > 0 ? trickyPool : vocabulary;
+    const idx = Math.abs(dateHash) % pool.length;
+    topWordId = String(pool[idx].id);
+  }
+
   return successResponse({
     totalWords,
     masteredCount,
