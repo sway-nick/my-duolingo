@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId } from './authService.js?v=18.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId } from './authService.js?v=18.0';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
@@ -289,7 +289,24 @@ function getUserWeeklyXP(userId = null, weekKey = null) {
   const uId = userId || getEffectiveUserId();
   const wKey = weekKey || getIsoWeekKey();
   const key = `xp_${uId}_${wKey}`;
-  return Math.max(0, Number(localStorage.getItem(key) || 0));
+  let xp = Math.max(0, Number(localStorage.getItem(key) || 0));
+
+  // If user is logged in, but local xp is 0, check if there was any guest XP
+  if (xp === 0 && typeof window !== 'undefined') {
+    try {
+      const guestId = getGuestId();
+      const guestXp = Math.max(
+        Number(localStorage.getItem(`xp_${guestId}_${wKey}`) || 0),
+        Number(localStorage.getItem(`xp_guest_${wKey}`) || 0)
+      );
+      if (guestXp > 0) {
+        xp = guestXp;
+        localStorage.setItem(key, String(xp));
+      }
+    } catch (e) {}
+  }
+
+  return xp;
 }
 
 function addWeeklyXP(delta, userId = null, weekKey = null) {
@@ -443,6 +460,14 @@ async function getLeaderboard(weekKey = null) {
     const data = await res.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
       localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(data.data));
+
+      // Bi-directional sync: if server has higher XP for current user than local, update local
+      const meOnServer = data.data.find((item) => String(item.userId) === String(currentUserId));
+      if (meOnServer && Number(meOnServer.xp || 0) > userXP) {
+        localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
+        window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
+      }
+
       return getCachedLeaderboard(wKey);
     }
   } catch (e) {
