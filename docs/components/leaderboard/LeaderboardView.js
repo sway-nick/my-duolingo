@@ -188,6 +188,22 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         });
       });
     }
+
+    // Dynamic compact mode when scrolling down
+    const updateCompactPodium = () => {
+      const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
+      if (stickyWrapper && document.body.contains(stickyWrapper)) {
+        const isScrolled = window.scrollY > 30 || document.documentElement.scrollTop > 30;
+        stickyWrapper.classList.toggle('is-compact', isScrolled);
+      }
+    };
+
+    if (container._onLeaderboardScroll) {
+      window.removeEventListener('scroll', container._onLeaderboardScroll);
+    }
+    container._onLeaderboardScroll = updateCompactPodium;
+    window.addEventListener('scroll', container._onLeaderboardScroll, { passive: true });
+    updateCompactPodium();
   }
 
   bindListeners();
