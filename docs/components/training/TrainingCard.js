@@ -455,7 +455,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     // Test mode: Russian prompt on top -> user types in English
     practiceArea.innerHTML = `
       <div class="input-form-row">
-        <input class="answer-input" id="answer-input" placeholder="Введите на английском..." autocomplete="off" autocapitalize="none" spellcheck="false" />
+        <div class="answer-input" id="answer-input" contenteditable="true" role="textbox" aria-placeholder="Введите на английском..." spellcheck="false" autocomplete="off" autocapitalize="none"></div>
         <button type="button" class="check-button" id="check-answer-btn">Проверить</button>
       </div>
       <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 10px; font-weight: 600; text-align: center; font-size: 15px;"></div>
@@ -465,6 +465,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const checkBtn = practiceArea.querySelector('#check-answer-btn');
     const feedback = practiceArea.querySelector('#input-feedback');
     let hasSecondChance = false;
+
+    function placeCaretAtEnd(el) {
+      el.focus();
+      try {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } catch (e) {}
+    }
 
     function calculateLevenshtein(a, b) {
       const matrix = [];
@@ -488,23 +500,24 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const t = targetText[i] || '';
         if (i < userText.length) {
           if (u === t) {
-            html += `<span class="diff-char match">${u}</span>`;
+            html += `<span class="diff-char-inline match">${u}</span>`;
           } else {
-            html += `<span class="diff-char mismatch">${u}</span>`;
+            html += `<span class="diff-char-inline mismatch">${u}</span>`;
           }
         } else {
-          html += `<span class="diff-char missing">_</span>`;
+          html += `<span class="diff-char-inline missing">_</span>`;
         }
       }
       return html;
     }
 
     const handleCheck = async () => {
-      const userAns = input.value.trim().toLowerCase();
+      const rawText = input.textContent || '';
+      const userAns = rawText.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
       const correctAns = currentWord.word.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
 
-      // Check for typo and give Second Chance if mistake is minor (< 40% of word length)
+      // Check for typo and colorize letters directly inside the input box on 1st typo attempt
       if (!isCorrect && !hasSecondChance && userAns.length > 0) {
         const lev = calculateLevenshtein(userAns, correctAns);
         const maxAllowedDistance = Math.max(2, Math.floor(correctAns.length * 0.38));
@@ -517,25 +530,24 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           void input.offsetWidth; // trigger reflow
           input.classList.add('shake-input');
 
+          // Highlight letters directly inside the input window!
+          input.innerHTML = renderDiffHtml(userAns, correctAns);
+
           feedback.style.display = 'block';
           feedback.innerHTML = `
-            <div class="input-typo-hint">
-              <div class="input-typo-label">
-                <span>⚠️ Опечатка! Исправьте ошибку:</span>
-              </div>
-              <div class="diff-letters-row">
-                ${renderDiffHtml(userAns, correctAns)}
-              </div>
+            <div style="font-size: 14px; font-weight: 700; color: #ef4444;">
+              ⚠️ Опечатка! Исправьте красные буквы прямо в поле ввода
             </div>
           `;
 
           checkBtn.textContent = 'Исправить (-1 XP)';
-          input.focus();
+          placeCaretAtEnd(input);
           return;
         }
       }
 
-      input.disabled = true;
+      input.setAttribute('contenteditable', 'false');
+      input.classList.add('disabled');
       checkBtn.disabled = true;
 
       // Pronounce English word after answer submission
@@ -558,6 +570,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (isCorrect) {
         input.classList.remove('wrong', 'shake-input');
         input.classList.add('correct');
+        input.textContent = currentWord.word; // clean display of correct word
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
 
@@ -602,10 +615,22 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     };
 
     checkBtn.addEventListener('click', handleCheck);
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleCheck();
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleCheck();
+      }
     });
-    input.focus();
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text');
+      document.execCommand('insertText', false, text);
+    });
+
+    setTimeout(() => {
+      placeCaretAtEnd(input);
+    }, 100);
   } else {
     practiceArea.innerHTML = `
       <div class="flashcard-box" id="flashcard">
