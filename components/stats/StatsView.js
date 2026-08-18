@@ -82,8 +82,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         <!-- Relocated Curriculum / Program Section -->
         <div class="curriculum-block">
           <div class="section-title-row">
-            <h3>📚 Программа обучения по категориям</h3>
-            <span class="total-words-badge" id="stat-total-words">Всего в программе: ${stats.totalWords || 0} слов</span>
+            <h3>Категории</h3>
+            <span class="total-words-badge" id="stat-total-words">Всего слов — ${stats.totalWords || 0}</span>
           </div>
           
           <div class="category-progress-list" id="category-list">
