@@ -81,10 +81,30 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </h3>
         <div class="voice-options-row">
           <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (Великобритания)" aria-label="Британский английский">
-            🇬🇧
+            <svg class="flag-svg-icon" viewBox="0 0 640 480" width="34" height="24">
+              <path fill="#012169" d="M0 0h640v480H0z"/>
+              <path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 240l240 178v62h-80L320 301 81 480H0v-60l239-180L0 64V0h75z"/>
+              <path fill="#C8102E" d="m424 288 216 159v33h-44L367 304l57-16zM640 22v10L432 201l-24-33 197-146h35zM0 458v-10l208-169 24 33L35 458H0zM216 192 0 33V0h44l229 176-57 16z"/>
+              <path fill="#FFF" d="M240 0h160v480H240zM0 160h640v160H0z"/>
+              <path fill="#C8102E" d="M267 0h106v480H267zM0 187h640v106H0z"/>
+            </svg>
           </button>
           <button class="voice-option-btn flag-btn" id="voice-us-btn" title="American English (США)" aria-label="Американский английский">
-            🇺🇸
+            <svg class="flag-svg-icon" viewBox="0 0 640 480" width="34" height="24">
+              <path fill="#bd3d44" d="M0 0h640v480H0z"/>
+              <path stroke="#fff" stroke-width="37" d="M0 55.5h640M0 129.5h640M0 203.5h640M0 277.5h640M0 351.5h640M0 425.5h640"/>
+              <path fill="#192f5d" d="M0 0h260v259H0z"/>
+              <g fill="#fff">
+                <circle cx="30" cy="28" r="7"/><circle cx="75" cy="28" r="7"/><circle cx="120" cy="28" r="7"/><circle cx="165" cy="28" r="7"/><circle cx="210" cy="28" r="7"/>
+                <circle cx="52" cy="56" r="7"/><circle cx="97" cy="56" r="7"/><circle cx="142" cy="56" r="7"/><circle cx="187" cy="56" r="7"/>
+                <circle cx="30" cy="84" r="7"/><circle cx="75" cy="84" r="7"/><circle cx="120" cy="84" r="7"/><circle cx="165" cy="84" r="7"/><circle cx="210" cy="84" r="7"/>
+                <circle cx="52" cy="112" r="7"/><circle cx="97" cy="112" r="7"/><circle cx="142" cy="112" r="7"/><circle cx="187" cy="112" r="7"/>
+                <circle cx="30" cy="140" r="7"/><circle cx="75" cy="140" r="7"/><circle cx="120" cy="140" r="7"/><circle cx="165" cy="140" r="7"/><circle cx="210" cy="140" r="7"/>
+                <circle cx="52" cy="168" r="7"/><circle cx="97" cy="168" r="7"/><circle cx="142" cy="168" r="7"/><circle cx="187" cy="168" r="7"/>
+                <circle cx="30" cy="196" r="7"/><circle cx="75" cy="196" r="7"/><circle cx="120" cy="196" r="7"/><circle cx="165" cy="196" r="7"/><circle cx="210" cy="196" r="7"/>
+                <circle cx="52" cy="224" r="7"/><circle cx="97" cy="224" r="7"/><circle cx="142" cy="224" r="7"/><circle cx="187" cy="224" r="7"/>
+              </g>
+            </svg>
           </button>
         </div>
       </div>
