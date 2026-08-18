@@ -1138,32 +1138,18 @@ async function getUserStats(customWords = null) {
   }));
 
   // Word of the Day: 100% globally unified across ALL players
-  let wordOfTheDay = null;
-
-  // 1. Check if cloud stats provided the global most mistaken word
+  let cloudWordId = null;
   try {
     const cloudStatsRaw = localStorage.getItem('myduo_cached_cloud_stats');
     if (cloudStatsRaw) {
       const cloudStats = JSON.parse(cloudStatsRaw);
       if (cloudStats && cloudStats.wordOfTheDayId) {
-        wordOfTheDay = wordsList.find((w) => String(w.id) === String(cloudStats.wordOfTheDayId));
+        cloudWordId = cloudStats.wordOfTheDayId;
       }
     }
   } catch (e) {}
 
-  // 2. Global deterministic calendar seed (identical for ALL players worldwide on today's date)
-  if (!wordOfTheDay && wordsList.length > 0) {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    let dateHash = 0;
-    for (let i = 0; i < todayStr.length; i++) {
-      dateHash = ((dateHash << 5) - dateHash) + todayStr.charCodeAt(i);
-      dateHash |= 0;
-    }
-    const trickyPool = wordsList.filter((w) => w.level === 'B1' || w.level === 'B2' || w.level === 'Intermediate' || (w.word && w.word.length >= 6));
-    const pool = trickyPool.length > 0 ? trickyPool : wordsList;
-    const idx = Math.abs(dateHash) % pool.length;
-    wordOfTheDay = pool[idx];
-  }
+  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, cloudWordId);
 
   // Fetch fresh stats from backend in background to keep word of the day updated
   if (typeof fetch !== 'undefined') {
@@ -1273,6 +1259,36 @@ function resetWordsProgressForPractice(words) {
   return localProg;
 }
 
+function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
+  if (!wordsList || wordsList.length === 0) return null;
+
+  // 1. Sort words strictly by ID ascending so the list ordering is 100% identical on all devices
+  const sorted = [...wordsList].sort((a, b) => {
+    const idA = Number(a.id) || 0;
+    const idB = Number(b.id) || 0;
+    if (idA !== idB) return idA - idB;
+    return String(a.word || '').localeCompare(String(b.word || ''));
+  });
+
+  if (cloudWordId) {
+    const found = sorted.find((w) => String(w.id) === String(cloudWordId));
+    if (found) return found;
+  }
+
+  // 2. Standardized local calendar date (YYYY-MM-DD)
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  let hash = 0;
+  for (let i = 0; i < todayStr.length; i++) {
+    hash = ((hash << 5) - hash) + todayStr.charCodeAt(i);
+    hash |= 0;
+  }
+
+  const idx = Math.abs(hash) % sorted.length;
+  return sorted[idx];
+}
+
 export {
   getHealth,
   getWords,
@@ -1292,6 +1308,7 @@ export {
   flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,
+  getGlobalWordOfTheDay,
   getUserSettings,
   saveUserSettings,
   resetWordsProgressForPractice,
