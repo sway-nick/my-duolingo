@@ -547,10 +547,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       </div>
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 14px; gap: 12px;">
-        <button type="button" class="btn-learn" id="btn-learn" style="flex: 1; padding: 14px 16px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <button type="button" class="btn-learn" id="btn-learn">
           Учить
         </button>
-        <button type="button" class="btn-know" id="btn-know" style="flex: 1; padding: 14px 16px; border-radius: var(--radius-md); font-weight: 700; font-size: 16px; background: #dcfce7; color: #166534; border: 1.5px solid #22c55e; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <button type="button" class="btn-know" id="btn-know">
           Знаю
         </button>
       </div>
