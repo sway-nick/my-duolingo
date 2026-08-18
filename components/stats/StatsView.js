@@ -51,7 +51,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       wotdHtml = `
         <!-- Word of the Day Section (Self-contained Card) -->
         <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 16px auto 0; max-width: 100%;">
-          <div class="flashcard-3d" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
+          <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
             <!-- Front Face: English word -->
             <div class="flashcard-face flashcard-front">
               <div class="flashcard-face-top">
@@ -66,7 +66,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
                 ${wotd.transcription ? `<p class="flashcard-transcription">${wotd.transcription}</p>` : ''}
               </div>
               <div class="flashcard-face-bottom">
-                <span class="flashcard-flip-prompt">🔄 Нажми, чтобы увидеть перевод</span>
+                <span class="flashcard-flip-prompt">Нажми, чтобы увидеть перевод</span>
               </div>
             </div>
 

@@ -707,7 +707,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ${currentWord.transcription ? `<p class="flashcard-transcription">${currentWord.transcription}</p>` : ''}
             </div>
             <div class="flashcard-face-bottom">
-              <span class="flashcard-flip-prompt">🔄 Нажми, чтобы увидеть перевод</span>
+              <span class="flashcard-flip-prompt">Нажми, чтобы увидеть перевод</span>
             </div>
           </div>
 

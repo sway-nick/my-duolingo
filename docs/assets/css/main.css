@@ -1823,26 +1823,57 @@ body {
   margin-top: 16px;
 }
 
+/* Golden themed Card for Word of the Day */
+.wotd-card .flashcard-face {
+  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.16), 0 2px 6px rgba(245, 158, 11, 0.08);
+}
+
+.dark-theme .wotd-card .flashcard-face {
+  background: linear-gradient(145deg, #2d2314 0%, #1f180c 100%);
+  border-color: #d97706;
+  box-shadow: 0 8px 28px rgba(217, 119, 6, 0.25), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.wotd-card .flashcard-face.flashcard-back {
+  background: linear-gradient(145deg, #fef9c3 0%, #fef08a 100%);
+}
+
+.dark-theme .wotd-card .flashcard-face.flashcard-back {
+  background: linear-gradient(145deg, #2b2112 0%, #1e160a 100%);
+}
+
+.wotd-card .flashcard-sound-btn,
+.wotd-card .flashcard-fav-btn {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+}
+
+.dark-theme .wotd-card .flashcard-sound-btn,
+.dark-theme .wotd-card .flashcard-fav-btn {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
 .wotd-card-badge {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text-main, #0f172a);
-  letter-spacing: -0.2px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #b45309;
+  letter-spacing: -0.3px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
   user-select: none;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.25);
-  padding: 4px 10px;
-  border-radius: 12px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .dark-theme .wotd-card-badge {
-  color: #fde68a;
-  background: rgba(245, 158, 11, 0.18);
-  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  text-shadow: 0 2px 10px rgba(251, 191, 36, 0.35);
 }
 
 .section-title-row {
