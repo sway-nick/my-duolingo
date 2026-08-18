@@ -42,6 +42,12 @@ async function getHealth() {
 }
 
 let cachedWordsList = null;
+try {
+  const initialCache = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+  if (Array.isArray(initialCache) && initialCache.length > 0) {
+    cachedWordsList = initialCache;
+  }
+} catch (e) {}
 
 async function getWords(forceRefresh = false) {
   if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
@@ -1137,31 +1143,13 @@ async function getUserStats(customWords = null) {
     learned: stats.learned,
   }));
 
-  // Word of the Day: 100% globally unified across ALL players
-  let cloudWordId = null;
+  // Clean any old legacy stats cache to prevent cross-device deviation
   try {
-    const cloudStatsRaw = localStorage.getItem('myduo_cached_cloud_stats');
-    if (cloudStatsRaw) {
-      const cloudStats = JSON.parse(cloudStatsRaw);
-      if (cloudStats && cloudStats.wordOfTheDayId) {
-        cloudWordId = cloudStats.wordOfTheDayId;
-      }
-    }
+    localStorage.removeItem('myduo_cached_cloud_stats');
   } catch (e) {}
 
-  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, cloudWordId);
-
-  // Fetch fresh stats from backend in background to keep word of the day updated
-  if (typeof fetch !== 'undefined') {
-    fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.success && data.data) {
-          localStorage.setItem('myduo_cached_cloud_stats', JSON.stringify(data.data));
-        }
-      })
-      .catch(() => {});
-  }
+  // Word of the Day: 100% globally unified across ALL players worldwide
+  const wordOfTheDay = getGlobalWordOfTheDay(wordsList);
 
   return {
     totalWords: wordsList.length,
