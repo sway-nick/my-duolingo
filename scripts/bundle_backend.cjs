@@ -41,13 +41,15 @@ function generateBackendBundle() {
  */\n\n`;
 
   for (const relPath of filesOrder) {
-    const fullPath = path.join(srcDir, relPath);
+    const fullPath = path.join(srcDir, ...relPath.split('/'));
     if (fs.existsSync(fullPath)) {
       const code = fs.readFileSync(fullPath, 'utf8');
       bundleContent += `// ==========================================\n`;
       bundleContent += `// FILE: ${relPath}\n`;
       bundleContent += `// ==========================================\n`;
       bundleContent += code + '\n\n';
+    } else {
+      console.warn('⚠️ File not found during bundle:', fullPath);
     }
   }
 
