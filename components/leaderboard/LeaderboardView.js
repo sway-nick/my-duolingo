@@ -195,13 +195,13 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
       if (stickyWrapper && document.body.contains(stickyWrapper)) {
         const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
-        // Leave a clean 4px visible gap under the header
-        const stickyTopOffset = Math.ceil(headerBottom) + 4;
+        // Leave a precise 1px visible gap under the header
+        const stickyTopOffset = Math.ceil(headerBottom) + 1;
         stickyWrapper.style.setProperty('--podium-sticky-top', `${stickyTopOffset}px`);
 
         const wrapperRect = stickyWrapper.getBoundingClientRect();
         // Compress only when the top edge of the cards reaches the header
-        const isTouchingHeader = wrapperRect.top <= (stickyTopOffset + 2);
+        const isTouchingHeader = wrapperRect.top <= (stickyTopOffset + 1);
         stickyWrapper.classList.toggle('is-compact', isTouchingHeader);
       }
     };
