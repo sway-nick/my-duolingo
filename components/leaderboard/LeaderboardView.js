@@ -152,8 +152,13 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
           <h2 style="margin: 0; font-size: 22px; display: flex; align-items: center; gap: 8px;">
             🏆 Лига недели
           </h2>
-          <div class="league-timer-badge">
-            ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="refresh-leaderboard-btn" id="refresh-leaderboard-btn" title="Обновить таблицу лидеров">
+              🔄
+            </button>
+            <div class="league-timer-badge">
+              ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
+            </div>
           </div>
         </div>
       </div>
@@ -174,6 +179,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   `;
 
   const contentEl = container.querySelector('#leaderboard-content');
+  const refreshBtn = container.querySelector('#refresh-leaderboard-btn');
 
   function bindListeners() {
     const loginBtn = contentEl.querySelector('#leaderboard-login-btn');
@@ -189,13 +195,29 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
   bindListeners();
 
-  // 2. Background fresh sync (non-blocking)
-  getLeaderboard().then((freshRes) => {
-    if (freshRes && freshRes.data && contentEl) {
-      contentEl.innerHTML = buildLeaderboardBodyHtml(freshRes.data, currentUser);
-      bindListeners();
+  async function loadFreshData() {
+    if (refreshBtn) refreshBtn.classList.add('is-loading');
+    try {
+      const freshRes = await getLeaderboard();
+      if (freshRes && freshRes.data && contentEl) {
+        contentEl.innerHTML = buildLeaderboardBodyHtml(freshRes.data, currentUser);
+        bindListeners();
+      }
+    } catch (e) {
+      console.warn('Leaderboard refresh failed:', e);
+    } finally {
+      if (refreshBtn) refreshBtn.classList.remove('is-loading');
     }
-  }).catch(() => {});
+  }
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+      loadFreshData();
+    });
+  }
+
+  // Background fresh sync on initial open
+  loadFreshData();
 }
 
 export { renderLeaderboardView };

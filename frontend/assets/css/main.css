@@ -2673,6 +2673,48 @@ body {
   padding-bottom: 70px;
 }
 
+.refresh-leaderboard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.15s ease;
+  color: var(--text-main);
+  padding: 0;
+}
+
+.refresh-leaderboard-btn:hover {
+  background: var(--border-color);
+  transform: rotate(45deg);
+}
+
+.dark-theme .refresh-leaderboard-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+.dark-theme .refresh-leaderboard-btn:hover {
+  background: #2a3b52;
+}
+
+.refresh-leaderboard-btn.is-loading {
+  animation: spinLeaderboard 0.8s linear infinite;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+@keyframes spinLeaderboard {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .league-timer-badge {
   display: inline-flex;
   align-items: center;
