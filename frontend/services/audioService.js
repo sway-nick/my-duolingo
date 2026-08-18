@@ -338,12 +338,19 @@ function preloadWordAudio(text, voiceAccentOverride = null) {
   } catch (e) {}
 }
 
+let sharedWordAudioPlayer = null;
+
+function getSharedWordAudioPlayer() {
+  if (!sharedWordAudioPlayer && typeof window !== 'undefined') {
+    sharedWordAudioPlayer = new Audio();
+    sharedWordAudioPlayer.preload = 'auto';
+  }
+  return sharedWordAudioPlayer;
+}
+
 function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-  // Respect modern browser Autoplay Policy: only speak if user has interacted with the page
-  if (typeof navigator !== 'undefined' && navigator.userActivation && !navigator.userActivation.hasBeenActive) {
-    return;
-  }
+  if (typeof navigator !== 'undefined' && navigator.onLine) return; // Do not use robot voice when online
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -364,32 +371,30 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
     }
 
     window.speechSynthesis.speak(utterance);
-  } catch (e) {
-    console.warn('SpeechSynthesis fallback warning:', e);
-  }
+  } catch (e) {}
 }
 
 /**
- * Speaks the given text with instant 0ms latency studio cloud audio,
- * supporting British and American accents with multi-tier fallback.
+ * Speaks the given text exclusively with high-definition studio cloud audio,
+ * supporting British and American accents without any dual-voice overlap.
  */
 function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null, forcePlay = false) {
   if (!text || (isAudioMuted() && !forcePlay)) {
     return false;
   }
 
-  // 1. Stop any currently playing audio
-  if (currentAudioPlayer) {
-    try {
-      currentAudioPlayer.pause();
-      currentAudioPlayer.currentTime = 0;
-    } catch (e) {}
-    currentAudioPlayer = null;
-  }
-
+  // 1. Unconditionally kill any robotic voice and previous audio to guarantee only 1 voice plays
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
       window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+
+  const player = getSharedWordAudioPlayer();
+  if (player) {
+    try {
+      player.pause();
+      player.currentTime = 0;
     } catch (e) {}
   }
 
@@ -407,53 +412,46 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetLang = lang || (isUk ? 'en-GB' : 'en-US');
 
-  const { primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
-  const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
+  const { primary, fallback } = getAudioUrls(text, isUk);
 
-  // 3. Retrieve pre-buffered audio or create instant playback element
-  let audio = audioCache.get(cacheKey);
-  if (!audio) {
-    audio = new Audio(primary);
-    audio.preload = 'auto';
-    audioCache.set(cacheKey, audio);
+  if (!player) {
+    speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+    return isTurtleMode;
   }
 
-  currentAudioPlayer = audio;
-
   try {
-    audio.currentTime = 0;
-    audio.playbackRate = isTurtleMode ? 0.62 : 1.0;
+    player.playbackRate = isTurtleMode ? 0.62 : 1.0;
+    player.src = primary;
+    player.currentTime = 0;
 
     let hasTriedFallback = false;
-    let hasSpeechFallbackRun = false;
 
-    const runSpeechFallback = () => {
-      if (hasSpeechFallbackRun) return;
-      hasSpeechFallbackRun = true;
-      speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-    };
-
-    audio.onerror = () => {
+    player.onerror = () => {
       if (!hasTriedFallback) {
         hasTriedFallback = true;
-        audio.src = fallback;
-        audio.currentTime = 0;
-        audio.play().catch(runSpeechFallback);
+        player.src = fallback;
+        player.currentTime = 0;
+        player.play().catch(() => {
+          speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+        });
       } else {
-        runSpeechFallback();
+        speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
       }
     };
 
-    const playPromise = audio.play();
+    const playPromise = player.play();
     if (playPromise !== undefined) {
-      playPromise.catch(() => {
+      playPromise.catch((err) => {
+        // AbortError happens when user taps quickly — ignore it cleanly without playing robot voice
+        if (err && err.name === 'AbortError') return;
+
         if (!hasTriedFallback) {
           hasTriedFallback = true;
-          audio.src = fallback;
-          audio.currentTime = 0;
-          audio.play().catch(runSpeechFallback);
-        } else {
-          runSpeechFallback();
+          player.src = fallback;
+          player.currentTime = 0;
+          player.play().catch(() => {
+            speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+          });
         }
       });
     }
