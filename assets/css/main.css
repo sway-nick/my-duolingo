@@ -362,7 +362,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 9px;
   background: transparent;
   border: none;
   padding: 0 4px;
@@ -385,13 +385,14 @@ body {
 }
 
 .xp-badge-icon {
-  font-size: 17px;
+  font-size: 22px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transform: translateY(-0.5px);
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  margin-right: 2px;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
 }
 
 .xp-badge-level {
