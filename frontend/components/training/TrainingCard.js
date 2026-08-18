@@ -540,7 +540,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } else {
     practiceArea.innerHTML = `
       <div class="flashcard-box" id="flashcard">
-        <p id="flashcard-hint" class="flashcard-hint">Нажмите на карточку, чтобы увидеть перевод</p>
+        <p id="flashcard-hint" class="flashcard-hint">Нажми, чтобы увидеть перевод</p>
         <div class="flashcard-back" id="flashcard-back" style="display:none; width: 100%;">
           <h2 class="card-translation">${currentWord.translation}</h2>
         </div>
