@@ -49,47 +49,38 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       isWotdFav = favSet.has(String(wotd.id));
 
       wotdHtml = `
-        <!-- Word of the Day Section -->
-        <div class="curriculum-block wotd-block" style="margin-top: 14px;">
-          <div class="section-title-row" style="margin-bottom: 12px;">
-            <h3 style="display: flex; align-items: center; gap: 6px; margin: 0; font-size: 16.5px;">
-              <span>🔥</span> Слово дня
-            </h3>
-            <span class="total-words-badge" style="font-size: 11.5px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.25);">
-              Самое коварное за 3 дня
-            </span>
-          </div>
-
-          <div class="flashcard-3d-wrapper" style="margin: 0 auto; max-width: 100%;">
-            <div class="flashcard-3d" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
-              <!-- Front Face: English word -->
-              <div class="flashcard-face flashcard-front">
-                <div class="flashcard-face-top">
-                  <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔊</button>
-                  <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
-                    ${isWotdFav ? '❤️' : '🤍'}
-                  </button>
-                </div>
-                <div class="flashcard-face-body">
-                  <h2 class="flashcard-word">${wotd.word}</h2>
-                  ${wotd.transcription ? `<p class="flashcard-transcription">${wotd.transcription}</p>` : ''}
-                </div>
-                <div class="flashcard-face-bottom">
-                  <span class="flashcard-flip-prompt">🔄 Нажми, чтобы увидеть перевод</span>
-                </div>
+        <!-- Word of the Day Section (Self-contained Card) -->
+        <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 16px auto 0; max-width: 100%;">
+          <div class="flashcard-3d" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
+            <!-- Front Face: English word -->
+            <div class="flashcard-face flashcard-front">
+              <div class="flashcard-face-top">
+                <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔊</button>
+                <span class="wotd-card-badge">🔥 Слово дня</span>
+                <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
+                  ${isWotdFav ? '❤️' : '🤍'}
+                </button>
               </div>
+              <div class="flashcard-face-body">
+                <h2 class="flashcard-word">${wotd.word}</h2>
+                ${wotd.transcription ? `<p class="flashcard-transcription">${wotd.transcription}</p>` : ''}
+              </div>
+              <div class="flashcard-face-bottom">
+                <span class="flashcard-flip-prompt">🔄 Нажми, чтобы увидеть перевод</span>
+              </div>
+            </div>
 
-              <!-- Back Face: Russian translation -->
-              <div class="flashcard-face flashcard-back">
-                <div class="flashcard-face-top">
-                  <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔊</button>
-                  <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
-                    ${isWotdFav ? '❤️' : '🤍'}
-                  </button>
-                </div>
-                <div class="flashcard-face-body">
-                  <h2 class="flashcard-translation">${wotd.translation}</h2>
-                </div>
+            <!-- Back Face: Russian translation -->
+            <div class="flashcard-face flashcard-back">
+              <div class="flashcard-face-top">
+                <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔊</button>
+                <span class="wotd-card-badge">🔥 Слово дня</span>
+                <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
+                  ${isWotdFav ? '❤️' : '🤍'}
+                </button>
+              </div>
+              <div class="flashcard-face-body">
+                <h2 class="flashcard-translation">${wotd.translation}</h2>
               </div>
             </div>
           </div>
