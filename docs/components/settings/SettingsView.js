@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=18.0'
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=18.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=18.0';
-import { speakWord, setSavedVoiceGender, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=21.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=24.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=18.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
@@ -77,14 +77,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           <svg width="19" height="19" viewBox="0 0 24 24" fill="#d4a373" style="flex-shrink: 0;">
             <path d="M12 3a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4zm-6 16a6 6 0 0 1 12 0H6zm14.5-9a4.5 4.5 0 0 1 0 6.36l-1.06-1.06a3 3 0 0 0 0-4.24l1.06-1.06zm2.5-2.5a8 8 0 0 1 0 11.31l-1.06-1.06a6.5 6.5 0 0 0 0-9.19l1.06-1.06z"/>
           </svg>
-          Голос озвучки
+          Вариант озвучки
         </h3>
         <div class="voice-options-row">
-          <button class="voice-option-btn" id="voice-female-btn">
-            ♀ Женский
+          <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (Великобритания)" aria-label="Британский английский">
+            🇬🇧
           </button>
-          <button class="voice-option-btn" id="voice-male-btn">
-            ♂ Мужской
+          <button class="voice-option-btn flag-btn" id="voice-us-btn" title="American English (США)" aria-label="Американский английский">
+            🇺🇸
           </button>
         </div>
       </div>
@@ -279,21 +279,33 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind voice buttons with preview speech
-  if (femaleVoiceBtn && maleVoiceBtn) {
-    femaleVoiceBtn.addEventListener('click', () => {
-      currentVoice = 'female';
-      setSavedVoiceGender('female');
+  // Bind voice accent buttons (🇬🇧 UK / 🇺🇸 US) with preview speech
+  let currentAccent = getSavedVoiceAccent();
+  const ukVoiceBtn = container.querySelector('#voice-uk-btn');
+  const usVoiceBtn = container.querySelector('#voice-us-btn');
+
+  const updateVoiceButtons = () => {
+    if (ukVoiceBtn && usVoiceBtn) {
+      ukVoiceBtn.classList.toggle('active', currentAccent === 'uk');
+      usVoiceBtn.classList.toggle('active', currentAccent === 'us');
+    }
+  };
+  updateVoiceButtons();
+
+  if (ukVoiceBtn && usVoiceBtn) {
+    ukVoiceBtn.addEventListener('click', () => {
+      currentAccent = 'uk';
+      setSavedVoiceAccent('uk');
       updateVoiceButtons();
-      speakWord('Hello', null, 'en-US', 'female', true);
+      speakWord('Hello', null, 'en-GB', 'uk', true);
       triggerAutoSave();
     });
 
-    maleVoiceBtn.addEventListener('click', () => {
-      currentVoice = 'male';
-      setSavedVoiceGender('male');
+    usVoiceBtn.addEventListener('click', () => {
+      currentAccent = 'us';
+      setSavedVoiceAccent('us');
       updateVoiceButtons();
-      speakWord('Hello', null, 'en-US', 'male', true);
+      speakWord('Hello', null, 'en-US', 'us', true);
       triggerAutoSave();
     });
   }

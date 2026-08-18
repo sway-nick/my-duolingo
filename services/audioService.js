@@ -218,23 +218,34 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   }
 }
 
-function getSavedVoiceGender() {
+function getSavedVoiceAccent() {
   try {
-    const direct = localStorage.getItem('myduo_voice_gender');
+    const direct = localStorage.getItem('myduo_voice_accent');
     if (direct) return direct;
+    const gender = localStorage.getItem('myduo_voice_gender');
+    if (gender === 'male' || gender === 'uk') return 'uk';
     const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
     const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
     const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
-    return settings.voiceGender || 'female';
+    return settings.voiceAccent || (settings.voiceGender === 'male' ? 'uk' : 'us');
   } catch (e) {
-    return 'female';
+    return 'us';
   }
 }
 
-function setSavedVoiceGender(gender) {
+function setSavedVoiceAccent(accent) {
   try {
-    localStorage.setItem('myduo_voice_gender', gender);
+    localStorage.setItem('myduo_voice_accent', accent);
+    localStorage.setItem('myduo_voice_gender', accent === 'uk' ? 'male' : 'female');
   } catch (e) {}
+}
+
+function getSavedVoiceGender() {
+  return getSavedVoiceAccent();
+}
+
+function setSavedVoiceGender(gender) {
+  setSavedVoiceAccent(gender === 'male' || gender === 'uk' ? 'uk' : 'us');
 }
 
 const MALE_VOICE_KEYWORDS = [
@@ -264,23 +275,19 @@ function getPreferredVoice(gender = 'female') {
 
   const target = (gender || 'female').toLowerCase();
 
-  if (target === 'male') {
-    // 1. Explicit male voice match by priority
+  if (target === 'male' || target === 'uk') {
+    // 1. Explicit male / British voice match by priority
     for (const kw of MALE_VOICE_KEYWORDS) {
       const found = englishVoices.find((v) => (v.name || '').toLowerCase().includes(kw));
       if (found) return found;
     }
 
-    // 2. Non-female voice
-    const nonFemale = englishVoices.find((v) => {
-      const name = (v.name || '').toLowerCase();
-      return !FEMALE_VOICE_KEYWORDS.some((kw) => name.includes(kw));
-    });
-    if (nonFemale) return nonFemale;
+    const ukVoice = englishVoices.find((v) => (v.lang || '').toLowerCase().includes('gb') || (v.lang || '').toLowerCase().includes('uk'));
+    if (ukVoice) return ukVoice;
 
     return englishVoices[0];
   } else {
-    // 1. Explicit female voice match by priority
+    // 1. Explicit female / US voice match by priority
     for (const kw of FEMALE_VOICE_KEYWORDS) {
       const found = englishVoices.find((v) => (v.name || '').toLowerCase().includes(kw));
       if (found) return found;
@@ -306,11 +313,11 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
       if (voice.lang) utterance.lang = voice.lang;
     }
 
-    if (gender === 'male') {
-      utterance.pitch = 0.92; // Clean natural masculine pitch (no distortion)
+    if (gender === 'male' || gender === 'uk') {
+      utterance.pitch = 0.95;
       utterance.rate = isTurtleMode ? 0.45 : 0.88;
     } else {
-      utterance.pitch = 1.02; // Clean natural feminine pitch
+      utterance.pitch = 1.02;
       utterance.rate = isTurtleMode ? 0.45 : 0.90;
     }
 
@@ -321,18 +328,19 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
 }
 
 /**
- * Speaks the given text using high-definition natural Cloud Audio for female voice,
- * and clean natural masculine voice for male voice, with automatic offline fallback.
+ * Speaks the given text using high-definition natural studio cloud audio,
+ * supporting British (Type 1, 🇬🇧) and American (Type 2, 🇺🇸) accents,
+ * with automatic SpeechSynthesis fallback when offline.
  * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
  *
  * @param {string} text - The word or text to pronounce
  * @param {string} wordId - Optional unique ID for tracking consecutive clicks
- * @param {string} lang - Language code (default 'en-US')
- * @param {string} voiceGenderOverride - Optional gender override ('male' | 'female')
+ * @param {string} lang - Language code (default 'en-US' or 'en-GB')
+ * @param {string} voiceAccentOverride - Optional accent override ('uk' | 'us')
  * @param {boolean} forcePlay - Play even if silent mode is enabled
  * @returns {boolean} isTurtleMode - True if playing in slow speed
  */
-function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = null, forcePlay = false) {
+function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null, forcePlay = false) {
   if (!text || (isAudioMuted() && !forcePlay)) {
     return false;
   }
@@ -362,19 +370,17 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
   }
 
   const isTurtleMode = clickCount >= 3;
-  const gender = voiceGenderOverride || getSavedVoiceGender();
+  const accent = voiceAccentOverride || getSavedVoiceAccent();
+  const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+  const voiceType = isUk ? 1 : 2; // Type 1 = 🇬🇧 British English, Type 2 = 🇺🇸 American English
+  const targetLang = lang || (isUk ? 'en-GB' : 'en-US');
 
-  // 3. For Male voice: use clean natural masculine voice engine
-  if (gender === 'male') {
-    speakWithSpeechSynthesis(text, lang, isTurtleMode, 'male');
-    return isTurtleMode;
-  }
-
-  // 4. For Female voice: use high-definition studio native recording
+  // Clean text from punctuation (which breaks dictionary audio endpoints)
   const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
 
+  // 3. Play high-definition studio native recording (Type 1 = 🇬🇧 British, Type 2 = 🇺🇸 American)
   try {
-    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=2`;
+    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`;
     const audio = new Audio(cloudUrl);
     currentAudioPlayer = audio;
 
@@ -385,7 +391,7 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
     const runFallback = () => {
       if (hasFallbackRun) return;
       hasFallbackRun = true;
-      speakWithSpeechSynthesis(text, lang, isTurtleMode, 'female');
+      speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
     };
 
     audio.onerror = () => {
@@ -399,7 +405,7 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
       });
     }
   } catch (err) {
-    speakWithSpeechSynthesis(text, lang, isTurtleMode, 'female');
+    speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
   }
 
   return isTurtleMode;
@@ -456,6 +462,8 @@ export {
   playFanfareSound,
   setSavedVoiceGender,
   getSavedVoiceGender,
+  setSavedVoiceAccent,
+  getSavedVoiceAccent,
   isAudioMuted,
   setSavedSilentMode,
 };

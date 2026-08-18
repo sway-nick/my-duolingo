@@ -207,6 +207,13 @@ body.dark-theme,
   font-weight: 700;
 }
 
+.voice-option-btn.flag-btn {
+  font-size: 28px;
+  line-height: 1;
+  padding: 6px 12px;
+  min-height: 48px;
+}
+
 .dark-theme .theme-option-btn,
 .dark-theme .voice-option-btn,
 .dark-theme .sound-option-btn {
