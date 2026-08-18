@@ -628,15 +628,47 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       placeCaretAtEnd(input);
     }, 100);
   } else {
+    // 3D Vertical Flippable Flashcard
     practiceArea.innerHTML = `
-      <div class="flashcard-box" id="flashcard">
-        <p id="flashcard-hint" class="flashcard-hint">Нажми, чтобы увидеть перевод</p>
-        <div class="flashcard-back" id="flashcard-back" style="display:none; width: 100%;">
-          <h2 class="card-translation">${currentWord.translation}</h2>
+      <div class="flashcard-3d-wrapper">
+        <div class="flashcard-3d" id="flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
+          <!-- Front Face: English word -->
+          <div class="flashcard-face flashcard-front">
+            <div class="flashcard-face-top">
+              <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="Прослушать">🔊</button>
+              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-front" title="В Избранное">
+                ${favorited ? '❤️' : '🤍'}
+              </button>
+            </div>
+            <div class="flashcard-face-body">
+              <h2 class="flashcard-word">${currentWord.word}</h2>
+              ${currentWord.transcription ? `<p class="flashcard-transcription">${currentWord.transcription}</p>` : ''}
+            </div>
+            <div class="flashcard-face-bottom">
+              <span class="flashcard-flip-prompt">🔄 Нажми, чтобы увидеть перевод</span>
+            </div>
+          </div>
+
+          <!-- Back Face: Russian translation -->
+          <div class="flashcard-face flashcard-back">
+            <div class="flashcard-face-top">
+              <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="Прослушать">🔊</button>
+              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-back" title="В Избранное">
+                ${favorited ? '❤️' : '🤍'}
+              </button>
+            </div>
+            <div class="flashcard-face-body">
+              <h2 class="flashcard-translation">${currentWord.translation}</h2>
+              <p class="flashcard-subword">${currentWord.word}</p>
+            </div>
+            <div class="flashcard-face-bottom">
+              <span class="flashcard-flip-prompt">🔄 Нажми, чтобы перевернуть обратно</span>
+            </div>
+          </div>
         </div>
       </div>
       
-      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 14px; gap: 12px;">
+      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
         <button type="button" class="btn-learn" id="btn-learn">
           Учить
         </button>
@@ -646,17 +678,47 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       </div>
     `;
 
-    const flashcard = practiceArea.querySelector('#flashcard');
-    const flashcardHint = practiceArea.querySelector('#flashcard-hint');
-    const flashcardBack = practiceArea.querySelector('#flashcard-back');
+    const flashcard = practiceArea.querySelector('#flashcard-3d');
     const feedbackBtns = practiceArea.querySelector('#card-feedback-btns');
+    let isFlipped = false;
 
-    flashcard.addEventListener('click', () => {
-      if (flashcardHint) flashcardHint.style.display = 'none';
-      flashcardBack.style.display = 'block';
-      feedbackBtns.style.display = 'flex';
-      flashcard.classList.add('flipped');
+    flashcard.addEventListener('click', (e) => {
+      // Ignore clicks on inner sound or favorite buttons to prevent accidental flip
+      if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
+        return;
+      }
+      isFlipped = !isFlipped;
+      flashcard.classList.toggle('is-flipped', isFlipped);
+      if (feedbackBtns.style.display === 'none') {
+        feedbackBtns.style.display = 'flex';
+      }
     });
+
+    const handleCardSpeak = (e) => {
+      e.stopPropagation();
+      speakWord(currentWord.word, currentWord.id);
+    };
+    practiceArea.querySelector('#fc-sound-front')?.addEventListener('click', handleCardSpeak);
+    practiceArea.querySelector('#fc-sound-back')?.addEventListener('click', handleCardSpeak);
+
+    const handleCardFav = async (e) => {
+      e.stopPropagation();
+      favorited = !favorited;
+      const favFront = practiceArea.querySelector('#fc-fav-front');
+      const favBack = practiceArea.querySelector('#fc-fav-back');
+      if (favFront) {
+        favFront.textContent = favorited ? '❤️' : '🤍';
+        favFront.classList.toggle('is-favorite', favorited);
+      }
+      if (favBack) {
+        favBack.textContent = favorited ? '❤️' : '🤍';
+        favBack.classList.toggle('is-favorite', favorited);
+      }
+      await toggleFavoriteApi(currentWord.id, favorited);
+      onFavoriteToggle(currentWord.id, favorited);
+    };
+    practiceArea.querySelector('#fc-fav-front')?.addEventListener('click', handleCardFav);
+    practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
     practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
       await saveProgress(currentWord.id, true, 'cards_learn');
