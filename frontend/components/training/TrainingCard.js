@@ -36,6 +36,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const isPairsMode = currentMethod === 'pairs';
   const isCardsMode = currentMethod === 'cards';
 
+  function formatWordCount(n) {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod100 >= 11 && mod100 <= 19) return `${n} слов`;
+    if (mod10 === 1) return `${n} слово`;
+    if (mod10 >= 2 && mod10 <= 4) return `${n} слова`;
+    return `${n} слов`;
+  }
+
   container.innerHTML = `
     <section class="word-card-container">
       
@@ -61,17 +70,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <!-- Word Display & Audio Button -->
       <div class="word-main-display">
         ${
-          !isPairsMode
+          isCardsMode
             ? `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
               🎯 В обучении: <strong>${learningCount} / ${dailyGoal}</strong> слов
             </div>
           `
-            : ''
-        }
-        ${
-          isCardsMode
-            ? ''
             : isPairsMode
             ? `
             <div class="pairs-header-box" style="margin: 4px 0 6px;">
@@ -80,6 +84,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isInputMode
             ? `
+            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+              ✍️ Осталось в Тесте: <strong>${formatWordCount(activeWords.length)}</strong>
+            </div>
             <div class="word-header-row">
               <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
               <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
@@ -91,6 +98,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `
             : `
+            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+              🎯 Осталось в Квизе: <strong>${formatWordCount(activeWords.length)}</strong>
+            </div>
             <div class="word-header-row">
               <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
               <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
@@ -100,7 +110,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 ${favorited ? '❤️' : '🤍'}
               </button>
             </div>
-            <p class="training-transcription">${currentWord.transcription || ''}</p>
           `
         }
       </div>
