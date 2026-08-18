@@ -479,8 +479,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function placeCaretAtEnd(el) {
       if (!el) return;
-      el.focus();
       try {
+        el.focus({ preventScroll: true });
         const range = document.createRange();
         range.selectNodeContents(el);
         range.collapse(false);
@@ -492,8 +492,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function placeCaretAfterFirstMismatch(el) {
       if (!el) return;
-      el.focus();
       try {
+        el.focus({ preventScroll: true });
         const firstMismatch = el.querySelector('.diff-char-inline.mismatch, .diff-char-inline.missing');
         if (firstMismatch) {
           const range = document.createRange();
@@ -516,18 +516,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function focusAndPlaceCaret(el) {
       if (!el) return;
-      el.focus();
+      try {
+        el.focus({ preventScroll: true });
+      } catch (e) {}
       placeCaretAtEnd(el);
       requestAnimationFrame(() => {
-        el.focus();
+        try {
+          el.focus({ preventScroll: true });
+        } catch (e) {}
         placeCaretAtEnd(el);
       });
       setTimeout(() => {
-        el.focus();
+        try {
+          el.focus({ preventScroll: true });
+        } catch (e) {}
         placeCaretAtEnd(el);
       }, 50);
       setTimeout(() => {
-        el.focus();
+        try {
+          el.focus({ preventScroll: true });
+        } catch (e) {}
         placeCaretAtEnd(el);
       }, 150);
     }
@@ -676,10 +684,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     });
 
-    input.addEventListener('paste', (e) => {
-      e.preventDefault();
-      const text = (e.clipboardData || window.clipboardData).getData('text');
-      document.execCommand('insertText', false, text);
+    input.addEventListener('focus', () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     });
 
     focusAndPlaceCaret(input);

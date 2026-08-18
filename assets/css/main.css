@@ -1226,8 +1226,8 @@ body {
 }
 
 .flashcard-translation {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 600;
   color: #15803d;
   margin: 0 0 4px;
   line-height: 1.2;
@@ -1268,15 +1268,16 @@ body {
 .btn-repeat, .btn-easy {
   flex: 1;
   padding: 15px;
-  border: none;
   border-radius: var(--radius-md);
-  font-size: 16.5px;
+  font-size: 16px;
   font-weight: 700;
+  border: none;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-repeat {
-  background: #fef2f2;
+  background: #fee2e2;
   color: #991b1b;
 }
 
@@ -1315,6 +1316,9 @@ body {
   cursor: text;
   white-space: nowrap;
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  touch-action: pan-x;
 }
 
 .answer-input:empty::before {
