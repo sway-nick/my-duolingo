@@ -51,6 +51,7 @@
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=18.0';
       import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=18.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=18.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=18.0';
 
       let allWords = [];
       let favoriteIds = new Set();
@@ -549,6 +550,7 @@
       }
 
       async function init() {
+        initPrizePodiumListener();
         await loadData();
 
         window.addEventListener('myduo:auth_changed', async () => {

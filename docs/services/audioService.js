@@ -151,6 +151,51 @@ function playErrorSound() {
   }
 }
 
+/**
+ * Plays a triumphant celebratory fanfare sound for podium prize achievements (Web Audio API)
+ */
+function playFanfareSound() {
+  if (isAudioMuted()) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    // Triumphant orchestral brass fanfare melody:
+    // C5 (523.25Hz) -> E5 (659.25Hz) -> G5 (783.99Hz) -> Hold majestic C6 chord (1046.5Hz + 1318.5Hz + 1567.98Hz + 2093Hz)
+    const melody = [
+      { freq: 523.25, time: 0.00, dur: 0.12, vol: 0.18 },
+      { freq: 659.25, time: 0.13, dur: 0.12, vol: 0.20 },
+      { freq: 783.99, time: 0.26, dur: 0.14, vol: 0.22 },
+      { freq: 1046.50, time: 0.42, dur: 1.20, vol: 0.26 }, // Main high root
+      { freq: 1318.51, time: 0.42, dur: 1.20, vol: 0.18 }, // Major third harmony
+      { freq: 1567.98, time: 0.42, dur: 1.20, vol: 0.16 }, // Fifth harmony
+      { freq: 2093.00, time: 0.42, dur: 1.00, vol: 0.12 }, // Sparkling octave
+    ];
+
+    melody.forEach(({ freq, time, dur, vol }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle'; // Warm brassy trumpet synth
+      osc.frequency.setValueAtTime(freq, now + time);
+
+      gain.gain.setValueAtTime(0.001, now + time);
+      gain.gain.linearRampToValueAtTime(vol, now + time + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + time + dur);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + time);
+      osc.stop(now + time + dur);
+    });
+  } catch (e) {
+    console.warn('Fanfare audio effect skipped:', e);
+  }
+}
+
 let cachedVoices = [];
 
 function loadVoices() {
@@ -352,6 +397,7 @@ export {
   playErrorSound,
   playCasinoRollSound,
   playCoinDropSound,
+  playFanfareSound,
   setSavedVoiceGender,
   getSavedVoiceGender,
   isAudioMuted,

@@ -297,6 +297,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   const wKey = weekKey || getIsoWeekKey();
   const key = `xp_${uId}_${wKey}`;
   const current = Math.max(0, Number(localStorage.getItem(key) || 0));
+  const oldRank = getUserWeeklyRank(uId, wKey);
   const next = Math.max(0, current + delta);
   localStorage.setItem(key, String(next));
 
@@ -307,8 +308,21 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 
   syncWeeklyXpApi(uId, wKey, next, userName, avatar);
 
+  const newRank = getUserWeeklyRank(uId, wKey);
+
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: next, delta } }));
+
+    // Trigger celebration when reaching prize podium (top 4: 1st=💎, 2nd=🥇, 3rd=🥈, 4th=🥉)
+    if (newRank && newRank <= 4 && delta > 0) {
+      const bestCelebrated = Number(sessionStorage.getItem(`myduo_celebrated_rank_${wKey}_${uId}`) || 999);
+      if (newRank < bestCelebrated || (!oldRank || oldRank > 4)) {
+        sessionStorage.setItem(`myduo_celebrated_rank_${wKey}_${uId}`, String(newRank));
+        window.dispatchEvent(new CustomEvent('myduo:podium_achieved', {
+          detail: { rank: newRank, oldRank, xp: next }
+        }));
+      }
+    }
   }
 
   return { currentXP: next, delta };
