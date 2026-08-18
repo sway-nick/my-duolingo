@@ -474,26 +474,26 @@ function getCachedLeaderboard(weekKey = null) {
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
   const userName = currentUser && currentUser.name ? currentUser.name : 'Вы (Гость)';
 
-  let list = [];
+  let rawList = [];
   try {
     const raw = localStorage.getItem(`cache_leaderboard_${wKey}`);
-    if (raw) list = JSON.parse(raw);
+    if (raw) rawList = JSON.parse(raw);
   } catch (e) {}
 
-  if (!list || list.length === 0) {
-    // Dynamic 50 realistic league participants with daily progression (0-200 XP/day)
-    list = generateDynamicBots(wKey);
-  }
+  // Keep real players from server, and merge all 50 dynamic bots with daily progression
+  const realPlayers = rawList.filter((u) => !String(u.userId).startsWith('bot_'));
+  const dynamicBots = generateDynamicBots(wKey);
+  const combined = [...realPlayers, ...dynamicBots];
 
   // Merge current user's profile and live XP
-  const myIdx = list.findIndex((u) => String(u.userId) === String(currentUserId));
+  const myIdx = combined.findIndex((u) => String(u.userId) === String(currentUserId));
   if (myIdx >= 0) {
-    list[myIdx].xp = Math.max(Number(list[myIdx].xp || 0), userXP);
-    list[myIdx].name = userName;
-    if (userAvatar) list[myIdx].avatar = userAvatar;
-    list[myIdx].isCurrentUser = true;
+    combined[myIdx].xp = Math.max(Number(combined[myIdx].xp || 0), userXP);
+    combined[myIdx].name = userName;
+    if (userAvatar) combined[myIdx].avatar = userAvatar;
+    combined[myIdx].isCurrentUser = true;
   } else {
-    list.push({
+    combined.push({
       userId: currentUserId,
       name: userName,
       avatar: userAvatar,
@@ -503,9 +503,9 @@ function getCachedLeaderboard(weekKey = null) {
   }
 
   // Sort descending by XP
-  list.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+  combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
 
-  return { success: true, data: list, weekKey: wKey, userXP };
+  return { success: true, data: combined, weekKey: wKey, userXP };
 }
 
 function getUserWeeklyRank(userId = null, weekKey = null) {
@@ -561,7 +561,13 @@ async function getLeaderboard(weekKey = null) {
     clearTimeout(timer);
     const data = await res.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
-      localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(data.data));
+      // Combine real players from server with all 50 dynamic bots
+      const realPlayers = data.data.filter((u) => !String(u.userId).startsWith('bot_'));
+      const dynamicBots = generateDynamicBots(wKey);
+      const combined = [...realPlayers, ...dynamicBots];
+      combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+
+      localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
 
       // Bi-directional sync: if server has higher XP or avatar for current user, update local
       const meOnServer = data.data.find((item) => String(item.userId) === String(currentUserId));
