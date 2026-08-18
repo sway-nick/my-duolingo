@@ -36,6 +36,12 @@ function settingsPost(e) {
   validateRequired(body, ['userId']);
 
   const userId = String(body.userId).trim();
+
+  // Optimization: Do not pollute Google Sheets with unregistered guest settings
+  if (!userId.startsWith('u_')) {
+    return successResponse({ userId, ...body, localOnly: true });
+  }
+
   const sheet = getSheet('UserSettings', SETTINGS_HEADERS);
   const list = getSheetData('UserSettings', SETTINGS_HEADERS);
 

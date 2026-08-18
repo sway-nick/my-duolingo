@@ -351,7 +351,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 }
 
 async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
-  if (!userId) return;
+  if (!userId || !String(userId).startsWith('u_')) return;
   const cleanName = name || 'Гость';
   const cleanAvatar = avatar || '';
   const cleanXp = Math.max(0, Number(xp || 0));
@@ -662,6 +662,9 @@ async function flushProgressQueue() {
   pendingProgressQueue = [];
 
   for (const item of batch) {
+    if (!item.userId || !String(item.userId).startsWith('u_')) {
+      continue; // Skip guests from cloud progress sync
+    }
     try {
       await fetch(`${API_URL}?route=progress`, {
         method: 'POST',
@@ -703,14 +706,16 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   }
   localStorage.setItem(key, JSON.stringify(favs));
 
-  try {
-    await fetch(`${API_URL}?route=favorite`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ route: 'favorite', action: 'favorite', userId, wordId, isFavorite }),
-    });
-  } catch (e) {
-    console.warn('Favorite saved locally, remote sync pending:', e);
+  if (String(userId).startsWith('u_')) {
+    try {
+      await fetch(`${API_URL}?route=favorite`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ route: 'favorite', action: 'favorite', userId, wordId, isFavorite }),
+      });
+    } catch (e) {
+      console.warn('Favorite saved locally, remote sync pending:', e);
+    }
   }
 }
 
@@ -921,14 +926,16 @@ async function saveUserSettings(settings) {
   const key = `settings_${userId}`;
   localStorage.setItem(key, JSON.stringify(payload));
 
-  try {
-    await fetch(`${API_URL}?route=settings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-    });
-  } catch (e) {
-    console.warn('Settings saved locally, sync pending', e);
+  if (String(userId).startsWith('u_')) {
+    try {
+      await fetch(`${API_URL}?route=settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
+    } catch (e) {
+      console.warn('Settings saved locally, sync pending', e);
+    }
   }
 }
 

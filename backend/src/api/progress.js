@@ -5,14 +5,19 @@ function progressPost(e) {
   const body = getJsonBody(e);
   validateRequired(body, ['userId', 'wordId', 'isCorrect']);
 
-  const userId = body.userId;
-  const wordId = String(body.wordId);
+  const userId = String(body.userId).trim();
+  const wordId = String(body.wordId).trim();
   const isCorrect = Boolean(body.isCorrect);
+
+  // Optimization: Do not pollute Google Sheets with unregistered guest progress
+  if (!userId.startsWith('u_')) {
+    return successResponse({ userId, wordId, isCorrect, localOnly: true });
+  }
 
   const sheet = getSheet('UserProgress', PROGRESS_HEADERS);
   const progressList = getSheetData('UserProgress', PROGRESS_HEADERS);
 
-  const existingIndex = progressList.findIndex((p) => String(p.userId) === String(userId) && String(p.wordId) === wordId);
+  const existingIndex = progressList.findIndex((p) => String(p.userId).trim() === userId && String(p.wordId).trim() === wordId);
 
   let updatedRecord;
   if (existingIndex >= 0) {
@@ -95,14 +100,19 @@ function favoritePost(e) {
   const body = getJsonBody(e);
   validateRequired(body, ['userId', 'wordId', 'isFavorite']);
 
-  const userId = body.userId;
-  const wordId = String(body.wordId);
+  const userId = String(body.userId).trim();
+  const wordId = String(body.wordId).trim();
   const isFavorite = Boolean(body.isFavorite);
+
+  // Optimization: Do not pollute Google Sheets with unregistered guest favorites
+  if (!userId.startsWith('u_')) {
+    return successResponse({ userId, wordId, isFavorite, localOnly: true });
+  }
 
   const sheet = getSheet('Favorites', FAVORITE_HEADERS);
   const favList = getSheetData('Favorites', FAVORITE_HEADERS);
 
-  const existingIndex = favList.findIndex((f) => String(f.userId) === String(userId) && String(f.wordId) === wordId);
+  const existingIndex = favList.findIndex((f) => String(f.userId).trim() === userId && String(f.wordId).trim() === wordId);
 
   if (isFavorite && existingIndex < 0) {
     appendSheetRow('Favorites', { userId, wordId, createdAt: new Date().toISOString() }, FAVORITE_HEADERS);

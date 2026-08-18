@@ -104,6 +104,11 @@ function migrateGuestData(newUserId) {
         }
       }
     });
+
+    // Clean up temporary guest keys to keep storage tidy
+    localStorage.removeItem(guestProgKey);
+    localStorage.removeItem(guestFavKey);
+    localStorage.removeItem(guestSetKey);
   } catch (e) {
     console.warn('Failed migrating guest data to user:', e);
   }

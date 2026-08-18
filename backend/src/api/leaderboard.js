@@ -13,33 +13,72 @@ function leaderboardGet(e) {
   const weekKey = query.weekKey || getIsoWeekKey();
 
   if (query.userId && query.xp !== undefined) {
-    const userId = String(query.userId);
-    const xp = Math.max(0, Number(query.xp || 0));
-    const name = query.name || 'Ученик';
-    const avatar = query.avatar || '';
-    const updatedAt = new Date().toISOString();
+    const userId = String(query.userId).trim();
+    if (userId.startsWith('u_')) {
+      const xp = Math.max(0, Number(query.xp || 0));
+      const name = query.name || 'Ученик';
+      const avatar = query.avatar || '';
+      const updatedAt = new Date().toISOString();
 
-    const sheet = getSheet('Leaderboard', LEADERBOARD_HEADERS);
-    const list = getSheetData('Leaderboard', LEADERBOARD_HEADERS);
+      const sheet = getSheet('Leaderboard', LEADERBOARD_HEADERS);
+      const list = getSheetData('Leaderboard', LEADERBOARD_HEADERS);
 
-    const existingIdx = list.findIndex(
-      (item) => String(item.userId) === userId && item.weekKey === weekKey
-    );
+      const existingIdx = list.findIndex(
+        (item) => String(item.userId).trim() === userId && item.weekKey === weekKey
+      );
 
-    if (existingIdx >= 0) {
-      const item = list[existingIdx];
-      const rowIndex = item._rowIndex;
-      const nameToSave = (name && name !== 'Ученик') ? name : (item.name || name);
-      const avatarToSave = avatar || item.avatar || '';
-      const xpToSave = Math.max(xp, Number(item.xp || 0));
-      sheet.getRange(rowIndex, 3, 1, 4).setValues([[nameToSave, avatarToSave, xpToSave, updatedAt]]);
-    } else {
-      appendSheetRow('Leaderboard', { userId, weekKey, name, avatar, xp, updatedAt }, LEADERBOARD_HEADERS);
+      if (existingIdx >= 0) {
+        const item = list[existingIdx];
+        const rowIndex = item._rowIndex;
+        const nameToSave = (name && name !== 'Ученик') ? name : (item.name || name);
+        const avatarToSave = avatar || item.avatar || '';
+        const xpToSave = Math.max(xp, Number(item.xp || 0));
+        sheet.getRange(rowIndex, 3, 1, 4).setValues([[nameToSave, avatarToSave, xpToSave, updatedAt]]);
+      } else {
+        appendSheetRow('Leaderboard', { userId, weekKey, name, avatar, xp, updatedAt }, LEADERBOARD_HEADERS);
+      }
     }
   }
 
   const leaderboardList = getSheetData('Leaderboard', LEADERBOARD_HEADERS);
   const usersList = getSheetData('Users', USER_HEADERS);
+
+  // Auto-cleanup: remove obsolete guest rows and weeks older than 4 weeks from sheet
+  try {
+    const sheet = getSheet('Leaderboard', LEADERBOARD_HEADERS);
+    const currentWeekKey = getIsoWeekKey();
+    const parts = currentWeekKey.split('-W');
+    const curYear = parseInt(parts[0], 10);
+    const curWeek = parseInt(parts[1], 10);
+
+    const rowsToDelete = [];
+    leaderboardList.forEach((item) => {
+      if (!item._rowIndex) return;
+      const uid = String(item.userId).trim();
+      // Remove any guest rows
+      if (!uid.startsWith('u_') && !uid.startsWith('bot_')) {
+        rowsToDelete.push(item._rowIndex);
+        return;
+      }
+      // Remove weeks older than 4 weeks
+      if (item.weekKey && item.weekKey.includes('-W')) {
+        const itemParts = item.weekKey.split('-W');
+        const itemYear = parseInt(itemParts[0], 10);
+        const itemWeek = parseInt(itemParts[1], 10);
+        const diffWeeks = (curYear - itemYear) * 52 + (curWeek - itemWeek);
+        if (diffWeeks > 4) {
+          rowsToDelete.push(item._rowIndex);
+        }
+      }
+    });
+
+    if (rowsToDelete.length > 0) {
+      rowsToDelete.sort((a, b) => b - a); // bottom to top
+      rowsToDelete.forEach((rIdx) => {
+        try { sheet.deleteRow(rIdx); } catch (err) {}
+      });
+    }
+  } catch (cleanErr) {}
 
   // Map of userId -> leaderboard item for this week (with duplicate deduplication taking max XP)
   const weekMap = {};
@@ -110,7 +149,13 @@ function leaderboardPost(e) {
   const body = getJsonBody(e);
   validateRequired(body, ['userId']);
 
-  const userId = String(body.userId);
+  const userId = String(body.userId).trim();
+
+  // Optimization: Do not pollute Google Sheets with unregistered guest leaderboard rows
+  if (!userId.startsWith('u_')) {
+    return successResponse({ userId, xp: body.xp, localOnly: true });
+  }
+
   const weekKey = body.weekKey || getIsoWeekKey();
   const xp = Math.max(0, Number(body.xp || 0));
   const name = body.name || 'Ученик';
