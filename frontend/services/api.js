@@ -478,11 +478,17 @@ async function getLeaderboard(weekKey = null) {
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
       localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(data.data));
 
-      // Bi-directional sync: if server has higher XP for current user than local, update local
+      // Bi-directional sync: if server has higher XP or avatar for current user, update local
       const meOnServer = data.data.find((item) => String(item.userId) === String(currentUserId));
-      if (meOnServer && Number(meOnServer.xp || 0) > userXP) {
-        localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
-        window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
+      if (meOnServer) {
+        if (Number(meOnServer.xp || 0) > userXP) {
+          localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
+          window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
+        }
+        if (meOnServer.avatar && !localStorage.getItem(`avatar_${currentUserId}`)) {
+          localStorage.setItem(`avatar_${currentUserId}`, meOnServer.avatar);
+          window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: currentUserId, avatar: meOnServer.avatar } }));
+        }
       }
 
       if (typeof window !== 'undefined') {

@@ -210,7 +210,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   // 1. Fresh sync on initial open
   loadFreshData();
 
-  // 2. Real-time background sync every 12 seconds while viewing leaderboard
+  // 2. Real-time background sync every 60 seconds while viewing leaderboard
   container._leaderboardTimer = setInterval(() => {
     // Only fetch if tab content is still active in the DOM
     if (document.body.contains(contentEl)) {
@@ -219,7 +219,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       clearInterval(container._leaderboardTimer);
       container._leaderboardTimer = null;
     }
-  }, 12000);
+  }, 60000);
 
   // 3. Listen to local XP and remote leaderboard changes to update table immediately
   const handleLiveUpdate = () => {

@@ -177,6 +177,13 @@ function saveUserAvatar(userId, base64Data) {
   } else {
     localStorage.setItem(`avatar_${id}`, base64Data);
   }
+  if (currentUser && String(currentUser.id) === String(id)) {
+    currentUser.avatar = base64Data || '';
+    try {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(currentUser));
+    } catch (e) {}
+  }
+
   try {
     window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: id, avatar: base64Data } }));
   } catch (e) {}
@@ -192,7 +199,7 @@ function saveUserAvatar(userId, base64Data) {
 
     const user = currentUser;
     const userName = user && user.name ? user.name : 'Гость';
-    const xp = Number(localStorage.getItem(`weekly_xp_${id}_${wKey}`) || 0);
+    const xp = Number(localStorage.getItem(`xp_${id}_${wKey}`) || 0);
 
     fetch(`${API_URL}?route=leaderboard`, {
       method: 'POST',

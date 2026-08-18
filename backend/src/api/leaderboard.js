@@ -29,7 +29,10 @@ function leaderboardGet(e) {
     if (existingIdx >= 0) {
       const item = list[existingIdx];
       const rowIndex = item._rowIndex;
-      sheet.getRange(rowIndex, 3, 1, 4).setValues([[name, avatar, xp, updatedAt]]);
+      const nameToSave = (name && name !== 'Ученик') ? name : (item.name || name);
+      const avatarToSave = avatar || item.avatar || '';
+      const xpToSave = Math.max(xp, Number(item.xp || 0));
+      sheet.getRange(rowIndex, 3, 1, 4).setValues([[nameToSave, avatarToSave, xpToSave, updatedAt]]);
     } else {
       appendSheetRow('Leaderboard', { userId, weekKey, name, avatar, xp, updatedAt }, LEADERBOARD_HEADERS);
     }
@@ -116,7 +119,10 @@ function leaderboardPost(e) {
   if (existingIdx >= 0) {
     const item = list[existingIdx];
     const rowIndex = item._rowIndex;
-    sheet.getRange(rowIndex, 3, 1, 4).setValues([[name, avatar, xp, updatedAt]]);
+    const nameToSave = (name && name !== 'Ученик') ? name : (item.name || name);
+    const avatarToSave = avatar || item.avatar || '';
+    const xpToSave = Math.max(xp, Number(item.xp || 0));
+    sheet.getRange(rowIndex, 3, 1, 4).setValues([[nameToSave, avatarToSave, xpToSave, updatedAt]]);
   } else {
     appendSheetRow('Leaderboard', { userId, weekKey, name, avatar, xp, updatedAt }, LEADERBOARD_HEADERS);
   }
