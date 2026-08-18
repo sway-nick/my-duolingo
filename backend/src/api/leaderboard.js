@@ -41,16 +41,24 @@ function leaderboardGet(e) {
   const leaderboardList = getSheetData('Leaderboard', LEADERBOARD_HEADERS);
   const usersList = getSheetData('Users', USER_HEADERS);
 
-  // Map of userId -> leaderboard item for this week
+  // Map of userId -> leaderboard item for this week (with duplicate deduplication taking max XP)
   const weekMap = {};
   leaderboardList.forEach((item) => {
     if (item.weekKey === weekKey) {
-      weekMap[String(item.userId)] = {
-        userId: String(item.userId),
-        name: item.name || 'Ученик',
-        avatar: item.avatar || '',
-        xp: Number(item.xp || 0),
-      };
+      const uid = String(item.userId);
+      const itemXp = Number(item.xp || 0);
+      if (!weekMap[uid]) {
+        weekMap[uid] = {
+          userId: uid,
+          name: item.name || 'Ученик',
+          avatar: item.avatar || '',
+          xp: itemXp,
+        };
+      } else {
+        weekMap[uid].xp = Math.max(weekMap[uid].xp, itemXp);
+        if (item.avatar && !weekMap[uid].avatar) weekMap[uid].avatar = item.avatar;
+        if (item.name && item.name !== 'Ученик') weekMap[uid].name = item.name;
+      }
     }
   });
 
