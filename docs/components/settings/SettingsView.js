@@ -90,17 +90,22 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       </div>
 
       <!-- Goals Card -->
-      <div class="settings-card">
+      <div class="settings-card" style="position: relative; z-index: 10;">
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">📌 Задача на день</h3>
-        <select id="daily-goal-select" class="settings-select">
-          <option value="10">10 слов</option>
-          <option value="20">20 слов</option>
-          <option value="30">30 слов</option>
-          <option value="40">40 слов</option>
-          <option value="50">50 слов</option>
-          <option value="75">75 слов</option>
-          <option value="100">100 слов</option>
-        </select>
+        <div class="custom-dropdown" id="goal-dropdown">
+          <button type="button" class="custom-dropdown-trigger" id="goal-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="goal-dropdown-label">20 слов</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="custom-dropdown-menu" id="goal-dropdown-menu" role="listbox">
+            <div class="dropdown-item" data-value="20">20 слов</div>
+            <div class="dropdown-item" data-value="30">30 слов</div>
+            <div class="dropdown-item" data-value="40">40 слов</div>
+            <div class="dropdown-item" data-value="50">50 слов</div>
+            <div class="dropdown-item" data-value="75">75 слов</div>
+            <div class="dropdown-item" data-value="100">100 слов</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -128,7 +133,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   // Load current user settings
   const settings = await getUserSettings();
-  const goalSelect = container.querySelector('#daily-goal-select');
   const autoSaveStatus = container.querySelector('#autosave-status');
 
   // Bind Avatar Picker on avatar click
@@ -148,7 +152,44 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  goalSelect.value = String(settings.dailyGoal || 10);
+  // Goal Dropdown handling (Default 20 words)
+  let currentGoal = Number(settings.dailyGoal) === 10 || !settings.dailyGoal ? 20 : Number(settings.dailyGoal);
+  const goalDropdown = container.querySelector('#goal-dropdown');
+  const goalTrigger = container.querySelector('#goal-dropdown-trigger');
+  const goalLabel = container.querySelector('#goal-dropdown-label');
+  const goalItems = container.querySelectorAll('.dropdown-item');
+
+  function updateGoalUI(val) {
+    currentGoal = Number(val);
+    if (goalLabel) goalLabel.textContent = `${currentGoal} слов`;
+    goalItems.forEach((item) => {
+      item.classList.toggle('selected', Number(item.dataset.value) === currentGoal);
+    });
+  }
+
+  updateGoalUI(currentGoal);
+
+  if (goalTrigger && goalDropdown) {
+    goalTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goalDropdown.classList.toggle('open');
+    });
+
+    goalItems.forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = Number(item.dataset.value);
+        updateGoalUI(val);
+        goalDropdown.classList.remove('open');
+        triggerAutoSave();
+      });
+    });
+
+    // Close on click outside
+    document.addEventListener('click', () => {
+      goalDropdown.classList.remove('open');
+    });
+  }
 
   // Setup Sound / Silent Mode Selection
   let isSilent = isAudioMuted() || Boolean(settings.silentMode);
@@ -180,7 +221,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   async function triggerAutoSave() {
     const newSettings = {
       ...settings,
-      dailyGoal: Number(goalSelect.value),
+      dailyGoal: currentGoal,
       theme: getSavedTheme(),
       voiceGender: currentVoice,
       silentMode: isSilent,
@@ -201,9 +242,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       }, 1500);
     }
   }
-
-  // Bind change listener for goal
-  goalSelect.addEventListener('change', triggerAutoSave);
 
   // Bind theme buttons with auto-save
   const lightBtn = container.querySelector('#theme-light-btn');

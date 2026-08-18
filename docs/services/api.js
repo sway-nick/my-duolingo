@@ -753,20 +753,24 @@ async function getUserSettings() {
   const saved = localStorage.getItem(key);
   if (saved) {
     try {
+      const parsed = JSON.parse(saved);
+      if (parsed.dailyGoal === 10 || !parsed.dailyGoal) {
+        parsed.dailyGoal = 20;
+      }
       return {
         userId,
-        dailyGoal: 10,
+        dailyGoal: 20,
         theme: 'light',
         level: 'All',
         category: 'All',
         preferredMethod: 'quiz',
-        ...JSON.parse(saved),
+        ...parsed,
       };
     } catch (e) {}
   }
   return {
     userId,
-    dailyGoal: 10,
+    dailyGoal: 20,
     theme: 'light',
     level: 'All',
     category: 'All',

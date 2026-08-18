@@ -71,8 +71,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const favSet = new Set(favoriteIds.map(String));
   const userProgress = getUserProgress();
 
-  // Load saved dictionary category filter from localStorage
-  const savedDictCat = localStorage.getItem('myduo_dict_category') || 'All';
+  // Load saved dictionary category filter from localStorage, defaulting to 'Elementary'
+  const savedDictCat = localStorage.getItem('myduo_dict_category') || 'Elementary';
 
   container.innerHTML = `
     <div class="dictionary-page">
@@ -114,6 +114,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     categorySelect.value = 'All';
   } else if (uniqueCats.includes(savedDictCat)) {
     categorySelect.value = savedDictCat;
+  } else if (uniqueCats.includes('Elementary')) {
+    categorySelect.value = 'Elementary';
   }
 
   const grid = container.querySelector('#dict-grid');
