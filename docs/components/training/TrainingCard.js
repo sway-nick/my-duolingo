@@ -61,12 +61,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <!-- Word Display & Audio Button -->
       <div class="word-main-display">
         ${
-          isCardsMode
+          !isPairsMode
             ? `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
               🎯 В обучении: <strong>${learningCount} / ${dailyGoal}</strong> слов
             </div>
           `
+            : ''
+        }
+        ${
+          isCardsMode
+            ? ''
             : isPairsMode
             ? `
             <div class="pairs-header-box" style="margin: 4px 0 6px;">
@@ -600,8 +605,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // Exact delay: 1s on correct, 4s on error
-      const delay = isCorrect ? (inputCount >= 3 && !favorited ? 1500 : 1000) : 4000;
+      // Exact delay: 1.8s on correct (gives enough time for audio to finish playing), 4s on error
+      const delay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1800) : 4000;
       setTimeout(() => {
         onNext();
       }, delay);
