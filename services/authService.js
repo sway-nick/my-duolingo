@@ -154,17 +154,54 @@ function getAuthToken() {
 
 function getUserAvatar(targetUserId) {
   const userId = targetUserId || getEffectiveUserId();
-  const saved = localStorage.getItem(`avatar_${userId}`);
+
+  // 1. Direct key for this user
+  let saved = localStorage.getItem(`avatar_${userId}`);
   if (saved) {
     if (saved.startsWith('./assets/avatars/avatar_') && !saved.includes('?v=')) {
       return `${saved}?v=18.0`;
     }
     return saved;
   }
+
+  // 2. Current user session
   const user = getCurrentUser();
   if (user && (user.picture || user.avatar)) {
     return user.picture || user.avatar;
   }
+
+  // 3. Scan any avatar keys in localStorage (e.g. from guest or prior logins)
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('avatar_')) {
+        const val = localStorage.getItem(k);
+        if (val && val.length > 5) {
+          localStorage.setItem(`avatar_${userId}`, val);
+          return val;
+        }
+      }
+    }
+  } catch (e) {}
+
+  // 4. Check cached leaderboard data for this user's avatar from cloud
+  try {
+    const allKeys = Object.keys(localStorage);
+    for (const k of allKeys) {
+      if (k.startsWith('cache_leaderboard_')) {
+        const raw = localStorage.getItem(k);
+        if (raw) {
+          const list = JSON.parse(raw);
+          const me = list.find((item) => String(item.userId) === String(userId) || (user && item.name === user.name));
+          if (me && me.avatar) {
+            localStorage.setItem(`avatar_${userId}`, me.avatar);
+            return me.avatar;
+          }
+        }
+      }
+    }
+  } catch (e) {}
+
   return null;
 }
 
