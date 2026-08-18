@@ -45,12 +45,12 @@ function playSuccessSound() {
 
     const now = ctx.currentTime;
 
-    // Sweet sparkling crystal bell chord (soft volume): C6 (1046.5Hz) -> E6 (1318.5Hz) -> G6 (1567.98Hz) -> C7 (2093Hz)
+    // Sweet sparkling crystal bell chord (whisper-soft volume): C6 (1046.5Hz) -> E6 (1318.5Hz) -> G6 (1567.98Hz) -> C7 (2093Hz)
     const notes = [
-      { freq: 1046.5, delay: 0.00, vol: 0.05 },
-      { freq: 1318.5, delay: 0.04, vol: 0.055 },
-      { freq: 1567.98, delay: 0.08, vol: 0.06 },
-      { freq: 2093.0, delay: 0.12, vol: 0.045 },
+      { freq: 1046.5, delay: 0.00, vol: 0.02 },
+      { freq: 1318.5, delay: 0.04, vol: 0.022 },
+      { freq: 1567.98, delay: 0.08, vol: 0.025 },
+      { freq: 2093.0, delay: 0.12, vol: 0.018 },
     ];
 
     notes.forEach(({ freq, delay, vol }) => {
