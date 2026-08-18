@@ -365,9 +365,9 @@ function speakWord(text, wordId = null, lang = 'en-US', voiceGenderOverride = nu
   const gender = voiceGenderOverride || getSavedVoiceGender();
   const cleanText = text.trim();
 
-  // 3. Try high-definition natural cloud audio stream
+  // 3. Try high-definition natural studio cloud audio stream (American/British native speaker)
   try {
-    const cloudUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(cleanText)}`;
+    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanText)}&type=2`;
     const audio = new Audio(cloudUrl);
     currentAudioPlayer = audio;
 
