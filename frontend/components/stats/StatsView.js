@@ -1,5 +1,5 @@
-import { getUserStats } from '../../services/api.js?v=16.0';
-import { getCurrentUser } from '../../services/authService.js?v=16.0';
+import { getUserStats } from '../../services/api.js?v=18.0';
+import { getCurrentUser } from '../../services/authService.js?v=18.0';
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];

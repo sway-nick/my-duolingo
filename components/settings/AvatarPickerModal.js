@@ -1,4 +1,4 @@
-import { VECTOR_AVATARS, saveUserAvatar, getUserAvatar, getEffectiveUserId, compressAndCropAvatar } from '../../services/authService.js?v=16.0';
+import { VECTOR_AVATARS, saveUserAvatar, getUserAvatar, getEffectiveUserId, compressAndCropAvatar } from '../../services/authService.js?v=18.0';
 
 function renderAvatarPickerModal(onAvatarSelected = () => {}) {
   // Remove existing modal if any

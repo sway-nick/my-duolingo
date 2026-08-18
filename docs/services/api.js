@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId } from './authService.js?v=16.0';
+import { getCurrentUser, getEffectiveUserId } from './authService.js?v=18.0';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
