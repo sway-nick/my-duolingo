@@ -145,6 +145,8 @@ function getUserAvatar(targetUserId) {
   return null;
 }
 
+const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
+
 function saveUserAvatar(userId, base64Data) {
   const id = userId || getEffectiveUserId();
   if (!base64Data) {
@@ -155,6 +157,34 @@ function saveUserAvatar(userId, base64Data) {
   try {
     window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: id, avatar: base64Data } }));
   } catch (e) {}
+
+  // Direct cloud sync
+  try {
+    const d = new Date();
+    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+    const wKey = `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+
+    const user = currentUser;
+    const userName = user && user.name ? user.name : 'Гость';
+    const xp = Number(localStorage.getItem(`weekly_xp_${id}_${wKey}`) || 0);
+
+    fetch(`${API_URL}?route=leaderboard`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        route: 'leaderboard',
+        action: 'leaderboard',
+        userId: id,
+        weekKey: wKey,
+        xp,
+        name: userName,
+        avatar: base64Data || '',
+      }),
+    }).catch(() => {});
+  } catch (err) {}
 }
 
 function removeUserAvatar(userId) {

@@ -41,16 +41,16 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice } from './services/api.js?v=16.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=16.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=16.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=16.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=16.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=16.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=16.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=16.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=16.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=16.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice } from './services/api.js?v=17.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=17.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=17.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=17.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=17.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=17.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=17.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=17.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=17.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=17.0';
 
       let allWords = [];
       let favoriteIds = new Set();
