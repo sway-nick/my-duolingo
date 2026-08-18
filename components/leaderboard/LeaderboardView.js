@@ -205,14 +205,25 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
           const stickyTopOffset = Math.round(headerBottom);
           stickyWrapper.style.setProperty('--podium-sticky-top', `${stickyTopOffset}px`);
 
-          // Calculate continuous scroll progress past the touch point
-          const contentTop = contentEl.getBoundingClientRect().top;
-          const scrollPast = Math.max(0, stickyTopOffset - contentTop);
-          const compressDistance = 50; // Smoothly interpolates across 50px of scroll
-          const progress = Math.min(1, Math.max(0, scrollPast / compressDistance));
+          // Calculate stable static threshold based on page elements to avoid layout feedback loop
+          const pageEl = container.querySelector('.leaderboard-page');
+          const pageTop = pageEl ? pageEl.getBoundingClientRect().top : 0;
 
-          // Set progressive ratio directly to CSS variables
-          stickyWrapper.style.setProperty('--p', progress.toFixed(3));
+          const headerH = (pageEl && pageEl.querySelector('.page-header')) ? pageEl.querySelector('.page-header').offsetHeight : 36;
+          const rulesH = (pageEl && pageEl.querySelector('.scoring-rules-banner')) ? pageEl.querySelector('.scoring-rules-banner').offsetHeight : 44;
+          const bannerOffset = headerH + rulesH + 16; // Stable static distance
+
+          const currentPodiumNaturalTop = pageTop + bannerOffset;
+          const scrollPast = Math.max(0, stickyTopOffset - currentPodiumNaturalTop);
+
+          // Generous smooth 120px transition travel
+          const compressDistance = 120;
+          const rawRatio = Math.min(1, Math.max(0, scrollPast / compressDistance));
+
+          // Sinusoidal S-curve easing (smooth acceleration & deceleration, zero sudden steps)
+          const easeProgress = rawRatio <= 0 ? 0 : rawRatio >= 1 ? 1 : (0.5 - 0.5 * Math.cos(rawRatio * Math.PI));
+
+          stickyWrapper.style.setProperty('--p', easeProgress.toFixed(4));
         }
       });
     };
