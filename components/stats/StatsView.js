@@ -1,6 +1,6 @@
 import { getUserStats, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=18.0';
 import { getCurrentUser } from '../../services/authService.js?v=18.0';
-import { speakWord } from '../../services/audioService.js?v=18.0';
+import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=18.0';
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];
@@ -44,6 +44,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     let isWotdFav = false;
 
     if (wotd) {
+      if (wotd.word) preloadWordAudio(wotd.word);
       const favList = getUserFavorites();
       const favSet = new Set(favList.map(String));
       isWotdFav = favSet.has(String(wotd.id));

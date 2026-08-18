@@ -298,7 +298,45 @@ function getPreferredVoice(gender = 'female') {
 }
 
 let currentAudioPlayer = null;
-const audioUrlCache = new Map();
+const audioCache = new Map();
+
+function getAudioUrls(text, isUk) {
+  const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
+  const langCode = isUk ? 'en-GB' : 'en-US';
+  const voiceType = isUk ? 1 : 2;
+
+  return {
+    primary: `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encodeURIComponent(cleanQuery)}`,
+    fallback: `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`,
+    cleanQuery,
+    langCode,
+  };
+}
+
+/**
+ * Preloads audio in the background so that clicking or flipping cards has 0ms latency.
+ */
+function preloadWordAudio(text, voiceAccentOverride = null) {
+  if (!text || typeof window === 'undefined') return;
+  try {
+    const accent = voiceAccentOverride || getSavedVoiceAccent();
+    const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+    const { primary, cleanQuery } = getAudioUrls(text, isUk);
+    const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
+
+    if (audioCache.has(cacheKey)) return;
+
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = primary;
+
+    if (audioCache.size > 80) {
+      const firstKey = audioCache.keys().next().value;
+      audioCache.delete(firstKey);
+    }
+    audioCache.set(cacheKey, audio);
+  } catch (e) {}
+}
 
 function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -332,17 +370,8 @@ function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
 }
 
 /**
- * Speaks the given text using high-definition natural studio cloud audio,
- * supporting British (Type 1, 🇬🇧) and American (Type 2, 🇺🇸) accents,
- * with automatic SpeechSynthesis fallback when offline.
- * Automatically switches to slow "turtle" mode on the 3rd consecutive play of the same word.
- *
- * @param {string} text - The word or text to pronounce
- * @param {string} wordId - Optional unique ID for tracking consecutive clicks
- * @param {string} lang - Language code (default 'en-US' or 'en-GB')
- * @param {string} voiceAccentOverride - Optional accent override ('uk' | 'us')
- * @param {boolean} forcePlay - Play even if silent mode is enabled
- * @returns {boolean} isTurtleMode - True if playing in slow speed
+ * Speaks the given text with instant 0ms latency studio cloud audio,
+ * supporting British and American accents with multi-tier fallback.
  */
 function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null, forcePlay = false) {
   if (!text || (isAudioMuted() && !forcePlay)) {
@@ -373,40 +402,59 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     clickCount = 1;
   }
 
-  // 1st: Normal, 2nd: Normal, 3rd: Slow, 4th: Normal, 5th: Slow, 6th: Normal...
   const isTurtleMode = clickCount >= 3 && (clickCount % 2 === 1);
   const accent = voiceAccentOverride || getSavedVoiceAccent();
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
-  const voiceType = isUk ? 1 : 2; // Type 1 = 🇬🇧 British English, Type 2 = 🇺🇸 American English
   const targetLang = lang || (isUk ? 'en-GB' : 'en-US');
 
-  // Clean text from punctuation (which breaks dictionary audio endpoints)
-  const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
+  const { primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
+  const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
 
-  // 3. Play high-definition studio native recording (Type 1 = 🇬🇧 British, Type 2 = 🇺🇸 American)
+  // 3. Retrieve pre-buffered audio or create instant playback element
+  let audio = audioCache.get(cacheKey);
+  if (!audio) {
+    audio = new Audio(primary);
+    audio.preload = 'auto';
+    audioCache.set(cacheKey, audio);
+  }
+
+  currentAudioPlayer = audio;
+
   try {
-    const cloudUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`;
-    const audio = new Audio(cloudUrl);
-    currentAudioPlayer = audio;
-
-    // Pitch-corrected slow down in turtle mode
+    audio.currentTime = 0;
     audio.playbackRate = isTurtleMode ? 0.62 : 1.0;
 
-    let hasFallbackRun = false;
-    const runFallback = () => {
-      if (hasFallbackRun) return;
-      hasFallbackRun = true;
+    let hasTriedFallback = false;
+    let hasSpeechFallbackRun = false;
+
+    const runSpeechFallback = () => {
+      if (hasSpeechFallbackRun) return;
+      hasSpeechFallbackRun = true;
       speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
     };
 
     audio.onerror = () => {
-      runFallback();
+      if (!hasTriedFallback) {
+        hasTriedFallback = true;
+        audio.src = fallback;
+        audio.currentTime = 0;
+        audio.play().catch(runSpeechFallback);
+      } else {
+        runSpeechFallback();
+      }
     };
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        runFallback();
+        if (!hasTriedFallback) {
+          hasTriedFallback = true;
+          audio.src = fallback;
+          audio.currentTime = 0;
+          audio.play().catch(runSpeechFallback);
+        } else {
+          runSpeechFallback();
+        }
       });
     }
   } catch (err) {
@@ -462,6 +510,7 @@ const playAudio = speakWord;
 export {
   speakWord,
   playAudio,
+  preloadWordAudio,
   resetAudioCounter,
   playSuccessSound,
   playErrorSound,

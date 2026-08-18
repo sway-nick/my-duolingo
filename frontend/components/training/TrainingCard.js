@@ -1,4 +1,4 @@
-import { speakWord, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound } from '../../services/audioService.js?v=21.0';
+import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound } from '../../services/audioService.js?v=21.0';
 import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
@@ -16,6 +16,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const container = document.querySelector('#training');
   if (!container) return;
 
+  if (currentWord && currentWord.word) {
+    preloadWordAudio(currentWord.word);
+  }
+
   const {
     currentMethod = 'quiz',
     selectedCategory = 'All',
@@ -30,6 +34,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     dailyGoal = 10,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
   } = options;
+
+  if (activeWords && activeWords.length > 0) {
+    // Preload next 2 words in queue for instant 0ms audio latency
+    activeWords.slice(0, 3).forEach((w) => {
+      if (w && w.word) preloadWordAudio(w.word);
+    });
+  }
 
   let favorited = isFavorite;
   const isInputMode = currentMethod === 'input';
