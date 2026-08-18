@@ -407,7 +407,16 @@ function formatCompactXp(xp) {
 
 async function getLeaderboard(weekKey = null) {
   const wKey = weekKey || getIsoWeekKey();
-  const cached = getCachedLeaderboard(wKey);
+  const currentUserId = getEffectiveUserId();
+  const userXP = getUserWeeklyXP(currentUserId, wKey);
+  const currentUser = getCurrentUser();
+  const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
+  const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
+
+  // Automatically ensure current user's local XP & avatar are synced to cloud
+  if (userXP > 0 || userAvatar) {
+    syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
+  }
 
   try {
     const controller = new AbortController();
@@ -423,7 +432,21 @@ async function getLeaderboard(weekKey = null) {
     // Graceful fallback to instant cache on network timeout
   }
 
-  return cached;
+  return getCachedLeaderboard(wKey);
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('myduo:avatar_changed', (e) => {
+    const uId = (e.detail && e.detail.userId) || getEffectiveUserId();
+    const wKey = getIsoWeekKey();
+    const currentXp = getUserWeeklyXP(uId, wKey);
+    const user = getCurrentUser();
+    const userName = user && user.name ? user.name : 'Гость';
+    const avatar = (e.detail && typeof e.detail.avatar !== 'undefined')
+      ? e.detail.avatar
+      : localStorage.getItem(`avatar_${uId}`) || '';
+    syncWeeklyXpApi(uId, wKey, currentXp, userName, avatar);
+  });
 }
 
 function getUserProgress() {
