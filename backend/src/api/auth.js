@@ -15,6 +15,19 @@ function hashPassword(password) {
   return 'hashed_' + password;
 }
 
+function getDeterministicUserId(email) {
+  if (!email) return 'u_guest';
+  const clean = String(email).toLowerCase().trim();
+  let hash = 0;
+  for (let i = 0; i < clean.length; i++) {
+    const char = clean.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  const cleanPrefix = clean.split('@')[0].replace(/[^a-z0-9]/gi, '_').slice(0, 10);
+  return `u_${cleanPrefix}_${Math.abs(hash)}`;
+}
+
 /**
  * Register endpoint. Handles both POST body and GET query parameters.
  *
@@ -42,7 +55,7 @@ function registerPost(e) {
     return errorResponse('Пользователь с таким email уже зарегистрирован', 400);
   }
 
-  const userId = 'u_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+  const userId = getDeterministicUserId(email);
   const hashedPassword = hashPassword(password);
   const userName = rawName || email.split('@')[0];
 
@@ -112,15 +125,15 @@ function googleAuthPost(e) {
 
     return successResponse({
       user: {
-        id: existing.id,
+        id: existing.id || getDeterministicUserId(existing.email),
         email: existing.email,
         name: existingName || userName,
       },
-      token: 'tok_' + existing.id,
+      token: 'tok_' + (existing.id || getDeterministicUserId(existing.email)),
     });
   }
 
-  const userId = 'u_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+  const userId = getDeterministicUserId(email);
   const newUser = {
     id: userId,
     email: email,

@@ -27,6 +27,19 @@ function getGuestId() {
   return guestId;
 }
 
+function getDeterministicUserId(email) {
+  if (!email) return getGuestId();
+  const clean = String(email).toLowerCase().trim();
+  let hash = 0;
+  for (let i = 0; i < clean.length; i++) {
+    const char = clean.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  const cleanPrefix = clean.split('@')[0].replace(/[^a-z0-9]/gi, '_').slice(0, 10);
+  return `u_${cleanPrefix}_${Math.abs(hash)}`;
+}
+
 function getEffectiveUserId() {
   if (currentUser && currentUser.id) {
     return String(currentUser.id);
@@ -320,5 +333,6 @@ export {
   saveUserAvatar,
   removeUserAvatar,
   compressAndCropAvatar,
+  getDeterministicUserId,
   VECTOR_AVATARS,
 };

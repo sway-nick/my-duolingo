@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId } from './authService.js?v=18.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=18.0';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
@@ -14,6 +14,7 @@ const MOCK_WORDS = [
 ];
 
 let pendingProgressQueue = [];
+let syncDebounceTimer = null;
 
 function getLocalUsers() {
   try {
@@ -86,6 +87,7 @@ async function getWords(forceRefresh = false) {
 
 async function registerUser(email, password, name) {
   const cleanEmail = email.toLowerCase().trim();
+  const deterministicId = getDeterministicUserId(cleanEmail);
 
   // 1. Try POST to Google Apps Script backend
   try {
@@ -130,9 +132,9 @@ async function registerUser(email, password, name) {
     console.warn('Backend API connection offline, creating local user account', e);
   }
 
-  // 3. Local fallback registration
+  // 3. Local fallback registration (using deterministic ID)
   const newUser = {
-    id: 'u_' + Date.now(),
+    id: deterministicId,
     email: cleanEmail,
     name: name.trim(),
     password: password,
@@ -150,6 +152,7 @@ async function registerUser(email, password, name) {
 
 async function loginUser(email, password) {
   const cleanEmail = email.toLowerCase().trim();
+  const deterministicId = getDeterministicUserId(cleanEmail);
 
   try {
     const response = await fetch(`${API_URL}?route=login`, {
@@ -188,14 +191,14 @@ async function loginUser(email, password) {
     return {
       success: true,
       data: {
-        user: { id: found.id, email: found.email, name: found.name },
-        token: 'tok_' + found.id,
+        user: { id: found.id || deterministicId, email: found.email, name: found.name },
+        token: 'tok_' + (found.id || deterministicId),
       },
     };
   }
 
   const demoUser = {
-    id: 'u_' + Date.now(),
+    id: deterministicId,
     email: cleanEmail,
     name: cleanEmail.split('@')[0],
   };
@@ -213,6 +216,7 @@ async function loginUser(email, password) {
 async function googleAuthUser(email, name, avatar) {
   const cleanEmail = email.toLowerCase().trim();
   const cleanName = (name || cleanEmail.split('@')[0]).trim();
+  const deterministicId = getDeterministicUserId(cleanEmail);
 
   // 1. Try POST to Google Apps Script backend
   try {
@@ -255,12 +259,12 @@ async function googleAuthUser(email, name, avatar) {
     console.warn('Backend google_auth offline, fallback to local', e);
   }
 
-  // 3. Local fallback if completely offline
+  // 3. Local fallback if completely offline (using deterministic ID)
   const localUsers = getLocalUsers();
   let user = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
   if (!user) {
     user = {
-      id: 'u_' + Date.now(),
+      id: deterministicId,
       email: cleanEmail,
       name: cleanName,
       password: 'google_oauth_pass',
@@ -271,8 +275,8 @@ async function googleAuthUser(email, name, avatar) {
   return {
     success: true,
     data: {
-      user: { id: user.id, email: user.email, name: user.name || cleanName },
-      token: 'tok_' + user.id,
+      user: { id: user.id || deterministicId, email: user.email, name: user.name || cleanName },
+      token: 'tok_' + (user.id || deterministicId),
     },
   };
 }
@@ -794,6 +798,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     flushProgressQueue();
   }
 
+  pushUserDataToCloud(userId);
+
   return { ...prog, autoFavorited };
 }
 
@@ -818,11 +824,132 @@ async function flushProgressQueue() {
   }
 }
 
+async function fetchUserDataFromCloud(userId = null, weekKey = null) {
+  const uId = userId || getEffectiveUserId();
+  if (!uId || !String(uId).startsWith('u_')) return null;
+
+  const wKey = weekKey || getIsoWeekKey();
+  try {
+    const response = await fetch(`${API_URL}?route=sync&userId=${encodeURIComponent(uId)}&weekKey=${encodeURIComponent(wKey)}`);
+    const res = await response.json();
+    if (res && res.success && res.data) {
+      const { progress = {}, favorites = [], weeklyXp = 0, avatar = '', settings = null } = res.data;
+
+      // 1. Merge Progress (take highest advancement for each word)
+      const progKey = `progress_${uId}`;
+      const localProg = JSON.parse(localStorage.getItem(progKey) || '{}');
+      const mergedProg = { ...localProg };
+
+      Object.keys(progress).forEach((wordId) => {
+        const c = progress[wordId];
+        const l = localProg[wordId];
+        if (!l) {
+          mergedProg[wordId] = c;
+        } else {
+          mergedProg[wordId] = {
+            correct: Math.max(l.correct || 0, c.correct || 0),
+            error: Math.max(l.error || 0, c.error || 0),
+            quizCorrect: Math.max(l.quizCorrect || 0, c.quizCorrect || 0),
+            pairsCorrect: Math.max(l.pairsCorrect || 0, c.pairsCorrect || 0),
+            inputCorrect: Math.max(l.inputCorrect || 0, c.inputCorrect || 0),
+            seenInCards: Boolean(l.seenInCards || c.seenInCards),
+            mastered: Boolean(l.mastered || c.mastered || (Math.max(l.inputCorrect || 0, c.inputCorrect || 0) >= 3)),
+            masteredAt: l.masteredAt || c.masteredAt || null,
+            lastPracticed: Math.max(l.lastPracticed || 0, c.lastPracticed || 0),
+            hardCount: Math.max(l.hardCount || 0, c.hardCount || 0),
+          };
+        }
+      });
+      localStorage.setItem(progKey, JSON.stringify(mergedProg));
+
+      // 2. Merge Favorites (union of sets)
+      const favKey = `favs_${uId}`;
+      const localFavs = JSON.parse(localStorage.getItem(favKey) || '[]');
+      const mergedFavs = Array.from(new Set([...localFavs.map(String), ...favorites.map(String)]));
+      localStorage.setItem(favKey, JSON.stringify(mergedFavs));
+
+      // 3. Merge Weekly XP (take maximum)
+      const xpKey = `xp_${uId}_${wKey}`;
+      const localXp = Number(localStorage.getItem(xpKey) || 0);
+      const finalXp = Math.max(localXp, Number(weeklyXp || 0));
+      if (finalXp > 0) {
+        localStorage.setItem(xpKey, String(finalXp));
+      }
+
+      // 4. Merge Avatar
+      if (avatar && !localStorage.getItem(`avatar_${uId}`)) {
+        localStorage.setItem(`avatar_${uId}`, avatar);
+      }
+
+      // 5. Merge Settings
+      if (settings && typeof settings === 'object') {
+        const setKey = `settings_${uId}`;
+        const localSet = JSON.parse(localStorage.getItem(setKey) || '{}');
+        const mergedSet = { ...settings, ...localSet };
+        localStorage.setItem(setKey, JSON.stringify(mergedSet));
+      }
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo:cloud_synced', { detail: { userId: uId, xp: finalXp } }));
+        window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalXp, delta: 0 } }));
+      }
+
+      return res.data;
+    }
+  } catch (e) {
+    console.warn('Cloud sync GET failed, using local offline data:', e);
+  }
+  return null;
+}
+
+function pushUserDataToCloud(userId = null, weekKey = null) {
+  const uId = userId || getEffectiveUserId();
+  if (!uId || !String(uId).startsWith('u_')) return;
+
+  clearTimeout(syncDebounceTimer);
+  syncDebounceTimer = setTimeout(async () => {
+    const wKey = weekKey || getIsoWeekKey();
+    const progress = JSON.parse(localStorage.getItem(`progress_${uId}`) || '{}');
+    const favorites = JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]');
+    const weeklyXp = Number(localStorage.getItem(`xp_${uId}_${wKey}`) || 0);
+    const settings = JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}');
+    const avatar = localStorage.getItem(`avatar_${uId}`) || '';
+    const user = getCurrentUser();
+    const userName = user && user.name ? user.name : 'Участник';
+
+    try {
+      await fetch(`${API_URL}?route=sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          route: 'sync',
+          action: 'sync',
+          userId: uId,
+          weekKey: wKey,
+          progress,
+          favorites,
+          weeklyXp,
+          settings,
+          avatar,
+          userName,
+        }),
+      });
+    } catch (e) {
+      console.warn('Cloud sync POST failed, queued for next sync:', e);
+    }
+  }, 400);
+}
+
 if (typeof window !== 'undefined') {
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       flushProgressQueue();
+      pushUserDataToCloud();
     }
+  });
+  window.addEventListener('pagehide', () => {
+    flushProgressQueue();
+    pushUserDataToCloud();
   });
 }
 
@@ -846,6 +973,8 @@ async function toggleFavoriteApi(wordId, isFavorite) {
     if (idx >= 0) favs.splice(idx, 1);
   }
   localStorage.setItem(key, JSON.stringify(favs));
+
+  pushUserDataToCloud(userId);
 
   if (String(userId).startsWith('u_')) {
     try {
@@ -1067,6 +1196,8 @@ async function saveUserSettings(settings) {
   const key = `settings_${userId}`;
   localStorage.setItem(key, JSON.stringify(payload));
 
+  pushUserDataToCloud(userId);
+
   if (String(userId).startsWith('u_')) {
     try {
       await fetch(`${API_URL}?route=settings`, {
@@ -1131,4 +1262,6 @@ export {
   getUserWeeklyRank,
   formatCompactXp,
   getIsoWeekKey,
+  fetchUserDataFromCloud,
+  pushUserDataToCloud,
 };

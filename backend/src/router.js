@@ -59,6 +59,10 @@ const ROUTES = {
       get: leaderboardGet,
       post: leaderboardPost,
     },
+    sync: {
+      get: syncGet,
+      post: syncPost,
+    },
   },
 };
 

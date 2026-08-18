@@ -33,7 +33,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png" />
     <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=70.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=71.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -41,17 +41,17 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard } from './services/api.js?v=70.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=70.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=70.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=70.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=70.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=70.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=70.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=70.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=70.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=70.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=70.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud } from './services/api.js?v=71.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=71.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=71.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=71.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=71.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=71.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=71.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=71.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=71.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=71.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=71.0';
 
       let allWords = [];
       let favoriteIds = new Set();
@@ -61,6 +61,16 @@
       let userSettings = { enabledMethods: 'quiz,cards,input' };
 
       async function loadData() {
+        // 1. Sync User Data from Cloud for cross-device consistency
+        const user = getCurrentUser();
+        if (user && user.id) {
+          try {
+            await fetchUserDataFromCloud(user.id);
+          } catch (e) {
+            console.warn('Cloud sync error on load:', e);
+          }
+        }
+
         try {
           const wordsRes = await getWords();
           if (wordsRes && wordsRes.data && wordsRes.data.length > 0) {
@@ -548,10 +558,24 @@
         initPrizePodiumListener();
         await loadData();
 
-        window.addEventListener('myduo:auth_changed', async () => {
+        window.addEventListener('myduo:auth_changed', async (e) => {
+          const user = e.detail?.user || getCurrentUser();
+          if (user && user.id) {
+            await fetchUserDataFromCloud(user.id);
+            pushUserDataToCloud(user.id);
+          }
           updateHeaderUser();
           await loadData();
           renderTab(activeTab);
+        });
+
+        window.addEventListener('myduo:cloud_synced', async () => {
+          updateHeaderUser();
+          const favList = getUserFavorites();
+          favoriteIds = new Set(favList.map(String));
+          if (activeTab === 'stats' || activeTab === 'favorites' || activeTab === 'leaderboard') {
+            renderTab(activeTab);
+          }
         });
 
         renderAppLayout(

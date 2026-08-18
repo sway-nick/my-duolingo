@@ -20,6 +20,7 @@ const filesOrder = [
   'api/progress.js',
   'api/settings.js',
   'api/leaderboard.js',
+  'api/sync.js',
   'router.js',
   'postRouter.js',
   'Code.js',
