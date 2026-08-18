@@ -48,7 +48,7 @@ function renderWordCardHtml(w, isFav, prog) {
           ${stageBadge}
         </div>
         <div class="dict-card-actions">
-          <button class="dict-audio-btn" data-word="${w.word}" data-id="${w.id}" title="Слушать произношение">🎙️</button>
+          <button class="dict-audio-btn" data-word="${w.word}" data-id="${w.id}" title="Слушать произношение">🔊</button>
           <button class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? 'Удалить из избранного' : 'Добавить в избранное'}">
             ${isFav ? '❤️' : '🤍'}
           </button>

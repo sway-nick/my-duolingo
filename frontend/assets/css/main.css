@@ -2464,8 +2464,10 @@ body {
 }
 
 .search-input {
-  flex: 1 1 120px;
-  min-width: 95px;
+  flex: 1 1 0;
+  width: 50%;
+  min-width: 0;
+  max-width: none;
   height: 42px;
   padding: 0 10px;
   border-radius: var(--radius-md);
@@ -2483,9 +2485,10 @@ body {
 }
 
 .filter-select {
-  flex: 1.25 1 155px;
-  min-width: 140px;
-  max-width: 190px;
+  flex: 1 1 0;
+  width: 50%;
+  min-width: 0;
+  max-width: none;
   height: 42px;
   padding: 0 8px;
   border-radius: var(--radius-md);
@@ -2504,9 +2507,10 @@ body {
 }
 
 .dict-dropdown {
-  flex: 1.25 1 155px;
-  min-width: 140px;
-  max-width: 190px;
+  flex: 1 1 0;
+  width: 50%;
+  min-width: 0;
+  max-width: none;
   position: relative;
 }
 
