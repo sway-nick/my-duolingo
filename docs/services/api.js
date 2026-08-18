@@ -291,16 +291,21 @@ function getUserWeeklyXP(userId = null, weekKey = null) {
   const key = `xp_${uId}_${wKey}`;
   let xp = Math.max(0, Number(localStorage.getItem(key) || 0));
 
-  // If user is logged in, but local xp is 0, check if there was any guest XP
+  // If user xp is 0, search all localStorage keys for any previously earned XP
   if (xp === 0 && typeof window !== 'undefined') {
     try {
-      const guestId = getGuestId();
-      const guestXp = Math.max(
-        Number(localStorage.getItem(`xp_${guestId}_${wKey}`) || 0),
-        Number(localStorage.getItem(`xp_guest_${wKey}`) || 0)
-      );
-      if (guestXp > 0) {
-        xp = guestXp;
+      let maxFound = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith('xp_') || k.includes('_xp_') || k.endsWith('_xp'))) {
+          const val = Number(localStorage.getItem(k) || 0);
+          if (!isNaN(val) && val > maxFound && val < 1000000) {
+            maxFound = val;
+          }
+        }
+      }
+      if (maxFound > 0) {
+        xp = maxFound;
         localStorage.setItem(key, String(xp));
       }
     } catch (e) {}
@@ -313,7 +318,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   const uId = userId || getEffectiveUserId();
   const wKey = weekKey || getIsoWeekKey();
   const key = `xp_${uId}_${wKey}`;
-  const current = Math.max(0, Number(localStorage.getItem(key) || 0));
+  const current = getUserWeeklyXP(uId, wKey);
   const oldRank = getUserWeeklyRank(uId, wKey);
   const next = Math.max(0, current + delta);
   localStorage.setItem(key, String(next));
