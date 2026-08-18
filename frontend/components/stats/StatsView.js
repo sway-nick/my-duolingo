@@ -56,8 +56,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <!-- Front Face: English word -->
             <div class="flashcard-face flashcard-front">
               <div class="flashcard-face-top">
-                <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔊</button>
-                <span class="wotd-card-badge">🔥 Слово дня</span>
+                <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔥</button>
+                <span class="wotd-card-badge">Слово дня</span>
                 <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
                   ${isWotdFav ? '❤️' : '🤍'}
                 </button>
@@ -74,8 +74,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <!-- Back Face: Russian translation -->
             <div class="flashcard-face flashcard-back">
               <div class="flashcard-face-top">
-                <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔊</button>
-                <span class="wotd-card-badge">🔥 Слово дня</span>
+                <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔥</button>
+                <span class="wotd-card-badge">Слово дня</span>
                 <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
                   ${isWotdFav ? '❤️' : '🤍'}
                 </button>
