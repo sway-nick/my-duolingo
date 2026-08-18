@@ -54,16 +54,19 @@ function renderPodiumCard(player, rank) {
 }
 
 function buildLeaderboardBodyHtml(players, currentUser) {
-  const top4 = players.slice(0, 4);
-  const rest = players.slice(4);
+  const top100 = players.slice(0, 100);
+  const top4 = top100.slice(0, 4);
+  const rest = top100.slice(4);
 
   const myRankIndex = players.findIndex((p) => p.isCurrentUser);
   const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
   const myPlayer = myRankIndex >= 0 ? players[myRankIndex] : null;
 
   const podiumHtml = `
-    <div class="podium-grid">
-      ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
+    <div class="podium-sticky-wrapper">
+      <div class="podium-grid">
+        ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
+      </div>
     </div>
   `;
 
