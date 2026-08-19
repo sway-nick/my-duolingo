@@ -3185,10 +3185,10 @@ body {
 
 .diamond-laurel-wreath {
   position: absolute;
-  top: -8px;
-  left: -8px;
-  width: 54px;
-  height: 54px;
+  top: -7px;
+  left: -7px;
+  width: 52px;
+  height: 52px;
   pointer-events: none;
   z-index: 3;
 }

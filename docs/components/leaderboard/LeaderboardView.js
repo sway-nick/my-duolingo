@@ -42,44 +42,63 @@ function renderPodiumCard(player, rank) {
         ${
           rank === 1
             ? `
-          <svg class="diamond-laurel-wreath" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="diamond-laurel-wreath" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="laurelGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#fffbeb" />
-                <stop offset="30%" stop-color="#fde047" />
-                <stop offset="65%" stop-color="#f59e0b" />
-                <stop offset="100%" stop-color="#b45309" />
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="25%" stop-color="#fef08a" />
+                <stop offset="55%" stop-color="#f59e0b" />
+                <stop offset="85%" stop-color="#d97706" />
+                <stop offset="100%" stop-color="#78350f" />
               </linearGradient>
               <filter id="wreathGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#78350f" flood-opacity="0.5"/>
+                <feDropShadow dx="0" dy="0.8" stdDeviation="1.2" flood-color="#451a03" flood-opacity="0.55"/>
               </filter>
+
+              <!-- Slender Laurel Leaf Pair Definition at R=41.5 -->
+              <g id="laurel-pair">
+                <!-- Outer elegant leaf -->
+                <path d="M 50 91.5 C 55 93.5 60 91.5 62 86.5 C 60 83 54 84.5 50 89" fill="url(#laurelGoldGrad)" stroke="#92400e" stroke-width="0.5"/>
+                <!-- Inner slender leaf -->
+                <path d="M 50 91.5 C 53.5 89.5 56 85 54 80.5 C 51.5 81 49 84.5 50 90" fill="url(#laurelGoldGrad)" stroke="#92400e" stroke-width="0.5"/>
+                <!-- Small acorn node -->
+                <circle cx="50" cy="91.5" r="0.8" fill="#fef08a"/>
+              </g>
+              <!-- Single top tip leaf -->
+              <g id="laurel-tip">
+                <path d="M 50 91.5 C 53 93 57 88 56 83 C 53 84 51 88 50 91.5" fill="url(#laurelGoldGrad)" stroke="#92400e" stroke-width="0.5"/>
+              </g>
             </defs>
             <g filter="url(#wreathGlow)">
-              <!-- Left branch stem -->
-              <path d="M60 110 C38 108 16 88 16 60 C16 42 26 25 40 16" stroke="url(#laurelGoldGrad)" stroke-width="2.8" stroke-linecap="round"/>
-              <!-- Left leaves -->
-              <path d="M53 108 C44 104 41 95 48 90 C53 94 56 102 53 108 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M38 98 C28 92 26 83 34 78 C39 83 40 91 38 98 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M26 84 C17 77 16 67 25 63 C29 68 29 77 26 84 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M19 68 C13 60 13 49 22 47 C25 53 23 62 19 68 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M18 49 C15 39 19 30 28 30 C30 36 26 44 18 49 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M25 32 C24 23 31 16 40 18 C39 25 33 31 25 32 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M38 19 C39 10 49 7 56 12 C54 19 46 22 38 19 Z" fill="url(#laurelGoldGrad)"/>
+              <!-- Exact circular branch stems (Radius R=41.5 around 50,50) -->
+              <path d="M 50 91.5 A 41.5 41.5 0 0 1 39.5 10" stroke="url(#laurelGoldGrad)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M 50 91.5 A 41.5 41.5 0 0 0 60.5 10" stroke="url(#laurelGoldGrad)" stroke-width="1.6" stroke-linecap="round"/>
               
-              <!-- Right branch stem -->
-              <path d="M60 110 C82 108 104 88 104 60 C104 42 94 25 80 16" stroke="url(#laurelGoldGrad)" stroke-width="2.8" stroke-linecap="round"/>
-              <!-- Right leaves -->
-              <path d="M67 108 C76 104 79 95 72 90 C67 94 64 102 67 108 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M82 98 C92 92 94 83 86 78 C81 83 80 91 82 98 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M94 84 C103 77 104 67 95 63 C91 68 91 77 94 84 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M101 68 C107 60 107 49 98 47 C95 53 97 62 101 68 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M102 49 C105 39 101 30 92 30 C90 36 94 44 102 49 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M95 32 C96 23 89 16 80 18 C81 25 87 31 95 32 Z" fill="url(#laurelGoldGrad)"/>
-              <path d="M82 19 C81 10 71 7 64 12 C66 19 74 22 82 19 Z" fill="url(#laurelGoldGrad)"/>
-              
-              <!-- Bottom gold ribbon tie -->
-              <path d="M55 110 C58 107 62 107 65 110 C62 114 58 114 55 110 Z" fill="url(#laurelGoldGrad)"/>
-              <circle cx="60" cy="110" r="3" fill="#fef08a"/>
+              <!-- Right branch leaf pairs (Rotated precisely around 50,50) -->
+              <use href="#laurel-pair" transform="rotate(-20 50 50)"/>
+              <use href="#laurel-pair" transform="rotate(-44 50 50)"/>
+              <use href="#laurel-pair" transform="rotate(-68 50 50)"/>
+              <use href="#laurel-pair" transform="rotate(-92 50 50)"/>
+              <use href="#laurel-pair" transform="rotate(-116 50 50)"/>
+              <use href="#laurel-pair" transform="rotate(-140 50 50)"/>
+              <use href="#laurel-tip" transform="rotate(-162 50 50)"/>
+
+              <!-- Left branch leaf pairs (Symmetrically mirrored across vertical axis) -->
+              <g transform="translate(100, 0) scale(-1, 1)">
+                <use href="#laurel-pair" transform="rotate(-20 50 50)"/>
+                <use href="#laurel-pair" transform="rotate(-44 50 50)"/>
+                <use href="#laurel-pair" transform="rotate(-68 50 50)"/>
+                <use href="#laurel-pair" transform="rotate(-92 50 50)"/>
+                <use href="#laurel-pair" transform="rotate(-116 50 50)"/>
+                <use href="#laurel-pair" transform="rotate(-140 50 50)"/>
+                <use href="#laurel-tip" transform="rotate(-162 50 50)"/>
+              </g>
+
+              <!-- Bottom delicate ribbon knot & tails -->
+              <path d="M 46.5 91.5 C 48 89.5 52 89.5 53.5 91.5 C 52 93.5 48 93.5 46.5 91.5 Z" fill="url(#laurelGoldGrad)" stroke="#92400e" stroke-width="0.5"/>
+              <path d="M 48 92.5 L 45 96.5 L 47.5 95.5 L 49.5 92.5" fill="url(#laurelGoldGrad)"/>
+              <path d="M 52 92.5 L 55 96.5 L 52.5 95.5 L 50.5 92.5" fill="url(#laurelGoldGrad)"/>
+              <circle cx="50" cy="91.5" r="1.6" fill="#fffbeb" stroke="#b45309" stroke-width="0.4"/>
             </g>
           </svg>
         `
