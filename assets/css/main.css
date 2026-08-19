@@ -3849,3 +3849,122 @@ body {
   }
 }
 
+/* ==========================================================================
+   SPEECH RECOGNITION & QUIZ STAGES
+   ========================================================================== */
+.speech-quiz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.speech-mic-btn {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #ffffff;
+  border: none;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  user-select: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.speech-mic-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.45);
+}
+
+.speech-mic-btn:active {
+  transform: scale(0.95);
+}
+
+.speech-mic-btn.listening {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: micPulseRipple 1.2s infinite;
+}
+
+.speech-mic-btn.processing {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  animation: micPulseRipple 1s infinite;
+}
+
+.speech-mic-btn.success {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.6) !important;
+  transform: scale(1.08);
+}
+
+@keyframes micPulseRipple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 18px rgba(239, 68, 68, 0);
+    transform: scale(1.08);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+}
+
+.speech-status-msg {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  min-height: 28px;
+  margin-top: 16px;
+  line-height: 1.4;
+}
+
+.speech-transcript-box {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: 12px;
+  margin-top: 10px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.dark-theme .speech-transcript-box {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.speech-cant-speak-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 18px;
+  padding: 4px 8px;
+  opacity: 0.85;
+  transition: all 0.2s ease;
+}
+
+.speech-cant-speak-btn:hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+

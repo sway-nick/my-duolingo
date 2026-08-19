@@ -1,5 +1,5 @@
 import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound } from '../../services/audioService.js?v=21.0';
-import { saveProgress, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=21.0';
+import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -10,6 +10,53 @@ function sanitizeCategory(cat) {
 
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function calculateLevenshtein(a, b) {
+  if (!a || !b) return (a || b || '').length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+        ? matrix[i - 1][j - 1]
+        : Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1));
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+function normalizeEnglish(str) {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, '')
+    .replace(/\b(a|an|the|to)\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function checkSpeechMatch(spokenList, targetWord) {
+  const normTarget = normalizeEnglish(targetWord);
+  if (!normTarget) return false;
+
+  for (const rawSpoken of spokenList) {
+    const normSpoken = normalizeEnglish(rawSpoken);
+    if (!normSpoken) continue;
+
+    if (normSpoken === normTarget) return true;
+
+    // Check individual words in phrase
+    const wordsInSpoken = normSpoken.split(' ');
+    if (wordsInSpoken.includes(normTarget)) return true;
+
+    // Check Levenshtein distance with tolerance
+    const dist = calculateLevenshtein(normSpoken, normTarget);
+    const maxDist = Math.max(1, Math.floor(normTarget.length * 0.28));
+    if (dist <= maxDist) return true;
+  }
+  return false;
 }
 
 function renderTrainingCard(currentWord, allWords = [], options = {}) {
@@ -34,9 +81,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     onMethodChange = () => {},
     onCategoryChange = () => {},
     onNext = () => {},
-    activeWords = [],
     learningCount = 0,
     dailyGoal = 5,
+    activeWords = [],
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
   } = options;
 
@@ -48,39 +95,42 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   }
 
   let favorited = isFavorite;
-  const isInputMode = currentMethod === 'input';
-  const isPairsMode = currentMethod === 'pairs';
-  const isCardsMode = currentMethod === 'cards';
 
-  function formatWordCount(n) {
-    const mod10 = n % 10;
-    const mod100 = n % 100;
-    if (mod100 >= 11 && mod100 <= 19) return `${n} слов`;
-    if (mod10 === 1) return `${n} слово`;
-    if (mod10 >= 2 && mod10 <= 4) return `${n} слова`;
-    return `${n} слов`;
+  const progressMap = getUserProgress() || {};
+  const currentProg = progressMap[currentWord?.id] || {};
+  const quizStage = currentProg.quizCorrect || 0; // 0, 1 = EN->RU; 2 = RU->EN; 3 = Speak EN w/ prompt; 4 = Speak EN from memory
+
+  const isCardsMode = currentMethod === 'cards';
+  const isPairsMode = currentMethod === 'pairs';
+  const isInputMode = currentMethod === 'input';
+
+  function formatWordCount(cnt) {
+    const lastDigit = cnt % 10;
+    const lastTwo = cnt % 100;
+    if (lastTwo >= 11 && lastTwo <= 19) return `${cnt} слов`;
+    if (lastDigit === 1) return `${cnt} слово`;
+    if (lastDigit >= 2 && lastDigit <= 4) return `${cnt} слова`;
+    return `${cnt} слов`;
   }
 
   container.innerHTML = `
-    <section class="word-card-container">
+    <section class="training-card-container">
       
-      <!-- Top card bar: Mode Switch full width -->
-      <div class="card-header-bar">
-        <div class="mode-switch-pills" id="mode-switch-pills">
-          <div class="mode-pill-glider" id="mode-pill-glider"></div>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'cards' ? 'active' : ''} ${!availableModes.cards && currentMethod !== 'cards' ? 'disabled-mode' : ''}" data-mode="cards" ${!availableModes.cards && currentMethod !== 'cards' ? 'disabled' : ''} title="Режим Карточки">
-            Карточки
-          </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz && currentMethod !== 'quiz' ? 'disabled-mode' : ''}" data-mode="quiz" ${!availableModes.quiz && currentMethod !== 'quiz' ? 'disabled' : ''} title="Режим Квиз">
-            Квиз
-          </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'pairs' ? 'active' : ''} ${!availableModes.pairs && currentMethod !== 'pairs' ? 'disabled-mode' : ''}" data-mode="pairs" ${!availableModes.pairs && currentMethod !== 'pairs' ? 'disabled' : ''} title="Режим Пары">
-            Пары
-          </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'input' ? 'active' : ''} ${!availableModes.input && currentMethod !== 'input' ? 'disabled-mode' : ''}" data-mode="input" ${!availableModes.input && currentMethod !== 'input' ? 'disabled' : ''} title="Режим Тест">
-            Тест
-          </button>
-        </div>
+      <!-- Top Mode Switcher Bar -->
+      <div class="mode-switch-bar" id="mode-switch-pills">
+        <div class="mode-pill-glider" id="mode-pill-glider"></div>
+        <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
+          Карточки
+        </button>
+        <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
+          Квиз
+        </button>
+        <button type="button" class="mode-pill-btn ${isPairsMode ? 'active' : ''} ${!availableModes.pairs ? 'disabled' : ''}" data-mode="pairs" ${!availableModes.pairs ? 'disabled' : ''}>
+          Пары
+        </button>
+        <button type="button" class="mode-pill-btn ${isInputMode ? 'active' : ''} ${!availableModes.input ? 'disabled' : ''}" data-mode="input" ${!availableModes.input ? 'disabled' : ''}>
+          Тест
+        </button>
       </div>
 
       <!-- Word Display & Audio Button -->
@@ -119,13 +169,55 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              🎯 Осталось в Квизе: <strong>${formatWordCount(activeWords.length)}</strong>
+              ${
+                quizStage < 2
+                  ? `🎯 Квиз: шаг ${quizStage + 1} из 5 • ${formatWordCount(activeWords.length)}`
+                  : quizStage === 2
+                  ? `🔄 Обратный Квиз: шаг 3 из 5 • ${formatWordCount(activeWords.length)}`
+                  : quizStage === 3
+                  ? `🎙️ Прочитайте вслух: шаг 4 из 5`
+                  : `🎙️ Вспомните и скажите: шаг 5 из 5`
+              }
             </div>
             <div class="word-header-row">
-              <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
-              <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                <span class="training-word-text">${currentWord.word}</span>
-              </h2>
+              ${
+                quizStage < 2
+                  ? `
+                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
+                <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                  <span class="training-word-text">${currentWord.word}</span>
+                </h2>
+              `
+                  : quizStage === 2
+                  ? `
+                <div style="width: 36px;"></div>
+                <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                  ${currentWord.translation}
+                </h2>
+              `
+                  : quizStage === 3
+                  ? `
+                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
+                <div style="text-align: center;">
+                  <h2 class="training-word clickable-word-box" id="speak-word-trigger" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
+                    <span class="training-word-text">${currentWord.word}</span>
+                  </h2>
+                  <div style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 3px;">${currentWord.translation}</div>
+                </div>
+              `
+                  : `
+                <div style="width: 36px;"></div>
+                <div style="text-align: center;">
+                  <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
+                    ${currentWord.translation}
+                  </h2>
+                  <button type="button" class="speech-hint-btn" id="speech-hint-btn" style="margin-top: 4px; font-size: 12px; font-weight: 700; background: rgba(59, 130, 246, 0.1); color: var(--primary-color); border: none; padding: 2px 8px; border-radius: 8px; cursor: pointer;">
+                    💡 Подсказка
+                  </button>
+                  <div id="speech-revealed-hint" style="display: none; font-size: 14px; font-weight: 700; color: var(--primary-color); margin-top: 2px;">${currentWord.word}</div>
+                </div>
+              `
+              }
               <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
                 ${favorited ? '❤️' : '🤍'}
               </button>
@@ -190,7 +282,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
-  if (!isPairsMode && !isInputMode) {
+  if (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage < 2)) {
     setTimeout(() => { try { speakWord(currentWord.word, currentWord.id); } catch (e) {} }, 100);
   }
 
@@ -209,23 +301,238 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const practiceArea = container.querySelector('#practice-area');
 
   if (currentMethod === 'quiz') {
-    const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
-    const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
-    const otherTranslations = pool.filter((w) => w.id !== currentWord.id).map((w) => w.translation);
-    const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
-    const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
+    function renderStandardQuiz() {
+      const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+      const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
+      const otherTranslations = pool.filter((w) => w.id !== currentWord.id).map((w) => w.translation);
+      const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
+      const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
 
-    practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>`).join('')}</div>`;
-    practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
-      btn.addEventListener('click', async (e) => {
-        const optionBtn = e.currentTarget;
-        const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.translation).trim();
-        practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.translation) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
-        if (isCorrect) playSuccessSound(); else playErrorSound();
-        await saveProgress(currentWord.id, isCorrect, 'quiz');
-        setTimeout(() => onNext(), isCorrect ? 1000 : 4000);
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>`).join('')}</div>`;
+      practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+          const optionBtn = e.currentTarget;
+          const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.translation).trim();
+          practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.translation) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
+          if (isCorrect) playSuccessSound(); else playErrorSound();
+          await saveProgress(currentWord.id, isCorrect, 'quiz');
+          setTimeout(() => onNext(), isCorrect ? 1000 : 4000);
+        });
       });
-    });
+    }
+
+    function renderReverseQuiz() {
+      const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+      const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
+      const otherWords = pool.filter((w) => w.id !== currentWord.id).map((w) => w.word);
+      const shuffledOthers = shuffleArray(otherWords).slice(0, 5);
+      const choices = shuffleArray([currentWord.word, ...shuffledOthers]);
+
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>`).join('')}</div>`;
+      practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+          const optionBtn = e.currentTarget;
+          const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.word).trim();
+          practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.word) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
+          speakWord(currentWord.word, currentWord.id);
+          if (isCorrect) playSuccessSound(); else playErrorSound();
+          await saveProgress(currentWord.id, isCorrect, 'quiz');
+          setTimeout(() => onNext(), isCorrect ? 1200 : 4000);
+        });
+      });
+    }
+
+    function renderSpeechQuiz() {
+      let speechAttempts = 0;
+      let isProcessing = false;
+      let isListening = false;
+      let isCompleted = false;
+
+      practiceArea.innerHTML = `
+        <div class="speech-quiz-container">
+          <button type="button" class="speech-mic-btn" id="speech-mic-btn" title="Нажмите, чтобы сказать слово">
+            🎙️
+          </button>
+          <div class="speech-status-msg" id="speech-status-msg">
+            ${quizStage === 3 ? 'Нажмите на микрофон и прочитайте слово' : 'Вспомните и скажите слово по-английски'}
+          </div>
+          <div class="speech-transcript-box" id="speech-transcript-box" style="display: none;"></div>
+          <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
+            Не могу говорить сейчас
+          </button>
+        </div>
+      `;
+
+      const micBtn = practiceArea.querySelector('#speech-mic-btn');
+      const statusMsg = practiceArea.querySelector('#speech-status-msg');
+      const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
+      const cantSpeakBtn = practiceArea.querySelector('#speech-cant-speak-btn');
+
+      const hintBtn = container.querySelector('#speech-hint-btn');
+      const revealedHint = container.querySelector('#speech-revealed-hint');
+      if (hintBtn && revealedHint) {
+        hintBtn.addEventListener('click', () => {
+          hintBtn.style.display = 'none';
+          revealedHint.style.display = 'block';
+        });
+      }
+
+      if (cantSpeakBtn) {
+        cantSpeakBtn.addEventListener('click', () => {
+          renderReverseQuiz();
+        });
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        statusMsg.innerHTML = 'Распознавание речи не поддерживается в этом браузере.<br>Переключаем на тест...';
+        setTimeout(() => renderReverseQuiz(), 1200);
+        return;
+      }
+
+      let recognition = null;
+
+      function stopCurrentRecognition() {
+        if (recognition) {
+          try { recognition.abort(); } catch (e) {}
+          recognition = null;
+        }
+        isListening = false;
+      }
+
+      function startRecognition() {
+        if (isProcessing || isCompleted) return;
+        stopCurrentRecognition();
+
+        try {
+          recognition = new SpeechRecognition();
+          recognition.lang = 'en-US';
+          recognition.continuous = false;
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 5;
+
+          recognition.onstart = () => {
+            isListening = true;
+            micBtn.classList.remove('success', 'processing');
+            micBtn.classList.add('listening');
+            statusMsg.innerHTML = '<span style="color: #ef4444; font-weight: 700;">🔴 Слушаю... Говорите!</span>';
+          };
+
+          recognition.onresult = async (event) => {
+            isListening = false;
+            micBtn.classList.remove('listening');
+            micBtn.classList.add('processing');
+
+            const alternatives = [];
+            for (let i = 0; i < event.results[0].length; i++) {
+              alternatives.push(event.results[0][i].transcript);
+            }
+
+            const recognizedText = alternatives[0] || '';
+            if (transcriptBox) {
+              transcriptBox.style.display = 'block';
+              transcriptBox.innerHTML = `Услышано: <strong>«${recognizedText}»</strong>`;
+            }
+
+            await evaluateSpeech(alternatives);
+          };
+
+          recognition.onerror = (event) => {
+            isListening = false;
+            micBtn.classList.remove('listening', 'processing');
+            console.warn('Speech recognition error:', event.error);
+            if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+              statusMsg.innerHTML = '<span style="color: #ef4444;">Доступ к микрофону запрещен</span>';
+              if (transcriptBox) {
+                transcriptBox.style.display = 'block';
+                transcriptBox.innerHTML = `<button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 4px 12px; margin-top: 4px;">Ответить текстом</button>`;
+                const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
+                if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz());
+              }
+            } else if (event.error === 'no-speech') {
+              statusMsg.innerHTML = 'Ничего не услышано. Нажмите на микрофон и попробуйте снова 🎙️';
+            } else {
+              statusMsg.innerHTML = 'Ошибка распознавания. Попробуйте ещё раз 🎙️';
+            }
+          };
+
+          recognition.onend = () => {
+            isListening = false;
+            if (!isCompleted && !isProcessing) {
+              micBtn.classList.remove('listening', 'processing');
+            }
+          };
+
+          recognition.start();
+        } catch (err) {
+          console.warn('SpeechRecognition start failed:', err);
+          renderReverseQuiz();
+        }
+      }
+
+      async function evaluateSpeech(alternatives) {
+        isProcessing = true;
+        const isMatch = checkSpeechMatch(alternatives, currentWord.word);
+
+        if (isMatch) {
+          isCompleted = true;
+          playSuccessSound();
+          micBtn.classList.remove('listening', 'processing');
+          micBtn.classList.add('success');
+          micBtn.innerHTML = '✓';
+          statusMsg.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">✓ Отлично! Произношение верное!</span>`;
+
+          await saveProgress(currentWord.id, true, 'quiz');
+          setTimeout(() => {
+            onNext();
+          }, 1400);
+        } else {
+          speechAttempts++;
+          playErrorSound();
+          micBtn.classList.remove('listening', 'processing');
+
+          if (speechAttempts === 1) {
+            statusMsg.innerHTML = `Почти! Попробуйте ещё раз 🎙️`;
+            isProcessing = false;
+          } else if (speechAttempts === 2) {
+            statusMsg.innerHTML = `Послушайте эталон и повторите 🔊`;
+            speakWord(currentWord.word, currentWord.id);
+            setTimeout(() => {
+              statusMsg.innerHTML = `Теперь попробуйте повторить 🎙️`;
+              isProcessing = false;
+            }, 1400);
+          } else {
+            isCompleted = true;
+            micBtn.disabled = true;
+            statusMsg.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
+            speakWord(currentWord.word, currentWord.id);
+            await saveProgress(currentWord.id, false, 'quiz');
+            setTimeout(() => {
+              onNext();
+            }, 3500);
+          }
+        }
+      }
+
+      micBtn.addEventListener('click', () => {
+        if (isListening) {
+          stopCurrentRecognition();
+          micBtn.classList.remove('listening');
+          statusMsg.innerHTML = 'Нажмите на микрофон, чтобы начать';
+        } else {
+          startRecognition();
+        }
+      });
+    }
+
+    if (quizStage < 2) {
+      renderStandardQuiz();
+    } else if (quizStage === 2) {
+      renderReverseQuiz();
+    } else {
+      renderSpeechQuiz();
+    }
   } else if (currentMethod === 'pairs') {
     const TARGET_PAIRS_COUNT = 6;
     const roundWords = [currentWord];
