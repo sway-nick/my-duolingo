@@ -1,5 +1,5 @@
 import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound } from '../../services/audioService.js?v=21.0';
-import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=21.0';
+import { saveProgress, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -36,7 +36,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     onNext = () => {},
     activeWords = [],
     learningCount = 0,
-    dailyGoal = 10,
+    dailyGoal = 5,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
   } = options;
 
@@ -227,10 +227,68 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'pairs') {
-    const eligiblePool = activeWords && activeWords.length > 0 ? activeWords : allWords;
-    const otherWords = eligiblePool.filter((w) => String(w.id) !== String(currentWord.id));
-    const countNeeded = Math.min(4, otherWords.length);
-    const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, countNeeded)];
+    const TARGET_PAIRS_COUNT = 5;
+    const roundWords = [currentWord];
+    const usedIds = new Set([String(currentWord.id)]);
+
+    // 1. First add from active Pairs queue
+    if (activeWords && activeWords.length > 0) {
+      const activeOthers = shuffleArray(
+        activeWords.filter((w) => !usedIds.has(String(w.id)))
+      );
+      for (const w of activeOthers) {
+        if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+        roundWords.push(w);
+        usedIds.add(String(w.id));
+      }
+    }
+
+    // 2. If fewer than 5, pull from User Favorites
+    if (roundWords.length < TARGET_PAIRS_COUNT) {
+      try {
+        const favIds = new Set((getUserFavorites() || []).map(String));
+        const favWords = shuffleArray(
+          allWords.filter((w) => favIds.has(String(w.id)) && !usedIds.has(String(w.id)))
+        );
+        for (const w of favWords) {
+          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+          roundWords.push(w);
+          usedIds.add(String(w.id));
+        }
+      } catch (e) {
+        console.warn('Error fetching favorites for pairs filler:', e);
+      }
+    }
+
+    // 3. If still fewer than 5, pull from current category
+    if (roundWords.length < TARGET_PAIRS_COUNT && allWords.length > 0) {
+      const categoryOthers = shuffleArray(
+        allWords.filter(
+          (w) =>
+            !usedIds.has(String(w.id)) &&
+            (selectedCategory === 'All' ||
+              selectedCategory === 'Все категории' ||
+              sanitizeCategory(w.category) === sanitizeCategory(selectedCategory))
+        )
+      );
+      for (const w of categoryOthers) {
+        if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+        roundWords.push(w);
+        usedIds.add(String(w.id));
+      }
+
+      // 4. Fallback to any remaining words in allWords
+      if (roundWords.length < TARGET_PAIRS_COUNT) {
+        const remainingAll = shuffleArray(
+          allWords.filter((w) => !usedIds.has(String(w.id)))
+        );
+        for (const w of remainingAll) {
+          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+          roundWords.push(w);
+          usedIds.add(String(w.id));
+        }
+      }
+    }
 
     function setupPairsRound() {
       if (window.__activePairsTimerInterval) {
