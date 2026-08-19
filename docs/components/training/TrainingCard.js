@@ -679,22 +679,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               <strong id="diag-perm-status" style="color: #d97706;">⏳ Проверка...</strong>
             </div>
 
-            <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">
-              Датчик громкости звука (скажите что-нибудь):
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 2px;">
+              Датчик звука (скажите что-нибудь):
             </div>
             <div class="speech-volume-meter-container">
               <div class="speech-volume-meter-bar" id="diag-volume-bar"></div>
             </div>
 
-            <div class="speech-diag-live-box" id="diag-transcript-box">
-              Нажмите «Начать тест», чтобы проверить распознавание
-            </div>
+            <div class="speech-diag-live-box" id="diag-transcript-box" style="display: none;"></div>
 
-            <div style="display: flex; gap: 8px; margin-top: 6px;">
-              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 40px; font-size: 14px;">
+            <div style="display: flex; gap: 8px; margin-top: 4px;">
+              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 42px; font-size: 14px;">
                 🎙️ Начать тест
               </button>
-              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 1; min-height: 40px; font-size: 14px; background: rgba(0,0,0,0.08); color: var(--text-main);">
+              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 1; min-height: 42px; font-size: 14px; background: rgba(0,0,0,0.08); color: var(--text-main);">
                 Закрыть
               </button>
             </div>
@@ -707,6 +705,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         let diagStream = null;
         let diagAnimFrame = null;
         let diagRecognition = null;
+        let diagAutoStopTimer = null;
 
         const permStatus = modalEl.querySelector('#diag-perm-status');
         const volBar = modalEl.querySelector('#diag-volume-bar');
@@ -743,55 +742,102 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           } catch (err) {
             console.warn('Diag mic access failed:', err);
             if (permStatus) permStatus.innerHTML = '<span style="color: #ef4444;">🔒 Заблокировано</span>';
-            if (transcriptBox) transcriptBox.innerHTML = '<span style="color: #ef4444;">Разрешите микрофон в настройках браузера (значок 🔒 вверху)</span>';
           }
         }
 
         initMicSensor();
 
+        function stopSensorStreams() {
+          if (diagAnimFrame) {
+            cancelAnimationFrame(diagAnimFrame);
+            diagAnimFrame = null;
+          }
+          if (diagStream) {
+            diagStream.getTracks().forEach((t) => t.stop());
+            diagStream = null;
+          }
+          if (diagAudioCtx) {
+            try { diagAudioCtx.close(); } catch(e) {}
+            diagAudioCtx = null;
+          }
+          if (volBar) volBar.style.width = '0%';
+        }
+
         startBtn.addEventListener('click', () => {
           if (!SpeechRecognition) return;
-          transcriptBox.innerHTML = '<span style="color: #d97706; font-weight: 700;">🔴 Слушаю... Скажите любое слово по-английски или по-русски</span>';
+
+          // Free microphone hardware on Android before launching SpeechRecognition!
+          stopSensorStreams();
+
+          transcriptBox.style.display = 'block';
+          transcriptBox.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Скажите слово в телефон!</span>';
           startBtn.disabled = true;
+          startBtn.textContent = '🔴 Слушаю...';
 
           try {
             diagRecognition = new SpeechRecognition();
             diagRecognition.lang = 'en-US';
             diagRecognition.continuous = false;
             diagRecognition.interimResults = true;
+            diagRecognition.maxAlternatives = 5;
+
+            let heardAny = false;
+
+            diagRecognition.onstart = () => {
+              diagAutoStopTimer = setTimeout(() => {
+                try { diagRecognition.stop(); } catch(e) {}
+              }, 4000);
+            };
 
             diagRecognition.onresult = (e) => {
               let spoken = '';
               for (let i = e.resultIndex; i < e.results.length; ++i) {
                 spoken += e.results[i][0].transcript;
               }
-              transcriptBox.innerHTML = `Услышано: <strong style="color: #16a34a; font-size: 15px;">«${spoken}»</strong>`;
+              if (spoken.trim()) {
+                heardAny = true;
+                transcriptBox.innerHTML = `Услышано: <strong style="color: #16a34a; font-size: 16px;">«${spoken}»</strong>`;
+              }
             };
 
             diagRecognition.onerror = (e) => {
-              transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${e.error}</span>`;
+              console.warn('Diag speech error:', e.error);
+              if (!heardAny) {
+                transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${e.error === 'no-speech' ? 'Голос не обнаружен' : e.error}</span>`;
+              }
               startBtn.disabled = false;
+              startBtn.textContent = '🎙️ Повторить тест';
             };
 
             diagRecognition.onend = () => {
+              if (diagAutoStopTimer) clearTimeout(diagAutoStopTimer);
+              if (!heardAny) {
+                transcriptBox.innerHTML = '<span style="color: #ef4444;">Голос не распознан. Попробуйте сказать громче.</span>';
+              }
               startBtn.disabled = false;
+              startBtn.textContent = '🎙️ Повторить тест';
             };
 
-            diagRecognition.start();
+            // Small 150ms delay to guarantee audio hardware driver is 100% available
+            setTimeout(() => {
+              try {
+                diagRecognition.start();
+              } catch(startErr) {
+                transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка старта: ${startErr.message}</span>`;
+                startBtn.disabled = false;
+                startBtn.textContent = '🎙️ Начать тест';
+              }
+            }, 150);
           } catch (err) {
             transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка запуска: ${err.message}</span>`;
             startBtn.disabled = false;
+            startBtn.textContent = '🎙️ Начать тест';
           }
         });
 
         function cleanupDiag() {
-          if (diagAnimFrame) cancelAnimationFrame(diagAnimFrame);
-          if (diagStream) {
-            diagStream.getTracks().forEach((t) => t.stop());
-          }
-          if (diagAudioCtx) {
-            try { diagAudioCtx.close(); } catch(e) {}
-          }
+          if (diagAutoStopTimer) clearTimeout(diagAutoStopTimer);
+          stopSensorStreams();
           if (diagRecognition) {
             try { diagRecognition.stop(); } catch(e) {}
           }
