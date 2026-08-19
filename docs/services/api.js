@@ -819,7 +819,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
       prog.quizCorrect = (prog.quizCorrect || 0) + 1;
-      if (prog.quizCorrect >= 5) {
+      if (prog.quizCorrect >= 4) {
         prog.stage = 'pairs';
       }
       xpDelta = 1; // +1 XP for correct quiz answer
@@ -1117,7 +1117,7 @@ function getWordStage(prog) {
   if (!prog) return 'new';
   if (isWordMastered(prog)) return 'mastered';
   if ((prog.pairsCorrect || 0) >= 2) return 'test';
-  if ((prog.quizCorrect || 0) >= 5) return 'pairs';
+  if ((prog.quizCorrect || 0) >= 4) return 'pairs';
   if (prog.seenInCards) return 'quiz';
   return 'new';
 }
@@ -1132,7 +1132,7 @@ function getQueueForCards(words, progress) {
 function getQueueForQuiz(words, progress, favorites = []) {
   const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return p && p.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
+    return p && p.seenInCards && (p.quizCorrect || 0) < 4 && !isWordMastered(p);
   });
 
   if (!favorites || favorites.length === 0 || base.length === 0) {
@@ -1162,7 +1162,7 @@ function getQueueForQuiz(words, progress, favorites = []) {
 function getQueueForPairs(words, progress, favorites = []) {
   const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 2 && !isWordMastered(p);
+    return p && (p.quizCorrect || 0) >= 4 && (p.pairsCorrect || 0) < 2 && !isWordMastered(p);
   });
 
   if (!favorites || favorites.length === 0 || base.length === 0) {
