@@ -403,6 +403,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
             Не могу говорить сейчас
           </button>
+          <button type="button" class="speech-diag-trigger-btn" id="speech-diag-trigger-btn">
+            🛠️ Проверить микрофон
+          </button>
         </div>
       `;
 
@@ -410,6 +413,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const holdHint = practiceArea.querySelector('#speech-hold-hint');
       const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
       const cantSpeakBtn = practiceArea.querySelector('#speech-cant-speak-btn');
+      const diagBtn = practiceArea.querySelector('#speech-diag-trigger-btn');
 
       const hintBtn = container.querySelector('#speech-hint-btn');
       const revealedHint = container.querySelector('#speech-revealed-hint');
@@ -423,6 +427,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (cantSpeakBtn) {
         cantSpeakBtn.addEventListener('click', () => {
           renderReverseQuiz();
+        });
+      }
+
+      if (diagBtn) {
+        diagBtn.addEventListener('click', () => {
+          openMicDiagnosticModal();
         });
       }
 
@@ -515,7 +525,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      async function startRecognition() {
+      function startRecognition() {
         if (isProcessing || isCompleted) return;
         clearAllTimers();
         lastInterim = '';
@@ -524,21 +534,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         try {
           if (window.speechSynthesis) window.speechSynthesis.cancel();
         } catch (e) {}
-
-        // Pre-check microphone permission on mobile devices
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            // Release stream immediately so SpeechRecognition can use it
-            stream.getTracks().forEach((track) => track.stop());
-          } catch (permErr) {
-            console.warn('Microphone permission not granted:', permErr);
-            if (permErr.name === 'NotAllowedError' || permErr.name === 'PermissionDeniedError') {
-              handleNoSpeechHeard('🔒 Доступ к микрофону заблокирован в браузере. Нажмите 🔒 в адресной строке и разрешите микрофон.');
-              return;
-            }
-          }
-        }
 
         try {
           recognition = new SpeechRecognition();
@@ -554,12 +549,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '🎙️';
             if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
-            // Automatic finalize timer after 2.8 seconds
+            // Automatic finalize timer after 3.5 seconds
             autoStopTimer = setTimeout(() => {
               if (isListening && !isEvaluated) {
                 stopAndEvaluate();
               }
-            }, 2800);
+            }, 3500);
 
             // Safety watchdog timeout
             safetyTimer = setTimeout(() => {
@@ -571,7 +566,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   handleNoSpeechHeard('Не удалось распознать. Нажмите 🎙️ для повтора');
                 }
               }
-            }, 4500);
+            }, 4800);
           };
 
           recognition.onresult = async (event) => {
@@ -665,6 +660,148 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           console.warn('SpeechRecognition start failed:', err);
           handleNoSpeechHeard('Не удалось запустить микрофон');
         }
+      }
+
+      function openMicDiagnosticModal() {
+        const modalEl = document.createElement('div');
+        modalEl.className = 'speech-diag-modal';
+        modalEl.innerHTML = `
+          <div class="speech-diag-card">
+            <h3 class="speech-diag-title">🛠️ Проверка микрофона</h3>
+            
+            <div class="speech-diag-item">
+              <span>Web Speech API:</span>
+              <strong style="color: #16a34a;">${SpeechRecognition ? '✅ Поддерживается' : '❌ Не поддерживается'}</strong>
+            </div>
+
+            <div class="speech-diag-item">
+              <span>Доступ к микрофону:</span>
+              <strong id="diag-perm-status" style="color: #d97706;">⏳ Проверка...</strong>
+            </div>
+
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">
+              Датчик громкости звука (скажите что-нибудь):
+            </div>
+            <div class="speech-volume-meter-container">
+              <div class="speech-volume-meter-bar" id="diag-volume-bar"></div>
+            </div>
+
+            <div class="speech-diag-live-box" id="diag-transcript-box">
+              Нажмите «Начать тест», чтобы проверить распознавание
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 6px;">
+              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 40px; font-size: 14px;">
+                🎙️ Начать тест
+              </button>
+              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 1; min-height: 40px; font-size: 14px; background: rgba(0,0,0,0.08); color: var(--text-main);">
+                Закрыть
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modalEl);
+
+        let diagAudioCtx = null;
+        let diagAnalyser = null;
+        let diagStream = null;
+        let diagAnimFrame = null;
+        let diagRecognition = null;
+
+        const permStatus = modalEl.querySelector('#diag-perm-status');
+        const volBar = modalEl.querySelector('#diag-volume-bar');
+        const transcriptBox = modalEl.querySelector('#diag-transcript-box');
+        const startBtn = modalEl.querySelector('#diag-start-test-btn');
+        const closeBtn = modalEl.querySelector('#diag-close-btn');
+
+        async function initMicSensor() {
+          try {
+            diagStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            if (permStatus) permStatus.innerHTML = '<span style="color: #16a34a;">✅ Разрешено</span>';
+
+            diagAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            diagAnalyser = diagAudioCtx.createAnalyser();
+            diagAnalyser.fftSize = 256;
+            const source = diagAudioCtx.createMediaStreamSource(diagStream);
+            source.connect(diagAnalyser);
+
+            const dataArray = new Uint8Array(diagAnalyser.frequencyBinCount);
+
+            function updateMeter() {
+              if (!diagAnalyser) return;
+              diagAnalyser.getByteFrequencyData(dataArray);
+              let sum = 0;
+              for (let i = 0; i < dataArray.length; i++) {
+                sum += dataArray[i];
+              }
+              const average = sum / dataArray.length;
+              const volumePercent = Math.min(100, Math.round((average / 100) * 100));
+              if (volBar) volBar.style.width = `${Math.max(4, volumePercent * 1.5)}%`;
+              diagAnimFrame = requestAnimationFrame(updateMeter);
+            }
+            updateMeter();
+          } catch (err) {
+            console.warn('Diag mic access failed:', err);
+            if (permStatus) permStatus.innerHTML = '<span style="color: #ef4444;">🔒 Заблокировано</span>';
+            if (transcriptBox) transcriptBox.innerHTML = '<span style="color: #ef4444;">Разрешите микрофон в настройках браузера (значок 🔒 вверху)</span>';
+          }
+        }
+
+        initMicSensor();
+
+        startBtn.addEventListener('click', () => {
+          if (!SpeechRecognition) return;
+          transcriptBox.innerHTML = '<span style="color: #d97706; font-weight: 700;">🔴 Слушаю... Скажите любое слово по-английски или по-русски</span>';
+          startBtn.disabled = true;
+
+          try {
+            diagRecognition = new SpeechRecognition();
+            diagRecognition.lang = 'en-US';
+            diagRecognition.continuous = false;
+            diagRecognition.interimResults = true;
+
+            diagRecognition.onresult = (e) => {
+              let spoken = '';
+              for (let i = e.resultIndex; i < e.results.length; ++i) {
+                spoken += e.results[i][0].transcript;
+              }
+              transcriptBox.innerHTML = `Услышано: <strong style="color: #16a34a; font-size: 15px;">«${spoken}»</strong>`;
+            };
+
+            diagRecognition.onerror = (e) => {
+              transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${e.error}</span>`;
+              startBtn.disabled = false;
+            };
+
+            diagRecognition.onend = () => {
+              startBtn.disabled = false;
+            };
+
+            diagRecognition.start();
+          } catch (err) {
+            transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка запуска: ${err.message}</span>`;
+            startBtn.disabled = false;
+          }
+        });
+
+        function cleanupDiag() {
+          if (diagAnimFrame) cancelAnimationFrame(diagAnimFrame);
+          if (diagStream) {
+            diagStream.getTracks().forEach((t) => t.stop());
+          }
+          if (diagAudioCtx) {
+            try { diagAudioCtx.close(); } catch(e) {}
+          }
+          if (diagRecognition) {
+            try { diagRecognition.stop(); } catch(e) {}
+          }
+          modalEl.remove();
+        }
+
+        closeBtn.addEventListener('click', cleanupDiag);
+        modalEl.addEventListener('click', (e) => {
+          if (e.target === modalEl) cleanupDiag();
+        });
       }
 
       async function evaluateSpeech(alternatives) {
