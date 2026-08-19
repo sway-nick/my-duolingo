@@ -667,6 +667,98 @@ if (typeof window !== 'undefined') {
       : localStorage.getItem(`avatar_${uId}`) || '';
     syncWeeklyXpApi(uId, wKey, currentXp, userName, avatar);
   });
+function getLocalDateStr(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function recordStudyDay(userId) {
+  if (!userId) return;
+  try {
+    const today = getLocalDateStr(new Date());
+    const key = `study_dates_${userId}`;
+    const dates = JSON.parse(localStorage.getItem(key) || '[]');
+    if (!dates.includes(today)) {
+      dates.push(today);
+      localStorage.setItem(key, JSON.stringify(dates));
+    }
+  } catch (e) {}
+}
+
+function calculateUserStreak(userId, localProg = {}) {
+  const datesSet = new Set();
+
+  // 1. Collect from stored study_dates list
+  try {
+    const storedDates = JSON.parse(localStorage.getItem(`study_dates_${userId}`) || '[]');
+    if (Array.isArray(storedDates)) {
+      storedDates.forEach((d) => {
+        if (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
+          datesSet.add(d);
+        }
+      });
+    }
+  } catch (e) {}
+
+  // 2. Collect from all word progress timestamps (lastPracticed, masteredAt)
+  if (localProg && typeof localProg === 'object') {
+    Object.values(localProg).forEach((p) => {
+      if (p && p.lastPracticed && typeof p.lastPracticed === 'number' && p.lastPracticed > 0) {
+        datesSet.add(getLocalDateStr(new Date(p.lastPracticed)));
+      }
+      if (p && p.masteredAt && typeof p.masteredAt === 'number' && p.masteredAt > 0) {
+        datesSet.add(getLocalDateStr(new Date(p.masteredAt)));
+      }
+    });
+  }
+
+  // 3. Collect from legacy streak_data if available
+  try {
+    const legacy = JSON.parse(localStorage.getItem('streak_data') || '{}');
+    if (legacy && legacy.lastStudyDate && /^\d{4}-\d{2}-\d{2}$/.test(legacy.lastStudyDate)) {
+      datesSet.add(legacy.lastStudyDate);
+    }
+  } catch (e) {}
+
+  if (datesSet.size === 0) {
+    return 0;
+  }
+
+  // Persist merged unique dates
+  try {
+    localStorage.setItem(`study_dates_${userId}`, JSON.stringify(Array.from(datesSet).sort()));
+  } catch (e) {}
+
+  const today = getLocalDateStr(new Date());
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterday = getLocalDateStr(yesterdayDate);
+
+  // If user hasn't studied today and hasn't studied yesterday, streak is broken
+  if (!datesSet.has(today) && !datesSet.has(yesterday)) {
+    return 0;
+  }
+
+  // Count consecutive days going backwards from anchor (today if studied today, else yesterday)
+  let currentCheckDate = new Date();
+  if (!datesSet.has(today)) {
+    currentCheckDate.setDate(currentCheckDate.getDate() - 1);
+  }
+
+  let streak = 0;
+  while (true) {
+    const checkStr = getLocalDateStr(currentCheckDate);
+    if (datesSet.has(checkStr)) {
+      streak += 1;
+      currentCheckDate.setDate(currentCheckDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+
+  return streak;
 }
 
 function getUserProgress() {
@@ -677,6 +769,7 @@ function getUserProgress() {
 
 async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   const userId = getEffectiveUserId();
+  recordStudyDay(userId);
 
   const key = `progress_${userId}`;
   const local = JSON.parse(localStorage.getItem(key) || '{}');
@@ -895,6 +988,14 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
         localStorage.setItem(setKey, JSON.stringify(mergedSet));
       }
 
+      // 6. Merge Study Dates for streak
+      if (res.data.studyDates && Array.isArray(res.data.studyDates)) {
+        const dateKey = `study_dates_${uId}`;
+        const localDates = JSON.parse(localStorage.getItem(dateKey) || '[]');
+        const mergedDates = Array.from(new Set([...localDates, ...res.data.studyDates])).sort();
+        localStorage.setItem(dateKey, JSON.stringify(mergedDates));
+      }
+
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:cloud_synced', { detail: { userId: uId, xp: finalXp } }));
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalXp, delta: 0 } }));
@@ -920,6 +1021,7 @@ function pushUserDataToCloud(userId = null, weekKey = null) {
     const weeklyXp = Number(localStorage.getItem(`xp_${uId}_${wKey}`) || 0);
     const settings = JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}');
     const avatar = localStorage.getItem(`avatar_${uId}`) || '';
+    const studyDates = JSON.parse(localStorage.getItem(`study_dates_${uId}`) || '[]');
     const user = getCurrentUser();
     const userName = user && user.name ? user.name : 'Участник';
 
@@ -937,6 +1039,7 @@ function pushUserDataToCloud(userId = null, weekKey = null) {
           weeklyXp,
           settings,
           avatar,
+          studyDates,
           userName,
         }),
       });
@@ -1020,14 +1123,14 @@ function getWordStage(prog) {
 function getQueueForCards(words, progress) {
   return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return !p?.seenInCards && !isWordMastered(p);
+    return !p || (!p.seenInCards && !isWordMastered(p));
   });
 }
 
 function getQueueForQuiz(words, progress, favorites = []) {
   const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return p?.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
+    return p && p.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
   });
 
   if (!favorites || favorites.length === 0 || base.length === 0) {
@@ -1040,12 +1143,11 @@ function getQueueForQuiz(words, progress, favorites = []) {
     return favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id)) && !isWordMastered(p);
   });
 
-  // Sort candidate favorites by lastPracticed ASC (oldest practiced first, then newer)
   candidateFavs.sort((a, b) => {
     const pA = progress[a.id] || progress[String(a.id)];
     const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA?.lastPracticed || 0;
-    const tB = pB?.lastPracticed || 0;
+    const tA = pA ? pA.lastPracticed || 0 : 0;
+    const tB = pB ? pB.lastPracticed || 0 : 0;
     return tA - tB;
   });
 
@@ -1058,7 +1160,7 @@ function getQueueForQuiz(words, progress, favorites = []) {
 function getQueueForPairs(words, progress, favorites = []) {
   const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return (p?.quizCorrect || 0) >= 5 && (p?.pairsCorrect || 0) < 2 && !isWordMastered(p);
+    return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 2 && !isWordMastered(p);
   });
 
   if (!favorites || favorites.length === 0 || base.length === 0) {
@@ -1071,12 +1173,11 @@ function getQueueForPairs(words, progress, favorites = []) {
     return favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id)) && !isWordMastered(p);
   });
 
-  // Sort candidate favorites by lastPracticed ASC (oldest practiced first, then newer)
   candidateFavs.sort((a, b) => {
     const pA = progress[a.id] || progress[String(a.id)];
     const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA?.lastPracticed || 0;
-    const tB = pB?.lastPracticed || 0;
+    const tA = pA ? pA.lastPracticed || 0 : 0;
+    const tB = pB ? pB.lastPracticed || 0 : 0;
     return tA - tB;
   });
 
@@ -1089,14 +1190,15 @@ function getQueueForPairs(words, progress, favorites = []) {
 function getQueueForTest(words, progress) {
   return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return (p?.pairsCorrect || 0) >= 2 && (p?.inputCorrect || 0) < 3 && !isWordMastered(p);
+    if (!p) return false;
+    if (isWordMastered(p)) return false;
+    return Boolean((p.pairsCorrect || 0) >= 2 && (p.inputCorrect || 0) < 3);
   });
 }
 
 async function getUserStats(customWords = null) {
   const userId = getEffectiveUserId();
-  const key = `progress_${userId}`;
-  const localProg = JSON.parse(localStorage.getItem(key) || '{}');
+  const localProg = getUserProgress();
 
   let wordsList = customWords;
   if (!wordsList || wordsList.length === 0) {
@@ -1151,6 +1253,8 @@ async function getUserStats(customWords = null) {
   // Word of the Day: 100% globally unified across ALL players worldwide
   const wordOfTheDay = getGlobalWordOfTheDay(wordsList);
 
+  const streakDays = calculateUserStreak(userId, localProg);
+
   return {
     totalWords: wordsList.length,
     masteredCount,
@@ -1159,7 +1263,7 @@ async function getUserStats(customWords = null) {
     totalAnswers: correct + errors,
     correctAnswers: correct,
     accuracy,
-    streakDays: 1,
+    streakDays,
     categoryBreakdown,
     wordOfTheDay,
   };

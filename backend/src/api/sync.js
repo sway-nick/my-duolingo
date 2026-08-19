@@ -63,10 +63,26 @@ function syncGet(e) {
     }
   }
 
-  // 4. Fetch UserSettings
-  const setHeaders = ['userId', 'dailyGoal', 'enabledMethods', 'theme', 'level', 'updatedAt'];
-  const allSettings = getSheetData('UserSettings', setHeaders);
-  const userSet = allSettings.find((s) => String(s.userId).trim() === userId);
+  // 5. Extract Study Dates for streak
+  const studyDatesSet = new Set();
+  userProgressRows.forEach((row) => {
+    if (row.lastReviewed) {
+      try {
+        const d = new Date(row.lastReviewed);
+        if (!isNaN(d.getTime())) {
+          studyDatesSet.add(d.toISOString().split('T')[0]);
+        }
+      } catch (e) {}
+    }
+    if (row.masteredAt) {
+      try {
+        const d = new Date(row.masteredAt);
+        if (!isNaN(d.getTime())) {
+          studyDatesSet.add(d.toISOString().split('T')[0]);
+        }
+      } catch (e) {}
+    }
+  });
 
   return successResponse({
     userId,
@@ -75,6 +91,7 @@ function syncGet(e) {
     weeklyXp,
     avatar,
     userName,
+    studyDates: Array.from(studyDatesSet).sort(),
     settings: userSet ? {
       dailyGoal: Number(userSet.dailyGoal || 10),
       enabledMethods: String(userSet.enabledMethods || 'cards,quiz,input'),
