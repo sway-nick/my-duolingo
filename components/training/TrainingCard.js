@@ -529,10 +529,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       // ==========================================
       // 1. DESKTOP NATIVE SPEECH (0 tokens, fast)
       // ==========================================
+      let isEvaluated = false;
+
       function startDesktopNativeSpeech() {
         if (isProcessing || isCompleted) return;
         clearAllTimers();
         isListening = true;
+        isEvaluated = false;
 
         try {
           if (window.speechSynthesis) window.speechSynthesis.cancel();
@@ -554,7 +557,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
             autoStopTimer = setTimeout(() => {
-              if (isListening) {
+              if (isListening && !isEvaluated) {
                 if (micBtn) {
                   micBtn.classList.remove('listening');
                   micBtn.classList.add('processing');
@@ -566,6 +569,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           };
 
           nativeRecognition.onresult = async (event) => {
+            isEvaluated = true;
             clearAllTimers();
             isListening = false;
             let alternatives = [];
@@ -581,17 +585,27 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               transcriptBox.style.display = 'block';
               transcriptBox.innerHTML = `Услышано: <strong>«${spoken}»</strong>`;
             }
+            if (micBtn) {
+              micBtn.classList.remove('listening');
+              micBtn.classList.add('processing');
+            }
+            if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
             await evaluateSpeech(alternatives.length > 0 ? alternatives : [spoken]);
           };
 
           nativeRecognition.onerror = (err) => {
-            console.warn('Native desktop speech error, falling back to MediaRecorder:', err.error);
+            console.warn('Native desktop speech error:', err.error);
             clearAllTimers();
             isListening = false;
             if (err.error === 'not-allowed') {
+              isEvaluated = true;
               handleNoSpeechHeard('🔒 Разрешите микрофон в браузере');
+            } else if (err.error === 'no-speech' || err.error === 'aborted') {
+              isEvaluated = true;
+              handleNoSpeechHeard('Голос не обнаружен. Нажмите 🎙️ для повтора');
             } else {
               // Fallback to Gemini AI transcription seamlessly
+              isEvaluated = true;
               startMobileMediaRecorder();
             }
           };
