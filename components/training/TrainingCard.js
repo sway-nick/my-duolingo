@@ -431,13 +431,28 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
       }
 
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      function isMobileClient() {
+        if (typeof navigator === 'undefined') return false;
+        const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+        const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 1);
+        const isSmallScreen = window.innerWidth <= 820;
+        return isMobileUA || (isTouch && isSmallScreen);
+      }
+
+      const preferNativeSpeech = !isMobileClient() && Boolean(SpeechRecognition);
+
       let mediaStream = null;
       let mediaRecorder = null;
+      let nativeRecognition = null;
       let recordedChunks = [];
       let isListening = false;
       let isProcessing = false;
       let isCompleted = false;
       let autoStopTimer = null;
+      let safetyWatchdog = null;
 
       const mimeCandidates = [
         'audio/webm;codecs=opus',
@@ -454,13 +469,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       function clearAllTimers() {
         if (autoStopTimer) clearTimeout(autoStopTimer);
+        if (safetyWatchdog) clearTimeout(safetyWatchdog);
         autoStopTimer = null;
+        safetyWatchdog = null;
       }
 
       function stopSensorStreams() {
         if (mediaStream) {
           mediaStream.getTracks().forEach((track) => track.stop());
           mediaStream = null;
+        }
+        if (nativeRecognition) {
+          try { nativeRecognition.stop(); } catch (e) {}
+          nativeRecognition = null;
         }
       }
 
@@ -505,7 +526,95 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      async function startRecordingSpeech() {
+      // ==========================================
+      // 1. DESKTOP NATIVE SPEECH (0 tokens, fast)
+      // ==========================================
+      function startDesktopNativeSpeech() {
+        if (isProcessing || isCompleted) return;
+        clearAllTimers();
+        isListening = true;
+
+        try {
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+        } catch (e) {}
+
+        try {
+          nativeRecognition = new SpeechRecognition();
+          nativeRecognition.lang = 'en-US';
+          nativeRecognition.continuous = false;
+          nativeRecognition.interimResults = false;
+          nativeRecognition.maxAlternatives = 3;
+
+          nativeRecognition.onstart = () => {
+            if (micBtn) {
+              micBtn.classList.remove('processing', 'success');
+              micBtn.classList.add('listening');
+              micBtn.innerHTML = '🎙️';
+            }
+            if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+
+            autoStopTimer = setTimeout(() => {
+              if (isListening) {
+                if (micBtn) {
+                  micBtn.classList.remove('listening');
+                  micBtn.classList.add('processing');
+                }
+                if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
+                try { nativeRecognition.stop(); } catch (e) {}
+              }
+            }, 3200);
+          };
+
+          nativeRecognition.onresult = async (event) => {
+            clearAllTimers();
+            isListening = false;
+            let alternatives = [];
+            if (event.results && event.results[0]) {
+              for (let i = 0; i < event.results[0].length; i++) {
+                if (event.results[0][i].transcript) {
+                  alternatives.push(event.results[0][i].transcript);
+                }
+              }
+            }
+            const spoken = (alternatives[0] || '').trim();
+            if (spoken && transcriptBox) {
+              transcriptBox.style.display = 'block';
+              transcriptBox.innerHTML = `Услышано: <strong>«${spoken}»</strong>`;
+            }
+            await evaluateSpeech(alternatives.length > 0 ? alternatives : [spoken]);
+          };
+
+          nativeRecognition.onerror = (err) => {
+            console.warn('Native desktop speech error, falling back to MediaRecorder:', err.error);
+            clearAllTimers();
+            isListening = false;
+            if (err.error === 'not-allowed') {
+              handleNoSpeechHeard('🔒 Разрешите микрофон в браузере');
+            } else {
+              // Fallback to Gemini AI transcription seamlessly
+              startMobileMediaRecorder();
+            }
+          };
+
+          nativeRecognition.onend = () => {
+            clearAllTimers();
+            if (isListening && !isCompleted && !isProcessing) {
+              isListening = false;
+              handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
+            }
+          };
+
+          nativeRecognition.start();
+        } catch (e) {
+          console.warn('Native speech launch failed, using MediaRecorder:', e);
+          startMobileMediaRecorder();
+        }
+      }
+
+      // ==========================================
+      // 2. MOBILE MEDIARECORDER + GEMINI AI STT
+      // ==========================================
+      async function startMobileMediaRecorder() {
         if (isProcessing || isCompleted) return;
 
         if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
@@ -603,14 +712,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      function stopAndTranscribe() {
-        if (autoStopTimer) clearTimeout(autoStopTimer);
-        autoStopTimer = null;
+      function startSpeechSession() {
+        if (preferNativeSpeech) {
+          startDesktopNativeSpeech();
+        } else {
+          startMobileMediaRecorder();
+        }
+      }
 
+      function stopAndTranscribe() {
+        clearAllTimers();
+        isListening = false;
+
+        if (nativeRecognition) {
+          try { nativeRecognition.stop(); } catch (e) {}
+        }
         if (mediaRecorder && mediaRecorder.state === 'recording') {
-          try {
-            mediaRecorder.stop();
-          } catch (e) {}
+          try { mediaRecorder.stop(); } catch (e) {}
         }
       }
 
@@ -843,7 +961,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (isListening) {
           stopAndTranscribe();
         } else {
-          startRecordingSpeech();
+          startSpeechSession();
         }
       });
     }
