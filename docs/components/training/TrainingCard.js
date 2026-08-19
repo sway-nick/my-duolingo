@@ -443,18 +443,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       let recognition = null;
+      let silenceTimer = null;
+      let maxDurationTimer = null;
+      let lastInterim = '';
+      let isEvaluated = false;
 
-      function stopCurrentRecognition() {
-        if (recognition) {
-          try { recognition.abort(); } catch (e) {}
-          recognition = null;
+      function clearTimers() {
+        if (silenceTimer) clearTimeout(silenceTimer);
+        if (maxDurationTimer) clearTimeout(maxDurationTimer);
+        silenceTimer = null;
+        maxDurationTimer = null;
+      }
+
+      function stopAndEvaluate() {
+        clearTimers();
+        if (recognition && isListening) {
+          try {
+            recognition.stop();
+          } catch (e) {}
         }
-        isListening = false;
       }
 
       function startRecognition() {
         if (isProcessing || isCompleted) return;
-        stopCurrentRecognition();
+        clearTimers();
+        lastInterim = '';
+        isEvaluated = false;
 
         try {
           recognition = new SpeechRecognition();
@@ -467,10 +481,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             isListening = true;
             micBtn.classList.remove('success', 'processing');
             micBtn.classList.add('listening');
-            statusMsg.innerHTML = '<span style="color: #ef4444; font-weight: 700;">🔴 Слушаю... Произнесите слово!</span>';
-          };
+            micBtn.innerHTML = '⏹️';
+            statusMsg.innerHTML = '<span style="color: #ef4444; font-weight: 700;">🔴 Слушаю... Скажите слово!</span>';
 
-          let finalHandled = false;
+            maxDurationTimer = setTimeout(() => {
+              stopAndEvaluate();
+            }, 4000);
+          };
 
           recognition.onresult = async (event) => {
             let interimTranscript = '';
@@ -487,40 +504,57 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               }
             }
 
-            if (transcriptBox) {
-              transcriptBox.style.display = 'block';
-              if (interimTranscript && finalAlternatives.length === 0) {
-                transcriptBox.innerHTML = `Слушаю: <em>«${interimTranscript}»</em>`;
-              } else if (finalAlternatives.length > 0) {
-                transcriptBox.innerHTML = `Услышано: <strong>«${finalAlternatives[0]}»</strong>`;
+            const currentSpoken = (finalAlternatives[0] || interimTranscript || '').trim();
+            if (currentSpoken) {
+              lastInterim = currentSpoken;
+              if (transcriptBox) {
+                transcriptBox.style.display = 'block';
+                transcriptBox.innerHTML = `Услышано: <strong>«${currentSpoken}»</strong>`;
               }
+
+              if (silenceTimer) clearTimeout(silenceTimer);
+              silenceTimer = setTimeout(() => {
+                stopAndEvaluate();
+              }, 900);
             }
 
-            if (finalAlternatives.length > 0 && !finalHandled) {
-              finalHandled = true;
+            if (finalAlternatives.length > 0 && !isEvaluated) {
+              isEvaluated = true;
+              clearTimers();
               isListening = false;
               micBtn.classList.remove('listening');
               micBtn.classList.add('processing');
+              micBtn.innerHTML = '⏳';
               await evaluateSpeech(finalAlternatives);
             }
           };
 
           recognition.onerror = (event) => {
+            clearTimers();
             isListening = false;
             micBtn.classList.remove('listening', 'processing');
+            micBtn.innerHTML = '🎙️';
             console.warn('Speech recognition error:', event.error);
+
+            if (isEvaluated) return;
+
+            if (lastInterim && (event.error === 'no-speech' || event.error === 'aborted')) {
+              isEvaluated = true;
+              evaluateSpeech([lastInterim]);
+              return;
+            }
 
             let errMsg = '';
             if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-              errMsg = '🔒 Доступ к микрофону заблокирован в браузере.';
+              errMsg = '🔒 Разрешите доступ к микрофону в браузере.';
             } else if (event.error === 'network') {
-              errMsg = '🌐 Сетевой сервис распознавания речи недоступен в этом браузере.';
+              errMsg = '🌐 Сетевой сервис распознавания Google недоступен.';
             } else if (event.error === 'no-speech') {
               errMsg = 'Голос не обнаружен. Нажмите 🎙️ и скажите слово сразу.';
             } else if (event.error === 'audio-capture') {
-              errMsg = 'Микрофон не найден или занят другим приложением.';
+              errMsg = 'Микрофон не найден или занят.';
             } else if (event.error === 'aborted') {
-              errMsg = 'Запись остановлена.';
+              errMsg = 'Нажмите 🎙️ и произнесите слово.';
             } else {
               errMsg = `Ошибка: ${event.error}. Нажмите 🎙️ для повтора.`;
             }
@@ -541,14 +575,22 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           };
 
           recognition.onend = () => {
+            clearTimers();
             isListening = false;
             if (!isCompleted && !isProcessing) {
               micBtn.classList.remove('listening', 'processing');
+              micBtn.innerHTML = '🎙️';
+
+              if (!isEvaluated && lastInterim) {
+                isEvaluated = true;
+                evaluateSpeech([lastInterim]);
+              }
             }
           };
 
           recognition.start();
         } catch (err) {
+          clearTimers();
           console.warn('SpeechRecognition start failed:', err);
           statusMsg.innerHTML = '<span style="color: #ef4444;">Не удалось запустить микрофон</span>';
           renderReverseQuiz();
@@ -575,6 +617,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speechAttempts++;
           playErrorSound();
           micBtn.classList.remove('listening', 'processing');
+          micBtn.innerHTML = '🎙️';
 
           if (speechAttempts === 1) {
             statusMsg.innerHTML = `Почти! Попробуйте ещё раз 🎙️`;
@@ -601,9 +644,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       micBtn.addEventListener('click', () => {
         if (isListening) {
-          stopCurrentRecognition();
-          micBtn.classList.remove('listening');
-          statusMsg.innerHTML = 'Нажмите на микрофон, чтобы начать';
+          stopAndEvaluate();
         } else {
           startRecognition();
         }
