@@ -27,6 +27,18 @@ function calculateLevenshtein(a, b) {
   return matrix[b.length][a.length];
 }
 
+function cyrillicToLatinPhonetic(str) {
+  if (!str) return '';
+  const map = {
+    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e',
+    'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+    'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+    'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch',
+    'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+  };
+  return String(str).toLowerCase().split('').map(c => map[c] || c).join('');
+}
+
 function normalizeEnglish(str) {
   if (!str) return '';
   return String(str)
@@ -53,8 +65,17 @@ function checkSpeechMatch(spokenList, targetWord) {
 
     // Check Levenshtein distance with tolerance
     const dist = calculateLevenshtein(normSpoken, normTarget);
-    const maxDist = Math.max(1, Math.floor(normTarget.length * 0.28));
+    const maxDist = Math.max(1, Math.floor(normTarget.length * 0.35));
     if (dist <= maxDist) return true;
+
+    // Check transliterated cyrillic match if browser captured speech in Russian
+    const latinized = cyrillicToLatinPhonetic(rawSpoken.trim());
+    if (latinized) {
+      const normLatinized = normalizeEnglish(latinized);
+      if (normLatinized === normTarget) return true;
+      const distTranslit = calculateLevenshtein(normLatinized, normTarget);
+      if (distTranslit <= Math.max(1, Math.floor(normTarget.length * 0.38))) return true;
+    }
   }
   return false;
 }
@@ -439,51 +460,83 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           recognition = new SpeechRecognition();
           recognition.lang = 'en-US';
           recognition.continuous = false;
-          recognition.interimResults = false;
+          recognition.interimResults = true;
           recognition.maxAlternatives = 5;
 
           recognition.onstart = () => {
             isListening = true;
             micBtn.classList.remove('success', 'processing');
             micBtn.classList.add('listening');
-            statusMsg.innerHTML = '<span style="color: #ef4444; font-weight: 700;">🔴 Слушаю... Говорите!</span>';
+            statusMsg.innerHTML = '<span style="color: #ef4444; font-weight: 700;">🔴 Слушаю... Произнесите слово!</span>';
           };
 
-          recognition.onresult = async (event) => {
-            isListening = false;
-            micBtn.classList.remove('listening');
-            micBtn.classList.add('processing');
+          let finalHandled = false;
 
-            const alternatives = [];
-            for (let i = 0; i < event.results[0].length; i++) {
-              alternatives.push(event.results[0][i].transcript);
+          recognition.onresult = async (event) => {
+            let interimTranscript = '';
+            let finalAlternatives = [];
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              const res = event.results[i];
+              if (res.isFinal) {
+                for (let j = 0; j < res.length; j++) {
+                  finalAlternatives.push(res[j].transcript);
+                }
+              } else {
+                interimTranscript += res[0].transcript;
+              }
             }
 
-            const recognizedText = alternatives[0] || '';
             if (transcriptBox) {
               transcriptBox.style.display = 'block';
-              transcriptBox.innerHTML = `Услышано: <strong>«${recognizedText}»</strong>`;
+              if (interimTranscript && finalAlternatives.length === 0) {
+                transcriptBox.innerHTML = `Слушаю: <em>«${interimTranscript}»</em>`;
+              } else if (finalAlternatives.length > 0) {
+                transcriptBox.innerHTML = `Услышано: <strong>«${finalAlternatives[0]}»</strong>`;
+              }
             }
 
-            await evaluateSpeech(alternatives);
+            if (finalAlternatives.length > 0 && !finalHandled) {
+              finalHandled = true;
+              isListening = false;
+              micBtn.classList.remove('listening');
+              micBtn.classList.add('processing');
+              await evaluateSpeech(finalAlternatives);
+            }
           };
 
           recognition.onerror = (event) => {
             isListening = false;
             micBtn.classList.remove('listening', 'processing');
             console.warn('Speech recognition error:', event.error);
+
+            let errMsg = '';
             if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-              statusMsg.innerHTML = '<span style="color: #ef4444;">Доступ к микрофону запрещен</span>';
-              if (transcriptBox) {
-                transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = `<button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 4px 12px; margin-top: 4px;">Ответить текстом</button>`;
-                const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
-                if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz());
-              }
+              errMsg = '🔒 Доступ к микрофону заблокирован в браузере.';
+            } else if (event.error === 'network') {
+              errMsg = '🌐 Сетевой сервис распознавания речи недоступен в этом браузере.';
             } else if (event.error === 'no-speech') {
-              statusMsg.innerHTML = 'Ничего не услышано. Нажмите на микрофон и попробуйте снова 🎙️';
+              errMsg = 'Голос не обнаружен. Нажмите 🎙️ и скажите слово сразу.';
+            } else if (event.error === 'audio-capture') {
+              errMsg = 'Микрофон не найден или занят другим приложением.';
+            } else if (event.error === 'aborted') {
+              errMsg = 'Запись остановлена.';
             } else {
-              statusMsg.innerHTML = 'Ошибка распознавания. Попробуйте ещё раз 🎙️';
+              errMsg = `Ошибка: ${event.error}. Нажмите 🎙️ для повтора.`;
+            }
+
+            statusMsg.innerHTML = `<span style="color: #ef4444; font-size: 14px; line-height: 1.35;">${errMsg}</span>`;
+
+            if (transcriptBox) {
+              transcriptBox.style.display = 'block';
+              transcriptBox.innerHTML = `
+                <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Вы можете продолжить с выбором карточек:</div>
+                <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
+                  🎯 Ответить карточками
+                </button>
+              `;
+              const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
+              if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz());
             }
           };
 
@@ -497,6 +550,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           recognition.start();
         } catch (err) {
           console.warn('SpeechRecognition start failed:', err);
+          statusMsg.innerHTML = '<span style="color: #ef4444;">Не удалось запустить микрофон</span>';
           renderReverseQuiz();
         }
       }
