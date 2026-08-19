@@ -119,7 +119,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const progressMap = getUserProgress() || {};
   const currentProg = progressMap[currentWord?.id] || {};
-  const quizStage = currentProg.quizCorrect || 0; // 0, 1 = EN->RU; 2 = RU->EN; 3 = Speak EN w/ prompt (final)
+  const quizStage = currentProg.quizCorrect || 0; // 0, 1 = EN->RU; 2 = RU->EN; 3 = Speak EN from memory (show hint on demand)
 
   const isCardsMode = currentMethod === 'cards';
   const isPairsMode = currentMethod === 'pairs';
@@ -219,12 +219,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 </h2>
               `
                   : `
-                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
+                <div style="width: 36px;"></div>
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                  <h2 class="training-word clickable-word-box" id="speak-word-trigger" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
-                    <span class="training-word-text">${currentWord.word}</span>
+                  <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
+                    ${currentWord.translation}
                   </h2>
-                  <div style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">${currentWord.translation}</div>
+                  <button type="button" class="speech-hint-btn" id="speech-hint-btn" style="margin-top: 6px; font-size: 13px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: var(--primary-color); border: 1px solid rgba(59, 130, 246, 0.25); padding: 3px 12px; border-radius: 12px; cursor: pointer;">
+                    💡 Подсказка
+                  </button>
+                  <div id="speech-revealed-hint" style="display: none; font-size: 15px; font-weight: 800; color: var(--primary-color); margin-top: 4px;">${currentWord.word}</div>
                 </div>
               `
               }
@@ -379,7 +382,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             🎙️
           </button>
           <div class="speech-hold-hint" id="speech-hold-hint">
-            ${quizStage === 3 ? 'Нажмите на микрофон и прочитайте слово' : 'Нажмите на микрофон и скажите слово'}
+            Нажмите на микрофон и скажите слово
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none;"></div>
           <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
