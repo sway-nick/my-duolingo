@@ -172,8 +172,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             : `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
               ${
-                quizStage < 2
-                  ? `🎯 Квиз: шаг ${quizStage + 1} из 5 • ${formatWordCount(activeWords.length)}`
+                quizStage === 0
+                  ? `🎯 Квиз: шаг 1 из 5 • ${formatWordCount(activeWords.length)}`
+                  : quizStage === 1
+                  ? `🎧 На слух: шаг 2 из 5 • ${formatWordCount(activeWords.length)}`
                   : quizStage === 2
                   ? `🔄 Обратный Квиз: шаг 3 из 5 • ${formatWordCount(activeWords.length)}`
                   : quizStage === 3
@@ -183,12 +185,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="word-header-row">
               ${
-                quizStage < 2
+                quizStage === 0
                   ? `
                 <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
                 <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                   <span class="training-word-text">${currentWord.word}</span>
                 </h2>
+              `
+                  : quizStage === 1
+                  ? `
+                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Повторить звук">🔊</button>
+                <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
+                  <span class="listening-audio-icon">🎧</span>
+                  <span class="listening-word-text" id="listening-word-text">Слушайте...</span>
+                </div>
               `
                   : quizStage === 2
                   ? `
@@ -284,7 +294,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
-  if (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage < 2)) {
+  if (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1)) {
     setTimeout(() => { try { speakWord(currentWord.word, currentWord.id); } catch (e) {} }, 100);
   }
 
@@ -315,8 +325,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
           const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.translation).trim();
-          practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.translation) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
-          if (isCorrect) playSuccessSound(); else playErrorSound();
+
+          const listenText = container.querySelector('#listening-word-text');
+          if (listenText) {
+            listenText.textContent = currentWord.word;
+            listenText.style.fontWeight = '800';
+            listenText.style.letterSpacing = '0.5px';
+          }
+
+          practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
+            b.disabled = true;
+            if (b.getAttribute('data-choice') === currentWord.translation) b.classList.add('correct');
+            else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
+          });
+
+          if (isCorrect) playSuccessSound();
+          else {
+            playErrorSound();
+            speakWord(currentWord.word, currentWord.id);
+          }
+
           await saveProgress(currentWord.id, isCorrect, 'quiz');
           setTimeout(() => onNext(), isCorrect ? 1000 : 4000);
         });
