@@ -4021,21 +4021,32 @@ body {
   color: var(--primary-color);
 }
 
-.speech-diag-trigger-btn {
+.card-bottom-diag-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
   background: transparent;
   border: none;
-  color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 18px;
+  opacity: 0.45;
   cursor: pointer;
-  margin-top: 8px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.25s ease;
+  line-height: 1;
+  user-select: none;
 }
 
-.speech-diag-trigger-btn:hover {
+.card-bottom-diag-btn:hover {
   opacity: 1;
-  text-decoration: underline;
+  transform: rotate(45deg) scale(1.1);
+}
+
+.card-bottom-diag-btn:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 .speech-diag-modal {

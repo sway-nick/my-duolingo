@@ -403,8 +403,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
             Не могу говорить сейчас
           </button>
-          <button type="button" class="speech-diag-trigger-btn" id="speech-diag-trigger-btn">
-            🛠️ Проверить микрофон
+          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Проверить микрофон">
+            ⚙️
           </button>
         </div>
       `;
