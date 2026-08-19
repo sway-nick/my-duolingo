@@ -53,13 +53,13 @@ function syncGet(e) {
   let avatar = '';
   let userName = '';
   if (weekKey) {
-    const lbHeaders = ['userId', 'weekKey', 'xp', 'userName', 'avatar', 'updatedAt'];
+    const lbHeaders = ['userId', 'weekKey', 'name', 'avatar', 'xp', 'updatedAt'];
     const allLb = getSheetData('Leaderboard', lbHeaders);
     const userLb = allLb.find((l) => String(l.userId).trim() === userId && String(l.weekKey).trim() === weekKey);
     if (userLb) {
       weeklyXp = Number(userLb.xp || 0);
       avatar = String(userLb.avatar || '');
-      userName = String(userLb.userName || '');
+      userName = String(userLb.name || '');
     }
   }
 
@@ -180,7 +180,7 @@ function syncPost(e) {
 
   // 3. Sync Leaderboard / XP
   if (weeklyXp !== null && weekKey) {
-    const lbHeaders = ['userId', 'weekKey', 'xp', 'userName', 'avatar', 'updatedAt'];
+    const lbHeaders = ['userId', 'weekKey', 'name', 'avatar', 'xp', 'updatedAt'];
     const sheetLb = getSheet('Leaderboard', lbHeaders);
     const allLb = getSheetData('Leaderboard', lbHeaders);
     const existingLb = allLb.find((l) => String(l.userId).trim() === userId && String(l.weekKey).trim() === weekKey);
@@ -189,16 +189,17 @@ function syncPost(e) {
     if (existingLb) {
       const currentServerXp = Number(existingLb.xp || 0);
       const finalXp = Math.max(currentServerXp, weeklyXp);
-      const finalName = userName || existingLb.userName || 'Участник';
+      const finalName = userName || existingLb.name || 'Участник';
       const finalAvatar = avatar || existingLb.avatar || '';
-      sheetLb.getRange(existingLb._rowIndex, 3, 1, 4).setValues([[finalXp, finalName, finalAvatar, nowIso]]);
+      // Columns: C=name, D=avatar, E=xp, F=updatedAt
+      sheetLb.getRange(existingLb._rowIndex, 3, 1, 4).setValues([[finalName, finalAvatar, finalXp, nowIso]]);
     } else {
       appendSheetRow('Leaderboard', {
         userId,
         weekKey,
-        xp: weeklyXp,
-        userName: userName || 'Участник',
+        name: userName || 'Участник',
         avatar: avatar || '',
+        xp: weeklyXp,
         updatedAt: nowIso,
       }, lbHeaders);
     }
