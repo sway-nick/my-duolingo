@@ -1,5 +1,5 @@
 import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound } from '../../services/audioService.js?v=21.0';
-import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress } from '../../services/api.js?v=21.0';
+import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress, transcribeAudio } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -385,11 +385,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function renderSpeechQuiz() {
       let speechAttempts = 0;
-      let isProcessing = false;
-      let isListening = false;
-      let isCompleted = false;
-      let autoStopTimer = null;
-      let safetyTimer = null;
 
       practiceArea.innerHTML = `
         <div class="speech-quiz-container">
@@ -436,57 +431,42 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
       }
 
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let mediaStream = null;
+      let mediaRecorder = null;
+      let recordedChunks = [];
+      let isListening = false;
+      let isProcessing = false;
+      let isCompleted = false;
+      let autoStopTimer = null;
 
-      if (!SpeechRecognition) {
-        if (holdHint) holdHint.innerHTML = 'Распознавание речи не поддерживается в этом браузере.<br>Переключаем на тест...';
-        setTimeout(() => renderReverseQuiz(), 1200);
-        return;
+      const mimeCandidates = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4',
+        'audio/aac',
+        'audio/ogg',
+        'audio/wav',
+      ];
+      let supportedMimeType = '';
+      if (typeof MediaRecorder !== 'undefined') {
+        supportedMimeType = mimeCandidates.find((m) => MediaRecorder.isTypeSupported(m)) || '';
       }
-
-      let recognition = null;
-      let lastInterim = '';
-      let isEvaluated = false;
 
       function clearAllTimers() {
         if (autoStopTimer) clearTimeout(autoStopTimer);
-        if (safetyTimer) clearTimeout(safetyTimer);
         autoStopTimer = null;
-        safetyTimer = null;
       }
 
-      function stopAndEvaluate() {
-        if (autoStopTimer) clearTimeout(autoStopTimer);
-        autoStopTimer = null;
-
-        if (micBtn) {
-          micBtn.classList.remove('listening');
-          micBtn.classList.add('processing');
-        }
-        if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-
-        // Critical Android fix: watchdog must run DURING evaluation to never freeze on processing
-        if (safetyTimer) clearTimeout(safetyTimer);
-        safetyTimer = setTimeout(() => {
-          if (!isEvaluated && !isCompleted) {
-            if (lastInterim) {
-              isEvaluated = true;
-              evaluateSpeech([lastInterim]);
-            } else {
-              handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
-            }
-          }
-        }, 2200);
-
-        if (recognition) {
-          try {
-            recognition.stop();
-          } catch (e) {}
+      function stopSensorStreams() {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          mediaStream = null;
         }
       }
 
       function handleNoSpeechHeard(customMsg = null) {
         clearAllTimers();
+        stopSensorStreams();
         if (isCompleted) return;
         isProcessing = false;
         isListening = false;
@@ -525,136 +505,112 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      function startRecognition() {
+      async function startRecordingSpeech() {
         if (isProcessing || isCompleted) return;
+
+        if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
+          stopAndTranscribe();
+          return;
+        }
+
         clearAllTimers();
-        lastInterim = '';
-        isEvaluated = false;
 
         try {
           if (window.speechSynthesis) window.speechSynthesis.cancel();
         } catch (e) {}
 
         try {
-          recognition = new SpeechRecognition();
-          recognition.lang = 'en-US';
-          recognition.continuous = false;
-          recognition.interimResults = false;
-          recognition.maxAlternatives = 3;
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-          recognition.onstart = () => {
-            isListening = true;
-            micBtn.classList.remove('success', 'processing');
-            micBtn.classList.add('listening');
-            micBtn.innerHTML = '🎙️';
-            if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+          let options = {};
+          if (supportedMimeType) {
+            options = { mimeType: supportedMimeType };
+          }
 
-            // Automatic finalize timer after 3.5 seconds
-            autoStopTimer = setTimeout(() => {
-              if (isListening && !isEvaluated) {
-                stopAndEvaluate();
-              }
-            }, 3500);
+          try {
+            mediaRecorder = new MediaRecorder(mediaStream, options);
+          } catch (e) {
+            mediaRecorder = new MediaRecorder(mediaStream);
+          }
 
-            // Safety watchdog timeout
-            safetyTimer = setTimeout(() => {
-              if (!isEvaluated && !isCompleted) {
-                if (lastInterim) {
-                  isEvaluated = true;
-                  evaluateSpeech([lastInterim]);
-                } else {
-                  handleNoSpeechHeard('Не удалось распознать. Нажмите 🎙️ для повтора');
-                }
-              }
-            }, 4800);
-          };
+          recordedChunks = [];
+          isListening = true;
 
-          recognition.onresult = async (event) => {
-            let finalAlternatives = [];
-
-            if (event.results && event.results[0]) {
-              for (let j = 0; j < event.results[0].length; j++) {
-                if (event.results[0][j].transcript) {
-                  finalAlternatives.push(event.results[0][j].transcript);
-                }
-              }
-            }
-
-            const currentSpoken = (finalAlternatives[0] || '').trim();
-            if (currentSpoken) {
-              lastInterim = currentSpoken;
-              if (transcriptBox) {
-                transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = `Услышано: <strong>«${currentSpoken}»</strong>`;
-              }
-            }
-
-            if (finalAlternatives.length > 0 && !isEvaluated) {
-              isEvaluated = true;
-              clearAllTimers();
-              isListening = false;
-              micBtn.classList.remove('listening');
-              micBtn.classList.add('processing');
-              if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-              await evaluateSpeech(finalAlternatives);
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data && event.data.size > 0) {
+              recordedChunks.push(event.data);
             }
           };
 
-          recognition.onerror = (event) => {
+          mediaRecorder.onstop = async () => {
             clearAllTimers();
             isListening = false;
-            micBtn.classList.remove('listening', 'processing');
-            micBtn.innerHTML = '🎙️';
-            console.warn('Speech recognition error:', event.error);
+            isProcessing = true;
 
-            if (isEvaluated) return;
+            const mime = mediaRecorder.mimeType || supportedMimeType || 'audio/webm';
+            const audioBlob = new Blob(recordedChunks, { type: mime });
+            stopSensorStreams();
 
-            if (lastInterim && (event.error === 'no-speech' || event.error === 'aborted')) {
-              isEvaluated = true;
-              evaluateSpeech([lastInterim]);
-              return;
-            }
-
-            let errMsg = '';
-            if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-              errMsg = '🔒 Доступ к микрофону заблокирован. Нажмите значок 🔒 в строке браузера и разрешите микрофон.';
-            } else if (event.error === 'network') {
-              errMsg = '🌐 Служба распознавания речи Google недоступна на мобильной сети.';
-            } else if (event.error === 'no-speech') {
-              errMsg = 'Голос не обнаружен. Нажмите 🎙️ и скажите слово громче.';
-            } else if (event.error === 'audio-capture') {
-              errMsg = 'Микрофон занят другим приложением или не найден.';
-            } else if (event.error === 'aborted') {
-              errMsg = 'Запись завершена. Нажмите 🎙️ для повтора.';
-            } else {
-              errMsg = `Ошибка (${event.error}). Попробуйте ещё раз.`;
-            }
-
-            handleNoSpeechHeard(errMsg);
-          };
-
-          recognition.onend = () => {
-            if (!isCompleted && !isProcessing) {
-              micBtn.classList.remove('listening', 'processing');
+            if (micBtn) {
+              micBtn.classList.remove('listening');
+              micBtn.classList.add('processing');
               micBtn.innerHTML = '🎙️';
+            }
+            if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
 
-              if (!isEvaluated) {
-                if (lastInterim) {
-                  isEvaluated = true;
-                  clearAllTimers();
-                  evaluateSpeech([lastInterim]);
-                } else {
-                  handleNoSpeechHeard();
+            try {
+              const result = await transcribeAudio(audioBlob, mime, currentWord.word);
+              const spokenWord = (result && result.text ? result.text : '').trim();
+
+              if (spokenWord) {
+                if (transcriptBox) {
+                  transcriptBox.style.display = 'block';
+                  transcriptBox.innerHTML = `Услышано: <strong>«${spokenWord}»</strong>`;
                 }
+                await evaluateSpeech([spokenWord]);
+              } else {
+                handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
               }
+            } catch (transcribeErr) {
+              console.warn('AI Transcribe error:', transcribeErr);
+              handleNoSpeechHeard('Не удалось распознать. Нажмите 🎙️ для повтора');
             }
           };
 
-          recognition.start();
-        } catch (err) {
-          clearAllTimers();
-          console.warn('SpeechRecognition start failed:', err);
-          handleNoSpeechHeard('Не удалось запустить микрофон');
+          mediaRecorder.start();
+
+          if (micBtn) {
+            micBtn.classList.remove('processing', 'success');
+            micBtn.classList.add('listening');
+            micBtn.innerHTML = '🎙️';
+          }
+          if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+
+          // Auto-finalize recording after 2.5 seconds
+          autoStopTimer = setTimeout(() => {
+            if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
+              stopAndTranscribe();
+            }
+          }, 2500);
+
+        } catch (micErr) {
+          console.warn('Microphone access failed:', micErr);
+          if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
+            handleNoSpeechHeard('🔒 Доступ к микрофону заблокирован. Разрешите микрофон в браузере.');
+          } else {
+            handleNoSpeechHeard('Не удалось запустить микрофон');
+          }
+        }
+      }
+
+      function stopAndTranscribe() {
+        if (autoStopTimer) clearTimeout(autoStopTimer);
+        autoStopTimer = null;
+
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          try {
+            mediaRecorder.stop();
+          } catch (e) {}
         }
       }
 
@@ -666,8 +622,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             <h3 class="speech-diag-title">🛠️ Проверка микрофона</h3>
             
             <div class="speech-diag-item">
-              <span>Web Speech API:</span>
-              <strong style="color: #16a34a;">${SpeechRecognition ? '✅ Поддерживается' : '❌ Не поддерживается'}</strong>
+              <span>MediaRecorder STT:</span>
+              <strong style="color: #16a34a;">${typeof MediaRecorder !== 'undefined' ? '✅ Поддерживается' : '❌ Не поддерживается'}</strong>
             </div>
 
             <div class="speech-diag-item">
@@ -700,8 +656,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         let diagAnalyser = null;
         let diagStream = null;
         let diagAnimFrame = null;
-        let diagRecognition = null;
-        let diagAutoStopTimer = null;
+        let diagRecorder = null;
+        let diagChunks = [];
 
         const permStatus = modalEl.querySelector('#diag-perm-status');
         const volBar = modalEl.querySelector('#diag-volume-bar');
@@ -743,7 +699,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         initMicSensor();
 
-        function stopSensorStreams() {
+        function stopDiagSensorStreams() {
           if (diagAnimFrame) {
             cancelAnimationFrame(diagAnimFrame);
             diagAnimFrame = null;
@@ -759,83 +715,71 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (volBar) volBar.style.width = '0%';
         }
 
-        startBtn.addEventListener('click', () => {
-          if (!SpeechRecognition) return;
-
-          // Free microphone hardware on Android before launching SpeechRecognition!
-          stopSensorStreams();
+        startBtn.addEventListener('click', async () => {
+          stopDiagSensorStreams();
 
           transcriptBox.style.display = 'block';
-          transcriptBox.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Скажите слово в телефон!</span>';
+          transcriptBox.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Запись... Скажите слово в телефон!</span>';
           startBtn.disabled = true;
-          startBtn.textContent = '🔴 Слушаю...';
+          startBtn.textContent = '🔴 Запись (2.5 сек)...';
 
           try {
-            diagRecognition = new SpeechRecognition();
-            diagRecognition.lang = 'en-US';
-            diagRecognition.continuous = false;
-            diagRecognition.interimResults = false;
-            diagRecognition.maxAlternatives = 3;
+            const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            let testOptions = {};
+            if (supportedMimeType) testOptions = { mimeType: supportedMimeType };
 
-            let heardAny = false;
+            try {
+              diagRecorder = new MediaRecorder(testStream, testOptions);
+            } catch(e) {
+              diagRecorder = new MediaRecorder(testStream);
+            }
 
-            diagRecognition.onstart = () => {
-              diagAutoStopTimer = setTimeout(() => {
-                try { diagRecognition.stop(); } catch(e) {}
-              }, 4000);
+            diagChunks = [];
+            diagRecorder.ondataavailable = (e) => {
+              if (e.data && e.data.size > 0) diagChunks.push(e.data);
             };
 
-            diagRecognition.onresult = (e) => {
-              let spoken = '';
-              if (e.results && e.results[0]) {
-                spoken = e.results[0][0].transcript;
-              }
-              if (spoken.trim()) {
-                heardAny = true;
-                transcriptBox.innerHTML = `Услышано: <strong style="color: #16a34a; font-size: 16px;">«${spoken}»</strong>`;
-              }
-            };
+            diagRecorder.onstop = async () => {
+              testStream.getTracks().forEach((t) => t.stop());
+              transcriptBox.innerHTML = '⏳ Проверяю через AI Gemini...';
 
-            diagRecognition.onerror = (e) => {
-              console.warn('Diag speech error:', e.error);
-              if (!heardAny) {
-                transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${e.error === 'no-speech' ? 'Голос не обнаружен' : e.error}</span>`;
-              }
-              startBtn.disabled = false;
-              startBtn.textContent = '🎙️ Повторить тест';
-            };
+              const mime = diagRecorder.mimeType || supportedMimeType || 'audio/webm';
+              const blob = new Blob(diagChunks, { type: mime });
 
-            diagRecognition.onend = () => {
-              if (diagAutoStopTimer) clearTimeout(diagAutoStopTimer);
-              if (!heardAny) {
-                transcriptBox.innerHTML = '<span style="color: #ef4444;">Голос не распознан. Попробуйте сказать громче.</span>';
-              }
-              startBtn.disabled = false;
-              startBtn.textContent = '🎙️ Повторить тест';
-            };
-
-            // Small 150ms delay to guarantee audio hardware driver is 100% available
-            setTimeout(() => {
               try {
-                diagRecognition.start();
-              } catch(startErr) {
-                transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка старта: ${startErr.message}</span>`;
-                startBtn.disabled = false;
-                startBtn.textContent = '🎙️ Начать тест';
+                const res = await transcribeAudio(blob, mime, 'hello');
+                if (res && res.text) {
+                  transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${res.text}»</strong>`;
+                } else {
+                  transcriptBox.innerHTML = '<span style="color: #ef4444;">Голос не распознан.</span>';
+                }
+              } catch(transErr) {
+                transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${transErr.message}</span>`;
               }
-            }, 150);
+
+              startBtn.disabled = false;
+              startBtn.textContent = '🎙️ Повторить тест';
+            };
+
+            diagRecorder.start();
+
+            setTimeout(() => {
+              if (diagRecorder && diagRecorder.state === 'recording') {
+                diagRecorder.stop();
+              }
+            }, 2500);
+
           } catch (err) {
-            transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка запуска: ${err.message}</span>`;
+            transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
             startBtn.textContent = '🎙️ Начать тест';
           }
         });
 
         function cleanupDiag() {
-          if (diagAutoStopTimer) clearTimeout(diagAutoStopTimer);
-          stopSensorStreams();
-          if (diagRecognition) {
-            try { diagRecognition.stop(); } catch(e) {}
+          stopDiagSensorStreams();
+          if (diagRecorder && diagRecorder.state === 'recording') {
+            try { diagRecorder.stop(); } catch(e) {}
           }
           modalEl.remove();
         }
@@ -897,9 +841,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         e.preventDefault();
         if (isProcessing || isCompleted) return;
         if (isListening) {
-          stopAndEvaluate();
+          stopAndTranscribe();
         } else {
-          startRecognition();
+          startRecordingSpeech();
         }
       });
     }
