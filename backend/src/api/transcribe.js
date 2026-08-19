@@ -4,14 +4,7 @@
  */
 
 function getGeminiApiKey() {
-  var key = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
-  if (!key) {
-    key = 'AIzaSyCCa5D1txoS4wEaDW4PxThPEL_TU93SeRU';
-    try {
-      PropertiesService.getScriptProperties().setProperty('GEMINI_API_KEY', key);
-    } catch (e) {}
-  }
-  return key;
+  return PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY') || '';
 }
 
 function setGeminiApiKey(key) {
@@ -24,10 +17,12 @@ function setGeminiApiKey(key) {
 
 function testGeminiAuthorization() {
   var apiKey = getGeminiApiKey();
-  var url = 'https://generativelanguage.googleapis.com/v1beta/models?key=' + encodeURIComponent(apiKey);
+  if (!apiKey) {
+    Logger.log('⚠️ GEMINI_API_KEY is not set in Script Properties yet. Please set it in Project Settings -> Script Properties.');
+  }
+  var url = 'https://generativelanguage.googleapis.com/v1beta/models' + (apiKey ? '?key=' + encodeURIComponent(apiKey) : '');
   var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
   Logger.log('Status: ' + res.getResponseCode());
-  Logger.log('Response: ' + res.getContentText().slice(0, 200));
   return res.getResponseCode() === 200;
 }
 
