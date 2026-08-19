@@ -596,10 +596,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           btn.classList.add('selected');
           selectedLeft = btn;
 
-          const w = btn.getAttribute('data-word');
-          const id = btn.getAttribute('data-id');
-          speakWord(w, id);
-
           if (selectedRight) {
             checkPairMatch();
           }
