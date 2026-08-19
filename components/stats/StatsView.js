@@ -64,7 +64,6 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
               </div>
               <div class="flashcard-face-body">
                 <h2 class="flashcard-word embossed-text">${wotd.word}</h2>
-                ${wotd.transcription ? `<p class="flashcard-transcription embossed-subtext">${wotd.transcription}</p>` : ''}
               </div>
               <div class="flashcard-face-bottom">
                 <span class="flashcard-flip-prompt">Нажми, чтобы увидеть перевод</span>
@@ -157,6 +156,12 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           }
           isFlipped = !isFlipped;
           flashcard.classList.toggle('is-flipped', isFlipped);
+          
+          // Trigger specular edge gleam animation on the card
+          flashcard.classList.remove('gleam-active');
+          void flashcard.offsetWidth;
+          flashcard.classList.add('gleam-active');
+
           if (!isFlipped) {
             speakWord(wotd.word, wotd.id);
           }
