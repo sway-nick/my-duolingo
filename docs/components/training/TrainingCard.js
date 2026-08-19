@@ -651,14 +651,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (!el) return;
       try {
         el.focus({ preventScroll: true });
-        const firstMismatch = el.querySelector('.diff-char-inline.mismatch, .diff-char-inline.missing');
+        const firstMismatch = el.querySelector('.diff-char-inline.mismatch');
         if (firstMismatch) {
           const range = document.createRange();
-          if (firstMismatch.classList.contains('missing')) {
-            range.setStartBefore(firstMismatch);
-          } else {
-            range.setStartAfter(firstMismatch);
-          }
+          range.setStartAfter(firstMismatch);
           range.collapse(true);
           const sel = window.getSelection();
           sel.removeAllRanges();
@@ -713,18 +709,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function renderDiffHtml(userText, targetText) {
       let html = '';
-      const maxLen = Math.max(userText.length, targetText.length);
-      for (let i = 0; i < maxLen; i++) {
-        const u = userText[i] || '';
-        const t = targetText[i] || '';
-        if (i < userText.length) {
-          if (u === t) {
-            html += `<span class="diff-char-inline match">${u}</span>`;
-          } else {
-            html += `<span class="diff-char-inline mismatch">${u}</span>`;
-          }
+      for (let i = 0; i < userText.length; i++) {
+        const u = userText[i];
+        const t = targetText[i];
+        if (u === t) {
+          html += `<span class="diff-char-inline match">${u}</span>`;
         } else {
-          html += `<span class="diff-char-inline missing">_</span>`;
+          html += `<span class="diff-char-inline mismatch">${u}</span>`;
         }
       }
       return html;
@@ -732,7 +723,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     const handleCheck = async () => {
       const rawText = input.textContent || '';
-      const userAns = rawText.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+      const userAns = rawText.replace(/\u00a0/g, ' ').replace(/_/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
       const correctAns = currentWord.word.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
 
