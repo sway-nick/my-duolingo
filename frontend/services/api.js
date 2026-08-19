@@ -667,6 +667,8 @@ if (typeof window !== 'undefined') {
       : localStorage.getItem(`avatar_${uId}`) || '';
     syncWeeklyXpApi(uId, wKey, currentXp, userName, avatar);
   });
+}
+
 function getLocalDateStr(date = new Date()) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
