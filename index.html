@@ -35,7 +35,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=94.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=95.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -43,17 +43,17 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud } from './services/api.js?v=94.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=94.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=94.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=94.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=94.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=94.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=94.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=94.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=94.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=94.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=94.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud } from './services/api.js?v=95.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=95.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=95.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=95.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=95.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=95.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=95.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=95.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=95.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=95.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=95.0';
 
       let allWords = [];
       let favoriteIds = new Set();
@@ -408,23 +408,30 @@
             nextBtnLabel = '🎯 Перейти в Квиз';
           } else if (currentMethod === 'input') {
             emptyIcon = '🏆';
-            emptyTitle = 'Отлично! Тест завершён!';
-            emptyMsg = 'Все слова в режиме «Тест» успешно проверены!';
+            emptyTitle = 'Отлично! Задача выполнена!';
+            emptyMsg = '';
             nextMode = 'cards';
-            nextBtnLabel = '🗂️ Перейти в Карточки';
+            nextBtnLabel = 'Учить новые слова';
           }
 
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
               <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
-              <h2 style="font-size: 22px; margin-bottom: 8px;">${emptyTitle}</h2>
-              <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">
-                ${emptyMsg}
-              </p>
-              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                <button class="primary-button" id="go-next-mode-btn">
+              <h2 style="font-size: 22px; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
+              ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
+              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
+                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
                   ${nextBtnLabel}
                 </button>
+                ${
+                  currentMethod === 'input'
+                    ? `
+                  <button class="secondary-button" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    ❤️ Повторить избранное
+                  </button>
+                `
+                    : ''
+                }
               </div>
             </div>
           `;
@@ -436,6 +443,30 @@
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               renderTrainingTab();
+            });
+          }
+
+          const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
+          if (repeatFavsBtn) {
+            repeatFavsBtn.addEventListener('click', () => {
+              const favList = getUserFavorites();
+              const favIds = new Set(favList.map(String));
+              const favWords = allWords.filter((w) => favIds.has(String(w.id)));
+              if (favWords && favWords.length > 0) {
+                favoritePracticeWords = [...favWords];
+                resetWordsProgressForPractice(favWords);
+                userSettings.preferredMethod = 'quiz';
+                saveUserSettings(userSettings);
+                currentWordIndex = 0;
+                renderTrainingTab();
+              } else {
+                const tabBtn = document.querySelector('.nav-tab[data-tab="favorites"]');
+                if (tabBtn) {
+                  tabBtn.click();
+                } else {
+                  renderTab('favorites');
+                }
+              }
             });
           }
           return;
