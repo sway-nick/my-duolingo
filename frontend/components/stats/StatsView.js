@@ -55,6 +55,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
             <!-- Front Face: English word -->
             <div class="flashcard-face flashcard-front">
+              <div class="card-edge-rim-glint" aria-hidden="true"></div>
               <div class="flashcard-face-top">
                 <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔥</button>
                 <span class="wotd-card-badge">Слово дня</span>
@@ -72,6 +73,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
             <!-- Back Face: Russian translation -->
             <div class="flashcard-face flashcard-back">
+              <div class="card-edge-rim-glint" aria-hidden="true"></div>
               <div class="flashcard-face-top">
                 <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔥</button>
                 <span class="wotd-card-badge">Слово дня</span>

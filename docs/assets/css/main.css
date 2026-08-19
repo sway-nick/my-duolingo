@@ -1825,8 +1825,6 @@ body {
 
 /* Gold VIP Bank Card styling for Word of the Day */
 .wotd-card .flashcard-face {
-  position: relative;
-  overflow: hidden;
   background: 
     linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 18%, rgba(255, 255, 255, 0) 32%),
     linear-gradient(135deg, #ca8a04 0%, #facc15 28%, #fef08a 48%, #eab308 68%, #a16207 100%);
@@ -1856,39 +1854,39 @@ body {
     linear-gradient(135deg, #713f12 0%, #a16207 24%, #ca8a04 46%, #eab308 64%, #854d0e 82%, #451a03 100%);
 }
 
-/* Light gleam sweep across the upper right edge of the card (triggers after flip) */
-.wotd-card .flashcard-face::after {
-  content: '';
+/* Delicate sliding specular glint along the top-right card rim */
+.card-edge-rim-glint {
   position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 140px;
-  height: 140px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0.85) 50%, rgba(254, 240, 138, 0.95) 54%, rgba(255, 255, 255, 0) 75%);
-  transform: rotate(25deg) translateY(-80px);
-  pointer-events: none;
+  top: -1px;
+  right: 14px;
+  width: 44px;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent 0%, #ffffff 50%, #fef08a 70%, transparent 100%);
+  box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.95), 0 0 10px 2px rgba(253, 224, 71, 0.7);
+  border-radius: 4px;
   opacity: 0;
-  z-index: 6;
+  pointer-events: none;
+  z-index: 10;
 }
 
-.wotd-card.gleam-active .flashcard-face::after {
-  animation: cardCornerGleam 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s forwards;
+.wotd-card.gleam-active .card-edge-rim-glint {
+  animation: edgeRimGlint 0.65s ease-out 0.35s forwards;
 }
 
-@keyframes cardCornerGleam {
+@keyframes edgeRimGlint {
   0% {
     opacity: 0;
-    transform: rotate(25deg) translateY(-80px) translateX(60px);
+    transform: translateX(-45px);
   }
   30% {
     opacity: 1;
   }
-  70% {
+  75% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: rotate(25deg) translateY(90px) translateX(-90px);
+    transform: translateX(18px);
   }
 }
 
