@@ -539,8 +539,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           recognition = new SpeechRecognition();
           recognition.lang = 'en-US';
           recognition.continuous = false;
-          recognition.interimResults = true;
-          recognition.maxAlternatives = 5;
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 3;
 
           recognition.onstart = () => {
             isListening = true;
@@ -570,21 +570,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           };
 
           recognition.onresult = async (event) => {
-            let interimTranscript = '';
             let finalAlternatives = [];
 
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-              const res = event.results[i];
-              if (res.isFinal) {
-                for (let j = 0; j < res.length; j++) {
-                  finalAlternatives.push(res[j].transcript);
+            if (event.results && event.results[0]) {
+              for (let j = 0; j < event.results[0].length; j++) {
+                if (event.results[0][j].transcript) {
+                  finalAlternatives.push(event.results[0][j].transcript);
                 }
-              } else {
-                interimTranscript += res[0].transcript;
               }
             }
 
-            const currentSpoken = (finalAlternatives[0] || interimTranscript || '').trim();
+            const currentSpoken = (finalAlternatives[0] || '').trim();
             if (currentSpoken) {
               lastInterim = currentSpoken;
               if (transcriptBox) {
@@ -778,8 +774,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             diagRecognition = new SpeechRecognition();
             diagRecognition.lang = 'en-US';
             diagRecognition.continuous = false;
-            diagRecognition.interimResults = true;
-            diagRecognition.maxAlternatives = 5;
+            diagRecognition.interimResults = false;
+            diagRecognition.maxAlternatives = 3;
 
             let heardAny = false;
 
@@ -791,8 +787,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             diagRecognition.onresult = (e) => {
               let spoken = '';
-              for (let i = e.resultIndex; i < e.results.length; ++i) {
-                spoken += e.results[i][0].transcript;
+              if (e.results && e.results[0]) {
+                spoken = e.results[0][0].transcript;
               }
               if (spoken.trim()) {
                 heardAny = true;
