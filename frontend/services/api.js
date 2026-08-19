@@ -1252,8 +1252,19 @@ async function getUserStats(customWords = null) {
     localStorage.removeItem('myduo_cached_cloud_stats');
   } catch (e) {}
 
-  // Word of the Day: 100% globally unified across ALL players worldwide
-  const wordOfTheDay = getGlobalWordOfTheDay(wordsList);
+  // Word of the Day: fetch from backend (most errors across all players in last 3 days).
+  // Fallback to date-hash if backend is unavailable.
+  let cloudWordOfTheDayId = null;
+  try {
+    const statsRes = await fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`);
+    const statsJson = await statsRes.json();
+    if (statsJson && statsJson.success && statsJson.data && statsJson.data.wordOfTheDayId) {
+      cloudWordOfTheDayId = String(statsJson.data.wordOfTheDayId);
+    }
+  } catch (e) {
+    // Network error — fall back to date-hash below
+  }
+  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, cloudWordOfTheDayId);
 
   const streakDays = calculateUserStreak(userId, localProg);
 
