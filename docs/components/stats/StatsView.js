@@ -50,11 +50,22 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       isWotdFav = favSet.has(String(wotd.id));
 
       wotdHtml = `
-        <!-- Word of the Day Section (Self-contained Card) -->
+        <!-- Word of the Day Section (Self-contained VIP Bank Card) -->
         <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 16px auto 0; max-width: 100%;">
           <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
             <!-- Front Face: English word -->
             <div class="flashcard-face flashcard-front">
+              <!-- Decorative Bank Card Elements -->
+              <div class="card-chip-gold" aria-hidden="true">
+                <div class="chip-line h1"></div>
+                <div class="chip-line h2"></div>
+                <div class="chip-line v1"></div>
+                <div class="chip-core"></div>
+              </div>
+              <div class="card-contactless-wave" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+              </div>
+
               <div class="flashcard-face-top">
                 <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔥</button>
                 <span class="wotd-card-badge">Слово дня</span>
@@ -63,8 +74,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
                 </button>
               </div>
               <div class="flashcard-face-body">
-                <h2 class="flashcard-word">${wotd.word}</h2>
-                ${wotd.transcription ? `<p class="flashcard-transcription">${wotd.transcription}</p>` : ''}
+                <h2 class="flashcard-word embossed-text">${wotd.word}</h2>
+                ${wotd.transcription ? `<p class="flashcard-transcription embossed-subtext">${wotd.transcription}</p>` : ''}
               </div>
               <div class="flashcard-face-bottom">
                 <span class="flashcard-flip-prompt">Нажми, чтобы увидеть перевод</span>
@@ -73,6 +84,17 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
             <!-- Back Face: Russian translation -->
             <div class="flashcard-face flashcard-back">
+              <!-- Decorative Bank Card Elements -->
+              <div class="card-chip-gold" aria-hidden="true">
+                <div class="chip-line h1"></div>
+                <div class="chip-line h2"></div>
+                <div class="chip-line v1"></div>
+                <div class="chip-core"></div>
+              </div>
+              <div class="card-contactless-wave" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+              </div>
+
               <div class="flashcard-face-top">
                 <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔥</button>
                 <span class="wotd-card-badge">Слово дня</span>
@@ -81,7 +103,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
                 </button>
               </div>
               <div class="flashcard-face-body">
-                <h2 class="flashcard-translation">${wotd.translation}</h2>
+                <h2 class="flashcard-translation embossed-text">${wotd.translation}</h2>
               </div>
             </div>
           </div>
