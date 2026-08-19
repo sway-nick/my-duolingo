@@ -22,6 +22,15 @@ function setGeminiApiKey(key) {
   return errorResponse('API key cannot be empty', 400);
 }
 
+function testGeminiAuthorization() {
+  var apiKey = getGeminiApiKey();
+  var url = 'https://generativelanguage.googleapis.com/v1beta/models?key=' + encodeURIComponent(apiKey);
+  var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+  Logger.log('Status: ' + res.getResponseCode());
+  Logger.log('Response: ' + res.getContentText().slice(0, 200));
+  return res.getResponseCode() === 200;
+}
+
 function transcribePost(e) {
   var body = getJsonBody(e);
   validateRequired(body, ['audioBase64']);
