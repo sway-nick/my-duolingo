@@ -661,6 +661,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           sel.addRange(range);
           return;
         }
+        const matches = el.querySelectorAll('.diff-char-inline.match');
+        if (matches.length > 0) {
+          const lastMatch = matches[matches.length - 1];
+          const range = document.createRange();
+          range.setStartAfter(lastMatch);
+          range.collapse(true);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          return;
+        }
       } catch (e) {
         console.warn('Error placing caret after mismatch:', e);
       }
@@ -718,6 +729,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           html += `<span class="diff-char-inline mismatch">${u}</span>`;
         }
       }
+      if (userText.length < targetText.length) {
+        const missingCount = targetText.length - userText.length;
+        for (let j = 0; j < missingCount; j++) {
+          html += `<span class="diff-missing-dash" contenteditable="false" aria-hidden="true"></span>`;
+        }
+      }
       return html;
     }
 
@@ -738,9 +755,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           input.classList.remove('shake-input');
           void input.offsetWidth; // trigger reflow
-          input.classList.add('shake-input');
+          input.classList.add('shake-input', 'correction-mode');
 
-          // Highlight letters directly inside the input window!
+          // Highlight letters directly inside the input window with missing letter dashes!
           input.innerHTML = renderDiffHtml(userAns, correctAns);
 
           feedback.style.display = 'none';
@@ -756,6 +773,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
+      input.classList.remove('correction-mode');
       input.setAttribute('contenteditable', 'false');
       input.classList.add('disabled');
       checkBtn.disabled = true;

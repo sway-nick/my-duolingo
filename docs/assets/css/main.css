@@ -1487,7 +1487,11 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior: contain;
-  touch-action: pan-x;
+  letter-spacing: 1px;
+}
+
+.answer-input.correction-mode {
+  letter-spacing: 5px;
 }
 
 .answer-input:empty::before {
@@ -1527,16 +1531,33 @@ body {
 .diff-char-inline.mismatch {
   color: #ef4444;
   font-weight: 800;
-  text-decoration: underline wavy #ef4444 2px;
-  text-underline-offset: 3px;
-  background: rgba(239, 68, 68, 0.12);
-  border-radius: 2px;
+  background: rgba(239, 68, 68, 0.16);
+  border-radius: 4px;
+  padding: 1px 3px;
 }
 
 .dark-theme .diff-char-inline.mismatch {
   color: #f87171;
-  text-decoration: underline wavy #f87171 2px;
-  background: rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.32);
+}
+
+/* Yellow dashes for missing letters */
+.diff-missing-dash {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  background-color: #f59e0b;
+  border-radius: 2px;
+  margin: 0 4px;
+  vertical-align: middle;
+  user-select: none;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
+}
+
+.dark-theme .diff-missing-dash {
+  background-color: #fbbf24;
+  box-shadow: 0 1px 4px rgba(251, 191, 36, 0.4);
 }
 
 .answer-input:focus {
