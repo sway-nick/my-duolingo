@@ -431,18 +431,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
       }
 
+      // Always try native Web Speech API first (fast, 0 tokens).
+      // On error/unavailable → fall back to MediaRecorder + Gemini AI (mobile-safe).
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-      function isMobileClient() {
-        if (typeof navigator === 'undefined') return false;
-        const ua = navigator.userAgent || navigator.vendor || window.opera || '';
-        const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 1);
-        const isSmallScreen = window.innerWidth <= 820;
-        return isMobileUA || (isTouch && isSmallScreen);
-      }
-
-      const preferNativeSpeech = !isMobileClient() && Boolean(SpeechRecognition);
+      const nativeSpeechAvailable = Boolean(SpeechRecognition);
 
       let mediaStream = null;
       let mediaRecorder = null;
@@ -727,7 +719,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       function startSpeechSession() {
-        if (preferNativeSpeech) {
+        // Native Web Speech API: fast (0 tokens), works on desktop Chrome/Edge.
+        // On error (network, no-speech, mobile hang) → auto-fallback to Gemini AI.
+        if (nativeSpeechAvailable) {
           startDesktopNativeSpeech();
         } else {
           startMobileMediaRecorder();
