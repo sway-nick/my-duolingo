@@ -114,23 +114,25 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   }
 
   container.innerHTML = `
-    <section class="training-card-container">
+    <section class="word-card-container">
       
       <!-- Top Mode Switcher Bar -->
-      <div class="mode-switch-bar" id="mode-switch-pills">
-        <div class="mode-pill-glider" id="mode-pill-glider"></div>
-        <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
-          Карточки
-        </button>
-        <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
-          Квиз
-        </button>
-        <button type="button" class="mode-pill-btn ${isPairsMode ? 'active' : ''} ${!availableModes.pairs ? 'disabled' : ''}" data-mode="pairs" ${!availableModes.pairs ? 'disabled' : ''}>
-          Пары
-        </button>
-        <button type="button" class="mode-pill-btn ${isInputMode ? 'active' : ''} ${!availableModes.input ? 'disabled' : ''}" data-mode="input" ${!availableModes.input ? 'disabled' : ''}>
-          Тест
-        </button>
+      <div class="card-header-bar">
+        <div class="mode-switch-pills" id="mode-switch-pills">
+          <div class="mode-pill-glider" id="mode-pill-glider"></div>
+          <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
+            Карточки
+          </button>
+          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
+            Квиз
+          </button>
+          <button type="button" class="mode-pill-btn ${isPairsMode ? 'active' : ''} ${!availableModes.pairs ? 'disabled' : ''}" data-mode="pairs" ${!availableModes.pairs ? 'disabled' : ''}>
+            Пары
+          </button>
+          <button type="button" class="mode-pill-btn ${isInputMode ? 'active' : ''} ${!availableModes.input ? 'disabled' : ''}" data-mode="input" ${!availableModes.input ? 'disabled' : ''}>
+            Тест
+          </button>
+        </div>
       </div>
 
       <!-- Word Display & Audio Button -->
