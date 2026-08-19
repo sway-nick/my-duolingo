@@ -585,16 +585,16 @@ function formatCompactXp(xp) {
   if (num < 1000) return String(num);
   if (num < 1_000_000) {
     const kVal = num / 1000;
-    const formatted = kVal.toFixed(3).replace(/\.?0+$/, '').replace('.', ',');
+    const formatted = kVal >= 10 ? Math.round(kVal) : kVal.toFixed(1).replace(/\.0$/, '').replace('.', ',');
     return `${formatted}K`;
   }
   if (num < 1_000_000_000) {
     const mVal = num / 1_000_000;
-    const formatted = mVal.toFixed(3).replace(/\.?0+$/, '').replace('.', ',');
+    const formatted = mVal.toFixed(1).replace(/\.0$/, '').replace('.', ',');
     return `${formatted}M`;
   }
   const bVal = num / 1_000_000_000;
-  const formatted = bVal.toFixed(3).replace(/\.?0+$/, '').replace('.', ',');
+  const formatted = bVal.toFixed(1).replace(/\.0$/, '').replace('.', ',');
   return `${formatted}B`;
 }
 
