@@ -399,6 +399,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       let isListening = false;
       let isCompleted = false;
       let isHolding = false;
+      let evalTimeout = null;
 
       practiceArea.innerHTML = `
         <div class="speech-quiz-container">
@@ -445,21 +446,75 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       let lastInterim = '';
       let isEvaluated = false;
 
+      function clearWatchdog() {
+        if (evalTimeout) clearTimeout(evalTimeout);
+        evalTimeout = null;
+      }
+
       function stopAndEvaluate() {
         if (micBtn) {
           micBtn.classList.remove('listening', 'holding');
         }
-        if (recognition && isListening) {
+        if (recognition) {
           try {
             recognition.stop();
           } catch (e) {}
         }
       }
 
+      function handleNoSpeechHeard(customMsg = null) {
+        clearWatchdog();
+        if (isCompleted) return;
+        isProcessing = false;
+        isListening = false;
+        isHolding = false;
+        if (micBtn) {
+          micBtn.classList.remove('listening', 'processing', 'holding');
+          micBtn.innerHTML = '🎙️';
+        }
+
+        speechAttempts++;
+        playErrorSound();
+
+        if (speechAttempts === 1) {
+          if (holdHint) holdHint.innerHTML = customMsg || 'Не удалось расслышать. Зажмите кнопку и повторите 🎙️';
+        } else if (speechAttempts === 2) {
+          if (holdHint) holdHint.innerHTML = 'Послушайте эталон и повторите 🔊';
+          speakWord(currentWord.word, currentWord.id);
+          setTimeout(() => {
+            if (holdHint) holdHint.innerHTML = 'Теперь зажмите кнопку и повторите 🎙️';
+          }, 1400);
+        } else {
+          isCompleted = true;
+          if (micBtn) micBtn.disabled = true;
+          if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
+          speakWord(currentWord.word, currentWord.id);
+          saveProgress(currentWord.id, false, 'quiz');
+          setTimeout(() => onNext(), 3500);
+        }
+
+        if (transcriptBox) {
+          transcriptBox.style.display = 'block';
+          transcriptBox.innerHTML = `
+            <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Или ответьте текстом без микрофона:</div>
+            <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
+              🎯 Ответить карточками
+            </button>
+          `;
+          const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
+          if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz());
+        }
+      }
+
       function startRecognition() {
         if (isProcessing || isCompleted) return;
+        clearWatchdog();
         lastInterim = '';
         isEvaluated = false;
+
+        try {
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+        } catch (e) {}
 
         try {
           recognition = new SpeechRecognition();
@@ -505,6 +560,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             if (finalAlternatives.length > 0 && !isEvaluated) {
               isEvaluated = true;
+              clearWatchdog();
               isListening = false;
               micBtn.classList.remove('listening');
               micBtn.classList.add('processing');
@@ -513,9 +569,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           };
 
           recognition.onerror = (event) => {
+            clearWatchdog();
             isListening = false;
             micBtn.classList.remove('listening', 'processing');
-            if (holdHint) holdHint.innerHTML = 'Удерживайте кнопку и говорите';
             console.warn('Speech recognition error:', event.error);
 
             if (isEvaluated) return;
@@ -532,7 +588,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             } else if (event.error === 'network') {
               errMsg = '🌐 Сетевой сервис распознавания Google недоступен.';
             } else if (event.error === 'no-speech') {
-              errMsg = 'Голос не обнаружен. Удерживайте кнопку пока произносите слово.';
+              errMsg = 'Голос не обнаружен. Удерживайте кнопку пока говорите.';
             } else if (event.error === 'audio-capture') {
               errMsg = 'Микрофон не найден или занят.';
             } else if (event.error === 'aborted') {
@@ -541,43 +597,36 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               errMsg = `Ошибка: ${event.error}. Попробуйте ещё раз.`;
             }
 
-            if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-size: 14px; line-height: 1.35;">${errMsg}</span>`;
-
-            if (transcriptBox) {
-              transcriptBox.style.display = 'block';
-              transcriptBox.innerHTML = `
-                <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Вы можете продолжить с выбором карточек:</div>
-                <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
-                  🎯 Ответить карточками
-                </button>
-              `;
-              const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
-              if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz());
-            }
+            handleNoSpeechHeard(errMsg);
           };
 
           recognition.onend = () => {
             isListening = false;
             if (!isCompleted && !isProcessing) {
               micBtn.classList.remove('listening', 'processing');
-              if (holdHint) holdHint.innerHTML = 'Удерживайте кнопку и говорите';
 
-              if (!isEvaluated && lastInterim) {
-                isEvaluated = true;
-                evaluateSpeech([lastInterim]);
+              if (!isEvaluated) {
+                if (lastInterim) {
+                  isEvaluated = true;
+                  clearWatchdog();
+                  evaluateSpeech([lastInterim]);
+                } else if (!isHolding) {
+                  handleNoSpeechHeard();
+                }
               }
             }
           };
 
           recognition.start();
         } catch (err) {
+          clearWatchdog();
           console.warn('SpeechRecognition start failed:', err);
-          if (holdHint) holdHint.innerHTML = '<span style="color: #ef4444;">Не удалось запустить микрофон</span>';
-          renderReverseQuiz();
+          handleNoSpeechHeard('Не удалось запустить микрофон');
         }
       }
 
       async function evaluateSpeech(alternatives) {
+        clearWatchdog();
         isProcessing = true;
         const isMatch = checkSpeechMatch(alternatives, currentWord.word);
 
@@ -633,15 +682,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (!isHolding) return;
         isHolding = false;
         micBtn.classList.remove('holding', 'listening');
-        if (isListening) {
-          micBtn.classList.add('processing');
-          if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-        }
+        micBtn.classList.add('processing');
+        if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
         if (e && e.cancelable) e.preventDefault();
+
+        // Hard watchdog timeout: if browser speech doesn't respond within 1.8s, fail-safe!
+        clearWatchdog();
+        evalTimeout = setTimeout(() => {
+          if (!isEvaluated && !isCompleted) {
+            if (lastInterim) {
+              isEvaluated = true;
+              evaluateSpeech([lastInterim]);
+            } else {
+              handleNoSpeechHeard();
+            }
+          }
+        }, 1800);
 
         setTimeout(() => {
           stopAndEvaluate();
-        }, 100);
+        }, 80);
       }
 
       micBtn.addEventListener('pointerdown', handleStart);
