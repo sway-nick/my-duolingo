@@ -1,4 +1,4 @@
-import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound } from '../../services/audioService.js?v=21.0';
+import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound } from '../../services/audioService.js?v=21.0';
 import { saveProgress, toggleFavoriteApi } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
@@ -15,6 +15,11 @@ function shuffleArray(arr) {
 function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const container = document.querySelector('#training');
   if (!container) return;
+
+  if (window.__activePairsTimerInterval) {
+    clearInterval(window.__activePairsTimerInterval);
+    window.__activePairsTimerInterval = null;
+  }
 
   if (currentWord && currentWord.word) {
     preloadWordAudio(currentWord.word);
@@ -89,8 +94,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isPairsMode
             ? `
-            <div class="pairs-header-box" style="margin: 4px 0 6px;">
-              <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 Найдите пары слов</h2>
+            <div class="pairs-header-box" style="margin: 4px 0 6px; display: flex; justify-content: space-between; align-items: center;">
+              <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 Найдите пары</h2>
+              <div class="pairs-timer-badge" id="pairs-timer-badge" title="Таймер раунда">
+                <span class="pairs-timer-icon">⏱️</span>
+                <span class="pairs-timer-val" id="pairs-timer-val">00:00</span>
+              </div>
             </div>
           `
             : isInputMode
@@ -131,7 +140,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     </section>
   `;
 
-  // Bind mode switcher pills with animated smooth sliding glider
   const pillBar = container.querySelector('#mode-switch-pills');
   const glider = container.querySelector('#mode-pill-glider');
   const modePills = container.querySelectorAll('.mode-pill-btn');
@@ -141,34 +149,22 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const offsetLeft = targetBtn.offsetLeft;
     const btnWidth = targetBtn.offsetWidth;
     if (btnWidth === 0) return;
-
-    if (!animate) {
-      glider.style.transition = 'none';
-    } else {
-      glider.style.transition = 'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
-    }
-
+    if (!animate) glider.style.transition = 'none';
+    else glider.style.transition = 'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
     glider.style.transform = `translateX(${offsetLeft}px)`;
     glider.style.width = `${btnWidth}px`;
   }
 
-  // Initial positioning
   const initialActive = container.querySelector('.mode-pill-btn.active');
   if (initialActive) {
-    requestAnimationFrame(() => {
-      positionGlider(initialActive, false);
-    });
-    setTimeout(() => {
-      positionGlider(initialActive, false);
-    }, 50);
+    requestAnimationFrame(() => positionGlider(initialActive, false));
+    setTimeout(() => positionGlider(initialActive, false), 50);
   }
 
-  // Handle responsive resizing / device orientation changes
-  const handleResize = () => {
+  window.addEventListener('resize', () => {
     const activeBtn = container.querySelector('.mode-pill-btn.active');
     if (activeBtn) positionGlider(activeBtn, false);
-  };
-  window.addEventListener('resize', handleResize, { passive: true });
+  }, { passive: true });
 
   modePills.forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -176,43 +172,28 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       e.stopPropagation();
       const selectedMode = btn.getAttribute('data-mode');
       if (selectedMode && selectedMode !== currentMethod) {
+        if (window.__activePairsTimerInterval) {
+          clearInterval(window.__activePairsTimerInterval);
+          window.__activePairsTimerInterval = null;
+        }
         modePills.forEach((p) => p.classList.remove('active'));
         btn.classList.add('active');
         positionGlider(btn, true);
-        setTimeout(() => {
-          onMethodChange(selectedMode);
-        }, 150);
+        setTimeout(() => onMethodChange(selectedMode), 150);
       }
     });
   });
 
-  // Bind audio speak trigger (tapping word or sound icon)
   const speakTrigger = container.querySelector('#speak-word-trigger');
   const soundBtn = container.querySelector('#speak-sound-btn');
-
-  const handleSpeak = () => {
-    speakWord(currentWord.word, currentWord.id);
-  };
-
-  if (speakTrigger && !isPairsMode) {
-    speakTrigger.addEventListener('click', handleSpeak);
-  }
-  if (soundBtn && !isPairsMode) {
-    soundBtn.addEventListener('click', handleSpeak);
-  }
+  const handleSpeak = () => speakWord(currentWord.word, currentWord.id);
+  if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
+  if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
   if (!isPairsMode && !isInputMode) {
-    // Auto-pronounce word on card appearance
-    setTimeout(() => {
-      try {
-        speakWord(currentWord.word, currentWord.id);
-      } catch (e) {
-        console.warn('Auto-speak failed:', e);
-      }
-    }, 100);
+    setTimeout(() => { try { speakWord(currentWord.word, currentWord.id); } catch (e) {} }, 100);
   }
 
-  // Bind favorite toggle
   const favBtn = container.querySelector('#fav-toggle-btn');
   if (favBtn) {
     favBtn.addEventListener('click', async () => {
@@ -227,252 +208,328 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const practiceArea = container.querySelector('#practice-area');
 
-  // --- RENDER ACCORDING TO CURRENT METHOD ---
-
   if (currentMethod === 'quiz') {
-    // Generate 6 multiple-choice options (1 correct + 5 incorrect)
-    const categoryFilteredWords =
-      selectedCategory === 'All' || selectedCategory === 'Все категории'
-        ? allWords
-        : allWords.filter(
-            (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)
-          );
-
+    const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
     const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
-    const otherTranslations = pool
-      .filter((w) => w.id !== currentWord.id)
-      .map((w) => w.translation);
+    const otherTranslations = pool.filter((w) => w.id !== currentWord.id).map((w) => w.translation);
     const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
     const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
 
-    function getQuizFontSize(text) {
-      if (!text) return '17.5px';
-      const len = text.length;
-      if (len > 55) return '12px';
-      if (len > 38) return '13.5px';
-      if (len > 24) return '15px';
-      return '17px';
-    }
-
-    practiceArea.innerHTML = `
-      <div class="quiz-grid">
-        ${choices
-          .map(
-            (choice) => `
-          <button type="button" class="quiz-option" data-choice="${choice}" style="font-size: ${getQuizFontSize(choice)};">
-            <span class="quiz-option-inner">${choice}</span>
-          </button>
-        `,
-          )
-          .join('')}
-      </div>
-    `;
-
+    practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>`).join('')}</div>`;
     practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
       btn.addEventListener('click', async (e) => {
-        const optionBtn = e.currentTarget || btn;
-        const selected = optionBtn.getAttribute('data-choice');
-        const isCorrect = String(selected).trim() === String(currentWord.translation).trim();
-
-        // Disable all options immediately to prevent double-clicks
-        practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
-          b.disabled = true;
-          if (b.getAttribute('data-choice') === currentWord.translation) {
-            b.classList.add('correct');
-          } else if (b === optionBtn && !isCorrect) {
-            b.classList.add('wrong');
-          }
-        });
-
-        if (isCorrect) {
-          playSuccessSound();
-        } else {
-          playErrorSound();
-        }
-
+        const optionBtn = e.currentTarget;
+        const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.translation).trim();
+        practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.translation) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
+        if (isCorrect) playSuccessSound(); else playErrorSound();
         await saveProgress(currentWord.id, isCorrect, 'quiz');
-
-        // Exact delay: 1s (1000ms) on correct, 4s (4000ms) on error (doubled for comfortable reading)
-        const delay = isCorrect ? 1000 : 4000;
-        setTimeout(() => {
-          onNext();
-        }, delay);
+        setTimeout(() => onNext(), isCorrect ? 1000 : 4000);
       });
     });
   } else if (currentMethod === 'pairs') {
-    // Pairs Matching Mode: strictly use words eligible for Pairs (quiz >= 5 or 'know' + favorites)
     const eligiblePool = activeWords && activeWords.length > 0 ? activeWords : allWords;
     const otherWords = eligiblePool.filter((w) => String(w.id) !== String(currentWord.id));
-    const countNeeded = Math.min(5, otherWords.length);
+    const countNeeded = Math.min(4, otherWords.length);
     const roundWords = [currentWord, ...shuffleArray(otherWords).slice(0, countNeeded)];
-    const leftItems = shuffleArray(
-      roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
-    );
-    const rightItems = shuffleArray(
-      roundWords.map((w) => ({ id: w.id, text: w.translation, word: w.word, side: 'right' }))
-    );
 
-    function getPairFontSize(text) {
-      if (!text) return '17.5px';
-      const len = text.length;
-      if (len > 35) return '13.5px';
-      if (len > 24) return '15px';
-      if (len > 16) return '16.5px';
-      return '17.5px';
+    function setupPairsRound() {
+      if (window.__activePairsTimerInterval) {
+        clearInterval(window.__activePairsTimerInterval);
+        window.__activePairsTimerInterval = null;
+      }
+
+      const totalPairs = roundWords.length;
+      const initialSeconds = totalPairs * 2; // 2 sec per pair (e.g. 5 pairs = 10 sec)
+
+      let timerStarted = false;
+      let timeRemaining = initialSeconds;
+      let isRoundFinished = false;
+      let selectedLeft = null;
+      let selectedRight = null;
+      let matchedCount = 0;
+      let errorsInRound = 0;
+
+      const timerBadge = container.querySelector('#pairs-timer-badge');
+      const timerVal = container.querySelector('#pairs-timer-val');
+
+      function formatTimerStr(sec) {
+        const s = Math.max(0, sec);
+        const mins = Math.floor(s / 60);
+        const remSecs = s % 60;
+        return `${String(mins).padStart(2, '0')}:${String(remSecs).padStart(2, '0')}`;
+      }
+
+      if (timerVal) {
+        timerVal.textContent = formatTimerStr(initialSeconds);
+      }
+      if (timerBadge) {
+        timerBadge.classList.remove('timer-active', 'timer-warning', 'timer-expired');
+      }
+
+      const leftItems = shuffleArray(
+        roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
+      );
+      const rightItems = shuffleArray(
+        roundWords.map((w) => ({ id: w.id, text: w.translation, word: w.word, side: 'right' }))
+      );
+
+      function getPairFontSize(text) {
+        if (!text) return '17.5px';
+        const len = text.length;
+        if (len > 35) return '13.5px';
+        if (len > 24) return '15px';
+        if (len > 16) return '16.5px';
+        return '17.5px';
+      }
+
+      practiceArea.innerHTML = `
+        <div class="pairs-grid-container" style="position: relative;">
+          <div class="pairs-grid">
+            <div class="pairs-col" id="pairs-left-col">
+              ${leftItems
+                .map(
+                  (item) => `
+                <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
+                  <span class="pairs-card-inner">${item.text}</span>
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+            <div class="pairs-col" id="pairs-right-col">
+              ${rightItems
+                .map(
+                  (item) => `
+                <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
+                  <span class="pairs-card-inner">${item.text}</span>
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+          </div>
+          <div id="pairs-timeout-container"></div>
+        </div>
+      `;
+
+      // Dynamically auto-fit font size so all text 100% fits inside card without clipping
+      requestAnimationFrame(() => {
+        practiceArea.querySelectorAll('.pairs-card').forEach((card) => {
+          const inner = card.querySelector('.pairs-card-inner');
+          if (!inner) return;
+
+          let size = parseFloat(window.getComputedStyle(card).fontSize) || 17.5;
+          const maxHeight = card.clientHeight - 8;
+          const maxWidth = card.clientWidth - 8;
+
+          while ((inner.scrollHeight > maxHeight || inner.scrollWidth > maxWidth) && size > 9.5) {
+            size -= 0.5;
+            card.style.fontSize = `${size}px`;
+          }
+        });
+      });
+
+      const leftBtns = practiceArea.querySelectorAll('.pairs-card[data-side="left"]');
+      const rightBtns = practiceArea.querySelectorAll('.pairs-card[data-side="right"]');
+
+      function startTimerOnFirstAction() {
+        if (timerStarted || isRoundFinished) return;
+        timerStarted = true;
+        if (timerBadge) {
+          timerBadge.classList.add('timer-active');
+        }
+        playStopwatchTickSound(false);
+
+        window.__activePairsTimerInterval = setInterval(() => {
+          if (isRoundFinished) {
+            clearInterval(window.__activePairsTimerInterval);
+            window.__activePairsTimerInterval = null;
+            return;
+          }
+
+          timeRemaining--;
+          if (timerVal) {
+            timerVal.textContent = formatTimerStr(timeRemaining);
+          }
+
+          if (timeRemaining <= 3 && timeRemaining > 0) {
+            if (timerBadge) {
+              timerBadge.classList.add('timer-warning');
+            }
+            playStopwatchTickSound(true);
+          } else if (timeRemaining > 3) {
+            playStopwatchTickSound(false);
+          }
+
+          if (timeRemaining <= 0) {
+            clearInterval(window.__activePairsTimerInterval);
+            window.__activePairsTimerInterval = null;
+            triggerTimeout();
+          }
+        }, 1000);
+      }
+
+      async function triggerTimeout() {
+        if (isRoundFinished) return;
+        isRoundFinished = true;
+
+        if (timerBadge) {
+          timerBadge.classList.remove('timer-active');
+          timerBadge.classList.add('timer-warning', 'timer-expired');
+        }
+
+        // 1. Play funny comic fart sound
+        playFartSound();
+
+        // 2. Highlight all remaining unmatched cards in red
+        practiceArea.querySelectorAll('.pairs-card:not(.matched)').forEach((card) => {
+          card.classList.remove('selected');
+          card.classList.add('timeout-failed');
+        });
+
+        // 3. Deduct 5 XP penalty
+        await saveProgress(currentWord.id, false, 'pairs', { isPairMistake: true });
+
+        // 4. Render Timeout Modal / Banner
+        const timeoutContainer = practiceArea.querySelector('#pairs-timeout-container');
+        if (timeoutContainer) {
+          timeoutContainer.innerHTML = `
+            <div class="pairs-timeout-overlay">
+              <div class="pairs-timeout-card">
+                <div class="timeout-emoji" style="font-size: 46px; margin-bottom: 6px; line-height: 1;">💨</div>
+                <h3 style="font-size: 20px; font-weight: 800; margin: 0 0 6px; color: #ef4444;">Время вышло!</h3>
+                <div style="font-size: 14px; font-weight: 700; color: #dc2626; margin-bottom: 16px; background: rgba(239, 68, 68, 0.1); padding: 4px 12px; border-radius: 8px; display: inline-block;">
+                  Штраф -5 XP
+                </div>
+                <button class="primary-button btn-green" id="retry-pairs-btn" style="min-height: 44px; font-size: 16px; font-weight: 700; width: 100%;">
+                  🔄 Попробовать снова
+                </button>
+              </div>
+            </div>
+          `;
+
+          const retryBtn = timeoutContainer.querySelector('#retry-pairs-btn');
+          if (retryBtn) {
+            retryBtn.addEventListener('click', () => {
+              setupPairsRound();
+            });
+          }
+        }
+      }
+
+      const checkPairMatch = async () => {
+        if (!selectedLeft || !selectedRight || isRoundFinished) return;
+
+        const leftId = selectedLeft.getAttribute('data-id');
+        const rightId = selectedRight.getAttribute('data-id');
+
+        const isMatch = String(leftId) === String(rightId);
+
+        const curLeft = selectedLeft;
+        const curRight = selectedRight;
+        selectedLeft = null;
+        selectedRight = null;
+
+        if (isMatch) {
+          if (matchedCount + 1 < totalPairs) {
+            playSuccessSound();
+          }
+          curLeft.classList.remove('selected');
+          curRight.classList.remove('selected');
+          curLeft.classList.add('matched');
+          curRight.classList.add('matched');
+
+          await saveProgress(leftId, true, 'pairs');
+          matchedCount++;
+
+          if (matchedCount === totalPairs) {
+            isRoundFinished = true;
+            if (window.__activePairsTimerInterval) {
+              clearInterval(window.__activePairsTimerInterval);
+              window.__activePairsTimerInterval = null;
+            }
+            if (timerBadge) {
+              timerBadge.classList.remove('timer-active', 'timer-warning');
+            }
+
+            // Authentic casino slot machine reel roll sound
+            playCasinoRollSound();
+
+            // Cascade 3D flip animation across horizontal axis (Dollar green / white)
+            const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
+            allCards.forEach((card, idx) => {
+              card.classList.remove('matched', 'selected', 'wrong');
+              setTimeout(() => {
+                card.classList.add('casino-flipping');
+              }, idx * 80);
+            });
+
+            // Play realistic metallic ringing coin drop sound and award XP simultaneously (only on error-free perfect round)
+            setTimeout(async () => {
+              if (errorsInRound === 0) {
+                playCoinDropSound();
+              }
+              await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
+            }, 1350);
+
+            // Advance to next round smoothly
+            setTimeout(() => {
+              onNext();
+            }, 2050);
+          }
+        } else {
+          errorsInRound++;
+          playErrorSound();
+          curLeft.classList.add('wrong');
+          curRight.classList.add('wrong');
+          // Deduct 1 XP for mistake
+          await saveProgress(leftId, false, 'pairs', { isPairMistake: true });
+
+          setTimeout(() => {
+            if (!isRoundFinished) {
+              curLeft.classList.remove('wrong', 'selected');
+              curRight.classList.remove('wrong', 'selected');
+            }
+          }, 1950);
+        }
+      };
+
+      leftBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (isRoundFinished || btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
+          startTimerOnFirstAction();
+
+          leftBtns.forEach((b) => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedLeft = btn;
+
+          const w = btn.getAttribute('data-word');
+          const id = btn.getAttribute('data-id');
+          speakWord(w, id);
+
+          if (selectedRight) {
+            checkPairMatch();
+          }
+        });
+      });
+
+      rightBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (isRoundFinished || btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
+          startTimerOnFirstAction();
+
+          rightBtns.forEach((b) => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedRight = btn;
+
+          if (selectedLeft) {
+            checkPairMatch();
+          }
+        });
+      });
     }
 
-    practiceArea.innerHTML = `
-      <div class="pairs-grid">
-        <div class="pairs-col" id="pairs-left-col">
-          ${leftItems
-            .map(
-              (item) => `
-            <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
-              <span class="pairs-card-inner">${item.text}</span>
-            </button>
-          `
-            )
-            .join('')}
-        </div>
-        <div class="pairs-col" id="pairs-right-col">
-          ${rightItems
-            .map(
-              (item) => `
-            <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
-              <span class="pairs-card-inner">${item.text}</span>
-            </button>
-          `
-            )
-            .join('')}
-        </div>
-      </div>
-    `;
-
-    // Dynamically auto-fit font size so all text 100% fits inside card without clipping
-    requestAnimationFrame(() => {
-      practiceArea.querySelectorAll('.pairs-card').forEach((card) => {
-        const inner = card.querySelector('.pairs-card-inner');
-        if (!inner) return;
-
-        let size = parseFloat(window.getComputedStyle(card).fontSize) || 17.5;
-        const maxHeight = card.clientHeight - 8;
-        const maxWidth = card.clientWidth - 8;
-
-        while ((inner.scrollHeight > maxHeight || inner.scrollWidth > maxWidth) && size > 9.5) {
-          size -= 0.5;
-          card.style.fontSize = `${size}px`;
-        }
-      });
-    });
-
-    let selectedLeft = null;
-    let selectedRight = null;
-    let matchedCount = 0;
-    let errorsInRound = 0;
-    const totalPairs = roundWords.length;
-
-    const leftBtns = practiceArea.querySelectorAll('.pairs-card[data-side="left"]');
-    const rightBtns = practiceArea.querySelectorAll('.pairs-card[data-side="right"]');
-
-    const checkPairMatch = async () => {
-      if (!selectedLeft || !selectedRight) return;
-
-      const leftId = selectedLeft.getAttribute('data-id');
-      const rightId = selectedRight.getAttribute('data-id');
-
-      const isMatch = String(leftId) === String(rightId);
-
-      const curLeft = selectedLeft;
-      const curRight = selectedRight;
-      selectedLeft = null;
-      selectedRight = null;
-
-      if (isMatch) {
-        if (matchedCount + 1 < totalPairs) {
-          playSuccessSound();
-        }
-        curLeft.classList.remove('selected');
-        curRight.classList.remove('selected');
-        curLeft.classList.add('matched');
-        curRight.classList.add('matched');
-
-        // No duplicate audio call here: English word is already spoken when tapped
-        await saveProgress(leftId, true, 'pairs');
-        matchedCount++;
-
-        if (matchedCount === totalPairs) {
-          // Authentic casino slot machine reel roll sound
-          playCasinoRollSound();
-
-          // Cascade 3D flip animation across horizontal axis (Dollar green / white)
-          const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
-          allCards.forEach((card, idx) => {
-            card.classList.remove('matched', 'selected', 'wrong');
-            setTimeout(() => {
-              card.classList.add('casino-flipping');
-            }, idx * 80);
-          });
-
-          // Play realistic metallic ringing coin drop sound and award XP simultaneously (only on error-free perfect round)
-          setTimeout(async () => {
-            if (errorsInRound === 0) {
-              playCoinDropSound();
-            }
-            await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
-          }, 1350);
-
-          // Advance to next round smoothly
-          setTimeout(() => {
-            onNext();
-          }, 2050);
-        }
-      } else {
-        errorsInRound++;
-        playErrorSound();
-        curLeft.classList.add('wrong');
-        curRight.classList.add('wrong');
-        // Deduct 1 XP for mistake
-        await saveProgress(leftId, false, 'pairs', { isPairMistake: true });
-
-        // 3x Increased delay on wrong mismatch: 1950ms
-        setTimeout(() => {
-          curLeft.classList.remove('wrong', 'selected');
-          curRight.classList.remove('wrong', 'selected');
-        }, 1950);
-      }
-    };
-
-    leftBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
-
-        leftBtns.forEach((b) => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedLeft = btn;
-
-        const w = btn.getAttribute('data-word');
-        const id = btn.getAttribute('data-id');
-        speakWord(w, id);
-
-        if (selectedRight) {
-          checkPairMatch();
-        }
-      });
-    });
-
-    rightBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
-
-        rightBtns.forEach((b) => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedRight = btn;
-
-        if (selectedLeft) {
-          checkPairMatch();
-        }
-      });
-    });
+    setupPairsRound();
   } else if (currentMethod === 'input') {
     // Test mode: Russian prompt on top -> user types in English
     practiceArea.innerHTML = `

@@ -498,6 +498,90 @@ function playCoinDropSound() {
   }
 }
 
+/**
+ * Plays a mechanical stopwatch ticking sound (Web Audio API)
+ */
+function playStopwatchTickSound(isUrgent = false) {
+  if (isAudioMuted()) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = isUrgent ? 'sawtooth' : 'triangle';
+    const freq = isUrgent ? 1100 : 820;
+    osc.frequency.setValueAtTime(freq, now);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.45, now + 0.035);
+
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(isUrgent ? 0.24 : 0.16, now + 0.003);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.035);
+  } catch (e) {
+    console.warn('Tick audio skipped:', e);
+  }
+}
+
+/**
+ * Plays a funny comic synthesized fart sound upon pairs timeout failure (Web Audio API)
+ */
+function playFartSound() {
+  if (isAudioMuted()) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // 1. Low frequency carrier oscillator
+    const osc = ctx.createOscillator();
+    const oscGain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(108, now);
+    osc.frequency.linearRampToValueAtTime(76, now + 0.18);
+    osc.frequency.linearRampToValueAtTime(88, now + 0.35);
+    osc.frequency.exponentialRampToValueAtTime(38, now + 0.68);
+
+    // 2. LFO for fluttering/rippling vibration effect
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.type = 'sawtooth';
+    lfo.frequency.setValueAtTime(32, now);
+    lfo.frequency.linearRampToValueAtTime(22, now + 0.68);
+    lfoGain.gain.setValueAtTime(42, now);
+    lfo.connect(osc.frequency);
+
+    // 3. Lowpass filter with juicy resonance
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(480, now);
+    filter.frequency.exponentialRampToValueAtTime(140, now + 0.68);
+    filter.Q.setValueAtTime(4.2, now);
+
+    oscGain.gain.setValueAtTime(0.01, now);
+    oscGain.gain.linearRampToValueAtTime(0.48, now + 0.04);
+    oscGain.gain.linearRampToValueAtTime(0.38, now + 0.35);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.68);
+
+    osc.connect(filter);
+    filter.connect(oscGain);
+    oscGain.connect(ctx.destination);
+
+    lfo.start(now);
+    osc.start(now);
+    lfo.stop(now + 0.68);
+    osc.stop(now + 0.68);
+  } catch (e) {
+    console.warn('Fart audio effect skipped:', e);
+  }
+}
+
 function resetAudioCounter() {
   currentWordKey = null;
   clickCount = 0;
@@ -515,6 +599,8 @@ export {
   playCasinoRollSound,
   playCoinDropSound,
   playFanfareSound,
+  playStopwatchTickSound,
+  playFartSound,
   setSavedVoiceGender,
   getSavedVoiceGender,
   setSavedVoiceAccent,
