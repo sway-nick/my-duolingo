@@ -227,7 +227,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else if (currentMethod === 'pairs') {
-    const TARGET_PAIRS_COUNT = 5;
+    const TARGET_PAIRS_COUNT = 6;
     const roundWords = [currentWord];
     const usedIds = new Set([String(currentWord.id)]);
 
