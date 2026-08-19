@@ -455,10 +455,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
       }
 
-      // Always try native Web Speech API first (fast, 0 tokens).
-      // On error/unavailable → fall back to MediaRecorder + Gemini AI (mobile-safe).
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const nativeSpeechAvailable = Boolean(SpeechRecognition);
+
+      // Detect mobile strictly by User Agent only (no touch/screen heuristics that misfire on laptops).
+      // iOS and Android: native WebSpeech is unstable → always use MediaRecorder + Gemini AI.
+      // Desktop Chrome/Edge/Firefox: native WebSpeech is fast and reliable → use it, fallback to Gemini on error.
+      function isMobileUA() {
+        const ua = navigator.userAgent || '';
+        return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      }
+      const preferNativeSpeech = !isMobileUA() && Boolean(SpeechRecognition);
 
       let mediaStream = null;
       let mediaRecorder = null;
@@ -470,14 +476,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       let autoStopTimer = null;
       let safetyWatchdog = null;
 
-      const mimeCandidates = [
-        'audio/webm;codecs=opus',
-        'audio/webm',
-        'audio/mp4',
-        'audio/aac',
-        'audio/ogg',
-        'audio/wav',
-      ];
+      // iOS Safari only supports audio/mp4 — put it first for iOS, webm first for others.
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mimeCandidates = isIOS
+        ? ['audio/mp4', 'audio/aac', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg', 'audio/wav']
+        : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac', 'audio/ogg', 'audio/wav'];
       let supportedMimeType = '';
       if (typeof MediaRecorder !== 'undefined') {
         supportedMimeType = mimeCandidates.find((m) => MediaRecorder.isTypeSupported(m)) || '';
@@ -628,7 +631,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           nativeRecognition.onend = () => {
             clearAllTimers();
-            if (isListening && !isCompleted && !isProcessing) {
+            // Only trigger no-speech if we never got a result AND never kicked off a fallback
+            if (!isEvaluated && !isCompleted && !isProcessing) {
               isListening = false;
               handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
             }
@@ -743,9 +747,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       function startSpeechSession() {
-        // Native Web Speech API: fast (0 tokens), works on desktop Chrome/Edge.
-        // On error (network, no-speech, mobile hang) → auto-fallback to Gemini AI.
-        if (nativeSpeechAvailable) {
+        // Desktop Chrome/Edge → native Web Speech API (0 tokens, instant).
+        // iOS / Android → MediaRecorder + Gemini AI (reliable cross-platform).
+        if (preferNativeSpeech) {
           startDesktopNativeSpeech();
         } else {
           startMobileMediaRecorder();
