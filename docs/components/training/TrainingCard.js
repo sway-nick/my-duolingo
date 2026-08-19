@@ -406,9 +406,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             🎙️
           </button>
           <div class="speech-hold-hint" id="speech-hold-hint">Удерживайте кнопку и говорите</div>
-          <div class="speech-status-msg" id="speech-status-msg">
-            ${quizStage === 3 ? 'Зажмите микрофон и прочитайте слово' : 'Зажмите микрофон и скажите слово по-английски'}
-          </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none;"></div>
           <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
             Не могу говорить сейчас
@@ -418,7 +415,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       const micBtn = practiceArea.querySelector('#speech-mic-btn');
       const holdHint = practiceArea.querySelector('#speech-hold-hint');
-      const statusMsg = practiceArea.querySelector('#speech-status-msg');
       const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
       const cantSpeakBtn = practiceArea.querySelector('#speech-cant-speak-btn');
 
@@ -440,7 +436,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
       if (!SpeechRecognition) {
-        statusMsg.innerHTML = 'Распознавание речи не поддерживается в этом браузере.<br>Переключаем на тест...';
+        if (holdHint) holdHint.innerHTML = 'Распознавание речи не поддерживается в этом браузере.<br>Переключаем на тест...';
         setTimeout(() => renderReverseQuiz(), 1200);
         return;
       }
@@ -450,6 +446,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       let isEvaluated = false;
 
       function stopAndEvaluate() {
+        if (micBtn) {
+          micBtn.classList.remove('listening', 'holding');
+        }
         if (recognition && isListening) {
           try {
             recognition.stop();
@@ -470,11 +469,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           recognition.maxAlternatives = 5;
 
           recognition.onstart = () => {
+            if (!isHolding) {
+              stopAndEvaluate();
+              return;
+            }
             isListening = true;
             micBtn.classList.remove('success', 'processing');
             micBtn.classList.add('listening');
-            if (holdHint) holdHint.innerHTML = '🔴 Отпустите кнопку, когда скажете';
-            statusMsg.innerHTML = '<span style="color: #ef4444; font-weight: 700;">Слушаю... Отпустите, когда скажете!</span>';
+            if (holdHint) holdHint.innerHTML = '<span style="color: #ef4444; font-weight: 700;">🔴 Слушаю... Отпустите, когда скажете!</span>';
           };
 
           recognition.onresult = async (event) => {
@@ -539,7 +541,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               errMsg = `Ошибка: ${event.error}. Попробуйте ещё раз.`;
             }
 
-            statusMsg.innerHTML = `<span style="color: #ef4444; font-size: 14px; line-height: 1.35;">${errMsg}</span>`;
+            if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-size: 14px; line-height: 1.35;">${errMsg}</span>`;
 
             if (transcriptBox) {
               transcriptBox.style.display = 'block';
@@ -570,7 +572,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           recognition.start();
         } catch (err) {
           console.warn('SpeechRecognition start failed:', err);
-          statusMsg.innerHTML = '<span style="color: #ef4444;">Не удалось запустить микрофон</span>';
+          if (holdHint) holdHint.innerHTML = '<span style="color: #ef4444;">Не удалось запустить микрофон</span>';
           renderReverseQuiz();
         }
       }
@@ -585,8 +587,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.classList.remove('listening', 'processing');
           micBtn.classList.add('success');
           micBtn.innerHTML = '✓';
-          if (holdHint) holdHint.style.display = 'none';
-          statusMsg.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">✓ Отлично! Произношение верное!</span>`;
+          if (holdHint) holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">✓ Отлично! Произношение верное!</span>`;
 
           await saveProgress(currentWord.id, true, 'quiz');
           setTimeout(() => {
@@ -596,23 +597,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speechAttempts++;
           playErrorSound();
           micBtn.classList.remove('listening', 'processing');
-          if (holdHint) holdHint.innerHTML = 'Удерживайте кнопку и говорите';
 
           if (speechAttempts === 1) {
-            statusMsg.innerHTML = `Почти! Попробуйте ещё раз 🎙️`;
+            if (holdHint) holdHint.innerHTML = `Почти! Попробуйте ещё раз 🎙️`;
             isProcessing = false;
           } else if (speechAttempts === 2) {
-            statusMsg.innerHTML = `Послушайте эталон и повторите 🔊`;
+            if (holdHint) holdHint.innerHTML = `Послушайте эталон и повторите 🔊`;
             speakWord(currentWord.word, currentWord.id);
             setTimeout(() => {
-              statusMsg.innerHTML = `Теперь зажмите кнопку и повторите 🎙️`;
+              if (holdHint) holdHint.innerHTML = `Теперь зажмите кнопку и повторите 🎙️`;
               isProcessing = false;
             }, 1400);
           } else {
             isCompleted = true;
             micBtn.disabled = true;
-            if (holdHint) holdHint.style.display = 'none';
-            statusMsg.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
+            if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
             speakWord(currentWord.word, currentWord.id);
             await saveProgress(currentWord.id, false, 'quiz');
             setTimeout(() => {
@@ -633,12 +632,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       function handleRelease(e) {
         if (!isHolding) return;
         isHolding = false;
-        micBtn.classList.remove('holding');
+        micBtn.classList.remove('holding', 'listening');
+        if (isListening) {
+          micBtn.classList.add('processing');
+          if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
+        }
         if (e && e.cancelable) e.preventDefault();
 
         setTimeout(() => {
           stopAndEvaluate();
-        }, 220);
+        }, 100);
       }
 
       micBtn.addEventListener('pointerdown', handleStart);
