@@ -269,9 +269,44 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const leftItems = shuffleArray(
         roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
       );
-      const rightItems = shuffleArray(
-        roundWords.map((w) => ({ id: w.id, text: w.translation, word: w.word, side: 'right' }))
-      );
+
+      // Derangement Shuffle: Ensure NO word is directly opposite its translation in the same row
+      function shuffleDerangement(items, leftReference) {
+        if (items.length <= 1) return [...items];
+        let shuffled = shuffleArray(items);
+        for (let attempt = 0; attempt < 80; attempt++) {
+          let hasDirectOpposite = false;
+          for (let i = 0; i < shuffled.length; i++) {
+            if (String(shuffled[i].id) === String(leftReference[i].id)) {
+              hasDirectOpposite = true;
+              break;
+            }
+          }
+          if (!hasDirectOpposite) {
+            return shuffled;
+          }
+          shuffled = shuffleArray(items);
+        }
+
+        // Guaranteed mathematical fallback: shift by 1 relative to left column
+        const mapById = {};
+        items.forEach((item) => {
+          mapById[String(item.id)] = item;
+        });
+        return leftReference.map((leftItem, idx) => {
+          const nextIdx = (idx + 1) % leftReference.length;
+          const targetId = String(leftReference[nextIdx].id);
+          return mapById[targetId] || items[idx];
+        });
+      }
+
+      const rawRightItems = roundWords.map((w) => ({
+        id: w.id,
+        text: w.translation,
+        word: w.word,
+        side: 'right',
+      }));
+      const rightItems = shuffleDerangement(rawRightItems, leftItems);
 
       function getPairFontSize(text) {
         if (!text) return '17.5px';
@@ -378,7 +413,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           timerBadge.classList.add('timer-warning', 'timer-expired');
         }
 
-        // 1. Play funny comic fart sound
+        // 1. Play comic fart sound
         playFartSound();
 
         // 2. Highlight all remaining unmatched cards in red
@@ -390,18 +425,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         // 3. Deduct 5 XP penalty
         await saveProgress(currentWord.id, false, 'pairs', { isPairMistake: true });
 
-        // 4. Render Timeout Modal / Banner
+        // 4. Render Timeout Modal / Banner (clean Stopwatch icon without fart emoji)
         const timeoutContainer = practiceArea.querySelector('#pairs-timeout-container');
         if (timeoutContainer) {
           timeoutContainer.innerHTML = `
             <div class="pairs-timeout-overlay">
               <div class="pairs-timeout-card">
-                <div class="timeout-emoji" style="font-size: 46px; margin-bottom: 6px; line-height: 1;">💨</div>
-                <h3 style="font-size: 20px; font-weight: 800; margin: 0 0 6px; color: #ef4444;">Время вышло!</h3>
-                <div style="font-size: 14px; font-weight: 700; color: #dc2626; margin-bottom: 16px; background: rgba(239, 68, 68, 0.1); padding: 4px 12px; border-radius: 8px; display: inline-block;">
+                <div style="font-size: 42px; margin-bottom: 8px; line-height: 1;">⏱️</div>
+                <h3 style="font-size: 22px; font-weight: 800; margin: 0 0 8px; color: #ef4444;">Время вышло!</h3>
+                <div style="font-size: 14px; font-weight: 700; color: #dc2626; margin-bottom: 18px; background: rgba(239, 68, 68, 0.1); padding: 5px 14px; border-radius: 8px; display: inline-block;">
                   Штраф -5 XP
                 </div>
-                <button class="primary-button btn-green" id="retry-pairs-btn" style="min-height: 44px; font-size: 16px; font-weight: 700; width: 100%;">
+                <button class="primary-button btn-green" id="retry-pairs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; width: 100%;">
                   🔄 Попробовать снова
                 </button>
               </div>
