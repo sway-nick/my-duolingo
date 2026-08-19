@@ -3095,7 +3095,7 @@ body {
 
 .podium-card {
   position: relative;
-  background: #ffffff;
+  background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 8px 6px 6px;
@@ -3107,49 +3107,55 @@ body {
 }
 
 .dark-theme .podium-card {
-  background: #1e293b;
+  background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, #1e293b 100%);
   border-color: #334155;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+.podium-card.rank-diamond,
+.podium-card.rank-gold,
+.podium-card.rank-silver,
+.podium-card.rank-bronze {
+  background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+}
+
+.dark-theme .podium-card.rank-diamond,
+.dark-theme .podium-card.rank-gold,
+.dark-theme .podium-card.rank-silver,
+.dark-theme .podium-card.rank-bronze {
+  background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, #1e293b 100%);
+}
+
 .podium-card.rank-diamond {
   border-color: #38bdf8;
-  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
 }
 
 .dark-theme .podium-card.rank-diamond {
   border-color: #0284c7;
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.15) 0%, #1e293b 100%);
 }
 
 .podium-card.rank-gold {
   border-color: #fbbf24;
-  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
 }
 
 .dark-theme .podium-card.rank-gold {
   border-color: #d97706;
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.15) 0%, #1e293b 100%);
 }
 
 .podium-card.rank-silver {
   border-color: #94a3b8;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
 .dark-theme .podium-card.rank-silver {
   border-color: #64748b;
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.15) 0%, #1e293b 100%);
 }
 
 .podium-card.rank-bronze {
   border-color: #d97706;
-  background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
 }
 
 .dark-theme .podium-card.rank-bronze {
   border-color: #b45309;
-  background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, #1e293b 100%);
 }
 
 .podium-card.is-me {
@@ -3171,6 +3177,20 @@ body {
   height: 38px;
   border-radius: 50%;
   margin-bottom: 4px;
+}
+
+.podium-avatar-wrapper.has-wreath {
+  overflow: visible;
+}
+
+.diamond-laurel-wreath {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 54px;
+  height: 54px;
+  pointer-events: none;
+  z-index: 3;
 }
 
 .podium-avatar-img {
