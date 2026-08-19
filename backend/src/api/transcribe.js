@@ -41,57 +41,71 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  try {
-    var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
+  var modelsToTry = [
+    'gemini-2.0-flash',
+    'gemini-1.5-flash-latest',
+    'gemini-2.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-1.5-pro'
+  ];
 
-    var payload = {
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            {
-              inlineData: {
-                mimeType: mimeType || 'audio/webm',
-                data: audioBase64
-              }
-            },
-            {
-              text: 'The user was asked to pronounce the English word: "' + expectedWord + '". Transcribe strictly what the user pronounced in English letters (lowercase). If they pronounced the word correctly or with an accent, return the English word. Return ONLY the single word or short phrase, without punctuation, quotes, markdown or explanations.'
+  var lastError = '';
+  var payload = {
+    contents: [
+      {
+        role: 'user',
+        parts: [
+          {
+            inlineData: {
+              mimeType: mimeType || 'audio/webm',
+              data: audioBase64
             }
-          ]
-        }
-      ],
-      generationConfig: {
-        temperature: 0.1,
-        maxOutputTokens: 20
+          },
+          {
+            text: 'The user was asked to pronounce the English word: "' + expectedWord + '". Transcribe strictly what the user pronounced in English letters (lowercase). If they pronounced the word correctly or with an accent, return the English word. Return ONLY the single word or short phrase, without punctuation, quotes, markdown or explanations.'
+          }
+        ]
       }
-    };
-
-    var options = {
-      method: 'POST',
-      contentType: 'application/json',
-      payload: JSON.stringify(payload),
-      muteHttpExceptions: true
-    };
-
-    var response = UrlFetchApp.fetch(url, options);
-    var responseCode = response.getResponseCode();
-    var responseText = response.getContentText();
-
-    if (responseCode !== 200) {
-      return errorResponse('Gemini API error (' + responseCode + '): ' + responseText, responseCode);
+    ],
+    generationConfig: {
+      temperature: 0.1,
+      maxOutputTokens: 20
     }
+  };
 
-    var resJson = JSON.parse(responseText);
-    var rawTranscribed = resJson && resJson.candidates && resJson.candidates[0] && resJson.candidates[0].content && resJson.candidates[0].content.parts && resJson.candidates[0].content.parts[0] ? resJson.candidates[0].content.parts[0].text : '';
-    var cleanedText = rawTranscribed.trim().toLowerCase().replace(/[.,!?:;"'«»`]/g, '');
+  var options = {
+    method: 'POST',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  };
 
-    return successResponse({
-      text: cleanedText,
-      raw: rawTranscribed,
-      expectedWord: expectedWord
-    });
-  } catch (err) {
-    return errorResponse('Transcription failed: ' + err.message, 500);
+  for (var m = 0; m < modelsToTry.length; m++) {
+    var modelName = modelsToTry[m];
+    try {
+      var url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(modelName) + ':generateContent?key=' + encodeURIComponent(apiKey);
+      var response = UrlFetchApp.fetch(url, options);
+      var responseCode = response.getResponseCode();
+      var responseText = response.getContentText();
+
+      if (responseCode === 200) {
+        var resJson = JSON.parse(responseText);
+        var rawTranscribed = resJson && resJson.candidates && resJson.candidates[0] && resJson.candidates[0].content && resJson.candidates[0].content.parts && resJson.candidates[0].content.parts[0] ? resJson.candidates[0].content.parts[0].text : '';
+        var cleanedText = rawTranscribed.trim().toLowerCase().replace(/[.,!?:;"'«»`]/g, '');
+
+        return successResponse({
+          text: cleanedText,
+          raw: rawTranscribed,
+          expectedWord: expectedWord,
+          modelUsed: modelName
+        });
+      } else {
+        lastError = 'Model ' + modelName + ' error (' + responseCode + '): ' + responseText;
+      }
+    } catch (err) {
+      lastError = 'Model ' + modelName + ' exception: ' + err.message;
+    }
   }
+
+  return errorResponse('Gemini transcription failed across all models: ' + lastError, 500);
 }
