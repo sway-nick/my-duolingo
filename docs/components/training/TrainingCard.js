@@ -480,16 +480,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
 
         speechAttempts++;
-        playErrorSound();
 
         if (speechAttempts === 1) {
-          if (holdHint) holdHint.innerHTML = customMsg || 'Не удалось расслышать. Нажмите 🎙️ и повторите';
-        } else if (speechAttempts === 2) {
-          if (holdHint) holdHint.innerHTML = 'Послушайте эталон и повторите 🔊';
           speakWord(currentWord.word, currentWord.id);
-          setTimeout(() => {
-            if (holdHint) holdHint.innerHTML = 'Теперь нажмите 🎙️ и повторите';
-          }, 1400);
+          if (holdHint) holdHint.innerHTML = customMsg || 'Послушайте слово 🔊 и нажмите 🎙️ для повтора';
+        } else if (speechAttempts === 2) {
+          speakWord(currentWord.word, currentWord.id);
+          if (holdHint) holdHint.innerHTML = 'Послушайте эталон 🔊 и повторите 🎙️';
         } else {
           isCompleted = true;
           if (micBtn) micBtn.disabled = true;
@@ -669,20 +666,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }, 1400);
         } else {
           speechAttempts++;
-          playErrorSound();
           micBtn.classList.remove('listening', 'processing');
           micBtn.innerHTML = '🎙️';
 
           if (speechAttempts === 1) {
-            if (holdHint) holdHint.innerHTML = `Почти! Нажмите 🎙️ и попробуйте ещё раз`;
-            isProcessing = false;
-          } else if (speechAttempts === 2) {
-            if (holdHint) holdHint.innerHTML = `Послушайте эталон и повторите 🔊`;
             speakWord(currentWord.word, currentWord.id);
+            if (holdHint) holdHint.innerHTML = `Послушайте эталон 🔊 и попробуйте ещё раз`;
             setTimeout(() => {
-              if (holdHint) holdHint.innerHTML = `Теперь нажмите 🎙️ и повторите`;
               isProcessing = false;
-            }, 1400);
+            }, 1200);
+          } else if (speechAttempts === 2) {
+            speakWord(currentWord.word, currentWord.id);
+            if (holdHint) holdHint.innerHTML = `Послушайте эталон 🔊 и повторите 🎙️`;
+            setTimeout(() => {
+              isProcessing = false;
+            }, 1200);
           } else {
             isCompleted = true;
             micBtn.disabled = true;
