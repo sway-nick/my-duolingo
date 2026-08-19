@@ -63,6 +63,9 @@ const ROUTES = {
       get: syncGet,
       post: syncPost,
     },
+    transcribe: {
+      post: transcribePost,
+    },
   },
 };
 

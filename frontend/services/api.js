@@ -1383,6 +1383,44 @@ function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
   return sorted[idx];
 }
 
+async function transcribeAudio(audioBlob, mimeType, expectedWord) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const base64Data = (reader.result || '').split(',')[1];
+        if (!base64Data) {
+          throw new Error('Empty audio payload');
+        }
+
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: 'transcribe',
+            audioBase64: base64Data,
+            mimeType: mimeType || 'audio/webm',
+            expectedWord: expectedWord || '',
+          }),
+        });
+
+        const json = await response.json();
+        if (json && json.success && json.data) {
+          resolve(json.data);
+        } else {
+          reject(new Error(json?.error || 'Transcription failed'));
+        }
+      } catch (err) {
+        reject(err);
+      }
+    };
+    reader.onerror = (e) => reject(new Error('Failed to read audio blob'));
+    reader.readAsDataURL(audioBlob);
+  });
+}
+
 export {
   getHealth,
   getWords,
@@ -1416,4 +1454,5 @@ export {
   getIsoWeekKey,
   fetchUserDataFromCloud,
   pushUserDataToCloud,
+  transcribeAudio,
 };
