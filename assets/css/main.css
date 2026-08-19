@@ -1823,61 +1823,76 @@ body {
   margin-top: 16px;
 }
 
-/* Golden themed Card with 45-degree Silver Sheen for Word of the Day */
+/* Gold VIP Bank Card styling for Word of the Day */
 .wotd-card .flashcard-face {
   background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(226, 232, 240, 0.25) 42%, rgba(255, 255, 255, 0.75) 50%, rgba(226, 232, 240, 0.25) 58%, rgba(255, 255, 255, 0.45) 100%),
-    linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
-  border: 2px solid #f59e0b;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.16), 0 2px 6px rgba(245, 158, 11, 0.08);
+    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 18%, rgba(255, 255, 255, 0) 32%),
+    linear-gradient(135deg, #ca8a04 0%, #facc15 28%, #fef08a 48%, #eab308 68%, #a16207 100%);
+  border: 1.5px solid #fef08a;
+  border-top-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(161, 98, 7, 0.35), 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.7);
 }
 
 .dark-theme .wotd-card .flashcard-face {
   background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0%, rgba(203, 213, 225, 0.12) 38%, rgba(255, 255, 255, 0.26) 50%, rgba(203, 213, 225, 0.12) 62%, rgba(255, 255, 255, 0.03) 100%),
-    linear-gradient(145deg, #2d2314 0%, #1f180c 100%);
-  border-color: #d97706;
-  box-shadow: 0 8px 28px rgba(217, 119, 6, 0.25), 0 2px 8px rgba(0, 0, 0, 0.5);
+    linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 16%, rgba(255, 255, 255, 0) 30%),
+    linear-gradient(135deg, #713f12 0%, #a16207 24%, #ca8a04 46%, #eab308 64%, #854d0e 82%, #451a03 100%);
+  border: 1.5px solid rgba(253, 224, 71, 0.7);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 4px 14px rgba(202, 138, 4, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
 .wotd-card .flashcard-face.flashcard-back {
   background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(226, 232, 240, 0.25) 42%, rgba(255, 255, 255, 0.75) 50%, rgba(226, 232, 240, 0.25) 58%, rgba(255, 255, 255, 0.45) 100%),
-    linear-gradient(145deg, #fef9c3 0%, #fef08a 100%);
+    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 18%, rgba(255, 255, 255, 0) 32%),
+    linear-gradient(135deg, #ca8a04 0%, #facc15 28%, #fef08a 48%, #eab308 68%, #a16207 100%);
 }
 
 .dark-theme .wotd-card .flashcard-face.flashcard-back {
   background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0%, rgba(203, 213, 225, 0.12) 38%, rgba(255, 255, 255, 0.26) 50%, rgba(203, 213, 225, 0.12) 62%, rgba(255, 255, 255, 0.03) 100%),
-    linear-gradient(145deg, #2b2112 0%, #1e160a 100%);
+    linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 16%, rgba(255, 255, 255, 0) 30%),
+    linear-gradient(135deg, #713f12 0%, #a16207 24%, #ca8a04 46%, #eab308 64%, #854d0e 82%, #451a03 100%);
+}
+
+.wotd-card .flashcard-word {
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  font-weight: 800;
+}
+
+.wotd-card .flashcard-transcription {
+  color: #fef08a;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .wotd-card .flashcard-translation {
-  color: #1e293b;
-  font-weight: 700;
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+  font-weight: 800;
 }
 
-.dark-theme .wotd-card .flashcard-translation {
-  color: #ffffff !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+.wotd-card .flashcard-flip-prompt {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .wotd-card .flashcard-sound-btn,
 .wotd-card .flashcard-fav-btn {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
 }
 
 .dark-theme .wotd-card .flashcard-sound-btn,
 .dark-theme .wotd-card .flashcard-fav-btn {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(253, 224, 71, 0.5);
 }
 
 .wotd-card-badge {
   font-size: 24px;
   font-weight: 800;
-  color: #b45309;
+  color: #ffffff;
   letter-spacing: -0.3px;
   display: inline-flex;
   align-items: center;
@@ -1887,11 +1902,12 @@ body {
   background: transparent;
   border: none;
   padding: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 12px rgba(254, 240, 138, 0.4);
 }
 
 .dark-theme .wotd-card-badge {
-  color: #fbbf24;
-  text-shadow: 0 2px 10px rgba(251, 191, 36, 0.35);
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 14px rgba(253, 224, 71, 0.6);
 }
 
 .section-title-row {
