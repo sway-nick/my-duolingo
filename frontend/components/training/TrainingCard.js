@@ -12,6 +12,32 @@ function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
+/**
+ * Waits until speechSynthesis has finished speaking, then calls onNext.
+ * Prevents the card from flipping while the word is still being pronounced.
+ * @param {Function} onNext
+ * @param {number} minDelay - minimum wait in ms even if speech is done
+ * @param {number} maxWait - maximum wait in ms before forcing transition
+ */
+function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
+  const start = Date.now();
+
+  function check() {
+    const elapsed = Date.now() - start;
+    const stillSpeaking = window.speechSynthesis && window.speechSynthesis.speaking;
+
+    if (!stillSpeaking && elapsed >= minDelay) {
+      onNext();
+    } else if (elapsed >= maxWait) {
+      onNext(); // force transition after maxWait
+    } else {
+      setTimeout(check, 80);
+    }
+  }
+
+  setTimeout(check, minDelay);
+}
+
 function calculateLevenshtein(a, b) {
   if (!a || !b) return (a || b || '').length;
   const matrix = [];
@@ -347,7 +373,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
 
           await saveProgress(currentWord.id, isCorrect, 'quiz');
-          setTimeout(() => onNext(), isCorrect ? 1000 : 4000);
+          if (isCorrect) {
+            onNextAfterSpeech(onNext, 800, 3500);
+          } else {
+            setTimeout(() => onNext(), 4000);
+          }
         });
       });
     }
@@ -368,7 +398,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speakWord(currentWord.word, currentWord.id);
           if (isCorrect) playSuccessSound(); else playErrorSound();
           await saveProgress(currentWord.id, isCorrect, 'quiz');
-          setTimeout(() => onNext(), isCorrect ? 1200 : 4000);
+          if (isCorrect) {
+            onNextAfterSpeech(onNext, 800, 3500);
+          } else {
+            setTimeout(() => onNext(), 4000);
+          }
         });
       });
     }
@@ -920,9 +954,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (holdHint) holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">✓ Отлично! Произношение верное!</span>`;
 
           await saveProgress(currentWord.id, true, 'quiz');
-          setTimeout(() => {
-            onNext();
-          }, 1400);
+          onNextAfterSpeech(onNext, 1000, 4000);
         } else {
           speechAttempts++;
           micBtn.classList.remove('listening', 'processing');
