@@ -1823,25 +1823,43 @@ body {
   margin-top: 16px;
 }
 
-/* Golden themed Card for Word of the Day */
+/* Golden themed Card with 45-degree Silver Sheen for Word of the Day */
 .wotd-card .flashcard-face {
-  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
+  background: 
+    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(226, 232, 240, 0.25) 42%, rgba(255, 255, 255, 0.75) 50%, rgba(226, 232, 240, 0.25) 58%, rgba(255, 255, 255, 0.45) 100%),
+    linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
   border: 2px solid #f59e0b;
   box-shadow: 0 8px 24px rgba(245, 158, 11, 0.16), 0 2px 6px rgba(245, 158, 11, 0.08);
 }
 
 .dark-theme .wotd-card .flashcard-face {
-  background: linear-gradient(145deg, #2d2314 0%, #1f180c 100%);
+  background: 
+    linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0%, rgba(203, 213, 225, 0.12) 38%, rgba(255, 255, 255, 0.26) 50%, rgba(203, 213, 225, 0.12) 62%, rgba(255, 255, 255, 0.03) 100%),
+    linear-gradient(145deg, #2d2314 0%, #1f180c 100%);
   border-color: #d97706;
   box-shadow: 0 8px 28px rgba(217, 119, 6, 0.25), 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .wotd-card .flashcard-face.flashcard-back {
-  background: linear-gradient(145deg, #fef9c3 0%, #fef08a 100%);
+  background: 
+    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(226, 232, 240, 0.25) 42%, rgba(255, 255, 255, 0.75) 50%, rgba(226, 232, 240, 0.25) 58%, rgba(255, 255, 255, 0.45) 100%),
+    linear-gradient(145deg, #fef9c3 0%, #fef08a 100%);
 }
 
 .dark-theme .wotd-card .flashcard-face.flashcard-back {
-  background: linear-gradient(145deg, #2b2112 0%, #1e160a 100%);
+  background: 
+    linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0%, rgba(203, 213, 225, 0.12) 38%, rgba(255, 255, 255, 0.26) 50%, rgba(203, 213, 225, 0.12) 62%, rgba(255, 255, 255, 0.03) 100%),
+    linear-gradient(145deg, #2b2112 0%, #1e160a 100%);
+}
+
+.wotd-card .flashcard-translation {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.dark-theme .wotd-card .flashcard-translation {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .wotd-card .flashcard-sound-btn,
