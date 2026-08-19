@@ -178,7 +178,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             : isInputMode
             ? `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              ✍️ Осталось в Тесте: <strong>${formatWordCount(activeWords.length)}</strong>
+              ✍️ Осталось слов: <strong>${formatWordCount(activeWords.length)}</strong>
             </div>
             <div class="word-header-row">
               <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
@@ -192,17 +192,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              ${
-                quizStage === 0
-                  ? `🎯 Квиз: шаг 1 из 5 • ${formatWordCount(activeWords.length)}`
-                  : quizStage === 1
-                  ? `🎧 На слух: шаг 2 из 5 • ${formatWordCount(activeWords.length)}`
-                  : quizStage === 2
-                  ? `🔄 Обратный Квиз: шаг 3 из 5 • ${formatWordCount(activeWords.length)}`
-                  : quizStage === 3
-                  ? `🎙️ Прочитайте вслух: шаг 4 из 5`
-                  : `🎙️ Вспомните и скажите: шаг 5 из 5`
-              }
+              🎯 Осталось слов: <strong>${formatWordCount(activeWords.length)}</strong>
             </div>
             <div class="word-header-row">
               ${
@@ -231,23 +221,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   : quizStage === 3
                   ? `
                 <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
-                <div style="text-align: center;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                   <h2 class="training-word clickable-word-box" id="speak-word-trigger" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
                     <span class="training-word-text">${currentWord.word}</span>
                   </h2>
-                  <div style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 3px;">${currentWord.translation}</div>
+                  <div style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">${currentWord.translation}</div>
                 </div>
               `
                   : `
                 <div style="width: 36px;"></div>
-                <div style="text-align: center;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                   <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
                     ${currentWord.translation}
                   </h2>
-                  <button type="button" class="speech-hint-btn" id="speech-hint-btn" style="margin-top: 4px; font-size: 12px; font-weight: 700; background: rgba(59, 130, 246, 0.1); color: var(--primary-color); border: none; padding: 2px 8px; border-radius: 8px; cursor: pointer;">
+                  <button type="button" class="speech-hint-btn" id="speech-hint-btn" style="margin-top: 6px; font-size: 13px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: var(--primary-color); border: 1px solid rgba(59, 130, 246, 0.25); padding: 3px 12px; border-radius: 12px; cursor: pointer;">
                     💡 Подсказка
                   </button>
-                  <div id="speech-revealed-hint" style="display: none; font-size: 14px; font-weight: 700; color: var(--primary-color); margin-top: 2px;">${currentWord.word}</div>
+                  <div id="speech-revealed-hint" style="display: none; font-size: 15px; font-weight: 800; color: var(--primary-color); margin-top: 4px;">${currentWord.word}</div>
                 </div>
               `
               }
