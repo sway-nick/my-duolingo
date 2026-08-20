@@ -4211,7 +4211,7 @@ body.notebook-theme,
   background: #fffdf7 !important;
   border-top: 2px solid var(--nb-blue-pen) !important;
   font-family: 'Caveat', cursive !important;
-  position: relative;
+  position: fixed !important;
 }
 
 .notebook-theme .bottom-nav::before {
