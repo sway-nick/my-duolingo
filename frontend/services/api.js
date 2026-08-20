@@ -1252,26 +1252,19 @@ async function getUserStats(customWords = null) {
     localStorage.removeItem('myduo_cached_cloud_stats');
   } catch (e) {}
 
-  // Word of the Day: show immediately using date-hash (instant, no network).
-  // Then fetch real top-error word from backend in background and update if different.
-  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, null);
-
-  // Fire-and-forget: update wordOfTheDayId from backend without blocking render.
-  // StatsView will refresh the WOTD block when this resolves.
-  let _cloudWotdPromise = null;
+  // Word of the Day: use real global error stats from backend.
+  // Race against 1.8s timeout — fast enough for UX, always shows real data when backend is warm.
+  let cloudWordOfTheDayId = null;
   try {
-    _cloudWotdPromise = fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`)
+    const fetchPromise = fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`)
       .then((r) => r.json())
-      .then((json) => {
-        if (json && json.success && json.data && json.data.wordOfTheDayId) {
-          return String(json.data.wordOfTheDayId);
-        }
-        return null;
-      })
-      .catch(() => null);
+      .then((json) => (json && json.success && json.data && json.data.wordOfTheDayId ? String(json.data.wordOfTheDayId) : null));
+    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 1800));
+    cloudWordOfTheDayId = await Promise.race([fetchPromise, timeoutPromise]);
   } catch (e) {
-    _cloudWotdPromise = Promise.resolve(null);
+    // fallback to date-hash below
   }
+  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, cloudWordOfTheDayId);
 
   const streakDays = calculateUserStreak(userId, localProg);
 
@@ -1286,8 +1279,6 @@ async function getUserStats(customWords = null) {
     streakDays,
     categoryBreakdown,
     wordOfTheDay,
-    wordsList,
-    cloudWotdPromise: _cloudWotdPromise,
   };
 }
 
