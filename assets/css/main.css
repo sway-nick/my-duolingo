@@ -4484,9 +4484,21 @@ body.notebook-theme,
 }
 
 /* Word of the day gold card — keep gold but add notebook feel */
-.notebook-theme .wotd-vip-card {
-  font-family: 'Caveat', cursive !important;
-  border-radius: 4px 18px 8px 16px !important;
+/* Word of the Day card — always keeps its original design, unaffected by notebook theme fonts */
+.notebook-theme .wotd-standalone-wrapper,
+.notebook-theme .wotd-standalone-wrapper * {
+  font-family: inherit !important;
+}
+
+.notebook-theme .wotd-card .flashcard-face,
+.notebook-theme .wotd-card .embossed-text,
+.notebook-theme .wotd-card .flashcard-flip-prompt,
+.notebook-theme .wotd-card .flashcard-word,
+.notebook-theme .wotd-card .flashcard-translation,
+.notebook-theme .wotd-card .flashcard-transcription,
+.notebook-theme .wotd-card .wotd-card-badge {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  border-radius: revert !important;
 }
 
 /* Success/error colors override */
