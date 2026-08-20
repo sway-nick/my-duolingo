@@ -1252,19 +1252,26 @@ async function getUserStats(customWords = null) {
     localStorage.removeItem('myduo_cached_cloud_stats');
   } catch (e) {}
 
-  // Word of the Day: fetch from backend (most errors across all players in last 3 days).
-  // Fallback to date-hash if backend is unavailable.
-  let cloudWordOfTheDayId = null;
+  // Word of the Day: show immediately using date-hash (instant, no network).
+  // Then fetch real top-error word from backend in background and update if different.
+  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, null);
+
+  // Fire-and-forget: update wordOfTheDayId from backend without blocking render.
+  // StatsView will refresh the WOTD block when this resolves.
+  let _cloudWotdPromise = null;
   try {
-    const statsRes = await fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`);
-    const statsJson = await statsRes.json();
-    if (statsJson && statsJson.success && statsJson.data && statsJson.data.wordOfTheDayId) {
-      cloudWordOfTheDayId = String(statsJson.data.wordOfTheDayId);
-    }
+    _cloudWotdPromise = fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId)}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (json && json.success && json.data && json.data.wordOfTheDayId) {
+          return String(json.data.wordOfTheDayId);
+        }
+        return null;
+      })
+      .catch(() => null);
   } catch (e) {
-    // Network error — fall back to date-hash below
+    _cloudWotdPromise = Promise.resolve(null);
   }
-  const wordOfTheDay = getGlobalWordOfTheDay(wordsList, cloudWordOfTheDayId);
 
   const streakDays = calculateUserStreak(userId, localProg);
 
@@ -1279,6 +1286,8 @@ async function getUserStats(customWords = null) {
     streakDays,
     categoryBreakdown,
     wordOfTheDay,
+    wordsList,
+    cloudWotdPromise: _cloudWotdPromise,
   };
 }
 

@@ -191,6 +191,24 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         });
       }
     }
+    // Background update: when backend returns real top-error word, swap WOTD card silently
+    if (stats.cloudWotdPromise) {
+      stats.cloudWotdPromise.then((cloudWordId) => {
+        if (!cloudWordId) return;
+        if (stats.wordOfTheDay && String(stats.wordOfTheDay.id) === cloudWordId) return; // already correct
+
+        // Find the real word from the words list
+        const realWord = (stats.wordsList || allWords || []).find((w) => String(w.id) === cloudWordId);
+        if (!realWord) return;
+
+        // Silently re-render only the WOTD wrapper if it's still visible
+        const wotdWrapper = container.querySelector('.wotd-standalone-wrapper');
+        if (!wotdWrapper) return;
+
+        // Re-render the whole stats page with the correct word (fast, local data only)
+        renderStatsView(stats.wordsList || allWords, containerSelector);
+      }).catch(() => {});
+    }
   } catch (err) {
     console.error('Failed to load stats view:', err);
     container.innerHTML = '<p class="empty-state">Ошибка загрузки статистики.</p>';
