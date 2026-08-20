@@ -4212,23 +4212,7 @@ body.notebook-theme,
   position: fixed !important;
 }
 
-.notebook-theme .bottom-nav::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: 0;
-  right: 0;
-  height: 8px;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px,
-    transparent 12px,
-    #8aabcc 12px,
-    #8aabcc 20px,
-    transparent 20px,
-    transparent 28px
-  );
-}
+
 
 .notebook-theme .nav-btn {
   color: var(--nb-muted) !important;
