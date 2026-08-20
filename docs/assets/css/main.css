@@ -4142,3 +4142,395 @@ body {
   justify-content: center;
 }
 
+
+/* ============================================================
+   📓 NOTEBOOK THEME — graph paper + ballpoint pen aesthetic
+   ============================================================ */
+
+body.notebook-theme,
+.mobile-app.notebook-theme {
+  --nb-bg: #fdf8f0;
+  --nb-card: #fffdf7;
+  --nb-grid-color: #b8cfe8;
+  --nb-line-color: #d0e4f5;
+  --nb-blue-pen: #1a3a8f;
+  --nb-black-pen: #1a1a2e;
+  --nb-red-pen: #c0392b;
+  --nb-green-pen: #1a7a3a;
+  --nb-border: #7a9fc0;
+  --nb-muted: #5a7a9a;
+  --nb-shadow: 2px 3px 0px rgba(26, 58, 143, 0.12);
+
+  /* Override global vars */
+  --primary-color: #1a3a8f;
+  --primary-hover: #152d6e;
+  --success-color: #1a7a3a;
+  --error-color: #c0392b;
+  --bg-color: var(--nb-bg);
+  --card-bg: var(--nb-card);
+  --text-main: var(--nb-black-pen);
+  --text-muted: var(--nb-muted);
+  --border-color: var(--nb-grid-color);
+
+  font-family: 'Caveat', 'Comic Sans MS', cursive !important;
+  background-color: var(--nb-bg) !important;
+
+  /* Graph paper background — small squares */
+  background-image:
+    linear-gradient(var(--nb-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--nb-grid-color) 1px, transparent 1px),
+    linear-gradient(var(--nb-line-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--nb-line-color) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+}
+
+.notebook-theme .mobile-app {
+  background: transparent !important;
+  font-family: 'Caveat', cursive !important;
+}
+
+/* Header */
+.notebook-theme .mobile-header {
+  background: #fffdf7 !important;
+  border-bottom: 2px solid var(--nb-blue-pen) !important;
+  font-family: 'Caveat', cursive !important;
+  box-shadow: 0 2px 0 var(--nb-grid-color) !important;
+}
+
+.notebook-theme .mobile-header .app-title {
+  font-family: 'Caveat', cursive !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: var(--nb-blue-pen) !important;
+  letter-spacing: 0.5px;
+}
+
+/* Bottom nav — notebook spiral binding */
+.notebook-theme .bottom-nav {
+  background: #fffdf7 !important;
+  border-top: 2px solid var(--nb-blue-pen) !important;
+  font-family: 'Caveat', cursive !important;
+  position: relative;
+}
+
+.notebook-theme .bottom-nav::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 12px,
+    #8aabcc 12px,
+    #8aabcc 20px,
+    transparent 20px,
+    transparent 28px
+  );
+}
+
+.notebook-theme .nav-btn {
+  color: var(--nb-muted) !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 12px !important;
+}
+
+.notebook-theme .nav-btn.active,
+.notebook-theme .nav-btn:hover {
+  color: var(--nb-blue-pen) !important;
+}
+
+/* Cards */
+.notebook-theme .word-card-container,
+.notebook-theme .stat-card,
+.notebook-theme .settings-card,
+.notebook-theme .fav-card,
+.notebook-theme .dict-card,
+.notebook-theme .modal-content,
+.notebook-theme .empty-favorites-box {
+  background: var(--nb-card) !important;
+  border: 2px solid var(--nb-blue-pen) !important;
+  border-radius: 4px 14px 6px 12px !important; /* uneven = hand-drawn feel */
+  box-shadow: var(--nb-shadow) !important;
+  font-family: 'Caveat', cursive !important;
+
+  /* Subtle grid lines on card */
+  background-image:
+    linear-gradient(rgba(184, 207, 232, 0.3) 1px, transparent 1px);
+  background-size: 100% 28px;
+}
+
+/* Training word */
+.notebook-theme .training-word,
+.notebook-theme .training-word-text {
+  font-family: 'Caveat', cursive !important;
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  color: var(--nb-blue-pen) !important;
+  letter-spacing: 1px;
+}
+
+.notebook-theme .card-translation {
+  font-family: 'Caveat', cursive !important;
+  color: var(--nb-black-pen) !important;
+  font-size: 20px !important;
+}
+
+/* Quiz options */
+.notebook-theme .quiz-option {
+  background: var(--nb-card) !important;
+  border: 2px solid var(--nb-blue-pen) !important;
+  border-radius: 3px 10px 5px 8px !important;
+  color: var(--nb-blue-pen) !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.15) !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.notebook-theme .quiz-option:hover:not(:disabled) {
+  background: rgba(26, 58, 143, 0.06) !important;
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0 rgba(26, 58, 143, 0.2) !important;
+}
+
+.notebook-theme .quiz-option.correct {
+  background: rgba(26, 122, 58, 0.1) !important;
+  border: 2.5px solid var(--nb-green-pen) !important;
+  color: var(--nb-green-pen) !important;
+  border-radius: 3px 10px 5px 8px !important;
+}
+
+.notebook-theme .quiz-option.wrong {
+  background: rgba(192, 57, 43, 0.08) !important;
+  border: 2.5px solid var(--nb-red-pen) !important;
+  color: var(--nb-red-pen) !important;
+  border-radius: 3px 10px 5px 8px !important;
+  text-decoration: line-through;
+}
+
+/* Primary buttons */
+.notebook-theme .primary-button,
+.notebook-theme .btn-blue {
+  background: var(--nb-blue-pen) !important;
+  border: 2px solid #0f2660 !important;
+  border-radius: 4px 12px 6px 10px !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  box-shadow: 2px 2px 0 rgba(15, 38, 96, 0.3) !important;
+}
+
+.notebook-theme .primary-button:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0 rgba(15, 38, 96, 0.35) !important;
+}
+
+.notebook-theme .btn-green {
+  background: var(--nb-green-pen) !important;
+  border-color: #145c2b !important;
+}
+
+/* Mic button */
+.notebook-theme .speech-mic-btn {
+  background: linear-gradient(135deg, var(--nb-blue-pen), #2a4fa0) !important;
+  border: 3px solid #0f2660 !important;
+  border-radius: 50% !important;
+  box-shadow: 3px 3px 0 rgba(15, 38, 96, 0.25) !important;
+  font-size: 36px !important;
+}
+
+/* Flashcard */
+.notebook-theme .flashcard-box {
+  background: var(--nb-card) !important;
+  border: 2px solid var(--nb-blue-pen) !important;
+  border-radius: 4px 16px 8px 14px !important;
+  box-shadow: var(--nb-shadow) !important;
+  font-family: 'Caveat', cursive !important;
+}
+
+/* Inputs */
+.notebook-theme .answer-input,
+.notebook-theme .search-input,
+.notebook-theme .filter-select,
+.notebook-theme .settings-select,
+.notebook-theme .form-group input {
+  background: var(--nb-card) !important;
+  border: 2px solid var(--nb-blue-pen) !important;
+  border-radius: 3px 8px 4px 6px !important;
+  color: var(--nb-black-pen) !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 18px !important;
+  box-shadow: inset 1px 1px 0 rgba(26, 58, 143, 0.08) !important;
+}
+
+.notebook-theme .answer-input:focus,
+.notebook-theme .search-input:focus {
+  border-color: var(--nb-blue-pen) !important;
+  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.2) !important;
+  outline: none !important;
+}
+
+/* Mode pills */
+.notebook-theme .mode-switch-pills {
+  background: rgba(184, 207, 232, 0.3) !important;
+  border: 1.5px solid var(--nb-border) !important;
+  border-radius: 4px 12px 6px 10px !important;
+}
+
+.notebook-theme .mode-pill-glider {
+  background: var(--nb-blue-pen) !important;
+  border-radius: 3px 10px 5px 8px !important;
+}
+
+.notebook-theme .mode-pill-btn {
+  font-family: 'Caveat', cursive !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--nb-muted) !important;
+}
+
+.notebook-theme .mode-pill-btn.active {
+  color: #fff !important;
+}
+
+/* Category badge */
+.notebook-theme .category-badge,
+.notebook-theme .total-words-badge {
+  background: rgba(26, 58, 143, 0.1) !important;
+  border: 1.5px solid var(--nb-blue-pen) !important;
+  color: var(--nb-blue-pen) !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 13px !important;
+  border-radius: 3px 8px 4px 6px !important;
+}
+
+/* Sound button */
+.notebook-theme .sound-button-sm,
+.notebook-theme .word-side-icon-btn {
+  background: rgba(26, 58, 143, 0.08) !important;
+  border: 1.5px solid var(--nb-border) !important;
+  border-radius: 50% !important;
+  color: var(--nb-blue-pen) !important;
+}
+
+/* Leaderboard / stats */
+.notebook-theme .stat-label {
+  font-family: 'Caveat', cursive !important;
+  color: var(--nb-muted) !important;
+  font-size: 14px !important;
+}
+
+.notebook-theme .stat-value {
+  font-family: 'Caveat', cursive !important;
+  color: var(--nb-blue-pen) !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+}
+
+/* Pairs game cards */
+.notebook-theme .pairs-card {
+  background: var(--nb-card) !important;
+  border: 2px solid var(--nb-blue-pen) !important;
+  border-radius: 4px 12px 6px 10px !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: var(--nb-blue-pen) !important;
+  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.12) !important;
+}
+
+.notebook-theme .pairs-card.selected {
+  background: rgba(26, 58, 143, 0.1) !important;
+  border-color: var(--nb-blue-pen) !important;
+}
+
+.notebook-theme .pairs-card.matched {
+  background: rgba(26, 122, 58, 0.1) !important;
+  border-color: var(--nb-green-pen) !important;
+  color: var(--nb-green-pen) !important;
+}
+
+/* Theme toggle button */
+.notebook-theme .theme-toggle-btn {
+  background: rgba(26, 58, 143, 0.1) !important;
+  border: 1.5px solid var(--nb-border) !important;
+  color: var(--nb-blue-pen) !important;
+}
+
+/* Profile badge */
+.notebook-theme .header-profile-badge {
+  background: rgba(26, 58, 143, 0.08) !important;
+  border: 1.5px solid var(--nb-border) !important;
+  font-family: 'Caveat', cursive !important;
+}
+
+/* Theme option buttons in settings */
+.notebook-theme .theme-option-btn,
+.notebook-theme .voice-option-btn,
+.notebook-theme .sound-option-btn {
+  background: var(--nb-card) !important;
+  border: 2px solid var(--nb-border) !important;
+  border-radius: 4px 10px 5px 8px !important;
+  color: var(--nb-muted) !important;
+  font-family: 'Caveat', cursive !important;
+  font-size: 16px !important;
+}
+
+.notebook-theme .theme-option-btn.active,
+.notebook-theme .voice-option-btn.active,
+.notebook-theme .sound-option-btn.active {
+  background: rgba(26, 58, 143, 0.12) !important;
+  border-color: var(--nb-blue-pen) !important;
+  color: var(--nb-blue-pen) !important;
+  font-weight: 700 !important;
+}
+
+/* Progress bar */
+.notebook-theme .progress-fill,
+.notebook-theme .category-fill {
+  background: linear-gradient(90deg, var(--nb-blue-pen), #3a5fb0) !important;
+}
+
+/* XP badge */
+.notebook-theme .xp-badge {
+  background: rgba(26, 58, 143, 0.12) !important;
+  border: 1.5px solid var(--nb-blue-pen) !important;
+  color: var(--nb-blue-pen) !important;
+  font-family: 'Caveat', cursive !important;
+  font-weight: 700 !important;
+}
+
+/* Word of the day gold card — keep gold but add notebook feel */
+.notebook-theme .wotd-vip-card {
+  font-family: 'Caveat', cursive !important;
+  border-radius: 4px 18px 8px 16px !important;
+}
+
+/* Success/error colors override */
+.notebook-theme .correct-answer-banner {
+  background: rgba(26, 122, 58, 0.12) !important;
+  border: 2px solid var(--nb-green-pen) !important;
+  color: var(--nb-green-pen) !important;
+  font-family: 'Caveat', cursive !important;
+}
+
+.notebook-theme .wrong-answer-banner {
+  background: rgba(192, 57, 43, 0.10) !important;
+  border: 2px solid var(--nb-red-pen) !important;
+  color: var(--nb-red-pen) !important;
+  font-family: 'Caveat', cursive !important;
+}
+
+/* Scrollbar */
+.notebook-theme ::-webkit-scrollbar {
+  width: 6px;
+}
+.notebook-theme ::-webkit-scrollbar-thumb {
+  background: var(--nb-border);
+  border-radius: 3px;
+}

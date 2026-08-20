@@ -12,13 +12,18 @@ function getSavedTheme() {
 function applyTheme(theme) {
   localStorage.setItem('myduo_theme', theme);
   const app = document.querySelector('.mobile-app');
+  // Remove all theme classes first
+  document.body.classList.remove('dark-theme', 'notebook-theme');
+  if (app) app.classList.remove('dark-theme', 'notebook-theme');
+
   if (theme === 'dark') {
     document.body.classList.add('dark-theme');
     if (app) app.classList.add('dark-theme');
-  } else {
-    document.body.classList.remove('dark-theme');
-    if (app) app.classList.remove('dark-theme');
+  } else if (theme === 'notebook') {
+    document.body.classList.add('notebook-theme');
+    if (app) app.classList.add('notebook-theme');
   }
+  // 'light' → no extra class needed
 }
 
 function toggleTheme() {
