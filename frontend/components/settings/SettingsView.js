@@ -50,13 +50,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Тема оформления</h3>
         <div class="theme-options-row">
           <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
-            ☼ Светлая
+            Светлая
           </button>
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
-            ☾ Тёмная
+            Тёмная
           </button>
           <button class="theme-option-btn ${currentTheme === 'notebook' ? 'active' : ''}" id="theme-notebook-btn">
-            📓 Тетрадь
+            Тетрадь
           </button>
         </div>
       </div>
