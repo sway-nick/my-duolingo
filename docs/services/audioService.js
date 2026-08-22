@@ -138,6 +138,11 @@ function playCasinoRollSound() {
  * Plays a gentle, distinct error sound upon incorrect answer (Web Audio API)
  */
 function playErrorSound() {
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    try {
+      navigator.vibrate(200);
+    } catch (e) {}
+  }
   if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
