@@ -46,18 +46,9 @@ function getHeaderRankBadge(rank, xp) {
 }
 
 function renderHeaderRightActions(user) {
-  const avatar = getUserAvatar();
   const xp = getUserWeeklyXP();
   const rank = getUserWeeklyRank();
   const rankBadge = getHeaderRankBadge(rank, xp);
-  let badgeContent = '⚙️';
-  let extraClass = '';
-  if (avatar) {
-    badgeContent = `<img src="${avatar}" alt="Avatar" class="header-avatar-img" />`;
-    extraClass = 'has-avatar';
-  } else if (user && user.name) {
-    badgeContent = user.name.trim().charAt(0).toUpperCase();
-  }
 
   const formattedXp = formatCompactXp(xp);
   const iconHtml = rankBadge.isIcon
@@ -71,19 +62,16 @@ function renderHeaderRightActions(user) {
     </button>
   `;
 
-  if (user) {
-    return `
-      <div style="display:flex; align-items:center; gap:10px;">
-        ${xpBadgeHtml}
-        <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
-      </div>
-    `;
-  }
   return `
     <div style="display:flex; align-items:center; gap:10px;">
       ${xpBadgeHtml}
-      <button class="header-auth-btn" id="login-header-btn">Войти</button>
-      <button class="header-profile-badge ${extraClass}" id="profile-btn" title="Настройки">${badgeContent}</button>
+      <button class="header-burger-btn" id="header-burger-btn" title="Меню" aria-label="Открыть меню">
+        <svg class="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: var(--text-main);">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </div>
   `;
 }
@@ -96,6 +84,17 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const user = getCurrentUser();
   const currentTheme = getSavedTheme();
   const guestCount = getGuestTrainingCount();
+
+  const avatar = getUserAvatar();
+  let avatarHtml = '';
+  if (avatar) {
+    avatarHtml = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img" />`;
+  } else {
+    const initial = user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤';
+    avatarHtml = `<div class="drawer-avatar-placeholder">${initial}</div>`;
+  }
+  const username = user ? user.name : 'Гость (Демо)';
+  const email = user ? user.email : `Прогресс: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
 
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
@@ -144,23 +143,51 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         <div id="app-content"></div>
       </main>
 
-      <nav class="bottom-nav">
-        <button class="nav-tab active" data-tab="training" title="Тренировка">
-          <span class="tab-icon">🎓</span>
-        </button>
-        <button class="nav-tab" data-tab="leaderboard" title="Рейтинг недели">
-          <span class="tab-icon">🏆</span>
-        </button>
-        <button class="nav-tab" data-tab="dictionary" title="Словарь">
-          <span class="tab-icon">📖</span>
-        </button>
-        <button class="nav-tab" data-tab="favorites" title="Избранное">
-          <span class="tab-icon">❤️</span>
-        </button>
-        <button class="nav-tab" data-tab="stats" title="Прогресс">
-          <span class="tab-icon">📊</span>
-        </button>
-      </nav>
+      <!-- Drawer Overlay -->
+      <div class="drawer-overlay" id="drawer-overlay"></div>
+
+      <!-- Hamburger Drawer -->
+      <div class="burger-drawer" id="burger-drawer">
+        <div class="drawer-header">
+          <div class="drawer-profile">
+            <div class="drawer-avatar-wrapper">
+              ${avatarHtml}
+            </div>
+            <div class="drawer-profile-info">
+              <div class="drawer-username">${username}</div>
+              <div class="drawer-email">${email}</div>
+            </div>
+          </div>
+          <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Закрыть">&times;</button>
+        </div>
+
+        <div class="drawer-menu">
+          <button class="nav-tab active" data-tab="training" title="Тренировка">
+            <span class="tab-icon">🎓</span>
+            <span class="drawer-item-text">Тренировка</span>
+          </button>
+          <button class="nav-tab" data-tab="leaderboard" title="Рейтинг недели">
+            <span class="tab-icon">🏆</span>
+            <span class="drawer-item-text">Рейтинг недели</span>
+          </button>
+          <button class="nav-tab" data-tab="dictionary" title="Словарь">
+            <span class="tab-icon">📖</span>
+            <span class="drawer-item-text">Словарь</span>
+          </button>
+          <button class="nav-tab" data-tab="favorites" title="Избранное">
+            <span class="tab-icon">❤️</span>
+            <span class="drawer-item-text">Избранное</span>
+          </button>
+          <button class="nav-tab" data-tab="stats" title="Прогресс">
+            <span class="tab-icon">📊</span>
+            <span class="drawer-item-text">Статистика</span>
+          </button>
+          <button class="nav-tab" data-tab="settings" title="Настройки">
+            <span class="tab-icon">⚙️</span>
+            <span class="drawer-item-text">Настройки</span>
+          </button>
+        </div>
+      </div>
 
     </div>
   `;
@@ -175,15 +202,63 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   }
 
-  // Bind tab switching
+  // Bind tab switching & drawer closing
   const tabs = app.querySelectorAll('.nav-tab');
   tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
+    tab.addEventListener('click', (e) => {
       tabs.forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
       const targetTab = tab.getAttribute('data-tab');
       onTabChange(targetTab);
+      closeDrawer();
     });
+  });
+
+  // Bind Hamburger Drawer triggers
+  const burgerBtn = app.querySelector('#header-burger-btn');
+  const drawer = app.querySelector('#burger-drawer');
+  const overlay = app.querySelector('#drawer-overlay');
+  const closeBtn = app.querySelector('#drawer-close-btn');
+
+  function openDrawer() {
+    if (drawer && overlay) {
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  }
+
+  function closeDrawer() {
+    if (drawer && overlay) {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+  }
+
+  if (burgerBtn) {
+    burgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDrawer();
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeDrawer();
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      closeDrawer();
+    });
+  }
+
+  // Close drawer on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDrawer();
+    }
   });
 
   bindHeaderActionButtons(app);
@@ -200,24 +275,34 @@ function bindHeaderActionButtons(container) {
       globalTabChangeCallback('leaderboard');
     });
   }
+}
 
-  const loginHeaderBtn = container.querySelector('#login-header-btn');
-  if (loginHeaderBtn) {
-    loginHeaderBtn.addEventListener('click', () => {
-      renderAuthModal(async () => {
-        updateHeaderUser();
-        await globalAuthChangedCallback();
-      });
-    });
+function updateDrawerProfile() {
+  const user = getCurrentUser();
+  const avatar = getUserAvatar();
+  const guestCount = getGuestTrainingCount();
+
+  const drawer = document.querySelector('#burger-drawer');
+  if (!drawer) return;
+
+  const avatarWrapper = drawer.querySelector('.drawer-avatar-wrapper');
+  if (avatarWrapper) {
+    if (avatar) {
+      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img" />`;
+    } else {
+      const initial = user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤';
+      avatarWrapper.innerHTML = `<div class="drawer-avatar-placeholder">${initial}</div>`;
+    }
   }
 
-  const profileBtn = container.querySelector('#profile-btn');
-  if (profileBtn) {
-    profileBtn.addEventListener('click', () => {
-      const navTabs = document.querySelectorAll('.nav-tab');
-      navTabs.forEach((t) => t.classList.remove('active'));
-      globalTabChangeCallback('settings');
-    });
+  const usernameEl = drawer.querySelector('.drawer-username');
+  if (usernameEl) {
+    usernameEl.textContent = user ? user.name : 'Гость (Демо)';
+  }
+
+  const emailEl = drawer.querySelector('.drawer-email');
+  if (emailEl) {
+    emailEl.textContent = user ? user.email : `Прогресс: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
   }
 }
 
@@ -238,6 +323,8 @@ function updateHeaderUser(onUserAuthChanged) {
     actionsContainer.innerHTML = renderHeaderRightActions(user);
     bindHeaderActionButtons(actionsContainer);
   }
+
+  updateDrawerProfile();
 }
 
 // Automatically react to global auth, avatar, and XP changes anywhere in the app
