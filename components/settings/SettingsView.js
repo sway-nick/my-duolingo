@@ -63,16 +63,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Sound Mode Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🔊 Произношение слов</h3>
-        <div class="sound-options-row" style="margin-bottom: 16px;">
-          <button class="sound-option-btn" id="sound-on-btn">
-            🔊 Включено
-          </button>
-          <button class="sound-option-btn" id="sound-off-btn">
-            🔇 Выключено
-          </button>
-        </div>
-        
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">✨ Звуковые эффекты</h3>
         <div class="sound-options-row">
           <button class="sound-option-btn" id="sfx-on-btn">
@@ -224,18 +214,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Setup Sound / Silent Mode Selection
-  let isSilent = isAudioMuted() || Boolean(settings.silentMode);
-  const soundOnBtn = container.querySelector('#sound-on-btn');
-  const soundOffBtn = container.querySelector('#sound-off-btn');
 
-  function updateSoundButtons() {
-    if (soundOnBtn && soundOffBtn) {
-      soundOnBtn.classList.toggle('active', !isSilent);
-      soundOffBtn.classList.toggle('active', isSilent);
-    }
-  }
-  updateSoundButtons();
 
   // Setup SFX Selection
   let isSfxMutedVal = isSfxMuted() || Boolean(settings.sfxMuted);
@@ -271,7 +250,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       theme: getSavedTheme(),
       voiceAccent: currentAccent,
       voiceGender: currentAccent === 'uk' ? 'male' : 'female',
-      silentMode: isSilent,
       sfxMuted: isSfxMutedVal,
     };
 
@@ -321,23 +299,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind sound buttons
-  if (soundOnBtn && soundOffBtn) {
-    soundOnBtn.addEventListener('click', () => {
-      isSilent = false;
-      setSavedSilentMode(false);
-      updateSoundButtons();
-      playSuccessSound();
-      triggerAutoSave();
-    });
 
-    soundOffBtn.addEventListener('click', () => {
-      isSilent = true;
-      setSavedSilentMode(true);
-      updateSoundButtons();
-      triggerAutoSave();
-    });
-  }
 
   // Bind sfx buttons
   if (sfxOnBtn && sfxOffBtn) {

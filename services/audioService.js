@@ -3,22 +3,11 @@ let clickCount = 0;
 let audioCtx = null;
 
 function isAudioMuted() {
-  try {
-    const direct = localStorage.getItem('myduo_silent_mode');
-    if (direct !== null) return direct === 'true';
-    const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
-    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
-    const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
-    return Boolean(settings.silentMode);
-  } catch (e) {
-    return false;
-  }
+  return false;
 }
 
 function setSavedSilentMode(silent) {
-  try {
-    localStorage.setItem('myduo_silent_mode', silent ? 'true' : 'false');
-  } catch (e) {}
+  // pronunciation is always enabled
 }
 
 function isSfxMuted() {
