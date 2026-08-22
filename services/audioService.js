@@ -595,6 +595,17 @@ function playFartSound() {
   }
 }
 
+function isWordAudioPlaying() {
+  const player = sharedWordAudioPlayer;
+  if (player && !player.paused && !player.ended && player.currentTime > 0) {
+    return true;
+  }
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    if (window.speechSynthesis.speaking) return true;
+  }
+  return false;
+}
+
 function resetAudioCounter() {
   currentWordKey = null;
   clickCount = 0;
@@ -622,4 +633,5 @@ export {
   setSavedSilentMode,
   isSfxMuted,
   setSavedSfxMuted,
+  isWordAudioPlaying,
 };

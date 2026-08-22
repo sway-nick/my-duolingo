@@ -1,4 +1,4 @@
-import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound } from '../../services/audioService.js?v=21.0';
+import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound, isWordAudioPlaying } from '../../services/audioService.js?v=21.0';
 import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress, transcribeAudio } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
@@ -24,7 +24,7 @@ function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
 
   function check() {
     const elapsed = Date.now() - start;
-    const stillSpeaking = window.speechSynthesis && window.speechSynthesis.speaking;
+    const stillSpeaking = isWordAudioPlaying();
 
     if (!stillSpeaking && elapsed >= minDelay) {
       onNext();
@@ -376,7 +376,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (isCorrect) {
             onNextAfterSpeech(onNext, 800, 3500);
           } else {
-            setTimeout(() => onNext(), 4000);
+            onNextAfterSpeech(onNext, 1200, 4500);
           }
         });
       });
@@ -401,7 +401,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (isCorrect) {
             onNextAfterSpeech(onNext, 800, 3500);
           } else {
-            setTimeout(() => onNext(), 4000);
+            onNextAfterSpeech(onNext, 1200, 4500);
           }
         });
       });
@@ -529,7 +529,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
           speakWord(currentWord.word, currentWord.id);
           saveProgress(currentWord.id, false, 'quiz');
-          setTimeout(() => onNext(), 3500);
+          onNextAfterSpeech(onNext, 1200, 4500);
         }
 
         if (transcriptBox) {
@@ -982,9 +982,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
             speakWord(currentWord.word, currentWord.id);
             await saveProgress(currentWord.id, false, 'quiz');
-            setTimeout(() => {
-              onNext();
-            }, 3500);
+            onNextAfterSpeech(onNext, 1200, 4500);
           }
         }
       }
