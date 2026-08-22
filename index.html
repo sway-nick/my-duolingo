@@ -197,15 +197,15 @@
         const favSet = new Set(favList.map(String));
         favoriteIds = favSet;
 
-        const dailyGoal = Number(userSettings.dailyGoal) || 10;
-        const totalLearningWords = allWords.filter((w) => isWordLearning(userProgress[w.id]));
-        const learningCount = totalLearningWords.length;
-
         // Check if practicing favorites mode is active
         const isFavPracticeActive = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
         if (isFavPracticeActive) {
           categoryWords = favoritePracticeWords;
         }
+
+        const dailyGoal = Number(userSettings.dailyGoal) || 10;
+        const totalLearningWords = categoryWords.filter((w) => isWordLearning(userProgress[w.id]));
+        const learningCount = totalLearningWords.length;
 
         const favListForMixing = isFavPracticeActive ? [] : favList;
 
