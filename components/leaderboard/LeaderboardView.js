@@ -165,10 +165,8 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   const myPlayer = myRankIndex >= 0 ? players[myRankIndex] : null;
 
   const podiumHtml = `
-    <div class="podium-sticky-wrapper">
-      <div class="podium-grid">
-        ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
-      </div>
+    <div class="podium-grid">
+      ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
     </div>
   `;
 
@@ -237,7 +235,10 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
     `;
   }
 
-  return `${podiumHtml}${restListHtml}${myStickyBarHtml}`;
+  return {
+    podiumHtml,
+    restHtml: `${restListHtml}${myStickyBarHtml}`
+  };
 }
 
 async function renderLeaderboardView(containerSelector = '#app-content', options = {}) {
@@ -263,27 +264,36 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     }
   }
 
+  const bodyData = buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod);
+
   container.innerHTML = `
-    <div class="leaderboard-page">
-      <div class="page-header" style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-        <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; width: 175px;">
-          <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 19px; font-weight: 800; padding: 4px 6px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: space-between; width: 175px; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
-            <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 Общий зачёт' : '🏆 Лига недели'}</span>
-            <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 2px;">▼</span>
-          </button>
-          <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 175px;">
-            <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">🏆 Лига недели</div>
-            <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 Общий зачёт</div>
+    <div class="leaderboard-page" style="position: relative;">
+      <!-- Single Sticky Header Group (Header + Podium) -->
+      <div class="leaderboard-sticky-group" style="position: sticky; top: 56px; z-index: 45; background: var(--bg-main, var(--bg-color, #ffffff)); padding-top: 6px; padding-bottom: 6px; border-bottom: 1.5px solid var(--border-color); margin: 0 -12px 8px -12px; padding-left: 12px; padding-right: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+        <div class="page-header" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; width: 175px;">
+            <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 19px; font-weight: 800; padding: 4px 6px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: space-between; width: 175px; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
+              <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 Общий зачёт' : '🏆 Лига недели'}</span>
+              <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 2px;">▼</span>
+            </button>
+            <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 175px;">
+              <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">🏆 Лига недели</div>
+              <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 Общий зачёт</div>
+            </div>
+          </div>
+          <div class="league-timer-badge" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'block'}; margin-right: 4px;">
+            ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
           </div>
         </div>
-        <div class="league-timer-badge" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'block'}; margin-right: 12px;">
-          ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
+
+        <div id="leaderboard-podium-container">
+          ${bodyData.podiumHtml}
         </div>
       </div>
 
-      <!-- Instant 0ms Content -->
+      <!-- Scrollable Content -->
       <div id="leaderboard-content" style="min-height: 280px;">
-        ${buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod)}
+        ${bodyData.restHtml}
       </div>
     </div>
   `;
@@ -327,32 +337,6 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       };
       document.addEventListener('click', closeDropdown);
     }
-
-    // Set sticky top offsets dynamically so nothing gets hidden under mobile-header
-    const headerEl = document.querySelector('.mobile-header');
-    const pageHeaderEl = container.querySelector('.leaderboard-page .page-header');
-    const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
-
-    const updateStickyPositions = () => {
-      const headerBottom = headerEl ? headerEl.getBoundingClientRect().height : 56;
-      if (pageHeaderEl) {
-        pageHeaderEl.style.position = 'sticky';
-        pageHeaderEl.style.top = `${Math.round(headerBottom)}px`;
-        pageHeaderEl.style.zIndex = '45';
-        pageHeaderEl.style.background = 'var(--bg-color)';
-        pageHeaderEl.style.borderBottom = '1.5px solid var(--border-color)';
-        pageHeaderEl.style.paddingTop = '6px';
-        pageHeaderEl.style.paddingBottom = '6px';
-        pageHeaderEl.style.marginTop = '0px';
-      }
-      if (stickyWrapper) {
-        const pageHeaderHeight = pageHeaderEl ? pageHeaderEl.getBoundingClientRect().height : 50;
-        stickyWrapper.style.setProperty('--podium-sticky-top', `${Math.round(headerBottom + pageHeaderHeight)}px`);
-      }
-    };
-
-    updateStickyPositions();
-    window.addEventListener('resize', updateStickyPositions, { passive: true });
   }
 
   bindListeners();
@@ -361,7 +345,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     try {
       const freshRes = await getLeaderboard(null, currentPeriod);
       if (freshRes && freshRes.data && contentEl) {
-        contentEl.innerHTML = buildLeaderboardBodyHtml(freshRes.data, currentUser, currentPeriod);
+        const freshBodyData = buildLeaderboardBodyHtml(freshRes.data, currentUser, currentPeriod);
+        const podiumContainer = container.querySelector('#leaderboard-podium-container');
+        if (podiumContainer) podiumContainer.innerHTML = freshBodyData.podiumHtml;
+        contentEl.innerHTML = freshBodyData.restHtml;
         bindListeners();
       }
     } catch (e) {
@@ -393,7 +380,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   const handleLiveUpdate = () => {
     const updatedCache = getCachedLeaderboard(null, currentPeriod);
     if (updatedCache && updatedCache.data && contentEl && document.body.contains(contentEl)) {
-      contentEl.innerHTML = buildLeaderboardBodyHtml(updatedCache.data, currentUser, currentPeriod);
+      const freshBodyData = buildLeaderboardBodyHtml(updatedCache.data, currentUser, currentPeriod);
+      const podiumContainer = container.querySelector('#leaderboard-podium-container');
+      if (podiumContainer) podiumContainer.innerHTML = freshBodyData.podiumHtml;
+      contentEl.innerHTML = freshBodyData.restHtml;
       bindListeners();
     }
   };
