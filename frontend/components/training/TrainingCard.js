@@ -382,7 +382,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     }
 
-    function renderReverseQuiz() {
+    function renderReverseQuiz(isFromSpeechFallback = false) {
       const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
       const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
       const otherWords = pool.filter((w) => w.id !== currentWord.id).map((w) => w.word);
@@ -397,7 +397,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.word) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
           speakWord(currentWord.word, currentWord.id);
           if (isCorrect) playSuccessSound(); else playErrorSound();
-          await saveProgress(currentWord.id, isCorrect, 'quiz');
+          await saveProgress(currentWord.id, isCorrect, 'quiz', { skipXp: isFromSpeechFallback });
           if (isCorrect) {
             onNextAfterSpeech(onNext, 800, 3500);
           } else {
@@ -445,7 +445,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       if (cantSpeakBtn) {
         cantSpeakBtn.addEventListener('click', () => {
-          renderReverseQuiz();
+          renderReverseQuiz(true);
         });
       }
 
@@ -541,7 +541,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </button>
           `;
           const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
-          if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz());
+          if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz(true));
         }
       }
 
@@ -1078,7 +1078,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       const totalPairs = roundWords.length;
-      const initialSeconds = totalPairs * 2; // 2 sec per pair (e.g. 5 pairs = 10 sec)
+      const initialSeconds = totalPairs * 2 + 3; // 2 sec per pair + 3 sec extra (e.g. 5 pairs = 13 sec)
 
       let timerStarted = false;
       let timeRemaining = initialSeconds;
@@ -1226,12 +1226,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             timerVal.textContent = formatTimerStr(timeRemaining);
           }
 
-          if (timeRemaining <= 3 && timeRemaining > 0) {
+          if (timeRemaining <= 5 && timeRemaining > 0) {
             if (timerBadge) {
               timerBadge.classList.add('timer-warning');
             }
             playStopwatchTickSound(true);
-          } else if (timeRemaining > 3) {
+          } else if (timeRemaining > 5) {
             playStopwatchTickSound(false);
           }
 

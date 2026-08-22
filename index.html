@@ -23,13 +23,15 @@
         });
       }
     </script>
+    <title>English Breakfast</title>
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="English Trainer" />
-    <meta name="application-name" content="English Trainer" />
+    <meta name="apple-mobile-web-app-title" content="English Breakfast" />
+    <meta name="application-name" content="English Breakfast" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -274,8 +276,8 @@
               <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; line-height: 1.45;">
                 ${
                   isFavPracticeActive
-                    ? `Вы успешно изучили все <strong>${favoritePracticeWords.length}</strong> избранных слов (3x в режиме Тест)!`
-                    : `Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (3x в режиме Тест)!`
+                    ? `Вы успешно изучили все <strong>${favoritePracticeWords.length}</strong> избранных слов (2x в режиме Тест)!`
+                    : `Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (2x в режиме Тест)!`
                 }
               </p>
               <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">

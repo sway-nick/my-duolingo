@@ -21,6 +21,25 @@ function setSavedSilentMode(silent) {
   } catch (e) {}
 }
 
+function isSfxMuted() {
+  try {
+    const directSfx = localStorage.getItem('myduo_sfx_muted');
+    if (directSfx !== null) return directSfx === 'true';
+    const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
+    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
+    const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
+    return Boolean(settings.sfxMuted);
+  } catch (e) {
+    return false;
+  }
+}
+
+function setSavedSfxMuted(muted) {
+  try {
+    localStorage.setItem('myduo_sfx_muted', muted ? 'true' : 'false');
+  } catch (e) {}
+}
+
 function getAudioContext() {
   if (!audioCtx && typeof window !== 'undefined') {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -38,7 +57,7 @@ function getAudioContext() {
  * Plays a cute, sweet sparkling crystal bell chime upon correct answer (Web Audio API)
  */
 function playSuccessSound() {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -79,7 +98,7 @@ function playSuccessSound() {
  * Plays a casino slot machine reel spinning / cascading ratchet sound (Web Audio API)
  */
 function playCasinoRollSound() {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -119,7 +138,7 @@ function playCasinoRollSound() {
  * Plays a gentle, distinct error sound upon incorrect answer (Web Audio API)
  */
 function playErrorSound() {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -155,7 +174,7 @@ function playErrorSound() {
  * Plays a triumphant celebratory fanfare sound for podium prize achievements (Web Audio API)
  */
 function playFanfareSound() {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -480,12 +499,12 @@ function getCoinAudio() {
  * Plays the exact metallic coin sound provided by user (coin.mp3)
  */
 function playCoinDropSound() {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const audio = getCoinAudio();
     if (audio) {
       audio.currentTime = 0;
-      audio.volume = 1.0;
+      audio.volume = 0.4;
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.catch((e) => {
@@ -502,7 +521,7 @@ function playCoinDropSound() {
  * Plays a mechanical stopwatch ticking sound (Web Audio API)
  */
 function playStopwatchTickSound(isUrgent = false) {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -533,7 +552,7 @@ function playStopwatchTickSound(isUrgent = false) {
  * Plays a funny comic synthesized fart sound upon pairs timeout failure (Web Audio API)
  */
 function playFartSound() {
-  if (isAudioMuted()) return;
+  if (isAudioMuted() || isSfxMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -607,4 +626,6 @@ export {
   getSavedVoiceAccent,
   isAudioMuted,
   setSavedSilentMode,
+  isSfxMuted,
+  setSavedSfxMuted,
 };

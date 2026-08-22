@@ -101,14 +101,32 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <header class="mobile-header">
-        <div class="brand" id="brand-logo" style="cursor: pointer;" title="Перейти на главную (режим Тест)">
-          <span class="brand-icon">🦉</span>
-          <div>
-            <h2>English Trainer</h2>
-            <small class="user-status-text" id="header-user-status">
-              ${user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
-            </small>
+        <div class="brand" id="brand-logo" style="cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 2px;" title="Перейти на главную (режим Тест)">
+          <div style="display: flex; align-items: center;">
+            <!-- SVG Cup-with-Book Logo -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 56" width="160" height="36" style="display: block;">
+              <!-- Steam lines -->
+              <path d="M20,20 Q24,14 20,8" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <path d="M30,20 Q34,12 30,6" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <path d="M40,20 Q44,14 40,8" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <!-- Cup body -->
+              <path d="M8,28 C8,48 18,58 30,58 C42,58 52,48 52,28 Z" fill="#F45100"/>
+              <!-- Handle -->
+              <path d="M52,34 C60,34 61,44 52,47" stroke="#F45100" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <!-- Open Book pages -->
+              <path d="M30,28 Q23,25 16,28 L16,36 Q23,33 30,36 Z" fill="#FFF"/>
+              <path d="M30,28 Q37,25 44,28 L44,36 Q37,33 30,36 Z" fill="#FFF"/>
+              <line x1="30" y1="28" x2="30" y2="36" stroke="#F45100" stroke-width="1"/>
+              <!-- EN Text -->
+              <text x="30" y="50" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
+              <!-- Brand Name Text -->
+              <text x="70" y="30" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="20" fill="var(--text-main)">English</text>
+              <text x="70" y="50" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="20" fill="#FF6A00">Breakfast</text>
+            </svg>
           </div>
+          <small class="user-status-text" id="header-user-status" style="margin-left: 45px; margin-top: -4px;">
+            ${user ? '' : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
+          </small>
         </div>
         
         <div class="header-right-actions">
@@ -206,7 +224,7 @@ function updateHeaderUser(onUserAuthChanged) {
   const guestCount = getGuestTrainingCount();
   const statusEl = document.querySelector('#header-user-status');
   if (statusEl) {
-    statusEl.textContent = user ? user.name : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
+    statusEl.textContent = user ? '' : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
   }
 
   const actionsContainer = document.querySelector('.header-right-actions');

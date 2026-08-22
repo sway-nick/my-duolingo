@@ -2,6 +2,43 @@ import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey } from '../../servi
 import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=18.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
 
+let currentPeriod = 'week'; // 'week' or 'all'
+
+function showTop100Modal(rank) {
+  const existing = document.querySelector('#top100-congrats-modal');
+  if (existing) existing.remove();
+
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'top100-congrats-modal';
+  modalOverlay.className = 'modal-backdrop';
+  modalOverlay.style.zIndex = '9999';
+
+  modalOverlay.innerHTML = `
+    <div class="modal-content" style="text-align: center; max-width: 320px; padding: 28px 20px; position: relative;">
+      <div style="font-size: 52px; margin-bottom: 12px;">🏆</div>
+      <h2 style="margin: 0 0 10px; font-size: 22px;">Вы в ТОП 100!</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 15px; line-height: 1.4;">
+        Поздравляем! Вы заняли <strong>#${rank}</strong> место в рейтинге. Так держать! 🚀
+      </p>
+      <button class="primary-button btn-green" id="top100-close-btn" style="min-height: 44px; width: 100%;">
+        Ура!
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modalOverlay);
+
+  const cleanup = () => {
+    modalOverlay.classList.add('fade-out');
+    setTimeout(() => modalOverlay.remove(), 250);
+  };
+
+  modalOverlay.querySelector('#top100-close-btn').addEventListener('click', cleanup);
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) cleanup();
+  });
+}
+
 function getTimeUntilSundayEnd() {
   const now = new Date();
   const day = now.getDay(); // 0 is Sunday, 1 is Monday...
@@ -118,7 +155,7 @@ function renderPodiumCard(player, rank) {
   `;
 }
 
-function buildLeaderboardBodyHtml(players, currentUser) {
+function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   const top100 = players.slice(0, 100);
   const top4 = top100.slice(0, 4);
   const rest = top100.slice(4);
@@ -171,6 +208,7 @@ function buildLeaderboardBodyHtml(players, currentUser) {
   let myStickyBarHtml = '';
   if (myPlayer && (myRank > 4 || !currentUser)) {
     const myAvatar = getUserAvatar();
+    const statusText = period === 'all' ? 'Ваш результат за всё время' : (currentUser ? 'Ваш текущий результат' : 'Войдите, чтобы закрепить результат');
     myStickyBarHtml = `
       <div class="my-leaderboard-bar">
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -183,7 +221,7 @@ function buildLeaderboardBodyHtml(players, currentUser) {
           <div>
             <div style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : 'Вы (Гость)'}</div>
             <div style="font-size: 12px; color: var(--text-muted);">
-              ${currentUser ? 'Ваш текущий результат' : 'Войдите, чтобы закрепить результат'}
+              ${statusText}
             </div>
           </div>
         </div>
@@ -210,33 +248,42 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   const weekTime = getTimeUntilSundayEnd();
 
   // 1. Instant 0ms cached data load
-  const cachedRes = getCachedLeaderboard();
+  const cachedRes = getCachedLeaderboard(null, currentPeriod);
   const initialPlayers = cachedRes.data || [];
+
+  // Congratulate user if they are in TOP 100
+  const myRankIndex = initialPlayers.findIndex((p) => p.isCurrentUser);
+  const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
+  if (myRank !== null && myRank <= 100) {
+    const weekKey = getIsoWeekKey();
+    const congratKey = `congrats_top100_${weekKey}_${currentUser ? currentUser.id : 'guest'}`;
+    if (!localStorage.getItem(congratKey)) {
+      localStorage.setItem(congratKey, 'true');
+      setTimeout(() => showTop100Modal(myRank), 500);
+    }
+  }
 
   container.innerHTML = `
     <div class="leaderboard-page">
-      <div class="page-header" style="margin-bottom: 12px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <h2 style="margin: 0; font-size: 22px; display: flex; align-items: center; gap: 8px;">
-            🏆 Лига недели
-          </h2>
-          <div class="league-timer-badge">
-            ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
+      <div class="page-header" style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; min-width: 175px;">
+          <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 19px; font-weight: 800; padding: 4px 10px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
+            <span id="leaderboard-type-label">${currentPeriod === 'all' ? '🌎 Общий зачёт' : '🏆 Лига недели'}</span>
+            <span class="dropdown-arrow" style="font-size: 11px;">▼</span>
+          </button>
+          <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130;">
+            <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week">🏆 Лига недели</div>
+            <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all">🌎 Общий зачёт</div>
           </div>
         </div>
-      </div>
-
-      <!-- Scoring rules mini-banner -->
-      <div class="scoring-rules-banner">
-        <div class="rule-chip"><span class="rule-chip-icon">🎯</span> Квиз <strong class="rule-chip-val">+1&nbsp;XP</strong></div>
-        <div class="rule-chip"><span class="rule-chip-icon">🧩</span> Пары <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
-        <div class="rule-chip"><span class="rule-chip-icon">✍️</span> Тест <strong class="rule-chip-val">+3&nbsp;XP</strong></div>
-        <div class="rule-chip error-chip"><span class="rule-chip-icon">🪲</span> Ошибка <strong class="error-xp-val">-5&nbsp;XP</strong></div>
+        <div class="league-timer-badge" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'block'}; margin-right: 12px;">
+          ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
+        </div>
       </div>
 
       <!-- Instant 0ms Content -->
       <div id="leaderboard-content" style="min-height: 280px;">
-        ${buildLeaderboardBodyHtml(initialPlayers, currentUser)}
+        ${buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod)}
       </div>
     </div>
   `;
@@ -254,26 +301,67 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       });
     }
 
-    // Set sticky top offset for podium directly below header
+    // Bind dropdown period selector
+    const typeDropdown = container.querySelector('#leaderboard-type-dropdown');
+    const typeTrigger = container.querySelector('#leaderboard-type-trigger');
+    const typeItems = container.querySelectorAll('#leaderboard-type-menu .dropdown-item');
+
+    if (typeTrigger && typeDropdown) {
+      typeTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        typeDropdown.classList.toggle('open');
+      });
+
+      typeItems.forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          currentPeriod = item.getAttribute('data-value');
+          typeDropdown.classList.remove('open');
+          renderLeaderboardView(containerSelector, options);
+        });
+      });
+
+      // Close dropdown when clicking outside
+      const closeDropdown = () => {
+        typeDropdown.classList.remove('open');
+      };
+      document.addEventListener('click', closeDropdown);
+    }
+
+    // Set sticky top offsets dynamically so nothing gets hidden under mobile-header
     const headerEl = document.querySelector('.mobile-header');
+    const pageHeaderEl = container.querySelector('.leaderboard-page .page-header');
     const stickyWrapper = contentEl.querySelector('.podium-sticky-wrapper');
-    const updatePodiumStickyTop = () => {
+
+    const updateStickyPositions = () => {
+      const headerBottom = headerEl ? headerEl.getBoundingClientRect().height : 56;
+      if (pageHeaderEl) {
+        pageHeaderEl.style.position = 'sticky';
+        pageHeaderEl.style.top = `${Math.round(headerBottom)}px`;
+        pageHeaderEl.style.zIndex = '45';
+        pageHeaderEl.style.background = 'var(--bg-color)';
+        pageHeaderEl.style.borderBottom = '1.5px solid var(--border-color)';
+        pageHeaderEl.style.paddingTop = '6px';
+        pageHeaderEl.style.paddingBottom = '6px';
+        pageHeaderEl.style.marginTop = '0px';
+      }
       if (stickyWrapper) {
-        const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
-        stickyWrapper.style.setProperty('--podium-sticky-top', `${Math.round(headerBottom)}px`);
+        const pageHeaderHeight = pageHeaderEl ? pageHeaderEl.getBoundingClientRect().height : 50;
+        stickyWrapper.style.setProperty('--podium-sticky-top', `${Math.round(headerBottom + pageHeaderHeight)}px`);
       }
     };
-    updatePodiumStickyTop();
-    window.addEventListener('resize', updatePodiumStickyTop, { passive: true });
+
+    updateStickyPositions();
+    window.addEventListener('resize', updateStickyPositions, { passive: true });
   }
 
   bindListeners();
 
   async function loadFreshData() {
     try {
-      const freshRes = await getLeaderboard();
+      const freshRes = await getLeaderboard(null, currentPeriod);
       if (freshRes && freshRes.data && contentEl) {
-        contentEl.innerHTML = buildLeaderboardBodyHtml(freshRes.data, currentUser);
+        contentEl.innerHTML = buildLeaderboardBodyHtml(freshRes.data, currentUser, currentPeriod);
         bindListeners();
       }
     } catch (e) {
@@ -303,9 +391,9 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
   // 3. Listen to local XP and remote leaderboard changes to update table immediately
   const handleLiveUpdate = () => {
-    const updatedCache = getCachedLeaderboard();
+    const updatedCache = getCachedLeaderboard(null, currentPeriod);
     if (updatedCache && updatedCache.data && contentEl && document.body.contains(contentEl)) {
-      contentEl.innerHTML = buildLeaderboardBodyHtml(updatedCache.data, currentUser);
+      contentEl.innerHTML = buildLeaderboardBodyHtml(updatedCache.data, currentUser, currentPeriod);
       bindListeners();
     }
   };

@@ -32,12 +32,12 @@ function renderWordCardHtml(w, isFav, prog) {
   let stageBadge = '';
   if (isMastered) {
     stageBadge = `<span class="mastered-badge">🏆 Выучено</span>`;
-  } else if (pairsCount >= 5) {
-    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/3</span>`;
-  } else if (quizCount >= 5) {
-    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/5</span>`;
+  } else if (pairsCount >= 2) {
+    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/2</span>`;
+  } else if (quizCount >= 4) {
+    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/2</span>`;
   } else if (seen) {
-    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/4</span>`;
   }
 
   return `

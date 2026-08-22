@@ -80,6 +80,66 @@ function leaderboardGet(e) {
     }
   } catch (cleanErr) {}
 
+  const isOverall = (query.period === 'all');
+
+  if (isOverall) {
+    const overallMap = {};
+    leaderboardList.forEach((item) => {
+      const uid = String(item.userId).trim();
+      if (!uid) return;
+      const itemXp = Number(item.xp || 0);
+      if (!overallMap[uid]) {
+        overallMap[uid] = {
+          userId: uid,
+          name: item.name || 'Ученик',
+          avatar: item.avatar || '',
+          xp: itemXp,
+        };
+      } else {
+        overallMap[uid].xp += itemXp;
+        if (item.avatar && !overallMap[uid].avatar) overallMap[uid].avatar = item.avatar;
+        if (item.name && item.name !== 'Ученик') overallMap[uid].name = item.name;
+      }
+    });
+
+    usersList.forEach((u) => {
+      const uid = String(u.id).trim();
+      if (!uid) return;
+      if (!overallMap[uid]) {
+        overallMap[uid] = {
+          userId: uid,
+          name: u.userName || u.email || 'Ученик',
+          avatar: '',
+          xp: 0,
+        };
+      } else {
+        if (u.userName && (overallMap[uid].name === 'Ученик' || !overallMap[uid].name)) {
+          overallMap[uid].name = u.userName;
+        }
+      }
+    });
+
+    const overallList = Object.values(overallMap);
+
+    const dynamicBots = generateDynamicBots(weekKey);
+    dynamicBots.forEach((bot) => {
+      const botUid = String(bot.userId);
+      const botOverallXp = Math.floor(bot.xp * 3.5);
+      if (!overallList.some((p) => String(p.userId) === botUid)) {
+        overallList.push({
+          userId: botUid,
+          name: bot.name,
+          avatar: bot.avatar,
+          xp: botOverallXp,
+          isBot: true,
+        });
+      }
+    });
+
+    overallList.sort((a, b) => b.xp - a.xp);
+    return successResponse(overallList);
+  }
+
   // Map of userId -> leaderboard item for this week (with duplicate deduplication taking max XP)
   const weekMap = {};
   leaderboardList.forEach((item) => {

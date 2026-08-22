@@ -22,8 +22,11 @@ function build() {
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });
   copyRecursiveSync('./frontend', './docs');
 
-  // 2. Sync root index.html from frontend/index.html
+  // 2. Sync root index.html and favicon.svg from frontend/
   fs.copyFileSync('./frontend/index.html', './index.html');
+  if (fs.existsSync('./frontend/favicon.svg')) {
+    fs.copyFileSync('./frontend/favicon.svg', './favicon.svg');
+  }
 
   // 3. Sync frontend assets & modules to root for direct root hosting
   copyRecursiveSync('./frontend/components', './components');

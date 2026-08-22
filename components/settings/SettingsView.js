@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings } from '../../services/api.js?v=18.0'
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=18.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=18.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound } from '../../services/audioService.js?v=24.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=24.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=18.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
@@ -63,13 +63,23 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Sound Mode Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🔊 Звук и эффекты</h3>
-        <div class="sound-options-row">
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🔊 Произношение слов</h3>
+        <div class="sound-options-row" style="margin-bottom: 16px;">
           <button class="sound-option-btn" id="sound-on-btn">
-            🔊 Со звуком
+            🔊 Включено
           </button>
           <button class="sound-option-btn" id="sound-off-btn">
-            🔇 Без звука
+            🔇 Выключено
+          </button>
+        </div>
+        
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">✨ Звуковые эффекты</h3>
+        <div class="sound-options-row">
+          <button class="sound-option-btn" id="sfx-on-btn">
+            🔔 Включены
+          </button>
+          <button class="sound-option-btn" id="sfx-off-btn">
+            🔕 Выключены
           </button>
         </div>
       </div>
@@ -227,6 +237,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   }
   updateSoundButtons();
 
+  // Setup SFX Selection
+  let isSfxMutedVal = isSfxMuted() || Boolean(settings.sfxMuted);
+  const sfxOnBtn = container.querySelector('#sfx-on-btn');
+  const sfxOffBtn = container.querySelector('#sfx-off-btn');
+
+  function updateSfxButtons() {
+    if (sfxOnBtn && sfxOffBtn) {
+      sfxOnBtn.classList.toggle('active', !isSfxMutedVal);
+      sfxOffBtn.classList.toggle('active', isSfxMutedVal);
+    }
+  }
+  updateSfxButtons();
+
   // Setup Voice Accent Selection (🇬🇧 UK / 🇺🇸 US)
   let currentAccent = getSavedVoiceAccent();
   const ukVoiceBtn = container.querySelector('#voice-uk-btn');
@@ -249,6 +272,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       voiceAccent: currentAccent,
       voiceGender: currentAccent === 'uk' ? 'male' : 'female',
       silentMode: isSilent,
+      sfxMuted: isSfxMutedVal,
     };
 
     if (autoSaveStatus) {
@@ -311,6 +335,24 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       isSilent = true;
       setSavedSilentMode(true);
       updateSoundButtons();
+      triggerAutoSave();
+    });
+  }
+
+  // Bind sfx buttons
+  if (sfxOnBtn && sfxOffBtn) {
+    sfxOnBtn.addEventListener('click', () => {
+      isSfxMutedVal = false;
+      setSavedSfxMuted(false);
+      updateSfxButtons();
+      playSuccessSound();
+      triggerAutoSave();
+    });
+
+    sfxOffBtn.addEventListener('click', () => {
+      isSfxMutedVal = true;
+      setSavedSfxMuted(true);
+      updateSfxButtons();
       triggerAutoSave();
     });
   }

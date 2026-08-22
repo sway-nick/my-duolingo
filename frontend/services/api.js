@@ -526,26 +526,61 @@ function generateDynamicBots(weekKey) {
   });
 }
 
-function getCachedLeaderboard(weekKey = null) {
+function getCachedLeaderboard(weekKey = null, period = 'week') {
   const wKey = weekKey || getIsoWeekKey();
   const currentUser = getCurrentUser();
   const currentUserId = getEffectiveUserId();
-  const userXP = getUserWeeklyXP(currentUserId, wKey);
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
   const userName = currentUser && currentUser.name ? currentUser.name : 'Вы (Гость)';
 
+  if (period === 'all') {
+    let rawList = [];
+    try {
+      const raw = localStorage.getItem('cache_leaderboard_all');
+      if (raw) rawList = JSON.parse(raw);
+    } catch (e) {}
+
+    let totalLocalXP = 0;
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(`xp_${currentUserId}_`)) {
+          totalLocalXP += Number(localStorage.getItem(k) || 0);
+        }
+      }
+    } catch (e) {}
+
+    const myIdx = rawList.findIndex((u) => String(u.userId) === String(currentUserId));
+    if (myIdx >= 0) {
+      rawList[myIdx].xp = Math.max(Number(rawList[myIdx].xp || 0), totalLocalXP);
+      rawList[myIdx].name = userName;
+      if (userAvatar) rawList[myIdx].avatar = userAvatar;
+      rawList[myIdx].isCurrentUser = true;
+    } else {
+      rawList.push({
+        userId: currentUserId,
+        name: userName,
+        avatar: userAvatar,
+        xp: totalLocalXP,
+        isCurrentUser: true,
+      });
+    }
+
+    rawList.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+    return { success: true, data: rawList, period: 'all' };
+  }
+
+  const userXP = getUserWeeklyXP(currentUserId, wKey);
   let rawList = [];
   try {
     const raw = localStorage.getItem(`cache_leaderboard_${wKey}`);
     if (raw) rawList = JSON.parse(raw);
   } catch (e) {}
 
-  // Keep real players from server, and merge all 50 dynamic bots with daily progression
   const realPlayers = rawList.filter((u) => !String(u.userId).startsWith('bot_'));
   const dynamicBots = generateDynamicBots(wKey);
   const combined = [...realPlayers, ...dynamicBots];
 
-  // Merge current user's profile and live XP
   const myIdx = combined.findIndex((u) => String(u.userId) === String(currentUserId));
   if (myIdx >= 0) {
     combined[myIdx].xp = Math.max(Number(combined[myIdx].xp || 0), userXP);
@@ -562,10 +597,9 @@ function getCachedLeaderboard(weekKey = null) {
     });
   }
 
-  // Sort descending by XP
   combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
 
-  return { success: true, data: combined, weekKey: wKey, userXP };
+  return { success: true, data: combined, weekKey: wKey, userXP, period: 'week' };
 }
 
 function getUserWeeklyRank(userId = null, weekKey = null) {
@@ -598,7 +632,7 @@ function formatCompactXp(xp) {
   return `${formatted}B`;
 }
 
-async function getLeaderboard(weekKey = null) {
+async function getLeaderboard(weekKey = null, period = 'week') {
   const wKey = weekKey || getIsoWeekKey();
   const currentUserId = getEffectiveUserId();
   const userXP = getUserWeeklyXP(currentUserId, wKey);
@@ -611,48 +645,57 @@ async function getLeaderboard(weekKey = null) {
     syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
   }
 
+  let fetchUrl = `${API_URL}?route=leaderboard&weekKey=${wKey}&_t=${Date.now()}`;
+  if (period === 'all') {
+    fetchUrl = `${API_URL}?route=leaderboard&period=all&_t=${Date.now()}`;
+  }
+
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 4500);
-    const res = await fetch(`${API_URL}?route=leaderboard&weekKey=${wKey}&_t=${Date.now()}`, {
+    const res = await fetch(fetchUrl, {
       signal: controller.signal,
       cache: 'no-store',
     });
     clearTimeout(timer);
     const data = await res.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
-      // Combine real players from server with all 50 dynamic bots
-      const realPlayers = data.data.filter((u) => !String(u.userId).startsWith('bot_'));
-      const dynamicBots = generateDynamicBots(wKey);
-      const combined = [...realPlayers, ...dynamicBots];
-      combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+      if (period === 'all') {
+        localStorage.setItem('cache_leaderboard_all', JSON.stringify(data.data));
+      } else {
+        const realPlayers = data.data.filter((u) => !String(u.userId).startsWith('bot_'));
+        const dynamicBots = generateDynamicBots(wKey);
+        const combined = [...realPlayers, ...dynamicBots];
+        combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
 
-      localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
+        localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
+      }
 
-      // Bi-directional sync: if server has higher XP or avatar for current user, update local
-      const meOnServer = data.data.find((item) => String(item.userId) === String(currentUserId));
-      if (meOnServer) {
-        if (Number(meOnServer.xp || 0) > userXP) {
-          localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
-          window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
-        }
-        if (meOnServer.avatar && !localStorage.getItem(`avatar_${currentUserId}`)) {
-          localStorage.setItem(`avatar_${currentUserId}`, meOnServer.avatar);
-          window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: currentUserId, avatar: meOnServer.avatar } }));
+      if (period !== 'all') {
+        const meOnServer = data.data.find((item) => String(item.userId) === String(currentUserId));
+        if (meOnServer) {
+          if (Number(meOnServer.xp || 0) > userXP) {
+            localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
+            window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
+          }
+          if (meOnServer.avatar && !localStorage.getItem(`avatar_${currentUserId}`)) {
+            localStorage.setItem(`avatar_${currentUserId}`, meOnServer.avatar);
+            window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: currentUserId, avatar: meOnServer.avatar } }));
+          }
         }
       }
 
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: data.data } }));
+        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: data.data, period } }));
       }
 
-      return getCachedLeaderboard(wKey);
+      return getCachedLeaderboard(wKey, period);
     }
   } catch (e) {
     // Graceful fallback to instant cache on network timeout
   }
 
-  return getCachedLeaderboard(wKey);
+  return getCachedLeaderboard(wKey, period);
 }
 
 if (typeof window !== 'undefined') {
@@ -822,7 +865,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       if (prog.quizCorrect >= 4) {
         prog.stage = 'pairs';
       }
-      xpDelta = 1; // +1 XP for correct quiz answer
+      xpDelta = (options && options.skipXp) ? 0 : 1; // +1 XP (or 0 if fallback) for correct quiz answer
     } else {
       prog.error = (prog.error || 0) + 1;
       xpDelta = -5; // -5 XP for wrong quiz answer
@@ -850,7 +893,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       } else {
         prog.correct = (prog.correct || 0) + 1;
         prog.inputCorrect = (prog.inputCorrect || 0) + 1;
-        if (prog.inputCorrect >= 3) {
+        if (prog.inputCorrect >= 2) {
           prog.mastered = true;
           if (!prog.masteredAt) {
             prog.masteredAt = Date.now();
@@ -1194,7 +1237,7 @@ function getQueueForTest(words, progress) {
     const p = progress[w.id] || progress[String(w.id)];
     if (!p) return false;
     if (isWordMastered(p)) return false;
-    return Boolean((p.pairsCorrect || 0) >= 2 && (p.inputCorrect || 0) < 3);
+    return Boolean((p.pairsCorrect || 0) >= 2 && (p.inputCorrect || 0) < 2);
   });
 }
 
