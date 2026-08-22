@@ -1413,6 +1413,30 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const feedback = practiceArea.querySelector('#input-feedback');
     let hasSecondChance = false;
 
+    // Secure input: max 40 chars & strip HTML/script tags
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') return;
+      if (input.textContent.length >= 40) {
+        e.preventDefault();
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData || e.originalEvent?.clipboardData).getData('text/plain');
+      const sanitized = text.replace(/<[^>]*>?/gm, '').slice(0, 40);
+      document.execCommand('insertText', false, sanitized);
+    });
+
+    input.addEventListener('input', () => {
+      const text = input.textContent || '';
+      const sanitized = text.replace(/<[^>]*>?/gm, '');
+      if (text !== sanitized || text.length > 40) {
+        input.textContent = sanitized.slice(0, 40);
+        placeCaretAtEnd(input);
+      }
+    });
+
     function placeCaretAtEnd(el) {
       if (!el) return;
       try {

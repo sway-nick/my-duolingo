@@ -59,22 +59,22 @@ function renderAuthModal(onSuccessCallback) {
         
         <div class="form-group" id="name-group" style="display:none;">
           <label>Имя</label>
-          <input type="text" id="auth-name" placeholder="Ваше имя" />
+          <input type="text" id="auth-name" placeholder="Ваше имя" maxlength="40" />
         </div>
 
         <div class="form-group">
           <label>Email</label>
-          <input type="email" id="auth-email" placeholder="example@mail.com" required />
+          <input type="email" id="auth-email" placeholder="example@mail.com" required maxlength="40" />
         </div>
 
         <div class="form-group">
           <label>Пароль</label>
-          <input type="password" id="auth-password" placeholder="••••••••" required />
+          <input type="password" id="auth-password" placeholder="••••••••" required maxlength="40" />
         </div>
 
         <div class="form-group" id="password-confirm-group" style="display:none;">
           <label>Повторите пароль</label>
-          <input type="password" id="auth-password-confirm" placeholder="••••••••" />
+          <input type="password" id="auth-password-confirm" placeholder="••••••••" maxlength="40" />
         </div>
 
         <button type="submit" class="primary-button" id="auth-submit-btn">Войти</button>
@@ -272,14 +272,22 @@ function renderAuthModal(onSuccessCallback) {
   }
 
   const form = modal.querySelector('#auth-form');
+  
+  function sanitizeInput(str) {
+    if (!str) return '';
+    // Strip HTML/script tags
+    const clean = str.replace(/<[^>]*>?/gm, '');
+    return clean.slice(0, 40);
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorBox.style.display = 'none';
 
-    const email = modal.querySelector('#auth-email').value.trim();
-    const password = modal.querySelector('#auth-password').value.trim();
-    const passwordConfirm = modal.querySelector('#auth-password-confirm').value.trim();
-    const name = modal.querySelector('#auth-name').value.trim();
+    const email = sanitizeInput(modal.querySelector('#auth-email').value.trim());
+    const password = sanitizeInput(modal.querySelector('#auth-password').value.trim());
+    const passwordConfirm = sanitizeInput(modal.querySelector('#auth-password-confirm').value.trim());
+    const name = sanitizeInput(modal.querySelector('#auth-name').value.trim());
 
     if (mode === 'register') {
       if (!name) {
