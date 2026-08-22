@@ -1614,11 +1614,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // Exact delay: 1.8s on correct (gives enough time for audio to finish playing), 4s on error
-      const delay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1800) : 4000;
-      setTimeout(() => {
-        onNext();
-      }, delay);
+      // Wait for word pronunciation to finish before transitioning
+      const minDelay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1600) : 1800;
+      const maxWait = isCorrect ? 3500 : 5000;
+      onNextAfterSpeech(onNext, minDelay, maxWait);
     };
 
     checkBtn.addEventListener('click', handleCheck);
@@ -1743,13 +1742,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
       await saveProgress(currentWord.id, true, 'cards_learn');
-      onNext();
+      onNextAfterSpeech(onNext, 400, 3000);
     });
 
     practiceArea.querySelector('#btn-know').addEventListener('click', async () => {
       playSuccessSound();
       await saveProgress(currentWord.id, true, 'cards_know');
-      onNext();
+      onNextAfterSpeech(onNext, 400, 3000);
     });
   }
 }
