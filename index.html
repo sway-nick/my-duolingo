@@ -411,11 +411,27 @@
             nextMode = 'quiz';
             nextBtnLabel = '🎯 Перейти в Квиз';
           } else if (currentMethod === 'input') {
-            emptyIcon = '🏆';
-            emptyTitle = 'Отлично!<br>Задача выполнена!';
-            emptyMsg = '';
-            nextMode = 'cards';
-            nextBtnLabel = 'Учить новые слова';
+            if (unmasteredCount > 0) {
+              emptyIcon = '✍️';
+              emptyTitle = 'Нет слов для Теста';
+              emptyMsg = 'Сюда попадают слова, прошедшие режим «Пары».';
+              if (cardsQueue.length > 0 && learningCount < dailyGoal) {
+                nextMode = 'cards';
+                nextBtnLabel = '🗂️ Открыть Карточки';
+              } else if (quizQueue.length > 0) {
+                nextMode = 'quiz';
+                nextBtnLabel = '🎯 Перейти в Квиз';
+              } else {
+                nextMode = 'pairs';
+                nextBtnLabel = '🧩 Перейти в Пары';
+              }
+            } else {
+              emptyIcon = '🏆';
+              emptyTitle = 'Отлично!<br>Задача выполнена!';
+              emptyMsg = '';
+              nextMode = 'cards';
+              nextBtnLabel = 'Учить новые слова';
+            }
           }
 
           content.innerHTML = `
