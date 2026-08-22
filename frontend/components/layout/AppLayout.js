@@ -104,32 +104,30 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         <div class="brand" id="brand-logo" style="cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 2px;" title="Перейти на главную (режим Тест)">
           <div style="display: flex; align-items: center;">
             <!-- SVG Cup-with-Book Logo -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 56" width="170" height="38" style="display: block;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 56" width="180" height="40" style="display: block;">
               <!-- Steam lines -->
               <path d="M20,16 C18.5,12.5 21.5,9.5 20,5" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
               <path d="M30,16 C28.5,11.5 31.5,8.5 30,3" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
               <path d="M40,16 C38.5,12.5 41.5,9.5 40,5" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
               <!-- Cup body -->
-              <path d="M12,28 C12,46 20,54 30,54 C40,54 48,46 48,28 Z" fill="#F45100"/>
+              <path d="M12,28 C12,46 20,54 30,54 C40,54 48,46 48,28 Z" fill="#FF6A00"/>
               <!-- Handle -->
-              <path d="M48,34 C55,34 56,43 48,46" stroke="#F45100" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-              <!-- Stacked open book pages -->
-              <!-- Layer 1 (back, largest) -->
-              <path d="M30,22 Q22,19 14,22 L14,30 Q22,27 30,30 Z" fill="#FFF" stroke="#F45100" stroke-width="1"/>
-              <path d="M30,22 Q38,19 46,22 L46,30 Q38,27 30,30 Z" fill="#FFF" stroke="#F45100" stroke-width="1"/>
-              <!-- Layer 2 (middle) -->
-              <path d="M30,22 Q23.5,20 17,23 L17,30 Q23.5,27 30,30 Z" fill="#FFF" stroke="#F45100" stroke-width="1"/>
-              <path d="M30,22 Q36.5,20 43,23 L43,30 Q36.5,27 30,30 Z" fill="#FFF" stroke="#F45100" stroke-width="1"/>
-              <!-- Layer 3 (front) -->
-              <path d="M30,22 Q25,21 20,24 L20,30 Q25,27 30,30 Z" fill="#FFF" stroke="#F45100" stroke-width="1"/>
-              <path d="M30,22 Q35,21 40,24 L40,30 Q35,27 30,30 Z" fill="#FFF" stroke="#F45100" stroke-width="1"/>
-              <!-- Book spine center line -->
-              <line x1="30" y1="22" x2="30" y2="30" stroke="#F45100" stroke-width="1"/>
+              <path d="M48,34 C55,34 56,43 48,46" stroke="#FF6A00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <!-- Stacked open book pages with thick orange borders -->
+              <!-- Layer 1 (back pages) -->
+              <path d="M30,22 Q21,19 13,22 L13,30 Q21,27 30,30 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
+              <path d="M30,22 Q39,19 47,22 L47,30 Q39,27 30,30 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
+              <!-- Layer 2 (front pages) -->
+              <path d="M30,22 Q24,20 18,23 L18,30 Q24,27 30,30 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
+              <path d="M30,22 Q36,20 42,23 L42,30 Q36,27 30,30 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
+              <!-- Spine center line -->
+              <line x1="30" y1="22" x2="30" y2="30" stroke="#FF6A00" stroke-width="1.8"/>
               <!-- EN Text -->
-              <text x="30" y="46" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" font-size="13" fill="#FFF" text-anchor="middle">EN</text>
-              <!-- Brand Name Text -->
-              <text x="68" y="29" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="20" fill="var(--text-main)">English</text>
-              <text x="68" y="49" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="20" fill="#FF6A00">Breakfast</text>
+              <text x="30" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
+              <!-- Brand Text (English Breakfast) -->
+              <text x="62" y="29" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="18.5" fill="var(--text-main)">English <tspan fill="#FF6A00">Breakfast</tspan></text>
+              <!-- Subtitle (Daily words. Real progress.) -->
+              <text x="62" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="11" fill="var(--text-muted)">Daily words. Real progress.</text>
             </svg>
           </div>
           <small class="user-status-text" id="header-user-status" style="margin-left: 45px; margin-top: -4px;">
