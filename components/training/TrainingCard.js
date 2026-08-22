@@ -1,4 +1,4 @@
-import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound, isWordAudioPlaying } from '../../services/audioService.js?v=21.0';
+import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound, isWordAudioPlaying } from '../../services/audioService.js?v=25.0';
 import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress, transcribeAudio } from '../../services/api.js?v=21.0';
 
 function sanitizeCategory(cat) {
