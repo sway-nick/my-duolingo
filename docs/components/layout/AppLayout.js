@@ -129,7 +129,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               <!-- Brand Text (English Breakfast) -->
               <text x="56" y="27" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="20.5" fill="var(--text-main)">English <tspan fill="#FF6A00">Breakfast</tspan></text>
               <!-- Subtitle (Vocabulary) -->
-              <text x="56" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="13" fill="var(--text-muted)">Vocabulary</text>
+              <text x="56" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="15" fill="var(--text-muted)">Vocabulary</text>
             </svg>
           </div>
           <small class="user-status-text" id="header-user-status" style="margin-left: 46px; margin-top: -4px;">
