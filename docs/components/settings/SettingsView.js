@@ -151,24 +151,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
-      <!-- Goals Card -->
-      <div class="settings-card" style="position: relative; z-index: 10;">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_goal')}</h3>
-        <div class="custom-dropdown" id="goal-dropdown">
-          <button type="button" class="custom-dropdown-trigger" id="goal-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span id="goal-dropdown-label">20 ${t('words')}</span>
-            <span class="dropdown-arrow">▼</span>
-          </button>
-          <div class="custom-dropdown-menu" id="goal-dropdown-menu" role="listbox">
-            <div class="dropdown-item" data-value="20">20 ${t('words')}</div>
-            <div class="dropdown-item" data-value="30">30 ${t('words')}</div>
-            <div class="dropdown-item" data-value="40">40 ${t('words')}</div>
-            <div class="dropdown-item" data-value="50">50 ${t('words')}</div>
-            <div class="dropdown-item" data-value="75">75 ${t('words')}</div>
-            <div class="dropdown-item" data-value="100">100 ${t('words')}</div>
-          </div>
-        </div>
-      </div>
 
     </div>
   `;
@@ -214,44 +196,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Goal Dropdown handling (Default 20 words)
-  let currentGoal = Number(settings.dailyGoal) === 10 || !settings.dailyGoal ? 20 : Number(settings.dailyGoal);
-  const goalDropdown = container.querySelector('#goal-dropdown');
-  const goalTrigger = container.querySelector('#goal-dropdown-trigger');
-  const goalLabel = container.querySelector('#goal-dropdown-label');
-  const goalItems = container.querySelectorAll('.dropdown-item');
-
-  function updateGoalUI(val) {
-    currentGoal = Number(val);
-    if (goalLabel) goalLabel.textContent = `${currentGoal} words`;
-    goalItems.forEach((item) => {
-      item.classList.toggle('selected', Number(item.dataset.value) === currentGoal);
-    });
-  }
-
-  updateGoalUI(currentGoal);
-
-  if (goalTrigger && goalDropdown) {
-    goalTrigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      goalDropdown.classList.toggle('open');
-    });
-
-    goalItems.forEach((item) => {
-      item.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const val = Number(item.dataset.value);
-        updateGoalUI(val);
-        goalDropdown.classList.remove('open');
-        triggerAutoSave();
-      });
-    });
-
-    // Close on click outside
-    document.addEventListener('click', () => {
-      goalDropdown.classList.remove('open');
-    });
-  }
 
 
 
@@ -285,7 +229,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   async function triggerAutoSave() {
     const newSettings = {
       ...settings,
-      dailyGoal: currentGoal,
+      dailyGoal: 20,
       theme: getSavedTheme(),
       voiceAccent: currentAccent,
       voiceGender: currentAccent === 'uk' ? 'male' : 'female',
