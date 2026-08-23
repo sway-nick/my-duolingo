@@ -1571,6 +1571,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const isCorrect = userAns === correctAns;
 
       // Check for typo and colorize letters directly inside the input box on 1st typo attempt
+      let isManyMistakes = false;
       if (!isCorrect && !hasSecondChance && userAns.length > 0) {
         const lev = calculateLevenshtein(userAns, correctAns);
         const maxAllowedDistance = Math.max(2, Math.floor(correctAns.length * 0.38));
@@ -1596,6 +1597,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           requestAnimationFrame(() => placeCaretAfterFirstMismatch(input));
           setTimeout(() => placeCaretAfterFirstMismatch(input), 50);
           return;
+        } else {
+          isManyMistakes = true;
         }
       }
 
@@ -1611,13 +1614,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const prog = await saveProgress(currentWord.id, isCorrect, 'input', { secondChanceFix: isSecondChanceFix });
       const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
 
-      if (prog?.autoFavorited) {
+      if (isManyMistakes) {
         favorited = true;
-        const favBtn = container.querySelector('#fav-toggle-btn');
-        if (favBtn) {
-          favBtn.textContent = '❤️';
-          favBtn.classList.add('is-favorite');
-        }
+        await toggleFavoriteApi(currentWord.id, true).catch((e) => console.warn(e));
+        onFavoriteToggle(currentWord.id, true);
+      } else if (prog?.autoFavorited) {
+        favorited = true;
         onFavoriteToggle(currentWord.id, true);
       }
 
@@ -1656,14 +1658,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         // Shimmer / blink heart as a prompt to favorite difficult word
         const favBtn = container.querySelector('#fav-toggle-btn');
-        if (favBtn && !favorited) {
-          favBtn.classList.add('heart-hint-blink');
+        if (favBtn) {
+          if (favorited) {
+            favBtn.textContent = '❤️';
+            favBtn.classList.add('is-favorite');
+          } else {
+            favBtn.classList.add('heart-hint-blink');
+          }
         }
       }
 
-      // Wait for word pronunciation to finish before transitioning
-      const minDelay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1600) : 1800;
-      const maxWait = isCorrect ? 3500 : 5000;
+      // Wait for word pronunciation to finish before transitioning (+1s extra delay for wrong answers)
+      const minDelay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1600) : 2800;
+      const maxWait = isCorrect ? 3500 : 6000;
       onNextAfterSpeech(onNext, minDelay, maxWait);
     };
 
