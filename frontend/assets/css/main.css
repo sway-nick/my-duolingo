@@ -2572,6 +2572,17 @@ body {
   font-size: 14px;
 }
 
+.train-left-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  margin-bottom: 8px;
+  background: rgba(22, 163, 74, 0.08);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
 .autosave-bar {
   display: flex;
   justify-content: flex-end;
@@ -4690,4 +4701,11 @@ body.notebook-theme,
 .notebook-theme .settings-option-subtitle,
 .notebook-theme .settings-info-text {
   font-size: 1.25em !important;
+}
+
+.notebook-theme .dropdown-item,
+.notebook-theme .custom-dropdown-trigger,
+.notebook-theme .train-left-badge {
+  font-size: 19px !important;
+  font-family: 'Caveat', cursive !important;
 }

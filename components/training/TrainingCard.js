@@ -208,8 +208,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isInputMode
             ? `
-            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              ✍️ ${t('train_left')}: <strong>${formatWordCount(activeWords.length)}</strong>
+            <div class="train-left-badge">
+              ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
             <div class="word-header-row">
               <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Speak word">🔊</button>
@@ -222,8 +222,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `
             : `
-            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              🎯 ${t('train_left')}: <strong>${formatWordCount(activeWords.length)}</strong>
+            <div class="train-left-badge">
+              🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
             <div class="word-header-row">
               ${
