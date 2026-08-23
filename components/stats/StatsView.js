@@ -1,4 +1,4 @@
-import { getUserStats, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=18.0';
+import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.js?v=18.0';
 import { getCurrentUser } from '../../services/authService.js?v=18.0';
 import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=18.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=25.0';
@@ -42,56 +42,130 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         .join('');
     }
 
-    const wotd = stats.wordOfTheDay;
-    let wotdHtml = '';
-    let isWotdFav = false;
+    // Generate dates for the last 7 days
+    const days = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(now.getDate() - i);
+      days.push({
+        dateStr: d.toLocaleDateString(getInterfaceLanguage() === 'ru' ? 'ru-RU' : getInterfaceLanguage() === 'uk' ? 'uk-UA' : 'en-US', { day: 'numeric', month: 'short' }),
+        timestampStart: new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(),
+        timestampEnd: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999).getTime(),
+        dailyCount: 0,
+        cumulativeCount: 0
+      });
+    }
 
-    if (wotd) {
-      if (wotd.word) preloadWordAudio(wotd.word);
-      const favList = getUserFavorites();
-      const favSet = new Set(favList.map(String));
-      isWotdFav = favSet.has(String(wotd.id));
+    const localProg = getUserProgress();
 
-      wotdHtml = `
-        <!-- Word of the Day Section (Self-contained VIP Gold Card) -->
-        <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 16px auto 0; max-width: 100%;">
-          <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
-            <!-- Front Face: English word -->
-            <div class="flashcard-face flashcard-front">
-              <div class="card-edge-rim-glint" aria-hidden="true"></div>
-              <div class="flashcard-face-top">
-                <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔥</button>
-                <span class="wotd-card-badge">${t('word_of_day')}</span>
-                <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
-                  ${isWotdFav ? '❤️' : '🤍'}
-                </button>
-              </div>
-              <div class="flashcard-face-body">
-                <h2 class="flashcard-word embossed-text">${wotd.word}</h2>
-              </div>
-              <div class="flashcard-face-bottom">
-                <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
-              </div>
-            </div>
+    // Fill daily counts
+    Object.entries(localProg).forEach(([wordId, prog]) => {
+      if (isWordMastered(prog)) {
+        const masteredAt = prog.masteredAt || prog.lastPracticed || Date.now();
+        days.forEach(day => {
+          if (masteredAt >= day.timestampStart && masteredAt <= day.timestampEnd) {
+            day.dailyCount += 1;
+          }
+        });
+      }
+    });
 
-            <!-- Back Face: Russian translation -->
-            <div class="flashcard-face flashcard-back">
-              <div class="card-edge-rim-glint" aria-hidden="true"></div>
-              <div class="flashcard-face-top">
-                <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔥</button>
-                <span class="wotd-card-badge">${t('word_of_day')}</span>
-                <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
-                  ${isWotdFav ? '❤️' : '🤍'}
-                </button>
-              </div>
-              <div class="flashcard-face-body">
-                <h2 class="flashcard-translation embossed-text">${wotd.translation}</h2>
-              </div>
-            </div>
+    // Fill cumulative counts
+    days.forEach(day => {
+      let count = 0;
+      Object.entries(localProg).forEach(([wordId, prog]) => {
+        if (isWordMastered(prog)) {
+          const masteredAt = prog.masteredAt || prog.lastPracticed || Date.now();
+          if (masteredAt <= day.timestampEnd) {
+            count += 1;
+          }
+        }
+      });
+      day.cumulativeCount = count;
+    });
+
+    const maxDaily = Math.max(...days.map(d => d.dailyCount), 1);
+    const maxCumulative = Math.max(...days.map(d => d.cumulativeCount), 1);
+
+    const chartHeight = 110; // active height for columns
+    const chartBottom = 140; // y baseline
+
+    let barsHtml = '';
+    let points = [];
+    let labelsHtml = '';
+
+    days.forEach((day, idx) => {
+      const x = 50 + idx * 56;
+      const barHeight = (day.dailyCount / maxDaily) * chartHeight;
+      const barY = chartBottom - barHeight;
+      
+      // Bar for daily learned (blue)
+      barsHtml += `
+        <rect x="${x + 8}" y="${barY}" width="20" height="${barHeight}" fill="#3b82f6" rx="3" opacity="0.85" />
+        <text x="${x + 18}" y="${barY - 5}" font-family="inherit" font-weight="700" font-size="11" fill="#3b82f6" text-anchor="middle">${day.dailyCount}</text>
+      `;
+
+      // Line point for cumulative (green)
+      const lineY = chartBottom - (day.cumulativeCount / maxCumulative) * chartHeight;
+      points.push({ x: x + 18, y: lineY, val: day.cumulativeCount });
+
+      // Date labels
+      labelsHtml += `
+        <text x="${x + 18}" y="${chartBottom + 20}" font-family="inherit" font-size="11" fill="var(--text-muted)" text-anchor="middle">${day.dateStr}</text>
+      `;
+    });
+
+    // Generate path for cumulative line
+    let pathD = '';
+    points.forEach((p, idx) => {
+      if (idx === 0) pathD += `M ${p.x} ${p.y}`;
+      else pathD += ` L ${p.x} ${p.y}`;
+    });
+
+    let lineHtml = `
+      <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    `;
+    points.forEach((p) => {
+      lineHtml += `
+        <circle cx="${p.x}" cy="${p.y}" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="${p.x}" y="${p.y - 7}" font-family="inherit" font-weight="700" font-size="11" fill="#10b981" text-anchor="middle">${p.val}</text>
+      `;
+    });
+
+    const chartTitle = getInterfaceLanguage() === 'ru' ? 'Динамика изучения' : getInterfaceLanguage() === 'uk' ? 'Динаміка вивчення' : 'Learning Dynamics';
+    const barLegend = getInterfaceLanguage() === 'ru' ? 'Выучено за день' : getInterfaceLanguage() === 'uk' ? 'Вивчено за день' : 'Learned today';
+    const lineLegend = getInterfaceLanguage() === 'ru' ? 'Всего выучено' : getInterfaceLanguage() === 'uk' ? 'Всього вивчено' : 'Total learned';
+
+    const chartHtml = `
+      <div class="curriculum-block" style="margin-top: 20px;">
+        <div class="section-title-row" style="margin-bottom: 16px;">
+          <h3>📊 ${chartTitle}</h3>
+          <div style="display: flex; gap: 14px; font-size: 11px; font-weight: 600;">
+            <span style="color: #3b82f6; display: flex; align-items: center; gap: 4px;">
+              <span style="display: inline-block; width: 10px; height: 10px; background-color: #3b82f6; border-radius: 2px;"></span>
+              ${barLegend}
+            </span>
+            <span style="color: #10b981; display: flex; align-items: center; gap: 4px;">
+              <span style="display: inline-block; width: 10px; height: 2px; background-color: #10b981;"></span>
+              ${lineLegend}
+            </span>
           </div>
         </div>
-      `;
-    }
+        <div style="width: 100%; overflow-x: auto; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 8px 10px; box-shadow: var(--shadow-sm);">
+          <svg viewBox="0 0 460 180" width="100%" height="160" style="display: block; overflow: visible;">
+            <!-- Grid lines -->
+            <line x1="40" y1="30" x2="440" y2="30" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
+            <line x1="40" y1="85" x2="440" y2="85" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
+            <line x1="40" y1="140" x2="440" y2="140" stroke="var(--border-color)" stroke-width="1" />
+            
+            ${barsHtml}
+            ${lineHtml}
+            ${labelsHtml}
+          </svg>
+        </div>
+      </div>
+    `;
 
     container.innerHTML = `
       <div class="page-header" style="margin-bottom: 14px;">
@@ -99,21 +173,13 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       </div>
 
       <div id="stats-content" style="padding-bottom: 24px;">
-        <!-- Top Stats Widgets Grid (2x2) -->
+        <!-- Top Stats Widgets Grid (1x3) -->
         <div class="stats-grid">
           <div class="stat-card">
             <span class="stat-icon">🎓</span>
             <div class="stat-info">
               <h3 id="stat-mastered">${stats.masteredCount || 0}</h3>
               <p>${t('dict_filter_mastered')}</p>
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <span class="stat-icon">📖</span>
-            <div class="stat-info">
-              <h3 id="stat-learning">${stats.learningCount || 0}</h3>
-              <p>${getInterfaceLanguage() === 'ru' ? 'Изучаю' : getInterfaceLanguage() === 'uk' ? 'Вивчаю' : 'Learning'}</p>
             </div>
           </div>
 
@@ -146,73 +212,10 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           </div>
         </div>
 
-        <!-- Word of the Day Section -->
-        ${wotdHtml}
+        <!-- Custom SVG Study Progress Chart -->
+        ${chartHtml}
       </div>
     `;
-
-    if (wotd) {
-      const flashcard = container.querySelector('#wotd-flashcard-3d');
-      if (flashcard) {
-        let isFlipped = false;
-        flashcard.addEventListener('click', (e) => {
-          if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
-            return;
-          }
-          isFlipped = !isFlipped;
-          flashcard.classList.toggle('is-flipped', isFlipped);
-          
-          // Trigger specular edge gleam animation on the card
-          flashcard.classList.remove('gleam-active');
-          void flashcard.offsetWidth;
-          flashcard.classList.add('gleam-active');
-
-          if (!isFlipped) {
-            speakWord(wotd.word, wotd.id);
-          }
-        });
-
-        const speakButtons = container.querySelectorAll('#wotd-sound-front, #wotd-sound-back');
-        speakButtons.forEach((btn) => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            speakWord(wotd.word, wotd.id);
-          });
-        });
-
-        const favButtons = container.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
-        favButtons.forEach((btn) => {
-          btn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            isWotdFav = !isWotdFav;
-            await toggleFavoriteApi(wotd.id, isWotdFav);
-            favButtons.forEach((b) => {
-              b.classList.toggle('is-favorite', isWotdFav);
-              b.innerHTML = isWotdFav ? '❤️' : '🤍';
-            });
-          });
-        });
-      }
-    }
-    // ── Background patch: when backend returns real top-error word ──────────────
-    // The page is already visible; we only update the WOTD block if the word differs.
-    if (stats.wotdBackgroundPromise) {
-      stats.wotdBackgroundPromise.then((cloudWordId) => {
-        if (!cloudWordId) return;
-        if (stats.wordOfTheDay && String(stats.wordOfTheDay.id) === cloudWordId) return; // already right
-
-        // Find word object from the list returned by getUserStats
-        const realWord = (stats.wordsList || allWords || []).find((w) => String(w.id) === cloudWordId);
-        if (!realWord) return;
-
-        // Only patch if the stats container is still showing (user hasn't navigated away)
-        const wotdWrapper = container.querySelector('.wotd-standalone-wrapper');
-        if (!wotdWrapper) return;
-
-        // Re-render full stats page with correct word (fast — all local data)
-        renderStatsView(stats.wordsList || allWords, containerSelector);
-      }).catch(() => {});
-    }
   } catch (err) {
     console.error('Failed to load stats view:', err);
     container.innerHTML = '<p class="empty-state">Ошибка загрузки статистики.</p>';
