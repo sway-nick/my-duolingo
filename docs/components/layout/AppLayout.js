@@ -256,6 +256,7 @@ function bindHeaderActionButtons(container) {
   const xpBtn = container.querySelector('#header-xp-btn');
   if (xpBtn) {
     xpBtn.addEventListener('click', () => {
+      closeDrawer();
       const navTabs = document.querySelectorAll('.nav-tab');
       navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'leaderboard'));
       globalTabChangeCallback('leaderboard');
