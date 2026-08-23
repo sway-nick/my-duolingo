@@ -223,8 +223,8 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               : `<div class="my-bar-avatar-placeholder">${currentUser && currentUser.name ? currentUser.name.charAt(0) : '👤'}</div>`
           }
           <div>
-            <div style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : (getInterfaceLanguage() === 'ru' ? 'Вы (Гость)' : getInterfaceLanguage() === 'uk' ? 'Ви (Гість)' : 'You (Guest)')}</div>
-            <div style="font-size: 12px; color: var(--text-muted);">
+            <div class="my-bar-name" style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : (getInterfaceLanguage() === 'ru' ? 'Вы (Гость)' : getInterfaceLanguage() === 'uk' ? 'Ви (Гість)' : 'You (Guest)')}</div>
+            <div class="my-bar-status" style="font-size: 12px; color: var(--text-muted);">
               ${statusText}
             </div>
           </div>

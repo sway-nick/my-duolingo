@@ -4209,7 +4209,7 @@ body.notebook-theme,
   border-radius: 3px 10px 5px 8px !important;
   color: var(--nb-blue-pen) !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 18px !important;
+  font-size: 20px !important;
   font-weight: 600 !important;
   box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.15) !important;
   transition: transform 0.1s ease, box-shadow 0.1s ease !important;
@@ -4328,7 +4328,7 @@ body.notebook-theme,
   border: 1.5px solid var(--nb-blue-pen) !important;
   color: var(--nb-blue-pen) !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 13px !important;
+  font-size: 17px !important;
   border-radius: 3px 8px 4px 6px !important;
 }
 
@@ -4345,7 +4345,7 @@ body.notebook-theme,
 .notebook-theme .stat-label {
   font-family: 'Caveat', cursive !important;
   color: var(--nb-muted) !important;
-  font-size: 14px !important;
+  font-size: 18px !important;
 }
 
 .notebook-theme .stat-value {
@@ -4361,7 +4361,7 @@ body.notebook-theme,
   border: 2px solid var(--nb-blue-pen) !important;
   border-radius: 4px 12px 6px 10px !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 17px !important;
+  font-size: 20px !important;
   font-weight: 600 !important;
   color: var(--nb-blue-pen) !important;
   box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.12) !important;
@@ -4435,7 +4435,6 @@ body.notebook-theme,
   font-family: inherit !important;
 }
 
-.notebook-theme .wotd-card .flashcard-face,
 .notebook-theme .wotd-card .embossed-text,
 .notebook-theme .wotd-card .flashcard-flip-prompt,
 .notebook-theme .wotd-card .flashcard-word,
@@ -4443,7 +4442,11 @@ body.notebook-theme,
 .notebook-theme .wotd-card .flashcard-transcription,
 .notebook-theme .wotd-card .wotd-card-badge {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  border-radius: revert !important;
+}
+
+.notebook-theme .wotd-card .flashcard-face {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  border-radius: var(--radius-lg, 16px) !important;
 }
 
 /* Success/error colors override */
@@ -4708,4 +4711,42 @@ body.notebook-theme,
 .notebook-theme .train-left-badge {
   font-size: 19px !important;
   font-family: 'Caveat', cursive !important;
+}
+
+.notebook-theme .mode-pill-btn {
+  font-family: 'Caveat', cursive !important;
+  font-size: 21px !important;
+}
+
+.notebook-theme .podium-name,
+.notebook-theme .row-name,
+.notebook-theme .my-bar-name {
+  font-family: 'Caveat', cursive !important;
+  font-size: 19px !important;
+}
+
+.notebook-theme .podium-xp,
+.notebook-theme .row-xp,
+.notebook-theme .my-bar-xp,
+.notebook-theme .my-rank-badge,
+.notebook-theme .row-rank {
+  font-family: 'Caveat', cursive !important;
+  font-size: 18px !important;
+}
+
+.notebook-theme #leaderboard-type-trigger,
+.notebook-theme #leaderboard-type-label {
+  font-family: 'Caveat', cursive !important;
+  font-size: 23px !important;
+}
+
+.notebook-theme .league-timer-badge,
+.notebook-theme #leaderboard-timer-badge {
+  font-family: 'Caveat', cursive !important;
+  font-size: 18px !important;
+}
+
+.notebook-theme .my-bar-status {
+  font-family: 'Caveat', cursive !important;
+  font-size: 16px !important;
 }
