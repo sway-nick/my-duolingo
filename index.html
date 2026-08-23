@@ -65,7 +65,7 @@
       let favoritePracticeWords = null;
       let currentWordIndex = 0;
       let activeTab = 'training';
-      let userSettings = { enabledMethods: 'quiz,cards,input' };
+      let userSettings = { enabledMethods: 'quiz,cards,input', dailyGoal: 20 };
 
       async function loadData() {
         // 1. Sync User Data from Cloud for cross-device consistency
@@ -204,7 +204,7 @@
           categoryWords = favoritePracticeWords;
         }
 
-        const dailyGoal = Number(userSettings.dailyGoal) || 10;
+        const dailyGoal = Number(userSettings.dailyGoal) || 20;
         const totalLearningWords = categoryWords.filter((w) => isWordLearning(userProgress[w.id]));
         const learningCount = totalLearningWords.length;
 
