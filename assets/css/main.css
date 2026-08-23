@@ -2510,7 +2510,8 @@ body {
   border-radius: var(--radius-md);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
   z-index: 100;
-  overflow: hidden;
+  max-height: 260px;
+  overflow-y: auto;
   display: none;
   animation: dropdownFade 0.15s ease;
 }
