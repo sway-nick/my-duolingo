@@ -208,11 +208,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isInputMode
             ? `
+            <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
             <div class="train-left-badge">
               ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
             <div class="word-header-row">
-              <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Speak word">🔊</button>
               <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                 ${currentWord.translation}
               </h2>
@@ -222,6 +222,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `
             : `
+            ${(quizStage === 0 || quizStage === 1) ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="${quizStage === 1 ? 'Repeat sound' : 'Speak word'}" style="right: auto; left: -4px;">🔊</button>` : ''}
             <div class="train-left-badge">
               🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
@@ -229,14 +230,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ${
                 quizStage === 0
                   ? `
-                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Speak word">🔊</button>
                 <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                   <span class="training-word-text">${currentWord.word}</span>
                 </h2>
               `
                   : quizStage === 1
                   ? `
-                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Repeat sound">🔊</button>
                 <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
                   <span class="listening-audio-icon">🎧</span>
                   <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
@@ -244,13 +243,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               `
                   : quizStage === 2
                   ? `
-                <div style="width: 36px;"></div>
                 <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                   ${currentWord.translation}
                 </h2>
               `
                   : `
-                <div style="width: 36px;"></div>
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                   <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
                     ${currentWord.translation}
