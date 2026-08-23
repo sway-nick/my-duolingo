@@ -45,6 +45,25 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
+      <!-- Language Selection Card -->
+      <div class="settings-card" style="position: relative; z-index: 15;">
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🌐 Interface Language</h3>
+        <div class="custom-dropdown" id="lang-dropdown">
+          <button type="button" class="custom-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="lang-dropdown-label">English</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="custom-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <div class="dropdown-item" data-value="ru">Русский</div>
+            <div class="dropdown-item" data-value="uk">Українська</div>
+            <div class="dropdown-item" data-value="en">English</div>
+            <div class="dropdown-item" data-value="de">Deutsch</div>
+            <div class="dropdown-item" data-value="es">Español</div>
+            <div class="dropdown-item" data-value="fr">Français</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Theme Switcher Card -->
       <div class="settings-card">
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Theme</h3>
@@ -127,25 +146,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="50">50 words</div>
             <div class="dropdown-item" data-value="75">75 words</div>
             <div class="dropdown-item" data-value="100">100 words</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Language Selection Card -->
-      <div class="settings-card" style="position: relative; z-index: 9;">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🌐 Interface Language</h3>
-        <div class="custom-dropdown" id="lang-dropdown">
-          <button type="button" class="custom-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span id="lang-dropdown-label">English</span>
-            <span class="dropdown-arrow">▼</span>
-          </button>
-          <div class="custom-dropdown-menu" id="lang-dropdown-menu" role="listbox">
-            <div class="dropdown-item" data-value="ru">Русский</div>
-            <div class="dropdown-item" data-value="uk">Українська</div>
-            <div class="dropdown-item" data-value="en">English</div>
-            <div class="dropdown-item" data-value="de">Deutsch</div>
-            <div class="dropdown-item" data-value="es">Español</div>
-            <div class="dropdown-item" data-value="fr">Français</div>
           </div>
         </div>
       </div>
