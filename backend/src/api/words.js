@@ -17,6 +17,7 @@ function wordsGet() {
   const translnIdx = headers.indexOf('translation');
   const catIdx = headers.indexOf('category');
   const lvlIdx = headers.indexOf('level');
+  const notesIdx = headers.indexOf('notes');
 
   values.shift();
 
@@ -31,6 +32,11 @@ function wordsGet() {
       transcription = `/${transcription}/`;
     }
 
+    let notes = '';
+    if (notesIdx >= 0 && row[notesIdx] !== undefined) {
+      notes = String(row[notesIdx]).trim();
+    }
+
     return {
       id: row[idIdx >= 0 ? idIdx : 0],
       word: row[wordIdx >= 0 ? wordIdx : 1],
@@ -38,6 +44,7 @@ function wordsGet() {
       translation: row[translnIdx >= 0 ? translnIdx : 3],
       category: row[catIdx >= 0 ? catIdx : 4],
       level: row[lvlIdx >= 0 ? lvlIdx : 5],
+      notes: notes,
     };
   });
 
