@@ -283,11 +283,11 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         <div class="page-header" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; width: 175px;">
             <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 19px; font-weight: 800; padding: 4px 6px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: space-between; width: 175px; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
-              <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : '🏆 ' + t('lead_title')}</span>
+              <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
               <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 2px;">▼</span>
             </button>
             <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 175px;">
-              <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">🏆 ${t('lead_title')}</div>
+              <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">${t('lead_title')}</div>
               <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 ${t('lead_all_time')}</div>
             </div>
           </div>
