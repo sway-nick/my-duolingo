@@ -363,7 +363,6 @@ function getSharedWordAudioPlayer() {
 
 function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-  if (typeof navigator !== 'undefined' && navigator.onLine) return; // Do not use robot voice when online
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -435,12 +434,33 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     }
     try {
       cachedAudio.playbackRate = isTurtleMode ? 0.62 : 1.0;
-      cachedAudio.currentTime = 0;
+      
+      let hasTriedFallback = false;
+      cachedAudio.onerror = () => {
+        if (!hasTriedFallback) {
+          hasTriedFallback = true;
+          cachedAudio.src = fallback;
+          cachedAudio.currentTime = 0;
+          cachedAudio.play().catch(() => {
+            speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+          });
+        } else {
+          speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+        }
+      };
+
       const playPromise = cachedAudio.play();
       if (playPromise !== undefined) {
         playPromise.catch((err) => {
           if (err && err.name === 'AbortError') return;
-          speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+          if (!hasTriedFallback) {
+            hasTriedFallback = true;
+            cachedAudio.src = fallback;
+            cachedAudio.currentTime = 0;
+            cachedAudio.play().catch(() => {
+              speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+            });
+          }
         });
       }
     } catch (e) {
