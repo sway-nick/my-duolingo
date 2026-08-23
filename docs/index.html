@@ -714,7 +714,6 @@
           () => {
             // Click on Logo / Owl -> Switch to Training and activate leftmost available mode
             try {
-              console.log('Logo clicked callback triggered!');
               const selectedCategory = userSettings.category || 'Elementary';
               const cleanCat = (cat) => {
                 if (!cat) return 'Elementary';
@@ -739,7 +738,6 @@
                 nextMethod = 'input';
               }
 
-              console.log('Logo click computed nextMethod:', nextMethod);
               userSettings.preferredMethod = nextMethod;
               saveUserSettings(userSettings).catch((e) => console.warn(e));
 
