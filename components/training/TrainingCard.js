@@ -966,23 +966,41 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           await saveProgress(currentWord.id, true, 'quiz');
           onNextAfterSpeech(onNext, 1000, 4000);
         } else {
-          isCompleted = true;
-          micBtn.disabled = true;
-          playErrorSound();
+          speechAttempts++;
           micBtn.classList.remove('listening', 'processing');
-          micBtn.classList.add('wrong');
-          micBtn.innerHTML = '❌';
+          
+          if (speechAttempts === 1) {
+            playErrorSound();
+            micBtn.innerHTML = '🎙️';
+            if (holdHint) {
+              holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
+                ? 'Попробуйте повторить 🎙️' 
+                : getInterfaceLanguage() === 'uk' 
+                  ? 'Спробуйте повторити 🎙️' 
+                  : 'Try to repeat 🎙️';
+            }
+            speakWord(currentWord.word, currentWord.id);
+            setTimeout(() => {
+              isProcessing = false;
+            }, 1200);
+          } else {
+            isCompleted = true;
+            micBtn.disabled = true;
+            playErrorSound();
+            micBtn.classList.add('wrong');
+            micBtn.innerHTML = '❌';
 
-          if (holdHint) {
-            holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-              ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>` 
-              : getInterfaceLanguage() === 'uk'
-                ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+            if (holdHint) {
+              holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
+                ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>` 
+                : getInterfaceLanguage() === 'uk'
+                  ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
+                  : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+            }
+            speakWord(currentWord.word, currentWord.id);
+            await saveProgress(currentWord.id, false, 'quiz');
+            onNextAfterSpeech(onNext, 2000, 5000);
           }
-          speakWord(currentWord.word, currentWord.id);
-          await saveProgress(currentWord.id, false, 'quiz');
-          onNextAfterSpeech(onNext, 2000, 5000);
         }
       }
 
