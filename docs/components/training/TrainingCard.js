@@ -1445,6 +1445,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
 
     input.addEventListener('input', () => {
+      if (input.querySelector('span')) {
+        const rawText = input.textContent || '';
+        input.innerHTML = '';
+        input.textContent = rawText;
+        placeCaretAtEnd(input);
+        return;
+      }
       const text = input.textContent || '';
       const sanitized = text.replace(/<[^>]*>?/gm, '');
       if (text !== sanitized || text.length > 40) {

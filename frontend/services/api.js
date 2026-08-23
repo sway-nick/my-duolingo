@@ -842,13 +842,17 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   if (method === 'cards_learn') {
     prog.seenInCards = true;
-    prog.stage = 'quiz';
-    if (!prog.quizCorrect) prog.quizCorrect = 0;
+    if (!isWordMastered(prog)) {
+      prog.stage = 'quiz';
+      if (!prog.quizCorrect) prog.quizCorrect = 0;
+    }
   } else if (method === 'cards_know') {
     prog.seenInCards = true;
-    prog.quizCorrect = Math.max(prog.quizCorrect || 0, 5);
-    prog.stage = 'pairs';
-    if (!prog.pairsCorrect) prog.pairsCorrect = 0;
+    if (!isWordMastered(prog)) {
+      prog.quizCorrect = Math.max(prog.quizCorrect || 0, 5);
+      prog.stage = 'pairs';
+      if (!prog.pairsCorrect) prog.pairsCorrect = 0;
+    }
   } else if (method === 'cards') {
     prog.seenInCards = true;
     if (!isCorrect) {
@@ -1166,10 +1170,32 @@ function getWordStage(prog) {
 }
 
 function getQueueForCards(words, progress) {
-  return words.filter((w) => {
+  const base = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return !p || (!p.seenInCards && !isWordMastered(p));
   });
+
+  const candidateMastered = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return p && isWordMastered(p);
+  });
+
+  if (candidateMastered.length === 0) {
+    return base;
+  }
+
+  candidateMastered.sort((a, b) => {
+    const pA = progress[a.id] || progress[String(a.id)];
+    const pB = progress[b.id] || progress[String(b.id)];
+    const tA = pA ? pA.lastPracticed || 0 : 0;
+    const tB = pB ? pB.lastPracticed || 0 : 0;
+    return tA - tB;
+  });
+
+  const injectCount = Math.max(1, Math.round(base.length * 0.15));
+  const injected = candidateMastered.slice(0, injectCount);
+
+  return [...base, ...injected];
 }
 
 function getQueueForQuiz(words, progress, favorites = []) {
