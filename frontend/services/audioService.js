@@ -425,7 +425,29 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetLang = lang || (isUk ? 'en-GB' : 'en-US');
 
-  const { primary, fallback } = getAudioUrls(text, isUk);
+  const { primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
+  const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
+
+  const cachedAudio = audioCache.get(cacheKey);
+  if (cachedAudio) {
+    if (player) {
+      try { player.pause(); } catch (e) {}
+    }
+    try {
+      cachedAudio.playbackRate = isTurtleMode ? 0.62 : 1.0;
+      cachedAudio.currentTime = 0;
+      const playPromise = cachedAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          if (err && err.name === 'AbortError') return;
+          speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+        });
+      }
+    } catch (e) {
+      speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+    }
+    return isTurtleMode;
+  }
 
   if (!player) {
     speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');

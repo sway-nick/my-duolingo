@@ -1498,6 +1498,19 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
   });
 }
 
+async function getCloudWordOfTheDayId(userId) {
+  try {
+    const r = await fetch(`${API_URL}?route=stats&userId=${encodeURIComponent(userId || 'guest')}`);
+    const json = await r.json();
+    if (json && json.success && json.data && json.data.wordOfTheDayId) {
+      return String(json.data.wordOfTheDayId);
+    }
+  } catch (e) {
+    console.warn('Failed to fetch cloud word of the day ID:', e);
+  }
+  return null;
+}
+
 export {
   getHealth,
   getWords,
@@ -1532,4 +1545,5 @@ export {
   fetchUserDataFromCloud,
   pushUserDataToCloud,
   transcribeAudio,
+  getCloudWordOfTheDayId,
 };
