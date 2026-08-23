@@ -1,5 +1,6 @@
 import { speakWord } from '../../services/audioService.js?v=21.0';
 import { toggleFavoriteApi } from '../../services/api.js?v=18.0';
+import { t } from '../../services/i18n.js?v=25.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -11,13 +12,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     container.innerHTML = `
       <div class="favorites-page">
         <div class="page-header" style="margin-bottom: 14px;">
-          <h2 style="font-size: 22px; margin: 0;">❤️ Избранные</h2>
+          <h2 style="font-size: 22px; margin: 0;">${t('fav_title')}</h2>
         </div>
         <div class="empty-favorites-box">
           <span class="empty-icon" style="font-size: 40px; display: block; margin-bottom: 8px;">🤍</span>
-          <h3 style="margin: 4px 0 8px;">У вас пока нет избранных слов</h3>
+          <h3 style="margin: 4px 0 8px;">${t('fav_empty')}</h3>
           <p style="color: var(--text-muted); font-size: 14px; margin: 0;">
-            Нажимайте на сердечко ❤️ в Словаре или во время тренировок, чтобы добавлять слова сюда.
+            ${t('fav_empty_sub')}
           </p>
         </div>
       </div>
@@ -28,13 +29,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   container.innerHTML = `
     <div class="favorites-page">
       <div class="page-header" style="margin-bottom: 8px;">
-        <h2 style="font-size: 22px; margin: 0; white-space: nowrap;">❤️ Избранные (${favoriteWords.length})</h2>
+        <h2 style="font-size: 22px; margin: 0; white-space: nowrap;">${t('fav_title')} (${favoriteWords.length})</h2>
       </div>
 
       <!-- Sticky Repeat Button -->
       <div class="fav-sticky-controls">
         <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-height: 44px; height: 44px; font-size: 16px; font-weight: 700;">
-          Повторить
+          ${t('fav_practice_btn')}
         </button>
       </div>
 

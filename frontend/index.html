@@ -50,6 +50,7 @@
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud } from './services/api.js?v=130.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=130.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=130.0';
+      import { t, getInterfaceLanguage } from './services/i18n.js?v=130.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=130.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=130.0';
       import { renderSettingsView } from './components/settings/SettingsView.js?v=130.0';
@@ -270,26 +271,27 @@
         // Check if all words in category/favorites are mastered (3x in Test)
         const unmasteredCount = categoryWords.filter((w) => !isWordMastered(userProgress[w.id])).length;
         if (unmasteredCount === 0 && categoryWords.length > 0) {
+          const title = isFavPracticeActive ? t('train_mastered_all_favs') : t('train_mastered_title');
+          const description = isFavPracticeActive
+            ? (getInterfaceLanguage() === 'ru' ? `Вы успешно изучили все <strong>${favoritePracticeWords.length}</strong> избранных слов (2x в режиме Тест)!` : getInterfaceLanguage() === 'uk' ? `Ви успішно вивчили всі <strong>${favoritePracticeWords.length}</strong> обраних слів (2x у режимі Тест)!` : `You have successfully learned all <strong>${favoritePracticeWords.length}</strong> favorite words (2x in Test mode)!`)
+            : (getInterfaceLanguage() === 'ru' ? `Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (2x в режиме Тест)!` : getInterfaceLanguage() === 'uk' ? `Всі слова в категорії <strong>«${selectedCategory === 'All' ? t('dict_filter_all') : selectedCategory}»</strong> успішно вивчені (2x у режимі Тест)!` : `All words in category <strong>"${selectedCategory === 'All' ? t('dict_filter_all') : selectedCategory}"</strong> have been successfully learned (2x in Test mode)!`);
+
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
               <div style="font-size: 56px; margin-bottom: 16px;">🎉</div>
-              <h2 style="margin: 0 0 10px;">${isFavPracticeActive ? 'Все избранные слова изучены!' : 'Поздравляем!'}</h2>
+              <h2 style="margin: 0 0 10px;">${title}</h2>
               <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; line-height: 1.45;">
-                ${
-                  isFavPracticeActive
-                    ? `Вы успешно изучили все <strong>${favoritePracticeWords.length}</strong> избранных слов (2x в режиме Тест)!`
-                    : `Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (2x в режиме Тест)!`
-                }
+                ${description}
               </p>
               <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
                 <button class="primary-button btn-green" id="review-all-btn" style="min-height: 46px;">
-                  🔄 Повторить заново
+                  ${t('train_review_again')}
                 </button>
                 ${
                   isFavPracticeActive
                     ? `
                   <button class="secondary-button" id="exit-favs-btn" style="min-height: 46px;">
-                    Вернуться в общую программу
+                    ${t('train_exit_favs')}
                   </button>
                 `
                     : ''
@@ -340,12 +342,11 @@
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
                 <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                  Отлично!<br/>
-                  Все слова в этом режиме изучены!
+                  ${getInterfaceLanguage() === 'ru' ? 'Отлично!<br/>Все слова в этом режиме изучены!' : getInterfaceLanguage() === 'uk' ? 'Відмінно!<br/>Всі слова в цьому режимі вивчені!' : 'Excellent!<br/>All words in this mode have been mastered!'}
                 </p>
                 <div style="width: 100%; max-width: 340px; margin: 0 auto;">
                   <button class="primary-button btn-green" id="go-pairs-btn">
-                    Перейти в Пары
+                    ${t('train_go_pairs')}
                   </button>
                 </div>
               </div>
@@ -369,12 +370,11 @@
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
                 <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                  Отлично!<br/>
-                  Все слова в этом режиме изучены!
+                  ${getInterfaceLanguage() === 'ru' ? 'Отлично!<br/>Все слова в этом режиме изучены!' : getInterfaceLanguage() === 'uk' ? 'Відмінно!<br/>Всі слова в цьому режимі вивчені!' : 'Excellent!<br/>All words in this mode have been mastered!'}
                 </p>
                 <div style="width: 100%; max-width: 340px; margin: 0 auto;">
                   <button class="primary-button btn-green" id="go-test-btn">
-                    Перейти в Тест
+                    ${t('train_go_test')}
                   </button>
                 </div>
               </div>
@@ -393,44 +393,44 @@
           }
 
           let emptyIcon = '🗂️';
-          let emptyTitle = 'Очередь пуста';
-          let emptyMsg = 'Сначала отберите слова в режиме «Карточки»!';
+          let emptyTitle = getInterfaceLanguage() === 'ru' ? 'Очередь пуста' : getInterfaceLanguage() === 'uk' ? 'Черга порожня' : 'Queue is empty';
+          let emptyMsg = getInterfaceLanguage() === 'ru' ? 'Сначала отберите слова в режиме «Карточки»!' : getInterfaceLanguage() === 'uk' ? 'Спочатку відберіть слова в режимі «Картки»!' : 'Select words in "Cards" mode first!';
           let nextMode = 'cards';
-          let nextBtnLabel = '🗂️ Открыть Карточки';
+          let nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
 
           if (currentMethod === 'quiz') {
             emptyIcon = '🎯';
-            emptyTitle = 'Нет слов для Квиза';
-            emptyMsg = 'Сюда попадают слова из <strong>Карточек</strong> по кнопке «Учить».';
+            emptyTitle = t('train_no_words_quiz');
+            emptyMsg = t('train_no_words_quiz_sub');
             nextMode = 'cards';
-            nextBtnLabel = '🗂️ Отобрать слова в Карточках';
+            nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Отобрать слова в Карточках' : getInterfaceLanguage() === 'uk' ? '🗂️ Відібрати слова в Картках' : '🗂️ Select words in Cards';
           } else if (currentMethod === 'pairs') {
             emptyIcon = '🧩';
-            emptyTitle = 'Нет слов для режима «Пары»';
-            emptyMsg = 'Сюда попадают слова, отгаданные <strong>5 раз в Квизе</strong> или отмеченные <strong>«Знаю»</strong>.';
+            emptyTitle = t('train_no_words_pairs');
+            emptyMsg = t('train_no_words_pairs_sub');
             nextMode = 'quiz';
-            nextBtnLabel = '🎯 Перейти в Квиз';
+            nextBtnLabel = '🎯 ' + t('train_go_quiz');
           } else if (currentMethod === 'input') {
             if (unmasteredCount > 0) {
               emptyIcon = '✍️';
-              emptyTitle = 'Нет слов для Теста';
-              emptyMsg = 'Сюда попадают слова, прошедшие режим «Пары».';
+              emptyTitle = t('train_no_words_test');
+              emptyMsg = t('train_no_words_test_sub');
               if (cardsQueue.length > 0 && learningCount < dailyGoal) {
                 nextMode = 'cards';
-                nextBtnLabel = '🗂️ Открыть Карточки';
+                nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
               } else if (quizQueue.length > 0) {
                 nextMode = 'quiz';
-                nextBtnLabel = '🎯 Перейти в Квиз';
+                nextBtnLabel = '🎯 ' + t('train_go_quiz');
               } else {
                 nextMode = 'pairs';
-                nextBtnLabel = '🧩 Перейти в Пары';
+                nextBtnLabel = '🧩 ' + t('train_go_pairs');
               }
             } else {
               emptyIcon = '🏆';
-              emptyTitle = 'Отлично!<br>Задача выполнена!';
+              emptyTitle = getInterfaceLanguage() === 'ru' ? 'Отлично!<br>Задача выполнена!' : getInterfaceLanguage() === 'uk' ? 'Відмінно!<br>Завдання виконано!' : 'Excellent!<br>Goal achieved!';
               emptyMsg = '';
               nextMode = 'cards';
-              nextBtnLabel = 'Учить новые слова';
+              nextBtnLabel = getInterfaceLanguage() === 'ru' ? 'Учить новые слова' : getInterfaceLanguage() === 'uk' ? 'Вчити нові слова' : 'Learn new words';
             }
           }
 
@@ -447,7 +447,7 @@
                   currentMethod === 'input'
                     ? `
                   <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    ❤️ Повторить избранное
+                    ❤️ ${t('fav_practice_btn')}
                   </button>
                 `
                     : ''
@@ -631,6 +631,34 @@
           }
         });
 
+        window.addEventListener('myduo:lang_changed', () => {
+          const drawer = document.querySelector('#burger-drawer');
+          if (drawer) {
+            const tabsDef = [
+              { tab: 'training', key: 'training' },
+              { tab: 'leaderboard', key: 'leaderboard' },
+              { tab: 'dictionary', key: 'dictionary' },
+              { tab: 'favorites', key: 'favorites' },
+              { tab: 'stats', key: 'stats' },
+              { tab: 'settings', key: 'settings' }
+            ];
+            tabsDef.forEach(({ tab, key }) => {
+              const tabEl = drawer.querySelector(`.nav-tab[data-tab="${tab}"]`);
+              if (tabEl) {
+                const textEl = tabEl.querySelector('.drawer-item-text');
+                if (textEl) textEl.textContent = t(key);
+                tabEl.title = t(key);
+              }
+            });
+            const closeBtn = drawer.querySelector('#drawer-close-btn');
+            if (closeBtn) {
+              closeBtn.ariaLabel = getInterfaceLanguage() === 'ru' ? 'Закрыть' : getInterfaceLanguage() === 'uk' ? 'Закрити' : 'Close';
+            }
+          }
+          updateHeaderUser();
+          renderTab(activeTab);
+        });
+
         renderAppLayout(
           (tabName) => {
             renderTab(tabName);
@@ -640,19 +668,41 @@
             await loadData();
             renderTab(activeTab);
           },
-          async () => {
-            // Click on Logo / Owl -> Switch to Training and activate Test ('input') mode
-            userSettings.preferredMethod = 'input';
-            try {
-              await saveUserSettings(userSettings);
-            } catch (e) {
-              console.warn(e);
+          () => {
+            // Click on Logo / Owl -> Switch to Training and activate leftmost available mode
+            const selectedCategory = userSettings.category || 'Elementary';
+            const cleanCat = (cat) => {
+              if (!cat) return 'Elementary';
+              return String(cat).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim();
+            };
+            const categoryWords = allWords.filter(
+              (w) => selectedCategory === 'All' || cleanCat(w.category) === cleanCat(selectedCategory)
+            );
+            const favList = getUserFavorites() || [];
+            const userProgress = getUserProgress() || {};
+
+            const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
+            const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
+            const testQueue = getQueueForTest(categoryWords, userProgress);
+
+            let nextMethod = 'cards';
+            if (quizQueue.length > 0) {
+              nextMethod = 'quiz';
+            } else if (pairsQueue.length > 0) {
+              nextMethod = 'pairs';
+            } else if (testQueue.length > 0) {
+              nextMethod = 'input';
             }
 
+            userSettings.preferredMethod = nextMethod;
+            saveUserSettings(userSettings).catch((e) => console.warn(e));
+
+            // Instant UI update
+            currentWordIndex = 0;
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
 
-            await renderTrainingTab();
+            renderTab('training');
           }
         );
 

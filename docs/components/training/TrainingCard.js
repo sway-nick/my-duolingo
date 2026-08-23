@@ -1,5 +1,6 @@
 import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound, isWordAudioPlaying } from '../../services/audioService.js?v=25.0';
 import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress, transcribeAudio } from '../../services/api.js?v=21.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=130.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -152,12 +153,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const isInputMode = currentMethod === 'input';
 
   function formatWordCount(cnt) {
-    const lastDigit = cnt % 10;
-    const lastTwo = cnt % 100;
-    if (lastTwo >= 11 && lastTwo <= 19) return `${cnt} слов`;
-    if (lastDigit === 1) return `${cnt} слово`;
-    if (lastDigit >= 2 && lastDigit <= 4) return `${cnt} слова`;
-    return `${cnt} слов`;
+    const lang = getInterfaceLanguage();
+    if (lang === 'ru' || lang === 'uk') {
+      const lastDigit = cnt % 10;
+      const lastTwo = cnt % 100;
+      if (lastTwo >= 11 && lastTwo <= 19) return `${cnt} ${t('words')}`;
+      if (lastDigit === 1) return `${cnt} ${t('word_1')}`;
+      if (lastDigit >= 2 && lastDigit <= 4) return `${cnt} ${t('word_2')}`;
+      return `${cnt} ${t('words')}`;
+    }
+    return `${cnt} ${t('words')}`;
   }
 
   container.innerHTML = `
@@ -168,16 +173,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         <div class="mode-switch-pills" id="mode-switch-pills">
           <div class="mode-pill-glider" id="mode-pill-glider"></div>
           <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
-            Карточки
+            ${getInterfaceLanguage() === 'ru' ? 'Карточки' : getInterfaceLanguage() === 'uk' ? 'Картки' : 'Cards'}
           </button>
           <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
-            Квиз
+            ${t('dict_stage_quiz')}
           </button>
           <button type="button" class="mode-pill-btn ${isPairsMode ? 'active' : ''} ${!availableModes.pairs ? 'disabled' : ''}" data-mode="pairs" ${!availableModes.pairs ? 'disabled' : ''}>
-            Пары
+            ${t('dict_stage_pairs')}
           </button>
           <button type="button" class="mode-pill-btn ${isInputMode ? 'active' : ''} ${!availableModes.input ? 'disabled' : ''}" data-mode="input" ${!availableModes.input ? 'disabled' : ''}>
-            Тест
+            ${t('dict_stage_test')}
           </button>
         </div>
       </div>
@@ -188,14 +193,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           isCardsMode
             ? `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              🎯 В обучении: <strong>${learningCount} / ${dailyGoal}</strong> слов
+              🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
             </div>
           `
             : isPairsMode
             ? `
             <div class="pairs-header-box" style="margin: 4px 0 6px; display: flex; justify-content: space-between; align-items: center;">
-              <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 Найдите пары</h2>
-              <div class="pairs-timer-badge" id="pairs-timer-badge" title="Таймер раунда">
+              <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 ${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</h2>
+              <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
                 <span class="pairs-timer-icon">⏱️</span>
                 <span class="pairs-timer-val" id="pairs-timer-val">00:00</span>
               </div>
@@ -204,37 +209,37 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             : isInputMode
             ? `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              ✍️ Осталось слов: <strong>${formatWordCount(activeWords.length)}</strong>
+              ✍️ ${t('train_left')}: <strong>${formatWordCount(activeWords.length)}</strong>
             </div>
             <div class="word-header-row">
-              <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
+              <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Speak word">🔊</button>
               <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                 ${currentWord.translation}
               </h2>
-              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
                 ${favorited ? '❤️' : '🤍'}
               </button>
             </div>
           `
             : `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              🎯 Осталось слов: <strong>${formatWordCount(activeWords.length)}</strong>
+              🎯 ${t('train_left')}: <strong>${formatWordCount(activeWords.length)}</strong>
             </div>
             <div class="word-header-row">
               ${
                 quizStage === 0
                   ? `
-                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Прослушать слово">🔊</button>
-                <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Speak word">🔊</button>
+                <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                   <span class="training-word-text">${currentWord.word}</span>
                 </h2>
               `
                   : quizStage === 1
                   ? `
-                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Повторить звук">🔊</button>
-                <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Нажмите, чтобы прослушать слово">
+                <button type="button" class="word-side-icon-btn" id="speak-sound-btn" title="Repeat sound">🔊</button>
+                <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
                   <span class="listening-audio-icon">🎧</span>
-                  <span class="listening-word-text" id="listening-word-text">Слушайте...</span>
+                  <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
                 </div>
               `
                   : quizStage === 2
@@ -251,13 +256,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     ${currentWord.translation}
                   </h2>
                   <button type="button" class="speech-hint-btn" id="speech-hint-btn" style="margin-top: 6px; font-size: 13px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: var(--primary-color); border: 1px solid rgba(59, 130, 246, 0.25); padding: 3px 12px; border-radius: 12px; cursor: pointer;">
-                    💡 Подсказка
+                    💡 ${getInterfaceLanguage() === 'ru' ? 'Подсказка' : getInterfaceLanguage() === 'uk' ? 'Підказка' : 'Hint'}
                   </button>
                   <div id="speech-revealed-hint" style="display: none; font-size: 15px; font-weight: 800; color: var(--primary-color); margin-top: 4px;">${currentWord.word}</div>
                 </div>
               `
               }
-              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Добавить в Избранное">
+              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
                 ${favorited ? '❤️' : '🤍'}
               </button>
             </div>
@@ -412,17 +417,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       practiceArea.innerHTML = `
         <div class="speech-quiz-container">
-          <button type="button" class="speech-mic-btn" id="speech-mic-btn" title="Нажмите, чтобы сказать слово">
+          <button type="button" class="speech-mic-btn" id="speech-mic-btn" title="Tap to speak word">
             🎙️
           </button>
           <div class="speech-hold-hint" id="speech-hold-hint">
-            Нажмите на микрофон и скажите слово
+            ${getInterfaceLanguage() === 'ru' ? 'Нажмите на микрофон и скажите слово' : getInterfaceLanguage() === 'uk' ? 'Натисніть на мікрофон і скажіть слово' : 'Tap the microphone and say the word'}
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none;"></div>
           <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
-            Не могу говорить сейчас
+            ${getInterfaceLanguage() === 'ru' ? 'Не могу говорить сейчас' : getInterfaceLanguage() === 'uk' ? 'Не можу говорити зараз' : "Can't speak right now"}
           </button>
-          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Проверить микрофон">
+          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone">
             ⚙️
           </button>
         </div>
@@ -955,7 +960,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.classList.remove('listening', 'processing');
           micBtn.classList.add('success');
           micBtn.innerHTML = '✓';
-          if (holdHint) holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">✓ Отлично! Произношение верное!</span>`;
+          if (holdHint) {
+            holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">${
+              getInterfaceLanguage() === 'ru' ? '✓ Отлично! Произношение верное!' : getInterfaceLanguage() === 'uk' ? '✓ Відмінно! Вимова правильна!' : '✓ Perfect! Correct pronunciation!'
+            }</span>`;
+          }
 
           await saveProgress(currentWord.id, true, 'quiz');
           onNextAfterSpeech(onNext, 1000, 4000);
@@ -966,20 +975,30 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           if (speechAttempts === 1) {
             speakWord(currentWord.word, currentWord.id);
-            if (holdHint) holdHint.innerHTML = `Послушайте эталон 🔊 и попробуйте ещё раз`;
+            if (holdHint) {
+              holdHint.innerHTML = getInterfaceLanguage() === 'ru' ? 'Послушайте эталон 🔊 и попробуйте ещё раз' : getInterfaceLanguage() === 'uk' ? 'Послухайте еталон 🔊 і спробуйте ще раз' : 'Listen to the model 🔊 and try again';
+            }
             setTimeout(() => {
               isProcessing = false;
             }, 1200);
           } else if (speechAttempts === 2) {
             speakWord(currentWord.word, currentWord.id);
-            if (holdHint) holdHint.innerHTML = `Послушайте эталон 🔊 и повторите 🎙️`;
+            if (holdHint) {
+              holdHint.innerHTML = getInterfaceLanguage() === 'ru' ? 'Послушайте эталон 🔊 и повторите 🎙️' : getInterfaceLanguage() === 'uk' ? 'Послухайте еталон 🔊 і повторіть 🎙️' : 'Listen to the model 🔊 and repeat 🎙️';
+            }
             setTimeout(() => {
               isProcessing = false;
             }, 1200);
           } else {
             isCompleted = true;
             micBtn.disabled = true;
-            if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
+            if (holdHint) {
+              holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
+                ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>` 
+                : getInterfaceLanguage() === 'uk'
+                  ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
+                  : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+            }
             speakWord(currentWord.word, currentWord.id);
             await saveProgress(currentWord.id, false, 'quiz');
             onNextAfterSpeech(onNext, 1200, 4500);

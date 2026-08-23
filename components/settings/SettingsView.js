@@ -16,60 +16,60 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   container.innerHTML = `
     <div class="settings-page">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 style="margin: 0;">⚙️ Настройки</h2>
+        <h2 style="margin: 0;">⚙️ Settings</h2>
         <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap;">
-          ✓ Сохранено
+          ✓ Saved
         </span>
       </div>
 
       <!-- User Profile Card -->
       <div class="settings-card profile-card">
-        <div class="profile-avatar-wrapper" id="change-avatar-trigger" title="Нажмите, чтобы выбрать персонажа или фото">
+        <div class="profile-avatar-wrapper" id="change-avatar-trigger" title="Click to choose avatar or photo">
           ${
             avatar
-              ? `<img src="${avatar}" alt="Аватар" class="profile-avatar-img" />`
+              ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" />`
               : `<div class="profile-avatar-placeholder">${user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤'}</div>`
           }
-          <div class="avatar-edit-badge" title="Выбрать персонажа">🎭</div>
+          <div class="avatar-edit-badge" title="Change avatar">🎭</div>
         </div>
         <div class="profile-details">
-          <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : 'Гостевой режим'}</h3>
-          <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : 'Авторизуйтесь для синхронизации'}</p>
+          <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : 'Guest Mode'}</h3>
+          <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : 'Log in to sync progress'}</p>
         </div>
         <div>
           ${
             user
-              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Выйти</button>`
-              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Войти</button>`
+              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Log Out</button>`
+              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Log In</button>`
           }
         </div>
       </div>
 
       <!-- Theme Switcher Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Тема оформления</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Theme</h3>
         <div class="theme-options-row">
           <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
-            Светлая
+            Light
           </button>
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
-            Тёмная
+            Dark
           </button>
           <button class="theme-option-btn ${currentTheme === 'notebook' ? 'active' : ''}" id="theme-notebook-btn">
-            Тетрадь
+            Notebook
           </button>
         </div>
       </div>
 
       <!-- Sound Mode Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">✨ Звуковые эффекты</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">✨ Sound Effects</h3>
         <div class="sound-options-row">
           <button class="sound-option-btn" id="sfx-on-btn">
-            🔔 Включены
+            🔔 Enabled
           </button>
           <button class="sound-option-btn" id="sfx-off-btn">
-            🔕 Выключены
+            🔕 Disabled
           </button>
         </div>
       </div>
@@ -80,10 +80,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           <svg width="19" height="19" viewBox="0 0 24 24" fill="#d4a373" style="flex-shrink: 0;">
             <path d="M12 3a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4zm-6 16a6 6 0 0 1 12 0H6zm14.5-9a4.5 4.5 0 0 1 0 6.36l-1.06-1.06a3 3 0 0 0 0-4.24l1.06-1.06zm2.5-2.5a8 8 0 0 1 0 11.31l-1.06-1.06a6.5 6.5 0 0 0 0-9.19l1.06-1.06z"/>
           </svg>
-          Вариант озвучки
+          Voice Accent
         </h3>
         <div class="voice-options-row">
-          <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (Великобритания)" aria-label="Британский английский">
+          <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (UK)" aria-label="British English">
             <svg class="flag-svg-icon" viewBox="0 0 640 480" width="34" height="24">
               <path fill="#012169" d="M0 0h640v480H0z"/>
               <path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 240l240 178v62h-80L320 301 81 480H0v-60l239-180L0 64V0h75z"/>
@@ -92,7 +92,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
               <path fill="#C8102E" d="M267 0h106v480H267zM0 187h640v106H0z"/>
             </svg>
           </button>
-          <button class="voice-option-btn flag-btn" id="voice-us-btn" title="American English (США)" aria-label="Американский английский">
+          <button class="voice-option-btn flag-btn" id="voice-us-btn" title="American English (US)" aria-label="American English">
             <svg class="flag-svg-icon" viewBox="0 0 640 480" width="34" height="24">
               <path fill="#bd3d44" d="M0 0h640v480H0z"/>
               <path stroke="#fff" stroke-width="37" d="M0 55.5h640M0 129.5h640M0 203.5h640M0 277.5h640M0 351.5h640M0 425.5h640"/>
@@ -114,19 +114,38 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Goals Card -->
       <div class="settings-card" style="position: relative; z-index: 10;">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">📌 Задача на день</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">📌 Daily Goal</h3>
         <div class="custom-dropdown" id="goal-dropdown">
           <button type="button" class="custom-dropdown-trigger" id="goal-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span id="goal-dropdown-label">20 слов</span>
+            <span id="goal-dropdown-label">20 words</span>
             <span class="dropdown-arrow">▼</span>
           </button>
           <div class="custom-dropdown-menu" id="goal-dropdown-menu" role="listbox">
-            <div class="dropdown-item" data-value="20">20 слов</div>
-            <div class="dropdown-item" data-value="30">30 слов</div>
-            <div class="dropdown-item" data-value="40">40 слов</div>
-            <div class="dropdown-item" data-value="50">50 слов</div>
-            <div class="dropdown-item" data-value="75">75 слов</div>
-            <div class="dropdown-item" data-value="100">100 слов</div>
+            <div class="dropdown-item" data-value="20">20 words</div>
+            <div class="dropdown-item" data-value="30">30 words</div>
+            <div class="dropdown-item" data-value="40">40 words</div>
+            <div class="dropdown-item" data-value="50">50 words</div>
+            <div class="dropdown-item" data-value="75">75 words</div>
+            <div class="dropdown-item" data-value="100">100 words</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Language Selection Card -->
+      <div class="settings-card" style="position: relative; z-index: 9;">
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🌐 Interface Language</h3>
+        <div class="custom-dropdown" id="lang-dropdown">
+          <button type="button" class="custom-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="lang-dropdown-label">English</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="custom-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <div class="dropdown-item" data-value="ru">Русский</div>
+            <div class="dropdown-item" data-value="uk">Українська</div>
+            <div class="dropdown-item" data-value="en">English</div>
+            <div class="dropdown-item" data-value="de">Deutsch</div>
+            <div class="dropdown-item" data-value="es">Español</div>
+            <div class="dropdown-item" data-value="fr">Français</div>
           </div>
         </div>
       </div>
@@ -164,7 +183,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     avatarTrigger.addEventListener('click', () => {
       renderAvatarPickerModal(async () => {
         if (autoSaveStatus) {
-          autoSaveStatus.textContent = '✓ Аватар обновлен';
+          autoSaveStatus.textContent = '✓ Avatar updated';
           autoSaveStatus.style.opacity = '1';
           setTimeout(() => {
             if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
@@ -184,7 +203,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   function updateGoalUI(val) {
     currentGoal = Number(val);
-    if (goalLabel) goalLabel.textContent = `${currentGoal} слов`;
+    if (goalLabel) goalLabel.textContent = `${currentGoal} words`;
     goalItems.forEach((item) => {
       item.classList.toggle('selected', Number(item.dataset.value) === currentGoal);
     });
@@ -254,7 +273,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     };
 
     if (autoSaveStatus) {
-      autoSaveStatus.textContent = 'Сохранение...';
+      autoSaveStatus.textContent = 'Saving...';
       autoSaveStatus.style.opacity = '1';
     }
 
@@ -262,7 +281,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     onUserChange();
 
     if (autoSaveStatus) {
-      autoSaveStatus.textContent = '✓ Сохранено в профиле';
+      autoSaveStatus.textContent = '✓ Saved in profile';
       setTimeout(() => {
         if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
       }, 1500);
@@ -335,6 +354,56 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       updateVoiceButtons();
       speakWord('Hello', null, 'en-US', 'us', true);
       triggerAutoSave();
+    });
+  }
+
+  // Language Dropdown handling
+  const langDropdown = container.querySelector('#lang-dropdown');
+  const langTrigger = container.querySelector('#lang-dropdown-trigger');
+  const langLabel = container.querySelector('#lang-dropdown-label');
+  const langItems = container.querySelectorAll('#lang-dropdown-menu .dropdown-item');
+
+  const langNames = {
+    ru: 'Русский',
+    uk: 'Українська',
+    en: 'English',
+    de: 'Deutsch',
+    es: 'Español',
+    fr: 'Français'
+  };
+
+  const currentLang = localStorage.getItem('myduo_interface_lang') || 'ru';
+
+  function updateLangUI(val) {
+    if (langLabel) langLabel.textContent = langNames[val] || 'English';
+    langItems.forEach((item) => {
+      item.classList.toggle('selected', item.dataset.value === val);
+    });
+  }
+
+  updateLangUI(currentLang);
+
+  if (langTrigger && langDropdown) {
+    langTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('open');
+    });
+
+    langItems.forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = item.dataset.value;
+        localStorage.setItem('myduo_interface_lang', val);
+        updateLangUI(val);
+        langDropdown.classList.remove('open');
+        // Dispatch event to reload other tabs/header immediately
+        window.dispatchEvent(new Event('myduo:lang_changed'));
+      });
+    });
+
+    // Close on click outside
+    document.addEventListener('click', () => {
+      langDropdown.classList.remove('open');
     });
   }
 }

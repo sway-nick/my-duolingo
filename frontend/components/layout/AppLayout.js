@@ -1,6 +1,7 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=18.0';
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=18.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
+import { t } from '../../services/i18n.js?v=130.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -125,12 +126,12 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               <text x="30" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
               <!-- Brand Text (English Breakfast) -->
               <text x="62" y="29" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="18.5" fill="var(--text-main)">English <tspan fill="#FF6A00">Breakfast</tspan></text>
-              <!-- Subtitle (Daily words. Real progress.) -->
-              <text x="62" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="11" fill="var(--text-muted)">Daily words. Real progress.</text>
+              <!-- Subtitle (Vocabulary) -->
+              <text x="62" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="11" fill="var(--text-muted)">Vocabulary</text>
             </svg>
           </div>
           <small class="user-status-text" id="header-user-status" style="margin-left: 45px; margin-top: -4px;">
-            ${user ? '' : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`}
+            ${user ? '' : `🎁 Demo: ${guestCount}/${GUEST_WORD_LIMIT} words`}
           </small>
         </div>
         
@@ -158,33 +159,33 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               <div class="drawer-email">${email}</div>
             </div>
           </div>
-          <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Закрыть">&times;</button>
+          <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close">&times;</button>
         </div>
 
         <div class="drawer-menu">
-          <button class="nav-tab active" data-tab="training" title="Тренировка">
+          <button class="nav-tab active" data-tab="training" title="${t('training')}">
             <span class="tab-icon">🎓</span>
-            <span class="drawer-item-text">Тренировка</span>
+            <span class="drawer-item-text">${t('training')}</span>
           </button>
-          <button class="nav-tab" data-tab="leaderboard" title="Рейтинг недели">
+          <button class="nav-tab" data-tab="leaderboard" title="${t('leaderboard')}">
             <span class="tab-icon">🏆</span>
-            <span class="drawer-item-text">Рейтинг недели</span>
+            <span class="drawer-item-text">${t('leaderboard')}</span>
           </button>
-          <button class="nav-tab" data-tab="dictionary" title="Словарь">
+          <button class="nav-tab" data-tab="dictionary" title="${t('dictionary')}">
             <span class="tab-icon">📖</span>
-            <span class="drawer-item-text">Словарь</span>
+            <span class="drawer-item-text">${t('dictionary')}</span>
           </button>
-          <button class="nav-tab" data-tab="favorites" title="Избранное">
+          <button class="nav-tab" data-tab="favorites" title="${t('favorites')}">
             <span class="tab-icon">❤️</span>
-            <span class="drawer-item-text">Избранное</span>
+            <span class="drawer-item-text">${t('favorites')}</span>
           </button>
-          <button class="nav-tab" data-tab="stats" title="Прогресс">
+          <button class="nav-tab" data-tab="stats" title="${t('stats')}">
             <span class="tab-icon">📊</span>
-            <span class="drawer-item-text">Статистика</span>
+            <span class="drawer-item-text">${t('stats')}</span>
           </button>
-          <button class="nav-tab" data-tab="settings" title="Настройки">
+          <button class="nav-tab" data-tab="settings" title="${t('settings')}">
             <span class="tab-icon">⚙️</span>
-            <span class="drawer-item-text">Настройки</span>
+            <span class="drawer-item-text">${t('settings')}</span>
           </button>
         </div>
       </div>
@@ -214,40 +215,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   });
 
-  // Bind Hamburger Drawer triggers
-  const burgerBtn = app.querySelector('#header-burger-btn');
-  const drawer = app.querySelector('#burger-drawer');
   const overlay = app.querySelector('#drawer-overlay');
-  const closeBtn = app.querySelector('#drawer-close-btn');
-
-  function openDrawer() {
-    if (drawer && overlay) {
-      drawer.classList.add('open');
-      overlay.classList.add('open');
-    }
-  }
-
-  function closeDrawer() {
-    if (drawer && overlay) {
-      drawer.classList.remove('open');
-      overlay.classList.remove('open');
-    }
-  }
-
-  if (burgerBtn) {
-    burgerBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openDrawer();
-    });
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeDrawer();
-    });
-  }
-
   if (overlay) {
     overlay.addEventListener('click', () => {
       closeDrawer();
@@ -264,6 +232,24 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   bindHeaderActionButtons(app);
 }
 
+function openDrawer() {
+  const drawer = document.querySelector('#burger-drawer');
+  const overlay = document.querySelector('#drawer-overlay');
+  if (drawer && overlay) {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+  }
+}
+
+function closeDrawer() {
+  const drawer = document.querySelector('#burger-drawer');
+  const overlay = document.querySelector('#drawer-overlay');
+  if (drawer && overlay) {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+}
+
 function bindHeaderActionButtons(container) {
   if (!container) return;
 
@@ -274,6 +260,22 @@ function bindHeaderActionButtons(container) {
       navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'leaderboard'));
       globalTabChangeCallback('leaderboard');
     });
+  }
+
+  const burgerBtn = container.querySelector('#header-burger-btn');
+  if (burgerBtn) {
+    burgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDrawer();
+    });
+  }
+
+  const drawerCloseBtn = document.querySelector('#drawer-close-btn');
+  if (drawerCloseBtn) {
+    drawerCloseBtn.onclick = (e) => {
+      e.stopPropagation();
+      closeDrawer();
+    };
   }
 }
 
@@ -288,7 +290,7 @@ function updateDrawerProfile() {
   const avatarWrapper = drawer.querySelector('.drawer-avatar-wrapper');
   if (avatarWrapper) {
     if (avatar) {
-      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img" />`;
+      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Avatar" class="drawer-avatar-img" />`;
     } else {
       const initial = user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤';
       avatarWrapper.innerHTML = `<div class="drawer-avatar-placeholder">${initial}</div>`;
@@ -297,12 +299,12 @@ function updateDrawerProfile() {
 
   const usernameEl = drawer.querySelector('.drawer-username');
   if (usernameEl) {
-    usernameEl.textContent = user ? user.name : 'Гость (Демо)';
+    usernameEl.textContent = user ? user.name : 'Guest (Demo)';
   }
 
   const emailEl = drawer.querySelector('.drawer-email');
   if (emailEl) {
-    emailEl.textContent = user ? user.email : `Прогресс: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
+    emailEl.textContent = user ? user.email : `Progress: ${guestCount}/${GUEST_WORD_LIMIT} words`;
   }
 }
 
@@ -315,7 +317,7 @@ function updateHeaderUser(onUserAuthChanged) {
   const guestCount = getGuestTrainingCount();
   const statusEl = document.querySelector('#header-user-status');
   if (statusEl) {
-    statusEl.textContent = user ? '' : `🎁 Демо: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
+    statusEl.textContent = user ? '' : `🎁 Demo: ${guestCount}/${GUEST_WORD_LIMIT} words`;
   }
 
   const actionsContainer = document.querySelector('.header-right-actions');
@@ -356,7 +358,7 @@ if (typeof window !== 'undefined') {
       xpIconEl.textContent = rankBadge.content;
       xpIconEl.className = rankBadge.isIcon ? 'xp-badge-icon' : 'xp-badge-level';
       if (xpBtnEl) {
-        xpBtnEl.title = `${rankBadge.title}. Нажмите, чтобы открыть рейтинг`;
+        xpBtnEl.title = `${rankBadge.title}. Click to open weekly league`;
       }
     }
 

@@ -1,6 +1,7 @@
 import { getUserStats, toggleFavoriteApi, getUserFavorites } from '../../services/api.js?v=18.0';
 import { getCurrentUser } from '../../services/authService.js?v=18.0';
 import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=18.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=25.0';
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];
@@ -19,8 +20,10 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
   try {
     const stats = await getUserStats(allWords);
 
-    let categoriesHtml = '<p class="empty-state">Категории появятся после первых пройденных уроков.</p>';
+    let categoriesHtml = `<p class="empty-state">${t('stats_empty_categories')}</p>`;
     if (stats.categoryBreakdown && stats.categoryBreakdown.length > 0) {
+      const wordLabel = getInterfaceLanguage() === 'ru' ? 'слов' : getInterfaceLanguage() === 'uk' ? 'слів' : 'words';
+      const ofLabel = getInterfaceLanguage() === 'ru' ? 'из' : getInterfaceLanguage() === 'uk' ? 'із' : 'of';
       categoriesHtml = stats.categoryBreakdown
         .map((cat) => {
           const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
@@ -28,7 +31,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <div class="category-row">
               <div class="category-info-row">
                 <span class="category-name">📁 ${cat.category}</span>
-                <span class="category-count">${cat.learned} из ${cat.total} слов (${percent}%)</span>
+                <span class="category-count">${cat.learned} ${ofLabel} ${cat.total} ${wordLabel} (${percent}%)</span>
               </div>
               <div class="category-progress-track">
                 <div class="category-progress-fill" style="width: ${percent}%;"></div>
@@ -58,7 +61,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
               <div class="card-edge-rim-glint" aria-hidden="true"></div>
               <div class="flashcard-face-top">
                 <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔥</button>
-                <span class="wotd-card-badge">Слово дня</span>
+                <span class="wotd-card-badge">${t('word_of_day')}</span>
                 <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
                   ${isWotdFav ? '❤️' : '🤍'}
                 </button>
@@ -67,7 +70,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
                 <h2 class="flashcard-word embossed-text">${wotd.word}</h2>
               </div>
               <div class="flashcard-face-bottom">
-                <span class="flashcard-flip-prompt">Нажми, чтобы увидеть перевод</span>
+                <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
               </div>
             </div>
 
@@ -76,7 +79,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
               <div class="card-edge-rim-glint" aria-hidden="true"></div>
               <div class="flashcard-face-top">
                 <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔥</button>
-                <span class="wotd-card-badge">Слово дня</span>
+                <span class="wotd-card-badge">${t('word_of_day')}</span>
                 <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
                   ${isWotdFav ? '❤️' : '🤍'}
                 </button>
@@ -92,7 +95,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
     container.innerHTML = `
       <div class="page-header" style="margin-bottom: 14px;">
-        <h2 style="font-size: 22px; margin: 0;">📊 Мои достижения</h2>
+        <h2 style="font-size: 22px; margin: 0;">${t('achievements')}</h2>
       </div>
 
       <div id="stats-content" style="padding-bottom: 24px;">
@@ -102,7 +105,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">🎓</span>
             <div class="stat-info">
               <h3 id="stat-mastered">${stats.masteredCount || 0}</h3>
-              <p>Выучено</p>
+              <p>${t('dict_filter_mastered')}</p>
             </div>
           </div>
 
@@ -110,7 +113,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">📖</span>
             <div class="stat-info">
               <h3 id="stat-learning">${stats.learningCount || 0}</h3>
-              <p>На изучении</p>
+              <p>${getInterfaceLanguage() === 'ru' ? 'Изучаю' : getInterfaceLanguage() === 'uk' ? 'Вивчаю' : 'Learning'}</p>
             </div>
           </div>
 
@@ -118,15 +121,15 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">🎯</span>
             <div class="stat-info">
               <h3 id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
-              <p>Точность</p>
+              <p>${getInterfaceLanguage() === 'ru' ? 'Точность' : getInterfaceLanguage() === 'uk' ? 'Точність' : 'Accuracy'}</p>
             </div>
           </div>
 
           <div class="stat-card">
             <span class="stat-icon">🔥</span>
             <div class="stat-info">
-              <h3 id="stat-streak">${stats.streakDays || 1} дн</h3>
-              <p>Серия</p>
+              <h3 id="stat-streak">${stats.streakDays || 1} ${getInterfaceLanguage() === 'ru' ? 'дн' : getInterfaceLanguage() === 'uk' ? 'дн' : 'days'}</h3>
+              <p>${getInterfaceLanguage() === 'ru' ? 'Серия' : getInterfaceLanguage() === 'uk' ? 'Серія' : 'Streak'}</p>
             </div>
           </div>
         </div>
@@ -134,8 +137,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         <!-- Categories Section -->
         <div class="curriculum-block">
           <div class="section-title-row">
-            <h3>Категории</h3>
-            <span class="total-words-badge" id="stat-total-words">Всего слов — ${stats.totalWords || 0}</span>
+            <h3>${t('stats_categories')}</h3>
+            <span class="total-words-badge" id="stat-total-words">${getInterfaceLanguage() === 'ru' ? 'Всего слов —' : getInterfaceLanguage() === 'uk' ? 'Всього слів —' : 'Total words —'} ${stats.totalWords || 0}</span>
           </div>
           
           <div class="category-progress-list" id="category-list">

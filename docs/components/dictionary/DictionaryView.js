@@ -1,5 +1,6 @@
 import { speakWord } from '../../services/audioService.js?v=21.0';
 import { toggleFavoriteApi, getUserProgress, isWordMastered } from '../../services/api.js?v=18.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=25.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -11,12 +12,16 @@ function sanitizeCategory(cat) {
 }
 
 function formatWordCount(count) {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
-  if (mod100 >= 11 && mod100 <= 19) return `${count} слов`;
-  if (mod10 === 1) return `${count} слово`;
-  if (mod10 >= 2 && mod10 <= 4) return `${count} слова`;
-  return `${count} слов`;
+  const lang = getInterfaceLanguage();
+  if (lang === 'ru' || lang === 'uk') {
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+    if (mod100 >= 11 && mod100 <= 19) return `${count} ${t('words')}`;
+    if (mod10 === 1) return `${count} ${t('word_1')}`;
+    if (mod10 >= 2 && mod10 <= 4) return `${count} ${t('word_2')}`;
+    return `${count} ${t('words')}`;
+  }
+  return `${count} ${t('words')}`;
 }
 
 const BATCH_SIZE = 35; // Render 35 cards at a time for instant 60fps performance
@@ -31,13 +36,13 @@ function renderWordCardHtml(w, isFav, prog) {
 
   let stageBadge = '';
   if (isMastered) {
-    stageBadge = `<span class="mastered-badge">🏆 Выучено</span>`;
+    stageBadge = `<span class="mastered-badge">🏆 ${t('dict_filter_mastered')}</span>`;
   } else if (pairsCount >= 2) {
-    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/2</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ ${t('dict_stage_test')}: ${testCount}/2</span>`;
   } else if (quizCount >= 4) {
-    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/2</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 ${t('dict_stage_pairs')}: ${pairsCount}/2</span>`;
   } else if (seen) {
-    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/4</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 ${t('dict_stage_quiz')}: ${quizCount}/4</span>`;
   }
 
   return `
@@ -82,19 +87,19 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   }
 
   function getCatDisplayName(cat) {
-    return cat === 'All' ? 'Все категории' : cat;
+    return cat === 'All' ? t('dict_filter_all') : cat;
   }
 
   container.innerHTML = `
     <div class="dictionary-page">
       <div class="page-header">
-        <h2 id="dict-header-title">📖 Словарь (<span id="dict-word-count">${formatWordCount(words.length)}</span>)</h2>
-        <p class="subtitle">Изучайте слова, слушайте произношение и отслеживайте выученные</p>
+        <h2 id="dict-header-title">${t('dict_title')} (<span id="dict-word-count">${formatWordCount(words.length)}</span>)</h2>
+        <p class="subtitle" style="display: none;"></p>
       </div>
 
       <!-- Controls: Sticky Search & Category Filter -->
       <div class="dictionary-controls">
-        <input type="text" id="dict-search" class="search-input" placeholder="🔍 Поиск слова" autocomplete="off" />
+        <input type="text" id="dict-search" class="search-input" placeholder="🔍 ${t('dict_search')}" autocomplete="off" />
         
         <div class="custom-dropdown dict-dropdown" id="dict-cat-dropdown">
           <button type="button" class="custom-dropdown-trigger" id="dict-cat-trigger" aria-haspopup="listbox" aria-expanded="false">
@@ -262,7 +267,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     renderedCount = 0;
 
     if (filteredWords.length === 0) {
-      grid.innerHTML = '<p class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px 0;">Слова не найдены.</p>';
+      grid.innerHTML = `<p class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px 0;">${getInterfaceLanguage() === 'ru' ? 'Слова не найдены.' : getInterfaceLanguage() === 'uk' ? 'Слова не знайдені.' : 'No words found.'}</p>`;
       if (sentinel) sentinel.style.display = 'none';
       return;
     }

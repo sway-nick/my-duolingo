@@ -1,6 +1,7 @@
 import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey } from '../../services/api.js?v=18.0';
 import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=18.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
+import { t } from '../../services/i18n.js?v=25.0';
 
 let currentPeriod = 'week'; // 'week' or 'all'
 
@@ -148,7 +149,7 @@ function renderPodiumCard(player, rank) {
         }
       </div>
       <div class="podium-info">
-        <h4 class="podium-name">${player.name || 'Ученик'}</h4>
+        <h4 class="podium-name">${player.name || (getInterfaceLanguage() === 'ru' ? 'Ученик' : getInterfaceLanguage() === 'uk' ? 'Учень' : 'Student')}</h4>
         <span class="podium-xp">${player.xp} XP</span>
       </div>
     </div>
@@ -206,7 +207,12 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   let myStickyBarHtml = '';
   if (myPlayer && (myRank > 4 || !currentUser)) {
     const myAvatar = getUserAvatar();
-    const statusText = period === 'all' ? 'Ваш результат за всё время' : (currentUser ? 'Ваш текущий результат' : 'Войдите, чтобы закрепить результат');
+    const statusText = period === 'all' 
+      ? (getInterfaceLanguage() === 'ru' ? 'Ваш результат за всё время' : getInterfaceLanguage() === 'uk' ? 'Ваш результат за весь час' : 'Your result of all time') 
+      : (currentUser 
+          ? (getInterfaceLanguage() === 'ru' ? 'Ваш текущий результат' : getInterfaceLanguage() === 'uk' ? 'Ваш поточний результат' : 'Your current result') 
+          : (getInterfaceLanguage() === 'ru' ? 'Войдите, чтобы закрепить результат' : getInterfaceLanguage() === 'uk' ? 'Увійдіть, щоб закріпити результат' : 'Log in to save your result')
+        );
     myStickyBarHtml = `
       <div class="my-leaderboard-bar">
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -217,7 +223,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               : `<div class="my-bar-avatar-placeholder">${currentUser && currentUser.name ? currentUser.name.charAt(0) : '👤'}</div>`
           }
           <div>
-            <div style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : 'Вы (Гость)'}</div>
+            <div style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : (getInterfaceLanguage() === 'ru' ? 'Вы (Гость)' : getInterfaceLanguage() === 'uk' ? 'Ви (Гість)' : 'You (Guest)')}</div>
             <div style="font-size: 12px; color: var(--text-muted);">
               ${statusText}
             </div>
@@ -227,7 +233,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           <span class="my-bar-xp">${myPlayer.xp} XP</span>
           ${
             !currentUser
-              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">Войти</button>`
+              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">${getInterfaceLanguage() === 'ru' ? 'Войти' : getInterfaceLanguage() === 'uk' ? 'Увійти' : 'Log In'}</button>`
               : ''
           }
         </div>
@@ -266,6 +272,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
   const bodyData = buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod);
 
+  const dText = getInterfaceLanguage() === 'ru' ? 'д' : getInterfaceLanguage() === 'uk' ? 'д' : 'd';
+  const hText = getInterfaceLanguage() === 'ru' ? 'ч' : getInterfaceLanguage() === 'uk' ? 'г' : 'h';
+  const mText = getInterfaceLanguage() === 'ru' ? 'м' : getInterfaceLanguage() === 'uk' ? 'хв' : 'm';
+
   container.innerHTML = `
     <div class="leaderboard-page" style="position: relative;">
       <!-- Single Sticky Header Group (Header + Podium) -->
@@ -273,16 +283,16 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         <div class="page-header" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; width: 175px;">
             <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 19px; font-weight: 800; padding: 4px 6px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: space-between; width: 175px; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
-              <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 Общий зачёт' : '🏆 Лига недели'}</span>
+              <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : '🏆 ' + t('lead_title')}</span>
               <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 2px;">▼</span>
             </button>
             <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 175px;">
-              <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">🏆 Лига недели</div>
-              <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 Общий зачёт</div>
+              <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">🏆 ${t('lead_title')}</div>
+              <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 ${t('lead_all_time')}</div>
             </div>
           </div>
           <div class="league-timer-badge" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'block'}; margin-right: 4px;">
-            ⏳ ${weekTime.days > 0 ? `${weekTime.days}д ` : ''}${weekTime.hours}ч ${weekTime.mins}м
+            ⏳ ${weekTime.days > 0 ? `${weekTime.days}${dText} ` : ''}${weekTime.hours}${hText} ${weekTime.mins}${mText}
           </div>
         </div>
 

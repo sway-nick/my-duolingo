@@ -662,6 +662,10 @@ body {
   flex-shrink: 0;
   padding: 0;
   border-radius: 50%;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  z-index: 5;
 }
 
 .favorite-button:hover {
@@ -676,6 +680,7 @@ body {
 .word-main-display {
   text-align: center;
   margin-bottom: 12px;
+  position: relative;
 }
 
 .sound-button {
@@ -1975,16 +1980,8 @@ body {
 }
 
 /* Gold VIP Bank Card styling for Word of the Day */
+/* Gold VIP Bank Card styling for Word of the Day - Premium Gold-on-Dark always */
 .wotd-card .flashcard-face {
-  background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 18%, rgba(255, 255, 255, 0) 32%),
-    linear-gradient(135deg, #ca8a04 0%, #facc15 28%, #fef08a 48%, #eab308 68%, #a16207 100%);
-  border: 1.5px solid #fef08a;
-  border-top-color: #ffffff;
-  box-shadow: 0 10px 30px rgba(161, 98, 7, 0.35), 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.7);
-}
-
-.dark-theme .wotd-card .flashcard-face {
   background: 
     linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 16%, rgba(255, 255, 255, 0) 30%),
     linear-gradient(135deg, #713f12 0%, #a16207 24%, #ca8a04 46%, #eab308 64%, #854d0e 82%, #451a03 100%);
@@ -1994,12 +1991,6 @@ body {
 }
 
 .wotd-card .flashcard-face.flashcard-back {
-  background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 18%, rgba(255, 255, 255, 0) 32%),
-    linear-gradient(135deg, #ca8a04 0%, #facc15 28%, #fef08a 48%, #eab308 68%, #a16207 100%);
-}
-
-.dark-theme .wotd-card .flashcard-face.flashcard-back {
   background: 
     linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 16%, rgba(255, 255, 255, 0) 30%),
     linear-gradient(135deg, #713f12 0%, #a16207 24%, #ca8a04 46%, #eab308 64%, #854d0e 82%, #451a03 100%);
@@ -2074,16 +2065,10 @@ body {
 
 .wotd-card .flashcard-sound-btn,
 .wotd-card .flashcard-fav-btn {
-  background: rgba(0, 0, 0, 0.22);
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(253, 224, 71, 0.5);
   backdrop-filter: blur(4px);
   z-index: 2;
-}
-
-.dark-theme .wotd-card .flashcard-sound-btn,
-.dark-theme .wotd-card .flashcard-fav-btn {
-  background: rgba(0, 0, 0, 0.35);
-  border-color: rgba(253, 224, 71, 0.5);
 }
 
 /* Elegant premium italic typography for "Слово дня" with internal 3D depth */
@@ -2098,21 +2083,11 @@ body {
   justify-content: center;
   gap: 6px;
   user-select: none;
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff 30%, #f1f5f9 60%, #cbd5e1 85%, #94a3b8 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 30%, #fef08a 65%, #ca8a04 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   border: none;
   padding: 0;
-  filter: 
-    drop-shadow(-1px -1px 0px rgba(255, 255, 255, 0.85))
-    drop-shadow(1px 1px 0px rgba(69, 26, 3, 0.85))
-    drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.45));
-}
-
-.dark-theme .wotd-card-badge {
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff 30%, #fef08a 65%, #ca8a04 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   filter: 
     drop-shadow(-1px -1px 0px rgba(255, 255, 255, 0.85))
     drop-shadow(1px 1px 0px rgba(69, 26, 3, 0.9))
@@ -3263,51 +3238,7 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.podium-card.rank-diamond,
-.podium-card.rank-gold,
-.podium-card.rank-silver,
-.podium-card.rank-bronze {
-  background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
-}
 
-.dark-theme .podium-card.rank-diamond,
-.dark-theme .podium-card.rank-gold,
-.dark-theme .podium-card.rank-silver,
-.dark-theme .podium-card.rank-bronze {
-  background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, #1e293b 100%);
-}
-
-.podium-card.rank-diamond {
-  border-color: #38bdf8;
-}
-
-.dark-theme .podium-card.rank-diamond {
-  border-color: #0284c7;
-}
-
-.podium-card.rank-gold {
-  border-color: #fbbf24;
-}
-
-.dark-theme .podium-card.rank-gold {
-  border-color: #d97706;
-}
-
-.podium-card.rank-silver {
-  border-color: #94a3b8;
-}
-
-.dark-theme .podium-card.rank-silver {
-  border-color: #64748b;
-}
-
-.podium-card.rank-bronze {
-  border-color: #d97706;
-}
-
-.dark-theme .podium-card.rank-bronze {
-  border-color: #b45309;
-}
 
 .podium-card.is-me {
   box-shadow: 0 0 0 2px #22c55e, 0 4px 12px rgba(34, 197, 94, 0.2);
@@ -4538,7 +4469,7 @@ body.notebook-theme,
   z-index: 120;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.22s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 
 .drawer-overlay.open {
@@ -4549,7 +4480,7 @@ body.notebook-theme,
 .burger-drawer {
   position: fixed;
   top: 0;
-  right: -290px;
+  right: 0;
   width: 290px;
   max-width: 85vw;
   height: 100vh;
@@ -4557,14 +4488,15 @@ body.notebook-theme,
   border-left: 1.5px solid var(--border-color);
   z-index: 130;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
-  transition: right 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
 
 .burger-drawer.open {
-  right: 0;
+  transform: translateX(0);
 }
 
 .drawer-header {
@@ -4709,19 +4641,20 @@ body.notebook-theme,
   color: #4ade80;
 }
 
-/* Hamburger button in header */
+/* Hamburger button in header - square with rounded edges */
 .header-burger-btn {
-  background: transparent;
-  border: none;
+  background: var(--card-bg, #ffffff);
+  border: 1.5px solid var(--border-color);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  transition: background 0.15s ease;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
   padding: 0;
+  box-shadow: var(--shadow-sm);
 }
 
 .header-burger-btn:hover {
@@ -4732,6 +4665,28 @@ body.notebook-theme,
   background: #1e293b;
 }
 
+.notebook-theme .header-burger-btn {
+  background: #fffdf7;
+  border: 2px solid var(--nb-blue-pen);
+  box-shadow: var(--nb-shadow);
+}
+
 .notebook-theme .header-burger-btn:hover {
   background: #f0ede4;
+}
+
+/* Scale up small fonts in Notebook theme for readability */
+.notebook-theme small,
+.notebook-theme .user-status-text,
+.notebook-theme .xp-badge-text,
+.notebook-theme .drawer-email,
+.notebook-theme .drawer-username,
+.notebook-theme .dict-translation,
+.notebook-theme .fav-translation,
+.notebook-theme .word-transcription,
+.notebook-theme .card-transcription,
+.notebook-theme .word-example,
+.notebook-theme .settings-option-subtitle,
+.notebook-theme .settings-info-text {
+  font-size: 1.25em !important;
 }
