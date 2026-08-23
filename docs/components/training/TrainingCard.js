@@ -1447,10 +1447,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     input.addEventListener('input', () => {
       if (input.querySelector('span')) {
+        const offset = getCaretCharacterOffsetWithin(input);
         const rawText = input.textContent || '';
         input.innerHTML = '';
         input.textContent = rawText;
-        placeCaretAtEnd(input);
+        setCaretCharacterOffsetWithin(input, offset);
         return;
       }
       const text = input.textContent || '';
@@ -1460,6 +1461,51 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         placeCaretAtEnd(input);
       }
     });
+
+    function getCaretCharacterOffsetWithin(element) {
+      let caretOffset = 0;
+      try {
+        const doc = element.ownerDocument || document;
+        const win = doc.defaultView || window;
+        const sel = win.getSelection();
+        if (sel.rangeCount > 0) {
+          const range = sel.getRangeAt(0);
+          const preCaretRange = range.cloneRange();
+          preCaretRange.selectNodeContents(element);
+          preCaretRange.setEnd(range.endContainer, range.endOffset);
+          caretOffset = preCaretRange.toString().length;
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+      return caretOffset;
+    }
+
+    function setCaretCharacterOffsetWithin(element, offset) {
+      if (!element) return;
+      try {
+        element.focus({ preventScroll: true });
+        const textNode = element.firstChild;
+        if (!textNode) {
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          range.collapse(true);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          return;
+        }
+        const range = document.createRange();
+        const safeOffset = Math.min(offset, textNode.length);
+        range.setStart(textNode, safeOffset);
+        range.collapse(true);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
 
     function placeCaretAtEnd(el) {
       if (!el) return;
