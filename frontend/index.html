@@ -225,16 +225,35 @@
 
         // In Cards mode: if user reached their daily learning limit, show warning and block adding new words!
         if (!isFavPracticeActive && currentMethod === 'cards' && learningCount >= dailyGoal) {
+          const congratsText = getInterfaceLanguage() === 'ru' 
+            ? `Отлично!<br/>Вы отобрали ${learningCount} слов на сегодня!`
+            : getInterfaceLanguage() === 'uk'
+              ? `Відмінно!<br/>Ви відібрали ${learningCount} слів на сьогодні!`
+              : `Excellent!<br/>You selected ${learningCount} words for today!`;
+
+          let nextBtnTarget = 'quiz';
+          let nextBtnText = getInterfaceLanguage() === 'ru' ? 'Перейти в Квиз' : getInterfaceLanguage() === 'uk' ? 'Перейти до Квізу' : 'Go to Quiz';
+
+          if (quizQueue.length > 0) {
+            nextBtnTarget = 'quiz';
+            nextBtnText = '🎯 ' + t('train_go_quiz');
+          } else if (pairsQueue.length > 0) {
+            nextBtnTarget = 'pairs';
+            nextBtnText = '🧩 ' + t('train_go_pairs');
+          } else if (testQueue.length > 0) {
+            nextBtnTarget = 'input';
+            nextBtnText = '✍️ ' + t('train_go_test');
+          }
+
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
               <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
               <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                Отлично!<br/>
-                Вы отобрали ${learningCount} слов на сегодня!
+                ${congratsText}
               </p>
               <div style="width: 100%; max-width: 340px; margin: 0 auto;">
                 <button class="primary-button btn-green" id="go-quiz-btn">
-                  Перейти в Квиз
+                  ${nextBtnText}
                 </button>
               </div>
             </div>
@@ -243,7 +262,7 @@
           const goQuizBtn = content.querySelector('#go-quiz-btn');
           if (goQuizBtn) {
             goQuizBtn.addEventListener('click', () => {
-              userSettings.preferredMethod = 'quiz';
+              userSettings.preferredMethod = nextBtnTarget;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               renderTrainingTab();
@@ -392,6 +411,11 @@
             return;
           }
 
+          const hasQuiz = quizQueue.length > 0;
+          const hasPairs = pairsQueue.length > 0;
+          const hasTest = testQueue.length > 0;
+          const hasCards = cardsQueue.length > 0 && learningCount < dailyGoal;
+
           let emptyIcon = '🗂️';
           let emptyTitle = getInterfaceLanguage() === 'ru' ? 'Очередь пуста' : getInterfaceLanguage() === 'uk' ? 'Черга порожня' : 'Queue is empty';
           let emptyMsg = getInterfaceLanguage() === 'ru' ? 'Сначала отберите слова в режиме «Карточки»!' : getInterfaceLanguage() === 'uk' ? 'Спочатку відберіть слова в режимі «Картки»!' : 'Select words in "Cards" mode first!';
@@ -402,28 +426,47 @@
             emptyIcon = '🎯';
             emptyTitle = t('train_no_words_quiz');
             emptyMsg = t('train_no_words_quiz_sub');
-            nextMode = 'cards';
-            nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Отобрать слова в Карточках' : getInterfaceLanguage() === 'uk' ? '🗂️ Відібрати слова в Картках' : '🗂️ Select words in Cards';
+            if (hasPairs) {
+              nextMode = 'pairs';
+              nextBtnLabel = '🧩 ' + t('train_go_pairs');
+            } else if (hasTest) {
+              nextMode = 'input';
+              nextBtnLabel = '✍️ ' + t('train_go_test');
+            } else {
+              nextMode = 'cards';
+              nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Отобрать слова в Карточках' : getInterfaceLanguage() === 'uk' ? '🗂️ Відібрати слова в Картках' : '🗂️ Select words in Cards';
+            }
           } else if (currentMethod === 'pairs') {
             emptyIcon = '🧩';
             emptyTitle = t('train_no_words_pairs');
             emptyMsg = t('train_no_words_pairs_sub');
-            nextMode = 'quiz';
-            nextBtnLabel = '🎯 ' + t('train_go_quiz');
+            if (hasTest) {
+              nextMode = 'input';
+              nextBtnLabel = '✍️ ' + t('train_go_test');
+            } else if (hasQuiz) {
+              nextMode = 'quiz';
+              nextBtnLabel = '🎯 ' + t('train_go_quiz');
+            } else {
+              nextMode = 'cards';
+              nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+            }
           } else if (currentMethod === 'input') {
             if (unmasteredCount > 0) {
               emptyIcon = '✍️';
               emptyTitle = t('train_no_words_test');
               emptyMsg = t('train_no_words_test_sub');
-              if (cardsQueue.length > 0 && learningCount < dailyGoal) {
+              if (hasCards) {
                 nextMode = 'cards';
                 nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
-              } else if (quizQueue.length > 0) {
+              } else if (hasQuiz) {
                 nextMode = 'quiz';
                 nextBtnLabel = '🎯 ' + t('train_go_quiz');
-              } else {
+              } else if (hasPairs) {
                 nextMode = 'pairs';
                 nextBtnLabel = '🧩 ' + t('train_go_pairs');
+              } else {
+                nextMode = 'cards';
+                nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
               }
             } else {
               emptyIcon = '🏆';
