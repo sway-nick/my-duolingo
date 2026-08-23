@@ -4786,3 +4786,35 @@ body.notebook-theme,
     font-size: 15px !important;
   }
 }
+
+/* Custom Notes styles for Cards and Dictionary */
+.flashcard-notes {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 8px;
+  margin-bottom: 0;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.notebook-theme .flashcard-notes {
+  color: var(--nb-blue-pen) !important;
+  opacity: 0.8;
+  font-family: 'Caveat', cursive !important;
+}
+
+.dict-notes {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 4px;
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+
+.notebook-theme .dict-notes {
+  color: var(--nb-blue-pen) !important;
+  opacity: 0.85;
+  font-family: 'Caveat', cursive !important;
+}

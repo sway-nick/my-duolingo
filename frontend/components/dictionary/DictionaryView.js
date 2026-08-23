@@ -63,6 +63,7 @@ function renderWordCardHtml(w, isFav, prog) {
       <div class="dict-card-body">
         <h3>${w.word}</h3>
         <p class="dict-translation">${w.translation}</p>
+        ${w.notes ? `<p class="dict-notes">${w.notes}</p>` : ''}
       </div>
     </div>
   `;

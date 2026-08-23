@@ -1766,6 +1766,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${currentWord.translation}</h2>
+              ${currentWord.notes ? `<p class="flashcard-notes">${currentWord.notes}</p>` : ''}
             </div>
           </div>
         </div>
