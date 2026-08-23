@@ -526,9 +526,7 @@ const translations = {
     settings_voice: "Accent de voix",
     settings_goal: "📌 Objectif quotidien",
     settings_lang: "🌐 Langue de l'interface",
-  }
-
-
+  },
   pl: {
     training: "Trening",
     leaderboard: "Tygodniowy ranking",
