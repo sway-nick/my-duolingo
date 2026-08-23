@@ -199,6 +199,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const brandLogo = app.querySelector('#brand-logo');
   if (brandLogo) {
     brandLogo.addEventListener('click', () => {
+      console.log('Brand logo DOM element clicked!');
       onLogoClick();
     });
   }
@@ -256,6 +257,7 @@ function bindHeaderActionButtons(container) {
   const xpBtn = container.querySelector('#header-xp-btn');
   if (xpBtn) {
     xpBtn.addEventListener('click', () => {
+      console.log('XP badge button clicked! Navigating to leaderboard...');
       closeDrawer();
       const navTabs = document.querySelectorAll('.nav-tab');
       navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'leaderboard'));
