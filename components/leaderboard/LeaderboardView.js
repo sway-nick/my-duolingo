@@ -1,7 +1,7 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey } from '../../services/api.js?v=18.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=18.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
-import { t } from '../../services/i18n.js?v=25.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey } from '../../services/api.js?v=131.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=131.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=131.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=131.0';
 
 let currentPeriod = 'week'; // 'week' or 'all'
 
