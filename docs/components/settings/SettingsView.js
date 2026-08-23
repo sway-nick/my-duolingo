@@ -1,9 +1,10 @@
-import { getUserSettings, saveUserSettings } from '../../services/api.js?v=18.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=18.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=18.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=18.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=24.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=18.0';
+import { getUserSettings, saveUserSettings } from '../../services/api.js?v=132.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=132.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=132.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=132.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=132.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=132.0';
+import { t } from '../../services/i18n.js?v=132.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -16,7 +17,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   container.innerHTML = `
     <div class="settings-page">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 style="margin: 0;">⚙️ Settings</h2>
+        <h2 style="margin: 0;">⚙️ ${t('settings')}</h2>
         <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap;">
           ✓ Saved
         </span>
@@ -33,21 +34,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           <div class="avatar-edit-badge" title="Change avatar">🎭</div>
         </div>
         <div class="profile-details">
-          <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : 'Guest Mode'}</h3>
-          <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : 'Log in to sync progress'}</p>
+          <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : (t('demo') || 'Guest Mode')}</h3>
+          <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : (t('settings_login_sub') || 'Log in to sync progress')}</p>
         </div>
         <div>
           ${
             user
-              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Log Out</button>`
-              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">Log In</button>`
+              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">${t('settings_logout')}</button>`
+              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">${t('settings_login')}</button>`
           }
         </div>
       </div>
 
       <!-- Language Selection Card -->
       <div class="settings-card" style="position: relative; z-index: 15;">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🌐 Interface Language</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_lang')}</h3>
         <div class="custom-dropdown" id="lang-dropdown">
           <button type="button" class="custom-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
             <span id="lang-dropdown-label">English</span>
@@ -85,29 +86,29 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Theme Switcher Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">🎨 Theme</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_theme')}</h3>
         <div class="theme-options-row">
           <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
-            Light
+            ${t('settings_theme_light')}
           </button>
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
-            Dark
+            ${t('settings_theme_dark')}
           </button>
           <button class="theme-option-btn ${currentTheme === 'notebook' ? 'active' : ''}" id="theme-notebook-btn">
-            Notebook
+            ${t('settings_theme_notebook')}
           </button>
         </div>
       </div>
 
       <!-- Sound Mode Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">✨ Sound Effects</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_sfx')}</h3>
         <div class="sound-options-row">
           <button class="sound-option-btn" id="sfx-on-btn">
-            🔔 Enabled
+            ${t('settings_sfx_on')}
           </button>
           <button class="sound-option-btn" id="sfx-off-btn">
-            🔕 Disabled
+            ${t('settings_sfx_off')}
           </button>
         </div>
       </div>
@@ -118,7 +119,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           <svg width="19" height="19" viewBox="0 0 24 24" fill="#d4a373" style="flex-shrink: 0;">
             <path d="M12 3a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4zm-6 16a6 6 0 0 1 12 0H6zm14.5-9a4.5 4.5 0 0 1 0 6.36l-1.06-1.06a3 3 0 0 0 0-4.24l1.06-1.06zm2.5-2.5a8 8 0 0 1 0 11.31l-1.06-1.06a6.5 6.5 0 0 0 0-9.19l1.06-1.06z"/>
           </svg>
-          Voice Accent
+          ${t('settings_voice')}
         </h3>
         <div class="voice-options-row">
           <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (UK)" aria-label="British English">
@@ -152,19 +153,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Goals Card -->
       <div class="settings-card" style="position: relative; z-index: 10;">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">📌 Daily Goal</h3>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_goal')}</h3>
         <div class="custom-dropdown" id="goal-dropdown">
           <button type="button" class="custom-dropdown-trigger" id="goal-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span id="goal-dropdown-label">20 words</span>
+            <span id="goal-dropdown-label">20 ${t('words')}</span>
             <span class="dropdown-arrow">▼</span>
           </button>
           <div class="custom-dropdown-menu" id="goal-dropdown-menu" role="listbox">
-            <div class="dropdown-item" data-value="20">20 words</div>
-            <div class="dropdown-item" data-value="30">30 words</div>
-            <div class="dropdown-item" data-value="40">40 words</div>
-            <div class="dropdown-item" data-value="50">50 words</div>
-            <div class="dropdown-item" data-value="75">75 words</div>
-            <div class="dropdown-item" data-value="100">100 words</div>
+            <div class="dropdown-item" data-value="20">20 ${t('words')}</div>
+            <div class="dropdown-item" data-value="30">30 ${t('words')}</div>
+            <div class="dropdown-item" data-value="40">40 ${t('words')}</div>
+            <div class="dropdown-item" data-value="50">50 ${t('words')}</div>
+            <div class="dropdown-item" data-value="75">75 ${t('words')}</div>
+            <div class="dropdown-item" data-value="100">100 ${t('words')}</div>
           </div>
         </div>
       </div>
@@ -410,10 +411,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     et: 'Eesti'
   };
 
-  const currentLang = localStorage.getItem('myduo_interface_lang') || 'ru';
+  const currentLang = localStorage.getItem('myduo_interface_lang') || 'en';
 
   function updateLangUI(val) {
-    if (langLabel) langLabel.textContent = langNames[val] || 'Русский';
+    if (langLabel) langLabel.textContent = langNames[val] || 'English';
     langItems.forEach((item) => {
       item.classList.toggle('selected', item.dataset.value === val);
     });

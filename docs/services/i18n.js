@@ -72,6 +72,20 @@ const translations = {
     train_go_quiz: "Перейти в Квиз",
     train_go_pairs: "Перейти в Пары",
     train_go_test: "Перейти в Тест",
+
+    // Settings
+    settings_logout: "Выйти",
+    settings_login: "Войти",
+    settings_theme: "🎨 Тема",
+    settings_theme_light: "Светлая",
+    settings_theme_dark: "Тёмная",
+    settings_theme_notebook: "Тетрадь",
+    settings_sfx: "✨ Звуковые эффекты",
+    settings_sfx_on: "🔔 Включены",
+    settings_sfx_off: "🔕 Выключены",
+    settings_voice: "Акцент озвучки",
+    settings_goal: "📌 Дневная цель",
+    settings_lang: "🌐 Язык интерфейса",
   },
   uk: {
     // Nav / Drawer
@@ -146,6 +160,20 @@ const translations = {
     train_go_quiz: "Перейти до Квізу",
     train_go_pairs: "Перейти до Пар",
     train_go_test: "Перейти до Тесту",
+
+    // Settings
+    settings_logout: "Вийти",
+    settings_login: "Увійти",
+    settings_theme: "🎨 Тема",
+    settings_theme_light: "Світла",
+    settings_theme_dark: "Темна",
+    settings_theme_notebook: "Зошит",
+    settings_sfx: "✨ Звукові ефекти",
+    settings_sfx_on: "🔔 Увімкнено",
+    settings_sfx_off: "🔕 Вимкнено",
+    settings_voice: "Акцент озвучення",
+    settings_goal: "📌 Денна ціль",
+    settings_lang: "🌐 Мова інтерфейсу",
   },
   en: {
     // Nav / Drawer
@@ -220,6 +248,20 @@ const translations = {
     train_go_quiz: "Go to Quiz",
     train_go_pairs: "Go to Pairs",
     train_go_test: "Go to Test",
+
+    // Settings
+    settings_logout: "Log Out",
+    settings_login: "Log In",
+    settings_theme: "🎨 Theme",
+    settings_theme_light: "Light",
+    settings_theme_dark: "Dark",
+    settings_theme_notebook: "Notebook",
+    settings_sfx: "✨ Sound Effects",
+    settings_sfx_on: "🔔 Enabled",
+    settings_sfx_off: "🔕 Disabled",
+    settings_voice: "Voice Accent",
+    settings_goal: "📌 Daily Goal",
+    settings_lang: "🌐 Interface Language",
   },
   de: {
     // Nav / Drawer
@@ -294,6 +336,20 @@ const translations = {
     train_go_quiz: "Zum Quiz",
     train_go_pairs: "Zu Paaren",
     train_go_test: "Zum Test",
+
+    // Settings
+    settings_logout: "Abmelden",
+    settings_login: "Anmelden",
+    settings_theme: "🎨 Design",
+    settings_theme_light: "Hell",
+    settings_theme_dark: "Dunkel",
+    settings_theme_notebook: "Notizbuch",
+    settings_sfx: "✨ Soundeffekte",
+    settings_sfx_on: "🔔 Aktiviert",
+    settings_sfx_off: "🔕 Deaktiviert",
+    settings_voice: "Stimmenakzent",
+    settings_goal: "📌 Tägliches Ziel",
+    settings_lang: "🌐 Sprache",
   },
   es: {
     // Nav / Drawer
@@ -368,6 +424,20 @@ const translations = {
     train_go_quiz: "Ir a Quiz",
     train_go_pairs: "Ir a Parejas",
     train_go_test: "Ir a Prueba",
+
+    // Settings
+    settings_logout: "Cerrar sesión",
+    settings_login: "Iniciar sesión",
+    settings_theme: "🎨 Tema",
+    settings_theme_light: "Claro",
+    settings_theme_dark: "Oscuro",
+    settings_theme_notebook: "Cuaderno",
+    settings_sfx: "✨ Efectos de sonido",
+    settings_sfx_on: "🔔 Activado",
+    settings_sfx_off: "🔕 Desactivado",
+    settings_voice: "Acento de voz",
+    settings_goal: "📌 Meta diaria",
+    settings_lang: "🌐 Idioma",
   },
   fr: {
     // Nav / Drawer
@@ -442,11 +512,25 @@ const translations = {
     train_go_quiz: "Aller au Quiz",
     train_go_pairs: "Aller aux Paires",
     train_go_test: "Aller au Test",
+
+    // Settings
+    settings_logout: "Déconnexion",
+    settings_login: "Connexion",
+    settings_theme: "🎨 Thème",
+    settings_theme_light: "Clair",
+    settings_theme_dark: "Sombre",
+    settings_theme_notebook: "Cahier",
+    settings_sfx: "✨ Effets sonores",
+    settings_sfx_on: "🔔 Activé",
+    settings_sfx_off: "🔕 Désactivé",
+    settings_voice: "Accent de voix",
+    settings_goal: "📌 Objectif quotidien",
+    settings_lang: "🌐 Langue de l'interface",
   }
 };
 
 export function getInterfaceLanguage() {
-  return localStorage.getItem('myduo_interface_lang') || 'ru';
+  return localStorage.getItem('myduo_interface_lang') || 'en';
 }
 
 export function setInterfaceLanguage(lang) {
@@ -456,6 +540,6 @@ export function setInterfaceLanguage(lang) {
 
 export function t(key) {
   const lang = getInterfaceLanguage();
-  const dict = translations[lang] || translations['ru'];
-  return dict[key] || translations['ru'][key] || key;
+  const dict = translations[lang] || translations['en'];
+  return dict[key] || translations['en'][key] || key;
 }
