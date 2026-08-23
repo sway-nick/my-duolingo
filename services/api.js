@@ -85,6 +85,9 @@ async function getWords(forceRefresh = false) {
               sanitizeTranscriptions(data.data);
               cachedWordsList = data.data;
               localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: data.data }));
+              }
             }
           })
           .catch(() => {});
