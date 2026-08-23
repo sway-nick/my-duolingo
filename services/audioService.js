@@ -318,7 +318,13 @@ function getAudioUrls(text, isUk) {
   const langCode = isUk ? 'en-GB' : 'en-US';
   const voiceType = isUk ? 1 : 2;
 
+  const cleanFilename = text.toLowerCase().trim()
+    .replace(/[^a-z0-9\s'-]/g, '')
+    .replace(/\s+/g, '_');
+  const localPath = `./assets/audio/${isUk ? 'uk' : 'us'}/${cleanFilename}.mp3`;
+
   return {
+    local: localPath,
     primary: `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encodeURIComponent(cleanQuery)}`,
     fallback: `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`,
     cleanQuery,
@@ -334,14 +340,14 @@ function preloadWordAudio(text, voiceAccentOverride = null) {
   try {
     const accent = voiceAccentOverride || getSavedVoiceAccent();
     const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
-    const { primary, cleanQuery } = getAudioUrls(text, isUk);
+    const { local, cleanQuery } = getAudioUrls(text, isUk);
     const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
 
     if (audioCache.has(cacheKey)) return;
 
     const audio = new Audio();
     audio.preload = 'auto';
-    audio.src = primary;
+    audio.src = local;
 
     if (audioCache.size > 80) {
       const firstKey = audioCache.keys().next().value;
@@ -424,7 +430,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetLang = lang || (isUk ? 'en-GB' : 'en-US');
 
-  const { primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
+  const { local, primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
   const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
 
   const cachedAudio = audioCache.get(cacheKey);
@@ -435,15 +441,18 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     try {
       cachedAudio.playbackRate = isTurtleMode ? 0.62 : 1.0;
       
-      let hasTriedFallback = false;
+      let fallbackStage = 0; // 0 = local, 1 = primary, 2 = fallback, 3 = speech synthesis
       cachedAudio.onerror = () => {
-        if (!hasTriedFallback) {
-          hasTriedFallback = true;
+        if (fallbackStage === 0) {
+          fallbackStage = 1;
+          cachedAudio.src = primary;
+          cachedAudio.currentTime = 0;
+          cachedAudio.play().catch(() => cachedAudio.onerror());
+        } else if (fallbackStage === 1) {
+          fallbackStage = 2;
           cachedAudio.src = fallback;
           cachedAudio.currentTime = 0;
-          cachedAudio.play().catch(() => {
-            speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-          });
+          cachedAudio.play().catch(() => cachedAudio.onerror());
         } else {
           speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
         }
@@ -453,13 +462,11 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
       if (playPromise !== undefined) {
         playPromise.catch((err) => {
           if (err && err.name === 'AbortError') return;
-          if (!hasTriedFallback) {
-            hasTriedFallback = true;
-            cachedAudio.src = fallback;
+          if (fallbackStage === 0) {
+            fallbackStage = 1;
+            cachedAudio.src = primary;
             cachedAudio.currentTime = 0;
-            cachedAudio.play().catch(() => {
-              speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-            });
+            cachedAudio.play().catch(() => cachedAudio.onerror());
           }
         });
       }
@@ -476,19 +483,22 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
 
   try {
     player.playbackRate = isTurtleMode ? 0.62 : 1.0;
-    player.src = primary;
+    player.src = local;
     player.currentTime = 0;
 
-    let hasTriedFallback = false;
+    let fallbackStage = 0; // 0 = local, 1 = primary, 2 = fallback, 3 = speech synthesis
 
     player.onerror = () => {
-      if (!hasTriedFallback) {
-        hasTriedFallback = true;
+      if (fallbackStage === 0) {
+        fallbackStage = 1;
+        player.src = primary;
+        player.currentTime = 0;
+        player.play().catch(() => player.onerror());
+      } else if (fallbackStage === 1) {
+        fallbackStage = 2;
         player.src = fallback;
         player.currentTime = 0;
-        player.play().catch(() => {
-          speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-        });
+        player.play().catch(() => player.onerror());
       } else {
         speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
       }
@@ -497,16 +507,12 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     const playPromise = player.play();
     if (playPromise !== undefined) {
       playPromise.catch((err) => {
-        // AbortError happens when user taps quickly — ignore it cleanly without playing robot voice
         if (err && err.name === 'AbortError') return;
-
-        if (!hasTriedFallback) {
-          hasTriedFallback = true;
-          player.src = fallback;
+        if (fallbackStage === 0) {
+          fallbackStage = 1;
+          player.src = primary;
           player.currentTime = 0;
-          player.play().catch(() => {
-            speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-          });
+          player.play().catch(() => player.onerror());
         }
       });
     }
