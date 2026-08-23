@@ -49,8 +49,24 @@ try {
   }
 } catch (e) {}
 
+function sanitizeTranscriptions(words) {
+  if (!Array.isArray(words)) return;
+  words.forEach((w) => {
+    if (w) {
+      let t = String(w.transcription || '').trim();
+      if (t) {
+        t = t.replace(/^[\/\[]/, '').replace(/[\/\]]$/, '');
+        w.transcription = `/${t}/`;
+      } else {
+        w.transcription = '';
+      }
+    }
+  });
+}
+
 async function getWords(forceRefresh = false) {
   if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
+    sanitizeTranscriptions(cachedWordsList);
     return { success: true, data: cachedWordsList };
   }
 
@@ -59,12 +75,14 @@ async function getWords(forceRefresh = false) {
     try {
       const localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
       if (Array.isArray(localCached) && localCached.length > 0) {
+        sanitizeTranscriptions(localCached);
         cachedWordsList = localCached;
         // Asynchronously refresh in background without blocking UI
         fetch(`${API_URL}?route=words`)
           .then((res) => res.json())
           .then((data) => {
             if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+              sanitizeTranscriptions(data.data);
               cachedWordsList = data.data;
               localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
             }
@@ -79,6 +97,7 @@ async function getWords(forceRefresh = false) {
     const response = await fetch(`${API_URL}?route=words`);
     const data = await response.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      sanitizeTranscriptions(data.data);
       cachedWordsList = data.data;
       try {
         localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
@@ -88,7 +107,10 @@ async function getWords(forceRefresh = false) {
   } catch (error) {
     console.warn('API error, using default word list', error);
   }
-  return { success: true, data: cachedWordsList || MOCK_WORDS };
+
+  const fallbackList = cachedWordsList || MOCK_WORDS;
+  sanitizeTranscriptions(fallbackList);
+  return { success: true, data: fallbackList };
 }
 
 async function registerUser(email, password, name) {

@@ -47,19 +47,19 @@
     <div id="app"></div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=148.0';
-      import { speakWord, preloadWordAudio } from './services/audioService.js?v=148.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=148.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=148.0';
-      import { t, getInterfaceLanguage } from './services/i18n.js?v=148.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=148.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=148.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=148.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=148.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=148.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=148.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=148.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=148.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=149.0';
+      import { speakWord, preloadWordAudio } from './services/audioService.js?v=149.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=149.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=149.0';
+      import { t, getInterfaceLanguage } from './services/i18n.js?v=149.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=149.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=149.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=149.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=149.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=149.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=149.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=149.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=149.0';
 
       let allWords = [];
       let favoriteIds = new Set();
