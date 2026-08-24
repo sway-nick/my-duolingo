@@ -56,7 +56,7 @@ function transcribePost(e) {
     '{"isCorrect": boolean (true if the pronunciation is correct or has minor acceptable accent/variation, false if incorrect or completely different word), ' +
     '"transcribed": string (what you heard the user pronounce in lowercase, cleaned of punctuation), ' +
     '"score": number (pronunciation accuracy score from 0 to 100), ' +
-    '"feedback": string (brief, constructive feedback in Russian about their pronunciation, max 10 words. If correct, write "Отлично!" or similar)}';
+    '"feedback": string (brief, constructive teacher-like feedback in Russian pointing out errors, formatted strictly like "обрати внимание на букву X" or "неправильное ударение" or "звук Z произнесен неверно". Keep it short, max 10 words. If correct, write "Отлично, произношение верное!")}';
 
   var payload = {
     contents: [

@@ -421,6 +421,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ${getInterfaceLanguage() === 'ru' ? 'Нажмите на микрофон и скажите слово' : getInterfaceLanguage() === 'uk' ? 'Натисніть на мікрофон і скажіть слово' : 'Tap the microphone and say the word'}
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none;"></div>
+          <button type="button" class="primary-button" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
+            ${getInterfaceLanguage() === 'ru' ? 'Продолжить' : getInterfaceLanguage() === 'uk' ? 'Продовжити' : 'Continue'}
+          </button>
           <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
             ${getInterfaceLanguage() === 'ru' ? 'Не могу говорить сейчас' : getInterfaceLanguage() === 'uk' ? 'Не можу говорити зараз' : "Can't speak right now"}
           </button>
@@ -433,6 +436,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const micBtn = practiceArea.querySelector('#speech-mic-btn');
       const holdHint = practiceArea.querySelector('#speech-hold-hint');
       const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
+      const continueBtn = practiceArea.querySelector('#speech-continue-btn');
       const cantSpeakBtn = practiceArea.querySelector('#speech-cant-speak-btn');
       const diagBtn = practiceArea.querySelector('#speech-diag-trigger-btn');
 
@@ -711,15 +715,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               const feedback = result && result.feedback ? result.feedback : '';
 
               if (spokenWord || isAiCorrect) {
-                if (transcriptBox) {
+                 if (transcriptBox) {
                   transcriptBox.style.display = 'block';
-                  let heardHtml = `Услышано: <strong>«${spokenWord || currentWord.word}»</strong>`;
+                  let heardHtml = '';
                   if (score !== null) {
-                    heardHtml += ` (Точность: ${score}%)`;
+                    heardHtml += `Точность произношения: <strong>${score}%</strong>`;
                   }
                   if (feedback) {
                     const fbColor = isAiCorrect ? '#16a34a' : '#d97706';
-                    heardHtml += `<br><span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${feedback}</span>`;
+                    heardHtml += `${score !== null ? '<br>' : ''}<span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${feedback}</span>`;
                   }
                   transcriptBox.innerHTML = heardHtml;
                 }
@@ -975,20 +979,24 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
 
           await saveProgress(currentWord.id, true, 'quiz');
-          onNextAfterSpeech(onNext, 1000, 4000);
+          if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
+          if (continueBtn) {
+            continueBtn.style.display = 'block';
+            continueBtn.onclick = () => onNext();
+          }
         } else {
           speechAttempts++;
           micBtn.classList.remove('listening', 'processing');
           
-          if (speechAttempts === 1) {
+          if (speechAttempts < 5) {
             playErrorSound();
             micBtn.innerHTML = '🎙️';
             if (holdHint) {
               holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-                ? 'Попробуйте повторить 🎙️' 
+                ? `Попробуйте повторить 🎙️ (Попытка ${speechAttempts} из 5)` 
                 : getInterfaceLanguage() === 'uk' 
-                  ? 'Спробуйте повторити 🎙️' 
-                  : 'Try to repeat 🎙️';
+                  ? `Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)` 
+                  : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
             }
             speakWord(currentWord.word, currentWord.id);
             setTimeout(() => {
@@ -1010,7 +1018,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }
             speakWord(currentWord.word, currentWord.id);
             await saveProgress(currentWord.id, false, 'quiz');
-            onNextAfterSpeech(onNext, 2000, 5000);
+            if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
+            if (continueBtn) {
+              continueBtn.style.display = 'block';
+              continueBtn.onclick = () => onNext();
+            }
           }
         }
       }
