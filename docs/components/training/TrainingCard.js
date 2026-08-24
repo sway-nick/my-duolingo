@@ -252,10 +252,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
                     ${currentWord.translation}
                   </h2>
-                  <button type="button" class="speech-hint-btn" id="speech-hint-btn" style="margin-top: 6px; font-size: 13px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: var(--primary-color); border: 1px solid rgba(59, 130, 246, 0.25); padding: 3px 12px; border-radius: 12px; cursor: pointer;">
-                    💡 ${getInterfaceLanguage() === 'ru' ? 'Подсказка' : getInterfaceLanguage() === 'uk' ? 'Підказка' : 'Hint'}
-                  </button>
-                  <div id="speech-revealed-hint" style="display: none; font-size: 15px; font-weight: 800; color: var(--primary-color); margin-top: 4px;">${currentWord.word}</div>
                 </div>
               `
               }
@@ -440,14 +436,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const cantSpeakBtn = practiceArea.querySelector('#speech-cant-speak-btn');
       const diagBtn = practiceArea.querySelector('#speech-diag-trigger-btn');
 
-      const hintBtn = container.querySelector('#speech-hint-btn');
-      const revealedHint = container.querySelector('#speech-revealed-hint');
-      if (hintBtn && revealedHint) {
-        hintBtn.addEventListener('click', () => {
-          hintBtn.style.display = 'none';
-          revealedHint.style.display = 'block';
-        });
-      }
+
 
       if (cantSpeakBtn) {
         cantSpeakBtn.addEventListener('click', () => {
@@ -997,7 +986,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   ? `Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)` 
                   : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
             }
-            speakWord(currentWord.word, currentWord.id);
             setTimeout(() => {
               isProcessing = false;
             }, 1200);
@@ -1014,7 +1002,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
                   : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
             }
-            speakWord(currentWord.word, currentWord.id);
             await saveProgress(currentWord.id, false, 'quiz');
             if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
             if (continueBtn) {
