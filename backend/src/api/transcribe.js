@@ -50,6 +50,14 @@ function transcribePost(e) {
   ];
 
   var lastError = '';
+  var promptText = 'The user was asked to pronounce the English word or phrase: "' + expectedWord + '". ' +
+    'Analyze the audio and evaluate their pronunciation quality. ' +
+    'Respond strictly in JSON format with these exact keys: ' +
+    '{"isCorrect": boolean (true if the pronunciation is correct or has minor acceptable accent/variation, false if incorrect or completely different word), ' +
+    '"transcribed": string (what you heard the user pronounce in lowercase, cleaned of punctuation), ' +
+    '"score": number (pronunciation accuracy score from 0 to 100), ' +
+    '"feedback": string (brief, constructive feedback in Russian about their pronunciation, max 10 words. If correct, write "Отлично!" or similar)}';
+
   var payload = {
     contents: [
       {
@@ -62,14 +70,15 @@ function transcribePost(e) {
             }
           },
           {
-            text: 'The user was asked to pronounce the English word: "' + expectedWord + '". Transcribe strictly what the user pronounced in English letters (lowercase). If they pronounced the word correctly or with an accent, return the English word. Return ONLY the single word or short phrase, without punctuation, quotes, markdown or explanations.'
+            text: promptText
           }
         ]
       }
     ],
     generationConfig: {
       temperature: 0.1,
-      maxOutputTokens: 20
+      maxOutputTokens: 200,
+      responseMimeType: 'application/json'
     }
   };
 
@@ -90,13 +99,33 @@ function transcribePost(e) {
 
       if (responseCode === 200) {
         var resJson = JSON.parse(responseText);
-        var rawTranscribed = resJson && resJson.candidates && resJson.candidates[0] && resJson.candidates[0].content && resJson.candidates[0].content.parts && resJson.candidates[0].content.parts[0] ? resJson.candidates[0].content.parts[0].text : '';
-        var cleanedText = rawTranscribed.trim().toLowerCase().replace(/[.,!?:;"'«»`]/g, '');
+        var rawText = resJson && resJson.candidates && resJson.candidates[0] && resJson.candidates[0].content && resJson.candidates[0].content.parts && resJson.candidates[0].content.parts[0] ? resJson.candidates[0].content.parts[0].text : '';
+        
+        var evaluation = {
+          isCorrect: false,
+          transcribed: '',
+          score: 0,
+          feedback: ''
+        };
+
+        try {
+          evaluation = JSON.parse(rawText);
+        } catch (jsonErr) {
+          var cleanText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+          try {
+            evaluation = JSON.parse(cleanText);
+          } catch (e) {
+            evaluation.transcribed = rawText.trim().toLowerCase();
+            evaluation.isCorrect = evaluation.transcribed.indexOf(expectedWord.toLowerCase()) !== -1;
+            evaluation.score = evaluation.isCorrect ? 80 : 20;
+          }
+        }
 
         return successResponse({
-          text: cleanedText,
-          raw: rawTranscribed,
-          expectedWord: expectedWord,
+          isCorrect: !!evaluation.isCorrect,
+          transcribed: String(evaluation.transcribed || '').trim().toLowerCase(),
+          score: Number(evaluation.score || 0),
+          feedback: String(evaluation.feedback || ''),
           modelUsed: modelName
         });
       } else {

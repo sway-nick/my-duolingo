@@ -705,14 +705,25 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             try {
               const result = await transcribeAudio(audioBlob, mime, currentWord.word);
-              const spokenWord = (result && result.text ? result.text : '').trim();
+              const isAiCorrect = !!(result && result.isCorrect);
+              const spokenWord = (result && result.transcribed ? result.transcribed : '').trim();
+              const score = result && result.score !== undefined ? result.score : null;
+              const feedback = result && result.feedback ? result.feedback : '';
 
-              if (spokenWord) {
+              if (spokenWord || isAiCorrect) {
                 if (transcriptBox) {
                   transcriptBox.style.display = 'block';
-                  transcriptBox.innerHTML = `Услышано: <strong>«${spokenWord}»</strong>`;
+                  let heardHtml = `Услышано: <strong>«${spokenWord || currentWord.word}»</strong>`;
+                  if (score !== null) {
+                    heardHtml += ` (Точность: ${score}%)`;
+                  }
+                  if (feedback) {
+                    const fbColor = isAiCorrect ? '#16a34a' : '#d97706';
+                    heardHtml += `<br><span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${feedback}</span>`;
+                  }
+                  transcriptBox.innerHTML = heardHtml;
                 }
-                await evaluateSpeech([spokenWord]);
+                await evaluateSpeech([spokenWord], isAiCorrect);
               } else {
                 handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
               }
@@ -946,10 +957,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
       }
 
-      async function evaluateSpeech(alternatives) {
+      async function evaluateSpeech(alternatives, forceCorrect = false) {
         clearAllTimers();
         isProcessing = true;
-        const isMatch = checkSpeechMatch(alternatives, currentWord.word);
+        const isMatch = forceCorrect || checkSpeechMatch(alternatives, currentWord.word);
 
         if (isMatch) {
           isCompleted = true;
