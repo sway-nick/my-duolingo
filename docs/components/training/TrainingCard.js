@@ -517,24 +517,41 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         speechAttempts++;
 
-        if (speechAttempts === 1) {
-          speakWord(currentWord.word, currentWord.id);
-          if (holdHint) holdHint.innerHTML = customMsg || 'Послушайте слово 🔊 и нажмите 🎙️ для повтора';
-        } else if (speechAttempts === 2) {
-          speakWord(currentWord.word, currentWord.id);
-          if (holdHint) holdHint.innerHTML = 'Послушайте эталон 🔊 и повторите 🎙️';
+        if (speechAttempts < 5) {
+          if (holdHint) {
+            holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
+              ? `${customMsg || 'Голос не распознан.'} Попробуйте повторить 🎙️ (Попытка ${speechAttempts} из 5)` 
+              : getInterfaceLanguage() === 'uk' 
+                ? `${customMsg || 'Голос не розпізнано.'} Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)` 
+                : `${customMsg || 'Voice not recognized.'} Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+          }
         } else {
           isCompleted = true;
-          if (micBtn) micBtn.disabled = true;
-          if (holdHint) holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`;
-          speakWord(currentWord.word, currentWord.id);
+          if (micBtn) {
+            micBtn.disabled = true;
+            micBtn.classList.add('wrong');
+            micBtn.innerHTML = '❌';
+          }
+          if (holdHint) {
+            holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
+              ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>` 
+              : getInterfaceLanguage() === 'uk'
+                ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
+                : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+          }
           saveProgress(currentWord.id, false, 'quiz');
-          onNextAfterSpeech(onNext, 1200, 4500);
+          if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
+          if (continueBtn) {
+            continueBtn.style.display = 'block';
+            continueBtn.onclick = () => onNext();
+          }
         }
 
         if (transcriptBox) {
           transcriptBox.style.display = 'block';
+          const errorText = customMsg || (getInterfaceLanguage() === 'ru' ? 'Голос не распознан. Нажмите 🎙️ для повтора' : 'Voice not recognized. Tap 🎙️ to retry');
           transcriptBox.innerHTML = `
+            <div style="margin-bottom: 8px; color: #ef4444;">⚠️ ${errorText}</div>
             <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Или ответьте текстом без микрофона:</div>
             <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
               🎯 Ответить карточками
@@ -676,74 +693,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
           }
 
-          let processedStream = mediaStream;
-
-          // Create Web Audio processing graph to clean background rumble and compress voice
-          try {
-            try {
-              audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-            } catch (e) {
-              audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            if (audioContext && audioContext.state === 'suspended') {
-              try { await audioContext.resume(); } catch (e) {}
-            }
-
-            const source = audioContext.createMediaStreamSource(mediaStream);
-
-            // 1. High-pass filter (cut off low frequency rumbling below 85Hz)
-            const hpFilter = audioContext.createBiquadFilter();
-            hpFilter.type = 'highpass';
-            hpFilter.frequency.value = 85;
-
-            // 2. Low-pass filter (cut off high frequency whistle/noise above 8000Hz)
-            const lpFilter = audioContext.createBiquadFilter();
-            lpFilter.type = 'lowpass';
-            lpFilter.frequency.value = 8000;
-
-            // 3. Compressor (boosts quiet voice and limits loud bursts for even volume levels)
-            const compressor = audioContext.createDynamicsCompressor();
-            compressor.threshold.setValueAtTime(-30, audioContext.currentTime);
-            compressor.knee.setValueAtTime(10, audioContext.currentTime);
-            compressor.ratio.setValueAtTime(4, audioContext.currentTime);
-            compressor.attack.setValueAtTime(0.01, audioContext.currentTime);
-            compressor.release.setValueAtTime(0.15, audioContext.currentTime);
-
-            // 4. Output destination stream for MediaRecorder
-            const dest = audioContext.createMediaStreamAudioDestination();
-
-            // Connect Web Audio graph nodes
-            source.connect(hpFilter);
-            hpFilter.connect(lpFilter);
-            lpFilter.connect(compressor);
-            compressor.connect(dest);
-
-            processedStream = dest.stream;
-          } catch (audioContextErr) {
-            console.warn('Web Audio preprocessing graph failed, using raw stream:', audioContextErr);
-            processedStream = mediaStream;
-          }
-
           let options = {};
           if (supportedMimeType) {
             options = { mimeType: supportedMimeType };
           }
 
-          // Record the filtered and downsampled audio stream (fallback to raw stream on failure)
           try {
-            mediaRecorder = new MediaRecorder(processedStream, options);
+            mediaRecorder = new MediaRecorder(mediaStream, options);
           } catch (e1) {
-            try {
-              mediaRecorder = new MediaRecorder(processedStream);
-            } catch (e2) {
-              console.warn('MediaRecorder with processed stream failed, falling back to raw stream:', e2);
-              try {
-                mediaRecorder = new MediaRecorder(mediaStream, options);
-              } catch (e3) {
-                mediaRecorder = new MediaRecorder(mediaStream);
-              }
-            }
+            mediaRecorder = new MediaRecorder(mediaStream);
           }
 
           recordedChunks = [];
