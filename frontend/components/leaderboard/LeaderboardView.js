@@ -308,9 +308,13 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     </div>
   `;
 
-  const contentEl = container.querySelector('#leaderboard-content');
+  // Clean up previous event listeners to prevent duplicate execution
+  if (container._xpHandler) window.removeEventListener('myduo:xp_changed', container._xpHandler);
+  if (container._leaderboardHandler) window.removeEventListener('myduo:leaderboard_updated', container._leaderboardHandler);
+  if (container._visibilityHandler) document.removeEventListener('visibilitychange', container._visibilityHandler);
+  if (container._globalClickHandler) document.removeEventListener('click', container._globalClickHandler);
 
-  function bindListeners() {
+  function bindDynamicListeners() {
     const loginBtn = contentEl.querySelector('#leaderboard-login-btn');
     if (loginBtn) {
       loginBtn.addEventListener('click', () => {
@@ -320,8 +324,9 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         });
       });
     }
+  }
 
-    // Bind dropdown period selector
+  function bindStaticListeners() {
     const typeDropdown = container.querySelector('#leaderboard-type-dropdown');
     const typeTrigger = container.querySelector('#leaderboard-type-trigger');
     const typeItems = container.querySelectorAll('#leaderboard-type-menu .dropdown-item');
@@ -341,15 +346,16 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         });
       });
 
-      // Close dropdown when clicking outside
       const closeDropdown = () => {
         typeDropdown.classList.remove('open');
       };
       document.addEventListener('click', closeDropdown);
+      container._globalClickHandler = closeDropdown;
     }
   }
 
-  bindListeners();
+  bindStaticListeners();
+  bindDynamicListeners();
 
   async function loadFreshData() {
     try {
@@ -359,7 +365,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         const podiumContainer = container.querySelector('#leaderboard-podium-container');
         if (podiumContainer) podiumContainer.innerHTML = freshBodyData.podiumHtml;
         contentEl.innerHTML = freshBodyData.restHtml;
-        bindListeners();
+        bindDynamicListeners();
       }
     } catch (e) {
       console.warn('Leaderboard auto-sync error:', e);
@@ -394,12 +400,14 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       const podiumContainer = container.querySelector('#leaderboard-podium-container');
       if (podiumContainer) podiumContainer.innerHTML = freshBodyData.podiumHtml;
       contentEl.innerHTML = freshBodyData.restHtml;
-      bindListeners();
+      bindDynamicListeners();
     }
   };
 
   window.addEventListener('myduo:xp_changed', handleLiveUpdate);
   window.addEventListener('myduo:leaderboard_updated', handleLiveUpdate);
+  container._xpHandler = handleLiveUpdate;
+  container._leaderboardHandler = handleLiveUpdate;
 
   // 4. When user tabs back to the app, immediately refresh
   const handleVisibility = () => {
@@ -408,6 +416,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     }
   };
   document.addEventListener('visibilitychange', handleVisibility);
+  container._visibilityHandler = handleVisibility;
 }
 
 export { renderLeaderboardView };

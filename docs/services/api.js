@@ -1522,24 +1522,28 @@ function runWeeklyXpCleanup() {
     const currentWeekKey = getIsoWeekKey();
     const currentXpKey = `xp_${currentUserId}_${currentWeekKey}`;
 
-    if (!localStorage.getItem(`myduo_reset_cleanup_${currentWeekKey}`)) {
-      const currentVal = localStorage.getItem(currentXpKey);
-      if (currentVal && Number(currentVal) > 0) {
-        let foundMatch = false;
+    if (!localStorage.getItem(`myduo_reset_cleanup_v2_${currentWeekKey}`)) {
+      const currentVal = Number(localStorage.getItem(currentXpKey) || 0);
+      if (currentVal > 0) {
+        let maxOtherVal = 0;
         for (let i = 0; i < localStorage.length; i++) {
           const k = localStorage.key(i);
           if (k && k.startsWith(`xp_${currentUserId}_`) && k !== currentXpKey) {
-            if (localStorage.getItem(k) === currentVal) {
-              foundMatch = true;
-              break;
+            const val = Number(localStorage.getItem(k) || 0);
+            if (val > maxOtherVal) {
+              maxOtherVal = val;
             }
           }
         }
-        if (foundMatch) {
-          localStorage.setItem(currentXpKey, '0');
+        if (maxOtherVal > 0 && currentVal >= maxOtherVal) {
+          const actualXP = currentVal - maxOtherVal;
+          localStorage.setItem(currentXpKey, String(actualXP));
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: actualXP, delta: 0 } }));
+          }, 100);
         }
       }
-      localStorage.setItem(`myduo_reset_cleanup_${currentWeekKey}`, 'true');
+      localStorage.setItem(`myduo_reset_cleanup_v2_${currentWeekKey}`, 'true');
     }
   } catch (e) {}
 }
