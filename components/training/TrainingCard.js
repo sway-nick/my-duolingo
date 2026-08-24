@@ -222,7 +222,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `
             : `
-            ${(quizStage === 0 || quizStage === 1) ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="${quizStage === 1 ? 'Repeat sound' : 'Speak word'}" style="right: auto; left: -4px;">🔊</button>` : ''}
+            ${(quizStage === 0 || quizStage === 1 || quizStage === 3) ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
             <div class="train-left-badge">
               🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
