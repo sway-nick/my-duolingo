@@ -663,13 +663,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         } catch (e) {}
 
         try {
-          mediaStream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true
-            }
-          });
+          try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true
+              }
+            });
+          } catch (constraintErr) {
+            console.warn('getUserMedia constraints failed, falling back to simple audio: true', constraintErr);
+            mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          }
 
           let processedStream = mediaStream;
 
@@ -679,6 +684,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
             } catch (e) {
               audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (audioContext && audioContext.state === 'suspended') {
+              try { await audioContext.resume(); } catch (e) {}
             }
 
             const source = audioContext.createMediaStreamSource(mediaStream);
