@@ -677,10 +677,27 @@ async function getLeaderboard(weekKey = null, period = 'week') {
       if (period !== 'all') {
         const meOnServer = data.data.find((item) => String(item.userId) === String(currentUserId));
         if (meOnServer) {
-          if (Number(meOnServer.xp || 0) > userXP) {
-            localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
-            window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: Number(meOnServer.xp), delta: 0 } }));
+          const serverXp = Number(meOnServer.xp || 0);
+
+          // Check if the server value is contaminated (equal to current userXP + maxOtherVal of previous weeks)
+          let maxOtherVal = 0;
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(`xp_${currentUserId}_`) && k !== `xp_${currentUserId}_${wKey}`) {
+              const val = Number(localStorage.getItem(k) || 0);
+              if (val > maxOtherVal) maxOtherVal = val;
+            }
           }
+
+          if (maxOtherVal > 0 && serverXp === (userXP + maxOtherVal)) {
+            // The server value is contaminated! Do NOT restore it.
+            // Instead, force sync the correct userXP to the server immediately.
+            syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
+          } else if (serverXp > userXP) {
+            localStorage.setItem(`xp_${currentUserId}_${wKey}`, String(meOnServer.xp));
+            window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: serverXp, delta: 0 } }));
+          }
+
           if (meOnServer.avatar && !localStorage.getItem(`avatar_${currentUserId}`)) {
             localStorage.setItem(`avatar_${currentUserId}`, meOnServer.avatar);
             window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: currentUserId, avatar: meOnServer.avatar } }));
@@ -1522,7 +1539,7 @@ function runWeeklyXpCleanup() {
     const currentWeekKey = getIsoWeekKey();
     const currentXpKey = `xp_${currentUserId}_${currentWeekKey}`;
 
-    if (!localStorage.getItem(`myduo_reset_cleanup_v2_${currentWeekKey}`)) {
+    if (!localStorage.getItem(`myduo_reset_cleanup_v3_${currentWeekKey}`)) {
       const currentVal = Number(localStorage.getItem(currentXpKey) || 0);
       if (currentVal > 0) {
         let maxOtherVal = 0;
@@ -1543,7 +1560,7 @@ function runWeeklyXpCleanup() {
           }, 100);
         }
       }
-      localStorage.setItem(`myduo_reset_cleanup_v2_${currentWeekKey}`, 'true');
+      localStorage.setItem(`myduo_reset_cleanup_v3_${currentWeekKey}`, 'true');
     }
   } catch (e) {}
 }
