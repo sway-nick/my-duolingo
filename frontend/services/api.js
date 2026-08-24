@@ -1512,6 +1512,8 @@ async function getCloudWordOfTheDayId(userId) {
     console.warn('Failed to fetch cloud word of the day ID:', e);
   }
   return null;
+}
+
 // Self-healing function to correct any improperly copied weekly XP from previous weeks
 function runWeeklyXpCleanup() {
   if (typeof window === 'undefined') return;
