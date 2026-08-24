@@ -324,29 +324,7 @@ function getUserWeeklyXP(userId = null, weekKey = null) {
   const uId = userId || getEffectiveUserId();
   const wKey = weekKey || getIsoWeekKey();
   const key = `xp_${uId}_${wKey}`;
-  let xp = Math.max(0, Number(localStorage.getItem(key) || 0));
-
-  // If user xp is 0, search all localStorage keys for any previously earned XP
-  if (xp === 0 && typeof window !== 'undefined') {
-    try {
-      let maxFound = 0;
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && (k.startsWith('xp_') || k.includes('_xp_') || k.endsWith('_xp'))) {
-          const val = Number(localStorage.getItem(k) || 0);
-          if (!isNaN(val) && val > maxFound && val < 1000000) {
-            maxFound = val;
-          }
-        }
-      }
-      if (maxFound > 0) {
-        xp = maxFound;
-        localStorage.setItem(key, String(xp));
-      }
-    } catch (e) {}
-  }
-
-  return xp;
+  return Math.max(0, Number(localStorage.getItem(key) || 0));
 }
 
 function addWeeklyXP(delta, userId = null, weekKey = null) {
@@ -1534,7 +1512,39 @@ async function getCloudWordOfTheDayId(userId) {
     console.warn('Failed to fetch cloud word of the day ID:', e);
   }
   return null;
+// Self-healing function to correct any improperly copied weekly XP from previous weeks
+function runWeeklyXpCleanup() {
+  if (typeof window === 'undefined') return;
+  try {
+    const currentUserId = getEffectiveUserId();
+    const currentWeekKey = getIsoWeekKey();
+    const currentXpKey = `xp_${currentUserId}_${currentWeekKey}`;
+
+    if (!localStorage.getItem(`myduo_reset_cleanup_${currentWeekKey}`)) {
+      const currentVal = localStorage.getItem(currentXpKey);
+      if (currentVal && Number(currentVal) > 0) {
+        let foundMatch = false;
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(`xp_${currentUserId}_`) && k !== currentXpKey) {
+            if (localStorage.getItem(k) === currentVal) {
+              foundMatch = true;
+              break;
+            }
+          }
+        }
+        if (foundMatch) {
+          localStorage.setItem(currentXpKey, '0');
+        }
+      }
+      localStorage.setItem(`myduo_reset_cleanup_${currentWeekKey}`, 'true');
+    }
+  } catch (e) {}
 }
+
+try {
+  runWeeklyXpCleanup();
+} catch (e) {}
 
 export {
   getHealth,
