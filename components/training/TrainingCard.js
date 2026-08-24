@@ -989,7 +989,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.classList.remove('listening', 'processing');
           
           if (speechAttempts < 5) {
-            playErrorSound();
             micBtn.innerHTML = '🎙️';
             if (holdHint) {
               holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
@@ -1005,7 +1004,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           } else {
             isCompleted = true;
             micBtn.disabled = true;
-            playErrorSound();
             micBtn.classList.add('wrong');
             micBtn.innerHTML = '❌';
 
