@@ -13,6 +13,10 @@ function analyticsPost(e) {
   }
 
   const userId = body.userId || '';
+  if (!userId) {
+    return errorResponse('Missing userId.', 400);
+  }
+
   const email = body.email || '';
   const name = body.name || '';
   const timestamp = new Date().toISOString();
@@ -26,11 +30,32 @@ function analyticsPost(e) {
   const referrer = body.referrer || '';
   const ipAddress = body.ipAddress || '';
 
-  appendSheetRow('Analytics', {
+  const sheet = getSheet('Analytics', ANALYTICS_HEADERS);
+  const list = getSheetData('Analytics', ANALYTICS_HEADERS);
+
+  const existingIdx = list.findIndex(
+    (item) => String(item.userId).trim() === userId
+  );
+
+  const rowData = {
     userId, email, name, timestamp,
     deviceType, os, browser, language,
     timezone, resolution, location, referrer, ipAddress
-  }, ANALYTICS_HEADERS);
+  };
+
+  if (existingIdx >= 0) {
+    const rowIndex = list[existingIdx]._rowIndex;
+    const lastCol = sheet.getLastColumn() || ANALYTICS_HEADERS.length;
+    const headers = sheet.getRange(1, 1, 1, Math.max(lastCol, 1)).getValues()[0];
+    const rowValues = headers.map((h) => {
+      if (rowData[h] !== undefined) return rowData[h];
+      if (typeof h === 'string' && rowData[h.toLowerCase()] !== undefined) return rowData[h.toLowerCase()];
+      return '';
+    });
+    sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowValues]);
+  } else {
+    appendSheetRow('Analytics', rowData, ANALYTICS_HEADERS);
+  }
 
   return successResponse({ success: true });
 }

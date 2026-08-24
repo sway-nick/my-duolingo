@@ -1586,12 +1586,12 @@ async function sendUserAnalytics() {
 
     // 2. OS Detection
     let os = 'Unknown OS';
-    if (ua.indexOf('Win') !== -1) os = 'Windows';
-    else if (ua.indexOf('Mac') !== -1 && ua.indexOf('iPhone') === -1 && ua.indexOf('iPad') === -1) os = 'macOS';
-    else if (ua.indexOf('X11') !== -1) os = 'UNIX';
-    else if (ua.indexOf('Linux') !== -1) os = 'Linux';
-    else if (/Android/i.test(ua)) os = 'Android';
+    if (/Android/i.test(ua)) os = 'Android';
     else if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS';
+    else if (ua.indexOf('Win') !== -1) os = 'Windows';
+    else if (ua.indexOf('Mac') !== -1) os = 'macOS';
+    else if (ua.indexOf('Linux') !== -1) os = 'Linux';
+    else if (ua.indexOf('X11') !== -1) os = 'UNIX';
 
     // 3. Browser Detection
     let browser = 'Unknown Browser';
