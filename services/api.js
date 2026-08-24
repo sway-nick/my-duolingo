@@ -1565,10 +1565,22 @@ function runWeeklyXpCleanup() {
   } catch (e) {}
 }
 
+let lastSentAnalyticsUser = null;
+let lastSentAnalyticsTime = 0;
+
 async function sendUserAnalytics() {
   if (typeof window === 'undefined') return;
+  const currentUserId = getEffectiveUserId();
+  const now = Date.now();
+
+  // Throttle rapid duplicate requests (max once per 10 seconds per user)
+  if (lastSentAnalyticsUser === currentUserId && (now - lastSentAnalyticsTime) < 10000) {
+    return;
+  }
+  lastSentAnalyticsUser = currentUserId;
+  lastSentAnalyticsTime = now;
+
   try {
-    const currentUserId = getEffectiveUserId();
     const currentUser = getCurrentUser();
     const email = currentUser && currentUser.email ? currentUser.email : 'guest';
     const name = currentUser && currentUser.name ? currentUser.name : 'Гость';

@@ -34,7 +34,7 @@ function analyticsPost(e) {
   const list = getSheetData('Analytics', ANALYTICS_HEADERS);
 
   const existingIdx = list.findIndex(
-    (item) => String(item.userId).trim() === userId
+    (item) => String(item.userId || item.userid || '').trim() === userId
   );
 
   const rowData = {
