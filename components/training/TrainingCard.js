@@ -520,10 +520,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (speechAttempts < 5) {
           if (holdHint) {
             holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-              ? `${customMsg || 'Голос не распознан.'} Попробуйте повторить 🎙️ (Попытка ${speechAttempts} из 5)` 
+              ? `Попробуйте еще раз 🎙️ (Попытка ${speechAttempts} из 5)` 
               : getInterfaceLanguage() === 'uk' 
-                ? `${customMsg || 'Голос не розпізнано.'} Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)` 
-                : `${customMsg || 'Voice not recognized.'} Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+                ? `Спробуйте ще раз 🎙️ (Спроба ${speechAttempts} з 5)` 
+                : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+          }
+          if (transcriptBox) {
+            transcriptBox.style.display = 'block';
+            const errorText = customMsg || (getInterfaceLanguage() === 'ru' ? 'Голос не распознан. Нажмите 🎙️ для повтора' : 'Voice not recognized. Tap 🎙️ to retry');
+            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${errorText}</span>`;
           }
         } else {
           isCompleted = true;
@@ -545,20 +550,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
           }
-        }
-
-        if (transcriptBox) {
-          transcriptBox.style.display = 'block';
-          const errorText = customMsg || (getInterfaceLanguage() === 'ru' ? 'Голос не распознан. Нажмите 🎙️ для повтора' : 'Voice not recognized. Tap 🎙️ to retry');
-          transcriptBox.innerHTML = `
-            <div style="margin-bottom: 8px; color: #ef4444;">⚠️ ${errorText}</div>
-            <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Или ответьте текстом без микрофона:</div>
-            <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
-              🎯 Ответить карточками
-            </button>
-          `;
-          const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
-          if (fbBtn) fbBtn.addEventListener('click', () => renderReverseQuiz(true));
+          if (transcriptBox) {
+            transcriptBox.style.display = 'block';
+            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ Попытки исчерпаны. Перейдите к следующей карточке.</span>`;
+          }
         }
       }
 
