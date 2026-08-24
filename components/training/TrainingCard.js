@@ -671,52 +671,70 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }
           });
 
+          let processedStream = mediaStream;
+
           // Create Web Audio processing graph to clean background rumble and compress voice
           try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-          } catch (e) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            try {
+              audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            } catch (e) {
+              audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const source = audioContext.createMediaStreamSource(mediaStream);
+
+            // 1. High-pass filter (cut off low frequency rumbling below 85Hz)
+            const hpFilter = audioContext.createBiquadFilter();
+            hpFilter.type = 'highpass';
+            hpFilter.frequency.value = 85;
+
+            // 2. Low-pass filter (cut off high frequency whistle/noise above 8000Hz)
+            const lpFilter = audioContext.createBiquadFilter();
+            lpFilter.type = 'lowpass';
+            lpFilter.frequency.value = 8000;
+
+            // 3. Compressor (boosts quiet voice and limits loud bursts for even volume levels)
+            const compressor = audioContext.createDynamicsCompressor();
+            compressor.threshold.setValueAtTime(-30, audioContext.currentTime);
+            compressor.knee.setValueAtTime(10, audioContext.currentTime);
+            compressor.ratio.setValueAtTime(4, audioContext.currentTime);
+            compressor.attack.setValueAtTime(0.01, audioContext.currentTime);
+            compressor.release.setValueAtTime(0.15, audioContext.currentTime);
+
+            // 4. Output destination stream for MediaRecorder
+            const dest = audioContext.createMediaStreamAudioDestination();
+
+            // Connect Web Audio graph nodes
+            source.connect(hpFilter);
+            hpFilter.connect(lpFilter);
+            lpFilter.connect(compressor);
+            compressor.connect(dest);
+
+            processedStream = dest.stream;
+          } catch (audioContextErr) {
+            console.warn('Web Audio preprocessing graph failed, using raw stream:', audioContextErr);
+            processedStream = mediaStream;
           }
-
-          const source = audioContext.createMediaStreamSource(mediaStream);
-
-          // 1. High-pass filter (cut off low frequency rumbling below 85Hz)
-          const hpFilter = audioContext.createBiquadFilter();
-          hpFilter.type = 'highpass';
-          hpFilter.frequency.value = 85;
-
-          // 2. Low-pass filter (cut off high frequency whistle/noise above 8000Hz)
-          const lpFilter = audioContext.createBiquadFilter();
-          lpFilter.type = 'lowpass';
-          lpFilter.frequency.value = 8000;
-
-          // 3. Compressor (boosts quiet voice and limits loud bursts for even volume levels)
-          const compressor = audioContext.createDynamicsCompressor();
-          compressor.threshold.setValueAtTime(-30, audioContext.currentTime);
-          compressor.knee.setValueAtTime(10, audioContext.currentTime);
-          compressor.ratio.setValueAtTime(4, audioContext.currentTime);
-          compressor.attack.setValueAtTime(0.01, audioContext.currentTime);
-          compressor.release.setValueAtTime(0.15, audioContext.currentTime);
-
-          // 4. Output destination stream for MediaRecorder
-          const dest = audioContext.createMediaStreamAudioDestination();
-
-          // Connect Web Audio graph nodes
-          source.connect(hpFilter);
-          hpFilter.connect(lpFilter);
-          lpFilter.connect(compressor);
-          compressor.connect(dest);
 
           let options = {};
           if (supportedMimeType) {
             options = { mimeType: supportedMimeType };
           }
 
-          // Record the filtered and downsampled audio stream
+          // Record the filtered and downsampled audio stream (fallback to raw stream on failure)
           try {
-            mediaRecorder = new MediaRecorder(dest.stream, options);
-          } catch (e) {
-            mediaRecorder = new MediaRecorder(dest.stream);
+            mediaRecorder = new MediaRecorder(processedStream, options);
+          } catch (e1) {
+            try {
+              mediaRecorder = new MediaRecorder(processedStream);
+            } catch (e2) {
+              console.warn('MediaRecorder with processed stream failed, falling back to raw stream:', e2);
+              try {
+                mediaRecorder = new MediaRecorder(mediaStream, options);
+              } catch (e3) {
+                mediaRecorder = new MediaRecorder(mediaStream);
+              }
+            }
           }
 
           recordedChunks = [];
