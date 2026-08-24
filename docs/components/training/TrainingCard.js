@@ -416,14 +416,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <div class="speech-hold-hint" id="speech-hold-hint">
             ${getInterfaceLanguage() === 'ru' ? 'Нажмите на микрофон и скажите слово' : getInterfaceLanguage() === 'uk' ? 'Натисніть на мікрофон і скажіть слово' : 'Tap the microphone and say the word'}
           </div>
-          <div class="speech-transcript-box" id="speech-transcript-box" style="display: none;"></div>
+          <div class="speech-transcript-box" id="speech-transcript-box" style="margin-top: 10px;"></div>
           <button type="button" class="primary-button" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
             ${getInterfaceLanguage() === 'ru' ? 'Продолжить' : getInterfaceLanguage() === 'uk' ? 'Продовжити' : 'Continue'}
           </button>
-          <button type="button" class="speech-cant-speak-btn" id="speech-cant-speak-btn">
-            ${getInterfaceLanguage() === 'ru' ? 'Не могу говорить сейчас' : getInterfaceLanguage() === 'uk' ? 'Не можу говорити зараз' : "Can't speak right now"}
-          </button>
-          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone">
+          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone" style="margin-top: 12px;">
             ⚙️
           </button>
         </div>
@@ -433,16 +430,29 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const holdHint = practiceArea.querySelector('#speech-hold-hint');
       const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
       const continueBtn = practiceArea.querySelector('#speech-continue-btn');
-      const cantSpeakBtn = practiceArea.querySelector('#speech-cant-speak-btn');
       const diagBtn = practiceArea.querySelector('#speech-diag-trigger-btn');
 
-
-
-      if (cantSpeakBtn) {
-        cantSpeakBtn.addEventListener('click', () => {
-          renderReverseQuiz(true);
-        });
+      function showFallbackButton(errorText = null) {
+        if (!transcriptBox) return;
+        transcriptBox.style.display = 'block';
+        let html = '';
+        if (errorText) {
+          html += `<div style="margin-bottom: 8px; color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${errorText}</div>`;
+        }
+        html += `
+          <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
+            🎯 ${getInterfaceLanguage() === 'ru' ? 'Ответить карточками' : getInterfaceLanguage() === 'uk' ? 'Відповісти картками' : 'Answer with cards'}
+          </button>
+        `;
+        transcriptBox.innerHTML = html;
+        const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
+        if (fbBtn) {
+          fbBtn.addEventListener('click', () => renderReverseQuiz(true));
+        }
       }
+
+      // Initialize the fallback button right away
+      showFallbackButton();
 
       if (diagBtn) {
         diagBtn.addEventListener('click', () => {
@@ -525,11 +535,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 ? `Спробуйте ще раз 🎙️ (Спроба ${speechAttempts} з 5)` 
                 : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
           }
-          if (transcriptBox) {
-            transcriptBox.style.display = 'block';
-            const errorText = customMsg || (getInterfaceLanguage() === 'ru' ? 'Голос не распознан. Нажмите 🎙️ для повтора' : 'Voice not recognized. Tap 🎙️ to retry');
-            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${errorText}</span>`;
-          }
+          const errorText = customMsg || (getInterfaceLanguage() === 'ru' ? 'Голос не распознан. Нажмите 🎙️ для повтора' : 'Voice not recognized. Tap 🎙️ to retry');
+          showFallbackButton(errorText);
         } else {
           isCompleted = true;
           if (micBtn) {
@@ -545,14 +552,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
           }
           saveProgress(currentWord.id, false, 'quiz');
-          if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
           if (continueBtn) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
           }
           if (transcriptBox) {
             transcriptBox.style.display = 'block';
-            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ Попытки исчерпаны. Перейдите к следующей карточке.</span>`;
+            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ Попытки исчерпаны. Нажмите "Продолжить" для перехода к следующему слову.</span>`;
           }
         }
       }
@@ -675,18 +681,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         } catch (e) {}
 
         try {
-          try {
-            mediaStream = await navigator.mediaDevices.getUserMedia({
-              audio: {
-                echoCancellation: true,
-                noiseSuppression: true,
-                autoGainControl: true
-              }
-            });
-          } catch (constraintErr) {
-            console.warn('getUserMedia constraints failed, falling back to simple audio: true', constraintErr);
-            mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          }
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
           let options = {};
           if (supportedMimeType) {
