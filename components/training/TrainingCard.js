@@ -584,7 +584,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
                 try { nativeRecognition.stop(); } catch (e) {}
               }
-            }, 3200);
+            }, 5000);
           };
 
           nativeRecognition.onresult = async (event) => {
@@ -783,12 +783,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
           if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
-          // Auto-finalize recording after 2.5 seconds
+          // Auto-finalize recording after 5.0 seconds
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
             }
-          }, 2500);
+          }, 5000);
 
         } catch (micErr) {
           console.warn('Microphone access failed:', micErr);
