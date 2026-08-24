@@ -1,7 +1,7 @@
 const ANALYTICS_HEADERS = [
   'userId', 'email', 'name', 'timestamp',
   'deviceType', 'os', 'browser', 'language',
-  'timezone', 'resolution', 'referrer', 'ipAddress'
+  'timezone', 'resolution', 'location', 'referrer', 'ipAddress'
 ];
 
 function analyticsPost(e) {
@@ -22,13 +22,14 @@ function analyticsPost(e) {
   const language = body.language || '';
   const timezone = body.timezone || '';
   const resolution = body.resolution || '';
+  const location = body.location || '';
   const referrer = body.referrer || '';
-  const ipAddress = ''; // Google Apps Script doesn't provide client IP in standard webapp events
+  const ipAddress = body.ipAddress || '';
 
   appendSheetRow('Analytics', {
     userId, email, name, timestamp,
     deviceType, os, browser, language,
-    timezone, resolution, referrer, ipAddress
+    timezone, resolution, location, referrer, ipAddress
   }, ANALYTICS_HEADERS);
 
   return successResponse({ success: true });

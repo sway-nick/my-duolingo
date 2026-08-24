@@ -1611,6 +1611,22 @@ async function sendUserAnalytics() {
     // 6. Referrer
     const referrer = document.referrer || '';
 
+    let location = 'Unknown Location';
+    let ipAddress = '';
+    try {
+      const geoRes = await fetch('https://ipapi.co/json/').then((r) => r.json());
+      if (geoRes) {
+        ipAddress = geoRes.ip || '';
+        const country = geoRes.country_name || '';
+        const city = geoRes.city || '';
+        if (country || city) {
+          location = [country, city].filter(Boolean).join(', ');
+        }
+      }
+    } catch (err) {
+      console.warn('Silent geolocation fetch failed:', err);
+    }
+
     fetch(`${API_URL}?route=analytics`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1625,7 +1641,9 @@ async function sendUserAnalytics() {
         language,
         timezone,
         resolution,
-        referrer
+        location,
+        referrer,
+        ipAddress
       }),
     }).catch(() => {});
   } catch (e) {
