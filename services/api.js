@@ -1565,20 +1565,18 @@ function runWeeklyXpCleanup() {
   } catch (e) {}
 }
 
-let lastSentAnalyticsUser = null;
-let lastSentAnalyticsTime = 0;
-
 async function sendUserAnalytics() {
   if (typeof window === 'undefined') return;
   const currentUserId = getEffectiveUserId();
   const now = Date.now();
 
-  // Throttle rapid duplicate requests (max once per 10 seconds per user)
-  if (lastSentAnalyticsUser === currentUserId && (now - lastSentAnalyticsTime) < 10000) {
+  // Bulletproof throttle using localStorage (shared across tabs, module imports, and page reloads)
+  const throttleKey = `myduo_last_analytics_sent_${currentUserId}`;
+  const lastSent = Number(localStorage.getItem(throttleKey) || 0);
+  if (now - lastSent < 30000) { // Max once per 30 seconds per user
     return;
   }
-  lastSentAnalyticsUser = currentUserId;
-  lastSentAnalyticsTime = now;
+  localStorage.setItem(throttleKey, String(now));
 
   try {
     const currentUser = getCurrentUser();

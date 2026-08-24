@@ -44,15 +44,31 @@ function analyticsPost(e) {
   };
 
   if (existingIdx >= 0) {
-    const rowIndex = list[existingIdx]._rowIndex;
-    const lastCol = sheet.getLastColumn() || ANALYTICS_HEADERS.length;
-    const headers = sheet.getRange(1, 1, 1, Math.max(lastCol, 1)).getValues()[0];
-    const rowValues = headers.map((h) => {
-      if (rowData[h] !== undefined) return rowData[h];
-      if (typeof h === 'string' && rowData[h.toLowerCase()] !== undefined) return rowData[h.toLowerCase()];
-      return '';
-    });
-    sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowValues]);
+    const existing = list[existingIdx];
+    const hasChanged =
+      String(existing.email || '').trim() !== String(email).trim() ||
+      String(existing.name || '').trim() !== String(name).trim() ||
+      String(existing.devicetype || existing.deviceType || '').trim() !== String(deviceType).trim() ||
+      String(existing.os || '').trim() !== String(os).trim() ||
+      String(existing.browser || '').trim() !== String(browser).trim() ||
+      String(existing.language || '').trim() !== String(language).trim() ||
+      String(existing.timezone || '').trim() !== String(timezone).trim() ||
+      String(existing.resolution || '').trim() !== String(resolution).trim() ||
+      String(existing.location || '').trim() !== String(location).trim() ||
+      String(existing.referrer || '').trim() !== String(referrer).trim() ||
+      String(existing.ipaddress || existing.ipAddress || '').trim() !== String(ipAddress).trim();
+
+    if (hasChanged) {
+      const rowIndex = existing._rowIndex;
+      const lastCol = sheet.getLastColumn() || ANALYTICS_HEADERS.length;
+      const headers = sheet.getRange(1, 1, 1, Math.max(lastCol, 1)).getValues()[0];
+      const rowValues = headers.map((h) => {
+        if (rowData[h] !== undefined) return rowData[h];
+        if (typeof h === 'string' && rowData[h.toLowerCase()] !== undefined) return rowData[h.toLowerCase()];
+        return '';
+      });
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowValues]);
+    }
   } else {
     appendSheetRow('Analytics', rowData, ANALYTICS_HEADERS);
   }
