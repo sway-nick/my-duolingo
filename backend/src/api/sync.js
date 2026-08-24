@@ -63,6 +63,11 @@ function syncGet(e) {
     }
   }
 
+  // 4. Fetch UserSettings
+  const setHeaders = ['userId', 'dailyGoal', 'enabledMethods', 'theme', 'level', 'updatedAt'];
+  const allSet = getSheetData('UserSettings', setHeaders);
+  const userSet = allSet.find((s) => String(s.userId).trim() === userId);
+
   // 5. Extract Study Dates for streak
   const studyDatesSet = new Set();
   userProgressRows.forEach((row) => {
