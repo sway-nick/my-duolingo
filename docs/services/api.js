@@ -1565,11 +1565,89 @@ function runWeeklyXpCleanup() {
   } catch (e) {}
 }
 
+async function sendUserAnalytics() {
+  if (typeof window === 'undefined') return;
+  try {
+    const currentUserId = getEffectiveUserId();
+    const currentUser = getCurrentUser();
+    const email = currentUser && currentUser.email ? currentUser.email : 'guest';
+    const name = currentUser && currentUser.name ? currentUser.name : 'Гость';
+
+    // 1. Device Type
+    let deviceType = 'Desktop';
+    const ua = navigator.userAgent || '';
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) {
+      if (/Tablet|iPad/i.test(ua)) {
+        deviceType = 'Tablet';
+      } else {
+        deviceType = 'Mobile';
+      }
+    }
+
+    // 2. OS Detection
+    let os = 'Unknown OS';
+    if (ua.indexOf('Win') !== -1) os = 'Windows';
+    else if (ua.indexOf('Mac') !== -1 && ua.indexOf('iPhone') === -1 && ua.indexOf('iPad') === -1) os = 'macOS';
+    else if (ua.indexOf('X11') !== -1) os = 'UNIX';
+    else if (ua.indexOf('Linux') !== -1) os = 'Linux';
+    else if (/Android/i.test(ua)) os = 'Android';
+    else if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS';
+
+    // 3. Browser Detection
+    let browser = 'Unknown Browser';
+    if (ua.indexOf('Chrome') !== -1 && ua.indexOf('Chromium') === -1 && ua.indexOf('Edg') === -1) browser = 'Chrome';
+    else if (ua.indexOf('Safari') !== -1 && ua.indexOf('Chrome') === -1) browser = 'Safari';
+    else if (ua.indexOf('Firefox') !== -1) browser = 'Firefox';
+    else if (ua.indexOf('Edg') !== -1) browser = 'Edge';
+    else if (ua.indexOf('OPR') !== -1 || ua.indexOf('Opera') !== -1) browser = 'Opera';
+
+    // 4. Language & Locale
+    const language = navigator.language || (navigator.languages && navigator.languages[0]) || '';
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+
+    // 5. Screen Resolution
+    const resolution = `${window.screen.width}x${window.screen.height}`;
+
+    // 6. Referrer
+    const referrer = document.referrer || '';
+
+    fetch(`${API_URL}?route=analytics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        route: 'analytics',
+        userId: currentUserId,
+        email: email,
+        name: name,
+        deviceType,
+        os,
+        browser,
+        language,
+        timezone,
+        resolution,
+        referrer
+      }),
+    }).catch(() => {});
+  } catch (e) {
+    console.warn('Failed to send user analytics:', e);
+  }
+}
+
+// Automatically trigger on page load
 try {
   runWeeklyXpCleanup();
+  sendUserAnalytics();
 } catch (e) {}
 
+// Automatically trigger on login/logout state change
+if (typeof window !== 'undefined') {
+  window.addEventListener('myduo:auth_changed', () => {
+    sendUserAnalytics();
+  });
+}
+
 export {
+  sendUserAnalytics,
   getHealth,
   getWords,
   registerUser,

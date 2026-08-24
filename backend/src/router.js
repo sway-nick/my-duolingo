@@ -66,6 +66,9 @@ const ROUTES = {
     transcribe: {
       post: transcribePost,
     },
+    analytics: {
+      post: analyticsPost,
+    },
   },
 };
 
