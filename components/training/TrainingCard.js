@@ -1048,12 +1048,103 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     }
 
+    function renderConsonantsQuiz() {
+      const VOWELS = new Set(['a', 'e', 'i', 'o', 'u', 'y']);
+      const isVowel = (c) => VOWELS.has(c.toLowerCase());
+      const isLetter = (c) => /[a-zA-Z]/.test(c);
+
+      const wordText = currentWord.word;
+
+      practiceArea.innerHTML = `
+        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto; padding: 12px 6px;">
+          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 12px; width: 100%;">
+            ${wordText.split('').map((char, index) => {
+              if (!isLetter(char) || isVowel(char)) {
+                return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 8px; font-size: 18px; font-weight: 700; margin: 2px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
+              } else {
+                return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 8px; font-size: 18px; font-weight: 700; margin: 2px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
+              }
+            }).join('')}
+          </div>
+        </div>
+      `;
+
+      const inputs = Array.from(practiceArea.querySelectorAll('.consonant-input'));
+
+      function focusNext(currentIndex) {
+        const nextInput = inputs.find(input => parseInt(input.getAttribute('data-index')) > currentIndex);
+        if (nextInput) {
+          nextInput.focus();
+        }
+      }
+
+      if (inputs.length > 0) {
+        setTimeout(() => {
+          if (inputs[0]) inputs[0].focus();
+        }, 200);
+      }
+
+      inputs.forEach((input) => {
+        const correctChar = input.getAttribute('data-correct');
+        const index = parseInt(input.getAttribute('data-index'));
+
+        input.addEventListener('input', async (e) => {
+          const val = input.value.trim().toLowerCase();
+          if (!val) return;
+
+          if (val === correctChar) {
+            input.classList.remove('wrong');
+            input.classList.add('correct');
+            input.style.setProperty('background', 'rgba(16, 185, 129, 0.2)', 'important');
+            input.style.setProperty('border-color', '#10b981', 'important');
+            input.style.setProperty('color', '#10b981', 'important');
+            input.setAttribute('readonly', 'true');
+            input.disabled = true;
+
+            const allCorrect = inputs.every(inp => inp.classList.contains('correct'));
+            if (allCorrect) {
+              playSuccessSound();
+              speakWord(currentWord.word, currentWord.id);
+              await saveProgress(currentWord.id, true, 'quiz');
+              onNextAfterSpeech(onNext, 1200, 4500);
+            } else {
+              focusNext(index);
+            }
+          } else {
+            input.value = '';
+            input.classList.add('wrong');
+            input.style.setProperty('background', 'rgba(239, 68, 68, 0.2)', 'important');
+            input.style.setProperty('border-color', '#ef4444', 'important');
+            input.style.setProperty('color', '#ef4444', 'important');
+            playErrorSound();
+            
+            setTimeout(() => {
+              input.classList.remove('wrong');
+              if (!input.classList.contains('correct')) {
+                input.style.background = 'var(--bg-main)';
+                input.style.borderColor = 'var(--border-color)';
+                input.style.color = 'var(--text-main)';
+              }
+            }, 300);
+          }
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && input.hasAttribute('readonly')) {
+            e.preventDefault();
+          }
+        });
+      });
+    }
+
     if (quizStage < 2) {
       renderStandardQuiz();
     } else if (quizStage === 2) {
       renderReverseQuiz();
-    } else {
+    } else if (quizStage === 3) {
       renderSpeechQuiz();
+    } else {
+      renderConsonantsQuiz();
     }
   } else if (currentMethod === 'pairs') {
     const TARGET_PAIRS_COUNT = 6;

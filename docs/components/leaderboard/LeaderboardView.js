@@ -3,7 +3,7 @@ import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=1
 import { renderAuthModal } from '../auth/AuthModal.js?v=131.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=131.0';
 
-let currentPeriod = 'week'; // 'week' or 'all'
+let currentPeriod = localStorage.getItem('myduo_leaderboard_period') || 'all'; // 'week' or 'all'
 
 function showTop100Modal(rank) {
   const existing = document.querySelector('#top100-congrats-modal');
@@ -341,6 +341,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         item.addEventListener('click', (e) => {
           e.stopPropagation();
           currentPeriod = item.getAttribute('data-value');
+          localStorage.setItem('myduo_leaderboard_period', currentPeriod);
           typeDropdown.classList.remove('open');
           renderLeaderboardView(containerSelector, options);
         });
