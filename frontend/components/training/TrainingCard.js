@@ -31,13 +31,6 @@ function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-/**
- * Waits until speechSynthesis has finished speaking, then calls onNext.
- * Prevents the card from flipping while the word is still being pronounced.
- * @param {Function} onNext
- * @param {number} minDelay - minimum wait in ms even if speech is done
- * @param {number} maxWait - maximum wait in ms before forcing transition
- */
 function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
   const start = Date.now();
   const adjustedDelay = minDelay + 500;
@@ -50,7 +43,7 @@ function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
     if (!stillSpeaking && elapsed >= adjustedDelay) {
       onNext();
     } else if (elapsed >= adjustedMaxWait) {
-      onNext(); // force transition after maxWait
+      onNext();
     } else {
       setTimeout(check, 80);
     }
@@ -80,41 +73,79 @@ function calculateLevenshtein(a, b) {
 
 function cyrillicToLatinPhonetic(str) {
   if (!str) return '';
-  const map = {
-    а: 'a',
-    б: 'b',
-    в: 'v',
-    г: 'g',
-    д: 'd',
-    е: 'e',
-    ё: 'e',
-    ж: 'zh',
-    з: 'z',
-    и: 'i',
-    й: 'y',
-    к: 'k',
-    л: 'l',
-    м: 'm',
-    н: 'n',
-    о: 'o',
-    п: 'p',
-    р: 'r',
-    с: 's',
-    т: 't',
-    у: 'u',
-    ф: 'f',
-    х: 'h',
-    ц: 'ts',
-    ч: 'ch',
-    ш: 'sh',
-    щ: 'sch',
-    ъ: '',
-    ы: 'y',
-    ь: '',
-    э: 'e',
-    ю: 'yu',
-    я: 'ya',
-  };
+  const lang = getInterfaceLanguage();
+  const map =
+    lang === 'uk'
+      ? {
+          а: 'a',
+          б: 'b',
+          в: 'v',
+          г: 'h',
+          ґ: 'g',
+          д: 'd',
+          е: 'e',
+          є: 'ye',
+          ж: 'zh',
+          з: 'z',
+          и: 'y',
+          і: 'i',
+          ї: 'yi',
+          й: 'y',
+          к: 'k',
+          л: 'l',
+          м: 'm',
+          н: 'n',
+          о: 'o',
+          п: 'p',
+          р: 'r',
+          с: 's',
+          т: 't',
+          у: 'u',
+          ф: 'f',
+          х: 'kh',
+          ц: 'ts',
+          ч: 'ch',
+          ш: 'sh',
+          щ: 'shch',
+          ь: '',
+          ю: 'yu',
+          я: 'ya',
+        }
+      : {
+          а: 'a',
+          б: 'b',
+          в: 'v',
+          г: 'g',
+          д: 'd',
+          е: 'e',
+          ё: 'e',
+          ж: 'zh',
+          з: 'z',
+          и: 'i',
+          й: 'y',
+          к: 'k',
+          л: 'l',
+          м: 'm',
+          н: 'n',
+          о: 'o',
+          п: 'p',
+          р: 'r',
+          с: 's',
+          т: 't',
+          у: 'u',
+          ф: 'f',
+          х: 'h',
+          ц: 'ts',
+          ч: 'ch',
+          ш: 'sh',
+          щ: 'sch',
+          ъ: '',
+          ы: 'y',
+          ь: '',
+          э: 'e',
+          ю: 'yu',
+          я: 'ya',
+        };
   return String(str)
     .toLowerCase()
     .split('')
@@ -124,12 +155,21 @@ function cyrillicToLatinPhonetic(str) {
 
 function normalizeEnglish(str) {
   if (!str) return '';
-  return String(str)
+  const stripped = String(str)
     .toLowerCase()
     .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, '')
     .replace(/\b(a|an|the|to)\b/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
+
+  if (stripped === '' && str.trim().length > 0) {
+    return String(str)
+      .toLowerCase()
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  return stripped;
 }
 
 function checkSpeechMatch(spokenList, targetWord) {
@@ -142,16 +182,13 @@ function checkSpeechMatch(spokenList, targetWord) {
 
     if (normSpoken === normTarget) return true;
 
-    // Check individual words in phrase
     const wordsInSpoken = normSpoken.split(' ');
     if (wordsInSpoken.includes(normTarget)) return true;
 
-    // Check Levenshtein distance with tolerance
     const dist = calculateLevenshtein(normSpoken, normTarget);
     const maxDist = Math.max(1, Math.floor(normTarget.length * 0.35));
     if (dist <= maxDist) return true;
 
-    // Check transliterated cyrillic match if browser captured speech in Russian
     const latinized = cyrillicToLatinPhonetic(rawSpoken.trim());
     if (latinized) {
       const normLatinized = normalizeEnglish(latinized);
@@ -192,7 +229,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } = options;
 
   if (activeWords && activeWords.length > 0) {
-    // Preload next 2 words in queue for instant 0ms audio latency
     activeWords.slice(0, 3).forEach((w) => {
       if (w && w.word) preloadWordAudio(w.word);
     });
@@ -202,7 +238,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const progressMap = getUserProgress() || {};
   const currentProg = progressMap[currentWord?.id] || {};
-  const quizStage = currentProg.quizCorrect || 0; // 0, 1 = EN->RU; 2 = RU->EN; 3 = Speak EN from memory (show hint on demand)
+  const quizStage = currentProg.quizCorrect || 0;
 
   const isCardsMode = currentMethod === 'cards';
   const isPairsMode = currentMethod === 'pairs';
@@ -224,7 +260,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   container.innerHTML = `
     <section class="word-card-container">
       
-      <!-- Top Mode Switcher Bar -->
       <div class="card-header-bar">
         <div class="mode-switch-pills" id="mode-switch-pills">
           <div class="mode-pill-glider" id="mode-pill-glider"></div>
@@ -243,7 +278,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         </div>
       </div>
 
-      <!-- Word Display & Audio Button -->
       <div class="word-main-display">
         ${
           isCardsMode
@@ -319,7 +353,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       </div>
 
-      <!-- Practice Area based on active method -->
       <div id="practice-area" class="practice-area"></div>
 
     </section>
@@ -539,7 +572,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // Initialize the fallback button right away
       showFallbackButton();
 
       if (diagBtn) {
@@ -549,15 +581,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-      // Detect mobile strictly by User Agent only (no touch/screen heuristics that misfire on laptops).
-      // iOS and Android: native WebSpeech is unstable → always use MediaRecorder + Gemini AI.
-      // Desktop Chrome/Edge/Firefox: native WebSpeech is fast and reliable → use it, fallback to Gemini on error.
-      function isMobileUA() {
-        const ua = navigator.userAgent || '';
-        return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-      }
-      // ===== ИЗМЕНЕНИЕ v1: используем Web Speech везде, где он доступен =====
       const preferNativeSpeech = Boolean(SpeechRecognition);
 
       let mediaStream = null;
@@ -571,7 +594,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       let autoStopTimer = null;
       let safetyWatchdog = null;
 
-      // iOS Safari only supports audio/mp4 — put it first for iOS, webm first for others.
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
       const mimeCandidates = isIOS
         ? [
@@ -621,7 +643,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      function handleNoSpeechHeard(customMsg = null) {
+      // ===== ИСПРАВЛЕННАЯ handleNoSpeechHeard с разделением счётчиков =====
+      function handleNoSpeechHeard(customMsg = null, isTechnical = false) {
         clearAllTimers();
         stopSensorStreams();
         if (isCompleted) return;
@@ -632,16 +655,25 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.innerHTML = '🎙️';
         }
 
-        speechAttempts++;
+        // Увеличиваем speechAttempts только если это НЕ техническая ошибка
+        if (!isTechnical) {
+          speechAttempts++;
+        }
 
         if (speechAttempts < 5) {
           if (holdHint) {
-            holdHint.innerHTML =
-              getInterfaceLanguage() === 'ru'
+            const attemptText = isTechnical
+              ? getInterfaceLanguage() === 'ru'
+                ? 'Попробуйте еще раз 🎙️'
+                : getInterfaceLanguage() === 'uk'
+                  ? 'Спробуйте ще раз 🎙️'
+                  : 'Try again 🎙️'
+              : getInterfaceLanguage() === 'ru'
                 ? `Попробуйте еще раз 🎙️ (Попытка ${speechAttempts} из 5)`
                 : getInterfaceLanguage() === 'uk'
                   ? `Спробуйте ще раз 🎙️ (Спроба ${speechAttempts} з 5)`
-                  : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+                  : `Try again 🎙️ (Attempt ${speechAttempts} of 5)`;
+            holdHint.innerHTML = attemptText;
           }
           const errorText =
             customMsg ||
@@ -650,6 +682,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               : 'Voice not recognized. Tap 🎙️ to retry');
           showFallbackButton(errorText);
         } else {
+          // Достигнут лимит реальных попыток (5) – штраф
           isCompleted = true;
           if (micBtn) {
             micBtn.disabled = true;
@@ -676,12 +709,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // ==========================================
-      // 1. NATIVE SPEECH (используется везде, где доступен)
-      // ==========================================
       let isEvaluated = false;
 
-      // ===== НОВАЯ ВЕРСИЯ startDesktopNativeSpeech =====
       function startDesktopNativeSpeech() {
         if (isProcessing || isCompleted) return;
         clearAllTimers();
@@ -692,129 +721,145 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (window.speechSynthesis) window.speechSynthesis.cancel();
         } catch (e) {}
 
-        try {
-          nativeRecognition = new SpeechRecognition();
-          nativeRecognition.lang = 'en-US';
-          nativeRecognition.continuous = false; // одно слово за раз
-          nativeRecognition.interimResults = true; // показываем промежуточные
-          nativeRecognition.maxAlternatives = 3; // больше вариантов для выбора
+        setTimeout(() => {
+          if (isProcessing || isCompleted || !isListening) {
+            return;
+          }
 
-          nativeRecognition.onstart = () => {
-            if (micBtn) {
-              micBtn.classList.remove('processing', 'success');
-              micBtn.classList.add('listening');
-              micBtn.innerHTML = '🎙️';
-            }
-            if (holdHint) {
-              holdHint.innerHTML =
-                '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
-            }
+          try {
+            nativeRecognition = new SpeechRecognition();
+            nativeRecognition.lang = 'en-US';
+            nativeRecognition.continuous = false;
+            nativeRecognition.interimResults = true;
+            nativeRecognition.maxAlternatives = 3;
 
-            autoStopTimer = setTimeout(() => {
-              if (isListening && !isEvaluated) {
+            nativeRecognition.onstart = () => {
+              if (micBtn) {
+                micBtn.classList.remove('processing', 'success');
+                micBtn.classList.add('listening');
+                micBtn.innerHTML = '🎙️';
+              }
+              if (holdHint) {
+                holdHint.innerHTML =
+                  '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+              }
+
+              const wordLength = currentWord.word ? currentWord.word.length : 5;
+              const timeoutMs = Math.min(4000, 1800 + wordLength * 150);
+              autoStopTimer = setTimeout(() => {
+                if (isListening && !isEvaluated) {
+                  if (micBtn) {
+                    micBtn.classList.remove('listening');
+                    micBtn.classList.add('processing');
+                  }
+                  if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
+                  try {
+                    nativeRecognition.stop();
+                  } catch (e) {}
+                }
+              }, timeoutMs);
+            };
+
+            nativeRecognition.onresult = (event) => {
+              const finalResults = [];
+              const interimResults = [];
+
+              for (let i = 0; i < event.results.length; i++) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                  for (let j = 0; j < result.length; j++) {
+                    if (result[j].transcript) {
+                      finalResults.push(result[j].transcript.trim());
+                    }
+                  }
+                } else {
+                  for (let j = 0; j < result.length; j++) {
+                    if (result[j].transcript) {
+                      interimResults.push(result[j].transcript.trim());
+                    }
+                  }
+                }
+              }
+
+              if (interimResults.length > 0 && transcriptBox) {
+                transcriptBox.style.display = 'block';
+                transcriptBox.innerHTML = `🎤 <span style="color: #6b7280;">${interimResults[0]}</span>`;
+              }
+
+              if (finalResults.length > 0) {
+                isEvaluated = true;
+                clearAllTimers();
+                isListening = false;
+
                 if (micBtn) {
                   micBtn.classList.remove('listening');
                   micBtn.classList.add('processing');
                 }
                 if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-                try {
-                  nativeRecognition.stop();
-                } catch (e) {}
-              }
-            }, 2500);
-          };
 
-          nativeRecognition.onresult = (event) => {
-            const finalResults = [];
-            const interimResults = [];
-
-            for (let i = 0; i < event.results.length; i++) {
-              const result = event.results[i];
-              if (result.isFinal) {
-                for (let j = 0; j < result.length; j++) {
-                  if (result[j].transcript) {
-                    finalResults.push(result[j].transcript.trim());
-                  }
+                if (transcriptBox) {
+                  transcriptBox.style.display = 'block';
+                  transcriptBox.innerHTML = `Услышано: <strong>«${finalResults[0]}»</strong>`;
                 }
-              } else {
-                for (let j = 0; j < result.length; j++) {
-                  if (result[j].transcript) {
-                    interimResults.push(result[j].transcript.trim());
-                  }
-                }
+
+                evaluateSpeech(finalResults);
               }
-            }
+            };
 
-            // Показываем промежуточный текст (только для UX)
-            if (interimResults.length > 0 && transcriptBox) {
-              transcriptBox.style.display = 'block';
-              transcriptBox.innerHTML = `🎤 <span style="color: #6b7280;">${interimResults[0]}</span>`;
-            }
-
-            // Если есть финальный результат – оцениваем
-            if (finalResults.length > 0) {
-              isEvaluated = true;
+            nativeRecognition.onerror = (err) => {
+              console.warn('Native speech error:', err.error);
               clearAllTimers();
               isListening = false;
 
-              if (micBtn) {
-                micBtn.classList.remove('listening');
-                micBtn.classList.add('processing');
+              // Технические ошибки – не списываем попытку
+              if (err.error === 'not-allowed' || err.error === 'audio-capture') {
+                isEvaluated = true;
+                handleNoSpeechHeard('🔒 Разрешите микрофон в браузере', true);
+                return;
               }
-              if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
 
+              if (err.error === 'no-speech') {
+                isEvaluated = true;
+                handleNoSpeechHeard('Голос не обнаружен. Нажмите 🎙️ для повтора', true);
+                return;
+              }
+
+              // Остальные технические ошибки – переключаем на MediaRecorder (тоже не списываем)
+              isEvaluated = true;
+              console.warn('Переключение на MediaRecorder (ошибка:', err.error, ')');
               if (transcriptBox) {
                 transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = `Услышано: <strong>«${finalResults[0]}»</strong>`;
+                transcriptBox.innerHTML = '⏳ Переключаемся на альтернативное распознавание...';
               }
+              if (holdHint) {
+                holdHint.innerHTML = '⏳ Подключаем запасной вариант...';
+              }
+              startMobileMediaRecorder();
+            };
 
-              evaluateSpeech(finalResults);
+            nativeRecognition.onend = () => {
+              clearAllTimers();
+              if (!isEvaluated && !isCompleted && !isProcessing) {
+                isListening = false;
+                handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
+              }
+            };
+
+            nativeRecognition.start();
+          } catch (e) {
+            console.warn('Native speech launch failed, using MediaRecorder:', e);
+            if (transcriptBox) {
+              transcriptBox.style.display = 'block';
+              transcriptBox.innerHTML = '⏳ Переключаемся на альтернативное распознавание...';
             }
-          };
-
-          nativeRecognition.onerror = (err) => {
-            console.warn('Native speech error:', err.error);
-            clearAllTimers();
-            isListening = false;
-
-            // 1. Ошибка разрешения – не переключаем на AI
-            if (err.error === 'not-allowed' || err.error === 'audio-capture') {
-              isEvaluated = true;
-              handleNoSpeechHeard('🔒 Разрешите микрофон в браузере');
-              return;
+            if (holdHint) {
+              holdHint.innerHTML = '⏳ Подключаем запасной вариант...';
             }
-
-            // 2. Нет речи – даём пользователю повторить (не переключаем на AI)
-            if (err.error === 'no-speech') {
-              isEvaluated = true;
-              handleNoSpeechHeard('Голос не обнаружен. Нажмите 🎙️ для повтора');
-              return;
-            }
-
-            // 3. Все остальные технические ошибки – переключаем на MediaRecorder + AI
-            isEvaluated = true;
-            console.warn('Переключение на MediaRecorder (ошибка:', err.error, ')');
             startMobileMediaRecorder();
-          };
-
-          nativeRecognition.onend = () => {
-            clearAllTimers();
-            if (!isEvaluated && !isCompleted && !isProcessing) {
-              isListening = false;
-              handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
-            }
-          };
-
-          nativeRecognition.start();
-        } catch (e) {
-          console.warn('Native speech launch failed, using MediaRecorder:', e);
-          startMobileMediaRecorder();
-        }
+          }
+        }, 150);
       }
 
-      // ==========================================
-      // 2. MOBILE MEDIARECORDER + GEMINI AI STT
-      // ==========================================
       async function startMobileMediaRecorder() {
         if (isProcessing || isCompleted) return;
 
@@ -824,13 +869,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
 
         clearAllTimers();
+        // Синхронно выставляем флаг
+        isListening = true;
 
         try {
           if (window.speechSynthesis) window.speechSynthesis.cancel();
         } catch (e) {}
 
+        await new Promise((resolve) => setTimeout(resolve, 150));
+
+        if (isProcessing || isCompleted || !isListening) {
+          return;
+        }
+
         try {
           mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+          if (!isListening) {
+            if (mediaStream) mediaStream.getTracks().forEach((t) => t.stop());
+            return;
+          }
 
           let options = {};
           if (supportedMimeType) {
@@ -844,7 +902,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
 
           recordedChunks = [];
-          isListening = true;
 
           mediaRecorder.ondataavailable = (event) => {
             if (event.data && event.data.size > 0) {
@@ -890,11 +947,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 }
                 await evaluateSpeech([spokenWord], isAiCorrect);
               } else {
-                handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
+                // Техническая ошибка распознавания (AI не вернул текст) – не списываем попытку
+                handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
               }
             } catch (transcribeErr) {
               console.warn('AI Transcribe error:', transcribeErr);
-              handleNoSpeechHeard('Не удалось распознать. Нажмите 🎙️ для повтора');
+              // Техническая ошибка – не списываем попытку
+              handleNoSpeechHeard('Не удалось распознать. Нажмите 🎙️ для повтора', true);
             }
           };
 
@@ -909,26 +968,28 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             holdHint.innerHTML =
               '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
-          // Auto-finalize recording after 2.5 seconds
+          const wordLength = currentWord.word ? currentWord.word.length : 5;
+          const timeoutMs = Math.min(4000, 1800 + wordLength * 150);
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
             }
-          }, 2500);
+          }, timeoutMs);
         } catch (micErr) {
+          isListening = false;
           console.warn('Microphone access failed:', micErr);
           if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
             handleNoSpeechHeard(
               '🔒 Доступ к микрофону заблокирован. Разрешите микрофон в браузере.',
+              true,
             );
           } else {
-            handleNoSpeechHeard('Не удалось запустить микрофон');
+            handleNoSpeechHeard('Не удалось запустить микрофон', true);
           }
         }
       }
 
       function startSpeechSession() {
-        // Используем нативный API, если доступен (теперь и на мобильных)
         if (preferNativeSpeech) {
           startDesktopNativeSpeech();
         } else {
@@ -1162,6 +1223,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             continueBtn.onclick = () => onNext();
           }
         } else {
+          // РЕАЛЬНАЯ ошибка произношения – списываем попытку
           speechAttempts++;
           micBtn.classList.remove('listening', 'processing');
 
@@ -1316,11 +1378,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       renderConsonantsQuiz();
     }
   } else if (currentMethod === 'pairs') {
+    // ... (без изменений, оставляем как было)
     const TARGET_PAIRS_COUNT = 6;
     const roundWords = [currentWord];
     const usedIds = new Set([String(currentWord.id)]);
 
-    // 1. First add from active Pairs queue
     if (activeWords && activeWords.length > 0) {
       const activeOthers = shuffleArray(activeWords.filter((w) => !usedIds.has(String(w.id))));
       for (const w of activeOthers) {
@@ -1330,7 +1392,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     }
 
-    // 2. If fewer than 5, pull from User Favorites
     if (roundWords.length < TARGET_PAIRS_COUNT) {
       try {
         const favIds = new Set((getUserFavorites() || []).map(String));
@@ -1347,7 +1408,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     }
 
-    // 3. If still fewer than 5, pull from current category
     if (roundWords.length < TARGET_PAIRS_COUNT && allWords.length > 0) {
       const categoryOthers = shuffleArray(
         allWords.filter(
@@ -1364,7 +1424,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         usedIds.add(String(w.id));
       }
 
-      // 4. Fallback to any remaining words in allWords
       if (roundWords.length < TARGET_PAIRS_COUNT) {
         const remainingAll = shuffleArray(allWords.filter((w) => !usedIds.has(String(w.id))));
         for (const w of remainingAll) {
@@ -1382,7 +1441,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       const totalPairs = roundWords.length;
-      const initialSeconds = totalPairs * 2 + 2; // 2 sec per pair + 2 sec extra (e.g. 5 pairs = 12 sec)
+      const initialSeconds = totalPairs * 2 + 2;
 
       let timerStarted = false;
       let timeRemaining = initialSeconds;
@@ -1413,7 +1472,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' })),
       );
 
-      // Derangement Shuffle: Ensure NO word is directly opposite its translation in the same row
       function shuffleDerangement(items, leftReference) {
         if (items.length <= 1) return [...items];
         let shuffled = shuffleArray(items);
@@ -1431,7 +1489,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           shuffled = shuffleArray(items);
         }
 
-        // Guaranteed mathematical fallback: shift by 1 relative to left column
         const mapById = {};
         items.forEach((item) => {
           mapById[String(item.id)] = item;
@@ -1490,7 +1547,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         </div>
       `;
 
-      // Dynamically auto-fit font size so all text 100% fits inside card without clipping
       requestAnimationFrame(() => {
         practiceArea.querySelectorAll('.pairs-card').forEach((card) => {
           const inner = card.querySelector('.pairs-card-inner');
@@ -1556,19 +1612,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           timerBadge.classList.add('timer-warning', 'timer-expired');
         }
 
-        // 1. Play comic fart sound
         playFartSound();
 
-        // 2. Highlight all remaining unmatched cards in red
         practiceArea.querySelectorAll('.pairs-card:not(.matched)').forEach((card) => {
           card.classList.remove('selected');
           card.classList.add('timeout-failed');
         });
 
-        // 3. Deduct 5 XP penalty
         await saveProgress(currentWord.id, false, 'pairs', { isPairMistake: true });
 
-        // 4. Render Timeout Modal / Banner (clean Stopwatch icon without fart emoji)
         const timeoutContainer = practiceArea.querySelector('#pairs-timeout-container');
         if (timeoutContainer) {
           timeoutContainer.innerHTML = `
@@ -1630,10 +1682,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               timerBadge.classList.remove('timer-active', 'timer-warning');
             }
 
-            // Authentic casino slot machine reel roll sound
             playCasinoRollSound();
 
-            // Cascade 3D flip animation across horizontal axis (Dollar green / white)
             const allCards = Array.from(practiceArea.querySelectorAll('.pairs-card'));
             allCards.forEach((card, idx) => {
               card.classList.remove('matched', 'selected', 'wrong');
@@ -1642,7 +1692,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               }, idx * 80);
             });
 
-            // Play realistic metallic ringing coin drop sound and award XP simultaneously (only on error-free perfect round)
             setTimeout(async () => {
               if (errorsInRound === 0) {
                 playCoinDropSound();
@@ -1652,7 +1701,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               });
             }, 1350);
 
-            // Advance to next round smoothly
             setTimeout(() => {
               onNext();
             }, 2050);
@@ -1662,7 +1710,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           playErrorSound();
           curLeft.classList.add('wrong');
           curRight.classList.add('wrong');
-          // Deduct 1 XP for mistake
           await saveProgress(leftId, false, 'pairs', { isPairMistake: true });
 
           setTimeout(() => {
@@ -1717,7 +1764,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     setupPairsRound();
   } else if (currentMethod === 'input') {
-    // Test mode: Russian prompt on top -> user types in English
     practiceArea.innerHTML = `
       <div class="input-form-row">
         <div class="answer-input" id="answer-input" contenteditable="true" role="textbox" aria-placeholder="Введите на английском..." spellcheck="false" autocomplete="off" autocapitalize="none"></div>
@@ -1731,7 +1777,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const feedback = practiceArea.querySelector('#input-feedback');
     let hasSecondChance = false;
 
-    // Secure input: max 40 chars & strip HTML/script tags
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') return;
       if (input.textContent.length >= 40) {
@@ -1923,7 +1968,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const correctAns = currentWord.word.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
 
-      // Check for typo and colorize letters directly inside the input box on 1st typo attempt
       let isManyMistakes = false;
       if (!isCorrect && !hasSecondChance && userAns.length > 0) {
         const lev = calculateLevenshtein(userAns, correctAns);
@@ -1934,10 +1978,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           playErrorSound();
 
           input.classList.remove('shake-input');
-          void input.offsetWidth; // trigger reflow
+          void input.offsetWidth;
           input.classList.add('shake-input', 'correction-mode');
 
-          // Highlight letters in the feedback block below the input window
           feedback.style.display = 'block';
           feedback.style.color = '#ef4444';
           feedback.innerHTML = `
@@ -1962,7 +2005,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       input.classList.add('disabled');
       checkBtn.disabled = true;
 
-      // Pronounce English word after answer submission
       speakWord(currentWord.word, currentWord.id);
 
       const isSecondChanceFix = isCorrect && hasSecondChance;
@@ -1983,7 +2025,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (isCorrect) {
         input.classList.remove('wrong', 'shake-input');
         input.classList.add('correct');
-        input.textContent = currentWord.word; // clean display of correct word
+        input.textContent = currentWord.word;
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
 
@@ -2013,7 +2055,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           </div>
         `;
 
-        // Shimmer / blink heart as a prompt to favorite difficult word
         const favBtn = container.querySelector('#fav-toggle-btn');
         if (favBtn) {
           if (favorited) {
@@ -2025,7 +2066,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      // Wait for word pronunciation to finish before transitioning (+1s extra delay for wrong answers)
       const minDelay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1600) : 2800;
       const maxWait = isCorrect ? 3500 : 6000;
       onNextAfterSpeech(onNext, minDelay, maxWait);
@@ -2045,11 +2085,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     focusAndPlaceCaret(input);
   } else {
-    // 3D Vertical Flippable Flashcard
     practiceArea.innerHTML = `
       <div class="flashcard-3d-wrapper">
         <div class="flashcard-3d" id="flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
-          <!-- Front Face: English word -->
           <div class="flashcard-face flashcard-front">
             <div class="flashcard-face-top">
               <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="Прослушать">🔊</button>
@@ -2066,7 +2104,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           </div>
 
-          <!-- Back Face: Russian translation -->
           <div class="flashcard-face flashcard-back">
             <div class="flashcard-face-top">
               <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="Прослушать">🔊</button>
@@ -2099,7 +2136,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     let shimmerTriggered = false;
 
     flashcard.addEventListener('click', (e) => {
-      // Ignore clicks on inner sound or favorite buttons to prevent accidental flip
       if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
         return;
       }
@@ -2111,7 +2147,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedbackBtns.style.display = 'flex';
       }
 
-      // If user flips card more than 2 times, shimmer heart with red 45deg gradient once
       if (flipCount > 2 && !shimmerTriggered && !favorited) {
         shimmerTriggered = true;
         const favFront = practiceArea.querySelector('#fc-fav-front');
@@ -2120,7 +2155,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (favBack) favBack.classList.add('heart-shimmer-45');
       }
 
-      // Pronounce English word whenever card flips back to English front side
       if (!isFlipped) {
         speakWord(currentWord.word, currentWord.id);
       }
