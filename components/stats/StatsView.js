@@ -88,31 +88,31 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     const maxDaily = Math.max(...days.map(d => d.dailyCount), 1);
     const maxCumulative = Math.max(...days.map(d => d.cumulativeCount), 1);
 
-    const chartHeight = 110; // active height for columns
-    const chartBottom = 140; // y baseline
+    const chartHeight = 130; // active height for columns
+    const chartBottom = 150; // y baseline
 
     let barsHtml = '';
     let points = [];
     let labelsHtml = '';
 
     days.forEach((day, idx) => {
-      const x = 50 + idx * 56;
+      const x = 20 + idx * 60;
       const barHeight = (day.dailyCount / maxDaily) * chartHeight;
       const barY = chartBottom - barHeight;
       
       // Bar for daily learned (blue)
       barsHtml += `
-        <rect x="${x + 8}" y="${barY}" width="20" height="${barHeight}" fill="#3b82f6" rx="3" opacity="0.85" />
-        <text x="${x + 18}" y="${barY - 5}" font-family="inherit" font-weight="700" font-size="11" fill="#3b82f6" text-anchor="middle">${day.dailyCount}</text>
+        <rect x="${x}" y="${barY}" width="59" height="${barHeight}" fill="#3b82f6" rx="3" opacity="0.85" />
+        <text x="${x + 29.5}" y="${barY - 5}" font-family="inherit" font-weight="700" font-size="11" fill="#3b82f6" text-anchor="middle">${day.dailyCount}</text>
       `;
 
       // Line point for cumulative (green)
       const lineY = chartBottom - (day.cumulativeCount / maxCumulative) * chartHeight;
-      points.push({ x: x + 18, y: lineY, val: day.cumulativeCount });
+      points.push({ x: x + 29.5, y: lineY, val: day.cumulativeCount });
 
       // Date labels
       labelsHtml += `
-        <text x="${x + 18}" y="${chartBottom + 20}" font-family="inherit" font-size="11" fill="var(--text-muted)" text-anchor="middle">${day.dateStr}</text>
+        <text x="${x + 29.5}" y="${chartBottom + 18}" font-family="inherit" font-size="11" fill="var(--text-muted)" text-anchor="middle">${day.dateStr}</text>
       `;
     });
 
@@ -133,31 +133,14 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       `;
     });
 
-    const chartTitle = getInterfaceLanguage() === 'ru' ? 'Динамика изучения' : getInterfaceLanguage() === 'uk' ? 'Динаміка вивчення' : 'Learning Dynamics';
-    const barLegend = getInterfaceLanguage() === 'ru' ? 'Выучено за день' : getInterfaceLanguage() === 'uk' ? 'Вивчено за день' : 'Learned today';
-    const lineLegend = getInterfaceLanguage() === 'ru' ? 'Всего выучено' : getInterfaceLanguage() === 'uk' ? 'Всього вивчено' : 'Total learned';
-
     const chartHtml = `
       <div class="curriculum-block" style="margin-top: 20px;">
-        <div class="section-title-row" style="margin-bottom: 16px;">
-          <h3>📊 ${chartTitle}</h3>
-          <div style="display: flex; gap: 14px; font-size: 11px; font-weight: 600;">
-            <span style="color: #3b82f6; display: flex; align-items: center; gap: 4px;">
-              <span style="display: inline-block; width: 10px; height: 10px; background-color: #3b82f6; border-radius: 2px;"></span>
-              ${barLegend}
-            </span>
-            <span style="color: #10b981; display: flex; align-items: center; gap: 4px;">
-              <span style="display: inline-block; width: 10px; height: 2px; background-color: #10b981;"></span>
-              ${lineLegend}
-            </span>
-          </div>
-        </div>
         <div style="width: 100%; overflow-x: auto; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 8px 10px; box-shadow: var(--shadow-sm);">
           <svg viewBox="0 0 460 180" width="100%" height="160" style="display: block; overflow: visible;">
             <!-- Grid lines -->
-            <line x1="40" y1="30" x2="440" y2="30" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
-            <line x1="40" y1="85" x2="440" y2="85" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
-            <line x1="40" y1="140" x2="440" y2="140" stroke="var(--border-color)" stroke-width="1" />
+            <line x1="20" y1="20" x2="440" y2="20" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
+            <line x1="20" y1="85" x2="440" y2="85" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
+            <line x1="20" y1="150" x2="440" y2="150" stroke="var(--border-color)" stroke-width="1" />
             
             ${barsHtml}
             ${lineHtml}
