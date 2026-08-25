@@ -1,12 +1,30 @@
-import { speakWord, preloadWordAudio, playSuccessSound, playErrorSound, playCasinoRollSound, playCoinDropSound, playStopwatchTickSound, playFartSound, isWordAudioPlaying } from '../../services/audioService.js?v=25.0';
-import { saveProgress, toggleFavoriteApi, getUserFavorites, getUserProgress, transcribeAudio } from '../../services/api.js?v=21.0';
+import {
+  speakWord,
+  preloadWordAudio,
+  playSuccessSound,
+  playErrorSound,
+  playCasinoRollSound,
+  playCoinDropSound,
+  playStopwatchTickSound,
+  playFartSound,
+  isWordAudioPlaying,
+} from '../../services/audioService.js?v=25.0';
+import {
+  saveProgress,
+  toggleFavoriteApi,
+  getUserFavorites,
+  getUserProgress,
+  transcribeAudio,
+} from '../../services/api.js?v=21.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=130.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
-  return String(cat)
-    .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
-    .trim() || String(cat).trim();
+  return (
+    String(cat)
+      .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
+      .trim() || String(cat).trim()
+  );
 }
 
 function shuffleArray(arr) {
@@ -48,9 +66,13 @@ function calculateLevenshtein(a, b) {
   for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
   for (let i = 1; i <= b.length; i++) {
     for (let j = 1; j <= a.length; j++) {
-      matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
-        ? matrix[i - 1][j - 1]
-        : Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1));
+      matrix[i][j] =
+        b.charAt(i - 1) === a.charAt(j - 1)
+          ? matrix[i - 1][j - 1]
+          : Math.min(
+              matrix[i - 1][j - 1] + 1,
+              Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1),
+            );
     }
   }
   return matrix[b.length][a.length];
@@ -59,13 +81,45 @@ function calculateLevenshtein(a, b) {
 function cyrillicToLatinPhonetic(str) {
   if (!str) return '';
   const map = {
-    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e',
-    'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
-    'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
-    'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch',
-    'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+    а: 'a',
+    б: 'b',
+    в: 'v',
+    г: 'g',
+    д: 'd',
+    е: 'e',
+    ё: 'e',
+    ж: 'zh',
+    з: 'z',
+    и: 'i',
+    й: 'y',
+    к: 'k',
+    л: 'l',
+    м: 'm',
+    н: 'n',
+    о: 'o',
+    п: 'p',
+    р: 'r',
+    с: 's',
+    т: 't',
+    у: 'u',
+    ф: 'f',
+    х: 'h',
+    ц: 'ts',
+    ч: 'ch',
+    ш: 'sh',
+    щ: 'sch',
+    ъ: '',
+    ы: 'y',
+    ь: '',
+    э: 'e',
+    ю: 'yu',
+    я: 'ya',
   };
-  return String(str).toLowerCase().split('').map(c => map[c] || c).join('');
+  return String(str)
+    .toLowerCase()
+    .split('')
+    .map((c) => map[c] || c)
+    .join('');
 }
 
 function normalizeEnglish(str) {
@@ -199,7 +253,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `
             : isPairsMode
-            ? `
+              ? `
             <div class="pairs-header-box" style="margin: 4px 0 6px; display: flex; justify-content: space-between; align-items: center;">
               <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 ${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</h2>
               <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
@@ -208,8 +262,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </div>
             </div>
           `
-            : isInputMode
-            ? `
+              : isInputMode
+                ? `
             <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
             <div class="train-left-badge">
               ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
@@ -223,8 +277,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </button>
             </div>
           `
-            : `
-            ${(quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4) ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
+                : `
+            ${quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
             <div class="train-left-badge">
               🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
@@ -237,19 +291,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 </h2>
               `
                   : quizStage === 1
-                  ? `
+                    ? `
                 <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
                   <span class="listening-audio-icon">🎧</span>
                   <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
                 </div>
               `
-                  : quizStage === 2
-                  ? `
+                    : quizStage === 2
+                      ? `
                 <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                   ${currentWord.translation}
                 </h2>
               `
-                  : `
+                      : `
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                   <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
                     ${currentWord.translation}
@@ -281,7 +335,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const btnWidth = targetBtn.offsetWidth;
     if (btnWidth === 0) return;
     if (!animate) glider.style.transition = 'none';
-    else glider.style.transition = 'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
+    else
+      glider.style.transition =
+        'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
     glider.style.transform = `translateX(${offsetLeft}px)`;
     glider.style.width = `${btnWidth}px`;
   }
@@ -292,10 +348,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     setTimeout(() => positionGlider(initialActive, false), 50);
   }
 
-  window.addEventListener('resize', () => {
-    const activeBtn = container.querySelector('.mode-pill-btn.active');
-    if (activeBtn) positionGlider(activeBtn, false);
-  }, { passive: true });
+  window.addEventListener(
+    'resize',
+    () => {
+      const activeBtn = container.querySelector('.mode-pill-btn.active');
+      if (activeBtn) positionGlider(activeBtn, false);
+    },
+    { passive: true },
+  );
 
   modePills.forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -322,7 +382,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
   if (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1)) {
-    setTimeout(() => { try { speakWord(currentWord.word, currentWord.id); } catch (e) {} }, 100);
+    setTimeout(() => {
+      try {
+        speakWord(currentWord.word, currentWord.id);
+      } catch (e) {}
+    }, 100);
   }
 
   const favBtn = container.querySelector('#fav-toggle-btn');
@@ -341,9 +405,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   if (currentMethod === 'quiz') {
     function renderStandardQuiz() {
-      const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+      const categoryFilteredWords =
+        selectedCategory === 'All' || selectedCategory === 'Все категории'
+          ? allWords
+          : allWords.filter(
+              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
+            );
       const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
-      const otherTranslations = pool.filter((w) => w.id !== currentWord.id).map((w) => w.translation);
+      const otherTranslations = pool
+        .filter((w) => w.id !== currentWord.id)
+        .map((w) => w.translation);
       const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
       const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
 
@@ -351,7 +422,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
-          const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.translation).trim();
+          const isCorrect =
+            String(optionBtn.getAttribute('data-choice')).trim() ===
+            String(currentWord.translation).trim();
 
           const listenText = container.querySelector('#listening-word-text');
           if (listenText) {
@@ -362,7 +435,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
             b.disabled = true;
-            if (b.getAttribute('data-choice') === currentWord.translation) b.classList.add('correct');
+            if (b.getAttribute('data-choice') === currentWord.translation)
+              b.classList.add('correct');
             else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
           });
 
@@ -383,7 +457,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }
 
     function renderReverseQuiz(isFromSpeechFallback = false) {
-      const categoryFilteredWords = selectedCategory === 'All' || selectedCategory === 'Все категории' ? allWords : allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+      const categoryFilteredWords =
+        selectedCategory === 'All' || selectedCategory === 'Все категории'
+          ? allWords
+          : allWords.filter(
+              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
+            );
       const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
       const otherWords = pool.filter((w) => w.id !== currentWord.id).map((w) => w.word);
       const shuffledOthers = shuffleArray(otherWords).slice(0, 5);
@@ -393,10 +472,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
-          const isCorrect = String(optionBtn.getAttribute('data-choice')).trim() === String(currentWord.word).trim();
-          practiceArea.querySelectorAll('.quiz-option').forEach((b) => { b.disabled = true; if (b.getAttribute('data-choice') === currentWord.word) b.classList.add('correct'); else if (b === optionBtn && !isCorrect) b.classList.add('wrong'); });
+          const isCorrect =
+            String(optionBtn.getAttribute('data-choice')).trim() ===
+            String(currentWord.word).trim();
+          practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
+            b.disabled = true;
+            if (b.getAttribute('data-choice') === currentWord.word) b.classList.add('correct');
+            else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
+          });
           speakWord(currentWord.word, currentWord.id);
-          if (isCorrect) playSuccessSound(); else playErrorSound();
+          if (isCorrect) playSuccessSound();
+          else playErrorSound();
           await saveProgress(currentWord.id, isCorrect, 'quiz', { skipXp: isFromSpeechFallback });
           if (isCorrect) {
             onNextAfterSpeech(onNext, 800, 3500);
@@ -471,7 +557,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const ua = navigator.userAgent || '';
         return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
       }
-      const preferNativeSpeech = !isMobileUA() && Boolean(SpeechRecognition);
+      // ===== ИЗМЕНЕНИЕ v1: используем Web Speech везде, где он доступен =====
+      const preferNativeSpeech = Boolean(SpeechRecognition);
 
       let mediaStream = null;
       let audioContext = null;
@@ -487,8 +574,22 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       // iOS Safari only supports audio/mp4 — put it first for iOS, webm first for others.
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
       const mimeCandidates = isIOS
-        ? ['audio/mp4', 'audio/aac', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg', 'audio/wav']
-        : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac', 'audio/ogg', 'audio/wav'];
+        ? [
+            'audio/mp4',
+            'audio/aac',
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/ogg',
+            'audio/wav',
+          ]
+        : [
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/mp4',
+            'audio/aac',
+            'audio/ogg',
+            'audio/wav',
+          ];
       let supportedMimeType = '';
       if (typeof MediaRecorder !== 'undefined') {
         supportedMimeType = mimeCandidates.find((m) => MediaRecorder.isTypeSupported(m)) || '';
@@ -507,11 +608,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           mediaStream = null;
         }
         if (nativeRecognition) {
-          try { nativeRecognition.stop(); } catch (e) {}
+          try {
+            nativeRecognition.stop();
+          } catch (e) {}
           nativeRecognition = null;
         }
         if (audioContext && audioContext.state !== 'closed') {
-          try { audioContext.close(); } catch (e) {}
+          try {
+            audioContext.close();
+          } catch (e) {}
           audioContext = null;
         }
       }
@@ -531,13 +636,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         if (speechAttempts < 5) {
           if (holdHint) {
-            holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-              ? `Попробуйте еще раз 🎙️ (Попытка ${speechAttempts} из 5)` 
-              : getInterfaceLanguage() === 'uk' 
-                ? `Спробуйте ще раз 🎙️ (Спроба ${speechAttempts} з 5)` 
-                : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+            holdHint.innerHTML =
+              getInterfaceLanguage() === 'ru'
+                ? `Попробуйте еще раз 🎙️ (Попытка ${speechAttempts} из 5)`
+                : getInterfaceLanguage() === 'uk'
+                  ? `Спробуйте ще раз 🎙️ (Спроба ${speechAttempts} з 5)`
+                  : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
           }
-          const errorText = customMsg || (getInterfaceLanguage() === 'ru' ? 'Голос не распознан. Нажмите 🎙️ для повтора' : 'Voice not recognized. Tap 🎙️ to retry');
+          const errorText =
+            customMsg ||
+            (getInterfaceLanguage() === 'ru'
+              ? 'Голос не распознан. Нажмите 🎙️ для повтора'
+              : 'Voice not recognized. Tap 🎙️ to retry');
           showFallbackButton(errorText);
         } else {
           isCompleted = true;
@@ -547,11 +657,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '❌';
           }
           if (holdHint) {
-            holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-              ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>` 
-              : getInterfaceLanguage() === 'uk'
+            holdHint.innerHTML =
+              getInterfaceLanguage() === 'ru'
                 ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+                : getInterfaceLanguage() === 'uk'
+                  ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
+                  : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
           }
           saveProgress(currentWord.id, false, 'quiz');
           if (continueBtn) {
@@ -566,10 +677,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       // ==========================================
-      // 1. DESKTOP NATIVE SPEECH (0 tokens, fast)
+      // 1. NATIVE SPEECH (используется везде, где доступен)
       // ==========================================
       let isEvaluated = false;
 
+      // ===== НОВАЯ ВЕРСИЯ startDesktopNativeSpeech =====
       function startDesktopNativeSpeech() {
         if (isProcessing || isCompleted) return;
         clearAllTimers();
@@ -583,9 +695,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         try {
           nativeRecognition = new SpeechRecognition();
           nativeRecognition.lang = 'en-US';
-          nativeRecognition.continuous = false;
-          nativeRecognition.interimResults = false;
-          nativeRecognition.maxAlternatives = 3;
+          nativeRecognition.continuous = false; // одно слово за раз
+          nativeRecognition.interimResults = true; // показываем промежуточные
+          nativeRecognition.maxAlternatives = 3; // больше вариантов для выбора
 
           nativeRecognition.onstart = () => {
             if (micBtn) {
@@ -593,7 +705,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               micBtn.classList.add('listening');
               micBtn.innerHTML = '🎙️';
             }
-            if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+            if (holdHint) {
+              holdHint.innerHTML =
+                '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+            }
 
             autoStopTimer = setTimeout(() => {
               if (isListening && !isEvaluated) {
@@ -602,56 +717,88 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   micBtn.classList.add('processing');
                 }
                 if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-                try { nativeRecognition.stop(); } catch (e) {}
+                try {
+                  nativeRecognition.stop();
+                } catch (e) {}
               }
-            }, 3200);
+            }, 2500);
           };
 
-          nativeRecognition.onresult = async (event) => {
-            isEvaluated = true;
-            clearAllTimers();
-            isListening = false;
-            let alternatives = [];
-            if (event.results && event.results[0]) {
-              for (let i = 0; i < event.results[0].length; i++) {
-                if (event.results[0][i].transcript) {
-                  alternatives.push(event.results[0][i].transcript);
+          nativeRecognition.onresult = (event) => {
+            const finalResults = [];
+            const interimResults = [];
+
+            for (let i = 0; i < event.results.length; i++) {
+              const result = event.results[i];
+              if (result.isFinal) {
+                for (let j = 0; j < result.length; j++) {
+                  if (result[j].transcript) {
+                    finalResults.push(result[j].transcript.trim());
+                  }
+                }
+              } else {
+                for (let j = 0; j < result.length; j++) {
+                  if (result[j].transcript) {
+                    interimResults.push(result[j].transcript.trim());
+                  }
                 }
               }
             }
-            const spoken = (alternatives[0] || '').trim();
-            if (spoken && transcriptBox) {
+
+            // Показываем промежуточный текст (только для UX)
+            if (interimResults.length > 0 && transcriptBox) {
               transcriptBox.style.display = 'block';
-              transcriptBox.innerHTML = `Услышано: <strong>«${spoken}»</strong>`;
+              transcriptBox.innerHTML = `🎤 <span style="color: #6b7280;">${interimResults[0]}</span>`;
             }
-            if (micBtn) {
-              micBtn.classList.remove('listening');
-              micBtn.classList.add('processing');
+
+            // Если есть финальный результат – оцениваем
+            if (finalResults.length > 0) {
+              isEvaluated = true;
+              clearAllTimers();
+              isListening = false;
+
+              if (micBtn) {
+                micBtn.classList.remove('listening');
+                micBtn.classList.add('processing');
+              }
+              if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
+
+              if (transcriptBox) {
+                transcriptBox.style.display = 'block';
+                transcriptBox.innerHTML = `Услышано: <strong>«${finalResults[0]}»</strong>`;
+              }
+
+              evaluateSpeech(finalResults);
             }
-            if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-            await evaluateSpeech(alternatives.length > 0 ? alternatives : [spoken]);
           };
 
           nativeRecognition.onerror = (err) => {
-            console.warn('Native desktop speech error:', err.error);
+            console.warn('Native speech error:', err.error);
             clearAllTimers();
             isListening = false;
-            if (err.error === 'not-allowed') {
+
+            // 1. Ошибка разрешения – не переключаем на AI
+            if (err.error === 'not-allowed' || err.error === 'audio-capture') {
               isEvaluated = true;
               handleNoSpeechHeard('🔒 Разрешите микрофон в браузере');
-            } else if (err.error === 'no-speech' || err.error === 'aborted') {
+              return;
+            }
+
+            // 2. Нет речи – даём пользователю повторить (не переключаем на AI)
+            if (err.error === 'no-speech') {
               isEvaluated = true;
               handleNoSpeechHeard('Голос не обнаружен. Нажмите 🎙️ для повтора');
-            } else {
-              // Fallback to Gemini AI transcription seamlessly
-              isEvaluated = true;
-              startMobileMediaRecorder();
+              return;
             }
+
+            // 3. Все остальные технические ошибки – переключаем на MediaRecorder + AI
+            isEvaluated = true;
+            console.warn('Переключение на MediaRecorder (ошибка:', err.error, ')');
+            startMobileMediaRecorder();
           };
 
           nativeRecognition.onend = () => {
             clearAllTimers();
-            // Only trigger no-speech if we never got a result AND never kicked off a fallback
             if (!isEvaluated && !isCompleted && !isProcessing) {
               isListening = false;
               handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора');
@@ -729,7 +876,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               const feedback = result && result.feedback ? result.feedback : '';
 
               if (spokenWord || isAiCorrect) {
-                 if (transcriptBox) {
+                if (transcriptBox) {
                   transcriptBox.style.display = 'block';
                   let heardHtml = '';
                   if (score !== null) {
@@ -758,7 +905,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.classList.add('listening');
             micBtn.innerHTML = '🎙️';
           }
-          if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+          if (holdHint)
+            holdHint.innerHTML =
+              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
           // Auto-finalize recording after 2.5 seconds
           autoStopTimer = setTimeout(() => {
@@ -766,11 +915,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               stopAndTranscribe();
             }
           }, 2500);
-
         } catch (micErr) {
           console.warn('Microphone access failed:', micErr);
           if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
-            handleNoSpeechHeard('🔒 Доступ к микрофону заблокирован. Разрешите микрофон в браузере.');
+            handleNoSpeechHeard(
+              '🔒 Доступ к микрофону заблокирован. Разрешите микрофон в браузере.',
+            );
           } else {
             handleNoSpeechHeard('Не удалось запустить микрофон');
           }
@@ -778,8 +928,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       function startSpeechSession() {
-        // Desktop Chrome/Edge → native Web Speech API (0 tokens, instant).
-        // iOS / Android → MediaRecorder + Gemini AI (reliable cross-platform).
+        // Используем нативный API, если доступен (теперь и на мобильных)
         if (preferNativeSpeech) {
           startDesktopNativeSpeech();
         } else {
@@ -792,10 +941,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         isListening = false;
 
         if (nativeRecognition) {
-          try { nativeRecognition.stop(); } catch (e) {}
+          try {
+            nativeRecognition.stop();
+          } catch (e) {}
         }
         if (mediaRecorder && mediaRecorder.state === 'recording') {
-          try { mediaRecorder.stop(); } catch (e) {}
+          try {
+            mediaRecorder.stop();
+          } catch (e) {}
         }
       }
 
@@ -853,7 +1006,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         async function initMicSensor() {
           try {
             diagStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            if (permStatus) permStatus.innerHTML = '<span style="color: #16a34a;">✅ Разрешено</span>';
+            if (permStatus)
+              permStatus.innerHTML = '<span style="color: #16a34a;">✅ Разрешено</span>';
 
             diagAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
             diagAnalyser = diagAudioCtx.createAnalyser();
@@ -878,7 +1032,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             updateMeter();
           } catch (err) {
             console.warn('Diag mic access failed:', err);
-            if (permStatus) permStatus.innerHTML = '<span style="color: #ef4444;">🔒 Заблокировано</span>';
+            if (permStatus)
+              permStatus.innerHTML = '<span style="color: #ef4444;">🔒 Заблокировано</span>';
           }
         }
 
@@ -894,7 +1049,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             diagStream = null;
           }
           if (diagAudioCtx) {
-            try { diagAudioCtx.close(); } catch(e) {}
+            try {
+              diagAudioCtx.close();
+            } catch (e) {}
             diagAudioCtx = null;
           }
           if (volBar) volBar.style.width = '0%';
@@ -904,7 +1061,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           stopDiagSensorStreams();
 
           transcriptBox.style.display = 'block';
-          transcriptBox.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Запись... Скажите слово в телефон!</span>';
+          transcriptBox.innerHTML =
+            '<span style="color: #d97706; font-weight: 700;">🟡 Запись... Скажите слово в телефон!</span>';
           startBtn.disabled = true;
           startBtn.textContent = '🔴 Запись (2.5 сек)...';
 
@@ -915,7 +1073,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             try {
               diagRecorder = new MediaRecorder(testStream, testOptions);
-            } catch(e) {
+            } catch (e) {
               diagRecorder = new MediaRecorder(testStream);
             }
 
@@ -936,9 +1094,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 if (res && res.text) {
                   transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${res.text}»</strong>`;
                 } else {
-                  transcriptBox.innerHTML = '<span style="color: #ef4444;">Голос не распознан.</span>';
+                  transcriptBox.innerHTML =
+                    '<span style="color: #ef4444;">Голос не распознан.</span>';
                 }
-              } catch(transErr) {
+              } catch (transErr) {
                 transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${transErr.message}</span>`;
               }
 
@@ -953,7 +1112,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 diagRecorder.stop();
               }
             }, 2500);
-
           } catch (err) {
             transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
@@ -964,7 +1122,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         function cleanupDiag() {
           stopDiagSensorStreams();
           if (diagRecorder && diagRecorder.state === 'recording') {
-            try { diagRecorder.stop(); } catch(e) {}
+            try {
+              diagRecorder.stop();
+            } catch (e) {}
           }
           modalEl.remove();
         }
@@ -988,7 +1148,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.innerHTML = '✓';
           if (holdHint) {
             holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">${
-              getInterfaceLanguage() === 'ru' ? '✓ Отлично! Произношение верное!' : getInterfaceLanguage() === 'uk' ? '✓ Відмінно! Вимова правильна!' : '✓ Perfect! Correct pronunciation!'
+              getInterfaceLanguage() === 'ru'
+                ? '✓ Отлично! Произношение верное!'
+                : getInterfaceLanguage() === 'uk'
+                  ? '✓ Відмінно! Вимова правильна!'
+                  : '✓ Perfect! Correct pronunciation!'
             }</span>`;
           }
 
@@ -1000,15 +1164,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         } else {
           speechAttempts++;
           micBtn.classList.remove('listening', 'processing');
-          
+
           if (speechAttempts < 5) {
             micBtn.innerHTML = '🎙️';
             if (holdHint) {
-              holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-                ? `Попробуйте повторить 🎙️ (Попытка ${speechAttempts} из 5)` 
-                : getInterfaceLanguage() === 'uk' 
-                  ? `Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)` 
-                  : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+              holdHint.innerHTML =
+                getInterfaceLanguage() === 'ru'
+                  ? `Попробуйте повторить 🎙️ (Попытка ${speechAttempts} из 5)`
+                  : getInterfaceLanguage() === 'uk'
+                    ? `Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)`
+                    : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
             }
             setTimeout(() => {
               isProcessing = false;
@@ -1020,11 +1185,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '❌';
 
             if (holdHint) {
-              holdHint.innerHTML = getInterfaceLanguage() === 'ru' 
-                ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>` 
-                : getInterfaceLanguage() === 'uk'
+              holdHint.innerHTML =
+                getInterfaceLanguage() === 'ru'
                   ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                  : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+                  : getInterfaceLanguage() === 'uk'
+                    ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
+                    : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
             }
             await saveProgress(currentWord.id, false, 'quiz');
             if (continueBtn) {
@@ -1056,13 +1222,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       practiceArea.innerHTML = `
         <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto; padding: 12px 6px;">
           <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-bottom: 12px; width: 100%;">
-            ${wordText.split('').map((char, index) => {
-              if (!isLetter(char) || isVowel(char)) {
-                return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
-              } else {
-                return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
-              }
-            }).join('')}
+            ${wordText
+              .split('')
+              .map((char, index) => {
+                if (!isLetter(char) || isVowel(char)) {
+                  return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
+                } else {
+                  return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
+                }
+              })
+              .join('')}
           </div>
         </div>
       `;
@@ -1070,7 +1239,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const inputs = Array.from(practiceArea.querySelectorAll('.consonant-input'));
 
       function focusNext(currentIndex) {
-        const nextInput = inputs.find(input => parseInt(input.getAttribute('data-index')) > currentIndex);
+        const nextInput = inputs.find(
+          (input) => parseInt(input.getAttribute('data-index')) > currentIndex,
+        );
         if (nextInput) {
           nextInput.focus();
         }
@@ -1099,7 +1270,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             input.setAttribute('readonly', 'true');
             input.disabled = true;
 
-            const allCorrect = inputs.every(inp => inp.classList.contains('correct'));
+            const allCorrect = inputs.every((inp) => inp.classList.contains('correct'));
             if (allCorrect) {
               playSuccessSound();
               speakWord(currentWord.word, currentWord.id);
@@ -1115,7 +1286,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             input.style.setProperty('border-color', '#ef4444', 'important');
             input.style.setProperty('color', '#ef4444', 'important');
             playErrorSound();
-            
+
             setTimeout(() => {
               input.classList.remove('wrong');
               if (!input.classList.contains('correct')) {
@@ -1151,9 +1322,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     // 1. First add from active Pairs queue
     if (activeWords && activeWords.length > 0) {
-      const activeOthers = shuffleArray(
-        activeWords.filter((w) => !usedIds.has(String(w.id)))
-      );
+      const activeOthers = shuffleArray(activeWords.filter((w) => !usedIds.has(String(w.id))));
       for (const w of activeOthers) {
         if (roundWords.length >= TARGET_PAIRS_COUNT) break;
         roundWords.push(w);
@@ -1166,7 +1335,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       try {
         const favIds = new Set((getUserFavorites() || []).map(String));
         const favWords = shuffleArray(
-          allWords.filter((w) => favIds.has(String(w.id)) && !usedIds.has(String(w.id)))
+          allWords.filter((w) => favIds.has(String(w.id)) && !usedIds.has(String(w.id))),
         );
         for (const w of favWords) {
           if (roundWords.length >= TARGET_PAIRS_COUNT) break;
@@ -1186,8 +1355,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             !usedIds.has(String(w.id)) &&
             (selectedCategory === 'All' ||
               selectedCategory === 'Все категории' ||
-              sanitizeCategory(w.category) === sanitizeCategory(selectedCategory))
-        )
+              sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)),
+        ),
       );
       for (const w of categoryOthers) {
         if (roundWords.length >= TARGET_PAIRS_COUNT) break;
@@ -1197,9 +1366,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       // 4. Fallback to any remaining words in allWords
       if (roundWords.length < TARGET_PAIRS_COUNT) {
-        const remainingAll = shuffleArray(
-          allWords.filter((w) => !usedIds.has(String(w.id)))
-        );
+        const remainingAll = shuffleArray(allWords.filter((w) => !usedIds.has(String(w.id))));
         for (const w of remainingAll) {
           if (roundWords.length >= TARGET_PAIRS_COUNT) break;
           roundWords.push(w);
@@ -1243,7 +1410,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       const leftItems = shuffleArray(
-        roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' }))
+        roundWords.map((w) => ({ id: w.id, text: w.word, word: w.word, side: 'left' })),
       );
 
       // Derangement Shuffle: Ensure NO word is directly opposite its translation in the same row
@@ -1303,7 +1470,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
                   <span class="pairs-card-inner">${item.text}</span>
                 </button>
-              `
+              `,
                 )
                 .join('')}
             </div>
@@ -1314,7 +1481,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
                   <span class="pairs-card-inner">${item.text}</span>
                 </button>
-              `
+              `,
                 )
                 .join('')}
             </div>
@@ -1480,7 +1647,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               if (errorsInRound === 0) {
                 playCoinDropSound();
               }
-              await saveProgress(currentWord.id, true, 'pairs', { perfectRound: errorsInRound === 0 });
+              await saveProgress(currentWord.id, true, 'pairs', {
+                perfectRound: errorsInRound === 0,
+              });
             }, 1350);
 
             // Advance to next round smoothly
@@ -1507,7 +1676,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       leftBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
-          if (isRoundFinished || btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
+          if (
+            isRoundFinished ||
+            btn.classList.contains('matched') ||
+            btn.classList.contains('wrong')
+          )
+            return;
           startTimerOnFirstAction();
 
           leftBtns.forEach((b) => b.classList.remove('selected'));
@@ -1522,7 +1696,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       rightBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
-          if (isRoundFinished || btn.classList.contains('matched') || btn.classList.contains('wrong')) return;
+          if (
+            isRoundFinished ||
+            btn.classList.contains('matched') ||
+            btn.classList.contains('wrong')
+          )
+            return;
           startTimerOnFirstAction();
 
           rightBtns.forEach((b) => b.classList.remove('selected'));
@@ -1562,7 +1741,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     input.addEventListener('paste', (e) => {
       e.preventDefault();
-      const text = (e.clipboardData || window.clipboardData || e.originalEvent?.clipboardData).getData('text/plain');
+      const text = (
+        e.clipboardData ||
+        window.clipboardData ||
+        e.originalEvent?.clipboardData
+      ).getData('text/plain');
       const sanitized = text.replace(/<[^>]*>?/gm, '').slice(0, 40);
       document.execCommand('insertText', false, sanitized);
     });
@@ -1697,9 +1880,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
       for (let i = 1; i <= b.length; i++) {
         for (let j = 1; j <= a.length; j++) {
-          matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
-            ? matrix[i - 1][j - 1]
-            : Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+          matrix[i][j] =
+            b.charAt(i - 1) === a.charAt(j - 1)
+              ? matrix[i - 1][j - 1]
+              : Math.min(
+                  matrix[i - 1][j - 1] + 1,
+                  Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1),
+                );
         }
       }
       return matrix[b.length][a.length];
@@ -1727,7 +1914,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     const handleCheck = async () => {
       const rawText = input.textContent || '';
-      const userAns = rawText.replace(/\u00a0/g, ' ').replace(/_/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+      const userAns = rawText
+        .replace(/\u00a0/g, ' ')
+        .replace(/_/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
       const correctAns = currentWord.word.trim().toLowerCase();
       const isCorrect = userAns === correctAns;
 
@@ -1774,7 +1966,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       speakWord(currentWord.word, currentWord.id);
 
       const isSecondChanceFix = isCorrect && hasSecondChance;
-      const prog = await saveProgress(currentWord.id, isCorrect, 'input', { secondChanceFix: isSecondChanceFix });
+      const prog = await saveProgress(currentWord.id, isCorrect, 'input', {
+        secondChanceFix: isSecondChanceFix,
+      });
       const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
 
       if (isManyMistakes) {
@@ -1912,7 +2106,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       isFlipped = !isFlipped;
       flipCount++;
       flashcard.classList.toggle('is-flipped', isFlipped);
-      
+
       if (feedbackBtns.style.display === 'none') {
         feedbackBtns.style.display = 'flex';
       }
