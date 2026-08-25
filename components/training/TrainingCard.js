@@ -224,7 +224,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `
             : `
-            ${(quizStage === 0 || quizStage === 1 || quizStage === 3) ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
+            ${(quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4) ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
             <div class="train-left-badge">
               🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
@@ -1057,12 +1057,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       practiceArea.innerHTML = `
         <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto; padding: 12px 6px;">
-          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 12px; width: 100%;">
+          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-bottom: 12px; width: 100%;">
             ${wordText.split('').map((char, index) => {
               if (!isLetter(char) || isVowel(char)) {
-                return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 8px; font-size: 18px; font-weight: 700; margin: 2px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
+                return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
               } else {
-                return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 8px; font-size: 18px; font-weight: 700; margin: 2px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
+                return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
               }
             }).join('')}
           </div>
