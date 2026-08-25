@@ -22,21 +22,23 @@ function shuffleArray(arr) {
  */
 function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
   const start = Date.now();
+  const adjustedDelay = minDelay + 500;
+  const adjustedMaxWait = maxWait + 500;
 
   function check() {
     const elapsed = Date.now() - start;
     const stillSpeaking = isWordAudioPlaying();
 
-    if (!stillSpeaking && elapsed >= minDelay) {
+    if (!stillSpeaking && elapsed >= adjustedDelay) {
       onNext();
-    } else if (elapsed >= maxWait) {
+    } else if (elapsed >= adjustedMaxWait) {
       onNext(); // force transition after maxWait
     } else {
       setTimeout(check, 80);
     }
   }
 
-  setTimeout(check, minDelay);
+  setTimeout(check, adjustedDelay);
 }
 
 function calculateLevenshtein(a, b) {
@@ -602,7 +604,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
                 try { nativeRecognition.stop(); } catch (e) {}
               }
-            }, 5000);
+            }, 3200);
           };
 
           nativeRecognition.onresult = async (event) => {
@@ -758,12 +760,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
           if (holdHint) holdHint.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
-          // Auto-finalize recording after 5.0 seconds
+          // Auto-finalize recording after 2.5 seconds
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
             }
-          }, 5000);
+          }, 2500);
 
         } catch (micErr) {
           console.warn('Microphone access failed:', micErr);
@@ -1124,7 +1126,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       const totalPairs = roundWords.length;
-      const initialSeconds = totalPairs * 2 + 3; // 2 sec per pair + 3 sec extra (e.g. 5 pairs = 13 sec)
+      const initialSeconds = totalPairs * 2 + 2; // 2 sec per pair + 2 sec extra (e.g. 5 pairs = 12 sec)
 
       let timerStarted = false;
       let timeRemaining = initialSeconds;
