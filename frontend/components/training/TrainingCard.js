@@ -419,8 +419,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ${getInterfaceLanguage() === 'ru' ? 'Нажмите на микрофон и скажите слово' : getInterfaceLanguage() === 'uk' ? 'Натисніть на мікрофон і скажіть слово' : 'Tap the microphone and say the word'}
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="margin-top: 10px;"></div>
-          <button type="button" class="primary-button" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
-            ${getInterfaceLanguage() === 'ru' ? 'Продолжить' : getInterfaceLanguage() === 'uk' ? 'Продовжити' : 'Continue'}
+          <button type="button" class="primary-button btn-green" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
+            ${getInterfaceLanguage() === 'ru' ? 'Дальше' : getInterfaceLanguage() === 'uk' ? 'Далі' : 'Next'}
           </button>
           <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone" style="margin-top: 12px;">
             ⚙️
@@ -993,7 +993,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
 
           await saveProgress(currentWord.id, true, 'quiz');
-          if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
           if (continueBtn) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
@@ -1028,7 +1027,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
             }
             await saveProgress(currentWord.id, false, 'quiz');
-            if (cantSpeakBtn) cantSpeakBtn.style.display = 'none';
             if (continueBtn) {
               continueBtn.style.display = 'block';
               continueBtn.onclick = () => onNext();
@@ -1570,14 +1568,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
 
     input.addEventListener('input', () => {
-      if (input.querySelector('span')) {
-        const offset = getCaretCharacterOffsetWithin(input);
-        const rawText = input.textContent || '';
-        input.innerHTML = '';
-        input.textContent = rawText;
-        setCaretCharacterOffsetWithin(input, offset);
-        return;
-      }
       const text = input.textContent || '';
       const sanitized = text.replace(/<[^>]*>?/gm, '');
       if (text !== sanitized || text.length > 40) {
@@ -1755,18 +1745,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           void input.offsetWidth; // trigger reflow
           input.classList.add('shake-input', 'correction-mode');
 
-          // Highlight letters directly inside the input window with missing letter dashes!
-          input.innerHTML = renderDiffHtml(userAns, correctAns);
-
-          feedback.style.display = 'none';
-          feedback.innerHTML = '';
+          // Highlight letters in the feedback block below the input window
+          feedback.style.display = 'block';
+          feedback.style.color = '#ef4444';
+          feedback.innerHTML = `
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">
+              ⚠️ Опечатка! Исправьте ошибку:
+            </div>
+            <div class="diff-letters-row" style="letter-spacing: 5px; font-size: 20px; font-weight: 700; display: inline-block; margin-top: 4px;">
+              ${renderDiffHtml(userAns, correctAns)}
+            </div>
+          `;
 
           checkBtn.textContent = 'Исправить (-1 XP)';
-          
-          // Place cursor automatically after the first incorrect letter!
-          placeCaretAfterFirstMismatch(input);
-          requestAnimationFrame(() => placeCaretAfterFirstMismatch(input));
-          setTimeout(() => placeCaretAfterFirstMismatch(input), 50);
+          placeCaretAtEnd(input);
           return;
         } else {
           isManyMistakes = true;
