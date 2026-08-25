@@ -88,31 +88,34 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     const maxDaily = Math.max(...days.map(d => d.dailyCount), 1);
     const maxCumulative = Math.max(...days.map(d => d.cumulativeCount), 1);
 
-    const chartHeight = 130; // active height for columns
-    const chartBottom = 150; // y baseline
+    const chartHeight = 95; // active height for columns
+    const chartBottom = 120; // y baseline
 
     let barsHtml = '';
     let points = [];
     let labelsHtml = '';
 
     days.forEach((day, idx) => {
-      const x = 20 + idx * 60;
+      const x = 45 + idx * 60;
       const barHeight = (day.dailyCount / maxDaily) * chartHeight;
       const barY = chartBottom - barHeight;
       
-      // Bar for daily learned (blue)
+      // Bar for daily learned (blue) with value text (inside bar if it fits, above if not, hidden if 0)
       barsHtml += `
-        <rect x="${x}" y="${barY}" width="59" height="${barHeight}" fill="#3b82f6" rx="3" opacity="0.85" />
-        <text x="${x + 29.5}" y="${barY - 5}" font-family="inherit" font-weight="700" font-size="11" fill="#3b82f6" text-anchor="middle">${day.dailyCount}</text>
+        <rect x="${x}" y="${barY}" width="24" height="${barHeight}" fill="#3b82f6" rx="4" opacity="0.85" />
+        ${day.dailyCount > 0 ? (barHeight > 16 
+          ? `<text x="${x + 12}" y="${barY + 12}" font-family="inherit" font-weight="700" font-size="10" fill="#ffffff" text-anchor="middle">${day.dailyCount}</text>`
+          : `<text x="${x + 12}" y="${barY - 4}" font-family="inherit" font-weight="700" font-size="10" fill="#3b82f6" text-anchor="middle">${day.dailyCount}</text>`
+        ) : ''}
       `;
 
       // Line point for cumulative (green)
       const lineY = chartBottom - (day.cumulativeCount / maxCumulative) * chartHeight;
-      points.push({ x: x + 29.5, y: lineY, val: day.cumulativeCount });
+      points.push({ x: x + 12, y: lineY, val: day.cumulativeCount });
 
       // Date labels
       labelsHtml += `
-        <text x="${x + 29.5}" y="${chartBottom + 18}" font-family="inherit" font-size="11" fill="var(--text-muted)" text-anchor="middle">${day.dateStr}</text>
+        <text x="${x + 12}" y="${chartBottom + 16}" font-family="inherit" font-size="10" fill="var(--text-muted)" text-anchor="middle">${day.dateStr}</text>
       `;
     });
 
@@ -128,19 +131,19 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     `;
     points.forEach((p) => {
       lineHtml += `
-        <circle cx="${p.x}" cy="${p.y}" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
         <text x="${p.x}" y="${p.y - 7}" font-family="inherit" font-weight="700" font-size="11" fill="#10b981" text-anchor="middle">${p.val}</text>
       `;
     });
 
     const chartHtml = `
       <div class="curriculum-block" style="margin-top: 20px;">
-        <div style="width: 100%; overflow-x: auto; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 8px 10px; box-shadow: var(--shadow-sm);">
-          <svg viewBox="0 0 460 180" width="100%" height="160" style="display: block; overflow: visible;">
+        <div style="width: 100%; overflow-x: auto; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 6px 6px; box-shadow: var(--shadow-sm);">
+          <svg viewBox="0 0 460 145" width="100%" height="135" style="display: block; overflow: visible;">
             <!-- Grid lines -->
-            <line x1="20" y1="20" x2="440" y2="20" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
-            <line x1="20" y1="85" x2="440" y2="85" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5" />
-            <line x1="20" y1="150" x2="440" y2="150" stroke="var(--border-color)" stroke-width="1" />
+            <line x1="25" y1="25" x2="435" y2="25" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.4" />
+            <line x1="25" y1="72.5" x2="435" y2="72.5" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.4" />
+            <line x1="25" y1="120" x2="435" y2="120" stroke="var(--border-color)" stroke-width="1" />
             
             ${barsHtml}
             ${lineHtml}
