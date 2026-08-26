@@ -1,5 +1,5 @@
 /**
- * Speech-to-Text Audio Transcription via Google Gemini Flash API.
+ * Speech-to-Text Audio Transcription via Google Gemini API.
  * Receives Base64 audio from MediaRecorder on client, sends to Gemini, returns transcribed word.
  */
 
@@ -18,9 +18,13 @@ function setGeminiApiKey(key) {
 function testGeminiAuthorization() {
   var apiKey = getGeminiApiKey();
   if (!apiKey) {
-    Logger.log('⚠️ GEMINI_API_KEY is not set in Script Properties yet. Please set it in Project Settings -> Script Properties.');
+    Logger.log(
+      '⚠️ GEMINI_API_KEY is not set in Script Properties yet. Please set it in Project Settings -> Script Properties.',
+    );
   }
-  var url = 'https://generativelanguage.googleapis.com/v1beta/models' + (apiKey ? '?key=' + encodeURIComponent(apiKey) : '');
+  var url =
+    'https://generativelanguage.googleapis.com/v1beta/models' +
+    (apiKey ? '?key=' + encodeURIComponent(apiKey) : '');
   var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
   Logger.log('Status: ' + res.getResponseCode());
   return res.getResponseCode() === 200;
@@ -41,16 +45,19 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  var modelsToTry = [
-    'gemini-2.0-flash',
-    'gemini-1.5-flash-latest',
-    'gemini-2.5-flash',
-    'gemini-1.5-flash-8b',
-    'gemini-1.5-pro'
-  ];
+  // ===== ИСПРАВЛЕННЫЙ СПИСОК МОДЕЛЕЙ (актуальные на август 2026) =====
+  // Можно переопределить основную модель через Script Property 'GEMINI_TRANSCRIPTION_MODEL'
+  var defaultModel =
+    PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') ||
+    'gemini-3.6-flash';
+
+  var modelsToTry = [defaultModel, 'gemini-3.5-flash', 'gemini-3.5-flash-lite'];
 
   var lastError = '';
-  var promptText = 'The user was asked to pronounce the English word or phrase: "' + expectedWord + '". ' +
+  var promptText =
+    'The user was asked to pronounce the English word or phrase: "' +
+    expectedWord +
+    '". ' +
     'Analyze the audio and evaluate their pronunciation quality. ' +
     'Respond strictly in JSON format with these exact keys: ' +
     '{"isCorrect": boolean (true if the pronunciation is correct or has minor acceptable accent/variation, false if incorrect or completely different word), ' +
@@ -66,67 +73,85 @@ function transcribePost(e) {
           {
             inlineData: {
               mimeType: mimeType || 'audio/webm',
-              data: audioBase64
-            }
+              data: audioBase64,
+            },
           },
           {
-            text: promptText
-          }
-        ]
-      }
+            text: promptText,
+          },
+        ],
+      },
     ],
     generationConfig: {
       temperature: 0.1,
       maxOutputTokens: 200,
-      responseMimeType: 'application/json'
-    }
+      responseMimeType: 'application/json',
+    },
   };
 
   var options = {
     method: 'POST',
     contentType: 'application/json',
     payload: JSON.stringify(payload),
-    muteHttpExceptions: true
+    muteHttpExceptions: true,
   };
 
   for (var m = 0; m < modelsToTry.length; m++) {
     var modelName = modelsToTry[m];
     try {
-      var url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(modelName) + ':generateContent?key=' + encodeURIComponent(apiKey);
+      var url =
+        'https://generativelanguage.googleapis.com/v1beta/models/' +
+        encodeURIComponent(modelName) +
+        ':generateContent?key=' +
+        encodeURIComponent(apiKey);
       var response = UrlFetchApp.fetch(url, options);
       var responseCode = response.getResponseCode();
       var responseText = response.getContentText();
 
       if (responseCode === 200) {
         var resJson = JSON.parse(responseText);
-        var rawText = resJson && resJson.candidates && resJson.candidates[0] && resJson.candidates[0].content && resJson.candidates[0].content.parts && resJson.candidates[0].content.parts[0] ? resJson.candidates[0].content.parts[0].text : '';
-        
+        var rawText =
+          resJson &&
+          resJson.candidates &&
+          resJson.candidates[0] &&
+          resJson.candidates[0].content &&
+          resJson.candidates[0].content.parts &&
+          resJson.candidates[0].content.parts[0]
+            ? resJson.candidates[0].content.parts[0].text
+            : '';
+
         var evaluation = {
           isCorrect: false,
           transcribed: '',
           score: 0,
-          feedback: ''
+          feedback: '',
         };
 
         try {
           evaluation = JSON.parse(rawText);
         } catch (jsonErr) {
-          var cleanText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+          var cleanText = rawText
+            .replace(/```json/g, '')
+            .replace(/```/g, '')
+            .trim();
           try {
             evaluation = JSON.parse(cleanText);
           } catch (e) {
             evaluation.transcribed = rawText.trim().toLowerCase();
-            evaluation.isCorrect = evaluation.transcribed.indexOf(expectedWord.toLowerCase()) !== -1;
+            evaluation.isCorrect =
+              evaluation.transcribed.indexOf(expectedWord.toLowerCase()) !== -1;
             evaluation.score = evaluation.isCorrect ? 80 : 20;
           }
         }
 
         return successResponse({
           isCorrect: !!evaluation.isCorrect,
-          transcribed: String(evaluation.transcribed || '').trim().toLowerCase(),
+          transcribed: String(evaluation.transcribed || '')
+            .trim()
+            .toLowerCase(),
           score: Number(evaluation.score || 0),
           feedback: String(evaluation.feedback || ''),
-          modelUsed: modelName
+          modelUsed: modelName,
         });
       } else {
         lastError = 'Model ' + modelName + ' error (' + responseCode + '): ' + responseText;
@@ -138,3 +163,43 @@ function transcribePost(e) {
 
   return errorResponse('Gemini transcription failed across all models: ' + lastError, 500);
 }
+
+// ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (должны быть в этом же файле) =====
+// Если они у вас уже есть – можно не копировать, они останутся без изменений.
+// Если нет – раскомментируйте и используйте.
+
+/*
+function getJsonBody(e) {
+  if (e && e.postData && e.postData.contents) {
+    try {
+      return JSON.parse(e.postData.contents);
+    } catch (err) {
+      return e.parameter || {};
+    }
+  }
+  return e && e.parameter ? e.parameter : {};
+}
+
+function validateRequired(body, requiredFields) {
+  for (var i = 0; i < requiredFields.length; i++) {
+    if (!body[requiredFields[i]]) {
+      throw new Error('Missing required field: ' + requiredFields[i]);
+    }
+  }
+}
+
+function successResponse(data) {
+  return {
+    status: 'success',
+    data: data
+  };
+}
+
+function errorResponse(message, code) {
+  return {
+    status: 'error',
+    message: message,
+    code: code || 500
+  };
+}
+*/
