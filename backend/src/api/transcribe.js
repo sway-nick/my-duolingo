@@ -55,15 +55,9 @@ function transcribePost(e) {
 
   var lastError = '';
   var promptText =
-    'The user was asked to pronounce the English word or phrase: "' +
-    expectedWord +
-    '". ' +
-    'Analyze the audio and evaluate their pronunciation quality. ' +
-    'Respond strictly in JSON format with these exact keys: ' +
-    '{"isCorrect": boolean (true if the pronunciation is correct or has minor acceptable accent/variation, false if incorrect or completely different word), ' +
-    '"transcribed": string (what you heard the user pronounce in lowercase, cleaned of punctuation), ' +
-    '"score": number (pronunciation accuracy score from 0 to 100), ' +
-    '"feedback": string (brief, constructive teacher-like feedback in Russian pointing out errors, formatted strictly like "обрати внимание на букву X" or "неправильное ударение" or "звук Z произнесен неверно". Keep it short, max 10 words. If correct, write "Отлично, произношение верное!")}';
+    'Expected English word: "' + expectedWord + '". ' +
+    'Analyze pronunciation and output JSON only:\n' +
+    '{"isCorrect": boolean, "transcribed": "spoken word lowercase", "score": 0-100, "feedback": "brief Russian tip max 8 words"}';
 
   var payload = {
     contents: [
@@ -84,7 +78,7 @@ function transcribePost(e) {
     ],
     generationConfig: {
       temperature: 0.1,
-      maxOutputTokens: 200,
+      maxOutputTokens: 120,
       responseMimeType: 'application/json',
     },
   };
@@ -128,16 +122,21 @@ function transcribePost(e) {
         };
 
         try {
-          evaluation = JSON.parse(rawText);
+          var jsonMatch = String(rawText).match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            evaluation = JSON.parse(jsonMatch[0]);
+          } else {
+            evaluation = JSON.parse(rawText);
+          }
         } catch (jsonErr) {
-          var cleanText = rawText
-            .replace(/```json/g, '')
+          var cleanText = String(rawText)
+            .replace(/```json/gi, '')
             .replace(/```/g, '')
             .trim();
           try {
             evaluation = JSON.parse(cleanText);
           } catch (e) {
-            evaluation.transcribed = rawText.trim().toLowerCase();
+            evaluation.transcribed = cleanText.toLowerCase();
             evaluation.isCorrect =
               evaluation.transcribed.indexOf(expectedWord.toLowerCase()) !== -1;
             evaluation.score = evaluation.isCorrect ? 80 : 20;

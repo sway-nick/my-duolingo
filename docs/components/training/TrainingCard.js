@@ -756,6 +756,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   try {
                     nativeRecognition.stop();
                   } catch (e) {}
+
+                  // Watchdog: если Web Speech API завис и не вызвал onend/onresult
+                  if (safetyWatchdog) clearTimeout(safetyWatchdog);
+                  safetyWatchdog = setTimeout(() => {
+                    if (!isEvaluated && !isCompleted) {
+                      isListening = false;
+                      isProcessing = false;
+                      handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
+                    }
+                  }, 3500);
                 }
               }, timeoutMs);
             };
@@ -952,8 +962,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               }
             } catch (transcribeErr) {
               console.warn('AI Transcribe error:', transcribeErr);
-              // Техническая ошибка – не списываем попытку
-              handleNoSpeechHeard('Не удалось распознать. Нажмите 🎙️ для повтора', true);
+              const errMsg =
+                transcribeErr && transcribeErr.message
+                  ? transcribeErr.message
+                  : 'Не удалось распознать. Нажмите 🎙️ для повтора';
+              handleNoSpeechHeard(errMsg, true);
             }
           };
 

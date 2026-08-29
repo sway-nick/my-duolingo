@@ -1484,11 +1484,15 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
+      let timeoutId = null;
       try {
         const base64Data = (reader.result || '').split(',')[1];
         if (!base64Data) {
           throw new Error('Empty audio payload');
         }
+
+        const controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), 15000);
 
         const response = await fetch(API_URL, {
           method: 'POST',
@@ -1501,8 +1505,10 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
             mimeType: mimeType || 'audio/webm',
             expectedWord: expectedWord || '',
           }),
+          signal: controller.signal,
         });
 
+        clearTimeout(timeoutId);
         const json = await response.json();
         if (json && json.success && json.data) {
           resolve(json.data);
@@ -1510,7 +1516,12 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
           reject(new Error(json?.error || 'Transcription failed'));
         }
       } catch (err) {
-        reject(err);
+        if (timeoutId) clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          reject(new Error('Время ожидания ответа сервера истекло. Попробуйте еще раз.'));
+        } else {
+          reject(err);
+        }
       }
     };
     reader.onerror = (e) => reject(new Error('Failed to read audio blob'));
