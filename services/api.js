@@ -1492,7 +1492,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
         }
 
         const controller = new AbortController();
-        timeoutId = setTimeout(() => controller.abort(), 15000);
+        timeoutId = setTimeout(() => controller.abort(), 25000);
 
         const response = await fetch(API_URL, {
           method: 'POST',

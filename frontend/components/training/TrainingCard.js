@@ -1173,8 +1173,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
               try {
                 const res = await transcribeAudio(blob, mime, 'hello');
-                if (res && res.text) {
-                  transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${res.text}»</strong>`;
+                const heardWord = (res && (res.transcribed || res.heard || res.text)) || '';
+                if (heardWord) {
+                  const scoreHtml = res.score !== undefined ? ` (Точность: <strong>${res.score}%</strong>)` : '';
+                  const fbHtml = res.feedback ? `<br><span style="font-size: 13px; color: #16a34a; font-style: italic;">💡 ${res.feedback}</span>` : '';
+                  transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}`;
                 } else {
                   transcriptBox.innerHTML =
                     '<span style="color: var(--text-muted);">Голос не распознан. Попробуйте ещё раз.</span>';

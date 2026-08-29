@@ -48,12 +48,12 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  // Список моделей: gemini-3.7-flash (основная с thinkingLevel: low), fallbacks
+  // Список моделей: gemini-3.6-flash (быстрая и стабильная), fallbacks
   var defaultModel =
     PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') ||
-    'gemini-3.7-flash';
+    'gemini-3.6-flash';
 
-  var modelsToTry = [defaultModel, 'gemini-3.6-flash', 'gemini-3.5-flash'];
+  var modelsToTry = [defaultModel, 'gemini-3.7-flash', 'gemini-3.5-flash'];
 
   var promptText =
     'You are an expert English pronunciation evaluator for language learners.\n' +
