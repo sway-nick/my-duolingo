@@ -68,8 +68,8 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  // Список надёжных моделей с высоким лимитом (1500 req/day)
-  var modelsToTry = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-lite'];
+  // Список активных моделей Gemini API
+  var modelsToTry = ['gemini-2.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.5-flash'];
 
   var promptText =
     'Transcribe only the spoken English words in this audio. Output plain text in lowercase without punctuation, quotes, or markdown.';
