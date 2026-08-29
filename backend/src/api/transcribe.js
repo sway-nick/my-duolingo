@@ -45,13 +45,13 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  // Список актуальных моделей (проверены в Gemini API)
+  // Список актуальных моделей (gemini-3.7-flash — новая, 3.6 — стабильная)
   // Можно переопределить основную модель через Script Property 'GEMINI_TRANSCRIPTION_MODEL'
   var defaultModel =
     PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') ||
     'gemini-3.7-flash';
 
-  var modelsToTry = [defaultModel, 'gemini-2.5-flash', 'gemini-2.0-flash'];
+  var modelsToTry = [defaultModel, 'gemini-3.6-flash', 'gemini-3.5-flash'];
 
   var lastError = '';
   var promptText =
