@@ -4,7 +4,7 @@ import { renderAuthModal } from '../auth/AuthModal.js?v=132.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=132.0';
 import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=132.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=132.0';
-import { t } from '../../services/i18n.js?v=132.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=132.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -151,6 +151,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
+      <!-- App Maintenance Card -->
+      <div class="settings-card">
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 6px;">${getInterfaceLanguage() === 'ru' ? 'Обслуживание приложения' : getInterfaceLanguage() === 'uk' ? 'Обслуговування' : 'Maintenance'}</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">
+          ${getInterfaceLanguage() === 'ru' ? 'Если таблица рейтинга или слова не обновляются, очистите кэш приложения.' : getInterfaceLanguage() === 'uk' ? 'Якщо рейтинг або слова не оновлюються, очистіть кеш додатка.' : 'If the leaderboard or words do not update, clear the app cache.'}
+        </p>
+        <button class="primary-button" id="clear-app-cache-btn" style="background-color: var(--error-color, #ef4444); color: #ffffff; width: 100%; min-height: 40px; font-weight: 600;">
+          ${getInterfaceLanguage() === 'ru' ? 'Очистить кэш приложения' : getInterfaceLanguage() === 'uk' ? 'Очистити кеш додатка' : 'Clear App Cache'}
+        </button>
+      </div>
 
     </div>
   `;
@@ -387,6 +397,38 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     // Close on click outside
     document.addEventListener('click', () => {
       langDropdown.classList.remove('open');
+    });
+  }
+
+  // Bind clear cache button
+  const clearCacheBtn = container.querySelector('#clear-app-cache-btn');
+  if (clearCacheBtn) {
+    clearCacheBtn.addEventListener('click', async () => {
+      const confirmMsg = getInterfaceLanguage() === 'ru' 
+        ? 'Вы уверены, что хотите очистить кэш рейтинга и перезагрузить приложение?' 
+        : getInterfaceLanguage() === 'uk' 
+          ? 'Ви впевнені, що хочете очистити кеш рейтингу та перезавантажити додаток?' 
+          : 'Are you sure you want to clear the leaderboard cache and reload the app?';
+      if (confirm(confirmMsg)) {
+        // 1. Clear local leaderboard cache
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith('cache_leaderboard_') || k === 'myduo_leaderboard_period')) {
+            localStorage.removeItem(k);
+          }
+        }
+        // 2. Clear browser Cache Storage
+        if ('caches' in window) {
+          try {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          } catch (e) {
+            console.warn('Cache storage clear error:', e);
+          }
+        }
+        // 3. Force reload
+        window.location.reload();
+      }
     });
   }
 }
