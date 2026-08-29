@@ -182,19 +182,27 @@ function checkSpeechMatch(spokenList, targetWord) {
 
     if (normSpoken === normTarget) return true;
 
-    const wordsInSpoken = normSpoken.split(' ');
-    if (wordsInSpoken.includes(normTarget)) return true;
+    // Сравнение по отдельным словам (строго до 2 слов в ответе)
+    const wordsInSpoken = normSpoken.split(/\s+/).filter(Boolean);
+    if (wordsInSpoken.length <= 2 && wordsInSpoken.includes(normTarget)) {
+      return true;
+    }
 
-    const dist = calculateLevenshtein(normSpoken, normTarget);
-    const maxDist = Math.max(1, Math.floor(normTarget.length * 0.35));
-    if (dist <= maxDist) return true;
+    // Для коротких слов (<= 4 букв, например ship, dog, art) не допускаем замену одной буквы на произвольную (ship -> shop)
+    if (normTarget.length > 4) {
+      const dist = calculateLevenshtein(normSpoken, normTarget);
+      const maxDist = Math.max(1, Math.floor(normTarget.length * 0.25));
+      if (dist <= maxDist && dist <= 2) return true;
+    }
 
     const latinized = cyrillicToLatinPhonetic(rawSpoken.trim());
     if (latinized) {
       const normLatinized = normalizeEnglish(latinized);
       if (normLatinized === normTarget) return true;
-      const distTranslit = calculateLevenshtein(normLatinized, normTarget);
-      if (distTranslit <= Math.max(1, Math.floor(normTarget.length * 0.38))) return true;
+      if (normTarget.length > 4) {
+        const distTranslit = calculateLevenshtein(normLatinized, normTarget);
+        if (distTranslit <= Math.max(1, Math.floor(normTarget.length * 0.25))) return true;
+      }
     }
   }
   return false;
@@ -745,7 +753,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               }
 
               const wordLength = currentWord.word ? currentWord.word.length : 5;
-              const timeoutMs = Math.min(4000, 1800 + wordLength * 150);
+              const timeoutMs = wordLength <= 4 ? 1400 : wordLength <= 7 ? 1750 : 2100;
               autoStopTimer = setTimeout(() => {
                 if (isListening && !isEvaluated) {
                   if (micBtn) {
@@ -982,7 +990,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
-          const timeoutMs = Math.min(4000, 1800 + wordLength * 150);
+          const timeoutMs = wordLength <= 4 ? 1400 : wordLength <= 7 ? 1750 : 2100;
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
