@@ -901,22 +901,38 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
 
         try {
-          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const audioConstraints = {
+            audio: {
+              channelCount: 1,
+              sampleRate: 16000,
+              echoCancellation: true,
+              noiseSuppression: true,
+            },
+          };
+          try {
+            mediaStream = await navigator.mediaDevices.getUserMedia(audioConstraints);
+          } catch (cErr) {
+            mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          }
 
           if (!isListening) {
             if (mediaStream) mediaStream.getTracks().forEach((t) => t.stop());
             return;
           }
 
-          let options = {};
+          let options = { audioBitsPerSecond: 16000 };
           if (supportedMimeType) {
-            options = { mimeType: supportedMimeType };
+            options.mimeType = supportedMimeType;
           }
 
           try {
             mediaRecorder = new MediaRecorder(mediaStream, options);
           } catch (e1) {
-            mediaRecorder = new MediaRecorder(mediaStream);
+            try {
+              mediaRecorder = new MediaRecorder(mediaStream, supportedMimeType ? { mimeType: supportedMimeType } : {});
+            } catch (e2) {
+              mediaRecorder = new MediaRecorder(mediaStream);
+            }
           }
 
           recordedChunks = [];
@@ -1149,14 +1165,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           startBtn.textContent = '🔴 Запись (2.5 сек)...';
 
           try {
-            const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            let testOptions = {};
-            if (supportedMimeType) testOptions = { mimeType: supportedMimeType };
+            const diagConstraints = {
+              audio: {
+                channelCount: 1,
+                sampleRate: 16000,
+                echoCancellation: true,
+                noiseSuppression: true,
+              },
+            };
+            let testStream;
+            try {
+              testStream = await navigator.mediaDevices.getUserMedia(diagConstraints);
+            } catch (cErr) {
+              testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            }
+
+            let testOptions = { audioBitsPerSecond: 16000 };
+            if (supportedMimeType) testOptions.mimeType = supportedMimeType;
 
             try {
               diagRecorder = new MediaRecorder(testStream, testOptions);
             } catch (e) {
-              diagRecorder = new MediaRecorder(testStream);
+              try {
+                diagRecorder = new MediaRecorder(testStream, supportedMimeType ? { mimeType: supportedMimeType } : {});
+              } catch (e2) {
+                diagRecorder = new MediaRecorder(testStream);
+              }
             }
 
             diagChunks = [];
