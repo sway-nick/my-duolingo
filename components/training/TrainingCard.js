@@ -905,16 +905,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
 
         try {
-          const audioConstraints = {
-            audio: {
-              channelCount: 1,
-              sampleRate: 16000,
-              echoCancellation: true,
-              noiseSuppression: true,
-            },
-          };
           try {
-            mediaStream = await navigator.mediaDevices.getUserMedia(audioConstraints);
+            mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
           } catch (cErr) {
             mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
           }
@@ -924,7 +916,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             return;
           }
 
-          let options = { audioBitsPerSecond: 16000 };
+          let options = {};
           if (supportedMimeType) {
             options.mimeType = supportedMimeType;
           }
@@ -932,11 +924,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           try {
             mediaRecorder = new MediaRecorder(mediaStream, options);
           } catch (e1) {
-            try {
-              mediaRecorder = new MediaRecorder(mediaStream, supportedMimeType ? { mimeType: supportedMimeType } : {});
-            } catch (e2) {
-              mediaRecorder = new MediaRecorder(mediaStream);
-            }
+            mediaRecorder = new MediaRecorder(mediaStream);
           }
 
           recordedChunks = [];
@@ -1166,40 +1154,30 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         async function runDiagRecording(isPingOnly = false) {
           stopDiagSensorStreams();
 
+          const expectedTarget = (word && word.word ? word.word : 'hello').trim();
+
           transcriptBox.style.display = 'block';
           transcriptBox.innerHTML =
-            '<span style="color: #d97706; font-weight: 700;">🟡 Запись... Скажите слово в телефон!</span>';
+            `<span style="color: #d97706; font-weight: 700;">🟡 Запись (2 сек)... Чётко скажите: «${expectedTarget}»!</span>`;
           startBtn.disabled = true;
           pingBtn.disabled = true;
-          startBtn.textContent = '🔴 Запись...';
+          startBtn.textContent = '🔴 Слушаю...';
 
           try {
-            const diagConstraints = {
-              audio: {
-                channelCount: 1,
-                sampleRate: 16000,
-                echoCancellation: true,
-                noiseSuppression: true,
-              },
-            };
             let testStream;
             try {
-              testStream = await navigator.mediaDevices.getUserMedia(diagConstraints);
+              testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             } catch (cErr) {
               testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             }
 
-            let testOptions = { audioBitsPerSecond: 16000 };
+            let testOptions = {};
             if (supportedMimeType) testOptions.mimeType = supportedMimeType;
 
             try {
               diagRecorder = new MediaRecorder(testStream, testOptions);
             } catch (e) {
-              try {
-                diagRecorder = new MediaRecorder(testStream, supportedMimeType ? { mimeType: supportedMimeType } : {});
-              } catch (e2) {
-                diagRecorder = new MediaRecorder(testStream);
-              }
+              diagRecorder = new MediaRecorder(testStream);
             }
 
             diagChunks = [];
@@ -1216,7 +1194,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
               try {
                 if (isPingOnly) {
-                  const pingRes = await transcribePingAudio(blob, mime, 'hello');
+                  const pingRes = await transcribePingAudio(blob, mime, expectedTarget);
                   transcriptBox.innerHTML = `
                     <span style="color: #16a34a; font-weight: 700;">⚡ Ping успешен!</span><br>
                     <span style="font-size: 13px; color: var(--text-main);">
@@ -1226,7 +1204,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     </span>
                   `;
                 } else {
-                  const res = await transcribeAudio(blob, mime, 'hello');
+                  const res = await transcribeAudio(blob, mime, expectedTarget);
                   const heardWord = (res && (res.transcribed || res.heard || res.text)) || '';
                   if (heardWord) {
                     const scoreHtml = res.score !== undefined ? ` (Точность: <strong>${res.score}%</strong>)` : '';
@@ -1235,12 +1213,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     if (res.timings) {
                       const totalSec = Math.round((res.timings.totalClientMs || res.timings.totalServerMs || 0) / 100) / 10;
                       const geminiSec = Math.round((res.timings.geminiMs || 0) / 100) / 10;
-                      timeInfo = `<br><span style="font-size: 12px; color: var(--text-muted);">⏱️ Время: ${totalSec}с (Gemini: ${geminiSec}с, модель: ${res.modelUsed || '3.6'})</span>`;
+                      timeInfo = `<br><span style="font-size: 12px; color: var(--text-muted);">⏱️ Время: ${totalSec}с (Gemini: ${geminiSec}с, модель: ${res.modelUsed || '2.0-flash'})</span>`;
                     }
                     transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}${timeInfo}`;
                   } else {
                     transcriptBox.innerHTML =
-                      '<span style="color: var(--text-muted);">Голос не распознан. Попробуйте ещё раз.</span>';
+                      `<span style="color: var(--text-muted);">Голос не распознан. Попробуйте произнести громче «${expectedTarget}».</span>`;
                   }
                 }
               } catch (transErr) {
@@ -1258,7 +1236,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               if (diagRecorder && diagRecorder.state === 'recording') {
                 diagRecorder.stop();
               }
-            }, 1800);
+            }, 2200);
           } catch (err) {
             transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
