@@ -94,6 +94,10 @@ function transcribePost(e) {
     ],
     generationConfig: {
       maxOutputTokens: 30,
+      audioTranscriptionConfig: {
+        languageCodes: ['en-US'],
+        customVocabulary: expectedWord ? [expectedWord] : [],
+      },
     },
   };
 
@@ -133,6 +137,12 @@ function transcribePost(e) {
             ? candidate.content.parts[0].text
             : '';
 
+        // Если модель вернула HTTP 200, но пустой текст (известный баг 3.5-transcribe) — переключаемся на fallback
+        if (!String(rawText || '').trim()) {
+          lastError = 'Model ' + modelName + ' returned 200 with empty text (finishReason=' + finishReason + ')';
+          continue;
+        }
+
         var heard = String(rawText || '')
           .toLowerCase()
           .replace(/[^a-z0-9\s']/g, ' ')
@@ -151,10 +161,8 @@ function transcribePost(e) {
         var feedback = '';
 
         if (heardTokens.length === 0) {
-          category = 'no_speech_detected';
-          score = 0;
-          isCorrect = false;
-          feedback = 'Голос не обнаружен. Попробуйте ещё раз.';
+          lastError = 'Model ' + modelName + ' no heard tokens';
+          continue;
         } else if (heard === target || (targetTokens.length === 1 && heardTokens.includes(targetTokens[0]))) {
           category = 'exact_match';
           score = 96;
