@@ -69,11 +69,15 @@ function transcribePost(e) {
   }
 
   // Основная модель: gemini-3.6-flash (быстрая), fallback: gemini-3.7-flash
-  var defaultModel =
-    PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') ||
-    'gemini-3.6-flash';
+  var propModel = String(
+    PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') || '',
+  ).trim();
 
-  var modelsToTry = [defaultModel, 'gemini-3.7-flash'];
+  if (!propModel || propModel.indexOf('1.5') !== -1 || propModel.indexOf('1.0') !== -1 || propModel.indexOf('pro') !== -1) {
+    propModel = 'gemini-3.6-flash';
+  }
+
+  var modelsToTry = [propModel, 'gemini-3.7-flash'];
 
   var promptText =
     'You are an expert English pronunciation evaluator for language learners.\n' +
