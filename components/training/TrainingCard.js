@@ -571,13 +571,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
         html += `
           <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
-            🎯 ${getInterfaceLanguage() === 'ru' ? 'Ответить карточками' : getInterfaceLanguage() === 'uk' ? 'Відповісти картками' : 'Answer with cards'}
+            ✍️ ${getInterfaceLanguage() === 'ru' ? 'Не могу говорить' : getInterfaceLanguage() === 'uk' ? 'Не можу говорити' : "Can't speak"}
           </button>
         `;
         transcriptBox.innerHTML = html;
         const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
         if (fbBtn) {
-          fbBtn.addEventListener('click', () => renderReverseQuiz(true));
+          fbBtn.addEventListener('click', () => renderConsonantsQuiz());
         }
       }
 
@@ -1043,7 +1043,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
           if (holdHint)
             holdHint.innerHTML =
-              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Скажите: «' + (currentWord.word || '') + '»</span>';
+              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю...</span>';
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
           const timeoutMs = wordLength <= 4 ? 2600 : wordLength <= 7 ? 3000 : 3400;
