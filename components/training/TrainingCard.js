@@ -1200,15 +1200,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
 
         async function runDiagRecording(isPingOnly = false) {
-          stopDiagSensorStreams();
-          await new Promise((r) => setTimeout(r, 120));
-
           const expectedTarget = (currentWord && currentWord.word ? currentWord.word : 'hello').trim();
 
           transcriptBox.style.display = 'block';
           transcriptBox.innerHTML = isPingOnly
-            ? `<span style="color: #0284c7; font-weight: 700;">🟡 Запись (2 сек)... Проверяю скорость связи без AI</span>`
-            : `<span style="color: #d97706; font-weight: 700;">🟡 Запись (2 сек)... Чётко скажите: «${expectedTarget}»!</span>`;
+            ? `<span style="color: #0284c7; font-weight: 700;">🟡 Запись (2.5 сек)... Проверяю связь без AI</span>`
+            : `<span style="color: #d97706; font-weight: 700;">🟡 Запись (2.5 сек)... Чётко скажите: «${expectedTarget}»!</span>`;
 
           startBtn.disabled = true;
           pingBtn.disabled = true;
@@ -1219,11 +1216,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
 
           try {
-            let testStream;
-            try {
+            let testStream = diagStream;
+            if (!testStream || !testStream.active) {
               testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            } catch (cErr) {
-              testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              diagStream = testStream;
             }
 
             let testOptions = {};
