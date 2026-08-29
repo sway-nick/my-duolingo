@@ -49,9 +49,9 @@ function transcribePost(e) {
   // Можно переопределить основную модель через Script Property 'GEMINI_TRANSCRIPTION_MODEL'
   var defaultModel =
     PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') ||
-    'gemini-2.5-flash';
+    'gemini-3.7-flash';
 
-  var modelsToTry = [defaultModel, 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  var modelsToTry = [defaultModel, 'gemini-2.5-flash', 'gemini-2.0-flash'];
 
   var lastError = '';
   var promptText =
