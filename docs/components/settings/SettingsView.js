@@ -426,8 +426,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             console.warn('Cache storage clear error:', e);
           }
         }
-        // 3. Force reload
-        window.location.reload();
+        // 3. Force reload with timestamp to bust mobile disk cache
+        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
       }
     });
   }
