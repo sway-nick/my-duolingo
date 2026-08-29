@@ -57,9 +57,6 @@ function transcribePost(e) {
   var audioBase64 = String(body.audioBase64 || '').trim();
   var rawMime = String(body.mimeType || 'audio/webm').toLowerCase();
   var cleanMime = rawMime.split(';')[0].trim();
-  if (cleanMime === 'audio/mp4' || cleanMime === 'audio/x-m4a') {
-    cleanMime = 'audio/m4a';
-  }
 
   var expectedWord = String(body.expectedWord || '').trim();
   var apiKey = getGeminiApiKey();
@@ -68,11 +65,10 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  // Список моделей: сначала специализированный STT, затем ультрабыстрый flash-lite и flash
+  // Список моделей: специализированный STT, затем ультрабыстрые варианты
   var modelsToTry = [
     'gemini-3.5-transcribe',
     'gemini-3.5-flash-lite',
-    'gemini-3.5-flash',
     'gemini-2.5-flash',
   ];
 
@@ -127,14 +123,14 @@ function transcribePost(e) {
 
       if (responseCode === 200) {
         var resJson = JSON.parse(responseText);
+        var candidate = resJson && resJson.candidates && resJson.candidates[0];
+        var finishReason = candidate ? (candidate.finishReason || 'STOP') : null;
         var rawText =
-          resJson &&
-          resJson.candidates &&
-          resJson.candidates[0] &&
-          resJson.candidates[0].content &&
-          resJson.candidates[0].content.parts &&
-          resJson.candidates[0].content.parts[0]
-            ? resJson.candidates[0].content.parts[0].text
+          candidate &&
+          candidate.content &&
+          candidate.content.parts &&
+          candidate.content.parts[0]
+            ? candidate.content.parts[0].text
             : '';
 
         var heard = String(rawText || '')
@@ -204,6 +200,13 @@ function transcribePost(e) {
             parseMs: parseMs,
             geminiMs: geminiMs,
             totalServerMs: totalServerMs,
+          },
+          debug: {
+            rawText: rawText || '',
+            finishReason: finishReason,
+            mimeType: cleanMime,
+            audioChars: audioBase64.length,
+            responseCode: responseCode,
           },
         });
       } else {

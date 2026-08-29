@@ -882,6 +882,52 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }, 150);
       }
 
+      async function inspectAudioBlob(blob) {
+        return new Promise((resolve) => {
+          try {
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio();
+            const cleanup = () => {
+              try {
+                URL.revokeObjectURL(url);
+              } catch (e) {}
+            };
+            const timer = setTimeout(() => {
+              cleanup();
+              resolve({ ok: true, duration: 0, size: blob.size, type: blob.type });
+            }, 600);
+
+            audio.onloadedmetadata = () => {
+              clearTimeout(timer);
+              const result = {
+                ok: true,
+                duration: Math.round((audio.duration || 0) * 10) / 10,
+                size: blob.size,
+                type: blob.type,
+              };
+              cleanup();
+              resolve(result);
+            };
+
+            audio.onerror = () => {
+              clearTimeout(timer);
+              cleanup();
+              resolve({
+                ok: false,
+                duration: 0,
+                size: blob.size,
+                type: blob.type,
+              });
+            };
+
+            audio.src = url;
+            audio.load();
+          } catch (e) {
+            resolve({ ok: true, duration: 0, size: blob.size, type: blob.type });
+          }
+        });
+      }
+
       async function startMobileMediaRecorder() {
         if (isProcessing || isCompleted) return;
 
@@ -891,7 +937,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
 
         clearAllTimers();
-        // Синхронно выставляем флаг
         isListening = true;
 
         try {
@@ -944,6 +989,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             const audioBlob = new Blob(recordedChunks, { type: mime });
             stopSensorStreams();
 
+            const inspect = await inspectAudioBlob(audioBlob);
+            console.log('AUDIO INSPECT', inspect);
+
             if (micBtn) {
               micBtn.classList.remove('listening');
               micBtn.classList.add('processing');
@@ -973,7 +1021,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 }
                 await evaluateSpeech([spokenWord], isAiCorrect);
               } else {
-                // Техническая ошибка распознавания (AI не вернул текст) – не списываем попытку
                 handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
               }
             } catch (transcribeErr) {
@@ -986,7 +1033,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }
           };
 
-          mediaRecorder.start(250);
+          // One-shot запись без timeslice (дает цельный закрытый медиа-контейнер)
+          mediaRecorder.start();
 
           if (micBtn) {
             micBtn.classList.remove('processing', 'success');
@@ -1198,13 +1246,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               const mime = diagRecorder.mimeType || supportedMimeType || 'audio/webm';
               const blob = new Blob(diagChunks, { type: mime });
 
+              const inspect = await inspectAudioBlob(blob);
+              console.log('DIAG AUDIO INSPECT', inspect);
+
               try {
                 if (isPingOnly) {
                   const pingRes = await transcribePingAudio(blob, mime, expectedTarget);
                   transcriptBox.innerHTML = `
                     <span style="color: #16a34a; font-weight: 700;">⚡ Ping успешен!</span><br>
                     <span style="font-size: 13px; color: var(--text-main);">
-                      Размер аудио: <strong>${Math.round(blob.size / 1024 * 10) / 10} КБ</strong> (${blob.type})<br>
+                      Размер: <strong>${Math.round(blob.size / 1024 * 10) / 10} КБ</strong> | Длительность: <strong>${inspect.duration}с</strong> (${blob.type})<br>
                       Клиентский Roundtrip: <strong>${pingRes.totalClientMs} мс</strong><br>
                       Серверный парсинг: <strong>${pingRes.serverParseMs} мс</strong>
                     </span>
@@ -1219,12 +1270,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     if (res.timings) {
                       const totalSec = Math.round((res.timings.totalClientMs || res.timings.totalServerMs || 0) / 100) / 10;
                       const geminiSec = Math.round((res.timings.geminiMs || 0) / 100) / 10;
-                      timeInfo = `<br><span style="font-size: 12px; color: var(--text-muted);">⏱️ Время: ${totalSec}с (Gemini: ${geminiSec}с, модель: ${res.modelUsed || '2.0-flash'})</span>`;
+                      timeInfo = `<br><span style="font-size: 12px; color: var(--text-muted);">⏱️ Время: ${totalSec}с (Gemini: ${geminiSec}с, модель: ${res.modelUsed || '3.5-transcribe'})</span>`;
                     }
-                    transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}${timeInfo}`;
+                    let debugInfo = '';
+                    if (res.debug) {
+                      debugInfo = `<br><span style="font-size: 11px; color: var(--text-muted);">Размер: ${Math.round(blob.size / 1024 * 10) / 10}КБ, ${inspect.duration}с | Raw: "${res.debug.rawText || ''}"</span>`;
+                    }
+                    transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}${timeInfo}${debugInfo}`;
                   } else {
+                    let debugInfo = '';
+                    if (res && res.debug) {
+                      debugInfo = `<br><span style="font-size: 11px; color: var(--text-muted);">Аудио: ${Math.round(blob.size / 1024 * 10) / 10}КБ, ${inspect.duration}с | Raw: "${res.debug.rawText || ''}" (${res.modelUsed})</span>`;
+                    }
                     transcriptBox.innerHTML =
-                      `<span style="color: var(--text-muted);">Голос не распознан. Попробуйте произнести громче «${expectedTarget}».</span>`;
+                      `<span style="color: var(--text-muted);">Голос не распознан. Попробуйте произнести громче «${expectedTarget}».</span>${debugInfo}`;
                   }
                 }
               } catch (transErr) {
@@ -1237,13 +1296,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               pingBtn.textContent = '⚡ Ping (без AI)';
             };
 
-            diagRecorder.start(250);
+            // One-shot запись без timeslice
+            diagRecorder.start();
 
             setTimeout(() => {
               if (diagRecorder && diagRecorder.state === 'recording') {
                 diagRecorder.stop();
               }
-            }, 2800);
+            }, 2500);
           } catch (err) {
             transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
