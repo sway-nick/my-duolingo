@@ -1201,6 +1201,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         async function runDiagRecording(isPingOnly = false) {
           stopDiagSensorStreams();
+          await new Promise((r) => setTimeout(r, 120));
 
           const expectedTarget = (word && word.word ? word.word : 'hello').trim();
 
@@ -1240,6 +1241,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             };
 
             diagRecorder.onstop = async () => {
+              await new Promise((r) => setTimeout(r, 80));
               testStream.getTracks().forEach((t) => t.stop());
               transcriptBox.innerHTML = isPingOnly ? '⏳ Проверяю связь с сервером (Ping)...' : '⏳ Проверяю через AI Gemini...';
 
