@@ -1156,10 +1156,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${res.text}»</strong>`;
                 } else {
                   transcriptBox.innerHTML =
-                    '<span style="color: #ef4444;">Голос не распознан.</span>';
+                    '<span style="color: var(--text-muted);">Голос не распознан. Попробуйте ещё раз.</span>';
                 }
               } catch (transErr) {
-                transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка: ${transErr.message}</span>`;
+                transcriptBox.innerHTML = `<span style="color: var(--text-muted);">Ошибка: ${transErr.message}</span>`;
               }
 
               startBtn.disabled = false;
@@ -1174,7 +1174,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               }
             }, 2500);
           } catch (err) {
-            transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
+            transcriptBox.innerHTML = `<span style="color: var(--text-muted);">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
             startBtn.textContent = '🎙️ Начать тест';
           }
@@ -1288,9 +1288,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               .split('')
               .map((char, index) => {
                 if (!isLetter(char) || isVowel(char)) {
-                  return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
+                  return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
                 } else {
-                  return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
+                  return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
                 }
               })
               .join('')}

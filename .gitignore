@@ -28,4 +28,7 @@ build/
 *.tmp
 *.temp
 
+# Nested repos (prevent accidental submodule)
+my-duolingo/
+
 backend/src/config/config.local.js
