@@ -72,22 +72,7 @@ function transcribePost(e) {
   var modelsToTry = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-lite'];
 
   var promptText =
-    'You are an expert English pronunciation evaluator for language learners.\n' +
-    'Target English word: "' + expectedWord + '"\n\n' +
-    'TASK (2 steps):\n' +
-    '1. First, blind-transcribe what word the speaker actually uttered into "heard" (lowercase, clean). Ignore background noise, breathing, or mic clicks.\n' +
-    '2. Compare "heard" with the target word "' + expectedWord + '". Classify match into "category":\n' +
-    '   - "exact_match": word matches accurately with native or natural pronunciation.\n' +
-    '   - "close_accented_variant": the intended word is clearly recognizable, but has noticeable non-native accent/phoneme distortion (e.g. /θ/ vs /s/, /w/ vs /v/, /r/ vs /l/, vowel length /ɪ/ vs /iː/, devoiced final consonant).\n' +
-    '   - "wrong_word": speaker said a completely different word, extra phrases, or unintelligible speech.\n' +
-    '   - "no_speech_detected": silence, cough, noise only.\n\n' +
-    'Respond strictly in JSON format:\n' +
-    '{\n' +
-    '  "heard": "word",\n' +
-    '  "category": "exact_match" | "close_accented_variant" | "wrong_word" | "no_speech_detected",\n' +
-    '  "confidence": 0.0 to 1.0,\n' +
-    '  "feedback": "short Russian tip max 8 words (e.g. Обратите внимание на звук /θ/ or Отличное произношение!)"\n' +
-    '}';
+    'Transcribe only the spoken English words in this audio. Output plain text in lowercase without punctuation, quotes, or markdown.';
 
   var payload = {
     contents: [
@@ -107,8 +92,7 @@ function transcribePost(e) {
       },
     ],
     generationConfig: {
-      maxOutputTokens: 150,
-      responseMimeType: 'application/json',
+      maxOutputTokens: 30,
     },
   };
 
@@ -148,67 +132,65 @@ function transcribePost(e) {
             ? resJson.candidates[0].content.parts[0].text
             : '';
 
-        var evaluation = {};
-        try {
-          var jsonMatch = String(rawText).match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            evaluation = JSON.parse(jsonMatch[0]);
-          } else {
-            evaluation = JSON.parse(rawText);
-          }
-        } catch (jsonErr) {
-          evaluation = {};
-        }
+        var heard = String(rawText || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9\s']/g, ' ')
+          .trim();
 
-        var heard = String(evaluation.heard || evaluation.transcribed || '').trim().toLowerCase();
-        var category = String(evaluation.category || '').toLowerCase();
-        var confidence = Number(evaluation.confidence !== undefined ? evaluation.confidence : 0.85);
-        var feedback = String(evaluation.feedback || '').trim();
-
-        // Токенизация и проверка слов
-        var heardTokens = heard.match(/[a-z]+(?:'[a-z]+)?/g) || [];
-        var targetToken = String(expectedWord).trim().toLowerCase();
+        var heardTokens = heard.match(/[a-z0-9]+(?:'[a-z]+)?/g) || [];
+        var target = String(expectedWord || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9\s']/g, ' ')
+          .trim();
+        var targetTokens = target.match(/[a-z0-9]+(?:'[a-z]+)?/g) || [];
 
         var isCorrect = false;
         var score = 0;
+        var category = 'wrong_word';
+        var feedback = '';
 
-        if (category === 'exact_match') {
-          score = Math.min(100, Math.max(90, Math.round((confidence || 0.95) * 100)));
-          isCorrect = true;
-          if (!feedback) feedback = 'Отличное произношение!';
-        } else if (category === 'close_accented_variant') {
-          score = Math.min(88, Math.max(62, Math.round((confidence || 0.8) * 85)));
-          isCorrect = true; // Слово угадано, замечание по произношению выдается в feedback
-        } else if (category === 'wrong_word') {
-          score = Math.min(45, Math.max(10, Math.round((confidence || 0.5) * 30)));
-          isCorrect = false;
-        } else if (category === 'no_speech_detected') {
+        if (heardTokens.length === 0) {
+          category = 'no_speech_detected';
           score = 0;
           isCorrect = false;
-          if (!feedback) feedback = 'Голос не обнаружен';
+          feedback = 'Голос не обнаружен. Попробуйте ещё раз.';
+        } else if (heard === target || (targetTokens.length === 1 && heardTokens.includes(targetTokens[0]))) {
+          category = 'exact_match';
+          score = 96;
+          isCorrect = true;
+          feedback = 'Отличное произношение!';
         } else {
-          // Fallback если категория не передана
-          if (heardTokens.includes(targetToken)) {
-            score = 80;
-            isCorrect = true;
-          } else {
-            score = 20;
-            isCorrect = false;
-          }
-        }
+          // JS фонетическое и дистанционное сравнение
+          var primaryHeard = heardTokens[0] || '';
+          var primaryTarget = targetTokens[0] || '';
+          
+          var isPhoneticVariant = false;
+          // Известные русскоязычные паттерны (th->s/z/f, w->v, short/long vowels)
+          var normH = primaryHeard.replace(/^s/i, 'th').replace(/^z/i, 'th').replace(/^v/i, 'w');
+          var normT = primaryTarget.replace(/^s/i, 'th').replace(/^z/i, 'th').replace(/^v/i, 'w');
 
-        // Защита от лишних слов (например "I don't know apple")
-        if (isCorrect && heardTokens.length > 2 && !heardTokens.includes(targetToken)) {
-          isCorrect = false;
-          score = 25;
-          feedback = 'Произнесите только одно слово: ' + expectedWord;
+          if (normH === normT || (primaryTarget.length >= 5 && Math.abs(primaryHeard.length - primaryTarget.length) <= 1)) {
+            isPhoneticVariant = true;
+          }
+
+          if (isPhoneticVariant) {
+            category = 'close_accented_variant';
+            score = 78;
+            isCorrect = true;
+            feedback = 'Хорошо! Обратите внимание на чистоту звуков.';
+          } else {
+            category = 'wrong_word';
+            score = 25;
+            isCorrect = false;
+            feedback = 'Сказано: «' + (heardTokens.slice(0, 3).join(' ')) + '». Нужно: «' + expectedWord + '»';
+          }
         }
 
         var totalServerMs = Date.now() - t0;
 
         return successResponse({
           isCorrect: isCorrect,
-          transcribed: heard || (heardTokens[0] || ''),
+          transcribed: heardTokens.join(' ') || heard,
           score: score,
           feedback: feedback,
           category: category,
