@@ -1778,5 +1778,6 @@ export {
   fetchUserDataFromCloud,
   pushUserDataToCloud,
   transcribeAudio,
+  transcribePingAudio,
   getCloudWordOfTheDayId,
 };
