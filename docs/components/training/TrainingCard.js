@@ -1203,7 +1203,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           stopDiagSensorStreams();
           await new Promise((r) => setTimeout(r, 120));
 
-          const expectedTarget = (word && word.word ? word.word : 'hello').trim();
+          const expectedTarget = (currentWord && currentWord.word ? currentWord.word : 'hello').trim();
 
           transcriptBox.style.display = 'block';
           transcriptBox.innerHTML = isPingOnly
