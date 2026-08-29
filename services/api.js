@@ -1491,8 +1491,17 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
           throw new Error('Empty audio payload');
         }
 
+        console.log('VOICE DEBUG', {
+          mimeType,
+          blobBytes: audioBlob.size,
+          base64Chars: base64Data.length,
+          expectedWord,
+          userAgent: navigator.userAgent,
+        });
+
         const controller = new AbortController();
-        timeoutId = setTimeout(() => controller.abort(), 25000);
+        timeoutId = setTimeout(() => controller.abort(), 45000);
+        const uploadStart = Date.now();
 
         const response = await fetch(API_URL, {
           method: 'POST',
@@ -1509,8 +1518,13 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
         });
 
         clearTimeout(timeoutId);
+        const totalClientMs = Date.now() - uploadStart;
+
         const json = await response.json();
         if (json && json.success && json.data) {
+          if (json.data.timings) {
+            json.data.timings.totalClientMs = totalClientMs;
+          }
           resolve(json.data);
         } else {
           reject(new Error(json?.error || 'Transcription failed'));
@@ -1518,10 +1532,54 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
       } catch (err) {
         if (timeoutId) clearTimeout(timeoutId);
         if (err.name === 'AbortError') {
-          reject(new Error('Время ожидания ответа сервера истекло. Попробуйте еще раз.'));
+          reject(new Error('Время ожидания ответа сервера истекло (45 сек). Попробуйте еще раз.'));
         } else {
           reject(err);
         }
+      }
+    };
+    reader.onerror = (e) => reject(new Error('Failed to read audio blob'));
+    reader.readAsDataURL(audioBlob);
+  });
+}
+
+async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      let timeoutId = null;
+      try {
+        const base64Data = (reader.result || '').split(',')[1];
+        const controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), 30000);
+        const uploadStart = Date.now();
+
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: 'transcribeping',
+            audioBase64: base64Data,
+            mimeType: mimeType || 'audio/webm',
+            expectedWord: expectedWord || '',
+          }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+        const totalClientMs = Date.now() - uploadStart;
+        const json = await response.json();
+        if (json && json.success && json.data) {
+          json.data.totalClientMs = totalClientMs;
+          resolve(json.data);
+        } else {
+          reject(new Error(json?.error || 'Ping failed'));
+        }
+      } catch (err) {
+        if (timeoutId) clearTimeout(timeoutId);
+        reject(err);
       }
     };
     reader.onerror = (e) => reject(new Error('Failed to read audio blob'));

@@ -30,8 +30,28 @@ function testGeminiAuthorization() {
   return res.getResponseCode() === 200;
 }
 
+function transcribePingPost(e) {
+  var t0 = Date.now();
+  var body = {};
+  try {
+    body = getJsonBody(e);
+  } catch (err) {
+    body = {};
+  }
+  return successResponse({
+    ping: 'pong',
+    receivedLength: (e && e.postData && e.postData.length) || 0,
+    audioChars: String(body.audioBase64 || '').length,
+    mimeType: body.mimeType || '',
+    expectedWord: body.expectedWord || '',
+    serverParseMs: Date.now() - t0,
+  });
+}
+
 function transcribePost(e) {
+  var t0 = Date.now();
   var body = getJsonBody(e);
+  var parseMs = Date.now() - t0;
   validateRequired(body, ['audioBase64']);
 
   var audioBase64 = String(body.audioBase64 || '').trim();
@@ -48,12 +68,12 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  // Список моделей: gemini-3.6-flash (быстрая и стабильная), fallbacks
+  // Основная модель: gemini-3.6-flash (быстрая), fallback: gemini-3.7-flash
   var defaultModel =
     PropertiesService.getScriptProperties().getProperty('GEMINI_TRANSCRIPTION_MODEL') ||
     'gemini-3.6-flash';
 
-  var modelsToTry = [defaultModel, 'gemini-3.7-flash', 'gemini-3.5-flash'];
+  var modelsToTry = [defaultModel, 'gemini-3.7-flash'];
 
   var promptText =
     'You are an expert English pronunciation evaluator for language learners.\n' +
@@ -91,7 +111,6 @@ function transcribePost(e) {
       },
     ],
     generationConfig: {
-      temperature: 0.1,
       maxOutputTokens: 150,
       responseMimeType: 'application/json',
       thinkingConfig: {
@@ -108,6 +127,7 @@ function transcribePost(e) {
   };
 
   var lastError = '';
+  var geminiMs = 0;
 
   for (var m = 0; m < modelsToTry.length; m++) {
     var modelName = modelsToTry[m];
@@ -117,7 +137,9 @@ function transcribePost(e) {
         encodeURIComponent(modelName) +
         ':generateContent?key=' +
         encodeURIComponent(apiKey);
+      var g0 = Date.now();
       var response = UrlFetchApp.fetch(url, options);
+      geminiMs = Date.now() - g0;
       var responseCode = response.getResponseCode();
       var responseText = response.getContentText();
 
@@ -189,6 +211,8 @@ function transcribePost(e) {
           feedback = 'Произнесите только одно слово: ' + expectedWord;
         }
 
+        var totalServerMs = Date.now() - t0;
+
         return successResponse({
           isCorrect: isCorrect,
           transcribed: heard || (heardTokens[0] || ''),
@@ -196,6 +220,11 @@ function transcribePost(e) {
           feedback: feedback,
           category: category,
           modelUsed: modelName,
+          timings: {
+            parseMs: parseMs,
+            geminiMs: geminiMs,
+            totalServerMs: totalServerMs,
+          },
         });
       } else {
         lastError = 'Model ' + modelName + ' error (' + responseCode + '): ' + responseText;

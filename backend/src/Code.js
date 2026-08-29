@@ -21,15 +21,14 @@ function doGet(e) {
  * @returns {GoogleAppsScript.Content.TextOutput}
  */
 function doPost(e) {
-  console.log('========== doPost ==========');
-
   try {
-    console.log(JSON.stringify(e));
-  } catch (error) {
-    console.log('Cannot stringify event object.');
-  }
+    const route =
+      e?.parameter?.route ||
+      e?.parameter?.action ||
+      'unknown';
 
-  try {
+    console.log('doPost route=' + route);
+
     return routePost(e);
   } catch (error) {
     console.error(error);

@@ -15,6 +15,7 @@ import {
   getUserFavorites,
   getUserProgress,
   transcribeAudio,
+  transcribePingAudio,
 } from '../../services/api.js?v=185.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=130.0';
 
@@ -588,8 +589,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
       }
 
+      const isMobileDevice = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent || '',
+      );
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const preferNativeSpeech = Boolean(SpeechRecognition);
+      const preferNativeSpeech = !isMobileDevice && Boolean(SpeechRecognition);
 
       let mediaStream = null;
       let audioContext = null;
@@ -1077,10 +1081,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             <div class="speech-diag-live-box" id="diag-transcript-box" style="display: none;"></div>
 
             <div style="display: flex; gap: 8px; margin-top: 4px;">
-              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 42px; font-size: 14px;">
-                🎙️ Начать тест
+              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 42px; font-size: 13px; padding: 6px 10px;">
+                🎙️ Тест с AI
               </button>
-              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 1; min-height: 42px; font-size: 14px; background: rgba(0,0,0,0.08); color: var(--text-main);">
+              <button type="button" class="primary-button" id="diag-ping-btn" style="flex: 1; min-height: 42px; font-size: 13px; padding: 6px 10px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                ⚡ Ping (без AI)
+              </button>
+              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 0 0 70px; min-height: 42px; font-size: 13px; background: rgba(0,0,0,0.08); color: var(--text-main);">
                 Закрыть
               </button>
             </div>
@@ -1099,6 +1106,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const volBar = modalEl.querySelector('#diag-volume-bar');
         const transcriptBox = modalEl.querySelector('#diag-transcript-box');
         const startBtn = modalEl.querySelector('#diag-start-test-btn');
+        const pingBtn = modalEl.querySelector('#diag-ping-btn');
         const closeBtn = modalEl.querySelector('#diag-close-btn');
 
         async function initMicSensor() {
@@ -1155,14 +1163,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (volBar) volBar.style.width = '0%';
         }
 
-        startBtn.addEventListener('click', async () => {
+        async function runDiagRecording(isPingOnly = false) {
           stopDiagSensorStreams();
 
           transcriptBox.style.display = 'block';
           transcriptBox.innerHTML =
             '<span style="color: #d97706; font-weight: 700;">🟡 Запись... Скажите слово в телефон!</span>';
           startBtn.disabled = true;
-          startBtn.textContent = '🔴 Запись (2.5 сек)...';
+          pingBtn.disabled = true;
+          startBtn.textContent = '🔴 Запись...';
 
           try {
             const diagConstraints = {
@@ -1200,28 +1209,47 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             diagRecorder.onstop = async () => {
               testStream.getTracks().forEach((t) => t.stop());
-              transcriptBox.innerHTML = '⏳ Проверяю через AI Gemini...';
+              transcriptBox.innerHTML = isPingOnly ? '⏳ Проверяю связь с сервером (Ping)...' : '⏳ Проверяю через AI Gemini...';
 
               const mime = diagRecorder.mimeType || supportedMimeType || 'audio/webm';
               const blob = new Blob(diagChunks, { type: mime });
 
               try {
-                const res = await transcribeAudio(blob, mime, 'hello');
-                const heardWord = (res && (res.transcribed || res.heard || res.text)) || '';
-                if (heardWord) {
-                  const scoreHtml = res.score !== undefined ? ` (Точность: <strong>${res.score}%</strong>)` : '';
-                  const fbHtml = res.feedback ? `<br><span style="font-size: 13px; color: #16a34a; font-style: italic;">💡 ${res.feedback}</span>` : '';
-                  transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}`;
+                if (isPingOnly) {
+                  const pingRes = await transcribePingAudio(blob, mime, 'hello');
+                  transcriptBox.innerHTML = `
+                    <span style="color: #16a34a; font-weight: 700;">⚡ Ping успешен!</span><br>
+                    <span style="font-size: 13px; color: var(--text-main);">
+                      Размер аудио: <strong>${Math.round(blob.size / 1024 * 10) / 10} КБ</strong> (${blob.type})<br>
+                      Клиентский Roundtrip: <strong>${pingRes.totalClientMs} мс</strong><br>
+                      Серверный парсинг: <strong>${pingRes.serverParseMs} мс</strong>
+                    </span>
+                  `;
                 } else {
-                  transcriptBox.innerHTML =
-                    '<span style="color: var(--text-muted);">Голос не распознан. Попробуйте ещё раз.</span>';
+                  const res = await transcribeAudio(blob, mime, 'hello');
+                  const heardWord = (res && (res.transcribed || res.heard || res.text)) || '';
+                  if (heardWord) {
+                    const scoreHtml = res.score !== undefined ? ` (Точность: <strong>${res.score}%</strong>)` : '';
+                    const fbHtml = res.feedback ? `<br><span style="font-size: 13px; color: #16a34a; font-style: italic;">💡 ${res.feedback}</span>` : '';
+                    let timeInfo = '';
+                    if (res.timings) {
+                      const totalSec = Math.round((res.timings.totalClientMs || res.timings.totalServerMs || 0) / 100) / 10;
+                      const geminiSec = Math.round((res.timings.geminiMs || 0) / 100) / 10;
+                      timeInfo = `<br><span style="font-size: 12px; color: var(--text-muted);">⏱️ Время: ${totalSec}с (Gemini: ${geminiSec}с, модель: ${res.modelUsed || '3.6'})</span>`;
+                    }
+                    transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}${timeInfo}`;
+                  } else {
+                    transcriptBox.innerHTML =
+                      '<span style="color: var(--text-muted);">Голос не распознан. Попробуйте ещё раз.</span>';
+                  }
                 }
               } catch (transErr) {
-                transcriptBox.innerHTML = `<span style="color: var(--text-muted);">Ошибка: ${transErr.message}</span>`;
+                transcriptBox.innerHTML = `<span style="color: #ef4444; font-weight: 600;">Ошибка: ${transErr.message}</span>`;
               }
 
               startBtn.disabled = false;
-              startBtn.textContent = '🎙️ Повторить тест';
+              pingBtn.disabled = false;
+              startBtn.textContent = '🎙️ Тест с AI';
             };
 
             diagRecorder.start();
@@ -1230,13 +1258,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               if (diagRecorder && diagRecorder.state === 'recording') {
                 diagRecorder.stop();
               }
-            }, 2500);
+            }, 1800);
           } catch (err) {
-            transcriptBox.innerHTML = `<span style="color: var(--text-muted);">Ошибка микрофона: ${err.message}</span>`;
+            transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
-            startBtn.textContent = '🎙️ Начать тест';
+            pingBtn.disabled = false;
+            startBtn.textContent = '🎙️ Тест с AI';
           }
-        });
+        }
+
+        startBtn.addEventListener('click', () => runDiagRecording(false));
+        pingBtn.addEventListener('click', () => runDiagRecording(true));
 
         function cleanupDiag() {
           stopDiagSensorStreams();
