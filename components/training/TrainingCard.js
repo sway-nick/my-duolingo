@@ -1157,11 +1157,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           const expectedTarget = (word && word.word ? word.word : 'hello').trim();
 
           transcriptBox.style.display = 'block';
-          transcriptBox.innerHTML =
-            `<span style="color: #d97706; font-weight: 700;">🟡 Запись (2 сек)... Чётко скажите: «${expectedTarget}»!</span>`;
+          transcriptBox.innerHTML = isPingOnly
+            ? `<span style="color: #0284c7; font-weight: 700;">🟡 Запись (2 сек)... Проверяю скорость связи без AI</span>`
+            : `<span style="color: #d97706; font-weight: 700;">🟡 Запись (2 сек)... Чётко скажите: «${expectedTarget}»!</span>`;
+
           startBtn.disabled = true;
           pingBtn.disabled = true;
-          startBtn.textContent = '🔴 Слушаю...';
+          if (isPingOnly) {
+            pingBtn.textContent = '🔴 Ping...';
+          } else {
+            startBtn.textContent = '🔴 Слушаю...';
+          }
 
           try {
             let testStream;
@@ -1228,6 +1234,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               startBtn.disabled = false;
               pingBtn.disabled = false;
               startBtn.textContent = '🎙️ Тест с AI';
+              pingBtn.textContent = '⚡ Ping (без AI)';
             };
 
             diagRecorder.start();
@@ -1242,6 +1249,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             startBtn.disabled = false;
             pingBtn.disabled = false;
             startBtn.textContent = '🎙️ Тест с AI';
+            pingBtn.textContent = '⚡ Ping (без AI)';
           }
         }
 
