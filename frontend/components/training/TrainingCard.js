@@ -986,7 +986,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }
           };
 
-          mediaRecorder.start();
+          mediaRecorder.start(250);
 
           if (micBtn) {
             micBtn.classList.remove('processing', 'success');
@@ -995,10 +995,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
           if (holdHint)
             holdHint.innerHTML =
-              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Скажите: «' + (currentWord.word || '') + '»</span>';
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
-          const timeoutMs = wordLength <= 4 ? 1400 : wordLength <= 7 ? 1750 : 2100;
+          const timeoutMs = wordLength <= 4 ? 2600 : wordLength <= 7 ? 3000 : 3400;
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
@@ -1237,13 +1237,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               pingBtn.textContent = '⚡ Ping (без AI)';
             };
 
-            diagRecorder.start();
+            diagRecorder.start(250);
 
             setTimeout(() => {
               if (diagRecorder && diagRecorder.state === 'recording') {
                 diagRecorder.stop();
               }
-            }, 2200);
+            }, 2800);
           } catch (err) {
             transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
