@@ -15,7 +15,7 @@ import {
   getUserFavorites,
   getUserProgress,
   transcribeAudio,
-} from '../../services/api.js?v=21.0';
+} from '../../services/api.js?v=185.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=130.0';
 
 function sanitizeCategory(cat) {
