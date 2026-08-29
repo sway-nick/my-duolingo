@@ -68,8 +68,13 @@ function transcribePost(e) {
     return errorResponse('Gemini API key is not configured.', 500);
   }
 
-  // Список активных моделей Gemini API
-  var modelsToTry = ['gemini-2.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.5-flash'];
+  // Список моделей: сначала специализированный STT, затем ультрабыстрый flash-lite и flash
+  var modelsToTry = [
+    'gemini-3.5-transcribe',
+    'gemini-3.5-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-2.5-flash',
+  ];
 
   var promptText =
     'Transcribe only the spoken English words in this audio. Output plain text in lowercase without punctuation, quotes, or markdown.';
