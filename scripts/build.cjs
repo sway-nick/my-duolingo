@@ -18,6 +18,12 @@ function copyRecursiveSync(src, dest) {
 function build() {
   console.log('📦 Building English Trainer PWA from frontend/ source...');
 
+  // 0. Automatically generate playlist.json for all videos in frontend/assets/video
+  const videoDir = path.join(__dirname, '../frontend/assets/video');
+  if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
+  const videoFiles = fs.readdirSync(videoDir).filter(f => /\.(mp4|webm|mov)$/i.test(f)).sort();
+  fs.writeFileSync(path.join(videoDir, 'playlist.json'), JSON.stringify(videoFiles.length > 0 ? videoFiles : ['cat.mp4'], null, 2));
+
   // 1. Sync frontend/ -> docs/
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });
   copyRecursiveSync('./frontend', './docs');

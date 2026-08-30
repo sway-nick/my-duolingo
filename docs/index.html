@@ -572,9 +572,9 @@
             wotdHtml = `
               <div class="wotd-bonus-section" style="margin-top: 26px;">
                 <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 0 auto; max-width: 340px; width: 100%;">
-                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку" style="min-height: 180px;">
+                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку" style="min-height: 220px;">
                      <!-- Front Face: English word -->
-                     <div class="flashcard-face flashcard-front" style="min-height: 180px; padding: 12px 14px;">
+                     <div class="flashcard-face flashcard-front" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        <div class="flashcard-face-top">
                          <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔊</button>
@@ -591,131 +591,114 @@
                        </div>
                      </div>
 
-                     <!-- Back Face: Russian translation -->
-                     <div class="flashcard-face flashcard-back" style="min-height: 180px; padding: 12px 14px;">
+                     <!-- Back Face: Russian translation & Embedded Video -->
+                     <div class="flashcard-face flashcard-back" style="min-height: 220px; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
-                       <div class="flashcard-face-top">
+                       <div class="flashcard-face-top" style="z-index: 2; margin-bottom: 4px;">
                          <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔊</button>
                          <span class="wotd-card-badge">${t('word_of_day')}</span>
                          <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
                            ${isWotdFav ? '❤️' : '🤍'}
                          </button>
                        </div>
-                      <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1;">
-                        <h2 class="flashcard-translation" style="font-size: 24px; font-weight: 500; margin: 14px 0 0 0; text-align: center;">${wotd.translation}</h2>
-                      </div>
-                    </div>
+                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; z-index: 2;">
+                         <div id="wotd-video-container" style="display: none; width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border: 1.5px solid rgba(255,255,255,0.25);">
+                           <video id="wotd-card-video" playsinline style="width: 100%; max-height: 130px; object-fit: cover; display: block; border-radius: 10px; background: #000;"></video>
+                         </div>
+                         <h2 class="flashcard-translation" style="font-size: 22px; font-weight: 600; margin: 4px 0 0 0; text-align: center;">${wotd.translation}</h2>
+                       </div>
+                     </div>
                   </div>
                 </div>
               </div>
             `;
           }
 
-        function playWotdCelebrationVideo(onFinish) {
-          const existing = document.querySelector('#wotd-video-modal');
-          if (existing) existing.remove();
-
-          const modal = document.createElement('div');
-          modal.id = 'wotd-video-modal';
-          modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; backdrop-filter: blur(8px);';
-
-          modal.innerHTML = `
-            <div style="position: relative; max-width: 340px; width: 100%; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.65); border: 2px solid var(--accent-gold, #f59e0b); background: #000;">
-              <button type="button" id="close-wotd-video-btn" style="position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">✕</button>
-              <video id="wotd-cat-video" src="assets/video/cat.mp4" playsinline style="width: 100%; display: block; border-radius: 18px;"></video>
+          content.innerHTML = `
+            <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
+              <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
+              <h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
+              ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
+              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
+                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
+                  ${nextBtnLabel}
+                </button>
+                ${
+                  (currentMethod === 'input' || currentMethod === 'quiz')
+                    ? `
+                  <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
+                  </button>
+                `
+                    : ''
+                }
+              </div>
+              ${wotdHtml}
             </div>
           `;
 
-          document.body.appendChild(modal);
+          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+            const flashcard = content.querySelector('#wotd-flashcard-3d');
+            if (flashcard) {
+              let isFlipped = false;
+              let videoStarted = false;
+              let playlist = ['cat.mp4'];
 
-          const video = modal.querySelector('#wotd-cat-video');
-          const closeBtn = modal.querySelector('#close-wotd-video-btn');
+              // Fetch dynamic playlist if available
+              fetch('assets/video/playlist.json?v=' + Date.now())
+                .then((r) => r.json())
+                .then((list) => {
+                  if (Array.isArray(list) && list.length > 0) playlist = list;
+                })
+                .catch(() => {});
 
-          let finished = false;
-          const finish = () => {
-            if (finished) return;
-            finished = true;
-            if (modal.parentNode) modal.remove();
-            if (typeof onFinish === 'function') onFinish();
-          };
+              flashcard.addEventListener('click', (e) => {
+                if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
+                  return;
+                }
 
-          closeBtn.addEventListener('click', finish);
-          modal.addEventListener('click', (e) => {
-            if (e.target === modal) finish();
-          });
+                isFlipped = !isFlipped;
+                flashcard.classList.toggle('is-flipped', isFlipped);
+                flashcard.classList.remove('gleam-active');
+                void flashcard.offsetWidth;
+                flashcard.classList.add('gleam-active');
 
-          video.addEventListener('ended', finish);
+                const cardVideo = flashcard.querySelector('#wotd-card-video');
+                const videoContainer = flashcard.querySelector('#wotd-video-container');
 
-          video.muted = false;
-          video.volume = 1.0;
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(() => {
-              video.muted = true;
-              video.play().catch(() => {});
-            });
-          }
-        }
+                if (isFlipped) {
+                  const hasPlayed = sessionStorage.getItem('myduo_wotd_video_played');
+                  if (!hasPlayed && !videoStarted && cardVideo && videoContainer) {
+                    videoStarted = true;
+                    sessionStorage.setItem('myduo_wotd_video_played', '1');
 
-        content.innerHTML = `
-          <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
-            <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
-            <h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
-            ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-            <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
-              <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
-                ${nextBtnLabel}
-              </button>
-              ${
-                (currentMethod === 'input' || currentMethod === 'quiz')
-                  ? `
-                <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                  ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
-                </button>
-              `
-                  : ''
-              }
-            </div>
-            ${wotdHtml}
-          </div>
-        `;
+                    let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
+                    if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
+                    const selectedVideo = playlist[currentIdx % playlist.length];
 
-        if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
-          const flashcard = content.querySelector('#wotd-flashcard-3d');
-          if (flashcard) {
-            let isFlipped = false;
-            flashcard.addEventListener('click', (e) => {
-              if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
-                return;
-              }
+                    // Advance index for next time so videos play in sequence
+                    localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % playlist.length));
 
-              const hasPlayed = sessionStorage.getItem('myduo_wotd_video_played');
-              if (!hasPlayed) {
-                sessionStorage.setItem('myduo_wotd_video_played', '1');
-                playWotdCelebrationVideo(() => {
-                  isFlipped = !isFlipped;
-                  flashcard.classList.toggle('is-flipped', isFlipped);
-                  flashcard.classList.remove('gleam-active');
-                  void flashcard.offsetWidth;
-                  flashcard.classList.add('gleam-active');
-                  if (!isFlipped) {
-                    speakWord(wotd.word);
+                    videoContainer.style.display = 'block';
+                    cardVideo.src = 'assets/video/' + selectedVideo;
+                    cardVideo.muted = false;
+                    cardVideo.volume = 1.0;
+
+                    const p = cardVideo.play();
+                    if (p !== undefined) {
+                      p.catch(() => {
+                        cardVideo.muted = true;
+                        cardVideo.play().catch(() => {});
+                      });
+                    }
                   }
-                });
-                return;
-              }
-
-              isFlipped = !isFlipped;
-              flashcard.classList.toggle('is-flipped', isFlipped);
-              
-              flashcard.classList.remove('gleam-active');
-              void flashcard.offsetWidth;
-              flashcard.classList.add('gleam-active');
-
-              if (!isFlipped) {
-                speakWord(wotd.word);
-              }
-            });
+                } else {
+                  if (cardVideo && !cardVideo.paused) {
+                    cardVideo.pause();
+                  }
+                  speakWord(wotd.word);
+                }
+              });
 
               const speakButtons = content.querySelectorAll('#wotd-sound-front, #wotd-sound-back');
               speakButtons.forEach((btn) => {
