@@ -2,7 +2,7 @@ const translations = {
   ru: {
     // Nav / Drawer
     training: "Тренировка",
-    leaderboard: "Рейтинг недели",
+    leaderboard: "Рейтинг",
     dictionary: "Словарь",
     favorites: "Избранное",
     stats: "Статистика",
@@ -64,7 +64,7 @@ const translations = {
     train_review_again: "🔄 Повторить заново",
     train_exit_favs: "Вернуться в общую программу",
     train_no_words_test: "Нет слов для Теста",
-    train_no_words_test_sub: "Сюда попадают слова, прошедшие режим «Пары».",
+    train_no_words_test_sub: "Сюди попадают слова, прошедшие режим «Пары».",
     train_no_words_quiz: "Нет слов для Квиза",
     train_no_words_quiz_sub: "Сюда попадают слова из Карточек по кнопке «Учить».",
     train_no_words_pairs: "Нет слов для режима «Пары»",
@@ -90,7 +90,7 @@ const translations = {
   uk: {
     // Nav / Drawer
     training: "Тренування",
-    leaderboard: "Рейтинг тижня",
+    leaderboard: "Рейтинг",
     dictionary: "Словник",
     favorites: "Обране",
     stats: "Статистика",
@@ -178,7 +178,7 @@ const translations = {
   en: {
     // Nav / Drawer
     training: "Training",
-    leaderboard: "Weekly Leaderboard",
+    leaderboard: "Leaderboard",
     dictionary: "Dictionary",
     favorites: "Favorites",
     stats: "Stats",
