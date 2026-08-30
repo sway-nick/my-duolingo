@@ -329,18 +329,16 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const addWordBtnText = lang === 'ru' ? '➕ Добавить слово' : lang === 'uk' ? '➕ Додати слово' : '➕ Add word';
 
   container.innerHTML = `
-    <div class="dictionary-page">
-      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div>
-          <h2 id="dict-header-title" style="margin: 0;">${t('dict_title')} (<span id="dict-word-count">${formatWordCount(words.length)}</span>)</h2>
-        </div>
-        <button type="button" class="primary-button btn-green" id="dict-open-add-btn" style="min-height: 38px; font-size: 13px; padding: 6px 14px; white-space: nowrap; border-radius: 8px;">
+    <div class="dictionary-page" style="width: 100%; max-width: 100%; box-sizing: border-box; overflow-x: hidden;">
+      <div class="page-header" style="margin-bottom: 14px;">
+        <h2 id="dict-header-title" style="margin: 0 0 10px; font-size: 21px;">${t('dict_title')} (<span id="dict-word-count">${formatWordCount(words.length)}</span>)</h2>
+        <button type="button" class="primary-button btn-green" id="dict-open-add-btn" style="width: 100%; min-height: 42px; font-size: 14px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;">
           ${addWordBtnText}
         </button>
       </div>
 
       <!-- Controls: Sticky Search & Category Filter -->
-      <div class="dictionary-controls">
+      <div class="dictionary-controls" style="width: 100%; box-sizing: border-box;">
         <input type="text" id="dict-search" class="search-input" placeholder="🔍 ${t('dict_search')}" autocomplete="off" />
         
         <div class="custom-dropdown dict-dropdown" id="dict-cat-dropdown">
