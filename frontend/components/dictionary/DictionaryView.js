@@ -97,6 +97,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   const notesLabel = lang === 'ru' ? 'Заметка / Пример (необязательно)' : lang === 'uk' ? 'Примітка / Приклад (необовʼязково)' : 'Notes / Example (optional)';
   const saveBtnText = lang === 'ru' ? 'Сохранить' : lang === 'uk' ? 'Зберегти' : 'Save';
   const cancelBtnText = lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel';
+  const updateNoteText = lang === 'ru' ? 'Обновить заметку' : lang === 'uk' ? 'Оновити примітку' : 'Update note';
 
   modalEl.innerHTML = `
     <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
@@ -147,10 +148,10 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button type="button" id="add-word-cancel-btn" class="primary-button" style="flex: 1; min-height: 42px; background: rgba(255,255,255,0.08); color: var(--text-main); border-radius: 8px;">
+          <button type="button" id="add-word-cancel-btn" class="primary-button" style="flex: 1; min-height: 42px; background: rgba(255,255,255,0.08); color: var(--text-main); border-radius: 8px; font-size: 14px; font-weight: 600; padding: 6px 8px; box-sizing: border-box;">
             ${cancelBtnText}
           </button>
-          <button type="submit" id="add-word-submit-btn" class="primary-button btn-green" style="flex: 1; min-height: 42px; border-radius: 8px; font-weight: 700;">
+          <button type="submit" id="add-word-submit-btn" class="primary-button btn-green" style="flex: 1; min-height: 42px; border-radius: 8px; font-weight: 700; font-size: 13.5px; padding: 6px 6px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2;">
             ${saveBtnText}
           </button>
         </div>
@@ -246,7 +247,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       catSelect.value = existing.category || (existingCats[0] || 'Elementary');
       catSelect.disabled = true;
       if (suggestionsBox) suggestionsBox.style.display = 'none';
-      submitBtn.textContent = '💾 Обновить заметку';
+      submitBtn.textContent = updateNoteText;
     } else {
       noticeBox.style.display = 'none';
       transInput.disabled = false;
