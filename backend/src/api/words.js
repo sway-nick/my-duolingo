@@ -201,24 +201,36 @@ function wordsAddPost(e) {
   }
 
   try {
-    const prompt = `You are a strict English vocabulary moderator and dictionary editor.
-Review the English word "${rawWord}" and translation "${rawTranslation}".
-Rules:
-1. Block any vulgarity, swearing, profanity, hate speech, adult content, insults, or gibberish. (If found -> "valid": false, "rejectReason": "Ненормативная лексика запрещена.").
-2. Check if "${rawTranslation}" is actually a valid and accurate translation of "${rawWord}". If the translation is completely incorrect or mismatched (e.g. word "dog" translated as "кошка", or "fuck" translated as "козырь"), set "valid": false and "rejectReason": "Перевод не соответствует английскому слову.".
-3. Reject purely proper nouns, celebrity names, brand names (e.g. 'Donald Trump' -> "valid": false, "rejectReason": "Имена собственные не добавляются в словарь.").
-4. All words and translations MUST be strictly lowercase.
-5. If valid, fix minor spelling typos in translation, provide IPA transcription in slashes like /.../, CEFR level (A1, A2, B1, B2, C1), and estimated Zipf frequency (1.0 to 7.0).
-Respond with ONLY raw JSON without markdown:
+    const prompt = `You are an expert bilingual lexicographer and dictionary editor.
+Validate if the English word "${rawWord}" with user's translation "${rawTranslation}" can be added to an educational vocabulary.
+
+Step 1. Profanity & Hate Speech Check:
+Is "${rawWord}" or "${rawTranslation}" vulgar, offensive, swear word, slurs, or NSFW?
+-> If YES, respond: {"valid": false, "rejectReason": "Ненормативная лексика запрещена."}
+
+Step 2. Proper Noun Check:
+Is "${rawWord}" purely a proper noun (e.g. personal name, city, brand) with no common vocabulary meaning?
+-> If YES, respond: {"valid": false, "rejectReason": "Имена собственные и названия не добавляются в словарь."}
+
+Step 3. Translation Accuracy Check:
+What are the actual definitions/translations of the English word "${rawWord}" in Russian/Ukrainian?
+Does the user's translation "${rawTranslation}" accurately translate "${rawWord}"?
+CRITICAL: If "${rawTranslation}" is completely wrong or unrelated (for example: word "trump" translated as "собака", or "cat" translated as "автомобиль"):
+-> You MUST respond: {"valid": false, "rejectReason": "Перевод «${rawTranslation}» неверен для слова «${rawWord}». Правильные варианты: козырь, козырная карта, козырять."}
+
+Step 4. If and only if the translation is legitimate:
+Output:
 {
   "valid": true,
-  "cleanWord": "word",
-  "cleanTranslation": "translation",
-  "transcription": "/.../",
-  "level": "A2",
-  "zipf": 4.5,
+  "cleanWord": "<lowercase english word>",
+  "cleanTranslation": "<corrected lowercase translation>",
+  "transcription": "/<ipa>/",
+  "level": "<A1|A2|B1|B2|C1>",
+  "zipf": <float between 1.0 and 7.0>,
   "rejectReason": ""
-}`;
+}
+
+Respond with ONLY raw JSON without markdown formatting:`;
 
     const payload = {
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
