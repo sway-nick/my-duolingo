@@ -555,7 +555,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <div class="speech-hold-hint" id="speech-hold-hint">
             ${getInterfaceLanguage() === 'ru' ? 'Нажмите на микрофон и скажите слово' : getInterfaceLanguage() === 'uk' ? 'Натисніть на мікрофон і скажіть слово' : 'Tap the microphone and say the word'}
           </div>
-          <div class="speech-transcript-box" id="speech-transcript-box" style="margin-top: 10px;"></div>
+          <div class="speech-transcript-box" id="speech-transcript-box" style="display: none; margin-top: 10px;"></div>
+          <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="margin-top: 12px; width: 100%; max-width: 220px; min-height: 42px; font-size: 14px; padding: 8px 18px; border-radius: 12px; font-weight: 700; cursor: pointer;">
+            ${getInterfaceLanguage() === 'ru' ? 'Ответить в Квизе' : getInterfaceLanguage() === 'uk' ? 'Відповісти у Квізі' : 'Answer in Quiz'}
+          </button>
           <button type="button" class="primary-button btn-green" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
             ${getInterfaceLanguage() === 'ru' ? 'Дальше' : getInterfaceLanguage() === 'uk' ? 'Далі' : 'Next'}
           </button>
@@ -568,26 +571,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const micBtn = practiceArea.querySelector('#speech-mic-btn');
       const holdHint = practiceArea.querySelector('#speech-hold-hint');
       const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
+      const fallbackBtn = practiceArea.querySelector('#mic-fallback-quiz-btn');
       const continueBtn = practiceArea.querySelector('#speech-continue-btn');
       const diagBtn = practiceArea.querySelector('#speech-diag-trigger-btn');
 
+      if (fallbackBtn) {
+        fallbackBtn.addEventListener('click', () => renderConsonantsQuiz());
+      }
+
       function showFallbackButton(errorText = null) {
-        if (!transcriptBox) return;
-        transcriptBox.style.display = 'block';
-        let html = '';
-        if (errorText) {
-          html += `<div style="margin-bottom: 8px; color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${errorText}</div>`;
+        if (errorText && transcriptBox) {
+          transcriptBox.style.display = 'block';
+          transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${errorText}</span>`;
         }
-        html += `
-          <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
-            ${getInterfaceLanguage() === 'ru' ? 'Ответить в Квизе' : getInterfaceLanguage() === 'uk' ? 'Відповісти у Квізі' : 'Answer in Quiz'}
-          </button>
-        `;
-        transcriptBox.innerHTML = html;
-        const fbBtn = transcriptBox.querySelector('#mic-fallback-quiz-btn');
-        if (fbBtn) {
-          fbBtn.addEventListener('click', () => renderConsonantsQuiz());
-        }
+        if (fallbackBtn) fallbackBtn.style.display = 'block';
       }
 
       showFallbackButton();
@@ -723,6 +720,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
           }
+          if (fallbackBtn) fallbackBtn.style.display = 'none';
           if (transcriptBox) {
             transcriptBox.style.display = 'block';
             transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ Попытки исчерпаны. Нажмите "Продолжить" для перехода к следующему слову.</span>`;
@@ -1364,6 +1362,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
           }
+          if (fallbackBtn) fallbackBtn.style.display = 'none';
         } else {
           // РЕАЛЬНАЯ ошибка произношения – списываем попытку
           speechAttempts++;
@@ -1401,6 +1400,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               continueBtn.style.display = 'block';
               continueBtn.onclick = () => onNext();
             }
+            if (fallbackBtn) fallbackBtn.style.display = 'none';
           }
         }
       }
