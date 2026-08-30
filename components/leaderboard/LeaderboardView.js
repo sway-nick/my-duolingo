@@ -308,6 +308,8 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     </div>
   `;
 
+  const contentEl = container.querySelector('#leaderboard-content');
+
   // Clean up previous event listeners to prevent duplicate execution
   if (container._xpHandler) window.removeEventListener('myduo:xp_changed', container._xpHandler);
   if (container._leaderboardHandler) window.removeEventListener('myduo:leaderboard_updated', container._leaderboardHandler);

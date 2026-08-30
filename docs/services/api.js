@@ -554,6 +554,16 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       if (raw) rawList = JSON.parse(raw);
     } catch (e) {}
 
+    const realPlayers = rawList.filter((u) => !String(u.userId).startsWith('bot_'));
+    const dynamicBots = generateDynamicBots(wKey).map((bot) => ({
+      userId: bot.userId,
+      name: bot.name,
+      avatar: bot.avatar,
+      xp: Math.floor(bot.xp * 3.5),
+      isBot: true,
+    }));
+    const combined = [...realPlayers, ...dynamicBots];
+
     let totalLocalXP = 0;
     try {
       for (let i = 0; i < localStorage.length; i++) {
@@ -564,14 +574,14 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       }
     } catch (e) {}
 
-    const myIdx = rawList.findIndex((u) => String(u.userId) === String(currentUserId));
+    const myIdx = combined.findIndex((u) => String(u.userId) === String(currentUserId));
     if (myIdx >= 0) {
-      rawList[myIdx].xp = Math.max(Number(rawList[myIdx].xp || 0), totalLocalXP);
-      rawList[myIdx].name = userName;
-      if (userAvatar) rawList[myIdx].avatar = userAvatar;
-      rawList[myIdx].isCurrentUser = true;
+      combined[myIdx].xp = Math.max(Number(combined[myIdx].xp || 0), totalLocalXP);
+      combined[myIdx].name = userName;
+      if (userAvatar) combined[myIdx].avatar = userAvatar;
+      combined[myIdx].isCurrentUser = true;
     } else {
-      rawList.push({
+      combined.push({
         userId: currentUserId,
         name: userName,
         avatar: userAvatar,
@@ -580,8 +590,8 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       });
     }
 
-    rawList.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
-    return { success: true, data: rawList, period: 'all' };
+    combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+    return { success: true, data: combined, period: 'all' };
   }
 
   const userXP = getUserWeeklyXP(currentUserId, wKey);
