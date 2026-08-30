@@ -1,4 +1,4 @@
-const PROGRESS_HEADERS = ['userId', 'wordId', 'status', 'correctCount', 'errorCount', 'lastReviewed'];
+const PROGRESS_HEADERS = ['userId', 'wordId', 'status', 'correctCount', 'errorCount', 'lastReviewed', 'quizCorrect', 'pairsCorrect', 'inputCorrect', 'seenInCards', 'masteredAt'];
 const FAVORITE_HEADERS = ['userId', 'wordId', 'createdAt'];
 
 function progressPost(e) {
@@ -19,25 +19,45 @@ function progressPost(e) {
 
   const existingIndex = progressList.findIndex((p) => String(p.userId).trim() === userId && String(p.wordId).trim() === wordId);
 
+  const quizCorrect = Number(body.quizCorrect !== undefined ? body.quizCorrect : 0);
+  const pairsCorrect = Number(body.pairsCorrect !== undefined ? body.pairsCorrect : 0);
+  const inputCorrect = Number(body.inputCorrect !== undefined ? body.inputCorrect : 0);
+  const seenInCards = Boolean(body.seenInCards);
+  const masteredAt = body.masteredAt || '';
+
   let updatedRecord;
   if (existingIndex >= 0) {
     const item = progressList[existingIndex];
     const correctCount = Number(item.correctCount || 0) + (isCorrect ? 1 : 0);
     const errorCount = Number(item.errorCount || 0) + (isCorrect ? 0 : 1);
-    const status = correctCount >= 3 ? 'mastered' : 'learning';
+    const isMastered = inputCorrect >= 2 || item.status === 'mastered';
+    const status = isMastered ? 'mastered' : 'learning';
     const lastReviewed = new Date().toISOString();
 
     const rowIndex = item._rowIndex;
-    sheet.getRange(rowIndex, 3, 1, 4).setValues([[status, correctCount, errorCount, lastReviewed]]);
+    sheet.getRange(rowIndex, 3, 1, 9).setValues([[
+      status, correctCount, errorCount, lastReviewed,
+      quizCorrect || Number(item.quizCorrect || 0),
+      pairsCorrect || Number(item.pairsCorrect || 0),
+      inputCorrect || Number(item.inputCorrect || 0),
+      seenInCards || Boolean(item.seenInCards),
+      masteredAt || (item.masteredAt ? new Date(item.masteredAt).toISOString() : '')
+    ]]);
     updatedRecord = { userId, wordId, status, correctCount, errorCount, lastReviewed };
   } else {
+    const isMastered = inputCorrect >= 2;
     updatedRecord = {
       userId,
       wordId,
-      status: isCorrect ? 'learning' : 'learning',
+      status: isMastered ? 'mastered' : 'learning',
       correctCount: isCorrect ? 1 : 0,
       errorCount: isCorrect ? 0 : 1,
       lastReviewed: new Date().toISOString(),
+      quizCorrect,
+      pairsCorrect,
+      inputCorrect,
+      seenInCards,
+      masteredAt: masteredAt ? new Date(masteredAt).toISOString() : '',
     };
     appendSheetRow('UserProgress', updatedRecord, PROGRESS_HEADERS);
   }
