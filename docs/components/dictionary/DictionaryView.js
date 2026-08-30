@@ -360,8 +360,21 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const favSet = new Set(favoriteIds.map(String));
   const userProgress = getUserProgress();
 
-  const savedDictCat = localStorage.getItem('myduo_dict_category') || 'Elementary';
-  const uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
+  const getCategoryOrderIndex = (catName) => {
+    const clean = String(catName || '').toLowerCase().trim();
+    if (clean.includes('elementary')) return 0;
+    if (clean.includes('irregular')) return 1;
+    if (clean.includes('pattern')) return 2;
+    if (clean.includes('intermediate')) return 3;
+    if (clean.includes('advanced')) return 4;
+    return 999;
+  };
+  const uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)))
+    .sort((a, b) => {
+      const diff = getCategoryOrderIndex(a) - getCategoryOrderIndex(b);
+      if (diff !== 0) return diff;
+      return a.localeCompare(b);
+    });
   const allCategories = ['All', ...uniqueCats];
 
   let currentCategory = savedDictCat;

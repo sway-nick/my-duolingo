@@ -1354,11 +1354,27 @@ async function getUserStats(customWords = null) {
     }
   });
 
-  const categoryBreakdown = Object.entries(categoryMap).map(([category, stats]) => ({
-    category,
-    total: stats.total,
-    learned: stats.learned,
-  }));
+  const getCategoryOrderIndex = (catName) => {
+    const clean = String(catName || '').toLowerCase().trim();
+    if (clean.includes('elementary')) return 0;
+    if (clean.includes('irregular')) return 1;
+    if (clean.includes('pattern')) return 2;
+    if (clean.includes('intermediate')) return 3;
+    if (clean.includes('advanced')) return 4;
+    return 999;
+  };
+
+  const categoryBreakdown = Object.entries(categoryMap)
+    .map(([category, stats]) => ({
+      category,
+      total: stats.total,
+      learned: stats.learned,
+    }))
+    .sort((a, b) => {
+      const diff = getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category);
+      if (diff !== 0) return diff;
+      return a.category.localeCompare(b.category);
+    });
 
   // Clean any old legacy stats cache to prevent cross-device deviation
   try {

@@ -206,7 +206,34 @@
             .trim() || String(cat).trim();
         }
 
-        const categories = Array.from(new Set(allWords.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
+        const CANONICAL_CATEGORY_ORDER = ['Elementary', 'Irregular verb', 'Pattern', 'Intermediate', 'Advanced'];
+
+        function getCategoryOrderIndex(catName) {
+          const clean = String(catName || '').toLowerCase().trim();
+          if (clean.includes('elementary')) return 0;
+          if (clean.includes('irregular')) return 1;
+          if (clean.includes('pattern')) return 2;
+          if (clean.includes('intermediate')) return 3;
+          if (clean.includes('advanced')) return 4;
+          return 999;
+        }
+
+        function getNextSequentialCategory(currentCat, availableCats) {
+          const currentIdx = getCategoryOrderIndex(currentCat);
+          if (currentIdx === 999) return null;
+          for (let i = currentIdx + 1; i < CANONICAL_CATEGORY_ORDER.length; i++) {
+            const found = availableCats.find((c) => getCategoryOrderIndex(c) === i);
+            if (found) return found;
+          }
+          return null;
+        }
+
+        const categories = Array.from(new Set(allWords.map((w) => sanitizeCategory(w.category)).filter(Boolean)))
+          .sort((a, b) => {
+            const diff = getCategoryOrderIndex(a) - getCategoryOrderIndex(b);
+            if (diff !== 0) return diff;
+            return a.localeCompare(b);
+          });
         const selectedCategory = localStorage.getItem('myduo_dict_category') || userSettings.category || 'Elementary';
 
         let categoryWords = allWords;
@@ -318,10 +345,25 @@
         // Check if all words in category/favorites are mastered (3x in Test)
         const unmasteredCount = categoryWords.filter((w) => !isWordMastered(userProgress[w.id])).length;
         if (unmasteredCount === 0 && categoryWords.length > 0) {
+          const nextCategory = isFavPracticeActive ? null : getNextSequentialCategory(selectedCategory, categories);
           const title = isFavPracticeActive ? t('train_mastered_all_favs') : t('train_mastered_title');
           const description = isFavPracticeActive
             ? (getInterfaceLanguage() === 'ru' ? `Вы успешно изучили все <strong>${favoritePracticeWords.length}</strong> избранных слов (2x в режиме Тест)!` : getInterfaceLanguage() === 'uk' ? `Ви успішно вивчили всі <strong>${favoritePracticeWords.length}</strong> обраних слів (2x у режимі Тест)!` : `You have successfully learned all <strong>${favoritePracticeWords.length}</strong> favorite words (2x in Test mode)!`)
             : (getInterfaceLanguage() === 'ru' ? `Все слова в категории <strong>«${selectedCategory === 'All' ? 'Все категории' : selectedCategory}»</strong> успешно выучены (2x в режиме Тест)!` : getInterfaceLanguage() === 'uk' ? `Всі слова в категорії <strong>«${selectedCategory === 'All' ? t('dict_filter_all') : selectedCategory}»</strong> успішно вивчені (2x у режимі Тест)!` : `All words in category <strong>"${selectedCategory === 'All' ? t('dict_filter_all') : selectedCategory}"</strong> have been successfully learned (2x in Test mode)!`);
+
+          let nextCatBtnHtml = '';
+          if (nextCategory) {
+            const nextBtnLabel = getInterfaceLanguage() === 'ru'
+              ? `Перейти к группе «${nextCategory}» 🚀`
+              : getInterfaceLanguage() === 'uk'
+                ? `Перейти до групи «${nextCategory}» 🚀`
+                : `Go to "${nextCategory}" group 🚀`;
+            nextCatBtnHtml = `
+              <button class="primary-button btn-green" id="next-category-btn" style="min-height: 46px; font-weight: 700;">
+                ${nextBtnLabel}
+              </button>
+            `;
+          }
 
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
@@ -331,7 +373,8 @@
                 ${description}
               </p>
               <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
-                <button class="primary-button btn-green" id="review-all-btn" style="min-height: 46px;">
+                ${nextCatBtnHtml}
+                <button class="${nextCategory ? 'secondary-button' : 'primary-button btn-green'}" id="review-all-btn" style="min-height: 46px;">
                   ${t('train_review_again')}
                 </button>
                 ${
@@ -346,6 +389,18 @@
               </div>
             </div>
           `;
+
+          const nextCatBtn = content.querySelector('#next-category-btn');
+          if (nextCatBtn && nextCategory) {
+            nextCatBtn.addEventListener('click', () => {
+              localStorage.setItem('myduo_dict_category', nextCategory);
+              userSettings.category = nextCategory;
+              userSettings.preferredMethod = 'cards';
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              renderTrainingTab();
+            });
+          }
 
           const exitFavsBtn = content.querySelector('#exit-favs-btn');
           if (exitFavsBtn) {
