@@ -31,4 +31,8 @@ build/
 # Nested repos (prevent accidental submodule)
 my-duolingo/
 
+# Backend source and generated scripts (private)
+backend/
+Code.gs
+backend/dist/
 backend/src/config/config.local.js
