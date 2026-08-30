@@ -446,6 +446,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const practiceArea = container.querySelector('#practice-area');
 
   if (currentMethod === 'quiz') {
+    function getQuizOptionStyle(text) {
+      const len = String(text || '').trim().length;
+      if (len > 50) return 'font-size: 11.5px; line-height: 1.18;';
+      if (len > 35) return 'font-size: 12.5px; line-height: 1.22;';
+      if (len > 22) return 'font-size: 14px; line-height: 1.25;';
+      if (len > 12) return 'font-size: 15.5px; line-height: 1.25;';
+      return 'font-size: 17px; line-height: 1.25; font-weight: 600;';
+    }
+
     function renderStandardQuiz() {
       const categoryFilteredWords =
         selectedCategory === 'All' || selectedCategory === 'Все категории'
@@ -460,7 +469,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
       const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
 
-      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>`).join('')}</div>`;
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
@@ -510,7 +519,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const shuffledOthers = shuffleArray(otherWords).slice(0, 5);
       const choices = shuffleArray([currentWord.word, ...shuffledOthers]);
 
-      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}">${choice}</button>`).join('')}</div>`;
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;

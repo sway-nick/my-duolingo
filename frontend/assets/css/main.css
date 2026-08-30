@@ -806,17 +806,17 @@ body {
 }
 
 .quiz-option {
-  padding: 8px 8px;
+  padding: 8px 6px;
   border: 1.5px solid #cbd5e1;
   border-radius: var(--radius-md);
   background: #f1f5f9;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 70px;
-  max-height: 92px;
-  height: 80px;
+  min-height: 84px;
+  height: 92px;
+  max-height: 115px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -825,17 +825,19 @@ body {
   box-sizing: border-box;
   overflow: hidden;
   color: var(--text-main);
+  word-break: break-word;
 }
 
 .quiz-option-inner {
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 100%;
   width: 100%;
-  line-height: 1.25;
+  line-height: 1.22;
+  word-break: break-word;
 }
 
 .quiz-option:hover:not(:disabled) {
