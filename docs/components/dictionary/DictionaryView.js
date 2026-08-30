@@ -377,6 +377,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     });
   const allCategories = ['All', ...uniqueCats];
 
+  const savedDictCat = localStorage.getItem('myduo_dict_category') || 'Elementary';
   let currentCategory = savedDictCat;
   if (currentCategory !== 'All' && !uniqueCats.includes(currentCategory)) {
     currentCategory = uniqueCats.includes('Elementary') ? 'Elementary' : 'All';
