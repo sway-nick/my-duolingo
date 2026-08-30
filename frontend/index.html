@@ -366,8 +366,11 @@
           }
 
           content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-              <div style="font-size: 56px; margin-bottom: 16px;">🎉</div>
+            <div class="empty-state-card" style="text-align: center; padding: 32px 18px;">
+              <div class="reward-video-wrapper" style="position: relative; max-width: 320px; margin: 0 auto 18px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 26px rgba(0,0,0,0.45); border: 2px solid var(--accent-gold, #f59e0b); background: #000;">
+                <video id="reward-cat-video-category" src="assets/video/cat.mp4" autoplay loop muted playsinline style="width: 100%; display: block; border-radius: 14px; cursor: pointer;"></video>
+                <button type="button" class="reward-audio-btn" id="reward-audio-btn-category" style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; backdrop-filter: blur(4px); z-index: 2;">🔇</button>
+              </div>
               <h2 style="margin: 0 0 10px;">${title}</h2>
               <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; line-height: 1.45;">
                 ${description}
@@ -389,6 +392,18 @@
               </div>
             </div>
           `;
+
+          const videoCategory = content.querySelector('#reward-cat-video-category');
+          const audioBtnCategory = content.querySelector('#reward-audio-btn-category');
+          if (videoCategory && audioBtnCategory) {
+            const toggleAudio = (e) => {
+              e.stopPropagation();
+              videoCategory.muted = !videoCategory.muted;
+              audioBtnCategory.textContent = videoCategory.muted ? '🔇' : '🔊';
+            };
+            audioBtnCategory.addEventListener('click', toggleAudio);
+            videoCategory.addEventListener('click', toggleAudio);
+          }
 
           const nextCatBtn = content.querySelector('#next-category-btn');
           if (nextCatBtn && nextCategory) {
@@ -611,9 +626,19 @@
             `;
           }
 
+          let videoHtml = '';
+          if (currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+            videoHtml = `
+              <div class="reward-video-wrapper" style="position: relative; max-width: 320px; margin: 0 auto 18px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 26px rgba(0,0,0,0.45); border: 2px solid var(--accent-gold, #f59e0b); background: #000;">
+                <video id="reward-cat-video-test" src="assets/video/cat.mp4" autoplay loop muted playsinline style="width: 100%; display: block; border-radius: 14px; cursor: pointer;"></video>
+                <button type="button" class="reward-audio-btn" id="reward-audio-btn-test" style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; backdrop-filter: blur(4px); z-index: 2;">🔇</button>
+              </div>
+            `;
+          }
+
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
-              <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
+              ${videoHtml ? videoHtml : `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>`}
               <h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
@@ -633,6 +658,18 @@
               ${wotdHtml}
             </div>
           `;
+
+          const videoTest = content.querySelector('#reward-cat-video-test');
+          const audioBtnTest = content.querySelector('#reward-audio-btn-test');
+          if (videoTest && audioBtnTest) {
+            const toggleAudio = (e) => {
+              e.stopPropagation();
+              videoTest.muted = !videoTest.muted;
+              audioBtnTest.textContent = videoTest.muted ? '🔇' : '🔊';
+            };
+            audioBtnTest.addEventListener('click', toggleAudio);
+            videoTest.addEventListener('click', toggleAudio);
+          }
 
           if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
             const flashcard = content.querySelector('#wotd-flashcard-3d');
