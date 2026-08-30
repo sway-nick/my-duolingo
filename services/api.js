@@ -65,8 +65,15 @@ function sanitizeTranscriptions(words) {
 }
 
 async function getWords(forceRefresh = false) {
+  const sortByZipf = (list) => {
+    if (Array.isArray(list)) {
+      list.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
+    }
+  };
+
   if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
     sanitizeTranscriptions(cachedWordsList);
+    sortByZipf(cachedWordsList);
     return { success: true, data: cachedWordsList };
   }
 
@@ -76,6 +83,7 @@ async function getWords(forceRefresh = false) {
       const localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
       if (Array.isArray(localCached) && localCached.length > 0) {
         sanitizeTranscriptions(localCached);
+        sortByZipf(localCached);
         cachedWordsList = localCached;
         // Asynchronously refresh in background without blocking UI
         fetch(`${API_URL}?route=words`)
@@ -83,6 +91,7 @@ async function getWords(forceRefresh = false) {
           .then((data) => {
             if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
               sanitizeTranscriptions(data.data);
+              sortByZipf(data.data);
               cachedWordsList = data.data;
               localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
               if (typeof window !== 'undefined') {
@@ -101,6 +110,7 @@ async function getWords(forceRefresh = false) {
     const data = await response.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
       sanitizeTranscriptions(data.data);
+      sortByZipf(data.data);
       cachedWordsList = data.data;
       try {
         localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
@@ -113,6 +123,7 @@ async function getWords(forceRefresh = false) {
 
   const fallbackList = cachedWordsList || MOCK_WORDS;
   sanitizeTranscriptions(fallbackList);
+  sortByZipf(fallbackList);
   return { success: true, data: fallbackList };
 }
 
@@ -1194,6 +1205,9 @@ function getQueueForCards(words, progress) {
     const p = progress[w.id] || progress[String(w.id)];
     return !p || (!p.seenInCards && !isWordMastered(p));
   });
+
+  // Приоритет изучения: сначала слова с наибольшей частотностью Zipf
+  base.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
 
   const candidateMastered = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];

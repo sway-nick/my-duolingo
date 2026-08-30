@@ -218,6 +218,7 @@
             categoryWords = filtered;
           }
         }
+        categoryWords.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
 
         const userProgress = getUserProgress();
         let currentMethod = userSettings.preferredMethod || 'cards';
