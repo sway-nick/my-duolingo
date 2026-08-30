@@ -87,6 +87,62 @@ function isProfanityText(text) {
   });
 }
 
+const GEMINI_TEXT_CASCADE = [
+  'gemini-2.5-flash-lite',
+  'gemini-1.5-flash',
+  'gemini-2.5-flash'
+];
+
+function callGeminiTextCascade(apiKey, prompt, maxTokens) {
+  let lastError = null;
+  let isRateLimited = false;
+
+  for (let i = 0; i < GEMINI_TEXT_CASCADE.length; i++) {
+    const model = GEMINI_TEXT_CASCADE[i];
+    try {
+      const payload = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: maxTokens || 250, temperature: 0.1 },
+      };
+
+      const url =
+        'https://generativelanguage.googleapis.com/v1beta/models/' +
+        encodeURIComponent(model) +
+        ':generateContent?key=' +
+        encodeURIComponent(apiKey);
+
+      const response = UrlFetchApp.fetch(url, {
+        method: 'POST',
+        contentType: 'application/json',
+        payload: JSON.stringify(payload),
+        muteHttpExceptions: true,
+      });
+
+      const code = response.getResponseCode();
+      if (code === 200) {
+        const resText = response.getContentText();
+        const jsonMatch = resText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          return { success: true, data: JSON.parse(jsonMatch[0]), modelUsed: model };
+        }
+      } else if (code === 429) {
+        isRateLimited = true;
+        console.warn('Gemini 429 rate limit on model ' + model + ', trying next fallback...');
+      } else {
+        lastError = response.getContentText();
+      }
+    } catch (err) {
+      lastError = err.message;
+      console.warn('Gemini call error on model ' + model + ':', err);
+    }
+  }
+
+  if (isRateLimited) {
+    return { success: false, error: '⏳ Превышен лимит запросов к AI. Подождите 20-30 секунд и попробуйте снова.' };
+  }
+  return { success: false, error: lastError || 'Сбой связи с сервером AI.' };
+}
+
 function wordsAddPost(e) {
   const body = getJsonBody(e);
   validateRequired(body, ['word']);
@@ -200,8 +256,7 @@ function wordsAddPost(e) {
     return errorResponse('API-ключ Gemini не настроен на сервере Apps Script.', 500);
   }
 
-  try {
-    const prompt = `You are an expert bilingual lexicographer and dictionary editor.
+  const prompt = `You are an expert bilingual lexicographer and dictionary editor.
 Validate if the English word "${rawWord}" with user's translation "${rawTranslation}" can be added to an educational vocabulary.
 
 Step 1. Profanity & Hate Speech Check:
@@ -232,44 +287,21 @@ Output:
 
 Respond with ONLY raw JSON without markdown formatting:`;
 
-    const payload = {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: 250, temperature: 0.1 },
-    };
-
-    const url =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' +
-      encodeURIComponent(apiKey);
-
-    const response = UrlFetchApp.fetch(url, {
-      method: 'POST',
-      contentType: 'application/json',
-      payload: JSON.stringify(payload),
-      muteHttpExceptions: true,
-    });
-
-    if (response.getResponseCode() === 200) {
-      const resText = response.getContentText();
-      const jsonMatch = resText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const aiData = JSON.parse(jsonMatch[0]);
-        if (aiData.valid === false) {
-          return errorResponse(aiData.rejectReason || 'Слово не прошло модерацию безопасности.', 400);
-        }
-        if (aiData.cleanWord) aiCleanWord = String(aiData.cleanWord).toLowerCase().trim();
-        if (aiData.cleanTranslation) aiCleanTranslation = String(aiData.cleanTranslation).toLowerCase().trim();
-        if (aiData.transcription) aiTranscription = aiData.transcription;
-        if (aiData.level) aiLevel = aiData.level;
-        if (aiData.zipf) aiZipf = parseFloat(aiData.zipf) || 4.2;
-      } else {
-        return errorResponse('Не удалось распознать ответ AI-модератора.', 500);
-      }
-    } else {
-      return errorResponse('Ошибка проверки AI: ' + response.getContentText(), 500);
-    }
-  } catch (err) {
-    return errorResponse('Сбой AI-модерации: ' + err.message, 500);
+  const aiResult = callGeminiTextCascade(apiKey, prompt, 250);
+  if (!aiResult.success) {
+    return errorResponse(aiResult.error || 'Сбой AI-модерации.', 500);
   }
+
+  const aiData = aiResult.data;
+  if (aiData.valid === false) {
+    return errorResponse(aiData.rejectReason || 'Слово не прошло модерацию безопасности.', 400);
+  }
+
+  if (aiData.cleanWord) aiCleanWord = String(aiData.cleanWord).toLowerCase().trim();
+  if (aiData.cleanTranslation) aiCleanTranslation = String(aiData.cleanTranslation).toLowerCase().trim();
+  if (aiData.transcription) aiTranscription = aiData.transcription;
+  if (aiData.level) aiLevel = aiData.level;
+  if (aiData.zipf) aiZipf = parseFloat(aiData.zipf) || 4.2;
 
   // Force clean lowercase
   aiCleanWord = aiCleanWord.toLowerCase().trim();
@@ -323,9 +355,8 @@ function suggestTranslationsPost(e) {
     return successResponse({ suggestions: [], category: 'Общие', transcription: '' });
   }
 
-  try {
-    const targetLang = lang === 'uk' ? 'Ukrainian' : 'Russian';
-    const prompt = `Translate the English word "${rawWord}" into ${targetLang}.
+  const targetLang = lang === 'uk' ? 'Ukrainian' : 'Russian';
+  const prompt = `Translate the English word "${rawWord}" into ${targetLang}.
 Return 2 to 4 of the most common, accurate, lowercase translations (e.g. for "trump" in Russian: ["козырь", "козырная карта", "козырять"]).
 Also provide a category (e.g. "Общие", "Еда", "Бизнес", "Спорт", etc.) and IPA transcription.
 Respond with ONLY raw JSON without markdown:
@@ -335,36 +366,14 @@ Respond with ONLY raw JSON without markdown:
   "transcription": "/.../"
 }`;
 
-    const payload = {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: 200, temperature: 0.1 },
-    };
-
-    const url =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' +
-      encodeURIComponent(apiKey);
-
-    const response = UrlFetchApp.fetch(url, {
-      method: 'POST',
-      contentType: 'application/json',
-      payload: JSON.stringify(payload),
-      muteHttpExceptions: true,
+  const aiResult = callGeminiTextCascade(apiKey, prompt, 200);
+  if (aiResult.success && aiResult.data) {
+    const data = aiResult.data;
+    return successResponse({
+      suggestions: Array.isArray(data.suggestions) ? data.suggestions.map((s) => String(s).toLowerCase().trim()) : [],
+      category: data.category || 'Общие',
+      transcription: data.transcription || '',
     });
-
-    if (response.getResponseCode() === 200) {
-      const resText = response.getContentText();
-      const jsonMatch = resText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const data = JSON.parse(jsonMatch[0]);
-        return successResponse({
-          suggestions: Array.isArray(data.suggestions) ? data.suggestions.map((s) => String(s).toLowerCase().trim()) : [],
-          category: data.category || 'Общие',
-          transcription: data.transcription || '',
-        });
-      }
-    }
-  } catch (err) {
-    console.warn('suggestTranslations error:', err);
   }
 
   return successResponse({ suggestions: [], category: 'Общие', transcription: '' });
