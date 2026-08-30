@@ -161,8 +161,8 @@ function wordsAddPost(e) {
   }
 
   // CASE 2: New word -> AI Moderation & Auto-Enrichment via Gemini
-  let aiCleanWord = rawWord;
-  let aiCleanTranslation = rawTranslation;
+  let aiCleanWord = rawWord.toLowerCase().trim();
+  let aiCleanTranslation = rawTranslation.toLowerCase().trim();
   let aiTranscription = '';
   let aiLevel = 'A2';
   let aiZipf = 4.2;
@@ -170,20 +170,21 @@ function wordsAddPost(e) {
   const apiKey = getGeminiApiKey();
   if (apiKey) {
     try {
-      const prompt = `You are an English vocabulary moderator.
-Check if the word "${rawWord}" and translation "${rawTranslation}" are valid for an English learning app.
+      const prompt = `You are an English vocabulary moderator and dictionary editor.
+Review the English word "${rawWord}" and translation "${rawTranslation}".
 Rules:
-1. Block any profanity, hate speech, vulgarity, insults, or gibberish.
-2. Fix minor typos in the English word and translation if needed.
-3. Provide IPA transcription in slashes like /.../, CEFR level (A1, A2, B1, B2, C1), and estimated Zipf frequency (1.0 to 7.0).
+1. All words and translations MUST be strictly lowercase (unless an acronym like 'dna').
+2. Reject purely proper nouns, person names, brand names, or celebrities with NO common noun/verb meaning (e.g. 'Donald Trump' or 'Nike' -> reject. But common words like 'trump' = 'козырь/козырять', 'apple' = 'яблоко' are valid common words).
+3. Fix any spelling mistakes and typos in the translation (e.g. 'кощырь' -> 'козырь', 'собака', 'бегать').
+4. Provide accurate IPA transcription in slashes like /.../, CEFR level (A1, A2, B1, B2, C1), and estimated Zipf frequency (1.0 to 7.0).
 Respond with ONLY raw JSON without markdown:
 {
   "valid": true,
-  "cleanWord": "word",
-  "cleanTranslation": "translation",
-  "transcription": "/.../",
-  "level": "A2",
-  "zipf": 4.5,
+  "cleanWord": "trump",
+  "cleanTranslation": "козырь",
+  "transcription": "/trʌmp/",
+  "level": "B1",
+  "zipf": 4.1,
   "rejectReason": ""
 }`;
 
@@ -209,10 +210,10 @@ Respond with ONLY raw JSON without markdown:
         if (jsonMatch) {
           const aiData = JSON.parse(jsonMatch[0]);
           if (aiData.valid === false) {
-            return errorResponse(aiData.rejectReason || 'Слово не прошло модерацию безопасности.', 400);
+            return errorResponse(aiData.rejectReason || 'Имена собственные, бренды или нецензурные слова не добавляются в словарь.', 400);
           }
-          if (aiData.cleanWord) aiCleanWord = aiData.cleanWord;
-          if (aiData.cleanTranslation) aiCleanTranslation = aiData.cleanTranslation;
+          if (aiData.cleanWord) aiCleanWord = String(aiData.cleanWord).toLowerCase().trim();
+          if (aiData.cleanTranslation) aiCleanTranslation = String(aiData.cleanTranslation).toLowerCase().trim();
           if (aiData.transcription) aiTranscription = aiData.transcription;
           if (aiData.level) aiLevel = aiData.level;
           if (aiData.zipf) aiZipf = parseFloat(aiData.zipf) || 4.2;
@@ -222,6 +223,10 @@ Respond with ONLY raw JSON without markdown:
       console.warn('AI moderation fallback:', err);
     }
   }
+
+  // Force clean lowercase
+  aiCleanWord = aiCleanWord.toLowerCase().trim();
+  aiCleanTranslation = aiCleanTranslation.toLowerCase().trim();
 
   // Generate unique ID
   const newId = maxNumericId > 0 ? String(maxNumericId + 1) : 'w_' + Date.now().toString(36);
@@ -255,4 +260,65 @@ Respond with ONLY raw JSON without markdown:
     message: 'Слово успешно проверено и добавлено в словарь!',
     word: createdWord,
   });
+}
+
+function suggestTranslationsPost(e) {
+  const body = getJsonBody(e);
+  const rawWord = String(body.word || '').trim().toLowerCase();
+  const lang = String(body.lang || 'ru').trim().toLowerCase();
+
+  if (!rawWord || rawWord.length < 2) {
+    return successResponse({ suggestions: [], category: 'Общие', transcription: '' });
+  }
+
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) {
+    return successResponse({ suggestions: [], category: 'Общие', transcription: '' });
+  }
+
+  try {
+    const targetLang = lang === 'uk' ? 'Ukrainian' : 'Russian';
+    const prompt = `Translate the English word "${rawWord}" into ${targetLang}.
+Return 2 to 4 of the most common, accurate, lowercase translations (e.g. for "trump" in Russian: ["козырь", "козырная карта", "козырять"]).
+Also provide a category (e.g. "Общие", "Еда", "Бизнес", "Спорт", etc.) and IPA transcription.
+Respond with ONLY raw JSON without markdown:
+{
+  "suggestions": ["перевод 1", "перевод 2"],
+  "category": "Общие",
+  "transcription": "/.../"
+}`;
+
+    const payload = {
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 200, temperature: 0.1 },
+    };
+
+    const url =
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' +
+      encodeURIComponent(apiKey);
+
+    const response = UrlFetchApp.fetch(url, {
+      method: 'POST',
+      contentType: 'application/json',
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true,
+    });
+
+    if (response.getResponseCode() === 200) {
+      const resText = response.getContentText();
+      const jsonMatch = resText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const data = JSON.parse(jsonMatch[0]);
+        return successResponse({
+          suggestions: Array.isArray(data.suggestions) ? data.suggestions.map((s) => String(s).toLowerCase().trim()) : [],
+          category: data.category || 'Общие',
+          transcription: data.transcription || '',
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('suggestTranslations error:', err);
+  }
+
+  return successResponse({ suggestions: [], category: 'Общие', transcription: '' });
 }

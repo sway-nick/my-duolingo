@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=21.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord } from '../../services/api.js?v=18.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations } from '../../services/api.js?v=18.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=25.0';
 
 function sanitizeCategory(cat) {
@@ -87,7 +87,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
   const lang = getInterfaceLanguage();
   const titleText = lang === 'ru' ? '✨ Добавить слово в словарь' : lang === 'uk' ? '✨ Додати слово у словник' : '✨ Add word to dictionary';
-  const wordLabel = lang === 'ru' ? 'Английское слово' : lang === 'uk' ? 'Англійське слово' : 'English word';
+  const wordLabel = lang === 'ru' ? 'Английское слово (строчными)' : lang === 'uk' ? 'Англійське слово (малими літерами)' : 'English word (lowercase)';
   const transLabel = lang === 'ru' ? 'Перевод' : lang === 'uk' ? 'Переклад' : 'Translation';
   const catLabel = lang === 'ru' ? 'Категория' : lang === 'uk' ? 'Категорія' : 'Category';
   const notesLabel = lang === 'ru' ? 'Заметка / Пример (необязательно)' : lang === 'uk' ? 'Примітка / Приклад (необовʼязково)' : 'Notes / Example (optional)';
@@ -110,7 +110,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-word-input">${wordLabel} *</label>
             <span id="add-word-len" style="color: var(--text-muted); font-size: 11px;">0/35</span>
           </div>
-          <input type="text" id="add-word-input" class="search-input" maxlength="35" required value="${escapeHtml(initialWord)}" placeholder="e.g. blossom" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px;" />
+          <input type="text" id="add-word-input" class="search-input" maxlength="35" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="например: blossom" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px;" />
         </div>
 
         <div>
@@ -119,6 +119,10 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/60</span>
           </div>
           <input type="text" id="add-trans-input" class="search-input" maxlength="60" required placeholder="например: цветение" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px;" />
+          <div id="add-trans-suggestions" style="display: none; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center;">
+            <span style="font-size: 11px; color: var(--text-muted);">💡 Варианты:</span>
+            <div id="add-trans-pills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+          </div>
         </div>
 
         <div>
@@ -158,6 +162,8 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   const notesInput = modalEl.querySelector('#add-notes-input');
   const noticeBox = modalEl.querySelector('#add-word-notice');
   const errorBox = modalEl.querySelector('#add-word-error');
+  const suggestionsBox = modalEl.querySelector('#add-trans-suggestions');
+  const pillsBox = modalEl.querySelector('#add-trans-pills');
   const submitBtn = modalEl.querySelector('#add-word-submit-btn');
   const closeBtn = modalEl.querySelector('#add-word-close-btn');
   const cancelBtn = modalEl.querySelector('#add-word-cancel-btn');
@@ -172,6 +178,44 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     if (notesLen) notesLen.textContent = `${notesInput.value.length}/120`;
   }
 
+  let suggestTimeout = null;
+
+  async function fetchAiSuggestions(cleanWord) {
+    if (!cleanWord || cleanWord.length < 2) {
+      if (suggestionsBox) suggestionsBox.style.display = 'none';
+      return;
+    }
+    const data = await suggestTranslations(cleanWord);
+    if (data && Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+      if (pillsBox) {
+        pillsBox.innerHTML = data.suggestions
+          .map(
+            (s) => `
+          <button type="button" class="trans-pill-btn" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; border-radius: 6px; padding: 3px 8px; font-size: 12px; cursor: pointer; font-weight: 500;">
+            ${escapeHtml(s)}
+          </button>
+        `
+          )
+          .join('');
+
+        pillsBox.querySelectorAll('.trans-pill-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            transInput.value = btn.textContent.trim().toLowerCase();
+            updateCounters();
+          });
+        });
+      }
+
+      if (data.category && existingCats.includes(data.category)) {
+        catSelect.value = data.category;
+      }
+
+      if (suggestionsBox) suggestionsBox.style.display = 'flex';
+    } else {
+      if (suggestionsBox) suggestionsBox.style.display = 'none';
+    }
+  }
+
   function checkDuplicate() {
     const typed = wordInput.value.trim().toLowerCase();
     const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
@@ -182,12 +226,18 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       transInput.disabled = true;
       catSelect.value = existing.category || 'Общие';
       catSelect.disabled = true;
+      if (suggestionsBox) suggestionsBox.style.display = 'none';
       submitBtn.textContent = '💾 Обновить заметку';
     } else {
       noticeBox.style.display = 'none';
       transInput.disabled = false;
       catSelect.disabled = false;
       submitBtn.textContent = saveBtnText;
+
+      clearTimeout(suggestTimeout);
+      suggestTimeout = setTimeout(() => {
+        fetchAiSuggestions(typed);
+      }, 450);
     }
   }
 
@@ -218,8 +268,8 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     e.preventDefault();
     errorBox.style.display = 'none';
 
-    const word = wordInput.value.trim();
-    const translation = transInput.value.trim();
+    const word = wordInput.value.trim().toLowerCase();
+    const translation = transInput.value.trim().toLowerCase();
     const category = catSelect.value.trim();
     const notes = notesInput.value.trim();
 

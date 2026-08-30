@@ -45,6 +45,9 @@ const ROUTES = {
     addword: {
       post: wordsAddPost,
     },
+    suggest_translation: {
+      post: suggestTranslationsPost,
+    },
     stats: {
       get: statsGet,
     },

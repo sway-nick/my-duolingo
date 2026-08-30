@@ -1792,13 +1792,31 @@ async function addCustomWord({ word, translation, category, notes }) {
         window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
       }
     }
-    return json.data;
-  } else {
-    throw new Error(json?.error || 'Не удалось сохранить слово');
+async function suggestTranslations(word) {
+  try {
+    const lang = getInterfaceLanguage();
+    const response = await fetch(`${API_URL}?route=suggest_translation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'suggest_translation',
+        route: 'suggest_translation',
+        word: String(word || '').trim().toLowerCase(),
+        lang: lang,
+      }),
+    });
+    const json = await response.json();
+    if (json && json.success && json.data) {
+      return json.data;
+    }
+  } catch (e) {
+    console.warn('Failed to fetch translation suggestions:', e);
   }
+  return { suggestions: [], category: 'Общие', transcription: '' };
 }
 
 export {
+  suggestTranslations,
   addCustomWord,
   sendUserAnalytics,
   getHealth,
