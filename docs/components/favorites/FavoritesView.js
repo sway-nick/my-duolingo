@@ -68,8 +68,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   const favControls = container.querySelector('.fav-sticky-controls');
   const updateFavStickyTop = () => {
     if (favControls) {
-      const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
-      favControls.style.setProperty('--fav-sticky-top', `${Math.round(headerBottom)}px`);
+      const headerHeight = headerEl ? headerEl.offsetHeight : 56;
+      favControls.style.setProperty('--fav-sticky-top', `${Math.round(headerHeight)}px`);
     }
   };
   updateFavStickyTop();

@@ -408,8 +408,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const dictControls = container.querySelector('.dictionary-controls');
   const updateDictStickyTop = () => {
     if (dictControls) {
-      const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 58;
-      dictControls.style.setProperty('--dict-sticky-top', `${Math.round(headerBottom)}px`);
+      const headerHeight = headerEl ? headerEl.offsetHeight : 56;
+      dictControls.style.setProperty('--dict-sticky-top', `${Math.round(headerHeight)}px`);
     }
   };
   updateDictStickyTop();

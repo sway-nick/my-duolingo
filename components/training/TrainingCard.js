@@ -571,7 +571,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
         html += `
           <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="min-height: 38px; font-size: 14px; padding: 6px 16px; width: 100%;">
-            ✍️ ${getInterfaceLanguage() === 'ru' ? 'Не могу говорить' : getInterfaceLanguage() === 'uk' ? 'Не можу говорити' : "Can't speak"}
+            ${getInterfaceLanguage() === 'ru' ? 'Ответить в Квизе' : getInterfaceLanguage() === 'uk' ? 'Відповісти у Квізі' : 'Answer in Quiz'}
           </button>
         `;
         transcriptBox.innerHTML = html;
@@ -1117,10 +1117,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             <div style="display: flex; gap: 8px; margin-top: 4px;">
               <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 42px; font-size: 13px; padding: 6px 10px;">
-                🎙️ Тест с AI
+                Test AI
               </button>
               <button type="button" class="primary-button" id="diag-ping-btn" style="flex: 1; min-height: 42px; font-size: 13px; padding: 6px 10px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
-                ⚡ Ping (без AI)
+                Ping
               </button>
               <button type="button" class="primary-button" id="diag-close-btn" style="flex: 0 0 70px; min-height: 42px; font-size: 13px; background: rgba(0,0,0,0.08); color: var(--text-main);">
                 Закрыть
@@ -1209,9 +1209,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           startBtn.disabled = true;
           pingBtn.disabled = true;
           if (isPingOnly) {
-            pingBtn.textContent = '🔴 Ping...';
+            pingBtn.textContent = 'Ping...';
           } else {
-            startBtn.textContent = '🔴 Слушаю...';
+            startBtn.textContent = 'Слушаю...';
           }
 
           try {
@@ -1289,8 +1289,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
               startBtn.disabled = false;
               pingBtn.disabled = false;
-              startBtn.textContent = '🎙️ Тест с AI';
-              pingBtn.textContent = '⚡ Ping (без AI)';
+              startBtn.textContent = 'Test AI';
+              pingBtn.textContent = 'Ping';
             };
 
             // One-shot запись без timeslice
@@ -1305,8 +1305,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
             startBtn.disabled = false;
             pingBtn.disabled = false;
-            startBtn.textContent = '🎙️ Тест с AI';
-            pingBtn.textContent = '⚡ Ping (без AI)';
+            startBtn.textContent = 'Test AI';
+            pingBtn.textContent = 'Ping';
           }
         }
 

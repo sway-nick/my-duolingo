@@ -496,21 +496,6 @@ body {
 .bottom-nav {
   display: none !important;
 }
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: #ffffff;
-  border-top: 1px solid var(--border-color);
-  padding: 4px 6px;
-  min-height: 44px;
-  z-index: 100;
-}
 
 .nav-tab {
   border: none;

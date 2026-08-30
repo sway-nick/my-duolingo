@@ -188,11 +188,6 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
         <!-- Categories Section -->
         <div class="curriculum-block">
-          <div class="section-title-row">
-            <h3>${t('stats_categories')}</h3>
-            <span class="total-words-badge" id="stat-total-words">${getInterfaceLanguage() === 'ru' ? 'Всего слов —' : getInterfaceLanguage() === 'uk' ? 'Всього слів —' : 'Total words —'} ${stats.totalWords || 0}</span>
-          </div>
-          
           <div class="category-progress-list" id="category-list">
             ${categoriesHtml}
           </div>
