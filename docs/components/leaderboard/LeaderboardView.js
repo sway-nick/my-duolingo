@@ -1,4 +1,4 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey } from '../../services/api.js?v=131.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=200.0';
 import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=131.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=131.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=131.0';
@@ -150,7 +150,7 @@ function renderPodiumCard(player, rank) {
       </div>
       <div class="podium-info">
         <h4 class="podium-name">${player.name || (getInterfaceLanguage() === 'ru' ? 'Ученик' : getInterfaceLanguage() === 'uk' ? 'Учень' : 'Student')}</h4>
-        <span class="podium-xp">${player.xp} XP</span>
+        <span class="podium-xp">${formatCompactXp(player.xp)} XP</span>
       </div>
     </div>
   `;
@@ -195,7 +195,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               <div class="row-name">
                 ${p.name || 'Ученик'}
               </div>
-              <div class="row-xp">${p.xp} XP</div>
+              <div class="row-xp">${formatCompactXp(p.xp)} XP</div>
             </div>
           `;
           })
@@ -230,7 +230,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="my-bar-xp">${myPlayer.xp} XP</span>
+          <span class="my-bar-xp">${formatCompactXp(myPlayer.xp)} XP</span>
           ${
             !currentUser
               ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">${getInterfaceLanguage() === 'ru' ? 'Войти' : getInterfaceLanguage() === 'uk' ? 'Увійти' : 'Log In'}</button>`

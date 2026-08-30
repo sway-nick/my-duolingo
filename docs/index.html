@@ -254,10 +254,10 @@
         // In Cards mode: if user reached their daily learning limit, show clean message
         if (!isFavPracticeActive && currentMethod === 'cards' && learningCount >= dailyGoal) {
           const congratsText = getInterfaceLanguage() === 'ru' 
-            ? `Отлично!<br/>Вы отобрали ${learningCount} слов на сегодня!`
+            ? `Отлично!<br/>Вы отобрали ${learningCount} слов для изучения`
             : getInterfaceLanguage() === 'uk'
-              ? `Відмінно!<br/>Ви відібрали ${learningCount} слів на сьогодні!`
-              : `Excellent!<br/>You selected ${learningCount} words for today!`;
+              ? `Відмінно!<br/>Ви відібрали ${learningCount} слів для вивчення`
+              : `Excellent!<br/>You selected ${learningCount} words for study`;
 
           let nextBtnTarget = 'quiz';
           let nextBtnText = getInterfaceLanguage() === 'ru' ? '🎯 Перейти в Квиз' : getInterfaceLanguage() === 'uk' ? '🎯 Перейти до Квізу' : '🎯 Go to Quiz';
