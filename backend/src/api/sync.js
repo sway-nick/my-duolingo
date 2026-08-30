@@ -32,10 +32,10 @@ function syncGet(e) {
         pairsCorrect: Number(row.pairsCorrect || 0),
         inputCorrect: Number(row.inputCorrect || 0),
         seenInCards: Boolean(row.seenInCards === true || row.seenInCards === 'true' || row.status === 'mastered' || Number(row.quizCorrect || 0) > 0),
-        mastered: row.status === 'mastered' || Number(row.inputCorrect || 0) >= 3,
+        mastered: row.status === 'mastered' || Number(row.inputCorrect || 0) >= 2,
         masteredAt: row.masteredAt ? new Date(row.masteredAt).getTime() : null,
         lastPracticed: row.lastReviewed ? new Date(row.lastReviewed).getTime() : 0,
-        status: row.status || (Number(row.inputCorrect || 0) >= 3 ? 'mastered' : 'learning'),
+        status: row.status || (Number(row.inputCorrect || 0) >= 2 ? 'mastered' : 'learning'),
       };
     }
   });
@@ -135,7 +135,7 @@ function syncPost(e) {
     wordIds.forEach((wordId) => {
       const p = progress[wordId];
       if (!p) return;
-      const isMastered = Boolean(p.mastered || p.status === 'mastered' || Number(p.inputCorrect || 0) >= 3);
+      const isMastered = Boolean(p.mastered || p.status === 'mastered' || Number(p.inputCorrect || 0) >= 2);
       const status = isMastered ? 'mastered' : 'learning';
       const correctCount = Number(p.correct || 0);
       const errorCount = Number(p.error || 0);

@@ -263,8 +263,8 @@ body.dark-theme,
 }
 
 html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
+  overflow-x: clip;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
@@ -288,7 +288,6 @@ body {
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.04);
-  overflow-x: hidden;
   box-sizing: border-box;
 }
 

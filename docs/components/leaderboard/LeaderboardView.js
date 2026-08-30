@@ -3,7 +3,7 @@ import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=1
 import { renderAuthModal } from '../auth/AuthModal.js?v=131.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=131.0';
 
-let currentPeriod = localStorage.getItem('myduo_leaderboard_period') || 'all'; // 'week' or 'all'
+let currentPeriod = localStorage.getItem('myduo_leaderboard_period') || 'week'; // 'week' or 'all'
 
 function showTop100Modal(rank) {
   const existing = document.querySelector('#top100-congrats-modal');

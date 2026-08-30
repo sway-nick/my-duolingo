@@ -1032,7 +1032,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
             pairsCorrect: Math.max(l.pairsCorrect || 0, c.pairsCorrect || 0),
             inputCorrect: Math.max(l.inputCorrect || 0, c.inputCorrect || 0),
             seenInCards: Boolean(l.seenInCards || c.seenInCards),
-            mastered: Boolean(l.mastered || c.mastered || (Math.max(l.inputCorrect || 0, c.inputCorrect || 0) >= 3)),
+            mastered: Boolean(l.mastered || c.mastered || (Math.max(l.inputCorrect || 0, c.inputCorrect || 0) >= 2)),
             masteredAt: l.masteredAt || c.masteredAt || null,
             lastPracticed: Math.max(l.lastPracticed || 0, c.lastPracticed || 0),
             hardCount: Math.max(l.hardCount || 0, c.hardCount || 0),
@@ -1182,7 +1182,7 @@ function isWordMastered(prog) {
   if (!prog) return false;
   return Boolean(
     prog.mastered === true ||
-    (prog.inputCorrect !== undefined && Number(prog.inputCorrect) >= 3)
+    (prog.inputCorrect !== undefined && Number(prog.inputCorrect) >= 2)
   );
 }
 

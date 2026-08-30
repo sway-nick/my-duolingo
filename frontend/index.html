@@ -251,16 +251,16 @@
           return false;
         }
 
-        // In Cards mode: if user reached their daily learning limit, show warning and block adding new words!
-        if (!isFavPracticeActive && currentMethod === 'cards' && learningCount >= dailyGoal) {
+        // In Cards mode: if user reached their daily learning limit, show guidance and suggest practicing
+        if (!isFavPracticeActive && currentMethod === 'cards' && learningCount >= dailyGoal && !window._overrideDailyCardsLimit) {
           const congratsText = getInterfaceLanguage() === 'ru' 
-            ? `Отлично!<br/>Вы отобрали ${learningCount} слов на сегодня!`
+            ? `В очереди изучения: <strong>${learningCount} слов</strong> (норма: ${dailyGoal})<br/><span style="font-size: 14px; font-weight: normal; color: var(--text-muted); display: block; margin-top: 8px;">Чтобы перейти к новым карточкам, закрепите отобранные слова в Квизе, Парах или Тесте!</span>`
             : getInterfaceLanguage() === 'uk'
-              ? `Відмінно!<br/>Ви відібрали ${learningCount} слів на сьогодні!`
-              : `Excellent!<br/>You selected ${learningCount} words for today!`;
+              ? `У черзі вивчення: <strong>${learningCount} слів</strong> (норма: ${dailyGoal})<br/><span style="font-size: 14px; font-weight: normal; color: var(--text-muted); display: block; margin-top: 8px;">Щоб перейти до нових карток, закріпіть відібрані слова у Квізі, Парах або Тесті!</span>`
+              : `Active study queue: <strong>${learningCount} words</strong> (goal: ${dailyGoal})<br/><span style="font-size: 14px; font-weight: normal; color: var(--text-muted); display: block; margin-top: 8px;">Practice these words in Quiz, Pairs, or Test before adding more cards!</span>`;
 
           let nextBtnTarget = 'quiz';
-          let nextBtnText = getInterfaceLanguage() === 'ru' ? 'Перейти в Квиз' : getInterfaceLanguage() === 'uk' ? 'Перейти до Квізу' : 'Go to Quiz';
+          let nextBtnText = getInterfaceLanguage() === 'ru' ? '🎯 Перейти в Квиз' : getInterfaceLanguage() === 'uk' ? '🎯 Перейти до Квізу' : '🎯 Go to Quiz';
 
           if (quizQueue.length > 0) {
             nextBtnTarget = 'quiz';
@@ -275,13 +275,16 @@
 
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-              <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
-              <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
+              <div style="font-size: 56px; margin-bottom: 18px;">🎯</div>
+              <p style="color: var(--text-main); font-size: 17px; font-weight: 700; margin-bottom: 24px; line-height: 1.5;">
                 ${congratsText}
               </p>
-              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                <button class="primary-button btn-green" id="go-quiz-btn">
+              <div style="width: 100%; max-width: 340px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+                <button class="primary-button btn-green" id="go-quiz-btn" style="min-height: 44px; font-weight: 700;">
                   ${nextBtnText}
+                </button>
+                <button class="secondary-button" id="continue-cards-anyway-btn" style="min-height: 40px; font-size: 13px;">
+                  🃏 ${getInterfaceLanguage() === 'ru' ? 'Всё равно листать новые карточки' : getInterfaceLanguage() === 'uk' ? 'Все одно гортати нові картки' : 'Continue browsing cards anyway'}
                 </button>
               </div>
             </div>
@@ -293,6 +296,14 @@
               userSettings.preferredMethod = nextBtnTarget;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
+              renderTrainingTab();
+            });
+          }
+
+          const contCardsBtn = content.querySelector('#continue-cards-anyway-btn');
+          if (contCardsBtn) {
+            contCardsBtn.addEventListener('click', () => {
+              window._overrideDailyCardsLimit = true;
               renderTrainingTab();
             });
           }

@@ -550,7 +550,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <button type="button" class="primary-button btn-green" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
             ${getInterfaceLanguage() === 'ru' ? 'Дальше' : getInterfaceLanguage() === 'uk' ? 'Далі' : 'Next'}
           </button>
-          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone" style="margin-top: 12px;">
+          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone" style="position: absolute; bottom: 8px; left: 8px; margin: 0;">
             ⚙️
           </button>
         </div>
@@ -1013,9 +1013,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   if (score !== null) {
                     heardHtml += `Точность произношения: <strong>${score}%</strong>`;
                   }
-                  if (feedback) {
-                    const fbColor = isAiCorrect ? '#16a34a' : '#d97706';
-                    heardHtml += `${score !== null ? '<br>' : ''}<span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${feedback}</span>`;
+                  if (feedback && !isAiCorrect && !feedback.toLowerCase().includes('отличное') && !feedback.toLowerCase().includes('відмінне')) {
+                    heardHtml += `${score !== null ? '<br>' : ''}<span style="font-size: 13px; color: #d97706; font-style: italic;">💡 ${feedback}</span>`;
                   }
                   transcriptBox.innerHTML = heardHtml;
                 }
