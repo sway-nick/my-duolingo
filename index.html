@@ -366,11 +366,8 @@
           }
 
           content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 32px 18px;">
-              <div class="reward-video-wrapper" style="position: relative; max-width: 320px; margin: 0 auto 18px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 26px rgba(0,0,0,0.45); border: 2px solid var(--accent-gold, #f59e0b); background: #000;">
-                <video id="reward-cat-video-category" src="assets/video/cat.mp4" autoplay loop muted playsinline style="width: 100%; display: block; border-radius: 14px; cursor: pointer;"></video>
-                <button type="button" class="reward-audio-btn" id="reward-audio-btn-category" style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; backdrop-filter: blur(4px); z-index: 2;">🔇</button>
-              </div>
+            <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+              <div style="font-size: 56px; margin-bottom: 16px;">🎉</div>
               <h2 style="margin: 0 0 10px;">${title}</h2>
               <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; line-height: 1.45;">
                 ${description}
@@ -392,18 +389,6 @@
               </div>
             </div>
           `;
-
-          const videoCategory = content.querySelector('#reward-cat-video-category');
-          const audioBtnCategory = content.querySelector('#reward-audio-btn-category');
-          if (videoCategory && audioBtnCategory) {
-            const toggleAudio = (e) => {
-              e.stopPropagation();
-              videoCategory.muted = !videoCategory.muted;
-              audioBtnCategory.textContent = videoCategory.muted ? '🔇' : '🔊';
-            };
-            audioBtnCategory.addEventListener('click', toggleAudio);
-            videoCategory.addEventListener('click', toggleAudio);
-          }
 
           const nextCatBtn = content.querySelector('#next-category-btn');
           if (nextCatBtn && nextCategory) {
@@ -626,70 +611,111 @@
             `;
           }
 
-          let videoHtml = '';
-          if (currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
-            videoHtml = `
-              <div class="reward-video-wrapper" style="position: relative; max-width: 320px; margin: 0 auto 18px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 26px rgba(0,0,0,0.45); border: 2px solid var(--accent-gold, #f59e0b); background: #000;">
-                <video id="reward-cat-video-test" src="assets/video/cat.mp4" autoplay loop muted playsinline style="width: 100%; display: block; border-radius: 14px; cursor: pointer;"></video>
-                <button type="button" class="reward-audio-btn" id="reward-audio-btn-test" style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; backdrop-filter: blur(4px); z-index: 2;">🔇</button>
-              </div>
-            `;
-          }
+        function playWotdCelebrationVideo(onFinish) {
+          const existing = document.querySelector('#wotd-video-modal');
+          if (existing) existing.remove();
 
-          content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
-              ${videoHtml ? videoHtml : `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>`}
-              <h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
-              ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
-                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
-                  ${nextBtnLabel}
-                </button>
-                ${
-                  (currentMethod === 'input' || currentMethod === 'quiz')
-                    ? `
-                  <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
-                  </button>
-                `
-                    : ''
-                }
-              </div>
-              ${wotdHtml}
+          const modal = document.createElement('div');
+          modal.id = 'wotd-video-modal';
+          modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; backdrop-filter: blur(8px);';
+
+          modal.innerHTML = `
+            <div style="position: relative; max-width: 340px; width: 100%; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.65); border: 2px solid var(--accent-gold, #f59e0b); background: #000;">
+              <button type="button" id="close-wotd-video-btn" style="position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">✕</button>
+              <video id="wotd-cat-video" src="assets/video/cat.mp4" playsinline style="width: 100%; display: block; border-radius: 18px;"></video>
             </div>
           `;
 
-          const videoTest = content.querySelector('#reward-cat-video-test');
-          const audioBtnTest = content.querySelector('#reward-audio-btn-test');
-          if (videoTest && audioBtnTest) {
-            const toggleAudio = (e) => {
-              e.stopPropagation();
-              videoTest.muted = !videoTest.muted;
-              audioBtnTest.textContent = videoTest.muted ? '🔇' : '🔊';
-            };
-            audioBtnTest.addEventListener('click', toggleAudio);
-            videoTest.addEventListener('click', toggleAudio);
+          document.body.appendChild(modal);
+
+          const video = modal.querySelector('#wotd-cat-video');
+          const closeBtn = modal.querySelector('#close-wotd-video-btn');
+
+          let finished = false;
+          const finish = () => {
+            if (finished) return;
+            finished = true;
+            if (modal.parentNode) modal.remove();
+            if (typeof onFinish === 'function') onFinish();
+          };
+
+          closeBtn.addEventListener('click', finish);
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) finish();
+          });
+
+          video.addEventListener('ended', finish);
+
+          video.muted = false;
+          video.volume = 1.0;
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              video.muted = true;
+              video.play().catch(() => {});
+            });
           }
+        }
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
-            const flashcard = content.querySelector('#wotd-flashcard-3d');
-            if (flashcard) {
-              let isFlipped = false;
-              flashcard.addEventListener('click', (e) => {
-                if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
-                  return;
-                }
-                isFlipped = !isFlipped;
-                flashcard.classList.toggle('is-flipped', isFlipped);
-                
-                flashcard.classList.remove('gleam-active');
-                void flashcard.offsetWidth;
-                flashcard.classList.add('gleam-active');
+        content.innerHTML = `
+          <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
+            <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
+            <h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
+            ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
+            <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
+              <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
+                ${nextBtnLabel}
+              </button>
+              ${
+                (currentMethod === 'input' || currentMethod === 'quiz')
+                  ? `
+                <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
+                </button>
+              `
+                  : ''
+              }
+            </div>
+            ${wotdHtml}
+          </div>
+        `;
 
-                if (!isFlipped) {
-                  speakWord(wotd.word);
-                }
-              });
+        if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+          const flashcard = content.querySelector('#wotd-flashcard-3d');
+          if (flashcard) {
+            let isFlipped = false;
+            flashcard.addEventListener('click', (e) => {
+              if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
+                return;
+              }
+
+              const hasPlayed = sessionStorage.getItem('myduo_wotd_video_played');
+              if (!hasPlayed) {
+                sessionStorage.setItem('myduo_wotd_video_played', '1');
+                playWotdCelebrationVideo(() => {
+                  isFlipped = !isFlipped;
+                  flashcard.classList.toggle('is-flipped', isFlipped);
+                  flashcard.classList.remove('gleam-active');
+                  void flashcard.offsetWidth;
+                  flashcard.classList.add('gleam-active');
+                  if (!isFlipped) {
+                    speakWord(wotd.word);
+                  }
+                });
+                return;
+              }
+
+              isFlipped = !isFlipped;
+              flashcard.classList.toggle('is-flipped', isFlipped);
+              
+              flashcard.classList.remove('gleam-active');
+              void flashcard.offsetWidth;
+              flashcard.classList.add('gleam-active');
+
+              if (!isFlipped) {
+                speakWord(wotd.word);
+              }
+            });
 
               const speakButtons = content.querySelectorAll('#wotd-sound-front, #wotd-sound-back');
               speakButtons.forEach((btn) => {
