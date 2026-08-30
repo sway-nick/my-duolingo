@@ -1792,6 +1792,12 @@ async function addCustomWord({ word, translation, category, notes }) {
         window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
       }
     }
+    return json.data;
+  } else {
+    throw new Error(json?.error || 'Не удалось сохранить слово');
+  }
+}
+
 async function suggestTranslations(word) {
   try {
     const lang = getInterfaceLanguage();
