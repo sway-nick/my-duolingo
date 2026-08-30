@@ -46,20 +46,22 @@ function renderWordCardHtml(w, isFav, prog) {
   if (isMastered) {
     stageBadge = `<span class="mastered-badge">🏆 ${t('dict_filter_mastered')}</span>`;
   } else if (pairsCount >= 2) {
-    stageBadge = `<span class="stage-badge stage-test">✍️ Тест (${testCount}/2)</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/2</span>`;
   } else if (quizCount >= 5) {
-    stageBadge = `<span class="stage-badge stage-pairs">🧩 Пары (${pairsCount}/2)</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/2</span>`;
   } else if (seen) {
-    stageBadge = `<span class="stage-badge stage-quiz">🎯 Квиз (${quizCount}/5)</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
   }
 
   return `
     <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
       <div class="dict-card-header">
-        <span class="dict-category-tag">${cleanCat}</span>
-        ${stageBadge}
-        <div class="dict-actions">
-          <button type="button" class="dict-audio-btn sound-button-sm" data-word="${escapeHtml(w.word)}" data-id="${w.id}" title="${t('sound_on')}" aria-label="${t('sound_on')}">
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <span class="category-badge">${cleanCat}</span>
+          ${stageBadge}
+        </div>
+        <div class="dict-card-actions">
+          <button type="button" class="dict-audio-btn" data-word="${escapeHtml(w.word)}" data-id="${w.id}" title="${t('sound_on')}" aria-label="${t('sound_on')}">
             🔊
           </button>
           <button type="button" class="fav-icon-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${t('fav_toggle')}" aria-label="${t('fav_toggle')}">
@@ -79,26 +81,28 @@ function renderWordCardHtml(w, isFav, prog) {
 
 function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) {
   const modalEl = document.createElement('div');
-  modalEl.className = 'speech-diag-overlay';
   modalEl.id = 'add-word-modal-overlay';
+  modalEl.style.cssText = 'position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; backdrop-filter: blur(4px);';
 
-  const existingCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
-  if (!existingCats.includes('Общие')) existingCats.unshift('Общие');
+  // Extract exact unique category names from existing words in Google Sheet
+  const existingCats = Array.from(new Set(words.map((w) => String(w.category || '').trim()).filter(Boolean)));
+  existingCats.sort();
+  if (existingCats.length === 0) existingCats.push('Elementary');
 
   const lang = getInterfaceLanguage();
-  const titleText = lang === 'ru' ? '✨ Добавить слово в словарь' : lang === 'uk' ? '✨ Додати слово у словник' : '✨ Add word to dictionary';
+  const titleText = lang === 'ru' ? '✨ Добавить слово' : lang === 'uk' ? '✨ Додати слово' : '✨ Add word';
   const wordLabel = lang === 'ru' ? 'Английское слово (строчными)' : lang === 'uk' ? 'Англійське слово (малими літерами)' : 'English word (lowercase)';
   const transLabel = lang === 'ru' ? 'Перевод' : lang === 'uk' ? 'Переклад' : 'Translation';
   const catLabel = lang === 'ru' ? 'Категория' : lang === 'uk' ? 'Категорія' : 'Category';
   const notesLabel = lang === 'ru' ? 'Заметка / Пример (необязательно)' : lang === 'uk' ? 'Примітка / Приклад (необовʼязково)' : 'Notes / Example (optional)';
-  const saveBtnText = lang === 'ru' ? '💾 Сохранить (AI-проверка)' : lang === 'uk' ? '💾 Зберегти (AI-перевірка)' : '💾 Save (AI check)';
+  const saveBtnText = lang === 'ru' ? 'Сохранить' : lang === 'uk' ? 'Зберегти' : 'Save';
   const cancelBtnText = lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel';
 
   modalEl.innerHTML = `
-    <div class="speech-diag-modal" style="max-width: 440px; text-align: left; padding: 22px;">
-      <div class="speech-diag-header" style="justify-content: space-between; margin-bottom: 16px;">
+    <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main);">${titleText}</h3>
-        <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 0 4px;">✕</button>
+        <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 2px 6px; line-height: 1;">✕</button>
       </div>
 
       <form id="add-word-form" style="display: flex; flex-direction: column; gap: 14px;">
@@ -110,7 +114,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-word-input">${wordLabel} *</label>
             <span id="add-word-len" style="color: var(--text-muted); font-size: 11px;">0/35</span>
           </div>
-          <input type="text" id="add-word-input" class="search-input" maxlength="35" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="например: blossom" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px;" />
+          <input type="text" id="add-word-input" class="search-input" maxlength="35" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="например: blossom" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
         </div>
 
         <div>
@@ -118,7 +122,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-trans-input">${transLabel} *</label>
             <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/60</span>
           </div>
-          <input type="text" id="add-trans-input" class="search-input" maxlength="60" required placeholder="например: цветение" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px;" />
+          <input type="text" id="add-trans-input" class="search-input" maxlength="60" required placeholder="например: цветение" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
           <div id="add-trans-suggestions" style="display: none; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center;">
             <span style="font-size: 11px; color: var(--text-muted);">💡 Варианты:</span>
             <div id="add-trans-pills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
@@ -129,7 +133,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
             <label for="add-cat-select">${catLabel}</label>
           </div>
-          <select id="add-cat-select" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 14px; background: var(--card-bg, #fff); color: var(--text-main);">
+          <select id="add-cat-select" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); box-sizing: border-box;">
             ${existingCats.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
           </select>
         </div>
@@ -139,14 +143,14 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-notes-input">${notesLabel}</label>
             <span id="add-notes-len" style="color: var(--text-muted); font-size: 11px;">0/120</span>
           </div>
-          <textarea id="add-notes-input" maxlength="120" rows="2" placeholder="Пример: cherry blossoms bloom in spring" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #fff); color: var(--text-main); font-family: inherit; resize: none;"></textarea>
+          <textarea id="add-notes-input" maxlength="120" rows="2" placeholder="Пример: cherry blossoms bloom in spring" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button type="button" id="add-word-cancel-btn" class="primary-button" style="flex: 1; min-height: 42px; background: rgba(0,0,0,0.06); color: var(--text-main);">
+          <button type="button" id="add-word-cancel-btn" class="primary-button" style="flex: 1; min-height: 42px; background: rgba(255,255,255,0.08); color: var(--text-main); border-radius: 8px;">
             ${cancelBtnText}
           </button>
-          <button type="submit" id="add-word-submit-btn" class="primary-button btn-green" style="flex: 2; min-height: 42px;">
+          <button type="submit" id="add-word-submit-btn" class="primary-button btn-green" style="flex: 1; min-height: 42px; border-radius: 8px; font-weight: 700;">
             ${saveBtnText}
           </button>
         </div>
@@ -224,7 +228,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       noticeBox.innerHTML = `💡 Слово уже есть в словаре (перевод: <strong>«${escapeHtml(existing.translation)}»</strong>, категория: <strong>«${escapeHtml(existing.category)}»</strong>).<br>Вы можете дополнить или обновить примечание к нему.`;
       transInput.value = existing.translation || '';
       transInput.disabled = true;
-      catSelect.value = existing.category || 'Общие';
+      catSelect.value = existing.category || (existingCats[0] || 'Elementary');
       catSelect.disabled = true;
       if (suggestionsBox) suggestionsBox.style.display = 'none';
       submitBtn.textContent = '💾 Обновить заметку';
