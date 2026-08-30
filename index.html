@@ -207,7 +207,7 @@
         }
 
         const categories = Array.from(new Set(allWords.map((w) => sanitizeCategory(w.category)).filter(Boolean)));
-        const selectedCategory = localStorage.getItem('myduo_dict_category') || userSettings.category || 'All';
+        const selectedCategory = localStorage.getItem('myduo_dict_category') || userSettings.category || 'Elementary';
 
         let categoryWords = allWords;
         if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'Все категории') {

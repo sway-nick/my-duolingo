@@ -224,7 +224,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const {
     currentMethod = 'quiz',
-    selectedCategory = 'All',
+    selectedCategory = 'Elementary',
     categories = [],
     isFavorite = false,
     onFavoriteToggle = () => {},

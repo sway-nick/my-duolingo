@@ -1407,7 +1407,7 @@ async function getUserSettings() {
         dailyGoal: 20,
         theme: 'light',
         level: 'All',
-        category: 'All',
+        category: 'Elementary',
         preferredMethod: 'quiz',
         ...parsed,
       };
@@ -1418,7 +1418,7 @@ async function getUserSettings() {
     dailyGoal: 20,
     theme: 'light',
     level: 'All',
-    category: 'All',
+    category: 'Elementary',
     preferredMethod: 'quiz',
   };
 }
