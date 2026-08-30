@@ -54,7 +54,14 @@ function getTimeUntilSundayEnd() {
   return { days, hours, mins };
 }
 
-function renderPodiumCard(player, rank) {
+function formatLeaderboardXp(xp, period = 'week') {
+  if (period === 'all') {
+    return formatCompactXp(xp);
+  }
+  return String(Math.round(Number(xp || 0)));
+}
+
+function renderPodiumCard(player, rank, period = 'week') {
   let badgeIcon = '💎';
   let rankClass = 'rank-diamond';
 
@@ -150,7 +157,7 @@ function renderPodiumCard(player, rank) {
       </div>
       <div class="podium-info">
         <h4 class="podium-name">${player.name || (getInterfaceLanguage() === 'ru' ? 'Ученик' : getInterfaceLanguage() === 'uk' ? 'Учень' : 'Student')}</h4>
-        <span class="podium-xp">${formatCompactXp(player.xp)} XP</span>
+        <span class="podium-xp">${formatLeaderboardXp(player.xp, period)} XP</span>
       </div>
     </div>
   `;
@@ -167,7 +174,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
 
   const podiumHtml = `
     <div class="podium-grid">
-      ${top4.map((p, idx) => renderPodiumCard(p, idx + 1)).join('')}
+      ${top4.map((p, idx) => renderPodiumCard(p, idx + 1, period)).join('')}
     </div>
   `;
 
@@ -195,7 +202,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               <div class="row-name">
                 ${p.name || 'Ученик'}
               </div>
-              <div class="row-xp">${formatCompactXp(p.xp)} XP</div>
+              <div class="row-xp">${formatLeaderboardXp(p.xp, period)} XP</div>
             </div>
           `;
           })
@@ -230,7 +237,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="my-bar-xp">${formatCompactXp(myPlayer.xp)} XP</span>
+          <span class="my-bar-xp">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
           ${
             !currentUser
               ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">${getInterfaceLanguage() === 'ru' ? 'Войти' : getInterfaceLanguage() === 'uk' ? 'Увійти' : 'Log In'}</button>`
