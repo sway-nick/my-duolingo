@@ -69,12 +69,30 @@ function wordsGet() {
   return successResponse(words);
 }
 
+const PROFANITY_BLOCKLIST = [
+  'fuck', 'fucking', 'fucker', 'fucked', 'fucks',
+  'shit', 'shitty', 'bitch', 'bitches', 'cunt', 'cunts',
+  'dick', 'dicks', 'pussy', 'pussies', 'asshole', 'assholes',
+  'bastard', 'bastards', 'slut', 'sluts', 'whore', 'whores',
+  'nigger', 'niggers', 'nigga', 'fag', 'faggot', 'retard',
+  'cock', 'cocks', 'blowjob', 'handjob', 'porn', 'porno',
+  'хуй', 'хуя', 'хуе', 'пизд', 'ебат', 'ебан', 'бляд', 'сука', 'мудак', 'гандон'
+];
+
+function isProfanityText(text) {
+  const t = String(text || '').toLowerCase();
+  return PROFANITY_BLOCKLIST.some((bad) => {
+    const regex = new RegExp('\\b' + bad + '\\b', 'i');
+    return regex.test(t) || t.includes(bad);
+  });
+}
+
 function wordsAddPost(e) {
   const body = getJsonBody(e);
   validateRequired(body, ['word']);
 
-  const rawWord = String(body.word || '').trim();
-  const rawTranslation = String(body.translation || '').trim();
+  let rawWord = String(body.word || '').trim().toLowerCase();
+  let rawTranslation = String(body.translation || '').trim().toLowerCase();
   const rawCategory = String(body.category || 'Общие').trim();
   const rawNotes = String(body.notes || '').trim();
 
@@ -90,6 +108,16 @@ function wordsAddPost(e) {
   }
   if (rawNotes.length > 120) {
     return errorResponse('Длина примечания не должна превышать 120 символов.', 400);
+  }
+
+  // Strict English characters validation (only a-z, spaces, hyphens, apostrophes - NO digits, NO cyrillic)
+  if (!/^[a-z\s\-\']+$/i.test(rawWord) || /[0-9\u0400-\u04FF]/.test(rawWord)) {
+    return errorResponse('Поле английского слова должно содержать только буквы английского алфавита (без цифр и кириллицы).', 400);
+  }
+
+  // Local profanity filter
+  if (isProfanityText(rawWord) || isProfanityText(rawTranslation)) {
+    return errorResponse('Ненормативная, оскорбительная или нецензурная лексика строго запрещена.', 400);
   }
 
   const sheet = getSheet('Vocabulary');
@@ -161,67 +189,74 @@ function wordsAddPost(e) {
   }
 
   // CASE 2: New word -> AI Moderation & Auto-Enrichment via Gemini
-  let aiCleanWord = rawWord.toLowerCase().trim();
-  let aiCleanTranslation = rawTranslation.toLowerCase().trim();
+  let aiCleanWord = rawWord;
+  let aiCleanTranslation = rawTranslation;
   let aiTranscription = '';
   let aiLevel = 'A2';
   let aiZipf = 4.2;
 
   const apiKey = getGeminiApiKey();
-  if (apiKey) {
-    try {
-      const prompt = `You are an English vocabulary moderator and dictionary editor.
+  if (!apiKey) {
+    return errorResponse('API-ключ Gemini не настроен на сервере Apps Script.', 500);
+  }
+
+  try {
+    const prompt = `You are a strict English vocabulary moderator and dictionary editor.
 Review the English word "${rawWord}" and translation "${rawTranslation}".
 Rules:
-1. All words and translations MUST be strictly lowercase (unless an acronym like 'dna').
-2. Reject purely proper nouns, person names, brand names, or celebrities with NO common noun/verb meaning (e.g. 'Donald Trump' or 'Nike' -> reject. But common words like 'trump' = 'козырь/козырять', 'apple' = 'яблоко' are valid common words).
-3. Fix any spelling mistakes and typos in the translation (e.g. 'кощырь' -> 'козырь', 'собака', 'бегать').
-4. Provide accurate IPA transcription in slashes like /.../, CEFR level (A1, A2, B1, B2, C1), and estimated Zipf frequency (1.0 to 7.0).
+1. Block any vulgarity, swearing, profanity, hate speech, adult content, insults, or gibberish. (If found -> "valid": false, "rejectReason": "Ненормативная лексика запрещена.").
+2. Check if "${rawTranslation}" is actually a valid and accurate translation of "${rawWord}". If the translation is completely incorrect or mismatched (e.g. word "dog" translated as "кошка", or "fuck" translated as "козырь"), set "valid": false and "rejectReason": "Перевод не соответствует английскому слову.".
+3. Reject purely proper nouns, celebrity names, brand names (e.g. 'Donald Trump' -> "valid": false, "rejectReason": "Имена собственные не добавляются в словарь.").
+4. All words and translations MUST be strictly lowercase.
+5. If valid, fix minor spelling typos in translation, provide IPA transcription in slashes like /.../, CEFR level (A1, A2, B1, B2, C1), and estimated Zipf frequency (1.0 to 7.0).
 Respond with ONLY raw JSON without markdown:
 {
   "valid": true,
-  "cleanWord": "trump",
-  "cleanTranslation": "козырь",
-  "transcription": "/trʌmp/",
-  "level": "B1",
-  "zipf": 4.1,
+  "cleanWord": "word",
+  "cleanTranslation": "translation",
+  "transcription": "/.../",
+  "level": "A2",
+  "zipf": 4.5,
   "rejectReason": ""
 }`;
 
-      const payload = {
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 250, temperature: 0.1 },
-      };
+    const payload = {
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 250, temperature: 0.1 },
+    };
 
-      const url =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' +
-        encodeURIComponent(apiKey);
+    const url =
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' +
+      encodeURIComponent(apiKey);
 
-      const response = UrlFetchApp.fetch(url, {
-        method: 'POST',
-        contentType: 'application/json',
-        payload: JSON.stringify(payload),
-        muteHttpExceptions: true,
-      });
+    const response = UrlFetchApp.fetch(url, {
+      method: 'POST',
+      contentType: 'application/json',
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true,
+    });
 
-      if (response.getResponseCode() === 200) {
-        const resText = response.getContentText();
-        const jsonMatch = resText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          const aiData = JSON.parse(jsonMatch[0]);
-          if (aiData.valid === false) {
-            return errorResponse(aiData.rejectReason || 'Имена собственные, бренды или нецензурные слова не добавляются в словарь.', 400);
-          }
-          if (aiData.cleanWord) aiCleanWord = String(aiData.cleanWord).toLowerCase().trim();
-          if (aiData.cleanTranslation) aiCleanTranslation = String(aiData.cleanTranslation).toLowerCase().trim();
-          if (aiData.transcription) aiTranscription = aiData.transcription;
-          if (aiData.level) aiLevel = aiData.level;
-          if (aiData.zipf) aiZipf = parseFloat(aiData.zipf) || 4.2;
+    if (response.getResponseCode() === 200) {
+      const resText = response.getContentText();
+      const jsonMatch = resText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const aiData = JSON.parse(jsonMatch[0]);
+        if (aiData.valid === false) {
+          return errorResponse(aiData.rejectReason || 'Слово не прошло модерацию безопасности.', 400);
         }
+        if (aiData.cleanWord) aiCleanWord = String(aiData.cleanWord).toLowerCase().trim();
+        if (aiData.cleanTranslation) aiCleanTranslation = String(aiData.cleanTranslation).toLowerCase().trim();
+        if (aiData.transcription) aiTranscription = aiData.transcription;
+        if (aiData.level) aiLevel = aiData.level;
+        if (aiData.zipf) aiZipf = parseFloat(aiData.zipf) || 4.2;
+      } else {
+        return errorResponse('Не удалось распознать ответ AI-модератора.', 500);
       }
-    } catch (err) {
-      console.warn('AI moderation fallback:', err);
+    } else {
+      return errorResponse('Ошибка проверки AI: ' + response.getContentText(), 500);
     }
+  } catch (err) {
+    return errorResponse('Сбой AI-модерации: ' + err.message, 500);
   }
 
   // Force clean lowercase

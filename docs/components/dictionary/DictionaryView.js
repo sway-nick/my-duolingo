@@ -220,6 +220,21 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     }
   }
 
+  const CLIENT_PROFANITY = [
+    'fuck', 'fucking', 'fucker', 'fucked', 'fucks',
+    'shit', 'bitch', 'cunt', 'dick', 'pussy', 'asshole',
+    'bastard', 'slut', 'whore', 'nigger', 'nigga', 'fag', 'cock', 'porn',
+    'хуй', 'пизд', 'ебат', 'ебан', 'бляд', 'сука', 'мудак'
+  ];
+
+  function isClientProfane(text) {
+    const t = String(text || '').toLowerCase();
+    return CLIENT_PROFANITY.some((bad) => {
+      const reg = new RegExp('\\b' + bad + '\\b', 'i');
+      return reg.test(t) || t.includes(bad);
+    });
+  }
+
   function checkDuplicate() {
     const typed = wordInput.value.trim().toLowerCase();
     const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
@@ -246,10 +261,30 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   }
 
   wordInput.addEventListener('input', () => {
+    let val = wordInput.value.toLowerCase();
+    const hasInvalidChars = /[^a-z\s\-\']/.test(val);
+    if (hasInvalidChars) {
+      val = val.replace(/[^a-z\s\-\']/g, '');
+      wordInput.value = val;
+      errorBox.style.display = 'block';
+      errorBox.textContent = '⚠️ Разрешены только строчные английские буквы (без цифр и кириллицы).';
+    } else if (isClientProfane(val)) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = '⚠️ Ненормативная лексика строго запрещена.';
+    } else {
+      if (errorBox.textContent.includes('буквы') || errorBox.textContent.includes('Ненормативная')) {
+        errorBox.style.display = 'none';
+      }
+      wordInput.value = val;
+    }
     updateCounters();
     checkDuplicate();
   });
-  transInput.addEventListener('input', updateCounters);
+
+  transInput.addEventListener('input', () => {
+    transInput.value = transInput.value.toLowerCase();
+    updateCounters();
+  });
   notesInput.addEventListener('input', updateCounters);
 
   updateCounters();
@@ -280,6 +315,18 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     if (word.length < 2 || word.length > 35) {
       errorBox.style.display = 'block';
       errorBox.textContent = 'Длина английского слова должна быть от 2 до 35 символов.';
+      return;
+    }
+
+    if (!/^[a-z\s\-\']+$/i.test(word) || /[0-9\u0400-\u04FF]/.test(word)) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = 'Поле английского слова должно содержать только английские буквы.';
+      return;
+    }
+
+    if (isClientProfane(word) || isClientProfane(translation)) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = 'Ненормативная лексика строго запрещена.';
       return;
     }
 
