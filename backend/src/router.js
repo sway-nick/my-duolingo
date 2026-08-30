@@ -42,6 +42,9 @@ const ROUTES = {
     words: {
       get: wordsGet,
     },
+    addword: {
+      post: wordsAddPost,
+    },
     stats: {
       get: statsGet,
     },

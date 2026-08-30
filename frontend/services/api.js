@@ -1757,7 +1757,49 @@ if (typeof window !== 'undefined') {
   });
 }
 
+async function addCustomWord({ word, translation, category, notes }) {
+  const payload = {
+    action: 'addword',
+    route: 'addword',
+    word: String(word || '').trim(),
+    translation: String(translation || '').trim(),
+    category: String(category || 'Общие').trim(),
+    notes: String(notes || '').trim(),
+  };
+
+  const response = await fetch(`${API_URL}?route=addword`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+  });
+
+  const json = await response.json();
+  if (json && json.success && json.data?.word) {
+    const savedWord = json.data.word;
+    if (cachedWordsList && Array.isArray(cachedWordsList)) {
+      const idx = cachedWordsList.findIndex(
+        (w) => String(w.id) === String(savedWord.id) || (w.word && w.word.toLowerCase() === savedWord.word.toLowerCase())
+      );
+      if (idx >= 0) {
+        cachedWordsList[idx] = { ...cachedWordsList[idx], ...savedWord };
+      } else {
+        cachedWordsList.unshift(savedWord);
+      }
+      try {
+        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+      } catch (e) {}
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+      }
+    }
+    return json.data;
+  } else {
+    throw new Error(json?.error || 'Не удалось сохранить слово');
+  }
+}
+
 export {
+  addCustomWord,
   sendUserAnalytics,
   getHealth,
   getWords,
