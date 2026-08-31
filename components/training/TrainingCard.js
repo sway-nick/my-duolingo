@@ -449,25 +449,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const practiceArea = container.querySelector('#practice-area');
 
   if (currentMethod === 'quiz') {
-    function formatQuizChoiceText(text) {
-      const clean = String(text || '').trim();
-      if (clean.includes(',')) {
-        return clean.split(/,\s*/).join(',<br>');
-      }
-      return clean;
-    }
-
     function getQuizOptionStyle(text) {
       const clean = String(text || '').trim();
-      const parts = clean.split(/[\s,]+/);
-      const maxWordLen = Math.max(...parts.map((p) => p.length), 0);
+      const words = clean.split(/\s+/);
+      const maxWordLen = Math.max(...words.map((w) => w.replace(/[,\.?!;:]/g, '').length), 0);
       const totalLen = clean.length;
 
-      if (maxWordLen >= 15 || totalLen > 45) return 'font-size: 11.5px; line-height: 1.15;';
-      if (maxWordLen >= 13 || totalLen > 35) return 'font-size: 12.5px; line-height: 1.18;';
-      if (maxWordLen >= 11 || totalLen > 24) return 'font-size: 13.5px; line-height: 1.2;';
-      if (maxWordLen >= 9 || totalLen > 16) return 'font-size: 14.5px; line-height: 1.22;';
-      if (maxWordLen >= 7 || totalLen > 10) return 'font-size: 15.5px; line-height: 1.25;';
+      if (maxWordLen >= 17 || totalLen > 55) return 'font-size: 11.5px; line-height: 1.15;';
+      if (maxWordLen >= 14 || totalLen > 40) return 'font-size: 12.5px; line-height: 1.18;';
+      if (maxWordLen >= 12 || totalLen > 28) return 'font-size: 14px; line-height: 1.2;';
+      if (maxWordLen >= 10 || totalLen > 20) return 'font-size: 15.2px; line-height: 1.22;';
       return 'font-size: 16.5px; line-height: 1.25; font-weight: 600;';
     }
 
@@ -486,7 +477,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
       const choices = shuffleArray([currentTrans, ...shuffledOthers]);
 
-      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${formatQuizChoiceText(choice)}</span></button>`).join('')}</div>`;
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
@@ -1667,25 +1658,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }));
       const rightItems = shuffleDerangement(rawRightItems, leftItems);
 
-      function formatPairText(text) {
-        const clean = String(text || '').trim();
-        if (clean.includes(',')) {
-          return clean.split(/,\s*/).join(',<br>');
-        }
-        return clean;
-      }
-
       function getPairFontSize(text) {
         const clean = String(text || '').trim();
-        const parts = clean.split(/[\s,]+/);
-        const maxWordLen = Math.max(...parts.map((p) => p.length), 0);
+        const words = clean.split(/\s+/);
+        const maxWordLen = Math.max(...words.map((w) => w.replace(/[,\.?!;:]/g, '').length), 0);
         const totalLen = clean.length;
 
-        if (maxWordLen >= 15 || totalLen > 45) return '11.5px';
-        if (maxWordLen >= 13 || totalLen > 35) return '12.5px';
-        if (maxWordLen >= 11 || totalLen > 24) return '13.5px';
-        if (maxWordLen >= 9 || totalLen > 16) return '14.5px';
-        if (maxWordLen >= 7 || totalLen > 10) return '15.5px';
+        if (maxWordLen >= 17 || totalLen > 55) return '11.5px';
+        if (maxWordLen >= 14 || totalLen > 40) return '12.5px';
+        if (maxWordLen >= 12 || totalLen > 28) return '14px';
+        if (maxWordLen >= 10 || totalLen > 20) return '15.2px';
         return '16.5px';
       }
 
@@ -1697,7 +1679,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 .map(
                   (item) => `
                 <button type="button" class="pairs-card" data-id="${item.id}" data-side="left" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
-                  <span class="pairs-card-inner">${formatPairText(item.text)}</span>
+                  <span class="pairs-card-inner">${item.text}</span>
                 </button>
               `,
                 )
@@ -1708,7 +1690,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 .map(
                   (item) => `
                 <button type="button" class="pairs-card" data-id="${item.id}" data-side="right" data-word="${item.word}" style="font-size: ${getPairFontSize(item.text)};">
-                  <span class="pairs-card-inner">${formatPairText(item.text)}</span>
+                  <span class="pairs-card-inner">${item.text}</span>
                 </button>
               `,
                 )
