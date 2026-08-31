@@ -4310,10 +4310,19 @@ body.notebook-theme,
   border-radius: 3px 10px 5px 8px !important;
   color: var(--nb-blue-pen) !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 20px !important;
-  font-weight: 600 !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
   box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.15) !important;
   transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.notebook-theme .quiz-option-inner {
+  font-family: 'Caveat', cursive !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  line-height: 1.12 !important;
+  color: var(--nb-blue-pen) !important;
+  letter-spacing: 0.3px;
 }
 
 .notebook-theme .quiz-option:hover:not(:disabled) {
@@ -4462,10 +4471,19 @@ body.notebook-theme,
   border: 2px solid var(--nb-blue-pen) !important;
   border-radius: 4px 12px 6px 10px !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 20px !important;
-  font-weight: 600 !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
   color: var(--nb-blue-pen) !important;
   box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.12) !important;
+}
+
+.notebook-theme .pairs-card-inner {
+  font-family: 'Caveat', cursive !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  line-height: 1.12 !important;
+  color: var(--nb-blue-pen) !important;
+  letter-spacing: 0.3px;
 }
 
 .notebook-theme .pairs-card.selected {
