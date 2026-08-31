@@ -17,6 +17,7 @@ const filesOrder = [
   'api/health.js',
   'api/auth.js',
   'api/words.js',
+  'api/i18n.js',
   'api/progress.js',
   'api/settings.js',
   'api/leaderboard.js',
