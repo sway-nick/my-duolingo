@@ -3573,8 +3573,40 @@ body {
     white-space: nowrap;
   }
 
+}
+
+@media (max-width: 520px) {
   .favorites-grid, .dictionary-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* Ink blot for Notebook Theme */
+.notebook-ink-blot {
+  display: none;
+}
+
+.notebook-theme .notebook-ink-blot {
+  display: block;
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  width: 76px;
+  height: 76px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.88;
+  filter: drop-shadow(1px 2px 3px rgba(88, 28, 135, 0.3));
+  transform: rotate(-10deg);
+}
+
+@media (max-width: 480px) {
+  .notebook-theme .notebook-ink-blot {
+    width: 60px;
+    height: 60px;
+    right: 10px;
+    bottom: 8px;
   }
 }
 
