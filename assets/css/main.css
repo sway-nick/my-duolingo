@@ -827,7 +827,9 @@ body {
   box-sizing: border-box;
   overflow: hidden;
   color: var(--text-main);
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 .quiz-option-inner {
@@ -839,7 +841,9 @@ body {
   max-height: 100%;
   width: 100%;
   line-height: 1.22;
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 .quiz-option:hover:not(:disabled) {
