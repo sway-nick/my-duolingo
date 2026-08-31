@@ -1,6 +1,6 @@
 import { speakWord } from '../../services/audioService.js?v=21.0';
 import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations } from '../../services/api.js?v=18.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=25.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=25.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -72,8 +72,8 @@ function renderWordCardHtml(w, isFav, prog) {
       
       <div class="dict-card-body">
         <h3>${escapeHtml(w.word)}</h3>
-        <p class="dict-translation">${escapeHtml(w.translation)}</p>
-        ${w.notes ? `<p class="dict-notes">${escapeHtml(w.notes)}</p>` : ''}
+        <p class="dict-translation">${escapeHtml(getWordTranslation(w))}</p>
+        ${getWordNotes(w) ? `<p class="dict-notes">${escapeHtml(getWordNotes(w))}</p>` : ''}
       </div>
     </div>
   `;

@@ -64,6 +64,41 @@ function sanitizeTranscriptions(words) {
   });
 }
 
+function getActiveLang() {
+  try {
+    return localStorage.getItem('myduo_interface_lang') || 'en';
+  } catch (e) {
+    return 'en';
+  }
+}
+
+function applyMultilingualTranslations(words) {
+  if (!Array.isArray(words)) return;
+  const lang = getActiveLang();
+  words.forEach((w) => {
+    if (w) {
+      if (w.translations && w.translations[lang]) {
+        w.translation = w.translations[lang];
+      }
+      if (w.all_notes && w.all_notes[lang]) {
+        w.notes = w.all_notes[lang];
+      }
+    }
+  });
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('myduo:lang_changed', () => {
+    if (cachedWordsList && Array.isArray(cachedWordsList)) {
+      applyMultilingualTranslations(cachedWordsList);
+      try {
+        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+      } catch (e) {}
+      window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+    }
+  });
+}
+
 async function getWords(forceRefresh = false) {
   const sortByZipf = (list) => {
     if (Array.isArray(list)) {
@@ -71,8 +106,11 @@ async function getWords(forceRefresh = false) {
     }
   };
 
+  const currentLang = getActiveLang();
+
   if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
     sanitizeTranscriptions(cachedWordsList);
+    applyMultilingualTranslations(cachedWordsList);
     sortByZipf(cachedWordsList);
     return { success: true, data: cachedWordsList };
   }
@@ -83,14 +121,16 @@ async function getWords(forceRefresh = false) {
       const localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
       if (Array.isArray(localCached) && localCached.length > 0) {
         sanitizeTranscriptions(localCached);
+        applyMultilingualTranslations(localCached);
         sortByZipf(localCached);
         cachedWordsList = localCached;
         // Asynchronously refresh in background without blocking UI
-        fetch(`${API_URL}?route=words`)
+        fetch(`${API_URL}?route=words&lang=${currentLang}`)
           .then((res) => res.json())
           .then((data) => {
             if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
               sanitizeTranscriptions(data.data);
+              applyMultilingualTranslations(data.data);
               sortByZipf(data.data);
               cachedWordsList = data.data;
               localStorage.setItem('myduo_cached_words', JSON.stringify(data.data));
@@ -106,10 +146,11 @@ async function getWords(forceRefresh = false) {
   }
 
   try {
-    const response = await fetch(`${API_URL}?route=words`);
+    const response = await fetch(`${API_URL}?route=words&lang=${currentLang}`);
     const data = await response.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
       sanitizeTranscriptions(data.data);
+      applyMultilingualTranslations(data.data);
       sortByZipf(data.data);
       cachedWordsList = data.data;
       try {
@@ -123,6 +164,7 @@ async function getWords(forceRefresh = false) {
 
   const fallbackList = cachedWordsList || MOCK_WORDS;
   sanitizeTranscriptions(fallbackList);
+  applyMultilingualTranslations(fallbackList);
   sortByZipf(fallbackList);
   return { success: true, data: fallbackList };
 }

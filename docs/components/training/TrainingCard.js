@@ -17,7 +17,7 @@ import {
   transcribeAudio,
   transcribePingAudio,
 } from '../../services/api.js?v=185.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=130.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=130.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -313,7 +313,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="word-header-row">
               <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                ${currentWord.translation}
+                ${getWordTranslation(currentWord)}
               </h2>
               <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
                 ${favorited ? '❤️' : '🤍'}
@@ -343,13 +343,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     : quizStage === 2
                       ? `
                 <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                  ${currentWord.translation}
+                  ${getWordTranslation(currentWord)}
                 </h2>
               `
                       : `
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                   <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
-                    ${currentWord.translation}
+                    ${getWordTranslation(currentWord)}
                   </h2>
                 </div>
               `
@@ -463,11 +463,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
             );
       const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
+      const currentTrans = getWordTranslation(currentWord);
       const otherTranslations = pool
         .filter((w) => w.id !== currentWord.id)
-        .map((w) => w.translation);
+        .map((w) => getWordTranslation(w));
       const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
-      const choices = shuffleArray([currentWord.translation, ...shuffledOthers]);
+      const choices = shuffleArray([currentTrans, ...shuffledOthers]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
@@ -475,7 +476,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           const optionBtn = e.currentTarget;
           const isCorrect =
             String(optionBtn.getAttribute('data-choice')).trim() ===
-            String(currentWord.translation).trim();
+            String(currentTrans).trim();
 
           const listenText = container.querySelector('#listening-word-text');
           if (listenText) {
@@ -486,7 +487,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
             b.disabled = true;
-            if (b.getAttribute('data-choice') === currentWord.translation)
+            if (b.getAttribute('data-choice') === currentTrans)
               b.classList.add('correct');
             else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
           });
@@ -1644,7 +1645,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       const rawRightItems = roundWords.map((w) => ({
         id: w.id,
-        text: w.translation,
+        text: getWordTranslation(w),
         word: w.word,
         side: 'right',
       }));
@@ -2242,7 +2243,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ${currentWord.transcription ? `<p class="flashcard-transcription">${currentWord.transcription}</p>` : ''}
             </div>
             <div class="flashcard-face-bottom">
-              <span class="flashcard-flip-prompt">Нажми, чтобы увидеть перевод</span>
+              <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
             </div>
           </div>
 
@@ -2254,8 +2255,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </button>
             </div>
             <div class="flashcard-face-body">
-              <h2 class="flashcard-translation">${currentWord.translation}</h2>
-              ${currentWord.notes ? `<p class="flashcard-notes">${currentWord.notes}</p>` : ''}
+              <h2 class="flashcard-translation">${getWordTranslation(currentWord)}</h2>
+              ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${getWordNotes(currentWord)}</p>` : ''}
             </div>
           </div>
         </div>
@@ -2263,10 +2264,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
         <button type="button" class="btn-learn" id="btn-learn">
-          Учить
+          ${t('train_learn')}
         </button>
         <button type="button" class="btn-know" id="btn-know">
-          Знаю
+          ${t('train_know')}
         </button>
       </div>
     `;
