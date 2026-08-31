@@ -58,28 +58,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="ru">Русский</div>
             <div class="dropdown-item" data-value="uk">Українська</div>
             <div class="dropdown-item" data-value="de">Deutsch</div>
-            <div class="dropdown-item" data-value="fr">Français</div>
             <div class="dropdown-item" data-value="es">Español</div>
+            <div class="dropdown-item" data-value="fr">Français</div>
             <div class="dropdown-item" data-value="pl">Polski</div>
+            <div class="dropdown-item" data-value="it">Italiano</div>
+            <div class="dropdown-item" data-value="tr">Türkçe</div>
+            <div class="dropdown-item" data-value="pt">Português</div>
             <div class="dropdown-item" data-value="ro">Română</div>
             <div class="dropdown-item" data-value="bg">Български</div>
-            <div class="dropdown-item" data-value="tr">Türkçe</div>
-            <div class="dropdown-item" data-value="it">Italiano</div>
+            <div class="dropdown-item" data-value="cs">Čeština</div>
+            <div class="dropdown-item" data-value="sk">Slovenčina</div>
             <div class="dropdown-item" data-value="hu">Magyar</div>
             <div class="dropdown-item" data-value="el">Ελληνικά</div>
-            <div class="dropdown-item" data-value="da">Dansk</div>
-            <div class="dropdown-item" data-value="ga">Gaeilge</div>
-            <div class="dropdown-item" data-value="lv">Latviešu</div>
-            <div class="dropdown-item" data-value="lt">Lietuvių</div>
-            <div class="dropdown-item" data-value="mt">Malti</div>
-            <div class="dropdown-item" data-value="pt">Português</div>
-            <div class="dropdown-item" data-value="sk">Slovenčina</div>
             <div class="dropdown-item" data-value="sl">Slovenščina</div>
-            <div class="dropdown-item" data-value="fi">Suomi</div>
-            <div class="dropdown-item" data-value="hr">Hrvatski</div>
-            <div class="dropdown-item" data-value="cs">Čeština</div>
-            <div class="dropdown-item" data-value="sv">Svenska</div>
             <div class="dropdown-item" data-value="et">Eesti</div>
+            <div class="dropdown-item" data-value="lt">Lietuvių</div>
           </div>
         </div>
       </div>
@@ -341,28 +334,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     ru: 'Русский',
     uk: 'Українська',
     de: 'Deutsch',
-    fr: 'Français',
     es: 'Español',
+    fr: 'Français',
     pl: 'Polski',
+    it: 'Italiano',
+    tr: 'Türkçe',
+    pt: 'Português',
     ro: 'Română',
     bg: 'Български',
-    tr: 'Türkçe',
-    it: 'Italiano',
+    cs: 'Čeština',
+    sk: 'Slovenčina',
     hu: 'Magyar',
     el: 'Ελληνικά',
-    da: 'Dansk',
-    ga: 'Gaeilge',
-    lv: 'Latviešu',
-    lt: 'Lietuvių',
-    mt: 'Malti',
-    pt: 'Português',
-    sk: 'Slovenčina',
     sl: 'Slovenščina',
-    fi: 'Suomi',
-    hr: 'Hrvatski',
-    cs: 'Čeština',
-    sv: 'Svenska',
-    et: 'Eesti'
+    et: 'Eesti',
+    lt: 'Lietuvių',
   };
 
   const currentLang = localStorage.getItem('myduo_interface_lang') || 'en';

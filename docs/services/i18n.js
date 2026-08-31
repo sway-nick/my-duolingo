@@ -2042,3 +2042,21 @@ export function t(key) {
   const dict = translations[lang] || translations['en'];
   return dict[key] || translations['en'][key] || key;
 }
+
+export function getWordTranslation(wordObj) {
+  if (!wordObj) return '';
+  const lang = getInterfaceLanguage();
+  if (wordObj.translations && wordObj.translations[lang]) {
+    return wordObj.translations[lang];
+  }
+  return wordObj.translation || '';
+}
+
+export function getWordNotes(wordObj) {
+  if (!wordObj) return '';
+  const lang = getInterfaceLanguage();
+  if (wordObj.all_notes && wordObj.all_notes[lang]) {
+    return wordObj.all_notes[lang];
+  }
+  return wordObj.notes || '';
+}
