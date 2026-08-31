@@ -101,9 +101,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <header class="mobile-header">
-        <div class="brand" id="brand-logo" style="cursor: pointer;" title="Перейти на главную (режим Тест)">
+        <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden;" title="Перейти на главную (режим Тест)">
           <!-- SVG Cup-with-Book Logo -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" width="195" height="40" style="display: block;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" style="display: block; width: 100%; max-width: 180px; height: 38px; min-width: 130px;">
             <!-- Steam lines (More wavy) -->
             <path d="M12,16 C7,12 17,8 12,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
             <path d="M22,16 C17,12 27,8 22,2" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
