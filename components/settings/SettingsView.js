@@ -95,10 +95,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_sfx')}</h3>
         <div class="sound-options-row">
           <button class="sound-option-btn" id="sfx-on-btn">
-            ${String(t('settings_sfx_on') || '').replace(/^[^a-zA-Zа-яА-ЯёЁіІїЇєЄ\w\s]+/gu, '').trim()}
+            ${t('settings_sfx_on')}
           </button>
           <button class="sound-option-btn" id="sfx-off-btn">
-            ${String(t('settings_sfx_off') || '').replace(/^[^a-zA-Zа-яА-ЯёЁіІїЇєЄ\w\s]+/gu, '').trim()}
+            ${t('settings_sfx_off')}
           </button>
         </div>
       </div>

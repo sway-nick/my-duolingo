@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v209';
+        var APP_BUILD = '20260901_v210';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -19,25 +19,6 @@
             if (k && (k.startsWith('cache_leaderboard_') || k === 'myduo_leaderboard_period')) {
               localStorage.removeItem(k);
             }
-          }
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-              for (var i = 0; i < registrations.length; i++) {
-                registrations[i].unregister();
-              }
-            });
-          }
-          if ('caches' in window) {
-            caches.keys().then(function(names) {
-              for (var i = 0; i < names.length; i++) {
-                caches.delete(names[i]);
-              }
-            });
-          }
-          var url = new URL(window.location.href);
-          if (url.searchParams.get('b') !== APP_BUILD) {
-            url.searchParams.set('b', APP_BUILD);
-            window.location.replace(url.toString());
           }
         }
       })();
