@@ -3595,13 +3595,13 @@ body.notebook-theme .notebook-ink-blot,
 .notebook-theme .notebook-ink-blot {
   display: block !important;
   position: fixed !important;
-  right: 14px !important;
-  bottom: 14px !important;
-  width: 74px !important;
-  height: 74px !important;
+  right: 28px !important;
+  bottom: 22px !important;
+  width: 98px !important;
+  height: 98px !important;
   pointer-events: none !important;
-  z-index: 9999 !important;
-  opacity: 0.9 !important;
+  z-index: 1 !important;
+  opacity: 0.92 !important;
   filter: drop-shadow(1px 2px 3px rgba(88, 28, 135, 0.35)) !important;
   transform: rotate(-10deg) !important;
 }
@@ -3609,11 +3609,36 @@ body.notebook-theme .notebook-ink-blot,
 @media (max-width: 480px) {
   body.notebook-theme .notebook-ink-blot,
   .notebook-theme .notebook-ink-blot {
-    width: 60px !important;
-    height: 60px !important;
-    right: 10px !important;
-    bottom: 10px !important;
+    width: 86px !important;
+    height: 86px !important;
+    right: 20px !important;
+    bottom: 16px !important;
   }
+}
+
+.pairs-title {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.notebook-theme .pairs-title {
+  font-family: 'Caveat', cursive !important;
+  font-size: 21px !important;
+  font-weight: 700 !important;
+  color: var(--nb-blue-pen) !important;
+  letter-spacing: 0.5px;
+}
+
+.app-main-content,
+.word-card-container {
+  position: relative;
+  z-index: 5;
 }
 
 @media (max-width: 340px) {

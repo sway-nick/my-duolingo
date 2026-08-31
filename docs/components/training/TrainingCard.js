@@ -297,8 +297,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
             : isPairsMode
               ? `
-            <div class="pairs-header-box" style="margin: 4px 0 6px; display: flex; justify-content: space-between; align-items: center;">
-              <h2 class="training-word" style="font-size: 20px; margin: 0;">🧩 ${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</h2>
+            <div class="pairs-header-box" style="margin: 2px 0 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <h2 class="pairs-title">
+                <span style="font-size: 18px; line-height: 1; flex-shrink: 0;">🧩</span>
+                <span>${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</span>
+              </h2>
               <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
                 <span class="pairs-timer-icon">⏱️</span>
                 <span class="pairs-timer-val" id="pairs-timer-val">00:00</span>
