@@ -101,35 +101,35 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <header class="mobile-header">
-        <div class="brand" id="brand-logo" style="cursor: pointer; display: flex; align-items: center; gap: 8px;" title="Перейти на главную (режим Тест)">
+        <div class="brand" id="brand-logo" style="cursor: pointer;" title="Перейти на главную (режим Тест)">
           <!-- SVG Cup-with-Book Logo -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 56" width="32" height="39" style="display: block; flex-shrink: 0;">
-            <!-- Steam lines -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" width="195" height="40" style="display: block;">
+            <!-- Steam lines (More wavy) -->
             <path d="M12,16 C7,12 17,8 12,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
             <path d="M22,16 C17,12 27,8 22,2" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
             <path d="M32,16 C27,12 37,8 32,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
             <!-- Cup body -->
             <path d="M4,28 C4,46 12,54 22,54 C32,54 40,46 40,28 Z" fill="#FF6A00"/>
-            <!-- Handle -->
+            <!-- Handle (Now fully connects to cup body at y=45) -->
             <path d="M40,32 C48,32 48,45 35,45" stroke="#FF6A00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <!-- Open Book -->
+            <!-- Stacked open book pages with thick orange borders -->
+            <!-- Open Book background/fill (white) -->
             <path d="M5,30 Q13.5,27 22,30 Q30.5,27 39,30 L39,20 Q30.5,17 22,20 Q13.5,17 5,20 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
+            <!-- Page lines left -->
+            <path d="M22,23 Q13.5,20 8,23" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <path d="M22,26 Q13.5,23 8,26" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <!-- Page lines right -->
+            <path d="M22,23 Q30.5,20 36,23" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <path d="M22,26 Q30.5,23 36,26" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <!-- Center Spine Line -->
             <line x1="22" y1="20" x2="22" y2="30" stroke="#FF6A00" stroke-width="1.8"/>
             <!-- EN Text -->
             <text x="22" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
+            <!-- Brand Text (English Breakfast) -->
+            <text x="56" y="27" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="20.5" fill="var(--text-main)">English <tspan fill="#FF6A00">Breakfast</tspan></text>
+            <!-- Subtitle (Vocabulary + inline Demo) -->
+            <text x="56" y="49" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="16" fill="var(--text-muted)">Vocabulary<tspan id="header-user-status" fill="#ea580c" font-weight="700" font-size="14.5">${user ? '' : ` • 🎁 ${guestCount}/${GUEST_WORD_LIMIT}`}</tspan></text>
           </svg>
-
-          <div style="display: flex; flex-direction: column; justify-content: center; line-height: 1.2;">
-            <div style="font-weight: 800; font-size: 16px; color: var(--text-main); white-space: nowrap; letter-spacing: -0.2px;">
-              English <span style="color: #FF6A00;">Breakfast</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-muted); font-weight: 500; white-space: nowrap;">
-              <span>Vocabulary</span>
-              <span id="header-user-status" style="display: ${user ? 'none' : 'inline'}; color: #ea580c; font-weight: 600; font-size: 11px;">
-                • 🎁 ${guestCount}/${GUEST_WORD_LIMIT}
-              </span>
-            </div>
-          </div>
         </div>
         
         <div class="header-right-actions">
