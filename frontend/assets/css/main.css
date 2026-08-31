@@ -3584,29 +3584,31 @@ body {
 
 /* Ink blot for Notebook Theme */
 .notebook-ink-blot {
-  display: none;
+  display: none !important;
 }
 
+body.notebook-theme .notebook-ink-blot,
 .notebook-theme .notebook-ink-blot {
-  display: block;
-  position: fixed;
-  right: 14px;
-  bottom: 12px;
-  width: 76px;
-  height: 76px;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0.88;
-  filter: drop-shadow(1px 2px 3px rgba(88, 28, 135, 0.3));
-  transform: rotate(-10deg);
+  display: block !important;
+  position: fixed !important;
+  right: 14px !important;
+  bottom: 14px !important;
+  width: 74px !important;
+  height: 74px !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  opacity: 0.9 !important;
+  filter: drop-shadow(1px 2px 3px rgba(88, 28, 135, 0.35)) !important;
+  transform: rotate(-10deg) !important;
 }
 
 @media (max-width: 480px) {
+  body.notebook-theme .notebook-ink-blot,
   .notebook-theme .notebook-ink-blot {
-    width: 60px;
-    height: 60px;
-    right: 10px;
-    bottom: 8px;
+    width: 60px !important;
+    height: 60px !important;
+    right: 10px !important;
+    bottom: 10px !important;
   }
 }
 
