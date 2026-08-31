@@ -369,14 +369,22 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
 
     langItems.forEach((item) => {
-      item.addEventListener('click', (e) => {
+      item.addEventListener('click', async (e) => {
         e.stopPropagation();
         const val = item.dataset.value;
         localStorage.setItem('myduo_interface_lang', val);
         updateLangUI(val);
         langDropdown.classList.remove('open');
-        // Dispatch event to reload other tabs/header immediately
+        
+        // Dispatch event to reload other tabs/header and words immediately
         window.dispatchEvent(new Event('myduo:lang_changed'));
+        
+        // Background refresh words with new language
+        getWords(true).catch(() => {});
+
+        // Re-render settings view to show updated labels
+        await triggerAutoSave();
+        await renderSettingsView(containerSelector, onUserChange);
       });
     });
 
@@ -391,12 +399,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   if (clearCacheBtn) {
     clearCacheBtn.addEventListener('click', async () => {
       const confirmMsg = getInterfaceLanguage() === 'ru' 
-        ? 'Вы уверены, что хотите очистить кэш рейтинга и перезагрузить приложение?' 
+        ? 'Вы уверены, что хотите очистить кэш приложения (слов и рейтинга) и перезагрузить?' 
         : getInterfaceLanguage() === 'uk' 
-          ? 'Ви впевнені, що хочете очистити кеш рейтингу та перезавантажити додаток?' 
-          : 'Are you sure you want to clear the leaderboard cache and reload the app?';
+          ? 'Ви впевнені, що хочете очистити кеш додатка (слів та рейтингу) та перезавантажити?' 
+          : 'Are you sure you want to clear the app cache (words and leaderboard) and reload?';
       if (confirm(confirmMsg)) {
-        // 1. Clear local leaderboard cache
+        // 1. Clear local words & leaderboard cache
+        localStorage.removeItem('myduo_cached_words');
         for (let i = localStorage.length - 1; i >= 0; i--) {
           const k = localStorage.key(i);
           if (k && (k.startsWith('cache_leaderboard_') || k === 'myduo_leaderboard_period')) {

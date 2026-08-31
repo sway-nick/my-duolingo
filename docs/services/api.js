@@ -118,7 +118,15 @@ async function getWords(forceRefresh = false) {
   // Check localStorage cache first for instant startup
   if (!forceRefresh) {
     try {
-      const localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+      let localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+      const hasMultilingual = Array.isArray(localCached) && localCached.length > 0 && localCached.some((w) => w && w.translations && typeof w.translations === 'object');
+
+      if (!hasMultilingual) {
+        // Invalidate legacy cache without translations
+        localCached = null;
+        localStorage.removeItem('myduo_cached_words');
+      }
+
       if (Array.isArray(localCached) && localCached.length > 0) {
         sanitizeTranscriptions(localCached);
         applyMultilingualTranslations(localCached);
