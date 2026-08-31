@@ -288,9 +288,9 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       <!-- Single Sticky Header Group (Header + Podium) -->
       <div class="leaderboard-sticky-group" style="position: sticky; top: 56px; z-index: 45; background: var(--bg-main, var(--bg-color, #ffffff)); padding-top: 8px; padding-bottom: 6px; border-bottom: 1.5px solid var(--border-color); margin: -12px -14px 8px -14px; padding-left: 14px; padding-right: 14px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
         <div class="page-header" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-          <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; width: 175px;">
-            <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 19px; font-weight: 800; padding: 4px 6px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: space-between; width: 175px; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
-              <span id="leaderboard-type-label" style="white-space: nowrap; flex: 1; text-align: left;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
+          <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; flex: 1 1 auto; min-width: 0; max-width: 175px;">
+            <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 18px; font-weight: 800; padding: 4px 2px; height: 38px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: flex-start; width: 100%; gap: 4px;" aria-haspopup="listbox" aria-expanded="false">
+              <span id="leaderboard-type-label" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
               <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 2px;">▼</span>
             </button>
             <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 175px;">
@@ -298,8 +298,8 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
               <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 ${t('lead_all_time')}</div>
             </div>
           </div>
-          <div class="league-timer-badge" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'block'}; margin-right: 4px;">
-            ⏳ ${weekTime.days > 0 ? `${weekTime.days}${dText} ` : ''}${weekTime.hours}${hText} ${weekTime.mins}${mText}
+          <div class="league-timer-badge" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'inline-flex'}; flex-shrink: 0; white-space: nowrap;">
+            ⏳ ${weekTime.days > 0 ? `${weekTime.days}${dText} ` : ''}${weekTime.hours}${hText}
           </div>
         </div>
 

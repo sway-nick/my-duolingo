@@ -15,13 +15,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const currentTheme = getSavedTheme();
 
   container.innerHTML = `
-    <div class="settings-page">
-      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 style="margin: 0;">⚙️ ${t('settings')}</h2>
-        <span class="autosave-badge" id="autosave-status" style="opacity: 0; transition: opacity 0.3s ease; white-space: nowrap;">
-          ✓ Saved
-        </span>
-      </div>
+    <div class="settings-page" style="position: relative;">
+      <span class="autosave-badge" id="autosave-status" style="position: absolute; top: -6px; right: 0; opacity: 0; transition: opacity 0.3s ease; white-space: nowrap; z-index: 20;">
+        ✓ Saved
+      </span>
 
       <!-- User Profile Card -->
       <div class="settings-card profile-card">
