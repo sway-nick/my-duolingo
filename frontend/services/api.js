@@ -1298,28 +1298,41 @@ function getQueueForQuiz(words, progress, favorites = []) {
     return p && p.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
   });
 
-  if (!favorites || favorites.length === 0 || base.length === 0) {
-    return base;
+  const baseIds = new Set(base.map((bw) => String(bw.id)));
+
+  // 1. Up to 5 favorite words
+  let injectedFavs = [];
+  if (favorites && favorites.length > 0) {
+    const favSet = new Set(favorites.map(String));
+    const candidateFavs = words.filter((w) => {
+      const p = progress[w.id] || progress[String(w.id)];
+      return favSet.has(String(w.id)) && !baseIds.has(String(w.id)) && !isWordMastered(p);
+    });
+    candidateFavs.sort((a, b) => {
+      const pA = progress[a.id] || progress[String(a.id)];
+      const pB = progress[b.id] || progress[String(b.id)];
+      const tA = pA ? pA.lastPracticed || 0 : 0;
+      const tB = pB ? pB.lastPracticed || 0 : 0;
+      return tA - tB;
+    });
+    injectedFavs = candidateFavs.slice(0, 5);
   }
 
-  const favSet = new Set(favorites.map(String));
-  const candidateFavs = words.filter((w) => {
+  // 2. Up to 5 oldest mastered words for retention
+  const candidateMastered = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id)) && !isWordMastered(p);
+    return p && isWordMastered(p) && !baseIds.has(String(w.id));
   });
-
-  candidateFavs.sort((a, b) => {
+  candidateMastered.sort((a, b) => {
     const pA = progress[a.id] || progress[String(a.id)];
     const pB = progress[b.id] || progress[String(b.id)];
     const tA = pA ? pA.lastPracticed || 0 : 0;
     const tB = pB ? pB.lastPracticed || 0 : 0;
     return tA - tB;
   });
+  const injectedMastered = candidateMastered.slice(0, 5);
 
-  const favCount = Math.max(1, Math.round(base.length * 0.15));
-  const injectedFavs = candidateFavs.slice(0, favCount);
-
-  return [...base, ...injectedFavs];
+  return [...base, ...injectedFavs, ...injectedMastered];
 }
 
 function getQueueForPairs(words, progress, favorites = []) {
@@ -1328,28 +1341,41 @@ function getQueueForPairs(words, progress, favorites = []) {
     return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 2 && !isWordMastered(p);
   });
 
-  if (!favorites || favorites.length === 0 || base.length === 0) {
-    return base;
+  const baseIds = new Set(base.map((bw) => String(bw.id)));
+
+  // 1. Up to 5 favorite words
+  let injectedFavs = [];
+  if (favorites && favorites.length > 0) {
+    const favSet = new Set(favorites.map(String));
+    const candidateFavs = words.filter((w) => {
+      const p = progress[w.id] || progress[String(w.id)];
+      return favSet.has(String(w.id)) && !baseIds.has(String(w.id)) && !isWordMastered(p);
+    });
+    candidateFavs.sort((a, b) => {
+      const pA = progress[a.id] || progress[String(a.id)];
+      const pB = progress[b.id] || progress[String(b.id)];
+      const tA = pA ? pA.lastPracticed || 0 : 0;
+      const tB = pB ? pB.lastPracticed || 0 : 0;
+      return tA - tB;
+    });
+    injectedFavs = candidateFavs.slice(0, 5);
   }
 
-  const favSet = new Set(favorites.map(String));
-  const candidateFavs = words.filter((w) => {
+  // 2. Up to 5 oldest mastered words for retention
+  const candidateMastered = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return favSet.has(String(w.id)) && !base.some((bw) => String(bw.id) === String(w.id)) && !isWordMastered(p);
+    return p && isWordMastered(p) && !baseIds.has(String(w.id));
   });
-
-  candidateFavs.sort((a, b) => {
+  candidateMastered.sort((a, b) => {
     const pA = progress[a.id] || progress[String(a.id)];
     const pB = progress[b.id] || progress[String(b.id)];
     const tA = pA ? pA.lastPracticed || 0 : 0;
     const tB = pB ? pB.lastPracticed || 0 : 0;
     return tA - tB;
   });
+  const injectedMastered = candidateMastered.slice(0, 5);
 
-  const favCount = Math.max(1, Math.round(base.length * 0.15));
-  const injectedFavs = candidateFavs.slice(0, favCount);
-
-  return [...base, ...injectedFavs];
+  return [...base, ...injectedFavs, ...injectedMastered];
 }
 
 function getQueueForTest(words, progress) {
@@ -1377,8 +1403,23 @@ async function getUserStats(customWords = null) {
 
   let masteredCount = 0;
   let learningCount = 0;
+  let totalAttempted = 0;
   let correct = 0;
   let errors = 0;
+
+  const categoryMap = {};
+
+  wordsList.forEach((w) => {
+    const cat = w.category || 'Elementary';
+    if (!categoryMap[cat]) {
+      categoryMap[cat] = { total: 0, learned: 0 };
+    }
+    categoryMap[cat].total += 1;
+    const prog = localProg[w.id] || localProg[String(w.id)];
+    if (isWordMastered(prog)) {
+      categoryMap[cat].learned += 1;
+    }
+  });
 
   Object.entries(localProg).forEach(([wordId, prog]) => {
     correct += prog.correct || 0;
@@ -1388,21 +1429,10 @@ async function getUserStats(customWords = null) {
     } else if (isWordLearning(prog)) {
       learningCount += 1;
     }
+    totalAttempted += 1;
   });
 
-  const totalAttempted = Object.keys(localProg).length;
   const accuracy = correct + errors > 0 ? Math.round((correct / (correct + errors)) * 100) : 0;
-
-  const categoryMap = {};
-  wordsList.forEach((w) => {
-    const cat = w.category ? String(w.category).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() : 'Общие';
-    if (!categoryMap[cat]) categoryMap[cat] = { total: 0, learned: 0 };
-    categoryMap[cat].total += 1;
-    const prog = localProg[w.id] || localProg[String(w.id)];
-    if (isWordMastered(prog)) {
-      categoryMap[cat].learned += 1;
-    }
-  });
 
   const getCategoryOrderIndex = (catName) => {
     const clean = String(catName || '').toLowerCase().trim();
@@ -1465,12 +1495,12 @@ async function getUserSettings() {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      if (parsed.dailyGoal === 10 || !parsed.dailyGoal) {
-        parsed.dailyGoal = 20;
+      if (parsed.dailyGoal === 20 || !parsed.dailyGoal) {
+        parsed.dailyGoal = 10;
       }
       return {
         userId,
-        dailyGoal: 20,
+        dailyGoal: 10,
         theme: 'light',
         level: 'All',
         category: 'Elementary',
@@ -1481,7 +1511,7 @@ async function getUserSettings() {
   }
   return {
     userId,
-    dailyGoal: 20,
+    dailyGoal: 10,
     theme: 'light',
     level: 'All',
     category: 'Elementary',

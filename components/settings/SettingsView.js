@@ -229,7 +229,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   async function triggerAutoSave() {
     const newSettings = {
       ...settings,
-      dailyGoal: 20,
+      dailyGoal: 10,
       theme: getSavedTheme(),
       voiceAccent: currentAccent,
       voiceGender: currentAccent === 'uk' ? 'male' : 'female',
