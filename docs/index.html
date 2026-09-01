@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v221';
+        var APP_BUILD = '20260901_v222';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -622,7 +622,7 @@
           } else if (currentMethod === 'input') {
             if (unmasteredCount > 0) {
               if (learningCount === 0) {
-                emptyIcon = '🗂️';
+                emptyIcon = '';
                 emptyTitle = getInterfaceLanguage() === 'ru' ? 'Нет слов для обучения' : getInterfaceLanguage() === 'uk' ? 'Немає слів для навчання' : 'No words in learning';
                 emptyMsg = getInterfaceLanguage() === 'ru' ? 'Отберите новые слова для тренировки или повторите избранное:' : getInterfaceLanguage() === 'uk' ? 'Відберіть нові слова для тренування або повторіть обрані:' : 'Select new words for training or practice favorites:';
                 nextMode = 'cards';
@@ -720,7 +720,7 @@
 
           content.innerHTML = `
             <div class="empty-state-card" style="text-align: center; padding: 36px 20px;">
-              <div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>
+              ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               <h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
