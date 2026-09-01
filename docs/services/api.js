@@ -1292,90 +1292,69 @@ function getQueueForCards(words, progress) {
   return [...base, ...injected];
 }
 
-function getQueueForQuiz(words, progress, favorites = []) {
-  const base = words.filter((w) => {
+function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
+  // 1. 10 words actively selected in Cards
+  const baseWords = categoryWords.filter((w) => {
+    const p = userProgress[w.id] || userProgress[String(w.id)];
+    return isWordLearning(p);
+  });
+
+  const baseIds = new Set(baseWords.map((w) => String(w.id)));
+
+  // 2. Pick up to 5 oldest unmastered favorites
+  let injectedFavs = [];
+  if (favorites && favorites.length > 0) {
+    const favSet = new Set(favorites.map(String));
+    const candidateFavs = categoryWords.filter((w) => {
+      const p = userProgress[w.id] || userProgress[String(w.id)];
+      return favSet.has(String(w.id)) && !baseIds.has(String(w.id)) && !isWordMastered(p);
+    });
+    candidateFavs.sort((a, b) => {
+      const pA = userProgress[a.id] || userProgress[String(a.id)];
+      const pB = userProgress[b.id] || userProgress[String(b.id)];
+      const tA = pA ? pA.lastPracticed || 0 : 0;
+      const tB = pB ? pB.lastPracticed || 0 : 0;
+      return tA - tB;
+    });
+    injectedFavs = candidateFavs.slice(0, 5);
+  }
+
+  const combinedIds = new Set([...baseIds, ...injectedFavs.map((w) => String(w.id))]);
+
+  // 3. Pick up to 5 oldest mastered words for retention
+  const candidateMastered = categoryWords.filter((w) => {
+    const p = userProgress[w.id] || userProgress[String(w.id)];
+    return p && isWordMastered(p) && !combinedIds.has(String(w.id));
+  });
+  candidateMastered.sort((a, b) => {
+    const pA = userProgress[a.id] || userProgress[String(a.id)];
+    const pB = userProgress[b.id] || userProgress[String(b.id)];
+    const tA = pA ? pA.lastPracticed || 0 : 0;
+    const tB = pB ? pB.lastPracticed || 0 : 0;
+    return tA - tB;
+  });
+  const injectedMastered = candidateMastered.slice(0, 5);
+
+  const bonusWords = [...injectedFavs, ...injectedMastered];
+  if (bonusWords.length > 0) {
+    resetWordsProgressForPractice(bonusWords);
+  }
+
+  return [...baseWords, ...bonusWords];
+}
+
+function getQueueForQuiz(words, progress) {
+  return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return p && p.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
   });
-
-  const baseIds = new Set(base.map((bw) => String(bw.id)));
-
-  // 1. Up to 5 favorite words
-  let injectedFavs = [];
-  if (favorites && favorites.length > 0) {
-    const favSet = new Set(favorites.map(String));
-    const candidateFavs = words.filter((w) => {
-      const p = progress[w.id] || progress[String(w.id)];
-      return favSet.has(String(w.id)) && !baseIds.has(String(w.id)) && !isWordMastered(p);
-    });
-    candidateFavs.sort((a, b) => {
-      const pA = progress[a.id] || progress[String(a.id)];
-      const pB = progress[b.id] || progress[String(b.id)];
-      const tA = pA ? pA.lastPracticed || 0 : 0;
-      const tB = pB ? pB.lastPracticed || 0 : 0;
-      return tA - tB;
-    });
-    injectedFavs = candidateFavs.slice(0, 5);
-  }
-
-  // 2. Up to 5 oldest mastered words for retention
-  const candidateMastered = words.filter((w) => {
-    const p = progress[w.id] || progress[String(w.id)];
-    return p && isWordMastered(p) && !baseIds.has(String(w.id));
-  });
-  candidateMastered.sort((a, b) => {
-    const pA = progress[a.id] || progress[String(a.id)];
-    const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA ? pA.lastPracticed || 0 : 0;
-    const tB = pB ? pB.lastPracticed || 0 : 0;
-    return tA - tB;
-  });
-  const injectedMastered = candidateMastered.slice(0, 5);
-
-  return [...base, ...injectedFavs, ...injectedMastered];
 }
 
-function getQueueForPairs(words, progress, favorites = []) {
-  const base = words.filter((w) => {
+function getQueueForPairs(words, progress) {
+  return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 2 && !isWordMastered(p);
   });
-
-  const baseIds = new Set(base.map((bw) => String(bw.id)));
-
-  // 1. Up to 5 favorite words
-  let injectedFavs = [];
-  if (favorites && favorites.length > 0) {
-    const favSet = new Set(favorites.map(String));
-    const candidateFavs = words.filter((w) => {
-      const p = progress[w.id] || progress[String(w.id)];
-      return favSet.has(String(w.id)) && !baseIds.has(String(w.id)) && !isWordMastered(p);
-    });
-    candidateFavs.sort((a, b) => {
-      const pA = progress[a.id] || progress[String(a.id)];
-      const pB = progress[b.id] || progress[String(b.id)];
-      const tA = pA ? pA.lastPracticed || 0 : 0;
-      const tB = pB ? pB.lastPracticed || 0 : 0;
-      return tA - tB;
-    });
-    injectedFavs = candidateFavs.slice(0, 5);
-  }
-
-  // 2. Up to 5 oldest mastered words for retention
-  const candidateMastered = words.filter((w) => {
-    const p = progress[w.id] || progress[String(w.id)];
-    return p && isWordMastered(p) && !baseIds.has(String(w.id));
-  });
-  candidateMastered.sort((a, b) => {
-    const pA = progress[a.id] || progress[String(a.id)];
-    const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA ? pA.lastPracticed || 0 : 0;
-    const tB = pB ? pB.lastPracticed || 0 : 0;
-    return tA - tB;
-  });
-  const injectedMastered = candidateMastered.slice(0, 5);
-
-  return [...base, ...injectedFavs, ...injectedMastered];
 }
 
 function getQueueForTest(words, progress) {
@@ -1946,6 +1925,7 @@ export {
   getQueueForQuiz,
   getQueueForPairs,
   getQueueForTest,
+  prepareTrainingBatch,
   flushProgressQueue,
   toggleFavoriteApi,
   getUserStats,

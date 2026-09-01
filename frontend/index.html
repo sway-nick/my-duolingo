@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v226';
+        var APP_BUILD = '20260901_v227';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -65,7 +65,7 @@
     </div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=200.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=200.0';
       import { speakWord, preloadWordAudio } from './services/audioService.js?v=200.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=200.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=200.0';
@@ -361,8 +361,8 @@
         const favListForMixing = isFavPracticeActive ? [] : favList;
 
         const cardsQueue = getQueueForCards(categoryWords, userProgress);
-        const quizQueue = getQueueForQuiz(categoryWords, userProgress, favListForMixing);
-        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favListForMixing);
+        const quizQueue = getQueueForQuiz(categoryWords, userProgress);
+        const pairsQueue = getQueueForPairs(categoryWords, userProgress);
         const testQueue = getQueueForTest(categoryWords, userProgress);
 
         function isMethodAvailable(method) {
@@ -378,7 +378,7 @@
         // If 0 words in learning and user hasn't explicitly clicked "Open Cards", show the clean Hub screen.
         if (!isFavPracticeActive) {
           if (currentMethod === 'cards') {
-            // While user is in Cards mode, they continue selecting words until reaching dailyGoal (20 words)
+            // While user is in Cards mode, they continue selecting words until reaching dailyGoal (10 words)
             if (cardsQueue.length === 0 && learningCount === 0) {
               currentMethod = 'input';
             }
@@ -438,6 +438,7 @@
             goQuizBtn.addEventListener('click', () => {
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
+              prepareTrainingBatch(categoryWords, getUserProgress(), favList);
               userSettings.preferredMethod = nextBtnTarget;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
