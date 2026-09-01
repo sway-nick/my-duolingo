@@ -95,7 +95,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     avatarHtml = `<div class="drawer-avatar-placeholder">${initial}</div>`;
   }
   const username = user ? user.name : 'Гость (Демо)';
-  const email = user ? user.email : `Прогресс: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
+  const email = user ? '' : `Прогресс: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
 
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
@@ -313,7 +313,7 @@ function updateDrawerProfile() {
 
   const emailEl = drawer.querySelector('.drawer-email');
   if (emailEl) {
-    emailEl.textContent = user ? user.email : `Progress: ${guestCount}/${GUEST_WORD_LIMIT} words`;
+    emailEl.textContent = user ? '' : `Progress: ${guestCount}/${GUEST_WORD_LIMIT} words`;
   }
 }
 

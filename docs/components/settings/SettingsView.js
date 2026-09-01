@@ -31,8 +31,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           <div class="avatar-edit-badge" title="Change avatar">🎭</div>
         </div>
         <div class="profile-details">
-          <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 2px;">${user ? user.name : (t('demo') || 'Guest Mode')}</h3>
-          <p style="font-size: 12px; margin: 0; color: var(--text-muted);">${user ? user.email : (t('settings_login_sub') || 'Log in to sync progress')}</p>
+          <h3 style="font-size: 16px; font-weight: 700; margin: 0;">${user ? user.name : (t('demo') || 'Guest Mode')}</h3>
+          ${user ? '' : `<p style="font-size: 12px; margin: 2px 0 0; color: var(--text-muted);">${t('settings_login_sub') || 'Log in to sync progress'}</p>`}
         </div>
         <div>
           ${
