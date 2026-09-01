@@ -146,11 +146,15 @@ ui_elements.append(("Settings", "settings_voice_uk", "Британский (UK)"
 ui_elements.append(("Settings", "settings_voice_us", "Американский (US)"))
 ui_elements.append(("Settings", "settings_goal", "📌 Дневная цель"))
 ui_elements.append(("Settings", "settings_lang", "🌐 Язык интерфейса"))
-ui_elements.append(("Settings", "settings_maintenance", "Обслуживание приложения"))
-ui_elements.append(("Settings", "settings_maintenance_sub", "Если рейтинг или слова не обновляются, очистите кэш приложения."))
-ui_elements.append(("Settings", "settings_clear_cache", "Очистить кэш приложения"))
+ui_elements.append(("Settings", "settings_sync_btn", "Синхронизация с сервером"))
+ui_elements.append(("Settings", "settings_sync_confirm", "Вы уверены, что хотите синхронизировать данные с сервером и перезагрузить?"))
 ui_elements.append(("Settings", "settings_cache_cleared", "✓ Кэш успешно очищен!"))
 ui_elements.append(("Settings", "settings_avatar_choose", "Выбрать аватарку"))
+
+# Avatar Picker Modal
+ui_elements.append(("Avatar", "avatar_choose_title", "🎭 Выберите персонажа"))
+ui_elements.append(("Avatar", "avatar_upload_btn", "📁 Загрузить своё фото"))
+ui_elements.append(("Avatar", "avatar_reset_btn", "✕ Сбросить на стандартный"))
 
 # Auth Modal
 ui_elements.append(("Auth", "auth_modal_title", "Вход в аккаунт"))

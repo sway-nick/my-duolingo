@@ -86,6 +86,11 @@ const translations = {
     settings_voice: "Акцент озвучки",
     settings_goal: "📌 Дневная цель",
     settings_lang: "🌐 Язык интерфейса",
+    avatar_choose_title: "🎭 Выберите персонажа",
+    avatar_upload_btn: "📁 Загрузить своё фото",
+    avatar_reset_btn: "✕ Сбросить на стандартный",
+    settings_sync_btn: "Синхронизация с сервером",
+    settings_sync_confirm: "Вы уверены, что хотите синхронизировать данные с сервером и перезагрузить?",
   },
   uk: {
     // Nav / Drawer
@@ -174,6 +179,11 @@ const translations = {
     settings_voice: "Акцент озвучення",
     settings_goal: "📌 Денна ціль",
     settings_lang: "🌐 Мова інтерфейсу",
+    avatar_choose_title: "🎭 Оберіть персонажа",
+    avatar_upload_btn: "📁 Завантажити своє фото",
+    avatar_reset_btn: "✕ Скинути до стандартного",
+    settings_sync_btn: "Синхронізація з сервером",
+    settings_sync_confirm: "Ви впевнені, що хочете синхронізувати дані із сервером та перезавантажити?",
   },
   en: {
     // Nav / Drawer
@@ -262,6 +272,11 @@ const translations = {
     settings_voice: "Voice Accent",
     settings_goal: "📌 Daily Goal",
     settings_lang: "🌐 Interface Language",
+    avatar_choose_title: "🎭 Choose Character",
+    avatar_upload_btn: "📁 Upload Custom Photo",
+    avatar_reset_btn: "✕ Reset to Default",
+    settings_sync_btn: "Sync with server",
+    settings_sync_confirm: "Are you sure you want to sync data with the server and reload?",
   },
   de: {
     // Nav / Drawer

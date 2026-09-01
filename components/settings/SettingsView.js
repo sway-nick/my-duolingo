@@ -141,14 +141,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
-      <!-- App Maintenance Card -->
-      <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 6px;">${getInterfaceLanguage() === 'ru' ? 'Обслуживание приложения' : getInterfaceLanguage() === 'uk' ? 'Обслуговування' : 'Maintenance'}</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">
-          ${getInterfaceLanguage() === 'ru' ? 'Если таблица рейтинга или слова не обновляются, очистите кэш приложения.' : getInterfaceLanguage() === 'uk' ? 'Якщо рейтинг або слова не оновлюються, очистіть кеш додатка.' : 'If the leaderboard or words do not update, clear the app cache.'}
-        </p>
-        <button class="primary-button btn-clear-cache" id="clear-app-cache-btn" style="width: 100%; min-height: 40px; font-weight: 600;">
-          ${getInterfaceLanguage() === 'ru' ? 'Очистить кэш приложения' : getInterfaceLanguage() === 'uk' ? 'Очистити кеш додатка' : 'Clear App Cache'}
+      <!-- App Maintenance / Sync Card -->
+      <div class="settings-card" style="padding: 12px 14px;">
+        <button class="primary-button btn-clear-cache" id="clear-app-cache-btn" style="width: 100%; min-height: 42px; font-weight: 600; font-size: 15px;">
+          ${t('settings_sync_btn')}
         </button>
       </div>
 
@@ -395,11 +391,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const clearCacheBtn = container.querySelector('#clear-app-cache-btn');
   if (clearCacheBtn) {
     clearCacheBtn.addEventListener('click', async () => {
-      const confirmMsg = getInterfaceLanguage() === 'ru' 
-        ? 'Вы уверены, что хотите очистить кэш приложения (слов и рейтинга) и перезагрузить?' 
-        : getInterfaceLanguage() === 'uk' 
-          ? 'Ви впевнені, що хочете очистити кеш додатка (слів та рейтингу) та перезавантажити?' 
-          : 'Are you sure you want to clear the app cache (words and leaderboard) and reload?';
+      const confirmMsg = t('settings_sync_confirm');
       if (confirm(confirmMsg)) {
         // 1. Clear local words & leaderboard cache
         localStorage.removeItem('myduo_cached_words');
