@@ -285,8 +285,8 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
   container.innerHTML = `
     <div class="leaderboard-page" style="position: relative;">
-      <!-- Single Sticky Header Group (Header + Podium) Flush to Mobile Header (0px gap) -->
-      <div class="leaderboard-sticky-group" style="position: sticky; top: 53px; z-index: 45; background: var(--bg-main, var(--bg-color, #ffffff)); padding-top: 10px; padding-bottom: 6px; border-bottom: 1.5px solid var(--border-color); margin: -12px -14px 8px -14px; padding-left: 14px; padding-right: 14px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+      <!-- Single Sticky Header Group (Header + Podium) Flush to Mobile Header -->
+      <div class="leaderboard-sticky-group">
         <div class="page-header" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; flex: 1 1 auto; min-width: 0;">
             <button type="button" class="custom-dropdown-trigger" id="leaderboard-type-trigger" style="font-size: 16.5px; font-weight: 800; padding: 4px 0; height: 36px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: flex-start; width: 100%; gap: 3px;" aria-haspopup="listbox" aria-expanded="false">
