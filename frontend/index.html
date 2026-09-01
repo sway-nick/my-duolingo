@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v215';
+        var APP_BUILD = '20260901_v216';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -1078,7 +1078,17 @@
           }
         );
 
-        renderTab('training');
+        // Check if this is the very first start (before registration/first launch)
+        const hasLaunched = localStorage.getItem('myduo_has_launched');
+        const user = getCurrentUser();
+        if (!hasLaunched && (!user || user.id === 'guest')) {
+          localStorage.setItem('myduo_has_launched', '1');
+          activeTab = 'settings';
+        } else {
+          activeTab = 'training';
+        }
+
+        renderTab(activeTab);
 
         // 3. Asynchronous non-blocking background data sync
         loadData().then(() => {
