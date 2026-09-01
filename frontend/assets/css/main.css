@@ -4310,19 +4310,15 @@ body.notebook-theme,
   border-radius: 3px 10px 5px 8px !important;
   color: var(--nb-blue-pen) !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 24px !important;
-  font-weight: 700 !important;
   box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.15) !important;
   transition: transform 0.1s ease, box-shadow 0.1s ease !important;
 }
 
 .notebook-theme .quiz-option-inner {
   font-family: 'Caveat', cursive !important;
-  font-size: 24px !important;
   font-weight: 700 !important;
-  line-height: 1.12 !important;
   color: var(--nb-blue-pen) !important;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
 
 .notebook-theme .quiz-option:hover:not(:disabled) {
@@ -4434,12 +4430,19 @@ body.notebook-theme,
 /* Category badge */
 .notebook-theme .category-badge,
 .notebook-theme .total-words-badge {
-  background: rgba(26, 58, 143, 0.1) !important;
+  background: rgba(26, 58, 143, 0.08) !important;
   border: 1.5px solid var(--nb-blue-pen) !important;
   color: var(--nb-blue-pen) !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 17px !important;
-  border-radius: 3px 8px 4px 6px !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px 8px 4px 7px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  max-width: fit-content !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
 }
 
 /* Sound button */
@@ -4471,7 +4474,6 @@ body.notebook-theme,
   border: 2px solid var(--nb-blue-pen) !important;
   border-radius: 4px 12px 6px 10px !important;
   font-family: 'Caveat', cursive !important;
-  font-size: 23px !important;
   font-weight: 700 !important;
   color: var(--nb-blue-pen) !important;
   box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.12) !important;
@@ -4479,11 +4481,40 @@ body.notebook-theme,
 
 .notebook-theme .pairs-card-inner {
   font-family: 'Caveat', cursive !important;
-  font-size: 23px !important;
   font-weight: 700 !important;
-  line-height: 1.12 !important;
   color: var(--nb-blue-pen) !important;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+}
+
+/* Dictionary & Favorites Cards Typography in Notebook theme */
+.notebook-theme .dict-card h3,
+.notebook-theme .fav-word {
+  font-family: 'Caveat', cursive !important;
+  font-size: 22.5px !important;
+  font-weight: 700 !important;
+  color: var(--nb-blue-pen) !important;
+  line-height: 1.2 !important;
+  margin: 4px 0 2px !important;
+}
+
+.notebook-theme .dict-translation,
+.notebook-theme .fav-translation {
+  font-family: 'Caveat', cursive !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: var(--nb-black-pen) !important;
+  line-height: 1.25 !important;
+  margin: 2px 0 4px !important;
+}
+
+.notebook-theme .dict-notes,
+.notebook-theme .fav-card .dict-notes {
+  font-family: 'Caveat', cursive !important;
+  font-size: 15px !important;
+  color: var(--nb-blue-pen) !important;
+  opacity: 0.88 !important;
+  line-height: 1.25 !important;
+  margin-top: 4px !important;
 }
 
 .notebook-theme .pairs-card.selected {

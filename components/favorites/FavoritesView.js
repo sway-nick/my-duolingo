@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=21.0';
-import { toggleFavoriteApi } from '../../services/api.js?v=18.0';
+import { toggleFavoriteApi, getWordTranslation, getWordNotes } from '../../services/api.js?v=18.0';
 import { t } from '../../services/i18n.js?v=25.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
@@ -54,7 +54,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
             
             <div class="fav-card-body">
               <h3 class="fav-word">${word.word}</h3>
-              <p class="fav-translation">${word.translation}</p>
+              <p class="fav-translation">${getWordTranslation(word)}</p>
+              ${getWordNotes(word) ? `<p class="dict-notes">${getWordNotes(word)}</p>` : ''}
             </div>
           </div>
         `
