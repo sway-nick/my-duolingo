@@ -1,21 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <circle cx="32" cy="32" r="30" fill="#FFF" stroke="#FF6A00" stroke-width="2"/>
-  <!-- Steam lines -->
-  <path d="M22,22 Q26,16 22,10" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-  <path d="M32,22 Q36,14 32,8" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-  <path d="M42,22 Q46,16 42,10" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-  
-  <!-- Cup body -->
-  <path d="M12,30 C12,50 20,58 32,58 C44,58 52,50 52,30 Z" fill="#F45100"/>
-  
-  <!-- Handle -->
-  <path d="M52,36 C60,36 61,46 52,49" stroke="#F45100" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-  
-  <!-- Open Book pages -->
-  <path d="M32,30 Q25,27 18,30 L18,38 Q25,35 32,38 Z" fill="#FFF"/>
-  <path d="M32,30 Q39,27 46,30 L46,38 Q39,35 32,38 Z" fill="#FFF"/>
-  <line x1="32" y1="30" x2="32" y2="38" stroke="#F45100" stroke-width="1"/>
-  
-  <!-- EN Text -->
-  <text x="32" y="52" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" font-size="12" fill="#FFF" text-anchor="middle">EN</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Rich circular background gradient -->
+    <radialGradient id="badgeBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="85%" stop-color="#fff8f1"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </radialGradient>
+    <!-- Soft warm shadow -->
+    <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#c2410c" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Circular outer frame badge -->
+  <circle cx="256" cy="256" r="242" fill="url(#badgeBg)" stroke="#FF6A00" stroke-width="26"/>
+  <circle cx="256" cy="256" r="226" fill="none" stroke="#fed7aa" stroke-width="4"/>
+
+  <g filter="url(#badgeShadow)">
+    <!-- Steam waves - thick and prominent -->
+    <path d="M182,130 C162,100 202,68 182,38" stroke="#FF6A00" stroke-width="22" stroke-linecap="round" fill="none"/>
+    <path d="M256,122 C236,92 276,60 256,30" stroke="#FF6A00" stroke-width="22" stroke-linecap="round" fill="none"/>
+    <path d="M330,130 C310,100 350,68 330,38" stroke="#FF6A00" stroke-width="22" stroke-linecap="round" fill="none"/>
+
+    <!-- Cup Body - huge scale, centered -->
+    <path d="M96,215 C96,375 168,445 256,445 C344,445 416,375 416,215 Z" fill="#FF6A00"/>
+
+    <!-- Cup Handle -->
+    <path d="M410,250 C485,250 485,360 410,385" stroke="#FF6A00" stroke-width="36" fill="none" stroke-linecap="round"/>
+
+    <!-- Open Book - Large, Crisp White -->
+    <path d="M110,225 Q183,200 256,225 Q329,200 402,225 L402,150 Q329,125 256,150 Q183,125 110,150 Z" fill="#FFFFFF" stroke="#FF6A00" stroke-width="14" stroke-linejoin="round"/>
+    
+    <!-- Spine Line -->
+    <line x1="256" y1="150" x2="256" y2="225" stroke="#FF6A00" stroke-width="14" stroke-linecap="round"/>
+
+    <!-- Book Inner Page lines -->
+    <path d="M256,172 Q183,147 140,172" stroke="#FF6A00" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M256,198 Q183,173 140,198" stroke="#FF6A00" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M256,172 Q329,147 372,172" stroke="#FF6A00" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M256,198 Q329,173 372,198" stroke="#FF6A00" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+    <!-- EN Text inside cup - huge, bold white -->
+    <text x="256" y="375" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Impact, sans-serif" font-weight="900" font-size="120" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">EN</text>
+  </g>
 </svg>
