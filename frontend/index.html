@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v220';
+        var APP_BUILD = '20260901_v221';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -342,8 +342,10 @@
         const pairsQueue = getQueueForPairs(categoryWords, userProgress, favListForMixing);
         const testQueue = getQueueForTest(categoryWords, userProgress);
 
+        const hasActivePipelineWords = (quizQueue.length > 0 || pairsQueue.length > 0 || testQueue.length > 0);
+
         function isMethodAvailable(method) {
-          if (method === 'cards') return !isFavPracticeActive && (cardsQueue.length > 0 && learningCount < dailyGoal);
+          if (method === 'cards') return !isFavPracticeActive && !hasActivePipelineWords && (cardsQueue.length > 0 && learningCount < dailyGoal);
           if (method === 'quiz') return quizQueue.length > 0;
           if (method === 'pairs') return pairsQueue.length > 0;
           if (method === 'input') return testQueue.length > 0;
@@ -351,20 +353,17 @@
         }
 
         // SMART ACTIVE MODE RESOLUTION:
-        // Automatically switch to the active training step if current method is empty
+        // Automatically advance along the training conveyor: Quiz -> Pairs -> Test.
+        // Never jump back to Cards until the whole batch of words finishes the entire pipeline!
         if (!isFavPracticeActive && !isMethodAvailable(currentMethod)) {
-          if (learningCount > 0) {
-            if (quizQueue.length > 0) {
-              currentMethod = 'quiz';
-            } else if (pairsQueue.length > 0) {
-              currentMethod = 'pairs';
-            } else if (testQueue.length > 0) {
-              currentMethod = 'input';
-            } else if (cardsQueue.length > 0 && learningCount < dailyGoal) {
-              currentMethod = 'cards';
-            }
+          if (quizQueue.length > 0) {
+            currentMethod = 'quiz';
+          } else if (pairsQueue.length > 0) {
+            currentMethod = 'pairs';
+          } else if (testQueue.length > 0) {
+            currentMethod = 'input';
           } else {
-            // learningCount === 0: Keep clean empty-state mode so user can pick Cards or Favorites
+            // Pipeline for current batch finished or empty:
             currentMethod = 'input';
           }
         }
