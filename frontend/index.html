@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v216';
+        var APP_BUILD = '20260901_v217';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -261,7 +261,13 @@
         }
 
         if (allWords.length === 0) {
-          content.innerHTML = '<p class="empty-state">Нет доступных слов для тренировки.</p>';
+          content.innerHTML = `
+            <div style="text-align: center; padding: 48px 20px;">
+              <div style="font-size: 44px; margin-bottom: 14px; animation: splashPulse 1.2s ease-in-out infinite;">📚</div>
+              <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: var(--text-main);">${t('loading') || 'Загрузка...'}</h3>
+              <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Подготавливаем тренировку</p>
+            </div>
+          `;
           return;
         }
 
@@ -1093,9 +1099,7 @@
         // 3. Asynchronous non-blocking background data sync
         loadData().then(() => {
           updateHeaderUser();
-          if (activeTab === 'training' && (!allWords || allWords.length === 0)) {
-            renderTab('training');
-          }
+          renderTab(activeTab);
         }).catch((err) => console.warn('Background sync error:', err));
       }
 
