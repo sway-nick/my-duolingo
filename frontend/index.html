@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v222';
+        var APP_BUILD = '20260901_v223';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -354,17 +354,20 @@
 
         // SMART ACTIVE MODE RESOLUTION:
         // Automatically advance along the training conveyor: Quiz -> Pairs -> Test.
-        // Never jump back to Cards until the whole batch of words finishes the entire pipeline!
-        if (!isFavPracticeActive && !isMethodAvailable(currentMethod)) {
-          if (quizQueue.length > 0) {
-            currentMethod = 'quiz';
-          } else if (pairsQueue.length > 0) {
-            currentMethod = 'pairs';
-          } else if (testQueue.length > 0) {
+        // If 0 words in learning and user hasn't explicitly clicked "Open Cards", show the clean Hub screen.
+        if (!isFavPracticeActive) {
+          if (learningCount === 0 && !window._explicitCardsOpened) {
             currentMethod = 'input';
-          } else {
-            // Pipeline for current batch finished or empty:
-            currentMethod = 'input';
+          } else if (!isMethodAvailable(currentMethod)) {
+            if (quizQueue.length > 0) {
+              currentMethod = 'quiz';
+            } else if (pairsQueue.length > 0) {
+              currentMethod = 'pairs';
+            } else if (testQueue.length > 0) {
+              currentMethod = 'input';
+            } else {
+              currentMethod = 'input';
+            }
           }
         }
 
@@ -407,6 +410,8 @@
           const goQuizBtn = content.querySelector('#go-quiz-btn');
           if (goQuizBtn) {
             goQuizBtn.addEventListener('click', () => {
+              window._explicitCardsOpened = false;
+              window._trainingRoundJustCompleted = false;
               userSettings.preferredMethod = nextBtnTarget;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
@@ -658,7 +663,7 @@
           const wotd = getGlobalWordOfTheDay(allWords, cloudWordOfTheDayId);
           let isWotdFav = false;
           let currentWotdVideo = 'cat1.mp4';
-          const isTrainingRoundJustCompleted = sessionStorage.getItem('myduo_completed_training_round') === '1';
+          const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
 
           if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
             preloadWordAudio(wotd.word);
@@ -741,7 +746,7 @@
             </div>
           `;
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
             const flashcard = content.querySelector('#wotd-flashcard-3d');
             if (flashcard) {
               let isFlipped = false;
@@ -832,7 +837,12 @@
           const goBtn = content.querySelector('#go-next-mode-btn');
           if (goBtn) {
             goBtn.addEventListener('click', () => {
-              sessionStorage.removeItem('myduo_completed_training_round');
+              if (nextMode === 'cards') {
+                window._explicitCardsOpened = true;
+              } else {
+                window._explicitCardsOpened = false;
+              }
+              window._trainingRoundJustCompleted = false;
               userSettings.preferredMethod = nextMode;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
@@ -843,7 +853,8 @@
           const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
           if (repeatFavsBtn) {
             repeatFavsBtn.addEventListener('click', () => {
-              sessionStorage.removeItem('myduo_completed_training_round');
+              window._explicitCardsOpened = false;
+              window._trainingRoundJustCompleted = false;
               const favList = getUserFavorites();
               const favIds = new Set(favList.map(String));
               const favWords = allWords.filter((w) => favIds.has(String(w.id)));
@@ -983,6 +994,8 @@
       }
 
       async function init() {
+        window._explicitCardsOpened = false;
+        window._trainingRoundJustCompleted = false;
         initPrizePodiumListener();
         preloadNextWotdVideo();
 

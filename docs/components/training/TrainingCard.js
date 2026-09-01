@@ -2250,7 +2250,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const maxWait = isCorrect ? 3500 : 7000;
 
       if (activeWords.length <= 1) {
-        sessionStorage.setItem('myduo_completed_training_round', '1');
+        window._trainingRoundJustCompleted = true;
       }
 
       onNextAfterSpeech(onNext, minDelay, maxWait);
