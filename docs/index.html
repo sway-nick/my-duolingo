@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v213';
+        var APP_BUILD = '20260901_v214';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -86,6 +86,55 @@
       let activeTab = 'training';
       let userSettings = { enabledMethods: 'quiz,cards,input', dailyGoal: 20 };
       let cloudWordOfTheDayId = null;
+      let wotdPlaylist = ['cat1.mp4', 'cat2.mp4', 'cat3.mp4', 'cat4.mp4', 'cat5.mp4'];
+
+      // Fetch dynamic playlist if available
+      try {
+        fetch('assets/video/playlist.json?v=' + Date.now())
+          .then((r) => r.json())
+          .then((list) => {
+            if (Array.isArray(list) && list.length > 0) {
+              wotdPlaylist = list;
+              preloadNextWotdVideo();
+            }
+          })
+          .catch(() => {});
+      } catch (e) {}
+
+      function preloadNextWotdVideo() {
+        try {
+          let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
+          if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
+          const selectedVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
+          const videoUrl = 'assets/video/' + selectedVideo;
+
+          // Preload via link tag
+          let existingLink = document.querySelector(`link[data-wotd-video="1"]`);
+          if (!existingLink) {
+            existingLink = document.createElement('link');
+            existingLink.rel = 'preload';
+            existingLink.as = 'video';
+            existingLink.type = 'video/mp4';
+            existingLink.setAttribute('data-wotd-video', '1');
+            document.head.appendChild(existingLink);
+          }
+          if (existingLink.href !== videoUrl) {
+            existingLink.href = videoUrl;
+          }
+
+          // Preload via hidden video element into memory buffer
+          if (!window._wotdPreloadVideo) {
+            window._wotdPreloadVideo = document.createElement('video');
+            window._wotdPreloadVideo.preload = 'auto';
+            window._wotdPreloadVideo.muted = true;
+            window._wotdPreloadVideo.playsInline = true;
+          }
+          if (window._wotdPreloadVideo.src !== window.location.origin + '/' + videoUrl && !window._wotdPreloadVideo.src.endsWith(videoUrl)) {
+            window._wotdPreloadVideo.src = videoUrl;
+            window._wotdPreloadVideo.load();
+          }
+        } catch (e) {}
+      }
 
       async function loadData() {
         // 1. Sync User Data from Cloud for cross-device consistency
@@ -165,6 +214,7 @@
       }
 
       async function renderTrainingTab() {
+        preloadNextWotdVideo();
         const content = document.querySelector('#app-content');
         if (!content) return;
 
@@ -579,11 +629,16 @@
           let wotdHtml = '';
           const wotd = getGlobalWordOfTheDay(allWords, cloudWordOfTheDayId);
           let isWotdFav = false;
+          let currentWotdVideo = 'cat1.mp4';
           if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
             isWotdFav = favSet.has(String(wotd.id));
+
+            let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
+            if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
+            currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
 
             wotdHtml = `
               <div class="wotd-bonus-section" style="margin-top: 26px;">
@@ -611,9 +666,9 @@
                      <div class="flashcard-face flashcard-back" style="min-height: 200px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; border-radius: inherit;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        
-                       <!-- Full-size video covering entire golden card face -->
+                       <!-- Full-size video covering entire golden card face with instant preloading -->
                        <div id="wotd-video-container" style="display: none; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000;">
-                         <video id="wotd-card-video" playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
+                         <video id="wotd-card-video" playsinline preload="auto" src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                        </div>
 
                        <div class="flashcard-face-top" style="z-index: 2;">
@@ -661,15 +716,14 @@
             if (flashcard) {
               let isFlipped = false;
               let videoStarted = false;
-              let playlist = ['cat.mp4'];
 
-              // Fetch dynamic playlist if available
-              fetch('assets/video/playlist.json?v=' + Date.now())
-                .then((r) => r.json())
-                .then((list) => {
-                  if (Array.isArray(list) && list.length > 0) playlist = list;
-                })
-                .catch(() => {});
+              const cardVideo = flashcard.querySelector('#wotd-card-video');
+              const videoContainer = flashcard.querySelector('#wotd-video-container');
+
+              // Immediately pre-buffer video into memory
+              if (cardVideo) {
+                cardVideo.load();
+              }
 
               flashcard.addEventListener('click', (e) => {
                 if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
@@ -682,9 +736,6 @@
                 void flashcard.offsetWidth;
                 flashcard.classList.add('gleam-active');
 
-                const cardVideo = flashcard.querySelector('#wotd-card-video');
-                const videoContainer = flashcard.querySelector('#wotd-video-container');
-
                 if (isFlipped) {
                   const hasPlayed = sessionStorage.getItem('myduo_wotd_video_played');
                   if (!hasPlayed && !videoStarted && cardVideo && videoContainer) {
@@ -693,13 +744,12 @@
 
                     let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                     if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
-                    const selectedVideo = playlist[currentIdx % playlist.length];
 
-                    // Advance index for next time so videos play in sequence
-                    localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % playlist.length));
+                    // Advance index for next time and preload next video
+                    localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
+                    preloadNextWotdVideo();
 
                     videoContainer.style.display = 'block';
-                    cardVideo.src = 'assets/video/' + selectedVideo;
                     cardVideo.muted = false;
                     cardVideo.volume = 1.0;
 
@@ -903,6 +953,7 @@
 
       async function init() {
         initPrizePodiumListener();
+        preloadNextWotdVideo();
 
         // 1. Instant local cache restore (0ms)
         try {
