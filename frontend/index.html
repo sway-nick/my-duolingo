@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v227';
+        var APP_BUILD = '20260901_v228';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -108,21 +108,7 @@
           const selectedVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
           const videoUrl = 'assets/video/' + selectedVideo;
 
-          // Preload via link tag
-          let existingLink = document.querySelector(`link[data-wotd-video="1"]`);
-          if (!existingLink) {
-            existingLink = document.createElement('link');
-            existingLink.rel = 'preload';
-            existingLink.as = 'video';
-            existingLink.type = 'video/mp4';
-            existingLink.setAttribute('data-wotd-video', '1');
-            document.head.appendChild(existingLink);
-          }
-          if (existingLink.href !== videoUrl) {
-            existingLink.href = videoUrl;
-          }
-
-          // Preload via hidden video element into memory buffer
+          // Preload via background video element into memory buffer (clean, no console warnings)
           if (!window._wotdPreloadVideo) {
             window._wotdPreloadVideo = document.createElement('video');
             window._wotdPreloadVideo.preload = 'auto';
@@ -265,20 +251,20 @@
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
               <div style="font-size: 17px; font-weight: 700; color: var(--text-main, #334155); margin-bottom: 24px; letter-spacing: 0.6px; opacity: 0.85;">Loading...</div>
               <div class="cat-paw-loader" style="position: relative; width: 230px; height: 56px; margin: 0 auto;">
-                <div class="cat-paw-step" style="position: absolute; left: 0px; top: 2px; opacity: 0; animation: catPawStep 7s infinite 0.0s;">
+                <div class="cat-paw-step" style="position: absolute; left: 0px; top: 2px; opacity: 0; animation: catPawStep 10.5s infinite 0.0s;">
                   <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 48px; top: 24px; opacity: 0; animation: catPawStep 7s infinite 1.4s;">
+                <div class="cat-paw-step" style="position: absolute; left: 48px; top: 24px; opacity: 0; animation: catPawStep 10.5s infinite 2.1s;">
                   <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 96px; top: 2px; opacity: 0; animation: catPawStep 7s infinite 2.8s;">
-                  <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></svg>
+                <div class="cat-paw-step" style="position: absolute; left: 96px; top: 2px; opacity: 0; animation: catPawStep 10.5s infinite 4.2s;">
+                  <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 144px; top: 24px; opacity: 0; animation: catPawStep 7s infinite 4.2s;">
-                  <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></svg>
+                <div class="cat-paw-step" style="position: absolute; left: 144px; top: 24px; opacity: 0; animation: catPawStep 10.5s infinite 6.3s;">
+                  <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 192px; top: 2px; opacity: 0; animation: catPawStep 7s infinite 5.6s;">
-                  <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></svg>
+                <div class="cat-paw-step" style="position: absolute; left: 192px; top: 2px; opacity: 0; animation: catPawStep 10.5s infinite 8.4s;">
+                  <svg viewBox="0 0 32 32" width="26" height="26" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="16" cy="20" rx="6.5" ry="5.5"/><circle cx="8" cy="11" r="2.8"/><circle cx="13" cy="7.5" r="2.8"/><circle cx="19" cy="7.5" r="2.8"/><circle cx="24" cy="11" r="2.8"/></g></svg>
                 </div>
               </div>
             </div>
