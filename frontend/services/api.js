@@ -1937,3 +1937,5 @@ export {
   transcribePingAudio,
   getCloudWordOfTheDayId,
 };
+
+export { getWordTranslation, getWordNotes } from './i18n.js';
