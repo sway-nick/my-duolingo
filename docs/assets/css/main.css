@@ -4970,3 +4970,31 @@ body.notebook-theme,
   opacity: 0.85;
   font-family: 'Caveat', cursive !important;
 }
+
+/* App Maintenance: Clear Cache Button (Green in Dark theme) */
+.btn-clear-cache,
+#clear-app-cache-btn {
+  background-color: var(--error-color, #ef4444);
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.btn-clear-cache:hover,
+#clear-app-cache-btn:hover {
+  background-color: #dc2626;
+}
+
+[data-theme="dark"] .btn-clear-cache,
+[data-theme="dark"] #clear-app-cache-btn,
+body.dark-theme .btn-clear-cache,
+body.dark-theme #clear-app-cache-btn {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-clear-cache:hover,
+[data-theme="dark"] #clear-app-cache-btn:hover,
+body.dark-theme .btn-clear-cache:hover,
+body.dark-theme #clear-app-cache-btn:hover {
+  background-color: #15803d !important;
+}
