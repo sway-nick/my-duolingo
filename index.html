@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v217';
+        var APP_BUILD = '20260901_v218';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -743,10 +743,8 @@
                 flashcard.classList.add('gleam-active');
 
                 if (isFlipped) {
-                  const hasPlayed = sessionStorage.getItem('myduo_wotd_video_played');
-                  if (!hasPlayed && !videoStarted && cardVideo && videoContainer) {
+                  if (!videoStarted && cardVideo && videoContainer) {
                     videoStarted = true;
-                    sessionStorage.setItem('myduo_wotd_video_played', '1');
 
                     let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                     if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
@@ -759,11 +757,12 @@
                     cardVideo.muted = false;
                     cardVideo.volume = 1.0;
 
-                    const p = cardVideo.play();
-                    if (p !== undefined) {
-                      p.catch(() => {
+                    const playPromise = cardVideo.play();
+                    if (playPromise !== undefined) {
+                      playPromise.catch((err) => {
+                        console.warn('Playback with sound prevented by browser policy, falling back to muted autoplay:', err);
                         cardVideo.muted = true;
-                        cardVideo.play().catch(() => {});
+                        cardVideo.play().catch((e) => console.error('Video play error:', e));
                       });
                     }
 
