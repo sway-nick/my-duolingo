@@ -2248,6 +2248,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       // For wrong answers: 4200ms so user has ample time to review and memorize correct spelling
       const minDelay = isCorrect ? 1600 : 4200;
       const maxWait = isCorrect ? 3500 : 7000;
+
+      if (activeWords.length <= 1) {
+        sessionStorage.setItem('myduo_completed_training_round', '1');
+      }
+
       onNextAfterSpeech(onNext, minDelay, maxWait);
     };
 

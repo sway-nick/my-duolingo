@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v218';
+        var APP_BUILD = '20260901_v219';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -350,6 +350,26 @@
           return false;
         }
 
+        // SMART ACTIVE MODE RESOLUTION:
+        // Automatically switch to the active training step if current method is empty
+        if (!isFavPracticeActive && !isMethodAvailable(currentMethod)) {
+          if (learningCount > 0) {
+            if (quizQueue.length > 0) {
+              currentMethod = 'quiz';
+            } else if (pairsQueue.length > 0) {
+              currentMethod = 'pairs';
+            } else if (testQueue.length > 0) {
+              currentMethod = 'input';
+            } else if (cardsQueue.length > 0 && learningCount < dailyGoal) {
+              currentMethod = 'cards';
+            }
+          } else {
+            if (cardsQueue.length > 0) {
+              currentMethod = 'cards';
+            }
+          }
+        }
+
         // In Cards mode: if user reached their daily learning limit, show clean message
         if (!isFavPracticeActive && currentMethod === 'cards' && learningCount >= dailyGoal) {
           const congratsText = getInterfaceLanguage() === 'ru' 
@@ -402,10 +422,6 @@
         let activeWords = [];
         if (currentMethod === 'cards') {
           activeWords = getQueueForCards(categoryWords, userProgress);
-          // If all words in category were already sorted, allow reviewing all unmastered words in cards
-          if (activeWords.length === 0) {
-            activeWords = categoryWords.filter((w) => !isWordMastered(userProgress[w.id]));
-          }
         } else if (currentMethod === 'quiz') {
           activeWords = quizQueue;
         } else if (currentMethod === 'pairs') {
@@ -493,10 +509,10 @@
                   userProgress[w.id].pairsCorrect = 0;
                   userProgress[w.id].seenInCards = true;
                   userProgress[w.id].mastered = false;
+                  userProgress[w.id].learning = true;
                 }
               });
-              const user = getCurrentUser();
-              const userId = user ? user.id : 'guest';
+              const userId = userSettings.userId || 'guest';
               localStorage.setItem(`progress_${userId}`, JSON.stringify(userProgress));
               currentWordIndex = 0;
               renderTrainingTab();
@@ -636,7 +652,9 @@
           const wotd = getGlobalWordOfTheDay(allWords, cloudWordOfTheDayId);
           let isWotdFav = false;
           let currentWotdVideo = 'cat1.mp4';
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+          const isTrainingRoundJustCompleted = sessionStorage.getItem('myduo_completed_training_round') === '1';
+
+          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
@@ -808,6 +826,7 @@
           const goBtn = content.querySelector('#go-next-mode-btn');
           if (goBtn) {
             goBtn.addEventListener('click', () => {
+              sessionStorage.removeItem('myduo_completed_training_round');
               userSettings.preferredMethod = nextMode;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
@@ -818,6 +837,7 @@
           const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
           if (repeatFavsBtn) {
             repeatFavsBtn.addEventListener('click', () => {
+              sessionStorage.removeItem('myduo_completed_training_round');
               const favList = getUserFavorites();
               const favIds = new Set(favList.map(String));
               const favWords = allWords.filter((w) => favIds.has(String(w.id)));
