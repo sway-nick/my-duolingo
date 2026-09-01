@@ -2181,22 +2181,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       input.classList.add('disabled');
       checkBtn.disabled = true;
 
+      // 1. INSTANT UI FEEDBACK & SPEECH (0ms delay)
       speakWord(currentWord.word, currentWord.id);
-
-      const isSecondChanceFix = isCorrect && hasSecondChance;
-      const prog = await saveProgress(currentWord.id, isCorrect, 'input', {
-        secondChanceFix: isSecondChanceFix,
-      });
-      const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
-
-      if (isManyMistakes) {
-        favorited = true;
-        await toggleFavoriteApi(currentWord.id, true).catch((e) => console.warn(e));
-        onFavoriteToggle(currentWord.id, true);
-      } else if (prog?.autoFavorited) {
-        favorited = true;
-        onFavoriteToggle(currentWord.id, true);
-      }
 
       if (isCorrect) {
         input.classList.remove('wrong', 'shake-input');
@@ -2205,16 +2191,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedback.style.display = 'block';
         feedback.style.color = 'var(--success-color, #16a34a)';
 
-        let successMsg = '';
-        if (isSecondChanceFix) {
-          successMsg = '✓ Исправлено! (-1 XP)';
-        } else if (favorited) {
-          successMsg = '✓ Правильно! Слово в Избранном ❤️';
-        } else if (inputCount >= 3) {
-          successMsg = '🎉 Слово выучено!';
-        } else {
-          successMsg = '✓ Верно! (+3 XP)';
-        }
+        const isSecondChanceFix = isCorrect && hasSecondChance;
+        const successMsg = isSecondChanceFix ? '✓ Исправлено! (-1 XP)' : '✓ Верно! (+3 XP)';
 
         feedback.innerHTML = `
           <div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">
@@ -2233,7 +2211,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         const favBtn = container.querySelector('#fav-toggle-btn');
         if (favBtn) {
-          if (favorited) {
+          if (favorited || isManyMistakes) {
             favBtn.textContent = '❤️';
             favBtn.classList.add('is-favorite');
           } else {
@@ -2242,8 +2220,34 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
       }
 
-      const minDelay = isCorrect ? (inputCount >= 3 && !favorited ? 2200 : 1600) : 2800;
-      const maxWait = isCorrect ? 3500 : 6000;
+      // 2. NON-BLOCKING ASYNC PROGRESS SYNC
+      const isSecondChanceFix = isCorrect && hasSecondChance;
+      saveProgress(currentWord.id, isCorrect, 'input', {
+        secondChanceFix: isSecondChanceFix,
+      }).then((prog) => {
+        const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
+        if (isCorrect) {
+          if (favorited) {
+            feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">✓ Правильно! Слово в Избранном ❤️</div>`;
+          } else if (inputCount >= 3) {
+            feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">🎉 Слово выучено!</div>`;
+          }
+        }
+        if (isManyMistakes) {
+          favorited = true;
+          toggleFavoriteApi(currentWord.id, true).catch(() => {});
+          onFavoriteToggle(currentWord.id, true);
+        } else if (prog?.autoFavorited) {
+          favorited = true;
+          onFavoriteToggle(currentWord.id, true);
+        }
+      }).catch((e) => console.warn(e));
+
+      // 3. EXTENDED DISPLAY DURATION FOR MISTAKES (4200ms)
+      // For correct answers: 1600ms
+      // For wrong answers: 4200ms so user has ample time to review and memorize correct spelling
+      const minDelay = isCorrect ? 1600 : 4200;
+      const maxWait = isCorrect ? 3500 : 7000;
       onNextAfterSpeech(onNext, minDelay, maxWait);
     };
 
