@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260901_v219';
+        var APP_BUILD = '20260901_v220';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -364,9 +364,8 @@
               currentMethod = 'cards';
             }
           } else {
-            if (cardsQueue.length > 0) {
-              currentMethod = 'cards';
-            }
+            // learningCount === 0: Keep clean empty-state mode so user can pick Cards or Favorites
+            currentMethod = 'input';
           }
         }
 
@@ -623,21 +622,29 @@
             }
           } else if (currentMethod === 'input') {
             if (unmasteredCount > 0) {
-              emptyIcon = '✍️';
-              emptyTitle = t('train_no_words_test');
-              emptyMsg = '';
-              if (hasCards) {
+              if (learningCount === 0) {
+                emptyIcon = '🗂️';
+                emptyTitle = getInterfaceLanguage() === 'ru' ? 'Нет слов для обучения' : getInterfaceLanguage() === 'uk' ? 'Немає слів для навчання' : 'No words in learning';
+                emptyMsg = getInterfaceLanguage() === 'ru' ? 'Отберите новые слова для тренировки или повторите избранное:' : getInterfaceLanguage() === 'uk' ? 'Відберіть нові слова для тренування або повторіть обрані:' : 'Select new words for training or practice favorites:';
                 nextMode = 'cards';
                 nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
-              } else if (hasQuiz) {
-                nextMode = 'quiz';
-                nextBtnLabel = '🎯 ' + t('train_go_quiz');
-              } else if (hasPairs) {
-                nextMode = 'pairs';
-                nextBtnLabel = '🧩 ' + t('train_go_pairs');
               } else {
-                nextMode = 'cards';
-                nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+                emptyIcon = '✍️';
+                emptyTitle = t('train_no_words_test');
+                emptyMsg = '';
+                if (hasCards) {
+                  nextMode = 'cards';
+                  nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+                } else if (hasQuiz) {
+                  nextMode = 'quiz';
+                  nextBtnLabel = '🎯 ' + t('train_go_quiz');
+                } else if (hasPairs) {
+                  nextMode = 'pairs';
+                  nextBtnLabel = '🧩 ' + t('train_go_pairs');
+                } else {
+                  nextMode = 'cards';
+                  nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+                }
               }
             } else {
               emptyIcon = '🏆';
