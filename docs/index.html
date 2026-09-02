@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v269';
+        var APP_BUILD = '20260902_v270';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -713,7 +713,7 @@
           let currentWotdVideo = 'cat1.mp4';
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
@@ -777,10 +777,10 @@
             `;
           }
 
-          const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0)
+          const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0) || window._showHubScreen
             ? `
               <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: 48px; font-size: 16px; font-weight: 700;">
-                ${getInterfaceLanguage() === 'ru' ? 'Продолжить' : getInterfaceLanguage() === 'uk' ? 'Продовжити' : 'Continue'}
+                ${t('train_continue_round')}
               </button>
             `
             : '';
