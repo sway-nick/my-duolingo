@@ -5220,3 +5220,21 @@ body.dark-theme .btn-clear-cache:hover,
 body.dark-theme #clear-app-cache-btn:hover {
   background-color: #15803d !important;
 }
+
+/* Consonants Quiz letter boxes: reset Safari WebKit input padding and metrics */
+.letter-box {
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+}
+
+.consonant-input {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  padding: 0 !important;
+  margin: 1px !important;
+  box-sizing: border-box !important;
+  text-indent: 0 !important;
+  text-align: center !important;
+}
