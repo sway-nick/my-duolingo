@@ -5093,17 +5093,17 @@ body.notebook-theme,
   font-family: 'Caveat', cursive !important;
 }
 
-/* App Maintenance: Clear Cache Button (Green in Dark theme) */
+/* App Maintenance: Clear Cache Button (Green in all themes) */
 .btn-clear-cache,
 #clear-app-cache-btn {
-  background-color: var(--error-color, #ef4444);
-  color: #ffffff;
+  background-color: #16a34a !important;
+  color: #ffffff !important;
   transition: background-color 0.2s ease;
 }
 
 .btn-clear-cache:hover,
 #clear-app-cache-btn:hover {
-  background-color: #dc2626;
+  background-color: #15803d !important;
 }
 
 [data-theme="dark"] .btn-clear-cache,

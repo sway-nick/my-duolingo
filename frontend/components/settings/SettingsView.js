@@ -143,7 +143,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- App Maintenance / Sync Card -->
       <div class="settings-card" style="padding: 12px 14px;">
-        <button class="primary-button btn-clear-cache" id="clear-app-cache-btn" style="width: 100%; min-height: 42px; font-weight: 600; font-size: 15px;">
+        <button class="primary-button btn-green btn-clear-cache" id="clear-app-cache-btn" style="width: 100%; min-height: 42px; font-weight: 600; font-size: 15px;">
           ${t('settings_sync_btn')}
         </button>
       </div>
