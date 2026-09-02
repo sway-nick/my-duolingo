@@ -42,11 +42,16 @@ function getAudioContext() {
   return audioCtx;
 }
 
+let lastSuccessSoundTime = 0;
+
 /**
  * Plays a cute, sweet sparkling crystal bell chime upon correct answer (Web Audio API)
  */
 function playSuccessSound() {
   if (isAudioMuted() || isSfxMuted()) return;
+  const nowMs = Date.now();
+  if (nowMs - lastSuccessSoundTime < 600) return;
+  lastSuccessSoundTime = nowMs;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;

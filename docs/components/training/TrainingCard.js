@@ -874,6 +874,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             };
 
             nativeRecognition.onspeechend = () => {
+              if (isEvaluated || isCompleted || isProcessing) return;
               if (isListening && !isEvaluated) {
                 setTimeout(() => {
                   try {
@@ -884,6 +885,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             };
 
             nativeRecognition.onresult = (event) => {
+              if (isEvaluated || isCompleted || isProcessing) return;
+
               const allResults = [];
               const finalResults = [];
               let isAnyFinal = false;
@@ -922,11 +925,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 isEvaluated = true;
                 clearAllTimers();
                 isListening = false;
+                try {
+                  nativeRecognition.stop();
+                } catch (e) {}
                 evaluateSpeech(finalResults.length > 0 ? finalResults : allResults);
               }
             };
 
             nativeRecognition.onerror = (err) => {
+              if (isEvaluated || isCompleted || isProcessing) return;
               console.warn('Native speech error:', err.error);
               clearAllTimers();
               isListening = false;
@@ -1428,6 +1435,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       async function evaluateSpeech(alternatives, forceCorrect = false) {
+        if (isCompleted) return;
         clearAllTimers();
         isProcessing = true;
         const isMatch = forceCorrect || checkSpeechMatch(alternatives, currentWord.word);
