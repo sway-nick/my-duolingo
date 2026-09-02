@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v265';
+        var APP_BUILD = '20260902_v266';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -390,15 +390,15 @@
 
         // SMART ACTIVE MODE RESOLUTION:
         // Automatically advance along the training conveyor: Quiz -> Pairs -> Test.
-        // If 0 words in learning and user hasn't explicitly clicked "Open Cards", show the clean Hub screen.
+        // If 0 words in learning or window._showHubScreen is true, show the clean Hub screen.
         if (!isFavPracticeActive) {
-          if (currentMethod === 'cards') {
+          if (window._showHubScreen || (learningCount === 0 && !window._explicitCardsOpened)) {
+            currentMethod = 'input';
+          } else if (currentMethod === 'cards') {
             // While user is in Cards mode, they continue selecting words until reaching dailyGoal (10 words)
             if (cardsQueue.length === 0 && learningCount === 0) {
               currentMethod = 'input';
             }
-          } else if (learningCount === 0 && !window._explicitCardsOpened) {
-            currentMethod = 'input';
           } else if (!isMethodAvailable(currentMethod)) {
             if (quizQueue.length > 0) {
               currentMethod = 'quiz';
@@ -707,7 +707,7 @@
           let currentWotdVideo = 'cat1.mp4';
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
+          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
@@ -803,7 +803,7 @@
             </div>
           `;
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
+          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
             const flashcard = content.querySelector('#wotd-flashcard-3d');
             if (flashcard) {
               let isFlipped = false;
@@ -1016,9 +1016,18 @@
           const continueCardsBtn = content.querySelector('#go-continue-cards-btn');
           if (continueCardsBtn) {
             continueCardsBtn.addEventListener('click', () => {
-              window._explicitCardsOpened = true;
+              window._showHubScreen = false;
+              if (learningCount === 0) {
+                window._explicitCardsOpened = true;
+                userSettings.preferredMethod = 'cards';
+              } else {
+                window._explicitCardsOpened = false;
+                if (quizQueue.length > 0) userSettings.preferredMethod = 'quiz';
+                else if (pairsQueue.length > 0) userSettings.preferredMethod = 'pairs';
+                else if (testQueue.length > 0) userSettings.preferredMethod = 'input';
+                else userSettings.preferredMethod = 'cards';
+              }
               window._trainingRoundJustCompleted = false;
-              userSettings.preferredMethod = 'cards';
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               renderTrainingTab();
@@ -1308,7 +1317,8 @@
               userSettings.preferredMethod = nextMethod;
               saveUserSettings(userSettings).catch((e) => console.warn(e));
 
-              // Instant UI update
+              // Instant UI update: return to Hub start screen
+              window._showHubScreen = true;
               currentWordIndex = 0;
               const tabs = document.querySelectorAll('.nav-tab');
               tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
@@ -1328,6 +1338,7 @@
           activeTab = 'settings';
         } else {
           activeTab = 'training';
+          window._showHubScreen = true;
         }
 
         renderTab(activeTab);
