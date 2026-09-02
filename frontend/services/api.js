@@ -1313,13 +1313,15 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
 
   const baseIds = new Set(baseWords.map((w) => String(w.id)));
 
-  // 2. Pick up to 5 oldest unmastered favorites
+  const favLimit = Math.max(1, Math.round(baseWords.length * 0.5));
+  const masteredLimit = Math.max(1, Math.round(baseWords.length * 0.5));
+
+  // 2. Pick up to 50% (5 words) oldest favorites of the category
   let injectedFavs = [];
   if (favorites && favorites.length > 0) {
     const favSet = new Set(favorites.map(String));
     const candidateFavs = categoryWords.filter((w) => {
-      const p = userProgress[w.id] || userProgress[String(w.id)];
-      return favSet.has(String(w.id)) && !baseIds.has(String(w.id)) && !isWordMastered(p);
+      return favSet.has(String(w.id)) && !baseIds.has(String(w.id));
     });
     candidateFavs.sort((a, b) => {
       const pA = userProgress[a.id] || userProgress[String(a.id)];
@@ -1328,12 +1330,12 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
       const tB = pB ? pB.lastPracticed || 0 : 0;
       return tA - tB;
     });
-    injectedFavs = candidateFavs.slice(0, 5);
+    injectedFavs = candidateFavs.slice(0, favLimit);
   }
 
   const combinedIds = new Set([...baseIds, ...injectedFavs.map((w) => String(w.id))]);
 
-  // 3. Pick up to 5 oldest mastered words for retention
+  // 3. Pick up to 50% (5 words) oldest mastered words for retention
   const candidateMastered = categoryWords.filter((w) => {
     const p = userProgress[w.id] || userProgress[String(w.id)];
     return p && isWordMastered(p) && !combinedIds.has(String(w.id));
@@ -1345,7 +1347,7 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
     const tB = pB ? pB.lastPracticed || 0 : 0;
     return tA - tB;
   });
-  const injectedMastered = candidateMastered.slice(0, 5);
+  const injectedMastered = candidateMastered.slice(0, masteredLimit);
 
   const bonusWords = [...injectedFavs, ...injectedMastered];
   if (bonusWords.length > 0) {

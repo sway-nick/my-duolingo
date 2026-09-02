@@ -1580,69 +1580,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const roundWords = [currentWord];
     const usedIds = new Set([String(currentWord.id)]);
 
-    // 1. Сначала добавляем слова из текущей активной очереди изучения (activeWords)
+    // В раунд Пар попадают слова ИСКЛЮЧИТЕЛЬНО из активной обучающей очереди (activeWords),
+    // которая уже содержит 10 отобранных слов + до 50% фаворитов + до 50% старых изученных слов
     if (activeWords && activeWords.length > 0) {
       const activeOthers = shuffleArray(activeWords.filter((w) => !usedIds.has(String(w.id))));
       for (const w of activeOthers) {
         if (roundWords.length >= TARGET_PAIRS_COUNT) break;
         roundWords.push(w);
         usedIds.add(String(w.id));
-      }
-    }
-
-    // 2. Если в активной очереди меньше 6 слов, подмешиваем до 50% раунда (до 3 слов):
-    //    ТОЛЬКО из реальных Фаворитов и ТОЛЬКО из Старых изученных слов (mastered) этой же категории!
-    //    Если фаворитов или старых слов у пользователя нет — ничего постороннего не подмешивается!
-    if (roundWords.length < TARGET_PAIRS_COUNT) {
-      const progress = getUserProgress() || {};
-
-      // а) Подмешиваем реальные фавориты пользователя в текущей категории
-      try {
-        const favIds = new Set((getUserFavorites() || []).map(String));
-        if (favIds.size > 0) {
-          const favCandidates = allWords.filter(
-            (w) =>
-              favIds.has(String(w.id)) &&
-              !usedIds.has(String(w.id)) &&
-              (selectedCategory === 'All' ||
-                selectedCategory === 'Все категории' ||
-                sanitizeCategory(w.category) === sanitizeCategory(selectedCategory))
-          );
-          favCandidates.sort((a, b) => {
-            const pA = progress[a.id] || {};
-            const pB = progress[b.id] || {};
-            return (pA.lastPracticed || 0) - (pB.lastPracticed || 0);
-          });
-          for (const w of favCandidates) {
-            if (roundWords.length >= TARGET_PAIRS_COUNT) break;
-            roundWords.push(w);
-            usedIds.add(String(w.id));
-          }
-        }
-      } catch (e) {
-        console.warn('Error checking favorites for pairs filler:', e);
-      }
-
-      // б) Подмешиваем реальные старые выученные слова (mastered) пользователя в текущей категории
-      if (roundWords.length < TARGET_PAIRS_COUNT) {
-        const masteredCandidates = allWords.filter(
-          (w) =>
-            !usedIds.has(String(w.id)) &&
-            isWordMastered(progress[w.id]) &&
-            (selectedCategory === 'All' ||
-              selectedCategory === 'Все категории' ||
-              sanitizeCategory(w.category) === sanitizeCategory(selectedCategory))
-        );
-        masteredCandidates.sort((a, b) => {
-          const pA = progress[a.id] || {};
-          const pB = progress[b.id] || {};
-          return (pA.lastPracticed || 0) - (pB.lastPracticed || 0);
-        });
-        for (const w of masteredCandidates) {
-          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
-          roundWords.push(w);
-          usedIds.add(String(w.id));
-        }
       }
     }
 
