@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v278';
+        var APP_BUILD = '20260902_v279';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -761,7 +761,7 @@
                      </div>
 
                      <!-- Back Face: Russian translation & Full-Size Embedded Video -->
-                     <div class="flashcard-face flashcard-back" style="min-height: 200px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; border-radius: inherit;">
+                     <div class="flashcard-face flashcard-back" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; border-radius: inherit;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        
                        <!-- Full-size video covering entire golden card face with instant preloading -->
@@ -843,16 +843,18 @@
                 isFlipped = !isFlipped;
                 flashcard.classList.toggle('is-flipped', isFlipped);
                 flashcard.classList.remove('gleam-active');
-                void flashcard.offsetWidth;
-                flashcard.classList.add('gleam-active');
+                requestAnimationFrame(() => {
+                  flashcard.classList.add('gleam-active');
+                });
 
-                // Trigger crown horn sparkle glint on the newly visible side after 1s
+                // Trigger crown horn sparkle glint on the newly visible side
                 const activeFace = isFlipped ? flashcard.querySelector('.flashcard-back') : flashcard.querySelector('.flashcard-front');
                 const crownGlint = activeFace ? activeFace.querySelector('.crown-glint') : null;
                 if (crownGlint) {
                   crownGlint.classList.remove('sparkle-active');
-                  void crownGlint.offsetWidth;
-                  crownGlint.classList.add('sparkle-active');
+                  requestAnimationFrame(() => {
+                    crownGlint.classList.add('sparkle-active');
+                  });
                 }
 
                 if (isFlipped) {
