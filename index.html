@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v275';
+        var APP_BUILD = '20260902_v276';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -702,38 +702,20 @@
               nextMode = 'input';
               nextBtnLabel = '✍️ ' + t('train_go_test');
             }
-          } else if (currentMethod === 'input') {
-            if (unmasteredCount > 0) {
-              if (learningCount === 0) {
-                emptyIcon = '';
-                emptyTitle = '';
-                emptyMsg = '';
-                nextMode = 'select_category';
-                nextBtnLabel = t('train_select_category');
-              } else {
-                emptyIcon = '✍️';
-                emptyTitle = t('train_no_words_test');
-                emptyMsg = '';
-                if (hasCards) {
-                  nextMode = 'cards';
-                  nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
-                } else if (hasQuiz) {
-                  nextMode = 'quiz';
-                  nextBtnLabel = '🎯 ' + t('train_go_quiz');
-                } else if (hasPairs) {
-                  nextMode = 'pairs';
-                  nextBtnLabel = '🧩 ' + t('train_go_pairs');
-                } else {
-                  nextMode = 'cards';
-                  nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
-                }
-              }
-            } else {
+          } else if (currentMethod === 'input' || window._showHubScreen || learningCount === 0) {
+            // On Hub Choice Screen: buttons are ALWAYS permanently consistent:
+            // 1. Continue round
+            // 2. Select category (ALWAYS "Выбрать категорию")
+            // 3. Repeat favorites
+            emptyIcon = '';
+            emptyTitle = '';
+            emptyMsg = '';
+            nextMode = 'select_category';
+            nextBtnLabel = t('train_select_category');
+
+            if (unmasteredCount === 0 && !window._showHubScreen) {
               emptyIcon = '🏆';
               emptyTitle = getInterfaceLanguage() === 'ru' ? 'Отлично!<br>Задача выполнена!' : getInterfaceLanguage() === 'uk' ? 'Відмінно!<br>Завдання виконано!' : 'Excellent!<br>Goal achieved!';
-              emptyMsg = '';
-              nextMode = 'select_category';
-              nextBtnLabel = t('train_select_category');
             }
           }
 
