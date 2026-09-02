@@ -1575,59 +1575,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       renderConsonantsQuiz();
     }
   } else if (currentMethod === 'pairs') {
-    // ... (без изменений, оставляем как было)
     const TARGET_PAIRS_COUNT = 6;
     const roundWords = [currentWord];
     const usedIds = new Set([String(currentWord.id)]);
 
+    // В раунд Пар попадают СТРОГО только те слова, которые пользователь сейчас изучает (activeWords)
     if (activeWords && activeWords.length > 0) {
       const activeOthers = shuffleArray(activeWords.filter((w) => !usedIds.has(String(w.id))));
       for (const w of activeOthers) {
         if (roundWords.length >= TARGET_PAIRS_COUNT) break;
         roundWords.push(w);
         usedIds.add(String(w.id));
-      }
-    }
-
-    if (roundWords.length < TARGET_PAIRS_COUNT) {
-      try {
-        const favIds = new Set((getUserFavorites() || []).map(String));
-        const favWords = shuffleArray(
-          allWords.filter((w) => favIds.has(String(w.id)) && !usedIds.has(String(w.id))),
-        );
-        for (const w of favWords) {
-          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
-          roundWords.push(w);
-          usedIds.add(String(w.id));
-        }
-      } catch (e) {
-        console.warn('Error fetching favorites for pairs filler:', e);
-      }
-    }
-
-    if (roundWords.length < TARGET_PAIRS_COUNT && allWords.length > 0) {
-      const categoryOthers = shuffleArray(
-        allWords.filter(
-          (w) =>
-            !usedIds.has(String(w.id)) &&
-            (selectedCategory === 'All' ||
-              selectedCategory === 'Все категории' ||
-              sanitizeCategory(w.category) === sanitizeCategory(selectedCategory)),
-        ),
-      );
-      for (const w of categoryOthers) {
-        if (roundWords.length >= TARGET_PAIRS_COUNT) break;
-        roundWords.push(w);
-        usedIds.add(String(w.id));
-      }
-
-      if (roundWords.length < TARGET_PAIRS_COUNT) {
-        const remainingAll = shuffleArray(allWords.filter((w) => !usedIds.has(String(w.id))));
-        for (const w of remainingAll) {
-          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
-          roundWords.push(w);
-          usedIds.add(String(w.id));
-        }
       }
     }
 
