@@ -11,6 +11,12 @@ function copyRecursiveSync(src, dest) {
       copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
     });
   } else {
+    if (fs.existsSync(dest)) {
+      const destStats = fs.statSync(dest);
+      if (destStats.size === stats.size && Math.abs(destStats.mtimeMs - stats.mtimeMs) < 1000) {
+        return;
+      }
+    }
     fs.copyFileSync(src, dest);
   }
 }

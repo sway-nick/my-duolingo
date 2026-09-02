@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 Варианта авторской совы для English Breakfast</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 30px 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; text-align: center; }
+  h1 { font-size: 28px; color: #ffedd5; margin-bottom: 8px; }
+  .subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 32px; }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: #f97316;
+  }
+  .card-tag {
+    background: #ea580c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .img-box {
+    width: 260px;
+    height: 260px;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .title { font-size: 19px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .desc { font-size: 14px; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px; text-align: left; }
+  .features { font-size: 13px; color: #94a3b8; text-align: left; width: 100%; }
+  .features li { margin-left: 18px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>☕ Выберите маскота для English Breakfast</h1>
+  <p class="subtitle">Все 3 концепта созданы с нуля: 100% авторские права, свободны для регистрации и использования в приложении</p>
+
+  <div class="grid">
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-tag">Вариант 1</div>
+      <div class="img-box">
+        <img src="preview_owls/variant_1_gentleman.jpg" alt="Британский джентльмен">
+      </div>
+      <div class="title">Британский джентльмен</div>
+      <div class="desc">Умный и харизматичный профессор в очках, твидовом пиджаке и бабочке, наслаждающийся чашкой чая.</div>
+      <ul class="features">
+        <li>🏛️ Солидный клубный стиль British Tea</li>
+        <li>🎩 Идеально для мерча, аватаров и сайта</li>
+        <li>☕ Классическая английская атмосфера</li>
+      </ul>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card" style="border-color: #f97316;">
+      <div class="card-tag" style="background: #10b981;">Вариант 2 (Рекомендуем)</div>
+      <div class="img-box">
+        <img src="preview_owls/variant_2_cup_mascot.jpg" alt="Маскот в чашке">
+      </div>
+      <div class="title">3D Маскот в чашке</div>
+      <div class="desc">Очаровательная сова в академической шапочке сидит в утренней чашке и с удовольствием читает книгу.</div>
+      <ul class="features">
+        <li>📱 Идеальная иконка для App Store / Google Play</li>
+        <li>🔥 Вирусный потенциал в TikTok и соцсетях</li>
+        <li>💡 Мгновенно передает смысл: учим английский с кофе</li>
+      </ul>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-tag">Вариант 3</div>
+      <div class="img-box">
+        <img src="preview_owls/variant_3_flat_icon.jpg" alt="Минималистичный логотип">
+      </div>
+      <div class="title">Минималистичный логотип</div>
+      <div class="desc">Лаконичный плоский знак: мордочка совы с большими круглыми глазами вырастает из чашки с паром.</div>
+      <ul class="features">
+        <li>🔍 Отличная читаемость в размере 16x16 px</li>
+        <li>⚡ Идеально для фавикона во вкладке браузера</li>
+        <li>🎨 Строгая геометрия и высокая контрастность</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>
