@@ -80,8 +80,10 @@ function applyMultilingualTranslations(words) {
       if (w.translations && w.translations[lang]) {
         w.translation = w.translations[lang];
       }
-      if (w.all_notes && w.all_notes[lang]) {
-        w.notes = w.all_notes[lang];
+      if (w.all_notes && typeof w.all_notes === 'object') {
+        w.notes = w.all_notes[lang] || '';
+      } else if (lang !== 'ru') {
+        w.notes = '';
       }
     }
   });

@@ -2195,10 +2195,14 @@ export function getWordTranslation(wordObj) {
 export function getWordNotes(wordObj) {
   if (!wordObj) return '';
   const lang = getInterfaceLanguage();
-  if (wordObj.all_notes && wordObj.all_notes[lang]) {
-    return wordObj.all_notes[lang];
+  if (wordObj.all_notes && typeof wordObj.all_notes === 'object') {
+    return wordObj.all_notes[lang] || '';
   }
-  return wordObj.notes || '';
+  // Русский notes отдаем ТОЛЬКО если активный язык интерфейса — русский
+  if (lang === 'ru') {
+    return wordObj.notes || '';
+  }
+  return '';
 }
 
 const CATEGORY_LOCALIZATIONS = {
