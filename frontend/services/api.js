@@ -1083,7 +1083,12 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 
   const wKey = weekKey || getIsoWeekKey();
   try {
-    const response = await fetch(`${API_URL}?route=sync&userId=${encodeURIComponent(uId)}&weekKey=${encodeURIComponent(wKey)}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const response = await fetch(`${API_URL}?route=sync&userId=${encodeURIComponent(uId)}&weekKey=${encodeURIComponent(wKey)}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
     const res = await response.json();
     if (res && res.success && res.data) {
       const { progress = {}, favorites = [], weeklyXp = 0, avatar = '', settings = null } = res.data;

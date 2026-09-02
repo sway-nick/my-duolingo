@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v267';
+        var APP_BUILD = '20260902_v269';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -80,6 +80,12 @@
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=200.0';
 
       let allWords = [];
+      try {
+        const cachedWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+        if (Array.isArray(cachedWords) && cachedWords.length > 0) {
+          allWords = cachedWords;
+        }
+      } catch (e) {}
       let favoriteIds = new Set();
       let favoritePracticeWords = null;
       let currentWordIndex = 0;
@@ -123,24 +129,20 @@
       }
 
       async function loadData() {
-        // 1. Sync User Data from Cloud for cross-device consistency
         const user = getCurrentUser();
-        if (user && user.id) {
-          try {
-            await fetchUserDataFromCloud(user.id);
-          } catch (e) {
-            console.warn('Cloud sync error on load:', e);
-          }
-        }
 
         try {
-          const wordsRes = await getWords(false);
-          if (wordsRes && wordsRes.data && wordsRes.data.length > 0) {
-            allWords = wordsRes.data;
-          }
-        } catch (e) {
-          console.warn('Failed to load words:', e);
-        }
+          await Promise.allSettled([
+            (user && user.id && user.id !== 'guest')
+              ? fetchUserDataFromCloud(user.id).catch((e) => console.warn('Cloud sync error:', e))
+              : Promise.resolve(),
+            getWords(false).then((wordsRes) => {
+              if (wordsRes && wordsRes.data && wordsRes.data.length > 0) {
+                allWords = wordsRes.data;
+              }
+            }).catch((e) => console.warn('Words load error:', e))
+          ]);
+        } catch (e) {}
 
         try {
           userSettings = await getUserSettings();
@@ -388,20 +390,16 @@
           return false;
         }
 
-        // If Hub / Choice screen is requested or user completed their learning round, show Hub screen immediately!
-        if (!isFavPracticeActive && (window._showHubScreen || (learningCount === 0 && !window._explicitCardsOpened))) {
-          renderHubChoiceScreen();
-          return;
-        }
-
         // SMART ACTIVE MODE RESOLUTION:
         // Automatically advance along the training conveyor: Quiz -> Pairs -> Test.
+        // If 0 words in learning or window._showHubScreen is true, show the clean Hub screen.
         if (!isFavPracticeActive) {
-          if (currentMethod === 'cards') {
+          if (window._showHubScreen || (learningCount === 0 && !window._explicitCardsOpened)) {
+            currentMethod = 'input';
+          } else if (currentMethod === 'cards') {
             // While user is in Cards mode, they continue selecting words until reaching dailyGoal (10 words)
             if (cardsQueue.length === 0 && learningCount === 0) {
-              renderHubChoiceScreen();
-              return;
+              currentMethod = 'input';
             }
           } else if (!isMethodAvailable(currentMethod)) {
             if (quizQueue.length > 0) {
@@ -411,8 +409,7 @@
             } else if (testQueue.length > 0) {
               currentMethod = 'input';
             } else {
-              renderHubChoiceScreen();
-              return;
+              currentMethod = 'input';
             }
           }
         }
@@ -470,7 +467,11 @@
 
         // Filter words strictly based on the active training method queue
         let activeWords = [];
-        if (currentMethod === 'cards') {
+        if (window._showHubScreen) {
+          // Hub choice screen requested: force empty activeWords to display Hub options!
+          activeWords = [];
+          currentMethod = 'input';
+        } else if (currentMethod === 'cards') {
           activeWords = getQueueForCards(categoryWords, userProgress);
         } else if (currentMethod === 'quiz') {
           activeWords = quizQueue;
@@ -943,257 +944,6 @@
             }
           }
 
-                  function renderHubChoiceScreen() {
-          const content = document.querySelector('#app-content');
-          if (!content) return;
-
-          let wotdHtml = '';
-          const wotd = getGlobalWordOfTheDay(allWords, cloudWordOfTheDayId);
-          let isWotdFav = false;
-          let currentWotdVideo = 'cat1.mp4';
-
-          if (wotd) {
-            preloadWordAudio(wotd.word);
-            const favList = getUserFavorites();
-            const favSet = new Set(favList.map(String));
-            isWotdFav = favSet.has(String(wotd.id));
-
-            let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
-            if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
-            currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
-
-            wotdHtml = `
-              <div class="wotd-bonus-section" style="margin-top: 26px;">
-                <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 0 auto; max-width: 340px; width: 100%;">
-                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку" style="min-height: 220px;">
-                     <!-- Front Face: English word -->
-                     <div class="flashcard-face flashcard-front" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
-                       <div class="card-edge-rim-glint" aria-hidden="true"></div>
-                       <div class="flashcard-face-top">
-                          <button type="button" class="flashcard-crown-btn" id="wotd-sound-front" title="${t('word_of_day')}">
-                            <img src="assets/icons/golden_crown.png" alt="Корона" class="wotd-crown-icon">
-                            <span class="crown-glint sparkle-active" aria-hidden="true"></span>
-                          </button>
-                         <span class="wotd-card-badge">${t('word_of_day')}</span>
-                         <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
-                           ${isWotdFav ? '❤️' : '🤍'}
-                         </button>
-                       </div>
-                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1;">
-                         <h2 class="flashcard-word embossed-text" style="font-size: 28px; margin: 0;">${wotd.word}</h2>
-                       </div>
-                       <div class="flashcard-face-bottom">
-                         <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
-                       </div>
-                     </div>
-
-                     <!-- Back Face: Russian translation & Full-Size Embedded Video -->
-                     <div class="flashcard-face flashcard-back" style="min-height: 200px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; border-radius: inherit;">
-                       <div class="card-edge-rim-glint" aria-hidden="true"></div>
-                       
-                       <!-- Full-size video covering entire golden card face with instant preloading -->
-                       <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
-                         <video id="wotd-card-video" playsinline preload="auto" src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
-                       </div>
-
-                       <div class="flashcard-face-top" style="z-index: 2;">
-                          <button type="button" class="flashcard-crown-btn" id="wotd-sound-back" title="${t('word_of_day')}">
-                            <img src="assets/icons/golden_crown.png" alt="Корона" class="wotd-crown-icon">
-                            <span class="crown-glint" aria-hidden="true"></span>
-                          </button>
-                         <span class="wotd-card-badge">${t('word_of_day')}</span>
-                         <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
-                           ${isWotdFav ? '❤️' : '🤍'}
-                         </button>
-                       </div>
-                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; z-index: 2;">
-                         <h2 class="flashcard-translation" style="font-size: 24px; font-weight: 500; margin: 14px 0 0 0; text-align: center;">${wotd.translation}</h2>
-                       </div>
-                     </div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }
-
-          content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 28px 20px;">
-              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
-                <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: 48px; font-size: 16px; font-weight: 700;">
-                  ${getInterfaceLanguage() === 'ru' ? 'Продолжить' : getInterfaceLanguage() === 'uk' ? 'Продовжити' : 'Continue'}
-                </button>
-                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
-                  ${t('train_select_category')}
-                </button>
-                <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                  ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
-                </button>
-              </div>
-              ${wotdHtml}
-            </div>
-          `;
-
-          const continueCardsBtn = content.querySelector('#go-continue-cards-btn');
-          if (continueCardsBtn) {
-            continueCardsBtn.addEventListener('click', () => {
-              window._showHubScreen = false;
-              if (learningCount === 0) {
-                window._explicitCardsOpened = true;
-                userSettings.preferredMethod = 'cards';
-              } else {
-                window._explicitCardsOpened = false;
-                if (quizQueue.length > 0) userSettings.preferredMethod = 'quiz';
-                else if (pairsQueue.length > 0) userSettings.preferredMethod = 'pairs';
-                else if (testQueue.length > 0) userSettings.preferredMethod = 'input';
-                else userSettings.preferredMethod = 'cards';
-              }
-              window._trainingRoundJustCompleted = false;
-              saveUserSettings(userSettings);
-              currentWordIndex = 0;
-              renderTrainingTab();
-            });
-          }
-
-          const goCatBtn = content.querySelector('#go-next-mode-btn');
-          if (goCatBtn) {
-            goCatBtn.addEventListener('click', () => {
-              renderCategorySelectorScreen();
-            });
-          }
-
-          const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
-          if (repeatFavsBtn) {
-            repeatFavsBtn.addEventListener('click', () => {
-              window._showHubScreen = false;
-              window._explicitCardsOpened = false;
-              window._trainingRoundJustCompleted = false;
-              const favList = getUserFavorites();
-              const favIds = new Set(favList.map(String));
-              const favWords = allWords.filter((w) => favIds.has(String(w.id)));
-              if (favWords && favWords.length > 0) {
-                favoritePracticeWords = [...favWords];
-                resetWordsProgressForPractice(favWords);
-                userSettings.preferredMethod = 'quiz';
-                saveUserSettings(userSettings);
-                currentWordIndex = 0;
-                renderTrainingTab();
-              } else {
-                const tabBtn = document.querySelector('.nav-tab[data-tab="favorites"]');
-                if (tabBtn) tabBtn.click();
-                else renderTab('favorites');
-              }
-            });
-          }
-
-          if (wotd) {
-            const flashcard = content.querySelector('#wotd-flashcard-3d');
-            if (flashcard) {
-              let isFlipped = false;
-              let videoStarted = false;
-
-              const cardVideo = flashcard.querySelector('#wotd-card-video');
-              const videoContainer = flashcard.querySelector('#wotd-video-container');
-
-              if (cardVideo) cardVideo.load();
-
-              flashcard.addEventListener('click', (e) => {
-                if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-crown-btn') || e.target.closest('.flashcard-fav-btn')) {
-                  return;
-                }
-
-                isFlipped = !isFlipped;
-                flashcard.classList.toggle('is-flipped', isFlipped);
-                flashcard.classList.remove('gleam-active');
-                void flashcard.offsetWidth;
-                flashcard.classList.add('gleam-active');
-
-                const activeFace = isFlipped ? flashcard.querySelector('.flashcard-back') : flashcard.querySelector('.flashcard-front');
-                const crownGlint = activeFace ? activeFace.querySelector('.crown-glint') : null;
-                if (crownGlint) {
-                  crownGlint.classList.remove('sparkle-active');
-                  void crownGlint.offsetWidth;
-                  crownGlint.classList.add('sparkle-active');
-                }
-
-                if (isFlipped) {
-                  if (!videoStarted && cardVideo && videoContainer) {
-                    videoStarted = true;
-                    let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
-                    if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
-                    localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
-                    preloadNextWotdVideo();
-
-                    let isVideoRevealed = false;
-                    const revealVideo = () => {
-                      if (isVideoRevealed || !isFlipped) return;
-                      isVideoRevealed = true;
-                      videoContainer.style.display = 'block';
-                      requestAnimationFrame(() => {
-                        videoContainer.style.opacity = '1';
-                      });
-                    };
-
-                    const dismissVideo = () => {
-                      videoContainer.style.opacity = '0';
-                      setTimeout(() => {
-                        if (!isFlipped || cardVideo.ended || cardVideo.paused) {
-                          videoContainer.style.display = 'none';
-                        }
-                      }, 250);
-                    };
-
-                    cardVideo.addEventListener('playing', revealVideo, { once: true });
-                    cardVideo.addEventListener('timeupdate', () => {
-                      if (cardVideo.currentTime > 0.05) revealVideo();
-                    }, { once: true });
-                    cardVideo.addEventListener('ended', () => { dismissVideo(); }, { once: true });
-                    cardVideo.addEventListener('error', () => { dismissVideo(); }, { once: true });
-                    setTimeout(() => { if (!isVideoRevealed) dismissVideo(); }, 2500);
-
-                    cardVideo.muted = false;
-                    cardVideo.volume = 1.0;
-                    const playPromise = cardVideo.play();
-                    if (playPromise !== undefined) {
-                      playPromise.catch((err) => {
-                        cardVideo.muted = true;
-                        cardVideo.play().catch(() => dismissVideo());
-                      });
-                    }
-                  }
-                } else {
-                  if (cardVideo && !cardVideo.paused) cardVideo.pause();
-                  if (videoContainer) {
-                    videoContainer.style.opacity = '0';
-                    videoContainer.style.display = 'none';
-                  }
-                  speakWord(wotd.word);
-                }
-              });
-
-              const speakButtons = content.querySelectorAll('#wotd-sound-front, #wotd-sound-back');
-              speakButtons.forEach((btn) => {
-                btn.addEventListener('click', (e) => {
-                  e.stopPropagation();
-                  speakWord(wotd.word);
-                });
-              });
-
-              const favButtons = content.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
-              favButtons.forEach((btn) => {
-                btn.addEventListener('click', async (e) => {
-                  e.stopPropagation();
-                  isWotdFav = !isWotdFav;
-                  handleFavoriteToggle(wotd.id, isWotdFav);
-                  favButtons.forEach((b) => {
-                    b.classList.toggle('is-favorite', isWotdFav);
-                    b.innerHTML = isWotdFav ? '❤️' : '🤍';
-                  });
-                });
-              });
-            }
-          }
-        }
-
           function renderCategorySelectorScreen() {
             const content = document.querySelector('#app-content');
             if (!content) return;
@@ -1544,8 +1294,33 @@
             renderTab(activeTab);
           },
           () => {
-            // Click on Logo / Brand in header -> Always navigate to Hub / Choice screen
+            // Click on Logo / Owl -> Switch to Training and activate leftmost available mode
             try {
+              const selectedCategory = userSettings.category || 'Elementary';
+              const cleanCat = (cat) => {
+                if (!cat) return 'Elementary';
+                return String(cat).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim();
+              };
+              const categoryWords = allWords.filter(
+                (w) => selectedCategory === 'All' || cleanCat(w.category) === cleanCat(selectedCategory)
+              );
+              const favList = getUserFavorites() || [];
+              const userProgress = getUserProgress() || {};
+
+              const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
+              const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
+              const testQueue = getQueueForTest(categoryWords, userProgress);
+
+              let nextMethod = 'cards';
+              if (quizQueue.length > 0) {
+                nextMethod = 'quiz';
+              } else if (pairsQueue.length > 0) {
+                nextMethod = 'pairs';
+              } else if (testQueue.length > 0) {
+                nextMethod = 'input';
+              }
+
+              // Instant UI update: return directly to Hub choice screen
               window._showHubScreen = true;
               currentWordIndex = 0;
               const tabs = document.querySelectorAll('.nav-tab');
