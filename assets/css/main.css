@@ -3803,13 +3803,13 @@ body {
 body.notebook-theme .notebook-ink-blot,
 .notebook-theme .notebook-ink-blot {
   display: block !important;
-  position: fixed !important;
-  right: 28px !important;
-  bottom: 22px !important;
-  width: 98px !important;
-  height: 98px !important;
+  position: absolute !important;
+  right: 18px !important;
+  bottom: 18px !important;
+  width: 84px !important;
+  height: 84px !important;
   pointer-events: none !important;
-  z-index: 1 !important;
+  z-index: 20 !important;
   opacity: 0.92 !important;
   filter: drop-shadow(1px 2px 3px rgba(88, 28, 135, 0.35)) !important;
   transform: rotate(-10deg) !important;
@@ -3818,10 +3818,10 @@ body.notebook-theme .notebook-ink-blot,
 @media (max-width: 480px) {
   body.notebook-theme .notebook-ink-blot,
   .notebook-theme .notebook-ink-blot {
-    width: 86px !important;
-    height: 86px !important;
-    right: 20px !important;
-    bottom: 16px !important;
+    width: 70px !important;
+    height: 70px !important;
+    right: 14px !important;
+    bottom: 14px !important;
   }
 }
 
@@ -4428,19 +4428,29 @@ body.notebook-theme,
   --border-color: var(--nb-grid-color);
 
   font-family: 'Caveat', 'Comic Sans MS', cursive !important;
-  background-color: var(--nb-bg) !important;
   font-size: 18px !important;
+  background-color: #eae3d8 !important; /* Elegant natural desk surface behind notebook sheet */
+}
 
-  /* Math notebook background — uniform light-blue squares, like school notebook */
-  background-image:
-    linear-gradient(rgba(164, 200, 232, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(164, 200, 232, 0.55) 1px, transparent 1px);
-  background-size: 24px 24px;
+@media (max-width: 680px) {
+  body.notebook-theme {
+    background-color: var(--nb-bg) !important;
+  }
 }
 
 .notebook-theme .mobile-app {
-  background: transparent !important;
+  position: relative !important;
+  background-color: var(--nb-bg) !important;
   font-family: 'Caveat', cursive !important;
+
+  /* Math notebook background — strictly kept INSIDE the notebook sheet */
+  background-image:
+    linear-gradient(rgba(164, 200, 232, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(164, 200, 232, 0.55) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+  border-left: 2px solid var(--nb-border) !important;
+  border-right: 2px solid var(--nb-border) !important;
+  box-shadow: 0 4px 35px rgba(26, 58, 143, 0.15) !important;
 }
 
 /* Header */
