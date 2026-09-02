@@ -154,53 +154,79 @@ function cyrillicToLatinPhonetic(str) {
     .join('');
 }
 
-function normalizeEnglish(str) {
+function normalizeEnglish(str, preserveArticles = false) {
   if (!str) return '';
-  const stripped = String(str)
+  let cleaned = String(str)
     .toLowerCase()
     .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, '')
-    .replace(/\b(a|an|the|to)\b/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
 
-  if (stripped === '' && str.trim().length > 0) {
-    return String(str)
-      .toLowerCase()
-      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
+  if (!preserveArticles) {
+    const stripped = cleaned.replace(/\b(a|an|the|to)\b/gi, '').replace(/\s+/g, ' ').trim();
+    if (stripped.length > 0) {
+      cleaned = stripped;
+    }
   }
-  return stripped;
+  return cleaned;
 }
 
 function checkSpeechMatch(spokenList, targetWord) {
-  const normTarget = normalizeEnglish(targetWord);
+  if (!targetWord || !spokenList || spokenList.length === 0) return false;
+  const rawTarget = String(targetWord).toLowerCase().trim();
+  const isTargetArticleOrShort = /^(a|an|the|to|in|on|of|at|by|it|is|as|or|and)$/i.test(rawTarget);
+
+  const normTarget = normalizeEnglish(targetWord, isTargetArticleOrShort);
   if (!normTarget) return false;
 
   for (const rawSpoken of spokenList) {
-    const normSpoken = normalizeEnglish(rawSpoken);
+    const normSpoken = normalizeEnglish(rawSpoken, isTargetArticleOrShort);
     if (!normSpoken) continue;
 
+    // 1. Точное совпадение
     if (normSpoken === normTarget) return true;
 
-    // Сравнение по отдельным словам (строго до 2 слов в ответе)
+    // 2. Внутри сказанного (например, "it's the" или "the word")
     const wordsInSpoken = normSpoken.split(/\s+/).filter(Boolean);
-    if (wordsInSpoken.length <= 2 && wordsInSpoken.includes(normTarget)) {
+    if (wordsInSpoken.includes(normTarget)) {
+      return true;
+    }
+    const rawWords = String(rawSpoken)
+      .toLowerCase()
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, '')
+      .split(/\s+/)
+      .filter(Boolean);
+    if (rawWords.includes(rawTarget)) {
       return true;
     }
 
-    // Для коротких слов (<= 4 букв, например ship, dog, art) не допускаем замену одной буквы на произвольную (ship -> shop)
-    if (normTarget.length > 4) {
+    // 3. Фонетические эквиваленты для сложных коротких звуков
+    if (normTarget === 'the' && /^(the|dee|duh|tha|zee|th|da|de|d)$/i.test(normSpoken)) {
+      return true;
+    }
+    if (normTarget === 'of' && /^(of|off|ov|uv|have)$/i.test(normSpoken)) {
+      return true;
+    }
+    if (normTarget === 'and' && /^(and|end|an|und)$/i.test(normSpoken)) {
+      return true;
+    }
+    if (normTarget === 'in' && /^(in|inn|en|an)$/i.test(normSpoken)) {
+      return true;
+    }
+
+    // 4. Допуск на опечатку/небольшую неточность для слов от 4 букв
+    if (normTarget.length >= 4) {
       const dist = calculateLevenshtein(normSpoken, normTarget);
       const maxDist = Math.max(1, Math.floor(normTarget.length * 0.25));
       if (dist <= maxDist && dist <= 2) return true;
     }
 
+    // 5. Транслитерация / кириллица
     const latinized = cyrillicToLatinPhonetic(rawSpoken.trim());
     if (latinized) {
-      const normLatinized = normalizeEnglish(latinized);
+      const normLatinized = normalizeEnglish(latinized, isTargetArticleOrShort);
       if (normLatinized === normTarget) return true;
-      if (normTarget.length > 4) {
+      if (normTarget.length >= 4) {
         const distTranslit = calculateLevenshtein(normLatinized, normTarget);
         if (distTranslit <= Math.max(1, Math.floor(normTarget.length * 0.25))) return true;
       }
@@ -772,7 +798,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             nativeRecognition.lang = 'en-US';
             nativeRecognition.continuous = false;
             nativeRecognition.interimResults = true;
-            nativeRecognition.maxAlternatives = 3;
+            nativeRecognition.maxAlternatives = 5;
 
             nativeRecognition.onstart = () => {
               if (micBtn) {
@@ -785,8 +811,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
               }
 
-              const wordLength = currentWord.word ? currentWord.word.length : 5;
-              const timeoutMs = wordLength <= 4 ? 1400 : wordLength <= 7 ? 1750 : 2100;
+              // Даем комфортные 4 секунды на произнесение слова
+              const timeoutMs = 4000;
               autoStopTimer = setTimeout(() => {
                 if (isListening && !isEvaluated) {
                   if (micBtn) {
@@ -806,54 +832,61 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                       isProcessing = false;
                       handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
                     }
-                  }, 3500);
+                  }, 3000);
                 }
               }, timeoutMs);
             };
 
+            nativeRecognition.onspeechend = () => {
+              if (isListening && !isEvaluated) {
+                setTimeout(() => {
+                  try {
+                    nativeRecognition.stop();
+                  } catch (e) {}
+                }, 350);
+              }
+            };
+
             nativeRecognition.onresult = (event) => {
+              const allResults = [];
               const finalResults = [];
-              const interimResults = [];
+              let isAnyFinal = false;
 
               for (let i = 0; i < event.results.length; i++) {
                 const result = event.results[i];
-                if (result.isFinal) {
-                  for (let j = 0; j < result.length; j++) {
-                    if (result[j].transcript) {
-                      finalResults.push(result[j].transcript.trim());
-                    }
-                  }
-                } else {
-                  for (let j = 0; j < result.length; j++) {
-                    if (result[j].transcript) {
-                      interimResults.push(result[j].transcript.trim());
-                    }
+                if (result.isFinal) isAnyFinal = true;
+                for (let j = 0; j < result.length; j++) {
+                  const text = (result[j].transcript || '').trim();
+                  if (text) {
+                    allResults.push(text);
+                    if (result.isFinal) finalResults.push(text);
                   }
                 }
               }
 
-              if (interimResults.length > 0 && transcriptBox) {
+              if (allResults.length > 0 && transcriptBox) {
                 transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = `🎤 <span style="color: #6b7280;">${interimResults[0]}</span>`;
+                transcriptBox.innerHTML = `🎤 Услышано: <strong>«${allResults[0]}»</strong>`;
               }
 
-              if (finalResults.length > 0) {
+              // Мгновенная проверка: если уже есть верное произношение, сразу засчитываем!
+              if (checkSpeechMatch(allResults, currentWord.word)) {
                 isEvaluated = true;
                 clearAllTimers();
                 isListening = false;
+                try {
+                  nativeRecognition.stop();
+                } catch (e) {}
+                evaluateSpeech(allResults, true);
+                return;
+              }
 
-                if (micBtn) {
-                  micBtn.classList.remove('listening');
-                  micBtn.classList.add('processing');
-                }
-                if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
-
-                if (transcriptBox) {
-                  transcriptBox.style.display = 'block';
-                  transcriptBox.innerHTML = `Услышано: <strong>«${finalResults[0]}»</strong>`;
-                }
-
-                evaluateSpeech(finalResults);
+              // Финальная оценка после завершения распознавания фразы
+              if (isAnyFinal && (finalResults.length > 0 || allResults.length > 0)) {
+                isEvaluated = true;
+                clearAllTimers();
+                isListening = false;
+                evaluateSpeech(finalResults.length > 0 ? finalResults : allResults);
               }
             };
 
