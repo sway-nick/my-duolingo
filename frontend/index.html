@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v262';
+        var APP_BUILD = '20260902_v263';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -747,7 +747,7 @@
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        
                        <!-- Full-size video covering entire golden card face with instant preloading -->
-                       <div id="wotd-video-container" style="display: none; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000;">
+                       <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
                          <video id="wotd-card-video" playsinline preload="auto" src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                        </div>
 
@@ -839,7 +839,46 @@
                     localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
                     preloadNextWotdVideo();
 
-                    videoContainer.style.display = 'block';
+                    let isVideoRevealed = false;
+                    const revealVideo = () => {
+                      if (isVideoRevealed || !isFlipped) return;
+                      isVideoRevealed = true;
+                      videoContainer.style.display = 'block';
+                      requestAnimationFrame(() => {
+                        videoContainer.style.opacity = '1';
+                      });
+                    };
+
+                    const dismissVideo = () => {
+                      videoContainer.style.opacity = '0';
+                      setTimeout(() => {
+                        if (!isFlipped || cardVideo.ended || cardVideo.paused) {
+                          videoContainer.style.display = 'none';
+                        }
+                      }, 250);
+                    };
+
+                    // Reveal video strictly when first real frame starts playing (prevents black screen!)
+                    cardVideo.addEventListener('playing', revealVideo, { once: true });
+                    cardVideo.addEventListener('timeupdate', () => {
+                      if (cardVideo.currentTime > 0.05) revealVideo();
+                    }, { once: true });
+
+                    cardVideo.addEventListener('ended', () => {
+                      dismissVideo();
+                    }, { once: true });
+
+                    cardVideo.addEventListener('error', () => {
+                      dismissVideo();
+                    }, { once: true });
+
+                    // Watchdog: if video fails to play within 2.5s, keep card translation visible
+                    setTimeout(() => {
+                      if (!isVideoRevealed) {
+                        dismissVideo();
+                      }
+                    }, 2500);
+
                     cardVideo.muted = false;
                     cardVideo.volume = 1.0;
 
@@ -848,20 +887,19 @@
                       playPromise.catch((err) => {
                         console.warn('Playback with sound prevented by browser policy, falling back to muted autoplay:', err);
                         cardVideo.muted = true;
-                        cardVideo.play().catch((e) => console.error('Video play error:', e));
+                        cardVideo.play().catch((e) => {
+                          console.error('Video play error:', e);
+                          dismissVideo();
+                        });
                       });
                     }
-
-                    cardVideo.addEventListener('ended', () => {
-                      // Smoothly hide video container after video ends to reveal translation
-                      videoContainer.style.display = 'none';
-                    }, { once: true });
                   }
                 } else {
                   if (cardVideo && !cardVideo.paused) {
                     cardVideo.pause();
                   }
                   if (videoContainer) {
+                    videoContainer.style.opacity = '0';
                     videoContainer.style.display = 'none';
                   }
                   speakWord(wotd.word);
