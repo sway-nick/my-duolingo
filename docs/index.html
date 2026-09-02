@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v245';
+        var APP_BUILD = '20260902_v246';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -316,7 +316,12 @@
             if (diff !== 0) return diff;
             return a.localeCompare(b);
           });
-        const selectedCategory = localStorage.getItem('myduo_dict_category') || userSettings.category || 'Elementary';
+        let selectedCategory = userSettings.category || 'Elementary';
+        if (selectedCategory === 'All' || selectedCategory === 'Все категории') {
+          selectedCategory = 'Elementary';
+          userSettings.category = 'Elementary';
+          saveUserSettings(userSettings);
+        }
 
         let categoryWords = allWords;
         if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'Все категории') {

@@ -233,6 +233,18 @@ async function registerUser(email, password, name) {
   };
   saveLocalUser(newUser);
 
+  // Initialize brand new settings strictly for Elementary cards training
+  const initialSettings = {
+    userId: deterministicId,
+    dailyGoal: 10,
+    theme: 'light',
+    level: 'Elementary',
+    category: 'Elementary',
+    preferredMethod: 'cards',
+  };
+  localStorage.setItem(`settings_${deterministicId}`, JSON.stringify(initialSettings));
+  localStorage.setItem('myduo_dict_category', 'Elementary');
+
   return {
     success: true,
     data: {
@@ -1481,9 +1493,9 @@ async function getUserSettings() {
         userId,
         dailyGoal: 10,
         theme: 'light',
-        level: 'All',
+        level: 'Elementary',
         category: 'Elementary',
-        preferredMethod: 'quiz',
+        preferredMethod: 'cards',
         ...parsed,
       };
     } catch (e) {}
@@ -1492,21 +1504,24 @@ async function getUserSettings() {
     userId,
     dailyGoal: 10,
     theme: 'light',
-    level: 'All',
+    level: 'Elementary',
     category: 'Elementary',
-    preferredMethod: 'quiz',
+    preferredMethod: 'cards',
   };
 }
 
 async function saveUserSettings(settings) {
   const userId = getEffectiveUserId();
+  const cat = (settings.category && settings.category !== 'All' && settings.category !== 'Все категории')
+    ? settings.category
+    : 'Elementary';
   const payload = {
     route: 'settings',
     action: 'settings',
     ...settings,
-    preferredMethod: settings.preferredMethod || 'quiz',
-    category: settings.category || settings.level || 'All',
-    level: settings.category || settings.level || 'All',
+    preferredMethod: settings.preferredMethod || 'cards',
+    category: cat,
+    level: cat,
     userId,
   };
 

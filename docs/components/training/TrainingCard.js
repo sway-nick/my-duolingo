@@ -291,17 +291,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         ${
           isCardsMode
             ? `
-            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+              <span class="train-category-badge">${selectedCategory}</span>
+              <div style="font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+                🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
+              </div>
             </div>
           `
             : isPairsMode
               ? `
             <div class="pairs-header-box" style="margin: 2px 0 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-              <h2 class="pairs-title">
-                <span style="font-size: 18px; line-height: 1; flex-shrink: 0;">🧩</span>
-                <span>${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</span>
-              </h2>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h2 class="pairs-title" style="margin: 0;">
+                  <span style="font-size: 18px; line-height: 1; flex-shrink: 0;">🧩</span>
+                  <span>${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</span>
+                </h2>
+                <span class="train-category-badge">${selectedCategory}</span>
+              </div>
               <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
                 <span class="pairs-timer-icon">⏱️</span>
                 <span class="pairs-timer-val" id="pairs-timer-val">00:00</span>
@@ -311,8 +317,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               : isInputMode
                 ? `
             <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
-            <div class="train-left-badge">
-              ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
+            <div style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 6px;">
+              <span class="train-category-badge">${selectedCategory}</span>
+              <div class="train-left-badge" style="position: static;">
+                ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
+              </div>
             </div>
             <div class="word-header-row">
               <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
@@ -325,8 +334,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `
                 : `
             ${quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
-            <div class="train-left-badge">
-              🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
+            <div style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 6px;">
+              <span class="train-category-badge">${selectedCategory}</span>
+              <div class="train-left-badge" style="position: static;">
+                🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
+              </div>
             </div>
             <div class="word-header-row">
               ${
