@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v258';
+        var APP_BUILD = '20260902_v259';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -725,7 +725,10 @@
                      <div class="flashcard-face flashcard-front" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        <div class="flashcard-face-top">
-                         <button type="button" class="flashcard-sound-btn" id="wotd-sound-front" title="Прослушать">🔊</button>
+                          <button type="button" class="flashcard-crown-btn" id="wotd-sound-front" title="${t('word_of_day')}">
+                            <img src="assets/icons/golden_crown.png" alt="Корона" class="wotd-crown-icon">
+                            <span class="crown-glint sparkle-active" aria-hidden="true"></span>
+                          </button>
                          <span class="wotd-card-badge">${t('word_of_day')}</span>
                          <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-front" title="В Избранное">
                            ${isWotdFav ? '❤️' : '🤍'}
@@ -749,7 +752,10 @@
                        </div>
 
                        <div class="flashcard-face-top" style="z-index: 2;">
-                         <button type="button" class="flashcard-sound-btn" id="wotd-sound-back" title="Прослушать">🔊</button>
+                          <button type="button" class="flashcard-crown-btn" id="wotd-sound-back" title="${t('word_of_day')}">
+                            <img src="assets/icons/golden_crown.png" alt="Корона" class="wotd-crown-icon">
+                            <span class="crown-glint" aria-hidden="true"></span>
+                          </button>
                          <span class="wotd-card-badge">${t('word_of_day')}</span>
                          <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="В Избранное">
                            ${isWotdFav ? '❤️' : '🤍'}
@@ -803,7 +809,7 @@
               }
 
               flashcard.addEventListener('click', (e) => {
-                if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
+                if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-crown-btn') || e.target.closest('.flashcard-fav-btn')) {
                   return;
                 }
 
@@ -812,6 +818,15 @@
                 flashcard.classList.remove('gleam-active');
                 void flashcard.offsetWidth;
                 flashcard.classList.add('gleam-active');
+
+                // Trigger crown horn sparkle glint on the newly visible side after 1s
+                const activeFace = isFlipped ? flashcard.querySelector('.flashcard-back') : flashcard.querySelector('.flashcard-front');
+                const crownGlint = activeFace ? activeFace.querySelector('.crown-glint') : null;
+                if (crownGlint) {
+                  crownGlint.classList.remove('sparkle-active');
+                  void crownGlint.offsetWidth;
+                  crownGlint.classList.add('sparkle-active');
+                }
 
                 if (isFlipped) {
                   if (!videoStarted && cardVideo && videoContainer) {

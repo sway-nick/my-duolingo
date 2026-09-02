@@ -2101,11 +2101,111 @@ body {
 }
 
 .wotd-card .flashcard-sound-btn,
+.wotd-card .flashcard-crown-btn,
 .wotd-card .flashcard-fav-btn {
   background: rgba(0, 0, 0, 0.35);
   border: 1.5px solid rgba(253, 224, 71, 0.5);
   backdrop-filter: blur(4px);
   z-index: 2;
+}
+
+.wotd-card .flashcard-crown-btn {
+  position: relative;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: visible;
+}
+
+.wotd-card .flashcard-crown-btn:hover {
+  transform: scale(1.1);
+  border-color: rgba(253, 224, 71, 0.9);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
+}
+
+.wotd-card .wotd-crown-icon {
+  width: 26px;
+  height: 21px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+
+/* Sparkle glint on top tip of crown */
+.wotd-card .crown-glint {
+  position: absolute;
+  top: 9px;
+  left: 20px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffffff;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 5;
+}
+
+.wotd-card .crown-glint::before,
+.wotd-card .crown-glint::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #ffffff, #fef08a, #ffffff, transparent);
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+}
+
+.wotd-card .crown-glint::before {
+  width: 22px;
+  height: 2.5px;
+}
+
+.wotd-card .crown-glint::after {
+  width: 2.5px;
+  height: 22px;
+  background: linear-gradient(180deg, transparent, #ffffff, #fef08a, #ffffff, transparent);
+}
+
+.wotd-card .crown-glint.sparkle-active {
+  animation: crownHornSparkle 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards;
+}
+
+@keyframes crownHornSparkle {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    box-shadow: 0 0 0px #ffffff;
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.6) rotate(45deg);
+    box-shadow: 0 0 10px #ffffff, 0 0 20px #fef08a, 0 0 30px #eab308;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.1) rotate(90deg);
+    box-shadow: 0 0 8px #ffffff, 0 0 14px #fef08a;
+  }
+  75% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(0.5) rotate(135deg);
+    box-shadow: 0 0 4px #ffffff;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(180deg);
+    box-shadow: 0 0 0px #ffffff;
+  }
 }
 
 /* Elegant premium italic typography for "Слово дня" with internal 3D depth */
