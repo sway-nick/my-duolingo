@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v256';
+        var APP_BUILD = '20260902_v257';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -250,47 +250,48 @@
           content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
               <div style="font-size: 17px; font-weight: 700; color: var(--text-main, #334155); margin-bottom: 24px; letter-spacing: 0.6px; opacity: 0.85;">Loading...</div>
-              <div class="cat-paw-loader" style="position: relative; width: 285px; height: 54px; margin: 0 auto;">
-                <!-- Пара 1: Левая передняя + Правая задняя (наступают и исчезают вместе) -->
-                <div class="cat-paw-step" style="position: absolute; left: 0px; top: 2px; opacity: 0; animation: catPawPairStep 3.2s infinite 0.0s;">
+              <div class="cat-paw-loader" style="position: relative; width: 295px; height: 54px; margin: 0 auto;">
+                <!-- 1. Заход передними лапами: лапка 1 (FL), затем лапка 2 (FR) -->
+                <div class="cat-paw-step" style="position: absolute; left: 12px; top: 2px; opacity: 0; animation: catWalkTrack 7.5s infinite 0.0s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 36px; top: 24px; opacity: 0; animation: catPawPairStep 3.2s infinite 0.0s;">
-                  <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
-                </div>
-
-                <!-- Пара 2: Правая передняя + Левая задняя (наступают при исчезновении Пары 1) -->
-                <div class="cat-paw-step" style="position: absolute; left: 72px; top: 24px; opacity: 0; animation: catPawPairStep 3.2s infinite 0.8s;">
-                  <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
-                </div>
-                <div class="cat-paw-step" style="position: absolute; left: 108px; top: 2px; opacity: 0; animation: catPawPairStep 3.2s infinite 0.8s;">
+                <div class="cat-paw-step" style="position: absolute; left: 47px; top: 24px; opacity: 0; animation: catWalkTrack 7.5s infinite 0.6s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
 
-                <!-- Пара 3: Левая передняя + Правая задняя -->
-                <div class="cat-paw-step" style="position: absolute; left: 144px; top: 2px; opacity: 0; animation: catPawPairStep 3.2s infinite 1.6s;">
+                <!-- 2. Заходят задние лапы: лапка 3 (BL), затем лапка 4 (BR) - на листе видны 4 лапы кота! -->
+                <div class="cat-paw-step" style="position: absolute; left: 82px; top: 2px; opacity: 0; animation: catWalkTrack 7.5s infinite 1.2s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 180px; top: 24px; opacity: 0; animation: catPawPairStep 3.2s infinite 1.6s;">
+                <div class="cat-paw-step" style="position: absolute; left: 117px; top: 24px; opacity: 0; animation: catWalkTrack 7.5s infinite 1.8s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
 
-                <!-- Пара 4: Правая передняя + Левая задняя -->
-                <div class="cat-paw-step" style="position: absolute; left: 216px; top: 24px; opacity: 0; animation: catPawPairStep 3.2s infinite 2.4s;">
+                <!-- 3. Кот идет по листу (4 лапы идут вперед, первые плавно растворяются по диагонали) -->
+                <div class="cat-paw-step" style="position: absolute; left: 152px; top: 2px; opacity: 0; animation: catWalkTrack 7.5s infinite 2.4s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
-                <div class="cat-paw-step" style="position: absolute; left: 252px; top: 2px; opacity: 0; animation: catPawPairStep 3.2s infinite 2.4s;">
+                <div class="cat-paw-step" style="position: absolute; left: 187px; top: 24px; opacity: 0; animation: catWalkTrack 7.5s infinite 3.0s;">
+                  <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
+                </div>
+
+                <!-- 4. Выход с листа: последние шаги задних лап, передние уже вышли -->
+                <div class="cat-paw-step" style="position: absolute; left: 222px; top: 2px; opacity: 0; animation: catWalkTrack 7.5s infinite 3.6s;">
+                  <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
+                </div>
+                <div class="cat-paw-step" style="position: absolute; left: 257px; top: 24px; opacity: 0; animation: catWalkTrack 7.5s infinite 4.2s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
               </div>
             </div>
             <style>
-              @keyframes catPawPairStep {
+              @keyframes catWalkTrack {
                 0% { opacity: 0; transform: scale(0.65) translateY(-2px); }
-                6% { opacity: 0.95; transform: scale(1) translateY(0); }
-                24% { opacity: 0.95; transform: scale(1) translateY(0); }
-                30% { opacity: 0; transform: scale(0.9) translateY(1px); }
-                31%, 100% { opacity: 0; }
+                3% { opacity: 0.95; transform: scale(1) translateY(0); }
+                18% { opacity: 0.95; transform: scale(1) translateY(0); }
+                32% { opacity: 0.35; transform: scale(0.96); }
+                38% { opacity: 0; transform: scale(0.92); }
+                39%, 100% { opacity: 0; }
               }
             </style>
           `;
