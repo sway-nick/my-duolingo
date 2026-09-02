@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v279';
+        var APP_BUILD = '20260903_v280';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -789,28 +789,30 @@
             `;
           }
 
+          const hasWotdCard = Boolean(wotdHtml && wotdHtml.trim().length > 0);
+
           const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0) || window._showHubScreen
             ? `
-              <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: 48px; font-size: 16px; font-weight: 700;">
+              <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700;">
                 ${t('train_continue_round')}
               </button>
             `
             : '';
 
           content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 28px 20px;">
+            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: ${hasWotdCard ? 'flex-start' : 'center'}; min-height: ${hasWotdCard ? 'auto' : 'calc(100vh - 200px)'}; padding: ${hasWotdCard ? '20px 20px 28px' : '24px 20px'}; box-sizing: border-box;">
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               ${emptyTitle ? `<h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>` : ''}
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-              <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 0 auto;">
+              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '12px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
-                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: 46px; font-size: 16px; font-weight: 700;">
+                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700;">
                   ${nextBtnLabel}
                 </button>
                 ${
                   (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                     ? `
-                  <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
                   </button>
                 `
