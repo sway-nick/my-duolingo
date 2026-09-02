@@ -1312,11 +1312,58 @@ function getQueueForCards(words, progress) {
 }
 
 function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
-  // Strictly return only words actively selected in Cards (no forced injections)
-  return categoryWords.filter((w) => {
+  // 1. Up to 10 words actively selected in Cards
+  const baseWords = categoryWords.filter((w) => {
     const p = userProgress[w.id] || userProgress[String(w.id)];
     return isWordLearning(p);
+  }).slice(0, 10);
+
+  const baseIds = new Set(baseWords.map((w) => String(w.id)));
+
+  // Strict caps: max 5 favorites (50%) + max 5 oldest mastered (50%) = max 20 words total!
+  const favLimit = Math.min(5, Math.max(1, Math.round(baseWords.length * 0.5)));
+  const masteredLimit = Math.min(5, Math.max(1, Math.round(baseWords.length * 0.5)));
+
+  // 2. Pick up to 5 oldest favorites of the category
+  let injectedFavs = [];
+  if (favorites && favorites.length > 0) {
+    const favSet = new Set(favorites.map(String));
+    const candidateFavs = categoryWords.filter((w) => {
+      return favSet.has(String(w.id)) && !baseIds.has(String(w.id));
+    });
+    candidateFavs.sort((a, b) => {
+      const pA = userProgress[a.id] || userProgress[String(a.id)];
+      const pB = userProgress[b.id] || userProgress[String(b.id)];
+      const tA = pA ? (pA.lastPracticed || 0) : 0;
+      const tB = pB ? (pB.lastPracticed || 0) : 0;
+      return tA - tB;
+    });
+    injectedFavs = candidateFavs.slice(0, favLimit);
+  }
+
+  const combinedIds = new Set([...baseIds, ...injectedFavs.map((w) => String(w.id))]);
+
+  // 3. Pick up to 5 oldest mastered words for retention (spaced repetition)
+  const candidateMastered = categoryWords.filter((w) => {
+    const p = userProgress[w.id] || userProgress[String(w.id)];
+    return p && isWordMastered(p) && !combinedIds.has(String(w.id));
   });
+  candidateMastered.sort((a, b) => {
+    const pA = userProgress[a.id] || userProgress[String(a.id)];
+    const pB = userProgress[b.id] || userProgress[String(b.id)];
+    const tA = pA ? (pA.lastPracticed || pA.masteredAt || 0) : 0;
+    const tB = pB ? (pB.lastPracticed || pB.masteredAt || 0) : 0;
+    return tA - tB;
+  });
+  const injectedMastered = candidateMastered.slice(0, masteredLimit);
+
+  const bonusWords = [...injectedFavs, ...injectedMastered];
+  if (bonusWords.length > 0) {
+    resetWordsProgressForPractice(bonusWords);
+  }
+
+  // Exactly max 20 words: 10 base + up to 5 favs + up to 5 mastered
+  return [...baseWords, ...bonusWords].slice(0, 20);
 }
 
 function getQueueForQuiz(words, progress) {
@@ -1518,7 +1565,7 @@ function resetWordsProgressForPractice(words) {
       localProg[id] = {
         ...(localProg[id] || {}),
         seenInCards: true,
-        quizCorrect: 0,
+        quizCorrect: 5,
         pairsCorrect: 0,
         inputCorrect: 0,
         mastered: false,

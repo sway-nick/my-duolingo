@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v272';
+        var APP_BUILD = '20260902_v273';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -509,7 +509,8 @@
         } else if (currentMethod === 'pairs') {
           activeWords = pairsQueue;
         } else if (currentMethod === 'input') {
-          activeWords = testQueue.slice(0, dailyGoal);
+          // 10 new words + up to 5 favorites + up to 5 mastered retention = max 20 words!
+          activeWords = testQueue.slice(0, 20);
         }
 
         // Check if all words in category/favorites are mastered (3x in Test)
