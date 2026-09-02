@@ -8,6 +8,7 @@
   --text-main: #0f172a;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
+  --bg-hover: #f1f5f9;
   --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 8px;
@@ -19,6 +20,7 @@ body.dark-theme,
 .mobile-app.dark-theme {
   --bg-color: #0f172a;
   --card-bg: #1e293b;
+  --bg-hover: #1e293b;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --border-color: #334155;
@@ -4901,6 +4903,11 @@ body.notebook-theme,
   border-left: 1.5px solid var(--nb-border);
 }
 
+.notebook-theme .burger-drawer .nav-tab:hover {
+  background: #f0ede4;
+  color: var(--nb-text);
+}
+
 .notebook-theme .burger-drawer .nav-tab.active {
   background: #f0ede4;
   color: #c26a38;
@@ -4910,8 +4917,16 @@ body.notebook-theme,
 .dark-theme .burger-drawer {
   background: #0f172a;
 }
+.dark-theme .burger-drawer .nav-tab:hover {
+  background: #1e293b;
+  color: #f8fafc;
+}
 .dark-theme .burger-drawer .nav-tab.active {
   background: rgba(22, 163, 74, 0.15);
+  color: #4ade80;
+}
+.dark-theme .burger-drawer .nav-tab.active:hover {
+  background: rgba(22, 163, 74, 0.22);
   color: #4ade80;
 }
 
