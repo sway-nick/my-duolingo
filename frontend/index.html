@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v273';
+        var APP_BUILD = '20260902_v274';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -978,17 +978,30 @@
             const content = document.querySelector('#app-content');
             if (!content) return;
 
-            const CANONICAL_CATEGORIES = [
-              'Elementary',
-              'Irregular verb',
-              'Pattern',
-              'Intermediate',
-              'Advanced',
-            ];
+            // Dynamically extract all unique categories directly from allWords (Google Sheets)
+            const rawCategories = Array.from(
+              new Set(allWords.map((w) => sanitizeCategory(w.category)).filter(Boolean))
+            );
+
+            // Smart sort: foundational levels first, then any custom categories alphabetically
+            const categoriesList = rawCategories.sort((a, b) => {
+              const getOrderIndex = (catName) => {
+                const clean = String(catName || '').toLowerCase().trim();
+                if (clean.includes('elementary')) return 0;
+                if (clean.includes('irregular')) return 1;
+                if (clean.includes('pattern')) return 2;
+                if (clean.includes('intermediate')) return 3;
+                if (clean.includes('advanced')) return 4;
+                return 999;
+              };
+              const diff = getOrderIndex(a) - getOrderIndex(b);
+              if (diff !== 0) return diff;
+              return a.localeCompare(b);
+            });
 
             const currentCat = userSettings.category || 'Elementary';
 
-            const tilesHtml = CANONICAL_CATEGORIES.map((catKey) => {
+            const tilesHtml = categoriesList.map((catKey) => {
               const details = getCategoryDetails(catKey);
               const catWords = allWords.filter(
                 (w) => sanitizeCategory(w.category) === sanitizeCategory(catKey)

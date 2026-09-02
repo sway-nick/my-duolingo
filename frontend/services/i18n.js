@@ -2296,17 +2296,25 @@ const CATEGORY_LOCALIZATIONS = {
 
 export function getCategoryDetails(rawCategory) {
   const cat = String(rawCategory || '').toLowerCase();
-  let key = 'elementary';
-  if (cat.includes('irregular')) key = 'irregular';
+  let key = null;
+  if (cat.includes('elementary')) key = 'elementary';
+  else if (cat.includes('irregular')) key = 'irregular';
   else if (cat.includes('pattern')) key = 'pattern';
   else if (cat.includes('intermediate')) key = 'intermediate';
   else if (cat.includes('advanced')) key = 'advanced';
 
   const lang = getInterfaceLanguage();
-  const entry = CATEGORY_LOCALIZATIONS[key];
-  if (entry) {
+  if (key && CATEGORY_LOCALIZATIONS[key]) {
+    const entry = CATEGORY_LOCALIZATIONS[key];
     return entry[lang] || entry['en'] || entry['ru'];
   }
-  return { title: rawCategory, desc: '' };
+
+  // Fallback for custom user categories added to Google Sheet
+  const fallbackDesc = lang === 'ru' 
+    ? `Слова из категории «${rawCategory}»`
+    : lang === 'uk'
+      ? `Слова з категорії «${rawCategory}»`
+      : `Words from "${rawCategory}" category`;
+  return { title: rawCategory || 'Category', desc: fallbackDesc };
 }
 
