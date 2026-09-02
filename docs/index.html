@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v270';
+        var APP_BUILD = '20260902_v271';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -402,13 +402,22 @@
               currentMethod = 'input';
             }
           } else if (!isMethodAvailable(currentMethod)) {
-            if (quizQueue.length > 0) {
-              currentMethod = 'quiz';
-            } else if (pairsQueue.length > 0) {
-              currentMethod = 'pairs';
-            } else if (testQueue.length > 0) {
+            // STRICT FORWARD-ONLY CONVEYOR PROGRESSION:
+            // Cards -> Quiz -> Pairs -> Test -> Finished (Hub)
+            // Once user is in Pairs, next mode is STRICTLY ONLY Test!
+            if (currentMethod === 'cards') {
+              if (quizQueue.length > 0) currentMethod = 'quiz';
+              else if (pairsQueue.length > 0) currentMethod = 'pairs';
+              else if (testQueue.length > 0) currentMethod = 'input';
+              else currentMethod = 'input';
+            } else if (currentMethod === 'quiz') {
+              if (pairsQueue.length > 0) currentMethod = 'pairs';
+              else if (testQueue.length > 0) currentMethod = 'input';
+              else currentMethod = 'input';
+            } else if (currentMethod === 'pairs') {
+              // After Pairs, STRICTLY proceed ONLY to Test! Never regress to Quiz!
               currentMethod = 'input';
-            } else {
+            } else if (currentMethod === 'input') {
               currentMethod = 'input';
             }
           }
@@ -662,15 +671,13 @@
             emptyIcon = '🧩';
             emptyTitle = t('train_no_words_pairs');
             emptyMsg = t('train_no_words_pairs_sub');
+            // After Pairs, next mode is STRICTLY Test!
             if (hasTest) {
               nextMode = 'input';
               nextBtnLabel = '✍️ ' + t('train_go_test');
-            } else if (hasQuiz) {
-              nextMode = 'quiz';
-              nextBtnLabel = '🎯 ' + t('train_go_quiz');
             } else {
-              nextMode = 'cards';
-              nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+              nextMode = 'input';
+              nextBtnLabel = '✍️ ' + t('train_go_test');
             }
           } else if (currentMethod === 'input') {
             if (unmasteredCount > 0) {

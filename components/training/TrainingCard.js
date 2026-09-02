@@ -1908,10 +1908,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             setTimeout(async () => {
               if (errorsInRound === 0) {
                 playCoinDropSound();
+                try {
+                  const uid = (typeof getEffectiveUserId === 'function') ? getEffectiveUserId() : null;
+                  if (typeof addWeeklyXP === 'function') addWeeklyXP(3, uid);
+                } catch (e) {}
               }
-              await saveProgress(currentWord.id, true, 'pairs', {
-                perfectRound: errorsInRound === 0,
-              });
             }, 1350);
 
             setTimeout(() => {

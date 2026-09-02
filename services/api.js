@@ -983,7 +983,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
       prog.pairsCorrect = (prog.pairsCorrect || 0) + 1;
-      if (prog.pairsCorrect >= 2) {
+      if (prog.pairsCorrect >= 1) {
         prog.stage = 'test';
       }
       if (options && options.perfectRound) {
@@ -1273,7 +1273,7 @@ function isWordLearning(prog) {
 function getWordStage(prog) {
   if (!prog) return 'new';
   if (isWordMastered(prog)) return 'mastered';
-  if ((prog.pairsCorrect || 0) >= 2) return 'test';
+  if ((prog.pairsCorrect || 0) >= 1) return 'test';
   if ((prog.quizCorrect || 0) >= 5) return 'pairs';
   if (prog.seenInCards) return 'quiz';
   return 'new';
@@ -1374,7 +1374,7 @@ function getQueueForQuiz(words, progress) {
 function getQueueForPairs(words, progress) {
   return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 2 && !isWordMastered(p);
+    return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 1 && !isWordMastered(p);
   });
 }
 
@@ -1383,7 +1383,7 @@ function getQueueForTest(words, progress) {
     const p = progress[w.id] || progress[String(w.id)];
     if (!p) return false;
     if (isWordMastered(p)) return false;
-    return Boolean((p.pairsCorrect || 0) >= 2 && (p.inputCorrect || 0) < 2);
+    return Boolean((p.pairsCorrect || 0) >= 1 && (p.inputCorrect || 0) < 2);
   });
 }
 
