@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v271';
+        var APP_BUILD = '20260902_v272';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -68,6 +68,28 @@
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, resetWordsProgressForPractice, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=200.0';
       import { speakWord, preloadWordAudio } from './services/audioService.js?v=200.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=200.0';
+
+      // One-time cleanup of phantom words that were never actively learned in Cards
+      (function cleanPhantomWords() {
+        try {
+          const user = getCurrentUser();
+          const uId = user ? user.id : 'guest';
+          const progKey = 'progress_' + uId;
+          const localProg = JSON.parse(localStorage.getItem(progKey) || '{}');
+          let changed = false;
+          Object.keys(localProg).forEach((id) => {
+            const p = localProg[id];
+            // If word is not mastered, has no typing inputs, no quiz successes, but accumulated pairs, clear it
+            if (p && !p.mastered && (p.inputCorrect || 0) === 0 && (p.quizCorrect || 0) === 0 && (p.pairsCorrect || 0) > 0) {
+              delete localProg[id];
+              changed = true;
+            }
+          });
+          if (changed) {
+            localStorage.setItem(progKey, JSON.stringify(localProg));
+          }
+        } catch (e) {}
+      })();
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=200.0';
       import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=200.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=200.0';
@@ -487,7 +509,7 @@
         } else if (currentMethod === 'pairs') {
           activeWords = pairsQueue;
         } else if (currentMethod === 'input') {
-          activeWords = testQueue;
+          activeWords = testQueue.slice(0, dailyGoal);
         }
 
         // Check if all words in category/favorites are mastered (3x in Test)
