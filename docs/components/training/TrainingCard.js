@@ -503,20 +503,62 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       return 'font-size: 16.5px; line-height: 1.25; font-weight: 600;';
     }
 
-    function renderStandardQuiz() {
-      const categoryFilteredWords =
+    function getQuizDistractorWords() {
+      const currentIdStr = String(currentWord.id);
+      const seenIds = new Set([currentIdStr]);
+      const result = [];
+
+      // 1. Приоритет: слова из текущей изучаемой партии (activeWords), отобранной в Карточках
+      const shuffledActive = shuffleArray(activeWords || []);
+      for (const w of shuffledActive) {
+        const idStr = String(w.id);
+        if (!seenIds.has(idStr)) {
+          seenIds.add(idStr);
+          result.push(w);
+          if (result.length >= 5) return result;
+        }
+      }
+
+      // 2. Если в активной партии осталось мало слов (конец раунда),
+      // добираем ИСКЛЮЧИТЕЛЬНО из слов, которые пользователь уже видел в Карточках или уже изучил
+      const userProgress = getUserProgress();
+      const knownWords = allWords.filter((w) => {
+        const idStr = String(w.id);
+        if (seenIds.has(idStr)) return false;
+        const p = userProgress[w.id] || userProgress[idStr];
+        return p && (p.seenInCards === true || isWordMastered(p));
+      });
+
+      for (const w of shuffleArray(knownWords)) {
+        seenIds.add(String(w.id));
+        result.push(w);
+        if (result.length >= 5) return result;
+      }
+
+      // 3. Аварийный fallback (только если в истории пользователя меньше 6 изученных слов)
+      const categoryFiltered =
         selectedCategory === 'All' || selectedCategory === 'Все категории'
           ? allWords
           : allWords.filter(
               (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
             );
-      const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
+      const fallbackPool = categoryFiltered.length >= 6 ? categoryFiltered : allWords;
+      for (const w of shuffleArray(fallbackPool)) {
+        if (!seenIds.has(String(w.id))) {
+          seenIds.add(String(w.id));
+          result.push(w);
+          if (result.length >= 5) return result;
+        }
+      }
+
+      return result;
+    }
+
+    function renderStandardQuiz() {
       const currentTrans = getWordTranslation(currentWord);
-      const otherTranslations = pool
-        .filter((w) => w.id !== currentWord.id)
-        .map((w) => getWordTranslation(w));
-      const shuffledOthers = shuffleArray(otherTranslations).slice(0, 5);
-      const choices = shuffleArray([currentTrans, ...shuffledOthers]);
+      const distractorWords = getQuizDistractorWords();
+      const otherTranslations = distractorWords.map((w) => getWordTranslation(w));
+      const choices = shuffleArray([currentTrans, ...otherTranslations]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
@@ -557,16 +599,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }
 
     function renderReverseQuiz(isFromSpeechFallback = false) {
-      const categoryFilteredWords =
-        selectedCategory === 'All' || selectedCategory === 'Все категории'
-          ? allWords
-          : allWords.filter(
-              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
-            );
-      const pool = categoryFilteredWords.length >= 6 ? categoryFilteredWords : allWords;
-      const otherWords = pool.filter((w) => w.id !== currentWord.id).map((w) => w.word);
-      const shuffledOthers = shuffleArray(otherWords).slice(0, 5);
-      const choices = shuffleArray([currentWord.word, ...shuffledOthers]);
+      const distractorWords = getQuizDistractorWords();
+      const otherWords = distractorWords.map((w) => w.word);
+      const choices = shuffleArray([currentWord.word, ...otherWords]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
