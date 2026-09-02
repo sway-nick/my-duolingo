@@ -482,6 +482,14 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       if (!item) return;
       currentCategory = item.getAttribute('data-value') || 'All';
       localStorage.setItem('myduo_dict_category', currentCategory);
+      if (currentCategory !== 'All' && currentCategory !== 'Все категории') {
+        getUserSettings().then((s) => {
+          if (s) {
+            s.category = currentCategory;
+            saveUserSettings(s);
+          }
+        }).catch(() => {});
+      }
       if (dictLabel) dictLabel.textContent = getCatDisplayName(currentCategory);
       renderCategoryOptions();
       toggleDropdown(false);

@@ -230,6 +230,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     onFavoriteToggle = () => {},
     onMethodChange = () => {},
     onCategoryChange = () => {},
+    onCategoryBadgeClick = null,
     onNext = () => {},
     learningCount = 0,
     dailyGoal = 5,
@@ -430,6 +431,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         setTimeout(() => onMethodChange(selectedMode), 150);
       }
     });
+  });
+
+  const categoryBadges = container.querySelectorAll('.train-category-badge');
+  categoryBadges.forEach((badge) => {
+    if (onCategoryBadgeClick) {
+      badge.style.cursor = 'pointer';
+      badge.title = t('train_select_category') || 'Выбрать категорию';
+      badge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onCategoryBadgeClick();
+      });
+    }
   });
 
   const speakTrigger = container.querySelector('#speak-word-trigger');

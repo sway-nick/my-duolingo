@@ -63,6 +63,9 @@ const translations = {
     train_mastered_sub_cat: "Все слова в категории успешно выучены!",
     train_review_again: "🔄 Повторить заново",
     train_exit_favs: "Вернуться в общую программу",
+    train_select_category: "Выбрать категорию",
+    train_categories_title: "Выберите категорию",
+    train_categories_sub: "Слова и тренировки будут сформированы из выбранной группы",
     train_no_words_test: "Нет слов для Теста",
     train_no_words_test_sub: "Сюди попадают слова, прошедшие режим «Пары».",
     train_no_words_quiz: "Нет слов для Квиза",
@@ -156,6 +159,9 @@ const translations = {
     train_mastered_sub_cat: "Всі слова в категорії успішно вивчені!",
     train_review_again: "🔄 Повторити знову",
     train_exit_favs: "Повернутися до загальної програми",
+    train_select_category: "Обрати категорію",
+    train_categories_title: "Оберіть категорію",
+    train_categories_sub: "Слова та тренування будуть сформовані з обраної групи",
     train_no_words_test: "Немає слів для Тесту",
     train_no_words_test_sub: "Сюди потрапляють слова, що пройшли режим «Пари».",
     train_no_words_quiz: "Немає слів для Квізу",
@@ -249,6 +255,9 @@ const translations = {
     train_mastered_sub_cat: "All words in the category have been successfully mastered!",
     train_review_again: "🔄 Review again",
     train_exit_favs: "Return to general program",
+    train_select_category: "Select Category",
+    train_categories_title: "Choose Category",
+    train_categories_sub: "Words and exercises will be generated from this group",
     train_no_words_test: "No words for Test",
     train_no_words_test_sub: "Words enter here after passing the Pairs stage.",
     train_no_words_quiz: "No words for Quiz",
@@ -2159,6 +2168,7 @@ const translations = {
   },};
 
 export function getInterfaceLanguage() {
+  if (typeof localStorage === 'undefined') return 'ru';
   return localStorage.getItem('myduo_interface_lang') || 'en';
 }
 
@@ -2190,3 +2200,83 @@ export function getWordNotes(wordObj) {
   }
   return wordObj.notes || '';
 }
+
+const CATEGORY_LOCALIZATIONS = {
+  elementary: {
+    ru: { title: "Базовая лексика", desc: "Самые частотные и нужные слова повседневного английского" },
+    uk: { title: "Базова лексика", desc: "Найчастотніші та найпотрібніші слова повсякденної англійської" },
+    de: { title: "Grundwortschatz", desc: "Häufigste und wichtigste Wörter des alltäglichen Englisch" },
+    es: { title: "Vocabulario básico", desc: "Las palabras más frecuentes y esenciales del inglés diario" },
+    fr: { title: "Vocabulaire de base", desc: "Les mots les plus fréquents et essentiels de l'anglais quotidien" },
+    pl: { title: "Podstawowe słownictwo", desc: "Najczęstsze i najważniejsze słowa codziennego angielskiego" },
+    it: { title: "Vocabolario di base", desc: "Le parole più frequenti ed essenziali dell'inglese quotidiano" },
+    tr: { title: "Temel Kelimeler", desc: "Günlük İngilizcenin en sık kullanılan temel kelimeleri" },
+    pt: { title: "Vocabulário básico", desc: "As palavras mais frequentes e essenciais do inglês cotidiano" },
+    en: { title: "Elementary Vocabulary", desc: "Most frequent and essential everyday English words" },
+  },
+  irregular: {
+    ru: { title: "Неправильные глаголы", desc: "Ключевые формы и значения всех неправильных глаголов" },
+    uk: { title: "Неправильні дієслова", desc: "Ключові форми та значення всіх неправильних дієслів" },
+    de: { title: "Unregelmäßige Verben", desc: "Wichtige Formen und Bedeutungen unregelmäßiger Verben" },
+    es: { title: "Verbos irregulares", desc: "Formas clave y significados de verbos irregulares" },
+    fr: { title: "Verbes irréguliers", desc: "Formes clés et sens des verbes irréguliers" },
+    pl: { title: "Czasowniki nieregularne", desc: "Kluczowe formy i znaczenia czasowników nieregularnych" },
+    it: { title: "Verbi irregolari", desc: "Forme chiave e significati dei verbi irregolari" },
+    tr: { title: "Düzensiz Fiiller", desc: "Tüm düzensiz fiillerin temel formları ve anlamları" },
+    pt: { title: "Verbos irregulares", desc: "Formas essenciais e significados de verbos irregulares" },
+    en: { title: "Irregular Verbs", desc: "Key forms and meanings of all irregular English verbs" },
+  },
+  pattern: {
+    ru: { title: "Разговорные паттерны", desc: "Устойчивые фразы, речевые связки и идиоматические конструкции" },
+    uk: { title: "Розмовні патерни", desc: "Стійкі фрази, мовні зв'язки та ідіоматичні конструкції" },
+    de: { title: "Gesprächsmuster", desc: "Feste Redewendungen, Satzmuster und idiomatische Ausdrücke" },
+    es: { title: "Patrones conversacionales", desc: "Frases hechas, conectores y expresiones idiomáticas" },
+    fr: { title: "Modèles de conversation", desc: "Expressions courantes, tournures de phrases et idiomes" },
+    pl: { title: "Wzorce konwersacyjne", desc: "Zwroty potoczne, spójniki mowy i wyrażenia idiomatyczne" },
+    it: { title: "Pattern di conversazione", desc: "Frasi fatte, connettivi ed espressioni idiomatiche" },
+    tr: { title: "Konuşma Kalıpları", desc: "Kalıplaşmış ifadeler, konuşma bağlaçları ve deyimler" },
+    pt: { title: "Padrões de conversação", desc: "Frases feitas, conectivos e expressões idiomáticas" },
+    en: { title: "Phrasal Patterns", desc: "Common phrases, conversational collocations and idioms" },
+  },
+  intermediate: {
+    ru: { title: "Средний уровень", desc: "Слова для свободного общения, работы и чтения статей" },
+    uk: { title: "Середній рівень", desc: "Слова для вільного спілкування, роботи та читання статей" },
+    de: { title: "Mittelstufe", desc: "Wortschatz für fließende Gespräche, Beruf und Lektüre" },
+    es: { title: "Nivel intermedio", desc: "Vocabulario para conversar con fluidez, trabajar y leer" },
+    fr: { title: "Niveau intermédiaire", desc: "Mots pour communiquer avec aisance, travailler et lire" },
+    pl: { title: "Średnio zaawansowany", desc: "Słownictwo do swobodnej rozmowy, pracy i czytania artykułów" },
+    it: { title: "Livello intermedio", desc: "Parole per conversare fluentemente, lavorare e leggere" },
+    tr: { title: "Orta Düzey", desc: "Akıcı iletişim, iş hayatı ve okuma için gerekli kelimeler" },
+    pt: { title: "Nível intermediário", desc: "Vocabulário para conversar fluentemente, trabalhar e ler" },
+    en: { title: "Intermediate Vocabulary", desc: "Vocabulary for fluent conversation, work and reading" },
+  },
+  advanced: {
+    ru: { title: "Продвинутый уровень", desc: "Редкая, нюансная и академическая лексика высокого уровня" },
+    uk: { title: "Просунутий рівень", desc: "Рідкісна, нюансна та академічна лексика високого рівня" },
+    de: { title: "Oberstufe", desc: "Nuancierter und anspruchsvoller akademischer Wortschatz" },
+    es: { title: "Nivel avanzado", desc: "Léxico avanzado, matices sutiles y vocabulario académico" },
+    fr: { title: "Niveau avancé", desc: "Vocabulaire riche, nuances subtiles et termes académiques" },
+    pl: { title: "Zaawansowany", desc: "Bogate słownictwo, niuanse językowe i styl akademicki" },
+    it: { title: "Livello avanzato", desc: "Lessico ricco, sfumature sottili e linguaggio accademico" },
+    tr: { title: "İleri Düzey", desc: "İleri seviye, nüanslı ve akademik kelime dağarcığı" },
+    pt: { title: "Nível avançado", desc: "Léxico sofisticado, nuances expressivas e acadêmicas" },
+    en: { title: "Advanced Vocabulary", desc: "Nuanced, expressive and academic advanced vocabulary" },
+  },
+};
+
+export function getCategoryDetails(rawCategory) {
+  const cat = String(rawCategory || '').toLowerCase();
+  let key = 'elementary';
+  if (cat.includes('irregular')) key = 'irregular';
+  else if (cat.includes('pattern')) key = 'pattern';
+  else if (cat.includes('intermediate')) key = 'intermediate';
+  else if (cat.includes('advanced')) key = 'advanced';
+
+  const lang = getInterfaceLanguage();
+  const entry = CATEGORY_LOCALIZATIONS[key];
+  if (entry) {
+    return entry[lang] || entry['en'] || entry['ru'];
+  }
+  return { title: rawCategory, desc: '' };
+}
+

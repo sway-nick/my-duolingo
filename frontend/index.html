@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260902_v246';
+        var APP_BUILD = '20260902_v247';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -69,7 +69,7 @@
       import { speakWord, preloadWordAudio } from './services/audioService.js?v=200.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=200.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=200.0';
-      import { t, getInterfaceLanguage } from './services/i18n.js?v=200.0';
+      import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=200.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=200.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=200.0';
       import { renderSettingsView } from './components/settings/SettingsView.js?v=200.0';
@@ -649,8 +649,8 @@
                 emptyIcon = '';
                 emptyTitle = getInterfaceLanguage() === 'ru' ? 'Нет слов для обучения' : getInterfaceLanguage() === 'uk' ? 'Немає слів для навчання' : 'No words in learning';
                 emptyMsg = getInterfaceLanguage() === 'ru' ? 'Отберите новые слова для тренировки или повторите избранное:' : getInterfaceLanguage() === 'uk' ? 'Відберіть нові слова для тренування або повторіть обрані:' : 'Select new words for training or practice favorites:';
-                nextMode = 'cards';
-                nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+                nextMode = 'select_category';
+                nextBtnLabel = t('train_select_category');
               } else {
                 emptyIcon = '✍️';
                 emptyTitle = t('train_no_words_test');
@@ -673,8 +673,8 @@
               emptyIcon = '🏆';
               emptyTitle = getInterfaceLanguage() === 'ru' ? 'Отлично!<br>Задача выполнена!' : getInterfaceLanguage() === 'uk' ? 'Відмінно!<br>Завдання виконано!' : 'Excellent!<br>Goal achieved!';
               emptyMsg = '';
-              nextMode = 'cards';
-              nextBtnLabel = getInterfaceLanguage() === 'ru' ? 'Учить новые слова' : getInterfaceLanguage() === 'uk' ? 'Вчити нові слова' : 'Learn new words';
+              nextMode = 'select_category';
+              nextBtnLabel = t('train_select_category');
             }
           }
 
@@ -853,9 +853,88 @@
             }
           }
 
+          function renderCategorySelectorScreen() {
+            const content = document.querySelector('#app-content');
+            if (!content) return;
+
+            const CANONICAL_CATEGORIES = [
+              'Elementary',
+              'Irregular verb',
+              'Pattern',
+              'Intermediate',
+              'Advanced',
+            ];
+
+            const currentCat = userSettings.category || 'Elementary';
+
+            const tilesHtml = CANONICAL_CATEGORIES.map((catKey) => {
+              const details = getCategoryDetails(catKey);
+              const catWords = allWords.filter(
+                (w) => sanitizeCategory(w.category) === sanitizeCategory(catKey)
+              );
+              const count = catWords.length;
+              const isCurrent = sanitizeCategory(currentCat) === sanitizeCategory(catKey);
+
+              return `
+                <div class="dict-card category-tile-card ${isCurrent ? 'active' : ''}" data-category="${catKey}">
+                  <div class="dict-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span class="category-badge">${catKey}</span>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">${count} ${t('words')}</span>
+                  </div>
+                  <div class="dict-card-body">
+                    <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 700;">${details.title}</h3>
+                    <p class="dict-translation" style="margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.35;">${details.desc}</p>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+            content.innerHTML = `
+              <div class="category-select-page" style="width: 100%; max-width: 600px; margin: 0 auto; padding: 10px 4px 24px; box-sizing: border-box;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                  <div>
+                    <h2 style="margin: 0 0 4px; font-size: 21px; font-weight: 800;">${t('train_categories_title')}</h2>
+                    <p style="margin: 0; font-size: 13.5px; color: var(--text-muted);">${t('train_categories_sub')}</p>
+                  </div>
+                  <button type="button" id="cat-select-back-btn" class="secondary-button" style="width: auto; padding: 6px 14px; font-size: 14px; font-weight: 600; border-radius: 8px;">
+                    ✕
+                  </button>
+                </div>
+
+                <div class="dictionary-grid category-tiles-grid" style="width: 100%;">
+                  ${tilesHtml}
+                </div>
+              </div>
+            `;
+
+            content.querySelector('#cat-select-back-btn')?.addEventListener('click', () => {
+              renderTrainingTab();
+            });
+
+            content.querySelectorAll('.category-tile-card').forEach((card) => {
+              card.addEventListener('click', () => {
+                const chosenCat = card.getAttribute('data-category');
+                if (chosenCat) {
+                  favoritePracticeWords = null;
+                  userSettings.category = chosenCat;
+                  userSettings.preferredMethod = 'cards';
+                  window._explicitCardsOpened = true;
+                  window._trainingRoundJustCompleted = false;
+                  saveUserSettings(userSettings);
+                  currentWordIndex = 0;
+                  renderTrainingTab();
+                }
+              });
+            });
+          }
+
           const goBtn = content.querySelector('#go-next-mode-btn');
           if (goBtn) {
             goBtn.addEventListener('click', () => {
+              if (nextMode === 'select_category') {
+                renderCategorySelectorScreen();
+                return;
+              }
               if (nextMode === 'cards') {
                 window._explicitCardsOpened = true;
               } else {
@@ -920,6 +999,9 @@
           learningCount,
           dailyGoal,
           availableModes,
+          onCategoryBadgeClick: () => {
+            renderCategorySelectorScreen();
+          },
           onMethodChange: (newMethod) => {
             userSettings.preferredMethod = newMethod;
             saveUserSettings(userSettings);
