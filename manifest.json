@@ -1,23 +1,28 @@
 {
-  "name": "English Trainer",
-  "short_name": "English PRO",
+  "name": "English Breakfast",
+  "short_name": "English Breakfast",
+  "id": "./",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#090d16",
-  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "./assets/icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "./assets/icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["education", "language", "learning"],
-  "description": "Премиальное веб-приложение для изучения английского языка.",
+  "description": "Интерактивный тренажёр английских слов.",
   "lang": "ru"
 }

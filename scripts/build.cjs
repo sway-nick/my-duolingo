@@ -34,14 +34,27 @@ function build() {
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });
   copyRecursiveSync('./frontend', './docs');
 
-  // 2. Sync root index.html, favicon.svg and favicon.png from frontend/
-  fs.copyFileSync('./frontend/index.html', './index.html');
-  if (fs.existsSync('./frontend/favicon.svg')) {
-    fs.copyFileSync('./frontend/favicon.svg', './favicon.svg');
-  }
-  if (fs.existsSync('./frontend/favicon.png')) {
-    fs.copyFileSync('./frontend/favicon.png', './favicon.png');
-  }
+  // 2. Sync all root-level web app & favicon files from frontend/ to root
+  const rootFilesToSync = [
+    'index.html',
+    'favicon.ico',
+    'favicon.svg',
+    'favicon.png',
+    'favicon-96x96.png',
+    'apple-touch-icon.png',
+    'site.webmanifest',
+    'manifest.json',
+    'web-app-manifest-192x192.png',
+    'web-app-manifest-512x512.png',
+    'sw.js'
+  ];
+
+  rootFilesToSync.forEach((filename) => {
+    const srcFile = path.join('./frontend', filename);
+    if (fs.existsSync(srcFile)) {
+      fs.copyFileSync(srcFile, path.join('./', filename));
+    }
+  });
 
   // 3. Sync frontend assets & modules to root for direct root hosting
   copyRecursiveSync('./frontend/components', './components');
