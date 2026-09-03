@@ -24,11 +24,24 @@ function copyRecursiveSync(src, dest) {
 function build() {
   console.log('📦 Building English Trainer PWA from frontend/ source...');
 
-  // 0. Automatically generate playlist.json for all videos in frontend/assets/video
+  // 0. Automatically generate playlist.json and inject real video list into index.html
   const videoDir = path.join(__dirname, '../frontend/assets/video');
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
   const videoFiles = fs.readdirSync(videoDir).filter(f => /\.(mp4|webm|mov)$/i.test(f)).sort();
-  fs.writeFileSync(path.join(videoDir, 'playlist.json'), JSON.stringify(videoFiles.length > 0 ? videoFiles : ['cat.mp4'], null, 2));
+  const validPlaylist = videoFiles.length > 0 ? videoFiles : ['cat4.mp4'];
+  fs.writeFileSync(path.join(videoDir, 'playlist.json'), JSON.stringify(validPlaylist, null, 2));
+
+  // Auto-inject into frontend/index.html so it works synchronously without waiting for async fetch
+  const indexPath = path.join(__dirname, '../frontend/index.html');
+  if (fs.existsSync(indexPath)) {
+    let indexHtml = fs.readFileSync(indexPath, 'utf8');
+    const playlistRegex = /let wotdPlaylist = \[.*?\];/;
+    const newPlaylistCode = `let wotdPlaylist = ${JSON.stringify(validPlaylist)};`;
+    if (playlistRegex.test(indexHtml)) {
+      indexHtml = indexHtml.replace(playlistRegex, newPlaylistCode);
+      fs.writeFileSync(indexPath, indexHtml, 'utf8');
+    }
+  }
 
   // 1. Sync frontend/ -> docs/
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });

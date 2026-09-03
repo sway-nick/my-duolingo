@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260903_v281';
+        var APP_BUILD = '20260903_v282';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -114,7 +114,7 @@
       let activeTab = 'training';
       let userSettings = { enabledMethods: 'quiz,cards,input', dailyGoal: 10 };
       let cloudWordOfTheDayId = null;
-      let wotdPlaylist = ['cat1.mp4', 'cat2.mp4', 'cat3.mp4', 'cat4.mp4', 'cat5.mp4'];
+      let wotdPlaylist = ["cat4.mp4","cat5.mp4","cat6.mp4","cat7.mp4"];
 
       // Fetch dynamic playlist if available
       try {
@@ -736,7 +736,7 @@
             currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
 
             wotdHtml = `
-              <div class="wotd-bonus-section" style="margin-top: 26px;">
+              <div class="wotd-bonus-section" style="margin-top: 30px;">
                 <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 0 auto; max-width: 340px; width: 100%;">
                   <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="Нажмите, чтобы перевернуть карточку" style="min-height: 220px;">
                      <!-- Front Face: English word -->
@@ -800,11 +800,11 @@
             : '';
 
           content.innerHTML = `
-            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: ${hasWotdCard ? 'flex-start' : 'center'}; min-height: ${hasWotdCard ? 'auto' : 'calc(100vh - 200px)'}; padding: ${hasWotdCard ? '20px 20px 28px' : '24px 20px'}; box-sizing: border-box;">
+            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: calc(100vh - 120px); padding: ${hasWotdCard ? '16px 20px 24px' : '24px 20px'}; box-sizing: border-box;">
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               ${emptyTitle ? `<h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>` : ''}
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '12px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
+              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '14px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
                 <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700;">
                   ${nextBtnLabel}
