@@ -2202,7 +2202,7 @@ body {
 }
 
 .wotd-card .crown-glint.sparkle-active {
-  animation: crownHornSparkle 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards;
+  animation: crownHornSparkle 1.1s cubic-bezier(0.16, 1, 0.3, 1) 2.5s forwards;
 }
 
 @keyframes crownHornSparkle {
