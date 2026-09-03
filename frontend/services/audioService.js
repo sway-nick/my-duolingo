@@ -422,6 +422,13 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   }
 
   // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on 3rd click, then alternating fast/slow)
+  try {
+    const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
+    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
+    const audioKey = `myduo_audio_clicks_${userId}`;
+    localStorage.setItem(audioKey, String(Number(localStorage.getItem(audioKey) || 0) + 1));
+  } catch (e) {}
+
   const key = wordId || text;
   if (currentWordKey === key) {
     clickCount += 1;

@@ -1760,6 +1760,22 @@ function runWeeklyXpCleanup() {
   } catch (e) {}
 }
 
+// Initialize session tracking and tab switches
+if (typeof window !== 'undefined') {
+  if (!window._appSessionStartTime) {
+    window._appSessionStartTime = Date.now();
+  }
+  if (!window._tabSwitchInitialized) {
+    window._tabSwitchInitialized = true;
+    window._tabSwitchCount = 0;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        window._tabSwitchCount = (window._tabSwitchCount || 0) + 1;
+      }
+    });
+  }
+}
+
 async function sendUserAnalytics() {
   if (typeof window === 'undefined') return;
   const currentUserId = getEffectiveUserId();
@@ -1816,6 +1832,31 @@ async function sendUserAnalytics() {
     // 6. Referrer
     const referrer = document.referrer || '';
 
+    // 7. Extended Hardware Metrics (Columns N & O)
+    const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : '';
+    const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : '';
+
+    // 8. App Mode (Column P: PWA vs Browser)
+    const isPwa = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (window.navigator && window.navigator.standalone === true);
+    const appMode = isPwa ? 'PWA (App)' : 'Browser Tab';
+
+    // 9. Session Duration (Column Q)
+    if (!window._appSessionStartTime) window._appSessionStartTime = Date.now();
+    const elapsedMin = Math.max(0.1, Math.round(((Date.now() - window._appSessionStartTime) / 60000) * 10) / 10);
+    const sessionTime = `${elapsedMin} мин`;
+
+    // 10. Focus / Tab Switches (Column R)
+    const tabSwitches = String(window._tabSwitchCount || 0);
+
+    // 11. Conversions & Engagement (Columns S, T, U)
+    const roundsCompleted = localStorage.getItem(`myduo_rounds_count_${currentUserId}`) || '0';
+    const audioClicks = localStorage.getItem(`myduo_audio_clicks_${currentUserId}`) || '0';
+    let favsAdded = '0';
+    try {
+      const favs = JSON.parse(localStorage.getItem(`favs_${currentUserId}`) || '[]');
+      favsAdded = String(favs.length);
+    } catch(e) {}
+
     let location = 'Unknown Location';
     let ipAddress = '';
     try {
@@ -1848,7 +1889,15 @@ async function sendUserAnalytics() {
         resolution,
         location,
         referrer,
-        ipAddress
+        ipAddress,
+        cores,
+        ram,
+        appMode,
+        sessionTime,
+        tabSwitches,
+        roundsCompleted,
+        audioClicks,
+        favsAdded
       }),
     }).catch(() => {});
   } catch (e) {

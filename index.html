@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260903_v284';
+        var APP_BUILD = '20260903_v285';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -726,6 +726,10 @@
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
 
           if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
+            try {
+              const roundKey = 'myduo_rounds_count_' + getEffectiveUserId();
+              localStorage.setItem(roundKey, String(Number(localStorage.getItem(roundKey) || 0) + 1));
+            } catch (e) {}
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
