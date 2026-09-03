@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260903_v280';
+        var APP_BUILD = '20260903_v281';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -28,12 +28,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="English Breakfast" />
     <meta name="application-name" content="English Breakfast" />
+    <link rel="icon" type="image/png" href="./favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="EnglishBreakfast" />
+    <link rel="manifest" href="./site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="manifest" href="./manifest.json" />
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png?v=20260902_v277" />
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?v=20260902_v277" />
-    <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
