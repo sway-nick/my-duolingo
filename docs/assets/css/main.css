@@ -3820,35 +3820,7 @@ body {
   }
 }
 
-/* Ink blot for Notebook Theme */
-.notebook-ink-blot {
-  display: none !important;
-}
 
-body.notebook-theme .notebook-ink-blot,
-.notebook-theme .notebook-ink-blot {
-  display: block !important;
-  position: absolute !important;
-  right: 18px !important;
-  bottom: 18px !important;
-  width: 84px !important;
-  height: 84px !important;
-  pointer-events: none !important;
-  z-index: 20 !important;
-  opacity: 0.92 !important;
-  filter: drop-shadow(1px 2px 3px rgba(88, 28, 135, 0.35)) !important;
-  transform: rotate(-10deg) !important;
-}
-
-@media (max-width: 480px) {
-  body.notebook-theme .notebook-ink-blot,
-  .notebook-theme .notebook-ink-blot {
-    width: 70px !important;
-    height: 70px !important;
-    right: 14px !important;
-    bottom: 14px !important;
-  }
-}
 
 .pairs-title {
   margin: 0;

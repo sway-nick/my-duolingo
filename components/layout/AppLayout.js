@@ -187,17 +187,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
       </div>
 
-      <!-- Notebook Theme Ink Blot SVG (Bottom Right Corner in purple ink) -->
-      <svg class="notebook-ink-blot" viewBox="0 0 100 100" fill="#581c87" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M48 20 C54 11 62 10 65 17 C68 23 63 28 67 32 C73 29 80 23 84 29 C88 35 80 40 79 44 C86 45 95 49 96 57 C97 65 87 66 82 68 C87 75 91 84 84 90 C77 96 72 88 67 83 C64 90 60 100 52 100 C44 100 45 89 40 82 C35 90 27 97 21 92 C14 87 20 76 24 69 C17 71 6 72 4 64 C2 56 12 51 18 47 C12 43 3 36 8 28 C13 20 22 27 28 32 C26 25 23 13 31 10 C39 7 43 21 48 20 Z" />
-        <circle cx="73" cy="8" r="4.5" />
-        <circle cx="89" cy="18" r="3.5" />
-        <circle cx="25" cy="14" r="3.5" />
-        <circle cx="16" cy="76" r="4" />
-        <circle cx="74" cy="94" r="3" />
-        <circle cx="78" cy="99" r="1.8" />
-      </svg>
-
     </div>
   `;
 
