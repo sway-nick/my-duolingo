@@ -185,6 +185,22 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             <span class="drawer-item-text">${t('settings')}</span>
           </button>
         </div>
+
+        <div class="drawer-footer">
+          <div class="drawer-feedback-card" id="drawer-feedback-card">
+            <div class="drawer-feedback-header">
+              <span class="drawer-feedback-icon">💡</span>
+              <div class="drawer-feedback-text">
+                <div class="drawer-feedback-title">${t('feedback_title')}</div>
+                <div class="drawer-feedback-desc">${t('feedback_desc')}</div>
+              </div>
+            </div>
+            <button type="button" class="drawer-feedback-btn" id="drawer-feedback-btn">
+              <span>✉️</span> ${t('feedback_btn')}
+            </button>
+          </div>
+          <div class="drawer-app-version">English Breakfast • 2026</div>
+        </div>
       </div>
 
     </div>
@@ -197,6 +213,21 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   if (brandLogo) {
     brandLogo.addEventListener('click', () => {
       onLogoClick();
+    });
+  }
+
+  // Bind Feedback Card & Button
+  const feedbackBtn = app.querySelector('#drawer-feedback-btn');
+  const feedbackCard = app.querySelector('#drawer-feedback-card');
+  if (feedbackBtn) {
+    feedbackBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleFeedbackClick();
+    });
+  }
+  if (feedbackCard) {
+    feedbackCard.addEventListener('click', () => {
+      handleFeedbackClick();
     });
   }
 
@@ -227,6 +258,56 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   });
 
   bindHeaderActionButtons(app);
+}
+
+function showFeedbackToast(msg) {
+  let toast = document.querySelector('#feedback-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'feedback-toast';
+    toast.className = 'feedback-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+function handleFeedbackClick() {
+  const email = 'lipniagovnikola@gmail.com';
+  const currentUser = getCurrentUser();
+  const userName = currentUser ? (currentUser.name || currentUser.email) : 'Гость';
+  const subject = encodeURIComponent(`English Breakfast — Отзыв / Пожелания`);
+  const body = encodeURIComponent(
+`Здравствуйте, Николай!
+
+Мой отзыв / пожелание:
+
+
+---
+Пользователь: ${userName}
+Язык интерфейса: ${localStorage.getItem('myduo_interface_lang') || 'ru'}
+Устройство: ${navigator.userAgent}`
+  );
+
+  const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+
+  // Copy email to clipboard so user never gets stuck
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).catch(() => {});
+  }
+
+  showFeedbackToast(t('feedback_copied_toast'));
+
+  // Trigger mailto link
+  setTimeout(() => {
+    window.location.href = mailtoUrl;
+  }, 100);
+
+  closeDrawer();
 }
 
 function openDrawer() {

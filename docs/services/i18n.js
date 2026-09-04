@@ -95,6 +95,10 @@ const translations = {
     avatar_reset_btn: "✕ Сбросить на стандартный",
     settings_sync_btn: "Синхронизация с сервером",
     settings_sync_confirm: "Вы уверены, что хотите синхронизировать данные с сервером и перезагрузить?",
+    feedback_title: "Помогите нам стать лучше",
+    feedback_desc: "Есть идея или нашли ошибку?",
+    feedback_btn: "Написать разработчику",
+    feedback_copied_toast: "✉️ Почта открыта (адрес lipniagovnikola@gmail.com скопирован)",
   },
   uk: {
     // Nav / Drawer
@@ -192,6 +196,10 @@ const translations = {
     avatar_reset_btn: "✕ Скинути до стандартного",
     settings_sync_btn: "Синхронізація з сервером",
     settings_sync_confirm: "Ви впевнені, що хочете синхронізувати дані із сервером та перезавантажити?",
+    feedback_title: "Допоможіть нам стати краще",
+    feedback_desc: "Є ідея або знайшли помилку?",
+    feedback_btn: "Написати розробнику",
+    feedback_copied_toast: "✉️ Пошту відкрито (адресу lipniagovnikola@gmail.com скопійовано)",
   },
   en: {
     // Nav / Drawer
@@ -289,6 +297,10 @@ const translations = {
     avatar_reset_btn: "✕ Reset to Default",
     settings_sync_btn: "Sync with server",
     settings_sync_confirm: "Are you sure you want to sync data with the server and reload?",
+    feedback_title: "Help us improve",
+    feedback_desc: "Have an idea or found a bug?",
+    feedback_btn: "Write to developer",
+    feedback_copied_toast: "✉️ Mail client opened (lipniagovnikola@gmail.com copied)",
   },
   de: {
     // Nav / Drawer
