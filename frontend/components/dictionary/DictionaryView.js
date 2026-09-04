@@ -98,6 +98,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   const saveBtnText = lang === 'ru' ? 'Сохранить' : lang === 'uk' ? 'Зберегти' : 'Save';
   const cancelBtnText = lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel';
   const updateNoteText = lang === 'ru' ? 'Обновить заметку' : lang === 'uk' ? 'Оновити примітку' : 'Update note';
+  const checkingBtnText = lang === 'ru' ? 'Проверяю...' : lang === 'uk' ? 'Перевіряю...' : 'Checking...';
 
   modalEl.innerHTML = `
     <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
@@ -409,7 +410,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = '🤖 Проверяю через AI...';
+    submitBtn.textContent = checkingBtnText;
 
     try {
       const res = await addCustomWord({ word, translation, category, notes });
