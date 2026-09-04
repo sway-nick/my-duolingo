@@ -192,23 +192,71 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     }
     const data = await suggestTranslations(cleanWord);
     if (data && Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+      // Dynamically update placeholder with top translation
+      if (data.suggestions[0]) {
+        transInput.placeholder = `например: ${data.suggestions[0]}`;
+      }
+
       if (pillsBox) {
         pillsBox.innerHTML = data.suggestions
           .map(
             (s) => `
-          <button type="button" class="trans-pill-btn" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; border-radius: 6px; padding: 3px 8px; font-size: 12px; cursor: pointer; font-weight: 500;">
-            ${escapeHtml(s)}
+          <button type="button" class="trans-pill-btn" data-val="${escapeHtml(s)}" style="background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.35); border-radius: 20px; padding: 4px 10px; font-size: 12.5px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s ease;">
+            <span>+</span> ${escapeHtml(s)}
           </button>
         `
           )
           .join('');
 
+        function syncPillsHighlight() {
+          const currentWords = transInput.value
+            .toLowerCase()
+            .split(/[,;\/]/)
+            .map((x) => x.trim())
+            .filter(Boolean);
+
+          pillsBox.querySelectorAll('.trans-pill-btn').forEach((btn) => {
+            const val = (btn.getAttribute('data-val') || '').toLowerCase();
+            const isSelected = currentWords.includes(val);
+            if (isSelected) {
+              btn.style.background = '#22c55e';
+              btn.style.color = '#ffffff';
+              btn.style.borderColor = '#16a34a';
+              btn.innerHTML = `✓ ${escapeHtml(val)}`;
+            } else {
+              btn.style.background = 'rgba(34, 197, 94, 0.12)';
+              btn.style.color = '#22c55e';
+              btn.style.borderColor = 'rgba(34, 197, 94, 0.35)';
+              btn.innerHTML = `+ ${escapeHtml(val)}`;
+            }
+          });
+        }
+
         pillsBox.querySelectorAll('.trans-pill-btn').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            transInput.value = btn.textContent.trim().toLowerCase();
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const val = (btn.getAttribute('data-val') || '').toLowerCase();
+            let currentWords = transInput.value
+              .toLowerCase()
+              .split(/[,;\/]/)
+              .map((x) => x.trim())
+              .filter(Boolean);
+
+            if (currentWords.includes(val)) {
+              // Unselect / Remove
+              currentWords = currentWords.filter((w) => w !== val);
+            } else {
+              // Select / Add
+              currentWords.push(val);
+            }
+
+            transInput.value = currentWords.join(', ');
             updateCounters();
+            syncPillsHighlight();
           });
         });
+
+        syncPillsHighlight();
       }
 
       if (data.category && existingCats.includes(data.category)) {
@@ -285,6 +333,24 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   transInput.addEventListener('input', () => {
     transInput.value = transInput.value.toLowerCase();
     updateCounters();
+    const currentWords = transInput.value.toLowerCase().split(/[,;\/]/).map(x => x.trim()).filter(Boolean);
+    if (pillsBox) {
+      pillsBox.querySelectorAll('.trans-pill-btn').forEach(btn => {
+        const val = (btn.getAttribute('data-val') || '').toLowerCase();
+        const isSelected = currentWords.includes(val);
+        if (isSelected) {
+          btn.style.background = '#22c55e';
+          btn.style.color = '#ffffff';
+          btn.style.borderColor = '#16a34a';
+          btn.innerHTML = `✓ ${escapeHtml(val)}`;
+        } else {
+          btn.style.background = 'rgba(34, 197, 94, 0.12)';
+          btn.style.color = '#22c55e';
+          btn.style.borderColor = 'rgba(34, 197, 94, 0.35)';
+          btn.innerHTML = `+ ${escapeHtml(val)}`;
+        }
+      });
+    }
   });
   notesInput.addEventListener('input', updateCounters);
 
@@ -337,6 +403,23 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     try {
       const res = await addCustomWord({ word, translation, category, notes });
       cleanup();
+
+      // Automatically add newly created word to creator's Favorites ❤️
+      if (res && res.word && res.word.id) {
+        try {
+          await toggleFavoriteApi(res.word.id, true);
+          const favList = getUserFavorites();
+          if (!favList.includes(String(res.word.id))) {
+            favList.push(String(res.word.id));
+            const currentUser = getCurrentUser();
+            const userId = currentUser ? currentUser.id : (localStorage.getItem('myduo_guest_device_id') || 'guest');
+            localStorage.setItem(`favs_${userId}`, JSON.stringify(favList));
+          }
+        } catch (e) {
+          console.warn('Auto-favorite on create failed:', e);
+        }
+      }
+
       onWordSaved(res.word);
     } catch (err) {
       submitBtn.disabled = false;

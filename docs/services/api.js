@@ -1960,25 +1960,59 @@ async function addCustomWord({ word, translation, category, notes }) {
 }
 
 async function suggestTranslations(word) {
+  if (!word || word.trim().length < 2) {
+    return { suggestions: [], category: 'Общие', transcription: '' };
+  }
+  const clean = word.trim().toLowerCase();
+  const lang = getInterfaceLanguage ? getInterfaceLanguage() : 'ru';
+  const targetLang = lang === 'uk' ? 'uk' : (lang === 'de' ? 'de' : (lang === 'fr' ? 'fr' : (lang === 'es' ? 'es' : 'ru')));
+
   try {
-    const lang = getInterfaceLanguage();
-    const response = await fetch(`${API_URL}?route=suggest_translation`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        action: 'suggest_translation',
-        route: 'suggest_translation',
-        word: String(word || '').trim().toLowerCase(),
-        lang: lang,
-      }),
-    });
-    const json = await response.json();
-    if (json && json.success && json.data) {
-      return json.data;
+    // 1. Check local cached words first (0ms instantaneous)
+    if (cachedWordsList && Array.isArray(cachedWordsList)) {
+      const match = cachedWordsList.find(w => w.word && w.word.toLowerCase() === clean);
+      if (match && match.translation) {
+        const parts = match.translation.split(/[,;\/]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+        const unique = Array.from(new Set([match.translation.toLowerCase(), ...parts]));
+        return {
+          suggestions: unique.slice(0, 4),
+          category: match.category || 'Общие',
+          transcription: match.transcription || ''
+        };
+      }
+    }
+
+    // 2. High-speed translation API (MyMemory)
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=en|${targetLang}`;
+    const res = await fetch(url).then(r => r.json());
+    if (res && res.responseData && res.responseData.translatedText) {
+      const rawMain = String(res.responseData.translatedText || '').trim().toLowerCase();
+      const suggestions = [];
+      if (rawMain && rawMain !== clean && rawMain.length <= 40 && !rawMain.includes('mymemory')) {
+        suggestions.push(rawMain);
+      }
+      if (Array.isArray(res.matches)) {
+        res.matches.forEach(m => {
+          if (m.translation && typeof m.translation === 'string') {
+            const t = m.translation.trim().toLowerCase();
+            if (t && t !== clean && t.length <= 30 && !suggestions.includes(t) && !t.includes('mymemory') && !t.includes('http')) {
+              suggestions.push(t);
+            }
+          }
+        });
+      }
+      if (suggestions.length > 0) {
+        return {
+          suggestions: suggestions.slice(0, 4),
+          category: 'Общие',
+          transcription: ''
+        };
+      }
     }
   } catch (e) {
-    console.warn('Failed to fetch translation suggestions:', e);
+    console.warn('Translation suggestions fallback:', e);
   }
+
   return { suggestions: [], category: 'Общие', transcription: '' };
 }
 
