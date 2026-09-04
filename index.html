@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260903_v285';
+        var APP_BUILD = '20260904_v286';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -770,7 +770,7 @@
                        
                        <!-- Full-size video covering entire golden card face with instant preloading -->
                        <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
-                         <video id="wotd-card-video" playsinline preload="auto" src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
+                         <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                        </div>
 
                        <div class="flashcard-face-top" style="z-index: 2;">
@@ -907,12 +907,12 @@
                       dismissVideo();
                     }, { once: true });
 
-                    // Watchdog: if video fails to play within 2.5s, keep card translation visible
+                    // Watchdog: give mobile network 8s to buffer before falling back to translation
                     setTimeout(() => {
                       if (!isVideoRevealed) {
                         dismissVideo();
                       }
-                    }, 2500);
+                    }, 8000);
 
                     cardVideo.muted = false;
                     cardVideo.volume = 1.0;
