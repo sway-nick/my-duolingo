@@ -122,9 +122,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
         <div>
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
             <label for="add-trans-input">${transLabel} *</label>
-            <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/60</span>
+            <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/50</span>
           </div>
-          <input type="text" id="add-trans-input" class="search-input" maxlength="60" required placeholder="например: цветение" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
+          <input type="text" id="add-trans-input" class="search-input" maxlength="50" required placeholder="например: цветение" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
           <div id="add-trans-suggestions" style="display: none; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center;">
             <span style="font-size: 11px; color: var(--text-muted);">💡 Варианты:</span>
             <div id="add-trans-pills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
@@ -180,7 +180,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
   function updateCounters() {
     if (wordLen) wordLen.textContent = `${wordInput.value.length}/35`;
-    if (transLen) transLen.textContent = `${transInput.value.length}/60`;
+    if (transLen) transLen.textContent = `${transInput.value.length}/50`;
     if (notesLen) notesLen.textContent = `${notesInput.value.length}/60`;
   }
 
@@ -394,6 +394,12 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     if (word.length < 2 || word.length > 35) {
       errorBox.style.display = 'block';
       errorBox.textContent = 'Длина английского слова должна быть от 2 до 35 символов.';
+      return;
+    }
+
+    if (translation.length < 1 || translation.length > 50) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = 'Длина перевода должна быть от 1 до 50 символов.';
       return;
     }
 
