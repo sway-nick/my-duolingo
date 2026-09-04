@@ -27,7 +27,14 @@ function build() {
   // 0. Automatically generate playlist.json and inject real video list into index.html
   const videoDir = path.join(__dirname, '../frontend/assets/video');
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
-  const videoFiles = fs.readdirSync(videoDir).filter(f => /\.(mp4|webm|mov)$/i.test(f)).sort();
+  const videoFiles = fs.readdirSync(videoDir)
+    .filter(f => /\.(mp4|webm|mov)$/i.test(f))
+    .sort((a, b) => {
+      const numA = parseInt((a.match(/\d+/) || [0])[0], 10);
+      const numB = parseInt((b.match(/\d+/) || [0])[0], 10);
+      if (!isNaN(numA) && !isNaN(numB) && numA !== numB) return numA - numB;
+      return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+    });
   const validPlaylist = videoFiles.length > 0 ? videoFiles : ['cat4.mp4'];
   fs.writeFileSync(path.join(videoDir, 'playlist.json'), JSON.stringify(validPlaylist, null, 2));
 
