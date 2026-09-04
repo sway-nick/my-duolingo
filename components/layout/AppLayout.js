@@ -187,18 +187,10 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
 
         <div class="drawer-footer">
-          <div class="drawer-feedback-card" id="drawer-feedback-card">
-            <div class="drawer-feedback-header">
-              <span class="drawer-feedback-icon">💡</span>
-              <div class="drawer-feedback-text">
-                <div class="drawer-feedback-title">${t('feedback_title')}</div>
-                <div class="drawer-feedback-desc">${t('feedback_desc')}</div>
-              </div>
-            </div>
-            <button type="button" class="drawer-feedback-btn" id="drawer-feedback-btn">
-              <span>✉️</span> ${t('feedback_btn')}
-            </button>
-          </div>
+          <button type="button" class="drawer-feedback-btn" id="drawer-feedback-btn">
+            <span class="drawer-feedback-icon">💡</span>
+            <span class="drawer-feedback-title">${t('feedback_title')}</span>
+          </button>
           <div class="drawer-app-version">English Breakfast • 2026</div>
         </div>
       </div>
@@ -216,17 +208,11 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   }
 
-  // Bind Feedback Card & Button
+  // Bind Feedback Button
   const feedbackBtn = app.querySelector('#drawer-feedback-btn');
-  const feedbackCard = app.querySelector('#drawer-feedback-card');
   if (feedbackBtn) {
     feedbackBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      handleFeedbackClick();
-    });
-  }
-  if (feedbackCard) {
-    feedbackCard.addEventListener('click', () => {
       handleFeedbackClick();
     });
   }
@@ -283,23 +269,23 @@ function handleFeedbackClick() {
   const lang = getInterfaceLanguage ? getInterfaceLanguage() : (localStorage.getItem('myduo_interface_lang') || 'ru');
 
   let subjectText = 'English Breakfast — Отзыв / Пожелания';
-  let bodyText = `Здравствуйте, Николай!\n\nМой отзыв / пожелание:\n\n\n---\nПользователь: ${userName}\nЯзык интерфейса: ${lang}\nУстройство: ${navigator.userAgent}`;
+  let bodyText = `Здравствуйте!\n\nМой отзыв / пожелание:\n\n\n---\nПользователь: ${userName}\nЯзык интерфейса: ${lang}\nУстройство: ${navigator.userAgent}`;
 
   if (lang === 'uk') {
     subjectText = 'English Breakfast — Відгук / Пропозиції';
-    bodyText = `Привіт, Микола!\n\nМій відгук / пропозиція:\n\n\n---\nКористувач: ${userName}\nМова: ${lang}\nПристрій: ${navigator.userAgent}`;
+    bodyText = `Вітаємо!\n\nМій відгук / пропозиція:\n\n\n---\nКористувач: ${userName}\nМова: ${lang}\nПристрій: ${navigator.userAgent}`;
   } else if (lang === 'en') {
     subjectText = 'English Breakfast — Feedback / Suggestions';
-    bodyText = `Hello Nikolai,\n\nMy feedback / suggestion:\n\n\n---\nUser: ${userName}\nLanguage: ${lang}\nDevice: ${navigator.userAgent}`;
+    bodyText = `Hello!\n\nMy feedback / suggestion:\n\n\n---\nUser: ${userName}\nLanguage: ${lang}\nDevice: ${navigator.userAgent}`;
   } else if (lang === 'de') {
     subjectText = 'English Breakfast — Feedback / Vorschläge';
-    bodyText = `Hallo Nikolai,\n\nMein Feedback / Vorschlag:\n\n\n---\nBenutzer: ${userName}\nSprache: ${lang}\nGerät: ${navigator.userAgent}`;
+    bodyText = `Hallo!\n\nMein Feedback / Vorschlag:\n\n\n---\nBenutzer: ${userName}\nSprache: ${lang}\nGerät: ${navigator.userAgent}`;
   } else if (lang === 'es') {
     subjectText = 'English Breakfast — Comentarios / Sugerencias';
-    bodyText = `Hola Nikolai,\n\nMi comentario / sugerencia:\n\n\n---\nUsuario: ${userName}\nIdioma: ${lang}\nDispositivo: ${navigator.userAgent}`;
+    bodyText = `¡Hola!\n\nMi comentario / sugerencia:\n\n\n---\nUsuario: ${userName}\nIdioma: ${lang}\nDispositivo: ${navigator.userAgent}`;
   } else if (lang === 'fr') {
     subjectText = 'English Breakfast — Commentaires / Suggestions';
-    bodyText = `Bonjour Nikolai,\n\nMon retour / suggestion :\n\n\n---\nUtilisateur : ${userName}\nLangue : ${lang}\nAppareil : ${navigator.userAgent}`;
+    bodyText = `Bonjour !\n\nMon retour / suggestion :\n\n\n---\nUtilisateur : ${userName}\nLangue : ${lang}\nAppareil : ${navigator.userAgent}`;
   }
 
   const subject = encodeURIComponent(subjectText);
@@ -344,12 +330,6 @@ export function updateDrawerTranslations() {
 
   const titleEl = drawer.querySelector('.drawer-feedback-title');
   if (titleEl) titleEl.textContent = t('feedback_title');
-
-  const descEl = drawer.querySelector('.drawer-feedback-desc');
-  if (descEl) descEl.textContent = t('feedback_desc');
-
-  const btnEl = drawer.querySelector('#drawer-feedback-btn');
-  if (btnEl) btnEl.innerHTML = `<span>✉️</span> ${t('feedback_btn')}`;
 }
 
 if (typeof window !== 'undefined') {
