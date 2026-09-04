@@ -395,6 +395,10 @@ const translations = {
     avatar_reset_btn: "✕ Auf Standard zurücksetzen",
     settings_sync_btn: "Mit Server synchronisieren",
     settings_sync_confirm: "Möchten Sie die Daten wirklich mit dem Server synchronisieren und neu laden?",
+    feedback_title: "Helfen Sie uns, besser zu werden",
+    feedback_desc: "Haben Sie eine Idee oder einen Fehler gefunden?",
+    feedback_btn: "Entwickler schreiben",
+    feedback_copied_toast: "✉️ E-Mail geöffnet (lipniagovnikola@gmail.com kopiert)",
   },
   es: {
     // Nav / Drawer
@@ -489,6 +493,10 @@ const translations = {
     avatar_reset_btn: "✕ Restablecer por defecto",
     settings_sync_btn: "Sincronizar con el servidor",
     settings_sync_confirm: "¿Está seguro de que desea sincronizar los datos con el servidor y recargar?",
+    feedback_title: "Ayúdanos a mejorar",
+    feedback_desc: "¿Tienes una idea o encontraste un error?",
+    feedback_btn: "Escribir al desarrollador",
+    feedback_copied_toast: "✉️ Correo abierto (lipniagovnikola@gmail.com copiado)",
   },
   fr: {
     // Nav / Drawer
@@ -583,6 +591,10 @@ const translations = {
     avatar_reset_btn: "✕ Réinitialiser par défaut",
     settings_sync_btn: "Synchroniser avec le serveur",
     settings_sync_confirm: "Voulez-vous vraiment synchroniser les données avec le serveur et recharger ?",
+    feedback_title: "Aidez-nous à nous améliorer",
+    feedback_desc: "Une idée ou un problème ?",
+    feedback_btn: "Écrire au développeur",
+    feedback_copied_toast: "✉️ Client e-mail ouvert (lipniagovnikola@gmail.com copié)",
   },
   pl: {
     training: "Trening",
@@ -664,6 +676,10 @@ const translations = {
     avatar_reset_btn: "✕ Przywróć domyślny",
     settings_sync_btn: "Synchronizuj z serwerem",
     settings_sync_confirm: "Czy na pewno chcesz zsynchronizować dane z serwerem i odświeżyć?",
+    feedback_title: "Pomóż nam ulepszyć aplikację",
+    feedback_desc: "Masz pomysł lub znalazłeś błąd?",
+    feedback_btn: "Napisz do twórcy",
+    feedback_copied_toast: "✉️ Poczta otwarta (lipniagovnikola@gmail.com skopiowano)",
   },
   tr: {
     training: "Antrenman",
@@ -745,6 +761,10 @@ const translations = {
     avatar_reset_btn: "✕ Varsayılana sıfırla",
     settings_sync_btn: "Sunucuyla senkronize et",
     settings_sync_confirm: "Verileri sunucuyla senkronize etmek ve yeniden yüklemek istediğinizden emin misiniz?",
+    feedback_title: "Gelişmemize yardımcı olun",
+    feedback_desc: "Bir fikriniz mi var veya hata mı buldunuz?",
+    feedback_btn: "Geliştiriciye yazın",
+    feedback_copied_toast: "✉️ E-posta açıldı (lipniagovnikola@gmail.com kopyalandı)",
   },
   it: {
     training: "Allenamento",
@@ -826,6 +846,10 @@ const translations = {
     avatar_reset_btn: "✕ Ripristina predefinito",
     settings_sync_btn: "Sincronizza con il server",
     settings_sync_confirm: "Sei sicuro di voler sincronizzare i dati con il server e ricaricare?",
+    feedback_title: "Aiutaci a migliorare",
+    feedback_desc: "Hai un'idea o hai trovato un errore?",
+    feedback_btn: "Scrivi allo sviluppatore",
+    feedback_copied_toast: "✉️ Email aperta (lipniagovnikola@gmail.com copiato)",
   },
   ro: {
     training: "Instruire",

@@ -1,7 +1,7 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=200.0';
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=200.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
-import { t } from '../../services/i18n.js?v=200.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -279,20 +279,31 @@ function showFeedbackToast(msg) {
 function handleFeedbackClick() {
   const email = 'lipniagovnikola@gmail.com';
   const currentUser = getCurrentUser();
-  const userName = currentUser ? (currentUser.name || currentUser.email) : 'Гость';
-  const subject = encodeURIComponent(`English Breakfast — Отзыв / Пожелания`);
-  const body = encodeURIComponent(
-`Здравствуйте, Николай!
+  const userName = currentUser ? (currentUser.name || currentUser.email) : 'User';
+  const lang = getInterfaceLanguage ? getInterfaceLanguage() : (localStorage.getItem('myduo_interface_lang') || 'ru');
 
-Мой отзыв / пожелание:
+  let subjectText = 'English Breakfast — Отзыв / Пожелания';
+  let bodyText = `Здравствуйте, Николай!\n\nМой отзыв / пожелание:\n\n\n---\nПользователь: ${userName}\nЯзык интерфейса: ${lang}\nУстройство: ${navigator.userAgent}`;
 
+  if (lang === 'uk') {
+    subjectText = 'English Breakfast — Відгук / Пропозиції';
+    bodyText = `Привіт, Микола!\n\nМій відгук / пропозиція:\n\n\n---\nКористувач: ${userName}\nМова: ${lang}\nПристрій: ${navigator.userAgent}`;
+  } else if (lang === 'en') {
+    subjectText = 'English Breakfast — Feedback / Suggestions';
+    bodyText = `Hello Nikolai,\n\nMy feedback / suggestion:\n\n\n---\nUser: ${userName}\nLanguage: ${lang}\nDevice: ${navigator.userAgent}`;
+  } else if (lang === 'de') {
+    subjectText = 'English Breakfast — Feedback / Vorschläge';
+    bodyText = `Hallo Nikolai,\n\nMein Feedback / Vorschlag:\n\n\n---\nBenutzer: ${userName}\nSprache: ${lang}\nGerät: ${navigator.userAgent}`;
+  } else if (lang === 'es') {
+    subjectText = 'English Breakfast — Comentarios / Sugerencias';
+    bodyText = `Hola Nikolai,\n\nMi comentario / sugerencia:\n\n\n---\nUsuario: ${userName}\nIdioma: ${lang}\nDispositivo: ${navigator.userAgent}`;
+  } else if (lang === 'fr') {
+    subjectText = 'English Breakfast — Commentaires / Suggestions';
+    bodyText = `Bonjour Nikolai,\n\nMon retour / suggestion :\n\n\n---\nUtilisateur : ${userName}\nLangue : ${lang}\nAppareil : ${navigator.userAgent}`;
+  }
 
----
-Пользователь: ${userName}
-Язык интерфейса: ${localStorage.getItem('myduo_interface_lang') || 'ru'}
-Устройство: ${navigator.userAgent}`
-  );
-
+  const subject = encodeURIComponent(subjectText);
+  const body = encodeURIComponent(bodyText);
   const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
 
   // Copy email to clipboard so user never gets stuck
@@ -310,10 +321,48 @@ function handleFeedbackClick() {
   closeDrawer();
 }
 
+export function updateDrawerTranslations() {
+  const drawer = document.querySelector('#burger-drawer');
+  if (!drawer) return;
+
+  const tabsDef = [
+    { tab: 'training', key: 'training' },
+    { tab: 'leaderboard', key: 'leaderboard' },
+    { tab: 'dictionary', key: 'dictionary' },
+    { tab: 'favorites', key: 'favorites' },
+    { tab: 'stats', key: 'stats' },
+    { tab: 'settings', key: 'settings' }
+  ];
+  tabsDef.forEach(({ tab, key }) => {
+    const tabEl = drawer.querySelector(`.nav-tab[data-tab="${tab}"]`);
+    if (tabEl) {
+      const textEl = tabEl.querySelector('.drawer-item-text');
+      if (textEl) textEl.textContent = t(key);
+      tabEl.title = t(key);
+    }
+  });
+
+  const titleEl = drawer.querySelector('.drawer-feedback-title');
+  if (titleEl) titleEl.textContent = t('feedback_title');
+
+  const descEl = drawer.querySelector('.drawer-feedback-desc');
+  if (descEl) descEl.textContent = t('feedback_desc');
+
+  const btnEl = drawer.querySelector('#drawer-feedback-btn');
+  if (btnEl) btnEl.innerHTML = `<span>✉️</span> ${t('feedback_btn')}`;
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('myduo:lang_changed', () => {
+    updateDrawerTranslations();
+  });
+}
+
 function openDrawer() {
   const drawer = document.querySelector('#burger-drawer');
   const overlay = document.querySelector('#drawer-overlay');
   if (drawer && overlay) {
+    updateDrawerTranslations();
     drawer.classList.add('open');
     overlay.classList.add('open');
   }

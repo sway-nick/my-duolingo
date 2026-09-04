@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260904_v298';
+        var APP_BUILD = '20260904_v299';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -1336,6 +1336,13 @@
                 tabEl.title = t(key);
               }
             });
+            const titleEl = drawer.querySelector('.drawer-feedback-title');
+            if (titleEl) titleEl.textContent = t('feedback_title');
+            const descEl = drawer.querySelector('.drawer-feedback-desc');
+            if (descEl) descEl.textContent = t('feedback_desc');
+            const btnEl = drawer.querySelector('#drawer-feedback-btn');
+            if (btnEl) btnEl.innerHTML = `<span>✉️</span> ${t('feedback_btn')}`;
+
             const closeBtn = drawer.querySelector('#drawer-close-btn');
             if (closeBtn) {
               closeBtn.ariaLabel = getInterfaceLanguage() === 'ru' ? 'Закрыть' : getInterfaceLanguage() === 'uk' ? 'Закрити' : 'Close';
