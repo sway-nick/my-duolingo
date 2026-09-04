@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=21.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations } from '../../services/api.js?v=18.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=25.0';
+import { speakWord } from '../../services/audioService.js?v=200.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations } from '../../services/api.js?v=200.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -190,9 +190,22 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       if (suggestionsBox) suggestionsBox.style.display = 'none';
       return;
     }
+
+    if (suggestionsBox) {
+      suggestionsBox.style.display = 'flex';
+      if (pillsBox) {
+        pillsBox.innerHTML = '<span style="font-size: 11.5px; color: var(--text-muted); padding: 3px 6px;">⏳ Ищу перевод...</span>';
+      }
+    }
+
     const data = await suggestTranslations(cleanWord);
+
+    // Make sure user hasn't changed the input while fetching
+    if (wordInput.value.trim().toLowerCase() !== cleanWord) {
+      return;
+    }
+
     if (data && Array.isArray(data.suggestions) && data.suggestions.length > 0) {
-      // Dynamically update placeholder with top translation
       if (data.suggestions[0]) {
         transInput.placeholder = `например: ${data.suggestions[0]}`;
       }
@@ -243,10 +256,8 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
               .filter(Boolean);
 
             if (currentWords.includes(val)) {
-              // Unselect / Remove
               currentWords = currentWords.filter((w) => w !== val);
             } else {
-              // Select / Add
               currentWords.push(val);
             }
 
@@ -305,7 +316,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       clearTimeout(suggestTimeout);
       suggestTimeout = setTimeout(() => {
         fetchAiSuggestions(typed);
-      }, 450);
+      }, 200);
     }
   }
 

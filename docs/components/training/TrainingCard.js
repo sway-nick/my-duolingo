@@ -8,7 +8,7 @@ import {
   playStopwatchTickSound,
   playFartSound,
   isWordAudioPlaying,
-} from '../../services/audioService.js?v=25.0';
+} from '../../services/audioService.js?v=200.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -17,8 +17,8 @@ import {
   isWordMastered,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.js?v=185.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=130.0';
+} from '../../services/api.js?v=200.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';

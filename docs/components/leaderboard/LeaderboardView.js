@@ -1,7 +1,7 @@
 import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=200.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=131.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=131.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=131.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=200.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 
 let currentPeriod = localStorage.getItem('myduo_leaderboard_period') || 'week'; // 'week' or 'all'
 

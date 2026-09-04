@@ -1,4 +1,4 @@
-import { VECTOR_AVATARS, saveUserAvatar, getUserAvatar, getEffectiveUserId, compressAndCropAvatar } from '../../services/authService.js?v=18.0';
+import { VECTOR_AVATARS, saveUserAvatar, getUserAvatar, getEffectiveUserId, compressAndCropAvatar } from '../../services/authService.js?v=200.0';
 import { t } from '../../services/i18n.js?v=200.0';
 
 function renderAvatarPickerModal(onAvatarSelected = () => {}) {

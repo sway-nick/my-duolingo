@@ -1,10 +1,10 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=132.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=132.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=132.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=132.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=132.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=132.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=132.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=200.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=200.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=200.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);

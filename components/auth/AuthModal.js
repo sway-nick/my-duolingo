@@ -1,5 +1,5 @@
-import { loginUser, registerUser, googleAuthUser } from '../../services/api.js?v=18.0';
-import { setCurrentUser } from '../../services/authService.js?v=18.0';
+import { loginUser, registerUser, googleAuthUser } from '../../services/api.js?v=200.0';
+import { setCurrentUser } from '../../services/authService.js?v=200.0';
 
 const GOOGLE_CLIENT_ID = '971261131396-00l4rv6n0c4plrd9ie10qb8tvrme2emk.apps.googleusercontent.com';
 
