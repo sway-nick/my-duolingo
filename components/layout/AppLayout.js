@@ -328,8 +328,13 @@ export function updateDrawerTranslations() {
     }
   });
 
-  const titleEl = drawer.querySelector('.drawer-feedback-title');
-  if (titleEl) titleEl.textContent = t('feedback_title');
+  const feedbackBtn = drawer.querySelector('#drawer-feedback-btn');
+  if (feedbackBtn) {
+    feedbackBtn.innerHTML = `
+      <span class="drawer-feedback-icon">💡</span>
+      <span class="drawer-feedback-title">${t('feedback_title')}</span>
+    `;
+  }
 }
 
 if (typeof window !== 'undefined') {
