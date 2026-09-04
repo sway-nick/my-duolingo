@@ -187,7 +187,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   let suggestTimeout = null;
 
   async function fetchAiSuggestions(cleanWord) {
-    if (!cleanWord || cleanWord.length < 2) {
+    if (!cleanWord || cleanWord.length < 2 || !/[aeiouy]/i.test(cleanWord) || /[bcdfghjklmnpqrstvwxz]{5,}/i.test(cleanWord)) {
       if (suggestionsBox) suggestionsBox.style.display = 'none';
       return;
     }
@@ -406,6 +406,18 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     if (!/^[a-z\s\-\']+$/i.test(word) || /[0-9\u0400-\u04FF]/.test(word)) {
       errorBox.style.display = 'block';
       errorBox.textContent = 'Поле английского слова должно содержать только английские буквы.';
+      return;
+    }
+
+    if (!/[aeiouy]/i.test(word)) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = '⚠️ Английское слово должно содержать хотя бы одну гласную букву (a, e, i, o, u, y).';
+      return;
+    }
+
+    if (/[bcdfghjklmnpqrstvwxz]{5,}/i.test(word)) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = '⚠️ Слово похоже на случайный набор букв. Проверьте правильность написания.';
       return;
     }
 
