@@ -142,9 +142,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
         <div>
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
             <label for="add-notes-input">${notesLabel}</label>
-            <span id="add-notes-len" style="color: var(--text-muted); font-size: 11px;">0/120</span>
+            <span id="add-notes-len" style="color: var(--text-muted); font-size: 11px;">0/60</span>
           </div>
-          <textarea id="add-notes-input" maxlength="120" rows="2" placeholder="Пример: cherry blossoms bloom in spring" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
+          <textarea id="add-notes-input" maxlength="60" rows="2" placeholder="Пример: cherry blossoms bloom in spring" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 8px;">
@@ -180,7 +180,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   function updateCounters() {
     if (wordLen) wordLen.textContent = `${wordInput.value.length}/35`;
     if (transLen) transLen.textContent = `${transInput.value.length}/60`;
-    if (notesLen) notesLen.textContent = `${notesInput.value.length}/120`;
+    if (notesLen) notesLen.textContent = `${notesInput.value.length}/60`;
   }
 
   let suggestTimeout = null;
