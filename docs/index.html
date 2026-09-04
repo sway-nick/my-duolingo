@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260904_v286';
+        var APP_BUILD = '20260904_v287';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -221,6 +221,31 @@
             } catch (err) {}
           }
         });
+      }
+
+      
+      function resetWordsProgressForPractice(words) {
+        if (!words || !Array.isArray(words) || words.length === 0) return;
+        try {
+          const userProg = getUserProgress();
+          words.forEach((w) => {
+            if (w && w.id) {
+              const id = String(w.id);
+              if (!userProg[id]) userProg[id] = {};
+              userProg[id].inputCorrect = 0;
+              userProg[id].quizCorrect = 0;
+              userProg[id].pairsCorrect = 0;
+              userProg[id].seenInCards = true;
+              userProg[id].learning = true;
+              userProg[id].mastered = false;
+            }
+          });
+          const currentUser = getCurrentUser();
+          const userId = userSettings.userId || (currentUser ? currentUser.id : (localStorage.getItem('myduo_guest_device_id') || 'guest'));
+          localStorage.setItem(`progress_${userId}`, JSON.stringify(userProg));
+        } catch (e) {
+          console.warn('Failed to reset words progress for practice:', e);
+        }
       }
 
       async function renderTrainingTab() {
@@ -1096,6 +1121,7 @@
           const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
           if (repeatFavsBtn) {
             repeatFavsBtn.addEventListener('click', () => {
+              window._showHubScreen = false;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               const favList = getUserFavorites();
@@ -1198,6 +1224,9 @@
             onFavoriteToggle: handleFavoriteToggle,
             onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
             onStartFavoritePractice: (practiceWords) => {
+              window._showHubScreen = false;
+              window._explicitCardsOpened = false;
+              window._trainingRoundJustCompleted = false;
               if (practiceWords && practiceWords.length > 0) {
                 favoritePracticeWords = [...practiceWords];
                 resetWordsProgressForPractice(practiceWords);
