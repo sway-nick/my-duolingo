@@ -419,13 +419,6 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       if (res && res.word && res.word.id) {
         try {
           await toggleFavoriteApi(res.word.id, true);
-          const favList = getUserFavorites();
-          if (!favList.includes(String(res.word.id))) {
-            favList.push(String(res.word.id));
-            const currentUser = getCurrentUser();
-            const userId = currentUser ? currentUser.id : (localStorage.getItem('myduo_guest_device_id') || 'guest');
-            localStorage.setItem(`favs_${userId}`, JSON.stringify(favList));
-          }
         } catch (e) {
           console.warn('Auto-favorite on create failed:', e);
         }

@@ -1960,39 +1960,108 @@ async function addCustomWord({ word, translation, category, notes }) {
 }
 
 async function suggestTranslations(word) {
-  if (!word || word.trim().length < 2) {
+  if (!word || String(word).trim().length < 2) {
     return { suggestions: [], category: 'Общие', transcription: '' };
   }
-  const clean = word.trim().toLowerCase();
-  const lang = getInterfaceLanguage ? getInterfaceLanguage() : 'ru';
-  const targetLang = lang === 'uk' ? 'uk' : (lang === 'de' ? 'de' : (lang === 'fr' ? 'fr' : (lang === 'es' ? 'es' : 'ru')));
+  const clean = String(word).trim().toLowerCase();
+
+  let targetLang = 'ru';
+  try {
+    const stored = localStorage.getItem('myduo_interface_lang');
+    if (stored && ['ru', 'uk', 'de', 'es', 'fr', 'pl', 'it', 'tr', 'pt'].includes(stored)) {
+      targetLang = stored;
+    }
+  } catch (e) {}
 
   try {
     // 1. Check local cached words first (0ms instantaneous)
     if (cachedWordsList && Array.isArray(cachedWordsList)) {
-      const match = cachedWordsList.find(w => w.word && w.word.toLowerCase() === clean);
-      if (match && match.translation) {
-        const parts = match.translation.split(/[,;\/]/).map(s => s.trim().toLowerCase()).filter(Boolean);
-        const unique = Array.from(new Set([match.translation.toLowerCase(), ...parts]));
-        return {
-          suggestions: unique.slice(0, 4),
-          category: match.category || 'Общие',
-          transcription: match.transcription || ''
-        };
+      const match = cachedWordsList.find((w) => w.word && w.word.toLowerCase() === clean);
+      if (match) {
+        let tVal = (match.translations && match.translations[targetLang]) || match.translation || '';
+        if (tVal) {
+          const parts = tVal.split(/[,;\/]/).map((s) => s.trim().toLowerCase()).filter(Boolean);
+          const unique = Array.from(new Set([tVal.toLowerCase(), ...parts]));
+          return {
+            suggestions: unique.slice(0, 4),
+            category: match.category || 'Общие',
+            transcription: match.transcription || '',
+          };
+        }
       }
     }
 
-    // 2. High-speed translation API (MyMemory)
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=en|${targetLang}`;
-    const res = await fetch(url).then(r => r.json());
-    if (res && res.responseData && res.responseData.translatedText) {
-      const rawMain = String(res.responseData.translatedText || '').trim().toLowerCase();
+    // 2. High-speed Google Translate API (gtx client) - instant, unblocked, supports multiple synonyms
+    const gtxUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&dt=at&q=${encodeURIComponent(clean)}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    const res = await fetch(gtxUrl, { signal: controller.signal }).then((r) => r.json());
+    clearTimeout(timeoutId);
+
+    const suggestions = [];
+    if (res && res[0] && res[0][0] && res[0][0][0]) {
+      const mainTrans = String(res[0][0][0]).trim().toLowerCase();
+      if (mainTrans && mainTrans !== clean) {
+        suggestions.push(mainTrans);
+      }
+    }
+
+    // Dictionary synonyms from res[1]
+    if (res && Array.isArray(res[1])) {
+      res[1].forEach((group) => {
+        if (group && Array.isArray(group[1])) {
+          group[1].forEach((syn) => {
+            const cleanSyn = String(syn || '').trim().toLowerCase();
+            if (cleanSyn && cleanSyn !== clean && !suggestions.includes(cleanSyn) && cleanSyn.length <= 30) {
+              suggestions.push(cleanSyn);
+            }
+          });
+        }
+      });
+    }
+
+    // Alternative variants from res[5]
+    if (res && Array.isArray(res[5])) {
+      res[5].forEach((item) => {
+        if (item && Array.isArray(item[2])) {
+          item[2].forEach((synGroup) => {
+            const cleanSyn = String(synGroup[0] || '').trim().toLowerCase();
+            if (cleanSyn && cleanSyn !== clean && !suggestions.includes(cleanSyn) && cleanSyn.length <= 30) {
+              suggestions.push(cleanSyn);
+            }
+          });
+        }
+      });
+    }
+
+    if (suggestions.length > 0) {
+      return {
+        suggestions: suggestions.slice(0, 4),
+        category: 'Общие',
+        transcription: '',
+      };
+    }
+  } catch (e) {
+    console.warn('Google Translate suggestions fallback:', e);
+  }
+
+  // 3. Fallback: MyMemory API
+  try {
+    const myMemoryUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=en|${targetLang}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const mmRes = await fetch(myMemoryUrl, { signal: controller.signal }).then((r) => r.json());
+    clearTimeout(timeoutId);
+
+    if (mmRes && mmRes.responseData && mmRes.responseData.translatedText) {
+      const rawMain = String(mmRes.responseData.translatedText || '').trim().toLowerCase();
       const suggestions = [];
       if (rawMain && rawMain !== clean && rawMain.length <= 40 && !rawMain.includes('mymemory')) {
         suggestions.push(rawMain);
       }
-      if (Array.isArray(res.matches)) {
-        res.matches.forEach(m => {
+      if (Array.isArray(mmRes.matches)) {
+        mmRes.matches.forEach((m) => {
           if (m.translation && typeof m.translation === 'string') {
             const t = m.translation.trim().toLowerCase();
             if (t && t !== clean && t.length <= 30 && !suggestions.includes(t) && !t.includes('mymemory') && !t.includes('http')) {
@@ -2005,12 +2074,12 @@ async function suggestTranslations(word) {
         return {
           suggestions: suggestions.slice(0, 4),
           category: 'Общие',
-          transcription: ''
+          transcription: '',
         };
       }
     }
-  } catch (e) {
-    console.warn('Translation suggestions fallback:', e);
+  } catch (err) {
+    console.warn('MyMemory fallback error:', err);
   }
 
   return { suggestions: [], category: 'Общие', transcription: '' };
