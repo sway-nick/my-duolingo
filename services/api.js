@@ -1982,7 +1982,7 @@ async function addCustomWord({ word, translation, category, notes }) {
     level: (cleanCat === 'Pattern' || cleanCat === 'Irregular verbs') ? '' : 'A2',
     transcription: '',
     notes: cleanNotes,
-    zipf: 4.2,
+    zipf: 0,
   };
 
   const payload = {
@@ -2054,7 +2054,7 @@ async function batchAddCustomWords(words = []) {
     level: (w.category === 'Pattern' || w.category === 'Irregular verbs') ? '' : String(w.level || 'A2').trim(),
     transcription: w.category === 'Pattern' ? '' : String(w.transcription || '').trim(),
     notes: String(w.notes || '').trim(),
-    zipf: parseFloat(w.zipf) || 4.2,
+    zipf: parseFloat(w.zipf) || 0,
   }));
 
   const payload = {
