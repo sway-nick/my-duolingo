@@ -1281,6 +1281,15 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
               favSet.add(String(aw.id));
             }
           });
+          const firstCat = addedWords[0]?.category;
+          if (firstCat && currentCategory !== 'All' && currentCategory !== firstCat) {
+            currentCategory = firstCat;
+            try {
+              localStorage.setItem('myduo_dict_category', currentCategory);
+            } catch (e) {}
+            if (dictLabel) dictLabel.textContent = getCatDisplayName(currentCategory);
+            renderCategoryOptions();
+          }
           filterAndResetList();
         }
       });
