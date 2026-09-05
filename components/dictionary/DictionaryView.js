@@ -76,8 +76,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
         <!-- 1b. Paste Text View -->
         <div id="scanner-paste-view" class="scanner-paste-view" style="display: none;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 13.5px; font-weight: 700; color: var(--text-main);">${t('scan_paste_btn')}</span>
+          <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
             <button type="button" id="scanner-clipboard-auto-btn" class="scanner-link-btn" style="font-size: 12.5px;">
               ${t('scan_paste_clipboard_btn')}
             </button>
