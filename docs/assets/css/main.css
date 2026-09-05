@@ -5819,12 +5819,146 @@ body.dark-theme #clear-app-cache-btn:hover {
 }
 
 .scanner-lemma-cat {
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
   background: rgba(100, 116, 139, 0.12);
   color: var(--text-muted, #64748b);
+  border: 1px solid rgba(100, 116, 139, 0.22);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.scanner-lemma-cat:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.scanner-lemma-cat.cat-pattern {
+  background: #f3e8ff;
+  color: #7e22ce;
+  border-color: #d8b4fe;
+}
+.scanner-lemma-cat.cat-irregular-verbs {
+  background: #ffedd5;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+.scanner-lemma-cat.cat-elementary {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+.scanner-lemma-cat.cat-intermediate {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+.scanner-lemma-cat.cat-advanced {
+  background: #ede9fe;
+  color: #4338ca;
+  border-color: #c7d2fe;
+}
+
+/* Translation Chips with Checkbox Toggles */
+.scanner-lemma-trans-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.scanner-trans-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--card-bg, #ffffff);
+  color: var(--text-main, #0f172a);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  font-family: inherit;
+}
+.scanner-trans-chip.selected {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #86efac;
+  font-weight: 700;
+}
+.scanner-trans-chip.unselected {
+  background: #f8fafc;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+.scanner-trans-chip:hover {
+  transform: translateY(-1px);
+}
+.scanner-chip-check {
+  font-size: 11px;
+  font-weight: 800;
+}
+.scanner-trans-chip.selected .scanner-chip-check {
+  color: #16a34a;
+}
+.scanner-trans-chip.unselected .scanner-chip-check {
+  color: #ef4444;
+}
+
+.scanner-trans-edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+.scanner-trans-edit-btn:hover {
+  opacity: 1;
+}
+
+.scanner-trans-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  width: 100%;
+}
+.scanner-trans-input {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 13px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 6px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-main, #0f172a);
+  font-family: inherit;
+}
+.scanner-trans-input:focus {
+  outline: none;
+  border-color: #22c55e;
+}
+.scanner-trans-done-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #22c55e;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .scanner-lemma-trans {

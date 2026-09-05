@@ -371,14 +371,50 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     currentNewLemmas = [];
     const existingLemmas = [];
 
-    allLemmas.forEach((item) => {
-      const wClean = String(item.word || '').trim().toLowerCase();
+    allLemmas.forEach((raw) => {
+      const wClean = String(raw.word || '').trim().toLowerCase();
       if (!wClean) return;
       if (existingWordsSet.has(wClean)) {
-        existingLemmas.push(item);
+        existingLemmas.push(raw);
       } else {
         if (!currentNewLemmas.some((x) => x.word.toLowerCase() === wClean)) {
-          currentNewLemmas.push(item);
+          const tokens = wClean.split(/\s+/).filter(Boolean);
+          let cat = String(raw.category || '').trim();
+
+          // Auto-detect Irregular verbs (3 forms) even if flagged as Pattern
+          if (tokens.length === 3 && (wClean.includes('/') || tokens.every((t) => t.length >= 2))) {
+            cat = 'Irregular verbs';
+          } else if (!cat) {
+            cat = tokens.length >= 2 ? 'Pattern' : 'Elementary';
+          }
+
+          const rawTrans = String(raw.translation || '').trim();
+          const splitParts = rawTrans
+            .split(/[,;\/]+/)
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean);
+          const uniqueVariants = [];
+          splitParts.forEach((p) => {
+            if (!uniqueVariants.includes(p)) uniqueVariants.push(p);
+          });
+          if (uniqueVariants.length === 0 && rawTrans) {
+            uniqueVariants.push(rawTrans.toLowerCase());
+          }
+
+          const isSpecialCategory = cat === 'Pattern' || cat === 'Irregular verbs';
+
+          currentNewLemmas.push({
+            word: wClean,
+            original: String(raw.original || raw.word || '').trim(),
+            category: cat,
+            level: isSpecialCategory ? '' : String(raw.level || 'A2').trim().toUpperCase(),
+            transcription: cat === 'Pattern' ? '' : String(raw.transcription || '').trim(),
+            context: String(raw.context || '').trim(),
+            translationVariants: uniqueVariants,
+            selectedVariants: new Set(uniqueVariants),
+            isEditingTrans: false,
+            customTranslation: uniqueVariants.join(', '),
+          });
         }
       }
     });
@@ -407,12 +443,39 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     lemmasList.innerHTML = currentNewLemmas
       .map((item, idx) => {
         const isChecked = selectedIndices.has(idx);
-        const levelBadge = item.level ? `<span class="scanner-lemma-level">${escapeHtml(item.level)}</span>` : '';
-        const catBadge = item.category ? `<span class="scanner-lemma-cat">${escapeHtml(item.category)}</span>` : '';
-        const ipaText = item.transcription ? `<span class="scanner-lemma-ipa">${escapeHtml(item.transcription)}</span>` : '';
+        const isSpecialCategory = item.category === 'Pattern' || item.category === 'Irregular verbs';
+        const levelBadge = (!isSpecialCategory && item.level) ? `<span class="scanner-lemma-level">${escapeHtml(item.level)}</span>` : '';
+        const catClass = `cat-${item.category.toLowerCase().replace(/\s+/g, '-')}`;
+        const catBadge = `<button type="button" class="scanner-lemma-cat ${catClass}" data-lemma-idx="${idx}" title="Нажмите, чтобы переключить категорию (${escapeHtml(item.category)})">${escapeHtml(item.category)} ⇄</button>`;
+        const ipaText = (!isSpecialCategory && item.transcription) ? `<span class="scanner-lemma-ipa">${escapeHtml(item.transcription)}</span>` : '';
         const origSnippet = item.original && item.original.toLowerCase() !== item.word.toLowerCase()
           ? `<span style="font-size: 11px; color: var(--text-muted);"> (в тексте: «${escapeHtml(item.original)}»)</span>`
           : '';
+
+        let transHtml = '';
+        if (item.isEditingTrans) {
+          transHtml = `
+            <div class="scanner-trans-edit-row">
+              <input type="text" class="scanner-trans-input" data-lemma-idx="${idx}" value="${escapeHtml(item.customTranslation)}" placeholder="Введите перевод через запятую..." />
+              <button type="button" class="scanner-trans-done-btn" data-lemma-idx="${idx}" title="Сохранить перевод">✓</button>
+            </div>
+          `;
+        } else {
+          transHtml = `
+            <div class="scanner-lemma-trans-chips">
+              ${item.translationVariants.map((v, vIdx) => {
+                const isVariantSelected = item.selectedVariants.has(v);
+                return `
+                  <button type="button" class="scanner-trans-chip ${isVariantSelected ? 'selected' : 'unselected'}" data-lemma-idx="${idx}" data-variant-idx="${vIdx}" title="Нажмите, чтобы включить/исключить вариант перевода">
+                    <span class="scanner-chip-check">${isVariantSelected ? '✓' : '✕'}</span>
+                    <span>${escapeHtml(v)}</span>
+                  </button>
+                `;
+              }).join('')}
+              <button type="button" class="scanner-trans-edit-btn" data-lemma-idx="${idx}" title="Редактировать перевод вручную">✏️</button>
+            </div>
+          `;
+        }
 
         return `
           <div class="scanner-lemma-item ${isChecked ? 'selected' : ''}" data-idx="${idx}">
@@ -425,7 +488,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
                 ${catBadge}
                 ${origSnippet}
               </div>
-              <div class="scanner-lemma-trans">${escapeHtml(item.translation)}</div>
+              ${transHtml}
               ${item.context ? `<div class="scanner-lemma-context">💬 «${escapeHtml(item.context)}»</div>` : ''}
             </div>
           </div>
@@ -453,7 +516,105 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     existingArrow.textContent = isHidden ? '▲' : '▼';
   });
 
+  lemmasList.addEventListener('input', (e) => {
+    if (e.target.classList.contains('scanner-trans-input')) {
+      const lemmaIdx = parseInt(e.target.getAttribute('data-lemma-idx'), 10);
+      const item = currentNewLemmas[lemmaIdx];
+      if (item) {
+        item.customTranslation = e.target.value;
+      }
+    }
+  });
+
   lemmasList.addEventListener('click', (e) => {
+    // 1. Category Badge Click -> Cycle Category
+    const catBtn = e.target.closest('.scanner-lemma-cat');
+    if (catBtn) {
+      e.stopPropagation();
+      const lemmaIdx = parseInt(catBtn.getAttribute('data-lemma-idx'), 10);
+      const item = currentNewLemmas[lemmaIdx];
+      if (item) {
+        const catCycle = ['Pattern', 'Irregular verbs', 'Elementary', 'Intermediate', 'Advanced'];
+        const curIdx = catCycle.indexOf(item.category);
+        if (curIdx === -1) {
+          item.category = item.category === 'Pattern' ? 'Irregular verbs' : 'Pattern';
+        } else {
+          item.category = catCycle[(curIdx + 1) % catCycle.length];
+        }
+
+        if (item.category === 'Pattern' || item.category === 'Irregular verbs') {
+          item.level = '';
+          if (item.category === 'Pattern') item.transcription = '';
+        } else if (!item.level) {
+          item.level = 'A2';
+        }
+
+        renderLemmasList();
+      }
+      return;
+    }
+
+    // 2. Translation Variant Chip Click -> Toggle Translation Variant Checkbox
+    const chipBtn = e.target.closest('.scanner-trans-chip');
+    if (chipBtn) {
+      e.stopPropagation();
+      const lemmaIdx = parseInt(chipBtn.getAttribute('data-lemma-idx'), 10);
+      const vIdx = parseInt(chipBtn.getAttribute('data-variant-idx'), 10);
+      const item = currentNewLemmas[lemmaIdx];
+      if (item && item.translationVariants[vIdx]) {
+        const v = item.translationVariants[vIdx];
+        if (item.selectedVariants.has(v)) {
+          if (item.selectedVariants.size > 1) {
+            item.selectedVariants.delete(v);
+          }
+        } else {
+          item.selectedVariants.add(v);
+        }
+        item.customTranslation = Array.from(item.selectedVariants).join(', ');
+        renderLemmasList();
+      }
+      return;
+    }
+
+    // 3. Edit Translation Button ✏️
+    const editBtn = e.target.closest('.scanner-trans-edit-btn');
+    if (editBtn) {
+      e.stopPropagation();
+      const lemmaIdx = parseInt(editBtn.getAttribute('data-lemma-idx'), 10);
+      const item = currentNewLemmas[lemmaIdx];
+      if (item) {
+        item.isEditingTrans = true;
+        renderLemmasList();
+        setTimeout(() => {
+          const input = lemmasList.querySelector(`.scanner-trans-input[data-lemma-idx="${lemmaIdx}"]`);
+          if (input) input.focus();
+        }, 50);
+      }
+      return;
+    }
+
+    // 4. Done Edit Translation Button ✓
+    const doneBtn = e.target.closest('.scanner-trans-done-btn');
+    if (doneBtn) {
+      e.stopPropagation();
+      const lemmaIdx = parseInt(doneBtn.getAttribute('data-lemma-idx'), 10);
+      const item = currentNewLemmas[lemmaIdx];
+      if (item) {
+        const input = lemmasList.querySelector(`.scanner-trans-input[data-lemma-idx="${lemmaIdx}"]`);
+        if (input) {
+          const val = input.value.trim();
+          item.customTranslation = val;
+          const splitParts = val.split(/[,;\/]+/).map((s) => s.trim().toLowerCase()).filter(Boolean);
+          item.translationVariants = splitParts.length > 0 ? splitParts : [val];
+          item.selectedVariants = new Set(item.translationVariants);
+        }
+        item.isEditingTrans = false;
+        renderLemmasList();
+      }
+      return;
+    }
+
+    // 5. Normal Item Selection Toggle
     const itemEl = e.target.closest('.scanner-lemma-item');
     if (!itemEl) return;
     const idx = parseInt(itemEl.getAttribute('data-idx'), 10);
@@ -496,7 +657,27 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   }
 
   submitBtn.addEventListener('click', async () => {
-    const selectedWords = Array.from(selectedIndices).map((idx) => currentNewLemmas[idx]);
+    const selectedWords = Array.from(selectedIndices).map((idx) => {
+      const item = currentNewLemmas[idx];
+      let finalTrans = '';
+      if (item.isEditingTrans) {
+        const input = lemmasList.querySelector(`.scanner-trans-input[data-lemma-idx="${idx}"]`);
+        finalTrans = (input ? input.value : item.customTranslation).trim();
+      } else {
+        finalTrans = Array.from(item.selectedVariants).join(', ').trim() || item.customTranslation.trim() || item.word;
+      }
+      if (!finalTrans) finalTrans = item.word;
+
+      return {
+        word: item.word,
+        original: item.original || item.word,
+        translation: finalTrans,
+        category: item.category,
+        level: (item.category === 'Pattern' || item.category === 'Irregular verbs') ? '' : item.level,
+        transcription: item.category === 'Pattern' ? '' : item.transcription,
+        context: item.context,
+      };
+    });
     if (selectedWords.length === 0) return;
 
     try {
