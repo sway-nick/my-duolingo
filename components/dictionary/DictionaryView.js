@@ -60,7 +60,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         <div id="scanner-upload-view" class="scanner-upload-view">
           <div class="scanner-dropzone" id="scanner-dropzone">
             <div class="scanner-dropzone-icon">📷</div>
-            <p class="scanner-dropzone-text">${t('scan_dropzone_text')}</p>
             <div class="scanner-action-buttons">
               <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-btn-camera">
                 ${t('scan_take_photo')}
