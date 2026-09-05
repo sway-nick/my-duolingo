@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=200.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage } from '../../services/api.js?v=200.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=200.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
 
 function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
@@ -1184,13 +1184,13 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     if (clean.includes('advanced')) return 4;
     return 999;
   };
-  const uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)))
+  let uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)))
     .sort((a, b) => {
       const diff = getCategoryOrderIndex(a) - getCategoryOrderIndex(b);
       if (diff !== 0) return diff;
       return a.localeCompare(b);
     });
-  const allCategories = ['All', ...uniqueCats];
+  let allCategories = ['All', ...uniqueCats];
 
   const savedDictCat = localStorage.getItem('myduo_dict_category') || 'Elementary';
   let currentCategory = savedDictCat;
@@ -1200,6 +1200,17 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   function getCatDisplayName(cat) {
     return cat === 'All' ? t('dict_filter_all') : cat;
+  }
+
+  function refreshCategories() {
+    uniqueCats = Array.from(new Set(words.map((w) => sanitizeCategory(w.category)).filter(Boolean)))
+      .sort((a, b) => {
+        const diff = getCategoryOrderIndex(a) - getCategoryOrderIndex(b);
+        if (diff !== 0) return diff;
+        return a.localeCompare(b);
+      });
+    allCategories = ['All', ...uniqueCats];
+    renderCategoryOptions();
   }
 
   const lang = getInterfaceLanguage();
@@ -1264,6 +1275,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
         if (!words.some((w) => String(w.id) === String(savedWord.id))) {
           words.unshift(savedWord);
         }
+        refreshCategories();
         filterAndResetList();
       });
     });
@@ -1288,8 +1300,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
               localStorage.setItem('myduo_dict_category', currentCategory);
             } catch (e) {}
             if (dictLabel) dictLabel.textContent = getCatDisplayName(currentCategory);
-            renderCategoryOptions();
           }
+          refreshCategories();
           filterAndResetList();
         }
       });
@@ -1328,22 +1340,33 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   if (dictMenu) {
     dictMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
       const item = e.target.closest('.custom-dropdown-item');
       if (!item) return;
       currentCategory = item.getAttribute('data-value') || 'All';
-      localStorage.setItem('myduo_dict_category', currentCategory);
-      if (currentCategory !== 'All' && currentCategory !== 'Все категории') {
-        getUserSettings().then((s) => {
-          if (s) {
-            s.category = currentCategory;
-            saveUserSettings(s);
-          }
-        }).catch(() => {});
-      }
+      try {
+        localStorage.setItem('myduo_dict_category', currentCategory);
+      } catch (err) {}
+
       if (dictLabel) dictLabel.textContent = getCatDisplayName(currentCategory);
       renderCategoryOptions();
       toggleDropdown(false);
       filterAndResetList();
+
+      if (currentCategory !== 'All' && currentCategory !== 'Все категории') {
+        try {
+          if (typeof getUserSettings === 'function') {
+            getUserSettings().then((s) => {
+              if (s) {
+                s.category = currentCategory;
+                if (typeof saveUserSettings === 'function') {
+                  saveUserSettings(s).catch(() => {});
+                }
+              }
+            }).catch(() => {});
+          }
+        } catch (err) {}
+      }
     });
   }
 
