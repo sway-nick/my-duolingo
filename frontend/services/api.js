@@ -1975,7 +1975,7 @@ async function addCustomWord({ word, translation, category, notes }) {
   let savedWord = localWord;
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 35000);
 
     const response = await fetch(`${API_URL}?route=addword`, {
       method: 'POST',
@@ -2044,7 +2044,7 @@ async function batchAddCustomWords(words = []) {
   let savedWords = [];
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 20000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     const response = await fetch(`${API_URL}?route=batchadd`, {
       method: 'POST',
