@@ -397,7 +397,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       submitBtn.disabled = true;
-      submitBtn.textContent = '⏳ Добавляю в словарь...';
+      submitBtn.innerHTML = '<span class="hourglass-flip">⏳</span> Добавляю в словарь...';
 
       const res = await batchAddCustomWords(selectedWords);
       const added = res.words || selectedWords;
@@ -850,7 +850,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = checkingBtnText;
+    submitBtn.innerHTML = `<span class="hourglass-flip">⏳</span> ${checkingBtnText}`;
 
     try {
       const res = await addCustomWord({ word, translation, category, notes });
@@ -1006,7 +1006,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       .map(
         (cat) => `
         <div class="custom-dropdown-item ${cat === currentCategory ? 'selected' : ''}" data-value="${cat}" role="option" aria-selected="${cat === currentCategory}">
-          ${getCatDisplayName(cat)}
+          <span class="dict-cat-text">${getCatDisplayName(cat)}</span>
+          ${cat === currentCategory ? '<span class="dict-cat-check">✓</span>' : ''}
         </div>
       `
       )
