@@ -444,7 +444,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       .map((item, idx) => {
         const isChecked = selectedIndices.has(idx);
         const isSpecialCategory = item.category === 'Pattern' || item.category === 'Irregular verbs';
-        const levelBadge = (!isSpecialCategory && item.level) ? `<span class="scanner-lemma-level">${escapeHtml(item.level)}</span>` : '';
         const catClass = `cat-${item.category.toLowerCase().replace(/\s+/g, '-')}`;
         const catBadge = `<button type="button" class="scanner-lemma-cat ${catClass}" data-lemma-idx="${idx}" title="Нажмите, чтобы переключить категорию (${escapeHtml(item.category)})">${escapeHtml(item.category)} ⇄</button>`;
         const ipaText = (!isSpecialCategory && item.transcription) ? `<span class="scanner-lemma-ipa">${escapeHtml(item.transcription)}</span>` : '';
@@ -484,7 +483,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
               <div class="scanner-lemma-head">
                 <span class="scanner-lemma-word">${escapeHtml(item.word)}</span>
                 ${ipaText}
-                ${levelBadge}
                 ${catBadge}
                 ${origSnippet}
               </div>
