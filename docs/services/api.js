@@ -2011,7 +2011,7 @@ async function batchAddCustomWords(words = []) {
   }
 }
 
-async function scanDocumentImage(imageBase64, mimeType = 'image/jpeg') {
+async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   let lang = 'ru';
   try {
     const stored = localStorage.getItem('myduo_interface_lang');
@@ -2020,13 +2020,20 @@ async function scanDocumentImage(imageBase64, mimeType = 'image/jpeg') {
     }
   } catch (e) {}
 
-  const payload = {
+  let payload = {
     action: 'scanimage',
     route: 'scanimage',
-    imageBase64: String(imageBase64 || '').trim(),
-    mimeType: mimeType || 'image/jpeg',
     lang: lang,
   };
+
+  if (typeof payloadInput === 'object' && payloadInput !== null) {
+    if (payloadInput.text) payload.text = String(payloadInput.text).trim();
+    if (payloadInput.imageBase64) payload.imageBase64 = String(payloadInput.imageBase64).trim();
+    if (payloadInput.mimeType) payload.mimeType = payloadInput.mimeType || 'image/jpeg';
+  } else if (typeof payloadInput === 'string') {
+    payload.imageBase64 = payloadInput.trim();
+    payload.mimeType = mimeType || 'image/jpeg';
+  }
 
   const response = await fetch(`${API_URL}?route=scanimage`, {
     method: 'POST',
@@ -2038,7 +2045,7 @@ async function scanDocumentImage(imageBase64, mimeType = 'image/jpeg') {
   if (json && json.success && json.data) {
     return json.data;
   } else {
-    throw new Error(json?.error || 'Не удалось распознать слова с фото');
+    throw new Error(json?.error || 'Не удалось распознать слова');
   }
 }
 

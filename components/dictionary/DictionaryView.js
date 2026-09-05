@@ -67,14 +67,37 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
                 ${t('scan_choose_gallery')}
               </button>
             </div>
+            <button type="button" id="scanner-open-paste-btn" class="scanner-btn-paste">
+              ${t('scan_paste_btn')}
+            </button>
           </div>
           <div id="scanner-error" class="scanner-error" style="display: none;"></div>
         </div>
 
+        <!-- 1b. Paste Text View -->
+        <div id="scanner-paste-view" class="scanner-paste-view" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 13.5px; font-weight: 700; color: var(--text-main);">${t('scan_paste_btn')}</span>
+            <button type="button" id="scanner-clipboard-auto-btn" class="scanner-link-btn" style="font-size: 12.5px;">
+              ${t('scan_paste_clipboard_btn')}
+            </button>
+          </div>
+          <textarea id="scanner-text-input" class="search-input" rows="6" placeholder="${t('scan_paste_placeholder')}" style="width: 100%; height: auto; min-height: 130px; max-height: 220px; padding: 12px; font-size: 14px; font-family: inherit; resize: vertical; box-sizing: border-box; line-height: 1.45; border-radius: var(--radius-md);"></textarea>
+          <div style="display: flex; gap: 10px; margin-top: 12px;">
+            <button type="button" id="scanner-paste-back-btn" class="primary-button scanner-btn-rescan">
+              ${t('scan_back_to_upload')}
+            </button>
+            <button type="button" id="scanner-paste-submit-btn" class="primary-button btn-green" style="flex: 1.5; min-height: 42px; font-size: 14px; font-weight: 700; border-radius: 10px;">
+              ${t('scan_paste_submit')}
+            </button>
+          </div>
+        </div>
+
         <!-- 2. Processing View -->
         <div id="scanner-processing-view" class="scanner-processing-view" style="display: none;">
-          <div class="scanner-preview-container">
-            <img id="scanner-preview-img" class="scanner-preview-img" alt="Scanned Document" />
+          <div class="scanner-preview-container" id="scanner-preview-container">
+            <img id="scanner-preview-img" class="scanner-preview-img" alt="Scanned Document" style="display: none;" />
+            <div id="scanner-text-icon-preview" style="display: none; padding: 24px; font-size: 42px; text-align: center;">📄</div>
             <div class="scanner-laser-line"></div>
           </div>
           <div class="scanner-processing-status">
@@ -127,9 +150,11 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   const closeBtn = modalEl.querySelector('#scanner-close-btn');
   const uploadView = modalEl.querySelector('#scanner-upload-view');
+  const pasteView = modalEl.querySelector('#scanner-paste-view');
   const processingView = modalEl.querySelector('#scanner-processing-view');
   const resultsView = modalEl.querySelector('#scanner-results-view');
   const previewImg = modalEl.querySelector('#scanner-preview-img');
+  const textIconPreview = modalEl.querySelector('#scanner-text-icon-preview');
   const errorBox = modalEl.querySelector('#scanner-error');
   const dropzone = modalEl.querySelector('#scanner-dropzone');
 
@@ -137,6 +162,12 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const galleryInput = modalEl.querySelector('#scanner-gallery-input');
   const takePhotoBtn = modalEl.querySelector('#scanner-take-photo-btn');
   const galleryBtn = modalEl.querySelector('#scanner-gallery-btn');
+  const openPasteBtn = modalEl.querySelector('#scanner-open-paste-btn');
+
+  const textInput = modalEl.querySelector('#scanner-text-input');
+  const clipboardAutoBtn = modalEl.querySelector('#scanner-clipboard-auto-btn');
+  const pasteBackBtn = modalEl.querySelector('#scanner-paste-back-btn');
+  const pasteSubmitBtn = modalEl.querySelector('#scanner-paste-submit-btn');
 
   const snippetBox = modalEl.querySelector('#scanner-snippet-box');
   const snippetText = modalEl.querySelector('#scanner-snippet-text');
@@ -189,6 +220,73 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     galleryInput.click();
   });
 
+  openPasteBtn.addEventListener('click', async () => {
+    hideError();
+    uploadView.style.display = 'none';
+    pasteView.style.display = 'block';
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        const clipText = await navigator.clipboard.readText();
+        if (clipText && clipText.trim().length > 0 && !textInput.value) {
+          textInput.value = clipText.trim();
+        }
+      }
+    } catch (e) {}
+
+    setTimeout(() => {
+      textInput.focus();
+    }, 100);
+  });
+
+  clipboardAutoBtn.addEventListener('click', async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        const clipText = await navigator.clipboard.readText();
+        if (clipText) {
+          textInput.value = clipText.trim();
+          textInput.focus();
+        }
+      } else {
+        showError('Буфер обмена недоступен через браузер. Вставьте текст вручную.');
+      }
+    } catch (e) {
+      showError('Не удалось прочитать буфер обмена. Вставьте текст вручную (Ctrl+V / долгое нажатие).');
+    }
+  });
+
+  pasteBackBtn.addEventListener('click', () => {
+    hideError();
+    pasteView.style.display = 'none';
+    uploadView.style.display = 'block';
+  });
+
+  pasteSubmitBtn.addEventListener('click', async () => {
+    const rawText = textInput.value.trim();
+    if (!rawText || rawText.length < 2) {
+      showError('Пожалуйста, введите или вставьте английский текст.');
+      return;
+    }
+
+    try {
+      hideError();
+      pasteView.style.display = 'none';
+      processingView.style.display = 'flex';
+      resultsView.style.display = 'none';
+      previewImg.style.display = 'none';
+      textIconPreview.style.display = 'block';
+
+      const res = await scanDocumentImage({ text: rawText });
+      displayResults(res);
+    } catch (err) {
+      console.error('Text scan error:', err);
+      pasteView.style.display = 'block';
+      processingView.style.display = 'none';
+      resultsView.style.display = 'none';
+      showError(err.message || 'Ошибка извлечения лемм. Попробуйте снова.');
+    }
+  });
+
   dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
     dropzone.classList.add('dragover');
@@ -216,6 +314,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   rescanBtn.addEventListener('click', () => {
     uploadView.style.display = 'block';
+    pasteView.style.display = 'none';
     processingView.style.display = 'none';
     resultsView.style.display = 'none';
     hideError();
@@ -230,8 +329,11 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     try {
       hideError();
       uploadView.style.display = 'none';
+      pasteView.style.display = 'none';
       processingView.style.display = 'flex';
       resultsView.style.display = 'none';
+      previewImg.style.display = 'block';
+      textIconPreview.style.display = 'none';
 
       const compressed = await compressImageFile(file, 1200, 0.82);
       previewImg.src = compressed.dataUrl;
@@ -241,6 +343,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     } catch (err) {
       console.error('Scan error:', err);
       uploadView.style.display = 'block';
+      pasteView.style.display = 'none';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
       showError(err.message || 'Ошибка распознавания. Проверьте фото и попробуйте снова.');
