@@ -2035,22 +2035,138 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
     payload.mimeType = mimeType || 'image/jpeg';
   }
 
-  const response = await fetch(`${API_URL}?route=scanimage`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload),
-  });
-
-  const json = await response.json();
-  if (json && json.success && json.data) {
-    return json.data;
-  } else {
-    let errMsg = json?.error || 'Не удалось распознать слова';
-    if (errMsg.includes('imageBase64')) {
-      errMsg = 'Для работы распознавания текста обновите Code.gs в Google Apps Script (скопируйте файл backend/dist/Code.gs).';
-    }
-    throw new Error(errMsg);
+  let resJson = null;
+  try {
+    const response = await fetch(`${API_URL}?route=scanimage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    });
+    resJson = await response.json();
+  } catch (err) {
+    console.warn('Backend scanimage fetch error:', err);
   }
+
+  if (resJson && resJson.success && resJson.data && Array.isArray(resJson.data.lemmas) && resJson.data.lemmas.length > 0) {
+    return resJson.data;
+  }
+
+  // If text extraction failed on backend (e.g. rate-limit or model overload), use graceful client-side fallback
+  if (payload.text && payload.text.trim().length >= 2) {
+    try {
+      console.log('Using client-side fast text lemma extractor fallback...');
+      return await clientSideExtractTextLemmas(payload.text, lang);
+    } catch (fallbackErr) {
+      console.warn('Client fallback error:', fallbackErr);
+    }
+  }
+
+  if (resJson && resJson.data) {
+    return resJson.data;
+  }
+
+  let errMsg = resJson?.error || 'Не удалось распознать слова';
+  if (errMsg.includes('imageBase64')) {
+    errMsg = 'Для работы распознавания текста обновите Code.gs в Google Apps Script (скопируйте файл backend/dist/Code.gs).';
+  }
+  throw new Error(errMsg);
+}
+
+async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
+  const lines = rawText.split(/[\r\n]+|[;•·\t]+/);
+  const items = [];
+  const seen = new Set();
+
+  for (let rawLine of lines) {
+    let line = rawLine.trim();
+    if (!line || line.length < 2) continue;
+
+    // Remove bullets/numbers e.g. "1. ", "- "
+    line = line.replace(/^[\d\.\-\*\#\>\s]+/, '').trim();
+    if (!line) continue;
+
+    let original = line;
+    let clean = line.replace(/^[^\w\s']+|[^\w\s']+$/g, '').trim();
+    if (!clean) continue;
+
+    let lemma = clean;
+    if (lemma.toLowerCase().startsWith('to ')) {
+      lemma = lemma.slice(3).trim();
+    } else if (lemma.toLowerCase().startsWith('a ')) {
+      lemma = lemma.slice(2).trim();
+    } else if (lemma.toLowerCase().startsWith('an ')) {
+      lemma = lemma.slice(3).trim();
+    } else if (lemma.toLowerCase().startsWith('the ')) {
+      lemma = lemma.slice(4).trim();
+    }
+
+    const key = lemma.toLowerCase();
+    if (!key || key.length < 2 || seen.has(key)) continue;
+    seen.add(key);
+
+    items.push({
+      word: key,
+      original: original,
+      context: original,
+    });
+    if (items.length >= 40) break;
+  }
+
+  if (items.length <= 1 && rawText.length > 50) {
+    const words = rawText.match(/[a-zA-Z']+/g) || [];
+    const stopWords = new Set(['the', 'and', 'for', 'that', 'this', 'with', 'you', 'are', 'was', 'were', 'have', 'has', 'had', 'from', 'they', 'what', 'when', 'where', 'which', 'who', 'will', 'would', 'could', 'should', 'about']);
+    for (const w of words) {
+      const lower = w.toLowerCase().trim();
+      if (lower.length > 2 && !stopWords.has(lower) && !seen.has(lower)) {
+        seen.add(lower);
+        items.push({
+          word: lower,
+          original: w,
+          context: '',
+        });
+        if (items.length >= 30) break;
+      }
+    }
+  }
+
+  const targetLang = lang === 'uk' ? 'uk' : (lang === 'en' ? 'en' : 'ru');
+  const lemmas = await Promise.all(
+    items.map(async (item) => {
+      try {
+        const gtxUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(item.word)}`;
+        const res = await fetch(gtxUrl).then((r) => r.json());
+        let translation = '';
+        if (res && res[0] && res[0][0] && res[0][0][0]) {
+          translation = String(res[0][0][0]).trim().toLowerCase();
+        }
+        return {
+          word: item.word,
+          original: item.original,
+          translation: translation || item.word,
+          transcription: '',
+          level: 'A2',
+          category: 'Общие',
+          context: item.context,
+        };
+      } catch (e) {
+        return {
+          word: item.word,
+          original: item.original,
+          translation: item.word,
+          transcription: '',
+          level: 'A2',
+          category: 'Общие',
+          context: item.context,
+        };
+      }
+    })
+  );
+
+  return {
+    detected_text_snippet: rawText.slice(0, 100),
+    lemmas: lemmas,
+    modelUsed: 'client-fallback',
+  };
 }
 
 async function suggestTranslations(word) {
