@@ -1959,6 +1959,89 @@ async function addCustomWord({ word, translation, category, notes }) {
   }
 }
 
+async function batchAddCustomWords(words = []) {
+  if (!Array.isArray(words) || words.length === 0) {
+    return { addedCount: 0, words: [] };
+  }
+
+  const payload = {
+    action: 'batchadd',
+    route: 'batchadd',
+    words: words.map((w) => ({
+      word: String(w.word || '').trim(),
+      translation: String(w.translation || '').trim(),
+      category: String(w.category || 'Общие').trim(),
+      level: String(w.level || 'A2').trim(),
+      transcription: String(w.transcription || '').trim(),
+      notes: String(w.notes || w.context || '').trim(),
+      zipf: parseFloat(w.zipf) || 4.2,
+    })),
+  };
+
+  const response = await fetch(`${API_URL}?route=batchadd`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+  });
+
+  const json = await response.json();
+  if (json && json.success && json.data) {
+    const savedWords = Array.isArray(json.data.words) ? json.data.words : [];
+    if (cachedWordsList && Array.isArray(cachedWordsList) && savedWords.length > 0) {
+      savedWords.forEach((sw) => {
+        const idx = cachedWordsList.findIndex(
+          (w) => String(w.id) === String(sw.id) || (w.word && w.word.toLowerCase() === sw.word.toLowerCase())
+        );
+        if (idx >= 0) {
+          cachedWordsList[idx] = { ...cachedWordsList[idx], ...sw };
+        } else {
+          cachedWordsList.unshift(sw);
+        }
+      });
+      try {
+        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+      } catch (e) {}
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+      }
+    }
+    return json.data;
+  } else {
+    throw new Error(json?.error || 'Не удалось сохранить пакет слов');
+  }
+}
+
+async function scanDocumentImage(imageBase64, mimeType = 'image/jpeg') {
+  let lang = 'ru';
+  try {
+    const stored = localStorage.getItem('myduo_interface_lang');
+    if (stored && ['ru', 'uk', 'en', 'de', 'es', 'fr'].includes(stored)) {
+      lang = stored;
+    }
+  } catch (e) {}
+
+  const payload = {
+    action: 'scanimage',
+    route: 'scanimage',
+    imageBase64: String(imageBase64 || '').trim(),
+    mimeType: mimeType || 'image/jpeg',
+    lang: lang,
+  };
+
+  const response = await fetch(`${API_URL}?route=scanimage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+  });
+
+  const json = await response.json();
+  if (json && json.success && json.data) {
+    return json.data;
+  } else {
+    throw new Error(json?.error || 'Не удалось распознать слова с фото');
+  }
+}
+
 async function suggestTranslations(word) {
   if (!word || String(word).trim().length < 2) {
     return { suggestions: [], category: 'Общие', transcription: '' };
@@ -2088,6 +2171,8 @@ async function suggestTranslations(word) {
 export {
   suggestTranslations,
   addCustomWord,
+  batchAddCustomWords,
+  scanDocumentImage,
   sendUserAnalytics,
   getHealth,
   getWords,

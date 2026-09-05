@@ -1,6 +1,427 @@
 import { speakWord } from '../../services/audioService.js?v=200.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations } from '../../services/api.js?v=200.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage } from '../../services/api.js?v=200.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
+
+function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve({
+          dataUrl,
+          base64: dataUrl.split(',')[1],
+          mimeType: 'image/jpeg',
+        });
+      };
+      img.onerror = () => reject(new Error('Не удалось прочитать файл изображения.'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Ошибка при чтении файла.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function openDocScannerModal(words = [], onWordsSaved = () => {}) {
+  const modalEl = document.createElement('div');
+  modalEl.id = 'doc-scanner-modal-overlay';
+  modalEl.className = 'scanner-modal-overlay';
+
+  modalEl.innerHTML = `
+    <div class="scanner-modal-card">
+      <div class="scanner-modal-header">
+        <h3 class="scanner-modal-title">${t('scan_modal_title')}</h3>
+        <button type="button" id="scanner-close-btn" class="scanner-close-btn" title="Закрыть">✕</button>
+      </div>
+
+      <div class="scanner-modal-body" id="scanner-modal-body">
+        <input type="file" id="scanner-camera-input" accept="image/*" capture="environment" style="display: none;" />
+        <input type="file" id="scanner-gallery-input" accept="image/*" style="display: none;" />
+
+        <!-- 1. Upload View -->
+        <div id="scanner-upload-view" class="scanner-upload-view">
+          <div class="scanner-dropzone" id="scanner-dropzone">
+            <div class="scanner-dropzone-icon">📷</div>
+            <p class="scanner-dropzone-text">${t('scan_dropzone_text')}</p>
+            <div class="scanner-action-buttons">
+              <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-btn-camera">
+                ${t('scan_take_photo')}
+              </button>
+              <button type="button" id="scanner-gallery-btn" class="primary-button scanner-btn-gallery">
+                ${t('scan_choose_gallery')}
+              </button>
+            </div>
+          </div>
+          <div id="scanner-error" class="scanner-error" style="display: none;"></div>
+        </div>
+
+        <!-- 2. Processing View -->
+        <div id="scanner-processing-view" class="scanner-processing-view" style="display: none;">
+          <div class="scanner-preview-container">
+            <img id="scanner-preview-img" class="scanner-preview-img" alt="Scanned Document" />
+            <div class="scanner-laser-line"></div>
+          </div>
+          <div class="scanner-processing-status">
+            <div class="scanner-spinner"></div>
+            <p class="scanner-processing-text">${t('scan_processing')}</p>
+          </div>
+        </div>
+
+        <!-- 3. Results View -->
+        <div id="scanner-results-view" class="scanner-results-view" style="display: none;">
+          <div id="scanner-snippet-box" class="scanner-snippet-box" style="display: none;">
+            <div class="scanner-snippet-header">${t('scan_snippet_title')}</div>
+            <p id="scanner-snippet-text" class="scanner-snippet-text"></p>
+          </div>
+
+          <div class="scanner-lemmas-header">
+            <h4 id="scanner-lemmas-count" class="scanner-lemmas-title">${t('scan_new_lemmas')}</h4>
+            <div class="scanner-select-actions">
+              <button type="button" id="scanner-select-all-btn" class="scanner-link-btn">${t('scan_select_all')}</button>
+              <span style="color: var(--text-muted); font-size: 11px;">•</span>
+              <button type="button" id="scanner-deselect-all-btn" class="scanner-link-btn">${t('scan_deselect_all')}</button>
+            </div>
+          </div>
+
+          <div id="scanner-lemmas-list" class="scanner-lemmas-list"></div>
+
+          <!-- Existing Words Collapsible -->
+          <div id="scanner-existing-box" class="scanner-existing-box" style="display: none;">
+            <div class="scanner-existing-header" id="scanner-existing-toggle">
+              <span id="scanner-existing-title">${t('scan_already_exists')} (0)</span>
+              <span class="scanner-existing-arrow" id="scanner-existing-arrow">▼</span>
+            </div>
+            <div id="scanner-existing-list" class="scanner-existing-list" style="display: none;"></div>
+          </div>
+
+          <div class="scanner-results-footer">
+            <button type="button" id="scanner-rescan-btn" class="primary-button scanner-btn-rescan">
+              ${t('scan_rescan_btn')}
+            </button>
+            <button type="button" id="scanner-submit-btn" class="primary-button btn-green scanner-btn-save">
+              ${t('scan_add_btn')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modalEl);
+
+  const closeBtn = modalEl.querySelector('#scanner-close-btn');
+  const uploadView = modalEl.querySelector('#scanner-upload-view');
+  const processingView = modalEl.querySelector('#scanner-processing-view');
+  const resultsView = modalEl.querySelector('#scanner-results-view');
+  const previewImg = modalEl.querySelector('#scanner-preview-img');
+  const errorBox = modalEl.querySelector('#scanner-error');
+  const dropzone = modalEl.querySelector('#scanner-dropzone');
+
+  const cameraInput = modalEl.querySelector('#scanner-camera-input');
+  const galleryInput = modalEl.querySelector('#scanner-gallery-input');
+  const takePhotoBtn = modalEl.querySelector('#scanner-take-photo-btn');
+  const galleryBtn = modalEl.querySelector('#scanner-gallery-btn');
+
+  const snippetBox = modalEl.querySelector('#scanner-snippet-box');
+  const snippetText = modalEl.querySelector('#scanner-snippet-text');
+  const lemmasCount = modalEl.querySelector('#scanner-lemmas-count');
+  const lemmasList = modalEl.querySelector('#scanner-lemmas-list');
+  const selectAllBtn = modalEl.querySelector('#scanner-select-all-btn');
+  const deselectAllBtn = modalEl.querySelector('#scanner-deselect-all-btn');
+
+  const existingBox = modalEl.querySelector('#scanner-existing-box');
+  const existingToggle = modalEl.querySelector('#scanner-existing-toggle');
+  const existingTitle = modalEl.querySelector('#scanner-existing-title');
+  const existingArrow = modalEl.querySelector('#scanner-existing-arrow');
+  const existingList = modalEl.querySelector('#scanner-existing-list');
+
+  const rescanBtn = modalEl.querySelector('#scanner-rescan-btn');
+  const submitBtn = modalEl.querySelector('#scanner-submit-btn');
+
+  let currentNewLemmas = [];
+  let selectedIndices = new Set();
+
+  const closeModal = () => {
+    modalEl.remove();
+  };
+
+  closeBtn.addEventListener('click', closeModal);
+  modalEl.addEventListener('click', (e) => {
+    if (e.target === modalEl) closeModal();
+  });
+
+  const showError = (msg) => {
+    if (errorBox) {
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+    }
+  };
+
+  const hideError = () => {
+    if (errorBox) errorBox.style.display = 'none';
+  };
+
+  takePhotoBtn.addEventListener('click', () => {
+    hideError();
+    cameraInput.value = '';
+    cameraInput.click();
+  });
+
+  galleryBtn.addEventListener('click', () => {
+    hideError();
+    galleryInput.value = '';
+    galleryInput.click();
+  });
+
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileSelected(e.dataTransfer.files[0]);
+    }
+  });
+
+  cameraInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileSelected(e.target.files[0]);
+    }
+  });
+
+  galleryInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileSelected(e.target.files[0]);
+    }
+  });
+
+  rescanBtn.addEventListener('click', () => {
+    uploadView.style.display = 'block';
+    processingView.style.display = 'none';
+    resultsView.style.display = 'none';
+    hideError();
+  });
+
+  async function handleFileSelected(file) {
+    if (!file || !file.type.startsWith('image/')) {
+      showError('Пожалуйста, выберите файл изображения (JPEG, PNG, WEBP).');
+      return;
+    }
+
+    try {
+      hideError();
+      uploadView.style.display = 'none';
+      processingView.style.display = 'flex';
+      resultsView.style.display = 'none';
+
+      const compressed = await compressImageFile(file, 1200, 0.82);
+      previewImg.src = compressed.dataUrl;
+
+      const res = await scanDocumentImage(compressed.base64, compressed.mimeType);
+      displayResults(res);
+    } catch (err) {
+      console.error('Scan error:', err);
+      uploadView.style.display = 'block';
+      processingView.style.display = 'none';
+      resultsView.style.display = 'none';
+      showError(err.message || 'Ошибка распознавания. Проверьте фото и попробуйте снова.');
+    }
+  }
+
+  function displayResults(data) {
+    processingView.style.display = 'none';
+    resultsView.style.display = 'block';
+
+    const snippet = String(data.detected_text_snippet || '').trim();
+    if (snippet) {
+      snippetBox.style.display = 'block';
+      snippetText.textContent = `«${snippet}»`;
+    } else {
+      snippetBox.style.display = 'none';
+    }
+
+    const allLemmas = Array.isArray(data.lemmas) ? data.lemmas : [];
+    const existingWordsSet = new Set(
+      words.map((w) => String(w.word || '').trim().toLowerCase())
+    );
+
+    currentNewLemmas = [];
+    const existingLemmas = [];
+
+    allLemmas.forEach((item) => {
+      const wClean = String(item.word || '').trim().toLowerCase();
+      if (!wClean) return;
+      if (existingWordsSet.has(wClean)) {
+        existingLemmas.push(item);
+      } else {
+        if (!currentNewLemmas.some((x) => x.word.toLowerCase() === wClean)) {
+          currentNewLemmas.push(item);
+        }
+      }
+    });
+
+    selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
+
+    renderLemmasList();
+    renderExistingSection(existingLemmas);
+    updateSubmitButton();
+  }
+
+  function renderLemmasList() {
+    lemmasCount.textContent = `${t('scan_new_lemmas')} (${currentNewLemmas.length})`;
+
+    if (currentNewLemmas.length === 0) {
+      lemmasList.innerHTML = `
+        <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); font-size: 14px;">
+          ${t('scan_no_new_words')}
+        </div>
+      `;
+      submitBtn.style.display = 'none';
+      return;
+    }
+
+    submitBtn.style.display = 'block';
+    lemmasList.innerHTML = currentNewLemmas
+      .map((item, idx) => {
+        const isChecked = selectedIndices.has(idx);
+        const levelBadge = item.level ? `<span class="scanner-lemma-level">${escapeHtml(item.level)}</span>` : '';
+        const catBadge = item.category ? `<span class="scanner-lemma-cat">${escapeHtml(item.category)}</span>` : '';
+        const ipaText = item.transcription ? `<span class="scanner-lemma-ipa">${escapeHtml(item.transcription)}</span>` : '';
+        const origSnippet = item.original && item.original.toLowerCase() !== item.word.toLowerCase()
+          ? `<span style="font-size: 11px; color: var(--text-muted);"> (в тексте: «${escapeHtml(item.original)}»)</span>`
+          : '';
+
+        return `
+          <div class="scanner-lemma-item ${isChecked ? 'selected' : ''}" data-idx="${idx}">
+            <input type="checkbox" class="scanner-lemma-checkbox" data-idx="${idx}" ${isChecked ? 'checked' : ''} />
+            <div class="scanner-lemma-content">
+              <div class="scanner-lemma-head">
+                <span class="scanner-lemma-word">${escapeHtml(item.word)}</span>
+                ${ipaText}
+                ${levelBadge}
+                ${catBadge}
+                ${origSnippet}
+              </div>
+              <div class="scanner-lemma-trans">${escapeHtml(item.translation)}</div>
+              ${item.context ? `<div class="scanner-lemma-context">💬 «${escapeHtml(item.context)}»</div>` : ''}
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  function renderExistingSection(existingLemmas) {
+    if (existingLemmas.length === 0) {
+      existingBox.style.display = 'none';
+      return;
+    }
+
+    existingBox.style.display = 'block';
+    existingTitle.textContent = `${t('scan_already_exists')} (${existingLemmas.length})`;
+    existingList.innerHTML = existingLemmas
+      .map((item) => `<span class="scanner-existing-chip">✔️ ${escapeHtml(item.word)}</span>`)
+      .join('');
+  }
+
+  existingToggle.addEventListener('click', () => {
+    const isHidden = existingList.style.display === 'none';
+    existingList.style.display = isHidden ? 'flex' : 'none';
+    existingArrow.textContent = isHidden ? '▲' : '▼';
+  });
+
+  lemmasList.addEventListener('click', (e) => {
+    const itemEl = e.target.closest('.scanner-lemma-item');
+    if (!itemEl) return;
+    const idx = parseInt(itemEl.getAttribute('data-idx'), 10);
+    const cb = itemEl.querySelector('.scanner-lemma-checkbox');
+
+    if (e.target !== cb) {
+      cb.checked = !cb.checked;
+    }
+
+    if (cb.checked) {
+      selectedIndices.add(idx);
+      itemEl.classList.add('selected');
+    } else {
+      selectedIndices.delete(idx);
+      itemEl.classList.remove('selected');
+    }
+
+    updateSubmitButton();
+  });
+
+  selectAllBtn.addEventListener('click', () => {
+    selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
+    lemmasList.querySelectorAll('.scanner-lemma-item').forEach((el) => el.classList.add('selected'));
+    lemmasList.querySelectorAll('.scanner-lemma-checkbox').forEach((cb) => (cb.checked = true));
+    updateSubmitButton();
+  });
+
+  deselectAllBtn.addEventListener('click', () => {
+    selectedIndices.clear();
+    lemmasList.querySelectorAll('.scanner-lemma-item').forEach((el) => el.classList.remove('selected'));
+    lemmasList.querySelectorAll('.scanner-lemma-checkbox').forEach((cb) => (cb.checked = false));
+    updateSubmitButton();
+  });
+
+  function updateSubmitButton() {
+    const count = selectedIndices.size;
+    submitBtn.textContent = `${t('scan_add_btn')} (${count})`;
+    submitBtn.disabled = count === 0;
+    submitBtn.style.opacity = count === 0 ? '0.5' : '1';
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    const selectedWords = Array.from(selectedIndices).map((idx) => currentNewLemmas[idx]);
+    if (selectedWords.length === 0) return;
+
+    try {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ Добавляю в словарь...';
+
+      const res = await batchAddCustomWords(selectedWords);
+      const added = res.words || selectedWords;
+
+      for (let i = 0; i < added.length; i++) {
+        const w = added[i];
+        if (w.id) {
+          toggleFavoriteApi(w.id, true).catch(() => {});
+        }
+      }
+
+      onWordsSaved(added);
+
+      submitBtn.textContent = `🎉 ${t('scan_added_success')}${added.length}!`;
+      setTimeout(() => {
+        closeModal();
+      }, 1100);
+    } catch (err) {
+      submitBtn.disabled = false;
+      updateSubmitButton();
+      showError(err.message || 'Ошибка сохранения слов');
+    }
+  });
+}
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -32,7 +453,7 @@ function formatWordCount(count) {
   return `${count} ${t('words')}`;
 }
 
-const BATCH_SIZE = 35; // Render 35 cards at a time for instant 60fps performance
+const BATCH_SIZE = 35;
 
 function renderWordCardHtml(w, isFav, prog) {
   const isMastered = isWordMastered(prog);
@@ -78,6 +499,7 @@ function renderWordCardHtml(w, isFav, prog) {
     </div>
   `;
 }
+
 
 function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) {
   const modalEl = document.createElement('div');
@@ -494,15 +916,21 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   }
 
   const lang = getInterfaceLanguage();
-  const addWordBtnText = lang === 'ru' ? '➕ Добавить слово' : lang === 'uk' ? '➕ Додати слово' : '➕ Add word';
+  const addWordBtnText = t('dict_add_word_btn') || (lang === 'ru' ? '➕ Добавить слово' : lang === 'uk' ? '➕ Додати слово' : '➕ Add word');
+  const scanBtnText = t('dict_scan_btn') || (lang === 'ru' ? '📷 Сканировать фото' : lang === 'uk' ? '📷 Сканувати фото' : '📷 Scan photo');
 
   container.innerHTML = `
     <div class="dictionary-page" style="width: 100%; max-width: 100%; box-sizing: border-box;">
       <div class="page-header" style="margin-bottom: 14px;">
         <h2 id="dict-header-title" style="margin: 0 0 10px; font-size: 21px;">${t('dict_title')} (<span id="dict-word-count">${formatWordCount(words.length)}</span>)</h2>
-        <button type="button" class="primary-button btn-green" id="dict-open-add-btn" style="width: 100%; min-height: 42px; font-size: 14px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;">
-          ${addWordBtnText}
-        </button>
+        <div class="dict-header-actions" style="display: flex; gap: 8px; width: 100%; box-sizing: border-box;">
+          <button type="button" class="primary-button btn-green" id="dict-open-add-btn" style="flex: 1; min-height: 42px; font-size: 13.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; padding: 0 8px;">
+            ${addWordBtnText}
+          </button>
+          <button type="button" class="primary-button" id="dict-open-scan-btn" style="flex: 1; min-height: 42px; font-size: 13.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; border: none; box-shadow: 0 3px 10px rgba(2,132,199,0.3); padding: 0 8px;">
+            ${scanBtnText}
+          </button>
+        </div>
       </div>
 
       <!-- Controls: Sticky Search & Category Filter -->
@@ -541,6 +969,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const dictLabel = container.querySelector('#dict-cat-label');
   const dictMenu = container.querySelector('#dict-cat-menu');
   const openAddBtn = container.querySelector('#dict-open-add-btn');
+  const openScanBtn = container.querySelector('#dict-open-scan-btn');
 
   if (openAddBtn) {
     openAddBtn.addEventListener('click', () => {
@@ -549,6 +978,24 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
           words.unshift(savedWord);
         }
         filterAndResetList();
+      });
+    });
+  }
+
+  if (openScanBtn) {
+    openScanBtn.addEventListener('click', () => {
+      openDocScannerModal(words, (addedWords) => {
+        if (Array.isArray(addedWords) && addedWords.length > 0) {
+          addedWords.forEach((aw) => {
+            if (!words.some((w) => String(w.id) === String(aw.id) || (w.word && w.word.toLowerCase() === aw.word.toLowerCase()))) {
+              words.unshift(aw);
+            }
+            if (aw.id) {
+              favSet.add(String(aw.id));
+            }
+          });
+          filterAndResetList();
+        }
       });
     });
   }
@@ -757,4 +1204,4 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   filterAndResetList();
 }
 
-export { renderDictionaryView, openAddWordModal };
+export { renderDictionaryView, openAddWordModal, openDocScannerModal };
