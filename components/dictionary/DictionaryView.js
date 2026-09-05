@@ -675,7 +675,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         category: item.category,
         level: (item.category === 'Pattern' || item.category === 'Irregular verbs') ? '' : item.level,
         transcription: item.category === 'Pattern' ? '' : item.transcription,
-        context: item.context,
+        notes: '',
       };
     });
     if (selectedWords.length === 0) return;

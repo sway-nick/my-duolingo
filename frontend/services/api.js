@@ -2031,7 +2031,7 @@ async function batchAddCustomWords(words = []) {
     category: String(w.category || 'Общие').trim(),
     level: (w.category === 'Pattern' || w.category === 'Irregular verbs') ? '' : String(w.level || 'A2').trim(),
     transcription: w.category === 'Pattern' ? '' : String(w.transcription || '').trim(),
-    notes: String(w.notes || w.context || '').trim(),
+    notes: String(w.notes || '').trim(),
     zipf: parseFloat(w.zipf) || 4.2,
   }));
 
