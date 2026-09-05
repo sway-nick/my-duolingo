@@ -1947,44 +1947,76 @@ if (typeof window !== 'undefined') {
 }
 
 async function addCustomWord({ word, translation, category, notes }) {
+  const cleanW = String(word || '').trim();
+  const cleanTrans = String(translation || '').trim();
+  const cleanCat = String(category || 'Общие').trim();
+  const cleanNotes = String(notes || '').trim();
+
+  const localWord = {
+    id: `custom_${Date.now()}`,
+    word: cleanW,
+    translation: cleanTrans,
+    category: cleanCat,
+    level: (cleanCat === 'Pattern' || cleanCat === 'Irregular verbs') ? '' : 'A2',
+    transcription: '',
+    notes: cleanNotes,
+    zipf: 4.2,
+  };
+
   const payload = {
     action: 'addword',
     route: 'addword',
-    word: String(word || '').trim(),
-    translation: String(translation || '').trim(),
-    category: String(category || 'Общие').trim(),
-    notes: String(notes || '').trim(),
+    word: cleanW,
+    translation: cleanTrans,
+    category: cleanCat,
+    notes: cleanNotes,
   };
 
-  const response = await fetch(`${API_URL}?route=addword`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload),
-  });
+  let savedWord = localWord;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  const json = await response.json();
-  if (json && json.success && json.data?.word) {
-    const savedWord = json.data.word;
-    if (cachedWordsList && Array.isArray(cachedWordsList)) {
-      const idx = cachedWordsList.findIndex(
-        (w) => String(w.id) === String(savedWord.id) || (w.word && w.word.toLowerCase() === savedWord.word.toLowerCase())
-      );
-      if (idx >= 0) {
-        cachedWordsList[idx] = { ...cachedWordsList[idx], ...savedWord };
-      } else {
-        cachedWordsList.unshift(savedWord);
-      }
-      try {
-        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
-      } catch (e) {}
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
-      }
+    const response = await fetch(`${API_URL}?route=addword`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    const json = await response.json();
+    if (json && json.success && json.data?.word) {
+      savedWord = json.data.word;
     }
-    return json.data;
-  } else {
-    throw new Error(json?.error || 'Не удалось сохранить слово');
+  } catch (err) {
+    console.warn('Network error during addCustomWord, saving locally:', err);
   }
+
+  if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
+    try {
+      cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+    } catch (e) {
+      cachedWordsList = [];
+    }
+  }
+
+  const idx = cachedWordsList.findIndex(
+    (w) => String(w.id) === String(savedWord.id) || (w.word && w.word.toLowerCase() === savedWord.word.toLowerCase())
+  );
+  if (idx >= 0) {
+    cachedWordsList[idx] = { ...cachedWordsList[idx], ...savedWord };
+  } else {
+    cachedWordsList.unshift(savedWord);
+  }
+  try {
+    localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+  } catch (e) {}
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+  }
+
+  return { word: savedWord };
 }
 
 async function batchAddCustomWords(words = []) {
@@ -1992,51 +2024,78 @@ async function batchAddCustomWords(words = []) {
     return { addedCount: 0, words: [] };
   }
 
+  const formattedWords = words.map((w, idx) => ({
+    id: w.id || `custom_${Date.now()}_${idx}`,
+    word: String(w.word || '').trim().toLowerCase(),
+    translation: String(w.translation || '').trim().toLowerCase(),
+    category: String(w.category || 'Общие').trim(),
+    level: (w.category === 'Pattern' || w.category === 'Irregular verbs') ? '' : String(w.level || 'A2').trim(),
+    transcription: w.category === 'Pattern' ? '' : String(w.transcription || '').trim(),
+    notes: String(w.notes || w.context || '').trim(),
+    zipf: parseFloat(w.zipf) || 4.2,
+  }));
+
   const payload = {
     action: 'batchadd',
     route: 'batchadd',
-    words: words.map((w) => ({
-      word: String(w.word || '').trim(),
-      translation: String(w.translation || '').trim(),
-      category: String(w.category || 'Общие').trim(),
-      level: String(w.level || 'A2').trim(),
-      transcription: String(w.transcription || '').trim(),
-      notes: String(w.notes || w.context || '').trim(),
-      zipf: parseFloat(w.zipf) || 4.2,
-    })),
+    words: formattedWords,
   };
 
-  const response = await fetch(`${API_URL}?route=batchadd`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload),
-  });
+  let savedWords = [];
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-  const json = await response.json();
-  if (json && json.success && json.data) {
-    const savedWords = Array.isArray(json.data.words) ? json.data.words : [];
-    if (cachedWordsList && Array.isArray(cachedWordsList) && savedWords.length > 0) {
-      savedWords.forEach((sw) => {
-        const idx = cachedWordsList.findIndex(
-          (w) => String(w.id) === String(sw.id) || (w.word && w.word.toLowerCase() === sw.word.toLowerCase())
-        );
-        if (idx >= 0) {
-          cachedWordsList[idx] = { ...cachedWordsList[idx], ...sw };
-        } else {
-          cachedWordsList.unshift(sw);
-        }
-      });
-      try {
-        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
-      } catch (e) {}
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
-      }
+    const response = await fetch(`${API_URL}?route=batchadd`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    const json = await response.json();
+    if (json && json.success && json.data) {
+      savedWords = Array.isArray(json.data.words) ? json.data.words : formattedWords;
+    } else {
+      console.warn('Batch add backend warning, using local fallback:', json?.error);
+      savedWords = formattedWords;
     }
-    return json.data;
-  } else {
-    throw new Error(json?.error || 'Не удалось сохранить пакет слов');
+  } catch (err) {
+    console.warn('Network error during batchAddCustomWords, saving locally:', err);
+    savedWords = formattedWords;
   }
+
+  if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
+    try {
+      cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+    } catch (e) {
+      cachedWordsList = [];
+    }
+  }
+
+  if (savedWords.length > 0) {
+    savedWords.forEach((sw) => {
+      const idx = cachedWordsList.findIndex(
+        (w) => String(w.id) === String(sw.id) || (w.word && w.word.toLowerCase() === sw.word.toLowerCase())
+      );
+      if (idx >= 0) {
+        cachedWordsList[idx] = { ...cachedWordsList[idx], ...sw };
+      } else {
+        cachedWordsList.unshift(sw);
+      }
+    });
+
+    try {
+      localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+    } catch (e) {}
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+    }
+  }
+
+  return { addedCount: savedWords.length, words: savedWords };
 }
 
 async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
