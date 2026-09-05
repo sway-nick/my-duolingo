@@ -528,11 +528,13 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 }
 
 function sanitizeCategory(cat) {
-  if (!cat) return 'Общие';
+  if (!cat) return 'Elementary';
+  const s = String(cat).trim();
+  if (['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'].includes(s)) {
+    return s;
+  }
   return (
-    String(cat)
-      .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
-      .trim() || String(cat).trim()
+    s.replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() || 'Elementary'
   );
 }
 
@@ -610,8 +612,8 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   modalEl.id = 'add-word-modal-overlay';
   modalEl.style.cssText = 'position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; backdrop-filter: blur(4px);';
 
-  // Extract exact unique category names from existing words in Google Sheet
-  const existingCats = Array.from(new Set(words.map((w) => String(w.category || '').trim()).filter(Boolean)));
+  const standardCats = ['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'];
+  const existingCats = Array.from(new Set([...standardCats, ...words.map((w) => String(w.category || '').trim()).filter(Boolean)]));
   existingCats.sort();
   if (existingCats.length === 0) existingCats.push('Elementary');
 

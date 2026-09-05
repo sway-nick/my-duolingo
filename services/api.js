@@ -2132,6 +2132,14 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
   const targetLang = lang === 'uk' ? 'uk' : (lang === 'en' ? 'en' : 'ru');
   const lemmas = await Promise.all(
     items.map(async (item) => {
+      const tokens = item.word.split(/\s+/).filter(Boolean);
+      let cat = 'Elementary';
+      if (tokens.length === 3 && (item.word.includes('/') || item.original.includes('/'))) {
+        cat = 'Irregular verbs';
+      } else if (tokens.length >= 2 && tokens.length <= 3) {
+        cat = 'Pattern';
+      }
+
       try {
         const gtxUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(item.word)}`;
         const res = await fetch(gtxUrl).then((r) => r.json());
@@ -2145,7 +2153,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
           translation: translation || item.word,
           transcription: '',
           level: 'A2',
-          category: 'Общие',
+          category: cat,
           context: item.context,
         };
       } catch (e) {
@@ -2155,7 +2163,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
           translation: item.word,
           transcription: '',
           level: 'A2',
-          category: 'Общие',
+          category: cat,
           context: item.context,
         };
       }
