@@ -483,8 +483,8 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
               <div class="scanner-lemma-head">
                 <span class="scanner-lemma-word">${escapeHtml(item.word)}</span>
                 ${ipaText}
-                ${catBadge}
                 ${origSnippet}
+                ${catBadge}
               </div>
               ${transHtml}
             </div>
