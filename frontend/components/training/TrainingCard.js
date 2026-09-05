@@ -2265,9 +2265,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }).then((prog) => {
         const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
         if (isCorrect) {
-          if (favorited) {
-            feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">✓ Правильно! Слово в Избранном ❤️</div>`;
-          } else if (inputCount >= 3) {
+          if (inputCount >= 3 && !favorited) {
             feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">🎉 Слово выучено!</div>`;
           }
         }
