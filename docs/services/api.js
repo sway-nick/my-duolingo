@@ -1279,6 +1279,16 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   }
 }
 
+async function clearAllFavoritesApi() {
+  const userId = getEffectiveUserId();
+  const key = `favs_${userId}`;
+  localStorage.setItem(key, JSON.stringify([]));
+  pushUserDataToCloud(userId);
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: [] }));
+  }
+}
+
 function isWordMastered(prog) {
   if (!prog) return false;
   return Boolean(
@@ -2436,6 +2446,7 @@ const ApiService = {
   prepareTrainingBatch,
   flushProgressQueue,
   toggleFavoriteApi,
+  clearAllFavoritesApi,
   getUserStats,
   getGlobalWordOfTheDay,
   getUserSettings,
@@ -2485,6 +2496,7 @@ export {
   prepareTrainingBatch,
   flushProgressQueue,
   toggleFavoriteApi,
+  clearAllFavoritesApi,
   getUserStats,
   getGlobalWordOfTheDay,
   getUserSettings,

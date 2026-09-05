@@ -1245,6 +1245,9 @@
           renderFavoritesView(favWords, '#app-content', {
             onFavoriteToggle: handleFavoriteToggle,
             onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
+            onClearAllFavorites: () => {
+              favoriteIds.clear();
+            },
             onStartFavoritePractice: (practiceWords) => {
               window._showHubScreen = false;
               window._explicitCardsOpened = false;

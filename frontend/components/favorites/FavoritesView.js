@@ -1,12 +1,12 @@
 import { speakWord } from '../../services/audioService.js?v=200.0';
-import { toggleFavoriteApi } from '../../services/api.js?v=200.0';
+import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=200.0';
 import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
-  const { onStartFavoritePractice = () => {}, onRemoveFavorite = () => {} } = options;
+  const { onStartFavoritePractice = () => {}, onRemoveFavorite = () => {}, onClearAllFavorites = () => {} } = options;
 
   if (!favoriteWords || favoriteWords.length === 0) {
     container.innerHTML = `
@@ -32,11 +32,16 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         <h2 style="font-size: 22px; margin: 0; white-space: nowrap;">${t('fav_title')} (${favoriteWords.length})</h2>
       </div>
 
-      <!-- Sticky Repeat Button -->
+      <!-- Sticky Repeat & Clear Buttons -->
       <div class="fav-sticky-controls">
-        <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-height: 44px; height: 44px; font-size: 16px; font-weight: 700;">
-          ${t('fav_practice_btn')}
-        </button>
+        <div style="display: flex; gap: 8px; width: 100%; align-items: stretch;">
+          <button class="primary-button btn-green" id="start-fav-practice-btn" style="flex: 1; min-height: 44px; height: 44px; font-size: 15px; font-weight: 700; white-space: nowrap; padding: 0 12px;">
+            ${t('fav_practice_btn')}
+          </button>
+          <button class="secondary-button" id="clear-all-favs-btn" style="min-height: 44px; height: 44px; font-size: 14px; font-weight: 600; white-space: nowrap; padding: 0 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; border-radius: 12px;">
+            🤍 ${t('fav_clear_all_btn')}
+          </button>
+        </div>
       </div>
 
       <div class="favorites-grid" id="favorites-grid">
@@ -79,6 +84,17 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   // Bind practice button
   container.querySelector('#start-fav-practice-btn')?.addEventListener('click', () => {
     onStartFavoritePractice(favoriteWords);
+  });
+
+  // Bind clear all favorites button
+  container.querySelector('#clear-all-favs-btn')?.addEventListener('click', async () => {
+    if (!window.confirm(t('fav_clear_confirm'))) return;
+    await clearAllFavoritesApi();
+    onClearAllFavorites();
+    favoriteWords.forEach((w) => {
+      if (w && w.id) onRemoveFavorite(w.id);
+    });
+    renderFavoritesView([], containerSelector, options);
   });
 
   // High-performance single event delegation on grid
