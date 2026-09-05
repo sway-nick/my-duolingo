@@ -487,7 +487,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
                 ${origSnippet}
               </div>
               ${transHtml}
-              ${item.context ? `<div class="scanner-lemma-context">💬 «${escapeHtml(item.context)}»</div>` : ''}
             </div>
           </div>
         `;
