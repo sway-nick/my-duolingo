@@ -108,17 +108,15 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
         <!-- 3. Results View -->
         <div id="scanner-results-view" class="scanner-results-view" style="display: none;">
-          <div id="scanner-snippet-box" class="scanner-snippet-box" style="display: none;">
-            <div class="scanner-snippet-header">${t('scan_snippet_title')}</div>
-            <p id="scanner-snippet-text" class="scanner-snippet-text"></p>
-          </div>
-
-          <div class="scanner-lemmas-header">
-            <h4 id="scanner-lemmas-count" class="scanner-lemmas-title">${t('scan_new_lemmas')}</h4>
+          <div class="scanner-lemmas-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
+            <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="Сменить категорию для всех слов">
+              <span style="opacity: 0.75;">🏷️ Все:</span>
+              <strong id="scanner-group-cat-label" class="scanner-group-cat-label">Elementary ⇄</strong>
+            </button>
             <div class="scanner-select-actions">
-              <button type="button" id="scanner-select-all-btn" class="scanner-link-btn">${t('scan_select_all')}</button>
-              <span style="color: var(--text-muted); font-size: 11px;">•</span>
-              <button type="button" id="scanner-deselect-all-btn" class="scanner-link-btn">${t('scan_deselect_all')}</button>
+              <button type="button" id="scanner-toggle-select-btn" class="scanner-link-btn" style="font-size: 13px; font-weight: 700;">
+                ${t('scan_deselect_all')}
+              </button>
             </div>
           </div>
 
@@ -169,12 +167,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const pasteBackBtn = modalEl.querySelector('#scanner-paste-back-btn');
   const pasteSubmitBtn = modalEl.querySelector('#scanner-paste-submit-btn');
 
-  const snippetBox = modalEl.querySelector('#scanner-snippet-box');
-  const snippetText = modalEl.querySelector('#scanner-snippet-text');
-  const lemmasCount = modalEl.querySelector('#scanner-lemmas-count');
+  const groupCatBtn = modalEl.querySelector('#scanner-group-cat-btn');
+  const groupCatLabel = modalEl.querySelector('#scanner-group-cat-label');
   const lemmasList = modalEl.querySelector('#scanner-lemmas-list');
-  const selectAllBtn = modalEl.querySelector('#scanner-select-all-btn');
-  const deselectAllBtn = modalEl.querySelector('#scanner-deselect-all-btn');
+  const toggleSelectBtn = modalEl.querySelector('#scanner-toggle-select-btn');
 
   const existingBox = modalEl.querySelector('#scanner-existing-box');
   const existingToggle = modalEl.querySelector('#scanner-existing-toggle');
@@ -187,6 +183,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   let currentNewLemmas = [];
   let selectedIndices = new Set();
+  let currentGroupCategory = 'Elementary';
 
   const closeModal = () => {
     modalEl.remove();
@@ -354,14 +351,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     processingView.style.display = 'none';
     resultsView.style.display = 'block';
 
-    const snippet = String(data.detected_text_snippet || '').trim();
-    if (snippet) {
-      snippetBox.style.display = 'block';
-      snippetText.textContent = `«${snippet}»`;
-    } else {
-      snippetBox.style.display = 'none';
-    }
-
     const allLemmas = Array.isArray(data.lemmas) ? data.lemmas : [];
     const existingWordsSet = new Set(
       words.map((w) => String(w.word || '').trim().toLowerCase())
@@ -369,6 +358,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     currentNewLemmas = [];
     const existingLemmas = [];
+    const catCounts = {};
 
     allLemmas.forEach((raw) => {
       const wClean = String(raw.word || '').trim().toLowerCase();
@@ -377,29 +367,14 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         existingLemmas.push(raw);
       } else {
         if (!currentNewLemmas.some((x) => x.word.toLowerCase() === wClean)) {
-          const tokens = wClean.split(/\s+/).filter(Boolean);
-          let cat = String(raw.category || '').trim();
-
-          // Auto-detect Irregular verbs (3 forms) even if flagged as Pattern
-          if (tokens.length === 3 && (wClean.includes('/') || tokens.every((t) => t.length >= 2))) {
-            cat = 'Irregular verbs';
-          } else if (!cat) {
-            cat = tokens.length >= 2 ? 'Pattern' : 'Elementary';
-          }
-
           const rawTrans = String(raw.translation || '').trim();
-          const splitParts = rawTrans
-            .split(/[,;\/]+/)
-            .map((s) => s.trim().toLowerCase())
-            .filter(Boolean);
-          const uniqueVariants = [];
-          splitParts.forEach((p) => {
-            if (!uniqueVariants.includes(p)) uniqueVariants.push(p);
-          });
-          if (uniqueVariants.length === 0 && rawTrans) {
+          let uniqueVariants = [];
+          if (rawTrans) {
             uniqueVariants.push(rawTrans.toLowerCase());
           }
 
+          let cat = sanitizeCategory(raw.category);
+          catCounts[cat] = (catCounts[cat] || 0) + 1;
           const isSpecialCategory = cat === 'Pattern' || cat === 'Irregular verbs';
 
           currentNewLemmas.push({
@@ -418,6 +393,18 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       }
     });
 
+    // Set initial group category based on dominant category
+    let topCat = 'Elementary';
+    let topCount = 0;
+    Object.keys(catCounts).forEach((c) => {
+      if (catCounts[c] > topCount) {
+        topCount = catCounts[c];
+        topCat = c;
+      }
+    });
+    currentGroupCategory = topCat;
+    if (groupCatLabel) groupCatLabel.textContent = `${currentGroupCategory} ⇄`;
+
     selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
 
     renderLemmasList();
@@ -426,8 +413,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   }
 
   function renderLemmasList() {
-    lemmasCount.textContent = `${t('scan_new_lemmas')} (${currentNewLemmas.length})`;
-
     if (currentNewLemmas.length === 0) {
       lemmasList.innerHTML = `
         <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); font-size: 14px;">
@@ -435,9 +420,13 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         </div>
       `;
       submitBtn.style.display = 'none';
+      if (groupCatBtn) groupCatBtn.style.display = 'none';
+      if (toggleSelectBtn) toggleSelectBtn.style.display = 'none';
       return;
     }
 
+    if (groupCatBtn) groupCatBtn.style.display = 'inline-flex';
+    if (toggleSelectBtn) toggleSelectBtn.style.display = 'inline-block';
     submitBtn.style.display = 'block';
     lemmasList.innerHTML = currentNewLemmas
       .map((item, idx) => {
@@ -631,25 +620,61 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     updateSubmitButton();
   });
 
-  selectAllBtn.addEventListener('click', () => {
-    selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
-    lemmasList.querySelectorAll('.scanner-lemma-item').forEach((el) => el.classList.add('selected'));
-    lemmasList.querySelectorAll('.scanner-lemma-checkbox').forEach((cb) => (cb.checked = true));
-    updateSubmitButton();
-  });
+  // Group Category Cycler (all words at once)
+  if (groupCatBtn) {
+    groupCatBtn.addEventListener('click', () => {
+      const catCycle = ['Elementary', 'Intermediate', 'Advanced', 'Pattern', 'Irregular verbs'];
+      const curIdx = catCycle.indexOf(currentGroupCategory);
+      currentGroupCategory = catCycle[(curIdx + 1) % catCycle.length];
+      if (groupCatLabel) {
+        groupCatLabel.textContent = `${currentGroupCategory} ⇄`;
+      }
 
-  deselectAllBtn.addEventListener('click', () => {
-    selectedIndices.clear();
-    lemmasList.querySelectorAll('.scanner-lemma-item').forEach((el) => el.classList.remove('selected'));
-    lemmasList.querySelectorAll('.scanner-lemma-checkbox').forEach((cb) => (cb.checked = false));
-    updateSubmitButton();
-  });
+      currentNewLemmas.forEach((item) => {
+        item.category = currentGroupCategory;
+        if (currentGroupCategory === 'Pattern' || currentGroupCategory === 'Irregular verbs') {
+          item.level = '';
+          if (currentGroupCategory === 'Pattern') item.transcription = '';
+        } else if (currentGroupCategory === 'Elementary') {
+          item.level = 'A2';
+        } else if (currentGroupCategory === 'Intermediate') {
+          item.level = 'B1';
+        } else if (currentGroupCategory === 'Advanced') {
+          item.level = 'C1';
+        }
+      });
+
+      renderLemmasList();
+    });
+  }
+
+  // Single Toggle Select Button (Select all / Deselect all)
+  if (toggleSelectBtn) {
+    toggleSelectBtn.addEventListener('click', () => {
+      const allSelected = selectedIndices.size === currentNewLemmas.length && currentNewLemmas.length > 0;
+      if (allSelected) {
+        selectedIndices.clear();
+        lemmasList.querySelectorAll('.scanner-lemma-item').forEach((el) => el.classList.remove('selected'));
+        lemmasList.querySelectorAll('.scanner-lemma-checkbox').forEach((cb) => (cb.checked = false));
+      } else {
+        selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
+        lemmasList.querySelectorAll('.scanner-lemma-item').forEach((el) => el.classList.add('selected'));
+        lemmasList.querySelectorAll('.scanner-lemma-checkbox').forEach((cb) => (cb.checked = true));
+      }
+      updateSubmitButton();
+    });
+  }
 
   function updateSubmitButton() {
     const count = selectedIndices.size;
     submitBtn.textContent = `${t('scan_add_btn')} (${count})`;
     submitBtn.disabled = count === 0;
     submitBtn.style.opacity = count === 0 ? '0.5' : '1';
+
+    if (toggleSelectBtn) {
+      const allSelected = count === currentNewLemmas.length && currentNewLemmas.length > 0;
+      toggleSelectBtn.textContent = allSelected ? t('scan_deselect_all') : t('scan_select_all');
+    }
   }
 
   submitBtn.addEventListener('click', async () => {
