@@ -54,6 +54,8 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         <input type="file" id="scanner-camera-input" accept="image/*" capture="environment" style="display: none;" />
         <input type="file" id="scanner-gallery-input" accept="image/*" style="display: none;" />
 
+        <div id="scanner-error" class="scanner-error" style="display: none; margin-bottom: 12px;"></div>
+
         <!-- 1. Upload View -->
         <div id="scanner-upload-view" class="scanner-upload-view">
           <div class="scanner-dropzone" id="scanner-dropzone">
@@ -71,7 +73,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
               ${t('scan_paste_btn')}
             </button>
           </div>
-          <div id="scanner-error" class="scanner-error" style="display: none;"></div>
         </div>
 
         <!-- 1b. Paste Text View -->

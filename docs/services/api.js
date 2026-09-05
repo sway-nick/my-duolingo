@@ -2045,7 +2045,11 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   if (json && json.success && json.data) {
     return json.data;
   } else {
-    throw new Error(json?.error || 'Не удалось распознать слова');
+    let errMsg = json?.error || 'Не удалось распознать слова';
+    if (errMsg.includes('imageBase64')) {
+      errMsg = 'Для работы распознавания текста обновите Code.gs в Google Apps Script (скопируйте файл backend/dist/Code.gs).';
+    }
+    throw new Error(errMsg);
   }
 }
 
