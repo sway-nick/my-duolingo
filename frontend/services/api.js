@@ -139,6 +139,15 @@ async function getWords(forceRefresh = false) {
           .then((res) => res.json())
           .then((data) => {
             if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+              const serverWordSet = new Set(data.data.map((w) => String(w.word || '').toLowerCase().trim()));
+              const unsyncedLocal = (cachedWordsList || []).filter(
+                (w) => w && w.word && !serverWordSet.has(String(w.word).toLowerCase().trim()) && String(w.id || '').startsWith('custom_')
+              );
+              if (unsyncedLocal.length > 0) {
+                data.data.unshift(...unsyncedLocal);
+                batchAddCustomWords(unsyncedLocal).catch(() => {});
+              }
+
               sanitizeTranscriptions(data.data);
               applyMultilingualTranslations(data.data);
               sortByZipf(data.data);
@@ -159,6 +168,19 @@ async function getWords(forceRefresh = false) {
     const response = await fetch(`${API_URL}?route=words&lang=${currentLang}`);
     const data = await response.json();
     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      let localCached = [];
+      try {
+        localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+      } catch (e) {}
+      const serverWordSet = new Set(data.data.map((w) => String(w.word || '').toLowerCase().trim()));
+      const unsyncedLocal = localCached.filter(
+        (w) => w && w.word && !serverWordSet.has(String(w.word).toLowerCase().trim()) && String(w.id || '').startsWith('custom_')
+      );
+      if (unsyncedLocal.length > 0) {
+        data.data.unshift(...unsyncedLocal);
+        batchAddCustomWords(unsyncedLocal).catch(() => {});
+      }
+
       sanitizeTranscriptions(data.data);
       applyMultilingualTranslations(data.data);
       sortByZipf(data.data);
