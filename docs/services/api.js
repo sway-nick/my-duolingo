@@ -2136,7 +2136,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
       let cat = 'Elementary';
       if (tokens.length === 3 && (item.word.includes('/') || item.original.includes('/'))) {
         cat = 'Irregular verbs';
-      } else if (tokens.length >= 2 && tokens.length <= 3) {
+      } else if (tokens.length >= 2) {
         cat = 'Pattern';
       }
 
