@@ -673,6 +673,31 @@ function resetAudioCounter() {
 
 const playAudio = speakWord;
 
+export const AudioService = {
+  speakWord,
+  playAudio,
+  preloadWordAudio,
+  resetAudioCounter,
+  playSuccessSound,
+  playErrorSound,
+  playCasinoRollSound,
+  playCoinDropSound,
+  playFanfareSound,
+  playStopwatchTickSound,
+  playFartSound,
+  setSavedVoiceGender,
+  getSavedVoiceGender,
+  setSavedVoiceAccent,
+  getSavedVoiceAccent,
+  isAudioMuted,
+  setSavedSilentMode,
+  isSfxMuted,
+  setSavedSfxMuted,
+  isWordAudioPlaying,
+};
+
+export default AudioService;
+
 export {
   speakWord,
   playAudio,

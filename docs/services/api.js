@@ -1906,14 +1906,14 @@ async function sendUserAnalytics() {
 }
 
 let _analyticsDebounceTimer = null;
-export function sendUserAnalyticsDebounced(delay = 1000) {
+function sendUserAnalyticsDebounced(delay = 1000) {
   if (_analyticsDebounceTimer) clearTimeout(_analyticsDebounceTimer);
   _analyticsDebounceTimer = setTimeout(() => {
     sendUserAnalytics();
   }, delay);
 }
 
-export function trackRoundCompleted(targetUserId) {
+function trackRoundCompleted(targetUserId) {
   try {
     const uid = targetUserId || getEffectiveUserId();
     const roundKey = `myduo_rounds_count_${uid}`;
@@ -2331,7 +2331,56 @@ async function suggestTranslations(word) {
   return { suggestions: [], category: 'Общие', transcription: '' };
 }
 
+const ApiService = {
+  suggestTranslations,
+  addCustomWord,
+  batchAddCustomWords,
+  scanDocumentImage,
+  sendUserAnalytics,
+  getHealth,
+  getWords,
+  registerUser,
+  loginUser,
+  googleAuthUser,
+  saveProgress,
+  getUserProgress,
+  getUserFavorites,
+  isWordMastered,
+  isWordLearning,
+  getWordStage,
+  getQueueForCards,
+  getQueueForQuiz,
+  getQueueForPairs,
+  getQueueForTest,
+  prepareTrainingBatch,
+  flushProgressQueue,
+  toggleFavoriteApi,
+  getUserStats,
+  getGlobalWordOfTheDay,
+  getUserSettings,
+  saveUserSettings,
+  resetWordsProgressForPractice,
+  getEffectiveUserId,
+  getLeaderboard,
+  getCachedLeaderboard,
+  getUserWeeklyXP,
+  addWeeklyXP,
+  getUserWeeklyRank,
+  formatCompactXp,
+  getIsoWeekKey,
+  fetchUserDataFromCloud,
+  pushUserDataToCloud,
+  transcribeAudio,
+  transcribePingAudio,
+  getCloudWordOfTheDayId,
+  trackRoundCompleted,
+  sendUserAnalyticsDebounced,
+};
+
+export default ApiService;
+
 export {
+  ApiService,
   suggestTranslations,
   addCustomWord,
   batchAddCustomWords,
