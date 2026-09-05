@@ -752,8 +752,7 @@
 
           if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
             try {
-              const roundKey = 'myduo_rounds_count_' + getEffectiveUserId();
-              localStorage.setItem(roundKey, String(Number(localStorage.getItem(roundKey) || 0) + 1));
+              trackRoundCompleted(getEffectiveUserId());
             } catch (e) {}
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();

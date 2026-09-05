@@ -1905,15 +1905,43 @@ async function sendUserAnalytics() {
   }
 }
 
+let _analyticsDebounceTimer = null;
+export function sendUserAnalyticsDebounced(delay = 1000) {
+  if (_analyticsDebounceTimer) clearTimeout(_analyticsDebounceTimer);
+  _analyticsDebounceTimer = setTimeout(() => {
+    sendUserAnalytics();
+  }, delay);
+}
+
+export function trackRoundCompleted(targetUserId) {
+  try {
+    const uid = targetUserId || getEffectiveUserId();
+    const roundKey = `myduo_rounds_count_${uid}`;
+    const current = Number(localStorage.getItem(roundKey) || 0) + 1;
+    localStorage.setItem(roundKey, String(current));
+    sendUserAnalyticsDebounced(500);
+  } catch (e) {}
+}
+
 // Automatically trigger on page load
 try {
   runWeeklyXpCleanup();
   sendUserAnalytics();
 } catch (e) {}
 
-// Automatically trigger on login/logout state change
+// Automatically trigger on login/logout state change and tab exit
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:auth_changed', () => {
+    sendUserAnalytics();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      sendUserAnalytics();
+    }
+  });
+
+  window.addEventListener('pagehide', () => {
     sendUserAnalytics();
   });
 }
@@ -2345,6 +2373,8 @@ export {
   transcribeAudio,
   transcribePingAudio,
   getCloudWordOfTheDayId,
+  trackRoundCompleted,
+  sendUserAnalyticsDebounced,
 };
 
 export { getWordTranslation, getWordNotes } from './i18n.js';
