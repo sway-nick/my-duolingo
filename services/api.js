@@ -1106,7 +1106,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   const wKey = weekKey || getIsoWeekKey();
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
     const response = await fetch(`${API_URL}?route=sync&userId=${encodeURIComponent(uId)}&weekKey=${encodeURIComponent(wKey)}`, {
       signal: controller.signal
     });
@@ -1185,7 +1185,9 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       return res.data;
     }
   } catch (e) {
-    console.warn('Cloud sync GET failed, using local offline data:', e);
+    if (e.name !== 'AbortError') {
+      console.warn('Cloud sync GET failed, using local offline data:', e);
+    }
   }
   return null;
 }
