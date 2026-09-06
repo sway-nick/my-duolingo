@@ -759,7 +759,7 @@
             emptyTitle = '';
             emptyMsg = '';
             nextMode = 'select_category';
-            nextBtnLabel = t('train_select_category');
+            nextBtnLabel = '📚 ' + t('train_select_category');
 
             if (unmasteredCount === 0 && !window._showHubScreen) {
               emptyIcon = '🏆';
@@ -844,8 +844,8 @@
 
           const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0) || window._showHubScreen
             ? `
-              <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700;">
-                ${t('train_continue_round')}
+              <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                🚀 ${t('train_continue_round')}
               </button>
             `
             : '';
@@ -857,14 +857,14 @@
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '14px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
-                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700;">
+                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
                   ${nextBtnLabel}
                 </button>
                 ${
                   (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                     ? `
                   <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    ❤️ ${t('fav_practice_btn').replace('🔥 ', '')}
+                    💖 ${t('fav_practice_btn').replace('🔥 ', '')}
                   </button>
                 `
                     : ''
