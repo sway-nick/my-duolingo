@@ -1142,11 +1142,11 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       });
       localStorage.setItem(progKey, JSON.stringify(mergedProg));
 
-      // 2. Merge Favorites (union of sets)
+      // 2. Sync Favorites from cloud
       const favKey = `favs_${uId}`;
-      const localFavs = JSON.parse(localStorage.getItem(favKey) || '[]');
-      const mergedFavs = Array.from(new Set([...localFavs.map(String), ...favorites.map(String)]));
-      localStorage.setItem(favKey, JSON.stringify(mergedFavs));
+      if (Array.isArray(favorites)) {
+        localStorage.setItem(favKey, JSON.stringify(favorites.map(String)));
+      }
 
       // 3. Merge Weekly XP (take maximum)
       const xpKey = `xp_${uId}_${wKey}`;
@@ -1285,10 +1285,23 @@ async function clearAllFavoritesApi() {
   const userId = getEffectiveUserId();
   const key = `favs_${userId}`;
   localStorage.setItem(key, JSON.stringify([]));
-  pushUserDataToCloud(userId);
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: [] }));
   }
+
+  if (String(userId).startsWith('u_')) {
+    try {
+      await fetch(`${API_URL}?route=favorite`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ route: 'favorite', action: 'clear_all', userId }),
+      });
+    } catch (e) {
+      console.warn('Clear favorites cloud sync failed:', e);
+    }
+  }
+
+  pushUserDataToCloud(userId);
 }
 
 function isWordMastered(prog) {
