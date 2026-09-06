@@ -89,12 +89,9 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   // Bind clear all favorites button
   container.querySelector('#clear-all-favs-btn')?.addEventListener('click', async () => {
     if (!window.confirm(t('fav_clear_confirm'))) return;
-    await clearAllFavoritesApi();
     onClearAllFavorites();
-    favoriteWords.forEach((w) => {
-      if (w && w.id) onRemoveFavorite(w.id);
-    });
     renderFavoritesView([], containerSelector, options);
+    await clearAllFavoritesApi();
   });
 
   // High-performance single event delegation on grid
