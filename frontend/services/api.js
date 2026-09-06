@@ -586,9 +586,9 @@ const BOT_PROFILES = [
 
 function generateDynamicBots(weekKey) {
   const now = new Date();
-  let dayOfWeek = now.getUTCDay();
+  let dayOfWeek = now.getDay(); // 1 = Monday, 2 = Tuesday, ..., 7 = Sunday
   if (dayOfWeek === 0) dayOfWeek = 7;
-  const hour = now.getUTCHours();
+  const hour = now.getHours();
 
   function hashStr(str) {
     let hash = 0;
@@ -611,8 +611,9 @@ function generateDynamicBots(weekKey) {
       if (d < dayOfWeek) {
         botXP += dayGain;
       } else {
-        const fraction = Math.min(1.0, Math.max(0.1, (hour + 1) / 21));
-        botXP += Math.floor(dayGain * fraction);
+        // Today's progress: bots start gaining XP from 07:00 morning until 23:00 night
+        const progress = Math.min(1.0, Math.max(0.0, (hour + (now.getMinutes() / 60) - 7) / 16));
+        botXP += Math.floor(dayGain * progress);
       }
     }
 
