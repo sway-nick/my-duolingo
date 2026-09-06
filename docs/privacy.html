@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - English Breakfast</title>
+  <link rel="icon" type="image/png" href="./favicon-96x96.png" sizes="96x96">
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #ff6a00;
+      --border-color: #334155;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 32px 24px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--accent);
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 24px;
+      color: var(--text-main);
+    }
+    p, li {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 28px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    .lang-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .lang-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .lang-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="switchLang('ru')">Русский</button>
+      <button class="lang-btn" onclick="switchLang('en')">English</button>
+    </div>
+
+    <div id="content-ru">
+      <div class="header">
+        <h1>🍳 English Breakfast</h1>
+      </div>
+      <h2>Политика конфиденциальности</h2>
+      <p><strong>Дата последнего обновления:</strong> 6 сентября 2026 г.</p>
+      
+      <p>Настоящая Политика конфиденциальности описывает, как мобильное и веб-приложение <strong>English Breakfast</strong> собирает, использует и защищает информацию пользователей.</p>
+
+      <h2>1. Сбор и использование информации</h2>
+      <p>Мы собираем минимально необходимое количество данных для обеспечения работы интерактивного тренажёра:</p>
+      <ul>
+        <li><strong>Прогресс обучения:</strong> изученные слова, количество правильных и ошибочных ответов, баллы опыта (XP) и статистика сохраняются локально на вашем устройстве, а при авторизации синхронизируются с защищённой базой данных.</li>
+        <li><strong>Учётная запись (по желанию):</strong> если вы регистрируетесь или входите через Google, мы сохраняем ваше имя и адрес электронной почты исключительно для авторизации и отображения в таблице лидеров.</li>
+        <li><strong>Избранные слова и настройки:</strong> список добавленных в избранное слов и выбранная тема оформления.</li>
+      </ul>
+
+      <h2>2. Разрешения устройства</h2>
+      <ul>
+        <li><strong>Микрофон:</strong> используется исключительно для интерактивной тренировки произношения слов в реальном времени. Аудиозаписи вашего голоса не сохраняются на серверах.</li>
+        <li><strong>Камера и галерея:</strong> используется для распознавания текста (OCR) с фотографий и изображений для быстрого добавления слов в личный словарь.</li>
+      </ul>
+
+      <h2>3. Безопасность данных</h2>
+      <p>Мы применяем современные стандарты безопасности и шифрования HTTPS для передачи всех данных между приложением и сервером. Мы не продаём, не передаём и не раскрываем личные данные третьим лицам.</p>
+
+      <h2>4. Удаление данных</h2>
+      <p>Вы имеете полное право удалить свой прогресс, избранные слова или учётную запись в любой момент в настройках приложения либо обратившись к разработчику.</p>
+
+      <h2>5. Контакты</h2>
+      <p>По любым вопросам, связанным с Политикой конфиденциальности или работой приложения, вы можете связаться с нами по электронной почте:<br>
+      <strong>Email:</strong> <a href="mailto:lipniagovnikola@gmail.com" style="color: var(--accent);">lipniagovnikola@gmail.com</a></p>
+
+      <a href="./index.html" class="back-link">← Вернуться в приложение</a>
+    </div>
+
+    <div id="content-en" style="display: none;">
+      <div class="header">
+        <h1>🍳 English Breakfast</h1>
+      </div>
+      <h2>Privacy Policy</h2>
+      <p><strong>Last Updated:</strong> September 6, 2026</p>
+      
+      <p>This Privacy Policy explains how the <strong>English Breakfast</strong> mobile and web application collects, uses, and safeguards your information.</p>
+
+      <h2>1. Information We Collect</h2>
+      <p>We collect minimal information necessary to deliver personalized vocabulary learning:</p>
+      <ul>
+        <li><strong>Learning Progress:</strong> Mastered words, practice accuracy, experience points (XP), and study streak saved locally and synchronized with our secure database when signed in.</li>
+        <li><strong>Account Information (Optional):</strong> If you choose to sign up or log in with Google, we store your name and email address strictly for authentication and leaderboard ranking.</li>
+        <li><strong>Favorites & Settings:</strong> Your saved vocabulary lists, chosen difficulty level, and display themes.</li>
+      </ul>
+
+      <h2>2. Device Permissions</h2>
+      <ul>
+        <li><strong>Microphone:</strong> Used solely for real-time speech recognition during pronunciation practice. Voice audio recordings are not stored on our servers.</li>
+        <li><strong>Camera & Photo Gallery:</strong> Used for optical character recognition (OCR) to scan text from images and add vocabulary to your dictionary.</li>
+      </ul>
+
+      <h2>3. Data Protection</h2>
+      <p>All data transmissions are secured using HTTPS encryption. We do not sell, lease, or share personal user data with any third-party advertisers.</p>
+
+      <h2>4. User Rights & Data Deletion</h2>
+      <p>You can clear your learning history, remove favorite words, or request full account deletion at any time in the app settings or by contacting the developer.</p>
+
+      <h2>5. Contact Us</h2>
+      <p>If you have any questions regarding this Privacy Policy, please reach out to us:<br>
+      <strong>Email:</strong> <a href="mailto:lipniagovnikola@gmail.com" style="color: var(--accent);">lipniagovnikola@gmail.com</a></p>
+
+      <a href="./index.html" class="back-link">← Return to App</a>
+    </div>
+  </div>
+
+  <script>
+    function switchLang(lang) {
+      document.getElementById('content-ru').style.display = lang === 'ru' ? 'block' : 'none';
+      document.getElementById('content-en').style.display = lang === 'en' ? 'block' : 'none';
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(lang === 'ru' ? 'рус' : 'eng'));
+      });
+    }
+  </script>
+</body>
+</html>

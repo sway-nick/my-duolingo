@@ -66,6 +66,7 @@ function build() {
     'manifest.json',
     'web-app-manifest-192x192.png',
     'web-app-manifest-512x512.png',
+    'privacy.html',
     'sw.js'
   ];
 
@@ -80,6 +81,9 @@ function build() {
   copyRecursiveSync('./frontend/components', './components');
   copyRecursiveSync('./frontend/services', './services');
   copyRecursiveSync('./frontend/assets', './assets');
+  if (fs.existsSync('./frontend/.well-known')) {
+    copyRecursiveSync('./frontend/.well-known', './.well-known');
+  }
 
   // 4. Generate all-in-one backend bundle for Google Apps Script
   try {
