@@ -246,7 +246,7 @@ function saveUserAvatar(userId, base64Data) {
   // Direct cloud sync
   try {
     const d = new Date();
-    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
     const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
     const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);

@@ -42,10 +42,15 @@ function showTop100Modal(rank) {
 
 function getTimeUntilSundayEnd() {
   const now = new Date();
-  const day = now.getDay(); // 0 is Sunday, 1 is Monday...
+  const day = now.getUTCDay(); // 0 is Sunday, 1 is Monday... 6 is Saturday
   const daysUntilSunday = (7 - day) % 7;
-  const nextSunday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysUntilSunday, 23, 59, 59);
-  const diffMs = Math.max(0, nextSunday - now);
+  const targetEndMs = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + daysUntilSunday,
+    23, 59, 59, 999
+  );
+  const diffMs = Math.max(0, targetEndMs - now.getTime());
 
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

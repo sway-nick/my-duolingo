@@ -410,7 +410,7 @@ async function googleAuthUser(email, name, avatar) {
 }
 
 function getIsoWeekKey(d = new Date()) {
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
   date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
   const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
   const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
@@ -586,9 +586,10 @@ const BOT_PROFILES = [
 
 function generateDynamicBots(weekKey) {
   const now = new Date();
-  let dayOfWeek = now.getDay(); // 1 = Monday, 2 = Tuesday, ..., 7 = Sunday
+  let dayOfWeek = now.getUTCDay(); // 1 = Monday, 2 = Tuesday, ..., 7 = Sunday in UTC
   if (dayOfWeek === 0) dayOfWeek = 7;
-  const hour = now.getHours();
+  const hour = now.getUTCHours();
+  const mins = now.getUTCMinutes();
 
   function hashStr(str) {
     let hash = 0;
@@ -611,8 +612,8 @@ function generateDynamicBots(weekKey) {
       if (d < dayOfWeek) {
         botXP += dayGain;
       } else {
-        // Today's progress: bots start gaining XP from 07:00 morning until 23:00 night
-        const progress = Math.min(1.0, Math.max(0.0, (hour + (now.getMinutes() / 60) - 7) / 16));
+        // Current UTC day progress (bots study between 06:00 and 23:00 UTC)
+        const progress = Math.min(1.0, Math.max(0.0, (hour + (mins / 60) - 6) / 17));
         botXP += Math.floor(dayGain * progress);
       }
     }
