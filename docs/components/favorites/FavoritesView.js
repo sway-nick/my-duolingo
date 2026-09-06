@@ -12,7 +12,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     container.innerHTML = `
       <div class="favorites-page">
         <div class="page-header" style="margin-bottom: 14px;">
-          <h2 style="font-size: 22px; margin: 0;">${t('fav_title')}</h2>
+          <h2 style="font-size: 18px; font-weight: 700; margin: 0; letter-spacing: -0.2px;">${t('fav_title')}</h2>
         </div>
         <div class="empty-favorites-box">
           <span class="empty-icon" style="font-size: 40px; display: block; margin-bottom: 8px;">🤍</span>
@@ -29,7 +29,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   container.innerHTML = `
     <div class="favorites-page">
       <div class="page-header" style="margin-bottom: 8px;">
-        <h2 style="font-size: 22px; margin: 0; white-space: nowrap;">${t('fav_title')} (${favoriteWords.length})</h2>
+        <h2 style="font-size: 18px; font-weight: 700; margin: 0; white-space: nowrap; letter-spacing: -0.2px;">${t('fav_title')}: ${favoriteWords.length}</h2>
       </div>
 
       <!-- Sticky Repeat & Clear Buttons -->
