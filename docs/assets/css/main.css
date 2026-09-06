@@ -5050,8 +5050,9 @@ body.notebook-theme,
   overflow-y: auto;
 }
 
-/* Let's style the nav-tab inside the drawer */
-.burger-drawer .nav-tab {
+/* Let's style the nav-tab and share button inside the drawer */
+.burger-drawer .nav-tab,
+.burger-drawer .drawer-share-action-btn {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -5072,12 +5073,22 @@ body.notebook-theme,
   text-align: left;
 }
 
-.burger-drawer .nav-tab .tab-icon {
+.burger-drawer .nav-tab .tab-icon,
+.burger-drawer .drawer-share-action-btn .tab-icon {
   font-size: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.15s ease;
 }
 
-.burger-drawer .nav-tab:hover {
+.burger-drawer .drawer-share-action-btn .tab-icon svg {
+  color: #3b82f6;
+  stroke: #3b82f6;
+}
+
+.burger-drawer .nav-tab:hover,
+.burger-drawer .drawer-share-action-btn:hover {
   background: var(--bg-hover, #f1f5f9);
 }
 
@@ -5092,7 +5103,8 @@ body.notebook-theme,
   border-left: 1.5px solid var(--nb-border);
 }
 
-.notebook-theme .burger-drawer .nav-tab:hover {
+.notebook-theme .burger-drawer .nav-tab:hover,
+.notebook-theme .burger-drawer .drawer-share-action-btn:hover {
   background: #f0ede4;
   color: var(--nb-text);
 }
@@ -5106,9 +5118,14 @@ body.notebook-theme,
 .dark-theme .burger-drawer {
   background: #0f172a;
 }
-.dark-theme .burger-drawer .nav-tab:hover {
+.dark-theme .burger-drawer .nav-tab:hover,
+.dark-theme .burger-drawer .drawer-share-action-btn:hover {
   background: #1e293b;
   color: #f8fafc;
+}
+.dark-theme .burger-drawer .drawer-share-action-btn .tab-icon svg {
+  color: #60a5fa;
+  stroke: #60a5fa;
 }
 .dark-theme .burger-drawer .nav-tab.active {
   background: rgba(22, 163, 74, 0.15);
@@ -6136,3 +6153,297 @@ body.dark-theme #clear-app-cache-btn:hover {
 .dark-theme .scanner-group-cat-label {
   color: #38bdf8;
 }
+
+/* ========================================================
+   SHARE MODAL & TOAST
+   ======================================================== */
+.share-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+}
+
+.share-modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.share-modal-card {
+  background: var(--card-bg, #ffffff);
+  border: 1.5px solid var(--border-color, #e2e8f0);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  padding: 22px 22px 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+  transform: scale(0.92) translateY(10px);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.share-modal-overlay.open .share-modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.share-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.share-modal-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.share-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main, #0f172a);
+}
+
+.share-title-icon {
+  color: #FF6A00;
+  stroke: #FF6A00;
+  flex-shrink: 0;
+}
+
+.share-modal-subtitle {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-muted, #64748b);
+}
+
+.share-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--text-muted, #94a3b8);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.share-modal-close:hover {
+  color: var(--text-main, #0f172a);
+  background: var(--bg-hover, #f1f5f9);
+}
+
+.share-channels-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 10px;
+  margin-bottom: 20px;
+}
+
+.share-channel-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  border-radius: 12px;
+  transition: transform 0.15s ease, background 0.15s ease;
+  user-select: none;
+  outline: none;
+}
+
+.share-channel-btn:hover {
+  transform: translateY(-3px);
+  background: var(--bg-hover, rgba(0, 0, 0, 0.04));
+}
+
+.share-channel-btn:active {
+  transform: scale(0.95);
+}
+
+.share-channel-icon-wrap {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.share-channel-btn:hover .share-channel-icon-wrap {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.share-icon-tg {
+  background: linear-gradient(135deg, #2AABEE, #229ED9);
+}
+
+.share-icon-wa {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.share-icon-vb {
+  background: linear-gradient(135deg, #7F66FF, #665CAC);
+}
+
+.share-icon-tt {
+  background: linear-gradient(135deg, #111111, #222222);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.share-icon-em {
+  background: linear-gradient(135deg, #FF6A00, #EA4335);
+}
+
+.share-icon-sms {
+  background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.share-channel-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main, #334155);
+  text-align: center;
+}
+
+.share-link-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-subtle, #f8fafc);
+  border: 1.5px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 4px 4px 4px 12px;
+}
+
+.share-link-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: var(--text-muted, #64748b);
+  outline: none;
+  font-family: inherit;
+  user-select: all;
+}
+
+.share-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FF6A00;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.12s ease;
+  flex-shrink: 0;
+}
+
+.share-copy-btn:hover {
+  background: #e55e00;
+}
+
+.share-copy-btn:active {
+  transform: scale(0.96);
+}
+
+.share-copy-btn.copied {
+  background: #16a34a;
+}
+
+/* Share Toast */
+.share-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1e293b;
+  color: #ffffff;
+  padding: 11px 20px;
+  border-radius: 30px;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 100001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  max-width: 90vw;
+}
+
+.share-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Dark theme overrides for Share Modal */
+.dark-theme .share-modal-card {
+  background: #0f172a;
+  border-color: #334155;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+}
+
+.dark-theme .share-modal-close:hover {
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+.dark-theme .share-channel-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dark-theme .share-channel-label {
+  color: #e2e8f0;
+}
+
+.dark-theme .share-link-box {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark-theme .share-link-input {
+  color: #94a3b8;
+}
+
+.dark-theme .share-toast {
+  background: #334155;
+  border: 1px solid #475569;
+}
+
+/* Notebook theme overrides for Share Modal */
+.notebook-theme .share-modal-card {
+  background: #fcfbf7;
+  border: 1.5px solid var(--nb-border, #dcd7cb);
+}
+
+.notebook-theme .share-link-box {
+  background: #f0ede4;
+  border-color: var(--nb-border, #dcd7cb);
+}
+

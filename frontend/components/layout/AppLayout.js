@@ -1,6 +1,7 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=200.0';
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=200.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
+import { openShareDialog } from '../modals/ShareModal.js?v=200.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 
 let globalAuthChangedCallback = () => {};
@@ -184,6 +185,18 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             <span class="tab-icon">⚙️</span>
             <span class="drawer-item-text">${t('settings')}</span>
           </button>
+          <button type="button" class="drawer-share-action-btn" id="drawer-share-btn" title="${t('share_title')}">
+            <span class="tab-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </span>
+            <span class="drawer-item-text">${t('share_title')}</span>
+          </button>
         </div>
 
         <div class="drawer-footer">
@@ -214,6 +227,16 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     feedbackBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       handleFeedbackClick();
+    });
+  }
+
+  // Bind Share Button
+  const shareBtn = app.querySelector('#drawer-share-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeDrawer();
+      openShareDialog();
     });
   }
 
@@ -334,6 +357,13 @@ export function updateDrawerTranslations() {
       <span class="drawer-feedback-icon">💡</span>
       <span class="drawer-feedback-title">${t('feedback_title')}</span>
     `;
+  }
+
+  const shareBtn = drawer.querySelector('#drawer-share-btn');
+  if (shareBtn) {
+    const textEl = shareBtn.querySelector('.drawer-item-text');
+    if (textEl) textEl.textContent = t('share_title');
+    shareBtn.title = t('share_title');
   }
 }
 
