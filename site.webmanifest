@@ -12,7 +12,7 @@
   ],
   "orientation": "portrait",
   "background_color": "#0f172a",
-  "theme_color": "#ff6a00",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "./assets/icons/icon-192x192.png",
