@@ -42,8 +42,8 @@ const translations = {
     fav_empty: "У вас нет избранных слов",
     fav_empty_sub: "Добавляйте сложные слова в избранное, нажимая на ❤️ во время тренировок, чтобы повторять их отдельно.",
     fav_start_btn: "🎓 Перейти к тренировке",
-    fav_practice_btn: "🔥 Practicar",
-    fav_clear_all_btn: "Quitar todo",
+    fav_practice_btn: "🔥 Повторить",
+    fav_clear_all_btn: "Снять всё",
     fav_clear_confirm: "Снять все слова из избранного?",
 
     // Dictionary View
@@ -180,8 +180,8 @@ const translations = {
     fav_empty: "У вас немає обраних слів",
     fav_empty_sub: "Додавайте складні слова в обране, натискаючи на ❤️ під час тренувань, щоб повторювати їх окремо.",
     fav_start_btn: "🎓 Перейти до тренування",
-    fav_practice_btn: "🔥 Practicar",
-    fav_clear_all_btn: "Quitar todo",
+    fav_practice_btn: "🔥 Повторити",
+    fav_clear_all_btn: "Зняти все",
     fav_clear_confirm: "Зняти всі слова з обраного?",
 
     // Dictionary View
@@ -318,8 +318,8 @@ const translations = {
     fav_empty: "No favorite words yet",
     fav_empty_sub: "Add challenging words to favorites by tapping ❤️ during training to practice them separately.",
     fav_start_btn: "🎓 Start Training",
-    fav_practice_btn: "🔥 Practicar",
-    fav_clear_all_btn: "Quitar todo",
+    fav_practice_btn: "🔥 Practice",
+    fav_clear_all_btn: "Clear all",
     fav_clear_confirm: "Remove all words from favorites?",
 
     // Dictionary View
@@ -456,8 +456,8 @@ const translations = {
     fav_empty: "Noch keine Favoriten",
     fav_empty_sub: "Füge schwierige Wörter zu Favoriten hinzu, indem du während des Trainings auf ❤️ tippst.",
     fav_start_btn: "🎓 Training starten",
-    fav_practice_btn: "🔥 Practicar",
-    fav_clear_all_btn: "Quitar todo",
+    fav_practice_btn: "🔥 Wiederholen",
+    fav_clear_all_btn: "Alle leeren",
     fav_clear_confirm: "Alle Wörter aus den Favoriten entfernen?",
 
     // Dictionary View
@@ -686,7 +686,7 @@ const translations = {
     fav_start_btn: "🎓 Commencer l'entraînement",
     fav_practice_btn: "🔥 Réviser",
     fav_clear_all_btn: "Tout effacer",
-    fav_clear_confirm: "Retirer tous les mots des favoris ?",
+    fav_clear_confirm: "Supprimer tous les mots des favoris ?",
 
     // Dictionary View
     dict_title: "📖 Mon Dictionnaire",
