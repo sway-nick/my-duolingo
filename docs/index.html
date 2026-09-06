@@ -873,7 +873,7 @@
 
           const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0) || window._showHubScreen
             ? `
-              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding-left: clamp(52px, 15vw, 64px); padding-right: 20px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding-left: clamp(36px, 10vw, 42px); padding-right: 20px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
                 <span class="hub-btn-icon" style="font-size: 20px; line-height: 1; width: 24px; text-align: center; display: inline-flex; justify-content: center; flex-shrink: 0;">🚀</span>
                 <span class="hub-btn-text" style="text-align: left; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
               </button>
@@ -887,14 +887,14 @@
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '14px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
-                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding-left: clamp(52px, 15vw, 64px); padding-right: 20px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
+                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding-left: clamp(36px, 10vw, 42px); padding-right: 20px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
                   <span class="hub-btn-icon" style="font-size: 20px; line-height: 1; width: 24px; text-align: center; display: inline-flex; justify-content: center; flex-shrink: 0;">${nextBtnIcon}</span>
                   <span class="hub-btn-text" style="text-align: left; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
                 </button>
                 ${
                   (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                     ? `
-                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding-left: clamp(52px, 15vw, 64px); padding-right: 20px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
+                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding-left: clamp(36px, 10vw, 42px); padding-right: 20px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
                     <span class="hub-btn-icon" style="font-size: 20px; line-height: 1; width: 24px; text-align: center; display: inline-flex; justify-content: center; flex-shrink: 0;">💖</span>
                     <span class="hub-btn-text" style="text-align: left; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
                   </button>
