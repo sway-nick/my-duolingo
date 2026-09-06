@@ -287,21 +287,23 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     <div class="leaderboard-page" style="position: relative;">
       <!-- Single Sticky Header Group (Header + Podium) Flush to Mobile Header -->
       <div class="leaderboard-sticky-group">
-        <div class="page-header" style="margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-          <div class="custom-dropdown" id="leaderboard-type-dropdown" style="margin: 0; min-width: 0;">
+        <div class="leaderboard-top-row ${currentPeriod === 'all' ? 'no-timer' : ''}">
+          <div class="custom-dropdown" id="leaderboard-type-dropdown">
             <button type="button" class="leaderboard-header-chip leaderboard-dropdown-chip" id="leaderboard-type-trigger" aria-haspopup="listbox" aria-expanded="false">
-              <span id="leaderboard-type-label" style="white-space: nowrap; text-align: left;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
-              <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 4px; transition: transform 0.2s ease;">▼</span>
+              <span id="leaderboard-type-label" style="white-space: nowrap; text-align: left; overflow: hidden; text-overflow: ellipsis;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
+              <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 6px; transition: transform 0.2s ease;">▼</span>
             </button>
-            <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 190px;">
+            <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 100%; min-width: 190px;">
               <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap; padding: 10px 12px;">${t('lead_title')}</div>
               <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap; padding: 10px 12px;">🌎 ${t('lead_all_time')}</div>
             </div>
           </div>
-          <div class="leaderboard-header-chip leaderboard-timer-chip" id="leaderboard-timer-badge" style="display: ${currentPeriod === 'all' ? 'none' : 'inline-flex'};">
+          ${currentPeriod === 'all' ? '' : `
+          <div class="leaderboard-header-chip leaderboard-timer-chip" id="leaderboard-timer-badge">
             <span style="font-size: 13.5px; line-height: 1;">⏳</span>
             <span>${weekTime.days > 0 ? `${weekTime.days}${dText} ` : ''}${weekTime.hours}${hText}</span>
           </div>
+          `}
         </div>
 
         <div id="leaderboard-podium-container">

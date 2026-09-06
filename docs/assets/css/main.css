@@ -3435,12 +3435,32 @@ body.dark-theme .filter-select {
   to { transform: rotate(360deg); }
 }
 
-/* Leaderboard Header Symmetrical Chips */
+/* Leaderboard Header Symmetrical Chips (3fr 1fr Grid matching podium cards) */
+.leaderboard-top-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 8px;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.leaderboard-top-row.no-timer {
+  grid-template-columns: 1fr;
+}
+
+.leaderboard-top-row .custom-dropdown {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+}
+
 .leaderboard-header-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 36px;
+  height: 38px;
   padding: 0 12px;
   border-radius: var(--radius-md, 12px);
   background: #f1f5f9;
@@ -3452,12 +3472,14 @@ body.dark-theme .filter-select {
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   transition: all 0.15s ease;
+  width: 100%;
 }
 
 button.leaderboard-header-chip {
   cursor: pointer;
   font-family: inherit;
   user-select: none;
+  justify-content: space-between;
 }
 
 button.leaderboard-header-chip:hover {
@@ -3476,10 +3498,12 @@ button.leaderboard-header-chip:hover {
 
 .leaderboard-timer-chip {
   flex-shrink: 0;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   cursor: default;
   color: var(--text-main, #0f172a);
+  justify-content: center;
+  padding: 0 8px;
 }
 
 .dark-theme .leaderboard-header-chip {
