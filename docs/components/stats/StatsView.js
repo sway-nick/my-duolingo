@@ -154,11 +154,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     `;
 
     container.innerHTML = `
-      <div class="page-header" style="margin-bottom: 14px;">
-        <h2 style="font-size: 22px; margin: 0;">${t('achievements')}</h2>
-      </div>
-
-      <div id="stats-content" style="padding-bottom: 24px;">
+      <div id="stats-content" style="padding-bottom: 24px; margin-top: 4px;">
         <!-- Top Stats Widgets Grid (1x3) -->
         <div class="stats-grid">
           <div class="stat-card">
