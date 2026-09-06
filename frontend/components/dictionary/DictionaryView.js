@@ -1235,7 +1235,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
 
   const lang = getInterfaceLanguage();
   const addWordBtnText = t('dict_add_word_btn') || (lang === 'ru' ? '➕ Добавить слово' : lang === 'uk' ? '➕ Додати слово' : '➕ Add word');
-  const scanBtnText = t('dict_scan_btn') || (lang === 'ru' ? '📷 Сканировать фото' : lang === 'uk' ? '📷 Сканувати фото' : '📷 Scan photo');
+  const scanBtnText = t('dict_scan_btn') || (lang === 'ru' ? '📷 Сканировать' : lang === 'uk' ? '📷 Сканувати' : '📷 Scan');
 
   container.innerHTML = `
     <div class="dictionary-page" style="width: 100%; max-width: 100%; box-sizing: border-box;">
