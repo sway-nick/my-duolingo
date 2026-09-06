@@ -51,6 +51,22 @@
       "purpose": "any"
     }
   ],
+  "screenshots": [
+    {
+      "src": "./assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "English Breakfast Vocab Trainer"
+    },
+    {
+      "src": "./assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "English Breakfast Vocab Trainer"
+    }
+  ],
   "categories": [
     "education",
     "language",
