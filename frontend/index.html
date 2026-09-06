@@ -744,7 +744,8 @@
           let emptyTitle = getInterfaceLanguage() === 'ru' ? 'Очередь пуста' : getInterfaceLanguage() === 'uk' ? 'Черга порожня' : 'Queue is empty';
           let emptyMsg = getInterfaceLanguage() === 'ru' ? 'Сначала отберите слова в режиме «Карточки»!' : getInterfaceLanguage() === 'uk' ? 'Спочатку відберіть слова в режимі «Картки»!' : 'Select words in "Cards" mode first!';
           let nextMode = 'cards';
-          let nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Открыть Карточки' : getInterfaceLanguage() === 'uk' ? '🗂️ Відкрити Картки' : '🗂️ Open Cards';
+          let nextBtnIcon = '🗂️';
+          let nextBtnText = getInterfaceLanguage() === 'ru' ? 'Открыть Карточки' : getInterfaceLanguage() === 'uk' ? 'Відкрити Картки' : 'Open Cards';
 
           if (currentMethod === 'quiz') {
             emptyIcon = '🎯';
@@ -752,13 +753,16 @@
             emptyMsg = '';
             if (hasPairs) {
               nextMode = 'pairs';
-              nextBtnLabel = '🧩 ' + t('train_go_pairs');
+              nextBtnIcon = '🧩';
+              nextBtnText = t('train_go_pairs');
             } else if (hasTest) {
               nextMode = 'input';
-              nextBtnLabel = '✍️ ' + t('train_go_test');
+              nextBtnIcon = '✍️';
+              nextBtnText = t('train_go_test');
             } else {
               nextMode = 'cards';
-              nextBtnLabel = getInterfaceLanguage() === 'ru' ? '🗂️ Отобрать слова в Карточках' : getInterfaceLanguage() === 'uk' ? '🗂️ Відібрати слова в Картках' : '🗂️ Select words in Cards';
+              nextBtnIcon = '🗂️';
+              nextBtnText = getInterfaceLanguage() === 'ru' ? 'Отобрать слова в Карточках' : getInterfaceLanguage() === 'uk' ? 'Відібрати слова в Картках' : 'Select words in Cards';
             }
           } else if (currentMethod === 'pairs') {
             emptyIcon = '🧩';
@@ -767,10 +771,12 @@
             // After Pairs, next mode is STRICTLY Test!
             if (hasTest) {
               nextMode = 'input';
-              nextBtnLabel = '✍️ ' + t('train_go_test');
+              nextBtnIcon = '✍️';
+              nextBtnText = t('train_go_test');
             } else {
               nextMode = 'input';
-              nextBtnLabel = '✍️ ' + t('train_go_test');
+              nextBtnIcon = '✍️';
+              nextBtnText = t('train_go_test');
             }
           } else if (currentMethod === 'input' || window._showHubScreen || learningCount === 0) {
             // On Hub Choice Screen: buttons are ALWAYS permanently consistent:
@@ -781,7 +787,8 @@
             emptyTitle = '';
             emptyMsg = '';
             nextMode = 'select_category';
-            nextBtnLabel = '📚 ' + t('train_select_category');
+            nextBtnIcon = '📚';
+            nextBtnText = t('train_select_category');
 
             if (unmasteredCount === 0 && !window._showHubScreen) {
               emptyIcon = '🏆';
@@ -866,8 +873,9 @@
 
           const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0) || window._showHubScreen
             ? `
-              <button class="primary-button btn-green" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                🚀 ${t('train_continue_round')}
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding: 0 24px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
+                <span class="hub-btn-icon" style="font-size: 20px; line-height: 1; width: 24px; text-align: center; display: inline-flex; justify-content: center; flex-shrink: 0;">🚀</span>
+                <span class="hub-btn-text" style="text-align: left; flex: 1;">${t('train_continue_round')}</span>
               </button>
             `
             : '';
@@ -879,14 +887,16 @@
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '14px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
-                <button class="primary-button btn-green" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                  ${nextBtnLabel}
+                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding: 0 24px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
+                  <span class="hub-btn-icon" style="font-size: 20px; line-height: 1; width: 24px; text-align: center; display: inline-flex; justify-content: center; flex-shrink: 0;">${nextBtnIcon}</span>
+                  <span class="hub-btn-text" style="text-align: left; flex: 1;">${nextBtnText}</span>
                 </button>
                 ${
                   (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                     ? `
-                  <button class="primary-button btn-green" id="go-repeat-favs-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    💖 ${t('fav_hub_btn')}
+                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; padding: 0 24px; gap: 14px; text-align: left; width: 100%; box-sizing: border-box;">
+                    <span class="hub-btn-icon" style="font-size: 20px; line-height: 1; width: 24px; text-align: center; display: inline-flex; justify-content: center; flex-shrink: 0;">💖</span>
+                    <span class="hub-btn-text" style="text-align: left; flex: 1;">${t('fav_hub_btn')}</span>
                   </button>
                 `
                     : ''
