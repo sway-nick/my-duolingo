@@ -25,7 +25,13 @@ function applyTheme(theme) {
     document.body.classList.add('notebook-theme');
     if (app) app.classList.add('notebook-theme');
   }
-  // 'light' → no extra class needed
+  // Update Android status bar & navigation bar dynamically
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) {
+    if (theme === 'dark') metaTheme.setAttribute('content', '#0f172a');
+    else if (theme === 'notebook') metaTheme.setAttribute('content', '#f5eedc');
+    else metaTheme.setAttribute('content', '#ffffff');
+  }
 }
 
 function toggleTheme() {
