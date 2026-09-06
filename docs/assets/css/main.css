@@ -3435,17 +3435,89 @@ body.dark-theme .filter-select {
   to { transform: rotate(360deg); }
 }
 
+/* Leaderboard Header Symmetrical Chips */
+.leaderboard-header-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-md, 12px);
+  background: #f1f5f9;
+  border: 1.5px solid var(--border-color, #e2e8f0);
+  color: var(--text-main, #0f172a);
+  font-size: 14.5px;
+  font-weight: 800;
+  box-sizing: border-box;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+button.leaderboard-header-chip {
+  cursor: pointer;
+  font-family: inherit;
+  user-select: none;
+}
+
+button.leaderboard-header-chip:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.custom-dropdown.open button.leaderboard-header-chip {
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.custom-dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.leaderboard-timer-chip {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: default;
+  color: var(--text-main, #0f172a);
+}
+
+.dark-theme .leaderboard-header-chip {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.dark-theme button.leaderboard-header-chip:hover {
+  background: #273549;
+  border-color: #475569;
+}
+
+.dark-theme .custom-dropdown.open button.leaderboard-header-chip {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.25);
+}
+
+.notebook-theme .leaderboard-header-chip {
+  background: #fffdf5;
+  border-color: #d4c5a9;
+  color: #2c2518;
+}
+
 .league-timer-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-md, 12px);
   background: #f1f5f9;
   border: 1px solid var(--border-color);
-  padding: 4px 10px;
-  border-radius: 999px;
   font-size: 13px;
   font-weight: 700;
   color: var(--text-main);
+  box-sizing: border-box;
 }
 
 .dark-theme .league-timer-badge {
