@@ -35,10 +35,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       <!-- Sticky Repeat & Clear Buttons -->
       <div class="fav-sticky-controls">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
-          <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-height: 44px; height: 44px; font-size: 14.5px; font-weight: 700; white-space: nowrap; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;">
+          <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-width: 0; min-height: 44px; height: 44px; font-size: clamp(12.5px, 3.4vw, 14.5px); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-sizing: border-box;">
             ${t('fav_practice_btn')}
           </button>
-          <button class="secondary-button" id="clear-all-favs-btn" style="width: 100%; min-height: 44px; height: 44px; font-size: 14px; font-weight: 600; white-space: nowrap; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; border-radius: 12px; box-sizing: border-box;">
+          <button class="secondary-button" id="clear-all-favs-btn" style="width: 100%; min-width: 0; min-height: 44px; height: 44px; font-size: clamp(12.5px, 3.4vw, 14px); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; border-radius: 12px; box-sizing: border-box;">
             🤍 ${t('fav_clear_all_btn')}
           </button>
         </div>
