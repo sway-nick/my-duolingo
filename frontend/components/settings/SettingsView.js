@@ -30,22 +30,22 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           }
           <div class="avatar-edit-badge" title="Change avatar">🎭</div>
         </div>
-        <div class="profile-details">
-          <h3 style="font-size: 16px; font-weight: 700; margin: 0;">${user ? user.name : (t('demo') || 'Guest Mode')}</h3>
-          ${user ? '' : `<p style="font-size: 12px; margin: 2px 0 0; color: var(--text-muted);">${t('settings_login_sub') || 'Log in to sync progress'}</p>`}
+        <div class="profile-details" style="flex: 1; min-width: 0;">
+          <h3 class="profile-name">${user ? user.name : (t('demo') || 'Guest Mode')}</h3>
+          ${user ? '' : `<p class="profile-sub">${t('settings_login_sub') || 'Log in to sync progress'}</p>`}
         </div>
         <div>
           ${
             user
-              ? `<button class="secondary-button" id="logout-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">${t('settings_logout')}</button>`
-              : `<button class="primary-button" id="login-modal-btn" style="width: auto; padding: 8px 16px; min-height: 38px; height: 38px; font-size: 14px; font-weight: 600;">${t('settings_login')}</button>`
+              ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout')}</button>`
+              : `<button class="primary-button settings-auth-btn" id="login-modal-btn">${t('settings_login')}</button>`
           }
         </div>
       </div>
 
       <!-- Language Selection Card -->
       <div class="settings-card" style="position: relative; z-index: 15;">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_lang')}</h3>
+        <h3 class="settings-card-title">${t('settings_lang')}</h3>
         <div class="custom-dropdown" id="lang-dropdown">
           <button type="button" class="custom-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
             <span id="lang-dropdown-label">English</span>
@@ -76,7 +76,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Theme Switcher Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_theme')}</h3>
+        <h3 class="settings-card-title">${t('settings_theme')}</h3>
         <div class="theme-options-row">
           <button class="theme-option-btn ${currentTheme === 'light' ? 'active' : ''}" id="theme-light-btn">
             ${t('settings_theme_light')}
@@ -92,7 +92,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Sound Mode Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px;">${t('settings_sfx')}</h3>
+        <h3 class="settings-card-title">${t('settings_sfx')}</h3>
         <div class="sound-options-row">
           <button class="sound-option-btn" id="sfx-on-btn">
             ${t('settings_sfx_on')}
@@ -105,15 +105,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Voice Selection Card -->
       <div class="settings-card">
-        <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="#d4a373" style="flex-shrink: 0;">
+        <h3 class="settings-card-title" style="display: flex; align-items: center; gap: 6px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#d4a373" style="flex-shrink: 0;">
             <path d="M12 3a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4zm-6 16a6 6 0 0 1 12 0H6zm14.5-9a4.5 4.5 0 0 1 0 6.36l-1.06-1.06a3 3 0 0 0 0-4.24l1.06-1.06zm2.5-2.5a8 8 0 0 1 0 11.31l-1.06-1.06a6.5 6.5 0 0 0 0-9.19l1.06-1.06z"/>
           </svg>
           ${t('settings_voice')}
         </h3>
         <div class="voice-options-row">
           <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (UK)" aria-label="British English">
-            <svg class="flag-svg-icon" viewBox="0 0 640 480" width="34" height="24">
+            <svg class="flag-svg-icon" viewBox="0 0 640 480" width="30" height="21">
               <path fill="#012169" d="M0 0h640v480H0z"/>
               <path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 240l240 178v62h-80L320 301 81 480H0v-60l239-180L0 64V0h75z"/>
               <path fill="#C8102E" d="m424 288 216 159v33h-44L367 304l57-16zM640 22v10L432 201l-24-33 197-146h35zM0 458v-10l208-169 24 33L35 458H0zM216 192 0 33V0h44l229 176-57 16z"/>
@@ -122,7 +122,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             </svg>
           </button>
           <button class="voice-option-btn flag-btn" id="voice-us-btn" title="American English (US)" aria-label="American English">
-            <svg class="flag-svg-icon" viewBox="0 0 640 480" width="34" height="24">
+            <svg class="flag-svg-icon" viewBox="0 0 640 480" width="30" height="21">
               <path fill="#bd3d44" d="M0 0h640v480H0z"/>
               <path stroke="#fff" stroke-width="37" d="M0 55.5h640M0 129.5h640M0 203.5h640M0 277.5h640M0 351.5h640M0 425.5h640"/>
               <path fill="#192f5d" d="M0 0h260v259H0z"/>
@@ -142,8 +142,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       </div>
 
       <!-- App Maintenance / Sync Card -->
-      <div class="settings-card" style="padding: 12px 14px;">
-        <button class="primary-button btn-green btn-clear-cache" id="clear-app-cache-btn" style="width: 100%; min-height: 42px; font-weight: 600; font-size: 15px;">
+      <div class="settings-card" style="padding: 6px 12px;">
+        <button class="primary-button btn-green btn-clear-cache" id="clear-app-cache-btn">
           ${t('settings_sync_btn')}
         </button>
       </div>
