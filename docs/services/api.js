@@ -1652,30 +1652,42 @@ function resetWordsProgressForPractice(words) {
 function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
   if (!wordsList || wordsList.length === 0) return null;
 
-  // 1. Sort words strictly by ID ascending so the list ordering is 100% identical on all devices
-  const sorted = [...wordsList].sort((a, b) => {
+  // 1. Filter quality words of the day:
+  // - Minimum length 4 characters (no upper bound: 4, 5, 6, 7, 8, 9, 10+ letters)
+  // - Exclude pure prepositions / short service words
+  const eligible = wordsList.filter((w) => {
+    const text = String(w.word || '').trim();
+    if (text.length < 4) return false;
+    const lower = text.toLowerCase();
+    if (['with', 'from', 'into', 'than', 'then', 'that', 'this', 'them', 'they'].includes(lower)) return false;
+    return true;
+  });
+
+  const pool = eligible.length > 0 ? eligible : wordsList;
+
+  // 2. Sort words strictly by ID ascending so the ordering is 100% identical on all devices
+  const sorted = [...pool].sort((a, b) => {
     const idA = Number(a.id) || 0;
     const idB = Number(b.id) || 0;
     if (idA !== idB) return idA - idB;
     return String(a.word || '').localeCompare(String(b.word || ''));
   });
 
-  if (cloudWordId) {
-    const found = sorted.find((w) => String(w.id) === String(cloudWordId));
-    if (found) return found;
-  }
-
-  // 2. Standardized local calendar date (YYYY-MM-DD)
+  // 3. Standardized UTC calendar date (YYYY-MM-DD)
   const now = new Date();
-  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const y = now.getUTCFullYear();
+  const m = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(now.getUTCDate()).padStart(2, '0');
+  const todayStr = `${y}-${m}-${d}`;
 
-  let hash = 0;
+  // 4. Uniform 32-bit hash for daily rotation
+  let hash = 2166136261;
   for (let i = 0; i < todayStr.length; i++) {
-    hash = ((hash << 5) - hash) + todayStr.charCodeAt(i);
-    hash |= 0;
+    hash ^= todayStr.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
   }
 
-  const idx = Math.abs(hash) % sorted.length;
+  const idx = Math.abs(hash >>> 0) % sorted.length;
   return sorted[idx];
 }
 
