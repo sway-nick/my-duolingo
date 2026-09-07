@@ -1755,7 +1755,9 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
         resolve(data);
       } catch (err) {
         let msg = err.message || 'Ошибка распознавания';
-        if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
+        if (msg.includes('429') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('Quota exceeded') || msg.includes('quota')) {
+          msg = '⏳ Превышен лимит запросов Gemini (429). Пожалуйста, подождите 1 минуту или обновите код скрипта.';
+        } else if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
           msg = 'Связь с сервером прервана. Попробуйте еще раз.';
         }
         reject(new Error(msg));
