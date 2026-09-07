@@ -4641,14 +4641,19 @@ button.leaderboard-header-chip:hover {
   background: var(--card-bg, #ffffff);
   color: var(--text-main, #1e293b);
   border-radius: 20px;
-  padding: 24px;
-  max-width: 380px;
+  padding: 20px;
+  max-width: 390px;
   width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .dark-theme .speech-diag-card {
@@ -4674,6 +4679,7 @@ button.leaderboard-header-chip:hover {
   padding: 8px 12px;
   background: rgba(0, 0, 0, 0.03);
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .dark-theme .speech-diag-item {
@@ -4687,6 +4693,7 @@ button.leaderboard-header-chip:hover {
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 }
 
 .dark-theme .speech-volume-meter-container {
@@ -4706,12 +4713,17 @@ button.leaderboard-header-chip:hover {
   border: 1px dashed var(--primary-color);
   padding: 12px;
   border-radius: 12px;
-  font-size: 13.5px;
-  text-align: center;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
   min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  display: block;
 }
 
 
