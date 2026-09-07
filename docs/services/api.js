@@ -1695,61 +1695,73 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
-      let timeoutId = null;
       try {
         const base64Data = (reader.result || '').split(',')[1];
         if (!base64Data) {
           throw new Error('Empty audio payload');
         }
 
-        console.log('VOICE DEBUG', {
-          mimeType,
-          blobBytes: audioBlob.size,
-          base64Chars: base64Data.length,
-          expectedWord,
-          userAgent: navigator.userAgent,
-        });
+        async function doFetchAttempt(attempt = 1) {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 20000);
+          const uploadStart = Date.now();
 
-        const controller = new AbortController();
-        timeoutId = setTimeout(() => controller.abort(), 25000);
-        const uploadStart = Date.now();
+          try {
+            const response = await fetch(API_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+              },
+              body: JSON.stringify({
+                action: 'transcribe',
+                audioBase64: base64Data,
+                mimeType: mimeType || 'audio/webm',
+                expectedWord: expectedWord || '',
+              }),
+              signal: controller.signal,
+            });
 
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8',
-          },
-          body: JSON.stringify({
-            action: 'transcribe',
-            audioBase64: base64Data,
-            mimeType: mimeType || 'audio/webm',
-            expectedWord: expectedWord || '',
-          }),
-          signal: controller.signal,
-        });
+            clearTimeout(timeoutId);
+            const totalClientMs = Date.now() - uploadStart;
 
-        clearTimeout(timeoutId);
-        const totalClientMs = Date.now() - uploadStart;
-
-        const json = await response.json();
-        if (json && json.success && json.data) {
-          if (json.data.timings) {
-            json.data.timings.totalClientMs = totalClientMs;
+            const json = await response.json();
+            if (json && json.success && json.data) {
+              if (json.data.timings) {
+                json.data.timings.totalClientMs = totalClientMs;
+              }
+              return json.data;
+            } else {
+              const serverErr = json?.error || 'Transcription failed';
+              if (attempt < 2 && (serverErr.includes('503') || serverErr.includes('UNAVAILABLE') || serverErr.includes('high demand'))) {
+                await new Promise((r) => setTimeout(r, 600));
+                return doFetchAttempt(attempt + 1);
+              }
+              throw new Error(serverErr);
+            }
+          } catch (fetchErr) {
+            clearTimeout(timeoutId);
+            if (attempt < 2 && (fetchErr.name === 'AbortError' || fetchErr.message.includes('fetch') || fetchErr.message.includes('network'))) {
+              await new Promise((r) => setTimeout(r, 700));
+              return doFetchAttempt(attempt + 1);
+            }
+            if (fetchErr.name === 'AbortError') {
+              throw new Error('Время ожидания ответа сервера истекло. Попробуйте еще раз.');
+            }
+            throw fetchErr;
           }
-          resolve(json.data);
-        } else {
-          reject(new Error(json?.error || 'Transcription failed'));
         }
+
+        const data = await doFetchAttempt(1);
+        resolve(data);
       } catch (err) {
-        if (timeoutId) clearTimeout(timeoutId);
-        if (err.name === 'AbortError') {
-          reject(new Error('Время ожидания ответа сервера истекло. Попробуйте еще раз.'));
-        } else {
-          reject(err);
+        let msg = err.message || 'Ошибка распознавания';
+        if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
+          msg = 'Связь с сервером прервана. Попробуйте еще раз.';
         }
+        reject(new Error(msg));
       }
     };
-    reader.onerror = (e) => reject(new Error('Failed to read audio blob'));
+    reader.onerror = (e) => reject(new Error('Не удалось прочитать аудиозапись'));
     reader.readAsDataURL(audioBlob);
   });
 }

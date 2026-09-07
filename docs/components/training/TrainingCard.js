@@ -631,6 +631,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     function renderSpeechQuiz() {
       let speechAttempts = 0;
 
+      const CUTE_AI_ROBOT_HTML = `<svg class="cute-ai-robot-svg" viewBox="0 0 100 100" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><filter id="rGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><linearGradient id="rHeadGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e0e7ff"/></linearGradient><linearGradient id="rScreenGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1e1b4b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient></defs><line x1="50" y1="20" x2="50" y2="9" stroke="#c084fc" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="7" r="5" fill="#f43f5e" filter="url(#rGlow)"/><circle cx="50" cy="7" r="2.2" fill="#ffffff"/><rect x="13" y="34" width="7" height="20" rx="3.5" fill="#a855f7"/><rect x="80" y="34" width="7" height="20" rx="3.5" fill="#a855f7"/><rect x="18" y="18" width="64" height="54" rx="18" fill="url(#rHeadGrad)" stroke="#c084fc" stroke-width="2.5"/><rect x="25" y="25" width="50" height="40" rx="12" fill="url(#rScreenGrad)"/><ellipse cx="38" cy="41" rx="6" ry="7" fill="#38bdf8" filter="url(#rGlow)"/><circle cx="40" cy="39" r="2.2" fill="#ffffff"/><ellipse cx="62" cy="41" rx="6" ry="7" fill="#38bdf8" filter="url(#rGlow)"/><circle cx="64" cy="39" r="2.2" fill="#ffffff"/><circle cx="30" cy="51" r="3.5" fill="#f472b6" opacity="0.85"/><circle cx="70" cy="51" r="3.5" fill="#f472b6" opacity="0.85"/><path d="M43 49 Q50 56 57 49" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" fill="none" filter="url(#rGlow)"/></svg>`;
+
       practiceArea.innerHTML = `
         <div class="speech-quiz-container">
           <button type="button" class="speech-mic-btn" id="speech-mic-btn" title="Tap to speak word">
@@ -866,7 +868,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   if (micBtn) {
                     micBtn.classList.remove('listening', 'processing');
                     micBtn.classList.add('ai-thinking');
-                    micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
+                    micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
                   }
                   if (holdHint) {
                     holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
@@ -900,7 +902,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 if (micBtn) {
                   micBtn.classList.remove('listening', 'processing');
                   micBtn.classList.add('ai-thinking');
-                  micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
+                  micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
                 }
                 if (holdHint) {
                   holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
@@ -1135,7 +1137,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (micBtn) {
               micBtn.classList.remove('listening', 'processing');
               micBtn.classList.add('ai-thinking');
-              micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
+              micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
             }
             if (holdHint) {
               holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
@@ -1234,7 +1236,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (micBtn) {
           micBtn.classList.remove('listening', 'processing');
           micBtn.classList.add('ai-thinking');
-          micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
+          micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
         }
         if (holdHint) {
           holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${

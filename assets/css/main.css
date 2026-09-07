@@ -4472,6 +4472,14 @@ button.leaderboard-header-chip:hover {
   animation: robotFloat 1.2s infinite ease-in-out;
 }
 
+.cute-ai-robot-svg {
+  display: inline-block;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.65)) drop-shadow(0 0 14px rgba(56, 189, 248, 0.45));
+  animation: robotFloat 1.2s infinite ease-in-out;
+  pointer-events: none;
+}
+
 @keyframes robotFloat {
   0%, 100% {
     transform: translateY(0) rotate(0deg);
