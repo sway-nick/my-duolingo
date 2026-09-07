@@ -2058,24 +2058,36 @@ async function addCustomWord({ word, translation, category, notes }) {
   };
 
   let savedWord = localWord;
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 35000);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 35000);
 
-    const response = await fetch(`${API_URL}?route=addword`, {
+  let response;
+  try {
+    response = await fetch(`${API_URL}?route=addword`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
       signal: controller.signal,
     });
+  } catch (netErr) {
     clearTimeout(timeoutId);
+    console.warn('Network error during addCustomWord, saving locally:', netErr);
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
-    const json = await response.json();
+  if (response) {
+    let json = null;
+    try {
+      json = await response.json();
+    } catch (e) {}
+
+    if (json && json.success === false) {
+      throw new Error(json.error || 'Слово или фраза отклонена сервером.');
+    }
     if (json && json.success && json.data?.word) {
       savedWord = json.data.word;
     }
-  } catch (err) {
-    console.warn('Network error during addCustomWord, saving locally:', err);
   }
 
   if (!cachedWordsList || !Array.isArray(cachedWordsList)) {

@@ -819,9 +819,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   if (existingCats.length === 0) existingCats.push('Elementary');
 
   const lang = getInterfaceLanguage();
-  const titleText = lang === 'ru' ? '✨ Добавить слово' : lang === 'uk' ? '✨ Додати слово' : '✨ Add word';
-  const wordLabel = lang === 'ru' ? 'Английское слово (строчными)' : lang === 'uk' ? 'Англійське слово (малими літерами)' : 'English word (lowercase)';
-  const transLabel = lang === 'ru' ? 'Перевод' : lang === 'uk' ? 'Переклад' : 'Translation';
+  const titleText = lang === 'ru' ? '✨ Добавить слово или паттерн' : lang === 'uk' ? '✨ Додати слово чи патерн' : '✨ Add word or pattern';
+  const wordLabel = lang === 'ru' ? 'Английское слово или фраза *' : lang === 'uk' ? 'Англійське слово або фраза *' : 'English word or phrase *';
+  const transLabel = lang === 'ru' ? 'Перевод *' : lang === 'uk' ? 'Переклад *' : 'Translation *';
   const catLabel = lang === 'ru' ? 'Категория' : lang === 'uk' ? 'Категорія' : 'Category';
   const notesLabel = lang === 'ru' ? 'Заметка / Пример (необязательно)' : lang === 'uk' ? 'Примітка / Приклад (необовʼязково)' : 'Notes / Example (optional)';
   const saveBtnText = lang === 'ru' ? 'Сохранить' : lang === 'uk' ? 'Зберегти' : 'Save';
@@ -842,18 +842,18 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
         <div>
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
-            <label for="add-word-input">${wordLabel} *</label>
-            <span id="add-word-len" style="color: var(--text-muted); font-size: 11px;">0/35</span>
+            <label for="add-word-input">${wordLabel}</label>
+            <span id="add-word-len" style="color: var(--text-muted); font-size: 11px;">0/50</span>
           </div>
-          <input type="text" id="add-word-input" class="search-input" maxlength="35" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="например: blossom" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
+          <input type="text" id="add-word-input" class="search-input" maxlength="50" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="например: every cloud has a silver lining" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
         </div>
 
         <div>
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
-            <label for="add-trans-input">${transLabel} *</label>
-            <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/50</span>
+            <label for="add-trans-input">${transLabel}</label>
+            <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/75</span>
           </div>
-          <input type="text" id="add-trans-input" class="search-input" maxlength="50" required placeholder="например: цветение" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
+          <input type="text" id="add-trans-input" class="search-input" maxlength="75" required placeholder="например: нет худа без добра" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
           <div id="add-trans-suggestions" style="display: none; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center;">
             <span style="font-size: 11px; color: var(--text-muted);">💡 Варианты:</span>
             <div id="add-trans-pills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
@@ -872,9 +872,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
         <div>
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
             <label for="add-notes-input">${notesLabel}</label>
-            <span id="add-notes-len" style="color: var(--text-muted); font-size: 11px;">0/60</span>
+            <span id="add-notes-len" style="color: var(--text-muted); font-size: 11px;">0/100</span>
           </div>
-          <textarea id="add-notes-input" maxlength="60" rows="2" placeholder="Пример: cherry blossoms bloom in spring" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
+          <textarea id="add-notes-input" maxlength="100" rows="2" placeholder="Пример: Don't worry, every cloud has a silver lining" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 8px;">
@@ -908,9 +908,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   const notesLen = modalEl.querySelector('#add-notes-len');
 
   function updateCounters() {
-    if (wordLen) wordLen.textContent = `${wordInput.value.length}/35`;
-    if (transLen) transLen.textContent = `${transInput.value.length}/50`;
-    if (notesLen) notesLen.textContent = `${notesInput.value.length}/60`;
+    if (wordLen) wordLen.textContent = `${wordInput.value.length}/50`;
+    if (transLen) transLen.textContent = `${transInput.value.length}/75`;
+    if (notesLen) notesLen.textContent = `${notesInput.value.length}/100`;
   }
 
   let suggestTimeout = null;
@@ -1120,15 +1120,28 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     const category = catSelect.value.trim();
     const notes = notesInput.value.trim();
 
-    if (word.length < 2 || word.length > 35) {
+    if (word.length < 2 || word.length > 50) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Длина английского слова должна быть от 2 до 35 символов.';
+      errorBox.textContent = 'Длина английского слова или фразы должна быть от 2 до 50 символов.';
       return;
     }
 
-    if (translation.length < 1 || translation.length > 50) {
+    if (translation.length < 1 || translation.length > 75) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Длина перевода должна быть от 1 до 50 символов.';
+      errorBox.textContent = 'Длина перевода должна быть от 1 до 75 символов.';
+      return;
+    }
+
+    if (notes.length > 100) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = 'Длина примечания не должна превышать 100 символов.';
+      return;
+    }
+
+    const wordTokens = word.split(/\s+/).filter(Boolean);
+    if (wordTokens.length > 6) {
+      errorBox.style.display = 'block';
+      errorBox.textContent = '⚠️ Фраза не должна содержать более 6 слов (максимум для шаблонов и идиом — 6 слов).';
       return;
     }
 
