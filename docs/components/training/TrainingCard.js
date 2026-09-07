@@ -1147,10 +1147,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           }
           if (holdHint)
             holdHint.innerHTML =
-              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю...</span>';
+              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
-          const timeoutMs = wordLength <= 4 ? 2600 : wordLength <= 7 ? 3000 : 3400;
+          const isPhrase = currentWord.word && currentWord.word.includes(' ');
+          const timeoutMs = isPhrase ? 4800 : (wordLength <= 4 ? 3800 : 4200);
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
