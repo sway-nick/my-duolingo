@@ -764,6 +764,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speechAttempts++;
         }
 
+        const defaultRetryText =
+          getInterfaceLanguage() === 'ru'
+            ? 'Голос не распознан. Нажмите 🎙️ для повтора'
+            : getInterfaceLanguage() === 'uk'
+              ? 'Голос не розпізнано. Натисніть 🎙️ для повтору'
+              : 'Voice not recognized. Tap 🎙️ to retry';
+
+        // Filter out any raw technical JSON from customMsg
+        let cleanErrorText = customMsg || defaultRetryText;
+        if (cleanErrorText.includes('{') || cleanErrorText.includes('Key #') || cleanErrorText.includes('error (') || cleanErrorText.includes('failed across') || cleanErrorText.includes('ModelService')) {
+          cleanErrorText = defaultRetryText;
+        }
+
         if (speechAttempts < 5) {
           if (holdHint) {
             const attemptText = isTechnical
@@ -779,12 +792,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   : `Try again 🎙️ (Attempt ${speechAttempts} of 5)`;
             holdHint.innerHTML = attemptText;
           }
-          const errorText =
-            customMsg ||
-            (getInterfaceLanguage() === 'ru'
-              ? 'Голос не распознан. Нажмите 🎙️ для повтора'
-              : 'Voice not recognized. Tap 🎙️ to retry');
-          showFallbackButton(errorText);
+          showFallbackButton(cleanErrorText);
         } else {
           // Достигнут лимит реальных попыток (5) – штраф
           isCompleted = true;
