@@ -819,7 +819,28 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   if (existingCats.length === 0) existingCats.push('Elementary');
 
   const lang = getInterfaceLanguage();
-  const titleText = lang === 'ru' ? 'Добавить' : lang === 'uk' ? 'Додати' : 'Add';
+  const addTitles = {
+    ru: '✨ Добавить',
+    uk: '✨ Додати',
+    en: '✨ Add',
+    de: '✨ Hinzufügen',
+    es: '✨ Añadir',
+    fr: '✨ Ajouter',
+    pl: '✨ Dodaj',
+    it: '✨ Aggiungi',
+    tr: '✨ Ekle',
+    pt: '✨ Adicionar',
+    ro: '✨ Adaugă',
+    bg: '✨ Добавяне',
+    cs: '✨ Přidat',
+    sk: '✨ Pridať',
+    hu: '✨ Hozzáadás',
+    el: '✨ Προσθήκη',
+    sl: '✨ Dodaj',
+    et: '✨ Lisa',
+    lt: '✨ Pridėti',
+  };
+  const titleText = addTitles[lang] || addTitles['en'] || '✨ Add';
   const wordLabel = lang === 'ru' ? 'Английское слово или фраза *' : lang === 'uk' ? 'Англійське слово або фраза *' : 'English word or phrase *';
   const transLabel = lang === 'ru' ? 'Перевод *' : lang === 'uk' ? 'Переклад *' : 'Translation *';
   const catLabel = lang === 'ru' ? 'Категория' : lang === 'uk' ? 'Категорія' : 'Category';
@@ -831,9 +852,10 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
   modalEl.innerHTML = `
     <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main);">${titleText}</h3>
-        <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 2px 6px; line-height: 1;">✕</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; position: relative;">
+        <div style="width: 28px;"></div>
+        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); text-align: center; flex: 1;">${titleText}</h3>
+        <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 2px 6px; line-height: 1; width: 28px; text-align: right;">✕</button>
       </div>
 
       <form id="add-word-form" style="display: flex; flex-direction: column; gap: 14px;">
@@ -1025,6 +1047,30 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     });
   }
 
+  function syncCategoryForInput() {
+    const typed = wordInput.value.trim().toLowerCase();
+    const tokenCount = typed.split(/\s+/).filter(Boolean).length;
+    if (tokenCount > 1) {
+      if (!Array.from(catSelect.options).some((o) => o.value === 'Pattern')) {
+        const opt = document.createElement('option');
+        opt.value = 'Pattern';
+        opt.textContent = 'Pattern';
+        catSelect.appendChild(opt);
+      }
+      catSelect.value = 'Pattern';
+      catSelect.disabled = true;
+      catSelect.style.opacity = '0.75';
+      catSelect.style.cursor = 'not-allowed';
+    } else {
+      const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
+      if (!existing) {
+        catSelect.disabled = false;
+        catSelect.style.opacity = '1';
+        catSelect.style.cursor = 'default';
+      }
+    }
+  }
+
   function checkDuplicate() {
     const typed = wordInput.value.trim().toLowerCase();
     const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
@@ -1035,12 +1081,14 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       transInput.disabled = true;
       catSelect.value = existing.category || (existingCats[0] || 'Elementary');
       catSelect.disabled = true;
+      catSelect.style.opacity = '0.75';
+      catSelect.style.cursor = 'not-allowed';
       if (suggestionsBox) suggestionsBox.style.display = 'none';
       submitBtn.textContent = updateNoteText;
     } else {
       noticeBox.style.display = 'none';
       transInput.disabled = false;
-      catSelect.disabled = false;
+      syncCategoryForInput();
       submitBtn.textContent = saveBtnText;
 
       clearTimeout(suggestTimeout);
@@ -1117,7 +1165,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
     const word = wordInput.value.trim().toLowerCase();
     const translation = transInput.value.trim().toLowerCase();
-    const category = catSelect.value.trim();
+    const category = word.split(/\s+/).filter(Boolean).length > 1 ? 'Pattern' : catSelect.value.trim();
     const notes = notesInput.value.trim();
 
     if (word.length < 2 || word.length > 50) {
