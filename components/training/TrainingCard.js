@@ -753,7 +753,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         isProcessing = false;
         isListening = false;
         if (micBtn) {
-          micBtn.classList.remove('listening', 'processing', 'holding');
+          micBtn.classList.remove('listening', 'processing', 'holding', 'ai-thinking');
           micBtn.innerHTML = '🎙️';
         }
 
@@ -788,6 +788,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           isCompleted = true;
           if (micBtn) {
             micBtn.disabled = true;
+            micBtn.classList.remove('listening', 'processing', 'holding', 'ai-thinking');
             micBtn.classList.add('wrong');
             micBtn.innerHTML = '❌';
           }
@@ -807,7 +808,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (fallbackBtn) fallbackBtn.style.display = 'none';
           if (transcriptBox) {
             transcriptBox.style.display = 'block';
-            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ Попытки исчерпаны. Нажмите "Продолжить" для перехода к следующему слову.</span>`;
+            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${
+              getInterfaceLanguage() === 'ru'
+                ? 'Попытки исчерпаны. Нажмите "Продолжить" для перехода к следующему слову.'
+                : getInterfaceLanguage() === 'uk'
+                  ? 'Спроби вичерпані. Натисніть "Далі" для переходу до наступного слова.'
+                  : 'Attempts exhausted. Tap "Next" to proceed.'
+            }</span>`;
           }
         }
       }
@@ -838,13 +845,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             nativeRecognition.onstart = () => {
               if (micBtn) {
-                micBtn.classList.remove('processing', 'success');
+                micBtn.classList.remove('processing', 'success', 'ai-thinking');
                 micBtn.classList.add('listening');
                 micBtn.innerHTML = '🎙️';
               }
               if (holdHint) {
-                holdHint.innerHTML =
-                  '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+                holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700;">🟢 ${
+                  getInterfaceLanguage() === 'ru'
+                    ? 'Слушаю! Говорите...'
+                    : getInterfaceLanguage() === 'uk'
+                      ? 'Слухаю! Говоріть...'
+                      : 'Listening! Speak now...'
+                }</span>`;
               }
 
               // Даем комфортные 4 секунды на произнесение слова
@@ -852,10 +864,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               autoStopTimer = setTimeout(() => {
                 if (isListening && !isEvaluated) {
                   if (micBtn) {
-                    micBtn.classList.remove('listening');
-                    micBtn.classList.add('processing');
+                    micBtn.classList.remove('listening', 'processing');
+                    micBtn.classList.add('ai-thinking');
+                    micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
                   }
-                  if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
+                  if (holdHint) {
+                    holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
+                      getInterfaceLanguage() === 'ru'
+                        ? 'AI оценивает произношение...'
+                        : getInterfaceLanguage() === 'uk'
+                          ? 'AI оцінює вимову...'
+                          : 'AI is evaluating pronunciation...'
+                    }</span>`;
+                  }
                   try {
                     nativeRecognition.stop();
                   } catch (e) {}
@@ -876,6 +897,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             nativeRecognition.onspeechend = () => {
               if (isEvaluated || isCompleted || isProcessing) return;
               if (isListening && !isEvaluated) {
+                if (micBtn) {
+                  micBtn.classList.remove('listening', 'processing');
+                  micBtn.classList.add('ai-thinking');
+                  micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
+                }
+                if (holdHint) {
+                  holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
+                    getInterfaceLanguage() === 'ru'
+                      ? 'AI оценивает произношение...'
+                      : getInterfaceLanguage() === 'uk'
+                        ? 'AI оцінює вимову...'
+                        : 'AI is evaluating pronunciation...'
+                  }</span>`;
+                }
                 setTimeout(() => {
                   try {
                     nativeRecognition.stop();
@@ -1098,11 +1133,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             console.log('AUDIO INSPECT', inspect);
 
             if (micBtn) {
-              micBtn.classList.remove('listening');
-              micBtn.classList.add('processing');
-              micBtn.innerHTML = '🎙️';
+              micBtn.classList.remove('listening', 'processing');
+              micBtn.classList.add('ai-thinking');
+              micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
             }
-            if (holdHint) holdHint.innerHTML = '⏳ Проверяю произношение...';
+            if (holdHint) {
+              holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
+                getInterfaceLanguage() === 'ru'
+                  ? 'AI оценивает произношение...'
+                  : getInterfaceLanguage() === 'uk'
+                    ? 'AI оцінює вимову...'
+                    : 'AI is evaluating pronunciation...'
+              }</span>`;
+            }
 
             try {
               const result = await transcribeAudio(audioBlob, mime, currentWord.word);
@@ -1141,13 +1184,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           mediaRecorder.start();
 
           if (micBtn) {
-            micBtn.classList.remove('processing', 'success');
+            micBtn.classList.remove('processing', 'success', 'ai-thinking');
             micBtn.classList.add('listening');
             micBtn.innerHTML = '🎙️';
           }
-          if (holdHint)
-            holdHint.innerHTML =
-              '<span style="color: #d97706; font-weight: 700;">🟡 Слушаю... Произнесите слово!</span>';
+          if (holdHint) {
+            holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700;">🟢 ${
+              getInterfaceLanguage() === 'ru'
+                ? 'Слушаю! Говорите...'
+                : getInterfaceLanguage() === 'uk'
+                  ? 'Слухаю! Говоріть...'
+                  : 'Listening! Speak now...'
+            }</span>`;
+          }
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
           const isPhrase = currentWord.word && currentWord.word.includes(' ');
@@ -1182,6 +1231,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       function stopAndTranscribe() {
         clearAllTimers();
         isListening = false;
+        if (micBtn) {
+          micBtn.classList.remove('listening', 'processing');
+          micBtn.classList.add('ai-thinking');
+          micBtn.innerHTML = '<span class="robot-pulse-icon">🤖</span>';
+        }
+        if (holdHint) {
+          holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
+            getInterfaceLanguage() === 'ru'
+              ? 'AI оценивает произношение...'
+              : getInterfaceLanguage() === 'uk'
+                ? 'AI оцінює вимову...'
+                : 'AI is evaluating pronunciation...'
+          }</span>`;
+        }
 
         if (nativeRecognition) {
           try {
@@ -1444,7 +1507,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (isMatch) {
           isCompleted = true;
           playSuccessSound();
-          micBtn.classList.remove('listening', 'processing');
+          micBtn.classList.remove('listening', 'processing', 'ai-thinking');
           micBtn.classList.add('success');
           micBtn.innerHTML = '✓';
           if (holdHint) {
@@ -1466,7 +1529,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         } else {
           // РЕАЛЬНАЯ ошибка произношения – списываем попытку
           speechAttempts++;
-          micBtn.classList.remove('listening', 'processing');
+          micBtn.classList.remove('listening', 'processing', 'ai-thinking');
 
           if (speechAttempts < 5) {
             micBtn.innerHTML = '🎙️';
