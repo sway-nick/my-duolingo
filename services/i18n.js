@@ -461,7 +461,7 @@ const translations = {
     fav_start_btn: "🎓 Training starten",
     fav_practice_btn: "🔥 Wiederholen",
     fav_hub_btn: "Favoriten wiederholen",
-    fav_clear_all_btn: "Alle leeren",
+    fav_clear_all_btn: "Alles leeren",
     fav_clear_confirm: "Alle Wörter aus den Favoriten entfernen?",
 
     // Dictionary View
@@ -579,8 +579,8 @@ const translations = {
     fav_start_btn: "🎓 Iniciar entrenamiento",
     fav_practice_btn: "🔥 Practicar",
     fav_hub_btn: "Repasar favoritos",
-    fav_clear_all_btn: "Quitar todo",
-    fav_clear_confirm: "¿Quitar todas las palabras de favoritos?",
+    fav_clear_all_btn: "Limpiar todo",
+    fav_clear_confirm: "¿Limpiar todas las palabras de favoritos?",
 
     // Dictionary View
     dict_title: "📖 Diccionario",
