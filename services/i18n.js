@@ -44,8 +44,8 @@ const translations = {
     fav_start_btn: "🎓 Перейти к тренировке",
     fav_practice_btn: "🔥 Повторить",
     fav_hub_btn: "Повторить избранное",
-    fav_clear_all_btn: "Снять всё",
-    fav_clear_confirm: "Снять все слова из избранного?",
+    fav_clear_all_btn: "Очистить всё",
+    fav_clear_confirm: "Очистить все слова из избранного?",
 
     // Dictionary View
     dict_title: "📖 Словарь",
@@ -183,8 +183,8 @@ const translations = {
     fav_start_btn: "🎓 Перейти до тренування",
     fav_practice_btn: "🔥 Повторити",
     fav_hub_btn: "Повторити обране",
-    fav_clear_all_btn: "Зняти все",
-    fav_clear_confirm: "Зняти всі слова з обраного?",
+    fav_clear_all_btn: "Очистити все",
+    fav_clear_confirm: "Очистити всі слова з обраного?",
 
     // Dictionary View
     dict_title: "📖 Словник",
