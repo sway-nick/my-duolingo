@@ -5486,16 +5486,20 @@ body.notebook-theme,
 .flashcard-notes {
   font-size: 14.5px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  color: #475569;
   margin-top: 8px;
   margin-bottom: 0;
   line-height: 1.35;
   text-align: center;
 }
 
+.dark-theme .flashcard-notes {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
 .notebook-theme .flashcard-notes {
   color: var(--nb-blue-pen) !important;
-  opacity: 0.8;
+  opacity: 0.85;
   font-family: 'Caveat', cursive !important;
 }
 
