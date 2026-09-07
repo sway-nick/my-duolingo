@@ -588,8 +588,7 @@ function generateDynamicBots(weekKey) {
   const now = new Date();
   let dayOfWeek = now.getUTCDay(); // 1 = Monday, 2 = Tuesday, ..., 7 = Sunday in UTC
   if (dayOfWeek === 0) dayOfWeek = 7;
-  const hour = now.getUTCHours();
-  const mins = now.getUTCMinutes();
+  const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
   function hashStr(str) {
     let hash = 0;
@@ -607,14 +606,39 @@ function generateDynamicBots(weekKey) {
 
     let botXP = 0;
     for (let d = 1; d <= dayOfWeek; d++) {
-      const seed = hashStr(weekKey + '_' + userId + '_day_' + d);
-      const dayGain = minDaily + (seed % (maxDaily - minDaily + 1));
-      if (d < dayOfWeek) {
-        botXP += dayGain;
-      } else {
-        // Current UTC day progress (bots study between 06:00 and 23:00 UTC)
-        const progress = Math.min(1.0, Math.max(0.0, (hour + (mins / 60) - 6) / 17));
-        botXP += Math.floor(dayGain * progress);
+      const daySeed = hashStr(`${weekKey}_${userId}_day_${d}`);
+      const dayGain = minDaily + (daySeed % (maxDaily - minDaily + 1));
+      if (dayGain <= 0) continue;
+
+      // Number of training sessions today (1 to 4 sessions depending on tier and seed)
+      const numSessions = tier === 0 ? (2 + (daySeed % 3)) : // 2..4 sessions for top leaders
+                          tier <= 2 ? (1 + (daySeed % 3)) : // 1..3 sessions for mid tier
+                          (1 + (daySeed % 2));              // 1..2 sessions for casual
+
+      const slotSize = Math.floor(1440 / numSessions);
+      let remainingXP = dayGain;
+
+      for (let s = 0; s < numSessions; s++) {
+        const sessSeed = hashStr(`${weekKey}_${userId}_d${d}_s${s}`);
+        const isLast = (s === numSessions - 1);
+
+        const basePortion = Math.floor(dayGain / numSessions);
+        let sessionXP = isLast ? remainingXP : Math.max(5, Math.floor(basePortion * (0.8 + (sessSeed % 40) / 100)));
+        sessionXP = Math.min(sessionXP, remainingXP);
+        remainingXP -= sessionXP;
+
+        // Session start time in minutes (0..1439 UTC)
+        const slotStart = s * slotSize;
+        const jitter = sessSeed % Math.max(10, slotSize - 15);
+        const sessionMinute = slotStart + jitter;
+
+        if (d < dayOfWeek) {
+          botXP += sessionXP;
+        } else {
+          if (currentMinutes >= sessionMinute) {
+            botXP += sessionXP;
+          }
+        }
       }
     }
 
