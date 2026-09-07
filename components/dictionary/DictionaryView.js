@@ -852,10 +852,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
   modalEl.innerHTML = `
     <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; position: relative;">
-        <div style="width: 28px;"></div>
-        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); text-align: center; flex: 1;">${titleText}</h3>
-        <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 2px 6px; line-height: 1; width: 28px; text-align: right;">✕</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); text-align: left;">${titleText}</h3>
+        <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 2px 6px; line-height: 1;">✕</button>
       </div>
 
       <form id="add-word-form" style="display: flex; flex-direction: column; gap: 14px;">
