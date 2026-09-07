@@ -1711,7 +1711,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
         });
 
         const controller = new AbortController();
-        timeoutId = setTimeout(() => controller.abort(), 15000);
+        timeoutId = setTimeout(() => controller.abort(), 25000);
         const uploadStart = Date.now();
 
         const response = await fetch(API_URL, {
@@ -1743,7 +1743,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
       } catch (err) {
         if (timeoutId) clearTimeout(timeoutId);
         if (err.name === 'AbortError') {
-          reject(new Error('Время ожидания ответа сервера истекло (15 сек). Попробуйте еще раз.'));
+          reject(new Error('Время ожидания ответа сервера истекло. Попробуйте еще раз.'));
         } else {
           reject(err);
         }
