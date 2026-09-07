@@ -819,7 +819,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   if (existingCats.length === 0) existingCats.push('Elementary');
 
   const lang = getInterfaceLanguage();
-  const titleText = lang === 'ru' ? '✨ Добавить слово или паттерн' : lang === 'uk' ? '✨ Додати слово чи патерн' : '✨ Add word or pattern';
+  const titleText = lang === 'ru' ? 'Добавить' : lang === 'uk' ? 'Додати' : 'Add';
   const wordLabel = lang === 'ru' ? 'Английское слово или фраза *' : lang === 'uk' ? 'Англійське слово або фраза *' : 'English word or phrase *';
   const transLabel = lang === 'ru' ? 'Перевод *' : lang === 'uk' ? 'Переклад *' : 'Translation *';
   const catLabel = lang === 'ru' ? 'Категория' : lang === 'uk' ? 'Категорія' : 'Category';
