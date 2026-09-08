@@ -2533,7 +2533,105 @@ export function setInterfaceLanguage(lang) {
   window.dispatchEvent(new Event('myduo:lang_changed'));
 }
 
+export const SPEECH_PROMPTS = {
+  listening: {
+    ru: 'Слушаю! Говорите...',
+    uk: 'Слухаю! Говоріть...',
+    en: 'Listening! Speak now...',
+    de: 'Höre zu! Jetzt sprechen...',
+    es: '¡Escuchando! Habla ahora...',
+    fr: "À l'écoute ! Parlez maintenant...",
+    pl: 'Słucham! Mów teraz...',
+    it: 'In ascolto! Parla ora...',
+    tr: 'Dinliyorum! Şimdi konuşun...',
+    pt: 'Ouvindo! Fale agora...',
+    ro: 'Ascult! Vorbiți acum...',
+    bg: 'Слушам! Говорете сега...',
+    cs: 'Poslouchám! Mluvte...',
+    sk: 'Počúvam! Hovorte...',
+    hu: 'Hallgatom! Beszéljen most...',
+    el: 'Ακούω! Μιλήστε τώρα...',
+    sl: 'Poslušam! Govorite zdaj...',
+    et: 'Kuulan! Rääkige nüüd...',
+    lt: 'Klausau! Kalbėkite dabar...',
+  },
+  evaluating: {
+    ru: 'AI оценивает произношение...',
+    uk: 'AI оцінює вимову...',
+    en: 'AI is evaluating pronunciation...',
+    de: 'KI bewertet die Aussprache...',
+    es: 'La IA evalúa la pronunciación...',
+    fr: "L'IA évalue la prononciation...",
+    pl: 'AI ocenia wymowę...',
+    it: "L'IA valuta la pronuncia...",
+    tr: 'Yapay zeka telaffuzu değerlendiriyor...',
+    pt: 'A IA está avaliando a pronúncia...',
+    ro: 'IA evaluează pronunția...',
+    bg: 'ИИ оценява произношението...',
+    cs: 'AI hodnotí výslovnost...',
+    sk: 'AI hodnotí výslovnosť...',
+    hu: 'Az AI értékeli a kiejtést...',
+    el: 'Η τεχνητή νοημοσύνη αξιολογεί την προφορά...',
+    sl: 'UI ocenjuje izgovorjavo...',
+    et: 'Tehisintellekt hindab hääldust...',
+    lt: 'DI vertina tarimą...',
+  },
+  retry: {
+    ru: 'Голос не распознан. Нажмите 🎙️ для повтора',
+    uk: 'Голос не розпізнано. Натисніть 🎙️ для повтору',
+    en: 'Voice not recognized. Tap 🎙️ to retry',
+    de: 'Stimme nicht erkannt. 🎙️ zum Wiederholen tippen',
+    es: 'Voz no reconocida. Toca 🎙️ para reintentar',
+    fr: 'Voix non reconnue. Appuyez sur 🎙️ pour réessayer',
+    pl: 'Nie rozpoznano głosu. Dotknij 🎙️, aby ponowić',
+    it: 'Voce non riconosciuta. Tocca 🎙️ per riprovare',
+    tr: 'Ses tanınmadı. Tekrar denemek için 🎙️ dokunun',
+    pt: 'Voz não reconhecida. Toque em 🎙️ para tentar de novo',
+    ro: 'Voce nerecunoscută. Atingeți 🎙️ pentru a reîncerca',
+    bg: 'Гласът не е разпознат. Натиснете 🎙️ за повторение',
+    cs: 'Hlas nerozpoznán. Klepněte na 🎙️ pro opakování',
+    sk: 'Hlas nebol rozpoznaný. Klepnite na 🎙️ pre opakovanie',
+    hu: 'Nem sikerült felismerni a hangot. Koppintson a 🎙️ gombra',
+    el: 'Η φωνή δεν αναγνωρίστηκε. Πατήστε 🎙️ για επανάληψη',
+    sl: 'Glas ni bil prepoznan. Tapnite 🎙️ za ponovni poskus',
+    et: 'Häält ei tuvastatud. Puudutage 🎙️ uuesti proovimiseks',
+    lt: 'Balsas neatpažintas. Bakstelėkite 🎙️, kad pakartotumėte',
+  },
+  tap_to_speak: {
+    ru: 'Нажмите на микрофон и скажите слово',
+    uk: 'Натисніть на мікрофон і скажіть слово',
+    en: 'Tap the microphone and say the word',
+    de: 'Tippen Sie auf das Mikrofon und sprechen Sie das Wort',
+    es: 'Toca el micrófono y di la palabra',
+    fr: 'Appuyez sur le micro et prononcez le mot',
+    pl: 'Dotknij mikrofonu i powiedz słowo',
+    it: 'Tocca il microfono e pronuncia la parola',
+    tr: 'Mikrofona dokunun ve kelimeyi söyleyin',
+    pt: 'Toque no microfone e diga a palavra',
+    ro: 'Atingeți microfonul și rostiți cuvântul',
+    bg: 'Натиснете микрофона и кажете думата',
+    cs: 'Klepněte na mikrofon a řekněte slovo',
+    sk: 'Klepnite na mikrofón a povedzte slovo',
+    hu: 'Koppintson a mikrofonra és mondja ki a szót',
+    el: 'Πατήστε το μικρόφωνο και πείτε τη λέξη',
+    sl: 'Tapnite mikrofon in izgovorite besedo',
+    et: 'Puudutage mikrofoni ja öelge sõna',
+    lt: 'Bakstelėkite mikrofoną ir ištarkite žodį',
+  },
+};
+
+export function getSpeechPrompt(type = 'listening') {
+  const lang = getInterfaceLanguage();
+  const bundle = SPEECH_PROMPTS[type] || SPEECH_PROMPTS['listening'];
+  return bundle[lang] || bundle['en'] || bundle['ru'];
+}
+
 export function t(key) {
+  if (key === 'speech_listening') return getSpeechPrompt('listening');
+  if (key === 'speech_evaluating') return getSpeechPrompt('evaluating');
+  if (key === 'speech_not_recognized') return getSpeechPrompt('retry');
+  if (key === 'speech_tap_to_speak') return getSpeechPrompt('tap_to_speak');
+
   const lang = getInterfaceLanguage();
   const dict = translations[lang] || translations['en'];
   return dict[key] || translations['en'][key] || key;

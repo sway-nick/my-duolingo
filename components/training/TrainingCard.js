@@ -646,7 +646,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             🎙️
           </button>
           <div class="speech-hold-hint" id="speech-hold-hint">
-            ${getInterfaceLanguage() === 'ru' ? 'Нажмите на микрофон и скажите слово' : getInterfaceLanguage() === 'uk' ? 'Натисніть на мікрофон і скажіть слово' : 'Tap the microphone and say the word'}
+            ${t('speech_tap_to_speak')}
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none; margin-top: 10px;"></div>
           <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="margin-top: 12px; width: 100%; max-width: 220px; min-height: 42px; font-size: 14px; padding: 8px 18px; border-radius: 12px; font-weight: 700; cursor: pointer;">
@@ -771,12 +771,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speechAttempts++;
         }
 
-        const defaultRetryText =
-          getInterfaceLanguage() === 'ru'
-            ? 'Голос не распознан. Нажмите 🎙️ для повтора'
-            : getInterfaceLanguage() === 'uk'
-              ? 'Голос не розпізнано. Натисніть 🎙️ для повтору'
-              : 'Voice not recognized. Tap 🎙️ to retry';
+        const defaultRetryText = t('speech_not_recognized');
 
         // Filter out any raw technical JSON from customMsg
         let cleanErrorText = customMsg || defaultRetryText;
@@ -867,13 +862,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 micBtn.innerHTML = '🎙️';
               }
               if (holdHint) {
-                holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700;">🟢 ${
-                  getInterfaceLanguage() === 'ru'
-                    ? 'Слушаю! Говорите...'
-                    : getInterfaceLanguage() === 'uk'
-                      ? 'Слухаю! Говоріть...'
-                      : 'Listening! Speak now...'
-                }</span>`;
+                holdHint.innerHTML = `<span class="speech-listening-text">🟠 ${t('speech_listening')}</span>`;
               }
 
               // Даем комфортные 4 секунды на произнесение слова
@@ -886,13 +875,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
                   }
                   if (holdHint) {
-                    holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
-                      getInterfaceLanguage() === 'ru'
-                        ? 'AI оценивает произношение...'
-                        : getInterfaceLanguage() === 'uk'
-                          ? 'AI оцінює вимову...'
-                          : 'AI is evaluating pronunciation...'
-                    }</span>`;
+                    holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
                   }
                   try {
                     nativeRecognition.stop();
@@ -904,7 +887,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     if (!isEvaluated && !isCompleted) {
                       isListening = false;
                       isProcessing = false;
-                      handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
+                      handleNoSpeechHeard(t('speech_not_recognized'), true);
                     }
                   }, 3000);
                 }
@@ -1203,13 +1186,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '🎙️';
           }
           if (holdHint) {
-            holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700;">🟢 ${
-              getInterfaceLanguage() === 'ru'
-                ? 'Слушаю! Говорите...'
-                : getInterfaceLanguage() === 'uk'
-                  ? 'Слухаю! Говоріть...'
-                  : 'Listening! Speak now...'
-            }</span>`;
+            holdHint.innerHTML = `<span class="speech-listening-text">🟠 ${t('speech_listening')}</span>`;
           }
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
@@ -1251,13 +1228,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
         }
         if (holdHint) {
-          holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
-            getInterfaceLanguage() === 'ru'
-              ? 'AI оценивает произношение...'
-              : getInterfaceLanguage() === 'uk'
-                ? 'AI оцінює вимову...'
-                : 'AI is evaluating pronunciation...'
-          }</span>`;
+          holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
         }
 
         if (nativeRecognition) {
