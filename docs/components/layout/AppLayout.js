@@ -220,12 +220,13 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   applyTheme(currentTheme);
 
   // Bind Brand Logo Click
-  const brandLogo = app.querySelector('#brand-logo');
-  if (brandLogo) {
-    brandLogo.addEventListener('click', () => {
+  app.addEventListener('click', (e) => {
+    const brand = e.target.closest('#brand-logo');
+    if (brand) {
+      e.stopPropagation();
       onLogoClick();
-    });
-  }
+    }
+  });
 
   // Bind Feedback Button
   const feedbackBtn = app.querySelector('#drawer-feedback-btn');

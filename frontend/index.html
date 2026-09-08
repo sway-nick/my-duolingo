@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260908_v336';
+        var APP_BUILD = '20260908_v337';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -1441,34 +1441,13 @@
             renderTab(activeTab);
           },
           () => {
-            // Click on Logo / Owl -> Switch to Training and activate leftmost available mode
+            // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
-              const selectedCategory = userSettings.category || 'Elementary';
-              const cleanCat = (cat) => {
-                if (!cat) return 'Elementary';
-                return String(cat).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim();
-              };
-              const categoryWords = allWords.filter(
-                (w) => selectedCategory === 'All' || cleanCat(w.category) === cleanCat(selectedCategory)
-              );
-              const favList = getUserFavorites() || [];
-              const userProgress = getUserProgress() || {};
-
-              const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
-              const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
-              const testQueue = getQueueForTest(categoryWords, userProgress);
-
-              let nextMethod = 'cards';
-              if (quizQueue.length > 0) {
-                nextMethod = 'quiz';
-              } else if (pairsQueue.length > 0) {
-                nextMethod = 'pairs';
-              } else if (testQueue.length > 0) {
-                nextMethod = 'input';
-              }
-
-              // Instant UI update: return directly to Hub choice screen
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'quiz';
               window._showHubScreen = true;
+              window._explicitCardsOpened = false;
+              window._trainingRoundJustCompleted = false;
               currentWordIndex = 0;
               const tabs = document.querySelectorAll('.nav-tab');
               tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
