@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260908_v323';
+        var APP_BUILD = '20260908_v324';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -527,7 +527,7 @@
         }
 
         // In initial Cards mode: if user reached daily learning limit during selection, show prompt to go to Quiz
-        if (!isFavPracticeActive && !isCardsReviewMode && currentMethod === 'cards' && learningCount >= dailyGoal) {
+        if (!isFavPracticeActive && !window._showHubScreen && !isCardsReviewMode && currentMethod === 'cards' && learningCount >= dailyGoal) {
           const congratsText = getInterfaceLanguage() === 'ru' 
             ? `Отлично!<br/>Вы отобрали ${learningCount} слов для изучения`
             : getInterfaceLanguage() === 'uk'
@@ -601,7 +601,7 @@
 
         // Check if all words in category/favorites are mastered (3x in Test)
         const unmasteredCount = categoryWords.filter((w) => !isWordMastered(userProgress[w.id])).length;
-        if (unmasteredCount === 0 && categoryWords.length > 0) {
+        if (!window._showHubScreen && unmasteredCount === 0 && categoryWords.length > 0) {
           const nextCategory = isFavPracticeActive ? null : getNextSequentialCategory(selectedCategory, categories);
           const title = isFavPracticeActive ? t('train_mastered_all_favs') : t('train_mastered_title');
           const description = isFavPracticeActive
@@ -691,7 +691,7 @@
         }
 
         // If reviewing existing learning cards and reached the end of the batch
-        if (isCardsReviewMode && (activeWords.length === 0 || currentWordIndex >= activeWords.length)) {
+        if (!window._showHubScreen && isCardsReviewMode && (activeWords.length === 0 || currentWordIndex >= activeWords.length)) {
           let nextBtnTarget = 'quiz';
           let nextBtnIcon = '🎯';
           let nextBtnText = t('train_go_quiz');
@@ -748,7 +748,7 @@
           const testQueue = getQueueForTest(categoryWords, userProgress, favList);
 
           // If words completed Quiz -> show completion card with button to Pairs (like Cards mode)
-          if (currentMethod === 'quiz' && pairsQueue.length > 0) {
+          if (!window._showHubScreen && currentMethod === 'quiz' && pairsQueue.length > 0) {
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
@@ -776,7 +776,7 @@
           }
 
           // If words completed Pairs -> show completion card with button to Test
-          if (currentMethod === 'pairs' && testQueue.length > 0) {
+          if (!window._showHubScreen && currentMethod === 'pairs' && testQueue.length > 0) {
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
