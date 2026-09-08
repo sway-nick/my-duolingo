@@ -4547,15 +4547,15 @@ button.leaderboard-header-chip:hover {
 }
 
 .dark-theme .speech-listening-text {
-  color: #facc15 !important;
-  text-shadow: 0 0 12px rgba(250, 204, 21, 0.65) !important;
+  color: #fb923c !important;
+  text-shadow: 0 0 10px rgba(251, 146, 60, 0.45) !important;
 }
 
 .dark-theme .speech-mic-btn.listening {
-  background: linear-gradient(135deg, #facc15, #eab308) !important;
-  color: #1e1b4b !important;
-  box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.85) !important;
-  animation: micPulseRippleYellow 1.1s infinite !important;
+  background: linear-gradient(135deg, #ff7a00, #ea580c) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0 rgba(255, 122, 0, 0.85) !important;
+  animation: micPulseRippleOrange 1.1s infinite !important;
 }
 
 .notebook-theme .speech-listening-text {

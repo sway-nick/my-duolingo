@@ -1403,12 +1403,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               try {
                 if (isPingOnly) {
                   const pingRes = await transcribePingAudio(blob, mime, expectedTarget);
+                  const keysInfo = pingRes.keysFoundCount !== undefined
+                    ? `🔑 Ключей Gemini на сервере: <strong>${pingRes.keysFoundCount}</strong> (${pingRes.keysPreview || ''})<br>`
+                    : '';
                   transcriptBox.innerHTML = `
                     <span style="color: #16a34a; font-weight: 700;">⚡ Ping успешен!</span><br>
                     <span style="font-size: 13px; color: var(--text-main);">
+                      ${keysInfo}
                       Размер: <strong>${Math.round(blob.size / 1024 * 10) / 10} КБ</strong> | Длительность: <strong>${inspect.duration}с</strong> (${blob.type})<br>
-                      Клиентский Roundtrip: <strong>${pingRes.totalClientMs} мс</strong><br>
-                      Серверный парсинг: <strong>${pingRes.serverParseMs} мс</strong>
+                      Клиентский Roundtrip: <strong>${pingRes.totalClientMs} мс</strong> | Серверный парсинг: <strong>${pingRes.serverParseMs} мс</strong>
                     </span>
                   `;
                 } else {
