@@ -2394,10 +2394,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
         <button type="button" class="btn-learn" id="btn-learn">
-          ${isBatchReview ? (getInterfaceLanguage() === 'ru' ? '🔄 Ещё раз' : getInterfaceLanguage() === 'uk' ? '🔄 Ще раз' : '🔄 Again') : t('train_learn')}
+          ${isBatchReview ? ('🔄 ' + (t('review_repeat') || 'Повторить')) : t('train_learn')}
         </button>
         <button type="button" class="btn-know" id="btn-know">
-          ${isBatchReview ? (getInterfaceLanguage() === 'ru' ? '✓ Далее' : getInterfaceLanguage() === 'uk' ? '✓ Далі' : '✓ Next') : t('train_know')}
+          ${isBatchReview ? ('✓ ' + (t('review_know') || 'Знаю')) : t('train_know')}
         </button>
       </div>
     `;
@@ -2460,7 +2460,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
     if (isBatchReview) {
-      practiceArea.querySelector('#btn-learn')?.addEventListener('click', () => {
+      practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
+        await saveProgress(currentWord.id, false, 'cards_repeat_round');
         onNext({ repeatSoon: true });
       });
 

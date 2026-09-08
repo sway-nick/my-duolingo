@@ -999,6 +999,11 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       prog.stage = 'quiz';
       if (!prog.quizCorrect) prog.quizCorrect = 0;
     }
+  } else if (method === 'cards_repeat_round') {
+    prog.seenInCards = true;
+    prog.stage = 'quiz';
+    prog.quizCorrect = 0;
+    prog.pairsCorrect = 0;
   } else if (method === 'cards_know') {
     prog.seenInCards = true;
     if (!isWordMastered(prog)) {

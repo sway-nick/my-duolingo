@@ -2618,6 +2618,48 @@ export const SPEECH_PROMPTS = {
     et: 'Puudutage mikrofoni ja öelge sõna',
     lt: 'Bakstelėkite mikrofoną ir ištarkite žodį',
   },
+  review_repeat: {
+    ru: 'Повторить',
+    uk: 'Повторити',
+    en: 'Repeat',
+    de: 'Wiederholen',
+    es: 'Repetir',
+    fr: 'Répéter',
+    pl: 'Powtórz',
+    it: 'Ripeti',
+    tr: 'Tekrar et',
+    pt: 'Repetir',
+    ro: 'Repetă',
+    bg: 'Повтори',
+    cs: 'Opakovat',
+    sk: 'Opakovať',
+    hu: 'Ismétlés',
+    el: 'Επανάληψη',
+    sl: 'Ponovi',
+    et: 'Korda',
+    lt: 'Pakartoti',
+  },
+  review_know: {
+    ru: 'Знаю',
+    uk: 'Знаю',
+    en: 'I know',
+    de: 'Ich weiß',
+    es: 'Lo sé',
+    fr: 'Je sais',
+    pl: 'Znam',
+    it: 'Lo so',
+    tr: 'Biliyorum',
+    pt: 'Eu sei',
+    ro: 'Știu',
+    bg: 'Знам',
+    cs: 'Vím',
+    sk: 'Viem',
+    hu: 'Tudom',
+    el: 'Το ξέρω',
+    sl: 'Vem',
+    et: 'Tean',
+    lt: 'Žinau',
+  },
 };
 
 export function getSpeechPrompt(type = 'listening') {
@@ -2631,6 +2673,8 @@ export function t(key) {
   if (key === 'speech_evaluating') return getSpeechPrompt('evaluating');
   if (key === 'speech_not_recognized') return getSpeechPrompt('retry');
   if (key === 'speech_tap_to_speak') return getSpeechPrompt('tap_to_speak');
+  if (key === 'review_repeat') return getSpeechPrompt('review_repeat');
+  if (key === 'review_know') return getSpeechPrompt('review_know');
 
   const lang = getInterfaceLanguage();
   const dict = translations[lang] || translations['en'];
