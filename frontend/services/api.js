@@ -2071,6 +2071,11 @@ async function addCustomWord({ word, translation, category, notes }) {
     zipf: 0,
   };
 
+  let lang = 'ru';
+  try {
+    lang = localStorage.getItem('myduo_interface_lang') || 'ru';
+  } catch (e) {}
+
   const payload = {
     action: 'addword',
     route: 'addword',
@@ -2078,6 +2083,8 @@ async function addCustomWord({ word, translation, category, notes }) {
     translation: cleanTrans,
     category: cleanCat,
     notes: cleanNotes,
+    lang,
+    language: lang,
   };
 
   let savedWord = localWord;

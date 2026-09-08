@@ -1074,16 +1074,20 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     const typed = wordInput.value.trim().toLowerCase();
     const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
     if (existing) {
+      const existingTrans = getWordTranslation(existing) || existing.translation || '';
+      const existingNotes = getWordNotes(existing) || '';
       noticeBox.style.display = 'block';
-      noticeBox.innerHTML = `💡 Слово уже есть в словаре (перевод: <strong>«${escapeHtml(existing.translation)}»</strong>, категория: <strong>«${escapeHtml(existing.category)}»</strong>).<br>Вы можете дополнить или обновить примечание к нему.`;
-      transInput.value = existing.translation || '';
+      noticeBox.innerHTML = `💡 Слово уже есть в словаре (перевод: <strong>«${escapeHtml(existingTrans)}»</strong>, категория: <strong>«${escapeHtml(existing.category)}»</strong>).<br>Вы можете дополнить или обновить примечание к нему.`;
+      transInput.value = existingTrans;
       transInput.disabled = true;
+      notesInput.value = existingNotes;
       catSelect.value = existing.category || (existingCats[0] || 'Elementary');
       catSelect.disabled = true;
       catSelect.style.opacity = '0.75';
       catSelect.style.cursor = 'not-allowed';
       if (suggestionsBox) suggestionsBox.style.display = 'none';
       submitBtn.textContent = updateNoteText;
+      updateCounters();
     } else {
       noticeBox.style.display = 'none';
       transInput.disabled = false;
