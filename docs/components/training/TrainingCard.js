@@ -862,7 +862,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 micBtn.innerHTML = '🎙️';
               }
               if (holdHint) {
-                holdHint.innerHTML = `<span class="speech-listening-text">🟠 ${t('speech_listening')}</span>`;
+                holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
               }
 
               // Даем комфортные 4 секунды на произнесение слова
@@ -1186,7 +1186,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '🎙️';
           }
           if (holdHint) {
-            holdHint.innerHTML = `<span class="speech-listening-text">🟠 ${t('speech_listening')}</span>`;
+            holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
           }
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
