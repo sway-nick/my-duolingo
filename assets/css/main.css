@@ -3505,6 +3505,40 @@ body.dark-theme .filter-select {
   border-color: #334155 !important;
 }
 
+/* Disabled & readonly inputs (Add word modal, forms, etc.) */
+input:disabled,
+select:disabled,
+textarea:disabled,
+.search-input:disabled,
+.search-input[readonly] {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+  background: rgba(148, 163, 184, 0.15) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+  color: var(--text-muted, #64748b) !important;
+  box-shadow: none !important;
+}
+
+.dark-theme input:disabled,
+.dark-theme select:disabled,
+.dark-theme textarea:disabled,
+.dark-theme .search-input:disabled,
+.dark-theme .search-input[readonly] {
+  background: rgba(15, 23, 42, 0.65) !important;
+  border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+
+.notebook-theme input:disabled,
+.notebook-theme select:disabled,
+.notebook-theme textarea:disabled,
+.notebook-theme .search-input:disabled,
+.notebook-theme .search-input[readonly] {
+  background: rgba(26, 58, 143, 0.06) !important;
+  border-color: #b8cfe8 !important;
+  color: #7a9fc0 !important;
+}
+
 /* Auth Modal */
 .modal-backdrop {
   position: fixed;

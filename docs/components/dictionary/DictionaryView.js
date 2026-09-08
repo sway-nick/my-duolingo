@@ -1080,17 +1080,18 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       noticeBox.innerHTML = `💡 Слово уже есть в словаре (перевод: <strong>«${escapeHtml(existingTrans)}»</strong>, категория: <strong>«${escapeHtml(existing.category)}»</strong>).<br>Вы можете дополнить или обновить примечание к нему.`;
       transInput.value = existingTrans;
       transInput.disabled = true;
+      transInput.setAttribute('readonly', 'true');
       notesInput.value = existingNotes;
       catSelect.value = existing.category || (existingCats[0] || 'Elementary');
       catSelect.disabled = true;
-      catSelect.style.opacity = '0.75';
-      catSelect.style.cursor = 'not-allowed';
       if (suggestionsBox) suggestionsBox.style.display = 'none';
       submitBtn.textContent = updateNoteText;
       updateCounters();
     } else {
       noticeBox.style.display = 'none';
       transInput.disabled = false;
+      transInput.removeAttribute('readonly');
+      catSelect.disabled = false;
       syncCategoryForInput();
       submitBtn.textContent = saveBtnText;
 
@@ -1167,8 +1168,13 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     errorBox.style.display = 'none';
 
     const word = wordInput.value.trim().toLowerCase();
-    const translation = transInput.value.trim().toLowerCase();
-    const category = word.split(/\s+/).filter(Boolean).length > 1 ? 'Pattern' : catSelect.value.trim();
+    const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === word);
+    const translation = existing 
+      ? (existing.translation || transInput.value.trim().toLowerCase()) 
+      : transInput.value.trim().toLowerCase();
+    const category = existing
+      ? (existing.category || 'Elementary')
+      : (word.split(/\s+/).filter(Boolean).length > 1 ? 'Pattern' : catSelect.value.trim());
     const notes = notesInput.value.trim();
 
     if (word.length < 2 || word.length > 50) {
