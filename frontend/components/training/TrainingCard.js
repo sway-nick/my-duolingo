@@ -1191,7 +1191,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           const wordLength = currentWord.word ? currentWord.word.length : 5;
           const isPhrase = currentWord.word && currentWord.word.includes(' ');
-          const timeoutMs = isPhrase ? 4800 : (wordLength <= 4 ? 3800 : 4200);
+          const timeoutMs = isPhrase ? 3200 : (wordLength <= 4 ? 2200 : 2500);
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
