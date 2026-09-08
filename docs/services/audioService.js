@@ -170,7 +170,7 @@ function playErrorSound() {
 }
 
 /**
- * Plays a triumphant celebratory fanfare sound for podium prize achievements (Web Audio API)
+ * Plays a triumphant celebratory fanfare sound for podium prize achievements / round completion (Web Audio API)
  */
 function playFanfareSound() {
   if (isAudioMuted() || isSfxMuted()) return;
@@ -180,34 +180,35 @@ function playFanfareSound() {
 
     const now = ctx.currentTime;
 
-    // Triumphant orchestral brass fanfare melody:
-    // C5 (523.25Hz) -> E5 (659.25Hz) -> G5 (783.99Hz) -> Hold majestic C6 chord (1046.5Hz + 1318.5Hz + 1567.98Hz + 2093Hz)
-    const melody = [
-      { freq: 523.25, time: 0.00, dur: 0.12, vol: 0.18 },
-      { freq: 659.25, time: 0.13, dur: 0.12, vol: 0.20 },
-      { freq: 783.99, time: 0.26, dur: 0.14, vol: 0.22 },
-      { freq: 1046.50, time: 0.42, dur: 1.20, vol: 0.26 }, // Main high root
-      { freq: 1318.51, time: 0.42, dur: 1.20, vol: 0.18 }, // Major third harmony
-      { freq: 1567.98, time: 0.42, dur: 1.20, vol: 0.16 }, // Fifth harmony
-      { freq: 2093.00, time: 0.42, dur: 1.00, vol: 0.12 }, // Sparkling octave
+    // Victory Fanfare: Triplet G4 -> C5 -> E5 -> G5 -> C6 Big Brass & Grand Chord
+    const notes = [
+      { f: 392.00, t: 0.00, d: 0.12, v: 0.18, type: 'triangle' },
+      { f: 523.25, t: 0.11, d: 0.12, v: 0.20, type: 'triangle' },
+      { f: 659.25, t: 0.22, d: 0.14, v: 0.22, type: 'triangle' },
+      { f: 783.99, t: 0.35, d: 0.16, v: 0.24, type: 'triangle' },
+      // Grand chord
+      { f: 1046.50, t: 0.50, d: 1.00, v: 0.28, type: 'triangle' },
+      { f: 523.25, t: 0.50, d: 1.00, v: 0.20, type: 'triangle' },
+      { f: 659.25, t: 0.50, d: 1.00, v: 0.18, type: 'triangle' },
+      { f: 783.99, t: 0.50, d: 1.00, v: 0.16, type: 'triangle' }
     ];
 
-    melody.forEach(({ freq, time, dur, vol }) => {
+    notes.forEach(({ f, t, d, v, type }) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = 'triangle'; // Warm brassy trumpet synth
-      osc.frequency.setValueAtTime(freq, now + time);
+      osc.type = type || 'triangle';
+      osc.frequency.setValueAtTime(f, now + t);
 
-      gain.gain.setValueAtTime(0.001, now + time);
-      gain.gain.linearRampToValueAtTime(vol, now + time + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + time + dur);
+      gain.gain.setValueAtTime(0.001, now + t);
+      gain.gain.linearRampToValueAtTime(v, now + t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + t + d);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.start(now + time);
-      osc.stop(now + time + dur);
+      osc.start(now + t);
+      osc.stop(now + t + d);
     });
   } catch (e) {
     console.warn('Fanfare audio effect skipped:', e);

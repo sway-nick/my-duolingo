@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260908_v325';
+        var APP_BUILD = '20260908_v326';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -119,7 +119,7 @@
 
     <script type="module">
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=204.0';
-      import { speakWord, preloadWordAudio } from './services/audioService.js?v=204.0';
+      import { speakWord, preloadWordAudio, playFanfareSound } from './services/audioService.js?v=204.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=204.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=204.0';
       import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=204.0';
@@ -870,11 +870,14 @@
           let currentWotdVideo = 'cat1.mp4';
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
+          if (currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
             try {
               trackRoundCompleted(getEffectiveUserId());
             } catch (e) {}
-            preloadWordAudio(wotd.word);
+            playFanfareSound();
+            if (wotd) {
+              preloadWordAudio(wotd.word);
+            }
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
             isWotdFav = favSet.has(String(wotd.id));
