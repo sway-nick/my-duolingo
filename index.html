@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260908_v326';
+        var APP_BUILD = '20260908_v327';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -482,8 +482,8 @@
         const pairsQueue = getQueueForPairs(categoryWords, userProgress);
         const testQueue = getQueueForTest(categoryWords, userProgress);
 
-        const isBatchInProgress = learningCount > 0;
-        const isCardsReviewMode = currentMethod === 'cards' && isBatchInProgress;
+        const isBatchInProgress = learningCount >= dailyGoal;
+        const isCardsReviewMode = currentMethod === 'cards' && isBatchInProgress && !window._explicitCardsOpened;
 
         function isMethodAvailable(method) {
           if (method === 'cards') return (cardsQueue.length > 0 && learningCount < dailyGoal) || isBatchInProgress;
@@ -1206,7 +1206,7 @@
           if (continueCardsBtn) {
             continueCardsBtn.addEventListener('click', () => {
               window._showHubScreen = false;
-              if (learningCount === 0) {
+              if (learningCount < dailyGoal && cardsQueue.length > 0) {
                 window._explicitCardsOpened = true;
                 userSettings.preferredMethod = 'cards';
               } else {
