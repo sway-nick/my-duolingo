@@ -993,7 +993,21 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   // Calculate XP change based on mode and correctness
   let xpDelta = 0;
 
-  if (method === 'cards_learn') {
+  if (options && options.isFavPractice) {
+    if (isCorrect) {
+      prog.correct = (prog.correct || 0) + 1;
+      if (method === 'quiz') {
+        xpDelta = (options && options.skipXp) ? 0 : 1;
+      } else if (method === 'pairs') {
+        if (options && options.perfectRound) xpDelta = 3;
+      } else if (method === 'input') {
+        xpDelta = 3;
+      }
+    } else {
+      prog.error = (prog.error || 0) + 1;
+      xpDelta = -5;
+    }
+  } else if (method === 'cards_learn') {
     prog.seenInCards = true;
     if (!isWordMastered(prog)) {
       prog.stage = 'quiz';
@@ -1436,9 +1450,6 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
   const injectedMastered = candidateMastered.slice(0, masteredLimit);
 
   const bonusWords = [...injectedFavs, ...injectedMastered];
-  if (bonusWords.length > 0) {
-    resetWordsProgressForPractice(bonusWords);
-  }
 
   // Exactly max 20 words: 10 base + up to 5 favs + up to 5 mastered
   return [...baseWords, ...bonusWords].slice(0, 20);

@@ -317,6 +317,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     dailyGoal = 5,
     activeWords = [],
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
+    isFavPractice = false,
   } = options;
 
   if (activeWords && activeWords.length > 0) {
@@ -675,7 +676,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             speakWord(currentWord.word, currentWord.id);
           }
 
-          await saveProgress(currentWord.id, isCorrect, 'quiz');
+          await saveProgress(currentWord.id, isCorrect, 'quiz', { isFavPractice });
           if (isCorrect) {
             onNextAfterSpeech(onNext, 800, 3500);
           } else {
@@ -705,7 +706,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speakWord(currentWord.word, currentWord.id);
           if (isCorrect) playSuccessSound();
           else playErrorSound();
-          await saveProgress(currentWord.id, isCorrect, 'quiz', { skipXp: isFromSpeechFallback });
+          await saveProgress(currentWord.id, isCorrect, 'quiz', { skipXp: isFromSpeechFallback, isFavPractice });
           if (isCorrect) {
             onNextAfterSpeech(onNext, 800, 3500);
           } else {
@@ -892,7 +893,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
                   : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
           }
-          saveProgress(currentWord.id, false, 'quiz');
+          saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
           if (continueBtn) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
@@ -1588,7 +1589,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             }</span>`;
           }
 
-          await saveProgress(currentWord.id, true, 'quiz');
+          await saveProgress(currentWord.id, true, 'quiz', { isFavPractice });
           if (continueBtn) {
             continueBtn.style.display = 'block';
             continueBtn.onclick = () => onNext();
@@ -1626,7 +1627,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
                     : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
             }
-            await saveProgress(currentWord.id, false, 'quiz');
+            await saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
             if (continueBtn) {
               continueBtn.style.display = 'block';
               continueBtn.onclick = () => onNext();
@@ -1709,7 +1710,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (allCorrect) {
               playSuccessSound();
               speakWord(currentWord.word, currentWord.id);
-              await saveProgress(currentWord.id, true, 'quiz');
+              await saveProgress(currentWord.id, true, 'quiz', { isFavPractice });
               onNextAfterSpeech(onNext, 1200, 4500);
             } else {
               focusNext(index);
@@ -1964,7 +1965,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           card.classList.add('timeout-failed');
         });
 
-        await saveProgress(currentWord.id, false, 'pairs', { isPairMistake: true });
+        await saveProgress(currentWord.id, false, 'pairs', { isPairMistake: true, isFavPractice });
 
         const timeoutContainer = practiceArea.querySelector('#pairs-timeout-container');
         if (timeoutContainer) {
@@ -2014,7 +2015,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           curLeft.classList.add('matched');
           curRight.classList.add('matched');
 
-          await saveProgress(leftId, true, 'pairs');
+          await saveProgress(leftId, true, 'pairs', { isFavPractice });
           matchedCount++;
 
           if (matchedCount === totalPairs) {
@@ -2056,7 +2057,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           playErrorSound();
           curLeft.classList.add('wrong');
           curRight.classList.add('wrong');
-          await saveProgress(leftId, false, 'pairs', { isPairMistake: true });
+          await saveProgress(leftId, false, 'pairs', { isPairMistake: true, isFavPractice });
 
           setTimeout(() => {
             if (!isRoundFinished) {
@@ -2394,6 +2395,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const isSecondChanceFix = isCorrect && hasSecondChance;
       saveProgress(currentWord.id, isCorrect, 'input', {
         secondChanceFix: isSecondChanceFix,
+        isFavPractice,
       }).then((prog) => {
         const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
         if (isCorrect) {
