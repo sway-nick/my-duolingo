@@ -803,15 +803,184 @@ body {
   transform: scale(0.95);
 }
 
-.training-word {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-main);
-  line-height: 1.25;
+.training-word-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.word-notes-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  line-height: 1;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.word-notes-btn:hover {
+  color: #475569;
+  background: rgba(148, 163, 184, 0.15);
+  transform: scale(1.1);
+}
+
+.word-notes-btn:active {
+  transform: scale(0.92);
+}
+
+.dark-theme .word-notes-btn {
+  color: #64748b;
+}
+
+.dark-theme .word-notes-btn:hover {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.word-notes-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeInNotesModal 0.2s ease forwards;
+}
+
+.word-notes-modal-overlay.closing {
+  animation: fadeOutNotesModal 0.2s ease forwards;
+}
+
+.word-notes-modal-card {
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main, #1e293b);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color, #e2e8f0);
+  padding: 20px 22px;
   position: relative;
-  display: inline-block;
-  text-align: center;
+  animation: scaleInNotesModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.word-notes-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.word-notes-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dark-theme .word-notes-modal-badge {
+  background: rgba(129, 140, 248, 0.15);
+  color: #a5b4fc;
+}
+
+.word-notes-modal-word {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main, #0f172a);
+  margin: 0 0 2px;
+}
+
+.word-notes-modal-trans {
+  font-size: 15px;
+  color: var(--text-muted, #64748b);
+  margin: 0;
+  font-weight: 500;
+}
+
+.word-notes-modal-close {
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted, #64748b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.word-notes-modal-close:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: var(--text-main, #0f172a);
+  transform: scale(1.05);
+}
+
+.dark-theme .word-notes-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark-theme .word-notes-modal-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.word-notes-modal-body {
+  background: var(--bg-main, #f8fafc);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color, #f1f5f9);
+}
+
+.word-notes-modal-text {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-main, #334155);
+  margin: 0;
+  white-space: pre-line;
+}
+
+@keyframes fadeInNotesModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOutNotesModal {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes scaleInNotesModal {
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .word-audio-indicator {

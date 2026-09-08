@@ -236,6 +236,59 @@ function checkSpeechMatch(spokenList, targetWord) {
   return false;
 }
 
+function showWordNotesModal(word, translation, notes) {
+  let modal = document.getElementById('word-notes-modal-overlay');
+  if (modal) modal.remove();
+
+  modal = document.createElement('div');
+  modal.id = 'word-notes-modal-overlay';
+  modal.className = 'word-notes-modal-overlay';
+  modal.innerHTML = `
+    <div class="word-notes-modal-card">
+      <div class="word-notes-modal-header">
+        <div class="word-notes-modal-title-box">
+          <div class="word-notes-modal-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align: middle; margin-right: 4px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            ${t('word_notes_title') || 'Примечание'}
+          </div>
+          <h3 class="word-notes-modal-word">${word || ''}</h3>
+          ${translation ? `<p class="word-notes-modal-trans">${translation}</p>` : ''}
+        </div>
+        <button type="button" class="word-notes-modal-close" id="word-notes-close-btn" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="word-notes-modal-body">
+        <p class="word-notes-modal-text">${notes || ''}</p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const closeModal = () => {
+    modal.classList.add('closing');
+    setTimeout(() => { if (modal && modal.parentNode) modal.remove(); }, 180);
+    document.removeEventListener('keydown', handleEsc);
+  };
+
+  const handleEsc = (e) => {
+    if (e.key === 'Escape') closeModal();
+  };
+
+  modal.querySelector('#word-notes-close-btn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeModal();
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener('keydown', handleEsc);
+}
+
 function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const container = document.querySelector('#training');
   if (!container) return;
@@ -282,6 +335,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const isPairsMode = currentMethod === 'pairs';
   const isInputMode = currentMethod === 'input';
 
+  const wordNotes = getWordNotes(currentWord);
+  const hasNotes = Boolean(wordNotes && String(wordNotes).trim().length > 0);
+  const notesBtnHtml = hasNotes
+    ? `<button type="button" class="word-notes-btn" id="word-notes-btn" title="${t('word_notes_title') || 'Примечание'}" aria-label="${t('word_notes_title') || 'Примечание'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </button>`
+    : '';
+
   function formatWordCount(cnt) {
     const lang = getInterfaceLanguage();
     if (lang === 'ru' || lang === 'uk') {
@@ -319,13 +384,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <div class="word-main-display">
         ${
           isCardsMode
-            ? isBatchReview
-              ? `
-            <div style="font-size: 13px; font-weight: 600; color: #0284c7; margin-bottom: 8px; background: rgba(2, 132, 199, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              📖 ${getInterfaceLanguage() === 'ru' ? 'Повторение слов раунда' : getInterfaceLanguage() === 'uk' ? 'Повторення слів раунду' : 'Reviewing round words'}: <strong>${activeWords.length}</strong> ${t('words')}
-            </div>
-          `
-              : `
+            ? `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
               🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
             </div>
@@ -350,9 +409,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
             </div>
             <div class="word-header-row">
-              <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                ${getWordTranslation(currentWord)}
-              </h2>
+              <div class="training-word-container">
+                <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                  ${getWordTranslation(currentWord)}
+                </h2>
+                ${notesBtnHtml}
+              </div>
               <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
                 ${favorited ? '❤️' : '🤍'}
               </button>
@@ -367,28 +429,38 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ${
                 quizStage === 0
                   ? `
-                <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                  <span class="training-word-text">${currentWord.word}</span>
-                </h2>
+                <div class="training-word-container">
+                  <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                    <span class="training-word-text">${currentWord.word}</span>
+                  </h2>
+                  ${notesBtnHtml}
+                </div>
               `
                   : quizStage === 1
                     ? `
-                <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
-                  <span class="listening-audio-icon">🎧</span>
-                  <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
+                <div class="training-word-container">
+                  <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
+                    <span class="listening-audio-icon">🎧</span>
+                    <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
+                  </div>
+                  ${notesBtnHtml}
                 </div>
               `
                     : quizStage === 2
                       ? `
-                <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                  ${getWordTranslation(currentWord)}
-                </h2>
+                <div class="training-word-container">
+                  <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                    ${getWordTranslation(currentWord)}
+                  </h2>
+                  ${notesBtnHtml}
+                </div>
               `
                       : `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="training-word-container">
                   <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
                     ${getWordTranslation(currentWord)}
                   </h2>
+                  ${notesBtnHtml}
                 </div>
               `
               }
@@ -467,6 +539,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         speakWord(currentWord.word, currentWord.id);
       } catch (e) {}
     }, 100);
+  }
+
+  const notesBtn = container.querySelector('#word-notes-btn');
+  if (notesBtn && hasNotes) {
+    notesBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showWordNotesModal(currentWord.word, getWordTranslation(currentWord), wordNotes);
+    });
   }
 
   const favBtn = container.querySelector('#fav-toggle-btn');

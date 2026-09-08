@@ -2675,6 +2675,17 @@ export function t(key) {
   if (key === 'speech_tap_to_speak') return getSpeechPrompt('tap_to_speak');
   if (key === 'review_repeat') return getSpeechPrompt('review_repeat');
   if (key === 'review_know') return getSpeechPrompt('review_know');
+  if (key === 'word_notes_title') {
+    const lang = getInterfaceLanguage();
+    if (lang === 'ru') return 'Примечание';
+    if (lang === 'uk') return 'Примітка';
+    if (lang === 'de') return 'Hinweis';
+    if (lang === 'es' || lang === 'pt' || lang === 'it') return 'Nota';
+    if (lang === 'fr') return 'Remarque';
+    if (lang === 'pl') return 'Uwaga';
+    if (lang === 'tr') return 'Not';
+    return 'Note';
+  }
 
   const lang = getInterfaceLanguage();
   const dict = translations[lang] || translations['en'];
