@@ -2394,10 +2394,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
         <button type="button" class="btn-learn" id="btn-learn">
-          ${isBatchReview ? ('🔄 ' + (t('review_repeat') || 'Повторить')) : t('train_learn')}
+          ${t('train_learn')}
         </button>
         <button type="button" class="btn-know" id="btn-know">
-          ${isBatchReview ? ('✓ ' + (t('review_know') || 'Знаю')) : t('train_know')}
+          ${t('train_know')}
         </button>
       </div>
     `;
@@ -2459,28 +2459,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-front')?.addEventListener('click', handleCardFav);
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
-    if (isBatchReview) {
-      practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
-        await saveProgress(currentWord.id, false, 'cards_repeat_round');
-        onNext({ repeatSoon: true });
-      });
+    practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
+      await saveProgress(currentWord.id, true, 'cards_learn');
+      onNextAfterSpeech(onNext, 400, 3000);
+    });
 
-      practiceArea.querySelector('#btn-know')?.addEventListener('click', () => {
-        playSuccessSound();
-        onNextAfterSpeech(onNext, 250, 2000);
-      });
-    } else {
-      practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
-        await saveProgress(currentWord.id, true, 'cards_learn');
-        onNextAfterSpeech(onNext, 400, 3000);
-      });
-
-      practiceArea.querySelector('#btn-know').addEventListener('click', async () => {
-        playSuccessSound();
-        await saveProgress(currentWord.id, true, 'cards_know');
-        onNextAfterSpeech(onNext, 400, 3000);
-      });
-    }
+    practiceArea.querySelector('#btn-know')?.addEventListener('click', async () => {
+      playSuccessSound();
+      await saveProgress(currentWord.id, true, 'cards_know');
+      onNextAfterSpeech(onNext, 400, 3000);
+    });
   }
 }
 
