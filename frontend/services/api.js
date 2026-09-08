@@ -996,17 +996,10 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   if (options && options.isFavPractice) {
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
-      if (method === 'quiz') {
-        xpDelta = (options && options.skipXp) ? 0 : 1;
-      } else if (method === 'pairs') {
-        if (options && options.perfectRound) xpDelta = 3;
-      } else if (method === 'input') {
-        xpDelta = 3;
-      }
     } else {
       prog.error = (prog.error || 0) + 1;
-      xpDelta = -5;
     }
+    xpDelta = 0; // Practice in Favorites does NOT change XP at all
   } else if (method === 'cards_learn') {
     prog.seenInCards = true;
     if (!isWordMastered(prog)) {

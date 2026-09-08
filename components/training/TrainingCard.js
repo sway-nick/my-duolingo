@@ -2031,7 +2031,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             });
 
             setTimeout(async () => {
-              if (errorsInRound === 0) {
+              if (errorsInRound === 0 && !isFavPractice) {
                 playCoinDropSound();
                 try {
                   const uid = (typeof getEffectiveUserId === 'function') ? getEffectiveUserId() : null;
