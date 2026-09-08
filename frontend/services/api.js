@@ -1465,7 +1465,7 @@ function getQueueForQuiz(words, progress) {
 function getQueueForPairs(words, progress) {
   return words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    return p && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 1 && !isWordMastered(p);
+    return p && p.seenInCards && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 1 && !isWordMastered(p);
   });
 }
 

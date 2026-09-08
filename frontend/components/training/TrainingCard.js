@@ -2534,13 +2534,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
     practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
-      await saveProgress(currentWord.id, true, 'cards_learn');
+      await saveProgress(currentWord.id, true, 'cards_learn', { isFavPractice });
       onNextAfterSpeech(onNext, 400, 3000);
     });
 
     practiceArea.querySelector('#btn-know')?.addEventListener('click', async () => {
       playSuccessSound();
-      await saveProgress(currentWord.id, true, 'cards_know');
+      await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
       onNextAfterSpeech(onNext, 400, 3000);
     });
   }

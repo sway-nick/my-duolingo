@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260908_v333';
+        var APP_BUILD = '20260908_v334';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -163,6 +163,7 @@
       } catch (e) {}
       let favoriteIds = new Set();
       let favoritePracticeWords = null;
+      let favoritePracticeMethod = 'quiz';
       let currentWordIndex = 0;
       let activeTab = 'training';
       let userSettings = { enabledMethods: 'quiz,cards,input', dailyGoal: 10 };
@@ -460,13 +461,15 @@
         categoryWords.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
 
         const userProgress = getUserProgress();
-        let currentMethod = userSettings.preferredMethod || 'cards';
         const favList = getUserFavorites();
         const favSet = new Set(favList.map(String));
         favoriteIds = favSet;
 
         // Check if practicing favorites mode is active
         const isFavPracticeActive = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+        let currentMethod = isFavPracticeActive
+          ? (favoritePracticeMethod || 'quiz')
+          : (userSettings.preferredMethod || 'cards');
         if (isFavPracticeActive) {
           categoryWords = favoritePracticeWords;
         }
@@ -576,7 +579,7 @@
 
         // Filter words strictly based on the active training method queue
         let activeWords = [];
-        if (window._showHubScreen) {
+        if (window._showHubScreen && !isFavPracticeActive) {
           // Hub choice screen requested: force empty activeWords to display Hub options!
           activeWords = [];
           currentMethod = 'input';
@@ -657,6 +660,7 @@
           if (exitFavsBtn) {
             exitFavsBtn.addEventListener('click', () => {
               favoritePracticeWords = null;
+              favoritePracticeMethod = 'quiz';
               currentWordIndex = 0;
               renderTrainingTab();
             });
@@ -1189,7 +1193,6 @@
           const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
           if (repeatFavsBtn) {
             repeatFavsBtn.addEventListener('click', () => {
-              window._showHubScreen = false;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               const favList = getUserFavorites();
@@ -1197,8 +1200,7 @@
               const favWords = allWords.filter((w) => favIds.has(String(w.id)));
               if (favWords && favWords.length > 0) {
                 favoritePracticeWords = [...favWords];
-                userSettings.preferredMethod = 'quiz';
-                saveUserSettings(userSettings);
+                favoritePracticeMethod = 'quiz';
                 currentWordIndex = 0;
                 renderTrainingTab();
               } else {
@@ -1242,13 +1244,18 @@
             renderCategorySelectorScreen();
           },
           onMethodChange: (newMethod) => {
-            userSettings.preferredMethod = newMethod;
-            saveUserSettings(userSettings);
+            if (isFavPracticeActive) {
+              favoritePracticeMethod = newMethod;
+            } else {
+              userSettings.preferredMethod = newMethod;
+              saveUserSettings(userSettings);
+            }
             currentWordIndex = 0;
             renderTrainingTab();
           },
           onCategoryChange: (newCategory) => {
             favoritePracticeWords = null;
+            favoritePracticeMethod = 'quiz';
             userSettings.category = newCategory;
             saveUserSettings(userSettings);
             currentWordIndex = 0;
@@ -1278,6 +1285,7 @@
 
         if (tabName !== 'training') {
           favoritePracticeWords = null;
+          favoritePracticeMethod = 'quiz';
         }
 
         if (tabName === 'training') {
@@ -1295,16 +1303,15 @@
               favoriteIds.clear();
             },
             onStartFavoritePractice: (practiceWords) => {
-              window._showHubScreen = false;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               if (practiceWords && practiceWords.length > 0) {
                 favoritePracticeWords = [...practiceWords];
+                favoritePracticeMethod = 'quiz';
               } else {
                 favoritePracticeWords = null;
+                favoritePracticeMethod = 'quiz';
               }
-              userSettings.preferredMethod = 'quiz';
-              saveUserSettings(userSettings);
               currentWordIndex = 0;
               const tabBtn = document.querySelector('.nav-tab[data-tab="training"]');
               if (tabBtn) {
