@@ -1139,9 +1139,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             const audioBlob = new Blob(recordedChunks, { type: mime });
             stopSensorStreams();
 
-            const inspect = await inspectAudioBlob(audioBlob);
-            console.log('AUDIO INSPECT', inspect);
-
             if (micBtn) {
               micBtn.classList.remove('listening', 'processing');
               micBtn.classList.add('ai-thinking');
