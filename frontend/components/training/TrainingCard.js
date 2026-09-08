@@ -245,10 +245,10 @@ function showWordNotesModal(notes) {
   modal.className = 'word-notes-modal-overlay';
   modal.innerHTML = `
     <div class="word-notes-modal-card">
-      <div class="word-notes-modal-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-        <h3 style="font-size: 17px; font-weight: 700; margin: 0; color: var(--text-main); display: inline-flex; align-items: center; gap: 8px;">
-          <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #94a3b8; color: #ffffff; font-size: 13px; font-weight: 800; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1;">i</span>
-          <span>${t('word_notes_title') || 'Примечание'}</span>
+      <div class="word-notes-modal-header">
+        <h3 class="word-notes-modal-title">
+          <span class="word-notes-modal-icon">i</span>
+          <span class="word-notes-modal-title-text">${t('word_notes_title') || 'Примечание'}</span>
         </h3>
         <button type="button" class="word-notes-modal-close" id="word-notes-close-btn" aria-label="Закрыть">✕</button>
       </div>

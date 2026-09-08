@@ -868,57 +868,49 @@ body {
 }
 
 .word-notes-modal-card {
-  background: var(--bg-card, #ffffff);
-  color: var(--text-main, #1e293b);
+  background: #ffffff;
+  color: #0f172a;
   border-radius: 20px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--border-color, #e2e8f0);
-  padding: 20px 22px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 18px 20px;
   position: relative;
   animation: scaleInNotesModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .word-notes-modal-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-.word-notes-modal-badge {
+.word-notes-modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
   display: inline-flex;
   align-items: center;
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  gap: 8px;
 }
 
-.dark-theme .word-notes-modal-badge {
-  background: rgba(129, 140, 248, 0.15);
-  color: #a5b4fc;
-}
-
-.word-notes-modal-word {
-  font-size: 20px;
+.word-notes-modal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #94a3b8;
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 800;
-  color: var(--text-main, #0f172a);
-  margin: 0 0 2px;
-}
-
-.word-notes-modal-trans {
-  font-size: 15px;
-  color: var(--text-muted, #64748b);
-  margin: 0;
-  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1;
 }
 
 .word-notes-modal-close {
@@ -932,7 +924,7 @@ body {
   justify-content: center;
   font-size: 15px;
   font-weight: 700;
-  color: var(--text-muted, #64748b);
+  color: #64748b;
   cursor: pointer;
   transition: all 0.15s ease;
   flex-shrink: 0;
@@ -940,32 +932,122 @@ body {
 
 .word-notes-modal-close:hover {
   background: rgba(0, 0, 0, 0.12);
-  color: var(--text-main, #0f172a);
+  color: #0f172a;
   transform: scale(1.05);
 }
 
-.dark-theme .word-notes-modal-close {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.dark-theme .word-notes-modal-close:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-}
-
 .word-notes-modal-body {
-  background: var(--bg-main, #f8fafc);
+  background: #f8fafc;
   border-radius: 12px;
   padding: 14px 16px;
-  border: 1px solid var(--border-color, #f1f5f9);
+  border: 1px solid #f1f5f9;
 }
 
 .word-notes-modal-text {
   font-size: 15px;
   line-height: 1.55;
-  color: var(--text-main, #334155);
+  color: #334155;
   margin: 0;
   white-space: pre-line;
+}
+
+/* --- Dark Theme Modal --- */
+.dark-theme .word-notes-modal-card,
+body.dark-theme .word-notes-modal-card {
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .word-notes-modal-title,
+body.dark-theme .word-notes-modal-title {
+  color: #f8fafc;
+}
+
+.dark-theme .word-notes-modal-icon,
+body.dark-theme .word-notes-modal-icon {
+  background: #475569;
+  color: #ffffff;
+}
+
+.dark-theme .word-notes-modal-close,
+body.dark-theme .word-notes-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.dark-theme .word-notes-modal-close:hover,
+body.dark-theme .word-notes-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.dark-theme .word-notes-modal-body,
+body.dark-theme .word-notes-modal-body {
+  background: #0f172a;
+  border: 1px solid #334155;
+}
+
+.dark-theme .word-notes-modal-text,
+body.dark-theme .word-notes-modal-text {
+  color: #ffffff;
+}
+
+/* --- Notebook Theme Modal --- */
+.notebook-theme .word-notes-modal-card,
+body.notebook-theme .word-notes-modal-card {
+  background: #fffdf7;
+  color: #1a3a8f;
+  border: 2px solid #7a9fc0;
+  border-radius: 16px 8px 18px 12px;
+  box-shadow: 4px 6px 0px rgba(26, 58, 143, 0.15);
+  padding: 18px 20px;
+}
+
+.notebook-theme .word-notes-modal-title,
+body.notebook-theme .word-notes-modal-title {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a3a8f;
+}
+
+.notebook-theme .word-notes-modal-icon,
+body.notebook-theme .word-notes-modal-icon {
+  background: #1a3a8f;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+}
+
+.notebook-theme .word-notes-modal-close,
+body.notebook-theme .word-notes-modal-close {
+  background: rgba(26, 58, 143, 0.05);
+  border: 1.5px solid #7a9fc0;
+  color: #1a3a8f;
+}
+
+.notebook-theme .word-notes-modal-close:hover,
+body.notebook-theme .word-notes-modal-close:hover {
+  background: rgba(26, 58, 143, 0.12);
+  color: #152d6e;
+}
+
+.notebook-theme .word-notes-modal-body,
+body.notebook-theme .word-notes-modal-body {
+  background: rgba(26, 58, 143, 0.03);
+  border: 1.5px dashed #b8cfe8;
+  border-radius: 10px;
+}
+
+.notebook-theme .word-notes-modal-text,
+body.notebook-theme .word-notes-modal-text {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 21px;
+  line-height: 1.45;
+  color: #1a3a8f;
+  font-weight: 600;
 }
 
 @keyframes fadeInNotesModal {
