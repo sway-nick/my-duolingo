@@ -2705,11 +2705,16 @@ export function getWordNotes(wordObj) {
   if (!wordObj) return '';
   const lang = getInterfaceLanguage();
   if (wordObj.all_notes && typeof wordObj.all_notes === 'object') {
-    return wordObj.all_notes[lang] || '';
+    const n = wordObj.all_notes[lang];
+    if (n && typeof n === 'string' && n.trim().length > 0) return n.trim();
   }
-  // Русский notes отдаем ТОЛЬКО если активный язык интерфейса — русский
+  // Check direct column properties (e.g. notes for ru, notes_uk, notes_de, notes_es, etc.)
   if (lang === 'ru') {
-    return wordObj.notes || '';
+    return (wordObj.notes && typeof wordObj.notes === 'string') ? wordObj.notes.trim() : '';
+  }
+  const langKey = `notes_${lang}`;
+  if (wordObj[langKey] && typeof wordObj[langKey] === 'string' && wordObj[langKey].trim().length > 0) {
+    return wordObj[langKey].trim();
   }
   return '';
 }

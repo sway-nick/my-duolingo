@@ -236,7 +236,7 @@ function checkSpeechMatch(spokenList, targetWord) {
   return false;
 }
 
-function showWordNotesModal(word, translation, notes) {
+function showWordNotesModal(notes) {
   let modal = document.getElementById('word-notes-modal-overlay');
   if (modal) modal.remove();
 
@@ -245,19 +245,11 @@ function showWordNotesModal(word, translation, notes) {
   modal.className = 'word-notes-modal-overlay';
   modal.innerHTML = `
     <div class="word-notes-modal-card">
-      <div class="word-notes-modal-header">
-        <div class="word-notes-modal-title-box">
-          <div class="word-notes-modal-badge">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align: middle; margin-right: 4px;">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-            ${t('word_notes_title') || 'Примечание'}
-          </div>
-          <h3 class="word-notes-modal-word">${word || ''}</h3>
-          ${translation ? `<p class="word-notes-modal-trans">${translation}</p>` : ''}
-        </div>
+      <div class="word-notes-modal-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <h3 style="font-size: 17px; font-weight: 700; margin: 0; color: var(--text-main); display: inline-flex; align-items: center; gap: 8px;">
+          <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #94a3b8; color: #ffffff; font-size: 13px; font-weight: 800; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1;">i</span>
+          <span>${t('word_notes_title') || 'Примечание'}</span>
+        </h3>
         <button type="button" class="word-notes-modal-close" id="word-notes-close-btn" aria-label="Закрыть">✕</button>
       </div>
       <div class="word-notes-modal-body">
@@ -546,7 +538,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (notesBtn && hasNotes) {
     notesBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      showWordNotesModal(currentWord.word, getWordTranslation(currentWord), wordNotes);
+      showWordNotesModal(wordNotes);
     });
   }
 
