@@ -251,6 +251,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const {
     currentMethod = 'quiz',
+    isBatchReview = false,
     selectedCategory = 'Elementary',
     categories = [],
     isFavorite = false,
@@ -318,7 +319,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <div class="word-main-display">
         ${
           isCardsMode
-            ? `
+            ? isBatchReview
+              ? `
+            <div style="font-size: 13px; font-weight: 600; color: #0284c7; margin-bottom: 8px; background: rgba(2, 132, 199, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+              📖 ${getInterfaceLanguage() === 'ru' ? 'Повторение слов раунда' : getInterfaceLanguage() === 'uk' ? 'Повторення слів раунду' : 'Reviewing round words'}: <strong>${activeWords.length}</strong> ${t('words')}
+            </div>
+          `
+              : `
             <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
               🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
             </div>
@@ -2413,10 +2420,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       
       <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
         <button type="button" class="btn-learn" id="btn-learn">
-          ${t('train_learn')}
+          ${isBatchReview ? (getInterfaceLanguage() === 'ru' ? '🔄 Ещё раз' : getInterfaceLanguage() === 'uk' ? '🔄 Ще раз' : '🔄 Again') : t('train_learn')}
         </button>
         <button type="button" class="btn-know" id="btn-know">
-          ${t('train_know')}
+          ${isBatchReview ? (getInterfaceLanguage() === 'ru' ? '✓ Далее' : getInterfaceLanguage() === 'uk' ? '✓ Далі' : '✓ Next') : t('train_know')}
         </button>
       </div>
     `;
@@ -2478,16 +2485,27 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-front')?.addEventListener('click', handleCardFav);
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
-    practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
-      await saveProgress(currentWord.id, true, 'cards_learn');
-      onNextAfterSpeech(onNext, 400, 3000);
-    });
+    if (isBatchReview) {
+      practiceArea.querySelector('#btn-learn')?.addEventListener('click', () => {
+        onNext({ repeatSoon: true });
+      });
 
-    practiceArea.querySelector('#btn-know').addEventListener('click', async () => {
-      playSuccessSound();
-      await saveProgress(currentWord.id, true, 'cards_know');
-      onNextAfterSpeech(onNext, 400, 3000);
-    });
+      practiceArea.querySelector('#btn-know')?.addEventListener('click', () => {
+        playSuccessSound();
+        onNextAfterSpeech(onNext, 250, 2000);
+      });
+    } else {
+      practiceArea.querySelector('#btn-learn').addEventListener('click', async () => {
+        await saveProgress(currentWord.id, true, 'cards_learn');
+        onNextAfterSpeech(onNext, 400, 3000);
+      });
+
+      practiceArea.querySelector('#btn-know').addEventListener('click', async () => {
+        playSuccessSound();
+        await saveProgress(currentWord.id, true, 'cards_know');
+        onNextAfterSpeech(onNext, 400, 3000);
+      });
+    }
   }
 }
 
