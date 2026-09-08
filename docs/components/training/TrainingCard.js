@@ -377,11 +377,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       <div class="word-main-display">
         ${
           isCardsMode
-            ? `
-            <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-              🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
-            </div>
-          `
+            ? (
+              isFavPractice
+                ? `
+                <div class="train-left-badge">
+                  💖 ${t('fav_title')}: <strong>${activeWords.length}</strong>
+                </div>
+              `
+                : `
+                <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+                  🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
+                </div>
+              `
+            )
             : isPairsMode
               ? `
             <div class="pairs-header-box" style="margin: 2px 0 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
