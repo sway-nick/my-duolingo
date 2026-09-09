@@ -898,7 +898,7 @@
 
           const continueCardsBtnHtml = unmasteredCount > 0
             ? `
-              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: clamp(15px, 4.4vw, 17px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '54px'}; font-size: clamp(16px, 4.6vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                 <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">🚀</span>
                 <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
               </button>
@@ -912,14 +912,14 @@
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '14px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
-                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: clamp(15px, 4.4vw, 17px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '54px'}; font-size: clamp(16px, 4.6vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                   <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">${nextBtnIcon}</span>
                   <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
                 </button>
                 ${
                   (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                     ? `
-                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: clamp(15px, 4.4vw, 17px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '54px'}; font-size: clamp(16px, 4.6vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                     <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">💖</span>
                     <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
                   </button>
