@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260909_v347';
+        var APP_BUILD = '20260909_v348';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -353,7 +353,7 @@
           content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
               <div style="font-size: 17px; font-weight: 700; color: var(--text-main, #334155); margin-bottom: 24px; letter-spacing: 0.6px; opacity: 0.85;">Loading...</div>
-              <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 410px; height: 56px; margin: 0 auto;">
+              <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
                 <!-- 1. Заход передними лапами (неспешный шаг) -->
                 <div class="cat-paw-step" style="position: absolute; left: 12px; top: 2px; opacity: 0; animation: catSlowWalkTrack 11.5s infinite 0.0s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
@@ -384,11 +384,8 @@
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
 
-                <!-- 4. Выход с листа: передние лапы уходят первыми, следом уходят задние -->
+                <!-- 4. Выход с листа -->
                 <div class="cat-paw-step" style="position: absolute; left: 332px; top: 2px; opacity: 0; animation: catSlowWalkTrack 11.5s infinite 7.6s;">
-                  <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
-                </div>
-                <div class="cat-paw-step" style="position: absolute; left: 372px; top: 26px; opacity: 0; animation: catSlowWalkTrack 11.5s infinite 8.55s;">
                   <svg viewBox="0 0 32 32" width="24" height="24" fill="#94a3b8" style="display: block;"><g transform="rotate(90 16 16)"><ellipse cx="6.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(-26 6.5 11.5)"/><ellipse cx="12.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(-8 12.5 7.2)"/><ellipse cx="19.5" cy="7.2" rx="2.6" ry="3.7" transform="rotate(8 19.5 7.2)"/><ellipse cx="25.5" cy="11.5" rx="2.5" ry="3.4" transform="rotate(26 25.5 11.5)"/><path d="M16 14 C12.5 14 9.5 16.5 9 19.5 C8.5 22.5 10 25.5 12.5 25.5 C14 25.5 15 24 16 24 C17 24 18 25.5 19.5 25.5 C22 25.5 23.5 22.5 23 19.5 C22.5 16.5 19.5 14 16 14 Z"/></g></svg>
                 </div>
               </div>
