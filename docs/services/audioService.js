@@ -672,6 +672,56 @@ function resetAudioCounter() {
   clickCount = 0;
 }
 
+let sharedAutoplayAudio = null;
+
+function getAutoplayAudio() {
+  if (!sharedAutoplayAudio && typeof window !== 'undefined') {
+    try {
+      sharedAutoplayAudio = new Audio();
+      sharedAutoplayAudio.preload = 'auto';
+    } catch (e) {}
+  }
+  return sharedAutoplayAudio;
+}
+
+/**
+ * Primes and unlocks audio context and speech synthesis during user gesture (e.g. tapping "Слушать")
+ */
+function primeAudioForAutoplay() {
+  if (typeof window === 'undefined') return;
+  try {
+    const ctx = getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume();
+    }
+  } catch (e) {}
+
+  try {
+    const audio = getAutoplayAudio();
+    if (audio) {
+      audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          audio.pause();
+          audio.currentTime = 0;
+        }).catch(() => {});
+      }
+    }
+  } catch (e) {}
+
+  if ('speechSynthesis' in window) {
+    try {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0.01;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+}
+
 let activeAutoplayAudio = null;
 
 function stopAllAudio() {
@@ -682,6 +732,12 @@ function stopAllAudio() {
     } catch (e) {}
     activeAutoplayAudio = null;
   }
+  if (sharedAutoplayAudio) {
+    try {
+      sharedAutoplayAudio.pause();
+      sharedAutoplayAudio.currentTime = 0;
+    } catch (e) {}
+  }
   if (sharedWordAudioPlayer) {
     try {
       sharedWordAudioPlayer.pause();
@@ -690,7 +746,9 @@ function stopAllAudio() {
   }
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
-      window.speechSynthesis.cancel();
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
     } catch (e) {}
   }
 }
@@ -719,10 +777,15 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
     const fullLang = langCode === 'ru' ? 'ru-RU' : langCode === 'uk' ? 'uk-UA' : langCode;
     let resolved = false;
+    let resumeInterval = null;
 
     const finish = () => {
       if (!resolved) {
         resolved = true;
+        if (resumeInterval) {
+          clearInterval(resumeInterval);
+          resumeInterval = null;
+        }
         window.__activeSpeechUtterance = null;
         if (window.__activeSpeechTimer) {
           clearTimeout(window.__activeSpeechTimer);
@@ -766,6 +829,13 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           finish();
         };
 
+        // iOS keep-alive while speech synthesis runs
+        resumeInterval = setInterval(() => {
+          if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        }, 200);
+
         const expectedMs = Math.max(3000, spokenText.length * 160);
         window.__activeSpeechTimer = setTimeout(finish, expectedMs);
 
@@ -779,9 +849,10 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     // Secondary fallback
     try {
       const ttsUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(spokenText)}&le=ru`;
-      const audio = new Audio();
+      const audio = getAutoplayAudio() || new Audio();
       activeAutoplayAudio = audio;
       audio.src = ttsUrl;
+      audio.currentTime = 0;
 
       const fallbackTimer = setTimeout(finish, 4000);
       window.__activeSpeechTimer = fallbackTimer;
@@ -819,9 +890,15 @@ function speakWordAsync(text, isUk = null) {
     const { local, primary, fallback } = getAudioUrls(text, isUkAccent);
 
     let resolved = false;
+    let resumeInterval = null;
+
     const finish = () => {
       if (!resolved) {
         resolved = true;
+        if (resumeInterval) {
+          clearInterval(resumeInterval);
+          resumeInterval = null;
+        }
         if (activeAutoplayAudio === audio) {
           activeAutoplayAudio = null;
         }
@@ -834,14 +911,45 @@ function speakWordAsync(text, isUk = null) {
       }
     };
 
-    const maxTimer = setTimeout(finish, 5000);
+    const maxTimer = setTimeout(finish, 4500);
     window.__activeSpeechTimer = maxTimer;
 
-    const audio = new Audio();
+    const audio = getAutoplayAudio() || new Audio();
     activeAutoplayAudio = audio;
+    audio.playbackRate = 1.0;
     audio.src = local;
+    audio.currentTime = 0;
     let fallbackStage = 0;
     let stageLock = false;
+
+    function playSpeechFallback() {
+      clearTimeout(maxTimer);
+      if ('speechSynthesis' in window) {
+        try {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
+          utterance.rate = 0.90;
+          window.__activeSpeechUtterance = utterance;
+          utterance.onend = finish;
+          utterance.onerror = finish;
+
+          resumeInterval = setInterval(() => {
+            if (window.speechSynthesis && window.speechSynthesis.paused) {
+              window.speechSynthesis.resume();
+            }
+          }, 200);
+
+          window.speechSynthesis.speak(utterance);
+        } catch (e) {
+          finish();
+        }
+      } else {
+        finish();
+      }
+    }
 
     const handleStageError = () => {
       if (stageLock || resolved) return;
@@ -851,31 +959,17 @@ function speakWordAsync(text, isUk = null) {
       if (fallbackStage === 0) {
         fallbackStage = 1;
         audio.src = primary;
+        audio.currentTime = 0;
         const p1 = audio.play();
         if (p1 !== undefined) p1.catch(handleStageError);
       } else if (fallbackStage === 1) {
         fallbackStage = 2;
         audio.src = fallback;
+        audio.currentTime = 0;
         const p2 = audio.play();
         if (p2 !== undefined) p2.catch(handleStageError);
       } else {
-        clearTimeout(maxTimer);
-        if ('speechSynthesis' in window) {
-          try {
-            if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
-            utterance.rate = 0.90;
-            window.__activeSpeechUtterance = utterance;
-            utterance.onend = finish;
-            utterance.onerror = finish;
-            window.speechSynthesis.speak(utterance);
-          } catch (e) {
-            finish();
-          }
-        } else {
-          finish();
-        }
+        playSpeechFallback();
       }
     };
 
@@ -982,6 +1076,7 @@ export const AudioService = {
   requestScreenWakeLock,
   releaseScreenWakeLock,
   updateMediaSessionStatus,
+  primeAudioForAutoplay,
 };
 
 export default AudioService;
@@ -1013,4 +1108,5 @@ export {
   requestScreenWakeLock,
   releaseScreenWakeLock,
   updateMediaSessionStatus,
+  primeAudioForAutoplay,
 };

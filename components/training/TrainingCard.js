@@ -14,6 +14,7 @@ import {
   requestScreenWakeLock,
   releaseScreenWakeLock,
   updateMediaSessionStatus,
+  primeAudioForAutoplay,
 } from '../../services/audioService.js?v=200.0';
 import {
   saveProgress,
@@ -2932,6 +2933,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               flashcard.classList.remove('is-flipped');
             }
           } else {
+            primeAudioForAutoplay();
             window.__favsAutoplayRunning = true;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             requestScreenWakeLock();
