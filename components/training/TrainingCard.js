@@ -739,7 +739,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ${t('speech_tap_to_speak')}
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none; margin-top: 10px;"></div>
-          <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="margin-top: 12px; width: 100%; max-width: 220px; min-height: 42px; font-size: 14px; padding: 8px 18px; border-radius: 12px; font-weight: 700; cursor: pointer;">
+          <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="margin-top: 12px; width: 100%; max-width: 220px; min-height: 42px; font-size: 15px; padding: 8px 18px; border-radius: 12px; font-weight: 700; cursor: pointer;">
             ${getInterfaceLanguage() === 'ru' ? 'Ответить в Квизе' : getInterfaceLanguage() === 'uk' ? 'Відповісти у Квізі' : 'Answer in Quiz'}
           </button>
           <button type="button" class="primary-button btn-green" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
