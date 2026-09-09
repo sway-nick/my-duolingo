@@ -153,86 +153,18 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     </div>
   `;
 
-  // Bind auth buttons
-  const loginBtn = container.querySelector('#login-modal-btn');
-  if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
-      renderAuthModal(async () => {
-        await onUserChange();
-        if (!window._activeTab || window._activeTab === 'settings') {
-          await renderSettingsView(containerSelector, onUserChange);
-        }
-      });
-    });
-  }
-
-  const logoutBtn = container.querySelector('#logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-      logoutUser();
-      await onUserChange();
-      if (!window._activeTab || window._activeTab === 'settings') {
-        await renderSettingsView(containerSelector, onUserChange);
-      }
-    });
-  }
-
-  // Load current user settings
-  const settings = await getUserSettings();
-  const autoSaveStatus = container.querySelector('#autosave-status');
-
-  // Bind Avatar Picker on avatar click
-  const avatarTrigger = container.querySelector('#change-avatar-trigger');
-  if (avatarTrigger) {
-    avatarTrigger.addEventListener('click', () => {
-      renderAvatarPickerModal(async () => {
-        if (autoSaveStatus) {
-          autoSaveStatus.textContent = '✓ Avatar updated';
-          autoSaveStatus.style.opacity = '1';
-          setTimeout(() => {
-            if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
-          }, 1500);
-        }
-        if (!window._activeTab || window._activeTab === 'settings') {
-          await renderSettingsView(containerSelector, onUserChange);
-        }
-      });
-    });
-  }
-
-
-
-
-  // Setup SFX Selection
-  let isSfxMutedVal = isSfxMuted() || Boolean(settings.sfxMuted);
-  const sfxOnBtn = container.querySelector('#sfx-on-btn');
-  const sfxOffBtn = container.querySelector('#sfx-off-btn');
-
-  function updateSfxButtons() {
-    if (sfxOnBtn && sfxOffBtn) {
-      sfxOnBtn.classList.toggle('active', !isSfxMutedVal);
-      sfxOffBtn.classList.toggle('active', isSfxMutedVal);
-    }
-  }
-  updateSfxButtons();
-
-  // Setup Voice Accent Selection (🇬🇧 UK / 🇺🇸 US)
+  // Synchronous initial values from local storage/helpers
+  let isSfxMutedVal = isSfxMuted();
   let currentAccent = getSavedVoiceAccent();
-  const ukVoiceBtn = container.querySelector('#voice-uk-btn');
-  const usVoiceBtn = container.querySelector('#voice-us-btn');
+  let currentSettingsObj = {};
 
-  function updateVoiceButtons() {
-    if (ukVoiceBtn && usVoiceBtn) {
-      ukVoiceBtn.classList.toggle('active', currentAccent === 'uk');
-      usVoiceBtn.classList.toggle('active', currentAccent === 'us');
-    }
-  }
-  updateVoiceButtons();
+  // Auto-save status element
+  const autoSaveStatus = container.querySelector('#autosave-status');
 
   // Helper: auto-save function (non-blocking)
   function triggerAutoSave() {
     const newSettings = {
-      ...settings,
+      ...currentSettingsObj,
       dailyGoal: 10,
       theme: getSavedTheme(),
       voiceAccent: currentAccent,
@@ -258,39 +190,61 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind theme buttons with auto-save
-  const lightBtn = container.querySelector('#theme-light-btn');
-  const darkBtn = container.querySelector('#theme-dark-btn');
-  const notebookBtn = container.querySelector('#theme-notebook-btn');
-
-  function setActiveThemeBtn(active) {
-    [lightBtn, darkBtn, notebookBtn].forEach((b) => b && b.classList.remove('active'));
-    if (active) active.classList.add('active');
-  }
-
-  lightBtn.addEventListener('click', () => {
-    applyTheme('light');
-    setActiveThemeBtn(lightBtn);
-    triggerAutoSave();
-  });
-
-  darkBtn.addEventListener('click', () => {
-    applyTheme('dark');
-    setActiveThemeBtn(darkBtn);
-    triggerAutoSave();
-  });
-
-  if (notebookBtn) {
-    notebookBtn.addEventListener('click', () => {
-      applyTheme('notebook');
-      setActiveThemeBtn(notebookBtn);
-      triggerAutoSave();
+  // Bind auth buttons
+  const loginBtn = container.querySelector('#login-modal-btn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+      renderAuthModal(async () => {
+        await onUserChange();
+        if (!window._activeTab || window._activeTab === 'settings') {
+          renderSettingsView(containerSelector, onUserChange);
+        }
+      });
     });
   }
 
+  const logoutBtn = container.querySelector('#logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      logoutUser();
+      await onUserChange();
+      if (!window._activeTab || window._activeTab === 'settings') {
+        renderSettingsView(containerSelector, onUserChange);
+      }
+    });
+  }
 
+  // Bind Avatar Picker on avatar click
+  const avatarTrigger = container.querySelector('#change-avatar-trigger');
+  if (avatarTrigger) {
+    avatarTrigger.addEventListener('click', () => {
+      renderAvatarPickerModal(async () => {
+        if (autoSaveStatus) {
+          autoSaveStatus.textContent = '✓ Avatar updated';
+          autoSaveStatus.style.opacity = '1';
+          setTimeout(() => {
+            if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
+          }, 1500);
+        }
+        if (!window._activeTab || window._activeTab === 'settings') {
+          renderSettingsView(containerSelector, onUserChange);
+        }
+      });
+    });
+  }
 
-  // Bind sfx buttons
+  // Setup SFX Selection
+  const sfxOnBtn = container.querySelector('#sfx-on-btn');
+  const sfxOffBtn = container.querySelector('#sfx-off-btn');
+
+  function updateSfxButtons() {
+    if (sfxOnBtn && sfxOffBtn) {
+      sfxOnBtn.classList.toggle('active', !isSfxMutedVal);
+      sfxOffBtn.classList.toggle('active', isSfxMutedVal);
+    }
+  }
+  updateSfxButtons();
+
   if (sfxOnBtn && sfxOffBtn) {
     sfxOnBtn.addEventListener('click', () => {
       isSfxMutedVal = false;
@@ -308,7 +262,18 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind voice accent buttons (🇬🇧 UK / 🇺🇸 US) with preview speech
+  // Setup Voice Accent Selection (🇬🇧 UK / 🇺🇸 US)
+  const ukVoiceBtn = container.querySelector('#voice-uk-btn');
+  const usVoiceBtn = container.querySelector('#voice-us-btn');
+
+  function updateVoiceButtons() {
+    if (ukVoiceBtn && usVoiceBtn) {
+      ukVoiceBtn.classList.toggle('active', currentAccent === 'uk');
+      usVoiceBtn.classList.toggle('active', currentAccent === 'us');
+    }
+  }
+  updateVoiceButtons();
+
   if (ukVoiceBtn && usVoiceBtn) {
     ukVoiceBtn.addEventListener('click', () => {
       currentAccent = 'uk';
@@ -323,6 +288,40 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       setSavedVoiceAccent('us');
       updateVoiceButtons();
       speakWord('Hello', null, 'en-US', 'us', true);
+      triggerAutoSave();
+    });
+  }
+
+  // Bind theme buttons with auto-save
+  const lightBtn = container.querySelector('#theme-light-btn');
+  const darkBtn = container.querySelector('#theme-dark-btn');
+  const notebookBtn = container.querySelector('#theme-notebook-btn');
+
+  function setActiveThemeBtn(active) {
+    [lightBtn, darkBtn, notebookBtn].forEach((b) => b && b.classList.remove('active'));
+    if (active) active.classList.add('active');
+  }
+
+  if (lightBtn) {
+    lightBtn.addEventListener('click', () => {
+      applyTheme('light');
+      setActiveThemeBtn(lightBtn);
+      triggerAutoSave();
+    });
+  }
+
+  if (darkBtn) {
+    darkBtn.addEventListener('click', () => {
+      applyTheme('dark');
+      setActiveThemeBtn(darkBtn);
+      triggerAutoSave();
+    });
+  }
+
+  if (notebookBtn) {
+    notebookBtn.addEventListener('click', () => {
+      applyTheme('notebook');
+      setActiveThemeBtn(notebookBtn);
       triggerAutoSave();
     });
   }
@@ -389,17 +388,18 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         // Save in background
         triggerAutoSave();
 
-        // Re-render settings view immediately if user is still on settings tab
-        if (!window._activeTab || window._activeTab === 'settings') {
-          renderSettingsView(containerSelector, onUserChange);
-        }
+        // In-place update text of settings view dynamically without wiping the DOM
+        renderSettingsView(containerSelector, onUserChange);
       });
     });
 
-    // Close on click outside
-    document.addEventListener('click', () => {
-      langDropdown.classList.remove('open');
-    });
+    // Close on click outside without leaking global listeners
+    const onDocClick = (e) => {
+      if (!langDropdown.contains(e.target)) {
+        langDropdown.classList.remove('open');
+      }
+    };
+    document.addEventListener('click', onDocClick);
   }
 
   // Bind clear cache button
@@ -430,6 +430,23 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       }
     });
   }
+
+  // Asynchronously fetch full settings from server / cloud and update local state if present
+  getUserSettings().then((remoteSettings) => {
+    if (remoteSettings) {
+      currentSettingsObj = remoteSettings;
+      if (typeof remoteSettings.sfxMuted !== 'undefined') {
+        isSfxMutedVal = Boolean(remoteSettings.sfxMuted);
+        updateSfxButtons();
+      }
+      if (remoteSettings.voiceAccent) {
+        currentAccent = remoteSettings.voiceAccent;
+        updateVoiceButtons();
+      }
+    }
+  }).catch((err) => {
+    console.warn('Error loading remote settings:', err);
+  });
 }
 
 export { renderSettingsView };
