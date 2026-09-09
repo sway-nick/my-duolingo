@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260909_v342';
+        var APP_BUILD = '20260909_v343';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -507,18 +507,16 @@
           } else if (!isMethodAvailable(currentMethod)) {
             // STRICT FORWARD-ONLY CONVEYOR PROGRESSION:
             // Cards -> Quiz -> Pairs -> Test -> Finished (Hub)
-            // Once user is in Pairs, next mode is STRICTLY ONLY Test!
+            // NEVER regress backwards to a previous mode during a round!
             if (currentMethod === 'cards') {
               if (quizQueue.length > 0) currentMethod = 'quiz';
               else if (pairsQueue.length > 0) currentMethod = 'pairs';
-              else if (testQueue.length > 0) currentMethod = 'input';
               else currentMethod = 'input';
             } else if (currentMethod === 'quiz') {
               if (pairsQueue.length > 0) currentMethod = 'pairs';
-              else if (testQueue.length > 0) currentMethod = 'input';
               else currentMethod = 'input';
             } else if (currentMethod === 'pairs') {
-              // After Pairs, STRICTLY proceed ONLY to Test! Never regress to Quiz!
+              // After Pairs, STRICTLY proceed ONLY to Test! Never regress to Quiz or Cards!
               currentMethod = 'input';
             } else if (currentMethod === 'input') {
               currentMethod = 'input';
@@ -1226,12 +1224,14 @@
           (favSet.has(String(currentWord.id)) ||
             (currentWord.word && favSet.has(String(currentWord.word).toLowerCase().trim())));
 
-        const availableModes = {
-          cards: isFavPracticeActive ? true : (cardsQueue.length > 0 && learningCount < dailyGoal),
-          quiz: isFavPracticeActive ? true : quizQueue.length > 0,
-          pairs: isFavPracticeActive ? true : pairsQueue.length > 0,
-          input: isFavPracticeActive ? true : testQueue.length > 0,
-        };
+        const availableModes = isFavPracticeActive
+          ? { cards: true, quiz: true, pairs: true, input: true }
+          : {
+              cards: currentMethod === 'cards',
+              quiz: currentMethod === 'quiz',
+              pairs: currentMethod === 'pairs',
+              input: currentMethod === 'input',
+            };
 
         renderTrainingCard(currentWord, allWords, {
           currentMethod,

@@ -514,6 +514,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+      if (btn.disabled || btn.classList.contains('disabled')) return;
       const selectedMode = btn.getAttribute('data-mode');
       if (selectedMode && selectedMode !== currentMethod) {
         if (window.__activePairsTimerInterval) {
