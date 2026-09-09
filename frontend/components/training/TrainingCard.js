@@ -1223,6 +1223,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           return;
         }
 
+        if (!localStorage.getItem('myduo_mic_prompt_seen')) {
+          await new Promise((resolve) => {
+            const modal = document.createElement('div');
+            modal.className = 'modal-backdrop';
+            modal.id = 'mic-explainer-modal';
+            modal.innerHTML = `
+              <div class="modal-content" style="text-align: center; max-width: 340px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
+                <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🎙️</div>
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">${getInterfaceLanguage() === 'ru' ? 'Разрешите микрофон' : getInterfaceLanguage() === 'uk' ? 'Дозвольте мікрофон' : 'Allow microphone'}</h3>
+                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.45; margin: 0 0 20px;">
+                  ${getInterfaceLanguage() === 'ru' ? 'Микрофон нужен для тренировки произношения слов. В следующем системном окне нажмите <strong>«Разрешить»</strong>.' : getInterfaceLanguage() === 'uk' ? 'Мікрофон потрібен для тренування вимови слів. У наступному системному вікні натисніть <strong>«Дозволити»</strong>.' : 'Microphone is required for pronunciation training. In the next system prompt, tap <strong>"Allow"</strong>.'}
+                </p>
+                <button class="primary-button btn-green" id="mic-explainer-allow-btn" style="min-height: 46px; height: 46px; font-size: 15px; font-weight: 700; width: 100%;">
+                  ${getInterfaceLanguage() === 'ru' ? 'Понятно, продолжить' : getInterfaceLanguage() === 'uk' ? 'Зрозуміло, продовжити' : 'Got it, continue'}
+                </button>
+              </div>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('#mic-explainer-allow-btn').addEventListener('click', () => {
+              localStorage.setItem('myduo_mic_prompt_seen', 'true');
+              modal.remove();
+              resolve(true);
+            });
+          });
+        }
+
         try {
           try {
             mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });

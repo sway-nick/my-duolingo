@@ -53,6 +53,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <span class="dropdown-arrow">▼</span>
           </button>
           <div class="custom-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <div class="dropdown-item" data-value="en">English</div>
             <div class="dropdown-item" data-value="ru">Русский</div>
             <div class="dropdown-item" data-value="uk">Українська</div>
             <div class="dropdown-item" data-value="de">Deutsch</div>
@@ -333,6 +334,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const langItems = container.querySelectorAll('#lang-dropdown-menu .dropdown-item');
 
   const langNames = {
+    en: 'English',
     ru: 'Русский',
     uk: 'Українська',
     de: 'Deutsch',
