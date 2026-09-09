@@ -2655,8 +2655,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        // 2. Distinct Pause 1.8s between Russian and English
-        await autoplayDelay(1800);
+        // 2. Distinct Pause 2.4s between translation and English for recall
+        await autoplayDelay(2400);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         // 3. Show English (front face) and speak
