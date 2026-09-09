@@ -379,181 +379,204 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     return `${cnt} ${t('words')}`;
   }
 
-  container.innerHTML = `
-    <section class="word-card-container">
-      
-      <div class="card-header-bar">
-        <div class="mode-switch-pills" id="mode-switch-pills">
-          <div class="mode-pill-glider" id="mode-pill-glider"></div>
-          <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
-            ${getInterfaceLanguage() === 'ru' ? 'Карточки' : getInterfaceLanguage() === 'uk' ? 'Картки' : 'Cards'}
-          </button>
-          <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
-            ${t('dict_stage_quiz')}
-          </button>
-          <button type="button" class="mode-pill-btn ${isPairsMode ? 'active' : ''} ${!availableModes.pairs ? 'disabled' : ''}" data-mode="pairs" ${!availableModes.pairs ? 'disabled' : ''}>
-            ${t('dict_stage_pairs')}
-          </button>
-          <button type="button" class="mode-pill-btn ${isInputMode ? 'active' : ''} ${!availableModes.input ? 'disabled' : ''}" data-mode="input" ${!availableModes.input ? 'disabled' : ''}>
-            ${t('dict_stage_test')}
-          </button>
-        </div>
-      </div>
+  const existingCardContainer = container.querySelector('.word-card-container');
+  const isSameCardsLayout = Boolean(
+    existingCardContainer &&
+    container.dataset.trainingMethod === 'cards' &&
+    isCardsMode &&
+    container.dataset.isFavPractice === String(isFavPractice) &&
+    container.querySelector('#practice-area')
+  );
 
-      <div class="word-main-display">
-        ${
-          isCardsMode
-            ? (
-              isFavPractice
-                ? `
-                <div class="train-left-badge">
-                  ${t('fav_title')}: <strong>${activeWords.length}</strong>
-                </div>
-              `
-                : `
-                <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-                  🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
-                </div>
-              `
-            )
-            : isPairsMode
-              ? `
-            <div class="pairs-header-box" style="margin: 2px 0 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-              <h2 class="pairs-title">
-                <span style="font-size: 18px; line-height: 1; flex-shrink: 0;">🧩</span>
-                <span>${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</span>
-              </h2>
-              <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
-                <span class="pairs-timer-icon">⏱️</span>
-                <span class="pairs-timer-val" id="pairs-timer-val">00:00</span>
-              </div>
-            </div>
-          `
-              : isInputMode
-                ? `
-            <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
-            <div class="train-left-badge">
-              ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
-            </div>
-            <div class="word-header-row">
-              <div class="training-word-container">
-                <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                  ${getWordTranslation(currentWord)}
-                </h2>
-                ${notesBtnHtml}
-              </div>
-              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
-                ${favorited ? '❤️' : '🤍'}
-              </button>
-            </div>
-          `
-                : `
-            ${quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
-            <div class="train-left-badge">
-              🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
-            </div>
-            <div class="word-header-row">
-              ${
-                quizStage === 0
+  if (!isSameCardsLayout) {
+    container.dataset.trainingMethod = currentMethod;
+    container.dataset.isFavPractice = String(isFavPractice);
+
+    container.innerHTML = `
+      <section class="word-card-container">
+        
+        <div class="card-header-bar">
+          <div class="mode-switch-pills" id="mode-switch-pills">
+            <div class="mode-pill-glider" id="mode-pill-glider"></div>
+            <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
+              ${getInterfaceLanguage() === 'ru' ? 'Карточки' : getInterfaceLanguage() === 'uk' ? 'Картки' : 'Cards'}
+            </button>
+            <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
+              ${t('dict_stage_quiz')}
+            </button>
+            <button type="button" class="mode-pill-btn ${isPairsMode ? 'active' : ''} ${!availableModes.pairs ? 'disabled' : ''}" data-mode="pairs" ${!availableModes.pairs ? 'disabled' : ''}>
+              ${t('dict_stage_pairs')}
+            </button>
+            <button type="button" class="mode-pill-btn ${isInputMode ? 'active' : ''} ${!availableModes.input ? 'disabled' : ''}" data-mode="input" ${!availableModes.input ? 'disabled' : ''}>
+              ${t('dict_stage_test')}
+            </button>
+          </div>
+        </div>
+
+        <div class="word-main-display">
+          ${
+            isCardsMode
+              ? (
+                isFavPractice
                   ? `
-                <div class="training-word-container">
-                  <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                    <span class="training-word-text">${currentWord.word}</span>
-                  </h2>
-                  ${notesBtnHtml}
-                </div>
-              `
-                  : quizStage === 1
-                    ? `
-                <div class="training-word-container">
-                  <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
-                    <span class="listening-audio-icon">🎧</span>
-                    <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
+                  <div class="train-left-badge">
+                    ${t('fav_title')}: <strong>${activeWords.length}</strong>
                   </div>
-                  ${notesBtnHtml}
+                `
+                  : `
+                  <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+                    🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
+                  </div>
+                `
+              )
+              : isPairsMode
+                ? `
+              <div class="pairs-header-box" style="margin: 2px 0 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <h2 class="pairs-title">
+                  <span style="font-size: 18px; line-height: 1; flex-shrink: 0;">🧩</span>
+                  <span>${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</span>
+                </h2>
+                <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
+                  <span class="pairs-timer-icon">⏱️</span>
+                  <span class="pairs-timer-val" id="pairs-timer-val">00:00</span>
                 </div>
-              `
-                    : quizStage === 2
-                      ? `
+              </div>
+            `
+                : isInputMode
+                  ? `
+              <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
+              <div class="train-left-badge">
+                ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
+              </div>
+              <div class="word-header-row">
                 <div class="training-word-container">
                   <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
                     ${getWordTranslation(currentWord)}
                   </h2>
                   ${notesBtnHtml}
                 </div>
-              `
-                      : `
-                <div class="training-word-container">
-                  <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
-                    ${getWordTranslation(currentWord)}
-                  </h2>
-                  ${notesBtnHtml}
-                </div>
-              `
-              }
-              <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
-                ${favorited ? '❤️' : '🤍'}
-              </button>
-            </div>
-          `
+                <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
+                  ${favorited ? '❤️' : '🤍'}
+                </button>
+              </div>
+            `
+                  : `
+              ${quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
+              <div class="train-left-badge">
+                🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
+              </div>
+              <div class="word-header-row">
+                ${
+                  quizStage === 0
+                    ? `
+                  <div class="training-word-container">
+                    <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                      <span class="training-word-text">${currentWord.word}</span>
+                    </h2>
+                    ${notesBtnHtml}
+                  </div>
+                `
+                    : quizStage === 1
+                      ? `
+                  <div class="training-word-container">
+                    <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
+                      <span class="listening-audio-icon">🎧</span>
+                      <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
+                    </div>
+                    ${notesBtnHtml}
+                  </div>
+                `
+                      : quizStage === 2
+                        ? `
+                  <div class="training-word-container">
+                    <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                      ${getWordTranslation(currentWord)}
+                    </h2>
+                    ${notesBtnHtml}
+                  </div>
+                `
+                        : `
+                  <div class="training-word-container">
+                    <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
+                      ${getWordTranslation(currentWord)}
+                    </h2>
+                    ${notesBtnHtml}
+                  </div>
+                `
+                }
+                <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
+                  ${favorited ? '❤️' : '🤍'}
+                </button>
+              </div>
+            `
+          }
+        </div>
+
+        <div id="practice-area" class="practice-area"></div>
+
+      </section>
+    `;
+
+    const pillBar = container.querySelector('#mode-switch-pills');
+    const glider = container.querySelector('#mode-pill-glider');
+    const modePills = container.querySelectorAll('.mode-pill-btn');
+
+    function positionGlider(targetBtn, animate = true) {
+      if (!targetBtn || !glider || !pillBar) return;
+      const offsetLeft = targetBtn.offsetLeft;
+      const btnWidth = targetBtn.offsetWidth;
+      if (btnWidth === 0) return;
+      if (!animate) glider.style.transition = 'none';
+      else
+        glider.style.transition =
+          'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
+      glider.style.transform = `translateX(${offsetLeft}px)`;
+      glider.style.width = `${btnWidth}px`;
+    }
+
+    const initialActive = container.querySelector('.mode-pill-btn.active');
+    if (initialActive) {
+      requestAnimationFrame(() => positionGlider(initialActive, false));
+      setTimeout(() => positionGlider(initialActive, false), 50);
+    }
+
+    window.addEventListener(
+      'resize',
+      () => {
+        const activeBtn = container.querySelector('.mode-pill-btn.active');
+        if (activeBtn) positionGlider(activeBtn, false);
+      },
+      { passive: true },
+    );
+
+    modePills.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (btn.disabled || btn.classList.contains('disabled')) return;
+        const selectedMode = btn.getAttribute('data-mode');
+        if (selectedMode && selectedMode !== currentMethod) {
+          if (window.__activePairsTimerInterval) {
+            clearInterval(window.__activePairsTimerInterval);
+            window.__activePairsTimerInterval = null;
+          }
+          modePills.forEach((p) => p.classList.remove('active'));
+          btn.classList.add('active');
+          positionGlider(btn, true);
+          setTimeout(() => onMethodChange(selectedMode), 150);
         }
-      </div>
-
-      <div id="practice-area" class="practice-area"></div>
-
-    </section>
-  `;
-
-  const pillBar = container.querySelector('#mode-switch-pills');
-  const glider = container.querySelector('#mode-pill-glider');
-  const modePills = container.querySelectorAll('.mode-pill-btn');
-
-  function positionGlider(targetBtn, animate = true) {
-    if (!targetBtn || !glider || !pillBar) return;
-    const offsetLeft = targetBtn.offsetLeft;
-    const btnWidth = targetBtn.offsetWidth;
-    if (btnWidth === 0) return;
-    if (!animate) glider.style.transition = 'none';
-    else
-      glider.style.transition =
-        'transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease';
-    glider.style.transform = `translateX(${offsetLeft}px)`;
-    glider.style.width = `${btnWidth}px`;
-  }
-
-  const initialActive = container.querySelector('.mode-pill-btn.active');
-  if (initialActive) {
-    requestAnimationFrame(() => positionGlider(initialActive, false));
-    setTimeout(() => positionGlider(initialActive, false), 50);
-  }
-
-  window.addEventListener(
-    'resize',
-    () => {
-      const activeBtn = container.querySelector('.mode-pill-btn.active');
-      if (activeBtn) positionGlider(activeBtn, false);
-    },
-    { passive: true },
-  );
-
-  modePills.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (btn.disabled || btn.classList.contains('disabled')) return;
-      const selectedMode = btn.getAttribute('data-mode');
-      if (selectedMode && selectedMode !== currentMethod) {
-        if (window.__activePairsTimerInterval) {
-          clearInterval(window.__activePairsTimerInterval);
-          window.__activePairsTimerInterval = null;
-        }
-        modePills.forEach((p) => p.classList.remove('active'));
-        btn.classList.add('active');
-        positionGlider(btn, true);
-        setTimeout(() => onMethodChange(selectedMode), 150);
-      }
+      });
     });
-  });
+  } else {
+    const leftBadge = container.querySelector('.train-left-badge');
+    if (leftBadge) {
+      if (isFavPractice) {
+        leftBadge.innerHTML = `${t('fav_title')}: <strong>${activeWords.length}</strong>`;
+      } else {
+        leftBadge.innerHTML = `🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}`;
+      }
+    }
+  }
 
   const speakTrigger = container.querySelector('#speak-word-trigger');
   const soundBtn = container.querySelector('#speak-sound-btn');

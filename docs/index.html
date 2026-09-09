@@ -1222,7 +1222,10 @@
           return;
         }
 
-        content.innerHTML = '<div id="training"></div>';
+        let trainEl = content.querySelector('#training');
+        if (!trainEl) {
+          content.innerHTML = '<div id="training"></div>';
+        }
         const currentWord = activeWords[currentWordIndex % activeWords.length];
 
         const isFav =
