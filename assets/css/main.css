@@ -1497,6 +1497,10 @@ body.notebook-theme .word-notes-modal-text {
   perspective: 1000px;
   width: 100%;
   margin: 0 auto;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform, opacity;
 }
 
 .flashcard-3d {
@@ -1507,6 +1511,9 @@ body.notebook-theme .word-notes-modal-text {
   transition: transform 0.55s cubic-bezier(0.34, 1.25, 0.64, 1);
   cursor: pointer;
   border-radius: var(--radius-lg, 16px);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .flashcard-3d.is-flipped {

@@ -2575,13 +2575,119 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     `;
 
+    const flashcardWrapper = practiceArea.querySelector('.flashcard-3d-wrapper');
     const flashcard = practiceArea.querySelector('#flashcard-3d');
     const feedbackBtns = practiceArea.querySelector('#card-feedback-btns');
     let isFlipped = false;
     let flipCount = 0;
     let shimmerTriggered = false;
 
+    // Fan Swipe gesture support
+    let startX = 0;
+    let startY = 0;
+    let currentDx = 0;
+    let currentDy = 0;
+    let isPointerDown = false;
+    let isLockedSwipe = false;
+    let hasSwiped = false;
+
+    function handlePointerDown(e) {
+      if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn') || e.target.closest('#speech-diag-trigger-btn')) {
+        return;
+      }
+      isPointerDown = true;
+      isLockedSwipe = false;
+      currentDx = 0;
+      currentDy = 0;
+      startX = e.clientX;
+      startY = e.clientY;
+      if (flashcardWrapper) {
+        flashcardWrapper.style.transition = 'none';
+      }
+    }
+
+    function handlePointerMove(e) {
+      if (!isPointerDown) return;
+      currentDx = e.clientX - startX;
+      currentDy = e.clientY - startY;
+
+      if (!isLockedSwipe) {
+        const absX = Math.abs(currentDx);
+        const absY = Math.abs(currentDy);
+        if (absY > 12 && absY > absX * 1.3) {
+          isPointerDown = false;
+          if (flashcardWrapper) {
+            flashcardWrapper.style.transition = 'transform 0.2s ease';
+            flashcardWrapper.style.transform = '';
+          }
+          return;
+        }
+        if (absX > 8) {
+          isLockedSwipe = true;
+          try {
+            flashcard.setPointerCapture?.(e.pointerId);
+          } catch (_) {}
+        }
+      }
+
+      if (isLockedSwipe && flashcardWrapper) {
+        const rot = currentDx * 0.08;
+        flashcardWrapper.style.transform = `translate3d(${currentDx}px, ${currentDy * 0.2}px, 0) rotate(${rot}deg)`;
+      }
+    }
+
+    async function handlePointerUp() {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      const absDx = Math.abs(currentDx);
+
+      if (isLockedSwipe && absDx > 65) {
+        hasSwiped = true;
+        const flyX = currentDx > 0 ? (window.innerWidth + 200) : (-window.innerWidth - 200);
+        const flyRot = currentDx > 0 ? 25 : -25;
+        if (flashcardWrapper) {
+          flashcardWrapper.style.transition = 'transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.28s ease';
+          flashcardWrapper.style.transform = `translate3d(${flyX}px, ${currentDy * 0.3}px, 0) rotate(${flyRot}deg)`;
+          flashcardWrapper.style.opacity = '0';
+        }
+        playSuccessSound();
+        await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
+        onNextAfterSpeech(onNext, 250, 3000);
+      } else {
+        if (flashcardWrapper) {
+          flashcardWrapper.style.transition = 'transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          flashcardWrapper.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+        }
+        if (isLockedSwipe) {
+          hasSwiped = true;
+          setTimeout(() => { hasSwiped = false; }, 120);
+        }
+      }
+      isLockedSwipe = false;
+    }
+
+    function handlePointerCancel() {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      isLockedSwipe = false;
+      if (flashcardWrapper) {
+        flashcardWrapper.style.transition = 'transform 0.25s ease';
+        flashcardWrapper.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+      }
+    }
+
+    if (flashcard) {
+      flashcard.addEventListener('pointerdown', handlePointerDown);
+      flashcard.addEventListener('pointermove', handlePointerMove);
+      flashcard.addEventListener('pointerup', handlePointerUp);
+      flashcard.addEventListener('pointercancel', handlePointerCancel);
+    }
+
     flashcard.addEventListener('click', (e) => {
+      if (hasSwiped) {
+        hasSwiped = false;
+        return;
+      }
       if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn')) {
         return;
       }
