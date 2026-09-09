@@ -15,6 +15,7 @@ import {
   releaseScreenWakeLock,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
+  triggerHaptic,
 } from '../../services/audioService.js?v=200.0';
 import {
   saveProgress,
@@ -2716,6 +2717,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         } else {
           // SWIPE RIGHT -> Return to Previous Word
           if (canGoPrev && typeof onPrev === 'function') {
+            triggerHaptic('light');
             if (flashcardWrapper) {
               flashcardWrapper.style.transition = 'transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.16s ease';
               flashcardWrapper.style.transform = `translate3d(120vw, ${targetDy * 0.15}px, 0) rotate(22deg)`;

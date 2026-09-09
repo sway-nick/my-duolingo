@@ -42,12 +42,24 @@ function getAudioContext() {
   return audioCtx;
 }
 
+export function triggerHaptic(type = 'light') {
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    try {
+      if (type === 'light') navigator.vibrate(10);
+      else if (type === 'medium') navigator.vibrate(22);
+      else if (type === 'success') navigator.vibrate([12, 35, 18]);
+      else if (type === 'error') navigator.vibrate([30, 40, 30]);
+    } catch (e) {}
+  }
+}
+
 let lastSuccessSoundTime = 0;
 
 /**
  * Plays a cute, sweet sparkling crystal bell chime upon correct answer (Web Audio API)
  */
 function playSuccessSound() {
+  triggerHaptic('success');
   if (isAudioMuted() || isSfxMuted()) return;
   const nowMs = Date.now();
   if (nowMs - lastSuccessSoundTime < 600) return;
@@ -1109,4 +1121,5 @@ export {
   releaseScreenWakeLock,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
+  triggerHaptic,
 };

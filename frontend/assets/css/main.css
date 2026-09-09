@@ -301,9 +301,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
-  min-height: 58px;
-  height: 58px;
+  padding-top: calc(8px + env(safe-area-inset-top, 0px));
+  padding-bottom: 8px;
+  padding-left: max(10px, env(safe-area-inset-left, 0px));
+  padding-right: max(10px, env(safe-area-inset-right, 0px));
+  min-height: calc(58px + env(safe-area-inset-top, 0px));
+  height: calc(58px + env(safe-area-inset-top, 0px));
   border-bottom: 1px solid var(--border-color);
   background: #ffffff;
   position: sticky;
@@ -492,11 +495,59 @@ body {
   animation: xpPopDown 0.6s ease-out;
 }
 
-/* Main Content Area */
+/* Main Content Area with Safe Area support */
 .app-main-content {
   flex: 1;
   padding: 12px 14px;
-  padding-bottom: 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(14px, env(safe-area-inset-left, 0px));
+  padding-right: max(14px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+}
+
+/* Ergonomic Touch Target (Apple HIG / Material 3: Hitbox >= 44px) */
+.flashcard-sound-btn,
+.flashcard-fav-btn,
+.flashcard-crown-btn,
+.favorite-button,
+.header-burger-btn,
+.header-profile-badge,
+.theme-toggle-btn,
+.word-notes-modal-close {
+  position: relative;
+}
+
+.flashcard-sound-btn::after,
+.flashcard-fav-btn::after,
+.flashcard-crown-btn::after,
+.favorite-button::after,
+.header-burger-btn::after,
+.header-profile-badge::after,
+.theme-toggle-btn::after,
+.word-notes-modal-close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 44px;
+  min-height: 44px;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  pointer-events: auto;
+}
+
+/* iOS Safari: Prevent accidental page zoom by guaranteeing 16px font-size on all mobile inputs */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  .search-input,
+  .filter-select,
+  .settings-select,
+  .form-group input {
+    font-size: 16px !important;
+  }
 }
 
 /* Bottom Navigation (Hidden) */
