@@ -42,7 +42,7 @@ function getAudioContext() {
   return audioCtx;
 }
 
-export function triggerHaptic(type = 'light') {
+function triggerHaptic(type = 'light') {
   if (typeof navigator !== 'undefined' && navigator.vibrate) {
     try {
       if (type === 'light') navigator.vibrate(10);
@@ -1089,6 +1089,7 @@ export const AudioService = {
   releaseScreenWakeLock,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
+  triggerHaptic,
 };
 
 export default AudioService;
