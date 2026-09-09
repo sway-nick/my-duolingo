@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260909_v346';
+        var APP_BUILD = '20260909_v347';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -51,7 +51,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=207.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=208.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -906,7 +906,7 @@
             : '';
 
           content.innerHTML = `
-            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: ${hasWotdCard ? 'calc(100vh - 120px)' : 'calc(100dvh - 150px)'}; max-height: ${hasWotdCard ? 'none' : 'calc(100dvh - 110px)'}; padding: ${hasWotdCard ? '16px 20px 24px' : '16px 20px'}; box-sizing: border-box; overflow: hidden;">
+            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 0; padding: ${hasWotdCard ? '16px 20px 20px' : '16px 20px'}; box-sizing: border-box; overflow: hidden;">
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               ${emptyTitle ? `<h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>` : ''}
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
