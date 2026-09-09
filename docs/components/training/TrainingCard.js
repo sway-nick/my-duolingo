@@ -1757,14 +1757,67 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const roundWords = [currentWord];
     const usedIds = new Set([String(currentWord.id)]);
 
-    // В раунд Пар попадают слова ИСКЛЮЧИТЕЛЬНО из активной обучающей очереди (activeWords),
-    // которая уже содержит 10 отобранных слов + до 50% фаворитов + до 50% старых изученных слов
+    // 1. Сначала берем слова из текущей очереди Пар (activeWords)
     if (activeWords && activeWords.length > 0) {
       const activeOthers = shuffleArray(activeWords.filter((w) => !usedIds.has(String(w.id))));
       for (const w of activeOthers) {
         if (roundWords.length >= TARGET_PAIRS_COUNT) break;
         roundWords.push(w);
         usedIds.add(String(w.id));
+      }
+    }
+
+    // 2. Если в очереди осталось меньше 5 пар (например, в конце конвейера),
+    // гарантированно дополняем до 5 пар по нашему принципу:
+    // сначала самые старые по времени повторения Избранные, затем самые старые выученные слова
+    if (roundWords.length < TARGET_PAIRS_COUNT) {
+      const favList = getUserFavorites() || [];
+      const favSet = new Set(favList.map(String));
+      const userProgress = getUserProgress() || {};
+
+      const categoryWords = (selectedCategory === 'All' || !selectedCategory)
+        ? (allWords || [])
+        : (allWords || []).filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+
+      // A) Избранные слова категории, которых еще нет в раунде (от самых старых к новым)
+      const candidateFavs = categoryWords.filter((w) => favSet.has(String(w.id)) && !usedIds.has(String(w.id)));
+      candidateFavs.sort((a, b) => {
+        const pA = userProgress[a.id] || userProgress[String(a.id)];
+        const pB = userProgress[b.id] || userProgress[String(b.id)];
+        return (pA?.lastPracticed || 0) - (pB?.lastPracticed || 0);
+      });
+      for (const w of candidateFavs) {
+        if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+        roundWords.push(w);
+        usedIds.add(String(w.id));
+      }
+
+      // Б) Ранее выученные слова (mastered) (от самых старых к новым)
+      if (roundWords.length < TARGET_PAIRS_COUNT) {
+        const candidateMastered = categoryWords.filter((w) => {
+          const p = userProgress[w.id] || userProgress[String(w.id)];
+          return p && isWordMastered(p) && !usedIds.has(String(w.id));
+        });
+        candidateMastered.sort((a, b) => {
+          const pA = userProgress[a.id] || userProgress[String(a.id)];
+          const pB = userProgress[b.id] || userProgress[String(b.id)];
+          return (pA?.lastPracticed || pA?.masteredAt || 0) - (pB?.lastPracticed || pB?.masteredAt || 0);
+        });
+        for (const w of candidateMastered) {
+          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+          roundWords.push(w);
+          usedIds.add(String(w.id));
+        }
+      }
+
+      // В) Любые другие слова категории (на случай первых прохождений)
+      if (roundWords.length < TARGET_PAIRS_COUNT) {
+        const otherPool = shuffleArray(categoryWords.filter((w) => !usedIds.has(String(w.id))));
+        for (const w of otherPool) {
+          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+          roundWords.push(w);
+          usedIds.add(String(w.id));
+        }
       }
     }
 
