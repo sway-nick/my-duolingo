@@ -422,8 +422,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ? (
                 isFavPractice
                   ? `
-                  <div class="train-left-badge">
-                    ${t('fav_title')}: <strong>${activeWords.length}</strong>
+                  <div class="train-left-badge" id="fav-counter-badge">
+                    ${getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites'}: <strong>${Math.min(currentWordIndex + 1, activeWords.length)}/${activeWords.length}</strong>
                   </div>
                 `
                   : `
@@ -2615,6 +2615,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     if (isFavPractice && existingAutoplayBtn && existingWrapper) {
       existingWrapper.outerHTML = cardHtml;
+      const favBadge = container.querySelector('#fav-counter-badge') || container.querySelector('.train-left-badge');
+      if (favBadge) {
+        const favLabel = getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites';
+        favBadge.innerHTML = `${favLabel}: <strong>${Math.min(currentWordIndex + 1, activeWords.length)}/${activeWords.length}</strong>`;
+      }
     } else {
       practiceArea.innerHTML = `
         ${cardHtml}
