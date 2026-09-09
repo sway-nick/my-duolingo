@@ -3162,6 +3162,7 @@ body.dark-theme .custom-dropdown-trigger {
 }
 
 .autoplay-favs-btn-bottom {
+  position: relative;
   background: #16a34a !important;
   color: #ffffff !important;
   border: none;
@@ -3169,6 +3170,23 @@ body.dark-theme .custom-dropdown-trigger {
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
+}
+
+.autoplay-favs-btn-bottom .autoplay-btn-icon-wrapper {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.autoplay-favs-btn-bottom .autoplay-btn-text {
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
 }
 
 .autoplay-favs-btn-bottom:hover {

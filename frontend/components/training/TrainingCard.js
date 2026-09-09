@@ -39,6 +39,23 @@ function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
+const AUTOPLAY_HEADPHONES_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`;
+
+const AUTOPLAY_PAUSE_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" style="display: block;"><rect x="5" y="4" width="4.5" height="16" rx="1.5"></rect><rect x="14.5" y="4" width="4.5" height="16" rx="1.5"></rect></svg>`;
+
+function getFavsAutoplayBtnContent(isPlaying) {
+  const icon = isPlaying ? AUTOPLAY_PAUSE_SVG : AUTOPLAY_HEADPHONES_SVG;
+  const label = isPlaying ? t('fav_autoplay_stop') : t('fav_autoplay_listen');
+  return `
+    <span class="autoplay-btn-icon-wrapper" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; justify-content: center; pointer-events: none;">
+      ${icon}
+    </span>
+    <span class="autoplay-btn-text" style="width: 100%; text-align: center; pointer-events: none;">
+      ${label}
+    </span>
+  `;
+}
+
 function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
   const start = Date.now();
   const adjustedDelay = minDelay + 500;
@@ -2540,8 +2557,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         isFavPractice
           ? `
         <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
-          <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="min-height: 52px; width: 100%; max-width: 320px; font-size: 18px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            ${window.__favsAutoplayRunning ? '⏸️ ' + t('fav_autoplay_stop') : '🎧 ' + t('fav_autoplay_listen')}
+          <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; max-width: 320px; font-size: 18px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+            ${getFavsAutoplayBtnContent(window.__favsAutoplayRunning)}
           </button>
         </div>
       `
@@ -2703,7 +2720,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             releaseScreenWakeLock();
             updateMediaSessionStatus(false);
             autoplayBtn.classList.remove('is-playing');
-            autoplayBtn.innerHTML = '🎧 ' + t('fav_autoplay_listen');
+            autoplayBtn.innerHTML = getFavsAutoplayBtnContent(false);
             if (flashcard) {
               isFlipped = false;
               flashcard.classList.remove('is-flipped');
@@ -2714,7 +2731,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             requestScreenWakeLock();
             updateMediaSessionStatus(true, currentWord);
             autoplayBtn.classList.add('is-playing');
-            autoplayBtn.innerHTML = '⏸️ ' + t('fav_autoplay_stop');
+            autoplayBtn.innerHTML = getFavsAutoplayBtnContent(true);
             runAutoplayCycle();
           }
         });
