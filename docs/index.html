@@ -522,6 +522,12 @@
               currentMethod = 'input';
             }
           }
+
+          // Keep userSettings.preferredMethod strictly synchronized with the current active conveyor mode
+          if (userSettings.preferredMethod !== currentMethod) {
+            userSettings.preferredMethod = currentMethod;
+            saveUserSettings(userSettings);
+          }
         }
 
         // In initial Cards mode: if user reached daily learning limit during selection, show prompt to go to Quiz
