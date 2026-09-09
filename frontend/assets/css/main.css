@@ -3378,6 +3378,19 @@ body.dark-theme .custom-dropdown-trigger {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+
+.dict-card-center-badge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
 }
 
 .fav-card-actions, .dict-card-actions {

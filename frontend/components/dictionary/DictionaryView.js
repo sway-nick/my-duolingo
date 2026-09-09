@@ -784,10 +784,8 @@ function renderWordCardHtml(w, isFav, prog) {
   return `
     <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
       <div class="dict-card-header">
-        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-          <span class="category-badge">${cleanCat}</span>
-          ${stageBadge}
-        </div>
+        <span class="category-badge">${cleanCat}</span>
+        ${stageBadge ? `<div class="dict-card-center-badge">${stageBadge}</div>` : ''}
         <div class="dict-card-actions">
           <button type="button" class="dict-audio-btn" data-word="${escapeHtml(w.word)}" data-id="${w.id}" title="${t('sound_on')}" aria-label="${t('sound_on')}">
             🔊
