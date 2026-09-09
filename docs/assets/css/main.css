@@ -3187,7 +3187,7 @@ body.dark-theme .custom-dropdown-trigger {
   color: #ffffff !important;
   border: none;
   box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   cursor: pointer;
   user-select: none;
 }

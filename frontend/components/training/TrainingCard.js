@@ -2521,7 +2521,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     focusAndPlaceCaret(input);
   } else {
-    practiceArea.innerHTML = `
+    const cardHtml = `
       <div class="flashcard-3d-wrapper">
         <div class="flashcard-3d" id="flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
           <div class="flashcard-face flashcard-front">
@@ -2554,28 +2554,38 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           </div>
         </div>
       </div>
-      
-      ${
-        isFavPractice
-          ? `
-        <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
-          <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; max-width: 320px; font-size: 18px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-            ${getFavsAutoplayBtnContent(window.__favsAutoplayRunning)}
-          </button>
-        </div>
-      `
-          : `
-        <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
-          <button type="button" class="btn-learn" id="btn-learn">
-            ${t('train_learn')}
-          </button>
-          <button type="button" class="btn-know" id="btn-know">
-            ${t('train_know')}
-          </button>
-        </div>
-      `
-      }
     `;
+
+    const existingAutoplayBtn = practiceArea.querySelector('#favs-autoplay-toggle-btn');
+    const existingWrapper = practiceArea.querySelector('.flashcard-3d-wrapper');
+
+    if (isFavPractice && existingAutoplayBtn && existingWrapper) {
+      existingWrapper.outerHTML = cardHtml;
+    } else {
+      practiceArea.innerHTML = `
+        ${cardHtml}
+        ${
+          isFavPractice
+            ? `
+          <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
+            <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; max-width: 320px; font-size: 18px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+              ${getFavsAutoplayBtnContent(window.__favsAutoplayRunning)}
+            </button>
+          </div>
+        `
+            : `
+          <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
+            <button type="button" class="btn-learn" id="btn-learn">
+              ${t('train_learn')}
+            </button>
+            <button type="button" class="btn-know" id="btn-know">
+              ${t('train_know')}
+            </button>
+          </div>
+        `
+        }
+      `;
+    }
 
     const flashcardWrapper = practiceArea.querySelector('.flashcard-3d-wrapper');
     const flashcard = practiceArea.querySelector('#flashcard-3d');
@@ -2863,7 +2873,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       if (autoplayBtn) {
-        autoplayBtn.addEventListener('click', (e) => {
+        const newAutoplayBtn = autoplayBtn.cloneNode(true);
+        autoplayBtn.parentNode.replaceChild(newAutoplayBtn, autoplayBtn);
+        newAutoplayBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (window.__favsAutoplayRunning) {
             window.__favsAutoplayRunning = false;
@@ -2873,8 +2885,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             stopAllAudio();
             releaseScreenWakeLock();
             updateMediaSessionStatus(false);
-            autoplayBtn.classList.remove('is-playing');
-            autoplayBtn.innerHTML = getFavsAutoplayBtnContent(false);
+            newAutoplayBtn.classList.remove('is-playing');
+            newAutoplayBtn.innerHTML = getFavsAutoplayBtnContent(false);
             if (flashcard) {
               isFlipped = false;
               flashcard.classList.remove('is-flipped');
@@ -2884,8 +2896,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             requestScreenWakeLock();
             updateMediaSessionStatus(true, currentWord);
-            autoplayBtn.classList.add('is-playing');
-            autoplayBtn.innerHTML = getFavsAutoplayBtnContent(true);
+            newAutoplayBtn.classList.add('is-playing');
+            newAutoplayBtn.innerHTML = getFavsAutoplayBtnContent(true);
             runAutoplayCycle();
           }
         });
