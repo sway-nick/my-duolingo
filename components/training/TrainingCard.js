@@ -1351,14 +1351,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
             <div class="speech-diag-live-box" id="diag-transcript-box" style="display: none;"></div>
 
-            <div style="display: flex; gap: 8px; margin-top: 4px;">
-              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1; min-height: 42px; font-size: 13px; padding: 6px 10px;">
+            <div style="display: flex; gap: 8px; margin-top: 4px; width: 100%;">
+              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1 1 0; min-width: 0; min-height: 42px; font-size: clamp(12px, 3.4vw, 13.5px); font-weight: 600; padding: 6px 4px; white-space: nowrap; display: flex; align-items: center; justify-content: center; text-align: center;">
                 Test AI
               </button>
-              <button type="button" class="primary-button" id="diag-ping-btn" style="flex: 1; min-height: 42px; font-size: 13px; padding: 6px 10px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+              <button type="button" class="primary-button" id="diag-ping-btn" style="flex: 1 1 0; min-width: 0; min-height: 42px; font-size: clamp(12px, 3.4vw, 13.5px); font-weight: 600; padding: 6px 4px; white-space: nowrap; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; display: flex; align-items: center; justify-content: center; text-align: center;">
                 Ping
               </button>
-              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 0 0 70px; min-height: 42px; font-size: 13px; background: rgba(0,0,0,0.08); color: var(--text-main);">
+              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 1 1 0; min-width: 0; min-height: 42px; font-size: clamp(12px, 3.4vw, 13.5px); font-weight: 600; padding: 6px 4px; white-space: nowrap; background: rgba(0,0,0,0.08); color: var(--text-main); display: flex; align-items: center; justify-content: center; text-align: center;">
                 Закрыть
               </button>
             </div>
