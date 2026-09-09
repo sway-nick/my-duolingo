@@ -9,7 +9,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260909_v340';
+        var APP_BUILD = '20260909_v341';
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -118,7 +118,7 @@
     </div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=204.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=204.0';
       import { speakWord, preloadWordAudio, playFanfareSound } from './services/audioService.js?v=204.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=204.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=204.0';
@@ -481,9 +481,9 @@
         const favListForMixing = isFavPracticeActive ? [] : favList;
 
         const cardsQueue = getQueueForCards(categoryWords, userProgress);
-        const quizQueue = getQueueForQuiz(categoryWords, userProgress);
-        const pairsQueue = getQueueForPairs(categoryWords, userProgress);
-        const testQueue = getQueueForTest(categoryWords, userProgress);
+        const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
+        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
+        const testQueue = getQueueForTest(categoryWords, userProgress, favList);
 
         function isMethodAvailable(method) {
           if (method === 'cards') return !isFavPracticeActive && (cardsQueue.length > 0 && learningCount < dailyGoal);
@@ -567,7 +567,8 @@
             goQuizBtn.addEventListener('click', () => {
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
-              prepareTrainingBatch(categoryWords, getUserProgress(), favList);
+              clearActiveConveyorBatch();
+              getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
               userSettings.preferredMethod = nextBtnTarget;
               saveUserSettings(userSettings);
               currentWordIndex = 0;
@@ -592,8 +593,8 @@
         } else if (currentMethod === 'pairs') {
           activeWords = pairsQueue;
         } else if (currentMethod === 'input') {
-          // 10 new words + up to 5 favorites + up to 5 mastered retention = max 20 words!
-          activeWords = testQueue.slice(0, 20);
+          // Exactly the full batch of 20 words for Test
+          activeWords = testQueue;
         }
 
         // Check if all words in category/favorites are mastered (3x in Test)
@@ -819,6 +820,7 @@
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
 
           if (currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
+            clearActiveConveyorBatch();
             try {
               trackRoundCompleted(getEffectiveUserId());
             } catch (e) {}

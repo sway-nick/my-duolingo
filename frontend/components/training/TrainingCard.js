@@ -322,7 +322,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const progressMap = getUserProgress() || {};
   const currentProg = progressMap[currentWord?.id] || {};
-  const quizStage = currentProg.quizCorrect || 0;
+  const quizStage = isWordMastered(currentProg) ? 0 : (currentProg.quizCorrect || 0);
 
   const isCardsMode = currentMethod === 'cards';
   const isPairsMode = currentMethod === 'pairs';

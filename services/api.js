@@ -1030,9 +1030,13 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   } else if (method === 'quiz') {
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
-      prog.quizCorrect = (prog.quizCorrect || 0) + 1;
-      if (prog.quizCorrect >= 5) {
-        prog.stage = 'pairs';
+      if (isWordMastered(prog)) {
+        prog.roundQuizDone = true;
+      } else {
+        prog.quizCorrect = (prog.quizCorrect || 0) + 1;
+        if (prog.quizCorrect >= 5) {
+          prog.stage = 'pairs';
+        }
       }
       xpDelta = (options && options.skipXp) ? 0 : 1; // +1 XP (or 0 if fallback) for correct quiz answer
     } else {
@@ -1042,9 +1046,13 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   } else if (method === 'pairs') {
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
-      prog.pairsCorrect = (prog.pairsCorrect || 0) + 1;
-      if (prog.pairsCorrect >= 1) {
-        prog.stage = 'test';
+      if (isWordMastered(prog)) {
+        prog.roundPairsDone = true;
+      } else {
+        prog.pairsCorrect = (prog.pairsCorrect || 0) + 1;
+        if (prog.pairsCorrect >= 1) {
+          prog.stage = 'test';
+        }
       }
       if (options && options.perfectRound) {
         xpDelta = 3; // +3 XP for complete group of pairs without mistakes
@@ -1061,13 +1069,17 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
         prog.inputMistakes = (prog.inputMistakes || 0) + 1;
       } else {
         prog.correct = (prog.correct || 0) + 1;
-        prog.inputCorrect = (prog.inputCorrect || 0) + 1;
-        if (prog.inputCorrect >= 2) {
-          prog.mastered = true;
-          if (!prog.masteredAt) {
-            prog.masteredAt = Date.now();
+        if (isWordMastered(prog)) {
+          prog.roundTestDone = true;
+        } else {
+          prog.inputCorrect = (prog.inputCorrect || 0) + 1;
+          if (prog.inputCorrect >= 2) {
+            prog.mastered = true;
+            if (!prog.masteredAt) {
+              prog.masteredAt = Date.now();
+            }
+            prog.stage = 'mastered';
           }
-          prog.stage = 'mastered';
         }
         xpDelta = 3; // +3 XP for first-try correct word typing
       }
@@ -1404,12 +1416,10 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
   }).slice(0, 10);
 
   const baseIds = new Set(baseWords.map((w) => String(w.id)));
+  const targetTotal = 20;
+  const targetBonus = Math.max(0, targetTotal - baseWords.length);
 
-  // Strict caps: max 5 favorites (50%) + max 5 oldest mastered (50%) = max 20 words total!
-  const favLimit = Math.min(5, Math.max(1, Math.round(baseWords.length * 0.5)));
-  const masteredLimit = Math.min(5, Math.max(1, Math.round(baseWords.length * 0.5)));
-
-  // 2. Pick up to 5 oldest favorites of the category
+  // 2. Pick up to 5 oldest favorites of the category (sorted by lastPracticed ascending)
   let injectedFavs = [];
   if (favorites && favorites.length > 0) {
     const favSet = new Set(favorites.map(String));
@@ -1423,52 +1433,121 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
       const tB = pB ? (pB.lastPracticed || 0) : 0;
       return tA - tB;
     });
-    injectedFavs = candidateFavs.slice(0, favLimit);
+    injectedFavs = candidateFavs.slice(0, 5);
   }
 
   const combinedIds = new Set([...baseIds, ...injectedFavs.map((w) => String(w.id))]);
 
-  // 3. Pick up to 5 oldest mastered words for retention (spaced repetition)
-  const candidateMastered = categoryWords.filter((w) => {
-    const p = userProgress[w.id] || userProgress[String(w.id)];
-    return p && isWordMastered(p) && !combinedIds.has(String(w.id));
-  });
-  candidateMastered.sort((a, b) => {
-    const pA = userProgress[a.id] || userProgress[String(a.id)];
-    const pB = userProgress[b.id] || userProgress[String(b.id)];
-    const tA = pA ? (pA.lastPracticed || pA.masteredAt || 0) : 0;
-    const tB = pB ? (pB.lastPracticed || pB.masteredAt || 0) : 0;
-    return tA - tB;
-  });
-  const injectedMastered = candidateMastered.slice(0, masteredLimit);
+  // 3. If favorites < 5 (or fewer than targetBonus), fill the rest up to 10 bonus words from oldest mastered words
+  const neededMastered = Math.max(0, targetBonus - injectedFavs.length);
+  let injectedMastered = [];
+  if (neededMastered > 0) {
+    const candidateMastered = categoryWords.filter((w) => {
+      const p = userProgress[w.id] || userProgress[String(w.id)];
+      return p && isWordMastered(p) && !combinedIds.has(String(w.id));
+    });
+    candidateMastered.sort((a, b) => {
+      const pA = userProgress[a.id] || userProgress[String(a.id)];
+      const pB = userProgress[b.id] || userProgress[String(b.id)];
+      const tA = pA ? (pA.lastPracticed || pA.masteredAt || 0) : 0;
+      const tB = pB ? (pB.lastPracticed || pB.masteredAt || 0) : 0;
+      return tA - tB;
+    });
+    injectedMastered = candidateMastered.slice(0, neededMastered);
+  }
 
   const bonusWords = [...injectedFavs, ...injectedMastered];
 
-  // Exactly max 20 words: 10 base + up to 5 favs + up to 5 mastered
+  // Exactly up to 20 words: 10 base + up to 10 bonus (favs + mastered)
   return [...baseWords, ...bonusWords].slice(0, 20);
 }
 
-function getQueueForQuiz(words, progress) {
-  return words.filter((w) => {
-    const p = progress[w.id] || progress[String(w.id)];
-    return p && p.seenInCards && (p.quizCorrect || 0) < 5 && !isWordMastered(p);
-  });
+function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
+  const userId = getEffectiveUserId();
+  const storageKey = `conveyor_batch_${userId}`;
+  const raw = localStorage.getItem(storageKey);
+  let batchIds = [];
+  try {
+    batchIds = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    batchIds = [];
+  }
+
+  if (Array.isArray(batchIds) && batchIds.length > 0) {
+    const wordMap = new Map();
+    categoryWords.forEach((w) => wordMap.set(String(w.id), w));
+    const resolved = batchIds.map((id) => wordMap.get(String(id))).filter(Boolean);
+    if (resolved.length > 0) {
+      return resolved;
+    }
+  }
+
+  const freshBatch = prepareTrainingBatch(categoryWords, userProgress, favorites);
+  if (freshBatch.length > 0) {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(freshBatch.map((w) => String(w.id))));
+    } catch (e) {}
+  }
+  return freshBatch;
 }
 
-function getQueueForPairs(words, progress) {
-  return words.filter((w) => {
-    const p = progress[w.id] || progress[String(w.id)];
-    return p && p.seenInCards && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 1 && !isWordMastered(p);
-  });
+function clearActiveConveyorBatch() {
+  const userId = getEffectiveUserId();
+  try {
+    localStorage.removeItem(`conveyor_batch_${userId}`);
+    const key = `progress_${userId}`;
+    const local = JSON.parse(localStorage.getItem(key) || '{}');
+    let changed = false;
+    Object.values(local).forEach((p) => {
+      if (p.roundQuizDone || p.roundPairsDone || p.roundTestDone) {
+        delete p.roundQuizDone;
+        delete p.roundPairsDone;
+        delete p.roundTestDone;
+        changed = true;
+      }
+    });
+    if (changed) {
+      localStorage.setItem(key, JSON.stringify(local));
+    }
+  } catch (e) {}
 }
 
-function getQueueForTest(words, progress) {
-  return words.filter((w) => {
+function getQueueForQuiz(words, progress, favorites = []) {
+  const batch = getActiveConveyorBatch(words, progress, favorites);
+  if (!batch || batch.length === 0) return [];
+  return batch.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
     if (!p) return false;
-    if (isWordMastered(p)) return false;
-    if (p.seenInCards !== true) return false;
-    return Boolean((p.pairsCorrect || 0) >= 1 && (p.inputCorrect || 0) < 2);
+    if (isWordMastered(p)) {
+      return p.roundQuizDone !== true;
+    }
+    return p.seenInCards && (p.quizCorrect || 0) < 5;
+  });
+}
+
+function getQueueForPairs(words, progress, favorites = []) {
+  const batch = getActiveConveyorBatch(words, progress, favorites);
+  if (!batch || batch.length === 0) return [];
+  return batch.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    if (!p) return false;
+    if (isWordMastered(p)) {
+      return p.roundQuizDone === true && p.roundPairsDone !== true;
+    }
+    return p.seenInCards && (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 1;
+  });
+}
+
+function getQueueForTest(words, progress, favorites = []) {
+  const batch = getActiveConveyorBatch(words, progress, favorites);
+  if (!batch || batch.length === 0) return [];
+  return batch.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    if (!p) return false;
+    if (isWordMastered(p)) {
+      return p.roundPairsDone === true && p.roundTestDone !== true;
+    }
+    return Boolean(p.seenInCards === true && (p.pairsCorrect || 0) >= 1 && (p.inputCorrect || 0) < 2);
   });
 }
 
@@ -2539,6 +2618,8 @@ const ApiService = {
   getQueueForPairs,
   getQueueForTest,
   prepareTrainingBatch,
+  getActiveConveyorBatch,
+  clearActiveConveyorBatch,
   flushProgressQueue,
   toggleFavoriteApi,
   clearAllFavoritesApi,
@@ -2589,6 +2670,8 @@ export {
   getQueueForPairs,
   getQueueForTest,
   prepareTrainingBatch,
+  getActiveConveyorBatch,
+  clearActiveConveyorBatch,
   flushProgressQueue,
   toggleFavoriteApi,
   clearAllFavoritesApi,
