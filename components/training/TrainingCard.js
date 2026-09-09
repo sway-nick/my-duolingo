@@ -383,13 +383,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ? (
               isFavPractice
                 ? `
-                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 8px;">
-                  <div class="train-left-badge" style="margin-bottom: 0;">
-                    ${t('fav_title')}: <strong>${activeWords.length}</strong>
-                  </div>
-                  <button type="button" class="autoplay-favs-btn ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn">
-                    ${window.__favsAutoplayRunning ? '⏸️ ' + (getInterfaceLanguage() === 'ru' ? 'Стоп' : getInterfaceLanguage() === 'uk' ? 'Стоп' : 'Stop') : '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen')}
-                  </button>
+                <div class="train-left-badge">
+                  ${t('fav_title')}: <strong>${activeWords.length}</strong>
                 </div>
               `
                 : `
@@ -2536,14 +2531,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         </div>
       </div>
       
-      <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
-        <button type="button" class="btn-learn" id="btn-learn">
-          ${t('train_learn')}
-        </button>
-        <button type="button" class="btn-know" id="btn-know">
-          ${t('train_know')}
-        </button>
-      </div>
+      ${
+        isFavPractice
+          ? `
+        <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
+          <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="min-height: 48px; width: 100%; max-width: 320px; font-size: 16px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            ${window.__favsAutoplayRunning ? '⏸️ ' + (getInterfaceLanguage() === 'ru' ? 'Стоп' : getInterfaceLanguage() === 'uk' ? 'Стоп' : 'Stop') : '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen')}
+          </button>
+        </div>
+      `
+          : `
+        <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
+          <button type="button" class="btn-learn" id="btn-learn">
+            ${t('train_learn')}
+          </button>
+          <button type="button" class="btn-know" id="btn-know">
+            ${t('train_know')}
+          </button>
+        </div>
+      `
+      }
     `;
 
     const flashcard = practiceArea.querySelector('#flashcard-3d');
@@ -2560,7 +2567,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       flipCount++;
       flashcard.classList.toggle('is-flipped', isFlipped);
 
-      if (feedbackBtns.style.display === 'none') {
+      if (feedbackBtns && feedbackBtns.style.display === 'none') {
         feedbackBtns.style.display = 'flex';
       }
 
