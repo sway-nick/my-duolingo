@@ -119,7 +119,7 @@
 
     <script type="module">
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=204.0';
-      import { speakWord, preloadWordAudio, playFanfareSound } from './services/audioService.js?v=204.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock } from './services/audioService.js?v=204.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=204.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=204.0';
       import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=204.0';
@@ -1253,6 +1253,7 @@
           },
           onMethodChange: (newMethod) => {
             window.__favsAutoplayRunning = false;
+            releaseScreenWakeLock();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
@@ -1268,6 +1269,7 @@
           },
           onCategoryChange: (newCategory) => {
             window.__favsAutoplayRunning = false;
+            releaseScreenWakeLock();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
@@ -1306,6 +1308,7 @@
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           window.__favsAutoplayRunning = false;
+          releaseScreenWakeLock();
           if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
           if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             try { window.speechSynthesis.cancel(); } catch (e) {}

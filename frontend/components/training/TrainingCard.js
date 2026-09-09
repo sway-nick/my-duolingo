@@ -11,6 +11,9 @@ import {
   playStopwatchTickSound,
   playFartSound,
   isWordAudioPlaying,
+  requestScreenWakeLock,
+  releaseScreenWakeLock,
+  updateMediaSessionStatus,
 } from '../../services/audioService.js?v=200.0';
 import {
   saveProgress,
@@ -2639,6 +2642,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       async function runAutoplayCycle() {
         if (!window.__favsAutoplayRunning) return;
+        requestScreenWakeLock();
+        updateMediaSessionStatus(true, currentWord);
         const cycleId = ++window.__favsAutoplayCycleId;
 
         // 1. Show Translation (back face)
@@ -2695,6 +2700,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
+            releaseScreenWakeLock();
+            updateMediaSessionStatus(false);
             autoplayBtn.classList.remove('is-playing');
             autoplayBtn.innerHTML = '🎧 ' + t('fav_autoplay_listen');
             if (flashcard) {
@@ -2704,6 +2711,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           } else {
             window.__favsAutoplayRunning = true;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
+            requestScreenWakeLock();
+            updateMediaSessionStatus(true, currentWord);
             autoplayBtn.classList.add('is-playing');
             autoplayBtn.innerHTML = '⏸️ ' + t('fav_autoplay_stop');
             runAutoplayCycle();

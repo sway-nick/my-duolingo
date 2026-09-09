@@ -893,6 +893,66 @@ function speakWordAsync(text, isUk = null) {
   });
 }
 
+let activeWakeLock = null;
+
+/**
+ * Requests a screen wake lock to prevent the mobile screen from sleeping/locking during card autoplay.
+ */
+async function requestScreenWakeLock() {
+  if (typeof navigator === 'undefined' || !('wakeLock' in navigator)) return;
+  try {
+    if (!activeWakeLock || activeWakeLock.released) {
+      activeWakeLock = await navigator.wakeLock.request('screen');
+      activeWakeLock.addEventListener('release', () => {
+        activeWakeLock = null;
+      });
+    }
+  } catch (err) {}
+}
+
+/**
+ * Releases the screen wake lock when autoplay stops or finishes.
+ */
+function releaseScreenWakeLock() {
+  if (activeWakeLock) {
+    try {
+      activeWakeLock.release();
+    } catch (e) {}
+    activeWakeLock = null;
+  }
+}
+
+// Automatically re-acquire wake lock if page visibility returns while autoplay is active
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && typeof window !== 'undefined' && window.__favsAutoplayRunning) {
+      requestScreenWakeLock();
+    }
+  });
+}
+
+/**
+ * Updates MediaSession status for mobile background audio priority
+ */
+function updateMediaSessionStatus(isPlaying, currentWord = null) {
+  if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+    try {
+      if (isPlaying) {
+        navigator.mediaSession.playbackState = 'playing';
+        if (currentWord && currentWord.word) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: currentWord.word,
+            artist: 'My Duolingo',
+            album: 'Favorites Audio Mode',
+          });
+        }
+      } else {
+        navigator.mediaSession.playbackState = 'paused';
+      }
+    } catch (e) {}
+  }
+}
+
 const playAudio = speakWord;
 
 export const AudioService = {
@@ -919,6 +979,9 @@ export const AudioService = {
   isSfxMuted,
   setSavedSfxMuted,
   isWordAudioPlaying,
+  requestScreenWakeLock,
+  releaseScreenWakeLock,
+  updateMediaSessionStatus,
 };
 
 export default AudioService;
@@ -947,4 +1010,7 @@ export {
   isSfxMuted,
   setSavedSfxMuted,
   isWordAudioPlaying,
+  requestScreenWakeLock,
+  releaseScreenWakeLock,
+  updateMediaSessionStatus,
 };
