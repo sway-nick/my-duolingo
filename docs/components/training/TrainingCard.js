@@ -2540,7 +2540,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         isFavPractice
           ? `
         <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
-          <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="min-height: 48px; width: 100%; max-width: 320px; font-size: 16px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="min-height: 52px; width: 100%; max-width: 320px; font-size: 18px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
             ${window.__favsAutoplayRunning ? '⏸️ ' + t('fav_autoplay_stop') : '🎧 ' + t('fav_autoplay_listen')}
           </button>
         </div>
