@@ -1244,6 +1244,8 @@
           selectedCategory,
           categories,
           activeWords,
+          currentWordIndex,
+          isLastWord: currentWordIndex >= activeWords.length - 1,
           learningCount,
           dailyGoal,
           availableModes,
@@ -1293,6 +1295,10 @@
           onNext: (opts = {}) => {
             incrementGuestTrainingCount();
             updateHeaderUser();
+
+            if (currentMethod === 'input' && currentWordIndex >= activeWords.length - 1) {
+              window._trainingRoundJustCompleted = true;
+            }
 
             if (opts && opts.repeatSoon) {
               // Re-insert hard word 3 positions later so the user repeats it soon in this session

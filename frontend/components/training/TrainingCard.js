@@ -335,6 +335,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     learningCount = 0,
     dailyGoal = 5,
     activeWords = [],
+    currentWordIndex = 0,
+    isLastWord = false,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
   } = options;
@@ -2551,7 +2553,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const minDelay = isCorrect ? 1600 : 4200;
       const maxWait = isCorrect ? 3500 : 7000;
 
-      if (activeWords.length <= 1) {
+      const isFinalCard = isLastWord || (typeof currentWordIndex === 'number' && activeWords.length > 0 && currentWordIndex >= activeWords.length - 1) || activeWords.length <= 1;
+      if (isFinalCard) {
         window._trainingRoundJustCompleted = true;
       }
 
