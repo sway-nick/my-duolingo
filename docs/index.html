@@ -1299,6 +1299,7 @@
 
       async function renderTab(tabName) {
         activeTab = tabName;
+        window._activeTab = tabName;
         const content = document.querySelector('#app-content');
 
         if (tabName !== 'training') {

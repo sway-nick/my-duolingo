@@ -9,6 +9,7 @@ import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
+  if (window._activeTab && window._activeTab !== 'settings') return;
 
   const user = getCurrentUser();
   const avatar = getUserAvatar();
@@ -157,7 +158,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     loginBtn.addEventListener('click', () => {
       renderAuthModal(async () => {
         await onUserChange();
-        await renderSettingsView(containerSelector, onUserChange);
+        if (!window._activeTab || window._activeTab === 'settings') {
+          await renderSettingsView(containerSelector, onUserChange);
+        }
       });
     });
   }
@@ -167,7 +170,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     logoutBtn.addEventListener('click', async () => {
       logoutUser();
       await onUserChange();
-      await renderSettingsView(containerSelector, onUserChange);
+      if (!window._activeTab || window._activeTab === 'settings') {
+        await renderSettingsView(containerSelector, onUserChange);
+      }
     });
   }
 
@@ -187,7 +192,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
           }, 1500);
         }
-        await renderSettingsView(containerSelector, onUserChange);
+        if (!window._activeTab || window._activeTab === 'settings') {
+          await renderSettingsView(containerSelector, onUserChange);
+        }
       });
     });
   }
@@ -221,8 +228,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   }
   updateVoiceButtons();
 
-  // Helper: auto-save function
-  async function triggerAutoSave() {
+  // Helper: auto-save function (non-blocking)
+  function triggerAutoSave() {
     const newSettings = {
       ...settings,
       dailyGoal: 10,
@@ -237,15 +244,17 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       autoSaveStatus.style.opacity = '1';
     }
 
-    await saveUserSettings(newSettings);
-    onUserChange();
-
-    if (autoSaveStatus) {
-      autoSaveStatus.textContent = '✓ Saved in profile';
-      setTimeout(() => {
-        if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
-      }, 1500);
-    }
+    saveUserSettings(newSettings).then(() => {
+      onUserChange();
+      if (autoSaveStatus) {
+        autoSaveStatus.textContent = '✓ Saved in profile';
+        setTimeout(() => {
+          if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
+        }, 1500);
+      }
+    }).catch((e) => {
+      console.warn('Auto-save error:', e);
+    });
   }
 
   // Bind theme buttons with auto-save
@@ -362,7 +371,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
 
     langItems.forEach((item) => {
-      item.addEventListener('click', async (e) => {
+      item.addEventListener('click', (e) => {
         e.stopPropagation();
         const val = item.dataset.value;
         localStorage.setItem('myduo_interface_lang', val);
@@ -375,9 +384,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         // Background refresh words with new language
         getWords(true).catch(() => {});
 
-        // Re-render settings view to show updated labels
-        await triggerAutoSave();
-        await renderSettingsView(containerSelector, onUserChange);
+        // Save in background
+        triggerAutoSave();
+
+        // Re-render settings view immediately if user is still on settings tab
+        if (!window._activeTab || window._activeTab === 'settings') {
+          renderSettingsView(containerSelector, onUserChange);
+        }
       });
     });
 
