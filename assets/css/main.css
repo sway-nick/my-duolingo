@@ -1492,6 +1492,17 @@ body.notebook-theme .word-notes-modal-text {
   100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes cardQuickEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* 3D Vertical Flashcard */
 .flashcard-3d-wrapper {
   perspective: 1000px;
@@ -1501,6 +1512,8 @@ body.notebook-theme .word-notes-modal-text {
   user-select: none;
   -webkit-user-select: none;
   will-change: transform, opacity;
+  animation: cardQuickEnter 0.15s ease-out;
+  transform-origin: 50% 90%;
 }
 
 .flashcard-3d {

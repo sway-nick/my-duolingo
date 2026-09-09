@@ -1283,6 +1283,13 @@
           },
           isFavorite: isFav,
           onFavoriteToggle: handleFavoriteToggle,
+          canGoPrev: currentWordIndex > 0,
+          onPrev: () => {
+            if (currentWordIndex > 0) {
+              currentWordIndex -= 1;
+              renderTrainingTab();
+            }
+          },
           onNext: (opts = {}) => {
             incrementGuestTrainingCount();
             updateHeaderUser();
