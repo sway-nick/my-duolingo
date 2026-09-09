@@ -1332,6 +1332,7 @@
             onStartFavoritePractice: (practiceWords) => {
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
+              window._showHubScreen = false;
               if (practiceWords && practiceWords.length > 0) {
                 favoritePracticeWords = [...practiceWords];
                 favoritePracticeMethod = 'cards';
@@ -1340,12 +1341,9 @@
                 favoritePracticeMethod = 'cards';
               }
               currentWordIndex = 0;
-              const tabBtn = document.querySelector('.nav-tab[data-tab="training"]');
-              if (tabBtn) {
-                tabBtn.click();
-              } else {
-                renderTab('training');
-              }
+              const tabs = document.querySelectorAll('.nav-tab');
+              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
+              renderTab('training');
             },
           });
         } else if (tabName === 'leaderboard') {
@@ -1460,6 +1458,10 @@
         // 2. Immediate zero-latency UI mount (renders instantly)
         renderAppLayout(
           (tabName) => {
+            if (tabName === 'training') {
+              favoritePracticeWords = null;
+              window._showHubScreen = true;
+            }
             renderTab(tabName);
           },
           async () => {

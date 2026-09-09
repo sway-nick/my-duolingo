@@ -1415,6 +1415,11 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
     return isWordLearning(p);
   }).slice(0, 10);
 
+  // If no words are in active learning state, do not construct a phantom batch of bonus words!
+  if (baseWords.length === 0) {
+    return [];
+  }
+
   const baseIds = new Set(baseWords.map((w) => String(w.id)));
   const targetTotal = 20;
   const targetBonus = Math.max(0, targetTotal - baseWords.length);
@@ -1477,8 +1482,17 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
     const wordMap = new Map();
     categoryWords.forEach((w) => wordMap.set(String(w.id), w));
     const resolved = batchIds.map((id) => wordMap.get(String(id))).filter(Boolean);
-    if (resolved.length > 0) {
+    
+    // Check if the resolved batch still contains active learning words
+    const hasLearning = resolved.some((w) => {
+      const p = userProgress[w.id] || userProgress[String(w.id)];
+      return isWordLearning(p);
+    });
+
+    if (hasLearning && resolved.length > 0) {
       return resolved;
+    } else {
+      clearActiveConveyorBatch();
     }
   }
 
