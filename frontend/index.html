@@ -890,7 +890,7 @@
 
           const hasWotdCard = Boolean(wotdHtml && wotdHtml.trim().length > 0);
 
-          const continueCardsBtnHtml = (learningCount === 0 && unmasteredCount > 0) || window._showHubScreen
+          const continueCardsBtnHtml = unmasteredCount > 0
             ? `
               <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '46px' : '52px'}; font-size: clamp(14px, 4.2vw, 16px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                 <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">🚀</span>
