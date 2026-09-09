@@ -1242,12 +1242,11 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   return null;
 }
 
-function pushUserDataToCloud(userId = null, weekKey = null) {
+function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
   const uId = userId || getEffectiveUserId();
   if (!uId || !String(uId).startsWith('u_')) return;
 
-  clearTimeout(syncDebounceTimer);
-  syncDebounceTimer = setTimeout(async () => {
+  const doSync = async () => {
     const wKey = weekKey || getIsoWeekKey();
     const progress = JSON.parse(localStorage.getItem(`progress_${uId}`) || '{}');
     const favorites = JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]');
@@ -1258,40 +1257,60 @@ function pushUserDataToCloud(userId = null, weekKey = null) {
     const user = getCurrentUser();
     const userName = user && user.name ? user.name : 'Участник';
 
+    const payload = JSON.stringify({
+      route: 'sync',
+      action: 'sync',
+      userId: uId,
+      weekKey: wKey,
+      progress,
+      favorites,
+      weeklyXp,
+      settings,
+      avatar,
+      studyDates,
+      userName,
+    });
+
     try {
-      await fetch(`${API_URL}?route=sync`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          route: 'sync',
-          action: 'sync',
-          userId: uId,
-          weekKey: wKey,
-          progress,
-          favorites,
-          weeklyXp,
-          settings,
-          avatar,
-          studyDates,
-          userName,
-        }),
-      });
+      if (immediate && typeof navigator !== 'undefined' && navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'text/plain;charset=utf-8' });
+        navigator.sendBeacon(`${API_URL}?route=sync`, blob);
+      } else {
+        await fetch(`${API_URL}?route=sync`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: payload,
+          keepalive: true,
+        });
+      }
     } catch (e) {
       console.warn('Cloud sync POST failed, queued for next sync:', e);
     }
-  }, 400);
+  };
+
+  if (immediate) {
+    clearTimeout(syncDebounceTimer);
+    doSync();
+  } else {
+    clearTimeout(syncDebounceTimer);
+    syncDebounceTimer = setTimeout(doSync, 400);
+  }
 }
 
 if (typeof window !== 'undefined') {
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       flushProgressQueue();
-      pushUserDataToCloud();
+      pushUserDataToCloud(null, null, true);
     }
   });
   window.addEventListener('pagehide', () => {
     flushProgressQueue();
-    pushUserDataToCloud();
+    pushUserDataToCloud(null, null, true);
+  });
+  window.addEventListener('beforeunload', () => {
+    flushProgressQueue();
+    pushUserDataToCloud(null, null, true);
   });
 }
 
