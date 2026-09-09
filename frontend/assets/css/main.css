@@ -504,10 +504,10 @@ body {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  padding: 10px 14px;
+  padding: 10px 10px;
   padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
-  padding-left: max(14px, env(safe-area-inset-left, 0px));
-  padding-right: max(14px, env(safe-area-inset-right, 0px));
+  padding-left: max(10px, env(safe-area-inset-left, 0px));
+  padding-right: max(10px, env(safe-area-inset-right, 0px));
   box-sizing: border-box;
   min-height: 0;
 }
@@ -2676,8 +2676,10 @@ body.notebook-theme .word-notes-modal-text {
 
 /* Settings Page */
 .settings-page {
+  width: 100%;
   max-width: 540px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .settings-card {
