@@ -1753,7 +1753,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       renderConsonantsQuiz();
     }
   } else if (currentMethod === 'pairs') {
-    const TARGET_PAIRS_COUNT = 6;
+    const TARGET_PAIRS_COUNT = 5;
     const roundWords = [currentWord];
     const usedIds = new Set([String(currentWord.id)]);
 
@@ -1850,18 +1850,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const isNotebook = document.body.classList.contains('notebook-theme') || (localStorage.getItem('myduo_theme') === 'notebook');
 
         if (isNotebook) {
-          if (maxWordLen >= 17 || totalLen > 35) return '14.5px';
-          if (maxWordLen >= 14 || totalLen > 22) return '16.5px';
-          if (maxWordLen >= 11 || totalLen > 15) return '18.5px';
-          if (maxWordLen >= 8 || totalLen > 9) return '20.5px';
-          return '23px';
+          if (maxWordLen >= 17 || totalLen > 35) return '15.5px';
+          if (maxWordLen >= 14 || totalLen > 22) return '17.5px';
+          if (maxWordLen >= 11 || totalLen > 15) return '19.5px';
+          if (maxWordLen >= 8 || totalLen > 9) return '21.5px';
+          return '24px';
         }
 
-        if (maxWordLen >= 17 || totalLen > 55) return '11.5px';
-        if (maxWordLen >= 14 || totalLen > 40) return '12.5px';
-        if (maxWordLen >= 12 || totalLen > 28) return '14px';
-        if (maxWordLen >= 10 || totalLen > 20) return '15.2px';
-        return '16.5px';
+        if (maxWordLen >= 17 || totalLen > 55) return '12.5px';
+        if (maxWordLen >= 14 || totalLen > 40) return '13.5px';
+        if (maxWordLen >= 12 || totalLen > 28) return '15px';
+        if (maxWordLen >= 10 || totalLen > 20) return '16px';
+        return '17.5px';
       }
 
       practiceArea.innerHTML = `
