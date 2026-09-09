@@ -1252,6 +1252,11 @@
             renderCategorySelectorScreen();
           },
           onMethodChange: (newMethod) => {
+            window.__favsAutoplayRunning = false;
+            if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+              try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
             if (isFavPracticeActive) {
               favoritePracticeMethod = newMethod;
             } else {
@@ -1262,6 +1267,11 @@
             renderTrainingTab();
           },
           onCategoryChange: (newCategory) => {
+            window.__favsAutoplayRunning = false;
+            if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+              try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
             favoritePracticeWords = null;
             favoritePracticeMethod = 'quiz';
             userSettings.category = newCategory;
@@ -1294,6 +1304,11 @@
         if (tabName !== 'training') {
           favoritePracticeWords = null;
           favoritePracticeMethod = 'quiz';
+          window.__favsAutoplayRunning = false;
+          if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
+          if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            try { window.speechSynthesis.cancel(); } catch (e) {}
+          }
         }
 
         if (tabName === 'training') {

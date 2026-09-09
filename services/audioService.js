@@ -672,10 +672,177 @@ function resetAudioCounter() {
   clickCount = 0;
 }
 
+let activeAutoplayAudio = null;
+
+function stopAllAudio() {
+  if (activeAutoplayAudio) {
+    try {
+      activeAutoplayAudio.pause();
+      activeAutoplayAudio.currentTime = 0;
+    } catch (e) {}
+    activeAutoplayAudio = null;
+  }
+  if (sharedWordAudioPlayer) {
+    try {
+      sharedWordAudioPlayer.pause();
+      sharedWordAudioPlayer.currentTime = 0;
+    } catch (e) {}
+  }
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+}
+
+/**
+ * Speaks arbitrary text in specified language (e.g. 'ru', 'uk', 'en') and returns a Promise that resolves when speech ends.
+ */
+function speakTextInLangAsync(text, langCode = 'ru') {
+  return new Promise((resolve) => {
+    if (!text || typeof window === 'undefined') {
+      return resolve();
+    }
+
+    stopAllAudio();
+
+    // Clean text (remove brackets/notes, extra symbols)
+    const clean = String(text)
+      .replace(/\([^)]*\)/g, '')
+      .replace(/[\[\]]/g, '')
+      .trim();
+    if (!clean) return resolve();
+
+    const fullLang = langCode === 'ru' ? 'ru-RU' : langCode === 'uk' ? 'uk-UA' : langCode;
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(clean)}`;
+
+    let resolved = false;
+    const finish = () => {
+      if (!resolved) {
+        resolved = true;
+        if (activeAutoplayAudio === audio) {
+          activeAutoplayAudio = null;
+        }
+        resolve();
+      }
+    };
+
+    const maxTimer = setTimeout(finish, 6000);
+
+    const audio = new Audio();
+    activeAutoplayAudio = audio;
+    audio.preload = 'auto';
+    audio.src = ttsUrl;
+
+    audio.onended = () => {
+      clearTimeout(maxTimer);
+      finish();
+    };
+
+    audio.onerror = () => {
+      clearTimeout(maxTimer);
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(clean);
+          utterance.lang = fullLang;
+          utterance.rate = 0.92;
+          utterance.onend = finish;
+          utterance.onerror = finish;
+          window.speechSynthesis.speak(utterance);
+        } catch (e) {
+          finish();
+        }
+      } else {
+        finish();
+      }
+    };
+
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(() => audio.onerror());
+    }
+  });
+}
+
+/**
+ * Speaks an English word asynchronously and returns a Promise when speech completes.
+ */
+function speakWordAsync(text, isUk = null) {
+  return new Promise((resolve) => {
+    if (!text || typeof window === 'undefined') return resolve();
+
+    stopAllAudio();
+
+    const accent = isUk !== null ? (isUk ? 'uk' : 'us') : getSavedVoiceAccent();
+    const isUkAccent = accent === 'uk' || accent === 'gb' || accent === 'male';
+    const { local, primary, fallback } = getAudioUrls(text, isUkAccent);
+
+    let resolved = false;
+    const finish = () => {
+      if (!resolved) {
+        resolved = true;
+        if (activeAutoplayAudio === audio) {
+          activeAutoplayAudio = null;
+        }
+        resolve();
+      }
+    };
+    const maxTimer = setTimeout(finish, 5000);
+
+    const audio = new Audio();
+    activeAutoplayAudio = audio;
+    audio.src = local;
+    let fallbackStage = 0;
+
+    audio.onended = () => {
+      clearTimeout(maxTimer);
+      finish();
+    };
+
+    audio.onerror = () => {
+      if (fallbackStage === 0) {
+        fallbackStage = 1;
+        audio.src = primary;
+        audio.play().catch(() => audio.onerror());
+      } else if (fallbackStage === 1) {
+        fallbackStage = 2;
+        audio.src = fallback;
+        audio.play().catch(() => audio.onerror());
+      } else {
+        clearTimeout(maxTimer);
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
+            utterance.rate = 0.92;
+            utterance.onend = finish;
+            utterance.onerror = finish;
+            window.speechSynthesis.speak(utterance);
+          } catch (e) {
+            finish();
+          }
+        } else {
+          finish();
+        }
+      }
+    };
+
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(() => audio.onerror());
+    }
+  });
+}
+
 const playAudio = speakWord;
 
 export const AudioService = {
   speakWord,
+  speakWordAsync,
+  speakTextInLangAsync,
+  stopAllAudio,
   playAudio,
   preloadWordAudio,
   resetAudioCounter,
@@ -701,6 +868,9 @@ export default AudioService;
 
 export {
   speakWord,
+  speakWordAsync,
+  speakTextInLangAsync,
+  stopAllAudio,
   playAudio,
   preloadWordAudio,
   resetAudioCounter,

@@ -1,5 +1,8 @@
 import {
   speakWord,
+  speakWordAsync,
+  speakTextInLangAsync,
+  stopAllAudio,
   preloadWordAudio,
   playSuccessSound,
   playErrorSound,
@@ -380,8 +383,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             ? (
               isFavPractice
                 ? `
-                <div class="train-left-badge">
-                  ${t('fav_title')}: <strong>${activeWords.length}</strong>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 8px;">
+                  <div class="train-left-badge" style="margin-bottom: 0;">
+                    ${t('fav_title')}: <strong>${activeWords.length}</strong>
+                  </div>
+                  <button type="button" class="autoplay-favs-btn ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn">
+                    ${window.__favsAutoplayRunning ? '⏸️ ' + (getInterfaceLanguage() === 'ru' ? 'Стоп' : getInterfaceLanguage() === 'uk' ? 'Стоп' : 'Stop') : '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen')}
+                  </button>
                 </div>
               `
                 : `
@@ -2605,6 +2613,94 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
       onNextAfterSpeech(onNext, 400, 3000);
     });
+
+    // Autoplay Loop handler for Favorites in Cards mode
+    if (isCardsMode && isFavPractice) {
+      if (typeof window.__favsAutoplayCycleId === 'undefined') {
+        window.__favsAutoplayCycleId = 0;
+      }
+      const autoplayBtn = container.querySelector('#favs-autoplay-toggle-btn');
+
+      function autoplayDelay(ms) {
+        return new Promise((res) => {
+          const t = setTimeout(res, ms);
+          window.__favsAutoplayTimer = t;
+        });
+      }
+
+      async function runAutoplayCycle() {
+        if (!window.__favsAutoplayRunning) return;
+        const cycleId = ++window.__favsAutoplayCycleId;
+
+        // 1. Show Translation (back face)
+        if (flashcard) {
+          isFlipped = true;
+          flashcard.classList.add('is-flipped');
+        }
+        const translation = getWordTranslation(currentWord);
+        const userLang = getInterfaceLanguage() || 'ru';
+        await speakTextInLangAsync(translation, userLang);
+
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
+        // 2. Pause 1.6s
+        await autoplayDelay(1600);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
+        // 3. Show English (front face) and speak
+        if (flashcard) {
+          isFlipped = false;
+          flashcard.classList.remove('is-flipped');
+        }
+        await speakWordAsync(currentWord.word);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
+        // 4. Pause 1.5s
+        await autoplayDelay(1500);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
+        // 5. Repeat English word
+        await speakWordAsync(currentWord.word);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
+        // 6. Pause 2.0s before next card
+        await autoplayDelay(2000);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
+        // 7. Advance to next card in loop
+        onNext();
+      }
+
+      if (autoplayBtn) {
+        autoplayBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (window.__favsAutoplayRunning) {
+            window.__favsAutoplayRunning = false;
+            window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
+            if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
+            stopAllAudio();
+            autoplayBtn.classList.remove('is-playing');
+            autoplayBtn.innerHTML = '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen');
+            if (flashcard) {
+              isFlipped = false;
+              flashcard.classList.remove('is-flipped');
+            }
+          } else {
+            window.__favsAutoplayRunning = true;
+            window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
+            autoplayBtn.classList.add('is-playing');
+            autoplayBtn.innerHTML = '⏸️ ' + (getInterfaceLanguage() === 'ru' ? 'Стоп' : getInterfaceLanguage() === 'uk' ? 'Стоп' : 'Stop');
+            runAutoplayCycle();
+          }
+        });
+      }
+
+      if (window.__favsAutoplayRunning) {
+        setTimeout(() => {
+          if (window.__favsAutoplayRunning) runAutoplayCycle();
+        }, 120);
+      }
+    }
   }
 }
 
