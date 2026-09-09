@@ -723,44 +723,65 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     const finish = () => {
       if (!resolved) {
         resolved = true;
+        if (activeAutoplayAudio === audio) {
+          activeAutoplayAudio = null;
+        }
         window.__activeSpeechUtterance = null;
         if (window.__activeSpeechTimer) clearTimeout(window.__activeSpeechTimer);
-        setTimeout(resolve, 300); // 300ms guaranteed silence gap
+        setTimeout(resolve, 350); // 350ms guaranteed silence gap
       }
     };
 
-    if ('speechSynthesis' in window) {
-      try {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        utterance.lang = fullLang;
-        utterance.rate = 0.88;
-        utterance.pitch = 1.0;
+    const maxTimer = setTimeout(finish, 6000);
+    window.__activeSpeechTimer = maxTimer;
 
-        // Pick matching voice if available
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
+
+    const audio = new Audio();
+    activeAutoplayAudio = audio;
+    audio.src = ttsUrl;
+
+    audio.onended = () => {
+      clearTimeout(maxTimer);
+      finish();
+    };
+
+    audio.onerror = () => {
+      clearTimeout(maxTimer);
+      if ('speechSynthesis' in window) {
         try {
-          const voices = window.speechSynthesis.getVoices() || [];
-          const matched = voices.find(v => v.lang.startsWith(langCode) || v.lang.replace('_', '-').startsWith(fullLang));
-          if (matched) utterance.voice = matched;
-        } catch (e) {}
+          window.speechSynthesis.cancel();
+          if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+          const utterance = new SpeechSynthesisUtterance(spokenText);
+          utterance.lang = fullLang;
+          utterance.rate = 0.88;
+          utterance.pitch = 1.0;
 
-        // Crucial: keep global reference so V8 GC doesn't drop onend handler
-        window.__activeSpeechUtterance = utterance;
+          try {
+            const voices = window.speechSynthesis.getVoices() || [];
+            const matched = voices.find(v => v.lang.startsWith(langCode) || v.lang.replace('_', '-').startsWith(fullLang));
+            if (matched) utterance.voice = matched;
+          } catch (e) {}
 
-        utterance.onend = finish;
-        utterance.onerror = finish;
+          window.__activeSpeechUtterance = utterance;
+          utterance.onend = finish;
+          utterance.onerror = finish;
 
-        // Safety timeout based on word length (min 2.5s)
-        const expectedMs = Math.max(2500, spokenText.length * 120);
-        window.__activeSpeechTimer = setTimeout(finish, expectedMs);
+          const expectedMs = Math.max(2500, spokenText.length * 120);
+          window.__activeSpeechTimer = setTimeout(finish, expectedMs);
 
-        window.speechSynthesis.speak(utterance);
-        return;
-      } catch (e) {
+          window.speechSynthesis.speak(utterance);
+        } catch (e) {
+          finish();
+        }
+      } else {
         finish();
       }
-    } else {
-      finish();
+    };
+
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(() => audio.onerror());
     }
   });
 }

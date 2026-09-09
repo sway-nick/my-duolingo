@@ -538,10 +538,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
-  if (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1)) {
+  if (!isFavPractice && !window.__favsAutoplayRunning && (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1))) {
     setTimeout(() => {
       try {
-        speakWord(currentWord.word, currentWord.id);
+        if (!isFavPractice && !window.__favsAutoplayRunning) {
+          speakWord(currentWord.word, currentWord.id);
+        }
       } catch (e) {}
     }, 100);
   }
