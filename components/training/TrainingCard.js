@@ -2538,7 +2538,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           ? `
         <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
           <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="min-height: 48px; width: 100%; max-width: 320px; font-size: 16px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            ${window.__favsAutoplayRunning ? '⏸️ ' + (getInterfaceLanguage() === 'ru' ? 'Стоп' : getInterfaceLanguage() === 'uk' ? 'Стоп' : 'Stop') : '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen')}
+            ${window.__favsAutoplayRunning ? '⏸️ ' + t('fav_autoplay_stop') : '🎧 ' + t('fav_autoplay_listen')}
           </button>
         </div>
       `
@@ -2690,7 +2690,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
             autoplayBtn.classList.remove('is-playing');
-            autoplayBtn.innerHTML = '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen');
+            autoplayBtn.innerHTML = '🎧 ' + t('fav_autoplay_listen');
             if (flashcard) {
               isFlipped = false;
               flashcard.classList.remove('is-flipped');
@@ -2699,7 +2699,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             window.__favsAutoplayRunning = true;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             autoplayBtn.classList.add('is-playing');
-            autoplayBtn.innerHTML = '⏸️ ' + (getInterfaceLanguage() === 'ru' ? 'Стоп' : getInterfaceLanguage() === 'uk' ? 'Стоп' : 'Stop');
+            autoplayBtn.innerHTML = '⏸️ ' + t('fav_autoplay_stop');
             runAutoplayCycle();
           }
         });

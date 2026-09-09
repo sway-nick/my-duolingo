@@ -39,6 +39,8 @@ const translations = {
 
     // Favorites View
     fav_title: "❤️ Избранные",
+    fav_autoplay_listen: "Слушать",
+    fav_autoplay_stop: "Стоп",
     fav_empty: "У вас нет избранных слов",
     fav_empty_sub: "Добавляйте сложные слова в избранное, нажимая на ❤️ во время тренировок, чтобы повторять их отдельно.",
     fav_start_btn: "🎓 Перейти к тренировке",
@@ -178,6 +180,8 @@ const translations = {
 
     // Favorites View
     fav_title: "❤️ Обрані",
+    fav_autoplay_listen: "Слухати",
+    fav_autoplay_stop: "Стоп",
     fav_empty: "У вас немає обраних слів",
     fav_empty_sub: "Додавайте складні слова в обране, натискаючи на ❤️ під час тренувань, щоб повторювати їх окремо.",
     fav_start_btn: "🎓 Перейти до тренування",
@@ -317,6 +321,8 @@ const translations = {
 
     // Favorites View
     fav_title: "❤️ Favorites",
+    fav_autoplay_listen: "Listen",
+    fav_autoplay_stop: "Stop",
     fav_empty: "No favorite words yet",
     fav_empty_sub: "Add challenging words to favorites by tapping ❤️ during training to practice them separately.",
     fav_start_btn: "🎓 Start Training",
@@ -456,6 +462,8 @@ const translations = {
 
     // Favorites View
     fav_title: "❤️ Favoriten",
+    fav_autoplay_listen: "Anhören",
+    fav_autoplay_stop: "Stopp",
     fav_empty: "Noch keine Favoriten",
     fav_empty_sub: "Füge schwierige Wörter zu Favoriten hinzu, indem du während des Trainings auf ❤️ tippst.",
     fav_start_btn: "🎓 Training starten",
@@ -574,6 +582,8 @@ const translations = {
 
     // Favorites View
     fav_title: "❤️ Favoritos",
+    fav_autoplay_listen: "Escuchar",
+    fav_autoplay_stop: "Parar",
     fav_empty: "No hay favoritos todavía",
     fav_empty_sub: "Agrega palabras difíciles a favoritos tocando ❤️ durante el entrenamiento.",
     fav_start_btn: "🎓 Iniciar entrenamiento",
@@ -692,6 +702,8 @@ const translations = {
 
     // Favorites View
     fav_title: "❤️ Favoris",
+    fav_autoplay_listen: "Écouter",
+    fav_autoplay_stop: "Arrêter",
     fav_empty: "Pas encore de favoris",
     fav_empty_sub: "Ajoutez des mots difficiles aux favoris en appuyant sur ❤️ pendant l'entraînement.",
     fav_start_btn: "🎓 Commencer l'entraînement",
@@ -791,6 +803,8 @@ const translations = {
     stats_categories: "📁 Postęp według kategorii",
     stats_empty_categories: "Kategorie pojawią się po pierwszych lekcjach.",
     fav_title: "❤️ Ulubione",
+    fav_autoplay_listen: "Słuchaj",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Brak ulubionych słów",
     fav_empty_sub: "Dodaj trudne słowa do ulubionych, klikając ❤️ podczas treningu, aby ćwiczyć je osobno.",
     fav_start_btn: "🎓 Rozpocznij trening",
@@ -882,6 +896,8 @@ const translations = {
     stats_categories: "📁 Kategorilere Göre İlerleme",
     stats_empty_categories: "Kategoriler ilk derslerinizden sonra görünecektir.",
     fav_title: "❤️ Favoriler",
+    fav_autoplay_listen: "Dinle",
+    fav_autoplay_stop: "Durdur",
     fav_empty: "Henüz favori kelime yok",
     fav_empty_sub: "Eğitim sırasında ❤️ simgesine dokunarak zor kelimeleri favorilerinize ekleyin ve ayrı pratik yapın.",
     fav_start_btn: "🎓 Antrenmana Başla",
@@ -973,6 +989,8 @@ const translations = {
     stats_categories: "📁 Progressi per categorie",
     stats_empty_categories: "Le categorie appariranno dopo le prime lezioni.",
     fav_title: "❤️ Preferiti",
+    fav_autoplay_listen: "Ascolta",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Ancora nessun preferito",
     fav_empty_sub: "Aggiungi parole difficili ai preferiti toccando ❤️ per esercitarti separatamente.",
     fav_start_btn: "🎓 Inizia allenamento",
@@ -1064,6 +1082,8 @@ const translations = {
     stats_categories: "📁 Progres pe categorii",
     stats_empty_categories: "Categoriile vor apărea după primele lecții.",
     fav_title: "❤️ Favorite",
+    fav_autoplay_listen: "Ascultă",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Niciun cuvânt favorit",
     fav_empty_sub: "Adăugați cuvinte dificile la favorite apăsând ❤️ în timpul instruirii.",
     fav_start_btn: "🎓 Începe instruirea",
@@ -1151,6 +1171,8 @@ const translations = {
     stats_categories: "📁 Прогрес по категории",
     stats_empty_categories: "Категориите ще се появят след първите уроци.",
     fav_title: "❤️ Любими",
+    fav_autoplay_listen: "Слушай",
+    fav_autoplay_stop: "Стоп",
     fav_empty: "Все още няма любими думи",
     fav_empty_sub: "Добавете трудни думи към любимите с ❤️ по време на обучение за допълнителна практика.",
     fav_start_btn: "🎓 Стартирай обучение",
@@ -1238,6 +1260,8 @@ const translations = {
     stats_categories: "📁 Haladás kategóriák szerint",
     stats_empty_categories: "A kategóriák az első leckék után jelennek meg.",
     fav_title: "❤️ Kedvencek",
+    fav_autoplay_listen: "Hallgatás",
+    fav_autoplay_stop: "Állj",
     fav_empty: "Még nincsenek kedvenc szavak",
     fav_empty_sub: "Adjon nehéz szavakat a kedvencekhez a ❤️ gombbal a gyakorlás során.",
     fav_start_btn: "🎓 Gyakorlás indítása",
@@ -1325,6 +1349,8 @@ const translations = {
     stats_categories: "📁 Πρόοδος ανά κατηγορία",
     stats_empty_categories: "Οι κατηγορίες θα εμφανιστούν μετά τα πρώτα μαθήματα.",
     fav_title: "❤️ Αγαπημένα",
+    fav_autoplay_listen: "Ακούστε",
+    fav_autoplay_stop: "Διακοπή",
     fav_empty: "Δεν υπάρχουν αγαπημένες λέξεις",
     fav_empty_sub: "Προσθέστε δύσκολες λέξεις στα αγαπημένα πατώντας ❤️ κατά τη διάρκεια της εξάσκησης.",
     fav_start_btn: "🎓 Έναρξη εξάσκησης",
@@ -1412,6 +1438,8 @@ const translations = {
     stats_categories: "📁 Fremskridt efter kategorier",
     stats_empty_categories: "Kategorier vises efter de første lektioner.",
     fav_title: "❤️ Favoritter",
+    fav_autoplay_listen: "Lyt",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Ingen favoritord endnu",
     fav_empty_sub: "Tilføj svære ord til favoritter ved at trykke på ❤️ under træningen.",
     fav_start_btn: "🎓 Start træning",
@@ -1499,6 +1527,8 @@ const translations = {
     stats_categories: "📁 Dul chun cinn de réir catagóirí",
     stats_empty_categories: "Beidh catagóirí le feiceáil tar éir na chéad cheachtanna.",
     fav_title: "❤️ Is fearr",
+    fav_autoplay_listen: "Éist",
+    fav_autoplay_stop: "Stad",
     fav_empty: "Níl aon fhocal is fearr agat fós",
     fav_empty_sub: "Cuir focail dheacra le favorites tríd an ❤️ a thapáil le linn oiliúna.",
     fav_start_btn: "🎓 Tosaigh oiliúint",
@@ -1586,6 +1616,8 @@ const translations = {
     stats_categories: "📁 Progress pa kategorijām",
     stats_empty_categories: "Kategorijas parādīsies pēc pirmajām nodarbībām.",
     fav_title: "❤️ Favorīti",
+    fav_autoplay_listen: "Klausīties",
+    fav_autoplay_stop: "Apturēt",
     fav_empty: "Vēl nav favorītu vārdu",
     fav_empty_sub: "Pievienojiet grūtos vārdus favorītiem, nospiežot ❤️ mācību laikā.",
     fav_start_btn: "🎓 Sākt treniņu",
@@ -1673,6 +1705,8 @@ const translations = {
     stats_categories: "📁 Progresas pagal kategorijas",
     stats_empty_categories: "Kategorijos atsiras po pirmųjų pamokų.",
     fav_title: "❤️ Mėgstamiausi",
+    fav_autoplay_listen: "Klausytis",
+    fav_autoplay_stop: "Sustabdyti",
     fav_empty: "Dar nėra mėgstamiausių žodžių",
     fav_empty_sub: "Pridėkite sunkius žodžius prie mėgstamiausių, mokymosi metu bakstelėdami ❤️.",
     fav_start_btn: "🎓 Pradėti treniruotę",
@@ -1847,6 +1881,8 @@ const translations = {
     stats_categories: "📁 Progresso por categorias",
     stats_empty_categories: "As categorias aparecerão após as primeiras lições.",
     fav_title: "❤️ Favoritos",
+    fav_autoplay_listen: "Ouvir",
+    fav_autoplay_stop: "Parar",
     fav_empty: "Ainda sem palavras favoritas",
     fav_empty_sub: "Adicione palavras difíceis aos favoritos tocando ❤️ durante o treino para as praticar separadamente.",
     fav_start_btn: "🎓 Iniciar treino",
@@ -1934,6 +1970,8 @@ const translations = {
     stats_categories: "📁 Pokrok podľa kategórií",
     stats_empty_categories: "Kategórie sa zobrazia po prvých lekciách.",
     fav_title: "❤️ Obľúbené",
+    fav_autoplay_listen: "Počúvať",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Ešte žiadne obľúbené slová",
     fav_empty_sub: "Pridajte ťažké slová do obľúbených stlačením ❤️ počas tréningu, aby ste ich precvičovali samostatne.",
     fav_start_btn: "🎓 Spustiť tréning",
@@ -2021,6 +2059,8 @@ const translations = {
     stats_categories: "📁 Napredek po kategorijah",
     stats_empty_categories: "Kategorije se bodo prikazale po prvih lekcijah.",
     fav_title: "❤️ Priljubljene",
+    fav_autoplay_listen: "Poslušaj",
+    fav_autoplay_stop: "Ustavi",
     fav_empty: "Še ni priljubljenih besed",
     fav_empty_sub: "Med treningom dodajte težke besede med priljubljene s klikom na ❤️ za ločeno vadbo.",
     fav_start_btn: "🎓 Začni trening",
@@ -2108,6 +2148,8 @@ const translations = {
     stats_categories: "📁 Edistyminen kategorioittain",
     stats_empty_categories: "Kategoriat tulevat näkyviin ensimmäisten oppituntien jälkeen.",
     fav_title: "❤️ Suosikit",
+    fav_autoplay_listen: "Kuuntele",
+    fav_autoplay_stop: "Pysäytä",
     fav_empty: "Ei vielä suosikkisanoja",
     fav_empty_sub: "Lisää vaikeita sanoja suosikkeihin napauttamalla ❤️ harjoittelun aikana.",
     fav_start_btn: "🎓 Aloita harjoittelu",
@@ -2195,6 +2237,8 @@ const translations = {
     stats_categories: "📁 Napredak po kategorijama",
     stats_empty_categories: "Kategorije će se pojaviti nakon prvih lekcija.",
     fav_title: "❤️ Omiljeni",
+    fav_autoplay_listen: "Slušaj",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Još nema omiljenih riječi",
     fav_empty_sub: "Dodajte teške riječi u favorite pritiskom na ❤️ tijekom treninga za zasebno vježbanje.",
     fav_start_btn: "🎓 Započni trening",
@@ -2282,6 +2326,8 @@ const translations = {
     stats_categories: "📁 Pokrok podle kategórií",
     stats_empty_categories: "Kategorie se zobrazí po prvních lekcích.",
     fav_title: "❤️ Oblíbené",
+    fav_autoplay_listen: "Poslouchat",
+    fav_autoplay_stop: "Stop",
     fav_empty: "Zatím žádná oblíbená slova",
     fav_empty_sub: "Přidejte těžká slova do oblíbených stisknutím ❤️ během tréninku pro samostatné procvičování.",
     fav_start_btn: "🎓 Spustit trénink",
@@ -2369,6 +2415,8 @@ const translations = {
     stats_categories: "📁 Framsteg per kategori",
     stats_empty_categories: "Kategorier visas efter de första lektionerna.",
     fav_title: "❤️ Favoriter",
+    fav_autoplay_listen: "Lyssna",
+    fav_autoplay_stop: "Stopp",
     fav_empty: "Inga favoritord än",
     fav_empty_sub: "Lägg till svåra ord i favoriter genom att klicka ❤️ under träningen.",
     fav_start_btn: "🎓 Starta träning",
@@ -2456,6 +2504,8 @@ const translations = {
     stats_categories: "📁 Progress kategooriate kaupa",
     stats_empty_categories: "Kategooriad ilmuvad pärast esimesi tunde.",
     fav_title: "❤️ Lemmikud",
+    fav_autoplay_listen: "Kuula",
+    fav_autoplay_stop: "Peata",
     fav_empty: "Lemmiksõnu pole veel lisatud",
     fav_empty_sub: "Lisage raskeid sõnu lemmikutesse, vajutades treeningu ajal ❤️.",
     fav_start_btn: "🎓 Alusta treeningut",
@@ -2675,6 +2725,30 @@ export function t(key) {
   if (key === 'speech_tap_to_speak') return getSpeechPrompt('tap_to_speak');
   if (key === 'review_repeat') return getSpeechPrompt('review_repeat');
   if (key === 'review_know') return getSpeechPrompt('review_know');
+  if (key === 'fav_autoplay_listen') {
+    const lang = getInterfaceLanguage();
+    const map = {
+      ru: "Слушать", uk: "Слухати", en: "Listen", de: "Anhören", es: "Escuchar",
+      fr: "Écouter", pl: "Słuchaj", tr: "Dinle", it: "Ascolta", ro: "Ascultă",
+      bg: "Слушай", hu: "Hallgatás", el: "Ακούστε", da: "Lyt", ga: "Éist",
+      lv: "Klausīties", lt: "Klausytis", sr: "Слушај", pt: "Ouvir", sk: "Počúvať",
+      sl: "Poslušaj", fi: "Kuuntele", hr: "Slušaj", cs: "Poslouchat", sv: "Lyssna",
+      et: "Kuula", mt: "Isma'", nl: "Luisteren"
+    };
+    return map[lang] || map['en'] || "Listen";
+  }
+  if (key === 'fav_autoplay_stop') {
+    const lang = getInterfaceLanguage();
+    const map = {
+      ru: "Стоп", uk: "Стоп", en: "Stop", de: "Stopp", es: "Parar",
+      fr: "Arrêter", pl: "Stop", tr: "Durdur", it: "Stop", ro: "Stop",
+      bg: "Стоп", hu: "Állj", el: "Διακοπή", da: "Stop", ga: "Stad",
+      lv: "Apturēt", lt: "Sustabdyti", sr: "Стоп", pt: "Parar", sk: "Stop",
+      sl: "Ustavi", fi: "Pysäytä", hr: "Stop", cs: "Stop", sv: "Stopp",
+      et: "Peata", mt: "Ieqaf", nl: "Stop"
+    };
+    return map[lang] || map['en'] || "Stop";
+  }
   if (key === 'word_notes_title') {
     const lang = getInterfaceLanguage();
     if (lang === 'ru') return 'Примечание';
