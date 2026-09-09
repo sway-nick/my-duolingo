@@ -723,65 +723,84 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     const finish = () => {
       if (!resolved) {
         resolved = true;
-        if (activeAutoplayAudio === audio) {
-          activeAutoplayAudio = null;
-        }
         window.__activeSpeechUtterance = null;
-        if (window.__activeSpeechTimer) clearTimeout(window.__activeSpeechTimer);
+        if (window.__activeSpeechTimer) {
+          clearTimeout(window.__activeSpeechTimer);
+          window.__activeSpeechTimer = null;
+        }
         setTimeout(resolve, 350); // 350ms guaranteed silence gap
       }
     };
 
-    const maxTimer = setTimeout(finish, 6000);
-    window.__activeSpeechTimer = maxTimer;
-
-    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
-
-    const audio = new Audio();
-    activeAutoplayAudio = audio;
-    audio.src = ttsUrl;
-
-    audio.onended = () => {
-      clearTimeout(maxTimer);
-      finish();
-    };
-
-    audio.onerror = () => {
-      clearTimeout(maxTimer);
-      if ('speechSynthesis' in window) {
-        try {
-          window.speechSynthesis.cancel();
-          if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-          const utterance = new SpeechSynthesisUtterance(spokenText);
-          utterance.lang = fullLang;
-          utterance.rate = 0.88;
-          utterance.pitch = 1.0;
-
-          try {
-            const voices = window.speechSynthesis.getVoices() || [];
-            const matched = voices.find(v => v.lang.startsWith(langCode) || v.lang.replace('_', '-').startsWith(fullLang));
-            if (matched) utterance.voice = matched;
-          } catch (e) {}
-
-          window.__activeSpeechUtterance = utterance;
-          utterance.onend = finish;
-          utterance.onerror = finish;
-
-          const expectedMs = Math.max(2500, spokenText.length * 120);
-          window.__activeSpeechTimer = setTimeout(finish, expectedMs);
-
-          window.speechSynthesis.speak(utterance);
-        } catch (e) {
-          finish();
+    // Primary & direct high-quality speech engine: Web Speech API
+    if ('speechSynthesis' in window) {
+      try {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
         }
-      } else {
-        finish();
-      }
-    };
 
-    const p = audio.play();
-    if (p !== undefined) {
-      p.catch(() => audio.onerror());
+        const utterance = new SpeechSynthesisUtterance(spokenText);
+        utterance.lang = fullLang;
+        utterance.rate = 0.88;
+        utterance.pitch = 1.0;
+
+        try {
+          const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
+            ? window.speechSynthesis.getVoices()
+            : cachedVoices;
+
+          let matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
+          if (!matched) {
+            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+          }
+          if (matched) {
+            utterance.voice = matched;
+          }
+        } catch (e) {}
+
+        // Global reference to prevent Chrome garbage-collection bug
+        window.__activeSpeechUtterance = utterance;
+
+        utterance.onend = finish;
+        utterance.onerror = () => {
+          finish();
+        };
+
+        const expectedMs = Math.max(3000, spokenText.length * 160);
+        window.__activeSpeechTimer = setTimeout(finish, expectedMs);
+
+        window.speechSynthesis.speak(utterance);
+        return;
+      } catch (e) {
+        console.warn('SpeechSynthesis invocation failed:', e);
+      }
+    }
+
+    // Secondary fallback
+    try {
+      const ttsUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(spokenText)}&le=ru`;
+      const audio = new Audio();
+      activeAutoplayAudio = audio;
+      audio.src = ttsUrl;
+
+      const fallbackTimer = setTimeout(finish, 4000);
+      window.__activeSpeechTimer = fallbackTimer;
+
+      audio.onended = () => {
+        clearTimeout(fallbackTimer);
+        finish();
+      };
+      audio.onerror = () => {
+        clearTimeout(fallbackTimer);
+        finish();
+      };
+
+      const p = audio.play();
+      if (p !== undefined) {
+        p.catch(() => finish());
+      }
+    } catch (e) {
+      finish();
     }
   });
 }
@@ -807,7 +826,10 @@ function speakWordAsync(text, isUk = null) {
           activeAutoplayAudio = null;
         }
         window.__activeSpeechUtterance = null;
-        if (window.__activeSpeechTimer) clearTimeout(window.__activeSpeechTimer);
+        if (window.__activeSpeechTimer) {
+          clearTimeout(window.__activeSpeechTimer);
+          window.__activeSpeechTimer = null;
+        }
         setTimeout(resolve, 300); // 300ms guaranteed silence gap
       }
     };
@@ -819,26 +841,28 @@ function speakWordAsync(text, isUk = null) {
     activeAutoplayAudio = audio;
     audio.src = local;
     let fallbackStage = 0;
+    let stageLock = false;
 
-    audio.onended = () => {
-      clearTimeout(maxTimer);
-      finish();
-    };
+    const handleStageError = () => {
+      if (stageLock || resolved) return;
+      stageLock = true;
+      setTimeout(() => { stageLock = false; }, 50);
 
-    audio.onerror = () => {
       if (fallbackStage === 0) {
         fallbackStage = 1;
         audio.src = primary;
-        audio.play().catch(() => audio.onerror());
+        const p1 = audio.play();
+        if (p1 !== undefined) p1.catch(handleStageError);
       } else if (fallbackStage === 1) {
         fallbackStage = 2;
         audio.src = fallback;
-        audio.play().catch(() => audio.onerror());
+        const p2 = audio.play();
+        if (p2 !== undefined) p2.catch(handleStageError);
       } else {
         clearTimeout(maxTimer);
         if ('speechSynthesis' in window) {
           try {
-            window.speechSynthesis.cancel();
+            if (window.speechSynthesis.paused) window.speechSynthesis.resume();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
             utterance.rate = 0.90;
@@ -855,9 +879,16 @@ function speakWordAsync(text, isUk = null) {
       }
     };
 
+    audio.onended = () => {
+      clearTimeout(maxTimer);
+      finish();
+    };
+
+    audio.onerror = handleStageError;
+
     const p = audio.play();
     if (p !== undefined) {
-      p.catch(() => audio.onerror());
+      p.catch(handleStageError);
     }
   });
 }

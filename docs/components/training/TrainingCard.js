@@ -2646,6 +2646,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           isFlipped = true;
           flashcard.classList.add('is-flipped');
         }
+        await autoplayDelay(120);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
         const translation = getWordTranslation(currentWord);
         const userLang = getInterfaceLanguage() || 'ru';
         await speakTextInLangAsync(translation, userLang);
@@ -2661,6 +2664,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           isFlipped = false;
           flashcard.classList.remove('is-flipped');
         }
+        await autoplayDelay(120);
+        if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
+
         await speakWordAsync(currentWord.word);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
