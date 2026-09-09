@@ -381,7 +381,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               isFavPractice
                 ? `
                 <div class="train-left-badge">
-                  💖 ${t('fav_title')}: <strong>${activeWords.length}</strong>
+                  ${t('fav_title')}: <strong>${activeWords.length}</strong>
                 </div>
               `
                 : `
