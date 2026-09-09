@@ -1511,6 +1511,8 @@ body.notebook-theme .word-notes-modal-text {
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
   will-change: transform, opacity;
   animation: cardQuickEnter 0.15s ease-out;
   transform-origin: 50% 90%;
@@ -1527,6 +1529,8 @@ body.notebook-theme .word-notes-modal-text {
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .flashcard-3d.is-flipped {

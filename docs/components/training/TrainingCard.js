@@ -2594,12 +2594,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     let flipCount = 0;
     let shimmerTriggered = false;
 
-    // Fan Swipe gesture support (smooth 60fps RAF & directional left=Next / right=Prev)
+    // Fan Swipe gesture support (Touch Events for iOS Safari + Pointer Events for Desktop)
     let startX = 0;
     let startY = 0;
     let targetDx = 0;
     let targetDy = 0;
-    let isPointerDown = false;
+    let isTouchActive = false;
     let isLockedSwipe = false;
     let hasSwiped = false;
     let rafId = null;
@@ -2611,16 +2611,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       rafId = null;
     }
 
-    function handlePointerDown(e) {
-      if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-fav-btn') || e.target.closest('#speech-diag-trigger-btn')) {
-        return;
+    function onStart(clientX, clientY, target) {
+      if (target.closest('.flashcard-sound-btn') || target.closest('.flashcard-fav-btn') || target.closest('#speech-diag-trigger-btn')) {
+        return false;
       }
-      isPointerDown = true;
+      isTouchActive = true;
       isLockedSwipe = false;
       targetDx = 0;
       targetDy = 0;
-      startX = e.clientX;
-      startY = e.clientY;
+      startX = clientX;
+      startY = clientY;
       if (rafId) {
         cancelAnimationFrame(rafId);
         rafId = null;
@@ -2629,18 +2629,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         flashcardWrapper.style.transition = 'none';
         flashcardWrapper.style.willChange = 'transform, opacity';
       }
+      return true;
     }
 
-    function handlePointerMove(e) {
-      if (!isPointerDown) return;
-      targetDx = e.clientX - startX;
-      targetDy = e.clientY - startY;
+    function onMove(clientX, clientY, cancelableEvent = null) {
+      if (!isTouchActive) return;
+      targetDx = clientX - startX;
+      targetDy = clientY - startY;
 
       if (!isLockedSwipe) {
         const absX = Math.abs(targetDx);
         const absY = Math.abs(targetDy);
-        if (absY > 10 && absY > absX * 1.25) {
-          isPointerDown = false;
+        if (absY > 8 && absY > absX * 1.1) {
+          // Vertical scroll - abandon swipe
+          isTouchActive = false;
           if (flashcardWrapper) {
             flashcardWrapper.style.transition = 'transform 0.2s ease';
             flashcardWrapper.style.transform = '';
@@ -2649,29 +2651,29 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
         if (absX > 6) {
           isLockedSwipe = true;
-          try {
-            flashcard.setPointerCapture?.(e.pointerId);
-          } catch (_) {}
         }
       }
 
-      if (isLockedSwipe && flashcardWrapper) {
-        if (!rafId) {
+      if (isLockedSwipe) {
+        if (cancelableEvent && cancelableEvent.cancelable) {
+          cancelableEvent.preventDefault();
+        }
+        if (flashcardWrapper && !rafId) {
           rafId = requestAnimationFrame(applyCardTransform);
         }
       }
     }
 
-    async function handlePointerUp() {
-      if (!isPointerDown) return;
-      isPointerDown = false;
+    async function onEnd() {
+      if (!isTouchActive) return;
+      isTouchActive = false;
       if (rafId) {
         cancelAnimationFrame(rafId);
         rafId = null;
       }
       const absDx = Math.abs(targetDx);
 
-      if (isLockedSwipe && absDx > 55) {
+      if (isLockedSwipe && absDx > 45) {
         hasSwiped = true;
         stopAllAudio();
 
@@ -2720,9 +2722,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       isLockedSwipe = false;
     }
 
-    function handlePointerCancel() {
-      if (!isPointerDown) return;
-      isPointerDown = false;
+    function onCancel() {
+      if (!isTouchActive) return;
+      isTouchActive = false;
       isLockedSwipe = false;
       if (rafId) {
         cancelAnimationFrame(rafId);
@@ -2735,10 +2737,48 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }
 
     if (flashcard) {
-      flashcard.addEventListener('pointerdown', handlePointerDown);
-      flashcard.addEventListener('pointermove', handlePointerMove);
-      flashcard.addEventListener('pointerup', handlePointerUp);
-      flashcard.addEventListener('pointercancel', handlePointerCancel);
+      // Touch events (iOS Safari & Android touchscreens)
+      flashcard.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          onStart(e.touches[0].clientX, e.touches[0].clientY, e.target);
+        }
+      }, { passive: true });
+
+      flashcard.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          onMove(e.touches[0].clientX, e.touches[0].clientY, e);
+        }
+      }, { passive: false });
+
+      flashcard.addEventListener('touchend', () => {
+        onEnd();
+      }, { passive: true });
+
+      flashcard.addEventListener('touchcancel', () => {
+        onCancel();
+      }, { passive: true });
+
+      // Pointer events for desktop mice
+      flashcard.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') {
+          onStart(e.clientX, e.clientY, e.target);
+        }
+      });
+      flashcard.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'mouse') {
+          onMove(e.clientX, e.clientY, e);
+        }
+      });
+      flashcard.addEventListener('pointerup', (e) => {
+        if (e.pointerType === 'mouse') {
+          onEnd();
+        }
+      });
+      flashcard.addEventListener('pointercancel', (e) => {
+        if (e.pointerType === 'mouse') {
+          onCancel();
+        }
+      });
     }
 
     flashcard.addEventListener('click', (e) => {
