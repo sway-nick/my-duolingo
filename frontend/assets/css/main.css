@@ -3143,18 +3143,6 @@ body.dark-theme .custom-dropdown-trigger {
   background: #fef2f2 !important;
   color: #dc2626 !important;
   border-color: #fca5a5 !important;
-  animation: autoplayHeartbeat 1.6s ease infinite;
-}
-
-@keyframes autoplayHeartbeat {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-  }
-  50% {
-    transform: scale(1.04);
-    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
-  }
 }
 
 .dark-theme .autoplay-favs-btn {
@@ -3193,7 +3181,6 @@ body.dark-theme .custom-dropdown-trigger {
   background: #ea580c !important;
   color: #ffffff !important;
   box-shadow: 0 4px 16px rgba(234, 88, 12, 0.45) !important;
-  animation: autoplayHeartbeat 1.6s ease infinite;
 }
 
 .autoplay-favs-btn-bottom.is-playing:hover {
