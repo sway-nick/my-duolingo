@@ -2650,8 +2650,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        // 2. Pause 1.6s
-        await autoplayDelay(1600);
+        // 2. Distinct Pause 1.8s between Russian and English
+        await autoplayDelay(1800);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         // 3. Show English (front face) and speak
@@ -2662,16 +2662,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         await speakWordAsync(currentWord.word);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        // 4. Pause 1.5s
+        // 4. Distinct Pause 1.5s between 1st and 2nd English pronunciation
         await autoplayDelay(1500);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        // 5. Repeat English word
+        // 5. Repeat English word (2nd pronunciation)
         await speakWordAsync(currentWord.word);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        // 6. Pause 2.0s before next card
-        await autoplayDelay(2000);
+        // 6. Distinct Pause 2.2s before flipping to next card
+        await autoplayDelay(2200);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         // 7. Advance to next card in loop
@@ -2685,6 +2685,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             window.__favsAutoplayRunning = false;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
+            if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
             autoplayBtn.classList.remove('is-playing');
             autoplayBtn.innerHTML = '🎧 ' + (getInterfaceLanguage() === 'ru' ? 'Слушать' : getInterfaceLanguage() === 'uk' ? 'Слухати' : 'Listen');
@@ -2703,9 +2704,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       if (window.__favsAutoplayRunning) {
-        setTimeout(() => {
+        if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
+        window.__favsAutoplayStartTimeout = setTimeout(() => {
           if (window.__favsAutoplayRunning) runAutoplayCycle();
-        }, 120);
+        }, 150);
       }
     }
   }

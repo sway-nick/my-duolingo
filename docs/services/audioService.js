@@ -696,7 +696,7 @@ function stopAllAudio() {
 }
 
 /**
- * Speaks arbitrary text in specified language (e.g. 'ru', 'uk', 'en') and returns a Promise that resolves when speech ends.
+ * Speaks arbitrary text in specified language (e.g. 'ru', 'uk', 'en') and returns a Promise that resolves ONLY when speech completely ends.
  */
 function speakTextInLangAsync(text, langCode = 'ru') {
   return new Promise((resolve) => {
@@ -706,67 +706,67 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
     stopAllAudio();
 
-    // Clean text (remove brackets/notes, extra symbols)
-    const clean = String(text)
+    // Clean text: take clear main translation without notes/brackets
+    let clean = String(text)
       .replace(/\([^)]*\)/g, '')
       .replace(/[\[\]]/g, '')
       .trim();
     if (!clean) return resolve();
 
-    const fullLang = langCode === 'ru' ? 'ru-RU' : langCode === 'uk' ? 'uk-UA' : langCode;
-    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(clean)}`;
+    // If there are multiple comma-separated variants, keep up to first 2 for clean cadence
+    const parts = clean.split(/[;,]/).map(s => s.trim()).filter(Boolean);
+    const spokenText = parts.slice(0, 2).join(', ');
 
+    const fullLang = langCode === 'ru' ? 'ru-RU' : langCode === 'uk' ? 'uk-UA' : langCode;
     let resolved = false;
+
     const finish = () => {
       if (!resolved) {
         resolved = true;
-        if (activeAutoplayAudio === audio) {
-          activeAutoplayAudio = null;
-        }
-        resolve();
+        window.__activeSpeechUtterance = null;
+        if (window.__activeSpeechTimer) clearTimeout(window.__activeSpeechTimer);
+        setTimeout(resolve, 300); // 300ms guaranteed silence gap
       }
     };
 
-    const maxTimer = setTimeout(finish, 6000);
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(spokenText);
+        utterance.lang = fullLang;
+        utterance.rate = 0.88;
+        utterance.pitch = 1.0;
 
-    const audio = new Audio();
-    activeAutoplayAudio = audio;
-    audio.preload = 'auto';
-    audio.src = ttsUrl;
-
-    audio.onended = () => {
-      clearTimeout(maxTimer);
-      finish();
-    };
-
-    audio.onerror = () => {
-      clearTimeout(maxTimer);
-      if ('speechSynthesis' in window) {
+        // Pick matching voice if available
         try {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(clean);
-          utterance.lang = fullLang;
-          utterance.rate = 0.92;
-          utterance.onend = finish;
-          utterance.onerror = finish;
-          window.speechSynthesis.speak(utterance);
-        } catch (e) {
-          finish();
-        }
-      } else {
+          const voices = window.speechSynthesis.getVoices() || [];
+          const matched = voices.find(v => v.lang.startsWith(langCode) || v.lang.replace('_', '-').startsWith(fullLang));
+          if (matched) utterance.voice = matched;
+        } catch (e) {}
+
+        // Crucial: keep global reference so V8 GC doesn't drop onend handler
+        window.__activeSpeechUtterance = utterance;
+
+        utterance.onend = finish;
+        utterance.onerror = finish;
+
+        // Safety timeout based on word length (min 2.5s)
+        const expectedMs = Math.max(2500, spokenText.length * 120);
+        window.__activeSpeechTimer = setTimeout(finish, expectedMs);
+
+        window.speechSynthesis.speak(utterance);
+        return;
+      } catch (e) {
         finish();
       }
-    };
-
-    const p = audio.play();
-    if (p !== undefined) {
-      p.catch(() => audio.onerror());
+    } else {
+      finish();
     }
   });
 }
 
 /**
- * Speaks an English word asynchronously and returns a Promise when speech completes.
+ * Speaks an English word asynchronously and returns a Promise ONLY when speech completely ends.
  */
 function speakWordAsync(text, isUk = null) {
   return new Promise((resolve) => {
@@ -785,10 +785,14 @@ function speakWordAsync(text, isUk = null) {
         if (activeAutoplayAudio === audio) {
           activeAutoplayAudio = null;
         }
-        resolve();
+        window.__activeSpeechUtterance = null;
+        if (window.__activeSpeechTimer) clearTimeout(window.__activeSpeechTimer);
+        setTimeout(resolve, 300); // 300ms guaranteed silence gap
       }
     };
+
     const maxTimer = setTimeout(finish, 5000);
+    window.__activeSpeechTimer = maxTimer;
 
     const audio = new Audio();
     activeAutoplayAudio = audio;
@@ -816,7 +820,8 @@ function speakWordAsync(text, isUk = null) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
-            utterance.rate = 0.92;
+            utterance.rate = 0.90;
+            window.__activeSpeechUtterance = utterance;
             utterance.onend = finish;
             utterance.onerror = finish;
             window.speechSynthesis.speak(utterance);
