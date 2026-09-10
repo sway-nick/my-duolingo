@@ -11,6 +11,7 @@ import {
   playStopwatchTickSound,
   playFartSound,
   isWordAudioPlaying,
+  isSfxMuted,
   requestScreenWakeLock,
   releaseScreenWakeLock,
   updateMediaSessionStatus,
@@ -397,7 +398,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const progressMap = getUserProgress() || {};
   const currentProg = progressMap[currentWord?.id] || {};
-  const quizStage = isWordMastered(currentProg) ? 0 : (currentProg.quizCorrect || 0);
+  const rawQuizStage = isWordMastered(currentProg) ? 0 : (currentProg.quizCorrect || 0);
+
+  // Accessibility for deaf / hard-of-hearing / mute users:
+  // When sound effects are turned off, exclude stage 1 (Audio/Listening) and stage 3 (Microphone/Speech) in conveyor
+  const isAccessibilityMuted = Boolean(typeof isSfxMuted === 'function' && isSfxMuted() && !isFavPractice);
+
+  let quizStage = rawQuizStage;
+  if (isAccessibilityMuted) {
+    const step = rawQuizStage % 3;
+    if (step === 0) quizStage = 0; // En -> Ru choices
+    else if (step === 1) quizStage = 2; // Ru -> En choices
+    else quizStage = 4; // Consonants / Letter tiles
+  }
 
   const isCardsMode = currentMethod === 'cards';
   const isPairsMode = currentMethod === 'pairs';
@@ -633,10 +646,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
-  if (!isFavPractice && !window.__favsAutoplayRunning && (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1))) {
+  if (!isFavPractice && !window.__favsAutoplayRunning && !isAccessibilityMuted && (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1))) {
     setTimeout(() => {
       try {
-        if (!isFavPractice && !window.__favsAutoplayRunning) {
+        if (!isFavPractice && !window.__favsAutoplayRunning && !isAccessibilityMuted) {
           speakWord(currentWord.word, currentWord.id);
         }
       } catch (e) {}
