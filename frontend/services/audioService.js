@@ -458,6 +458,21 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const { local, primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
   const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
 
+let currentPlayingWordAudio = null;
+
+function trackPlayingAudio(audio) {
+  currentPlayingWordAudio = audio;
+  if (!audio) return;
+  const clear = () => {
+    if (currentPlayingWordAudio === audio) {
+      currentPlayingWordAudio = null;
+    }
+  };
+  audio.addEventListener('ended', clear, { once: true });
+  audio.addEventListener('pause', clear, { once: true });
+  audio.addEventListener('error', clear, { once: true });
+}
+
   const cachedAudio = audioCache.get(cacheKey);
   if (cachedAudio) {
     if (player) {
@@ -465,6 +480,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     }
     try {
       cachedAudio.playbackRate = isTurtleMode ? 0.62 : 1.0;
+      trackPlayingAudio(cachedAudio);
       
       let fallbackStage = 0; // 0 = local, 1 = primary, 2 = fallback, 3 = speech synthesis
       cachedAudio.onerror = () => {
@@ -472,11 +488,13 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
           fallbackStage = 1;
           cachedAudio.src = primary;
           cachedAudio.currentTime = 0;
+          trackPlayingAudio(cachedAudio);
           cachedAudio.play().catch(() => cachedAudio.onerror());
         } else if (fallbackStage === 1) {
           fallbackStage = 2;
           cachedAudio.src = fallback;
           cachedAudio.currentTime = 0;
+          trackPlayingAudio(cachedAudio);
           cachedAudio.play().catch(() => cachedAudio.onerror());
         } else {
           speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
@@ -491,6 +509,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
             fallbackStage = 1;
             cachedAudio.src = primary;
             cachedAudio.currentTime = 0;
+            trackPlayingAudio(cachedAudio);
             cachedAudio.play().catch(() => cachedAudio.onerror());
           }
         });
@@ -510,6 +529,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     player.playbackRate = isTurtleMode ? 0.62 : 1.0;
     player.src = local;
     player.currentTime = 0;
+    trackPlayingAudio(player);
 
     let fallbackStage = 0; // 0 = local, 1 = primary, 2 = fallback, 3 = speech synthesis
 
@@ -518,11 +538,13 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
         fallbackStage = 1;
         player.src = primary;
         player.currentTime = 0;
+        trackPlayingAudio(player);
         player.play().catch(() => player.onerror());
       } else if (fallbackStage === 1) {
         fallbackStage = 2;
         player.src = fallback;
         player.currentTime = 0;
+        trackPlayingAudio(player);
         player.play().catch(() => player.onerror());
       } else {
         speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
@@ -537,6 +559,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
           fallbackStage = 1;
           player.src = primary;
           player.currentTime = 0;
+          trackPlayingAudio(player);
           player.play().catch(() => player.onerror());
         }
       });
@@ -669,8 +692,14 @@ function playFartSound() {
 }
 
 function isWordAudioPlaying() {
+  if (currentPlayingWordAudio && !currentPlayingWordAudio.paused && !currentPlayingWordAudio.ended && currentPlayingWordAudio.currentTime > 0) {
+    return true;
+  }
   const player = sharedWordAudioPlayer;
   if (player && !player.paused && !player.ended && player.currentTime > 0) {
+    return true;
+  }
+  if (activeAutoplayAudio && !activeAutoplayAudio.paused && !activeAutoplayAudio.ended && activeAutoplayAudio.currentTime > 0) {
     return true;
   }
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {

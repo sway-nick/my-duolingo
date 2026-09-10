@@ -58,25 +58,52 @@ function getFavsAutoplayBtnContent(isPlaying) {
   `;
 }
 
-function onNextAfterSpeech(onNext, minDelay = 600, maxWait = 4000) {
+function onNextAfterSpeech(onNext, minDelay = 1000, maxWait = 8000) {
   const start = Date.now();
-  const adjustedDelay = minDelay + 500;
-  const adjustedMaxWait = maxWait + 500;
+  let speechEverActive = isWordAudioPlaying();
+  let speechEndedTimestamp = null;
+  let hasTriggered = false;
 
-  function check() {
-    const elapsed = Date.now() - start;
-    const stillSpeaking = isWordAudioPlaying();
-
-    if (!stillSpeaking && elapsed >= adjustedDelay) {
-      onNext();
-    } else if (elapsed >= adjustedMaxWait) {
-      onNext();
-    } else {
-      setTimeout(check, 80);
-    }
+  function trigger() {
+    if (hasTriggered) return;
+    hasTriggered = true;
+    onNext();
   }
 
-  setTimeout(check, adjustedDelay);
+  function check() {
+    if (hasTriggered) return;
+    const elapsed = Date.now() - start;
+    const currentlySpeaking = isWordAudioPlaying();
+
+    if (currentlySpeaking) {
+      speechEverActive = true;
+      speechEndedTimestamp = null; // Still playing
+    } else if (speechEverActive && speechEndedTimestamp === null) {
+      speechEndedTimestamp = Date.now(); // Speech just finished!
+    }
+
+    // 1. If audio was playing, give a full 1.0s (1000ms) pause AFTER audio finishes completely
+    if (speechEndedTimestamp !== null) {
+      if (Date.now() - speechEndedTimestamp >= 1000) {
+        trigger();
+        return;
+      }
+    } else if (!speechEverActive && elapsed >= minDelay) {
+      // 2. If no audio was active, wait at least minDelay (defaults to 1000ms)
+      trigger();
+      return;
+    }
+
+    // 3. Safety timeout to prevent getting stuck
+    if (elapsed >= maxWait) {
+      trigger();
+      return;
+    }
+
+    setTimeout(check, 50);
+  }
+
+  setTimeout(check, 50);
 }
 
 function calculateLevenshtein(a, b) {
@@ -725,18 +752,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
           });
 
-          if (isCorrect) playSuccessSound();
-          else {
+          if (isCorrect) {
+            playSuccessSound();
+            speakWord(currentWord.word, currentWord.id);
+          } else {
             playErrorSound();
             speakWord(currentWord.word, currentWord.id);
           }
 
           await saveProgress(currentWord.id, isCorrect, 'quiz', { isFavPractice });
-          if (isCorrect) {
-            onNextAfterSpeech(onNext, 800, 3500);
-          } else {
-            onNextAfterSpeech(onNext, 1200, 4500);
-          }
+          onNextAfterSpeech(onNext, 1000, 8000);
         });
       });
     }
@@ -762,11 +787,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (isCorrect) playSuccessSound();
           else playErrorSound();
           await saveProgress(currentWord.id, isCorrect, 'quiz', { skipXp: isFromSpeechFallback, isFavPractice });
-          if (isCorrect) {
-            onNextAfterSpeech(onNext, 800, 3500);
-          } else {
-            onNextAfterSpeech(onNext, 1200, 4500);
-          }
+          onNextAfterSpeech(onNext, 1000, 8000);
         });
       });
     }
@@ -1827,7 +1848,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               playSuccessSound();
               speakWord(currentWord.word, currentWord.id);
               await saveProgress(currentWord.id, true, 'quiz', { isFavPractice });
-              onNextAfterSpeech(onNext, 1200, 4500);
+              onNextAfterSpeech(onNext, 1000, 8000);
             } else {
               focusNext(index);
             }
@@ -2933,14 +2954,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
     practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
+      speakWord(currentWord.word, currentWord.id);
       await saveProgress(currentWord.id, true, 'cards_learn', { isFavPractice });
-      onNextAfterSpeech(onNext, 400, 3000);
+      onNextAfterSpeech(onNext, 1000, 8000);
     });
 
     practiceArea.querySelector('#btn-know')?.addEventListener('click', async () => {
       playSuccessSound();
+      speakWord(currentWord.word, currentWord.id);
       await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
-      onNextAfterSpeech(onNext, 400, 3000);
+      onNextAfterSpeech(onNext, 1000, 8000);
     });
 
     // Autoplay Loop handler for Favorites in Cards mode
