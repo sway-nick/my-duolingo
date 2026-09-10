@@ -598,9 +598,9 @@
           activeWords = testQueue;
         }
 
-        // Check if all words in category/favorites are mastered (3x in Test)
+        // Check if all words in category are mastered (3x in Test) — Favorites practice is exempt (can be repeated infinitely)
         const unmasteredCount = categoryWords.filter((w) => !isWordMastered(userProgress[w.id])).length;
-        if (!window._showHubScreen && unmasteredCount === 0 && categoryWords.length > 0) {
+        if (!window._showHubScreen && !isFavPracticeActive && unmasteredCount === 0 && categoryWords.length > 0) {
           const nextCategory = isFavPracticeActive ? null : getNextSequentialCategory(selectedCategory, categories);
           const title = isFavPracticeActive ? t('train_mastered_all_favs') : t('train_mastered_title');
           const description = isFavPracticeActive

@@ -423,7 +423,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 isFavPractice
                   ? `
                   <div class="train-left-badge" id="fav-counter-badge">
-                    ${getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites'}: <strong>${Math.min(currentWordIndex + 1, activeWords.length)}/${activeWords.length}</strong>
+                    ${getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites'}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>
                   </div>
                 `
                   : `
@@ -2618,7 +2618,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const favBadge = container.querySelector('#fav-counter-badge') || container.querySelector('.train-left-badge');
       if (favBadge) {
         const favLabel = getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites';
-        favBadge.innerHTML = `${favLabel}: <strong>${Math.min(currentWordIndex + 1, activeWords.length)}/${activeWords.length}</strong>`;
+        const currentNum = activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1;
+        favBadge.innerHTML = `${favLabel}: <strong>${currentNum}/${activeWords.length}</strong>`;
       }
     } else {
       practiceArea.innerHTML = `
