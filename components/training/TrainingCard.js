@@ -2973,16 +2973,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
     practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
-      speakWord(currentWord.word, currentWord.id);
+      triggerHaptic('light');
+      stopAllAudio();
       await saveProgress(currentWord.id, true, 'cards_learn', { isFavPractice });
-      onNextAfterSpeech(onNext, 1000, 8000);
+      onNext();
     });
 
     practiceArea.querySelector('#btn-know')?.addEventListener('click', async () => {
       playSuccessSound();
-      speakWord(currentWord.word, currentWord.id);
+      stopAllAudio();
       await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
-      onNextAfterSpeech(onNext, 1000, 8000);
+      setTimeout(() => {
+        onNext();
+      }, 150);
     });
 
     // Autoplay Loop handler for Favorites in Cards mode
