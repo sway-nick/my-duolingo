@@ -5135,17 +5135,17 @@ button.leaderboard-header-chip:hover {
 .speech-transcript-box {
   font-size: 13.5px;
   color: var(--text-muted);
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid var(--border-color);
-  padding: 6px 14px;
-  border-radius: 12px;
+  background: transparent;
+  border: none;
+  padding: 2px 8px;
+  border-radius: 0;
   margin-top: 10px;
-  max-width: 300px;
+  max-width: 320px;
   text-align: center;
 }
 
 .dark-theme .speech-transcript-box {
-  background: rgba(255, 255, 255, 0.06);
+  background: transparent;
 }
 
 .speech-cant-speak-btn {
