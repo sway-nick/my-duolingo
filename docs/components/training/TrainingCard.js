@@ -473,7 +473,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   </div>
                 `
                   : `
-                  <div style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+                  <div class="train-left-badge cards-learning-badge" style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
                     🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
                   </div>
                 `
@@ -617,7 +617,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
     });
   } else {
-    const leftBadge = container.querySelector('.train-left-badge');
+    const leftBadge = container.querySelector('.cards-learning-badge') || container.querySelector('.train-left-badge');
     if (leftBadge) {
       if (isFavPractice) {
         leftBadge.innerHTML = `${t('fav_title')}: <strong>${activeWords.length}</strong>`;

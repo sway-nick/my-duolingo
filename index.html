@@ -1306,7 +1306,11 @@
               activeWords.splice(insertPos, 0, currentWord);
             }
 
-            currentWordIndex += 1;
+            if (currentMethod === 'cards' && !isFavPracticeActive) {
+              currentWordIndex = 0;
+            } else {
+              currentWordIndex += 1;
+            }
             renderTrainingTab();
           },
         });
