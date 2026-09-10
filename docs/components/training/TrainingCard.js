@@ -1736,19 +1736,54 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       const wordText = currentWord.word;
 
+      // Split by words to prevent awkward mid-word breaks and avoid rendering giant space boxes
+      const words = wordText.split(/\s+/).filter(Boolean);
+      const isMultiWord = words.length > 1;
+      const totalChars = wordText.replace(/\s+/g, '').length;
+
+      // Adaptive tile sizing based on word complexity
+      let tileWidth = 32;
+      let tileHeight = 38;
+      let fontSize = 18;
+      let gap = 4;
+
+      if (totalChars > 12 || (isMultiWord && totalChars > 8)) {
+        tileWidth = 26;
+        tileHeight = 34;
+        fontSize = 15;
+        gap = 3;
+      } else if (totalChars > 8) {
+        tileWidth = 28;
+        tileHeight = 36;
+        fontSize = 16;
+        gap = 3;
+      }
+
+      let globalCharIndex = 0;
+      const wordsHtml = words
+        .map((w, wIdx) => {
+          const lettersHtml = w
+            .split('')
+            .map((char) => {
+              const index = globalCharIndex++;
+              if (!isLetter(char) || isVowel(char)) {
+                return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: ${tileWidth}px; height: ${tileHeight}px; border-radius: 6px; font-size: ${fontSize}px; font-weight: 700; margin: 0; padding: 0 !important; text-align: center; vertical-align: middle; box-sizing: border-box; line-height: 1; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
+              } else {
+                return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: ${tileWidth}px; height: ${tileHeight}px; border-radius: 6px; font-size: ${fontSize}px; font-weight: 700; margin: 0; padding: 0 !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-indent: 0; line-height: 1; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
+              }
+            })
+            .join('');
+
+          if (wIdx < words.length - 1) globalCharIndex++;
+
+          return `<div class="consonants-word-group" style="display: inline-flex; gap: ${gap}px; align-items: center; white-space: nowrap;">${lettersHtml}</div>`;
+        })
+        .join(`<div class="consonants-word-spacer" style="width: ${isMultiWord ? '10px' : '6px'}; height: ${tileHeight}px; flex-shrink: 0;"></div>`);
+
       practiceArea.innerHTML = `
-        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto; padding: 12px 6px;">
-          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-bottom: 12px; width: 100%;">
-            ${wordText
-              .split('')
-              .map((char, index) => {
-                if (!isLetter(char) || isVowel(char)) {
-                  return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; padding: 0 !important; text-align: center; vertical-align: middle; box-sizing: border-box; line-height: 1; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
-                } else {
-                  return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 38px; border-radius: 6px; font-size: 18px; font-weight: 700; margin: 1px; padding: 0 !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-indent: 0; line-height: 1; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
-                }
-              })
-              .join('')}
+        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto; padding: 12px 0;">
+          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 12px; width: 100%;">
+            ${wordsHtml}
           </div>
         </div>
       `;
