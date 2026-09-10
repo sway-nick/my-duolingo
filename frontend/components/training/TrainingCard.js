@@ -60,47 +60,66 @@ function getFavsAutoplayBtnContent(isPlaying) {
 
 function onNextAfterSpeech(onNext, minDelay = 1000, maxWait = 8000) {
   const start = Date.now();
-  let speechEverActive = isWordAudioPlaying();
+  let speechEverActive = false;
+  try {
+    speechEverActive = typeof isWordAudioPlaying === 'function' ? isWordAudioPlaying() : false;
+  } catch (e) {
+    speechEverActive = false;
+  }
   let speechEndedTimestamp = null;
   let hasTriggered = false;
 
   function trigger() {
     if (hasTriggered) return;
     hasTriggered = true;
-    onNext();
+    try {
+      onNext();
+    } catch (err) {
+      console.error('Error advancing to next card in onNext:', err);
+    }
   }
 
   function check() {
     if (hasTriggered) return;
-    const elapsed = Date.now() - start;
-    const currentlySpeaking = isWordAudioPlaying();
+    try {
+      const elapsed = Date.now() - start;
+      let currentlySpeaking = false;
+      try {
+        currentlySpeaking = typeof isWordAudioPlaying === 'function' ? isWordAudioPlaying() : false;
+      } catch (e) {
+        currentlySpeaking = false;
+      }
 
-    if (currentlySpeaking) {
-      speechEverActive = true;
-      speechEndedTimestamp = null; // Still playing
-    } else if (speechEverActive && speechEndedTimestamp === null) {
-      speechEndedTimestamp = Date.now(); // Speech just finished!
-    }
+      if (currentlySpeaking) {
+        speechEverActive = true;
+        speechEndedTimestamp = null; // Still playing
+      } else if (speechEverActive && speechEndedTimestamp === null) {
+        speechEndedTimestamp = Date.now(); // Speech just finished!
+      }
 
-    // 1. If audio was playing, give a full 1.0s (1000ms) pause AFTER audio finishes completely
-    if (speechEndedTimestamp !== null) {
-      if (Date.now() - speechEndedTimestamp >= 1000) {
+      // 1. If audio was playing, give a full 1.0s (1000ms) pause AFTER audio finishes completely
+      if (speechEndedTimestamp !== null) {
+        if (Date.now() - speechEndedTimestamp >= 1000) {
+          trigger();
+          return;
+        }
+      } else if (!speechEverActive && elapsed >= minDelay) {
+        // 2. If no audio was active, wait at least minDelay (defaults to 1000ms)
         trigger();
         return;
       }
-    } else if (!speechEverActive && elapsed >= minDelay) {
-      // 2. If no audio was active, wait at least minDelay (defaults to 1000ms)
-      trigger();
-      return;
-    }
 
-    // 3. Safety timeout to prevent getting stuck
-    if (elapsed >= maxWait) {
-      trigger();
-      return;
-    }
+      // 3. Safety timeout to prevent getting stuck
+      if (elapsed >= maxWait) {
+        trigger();
+        return;
+      }
 
-    setTimeout(check, 50);
+      setTimeout(check, 50);
+    } catch (err) {
+      console.error('Error in onNextAfterSpeech check loop:', err);
+      trigger();
+    }
   }
 
   setTimeout(check, 50);

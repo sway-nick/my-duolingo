@@ -376,6 +376,21 @@ function preloadWordAudio(text, voiceAccentOverride = null) {
 }
 
 let sharedWordAudioPlayer = null;
+let currentPlayingWordAudio = null;
+let activeAutoplayAudio = null;
+
+function trackPlayingAudio(audio) {
+  currentPlayingWordAudio = audio;
+  if (!audio) return;
+  const clear = () => {
+    if (currentPlayingWordAudio === audio) {
+      currentPlayingWordAudio = null;
+    }
+  };
+  audio.addEventListener('ended', clear, { once: true });
+  audio.addEventListener('pause', clear, { once: true });
+  audio.addEventListener('error', clear, { once: true });
+}
 
 function getSharedWordAudioPlayer() {
   if (!sharedWordAudioPlayer && typeof window !== 'undefined') {
@@ -457,22 +472,6 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
 
   const { local, primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
   const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
-
-let currentPlayingWordAudio = null;
-
-function trackPlayingAudio(audio) {
-  currentPlayingWordAudio = audio;
-  if (!audio) return;
-  const clear = () => {
-    if (currentPlayingWordAudio === audio) {
-      currentPlayingWordAudio = null;
-    }
-  };
-  audio.addEventListener('ended', clear, { once: true });
-  audio.addEventListener('pause', clear, { once: true });
-  audio.addEventListener('error', clear, { once: true });
-}
-
   const cachedAudio = audioCache.get(cacheKey);
   if (cachedAudio) {
     if (player) {
@@ -762,8 +761,6 @@ function primeAudioForAutoplay() {
     } catch (e) {}
   }
 }
-
-let activeAutoplayAudio = null;
 
 function stopAllAudio() {
   if (activeAutoplayAudio) {
