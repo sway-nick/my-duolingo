@@ -15,6 +15,7 @@ import {
   releaseScreenWakeLock,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
+  triggerHaptic,
 } from '../../services/audioService.js?v=200.0';
 import {
   saveProgress,
@@ -196,6 +197,30 @@ function normalizeEnglish(str, preserveArticles = false) {
   return cleaned;
 }
 
+function calculateLevenshtein(a, b) {
+  a = String(a || '');
+  b = String(b || '');
+  const m = a.length;
+  const n = b.length;
+  const d = [];
+  for (let i = 0; i <= m; i++) d[i] = [i];
+  for (let j = 0; j <= n; j++) d[0][j] = j;
+  for (let j = 1; j <= n; j++) {
+    for (let i = 1; i <= m; i++) {
+      if (a[i - 1] === b[j - 1]) {
+        d[i][j] = d[i - 1][j - 1];
+      } else {
+        d[i][j] = Math.min(
+          d[i - 1][j] + 1,
+          d[i][j - 1] + 1,
+          d[i - 1][j - 1] + 1
+        );
+      }
+    }
+  }
+  return d[m][n];
+}
+
 function checkSpeechMatch(spokenList, targetWord) {
   if (!targetWord || !spokenList || spokenList.length === 0) return false;
   const rawTarget = String(targetWord).toLowerCase().trim();
@@ -334,6 +359,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     learningCount = 0,
     dailyGoal = 5,
     activeWords = [],
+    currentWordIndex = 0,
+    isLastWord = false,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
   } = options;
@@ -419,8 +446,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               ? (
                 isFavPractice
                   ? `
-                  <div class="train-left-badge">
-                    ${t('fav_title')}: <strong>${activeWords.length}</strong>
+                  <div class="train-left-badge" id="fav-counter-badge">
+                    ${getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites'}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>
                   </div>
                 `
                   : `
@@ -1220,6 +1247,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         if (isProcessing || isCompleted || !isListening) {
           return;
+        }
+
+        if (!localStorage.getItem('myduo_mic_prompt_seen')) {
+          await new Promise((resolve) => {
+            const modal = document.createElement('div');
+            modal.className = 'modal-backdrop';
+            modal.id = 'mic-explainer-modal';
+            modal.innerHTML = `
+              <div class="modal-content" style="text-align: center; max-width: 340px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
+                <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🎙️</div>
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">${getInterfaceLanguage() === 'ru' ? 'Разрешите микрофон' : getInterfaceLanguage() === 'uk' ? 'Дозвольте мікрофон' : 'Allow microphone'}</h3>
+                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.45; margin: 0 0 20px;">
+                  ${getInterfaceLanguage() === 'ru' ? 'Микрофон нужен для тренировки произношения слов. В следующем системном окне нажмите <strong>«Разрешить»</strong>.' : getInterfaceLanguage() === 'uk' ? 'Мікрофон потрібен для тренування вимови слів. У наступному системному вікні натисніть <strong>«Дозволити»</strong>.' : 'Microphone is required for pronunciation training. In the next system prompt, tap <strong>"Allow"</strong>.'}
+                </p>
+                <button class="primary-button btn-green" id="mic-explainer-allow-btn" style="min-height: 46px; height: 46px; font-size: 15px; font-weight: 700; width: 100%;">
+                  ${getInterfaceLanguage() === 'ru' ? 'Понятно, продолжить' : getInterfaceLanguage() === 'uk' ? 'Зрозуміло, продовжити' : 'Got it, continue'}
+                </button>
+              </div>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('#mic-explainer-allow-btn').addEventListener('click', () => {
+              localStorage.setItem('myduo_mic_prompt_seen', 'true');
+              modal.remove();
+              resolve(true);
+            });
+          });
         }
 
         try {
@@ -2524,7 +2577,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const minDelay = isCorrect ? 1600 : 4200;
       const maxWait = isCorrect ? 3500 : 7000;
 
-      if (activeWords.length <= 1) {
+      const isFinalCard = isLastWord || (typeof currentWordIndex === 'number' && activeWords.length > 0 && currentWordIndex >= activeWords.length - 1) || activeWords.length <= 1;
+      if (isFinalCard) {
         window._trainingRoundJustCompleted = true;
       }
 
@@ -2585,6 +2639,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     if (isFavPractice && existingAutoplayBtn && existingWrapper) {
       existingWrapper.outerHTML = cardHtml;
+      const favBadge = container.querySelector('#fav-counter-badge') || container.querySelector('.train-left-badge');
+      if (favBadge) {
+        const favLabel = getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites';
+        const currentNum = activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1;
+        favBadge.innerHTML = `${favLabel}: <strong>${currentNum}/${activeWords.length}</strong>`;
+      }
     } else {
       practiceArea.innerHTML = `
         ${cardHtml}
@@ -2716,6 +2776,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         } else {
           // SWIPE RIGHT -> Return to Previous Word
           if (canGoPrev && typeof onPrev === 'function') {
+            triggerHaptic('light');
             if (flashcardWrapper) {
               flashcardWrapper.style.transition = 'transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.16s ease';
               flashcardWrapper.style.transform = `translate3d(120vw, ${targetDy * 0.15}px, 0) rotate(22deg)`;

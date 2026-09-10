@@ -169,6 +169,24 @@ function renderPodiumCard(player, rank, period = 'week') {
 }
 
 function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
+  if (!players || players.length === 0) {
+    return {
+      podiumHtml: '',
+      restHtml: `
+        <div class="empty-state-card" style="text-align: center; padding: 40px 20px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 240px;">
+          <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🏆</div>
+          <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px; color: var(--text-main);">${getInterfaceLanguage() === 'ru' ? 'Рейтинг обновляется' : getInterfaceLanguage() === 'uk' ? 'Рейтинг оновлюється' : 'Leaderboard updating'}</h3>
+          <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 20px; max-width: 280px; line-height: 1.45;">
+            ${getInterfaceLanguage() === 'ru' ? 'Загружаем актуальные данные с сервера. Если таблица не появилась, нажмите кнопку ниже:' : getInterfaceLanguage() === 'uk' ? 'Завантажуємо актуальні дані із сервера. Якщо таблиця не з\'явилася, натисніть кнопку нижче:' : 'Loading live data from server. If table does not appear, tap below:'}
+          </p>
+          <button class="primary-button btn-green" id="retry-leaderboard-btn" style="max-width: 240px; min-height: 44px; height: 44px; font-size: 15px; font-weight: 700;">
+            🔄 ${getInterfaceLanguage() === 'ru' ? 'Обновить рейтинг' : getInterfaceLanguage() === 'uk' ? 'Оновити рейтинг' : 'Refresh Leaderboard'}
+          </button>
+        </div>
+      `
+    };
+  }
+
   const top100 = players.slice(0, 100);
   const top4 = top100.slice(0, 4);
   const rest = top100.slice(4);
@@ -219,10 +237,10 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   let myStickyBarHtml = '';
   if (myPlayer && (myRank > 4 || !currentUser)) {
     const myAvatar = getUserAvatar();
-    const statusText = period === 'all' 
-      ? (getInterfaceLanguage() === 'ru' ? 'Ваш результат за всё время' : getInterfaceLanguage() === 'uk' ? 'Ваш результат за весь час' : 'Your result of all time') 
-      : (currentUser 
-          ? (getInterfaceLanguage() === 'ru' ? 'Ваш текущий результат' : getInterfaceLanguage() === 'uk' ? 'Ваш поточний результат' : 'Your current result') 
+    const statusText = period === 'all'
+      ? (getInterfaceLanguage() === 'ru' ? 'Ваш результат за всё время' : getInterfaceLanguage() === 'uk' ? 'Ваш результат за весь час' : 'Your result of all time')
+      : (currentUser
+          ? (getInterfaceLanguage() === 'ru' ? 'Ваш текущий результат' : getInterfaceLanguage() === 'uk' ? 'Ваш поточний результат' : 'Your current result')
           : (getInterfaceLanguage() === 'ru' ? 'Войдите, чтобы закрепить результат' : getInterfaceLanguage() === 'uk' ? 'Увійдіть, щоб закріпити результат' : 'Log in to save your result')
         );
     myStickyBarHtml = `
@@ -341,6 +359,14 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         });
       });
     }
+
+    const retryBtn = contentEl.querySelector('#retry-leaderboard-btn');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => {
+        retryBtn.textContent = '⏳ ...';
+        loadFreshData();
+      });
+    }
   }
 
   function bindStaticListeners() {
@@ -378,15 +404,24 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   async function loadFreshData() {
     try {
       const freshRes = await getLeaderboard(null, currentPeriod);
-      if (freshRes && freshRes.data && contentEl) {
+      if (freshRes && freshRes.data && freshRes.data.length > 0 && contentEl) {
         const freshBodyData = buildLeaderboardBodyHtml(freshRes.data, currentUser, currentPeriod);
         const podiumContainer = container.querySelector('#leaderboard-podium-container');
         if (podiumContainer) podiumContainer.innerHTML = freshBodyData.podiumHtml;
         contentEl.innerHTML = freshBodyData.restHtml;
         bindDynamicListeners();
+      } else if (contentEl && (!initialPlayers || initialPlayers.length === 0)) {
+        const fallbackData = buildLeaderboardBodyHtml([], currentUser, currentPeriod);
+        contentEl.innerHTML = fallbackData.restHtml;
+        bindDynamicListeners();
       }
     } catch (e) {
       console.warn('Leaderboard auto-sync error:', e);
+      if (contentEl && (!initialPlayers || initialPlayers.length === 0)) {
+        const fallbackData = buildLeaderboardBodyHtml([], currentUser, currentPeriod);
+        contentEl.innerHTML = fallbackData.restHtml;
+        bindDynamicListeners();
+      }
     }
   }
 

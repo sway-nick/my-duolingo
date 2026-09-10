@@ -275,6 +275,9 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
+  height: 100%;
+  min-height: 100%;
+  min-height: 100dvh;
   background: var(--bg-color);
   color: var(--text-main);
   line-height: 1.5;
@@ -288,7 +291,8 @@ body {
   max-width: 680px;
   width: 100%;
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 100%;
+  min-height: 100dvh;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -301,9 +305,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 10px;
-  min-height: 54px;
-  height: 54px;
+  padding-top: calc(8px + env(safe-area-inset-top, 0px));
+  padding-bottom: 8px;
+  padding-left: max(10px, env(safe-area-inset-left, 0px));
+  padding-right: max(10px, env(safe-area-inset-right, 0px));
+  min-height: calc(58px + env(safe-area-inset-top, 0px));
+  height: calc(58px + env(safe-area-inset-top, 0px));
   border-bottom: 1px solid var(--border-color);
   background: #ffffff;
   position: sticky;
@@ -492,11 +499,71 @@ body {
   animation: xpPopDown 0.6s ease-out;
 }
 
-/* Main Content Area */
+/* Main Content Area with Safe Area support */
 .app-main-content {
-  flex: 1;
-  padding: 12px 14px;
-  padding-bottom: 24px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(10px, env(safe-area-inset-left, 0px));
+  padding-right: max(10px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+#app-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ergonomic Touch Target (Apple HIG / Material 3: Hitbox >= 44px) */
+.flashcard-sound-btn,
+.flashcard-fav-btn,
+.flashcard-crown-btn,
+.favorite-button,
+.header-burger-btn,
+.header-profile-badge,
+.theme-toggle-btn,
+.word-notes-modal-close {
+  position: relative;
+}
+
+.flashcard-sound-btn::after,
+.flashcard-fav-btn::after,
+.flashcard-crown-btn::after,
+.favorite-button::after,
+.header-burger-btn::after,
+.header-profile-badge::after,
+.theme-toggle-btn::after,
+.word-notes-modal-close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 44px;
+  min-height: 44px;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  pointer-events: auto;
+}
+
+/* iOS Safari: Prevent accidental page zoom by guaranteeing 16px font-size on all mobile inputs */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  .search-input,
+  .filter-select,
+  .settings-select,
+  .form-group input {
+    font-size: 16px !important;
+  }
 }
 
 /* Bottom Navigation (Hidden) */
@@ -2609,8 +2676,10 @@ body.notebook-theme .word-notes-modal-text {
 
 /* Settings Page */
 .settings-page {
+  width: 100%;
   max-width: 540px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .settings-card {
@@ -2783,8 +2852,10 @@ body.notebook-theme .word-notes-modal-text {
   gap: 12px;
   max-height: 380px;
   overflow-y: auto;
-  padding: 4px 2px;
+  scrollbar-gutter: stable;
+  padding: 8px 6px;
   margin-bottom: 16px;
+  box-sizing: border-box;
 }
 
 .avatar-grid-item {
@@ -2798,7 +2869,8 @@ body.notebook-theme .word-notes-modal-text {
   cursor: pointer;
   box-sizing: border-box;
   user-select: none;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  will-change: transform;
 }
 
 .dark-theme .avatar-grid-item {
@@ -2806,7 +2878,8 @@ body.notebook-theme .word-notes-modal-text {
 }
 
 .avatar-grid-item:hover {
-  transform: scale(1.08);
+  z-index: 5;
+  transform: scale(1.06);
   border-color: var(--primary-color);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
