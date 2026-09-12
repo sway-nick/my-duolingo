@@ -441,6 +441,23 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     return `${cnt} ${t('words')}`;
   }
 
+  let remainingInputsCount = activeWords?.length || 0;
+  if (currentMethod === 'quiz') {
+    if (isFavPractice) {
+      remainingInputsCount = Math.max(1, (activeWords?.length || 0) - (currentWordIndex || 0));
+    } else {
+      remainingInputsCount = (activeWords || []).reduce((sum, w) => {
+        const p = progressMap[w?.id] || progressMap[String(w?.id)] || {};
+        if (isWordMastered(p)) {
+          return sum + (p.roundQuizDone ? 0 : 1);
+        }
+        return sum + Math.max(1, 5 - (p.quizCorrect || 0));
+      }, 0);
+    }
+  } else if (currentMethod === 'input') {
+    remainingInputsCount = Math.max(1, (activeWords?.length || 0) - (currentWordIndex || 0));
+  }
+
   const existingCardContainer = container.querySelector('.word-card-container');
   const isSameCardsLayout = Boolean(
     existingCardContainer &&
@@ -508,7 +525,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   ? `
               <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
               <div class="train-left-badge">
-                ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
+                ✍️ ${t('train_inputs_left')}: <strong>${remainingInputsCount}</strong>
               </div>
               <div class="word-header-row">
                 <div class="training-word-container">
@@ -525,7 +542,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   : `
               ${quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
               <div class="train-left-badge">
-                🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
+                🎯 ${t('train_inputs_left')}: <strong>${remainingInputsCount}</strong>
               </div>
               <div class="word-header-row">
                 ${
