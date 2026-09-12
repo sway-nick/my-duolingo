@@ -86,7 +86,13 @@ function build() {
     copyRecursiveSync('./frontend/.well-known', './.well-known');
   }
 
-  // 4. Generate all-in-one backend bundle for Google Apps Script
+  // 4. Sync web assets to Android Capacitor public folder
+  const androidPublic = './android/app/src/main/assets/public';
+  if (fs.existsSync('./android')) {
+    copyRecursiveSync('./frontend', androidPublic);
+  }
+
+  // 5. Generate all-in-one backend bundle for Google Apps Script
   try {
     const bundle = require('./bundle_backend.cjs');
     if (typeof bundle.generateBackendBundle === 'function') {
@@ -96,7 +102,7 @@ function build() {
     console.warn('Backend bundle step skipped or failed:', e);
   }
 
-  console.log('✅ Build successful! Single source of truth (frontend/) synchronized to docs/ and root.');
+  console.log('✅ Build successful! Single source of truth (frontend/) synchronized to docs/, root, and android.');
 }
 
 build();

@@ -1,0 +1,11 @@
+{
+  "appId": "com.englishbreakfast.app",
+  "appName": "English Breakfast",
+  "webDir": "frontend",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}
