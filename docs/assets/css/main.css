@@ -2869,8 +2869,7 @@ body.notebook-theme .word-notes-modal-text {
   cursor: pointer;
   box-sizing: border-box;
   user-select: none;
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-  will-change: transform;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .dark-theme .avatar-grid-item {
@@ -2878,17 +2877,14 @@ body.notebook-theme .word-notes-modal-text {
 }
 
 .avatar-grid-item:hover {
-  z-index: 5;
-  transform: scale(1.06);
-  border-color: var(--primary-color);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
 .avatar-grid-item.selected {
   border-color: #22c55e;
   background: rgba(34, 197, 94, 0.15);
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35);
-  transform: scale(1.04);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
 }
 
 .avatar-grid-img {
