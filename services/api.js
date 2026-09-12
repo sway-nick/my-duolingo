@@ -1,4 +1,5 @@
 import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=200.0';
+import { syncLeaderboardScoreFirestore, getWeeklyLeaderboardFirestore, saveUserProgressFirestore } from './firebase.js?v=200.0';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
@@ -325,19 +326,17 @@ async function loginUser(email, password) {
     };
   }
 
-  const demoUser = {
-    id: deterministicId,
-    email: cleanEmail,
-    name: cleanEmail.split('@')[0],
-  };
-  saveLocalUser({ ...demoUser, password });
+  const userExists = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
+  if (userExists) {
+    return {
+      success: false,
+      error: 'Неверный пароль. Пожалуйста, проверьте введённые данные.',
+    };
+  }
 
   return {
-    success: true,
-    data: {
-      user: demoUser,
-      token: 'tok_' + demoUser.id,
-    },
+    success: false,
+    error: 'Пользователь не найден. Пожалуйста, зарегистрируйтесь.',
   };
 }
 
@@ -461,12 +460,17 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 }
 
 async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
-  if (!userId || !String(userId).startsWith('u_')) return;
+  if (!userId) return;
   const cleanName = name || 'Гость';
   const cleanAvatar = avatar || '';
   const cleanXp = Math.max(0, Number(xp || 0));
 
-  // 1. Send via POST (text/plain)
+  // 1. Sync to Cloud Firestore (Real-time, instant)
+  try {
+    syncLeaderboardScoreFirestore(userId, weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+  } catch (e) {}
+
+  // 2. Send via POST (text/plain) to Google Apps Script backend
   try {
     fetch(`${API_URL}?route=leaderboard`, {
       method: 'POST',
@@ -784,6 +788,23 @@ async function getLeaderboard(weekKey = null, period = 'week') {
   let fetchUrl = `${API_URL}?route=leaderboard&weekKey=${wKey}&_t=${Date.now()}`;
   if (period === 'all') {
     fetchUrl = `${API_URL}?route=leaderboard&period=all&_t=${Date.now()}`;
+  }
+
+  // 0. Query Cloud Firestore first (5-20ms instant response)
+  try {
+    const fsPlayers = await getWeeklyLeaderboardFirestore(wKey);
+    if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
+      const dynamicBots = generateDynamicBots(wKey);
+      const combined = [...fsPlayers, ...dynamicBots];
+      combined.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+      localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period } }));
+      }
+      return combined;
+    }
+  } catch (fsErr) {
+    console.warn('Firestore leaderboard query fallback:', fsErr);
   }
 
   try {

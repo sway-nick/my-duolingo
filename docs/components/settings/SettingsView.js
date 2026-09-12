@@ -5,6 +5,7 @@ import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
 import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=200.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -148,6 +149,31 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <button class="primary-button btn-green btn-clear-cache" id="clear-app-cache-btn">
           ${t('settings_sync_btn')}
         </button>
+      </div>
+
+      ${
+        user
+          ? `
+        <!-- Danger Zone / Delete Account (Google Play Compliance) -->
+        <div class="settings-card danger-zone-card" style="border: 1px solid rgba(239, 68, 68, 0.25); background: rgba(239, 68, 68, 0.03);">
+          <h3 class="settings-card-title" style="color: #ef4444; margin-bottom: 8px;">
+            ${getInterfaceLanguage() === 'ru' ? 'Управление аккаунтом' : getInterfaceLanguage() === 'uk' ? 'Керування акаунтом' : 'Account Management'}
+          </h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4; margin: 0 0 12px;">
+            ${getInterfaceLanguage() === 'ru' ? 'Вы можете безвозвратно удалить свой профиль и все данные обучения.' : getInterfaceLanguage() === 'uk' ? 'Ви можете безповоротно видалити свій профіль та всі дані навчання.' : 'You can permanently delete your profile and all learning progress.'}
+          </p>
+          <button type="button" class="secondary-button" id="delete-account-btn" style="width: 100%; color: #ef4444; border-color: rgba(239, 68, 68, 0.4); font-weight: 600;">
+            ${getInterfaceLanguage() === 'ru' ? 'Удалить аккаунт и данные' : getInterfaceLanguage() === 'uk' ? 'Видалити акаунт та дані' : 'Delete Account & Data'}
+          </button>
+        </div>
+      `
+          : ''
+      }
+
+      <div style="text-align: center; margin-top: 12px; margin-bottom: 24px;">
+        <a href="./privacy.html" target="_blank" style="font-size: 13px; color: var(--text-muted); text-decoration: underline;">
+          ${getInterfaceLanguage() === 'ru' ? 'Политика конфиденциальности' : getInterfaceLanguage() === 'uk' ? 'Політика конфіденційності' : 'Privacy Policy'}
+        </a>
       </div>
 
     </div>
@@ -427,6 +453,32 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         }
         // 3. Force reload with timestamp to bust mobile disk cache
         window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+      }
+    });
+  }
+
+  // Bind Delete Account button (Google Play Compliance)
+  const deleteAccountBtn = container.querySelector('#delete-account-btn');
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', async () => {
+      const confirmMsg = getInterfaceLanguage() === 'ru'
+        ? 'Вы уверены, что хотите навсегда удалить свой аккаунт и все данные? Это действие необратимо.'
+        : getInterfaceLanguage() === 'uk'
+          ? 'Ви впевнені, що хочете назавжди видалити свій акаунт та всі дані? Ця дія незворотна.'
+          : 'Are you sure you want to permanently delete your account and all learning progress? This cannot be undone.';
+      if (confirm(confirmMsg)) {
+        try {
+          deleteAccountBtn.disabled = true;
+          deleteAccountBtn.textContent = 'Удаление...';
+          await deleteCurrentUserAccount();
+          logoutUser();
+          alert(getInterfaceLanguage() === 'ru' ? 'Аккаунт успешно удалён.' : 'Account successfully deleted.');
+          window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+        } catch (err) {
+          console.warn('Delete account error:', err);
+          logoutUser();
+          window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+        }
       }
     });
   }

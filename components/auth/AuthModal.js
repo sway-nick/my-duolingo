@@ -1,5 +1,6 @@
 import { loginUser, registerUser, googleAuthUser } from '../../services/api.js?v=200.0';
 import { setCurrentUser } from '../../services/authService.js?v=200.0';
+import { loginWithGoogle, loginWithEmail, registerWithEmail } from '../../services/firebase.js?v=200.0';
 
 const GOOGLE_CLIENT_ID = '971261131396-00l4rv6n0c4plrd9ie10qb8tvrme2emk.apps.googleusercontent.com';
 
@@ -122,14 +123,38 @@ function renderAuthModal(onSuccessCallback) {
     if (e.target === modal) modal.remove();
   });
 
-  // Handle Google OAuth Token Response (Universal for PC and Mobile)
-  async function handleGoogleOAuthToken(tokenResponse) {
-    if (!tokenResponse || tokenResponse.error) {
-      if (tokenResponse?.error !== 'popup_closed_by_user') {
-        console.warn('Google OAuth Token error:', tokenResponse);
+  // Handle Google Login
+  if (googleBtn) {
+    googleBtn.addEventListener('click', async () => {
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Авторизация через Google...';
+
+      try {
+        const user = await loginWithGoogle();
+        setCurrentUser(user, 'tok_' + user.id);
+        modal.remove();
+        if (onSuccessCallback) onSuccessCallback(user);
+      } catch (err) {
+        console.warn('Firebase Google Auth fallback to Identity Services:', err);
+        if (tokenClient) {
+          tokenClient.requestAccessToken({ prompt: 'select_account' });
+        } else if (window.google?.accounts?.id) {
+          window.google.accounts.id.prompt();
+        } else {
+          errorBox.textContent = err.message || 'Ошибка входа через Google';
+          errorBox.style.display = 'block';
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = mode === 'login' ? 'Войти' : 'Зарегистрироваться';
       }
-      return;
-    }
+    });
+  }
+
+  // Handle Google OAuth Token Response (Universal fallback)
+  async function handleGoogleOAuthToken(tokenResponse) {
+    if (!tokenResponse || tokenResponse.error) return;
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Авторизация через Google...';
@@ -142,10 +167,6 @@ function renderAuthModal(onSuccessCallback) {
       const email = (profile.email || '').toLowerCase().trim();
       const name = profile.name || profile.given_name || email.split('@')[0];
       const picture = profile.picture || '';
-
-      if (!email) {
-        throw new Error('Не удалось получить email от Google аккаунта');
-      }
 
       const res = await googleAuthUser(email, name, picture);
       if (res && res.success && res.data?.user) {
@@ -171,51 +192,6 @@ function renderAuthModal(onSuccessCallback) {
     }
   }
 
-  // Handle Google JWT Credential Response (One Tap / FedCM)
-  async function handleGoogleResponse(response) {
-    if (!response || !response.credential) return;
-
-    const payload = parseJwt(response.credential);
-    if (!payload || !payload.email) {
-      errorBox.textContent = 'Не удалось получить данные аккаунта Google';
-      errorBox.style.display = 'block';
-      return;
-    }
-
-    const email = payload.email.toLowerCase().trim();
-    const name = payload.name || payload.given_name || email.split('@')[0];
-    const picture = payload.picture || '';
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Авторизация через Google...';
-
-    try {
-      const res = await googleAuthUser(email, name, picture);
-
-      if (res && res.success && res.data?.user) {
-        const userWithGoogle = {
-          ...res.data.user,
-          provider: 'google',
-          name: res.data.user.name || name,
-          email: email,
-          avatar: picture,
-        };
-        setCurrentUser(userWithGoogle, res.data.token);
-        modal.remove();
-        if (onSuccessCallback) onSuccessCallback(userWithGoogle);
-      } else {
-        throw new Error(res?.error || 'Не удалось завершить вход через Google');
-      }
-    } catch (err) {
-      errorBox.textContent = err.message || 'Ошибка входа через Google';
-      errorBox.style.display = 'block';
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = mode === 'login' ? 'Войти' : 'Зарегистрироваться';
-    }
-  }
-
-  // Initialize official Google Identity Services (OAuth2 Token Client + ID Services)
   function initGoogleAuth() {
     if (window.google?.accounts?.oauth2) {
       try {
@@ -224,22 +200,7 @@ function renderAuthModal(onSuccessCallback) {
           scope: 'email profile openid',
           callback: handleGoogleOAuthToken,
         });
-      } catch (e) {
-        console.warn('Google OAuth2 init fallback:', e);
-      }
-    }
-
-    if (window.google?.accounts?.id) {
-      try {
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleGoogleResponse,
-          auto_select: false,
-          cancel_on_tap_outside: true,
-        });
-      } catch (e) {
-        console.warn('Google ID init fallback:', e);
-      }
+      } catch (e) {}
     }
   }
 
@@ -252,32 +213,14 @@ function renderAuthModal(onSuccessCallback) {
         initGoogleAuth();
       }
     }, 150);
-
     setTimeout(() => clearInterval(checkGoogleInterval), 4000);
-  }
-
-  // Click on full-width custom Google button
-  if (googleBtn) {
-    googleBtn.addEventListener('click', () => {
-      errorBox.style.display = 'none';
-      if (tokenClient) {
-        tokenClient.requestAccessToken({ prompt: 'select_account' });
-      } else if (window.google?.accounts?.id) {
-        window.google.accounts.id.prompt();
-      } else {
-        errorBox.textContent = 'Сервис Google подключается, попробуйте ещё раз через секунду...';
-        errorBox.style.display = 'block';
-      }
-    });
   }
 
   const form = modal.querySelector('#auth-form');
   
   function sanitizeInput(str) {
     if (!str) return '';
-    // Strip HTML/script tags
-    const clean = str.replace(/<[^>]*>?/gm, '');
-    return clean.slice(0, 40);
+    return str.replace(/<[^>]*>?/gm, '').slice(0, 40);
   }
 
   form.addEventListener('submit', async (e) => {
@@ -300,8 +243,8 @@ function renderAuthModal(onSuccessCallback) {
         errorBox.style.display = 'block';
         return;
       }
-      if (password.length < 4) {
-        errorBox.textContent = 'Пароль должен содержать не менее 4 символов';
+      if (password.length < 6) {
+        errorBox.textContent = 'Пароль должен содержать не менее 6 символов';
         errorBox.style.display = 'block';
         return;
       }
@@ -311,19 +254,41 @@ function renderAuthModal(onSuccessCallback) {
     submitBtn.textContent = 'Загрузка...';
 
     try {
-      let res;
-      if (mode === 'login') {
-        res = await loginUser(email, password);
-      } else {
-        res = await registerUser(email, password, name);
+      let userObj;
+      try {
+        if (mode === 'login') {
+          userObj = await loginWithEmail(email, password);
+        } else {
+          userObj = await registerWithEmail(email, password, name);
+        }
+      } catch (fbErr) {
+        console.warn('Firebase email auth fallback:', fbErr);
+        if (fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/invalid-credential' || fbErr.code === 'auth/user-not-found') {
+          throw new Error('Неверный email или пароль');
+        } else if (fbErr.code === 'auth/email-already-in-use') {
+          throw new Error('Пользователь с таким email уже зарегистрирован. Выберите «Вход».');
+        } else if (fbErr.code === 'auth/weak-password') {
+          throw new Error('Пароль слишком простой (минимум 6 символов)');
+        }
+
+        // Backend fallback with strict password validation
+        let res;
+        if (mode === 'login') {
+          res = await loginUser(email, password);
+        } else {
+          res = await registerUser(email, password, name);
+        }
+        if (res && res.success && res.data?.user) {
+          userObj = res.data.user;
+        } else {
+          throw new Error(res?.error || 'Неверный email или пароль');
+        }
       }
 
-      if (res && res.success && res.data?.user) {
-        setCurrentUser(res.data.user, res.data.token);
+      if (userObj) {
+        setCurrentUser(userObj, 'tok_' + userObj.id);
         modal.remove();
-        if (onSuccessCallback) onSuccessCallback(res.data.user);
-      } else {
-        throw new Error(res?.error || 'Произошла ошибка при авторизации');
+        if (onSuccessCallback) onSuccessCallback(userObj);
       }
     } catch (err) {
       errorBox.textContent = err.message || 'Ошибка входа';
