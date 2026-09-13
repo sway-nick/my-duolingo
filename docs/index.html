@@ -873,25 +873,25 @@
                      <div class="flashcard-face flashcard-back" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; border-radius: inherit;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        
-                       <!-- Full-size video covering entire golden card face with instant preloading -->
-                       <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
-                         <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
-                       </div>
+                       <!-- Full-size video covering entire golden card face with instant playback on first view -->
+                      <div id="wotd-video-container" style="display: block; opacity: 1; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.3s ease; pointer-events: none;">
+                        <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
+                      </div>
 
-                       <div class="flashcard-face-top" style="z-index: 2;">
-                          <button type="button" class="flashcard-crown-btn" id="wotd-sound-back" title="${t('word_of_day')}">
-                            <img src="assets/icons/golden_crown.png" alt="Crown" class="wotd-crown-icon">
-                            <span class="crown-glint" aria-hidden="true"></span>
-                          </button>
-                         <span class="wotd-card-badge">${t('word_of_day')}</span>
-                         <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="${t('train_to_favorites')}">
-                           ${isWotdFav ? '❤️' : '🤍'}
+                      <div class="flashcard-face-top" style="z-index: 2;">
+                         <button type="button" class="flashcard-crown-btn" id="wotd-sound-back" title="${t('word_of_day')}">
+                           <img src="assets/icons/golden_crown.png" alt="Crown" class="wotd-crown-icon">
+                           <span class="crown-glint" aria-hidden="true"></span>
                          </button>
-                       </div>
-                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; z-index: 2;">
-                         <h2 class="flashcard-translation" style="font-size: 24px; font-weight: 500; margin: 14px 0 0 0; text-align: center;">${getWordTranslation(wotd)}</h2>
-                       </div>
-                     </div>
+                        <span class="wotd-card-badge">${t('word_of_day')}</span>
+                        <button type="button" class="flashcard-fav-btn ${isWotdFav ? 'is-favorite' : ''}" id="wotd-fav-back" title="${t('train_to_favorites')}">
+                          ${isWotdFav ? '❤️' : '🤍'}
+                        </button>
+                      </div>
+                      <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; z-index: 2;">
+                        <h2 class="flashcard-translation" style="font-size: 24px; font-weight: 500; margin: 14px 0 0 0; text-align: center;">${getWordTranslation(wotd)}</h2>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -944,10 +944,18 @@
               const cardVideo = flashcard.querySelector('#wotd-card-video');
               const videoContainer = flashcard.querySelector('#wotd-video-container');
 
-              // Immediately pre-buffer video into memory
               if (cardVideo) {
                 cardVideo.load();
               }
+
+              const dismissVideo = () => {
+                if (videoContainer) {
+                  videoContainer.style.opacity = '0';
+                  setTimeout(() => {
+                    videoContainer.style.display = 'none';
+                  }, 300);
+                }
+              };
 
               flashcard.addEventListener('click', (e) => {
                 if (e.target.closest('.flashcard-sound-btn') || e.target.closest('.flashcard-crown-btn') || e.target.closest('.flashcard-fav-btn')) {
@@ -982,51 +990,9 @@
                     localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
                     preloadNextWotdVideo();
 
-                    let isVideoRevealed = false;
-                    const flipStartTime = Date.now();
-                    const revealVideo = () => {
-                      if (isVideoRevealed || !isFlipped) return;
-                      const elapsed = Date.now() - flipStartTime;
-                      const waitRemaining = Math.max(0, 950 - elapsed);
-                      setTimeout(() => {
-                        if (isVideoRevealed || !isFlipped) return;
-                        isVideoRevealed = true;
-                        videoContainer.style.display = 'block';
-                        requestAnimationFrame(() => {
-                          videoContainer.style.opacity = '1';
-                        });
-                      }, waitRemaining);
-                    };
-
-                    const dismissVideo = () => {
-                      videoContainer.style.opacity = '0';
-                      setTimeout(() => {
-                        if (!isFlipped || cardVideo.ended || cardVideo.paused) {
-                          videoContainer.style.display = 'none';
-                        }
-                      }, 350);
-                    };
-
-                    // Reveal video strictly when first real frame starts playing (prevents black screen!)
-                    cardVideo.addEventListener('playing', revealVideo, { once: true });
-                    cardVideo.addEventListener('timeupdate', () => {
-                      if (cardVideo.currentTime > 0.05) revealVideo();
-                    }, { once: true });
-
-                    cardVideo.addEventListener('ended', () => {
-                      dismissVideo();
-                    }, { once: true });
-
-                    cardVideo.addEventListener('error', () => {
-                      dismissVideo();
-                    }, { once: true });
-
-                    // Watchdog: give mobile network 8s to buffer before falling back to translation
-                    setTimeout(() => {
-                      if (!isVideoRevealed) {
-                        dismissVideo();
-                      }
-                    }, 8000);
+                    // Video container is already visible on the back face: play immediately!
+                    cardVideo.addEventListener('ended', dismissVideo, { once: true });
+                    cardVideo.addEventListener('error', dismissVideo, { once: true });
 
                     cardVideo.muted = false;
                     cardVideo.volume = 1.0;
@@ -1047,10 +1013,7 @@
                   if (cardVideo && !cardVideo.paused) {
                     cardVideo.pause();
                   }
-                  if (videoContainer) {
-                    videoContainer.style.opacity = '0';
-                    videoContainer.style.display = 'none';
-                  }
+                  dismissVideo();
                   speakWord(wotd.word);
                 }
               });
