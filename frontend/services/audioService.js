@@ -955,7 +955,7 @@ function stopAllAudio() {
  * Speaks arbitrary text in specified language (e.g. 'ru', 'uk', 'en') and returns a Promise that resolves ONLY when speech completely ends.
  */
 function speakTextInLangAsync(text, langCode = 'ru') {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     if (!text || typeof window === 'undefined') {
       return resolve();
     }
