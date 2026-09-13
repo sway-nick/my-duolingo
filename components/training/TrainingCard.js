@@ -2616,9 +2616,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     focusAndPlaceCaret(input);
   } else {
+    const startFlipped = Boolean(isFavPractice && window.__favsAutoplayRunning);
     const cardHtml = `
       <div class="flashcard-3d-wrapper">
-        <div class="flashcard-3d" id="flashcard-3d" title="${t('train_flip_card_hint')}">
+        <div class="flashcard-3d ${startFlipped ? 'is-flipped' : ''}" id="flashcard-3d" title="${t('train_flip_card_hint')}">
           <div class="flashcard-face flashcard-front">
             <div class="flashcard-face-top">
               <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="${t('train_listen_audio')}">🔊</button>
@@ -2691,7 +2692,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const flashcardWrapper = practiceArea.querySelector('.flashcard-3d-wrapper');
     const flashcard = practiceArea.querySelector('#flashcard-3d');
     const feedbackBtns = practiceArea.querySelector('#card-feedback-btns');
-    let isFlipped = false;
+    let isFlipped = startFlipped;
     let flipCount = 0;
     let shimmerTriggered = false;
 
@@ -2977,9 +2978,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         // 1. Show Translation (back face)
         if (flashcard) {
           isFlipped = true;
-          flashcard.classList.add('is-flipped');
+          if (!flashcard.classList.contains('is-flipped')) {
+            flashcard.classList.add('is-flipped');
+            await autoplayDelay(120);
+          }
         }
-        await autoplayDelay(120);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         const translation = getWordTranslation(currentWord);
@@ -3055,7 +3058,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
         window.__favsAutoplayStartTimeout = setTimeout(() => {
           if (window.__favsAutoplayRunning) runAutoplayCycle();
-        }, 150);
+        }, 80);
       }
     }
   }
