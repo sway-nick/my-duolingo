@@ -22,8 +22,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
     let categoriesHtml = `<p class="empty-state">${t('stats_empty_categories')}</p>`;
     if (stats.categoryBreakdown && stats.categoryBreakdown.length > 0) {
-      const wordLabel = getInterfaceLanguage() === 'ru' ? 'слов' : getInterfaceLanguage() === 'uk' ? 'слів' : 'words';
-      const ofLabel = getInterfaceLanguage() === 'ru' ? 'из' : getInterfaceLanguage() === 'uk' ? 'із' : 'of';
+      const wordLabel = t('stats_words_unit');
+      const ofLabel = t('stats_of');
       categoriesHtml = stats.categoryBreakdown
         .map((cat) => {
           const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
@@ -49,7 +49,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       const d = new Date();
       d.setDate(now.getDate() - i);
       days.push({
-        dateStr: d.toLocaleDateString(getInterfaceLanguage() === 'ru' ? 'ru-RU' : getInterfaceLanguage() === 'uk' ? 'uk-UA' : 'en-US', { day: 'numeric', month: 'short' }),
+        dateStr: d.toLocaleDateString(getInterfaceLanguage() || 'en', { day: 'numeric', month: 'short' }),
         timestampStart: new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(),
         timestampEnd: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999).getTime(),
         dailyCount: 0,
@@ -169,15 +169,15 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <span class="stat-icon">🎯</span>
             <div class="stat-info">
               <h3 id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
-              <p>${getInterfaceLanguage() === 'ru' ? 'Точность' : getInterfaceLanguage() === 'uk' ? 'Точність' : 'Accuracy'}</p>
+              <p>${t('stats_accuracy')}</p>
             </div>
           </div>
 
           <div class="stat-card">
             <span class="stat-icon">🔥</span>
             <div class="stat-info">
-              <h3 id="stat-streak">${stats.streakDays || 1} ${getInterfaceLanguage() === 'ru' ? 'дн' : getInterfaceLanguage() === 'uk' ? 'дн' : 'days'}</h3>
-              <p>${getInterfaceLanguage() === 'ru' ? 'Серия' : getInterfaceLanguage() === 'uk' ? 'Серія' : 'Streak'}</p>
+              <h3 id="stat-streak">${stats.streakDays || 1} ${t('stats_days_short')}</h3>
+              <p>${t('stats_streak')}</p>
             </div>
           </div>
         </div>
@@ -195,7 +195,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     `;
   } catch (err) {
     console.error('Failed to load stats view:', err);
-    container.innerHTML = '<p class="empty-state">Ошибка загрузки статистики.</p>';
+    container.innerHTML = `<p class="empty-state">${t('stats_load_error')}</p>`;
   }
 }
 

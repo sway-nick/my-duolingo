@@ -92,7 +92,7 @@ function renderAvatarPickerModal(onAvatarSelected = () => {}) {
         closeModal();
       } catch (err) {
         console.error('Error processing custom avatar:', err);
-        alert('Не удалось обработать изображение. Попробуйте другой файл.');
+        alert(t('avatar_img_process_error'));
       }
     });
   }
