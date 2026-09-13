@@ -151,12 +151,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
-      <!-- App Maintenance / Sync Card -->
-      <div class="settings-card">
-        <button class="primary-button btn-green btn-clear-cache" id="clear-app-cache-btn">
-          ${t('settings_sync_btn')}
-        </button>
-      </div>
 
       ${
         user
@@ -540,34 +534,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     }, 100);
   }
 
-  // Bind clear cache button
-  const clearCacheBtn = container.querySelector('#clear-app-cache-btn');
-  if (clearCacheBtn) {
-    clearCacheBtn.addEventListener('click', async () => {
-      const confirmMsg = t('settings_sync_confirm');
-      if (confirm(confirmMsg)) {
-        // 1. Clear local words & leaderboard cache
-        localStorage.removeItem('myduo_cached_words');
-        for (let i = localStorage.length - 1; i >= 0; i--) {
-          const k = localStorage.key(i);
-          if (k && (k.startsWith('cache_leaderboard_') || k === 'myduo_leaderboard_period')) {
-            localStorage.removeItem(k);
-          }
-        }
-        // 2. Clear browser Cache Storage
-        if ('caches' in window) {
-          try {
-            const keys = await caches.keys();
-            await Promise.all(keys.map((k) => caches.delete(k)));
-          } catch (e) {
-            console.warn('Cache storage clear error:', e);
-          }
-        }
-        // 3. Force reload with timestamp to bust mobile disk cache
-        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
-      }
-    });
-  }
+
 
   // Bind Delete Account button (Google Play Compliance)
   const deleteAccountBtn = container.querySelector('#delete-account-btn');
