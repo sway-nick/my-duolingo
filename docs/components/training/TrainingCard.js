@@ -646,10 +646,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
-  if (!isFavPractice && !window.__favsAutoplayRunning && !isAccessibilityMuted && (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1))) {
+  // Auto-speak: in cards mode always speak; in quiz speak at stage 0 (En→Ru) and stage 1 (Listen).
+  // isSfxMuted() controls sound effects (coins, fanfares) - NOT word pronunciation.
+  // isAccessibilityMuted only skips the Listen *stage* in conveyor, but word pronunciation should always play
+  // unless the user has explicitly turned off audio (isAudioMuted).
+  const shouldAutoSpeak = !isFavPractice && !window.__favsAutoplayRunning &&
+    (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1));
+  if (shouldAutoSpeak) {
     setTimeout(() => {
       try {
-        if (!isFavPractice && !window.__favsAutoplayRunning && !isAccessibilityMuted) {
+        if (!isFavPractice && !window.__favsAutoplayRunning) {
           speakWord(currentWord.word, currentWord.id);
         }
       } catch (e) {}
