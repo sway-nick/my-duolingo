@@ -9,7 +9,25 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260909_v350';
+        var APP_BUILD = '20260913_v363';
+        try {
+          var t = localStorage.getItem('myduo_theme') || 'light';
+          var initBg = '#ffffff';
+          if (t === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+            document.documentElement.style.backgroundColor = '#0f172a';
+            initBg = '#0f172a';
+          } else if (t === 'notebook') {
+            document.documentElement.classList.add('notebook-theme');
+            document.documentElement.style.backgroundColor = '#f5eedc';
+            initBg = '#f5eedc';
+          } else {
+            document.documentElement.style.backgroundColor = '#ffffff';
+          }
+          if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
+            window.AndroidThemeBridge.setWindowThemeColor(initBg);
+          }
+        } catch (e) {}
         var prevBuild = localStorage.getItem('myduo_app_build');
         if (prevBuild !== APP_BUILD) {
           localStorage.setItem('myduo_app_build', APP_BUILD);
@@ -51,8 +69,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=210.0" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="./assets/css/main.css?v=215.0" />
   </head>
 
   <body>
@@ -118,19 +135,19 @@
     </div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=207.0';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock } from './services/audioService.js?v=207.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=207.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=207.0';
-      import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=207.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=207.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=207.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=207.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=207.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=207.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=207.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=207.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=207.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=215.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=215.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=215.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=215.0';
+      import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=215.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=215.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=215.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=215.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=215.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=215.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=215.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=215.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=215.0';
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -976,13 +993,19 @@
                     preloadNextWotdVideo();
 
                     let isVideoRevealed = false;
+                    const flipStartTime = Date.now();
                     const revealVideo = () => {
                       if (isVideoRevealed || !isFlipped) return;
-                      isVideoRevealed = true;
-                      videoContainer.style.display = 'block';
-                      requestAnimationFrame(() => {
-                        videoContainer.style.opacity = '1';
-                      });
+                      const elapsed = Date.now() - flipStartTime;
+                      const waitRemaining = Math.max(0, 950 - elapsed);
+                      setTimeout(() => {
+                        if (isVideoRevealed || !isFlipped) return;
+                        isVideoRevealed = true;
+                        videoContainer.style.display = 'block';
+                        requestAnimationFrame(() => {
+                          videoContainer.style.opacity = '1';
+                        });
+                      }, waitRemaining);
                     };
 
                     const dismissVideo = () => {
@@ -991,7 +1014,7 @@
                         if (!isFlipped || cardVideo.ended || cardVideo.paused) {
                           videoContainer.style.display = 'none';
                         }
-                      }, 250);
+                      }, 350);
                     };
 
                     // Reveal video strictly when first real frame starts playing (prevents black screen!)
@@ -1066,6 +1089,7 @@
           }
 
           function renderCategorySelectorScreen() {
+            window._isCategorySelectOpen = true;
             const content = document.querySelector('#app-content');
             if (!content) return;
 
@@ -1131,23 +1155,115 @@
               </div>
             `;
 
-            content.querySelector('#cat-select-back-btn')?.addEventListener('click', () => {
+            content.querySelector('#cat-select-back-btn')?.addEventListener('click', (e) => {
+              e.stopPropagation();
+              window._isCategorySelectOpen = false;
               renderTrainingTab();
             });
 
             content.querySelectorAll('.category-tile-card').forEach((card) => {
-              card.addEventListener('click', () => {
+              card.addEventListener('click', async (e) => {
+                e.stopPropagation();
                 const chosenCat = card.getAttribute('data-category');
-                if (chosenCat) {
-                  favoritePracticeWords = null;
-                  userSettings.category = chosenCat;
-                  userSettings.preferredMethod = 'cards';
-                  window._explicitCardsOpened = true;
-                  window._trainingRoundJustCompleted = false;
-                  saveUserSettings(userSettings);
-                  currentWordIndex = 0;
-                  renderTrainingTab();
+                if (!chosenCat) return;
+
+                const currentAccent = getSavedVoiceAccent ? getSavedVoiceAccent() : 'us';
+                const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat);
+
+                if (!isDownloaded) {
+                  const details = getCategoryDetails(chosenCat);
+                  const catWords = allWords.filter(
+                    (w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat)
+                  );
+                  const count = catWords.length;
+                  const lang = getInterfaceLanguage();
+                  const sizeMb = Math.max(1, Math.round((count * 8) / 1024));
+
+                  const modal = document.createElement('div');
+                  modal.className = 'modal-overlay';
+                  modal.id = 'cat-voice-download-modal';
+                  modal.innerHTML = `
+                    <div class="modal-content" style="text-align: center; max-width: 350px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
+                      <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">📥</div>
+                      <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
+                        ${lang === 'ru' ? 'Загрузка озвучки' : lang === 'uk' ? 'Завантаження озвучення' : 'Download Audio'}
+                      </h3>
+                      <p id="cat-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
+                        ${lang === 'ru'
+                          ? `Для тренировки категории «<strong>${details.title}</strong>» требуется загрузить озвучку (${count} ${t('words')}, ~${sizeMb} МБ). Скачать сейчас?`
+                          : lang === 'uk'
+                          ? `Для тренування категорії «<strong>${details.title}</strong>» потрібно завантажити озвучення (${count} ${t('words')}, ~${sizeMb} МБ). Завантажити зараз?`
+                          : `To practice "<strong>${details.title}</strong>", download audio files (${count} ${t('words')}, ~${sizeMb} MB). Download now?`}
+                      </p>
+                      <div id="cat-progress-wrap" style="display: none; margin-bottom: 16px;">
+                        <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
+                          <div id="cat-progress-bar" style="background: var(--btn-green-bg, #22c55e); height: 100%; width: 0%; transition: width 0.15s ease;"></div>
+                        </div>
+                        <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
+                          ${lang === 'ru' ? `📥 Скачать (~${sizeMb} МБ)` : lang === 'uk' ? `📥 Завантажити (~${sizeMb} МБ)` : `📥 Download (~${sizeMb} MB)`}
+                        </button>
+                        <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%;">
+                          ${lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel'}
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                  document.body.appendChild(modal);
+
+                  const downloadBtn = modal.querySelector('#cat-modal-download-btn');
+                  const cancelBtn = modal.querySelector('#cat-modal-cancel-btn');
+                  const progressWrap = modal.querySelector('#cat-progress-wrap');
+                  const progressBar = modal.querySelector('#cat-progress-bar');
+                  const progressText = modal.querySelector('#cat-progress-text');
+                  const descEl = modal.querySelector('#cat-modal-desc');
+
+                  cancelBtn.addEventListener('click', () => {
+                    modal.remove();
+                  });
+
+                  downloadBtn.addEventListener('click', async () => {
+                    downloadBtn.disabled = true;
+                    cancelBtn.style.display = 'none';
+                    progressWrap.style.display = 'block';
+                    if (descEl) descEl.textContent = lang === 'ru' ? 'Загрузка аудиофайлов...' : lang === 'uk' ? 'Завантаження аудіофайлів...' : 'Downloading audio files...';
+                    try {
+                      await downloadCategoryVoicePack(currentAccent, chosenCat, catWords, (percent) => {
+                        if (progressBar) progressBar.style.width = `${percent}%`;
+                        if (progressText) progressText.textContent = `${percent}%`;
+                      });
+
+                      modal.remove();
+                      window._isCategorySelectOpen = false;
+                      favoritePracticeWords = null;
+                      userSettings.category = chosenCat;
+                      userSettings.preferredMethod = 'cards';
+                      window._explicitCardsOpened = true;
+                      window._trainingRoundJustCompleted = false;
+                      saveUserSettings(userSettings);
+                      currentWordIndex = 0;
+                      renderTrainingTab();
+                    } catch (err) {
+                      console.warn('Category voice download failed:', err);
+                      downloadBtn.disabled = false;
+                      cancelBtn.style.display = 'block';
+                      downloadBtn.textContent = lang === 'ru' ? 'Повторить' : 'Retry';
+                    }
+                  });
+                  return;
                 }
+
+                window._isCategorySelectOpen = false;
+                favoritePracticeWords = null;
+                userSettings.category = chosenCat;
+                userSettings.preferredMethod = 'cards';
+                window._explicitCardsOpened = true;
+                window._trainingRoundJustCompleted = false;
+                saveUserSettings(userSettings);
+                currentWordIndex = 0;
+                renderTrainingTab();
               });
             });
           }
@@ -1223,6 +1339,25 @@
         if (!trainEl) {
           content.innerHTML = '<div id="training"></div>';
         }
+        // Calculate remaining unfinished words in this round to detect if second word exists
+        const unfinishedInQueue = activeWords.filter((w) => {
+          const p = userProgress[w.id] || userProgress[String(w.id)];
+          if (!p) return true;
+          if (currentMethod === 'quiz') return (p.quizCorrect || 0) < 5 && !p.roundQuizDone && !isWordMastered(p);
+          if (currentMethod === 'pairs') return (p.pairsCorrect || 0) < 1 && !p.roundPairsDone;
+          if (currentMethod === 'input') return (p.inputCorrect || 0) < 2 && !p.roundTestDone && !isWordMastered(p);
+          return true;
+        });
+        const isSingleRemainingWord = unfinishedInQueue.length <= 1;
+
+        if (isFavPracticeActive && currentWordIndex >= activeWords.length) {
+          favoritePracticeWords = null;
+          favoritePracticeMethod = 'cards';
+          currentWordIndex = 0;
+          renderTrainingTab();
+          return;
+        }
+
         const currentWord = activeWords[currentWordIndex % activeWords.length];
 
         const isFav =
@@ -1245,7 +1380,8 @@
           categories,
           activeWords,
           currentWordIndex,
-          isLastWord: currentWordIndex >= activeWords.length - 1,
+          isLastWord: currentWordIndex >= activeWords.length - 1 || isSingleRemainingWord,
+          isSingleRemaining: isSingleRemainingWord,
           learningCount,
           dailyGoal,
           availableModes,
@@ -1296,7 +1432,7 @@
             incrementGuestTrainingCount();
             updateHeaderUser();
 
-            if (currentMethod === 'input' && currentWordIndex >= activeWords.length - 1) {
+            if (currentMethod === 'input' && (isSingleRemainingWord || currentWordIndex >= activeWords.length - 1)) {
               window._trainingRoundJustCompleted = true;
             }
 
@@ -1339,7 +1475,7 @@
         } else if (tabName === 'favorites') {
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
-          const favWords = allWords.filter((w) => favoriteIds.has(String(w.id)));
+          const favWords = allWords.filter((w) => w && (favoriteIds.has(String(w.id)) || favoriteIds.has(String(w.word || '').toLowerCase().trim())));
           renderFavoritesView(favWords, '#app-content', {
             onFavoriteToggle: handleFavoriteToggle,
             onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
@@ -1418,20 +1554,40 @@
 
         window.addEventListener('myduo:auth_changed', async (e) => {
           const user = e.detail?.user || getCurrentUser();
-          if (user && user.id) {
-            await fetchUserDataFromCloud(user.id);
-            pushUserDataToCloud(user.id);
-          }
+          const favList = getUserFavorites();
+          favoriteIds = new Set(favList.map(String));
           updateHeaderUser();
+          if (user && user.id) {
+            try {
+              await fetchUserDataFromCloud(user.id);
+            } catch (e) {}
+            pushUserDataToCloud(user.id, null, false);
+          }
           await loadData();
-          renderTab(activeTab);
+          if (!window._isCategorySelectOpen) {
+            renderTab(activeTab);
+          }
+        });
+
+        window.addEventListener('myduo_favorites_updated', (e) => {
+          const favs = e.detail || getUserFavorites();
+          favoriteIds = new Set(favs.map(String));
+          if (!window._isCategorySelectOpen && (activeTab === 'favorites' || activeTab === 'dictionary')) {
+            renderTab(activeTab);
+          }
+        });
+
+        window.addEventListener('myduo:progress_updated', () => {
+          if (!window._isCategorySelectOpen) {
+            renderTab(activeTab);
+          }
         });
 
         window.addEventListener('myduo:cloud_synced', async () => {
           updateHeaderUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
-          if (activeTab === 'stats' || activeTab === 'favorites' || activeTab === 'leaderboard') {
+          if (!window._isCategorySelectOpen) {
             renderTab(activeTab);
           }
         });
@@ -1531,6 +1687,37 @@
           updateHeaderUser();
           renderTab(activeTab);
         }).catch((err) => console.warn('Background sync error:', err));
+
+        // 4. Native Android Back Button & Gesture Navigation handler
+        if (window.Capacitor?.Plugins?.App) {
+          window.Capacitor.Plugins.App.addListener('backButton', ({ canGoBack }) => {
+            // Priority 1: Close any open modal dialogs
+            const openModals = document.querySelectorAll('.modal-backdrop, #auth-modal, #avatar-picker-modal, #doc-scanner-modal, #add-word-modal, #top100-congrats-modal, #share-app-modal');
+            if (openModals && openModals.length > 0) {
+              const topModal = openModals[openModals.length - 1];
+              topModal.remove();
+              return;
+            }
+
+            // Priority 2: If inside exercises or sub-screens, return to hub
+            if (activeTab === 'training' && !window._showHubScreen) {
+              window._showHubScreen = true;
+              renderTab('training');
+              return;
+            }
+
+            // Priority 3: If on sub-tabs, return to main training tab
+            if (activeTab !== 'training') {
+              activeTab = 'training';
+              window._showHubScreen = true;
+              renderTab('training');
+              return;
+            }
+
+            // Priority 4: Exit/minimize app when on home screen
+            window.Capacitor.Plugins.App.exitApp();
+          });
+        }
       }
 
       init();
