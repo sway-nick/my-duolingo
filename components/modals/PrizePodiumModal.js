@@ -1,12 +1,13 @@
 import { playFanfareSound } from '../../services/audioService.js?v=200.0';
+import { t } from '../../services/i18n.js?v=200.0';
 
 function getPrizeDetails(rank) {
   switch (rank) {
     case 1:
       return {
         icon: '💎',
-        title: 'Алмазный кубок!',
-        badge: '1 МЕСТО В ЛИГЕ НЕДЕЛИ',
+        title: t('podium_diamond_cup'),
+        badge: t('podium_rank_1_badge'),
         color: '#38bdf8',
         gradient: 'linear-gradient(135deg, #0284c7, #38bdf8)',
         shadow: 'rgba(56, 189, 248, 0.45)',
@@ -14,8 +15,8 @@ function getPrizeDetails(rank) {
     case 2:
       return {
         icon: '🥇',
-        title: 'Золотая медаль!',
-        badge: '2 МЕСТО В ЛИГЕ НЕДЕЛИ',
+        title: t('podium_gold_medal'),
+        badge: t('podium_rank_2_badge'),
         color: '#eab308',
         gradient: 'linear-gradient(135deg, #ca8a04, #fde047)',
         shadow: 'rgba(234, 179, 8, 0.45)',
@@ -23,8 +24,8 @@ function getPrizeDetails(rank) {
     case 3:
       return {
         icon: '🥈',
-        title: 'Серебряная медаль!',
-        badge: '3 МЕСТО В ЛИГЕ НЕДЕЛИ',
+        title: t('podium_silver_medal'),
+        badge: t('podium_rank_3_badge'),
         color: '#94a3b8',
         gradient: 'linear-gradient(135deg, #64748b, #cbd5e1)',
         shadow: 'rgba(148, 163, 184, 0.45)',
@@ -33,8 +34,8 @@ function getPrizeDetails(rank) {
     default:
       return {
         icon: '🥉',
-        title: 'Бронзовая медаль!',
-        badge: '4 МЕСТО В ЛИГЕ НЕДЕЛИ',
+        title: t('podium_bronze_medal'),
+        badge: t('podium_rank_4_badge'),
         color: '#d97706',
         gradient: 'linear-gradient(135deg, #b45309, #fcd34d)',
         shadow: 'rgba(217, 119, 6, 0.45)',
@@ -116,18 +117,18 @@ function showPrizePodiumModal(rank = 4, xp = 0, onDismiss = () => {}) {
         ${info.badge}
       </div>
 
-      <h2 class="prize-congrats-title">🎉 Поздравляем!</h2>
+      <h2 class="prize-congrats-title">${t('podium_congrats_title')}</h2>
       <p class="prize-congrats-subtitle">
-        Вы заняли призовое место!
+        ${t('podium_congrats_subtitle')}
       </p>
 
       <div class="prize-rank-box">
         <div class="prize-rank-name">${info.title}</div>
-        <div class="prize-rank-desc">Топ-4 игроков недели</div>
+        <div class="prize-rank-desc">${t('podium_top_desc')}</div>
       </div>
 
       <button class="primary-button btn-green prize-continue-btn" id="prize-continue-btn">
-        Ура! Продолжить 🚀
+        ${t('podium_continue_btn')}
       </button>
     </div>
   `;
