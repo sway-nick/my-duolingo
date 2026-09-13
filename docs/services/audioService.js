@@ -915,9 +915,6 @@ function primeAudioForAutoplay() {
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
       }
-      const u = new SpeechSynthesisUtterance(' ');
-      u.volume = 0.01;
-      window.speechSynthesis.speak(u);
     } catch (e) {}
   }
 }
@@ -952,6 +949,45 @@ function stopAllAudio() {
 }
 
 /**
+ * Plays speech using Google Translate TTS audio fallback.
+ */
+function playGoogleTtsAudio(spokenText, langCode, onFinished) {
+  try {
+    const targetLang = langCode === 'uk' ? 'uk' : langCode === 'ru' ? 'ru' : langCode;
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(spokenText)}&tl=${encodeURIComponent(targetLang)}&client=tw-ob`;
+    const audio = getAutoplayAudio() || new Audio();
+    activeAutoplayAudio = audio;
+    audio.src = ttsUrl;
+    audio.currentTime = 0;
+
+    let finished = false;
+    const safeFinish = () => {
+      if (!finished) {
+        finished = true;
+        if (window.__activeSpeechTimer) {
+          clearTimeout(window.__activeSpeechTimer);
+          window.__activeSpeechTimer = null;
+        }
+        onFinished();
+      }
+    };
+
+    const maxMs = Math.max(3500, spokenText.length * 250);
+    window.__activeSpeechTimer = setTimeout(safeFinish, maxMs);
+
+    audio.onended = safeFinish;
+    audio.onerror = safeFinish;
+
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(() => safeFinish());
+    }
+  } catch (e) {
+    onFinished();
+  }
+}
+
+/**
  * Speaks arbitrary text in specified language (e.g. 'ru', 'uk', 'en') and returns a Promise that resolves ONLY when speech completely ends.
  */
 function speakTextInLangAsync(text, langCode = 'ru') {
@@ -972,6 +1008,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     // If there are multiple comma-separated variants, keep up to first 2 for clean cadence
     const parts = clean.split(/[;,]/).map(s => s.trim()).filter(Boolean);
     const spokenText = parts.slice(0, 2).join(', ');
+    if (!spokenText) return resolve();
 
     const fullLang = langCode === 'ru' ? 'ru-RU' : langCode === 'uk' ? 'uk-UA' : langCode;
     let resolved = false;
@@ -993,8 +1030,23 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       }
     };
 
-    // Primary & direct high-quality speech engine: Web Speech API
+    // Check available voices for matching language
+    let matchedVoice = null;
     if ('speechSynthesis' in window) {
+      try {
+        let availableVoices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+        if (availableVoices.length === 0 && cachedVoices.length > 0) {
+          availableVoices = cachedVoices;
+        }
+        matchedVoice = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
+        if (!matchedVoice) {
+          matchedVoice = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+        }
+      } catch (e) {}
+    }
+
+    // Primary: Web Speech API only if a real matching voice exists on device
+    if ('speechSynthesis' in window && matchedVoice) {
       try {
         if (window.speechSynthesis.paused) {
           window.speechSynthesis.resume();
@@ -1002,51 +1054,16 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
         const utterance = new SpeechSynthesisUtterance(spokenText);
         utterance.lang = fullLang;
+        utterance.voice = matchedVoice;
         utterance.rate = 0.88;
         utterance.pitch = 1.0;
 
-        try {
-          // Wait for voices to load on Android if they are not yet available
-          let availableVoices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
-          if (availableVoices.length === 0 && cachedVoices.length > 0) {
-            availableVoices = cachedVoices;
-          }
-          // If still empty, wait up to 600ms for voiceschanged on Android
-          // Use addEventListener to avoid overwriting the global onvoiceschanged handler
-          if (availableVoices.length === 0) {
-            await new Promise((r) => {
-              const t = setTimeout(r, 600);
-              const onChanged = () => {
-                clearTimeout(t);
-                cachedVoices = window.speechSynthesis.getVoices() || [];
-                window.speechSynthesis.removeEventListener('voiceschanged', onChanged);
-                r();
-              };
-              try {
-                window.speechSynthesis.addEventListener('voiceschanged', onChanged);
-              } catch (e) { clearTimeout(t); r(); }
-            });
-            availableVoices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : cachedVoices;
-          }
-
-          // Exact lang match first (e.g. ru-RU), then prefix match (e.g. ru)
-          let matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
-          if (!matched) {
-            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
-          }
-          // Assign voice only if found — if not found let the system default handle it
-          // (on Android: not assigning a voice is BETTER than assigning null)
-          if (matched) {
-            utterance.voice = matched;
-          }
-        } catch (e) {}
-
-        // Global reference to prevent Chrome garbage-collection bug
         window.__activeSpeechUtterance = utterance;
 
         utterance.onend = finish;
         utterance.onerror = () => {
-          finish();
+          // If speech synthesis fails, seamlessly fall back to Google TTS audio
+          playGoogleTtsAudio(spokenText, langCode, finish);
         };
 
         // iOS/Android keep-alive while speech synthesis runs
@@ -1056,44 +1073,21 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           }
         }, 200);
 
-        // More generous timeout: Russian words can be long
         const expectedMs = Math.max(4000, spokenText.length * 200);
-        window.__activeSpeechTimer = setTimeout(finish, expectedMs);
+        window.__activeSpeechTimer = setTimeout(() => {
+          // If timed out, finish
+          finish();
+        }, expectedMs);
 
         window.speechSynthesis.speak(utterance);
         return;
       } catch (e) {
-        console.warn('SpeechSynthesis invocation failed:', e);
+        console.warn('SpeechSynthesis invocation failed, using audio fallback:', e);
       }
     }
 
-    // Secondary fallback
-    try {
-      const ttsUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(spokenText)}&le=ru`;
-      const audio = getAutoplayAudio() || new Audio();
-      activeAutoplayAudio = audio;
-      audio.src = ttsUrl;
-      audio.currentTime = 0;
-
-      const fallbackTimer = setTimeout(finish, 4000);
-      window.__activeSpeechTimer = fallbackTimer;
-
-      audio.onended = () => {
-        clearTimeout(fallbackTimer);
-        finish();
-      };
-      audio.onerror = () => {
-        clearTimeout(fallbackTimer);
-        finish();
-      };
-
-      const p = audio.play();
-      if (p !== undefined) {
-        p.catch(() => finish());
-      }
-    } catch (e) {
-      finish();
-    }
+    // Secondary & primary reliable fallback: Google Translate TTS Audio
+    playGoogleTtsAudio(spokenText, langCode, finish);
   });
 }
 
