@@ -41,6 +41,7 @@ backend/src/config/config.local.js
 *.jks
 *.keystore
 google_play_assets/
+!google_play_assets/*.md
 android/app/release/
 android/app/build/
 android/build/
