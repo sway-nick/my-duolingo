@@ -2917,4 +2917,3 @@ export {
 };
 
 export { getWordTranslation, getWordNotes } from './i18n.js';
-export { getUserNotesLocal, saveUserNote };

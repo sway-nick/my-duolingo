@@ -8,9 +8,11 @@ const GUEST_WORD_LIMIT = 50;
 let currentUser = null;
 
 try {
-  const saved = localStorage.getItem(STORAGE_KEY_USER);
-  if (saved) {
-    currentUser = JSON.parse(saved);
+  if (typeof localStorage !== 'undefined') {
+    const saved = localStorage.getItem(STORAGE_KEY_USER);
+    if (saved) {
+      currentUser = JSON.parse(saved);
+    }
   }
 } catch (e) {
   console.warn('Failed to load user session from localStorage', e);
