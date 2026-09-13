@@ -1012,15 +1012,18 @@ function speakTextInLangAsync(text, langCode = 'ru') {
             availableVoices = cachedVoices;
           }
           // If still empty, wait up to 600ms for voiceschanged on Android
+          // Use addEventListener to avoid overwriting the global onvoiceschanged handler
           if (availableVoices.length === 0) {
             await new Promise((r) => {
               const t = setTimeout(r, 600);
+              const onChanged = () => {
+                clearTimeout(t);
+                cachedVoices = window.speechSynthesis.getVoices() || [];
+                window.speechSynthesis.removeEventListener('voiceschanged', onChanged);
+                r();
+              };
               try {
-                window.speechSynthesis.onvoiceschanged = () => {
-                  clearTimeout(t);
-                  cachedVoices = window.speechSynthesis.getVoices() || [];
-                  r();
-                };
+                window.speechSynthesis.addEventListener('voiceschanged', onChanged);
               } catch (e) { clearTimeout(t); r(); }
             });
             availableVoices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : cachedVoices;
