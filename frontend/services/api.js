@@ -1595,29 +1595,9 @@ function getQueueForCards(words, progress) {
 
   // Приоритет изучения: сначала слова с наибольшей частотностью Zipf
   base.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
-
-  const candidateMastered = words.filter((w) => {
-    const p = progress[w.id] || progress[String(w.id)];
-    return p && isWordMastered(p);
-  });
-
-  if (candidateMastered.length === 0) {
-    return base;
-  }
-
-  candidateMastered.sort((a, b) => {
-    const pA = progress[a.id] || progress[String(a.id)];
-    const pB = progress[b.id] || progress[String(b.id)];
-    const tA = pA ? pA.lastPracticed || 0 : 0;
-    const tB = pB ? pB.lastPracticed || 0 : 0;
-    return tA - tB;
-  });
-
-  const injectCount = Math.max(1, Math.round(base.length * 0.15));
-  const injected = candidateMastered.slice(0, injectCount);
-
-  return [...base, ...injected];
+  return base;
 }
+
 
 function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
   // 1. Up to 10 words actively selected in Cards
