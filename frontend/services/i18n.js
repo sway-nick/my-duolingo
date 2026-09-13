@@ -120,6 +120,7 @@ const translations = {
     // Settings
     settings_logout: "Выйти",
     settings_login: "Войти",
+    settings_login_sub: "Войдите для синхронизации прогресса",
     settings_theme: "🎨 Тема",
     settings_theme_light: "Светлая",
     settings_theme_dark: "Тёмная",
@@ -402,6 +403,7 @@ const translations = {
     // Settings
     settings_logout: "Log Out",
     settings_login: "Log In",
+    settings_login_sub: "Log in to sync progress",
     settings_theme: "🎨 Theme",
     settings_theme_light: "Light",
     settings_theme_dark: "Dark",
@@ -3361,5 +3363,445 @@ export function getCategoryDetails(rawCategory) {
       ? `Слова з категорії «${rawCategory}»`
       : `Words from "${rawCategory}" category`;
   return { title: rawCategory || 'Category', desc: fallbackDesc };
+}
+
+const UK_VOICE_MODAL_I18N = {
+  ru: {
+    title: "Британская озвучка",
+    desc: "Для использования британского акцента необходимо загрузить файлы озвучки (Базовая лексика и Неправильные глаголы, ~23 МБ). Скачать сейчас?",
+    downloadBtn: "📥 Скачать (~23 МБ)",
+    cancelBtn: "Отмена",
+    retryBtn: "Повторить",
+    downloading: "Загрузка аудиофайлов..."
+  },
+  uk: {
+    title: "Британське озвучення",
+    desc: "Для використання британського акценту необхідно завантажити файли озвучення (Базова лексика та Неправильні дієслова, ~23 МБ). Завантажити зараз?",
+    downloadBtn: "📥 Завантажити (~23 МБ)",
+    cancelBtn: "Скасувати",
+    retryBtn: "Повторити",
+    downloading: "Завантаження аудіофайлів..."
+  },
+  en: {
+    title: "British Voice",
+    desc: "To use the British accent, you need to download the voice files (Elementary & Irregular Verbs, ~23 MB). Download now?",
+    downloadBtn: "📥 Download (~23 MB)",
+    cancelBtn: "Cancel",
+    retryBtn: "Retry",
+    downloading: "Downloading audio files..."
+  },
+  de: {
+    title: "Britische Aussprache",
+    desc: "Um den britischen Akzent zu nutzen, müssen Sie die Sprachdateien herunterladen (Grundwortschatz & Unregelmäßige Verben, ~23 MB). Jetzt herunterladen?",
+    downloadBtn: "📥 Herunterladen (~23 MB)",
+    cancelBtn: "Abbrechen",
+    retryBtn: "Wiederholen",
+    downloading: "Audiodateien werden heruntergeladen..."
+  },
+  es: {
+    title: "Voz británica",
+    desc: "Para usar el acento británico, debes descargar los archivos de voz (Vocabulario básico y Verbos irregulares, ~23 MB). ¿Descargar ahora?",
+    downloadBtn: "📥 Descargar (~23 MB)",
+    cancelBtn: "Cancelar",
+    retryBtn: "Reintentar",
+    downloading: "Descargando archivos de audio..."
+  },
+  fr: {
+    title: "Voix britannique",
+    desc: "Pour utiliser l'accent britannique, vous devez télécharger les fichiers vocaux (Vocabulaire de base et Verbes irréguliers, ~23 Mo). Télécharger maintenant ?",
+    downloadBtn: "📥 Télécharger (~23 Mo)",
+    cancelBtn: "Annuler",
+    retryBtn: "Réessayer",
+    downloading: "Téléchargement des fichiers audio..."
+  },
+  pl: {
+    title: "Brytyjski lektor",
+    desc: "Aby używać brytyjskiego akcentu, musisz pobrać pliki dźwiękowe (Podstawowe słownictwo i Czasowniki nieregularne, ~23 MB). Pobrać teraz?",
+    downloadBtn: "📥 Pobierz (~23 MB)",
+    cancelBtn: "Anuluj",
+    retryBtn: "Ponów",
+    downloading: "Pobieranie plików dźwiękowych..."
+  },
+  tr: {
+    title: "İngiliz Telaffuzu",
+    desc: "İngiliz aksanını kullanmak için ses dosyalarını indirmeniz gerekir (Temel Kelimeler ve Düzensiz Fiiller, ~23 MB). Şimdi indirilsin mi?",
+    downloadBtn: "📥 İndir (~23 MB)",
+    cancelBtn: "İptal",
+    retryBtn: "Yeniden dene",
+    downloading: "Ses dosyaları indiriliyor..."
+  },
+  it: {
+    title: "Voce britannica",
+    desc: "Per utilizzare l'accento britannico, è necessario scaricare i file vocali (Vocabolario di base e Verbi irregolari, ~23 MB). Scaricare ora?",
+    downloadBtn: "📥 Scarica (~23 MB)",
+    cancelBtn: "Annulla",
+    retryBtn: "Riprova",
+    downloading: "Download dei file audio in corso..."
+  },
+  ro: {
+    title: "Voce britanică",
+    desc: "Pentru a folosi accentul britanic, trebuie să descărcați fișierele audio (Vocabular de bază și Verbe neregulate, ~23 MB). Descărcați acum?",
+    downloadBtn: "📥 Descărcare (~23 MB)",
+    cancelBtn: "Anulare",
+    retryBtn: "Reîncearcă",
+    downloading: "Se descarcă fișierele audio..."
+  },
+  bg: {
+    title: "Британски глас",
+    desc: "За да използвате британския акцент, трябва да изтеглите аудио файловете (Основен речник и Неправилни глаголи, ~23 MB). Изтегляне сега?",
+    downloadBtn: "📥 Изтегляне (~23 MB)",
+    cancelBtn: "Отказ",
+    retryBtn: "Повторен опит",
+    downloading: "Изтегляне на аудио файлове..."
+  },
+  hu: {
+    title: "Brit kiejtés",
+    desc: "A brit kiejtés használatához le kell töltenie a hangfájlokat (Alapszókincs és Rendhagyó igék, ~23 MB). Letölti most?",
+    downloadBtn: "📥 Letöltés (~23 MB)",
+    cancelBtn: "Mégse",
+    retryBtn: "Újra",
+    downloading: "Hangfájlok letöltése..."
+  },
+  el: {
+    title: "Βρετανική προφορά",
+    desc: "Για να χρησιμοποιήσετε τη βρετανική προφορά, πρέπει να κατεβάσετε τα αρχεία ήχου (Βασικό λεξιλόγιο & Ανώμαλα ρήματα, ~23 MB). Λήψη τώρα;",
+    downloadBtn: "📥 Λήψη (~23 MB)",
+    cancelBtn: "Άκυρο",
+    retryBtn: "Δοκιμάστε ξανά",
+    downloading: "Λήψη αρχείων ήχου..."
+  },
+  da: {
+    title: "Britisk stemme",
+    desc: "For at bruge britisk accent skal du downloade lydfilerne (Grundlæggende ordforråd og Uregelmæssige verber, ~23 MB). Hent nu?",
+    downloadBtn: "📥 Hent (~23 MB)",
+    cancelBtn: "Annuller",
+    retryBtn: "Prøv igen",
+    downloading: "Downloader lydfiler..."
+  },
+  ga: {
+    title: "Guth na Breataine",
+    desc: "Chun an blas Briotanach a úsáid, ní mór duit na comhaid gutha a íoslódáil (Bunfhoclóir & Briathra Neamhrialta, ~23 MB). Íoslódáil anois?",
+    downloadBtn: "📥 Íoslódáil (~23 MB)",
+    cancelBtn: "Cealaigh",
+    retryBtn: "Bain triail eile as",
+    downloading: "Comhaid fuaime á n-íoslódáil..."
+  },
+  lv: {
+    title: "Britu balss",
+    desc: "Lai izmantotu britu akcentu, nepieciešams lejupielādēt balss failus (Pamatvārdi un Neregulārie darbības vārdi, ~23 MB). Lejupielādēt tagad?",
+    downloadBtn: "📥 Lejupielādēt (~23 MB)",
+    cancelBtn: "Atcelt",
+    retryBtn: "Mēģināt vēlreiz",
+    downloading: "Lejupielādē audio failus..."
+  },
+  lt: {
+    title: "Britų balsas",
+    desc: "Norėdami naudoti britų akcentą, turite atsisiųsti balso failus (Pagrindinis žodynas ir Netaisyklingi veiksmažodžiai, ~23 MB). Atsisiųsti dabar?",
+    downloadBtn: "📥 Atsisiųsti (~23 MB)",
+    cancelBtn: "Atšaukti",
+    retryBtn: "Bandyti dar kartą",
+    downloading: "Atsisiunčiami garso failai..."
+  },
+  pt: {
+    title: "Voz britânica",
+    desc: "Para usar o sotaque britânico, você precisa baixar os arquivos de voz (Vocabulário básico e Verbos irregulares, ~23 MB). Baixar agora?",
+    downloadBtn: "📥 Baixar (~23 MB)",
+    cancelBtn: "Cancelar",
+    retryBtn: "Tentar novamente",
+    downloading: "Baixando arquivos de áudio..."
+  },
+  sk: {
+    title: "Britský hlas",
+    desc: "Pre britský prízvuk je potrebné stiahnuť zvukové súbory (Základná slovná zásoba a Nepravidelné slovesá, ~23 MB). Stiahnuť teraz?",
+    downloadBtn: "📥 Stiahnuť (~23 MB)",
+    cancelBtn: "Zrušiť",
+    retryBtn: "Skúsiť znova",
+    downloading: "Sťahujú sa zvukové súbory..."
+  },
+  sl: {
+    title: "Britanski glas",
+    desc: "Za uporabo britanskega naglasa morate prenesti zvočne datoteke (Osnovno besedišče in Nepravilni glagoli, ~23 MB). Prenesi zdaj?",
+    downloadBtn: "📥 Prenesi (~23 MB)",
+    cancelBtn: "Prekliči",
+    retryBtn: "Poskusi znova",
+    downloading: "Prenašanje zvočnih datotek..."
+  },
+  fi: {
+    title: "Brittiläinen ääni",
+    desc: "Brittiläisen aksentin käyttämiseksi sinun on ladattava äänitiedostot (Perussanasto ja Epäsäännölliset verbit, ~23 Mt). Lataa nyt?",
+    downloadBtn: "📥 Lataa (~23 Mt)",
+    cancelBtn: "Peruuta",
+    retryBtn: "Yritä uudelleen",
+    downloading: "Ladataan äänitiedostoja..."
+  },
+  hr: {
+    title: "Britanski glas",
+    desc: "Za korištenje britanskog naglaska potrebno je preuzeti audio datoteke (Osnovni vokabular i Nepravilni glagoli, ~23 MB). Preuzeti sada?",
+    downloadBtn: "📥 Preuzmi (~23 MB)",
+    cancelBtn: "Odustani",
+    retryBtn: "Pokušaj ponovno",
+    downloading: "Preuzimanje audio datoteka..."
+  },
+  cs: {
+    title: "Britský hlas",
+    desc: "Pro použití britského přízvuku je potřeba stáhnout hlasové soubory (Základní slovní zásoba a Nepravidelná slovesa, ~23 MB). Stáhnout nyní?",
+    downloadBtn: "📥 Stáhnout (~23 MB)",
+    cancelBtn: "Zrušit",
+    retryBtn: "Zkusit znovu",
+    downloading: "Stahování zvukových souborů..."
+  },
+  sv: {
+    title: "Brittisk röst",
+    desc: "För att använda brittisk accent behöver du ladda ner röstfilerna (Grundläggande ordförråd och Oregelbundna verb, ~23 MB). Ladda ner nu?",
+    downloadBtn: "📥 Ladda ner (~23 MB)",
+    cancelBtn: "Avbryt",
+    retryBtn: "Försök igen",
+    downloading: "Laddar ner ljudfiler..."
+  },
+  et: {
+    title: "Briti hääl",
+    desc: "Briti aktsendi kasutamiseks peate alla laadima helifailid (Põhisõnavara ja Ebareeglipärased tegusõnad, ~23 MB). Laadi alla kohe?",
+    downloadBtn: "📥 Laadi alla (~23 MB)",
+    cancelBtn: "Loobu",
+    retryBtn: "Proovi uuesti",
+    downloading: "Helifailide allalaadimine..."
+  },
+  mt: {
+    title: "Vuċi Brittanika",
+    desc: "Biex tuża l-aċċent Brittaniku, trid tniżżel il-fajls tal-vuċi (Vokabolarju Bażiku u Briathra Irregolari, ~23 MB). Niżżel issa?",
+    downloadBtn: "📥 Niżżel (~23 MB)",
+    cancelBtn: "Ikkanċella",
+    retryBtn: "Erġa' pprova",
+    downloading: "Qed jitniżżlu l-fajls tal-awdjo..."
+  }
+};
+
+const CAT_VOICE_MODAL_I18N = {
+  ru: {
+    title: "Загрузка озвучки",
+    formatDesc: (t, c, s) => `Для тренировки категории «<strong>${t}</strong>» требуется загрузить озвучку (${c} слов, ~${s} МБ). Скачать сейчас?`,
+    downloadBtn: (s) => `📥 Скачать (~${s} МБ)`,
+    cancelBtn: "Отмена",
+    retryBtn: "Повторить",
+    downloading: "Загрузка аудиофайлов..."
+  },
+  uk: {
+    title: "Завантаження озвучення",
+    formatDesc: (t, c, s) => `Для тренування категорії «<strong>${t}</strong>» потрібно завантажити озвучення (${c} слів, ~${s} МБ). Завантажити зараз?`,
+    downloadBtn: (s) => `📥 Завантажити (~${s} МБ)`,
+    cancelBtn: "Скасувати",
+    retryBtn: "Повторити",
+    downloading: "Завантаження аудіофайлів..."
+  },
+  en: {
+    title: "Download Audio",
+    formatDesc: (t, c, s) => `To practice "<strong>${t}</strong>", you need to download audio files (${c} words, ~${s} MB). Download now?`,
+    downloadBtn: (s) => `📥 Download (~${s} MB)`,
+    cancelBtn: "Cancel",
+    retryBtn: "Retry",
+    downloading: "Downloading audio files..."
+  },
+  de: {
+    title: "Audio herunterladen",
+    formatDesc: (t, c, s) => `Um die Kategorie „<strong>${t}</strong>“ zu trainieren, müssen Audiodateien heruntergeladen werden (${c} Wörter, ~${s} MB). Jetzt herunterladen?`,
+    downloadBtn: (s) => `📥 Herunterladen (~${s} MB)`,
+    cancelBtn: "Abbrechen",
+    retryBtn: "Wiederholen",
+    downloading: "Audiodateien werden heruntergeladen..."
+  },
+  es: {
+    title: "Descargar audio",
+    formatDesc: (t, c, s) => `Para practicar la categoría "<strong>${t}</strong>", debes descargar los archivos de audio (${c} palabras, ~${s} MB). ¿Descargar ahora?`,
+    downloadBtn: (s) => `📥 Descargar (~${s} MB)`,
+    cancelBtn: "Cancelar",
+    retryBtn: "Reintentar",
+    downloading: "Descargando archivos de audio..."
+  },
+  fr: {
+    title: "Télécharger l'audio",
+    formatDesc: (t, c, s) => `Pour pratiquer la catégorie « <strong>${t}</strong> », vous devez télécharger les fichiers audio (${c} mots, ~${s} Mo). Télécharger maintenant ?`,
+    downloadBtn: (s) => `📥 Télécharger (~${s} Mo)`,
+    cancelBtn: "Annuler",
+    retryBtn: "Réessayer",
+    downloading: "Téléchargement des fichiers audio..."
+  },
+  pl: {
+    title: "Pobieranie dźwięku",
+    formatDesc: (t, c, s) => `Aby ćwiczyć kategorię „<strong>${t}</strong>”, należy pobrać pliki dźwiękowe (${c} słów, ~${s} MB). Pobrać teraz?`,
+    downloadBtn: (s) => `📥 Pobierz (~${s} MB)`,
+    cancelBtn: "Anuluj",
+    retryBtn: "Ponów",
+    downloading: "Pobieranie plików dźwiękowych..."
+  },
+  tr: {
+    title: "Sesi İndir",
+    formatDesc: (t, c, s) => `"<strong>${t}</strong>" kategorisini çalışmak için ses dosyalarını indirmeniz gerekir (${c} kelime, ~${s} MB). Şimdi indirilsin mi?`,
+    downloadBtn: (s) => `📥 İndir (~${s} MB)`,
+    cancelBtn: "İptal",
+    retryBtn: "Yeniden dene",
+    downloading: "Ses dosyaları indiriliyor..."
+  },
+  it: {
+    title: "Scarica audio",
+    formatDesc: (t, c, s) => `Per allenare la categoria "<strong>${t}</strong>", è necessario scaricare i file audio (${c} parole, ~${s} MB). Scaricare ora?`,
+    downloadBtn: (s) => `📥 Scarica (~${s} MB)`,
+    cancelBtn: "Annulla",
+    retryBtn: "Riprova",
+    downloading: "Download dei file audio in corso..."
+  },
+  ro: {
+    title: "Descărcare audio",
+    formatDesc: (t, c, s) => `Pentru categoria "<strong>${t}</strong>", trebuie să descărcați fișierele audio (${c} cuvinte, ~${s} MB). Descărcați acum?`,
+    downloadBtn: (s) => `📥 Descărcare (~${s} MB)`,
+    cancelBtn: "Anulare",
+    retryBtn: "Reîncearcă",
+    downloading: "Se descarcă fișierele audio..."
+  },
+  bg: {
+    title: "Изтегляне на аудио",
+    formatDesc: (t, c, s) => `За категория „<strong>${t}</strong>“ трябва да изтеглите аудио файлове (${c} думи, ~${s} MB). Изтегляне сега?`,
+    downloadBtn: (s) => `📥 Изтегляне (~${s} MB)`,
+    cancelBtn: "Отказ",
+    retryBtn: "Повторен опит",
+    downloading: "Изтегляне на аудио файлове..."
+  },
+  hu: {
+    title: "Hang letöltése",
+    formatDesc: (t, c, s) => `A(z) „<strong>${t}</strong>” kategória gyakorlásához le kell tölteni a hangfájlokat (${c} szó, ~${s} MB). Letölti most?`,
+    downloadBtn: (s) => `📥 Letöltés (~${s} MB)`,
+    cancelBtn: "Mégse",
+    retryBtn: "Újra",
+    downloading: "Hangfájlok letöltése..."
+  },
+  el: {
+    title: "Λήψη ήχου",
+    formatDesc: (t, c, s) => `Για την κατηγορία «<strong>${t}</strong>», πρέπει να κατεβάσετε αρχεία ήχου (${c} λέξεις, ~${s} MB). Λήψη τώρα;`,
+    downloadBtn: (s) => `📥 Λήψη (~${s} MB)`,
+    cancelBtn: "Άκυρο",
+    retryBtn: "Δοκιμάστε ξανά",
+    downloading: "Λήψη αρχείων ήχου..."
+  },
+  da: {
+    title: "Download lyd",
+    formatDesc: (t, c, s) => `For at øve kategorien "<strong>${t}</strong>", skal du downloade lydfiler (${c} ord, ~${s} MB). Hent nu?`,
+    downloadBtn: (s) => `📥 Hent (~${s} MB)`,
+    cancelBtn: "Annuller",
+    retryBtn: "Prøv igen",
+    downloading: "Downloader lydfiler..."
+  },
+  ga: {
+    title: "Íoslódáil Fuaim",
+    formatDesc: (t, c, s) => `Chun an catagóir "<strong>${t}</strong>" a chleachtadh, ní mór duit comhaid fuaime a íoslódáil (${c} focal, ~${s} MB). Íoslódáil anois?`,
+    downloadBtn: (s) => `📥 Íoslódáil (~${s} MB)`,
+    cancelBtn: "Cealaigh",
+    retryBtn: "Bain triail eile as",
+    downloading: "Comhaid fuaime á n-íoslódáil..."
+  },
+  lv: {
+    title: "Lejupielādēt audio",
+    formatDesc: (t, c, s) => `Lai trenētu kategoriju „<strong>${t}</strong>”, nepieciešams lejupielādēt audio failus (${c} vārdi, ~${s} MB). Lejupielādēt tagad?`,
+    downloadBtn: (s) => `📥 Lejupielādēt (~${s} MB)`,
+    cancelBtn: "Atcelt",
+    retryBtn: "Mēģināt vēlreiz",
+    downloading: "Lejupielādē audio failus..."
+  },
+  lt: {
+    title: "Atsisiųsti garsą",
+    formatDesc: (t, c, s) => `Norint treniruotis kategoriją „<strong>${t}</strong>“, reikia atsisiųsti garso failus (${c} žodžiai, ~${s} MB). Atsisiųsti dabar?`,
+    downloadBtn: (s) => `📥 Atsisiųsti (~${s} MB)`,
+    cancelBtn: "Atšaukti",
+    retryBtn: "Bandyti dar kartą",
+    downloading: "Atsisiunčiami garso failai..."
+  },
+  pt: {
+    title: "Baixar áudio",
+    formatDesc: (t, c, s) => `Para praticar a categoria "<strong>${t}</strong>", é necessário baixar os arquivos de áudio (${c} palavras, ~${s} MB). Baixar agora?`,
+    downloadBtn: (s) => `📥 Baixar (~${s} MB)`,
+    cancelBtn: "Cancelar",
+    retryBtn: "Tentar novamente",
+    downloading: "Baixando arquivos de áudio..."
+  },
+  sk: {
+    title: "Stiahnuť zvuk",
+    formatDesc: (t, c, s) => `Pre precvičovanie kategórie „<strong>${t}</strong>“ je potrebné stiahnuť zvukové súbory (${c} slov, ~${s} MB). Stiahnuť teraz?`,
+    downloadBtn: (s) => `📥 Stiahnuť (~${s} MB)`,
+    cancelBtn: "Zrušiť",
+    retryBtn: "Skúsiť znova",
+    downloading: "Sťahujú sa zvukové súbory..."
+  },
+  sl: {
+    title: "Prenos zvoka",
+    formatDesc: (t, c, s) => `Za vadbo kategorije „<strong>${t}</strong>“ morate prenesti zvočne datoteke (${c} besed, ~${s} MB). Prenesi zdaj?`,
+    downloadBtn: (s) => `📥 Prenesi (~${s} MB)`,
+    cancelBtn: "Prekliči",
+    retryBtn: "Poskusi znova",
+    downloading: "Prenašanje zvočnih datotek..."
+  },
+  fi: {
+    title: "Lataa ääni",
+    formatDesc: (t, c, s) => `Harjoitellaksesi kategoriaa ”<strong>${t}</strong>” sinun on ladattava äänitiedostot (${c} sanaa, ~${s} Mt). Lataa nyt?`,
+    downloadBtn: (s) => `📥 Lataa (~${s} Mt)`,
+    cancelBtn: "Peruuta",
+    retryBtn: "Yritä uudelleen",
+    downloading: "Ladataan äänitiedostoja..."
+  },
+  hr: {
+    title: "Preuzimanje zvuka",
+    formatDesc: (t, c, s) => `Za vježbanje kategorije „<strong>${t}</strong>“ potrebno je preuzeti audio datoteke (${c} riječi, ~${s} MB). Preuzeti sada?`,
+    downloadBtn: (s) => `📥 Preuzmi (~${s} MB)`,
+    cancelBtn: "Odustani",
+    retryBtn: "Pokušaj ponovno",
+    downloading: "Preuzimanje audio datoteka..."
+  },
+  cs: {
+    title: "Stáhnout zvuk",
+    formatDesc: (t, c, s) => `Pro procvičování kategorie „<strong>${t}</strong>“ je třeba stáhnout zvukové soubory (${c} slov, ~${s} MB). Stáhnout nyní?`,
+    downloadBtn: (s) => `📥 Stáhnout (~${s} MB)`,
+    cancelBtn: "Zrušit",
+    retryBtn: "Zkusit znovu",
+    downloading: "Stahování zvukových souborů..."
+  },
+  sv: {
+    title: "Ladda ner ljud",
+    formatDesc: (t, c, s) => `För att öva på kategorin "<strong>${t}</strong>" behöver du ladda ner ljudfilerna (${c} ord, ~${s} MB). Ladda ner nu?`,
+    downloadBtn: (s) => `📥 Ladda ner (~${s} MB)`,
+    cancelBtn: "Avbryt",
+    retryBtn: "Försök igen",
+    downloading: "Laddar ner ljudfiler..."
+  },
+  et: {
+    title: "Laadi heli alla",
+    formatDesc: (t, c, s) => `Kategooria „<strong>${t}</strong>“ harjutamiseks peate alla laadima helifailid (${c} sõna, ~${s} MB). Laadi alla kohe?`,
+    downloadBtn: (s) => `📥 Laadi alla (~${s} MB)`,
+    cancelBtn: "Loobu",
+    retryBtn: "Proovi uuesti",
+    downloading: "Helifailide allalaadimine..."
+  },
+  mt: {
+    title: "Niżżel l-Awdjo",
+    formatDesc: (t, c, s) => `Biex tipprattika l-kategorija "<strong>${t}</strong>", trid tniżżel il-fajls tal-awdjo (${c} kelma, ~${s} MB). Niżżel issa?`,
+    downloadBtn: (s) => `📥 Niżżel (~${s} MB)`,
+    cancelBtn: "Ikkanċella",
+    retryBtn: "Erġa' pprova",
+    downloading: "Qed jitniżżlu l-fajls tal-awdjo..."
+  }
+};
+
+export function getUkVoiceModalStrings() {
+  const lang = getInterfaceLanguage();
+  return UK_VOICE_MODAL_I18N[lang] || UK_VOICE_MODAL_I18N['en'] || UK_VOICE_MODAL_I18N['ru'];
+}
+
+export function getCategoryVoiceModalStrings(categoryTitle, count, sizeMb) {
+  const lang = getInterfaceLanguage();
+  const entry = CAT_VOICE_MODAL_I18N[lang] || CAT_VOICE_MODAL_I18N['en'] || CAT_VOICE_MODAL_I18N['ru'];
+  return {
+    title: entry.title,
+    desc: entry.formatDesc(categoryTitle, count, sizeMb),
+    downloadBtn: entry.downloadBtn(sizeMb),
+    cancelBtn: entry.cancelBtn,
+    retryBtn: entry.retryBtn,
+    downloading: entry.downloading
+  };
 }
 

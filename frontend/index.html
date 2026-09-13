@@ -139,7 +139,7 @@
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=215.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=215.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=215.0';
-      import { t, getInterfaceLanguage, getCategoryDetails } from './services/i18n.js?v=215.0';
+      import { t, getInterfaceLanguage, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=215.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=215.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=215.0';
       import { renderSettingsView } from './components/settings/SettingsView.js?v=215.0';
@@ -1176,8 +1176,8 @@
                     (w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat)
                   );
                   const count = catWords.length;
-                  const lang = getInterfaceLanguage();
                   const sizeMb = Math.max(1, Math.round((count * 8) / 1024));
+                  const strings = getCategoryVoiceModalStrings(details.title, count, sizeMb);
 
                   const modal = document.createElement('div');
                   modal.className = 'modal-overlay';
@@ -1186,14 +1186,10 @@
                     <div class="modal-content" style="text-align: center; max-width: 350px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
                       <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">📥</div>
                       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
-                        ${lang === 'ru' ? 'Загрузка озвучки' : lang === 'uk' ? 'Завантаження озвучення' : 'Download Audio'}
+                        ${strings.title}
                       </h3>
                       <p id="cat-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
-                        ${lang === 'ru'
-                          ? `Для тренировки категории «<strong>${details.title}</strong>» требуется загрузить озвучку (${count} ${t('words')}, ~${sizeMb} МБ). Скачать сейчас?`
-                          : lang === 'uk'
-                          ? `Для тренування категорії «<strong>${details.title}</strong>» потрібно завантажити озвучення (${count} ${t('words')}, ~${sizeMb} МБ). Завантажити зараз?`
-                          : `To practice "<strong>${details.title}</strong>", download audio files (${count} ${t('words')}, ~${sizeMb} MB). Download now?`}
+                        ${strings.desc}
                       </p>
                       <div id="cat-progress-wrap" style="display: none; margin-bottom: 16px;">
                         <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
@@ -1203,10 +1199,10 @@
                       </div>
                       <div style="display: flex; flex-direction: column; gap: 8px;">
                         <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
-                          ${lang === 'ru' ? `📥 Скачать (~${sizeMb} МБ)` : lang === 'uk' ? `📥 Завантажити (~${sizeMb} МБ)` : `📥 Download (~${sizeMb} MB)`}
+                          ${strings.downloadBtn}
                         </button>
                         <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%;">
-                          ${lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel'}
+                          ${strings.cancelBtn}
                         </button>
                       </div>
                     </div>
@@ -1228,7 +1224,7 @@
                     downloadBtn.disabled = true;
                     cancelBtn.style.display = 'none';
                     progressWrap.style.display = 'block';
-                    if (descEl) descEl.textContent = lang === 'ru' ? 'Загрузка аудиофайлов...' : lang === 'uk' ? 'Завантаження аудіофайлів...' : 'Downloading audio files...';
+                    if (descEl) descEl.textContent = strings.downloading;
                     try {
                       await downloadCategoryVoicePack(currentAccent, chosenCat, catWords, (percent) => {
                         if (progressBar) progressBar.style.width = `${percent}%`;
@@ -1249,7 +1245,7 @@
                       console.warn('Category voice download failed:', err);
                       downloadBtn.disabled = false;
                       cancelBtn.style.display = 'block';
-                      downloadBtn.textContent = lang === 'ru' ? 'Повторить' : 'Retry';
+                      downloadBtn.textContent = strings.retryBtn;
                     }
                   });
                   return;

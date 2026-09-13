@@ -4,7 +4,7 @@ import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
 import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isVoicePackDownloaded, downloadVoicePack } from '../../services/audioService.js?v=200.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
+import { t, getInterfaceLanguage, getUkVoiceModalStrings } from '../../services/i18n.js?v=200.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
@@ -312,8 +312,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         return;
       }
 
-      // Show UK base voice download modal
-      const lang = getInterfaceLanguage();
+      // Show UK base voice download modal (localized into user's language)
+      const strings = getUkVoiceModalStrings();
       const modal = document.createElement('div');
       modal.className = 'modal-overlay';
       modal.id = 'uk-voice-download-modal';
@@ -321,14 +321,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <div class="modal-content" style="text-align: center; max-width: 350px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
           <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">🇬🇧</div>
           <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
-            ${lang === 'ru' ? 'Британская озвучка' : lang === 'uk' ? 'Британське озвучення' : 'British Voice'}
+            ${strings.title}
           </h3>
           <p id="uk-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
-            ${lang === 'ru'
-              ? 'Для использования британского акцента необходимо загрузить файлы озвучки (Базовая лексика и Неправильные глаголы, ~23 МБ). Скачать сейчас?'
-              : lang === 'uk'
-              ? 'Для використання британського акценту необхідно завантажити файли озвучення (Базова лексика та Неправильні дієслова, ~23 МБ). Завантажити зараз?'
-              : 'To use the British accent, download voice files (Elementary & Irregular Verbs, ~23 MB). Download now?'}
+            ${strings.desc}
           </p>
           <div id="uk-progress-wrap" style="display: none; margin-bottom: 16px;">
             <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
@@ -338,10 +334,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <button class="primary-button btn-green" id="uk-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
-              ${lang === 'ru' ? '📥 Скачать (~23 МБ)' : lang === 'uk' ? '📥 Завантажити (~23 МБ)' : '📥 Download (~23 MB)'}
+              ${strings.downloadBtn}
             </button>
             <button class="secondary-button" id="uk-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%;">
-              ${lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel'}
+              ${strings.cancelBtn}
             </button>
           </div>
         </div>
@@ -363,7 +359,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         downloadBtn.disabled = true;
         cancelBtn.style.display = 'none';
         progressWrap.style.display = 'block';
-        if (descEl) descEl.textContent = lang === 'ru' ? 'Загрузка аудиофайлов...' : lang === 'uk' ? 'Завантаження аудіофайлів...' : 'Downloading audio files...';
+        if (descEl) descEl.textContent = strings.downloading;
         try {
           const wordsRes = await getWords(false);
           const words = (wordsRes && wordsRes.data) || [];
@@ -389,7 +385,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           console.warn('UK voice download failed:', err);
           downloadBtn.disabled = false;
           cancelBtn.style.display = 'block';
-          downloadBtn.textContent = lang === 'ru' ? 'Повторить' : 'Retry';
+          downloadBtn.textContent = strings.retryBtn;
         }
       });
     });
