@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings, getWords } from '../../services/api.
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=200.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=200.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isVoicePackDownloaded, downloadVoicePack } from '../../services/audioService.js?v=200.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
@@ -301,12 +301,97 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   updateVoiceButtons();
 
   if (ukVoiceBtn && usVoiceBtn) {
-    ukVoiceBtn.addEventListener('click', () => {
-      currentAccent = 'uk';
-      setSavedVoiceAccent('uk');
-      updateVoiceButtons();
-      speakWord('Hello', null, 'en-GB', 'uk', true);
-      triggerAutoSave();
+    ukVoiceBtn.addEventListener('click', async () => {
+      const isUkBaseDownloaded = isVoicePackDownloaded('uk_base');
+      if (isUkBaseDownloaded) {
+        currentAccent = 'uk';
+        setSavedVoiceAccent('uk');
+        updateVoiceButtons();
+        speakWord('Hello', null, 'en-GB', 'uk', true);
+        triggerAutoSave();
+        return;
+      }
+
+      // Show UK base voice download modal
+      const lang = getInterfaceLanguage();
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.id = 'uk-voice-download-modal';
+      modal.innerHTML = `
+        <div class="modal-content" style="text-align: center; max-width: 350px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
+          <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">🇬🇧</div>
+          <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
+            ${lang === 'ru' ? 'Британская озвучка' : lang === 'uk' ? 'Британське озвучення' : 'British Voice'}
+          </h3>
+          <p id="uk-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
+            ${lang === 'ru'
+              ? 'Для использования британского акцента необходимо загрузить файлы озвучки (Базовая лексика и Неправильные глаголы, ~23 МБ). Скачать сейчас?'
+              : lang === 'uk'
+              ? 'Для використання британського акценту необхідно завантажити файли озвучення (Базова лексика та Неправильні дієслова, ~23 МБ). Завантажити зараз?'
+              : 'To use the British accent, download voice files (Elementary & Irregular Verbs, ~23 MB). Download now?'}
+          </p>
+          <div id="uk-progress-wrap" style="display: none; margin-bottom: 16px;">
+            <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
+              <div id="uk-progress-bar" style="background: var(--btn-green-bg, #22c55e); height: 100%; width: 0%; transition: width 0.15s ease;"></div>
+            </div>
+            <span id="uk-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="primary-button btn-green" id="uk-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
+              ${lang === 'ru' ? '📥 Скачать (~23 МБ)' : lang === 'uk' ? '📥 Завантажити (~23 МБ)' : '📥 Download (~23 MB)'}
+            </button>
+            <button class="secondary-button" id="uk-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%;">
+              ${lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel'}
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      const downloadBtn = modal.querySelector('#uk-modal-download-btn');
+      const cancelBtn = modal.querySelector('#uk-modal-cancel-btn');
+      const progressWrap = modal.querySelector('#uk-progress-wrap');
+      const progressBar = modal.querySelector('#uk-progress-bar');
+      const progressText = modal.querySelector('#uk-progress-text');
+      const descEl = modal.querySelector('#uk-modal-desc');
+
+      cancelBtn.addEventListener('click', () => {
+        modal.remove();
+      });
+
+      downloadBtn.addEventListener('click', async () => {
+        downloadBtn.disabled = true;
+        cancelBtn.style.display = 'none';
+        progressWrap.style.display = 'block';
+        if (descEl) descEl.textContent = lang === 'ru' ? 'Загрузка аудиофайлов...' : lang === 'uk' ? 'Завантаження аудіофайлів...' : 'Downloading audio files...';
+        try {
+          const wordsRes = await getWords(false);
+          const words = (wordsRes && wordsRes.data) || [];
+          const baseWords = words.filter((w) => {
+            const cat = String(w.category || '').toLowerCase();
+            return cat.includes('elementary') || cat.includes('irregular');
+          });
+
+          await downloadVoicePack('uk', baseWords, (percent) => {
+            if (progressBar) progressBar.style.width = `${percent}%`;
+            if (progressText) progressText.textContent = `${percent}%`;
+          });
+
+          localStorage.setItem('myduo_pack_uk_base_downloaded', 'true');
+          modal.remove();
+
+          currentAccent = 'uk';
+          setSavedVoiceAccent('uk');
+          updateVoiceButtons();
+          speakWord('Hello', null, 'en-GB', 'uk', true);
+          triggerAutoSave();
+        } catch (err) {
+          console.warn('UK voice download failed:', err);
+          downloadBtn.disabled = false;
+          cancelBtn.style.display = 'block';
+          downloadBtn.textContent = lang === 'ru' ? 'Повторить' : 'Retry';
+        }
+      });
     });
 
     usVoiceBtn.addEventListener('click', () => {
@@ -391,14 +476,28 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   updateLangUI(currentLang);
 
+  if (container._langDocClickHandler) {
+    document.removeEventListener('click', container._langDocClickHandler);
+    container._langDocClickHandler = null;
+  }
+
   if (langTrigger && langDropdown) {
+    const langMenu = container.querySelector('#lang-dropdown-menu');
+
     langTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       langDropdown.classList.toggle('open');
     });
 
+    if (langMenu) {
+      langMenu.addEventListener('click', (e) => e.stopPropagation());
+      langMenu.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+    }
+
     langItems.forEach((item) => {
       item.addEventListener('click', (e) => {
+        e.preventDefault();
         e.stopPropagation();
         const val = item.dataset.value;
         localStorage.setItem('myduo_interface_lang', val);
@@ -421,11 +520,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
     // Close on click outside without leaking global listeners
     const onDocClick = (e) => {
-      if (!langDropdown.contains(e.target)) {
+      if (langDropdown && !langDropdown.contains(e.target)) {
         langDropdown.classList.remove('open');
       }
     };
-    document.addEventListener('click', onDocClick);
+    container._langDocClickHandler = onDocClick;
+    setTimeout(() => {
+      document.addEventListener('click', onDocClick);
+    }, 100);
   }
 
   // Bind clear cache button
