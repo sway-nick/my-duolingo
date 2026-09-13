@@ -6928,6 +6928,23 @@ export function getWordTranslation(wordObj) {
 
 export function getWordNotes(wordObj) {
   if (!wordObj) return '';
+
+  // 1. Personal user note has highest priority
+  if (typeof wordObj.user_note === 'string' && wordObj.user_note.trim().length > 0) {
+    return wordObj.user_note.trim();
+  }
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const userNotes = JSON.parse(localStorage.getItem('myduo_user_notes') || '{}');
+      const wId = wordObj.id ? String(wordObj.id) : '';
+      const wText = wordObj.word ? String(wordObj.word).toLowerCase().trim() : '';
+      const personalNote = (wId && userNotes[wId]) || (wText && userNotes[wText]);
+      if (personalNote && typeof personalNote === 'string' && personalNote.trim().length > 0) {
+        return personalNote.trim();
+      }
+    } catch (e) {}
+  }
+
   const lang = getInterfaceLanguage();
   if (wordObj.all_notes && typeof wordObj.all_notes === 'object') {
     const n = wordObj.all_notes[lang];
