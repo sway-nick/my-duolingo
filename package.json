@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.cjs",
+    "build:android": "node scripts/build.cjs && npx cap sync android && node scripts/prune_android_assets.cjs",
     "start": "echo Frontend runs as static files",
     "lint": "echo ESLint will be configured later",
     "format": "echo Prettier will be configured later"
@@ -20,6 +21,7 @@
     "@google/clasp": "^3.3.0"
   },
   "dependencies": {
+    "@capacitor-firebase/authentication": "^8.5.1",
     "@capacitor/android": "^8.5.2",
     "@capacitor/cli": "^8.5.2",
     "@capacitor/core": "^8.5.2",

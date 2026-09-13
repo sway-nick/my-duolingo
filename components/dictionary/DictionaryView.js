@@ -816,37 +816,15 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
   existingCats.sort();
   if (existingCats.length === 0) existingCats.push('Elementary');
 
-  const lang = getInterfaceLanguage();
-  const addTitles = {
-    ru: '✨ Добавить',
-    uk: '✨ Додати',
-    en: '✨ Add',
-    de: '✨ Hinzufügen',
-    es: '✨ Añadir',
-    fr: '✨ Ajouter',
-    pl: '✨ Dodaj',
-    it: '✨ Aggiungi',
-    tr: '✨ Ekle',
-    pt: '✨ Adicionar',
-    ro: '✨ Adaugă',
-    bg: '✨ Добавяне',
-    cs: '✨ Přidat',
-    sk: '✨ Pridať',
-    hu: '✨ Hozzáadás',
-    el: '✨ Προσθήκη',
-    sl: '✨ Dodaj',
-    et: '✨ Lisa',
-    lt: '✨ Pridėti',
-  };
-  const titleText = addTitles[lang] || addTitles['en'] || '✨ Add';
-  const wordLabel = lang === 'ru' ? 'Английское слово или фраза *' : lang === 'uk' ? 'Англійське слово або фраза *' : 'English word or phrase *';
-  const transLabel = lang === 'ru' ? 'Перевод *' : lang === 'uk' ? 'Переклад *' : 'Translation *';
-  const catLabel = lang === 'ru' ? 'Категория' : lang === 'uk' ? 'Категорія' : 'Category';
-  const notesLabel = lang === 'ru' ? 'Заметка / Пример (необязательно)' : lang === 'uk' ? 'Примітка / Приклад (необовʼязково)' : 'Notes / Example (optional)';
-  const saveBtnText = lang === 'ru' ? 'Сохранить' : lang === 'uk' ? 'Зберегти' : 'Save';
-  const cancelBtnText = lang === 'ru' ? 'Отмена' : lang === 'uk' ? 'Скасувати' : 'Cancel';
-  const updateNoteText = lang === 'ru' ? 'Обновить заметку' : lang === 'uk' ? 'Оновити примітку' : 'Update note';
-  const checkingBtnText = lang === 'ru' ? 'Проверяю...' : lang === 'uk' ? 'Перевіряю...' : 'Checking...';
+  const titleText = t('dict_add_word_title');
+  const wordLabel = t('dict_word_label');
+  const transLabel = t('dict_trans_label');
+  const catLabel = t('dict_cat_label');
+  const notesLabel = t('dict_notes_label');
+  const saveBtnText = t('dict_save_btn');
+  const cancelBtnText = t('dict_cancel_btn');
+  const updateNoteText = t('dict_update_note_btn');
+  const checkingBtnText = t('dict_checking_btn');
 
   modalEl.innerHTML = `
     <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
@@ -1545,8 +1523,8 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     renderedCount = 0;
 
     if (filteredWords.length === 0) {
-      const emptyText = getInterfaceLanguage() === 'ru' ? 'Слова не найдены.' : getInterfaceLanguage() === 'uk' ? 'Слова не знайдені.' : 'No words found.';
-      const quickAddText = getInterfaceLanguage() === 'ru' ? `➕ Добавить «${escapeHtml(query)}» в словарь` : getInterfaceLanguage() === 'uk' ? `➕ Додати «${escapeHtml(query)}» у словник` : `➕ Add "${escapeHtml(query)}" to dictionary`;
+      const emptyText = t('dict_no_words_found');
+      const quickAddText = t('dict_quick_add', { query: escapeHtml(query) });
 
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px 16px;">

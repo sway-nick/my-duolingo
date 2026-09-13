@@ -19,16 +19,25 @@ function showShareToast(msg) {
   }, 3500);
 }
 
+const GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.englishbreakfast.app';
+const WEB_LANDING_URL = 'https://sway-nick.github.io/my-duolingo/';
+
 /**
  * Get the canonical share URL for the app
  */
 function getShareUrl() {
-  if (typeof window === 'undefined') return 'https://sway-nick.github.io/my-duolingo/';
+  if (typeof window === 'undefined') return GOOGLE_PLAY_URL;
+  
+  // If running inside Android native app (Capacitor), automatically share the Google Play link!
+  const isNative = typeof window !== 'undefined' && !!(window.Capacitor?.isNativePlatform?.());
+  if (isNative) {
+    return GOOGLE_PLAY_URL;
+  }
+
   const origin = window.location.origin;
   const pathname = window.location.pathname;
-  // If running on localhost or raw file, standard fallback is GitHub pages URL
   if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file')) {
-    return 'https://sway-nick.github.io/my-duolingo/';
+    return GOOGLE_PLAY_URL;
   }
   return origin + pathname;
 }

@@ -15,16 +15,45 @@ function applyTheme(theme) {
   localStorage.setItem('myduo_theme', theme);
   const app = document.querySelector('.mobile-app');
   // Remove all theme classes first
+  document.documentElement.classList.remove('dark-theme', 'notebook-theme');
   document.body.classList.remove('dark-theme', 'notebook-theme');
   if (app) app.classList.remove('dark-theme', 'notebook-theme');
 
+  let activeBg = '#ffffff';
   if (theme === 'dark') {
+    activeBg = '#0f172a';
+    document.documentElement.classList.add('dark-theme');
+    document.documentElement.style.backgroundColor = '#0f172a';
     document.body.classList.add('dark-theme');
-    if (app) app.classList.add('dark-theme');
+    document.body.style.backgroundColor = '#0f172a';
+    if (app) {
+      app.classList.add('dark-theme');
+      app.style.backgroundColor = '#0f172a';
+    }
   } else if (theme === 'notebook') {
+    activeBg = '#f5eedc';
+    document.documentElement.classList.add('notebook-theme');
+    document.documentElement.style.backgroundColor = '#f5eedc';
     document.body.classList.add('notebook-theme');
-    if (app) app.classList.add('notebook-theme');
+    document.body.style.backgroundColor = '#f5eedc';
+    if (app) {
+      app.classList.add('notebook-theme');
+      app.style.backgroundColor = '#f5eedc';
+    }
+  } else {
+    activeBg = '#ffffff';
+    document.documentElement.style.backgroundColor = '#ffffff';
+    document.body.style.backgroundColor = '#ffffff';
+    if (app) app.style.backgroundColor = '#ffffff';
   }
+
+  // Dynamically synchronize native Android window & WebView background to match current theme!
+  try {
+    if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
+      window.AndroidThemeBridge.setWindowThemeColor(activeBg);
+    }
+  } catch (e) {}
+
   // Update Android status bar & navigation bar dynamically
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
@@ -442,12 +471,16 @@ function bindHeaderActionButtons(container) {
 
   const xpBtn = container.querySelector('#header-xp-btn');
   if (xpBtn) {
-    xpBtn.addEventListener('click', () => {
+    xpBtn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
       closeDrawer();
       const navTabs = document.querySelectorAll('.nav-tab');
       navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'leaderboard'));
-      globalTabChangeCallback('leaderboard');
-    });
+      if (typeof globalTabChangeCallback === 'function') {
+        globalTabChangeCallback('leaderboard');
+      }
+    };
   }
 
   const burgerBtn = container.querySelector('#header-burger-btn');
@@ -534,6 +567,14 @@ if (typeof window !== 'undefined') {
 
   window.addEventListener('myduo:avatar_changed', () => {
     updateHeaderUser();
+  });
+
+  window.addEventListener('myduo:cloud_synced', (e) => {
+    updateHeaderUser();
+    const xpValEl = document.querySelector('#header-xp-val');
+    if (xpValEl && e.detail && typeof e.detail.xp !== 'undefined') {
+      xpValEl.textContent = formatCompactXp(e.detail.xp);
+    }
   });
 
   window.addEventListener('myduo:xp_changed', (e) => {

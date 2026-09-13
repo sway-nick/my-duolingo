@@ -19,21 +19,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   container.innerHTML = `
     <div class="settings-page" style="position: relative;">
       <span class="autosave-badge" id="autosave-status" style="position: absolute; top: -6px; right: 0; opacity: 0; transition: opacity 0.3s ease; white-space: nowrap; z-index: 20;">
-        ✓ Saved
+        ${t('settings_saved')}
       </span>
 
       <!-- User Profile Card -->
       <div class="settings-card profile-card">
-        <div class="profile-avatar-wrapper" id="change-avatar-trigger" title="Click to choose avatar or photo">
+        <div class="profile-avatar-wrapper" id="change-avatar-trigger" title="${t('settings_avatar_choose_tooltip')}">
           ${
             avatar
               ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" />`
               : `<div class="profile-avatar-placeholder">${user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤'}</div>`
           }
-          <div class="avatar-edit-badge" title="Change avatar">🎭</div>
+          <div class="avatar-edit-badge" title="${t('settings_avatar_edit_tooltip')}">🎭</div>
         </div>
         <div class="profile-details" style="flex: 1; min-width: 0;">
-          <h3 class="profile-name">${user ? user.name : (t('demo') || 'Guest Mode')}</h3>
+          <h3 class="profile-name">${user ? user.name : (t('settings_guest_mode') || t('demo') || 'Guest Mode')}</h3>
           ${user ? '' : `<p class="profile-sub">${t('settings_login_sub') || 'Log in to sync progress'}</p>`}
         </div>
         <div>
@@ -73,6 +73,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="sl">Slovenščina</div>
             <div class="dropdown-item" data-value="et">Eesti</div>
             <div class="dropdown-item" data-value="lt">Lietuvių</div>
+            <div class="dropdown-item" data-value="lv">Latviešu</div>
+            <div class="dropdown-item" data-value="da">Dansk</div>
+            <div class="dropdown-item" data-value="fi">Suomi</div>
+            <div class="dropdown-item" data-value="sv">Svenska</div>
+            <div class="dropdown-item" data-value="hr">Hrvatski</div>
+            <div class="dropdown-item" data-value="ga">Gaeilge</div>
+            <div class="dropdown-item" data-value="mt">Malti</div>
           </div>
         </div>
       </div>
@@ -115,7 +122,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${t('settings_voice')}
         </h3>
         <div class="voice-options-row">
-          <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="British English (UK)" aria-label="British English">
+          <button class="voice-option-btn flag-btn" id="voice-uk-btn" title="${t('settings_voice_uk_title')}" aria-label="British English">
             <svg class="flag-svg-icon" viewBox="0 0 640 480" width="30" height="21">
               <path fill="#012169" d="M0 0h640v480H0z"/>
               <path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 240l240 178v62h-80L320 301 81 480H0v-60l239-180L0 64V0h75z"/>
@@ -124,7 +131,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
               <path fill="#C8102E" d="M267 0h106v480H267zM0 187h640v106H0z"/>
             </svg>
           </button>
-          <button class="voice-option-btn flag-btn" id="voice-us-btn" title="American English (US)" aria-label="American English">
+          <button class="voice-option-btn flag-btn" id="voice-us-btn" title="${t('settings_voice_us_title')}" aria-label="American English">
             <svg class="flag-svg-icon" viewBox="0 0 640 480" width="30" height="21">
               <path fill="#bd3d44" d="M0 0h640v480H0z"/>
               <path stroke="#fff" stroke-width="37" d="M0 55.5h640M0 129.5h640M0 203.5h640M0 277.5h640M0 351.5h640M0 425.5h640"/>
@@ -157,13 +164,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <!-- Danger Zone / Delete Account (Google Play Compliance) -->
         <div class="settings-card danger-zone-card" style="border: 1px solid rgba(239, 68, 68, 0.25); background: rgba(239, 68, 68, 0.03);">
           <h3 class="settings-card-title" style="color: #ef4444; margin-bottom: 8px;">
-            ${getInterfaceLanguage() === 'ru' ? 'Управление аккаунтом' : getInterfaceLanguage() === 'uk' ? 'Керування акаунтом' : 'Account Management'}
+            ${t('settings_account_mgmt')}
           </h3>
           <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4; margin: 0 0 12px;">
-            ${getInterfaceLanguage() === 'ru' ? 'Вы можете безвозвратно удалить свой профиль и все данные обучения.' : getInterfaceLanguage() === 'uk' ? 'Ви можете безповоротно видалити свій профіль та всі дані навчання.' : 'You can permanently delete your profile and all learning progress.'}
+            ${t('settings_account_delete_desc')}
           </p>
           <button type="button" class="secondary-button" id="delete-account-btn" style="width: 100%; color: #ef4444; border-color: rgba(239, 68, 68, 0.4); font-weight: 600;">
-            ${getInterfaceLanguage() === 'ru' ? 'Удалить аккаунт и данные' : getInterfaceLanguage() === 'uk' ? 'Видалити акаунт та дані' : 'Delete Account & Data'}
+            ${t('settings_account_delete_btn')}
           </button>
         </div>
       `
@@ -172,7 +179,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <div style="text-align: center; margin-top: 12px; margin-bottom: 24px;">
         <a href="./privacy.html" target="_blank" style="font-size: 13px; color: var(--text-muted); text-decoration: underline;">
-          ${getInterfaceLanguage() === 'ru' ? 'Политика конфиденциальности' : getInterfaceLanguage() === 'uk' ? 'Політика конфіденційності' : 'Privacy Policy'}
+          ${t('settings_privacy_policy')}
         </a>
       </div>
 
@@ -199,14 +206,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     };
 
     if (autoSaveStatus) {
-      autoSaveStatus.textContent = 'Saving...';
+      autoSaveStatus.textContent = t('settings_saving');
       autoSaveStatus.style.opacity = '1';
     }
 
     saveUserSettings(newSettings).then(() => {
       onUserChange();
       if (autoSaveStatus) {
-        autoSaveStatus.textContent = '✓ Saved in profile';
+        autoSaveStatus.textContent = t('settings_saved');
         setTimeout(() => {
           if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
         }, 1500);
@@ -246,7 +253,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     avatarTrigger.addEventListener('click', () => {
       renderAvatarPickerModal(async () => {
         if (autoSaveStatus) {
-          autoSaveStatus.textContent = '✓ Avatar updated';
+          autoSaveStatus.textContent = t('settings_avatar_updated');
           autoSaveStatus.style.opacity = '1';
           setTimeout(() => {
             if (autoSaveStatus) autoSaveStatus.style.opacity = '0';
@@ -459,6 +466,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     sl: 'Slovenščina',
     et: 'Eesti',
     lt: 'Lietuvių',
+    lv: 'Latviešu',
+    da: 'Dansk',
+    fi: 'Suomi',
+    sv: 'Svenska',
+    hr: 'Hrvatski',
+    ga: 'Gaeilge',
+    mt: 'Malti',
   };
 
   const currentLang = localStorage.getItem('myduo_interface_lang') || 'en';
@@ -559,18 +573,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const deleteAccountBtn = container.querySelector('#delete-account-btn');
   if (deleteAccountBtn) {
     deleteAccountBtn.addEventListener('click', async () => {
-      const confirmMsg = getInterfaceLanguage() === 'ru'
-        ? 'Вы уверены, что хотите навсегда удалить свой аккаунт и все данные? Это действие необратимо.'
-        : getInterfaceLanguage() === 'uk'
-          ? 'Ви впевнені, що хочете назавжди видалити свій акаунт та всі дані? Ця дія незворотна.'
-          : 'Are you sure you want to permanently delete your account and all learning progress? This cannot be undone.';
+      const confirmMsg = t('settings_account_delete_confirm');
       if (confirm(confirmMsg)) {
         try {
           deleteAccountBtn.disabled = true;
-          deleteAccountBtn.textContent = 'Удаление...';
+          deleteAccountBtn.textContent = t('settings_account_deleting');
           await deleteCurrentUserAccount();
           logoutUser();
-          alert(getInterfaceLanguage() === 'ru' ? 'Аккаунт успешно удалён.' : 'Account successfully deleted.');
+          alert(t('settings_account_deleted'));
           window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
         } catch (err) {
           console.warn('Delete account error:', err);

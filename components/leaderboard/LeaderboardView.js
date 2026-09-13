@@ -17,12 +17,12 @@ function showTop100Modal(rank) {
   modalOverlay.innerHTML = `
     <div class="modal-content" style="text-align: center; max-width: 320px; padding: 28px 20px; position: relative;">
       <div style="font-size: 52px; margin-bottom: 12px;">🏆</div>
-      <h2 style="margin: 0 0 10px; font-size: 22px;">Вы в ТОП 100!</h2>
+      <h2 style="margin: 0 0 10px; font-size: 22px;">${t('lead_top100_title')}</h2>
       <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 15px; line-height: 1.4;">
-        Поздравляем! Вы заняли <strong>#${rank}</strong> место в рейтинге. Так держать! 🚀
+        ${t('lead_top100_desc', { rank })}
       </p>
       <button class="primary-button btn-green" id="top100-close-btn" style="min-height: 44px; width: 100%;">
-        Ура!
+        ${t('lead_top100_btn')}
       </button>
     </div>
   `;
@@ -161,7 +161,7 @@ function renderPodiumCard(player, rank, period = 'week') {
         }
       </div>
       <div class="podium-info">
-        <h4 class="podium-name">${player.name || (getInterfaceLanguage() === 'ru' ? 'Ученик' : getInterfaceLanguage() === 'uk' ? 'Учень' : 'Student')}</h4>
+        <h4 class="podium-name">${player.name || t('lead_student_default')}</h4>
         <span class="podium-xp">${formatLeaderboardXp(player.xp, period)} XP</span>
       </div>
     </div>
@@ -175,12 +175,12 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
       restHtml: `
         <div class="empty-state-card" style="text-align: center; padding: 40px 20px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 240px;">
           <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🏆</div>
-          <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px; color: var(--text-main);">${getInterfaceLanguage() === 'ru' ? 'Рейтинг обновляется' : getInterfaceLanguage() === 'uk' ? 'Рейтинг оновлюється' : 'Leaderboard updating'}</h3>
+          <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px; color: var(--text-main);">${t('lead_updating_title')}</h3>
           <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 20px; max-width: 280px; line-height: 1.45;">
-            ${getInterfaceLanguage() === 'ru' ? 'Загружаем актуальные данные с сервера. Если таблица не появилась, нажмите кнопку ниже:' : getInterfaceLanguage() === 'uk' ? 'Завантажуємо актуальні дані із сервера. Якщо таблиця не з\'явилася, натисніть кнопку нижче:' : 'Loading live data from server. If table does not appear, tap below:'}
+            ${t('lead_updating_desc')}
           </p>
           <button class="primary-button btn-green" id="retry-leaderboard-btn" style="max-width: 240px; min-height: 44px; height: 44px; font-size: 15px; font-weight: 700;">
-            🔄 ${getInterfaceLanguage() === 'ru' ? 'Обновить рейтинг' : getInterfaceLanguage() === 'uk' ? 'Оновити рейтинг' : 'Refresh Leaderboard'}
+            🔄 ${t('lead_refresh_btn')}
           </button>
         </div>
       `
@@ -223,7 +223,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
                 }
               </div>
               <div class="row-name">
-                ${p.name || 'Ученик'}
+                ${p.name || t('lead_student_default')}
               </div>
               <div class="row-xp">${formatLeaderboardXp(p.xp, period)} XP</div>
             </div>
@@ -238,10 +238,10 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   if (myPlayer && (myRank > 4 || !currentUser)) {
     const myAvatar = getUserAvatar();
     const statusText = period === 'all'
-      ? (getInterfaceLanguage() === 'ru' ? 'Ваш результат за всё время' : getInterfaceLanguage() === 'uk' ? 'Ваш результат за весь час' : 'Your result of all time')
+      ? t('lead_score_all_time')
       : (currentUser
-          ? (getInterfaceLanguage() === 'ru' ? 'Ваш текущий результат' : getInterfaceLanguage() === 'uk' ? 'Ваш поточний результат' : 'Your current result')
-          : (getInterfaceLanguage() === 'ru' ? 'Войдите, чтобы закрепить результат' : getInterfaceLanguage() === 'uk' ? 'Увійдіть, щоб закріпити результат' : 'Log in to save your result')
+          ? t('lead_score_current')
+          : t('lead_login_to_save')
         );
     myStickyBarHtml = `
       <div class="my-leaderboard-bar">
@@ -253,7 +253,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               : `<div class="my-bar-avatar-placeholder">${currentUser && currentUser.name ? currentUser.name.charAt(0) : '👤'}</div>`
           }
           <div>
-            <div class="my-bar-name" style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : (getInterfaceLanguage() === 'ru' ? 'Вы (Гость)' : getInterfaceLanguage() === 'uk' ? 'Ви (Гість)' : 'You (Guest)')}</div>
+            <div class="my-bar-name" style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : t('lead_guest_name')}</div>
             <div class="my-bar-status" style="font-size: 12px; color: var(--text-muted);">
               ${statusText}
             </div>
@@ -263,7 +263,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           <span class="my-bar-xp">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
           ${
             !currentUser
-              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">${getInterfaceLanguage() === 'ru' ? 'Войти' : getInterfaceLanguage() === 'uk' ? 'Увійти' : 'Log In'}</button>`
+              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">${t('settings_login')}</button>`
               : ''
           }
         </div>
@@ -302,9 +302,9 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
   const bodyData = buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod);
 
-  const dText = getInterfaceLanguage() === 'ru' ? 'д' : getInterfaceLanguage() === 'uk' ? 'д' : 'd';
-  const hText = getInterfaceLanguage() === 'ru' ? 'ч' : getInterfaceLanguage() === 'uk' ? 'г' : 'h';
-  const mText = getInterfaceLanguage() === 'ru' ? 'м' : getInterfaceLanguage() === 'uk' ? 'хв' : 'm';
+  const dText = t('lead_days_short');
+  const hText = t('lead_hours_short');
+  const mText = t('lead_minutes_short');
 
   container.innerHTML = `
     <div class="leaderboard-page" style="position: relative;">
