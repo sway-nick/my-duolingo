@@ -502,6 +502,80 @@ export async function saveUserFavoritesFirestore(userId, favoritesArray) {
   }
 }
 
+export async function saveUserNotesFirestore(userId, notesMap) {
+  if (!userId) return;
+  try {
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`);
+    const cleanNotes = notesMap && typeof notesMap === 'object' ? notesMap : {};
+    const fields = {
+      notesJson: { stringValue: JSON.stringify(cleanNotes) },
+      updatedAt: { integerValue: String(Date.now()) }
+    };
+
+    await firestoreFetch(url, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ fields }),
+    });
+  } catch (err) {
+    console.warn('Firestore notes save failed:', err);
+  }
+}
+
+export async function loadUserNotesFirestore(userId) {
+  if (!userId) return {};
+  try {
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`);
+    const res = await firestoreFetch(url, { headers: getAuthHeaders() }).catch(() => null);
+    if (!res || !res.ok) return {};
+    const data = await res.json();
+    if (data.fields?.notesJson?.stringValue) {
+      return JSON.parse(data.fields.notesJson.stringValue);
+    }
+  } catch (err) {
+    console.warn('Firestore notes load failed:', err);
+  }
+  return {};
+}
+
+export async function saveUserCustomWordsFirestore(userId, wordsArray) {
+  if (!userId) return;
+  try {
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`);
+    const cleanWords = Array.isArray(wordsArray) ? wordsArray : [];
+    const fields = {
+      wordsJson: { stringValue: JSON.stringify(cleanWords) },
+      count: { integerValue: String(cleanWords.length) },
+      updatedAt: { integerValue: String(Date.now()) }
+    };
+
+    await firestoreFetch(url, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ fields }),
+    });
+  } catch (err) {
+    console.warn('Firestore custom words save failed:', err);
+  }
+}
+
+export async function loadUserCustomWordsFirestore(userId) {
+  if (!userId) return [];
+  try {
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`);
+    const res = await firestoreFetch(url, { headers: getAuthHeaders() }).catch(() => null);
+    if (!res || !res.ok) return [];
+    const data = await res.json();
+    if (data.fields?.wordsJson?.stringValue) {
+      const parsed = JSON.parse(data.fields.wordsJson.stringValue);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+  } catch (err) {
+    console.warn('Firestore custom words load failed:', err);
+  }
+  return [];
+}
+
 function toFirestoreValue(val) {
   if (val === null || val === undefined) return { nullValue: null };
   if (typeof val === 'boolean') return { booleanValue: val };
@@ -612,11 +686,13 @@ export async function loadFullUserDataFirestore(userId) {
   if (!userId) return null;
   try {
     const authHeaders = getAuthHeaders();
-    const [progress, userDocRes, favDocRes, setDocRes] = await Promise.all([
+    const [progress, userDocRes, favDocRes, setDocRes, notesDocRes, customDocRes] = await Promise.all([
       loadUserProgressFirestore(userId),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/favorites`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/settings/general`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`), { headers: authHeaders }).catch(() => null),
     ]);
 
     let userProfile = {};
@@ -666,11 +742,34 @@ export async function loadFullUserDataFirestore(userId) {
       }
     }
 
+    let notes = {};
+    if (notesDocRes && notesDocRes.ok) {
+      const data = await notesDocRes.json();
+      if (data.fields?.notesJson?.stringValue) {
+        try {
+          notes = JSON.parse(data.fields.notesJson.stringValue);
+        } catch (e) {}
+      }
+    }
+
+    let customWords = [];
+    if (customDocRes && customDocRes.ok) {
+      const data = await customDocRes.json();
+      if (data.fields?.wordsJson?.stringValue) {
+        try {
+          const parsed = JSON.parse(data.fields.wordsJson.stringValue);
+          if (Array.isArray(parsed)) customWords = parsed;
+        } catch (e) {}
+      }
+    }
+
     return {
       progress,
       profile: userProfile,
       favorites,
-      settings
+      settings,
+      notes,
+      customWords
     };
   } catch (err) {
     console.warn('Load full Firestore user data failed:', err);

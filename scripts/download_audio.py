@@ -133,27 +133,45 @@ async def process_task(sem, item, progress, force_overwrite):
             progress['success'] += 1
             idx = progress['success'] + progress['failed']
             pct = (idx / max(1, total_tasks)) * 100
-            if idx % 10 == 0 or idx == total_tasks:
+        if success:
+            progress['success'] += 1
+            idx = progress['success'] + progress['failed']
+            pct = (idx / max(1, total_tasks)) * 100
+            if idx % 100 == 0 or idx == total_tasks:
                 safe_print(f"[{idx}/{total_tasks}] ({pct:.1f}%) Generated: '{word_text}' [{accent.upper()}]")
         else:
             progress['failed'] += 1
             safe_print(f"  [!] Failed: '{word_text}' [{accent.upper()}]")
 
-        await asyncio.sleep(0.05)
+        await asyncio.sleep(0.02)
         return success
 
 async def async_main():
-    safe_print("[*] Fetching words list from Google Sheet API...")
-    try:
-        req = urllib.request.Request(API_URL, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=15) as response:
-            res_json = json.loads(response.read().decode('utf-8'))
-            if not res_json.get("success") or "data" not in res_json:
-                safe_print("[ERROR] Failed to fetch words: API response unsuccessful.")
-                return
-            words = res_json["data"]
-    except Exception as e:
-        safe_print(f"[ERROR] Failed to connect to API: {e}")
+    words = []
+    local_words_path = os.path.join(BASE_DIR, "frontend", "assets", "data", "words.json")
+    
+    if "--local" in sys.argv or not API_URL:
+        if os.path.exists(local_words_path):
+            safe_print(f"[*] Loading words directly from local words.json...")
+            with open(local_words_path, 'r', encoding='utf-8') as f:
+                words = json.load(f)
+    
+    if not words:
+        safe_print("[*] Fetching words list from Google Sheet API...")
+        try:
+            req = urllib.request.Request(API_URL, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=15) as response:
+                res_json = json.loads(response.read().decode('utf-8'))
+                if res_json.get("success") and "data" in res_json:
+                    words = res_json["data"]
+        except Exception as e:
+            safe_print(f"[!] Warning connecting to API: {e}. Falling back to local words.json...")
+            if os.path.exists(local_words_path):
+                with open(local_words_path, 'r', encoding='utf-8') as f:
+                    words = json.load(f)
+
+    if not words:
+        safe_print("[ERROR] No words available to process.")
         return
 
     category_filter = None
@@ -168,6 +186,17 @@ async def async_main():
 
     force_overwrite = "--force" in sys.argv
 
+    accents = ["uk", "us"]
+    if "--accent" in sys.argv:
+        try:
+            acc_idx = sys.argv.index("--accent")
+            acc_val = sys.argv[acc_idx + 1].strip().lower()
+            if acc_val in ["uk", "us"]:
+                accents = [acc_val]
+                safe_print(f"[*] Targeting single accent: {acc_val.upper()}")
+        except Exception:
+            pass
+
     limit = None
     if "--limit" in sys.argv:
         try:
@@ -178,7 +207,7 @@ async def async_main():
         except Exception:
             pass
 
-    safe_print(f"[SUCCESS] Loaded {len(words)} words to process (force_overwrite={force_overwrite}).")
+    safe_print(f"[SUCCESS] Loaded {len(words)} words to process (force_overwrite={force_overwrite}, accents={accents}).")
 
     tasks = []
     for w in words:
@@ -186,16 +215,17 @@ async def async_main():
         category = w.get("category", "")
         if not word_text:
             continue
-        for accent in ["us", "uk"]:
-            tasks.append((word_text, category, accent, len(words) * 2))
+        for accent in accents:
+            tasks.append((word_text, category, accent, len(words) * len(accents)))
 
     total_tasks = len(tasks)
     if total_tasks == 0:
         safe_print("[✓] No words to process!")
         return
 
-    safe_print(f"[*] Starting async generation for {total_tasks} tasks (concurrency=4)...")
-    sem = asyncio.Semaphore(4)
+    concurrency = 10
+    safe_print(f"[*] Starting async generation for {total_tasks} tasks (concurrency={concurrency})...")
+    sem = asyncio.Semaphore(concurrency)
     progress = {'success': 0, 'failed': 0, 'skipped': 0}
     start_time = time.time()
 

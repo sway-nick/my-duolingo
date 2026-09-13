@@ -16,6 +16,8 @@
   --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
+:root.dark-theme,
+html.dark-theme,
 body.dark-theme,
 .mobile-app.dark-theme {
   --bg-color: #0f172a;
@@ -28,8 +30,11 @@ body.dark-theme,
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
+html.dark-theme,
+html.dark-theme body,
 .dark-theme .mobile-app {
-  background: #0f172a;
+  background-color: #0f172a !important;
+  color-scheme: dark;
 }
 
 .dark-theme .mobile-header,
@@ -305,12 +310,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: calc(8px + env(safe-area-inset-top, 0px));
-  padding-bottom: 8px;
-  padding-left: max(10px, env(safe-area-inset-left, 0px));
-  padding-right: max(10px, env(safe-area-inset-right, 0px));
-  min-height: calc(58px + env(safe-area-inset-top, 0px));
-  height: calc(58px + env(safe-area-inset-top, 0px));
+  padding-top: max(24px, env(safe-area-inset-top, 24px));
+  padding-bottom: 6px;
+  padding-left: max(12px, env(safe-area-inset-left, 0px));
+  padding-right: max(12px, env(safe-area-inset-right, 0px));
+  min-height: auto;
   border-bottom: 1px solid var(--border-color);
   background: #ffffff;
   position: sticky;
@@ -318,7 +322,6 @@ body {
   z-index: 50;
   box-sizing: border-box;
   flex-wrap: nowrap;
-  overflow: hidden;
 }
 
 .brand {
@@ -2396,10 +2399,21 @@ body.notebook-theme .word-notes-modal-text {
 
 .wotd-standalone-wrapper {
   margin-top: 16px;
+  perspective: 1400px;
+  -webkit-perspective: 1400px;
 }
 
-/* Gold VIP Bank Card styling for Word of the Day */
-/* Gold VIP Bank Card styling for Word of the Day - Premium Gold-on-Dark always */
+/* Gold VIP Bank Card styling for Word of the Day - Smooth, majestic flip transition */
+.wotd-card {
+  transition: transform 0.95s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.95s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.wotd-card.is-flipped {
+  transform: rotateX(180deg);
+}
+
 .wotd-card .flashcard-face {
   background: 
     linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 16%, rgba(255, 255, 255, 0) 30%),
@@ -2407,13 +2421,11 @@ body.notebook-theme .word-notes-modal-text {
   border: 1.5px solid rgba(253, 224, 71, 0.7);
   border-top-color: rgba(255, 255, 255, 0.85);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 4px 14px rgba(202, 138, 4, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.35);
-}
-
-.wotd-card .flashcard-face {
   transform: rotateX(0deg) translateZ(1px);
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transition: box-shadow 0.95s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .wotd-card .flashcard-face.flashcard-back {
@@ -3938,35 +3950,18 @@ textarea:disabled,
 /* Leaderboard Page Styles */
 .leaderboard-page {
   padding-bottom: 70px;
-  margin-top: -12px;
-  margin-left: -14px;
-  margin-right: -14px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .leaderboard-sticky-group {
-  position: sticky;
-  top: 54px;
-  z-index: 45;
-  background: var(--bg-main, var(--bg-color, #ffffff));
-  padding: 8px 14px 6px 14px;
-  border-bottom: 1.5px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: transform;
-}
-
-.leaderboard-sticky-group::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: inherit;
-  z-index: 1;
+  position: relative;
+  z-index: 5;
+  background: transparent;
+  padding: 6px 14px 4px 14px;
+  border-bottom: none;
+  box-shadow: none;
 }
 
 #leaderboard-content {
@@ -4209,21 +4204,19 @@ button.leaderboard-header-chip:hover {
   font-weight: 800;
 }
 
-/* Sticky Podium Top 4 Container */
+/* Podium Top 4 Container */
 .podium-sticky-wrapper {
-  position: -webkit-sticky;
-  position: sticky;
-  top: var(--podium-sticky-top, 58px);
-  z-index: 25;
-  background: var(--bg-main, #ffffff);
+  position: relative;
+  z-index: 1;
+  background: transparent;
   padding: 4px 0 8px;
   margin-bottom: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: none;
 }
 
 .dark-theme .podium-sticky-wrapper {
-  background: #0f172a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  box-shadow: none;
 }
 
 /* Podium Top 4 Grid */
@@ -5766,6 +5759,7 @@ body.notebook-theme,
   width: 290px;
   max-width: 85vw;
   height: 100vh;
+  height: 100dvh;
   background: var(--bg-main, #ffffff);
   border-left: 1.5px solid var(--border-color);
   z-index: 130;
@@ -5775,6 +5769,8 @@ body.notebook-theme,
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  padding-top: calc(34px + env(safe-area-inset-top, 0px));
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 12px);
 }
 
 .burger-drawer.open {
@@ -5782,11 +5778,11 @@ body.notebook-theme,
 }
 
 .drawer-header {
-  padding: 20px 16px;
+  padding: 16px;
   border-bottom: 1.5px solid var(--border-color);
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 
@@ -6169,7 +6165,11 @@ body.notebook-theme,
 /* Responsive Header Optimizations for Narrow Screens */
 @media (max-width: 480px) {
   .mobile-header {
-    padding: 8px 10px !important;
+    padding-top: max(24px, env(safe-area-inset-top, 24px)) !important;
+    padding-bottom: 6px !important;
+    padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+    min-height: auto !important;
   }
   
   #brand-logo svg {

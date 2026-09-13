@@ -9,6 +9,10 @@ import {
   saveUserProfileFirestore,
   saveUserSettingsFirestore,
   saveUserFavoritesFirestore,
+  saveUserNotesFirestore,
+  loadUserNotesFirestore,
+  saveUserCustomWordsFirestore,
+  loadUserCustomWordsFirestore,
   saveUserAnalyticsFirestore,
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
@@ -109,6 +113,73 @@ if (typeof window !== 'undefined') {
   });
 }
 
+function getUserNotesLocal() {
+  try {
+    return JSON.parse(localStorage.getItem('myduo_user_notes') || '{}');
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveUserNote(wordId, wordText, noteText) {
+  const notes = getUserNotesLocal();
+  const cleanNote = String(noteText || '').trim();
+  const cleanWord = String(wordText || '').toLowerCase().trim();
+  const cleanId = wordId ? String(wordId) : '';
+
+  if (cleanId) {
+    if (cleanNote) notes[cleanId] = cleanNote;
+    else delete notes[cleanId];
+  }
+  if (cleanWord) {
+    if (cleanNote) notes[cleanWord] = cleanNote;
+    else delete notes[cleanWord];
+  }
+
+  try {
+    localStorage.setItem('myduo_user_notes', JSON.stringify(notes));
+  } catch (e) {}
+
+  if (cachedWordsList && Array.isArray(cachedWordsList)) {
+    const target = cachedWordsList.find(
+      (w) => (cleanId && String(w.id) === cleanId) || (cleanWord && w.word && w.word.toLowerCase() === cleanWord)
+    );
+    if (target) {
+      target.user_note = cleanNote;
+      if (cleanNote) target.notes = cleanNote;
+    }
+    try {
+      localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+    } catch (e) {}
+  }
+
+  try {
+    const user = getCurrentUser();
+    const uId = user?.id || getEffectiveUserId();
+    if (uId) {
+      saveUserNotesFirestore(uId, notes).catch(() => {});
+    }
+  } catch (e) {}
+
+  return notes;
+}
+
+function applyUserNotes(words) {
+  if (!Array.isArray(words)) return;
+  const userNotes = getUserNotesLocal();
+  if (!userNotes || Object.keys(userNotes).length === 0) return;
+  words.forEach((w) => {
+    if (!w) return;
+    const wId = w.id ? String(w.id) : '';
+    const wText = w.word ? String(w.word).toLowerCase().trim() : '';
+    const personalNote = (wId && userNotes[wId]) || (wText && userNotes[wText]);
+    if (personalNote) {
+      w.user_note = personalNote;
+      w.notes = personalNote;
+    }
+  });
+}
+
 async function getWords(forceRefresh = false) {
   const sortByZipf = (list) => {
     if (Array.isArray(list)) {
@@ -121,6 +192,7 @@ async function getWords(forceRefresh = false) {
   if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
     sanitizeTranscriptions(cachedWordsList);
     applyMultilingualTranslations(cachedWordsList);
+    applyUserNotes(cachedWordsList);
     sortByZipf(cachedWordsList);
     return { success: true, data: cachedWordsList };
   }
@@ -139,6 +211,7 @@ async function getWords(forceRefresh = false) {
       if (Array.isArray(localCached) && localCached.length > 0) {
         sanitizeTranscriptions(localCached);
         applyMultilingualTranslations(localCached);
+        applyUserNotes(localCached);
         sortByZipf(localCached);
         cachedWordsList = localCached;
         return { success: true, data: cachedWordsList };
@@ -175,6 +248,7 @@ async function getWords(forceRefresh = false) {
 
       sanitizeTranscriptions(wordData);
       applyMultilingualTranslations(wordData);
+      applyUserNotes(wordData);
       sortByZipf(wordData);
       cachedWordsList = wordData;
       try {
@@ -192,6 +266,7 @@ async function getWords(forceRefresh = false) {
   const fallbackList = cachedWordsList || MOCK_WORDS;
   sanitizeTranscriptions(fallbackList);
   applyMultilingualTranslations(fallbackList);
+  applyUserNotes(fallbackList);
   sortByZipf(fallbackList);
   return { success: true, data: fallbackList };
 }
@@ -1267,6 +1342,55 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       localStorage.setItem(`settings_${uId}`, JSON.stringify(mergedSettings));
     }
 
+    // 1. Sync User Notes
+    const localNotes = getUserNotesLocal();
+    const remoteNotes = { ...(detDoc?.notes || {}), ...(fullDoc?.notes || {}) };
+    const mergedNotes = { ...remoteNotes, ...localNotes };
+    if (Object.keys(mergedNotes).length > 0) {
+      localStorage.setItem('myduo_user_notes', JSON.stringify(mergedNotes));
+      saveUserNotesFirestore(uId, mergedNotes).catch(() => {});
+      if (cachedWordsList && Array.isArray(cachedWordsList)) {
+        applyUserNotes(cachedWordsList);
+      }
+    }
+
+    // 2. Sync Custom Words
+    const remoteCustomWords = Array.isArray(fullDoc?.customWords) ? fullDoc.customWords : (Array.isArray(detDoc?.customWords) ? detDoc.customWords : []);
+    if (remoteCustomWords.length > 0 || (cachedWordsList && cachedWordsList.some(w => String(w.id || '').startsWith('custom_')))) {
+      if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
+        try {
+          cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+        } catch (e) {
+          cachedWordsList = [];
+        }
+      }
+      const existingCustomIds = new Set(cachedWordsList.filter(w => String(w.id || '').startsWith('custom_')).map(w => String(w.id)));
+      const existingCustomWords = new Set(cachedWordsList.filter(w => String(w.id || '').startsWith('custom_')).map(w => String(w.word || '').toLowerCase()));
+      
+      let addedAny = false;
+      remoteCustomWords.forEach(rcw => {
+        if (!existingCustomIds.has(String(rcw.id)) && !existingCustomWords.has(String(rcw.word || '').toLowerCase())) {
+          cachedWordsList.unshift(rcw);
+          existingCustomIds.add(String(rcw.id));
+          existingCustomWords.add(String(rcw.word || '').toLowerCase());
+          addedAny = true;
+        }
+      });
+
+      const allCustomWords = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
+      if (allCustomWords.length > 0) {
+        saveUserCustomWordsFirestore(uId, allCustomWords).catch(() => {});
+      }
+      if (addedAny) {
+        try {
+          localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+        } catch (e) {}
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+        }
+      }
+    }
+
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('myduo:cloud_synced', { detail: { userId: uId, xp: finalFirestoreXp } }));
       window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp } }));
@@ -1303,6 +1427,18 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
       saveUserFavoritesFirestore(uId, favorites).catch(() => {});
       saveUserSettingsFirestore(uId, settings).catch(() => {});
       saveBulkProgressFirestore(uId, progress).catch(() => {});
+
+      const localNotes = getUserNotesLocal();
+      if (Object.keys(localNotes).length > 0) {
+        saveUserNotesFirestore(uId, localNotes).catch(() => {});
+      }
+
+      if (cachedWordsList && Array.isArray(cachedWordsList)) {
+        const customOnly = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
+        if (customOnly.length > 0) {
+          saveUserCustomWordsFirestore(uId, customOnly).catch(() => {});
+        }
+      }
       
       const progEntries = Object.entries(progress);
       if (progEntries.length > 0) {
@@ -2330,15 +2466,32 @@ async function addCustomWord({ word, translation, category, notes }) {
   );
   if (idx >= 0) {
     cachedWordsList[idx] = { ...cachedWordsList[idx], ...savedWord };
+    savedWord = cachedWordsList[idx];
   } else {
     cachedWordsList.unshift(savedWord);
   }
+
+  // Save personal note to notes map
+  if (cleanNotes) {
+    saveUserNote(savedWord.id, cleanW, cleanNotes);
+  }
+
   try {
     localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
   } catch (e) {}
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
   }
+
+  // Cloud sync to Firestore
+  try {
+    const user = getCurrentUser();
+    const uId = user?.id || getEffectiveUserId();
+    if (uId) {
+      const customOnly = cachedWordsList.filter((w) => String(w.id || '').startsWith('custom_'));
+      saveUserCustomWordsFirestore(uId, customOnly).catch(() => {});
+    }
+  } catch (e) {}
 
   return { word: savedWord };
 }
@@ -2376,6 +2529,9 @@ async function batchAddCustomWords(words = []) {
     } else {
       cachedWordsList.unshift(sw);
     }
+    if (sw.notes) {
+      saveUserNote(sw.id, sw.word, sw.notes);
+    }
   });
 
   try {
@@ -2385,6 +2541,16 @@ async function batchAddCustomWords(words = []) {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
   }
+
+  // Cloud sync to Firestore
+  try {
+    const user = getCurrentUser();
+    const uId = user?.id || getEffectiveUserId();
+    if (uId) {
+      const customOnly = cachedWordsList.filter((w) => String(w.id || '').startsWith('custom_'));
+      saveUserCustomWordsFirestore(uId, customOnly).catch(() => {});
+    }
+  } catch (e) {}
 
   return { addedCount: formattedWords.length, words: formattedWords };
 }
@@ -2746,6 +2912,9 @@ export {
   getCloudWordOfTheDayId,
   trackRoundCompleted,
   sendUserAnalyticsDebounced,
+  getUserNotesLocal,
+  saveUserNote,
 };
 
 export { getWordTranslation, getWordNotes } from './i18n.js';
+export { getUserNotesLocal, saveUserNote };
