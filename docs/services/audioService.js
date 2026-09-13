@@ -1006,14 +1006,33 @@ function speakTextInLangAsync(text, langCode = 'ru') {
         utterance.pitch = 1.0;
 
         try {
-          const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
-            ? window.speechSynthesis.getVoices()
-            : cachedVoices;
+          // Wait for voices to load on Android if they are not yet available
+          let availableVoices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+          if (availableVoices.length === 0 && cachedVoices.length > 0) {
+            availableVoices = cachedVoices;
+          }
+          // If still empty, wait up to 600ms for voiceschanged on Android
+          if (availableVoices.length === 0) {
+            await new Promise((r) => {
+              const t = setTimeout(r, 600);
+              try {
+                window.speechSynthesis.onvoiceschanged = () => {
+                  clearTimeout(t);
+                  cachedVoices = window.speechSynthesis.getVoices() || [];
+                  r();
+                };
+              } catch (e) { clearTimeout(t); r(); }
+            });
+            availableVoices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : cachedVoices;
+          }
 
+          // Exact lang match first (e.g. ru-RU), then prefix match (e.g. ru)
           let matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
           if (!matched) {
             matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
           }
+          // Assign voice only if found — if not found let the system default handle it
+          // (on Android: not assigning a voice is BETTER than assigning null)
           if (matched) {
             utterance.voice = matched;
           }
@@ -1027,14 +1046,15 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           finish();
         };
 
-        // iOS keep-alive while speech synthesis runs
+        // iOS/Android keep-alive while speech synthesis runs
         resumeInterval = setInterval(() => {
           if (window.speechSynthesis && window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
           }
         }, 200);
 
-        const expectedMs = Math.max(3000, spokenText.length * 160);
+        // More generous timeout: Russian words can be long
+        const expectedMs = Math.max(4000, spokenText.length * 200);
         window.__activeSpeechTimer = setTimeout(finish, expectedMs);
 
         window.speechSynthesis.speak(utterance);
