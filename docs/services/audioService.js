@@ -331,23 +331,183 @@ function getPreferredVoice(gender = 'female') {
 let currentAudioPlayer = null;
 const audioCache = new Map();
 
+const CDN_AUDIO_BASE = 'https://sway-nick.github.io/my-duolingo/assets/audio';
+const AUDIO_CACHE_NAME = 'myduo_audio_cache_v1';
+
 function getAudioUrls(text, isUk) {
   const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
   const langCode = isUk ? 'en-GB' : 'en-US';
   const voiceType = isUk ? 1 : 2;
+  const accentFolder = isUk ? 'uk' : 'us';
 
   const cleanFilename = text.toLowerCase().trim()
     .replace(/[^a-z0-9\s'-]/g, '')
     .replace(/\s+/g, '_');
-  const localPath = `./assets/audio/${isUk ? 'uk' : 'us'}/${cleanFilename}.mp3`;
+  const localPath = `./assets/audio/${accentFolder}/${cleanFilename}.mp3`;
+  const cdnPath = `${CDN_AUDIO_BASE}/${accentFolder}/${cleanFilename}.mp3`;
 
   return {
     local: localPath,
+    cdn: cdnPath,
     primary: `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encodeURIComponent(cleanQuery)}`,
     fallback: `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanQuery)}&type=${voiceType}`,
     cleanQuery,
     langCode,
+    cleanFilename,
+    accentFolder,
   };
+}
+
+/**
+ * Cache audio response in CacheStorage for instant subsequent offline playback
+ */
+async function cacheAudioOnline(url) {
+  if (typeof window === 'undefined' || !('caches' in window)) return;
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const match = await cache.match(url);
+    if (!match) {
+      const resp = await fetch(url, { mode: 'cors' });
+      if (resp.ok) {
+        await cache.put(url, resp);
+      }
+    }
+  } catch (e) {}
+}
+
+/**
+ * Plays audio from CacheStorage blob if available offline, otherwise streams from CDN
+ */
+async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail) {
+  if (typeof window !== 'undefined' && 'caches' in window) {
+    try {
+      const cache = await caches.open(AUDIO_CACHE_NAME);
+      const match = await cache.match(cdnUrl);
+      if (match) {
+        const blob = await match.blob();
+        targetAudio.src = URL.createObjectURL(blob);
+        targetAudio.currentTime = 0;
+        trackPlayingAudio(targetAudio);
+        const p = targetAudio.play();
+        if (p !== undefined) p.catch(() => onFail());
+        return;
+      }
+    } catch (e) {}
+  }
+  targetAudio.src = cdnUrl;
+  targetAudio.currentTime = 0;
+  trackPlayingAudio(targetAudio);
+  const p = targetAudio.play();
+  if (p !== undefined) {
+    p.then(() => cacheAudioOnline(cdnUrl)).catch(() => onFail());
+  }
+}
+
+/**
+ * Check if a pack is downloaded
+ */
+export function isVoicePackDownloaded(accent = 'us') {
+  if (accent === 'us' || accent === 'us_base') return true; // Pre-packaged in APK!
+  try {
+    return localStorage.getItem(`myduo_pack_${accent}_downloaded`) === 'true';
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * Check if audio for a specific category is already downloaded (or pre-packaged)
+ */
+export function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
+  const norm = String(category || '').toLowerCase().trim();
+  const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+  const targetAccent = isUk ? 'uk' : 'us';
+
+  if (targetAccent === 'us') {
+    if (norm.includes('elementary') || norm.includes('irregular')) {
+      return true; // Pre-packaged in APK!
+    }
+    try {
+      return localStorage.getItem(`myduo_cat_downloaded_us_${norm}`) === 'true';
+    } catch (e) {
+      return false;
+    }
+  } else {
+    // British voice
+    if (norm.includes('elementary') || norm.includes('irregular')) {
+      return isVoicePackDownloaded('uk_base');
+    }
+    try {
+      return localStorage.getItem(`myduo_cat_downloaded_uk_${norm}`) === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+}
+
+/**
+ * Download voice pack in background with progress callback
+ */
+export async function downloadVoicePack(accent = 'us', wordList = [], onProgress = () => {}) {
+  if (typeof window === 'undefined' || !('caches' in window)) {
+    throw new Error('Cache API not supported');
+  }
+  const cache = await caches.open(AUDIO_CACHE_NAME);
+  const words = Array.isArray(wordList) && wordList.length > 0 ? wordList : [];
+  if (words.length === 0) return { downloaded: 0, total: 0 };
+
+  const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+  const targetAccent = isUk ? 'uk' : 'us';
+  let completed = 0;
+  const total = words.length;
+  const batchSize = 12;
+
+  for (let i = 0; i < words.length; i += batchSize) {
+    const batch = words.slice(i, i + batchSize);
+    await Promise.all(
+      batch.map(async (w) => {
+        const wordText = typeof w === 'string' ? w : (w.word || '');
+        if (!wordText) return;
+        const { cdn, fallback } = getAudioUrls(wordText, isUk);
+        try {
+          const match = await cache.match(cdn);
+          if (!match) {
+            let resp = null;
+            try {
+              resp = await fetch(cdn, { mode: 'cors' });
+            } catch (e) {}
+            if (!resp || !resp.ok) {
+              try {
+                resp = await fetch(fallback, { mode: 'cors' });
+              } catch (e) {}
+            }
+            if (resp && resp.ok) {
+              await cache.put(cdn, resp);
+            }
+          }
+        } catch (e) {}
+        completed++;
+        onProgress(Math.round((completed / total) * 100), completed, total);
+      })
+    );
+  }
+
+  localStorage.setItem(`myduo_pack_${accent}_downloaded`, 'true');
+  return { downloaded: completed, total };
+}
+
+/**
+ * Download voice pack for a specific category
+ */
+export async function downloadCategoryVoicePack(accent = 'us', category = 'Pattern', wordList = [], onProgress = () => {}) {
+  const norm = String(category || '').toLowerCase().trim();
+  const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+  const targetAccent = isUk ? 'uk' : 'us';
+  const res = await downloadVoicePack(targetAccent, wordList, onProgress);
+  try {
+    localStorage.setItem(`myduo_cat_downloaded_${targetAccent}_${norm}`, 'true');
+  } catch (e) {}
+  return res;
 }
 
 /**
@@ -470,7 +630,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetLang = lang || (isUk ? 'en-GB' : 'en-US');
 
-  const { local, primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
+  const { local, cdn, primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
   const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
   const cachedAudio = audioCache.get(cacheKey);
   if (cachedAudio) {
@@ -481,16 +641,19 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
       cachedAudio.playbackRate = isTurtleMode ? 0.62 : 1.0;
       trackPlayingAudio(cachedAudio);
       
-      let fallbackStage = 0; // 0 = local, 1 = primary, 2 = fallback, 3 = speech synthesis
+      let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
       cachedAudio.onerror = () => {
         if (fallbackStage === 0) {
           fallbackStage = 1;
+          playAudioWithCacheFallback(cachedAudio, cdn, () => cachedAudio.onerror());
+        } else if (fallbackStage === 1) {
+          fallbackStage = 2;
           cachedAudio.src = primary;
           cachedAudio.currentTime = 0;
           trackPlayingAudio(cachedAudio);
           cachedAudio.play().catch(() => cachedAudio.onerror());
-        } else if (fallbackStage === 1) {
-          fallbackStage = 2;
+        } else if (fallbackStage === 2) {
+          fallbackStage = 3;
           cachedAudio.src = fallback;
           cachedAudio.currentTime = 0;
           trackPlayingAudio(cachedAudio);
@@ -506,10 +669,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
           if (err && err.name === 'AbortError') return;
           if (fallbackStage === 0) {
             fallbackStage = 1;
-            cachedAudio.src = primary;
-            cachedAudio.currentTime = 0;
-            trackPlayingAudio(cachedAudio);
-            cachedAudio.play().catch(() => cachedAudio.onerror());
+            playAudioWithCacheFallback(cachedAudio, cdn, () => cachedAudio.onerror());
           }
         });
       }
@@ -530,17 +690,20 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     player.currentTime = 0;
     trackPlayingAudio(player);
 
-    let fallbackStage = 0; // 0 = local, 1 = primary, 2 = fallback, 3 = speech synthesis
+    let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
 
     player.onerror = () => {
       if (fallbackStage === 0) {
         fallbackStage = 1;
+        playAudioWithCacheFallback(player, cdn, () => player.onerror());
+      } else if (fallbackStage === 1) {
+        fallbackStage = 2;
         player.src = primary;
         player.currentTime = 0;
         trackPlayingAudio(player);
         player.play().catch(() => player.onerror());
-      } else if (fallbackStage === 1) {
-        fallbackStage = 2;
+      } else if (fallbackStage === 2) {
+        fallbackStage = 3;
         player.src = fallback;
         player.currentTime = 0;
         trackPlayingAudio(player);
@@ -556,14 +719,11 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
         if (err && err.name === 'AbortError') return;
         if (fallbackStage === 0) {
           fallbackStage = 1;
-          player.src = primary;
-          player.currentTime = 0;
-          trackPlayingAudio(player);
-          player.play().catch(() => player.onerror());
+          playAudioWithCacheFallback(player, cdn, () => player.onerror());
         }
       });
     }
-  } catch (err) {
+  } catch (e) {
     speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
   }
 
@@ -925,7 +1085,7 @@ function speakWordAsync(text, isUk = null) {
 
     const accent = isUk !== null ? (isUk ? 'uk' : 'us') : getSavedVoiceAccent();
     const isUkAccent = accent === 'uk' || accent === 'gb' || accent === 'male';
-    const { local, primary, fallback } = getAudioUrls(text, isUkAccent);
+    const { local, cdn, primary, fallback } = getAudioUrls(text, isUkAccent);
 
     let resolved = false;
     let resumeInterval = null;
@@ -945,11 +1105,11 @@ function speakWordAsync(text, isUk = null) {
           clearTimeout(window.__activeSpeechTimer);
           window.__activeSpeechTimer = null;
         }
-        setTimeout(resolve, 300); // 300ms guaranteed silence gap
+        setTimeout(resolve, 150);
       }
     };
 
-    const maxTimer = setTimeout(finish, 4500);
+    const maxTimer = setTimeout(finish, 6500);
     window.__activeSpeechTimer = maxTimer;
 
     const audio = getAutoplayAudio() || new Audio();
@@ -957,7 +1117,7 @@ function speakWordAsync(text, isUk = null) {
     audio.playbackRate = 1.0;
     audio.src = local;
     audio.currentTime = 0;
-    let fallbackStage = 0;
+    let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
     let stageLock = false;
 
     function playSpeechFallback() {
@@ -996,12 +1156,18 @@ function speakWordAsync(text, isUk = null) {
 
       if (fallbackStage === 0) {
         fallbackStage = 1;
+        audio.src = cdn;
+        audio.currentTime = 0;
+        const pCdn = audio.play();
+        if (pCdn !== undefined) pCdn.then(() => cacheAudioOnline(cdn)).catch(handleStageError);
+      } else if (fallbackStage === 1) {
+        fallbackStage = 2;
         audio.src = primary;
         audio.currentTime = 0;
         const p1 = audio.play();
         if (p1 !== undefined) p1.catch(handleStageError);
-      } else if (fallbackStage === 1) {
-        fallbackStage = 2;
+      } else if (fallbackStage === 2) {
+        fallbackStage = 3;
         audio.src = fallback;
         audio.currentTime = 0;
         const p2 = audio.play();
@@ -1116,6 +1282,10 @@ export const AudioService = {
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
+  isVoicePackDownloaded,
+  isCategoryAudioDownloaded,
+  downloadVoicePack,
+  downloadCategoryVoicePack,
 };
 
 export default AudioService;
@@ -1149,4 +1319,8 @@ export {
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
+  isVoicePackDownloaded,
+  isCategoryAudioDownloaded,
+  downloadVoicePack,
+  downloadCategoryVoicePack,
 };

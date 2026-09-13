@@ -36,3 +36,14 @@ backend/
 Code.gs
 backend/dist/
 backend/src/config/config.local.js
+
+# Android security & build artifacts
+*.jks
+*.keystore
+google_play_assets/
+android/app/release/
+android/app/build/
+android/build/
+android/.gradle/
+.idea/
+android/.idea/

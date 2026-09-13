@@ -322,7 +322,7 @@ function showWordNotesModal(notes) {
           <span class="word-notes-modal-icon">i</span>
           <span class="word-notes-modal-title-text">${t('word_notes_title') || 'Примечание'}</span>
         </h3>
-        <button type="button" class="word-notes-modal-close" id="word-notes-close-btn" aria-label="Закрыть">✕</button>
+        <button type="button" class="word-notes-modal-close" id="word-notes-close-btn" aria-label="${t('word_notes_close')}">✕</button>
       </div>
       <div class="word-notes-modal-body">
         <p class="word-notes-modal-text">${notes || ''}</p>
@@ -461,7 +461,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           <div class="mode-switch-pills" id="mode-switch-pills">
             <div class="mode-pill-glider" id="mode-pill-glider"></div>
             <button type="button" class="mode-pill-btn ${isCardsMode ? 'active' : ''} ${!availableModes.cards ? 'disabled' : ''}" data-mode="cards" ${!availableModes.cards ? 'disabled' : ''}>
-              ${getInterfaceLanguage() === 'ru' ? 'Карточки' : getInterfaceLanguage() === 'uk' ? 'Картки' : 'Cards'}
+              ${t('train_cards_chip')}
             </button>
             <button type="button" class="mode-pill-btn ${currentMethod === 'quiz' ? 'active' : ''} ${!availableModes.quiz ? 'disabled' : ''}" data-mode="quiz" ${!availableModes.quiz ? 'disabled' : ''}>
               ${t('dict_stage_quiz')}
@@ -482,7 +482,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 isFavPractice
                   ? `
                   <div class="train-left-badge" id="fav-counter-badge">
-                    ${getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites'}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>
+                    ${t('train_favs_chip')}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>
                   </div>
                 `
                   : `
@@ -496,7 +496,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               <div class="pairs-header-box" style="margin: 2px 0 6px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
                 <h2 class="pairs-title">
                   <span style="font-size: 18px; line-height: 1; flex-shrink: 0;">🧩</span>
-                  <span>${getInterfaceLanguage() === 'ru' ? 'Найдите пары' : getInterfaceLanguage() === 'uk' ? 'Знайдіть пари' : 'Find the pairs'}</span>
+                  <span>${t('train_find_pairs')}</span>
                 </h2>
                 <div class="pairs-timer-badge" id="pairs-timer-badge" title="Round timer">
                   <span class="pairs-timer-icon">⏱️</span>
@@ -543,7 +543,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   <div class="training-word-container">
                     <div class="listening-word-box clickable-word-box" id="speak-word-trigger" title="Tap to speak word">
                       <span class="listening-audio-icon">🎧</span>
-                      <span class="listening-word-text" id="listening-word-text">${getInterfaceLanguage() === 'ru' ? 'Слушайте...' : getInterfaceLanguage() === 'uk' ? 'Слухайте...' : 'Listen...'}</span>
+                      <span class="listening-word-text" id="listening-word-text">${t('train_listen_chip')}</span>
                     </div>
                     ${notesBtnHtml}
                   </div>
@@ -839,10 +839,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           </div>
           <div class="speech-transcript-box" id="speech-transcript-box" style="display: none; margin-top: 10px;"></div>
           <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="margin-top: 12px; width: 100%; max-width: 220px; min-height: 42px; font-size: 15px; padding: 8px 18px; border-radius: 12px; font-weight: 700; cursor: pointer;">
-            ${getInterfaceLanguage() === 'ru' ? 'Ответить в Квизе' : getInterfaceLanguage() === 'uk' ? 'Відповісти у Квізі' : 'Answer in Quiz'}
+            ${t('train_answer_quiz')}
           </button>
           <button type="button" class="primary-button btn-green" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
-            ${getInterfaceLanguage() === 'ru' ? 'Дальше' : getInterfaceLanguage() === 'uk' ? 'Далі' : 'Next'}
+            ${t('train_next_btn')}
           </button>
           <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone" style="position: absolute; bottom: 8px; left: 8px; margin: 0;">
             ⚙️
@@ -971,16 +971,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (speechAttempts < 5) {
           if (holdHint) {
             const attemptText = isTechnical
-              ? getInterfaceLanguage() === 'ru'
-                ? 'Попробуйте еще раз 🎙️'
-                : getInterfaceLanguage() === 'uk'
-                  ? 'Спробуйте ще раз 🎙️'
-                  : 'Try again 🎙️'
-              : getInterfaceLanguage() === 'ru'
-                ? `Попробуйте еще раз 🎙️ (Попытка ${speechAttempts} из 5)`
-                : getInterfaceLanguage() === 'uk'
-                  ? `Спробуйте ще раз 🎙️ (Спроба ${speechAttempts} з 5)`
-                  : `Try again 🎙️ (Attempt ${speechAttempts} of 5)`;
+              ? t('train_try_again_mic')
+              : t('train_try_n_of_m').replace('{n}', speechAttempts).replace('{m}', '5');
             holdHint.innerHTML = attemptText;
           }
           showFallbackButton(cleanErrorText);
@@ -994,12 +986,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '❌';
           }
           if (holdHint) {
-            holdHint.innerHTML =
-              getInterfaceLanguage() === 'ru'
-                ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                : getInterfaceLanguage() === 'uk'
-                  ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                  : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+            holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${currentWord.word}</strong></span>`;
           }
           saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
           if (continueBtn) {
@@ -1009,13 +996,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (fallbackBtn) fallbackBtn.style.display = 'none';
           if (transcriptBox) {
             transcriptBox.style.display = 'block';
-            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${
-              getInterfaceLanguage() === 'ru'
-                ? 'Попытки исчерпаны. Нажмите "Продолжить" для перехода к следующему слову.'
-                : getInterfaceLanguage() === 'uk'
-                  ? 'Спроби вичерпані. Натисніть "Далі" для переходу до наступного слова.'
-                  : 'Attempts exhausted. Tap "Next" to proceed.'
-            }</span>`;
+            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${t('train_attempts_exhausted')}</span>`;
           }
         }
       }
@@ -1092,13 +1073,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
                 }
                 if (holdHint) {
-                  holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
-                    getInterfaceLanguage() === 'ru'
-                      ? 'AI оценивает произношение...'
-                      : getInterfaceLanguage() === 'uk'
-                        ? 'AI оцінює вимову...'
-                        : 'AI is evaluating pronunciation...'
-                  }</span>`;
+                  holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
                 }
                 setTimeout(() => {
                   try {
@@ -1129,7 +1104,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
               if (allResults.length > 0 && transcriptBox) {
                 transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = `🎤 Услышано: <strong>«${allResults[0]}»</strong>`;
+                transcriptBox.innerHTML = `🎤 <strong>«${allResults[0]}»</strong>`;
               }
 
               // Мгновенная проверка: если уже есть верное произношение, сразу засчитываем!
@@ -1165,13 +1140,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               // Технические ошибки – не списываем попытку
               if (err.error === 'not-allowed' || err.error === 'audio-capture') {
                 isEvaluated = true;
-                handleNoSpeechHeard('🔒 Разрешите микрофон в браузере', true);
+                handleNoSpeechHeard(t('train_mic_allow_browser'), true);
                 return;
               }
 
               if (err.error === 'no-speech') {
                 isEvaluated = true;
-                handleNoSpeechHeard('Голос не обнаружен. Нажмите 🎙️ для повтора', true);
+                handleNoSpeechHeard(t('train_voice_not_detected'), true);
                 return;
               }
 
@@ -1180,10 +1155,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               console.warn('Переключение на MediaRecorder (ошибка:', err.error, ')');
               if (transcriptBox) {
                 transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = '⏳ Переключаемся на альтернативное распознавание...';
+                transcriptBox.innerHTML = t('train_switching_alt');
               }
               if (holdHint) {
-                holdHint.innerHTML = '⏳ Подключаем запасной вариант...';
+                holdHint.innerHTML = t('train_switching_alt');
               }
               startMobileMediaRecorder();
             };
@@ -1192,7 +1167,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               clearAllTimers();
               if (!isEvaluated && !isCompleted && !isProcessing) {
                 isListening = false;
-                handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
+                handleNoSpeechHeard(t('train_voice_not_detected'), true);
               }
             };
 
@@ -1201,10 +1176,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             console.warn('Native speech launch failed, using MediaRecorder:', e);
             if (transcriptBox) {
               transcriptBox.style.display = 'block';
-              transcriptBox.innerHTML = '⏳ Переключаемся на альтернативное распознавание...';
+              transcriptBox.innerHTML = t('train_switching_alt');
             }
             if (holdHint) {
-              holdHint.innerHTML = '⏳ Подключаем запасной вариант...';
+              holdHint.innerHTML = t('train_switching_alt');
             }
             startMobileMediaRecorder();
           }
@@ -1278,6 +1253,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           return;
         }
 
+        if (!localStorage.getItem('myduo_mic_prompt_seen')) {
+          await new Promise((resolve) => {
+            const modal = document.createElement('div');
+            modal.className = 'modal-backdrop';
+            modal.id = 'mic-explainer-modal';
+            modal.innerHTML = `
+              <div class="modal-content" style="text-align: center; max-width: 340px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
+                <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🎙️</div>
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">${t('mic_modal_title')}</h3>
+                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.45; margin: 0 0 20px;">
+                  ${t('mic_modal_desc')}
+                </p>
+                <button class="primary-button btn-green" id="mic-explainer-allow-btn" style="min-height: 46px; height: 46px; font-size: 15px; font-weight: 700; width: 100%;">
+                  ${t('mic_modal_allow')}
+                </button>
+              </div>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('#mic-explainer-allow-btn').addEventListener('click', () => {
+              localStorage.setItem('myduo_mic_prompt_seen', 'true');
+              modal.remove();
+              resolve(true);
+            });
+          });
+        }
+
         try {
           try {
             mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -1324,13 +1325,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
             }
             if (holdHint) {
-              holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${
-                getInterfaceLanguage() === 'ru'
-                  ? 'AI оценивает произношение...'
-                  : getInterfaceLanguage() === 'uk'
-                    ? 'AI оцінює вимову...'
-                    : 'AI is evaluating pronunciation...'
-              }</span>`;
+              holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
             }
 
             try {
@@ -1345,7 +1340,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   transcriptBox.style.display = 'block';
                   let heardHtml = '';
                   if (score !== null) {
-                    heardHtml += `Точность произношения: <strong>${score}%</strong>`;
+                    heardHtml += `${t('stats_accuracy')}: <strong>${score}%</strong>`;
                   }
                   if (feedback && !isAiCorrect && !feedback.toLowerCase().includes('отличное') && !feedback.toLowerCase().includes('відмінне')) {
                     heardHtml += `${score !== null ? '<br>' : ''}<span style="font-size: 13px; color: #d97706; font-style: italic;">💡 ${feedback}</span>`;
@@ -1354,14 +1349,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 }
                 await evaluateSpeech([spokenWord], isAiCorrect);
               } else {
-                handleNoSpeechHeard('Голос не распознан. Нажмите 🎙️ для повтора', true);
+                handleNoSpeechHeard(t('train_voice_not_detected'), true);
               }
             } catch (transcribeErr) {
               console.warn('AI Transcribe error:', transcribeErr);
               const errMsg =
                 transcribeErr && transcribeErr.message
                   ? transcribeErr.message
-                  : 'Не удалось распознать. Нажмите 🎙️ для повтора';
+                  : t('train_try_again_mic');
               handleNoSpeechHeard(errMsg, true);
             }
           };
@@ -1391,57 +1386,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           console.warn('Microphone access failed:', micErr);
           if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
             handleNoSpeechHeard(
-              '🔒 Доступ к микрофону заблокирован. Разрешите микрофон в браузере.',
+              t('train_mic_allow_browser'),
               true,
             );
           } else {
-            handleNoSpeechHeard('Не удалось запустить микрофон', true);
+            handleNoSpeechHeard(t('train_mic_launch_failed'), true);
           }
         }
       }
 
-      async function startSpeechSession() {
-        const hasPromptSeen = localStorage.getItem('myduo_mic_prompt_seen');
-        if (!hasPromptSeen) {
-          const userAccepted = await new Promise((resolve) => {
-            const modal = document.createElement('div');
-            modal.className = 'modal-backdrop';
-            modal.id = 'mic-explainer-modal';
-            modal.innerHTML = `
-              <div class="modal-content" style="text-align: center; max-width: 340px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
-                <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🎙️</div>
-                <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">${getInterfaceLanguage() === 'ru' ? 'Разрешите доступ к микрофону' : getInterfaceLanguage() === 'uk' ? 'Дозвольте доступ до мікрофона' : 'Allow microphone access'}</h3>
-                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.45; margin: 0 0 20px;">
-                  ${getInterfaceLanguage() === 'ru' ? 'Микрофон нужен для тренировки произношения слов. В следующем системном окне браузера нажмите <strong>«Разрешить»</strong>.' : getInterfaceLanguage() === 'uk' ? 'Мікрофон потрібен для тренування вимови слів. У наступному системному вікні браузера натисніть <strong>«Дозволити»</strong>.' : 'Microphone is required for pronunciation training. In the next browser prompt, tap <strong>"Allow"</strong>.'}
-                </p>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                  <button class="primary-button btn-green" id="mic-explainer-allow-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
-                    ${getInterfaceLanguage() === 'ru' ? 'Понятно, продолжить' : getInterfaceLanguage() === 'uk' ? 'Зрозуміло, продовжити' : 'Got it, continue'}
-                  </button>
-                  <button class="secondary-button" id="mic-explainer-cancel-btn" style="min-height: 40px; font-size: 14px; width: 100%;">
-                    ${getInterfaceLanguage() === 'ru' ? 'Ответить текстом' : getInterfaceLanguage() === 'uk' ? 'Відповісти текстом' : 'Answer with text'}
-                  </button>
-                </div>
-              </div>
-            `;
-            document.body.appendChild(modal);
-            modal.querySelector('#mic-explainer-allow-btn').addEventListener('click', () => {
-              localStorage.setItem('myduo_mic_prompt_seen', 'true');
-              modal.remove();
-              resolve(true);
-            });
-            modal.querySelector('#mic-explainer-cancel-btn').addEventListener('click', () => {
-              modal.remove();
-              resolve(false);
-            });
-          });
-
-          if (!userAccepted) {
-            renderConsonantsQuiz();
-            return;
-          }
-        }
-
+      function startSpeechSession() {
         if (preferNativeSpeech) {
           startDesktopNativeSpeech();
         } else {
@@ -1729,13 +1683,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           micBtn.classList.add('success');
           micBtn.innerHTML = '✓';
           if (holdHint) {
-            holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">${
-              getInterfaceLanguage() === 'ru'
-                ? '✓ Отлично! Произношение верное!'
-                : getInterfaceLanguage() === 'uk'
-                  ? '✓ Відмінно! Вимова правильна!'
-                  : '✓ Perfect! Correct pronunciation!'
-            }</span>`;
+            holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">${t('train_speech_correct')}</span>`;
           }
 
           await saveProgress(currentWord.id, true, 'quiz', { isFavPractice });
@@ -1752,12 +1700,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (speechAttempts < 5) {
             micBtn.innerHTML = '🎙️';
             if (holdHint) {
-              holdHint.innerHTML =
-                getInterfaceLanguage() === 'ru'
-                  ? `Попробуйте повторить 🎙️ (Попытка ${speechAttempts} из 5)`
-                  : getInterfaceLanguage() === 'uk'
-                    ? `Спробуйте повторити 🎙️ (Спроба ${speechAttempts} з 5)`
-                    : `Try to repeat 🎙️ (Attempt ${speechAttempts} of 5)`;
+              holdHint.innerHTML = t('train_try_n_of_m', { n: speechAttempts, m: 5 });
             }
             setTimeout(() => {
               isProcessing = false;
@@ -1769,12 +1712,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '❌';
 
             if (holdHint) {
-              holdHint.innerHTML =
-                getInterfaceLanguage() === 'ru'
-                  ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                  : getInterfaceLanguage() === 'uk'
-                    ? `<span style="color: #ef4444; font-weight: 700;">Штраф -1 XP. Правильно: <strong>${currentWord.word}</strong></span>`
-                    : `<span style="color: #ef4444; font-weight: 700;">Penalty -1 XP. Correct: <strong>${currentWord.word}</strong></span>`;
+              holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${currentWord.word}</strong></span>`;
             }
             await saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
             if (continueBtn) {
@@ -2210,12 +2148,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             <div class="pairs-timeout-overlay">
               <div class="pairs-timeout-card">
                 <div style="font-size: 42px; margin-bottom: 8px; line-height: 1;">⏱️</div>
-                <h3 style="font-size: 22px; font-weight: 800; margin: 0 0 8px; color: #ef4444;">Время вышло!</h3>
+                <h3 style="font-size: 22px; font-weight: 800; margin: 0 0 8px; color: #ef4444;">${t('train_time_up')}</h3>
                 <div style="font-size: 14px; font-weight: 700; color: #dc2626; margin-bottom: 18px; background: rgba(239, 68, 68, 0.1); padding: 5px 14px; border-radius: 8px; display: inline-block;">
-                  Штраф -5 XP
+                  ${t('train_penalty_5xp')}
                 </div>
                 <button class="primary-button btn-green" id="retry-pairs-btn" style="min-height: 46px; font-size: 16px; font-weight: 700; width: 100%;">
-                  🔄 Попробовать снова
+                  ${t('train_try_again')}
                 </button>
               </div>
             </div>
@@ -2350,8 +2288,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } else if (currentMethod === 'input') {
     practiceArea.innerHTML = `
       <div class="input-form-row">
-        <div class="answer-input" id="answer-input" contenteditable="true" role="textbox" aria-placeholder="Введите на английском..." spellcheck="false" autocomplete="off" autocapitalize="none"></div>
-        <button type="button" class="check-button" id="check-answer-btn">Проверить</button>
+        <div class="answer-input" id="answer-input" contenteditable="true" role="textbox" aria-placeholder="${t('train_input_placeholder')}" spellcheck="false" autocomplete="off" autocapitalize="none"></div>
+        <button type="button" class="check-button" id="check-answer-btn">${t('train_check')}</button>
       </div>
       <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 10px; font-weight: 600; text-align: center; font-size: 15px;"></div>
     `;
@@ -2569,14 +2507,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           feedback.style.color = '#ef4444';
           feedback.innerHTML = `
             <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">
-              ⚠️ Опечатка! Исправьте ошибку:
+              ${t('train_typo_warning')}
             </div>
             <div class="diff-letters-row" style="letter-spacing: 5px; font-size: 20px; font-weight: 700; display: inline-block; margin-top: 4px;">
               ${renderDiffHtml(userAns, correctAns)}
             </div>
           `;
 
-          checkBtn.textContent = 'Исправить (-1 XP)';
+          checkBtn.textContent = t('train_fix_penalty');
           placeCaretAtEnd(input);
           return;
         } else {
@@ -2600,7 +2538,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedback.style.color = 'var(--success-color, #16a34a)';
 
         const isSecondChanceFix = isCorrect && hasSecondChance;
-        const successMsg = isSecondChanceFix ? '✓ Исправлено! (-1 XP)' : '✓ Верно! (+3 XP)';
+        const successMsg = isSecondChanceFix ? t('train_fixed_success') : t('train_correct_xp');
 
         feedback.innerHTML = `
           <div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">
@@ -2611,7 +2549,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         input.classList.add('wrong');
         feedback.style.display = 'block';
         feedback.innerHTML = `
-          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Правильно:</div>
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
           <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
             ${currentWord.word}
           </div>
@@ -2637,7 +2575,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
         if (isCorrect) {
           if (inputCount >= 3 && !favorited) {
-            feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">🎉 Слово выучено!</div>`;
+            feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">${t('train_word_mastered')}</div>`;
           }
         }
         if (isManyMistakes) {
@@ -2678,13 +2616,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     focusAndPlaceCaret(input);
   } else {
+    const startFlipped = Boolean(isFavPractice && window.__favsAutoplayRunning);
     const cardHtml = `
       <div class="flashcard-3d-wrapper">
-        <div class="flashcard-3d" id="flashcard-3d" title="Нажмите, чтобы перевернуть карточку">
+        <div class="flashcard-3d ${startFlipped ? 'is-flipped' : ''}" id="flashcard-3d" title="${t('train_flip_card_hint')}">
           <div class="flashcard-face flashcard-front">
             <div class="flashcard-face-top">
-              <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="Прослушать">🔊</button>
-              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-front" title="В Избранное">
+              <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="${t('train_listen_audio')}">🔊</button>
+              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-front" title="${t('train_to_favorites')}">
                 ${favorited ? '❤️' : '🤍'}
               </button>
             </div>
@@ -2699,8 +2638,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           <div class="flashcard-face flashcard-back">
             <div class="flashcard-face-top">
-              <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="Прослушать">🔊</button>
-              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-back" title="В Избранное">
+              <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="${t('train_listen_audio')}">🔊</button>
+              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-back" title="${t('train_to_favorites')}">
                 ${favorited ? '❤️' : '🤍'}
               </button>
             </div>
@@ -2720,7 +2659,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       existingWrapper.outerHTML = cardHtml;
       const favBadge = container.querySelector('#fav-counter-badge') || container.querySelector('.train-left-badge');
       if (favBadge) {
-        const favLabel = getInterfaceLanguage() === 'ru' ? 'Избранные' : getInterfaceLanguage() === 'uk' ? 'Обрані' : 'Favorites';
+        const favLabel = t('favorites');
         const currentNum = activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1;
         favBadge.innerHTML = `${favLabel}: <strong>${currentNum}/${activeWords.length}</strong>`;
       }
@@ -2753,7 +2692,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const flashcardWrapper = practiceArea.querySelector('.flashcard-3d-wrapper');
     const flashcard = practiceArea.querySelector('#flashcard-3d');
     const feedbackBtns = practiceArea.querySelector('#card-feedback-btns');
-    let isFlipped = false;
+    let isFlipped = startFlipped;
     let flipCount = 0;
     let shimmerTriggered = false;
 
@@ -3039,9 +2978,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         // 1. Show Translation (back face)
         if (flashcard) {
           isFlipped = true;
-          flashcard.classList.add('is-flipped');
+          if (!flashcard.classList.contains('is-flipped')) {
+            flashcard.classList.add('is-flipped');
+            await autoplayDelay(120);
+          }
         }
-        await autoplayDelay(120);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         const translation = getWordTranslation(currentWord);
@@ -3117,7 +3058,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
         window.__favsAutoplayStartTimeout = setTimeout(() => {
           if (window.__favsAutoplayRunning) runAutoplayCycle();
-        }, 150);
+        }, 80);
       }
     }
   }
