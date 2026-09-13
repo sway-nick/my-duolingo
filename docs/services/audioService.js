@@ -406,7 +406,7 @@ async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail) {
 /**
  * Check if a pack is downloaded
  */
-export function isVoicePackDownloaded(accent = 'us') {
+function isVoicePackDownloaded(accent = 'us') {
   if (accent === 'us' || accent === 'us_base') return true; // Pre-packaged in APK!
   try {
     return localStorage.getItem(`myduo_pack_${accent}_downloaded`) === 'true';
@@ -418,7 +418,7 @@ export function isVoicePackDownloaded(accent = 'us') {
 /**
  * Check if audio for a specific category is already downloaded (or pre-packaged)
  */
-export function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
+function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
   const norm = String(category || '').toLowerCase().trim();
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
@@ -448,7 +448,7 @@ export function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary'
 /**
  * Download voice pack in background with progress callback
  */
-export async function downloadVoicePack(accent = 'us', wordList = [], onProgress = () => {}) {
+async function downloadVoicePack(accent = 'us', wordList = [], onProgress = () => {}) {
   if (typeof window === 'undefined' || !('caches' in window)) {
     throw new Error('Cache API not supported');
   }
@@ -499,7 +499,7 @@ export async function downloadVoicePack(accent = 'us', wordList = [], onProgress
 /**
  * Download voice pack for a specific category
  */
-export async function downloadCategoryVoicePack(accent = 'us', category = 'Pattern', wordList = [], onProgress = () => {}) {
+async function downloadCategoryVoicePack(accent = 'us', category = 'Pattern', wordList = [], onProgress = () => {}) {
   const norm = String(category || '').toLowerCase().trim();
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
