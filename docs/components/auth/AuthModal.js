@@ -1,8 +1,9 @@
 import { loginUser, registerUser, googleAuthUser } from '../../services/api.js?v=200.0';
 import { setCurrentUser } from '../../services/authService.js?v=200.0';
+import { loginWithGoogle } from '../../services/firebase.js?v=200.0';
 import { t } from '../../services/i18n.js?v=200.0';
 
-const GOOGLE_CLIENT_ID = '971261131396-00l4rv6n0c4plrd9ie10qb8tvrme2emk.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com';
 
 function parseJwt(token) {
   try {
@@ -259,8 +260,53 @@ function renderAuthModal(onSuccessCallback) {
 
   // Click on full-width custom Google button
   if (googleBtn) {
-    googleBtn.addEventListener('click', () => {
+    googleBtn.addEventListener('click', async () => {
       errorBox.style.display = 'none';
+
+      // 1. Mobile Android (Capacitor Native Google Sign-In)
+      if (window.Capacitor?.Plugins?.FirebaseAuthentication) {
+        googleBtn.disabled = true;
+        const origContent = googleBtn.innerHTML;
+        googleBtn.innerHTML = `<span style="font-size: 14px;">⏳ ${t('auth_loading')}</span>`;
+        try {
+          const userObj = await loginWithGoogle();
+          if (userObj && userObj.email) {
+            const email = (userObj.email || '').toLowerCase().trim();
+            const name = userObj.name || email.split('@')[0];
+            const picture = userObj.avatar || '';
+
+            const res = await googleAuthUser(email, name, picture);
+            if (res && res.success && res.data?.user) {
+              const userWithGoogle = {
+                ...res.data.user,
+                provider: 'google',
+                name: res.data.user.name || name,
+                email: email,
+                avatar: picture,
+                idToken: userObj.idToken || '',
+              };
+              setCurrentUser(userWithGoogle, userWithGoogle.idToken || res.data.token);
+              modal.remove();
+              if (onSuccessCallback) onSuccessCallback(userWithGoogle);
+              return;
+            }
+          }
+        } catch (nativeErr) {
+          console.warn('Native Google Sign-In error:', nativeErr);
+          const msg = nativeErr?.message || String(nativeErr || '');
+          if (!msg.includes('cancel') && !msg.includes('closed') && !msg.includes('12501')) {
+            errorBox.textContent = msg || t('auth_err_failed');
+            errorBox.style.display = 'block';
+          }
+          return;
+        } finally {
+          googleBtn.disabled = false;
+          googleBtn.innerHTML = origContent;
+        }
+        return;
+      }
+
+      // 2. Web Browser Google Sign-In via GIS
       if (tokenClient) {
         tokenClient.requestAccessToken({ prompt: 'select_account' });
       } else if (window.google?.accounts?.id) {
