@@ -35,8 +35,8 @@ const sourceAudioDir = path.join(ROOT_SOURCE, 'frontend/assets/audio');
 // 2. Prepare Android frontend/assets/audio
 console.log('--- 2. Preparing Android frontend/assets/audio (Elementary + Irregular verbs only) ---');
 
-// Package US audio for Elementary & Irregular verbs (19.9 MB), keep UK empty for on-demand download to maintain ~37 MB APK size
-['us'].forEach(accent => {
+// Package both US and UK audio for Elementary & Irregular verbs (2,594 words * 2 = 5,188 files, ~42.8 MB audio)
+['us', 'uk'].forEach(accent => {
   const srcAccentDir = path.join(sourceAudioDir, accent);
   const destAccentDir = path.join(androidAudioDir, accent);
 
@@ -72,16 +72,6 @@ console.log('--- 2. Preparing Android frontend/assets/audio (Elementary + Irregu
   const finalCount = fs.readdirSync(destAccentDir).length;
   console.log(`Accent [${accent}]: removed ${removed} non-target files, copied/verified ${copied}, total in folder: ${finalCount}`);
 });
-
-// Clear UK audio folder in Android frontend
-const ukDestDir = path.join(androidAudioDir, 'uk');
-if (fs.existsSync(ukDestDir)) {
-  const ukFiles = fs.readdirSync(ukDestDir);
-  for (const f of ukFiles) {
-    fs.unlinkSync(path.join(ukDestDir, f));
-  }
-  console.log(`Cleaned UK audio folder in Android frontend (${ukFiles.length} files removed).`);
-}
 
 // Ensure coin.mp3 is in android audio
 if (fs.existsSync(path.join(sourceAudioDir, 'coin.mp3'))) {
