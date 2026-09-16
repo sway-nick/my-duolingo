@@ -6,7 +6,12 @@ const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
 
 console.log('--- 1. Loading words.json and filtering Elementary & Irregular verbs ---');
 const wordsPath = path.join(ROOT_SOURCE, 'frontend/assets/data/words.json');
-const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
+const rawWords = fs.readFileSync(wordsPath, 'utf8');
+if (rawWords.includes('\ufffd')) {
+  throw new Error('❌ BUILD FAILED: Detected corrupted UTF-8 replacement character (U+FFFD) in words.json!');
+}
+console.log('🔍 Data integrity check passed: 0 corrupted U+FFFD characters in words.json.');
+const words = JSON.parse(rawWords);
 
 function getAudioFileName(text) {
   return text.toLowerCase().trim()
