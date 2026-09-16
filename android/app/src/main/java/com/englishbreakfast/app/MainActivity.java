@@ -20,10 +20,11 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Enable modern edge-to-edge drawing so status bar and navigation bar are seamlessly colored by webview
+        // 1. Enable modern edge-to-edge drawing so status bar and navigation bar are colored with main theme background
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        int initialBg = Color.parseColor("#0f172a");
+        getWindow().setStatusBarColor(initialBg);
+        getWindow().setNavigationBarColor(initialBg);
 
         // 2. Measure status bar & navigation bar heights in dp
         measureDimensions();
@@ -85,8 +86,6 @@ public class MainActivity extends BridgeActivity {
     public void onResume() {
         super.onResume();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
         injectSafeTopToWebView();
         injectSafeBottomToWebView();
     }
@@ -123,6 +122,8 @@ public class MainActivity extends BridgeActivity {
                                 boolean isDark = themeOrColor.equalsIgnoreCase("dark") || 
                                                  themeOrColor.equalsIgnoreCase("#0f172a") || 
                                                  themeOrColor.equalsIgnoreCase("#1e293b");
+                                boolean isNotebook = themeOrColor.equalsIgnoreCase("notebook") || 
+                                                     themeOrColor.equalsIgnoreCase("#f5eedc");
                                 WindowInsetsControllerCompat controller = 
                                     WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
                                 if (controller != null) {
@@ -131,8 +132,10 @@ public class MainActivity extends BridgeActivity {
                                     controller.setAppearanceLightStatusBars(!isDark);
                                     controller.setAppearanceLightNavigationBars(!isDark);
                                 }
-                                getWindow().setStatusBarColor(Color.TRANSPARENT);
-                                getWindow().setNavigationBarColor(Color.TRANSPARENT);
+                                int bgThemeColor = isDark ? Color.parseColor("#0f172a") : 
+                                                   (isNotebook ? Color.parseColor("#f5eedc") : Color.parseColor("#f8fafc"));
+                                getWindow().setStatusBarColor(bgThemeColor);
+                                getWindow().setNavigationBarColor(bgThemeColor);
                             } catch (Exception e) {}
                         });
                     }

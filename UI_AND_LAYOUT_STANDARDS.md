@@ -19,31 +19,28 @@
      display: flex;
      justify-content: space-between;
      align-items: center;
-     padding-top: calc(10px + var(--safe-top, env(safe-area-inset-top, 0px)));
-     padding-bottom: 10px;
-     padding-left: max(14px, env(safe-area-inset-left, 0px));
-     padding-right: max(14px, env(safe-area-inset-right, 0px));
-     min-height: calc(60px + var(--safe-top, env(safe-area-inset-top, 0px)));
+     padding: 10px 14px;
+     min-height: 60px;
      height: auto;
      border-bottom: 1px solid var(--border-color);
      background: var(--card-bg, #ffffff);
      position: sticky;
-     top: 0;
+     top: var(--safe-top, 0px);
      z-index: 50;
      box-sizing: border-box;
      flex-wrap: nowrap;
      overflow: hidden;
    }
    ```
-2. **Бесшовное окрашивание системной строки состояния (Status Bar) на Android:**
-   - Android работает в современном режиме **Edge-to-Edge** (`WindowCompat.setDecorFitsSystemWindows(getWindow(), false)`).
-   - Строка состояния Android прозрачна (`Color.TRANSPARENT`), благодаря чему фон `.mobile-header` естественным образом заполняет пространство под часами и батареей для каждой темы:
-     - **Светлая тема:** белый фон `#ffffff`, системные иконки (время, батарея) — **тёмные** (`setAppearanceLightStatusBars(true)`).
-     - **Тёмная тема:** тёмно-синий фон `#0f172a`, системные иконки — **белые** (`setAppearanceLightStatusBars(false)`).
-     - **Тетрадь:** винтажный кремовый фон `#f5eedc`, системные иконки — **тёмные** (`setAppearanceLightStatusBars(true)`).
+2. **Окрашивание системной строки состояния (Status Bar) цветом основного фона:**
+   - Строка состояния Android (где часы, батарея, Wi-Fi) **строго окрашивается в цвет основного фона приложения (`--bg-color`)**, а не сливается с хедером:
+     - **Тёмная тема:** глубокий тёмный фон `#0f172a` (он темнее хедера `#1e293b`). Белые системные значки (`setAppearanceLightStatusBars(false)`).
+     - **Светлая тема:** светлый фон `#f8fafc`. Тёмные системные значки (`setAppearanceLightStatusBars(true)`).
+     - **Тетрадь:** винтажный кремовый фон `#f5eedc`. Тёмные системные значки (`setAppearanceLightStatusBars(true)`).
    - Точная высота статус-бара автоматически передаётся из Android в WebView через CSS-переменную `--safe-top`.
-   - В браузере (где `--safe-top` и `safe-area-inset-top` равны `0px`) отступ остаётся строго эталонным: `10px 14px`, `min-height: 60px`.
-   - На Android часы и батарея никогда не перекрывают логотип, очковый бейдж и бургер, а находятся аккуратно в верхнем безопасном поле шапки.
+   - В верстке перед хедером размещается элемент `.safe-area-top-fill` с `height: var(--safe-top, 0px)` и фоном `var(--bg-color)`.
+   - Хедер `.mobile-header` начинается на `top: var(--safe-top)` и имеет цвет плашки/карточки `var(--card-bg)` (`#1e293b` в тёмной теме), визуально возвышаясь над тёмной строкой состояния и сохраняя идеальную симметрию `min-height: 60px` и `padding: 10px 14px`.
+   - В браузере `--safe-top = 0px`, `.safe-area-top-fill` имеет высоту `0px`, и хедер прилегает к верхнему краю окна (`top: 0`).
 
 3. **Эталон нижней строки навигации Android (Navigation Bar) и безопасная зона снизу (`--safe-bottom`):**
    - **Режим Edge-to-Edge снизу:**
