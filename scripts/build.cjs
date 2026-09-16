@@ -24,7 +24,17 @@ function copyRecursiveSync(src, dest) {
 function build() {
   console.log('📦 Building English Trainer PWA from frontend/ source...');
 
-  // 0. Automatically generate playlist.json and inject real video list into index.html
+  // 0. Validate words.json encoding (Zero U+FFFD tolerance)
+  const wordsPath = path.join(__dirname, '../frontend/assets/data/words.json');
+  if (fs.existsSync(wordsPath)) {
+    const rawWords = fs.readFileSync(wordsPath, 'utf8');
+    if (rawWords.includes('\ufffd')) {
+      throw new Error('❌ BUILD FAILED: Detected corrupted UTF-8 replacement character (U+FFFD) in frontend/assets/data/words.json!');
+    }
+    console.log('🔍 Data integrity check passed: 0 corrupted U+FFFD characters in words.json.');
+  }
+
+  // 0.1. Automatically generate playlist.json and inject real video list into index.html
   const videoDir = path.join(__dirname, '../frontend/assets/video');
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
   const videoFiles = fs.readdirSync(videoDir)
