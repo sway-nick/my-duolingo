@@ -35,9 +35,14 @@
             initBg = '#f5eedc';
           } else {
             document.documentElement.style.backgroundColor = '#ffffff';
-          }
           if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
-            window.AndroidThemeBridge.setWindowThemeColor(initBg);
+            window.AndroidThemeBridge.setWindowThemeColor(t);
+          }
+          if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.getStatusBarHeightDp === 'function') {
+            var sbHeight = window.AndroidThemeBridge.getStatusBarHeightDp();
+            if (sbHeight > 0) {
+              document.documentElement.style.setProperty('--safe-top', sbHeight + 'px');
+            }
           }
         } catch (e) {}
         var prevBuild = localStorage.getItem('myduo_app_build');
