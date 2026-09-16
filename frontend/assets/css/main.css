@@ -305,8 +305,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
-  min-height: 60px;
+  padding-top: calc(10px + var(--safe-top, env(safe-area-inset-top, 0px)));
+  padding-bottom: 10px;
+  padding-left: max(14px, env(safe-area-inset-left, 0px));
+  padding-right: max(14px, env(safe-area-inset-right, 0px));
+  min-height: calc(60px + var(--safe-top, env(safe-area-inset-top, 0px)));
   height: auto;
   border-bottom: 1px solid var(--border-color);
   background: #ffffff;
@@ -6227,8 +6230,11 @@ body.notebook-theme,
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  padding: 10px 14px !important;
-  min-height: 60px !important;
+  padding-top: calc(10px + var(--safe-top, env(safe-area-inset-top, 0px))) !important;
+  padding-bottom: 10px !important;
+  padding-left: max(14px, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(14px, env(safe-area-inset-right, 0px)) !important;
+  min-height: calc(60px + var(--safe-top, env(safe-area-inset-top, 0px))) !important;
   height: auto !important;
   border-bottom: 1px solid var(--border-color) !important;
   position: sticky !important;
@@ -6245,6 +6251,10 @@ body.notebook-theme,
   max-width: 180px;
   height: 38px;
   min-width: 130px;
+}
+
+.burger-drawer {
+  padding-top: calc(16px + var(--safe-top, env(safe-area-inset-top, 0px))) !important;
 }
 
 /* Custom Notes styles for Cards and Dictionary */
