@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
+import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -15,6 +17,7 @@ public class MainActivity extends BridgeActivity {
 
     private float statusBarHeightDp = 0f;
     private float navigationBarHeightDp = 0f;
+    private long lastBackPressTime = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,34 @@ public class MainActivity extends BridgeActivity {
         });
 
         setupThemeBridge();
+        setupBackNavigation();
+    }
+
+    private void setupBackNavigation() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (bridge != null && bridge.getWebView() != null) {
+                    bridge.getWebView().evaluateJavascript(
+                        "(function() { if (typeof window.handleAndroidBackButton === 'function') { return window.handleAndroidBackButton(); } return false; })()",
+                        result -> {
+                            boolean handled = "true".equalsIgnoreCase(result) || "\"true\"".equalsIgnoreCase(result);
+                            if (!handled) {
+                                long now = System.currentTimeMillis();
+                                if (now - lastBackPressTime < 2000) {
+                                    finish();
+                                } else {
+                                    lastBackPressTime = now;
+                                    Toast.makeText(MainActivity.this, "Нажмите «Назад» еще раз, чтобы выйти", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    );
+                } else {
+                    finish();
+                }
+            }
+        });
     }
 
     private void measureDimensions() {
