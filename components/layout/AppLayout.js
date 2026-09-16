@@ -48,7 +48,7 @@ function applyTheme(theme) {
   }
   if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
     try {
-      window.AndroidThemeBridge.setWindowThemeColor(targetBg);
+      window.AndroidThemeBridge.setWindowThemeColor(theme);
     } catch (e) {}
   }
 }

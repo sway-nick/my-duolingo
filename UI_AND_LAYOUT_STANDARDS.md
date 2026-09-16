@@ -8,22 +8,25 @@
 
 ---
 
-## 1. Эталон шапки приложения (`.mobile-header`)
+## 1. Эталон шапки приложения (`.mobile-header`) и строки состояния Android
 
 Шапка приложения должна строго и неизменно соответствовать утверждённому эталону:
 
 ### Правила верстки хедера:
-1. **Симметричные вертикальные отступы и центрирование:**
+1. **Симметричные вертикальные отступы, центрирование и поддержка строки состояния:**
    ```css
    .mobile-header {
      display: flex;
      justify-content: space-between;
      align-items: center;
-     padding: 10px 14px;
-     min-height: 60px;
+     padding-top: calc(10px + var(--safe-top, env(safe-area-inset-top, 0px)));
+     padding-bottom: 10px;
+     padding-left: max(14px, env(safe-area-inset-left, 0px));
+     padding-right: max(14px, env(safe-area-inset-right, 0px));
+     min-height: calc(60px + var(--safe-top, env(safe-area-inset-top, 0px)));
      height: auto;
      border-bottom: 1px solid var(--border-color);
-     background: #ffffff;
+     background: var(--card-bg, #ffffff);
      position: sticky;
      top: 0;
      z-index: 50;
@@ -32,10 +35,15 @@
      overflow: hidden;
    }
    ```
-2. **Категорически запрещено:**
-   - ❌ Добавлять искусственные блоки-спейсеры (`.safe-top-spacer`).
-   - ❌ Добавлять асимметричные отступы сверху типа `padding-top: calc(... + env(safe-area-inset-top))` внутрь `.mobile-header`. На Android это создаёт «чёлку» (пустую серую зону сверху), смещая логотип и бургер к нижнему краю шапки.
-   - ❌ Смещать `top` шапки на `top: var(--safe-top)`. Шапка всегда должна оставаться на `top: 0`.
+2. **Бесшовное окрашивание системной строки состояния (Status Bar) на Android:**
+   - Android работает в современном режиме **Edge-to-Edge** (`WindowCompat.setDecorFitsSystemWindows(getWindow(), false)`).
+   - Строка состояния Android прозрачна (`Color.TRANSPARENT`), благодаря чему фон `.mobile-header` естественным образом заполняет пространство под часами и батареей для каждой темы:
+     - **Светлая тема:** белый фон `#ffffff`, системные иконки (время, батарея) — **тёмные** (`setAppearanceLightStatusBars(true)`).
+     - **Тёмная тема:** тёмно-синий фон `#0f172a`, системные иконки — **белые** (`setAppearanceLightStatusBars(false)`).
+     - **Тетрадь:** винтажный кремовый фон `#f5eedc`, системные иконки — **тёмные** (`setAppearanceLightStatusBars(true)`).
+   - Точная высота статус-бара автоматически передаётся из Android в WebView через CSS-переменную `--safe-top`.
+   - В браузере (где `--safe-top` и `safe-area-inset-top` равны `0px`) отступ остаётся строго эталонным: `10px 14px`, `min-height: 60px`.
+   - На Android часы и батарея никогда не перекрывают логотип, очковый бейдж и бургер, а находятся аккуратно в верхнем безопасном поле шапки.
 
 ---
 
