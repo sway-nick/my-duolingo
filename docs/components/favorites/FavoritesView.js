@@ -74,8 +74,9 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   const favControls = container.querySelector('.fav-sticky-controls');
   const updateFavStickyTop = () => {
     if (favControls) {
-      const headerHeight = headerEl ? headerEl.offsetHeight : 56;
-      favControls.style.setProperty('--fav-sticky-top', `${Math.round(headerHeight)}px`);
+      const safeTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0;
+      const headerHeight = headerEl ? headerEl.offsetHeight : 60;
+      favControls.style.setProperty('--fav-sticky-top', `${Math.round(headerHeight + safeTop)}px`);
     }
   };
   updateFavStickyTop();
