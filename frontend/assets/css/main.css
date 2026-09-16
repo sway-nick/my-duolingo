@@ -7363,3 +7363,411 @@ body.dark-theme #clear-app-cache-btn:hover {
   box-sizing: border-box;
 }
 
+
+
+/* ========================================================
+   VIP WORD PASS — 3D MATTE GOLD CARD
+   ======================================================== */
+.wotd-standalone-wrapper {
+  perspective: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.wotd-tilt-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.586 / 1;
+  max-width: 380px;
+  margin: 0 auto;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
+  transition: transform 0.15s ease-out;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#wotd-flashcard-3d.card-flipper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+#wotd-flashcard-3d.card-flipper.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.bank-card.matte-gold {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  user-select: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  /* Сатиновая основа с микро-текстурой шлифованного золота */
+  background-color: #d1b173;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.035) 0px,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.025) 0px,
+      rgba(0, 0, 0, 0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse at 50% 25%, rgba(255, 248, 220, 0.45) 0%, transparent 65%),
+    linear-gradient(135deg,
+      #edd196 0%,
+      #dcb773 28%,
+      #cda45e 55%,
+      #b08945 85%,
+      #9b7636 100%
+    );
+
+  border: 1px solid rgba(255, 245, 205, 0.6);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.55),
+    inset 0 -2px 4px rgba(60, 40, 10, 0.35),
+    0 18px 40px -10px rgba(0, 0, 0, 0.65);
+}
+
+.bank-card.matte-gold.card-back {
+  transform: rotateY(180deg);
+}
+
+/* Продавленная внутренняя рамка */
+.bank-card.matte-gold .card-inner-border {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  right: 9px;
+  bottom: 9px;
+  border-radius: 13px;
+  border: 1px solid rgba(135, 98, 38, 0.38);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 1px 1px rgba(80, 50, 15, 0.15);
+  pointer-events: none;
+}
+
+/* Хедер карты */
+.bank-card.matte-gold .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.bank-card.matte-gold .brand-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.bank-card.matte-gold .card-brand {
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #4a3717;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bank-card.matte-gold .card-brand .brand-sound-icon {
+  font-size: 13px;
+  opacity: 0.85;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.bank-card.matte-gold .brand-group:hover .brand-sound-icon {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.bank-card.matte-gold .card-sub {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: #664f26;
+  margin-top: 2px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Сердечко */
+.bank-card.matte-gold .card-fav {
+  z-index: 4;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bank-card.matte-gold .card-fav .heart-icon {
+  width: 20px;
+  height: 18px;
+  background-color: #531118;
+  border: 1.5px solid #dfc38a;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-45deg);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(90, 60, 20, 0.45);
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.bank-card.matte-gold .card-fav .heart-icon::before {
+  content: '';
+  width: 20px;
+  height: 18px;
+  background-color: #531118;
+  border-radius: 50%;
+  position: absolute;
+  top: -9px;
+  left: 0;
+  transition: background-color 0.2s ease;
+}
+
+.bank-card.matte-gold .card-fav .heart-icon::after {
+  content: '';
+  width: 20px;
+  height: 18px;
+  background-color: #531118;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: -9px;
+  transition: background-color 0.2s ease;
+}
+
+.bank-card.matte-gold .card-fav.is-off .heart-icon,
+.bank-card.matte-gold .card-fav.is-off .heart-icon::before,
+.bank-card.matte-gold .card-fav.is-off .heart-icon::after {
+  background-color: transparent;
+}
+
+.bank-card.matte-gold .card-fav:active .heart-icon {
+  transform: rotate(-45deg) scale(0.85);
+}
+
+/* Тело карты (Слово / Перевод) */
+.bank-card.matte-gold .card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 2;
+  margin: 2px 0;
+  flex: 1;
+}
+
+.bank-card.matte-gold .word-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bank-card.matte-gold .word {
+  font-size: clamp(26px, 7vw, 40px);
+  font-weight: 800;
+  color: #fff8e8;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  text-shadow:
+    0 -1px 1px rgba(0, 0, 0, 0.25),
+    0 2px 5px rgba(65, 42, 10, 0.6),
+    0 1px 0 #edd49a;
+  max-width: 320px;
+  word-break: break-word;
+  margin: 0;
+}
+
+.bank-card.matte-gold .transcription {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a3717;
+  margin-top: 5px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.bank-card.matte-gold .translation {
+  font-size: clamp(19px, 5vw, 25px);
+  font-weight: 800;
+  color: #fff8e8;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  text-shadow:
+    0 -1px 1px rgba(0, 0, 0, 0.25),
+    0 2px 4px rgba(65, 42, 10, 0.6),
+    0 1px 0 #edd49a;
+  max-width: 320px;
+  margin: 0;
+}
+
+.bank-card.matte-gold .example-line {
+  font-size: 12px;
+  font-weight: 500;
+  font-style: italic;
+  color: #4a3717;
+  margin-top: 7px;
+  max-width: 310px;
+  line-height: 1.35;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Футер карты */
+.bank-card.matte-gold .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 2;
+  gap: 10px;
+}
+
+.bank-card.matte-gold .hint {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #4a3717;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Металлический шильдик уровня */
+.bank-card.matte-gold .badge-tier {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #543c16;
+  background: linear-gradient(180deg, #faf3e0 0%, #e2cd9f 60%, #c8b180 100%);
+  border: 1px solid rgba(135, 102, 45, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 1px rgba(90, 60, 20, 0.2),
+    0 2px 5px rgba(0, 0, 0, 0.25);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7),
+    0 -1px 0 rgba(100, 70, 20, 0.2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Световые эффекты */
+.bank-card.matte-gold .card-sheen {
+  position: absolute;
+  inset: -60%;
+  pointer-events: none;
+  background: linear-gradient(115deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.45) 49%,
+    rgba(255, 241, 200, 0.25) 53%,
+    transparent 62%);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  transform: translate(calc((var(--glare-x, 50%) - 50%) * 0.5), calc((var(--glare-y, 20%) - 50%) * 0.5));
+  transition: opacity 0.3s ease;
+}
+
+.wotd-tilt-container.is-hovering .card-sheen {
+  opacity: 0.8;
+}
+
+.bank-card.matte-gold .card-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 20%),
+    rgba(255, 252, 230, 0.32) 0%, transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wotd-tilt-container.is-hovering .card-glow {
+  opacity: 1;
+}
+
+.bank-card.matte-gold .card-idle-shine {
+  position: absolute;
+  top: -60%;
+  left: -35%;
+  width: 45%;
+  height: 220%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  pointer-events: none;
+  animation: idleSweep 6.5s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.wotd-tilt-container.is-hovering .card-idle-shine {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+@keyframes idleSweep {
+  0%   { transform: translateX(-40%) rotate(10deg); opacity: 0; }
+  8%   { opacity: 0.5; }
+  24%  { opacity: 0; }
+  100% { transform: translateX(340%) rotate(10deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wotd-tilt-container, #wotd-flashcard-3d.card-flipper, .bank-card.matte-gold .heart-icon { transition: none !important; }
+  .bank-card.matte-gold .card-idle-shine { animation: none !important; }
+}
+
+
+.bank-card.matte-gold .card-fav .heart-svg {
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bank-card.matte-gold .card-fav.is-active .heart-path {
+  fill: #531118;
+  stroke: #edd49a;
+  stroke-width: 1.5;
+}
+
+.bank-card.matte-gold .card-fav.is-off .heart-path {
+  fill: rgba(83, 17, 24, 0.2);
+  stroke: rgba(135, 98, 38, 0.6);
+  stroke-width: 1.4;
+}
+
+.bank-card.matte-gold .card-fav:hover .heart-svg {
+  transform: scale(1.1);
+}
+
+.bank-card.matte-gold .card-fav:active .heart-svg {
+  transform: scale(0.9);
+}

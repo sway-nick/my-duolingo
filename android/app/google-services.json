@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "249517100642",
+    "project_id": "english-breakfast-181ba",
+    "storage_bucket": "english-breakfast-181ba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249517100642:android:5a7b6c8d9e0f1a2b3c4d5e",
+        "android_client_info": {
+          "package_name": "com.englishbreakfast.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
