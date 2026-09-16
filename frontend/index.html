@@ -1776,33 +1776,72 @@
         }).catch((err) => console.warn('Background sync error:', err));
 
         // 4. Native Android Back Button & Gesture Navigation handler
-        if (window.Capacitor?.Plugins?.App) {
-          window.Capacitor.Plugins.App.addListener('backButton', ({ canGoBack }) => {
-            // Priority 1: Close any open modal dialogs
-            const openModals = document.querySelectorAll('.modal-backdrop, #auth-modal, #avatar-picker-modal, #doc-scanner-modal, #add-word-modal, #top100-congrats-modal, #share-app-modal');
+        window.handleAndroidBackButton = function() {
+          try {
+            // Priority 1: Close burger drawer if open
+            const drawer = document.querySelector('#burger-drawer');
+            const drawerOverlay = document.querySelector('#drawer-overlay');
+            if (drawer && drawer.classList.contains('open')) {
+              drawer.classList.remove('open');
+              if (drawerOverlay) drawerOverlay.classList.remove('open');
+              return true;
+            }
+
+            // Priority 2: Close any open modal dialogs or overlays
+            const openModals = document.querySelectorAll('.modal-backdrop, .modal-overlay[style*="display: flex"], .modal-overlay[style*="display: block"], .modal-overlay.open, #auth-modal, #avatar-picker-modal, #doc-scanner-modal, #add-word-modal, #top100-congrats-modal, #share-app-modal, #share-dialog-overlay');
             if (openModals && openModals.length > 0) {
               const topModal = openModals[openModals.length - 1];
-              topModal.remove();
-              return;
+              const closeBtn = topModal.querySelector('.modal-close, .modal-close-btn, #modal-close-btn, .close-btn, [data-action="close"]');
+              if (closeBtn) {
+                closeBtn.click();
+              } else {
+                topModal.remove();
+              }
+              return true;
             }
 
-            // Priority 2: If inside exercises or sub-screens, return to hub
+            // Priority 3: If inside exercises or sub-screens, return to hub
             if (activeTab === 'training' && !window._showHubScreen) {
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'cards';
               window._showHubScreen = true;
-              renderTab('training');
-              return;
+              window._explicitCardsOpened = false;
+              window._trainingRoundJustCompleted = false;
+              currentWordIndex = 0;
+              renderTrainingTab();
+              return true;
             }
 
-            // Priority 3: If on sub-tabs, return to main training tab
+            // Priority 4: If on secondary tabs, return to main training tab
             if (activeTab !== 'training') {
-              activeTab = 'training';
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'cards';
               window._showHubScreen = true;
+              window._explicitCardsOpened = false;
+              window._trainingRoundJustCompleted = false;
+              currentWordIndex = 0;
+              activeTab = 'training';
+              const tabs = document.querySelectorAll('.nav-tab');
+              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
               renderTab('training');
-              return;
+              return true;
             }
 
-            // Priority 4: Exit/minimize app when on home screen
-            window.Capacitor.Plugins.App.exitApp();
+            // Priority 5: Already on the Main Hub with nothing open -> return false (triggers native toast / exit)
+            return false;
+          } catch (e) {
+            console.error('Error handling back button:', e);
+            return false;
+          }
+        };
+
+        // Also wire to Capacitor App plugin if dynamically loaded
+        if (window.Capacitor?.Plugins?.App) {
+          window.Capacitor.Plugins.App.addListener('backButton', () => {
+            const handled = window.handleAndroidBackButton();
+            if (!handled) {
+              window.Capacitor.Plugins.App.exitApp();
+            }
           });
         }
       }
