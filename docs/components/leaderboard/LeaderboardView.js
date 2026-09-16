@@ -67,6 +67,7 @@ function formatLeaderboardXp(xp, period = 'week') {
 }
 
 function renderPodiumCard(player, rank, period = 'week') {
+  if (!player) return '';
   let badgeIcon = '💎';
   let rankClass = 'rank-diamond';
 
@@ -82,8 +83,9 @@ function renderPodiumCard(player, rank, period = 'week') {
   }
 
   const avatarSrc = player.avatar || '';
-  const initial = player.name ? player.name.trim().charAt(0).toUpperCase() : '👤';
-  const isMe = player.isCurrentUser;
+  const playerName = (player && player.name != null) ? String(player.name) : t('lead_student_default');
+  const initial = playerName.trim().charAt(0).toUpperCase() || '👤';
+  const isMe = !!player.isCurrentUser;
 
   return `
     <div class="podium-card ${rankClass} ${isMe ? 'is-me' : ''}">
@@ -156,12 +158,12 @@ function renderPodiumCard(player, rank, period = 'week') {
         }
         ${
           avatarSrc
-            ? `<img src="${avatarSrc}" alt="${player.name}" class="podium-avatar-img" />`
+            ? `<img src="${avatarSrc}" alt="${player.name}" class="podium-avatar-img" referrerpolicy="no-referrer" />`
             : `<div class="podium-avatar-placeholder">${initial}</div>`
         }
       </div>
       <div class="podium-info">
-        <h4 class="podium-name">${player.name || t('lead_student_default')}</h4>
+        <h4 class="podium-name">${playerName}</h4>
         <span class="podium-xp">${formatLeaderboardXp(player.xp, period)} XP</span>
       </div>
     </div>
@@ -169,7 +171,8 @@ function renderPodiumCard(player, rank, period = 'week') {
 }
 
 function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
-  if (!players || players.length === 0) {
+  const safePlayers = Array.isArray(players) ? players.filter(p => p && typeof p === 'object') : [];
+  if (safePlayers.length === 0) {
     return {
       podiumHtml: '',
       restHtml: `
@@ -187,13 +190,13 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
     };
   }
 
-  const top100 = players.slice(0, 100);
+  const top100 = safePlayers.slice(0, 100);
   const top4 = top100.slice(0, 4);
   const rest = top100.slice(4);
 
-  const myRankIndex = players.findIndex((p) => p.isCurrentUser);
+  const myRankIndex = safePlayers.findIndex((p) => p && p.isCurrentUser);
   const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
-  const myPlayer = myRankIndex >= 0 ? players[myRankIndex] : null;
+  const myPlayer = myRankIndex >= 0 ? safePlayers[myRankIndex] : null;
 
   const podiumHtml = `
     <div class="podium-grid">
@@ -210,7 +213,8 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
             const rank = idx + 5;
             const isMe = p.isCurrentUser;
             const avatarSrc = p.avatar || '';
-            const initial = p.name ? p.name.trim().charAt(0).toUpperCase() : '👤';
+            const pName = (p && p.name != null) ? String(p.name) : t('lead_student_default');
+            const initial = pName.trim().charAt(0).toUpperCase() || '👤';
 
             return `
             <div class="leaderboard-row ${isMe ? 'is-me' : ''}">
@@ -218,12 +222,12 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               <div class="row-avatar-wrapper">
                 ${
                   avatarSrc
-                    ? `<img src="${avatarSrc}" alt="${p.name}" class="row-avatar-img" />`
+                    ? `<img src="${avatarSrc}" alt="${pName}" class="row-avatar-img" referrerpolicy="no-referrer" />`
                     : `<div class="row-avatar-placeholder">${initial}</div>`
                 }
               </div>
               <div class="row-name">
-                ${p.name || t('lead_student_default')}
+                ${pName}
               </div>
               <div class="row-xp">${formatLeaderboardXp(p.xp, period)} XP</div>
             </div>
@@ -243,17 +247,19 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           ? t('lead_score_current')
           : t('lead_login_to_save')
         );
+    const myName = (currentUser && currentUser.name != null) ? String(currentUser.name) : t('lead_guest_name');
+    const myInitial = myName.trim().charAt(0).toUpperCase() || '👤';
     myStickyBarHtml = `
       <div class="my-leaderboard-bar">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span class="my-rank-badge">#${myRank || '-'}</span>
           ${
             myAvatar
-              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" />`
-              : `<div class="my-bar-avatar-placeholder">${currentUser && currentUser.name ? currentUser.name.charAt(0) : '👤'}</div>`
+              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" />`
+              : `<div class="my-bar-avatar-placeholder">${myInitial}</div>`
           }
           <div>
-            <div class="my-bar-name" style="font-weight: 700; font-size: 14px;">${currentUser ? currentUser.name : t('lead_guest_name')}</div>
+            <div class="my-bar-name" style="font-weight: 700; font-size: 14px;">${myName}</div>
             <div class="my-bar-status" style="font-size: 12px; color: var(--text-muted);">
               ${statusText}
             </div>
@@ -281,26 +287,32 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
-  const currentUser = getCurrentUser();
-  const weekTime = getTimeUntilSundayEnd();
+  try {
+    const currentUser = getCurrentUser();
+    const weekTime = getTimeUntilSundayEnd();
 
-  // 1. Instant 0ms cached data load
-  const cachedRes = getCachedLeaderboard(null, currentPeriod);
-  const initialPlayers = cachedRes.data || [];
-
-  // Congratulate user if they are in TOP 100
-  const myRankIndex = initialPlayers.findIndex((p) => p.isCurrentUser);
-  const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
-  if (myRank !== null && myRank <= 100) {
-    const weekKey = getIsoWeekKey();
-    const congratKey = `congrats_top100_${weekKey}_${currentUser ? currentUser.id : 'guest'}`;
-    if (!localStorage.getItem(congratKey)) {
-      localStorage.setItem(congratKey, 'true');
-      setTimeout(() => showTop100Modal(myRank), 500);
+    // 1. Instant 0ms cached data load
+    let initialPlayers = [];
+    try {
+      const cachedRes = getCachedLeaderboard(null, currentPeriod);
+      initialPlayers = (cachedRes && Array.isArray(cachedRes.data)) ? cachedRes.data : [];
+    } catch (cacheErr) {
+      console.warn('Leaderboard initial cache read error:', cacheErr);
     }
-  }
 
-  const bodyData = buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod);
+    // Congratulate user if they are in TOP 100
+    const myRankIndex = initialPlayers.findIndex((p) => p && p.isCurrentUser);
+    const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
+    if (myRank !== null && myRank <= 100) {
+      const weekKey = getIsoWeekKey();
+      const congratKey = `congrats_top100_${weekKey}_${currentUser ? currentUser.id : 'guest'}`;
+      if (!localStorage.getItem(congratKey)) {
+        localStorage.setItem(congratKey, 'true');
+        setTimeout(() => showTop100Modal(myRank), 500);
+      }
+    }
+
+    const bodyData = buildLeaderboardBodyHtml(initialPlayers, currentUser, currentPeriod);
 
   const dText = t('lead_days_short');
   const hText = t('lead_hours_short');
@@ -350,6 +362,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   if (container._globalClickHandler) document.removeEventListener('click', container._globalClickHandler);
 
   function bindDynamicListeners() {
+    if (!contentEl || typeof contentEl.querySelector !== 'function') return;
     const loginBtn = contentEl.querySelector('#leaderboard-login-btn');
     if (loginBtn) {
       loginBtn.addEventListener('click', () => {
@@ -404,8 +417,12 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   async function loadFreshData() {
     try {
       const freshRes = await getLeaderboard(null, currentPeriod);
-      if (freshRes && freshRes.data && freshRes.data.length > 0 && contentEl) {
-        const freshBodyData = buildLeaderboardBodyHtml(freshRes.data, currentUser, currentPeriod);
+      const freshList = (freshRes && Array.isArray(freshRes.data))
+        ? freshRes.data
+        : (Array.isArray(freshRes) ? freshRes : null);
+
+      if (freshList && freshList.length > 0 && contentEl) {
+        const freshBodyData = buildLeaderboardBodyHtml(freshList, currentUser, currentPeriod);
         const podiumContainer = container.querySelector('#leaderboard-podium-container');
         if (podiumContainer) podiumContainer.innerHTML = freshBodyData.podiumHtml;
         contentEl.innerHTML = freshBodyData.restHtml;
@@ -470,6 +487,34 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   };
   document.addEventListener('visibilitychange', handleVisibility);
   container._visibilityHandler = handleVisibility;
+  } catch (err) {
+    console.error('Leaderboard render fatal error:', err);
+    try {
+      const fallbackList = [
+        { userId: 'me', name: 'Вы', xp: 0, isCurrentUser: true }
+      ];
+      const fallbackBody = buildLeaderboardBodyHtml(fallbackList, null, currentPeriod);
+      container.innerHTML = `
+        <div class="leaderboard-page" style="position: relative;">
+          <div class="leaderboard-sticky-group">
+            <div id="leaderboard-podium-container">${fallbackBody.podiumHtml}</div>
+          </div>
+          <div id="leaderboard-content">${fallbackBody.restHtml}</div>
+        </div>
+      `;
+    } catch (fallbackErr) {
+      container.innerHTML = `
+        <div class="leaderboard-page" style="padding: 40px 20px; text-align: center;">
+          <div style="font-size: 48px; margin-bottom: 12px;">📊</div>
+          <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 8px;">${t('lead_title')}</h3>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">${t('lead_updating_desc')}</p>
+          <button class="primary-button btn-green" id="fatal-retry-lead-btn" style="max-width: 240px; min-height: 44px; margin: 0 auto;">🔄 ${t('lead_refresh_btn')}</button>
+        </div>
+      `;
+      const btn = container.querySelector('#fatal-retry-lead-btn');
+      if (btn) btn.onclick = () => renderLeaderboardView(containerSelector, options);
+    }
+  }
 }
 
 export { renderLeaderboardView };

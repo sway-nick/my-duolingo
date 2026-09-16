@@ -1,10 +1,10 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=200.0';
+import { getUserSettings, saveUserSettings } from '../../services/api.js?v=200.0';
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=200.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isVoicePackDownloaded, downloadVoicePack } from '../../services/audioService.js?v=200.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=200.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
-import { t, getInterfaceLanguage, getUkVoiceModalStrings } from '../../services/i18n.js?v=200.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
@@ -27,8 +27,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <div class="profile-avatar-wrapper" id="change-avatar-trigger" title="${t('settings_avatar_choose_tooltip')}">
           ${
             avatar
-              ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" />`
-              : `<div class="profile-avatar-placeholder">${user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤'}</div>`
+              ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" referrerpolicy="no-referrer" />`
+              : `<div class="profile-avatar-placeholder">${user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤'}</div>`
           }
           <div class="avatar-edit-badge" title="${t('settings_avatar_edit_tooltip')}">🎭</div>
         </div>
@@ -155,15 +155,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       ${
         user
           ? `
-        <!-- Danger Zone / Delete Account (Google Play Compliance) -->
-        <div class="settings-card danger-zone-card" style="border: 1px solid rgba(239, 68, 68, 0.25); background: rgba(239, 68, 68, 0.03);">
-          <h3 class="settings-card-title" style="color: #ef4444; margin-bottom: 8px;">
-            ${t('settings_account_mgmt')}
-          </h3>
-          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4; margin: 0 0 12px;">
-            ${t('settings_account_delete_desc')}
-          </p>
-          <button type="button" class="secondary-button" id="delete-account-btn" style="width: 100%; color: #ef4444; border-color: rgba(239, 68, 68, 0.4); font-weight: 600;">
+        <!-- Delete Account Button (Clean, no card container) -->
+        <div style="text-align: center; margin: 24px 0 8px;">
+          <button type="button" id="delete-account-btn" style="background: transparent; border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; border-radius: 12px; padding: 10px 22px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
             ${t('settings_account_delete_btn')}
           </button>
         </div>
@@ -302,93 +296,12 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   updateVoiceButtons();
 
   if (ukVoiceBtn && usVoiceBtn) {
-    ukVoiceBtn.addEventListener('click', async () => {
-      const isUkBaseDownloaded = isVoicePackDownloaded('uk_base');
-      if (isUkBaseDownloaded) {
-        currentAccent = 'uk';
-        setSavedVoiceAccent('uk');
-        updateVoiceButtons();
-        speakWord('Hello', null, 'en-GB', 'uk', true);
-        triggerAutoSave();
-        return;
-      }
-
-      // Show UK base voice download modal (localized into user's language)
-      const strings = getUkVoiceModalStrings();
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
-      modal.id = 'uk-voice-download-modal';
-      modal.innerHTML = `
-        <div class="modal-content" style="text-align: center; max-width: 350px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
-          <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">🇬🇧</div>
-          <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
-            ${strings.title}
-          </h3>
-          <p id="uk-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
-            ${strings.desc}
-          </p>
-          <div id="uk-progress-wrap" style="display: none; margin-bottom: 16px;">
-            <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
-              <div id="uk-progress-bar" style="background: var(--btn-green-bg, #22c55e); height: 100%; width: 0%; transition: width 0.15s ease;"></div>
-            </div>
-            <span id="uk-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <button class="primary-button btn-green" id="uk-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
-              ${strings.downloadBtn}
-            </button>
-            <button class="secondary-button" id="uk-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%;">
-              ${strings.cancelBtn}
-            </button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-
-      const downloadBtn = modal.querySelector('#uk-modal-download-btn');
-      const cancelBtn = modal.querySelector('#uk-modal-cancel-btn');
-      const progressWrap = modal.querySelector('#uk-progress-wrap');
-      const progressBar = modal.querySelector('#uk-progress-bar');
-      const progressText = modal.querySelector('#uk-progress-text');
-      const descEl = modal.querySelector('#uk-modal-desc');
-
-      cancelBtn.addEventListener('click', () => {
-        modal.remove();
-      });
-
-      downloadBtn.addEventListener('click', async () => {
-        downloadBtn.disabled = true;
-        cancelBtn.style.display = 'none';
-        progressWrap.style.display = 'block';
-        if (descEl) descEl.textContent = strings.downloading;
-        try {
-          const wordsRes = await getWords(false);
-          const words = (wordsRes && wordsRes.data) || [];
-          const baseWords = words.filter((w) => {
-            const cat = String(w.category || '').toLowerCase();
-            return cat.includes('elementary') || cat.includes('irregular');
-          });
-
-          await downloadVoicePack('uk', baseWords, (percent) => {
-            if (progressBar) progressBar.style.width = `${percent}%`;
-            if (progressText) progressText.textContent = `${percent}%`;
-          });
-
-          localStorage.setItem('myduo_pack_uk_base_downloaded', 'true');
-          modal.remove();
-
-          currentAccent = 'uk';
-          setSavedVoiceAccent('uk');
-          updateVoiceButtons();
-          speakWord('Hello', null, 'en-GB', 'uk', true);
-          triggerAutoSave();
-        } catch (err) {
-          console.warn('UK voice download failed:', err);
-          downloadBtn.disabled = false;
-          cancelBtn.style.display = 'block';
-          downloadBtn.textContent = strings.retryBtn;
-        }
-      });
+    ukVoiceBtn.addEventListener('click', () => {
+      currentAccent = 'uk';
+      setSavedVoiceAccent('uk');
+      updateVoiceButtons();
+      speakWord('Hello', null, 'en-GB', 'uk', true);
+      triggerAutoSave();
     });
 
     usVoiceBtn.addEventListener('click', () => {

@@ -244,8 +244,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
     const isTargetUser = (userEmail && userEmail.toLowerCase().includes('lipniagov')) ||
                          (newUserId && String(newUserId).includes('lipniagov'));
     if (isTargetUser) {
-      if (migratedXp < 4500) {
-        migratedXp = 4500;
+      if (migratedXp < 4514) {
+        migratedXp = 4514;
       }
       if (Object.keys(mergedProg).length === 0) {
         try {
@@ -290,7 +290,7 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       }
     }
 
-    if (userAvatar && !localStorage.getItem(`avatar_${newUserId}`)) {
+    if (userAvatar) {
       localStorage.setItem(`avatar_${newUserId}`, userAvatar);
     }
 
@@ -360,6 +360,11 @@ try {
 } catch (e) {}
 
 function logoutUser() {
+  if (typeof window !== 'undefined') {
+    try {
+      window.dispatchEvent(new CustomEvent('myduo:pre_logout'));
+    } catch (e) {}
+  }
   logoutFirebase();
   setCurrentUser(null, null);
 }

@@ -14,6 +14,7 @@ const filesOrder = [
   'utils/response.js',
   'utils/request.js',
   'services/spreadsheet.js',
+  'services/firestoreSync.js',
   'api/health.js',
   'api/auth.js',
   'api/words.js',

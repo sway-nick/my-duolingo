@@ -9,7 +9,18 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260913_v363';
+        var APP_BUILD = '20260913_v364';
+        try {
+          var isAndroid = !!(
+            window.androidBridge ||
+            window.Capacitor?.isNativePlatform?.() ||
+            window.Capacitor?.getPlatform?.() === 'android' ||
+            (window.location && window.location.hostname === 'localhost' && /Android/i.test(navigator.userAgent))
+          );
+          if (isAndroid) {
+            document.documentElement.classList.add('is-android-app');
+          }
+        } catch (e) {}
         try {
           var t = localStorage.getItem('myduo_theme') || 'light';
           var initBg = '#ffffff';
@@ -136,19 +147,19 @@
     </div>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=215.0';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=215.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=215.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=215.0';
-      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=215.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=215.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=215.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=215.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=215.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=215.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=215.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=215.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=215.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=217.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=217.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=217.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=217.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=217.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=217.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=217.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=217.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=217.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=217.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=217.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=217.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=217.0';
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -495,13 +506,13 @@
 
         const favListForMixing = isFavPracticeActive ? [] : favList;
 
-        const cardsQueue = getQueueForCards(categoryWords, userProgress);
+        const cardsQueue = getQueueForCards(categoryWords, userProgress, favList);
         const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
         const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
         const testQueue = getQueueForTest(categoryWords, userProgress, favList);
 
         function isMethodAvailable(method) {
-          if (method === 'cards') return !isFavPracticeActive && (cardsQueue.length > 0 && learningCount < dailyGoal);
+          if (method === 'cards') return !isFavPracticeActive && cardsQueue.length > 0;
           if (method === 'quiz') return quizQueue.length > 0;
           if (method === 'pairs') return pairsQueue.length > 0;
           if (method === 'input') return testQueue.length > 0;
@@ -509,32 +520,41 @@
         }
 
         // SMART ACTIVE MODE RESOLUTION:
-        // Automatically advance along the training conveyor: Quiz -> Pairs -> Test.
-        // If 0 words in learning or window._showHubScreen is true, show the clean Hub screen.
+        // Automatically advance along the training conveyor: Cards -> Quiz -> Pairs -> Test.
+        // If window._showHubScreen is true or round is finished, show the clean Hub screen.
         if (!isFavPracticeActive) {
-          if (window._showHubScreen || (learningCount === 0 && !window._explicitCardsOpened)) {
+          if (window._showHubScreen) {
             currentMethod = 'input';
-          } else if (currentMethod === 'cards') {
-            // While user is in initial Cards mode, they continue selecting words until dailyGoal
-            if (cardsQueue.length === 0 && learningCount === 0) {
-              currentMethod = 'input';
-            }
           } else if (!isMethodAvailable(currentMethod)) {
             // STRICT FORWARD-ONLY CONVEYOR PROGRESSION:
             // Cards -> Quiz -> Pairs -> Test -> Finished (Hub)
-            // NEVER regress backwards to a previous mode during a round!
             if (currentMethod === 'cards') {
               if (quizQueue.length > 0) currentMethod = 'quiz';
               else if (pairsQueue.length > 0) currentMethod = 'pairs';
-              else currentMethod = 'input';
+              else if (testQueue.length > 0) currentMethod = 'input';
+              else {
+                window._showHubScreen = true;
+                currentMethod = 'input';
+              }
             } else if (currentMethod === 'quiz') {
               if (pairsQueue.length > 0) currentMethod = 'pairs';
-              else currentMethod = 'input';
+              else if (testQueue.length > 0) currentMethod = 'input';
+              else {
+                window._showHubScreen = true;
+                currentMethod = 'input';
+              }
             } else if (currentMethod === 'pairs') {
               // After Pairs, STRICTLY proceed ONLY to Test! Never regress to Quiz or Cards!
-              currentMethod = 'input';
+              if (testQueue.length > 0) currentMethod = 'input';
+              else {
+                window._showHubScreen = true;
+                currentMethod = 'input';
+              }
             } else if (currentMethod === 'input') {
-              currentMethod = 'input';
+              if (testQueue.length === 0) {
+                window._showHubScreen = true;
+                currentMethod = 'input';
+              }
             }
           }
 
@@ -543,54 +563,6 @@
             userSettings.preferredMethod = currentMethod;
             saveUserSettings(userSettings);
           }
-        }
-
-        // In initial Cards mode: if user reached daily learning limit during selection, show prompt to go to Quiz
-        if (!isFavPracticeActive && !window._showHubScreen && currentMethod === 'cards' && learningCount >= dailyGoal) {
-          const congratsText = t('train_congrats_selected', { n: learningCount });
-
-          let nextBtnTarget = 'quiz';
-          let nextBtnText = '🎯 ' + t('train_go_quiz');
-
-          if (quizQueue.length > 0) {
-            nextBtnTarget = 'quiz';
-            nextBtnText = '🎯 ' + t('train_go_quiz');
-          } else if (pairsQueue.length > 0) {
-            nextBtnTarget = 'pairs';
-            nextBtnText = '🧩 ' + t('train_go_pairs');
-          } else if (testQueue.length > 0) {
-            nextBtnTarget = 'input';
-            nextBtnText = '✍️ ' + t('train_go_test');
-          }
-
-          content.innerHTML = `
-            <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-              <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
-              <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                ${congratsText}
-              </p>
-              <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                <button class="primary-button btn-green" id="go-quiz-btn" style="min-height: 44px; font-weight: 700;">
-                  ${nextBtnText}
-                </button>
-              </div>
-            </div>
-          `;
-
-          const goQuizBtn = content.querySelector('#go-quiz-btn');
-          if (goQuizBtn) {
-            goQuizBtn.addEventListener('click', () => {
-              window._explicitCardsOpened = false;
-              window._trainingRoundJustCompleted = false;
-              clearActiveConveyorBatch();
-              getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
-              userSettings.preferredMethod = nextBtnTarget;
-              saveUserSettings(userSettings);
-              currentWordIndex = 0;
-              renderTrainingTab();
-            });
-          }
-          return;
         }
 
         // Filter words strictly based on the active training method queue
@@ -701,8 +673,64 @@
 
         // If queue for the current mode is empty, show intuitive step guidance
         if (activeWords.length === 0) {
+          const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
           const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
           const testQueue = getQueueForTest(categoryWords, userProgress, favList);
+
+          // If words completed Cards -> show completion card with button to Quiz (or Pairs)
+          if (!window._showHubScreen && currentMethod === 'cards' && quizQueue.length > 0) {
+            content.innerHTML = `
+              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
+                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
+                  ${t('train_congrats_mastered')}
+                </p>
+                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
+                  <button class="primary-button btn-green" id="go-quiz-btn" style="min-height: 44px; font-weight: 700;">
+                    🎯 ${t('train_go_quiz')}
+                  </button>
+                </div>
+              </div>
+            `;
+
+            const goQuizBtn = content.querySelector('#go-quiz-btn');
+            if (goQuizBtn) {
+              goQuizBtn.addEventListener('click', () => {
+                userSettings.preferredMethod = 'quiz';
+                saveUserSettings(userSettings);
+                currentWordIndex = 0;
+                renderTrainingTab();
+              });
+            }
+            return;
+          }
+
+          if (!window._showHubScreen && currentMethod === 'cards' && pairsQueue.length > 0) {
+            content.innerHTML = `
+              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
+                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
+                  ${t('train_congrats_mastered')}
+                </p>
+                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
+                  <button class="primary-button btn-green" id="go-pairs-btn" style="min-height: 44px; font-weight: 700;">
+                    🧩 ${t('train_go_pairs')}
+                  </button>
+                </div>
+              </div>
+            `;
+
+            const goPairsBtn = content.querySelector('#go-pairs-btn');
+            if (goPairsBtn) {
+              goPairsBtn.addEventListener('click', () => {
+                userSettings.preferredMethod = 'pairs';
+                saveUserSettings(userSettings);
+                currentWordIndex = 0;
+                renderTrainingTab();
+              });
+            }
+            return;
+          }
 
           // If words completed Quiz -> show completion card with button to Pairs (like Cards mode)
           if (!window._showHubScreen && currentMethod === 'quiz' && pairsQueue.length > 0) {
@@ -821,21 +849,36 @@
             }
           }
 
+          const rocketSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`;
+          const bookSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/><path d="M4 19.5a2.5 2.5 0 0 1 2.5-2.5H20"/></svg>`;
+          const heartSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" stroke="none" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+          const puzzleSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.439 7.85c0-1.571-1.28-2.85-2.85-2.85a2.85 2.85 0 0 0-2.85 2.85v1.14H9.74V7.85c0-1.571-1.28-2.85-2.85-2.85A2.85 2.85 0 0 0 4.04 7.85v4.56h1.14a2.85 2.85 0 0 1 2.85 2.85 2.85 2.85 0 0 1-2.85 2.85H4.04v4.56h4.56v-1.14a2.85 2.85 0 0 1 2.85-2.85 2.85 2.85 0 0 1 2.85 2.85v1.14h5.14v-4.56h-1.14a2.85 2.85 0 0 1-2.85-2.85 2.85 2.85 0 0 1 2.85-2.85h1.14V7.85z"/></svg>`;
+          const penSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
+          const cardsSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 3H4a2 2 0 0 0-2 2v2"/></svg>`;
+
+          let nextBtnSvg = bookSvg;
+          if (nextMode === 'select_category') nextBtnSvg = bookSvg;
+          else if (nextMode === 'pairs') nextBtnSvg = puzzleSvg;
+          else if (nextMode === 'input') nextBtnSvg = penSvg;
+          else if (nextMode === 'cards') nextBtnSvg = cardsSvg;
+
           let wotdHtml = '';
           const wotd = getGlobalWordOfTheDay(allWords, cloudWordOfTheDayId);
           let isWotdFav = false;
           let currentWotdVideo = 'cat1.mp4';
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
+          const isHubScreen = (!activeWords || activeWords.length === 0) && (currentMethod === 'input' || window._showHubScreen || learningCount === 0);
 
-          if (currentMethod === 'input' && (!activeWords || activeWords.length === 0) && isTrainingRoundJustCompleted) {
-            clearActiveConveyorBatch();
-            try {
-              trackRoundCompleted(getEffectiveUserId());
-            } catch (e) {}
-            playFanfareSound();
-            if (wotd) {
-              preloadWordAudio(wotd.word);
+          if (isHubScreen && wotd) {
+            if (isTrainingRoundJustCompleted) {
+              clearActiveConveyorBatch();
+              try {
+                trackRoundCompleted(getEffectiveUserId());
+                pushUserDataToCloud(null, null, true);
+              } catch (e) {}
+              playFanfareSound();
             }
+            preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
             const favSet = new Set(favList.map(String));
             isWotdFav = favSet.has(String(wotd.id));
@@ -845,11 +888,11 @@
             currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
 
             wotdHtml = `
-              <div class="wotd-bonus-section" style="margin-top: 30px;">
+              <div class="wotd-bonus-section" style="margin-top: 14px;">
                 <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 0 auto; max-width: 340px; width: 100%;">
-                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}" style="min-height: 220px;">
+                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}" style="min-height: 205px;">
                      <!-- Front Face: English word -->
-                     <div class="flashcard-face flashcard-front" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
+                     <div class="flashcard-face flashcard-front" style="min-height: 205px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        <div class="flashcard-face-top">
                           <button type="button" class="flashcard-crown-btn" id="wotd-sound-front" title="${t('word_of_day')}">
@@ -870,10 +913,10 @@
                      </div>
 
                      <!-- Back Face: Word translation & Full-Size Embedded Video -->
-                     <div class="flashcard-face flashcard-back" style="min-height: 220px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; border-radius: inherit;">
+                     <div class="flashcard-face flashcard-back" style="min-height: 205px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; border-radius: inherit;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        
-                       <!-- Full-size video covering entire golden card face with instant preloading -->
+                       <!-- Full-size video covering entire golden card face with instant preloading (strictly on round victory) -->
                        <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
                          <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                        </div>
@@ -902,29 +945,29 @@
 
           const continueCardsBtnHtml = unmasteredCount > 0
             ? `
-              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '54px'}; font-size: clamp(16px, 4.6vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
-                <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">🚀</span>
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${rocketSvg}</span>
                 <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
               </button>
             `
             : '';
 
           content.innerHTML = `
-            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 0; padding: ${hasWotdCard ? '16px 20px 20px' : '16px 20px'}; box-sizing: border-box; overflow: hidden;">
+            <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 0; padding: ${hasWotdCard ? '12px 16px 16px' : '16px 20px'}; box-sizing: border-box; overflow: hidden;">
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               ${emptyTitle ? `<h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>` : ''}
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '14px' : '18px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
+              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '12px' : '16px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
-                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '54px'}; font-size: clamp(16px, 4.6vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
-                  <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">${nextBtnIcon}</span>
+                <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                  <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${nextBtnSvg}</span>
                   <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
                 </button>
                 ${
                   (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                     ? `
-                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '54px'}; font-size: clamp(16px, 4.6vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
-                    <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">💖</span>
+                  <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                    <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${heartSvg}</span>
                     <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
                   </button>
                 `
@@ -935,17 +978,18 @@
             </div>
           `;
 
-          if (wotd && currentMethod === 'input' && (!activeWords || activeWords.length === 0)) {
+          if (wotd && isHubScreen) {
             const flashcard = content.querySelector('#wotd-flashcard-3d');
             if (flashcard) {
               let isFlipped = false;
               let videoStarted = false;
+              const canPlayRewardVideo = Boolean(isTrainingRoundJustCompleted);
 
               const cardVideo = flashcard.querySelector('#wotd-card-video');
               const videoContainer = flashcard.querySelector('#wotd-video-container');
 
-              // Immediately pre-buffer video into memory
-              if (cardVideo) {
+              // Immediately pre-buffer video into memory if reward can be played
+              if (canPlayRewardVideo && cardVideo) {
                 cardVideo.load();
               }
 
@@ -972,8 +1016,10 @@
                 }
 
                 if (isFlipped) {
-                  if (!videoStarted && cardVideo && videoContainer) {
+                  // Only launch cat video if user JUST completed a training round!
+                  if (canPlayRewardVideo && !videoStarted && cardVideo && videoContainer) {
                     videoStarted = true;
+                    window._trainingRoundJustCompleted = false;
 
                     let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                     if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
@@ -1157,6 +1203,24 @@
                 const chosenCat = card.getAttribute('data-category');
                 if (!chosenCat) return;
 
+                const normCat = String(chosenCat || '').toLowerCase().trim();
+                const isBundled = normCat.includes('elementary') || normCat.includes('irregular');
+
+                // 1. Elementary & Irregular Verbs are pre-packaged in the APK -> Open immediately
+                if (isBundled) {
+                  window._isCategorySelectOpen = false;
+                  favoritePracticeWords = null;
+                  userSettings.category = chosenCat;
+                  userSettings.preferredMethod = 'cards';
+                  window._explicitCardsOpened = true;
+                  window._trainingRoundJustCompleted = false;
+                  saveUserSettings(userSettings);
+                  currentWordIndex = 0;
+                  renderTrainingTab();
+                  return;
+                }
+
+                // 2. For "Разговорные паттерны" and below: verify if audio is downloaded
                 const currentAccent = getSavedVoiceAccent ? getSavedVoiceAccent() : 'us';
                 const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat);
 
@@ -1172,8 +1236,9 @@
                   const modal = document.createElement('div');
                   modal.className = 'modal-overlay';
                   modal.id = 'cat-voice-download-modal';
+                  modal.style.cssText = 'position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 16px; box-sizing: border-box;';
                   modal.innerHTML = `
-                    <div class="modal-content" style="text-align: center; max-width: 350px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
+                    <div class="modal-content" style="text-align: center; max-width: 350px; width: 100%; padding: 26px 20px; border-radius: 20px; box-sizing: border-box; animation: scaleUp 0.2s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
                       <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">📥</div>
                       <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
                         ${strings.title}
@@ -1188,10 +1253,10 @@
                         <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
                       </div>
                       <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%;">
+                        <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
                           ${strings.downloadBtn}
                         </button>
-                        <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%;">
+                        <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%; border-radius: 12px;">
                           ${strings.cancelBtn}
                         </button>
                       </div>
@@ -1241,6 +1306,7 @@
                   return;
                 }
 
+                // If already downloaded:
                 window._isCategorySelectOpen = false;
                 favoritePracticeWords = null;
                 userSettings.category = chosenCat;
@@ -1258,17 +1324,30 @@
           if (continueCardsBtn) {
             continueCardsBtn.addEventListener('click', () => {
               window._showHubScreen = false;
-              if (learningCount < dailyGoal && cardsQueue.length > 0) {
-                window._explicitCardsOpened = true;
-                userSettings.preferredMethod = 'cards';
-              } else {
-                window._explicitCardsOpened = false;
-                if (quizQueue.length > 0) userSettings.preferredMethod = 'quiz';
-                else if (pairsQueue.length > 0) userSettings.preferredMethod = 'pairs';
-                else if (testQueue.length > 0) userSettings.preferredMethod = 'input';
-                else userSettings.preferredMethod = 'cards';
-              }
               window._trainingRoundJustCompleted = false;
+
+              // Ensure batch is active or initialize fresh batch
+              getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
+              const curCards = getQueueForCards(categoryWords, getUserProgress(), favList);
+              const curQuiz = getQueueForQuiz(categoryWords, getUserProgress(), favList);
+              const curPairs = getQueueForPairs(categoryWords, getUserProgress(), favList);
+              const curTest = getQueueForTest(categoryWords, getUserProgress(), favList);
+
+              if (curCards.length > 0) {
+                userSettings.preferredMethod = 'cards';
+              } else if (curQuiz.length > 0) {
+                userSettings.preferredMethod = 'quiz';
+              } else if (curPairs.length > 0) {
+                userSettings.preferredMethod = 'pairs';
+              } else if (curTest.length > 0) {
+                userSettings.preferredMethod = 'input';
+              } else {
+                // If all queues are empty, clear and create fresh batch to start with cards
+                clearActiveConveyorBatch();
+                getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
+                userSettings.preferredMethod = 'cards';
+              }
+
               saveUserSettings(userSettings);
               currentWordIndex = 0;
               renderTrainingTab();
@@ -1441,6 +1520,8 @@
       async function renderTab(tabName) {
         activeTab = tabName;
         window._activeTab = tabName;
+        const navTabs = document.querySelectorAll('.nav-tab');
+        navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === tabName));
         const content = document.querySelector('#app-content');
 
         if (tabName !== 'training') {
@@ -1486,12 +1567,16 @@
             },
           });
         } else if (tabName === 'leaderboard') {
-          await renderLeaderboardView('#app-content', {
-            onUserChange: async () => {
-              updateHeaderUser();
-              await loadData();
-            },
-          });
+          try {
+            await renderLeaderboardView('#app-content', {
+              onUserChange: async () => {
+                updateHeaderUser();
+                await loadData();
+              },
+            });
+          } catch (leadErr) {
+            console.error('Failed to render leaderboard:', leadErr);
+          }
         } else if (tabName === 'dictionary') {
           renderDictionaryView(allWords, '#app-content', {
             favoriteIds: Array.from(favoriteIds),

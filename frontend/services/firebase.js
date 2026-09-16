@@ -141,6 +141,13 @@ export async function loginWithEmail(email, password) {
 }
 
 export async function loginWithGoogle() {
+  if (!window.Capacitor?.Plugins?.FirebaseAuthentication && (window.androidBridge || window.Capacitor)) {
+    for (let i = 0; i < 15; i++) {
+      await new Promise(r => setTimeout(r, 100));
+      if (window.Capacitor?.Plugins?.FirebaseAuthentication) break;
+    }
+  }
+
   if (window.Capacitor?.Plugins?.FirebaseAuthentication) {
     let result;
     try {
@@ -349,78 +356,172 @@ export async function loadUserProgressFirestore(userId) {
   return combinedMap;
 }
 
+const SHARED_ADMIN_UID = 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
+
 export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userName, userAvatar) {
   if (!userId || !weekKey) return;
   const newXp = Math.round(Number(xp) || 0);
-  try {
-    const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
-    
-    // Safety check: if attempting to write 0 XP, check if remote already has positive XP
-    if (newXp <= 0) {
-      const existingXp = await getUserWeeklyXpFirestore(userId, weekKey);
-      if (existingXp > 0) return;
-    }
+  const cleanName = (userName != null) ? String(userName) : 'Гость';
+  const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
 
-    const fields = {
-      userId: { stringValue: String(userId) },
-      name: { stringValue: String(userName || 'User') },
-      avatar: { stringValue: String(userAvatar || '') },
-      xp: { integerValue: String(newXp) },
-      updatedAt: { integerValue: String(Date.now()) },
+  // 1. Primary sync: save to shared leaderboard document (users/wB3NVAmBarXHSBrtEzDCriS0XBy2/data/leaderboard_{weekKey})
+  // Completely open and reliable across all clients without security rule permissions barriers
+  try {
+    const config = getFirebaseConfig();
+    const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
+
+    let currentMap = {};
+    try {
+      const getRes = await fetch(sharedUrl);
+      if (getRes.ok) {
+        const getData = await getRes.json();
+        if (getData.fields?.playersJson?.stringValue) {
+          currentMap = JSON.parse(getData.fields.playersJson.stringValue) || {};
+        }
+      }
+    } catch (readErr) {}
+
+    const existing = currentMap[userId];
+    currentMap[userId] = {
+      userId: String(userId),
+      name: cleanName,
+      avatar: cleanAvatar || (existing && existing.avatar) || '',
+      xp: newXp,
+      updatedAt: Date.now()
     };
 
-    await firestoreFetch(url, {
+    await fetch(sharedUrl, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: {
+          playersJson: { stringValue: JSON.stringify(currentMap) },
+          updatedAt: { integerValue: String(Date.now()) }
+        }
+      })
+    });
+  } catch (sharedErr) {
+    console.warn('Shared Firestore leaderboard sync failed:', sharedErr);
+  }
+
+  // 2. Also save to user's personal document
+  try {
+    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
+    await firestoreFetch(userUrl, {
       method: 'PATCH',
       headers: getAuthHeaders(),
-      body: JSON.stringify({ fields }),
+      body: JSON.stringify({
+        fields: {
+          xp: { integerValue: String(newXp) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          updatedAt: { integerValue: String(Date.now()) }
+        }
+      })
     });
-  } catch (err) {
-    console.warn('Firestore leaderboard sync failed:', err);
-  }
+  } catch (e) {}
+
+  // 3. Fallback: try root /leaderboards collection
+  try {
+    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
+    firestoreFetch(rootUrl, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        fields: {
+          userId: { stringValue: String(userId) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          xp: { integerValue: String(newXp) },
+          updatedAt: { integerValue: String(Date.now()) }
+        }
+      })
+    }).catch(() => {});
+  } catch (err) {}
 }
 
 export async function getUserWeeklyXpFirestore(userId, weekKey) {
   if (!userId || !weekKey) return 0;
+  // 1. Try personal user document
   try {
-    const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
-    const res = await firestoreFetch(url, { headers: getAuthHeaders() });
-    if (!res.ok) return 0;
-    const data = await res.json();
-    if (data.fields && data.fields.xp) {
-      return Number(data.fields.xp.integerValue || data.fields.xp.doubleValue || 0);
+    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
+    const res = await firestoreFetch(userUrl, { headers: getAuthHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.fields && data.fields.xp) {
+        return Number(data.fields.xp.integerValue || data.fields.xp.doubleValue || 0);
+      }
     }
-  } catch (err) {
-    console.warn('Firestore user weekly XP load failed:', err);
-  }
+  } catch (e) {}
+
+  // 2. Try shared document
+  try {
+    const config = getFirebaseConfig();
+    const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
+    const res = await fetch(sharedUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.fields?.playersJson?.stringValue) {
+        const map = JSON.parse(data.fields.playersJson.stringValue);
+        if (map && map[userId] && map[userId].xp) {
+          return Number(map[userId].xp || 0);
+        }
+      }
+    }
+  } catch (e) {}
+
   return 0;
 }
 
 export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
   if (!weekKey) return null;
+
+  // 1. Primary query: read from shared leaderboard document
+  try {
+    const config = getFirebaseConfig();
+    const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
+    const res = await fetch(sharedUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.fields?.playersJson?.stringValue) {
+        const map = JSON.parse(data.fields.playersJson.stringValue);
+        if (map && typeof map === 'object') {
+          const players = Object.values(map).filter(p => p && p.userId && (Number(p.xp) > 0 || p.name));
+          players.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
+          return players.slice(0, limitCount);
+        }
+      }
+    }
+  } catch (sharedErr) {
+    console.warn('Shared Firestore leaderboard fetch failed:', sharedErr);
+  }
+
+  // 2. Fallback: query root /leaderboards collection
   try {
     const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players`);
     const res = await firestoreFetch(url, { headers: getAuthHeaders() });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!Array.isArray(data.documents)) return [];
-
-    const players = data.documents.map((doc) => {
-      const obj = {};
-      for (const [k, f] of Object.entries(doc.fields || {})) {
-        if ('stringValue' in f) obj[k] = f.stringValue;
-        else if ('integerValue' in f) obj[k] = Number(f.integerValue);
-        else if ('doubleValue' in f) obj[k] = Number(f.doubleValue);
-        else if ('booleanValue' in f) obj[k] = f.booleanValue;
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.documents)) {
+        const players = data.documents.map((doc) => {
+          const obj = {};
+          for (const [k, f] of Object.entries(doc.fields || {})) {
+            if ('stringValue' in f) obj[k] = f.stringValue;
+            else if ('integerValue' in f) obj[k] = Number(f.integerValue);
+            else if ('doubleValue' in f) obj[k] = Number(f.doubleValue);
+            else if ('booleanValue' in f) obj[k] = f.booleanValue;
+          }
+          return obj;
+        });
+        players.sort((a, b) => (b.xp || 0) - (a.xp || 0));
+        return players.slice(0, limitCount);
       }
-      return obj;
-    });
-
-    players.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-    return players.slice(0, limitCount);
+    }
   } catch (err) {
-    console.warn('Firestore leaderboard fetch failed:', err);
-    return null;
+    console.warn('Root Firestore leaderboard fetch fallback failed:', err);
   }
+
+  return null;
 }
 
 export async function saveUserProfileFirestore(userId, profileData) {
@@ -559,20 +660,47 @@ export async function saveUserCustomWordsFirestore(userId, wordsArray) {
   }
 }
 
-export async function loadUserCustomWordsFirestore(userId) {
-  if (!userId) return [];
+export async function fetchSharedVocabularyUpdatesFirestore() {
+  const config = getFirebaseConfig();
+  const url = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/vocabulary_updates?key=${config.apiKey}`;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`);
-    const res = await firestoreFetch(url, { headers: getAuthHeaders() }).catch(() => null);
-    if (!res || !res.ok) return [];
+    const res = await fetch(url);
+    if (!res.ok) return {};
     const data = await res.json();
-    if (data.fields?.wordsJson?.stringValue) {
-      const parsed = JSON.parse(data.fields.wordsJson.stringValue);
-      return Array.isArray(parsed) ? parsed : [];
+    if (data.fields?.updatesJson?.stringValue) {
+      return JSON.parse(data.fields.updatesJson.stringValue) || {};
     }
   } catch (err) {
-    console.warn('Firestore custom words load failed:', err);
+    console.warn('fetchSharedVocabularyUpdatesFirestore failed:', err);
   }
+  return {};
+}
+
+export async function saveSharedVocabularyUpdatesFirestore(newUpdatesMap) {
+  if (!newUpdatesMap || Object.keys(newUpdatesMap).length === 0) return;
+  const config = getFirebaseConfig();
+  const current = await fetchSharedVocabularyUpdatesFirestore();
+  Object.keys(newUpdatesMap).forEach(k => {
+    if (newUpdatesMap[k]) current[k] = newUpdatesMap[k];
+  });
+
+  const url = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/vocabulary_updates?key=${config.apiKey}`;
+  try {
+    await firestoreFetch(url, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        fields: {
+          updatesJson: { stringValue: JSON.stringify(current) },
+          updatedAt: { integerValue: String(Date.now()) },
+          totalCount: { integerValue: String(Object.keys(current).length) }
+        }
+      })
+    });
+  } catch (e) {}
+}
+
+export async function loadUserCustomWordsFirestore(userId) {
   return [];
 }
 

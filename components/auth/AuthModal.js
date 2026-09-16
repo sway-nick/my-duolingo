@@ -1,4 +1,4 @@
-import { loginUser, registerUser, googleAuthUser } from '../../services/api.js?v=200.0';
+import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=200.0';
 import { setCurrentUser } from '../../services/authService.js?v=200.0';
 import { loginWithGoogle } from '../../services/firebase.js?v=200.0';
 import { t } from '../../services/i18n.js?v=200.0';
@@ -156,9 +156,13 @@ function renderAuthModal(onSuccessCallback) {
           provider: 'google',
           name: res.data.user.name || name,
           email: email,
-          avatar: picture,
+          avatar: picture || '',
+          firebaseUid: profile.sub || profile.id || '',
         };
         setCurrentUser(userWithGoogle, res.data.token);
+        try {
+          await fetchUserDataFromCloud(userWithGoogle.id);
+        } catch (e) {}
         modal.remove();
         if (onSuccessCallback) onSuccessCallback(userWithGoogle);
       } else {
@@ -200,9 +204,13 @@ function renderAuthModal(onSuccessCallback) {
           provider: 'google',
           name: res.data.user.name || name,
           email: email,
-          avatar: picture,
+          avatar: picture || '',
+          firebaseUid: payload.sub || '',
         };
         setCurrentUser(userWithGoogle, res.data.token);
+        try {
+          await fetchUserDataFromCloud(userWithGoogle.id);
+        } catch (e) {}
         modal.remove();
         if (onSuccessCallback) onSuccessCallback(userWithGoogle);
       } else {
@@ -263,8 +271,10 @@ function renderAuthModal(onSuccessCallback) {
     googleBtn.addEventListener('click', async () => {
       errorBox.style.display = 'none';
 
+      const isAndroidApp = !!(window.androidBridge || window.Capacitor?.isNativePlatform?.() || window.Capacitor?.getPlatform?.() === 'android');
+
       // 1. Mobile Android (Capacitor Native Google Sign-In)
-      if (window.Capacitor?.Plugins?.FirebaseAuthentication) {
+      if (isAndroidApp || window.Capacitor?.Plugins?.FirebaseAuthentication) {
         googleBtn.disabled = true;
         const origContent = googleBtn.innerHTML;
         googleBtn.innerHTML = `<span style="font-size: 14px;">⏳ ${t('auth_loading')}</span>`;
@@ -282,13 +292,19 @@ function renderAuthModal(onSuccessCallback) {
                 provider: 'google',
                 name: res.data.user.name || name,
                 email: email,
-                avatar: picture,
+                avatar: picture || userObj.avatar || '',
+                firebaseUid: userObj.id || '',
                 idToken: userObj.idToken || '',
               };
               setCurrentUser(userWithGoogle, userWithGoogle.idToken || res.data.token);
+              try {
+                await fetchUserDataFromCloud(userWithGoogle.id);
+              } catch (e) {}
               modal.remove();
               if (onSuccessCallback) onSuccessCallback(userWithGoogle);
               return;
+            } else {
+              throw new Error(res?.error || t('auth_err_failed'));
             }
           }
         } catch (nativeErr) {
@@ -306,7 +322,7 @@ function renderAuthModal(onSuccessCallback) {
         return;
       }
 
-      // 2. Web Browser Google Sign-In via GIS
+      // 2. Web Browser Google Sign-In via GIS (only for web desktop/browser)
       if (tokenClient) {
         tokenClient.requestAccessToken({ prompt: 'select_account' });
       } else if (window.google?.accounts?.id) {
@@ -367,6 +383,9 @@ function renderAuthModal(onSuccessCallback) {
 
       if (res && res.success && res.data?.user) {
         setCurrentUser(res.data.user, res.data.token);
+        try {
+          await fetchUserDataFromCloud(res.data.user.id);
+        } catch (e) {}
         modal.remove();
         if (onSuccessCallback) onSuccessCallback(res.data.user);
       } else {

@@ -7,6 +7,21 @@ import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
 
+function detectAndApplyAndroidApp() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  const isAndroid = !!(
+    window.androidBridge ||
+    window.Capacitor?.isNativePlatform?.() ||
+    window.Capacitor?.getPlatform?.() === 'android' ||
+    (window.location && window.location.hostname === 'localhost' && /Android/i.test(navigator.userAgent))
+  );
+  if (isAndroid) {
+    document.documentElement.classList.add('is-android-app');
+    if (document.body) document.body.classList.add('is-android-app');
+  }
+}
+detectAndApplyAndroidApp();
+
 function getSavedTheme() {
   return localStorage.getItem('myduo_theme') || 'light';
 }
@@ -96,9 +111,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const avatar = getUserAvatar();
   let avatarHtml = '';
   if (avatar) {
-    avatarHtml = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img" />`;
+    avatarHtml = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img" referrerpolicy="no-referrer" />`;
   } else {
-    const initial = user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤';
+    const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
     avatarHtml = `<div class="drawer-avatar-placeholder">${initial}</div>`;
   }
   const username = user ? user.name : 'Гость (Демо)';
@@ -108,7 +123,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <header class="mobile-header">
-        <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden;" title="Перейти на главную (режим Тест)">
+        <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="Перейти на главную (режим Тест)">
           <!-- SVG Cup-with-Book Logo -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" style="display: block; width: 100%; max-width: 180px; height: 38px; min-width: 130px;">
             <!-- Steam lines (More wavy) -->
@@ -163,37 +178,76 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               <div class="drawer-email">${email}</div>
             </div>
           </div>
-          <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close">&times;</button>
+          <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <div class="drawer-menu">
           <button class="nav-tab active" data-tab="training" title="${t('training')}">
-            <span class="tab-icon">🎓</span>
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </span>
             <span class="drawer-item-text">${t('training')}</span>
           </button>
           <button class="nav-tab" data-tab="leaderboard" title="${t('leaderboard')}">
-            <span class="tab-icon">🏆</span>
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+                <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+                <path d="M4 3h16v7a8 8 0 0 1-16 0V3z"></path>
+                <path d="M12 18v4"></path>
+                <path d="M8 22h8"></path>
+              </svg>
+            </span>
             <span class="drawer-item-text">${t('leaderboard')}</span>
           </button>
           <button class="nav-tab" data-tab="dictionary" title="${t('dictionary')}">
-            <span class="tab-icon">📖</span>
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+            </span>
             <span class="drawer-item-text">${t('dictionary')}</span>
           </button>
           <button class="nav-tab" data-tab="favorites" title="${t('favorites')}">
-            <span class="tab-icon">❤️</span>
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </span>
             <span class="drawer-item-text">${t('favorites')}</span>
           </button>
           <button class="nav-tab" data-tab="stats" title="${t('stats')}">
-            <span class="tab-icon">📊</span>
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+                <line x1="2" y1="20" x2="22" y2="20"></line>
+              </svg>
+            </span>
             <span class="drawer-item-text">${t('stats')}</span>
           </button>
           <button class="nav-tab" data-tab="settings" title="${t('settings')}">
-            <span class="tab-icon">⚙️</span>
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </span>
             <span class="drawer-item-text">${t('settings')}</span>
           </button>
           <button type="button" class="drawer-share-action-btn" id="drawer-share-btn" title="${t('share_title')}">
             <span class="tab-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="18" cy="5" r="3"></circle>
                 <circle cx="6" cy="12" r="3"></circle>
                 <circle cx="18" cy="19" r="3"></circle>
@@ -207,7 +261,13 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
 
         <div class="drawer-footer">
           <button type="button" class="drawer-feedback-btn" id="drawer-feedback-btn">
-            <span class="drawer-feedback-icon">💡</span>
+            <span class="drawer-feedback-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18h6"></path>
+                <path d="M10 22h4"></path>
+                <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path>
+              </svg>
+            </span>
             <span class="drawer-feedback-title">${t('feedback_title')}</span>
           </button>
           <div class="drawer-app-version">English Breakfast • 2026</div>
@@ -254,8 +314,14 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       tabs.forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
       const targetTab = tab.getAttribute('data-tab');
-      onTabChange(targetTab);
       closeDrawer();
+      if (typeof onTabChange === 'function') {
+        try {
+          onTabChange(targetTab);
+        } catch (err) {
+          console.error('Error changing tab:', err);
+        }
+      }
     });
   });
 
@@ -408,7 +474,13 @@ function bindHeaderActionButtons(container) {
       closeDrawer();
       const navTabs = document.querySelectorAll('.nav-tab');
       navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'leaderboard'));
-      globalTabChangeCallback('leaderboard');
+      if (typeof globalTabChangeCallback === 'function') {
+        try {
+          globalTabChangeCallback('leaderboard');
+        } catch (err) {
+          console.error('Error opening leaderboard from header XP:', err);
+        }
+      }
     });
   }
 
@@ -440,9 +512,9 @@ function updateDrawerProfile() {
   const avatarWrapper = drawer.querySelector('.drawer-avatar-wrapper');
   if (avatarWrapper) {
     if (avatar) {
-      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Avatar" class="drawer-avatar-img" />`;
+      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Avatar" class="drawer-avatar-img" referrerpolicy="no-referrer" />`;
     } else {
-      const initial = user && user.name ? user.name.trim().charAt(0).toUpperCase() : '👤';
+      const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
       avatarWrapper.innerHTML = `<div class="drawer-avatar-placeholder">${initial}</div>`;
     }
   }
