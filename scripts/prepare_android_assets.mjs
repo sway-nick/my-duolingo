@@ -19,7 +19,7 @@ function getAudioFileName(text) {
     .replace(/\s+/g, '_') + '.mp3';
 }
 
-const targetCategories = ['elementary', 'irregular'];
+const targetCategories = ['elementary'];
 const targetWords = words.filter(w => {
   const cat = String(w.category || '').toLowerCase();
   return targetCategories.some(tc => cat.includes(tc));
@@ -32,16 +32,23 @@ targetWords.forEach(w => {
   }
 });
 
-console.log(`Found ${targetWords.length} target words (${targetFileNames.size} unique audio files per accent).`);
+console.log(`Found ${targetWords.length} Elementary words (${targetFileNames.size} unique audio files for US accent).`);
 
 const androidAudioDir = path.join(ANDROID_PROJECT, 'frontend/assets/audio');
 const sourceAudioDir = path.join(ROOT_SOURCE, 'frontend/assets/audio');
 
 // 2. Prepare Android frontend/assets/audio
-console.log('--- 2. Preparing Android frontend/assets/audio (Elementary + Irregular verbs only) ---');
+console.log('--- 2. Preparing Android frontend/assets/audio (Elementary US only per Section 4/12) ---');
 
-// Package both US and UK audio for Elementary & Irregular verbs (2,594 words * 2 = 5,188 files, ~42.8 MB audio)
-['us', 'uk'].forEach(accent => {
+// Clean and remove UK audio from APK so it is downloaded on-demand only
+const ukDestDir = path.join(androidAudioDir, 'uk');
+if (fs.existsSync(ukDestDir)) {
+  fs.rmSync(ukDestDir, { recursive: true, force: true });
+  console.log('Cleaned UK audio from APK bundle (downloaded on-demand when UK accent is selected).');
+}
+
+// Package ONLY US audio for Elementary words
+['us'].forEach(accent => {
   const srcAccentDir = path.join(sourceAudioDir, accent);
   const destAccentDir = path.join(androidAudioDir, accent);
 
