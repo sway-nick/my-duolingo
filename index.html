@@ -24,7 +24,7 @@
         } catch (e) {}
         try {
           var t = localStorage.getItem('myduo_theme') || 'light';
-          var initBg = '#ffffff';
+          var initBg = '#f8fafc';
           if (t === 'dark') {
             document.documentElement.classList.add('dark-theme');
             document.documentElement.style.backgroundColor = '#0f172a';
@@ -34,7 +34,7 @@
             document.documentElement.style.backgroundColor = '#f5eedc';
             initBg = '#f5eedc';
           } else {
-            document.documentElement.style.backgroundColor = '#ffffff';
+            document.documentElement.style.backgroundColor = '#f8fafc';
           }
           if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
             window.AndroidThemeBridge.setWindowThemeColor(t);

@@ -3573,7 +3573,7 @@ body.dark-theme .custom-dropdown-trigger {
 .fav-sticky-controls {
   position: -webkit-sticky;
   position: sticky;
-  top: var(--fav-sticky-top, 58px);
+  top: var(--fav-sticky-top, calc(60px + var(--safe-top, 0px)));
   z-index: 25;
   background: var(--bg-main, #ffffff);
   padding: 4px 0 10px;
@@ -3629,7 +3629,7 @@ body.dark-theme .custom-dropdown-trigger {
   box-sizing: border-box;
   position: -webkit-sticky;
   position: sticky;
-  top: var(--dict-sticky-top, 58px);
+  top: var(--dict-sticky-top, calc(60px + var(--safe-top, 0px)));
   z-index: 25;
   background: var(--bg-main, #ffffff);
   padding: 6px 0 8px;
@@ -3976,7 +3976,7 @@ textarea:disabled,
 
 .leaderboard-sticky-group {
   position: sticky;
-  top: 54px;
+  top: var(--leaderboard-sticky-top, calc(60px + var(--safe-top, 0px)));
   z-index: 45;
   background: var(--bg-main, var(--bg-color, #ffffff));
   padding: 8px 14px 6px 14px;
@@ -4244,7 +4244,7 @@ button.leaderboard-header-chip:hover {
 .podium-sticky-wrapper {
   position: -webkit-sticky;
   position: sticky;
-  top: var(--podium-sticky-top, 58px);
+  top: var(--podium-sticky-top, calc(60px + var(--safe-top, 0px)));
   z-index: 25;
   background: var(--bg-main, #ffffff);
   padding: 4px 0 8px;
