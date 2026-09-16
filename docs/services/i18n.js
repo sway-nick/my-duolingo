@@ -6921,10 +6921,17 @@ export function getWordTranslation(wordObj) {
   if (!wordObj) return '';
   const lang = getInterfaceLanguage();
   if (wordObj.translations && wordObj.translations[lang]) {
-    return wordObj.translations[lang];
+    const localized = wordObj.translations[lang];
+    if (typeof localized === 'string' && !localized.includes('\ufffd')) {
+      return localized;
+    }
   }
-  return wordObj.translation || '';
+  if (typeof wordObj.translation === 'string' && !wordObj.translation.includes('\ufffd')) {
+    return wordObj.translation;
+  }
+  return (wordObj.translation || '').replace(/\ufffd+/g, '');
 }
+
 
 export function getWordNotes(wordObj) {
   if (!wordObj) return '';
