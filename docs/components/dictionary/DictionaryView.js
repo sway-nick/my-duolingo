@@ -1326,8 +1326,9 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const dictControls = container.querySelector('.dictionary-controls');
   const updateDictStickyTop = () => {
     if (dictControls) {
-      const headerHeight = headerEl ? headerEl.offsetHeight : 56;
-      dictControls.style.setProperty('--dict-sticky-top', `${Math.round(headerHeight)}px`);
+      const safeTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0;
+      const headerHeight = headerEl ? headerEl.offsetHeight : 60;
+      dictControls.style.setProperty('--dict-sticky-top', `${Math.round(headerHeight + safeTop)}px`);
     }
   };
   updateDictStickyTop();
