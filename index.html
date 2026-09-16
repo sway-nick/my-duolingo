@@ -35,6 +35,7 @@
             initBg = '#f5eedc';
           } else {
             document.documentElement.style.backgroundColor = '#ffffff';
+          }
           if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
             window.AndroidThemeBridge.setWindowThemeColor(t);
           }
@@ -42,6 +43,12 @@
             var sbHeight = window.AndroidThemeBridge.getStatusBarHeightDp();
             if (sbHeight > 0) {
               document.documentElement.style.setProperty('--safe-top', sbHeight + 'px');
+            }
+          }
+          if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.getNavigationBarHeightDp === 'function') {
+            var nbHeight = window.AndroidThemeBridge.getNavigationBarHeightDp();
+            if (nbHeight > 0) {
+              document.documentElement.style.setProperty('--safe-bottom', nbHeight + 'px');
             }
           }
         } catch (e) {}
