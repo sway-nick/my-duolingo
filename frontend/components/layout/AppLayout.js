@@ -29,19 +29,22 @@ function getSavedTheme() {
 function applyTheme(theme) {
   localStorage.setItem('myduo_theme', theme);
   const app = document.querySelector('.mobile-app');
-  // Remove all theme classes first
+  document.documentElement.classList.remove('dark-theme', 'notebook-theme');
   document.body.classList.remove('dark-theme', 'notebook-theme');
   if (app) app.classList.remove('dark-theme', 'notebook-theme');
 
   if (theme === 'dark') {
+    document.documentElement.classList.add('dark-theme');
     document.body.classList.add('dark-theme');
     if (app) app.classList.add('dark-theme');
   } else if (theme === 'notebook') {
+    document.documentElement.classList.add('notebook-theme');
     document.body.classList.add('notebook-theme');
     if (app) app.classList.add('notebook-theme');
   }
   // Update Android status bar & navigation bar dynamically
-  const targetBg = theme === 'dark' ? '#0f172a' : theme === 'notebook' ? '#f5eedc' : '#ffffff';
+  const targetBg = theme === 'dark' ? '#0f172a' : theme === 'notebook' ? '#f5eedc' : '#f8fafc';
+  document.documentElement.style.backgroundColor = targetBg;
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
     metaTheme.setAttribute('content', targetBg);

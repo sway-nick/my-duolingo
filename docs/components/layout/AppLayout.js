@@ -29,23 +29,30 @@ function getSavedTheme() {
 function applyTheme(theme) {
   localStorage.setItem('myduo_theme', theme);
   const app = document.querySelector('.mobile-app');
-  // Remove all theme classes first
+  document.documentElement.classList.remove('dark-theme', 'notebook-theme');
   document.body.classList.remove('dark-theme', 'notebook-theme');
   if (app) app.classList.remove('dark-theme', 'notebook-theme');
 
   if (theme === 'dark') {
+    document.documentElement.classList.add('dark-theme');
     document.body.classList.add('dark-theme');
     if (app) app.classList.add('dark-theme');
   } else if (theme === 'notebook') {
+    document.documentElement.classList.add('notebook-theme');
     document.body.classList.add('notebook-theme');
     if (app) app.classList.add('notebook-theme');
   }
   // Update Android status bar & navigation bar dynamically
+  const targetBg = theme === 'dark' ? '#0f172a' : theme === 'notebook' ? '#f5eedc' : '#f8fafc';
+  document.documentElement.style.backgroundColor = targetBg;
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
-    if (theme === 'dark') metaTheme.setAttribute('content', '#0f172a');
-    else if (theme === 'notebook') metaTheme.setAttribute('content', '#f5eedc');
-    else metaTheme.setAttribute('content', '#ffffff');
+    metaTheme.setAttribute('content', targetBg);
+  }
+  if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
+    try {
+      window.AndroidThemeBridge.setWindowThemeColor(theme);
+    } catch (e) {}
   }
 }
 
@@ -122,6 +129,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
+      <div class="safe-area-top-fill" aria-hidden="true"></div>
       <header class="mobile-header">
         <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="Перейти на главную (режим Тест)">
           <!-- SVG Cup-with-Book Logo -->
