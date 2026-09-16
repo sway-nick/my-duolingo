@@ -6222,42 +6222,29 @@ body.notebook-theme,
   font-size: 16px !important;
 }
 
-/* Responsive Header Optimizations for Narrow Screens */
-@media (max-width: 480px) {
-  .mobile-header {
-    padding: 8px 12px !important;
-    min-height: 60px !important;
-    align-items: center !important;
-  }
-  
-  #brand-logo svg {
-    width: 170px !important;
-    height: 35px !important;
-  }
-  
-  #header-user-status {
-    margin-left: 40px !important;
-  }
-  
-  .header-right-actions {
-    gap: 6px !important;
-  }
-  
-  .header-right-actions > div {
-    gap: 6px !important;
-  }
+/* Canonical Mobile Header Standards - Strict Section 1 Compliance */
+.mobile-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 10px 14px !important;
+  min-height: 60px !important;
+  height: auto !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  box-sizing: border-box !important;
+  flex-wrap: nowrap !important;
+  overflow: hidden !important;
+}
 
-  .header-xp-badge {
-    padding: 4px 6px !important;
-  }
-  
-  .xp-badge-text {
-    font-size: 11.5px !important;
-  }
-  
-  .xp-badge-icon {
-    font-size: 15px !important;
-  }
+#brand-logo svg {
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  height: 38px;
+  min-width: 130px;
 }
 
 /* Custom Notes styles for Cards and Dictionary */
