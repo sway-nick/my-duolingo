@@ -420,28 +420,16 @@ function isVoicePackDownloaded(accent = 'us') {
  */
 function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
   const norm = String(category || '').toLowerCase().trim();
+  if (norm.includes('elementary') || norm.includes('irregular')) {
+    return true; // Pre-packaged in APK!
+  }
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
 
-  if (targetAccent === 'us') {
-    if (norm.includes('elementary') || norm.includes('irregular')) {
-      return true; // Pre-packaged in APK!
-    }
-    try {
-      return localStorage.getItem(`myduo_cat_downloaded_us_${norm}`) === 'true';
-    } catch (e) {
-      return false;
-    }
-  } else {
-    // British voice
-    if (norm.includes('elementary') || norm.includes('irregular')) {
-      return isVoicePackDownloaded('uk_base');
-    }
-    try {
-      return localStorage.getItem(`myduo_cat_downloaded_uk_${norm}`) === 'true';
-    } catch (e) {
-      return false;
-    }
+  try {
+    return localStorage.getItem(`myduo_cat_downloaded_${targetAccent}_${norm}`) === 'true';
+  } catch (e) {
+    return false;
   }
 }
 

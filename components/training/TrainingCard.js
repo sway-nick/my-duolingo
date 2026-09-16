@@ -487,7 +487,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 `
                   : `
                   <div class="train-left-badge cards-learning-badge" style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
-                    🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}
+                    🗂️ <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>
                   </div>
                 `
               )
@@ -634,8 +634,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     if (leftBadge) {
       if (isFavPractice) {
         leftBadge.innerHTML = `${t('fav_title')}: <strong>${activeWords.length}</strong>`;
+      } else if (isCardsMode) {
+        leftBadge.innerHTML = `🗂️ <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>`;
       } else {
-        leftBadge.innerHTML = `🎯 ${t('train_in_progress')}: <strong>${learningCount} / ${dailyGoal}</strong> ${t('words')}`;
+        leftBadge.innerHTML = `🎯 <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>`;
       }
     }
   }
@@ -2218,7 +2220,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 playCoinDropSound();
                 try {
                   const uid = (typeof getEffectiveUserId === 'function') ? getEffectiveUserId() : null;
-                  if (typeof addWeeklyXP === 'function') addWeeklyXP(3, uid);
+                  if (typeof addWeeklyXP === 'function') addWeeklyXP(5, uid);
                 } catch (e) {}
               }
             }, 1350);
