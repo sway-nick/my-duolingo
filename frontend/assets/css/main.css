@@ -505,7 +505,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 10px 10px;
-  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  padding-bottom: max(12px, var(--safe-bottom, env(safe-area-inset-bottom, 0px)));
   padding-left: max(10px, env(safe-area-inset-left, 0px));
   padding-right: max(10px, env(safe-area-inset-right, 0px));
   box-sizing: border-box;
@@ -6255,6 +6255,7 @@ body.notebook-theme,
 
 .burger-drawer {
   padding-top: calc(16px + var(--safe-top, env(safe-area-inset-top, 0px))) !important;
+  padding-bottom: calc(16px + var(--safe-bottom, env(safe-area-inset-bottom, 0px))) !important;
 }
 
 /* Custom Notes styles for Cards and Dictionary */
