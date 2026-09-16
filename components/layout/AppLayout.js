@@ -41,11 +41,15 @@ function applyTheme(theme) {
     if (app) app.classList.add('notebook-theme');
   }
   // Update Android status bar & navigation bar dynamically
+  const targetBg = theme === 'dark' ? '#0f172a' : theme === 'notebook' ? '#f5eedc' : '#ffffff';
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
-    if (theme === 'dark') metaTheme.setAttribute('content', '#0f172a');
-    else if (theme === 'notebook') metaTheme.setAttribute('content', '#f5eedc');
-    else metaTheme.setAttribute('content', '#ffffff');
+    metaTheme.setAttribute('content', targetBg);
+  }
+  if (window.AndroidThemeBridge && typeof window.AndroidThemeBridge.setWindowThemeColor === 'function') {
+    try {
+      window.AndroidThemeBridge.setWindowThemeColor(targetBg);
+    } catch (e) {}
   }
 }
 
