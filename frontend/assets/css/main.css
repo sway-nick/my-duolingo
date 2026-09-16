@@ -2494,6 +2494,20 @@ body.notebook-theme .word-notes-modal-text {
   }
 }
 
+/* Optical lift for Word of the Day content to balance distance between header and bottom prompt */
+.wotd-card .flashcard-face-body {
+  transform: translateY(-10px);
+}
+
+.wotd-transcription {
+  font-size: 13.5px;
+  color: #fef08a;
+  opacity: 0.95;
+  margin-top: 4px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
 /* 3D Embossed Relief Text (Выпуклый объёмный шрифт с внутренней светотенью) */
 .wotd-card .embossed-text {
   background: linear-gradient(180deg, #ffffff 0%, #ffffff 28%, #e2e8f0 55%, #cbd5e1 78%, #94a3b8 100%);

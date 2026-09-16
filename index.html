@@ -917,8 +917,9 @@
                            ${isWotdFav ? '❤️' : '🤍'}
                          </button>
                        </div>
-                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1;">
+                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; transform: translateY(-10px);">
                          <h2 class="flashcard-word embossed-text" style="font-size: 28px; margin: 0;">${wotd.word}</h2>
+                         ${wotd.transcription ? `<div class="wotd-transcription" style="font-size: 13.5px; color: #fef08a; opacity: 0.95; margin-top: 4px; font-weight: 600; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);">[${wotd.transcription.replace(/^\[?|\/?|\]?$/g, '')}]</div>` : ''}
                        </div>
                        <div class="flashcard-face-bottom">
                          <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
@@ -944,8 +945,8 @@
                            ${isWotdFav ? '❤️' : '🤍'}
                          </button>
                        </div>
-                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; z-index: 2;">
-                         <h2 class="flashcard-translation" style="font-size: 24px; font-weight: 500; margin: 14px 0 0 0; text-align: center;">${getWordTranslation(wotd)}</h2>
+                       <div class="flashcard-face-body" style="justify-content: center; display: flex; flex-direction: column; flex: 1; z-index: 2; transform: translateY(-10px);">
+                         <h2 class="flashcard-translation" style="font-size: 24px; font-weight: 500; margin: 0; text-align: center;">${getWordTranslation(wotd)}</h2>
                        </div>
                      </div>
                   </div>
