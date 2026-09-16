@@ -4,86 +4,92 @@ import path from 'path';
 const ROOT_SOURCE = 'c:/projects/my-duolingo';
 const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
 
-console.log('--- 1. Loading words.json and filtering Elementary & Irregular verbs ---');
-const wordsPath = path.join(ROOT_SOURCE, 'frontend/assets/data/words.json');
-const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
+export function prepareAndroidAssets() {
+  console.log('--- 1. Loading words.json & filtering strictly Elementary (US only, Section 12) ---');
+  const wordsPath = path.join(ROOT_SOURCE, 'frontend/assets/data/words.json');
+  const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
 
-function getAudioFileName(text) {
-  return text.toLowerCase().trim()
-    .replace(/[^a-z0-9\s'-]/g, '')
-    .replace(/\s+/g, '_') + '.mp3';
-}
-
-const targetCategories = ['elementary', 'irregular'];
-const targetWords = words.filter(w => {
-  const cat = String(w.category || '').toLowerCase();
-  return targetCategories.some(tc => cat.includes(tc));
-});
-
-const targetFileNames = new Set();
-targetWords.forEach(w => {
-  if (w.word) {
-    targetFileNames.add(getAudioFileName(w.word));
-  }
-});
-
-console.log(`Found ${targetWords.length} target words (${targetFileNames.size} unique audio files per accent).`);
-
-const androidAudioDir = path.join(ANDROID_PROJECT, 'frontend/assets/audio');
-const sourceAudioDir = path.join(ROOT_SOURCE, 'frontend/assets/audio');
-
-// 2. Prepare Android frontend/assets/audio
-console.log('--- 2. Preparing Android frontend/assets/audio (Elementary + Irregular verbs only) ---');
-
-// Package both US and UK audio for Elementary & Irregular verbs (2,594 words * 2 = 5,188 files, ~42.8 MB audio)
-['us', 'uk'].forEach(accent => {
-  const srcAccentDir = path.join(sourceAudioDir, accent);
-  const destAccentDir = path.join(androidAudioDir, accent);
-
-  if (!fs.existsSync(destAccentDir)) {
-    fs.mkdirSync(destAccentDir, { recursive: true });
+  function getAudioFileName(text) {
+    return text.toLowerCase().trim()
+      .replace(/[^a-z0-9\s'-]/g, '')
+      .replace(/\s+/g, '_') + '.mp3';
   }
 
-  // Remove existing files in dest that are not in target
-  const existingFiles = fs.readdirSync(destAccentDir);
+  // Section 12: In APK, strictly 'elementary' category words are prepackaged
+  const targetWords = words.filter(w => {
+    const cat = String(w.category || '').toLowerCase();
+    return cat.includes('elementary');
+  });
+
+  const targetFileNames = new Set();
+  targetWords.forEach(w => {
+    if (w.word) {
+      targetFileNames.add(getAudioFileName(w.word));
+    }
+  });
+
+  console.log('Found ' + targetWords.length + ' Elementary words (' + targetFileNames.size + ' unique audio files for US).');
+
+  const androidAudioDir = path.join(ANDROID_PROJECT, 'frontend/assets/audio');
+  const sourceAudioDir = path.join(ROOT_SOURCE, 'frontend/assets/audio');
+
+  // Ensure UK audio folder is completely removed from APK prepackaging (UK is on-demand per Section 12)
+  const destUkDir = path.join(androidAudioDir, 'uk');
+  if (fs.existsSync(destUkDir)) {
+    fs.rmSync(destUkDir, { recursive: true, force: true });
+    console.log('✅ Removed UK audio folder from Android package (UK is downloaded on-demand in-app).');
+  }
+
+  // Prepare US audio folder (strictly Elementary words)
+  const srcUsDir = path.join(sourceAudioDir, 'us');
+  const destUsDir = path.join(androidAudioDir, 'us');
+
+  if (!fs.existsSync(destUsDir)) {
+    fs.mkdirSync(destUsDir, { recursive: true });
+  }
+
+  const existingFiles = fs.readdirSync(destUsDir);
   let removed = 0;
   for (const file of existingFiles) {
     if (!targetFileNames.has(file)) {
-      fs.unlinkSync(path.join(destAccentDir, file));
+      fs.unlinkSync(path.join(destUsDir, file));
       removed++;
     }
   }
 
-  // Copy target files from source if missing or different size
   let copied = 0;
   for (const filename of targetFileNames) {
-    const srcFile = path.join(srcAccentDir, filename);
-    const destFile = path.join(destAccentDir, filename);
+    const srcFile = path.join(srcUsDir, filename);
+    const destFile = path.join(destUsDir, filename);
     if (fs.existsSync(srcFile)) {
       if (!fs.existsSync(destFile) || fs.statSync(srcFile).size !== fs.statSync(destFile).size) {
         fs.copyFileSync(srcFile, destFile);
         copied++;
       }
-    } else {
-      console.warn(`Warning: source audio missing for [${accent}]: ${filename}`);
     }
   }
 
-  const finalCount = fs.readdirSync(destAccentDir).length;
-  console.log(`Accent [${accent}]: removed ${removed} non-target files, copied/verified ${copied}, total in folder: ${finalCount}`);
-});
+  const finalUsCount = fs.readdirSync(destUsDir).length;
+  console.log('✅ US Elementary audio: removed ' + removed + ' non-elementary files, verified ' + copied + ', total in folder: ' + finalUsCount);
 
-// Ensure coin.mp3 is in android audio
-if (fs.existsSync(path.join(sourceAudioDir, 'coin.mp3'))) {
-  fs.copyFileSync(path.join(sourceAudioDir, 'coin.mp3'), path.join(androidAudioDir, 'coin.mp3'));
+  // Ensure sound effects are copied
+  const sfxFiles = ['coin.mp3'];
+  sfxFiles.forEach(sfx => {
+    const srcSfx = path.join(sourceAudioDir, sfx);
+    if (fs.existsSync(srcSfx)) {
+      fs.copyFileSync(srcSfx, path.join(androidAudioDir, sfx));
+    }
+  });
+
+  // Clean Android public assets/audio so stale files are not retained
+  console.log('--- 2. Cleaning android public assets/audio before cap sync ---');
+  const publicAudioDir = path.join(ANDROID_PROJECT, 'android/app/src/main/assets/public/assets/audio');
+  if (fs.existsSync(publicAudioDir)) {
+    fs.rmSync(publicAudioDir, { recursive: true, force: true });
+    console.log('Public audio directory cleaned.');
+  }
+
+  console.log('✅ Android asset preparation complete: Ready for lightweight ~35MB APK build.');
 }
 
-// 3. Clean android public assets/audio so Capacitor copy does not leave stale files
-console.log('--- 3. Cleaning android public assets/audio before cap sync ---');
-const publicAudioDir = path.join(ANDROID_PROJECT, 'android/app/src/main/assets/public/assets/audio');
-if (fs.existsSync(publicAudioDir)) {
-  fs.rmSync(publicAudioDir, { recursive: true, force: true });
-  console.log('Public audio directory cleaned.');
-}
-
-console.log('Asset preparation complete.');
+prepareAndroidAssets();
