@@ -2167,25 +2167,23 @@ body.notebook-theme .word-notes-modal-text {
 }
 
 .btn-green {
-  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
+  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
   color: #ffffff !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.28) !important;
-  border-bottom: 3.5px solid #15803d !important;
-  border-left: none !important;
-  border-right: none !important;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28), inset 0 1.5px 1px rgba(255, 255, 255, 0.35) !important;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
 }
 
 .btn-green:hover:not(:disabled) {
-  filter: brightness(1.05) !important;
+  filter: brightness(1.04) !important;
   transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
 }
 
 .btn-green:active:not(:disabled) {
-  transform: translateY(2px) !important;
-  border-bottom: 1.5px solid #15803d !important;
-  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .btn-orange {
@@ -2403,15 +2401,18 @@ body.notebook-theme .word-notes-modal-text {
   margin-top: 16px;
 }
 
-/* Gold VIP Bank Card styling for Word of the Day */
-/* Gold VIP Bank Card styling for Word of the Day - Premium Gold-on-Dark always */
+.wotd-card {
+  border-radius: 22px !important;
+}
+
 .wotd-card .flashcard-face {
+  border-radius: 22px !important;
   background: 
-    linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 16%, rgba(255, 255, 255, 0) 30%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 18%, rgba(255, 255, 255, 0) 32%),
     linear-gradient(135deg, #713f12 0%, #a16207 24%, #ca8a04 46%, #eab308 64%, #854d0e 82%, #451a03 100%);
-  border: 1.5px solid rgba(253, 224, 71, 0.7);
+  border: 1.2px solid rgba(253, 224, 71, 0.65);
   border-top-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 4px 14px rgba(202, 138, 4, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(202, 138, 4, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
 .wotd-card .flashcard-face {

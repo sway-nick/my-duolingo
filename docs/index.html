@@ -888,11 +888,11 @@
             currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
 
             wotdHtml = `
-              <div class="wotd-bonus-section" style="margin-top: 14px;">
+              <div class="wotd-bonus-section" style="margin-top: 36px;">
                 <div class="flashcard-3d-wrapper wotd-standalone-wrapper" style="margin: 0 auto; max-width: 340px; width: 100%;">
-                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}" style="min-height: 205px;">
+                  <div class="flashcard-3d wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}" style="min-height: 200px;">
                      <!-- Front Face: English word -->
-                     <div class="flashcard-face flashcard-front" style="min-height: 205px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
+                     <div class="flashcard-face flashcard-front" style="min-height: 200px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        <div class="flashcard-face-top">
                           <button type="button" class="flashcard-crown-btn" id="wotd-sound-front" title="${t('word_of_day')}">
@@ -913,7 +913,7 @@
                      </div>
 
                      <!-- Back Face: Word translation & Full-Size Embedded Video -->
-                     <div class="flashcard-face flashcard-back" style="min-height: 205px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; border-radius: inherit;">
+                     <div class="flashcard-face flashcard-back" style="min-height: 200px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; border-radius: inherit;">
                        <div class="card-edge-rim-glint" aria-hidden="true"></div>
                        
                        <!-- Full-size video covering entire golden card face with instant preloading (strictly on round victory) -->
@@ -957,7 +957,7 @@
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               ${emptyTitle ? `<h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>` : ''}
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '12px' : '16px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
+              <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '11px' : '15px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                 ${continueCardsBtnHtml}
                 <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                   <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${nextBtnSvg}</span>
