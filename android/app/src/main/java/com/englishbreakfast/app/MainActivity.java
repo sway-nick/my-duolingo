@@ -14,19 +14,21 @@ import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
 
     private float statusBarHeightDp = 0f;
+    private float navigationBarHeightDp = 0f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Enable modern edge-to-edge drawing so status bar area is seamlessly colored by webview header
+        // 1. Enable modern edge-to-edge drawing so status bar and navigation bar are seamlessly colored by webview
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
 
-        // 2. Measure status bar height in dp
-        measureStatusBarHeight();
+        // 2. Measure status bar & navigation bar heights in dp
+        measureDimensions();
 
-        // 3. Listen to system window insets
+        // 3. Listen to system window insets (status bars & navigation bars)
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
             Insets statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars());
             if (statusBarInsets.top > 0) {
@@ -34,10 +36,21 @@ public class MainActivity extends BridgeActivity {
                 statusBarHeightDp = statusBarInsets.top / density;
                 injectSafeTopToWebView();
             }
+            Insets navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            if (navBarInsets.bottom >= 0) {
+                float density = getResources().getDisplayMetrics().density;
+                navigationBarHeightDp = navBarInsets.bottom / density;
+                injectSafeBottomToWebView();
+            }
             return insets;
         });
 
         setupThemeBridge();
+    }
+
+    private void measureDimensions() {
+        measureStatusBarHeight();
+        measureNavigationBarHeight();
     }
 
     private void measureStatusBarHeight() {
@@ -54,12 +67,28 @@ public class MainActivity extends BridgeActivity {
         }
     }
 
+    private void measureNavigationBarHeight() {
+        try {
+            Resources resources = getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                int px = resources.getDimensionPixelSize(resourceId);
+                float density = resources.getDisplayMetrics().density;
+                navigationBarHeightDp = px / density;
+            }
+        } catch (Exception e) {
+            navigationBarHeightDp = 0f;
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
         injectSafeTopToWebView();
+        injectSafeBottomToWebView();
     }
 
     private void injectSafeTopToWebView() {
@@ -69,6 +98,16 @@ public class MainActivity extends BridgeActivity {
             bridge.getWebView().post(() -> {
                 bridge.getWebView().evaluateJavascript(
                     "document.documentElement.style.setProperty('--safe-top', '" + dp + "px');", null);
+            });
+        }
+    }
+
+    private void injectSafeBottomToWebView() {
+        if (bridge != null && bridge.getWebView() != null) {
+            final float dp = navigationBarHeightDp >= 0 ? navigationBarHeightDp : 0f;
+            bridge.getWebView().post(() -> {
+                bridge.getWebView().evaluateJavascript(
+                    "document.documentElement.style.setProperty('--safe-bottom', '" + dp + "px');", null);
             });
         }
     }
@@ -87,11 +126,13 @@ public class MainActivity extends BridgeActivity {
                                 WindowInsetsControllerCompat controller = 
                                     WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
                                 if (controller != null) {
-                                    // For light/notebook theme -> dark status bar icons (black time/battery)
-                                    // For dark theme -> light status bar icons (white time/battery)
+                                    // For light/notebook theme -> dark status & navigation bar icons (black time/battery/gesture line)
+                                    // For dark theme -> light status & navigation bar icons (white time/battery/gesture line)
                                     controller.setAppearanceLightStatusBars(!isDark);
+                                    controller.setAppearanceLightNavigationBars(!isDark);
                                 }
                                 getWindow().setStatusBarColor(Color.TRANSPARENT);
+                                getWindow().setNavigationBarColor(Color.TRANSPARENT);
                             } catch (Exception e) {}
                         });
                     }
@@ -99,6 +140,11 @@ public class MainActivity extends BridgeActivity {
                     @JavascriptInterface
                     public float getStatusBarHeightDp() {
                         return statusBarHeightDp > 0 ? statusBarHeightDp : 28f;
+                    }
+
+                    @JavascriptInterface
+                    public float getNavigationBarHeightDp() {
+                        return navigationBarHeightDp >= 0 ? navigationBarHeightDp : 0f;
                     }
                 }, "AndroidThemeBridge");
             }
