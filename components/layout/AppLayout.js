@@ -126,6 +126,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
+      <div class="safe-area-top-fill" aria-hidden="true"></div>
       <header class="mobile-header">
         <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="Перейти на главную (режим Тест)">
           <!-- SVG Cup-with-Book Logo -->
