@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.cjs",
+    "prepare:assets": "node scripts/prepare_android_assets.mjs",
+    "build:apk": "node scripts/build_android_apk.mjs",
     "start": "echo Frontend runs as static files",
     "lint": "echo ESLint will be configured later",
     "format": "echo Prettier will be configured later"
