@@ -915,6 +915,43 @@
                   <div class="wotd-tilt-container" id="wotd-tilt-container">
                     <div class="card-flipper wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}">
 
+                      <!-- SVG Градиенты для объемного рубинового кабошона и золотого ободка сердечка -->
+                      <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+                        <defs>
+                          <!-- Выпуклый золотой ободок (эмбосс оправы) -->
+                          <linearGradient id="wotd-heart-gold-rim" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#fff9e6" />
+                            <stop offset="35%" stop-color="#f0cb7e" />
+                            <stop offset="70%" stop-color="#be8e33" />
+                            <stop offset="100%" stop-color="#724d14" />
+                          </linearGradient>
+
+                          <!-- Выпуклый рубиновый кабошон (ярко-рубиновый объемный кабошон) -->
+                          <radialGradient id="wotd-ruby-convex" cx="38%" cy="30%" r="68%">
+                            <stop offset="0%" stop-color="#ff6b8b" />
+                            <stop offset="25%" stop-color="#f42555" />
+                            <stop offset="60%" stop-color="#c40b35" />
+                            <stop offset="88%" stop-color="#80041d" />
+                            <stop offset="100%" stop-color="#550011" />
+                          </radialGradient>
+
+                          <!-- Выпуклый золотой контур для выключенного сердечка -->
+                          <linearGradient id="wotd-heart-off-rim" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#fff6d6" />
+                            <stop offset="35%" stop-color="#e2bc6e" />
+                            <stop offset="75%" stop-color="#9a6f23" />
+                            <stop offset="100%" stop-color="#5a3d0e" />
+                          </linearGradient>
+
+                          <!-- Рельефная глубина / ложе для выключенного сердечка -->
+                          <radialGradient id="wotd-heart-off-cavity" cx="45%" cy="35%" r="65%">
+                            <stop offset="0%" stop-color="rgba(215, 175, 100, 0.4)" />
+                            <stop offset="55%" stop-color="rgba(140, 100, 40, 0.3)" />
+                            <stop offset="100%" stop-color="rgba(60, 40, 12, 0.55)" />
+                          </radialGradient>
+                        </defs>
+                      </svg>
+
                       <!-- ================= ЛИЦЕВАЯ СТОРОНА ================= -->
                       <div class="bank-card matte-gold card-front">
                         <div class="card-inner-border"></div>
@@ -925,10 +962,10 @@
                         <div class="card-header">
                           <div class="brand-group">
                             <div class="card-brand">ENGLISH BREAKFAST</div>
-                            <div class="card-sub">VIP WORD PASS</div>
+                            <div class="card-sub">WORD OF THE DAY</div>
                           </div>
                           <button type="button" class="card-fav ${isWotdFav ? 'is-active' : 'is-off'}" id="wotd-fav-front" title="${t('train_to_favorites')}">
-                            <svg class="heart-svg" viewBox="0 0 24 24" width="22" height="22">
+                            <svg class="heart-svg" viewBox="0 0 24 24" width="26" height="26">
                             <path class="heart-path" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                           </svg>
                           </button>
@@ -965,7 +1002,7 @@
                             <div class="card-sub">MEANING &amp; CONTEXT</div>
                           </div>
                           <button type="button" class="card-fav ${isWotdFav ? 'is-active' : 'is-off'}" id="wotd-fav-back" title="${t('train_to_favorites')}">
-                            <svg class="heart-svg" viewBox="0 0 24 24" width="22" height="22">
+                            <svg class="heart-svg" viewBox="0 0 24 24" width="26" height="26">
                             <path class="heart-path" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                           </svg>
                           </button>
