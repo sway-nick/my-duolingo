@@ -63,6 +63,10 @@ public class MainActivity extends BridgeActivity {
                         result -> {
                             boolean handled = "true".equalsIgnoreCase(result) || "\"true\"".equalsIgnoreCase(result);
                             if (!handled) {
+                                if (bridge.getWebView().canGoBack()) {
+                                    bridge.getWebView().goBack();
+                                    return;
+                                }
                                 long now = System.currentTimeMillis();
                                 if (now - lastBackPressTime < 2000) {
                                     finish();
