@@ -2425,11 +2425,23 @@ body.notebook-theme .word-notes-modal-text {
 }
 
 /* Stats Page & Curriculum Block */
+#stats-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-bottom: 10px;
+  flex-shrink: 0;
 }
 
 .stat-card {
@@ -2487,6 +2499,7 @@ body.notebook-theme .word-notes-modal-text {
   padding: 10px 10px;
   margin-bottom: 10px;
   box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
 }
 
 .stats-section-title {
@@ -2625,17 +2638,35 @@ body.notebook-theme .word-notes-modal-text {
   transition: width 0.4s ease;
 }
 
-/* Chart Card */
+/* Chart Card - Elastic container filling remaining vertical space */
 .chart-card {
   background: var(--card-bg, #ffffff);
   border: 1px solid var(--border-color);
   border-radius: 14px;
   padding: 10px 10px 6px;
-  margin-top: 10px;
-  margin-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 0;
   box-shadow: var(--shadow-sm);
   width: 100%;
   box-sizing: border-box;
+  flex: 1 1 auto;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-svg-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-svg-container svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .chart-header {
@@ -4892,7 +4923,7 @@ button.leaderboard-header-chip:hover {
   .stats-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .stat-card {
