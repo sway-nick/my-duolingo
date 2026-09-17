@@ -903,7 +903,7 @@
             if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
             currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
 
-            const wotdTier = (wotd.level || wotd.tier || 'ELEMENTARY').toUpperCase();
+            const wotdTier = (wotd.category || wotd.level || wotd.tier || 'ELEMENTARY').toUpperCase();
             const rawTrans = (wotd.transcription || '').replace(/^\[?|\/?|\]?$/g, '').trim();
             const wotdCleanTranscription = rawTrans ? `[/ˈ${rawTrans.replace(/^[\/'ˈ]+/, '')}/]` : '';
             const wotdExample = (wotd.example || wotd.notes || '').trim();
