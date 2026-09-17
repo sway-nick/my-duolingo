@@ -2276,11 +2276,24 @@ function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
   if (!wordsList || wordsList.length === 0) return null;
 
   // 1. Filter quality words of the day:
-  // - Minimum length 4 characters (no upper bound: 4, 5, 6, 7, 8, 9, 10+ letters)
-  // - Exclude pure prepositions / short service words
+  // - No patterns (category includes 'pattern')
+  // - No irregular verbs (category includes 'irregular')
+  // - No words shorter than 4 letters
+  // - No words longer than 13 letters
+  // - Exclude phrases with spaces/slashes and pure service words
   const eligible = wordsList.filter((w) => {
+    if (!w) return false;
+    const cat = String(w.category || '').toLowerCase().trim();
+    if (cat.includes('pattern')) return false;
+    if (cat.includes('irregular')) return false;
+
     const text = String(w.word || '').trim();
-    if (text.length < 4) return false;
+    if (!text || text.includes(' ') || text.includes('/')) return false;
+
+    const cleanLetters = text.replace(/[^a-zA-Z]/g, '');
+    if (cleanLetters.length < 4 || cleanLetters.length > 13) return false;
+    if (text.length < 4 || text.length > 13) return false;
+
     const lower = text.toLowerCase();
     if (['with', 'from', 'into', 'than', 'then', 'that', 'this', 'them', 'they'].includes(lower)) return false;
     return true;
