@@ -144,52 +144,83 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     const maxCum = Math.max(...days.map(d => d.cumulativeCount));
     const cumDiff = maxCum - minCum;
 
-    const chartBottom = 84;
-    const maxBarHeight = 26;
+    function buildChartSvg(height) {
+      const H = Math.max(Math.round(height), 100);
+      const chartBottom = H - 24;
+      const maxBarHeight = Math.max(Math.min(Math.round(H * 0.35), 72), 24);
 
-    let barsHtml = '';
-    let points = [];
-    let labelsHtml = '';
+      let barsHtml = '';
+      let points = [];
+      let labelsHtml = '';
 
-    days.forEach((day, idx) => {
-      const x = 32 + idx * 48; // 32, 80, 128, 176, 224, 272, 320 (viewBox width 352)
-      const barHeight = day.dailyCount > 0 ? Math.max((day.dailyCount / maxDaily) * maxBarHeight, 5) : 0;
-      const barY = chartBottom - barHeight;
+      const topY = Math.max(Math.round(H * 0.16), 16);
+      const bottomY = Math.max(Math.round(chartBottom - maxBarHeight - 12), topY + 10);
 
-      // Lower tier: Bars for daily learned
-      if (day.dailyCount > 0) {
-        barsHtml += `
-          <rect x="${x - 9}" y="${barY}" width="18" height="${barHeight}" fill="url(#stats-bar-grad)" rx="3" opacity="0.9" />
-          <text x="${x}" y="${barY - 3}" font-family="inherit" font-weight="700" font-size="9" fill="#38bdf8" text-anchor="middle">${day.dailyCount}</text>
+      days.forEach((day, idx) => {
+        const x = 32 + idx * 48; // 32, 80, 128, 176, 224, 272, 320 (viewBox width 352)
+        const barHeight = day.dailyCount > 0 ? Math.max((day.dailyCount / maxDaily) * maxBarHeight, 5) : 0;
+        const barY = chartBottom - barHeight;
+
+        // Lower tier: Bars for daily learned
+        if (day.dailyCount > 0) {
+          barsHtml += `
+            <rect x="${x - 9}" y="${barY}" width="18" height="${barHeight}" fill="url(#stats-bar-grad)" rx="3" opacity="0.9" />
+            <text x="${x}" y="${barY - 3}" font-family="inherit" font-weight="700" font-size="9" fill="#38bdf8" text-anchor="middle">${day.dailyCount}</text>
+          `;
+        }
+
+        // Upper tier: Cumulative line
+        const lineY = cumDiff === 0 
+          ? Math.round((topY + bottomY) / 2) 
+          : Math.round(bottomY - ((day.cumulativeCount - minCum) / cumDiff) * (bottomY - topY));
+        points.push({ x, y: lineY, val: day.cumulativeCount });
+
+        // Clean X axis date labels
+        labelsHtml += `
+          <text x="${x}" y="${chartBottom + 14}" font-family="inherit" font-size="9.5" font-weight="500" fill="var(--text-muted, #94a3b8)" text-anchor="middle">${day.dateStr}</text>
         `;
-      }
+      });
 
-      // Upper tier: Cumulative line (y between 18 and 38)
-      const lineY = cumDiff === 0 ? 28 : 38 - ((day.cumulativeCount - minCum) / cumDiff) * 20;
-      points.push({ x, y: lineY, val: day.cumulativeCount });
+      // Generate path for cumulative line
+      let pathD = '';
+      points.forEach((p, idx) => {
+        if (idx === 0) pathD += `M ${p.x} ${p.y}`;
+        else pathD += ` L ${p.x} ${p.y}`;
+      });
 
-      // Clean X axis date labels
-      labelsHtml += `
-        <text x="${x}" y="${chartBottom + 14}" font-family="inherit" font-size="9.5" font-weight="500" fill="var(--text-muted, #94a3b8)" text-anchor="middle">${day.dateStr}</text>
+      let lineHtml = `
+        <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       `;
-    });
+      points.forEach((p) => {
+        lineHtml += `
+          <circle cx="${p.x}" cy="${p.y}" r="3" fill="#10b981" stroke="var(--card-bg, #1e293b)" stroke-width="1.2" />
+          <text x="${p.x}" y="${p.y - 6}" font-family="inherit" font-weight="700" font-size="9.5" fill="#10b981" text-anchor="middle">${p.val}</text>
+        `;
+      });
 
-    // Generate path for cumulative line
-    let pathD = '';
-    points.forEach((p, idx) => {
-      if (idx === 0) pathD += `M ${p.x} ${p.y}`;
-      else pathD += ` L ${p.x} ${p.y}`;
-    });
+      const grid1 = Math.round(H * 0.22);
+      const grid2 = Math.round(H * 0.52);
 
-    let lineHtml = `
-      <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-    `;
-    points.forEach((p) => {
-      lineHtml += `
-        <circle cx="${p.x}" cy="${p.y}" r="3" fill="#10b981" stroke="var(--card-bg, #1e293b)" stroke-width="1.2" />
-        <text x="${p.x}" y="${p.y - 6}" font-family="inherit" font-weight="700" font-size="9.5" fill="#10b981" text-anchor="middle">${p.val}</text>
+      return `
+        <svg viewBox="0 0 352 ${H}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="display: block; overflow: visible;">
+          <defs>
+            <linearGradient id="stats-bar-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#2563eb" />
+            </linearGradient>
+          </defs>
+
+          <!-- Baseline and grid -->
+          <line x1="15" y1="${grid1}" x2="337" y2="${grid1}" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
+          <line x1="15" y1="${grid2}" x2="337" y2="${grid2}" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
+          <line x1="15" y1="${chartBottom}" x2="337" y2="${chartBottom}" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
+
+          ${barsHtml}
+          ${lineHtml}
+          ${labelsHtml}
+        </svg>
       `;
-    });
+    }
 
     const chartHtml = `
       <div class="chart-card">
@@ -200,30 +231,14 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             <div class="legend-item"><span class="legend-dot" style="background: #10b981;"></span> ${t('stats_total')}</div>
           </div>
         </div>
-        <div style="width: 100%; overflow-x: auto;">
-          <svg viewBox="0 0 352 108" width="100%" height="100" style="display: block; overflow: visible;">
-            <defs>
-              <linearGradient id="stats-bar-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#60a5fa" />
-                <stop offset="100%" stop-color="#2563eb" />
-              </linearGradient>
-            </defs>
-
-            <!-- Baseline and grid -->
-            <line x1="15" y1="22" x2="337" y2="22" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
-            <line x1="15" y1="52" x2="337" y2="52" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
-            <line x1="15" y1="84" x2="337" y2="84" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
-
-            ${barsHtml}
-            ${lineHtml}
-            ${labelsHtml}
-          </svg>
+        <div class="chart-svg-container" id="stats-chart-wrapper">
+          ${buildChartSvg(140)}
         </div>
       </div>
     `;
 
     container.innerHTML = `
-      <div id="stats-content" style="padding-bottom: 6px; margin-top: 2px;">
+      <div id="stats-content" style="padding-bottom: 0; margin-top: 0;">
         <!-- Top Stats Widgets Grid (1x3) -->
         <div class="stats-grid">
           <div class="stat-card">
@@ -268,6 +283,37 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         ${chartHtml}
       </div>
     `;
+
+    // Dynamic height measurement for elastic chart
+    const chartWrapper = container.querySelector('#stats-chart-wrapper');
+    if (chartWrapper) {
+      let lastHeight = 0;
+      const applyChartHeight = (h) => {
+        const measured = Math.round(h || chartWrapper.clientHeight);
+        if (measured >= 80 && Math.abs(measured - lastHeight) >= 2) {
+          lastHeight = measured;
+          chartWrapper.innerHTML = buildChartSvg(measured);
+        }
+      };
+
+      // Measure immediately after DOM insertion
+      requestAnimationFrame(() => {
+        applyChartHeight();
+      });
+
+      // Watch for responsive size changes (e.g. orientation, window resize)
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const h = entry.contentRect ? entry.contentRect.height : null;
+            if (h && h >= 80) {
+              applyChartHeight(h);
+            }
+          }
+        });
+        ro.observe(chartWrapper);
+      }
+    }
   } catch (err) {
     console.error('Failed to load stats view:', err);
     container.innerHTML = `<p class="empty-state">${t('stats_load_error')}</p>`;
