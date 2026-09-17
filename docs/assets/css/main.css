@@ -5905,6 +5905,14 @@ body.notebook-theme,
   gap: 12px;
   min-width: 0;
   flex: 1;
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.drawer-profile:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .drawer-avatar-wrapper {
@@ -5918,6 +5926,20 @@ body.notebook-theme,
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.drawer-profile:hover .drawer-avatar-wrapper,
+.drawer-avatar-wrapper:hover {
+  transform: scale(1.06);
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+}
+
+.drawer-profile:active .drawer-avatar-wrapper,
+.drawer-avatar-wrapper:active {
+  transform: scale(0.95);
 }
 
 .drawer-avatar-img {

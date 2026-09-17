@@ -177,8 +177,8 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       <!-- Hamburger Drawer -->
       <div class="burger-drawer" id="burger-drawer">
         <div class="drawer-header">
-          <div class="drawer-profile">
-            <div class="drawer-avatar-wrapper">
+          <div class="drawer-profile" id="drawer-profile-btn" style="cursor: pointer;" title="${t('settings')}">
+            <div class="drawer-avatar-wrapper" id="drawer-avatar-btn" style="cursor: pointer;" title="${t('settings')}">
               ${avatarHtml}
             </div>
             <div class="drawer-profile-info">
@@ -332,6 +332,25 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       }
     });
   });
+
+  // Click on top avatar / profile in drawer -> navigate to Settings tab
+  const drawerProfileBtn = app.querySelector('#drawer-profile-btn') || app.querySelector('.drawer-profile');
+  if (drawerProfileBtn) {
+    drawerProfileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      tabs.forEach((t) => t.classList.remove('active'));
+      const settingsTab = app.querySelector('.nav-tab[data-tab="settings"]');
+      if (settingsTab) settingsTab.classList.add('active');
+      closeDrawer();
+      if (typeof onTabChange === 'function') {
+        try {
+          onTabChange('settings');
+        } catch (err) {
+          console.error('Error switching to settings tab from drawer avatar:', err);
+        }
+      }
+    });
+  }
 
   const overlay = app.querySelector('#drawer-overlay');
   if (overlay) {
