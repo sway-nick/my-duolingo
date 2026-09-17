@@ -144,8 +144,8 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     const maxCum = Math.max(...days.map(d => d.cumulativeCount));
     const cumDiff = maxCum - minCum;
 
-    const chartBottom = 122;
-    const maxBarHeight = 38;
+    const chartBottom = 84;
+    const maxBarHeight = 26;
 
     let barsHtml = '';
     let points = [];
@@ -153,24 +153,24 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
 
     days.forEach((day, idx) => {
       const x = 32 + idx * 48; // 32, 80, 128, 176, 224, 272, 320 (viewBox width 352)
-      const barHeight = day.dailyCount > 0 ? Math.max((day.dailyCount / maxDaily) * maxBarHeight, 6) : 0;
+      const barHeight = day.dailyCount > 0 ? Math.max((day.dailyCount / maxDaily) * maxBarHeight, 5) : 0;
       const barY = chartBottom - barHeight;
 
       // Lower tier: Bars for daily learned
       if (day.dailyCount > 0) {
         barsHtml += `
-          <rect x="${x - 10}" y="${barY}" width="20" height="${barHeight}" fill="url(#stats-bar-grad)" rx="4" opacity="0.9" />
-          <text x="${x}" y="${barY - 4}" font-family="inherit" font-weight="700" font-size="10" fill="#38bdf8" text-anchor="middle">${day.dailyCount}</text>
+          <rect x="${x - 9}" y="${barY}" width="18" height="${barHeight}" fill="url(#stats-bar-grad)" rx="3" opacity="0.9" />
+          <text x="${x}" y="${barY - 3}" font-family="inherit" font-weight="700" font-size="9" fill="#38bdf8" text-anchor="middle">${day.dailyCount}</text>
         `;
       }
 
-      // Upper tier: Cumulative line (y between 28 and 58)
-      const lineY = cumDiff === 0 ? 42 : 58 - ((day.cumulativeCount - minCum) / cumDiff) * 30;
+      // Upper tier: Cumulative line (y between 18 and 38)
+      const lineY = cumDiff === 0 ? 28 : 38 - ((day.cumulativeCount - minCum) / cumDiff) * 20;
       points.push({ x, y: lineY, val: day.cumulativeCount });
 
       // Clean X axis date labels
       labelsHtml += `
-        <text x="${x}" y="${chartBottom + 18}" font-family="inherit" font-size="10.5" font-weight="500" fill="var(--text-muted, #94a3b8)" text-anchor="middle">${day.dateStr}</text>
+        <text x="${x}" y="${chartBottom + 14}" font-family="inherit" font-size="9.5" font-weight="500" fill="var(--text-muted, #94a3b8)" text-anchor="middle">${day.dateStr}</text>
       `;
     });
 
@@ -182,12 +182,12 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     });
 
     let lineHtml = `
-      <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
     `;
     points.forEach((p) => {
       lineHtml += `
-        <circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#10b981" stroke="var(--card-bg, #1e293b)" stroke-width="1.5" />
-        <text x="${p.x}" y="${p.y - 7}" font-family="inherit" font-weight="700" font-size="10.5" fill="#10b981" text-anchor="middle">${p.val}</text>
+        <circle cx="${p.x}" cy="${p.y}" r="3" fill="#10b981" stroke="var(--card-bg, #1e293b)" stroke-width="1.2" />
+        <text x="${p.x}" y="${p.y - 6}" font-family="inherit" font-weight="700" font-size="9.5" fill="#10b981" text-anchor="middle">${p.val}</text>
       `;
     });
 
@@ -201,7 +201,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           </div>
         </div>
         <div style="width: 100%; overflow-x: auto;">
-          <svg viewBox="0 0 352 152" width="100%" height="150" style="display: block; overflow: visible;">
+          <svg viewBox="0 0 352 108" width="100%" height="100" style="display: block; overflow: visible;">
             <defs>
               <linearGradient id="stats-bar-grad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#60a5fa" />
@@ -210,9 +210,9 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             </defs>
 
             <!-- Baseline and grid -->
-            <line x1="15" y1="35" x2="337" y2="35" stroke="var(--border-color)" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4" />
-            <line x1="15" y1="78" x2="337" y2="78" stroke="var(--border-color)" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4" />
-            <line x1="15" y1="122" x2="337" y2="122" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
+            <line x1="15" y1="22" x2="337" y2="22" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
+            <line x1="15" y1="52" x2="337" y2="52" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
+            <line x1="15" y1="84" x2="337" y2="84" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
 
             ${barsHtml}
             ${lineHtml}
@@ -223,46 +223,37 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     `;
 
     container.innerHTML = `
-      <div id="stats-content" style="padding-bottom: 24px; margin-top: 4px;">
+      <div id="stats-content" style="padding-bottom: 6px; margin-top: 2px;">
         <!-- Top Stats Widgets Grid (1x3) -->
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-icon-wrap blue">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                 <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
               </svg>
             </div>
-            <div class="stat-info">
-              <h3 class="stat-val" id="stat-mastered">${stats.masteredCount || 0}</h3>
-              <p class="stat-lbl">${t('dict_filter_mastered')}</p>
-            </div>
+            <span class="stat-val" id="stat-mastered">${stats.masteredCount || 0}</span>
           </div>
 
           <div class="stat-card">
             <div class="stat-icon-wrap red">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <circle cx="12" cy="12" r="6"></circle>
                 <circle cx="12" cy="12" r="2"></circle>
               </svg>
             </div>
-            <div class="stat-info">
-              <h3 class="stat-val" id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
-              <p class="stat-lbl">${t('stats_accuracy')}</p>
-            </div>
+            <span class="stat-val" id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</span>
           </div>
 
           <div class="stat-card">
             <div class="stat-icon-wrap amber">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
               </svg>
             </div>
-            <div class="stat-info">
-              <h3 class="stat-val" id="stat-streak">${stats.streakDays || 1} ${t('stats_days_short')}</h3>
-              <p class="stat-lbl">${t('stats_streak')}</p>
-            </div>
+            <span class="stat-val" id="stat-streak">${stats.streakDays || 1} ${t('stats_days_short')}</span>
           </div>
         </div>
 
