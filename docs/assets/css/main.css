@@ -2136,7 +2136,7 @@ body.notebook-theme .word-notes-modal-text {
   height: 56px;
   min-height: 56px;
   box-sizing: border-box;
-  background: var(--primary-color);
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
   color: #ffffff;
   border: none;
   padding: 0 20px;
@@ -2144,19 +2144,30 @@ body.notebook-theme .word-notes-modal-text {
   font-size: 17.5px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .check-button:hover:not(:disabled) {
-  background: var(--primary-hover);
+  filter: brightness(1.04);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18);
 }
 
 .check-button:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: translateY(1.5px);
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.check-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 .primary-button {
@@ -2205,6 +2216,26 @@ body.notebook-theme .word-notes-modal-text {
 .btn-green:active:not(:disabled) {
   transform: translateY(1.5px) !important;
   box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-blue {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+}
+
+.btn-blue:hover:not(:disabled) {
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+}
+
+.btn-blue:active:not(:disabled) {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .btn-orange {
@@ -5506,7 +5537,8 @@ body.notebook-theme,
 
 /* Primary buttons */
 .notebook-theme .primary-button,
-.notebook-theme .btn-blue {
+.notebook-theme .btn-blue,
+.notebook-theme .check-button {
   background: var(--nb-blue-pen) !important;
   border: 2px solid #0f2660 !important;
   border-radius: 4px 12px 6px 10px !important;
