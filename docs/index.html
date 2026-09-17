@@ -260,7 +260,12 @@
               if (wordsRes && wordsRes.data && wordsRes.data.length > 0) {
                 allWords = wordsRes.data;
               }
-            }).catch((e) => console.warn('Words load error:', e))
+            }).catch((e) => console.warn('Words load error:', e)),
+            getCloudWordOfTheDayId(user ? user.id : 'guest').then((cId) => {
+              if (cId) {
+                cloudWordOfTheDayId = cId;
+              }
+            }).catch((e) => console.warn('WOTD load error:', e))
           ]);
         } catch (e) {}
 
@@ -277,6 +282,13 @@
           console.warn('Failed to load favorites:', e);
         }
 
+        if (cloudWordOfTheDayId && allWords && allWords.length > 0) {
+          const w = allWords.find(item => String(item.id) === cloudWordOfTheDayId);
+          if (w && w.word) {
+            preloadWordAudio(w.word);
+          }
+        }
+
         try {
           getLeaderboard().catch(() => {});
           // Global background sync every 1 hour for all players
@@ -285,18 +297,6 @@
               getLeaderboard().catch(() => {});
             }, 3600000);
           }
-        } catch (e) {}
-
-        try {
-          getCloudWordOfTheDayId(user ? user.id : 'guest').then((cId) => {
-            if (cId) {
-              cloudWordOfTheDayId = cId;
-              const w = allWords.find(item => String(item.id) === cloudWordOfTheDayId);
-              if (w) {
-                preloadWordAudio(w.word);
-              }
-            }
-          }).catch(() => {});
         } catch (e) {}
       }
 
@@ -1919,7 +1919,9 @@
           window._showHubScreen = true;
         }
 
-        // 3. Load initial data first, keeping splash screen visible to eliminate black screen/cat paws
+        // 3. Load initial data and render complete DOM before hiding splash screen
+        const splashMinTimePromise = new Promise((r) => setTimeout(r, 450));
+
         try {
           await loadData();
         } catch (err) {
@@ -1927,14 +1929,19 @@
         }
 
         try {
-          renderTab(activeTab);
+          await renderTab(activeTab);
           updateHeaderUser();
         } catch (err) {
           console.error('Initial tab render error:', err);
         } finally {
-          if (typeof window.hideAppSplashScreen === 'function') {
-            window.hideAppSplashScreen();
-          }
+          await splashMinTimePromise;
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (typeof window.hideAppSplashScreen === 'function') {
+                window.hideAppSplashScreen();
+              }
+            });
+          });
         }
 
         // 4. Native Android Back Button & Gesture Navigation handler
