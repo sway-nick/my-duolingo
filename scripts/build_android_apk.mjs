@@ -16,6 +16,7 @@ execSync('node scripts/build.cjs', { cwd: ROOT_SOURCE, stdio: 'inherit' });
 
 // Sync changes to android project frontend
 console.log('\n[2/5] Synchronizing frontend to android project...');
+fs.cpSync(path.join(ROOT_SOURCE, 'frontend'), path.join(ANDROID_PROJECT, 'frontend'), { recursive: true, force: true });
 execSync('node scripts/build.cjs', { cwd: ANDROID_PROJECT, stdio: 'inherit' });
 
 // Step 2: Prepare lightweight audio assets (Elementary US only)
@@ -27,8 +28,12 @@ console.log('\n[4/5] Running Capacitor Android sync...');
 execSync('cmd.exe /c "npx cap sync android"', { cwd: ANDROID_PROJECT, stdio: 'inherit' });
 
 // Step 4: Assemble Debug APK via Gradle
-console.log('\n[5/5] Building APK with Gradle...');
-const gradleCmd = 'cmd.exe /c "set JAVA_HOME=' + JAVA_HOME + '&& gradlew.bat assembleDebug"';
+console.log('\n[5/5] Building APK with Gradle (clean assembleDebug to prevent archive bloat)...');
+const oldApk = path.join(ANDROID_PROJECT, 'android/app/build/outputs/apk/debug/app-debug.apk');
+if (fs.existsSync(oldApk)) {
+  try { fs.unlinkSync(oldApk); } catch (e) {}
+}
+const gradleCmd = 'cmd.exe /c "set JAVA_HOME=' + JAVA_HOME + '&& gradlew.bat clean assembleDebug"';
 execSync(gradleCmd, { cwd: path.join(ANDROID_PROJECT, 'android'), stdio: 'inherit' });
 
 // Step 5: Copy and verify APK size
