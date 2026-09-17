@@ -1822,6 +1822,10 @@
         });
 
         window.addEventListener('myduo:progress_updated', () => {
+          if (activeTab === 'training' && window._showHubScreen) {
+            updateHeaderUser();
+            return;
+          }
           scheduleTabUpdate(activeTab);
         });
 
@@ -1829,6 +1833,9 @@
           updateHeaderUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
+          if (activeTab === 'training' && window._showHubScreen) {
+            return;
+          }
           scheduleTabUpdate(activeTab);
         });
 
@@ -1912,8 +1919,16 @@
           window._showHubScreen = true;
         }
 
+        // 3. Load initial data first, keeping splash screen visible to eliminate black screen/cat paws
+        try {
+          await loadData();
+        } catch (err) {
+          console.warn('Initial loadData error:', err);
+        }
+
         try {
           renderTab(activeTab);
+          updateHeaderUser();
         } catch (err) {
           console.error('Initial tab render error:', err);
         } finally {
@@ -1921,12 +1936,6 @@
             window.hideAppSplashScreen();
           }
         }
-
-        // 3. Asynchronous non-blocking background data sync
-        loadData().then(() => {
-          updateHeaderUser();
-          scheduleTabUpdate(activeTab);
-        }).catch((err) => console.warn('Background sync error:', err));
 
         // 4. Native Android Back Button & Gesture Navigation handler
         window.handleAndroidBackButton = function() {
