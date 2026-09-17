@@ -16,9 +16,13 @@ export function openPrivacyModal() {
     background: rgba(0, 0, 0, 0.65);
     z-index: 10000;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 14px;
+    padding-top: max(20px, calc(var(--safe-top, env(safe-area-inset-top, 0px)) + 14px));
+    padding-bottom: max(20px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 14px));
+    padding-left: max(14px, env(safe-area-inset-left, 0px));
+    padding-right: max(14px, env(safe-area-inset-right, 0px));
     box-sizing: border-box;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -31,7 +35,8 @@ export function openPrivacyModal() {
       border-radius: 20px;
       width: 100%;
       max-width: 540px;
-      max-height: calc(100dvh - 36px);
+      height: 100%;
+      max-height: 100%;
       display: flex;
       flex-direction: column;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
@@ -43,9 +48,10 @@ export function openPrivacyModal() {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 14px 18px;
+        padding: 12px 16px;
         border-bottom: 1px solid var(--border-color);
         flex-shrink: 0;
+        gap: 8px;
       ">
         <button type="button" id="privacy-back-btn" style="
           background: none;
