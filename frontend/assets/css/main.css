@@ -2219,23 +2219,23 @@ body.notebook-theme .word-notes-modal-text {
 }
 
 .btn-blue {
-  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%) !important;
   color: #ffffff !important;
   border: none !important;
   border-radius: 18px !important;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
   transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
 }
 
 .btn-blue:hover:not(:disabled) {
   filter: brightness(1.04) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
 }
 
 .btn-blue:active:not(:disabled) {
   transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 1px 4px rgba(2, 132, 199, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .btn-orange {
@@ -3465,8 +3465,14 @@ body.dark-theme .custom-dropdown-trigger {
   color: #f0fdf4 !important;
 }
 
-.dark-theme .dict-card.mastered .dict-translation {
-  color: #86efac !important;
+.dark-theme .dict-card.mastered .dict-translation,
+.dark-theme .fav-card.mastered .dict-translation {
+  color: #dcfce7 !important;
+}
+
+.dark-theme .dict-card.mastered .dict-notes,
+.dark-theme .fav-card.mastered .dict-notes {
+  color: #a7f3d0 !important;
 }
 
 .mastered-badge {
@@ -3650,6 +3656,11 @@ body.dark-theme .custom-dropdown-trigger {
   font-weight: 600;
   color: var(--primary-color);
   line-height: 1.3;
+}
+
+.dark-theme .fav-translation,
+.dark-theme .dict-translation {
+  color: #93c5fd;
 }
 
 .sound-button-sm {
