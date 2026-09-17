@@ -7862,17 +7862,19 @@ body.dark-theme #clear-app-cache-btn:hover {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
-/* Рельефный металлический шильдик категории (выпуклые края, плоская середина) */
+/* Рельефный металлический шильдик категории (аккуратная оправа ~0.2мм, идеальный центр текста) */
 .bank-card.matte-gold .badge-tier {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
+  text-indent: 0.8px;
+  line-height: 1;
   text-transform: uppercase;
-  padding: 3.5px 11px 3px 11px;
-  border-radius: 6px;
+  padding: 4.5px 11px 4px 11px;
+  border-radius: 5px;
   color: #583e15;
   background: 
     repeating-linear-gradient(90deg, 
@@ -7881,24 +7883,24 @@ body.dark-theme #clear-app-cache-btn:hover {
       rgba(255, 255, 255, 0.06) 4px, 
       transparent 6px),
     linear-gradient(180deg, 
-      #eed7a9 0%, 
-      #e3c896 48%, 
-      #d6b780 100%);
-  border: 2px solid #b8b3a8;
+      #ebd4a5 0%, 
+      #dfc491 50%, 
+      #d3b37b 100%);
+  border: 1.2px solid #c2bbae;
   position: relative;
   box-shadow:
-    /* Объемная металлическая оправа: нижний световой блик */
-    0 1.5px 0 0.5px #ffffff,
-    /* Мягкая тень под оправой на карту */
-    0 3px 7px rgba(20, 12, 5, 0.5),
-    0 1px 2px rgba(0, 0, 0, 0.3),
-    /* Внутреннее углубление плоской пластины */
-    inset 0 1px 2px rgba(70, 45, 15, 0.55),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.5),
-    inset 0 0 0 1px rgba(85, 58, 20, 0.3);
+    /* Деликатная оправа (выступ ~0.2мм вместо 0.5мм) */
+    0 0.8px 0 rgba(255, 255, 255, 0.8),
+    /* Мягкая естественная тень под оправой */
+    0 1.5px 3.5px rgba(20, 12, 5, 0.32),
+    0 0.5px 1px rgba(0, 0, 0, 0.18),
+    /* Тонкая внутренняя фаска */
+    inset 0 0.75px 1.2px rgba(70, 45, 15, 0.35),
+    inset 0 -0.5px 0.8px rgba(255, 255, 255, 0.45),
+    inset 0 0 0 0.5px rgba(85, 58, 20, 0.2);
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.65),
-    0 -0.5px 0.5px rgba(60, 40, 10, 0.35);
+    0 0.6px 0 rgba(255, 255, 255, 0.65),
+    0 -0.4px 0.4px rgba(60, 40, 10, 0.25);
   white-space: nowrap;
   flex-shrink: 0;
 }
