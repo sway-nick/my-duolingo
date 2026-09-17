@@ -1357,9 +1357,9 @@
                 if (!chosenCat) return;
 
                 const normCat = String(chosenCat || '').toLowerCase().trim();
-                const isBundled = normCat.includes('elementary') || normCat.includes('irregular');
+                const isBundled = normCat.includes('elementary');
 
-                // 1. Elementary & Irregular Verbs are pre-packaged in the APK -> Open immediately
+                // 1. Only Elementary (US) is pre-packaged in the APK -> Open immediately
                 if (isBundled) {
                   window._isCategorySelectOpen = false;
                   favoritePracticeWords = null;
