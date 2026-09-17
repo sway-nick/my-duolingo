@@ -40,7 +40,7 @@ const translations = {
     // Favorites View
     fav_title: "❤️ Избранные",
     fav_autoplay_listen: "Слушать",
-    fav_autoplay_stop: "Стоп",
+    fav_autoplay_stop: "Пауза",
     fav_empty: "У вас нет избранных слов",
     fav_empty_sub: "Добавляйте сложные слова в избранное, нажимая на ❤️ во время тренировок, чтобы повторять их отдельно.",
     fav_start_btn: "🎓 Перейти к тренировке",
@@ -305,7 +305,7 @@ const translations = {
     // Favorites View
     fav_title: "❤️ Обрані",
     fav_autoplay_listen: "Слухати",
-    fav_autoplay_stop: "Стоп",
+    fav_autoplay_stop: "Пауза",
     fav_empty: "У вас немає обраних слів",
     fav_empty_sub: "Додавайте складні слова в обране, натискаючи на ❤️ під час тренувань, щоб повторювати їх окремо.",
     fav_start_btn: "🎓 Перейти до тренування",
@@ -6891,7 +6891,7 @@ export function t(key, params = null) {
   } else if (key === 'fav_autoplay_stop') {
     const lang = getInterfaceLanguage();
     const map = {
-      ru: "Стоп", uk: "Стоп", en: "Stop", de: "Stopp", es: "Parar",
+      ru: "Пауза", uk: "Пауза", en: "Stop", de: "Stopp", es: "Parar",
       fr: "Arrêter", pl: "Stop", tr: "Durdur", it: "Stop", ro: "Stop",
       bg: "Стоп", hu: "Állj", el: "Διακοπή", da: "Stop", ga: "Stad",
       lv: "Apturēt", lt: "Sustabdyti", sr: "Стоп", pt: "Parar", sk: "Stop",
