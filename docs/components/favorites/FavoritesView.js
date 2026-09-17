@@ -26,6 +26,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     return;
   }
 
+  const heartIconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff" stroke="none" aria-hidden="true" style="flex-shrink: 0;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+  const trashIconSvg = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
+  const repeatBtnText = (t('fav_practice_btn') || '').replace(/^🔥\s*/, '');
+
   container.innerHTML = `
     <div class="favorites-page">
       <div class="page-header" style="margin-bottom: 8px;">
@@ -35,11 +39,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       <!-- Sticky Repeat & Clear Buttons -->
       <div class="fav-sticky-controls">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
-          <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-width: 0; min-height: 44px; height: 44px; font-size: clamp(12.5px, 3.4vw, 14.5px); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-sizing: border-box;">
-            ${t('fav_practice_btn')}
+          <button class="primary-button btn-green" id="start-fav-practice-btn" style="width: 100%; min-width: 0; min-height: 44px; height: 44px; font-size: clamp(12.5px, 3.4vw, 14.5px); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;">
+            ${heartIconSvg}
+            <span>${repeatBtnText}</span>
           </button>
-          <button class="secondary-button" id="clear-all-favs-btn" style="width: 100%; min-width: 0; min-height: 44px; height: 44px; font-size: clamp(12.5px, 3.4vw, 14px); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; border-radius: 12px; box-sizing: border-box;">
-            🤍 ${t('fav_clear_all_btn')}
+          <button class="primary-button btn-graphite" id="clear-all-favs-btn" style="width: 100%; min-width: 0; min-height: 44px; height: 44px; font-size: clamp(12.5px, 3.4vw, 14px); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; box-sizing: border-box;">
+            ${trashIconSvg}
+            <span>${t('fav_clear_all_btn')}</span>
           </button>
         </div>
       </div>

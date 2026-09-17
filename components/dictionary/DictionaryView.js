@@ -1304,10 +1304,10 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       <div class="page-header" style="margin-bottom: 14px;">
         <h2 id="dict-header-title" style="margin: 0 0 10px; font-size: 18px; font-weight: 700; letter-spacing: -0.2px;">${t('dict_title')}: <span id="dict-word-count">${getMasteredCount(words)} / ${words.length}</span></h2>
         <div class="dict-header-actions" style="display: flex; gap: 8px; width: 100%; box-sizing: border-box;">
-          <button type="button" class="primary-button btn-green" id="dict-open-add-btn" style="flex: 1; min-height: 42px; font-size: 13.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; padding: 0 8px;">
+          <button type="button" class="primary-button btn-green" id="dict-open-add-btn" style="flex: 1; min-height: 42px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; padding: 0 8px;">
             ${addWordBtnText}
           </button>
-          <button type="button" class="primary-button" id="dict-open-scan-btn" style="flex: 1; min-height: 42px; font-size: 13.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; border: none; box-shadow: 0 3px 10px rgba(2,132,199,0.3); padding: 0 8px;">
+          <button type="button" class="primary-button btn-blue" id="dict-open-scan-btn" style="flex: 1; min-height: 42px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; padding: 0 8px;">
             ${scanBtnText}
           </button>
         </div>
