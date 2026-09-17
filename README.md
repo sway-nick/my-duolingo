@@ -138,3 +138,9 @@ graph TD
    ```
 
 4. Открыть `frontend/index.html` или `docs/index.html` в браузере.
+
+5. Сборка легковесного Android APK (~30 МБ, только через канонический скрипт):
+   ```bash
+   node scripts/build_android_apk.mjs
+   ```
+
