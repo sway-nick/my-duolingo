@@ -54,11 +54,20 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
+const WORDS_CACHE_VERSION = 'v218_utf8_clean';
+
 let cachedWordsList = null;
 try {
-  const initialCache = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
-  if (Array.isArray(initialCache) && initialCache.length > 0) {
-    cachedWordsList = initialCache;
+  const cacheVer = localStorage.getItem('myduo_words_cache_ver');
+  const rawCache = localStorage.getItem('myduo_cached_words') || '';
+  if (cacheVer === WORDS_CACHE_VERSION && !rawCache.includes('\ufffd') && !rawCache.includes('плщадь')) {
+    const initialCache = JSON.parse(rawCache || '[]');
+    if (Array.isArray(initialCache) && initialCache.length > 0) {
+      cachedWordsList = initialCache;
+    }
+  } else {
+    localStorage.removeItem('myduo_cached_words');
+    localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
   }
 } catch (e) {}
 
@@ -248,6 +257,7 @@ async function syncRemoteVocabularyUpdates() {
     if (hasChanges) {
       try {
         localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+        localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
       } catch (e) {}
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
@@ -287,21 +297,24 @@ async function getWords(forceRefresh = false) {
   // Check localStorage cache first for instant startup
   if (!forceRefresh) {
     try {
-      let localCached = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
-      const hasMultilingual = Array.isArray(localCached) && localCached.length > 0 && localCached.some((w) => w && w.translations && typeof w.translations === 'object');
+      const cacheVer = localStorage.getItem('myduo_words_cache_ver');
+      const rawCache = localStorage.getItem('myduo_cached_words') || '';
 
-      if (!hasMultilingual) {
-        localCached = null;
+      if (cacheVer === WORDS_CACHE_VERSION && !rawCache.includes('\ufffd') && !rawCache.includes('плщадь')) {
+        let localCached = JSON.parse(rawCache || '[]');
+        const hasMultilingual = Array.isArray(localCached) && localCached.length > 0 && localCached.some((w) => w && w.translations && typeof w.translations === 'object');
+
+        if (hasMultilingual) {
+          sanitizeTranscriptions(localCached);
+          applyMultilingualTranslations(localCached);
+          applyUserNotes(localCached);
+          sortByZipf(localCached);
+          cachedWordsList = localCached;
+          return { success: true, data: cachedWordsList };
+        }
+      } else {
         localStorage.removeItem('myduo_cached_words');
-      }
-
-      if (Array.isArray(localCached) && localCached.length > 0) {
-        sanitizeTranscriptions(localCached);
-        applyMultilingualTranslations(localCached);
-        applyUserNotes(localCached);
-        sortByZipf(localCached);
-        cachedWordsList = localCached;
-        return { success: true, data: cachedWordsList };
+        localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
       }
     } catch (e) {}
   }
@@ -340,6 +353,7 @@ async function getWords(forceRefresh = false) {
       cachedWordsList = wordData;
       try {
         localStorage.setItem('myduo_cached_words', JSON.stringify(wordData));
+        localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
       } catch (e) {}
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: wordData }));
