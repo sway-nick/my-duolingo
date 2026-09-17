@@ -6,6 +6,7 @@ import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setS
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=200.0';
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -152,23 +153,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       </div>
 
 
-      ${
-        user
-          ? `
-        <!-- Delete Account Button (Clean, no card container) -->
-        <div style="text-align: center; margin: 24px 0 8px;">
-          <button type="button" id="delete-account-btn" style="background: transparent; border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; border-radius: 12px; padding: 10px 22px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+      <div class="settings-footer">
+        ${
+          user
+            ? `
+          <!-- Delete Account Button (Clean, no card container) -->
+          <button type="button" id="delete-account-btn" class="settings-delete-account-btn">
             ${t('settings_account_delete_btn')}
           </button>
-        </div>
-      `
-          : ''
-      }
+        `
+            : ''
+        }
 
-      <div style="text-align: center; margin-top: 12px; margin-bottom: 24px;">
-        <a href="./privacy.html" target="_blank" style="font-size: 13px; color: var(--text-muted); text-decoration: underline;">
+        <button type="button" id="open-privacy-btn" class="settings-privacy-btn">
           ${t('settings_privacy_policy')}
-        </a>
+        </button>
       </div>
 
     </div>
@@ -468,6 +467,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
         }
       }
+    });
+  }
+
+  // Bind Privacy Policy button (in-app modal)
+  const openPrivacyBtn = container.querySelector('#open-privacy-btn');
+  if (openPrivacyBtn) {
+    openPrivacyBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openPrivacyModal();
     });
   }
 

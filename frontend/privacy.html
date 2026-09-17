@@ -185,6 +185,12 @@
         btn.classList.toggle('active', btn.textContent.toLowerCase().includes(lang === 'ru' ? 'рус' : 'eng'));
       });
     }
+
+    // Android hardware back button fallback
+    window.handleAndroidBackButton = function() {
+      window.location.href = './index.html';
+      return true;
+    };
   </script>
 </body>
 </html>

@@ -3006,6 +3006,63 @@ body.notebook-theme .word-notes-modal-text {
   max-width: 540px;
   margin: 0 auto;
   box-sizing: border-box;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.settings-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  padding-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.settings-delete-account-btn {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+
+.settings-delete-account-btn:hover,
+.settings-delete-account-btn:active {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.55);
+}
+
+.settings-privacy-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #64748b);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 8px 16px;
+  transition: color 0.2s ease;
+  touch-action: manipulation;
+}
+
+.settings-privacy-btn:hover,
+.settings-privacy-btn:active {
+  color: var(--text-main, #0f172a);
 }
 
 .settings-card {
