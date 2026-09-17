@@ -1670,7 +1670,16 @@
         });
       }
 
-      async function renderTab(tabName) {
+      let tabHistory = ['training'];
+
+      async function renderTab(tabName, skipHistoryPush = false) {
+        if (!skipHistoryPush && tabName) {
+          if (tabName === 'training') {
+            tabHistory = ['training'];
+          } else if (tabHistory[tabHistory.length - 1] !== tabName) {
+            tabHistory.push(tabName);
+          }
+        }
         activeTab = tabName;
         window._activeTab = tabName;
         const navTabs = document.querySelectorAll('.nav-tab');
@@ -1716,7 +1725,7 @@
               currentWordIndex = 0;
               const tabs = document.querySelectorAll('.nav-tab');
               tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
-              renderTab('training');
+              renderTab('training', true);
             },
           });
         } else if (tabName === 'leaderboard') {
@@ -1925,18 +1934,63 @@
             // Priority 1: Close burger drawer if open
             const drawer = document.querySelector('#burger-drawer');
             const drawerOverlay = document.querySelector('#drawer-overlay');
-            if (drawer && drawer.classList.contains('open')) {
-              drawer.classList.remove('open');
+            if ((drawer && drawer.classList.contains('open')) || (drawerOverlay && drawerOverlay.classList.contains('open'))) {
+              if (drawer) drawer.classList.remove('open');
               if (drawerOverlay) drawerOverlay.classList.remove('open');
               return true;
             }
 
             // Priority 2: Close any open modal dialogs or overlays
-            const openModals = document.querySelectorAll('.modal-backdrop, .modal-overlay[style*="display: flex"], .modal-overlay[style*="display: block"], .modal-overlay.open, #auth-modal, #avatar-picker-modal, #doc-scanner-modal, #add-word-modal, #top100-congrats-modal, #share-app-modal, #share-dialog-overlay');
-            if (openModals && openModals.length > 0) {
-              const topModal = openModals[openModals.length - 1];
-              const closeBtn = topModal.querySelector('.modal-close, .modal-close-btn, #modal-close-btn, .close-btn, [data-action="close"]');
-              if (closeBtn) {
+            const modalSelectors = [
+              '#doc-scanner-modal-overlay',
+              '#add-word-modal-overlay',
+              '#word-notes-modal-overlay',
+              '#auth-modal',
+              '#avatar-picker-modal',
+              '#share-modal-overlay',
+              '#share-dialog-overlay',
+              '#top100-congrats-modal',
+              '#prize-podium-modal',
+              '#cat-voice-download-modal',
+              '#settings-overlay',
+              '#mic-explainer-modal',
+              '.scanner-modal-overlay',
+              '.word-notes-modal-overlay',
+              '.share-modal-overlay',
+              '.speech-diag-modal',
+              '.prize-podium-backdrop',
+              '.modal-backdrop',
+              '.modal-overlay'
+            ].join(', ');
+
+            const candidates = Array.from(document.querySelectorAll(modalSelectors));
+            const openModals = candidates.filter((el) => {
+              if (!el || !el.isConnected) return false;
+              if (el.tagName === 'TEMPLATE' || el.id === 'modal-template') return false;
+              if (el.id === 'burger-drawer' || el.id === 'drawer-overlay') return false;
+              const style = window.getComputedStyle(el);
+              if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+                return false;
+              }
+              return true;
+            });
+
+            // Keep only root modal elements (not child elements that matched a selector)
+            const rootModals = openModals.filter((el) => !openModals.some((other) => other !== el && other.contains(el)));
+
+            if (rootModals.length > 0) {
+              const topModal = rootModals[rootModals.length - 1];
+              const closeBtn = topModal.querySelector(
+                '#scanner-close-btn, .scanner-close-btn, ' +
+                '#add-word-close-btn, #add-word-cancel-btn, ' +
+                '#word-notes-close-btn, .word-notes-modal-close, ' +
+                '#close-avatar-modal-btn, .modal-close-btn, ' +
+                '#share-modal-close-btn, .share-modal-close, ' +
+                '#top100-close-btn, #prize-continue-btn, #cat-modal-cancel-btn, #close-settings-btn, ' +
+                '#diag-close-btn, #mic-explainer-allow-btn, ' +
+                '.modal-close, .close-btn, [data-action="close"], [aria-label="Close"], [aria-label="Закрыть"]'
+              );
+              if (closeBtn && typeof closeBtn.click === 'function') {
                 closeBtn.click();
               } else {
                 topModal.remove();
@@ -1944,19 +1998,34 @@
               return true;
             }
 
-            // Priority 3: If inside exercises or sub-screens, return to hub
+            // Priority 3: If Category Selection view is open, close it and return to Training Hub
+            if (window._isCategorySelectOpen) {
+              window._isCategorySelectOpen = false;
+              renderTrainingTab();
+              return true;
+            }
+
+            // Priority 4: If inside practice / exercise mode, return to hub (or to favorites if started from there)
             if (activeTab === 'training' && !window._showHubScreen) {
+              const wasFavPractice = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._showHubScreen = true;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               currentWordIndex = 0;
-              renderTrainingTab();
+              if (wasFavPractice && tabHistory.length > 1 && tabHistory[tabHistory.length - 1] === 'favorites') {
+                tabHistory.pop();
+                const tabs = document.querySelectorAll('.nav-tab');
+                tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
+                renderTab('favorites', true);
+              } else {
+                renderTrainingTab();
+              }
               return true;
             }
 
-            // Priority 4: If on secondary tabs, return to main training tab
+            // Priority 5: If on secondary tabs, return to previous page in history in depth, up to the main Training tab
             if (activeTab !== 'training') {
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
@@ -1964,14 +2033,25 @@
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               currentWordIndex = 0;
-              activeTab = 'training';
+
+              // Pop current tab
+              if (tabHistory.length > 1 && tabHistory[tabHistory.length - 1] === activeTab) {
+                tabHistory.pop();
+              }
+              const previousTab = (tabHistory.length > 0) ? tabHistory[tabHistory.length - 1] : 'training';
+              const targetTab = (previousTab && previousTab !== activeTab) ? previousTab : 'training';
+
+              if (targetTab === 'training') {
+                tabHistory = ['training'];
+              }
+
               const tabs = document.querySelectorAll('.nav-tab');
-              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
-              renderTab('training');
+              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === targetTab));
+              renderTab(targetTab, true);
               return true;
             }
 
-            // Priority 5: Already on the Main Hub with nothing open -> return false (triggers native toast / exit)
+            // Priority 6: Already on the Main Hub with nothing open -> return false (triggers native toast / exit)
             return false;
           } catch (e) {
             console.error('Error handling back button:', e);
