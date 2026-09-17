@@ -3,6 +3,26 @@ import { getCurrentUser } from '../../services/authService.js?v=200.0';
 import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=200.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 
+function getCategoryMeta(catName) {
+  const name = String(catName || '').toLowerCase().trim();
+  if (name.includes('elementary')) {
+    return { badgeClass: 'badge-a1', badgeText: 'A1-A2', isLevel: true, order: 1 };
+  }
+  if (name.includes('intermediate')) {
+    return { badgeClass: 'badge-b1', badgeText: 'B1-B2', isLevel: true, order: 2 };
+  }
+  if (name.includes('advanced')) {
+    return { badgeClass: 'badge-c1', badgeText: 'C1-C2', isLevel: true, order: 3 };
+  }
+  if (name.includes('irregular')) {
+    return { badgeClass: 'badge-verbs', badgeText: '⚡ ' + (t('category_irregular_short') || 'Глаголы'), isLevel: false, order: 4 };
+  }
+  if (name.includes('pattern')) {
+    return { badgeClass: 'badge-pattern', badgeText: '💬 ' + (t('category_pattern_short') || 'Речь'), isLevel: false, order: 5 };
+  }
+  return { badgeClass: 'badge-general', badgeText: '📚', isLevel: false, order: 6 };
+}
+
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
   let allWords = [];
   let containerSelector = '#app-content';
@@ -24,22 +44,56 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     if (stats.categoryBreakdown && stats.categoryBreakdown.length > 0) {
       const wordLabel = t('stats_words_unit');
       const ofLabel = t('stats_of');
-      categoriesHtml = stats.categoryBreakdown
-        .map((cat) => {
-          const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
-          return `
-            <div class="category-row">
-              <div class="category-info-row">
-                <span class="category-name">📁 ${cat.category}</span>
-                <span class="category-count">${cat.learned} ${ofLabel} ${cat.total} ${wordLabel} (${percent}%)</span>
+
+      const levelCards = [];
+      const specialCards = [];
+
+      stats.categoryBreakdown.forEach((cat) => {
+        const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
+        const meta = getCategoryMeta(cat.category);
+        const cardHtml = `
+          <div class="category-card">
+            <div class="category-info-row">
+              <div class="cat-name-box">
+                <span class="cat-badge ${meta.badgeClass}">${meta.badgeText}</span>
+                <span class="cat-title-text">${cat.category}</span>
               </div>
-              <div class="category-progress-track">
-                <div class="category-progress-fill" style="width: ${percent}%;"></div>
-              </div>
+              <span class="category-count">${cat.learned} ${ofLabel} ${cat.total} ${wordLabel} (${percent}%)</span>
             </div>
-          `;
-        })
-        .join('');
+            <div class="category-progress-track">
+              <div class="category-progress-fill" style="width: ${percent}%;"></div>
+            </div>
+          </div>
+        `;
+        if (meta.isLevel) {
+          levelCards.push({ meta, html: cardHtml });
+        } else {
+          specialCards.push({ meta, html: cardHtml });
+        }
+      });
+
+      levelCards.sort((a, b) => a.meta.order - b.meta.order);
+      specialCards.sort((a, b) => a.meta.order - b.meta.order);
+
+      let sectionsHtml = '';
+      if (levelCards.length > 0) {
+        sectionsHtml += `
+          <div class="stats-section-title">
+            <span>${t('stats_levels')}</span>
+          </div>
+          ${levelCards.map(c => c.html).join('')}
+        `;
+      }
+      if (specialCards.length > 0) {
+        sectionsHtml += `
+          <div class="stats-section-title"${levelCards.length > 0 ? ' style="margin-top: 16px;"' : ''}>
+            <span>${t('stats_special_courses')}</span>
+          </div>
+          ${specialCards.map(c => c.html).join('')}
+        `;
+      }
+
+      categoriesHtml = sectionsHtml || categoriesHtml;
     }
 
     // Generate dates for the last 7 days
@@ -86,36 +140,37 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     });
 
     const maxDaily = Math.max(...days.map(d => d.dailyCount), 1);
-    const maxCumulative = Math.max(...days.map(d => d.cumulativeCount), 1);
+    const minCum = Math.min(...days.map(d => d.cumulativeCount));
+    const maxCum = Math.max(...days.map(d => d.cumulativeCount));
+    const cumDiff = maxCum - minCum;
 
-    const chartHeight = 95; // active height for columns
-    const chartBottom = 120; // y baseline
+    const chartBottom = 122;
+    const maxBarHeight = 38;
 
     let barsHtml = '';
     let points = [];
     let labelsHtml = '';
 
     days.forEach((day, idx) => {
-      const x = 45 + idx * 60;
-      const barHeight = (day.dailyCount / maxDaily) * chartHeight;
+      const x = 32 + idx * 48; // 32, 80, 128, 176, 224, 272, 320 (viewBox width 352)
+      const barHeight = day.dailyCount > 0 ? Math.max((day.dailyCount / maxDaily) * maxBarHeight, 6) : 0;
       const barY = chartBottom - barHeight;
-      
-      // Bar for daily learned (blue) with value text (inside bar if it fits, above if not, hidden if 0)
-      barsHtml += `
-        <rect x="${x}" y="${barY}" width="24" height="${barHeight}" fill="#3b82f6" rx="4" opacity="0.85" />
-        ${day.dailyCount > 0 ? (barHeight > 16 
-          ? `<text x="${x + 12}" y="${barY + 12}" font-family="inherit" font-weight="700" font-size="10" fill="#ffffff" text-anchor="middle">${day.dailyCount}</text>`
-          : `<text x="${x + 12}" y="${barY - 4}" font-family="inherit" font-weight="700" font-size="10" fill="#3b82f6" text-anchor="middle">${day.dailyCount}</text>`
-        ) : ''}
-      `;
 
-      // Line point for cumulative (green)
-      const lineY = chartBottom - (day.cumulativeCount / maxCumulative) * chartHeight;
-      points.push({ x: x + 12, y: lineY, val: day.cumulativeCount });
+      // Lower tier: Bars for daily learned
+      if (day.dailyCount > 0) {
+        barsHtml += `
+          <rect x="${x - 10}" y="${barY}" width="20" height="${barHeight}" fill="url(#stats-bar-grad)" rx="4" opacity="0.9" />
+          <text x="${x}" y="${barY - 4}" font-family="inherit" font-weight="700" font-size="10" fill="#38bdf8" text-anchor="middle">${day.dailyCount}</text>
+        `;
+      }
 
-      // Date labels
+      // Upper tier: Cumulative line (y between 28 and 58)
+      const lineY = cumDiff === 0 ? 42 : 58 - ((day.cumulativeCount - minCum) / cumDiff) * 30;
+      points.push({ x, y: lineY, val: day.cumulativeCount });
+
+      // Clean X axis date labels
       labelsHtml += `
-        <text x="${x + 12}" y="${chartBottom + 16}" font-family="inherit" font-size="10" fill="var(--text-muted)" text-anchor="middle">${day.dateStr}</text>
+        <text x="${x}" y="${chartBottom + 18}" font-family="inherit" font-size="10.5" font-weight="500" fill="var(--text-muted, #94a3b8)" text-anchor="middle">${day.dateStr}</text>
       `;
     });
 
@@ -127,24 +182,38 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     });
 
     let lineHtml = `
-      <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
     `;
     points.forEach((p) => {
       lineHtml += `
-        <circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
-        <text x="${p.x}" y="${p.y - 7}" font-family="inherit" font-weight="700" font-size="11" fill="#10b981" text-anchor="middle">${p.val}</text>
+        <circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#10b981" stroke="var(--card-bg, #1e293b)" stroke-width="1.5" />
+        <text x="${p.x}" y="${p.y - 7}" font-family="inherit" font-weight="700" font-size="10.5" fill="#10b981" text-anchor="middle">${p.val}</text>
       `;
     });
 
     const chartHtml = `
-      <div class="curriculum-block" style="margin-top: 20px;">
-        <div style="width: 100%; overflow-x: auto; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 6px 6px; box-shadow: var(--shadow-sm);">
-          <svg viewBox="0 0 460 145" width="100%" height="135" style="display: block; overflow: visible;">
-            <!-- Grid lines -->
-            <line x1="25" y1="25" x2="435" y2="25" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.4" />
-            <line x1="25" y1="72.5" x2="435" y2="72.5" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.4" />
-            <line x1="25" y1="120" x2="435" y2="120" stroke="var(--border-color)" stroke-width="1" />
-            
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">${t('stats_study_dynamics')}</span>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-dot" style="background: #3b82f6;"></span> ${t('stats_daily')}</div>
+            <div class="legend-item"><span class="legend-dot" style="background: #10b981;"></span> ${t('stats_total')}</div>
+          </div>
+        </div>
+        <div style="width: 100%; overflow-x: auto;">
+          <svg viewBox="0 0 352 152" width="100%" height="150" style="display: block; overflow: visible;">
+            <defs>
+              <linearGradient id="stats-bar-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#60a5fa" />
+                <stop offset="100%" stop-color="#2563eb" />
+              </linearGradient>
+            </defs>
+
+            <!-- Baseline and grid -->
+            <line x1="15" y1="35" x2="337" y2="35" stroke="var(--border-color)" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4" />
+            <line x1="15" y1="78" x2="337" y2="78" stroke="var(--border-color)" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4" />
+            <line x1="15" y1="122" x2="337" y2="122" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
+
             ${barsHtml}
             ${lineHtml}
             ${labelsHtml}
@@ -158,26 +227,41 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         <!-- Top Stats Widgets Grid (1x3) -->
         <div class="stats-grid">
           <div class="stat-card">
-            <span class="stat-icon">🎓</span>
+            <div class="stat-icon-wrap blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
             <div class="stat-info">
-              <h3 id="stat-mastered">${stats.masteredCount || 0}</h3>
-              <p>${t('dict_filter_mastered')}</p>
+              <h3 class="stat-val" id="stat-mastered">${stats.masteredCount || 0}</h3>
+              <p class="stat-lbl">${t('dict_filter_mastered')}</p>
             </div>
           </div>
 
           <div class="stat-card">
-            <span class="stat-icon">🎯</span>
+            <div class="stat-icon-wrap red">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+            </div>
             <div class="stat-info">
-              <h3 id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
-              <p>${t('stats_accuracy')}</p>
+              <h3 class="stat-val" id="stat-accuracy">${(stats.totalAnswers > 0) ? `${stats.accuracy}%` : '0%'}</h3>
+              <p class="stat-lbl">${t('stats_accuracy')}</p>
             </div>
           </div>
 
           <div class="stat-card">
-            <span class="stat-icon">🔥</span>
+            <div class="stat-icon-wrap amber">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+              </svg>
+            </div>
             <div class="stat-info">
-              <h3 id="stat-streak">${stats.streakDays || 1} ${t('stats_days_short')}</h3>
-              <p>${t('stats_streak')}</p>
+              <h3 class="stat-val" id="stat-streak">${stats.streakDays || 1} ${t('stats_days_short')}</h3>
+              <p class="stat-lbl">${t('stats_streak')}</p>
             </div>
           </div>
         </div>
