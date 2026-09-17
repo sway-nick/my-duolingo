@@ -1369,6 +1369,7 @@
                 // 1. Only Elementary (US) is pre-packaged in the APK -> Open immediately
                 if (isBundled) {
                   window._isCategorySelectOpen = false;
+                  window._showHubScreen = false;
                   favoritePracticeWords = null;
                   userSettings.category = chosenCat;
                   userSettings.preferredMethod = 'cards';
@@ -1448,6 +1449,7 @@
 
                       modal.remove();
                       window._isCategorySelectOpen = false;
+                      window._showHubScreen = false;
                       favoritePracticeWords = null;
                       userSettings.category = chosenCat;
                       userSettings.preferredMethod = 'cards';
@@ -1468,6 +1470,7 @@
 
                 // If already downloaded:
                 window._isCategorySelectOpen = false;
+                window._showHubScreen = false;
                 favoritePracticeWords = null;
                 userSettings.category = chosenCat;
                 userSettings.preferredMethod = 'cards';
@@ -1521,6 +1524,7 @@
                 renderCategorySelectorScreen();
                 return;
               }
+              window._showHubScreen = false;
               if (nextMode === 'cards') {
                 window._explicitCardsOpened = true;
               } else {
@@ -1537,6 +1541,7 @@
           const repeatFavsBtn = content.querySelector('#go-repeat-favs-btn');
           if (repeatFavsBtn) {
             repeatFavsBtn.addEventListener('click', () => {
+              window._showHubScreen = false;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               const favList = getUserFavorites();
@@ -2039,16 +2044,16 @@
               return true;
             }
 
-            // Priority 4: If inside practice / exercise mode, return to hub (or to favorites if started from there)
-            if (activeTab === 'training' && !window._showHubScreen) {
-              const wasFavPractice = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+            // Priority 4: If inside practice / exercise mode or practicing favorites, return to hub (or to favorites if started from there)
+            const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+            if (activeTab === 'training' && (!window._showHubScreen || isFavPracticeRunning)) {
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._showHubScreen = true;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
               currentWordIndex = 0;
-              if (wasFavPractice && tabHistory.length > 1 && tabHistory[tabHistory.length - 1] === 'favorites') {
+              if (isFavPracticeRunning && tabHistory.length > 1 && tabHistory[tabHistory.length - 1] === 'favorites') {
                 tabHistory.pop();
                 const tabs = document.querySelectorAll('.nav-tab');
                 tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
