@@ -864,8 +864,9 @@
             }
           }
 
-          const rocketSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`;
-          const bookSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/><path d="M4 19.5a2.5 2.5 0 0 1 2.5-2.5H20"/></svg>`;
+          const capSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
+          const rocketSvg = capSvg;
+          const bookSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
           const heartSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" stroke="none" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
           const puzzleSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.439 7.85c0-1.571-1.28-2.85-2.85-2.85a2.85 2.85 0 0 0-2.85 2.85v1.14H9.74V7.85c0-1.571-1.28-2.85-2.85-2.85A2.85 2.85 0 0 0 4.04 7.85v4.56h1.14a2.85 2.85 0 0 1 2.85 2.85 2.85 2.85 0 0 1-2.85 2.85H4.04v4.56h4.56v-1.14a2.85 2.85 0 0 1 2.85-2.85 2.85 2.85 0 0 1 2.85 2.85v1.14h5.14v-4.56h-1.14a2.85 2.85 0 0 1-2.85-2.85 2.85 2.85 0 0 1 2.85-2.85h1.14V7.85z"/></svg>`;
           const penSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
@@ -994,8 +995,8 @@
 
           const continueCardsBtnHtml = unmasteredCount > 0
             ? `
-              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
-                <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${rocketSvg}</span>
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${capSvg}</span>
                 <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
               </button>
             `
@@ -1009,14 +1010,14 @@
               <div class="hub-content-cluster" style="display: flex; flex-direction: column; justify-content: center; width: 100%; ${hasWotdCard ? 'transform: translateY(-44px);' : ''}">
                 <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '11px' : '15px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                   ${continueCardsBtnHtml}
-                  <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                  <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                     <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${nextBtnSvg}</span>
                     <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
                   </button>
                   ${
                     (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                       ? `
-                    <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.4vw, 17.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                    <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                       <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${heartSvg}</span>
                       <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
                     </button>
