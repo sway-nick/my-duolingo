@@ -1286,10 +1286,13 @@
               <div class="category-select-page" style="width: 100%; max-width: 600px; margin: 0 auto; padding: 10px 4px 24px; box-sizing: border-box;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                   <div>
-                    <h2 style="margin: 0; font-size: 21px; font-weight: 800;">${t('train_categories_title')}</h2>
+                    <h2 style="margin: 0; font-size: 20px; font-weight: 800; line-height: 1.2;">${t('train_categories_title')}</h2>
                   </div>
-                  <button type="button" id="cat-select-back-btn" class="secondary-button" style="width: auto; padding: 6px 14px; font-size: 14px; font-weight: 600; border-radius: 8px;">
-                    ✕
+                  <button type="button" id="cat-select-back-btn" class="cat-select-circle-btn" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; border: 1.5px solid var(--border-color, #334155); background: var(--bg-hover, #1e293b); color: var(--text-muted, #94a3b8); display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; box-sizing: border-box; flex-shrink: 0; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);" aria-label="Закрыть">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
                   </button>
                 </div>
 
