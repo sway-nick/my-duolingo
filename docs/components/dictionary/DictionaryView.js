@@ -67,21 +67,19 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
         <!-- 1. Upload View -->
         <div id="scanner-upload-view" class="scanner-upload-view">
-          <div class="scanner-dropzone" id="scanner-dropzone">
-            <div class="scanner-actions-stack">
-              <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-action-btn">
-                <span class="scanner-btn-icon">${cameraSvg}</span>
-                <span class="scanner-btn-text">${photoText}</span>
-              </button>
-              <button type="button" id="scanner-gallery-btn" class="primary-button scanner-action-btn">
-                <span class="scanner-btn-icon">${gallerySvg}</span>
-                <span class="scanner-btn-text">${galleryText}</span>
-              </button>
-              <button type="button" id="scanner-open-paste-btn" class="primary-button scanner-action-btn">
-                <span class="scanner-btn-icon">${pasteSvg}</span>
-                <span class="scanner-btn-text">${pasteText}</span>
-              </button>
-            </div>
+          <div class="scanner-actions-stack" id="scanner-dropzone">
+            <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-action-btn">
+              <span class="scanner-btn-icon">${cameraSvg}</span>
+              <span class="scanner-btn-text">${photoText}</span>
+            </button>
+            <button type="button" id="scanner-gallery-btn" class="primary-button scanner-action-btn">
+              <span class="scanner-btn-icon">${gallerySvg}</span>
+              <span class="scanner-btn-text">${galleryText}</span>
+            </button>
+            <button type="button" id="scanner-open-paste-btn" class="primary-button scanner-action-btn">
+              <span class="scanner-btn-icon">${pasteSvg}</span>
+              <span class="scanner-btn-text">${pasteText}</span>
+            </button>
           </div>
         </div>
 
