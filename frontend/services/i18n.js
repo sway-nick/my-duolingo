@@ -6869,14 +6869,15 @@ export function getSpeechPrompt(type = 'listening') {
   return bundle[lang] || bundle['en'] || bundle['ru'];
 }
 
-export function t(key) {
-  if (key === 'speech_listening') return getSpeechPrompt('listening');
-  if (key === 'speech_evaluating') return getSpeechPrompt('evaluating');
-  if (key === 'speech_not_recognized') return getSpeechPrompt('retry');
-  if (key === 'speech_tap_to_speak') return getSpeechPrompt('tap_to_speak');
-  if (key === 'review_repeat') return getSpeechPrompt('review_repeat');
-  if (key === 'review_know') return getSpeechPrompt('review_know');
-  if (key === 'fav_autoplay_listen') {
+export function t(key, params = null) {
+  let val = '';
+  if (key === 'speech_listening') val = getSpeechPrompt('listening');
+  else if (key === 'speech_evaluating') val = getSpeechPrompt('evaluating');
+  else if (key === 'speech_not_recognized') val = getSpeechPrompt('retry');
+  else if (key === 'speech_tap_to_speak') val = getSpeechPrompt('tap_to_speak');
+  else if (key === 'review_repeat') val = getSpeechPrompt('review_repeat');
+  else if (key === 'review_know') val = getSpeechPrompt('review_know');
+  else if (key === 'fav_autoplay_listen') {
     const lang = getInterfaceLanguage();
     const map = {
       ru: "Слушать", uk: "Слухати", en: "Listen", de: "Anhören", es: "Escuchar",
@@ -6886,9 +6887,8 @@ export function t(key) {
       sl: "Poslušaj", fi: "Kuuntele", hr: "Slušaj", cs: "Poslouchat", sv: "Lyssna",
       et: "Kuula", mt: "Isma'", nl: "Luisteren"
     };
-    return map[lang] || map['en'] || "Listen";
-  }
-  if (key === 'fav_autoplay_stop') {
+    val = map[lang] || map['en'] || "Listen";
+  } else if (key === 'fav_autoplay_stop') {
     const lang = getInterfaceLanguage();
     const map = {
       ru: "Стоп", uk: "Стоп", en: "Stop", de: "Stopp", es: "Parar",
@@ -6898,23 +6898,32 @@ export function t(key) {
       sl: "Ustavi", fi: "Pysäytä", hr: "Stop", cs: "Stop", sv: "Stopp",
       et: "Peata", mt: "Ieqaf", nl: "Stop"
     };
-    return map[lang] || map['en'] || "Stop";
-  }
-  if (key === 'word_notes_title') {
+    val = map[lang] || map['en'] || "Stop";
+  } else if (key === 'word_notes_title') {
     const lang = getInterfaceLanguage();
-    if (lang === 'ru') return 'Примечание';
-    if (lang === 'uk') return 'Примітка';
-    if (lang === 'de') return 'Hinweis';
-    if (lang === 'es' || lang === 'pt' || lang === 'it') return 'Nota';
-    if (lang === 'fr') return 'Remarque';
-    if (lang === 'pl') return 'Uwaga';
-    if (lang === 'tr') return 'Not';
-    return 'Note';
+    if (lang === 'ru') val = 'Примечание';
+    else if (lang === 'uk') val = 'Примітка';
+    else if (lang === 'de') val = 'Hinweis';
+    else if (lang === 'es' || lang === 'pt' || lang === 'it') val = 'Nota';
+    else if (lang === 'fr') val = 'Remarque';
+    else if (lang === 'pl') val = 'Uwaga';
+    else if (lang === 'tr') val = 'Not';
+    else val = 'Note';
+  } else {
+    const lang = getInterfaceLanguage();
+    const dict = translations[lang] || translations['en'];
+    val = dict[key] || (translations['en'] && translations['en'][key]) || key;
   }
 
-  const lang = getInterfaceLanguage();
-  const dict = translations[lang] || translations['en'];
-  return dict[key] || translations['en'][key] || key;
+  if (params && typeof params === 'object' && typeof val === 'string') {
+    val = val.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, prop) => {
+      return Object.prototype.hasOwnProperty.call(params, prop) && params[prop] !== undefined && params[prop] !== null
+        ? String(params[prop])
+        : match;
+    });
+  }
+
+  return val;
 }
 
 export function getWordTranslation(wordObj) {
