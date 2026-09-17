@@ -923,8 +923,8 @@
                         <div class="card-sheen"></div>
 
                         <div class="card-header">
-                          <div class="brand-group" id="wotd-sound-front" title="${t('listen_word') || 'Listen'}">
-                            <div class="card-brand">ENGLISH BREAKFAST <span class="brand-sound-icon">🔊</span></div>
+                          <div class="brand-group">
+                            <div class="card-brand">ENGLISH BREAKFAST</div>
                             <div class="card-sub">VIP WORD PASS</div>
                           </div>
                           <button type="button" class="card-fav ${isWotdFav ? 'is-active' : 'is-off'}" id="wotd-fav-front" title="${t('train_to_favorites')}">
@@ -942,7 +942,7 @@
                         </div>
 
                         <div class="card-footer">
-                          <div class="hint">${t('flip_for_translation') || 'TAP TO REVEAL TRANSLATION'}</div>
+                          <div class="hint">TOUCH TO FLIP BACK</div>
                           <div class="badge-tier">${wotdTier}</div>
                         </div>
                       </div>
@@ -960,8 +960,8 @@
                         </div>
 
                         <div class="card-header" style="z-index: 2;">
-                          <div class="brand-group" id="wotd-sound-back" title="${t('listen_word') || 'Listen'}">
-                            <div class="card-brand">ENGLISH BREAKFAST <span class="brand-sound-icon">🔊</span></div>
+                          <div class="brand-group">
+                            <div class="card-brand">ENGLISH BREAKFAST</div>
                             <div class="card-sub">MEANING &amp; CONTEXT</div>
                           </div>
                           <button type="button" class="card-fav ${isWotdFav ? 'is-active' : 'is-off'}" id="wotd-fav-back" title="${t('train_to_favorites')}">
@@ -978,8 +978,7 @@
                           </div>
                         </div>
 
-                        <div class="card-footer" style="z-index: 2;">
-                          <div class="hint">TOUCH TO FLIP BACK</div>
+                        <div class="card-footer" style="z-index: 2; justify-content: flex-end;">
                           <div class="badge-tier">${wotdTier}</div>
                         </div>
                       </div>
@@ -1082,7 +1081,7 @@
               }
 
               flashcard.addEventListener('click', (e) => {
-                if (e.target.closest('.card-fav') || e.target.closest('#wotd-fav-front') || e.target.closest('#wotd-fav-back') || e.target.closest('#wotd-sound-front') || e.target.closest('#wotd-sound-back') || e.target.closest('.brand-group')) {
+                if (e.target.closest('.card-fav') || e.target.closest('#wotd-fav-front') || e.target.closest('#wotd-fav-back')) {
                   return;
                 }
 
