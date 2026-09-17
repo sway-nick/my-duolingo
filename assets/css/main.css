@@ -2238,6 +2238,26 @@ body.notebook-theme .word-notes-modal-text {
   box-shadow: 0 1px 4px rgba(2, 132, 199, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
+.btn-graphite {
+  background: linear-gradient(180deg, #475569 0%, #334155 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.28), inset 0 -1.5px 3px rgba(0, 0, 0, 0.25) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+}
+
+.btn-graphite:hover:not(:disabled) {
+  filter: brightness(1.08) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.5), inset 0 1px 1.5px rgba(255, 255, 255, 0.35), inset 0 -1.5px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+.btn-graphite:active:not(:disabled) {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
+}
+
 .btn-orange {
   background: #ea580c !important;
   color: #ffffff !important;
@@ -3660,7 +3680,7 @@ body.dark-theme .custom-dropdown-trigger {
 
 .dark-theme .fav-translation,
 .dark-theme .dict-translation {
-  color: #93c5fd;
+  color: #7dd3fc !important;
 }
 
 .sound-button-sm {
