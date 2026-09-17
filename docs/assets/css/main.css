@@ -7612,6 +7612,10 @@ body.dark-theme #clear-app-cache-btn:hover {
   transform: rotateY(180deg);
 }
 
+.bank-card.matte-gold.card-back .word-block {
+  transform: translateY(-22px);
+}
+
 /* Продавленная внутренняя рамка */
 .bank-card.matte-gold .card-inner-border {
   position: absolute;
