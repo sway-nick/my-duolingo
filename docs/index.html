@@ -313,7 +313,9 @@
       if (typeof window !== 'undefined') {
         window.addEventListener('myduo_words_updated', (e) => {
           allWords = e.detail;
-          if (activeTab && typeof renderTab === 'function') {
+          if (typeof scheduleTabUpdate === 'function') {
+            scheduleTabUpdate(activeTab);
+          } else if (activeTab && typeof renderTab === 'function') {
             try {
               renderTab(activeTab);
             } catch (err) {}
@@ -1036,6 +1038,46 @@
             `
             : '';
 
+          // Anti-flicker: If Hub screen with this Word of the Day is already mounted, update in-place without destroying DOM
+          const existingHub = content.querySelector('.hub-with-wotd, .hub-standalone');
+          const existingFlashcard = content.querySelector('#wotd-flashcard-3d');
+          const existingWord = existingFlashcard?.querySelector('.word')?.textContent?.trim();
+
+          if (isHubScreen && wotd && existingHub && existingFlashcard && existingWord === wotd.word && !isTrainingRoundJustCompleted) {
+            const favButtons = existingFlashcard.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
+            favButtons.forEach((btn) => {
+              btn.classList.toggle('is-active', isWotdFav);
+              btn.classList.toggle('is-off', !isWotdFav);
+            });
+
+            const curContinueBtn = content.querySelector('#go-continue-cards-btn');
+            if (unmasteredCount > 0 && !curContinueBtn) {
+              const buttonsStack = content.querySelector('.hub-buttons-stack');
+              if (buttonsStack) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = continueCardsBtnHtml;
+                if (tempDiv.firstElementChild) {
+                  buttonsStack.insertBefore(tempDiv.firstElementChild, buttonsStack.firstChild);
+                  const newContinueBtn = content.querySelector('#go-continue-cards-btn');
+                  if (newContinueBtn) {
+                    newContinueBtn.addEventListener('click', () => {
+                      window._showHubScreen = false;
+                      window._trainingRoundJustCompleted = false;
+                      getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
+                      userSettings.preferredMethod = 'cards';
+                      saveUserSettings(userSettings);
+                      currentWordIndex = 0;
+                      renderTrainingTab();
+                    });
+                  }
+                }
+              }
+            } else if (unmasteredCount === 0 && curContinueBtn) {
+              curContinueBtn.remove();
+            }
+            return;
+          }
+
           content.innerHTML = `
             <div class="empty-state-card ${hasWotdCard ? 'hub-with-wotd' : 'hub-standalone'}" style="text-align: center; display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 0; padding: ${hasWotdCard ? '12px 16px 16px' : '16px 20px'}; box-sizing: border-box; overflow: hidden;">
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
@@ -1705,6 +1747,17 @@
         }
       }
 
+      let _tabUpdateDebounceTimer = null;
+      function scheduleTabUpdate(tabName = activeTab, delay = 60) {
+        if (_tabUpdateDebounceTimer) clearTimeout(_tabUpdateDebounceTimer);
+        _tabUpdateDebounceTimer = setTimeout(() => {
+          _tabUpdateDebounceTimer = null;
+          if (!window._isCategorySelectOpen) {
+            renderTab(tabName);
+          }
+        }, delay);
+      }
+
       async function init() {
         window._explicitCardsOpened = false;
         window._trainingRoundJustCompleted = false;
@@ -1760,18 +1813,14 @@
         });
 
         window.addEventListener('myduo:progress_updated', () => {
-          if (!window._isCategorySelectOpen) {
-            renderTab(activeTab);
-          }
+          scheduleTabUpdate(activeTab);
         });
 
         window.addEventListener('myduo:cloud_synced', async () => {
           updateHeaderUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
-          if (!window._isCategorySelectOpen) {
-            renderTab(activeTab);
-          }
+          scheduleTabUpdate(activeTab);
         });
 
         window.addEventListener('myduo:lang_changed', () => {
@@ -1867,7 +1916,7 @@
         // 3. Asynchronous non-blocking background data sync
         loadData().then(() => {
           updateHeaderUser();
-          renderTab(activeTab);
+          scheduleTabUpdate(activeTab);
         }).catch((err) => console.warn('Background sync error:', err));
 
         // 4. Native Android Back Button & Gesture Navigation handler
