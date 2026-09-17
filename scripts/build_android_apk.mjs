@@ -33,10 +33,12 @@ execSync(gradleCmd, { cwd: path.join(ANDROID_PROJECT, 'android'), stdio: 'inheri
 
 // Step 5: Copy and verify APK size
 const apkSource = path.join(ANDROID_PROJECT, 'android/app/build/outputs/apk/debug/app-debug.apk');
+const apkDestOutputs = path.join(ANDROID_PROJECT, 'android/app/build/outputs/apk/EnglishBreakfast.apk');
 const apkDestRoot = path.join(ROOT_SOURCE, 'EnglishBreakfast.apk');
 const apkDestAndroid = path.join(ANDROID_PROJECT, 'EnglishBreakfast.apk');
 
 if (fs.existsSync(apkSource)) {
+  fs.copyFileSync(apkSource, apkDestOutputs);
   fs.copyFileSync(apkSource, apkDestRoot);
   fs.copyFileSync(apkSource, apkDestAndroid);
 
