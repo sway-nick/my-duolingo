@@ -7849,26 +7849,39 @@ body.dark-theme #clear-app-cache-btn:hover {
 
 .bank-card.matte-gold .card-fav .heart-svg {
   display: block;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  width: 26px;
+  height: 26px;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.bank-card.matte-gold .card-fav.is-active .heart-path {
-  fill: #531118;
-  stroke: #edd49a;
-  stroke-width: 1.5;
+.bank-card.matte-gold .card-fav.is-off .heart-svg {
+  filter: 
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.65))
+    drop-shadow(0 2px 4px rgba(60, 40, 10, 0.45));
 }
 
 .bank-card.matte-gold .card-fav.is-off .heart-path {
-  fill: rgba(83, 17, 24, 0.2);
-  stroke: rgba(135, 98, 38, 0.6);
-  stroke-width: 1.4;
+  fill: url(#wotd-heart-off-cavity);
+  stroke: url(#wotd-heart-off-rim);
+  stroke-width: 1.8;
+}
+
+.bank-card.matte-gold .card-fav.is-active .heart-svg {
+  filter: 
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.65))
+    drop-shadow(0 3px 6px rgba(110, 0, 24, 0.55));
+}
+
+.bank-card.matte-gold .card-fav.is-active .heart-path {
+  fill: url(#wotd-ruby-convex);
+  stroke: url(#wotd-heart-gold-rim);
+  stroke-width: 1.8;
 }
 
 .bank-card.matte-gold .card-fav:hover .heart-svg {
-  transform: scale(1.1);
+  transform: scale(1.12);
 }
 
 .bank-card.matte-gold .card-fav:active .heart-svg {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
