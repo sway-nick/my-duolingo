@@ -7939,3 +7939,13 @@ body.dark-theme #clear-app-cache-btn:hover {
 .bank-card.matte-gold .card-fav:active .heart-svg {
   transform: scale(0.92);
 }
+
+.cat-select-circle-btn:hover {
+  filter: brightness(1.15);
+  color: var(--text-main, #ffffff) !important;
+  transform: scale(1.05);
+}
+
+.cat-select-circle-btn:active {
+  transform: scale(0.95);
+}
