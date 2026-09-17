@@ -36,5 +36,7 @@ my-duolingo/
 # Backend source and generated scripts (private)
 backend/
 Code.gs
+GOOGLE_SHEETS_SCRIPT.js
+android/
 backend/dist/
 backend/src/config/config.local.js
