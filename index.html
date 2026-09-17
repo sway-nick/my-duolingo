@@ -910,7 +910,7 @@
             const wotdExampleHtml = wotdExample ? `<div class="example-line">«${wotdExample}»</div>` : '';
 
             wotdHtml = `
-              <div class="wotd-bonus-section" style="margin-top: 20px;">
+              <div class="wotd-bonus-section" style="margin-top: 18px; width: 100%; max-width: 340px; margin-left: auto; margin-right: auto; box-sizing: border-box;">
                 <div class="flashcard-3d-wrapper wotd-standalone-wrapper">
                   <div class="wotd-tilt-container" id="wotd-tilt-container">
                     <div class="card-flipper wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}">
@@ -1041,7 +1041,7 @@
               ${emptyIcon ? `<div style="font-size: 52px; margin-bottom: 12px;">${emptyIcon}</div>` : ''}
               ${emptyTitle ? `<h2 style="font-size: 22px; line-height: 1.35; margin-bottom: ${emptyMsg ? '8px' : '24px'};">${emptyTitle}</h2>` : ''}
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
-              <div class="hub-content-cluster" style="display: flex; flex-direction: column; justify-content: center; width: 100%; ${hasWotdCard ? 'transform: translateY(-44px);' : ''}">
+              <div class="hub-content-cluster" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; ${hasWotdCard ? 'transform: translateY(-44px);' : ''}">
                 <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '11px' : '15px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                   ${continueCardsBtnHtml}
                   <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">

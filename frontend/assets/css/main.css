@@ -7472,14 +7472,16 @@ body.dark-theme #clear-app-cache-btn:hover {
 .wotd-standalone-wrapper {
   perspective: 1400px;
   width: 100%;
+  max-width: 340px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .wotd-tilt-container {
   position: relative;
   width: 100%;
   aspect-ratio: 1.586 / 1;
-  max-width: 380px;
+  max-width: 340px;
   margin: 0 auto;
   cursor: pointer;
   transform-style: preserve-3d;
@@ -7488,6 +7490,7 @@ body.dark-theme #clear-app-cache-btn:hover {
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
+  box-sizing: border-box;
 }
 
 #wotd-flashcard-3d.card-flipper {
