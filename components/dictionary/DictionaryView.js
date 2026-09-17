@@ -43,6 +43,15 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   modalEl.id = 'doc-scanner-modal-overlay';
   modalEl.className = 'scanner-modal-overlay';
 
+  const cameraSvg = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+  const gallerySvg = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+  const pasteSvg = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>`;
+
+  const cleanBtnText = (str) => String(str || '').replace(/^[\p{Extended_Pictographic}\uFE0F\s]+/u, '').trim();
+  const photoText = cleanBtnText(t('scan_take_photo')) || 'Фото';
+  const galleryText = cleanBtnText(t('scan_choose_gallery')) || 'Галерея';
+  const pasteText = cleanBtnText(t('scan_paste_btn')) || 'Вставить текст';
+
   modalEl.innerHTML = `
     <div class="scanner-modal-card">
       <div class="scanner-modal-header">
@@ -59,18 +68,20 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         <!-- 1. Upload View -->
         <div id="scanner-upload-view" class="scanner-upload-view">
           <div class="scanner-dropzone" id="scanner-dropzone">
-            <div class="scanner-dropzone-icon">📷</div>
-            <div class="scanner-action-buttons">
-              <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-btn-camera">
-                ${t('scan_take_photo')}
+            <div class="scanner-actions-stack">
+              <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-action-btn">
+                <span class="scanner-btn-icon">${cameraSvg}</span>
+                <span class="scanner-btn-text">${photoText}</span>
               </button>
-              <button type="button" id="scanner-gallery-btn" class="primary-button scanner-btn-gallery">
-                ${t('scan_choose_gallery')}
+              <button type="button" id="scanner-gallery-btn" class="primary-button scanner-action-btn">
+                <span class="scanner-btn-icon">${gallerySvg}</span>
+                <span class="scanner-btn-text">${galleryText}</span>
+              </button>
+              <button type="button" id="scanner-open-paste-btn" class="primary-button scanner-action-btn">
+                <span class="scanner-btn-icon">${pasteSvg}</span>
+                <span class="scanner-btn-text">${pasteText}</span>
               </button>
             </div>
-            <button type="button" id="scanner-open-paste-btn" class="scanner-btn-paste">
-              ${t('scan_paste_btn')}
-            </button>
           </div>
         </div>
 
