@@ -3352,11 +3352,12 @@ body.dark-theme .custom-dropdown-trigger {
 
 .autoplay-favs-btn-bottom {
   position: relative;
-  background: #16a34a !important;
+  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
   color: #ffffff !important;
-  border: none;
-  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
-  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
   cursor: pointer;
   user-select: none;
 }
@@ -3379,39 +3380,72 @@ body.dark-theme .custom-dropdown-trigger {
 }
 
 .autoplay-favs-btn-bottom:hover {
-  background: #15803d !important;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.45);
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+}
+
+.autoplay-favs-btn-bottom:active {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .autoplay-favs-btn-bottom.is-playing {
-  background: #ea580c !important;
+  background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.45) !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(234, 88, 12, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
 }
 
 .autoplay-favs-btn-bottom.is-playing:hover {
-  background: #c2410c !important;
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.5), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+}
+
+.autoplay-favs-btn-bottom.is-playing:active {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(234, 88, 12, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
 }
 
 .dark-theme .autoplay-favs-btn-bottom {
-  background: #16a34a !important;
+  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
 }
 
 .dark-theme .autoplay-favs-btn-bottom:hover {
-  background: #15803d !important;
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dark-theme .autoplay-favs-btn-bottom:active {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .dark-theme .autoplay-favs-btn-bottom.is-playing {
-  background: #f97316 !important;
+  background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.45) !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 10px rgba(234, 88, 12, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
 }
 
 .dark-theme .autoplay-favs-btn-bottom.is-playing:hover {
-  background: #ea580c !important;
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.5), inset 0 1px 1.5px rgba(255, 255, 255, 0.5), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+}
+
+.dark-theme .autoplay-favs-btn-bottom.is-playing:active {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(234, 88, 12, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
 }
 
 .autosave-bar {
