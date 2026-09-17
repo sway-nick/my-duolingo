@@ -420,7 +420,7 @@ function isVoicePackDownloaded(accent = 'us') {
  */
 function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
   const norm = String(category || '').toLowerCase().trim();
-  if (norm.includes('elementary') || norm.includes('irregular')) {
+  if (norm.includes('elementary')) {
     return true; // Pre-packaged in APK!
   }
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
