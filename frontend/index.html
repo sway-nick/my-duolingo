@@ -65,9 +65,14 @@
         window.hideAppSplashScreen = function() {
           var splash = document.getElementById('app-splash-screen');
           if (splash) {
-            splash.style.transition = 'opacity 0.25s ease';
+            splash.style.pointerEvents = 'none';
+            splash.style.transition = 'opacity 0.3s ease';
             splash.style.opacity = '0';
-            setTimeout(function() { if (splash) splash.remove(); }, 260);
+            setTimeout(function() {
+              if (splash && splash.parentNode) {
+                splash.parentNode.removeChild(splash);
+              }
+            }, 320);
           }
         };
         if ('serviceWorker' in navigator) {
@@ -98,68 +103,67 @@
   </head>
 
   <body>
-    <div id="app">
-      <div id="app-splash-screen" style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; z-index: 999999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; outline: none; border: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;">
-        <div class="splash-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; transform: translateY(-45px);">
-          <div style="margin-bottom: 12px; outline: none; border: none; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 58" width="68" height="68" style="animation: splashPulse 1.4s ease-in-out infinite; display: block; outline: none; border: none; pointer-events: none; -webkit-tap-highlight-color: transparent;">
-              <!-- Steam lines (More wavy) -->
-              <path d="M12,16 C7,12 17,8 12,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              <path d="M22,16 C17,12 27,8 22,2" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              <path d="M32,16 C27,12 37,8 32,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              <!-- Cup body (Side view) -->
-              <path d="M4,28 C4,46 12,54 22,54 C32,54 40,46 40,28 Z" fill="#FF6A00"/>
-              <!-- Handle (Side view) -->
-              <path d="M40,32 C48,32 48,45 35,45" stroke="#FF6A00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-              <!-- Stacked open book pages with thick orange borders -->
-              <path d="M5,30 Q13.5,27 22,30 Q30.5,27 39,30 L39,20 Q30.5,17 22,20 Q13.5,17 5,20 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
-              <!-- Page lines left -->
-              <path d="M22,23 Q13.5,20 8,23" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
-              <path d="M22,26 Q13.5,23 8,26" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
-              <!-- Page lines right -->
-              <path d="M22,23 Q30.5,20 36,23" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
-              <path d="M22,26 Q30.5,23 36,26" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
-              <!-- Center Spine Line -->
-              <line x1="22" y1="20" x2="22" y2="30" stroke="#FF6A00" stroke-width="1.8"/>
-              <!-- EN Text -->
-              <text x="22" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
-            </svg>
-          </div>
-          <div style="font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: -0.5px; user-select: none; pointer-events: none;">English <span style="color: #ea580c;">Breakfast</span></div>
-          <div style="font-size: 13px; font-weight: 600; color: #94a3b8; margin-top: 4px; user-select: none; pointer-events: none;">Vocabulary Trainer</div>
-          <div style="margin-top: 24px; width: 140px; height: 4px; background: #f1f5f9; border-radius: 4px; overflow: hidden; position: relative; pointer-events: none;">
-            <div style="width: 50%; height: 100%; background: #22c55e; border-radius: 4px; animation: splashLoading 1s ease-in-out infinite;"></div>
-          </div>
+    <div id="app"></div>
+    <div id="app-splash-screen" style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; z-index: 999999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; outline: none; border: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;">
+      <div class="splash-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; transform: translateY(-45px);">
+        <div style="margin-bottom: 12px; outline: none; border: none; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 58" width="68" height="68" style="animation: splashPulse 1.4s ease-in-out infinite; display: block; outline: none; border: none; pointer-events: none; -webkit-tap-highlight-color: transparent;">
+            <!-- Steam lines (More wavy) -->
+            <path d="M12,16 C7,12 17,8 12,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M22,16 C17,12 27,8 22,2" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M32,16 C27,12 37,8 32,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <!-- Cup body (Side view) -->
+            <path d="M4,28 C4,46 12,54 22,54 C32,54 40,46 40,28 Z" fill="#FF6A00"/>
+            <!-- Handle (Side view) -->
+            <path d="M40,32 C48,32 48,45 35,45" stroke="#FF6A00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <!-- Stacked open book pages with thick orange borders -->
+            <path d="M5,30 Q13.5,27 22,30 Q30.5,27 39,30 L39,20 Q30.5,17 22,20 Q13.5,17 5,20 Z" fill="#FFF" stroke="#FF6A00" stroke-width="1.8"/>
+            <!-- Page lines left -->
+            <path d="M22,23 Q13.5,20 8,23" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <path d="M22,26 Q13.5,23 8,26" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <!-- Page lines right -->
+            <path d="M22,23 Q30.5,20 36,23" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <path d="M22,26 Q30.5,23 36,26" stroke="#FF6A00" stroke-width="1.2" fill="none"/>
+            <!-- Center Spine Line -->
+            <line x1="22" y1="20" x2="22" y2="30" stroke="#FF6A00" stroke-width="1.8"/>
+            <!-- EN Text -->
+            <text x="22" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
+          </svg>
+        </div>
+        <div style="font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: -0.5px; user-select: none; pointer-events: none;">English <span style="color: #ea580c;">Breakfast</span></div>
+        <div style="font-size: 13px; font-weight: 600; color: #94a3b8; margin-top: 4px; user-select: none; pointer-events: none;">Vocabulary Trainer</div>
+        <div style="margin-top: 24px; width: 140px; height: 4px; background: #f1f5f9; border-radius: 4px; overflow: hidden; position: relative; pointer-events: none;">
+          <div style="width: 50%; height: 100%; background: #22c55e; border-radius: 4px; animation: splashLoading 1s ease-in-out infinite;"></div>
         </div>
       </div>
-      <style>
-        #app-splash-screen,
-        #app-splash-screen * {
-          outline: none !important;
-          border: none !important;
-          -webkit-tap-highlight-color: transparent !important;
-          user-select: none !important;
-          -webkit-user-select: none !important;
-        }
-        #app-splash-screen svg {
-          outline: none !important;
-          border: none !important;
-          pointer-events: none !important;
-        }
-        #app-splash-screen *:focus,
-        #app-splash-screen *:active {
-          outline: none !important;
-        }
-        @keyframes splashPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
-        }
-        @keyframes splashLoading {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(200%); }
-        }
-      </style>
     </div>
+    <style>
+      #app-splash-screen,
+      #app-splash-screen * {
+        outline: none !important;
+        border: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+      }
+      #app-splash-screen svg {
+        outline: none !important;
+        border: none !important;
+        pointer-events: none !important;
+      }
+      #app-splash-screen *:focus,
+      #app-splash-screen *:active {
+        outline: none !important;
+      }
+      @keyframes splashPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+      }
+      @keyframes splashLoading {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+      }
+    </style>
 
     <script type="module">
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=217.0';
@@ -313,6 +317,9 @@
       if (typeof window !== 'undefined') {
         window.addEventListener('myduo_words_updated', (e) => {
           allWords = e.detail;
+          if (window._isAppInitializing) {
+            return;
+          }
           if (typeof scheduleTabUpdate === 'function') {
             scheduleTabUpdate(activeTab);
           } else if (activeTab && typeof renderTab === 'function') {
@@ -1758,6 +1765,7 @@
 
       let _tabUpdateDebounceTimer = null;
       function scheduleTabUpdate(tabName = activeTab, delay = 60) {
+        if (window._isAppInitializing) return;
         if (_tabUpdateDebounceTimer) clearTimeout(_tabUpdateDebounceTimer);
         _tabUpdateDebounceTimer = setTimeout(() => {
           _tabUpdateDebounceTimer = null;
@@ -1768,6 +1776,7 @@
       }
 
       async function init() {
+        window._isAppInitializing = true;
         window._explicitCardsOpened = false;
         window._trainingRoundJustCompleted = false;
         initPrizePodiumListener();
@@ -1797,6 +1806,7 @@
         } catch (e) {}
 
         window.addEventListener('myduo:auth_changed', async (e) => {
+          if (window._isAppInitializing) return;
           const user = e.detail?.user || getCurrentUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
@@ -1816,12 +1826,14 @@
         window.addEventListener('myduo_favorites_updated', (e) => {
           const favs = e.detail || getUserFavorites();
           favoriteIds = new Set(favs.map(String));
+          if (window._isAppInitializing) return;
           if (!window._isCategorySelectOpen && (activeTab === 'favorites' || activeTab === 'dictionary')) {
             renderTab(activeTab);
           }
         });
 
         window.addEventListener('myduo:progress_updated', () => {
+          if (window._isAppInitializing) return;
           if (activeTab === 'training' && window._showHubScreen) {
             updateHeaderUser();
             return;
@@ -1830,6 +1842,7 @@
         });
 
         window.addEventListener('myduo:cloud_synced', async () => {
+          if (window._isAppInitializing) return;
           updateHeaderUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
@@ -1920,7 +1933,7 @@
         }
 
         // 3. Load initial data and render complete DOM before hiding splash screen
-        const splashMinTimePromise = new Promise((r) => setTimeout(r, 450));
+        const splashMinTimePromise = new Promise((r) => setTimeout(r, 600));
 
         try {
           await loadData();
@@ -1934,7 +1947,10 @@
         } catch (err) {
           console.error('Initial tab render error:', err);
         } finally {
-          await splashMinTimePromise;
+          window._isAppInitializing = false;
+          try {
+            await splashMinTimePromise;
+          } catch (e) {}
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               if (typeof window.hideAppSplashScreen === 'function') {
