@@ -597,7 +597,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     } catch (e) {}
   }
 
-  // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on 3rd click, then alternating fast/slow)
+  // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on every 3rd playback: 3, 6, 9...)
   try {
     const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
     const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
@@ -613,7 +613,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     clickCount = 1;
   }
 
-  const isTurtleMode = clickCount >= 3 && (clickCount % 2 === 1);
+  const isTurtleMode = clickCount > 0 && (clickCount % 3 === 0);
   const accent = voiceAccentOverride || getSavedVoiceAccent();
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetLang = lang || (isUk ? 'en-GB' : 'en-US');

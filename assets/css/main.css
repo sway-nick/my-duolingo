@@ -678,7 +678,7 @@ body.notebook-theme .safe-area-top-fill,
   border-radius: 24px;
   padding: 3px;
   gap: 0;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(148, 163, 184, 0.35);
   box-sizing: border-box;
 }
 
@@ -694,6 +694,8 @@ body.notebook-theme .safe-area-top-fill,
   left: 0;
   background: #16a34a;
   border-radius: 20px;
+  border: 1px solid rgba(21, 128, 61, 0.3);
+  box-sizing: border-box;
   box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35);
   transition: transform 0.32s cubic-bezier(0.34, 1.35, 0.7, 1), width 0.25s ease;
   pointer-events: none;
@@ -730,6 +732,15 @@ body.notebook-theme .safe-area-top-fill,
   color: #ffffff !important;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+:not(.dark-theme) .mode-pill-btn:not(.active) {
+  color: #334155 !important;
+  font-weight: 700 !important;
+}
+
+:not(.dark-theme) .mode-pill-btn:not(.active):hover {
+  color: #0f172a !important;
 }
 
 .mode-pill-btn:disabled,
@@ -1593,7 +1604,7 @@ body.notebook-theme .word-notes-modal-text {
 .flashcard-3d-wrapper {
   perspective: 1000px;
   width: 100%;
-  margin: 0 auto;
+  margin: 12px auto 0;
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
@@ -1638,8 +1649,8 @@ body.notebook-theme .word-notes-modal-text {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #f1f5f9;
-  border: 2px solid #cbd5e1;
+  background: #eaeff5;
+  border: 1px solid rgba(148, 163, 184, 0.4);
   box-shadow: 4px 6px 18px rgba(15, 23, 42, 0.09), 1px 2px 5px rgba(15, 23, 42, 0.05);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
   transform: rotateX(0deg) translateZ(1px);
@@ -1654,7 +1665,7 @@ body.notebook-theme .word-notes-modal-text {
 
 .flashcard-face:hover {
   box-shadow: 5px 8px 26px rgba(15, 23, 42, 0.13), 2px 3px 8px rgba(15, 23, 42, 0.08);
-  border-color: var(--primary-color, #2563eb);
+  border-color: rgba(100, 116, 139, 0.55);
 }
 
 .dark-theme .flashcard-face:hover {
@@ -1667,8 +1678,8 @@ body.notebook-theme .word-notes-modal-text {
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background: #eef2f6;
-  border-color: #cbd5e1;
+  background: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.4);
   position: absolute;
   top: 0;
   left: 0;
@@ -1726,6 +1737,27 @@ body.notebook-theme .word-notes-modal-text {
 .flashcard-fav-btn.is-favorite {
   background: rgba(239, 68, 68, 0.12);
   border-color: rgba(239, 68, 68, 0.3);
+}
+
+:not(.dark-theme) .flashcard-sound-btn,
+:not(.dark-theme) .flashcard-fav-btn {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08) !important;
+  color: #334155 !important;
+}
+
+:not(.dark-theme) .flashcard-sound-btn:hover,
+:not(.dark-theme) .flashcard-fav-btn:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12) !important;
+}
+
+:not(.dark-theme) .flashcard-fav-btn.is-favorite {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #ef4444 !important;
 }
 
 @keyframes heartShimmer45 {
@@ -1861,7 +1893,7 @@ body.notebook-theme .word-notes-modal-text {
 .difficulty-buttons {
   display: flex;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 22px;
   animation: fadeInHint 0.25s ease-out;
 }
 
@@ -2276,57 +2308,81 @@ body.notebook-theme .word-notes-modal-text {
 .btn-learn {
   flex: 1;
   padding: 14px 16px;
-  min-height: 50px;
-  border-radius: var(--radius-md);
+  min-height: 52px;
+  border-radius: 18px !important;
   font-weight: 700;
-  font-size: 16px;
-  background: var(--primary-color, #2563eb);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 3px 0 #1d4ed8;
+  font-size: 16.5px;
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
 }
 
-.btn-learn:hover {
-  background: var(--primary-hover, #1d4ed8);
-  transform: translateY(-1px);
+.btn-learn:hover:not(:disabled) {
+  filter: brightness(1.05) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
 }
 
-.btn-learn:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #1d4ed8;
+.btn-learn:active:not(:disabled) {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Light theme secondary cushion styling for Learn (soft neutral secondary CTA) */
+:not(.dark-theme) .btn-learn {
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(148, 163, 184, 0.45) !important;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.1), inset 0 1px 1.5px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
+}
+
+:not(.dark-theme) .btn-learn:hover:not(:disabled) {
+  filter: brightness(1.03) !important;
+  background: linear-gradient(180deg, #e8edf4 0%, #cbd5e1 100%) !important;
+  color: #0f172a !important;
+  border-color: rgba(100, 116, 139, 0.5) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
+}
+
+:not(.dark-theme) .btn-learn:active:not(:disabled) {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12), inset 0 1px 1px rgba(0, 0, 0, 0.08) !important;
 }
 
 .btn-know {
   flex: 1;
   padding: 14px 16px;
-  min-height: 50px;
-  border-radius: var(--radius-md);
+  min-height: 52px;
+  border-radius: 18px !important;
   font-weight: 700;
-  font-size: 16px;
-  background: #16a34a;
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 3px 0 #15803d;
+  font-size: 16.5px;
+  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(21, 128, 61, 0.38) !important;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
 }
 
-.btn-know:hover {
-  background: #15803d;
-  transform: translateY(-1px);
+.btn-know:hover:not(:disabled) {
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  border-color: rgba(21, 128, 61, 0.55) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
 }
 
-.btn-know:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #15803d;
+.btn-know:active:not(:disabled) {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .secondary-button {
@@ -2638,26 +2694,26 @@ body.notebook-theme .word-notes-modal-text {
   transition: width 0.4s ease;
 }
 
-/* Chart Card - Elastic container filling remaining vertical space */
+/* Chart Card - Compact and stable container */
 .chart-card {
   background: var(--card-bg, #ffffff);
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  padding: 10px 10px 6px;
+  padding: 10px 10px 8px;
   margin-top: 0;
   margin-bottom: 0;
   box-shadow: var(--shadow-sm);
   width: 100%;
   box-sizing: border-box;
-  flex: 1 1 auto;
-  min-height: 110px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
 }
 
 .chart-svg-container {
-  flex: 1 1 auto;
-  min-height: 0;
+  height: 125px;
+  min-height: 125px;
+  max-height: 125px;
   width: 100%;
   position: relative;
   overflow: hidden;
@@ -3100,11 +3156,43 @@ body.notebook-theme .word-notes-modal-text {
 
 .settings-auth-btn {
   width: auto !important;
-  padding: 8px 16px !important;
-  min-height: 38px !important;
-  height: 38px !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
+  padding: 8px 20px !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  border-radius: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.primary-button.settings-auth-btn,
+#login-modal-btn.settings-auth-btn {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+}
+
+.primary-button.settings-auth-btn:hover:not(:disabled),
+#login-modal-btn.settings-auth-btn:hover:not(:disabled) {
+  filter: brightness(1.05) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+}
+
+.primary-button.settings-auth-btn:active:not(:disabled),
+#login-modal-btn.settings-auth-btn:active:not(:disabled) {
+  transform: translateY(1.5px) !important;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+.secondary-button.settings-auth-btn,
+#logout-btn.settings-auth-btn {
+  border-radius: 14px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .settings-page .custom-dropdown-trigger {
@@ -3586,13 +3674,22 @@ body.dark-theme .custom-dropdown-trigger {
 
 .train-left-badge {
   font-size: 13px;
-  font-weight: 600;
-  color: #16a34a;
+  font-weight: 700;
+  color: #15803d;
   margin-bottom: 8px;
-  background: rgba(22, 163, 74, 0.08);
+  background: #dcfce7;
+  border: 1px solid #86efac;
   padding: 4px 12px;
   border-radius: 12px;
   display: inline-block;
+  box-shadow: 0 1px 3px rgba(22, 163, 74, 0.1);
+}
+
+.dark-theme .train-left-badge {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: none;
 }
 
 .autoplay-favs-btn {
@@ -3643,6 +3740,8 @@ body.dark-theme .custom-dropdown-trigger {
 
 .autoplay-favs-btn-bottom {
   position: relative;
+  width: 100% !important;
+  box-sizing: border-box !important;
   background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
   color: #ffffff !important;
   border: none !important;
@@ -6229,7 +6328,7 @@ body.notebook-theme,
   border-bottom: 1.5px solid var(--border-color);
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 
@@ -6324,6 +6423,7 @@ body.notebook-theme,
   cursor: pointer;
   margin: 0;
   padding: 0;
+  align-self: center;
   flex-shrink: 0;
   transition: all 0.15s ease;
 }
@@ -8216,7 +8316,7 @@ body.dark-theme #clear-app-cache-btn:hover {
     rgba(255, 241, 200, 0.25) 53%,
     transparent 62%);
   mix-blend-mode: overlay;
-  opacity: 0.25;
+  opacity: 0;
   transform: translate(calc((var(--glare-x, 50%) - 50%) * 0.5), calc((var(--glare-y, 20%) - 50%) * 0.5));
   transition: opacity 0.3s ease;
 }
@@ -8242,13 +8342,15 @@ body.dark-theme #clear-app-cache-btn:hover {
 .bank-card.matte-gold .card-idle-shine {
   position: absolute;
   top: -60%;
-  left: -35%;
+  left: -55%;
   width: 45%;
   height: 220%;
   background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
   pointer-events: none;
+  opacity: 0;
   animation: idleSweep 6.5s ease-in-out infinite;
   animation-delay: 1.5s;
+  animation-fill-mode: backwards;
 }
 
 .wotd-tilt-container.is-hovering .card-idle-shine {
