@@ -23,27 +23,29 @@ function detectAndApplyAndroidApp() {
 detectAndApplyAndroidApp();
 
 function getSavedTheme() {
-  return localStorage.getItem('myduo_theme') || 'light';
+  const saved = localStorage.getItem('myduo_theme');
+  if (saved === 'notebook') {
+    localStorage.setItem('myduo_theme', 'light');
+    return 'light';
+  }
+  return saved || 'light';
 }
 
 function applyTheme(theme) {
-  localStorage.setItem('myduo_theme', theme);
+  const effectiveTheme = theme === 'notebook' ? 'light' : theme;
+  localStorage.setItem('myduo_theme', effectiveTheme);
   const app = document.querySelector('.mobile-app');
   document.documentElement.classList.remove('dark-theme', 'notebook-theme');
   document.body.classList.remove('dark-theme', 'notebook-theme');
   if (app) app.classList.remove('dark-theme', 'notebook-theme');
 
-  if (theme === 'dark') {
+  if (effectiveTheme === 'dark') {
     document.documentElement.classList.add('dark-theme');
     document.body.classList.add('dark-theme');
     if (app) app.classList.add('dark-theme');
-  } else if (theme === 'notebook') {
-    document.documentElement.classList.add('notebook-theme');
-    document.body.classList.add('notebook-theme');
-    if (app) app.classList.add('notebook-theme');
   }
   // Update Android status bar & navigation bar dynamically
-  const targetBg = theme === 'dark' ? '#0f172a' : theme === 'notebook' ? '#f5eedc' : '#f8fafc';
+  const targetBg = effectiveTheme === 'dark' ? '#0f172a' : '#f8fafc';
   document.documentElement.style.backgroundColor = targetBg;
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
