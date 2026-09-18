@@ -95,9 +95,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           <button class="theme-option-btn ${currentTheme === 'dark' ? 'active' : ''}" id="theme-dark-btn">
             ${t('settings_theme_dark')}
           </button>
-          <button class="theme-option-btn ${currentTheme === 'notebook' ? 'active' : ''}" id="theme-notebook-btn">
-            ${t('settings_theme_notebook')}
-          </button>
         </div>
       </div>
 
@@ -315,10 +312,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   // Bind theme buttons with auto-save
   const lightBtn = container.querySelector('#theme-light-btn');
   const darkBtn = container.querySelector('#theme-dark-btn');
-  const notebookBtn = container.querySelector('#theme-notebook-btn');
 
   function setActiveThemeBtn(active) {
-    [lightBtn, darkBtn, notebookBtn].forEach((b) => b && b.classList.remove('active'));
+    [lightBtn, darkBtn].forEach((b) => b && b.classList.remove('active'));
     if (active) active.classList.add('active');
   }
 
@@ -334,14 +330,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     darkBtn.addEventListener('click', () => {
       applyTheme('dark');
       setActiveThemeBtn(darkBtn);
-      triggerAutoSave();
-    });
-  }
-
-  if (notebookBtn) {
-    notebookBtn.addEventListener('click', () => {
-      applyTheme('notebook');
-      setActiveThemeBtn(notebookBtn);
       triggerAutoSave();
     });
   }

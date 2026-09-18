@@ -144,20 +144,25 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     const maxCum = Math.max(...days.map(d => d.cumulativeCount));
     const cumDiff = maxCum - minCum;
 
-    function buildChartSvg(height) {
-      const H = Math.max(Math.round(height), 100);
-      const chartBottom = H - 24;
-      const maxBarHeight = Math.max(Math.min(Math.round(H * 0.35), 72), 24);
+    function buildChartSvg(width = 352, height = 125) {
+      const W = Math.max(Math.round(width || 352), 260);
+      const H = Math.max(Math.round(height || 125), 100);
+      const chartBottom = H - 22;
+      const maxBarHeight = 36;
 
       let barsHtml = '';
       let points = [];
       let labelsHtml = '';
 
-      const topY = Math.max(Math.round(H * 0.16), 16);
-      const bottomY = Math.max(Math.round(chartBottom - maxBarHeight - 12), topY + 10);
+      const topY = 22;
+      const bottomY = Math.max(chartBottom - maxBarHeight - 6, topY + 8);
+
+      const paddingX = Math.round(W * 0.08);
+      const availableW = W - paddingX * 2;
+      const step = availableW / (days.length - 1);
 
       days.forEach((day, idx) => {
-        const x = 32 + idx * 48; // 32, 80, 128, 176, 224, 272, 320 (viewBox width 352)
+        const x = Math.round(paddingX + idx * step);
         const barHeight = day.dailyCount > 0 ? Math.max((day.dailyCount / maxDaily) * maxBarHeight, 5) : 0;
         const barY = chartBottom - barHeight;
 
@@ -198,11 +203,11 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         `;
       });
 
-      const grid1 = Math.round(H * 0.22);
-      const grid2 = Math.round(H * 0.52);
+      const grid1 = Math.round(H * 0.24);
+      const grid2 = Math.round(H * 0.54);
 
       return `
-        <svg viewBox="0 0 352 ${H}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="display: block; overflow: visible;">
+        <svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" preserveAspectRatio="none" style="display: block; overflow: visible;">
           <defs>
             <linearGradient id="stats-bar-grad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#60a5fa" />
@@ -211,9 +216,9 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           </defs>
 
           <!-- Baseline and grid -->
-          <line x1="15" y1="${grid1}" x2="337" y2="${grid1}" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
-          <line x1="15" y1="${grid2}" x2="337" y2="${grid2}" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
-          <line x1="15" y1="${chartBottom}" x2="337" y2="${chartBottom}" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
+          <line x1="12" y1="${grid1}" x2="${W - 12}" y2="${grid1}" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
+          <line x1="12" y1="${grid2}" x2="${W - 12}" y2="${grid2}" stroke="var(--border-color)" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.35" />
+          <line x1="12" y1="${chartBottom}" x2="${W - 12}" y2="${chartBottom}" stroke="var(--border-color)" stroke-width="1" opacity="0.7" />
 
           ${barsHtml}
           ${lineHtml}
@@ -232,7 +237,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           </div>
         </div>
         <div class="chart-svg-container" id="stats-chart-wrapper">
-          ${buildChartSvg(140)}
+          ${buildChartSvg(352, 125)}
         </div>
       </div>
     `;
@@ -284,30 +289,28 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       </div>
     `;
 
-    // Dynamic height measurement for elastic chart
+    // Responsive width adjustment for chart
     const chartWrapper = container.querySelector('#stats-chart-wrapper');
     if (chartWrapper) {
-      let lastHeight = 0;
-      const applyChartHeight = (h) => {
-        const measured = Math.round(h || chartWrapper.clientHeight);
-        if (measured >= 80 && Math.abs(measured - lastHeight) >= 2) {
-          lastHeight = measured;
-          chartWrapper.innerHTML = buildChartSvg(measured);
+      let lastWidth = 0;
+      const applyChartWidth = (w) => {
+        const measuredW = Math.round(w || chartWrapper.clientWidth || 352);
+        if (measuredW >= 200 && Math.abs(measuredW - lastWidth) >= 4) {
+          lastWidth = measuredW;
+          chartWrapper.innerHTML = buildChartSvg(measuredW, 125);
         }
       };
 
-      // Measure immediately after DOM insertion
       requestAnimationFrame(() => {
-        applyChartHeight();
+        applyChartWidth();
       });
 
-      // Watch for responsive size changes (e.g. orientation, window resize)
       if (typeof ResizeObserver !== 'undefined') {
         const ro = new ResizeObserver((entries) => {
           for (const entry of entries) {
-            const h = entry.contentRect ? entry.contentRect.height : null;
-            if (h && h >= 80) {
-              applyChartHeight(h);
+            const w = entry.contentRect ? entry.contentRect.width : null;
+            if (w && w >= 200) {
+              applyChartWidth(w);
             }
           }
         });

@@ -46,6 +46,15 @@ const AUTOPLAY_HEADPHONES_SVG = `<svg width="22" height="22" viewBox="0 0 24 24"
 
 const AUTOPLAY_PAUSE_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" style="display: block;"><rect x="5" y="4" width="4.5" height="16" rx="1.5"></rect><rect x="14.5" y="4" width="4.5" height="16" rx="1.5"></rect></svg>`;
 
+const FC_SOUND_ICON_HTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`;
+
+function getCardFavIconHtml(isFav) {
+  if (isFav) {
+    return `<svg width="19" height="19" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+  }
+  return `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+}
+
 function getFavsAutoplayBtnContent(isPlaying) {
   const icon = isPlaying ? AUTOPLAY_PAUSE_SVG : AUTOPLAY_HEADPHONES_SVG;
   const label = isPlaying ? t('fav_autoplay_stop') : t('fav_autoplay_listen');
@@ -486,7 +495,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   </div>
                 `
                   : `
-                  <div class="train-left-badge cards-learning-badge" style="font-size: 13px; font-weight: 600; color: #16a34a; margin-bottom: 8px; background: rgba(22, 163, 74, 0.08); padding: 4px 12px; border-radius: 12px; display: inline-block;">
+                  <div class="train-left-badge cards-learning-badge">
                     🗂️ <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>
                   </div>
                 `
@@ -2624,9 +2633,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         <div class="flashcard-3d ${startFlipped ? 'is-flipped' : ''}" id="flashcard-3d" title="${t('train_flip_card_hint')}">
           <div class="flashcard-face flashcard-front">
             <div class="flashcard-face-top">
-              <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="${t('train_listen_audio')}">🔊</button>
+              <button type="button" class="flashcard-sound-btn" id="fc-sound-front" title="${t('train_listen_audio')}">${FC_SOUND_ICON_HTML}</button>
               <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-front" title="${t('train_to_favorites')}">
-                ${favorited ? '❤️' : '🤍'}
+                ${getCardFavIconHtml(favorited)}
               </button>
             </div>
             <div class="flashcard-face-body">
@@ -2640,9 +2649,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           <div class="flashcard-face flashcard-back">
             <div class="flashcard-face-top">
-              <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="${t('train_listen_audio')}">🔊</button>
+              <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="${t('train_listen_audio')}">${FC_SOUND_ICON_HTML}</button>
               <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-back" title="${t('train_to_favorites')}">
-                ${favorited ? '❤️' : '🤍'}
+                ${getCardFavIconHtml(favorited)}
               </button>
             </div>
             <div class="flashcard-face-body">
@@ -2671,14 +2680,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         ${
           isFavPractice
             ? `
-          <div class="difficulty-buttons" style="display: flex; margin-top: 20px; width: 100%; justify-content: center;">
-            <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; max-width: 320px; font-size: 18px; font-weight: 700; border-radius: 18px; display: flex; align-items: center; justify-content: center;">
+          <div class="difficulty-buttons" style="display: flex; margin-top: 24px; width: 100%;">
+            <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; font-size: 18px; font-weight: 700; border-radius: 18px; display: flex; align-items: center; justify-content: center;">
               ${getFavsAutoplayBtnContent(window.__favsAutoplayRunning)}
             </button>
           </div>
         `
             : `
-          <div class="difficulty-buttons" id="card-feedback-btns" style="display:none; margin-top: 16px; gap: 12px;">
+          <div class="difficulty-buttons" id="card-feedback-btns">
             <button type="button" class="btn-learn" id="btn-learn">
               ${t('train_learn')}
             </button>
@@ -2928,11 +2937,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const favFront = practiceArea.querySelector('#fc-fav-front');
       const favBack = practiceArea.querySelector('#fc-fav-back');
       if (favFront) {
-        favFront.textContent = favorited ? '❤️' : '🤍';
+        favFront.innerHTML = getCardFavIconHtml(favorited);
         favFront.classList.toggle('is-favorite', favorited);
       }
       if (favBack) {
-        favBack.textContent = favorited ? '❤️' : '🤍';
+        favBack.innerHTML = getCardFavIconHtml(favorited);
         favBack.classList.toggle('is-favorite', favorited);
       }
       await toggleFavoriteApi(currentWord.id, favorited);
