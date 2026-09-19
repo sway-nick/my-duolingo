@@ -1,6 +1,6 @@
 import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=200.0';
 import { setCurrentUser } from '../../services/authService.js?v=200.0';
-import { loginWithGoogle, signInWithGoogleIdToken } from '../../services/firebase.js?v=200.0';
+import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail } from '../../services/firebase.js?v=200.0';
 import { t } from '../../services/i18n.js?v=200.0';
 
 const GOOGLE_CLIENT_ID = '249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com';
@@ -412,8 +412,8 @@ function renderAuthModal(onSuccessCallback) {
         errorBox.style.display = 'block';
         return;
       }
-      if (password.length < 4) {
-        errorBox.textContent = t('auth_err_password_length');
+      if (password.length < 6) {
+        errorBox.textContent = 'Пароль должен содержать не менее 6 символов';
         errorBox.style.display = 'block';
         return;
       }
@@ -424,21 +424,87 @@ function renderAuthModal(onSuccessCallback) {
 
     try {
       let res;
-      if (mode === 'login') {
-        res = await loginUser(email, password);
-      } else {
-        res = await registerUser(email, password, name);
-      }
+      let fbUser = null;
 
-      if (res && res.success && res.data?.user) {
-        setCurrentUser(res.data.user, res.data.token);
+      if (mode === 'register') {
+        // 1. Register with Firebase Auth cloud to get official ID token
         try {
-          await fetchUserDataFromCloud(res.data.user.id);
-        } catch (e) {}
-        modal.remove();
-        if (onSuccessCallback) onSuccessCallback(res.data.user);
+          fbUser = await registerWithEmail(email, password, name);
+        } catch (fbErr) {
+          if (fbErr.code === 'auth/email-already-in-use' || fbErr.code === 'auth/weak-password' || fbErr.code === 'auth/invalid-email') {
+            throw fbErr;
+          }
+          console.warn('Firebase registration fallback note:', fbErr);
+        }
+
+        // 2. Initialize local user profile and defaults
+        res = await registerUser(email, password, name);
+        if (res && res.success && res.data?.user) {
+          const finalUser = {
+            ...res.data.user,
+            name: name || res.data.user.name,
+            provider: 'email',
+            firebaseUid: fbUser?.id || '',
+            idToken: fbUser?.idToken || '',
+          };
+          setCurrentUser(finalUser, fbUser?.idToken || res.data.token);
+          try {
+            await fetchUserDataFromCloud(finalUser.id);
+          } catch (e) {}
+          modal.remove();
+          if (onSuccessCallback) onSuccessCallback(finalUser);
+          return;
+        } else {
+          throw new Error(res?.error || t('auth_err_failed'));
+        }
       } else {
-        throw new Error(res?.error || t('auth_err_failed'));
+        // Mode === 'login'
+        // 1. Try Firebase Auth cloud login
+        try {
+          fbUser = await loginWithEmail(email, password);
+        } catch (fbErr) {
+          if (fbErr.code === 'auth/invalid-credential' || fbErr.code === 'auth/user-disabled') {
+            // Check local fallback
+            const localRes = await loginUser(email, password);
+            if (localRes && localRes.success) {
+              res = localRes;
+            } else {
+              throw fbErr;
+            }
+          } else {
+            console.warn('Firebase login network fallback:', fbErr);
+            res = await loginUser(email, password);
+          }
+        }
+
+        if (fbUser) {
+          // Sync local user record
+          res = await registerUser(email, password, fbUser.name || name || email.split('@')[0]);
+          const finalUser = {
+            ...res.data.user,
+            name: fbUser.name || res.data.user.name,
+            provider: 'email',
+            firebaseUid: fbUser.id,
+            idToken: fbUser.idToken,
+          };
+          setCurrentUser(finalUser, fbUser.idToken);
+          try {
+            await fetchUserDataFromCloud(finalUser.id);
+          } catch (e) {}
+          modal.remove();
+          if (onSuccessCallback) onSuccessCallback(finalUser);
+          return;
+        } else if (res && res.success && res.data?.user) {
+          setCurrentUser(res.data.user, res.data.token);
+          try {
+            await fetchUserDataFromCloud(res.data.user.id);
+          } catch (e) {}
+          modal.remove();
+          if (onSuccessCallback) onSuccessCallback(res.data.user);
+          return;
+        } else {
+          throw new Error(res?.error || t('auth_err_failed'));
+        }
       }
     } catch (err) {
       errorBox.textContent = err.message || t('auth_err_failed');
