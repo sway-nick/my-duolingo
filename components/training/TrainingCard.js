@@ -24,6 +24,7 @@ import {
   getUserFavorites,
   getUserProgress,
   isWordMastered,
+  prepareTrainingBatch,
   transcribeAudio,
   transcribePingAudio,
 } from '../../services/api.js?v=200.0';
@@ -425,6 +426,29 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const isPairsMode = currentMethod === 'pairs';
   const isInputMode = currentMethod === 'input';
 
+  let cardsBadgeText = '';
+  if (isCardsMode && !isFavPractice) {
+    const catWords = (selectedCategory === 'All' || !selectedCategory)
+      ? (allWords || [])
+      : (allWords || []).filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+    const favList = getUserFavorites() || [];
+    const favSet = new Set(favList.map(String));
+
+    const totalUnmastered = catWords.filter((w) => {
+      const p = progressMap[w.id] || progressMap[String(w.id)];
+      return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
+    });
+
+    const pickedCount = catWords.filter((w) => {
+      const p = progressMap[w.id] || progressMap[String(w.id)];
+      return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
+    }).length;
+
+    const targetCount = Math.min(10, totalUnmastered.length || 10);
+    const currentDisplay = Math.max(1, Math.min(pickedCount + 1, targetCount));
+    cardsBadgeText = t('conveyor_in_learning', { current: currentDisplay, total: targetCount });
+  }
+
   const wordNotes = getWordNotes(currentWord);
   const hasNotes = Boolean(wordNotes && String(wordNotes).trim().length > 0);
   const notesBtnHtml = hasNotes
@@ -496,7 +520,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 `
                   : `
                   <div class="train-left-badge cards-learning-badge">
-                    🗂️ <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>
+                    <strong>${cardsBadgeText}</strong>
                   </div>
                 `
               )
@@ -2680,7 +2704,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         ${
           isFavPractice
             ? `
-          <div class="difficulty-buttons" style="display: flex; margin-top: 24px; width: 100%;">
+          <div class="difficulty-buttons" style="display: flex; margin-top: 34px; width: 100%;">
             <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; font-size: 18px; font-weight: 700; border-radius: 18px; display: flex; align-items: center; justify-content: center;">
               ${getFavsAutoplayBtnContent(window.__favsAutoplayRunning)}
             </button>
@@ -2777,6 +2801,69 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
     }
 
+    const handleLearnCard = async () => {
+      triggerHaptic('light');
+      stopAllAudio();
+      await saveProgress(currentWord.id, true, 'cards_learn', { isFavPractice });
+      if (!isFavPractice) {
+        const freshProg = getUserProgress();
+        const catWords = (selectedCategory === 'All' || !selectedCategory)
+          ? (allWords || [])
+          : (allWords || []).filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+        const favList = getUserFavorites();
+        const favSet = new Set(favList.map(String));
+        const totalUnmastered = catWords.filter((w) => {
+          const p = freshProg[w.id] || freshProg[String(w.id)];
+          return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
+        });
+        const pickedCount = catWords.filter((w) => {
+          const p = freshProg[w.id] || freshProg[String(w.id)];
+          return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
+        }).length;
+        const targetCount = Math.min(10, totalUnmastered.length || 10);
+        if (pickedCount >= targetCount && targetCount > 0) {
+          prepareTrainingBatch(catWords, freshProg, favList);
+          if (typeof onMethodChange === 'function') {
+            onMethodChange('quiz');
+            return;
+          }
+        }
+      }
+      onNext();
+    };
+
+    const handleKnowCard = async () => {
+      playSuccessSound();
+      stopAllAudio();
+      await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
+      setTimeout(() => {
+        if (!isFavPractice) {
+          const freshProg = getUserProgress();
+          const catWords = (selectedCategory === 'All' || !selectedCategory)
+            ? (allWords || [])
+            : (allWords || []).filter((w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory));
+          const favList = getUserFavorites();
+          const favSet = new Set(favList.map(String));
+          const remainingCandidates = catWords.filter((w) => {
+            const p = freshProg[w.id] || freshProg[String(w.id)];
+            return !favSet.has(String(w.id)) && (!p || !p.roundCardsDone) && !isWordMastered(p);
+          });
+          const pickedCount = catWords.filter((w) => {
+            const p = freshProg[w.id] || freshProg[String(w.id)];
+            return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
+          }).length;
+          if (remainingCandidates.length === 0 && pickedCount > 0) {
+            prepareTrainingBatch(catWords, freshProg, favList);
+            if (typeof onMethodChange === 'function') {
+              onMethodChange('quiz');
+              return;
+            }
+          }
+        }
+        onNext();
+      }, 150);
+    };
+
     async function onEnd() {
       if (!isTouchActive) return;
       isTouchActive = false;
@@ -2797,14 +2884,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             flashcardWrapper.style.transform = `translate3d(-120vw, ${targetDy * 0.15}px, 0) rotate(-22deg)`;
             flashcardWrapper.style.opacity = '0';
           }
-          playSuccessSound();
-          await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
-          setTimeout(() => {
-            onNext();
-          }, 150);
+          await handleKnowCard();
         } else {
-          // SWIPE RIGHT -> Return to Previous Word
-          if (canGoPrev && typeof onPrev === 'function') {
+          // SWIPE RIGHT:
+          if (isCardsMode && !isFavPractice) {
+            // In conveyor Cards mode: SWIPE RIGHT -> "Учить"
+            if (flashcardWrapper) {
+              flashcardWrapper.style.transition = 'transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.16s ease';
+              flashcardWrapper.style.transform = `translate3d(120vw, ${targetDy * 0.15}px, 0) rotate(22deg)`;
+              flashcardWrapper.style.opacity = '0';
+            }
+            await handleLearnCard();
+          } else if (canGoPrev && typeof onPrev === 'function') {
             triggerHaptic('light');
             if (flashcardWrapper) {
               flashcardWrapper.style.transition = 'transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.16s ease';
@@ -2950,21 +3041,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-fav-front')?.addEventListener('click', handleCardFav);
     practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
 
-    practiceArea.querySelector('#btn-learn')?.addEventListener('click', async () => {
-      triggerHaptic('light');
-      stopAllAudio();
-      await saveProgress(currentWord.id, true, 'cards_learn', { isFavPractice });
-      onNext();
-    });
-
-    practiceArea.querySelector('#btn-know')?.addEventListener('click', async () => {
-      playSuccessSound();
-      stopAllAudio();
-      await saveProgress(currentWord.id, true, 'cards_know', { isFavPractice });
-      setTimeout(() => {
-        onNext();
-      }, 150);
-    });
+    practiceArea.querySelector('#btn-learn')?.addEventListener('click', handleLearnCard);
+    practiceArea.querySelector('#btn-know')?.addEventListener('click', handleKnowCard);
 
     // Autoplay Loop handler for Favorites in Cards mode
     if (isCardsMode && isFavPractice) {
