@@ -4,7 +4,7 @@ import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
 import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=200.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=200.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=200.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=200.0';
 
@@ -179,7 +179,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const autoSaveStatus = container.querySelector('#autosave-status');
 
   // Helper: auto-save function (non-blocking)
-  function triggerAutoSave() {
+  function triggerAutoSave(langOverride) {
+    const activeLang = langOverride || localStorage.getItem('myduo_interface_lang') || 'en';
+    currentSettingsObj.interfaceLang = activeLang;
     const newSettings = {
       ...currentSettingsObj,
       dailyGoal: 10,
@@ -187,6 +189,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       voiceAccent: currentAccent,
       voiceGender: currentAccent === 'uk' ? 'male' : 'female',
       sfxMuted: isSfxMutedVal,
+      interfaceLang: activeLang,
     };
 
     if (autoSaveStatus) {
@@ -404,18 +407,22 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         e.preventDefault();
         e.stopPropagation();
         const val = item.dataset.value;
-        localStorage.setItem('myduo_interface_lang', val);
+        if (typeof setInterfaceLanguage === 'function') {
+          setInterfaceLanguage(val);
+        } else {
+          localStorage.setItem('myduo_interface_lang', val);
+          window.dispatchEvent(new Event('myduo:lang_changed'));
+        }
         updateLangUI(val);
         langDropdown.classList.remove('open');
         
-        // Dispatch event to reload other tabs/header and words immediately
-        window.dispatchEvent(new Event('myduo:lang_changed'));
-        
+        currentSettingsObj.interfaceLang = val;
+
         // Background refresh words with new language
         getWords(true).catch(() => {});
 
-        // Save in background
-        triggerAutoSave();
+        // Save in background with explicit language
+        triggerAutoSave(val);
 
         // In-place update text of settings view dynamically without wiping the DOM
         renderSettingsView(containerSelector, onUserChange);

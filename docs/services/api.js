@@ -1070,6 +1070,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   const prog = local[wordId];
   prog.lastPracticed = Date.now();
+  prog.lastReviewedAt = Date.now();
   let autoFavorited = false;
 
   // Calculate XP change based on mode and correctness
@@ -1086,8 +1087,11 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     prog.seenInCards = true;
     prog.roundCardsDone = true;
     prog.roundQuizDone = false;
+    prog.roundPairsDone = false;
+    prog.roundTestDone = false;
     prog.stage = 'quiz';
     prog.quizCorrect = 0;
+    prog.lastReviewedAt = Date.now();
   } else if (method === 'cards_repeat_round') {
     prog.seenInCards = true;
     prog.roundCardsDone = true;
@@ -1095,12 +1099,15 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     prog.quizCorrect = 0;
     prog.pairsCorrect = 0;
   } else if (method === 'cards_know') {
+    prog.known = true;
+    prog.mastered = true;
     prog.seenInCards = true;
-    prog.roundCardsDone = true;
-    prog.quizCorrect = Math.max(prog.quizCorrect || 0, 5);
-    prog.roundQuizDone = true;
-    prog.stage = 'pairs';
-    if (!prog.pairsCorrect) prog.pairsCorrect = 0;
+    prog.lastReviewedAt = Date.now();
+    prog.roundCardsDone = false;
+    prog.roundQuizDone = false;
+    prog.roundPairsDone = false;
+    prog.roundTestDone = false;
+    prog.stage = 'mastered';
   } else if (method === 'cards') {
     prog.seenInCards = true;
     prog.roundCardsDone = true;
@@ -1190,6 +1197,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
                 prog.masteredAt = Date.now();
               }
               prog.stage = 'mastered';
+              prog.roundTestDone = true;
             }
           }
         }
@@ -1510,12 +1518,16 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       }
     }
 
+    const activeLocalLang = localStorage.getItem('myduo_interface_lang');
     const mergedSettings = {
       ...(fbDoc?.settings || {}),
       ...(detDoc?.settings || {}),
       ...(fullDoc?.settings || {}),
       ...(JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}'))
     };
+    if (activeLocalLang) {
+      mergedSettings.interfaceLang = activeLocalLang;
+    }
     if (Object.keys(mergedSettings).length > 0) {
       localStorage.setItem(`settings_${uId}`, JSON.stringify(mergedSettings));
       if (fbUid && fbUid !== uId) {
@@ -1803,6 +1815,7 @@ function isWordMastered(prog) {
   if (!prog) return false;
   return Boolean(
     prog.mastered === true ||
+    prog.known === true ||
     (prog.inputCorrect !== undefined && Number(prog.inputCorrect) >= 2)
   );
 }
@@ -1822,61 +1835,86 @@ function getWordStage(prog) {
 }
 
 function getQueueForCards(words, progress, favorites = null) {
+  if (!words || words.length === 0) return [];
   const favs = favorites !== null ? favorites : (typeof getUserFavorites === 'function' ? getUserFavorites() : []);
-  const batch = getActiveConveyorBatch(words, progress, favs);
-  if (!batch || batch.length === 0) return [];
-
   const favSet = new Set((favs || []).map(String));
 
-  return batch.filter((w) => {
+  // Count unmastered words already accepted into the learning batch this round
+  const pickedInRound = words.filter((w) => {
     const p = progress[w.id] || progress[String(w.id)];
-    // Exclude Favorites and Mastered from Cards - they only repeat in Quiz / Pairs / Test!
+    return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
+  });
+
+  const totalUnmastered = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
+    return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
+  });
+
+  const targetCount = Math.min(10, totalUnmastered.length);
+
+  // If target quota (10 unmastered words) is already selected, Cards intake is done!
+  if (pickedInRound.length >= targetCount && targetCount > 0) {
+    return [];
+  }
+
+  // Candidate unmastered words that have NOT yet been accepted
+  const candidates = words.filter((w) => {
+    const p = progress[w.id] || progress[String(w.id)];
     if (favSet.has(String(w.id))) return false;
     if (p && isWordMastered(p)) return false;
     return !p || p.roundCardsDone !== true;
   });
+
+  // Sort candidate intake strictly by Zipf frequency descending (most frequent first)
+  candidates.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
+
+  return candidates;
 }
 
-function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
+function prepareTrainingBatch(categoryWords, userProgress, favorites = [], pickedWords = []) {
   if (!categoryWords || categoryWords.length === 0) return [];
 
   const favSet = new Set((favorites || []).map(String));
 
   // 1. Gather up to 10 base words (ONLY NEW / UNMASTERED words, NEVER Favorites!):
-  // Filter out any word that is in favorites or already mastered
-  const candidateNewWords = categoryWords.filter((w) => {
-    const p = userProgress[w.id] || userProgress[String(w.id)];
-    return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
-  });
+  let baseWords = [];
+  if (Array.isArray(pickedWords) && pickedWords.length > 0) {
+    baseWords = pickedWords.slice(0, 10);
+  } else {
+    // Filter out any word that is in favorites or already mastered
+    const candidateNewWords = categoryWords.filter((w) => {
+      const p = userProgress[w.id] || userProgress[String(w.id)];
+      return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
+    });
 
-  // Split candidate new words into those with pending round cards vs unstarted
-  const pendingInRound = candidateNewWords.filter((w) => {
-    const p = userProgress[w.id] || userProgress[String(w.id)];
-    return p && !p.roundCardsDone;
-  });
+    // Split candidate new words into those with pending round cards vs unstarted
+    const pendingInRound = candidateNewWords.filter((w) => {
+      const p = userProgress[w.id] || userProgress[String(w.id)];
+      return p && p.roundCardsDone;
+    });
 
-  const unstarted = candidateNewWords.filter((w) => {
-    const p = userProgress[w.id] || userProgress[String(w.id)];
-    return !p || !p.seenInCards;
-  });
-  unstarted.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
+    const unstarted = candidateNewWords.filter((w) => {
+      const p = userProgress[w.id] || userProgress[String(w.id)];
+      return !p || !p.seenInCards;
+    });
+    unstarted.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
 
-  // Combine to form baseWords (up to 10)
-  const baseWordsSet = new Set();
-  const baseWords = [];
-  for (const w of [...pendingInRound, ...unstarted]) {
-    if (baseWords.length >= 10) break;
-    const idStr = String(w.id);
-    if (!baseWordsSet.has(idStr)) {
-      baseWordsSet.add(idStr);
-      baseWords.push(w);
+    // Combine to form baseWords (up to 10)
+    const baseWordsSet = new Set();
+    for (const w of [...pendingInRound, ...unstarted]) {
+      if (baseWords.length >= 10) break;
+      const idStr = String(w.id);
+      if (!baseWordsSet.has(idStr)) {
+        baseWordsSet.add(idStr);
+        baseWords.push(w);
+      }
     }
-  }
 
-  // If still empty (e.g. all non-favorite words are mastered), fallback to any unmastered words
-  if (baseWords.length === 0) {
-    const remainingUnmastered = candidateNewWords.slice(0, 10);
-    baseWords.push(...remainingUnmastered);
+    // If still empty (e.g. all non-favorite words are mastered), fallback to any unmastered words
+    if (baseWords.length === 0) {
+      const remainingUnmastered = candidateNewWords.slice(0, 10);
+      baseWords.push(...remainingUnmastered);
+    }
   }
 
   if (baseWords.length === 0) {
@@ -1885,17 +1923,29 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
 
   const baseIds = new Set(baseWords.map((w) => String(w.id)));
 
-  // 2. Pick up to 5 oldest favorites of the category (sorted by lastPracticed ascending)
+  // Word pool for review words (favorites and mastered):
+  // Search within categoryWords first, supplemented by cachedWordsList if available
+  let reviewWordPool = [...categoryWords];
+  if (cachedWordsList && Array.isArray(cachedWordsList) && cachedWordsList.length > categoryWords.length) {
+    const catIds = new Set(categoryWords.map((w) => String(w.id)));
+    for (const w of cachedWordsList) {
+      if (!catIds.has(String(w.id))) {
+        reviewWordPool.push(w);
+      }
+    }
+  }
+
+  // 2. Pick up to 5 oldest Favorites (LRU by lastReviewedAt / lastPracticed ascending)
   let injectedFavs = [];
   if (favorites && favorites.length > 0) {
-    const candidateFavs = categoryWords.filter((w) => {
+    const candidateFavs = reviewWordPool.filter((w) => {
       return favSet.has(String(w.id)) && !baseIds.has(String(w.id));
     });
     candidateFavs.sort((a, b) => {
       const pA = userProgress[a.id] || userProgress[String(a.id)];
       const pB = userProgress[b.id] || userProgress[String(b.id)];
-      const tA = pA ? (pA.lastPracticed || 0) : 0;
-      const tB = pB ? (pB.lastPracticed || 0) : 0;
+      const tA = pA ? (pA.lastReviewedAt || pA.lastPracticed || 0) : 0;
+      const tB = pB ? (pB.lastReviewedAt || pB.lastPracticed || 0) : 0;
       return tA - tB;
     });
     injectedFavs = candidateFavs.slice(0, 5);
@@ -1903,19 +1953,20 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
 
   const combinedIds = new Set([...baseIds, ...injectedFavs.map((w) => String(w.id))]);
 
-  // 3. If favorites < 5, fill remainder up to 5 from oldest mastered words
-  const neededMastered = Math.max(0, 5 - injectedFavs.length);
+  // 3. Pick oldest Mastered words (LRU by lastReviewedAt / lastPracticed / masteredAt ascending)
+  // Quota: 5 words + shortfall from favorites if favorites < 5 (total review words up to 10)
+  const neededMastered = Math.max(0, 10 - injectedFavs.length);
   let injectedMastered = [];
   if (neededMastered > 0) {
-    const candidateMastered = categoryWords.filter((w) => {
+    const candidateMastered = reviewWordPool.filter((w) => {
       const p = userProgress[w.id] || userProgress[String(w.id)];
       return p && isWordMastered(p) && !combinedIds.has(String(w.id));
     });
     candidateMastered.sort((a, b) => {
       const pA = userProgress[a.id] || userProgress[String(a.id)];
       const pB = userProgress[b.id] || userProgress[String(b.id)];
-      const tA = pA ? (pA.lastPracticed || pA.masteredAt || 0) : 0;
-      const tB = pB ? (pB.lastPracticed || pB.masteredAt || 0) : 0;
+      const tA = pA ? (pA.lastReviewedAt || pA.lastPracticed || pA.masteredAt || 0) : 0;
+      const tB = pB ? (pB.lastReviewedAt || pB.lastPracticed || pB.masteredAt || 0) : 0;
       return tA - tB;
     });
     injectedMastered = candidateMastered.slice(0, neededMastered);
@@ -1923,8 +1974,8 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = []) {
 
   const bonusWords = [...injectedFavs, ...injectedMastered];
 
-  // Up to 15 words: up to 10 base (new words) + up to 5 review (favs + mastered)
-  return [...baseWords, ...bonusWords].slice(0, 15);
+  // Up to 20 words in conveyor: up to 10 base (new words) + up to 10 review (5 favs + 5 mastered)
+  return [...baseWords, ...bonusWords].slice(0, 20);
 }
 
 function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
@@ -1940,6 +1991,10 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
 
   if (Array.isArray(batchIds) && batchIds.length > 0) {
     const wordMap = new Map();
+    // Index category words first, then cachedWordsList for any injected review words
+    if (cachedWordsList && Array.isArray(cachedWordsList)) {
+      cachedWordsList.forEach((w) => wordMap.set(String(w.id), w));
+    }
     categoryWords.forEach((w) => wordMap.set(String(w.id), w));
     const resolved = batchIds.map((id) => wordMap.get(String(id))).filter(Boolean);
     
@@ -2164,6 +2219,7 @@ async function getUserSettings() {
   const userId = getEffectiveUserId();
   const key = `settings_${userId}`;
   const saved = localStorage.getItem(key);
+  const activeLang = localStorage.getItem('myduo_interface_lang') || 'en';
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
@@ -2178,6 +2234,7 @@ async function getUserSettings() {
         category: 'Elementary',
         preferredMethod: 'cards',
         ...parsed,
+        interfaceLang: activeLang,
       };
     } catch (e) {}
   }
@@ -2188,6 +2245,7 @@ async function getUserSettings() {
     level: 'Elementary',
     category: 'Elementary',
     preferredMethod: 'cards',
+    interfaceLang: activeLang,
   };
 }
 
@@ -2197,7 +2255,13 @@ async function saveUserSettings(settings) {
     ? settings.category
     : 'Elementary';
 
-  const currentLang = localStorage.getItem('myduo_interface_lang') || 'en';
+  // Primary source of truth for language is active selection in localStorage or explicit override
+  const activeLocalLang = localStorage.getItem('myduo_interface_lang');
+  let currentLang = (settings && settings.interfaceLang && settings.interfaceLang !== 'undefined')
+    ? settings.interfaceLang
+    : (activeLocalLang || 'en');
+  localStorage.setItem('myduo_interface_lang', currentLang);
+
   const currentTheme = localStorage.getItem('myduo_theme') || 'light';
   const currentAccent = localStorage.getItem('myduo_voice_accent') || 'us';
   const currentSfx = localStorage.getItem('myduo_sfx_muted') === 'true';
@@ -2220,11 +2284,11 @@ async function saveUserSettings(settings) {
   const payload = {
     dailyGoal: 10,
     theme: currentTheme,
-    interfaceLang: currentLang,
     voiceAccent: currentAccent,
     sfxMuted: currentSfx,
     downloadedCategories: downloadedCats,
     ...settings,
+    interfaceLang: currentLang,
     preferredMethod: settings.preferredMethod || 'cards',
     category: cat,
     level: cat,
