@@ -670,9 +670,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const leftBadge = container.querySelector('.cards-learning-badge') || container.querySelector('.train-left-badge');
     if (leftBadge) {
       if (isFavPractice) {
-        leftBadge.innerHTML = `${t('fav_title')}: <strong>${activeWords.length}</strong>`;
+        const favLabel = t('fav_title') || 'Избранное';
+        leftBadge.innerHTML = `${favLabel}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>`;
       } else if (isCardsMode) {
-        leftBadge.innerHTML = `🗂️ <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>`;
+        leftBadge.innerHTML = `<strong>${cardsBadgeText}</strong>`;
       } else {
         leftBadge.innerHTML = `🎯 <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1} / ${activeWords.length}</strong>`;
       }
