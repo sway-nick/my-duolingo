@@ -4,7 +4,8 @@ import { execSync } from 'child_process';
 
 const ROOT_SOURCE = 'c:/projects/my-duolingo';
 const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
-const JAVA_HOME = 'C:\\Program Files\\Android\\Android Studio\\jbr';
+const userJdks = path.join(process.env.USERPROFILE || 'C:\\Users\\user', '.jdks', 'jbr-21.0.11');
+const JAVA_HOME = fs.existsSync(userJdks) ? userJdks : 'C:\\Program Files\\Android\\Android Studio\\jbr';
 
 console.log('====================================================');
 console.log('🚀 STANDARDIZED ANDROID APK BUILD (Section 12 Compliant)');

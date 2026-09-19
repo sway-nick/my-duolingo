@@ -140,7 +140,113 @@ export async function loginWithEmail(email, password) {
   return user;
 }
 
+export async function signInWithGoogleIdToken(googleIdToken = '', accessToken = '') {
+  if (!googleIdToken && !accessToken) return null;
+  try {
+    const config = getFirebaseConfig();
+    const body = {
+      postBody: googleIdToken
+        ? `id_token=${encodeURIComponent(googleIdToken)}&providerId=google.com`
+        : `access_token=${encodeURIComponent(accessToken)}&providerId=google.com`,
+      requestUri: 'http://localhost',
+      returnIdpCredential: true,
+      returnSecureToken: true,
+    };
+    const res = await fetch(`${AUTH_BASE}/accounts:signInWithIdp?key=${config.apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) {
+      console.warn('Firebase signInWithIdp error:', data.error);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.warn('Firebase IDP exchange error:', err);
+    return null;
+  }
+}
+
 export async function loginWithGoogle() {
+  // 1. Native Android Bridge (Play Services Auth via AndroidAuthBridge)
+  if (window.AndroidAuthBridge && typeof window.AndroidAuthBridge.signInWithGoogle === 'function') {
+    const rawNativeUser = await new Promise((resolve, reject) => {
+      let settled = false;
+      const cleanup = () => {
+        window.onNativeGoogleSignInSuccess = null;
+        window.onNativeGoogleSignInFailure = null;
+        window.onNativeGoogleSignInCancelled = null;
+      };
+      window.onNativeGoogleSignInSuccess = (userObj) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resolve(userObj);
+      };
+      window.onNativeGoogleSignInFailure = (errObj) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(new Error(errObj?.error || 'Ошибка входа через Google'));
+      };
+      window.onNativeGoogleSignInCancelled = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(new Error('cancelled'));
+      };
+
+      try {
+        window.AndroidAuthBridge.signInWithGoogle();
+      } catch (err) {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(err);
+      }
+    });
+
+    let firebaseIdToken = rawNativeUser.idToken || '';
+    let firebaseUid = rawNativeUser.id || '';
+    let refreshToken = '';
+    let expiresAt = Date.now() + 3600 * 1000;
+
+    // Exchange Google ID Token with Firebase REST API for full Firestore access
+    if (rawNativeUser.idToken) {
+      try {
+        const fbRes = await signInWithGoogleIdToken(rawNativeUser.idToken);
+        if (fbRes && fbRes.idToken) {
+          firebaseIdToken = fbRes.idToken;
+          firebaseUid = fbRes.localId || firebaseUid;
+          refreshToken = fbRes.refreshToken || '';
+          expiresAt = Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000);
+        }
+      } catch (e) {
+        console.warn('Firebase IDP exchange note:', e);
+      }
+    }
+
+    const email = (rawNativeUser.email || '').toLowerCase().trim();
+    const name = rawNativeUser.name || (email ? email.split('@')[0] : 'User');
+    const avatar = rawNativeUser.photoUrl || '';
+
+    const user = {
+      id: firebaseUid || String(Date.now()),
+      name: name,
+      email: email,
+      avatar: avatar,
+      provider: 'google',
+      idToken: firebaseIdToken,
+      refreshToken: refreshToken,
+      expiresAt: expiresAt,
+    };
+    localStorage.setItem('myduo_firebase_user', JSON.stringify(user));
+    return user;
+  }
+
+  // 2. Capacitor FirebaseAuthentication plugin fallback
   if (!window.Capacitor?.Plugins?.FirebaseAuthentication && (window.androidBridge || window.Capacitor)) {
     for (let i = 0; i < 15; i++) {
       await new Promise(r => setTimeout(r, 100));
@@ -154,7 +260,6 @@ export async function loginWithGoogle() {
       result = await window.Capacitor.Plugins.FirebaseAuthentication.signInWithGoogle();
     } catch (authErr) {
       console.warn('Initial Google Sign-In failed, clearing stale session and retrying:', authErr);
-      // If error code 16 or reauth failed, clear native state and retry once
       try {
         await window.Capacitor.Plugins.FirebaseAuthentication.signOut();
       } catch (e) {}
@@ -182,11 +287,20 @@ export async function loginWithGoogle() {
     return user;
   }
 
-  throw new Error('Google Sign-In доступен в мобильном приложении.');
+  const isAndroid = !!(window.androidBridge || window.AndroidAuthBridge || window.Capacitor?.isNativePlatform?.() || window.Capacitor?.getPlatform?.() === 'android');
+  if (isAndroid) {
+    throw new Error('Google Sign-In настраивается на этом устройстве. Вы можете войти через Email и пароль.');
+  }
+  throw new Error('Для входа через Google в браузере используйте кнопку Google.');
 }
 
 export async function logoutFirebase() {
   localStorage.removeItem('myduo_firebase_user');
+  if (window.AndroidAuthBridge && typeof window.AndroidAuthBridge.signOutGoogle === 'function') {
+    try {
+      window.AndroidAuthBridge.signOutGoogle();
+    } catch (e) {}
+  }
   if (window.Capacitor?.Plugins?.FirebaseAuthentication) {
     try {
       await window.Capacitor.Plugins.FirebaseAuthentication.signOut();
