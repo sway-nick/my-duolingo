@@ -45,7 +45,10 @@ function applyTheme(theme) {
     if (app) app.classList.add('dark-theme');
   }
   // Update Android status bar & navigation bar dynamically
-  const targetBg = effectiveTheme === 'dark' ? '#0f172a' : '#f8fafc';
+  const isWide = typeof window !== 'undefined' && window.innerWidth > 680;
+  const targetBg = effectiveTheme === 'dark'
+    ? (isWide ? '#090d16' : '#0f172a')
+    : (isWide ? '#e2e8f0' : '#f8fafc');
   document.documentElement.style.backgroundColor = targetBg;
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {

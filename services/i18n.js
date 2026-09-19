@@ -6698,11 +6698,12 @@ const translations = {
   },};
 
 export function getInterfaceLanguage() {
-  if (typeof localStorage === 'undefined') return 'ru';
+  if (typeof localStorage === 'undefined') return 'en';
   return localStorage.getItem('myduo_interface_lang') || 'en';
 }
 
 export function setInterfaceLanguage(lang) {
+  if (!lang) return;
   localStorage.setItem('myduo_interface_lang', lang);
   window.dispatchEvent(new Event('myduo:lang_changed'));
 }
@@ -6920,6 +6921,37 @@ export function t(key, params = null) {
       et: "Peata", mt: "Ieqaf", nl: "Stop"
     };
     val = map[lang] || map['en'] || "Stop";
+  } else if (key === 'conveyor_in_learning') {
+    const lang = getInterfaceLanguage();
+    const map = {
+      ru: "В изучении {current}/{total}",
+      uk: "У вивченні {current}/{total}",
+      en: "In learning {current}/{total}",
+      de: "Beim Lernen {current}/{total}",
+      es: "En aprendizaje {current}/{total}",
+      fr: "En apprentissage {current}/{total}",
+      it: "In apprendimento {current}/{total}",
+      pl: "W nauce {current}/{total}",
+      pt: "Em aprendizagem {current}/{total}",
+      tr: "Öğrenimde {current}/{total}",
+      ro: "În învățare {current}/{total}",
+      bg: "В обучение {current}/{total}",
+      cs: "V učení {current}/{total}",
+      sk: "V učení {current}/{total}",
+      hu: "Tanulásban {current}/{total}",
+      el: "Σε μάθηση {current}/{total}",
+      sl: "V učenju {current}/{total}",
+      et: "Õppimisel {current}/{total}",
+      lt: "Mokomasi {current}/{total}",
+      lv: "Mācībās {current}/{total}",
+      da: "I læring {current}/{total}",
+      fi: "Opiskelussa {current}/{total}",
+      sv: "I inlärning {current}/{total}",
+      hr: "U učenju {current}/{total}",
+      ga: "Faoi fhoghlaim {current}/{total}",
+      mt: "Fit-tagħlim {current}/{total}"
+    };
+    val = map[lang] || map['en'] || "In learning {current}/{total}";
   } else if (key === 'word_notes_title') {
     const lang = getInterfaceLanguage();
     if (lang === 'ru') val = 'Примечание';
