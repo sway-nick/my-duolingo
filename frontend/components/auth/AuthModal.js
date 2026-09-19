@@ -1,6 +1,6 @@
 import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=200.0';
 import { setCurrentUser } from '../../services/authService.js?v=200.0';
-import { loginWithGoogle } from '../../services/firebase.js?v=200.0';
+import { loginWithGoogle, signInWithGoogleIdToken } from '../../services/firebase.js?v=200.0';
 import { t } from '../../services/i18n.js?v=200.0';
 
 const GOOGLE_CLIENT_ID = '249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com';
@@ -149,6 +149,26 @@ function renderAuthModal(onSuccessCallback) {
         throw new Error('Не удалось получить email от Google аккаунта');
       }
 
+      // Exchange with Firebase Auth REST API for valid Firestore idToken
+      let fbIdToken = '';
+      try {
+        const fbRes = await signInWithGoogleIdToken('', tokenResponse.access_token);
+        if (fbRes && fbRes.idToken) {
+          fbIdToken = fbRes.idToken;
+          const fbUser = {
+            id: fbRes.localId || profile.sub || '',
+            name: name,
+            email: email,
+            avatar: picture,
+            provider: 'google',
+            idToken: fbRes.idToken,
+            refreshToken: fbRes.refreshToken || '',
+            expiresAt: Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000),
+          };
+          localStorage.setItem('myduo_firebase_user', JSON.stringify(fbUser));
+        }
+      } catch (e) {}
+
       const res = await googleAuthUser(email, name, picture);
       if (res && res.success && res.data?.user) {
         const userWithGoogle = {
@@ -158,8 +178,9 @@ function renderAuthModal(onSuccessCallback) {
           email: email,
           avatar: picture || '',
           firebaseUid: profile.sub || profile.id || '',
+          idToken: fbIdToken || '',
         };
-        setCurrentUser(userWithGoogle, res.data.token);
+        setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
         try {
           await fetchUserDataFromCloud(userWithGoogle.id);
         } catch (e) {}
@@ -196,6 +217,26 @@ function renderAuthModal(onSuccessCallback) {
     submitBtn.textContent = t('auth_google_authorizing');
 
     try {
+      // Exchange Google ID Token with Firebase Auth REST API
+      let fbIdToken = '';
+      try {
+        const fbRes = await signInWithGoogleIdToken(response.credential);
+        if (fbRes && fbRes.idToken) {
+          fbIdToken = fbRes.idToken;
+          const fbUser = {
+            id: fbRes.localId || payload.sub || '',
+            name: name,
+            email: email,
+            avatar: picture,
+            provider: 'google',
+            idToken: fbRes.idToken,
+            refreshToken: fbRes.refreshToken || '',
+            expiresAt: Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000),
+          };
+          localStorage.setItem('myduo_firebase_user', JSON.stringify(fbUser));
+        }
+      } catch (e) {}
+
       const res = await googleAuthUser(email, name, picture);
 
       if (res && res.success && res.data?.user) {
@@ -206,8 +247,9 @@ function renderAuthModal(onSuccessCallback) {
           email: email,
           avatar: picture || '',
           firebaseUid: payload.sub || '',
+          idToken: fbIdToken || '',
         };
-        setCurrentUser(userWithGoogle, res.data.token);
+        setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
         try {
           await fetchUserDataFromCloud(userWithGoogle.id);
         } catch (e) {}
@@ -271,10 +313,15 @@ function renderAuthModal(onSuccessCallback) {
     googleBtn.addEventListener('click', async () => {
       errorBox.style.display = 'none';
 
-      const isAndroidApp = !!(window.androidBridge || window.Capacitor?.isNativePlatform?.() || window.Capacitor?.getPlatform?.() === 'android');
+      const isAndroidApp = !!(
+        window.androidBridge ||
+        window.AndroidAuthBridge ||
+        window.Capacitor?.isNativePlatform?.() ||
+        window.Capacitor?.getPlatform?.() === 'android'
+      );
 
-      // 1. Mobile Android (Capacitor Native Google Sign-In)
-      if (isAndroidApp || window.Capacitor?.Plugins?.FirebaseAuthentication) {
+      // 1. Mobile Android (Native AndroidAuthBridge or Capacitor FirebaseAuthentication)
+      if (window.AndroidAuthBridge || window.Capacitor?.Plugins?.FirebaseAuthentication || isAndroidApp) {
         googleBtn.disabled = true;
         const origContent = googleBtn.innerHTML;
         googleBtn.innerHTML = `<span style="font-size: 14px;">⏳ ${t('auth_loading')}</span>`;
@@ -308,9 +355,11 @@ function renderAuthModal(onSuccessCallback) {
             }
           }
         } catch (nativeErr) {
-          console.warn('Native Google Sign-In error:', nativeErr);
+          console.warn('Native Google Sign-In note:', nativeErr);
           const msg = nativeErr?.message || String(nativeErr || '');
-          if (!msg.includes('cancel') && !msg.includes('closed') && !msg.includes('12501')) {
+          const lower = msg.toLowerCase();
+          // Don't show red error if user simply backed out or closed the account picker
+          if (!lower.includes('cancel') && !lower.includes('closed') && !msg.includes('12501') && !msg.includes('12502')) {
             errorBox.textContent = msg || t('auth_err_failed');
             errorBox.style.display = 'block';
           }
