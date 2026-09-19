@@ -335,10 +335,14 @@ function showWordNotesModal(notes) {
         <button type="button" class="word-notes-modal-close" id="word-notes-close-btn" aria-label="${t('word_notes_close')}">✕</button>
       </div>
       <div class="word-notes-modal-body">
-        <p class="word-notes-modal-text">${notes || ''}</p>
+        <p class="word-notes-modal-text"></p>
       </div>
     </div>
   `;
+  const textEl = modal.querySelector('.word-notes-modal-text');
+  if (textEl) {
+    textEl.textContent = String(notes || '').trim();
+  }
   document.body.appendChild(modal);
 
   const closeModal = () => {
