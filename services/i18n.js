@@ -6952,6 +6952,26 @@ export function t(key, params = null) {
       mt: "Fit-tagħlim {current}/{total}"
     };
     val = map[lang] || map['en'] || "In learning {current}/{total}";
+  } else if (key === 'sound_on') {
+    const lang = getInterfaceLanguage();
+    const map = {
+      ru: "Озвучить слово", uk: "Озвучити слово", en: "Pronounce word", de: "Wort anhören",
+      es: "Pronunciar palabra", fr: "Prononcer le mot", pl: "Wymów słowo", it: "Pronuncia parola",
+      tr: "Kelimeyi seslendir", pt: "Pronunciar palavra", ro: "Pronunță cuvântul", bg: "Произнеси думата",
+      cs: "Vyslovit slovo", sk: "Vysloviť slovo", hu: "Szó kiejtése", el: "Προφορά λέξης",
+      da: "Udtal ord", fi: "Lausu sana", sv: "Uttala ord", nl: "Woord uitspreken"
+    };
+    val = map[lang] || map['en'] || "Pronounce word";
+  } else if (key === 'fav_toggle') {
+    const lang = getInterfaceLanguage();
+    const map = {
+      ru: "В избранное", uk: "До обраного", en: "To favorites", de: "Zu Favoriten",
+      es: "A favoritos", fr: "Aux favoris", pl: "Do ulubionych", it: "Ai preferiti",
+      tr: "Favorilere", pt: "Aos favoritos", ro: "La favorite", bg: "Към любими",
+      cs: "Do oblíbených", sk: "Do obľúbených", hu: "Kedvencekhez", el: "Στα αγαπημένα",
+      da: "Til favoritter", fi: "Suosikkeihin", sv: "Till favoriter", nl: "Naar favorieten"
+    };
+    val = map[lang] || map['en'] || "To favorites";
   } else if (key === 'word_notes_title') {
     const lang = getInterfaceLanguage();
     if (lang === 'ru') val = 'Примечание';
