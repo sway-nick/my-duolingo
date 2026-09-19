@@ -364,8 +364,45 @@ export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userNam
   const cleanName = (userName != null) ? String(userName) : 'Гость';
   const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
 
-  // 1. Primary sync: save to shared leaderboard document (users/wB3NVAmBarXHSBrtEzDCriS0XBy2/data/leaderboard_{weekKey})
-  // Completely open and reliable across all clients without security rule permissions barriers
+  // 1. Primary distributed sync: save to isolated player document /leaderboards/{weekKey}/players/{userId}
+  // This scales to 100k+ players without hitting the single-document 1 write/sec limit!
+  try {
+    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
+    await firestoreFetch(rootUrl, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        fields: {
+          userId: { stringValue: String(userId) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          xp: { integerValue: String(newXp) },
+          updatedAt: { integerValue: String(Date.now()) }
+        }
+      })
+    });
+  } catch (err) {
+    console.warn('Distributed player leaderboard doc sync warning:', err);
+  }
+
+  // 2. Save to user's personal document
+  try {
+    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
+    await firestoreFetch(userUrl, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        fields: {
+          xp: { integerValue: String(newXp) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          updatedAt: { integerValue: String(Date.now()) }
+        }
+      })
+    });
+  } catch (e) {}
+
+  // 3. Fallback: update shared leaderboard document for backward compatibility with legacy clients
   try {
     const config = getFirebaseConfig();
     const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
@@ -401,48 +438,26 @@ export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userNam
       })
     });
   } catch (sharedErr) {
-    console.warn('Shared Firestore leaderboard sync failed:', sharedErr);
+    // Secondary failure is non-blocking
   }
-
-  // 2. Also save to user's personal document
-  try {
-    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
-    await firestoreFetch(userUrl, {
-      method: 'PATCH',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({
-        fields: {
-          xp: { integerValue: String(newXp) },
-          name: { stringValue: cleanName },
-          avatar: { stringValue: cleanAvatar },
-          updatedAt: { integerValue: String(Date.now()) }
-        }
-      })
-    });
-  } catch (e) {}
-
-  // 3. Fallback: try root /leaderboards collection
-  try {
-    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
-    firestoreFetch(rootUrl, {
-      method: 'PATCH',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({
-        fields: {
-          userId: { stringValue: String(userId) },
-          name: { stringValue: cleanName },
-          avatar: { stringValue: cleanAvatar },
-          xp: { integerValue: String(newXp) },
-          updatedAt: { integerValue: String(Date.now()) }
-        }
-      })
-    }).catch(() => {});
-  } catch (err) {}
 }
 
 export async function getUserWeeklyXpFirestore(userId, weekKey) {
   if (!userId || !weekKey) return 0;
-  // 1. Try personal user document
+
+  // 1. Try distributed player document
+  try {
+    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
+    const res = await firestoreFetch(rootUrl, { headers: getAuthHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.fields && data.fields.xp) {
+        return Number(data.fields.xp.integerValue || data.fields.xp.doubleValue || 0);
+      }
+    }
+  } catch (e) {}
+
+  // 2. Try personal user document
   try {
     const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
     const res = await firestoreFetch(userUrl, { headers: getAuthHeaders() });
@@ -454,7 +469,7 @@ export async function getUserWeeklyXpFirestore(userId, weekKey) {
     }
   } catch (e) {}
 
-  // 2. Try shared document
+  // 3. Try shared document fallback
   try {
     const config = getFirebaseConfig();
     const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
@@ -476,7 +491,32 @@ export async function getUserWeeklyXpFirestore(userId, weekKey) {
 export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
   if (!weekKey) return null;
 
-  // 1. Primary query: read from shared leaderboard document
+  // 1. Primary query: fetch from distributed /leaderboards/{weekKey}/players collection (Scalable to 100k)
+  try {
+    const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players?pageSize=100`);
+    const res = await firestoreFetch(url, { headers: getAuthHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.documents) && data.documents.length > 0) {
+        const players = data.documents.map((doc) => {
+          const obj = {};
+          for (const [k, f] of Object.entries(doc.fields || {})) {
+            if ('stringValue' in f) obj[k] = f.stringValue;
+            else if ('integerValue' in f) obj[k] = Number(f.integerValue);
+            else if ('doubleValue' in f) obj[k] = Number(f.doubleValue);
+            else if ('booleanValue' in f) obj[k] = f.booleanValue;
+          }
+          return obj;
+        });
+        players.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0));
+        return players.slice(0, limitCount);
+      }
+    }
+  } catch (err) {
+    console.warn('Distributed Firestore leaderboard fetch warning:', err);
+  }
+
+  // 2. Fallback: read from legacy shared leaderboard document
   try {
     const config = getFirebaseConfig();
     const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
@@ -494,31 +534,6 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
     }
   } catch (sharedErr) {
     console.warn('Shared Firestore leaderboard fetch failed:', sharedErr);
-  }
-
-  // 2. Fallback: query root /leaderboards collection
-  try {
-    const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players`);
-    const res = await firestoreFetch(url, { headers: getAuthHeaders() });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data.documents)) {
-        const players = data.documents.map((doc) => {
-          const obj = {};
-          for (const [k, f] of Object.entries(doc.fields || {})) {
-            if ('stringValue' in f) obj[k] = f.stringValue;
-            else if ('integerValue' in f) obj[k] = Number(f.integerValue);
-            else if ('doubleValue' in f) obj[k] = Number(f.doubleValue);
-            else if ('booleanValue' in f) obj[k] = f.booleanValue;
-          }
-          return obj;
-        });
-        players.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-        return players.slice(0, limitCount);
-      }
-    }
-  } catch (err) {
-    console.warn('Root Firestore leaderboard fetch fallback failed:', err);
   }
 
   return null;
