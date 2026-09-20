@@ -310,6 +310,80 @@ export async function logoutFirebase() {
   }
 }
 
+// Удаляет все Firestore-документы пользователя перед удалением аккаунта.
+// Использует REST API напрямую, без Firebase SDK.
+async function deleteAllUserFirestoreData(userId, idToken) {
+  const config = getFirebaseConfig();
+  const authHeader = idToken ? { 'Authorization': `Bearer ${idToken}` } : {};
+  const headers = { 'Content-Type': 'application/json', ...authHeader };
+
+  // Вспомогательная функция: DELETE одного документа по URL
+  async function delDoc(url) {
+    try {
+      await fetch(`${url}?key=${config.apiKey}`, { method: 'DELETE', headers });
+    } catch (e) {
+      console.warn('deleteAllUserFirestoreData: failed to delete', url, e);
+    }
+  }
+
+  // Вспомогательная функция: список всех документов в подколлекции и их удаление
+  async function delSubcollection(subcollPath) {
+    try {
+      let pageToken = '';
+      do {
+        const listUrl = `${FIRESTORE_BASE}${subcollPath}?pageSize=300${pageToken ? '&pageToken=' + pageToken : ''}&key=${config.apiKey}`;
+        const res = await fetch(listUrl, { headers });
+        if (!res.ok) break;
+        const data = await res.json();
+        const docs = data.documents || [];
+        await Promise.all(docs.map((doc) => {
+          const docUrl = `https://firestore.googleapis.com/v1/${doc.name}`;
+          return fetch(`${docUrl}?key=${config.apiKey}`, { method: 'DELETE', headers }).catch(() => {});
+        }));
+        pageToken = data.nextPageToken || '';
+      } while (pageToken);
+    } catch (e) {
+      console.warn('deleteAllUserFirestoreData: subcollection error', subcollPath, e);
+    }
+  }
+
+  const uid = encodeURIComponent(userId);
+
+  // 1. Удаляем подколлекцию progress/* (индивидуальные записи по словам)
+  await delSubcollection(`/users/${uid}/progress`);
+
+  // 2. Удаляем подколлекцию settings/*
+  await delSubcollection(`/users/${uid}/settings`);
+
+  // 3. Удаляем подколлекцию data/* (favorites, notes, custom_words, weekly_xp_*, progress bulk)
+  await delSubcollection(`/users/${uid}/data`);
+
+  // 4. Удаляем корневой документ users/{uid}
+  await delDoc(`${FIRESTORE_BASE}/users/${uid}`);
+
+  // 5. Удаляем запись в leaderboard текущей и прошлой недели
+  try {
+    const now = new Date();
+    // Формат weekKey совпадает с syncLeaderboardScoreFirestore: YYYY-WW
+    function getISOWeekKey(date) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const day = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - day);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      return `${d.getUTCFullYear()}-${String(week).padStart(2, '0')}`;
+    }
+    const currentWeek = getISOWeekKey(now);
+    const prevWeekDate = new Date(now);
+    prevWeekDate.setDate(prevWeekDate.getDate() - 7);
+    const prevWeek = getISOWeekKey(prevWeekDate);
+    await delDoc(`${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(currentWeek)}/players/${uid}`);
+    await delDoc(`${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(prevWeek)}/players/${uid}`);
+  } catch (e) {
+    console.warn('deleteAllUserFirestoreData: leaderboard cleanup error', e);
+  }
+}
+
 export async function deleteCurrentUserAccount() {
   const stored = localStorage.getItem('myduo_firebase_user');
   if (!stored) return;
@@ -356,6 +430,18 @@ export async function deleteCurrentUserAccount() {
     }
   }
 
+  // 3. Удаляем все данные из Firestore ПЕРЕД удалением аккаунта,
+  //    пока idToken ещё валиден и правила разрешают write для этого uid.
+  const userId = user.localId || user.uid || user.userId || '';
+  if (userId) {
+    try {
+      await deleteAllUserFirestoreData(userId, idToken);
+    } catch (e) {
+      console.warn('deleteCurrentUserAccount: Firestore cleanup error (non-fatal):', e);
+    }
+  }
+
+  // 4. Удаляем Firebase Auth аккаунт
   if (idToken) {
     const res = await fetch(`${AUTH_BASE}/accounts:delete?key=${config.apiKey}`, {
       method: 'POST',
