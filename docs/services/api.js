@@ -26,7 +26,34 @@ async function getHealth() {
 
 function getFirestoreUserId(userId = null) {
   const user = getCurrentUser();
-  const fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
+  let fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
+
+  // Migration: myduo_firebase_user.id always stores fbRes.localId (real Firebase UID).
+  // Old auth code stored Google Sub ID in user.firebaseUid — detect and fix on the fly.
+  try {
+    const stored = localStorage.getItem('myduo_firebase_user');
+    if (stored) {
+      const fbData = JSON.parse(stored);
+      const realFbUid = fbData?.id ? String(fbData.id) : '';
+      // Google Sub IDs are purely numeric (e.g. 110531984537821932939).
+      // Real Firebase UIDs contain letters (e.g. b9PUaf5jtthwQIOPvAdZJ1o5CBC3).
+      const googleSubPattern = /^\d+$/;
+      if (realFbUid && realFbUid !== fbUid) {
+        // Prefer realFbUid if fbUid looks like a Google numeric Sub ID
+        if (!fbUid || googleSubPattern.test(fbUid)) {
+          fbUid = realFbUid;
+          // Also patch the user object in localStorage so future calls are instant
+          if (user && user.firebaseUid !== realFbUid) {
+            try {
+              user.firebaseUid = realFbUid;
+              localStorage.setItem('myduo_current_user', JSON.stringify(user));
+            } catch (e) {}
+          }
+        }
+      }
+    }
+  } catch (e) {}
+
   if (!fbUid) return userId;
   const detId = user?.email ? getDeterministicUserId(user.email) : null;
   const effectiveId = getEffectiveUserId();
