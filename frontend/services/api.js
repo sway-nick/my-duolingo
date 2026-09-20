@@ -1267,7 +1267,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   // Sync to Cloud Firestore (Real-time persistent cloud storage)
   try {
-    saveUserProgressFirestore(userId, wordId, prog).catch(() => {});
+    const fsUid = getFirestoreUserId(userId);
+    saveUserProgressFirestore(fsUid, wordId, prog).catch(() => {});
   } catch (e) {}
 
   pendingProgressQueue.push({
@@ -1307,7 +1308,7 @@ async function flushProgressQueue() {
       continue; // Skip guests from cloud progress sync
     }
     try {
-      saveUserProgressFirestore(item.userId, item.wordId, item);
+      saveUserProgressFirestore(getFirestoreUserId(item.userId), item.wordId, item);
     } catch (e) {
       console.warn('Failed to sync progress item to Firestore:', item, e);
     }
@@ -1557,12 +1558,9 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     if (fbUid && fbUid !== uId) {
       localStorage.setItem(`favs_${fbUid}`, JSON.stringify(mergedFavs));
     }
-    saveUserFavoritesFirestore(uId, mergedFavs).catch(() => {});
-    if (fbUid && fbUid !== uId) {
-      saveUserFavoritesFirestore(fbUid, mergedFavs).catch(() => {});
-    }
-    if (detId && detId !== uId && detId !== fbUid) {
-      saveUserFavoritesFirestore(detId, mergedFavs).catch(() => {});
+    const firestoreSyncUid = fbUid || firestoreUid;
+    if (firestoreSyncUid && !String(firestoreSyncUid).startsWith('guest_')) {
+      saveUserFavoritesFirestore(firestoreSyncUid, mergedFavs).catch(() => {});
     }
 
     const activeLocalLang = localStorage.getItem('myduo_interface_lang');
@@ -1981,11 +1979,11 @@ async function toggleFavoriteApi(wordId, isFavorite) {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: favs }));
   }
 
-  // Synchronize to Firestore for ALL user IDs (userId, fbUid, detId)
-  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
-  for (const id of idsToSync) {
+  // Synchronize to Firestore only via Firebase UID (required by security rules: request.auth.uid == userId)
+  const fsUid = fbUid || getFirestoreUserId(userId);
+  if (fsUid && !String(fsUid).startsWith('guest_')) {
     try {
-      saveUserFavoritesFirestore(id, favs).catch(() => {});
+      saveUserFavoritesFirestore(fsUid, favs).catch(() => {});
     } catch (e) {}
   }
 
@@ -2025,10 +2023,10 @@ async function clearAllFavoritesApi() {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: [] }));
   }
 
-  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
-  for (const id of idsToSync) {
+  const fsUid = fbUid || getFirestoreUserId(userId);
+  if (fsUid && !String(fsUid).startsWith('guest_')) {
     try {
-      saveUserFavoritesFirestore(id, []).catch(() => {});
+      saveUserFavoritesFirestore(fsUid, []).catch(() => {});
     } catch (e) {}
   }
 
