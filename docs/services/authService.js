@@ -176,7 +176,7 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       }
 
       // 2. Migrate all favorites keys
-      if ((k.startsWith('favs_') || k.startsWith('favorites_') || k === 'favorites' || k === 'favs' || k === 'myduo_favorites') && k !== userFavKey) {
+      if ((k.startsWith('favs_') || k.startsWith('favorites_') || k === 'favorites' || k === 'favs' || k === 'myduo_favorites') && !k.includes('deleted') && k !== userFavKey) {
         try {
           const favsArr = JSON.parse(localStorage.getItem(k) || '[]');
           if (Array.isArray(favsArr)) {
@@ -294,9 +294,20 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       localStorage.setItem(`avatar_${newUserId}`, userAvatar);
     }
 
+    const deletedFavs = new Set([
+      ...(JSON.parse(localStorage.getItem(`favs_deleted_${newUserId}`) || '[]')),
+      ...(guestId ? JSON.parse(localStorage.getItem(`favs_deleted_${guestId}`) || '[]') : []),
+      ...(JSON.parse(localStorage.getItem('favs_deleted') || '[]'))
+    ].map(String));
+
+    const finalFavs = Array.from(mergedFavs)
+      .map(String)
+      .map(s => s.trim())
+      .filter(id => id && !deletedFavs.has(id));
+
     // Save final merged data to user storage keys
     localStorage.setItem(userProgKey, JSON.stringify(mergedProg));
-    localStorage.setItem(userFavKey, JSON.stringify(Array.from(mergedFavs)));
+    localStorage.setItem(userFavKey, JSON.stringify(finalFavs));
     localStorage.setItem(userSetKey, JSON.stringify({ ...mergedSet, userId: newUserId }));
     localStorage.setItem(userDatesKey, JSON.stringify(Array.from(mergedDates).sort()));
     if (migratedXp > 0) {
@@ -310,7 +321,7 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: migratedXp } }));
       }
       window.dispatchEvent(new CustomEvent('myduo:progress_updated', { detail: { userId: newUserId, progress: mergedProg } }));
-      window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: Array.from(mergedFavs) }));
+      window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: finalFavs }));
     }
   } catch (e) {
     console.warn('Failed migrating guest data to user:', e);

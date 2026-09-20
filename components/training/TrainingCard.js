@@ -747,49 +747,78 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function getQuizDistractorWords() {
       const currentIdStr = String(currentWord.id);
+      const currentWordText = String(currentWord.word || '').toLowerCase().trim();
+      const currentTransText = String(getWordTranslation(currentWord) || '').toLowerCase().trim();
+
       const seenIds = new Set([currentIdStr]);
+      const seenWords = new Set([currentWordText]);
+      const seenTranslations = new Set([currentTransText]);
       const result = [];
+
+      function isValidCandidate(w) {
+        if (!w) return false;
+        const idStr = String(w.id);
+        if (seenIds.has(idStr)) return false;
+        const wText = String(w.word || '').toLowerCase().trim();
+        if (!wText || seenWords.has(wText)) return false;
+        const wTrans = String(getWordTranslation(w) || '').toLowerCase().trim();
+        if (!wTrans || seenTranslations.has(wTrans)) return false;
+        return true;
+      }
+
+      function addCandidate(w) {
+        seenIds.add(String(w.id));
+        seenWords.add(String(w.word || '').toLowerCase().trim());
+        seenTranslations.add(String(getWordTranslation(w) || '').toLowerCase().trim());
+        result.push(w);
+      }
 
       // 1. Приоритет: слова из текущей изучаемой партии (activeWords), отобранной в Карточках
       const shuffledActive = shuffleArray(activeWords || []);
       for (const w of shuffledActive) {
-        const idStr = String(w.id);
-        if (!seenIds.has(idStr)) {
-          seenIds.add(idStr);
-          result.push(w);
+        if (isValidCandidate(w)) {
+          addCandidate(w);
           if (result.length >= 5) return result;
         }
       }
 
-      // 2. Если в активной партии осталось мало слов (конец раунда),
-      // добираем ИСКЛЮЧИТЕЛЬНО из слов, которые пользователь уже видел в Карточках или уже изучил
+      // 2. ИСКЛЮЧИТЕЛЬНО из текущей категории (selectedCategory)! Слова других категорий не подмешиваем
+      const categoryFiltered =
+        selectedCategory === 'All' || selectedCategory === 'Все категории' || !selectedCategory
+          ? (allWords || [])
+          : (allWords || []).filter(
+              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
+            );
+
       const userProgress = getUserProgress();
-      const knownWords = allWords.filter((w) => {
-        const idStr = String(w.id);
-        if (seenIds.has(idStr)) return false;
-        const p = userProgress[w.id] || userProgress[idStr];
+      const knownWords = categoryFiltered.filter((w) => {
+        if (!isValidCandidate(w)) return false;
+        const p = userProgress[w.id] || userProgress[String(w.id)];
         return p && (p.seenInCards === true || isWordMastered(p));
       });
 
       for (const w of shuffleArray(knownWords)) {
-        seenIds.add(String(w.id));
-        result.push(w);
-        if (result.length >= 5) return result;
+        if (isValidCandidate(w)) {
+          addCandidate(w);
+          if (result.length >= 5) return result;
+        }
       }
 
-      // 3. Аварийный fallback (только если в истории пользователя меньше 6 изученных слов)
-      const categoryFiltered =
-        selectedCategory === 'All' || selectedCategory === 'Все категории'
-          ? allWords
-          : allWords.filter(
-              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
-            );
-      const fallbackPool = categoryFiltered.length >= 6 ? categoryFiltered : allWords;
-      for (const w of shuffleArray(fallbackPool)) {
-        if (!seenIds.has(String(w.id))) {
-          seenIds.add(String(w.id));
-          result.push(w);
+      // 3. Fallback строго внутри текущей категории
+      for (const w of shuffleArray(categoryFiltered)) {
+        if (isValidCandidate(w)) {
+          addCandidate(w);
           if (result.length >= 5) return result;
+        }
+      }
+
+      // 4. Аварийный fallback (только если в категории физически не хватает уникальных слов)
+      if (result.length < 5) {
+        for (const w of shuffleArray(allWords || [])) {
+          if (isValidCandidate(w)) {
+            addCandidate(w);
+            if (result.length >= 5) return result;
+          }
         }
       }
 
@@ -800,7 +829,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const currentTrans = getWordTranslation(currentWord);
       const distractorWords = getQuizDistractorWords();
       const otherTranslations = distractorWords.map((w) => getWordTranslation(w));
-      const choices = shuffleArray([currentTrans, ...otherTranslations]);
+      // Гарантия абсолютной уникальности вариантов ответов в Quiz
+      const seenSet = new Set([String(currentTrans).toLowerCase().trim()]);
+      const uniqueDistractors = [];
+      for (const t of otherTranslations) {
+        const norm = String(t || '').toLowerCase().trim();
+        if (norm && !seenSet.has(norm)) {
+          seenSet.add(norm);
+          uniqueDistractors.push(t);
+        }
+      }
+      const choices = shuffleArray([currentTrans, ...uniqueDistractors]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
@@ -841,7 +880,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     function renderReverseQuiz(isFromSpeechFallback = false) {
       const distractorWords = getQuizDistractorWords();
       const otherWords = distractorWords.map((w) => w.word);
-      const choices = shuffleArray([currentWord.word, ...otherWords]);
+      // Гарантия абсолютной уникальности вариантов ответов в Reverse Quiz
+      const seenSet = new Set([String(currentWord.word).toLowerCase().trim()]);
+      const uniqueDistractors = [];
+      for (const w of otherWords) {
+        const norm = String(w || '').toLowerCase().trim();
+        if (norm && !seenSet.has(norm)) {
+          seenSet.add(norm);
+          uniqueDistractors.push(w);
+        }
+      }
+      const choices = shuffleArray([currentWord.word, ...uniqueDistractors]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
@@ -1780,7 +1829,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const isVowel = (c) => VOWELS.has(c.toLowerCase());
       const isLetter = (c) => /[a-zA-Z]/.test(c);
 
-      const wordText = currentWord.word;
+      // Strip invisible/soft-hyphen characters (U+00AD, U+200B, U+FEFF) before processing
+      const wordText = (currentWord.word || '').replace(/[\u00ad\u200b\ufeff]/g, '');
 
       // Split by words to prevent awkward mid-word breaks and avoid rendering giant space boxes
       const words = wordText.split(/\s+/).filter(Boolean);
@@ -2669,7 +2719,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-word">${currentWord.word}</h2>
-              ${currentWord.transcription ? `<p class="flashcard-transcription">${currentWord.transcription}</p>` : ''}
+              ${(() => { const _rt = String(currentWord.transcription || '').replace(/[\[\]]/g, '').replace(/^\/+|\/+$/g, '').trim(); return _rt ? `<p class="flashcard-transcription">/${_rt}/</p>` : ''; })()}
             </div>
             <div class="flashcard-face-bottom">
               <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>

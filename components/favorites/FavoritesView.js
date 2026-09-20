@@ -126,6 +126,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         onRemoveFavorite(id);
 
         const remainingCards = container.querySelectorAll('.fav-card');
+        const titleEl = container.querySelector('.page-header h2');
+        if (titleEl) {
+          titleEl.textContent = `${t('fav_title')}: ${remainingCards.length}`;
+        }
         if (remainingCards.length === 0) {
           renderFavoritesView([], containerSelector, options);
         }

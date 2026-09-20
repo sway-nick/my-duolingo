@@ -301,6 +301,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       updateVoiceButtons();
       speakWord('Hello', null, 'en-GB', 'uk', true);
       triggerAutoSave();
+      // Show download modal for UK Elementary audio pack if not yet downloaded
+      if (typeof window.showAccentDownloadModalIfNeeded === 'function') {
+        window.showAccentDownloadModalIfNeeded('uk');
+      }
     });
 
     usVoiceBtn.addEventListener('click', () => {
@@ -455,12 +459,33 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           await deleteCurrentUserAccount();
           logoutUser();
           alert(t('settings_account_deleted'));
-          window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
         } catch (err) {
           console.warn('Delete account error:', err);
           logoutUser();
-          window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
         }
+
+        // ── Полная очистка всех локальных данных ──────────────────────────
+        try { localStorage.clear(); } catch (e) {}
+        try { sessionStorage.clear(); } catch (e) {}
+
+        // Удаляем все CacheStorage-кэши (скачанное аудио и Service Worker кэши)
+        try {
+          if ('caches' in window) {
+            const cacheKeys = await caches.keys();
+            await Promise.all(cacheKeys.map((k) => caches.delete(k)));
+          }
+        } catch (e) {}
+
+        // Отписываем и удаляем Service Worker регистрации
+        try {
+          if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map((r) => r.unregister()));
+          }
+        } catch (e) {}
+
+        // Редирект после очистки
+        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
       }
     });
   }
