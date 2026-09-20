@@ -151,12 +151,14 @@ function renderAuthModal(onSuccessCallback) {
 
       // Exchange with Firebase Auth REST API for valid Firestore idToken
       let fbIdToken = '';
+      let fbLocalId = ''; // True Firebase UID from Firebase Auth
       try {
         const fbRes = await signInWithGoogleIdToken('', tokenResponse.access_token);
         if (fbRes && fbRes.idToken) {
           fbIdToken = fbRes.idToken;
+          fbLocalId = fbRes.localId || ''; // Real Firebase UID (e.g. b9PUaf5j...)
           const fbUser = {
-            id: fbRes.localId || profile.sub || '',
+            id: fbLocalId || profile.sub || '',
             name: name,
             email: email,
             avatar: picture,
@@ -177,7 +179,8 @@ function renderAuthModal(onSuccessCallback) {
           name: res.data.user.name || name,
           email: email,
           avatar: picture || '',
-          firebaseUid: profile.sub || profile.id || '',
+          // Use real Firebase UID (localId) — NOT Google OAuth Sub ID (profile.sub)
+          firebaseUid: fbLocalId || profile.sub || profile.id || '',
           idToken: fbIdToken || '',
         };
         setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
@@ -219,12 +222,14 @@ function renderAuthModal(onSuccessCallback) {
     try {
       // Exchange Google ID Token with Firebase Auth REST API
       let fbIdToken = '';
+      let fbLocalId = ''; // True Firebase UID from Firebase Auth
       try {
         const fbRes = await signInWithGoogleIdToken(response.credential);
         if (fbRes && fbRes.idToken) {
           fbIdToken = fbRes.idToken;
+          fbLocalId = fbRes.localId || ''; // Real Firebase UID (e.g. b9PUaf5j...)
           const fbUser = {
-            id: fbRes.localId || payload.sub || '',
+            id: fbLocalId || payload.sub || '',
             name: name,
             email: email,
             avatar: picture,
@@ -246,7 +251,8 @@ function renderAuthModal(onSuccessCallback) {
           name: res.data.user.name || name,
           email: email,
           avatar: picture || '',
-          firebaseUid: payload.sub || '',
+          // Use real Firebase UID (localId) — NOT Google JWT Sub ID (payload.sub)
+          firebaseUid: fbLocalId || payload.sub || '',
           idToken: fbIdToken || '',
         };
         setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
