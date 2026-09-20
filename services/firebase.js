@@ -316,17 +316,61 @@ export async function deleteCurrentUserAccount() {
   const user = JSON.parse(stored);
   const config = getFirebaseConfig();
 
-  if (user.idToken) {
+  // Refresh idToken if we have a refreshToken — Firebase idTokens expire after 1 hour,
+  // so using a stale token would silently fail with TOKEN_EXPIRED.
+  let idToken = user.idToken || '';
+
+  // 1. Email/password users — refresh via securetoken endpoint
+  if (user.refreshToken) {
     try {
-      await fetch(`${AUTH_BASE}/accounts:delete?key=${config.apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken: user.idToken }),
-      });
-    } catch (e) {}
+      const refreshRes = await fetch(
+        `https://securetoken.googleapis.com/v1/token?key=${config.apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(user.refreshToken)}`,
+        }
+      );
+      const refreshData = await refreshRes.json();
+      if (refreshRes.ok && refreshData.id_token) {
+        idToken = refreshData.id_token;
+        // Persist fresh token so logout flow works correctly
+        try {
+          const updated = { ...user, idToken, refreshToken: refreshData.refresh_token || user.refreshToken };
+          localStorage.setItem('myduo_firebase_user', JSON.stringify(updated));
+        } catch (e) {}
+      }
+    } catch (e) {
+      console.warn('deleteCurrentUserAccount: token refresh failed, trying with stored token', e);
+    }
+  }
+
+  // 2. Google/Capacitor users — no refreshToken stored, ask native plugin for fresh token
+  const isCapacitorGoogle = user.provider === 'google' && window.Capacitor?.Plugins?.FirebaseAuthentication?.getIdToken;
+  if (isCapacitorGoogle) {
+    try {
+      const tokenRes = await window.Capacitor.Plugins.FirebaseAuthentication.getIdToken({ forceRefresh: true });
+      if (tokenRes?.token) idToken = tokenRes.token;
+    } catch (e) {
+      console.warn('deleteCurrentUserAccount: Capacitor getIdToken failed', e);
+    }
+  }
+
+  if (idToken) {
+    const res = await fetch(`${AUTH_BASE}/accounts:delete?key=${config.apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken }),
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      console.warn('deleteCurrentUserAccount: Firebase returned error:', errData?.error?.message || res.status);
+      // Still continue with local cleanup even if remote delete failed
+    }
   }
   localStorage.removeItem('myduo_firebase_user');
 }
+
 
 export function subscribeToAuthState(callback) {
   try {
@@ -703,21 +747,17 @@ export async function saveUserSettingsFirestore(userId, settingsObj) {
 export async function saveUserFavoritesFirestore(userId, favoritesArray) {
   if (!userId) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/favorites`);
-    const arr = (favoritesArray || []).map(id => ({ stringValue: String(id) }));
+    const cleanArr = Array.isArray(favoritesArray)
+      ? favoritesArray.map(id => String(id).trim()).filter(Boolean)
+      : [];
+    const arr = cleanArr.map(id => ({ stringValue: id }));
     const fields = {
-      favorites: {
-        arrayValue: {
-          values: arr
-        }
-      },
-      items: {
-        arrayValue: {
-          values: arr
-        }
-      },
+      favorites: arr.length > 0 ? { arrayValue: { values: arr } } : { arrayValue: {} },
+      items: arr.length > 0 ? { arrayValue: { values: arr } } : { arrayValue: {} },
       updatedAt: { integerValue: String(Date.now()) }
     };
+
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/favorites?updateMask.fieldPaths=favorites&updateMask.fieldPaths=items&updateMask.fieldPaths=updatedAt`);
 
     const res = await firestoreFetch(url, {
       method: 'PATCH',
@@ -727,6 +767,22 @@ export async function saveUserFavoritesFirestore(userId, favoritesArray) {
     if (!res.ok) {
       console.warn('Firestore favorites save failed HTTP', res.status, await res.text());
     }
+
+    // Keep root user doc favorites fields synchronized as well
+    try {
+      const rootUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}?updateMask.fieldPaths=favorites&updateMask.fieldPaths=favorite_words&updateMask.fieldPaths=updatedAt`);
+      await firestoreFetch(rootUrl, {
+        method: 'PATCH',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          fields: {
+            favorites: arr.length > 0 ? { arrayValue: { values: arr } } : { arrayValue: {} },
+            favorite_words: arr.length > 0 ? { arrayValue: { values: arr } } : { arrayValue: {} },
+            updatedAt: { integerValue: String(Date.now()) }
+          }
+        })
+      });
+    } catch (rootErr) {}
   } catch (err) {
     console.warn('Firestore favorites save failed:', err);
   }
@@ -954,6 +1010,22 @@ export async function loadFullUserDataFirestore(userId) {
 
     let userProfile = {};
     let favorites = [];
+    let hasExplicitFavDoc = false;
+
+    if (favDocRes && favDocRes.ok) {
+      const data = await favDocRes.json();
+      if (data.fields) {
+        hasExplicitFavDoc = true;
+        if (data.fields.favorites?.arrayValue?.values) {
+          const subFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+          favorites.push(...subFavs);
+        } else if (data.fields.items?.arrayValue?.values) {
+          const subFavs = data.fields.items.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+          favorites.push(...subFavs);
+        }
+      }
+    }
+
     if (userDocRes && userDocRes.ok) {
       const data = await userDocRes.json();
       if (data.fields) {
@@ -962,26 +1034,15 @@ export async function loadFullUserDataFirestore(userId) {
           else if ('integerValue' in f) userProfile[k] = Number(f.integerValue);
           else if ('booleanValue' in f) userProfile[k] = f.booleanValue;
         }
-        if (data.fields.favorites?.arrayValue?.values) {
-          const rFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-          favorites.push(...rFavs);
+        if (!hasExplicitFavDoc) {
+          if (data.fields.favorites?.arrayValue?.values) {
+            const rFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+            favorites.push(...rFavs);
+          } else if (data.fields.favorite_words?.arrayValue?.values) {
+            const rFavs = data.fields.favorite_words.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+            favorites.push(...rFavs);
+          }
         }
-        if (data.fields.favorite_words?.arrayValue?.values) {
-          const rFavs = data.fields.favorite_words.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-          favorites.push(...rFavs);
-        }
-      }
-    }
-
-    if (favDocRes && favDocRes.ok) {
-      const data = await favDocRes.json();
-      if (data.fields?.favorites?.arrayValue?.values) {
-        const subFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-        favorites.push(...subFavs);
-      }
-      if (data.fields?.items?.arrayValue?.values) {
-        const subFavs = data.fields.items.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-        favorites.push(...subFavs);
       }
     }
     favorites = Array.from(new Set(favorites.map(String)));

@@ -1949,7 +1949,7 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 .flashcard-translation {
   font-size: 22px;
   font-weight: 600;
-  color: #15803d;
+  color: var(--text-main, #0f172a);
   margin: 0;
   line-height: 1.35;
   letter-spacing: -0.2px;
@@ -1959,7 +1959,7 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 }
 
 .dark-theme .flashcard-translation {
-  color: #4ade80;
+  color: #f8fafc;
 }
 
 /* WOTD card back face: white text with outline (same style as English word) */

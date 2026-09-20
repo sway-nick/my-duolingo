@@ -420,11 +420,12 @@ function isVoicePackDownloaded(accent = 'us') {
  */
 function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
   const norm = String(category || '').toLowerCase().trim();
-  if (norm.includes('elementary')) {
-    return true; // Pre-packaged in APK!
-  }
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
+  if (norm.includes('elementary')) {
+    // US Elementary is pre-packaged in APK; UK Elementary must be downloaded
+    if (!isUk) return true;
+  }
 
   try {
     return localStorage.getItem(`myduo_cat_downloaded_${targetAccent}_${norm}`) === 'true';

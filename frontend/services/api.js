@@ -75,6 +75,9 @@ function sanitizeTranscriptions(words) {
   if (!Array.isArray(words)) return;
   words.forEach((w) => {
     if (w) {
+      if (typeof w.word === 'string' && /[\u00ad\u200b\ufeff]/.test(w.word)) {
+        w.word = w.word.replace(/[\u00ad\u200b\ufeff]/g, '').trim();
+      }
       let t = String(w.transcription || '').trim();
       if (t) {
         t = t.replace(/^[\/\[]/, '').replace(/[\/\]]$/, '');
@@ -1342,16 +1345,24 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       ...localProg
     };
 
+    const deletedFavs = getDeletedFavoritesSet(uId);
+    const sanitizeFavArray = (arr) => {
+      if (!Array.isArray(arr)) return [];
+      return arr
+        .map(id => String(id).trim())
+        .filter(id => id && !deletedFavs.has(id));
+    };
+
     const mergedFavsSet = new Set([
-      ...(fbDoc?.favorites || []),
-      ...(detDoc?.favorites || []),
-      ...(fullDoc?.favorites || []),
-      ...(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
-      ...(fbUid ? JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]') : []),
-      ...(detId ? JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]') : []),
-      ...(JSON.parse(localStorage.getItem('dl_favorites') || '[]')),
-      ...(JSON.parse(localStorage.getItem('favorites') || '[]')),
-      ...(JSON.parse(localStorage.getItem('favs_guest') || '[]'))
+      ...sanitizeFavArray(fbDoc?.favorites),
+      ...sanitizeFavArray(detDoc?.favorites),
+      ...sanitizeFavArray(fullDoc?.favorites),
+      ...sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
+      ...(fbUid ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]')) : []),
+      ...(detId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]')) : []),
+      ...sanitizeFavArray(JSON.parse(localStorage.getItem('dl_favorites') || '[]')),
+      ...sanitizeFavArray(JSON.parse(localStorage.getItem('favorites') || '[]')),
+      ...sanitizeFavArray(JSON.parse(localStorage.getItem('favs_guest') || '[]'))
     ]);
 
     // Match historical profile from migrated database
@@ -1399,7 +1410,10 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
         });
       }
       if (Array.isArray(prof.favorites)) {
-        prof.favorites.forEach(id => mergedFavsSet.add(String(id)));
+        prof.favorites.forEach(id => {
+          const sid = String(id).trim();
+          if (sid && !deletedFavs.has(sid)) mergedFavsSet.add(sid);
+        });
       }
       if (prof.weeklyXp && prof.weeklyXp > maxHistoricalXp) {
         maxHistoricalXp = prof.weeklyXp;
@@ -1486,36 +1500,32 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     }
 
     if (detId && detId !== uId) {
-      const detFavs = JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]');
-      if (Array.isArray(detFavs)) detFavs.forEach(id => mergedFavsSet.add(String(id)));
+      const detFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]'));
+      detFavs.forEach(id => mergedFavsSet.add(String(id)));
     }
     if (fbUid && fbUid !== uId) {
-      const fbFavs = JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]');
-      if (Array.isArray(fbFavs)) fbFavs.forEach(id => mergedFavsSet.add(String(id)));
+      const fbFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]'));
+      fbFavs.forEach(id => mergedFavsSet.add(String(id)));
     }
-    try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && (k.startsWith('favs_') || k.startsWith('favorites_'))) {
-          const arr = JSON.parse(localStorage.getItem(k) || '[]');
-          if (Array.isArray(arr)) arr.forEach(id => mergedFavsSet.add(String(id)));
-        }
-      }
-    } catch (e) {}
 
-    const mergedFavs = Array.from(mergedFavsSet).map(String).filter(Boolean);
-    if (mergedFavs.length > 0) {
-      localStorage.setItem(`favs_${uId}`, JSON.stringify(mergedFavs));
-      if (detId && detId !== uId) {
-        localStorage.setItem(`favs_${detId}`, JSON.stringify(mergedFavs));
-      }
-      if (fbUid && fbUid !== uId) {
-        localStorage.setItem(`favs_${fbUid}`, JSON.stringify(mergedFavs));
-      }
-      saveUserFavoritesFirestore(uId, mergedFavs).catch(() => {});
-      if (fbUid && fbUid !== uId) {
-        saveUserFavoritesFirestore(fbUid, mergedFavs).catch(() => {});
-      }
+    const mergedFavs = Array.from(mergedFavsSet)
+      .map(String)
+      .map(s => s.trim())
+      .filter(id => id && !deletedFavs.has(id));
+
+    localStorage.setItem(`favs_${uId}`, JSON.stringify(mergedFavs));
+    if (detId && detId !== uId) {
+      localStorage.setItem(`favs_${detId}`, JSON.stringify(mergedFavs));
+    }
+    if (fbUid && fbUid !== uId) {
+      localStorage.setItem(`favs_${fbUid}`, JSON.stringify(mergedFavs));
+    }
+    saveUserFavoritesFirestore(uId, mergedFavs).catch(() => {});
+    if (fbUid && fbUid !== uId) {
+      saveUserFavoritesFirestore(fbUid, mergedFavs).catch(() => {});
+    }
+    if (detId && detId !== uId && detId !== fbUid) {
+      saveUserFavoritesFirestore(detId, mergedFavs).catch(() => {});
     }
 
     const activeLocalLang = localStorage.getItem('myduo_interface_lang');
@@ -1710,22 +1720,119 @@ if (typeof window !== 'undefined') {
     flushProgressQueue();
     pushUserDataToCloud(null, null, true);
   });
-  document.addEventListener('pause', () => {
-    flushProgressQueue();
-    pushUserDataToCloud(null, null, true);
+  if (typeof document !== 'undefined') {
+    document.addEventListener('pause', () => {
+      flushProgressQueue();
+      pushUserDataToCloud(null, null, true);
+    });
+  }
+}
+
+function getDeletedFavoritesSet(userId = null) {
+  const uId = userId || getEffectiveUserId();
+  const user = getCurrentUser();
+  const detId = user && user.email ? getDeterministicUserId(user.email) : null;
+  const fbUid = user && user.firebaseUid ? user.firebaseUid : null;
+  const guestId = getGuestId();
+
+  const set = new Set();
+  const keys = [
+    uId ? `favs_deleted_${uId}` : null,
+    detId ? `favs_deleted_${detId}` : null,
+    fbUid ? `favs_deleted_${fbUid}` : null,
+    guestId ? `favs_deleted_${guestId}` : null,
+    'favs_deleted'
+  ].filter(Boolean);
+
+  keys.forEach(k => {
+    try {
+      const raw = localStorage.getItem(k);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) {
+          arr.forEach(id => {
+            const sid = String(id).trim();
+            if (sid) set.add(sid);
+          });
+        }
+      }
+    } catch (e) {}
+  });
+
+  return set;
+}
+
+function recordDeletedFavorite(wordId, userId = null) {
+  const sid = String(wordId).trim();
+  if (!sid) return;
+  const uId = userId || getEffectiveUserId();
+  const user = getCurrentUser();
+  const detId = user && user.email ? getDeterministicUserId(user.email) : null;
+  const fbUid = user && user.firebaseUid ? user.firebaseUid : null;
+  const guestId = getGuestId();
+
+  const targetKeys = Array.from(new Set([
+    uId ? `favs_deleted_${uId}` : null,
+    detId ? `favs_deleted_${detId}` : null,
+    fbUid ? `favs_deleted_${fbUid}` : null,
+    guestId ? `favs_deleted_${guestId}` : null,
+    'favs_deleted'
+  ].filter(Boolean)));
+
+  targetKeys.forEach(k => {
+    try {
+      const list = JSON.parse(localStorage.getItem(k) || '[]');
+      const set = new Set(Array.isArray(list) ? list.map(String) : []);
+      set.add(sid);
+      localStorage.setItem(k, JSON.stringify(Array.from(set)));
+    } catch (e) {}
+  });
+}
+
+function unrecordDeletedFavorite(wordId, userId = null) {
+  const sid = String(wordId).trim();
+  if (!sid) return;
+  const uId = userId || getEffectiveUserId();
+  const user = getCurrentUser();
+  const detId = user && user.email ? getDeterministicUserId(user.email) : null;
+  const fbUid = user && user.firebaseUid ? user.firebaseUid : null;
+  const guestId = getGuestId();
+
+  const targetKeys = Array.from(new Set([
+    uId ? `favs_deleted_${uId}` : null,
+    detId ? `favs_deleted_${detId}` : null,
+    fbUid ? `favs_deleted_${fbUid}` : null,
+    guestId ? `favs_deleted_${guestId}` : null,
+    'favs_deleted'
+  ].filter(Boolean)));
+
+  targetKeys.forEach(k => {
+    try {
+      const list = JSON.parse(localStorage.getItem(k) || '[]');
+      if (Array.isArray(list) && list.length > 0) {
+        const set = new Set(list.map(String));
+        set.delete(sid);
+        localStorage.setItem(k, JSON.stringify(Array.from(set)));
+      }
+    } catch (e) {}
   });
 }
 
 function getUserFavorites() {
   const userId = getEffectiveUserId();
   const key = `favs_${userId}`;
-  let favs = [];
+  let favs = null;
   try {
     const raw = localStorage.getItem(key);
-    if (raw) favs = JSON.parse(raw);
+    if (raw !== null) {
+      favs = JSON.parse(raw);
+    }
   } catch (e) {}
 
-  if (!Array.isArray(favs) || favs.length === 0) {
+  const deletedSet = getDeletedFavoritesSet(userId);
+
+  // ONLY if the key was never initialized in localStorage (null), perform one-time migration
+  if (!Array.isArray(favs)) {
     const merged = new Set();
     try {
       const user = getCurrentUser();
@@ -1733,79 +1840,167 @@ function getUserFavorites() {
         const detId = getDeterministicUserId(user.email);
         if (detId && detId !== userId) {
           const detFavs = JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]');
-          if (Array.isArray(detFavs)) detFavs.forEach(id => merged.add(String(id)));
+          if (Array.isArray(detFavs)) detFavs.forEach(id => {
+            const sid = String(id).trim();
+            if (sid && !deletedSet.has(sid)) merged.add(sid);
+          });
         }
       }
 
       if (user && user.firebaseUid && user.firebaseUid !== userId) {
         const fbFavs = JSON.parse(localStorage.getItem(`favs_${user.firebaseUid}`) || '[]');
-        if (Array.isArray(fbFavs)) fbFavs.forEach(id => merged.add(String(id)));
+        if (Array.isArray(fbFavs)) fbFavs.forEach(id => {
+          const sid = String(id).trim();
+          if (sid && !deletedSet.has(sid)) merged.add(sid);
+        });
       }
 
       const guestId = getGuestId();
       if (guestId && guestId !== userId) {
         const guestFavs = JSON.parse(localStorage.getItem(`favs_${guestId}`) || '[]');
-        if (Array.isArray(guestFavs)) guestFavs.forEach(id => merged.add(String(id)));
+        if (Array.isArray(guestFavs)) guestFavs.forEach(id => {
+          const sid = String(id).trim();
+          if (sid && !deletedSet.has(sid)) merged.add(sid);
+        });
       }
 
       const legacyKeys = ['favs_guest', 'dl_favorites', 'favorites', 'myduo_favorites', 'favs'];
       legacyKeys.forEach(k => {
         const arr = JSON.parse(localStorage.getItem(k) || '[]');
-        if (Array.isArray(arr)) arr.forEach(id => merged.add(String(id)));
+        if (Array.isArray(arr)) arr.forEach(id => {
+          const sid = String(id).trim();
+          if (sid && !deletedSet.has(sid)) merged.add(sid);
+        });
       });
-
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && (k.startsWith('favs_') || k.startsWith('favorites_'))) {
-          const arr = JSON.parse(localStorage.getItem(k) || '[]');
-          if (Array.isArray(arr)) arr.forEach(id => merged.add(String(id)));
-        }
-      }
     } catch (e) {}
 
-    if (merged.size > 0) {
-      favs = Array.from(merged);
-      try {
-        localStorage.setItem(key, JSON.stringify(favs));
-      } catch (e) {}
-    }
+    favs = Array.from(merged).filter(id => id && !deletedSet.has(id));
+    try {
+      localStorage.setItem(key, JSON.stringify(favs));
+    } catch (e) {}
   }
 
-  return Array.isArray(favs) ? favs.map(String).filter(Boolean) : [];
+  const cleanFavs = (Array.isArray(favs) ? favs : [])
+    .map(id => String(id).trim())
+    .filter(id => id && !deletedSet.has(id));
+
+  return cleanFavs;
 }
 
 async function toggleFavoriteApi(wordId, isFavorite) {
   const userId = getEffectiveUserId();
-  const key = `favs_${userId}`;
-  const favs = JSON.parse(localStorage.getItem(key) || '[]');
-  const wordIdStr = String(wordId);
-  const exists = favs.map(String).includes(wordIdStr);
+  const wordIdStr = String(wordId).trim();
+  if (!wordIdStr) return;
 
-  if (isFavorite && !exists) {
-    favs.push(wordId);
-  } else if (!isFavorite && exists) {
-    const idx = favs.map(String).indexOf(wordIdStr);
-    if (idx >= 0) favs.splice(idx, 1);
+  const user = getCurrentUser();
+  const detId = user && user.email ? getDeterministicUserId(user.email) : null;
+  const fbUid = user && user.firebaseUid ? user.firebaseUid : null;
+  const guestId = getGuestId();
+
+  let favs = getUserFavorites();
+
+  if (isFavorite) {
+    unrecordDeletedFavorite(wordIdStr, userId);
+    if (!favs.includes(wordIdStr)) {
+      favs.push(wordIdStr);
+    }
+  } else {
+    recordDeletedFavorite(wordIdStr, userId);
+    favs = favs.filter(id => String(id).trim() !== wordIdStr);
+
+    // Deep purge across all legacy, guest, and variant localStorage keys
+    const purgeKeys = new Set([
+      'favs_guest',
+      'dl_favorites',
+      'favorites',
+      'myduo_favorites',
+      'favs',
+      guestId ? `favs_${guestId}` : null
+    ].filter(Boolean));
+
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith('favs_') || k.startsWith('favorites_')) && !k.includes('deleted')) {
+          purgeKeys.add(k);
+        }
+      }
+    } catch (e) {}
+
+    purgeKeys.forEach(k => {
+      try {
+        const raw = localStorage.getItem(k);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            const filtered = parsed.filter(id => String(id).trim() !== wordIdStr);
+            localStorage.setItem(k, JSON.stringify(filtered));
+          }
+        }
+      } catch (e) {}
+    });
   }
-  localStorage.setItem(key, JSON.stringify(favs));
 
-  // Sync to Cloud Firestore
-  try {
-    saveUserFavoritesFirestore(userId, favs).catch(() => {});
-  } catch (e) {}
+  // Save the updated list to primary user key and aliases
+  const serialized = JSON.stringify(favs);
+  localStorage.setItem(`favs_${userId}`, serialized);
+  if (detId && detId !== userId) localStorage.setItem(`favs_${detId}`, serialized);
+  if (fbUid && fbUid !== userId) localStorage.setItem(`favs_${fbUid}`, serialized);
+
+  // Dispatch UI update
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: favs }));
+  }
+
+  // Synchronize to Firestore for ALL user IDs (userId, fbUid, detId)
+  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
+  for (const id of idsToSync) {
+    try {
+      saveUserFavoritesFirestore(id, favs).catch(() => {});
+    } catch (e) {}
+  }
 
   pushUserDataToCloud(userId);
 }
 
 async function clearAllFavoritesApi() {
   const userId = getEffectiveUserId();
-  const key = `favs_${userId}`;
-  localStorage.setItem(key, JSON.stringify([]));
+  const user = getCurrentUser();
+  const detId = user && user.email ? getDeterministicUserId(user.email) : null;
+  const fbUid = user && user.firebaseUid ? user.firebaseUid : null;
+  const guestId = getGuestId();
+
+  const currentFavs = getUserFavorites();
+  currentFavs.forEach(id => recordDeletedFavorite(id, userId));
+
+  localStorage.setItem(`favs_${userId}`, JSON.stringify([]));
+  if (detId && detId !== userId) localStorage.setItem(`favs_${detId}`, JSON.stringify([]));
+  if (fbUid && fbUid !== userId) localStorage.setItem(`favs_${fbUid}`, JSON.stringify([]));
+  if (guestId && guestId !== userId) localStorage.setItem(`favs_${guestId}`, JSON.stringify([]));
+
+  const legacyKeys = ['favs_guest', 'dl_favorites', 'favorites', 'myduo_favorites', 'favs'];
+  legacyKeys.forEach(k => {
+    try { localStorage.setItem(k, JSON.stringify([])); } catch (e) {}
+  });
+
   try {
-    saveUserFavoritesFirestore(userId, []).catch(() => {});
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith('favs_') || k.startsWith('favorites_')) && !k.includes('deleted')) {
+        localStorage.setItem(k, JSON.stringify([]));
+      }
+    }
   } catch (e) {}
+
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: [] }));
+  }
+
+  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
+  for (const id of idsToSync) {
+    try {
+      saveUserFavoritesFirestore(id, []).catch(() => {});
+    } catch (e) {}
   }
 
   pushUserDataToCloud(userId);
@@ -1924,16 +2119,8 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
   const baseIds = new Set(baseWords.map((w) => String(w.id)));
 
   // Word pool for review words (favorites and mastered):
-  // Search within categoryWords first, supplemented by cachedWordsList if available
-  let reviewWordPool = [...categoryWords];
-  if (cachedWordsList && Array.isArray(cachedWordsList) && cachedWordsList.length > categoryWords.length) {
-    const catIds = new Set(categoryWords.map((w) => String(w.id)));
-    for (const w of cachedWordsList) {
-      if (!catIds.has(String(w.id))) {
-        reviewWordPool.push(w);
-      }
-    }
-  }
+  // STRICTLY within categoryWords! Words from other categories must NEVER be mixed into the conveyor.
+  const reviewWordPool = [...categoryWords];
 
   // 2. Pick up to 5 oldest Favorites (LRU by lastReviewedAt / lastPracticed ascending)
   let injectedFavs = [];
@@ -1978,9 +2165,20 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
   return [...baseWords, ...bonusWords].slice(0, 20);
 }
 
+function getCategoryBatchKey(categoryWords) {
+  if (Array.isArray(categoryWords) && categoryWords.length > 0 && categoryWords[0] && categoryWords[0].category) {
+    return String(categoryWords[0].category).trim().toLowerCase().replace(/[^a-z0-9_]+/gi, '_');
+  }
+  return 'default';
+}
+
 function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
+  if (!Array.isArray(categoryWords) || categoryWords.length === 0) {
+    return [];
+  }
   const userId = getEffectiveUserId();
-  const storageKey = `conveyor_batch_${userId}`;
+  const catKey = getCategoryBatchKey(categoryWords);
+  const storageKey = `conveyor_batch_${userId}_${catKey}`;
   const raw = localStorage.getItem(storageKey);
   let batchIds = [];
   try {
@@ -1989,13 +2187,11 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
     batchIds = [];
   }
 
+  // Index ONLY category words - never resolve words outside the active category
+  const wordMap = new Map();
+  categoryWords.forEach((w) => wordMap.set(String(w.id), w));
+
   if (Array.isArray(batchIds) && batchIds.length > 0) {
-    const wordMap = new Map();
-    // Index category words first, then cachedWordsList for any injected review words
-    if (cachedWordsList && Array.isArray(cachedWordsList)) {
-      cachedWordsList.forEach((w) => wordMap.set(String(w.id), w));
-    }
-    categoryWords.forEach((w) => wordMap.set(String(w.id), w));
     const resolved = batchIds.map((id) => wordMap.get(String(id))).filter(Boolean);
     
     // Check if the resolved batch still has uncompleted words in this round
@@ -2012,7 +2208,7 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
     if (hasActiveWords && resolved.length > 0) {
       return resolved;
     } else {
-      clearActiveConveyorBatch();
+      clearActiveConveyorBatch(categoryWords);
     }
   }
 
@@ -2025,14 +2221,37 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
   return freshBatch;
 }
 
-function clearActiveConveyorBatch() {
+function clearActiveConveyorBatch(categoryWordsOrKey = null) {
   const userId = getEffectiveUserId();
   try {
+    // 1. Remove legacy un-scoped batch key
     localStorage.removeItem(`conveyor_batch_${userId}`);
+
+    // 2. Remove category-specific key or all category conveyor keys
+    if (typeof categoryWordsOrKey === 'string') {
+      localStorage.removeItem(`conveyor_batch_${userId}_${categoryWordsOrKey}`);
+    } else if (Array.isArray(categoryWordsOrKey)) {
+      const catKey = getCategoryBatchKey(categoryWordsOrKey);
+      localStorage.removeItem(`conveyor_batch_${userId}_${catKey}`);
+    } else {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(`conveyor_batch_${userId}`)) {
+          localStorage.removeItem(k);
+        }
+      }
+    }
+
+    // 3. Clear round flags in user progress
     const key = `progress_${userId}`;
     const local = JSON.parse(localStorage.getItem(key) || '{}');
     let changed = false;
-    Object.values(local).forEach((p) => {
+    const targetIds = Array.isArray(categoryWordsOrKey)
+      ? new Set(categoryWordsOrKey.map((w) => String(w.id)))
+      : null;
+
+    Object.entries(local).forEach(([id, p]) => {
+      if (targetIds && !targetIds.has(String(id))) return;
       if (p.roundCardsDone || p.roundQuizDone || p.roundPairsDone || p.roundTestDone) {
         delete p.roundCardsDone;
         delete p.roundQuizDone;
@@ -2784,8 +3003,8 @@ try {
 } catch (e) {}
 
 async function addCustomWord({ word, translation, category, notes }) {
-  const cleanW = String(word || '').trim();
-  const cleanTrans = String(translation || '').trim();
+  const cleanW = String(word || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
+  const cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
   const cleanCat = String(category || 'Общие').trim();
   const cleanNotes = String(notes || '').trim();
 
