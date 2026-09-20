@@ -20,33 +20,6 @@ import {
   loadFullUserDataFirestore
 } from './firebase.js?v=200.0';
 
-// Resolve the ID used for protected Firestore requests.
-// The app keeps its own internal user ID for local data, while Firebase Rules
-// require the authenticated Firebase UID for /users/{uid}/... documents.
-function getFirestoreUserId(userId = null) {
-  const user = getCurrentUser();
-  const fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
-  if (!fbUid) return userId;
-
-  const detId = user?.email ? getDeterministicUserId(user.email) : null;
-  const effectiveId = getEffectiveUserId();
-
-  if (!userId) return fbUid;
-
-  const candidate = String(userId);
-  if (
-    candidate === fbUid ||
-    candidate === String(user?.id || '') ||
-    candidate === String(detId || '') ||
-    candidate === String(effectiveId || '')
-  ) {
-    return fbUid;
-  }
-
-  return userId;
-}
-
-
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
 }
@@ -196,9 +169,8 @@ function saveUserNote(wordId, wordText, noteText) {
   try {
     const user = getCurrentUser();
     const uId = user?.id || getEffectiveUserId();
-    const firestoreUserId = getFirestoreUserId(uId);
-    if (firestoreUserId) {
-      saveUserNotesFirestore(firestoreUserId, notes).catch(() => {});
+    if (uId) {
+      saveUserNotesFirestore(uId, notes).catch(() => {});
     }
   } catch (e) {}
 
@@ -1249,7 +1221,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   // Sync to Cloud Firestore (Real-time persistent cloud storage)
   try {
-    saveUserProgressFirestore(getFirestoreUserId(userId), wordId, prog).catch(() => {});
+    saveUserProgressFirestore(userId, wordId, prog).catch(() => {});
   } catch (e) {}
 
   pendingProgressQueue.push({
@@ -1289,7 +1261,7 @@ async function flushProgressQueue() {
       continue; // Skip guests from cloud progress sync
     }
     try {
-      saveUserProgressFirestore(getFirestoreUserId(item.userId), item.wordId, item);
+      saveUserProgressFirestore(item.userId, item.wordId, item);
     } catch (e) {
       console.warn('Failed to sync progress item to Firestore:', item, e);
     }
@@ -1339,24 +1311,32 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   const wKey = weekKey || getIsoWeekKey();
   const user = getCurrentUser();
   const detId = user && user.email ? getDeterministicUserId(user.email) : null;
-  const fbUid = user?.firebaseUid || null;
-  const firestoreUserId = getFirestoreUserId(uId);
+  const fbUid = user && (user.firebaseUid || (user.id && user.id !== detId ? user.id : null));
 
-  // Fetch protected Firestore data only with the authenticated Firebase UID.
-  // Legacy/deterministic IDs remain available for localStorage migration only.
+  // Fetch real-time progress, XP and data from Cloud Firestore
   try {
-    const [firestoreProgress, firestoreXp, firestoreFullDoc, migratedPlayers] = await Promise.all([
-      loadUserProgressFirestore(firestoreUserId).catch(() => ({})),
-      getUserWeeklyXpFirestore(firestoreUserId, wKey).catch(() => 0),
-      loadFullUserDataFirestore(firestoreUserId).catch(() => null),
+    const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc, migratedPlayers] = await Promise.all([
+      loadUserProgressFirestore(uId).catch(() => ({})),
+      detId && detId !== uId ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
+      fbUid && fbUid !== uId && fbUid !== detId ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
+      getUserWeeklyXpFirestore(uId, wKey).catch(() => 0),
+      detId && detId !== uId ? getUserWeeklyXpFirestore(detId, wKey).catch(() => 0) : Promise.resolve(0),
+      fbUid && fbUid !== uId && fbUid !== detId ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
+      loadFullUserDataFirestore(uId).catch(() => null),
+      detId && detId !== uId ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
+      fbUid && fbUid !== uId && fbUid !== detId ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null),
       loadMigratedPlayersBundle().catch(() => [])
     ]);
 
     const progKey = `progress_${uId}`;
     const localProg = JSON.parse(localStorage.getItem(progKey) || '{}');
     const mergedProg = {
-      ...(firestoreFullDoc?.progress || {}),
-      ...(firestoreProgress || {}),
+      ...(fbDoc?.progress || {}),
+      ...(detDoc?.progress || {}),
+      ...(fullDoc?.progress || {}),
+      ...(progFb || {}),
+      ...(prog2 || {}),
+      ...(prog1 || {}),
       ...localProg
     };
 
@@ -1369,7 +1349,9 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     };
 
     const mergedFavsSet = new Set([
-      ...sanitizeFavArray(firestoreFullDoc?.favorites),
+      ...sanitizeFavArray(fbDoc?.favorites),
+      ...sanitizeFavArray(detDoc?.favorites),
+      ...sanitizeFavArray(fullDoc?.favorites),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
       ...(fbUid ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]')) : []),
       ...(detId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]')) : []),
@@ -1440,7 +1422,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     }
 
     if (!foundAvatar) {
-      foundAvatar = firestoreFullDoc?.profile?.avatar || user?.avatar || '';
+      foundAvatar = fbDoc?.profile?.avatar || fullDoc?.profile?.avatar || detDoc?.profile?.avatar || user?.avatar || '';
     }
 
     if (foundAvatar) {
@@ -1458,11 +1440,19 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     // Merge XP from Firestore and local
     const xpKey = `xp_${uId}_${wKey}`;
     const localXp = getUserWeeklyXP(uId, wKey);
-    let finalFirestoreXp = Math.max(localXp, Number(firestoreXp || 0), maxHistoricalXp);
+    let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0), maxHistoricalXp);
 
     // Check profile XP
-    if (firestoreFullDoc?.profile?.xp || firestoreFullDoc?.profile?.totalXp) {
-      const pXp = Number(firestoreFullDoc.profile.xp || firestoreFullDoc.profile.totalXp || 0);
+    if (fullDoc?.profile?.xp || fullDoc?.profile?.totalXp) {
+      const pXp = Number(fullDoc.profile.xp || fullDoc.profile.totalXp || 0);
+      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
+    }
+    if (detDoc?.profile?.xp || detDoc?.profile?.totalXp) {
+      const pXp = Number(detDoc.profile.xp || detDoc.profile.totalXp || 0);
+      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
+    }
+    if (fbDoc?.profile?.xp || fbDoc?.profile?.totalXp) {
+      const pXp = Number(fbDoc.profile.xp || fbDoc.profile.totalXp || 0);
       if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
     }
 
@@ -1481,6 +1471,8 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (calcXp > 0) finalFirestoreXp = calcXp;
     }
 
+
+
     if (finalFirestoreXp > 0) {
       localStorage.setItem(xpKey, String(finalFirestoreXp));
       localStorage.setItem('xp', String(finalFirestoreXp));
@@ -1490,13 +1482,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (fbUid && fbUid !== uId) {
         localStorage.setItem(`xp_${fbUid}_${wKey}`, String(finalFirestoreXp));
       }
-      syncLeaderboardScoreFirestore(
-        firestoreUserId,
-        wKey,
-        finalFirestoreXp,
-        user?.name || 'User',
-        foundAvatar || user?.avatar || ''
-      ).catch(() => {});
+      syncLeaderboardScoreFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp, delta: 0 } }));
       }
@@ -1523,11 +1509,19 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     if (fbUid && fbUid !== uId) {
       localStorage.setItem(`favs_${fbUid}`, JSON.stringify(mergedFavs));
     }
-    saveUserFavoritesFirestore(firestoreUserId, mergedFavs).catch(() => {});
+    saveUserFavoritesFirestore(uId, mergedFavs).catch(() => {});
+    if (fbUid && fbUid !== uId) {
+      saveUserFavoritesFirestore(fbUid, mergedFavs).catch(() => {});
+    }
+    if (detId && detId !== uId && detId !== fbUid) {
+      saveUserFavoritesFirestore(detId, mergedFavs).catch(() => {});
+    }
 
     const activeLocalLang = localStorage.getItem('myduo_interface_lang');
     const mergedSettings = {
-      ...(firestoreFullDoc?.settings || {}),
+      ...(fbDoc?.settings || {}),
+      ...(detDoc?.settings || {}),
+      ...(fullDoc?.settings || {}),
       ...(JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}'))
     };
     if (activeLocalLang) {
@@ -1578,18 +1572,18 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 
     // 1. Sync User Notes
     const localNotes = getUserNotesLocal();
-    const remoteNotes = { ...(firestoreFullDoc?.notes || {}) };
+    const remoteNotes = { ...(detDoc?.notes || {}), ...(fullDoc?.notes || {}) };
     const mergedNotes = { ...remoteNotes, ...localNotes };
     if (Object.keys(mergedNotes).length > 0) {
       localStorage.setItem('myduo_user_notes', JSON.stringify(mergedNotes));
-      saveUserNotesFirestore(firestoreUserId, mergedNotes).catch(() => {});
+      saveUserNotesFirestore(uId, mergedNotes).catch(() => {});
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
         applyUserNotes(cachedWordsList);
       }
     }
 
     // 2. Sync Custom Words
-    const remoteCustomWords = Array.isArray(firestoreFullDoc?.customWords) ? firestoreFullDoc.customWords : [];
+    const remoteCustomWords = Array.isArray(fullDoc?.customWords) ? fullDoc.customWords : (Array.isArray(detDoc?.customWords) ? detDoc.customWords : []);
     if (remoteCustomWords.length > 0 || (cachedWordsList && cachedWordsList.some(w => String(w.id || '').startsWith('custom_')))) {
       if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
         try {
@@ -1600,7 +1594,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       }
       const existingCustomIds = new Set(cachedWordsList.filter(w => String(w.id || '').startsWith('custom_')).map(w => String(w.id)));
       const existingCustomWords = new Set(cachedWordsList.filter(w => String(w.id || '').startsWith('custom_')).map(w => String(w.word || '').toLowerCase()));
-
+      
       let addedAny = false;
       remoteCustomWords.forEach(rcw => {
         if (!existingCustomIds.has(String(rcw.id)) && !existingCustomWords.has(String(rcw.word || '').toLowerCase())) {
@@ -1613,7 +1607,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 
       const allCustomWords = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
       if (allCustomWords.length > 0) {
-        saveUserCustomWordsFirestore(firestoreUserId, allCustomWords).catch(() => {});
+        saveUserCustomWordsFirestore(uId, allCustomWords).catch(() => {});
       }
       if (addedAny) {
         try {
@@ -1653,25 +1647,25 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     const userName = user && user.name ? user.name : 'Участник';
 
     // 100% Cloud Firestore sync
-    const firestoreUserId = getFirestoreUserId(uId);
     try {
-      saveUserProfileFirestore(firestoreUserId, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
+      const firestoreUid = getFirestoreUserId(uId);
+      saveUserProfileFirestore(firestoreUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
       if (weeklyXp > 0) {
-        syncLeaderboardScoreFirestore(firestoreUserId, wKey, weeklyXp, userName, avatar).catch(() => {});
+        syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
-      saveUserFavoritesFirestore(firestoreUserId, favorites).catch(() => {});
-      saveUserSettingsFirestore(firestoreUserId, settings).catch(() => {});
-      saveBulkProgressFirestore(firestoreUserId, progress).catch(() => {});
+      saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
+      saveUserSettingsFirestore(firestoreUid, settings).catch(() => {});
+      saveBulkProgressFirestore(firestoreUid, progress).catch(() => {});
 
       const localNotes = getUserNotesLocal();
       if (Object.keys(localNotes).length > 0) {
-        saveUserNotesFirestore(firestoreUserId, localNotes).catch(() => {});
+        saveUserNotesFirestore(firestoreUid, localNotes).catch(() => {});
       }
 
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
         const customOnly = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
         if (customOnly.length > 0) {
-          saveUserCustomWordsFirestore(firestoreUserId, customOnly).catch(() => {});
+          saveUserCustomWordsFirestore(firestoreUid, customOnly).catch(() => {});
         }
       }
     } catch (fsErr) {
@@ -1939,13 +1933,13 @@ async function toggleFavoriteApi(wordId, isFavorite) {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: favs }));
   }
 
-  // Synchronize the current user's favorites only to the authenticated Firebase UID.
-  const firestoreUserId = getFirestoreUserId(userId);
-  try {
-    if (firestoreUserId && !String(firestoreUserId).startsWith('guest_')) {
-      saveUserFavoritesFirestore(firestoreUserId, favs).catch(() => {});
-    }
-  } catch (e) {}
+  // Synchronize to Firestore for ALL user IDs (userId, fbUid, detId)
+  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
+  for (const id of idsToSync) {
+    try {
+      saveUserFavoritesFirestore(id, favs).catch(() => {});
+    } catch (e) {}
+  }
 
   pushUserDataToCloud(userId);
 }
@@ -1983,12 +1977,12 @@ async function clearAllFavoritesApi() {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: [] }));
   }
 
-  const firestoreUserId = getFirestoreUserId(userId);
-  try {
-    if (firestoreUserId && !String(firestoreUserId).startsWith('guest_')) {
-      saveUserFavoritesFirestore(firestoreUserId, []).catch(() => {});
-    }
-  } catch (e) {}
+  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
+  for (const id of idsToSync) {
+    try {
+      saveUserFavoritesFirestore(id, []).catch(() => {});
+    } catch (e) {}
+  }
 
   pushUserDataToCloud(userId);
 }
@@ -2508,9 +2502,13 @@ async function saveUserSettings(settings) {
   if (payload.voiceAccent) localStorage.setItem('myduo_voice_accent', payload.voiceAccent);
   if (typeof payload.sfxMuted !== 'undefined') localStorage.setItem('myduo_sfx_muted', String(payload.sfxMuted));
 
-  // Sync to Cloud Firestore using the authenticated Firebase UID.
+  // Sync to Cloud Firestore
   try {
-    saveUserSettingsFirestore(getFirestoreUserId(userId), payload).catch(() => {});
+    saveUserSettingsFirestore(userId, payload).catch(() => {});
+    const user = getCurrentUser();
+    if (user?.firebaseUid && user.firebaseUid !== userId) {
+      saveUserSettingsFirestore(user.firebaseUid, payload).catch(() => {});
+    }
   } catch (e) {}
 
   pushUserDataToCloud(userId);
