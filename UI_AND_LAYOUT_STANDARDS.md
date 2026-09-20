@@ -8,6 +8,133 @@
 
 ---
 
+## 0. Архитектура проекта и правила расположения файлов
+
+### Источник правды
+
+> [!IMPORTANT]
+> **Все исходники хранятся в `frontend/`. Никогда не редактировать `docs/`, `services/` (корень) и `docs/services/` напрямую!**
+> После любых правок обязательно выполнить: `node scripts/build.cjs`
+> Билд автоматически синхронизирует `frontend/` → `docs/` + корень репо → Cloudflare Pages деплоит из `docs/` ветки `main`.
+
+### Схема системы
+
+```
+frontend/  ← ПРАВИМ ЗДЕСЬ
+    │
+    │  node scripts/build.cjs
+    ▼
+docs/  ← генерируется автоматически (не трогать!)
+    │
+    │  Cloudflare Pages (ветка main)
+    ▼
+https://english-breakfast.pages.dev  (PWA + Android)
+    │
+    │  Firebase Auth + Firestore REST
+    ▼
+Firebase: english-breakfast-181ba
+  • Auth — аутентификация
+  • Firestore — прогресс, XP, избранное, лидерборд
+```
+
+### Структура папок
+
+```
+my-duolingo/
+│
+├── frontend/                        ← ИСТОЧНИК ПРАВДЫ (все правки сюда)
+│   ├── index.html                   ← Единственный HTML приложения
+│   ├── app.js / main.js             ← Точка входа (app.js — основной)
+│   ├── sw.js                        ← Service Worker (PWA-кэш)
+│   ├── manifest.json                ← PWA-манифест
+│   ├── privacy.html                 ← Политика конфиденциальности
+│   │
+│   ├── services/                    ← Сервисный слой (бизнес-логика и API)
+│   │   ├── api.js                   ← Главный API: данные, синхронизация, пользователь
+│   │   ├── firebase.js              ← Firebase Auth + Firestore REST-клиент
+│   │   ├── authService.js           ← Авторизация: вход, выход, сессия
+│   │   ├── audioService.js          ← Воспроизведение аудио и TTS
+│   │   ├── storageService.js        ← Обёртка над localStorage
+│   │   ├── i18n.js                  ← Переводы UI и словари
+│   │   └── initialData.js           ← Начальные данные (сиды)
+│   │
+│   ├── components/                  ← UI-компоненты
+│   │   ├── auth/                    ← Формы входа / регистрации
+│   │   ├── dictionary/              ← Компоненты словаря
+│   │   ├── exercises/               ← Типы упражнений
+│   │   ├── favorites/               ← Избранное
+│   │   ├── layout/                  ← Контейнеры, навигация
+│   │   ├── leaderboard/             ← Лидерборд
+│   │   ├── modals/                  ← Модальные окна
+│   │   ├── settings/                ← Экраны настроек
+│   │   ├── stats/                   ← Блоки статистики
+│   │   └── training/                ← Режимы тренировки
+│   │
+│   └── assets/
+│       ├── css/main.css             ← Главные стили
+│       ├── data/words.json          ← База словаря (~5.6 МБ)
+│       ├── data/migrated_players.json
+│       ├── audio/                   ← Аудио произношений
+│       ├── avatars/                 ← Аватары
+│       ├── icons/                   ← Иконки
+│       └── video/                   ← Видео
+│
+├── docs/                            ← СБОРКА (генерируется — не редактировать!)
+├── backend/src/                     ← Google Apps Script (серверная часть)
+├── scripts/                         ← Утилиты: build, android, audio, i18n
+├── android/                         ← Capacitor Android-проект
+├── google_play_assets/              ← Материалы для Google Play
+├── firestore.rules                  ← Правила безопасности Firestore
+├── UI_AND_LAYOUT_STANDARDS.md       ← Этот файл (главный файл правил)
+├── MOBILE_UI_UX_STANDARDS.md        ← UX-стандарты мобильного интерфейса
+└── EnglishBreakfast.apk             ← Актуальный APK (макс. 36 МБ)
+```
+
+### Куда класть новые файлы
+
+| Тип файла | Папка |
+|-----------|-------|
+| UI-компонент | `frontend/components/<область>/НазваниеКомпонента.js` |
+| API-сервис | `frontend/services/НазваниеService.js` |
+| CSS-стили | `frontend/assets/css/` |
+| Статичные данные JSON | `frontend/assets/data/` |
+| Аудио | `frontend/assets/audio/` |
+| Иконки / изображения | `frontend/assets/icons/` |
+| Аватары | `frontend/assets/avatars/` |
+| Скрипт сборки / автоматизации | `scripts/` |
+| Документация | `docs/` (нумеруй: `07-Название.md`) |
+
+### Запрещено
+
+- ❌ Редактировать `docs/services/`, `services/` (корень) или `docs/index.html` напрямую
+- ❌ Хранить секреты (API ключи, токены) в git
+- ❌ Класть компоненты в корень `frontend/components/` если есть подходящая подпапка
+- ❌ Хранить временные / тестовые файлы в `frontend/` или `docs/`
+
+### Firebase — userId в Firestore
+
+> [!IMPORTANT]
+> `userId` в путях Firestore = **Firebase UID** (`b9PUaf5jtthwQIOPvAdZJ1o5CBC3`),
+> а НЕ внутренний ID приложения (`110531984537821932939` / `u_sway1976_...`).
+> Всегда использовать `getFirestoreUserId(uId)` перед любым запросом к subcollections `/data/*`.
+
+```
+users/{firebaseUID}/data/progress     ← read/write: auth.uid == firebaseUID
+users/{firebaseUID}/data/favorites    ← read/write: auth.uid == firebaseUID
+users/{firebaseUID}/data/notes        ← read/write: auth.uid == firebaseUID
+leaderboards/{week}/players/{uid}     ← read: public; write: auth.uid == uid
+```
+
+### Версионирование импортов
+
+При значительных изменениях сервисного файла — увеличить версию в `index.html`:
+```html
+<script src="services/api.js?v=221.0" type="module"></script>
+<script src="services/firebase.js?v=200.0" type="module"></script>
+```
+
+---
+
 ## 1. Эталон шапки приложения (`.mobile-header`) и строки состояния Android
 
 Шапка приложения должна строго и неизменно соответствовать утверждённому эталону:
