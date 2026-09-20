@@ -577,7 +577,7 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
 
   // Sync to Cloud Firestore (Real-time, instant)
   try {
-    syncLeaderboardScoreFirestore(userId, weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    syncLeaderboardScoreFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
   } catch (e) {}
 }
 
@@ -1501,10 +1501,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (fbUid && fbUid !== uId) {
         localStorage.setItem(`xp_${fbUid}_${wKey}`, String(finalFirestoreXp));
       }
-      syncLeaderboardScoreFirestore(uId, wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
-      if (fbUid && fbUid !== uId) {
-        syncLeaderboardScoreFirestore(fbUid, wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
-      }
+      syncLeaderboardScoreFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp, delta: 0 } }));
       }
@@ -1660,6 +1657,7 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
 
   const doSync = async () => {
     const wKey = weekKey || getIsoWeekKey();
+    const firestoreUid = getFirestoreUserId(uId);
     const progress = JSON.parse(localStorage.getItem(`progress_${uId}`) || '{}');
     const favorites = JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]');
     const weeklyXp = getUserWeeklyXP(uId, wKey);
@@ -1668,34 +1666,25 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     const user = getCurrentUser();
     const userName = user && user.name ? user.name : 'Участник';
 
-    // 100% Cloud Firestore sync
+    // 100% Cloud Firestore sync using Firebase UID
     try {
-      saveUserProfileFirestore(uId, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
+      saveUserProfileFirestore(firestoreUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
       if (weeklyXp > 0) {
-        syncLeaderboardScoreFirestore(uId, wKey, weeklyXp, userName, avatar).catch(() => {});
+        syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
-      saveUserFavoritesFirestore(uId, favorites).catch(() => {});
-      saveUserSettingsFirestore(uId, settings).catch(() => {});
-      saveBulkProgressFirestore(uId, progress).catch(() => {});
+      saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
+      saveUserSettingsFirestore(firestoreUid, settings).catch(() => {});
+      saveBulkProgressFirestore(firestoreUid, progress).catch(() => {});
 
       const localNotes = getUserNotesLocal();
       if (Object.keys(localNotes).length > 0) {
-        saveUserNotesFirestore(uId, localNotes).catch(() => {});
+        saveUserNotesFirestore(firestoreUid, localNotes).catch(() => {});
       }
 
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
         const customOnly = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
         if (customOnly.length > 0) {
-          saveUserCustomWordsFirestore(uId, customOnly).catch(() => {});
-        }
-      }
-      
-      if (user?.firebaseUid && user.firebaseUid !== uId) {
-        saveUserProfileFirestore(user.firebaseUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
-        saveBulkProgressFirestore(user.firebaseUid, progress).catch(() => {});
-        saveUserFavoritesFirestore(user.firebaseUid, favorites).catch(() => {});
-        if (weeklyXp > 0) {
-          syncLeaderboardScoreFirestore(user.firebaseUid, wKey, weeklyXp, userName, avatar).catch(() => {});
+          saveUserCustomWordsFirestore(firestoreUid, customOnly).catch(() => {});
         }
       }
     } catch (fsErr) {
