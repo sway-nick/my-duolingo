@@ -24,6 +24,25 @@ async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
 }
 
+function getFirestoreUserId(userId = null) {
+  const user = getCurrentUser();
+  const fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
+  if (!fbUid) return userId;
+  const detId = user?.email ? getDeterministicUserId(user.email) : null;
+  const effectiveId = getEffectiveUserId();
+  if (!userId) return fbUid;
+  const candidate = String(userId);
+  if (
+    candidate === fbUid ||
+    candidate === String(user?.id || '') ||
+    candidate === String(detId || '') ||
+    candidate === String(effectiveId || '')
+  ) {
+    return fbUid;
+  }
+  return userId;
+}
+
 const MOCK_WORDS = [
   { id: '1', word: 'apple', transcription: '[ˈæp.əl]', translation: 'яблоко', category: 'Еда и напитки', level: 'A1' },
   { id: '2', word: 'book', transcription: '[bʊk]', translation: 'книга', category: 'Обучение', level: 'A1' },
@@ -558,7 +577,7 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
 
   // Sync to Cloud Firestore (Real-time, instant)
   try {
-    syncLeaderboardScoreFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    syncLeaderboardScoreFirestore(userId, weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
   } catch (e) {}
 }
 
@@ -1482,7 +1501,10 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (fbUid && fbUid !== uId) {
         localStorage.setItem(`xp_${fbUid}_${wKey}`, String(finalFirestoreXp));
       }
-      syncLeaderboardScoreFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
+      syncLeaderboardScoreFirestore(uId, wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
+      if (fbUid && fbUid !== uId) {
+        syncLeaderboardScoreFirestore(fbUid, wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
+      }
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp, delta: 0 } }));
       }
@@ -1648,24 +1670,32 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
 
     // 100% Cloud Firestore sync
     try {
-      const firestoreUid = getFirestoreUserId(uId);
-      saveUserProfileFirestore(firestoreUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
+      saveUserProfileFirestore(uId, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
       if (weeklyXp > 0) {
-        syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
+        syncLeaderboardScoreFirestore(uId, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
-      saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
-      saveUserSettingsFirestore(firestoreUid, settings).catch(() => {});
-      saveBulkProgressFirestore(firestoreUid, progress).catch(() => {});
+      saveUserFavoritesFirestore(uId, favorites).catch(() => {});
+      saveUserSettingsFirestore(uId, settings).catch(() => {});
+      saveBulkProgressFirestore(uId, progress).catch(() => {});
 
       const localNotes = getUserNotesLocal();
       if (Object.keys(localNotes).length > 0) {
-        saveUserNotesFirestore(firestoreUid, localNotes).catch(() => {});
+        saveUserNotesFirestore(uId, localNotes).catch(() => {});
       }
 
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
         const customOnly = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
         if (customOnly.length > 0) {
-          saveUserCustomWordsFirestore(firestoreUid, customOnly).catch(() => {});
+          saveUserCustomWordsFirestore(uId, customOnly).catch(() => {});
+        }
+      }
+      
+      if (user?.firebaseUid && user.firebaseUid !== uId) {
+        saveUserProfileFirestore(user.firebaseUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
+        saveBulkProgressFirestore(user.firebaseUid, progress).catch(() => {});
+        saveUserFavoritesFirestore(user.firebaseUid, favorites).catch(() => {});
+        if (weeklyXp > 0) {
+          syncLeaderboardScoreFirestore(user.firebaseUid, wKey, weeklyXp, userName, avatar).catch(() => {});
         }
       }
     } catch (fsErr) {
