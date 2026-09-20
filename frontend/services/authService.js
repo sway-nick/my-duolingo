@@ -240,38 +240,7 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       if (best > migratedXp) migratedXp = best;
     }
 
-    // Auto-restore for target user account
-    const isTargetUser = (userEmail && userEmail.toLowerCase().includes('lipniagov')) ||
-                         (newUserId && String(newUserId).includes('lipniagov'));
-    if (isTargetUser) {
-      if (migratedXp < 4514) {
-        migratedXp = 4514;
-      }
-      if (Object.keys(mergedProg).length === 0) {
-        try {
-          const cachedWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
-          if (Array.isArray(cachedWords) && cachedWords.length > 0) {
-            const elemWords = cachedWords.slice(0, 90);
-            elemWords.forEach((w) => {
-              if (w && w.id) {
-                mergedProg[w.id] = {
-                  correct: 4,
-                  error: 0,
-                  quizCorrect: 1,
-                  pairsCorrect: 1,
-                  inputCorrect: 1,
-                  seenInCards: true,
-                  mastered: true,
-                  masteredAt: Date.now() - 86400000,
-                  lastPracticed: Date.now(),
-                  hardCount: 0,
-                };
-              }
-            });
-          }
-        } catch (e) {}
-      }
-    }
+
 
     // If migratedXp is still 0, calculate from mergedProg
     if (migratedXp <= 0 && mergedProg && Object.keys(mergedProg).length > 0) {
