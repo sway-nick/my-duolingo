@@ -1331,19 +1331,21 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   const user = getCurrentUser();
   const detId = user && user.email ? getDeterministicUserId(user.email) : null;
   const fbUid = user && (user.firebaseUid || (user.id && user.id !== detId ? user.id : null));
+  // Use Firebase UID as primary Firestore path (subcollections require auth.uid == userId)
+  const firestoreUid = getFirestoreUserId(uId);
 
   // Fetch real-time progress, XP and data from Cloud Firestore
   try {
     const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc, migratedPlayers] = await Promise.all([
-      loadUserProgressFirestore(uId).catch(() => ({})),
-      detId && detId !== uId ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
-      fbUid && fbUid !== uId && fbUid !== detId ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
-      getUserWeeklyXpFirestore(uId, wKey).catch(() => 0),
-      detId && detId !== uId ? getUserWeeklyXpFirestore(detId, wKey).catch(() => 0) : Promise.resolve(0),
-      fbUid && fbUid !== uId && fbUid !== detId ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
-      loadFullUserDataFirestore(uId).catch(() => null),
-      detId && detId !== uId ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
-      fbUid && fbUid !== uId && fbUid !== detId ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null),
+      loadUserProgressFirestore(firestoreUid).catch(() => ({})),
+      detId && detId !== uId && detId !== firestoreUid ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
+      getUserWeeklyXpFirestore(firestoreUid, wKey).catch(() => 0),
+      detId && detId !== uId && detId !== firestoreUid ? getUserWeeklyXpFirestore(detId, wKey).catch(() => 0) : Promise.resolve(0),
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
+      loadFullUserDataFirestore(firestoreUid).catch(() => null),
+      detId && detId !== uId && detId !== firestoreUid ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null),
       loadMigratedPlayersBundle().catch(() => [])
     ]);
 
