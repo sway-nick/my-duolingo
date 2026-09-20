@@ -646,44 +646,6 @@ export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userNam
     });
   } catch (e) {}
 
-  // 3. Fallback: update shared leaderboard document for backward compatibility with legacy clients
-  try {
-    const config = getFirebaseConfig();
-    const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
-
-    let currentMap = {};
-    try {
-      const getRes = await fetch(sharedUrl);
-      if (getRes.ok) {
-        const getData = await getRes.json();
-        if (getData.fields?.playersJson?.stringValue) {
-          currentMap = JSON.parse(getData.fields.playersJson.stringValue) || {};
-        }
-      }
-    } catch (readErr) {}
-
-    const existing = currentMap[userId];
-    currentMap[userId] = {
-      userId: String(userId),
-      name: cleanName,
-      avatar: cleanAvatar || (existing && existing.avatar) || '',
-      xp: newXp,
-      updatedAt: Date.now()
-    };
-
-    await fetch(sharedUrl, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fields: {
-          playersJson: { stringValue: JSON.stringify(currentMap) },
-          updatedAt: { integerValue: String(Date.now()) }
-        }
-      })
-    });
-  } catch (sharedErr) {
-    // Secondary failure is non-blocking
-  }
 }
 
 export async function getUserWeeklyXpFirestore(userId, weekKey) {
