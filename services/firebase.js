@@ -753,7 +753,24 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
           return obj;
         });
         players.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0));
-        return players.slice(0, limitCount);
+        const topPlayers = players.slice(0, limitCount);
+
+        // Filter out deleted accounts: check users/{uid} existence (rule: allow read: if true)
+        // We batch-check all UIDs in parallel; if 404 → user was deleted → remove from leaderboard.
+        const config2 = getFirebaseConfig();
+        const existChecks = await Promise.all(
+          topPlayers.map(async (p) => {
+            const uid = p.userId || p.uid;
+            if (!uid) return false;
+            try {
+              const r = await fetch(`${FIRESTORE_BASE}/users/${encodeURIComponent(uid)}?key=${config2.apiKey}`);
+              return r.ok; // 200 = exists, 404 = deleted
+            } catch (e) {
+              return true; // network error → assume exists (don't hide)
+            }
+          })
+        );
+        return topPlayers.filter((_, i) => existChecks[i]);
       }
     }
   } catch (err) {
@@ -772,7 +789,23 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
         if (map && typeof map === 'object') {
           const players = Object.values(map).filter(p => p && p.userId && (Number(p.xp) > 0 || p.name));
           players.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
-          return players.slice(0, limitCount);
+          const topPlayers = players.slice(0, limitCount);
+
+          // Filter out deleted accounts (same as primary path)
+          const cfg = getFirebaseConfig();
+          const checks = await Promise.all(
+            topPlayers.map(async (p) => {
+              const uid = p.userId || p.uid;
+              if (!uid) return false;
+              try {
+                const r = await fetch(`${FIRESTORE_BASE}/users/${encodeURIComponent(uid)}?key=${cfg.apiKey}`);
+                return r.ok;
+              } catch (e) {
+                return true;
+              }
+            })
+          );
+          return topPlayers.filter((_, i) => checks[i]);
         }
       }
     }
