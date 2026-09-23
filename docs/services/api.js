@@ -798,18 +798,6 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
     } catch (e) {}
 
     let realPlayers = (Array.isArray(rawList) ? rawList : []).filter((u) => u && u.userId && !String(u.userId).startsWith('bot_'));
-    if (realPlayers.length === 0) {
-      const migrated = getMigratedPlayersSync();
-      if (Array.isArray(migrated) && migrated.length > 0) {
-        realPlayers = migrated.map(p => ({
-          userId: p && p.userId,
-          name: (p && p.name != null) ? String(p.name) : 'Student',
-          avatar: (p && p.avatar) || '',
-          xp: period === 'all' ? ((p && (p.allXp || p.weeklyXp)) || 0) : ((p && p.weeklyXp) || 0),
-          isBot: false
-        })).filter(p => p.userId && p.xp > 0);
-      }
-    }
     const dynamicBots = generateDynamicBots(wKey).map((bot) => ({
       userId: bot.userId,
       name: bot.name,
@@ -857,18 +845,6 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   } catch (e) {}
 
   let realPlayers = (Array.isArray(rawList) ? rawList : []).filter((u) => u && u.userId && !String(u.userId).startsWith('bot_'));
-  if (realPlayers.length === 0) {
-    const migrated = getMigratedPlayersSync();
-    if (Array.isArray(migrated) && migrated.length > 0) {
-      realPlayers = migrated.map(p => ({
-        userId: p && p.userId,
-        name: (p && p.name != null) ? String(p.name) : 'Student',
-        avatar: (p && p.avatar) || '',
-        xp: (p && p.weeklyXp) || 0,
-        isBot: false
-      })).filter(p => p.userId && p.xp > 0);
-    }
-  }
   const dynamicBots = generateDynamicBots(wKey);
   const combined = [...realPlayers, ...dynamicBots];
 
@@ -2883,9 +2859,11 @@ function tickSessionActiveTime() {
 }
 
 async function sendUserAnalytics(isClosing = false, customStatus = null) {
-  if (typeof window === 'undefined') return;
-  const currentUserId = getEffectiveUserId();
-  if (!currentUserId || String(currentUserId).startsWith('guest_')) return;
+  const currentUser = getCurrentUser();
+  if (!currentUser || !currentUser.email || !currentUser.id || String(currentUser.id).startsWith('guest')) {
+    return;
+  }
+  const currentUserId = currentUser.id;
   ensureActiveSession(currentUserId);
   tickSessionActiveTime();
 

@@ -364,7 +364,11 @@ async function deleteAllUserFirestoreData(userId, idToken) {
   // 3. Удаляем подколлекцию data/* (favorites, notes, custom_words, weekly_xp_*, progress bulk)
   await delSubcollection(`/users/${uid}/data`);
 
-  // 4. Удаляем корневой документ users/{uid}
+  // 4. Удаляем подколлекцию sessions/* и analytics/*
+  await delSubcollection(`/users/${uid}/sessions`);
+  await delSubcollection(`/users/${uid}/analytics`);
+
+  // 5. Удаляем корневой документ users/{uid}
   await delDoc(`${FIRESTORE_BASE}/users/${uid}`);
 
   // 5. Удаляем запись в leaderboard текущей и прошлой недели
@@ -1293,10 +1297,13 @@ function toFirestoreFields(obj) {
 
 export async function saveSessionFirestore(sessionId, sessionData, keepalive = false) {
   if (!sessionId || !sessionData) return;
+  const uid = getEffectiveFirestoreUid(sessionData.userId);
+  if (!uid) return; // Guest or unauthenticated - skip to avoid 403!
   try {
-    const url = getFirestoreUrl(`/sessions/${encodeURIComponent(sessionId)}`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/sessions/${encodeURIComponent(sessionId)}`);
     const fields = toFirestoreFields({
       ...sessionData,
+      userId: uid,
       updatedAt: Date.now()
     });
 
@@ -1317,13 +1324,15 @@ export async function saveSessionFirestore(sessionId, sessionData, keepalive = f
 
 export async function updateUserSessionSummaryFirestore(userId, summaryData, keepalive = false) {
   if (!userId || !summaryData) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return; // Guest or unauthenticated - skip to avoid 403!
   try {
     const cleanData = { ...summaryData, updatedAt: Date.now() };
     const fields = toFirestoreFields(cleanData);
     const maskParams = Object.keys(cleanData)
       .map(k => `updateMask.fieldPaths=${encodeURIComponent(k)}`)
       .join('&');
-    const path = `/users/${encodeURIComponent(userId)}${maskParams ? '?' + maskParams : ''}`;
+    const path = `/users/${encodeURIComponent(uid)}${maskParams ? '?' + maskParams : ''}`;
     const url = getFirestoreUrl(path);
 
     const fetchOptions = {
@@ -1343,11 +1352,13 @@ export async function updateUserSessionSummaryFirestore(userId, summaryData, kee
 
 export async function saveUserAnalyticsFirestore(userId, analyticsObj) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return; // Guest or unauthenticated - skip to avoid 403!
   try {
     const timestamp = Date.now();
-    const url = getFirestoreUrl(`/analytics/${encodeURIComponent(userId + '_' + timestamp)}`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/analytics/${encodeURIComponent(uid + '_' + timestamp)}`);
     const fields = toFirestoreFields({
-      userId: String(userId),
+      userId: String(uid),
       timestamp: timestamp,
       ...(analyticsObj || {})
     });
