@@ -5,8 +5,11 @@ import { t, getInterfaceLanguage } from '../../services/i18n.js?v=378.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 
-function hasSyncIssue() {
+function shouldShowSyncBadge() {
   try {
+    const u = getCurrentUser();
+    const isGuest = !u || !u.id || u.id === 'guest' || String(u.id).startsWith('guest_') || !u.email;
+    if (isGuest) return true;
     return Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
   } catch (e) {
     return false;
@@ -195,7 +198,7 @@ function renderPodiumCard(player, rank, period = 'week') {
       <div class="podium-info">
         <h4 class="podium-name" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
           <span>${playerName}</span>
-          ${player.isCurrentUser && hasSyncIssue() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
+          ${player.isCurrentUser && shouldShowSyncBadge() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
         </h4>
         <span class="podium-xp">${formatLeaderboardXp(player.xp, period)} XP</span>
       </div>
@@ -262,7 +265,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               </div>
               <div class="row-name" style="display: flex; align-items: center; gap: 6px;">
                 <span>${pName}</span>
-                ${isMe && hasSyncIssue() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
+                ${isMe && shouldShowSyncBadge() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
               </div>
               <div class="row-xp">${formatLeaderboardXp(p.xp, period)} XP</div>
             </div>
@@ -276,7 +279,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   let myStickyBarHtml = '';
   if (myPlayer && (myRank > 4 || !currentUser)) {
     const myAvatar = sanitizeAvatarUrl(getUserAvatar());
-    const isIssue = hasSyncIssue();
+    const isIssue = shouldShowSyncBadge();
     const statusText = isIssue
       ? '⚠️ Прогресс на телефоне. Войдите для облака'
       : (period === 'all'

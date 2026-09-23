@@ -28,6 +28,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const avatar = getUserAvatar();
   const currentTheme = getSavedTheme();
   const hasSyncIssue = Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
+  const showBadge = !isLoggedIn || hasSyncIssue;
 
   const displayName = isLoggedIn
     ? (user.name || user.email.split('@')[0])
@@ -62,7 +63,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
               ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
               : `<button class="primary-button settings-auth-btn" id="register-modal-btn" style="position: relative;">
                   ${hasSyncIssue ? (t('auth_tab_login') || 'Войти') : (t('auth_tab_register') || 'Регистрация')}
-                  <span class="sync-status-badge" id="settings-login-sync-badge" style="display: ${hasSyncIssue ? 'block' : 'none'}; top: -2px; right: -2px;"></span>
+                  <span class="sync-status-badge" id="settings-login-sync-badge" style="display: ${showBadge ? 'block' : 'none'}; top: -2px; right: -2px;"></span>
                 </button>`
           }
         </div>

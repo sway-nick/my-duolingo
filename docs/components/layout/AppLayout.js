@@ -80,25 +80,30 @@ function getHeaderRankBadge(rank, xp) {
   return { isIcon: false, content: `Lv ${rank}`, title: `${rank} место в Лиге недели` };
 }
 
-function hasSyncIssue() {
+function shouldShowSyncBadge(user = null) {
   try {
+    const u = user || getCurrentUser();
+    const isGuest = !u || !u.id || u.id === 'guest' || String(u.id).startsWith('guest_') || !u.email;
+    if (isGuest) return true;
     return Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
   } catch (e) {
     return false;
   }
 }
 
-function updateSyncBadges(show) {
+function updateSyncBadges(issueActive = false) {
   try {
     if (typeof window !== 'undefined') {
-      window.__myduo_sync_issue = Boolean(show);
-      if (show) {
+      window.__myduo_sync_issue = Boolean(issueActive);
+      if (issueActive) {
         sessionStorage.setItem('myduo_sync_issue', '1');
       } else {
         sessionStorage.removeItem('myduo_sync_issue');
       }
     }
   } catch (e) {}
+
+  const show = shouldShowSyncBadge();
 
   const burgerBadge = document.querySelector('#header-burger-sync-badge');
   if (burgerBadge) {
@@ -138,7 +143,7 @@ function renderHeaderRightActions(user) {
     </button>
   `;
 
-  const isIssueActive = hasSyncIssue();
+  const isBadgeActive = shouldShowSyncBadge(user);
 
   return `
     <div style="display:flex; align-items:center; gap:10px;">
@@ -149,7 +154,7 @@ function renderHeaderRightActions(user) {
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
-        <span class="sync-status-badge" id="header-burger-sync-badge" style="display: ${isIssueActive ? 'block' : 'none'};"></span>
+        <span class="sync-status-badge" id="header-burger-sync-badge" style="display: ${isBadgeActive ? 'block' : 'none'};"></span>
       </button>
     </div>
   `;
@@ -301,7 +306,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               </svg>
             </span>
             <span class="drawer-item-text">${t('settings')}</span>
-            <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${hasSyncIssue() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
+            <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${shouldShowSyncBadge() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
           </button>
           <button type="button" class="drawer-share-action-btn" id="drawer-share-btn" title="${t('share_title')}">
             <span class="tab-icon">
