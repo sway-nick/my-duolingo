@@ -3682,4 +3682,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=223.js?v=223.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=223.0';
