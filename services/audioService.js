@@ -982,38 +982,111 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       }
     };
 
-    // Primary & direct high-quality speech engine: Web Speech API
+    function playNetworkTts() {
+      if (resolved) return;
+      try {
+        const audio = getAutoplayAudio() || new Audio();
+        activeAutoplayAudio = audio;
+
+        // Primary online TTS: Google Translate TTS supports full phrases, commas, and multi-word translations seamlessly
+        const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
+        // Secondary fallback: Youdao accepts only single headwords (take parts[0] to prevent HTTP 500 error)
+        const youdaoUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(parts[0] || spokenText)}&le=${encodeURIComponent(langCode)}`;
+
+        let triedFallback = false;
+        audio.src = googleUrl;
+        audio.currentTime = 0;
+
+        const fallbackTimer = setTimeout(finish, 5000);
+        window.__activeSpeechTimer = fallbackTimer;
+
+        audio.onended = () => {
+          clearTimeout(fallbackTimer);
+          finish();
+        };
+
+        const tryFallbackOrFinish = () => {
+          if (!triedFallback) {
+            triedFallback = true;
+            try {
+              audio.src = youdaoUrl;
+              audio.currentTime = 0;
+              const p2 = audio.play();
+              if (p2 !== undefined) {
+                p2.catch(() => {
+                  clearTimeout(fallbackTimer);
+                  finish();
+                });
+              }
+            } catch (e) {
+              clearTimeout(fallbackTimer);
+              finish();
+            }
+          } else {
+            clearTimeout(fallbackTimer);
+            finish();
+          }
+        };
+
+        audio.onerror = tryFallbackOrFinish;
+
+        const p = audio.play();
+        if (p !== undefined) {
+          p.catch(tryFallbackOrFinish);
+        }
+      } catch (e) {
+        finish();
+      }
+    }
+
+    // Primary & direct high-quality speech engine: Web Speech API (if native voice for language exists)
     if ('speechSynthesis' in window) {
       try {
         if (window.speechSynthesis.paused) {
           window.speechSynthesis.resume();
         }
 
+        const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
+          ? window.speechSynthesis.getVoices()
+          : cachedVoices;
+
+        let matched = null;
+        if (availableVoices && availableVoices.length > 0) {
+          matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
+          if (!matched) {
+            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+          }
+        }
+
+        // If voices list is already populated and no matching voice for this language exists, skip Web Speech API to avoid wrong accent/silence
+        if (availableVoices && availableVoices.length > 0 && !matched) {
+          playNetworkTts();
+          return;
+        }
+
         const utterance = new SpeechSynthesisUtterance(spokenText);
         utterance.lang = fullLang;
         utterance.rate = 0.88;
         utterance.pitch = 1.0;
-
-        try {
-          const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
-            ? window.speechSynthesis.getVoices()
-            : cachedVoices;
-
-          let matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
-          if (!matched) {
-            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
-          }
-          if (matched) {
-            utterance.voice = matched;
-          }
-        } catch (e) {}
+        if (matched) {
+          utterance.voice = matched;
+        }
 
         // Global reference to prevent Chrome garbage-collection bug
         window.__activeSpeechUtterance = utterance;
 
         utterance.onend = finish;
         utterance.onerror = () => {
-          finish();
+          if (resumeInterval) {
+            clearInterval(resumeInterval);
+            resumeInterval = null;
+          }
+          if (window.__activeSpeechTimer) {
+            clearTimeout(window.__activeSpeechTimer);
+            window.__activeSpeechTimer = null;
+          }
+          window.__activeSpeechUtterance = null;
+          playNetworkTts();
         };
 
         // iOS keep-alive while speech synthesis runs
@@ -1034,32 +1107,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     }
 
     // Secondary fallback
-    try {
-      const ttsUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(spokenText)}&le=ru`;
-      const audio = getAutoplayAudio() || new Audio();
-      activeAutoplayAudio = audio;
-      audio.src = ttsUrl;
-      audio.currentTime = 0;
-
-      const fallbackTimer = setTimeout(finish, 4000);
-      window.__activeSpeechTimer = fallbackTimer;
-
-      audio.onended = () => {
-        clearTimeout(fallbackTimer);
-        finish();
-      };
-      audio.onerror = () => {
-        clearTimeout(fallbackTimer);
-        finish();
-      };
-
-      const p = audio.play();
-      if (p !== undefined) {
-        p.catch(() => finish());
-      }
-    } catch (e) {
-      finish();
-    }
+    playNetworkTts();
   });
 }
 
