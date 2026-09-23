@@ -1,7 +1,7 @@
-import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.0';
-import { getCurrentUser } from '../../services/authService.0';
-import { speakWord, preloadWordAudio } from '../../services/audioService.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.0';
+import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.js?v=223.0';
+import { getCurrentUser } from '../../services/authService.js?v=223.0';
+import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=223.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=223.0';
 
 function getCategoryMeta(catName) {
   const name = String(catName || '').toLowerCase().trim();

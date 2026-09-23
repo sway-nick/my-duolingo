@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=223.0';
 import { 
   syncLeaderboardScoreFirestore, 
   getWeeklyLeaderboardFirestore, 
@@ -19,7 +19,7 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.0';
+} from './firebase.js?v=223.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -87,17 +87,30 @@ let syncDebounceTimer = null;
 
 function getLocalUsers() {
   try {
-    return JSON.parse(localStorage.getItem('myduo_registered_users') || '[]');
+    const list = JSON.parse(localStorage.getItem('myduo_registered_users') || '[]');
+    if (Array.isArray(list)) {
+      list.forEach(u => { if (u && u.password) delete u.password; });
+      return list;
+    }
+    return [];
   } catch (e) {
     return [];
   }
 }
 
 function saveLocalUser(user) {
+  if (!user || !user.email) return;
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    avatar: user.avatar || ''
+  };
   const users = getLocalUsers();
-  const existingIdx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
-  if (existingIdx >= 0) users[existingIdx] = user;
-  else users.push(user);
+  const existingIdx = users.findIndex((u) => u.email.toLowerCase() === safeUser.email.toLowerCase());
+  if (existingIdx >= 0) users[existingIdx] = { ...users[existingIdx], ...safeUser };
+  else users.push(safeUser);
+  users.forEach(u => { if (u && u.password) delete u.password; });
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
@@ -430,7 +443,6 @@ async function registerUser(email, password, name) {
     id: deterministicId,
     email: cleanEmail,
     name: name.trim(),
-    password: password,
   };
   saveLocalUser(newUser);
 
@@ -460,7 +472,7 @@ async function loginUser(email, password) {
   const deterministicId = getDeterministicUserId(cleanEmail);
 
   const localUsers = getLocalUsers();
-  const found = localUsers.find((u) => u.email.toLowerCase() === cleanEmail && String(u.password) === String(password));
+  const found = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
 
   if (found) {
     return {
@@ -472,17 +484,9 @@ async function loginUser(email, password) {
     };
   }
 
-  const userExists = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
-  if (userExists) {
-    return {
-      success: false,
-      error: 'Неверный пароль. Пожалуйста, проверьте введённые данные.',
-    };
-  }
-
   return {
     success: false,
-    error: 'Пользователь не найден. Пожалуйста, зарегистрируйтесь.',
+    error: 'Пользователь не найден. Пожалуйста, войдите через Email или Google.',
   };
 }
 
@@ -498,7 +502,6 @@ async function googleAuthUser(email, name, avatar) {
       id: deterministicId,
       email: cleanEmail,
       name: cleanName,
-      password: 'google_oauth_pass',
     };
     saveLocalUser(user);
   }
@@ -1701,7 +1704,7 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
 
     // 100% Cloud Firestore sync using Firebase UID
     try {
-      saveUserProfileFirestore(firestoreUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
+      saveUserProfileFirestore(firestoreUid, { name: userName, avatar }).catch(() => {});
       if (weeklyXp > 0) {
         syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
@@ -3679,4 +3682,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=223.js?v=223.0';

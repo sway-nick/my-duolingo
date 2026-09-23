@@ -1,4 +1,4 @@
-import { t } from '../../services/i18n.0';
+import { t } from '../../services/i18n.js?v=223.0';
 
 /**
  * Show a quick toast notification

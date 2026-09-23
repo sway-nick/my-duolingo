@@ -1,8 +1,8 @@
-import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.0';
-import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.0';
-import { renderAuthModal } from '../auth/AuthModal.0';
-import { openShareDialog } from '../modals/ShareModal.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=223.0';
+import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=223.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=223.0';
+import { openShareDialog } from '../modals/ShareModal.js?v=223.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=223.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};

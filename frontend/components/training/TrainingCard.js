@@ -17,7 +17,7 @@ import {
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
-} from '../../services/audioService.0';
+} from '../../services/audioService.js?v=223.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -27,8 +27,8 @@ import {
   prepareTrainingBatch,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.0';
+} from '../../services/api.js?v=223.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=223.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -37,6 +37,16 @@ function sanitizeCategory(cat) {
       .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
       .trim() || String(cat).trim()
   );
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function shuffleArray(arr) {
@@ -2735,7 +2745,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${getWordTranslation(currentWord)}</h2>
-              ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${getWordNotes(currentWord)}</p>` : ''}
+              ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${escapeHtml(getWordNotes(currentWord))}</p>` : ''}
             </div>
           </div>
         </div>

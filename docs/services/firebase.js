@@ -931,17 +931,28 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
 export async function saveUserProfileFirestore(userId, profileData) {
   if (!userId) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}`);
     const fields = {};
+    const maskPaths = ['updatedAt'];
     for (const [k, v] of Object.entries(profileData || {})) {
-      if (typeof v === 'number') fields[k] = { integerValue: String(Math.round(v)) };
-      else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
-      else if (typeof v === 'string') fields[k] = { stringValue: v };
-      else if (Array.isArray(v)) {
+      if (k === 'email') continue; // Private sensitive field: never store on public user document
+      if (typeof v === 'number') {
+        fields[k] = { integerValue: String(Math.round(v)) };
+        maskPaths.push(k);
+      } else if (typeof v === 'boolean') {
+        fields[k] = { booleanValue: v };
+        maskPaths.push(k);
+      } else if (typeof v === 'string') {
+        fields[k] = { stringValue: v };
+        maskPaths.push(k);
+      } else if (Array.isArray(v)) {
         fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
+        maskPaths.push(k);
       }
     }
     fields.updatedAt = { integerValue: String(Date.now()) };
+
+    const maskParams = maskPaths.map(p => `updateMask.fieldPaths=${encodeURIComponent(p)}`).join('&');
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}?${maskParams}`);
 
     await firestoreFetch(url, {
       method: 'PATCH',

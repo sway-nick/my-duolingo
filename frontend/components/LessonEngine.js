@@ -1,13 +1,13 @@
-import { renderMultipleChoice, destroyMultipleChoice } from './exercises/MultipleChoice.0';
-import { renderSentenceBuilder, destroySentenceBuilder } from './exercises/SentenceBuilder.0';
-import { renderListeningExercise, destroyListeningExercise } from './exercises/ListeningExercise.0';
-import { renderMatchingPairs, destroyMatchingPairs } from './exercises/MatchingPairs.0';
-import { renderFlashcardMode, destroyFlashcardMode } from './exercises/FlashcardMode.0';
-import { renderIrregularVerbs, destroyIrregularVerbs } from './exercises/IrregularVerbs.0';
+import { renderMultipleChoice, destroyMultipleChoice } from './exercises/MultipleChoice.js?v=223.0';
+import { renderSentenceBuilder, destroySentenceBuilder } from './exercises/SentenceBuilder.js?v=223.0';
+import { renderListeningExercise, destroyListeningExercise } from './exercises/ListeningExercise.js?v=223.0';
+import { renderMatchingPairs, destroyMatchingPairs } from './exercises/MatchingPairs.js?v=223.0';
+import { renderFlashcardMode, destroyFlashcardMode } from './exercises/FlashcardMode.js?v=223.0';
+import { renderIrregularVerbs, destroyIrregularVerbs } from './exercises/IrregularVerbs.js?v=223.0';
 
-import AudioService from '../services/audioService.0';
-import StorageService from '../services/storageService.0';
-import { WORDS, IRREGULAR_VERBS, LESSONS } from '../services/initialData.0';
+import AudioService from '../services/audioService.js?v=223.0';
+import StorageService from '../services/storageService.js?v=223.0';
+import { WORDS, IRREGULAR_VERBS, LESSONS } from '../services/initialData.js?v=223.0';
 
 let currentExerciseIndex = 0;
 let exerciseQueue = [];

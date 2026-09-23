@@ -1,7 +1,7 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.0';
-import { renderAuthModal } from '../auth/AuthModal.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=223.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=223.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=223.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=223.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 
@@ -66,6 +66,26 @@ function formatLeaderboardXp(xp, period = 'week') {
   return String(Math.round(Number(xp || 0)));
 }
 
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeAvatarUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  // Only allow valid safe URL protocols and relative asset paths
+  if (/^(https?:\/\/|\.\/|\/|assets\/|data:image\/)/i.test(trimmed)) {
+    return escapeHtml(trimmed);
+  }
+  return '';
+}
+
 function renderPodiumCard(player, rank, period = 'week') {
   if (!player) return '';
   let badgeIcon = '💎';
@@ -82,9 +102,11 @@ function renderPodiumCard(player, rank, period = 'week') {
     rankClass = 'rank-bronze';
   }
 
-  const avatarSrc = player.avatar || '';
-  const playerName = (player && player.name != null) ? String(player.name) : t('lead_student_default');
-  const initial = playerName.trim().charAt(0).toUpperCase() || '👤';
+  const rawAvatar = player.avatar || '';
+  const avatarSrc = sanitizeAvatarUrl(rawAvatar);
+  const rawPlayerName = (player && player.name != null) ? String(player.name) : t('lead_student_default');
+  const playerName = escapeHtml(rawPlayerName);
+  const initial = escapeHtml(rawPlayerName.trim().charAt(0).toUpperCase() || '👤');
   const isMe = !!player.isCurrentUser;
 
   return `
@@ -212,9 +234,10 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           .map((p, idx) => {
             const rank = idx + 5;
             const isMe = p.isCurrentUser;
-            const avatarSrc = p.avatar || '';
-            const pName = (p && p.name != null) ? String(p.name) : t('lead_student_default');
-            const initial = pName.trim().charAt(0).toUpperCase() || '👤';
+            const avatarSrc = sanitizeAvatarUrl(p.avatar || '');
+            const rawPName = (p && p.name != null) ? String(p.name) : t('lead_student_default');
+            const pName = escapeHtml(rawPName);
+            const initial = escapeHtml(rawPName.trim().charAt(0).toUpperCase() || '👤');
 
             return `
             <div class="leaderboard-row ${isMe ? 'is-me' : ''}">
@@ -240,15 +263,16 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
 
   let myStickyBarHtml = '';
   if (myPlayer && (myRank > 4 || !currentUser)) {
-    const myAvatar = getUserAvatar();
+    const myAvatar = sanitizeAvatarUrl(getUserAvatar());
     const statusText = period === 'all'
       ? t('lead_score_all_time')
       : (currentUser
           ? t('lead_score_current')
           : t('lead_login_to_save')
         );
-    const myName = (currentUser && currentUser.name != null) ? String(currentUser.name) : t('lead_guest_name');
-    const myInitial = myName.trim().charAt(0).toUpperCase() || '👤';
+    const rawMyName = (currentUser && currentUser.name != null) ? String(currentUser.name) : t('lead_guest_name');
+    const myName = escapeHtml(rawMyName);
+    const myInitial = escapeHtml(rawMyName.trim().charAt(0).toUpperCase() || '👤');
     myStickyBarHtml = `
       <div class="my-leaderboard-bar">
         <div style="display: flex; align-items: center; gap: 10px;">

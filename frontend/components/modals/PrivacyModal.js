@@ -1,4 +1,4 @@
-import { PRIVACY_POLICY_DATA } from './privacyTranslations.js';
+import { PRIVACY_POLICY_DATA } from './privacyTranslations.js?v=223.js?v=223.0';
 
 export function openPrivacyModal() {
   const existing = document.querySelector('#privacy-policy-modal-overlay');

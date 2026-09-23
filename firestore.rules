@@ -4,10 +4,15 @@ service cloud.firestore {
 
     // 1. Weekly Leaderboard:
     // Anyone can read leaderboard standings.
-    // An authenticated user can only create or update their own record in the leaderboard.
+    // An authenticated user can only create or update their own record with valid format.
     match /leaderboards/{weekKey}/players/{userId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.userId == userId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 50
+        && request.resource.data.xp is int
+        && request.resource.data.xp >= 0;
     }
 
     // 2. User Profiles and Private Data:

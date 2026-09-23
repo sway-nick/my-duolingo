@@ -1,7 +1,7 @@
-import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.0';
-import { setCurrentUser } from '../../services/authService.0';
-import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail } from '../../services/firebase.0';
-import { t } from '../../services/i18n.0';
+import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=223.0';
+import { setCurrentUser } from '../../services/authService.js?v=223.0';
+import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail } from '../../services/firebase.js?v=223.0';
+import { t } from '../../services/i18n.js?v=223.0';
 
 const GOOGLE_CLIENT_ID = '249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com';
 
@@ -71,12 +71,12 @@ function renderAuthModal(onSuccessCallback) {
 
         <div class="form-group">
           <label>${t('auth_field_password')}</label>
-          <input type="password" id="auth-password" placeholder="••••••••" required maxlength="40" />
+          <input type="password" id="auth-password" placeholder="••••••••" required maxlength="128" autocomplete="current-password" />
         </div>
 
         <div class="form-group" id="password-confirm-group" style="display:none;">
           <label>${t('auth_field_password_confirm')}</label>
-          <input type="password" id="auth-password-confirm" placeholder="••••••••" maxlength="40" />
+          <input type="password" id="auth-password-confirm" placeholder="••••••••" maxlength="128" autocomplete="new-password" />
         </div>
 
         <button type="submit" class="primary-button" id="auth-submit-btn">${t('auth_btn_login')}</button>
@@ -402,9 +402,9 @@ function renderAuthModal(onSuccessCallback) {
     e.preventDefault();
     errorBox.style.display = 'none';
 
-    const email = sanitizeInput(modal.querySelector('#auth-email').value.trim());
-    const password = sanitizeInput(modal.querySelector('#auth-password').value.trim());
-    const passwordConfirm = sanitizeInput(modal.querySelector('#auth-password-confirm').value.trim());
+    const email = (modal.querySelector('#auth-email').value || '').trim();
+    const password = modal.querySelector('#auth-password').value || '';
+    const passwordConfirm = modal.querySelector('#auth-password-confirm').value || '';
     const name = sanitizeInput(modal.querySelector('#auth-name').value.trim());
 
     if (mode === 'register') {
