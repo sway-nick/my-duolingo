@@ -1,4 +1,4 @@
-﻿import { t } from '../../services/i18n.js?v=378.0';
+import { t } from '../../services/i18n.js?v=378.0';
 
 /**
  * Show a quick toast notification
@@ -23,12 +23,12 @@ function showShareToast(msg) {
  * Get the canonical share URL for the app
  */
 function getShareUrl() {
-  if (typeof window === 'undefined') return 'https://sway-nick.github.io/my-duolingo/';
+  if (typeof window === 'undefined') return 'https://english-breakfast.pages.dev/';
   const origin = window.location.origin;
   const pathname = window.location.pathname;
-  // If running on localhost or raw file, standard fallback is GitHub pages URL
+  // If running on localhost or raw file, standard fallback is Cloudflare Pages URL
   if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file')) {
-    return 'https://sway-nick.github.io/my-duolingo/';
+    return 'https://english-breakfast.pages.dev/';
   }
   return origin + pathname;
 }
