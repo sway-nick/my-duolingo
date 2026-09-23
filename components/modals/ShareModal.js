@@ -19,18 +19,13 @@ function showShareToast(msg) {
   }, 3500);
 }
 
+export const GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.englishbreakfast.app';
+
 /**
- * Get the canonical share URL for the app
+ * Get the canonical share URL for the app (Google Play Store)
  */
 function getShareUrl() {
-  if (typeof window === 'undefined') return 'https://english-breakfast.pages.dev/';
-  const origin = window.location.origin;
-  const pathname = window.location.pathname;
-  // If running on localhost or raw file, standard fallback is Cloudflare Pages URL
-  if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file')) {
-    return 'https://english-breakfast.pages.dev/';
-  }
-  return origin + pathname;
+  return GOOGLE_PLAY_URL;
 }
 
 /**

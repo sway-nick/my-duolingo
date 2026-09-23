@@ -7,6 +7,7 @@ import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=378.0';
 import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=378.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=378.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=378.0';
+import { openShareDialog } from '../modals/ShareModal.js?v=378.0';
 
 function escapeHtml(str) {
   if (str == null) return '';
@@ -172,6 +173,25 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
+      <!-- Share App Card -->
+      <div class="settings-card" id="settings-share-card" role="button" tabindex="0" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: 12px 14px; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: rgba(249, 115, 22, 0.12); display: flex; align-items: center; justify-content: center; color: #f97316; flex-shrink: 0;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <div>
+            <h3 class="settings-card-title" style="margin: 0; font-size: 14.5px;">${t('share_title')}</h3>
+            <p style="margin: 2px 0 0; font-size: 12.5px; color: var(--text-muted);">Google Play</p>
+          </div>
+        </div>
+        <span style="font-size: 18px; color: var(--text-muted); font-weight: 600; line-height: 1;">›</span>
+      </div>
 
       <div class="settings-footer">
         ${
@@ -532,6 +552,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     openPrivacyBtn.addEventListener('click', (e) => {
       e.preventDefault();
       openPrivacyModal();
+    });
+  }
+
+  // Bind Share App card
+  const shareCard = container.querySelector('#settings-share-card');
+  if (shareCard) {
+    shareCard.addEventListener('click', () => {
+      openShareDialog();
     });
   }
 
