@@ -1040,7 +1040,10 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     }
 
     // Primary & direct high-quality speech engine: Web Speech API (if native voice for language exists)
-    if ('speechSynthesis' in window) {
+    // Note: on mobile devices when screen is locked/backgrounded or autoplay is active, Web Speech API freezes or fails silently.
+    // In that case, bypass speech synthesis and jump directly to reliable HTML5 Audio network TTS.
+    const isBackgroundOrHidden = (typeof document !== 'undefined' && document.hidden) || (typeof window !== 'undefined' && window.__favsAutoplayRunning);
+    if (!isBackgroundOrHidden && 'speechSynthesis' in window) {
       try {
         if (window.speechSynthesis.paused) {
           window.speechSynthesis.resume();
@@ -1266,19 +1269,116 @@ if (typeof document !== 'undefined') {
   });
 }
 
+let silentAudioLoopElement = null;
+
 /**
- * Updates MediaSession status for mobile background audio priority
+ * Starts a silent audio loop to keep mobile browsers (Safari/Chrome/WebView)
+ * and OS audio sessions active without throttling JS timers when screen turns off.
  */
-function updateMediaSessionStatus(isPlaying, currentWord = null) {
+function startSilentAudioAnchor() {
+  if (typeof window === 'undefined') return;
+  try {
+    if (!silentAudioLoopElement) {
+      // 1-second silent WAV audio data URI
+      const silentWav = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      silentAudioLoopElement = new Audio(silentWav);
+      silentAudioLoopElement.loop = true;
+      silentAudioLoopElement.volume = 0.001; // virtually silent, keeps hardware audio pipeline open
+    }
+    const p = silentAudioLoopElement.play();
+    if (p !== undefined) p.catch(() => {});
+  } catch (e) {}
+}
+
+/**
+ * Stops and resets the silent audio anchor.
+ */
+function stopSilentAudioAnchor() {
+  if (silentAudioLoopElement) {
+    try {
+      silentAudioLoopElement.pause();
+      silentAudioLoopElement.currentTime = 0;
+    } catch (e) {}
+  }
+}
+
+/**
+ * Interfaces with native Android foreground service bridge if running in APK
+ */
+function startNativeBackgroundPlayback(word = '', translation = '') {
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.startBackgroundMode === 'function') {
+    try {
+      window.AndroidAudioBridge.startBackgroundMode(String(word || ''), String(translation || ''));
+    } catch (e) {}
+  }
+}
+
+function updateNativeBackgroundPlayback(word = '', translation = '', isPlaying = true) {
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.updateNotification === 'function') {
+    try {
+      window.AndroidAudioBridge.updateNotification(String(word || ''), String(translation || ''), Boolean(isPlaying));
+    } catch (e) {}
+  }
+}
+
+function stopNativeBackgroundPlayback() {
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopBackgroundMode === 'function') {
+    try {
+      window.AndroidAudioBridge.stopBackgroundMode();
+    } catch (e) {}
+  }
+}
+
+let mediaSessionHandlersRegistered = false;
+
+function setupMediaSessionHandlers() {
+  if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+  if (mediaSessionHandlersRegistered) return;
+  mediaSessionHandlersRegistered = true;
+
+  try {
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (typeof window.onBackgroundAudioToggle === 'function') {
+        window.onBackgroundAudioToggle(true);
+      }
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      if (typeof window.onBackgroundAudioToggle === 'function') {
+        window.onBackgroundAudioToggle(false);
+      }
+    });
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      if (typeof window.onBackgroundAudioNext === 'function') {
+        window.onBackgroundAudioNext();
+      }
+    });
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      if (typeof window.onBackgroundAudioPrev === 'function') {
+        window.onBackgroundAudioPrev();
+      }
+    });
+  } catch (e) {}
+}
+
+/**
+ * Updates MediaSession status for mobile background audio priority, lock screen widget, and headphones controls
+ */
+function updateMediaSessionStatus(isPlaying, currentWord = null, translationText = '') {
   if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
     try {
+      setupMediaSessionHandlers();
       if (isPlaying) {
         navigator.mediaSession.playbackState = 'playing';
         if (currentWord && currentWord.word) {
+          const artistText = translationText || currentWord.translation || 'English Breakfast';
           navigator.mediaSession.metadata = new MediaMetadata({
             title: currentWord.word,
-            artist: 'My Duolingo',
-            album: 'Favorites Audio Mode',
+            artist: artistText,
+            album: 'English Breakfast • Избранное',
+            artwork: [
+              { src: 'apple-touch-icon.png', sizes: '192x192', type: 'image/png' },
+              { src: 'apple-touch-icon.png', sizes: '512x512', type: 'image/png' },
+            ],
           });
         }
       } else {
@@ -1316,6 +1416,12 @@ export const AudioService = {
   isWordAudioPlaying,
   requestScreenWakeLock,
   releaseScreenWakeLock,
+  startSilentAudioAnchor,
+  stopSilentAudioAnchor,
+  startNativeBackgroundPlayback,
+  updateNativeBackgroundPlayback,
+  stopNativeBackgroundPlayback,
+  setupMediaSessionHandlers,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
@@ -1353,6 +1459,12 @@ export {
   isWordAudioPlaying,
   requestScreenWakeLock,
   releaseScreenWakeLock,
+  startSilentAudioAnchor,
+  stopSilentAudioAnchor,
+  startNativeBackgroundPlayback,
+  updateNativeBackgroundPlayback,
+  stopNativeBackgroundPlayback,
+  setupMediaSessionHandlers,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,

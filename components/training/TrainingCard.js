@@ -14,6 +14,11 @@ import {
   isSfxMuted,
   requestScreenWakeLock,
   releaseScreenWakeLock,
+  startSilentAudioAnchor,
+  stopSilentAudioAnchor,
+  startNativeBackgroundPlayback,
+  updateNativeBackgroundPlayback,
+  stopNativeBackgroundPlayback,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
@@ -3155,7 +3160,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       async function runAutoplayCycle() {
         if (!window.__favsAutoplayRunning) return;
         requestScreenWakeLock();
-        updateMediaSessionStatus(true, currentWord);
+        startSilentAudioAnchor();
+        const translation = getWordTranslation(currentWord);
+        updateNativeBackgroundPlayback(currentWord.word, translation, true);
+        updateMediaSessionStatus(true, currentWord, translation);
         const cycleId = ++window.__favsAutoplayCycleId;
 
         // 1. Show Translation (back face)
@@ -3168,7 +3176,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        const translation = getWordTranslation(currentWord);
         const userLang = getInterfaceLanguage() || 'ru';
         await speakTextInLangAsync(translation, userLang);
 
@@ -3208,6 +3215,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (autoplayBtn) {
         const newAutoplayBtn = autoplayBtn.cloneNode(true);
         autoplayBtn.parentNode.replaceChild(newAutoplayBtn, autoplayBtn);
+
+        // Global listeners for lock-screen/headphone/notification actions
+        window.onBackgroundAudioNext = () => {
+          if (window.__favsAutoplayRunning) {
+            stopAllAudio();
+            onNext();
+          }
+        };
+        window.onBackgroundAudioPrev = () => {
+          if (window.__favsAutoplayRunning && typeof onPrev === 'function') {
+            stopAllAudio();
+            onPrev();
+          }
+        };
+        window.onBackgroundAudioToggle = (forcePlay) => {
+          if (newAutoplayBtn) {
+            if (forcePlay === true && !window.__favsAutoplayRunning) {
+              newAutoplayBtn.click();
+            } else if (forcePlay === false && window.__favsAutoplayRunning) {
+              newAutoplayBtn.click();
+            } else if (typeof forcePlay === 'undefined') {
+              newAutoplayBtn.click();
+            }
+          }
+        };
+
         newAutoplayBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (window.__favsAutoplayRunning) {
@@ -3216,6 +3249,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
+            stopSilentAudioAnchor();
+            stopNativeBackgroundPlayback();
             releaseScreenWakeLock();
             updateMediaSessionStatus(false);
             newAutoplayBtn.classList.remove('is-playing');
@@ -3229,7 +3264,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             window.__favsAutoplayRunning = true;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             requestScreenWakeLock();
-            updateMediaSessionStatus(true, currentWord);
+            startSilentAudioAnchor();
+            const translation = getWordTranslation(currentWord);
+            startNativeBackgroundPlayback(currentWord.word, translation);
+            updateMediaSessionStatus(true, currentWord, translation);
             newAutoplayBtn.classList.add('is-playing');
             newAutoplayBtn.innerHTML = getFavsAutoplayBtnContent(true);
             runAutoplayCycle();
