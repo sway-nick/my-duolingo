@@ -59,12 +59,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${
             isLoggedIn
               ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
-              : `
-                <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;">
-                  <button class="primary-button settings-auth-btn" id="login-modal-btn">${t('settings_login') || 'Войти'}</button>
-                  <button class="secondary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>
-                </div>
-              `
+              : `<button class="primary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>`
           }
         </div>
       </div>
