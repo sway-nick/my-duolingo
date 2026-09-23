@@ -1134,8 +1134,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
               }
 
-              // Даем комфортные 4 секунды на произнесение слова
-              const timeoutMs = 4000;
+              // Даем комфортные 6 секунд на произнесение слова
+              const timeoutMs = 6000;
               autoStopTimer = setTimeout(() => {
                 if (isListening && !isEvaluated) {
                   if (micBtn) {
@@ -1175,10 +1175,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
                 }
                 setTimeout(() => {
-                  try {
-                    nativeRecognition.stop();
-                  } catch (e) {}
-                }, 350);
+                  if (isListening && !isEvaluated) {
+                    try {
+                      nativeRecognition.stop();
+                    } catch (e) {}
+                  }
+                }, 2000);
               }
             };
 
@@ -1240,6 +1242,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               if (err.error === 'not-allowed' || err.error === 'audio-capture') {
                 isEvaluated = true;
                 handleNoSpeechHeard(t('train_mic_allow_browser'), true);
+                return;
+              }
+
+              // Сетевые ошибки или блокировка сервиса Google Speech — переключаем на Gemini AI (MediaRecorder)
+              if (err.error === 'network' || err.error === 'service-not-allowed') {
+                isEvaluated = true;
+                console.warn('Native speech network/service error, falling back to Gemini AI via MediaRecorder');
+                if (transcriptBox) {
+                  transcriptBox.style.display = 'block';
+                  transcriptBox.innerHTML = t('train_switching_alt');
+                }
+                if (holdHint) {
+                  holdHint.innerHTML = t('train_switching_alt');
+                }
+                startMobileMediaRecorder();
                 return;
               }
 
@@ -1472,9 +1489,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
           }
 
-          const wordLength = currentWord.word ? currentWord.word.length : 5;
           const isPhrase = currentWord.word && currentWord.word.includes(' ');
-          const timeoutMs = isPhrase ? 3200 : (wordLength <= 4 ? 2200 : 2500);
+          const timeoutMs = isPhrase ? 4500 : 3500;
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();

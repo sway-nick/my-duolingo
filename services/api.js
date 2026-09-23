@@ -2544,10 +2544,7 @@ function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
 }
 
 async function transcribeAudio(audioBlob, mimeType, expectedWord) {
-  // Use Web Speech API for real speech recognition (works in Chrome/Android WebView)
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    // Fallback: feature not available — return neutral result (no score)
+  if (!audioBlob) {
     return {
       transcribed: '',
       isCorrect: false,
@@ -2559,78 +2556,105 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
 
   return new Promise((resolve) => {
     const t0 = Date.now();
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 5;
-    recognition.continuous = false;
-
-    let settled = false;
-    const settle = (result) => {
-      if (settled) return;
-      settled = true;
-      resolve(result);
-    };
-
-    recognition.onresult = (event) => {
-      const totalMs = Date.now() - t0;
-      const expected = (expectedWord || '').toLowerCase().trim();
-      let bestTranscribed = '';
-      let bestScore = 0;
-
-      // Check all alternatives for the best match
-      for (let i = 0; i < event.results[0].length; i++) {
-        const alt = event.results[0][i].transcript.toLowerCase().trim();
-        // Simple similarity: exact match or one contains the other
-        let score = 0;
-        if (alt === expected) {
-          score = 100;
-        } else if (alt.includes(expected) || expected.includes(alt)) {
-          score = Math.round(85 * (Math.min(alt.length, expected.length) / Math.max(alt.length, expected.length)));
-        } else {
-          // Character-level similarity (Dice coefficient on bigrams)
-          const bigrams = (s) => { const b = new Set(); for (let j = 0; j < s.length - 1; j++) b.add(s[j] + s[j+1]); return b; };
-          const bA = bigrams(alt), bE = bigrams(expected);
-          let inter = 0; bA.forEach(b => { if (bE.has(b)) inter++; });
-          score = bA.size + bE.size > 0 ? Math.round((2 * inter / (bA.size + bE.size)) * 100) : 0;
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const base64Data = (reader.result || '').split(',')[1];
+        if (!base64Data) {
+          return resolve({
+            transcribed: '',
+            isCorrect: false,
+            score: null,
+            feedback: '',
+            timings: { totalClientMs: Date.now() - t0 },
+          });
         }
-        if (score > bestScore) { bestScore = score; bestTranscribed = alt; }
-      }
 
-      const isCorrect = bestScore >= 70;
-      let feedback = '';
-      if (!isCorrect && bestTranscribed) {
-        feedback = `Услышано: «${bestTranscribed}»`;
+        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribe`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: 'transcribe',
+            audioBase64: base64Data,
+            mimeType: mimeType || 'audio/webm',
+            expectedWord: expectedWord || '',
+          }),
+        });
+        const json = await response.json();
+        const data = json && json.data ? json.data : json;
+        if (data && typeof data === 'object') {
+          if (!data.timings) data.timings = {};
+          data.timings.totalClientMs = Date.now() - t0;
+        }
+        resolve(data);
+      } catch (err) {
+        console.warn('Backend transcribeAudio error:', err);
+        resolve({
+          transcribed: '',
+          isCorrect: false,
+          score: null,
+          feedback: '',
+          timings: { totalClientMs: Date.now() - t0 },
+        });
       }
-
-      settle({
-        transcribed: bestTranscribed,
-        isCorrect,
-        score: bestScore,
-        feedback,
-        timings: { totalClientMs: totalMs },
+    };
+    reader.onerror = () => {
+      resolve({
+        transcribed: '',
+        isCorrect: false,
+        score: null,
+        feedback: '',
+        timings: { totalClientMs: Date.now() - t0 },
       });
     };
-
-    recognition.onerror = (event) => {
-      settle({ transcribed: '', isCorrect: false, score: null, feedback: '', timings: { totalClientMs: Date.now() - t0 } });
-    };
-
-    recognition.onend = () => {
-      // If no result was fired before end
-      settle({ transcribed: '', isCorrect: false, score: null, feedback: '', timings: { totalClientMs: Date.now() - t0 } });
-    };
-
-    recognition.start();
+    reader.readAsDataURL(audioBlob);
   });
 }
 
-
 async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
-  return {
-    success: true,
-    totalClientMs: 10,
-  };
+  return new Promise((resolve) => {
+    const t0 = Date.now();
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const base64Data = (reader.result || '').split(',')[1];
+        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribeping`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: 'transcribePing',
+            audioBase64: base64Data || '',
+            mimeType: mimeType || 'audio/webm',
+            expectedWord: expectedWord || '',
+          }),
+        });
+        const json = await response.json();
+        const data = json && json.data ? json.data : json;
+        if (data && typeof data === 'object') {
+          data.totalClientMs = Date.now() - t0;
+        }
+        resolve(data);
+      } catch (err) {
+        resolve({
+          success: false,
+          error: err.message,
+          totalClientMs: Date.now() - t0,
+        });
+      }
+    };
+    reader.onerror = () => {
+      resolve({
+        success: false,
+        error: 'FileReader error',
+        totalClientMs: Date.now() - t0,
+      });
+    };
+    reader.readAsDataURL(audioBlob);
+  });
 }
 
 async function getCloudWordOfTheDayId(userId) {
