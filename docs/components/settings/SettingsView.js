@@ -8,14 +8,32 @@ import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i1
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=224.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=224.0';
 
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
   if (window._activeTab && window._activeTab !== 'settings') return;
 
   const user = getCurrentUser();
+  const isLoggedIn = Boolean(user && user.id && user.id !== 'guest' && !String(user.id).startsWith('guest_') && user.email);
   const avatar = getUserAvatar();
   const currentTheme = getSavedTheme();
+
+  const displayName = isLoggedIn
+    ? (user.name || user.email.split('@')[0])
+    : (t('settings_guest_mode') || t('demo') || 'Guest (Demo)');
+  const displaySub = isLoggedIn
+    ? (user.email || '')
+    : (t('settings_login_sub') || 'Log in to sync progress');
 
   container.innerHTML = `
     <div class="settings-page" style="position: relative;">
@@ -29,19 +47,24 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${
             avatar
               ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" referrerpolicy="no-referrer" />`
-              : `<div class="profile-avatar-placeholder">${user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤'}</div>`
+              : `<div class="profile-avatar-placeholder">${escapeHtml(displayName.trim().charAt(0).toUpperCase() || '👤')}</div>`
           }
           <div class="avatar-edit-badge" title="${t('settings_avatar_edit_tooltip')}">🎭</div>
         </div>
         <div class="profile-details" style="flex: 1; min-width: 0;">
-          <h3 class="profile-name">${user ? user.name : (t('settings_guest_mode') || t('demo') || 'Guest Mode')}</h3>
-          ${user ? '' : `<p class="profile-sub">${t('settings_login_sub') || 'Log in to sync progress'}</p>`}
+          <h3 class="profile-name">${escapeHtml(displayName)}</h3>
+          <p class="profile-sub">${escapeHtml(displaySub)}</p>
         </div>
         <div>
           ${
-            user
-              ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout')}</button>`
-              : `<button class="primary-button settings-auth-btn" id="login-modal-btn">${t('settings_login')}</button>`
+            isLoggedIn
+              ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
+              : `
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;">
+                  <button class="primary-button settings-auth-btn" id="login-modal-btn">${t('settings_login') || 'Войти'}</button>
+                  <button class="secondary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>
+                </div>
+              `
           }
         </div>
       </div>
@@ -152,7 +175,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <div class="settings-footer">
         ${
-          user
+          isLoggedIn
             ? `
           <!-- Delete Account Button (Clean, no card container) -->
           <button type="button" id="delete-account-btn" class="settings-delete-account-btn">
@@ -219,7 +242,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         if (!window._activeTab || window._activeTab === 'settings') {
           renderSettingsView(containerSelector, onUserChange);
         }
-      });
+      }, 'login');
+    });
+  }
+
+  const registerBtn = container.querySelector('#register-modal-btn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', () => {
+      renderAuthModal(async () => {
+        await onUserChange();
+        if (!window._activeTab || window._activeTab === 'settings') {
+          renderSettingsView(containerSelector, onUserChange);
+        }
+      }, 'register');
     });
   }
 

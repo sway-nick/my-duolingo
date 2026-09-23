@@ -519,7 +519,13 @@ export function getEffectiveFirestoreUid(providedId = null) {
       }
     } catch (e) {}
   }
-  return providedId || fb?.id || cur?.firebaseUid || cur?.id || '';
+
+  // 5. Strictly validate candidate before returning — NEVER return guest IDs or dummy strings
+  const candidate = fb?.id || cur?.firebaseUid || providedId || '';
+  if (candidate && typeof candidate === 'string' && candidate.length >= 20 && !candidate.includes('_') && !candidate.startsWith('guest') && !/^\d+$/.test(candidate)) {
+    return candidate;
+  }
+  return '';
 }
 
 // Время истечения (мс) из поля exp JWT; 0, если прочитать не удалось.

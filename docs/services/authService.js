@@ -301,19 +301,24 @@ function getCurrentUser() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY_USER);
     if (saved) {
-      currentUser = JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (parsed && typeof parsed === 'object' && parsed.id && parsed.id !== 'guest' && !String(parsed.id).startsWith('guest_') && parsed.email) {
+        currentUser = parsed;
+      } else {
+        currentUser = null;
+      }
     } else {
       currentUser = null;
     }
   } catch (e) {
-    console.warn('Failed reading current user from storage:', e);
+    currentUser = null;
   }
   return currentUser;
 }
 
 function setCurrentUser(user, token) {
-  currentUser = user;
-  if (user) {
+  if (user && user.id && user.id !== 'guest' && !String(user.id).startsWith('guest_') && user.email) {
+    currentUser = user;
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
     const finalToken = (token && !token.startsWith('tok_')) ? token : (user.idToken || token || '');
     if (finalToken) localStorage.setItem(STORAGE_KEY_TOKEN, finalToken);
@@ -322,19 +327,25 @@ function setCurrentUser(user, token) {
       migrateGuestData(user.id, user.email || '', user.name || '', user.avatar || '');
     }
   } else {
+    currentUser = null;
     localStorage.removeItem(STORAGE_KEY_USER);
     localStorage.removeItem(STORAGE_KEY_TOKEN);
+    try {
+      localStorage.removeItem('myduo_firebase_user');
+      localStorage.removeItem('myduo_refresh_token');
+      localStorage.removeItem('myduo_auth_token');
+    } catch (e) {}
   }
 
   // Dispatch global event for instant UI reaction without page refresh
   try {
-    window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user } }));
+    window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user: currentUser } }));
   } catch (e) {}
 }
 
 // Auto-migrate on initial script evaluation if user is already logged in
 try {
-  if (currentUser && currentUser.id) {
+  if (currentUser && currentUser.id && currentUser.email) {
     migrateGuestData(currentUser.id, currentUser.email || '', currentUser.name || '', currentUser.avatar || '');
   }
 } catch (e) {}
@@ -347,6 +358,13 @@ function logoutUser() {
   }
   logoutFirebase();
   setCurrentUser(null, null);
+  try {
+    localStorage.removeItem(STORAGE_KEY_USER);
+    localStorage.removeItem(STORAGE_KEY_TOKEN);
+    localStorage.removeItem('myduo_firebase_user');
+    localStorage.removeItem('myduo_refresh_token');
+    localStorage.removeItem('myduo_auth_token');
+  } catch (e) {}
 }
 
 function getAuthToken() {
@@ -424,8 +442,12 @@ function saveUserAvatar(userId, base64Data) {
     window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: id, avatar: base64Data } }));
   } catch (e) {}
 
-  // Direct Firestore cloud sync
+  // Direct Firestore cloud sync: strictly for authenticated users only
   try {
+    const user = getCurrentUser();
+    if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
+      return;
+    }
     const d = new Date();
     const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
@@ -433,11 +455,10 @@ function saveUserAvatar(userId, base64Data) {
     const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
     const wKey = `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
 
-    const user = currentUser;
-    const userName = user && user.name ? user.name : 'Гость';
+    const userName = user.name || user.email.split('@')[0];
     const xp = Number(localStorage.getItem(`xp_${id}_${wKey}`) || 0);
 
-    const fsUid = (user?.firebaseUid && !user.firebaseUid.includes('_')) ? user.firebaseUid : id;
+    const fsUid = (user.firebaseUid && !user.firebaseUid.includes('_')) ? user.firebaseUid : user.id;
     saveUserProfileFirestore(fsUid, { avatar: base64Data || '', name: userName }).catch(() => {});
     syncLeaderboardScoreFirestore(fsUid, wKey, xp, userName, base64Data || '').catch(() => {});
   } catch (err) {}

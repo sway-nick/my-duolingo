@@ -22,7 +22,7 @@ function parseJwt(token) {
   }
 }
 
-function renderAuthModal(onSuccessCallback) {
+function renderAuthModal(onSuccessCallback, initialMode = 'login') {
   const existing = document.querySelector('#auth-modal');
   if (existing) existing.remove();
 
@@ -35,8 +35,8 @@ function renderAuthModal(onSuccessCallback) {
       <button class="modal-close" id="modal-close-btn">&times;</button>
       
       <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login-btn">${t('auth_tab_login')}</button>
-        <button class="auth-tab" id="tab-register-btn">${t('auth_tab_register')}</button>
+        <button class="auth-tab ${initialMode === 'register' ? '' : 'active'}" id="tab-login-btn">${t('auth_tab_login') || 'Вход'}</button>
+        <button class="auth-tab ${initialMode === 'register' ? 'active' : ''}" id="tab-register-btn">${t('auth_tab_register') || 'Регистрация'}</button>
       </div>
 
       <!-- Google Official One-Tap & Sign-In -->
@@ -59,7 +59,7 @@ function renderAuthModal(onSuccessCallback) {
       <form id="auth-form" class="auth-form">
         <div id="auth-error" class="auth-error" style="display:none;"></div>
         
-        <div class="form-group" id="name-group" style="display:none;">
+        <div class="form-group" id="name-group" style="${initialMode === 'register' ? 'display:block;' : 'display:none;'}">
           <label>${t('auth_field_name')}</label>
           <input type="text" id="auth-name" placeholder="${t('auth_field_name_placeholder')}" maxlength="40" />
         </div>
@@ -74,19 +74,19 @@ function renderAuthModal(onSuccessCallback) {
           <input type="password" id="auth-password" placeholder="••••••••" required maxlength="128" autocomplete="current-password" />
         </div>
 
-        <div class="form-group" id="password-confirm-group" style="display:none;">
+        <div class="form-group" id="password-confirm-group" style="${initialMode === 'register' ? 'display:block;' : 'display:none;'}">
           <label>${t('auth_field_password_confirm')}</label>
           <input type="password" id="auth-password-confirm" placeholder="••••••••" maxlength="128" autocomplete="new-password" />
         </div>
 
-        <button type="submit" class="primary-button" id="auth-submit-btn">${t('auth_btn_login')}</button>
+        <button type="submit" class="primary-button" id="auth-submit-btn">${initialMode === 'register' ? (t('auth_btn_register') || 'Зарегистрироваться') : (t('auth_btn_login') || 'Войти')}</button>
       </form>
     </div>
   `;
 
   document.body.appendChild(modal);
 
-  let mode = 'login'; // 'login' or 'register'
+  let mode = initialMode === 'register' ? 'register' : 'login';
   let tokenClient = null;
 
   const tabLogin = modal.querySelector('#tab-login-btn');
@@ -106,15 +106,17 @@ function renderAuthModal(onSuccessCallback) {
       tabRegister.classList.remove('active');
       nameGroup.style.display = 'none';
       passConfirmGroup.style.display = 'none';
-      submitBtn.textContent = t('auth_btn_login');
+      submitBtn.textContent = t('auth_btn_login') || 'Войти';
     } else {
       tabRegister.classList.add('active');
       tabLogin.classList.remove('active');
       nameGroup.style.display = 'block';
       passConfirmGroup.style.display = 'block';
-      submitBtn.textContent = t('auth_btn_register');
+      submitBtn.textContent = t('auth_btn_register') || 'Зарегистрироваться';
     }
   };
+
+  switchTab(mode);
 
   tabLogin.addEventListener('click', () => switchTab('login'));
   tabRegister.addEventListener('click', () => switchTab('register'));
@@ -152,11 +154,13 @@ function renderAuthModal(onSuccessCallback) {
       // Exchange with Firebase Auth REST API for valid Firestore idToken
       let fbIdToken = '';
       let fbLocalId = ''; // True Firebase UID from Firebase Auth
+      let fbRefreshToken = '';
       try {
         const fbRes = await signInWithGoogleIdToken('', tokenResponse.access_token);
         if (fbRes && fbRes.idToken) {
           fbIdToken = fbRes.idToken;
           fbLocalId = fbRes.localId || ''; // Real Firebase UID (e.g. b9PUaf5j...)
+          fbRefreshToken = fbRes.refreshToken || '';
           const fbUser = {
             id: fbLocalId || profile.sub || '',
             name: name,
@@ -164,12 +168,12 @@ function renderAuthModal(onSuccessCallback) {
             avatar: picture,
             provider: 'google',
             idToken: fbRes.idToken,
-            refreshToken: fbRes.refreshToken || '',
+            refreshToken: fbRefreshToken,
             expiresAt: Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000),
           };
           localStorage.setItem('myduo_firebase_user', JSON.stringify(fbUser));
-          if (fbRes.refreshToken) {
-            try { localStorage.setItem('myduo_refresh_token', fbRes.refreshToken); } catch (e) {}
+          if (fbRefreshToken) {
+            try { localStorage.setItem('myduo_refresh_token', fbRefreshToken); } catch (e) {}
           }
         }
       } catch (e) {}
@@ -185,7 +189,7 @@ function renderAuthModal(onSuccessCallback) {
           // Use real Firebase UID (localId) — NOT Google OAuth Sub ID (profile.sub)
           firebaseUid: fbLocalId || profile.sub || profile.id || '',
           idToken: fbIdToken || '',
-          refreshToken: (fbUser && fbUser.refreshToken) || '',
+          refreshToken: fbRefreshToken || '',
         };
         setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
         try {
@@ -227,11 +231,13 @@ function renderAuthModal(onSuccessCallback) {
       // Exchange Google ID Token with Firebase Auth REST API
       let fbIdToken = '';
       let fbLocalId = ''; // True Firebase UID from Firebase Auth
+      let fbRefreshToken = '';
       try {
         const fbRes = await signInWithGoogleIdToken(response.credential);
         if (fbRes && fbRes.idToken) {
           fbIdToken = fbRes.idToken;
           fbLocalId = fbRes.localId || ''; // Real Firebase UID (e.g. b9PUaf5j...)
+          fbRefreshToken = fbRes.refreshToken || '';
           const fbUser = {
             id: fbLocalId || payload.sub || '',
             name: name,
@@ -239,12 +245,12 @@ function renderAuthModal(onSuccessCallback) {
             avatar: picture,
             provider: 'google',
             idToken: fbRes.idToken,
-            refreshToken: fbRes.refreshToken || '',
+            refreshToken: fbRefreshToken,
             expiresAt: Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000),
           };
           localStorage.setItem('myduo_firebase_user', JSON.stringify(fbUser));
-          if (fbRes.refreshToken) {
-            try { localStorage.setItem('myduo_refresh_token', fbRes.refreshToken); } catch (e) {}
+          if (fbRefreshToken) {
+            try { localStorage.setItem('myduo_refresh_token', fbRefreshToken); } catch (e) {}
           }
         }
       } catch (e) {}
@@ -261,7 +267,7 @@ function renderAuthModal(onSuccessCallback) {
           // Use real Firebase UID (localId) — NOT Google JWT Sub ID (payload.sub)
           firebaseUid: fbLocalId || payload.sub || '',
           idToken: fbIdToken || '',
-          refreshToken: (fbUser && fbUser.refreshToken) || '',
+          refreshToken: fbRefreshToken || '',
         };
         setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
         try {
@@ -295,14 +301,19 @@ function renderAuthModal(onSuccessCallback) {
       }
     }
 
-    if (window.google?.accounts?.id) {
+    if (window.google?.accounts?.id && !window._gsiInitialized) {
       try {
         window.google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
-          callback: handleGoogleResponse,
+          callback: (resp) => {
+            if (typeof handleGoogleResponse === 'function') {
+              handleGoogleResponse(resp);
+            }
+          },
           auto_select: false,
           cancel_on_tap_outside: true,
         });
+        window._gsiInitialized = true;
       } catch (e) {
         console.warn('Google ID init fallback:', e);
       }

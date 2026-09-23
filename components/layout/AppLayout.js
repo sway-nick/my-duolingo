@@ -553,12 +553,12 @@ function updateDrawerProfile() {
 
   const usernameEl = drawer.querySelector('.drawer-username');
   if (usernameEl) {
-    usernameEl.textContent = user ? user.name : 'Guest (Demo)';
+    usernameEl.textContent = user ? (user.name || (user.email ? user.email.split('@')[0] : 'User')) : 'Guest (Demo)';
   }
 
   const emailEl = drawer.querySelector('.drawer-email');
   if (emailEl) {
-    emailEl.textContent = user ? '' : `Progress: ${guestCount}/${GUEST_WORD_LIMIT} words`;
+    emailEl.textContent = user ? (user.email || '') : `Progress: ${guestCount}/${GUEST_WORD_LIMIT} words`;
   }
 }
 

@@ -1356,11 +1356,14 @@ async function loadMigratedPlayersBundle() {
 }
 
 async function fetchUserDataFromCloud(userId = null, weekKey = null) {
-  const uId = userId || getEffectiveUserId();
-  if (!uId || String(uId).startsWith('guest_')) return null;
+  const user = getCurrentUser();
+  if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
+    return null;
+  }
+  const uId = userId || user.id;
+  if (!uId || String(uId).startsWith('guest')) return null;
 
   const wKey = weekKey || getIsoWeekKey();
-  const user = getCurrentUser();
   const detId = user && user.email ? getDeterministicUserId(user.email) : null;
   const fbUid = user && (user.firebaseUid || (user.id && user.id !== detId ? user.id : null));
   // Use Firebase UID as primary Firestore path (subcollections require auth.uid == userId)
@@ -1688,19 +1691,24 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 }
 
 function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
-  const uId = userId || getEffectiveUserId();
-  if (!uId || String(uId).startsWith('guest_')) return;
+  const user = getCurrentUser();
+  if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
+    return;
+  }
+  const uId = userId || user.id;
+  if (!uId || String(uId).startsWith('guest')) return;
 
   const doSync = async () => {
     const wKey = weekKey || getIsoWeekKey();
     const firestoreUid = getFirestoreUserId(uId);
+    if (!firestoreUid || String(firestoreUid).startsWith('guest')) return;
+
     const progress = JSON.parse(localStorage.getItem(`progress_${uId}`) || '{}');
     const favorites = JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]');
     const weeklyXp = getUserWeeklyXP(uId, wKey);
     const settings = JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}');
     const avatar = localStorage.getItem(`avatar_${uId}`) || '';
-    const user = getCurrentUser();
-    const userName = user && user.name ? user.name : 'Участник';
+    const userName = user && user.name ? user.name : (user.email.split('@')[0] || 'Участник');
 
     // 100% Cloud Firestore sync using Firebase UID
     try {
