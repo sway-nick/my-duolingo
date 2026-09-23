@@ -210,7 +210,7 @@ function initApp() {
                     registration.update();
                 }
             });
-            navigator.serviceWorker.register('./sw.js?v=2.1').catch(() => {
+            navigator.serviceWorker.register('./sw.0').catch(() => {
                 console.log('Service worker registration failed');
             });
         });

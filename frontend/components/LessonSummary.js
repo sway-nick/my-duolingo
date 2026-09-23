@@ -1,5 +1,5 @@
-import { AudioService } from '../services/audioService.js?v=200.0';
-import { StorageService } from '../services/storageService.js?v=200.0';
+import { AudioService } from '../services/audioService.0';
+import { StorageService } from '../services/storageService.0';
 
 export function renderLessonSummary(container, results) {
     if (!container) return;

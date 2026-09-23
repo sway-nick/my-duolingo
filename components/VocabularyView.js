@@ -1,6 +1,6 @@
-import { WORDS, CATEGORIES } from '../services/initialData.js?v=200.0';
-import { StorageService } from '../services/storageService.js?v=200.0';
-import { AudioService } from '../services/audioService.js?v=200.0';
+import { WORDS, CATEGORIES } from '../services/initialData.0';
+import { StorageService } from '../services/storageService.0';
+import { AudioService } from '../services/audioService.0';
 
 export function renderVocabulary(container, favoritesOnly = false) {
     if (!container) return;

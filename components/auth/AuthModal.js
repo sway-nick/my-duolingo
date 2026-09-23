@@ -1,7 +1,7 @@
-import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=200.0';
-import { setCurrentUser } from '../../services/authService.js?v=200.0';
-import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail } from '../../services/firebase.js?v=200.0';
-import { t } from '../../services/i18n.js?v=200.0';
+import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.0';
+import { setCurrentUser } from '../../services/authService.0';
+import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail } from '../../services/firebase.0';
+import { t } from '../../services/i18n.0';
 
 const GOOGLE_CLIENT_ID = '249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com';
 

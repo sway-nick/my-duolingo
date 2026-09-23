@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=200.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.0';
 import { 
   syncLeaderboardScoreFirestore, 
   getWeeklyLeaderboardFirestore, 
@@ -19,7 +19,7 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=201.0';
+} from './firebase.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };

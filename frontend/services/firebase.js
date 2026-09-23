@@ -390,47 +390,16 @@ export async function deleteCurrentUserAccount() {
   const user = JSON.parse(stored);
   const config = getFirebaseConfig();
 
-  // Refresh idToken if we have a refreshToken — Firebase idTokens expire after 1 hour,
-  // so using a stale token would silently fail with TOKEN_EXPIRED.
+  // idToken живёт 1 час — принудительно берём свежий (refreshToken или нативный плагин).
   let idToken = user.idToken || '';
-
-  // 1. Email/password users — refresh via securetoken endpoint
-  if (user.refreshToken) {
-    try {
-      const refreshRes = await fetch(
-        `https://securetoken.googleapis.com/v1/token?key=${config.apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(user.refreshToken)}`,
-        }
-      );
-      const refreshData = await refreshRes.json();
-      if (refreshRes.ok && refreshData.id_token) {
-        idToken = refreshData.id_token;
-        // Persist fresh token so logout flow works correctly
-        try {
-          const updated = { ...user, idToken, refreshToken: refreshData.refresh_token || user.refreshToken };
-          localStorage.setItem('myduo_firebase_user', JSON.stringify(updated));
-        } catch (e) {}
-      }
-    } catch (e) {
-      console.warn('deleteCurrentUserAccount: token refresh failed, trying with stored token', e);
-    }
+  try {
+    const fresh = await getValidIdToken({ force: true });
+    if (fresh) idToken = fresh;
+  } catch (e) {
+    console.warn('deleteCurrentUserAccount: token refresh failed, trying with stored token', e);
   }
 
-  // 2. Google/Capacitor users — no refreshToken stored, ask native plugin for fresh token
-  const isCapacitorGoogle = user.provider === 'google' && window.Capacitor?.Plugins?.FirebaseAuthentication?.getIdToken;
-  if (isCapacitorGoogle) {
-    try {
-      const tokenRes = await window.Capacitor.Plugins.FirebaseAuthentication.getIdToken({ forceRefresh: true });
-      if (tokenRes?.token) idToken = tokenRes.token;
-    } catch (e) {
-      console.warn('deleteCurrentUserAccount: Capacitor getIdToken failed', e);
-    }
-  }
-
-  // 3. Удаляем все данные из Firestore ПЕРЕД удалением аккаунта,
+  // 1. Удаляем все данные из Firestore ПЕРЕД удалением аккаунта,
   //    пока idToken ещё валиден и правила разрешают write для этого uid.
   const userId = user.localId || user.uid || user.userId || '';
   if (userId) {
@@ -441,7 +410,7 @@ export async function deleteCurrentUserAccount() {
     }
   }
 
-  // 4. Удаляем Firebase Auth аккаунт
+  // 2. Удаляем Firebase Auth аккаунт
   if (idToken) {
     const res = await fetch(`${AUTH_BASE}/accounts:delete?key=${config.apiKey}`, {
       method: 'POST',
@@ -480,38 +449,219 @@ function getFirestoreUrl(path) {
   return `${FIRESTORE_BASE}${path}${sep}key=${config.apiKey}`;
 }
 
+// ----------------- ТОКЕНЫ (единая точка получения и обновления) -----------------
+// Firebase ID-токен живёт 1 час. Раньше просроченный токен молча отбрасывался:
+// запрос уходил без Authorization, правила Firestore видели request.auth == null
+// и отвечали 403, а данные (прогресс, XP, лидерборд) не сохранялись в облаке.
+// Теперь токен обновляется по refreshToken (или через нативный плагин) ДО отправки запроса.
+
+const FB_USER_KEY = 'myduo_firebase_user';
+const CUR_USER_KEY = 'myduo_current_user';
+const AUTH_TOKEN_KEY = 'myduo_auth_token';
+const SECURETOKEN_URL = 'https://securetoken.googleapis.com/v1/token';
+const TOKEN_SKEW_MS = 60 * 1000;
+const SYNC_NOTICE_COOLDOWN_MS = 60 * 1000;
+
+let refreshInFlight = null;
+// null | 'network' (временно, токен не трогаем) | 'permanent' (сессия мертва, нужен повторный вход)
+let lastRefreshFailure = null;
+const lastSyncNoticeAt = {};
+
+function readJson(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Время истечения (мс) из поля exp JWT; 0, если прочитать не удалось.
+function getJwtExpiryMs(token) {
+  try {
+    const part = String(token).split('.')[1];
+    if (!part) return 0;
+    const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
+    const bin = atob(b64.padEnd(Math.ceil(b64.length / 4) * 4, '='));
+    const json = decodeURIComponent(
+      bin.split('').map((c) => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join('')
+    );
+    const exp = Number(JSON.parse(json).exp);
+    return exp ? exp * 1000 : 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
+function getStoredToken() {
+  const fb = readJson(FB_USER_KEY) || {};
+  const cur = readJson(CUR_USER_KEY) || {};
+  let token = fb.idToken || cur.idToken || '';
+  if (!token) {
+    try { token = localStorage.getItem(AUTH_TOKEN_KEY) || ''; } catch (e) {}
+  }
+  // 'tok_...' — локальный служебный токен старых версий, не Firebase
+  if (!token || token.startsWith('tok_')) return { token: '', expiresAt: 0 };
+  const expiresAt = (fb.idToken === token && Number(fb.expiresAt)) || getJwtExpiryMs(token) || 0;
+  return { token, expiresAt };
+}
+
+function hasFirebaseSession() {
+  const fb = readJson(FB_USER_KEY);
+  return !!(fb && (fb.idToken || fb.refreshToken));
+}
+
+// Кладём свежий токен во ВСЕ места, откуда его читают остальные части приложения.
+function persistFreshToken(idToken, refreshToken, expiresAt) {
+  const fb = readJson(FB_USER_KEY);
+  if (fb) {
+    fb.idToken = idToken;
+    if (refreshToken) fb.refreshToken = refreshToken;
+    fb.expiresAt = expiresAt;
+    try { localStorage.setItem(FB_USER_KEY, JSON.stringify(fb)); } catch (e) {}
+  }
+  const cur = readJson(CUR_USER_KEY);
+  if (cur && cur.idToken) {
+    cur.idToken = idToken;
+    if (refreshToken && cur.refreshToken) cur.refreshToken = refreshToken;
+    try { localStorage.setItem(CUR_USER_KEY, JSON.stringify(cur)); } catch (e) {}
+  }
+  try { localStorage.setItem(AUTH_TOKEN_KEY, idToken); } catch (e) {}
+}
+
+async function doRefreshIdToken() {
+  lastRefreshFailure = null;
+  const fb = readJson(FB_USER_KEY) || {};
+  const cur = readJson(CUR_USER_KEY) || {};
+  const refreshToken = fb.refreshToken || cur.refreshToken || '';
+
+  // 1. Email / Google (web, AndroidAuthBridge): обновление через securetoken
+  if (refreshToken) {
+    try {
+      const res = await fetch(`${SECURETOKEN_URL}?key=${getFirebaseConfig().apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.id_token) {
+        const expiresAt = Date.now() + parseInt(data.expires_in || '3600', 10) * 1000;
+        persistFreshToken(data.id_token, data.refresh_token || refreshToken, expiresAt);
+        return data.id_token;
+      }
+      // 400: TOKEN_EXPIRED / USER_DISABLED / USER_NOT_FOUND / INVALID_REFRESH_TOKEN — сессия мертва
+      lastRefreshFailure = res.status >= 400 && res.status < 500 ? 'permanent' : 'network';
+      console.warn('Firebase token refresh rejected:', data?.error?.message || res.status);
+    } catch (e) {
+      lastRefreshFailure = 'network';
+      console.warn('Firebase token refresh failed (network):', e);
+    }
+  }
+
+  // 2. Capacitor FirebaseAuthentication: refreshToken в localStorage нет, просим плагин
+  const plugin = typeof window !== 'undefined' ? window.Capacitor?.Plugins?.FirebaseAuthentication : null;
+  if (plugin && typeof plugin.getIdToken === 'function') {
+    try {
+      const r = await plugin.getIdToken({ forceRefresh: true });
+      if (r && r.token) {
+        const expiresAt = getJwtExpiryMs(r.token) || Date.now() + 3600 * 1000;
+        persistFreshToken(r.token, '', expiresAt);
+        lastRefreshFailure = null;
+        return r.token;
+      }
+    } catch (e) {
+      console.warn('Capacitor getIdToken failed:', e);
+      lastRefreshFailure = lastRefreshFailure || 'network';
+    }
+  }
+
+  if (!lastRefreshFailure) lastRefreshFailure = 'permanent'; // обновить нечем
+  return null;
+}
+
+// Обновление токена «в один поток»: параллельные запросы ждут один и тот же refresh.
+export function refreshIdToken() {
+  if (!refreshInFlight) {
+    refreshInFlight = doRefreshIdToken().finally(() => { refreshInFlight = null; });
+  }
+  return refreshInFlight;
+}
+
+// Возвращает действующий ID-токен (при необходимости обновляет) либо null.
+export async function getValidIdToken({ force = false } = {}) {
+  const { token, expiresAt } = getStoredToken();
+  if (!force && token && (!expiresAt || Date.now() < expiresAt - TOKEN_SKEW_MS)) return token;
+
+  const fresh = await refreshIdToken();
+  if (fresh) return fresh;
+
+  // Обновить не удалось: если старый токен ещё формально жив — используем его до конца
+  if (!force && token && expiresAt && Date.now() < expiresAt) return token;
+  return null;
+}
+
+// Оставлена для совместимости с вызывающим кодом (`headers: getAuthHeaders()`).
+// Авторизацию окончательно выставляет firestoreFetch — он же обновляет токен.
 function getAuthHeaders() {
   const headers = { 'Content-Type': 'application/json' };
-  try {
-    const fbUser = JSON.parse(localStorage.getItem('myduo_firebase_user') || '{}');
-    const curUser = JSON.parse(localStorage.getItem('myduo_current_user') || '{}');
-    const token = fbUser.idToken || curUser.idToken || localStorage.getItem('myduo_auth_token') || '';
-    const expiresAt = Number(fbUser.expiresAt) || 0;
-    if (token && !token.startsWith('tok_') && (!expiresAt || Date.now() < expiresAt - 60000)) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } catch (e) {}
+  const { token, expiresAt } = getStoredToken();
+  if (token && (!expiresAt || Date.now() < expiresAt - TOKEN_SKEW_MS)) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
   return headers;
 }
 
-export async function firestoreFetch(url, options = {}) {
-  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-  let res;
+// Событие для UI. Только для вошедших пользователей и не чаще 1 раза в минуту.
+function reportSyncIssue(kind, status) {
+  if (typeof window === 'undefined' || !hasFirebaseSession()) return;
+  const now = Date.now();
+  if (now - (lastSyncNoticeAt[kind] || 0) < SYNC_NOTICE_COOLDOWN_MS) return;
+  lastSyncNoticeAt[kind] = now;
   try {
-    res = await fetch(url, { ...options, headers });
-  } catch (netErr) {
-    throw netErr;
+    window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind, status } }));
+  } catch (e) {}
+}
+
+const FIRESTORE_WRITE_METHODS = new Set(['PATCH', 'PUT', 'POST', 'DELETE']);
+
+export async function firestoreFetch(url, options = {}) {
+  const method = String(options.method || 'GET').toUpperCase();
+  const isWrite = FIRESTORE_WRITE_METHODS.has(method);
+
+  const send = (token) => {
+    const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+    delete headers.Authorization;
+    delete headers.authorization;
+    if (token) headers.Authorization = `Bearer ${token}`;
+    return fetch(url, { ...options, headers });
+  };
+
+  let token = await getValidIdToken();
+  let res = await send(token);
+
+  // 401 при «живом» токене (отозван, сдвиг часов): один принудительный refresh и повтор.
+  if (res.status === 401 && token) {
+    const fresh = await getValidIdToken({ force: true });
+    if (fresh && fresh !== token) {
+      token = fresh;
+      res = await send(fresh);
+    }
+    // Публичные чтения работают и без токена
+    if (res.status === 401 && !isWrite) {
+      token = null;
+      res = await send(null);
+    }
   }
 
-  // If request failed with 401 UNAUTHENTICATED (e.g. stale/expired Bearer token from localStorage)
-  if (res && res.status === 401 && headers['Authorization']) {
-    console.warn('Firestore returned 401 with Bearer token, retrying without Authorization header...');
-    const retryHeaders = { ...headers };
-    delete retryHeaders['Authorization'];
-    try {
-      res = await fetch(url, { ...options, headers: retryHeaders });
-    } catch (retryErr) {
-      throw retryErr;
+  if (isWrite && (res.status === 401 || res.status === 403)) {
+    if (!token) {
+      // Токена нет: если причина — временная (сеть), пользователя не пугаем
+      if (lastRefreshFailure !== 'network') reportSyncIssue('relogin', res.status);
+    } else if (res.status === 401) {
+      reportSyncIssue('relogin', res.status);
+    } else {
+      // 403 с валидным токеном — это уже отказ правил Firestore (не токен)
+      reportSyncIssue('denied', res.status);
     }
   }
 
