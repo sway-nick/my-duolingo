@@ -869,6 +869,33 @@ export async function saveUserFavoritesFirestore(userId, favoritesArray) {
   }
 }
 
+export async function saveUserDeletedFavoritesFirestore(userId, deletedFavoritesArray) {
+  if (!userId) return;
+  try {
+    const cleanArr = Array.isArray(deletedFavoritesArray)
+      ? deletedFavoritesArray.map(id => String(id).trim()).filter(Boolean)
+      : [];
+    const arr = cleanArr.map(id => ({ stringValue: id }));
+    const fields = {
+      deletedFavorites: arr.length > 0 ? { arrayValue: { values: arr } } : { arrayValue: {} },
+      updatedAt: { integerValue: String(Date.now()) }
+    };
+
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/deleted_favorites?updateMask.fieldPaths=deletedFavorites&updateMask.fieldPaths=updatedAt`);
+
+    const res = await firestoreFetch(url, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ fields }),
+    });
+    if (!res.ok) {
+      console.warn('Firestore deleted_favorites save failed HTTP', res.status);
+    }
+  } catch (err) {
+    console.warn('Firestore deleted_favorites save failed:', err);
+  }
+}
+
 export async function saveUserNotesFirestore(userId, notesMap) {
   if (!userId) return;
   try {
@@ -1080,18 +1107,30 @@ export async function loadFullUserDataFirestore(userId) {
   if (!userId) return null;
   try {
     const authHeaders = getAuthHeaders();
-    const [progress, userDocRes, favDocRes, setDocRes, notesDocRes, customDocRes] = await Promise.all([
+    const [progress, userDocRes, favDocRes, setDocRes, notesDocRes, customDocRes, deletedFavDocRes] = await Promise.all([
       loadUserProgressFirestore(userId),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/favorites`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/settings/general`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/deleted_favorites`), { headers: authHeaders }).catch(() => null),
     ]);
 
     let userProfile = {};
     let favorites = [];
+    let deletedFavorites = [];
     let hasExplicitFavDoc = false;
+
+    if (deletedFavDocRes && deletedFavDocRes.ok) {
+      try {
+        const data = await deletedFavDocRes.json();
+        if (data.fields?.deletedFavorites?.arrayValue?.values) {
+          const sub = data.fields.deletedFavorites.arrayValue.values.map(v => v.stringValue || '').filter(Boolean);
+          deletedFavorites.push(...sub);
+        }
+      } catch (e) {}
+    }
 
     if (favDocRes && favDocRes.ok) {
       const data = await favDocRes.json();
@@ -1166,6 +1205,7 @@ export async function loadFullUserDataFirestore(userId) {
       progress,
       profile: userProfile,
       favorites,
+      deletedFavorites: Array.from(new Set(deletedFavorites.map(String))),
       settings,
       notes,
       customWords

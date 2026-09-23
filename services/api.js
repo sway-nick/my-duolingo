@@ -9,6 +9,7 @@ import {
   saveUserProfileFirestore,
   saveUserSettingsFirestore,
   saveUserFavoritesFirestore,
+  saveUserDeletedFavoritesFirestore,
   saveUserNotesFirestore,
   loadUserNotesFirestore,
   saveUserCustomWordsFirestore,
@@ -18,7 +19,7 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=200.0';
+} from './firebase.js?v=201.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -1390,6 +1391,20 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     };
 
     const deletedFavs = getDeletedFavoritesSet(uId);
+
+    // Sync remote deleted favorites from Firestore into local deleted set
+    const remoteDeleted = [
+      ...(Array.isArray(fullDoc?.deletedFavorites) ? fullDoc.deletedFavorites : []),
+      ...(Array.isArray(fbDoc?.deletedFavorites) ? fbDoc.deletedFavorites : [])
+    ];
+    remoteDeleted.forEach(id => {
+      const sid = String(id).trim();
+      if (sid) {
+        deletedFavs.add(sid);
+        recordDeletedFavorite(sid, uId);
+      }
+    });
+
     const sanitizeFavArray = (arr) => {
       if (!Array.isArray(arr)) return [];
       return arr
@@ -1398,12 +1413,10 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     };
 
     const mergedFavsSet = new Set([
-      ...sanitizeFavArray(fbDoc?.favorites),
-      ...sanitizeFavArray(detDoc?.favorites),
       ...sanitizeFavArray(fullDoc?.favorites),
+      ...sanitizeFavArray(fbDoc?.favorites),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
       ...(fbUid ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]')) : []),
-      ...(detId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]')) : []),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('dl_favorites') || '[]')),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favorites') || '[]')),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favs_guest') || '[]'))
@@ -1451,12 +1464,6 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
               seenInCards: Boolean(mergedProg[wId].seenInCards || prof.progress[wId].seenInCards)
             };
           }
-        });
-      }
-      if (Array.isArray(prof.favorites)) {
-        prof.favorites.forEach(id => {
-          const sid = String(id).trim();
-          if (sid && !deletedFavs.has(sid)) mergedFavsSet.add(sid);
         });
       }
       if (prof.weeklyXp && prof.weeklyXp > maxHistoricalXp) {
@@ -1537,10 +1544,6 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       }
     }
 
-    if (detId && detId !== uId) {
-      const detFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]'));
-      detFavs.forEach(id => mergedFavsSet.add(String(id)));
-    }
     if (fbUid && fbUid !== uId) {
       const fbFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]'));
       fbFavs.forEach(id => mergedFavsSet.add(String(id)));
@@ -1561,6 +1564,9 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     const firestoreSyncUid = fbUid || firestoreUid;
     if (firestoreSyncUid && !String(firestoreSyncUid).startsWith('guest_')) {
       saveUserFavoritesFirestore(firestoreSyncUid, mergedFavs).catch(() => {});
+      if (deletedFavs && deletedFavs.size > 0) {
+        saveUserDeletedFavoritesFirestore(firestoreSyncUid, Array.from(deletedFavs)).catch(() => {});
+      }
     }
 
     const activeLocalLang = localStorage.getItem('myduo_interface_lang');
@@ -1700,6 +1706,10 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
         syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
       saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
+      const delFavsList = Array.from(getDeletedFavoritesSet(uId));
+      if (delFavsList.length > 0) {
+        saveUserDeletedFavoritesFirestore(firestoreUid, delFavsList).catch(() => {});
+      }
       saveUserSettingsFirestore(firestoreUid, settings).catch(() => {});
       saveBulkProgressFirestore(firestoreUid, progress).catch(() => {});
 
@@ -1984,6 +1994,7 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   if (fsUid && !String(fsUid).startsWith('guest_')) {
     try {
       saveUserFavoritesFirestore(fsUid, favs).catch(() => {});
+      saveUserDeletedFavoritesFirestore(fsUid, Array.from(getDeletedFavoritesSet(userId))).catch(() => {});
     } catch (e) {}
   }
 
@@ -2027,6 +2038,7 @@ async function clearAllFavoritesApi() {
   if (fsUid && !String(fsUid).startsWith('guest_')) {
     try {
       saveUserFavoritesFirestore(fsUid, []).catch(() => {});
+      saveUserDeletedFavoritesFirestore(fsUid, Array.from(getDeletedFavoritesSet(userId))).catch(() => {});
     } catch (e) {}
   }
 
