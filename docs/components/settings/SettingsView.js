@@ -1,4 +1,4 @@
-﻿import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=378.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=378.0';
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=378.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=378.0';
@@ -27,12 +27,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const isLoggedIn = Boolean(user && user.id && user.id !== 'guest' && !String(user.id).startsWith('guest_') && user.email);
   const avatar = getUserAvatar();
   const currentTheme = getSavedTheme();
+  const hasSyncIssue = Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
 
   const displayName = isLoggedIn
     ? (user.name || user.email.split('@')[0])
     : (t('settings_guest_mode') || t('demo') || 'Guest (Demo)');
   const displaySub = isLoggedIn
-    ? (user.email || '')
+    ? (hasSyncIssue ? (t('lead_login_to_save') || 'Требуется войти заново для синхронизации') : (user.email || ''))
     : (t('settings_login_sub') || 'Log in to sync progress');
 
   container.innerHTML = `
@@ -53,13 +54,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
         <div class="profile-details" style="flex: 1; min-width: 0;">
           <h3 class="profile-name">${escapeHtml(displayName)}</h3>
-          <p class="profile-sub">${escapeHtml(displaySub)}</p>
+          <p class="profile-sub" style="${hasSyncIssue ? 'color: #ea580c; font-weight: 500;' : ''}">${escapeHtml(displaySub)}</p>
         </div>
         <div>
           ${
-            isLoggedIn
+            isLoggedIn && !hasSyncIssue
               ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
-              : `<button class="primary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>`
+              : `
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <button class="primary-button settings-auth-btn" id="login-modal-btn" style="position: relative;">
+                    ${t('auth_tab_login') || 'Войти'}
+                    <span class="sync-status-badge" id="settings-login-sync-badge" style="display: ${hasSyncIssue ? 'block' : 'none'}; top: -2px; right: -2px;"></span>
+                  </button>
+                  ${!isLoggedIn ? `<button class="secondary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>` : ''}
+                </div>
+              `
           }
         </div>
       </div>

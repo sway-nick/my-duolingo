@@ -80,6 +80,47 @@ function getHeaderRankBadge(rank, xp) {
   return { isIcon: false, content: `Lv ${rank}`, title: `${rank} место в Лиге недели` };
 }
 
+function hasSyncIssue() {
+  try {
+    return Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateSyncBadges(show) {
+  try {
+    if (typeof window !== 'undefined') {
+      window.__myduo_sync_issue = Boolean(show);
+      if (show) {
+        sessionStorage.setItem('myduo_sync_issue', '1');
+      } else {
+        sessionStorage.removeItem('myduo_sync_issue');
+      }
+    }
+  } catch (e) {}
+
+  const burgerBadge = document.querySelector('#header-burger-sync-badge');
+  if (burgerBadge) {
+    burgerBadge.style.display = show ? 'block' : 'none';
+  }
+
+  const settingsBadge = document.querySelector('#settings-login-sync-badge');
+  if (settingsBadge) {
+    settingsBadge.style.display = show ? 'block' : 'none';
+  }
+
+  const drawerSettingsBadge = document.querySelector('#drawer-settings-sync-badge');
+  if (drawerSettingsBadge) {
+    drawerSettingsBadge.style.display = show ? 'block' : 'none';
+  }
+
+  const leadBadge = document.querySelector('#leaderboard-player-sync-badge');
+  if (leadBadge) {
+    leadBadge.style.display = show ? 'inline-block' : 'none';
+  }
+}
+
 function renderHeaderRightActions(user) {
   const xp = getUserWeeklyXP();
   const rank = getUserWeeklyRank();
@@ -97,15 +138,18 @@ function renderHeaderRightActions(user) {
     </button>
   `;
 
+  const isIssueActive = hasSyncIssue();
+
   return `
     <div style="display:flex; align-items:center; gap:10px;">
       ${xpBadgeHtml}
-      <button class="header-burger-btn" id="header-burger-btn" title="Меню" aria-label="Открыть меню">
+      <button class="header-burger-btn" id="header-burger-btn" title="Меню" aria-label="Открыть меню" style="position: relative;">
         <svg class="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: var(--text-main);">
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
+        <span class="sync-status-badge" id="header-burger-sync-badge" style="display: ${isIssueActive ? 'block' : 'none'};"></span>
       </button>
     </div>
   `;
@@ -249,7 +293,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             </span>
             <span class="drawer-item-text">${t('stats')}</span>
           </button>
-          <button class="nav-tab" data-tab="settings" title="${t('settings')}">
+          <button class="nav-tab" data-tab="settings" title="${t('settings')}" style="position: relative;">
             <span class="tab-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3"></circle>
@@ -257,6 +301,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               </svg>
             </span>
             <span class="drawer-item-text">${t('settings')}</span>
+            <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${hasSyncIssue() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
           </button>
           <button type="button" class="drawer-share-action-btn" id="drawer-share-btn" title="${t('share_title')}">
             <span class="tab-icon">
@@ -633,56 +678,13 @@ if (typeof window !== 'undefined') {
   });
 
   // Handle sync issues (token expiration, network, Firestore rule issues)
+  // Instead of ugly intrusive black toast, gracefully activate orange badge on menu/settings/leaderboard
   window.addEventListener('myduo:sync-issue', (e) => {
-    const detail = e.detail || {};
-    const kind = detail.kind;
+    updateSyncBadges(true);
+  });
 
-    let existingToast = document.querySelector('#sync-issue-toast');
-    if (!existingToast) {
-      existingToast = document.createElement('div');
-      existingToast.id = 'sync-issue-toast';
-      existingToast.style.cssText = `
-        position: fixed;
-        bottom: 74px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #1e293b;
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-        border-radius: 14px;
-        padding: 10px 16px;
-        font-size: 13.5px;
-        font-weight: 500;
-        z-index: 99999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        max-width: 90vw;
-        box-sizing: border-box;
-      `;
-      document.body.appendChild(existingToast);
-    }
-
-    if (kind === 'relogin') {
-      existingToast.innerHTML = `
-        <span>⚠️ Сессия истекла. Войдите заново, чтобы прогресс сохранялся в облако.</span>
-        <button type="button" id="sync-toast-relogin-btn" style="background: #3b82f6; color: #fff; border: none; border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">Войти</button>
-      `;
-      existingToast.querySelector('#sync-toast-relogin-btn')?.addEventListener('click', () => {
-        existingToast.remove();
-        renderAuthModal();
-      });
-    } else {
-      existingToast.innerHTML = `
-        <span>☁️ Прогресс сохранён на устройстве (нет связи с облаком).</span>
-      `;
-      setTimeout(() => {
-        if (existingToast && existingToast.parentNode) {
-          existingToast.remove();
-        }
-      }, 5000);
-    }
+  window.addEventListener('myduo:auth_changed', () => {
+    updateSyncBadges(false);
   });
 }
 
