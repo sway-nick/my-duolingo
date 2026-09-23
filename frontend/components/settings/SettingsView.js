@@ -60,15 +60,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${
             isLoggedIn && !hasSyncIssue
               ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
-              : `
-                <div style="display: flex; gap: 8px; align-items: center;">
-                  <button class="primary-button settings-auth-btn" id="login-modal-btn" style="position: relative;">
-                    ${t('auth_tab_login') || 'Войти'}
-                    <span class="sync-status-badge" id="settings-login-sync-badge" style="display: ${hasSyncIssue ? 'block' : 'none'}; top: -2px; right: -2px;"></span>
-                  </button>
-                  ${!isLoggedIn ? `<button class="secondary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>` : ''}
-                </div>
-              `
+              : `<button class="primary-button settings-auth-btn" id="register-modal-btn" style="position: relative;">
+                  ${hasSyncIssue ? (t('auth_tab_login') || 'Войти') : (t('auth_tab_register') || 'Регистрация')}
+                  <span class="sync-status-badge" id="settings-login-sync-badge" style="display: ${hasSyncIssue ? 'block' : 'none'}; top: -2px; right: -2px;"></span>
+                </button>`
           }
         </div>
       </div>
@@ -253,12 +248,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const registerBtn = container.querySelector('#register-modal-btn');
   if (registerBtn) {
     registerBtn.addEventListener('click', () => {
+      const mode = hasSyncIssue ? 'login' : 'register';
       renderAuthModal(async () => {
         await onUserChange();
         if (!window._activeTab || window._activeTab === 'settings') {
           renderSettingsView(containerSelector, onUserChange);
         }
-      }, 'register');
+      }, mode);
     });
   }
 
