@@ -2438,102 +2438,145 @@ body.dark-theme .btn-graphite:active:not(:disabled) {
 .btn-learn {
   flex: 1;
   padding: 14px 16px;
-  min-height: 52px;
-  border-radius: 18px !important;
-  font-weight: 700;
-  font-size: 16.5px;
-  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  min-height: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 22px !important;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  background: #fedec0 !important;
+  color: #8c3e17 !important;
+  border: 2px solid #f6ad55 !important;
+  box-shadow: none !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease !important;
 }
 
 .btn-learn:hover:not(:disabled) {
-  filter: brightness(1.05) !important;
+  background: #fcd5b0 !important;
+  border-color: #f59e0b !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
 }
 
 .btn-learn:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(0.98) !important;
+  background: #fbcba2 !important;
 }
 
-/* Light theme secondary cushion styling for Learn (soft neutral secondary CTA) */
+/* Light theme explicit styles for Learn */
 body:not(.dark-theme) .btn-learn {
-  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%) !important;
-  color: #1e293b !important;
-  border: 1px solid rgba(148, 163, 184, 0.45) !important;
-  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.1), inset 0 1px 1.5px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
+  background: #fedec0 !important;
+  color: #8c3e17 !important;
+  border: 2px solid #f6ad55 !important;
+  box-shadow: none !important;
 }
 
 body:not(.dark-theme) .btn-learn:hover:not(:disabled) {
-  filter: brightness(1.03) !important;
-  background: linear-gradient(180deg, #e8edf4 0%, #cbd5e1 100%) !important;
-  color: #0f172a !important;
-  border-color: rgba(100, 116, 139, 0.5) !important;
+  background: #fcd5b0 !important;
+  border-color: #f59e0b !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
 }
 
 body:not(.dark-theme) .btn-learn:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12), inset 0 1px 1px rgba(0, 0, 0, 0.08) !important;
+  transform: scale(0.98) !important;
+  background: #fbcba2 !important;
 }
 
-/* Dark theme vibrant blue styling for Learn button */
+/* Dark theme pastel orange styling for Learn button */
 body.dark-theme .btn-learn {
-  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(59, 130, 246, 0.4) !important;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.2) !important;
+  background: rgba(251, 146, 60, 0.16) !important;
+  color: #fed7aa !important;
+  border: 2px solid #fb923c !important;
+  box-shadow: none !important;
 }
 
 body.dark-theme .btn-learn:hover:not(:disabled) {
-  filter: brightness(1.08) !important;
+  background: rgba(251, 146, 60, 0.24) !important;
+  border-color: #f97316 !important;
   transform: translateY(-1px) !important;
-  border-color: rgba(96, 165, 250, 0.6) !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
 body.dark-theme .btn-learn:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(0.98) !important;
 }
 
 .btn-know {
   flex: 1;
   padding: 14px 16px;
-  min-height: 52px;
-  border-radius: 18px !important;
-  font-weight: 700;
-  font-size: 16.5px;
-  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(21, 128, 61, 0.38) !important;
-  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+  min-height: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 22px !important;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  background: #cbf4d8 !important;
+  color: #14532d !important;
+  border: 2px solid #52c480 !important;
+  box-shadow: none !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease !important;
 }
 
 .btn-know:hover:not(:disabled) {
-  filter: brightness(1.04) !important;
+  background: #bbf0cb !important;
+  border-color: #22c55e !important;
   transform: translateY(-1px) !important;
-  border-color: rgba(21, 128, 61, 0.55) !important;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
 }
 
 .btn-know:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(0.98) !important;
+  background: #aeeabd !important;
+}
+
+/* Light theme explicit styles for Know */
+body:not(.dark-theme) .btn-know {
+  background: #cbf4d8 !important;
+  color: #14532d !important;
+  border: 2px solid #52c480 !important;
+  box-shadow: none !important;
+}
+
+body:not(.dark-theme) .btn-know:hover:not(:disabled) {
+  background: #bbf0cb !important;
+  border-color: #22c55e !important;
+  transform: translateY(-1px) !important;
+}
+
+body:not(.dark-theme) .btn-know:active:not(:disabled) {
+  transform: scale(0.98) !important;
+  background: #aeeabd !important;
+}
+
+/* Dark theme pastel green styling for Know button */
+body.dark-theme .btn-know {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #bbf7d0 !important;
+  border: 2px solid #4ade80 !important;
+  box-shadow: none !important;
+}
+
+body.dark-theme .btn-know:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.24) !important;
+  border-color: #22c55e !important;
+  transform: translateY(-1px) !important;
+}
+
+body.dark-theme .btn-know:active:not(:disabled) {
+  transform: scale(0.98) !important;
 }
 
 .secondary-button {
