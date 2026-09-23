@@ -1447,7 +1447,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             try {
               const result = await transcribeAudio(audioBlob, mime, currentWord.word);
               const isAiCorrect = !!(result && result.isCorrect);
-              const spokenWord = (result && result.transcribed ? result.transcribed : '').trim();
+              const spokenWord = (result && (result.transcribed || result.heard || result.text) ? (result.transcribed || result.heard || result.text) : '').trim();
               const score = result && result.score !== undefined ? result.score : null;
               const feedback = result && result.feedback ? result.feedback : '';
 
@@ -1455,11 +1455,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 if (transcriptBox) {
                   transcriptBox.style.display = 'block';
                   let heardHtml = '';
-                  if (score !== null) {
-                    heardHtml += `${t('stats_accuracy')}: <strong>${score}%</strong>`;
+                  if (spokenWord) {
+                    heardHtml += `🎤 «<strong>${escapeHtml(spokenWord)}</strong>»`;
                   }
-                  if (feedback && !isAiCorrect && !feedback.toLowerCase().includes('отличное') && !feedback.toLowerCase().includes('відмінне')) {
-                    heardHtml += `${score !== null ? '<br>' : ''}<span style="font-size: 13px; color: #d97706; font-style: italic;">💡 ${feedback}</span>`;
+                  if (score !== null) {
+                    heardHtml += `${heardHtml ? ' — ' : ''}${t('stats_accuracy')}: <strong>${score}%</strong>`;
+                  }
+                  if (feedback) {
+                    const fbColor = isAiCorrect ? '#16a34a' : '#d97706';
+                    heardHtml += `<br><span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${escapeHtml(feedback)}</span>`;
                   }
                   transcriptBox.innerHTML = heardHtml;
                 }
@@ -1511,7 +1515,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       function startSpeechSession() {
-        if (preferNativeSpeech) {
+        if (typeof MediaRecorder !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          startMobileMediaRecorder();
+        } else if (SpeechRecognition) {
           startDesktopNativeSpeech();
         } else {
           startMobileMediaRecorder();
