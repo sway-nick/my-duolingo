@@ -168,6 +168,9 @@ function renderAuthModal(onSuccessCallback) {
             expiresAt: Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000),
           };
           localStorage.setItem('myduo_firebase_user', JSON.stringify(fbUser));
+          if (fbRes.refreshToken) {
+            try { localStorage.setItem('myduo_refresh_token', fbRes.refreshToken); } catch (e) {}
+          }
         }
       } catch (e) {}
 
@@ -182,6 +185,7 @@ function renderAuthModal(onSuccessCallback) {
           // Use real Firebase UID (localId) — NOT Google OAuth Sub ID (profile.sub)
           firebaseUid: fbLocalId || profile.sub || profile.id || '',
           idToken: fbIdToken || '',
+          refreshToken: (fbUser && fbUser.refreshToken) || '',
         };
         setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
         try {
@@ -239,6 +243,9 @@ function renderAuthModal(onSuccessCallback) {
             expiresAt: Date.now() + (parseInt(fbRes.expiresIn || '3600', 10) * 1000),
           };
           localStorage.setItem('myduo_firebase_user', JSON.stringify(fbUser));
+          if (fbRes.refreshToken) {
+            try { localStorage.setItem('myduo_refresh_token', fbRes.refreshToken); } catch (e) {}
+          }
         }
       } catch (e) {}
 
@@ -254,6 +261,7 @@ function renderAuthModal(onSuccessCallback) {
           // Use real Firebase UID (localId) — NOT Google JWT Sub ID (payload.sub)
           firebaseUid: fbLocalId || payload.sub || '',
           idToken: fbIdToken || '',
+          refreshToken: (fbUser && fbUser.refreshToken) || '',
         };
         setCurrentUser(userWithGoogle, fbIdToken || res.data.token);
         try {

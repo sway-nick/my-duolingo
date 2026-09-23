@@ -94,6 +94,9 @@ export async function registerWithEmail(email, password, name = '') {
   };
 
   localStorage.setItem('myduo_firebase_user', JSON.stringify(user));
+  if (data.refreshToken) {
+    try { localStorage.setItem('myduo_refresh_token', data.refreshToken); } catch (e) {}
+  }
   return user;
 }
 
@@ -137,6 +140,9 @@ export async function loginWithEmail(email, password) {
   };
 
   localStorage.setItem('myduo_firebase_user', JSON.stringify(user));
+  if (data.refreshToken) {
+    try { localStorage.setItem('myduo_refresh_token', data.refreshToken); } catch (e) {}
+  }
   return user;
 }
 
@@ -449,7 +455,7 @@ function getFirestoreUrl(path) {
   return `${FIRESTORE_BASE}${path}${sep}key=${config.apiKey}`;
 }
 
-// ----------------- ТОКЕНЫ (единая точка получения и обновления) -----------------
+// ----------------- ТОКЕНЫ И ИДЕНТИФИКАТОРЫ ПОЛЬЗОВАТЕЛЯ -----------------
 // Firebase ID-токен живёт 1 час. Раньше просроченный токен молча отбрасывался:
 // запрос уходил без Authorization, правила Firestore видели request.auth == null
 // и отвечали 403, а данные (прогресс, XP, лидерборд) не сохранялись в облаке.
@@ -458,6 +464,7 @@ function getFirestoreUrl(path) {
 const FB_USER_KEY = 'myduo_firebase_user';
 const CUR_USER_KEY = 'myduo_current_user';
 const AUTH_TOKEN_KEY = 'myduo_auth_token';
+const REFRESH_TOKEN_KEY = 'myduo_refresh_token';
 const SECURETOKEN_URL = 'https://securetoken.googleapis.com/v1/token';
 const TOKEN_SKEW_MS = 60 * 1000;
 const SYNC_NOTICE_COOLDOWN_MS = 60 * 1000;
@@ -474,6 +481,45 @@ function readJson(key) {
   } catch (e) {
     return null;
   }
+}
+
+// Извлекает реальный Firebase Auth UID пользователя для запросов в Firestore.
+// Гарантирует совпадение с request.auth.uid в Security Rules даже если вызывающий код
+// передал локальный/детерминированный ID (например sway1976_591919916_...).
+export function getEffectiveFirestoreUid(providedId = null) {
+  // 1. Если передан валидный Firebase UID (буквы+цифры, длина >= 20, без подчёркиваний, не чисто числовой Google Sub)
+  if (providedId && typeof providedId === 'string' && providedId.length >= 20 && !providedId.includes('_') && !/^\d+$/.test(providedId)) {
+    return providedId;
+  }
+  // 2. Смотрим myduo_firebase_user.id
+  const fb = readJson(FB_USER_KEY);
+  if (fb && fb.id && typeof fb.id === 'string' && fb.id.length >= 20 && !fb.id.includes('_') && !/^\d+$/.test(fb.id)) {
+    return fb.id;
+  }
+  // 3. Смотрим myduo_current_user.firebaseUid
+  const cur = readJson(CUR_USER_KEY);
+  if (cur?.firebaseUid && typeof cur.firebaseUid === 'string' && !cur.firebaseUid.includes('_') && !/^\d+$/.test(cur.firebaseUid)) {
+    return cur.firebaseUid;
+  }
+  // 4. Достаем user_id / sub напрямую из полезной нагрузки JWT-токена (100% совпадение с request.auth.uid)
+  const { token } = getStoredToken();
+  if (token) {
+    try {
+      const part = String(token).split('.')[1];
+      if (part) {
+        const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
+        const bin = atob(b64.padEnd(Math.ceil(b64.length / 4) * 4, '='));
+        const json = JSON.parse(bin);
+        if (json.user_id && typeof json.user_id === 'string' && json.user_id.length >= 20) {
+          return json.user_id;
+        }
+        if (json.sub && typeof json.sub === 'string' && json.sub.length >= 20 && !/^\d+$/.test(json.sub)) {
+          return json.sub;
+        }
+      }
+    } catch (e) {}
+  }
+  return providedId || fb?.id || cur?.firebaseUid || cur?.id || '';
 }
 
 // Время истечения (мс) из поля exp JWT; 0, если прочитать не удалось.
@@ -508,32 +554,42 @@ function getStoredToken() {
 
 function hasFirebaseSession() {
   const fb = readJson(FB_USER_KEY);
-  return !!(fb && (fb.idToken || fb.refreshToken));
+  const cur = readJson(CUR_USER_KEY);
+  return !!(
+    (fb && (fb.idToken || fb.refreshToken)) ||
+    (cur && (cur.idToken || cur.refreshToken)) ||
+    localStorage.getItem(REFRESH_TOKEN_KEY)
+  );
 }
 
 // Кладём свежий токен во ВСЕ места, откуда его читают остальные части приложения.
 function persistFreshToken(idToken, refreshToken, expiresAt) {
-  const fb = readJson(FB_USER_KEY);
-  if (fb) {
-    fb.idToken = idToken;
-    if (refreshToken) fb.refreshToken = refreshToken;
-    fb.expiresAt = expiresAt;
-    try { localStorage.setItem(FB_USER_KEY, JSON.stringify(fb)); } catch (e) {}
-  }
-  const cur = readJson(CUR_USER_KEY);
-  if (cur && cur.idToken) {
+  const fb = readJson(FB_USER_KEY) || {};
+  fb.idToken = idToken;
+  if (refreshToken) fb.refreshToken = refreshToken;
+  fb.expiresAt = expiresAt;
+  try { localStorage.setItem(FB_USER_KEY, JSON.stringify(fb)); } catch (e) {}
+
+  const cur = readJson(CUR_USER_KEY) || {};
+  if (cur) {
     cur.idToken = idToken;
-    if (refreshToken && cur.refreshToken) cur.refreshToken = refreshToken;
+    if (refreshToken) cur.refreshToken = refreshToken;
     try { localStorage.setItem(CUR_USER_KEY, JSON.stringify(cur)); } catch (e) {}
   }
   try { localStorage.setItem(AUTH_TOKEN_KEY, idToken); } catch (e) {}
+  if (refreshToken) {
+    try { localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken); } catch (e) {}
+  }
 }
 
 async function doRefreshIdToken() {
   lastRefreshFailure = null;
   const fb = readJson(FB_USER_KEY) || {};
   const cur = readJson(CUR_USER_KEY) || {};
-  const refreshToken = fb.refreshToken || cur.refreshToken || '';
+  let refreshToken = fb.refreshToken || cur.refreshToken || '';
+  if (!refreshToken) {
+    try { refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY) || ''; } catch (e) {}
+  }
 
   // 1. Email / Google (web, AndroidAuthBridge): обновление через securetoken
   if (refreshToken) {
@@ -639,28 +695,28 @@ export async function firestoreFetch(url, options = {}) {
   let token = await getValidIdToken();
   let res = await send(token);
 
-  // 401 при «живом» токене (отозван, сдвиг часов): один принудительный refresh и повтор.
-  if (res.status === 401 && token) {
+  // Firestore REST API при невалидном или истекшем токене отвечает 401 или 403 (PERMISSION_DENIED):
+  // выполняем одну принудительную попытку обновления токена и повтор запроса.
+  if ((res.status === 401 || res.status === 403) && token) {
     const fresh = await getValidIdToken({ force: true });
     if (fresh && fresh !== token) {
       token = fresh;
       res = await send(fresh);
     }
-    // Публичные чтения работают и без токена
-    if (res.status === 401 && !isWrite) {
-      token = null;
-      res = await send(null);
+  }
+
+  // Публичные чтения (GET) могут работать и без токена
+  if ((res.status === 401 || res.status === 403) && !isWrite && token) {
+    const publicRes = await send(null);
+    if (publicRes.ok) {
+      res = publicRes;
     }
   }
 
   if (isWrite && (res.status === 401 || res.status === 403)) {
-    if (!token) {
-      // Токена нет: если причина — временная (сеть), пользователя не пугаем
-      if (lastRefreshFailure !== 'network') reportSyncIssue('relogin', res.status);
-    } else if (res.status === 401) {
+    if (!token || lastRefreshFailure === 'permanent') {
       reportSyncIssue('relogin', res.status);
     } else {
-      // 403 с валидным токеном — это уже отказ правил Firestore (не токен)
       reportSyncIssue('denied', res.status);
     }
   }
@@ -670,8 +726,10 @@ export async function firestoreFetch(url, options = {}) {
 
 export async function saveUserProgressFirestore(userId, wordId, progressObj) {
   if (!userId || !wordId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/progress/${encodeURIComponent(wordId)}`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/progress/${encodeURIComponent(wordId)}`);
     const fields = toFirestoreFields({
       ...progressObj,
       updatedAt: Date.now()
@@ -689,8 +747,10 @@ export async function saveUserProgressFirestore(userId, wordId, progressObj) {
 
 export async function saveBulkProgressFirestore(userId, progressMap) {
   if (!userId || !progressMap) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/progress`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/progress`);
     const fields = {
       progressJson: { stringValue: JSON.stringify(progressMap) },
       updatedAt: { integerValue: String(Date.now()) }
@@ -708,10 +768,12 @@ export async function saveBulkProgressFirestore(userId, progressMap) {
 
 export async function loadUserProgressFirestore(userId) {
   if (!userId) return {};
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return {};
   const combinedMap = {};
   try {
     // 1. Fetch bulk progress doc (fast single query)
-    const bulkRes = await firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/progress`), {
+    const bulkRes = await firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/progress`), {
       headers: getAuthHeaders()
     }).catch(() => null);
     if (bulkRes && bulkRes.ok) {
@@ -725,7 +787,7 @@ export async function loadUserProgressFirestore(userId) {
     }
 
     // 2. Fetch individual subcollection docs
-    const subRes = await firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/progress`), {
+    const subRes = await firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/progress`), {
       headers: getAuthHeaders()
     }).catch(() => null);
     if (subRes && subRes.ok) {
@@ -754,20 +816,22 @@ const SHARED_ADMIN_UID = 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
 
 export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userName, userAvatar) {
   if (!userId || !weekKey) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   const newXp = Math.round(Number(xp) || 0);
   const cleanName = (userName != null) ? String(userName) : 'Гость';
   const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
 
-  // 1. Primary distributed sync: save to isolated player document /leaderboards/{weekKey}/players/{userId}
+  // 1. Primary distributed sync: save to isolated player document /leaderboards/{weekKey}/players/{uid}
   // This scales to 100k+ players without hitting the single-document 1 write/sec limit!
   try {
-    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
+    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}`);
     await firestoreFetch(rootUrl, {
       method: 'PATCH',
       headers: getAuthHeaders(),
       body: JSON.stringify({
         fields: {
-          userId: { stringValue: String(userId) },
+          userId: { stringValue: String(uid) },
           name: { stringValue: cleanName },
           avatar: { stringValue: cleanAvatar },
           xp: { integerValue: String(newXp) },
@@ -781,7 +845,7 @@ export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userNam
 
   // 2. Save to user's personal document
   try {
-    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
+    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
     await firestoreFetch(userUrl, {
       method: 'PATCH',
       headers: getAuthHeaders(),
@@ -800,10 +864,12 @@ export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userNam
 
 export async function getUserWeeklyXpFirestore(userId, weekKey) {
   if (!userId || !weekKey) return 0;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return 0;
 
   // 1. Try distributed player document
   try {
-    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(userId)}`);
+    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}`);
     const res = await firestoreFetch(rootUrl, { headers: getAuthHeaders() });
     if (res.ok) {
       const data = await res.json();
@@ -815,7 +881,7 @@ export async function getUserWeeklyXpFirestore(userId, weekKey) {
 
   // 2. Try personal user document
   try {
-    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
+    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
     const res = await firestoreFetch(userUrl, { headers: getAuthHeaders() });
     if (res.ok) {
       const data = await res.json();
@@ -930,6 +996,8 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
 
 export async function saveUserProfileFirestore(userId, profileData) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
     const fields = {};
     const maskPaths = ['updatedAt'];
@@ -952,7 +1020,7 @@ export async function saveUserProfileFirestore(userId, profileData) {
     fields.updatedAt = { integerValue: String(Date.now()) };
 
     const maskParams = maskPaths.map(p => `updateMask.fieldPaths=${encodeURIComponent(p)}`).join('&');
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}?${maskParams}`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}?${maskParams}`);
 
     await firestoreFetch(url, {
       method: 'PATCH',
@@ -966,8 +1034,10 @@ export async function saveUserProfileFirestore(userId, profileData) {
 
 export async function saveUserSettingsFirestore(userId, settingsObj) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/settings/general`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings/general`);
     const fields = {};
     for (const [k, v] of Object.entries(settingsObj || {})) {
       if (typeof v === 'number') fields[k] = { integerValue: String(Math.round(v)) };
@@ -988,6 +1058,8 @@ export async function saveUserSettingsFirestore(userId, settingsObj) {
 
 export async function saveUserFavoritesFirestore(userId, favoritesArray) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
     const cleanArr = Array.isArray(favoritesArray)
       ? favoritesArray.map(id => String(id).trim()).filter(Boolean)
@@ -999,7 +1071,7 @@ export async function saveUserFavoritesFirestore(userId, favoritesArray) {
       updatedAt: { integerValue: String(Date.now()) }
     };
 
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/favorites?updateMask.fieldPaths=favorites&updateMask.fieldPaths=items&updateMask.fieldPaths=updatedAt`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/favorites?updateMask.fieldPaths=favorites&updateMask.fieldPaths=items&updateMask.fieldPaths=updatedAt`);
 
     const res = await firestoreFetch(url, {
       method: 'PATCH',
@@ -1012,7 +1084,7 @@ export async function saveUserFavoritesFirestore(userId, favoritesArray) {
 
     // Keep root user doc favorites fields synchronized as well
     try {
-      const rootUrl = getFirestoreUrl(`/users/${encodeURIComponent(userId)}?updateMask.fieldPaths=favorites&updateMask.fieldPaths=favorite_words&updateMask.fieldPaths=updatedAt`);
+      const rootUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}?updateMask.fieldPaths=favorites&updateMask.fieldPaths=favorite_words&updateMask.fieldPaths=updatedAt`);
       await firestoreFetch(rootUrl, {
         method: 'PATCH',
         headers: getAuthHeaders(),
@@ -1032,6 +1104,8 @@ export async function saveUserFavoritesFirestore(userId, favoritesArray) {
 
 export async function saveUserDeletedFavoritesFirestore(userId, deletedFavoritesArray) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
     const cleanArr = Array.isArray(deletedFavoritesArray)
       ? deletedFavoritesArray.map(id => String(id).trim()).filter(Boolean)
@@ -1042,7 +1116,7 @@ export async function saveUserDeletedFavoritesFirestore(userId, deletedFavorites
       updatedAt: { integerValue: String(Date.now()) }
     };
 
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/deleted_favorites?updateMask.fieldPaths=deletedFavorites&updateMask.fieldPaths=updatedAt`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/deleted_favorites?updateMask.fieldPaths=deletedFavorites&updateMask.fieldPaths=updatedAt`);
 
     const res = await firestoreFetch(url, {
       method: 'PATCH',
@@ -1059,8 +1133,10 @@ export async function saveUserDeletedFavoritesFirestore(userId, deletedFavorites
 
 export async function saveUserNotesFirestore(userId, notesMap) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/notes`);
     const cleanNotes = notesMap && typeof notesMap === 'object' ? notesMap : {};
     const fields = {
       notesJson: { stringValue: JSON.stringify(cleanNotes) },
@@ -1079,8 +1155,10 @@ export async function saveUserNotesFirestore(userId, notesMap) {
 
 export async function loadUserNotesFirestore(userId) {
   if (!userId) return {};
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return {};
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/notes`);
     const res = await firestoreFetch(url, { headers: getAuthHeaders() }).catch(() => null);
     if (!res || !res.ok) return {};
     const data = await res.json();
@@ -1095,8 +1173,10 @@ export async function loadUserNotesFirestore(userId) {
 
 export async function saveUserCustomWordsFirestore(userId, wordsArray) {
   if (!userId) return;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return;
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`);
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/custom_words`);
     const cleanWords = Array.isArray(wordsArray) ? wordsArray : [];
     const fields = {
       wordsJson: { stringValue: JSON.stringify(cleanWords) },
@@ -1266,45 +1346,64 @@ export async function saveUserAnalyticsFirestore(userId, analyticsObj) {
 
 export async function loadFullUserDataFirestore(userId) {
   if (!userId) return null;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return null;
   try {
     const authHeaders = getAuthHeaders();
-    const [progress, userDocRes, favDocRes, setDocRes, notesDocRes, customDocRes, deletedFavDocRes] = await Promise.all([
-      loadUserProgressFirestore(userId),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/favorites`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/settings/general`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/notes`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/custom_words`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(userId)}/data/deleted_favorites`), { headers: authHeaders }).catch(() => null),
+    const [progress, userDocRes, dataColRes, setDocRes] = await Promise.all([
+      loadUserProgressFirestore(uid),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings/general`), { headers: authHeaders }).catch(() => null),
     ]);
 
     let userProfile = {};
     let favorites = [];
     let deletedFavorites = [];
     let hasExplicitFavDoc = false;
+    let notes = {};
+    let customWords = [];
 
-    if (deletedFavDocRes && deletedFavDocRes.ok) {
+    // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words)
+    // This avoids 404 Not Found network errors when documents do not exist yet!
+    if (dataColRes && dataColRes.ok) {
       try {
-        const data = await deletedFavDocRes.json();
-        if (data.fields?.deletedFavorites?.arrayValue?.values) {
-          const sub = data.fields.deletedFavorites.arrayValue.values.map(v => v.stringValue || '').filter(Boolean);
-          deletedFavorites.push(...sub);
+        const colData = await dataColRes.json();
+        const docs = Array.isArray(colData.documents) ? colData.documents : [];
+        for (const doc of docs) {
+          const docName = doc.name ? doc.name.split('/').pop() : '';
+          if (docName === 'deleted_favorites') {
+            if (doc.fields?.deletedFavorites?.arrayValue?.values) {
+              const sub = doc.fields.deletedFavorites.arrayValue.values.map(v => v.stringValue || '').filter(Boolean);
+              deletedFavorites.push(...sub);
+            }
+          } else if (docName === 'favorites') {
+            if (doc.fields) {
+              hasExplicitFavDoc = true;
+              if (doc.fields.favorites?.arrayValue?.values) {
+                const subFavs = doc.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+                favorites.push(...subFavs);
+              } else if (doc.fields.items?.arrayValue?.values) {
+                const subFavs = doc.fields.items.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+                favorites.push(...subFavs);
+              }
+            }
+          } else if (docName === 'notes') {
+            if (doc.fields?.notesJson?.stringValue) {
+              try {
+                notes = JSON.parse(doc.fields.notesJson.stringValue);
+              } catch (e) {}
+            }
+          } else if (docName === 'custom_words') {
+            if (doc.fields?.wordsJson?.stringValue) {
+              try {
+                const parsed = JSON.parse(doc.fields.wordsJson.stringValue);
+                if (Array.isArray(parsed)) customWords = parsed;
+              } catch (e) {}
+            }
+          }
         }
       } catch (e) {}
-    }
-
-    if (favDocRes && favDocRes.ok) {
-      const data = await favDocRes.json();
-      if (data.fields) {
-        hasExplicitFavDoc = true;
-        if (data.fields.favorites?.arrayValue?.values) {
-          const subFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-          favorites.push(...subFavs);
-        } else if (data.fields.items?.arrayValue?.values) {
-          const subFavs = data.fields.items.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-          favorites.push(...subFavs);
-        }
-      }
     }
 
     if (userDocRes && userDocRes.ok) {
@@ -1338,27 +1437,6 @@ export async function loadFullUserDataFirestore(userId) {
           else if ('integerValue' in f) settings[k] = Number(f.integerValue);
           else if ('booleanValue' in f) settings[k] = f.booleanValue;
         }
-      }
-    }
-
-    let notes = {};
-    if (notesDocRes && notesDocRes.ok) {
-      const data = await notesDocRes.json();
-      if (data.fields?.notesJson?.stringValue) {
-        try {
-          notes = JSON.parse(data.fields.notesJson.stringValue);
-        } catch (e) {}
-      }
-    }
-
-    let customWords = [];
-    if (customDocRes && customDocRes.ok) {
-      const data = await customDocRes.json();
-      if (data.fields?.wordsJson?.stringValue) {
-        try {
-          const parsed = JSON.parse(data.fields.wordsJson.stringValue);
-          if (Array.isArray(parsed)) customWords = parsed;
-        } catch (e) {}
       }
     }
 

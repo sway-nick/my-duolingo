@@ -437,8 +437,9 @@ function saveUserAvatar(userId, base64Data) {
     const userName = user && user.name ? user.name : 'Гость';
     const xp = Number(localStorage.getItem(`xp_${id}_${wKey}`) || 0);
 
-    saveUserProfileFirestore(id, { avatar: base64Data || '', name: userName }).catch(() => {});
-    syncLeaderboardScoreFirestore(id, wKey, xp, userName, base64Data || '').catch(() => {});
+    const fsUid = (user?.firebaseUid && !user.firebaseUid.includes('_')) ? user.firebaseUid : id;
+    saveUserProfileFirestore(fsUid, { avatar: base64Data || '', name: userName }).catch(() => {});
+    syncLeaderboardScoreFirestore(fsUid, wKey, xp, userName, base64Data || '').catch(() => {});
   } catch (err) {}
 }
 
