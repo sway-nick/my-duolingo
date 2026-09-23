@@ -1,4 +1,4 @@
-﻿import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=378.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=378.0';
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=378.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
 import { openShareDialog } from '../modals/ShareModal.js?v=378.0';
@@ -629,6 +629,59 @@ if (typeof window !== 'undefined') {
       setTimeout(() => {
         xpBtnEl.classList.remove('xp-bump-up', 'xp-bump-down');
       }, 700);
+    }
+  });
+
+  // Handle sync issues (token expiration, network, Firestore rule issues)
+  window.addEventListener('myduo:sync-issue', (e) => {
+    const detail = e.detail || {};
+    const kind = detail.kind;
+
+    let existingToast = document.querySelector('#sync-issue-toast');
+    if (!existingToast) {
+      existingToast = document.createElement('div');
+      existingToast.id = 'sync-issue-toast';
+      existingToast.style.cssText = `
+        position: fixed;
+        bottom: 74px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1e293b;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+        border-radius: 14px;
+        padding: 10px 16px;
+        font-size: 13.5px;
+        font-weight: 500;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 90vw;
+        box-sizing: border-box;
+      `;
+      document.body.appendChild(existingToast);
+    }
+
+    if (kind === 'relogin') {
+      existingToast.innerHTML = `
+        <span>⚠️ Сессия истекла. Войдите заново, чтобы прогресс сохранялся в облако.</span>
+        <button type="button" id="sync-toast-relogin-btn" style="background: #3b82f6; color: #fff; border: none; border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">Войти</button>
+      `;
+      existingToast.querySelector('#sync-toast-relogin-btn')?.addEventListener('click', () => {
+        existingToast.remove();
+        renderAuthModal();
+      });
+    } else {
+      existingToast.innerHTML = `
+        <span>☁️ Прогресс сохранён на устройстве (нет связи с облаком).</span>
+      `;
+      setTimeout(() => {
+        if (existingToast && existingToast.parentNode) {
+          existingToast.remove();
+        }
+      }, 5000);
     }
   });
 }

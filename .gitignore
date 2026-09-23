@@ -40,3 +40,8 @@ GOOGLE_SHEETS_SCRIPT.js
 android/
 backend/dist/
 backend/src/config/config.local.js
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
