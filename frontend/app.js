@@ -1,13 +1,13 @@
-import { AudioService } from './services/audioService.js';
-import { StorageService } from './services/storageService.js';
-import { ApiService } from './services/api.js';
-import { renderHeader, updateHeader } from './components/Header.js';
-import { renderSkillPath } from './components/SkillPath.js';
-import { renderLesson, destroyLesson } from './components/LessonEngine.js';
-import { renderLessonSummary } from './components/LessonSummary.js';
-import { renderVocabulary } from './components/VocabularyView.js';
-import { renderStats } from './components/StatsView.js';
-import { showSettingsModal, renderSettings } from './components/SettingsModal.js';
+﻿import { AudioService } from './services/audioService.js?v=378.0';
+import { StorageService } from './services/storageService.js?v=378.0';
+import { ApiService } from './services/api.js?v=378.0';
+import { renderHeader, updateHeader } from './components/Header.js?v=378.0';
+import { renderSkillPath } from './components/SkillPath.js?v=378.0';
+import { renderLesson, destroyLesson } from './components/LessonEngine.js?v=378.0';
+import { renderLessonSummary } from './components/LessonSummary.js?v=378.0';
+import { renderVocabulary } from './components/VocabularyView.js?v=378.0';
+import { renderStats } from './components/StatsView.js?v=378.0';
+import { showSettingsModal, renderSettings } from './components/SettingsModal.js?v=378.0';
 
 function initApp() {
     const appElement = document.getElementById('app');
@@ -210,7 +210,7 @@ function initApp() {
                     registration.update();
                 }
             });
-            navigator.serviceWorker.register('./sw.js?v=2.1').catch(() => {
+            navigator.serviceWorker.register('./sw.js?v=378.0').catch(() => {
                 console.log('Service worker registration failed');
             });
         });

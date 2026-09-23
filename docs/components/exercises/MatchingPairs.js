@@ -1,4 +1,4 @@
-import AudioService from '../../services/audioService.js?v=200.0';
+﻿import AudioService from '../../services/audioService.js?v=378.0';
 
 export function renderMatchingPairs(container, exerciseData, onComplete) {
     container.innerHTML = '';

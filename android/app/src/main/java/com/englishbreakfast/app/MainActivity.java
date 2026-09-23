@@ -1,8 +1,10 @@
 package com.englishbreakfast.app;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
@@ -64,6 +66,13 @@ public class MainActivity extends BridgeActivity {
         setupThemeBridge();
         setupBackNavigation();
         setupGoogleAuthBridge();
+        setupAudioBridge();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
     }
 
     private void setupBackNavigation() {
@@ -327,5 +336,97 @@ public class MainActivity extends BridgeActivity {
                     "(function() { if (typeof window.onNativeGoogleSignInFailure === 'function') { window.onNativeGoogleSignInFailure(" + obj.toString() + "); } })()", null);
             });
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // If background audio service is actively running, ensure WebView JavaScript timers keep firing while screen is off
+        if (BackgroundAudioService.isRunning() && bridge != null && bridge.getWebView() != null) {
+            bridge.getWebView().resumeTimers();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        BackgroundAudioService.setActionListener(null);
+        super.onDestroy();
+    }
+
+    private void setupAudioBridge() {
+        BackgroundAudioService.setActionListener(new BackgroundAudioService.PlaybackActionListener() {
+            @Override
+            public void onTogglePlay() {
+                if (bridge != null && bridge.getWebView() != null) {
+                    bridge.getWebView().post(() -> {
+                        bridge.getWebView().evaluateJavascript(
+                            "(function() { if (typeof window.onBackgroundAudioToggle === 'function') { window.onBackgroundAudioToggle(); } })()", null);
+                    });
+                }
+            }
+
+            @Override
+            public void onNextWord() {
+                if (bridge != null && bridge.getWebView() != null) {
+                    bridge.getWebView().post(() -> {
+                        bridge.getWebView().evaluateJavascript(
+                            "(function() { if (typeof window.onBackgroundAudioNext === 'function') { window.onBackgroundAudioNext(); } })()", null);
+                    });
+                }
+            }
+        });
+
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().addJavascriptInterface(new Object() {
+                    @JavascriptInterface
+                    public void startBackgroundMode(final String word, final String translation) {
+                        runOnUiThread(() -> {
+                            try {
+                                Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
+                                intent.setAction(BackgroundAudioService.ACTION_START);
+                                intent.putExtra(BackgroundAudioService.EXTRA_WORD, word);
+                                intent.putExtra(BackgroundAudioService.EXTRA_TRANSLATION, translation);
+                                intent.putExtra(BackgroundAudioService.EXTRA_PLAYING, true);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    startForegroundService(intent);
+                                } else {
+                                    startService(intent);
+                                }
+                            } catch (Exception ignored) {}
+                        });
+                    }
+
+                    @JavascriptInterface
+                    public void updateNotification(final String word, final String translation, final boolean isPlaying) {
+                        runOnUiThread(() -> {
+                            try {
+                                Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
+                                intent.setAction(BackgroundAudioService.ACTION_UPDATE);
+                                intent.putExtra(BackgroundAudioService.EXTRA_WORD, word);
+                                intent.putExtra(BackgroundAudioService.EXTRA_TRANSLATION, translation);
+                                intent.putExtra(BackgroundAudioService.EXTRA_PLAYING, isPlaying);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    startForegroundService(intent);
+                                } else {
+                                    startService(intent);
+                                }
+                            } catch (Exception ignored) {}
+                        });
+                    }
+
+                    @JavascriptInterface
+                    public void stopBackgroundMode() {
+                        runOnUiThread(() -> {
+                            try {
+                                Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
+                                intent.setAction(BackgroundAudioService.ACTION_STOP);
+                                startService(intent);
+                            } catch (Exception ignored) {}
+                        });
+                    }
+                }, "AndroidAudioBridge");
+            }
+        } catch (Exception ignored) {}
     }
 }

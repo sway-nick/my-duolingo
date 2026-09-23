@@ -1,4 +1,4 @@
-import { PRIVACY_POLICY_DATA } from './privacyTranslations.js';
+﻿import { PRIVACY_POLICY_DATA } from './privacyTranslations.js?v=378.0';
 
 export function openPrivacyModal() {
   const existing = document.querySelector('#privacy-policy-modal-overlay');
@@ -82,25 +82,7 @@ export function openPrivacyModal() {
         gap: 8px;
         background: var(--bg-main, inherit);
       ">
-        <button type="button" id="privacy-back-btn" style="
-          background: none;
-          border: none;
-          color: var(--accent, #ea580c);
-          font-size: 14.5px;
-          font-weight: 700;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 10px;
-          margin-left: -6px;
-          border-radius: 8px;
-          min-height: 38px;
-        ">
-          ← ${policy.backBtn || 'Back'}
-        </button>
-
-        <div style="font-size: 15.5px; font-weight: 800; color: var(--text-main); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px;">
+        <div style="font-size: 15.5px; font-weight: 800; color: var(--text-main); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; flex: 1;">
           ${policy.modalTitle || 'Privacy Policy'}
         </div>
 
@@ -149,9 +131,6 @@ export function openPrivacyModal() {
 
   const closeBtn = overlay.querySelector('#privacy-close-btn');
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-  const backBtn = overlay.querySelector('#privacy-back-btn');
-  if (backBtn) backBtn.addEventListener('click', closeModal);
 
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeModal();

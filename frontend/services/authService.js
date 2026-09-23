@@ -1,4 +1,4 @@
-import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=200.0';
+﻿import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=378.0';
 
 const STORAGE_KEY_USER = 'myduo_current_user';
 const STORAGE_KEY_TOKEN = 'myduo_auth_token';
@@ -142,10 +142,15 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       if (dlXp > migratedXp) migratedXp = dlXp;
     } catch (e) {}
 
+    const isGuestKey = (k) => {
+      const kl = String(k || '').toLowerCase();
+      return kl.includes('guest') || kl.startsWith('dl_') || kl === 'favorites' || kl === 'favs' || kl === 'xp';
+    };
+
     const allKeys = Object.keys(localStorage);
     allKeys.forEach((k) => {
-      // 1. Deep merge all progress keys
-      if (k.startsWith('progress_') && k !== userProgKey) {
+      // 1. Deep merge all progress keys (ONLY guest keys)
+      if (k.startsWith('progress_') && k !== userProgKey && isGuestKey(k)) {
         try {
           const progObj = JSON.parse(localStorage.getItem(k) || '{}');
           if (progObj && typeof progObj === 'object') {
@@ -175,8 +180,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 2. Migrate all favorites keys
-      if ((k.startsWith('favs_') || k.startsWith('favorites_') || k === 'favorites' || k === 'favs' || k === 'myduo_favorites') && k !== userFavKey) {
+      // 2. Migrate all favorites keys (ONLY guest keys)
+      if ((k.startsWith('favs_') || k.startsWith('favorites_') || k === 'favorites' || k === 'favs' || k === 'myduo_favorites') && !k.includes('deleted') && k !== userFavKey && isGuestKey(k)) {
         try {
           const favsArr = JSON.parse(localStorage.getItem(k) || '[]');
           if (Array.isArray(favsArr)) {
@@ -185,8 +190,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 3. Migrate settings
-      if (k.startsWith('settings_') && k !== userSetKey) {
+      // 3. Migrate settings (ONLY guest keys)
+      if (k.startsWith('settings_') && k !== userSetKey && isGuestKey(k)) {
         try {
           const setObj = JSON.parse(localStorage.getItem(k) || '{}');
           if (setObj && typeof setObj === 'object') {
@@ -195,8 +200,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 4. Migrate study dates (streak)
-      if (k.startsWith('study_dates_') && k !== userDatesKey) {
+      // 4. Migrate study dates (streak) (ONLY guest keys)
+      if (k.startsWith('study_dates_') && k !== userDatesKey && isGuestKey(k)) {
         try {
           const datesArr = JSON.parse(localStorage.getItem(k) || '[]');
           if (Array.isArray(datesArr)) {
@@ -205,8 +210,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 5. Migrate XP
-      if (k.startsWith('xp_') && !k.startsWith(`xp_${newUserId}_`)) {
+      // 5. Migrate XP (ONLY guest keys)
+      if (k.startsWith('xp_') && !k.startsWith(`xp_${newUserId}_`) && isGuestKey(k)) {
         const match = k.match(/(\d{4}-W\d{2})/);
         const wKey = match ? match[1] : currentWeek;
         const xpVal = Number(localStorage.getItem(k) || 0);
@@ -221,8 +226,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         }
       }
 
-      // 6. Migrate avatar
-      if (k.startsWith('avatar_') && k !== `avatar_${newUserId}`) {
+      // 6. Migrate avatar (ONLY guest keys)
+      if (k.startsWith('avatar_') && k !== `avatar_${newUserId}` && isGuestKey(k)) {
         const av = localStorage.getItem(k);
         if (av && !localStorage.getItem(`avatar_${newUserId}`)) {
           localStorage.setItem(`avatar_${newUserId}`, av);
@@ -240,38 +245,7 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       if (best > migratedXp) migratedXp = best;
     }
 
-    // Auto-restore for target user account
-    const isTargetUser = (userEmail && userEmail.toLowerCase().includes('lipniagov')) ||
-                         (newUserId && String(newUserId).includes('lipniagov'));
-    if (isTargetUser) {
-      if (migratedXp < 4514) {
-        migratedXp = 4514;
-      }
-      if (Object.keys(mergedProg).length === 0) {
-        try {
-          const cachedWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
-          if (Array.isArray(cachedWords) && cachedWords.length > 0) {
-            const elemWords = cachedWords.slice(0, 90);
-            elemWords.forEach((w) => {
-              if (w && w.id) {
-                mergedProg[w.id] = {
-                  correct: 4,
-                  error: 0,
-                  quizCorrect: 1,
-                  pairsCorrect: 1,
-                  inputCorrect: 1,
-                  seenInCards: true,
-                  mastered: true,
-                  masteredAt: Date.now() - 86400000,
-                  lastPracticed: Date.now(),
-                  hardCount: 0,
-                };
-              }
-            });
-          }
-        } catch (e) {}
-      }
-    }
+
 
     // If migratedXp is still 0, calculate from mergedProg
     if (migratedXp <= 0 && mergedProg && Object.keys(mergedProg).length > 0) {
@@ -294,9 +268,20 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       localStorage.setItem(`avatar_${newUserId}`, userAvatar);
     }
 
+    const deletedFavs = new Set([
+      ...(JSON.parse(localStorage.getItem(`favs_deleted_${newUserId}`) || '[]')),
+      ...(guestId ? JSON.parse(localStorage.getItem(`favs_deleted_${guestId}`) || '[]') : []),
+      ...(JSON.parse(localStorage.getItem('favs_deleted') || '[]'))
+    ].map(String));
+
+    const finalFavs = Array.from(mergedFavs)
+      .map(String)
+      .map(s => s.trim())
+      .filter(id => id && !deletedFavs.has(id));
+
     // Save final merged data to user storage keys
     localStorage.setItem(userProgKey, JSON.stringify(mergedProg));
-    localStorage.setItem(userFavKey, JSON.stringify(Array.from(mergedFavs)));
+    localStorage.setItem(userFavKey, JSON.stringify(finalFavs));
     localStorage.setItem(userSetKey, JSON.stringify({ ...mergedSet, userId: newUserId }));
     localStorage.setItem(userDatesKey, JSON.stringify(Array.from(mergedDates).sort()));
     if (migratedXp > 0) {
@@ -304,13 +289,30 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       localStorage.setItem('xp', String(migratedXp));
     }
 
+    // Clean up temporary guest keys after migration
+    try {
+      localStorage.removeItem('progress_guest');
+      if (guestId) localStorage.removeItem(`progress_${guestId}`);
+      localStorage.removeItem('dl_word_progress');
+      localStorage.removeItem('favs_guest');
+      if (guestId) localStorage.removeItem(`favs_${guestId}`);
+      localStorage.removeItem('settings_guest');
+      if (guestId) localStorage.removeItem(`settings_${guestId}`);
+      localStorage.removeItem('study_dates_guest');
+      if (guestId) localStorage.removeItem(`study_dates_${guestId}`);
+      localStorage.removeItem('xp_guest');
+      localStorage.removeItem('dl_xp');
+      localStorage.removeItem('xp');
+      if (guestId) localStorage.removeItem(`xp_${guestId}_${currentWeek}`);
+    } catch (e) {}
+
     // Broadcast local changes
     if (typeof window !== 'undefined') {
       if (migratedXp > 0) {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: migratedXp } }));
       }
       window.dispatchEvent(new CustomEvent('myduo:progress_updated', { detail: { userId: newUserId, progress: mergedProg } }));
-      window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: Array.from(mergedFavs) }));
+      window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: finalFavs }));
     }
   } catch (e) {
     console.warn('Failed migrating guest data to user:', e);
@@ -321,19 +323,24 @@ function getCurrentUser() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY_USER);
     if (saved) {
-      currentUser = JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (parsed && typeof parsed === 'object' && parsed.id && parsed.id !== 'guest' && !String(parsed.id).startsWith('guest_') && parsed.email) {
+        currentUser = parsed;
+      } else {
+        currentUser = null;
+      }
     } else {
       currentUser = null;
     }
   } catch (e) {
-    console.warn('Failed reading current user from storage:', e);
+    currentUser = null;
   }
   return currentUser;
 }
 
 function setCurrentUser(user, token) {
-  currentUser = user;
-  if (user) {
+  if (user && user.id && user.id !== 'guest' && !String(user.id).startsWith('guest_') && user.email) {
+    currentUser = user;
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
     const finalToken = (token && !token.startsWith('tok_')) ? token : (user.idToken || token || '');
     if (finalToken) localStorage.setItem(STORAGE_KEY_TOKEN, finalToken);
@@ -342,19 +349,25 @@ function setCurrentUser(user, token) {
       migrateGuestData(user.id, user.email || '', user.name || '', user.avatar || '');
     }
   } else {
+    currentUser = null;
     localStorage.removeItem(STORAGE_KEY_USER);
     localStorage.removeItem(STORAGE_KEY_TOKEN);
+    try {
+      localStorage.removeItem('myduo_firebase_user');
+      localStorage.removeItem('myduo_refresh_token');
+      localStorage.removeItem('myduo_auth_token');
+    } catch (e) {}
   }
 
   // Dispatch global event for instant UI reaction without page refresh
   try {
-    window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user } }));
+    window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user: currentUser } }));
   } catch (e) {}
 }
 
 // Auto-migrate on initial script evaluation if user is already logged in
 try {
-  if (currentUser && currentUser.id) {
+  if (currentUser && currentUser.id && currentUser.email) {
     migrateGuestData(currentUser.id, currentUser.email || '', currentUser.name || '', currentUser.avatar || '');
   }
 } catch (e) {}
@@ -367,6 +380,26 @@ function logoutUser() {
   }
   logoutFirebase();
   setCurrentUser(null, null);
+  try {
+    localStorage.removeItem(STORAGE_KEY_USER);
+    localStorage.removeItem(STORAGE_KEY_TOKEN);
+    localStorage.removeItem('myduo_firebase_user');
+    localStorage.removeItem('myduo_refresh_token');
+    localStorage.removeItem('myduo_auth_token');
+    localStorage.removeItem('xp');
+    localStorage.removeItem('dl_xp');
+    localStorage.removeItem('avatar_guest');
+    localStorage.removeItem('favs_guest');
+    localStorage.removeItem('progress_guest');
+    localStorage.removeItem('settings_guest');
+    localStorage.removeItem('study_dates_guest');
+  } catch (e) {}
+  if (typeof window !== 'undefined') {
+    try {
+      window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: 0 } }));
+      window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user: null } }));
+    } catch (e) {}
+  }
 }
 
 function getAuthToken() {
@@ -444,8 +477,12 @@ function saveUserAvatar(userId, base64Data) {
     window.dispatchEvent(new CustomEvent('myduo:avatar_changed', { detail: { userId: id, avatar: base64Data } }));
   } catch (e) {}
 
-  // Direct Firestore cloud sync
+  // Direct Firestore cloud sync: strictly for authenticated users only
   try {
+    const user = getCurrentUser();
+    if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
+      return;
+    }
     const d = new Date();
     const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
@@ -453,12 +490,12 @@ function saveUserAvatar(userId, base64Data) {
     const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
     const wKey = `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
 
-    const user = currentUser;
-    const userName = user && user.name ? user.name : 'Гость';
+    const userName = user.name || user.email.split('@')[0];
     const xp = Number(localStorage.getItem(`xp_${id}_${wKey}`) || 0);
 
-    saveUserProfileFirestore(id, { avatar: base64Data || '', name: userName }).catch(() => {});
-    syncLeaderboardScoreFirestore(id, wKey, xp, userName, base64Data || '').catch(() => {});
+    const fsUid = (user.firebaseUid && !user.firebaseUid.includes('_')) ? user.firebaseUid : user.id;
+    saveUserProfileFirestore(fsUid, { avatar: base64Data || '', name: userName }).catch(() => {});
+    syncLeaderboardScoreFirestore(fsUid, wKey, xp, userName, base64Data || '').catch(() => {});
   } catch (err) {}
 }
 

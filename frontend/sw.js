@@ -7,6 +7,13 @@ self.addEventListener('activate', (event) => {
   );
 });
 self.addEventListener('fetch', (event) => {
-  // Always fetch from network directly
-  event.respondWith(fetch(event.request));
+  // Only handle same-origin GET requests; never intercept cross-origin API calls (Firebase Auth, Firestore, Google)
+  if (event.request.method !== 'GET') return;
+  try {
+    const url = new URL(event.request.url);
+    if (url.origin !== self.location.origin) return;
+    event.respondWith(fetch(event.request));
+  } catch (e) {
+    // If URL parsing fails, let the browser handle it naturally
+  }
 });

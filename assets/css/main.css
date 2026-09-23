@@ -797,19 +797,15 @@ body:not(.dark-theme) .mode-pill-btn:not(.active):hover {
 @keyframes heartHintBlink {
   0% {
     transform: scale(1);
-    filter: drop-shadow(0 0 0 rgba(239, 68, 68, 0));
   }
   30% {
-    transform: scale(1.45) rotate(-8deg);
-    filter: drop-shadow(0 0 14px #ec4899) hue-rotate(90deg);
+    transform: scale(1.3) rotate(-6deg);
   }
   60% {
-    transform: scale(1.3) rotate(8deg);
-    filter: drop-shadow(0 0 16px #a855f7) hue-rotate(240deg);
+    transform: scale(1.18) rotate(6deg);
   }
   100% {
     transform: scale(1) rotate(0deg);
-    filter: drop-shadow(0 0 0 rgba(239, 68, 68, 0));
   }
 }
 
@@ -1779,12 +1775,14 @@ body.notebook-theme .word-notes-modal-text {
 }
 
 .flashcard-fav-btn.is-favorite {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.3);
+  background: #fedec0 !important;
+  border: 1.5px solid #f6ad55 !important;
+  color: #8c3e17 !important;
+  box-shadow: none !important;
 }
 
 body:not(.dark-theme) .flashcard-sound-btn,
-body:not(.dark-theme) .flashcard-fav-btn {
+body:not(.dark-theme) .flashcard-fav-btn:not(.is-favorite) {
   background: #ffffff !important;
   border: 1.5px solid #cbd5e1 !important;
   box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08) !important;
@@ -1792,23 +1790,35 @@ body:not(.dark-theme) .flashcard-fav-btn {
 }
 
 body:not(.dark-theme) .flashcard-sound-btn:hover,
-body:not(.dark-theme) .flashcard-fav-btn:hover {
+body:not(.dark-theme) .flashcard-fav-btn:not(.is-favorite):hover {
   background: #f8fafc !important;
   border-color: #94a3b8 !important;
   box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12) !important;
 }
 
 body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
-  background: #fef2f2 !important;
-  border-color: #fca5a5 !important;
-  color: #ef4444 !important;
+  background: #fedec0 !important;
+  border: 1.5px solid #f6ad55 !important;
+  color: #8c3e17 !important;
+  box-shadow: none !important;
+}
+
+body:not(.dark-theme) .flashcard-fav-btn.is-favorite:hover {
+  background: #fcd5b0 !important;
+  border-color: #f59e0b !important;
+  box-shadow: none !important;
+}
+
+body:not(.dark-theme) .flashcard-fav-btn.is-favorite svg {
+  fill: #ea580c !important;
+  stroke: #ea580c !important;
 }
 
 /* Dark Theme: High-contrast, bright buttons for speaker and heart on card */
 .dark-theme .flashcard-sound-btn,
-.dark-theme .flashcard-fav-btn,
+.dark-theme .flashcard-fav-btn:not(.is-favorite),
 [data-theme='dark'] .flashcard-sound-btn,
-[data-theme='dark'] .flashcard-fav-btn {
+[data-theme='dark'] .flashcard-fav-btn:not(.is-favorite) {
   background: rgba(255, 255, 255, 0.16) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
@@ -1816,16 +1826,16 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 }
 
 .dark-theme .flashcard-sound-btn svg,
-.dark-theme .flashcard-fav-btn svg,
+.dark-theme .flashcard-fav-btn:not(.is-favorite) svg,
 [data-theme='dark'] .flashcard-sound-btn svg,
-[data-theme='dark'] .flashcard-fav-btn svg {
+[data-theme='dark'] .flashcard-fav-btn:not(.is-favorite) svg {
   stroke: #f8fafc !important;
 }
 
 .dark-theme .flashcard-sound-btn:hover,
-.dark-theme .flashcard-fav-btn:hover,
+.dark-theme .flashcard-fav-btn:not(.is-favorite):hover,
 [data-theme='dark'] .flashcard-sound-btn:hover,
-[data-theme='dark'] .flashcard-fav-btn:hover {
+[data-theme='dark'] .flashcard-fav-btn:not(.is-favorite):hover {
   background: rgba(255, 255, 255, 0.28) !important;
   border-color: rgba(255, 255, 255, 0.55) !important;
   color: #ffffff !important;
@@ -1834,9 +1844,9 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 }
 
 .dark-theme .flashcard-sound-btn:hover svg,
-.dark-theme .flashcard-fav-btn:hover svg,
+.dark-theme .flashcard-fav-btn:not(.is-favorite):hover svg,
 [data-theme='dark'] .flashcard-sound-btn:hover svg,
-[data-theme='dark'] .flashcard-fav-btn:hover svg {
+[data-theme='dark'] .flashcard-fav-btn:not(.is-favorite):hover svg {
   stroke: #ffffff !important;
 }
 
@@ -1850,55 +1860,39 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 
 .dark-theme .flashcard-fav-btn.is-favorite,
 [data-theme='dark'] .flashcard-fav-btn.is-favorite {
-  background: rgba(239, 68, 68, 0.3) !important;
-  border: 1.5px solid #ef4444 !important;
-  color: #f87171 !important;
-  box-shadow: 0 0 14px rgba(239, 68, 68, 0.45) !important;
+  background: rgba(251, 146, 60, 0.16) !important;
+  border: 1.5px solid #fb923c !important;
+  color: #fed7aa !important;
+  box-shadow: none !important;
+}
+
+.dark-theme .flashcard-fav-btn.is-favorite:hover,
+[data-theme='dark'] .flashcard-fav-btn.is-favorite:hover {
+  background: rgba(251, 146, 60, 0.24) !important;
+  border-color: #f97316 !important;
+  box-shadow: none !important;
 }
 
 .dark-theme .flashcard-fav-btn.is-favorite svg,
 [data-theme='dark'] .flashcard-fav-btn.is-favorite svg {
-  fill: #ef4444 !important;
-  stroke: #ef4444 !important;
+  fill: #fb923c !important;
+  stroke: #fb923c !important;
 }
 
 @keyframes heartShimmer45 {
   0% {
-    background: rgba(100, 116, 139, 0.08);
-    box-shadow: 0 0 0 rgba(239, 68, 68, 0);
     transform: scale(1);
   }
-  25% {
-    background: linear-gradient(45deg, #ef4444, #f43f5e, #fda4af, #ef4444);
-    background-size: 200% 200%;
-    background-position: 0% 50%;
-    box-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
-    transform: scale(1.22);
-  }
   50% {
-    background: linear-gradient(45deg, #ef4444, #f43f5e, #fda4af, #ef4444);
-    background-size: 200% 200%;
-    background-position: 100% 50%;
-    box-shadow: 0 0 18px rgba(239, 68, 68, 0.8);
-    transform: scale(1.28) rotate(-8deg);
-  }
-  75% {
-    background: linear-gradient(45deg, #ef4444, #f43f5e, #fda4af, #ef4444);
-    background-size: 200% 200%;
-    background-position: 0% 50%;
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
-    transform: scale(1.18) rotate(8deg);
+    transform: scale(1.18);
   }
   100% {
-    background: rgba(100, 116, 139, 0.08);
-    box-shadow: 0 0 0 rgba(239, 68, 68, 0);
-    transform: scale(1) rotate(0deg);
+    transform: scale(1);
   }
 }
 
 .heart-shimmer-45 {
-  animation: heartShimmer45 1.4s ease-in-out forwards;
-  border-color: rgba(239, 68, 68, 0.6) !important;
+  animation: heartShimmer45 1.2s ease-in-out forwards;
 }
 
 .flashcard-face-body {
@@ -1949,7 +1943,7 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 .flashcard-translation {
   font-size: 22px;
   font-weight: 600;
-  color: #15803d;
+  color: var(--text-main, #0f172a);
   margin: 0;
   line-height: 1.35;
   letter-spacing: -0.2px;
@@ -1959,7 +1953,7 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite {
 }
 
 .dark-theme .flashcard-translation {
-  color: #4ade80;
+  color: #f8fafc;
 }
 
 /* WOTD card back face: white text with outline (same style as English word) */
@@ -2438,102 +2432,145 @@ body.dark-theme .btn-graphite:active:not(:disabled) {
 .btn-learn {
   flex: 1;
   padding: 14px 16px;
-  min-height: 52px;
-  border-radius: 18px !important;
-  font-weight: 700;
-  font-size: 16.5px;
-  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  min-height: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 22px !important;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  background: #fedec0 !important;
+  color: #8c3e17 !important;
+  border: 2px solid #f6ad55 !important;
+  box-shadow: none !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease !important;
 }
 
 .btn-learn:hover:not(:disabled) {
-  filter: brightness(1.05) !important;
+  background: #fcd5b0 !important;
+  border-color: #f59e0b !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
 }
 
 .btn-learn:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(0.98) !important;
+  background: #fbcba2 !important;
 }
 
-/* Light theme secondary cushion styling for Learn (soft neutral secondary CTA) */
+/* Light theme explicit styles for Learn */
 body:not(.dark-theme) .btn-learn {
-  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%) !important;
-  color: #1e293b !important;
-  border: 1px solid rgba(148, 163, 184, 0.45) !important;
-  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.1), inset 0 1px 1.5px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
+  background: #fedec0 !important;
+  color: #8c3e17 !important;
+  border: 2px solid #f6ad55 !important;
+  box-shadow: none !important;
 }
 
 body:not(.dark-theme) .btn-learn:hover:not(:disabled) {
-  filter: brightness(1.03) !important;
-  background: linear-gradient(180deg, #e8edf4 0%, #cbd5e1 100%) !important;
-  color: #0f172a !important;
-  border-color: rgba(100, 116, 139, 0.5) !important;
+  background: #fcd5b0 !important;
+  border-color: #f59e0b !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14), inset 0 1px 1.5px rgba(255, 255, 255, 0.7), inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
 }
 
 body:not(.dark-theme) .btn-learn:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12), inset 0 1px 1px rgba(0, 0, 0, 0.08) !important;
+  transform: scale(0.98) !important;
+  background: #fbcba2 !important;
 }
 
-/* Dark theme vibrant blue styling for Learn button */
+/* Dark theme pastel orange styling for Learn button */
 body.dark-theme .btn-learn {
-  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(59, 130, 246, 0.4) !important;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.2) !important;
+  background: rgba(251, 146, 60, 0.16) !important;
+  color: #fed7aa !important;
+  border: 2px solid #fb923c !important;
+  box-shadow: none !important;
 }
 
 body.dark-theme .btn-learn:hover:not(:disabled) {
-  filter: brightness(1.08) !important;
+  background: rgba(251, 146, 60, 0.24) !important;
+  border-color: #f97316 !important;
   transform: translateY(-1px) !important;
-  border-color: rgba(96, 165, 250, 0.6) !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
 body.dark-theme .btn-learn:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(0.98) !important;
 }
 
 .btn-know {
   flex: 1;
   padding: 14px 16px;
-  min-height: 52px;
-  border-radius: 18px !important;
-  font-weight: 700;
-  font-size: 16.5px;
-  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(21, 128, 61, 0.38) !important;
-  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+  min-height: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 22px !important;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  background: #cbf4d8 !important;
+  color: #14532d !important;
+  border: 2px solid #52c480 !important;
+  box-shadow: none !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease !important;
 }
 
 .btn-know:hover:not(:disabled) {
-  filter: brightness(1.04) !important;
+  background: #bbf0cb !important;
+  border-color: #22c55e !important;
   transform: translateY(-1px) !important;
-  border-color: rgba(21, 128, 61, 0.55) !important;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
 }
 
 .btn-know:active:not(:disabled) {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(0.98) !important;
+  background: #aeeabd !important;
+}
+
+/* Light theme explicit styles for Know */
+body:not(.dark-theme) .btn-know {
+  background: #cbf4d8 !important;
+  color: #14532d !important;
+  border: 2px solid #52c480 !important;
+  box-shadow: none !important;
+}
+
+body:not(.dark-theme) .btn-know:hover:not(:disabled) {
+  background: #bbf0cb !important;
+  border-color: #22c55e !important;
+  transform: translateY(-1px) !important;
+}
+
+body:not(.dark-theme) .btn-know:active:not(:disabled) {
+  transform: scale(0.98) !important;
+  background: #aeeabd !important;
+}
+
+/* Dark theme pastel green styling for Know button */
+body.dark-theme .btn-know {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #bbf7d0 !important;
+  border: 2px solid #4ade80 !important;
+  box-shadow: none !important;
+}
+
+body.dark-theme .btn-know:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.24) !important;
+  border-color: #22c55e !important;
+  transform: translateY(-1px) !important;
+}
+
+body.dark-theme .btn-know:active:not(:disabled) {
+  transform: scale(0.98) !important;
 }
 
 .secondary-button {
@@ -3904,19 +3941,27 @@ body.dark-theme .custom-dropdown-trigger {
   position: relative;
   width: 100% !important;
   box-sizing: border-box !important;
-  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 18px !important;
-  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+  min-height: 56px !important;
+  height: 56px !important;
+  padding: 14px 16px !important;
+  border-radius: 22px !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  letter-spacing: 0.2px !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease !important;
 }
 
 .autoplay-favs-btn-bottom .autoplay-btn-icon-wrapper {
   position: absolute;
-  left: 20px;
+  left: 24px;
   top: 50%;
   transform: translateY(-50%);
   display: inline-flex;
@@ -3931,73 +3976,88 @@ body.dark-theme .custom-dropdown-trigger {
   pointer-events: none;
 }
 
-.autoplay-favs-btn-bottom:hover {
-  filter: brightness(1.04) !important;
+/* Light Theme: "Слушать" (idle) -> exact same style as "Знаю" (.btn-know) */
+body:not(.dark-theme) .autoplay-favs-btn-bottom:not(.is-playing) {
+  background: #dcfce7 !important;
+  color: #14532d !important;
+  border: 2px solid #4ade80 !important;
+  box-shadow: none !important;
+}
+
+body:not(.dark-theme) .autoplay-favs-btn-bottom:not(.is-playing):hover {
+  background: #bbf7d0 !important;
+  border-color: #22c55e !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: none !important;
 }
 
-.autoplay-favs-btn-bottom:active {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+body:not(.dark-theme) .autoplay-favs-btn-bottom:not(.is-playing):active {
+  transform: scale(0.98) !important;
+  background: #86efac !important;
 }
 
-.autoplay-favs-btn-bottom.is-playing {
-  background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 18px !important;
-  box-shadow: 0 3px 10px rgba(234, 88, 12, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+/* Light Theme: "Пауза" (playing) -> exact same style as "Учить" (.btn-learn) */
+body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing {
+  background: #fedec0 !important;
+  color: #8c3e17 !important;
+  border: 2px solid #f6ad55 !important;
+  box-shadow: none !important;
 }
 
-.autoplay-favs-btn-bottom.is-playing:hover {
-  filter: brightness(1.04) !important;
+body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing:hover {
+  background: #fcd5b0 !important;
+  border-color: #f59e0b !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.5), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: none !important;
 }
 
-.autoplay-favs-btn-bottom.is-playing:active {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(234, 88, 12, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing:active {
+  transform: scale(0.98) !important;
+  background: #fbcba2 !important;
 }
 
-.dark-theme .autoplay-favs-btn-bottom {
-  background: linear-gradient(180deg, #27d468 0%, #16a34a 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 18px !important;
-  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+/* Dark Theme: "Слушать" (idle) -> exact same style as "Знаю" (.btn-know) */
+.dark-theme .autoplay-favs-btn-bottom:not(.is-playing),
+[data-theme='dark'] .autoplay-favs-btn-bottom:not(.is-playing) {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #bbf7d0 !important;
+  border: 2px solid #22c55e !important;
+  box-shadow: none !important;
 }
 
-.dark-theme .autoplay-favs-btn-bottom:hover {
-  filter: brightness(1.04) !important;
+.dark-theme .autoplay-favs-btn-bottom:not(.is-playing):hover,
+[data-theme='dark'] .autoplay-favs-btn-bottom:not(.is-playing):hover {
+  background: rgba(34, 197, 94, 0.24) !important;
+  border-color: #16a34a !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: none !important;
 }
 
-.dark-theme .autoplay-favs-btn-bottom:active {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+.dark-theme .autoplay-favs-btn-bottom:not(.is-playing):active,
+[data-theme='dark'] .autoplay-favs-btn-bottom:not(.is-playing):active {
+  transform: scale(0.98) !important;
 }
 
-.dark-theme .autoplay-favs-btn-bottom.is-playing {
-  background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 18px !important;
-  box-shadow: 0 3px 10px rgba(234, 88, 12, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+/* Dark Theme: "Пауза" (playing) -> exact same style as "Учить" (.btn-learn) */
+.dark-theme .autoplay-favs-btn-bottom.is-playing,
+[data-theme='dark'] .autoplay-favs-btn-bottom.is-playing {
+  background: rgba(251, 146, 60, 0.16) !important;
+  color: #fed7aa !important;
+  border: 2px solid #fb923c !important;
+  box-shadow: none !important;
 }
 
-.dark-theme .autoplay-favs-btn-bottom.is-playing:hover {
-  filter: brightness(1.04) !important;
+.dark-theme .autoplay-favs-btn-bottom.is-playing:hover,
+[data-theme='dark'] .autoplay-favs-btn-bottom.is-playing:hover {
+  background: rgba(251, 146, 60, 0.24) !important;
+  border-color: #f97316 !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.5), inset 0 1px 1.5px rgba(255, 255, 255, 0.5), inset 0 -1.5px 3px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: none !important;
 }
 
-.dark-theme .autoplay-favs-btn-bottom.is-playing:active {
-  transform: translateY(1.5px) !important;
-  box-shadow: 0 1px 4px rgba(234, 88, 12, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+.dark-theme .autoplay-favs-btn-bottom.is-playing:active,
+[data-theme='dark'] .autoplay-favs-btn-bottom.is-playing:active {
+  transform: scale(0.98) !important;
 }
 
 .autosave-bar {

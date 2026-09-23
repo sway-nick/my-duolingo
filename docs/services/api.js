@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=200.0';
+﻿import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=378.0';
 import { 
   syncLeaderboardScoreFirestore, 
   getWeeklyLeaderboardFirestore, 
@@ -9,6 +9,7 @@ import {
   saveUserProfileFirestore,
   saveUserSettingsFirestore,
   saveUserFavoritesFirestore,
+  saveUserDeletedFavoritesFirestore,
   saveUserNotesFirestore,
   loadUserNotesFirestore,
   saveUserCustomWordsFirestore,
@@ -18,7 +19,7 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=200.0';
+} from './firebase.js?v=378.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -26,7 +27,34 @@ async function getHealth() {
 
 function getFirestoreUserId(userId = null) {
   const user = getCurrentUser();
-  const fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
+  let fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
+
+  // Migration: myduo_firebase_user.id always stores fbRes.localId (real Firebase UID).
+  // Old auth code stored Google Sub ID in user.firebaseUid — detect and fix on the fly.
+  try {
+    const stored = localStorage.getItem('myduo_firebase_user');
+    if (stored) {
+      const fbData = JSON.parse(stored);
+      const realFbUid = fbData?.id ? String(fbData.id) : '';
+      // Google Sub IDs are purely numeric (e.g. 110531984537821932939).
+      // Real Firebase UIDs contain letters (e.g. b9PUaf5jtthwQIOPvAdZJ1o5CBC3).
+      const googleSubPattern = /^\d+$/;
+      if (realFbUid && realFbUid !== fbUid) {
+        // Prefer realFbUid if fbUid looks like a Google numeric Sub ID
+        if (!fbUid || googleSubPattern.test(fbUid)) {
+          fbUid = realFbUid;
+          // Also patch the user object in localStorage so future calls are instant
+          if (user && user.firebaseUid !== realFbUid) {
+            try {
+              user.firebaseUid = realFbUid;
+              localStorage.setItem('myduo_current_user', JSON.stringify(user));
+            } catch (e) {}
+          }
+        }
+      }
+    }
+  } catch (e) {}
+
   if (!fbUid) return userId;
   const detId = user?.email ? getDeterministicUserId(user.email) : null;
   const effectiveId = getEffectiveUserId();
@@ -59,21 +87,34 @@ let syncDebounceTimer = null;
 
 function getLocalUsers() {
   try {
-    return JSON.parse(localStorage.getItem('myduo_registered_users') || '[]');
+    const list = JSON.parse(localStorage.getItem('myduo_registered_users') || '[]');
+    if (Array.isArray(list)) {
+      list.forEach(u => { if (u && u.password) delete u.password; });
+      return list;
+    }
+    return [];
   } catch (e) {
     return [];
   }
 }
 
 function saveLocalUser(user) {
+  if (!user || !user.email) return;
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    avatar: user.avatar || ''
+  };
   const users = getLocalUsers();
-  const existingIdx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
-  if (existingIdx >= 0) users[existingIdx] = user;
-  else users.push(user);
+  const existingIdx = users.findIndex((u) => u.email.toLowerCase() === safeUser.email.toLowerCase());
+  if (existingIdx >= 0) users[existingIdx] = { ...users[existingIdx], ...safeUser };
+  else users.push(safeUser);
+  users.forEach(u => { if (u && u.password) delete u.password; });
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v218_utf8_clean';
+const WORDS_CACHE_VERSION = 'v219_damage_sync';
 
 let cachedWordsList = null;
 try {
@@ -245,8 +286,12 @@ async function syncRemoteVocabularyUpdates() {
       if (targetIdx !== undefined) {
         const existing = cachedWordsList[targetIdx];
         let rowChanged = false;
-        if (u.translation && existing.translation !== u.translation) {
+        if (u.translation && (existing.translation !== u.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
           existing.translation = u.translation;
+          rowChanged = true;
+        }
+        if (u.translations && typeof u.translations === 'object') {
+          existing.translations = { ...(existing.translations || {}), ...u.translations };
           rowChanged = true;
         }
         if (u.transcription !== undefined && existing.transcription !== u.transcription) {
@@ -266,7 +311,8 @@ async function syncRemoteVocabularyUpdates() {
         cachedWordsList.unshift({
           id: u.id || `w_${cleanWord}`,
           word: cleanWord,
-          translation: u.translation || cleanWord,
+          translation: u.translation || '',
+          translations: u.translations || (u.translation ? { ru: u.translation } : {}),
           transcription: u.transcription || '',
           category: u.category || 'Elementary',
           level: u.level || 'A2',
@@ -301,7 +347,7 @@ async function getWords(forceRefresh = false) {
 
   const currentLang = getActiveLang();
 
-  // Background sync for latest updates from Google Sheets / Firestore
+  // Background sync for latest vocabulary updates from Cloud Firestore
   if (forceRefresh) {
     await syncRemoteVocabularyUpdates();
   } else {
@@ -402,7 +448,6 @@ async function registerUser(email, password, name) {
     id: deterministicId,
     email: cleanEmail,
     name: name.trim(),
-    password: password,
   };
   saveLocalUser(newUser);
 
@@ -432,7 +477,7 @@ async function loginUser(email, password) {
   const deterministicId = getDeterministicUserId(cleanEmail);
 
   const localUsers = getLocalUsers();
-  const found = localUsers.find((u) => u.email.toLowerCase() === cleanEmail && String(u.password) === String(password));
+  const found = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
 
   if (found) {
     return {
@@ -444,17 +489,9 @@ async function loginUser(email, password) {
     };
   }
 
-  const userExists = localUsers.find((u) => u.email.toLowerCase() === cleanEmail);
-  if (userExists) {
-    return {
-      success: false,
-      error: 'Неверный пароль. Пожалуйста, проверьте введённые данные.',
-    };
-  }
-
   return {
     success: false,
-    error: 'Пользователь не найден. Пожалуйста, зарегистрируйтесь.',
+    error: 'Пользователь не найден. Пожалуйста, войдите через Email или Google.',
   };
 }
 
@@ -470,7 +507,6 @@ async function googleAuthUser(email, name, avatar) {
       id: deterministicId,
       email: cleanEmail,
       name: cleanName,
-      password: 'google_oauth_pass',
     };
     saveLocalUser(user);
   }
@@ -577,7 +613,7 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
 
   // Sync to Cloud Firestore (Real-time, instant)
   try {
-    syncLeaderboardScoreFirestore(userId, weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    syncLeaderboardScoreFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
   } catch (e) {}
 }
 
@@ -767,18 +803,6 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
     } catch (e) {}
 
     let realPlayers = (Array.isArray(rawList) ? rawList : []).filter((u) => u && u.userId && !String(u.userId).startsWith('bot_'));
-    if (realPlayers.length === 0) {
-      const migrated = getMigratedPlayersSync();
-      if (Array.isArray(migrated) && migrated.length > 0) {
-        realPlayers = migrated.map(p => ({
-          userId: p && p.userId,
-          name: (p && p.name != null) ? String(p.name) : 'Student',
-          avatar: (p && p.avatar) || '',
-          xp: period === 'all' ? ((p && (p.allXp || p.weeklyXp)) || 0) : ((p && p.weeklyXp) || 0),
-          isBot: false
-        })).filter(p => p.userId && p.xp > 0);
-      }
-    }
     const dynamicBots = generateDynamicBots(wKey).map((bot) => ({
       userId: bot.userId,
       name: bot.name,
@@ -826,18 +850,6 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   } catch (e) {}
 
   let realPlayers = (Array.isArray(rawList) ? rawList : []).filter((u) => u && u.userId && !String(u.userId).startsWith('bot_'));
-  if (realPlayers.length === 0) {
-    const migrated = getMigratedPlayersSync();
-    if (Array.isArray(migrated) && migrated.length > 0) {
-      realPlayers = migrated.map(p => ({
-        userId: p && p.userId,
-        name: (p && p.name != null) ? String(p.name) : 'Student',
-        avatar: (p && p.avatar) || '',
-        xp: (p && p.weeklyXp) || 0,
-        isBot: false
-      })).filter(p => p.userId && p.xp > 0);
-    }
-  }
   const dynamicBots = generateDynamicBots(wKey);
   const combined = [...realPlayers, ...dynamicBots];
 
@@ -901,7 +913,7 @@ async function getLeaderboard(weekKey = null, period = 'week') {
   const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
 
   // Automatically ensure current user's local XP & avatar are synced to Firestore
-  if (userXP > 0 || userAvatar) {
+  if (userXP > 0 && currentUser && currentUser.id && !String(currentUser.id).startsWith('guest')) {
     syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
   }
 
@@ -1240,7 +1252,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   // Sync to Cloud Firestore (Real-time persistent cloud storage)
   try {
-    saveUserProgressFirestore(userId, wordId, prog).catch(() => {});
+    const fsUid = getFirestoreUserId(userId);
+    saveUserProgressFirestore(fsUid, wordId, prog).catch(() => {});
   } catch (e) {}
 
   pendingProgressQueue.push({
@@ -1280,71 +1293,40 @@ async function flushProgressQueue() {
       continue; // Skip guests from cloud progress sync
     }
     try {
-      saveUserProgressFirestore(item.userId, item.wordId, item);
+      saveUserProgressFirestore(getFirestoreUserId(item.userId), item.wordId, item);
     } catch (e) {
       console.warn('Failed to sync progress item to Firestore:', item, e);
     }
   }
 }
 
-let cachedMigratedPlayers = null;
-function getMigratedPlayersSync() {
-  if (cachedMigratedPlayers) return cachedMigratedPlayers;
-  try {
-    const raw = localStorage.getItem('myduo_migrated_players_cache');
-    if (raw) {
-      cachedMigratedPlayers = JSON.parse(raw);
-      return cachedMigratedPlayers;
-    }
-  } catch (e) {}
-  return [];
-}
-
-async function loadMigratedPlayersBundle() {
-  if (cachedMigratedPlayers && Array.isArray(cachedMigratedPlayers) && cachedMigratedPlayers.length > 0) {
-    return cachedMigratedPlayers;
-  }
-  const paths = ['./assets/data/migrated_players.json', 'assets/data/migrated_players.json', '/assets/data/migrated_players.json'];
-  for (const p of paths) {
-    try {
-      const res = await fetch(p);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          cachedMigratedPlayers = data;
-          try {
-            localStorage.setItem('myduo_migrated_players_cache', JSON.stringify(data));
-          } catch (e) {}
-          return data;
-        }
-      }
-    } catch (e) {}
-  }
-  return getMigratedPlayersSync();
-}
 
 async function fetchUserDataFromCloud(userId = null, weekKey = null) {
-  const uId = userId || getEffectiveUserId();
-  if (!uId || String(uId).startsWith('guest_')) return null;
+  const user = getCurrentUser();
+  if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
+    return null;
+  }
+  const uId = userId || user.id;
+  if (!uId || String(uId).startsWith('guest')) return null;
 
   const wKey = weekKey || getIsoWeekKey();
-  const user = getCurrentUser();
   const detId = user && user.email ? getDeterministicUserId(user.email) : null;
   const fbUid = user && (user.firebaseUid || (user.id && user.id !== detId ? user.id : null));
+  // Use Firebase UID as primary Firestore path (subcollections require auth.uid == userId)
+  const firestoreUid = getFirestoreUserId(uId);
 
   // Fetch real-time progress, XP and data from Cloud Firestore
   try {
-    const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc, migratedPlayers] = await Promise.all([
-      loadUserProgressFirestore(uId).catch(() => ({})),
-      detId && detId !== uId ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
-      fbUid && fbUid !== uId && fbUid !== detId ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
-      getUserWeeklyXpFirestore(uId, wKey).catch(() => 0),
-      detId && detId !== uId ? getUserWeeklyXpFirestore(detId, wKey).catch(() => 0) : Promise.resolve(0),
-      fbUid && fbUid !== uId && fbUid !== detId ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
-      loadFullUserDataFirestore(uId).catch(() => null),
-      detId && detId !== uId ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
-      fbUid && fbUid !== uId && fbUid !== detId ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null),
-      loadMigratedPlayersBundle().catch(() => [])
+    const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc] = await Promise.all([
+      loadUserProgressFirestore(firestoreUid).catch(() => ({})),
+      detId && detId !== uId && detId !== firestoreUid ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
+      getUserWeeklyXpFirestore(firestoreUid, wKey).catch(() => 0),
+      detId && detId !== uId && detId !== firestoreUid ? getUserWeeklyXpFirestore(detId, wKey).catch(() => 0) : Promise.resolve(0),
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
+      loadFullUserDataFirestore(firestoreUid).catch(() => null),
+      detId && detId !== uId && detId !== firestoreUid ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null)
     ]);
 
     const progKey = `progress_${uId}`;
@@ -1360,6 +1342,20 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     };
 
     const deletedFavs = getDeletedFavoritesSet(uId);
+
+    // Sync remote deleted favorites from Firestore into local deleted set
+    const remoteDeleted = [
+      ...(Array.isArray(fullDoc?.deletedFavorites) ? fullDoc.deletedFavorites : []),
+      ...(Array.isArray(fbDoc?.deletedFavorites) ? fbDoc.deletedFavorites : [])
+    ];
+    remoteDeleted.forEach(id => {
+      const sid = String(id).trim();
+      if (sid) {
+        deletedFavs.add(sid);
+        recordDeletedFavorite(sid, uId);
+      }
+    });
+
     const sanitizeFavArray = (arr) => {
       if (!Array.isArray(arr)) return [];
       return arr
@@ -1368,81 +1364,16 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     };
 
     const mergedFavsSet = new Set([
-      ...sanitizeFavArray(fbDoc?.favorites),
-      ...sanitizeFavArray(detDoc?.favorites),
       ...sanitizeFavArray(fullDoc?.favorites),
+      ...sanitizeFavArray(fbDoc?.favorites),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
       ...(fbUid ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]')) : []),
-      ...(detId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]')) : []),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('dl_favorites') || '[]')),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favorites') || '[]')),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favs_guest') || '[]'))
     ]);
 
-    // Match historical profile from migrated database
-    const cleanEmail = (user?.email || '').toLowerCase().trim();
-    const cleanName = (user?.name || '').toLowerCase().trim();
-    const matchingProfiles = (migratedPlayers || []).filter(p => {
-      const pId = String(p.userId || '').toLowerCase();
-      const pName = String(p.name || '').toLowerCase();
-      if (cleanEmail && (cleanEmail.includes('lipniagov') || cleanEmail.includes('nikola') || cleanEmail.includes('sway'))) {
-        return pName.includes('nikola') || pName.includes('nick lip') || pId.includes('lipniagov') || pId.includes('1786863204201');
-      }
-      if (cleanEmail && (cleanEmail.includes('julia') || cleanEmail.includes('voland') || cleanEmail.includes('lipa'))) {
-        return pName.includes('julia') || pName.includes('voland') || pId.includes('1787070034849');
-      }
-      if (cleanEmail && (cleanEmail.includes('irina') || cleanEmail.includes('ирина'))) {
-        return pName.includes('ирина') || pId.includes('1786872780877');
-      }
-      if (cleanEmail && (cleanEmail.includes('stadnikov') || cleanEmail.includes('роман'))) {
-        return pName.includes('роман') || pId.includes('1786973820215');
-      }
-      return pId === String(uId).toLowerCase() || (cleanName && pName === cleanName);
-    });
-
-    let maxHistoricalXp = 0;
-    let foundAvatar = '';
-
-    for (const prof of matchingProfiles) {
-      if (prof.progress && typeof prof.progress === 'object') {
-        Object.keys(prof.progress).forEach(wId => {
-          if (!mergedProg[wId]) {
-            mergedProg[wId] = prof.progress[wId];
-          } else {
-            mergedProg[wId] = {
-              ...mergedProg[wId],
-              ...prof.progress[wId],
-              correct: Math.max(mergedProg[wId].correct || 0, prof.progress[wId].correct || 0),
-              error: Math.max(mergedProg[wId].error || 0, prof.progress[wId].error || 0),
-              quizCorrect: Math.max(mergedProg[wId].quizCorrect || 0, prof.progress[wId].quizCorrect || 0),
-              pairsCorrect: Math.max(mergedProg[wId].pairsCorrect || 0, prof.progress[wId].pairsCorrect || 0),
-              inputCorrect: Math.max(mergedProg[wId].inputCorrect || 0, prof.progress[wId].inputCorrect || 0),
-              mastered: Boolean(mergedProg[wId].mastered || prof.progress[wId].mastered),
-              seenInCards: Boolean(mergedProg[wId].seenInCards || prof.progress[wId].seenInCards)
-            };
-          }
-        });
-      }
-      if (Array.isArray(prof.favorites)) {
-        prof.favorites.forEach(id => {
-          const sid = String(id).trim();
-          if (sid && !deletedFavs.has(sid)) mergedFavsSet.add(sid);
-        });
-      }
-      if (prof.weeklyXp && prof.weeklyXp > maxHistoricalXp) {
-        maxHistoricalXp = prof.weeklyXp;
-      }
-      if (prof.avatar && !foundAvatar) {
-        let av = prof.avatar;
-        if (av.startsWith('./')) av = av.slice(2);
-        if (av.includes('?v=')) av = av.split('?')[0];
-        foundAvatar = av;
-      }
-    }
-
-    if (!foundAvatar) {
-      foundAvatar = fbDoc?.profile?.avatar || fullDoc?.profile?.avatar || detDoc?.profile?.avatar || user?.avatar || '';
-    }
+    let foundAvatar = fbDoc?.profile?.avatar || fullDoc?.profile?.avatar || detDoc?.profile?.avatar || user?.avatar || '';
 
     if (foundAvatar) {
       localStorage.setItem(`avatar_${uId}`, foundAvatar);
@@ -1459,7 +1390,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     // Merge XP from Firestore and local
     const xpKey = `xp_${uId}_${wKey}`;
     const localXp = getUserWeeklyXP(uId, wKey);
-    let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0), maxHistoricalXp);
+    let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0));
 
     // Check profile XP
     if (fullDoc?.profile?.xp || fullDoc?.profile?.totalXp) {
@@ -1501,19 +1432,12 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (fbUid && fbUid !== uId) {
         localStorage.setItem(`xp_${fbUid}_${wKey}`, String(finalFirestoreXp));
       }
-      syncLeaderboardScoreFirestore(uId, wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
-      if (fbUid && fbUid !== uId) {
-        syncLeaderboardScoreFirestore(fbUid, wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
-      }
+      syncLeaderboardScoreFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp, delta: 0 } }));
       }
     }
 
-    if (detId && detId !== uId) {
-      const detFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]'));
-      detFavs.forEach(id => mergedFavsSet.add(String(id)));
-    }
     if (fbUid && fbUid !== uId) {
       const fbFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]'));
       fbFavs.forEach(id => mergedFavsSet.add(String(id)));
@@ -1531,12 +1455,12 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     if (fbUid && fbUid !== uId) {
       localStorage.setItem(`favs_${fbUid}`, JSON.stringify(mergedFavs));
     }
-    saveUserFavoritesFirestore(uId, mergedFavs).catch(() => {});
-    if (fbUid && fbUid !== uId) {
-      saveUserFavoritesFirestore(fbUid, mergedFavs).catch(() => {});
-    }
-    if (detId && detId !== uId && detId !== fbUid) {
-      saveUserFavoritesFirestore(detId, mergedFavs).catch(() => {});
+    const firestoreSyncUid = fbUid || firestoreUid;
+    if (firestoreSyncUid && !String(firestoreSyncUid).startsWith('guest_')) {
+      saveUserFavoritesFirestore(firestoreSyncUid, mergedFavs).catch(() => {});
+      if (deletedFavs && deletedFavs.size > 0) {
+        saveUserDeletedFavoritesFirestore(firestoreSyncUid, Array.from(deletedFavs)).catch(() => {});
+      }
     }
 
     const activeLocalLang = localStorage.getItem('myduo_interface_lang');
@@ -1655,47 +1579,48 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 }
 
 function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
-  const uId = userId || getEffectiveUserId();
-  if (!uId || String(uId).startsWith('guest_')) return;
+  const user = getCurrentUser();
+  if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
+    return;
+  }
+  const uId = userId || user.id;
+  if (!uId || String(uId).startsWith('guest')) return;
 
   const doSync = async () => {
     const wKey = weekKey || getIsoWeekKey();
+    const firestoreUid = getFirestoreUserId(uId);
+    if (!firestoreUid || String(firestoreUid).startsWith('guest')) return;
+
     const progress = JSON.parse(localStorage.getItem(`progress_${uId}`) || '{}');
     const favorites = JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]');
     const weeklyXp = getUserWeeklyXP(uId, wKey);
     const settings = JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}');
     const avatar = localStorage.getItem(`avatar_${uId}`) || '';
-    const user = getCurrentUser();
-    const userName = user && user.name ? user.name : 'Участник';
+    const userName = user && user.name ? user.name : (user.email.split('@')[0] || 'Участник');
 
-    // 100% Cloud Firestore sync
+    // 100% Cloud Firestore sync using Firebase UID
     try {
-      saveUserProfileFirestore(uId, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
+      saveUserProfileFirestore(firestoreUid, { name: userName, avatar }).catch(() => {});
       if (weeklyXp > 0) {
-        syncLeaderboardScoreFirestore(uId, wKey, weeklyXp, userName, avatar).catch(() => {});
+        syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
-      saveUserFavoritesFirestore(uId, favorites).catch(() => {});
-      saveUserSettingsFirestore(uId, settings).catch(() => {});
-      saveBulkProgressFirestore(uId, progress).catch(() => {});
+      saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
+      const delFavsList = Array.from(getDeletedFavoritesSet(uId));
+      if (delFavsList.length > 0) {
+        saveUserDeletedFavoritesFirestore(firestoreUid, delFavsList).catch(() => {});
+      }
+      saveUserSettingsFirestore(firestoreUid, settings).catch(() => {});
+      saveBulkProgressFirestore(firestoreUid, progress).catch(() => {});
 
       const localNotes = getUserNotesLocal();
       if (Object.keys(localNotes).length > 0) {
-        saveUserNotesFirestore(uId, localNotes).catch(() => {});
+        saveUserNotesFirestore(firestoreUid, localNotes).catch(() => {});
       }
 
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
         const customOnly = cachedWordsList.filter(w => String(w.id || '').startsWith('custom_'));
         if (customOnly.length > 0) {
-          saveUserCustomWordsFirestore(uId, customOnly).catch(() => {});
-        }
-      }
-      
-      if (user?.firebaseUid && user.firebaseUid !== uId) {
-        saveUserProfileFirestore(user.firebaseUid, { name: userName, avatar, email: user?.email || '' }).catch(() => {});
-        saveBulkProgressFirestore(user.firebaseUid, progress).catch(() => {});
-        saveUserFavoritesFirestore(user.firebaseUid, favorites).catch(() => {});
-        if (weeklyXp > 0) {
-          syncLeaderboardScoreFirestore(user.firebaseUid, wKey, weeklyXp, userName, avatar).catch(() => {});
+          saveUserCustomWordsFirestore(firestoreUid, customOnly).catch(() => {});
         }
       }
     } catch (fsErr) {
@@ -1963,11 +1888,12 @@ async function toggleFavoriteApi(wordId, isFavorite) {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: favs }));
   }
 
-  // Synchronize to Firestore for ALL user IDs (userId, fbUid, detId)
-  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
-  for (const id of idsToSync) {
+  // Synchronize to Firestore only via Firebase UID (required by security rules: request.auth.uid == userId)
+  const fsUid = fbUid || getFirestoreUserId(userId);
+  if (fsUid && !String(fsUid).startsWith('guest_')) {
     try {
-      saveUserFavoritesFirestore(id, favs).catch(() => {});
+      saveUserFavoritesFirestore(fsUid, favs).catch(() => {});
+      saveUserDeletedFavoritesFirestore(fsUid, Array.from(getDeletedFavoritesSet(userId))).catch(() => {});
     } catch (e) {}
   }
 
@@ -2007,10 +1933,11 @@ async function clearAllFavoritesApi() {
     window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: [] }));
   }
 
-  const idsToSync = Array.from(new Set([userId, fbUid, detId].filter(id => id && !String(id).startsWith('guest_'))));
-  for (const id of idsToSync) {
+  const fsUid = fbUid || getFirestoreUserId(userId);
+  if (fsUid && !String(fsUid).startsWith('guest_')) {
     try {
-      saveUserFavoritesFirestore(id, []).catch(() => {});
+      saveUserFavoritesFirestore(fsUid, []).catch(() => {});
+      saveUserDeletedFavoritesFirestore(fsUid, Array.from(getDeletedFavoritesSet(userId))).catch(() => {});
     } catch (e) {}
   }
 
@@ -2622,10 +2549,7 @@ function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
 }
 
 async function transcribeAudio(audioBlob, mimeType, expectedWord) {
-  // Use Web Speech API for real speech recognition (works in Chrome/Android WebView)
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    // Fallback: feature not available — return neutral result (no score)
+  if (!audioBlob) {
     return {
       transcribed: '',
       isCorrect: false,
@@ -2637,78 +2561,105 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
 
   return new Promise((resolve) => {
     const t0 = Date.now();
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 5;
-    recognition.continuous = false;
-
-    let settled = false;
-    const settle = (result) => {
-      if (settled) return;
-      settled = true;
-      resolve(result);
-    };
-
-    recognition.onresult = (event) => {
-      const totalMs = Date.now() - t0;
-      const expected = (expectedWord || '').toLowerCase().trim();
-      let bestTranscribed = '';
-      let bestScore = 0;
-
-      // Check all alternatives for the best match
-      for (let i = 0; i < event.results[0].length; i++) {
-        const alt = event.results[0][i].transcript.toLowerCase().trim();
-        // Simple similarity: exact match or one contains the other
-        let score = 0;
-        if (alt === expected) {
-          score = 100;
-        } else if (alt.includes(expected) || expected.includes(alt)) {
-          score = Math.round(85 * (Math.min(alt.length, expected.length) / Math.max(alt.length, expected.length)));
-        } else {
-          // Character-level similarity (Dice coefficient on bigrams)
-          const bigrams = (s) => { const b = new Set(); for (let j = 0; j < s.length - 1; j++) b.add(s[j] + s[j+1]); return b; };
-          const bA = bigrams(alt), bE = bigrams(expected);
-          let inter = 0; bA.forEach(b => { if (bE.has(b)) inter++; });
-          score = bA.size + bE.size > 0 ? Math.round((2 * inter / (bA.size + bE.size)) * 100) : 0;
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const base64Data = (reader.result || '').split(',')[1];
+        if (!base64Data) {
+          return resolve({
+            transcribed: '',
+            isCorrect: false,
+            score: null,
+            feedback: '',
+            timings: { totalClientMs: Date.now() - t0 },
+          });
         }
-        if (score > bestScore) { bestScore = score; bestTranscribed = alt; }
-      }
 
-      const isCorrect = bestScore >= 70;
-      let feedback = '';
-      if (!isCorrect && bestTranscribed) {
-        feedback = `Услышано: «${bestTranscribed}»`;
+        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribe`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: 'transcribe',
+            audioBase64: base64Data,
+            mimeType: mimeType || 'audio/webm',
+            expectedWord: expectedWord || '',
+          }),
+        });
+        const json = await response.json();
+        const data = json && json.data ? json.data : json;
+        if (data && typeof data === 'object') {
+          if (!data.timings) data.timings = {};
+          data.timings.totalClientMs = Date.now() - t0;
+        }
+        resolve(data);
+      } catch (err) {
+        console.warn('Backend transcribeAudio error:', err);
+        resolve({
+          transcribed: '',
+          isCorrect: false,
+          score: null,
+          feedback: '',
+          timings: { totalClientMs: Date.now() - t0 },
+        });
       }
-
-      settle({
-        transcribed: bestTranscribed,
-        isCorrect,
-        score: bestScore,
-        feedback,
-        timings: { totalClientMs: totalMs },
+    };
+    reader.onerror = () => {
+      resolve({
+        transcribed: '',
+        isCorrect: false,
+        score: null,
+        feedback: '',
+        timings: { totalClientMs: Date.now() - t0 },
       });
     };
-
-    recognition.onerror = (event) => {
-      settle({ transcribed: '', isCorrect: false, score: null, feedback: '', timings: { totalClientMs: Date.now() - t0 } });
-    };
-
-    recognition.onend = () => {
-      // If no result was fired before end
-      settle({ transcribed: '', isCorrect: false, score: null, feedback: '', timings: { totalClientMs: Date.now() - t0 } });
-    };
-
-    recognition.start();
+    reader.readAsDataURL(audioBlob);
   });
 }
 
-
 async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
-  return {
-    success: true,
-    totalClientMs: 10,
-  };
+  return new Promise((resolve) => {
+    const t0 = Date.now();
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const base64Data = (reader.result || '').split(',')[1];
+        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribeping`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: 'transcribePing',
+            audioBase64: base64Data || '',
+            mimeType: mimeType || 'audio/webm',
+            expectedWord: expectedWord || '',
+          }),
+        });
+        const json = await response.json();
+        const data = json && json.data ? json.data : json;
+        if (data && typeof data === 'object') {
+          data.totalClientMs = Date.now() - t0;
+        }
+        resolve(data);
+      } catch (err) {
+        resolve({
+          success: false,
+          error: err.message,
+          totalClientMs: Date.now() - t0,
+        });
+      }
+    };
+    reader.onerror = () => {
+      resolve({
+        success: false,
+        error: 'FileReader error',
+        totalClientMs: Date.now() - t0,
+      });
+    };
+    reader.readAsDataURL(audioBlob);
+  });
 }
 
 async function getCloudWordOfTheDayId(userId) {
@@ -2937,9 +2888,11 @@ function tickSessionActiveTime() {
 }
 
 async function sendUserAnalytics(isClosing = false, customStatus = null) {
-  if (typeof window === 'undefined') return;
-  const currentUserId = getEffectiveUserId();
-  if (!currentUserId || String(currentUserId).startsWith('guest_')) return;
+  const currentUser = getCurrentUser();
+  if (!currentUser || !currentUser.email || !currentUser.id || String(currentUser.id).startsWith('guest')) {
+    return;
+  }
+  const currentUserId = currentUser.id;
   ensureActiveSession(currentUserId);
   tickSessionActiveTime();
 
@@ -3088,9 +3041,19 @@ try {
 
 async function addCustomWord({ word, translation, category, notes }) {
   const cleanW = String(word || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
-  const cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
+  let cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
   const cleanCat = String(category || 'Общие').trim();
   const cleanNotes = String(notes || '').trim();
+
+  // If translation was left empty or equals the word itself, auto-resolve with suggestTranslations
+  if (!cleanTrans || cleanTrans.toLowerCase() === cleanW.toLowerCase()) {
+    try {
+      const suggested = await suggestTranslations(cleanW);
+      if (suggested && Array.isArray(suggested.suggestions) && suggested.suggestions[0]) {
+        cleanTrans = suggested.suggestions[0];
+      }
+    } catch (e) {}
+  }
 
   const localWord = {
     id: `custom_${Date.now()}`,
@@ -3395,7 +3358,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
         return {
           word: item.word,
           original: item.original,
-          translation: translation || item.word,
+          translation: translation || '',
           transcription: '',
           level: 'A2',
           category: cat,
@@ -3405,7 +3368,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
         return {
           word: item.word,
           original: item.original,
-          translation: item.word,
+          translation: '',
           transcription: '',
           level: 'A2',
           category: cat,
@@ -3651,4 +3614,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=378.0';

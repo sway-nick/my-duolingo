@@ -420,11 +420,12 @@ function isVoicePackDownloaded(accent = 'us') {
  */
 function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
   const norm = String(category || '').toLowerCase().trim();
-  if (norm.includes('elementary')) {
-    return true; // Pre-packaged in APK!
-  }
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
+  if (norm.includes('elementary')) {
+    // US Elementary is pre-packaged in APK; UK Elementary must be downloaded
+    if (!isUk) return true;
+  }
 
   try {
     return localStorage.getItem(`myduo_cat_downloaded_${targetAccent}_${norm}`) === 'true';
@@ -981,38 +982,114 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       }
     };
 
-    // Primary & direct high-quality speech engine: Web Speech API
-    if ('speechSynthesis' in window) {
+    function playNetworkTts() {
+      if (resolved) return;
+      try {
+        const audio = getAutoplayAudio() || new Audio();
+        activeAutoplayAudio = audio;
+
+        // Primary online TTS: Google Translate TTS supports full phrases, commas, and multi-word translations seamlessly
+        const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
+        // Secondary fallback: Youdao accepts only single headwords (take parts[0] to prevent HTTP 500 error)
+        const youdaoUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(parts[0] || spokenText)}&le=${encodeURIComponent(langCode)}`;
+
+        let triedFallback = false;
+        audio.src = googleUrl;
+        audio.currentTime = 0;
+
+        const fallbackTimer = setTimeout(finish, 5000);
+        window.__activeSpeechTimer = fallbackTimer;
+
+        audio.onended = () => {
+          clearTimeout(fallbackTimer);
+          finish();
+        };
+
+        const tryFallbackOrFinish = () => {
+          if (!triedFallback) {
+            triedFallback = true;
+            try {
+              audio.src = youdaoUrl;
+              audio.currentTime = 0;
+              const p2 = audio.play();
+              if (p2 !== undefined) {
+                p2.catch(() => {
+                  clearTimeout(fallbackTimer);
+                  finish();
+                });
+              }
+            } catch (e) {
+              clearTimeout(fallbackTimer);
+              finish();
+            }
+          } else {
+            clearTimeout(fallbackTimer);
+            finish();
+          }
+        };
+
+        audio.onerror = tryFallbackOrFinish;
+
+        const p = audio.play();
+        if (p !== undefined) {
+          p.catch(tryFallbackOrFinish);
+        }
+      } catch (e) {
+        finish();
+      }
+    }
+
+    // Primary & direct high-quality speech engine: Web Speech API (if native voice for language exists)
+    // Note: on mobile devices when screen is locked/backgrounded or autoplay is active, Web Speech API freezes or fails silently.
+    // In that case, bypass speech synthesis and jump directly to reliable HTML5 Audio network TTS.
+    const isBackgroundOrHidden = (typeof document !== 'undefined' && document.hidden) || (typeof window !== 'undefined' && window.__favsAutoplayRunning);
+    if (!isBackgroundOrHidden && 'speechSynthesis' in window) {
       try {
         if (window.speechSynthesis.paused) {
           window.speechSynthesis.resume();
+        }
+
+        const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
+          ? window.speechSynthesis.getVoices()
+          : cachedVoices;
+
+        let matched = null;
+        if (availableVoices && availableVoices.length > 0) {
+          matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
+          if (!matched) {
+            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+          }
+        }
+
+        // If voices list is already populated and no matching voice for this language exists, skip Web Speech API to avoid wrong accent/silence
+        if (availableVoices && availableVoices.length > 0 && !matched) {
+          playNetworkTts();
+          return;
         }
 
         const utterance = new SpeechSynthesisUtterance(spokenText);
         utterance.lang = fullLang;
         utterance.rate = 0.88;
         utterance.pitch = 1.0;
-
-        try {
-          const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
-            ? window.speechSynthesis.getVoices()
-            : cachedVoices;
-
-          let matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
-          if (!matched) {
-            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
-          }
-          if (matched) {
-            utterance.voice = matched;
-          }
-        } catch (e) {}
+        if (matched) {
+          utterance.voice = matched;
+        }
 
         // Global reference to prevent Chrome garbage-collection bug
         window.__activeSpeechUtterance = utterance;
 
         utterance.onend = finish;
         utterance.onerror = () => {
-          finish();
+          if (resumeInterval) {
+            clearInterval(resumeInterval);
+            resumeInterval = null;
+          }
+          if (window.__activeSpeechTimer) {
+            clearTimeout(window.__activeSpeechTimer);
+            window.__activeSpeechTimer = null;
+          }
+          window.__activeSpeechUtterance = null;
+          playNetworkTts();
         };
 
         // iOS keep-alive while speech synthesis runs
@@ -1033,32 +1110,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     }
 
     // Secondary fallback
-    try {
-      const ttsUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(spokenText)}&le=ru`;
-      const audio = getAutoplayAudio() || new Audio();
-      activeAutoplayAudio = audio;
-      audio.src = ttsUrl;
-      audio.currentTime = 0;
-
-      const fallbackTimer = setTimeout(finish, 4000);
-      window.__activeSpeechTimer = fallbackTimer;
-
-      audio.onended = () => {
-        clearTimeout(fallbackTimer);
-        finish();
-      };
-      audio.onerror = () => {
-        clearTimeout(fallbackTimer);
-        finish();
-      };
-
-      const p = audio.play();
-      if (p !== undefined) {
-        p.catch(() => finish());
-      }
-    } catch (e) {
-      finish();
-    }
+    playNetworkTts();
   });
 }
 
@@ -1217,19 +1269,116 @@ if (typeof document !== 'undefined') {
   });
 }
 
+let silentAudioLoopElement = null;
+
 /**
- * Updates MediaSession status for mobile background audio priority
+ * Starts a silent audio loop to keep mobile browsers (Safari/Chrome/WebView)
+ * and OS audio sessions active without throttling JS timers when screen turns off.
  */
-function updateMediaSessionStatus(isPlaying, currentWord = null) {
+function startSilentAudioAnchor() {
+  if (typeof window === 'undefined') return;
+  try {
+    if (!silentAudioLoopElement) {
+      // 1-second silent WAV audio data URI
+      const silentWav = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      silentAudioLoopElement = new Audio(silentWav);
+      silentAudioLoopElement.loop = true;
+      silentAudioLoopElement.volume = 0.001; // virtually silent, keeps hardware audio pipeline open
+    }
+    const p = silentAudioLoopElement.play();
+    if (p !== undefined) p.catch(() => {});
+  } catch (e) {}
+}
+
+/**
+ * Stops and resets the silent audio anchor.
+ */
+function stopSilentAudioAnchor() {
+  if (silentAudioLoopElement) {
+    try {
+      silentAudioLoopElement.pause();
+      silentAudioLoopElement.currentTime = 0;
+    } catch (e) {}
+  }
+}
+
+/**
+ * Interfaces with native Android foreground service bridge if running in APK
+ */
+function startNativeBackgroundPlayback(word = '', translation = '') {
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.startBackgroundMode === 'function') {
+    try {
+      window.AndroidAudioBridge.startBackgroundMode(String(word || ''), String(translation || ''));
+    } catch (e) {}
+  }
+}
+
+function updateNativeBackgroundPlayback(word = '', translation = '', isPlaying = true) {
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.updateNotification === 'function') {
+    try {
+      window.AndroidAudioBridge.updateNotification(String(word || ''), String(translation || ''), Boolean(isPlaying));
+    } catch (e) {}
+  }
+}
+
+function stopNativeBackgroundPlayback() {
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopBackgroundMode === 'function') {
+    try {
+      window.AndroidAudioBridge.stopBackgroundMode();
+    } catch (e) {}
+  }
+}
+
+let mediaSessionHandlersRegistered = false;
+
+function setupMediaSessionHandlers() {
+  if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+  if (mediaSessionHandlersRegistered) return;
+  mediaSessionHandlersRegistered = true;
+
+  try {
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (typeof window.onBackgroundAudioToggle === 'function') {
+        window.onBackgroundAudioToggle(true);
+      }
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      if (typeof window.onBackgroundAudioToggle === 'function') {
+        window.onBackgroundAudioToggle(false);
+      }
+    });
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      if (typeof window.onBackgroundAudioNext === 'function') {
+        window.onBackgroundAudioNext();
+      }
+    });
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      if (typeof window.onBackgroundAudioPrev === 'function') {
+        window.onBackgroundAudioPrev();
+      }
+    });
+  } catch (e) {}
+}
+
+/**
+ * Updates MediaSession status for mobile background audio priority, lock screen widget, and headphones controls
+ */
+function updateMediaSessionStatus(isPlaying, currentWord = null, translationText = '') {
   if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
     try {
+      setupMediaSessionHandlers();
       if (isPlaying) {
         navigator.mediaSession.playbackState = 'playing';
         if (currentWord && currentWord.word) {
+          const artistText = translationText || currentWord.translation || 'English Breakfast';
           navigator.mediaSession.metadata = new MediaMetadata({
             title: currentWord.word,
-            artist: 'My Duolingo',
-            album: 'Favorites Audio Mode',
+            artist: artistText,
+            album: 'English Breakfast • Избранное',
+            artwork: [
+              { src: 'apple-touch-icon.png', sizes: '192x192', type: 'image/png' },
+              { src: 'apple-touch-icon.png', sizes: '512x512', type: 'image/png' },
+            ],
           });
         }
       } else {
@@ -1267,6 +1416,12 @@ export const AudioService = {
   isWordAudioPlaying,
   requestScreenWakeLock,
   releaseScreenWakeLock,
+  startSilentAudioAnchor,
+  stopSilentAudioAnchor,
+  startNativeBackgroundPlayback,
+  updateNativeBackgroundPlayback,
+  stopNativeBackgroundPlayback,
+  setupMediaSessionHandlers,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
@@ -1304,6 +1459,12 @@ export {
   isWordAudioPlaying,
   requestScreenWakeLock,
   releaseScreenWakeLock,
+  startSilentAudioAnchor,
+  stopSilentAudioAnchor,
+  startNativeBackgroundPlayback,
+  updateNativeBackgroundPlayback,
+  stopNativeBackgroundPlayback,
+  setupMediaSessionHandlers,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,

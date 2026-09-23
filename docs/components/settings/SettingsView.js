@@ -1,12 +1,22 @@
-import { getUserSettings, saveUserSettings } from '../../services/api.js?v=200.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=200.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=200.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=200.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=200.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=200.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=200.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=200.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=200.0';
+﻿import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=378.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=378.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=378.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=378.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=378.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=378.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=378.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=378.0';
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 async function renderSettingsView(containerSelector = '#app-content', onUserChange = () => {}) {
   const container = document.querySelector(containerSelector);
@@ -14,8 +24,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   if (window._activeTab && window._activeTab !== 'settings') return;
 
   const user = getCurrentUser();
+  const isLoggedIn = Boolean(user && user.id && user.id !== 'guest' && !String(user.id).startsWith('guest_') && user.email);
   const avatar = getUserAvatar();
   const currentTheme = getSavedTheme();
+
+  const displayName = isLoggedIn
+    ? (user.name || user.email.split('@')[0])
+    : (t('settings_guest_mode') || t('demo') || 'Guest (Demo)');
+  const displaySub = isLoggedIn
+    ? (user.email || '')
+    : (t('settings_login_sub') || 'Log in to sync progress');
 
   container.innerHTML = `
     <div class="settings-page" style="position: relative;">
@@ -29,19 +47,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${
             avatar
               ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" referrerpolicy="no-referrer" />`
-              : `<div class="profile-avatar-placeholder">${user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤'}</div>`
+              : `<div class="profile-avatar-placeholder">${escapeHtml(displayName.trim().charAt(0).toUpperCase() || '👤')}</div>`
           }
           <div class="avatar-edit-badge" title="${t('settings_avatar_edit_tooltip')}">🎭</div>
         </div>
         <div class="profile-details" style="flex: 1; min-width: 0;">
-          <h3 class="profile-name">${user ? user.name : (t('settings_guest_mode') || t('demo') || 'Guest Mode')}</h3>
-          ${user ? '' : `<p class="profile-sub">${t('settings_login_sub') || 'Log in to sync progress'}</p>`}
+          <h3 class="profile-name">${escapeHtml(displayName)}</h3>
+          <p class="profile-sub">${escapeHtml(displaySub)}</p>
         </div>
         <div>
           ${
-            user
-              ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout')}</button>`
-              : `<button class="primary-button settings-auth-btn" id="login-modal-btn">${t('settings_login')}</button>`
+            isLoggedIn
+              ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
+              : `<button class="primary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>`
           }
         </div>
       </div>
@@ -152,7 +170,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <div class="settings-footer">
         ${
-          user
+          isLoggedIn
             ? `
           <!-- Delete Account Button (Clean, no card container) -->
           <button type="button" id="delete-account-btn" class="settings-delete-account-btn">
@@ -219,7 +237,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         if (!window._activeTab || window._activeTab === 'settings') {
           renderSettingsView(containerSelector, onUserChange);
         }
-      });
+      }, 'login');
+    });
+  }
+
+  const registerBtn = container.querySelector('#register-modal-btn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', () => {
+      renderAuthModal(async () => {
+        await onUserChange();
+        if (!window._activeTab || window._activeTab === 'settings') {
+          renderSettingsView(containerSelector, onUserChange);
+        }
+      }, 'register');
     });
   }
 
@@ -301,6 +331,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       updateVoiceButtons();
       speakWord('Hello', null, 'en-GB', 'uk', true);
       triggerAutoSave();
+      // Show download modal for UK Elementary audio pack if not yet downloaded
+      if (typeof window.showAccentDownloadModalIfNeeded === 'function') {
+        window.showAccentDownloadModalIfNeeded('uk');
+      }
     });
 
     usVoiceBtn.addEventListener('click', () => {
@@ -455,12 +489,33 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           await deleteCurrentUserAccount();
           logoutUser();
           alert(t('settings_account_deleted'));
-          window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
         } catch (err) {
           console.warn('Delete account error:', err);
           logoutUser();
-          window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
         }
+
+        // ── Полная очистка всех локальных данных ──────────────────────────
+        try { localStorage.clear(); } catch (e) {}
+        try { sessionStorage.clear(); } catch (e) {}
+
+        // Удаляем все CacheStorage-кэши (скачанное аудио и Service Worker кэши)
+        try {
+          if ('caches' in window) {
+            const cacheKeys = await caches.keys();
+            await Promise.all(cacheKeys.map((k) => caches.delete(k)));
+          }
+        } catch (e) {}
+
+        // Отписываем и удаляем Service Worker регистрации
+        try {
+          if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map((r) => r.unregister()));
+          }
+        } catch (e) {}
+
+        // Редирект после очистки
+        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
       }
     });
   }

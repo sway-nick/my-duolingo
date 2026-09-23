@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=200.0';
-import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=200.0';
-import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
+﻿import { speakWord } from '../../services/audioService.js?v=378.0';
+import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=378.0';
+import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=378.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -126,6 +126,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         onRemoveFavorite(id);
 
         const remainingCards = container.querySelectorAll('.fav-card');
+        const titleEl = container.querySelector('.page-header h2');
+        if (titleEl) {
+          titleEl.textContent = `${t('fav_title')}: ${remainingCards.length}`;
+        }
         if (remainingCards.length === 0) {
           renderFavoritesView([], containerSelector, options);
         }

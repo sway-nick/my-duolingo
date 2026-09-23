@@ -1,4 +1,4 @@
-import { StorageService } from '../services/storageService.js?v=200.0';
+﻿import { StorageService } from '../services/storageService.js?v=378.0';
 
 export function renderSettings(container) {
     if (!container) return;
@@ -7,8 +7,7 @@ export function renderSettings(container) {
         theme: 'light',
         soundEnabled: true,
         speechRate: 1.0,
-        dailyGoal: 3,
-        apiUrl: ''
+        dailyGoal: 3
     };
     
     const html = `
@@ -45,16 +44,6 @@ export function renderSettings(container) {
                         <input type="number" id="daily-goal" min="1" max="20" value="${settings.dailyGoal}">
                     </div>
                     
-                    <div class="setting-row advanced-row">
-                        <details>
-                            <summary>Дополнительно</summary>
-                            <div class="advanced-content">
-                                <label for="api-url">API URL</label>
-                                <input type="text" id="api-url" value="${settings.apiUrl || ''}" placeholder="https://script.google.com/...">
-                            </div>
-                        </details>
-                    </div>
-                    
                     <div class="setting-row danger-zone">
                         <button id="reset-progress-btn" class="danger-btn">Сбросить прогресс</button>
                     </div>
@@ -78,7 +67,6 @@ export function renderSettings(container) {
     const speechRate = document.getElementById('speech-rate');
     const speechRateVal = document.getElementById('speech-rate-val');
     const dailyGoal = document.getElementById('daily-goal');
-    const apiUrl = document.getElementById('api-url');
     const resetBtn = document.getElementById('reset-progress-btn');
     
     closeBtn.addEventListener('click', hideSettingsModal);
@@ -107,11 +95,6 @@ export function renderSettings(container) {
     
     dailyGoal.addEventListener('change', (e) => {
         settings.dailyGoal = parseInt(e.target.value, 10) || 3;
-        StorageService.updateSettings(settings);
-    });
-    
-    apiUrl.addEventListener('change', (e) => {
-        settings.apiUrl = e.target.value;
         StorageService.updateSettings(settings);
     });
     

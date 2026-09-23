@@ -10,7 +10,7 @@
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
-        var APP_BUILD = '20260919_v365';
+        var APP_BUILD = '20260923_v377';
         try {
           var isAndroid = !!(
             window.androidBridge ||
@@ -71,7 +71,7 @@
         };
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function() {
-            navigator.serviceWorker.register('./sw.js').catch(function() {});
+            navigator.serviceWorker.register('./sw.js?v=378.0').catch(function() {});
           });
         }
       })();
@@ -92,7 +92,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=221.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=378.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -160,19 +160,19 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=221.0';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=221.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=221.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=221.0';
-      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=221.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=221.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=221.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=221.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=221.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=221.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=221.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=221.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=221.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=378.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=378.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=378.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=378.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=378.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=378.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=378.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=378.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=378.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=378.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=378.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=378.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=378.0';
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -298,10 +298,113 @@
         } catch (e) {}
       }
 
+      // Expose a global function so SettingsView can trigger the "download UK Elementary audio" modal
+      window.showAccentDownloadModalIfNeeded = function(accent) {
+        if (accent !== 'uk') return false;
+        // Elementary is the bundled category — check if its UK audio pack is downloaded
+        const ELEMENTARY_CAT = 'Elementary';
+        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT)) return false;
+
+        const catWords = allWords.filter((w) => {
+          const wCat = (w.category || '').toLowerCase().trim();
+          return wCat === ELEMENTARY_CAT.toLowerCase();
+        });
+        const count = catWords.length || 2451;
+        const sizeMb = Math.max(1, Math.round((count * 8) / 1024));
+        const details = getCategoryDetails(ELEMENTARY_CAT);
+        const strings = getCategoryVoiceModalStrings(details.title, count, sizeMb);
+
+        const existing = document.querySelector('#cat-voice-download-modal');
+        if (existing) existing.remove();
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.id = 'cat-voice-download-modal';
+        modal.style.cssText = 'position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 16px; box-sizing: border-box;';
+        modal.innerHTML = `
+          <div class="modal-content" style="text-align: center; max-width: 350px; width: 100%; padding: 26px 20px; border-radius: 20px; box-sizing: border-box; animation: scaleUp 0.2s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">📥</div>
+            <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
+              ${strings.title}
+            </h3>
+            <p id="cat-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
+              ${strings.desc}
+            </p>
+            <div id="cat-progress-wrap" style="display: none; margin-bottom: 16px;">
+              <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
+                <div id="cat-progress-bar" style="background: var(--btn-green-bg, #22c55e); height: 100%; width: 0%; transition: width 0.15s ease;"></div>
+              </div>
+              <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
+                ${strings.downloadBtn}
+              </button>
+              <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%; border-radius: 12px;">
+                ${strings.cancelBtn}
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        const downloadBtn = modal.querySelector('#cat-modal-download-btn');
+        const cancelBtn = modal.querySelector('#cat-modal-cancel-btn');
+        const progressWrap = modal.querySelector('#cat-progress-wrap');
+        const progressBar = modal.querySelector('#cat-progress-bar');
+        const progressText = modal.querySelector('#cat-progress-text');
+        const descEl = modal.querySelector('#cat-modal-desc');
+
+        cancelBtn.addEventListener('click', () => { modal.remove(); });
+
+        downloadBtn.addEventListener('click', async () => {
+          downloadBtn.disabled = true;
+          cancelBtn.style.display = 'none';
+          progressWrap.style.display = 'block';
+          if (descEl) descEl.textContent = strings.downloading;
+          try {
+            await downloadCategoryVoicePack(accent, ELEMENTARY_CAT, catWords, (percent) => {
+              if (progressBar) progressBar.style.width = `${percent}%`;
+              if (progressText) progressText.textContent = `${percent}%`;
+            });
+            modal.remove();
+          } catch (err) {
+            console.warn('UK accent download failed:', err);
+            downloadBtn.disabled = false;
+            cancelBtn.style.display = 'block';
+            downloadBtn.textContent = strings.retryBtn;
+          }
+        });
+
+        return true;
+      };
+
       function handleFavoriteToggle(wordId, isFav) {
         const idStr = String(wordId);
         if (isFav) favoriteIds.add(idStr);
         else favoriteIds.delete(idStr);
+
+        // If unfavoriting during "Repeat Favorites" practice — remove card from the list
+        if (!isFav && favoritePracticeWords && favoritePracticeWords.length > 0) {
+          const prevLen = favoritePracticeWords.length;
+          favoritePracticeWords = favoritePracticeWords.filter(
+            (w) => String(w.id) !== idStr
+          );
+          if (favoritePracticeWords.length < prevLen) {
+            // Keep index in bounds
+            if (currentWordIndex >= favoritePracticeWords.length) {
+              currentWordIndex = Math.max(0, favoritePracticeWords.length - 1);
+            }
+            if (favoritePracticeWords.length === 0) {
+              // No more favorites — exit practice mode
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'cards';
+              currentWordIndex = 0;
+            }
+            renderTrainingTab();
+            return;
+          }
+        }
 
         if (activeTab === 'favorites') {
           renderTab(activeTab);
@@ -544,6 +647,7 @@
           if (window._showHubScreen) {
             currentMethod = 'input';
           } else if (!isMethodAvailable(currentMethod)) {
+            const prevMethod = currentMethod;
             // STRICT FORWARD-ONLY CONVEYOR PROGRESSION:
             // Cards -> Quiz -> Pairs -> Test -> Finished (Hub)
             if (currentMethod === 'cards') {
@@ -573,6 +677,9 @@
                 window._showHubScreen = true;
                 currentMethod = 'input';
               }
+            }
+            if (currentMethod !== prevMethod) {
+              currentWordIndex = 0;
             }
           }
 
@@ -646,6 +753,7 @@
           const nextCatBtn = content.querySelector('#next-category-btn');
           if (nextCatBtn && nextCategory) {
             nextCatBtn.addEventListener('click', () => {
+              clearActiveConveyorBatch();
               localStorage.setItem('myduo_dict_category', nextCategory);
               userSettings.category = nextCategory;
               userSettings.preferredMethod = 'cards';
@@ -778,31 +886,13 @@
             return;
           }
 
-          // If words completed Pairs -> show completion card with button to Test
+          // If words completed Pairs -> directly launch Test mode!
           if (!window._showHubScreen && currentMethod === 'pairs' && testQueue.length > 0) {
-            content.innerHTML = `
-              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
-                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                  ${t('train_congrats_mastered')}
-                </p>
-                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                  <button class="primary-button btn-green" id="go-test-btn">
-                    ${t('train_go_test')}
-                  </button>
-                </div>
-              </div>
-            `;
-
-            const goTestBtn = content.querySelector('#go-test-btn');
-            if (goTestBtn) {
-              goTestBtn.addEventListener('click', () => {
-                userSettings.preferredMethod = 'input';
-                saveUserSettings(userSettings);
-                currentWordIndex = 0;
-                renderTrainingTab();
-              });
-            }
+            currentMethod = 'input';
+            userSettings.preferredMethod = 'input';
+            saveUserSettings(userSettings);
+            currentWordIndex = 0;
+            renderTrainingTab();
             return;
           }
 
@@ -1365,6 +1455,7 @@
                   window._isCategorySelectOpen = false;
                   window._showHubScreen = false;
                   favoritePracticeWords = null;
+                  clearActiveConveyorBatch();
                   userSettings.category = chosenCat;
                   userSettings.preferredMethod = 'cards';
                   window._explicitCardsOpened = true;
@@ -1445,6 +1536,7 @@
                       window._isCategorySelectOpen = false;
                       window._showHubScreen = false;
                       favoritePracticeWords = null;
+                      clearActiveConveyorBatch();
                       userSettings.category = chosenCat;
                       userSettings.preferredMethod = 'cards';
                       window._explicitCardsOpened = true;
@@ -1466,6 +1558,7 @@
                 window._isCategorySelectOpen = false;
                 window._showHubScreen = false;
                 favoritePracticeWords = null;
+                clearActiveConveyorBatch();
                 userSettings.category = chosenCat;
                 userSettings.preferredMethod = 'cards';
                 window._explicitCardsOpened = true;
@@ -1572,14 +1665,32 @@
           if (currentMethod === 'input') return (p.inputCorrect || 0) < 2 && !p.roundTestDone && !isWordMastered(p);
           return true;
         });
-        const isSingleRemainingWord = unfinishedInQueue.length <= 1;
+        const isSingleRemainingWord = unfinishedInQueue.length <= 1 || (currentMethod === 'input' && testQueue.length <= 1);
 
         if (isFavPracticeActive && currentWordIndex >= activeWords.length) {
+          if (window.__favsAutoplayRunning) {
+            // Endless loop mode for background player: wrap to first word and continue
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          }
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           currentWordIndex = 0;
           renderTrainingTab();
           return;
+        }
+
+        if (!isFavPracticeActive && currentMethod === 'input' && currentWordIndex >= activeWords.length) {
+          if (testQueue.length === 0 || unfinishedInQueue.length === 0) {
+            window._trainingRoundJustCompleted = true;
+            window._showHubScreen = true;
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          } else {
+            currentWordIndex = 0;
+          }
         }
 
         const currentWord = activeWords[currentWordIndex % activeWords.length];
@@ -1616,6 +1727,8 @@
           onMethodChange: (newMethod) => {
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
+            stopSilentAudioAnchor();
+            stopNativeBackgroundPlayback();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
@@ -1632,12 +1745,15 @@
           onCategoryChange: (newCategory) => {
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
+            stopSilentAudioAnchor();
+            stopNativeBackgroundPlayback();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
             }
             favoritePracticeWords = null;
             favoritePracticeMethod = 'cards';
+            clearActiveConveyorBatch();
             userSettings.category = newCategory;
             saveUserSettings(userSettings);
             currentWordIndex = 0;
@@ -1656,7 +1772,7 @@
             incrementGuestTrainingCount();
             updateHeaderUser();
 
-            if (currentMethod === 'input' && (isSingleRemainingWord || currentWordIndex >= activeWords.length - 1)) {
+            if (currentMethod === 'input' && (isSingleRemainingWord || unfinishedInQueue.length <= 1)) {
               window._trainingRoundJustCompleted = true;
             }
 
@@ -1667,6 +1783,8 @@
             }
 
             if (currentMethod === 'cards' && !isFavPracticeActive) {
+              currentWordIndex = 0;
+            } else if (currentMethod === 'pairs' && !isFavPracticeActive) {
               currentWordIndex = 0;
             } else {
               currentWordIndex += 1;
@@ -1697,6 +1815,8 @@
           favoritePracticeMethod = 'cards';
           window.__favsAutoplayRunning = false;
           releaseScreenWakeLock();
+          stopSilentAudioAnchor();
+          stopNativeBackgroundPlayback();
           if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
           if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             try { window.speechSynthesis.cancel(); } catch (e) {}

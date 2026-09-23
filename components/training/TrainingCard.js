@@ -14,10 +14,15 @@ import {
   isSfxMuted,
   requestScreenWakeLock,
   releaseScreenWakeLock,
+  startSilentAudioAnchor,
+  stopSilentAudioAnchor,
+  startNativeBackgroundPlayback,
+  updateNativeBackgroundPlayback,
+  stopNativeBackgroundPlayback,
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
-} from '../../services/audioService.js?v=200.0';
+} from '../../services/audioService.js?v=378.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -27,8 +32,8 @@ import {
   prepareTrainingBatch,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.js?v=200.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=200.0';
+} from '../../services/api.js?v=378.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=378.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -39,19 +44,29 @@ function sanitizeCategory(cat) {
   );
 }
 
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-const AUTOPLAY_HEADPHONES_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`;
+const AUTOPLAY_HEADPHONES_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`;
 
-const AUTOPLAY_PAUSE_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" style="display: block;"><rect x="5" y="4" width="4.5" height="16" rx="1.5"></rect><rect x="14.5" y="4" width="4.5" height="16" rx="1.5"></rect></svg>`;
+const AUTOPLAY_PAUSE_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display: block;"><rect x="5" y="4" width="4.5" height="16" rx="1.5"></rect><rect x="14.5" y="4" width="4.5" height="16" rx="1.5"></rect></svg>`;
 
 const FC_SOUND_ICON_HTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`;
 
 function getCardFavIconHtml(isFav) {
   if (isFav) {
-    return `<svg width="19" height="19" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+    return `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
   }
   return `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
 }
@@ -398,6 +413,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     activeWords = [],
     currentWordIndex = 0,
     isLastWord = false,
+    isSingleRemaining = false,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
   } = options;
@@ -747,49 +763,78 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     function getQuizDistractorWords() {
       const currentIdStr = String(currentWord.id);
+      const currentWordText = String(currentWord.word || '').toLowerCase().trim();
+      const currentTransText = String(getWordTranslation(currentWord) || '').toLowerCase().trim();
+
       const seenIds = new Set([currentIdStr]);
+      const seenWords = new Set([currentWordText]);
+      const seenTranslations = new Set([currentTransText]);
       const result = [];
+
+      function isValidCandidate(w) {
+        if (!w) return false;
+        const idStr = String(w.id);
+        if (seenIds.has(idStr)) return false;
+        const wText = String(w.word || '').toLowerCase().trim();
+        if (!wText || seenWords.has(wText)) return false;
+        const wTrans = String(getWordTranslation(w) || '').toLowerCase().trim();
+        if (!wTrans || seenTranslations.has(wTrans)) return false;
+        return true;
+      }
+
+      function addCandidate(w) {
+        seenIds.add(String(w.id));
+        seenWords.add(String(w.word || '').toLowerCase().trim());
+        seenTranslations.add(String(getWordTranslation(w) || '').toLowerCase().trim());
+        result.push(w);
+      }
 
       // 1. Приоритет: слова из текущей изучаемой партии (activeWords), отобранной в Карточках
       const shuffledActive = shuffleArray(activeWords || []);
       for (const w of shuffledActive) {
-        const idStr = String(w.id);
-        if (!seenIds.has(idStr)) {
-          seenIds.add(idStr);
-          result.push(w);
+        if (isValidCandidate(w)) {
+          addCandidate(w);
           if (result.length >= 5) return result;
         }
       }
 
-      // 2. Если в активной партии осталось мало слов (конец раунда),
-      // добираем ИСКЛЮЧИТЕЛЬНО из слов, которые пользователь уже видел в Карточках или уже изучил
+      // 2. ИСКЛЮЧИТЕЛЬНО из текущей категории (selectedCategory)! Слова других категорий не подмешиваем
+      const categoryFiltered =
+        selectedCategory === 'All' || selectedCategory === 'Все категории' || !selectedCategory
+          ? (allWords || [])
+          : (allWords || []).filter(
+              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
+            );
+
       const userProgress = getUserProgress();
-      const knownWords = allWords.filter((w) => {
-        const idStr = String(w.id);
-        if (seenIds.has(idStr)) return false;
-        const p = userProgress[w.id] || userProgress[idStr];
+      const knownWords = categoryFiltered.filter((w) => {
+        if (!isValidCandidate(w)) return false;
+        const p = userProgress[w.id] || userProgress[String(w.id)];
         return p && (p.seenInCards === true || isWordMastered(p));
       });
 
       for (const w of shuffleArray(knownWords)) {
-        seenIds.add(String(w.id));
-        result.push(w);
-        if (result.length >= 5) return result;
+        if (isValidCandidate(w)) {
+          addCandidate(w);
+          if (result.length >= 5) return result;
+        }
       }
 
-      // 3. Аварийный fallback (только если в истории пользователя меньше 6 изученных слов)
-      const categoryFiltered =
-        selectedCategory === 'All' || selectedCategory === 'Все категории'
-          ? allWords
-          : allWords.filter(
-              (w) => sanitizeCategory(w.category) === sanitizeCategory(selectedCategory),
-            );
-      const fallbackPool = categoryFiltered.length >= 6 ? categoryFiltered : allWords;
-      for (const w of shuffleArray(fallbackPool)) {
-        if (!seenIds.has(String(w.id))) {
-          seenIds.add(String(w.id));
-          result.push(w);
+      // 3. Fallback строго внутри текущей категории
+      for (const w of shuffleArray(categoryFiltered)) {
+        if (isValidCandidate(w)) {
+          addCandidate(w);
           if (result.length >= 5) return result;
+        }
+      }
+
+      // 4. Аварийный fallback (только если в категории физически не хватает уникальных слов)
+      if (result.length < 5) {
+        for (const w of shuffleArray(allWords || [])) {
+          if (isValidCandidate(w)) {
+            addCandidate(w);
+            if (result.length >= 5) return result;
+          }
         }
       }
 
@@ -800,7 +845,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const currentTrans = getWordTranslation(currentWord);
       const distractorWords = getQuizDistractorWords();
       const otherTranslations = distractorWords.map((w) => getWordTranslation(w));
-      const choices = shuffleArray([currentTrans, ...otherTranslations]);
+      // Гарантия абсолютной уникальности вариантов ответов в Quiz
+      const seenSet = new Set([String(currentTrans).toLowerCase().trim()]);
+      const uniqueDistractors = [];
+      for (const t of otherTranslations) {
+        const norm = String(t || '').toLowerCase().trim();
+        if (norm && !seenSet.has(norm)) {
+          seenSet.add(norm);
+          uniqueDistractors.push(t);
+        }
+      }
+      const choices = shuffleArray([currentTrans, ...uniqueDistractors]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
@@ -841,7 +896,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     function renderReverseQuiz(isFromSpeechFallback = false) {
       const distractorWords = getQuizDistractorWords();
       const otherWords = distractorWords.map((w) => w.word);
-      const choices = shuffleArray([currentWord.word, ...otherWords]);
+      // Гарантия абсолютной уникальности вариантов ответов в Reverse Quiz
+      const seenSet = new Set([String(currentWord.word).toLowerCase().trim()]);
+      const uniqueDistractors = [];
+      for (const w of otherWords) {
+        const norm = String(w || '').toLowerCase().trim();
+        if (norm && !seenSet.has(norm)) {
+          seenSet.add(norm);
+          uniqueDistractors.push(w);
+        }
+      }
+      const choices = shuffleArray([currentWord.word, ...uniqueDistractors]);
 
       practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
@@ -1075,8 +1140,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
               }
 
-              // Даем комфортные 4 секунды на произнесение слова
-              const timeoutMs = 4000;
+              // Даем комфортные 6 секунд на произнесение слова
+              const timeoutMs = 6000;
               autoStopTimer = setTimeout(() => {
                 if (isListening && !isEvaluated) {
                   if (micBtn) {
@@ -1116,10 +1181,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
                 }
                 setTimeout(() => {
-                  try {
-                    nativeRecognition.stop();
-                  } catch (e) {}
-                }, 350);
+                  if (isListening && !isEvaluated) {
+                    try {
+                      nativeRecognition.stop();
+                    } catch (e) {}
+                  }
+                }, 2000);
               }
             };
 
@@ -1181,6 +1248,21 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               if (err.error === 'not-allowed' || err.error === 'audio-capture') {
                 isEvaluated = true;
                 handleNoSpeechHeard(t('train_mic_allow_browser'), true);
+                return;
+              }
+
+              // Сетевые ошибки или блокировка сервиса Google Speech — переключаем на Gemini AI (MediaRecorder)
+              if (err.error === 'network' || err.error === 'service-not-allowed') {
+                isEvaluated = true;
+                console.warn('Native speech network/service error, falling back to Gemini AI via MediaRecorder');
+                if (transcriptBox) {
+                  transcriptBox.style.display = 'block';
+                  transcriptBox.innerHTML = t('train_switching_alt');
+                }
+                if (holdHint) {
+                  holdHint.innerHTML = t('train_switching_alt');
+                }
+                startMobileMediaRecorder();
                 return;
               }
 
@@ -1371,7 +1453,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             try {
               const result = await transcribeAudio(audioBlob, mime, currentWord.word);
               const isAiCorrect = !!(result && result.isCorrect);
-              const spokenWord = (result && result.transcribed ? result.transcribed : '').trim();
+              const spokenWord = (result && (result.transcribed || result.heard || result.text) ? (result.transcribed || result.heard || result.text) : '').trim();
               const score = result && result.score !== undefined ? result.score : null;
               const feedback = result && result.feedback ? result.feedback : '';
 
@@ -1379,11 +1461,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 if (transcriptBox) {
                   transcriptBox.style.display = 'block';
                   let heardHtml = '';
-                  if (score !== null) {
-                    heardHtml += `${t('stats_accuracy')}: <strong>${score}%</strong>`;
+                  if (spokenWord) {
+                    heardHtml += `🎤 «<strong>${escapeHtml(spokenWord)}</strong>»`;
                   }
-                  if (feedback && !isAiCorrect && !feedback.toLowerCase().includes('отличное') && !feedback.toLowerCase().includes('відмінне')) {
-                    heardHtml += `${score !== null ? '<br>' : ''}<span style="font-size: 13px; color: #d97706; font-style: italic;">💡 ${feedback}</span>`;
+                  if (score !== null) {
+                    heardHtml += `${heardHtml ? ' — ' : ''}${t('stats_accuracy')}: <strong>${score}%</strong>`;
+                  }
+                  if (feedback) {
+                    const fbColor = isAiCorrect ? '#16a34a' : '#d97706';
+                    heardHtml += `<br><span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${escapeHtml(feedback)}</span>`;
                   }
                   transcriptBox.innerHTML = heardHtml;
                 }
@@ -1413,9 +1499,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
           }
 
-          const wordLength = currentWord.word ? currentWord.word.length : 5;
           const isPhrase = currentWord.word && currentWord.word.includes(' ');
-          const timeoutMs = isPhrase ? 3200 : (wordLength <= 4 ? 2200 : 2500);
+          const timeoutMs = isPhrase ? 4500 : 3500;
           autoStopTimer = setTimeout(() => {
             if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
               stopAndTranscribe();
@@ -1436,7 +1521,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
 
       function startSpeechSession() {
-        if (preferNativeSpeech) {
+        if (typeof MediaRecorder !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          startMobileMediaRecorder();
+        } else if (SpeechRecognition) {
           startDesktopNativeSpeech();
         } else {
           startMobileMediaRecorder();
@@ -1780,7 +1867,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const isVowel = (c) => VOWELS.has(c.toLowerCase());
       const isLetter = (c) => /[a-zA-Z]/.test(c);
 
-      const wordText = currentWord.word;
+      // Strip invisible/soft-hyphen characters (U+00AD, U+200B, U+FEFF) before processing
+      const wordText = (currentWord.word || '').replace(/[\u00ad\u200b\ufeff]/g, '');
 
       // Split by words to prevent awkward mid-word breaks and avoid rendering giant space boxes
       const words = wordText.split(/\s+/).filter(Boolean);
@@ -2608,13 +2696,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       // 2. NON-BLOCKING ASYNC PROGRESS SYNC
       const isSecondChanceFix = isCorrect && hasSecondChance;
+      const isSingleWordMode = Boolean(
+        isSingleRemaining ||
+        (activeWords && activeWords.length <= 1)
+      );
+
       saveProgress(currentWord.id, isCorrect, 'input', {
         secondChanceFix: isSecondChanceFix,
+        isSingleRemaining: isSingleWordMode,
         isFavPractice,
       }).then((prog) => {
         const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
         if (isCorrect) {
-          if (inputCount >= 3 && !favorited) {
+          if ((prog?.mastered || inputCount >= 2) && !favorited) {
             feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">${t('train_word_mastered')}</div>`;
           }
         }
@@ -2634,7 +2728,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const minDelay = isCorrect ? 1600 : 4200;
       const maxWait = isCorrect ? 3500 : 7000;
 
-      const isFinalCard = isLastWord || (typeof currentWordIndex === 'number' && activeWords.length > 0 && currentWordIndex >= activeWords.length - 1) || activeWords.length <= 1;
+      const isFinalCard = (isSingleWordMode && isCorrect) || (isLastWord && isCorrect && activeWords.length <= 1);
       if (isFinalCard) {
         window._trainingRoundJustCompleted = true;
       }
@@ -2669,7 +2763,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-word">${currentWord.word}</h2>
-              ${currentWord.transcription ? `<p class="flashcard-transcription">${currentWord.transcription}</p>` : ''}
+              ${(() => { const _rt = String(currentWord.transcription || '').replace(/[\[\]]/g, '').replace(/^\/+|\/+$/g, '').trim(); return _rt ? `<p class="flashcard-transcription">/${_rt}/</p>` : ''; })()}
             </div>
             <div class="flashcard-face-bottom">
               <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
@@ -2685,7 +2779,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${getWordTranslation(currentWord)}</h2>
-              ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${getWordNotes(currentWord)}</p>` : ''}
+              ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${escapeHtml(getWordNotes(currentWord))}</p>` : ''}
             </div>
           </div>
         </div>
@@ -2710,7 +2804,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           isFavPractice
             ? `
           <div class="difficulty-buttons" style="display: flex; margin-top: 34px; width: 100%;">
-            <button type="button" class="primary-button autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn" style="position: relative; min-height: 52px; width: 100%; font-size: 18px; font-weight: 700; border-radius: 18px; display: flex; align-items: center; justify-content: center;">
+            <button type="button" class="autoplay-favs-btn-bottom ${window.__favsAutoplayRunning ? 'is-playing' : ''}" id="favs-autoplay-toggle-btn">
               ${getFavsAutoplayBtnContent(window.__favsAutoplayRunning)}
             </button>
           </div>
@@ -3066,7 +3160,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       async function runAutoplayCycle() {
         if (!window.__favsAutoplayRunning) return;
         requestScreenWakeLock();
-        updateMediaSessionStatus(true, currentWord);
+        startSilentAudioAnchor();
+        const translation = getWordTranslation(currentWord);
+        updateNativeBackgroundPlayback(currentWord.word, translation, true);
+        updateMediaSessionStatus(true, currentWord, translation);
         const cycleId = ++window.__favsAutoplayCycleId;
 
         // 1. Show Translation (back face)
@@ -3079,7 +3176,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        const translation = getWordTranslation(currentWord);
         const userLang = getInterfaceLanguage() || 'ru';
         await speakTextInLangAsync(translation, userLang);
 
@@ -3119,6 +3215,32 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (autoplayBtn) {
         const newAutoplayBtn = autoplayBtn.cloneNode(true);
         autoplayBtn.parentNode.replaceChild(newAutoplayBtn, autoplayBtn);
+
+        // Global listeners for lock-screen/headphone/notification actions
+        window.onBackgroundAudioNext = () => {
+          if (window.__favsAutoplayRunning) {
+            stopAllAudio();
+            onNext();
+          }
+        };
+        window.onBackgroundAudioPrev = () => {
+          if (window.__favsAutoplayRunning && typeof onPrev === 'function') {
+            stopAllAudio();
+            onPrev();
+          }
+        };
+        window.onBackgroundAudioToggle = (forcePlay) => {
+          if (newAutoplayBtn) {
+            if (forcePlay === true && !window.__favsAutoplayRunning) {
+              newAutoplayBtn.click();
+            } else if (forcePlay === false && window.__favsAutoplayRunning) {
+              newAutoplayBtn.click();
+            } else if (typeof forcePlay === 'undefined') {
+              newAutoplayBtn.click();
+            }
+          }
+        };
+
         newAutoplayBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (window.__favsAutoplayRunning) {
@@ -3127,6 +3249,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
+            stopSilentAudioAnchor();
+            stopNativeBackgroundPlayback();
             releaseScreenWakeLock();
             updateMediaSessionStatus(false);
             newAutoplayBtn.classList.remove('is-playing');
@@ -3140,7 +3264,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             window.__favsAutoplayRunning = true;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             requestScreenWakeLock();
-            updateMediaSessionStatus(true, currentWord);
+            startSilentAudioAnchor();
+            const translation = getWordTranslation(currentWord);
+            startNativeBackgroundPlayback(currentWord.word, translation);
+            updateMediaSessionStatus(true, currentWord, translation);
             newAutoplayBtn.classList.add('is-playing');
             newAutoplayBtn.innerHTML = getFavsAutoplayBtnContent(true);
             runAutoplayCycle();
