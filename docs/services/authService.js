@@ -142,10 +142,15 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       if (dlXp > migratedXp) migratedXp = dlXp;
     } catch (e) {}
 
+    const isGuestKey = (k) => {
+      const kl = String(k || '').toLowerCase();
+      return kl.includes('guest') || kl.startsWith('dl_') || kl === 'favorites' || kl === 'favs' || kl === 'xp';
+    };
+
     const allKeys = Object.keys(localStorage);
     allKeys.forEach((k) => {
-      // 1. Deep merge all progress keys
-      if (k.startsWith('progress_') && k !== userProgKey) {
+      // 1. Deep merge all progress keys (ONLY guest keys)
+      if (k.startsWith('progress_') && k !== userProgKey && isGuestKey(k)) {
         try {
           const progObj = JSON.parse(localStorage.getItem(k) || '{}');
           if (progObj && typeof progObj === 'object') {
@@ -175,8 +180,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 2. Migrate all favorites keys
-      if ((k.startsWith('favs_') || k.startsWith('favorites_') || k === 'favorites' || k === 'favs' || k === 'myduo_favorites') && !k.includes('deleted') && k !== userFavKey) {
+      // 2. Migrate all favorites keys (ONLY guest keys)
+      if ((k.startsWith('favs_') || k.startsWith('favorites_') || k === 'favorites' || k === 'favs' || k === 'myduo_favorites') && !k.includes('deleted') && k !== userFavKey && isGuestKey(k)) {
         try {
           const favsArr = JSON.parse(localStorage.getItem(k) || '[]');
           if (Array.isArray(favsArr)) {
@@ -185,8 +190,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 3. Migrate settings
-      if (k.startsWith('settings_') && k !== userSetKey) {
+      // 3. Migrate settings (ONLY guest keys)
+      if (k.startsWith('settings_') && k !== userSetKey && isGuestKey(k)) {
         try {
           const setObj = JSON.parse(localStorage.getItem(k) || '{}');
           if (setObj && typeof setObj === 'object') {
@@ -195,8 +200,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 4. Migrate study dates (streak)
-      if (k.startsWith('study_dates_') && k !== userDatesKey) {
+      // 4. Migrate study dates (streak) (ONLY guest keys)
+      if (k.startsWith('study_dates_') && k !== userDatesKey && isGuestKey(k)) {
         try {
           const datesArr = JSON.parse(localStorage.getItem(k) || '[]');
           if (Array.isArray(datesArr)) {
@@ -205,8 +210,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 5. Migrate XP
-      if (k.startsWith('xp_') && !k.startsWith(`xp_${newUserId}_`)) {
+      // 5. Migrate XP (ONLY guest keys)
+      if (k.startsWith('xp_') && !k.startsWith(`xp_${newUserId}_`) && isGuestKey(k)) {
         const match = k.match(/(\d{4}-W\d{2})/);
         const wKey = match ? match[1] : currentWeek;
         const xpVal = Number(localStorage.getItem(k) || 0);
@@ -221,8 +226,8 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         }
       }
 
-      // 6. Migrate avatar
-      if (k.startsWith('avatar_') && k !== `avatar_${newUserId}`) {
+      // 6. Migrate avatar (ONLY guest keys)
+      if (k.startsWith('avatar_') && k !== `avatar_${newUserId}` && isGuestKey(k)) {
         const av = localStorage.getItem(k);
         if (av && !localStorage.getItem(`avatar_${newUserId}`)) {
           localStorage.setItem(`avatar_${newUserId}`, av);
@@ -283,6 +288,23 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       localStorage.setItem(`xp_${newUserId}_${currentWeek}`, String(migratedXp));
       localStorage.setItem('xp', String(migratedXp));
     }
+
+    // Clean up temporary guest keys after migration
+    try {
+      localStorage.removeItem('progress_guest');
+      if (guestId) localStorage.removeItem(`progress_${guestId}`);
+      localStorage.removeItem('dl_word_progress');
+      localStorage.removeItem('favs_guest');
+      if (guestId) localStorage.removeItem(`favs_${guestId}`);
+      localStorage.removeItem('settings_guest');
+      if (guestId) localStorage.removeItem(`settings_${guestId}`);
+      localStorage.removeItem('study_dates_guest');
+      if (guestId) localStorage.removeItem(`study_dates_${guestId}`);
+      localStorage.removeItem('xp_guest');
+      localStorage.removeItem('dl_xp');
+      localStorage.removeItem('xp');
+      if (guestId) localStorage.removeItem(`xp_${guestId}_${currentWeek}`);
+    } catch (e) {}
 
     // Broadcast local changes
     if (typeof window !== 'undefined') {
@@ -364,7 +386,20 @@ function logoutUser() {
     localStorage.removeItem('myduo_firebase_user');
     localStorage.removeItem('myduo_refresh_token');
     localStorage.removeItem('myduo_auth_token');
+    localStorage.removeItem('xp');
+    localStorage.removeItem('dl_xp');
+    localStorage.removeItem('avatar_guest');
+    localStorage.removeItem('favs_guest');
+    localStorage.removeItem('progress_guest');
+    localStorage.removeItem('settings_guest');
+    localStorage.removeItem('study_dates_guest');
   } catch (e) {}
+  if (typeof window !== 'undefined') {
+    try {
+      window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: 0 } }));
+      window.dispatchEvent(new CustomEvent('myduo:auth_changed', { detail: { user: null } }));
+    } catch (e) {}
+  }
 }
 
 function getAuthToken() {

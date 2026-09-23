@@ -1319,41 +1319,6 @@ async function flushProgressQueue() {
   }
 }
 
-let cachedMigratedPlayers = null;
-function getMigratedPlayersSync() {
-  if (cachedMigratedPlayers) return cachedMigratedPlayers;
-  try {
-    const raw = localStorage.getItem('myduo_migrated_players_cache');
-    if (raw) {
-      cachedMigratedPlayers = JSON.parse(raw);
-      return cachedMigratedPlayers;
-    }
-  } catch (e) {}
-  return [];
-}
-
-async function loadMigratedPlayersBundle() {
-  if (cachedMigratedPlayers && Array.isArray(cachedMigratedPlayers) && cachedMigratedPlayers.length > 0) {
-    return cachedMigratedPlayers;
-  }
-  const paths = ['./assets/data/migrated_players.json', 'assets/data/migrated_players.json', '/assets/data/migrated_players.json'];
-  for (const p of paths) {
-    try {
-      const res = await fetch(p);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          cachedMigratedPlayers = data;
-          try {
-            localStorage.setItem('myduo_migrated_players_cache', JSON.stringify(data));
-          } catch (e) {}
-          return data;
-        }
-      }
-    } catch (e) {}
-  }
-  return getMigratedPlayersSync();
-}
 
 async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   const user = getCurrentUser();
@@ -1371,7 +1336,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 
   // Fetch real-time progress, XP and data from Cloud Firestore
   try {
-    const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc, migratedPlayers] = await Promise.all([
+    const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc] = await Promise.all([
       loadUserProgressFirestore(firestoreUid).catch(() => ({})),
       detId && detId !== uId && detId !== firestoreUid ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
       fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
@@ -1380,8 +1345,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
       loadFullUserDataFirestore(firestoreUid).catch(() => null),
       detId && detId !== uId && detId !== firestoreUid ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
-      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null),
-      loadMigratedPlayersBundle().catch(() => [])
+      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null)
     ]);
 
     const progKey = `progress_${uId}`;
@@ -1428,64 +1392,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favs_guest') || '[]'))
     ]);
 
-    // Match historical profile from migrated database
-    const cleanEmail = (user?.email || '').toLowerCase().trim();
-    const cleanName = (user?.name || '').toLowerCase().trim();
-    const matchingProfiles = (migratedPlayers || []).filter(p => {
-      const pId = String(p.userId || '').toLowerCase();
-      const pName = String(p.name || '').toLowerCase();
-      if (cleanEmail && (cleanEmail.includes('lipniagov') || cleanEmail.includes('nikola') || cleanEmail.includes('sway'))) {
-        return pName.includes('nikola') || pName.includes('nick lip') || pId.includes('lipniagov') || pId.includes('1786863204201');
-      }
-      if (cleanEmail && (cleanEmail.includes('julia') || cleanEmail.includes('voland') || cleanEmail.includes('lipa'))) {
-        return pName.includes('julia') || pName.includes('voland') || pId.includes('1787070034849');
-      }
-      if (cleanEmail && (cleanEmail.includes('irina') || cleanEmail.includes('ирина'))) {
-        return pName.includes('ирина') || pId.includes('1786872780877');
-      }
-      if (cleanEmail && (cleanEmail.includes('stadnikov') || cleanEmail.includes('роман'))) {
-        return pName.includes('роман') || pId.includes('1786973820215');
-      }
-      return pId === String(uId).toLowerCase() || (cleanName && pName === cleanName);
-    });
-
-    let maxHistoricalXp = 0;
-    let foundAvatar = '';
-
-    for (const prof of matchingProfiles) {
-      if (prof.progress && typeof prof.progress === 'object') {
-        Object.keys(prof.progress).forEach(wId => {
-          if (!mergedProg[wId]) {
-            mergedProg[wId] = prof.progress[wId];
-          } else {
-            mergedProg[wId] = {
-              ...mergedProg[wId],
-              ...prof.progress[wId],
-              correct: Math.max(mergedProg[wId].correct || 0, prof.progress[wId].correct || 0),
-              error: Math.max(mergedProg[wId].error || 0, prof.progress[wId].error || 0),
-              quizCorrect: Math.max(mergedProg[wId].quizCorrect || 0, prof.progress[wId].quizCorrect || 0),
-              pairsCorrect: Math.max(mergedProg[wId].pairsCorrect || 0, prof.progress[wId].pairsCorrect || 0),
-              inputCorrect: Math.max(mergedProg[wId].inputCorrect || 0, prof.progress[wId].inputCorrect || 0),
-              mastered: Boolean(mergedProg[wId].mastered || prof.progress[wId].mastered),
-              seenInCards: Boolean(mergedProg[wId].seenInCards || prof.progress[wId].seenInCards)
-            };
-          }
-        });
-      }
-      if (prof.weeklyXp && prof.weeklyXp > maxHistoricalXp) {
-        maxHistoricalXp = prof.weeklyXp;
-      }
-      if (prof.avatar && !foundAvatar) {
-        let av = prof.avatar;
-        if (av.startsWith('./')) av = av.slice(2);
-        if (av.includes('?v=')) av = av.split('?')[0];
-        foundAvatar = av;
-      }
-    }
-
-    if (!foundAvatar) {
-      foundAvatar = fbDoc?.profile?.avatar || fullDoc?.profile?.avatar || detDoc?.profile?.avatar || user?.avatar || '';
-    }
+    let foundAvatar = fbDoc?.profile?.avatar || fullDoc?.profile?.avatar || detDoc?.profile?.avatar || user?.avatar || '';
 
     if (foundAvatar) {
       localStorage.setItem(`avatar_${uId}`, foundAvatar);
@@ -1502,7 +1409,7 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
     // Merge XP from Firestore and local
     const xpKey = `xp_${uId}_${wKey}`;
     const localXp = getUserWeeklyXP(uId, wKey);
-    let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0), maxHistoricalXp);
+    let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0));
 
     // Check profile XP
     if (fullDoc?.profile?.xp || fullDoc?.profile?.totalXp) {

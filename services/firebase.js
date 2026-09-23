@@ -416,6 +416,18 @@ export async function deleteCurrentUserAccount() {
     }
   }
 
+  // Также проверяем альтернативный ID из локального профиля (если отличается от Firebase UID)
+  try {
+    const rawLocal = localStorage.getItem('myduo_user');
+    if (rawLocal) {
+      const localU = JSON.parse(rawLocal);
+      const otherId = localU?.id;
+      if (otherId && otherId !== userId && !String(otherId).startsWith('guest')) {
+        await deleteAllUserFirestoreData(otherId, idToken);
+      }
+    }
+  } catch (e) {}
+
   // 2. Удаляем Firebase Auth аккаунт
   if (idToken) {
     const res = await fetch(`${AUTH_BASE}/accounts:delete?key=${config.apiKey}`, {
