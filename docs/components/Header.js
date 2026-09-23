@@ -1,4 +1,4 @@
-import { StorageService } from '../services/storageService.js?v=376.0';
+﻿import { StorageService } from '../services/storageService.js?v=378.0';
 
 export function renderHeader() {
     const container = document.getElementById('app-header');
