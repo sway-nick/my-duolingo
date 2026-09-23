@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=223.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=223.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=223.0';
+import { speakWord } from '../../services/audioService.js?v=224.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=224.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=224.0';
 
 function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
   return new Promise((resolve, reject) => {

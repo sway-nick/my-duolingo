@@ -1,5 +1,5 @@
-import { playFanfareSound } from '../../services/audioService.js?v=223.0';
-import { t } from '../../services/i18n.js?v=223.0';
+import { playFanfareSound } from '../../services/audioService.js?v=224.0';
+import { t } from '../../services/i18n.js?v=224.0';
 
 function getPrizeDetails(rank) {
   switch (rank) {

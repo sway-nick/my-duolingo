@@ -17,7 +17,7 @@ import {
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
-} from '../../services/audioService.js?v=223.0';
+} from '../../services/audioService.js?v=224.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -27,8 +27,8 @@ import {
   prepareTrainingBatch,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.js?v=223.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=223.0';
+} from '../../services/api.js?v=224.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=224.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
