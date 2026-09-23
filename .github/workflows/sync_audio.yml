@@ -1,0 +1,56 @@
+name: Sync Dictionary & Studio Audio
+
+on:
+  schedule:
+    # Запуск каждую ночь в 03:00 UTC (06:00 по Москве)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    # Позволяет запустить вручную одной кнопкой из GitHub Actions в любое время
+
+permissions:
+  contents: write
+
+jobs:
+  sync-dictionary-and-audio:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install edge-tts
+
+      - name: Synchronize dictionary and generate studio neural audio
+        run: |
+          node scripts/sync_dictionary_and_audio.mjs
+
+      - name: Build web assets and distribute to CDN
+        run: |
+          node scripts/build.cjs
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/assets/data/words.json frontend/assets/audio/ docs/ assets/ index.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit. Everything is up to date."
+          else
+            git commit -m "chore(audio): auto-sync vocabulary & studio neural audio [skip ci]"
+            git push origin main
+          fi
