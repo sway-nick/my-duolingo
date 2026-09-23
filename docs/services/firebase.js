@@ -371,24 +371,47 @@ async function deleteAllUserFirestoreData(userId, idToken) {
   // 5. Удаляем корневой документ users/{uid}
   await delDoc(`${FIRESTORE_BASE}/users/${uid}`);
 
-  // 5. Удаляем запись в leaderboard текущей и прошлой недели
+  // 5. Обнуляем и удаляем запись в leaderboard текущей и прошлой недели
   try {
-    const now = new Date();
-    // Формат weekKey совпадает с syncLeaderboardScoreFirestore: YYYY-WW
-    function getISOWeekKey(date) {
-      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-      const day = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - day);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-      const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-      return `${d.getUTCFullYear()}-${String(week).padStart(2, '0')}`;
+    function getISOWeekKey(d = new Date()) {
+      const target = new Date(d.valueOf());
+      const dayNr = (d.getDay() + 6) % 7;
+      target.setDate(target.getDate() - dayNr + 3);
+      const firstThursday = target.valueOf();
+      target.setMonth(0, 1);
+      if (target.getDay() !== 4) {
+        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+      }
+      const weekNumber = 1 + Math.ceil((firstThursday - target) / 604800000);
+      return `${target.getFullYear()}-W${String(weekNumber).padStart(2, '0')}`;
     }
+    const now = new Date();
     const currentWeek = getISOWeekKey(now);
     const prevWeekDate = new Date(now);
     prevWeekDate.setDate(prevWeekDate.getDate() - 7);
     const prevWeek = getISOWeekKey(prevWeekDate);
-    await delDoc(`${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(currentWeek)}/players/${uid}`);
-    await delDoc(`${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(prevWeek)}/players/${uid}`);
+
+    const weekKeys = [currentWeek, prevWeek, currentWeek.replace('-W', '-'), prevWeek.replace('-W', '-')];
+    for (const wKey of weekKeys) {
+      // 1) Сначала обнуляем счёт (разрешено правилами create/update)
+      const zeroUrl = `${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(wKey)}/players/${uid}?key=${config.apiKey}`;
+      try {
+        await fetch(zeroUrl, {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({
+            fields: {
+              userId: { stringValue: String(userId) },
+              name: { stringValue: 'Deleted' },
+              xp: { integerValue: '0' },
+              updatedAt: { integerValue: String(Date.now()) }
+            }
+          })
+        });
+      } catch (e) {}
+      // 2) Затем удаляем документ полностью
+      await delDoc(`${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(wKey)}/players/${uid}`);
+    }
   } catch (e) {
     console.warn('deleteAllUserFirestoreData: leaderboard cleanup error', e);
   }
@@ -396,12 +419,21 @@ async function deleteAllUserFirestoreData(userId, idToken) {
 
 export async function deleteCurrentUserAccount() {
   const stored = localStorage.getItem('myduo_firebase_user');
-  if (!stored) return;
-  const user = JSON.parse(stored);
+  let fbUser = null;
+  try {
+    if (stored) fbUser = JSON.parse(stored);
+  } catch (e) {}
+
+  let curUser = null;
+  try {
+    const rawCur = localStorage.getItem('myduo_user') || localStorage.getItem('myduo_current_user');
+    if (rawCur) curUser = JSON.parse(rawCur);
+  } catch (e) {}
+
   const config = getFirebaseConfig();
 
   // idToken живёт 1 час — принудительно берём свежий (refreshToken или нативный плагин).
-  let idToken = user.idToken || '';
+  let idToken = fbUser?.idToken || curUser?.idToken || '';
   try {
     const fresh = await getValidIdToken({ force: true });
     if (fresh) idToken = fresh;
@@ -411,8 +443,9 @@ export async function deleteCurrentUserAccount() {
 
   // 1. Удаляем все данные из Firestore ПЕРЕД удалением аккаунта,
   //    пока idToken ещё валиден и правила разрешают write для этого uid.
-  const userId = user.localId || user.uid || user.userId || '';
-  if (userId) {
+  const effectiveUid = getEffectiveFirestoreUid();
+  const userId = effectiveUid || fbUser?.id || fbUser?.localId || fbUser?.uid || curUser?.firebaseUid || curUser?.id || '';
+  if (userId && !String(userId).startsWith('guest')) {
     try {
       await deleteAllUserFirestoreData(userId, idToken);
     } catch (e) {
@@ -422,13 +455,9 @@ export async function deleteCurrentUserAccount() {
 
   // Также проверяем альтернативный ID из локального профиля (если отличается от Firebase UID)
   try {
-    const rawLocal = localStorage.getItem('myduo_user');
-    if (rawLocal) {
-      const localU = JSON.parse(rawLocal);
-      const otherId = localU?.id;
-      if (otherId && otherId !== userId && !String(otherId).startsWith('guest')) {
-        await deleteAllUserFirestoreData(otherId, idToken);
-      }
+    const otherId = curUser?.id;
+    if (otherId && otherId !== userId && !String(otherId).startsWith('guest')) {
+      await deleteAllUserFirestoreData(otherId, idToken);
     }
   } catch (e) {}
 
@@ -442,10 +471,13 @@ export async function deleteCurrentUserAccount() {
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
       console.warn('deleteCurrentUserAccount: Firebase returned error:', errData?.error?.message || res.status);
-      // Still continue with local cleanup even if remote delete failed
     }
   }
   localStorage.removeItem('myduo_firebase_user');
+  localStorage.removeItem('myduo_user');
+  localStorage.removeItem('myduo_current_user');
+  localStorage.removeItem('myduo_auth_token');
+  localStorage.removeItem('myduo_refresh_token');
 }
 
 
@@ -952,8 +984,22 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
           }
           return obj;
         });
-        players.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0));
-        const topPlayers = players.slice(0, limitCount);
+        const DELETED_ORPHANED_UIDS = new Set([
+          'b9Puaf5jtthwQlOPvAdZJ1o5CBC3',
+          'jf0lHNZnwXVKzQpNh1FSYwkrDfl1'
+        ]);
+
+        const validPlayers = players.filter(p => {
+          if (!p || !p.userId) return false;
+          const uid = String(p.userId || p.uid || '');
+          if (DELETED_ORPHANED_UIDS.has(uid)) return false;
+          if (p.name === 'Deleted') return false;
+          if (Number(p.xp || 0) <= 0) return false;
+          return true;
+        });
+
+        validPlayers.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0));
+        const topPlayers = validPlayers.slice(0, limitCount);
 
         // Filter out deleted accounts: check users/{uid} existence (rule: allow read: if true)
         // We batch-check all UIDs in parallel; if 404 → user was deleted → remove from leaderboard.
@@ -987,7 +1033,18 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
       if (data.fields?.playersJson?.stringValue) {
         const map = JSON.parse(data.fields.playersJson.stringValue);
         if (map && typeof map === 'object') {
-          const players = Object.values(map).filter(p => p && p.userId && (Number(p.xp) > 0 || p.name));
+          const DELETED_ORPHANED_UIDS = new Set([
+            'b9Puaf5jtthwQlOPvAdZJ1o5CBC3',
+            'jf0lHNZnwXVKzQpNh1FSYwkrDfl1'
+          ]);
+
+          const players = Object.values(map).filter(p => {
+            if (!p || !p.userId) return false;
+            const uid = String(p.userId || p.uid || '');
+            if (DELETED_ORPHANED_UIDS.has(uid)) return false;
+            if (p.name === 'Deleted') return false;
+            return Number(p.xp || 0) > 0;
+          });
           players.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
           const topPlayers = players.slice(0, limitCount);
 

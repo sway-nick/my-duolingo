@@ -908,7 +908,7 @@ async function getLeaderboard(weekKey = null, period = 'week') {
   const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
 
   // Automatically ensure current user's local XP & avatar are synced to Firestore
-  if (userXP > 0 || userAvatar) {
+  if (userXP > 0 && currentUser && currentUser.id && !String(currentUser.id).startsWith('guest')) {
     syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
   }
 
