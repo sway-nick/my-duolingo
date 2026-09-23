@@ -342,7 +342,7 @@ async function getWords(forceRefresh = false) {
 
   const currentLang = getActiveLang();
 
-  // Background sync for latest updates from Google Sheets / Firestore
+  // Background sync for latest vocabulary updates from Cloud Firestore
   if (forceRefresh) {
     await syncRemoteVocabularyUpdates();
   } else {
