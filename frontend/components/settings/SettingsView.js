@@ -1,4 +1,4 @@
-import { getUserSettings, saveUserSettings } from '../../services/api.js?v=224.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=224.0';
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=224.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=224.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=224.0';

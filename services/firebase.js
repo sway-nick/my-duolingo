@@ -826,24 +826,24 @@ export async function loadUserProgressFirestore(userId) {
   if (!uid) return {};
   const combinedMap = {};
   try {
-    // 1. Fetch bulk progress doc (fast single query)
-    const bulkRes = await firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/progress`), {
-      headers: getAuthHeaders()
-    }).catch(() => null);
-    if (bulkRes && bulkRes.ok) {
-      const data = await bulkRes.json();
-      if (data.fields?.progressJson?.stringValue) {
+    const authHeaders = getAuthHeaders();
+    // Fetch collections in parallel — listing collections returns 200 OK with empty array, NEVER 404!
+    const [subRes, dataColRes] = await Promise.all([
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/progress`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`), { headers: authHeaders }).catch(() => null)
+    ]);
+
+    if (dataColRes && dataColRes.ok) {
+      const colData = await dataColRes.json();
+      const docs = Array.isArray(colData.documents) ? colData.documents : [];
+      const progDoc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === 'progress');
+      if (progDoc?.fields?.progressJson?.stringValue) {
         try {
-          const parsed = JSON.parse(data.fields.progressJson.stringValue);
-          Object.assign(combinedMap, parsed);
+          Object.assign(combinedMap, JSON.parse(progDoc.fields.progressJson.stringValue));
         } catch (e) {}
       }
     }
 
-    // 2. Fetch individual subcollection docs
-    const subRes = await firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/progress`), {
-      headers: getAuthHeaders()
-    }).catch(() => null);
     if (subRes && subRes.ok) {
       const subData = await subRes.json();
       if (Array.isArray(subData.documents)) {
@@ -921,42 +921,17 @@ export async function getUserWeeklyXpFirestore(userId, weekKey) {
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return 0;
 
-  // 1. Try distributed player document
+  // Try personal user data collection (listing collection never 404s)
   try {
-    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}`);
-    const res = await firestoreFetch(rootUrl, { headers: getAuthHeaders() });
+    const colUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`);
+    const res = await firestoreFetch(colUrl, { headers: getAuthHeaders() });
     if (res.ok) {
-      const data = await res.json();
-      if (data.fields && data.fields.xp) {
-        return Number(data.fields.xp.integerValue || data.fields.xp.doubleValue || 0);
-      }
-    }
-  } catch (e) {}
-
-  // 2. Try personal user document
-  try {
-    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
-    const res = await firestoreFetch(userUrl, { headers: getAuthHeaders() });
-    if (res.ok) {
-      const data = await res.json();
-      if (data.fields && data.fields.xp) {
-        return Number(data.fields.xp.integerValue || data.fields.xp.doubleValue || 0);
-      }
-    }
-  } catch (e) {}
-
-  // 3. Try shared document fallback
-  try {
-    const config = getFirebaseConfig();
-    const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
-    const res = await fetch(sharedUrl);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.fields?.playersJson?.stringValue) {
-        const map = JSON.parse(data.fields.playersJson.stringValue);
-        if (map && map[userId] && map[userId].xp) {
-          return Number(map[userId].xp || 0);
-        }
+      const colData = await res.json();
+      const docs = Array.isArray(colData.documents) ? colData.documents : [];
+      const targetName = `weekly_xp_${weekKey}`;
+      const doc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === targetName);
+      if (doc?.fields?.xp) {
+        return Number(doc.fields.xp.integerValue || doc.fields.xp.doubleValue || 0);
       }
     }
   } catch (e) {}
@@ -1023,15 +998,18 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
     console.warn('Distributed Firestore leaderboard fetch warning:', err);
   }
 
-  // 2. Fallback: read from legacy shared leaderboard document
+  // 2. Fallback: read from legacy shared leaderboard document (query collection so never 404s)
   try {
     const config = getFirebaseConfig();
-    const sharedUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/leaderboard_${encodeURIComponent(weekKey)}?key=${config.apiKey}`;
-    const res = await fetch(sharedUrl);
+    const colUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data?key=${config.apiKey}`;
+    const res = await fetch(colUrl);
     if (res.ok) {
       const data = await res.json();
-      if (data.fields?.playersJson?.stringValue) {
-        const map = JSON.parse(data.fields.playersJson.stringValue);
+      const docs = Array.isArray(data.documents) ? data.documents : [];
+      const targetName = `leaderboard_${weekKey}`;
+      const doc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === targetName);
+      if (doc?.fields?.playersJson?.stringValue) {
+        const map = JSON.parse(doc.fields.playersJson.stringValue);
         if (map && typeof map === 'object') {
           const DELETED_ORPHANED_UIDS = new Set([
             'b9Puaf5jtthwQlOPvAdZJ1o5CBC3',
@@ -1237,12 +1215,14 @@ export async function loadUserNotesFirestore(userId) {
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return {};
   try {
-    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/notes`);
-    const res = await firestoreFetch(url, { headers: getAuthHeaders() }).catch(() => null);
+    const colUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`);
+    const res = await firestoreFetch(colUrl, { headers: getAuthHeaders() }).catch(() => null);
     if (!res || !res.ok) return {};
-    const data = await res.json();
-    if (data.fields?.notesJson?.stringValue) {
-      return JSON.parse(data.fields.notesJson.stringValue);
+    const colData = await res.json();
+    const docs = Array.isArray(colData.documents) ? colData.documents : [];
+    const doc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === 'notes');
+    if (doc?.fields?.notesJson?.stringValue) {
+      return JSON.parse(doc.fields.notesJson.stringValue);
     }
   } catch (err) {
     console.warn('Firestore notes load failed:', err);
@@ -1440,7 +1420,7 @@ export async function loadFullUserDataFirestore(userId) {
       loadUserProgressFirestore(uid),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}`), { headers: authHeaders }).catch(() => null),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings/general`), { headers: authHeaders }).catch(() => null),
+      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings`), { headers: authHeaders }).catch(() => null),
     ]);
 
     let userProfile = {};
@@ -1450,7 +1430,7 @@ export async function loadFullUserDataFirestore(userId) {
     let notes = {};
     let customWords = [];
 
-    // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words)
+    // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words, progress)
     // This avoids 404 Not Found network errors when documents do not exist yet!
     if (dataColRes && dataColRes.ok) {
       try {
@@ -1487,6 +1467,12 @@ export async function loadFullUserDataFirestore(userId) {
                 if (Array.isArray(parsed)) customWords = parsed;
               } catch (e) {}
             }
+          } else if (docName === 'progress') {
+            if (doc.fields?.progressJson?.stringValue) {
+              try {
+                Object.assign(progress, JSON.parse(doc.fields.progressJson.stringValue));
+              } catch (e) {}
+            }
           }
         }
       } catch (e) {}
@@ -1515,15 +1501,19 @@ export async function loadFullUserDataFirestore(userId) {
 
     let settings = null;
     if (setDocRes && setDocRes.ok) {
-      const data = await setDocRes.json();
-      if (data.fields) {
-        settings = {};
-        for (const [k, f] of Object.entries(data.fields)) {
-          if ('stringValue' in f) settings[k] = f.stringValue;
-          else if ('integerValue' in f) settings[k] = Number(f.integerValue);
-          else if ('booleanValue' in f) settings[k] = f.booleanValue;
+      try {
+        const data = await setDocRes.json();
+        const docs = Array.isArray(data.documents) ? data.documents : [];
+        const genDoc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === 'general');
+        if (genDoc && genDoc.fields) {
+          settings = {};
+          for (const [k, f] of Object.entries(genDoc.fields)) {
+            if ('stringValue' in f) settings[k] = f.stringValue;
+            else if ('integerValue' in f) settings[k] = Number(f.integerValue);
+            else if ('booleanValue' in f) settings[k] = f.booleanValue;
+          }
         }
-      }
+      } catch (e) {}
     }
 
     return {
