@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -647,6 +647,7 @@
           if (window._showHubScreen) {
             currentMethod = 'input';
           } else if (!isMethodAvailable(currentMethod)) {
+            const prevMethod = currentMethod;
             // STRICT FORWARD-ONLY CONVEYOR PROGRESSION:
             // Cards -> Quiz -> Pairs -> Test -> Finished (Hub)
             if (currentMethod === 'cards') {
@@ -676,6 +677,9 @@
                 window._showHubScreen = true;
                 currentMethod = 'input';
               }
+            }
+            if (currentMethod !== prevMethod) {
+              currentWordIndex = 0;
             }
           }
 
@@ -882,31 +886,13 @@
             return;
           }
 
-          // If words completed Pairs -> show completion card with button to Test
+          // If words completed Pairs -> directly launch Test mode!
           if (!window._showHubScreen && currentMethod === 'pairs' && testQueue.length > 0) {
-            content.innerHTML = `
-              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
-                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                  ${t('train_congrats_mastered')}
-                </p>
-                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                  <button class="primary-button btn-green" id="go-test-btn">
-                    ${t('train_go_test')}
-                  </button>
-                </div>
-              </div>
-            `;
-
-            const goTestBtn = content.querySelector('#go-test-btn');
-            if (goTestBtn) {
-              goTestBtn.addEventListener('click', () => {
-                userSettings.preferredMethod = 'input';
-                saveUserSettings(userSettings);
-                currentWordIndex = 0;
-                renderTrainingTab();
-              });
-            }
+            currentMethod = 'input';
+            userSettings.preferredMethod = 'input';
+            saveUserSettings(userSettings);
+            currentWordIndex = 0;
+            renderTrainingTab();
             return;
           }
 
@@ -1679,7 +1665,7 @@
           if (currentMethod === 'input') return (p.inputCorrect || 0) < 2 && !p.roundTestDone && !isWordMastered(p);
           return true;
         });
-        const isSingleRemainingWord = unfinishedInQueue.length <= 1;
+        const isSingleRemainingWord = unfinishedInQueue.length <= 1 || (currentMethod === 'input' && testQueue.length <= 1);
 
         if (isFavPracticeActive && currentWordIndex >= activeWords.length) {
           favoritePracticeWords = null;
@@ -1690,11 +1676,15 @@
         }
 
         if (!isFavPracticeActive && currentMethod === 'input' && currentWordIndex >= activeWords.length) {
-          window._trainingRoundJustCompleted = true;
-          window._showHubScreen = true;
-          currentWordIndex = 0;
-          renderTrainingTab();
-          return;
+          if (testQueue.length === 0 || unfinishedInQueue.length === 0) {
+            window._trainingRoundJustCompleted = true;
+            window._showHubScreen = true;
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          } else {
+            currentWordIndex = 0;
+          }
         }
 
         const currentWord = activeWords[currentWordIndex % activeWords.length];
@@ -1772,7 +1762,7 @@
             incrementGuestTrainingCount();
             updateHeaderUser();
 
-            if (currentMethod === 'input' && (isSingleRemainingWord || currentWordIndex >= activeWords.length - 1)) {
+            if (currentMethod === 'input' && (isSingleRemainingWord || unfinishedInQueue.length <= 1)) {
               window._trainingRoundJustCompleted = true;
             }
 
@@ -1783,6 +1773,8 @@
             }
 
             if (currentMethod === 'cards' && !isFavPracticeActive) {
+              currentWordIndex = 0;
+            } else if (currentMethod === 'pairs' && !isFavPracticeActive) {
               currentWordIndex = 0;
             } else {
               currentWordIndex += 1;

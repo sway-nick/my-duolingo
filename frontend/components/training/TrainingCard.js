@@ -1,4 +1,4 @@
-﻿import {
+import {
   speakWord,
   speakWordAsync,
   speakTextInLangAsync,
@@ -408,6 +408,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     activeWords = [],
     currentWordIndex = 0,
     isLastWord = false,
+    isSingleRemaining = false,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
   } = options;
@@ -2690,13 +2691,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
       // 2. NON-BLOCKING ASYNC PROGRESS SYNC
       const isSecondChanceFix = isCorrect && hasSecondChance;
+      const isSingleWordMode = Boolean(
+        isSingleRemaining ||
+        (activeWords && activeWords.length <= 1)
+      );
+
       saveProgress(currentWord.id, isCorrect, 'input', {
         secondChanceFix: isSecondChanceFix,
+        isSingleRemaining: isSingleWordMode,
         isFavPractice,
       }).then((prog) => {
         const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
         if (isCorrect) {
-          if (inputCount >= 3 && !favorited) {
+          if ((prog?.mastered || inputCount >= 2) && !favorited) {
             feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">${t('train_word_mastered')}</div>`;
           }
         }
@@ -2716,7 +2723,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const minDelay = isCorrect ? 1600 : 4200;
       const maxWait = isCorrect ? 3500 : 7000;
 
-      const isFinalCard = isLastWord || (typeof currentWordIndex === 'number' && activeWords.length > 0 && currentWordIndex >= activeWords.length - 1) || activeWords.length <= 1;
+      const isFinalCard = (isSingleWordMode && isCorrect) || (isLastWord && isCorrect && activeWords.length <= 1);
       if (isFinalCard) {
         window._trainingRoundJustCompleted = true;
       }
