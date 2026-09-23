@@ -1,5 +1,5 @@
-import { CATEGORIES, LESSONS } from '../services/initialData.js?v=224.0';
-import { StorageService } from '../services/storageService.js?v=224.0';
+import { CATEGORIES, LESSONS } from '../services/initialData.js?v=376.0';
+import { StorageService } from '../services/storageService.js?v=376.0';
 
 export function renderSkillPath(container) {
     if (!container) return;

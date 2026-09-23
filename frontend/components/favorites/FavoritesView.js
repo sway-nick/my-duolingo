@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=224.0';
-import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=224.0';
-import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=224.0';
+import { speakWord } from '../../services/audioService.js?v=376.0';
+import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=376.0';
+import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=376.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);

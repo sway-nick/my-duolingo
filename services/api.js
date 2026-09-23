@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=224.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=376.0';
 import { 
   syncLeaderboardScoreFirestore, 
   getWeeklyLeaderboardFirestore, 
@@ -19,7 +19,7 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=224.0';
+} from './firebase.js?v=376.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -3599,4 +3599,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=224.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=376.0';

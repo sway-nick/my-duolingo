@@ -1,4 +1,4 @@
-import AudioService from '../../services/audioService.js?v=224.0';
+import AudioService from '../../services/audioService.js?v=376.0';
 
 export function renderSentenceBuilder(container, exerciseData, onComplete) {
     container.innerHTML = '';
