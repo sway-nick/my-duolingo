@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=376.0';
+﻿import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=378.0';
 import { 
   syncLeaderboardScoreFirestore, 
   getWeeklyLeaderboardFirestore, 
@@ -19,7 +19,7 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=376.0';
+} from './firebase.js?v=378.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -114,7 +114,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v218_utf8_clean';
+const WORDS_CACHE_VERSION = 'v219_damage_sync';
 
 let cachedWordsList = null;
 try {
@@ -286,8 +286,12 @@ async function syncRemoteVocabularyUpdates() {
       if (targetIdx !== undefined) {
         const existing = cachedWordsList[targetIdx];
         let rowChanged = false;
-        if (u.translation && existing.translation !== u.translation) {
+        if (u.translation && (existing.translation !== u.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
           existing.translation = u.translation;
+          rowChanged = true;
+        }
+        if (u.translations && typeof u.translations === 'object') {
+          existing.translations = { ...(existing.translations || {}), ...u.translations };
           rowChanged = true;
         }
         if (u.transcription !== undefined && existing.transcription !== u.transcription) {
@@ -307,7 +311,8 @@ async function syncRemoteVocabularyUpdates() {
         cachedWordsList.unshift({
           id: u.id || `w_${cleanWord}`,
           word: cleanWord,
-          translation: u.translation || cleanWord,
+          translation: u.translation || '',
+          translations: u.translations || (u.translation ? { ru: u.translation } : {}),
           transcription: u.transcription || '',
           category: u.category || 'Elementary',
           level: u.level || 'A2',
@@ -3036,9 +3041,19 @@ try {
 
 async function addCustomWord({ word, translation, category, notes }) {
   const cleanW = String(word || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
-  const cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
+  let cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
   const cleanCat = String(category || 'Общие').trim();
   const cleanNotes = String(notes || '').trim();
+
+  // If translation was left empty or equals the word itself, auto-resolve with suggestTranslations
+  if (!cleanTrans || cleanTrans.toLowerCase() === cleanW.toLowerCase()) {
+    try {
+      const suggested = await suggestTranslations(cleanW);
+      if (suggested && Array.isArray(suggested.suggestions) && suggested.suggestions[0]) {
+        cleanTrans = suggested.suggestions[0];
+      }
+    } catch (e) {}
+  }
 
   const localWord = {
     id: `custom_${Date.now()}`,
@@ -3343,7 +3358,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
         return {
           word: item.word,
           original: item.original,
-          translation: translation || item.word,
+          translation: translation || '',
           transcription: '',
           level: 'A2',
           category: cat,
@@ -3353,7 +3368,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
         return {
           word: item.word,
           original: item.original,
-          translation: item.word,
+          translation: '',
           transcription: '',
           level: 'A2',
           category: cat,
@@ -3599,4 +3614,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=376.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=378.0';

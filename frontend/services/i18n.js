@@ -7002,16 +7002,47 @@ export function t(key, params = null) {
 export function getWordTranslation(wordObj) {
   if (!wordObj) return '';
   const lang = getInterfaceLanguage();
+  const rawWord = String(wordObj.word || '').trim().toLowerCase();
+
+  const isInvalidTranslation = (val) => {
+    if (!val || typeof val !== 'string') return true;
+    const clean = val.trim().toLowerCase();
+    if (clean.includes('\ufffd')) return true;
+    if (rawWord && clean === rawWord) return true;
+    return false;
+  };
+
+  // 1. Localized translation for active interface language
   if (wordObj.translations && wordObj.translations[lang]) {
     const localized = wordObj.translations[lang];
-    if (typeof localized === 'string' && !localized.includes('\ufffd')) {
+    if (!isInvalidTranslation(localized)) {
       return localized;
     }
   }
-  if (typeof wordObj.translation === 'string' && !wordObj.translation.includes('\ufffd')) {
+
+  // 2. Main translation field
+  if (typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
     return wordObj.translation;
   }
-  return (wordObj.translation || '').replace(/\ufffd+/g, '');
+
+  // 3. Fallback: check Russian or other available language translations
+  if (wordObj.translations && typeof wordObj.translations === 'object') {
+    if (wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
+      return wordObj.translations.ru;
+    }
+    for (const l of Object.keys(wordObj.translations)) {
+      const alt = wordObj.translations[l];
+      if (!isInvalidTranslation(alt)) {
+        return alt;
+      }
+    }
+  }
+
+  const fallback = (wordObj.translation || '').replace(/\ufffd+/g, '').trim();
+  if (rawWord && fallback.toLowerCase() === rawWord) {
+    return '';
+  }
+  return fallback;
 }
 
 
