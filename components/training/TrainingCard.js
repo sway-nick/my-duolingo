@@ -30,9 +30,11 @@ import {
   getUserProgress,
   isWordMastered,
   prepareTrainingBatch,
+  getActiveConveyorBatch,
+  clearActiveConveyorBatch,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.js?v=378.0';
+} from '../../services/api.js?v=383.1';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=378.0';
 
 function sanitizeCategory(cat) {
@@ -2921,7 +2923,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }).length;
         const targetCount = Math.min(10, totalUnmastered.length || 10);
         if (pickedCount >= targetCount && targetCount > 0) {
-          prepareTrainingBatch(catWords, freshProg, favList);
+          clearActiveConveyorBatch(catWords, true);
+          getActiveConveyorBatch(catWords, freshProg, favList);
           if (typeof onMethodChange === 'function') {
             onMethodChange('quiz');
             return;
@@ -2952,7 +2955,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
           }).length;
           if (remainingCandidates.length === 0 && pickedCount > 0) {
-            prepareTrainingBatch(catWords, freshProg, favList);
+            clearActiveConveyorBatch(catWords, true);
+            getActiveConveyorBatch(catWords, freshProg, favList);
             if (typeof onMethodChange === 'function') {
               onMethodChange('quiz');
               return;
