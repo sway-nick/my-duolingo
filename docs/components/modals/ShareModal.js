@@ -1,4 +1,4 @@
-﻿import { t } from '../../services/i18n.js?v=378.0';
+import { t } from '../../services/i18n.js?v=378.0';
 
 /**
  * Show a quick toast notification
@@ -19,18 +19,13 @@ function showShareToast(msg) {
   }, 3500);
 }
 
+export const GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.englishbreakfast.app';
+
 /**
- * Get the canonical share URL for the app
+ * Get the canonical share URL for the app (Google Play Store)
  */
 function getShareUrl() {
-  if (typeof window === 'undefined') return 'https://sway-nick.github.io/my-duolingo/';
-  const origin = window.location.origin;
-  const pathname = window.location.pathname;
-  // If running on localhost or raw file, standard fallback is GitHub pages URL
-  if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file')) {
-    return 'https://sway-nick.github.io/my-duolingo/';
-  }
-  return origin + pathname;
+  return GOOGLE_PLAY_URL;
 }
 
 /**

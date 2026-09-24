@@ -22,6 +22,8 @@ dist/
 build/
 *.apk
 *.aab
+*.jks
+*.keystore
 
 # Google Apps Script
 .clasp.json

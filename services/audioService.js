@@ -331,7 +331,7 @@ function getPreferredVoice(gender = 'female') {
 let currentAudioPlayer = null;
 const audioCache = new Map();
 
-const CDN_AUDIO_BASE = 'https://sway-nick.github.io/my-duolingo/assets/audio';
+const CDN_AUDIO_BASE = 'https://english-breakfast.pages.dev/assets/audio';
 const AUDIO_CACHE_NAME = 'myduo_audio_cache_v1';
 
 function getAudioUrls(text, isUk) {

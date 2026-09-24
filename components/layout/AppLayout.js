@@ -1,4 +1,4 @@
-﻿import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=378.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=378.0';
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=378.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
 import { openShareDialog } from '../modals/ShareModal.js?v=378.0';
@@ -80,6 +80,52 @@ function getHeaderRankBadge(rank, xp) {
   return { isIcon: false, content: `Lv ${rank}`, title: `${rank} место в Лиге недели` };
 }
 
+function shouldShowSyncBadge(user = null) {
+  try {
+    const u = user || getCurrentUser();
+    const isGuest = !u || !u.id || u.id === 'guest' || String(u.id).startsWith('guest_') || !u.email;
+    if (isGuest) return true;
+    return Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateSyncBadges(issueActive = false) {
+  try {
+    if (typeof window !== 'undefined') {
+      window.__myduo_sync_issue = Boolean(issueActive);
+      if (issueActive) {
+        sessionStorage.setItem('myduo_sync_issue', '1');
+      } else {
+        sessionStorage.removeItem('myduo_sync_issue');
+      }
+    }
+  } catch (e) {}
+
+  const show = shouldShowSyncBadge();
+
+  const burgerBadge = document.querySelector('#header-burger-sync-badge');
+  if (burgerBadge) {
+    burgerBadge.style.display = show ? 'block' : 'none';
+  }
+
+  const settingsBadge = document.querySelector('#settings-login-sync-badge');
+  if (settingsBadge) {
+    settingsBadge.style.display = show ? 'block' : 'none';
+  }
+
+  const drawerSettingsBadge = document.querySelector('#drawer-settings-sync-badge');
+  if (drawerSettingsBadge) {
+    drawerSettingsBadge.style.display = show ? 'block' : 'none';
+  }
+
+  const leadBadge = document.querySelector('#leaderboard-player-sync-badge');
+  if (leadBadge) {
+    leadBadge.style.display = show ? 'inline-block' : 'none';
+  }
+}
+
 function renderHeaderRightActions(user) {
   const xp = getUserWeeklyXP();
   const rank = getUserWeeklyRank();
@@ -97,15 +143,18 @@ function renderHeaderRightActions(user) {
     </button>
   `;
 
+  const isBadgeActive = shouldShowSyncBadge(user);
+
   return `
     <div style="display:flex; align-items:center; gap:10px;">
       ${xpBadgeHtml}
-      <button class="header-burger-btn" id="header-burger-btn" title="Меню" aria-label="Открыть меню">
+      <button class="header-burger-btn" id="header-burger-btn" title="Меню" aria-label="Открыть меню" style="position: relative;">
         <svg class="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: var(--text-main);">
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
+        <span class="sync-status-badge" id="header-burger-sync-badge" style="display: ${isBadgeActive ? 'block' : 'none'};"></span>
       </button>
     </div>
   `;
@@ -249,7 +298,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             </span>
             <span class="drawer-item-text">${t('stats')}</span>
           </button>
-          <button class="nav-tab" data-tab="settings" title="${t('settings')}">
+          <button class="nav-tab" data-tab="settings" title="${t('settings')}" style="position: relative;">
             <span class="tab-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3"></circle>
@@ -257,6 +306,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               </svg>
             </span>
             <span class="drawer-item-text">${t('settings')}</span>
+            <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${shouldShowSyncBadge() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
           </button>
           <button type="button" class="drawer-share-action-btn" id="drawer-share-btn" title="${t('share_title')}">
             <span class="tab-icon">
@@ -630,6 +680,16 @@ if (typeof window !== 'undefined') {
         xpBtnEl.classList.remove('xp-bump-up', 'xp-bump-down');
       }, 700);
     }
+  });
+
+  // Handle sync issues (token expiration, network, Firestore rule issues)
+  // Instead of ugly intrusive black toast, gracefully activate orange badge on menu/settings/leaderboard
+  window.addEventListener('myduo:sync-issue', (e) => {
+    updateSyncBadges(true);
+  });
+
+  window.addEventListener('myduo:auth_changed', () => {
+    updateSyncBadges(false);
   });
 }
 

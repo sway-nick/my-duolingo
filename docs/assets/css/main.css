@@ -178,9 +178,11 @@ body.dark-theme,
 .voice-option-btn,
 .sound-option-btn {
   flex: 1;
-  padding: 10px 14px;
+  padding: 8px 12px;
   min-height: 44px;
-  border-radius: 14px;
+  height: 44px;
+  box-sizing: border-box;
+  border-radius: 12px;
   font-weight: 600;
   font-size: 14.5px;
   cursor: pointer;
@@ -245,6 +247,8 @@ body.dark-theme,
 .voice-option-btn.flag-btn {
   padding: 6px 14px;
   min-height: 44px;
+  height: 44px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -329,6 +333,8 @@ body {
   font-size: 15px;
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* App Wrapper */
@@ -3269,12 +3275,11 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 
 .settings-footer {
   margin-top: auto;
-  padding-top: 24px;
-  padding-bottom: 6px;
+  padding-top: 16px;
+  padding-bottom: max(8px, var(--safe-bottom, 0px));
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 14px;
   width: 100%;
   flex-shrink: 0;
 }
@@ -3305,12 +3310,12 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
   background: transparent;
   border: none;
   color: var(--text-muted, #64748b);
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
-  padding: 8px 16px;
+  padding: 4px 12px;
   transition: color 0.2s ease;
   touch-action: manipulation;
 }
@@ -3332,38 +3337,68 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 .settings-card h3 {
   font-size: 14.5px;
   font-weight: 700;
-  margin: 0 0 8px 0;
+  margin: 0 0 7px 0;
+}
+
+/* Account Actions Modal */
+.account-actions-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .account-actions-card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark-theme #modal-cancel-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
 }
 
 .profile-card {
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-between;
 }
 
 .profile-name {
   font-size: 15px;
   font-weight: 700;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .profile-sub {
   font-size: 12px;
   margin: 2px 0 0;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .settings-auth-btn {
   width: auto !important;
-  padding: 8px 20px !important;
-  min-height: 40px !important;
-  height: 40px !important;
+  padding: 8px 18px !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
   font-size: 14.5px !important;
   font-weight: 700 !important;
-  border-radius: 14px !important;
+  border-radius: 12px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .primary-button.settings-auth-btn,
@@ -3390,13 +3425,14 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 
 .secondary-button.settings-auth-btn,
 #logout-btn.settings-auth-btn {
-  border-radius: 14px !important;
+  border-radius: 12px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .settings-page .custom-dropdown-trigger {
-  height: 42px;
-  min-height: 42px;
+  height: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
   padding: 0 14px;
   font-size: 14.5px;
 }
@@ -3619,18 +3655,26 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 }
 
 .profile-details {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .profile-details h3 {
   margin: 0;
   font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .profile-details p {
   margin: 2px 0 0;
   font-size: 12px;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-desc {
@@ -8529,11 +8573,12 @@ body.dark-theme #clear-app-cache-btn:hover {
 }
 
 .bank-card.matte-gold .hint {
-  font-size: 9.5px;
+  font-size: clamp(8px, 2.3vw, 9.5px);
   font-weight: 700;
   letter-spacing: 0.8px;
   color: #4a3717;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
 }
 
 /* Рельефный металлический шильдик категории (аккуратная оправа ~0.2мм, идеальный центр текста) */
@@ -8692,4 +8737,45 @@ body.dark-theme #clear-app-cache-btn:hover {
 
 .cat-select-circle-btn:active {
   transform: scale(0.95);
+}
+
+/* ============================================================
+   Sync Status Orange Badge (Breadcrumb UI Indicators)
+   ============================================================ */
+.sync-status-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background-color: #ea580c;
+  border-radius: 50%;
+  border: 1.5px solid var(--card-bg, #ffffff);
+  box-sizing: content-box;
+  pointer-events: none;
+  z-index: 25;
+  transform-origin: center center;
+  animation: sync-badge-breathe 1.5s cubic-bezier(0.25, 1, 0.5, 1) 1 forwards;
+}
+
+.dark-theme .sync-status-badge {
+  border-color: #1e293b;
+  box-shadow: 0 0 6px rgba(234, 88, 12, 0.4);
+}
+
+@keyframes sync-badge-breathe {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(234, 88, 12, 0.75);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: none;
+  }
 }

@@ -71,7 +71,7 @@
         };
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function() {
-            navigator.serviceWorker.register('./sw.js?v=378.0').catch(function() {});
+            navigator.serviceWorker.register('./sw.js?v=383.2').catch(function() {});
           });
         }
       })();
@@ -92,7 +92,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=378.0" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=383.2" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -160,19 +160,19 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=378.0';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=378.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=378.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=378.0';
-      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=378.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=378.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=378.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=378.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=378.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=378.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=378.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=378.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=378.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=383.2';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=383.2';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=383.2';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=383.2';
+      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=383.2';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=383.2';
+      import { renderStatsView } from './components/stats/StatsView.js?v=383.2';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=383.2';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=383.2';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=383.2';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=383.2';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=383.2';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=383.2';
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -1072,7 +1072,7 @@
                         </div>
 
                         <div class="card-footer">
-                          <div class="hint">TOUCH TO FLIP BACK</div>
+                          <div class="hint" style="white-space: nowrap;">TOUCH TO FLIP BACK</div>
                           <div class="badge-tier">${wotdTier}</div>
                         </div>
                       </div>
@@ -1122,9 +1122,9 @@
 
           const continueCardsBtnHtml = unmasteredCount > 0
             ? `
-              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15px, 4.1vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                 <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;">${capSvg}</span>
-                <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
+                <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
               </button>
             `
             : '';
@@ -1177,16 +1177,16 @@
               <div class="hub-content-cluster" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; ${hasWotdCard ? 'transform: translateY(-44px);' : ''}">
                 <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '11px' : '15px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                   ${continueCardsBtnHtml}
-                  <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                  <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.2vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                     <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${nextBtnSvg}</span>
-                    <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
+                    <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
                   </button>
                   ${
                     (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                       ? `
-                    <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                    <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15px, 4.1vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                       <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${heartSvg}</span>
-                      <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
+                      <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
                     </button>
                   `
                       : ''

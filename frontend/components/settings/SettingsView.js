@@ -1,12 +1,12 @@
-﻿import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=378.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=378.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=378.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=378.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=378.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=378.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=378.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=378.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=383.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=383.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=383.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=383.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=383.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=383.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=383.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=383.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=383.0';
 
 function escapeHtml(str) {
   if (str == null) return '';
@@ -27,12 +27,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const isLoggedIn = Boolean(user && user.id && user.id !== 'guest' && !String(user.id).startsWith('guest_') && user.email);
   const avatar = getUserAvatar();
   const currentTheme = getSavedTheme();
+  const hasSyncIssue = Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
+  const showBadge = !isLoggedIn || hasSyncIssue;
 
   const displayName = isLoggedIn
     ? (user.name || user.email.split('@')[0])
     : (t('settings_guest_mode') || t('demo') || 'Guest (Demo)');
   const displaySub = isLoggedIn
-    ? (user.email || '')
+    ? (hasSyncIssue ? (t('lead_login_to_save') || 'Требуется войти заново для синхронизации') : (user.email || ''))
     : (t('settings_login_sub') || 'Log in to sync progress');
 
   container.innerHTML = `
@@ -51,15 +53,18 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           }
           <div class="avatar-edit-badge" title="${t('settings_avatar_edit_tooltip')}">🎭</div>
         </div>
-        <div class="profile-details" style="flex: 1; min-width: 0;">
-          <h3 class="profile-name">${escapeHtml(displayName)}</h3>
-          <p class="profile-sub">${escapeHtml(displaySub)}</p>
+        <div class="profile-details" style="flex: 1 1 auto; min-width: 0; overflow: hidden; padding-right: 8px;">
+          <h3 class="profile-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(displayName)}</h3>
+          <p class="profile-sub" style="${hasSyncIssue ? 'color: #ea580c; font-weight: 500;' : ''} white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">${escapeHtml(displaySub)}</p>
         </div>
-        <div>
+        <div class="profile-action" style="flex: 0 0 auto; flex-shrink: 0;">
           ${
-            isLoggedIn
+            isLoggedIn && !hasSyncIssue
               ? `<button class="secondary-button settings-auth-btn" id="logout-btn">${t('settings_logout') || 'Выйти'}</button>`
-              : `<button class="primary-button settings-auth-btn" id="register-modal-btn">${t('auth_tab_register') || 'Регистрация'}</button>`
+              : `<button class="primary-button settings-auth-btn" id="register-modal-btn" style="position: relative;">
+                  ${hasSyncIssue ? (t('auth_tab_login') || 'Войти') : (t('auth_tab_register') || 'Регистрация')}
+                  <span class="sync-status-badge" id="settings-login-sync-badge" style="display: ${showBadge ? 'block' : 'none'}; top: -2px; right: -2px;"></span>
+                </button>`
           }
         </div>
       </div>
@@ -167,19 +172,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </div>
       </div>
 
-
       <div class="settings-footer">
-        ${
-          isLoggedIn
-            ? `
-          <!-- Delete Account Button (Clean, no card container) -->
-          <button type="button" id="delete-account-btn" class="settings-delete-account-btn">
-            ${t('settings_account_delete_btn')}
-          </button>
-        `
-            : ''
-        }
-
         <button type="button" id="open-privacy-btn" class="settings-privacy-btn">
           ${t('settings_privacy_policy')}
         </button>
@@ -244,23 +237,20 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const registerBtn = container.querySelector('#register-modal-btn');
   if (registerBtn) {
     registerBtn.addEventListener('click', () => {
+      const mode = hasSyncIssue ? 'login' : 'register';
       renderAuthModal(async () => {
         await onUserChange();
         if (!window._activeTab || window._activeTab === 'settings') {
           renderSettingsView(containerSelector, onUserChange);
         }
-      }, 'register');
+      }, mode);
     });
   }
 
   const logoutBtn = container.querySelector('#logout-btn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-      logoutUser();
-      await onUserChange();
-      if (!window._activeTab || window._activeTab === 'settings') {
-        renderSettingsView(containerSelector, onUserChange);
-      }
+    logoutBtn.addEventListener('click', () => {
+      openAccountActionsModal();
     });
   }
 
@@ -477,46 +467,103 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
 
 
-  // Bind Delete Account button (Google Play Compliance)
-  const deleteAccountBtn = container.querySelector('#delete-account-btn');
-  if (deleteAccountBtn) {
-    deleteAccountBtn.addEventListener('click', async () => {
-      const confirmMsg = t('settings_account_delete_confirm');
-      if (confirm(confirmMsg)) {
-        try {
-          deleteAccountBtn.disabled = true;
-          deleteAccountBtn.textContent = t('settings_account_deleting');
-          await deleteCurrentUserAccount();
-          logoutUser();
-          alert(t('settings_account_deleted'));
-        } catch (err) {
-          console.warn('Delete account error:', err);
-          logoutUser();
-        }
+  async function executeDeleteAccount(statusBtn = null) {
+    const confirmMsg = t('settings_account_delete_confirm') || 'Are you sure you want to permanently delete your account and all learning data? This action cannot be undone.';
+    if (!confirm(confirmMsg)) return;
 
-        // ── Полная очистка всех локальных данных ──────────────────────────
-        try { localStorage.clear(); } catch (e) {}
-        try { sessionStorage.clear(); } catch (e) {}
+    if (statusBtn) {
+      statusBtn.disabled = true;
+      statusBtn.textContent = t('settings_account_deleting') || 'Deleting...';
+    }
 
-        // Удаляем все CacheStorage-кэши (скачанное аудио и Service Worker кэши)
-        try {
-          if ('caches' in window) {
-            const cacheKeys = await caches.keys();
-            await Promise.all(cacheKeys.map((k) => caches.delete(k)));
-          }
-        } catch (e) {}
+    try {
+      await deleteCurrentUserAccount();
+      logoutUser();
+      alert(t('settings_account_deleted') || 'Account deleted successfully.');
+    } catch (err) {
+      console.warn('Delete account error:', err);
+      logoutUser();
+    }
 
-        // Отписываем и удаляем Service Worker регистрации
-        try {
-          if ('serviceWorker' in navigator) {
-            const regs = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(regs.map((r) => r.unregister()));
-          }
-        } catch (e) {}
+    // ── Полная очистка всех локальных данных ──────────────────────────
+    try { localStorage.clear(); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
 
-        // Редирект после очистки
-        window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+    // Удаляем все CacheStorage-кэши (скачанное аудио и Service Worker кэши)
+    try {
+      if ('caches' in window) {
+        const cacheKeys = await caches.keys();
+        await Promise.all(cacheKeys.map((k) => caches.delete(k)));
       }
+    } catch (e) {}
+
+    // Отписываем и удаляем Service Worker регистрации
+    try {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+      }
+    } catch (e) {}
+
+    // Редирект после очистки
+    window.location.href = window.location.origin + window.location.pathname + '?t=' + Date.now();
+  }
+
+  function openAccountActionsModal() {
+    const existing = document.querySelector('#account-actions-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-backdrop';
+    modal.id = 'account-actions-modal';
+    modal.style.zIndex = '99999';
+    modal.innerHTML = `
+      <div class="modal-content account-actions-card" style="text-align: center; max-width: 320px; width: 90%; padding: 22px 18px; box-sizing: border-box; animation: scaleUp 0.18s ease; border-radius: 16px;">
+        <div style="margin-bottom: 18px;">
+          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            ${escapeHtml(displayName)}
+          </h3>
+          <p style="margin: 4px 0 0; font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            ${escapeHtml(user.email || '')}
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+          <button type="button" class="secondary-button" id="modal-logout-btn" style="min-height: 42px; height: 42px; font-size: 14.5px; font-weight: 700; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            ${t('settings_logout') || 'Выйти'}
+          </button>
+
+          <button type="button" class="settings-delete-account-btn" id="modal-delete-account-btn" style="min-height: 42px; height: 42px; font-size: 13px; font-weight: 600; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            ${t('settings_account_delete_btn') || 'Удалить аккаунт и данные'}
+          </button>
+
+          <button type="button" class="primary-button btn-green" id="modal-cancel-btn" style="min-height: 42px; height: 42px; font-size: 14.5px; font-weight: 700; width: 100%; border-radius: 12px !important; margin-top: 2px; cursor: pointer;">
+            ${t('dict_cancel_btn') || 'Отмена'}
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const closeModal = () => modal.remove();
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    modal.querySelector('#modal-cancel-btn').addEventListener('click', closeModal);
+
+    modal.querySelector('#modal-logout-btn').addEventListener('click', async () => {
+      closeModal();
+      logoutUser();
+      await onUserChange();
+      if (!window._activeTab || window._activeTab === 'settings') {
+        renderSettingsView(containerSelector, onUserChange);
+      }
+    });
+
+    modal.querySelector('#modal-delete-account-btn').addEventListener('click', async () => {
+      const delBtn = modal.querySelector('#modal-delete-account-btn');
+      await executeDeleteAccount(delBtn);
     });
   }
 
