@@ -1,12 +1,12 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=381.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=381.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=381.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=381.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=381.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=381.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=381.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=381.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=381.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=382.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=382.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=382.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=382.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=382.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=382.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=382.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=382.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=382.0';
 
 function escapeHtml(str) {
   if (str == null) return '';
@@ -519,28 +519,25 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     modal.style.zIndex = '99999';
     modal.innerHTML = `
       <div class="modal-content account-actions-card" style="text-align: center; max-width: 320px; width: 90%; padding: 22px 18px; box-sizing: border-box; animation: scaleUp 0.18s ease; border-radius: 16px;">
-        <div style="margin-bottom: 16px;">
-          <div style="font-size: 36px; line-height: 1; margin-bottom: 8px;">👤</div>
-          <h3 style="margin: 0; font-size: 16.5px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <div style="margin-bottom: 18px;">
+          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             ${escapeHtml(displayName)}
           </h3>
-          <p style="margin: 3px 0 0; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          <p style="margin: 4px 0 0; font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             ${escapeHtml(user.email || '')}
           </p>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 9px; width: 100%;">
-          <button type="button" class="secondary-button" id="modal-logout-btn" style="min-height: 42px; height: 42px; font-size: 14.5px; font-weight: 700; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-            <span>🚪</span>
-            <span>${t('settings_logout') || 'Выйти'}</span>
+        <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+          <button type="button" class="secondary-button" id="modal-logout-btn" style="min-height: 42px; height: 42px; font-size: 14.5px; font-weight: 700; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            ${t('settings_logout') || 'Выйти'}
           </button>
 
-          <button type="button" class="settings-delete-account-btn" id="modal-delete-account-btn" style="min-height: 42px; height: 42px; font-size: 13px; font-weight: 600; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-            <span>🗑️</span>
-            <span>${t('settings_account_delete_btn') || 'Удалить аккаунт и данные'}</span>
+          <button type="button" class="settings-delete-account-btn" id="modal-delete-account-btn" style="min-height: 42px; height: 42px; font-size: 13px; font-weight: 600; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            ${t('settings_account_delete_btn') || 'Удалить аккаунт и данные'}
           </button>
 
-          <button type="button" class="primary-button" id="modal-cancel-btn" style="min-height: 38px; height: 38px; font-size: 13.5px; font-weight: 600; width: 100%; border-radius: 12px; background: rgba(0,0,0,0.06); color: var(--text-main); border: 1px solid var(--border-color); margin-top: 2px; cursor: pointer;">
+          <button type="button" class="primary-button btn-green" id="modal-cancel-btn" style="min-height: 42px; height: 42px; font-size: 14.5px; font-weight: 700; width: 100%; border-radius: 12px !important; margin-top: 2px; cursor: pointer;">
             ${t('dict_cancel_btn') || 'Отмена'}
           </button>
         </div>
