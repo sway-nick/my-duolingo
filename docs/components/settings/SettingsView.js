@@ -1,12 +1,12 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=380.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=380.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=380.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=380.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=380.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=380.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=380.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=380.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=380.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=381.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=381.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=381.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=381.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=381.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=381.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=381.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=381.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=381.0';
 
 function escapeHtml(str) {
   if (str == null) return '';
@@ -541,7 +541,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           </button>
 
           <button type="button" class="primary-button" id="modal-cancel-btn" style="min-height: 38px; height: 38px; font-size: 13.5px; font-weight: 600; width: 100%; border-radius: 12px; background: rgba(0,0,0,0.06); color: var(--text-main); border: 1px solid var(--border-color); margin-top: 2px; cursor: pointer;">
-            ${t('cancelBtn') || 'Отмена'}
+            ${t('dict_cancel_btn') || 'Отмена'}
           </button>
         </div>
       </div>
