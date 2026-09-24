@@ -1072,7 +1072,7 @@
                         </div>
 
                         <div class="card-footer">
-                          <div class="hint">TOUCH TO FLIP BACK</div>
+                          <div class="hint" style="white-space: nowrap;">TOUCH TO FLIP BACK</div>
                           <div class="badge-tier">${wotdTier}</div>
                         </div>
                       </div>
@@ -1122,9 +1122,9 @@
 
           const continueCardsBtnHtml = unmasteredCount > 0
             ? `
-              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+              <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15px, 4.1vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                 <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;">${capSvg}</span>
-                <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
+                <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('train_continue_round')}</span>
               </button>
             `
             : '';
@@ -1177,16 +1177,16 @@
               <div class="hub-content-cluster" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; ${hasWotdCard ? 'transform: translateY(-44px);' : ''}">
                 <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '11px' : '15px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
                   ${continueCardsBtnHtml}
-                  <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                  <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.2vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                     <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${nextBtnSvg}</span>
-                    <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
+                    <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nextBtnText}</span>
                   </button>
                   ${
                     (currentMethod === 'input' || currentMethod === 'quiz' || learningCount === 0)
                       ? `
-                    <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(16.5px, 4.4vw, 18.5px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
+                    <button class="primary-button btn-green hub-choice-btn" id="go-repeat-favs-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15px, 4.1vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                       <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${heartSvg}</span>
-                      <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
+                      <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t('fav_hub_btn')}</span>
                     </button>
                   `
                       : ''
