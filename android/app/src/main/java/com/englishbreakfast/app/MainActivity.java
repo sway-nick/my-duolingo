@@ -67,12 +67,25 @@ public class MainActivity extends BridgeActivity {
         setupBackNavigation();
         setupGoogleAuthBridge();
         setupAudioBridge();
+        lockWebViewTextZoom();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
+    }
+
+    private void lockWebViewTextZoom() {
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().post(() -> {
+                    try {
+                        bridge.getWebView().getSettings().setTextZoom(100);
+                    } catch (Exception e) {}
+                });
+            }
+        } catch (Exception e) {}
     }
 
     private void setupBackNavigation() {
@@ -143,6 +156,7 @@ public class MainActivity extends BridgeActivity {
     public void onResume() {
         super.onResume();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        lockWebViewTextZoom();
         injectSafeTopToWebView();
         injectSafeBottomToWebView();
     }
