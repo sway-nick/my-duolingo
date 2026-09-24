@@ -178,11 +178,12 @@ body.dark-theme,
 .voice-option-btn,
 .sound-option-btn {
   flex: 1;
-  padding: 10px 14px;
-  min-height: 44px;
-  border-radius: 14px;
+  padding: 8px 12px;
+  min-height: 40px;
+  height: 40px;
+  border-radius: 12px;
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -3271,12 +3272,11 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 
 .settings-footer {
   margin-top: auto;
-  padding-top: 14px;
-  padding-bottom: calc(16px + var(--safe-bottom, 0px));
+  padding-top: 8px;
+  padding-bottom: max(6px, var(--safe-bottom, 0px));
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
   width: 100%;
   flex-shrink: 0;
 }
@@ -3307,12 +3307,12 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
   background: transparent;
   border: none;
   color: var(--text-muted, #64748b);
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
-  padding: 6px 16px;
+  padding: 4px 12px;
   transition: color 0.2s ease;
   touch-action: manipulation;
 }
@@ -3326,15 +3326,34 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 12px 14px;
-  margin-bottom: 10px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
 }
 
 .settings-card-title,
 .settings-card h3 {
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
+}
+
+/* Account Actions Modal */
+.account-actions-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .account-actions-card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark-theme #modal-cancel-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
 }
 
 .profile-card {
@@ -3407,10 +3426,10 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 }
 
 .settings-page .custom-dropdown-trigger {
-  height: 42px;
-  min-height: 42px;
+  height: 40px;
+  min-height: 40px;
   padding: 0 14px;
-  font-size: 14.5px;
+  font-size: 14px;
 }
 
 #clear-app-cache-btn {
