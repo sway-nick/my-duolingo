@@ -3393,7 +3393,7 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
   box-sizing: border-box !important;
   font-size: 14.5px !important;
   font-weight: 700 !important;
-  border-radius: 14px !important;
+  border-radius: 12px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -3425,7 +3425,7 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 
 .secondary-button.settings-auth-btn,
 #logout-btn.settings-auth-btn {
-  border-radius: 14px !important;
+  border-radius: 12px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
