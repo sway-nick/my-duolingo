@@ -179,11 +179,12 @@ body.dark-theme,
 .sound-option-btn {
   flex: 1;
   padding: 8px 12px;
-  min-height: 40px;
-  height: 40px;
+  min-height: 44px;
+  height: 44px;
+  box-sizing: border-box;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 14.5px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -246,6 +247,8 @@ body.dark-theme,
 .voice-option-btn.flag-btn {
   padding: 6px 14px;
   min-height: 44px;
+  height: 44px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3272,8 +3275,8 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 
 .settings-footer {
   margin-top: auto;
-  padding-top: 8px;
-  padding-bottom: max(6px, var(--safe-bottom, 0px));
+  padding-top: 16px;
+  padding-bottom: max(8px, var(--safe-bottom, 0px));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3326,15 +3329,15 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 10px 14px;
-  margin-bottom: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
 }
 
 .settings-card-title,
 .settings-card h3 {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
-  margin: 0 0 6px 0;
+  margin: 0 0 7px 0;
 }
 
 /* Account Actions Modal */
@@ -3384,9 +3387,10 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 
 .settings-auth-btn {
   width: auto !important;
-  padding: 8px 16px !important;
-  min-height: 40px !important;
-  height: 40px !important;
+  padding: 8px 18px !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
   font-size: 14.5px !important;
   font-weight: 700 !important;
   border-radius: 14px !important;
@@ -3426,10 +3430,11 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 }
 
 .settings-page .custom-dropdown-trigger {
-  height: 40px;
-  min-height: 40px;
+  height: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
   padding: 0 14px;
-  font-size: 14px;
+  font-size: 14.5px;
 }
 
 #clear-app-cache-btn {
