@@ -1,4 +1,4 @@
-﻿import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=378.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=378.0';
 import { 
   syncLeaderboardScoreFirestore, 
   getWeeklyLeaderboardFirestore, 
@@ -2159,7 +2159,7 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
   return freshBatch;
 }
 
-function clearActiveConveyorBatch(categoryWordsOrKey = null) {
+function clearActiveConveyorBatch(categoryWordsOrKey = null, preserveProgress = false) {
   const userId = getEffectiveUserId();
   try {
     // 1. Remove legacy un-scoped batch key
@@ -2178,6 +2178,10 @@ function clearActiveConveyorBatch(categoryWordsOrKey = null) {
           localStorage.removeItem(k);
         }
       }
+    }
+
+    if (preserveProgress) {
+      return;
     }
 
     // 3. Clear round flags in user progress

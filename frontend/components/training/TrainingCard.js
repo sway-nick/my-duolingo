@@ -30,9 +30,11 @@ import {
   getUserProgress,
   isWordMastered,
   prepareTrainingBatch,
+  getActiveConveyorBatch,
+  clearActiveConveyorBatch,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.js?v=378.0';
+} from '../../services/api.js?v=383.1';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=378.0';
 
 function sanitizeCategory(cat) {
@@ -586,7 +588,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                     ? `
                   <div class="training-word-container">
                     <h2 class="training-word clickable-word-box" id="speak-word-trigger" title="Tap to speak word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                      <span class="training-word-text">${currentWord.word}</span>
+                      <span class="training-word-text">${escapeHtml(currentWord.word)}</span>
                     </h2>
                     ${notesBtnHtml}
                   </div>
@@ -605,7 +607,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                         ? `
                   <div class="training-word-container">
                     <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
-                      ${getWordTranslation(currentWord)}
+                      ${escapeHtml(getWordTranslation(currentWord))}
                     </h2>
                     ${notesBtnHtml}
                   </div>
@@ -613,7 +615,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                         : `
                   <div class="training-word-container">
                     <h2 class="training-word" style="font-size: 22px; margin: 0; color: var(--text-main); line-height: 1.2;">
-                      ${getWordTranslation(currentWord)}
+                      ${escapeHtml(getWordTranslation(currentWord))}
                     </h2>
                     ${notesBtnHtml}
                   </div>
@@ -1091,7 +1093,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '❌';
           }
           if (holdHint) {
-            holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${currentWord.word}</strong></span>`;
+            holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${escapeHtml(currentWord.word)}</strong></span>`;
           }
           saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
           if (continueBtn) {
@@ -1839,7 +1841,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             micBtn.innerHTML = '❌';
 
             if (holdHint) {
-              holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${currentWord.word}</strong></span>`;
+              holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${escapeHtml(currentWord.word)}</strong></span>`;
             }
             await saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
             if (continueBtn) {
@@ -2679,7 +2681,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         feedback.innerHTML = `
           <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
           <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
-            ${currentWord.word}
+            ${escapeHtml(currentWord.word)}
           </div>
         `;
 
@@ -2762,8 +2764,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </button>
             </div>
             <div class="flashcard-face-body">
-              <h2 class="flashcard-word">${currentWord.word}</h2>
-              ${(() => { const _rt = String(currentWord.transcription || '').replace(/[\[\]]/g, '').replace(/^\/+|\/+$/g, '').trim(); return _rt ? `<p class="flashcard-transcription">/${_rt}/</p>` : ''; })()}
+              <h2 class="flashcard-word">${escapeHtml(currentWord.word)}</h2>
+              ${(() => { const _rt = escapeHtml(String(currentWord.transcription || '').replace(/[\[\]]/g, '').replace(/^\/+|\/+$/g, '').trim()); return _rt ? `<p class="flashcard-transcription">/${_rt}/</p>` : ''; })()}
             </div>
             <div class="flashcard-face-bottom">
               <span class="flashcard-flip-prompt">${t('flip_for_translation')}</span>
@@ -2778,7 +2780,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </button>
             </div>
             <div class="flashcard-face-body">
-              <h2 class="flashcard-translation">${getWordTranslation(currentWord)}</h2>
+              <h2 class="flashcard-translation">${escapeHtml(getWordTranslation(currentWord))}</h2>
               ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${escapeHtml(getWordNotes(currentWord))}</p>` : ''}
             </div>
           </div>
@@ -2921,7 +2923,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         }).length;
         const targetCount = Math.min(10, totalUnmastered.length || 10);
         if (pickedCount >= targetCount && targetCount > 0) {
-          prepareTrainingBatch(catWords, freshProg, favList);
+          clearActiveConveyorBatch(catWords, true);
+          getActiveConveyorBatch(catWords, freshProg, favList);
           if (typeof onMethodChange === 'function') {
             onMethodChange('quiz');
             return;
@@ -2952,7 +2955,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
           }).length;
           if (remainingCandidates.length === 0 && pickedCount > 0) {
-            prepareTrainingBatch(catWords, freshProg, favList);
+            clearActiveConveyorBatch(catWords, true);
+            getActiveConveyorBatch(catWords, freshProg, favList);
             if (typeof onMethodChange === 'function') {
               onMethodChange('quiz');
               return;
