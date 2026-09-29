@@ -13478,8 +13478,10 @@
     },
     "category": "Elementary",
     "level": "",
-    "notes": "",
-    "all_notes": {},
+    "notes": "следующий за указанным моментом в прошлом или будущем, либо идущий ниже в тексте",
+    "all_notes": {
+      "ru": "следующий за указанным моментом в прошлом или будущем, либо идущий ниже в тексте"
+    },
     "zipf": 5.46
   },
   {
@@ -48936,6 +48938,37 @@
     "zipf": 4.8
   },
   {
+    "id": 6752,
+    "word": false,
+    "transcription": "fɔːls",
+    "translation": "ложь, ложный",
+    "translations": {
+      "ru": "ложь, ложный",
+      "uk": "брехня, брехня",
+      "de": "lüge, falsch",
+      "es": "mentira, falsedad",
+      "fr": "mensonge, faux",
+      "pl": "kłamstwo, fałsz",
+      "it": "menzogna, falso",
+      "tr": "yalan, yanlış",
+      "pt": "mentira, falso",
+      "ro": "minciună, fals",
+      "bg": "лъжа, невярно",
+      "cs": "lež, falešný",
+      "sk": "lož, faloš",
+      "hu": "hazugság, hamis",
+      "el": "ψέμα, ψευδές",
+      "sl": "laž, neresnica",
+      "et": "vale, valelik",
+      "lt": "melas, netikras"
+    },
+    "category": "Advanced",
+    "level": "A2",
+    "notes": "",
+    "all_notes": {},
+    "zipf": 4.8
+  },
+  {
     "id": 65,
     "word": "extremely",
     "transcription": "ɪkˈstriːmli",
@@ -77517,6 +77550,37 @@
       "lt": "paklausti niekada nepakenks"
     },
     "category": "Pattern",
+    "level": "B1",
+    "notes": "",
+    "all_notes": {},
+    "zipf": 4.5
+  },
+  {
+    "id": 6753,
+    "word": "cheatsheet",
+    "transcription": "ˈtʃiːt.ʃiːt",
+    "translation": "шпаргалка",
+    "translations": {
+      "ru": "шпаргалка",
+      "uk": "шпаргалка",
+      "de": "spickzettel",
+      "es": "hoja de trucos",
+      "fr": "aide-mémoire",
+      "pl": "ściągawka",
+      "it": "foglio riassuntivo",
+      "tr": "kopya kağıdı",
+      "pt": "folha de dicas",
+      "ro": "fișă informativă",
+      "bg": "шпаргалка",
+      "cs": "tahák",
+      "sk": "ťahák",
+      "hu": "puskalap",
+      "el": "φύλλο οδηγιών χρήσης",
+      "sl": "goljufiv list",
+      "et": "spikker",
+      "lt": "apgaulės lapas"
+    },
+    "category": "Advanced",
     "level": "B1",
     "notes": "",
     "all_notes": {},
