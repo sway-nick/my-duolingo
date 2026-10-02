@@ -16,6 +16,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
+import java.util.Locale;
 import com.getcapacitor.BridgeActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -32,6 +35,8 @@ public class MainActivity extends BridgeActivity {
     private long lastBackPressTime = 0;
     private GoogleSignInClient googleSignInClient;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
+    private TextToSpeech tts;
+    private boolean ttsInitialized = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,7 @@ public class MainActivity extends BridgeActivity {
         setupBackNavigation();
         setupGoogleAuthBridge();
         setupAudioBridge();
+        initNativeTts();
         lockWebViewTextZoom();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -364,7 +370,48 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onDestroy() {
         BackgroundAudioService.setActionListener(null);
+        if (tts != null) {
+            try {
+                tts.stop();
+                tts.shutdown();
+            } catch (Exception ignored) {}
+        }
         super.onDestroy();
+    }
+
+    private void initNativeTts() {
+        try {
+            tts = new TextToSpeech(this, status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    ttsInitialized = true;
+                    try {
+                        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                            @Override
+                            public void onStart(String utteranceId) {}
+
+                            @Override
+                            public void onDone(String utteranceId) {
+                                notifyTtsDone(utteranceId);
+                            }
+
+                            @Override
+                            public void onError(String utteranceId) {
+                                notifyTtsDone(utteranceId);
+                            }
+                        });
+                    } catch (Exception ignored) {}
+                }
+            });
+        } catch (Exception ignored) {}
+    }
+
+    private void notifyTtsDone(String utteranceId) {
+        if (bridge != null && bridge.getWebView() != null) {
+            bridge.getWebView().post(() -> {
+                bridge.getWebView().evaluateJavascript(
+                    "(function() { if (typeof window.onNativeTtsComplete === 'function') { window.onNativeTtsComplete('" + utteranceId + "'); } })()", null);
+            });
+        }
     }
 
     private void setupAudioBridge() {
@@ -436,6 +483,60 @@ public class MainActivity extends BridgeActivity {
                                 Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
                                 intent.setAction(BackgroundAudioService.ACTION_STOP);
                                 startService(intent);
+                            } catch (Exception ignored) {}
+                        });
+                    }
+
+                    @JavascriptInterface
+                    public boolean speakText(final String text, final String langCode, final String utteranceId) {
+                        if (text == null || text.trim().isEmpty()) {
+                            return false;
+                        }
+                        runOnUiThread(() -> {
+                            try {
+                                if (tts == null) {
+                                    notifyTtsDone(utteranceId);
+                                    return;
+                                }
+                                Locale locale;
+                                if ("uk".equalsIgnoreCase(langCode)) {
+                                    locale = new Locale("uk", "UA");
+                                } else if ("ru".equalsIgnoreCase(langCode)) {
+                                    locale = new Locale("ru", "RU");
+                                } else if ("de".equalsIgnoreCase(langCode)) {
+                                    locale = Locale.GERMANY;
+                                } else if ("fr".equalsIgnoreCase(langCode)) {
+                                    locale = Locale.FRANCE;
+                                } else if ("es".equalsIgnoreCase(langCode)) {
+                                    locale = new Locale("es", "ES");
+                                } else if (langCode != null && langCode.contains("-")) {
+                                    String[] parts = langCode.split("-");
+                                    locale = new Locale(parts[0], parts[1]);
+                                } else if (langCode != null) {
+                                    locale = new Locale(langCode);
+                                } else {
+                                    locale = new Locale("ru", "RU");
+                                }
+                                tts.setLanguage(locale);
+                                tts.setSpeechRate(1.0f);
+                                tts.setPitch(1.0f);
+                                Bundle params = new Bundle();
+                                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+                                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, utteranceId);
+                            } catch (Exception e) {
+                                notifyTtsDone(utteranceId);
+                            }
+                        });
+                        return true;
+                    }
+
+                    @JavascriptInterface
+                    public void stopSpeech() {
+                        runOnUiThread(() -> {
+                            try {
+                                if (tts != null) {
+                                    tts.stop();
+                                }
                             } catch (Exception ignored) {}
                         });
                     }
