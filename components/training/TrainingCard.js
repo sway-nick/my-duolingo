@@ -1876,52 +1876,143 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       const wordText = (currentWord.word || '').replace(/[\u00ad\u200b\ufeff]/g, '');
 
       // Split by words to prevent awkward mid-word breaks and avoid rendering giant space boxes
-      const words = wordText.split(/\s+/).filter(Boolean);
-      const isMultiWord = words.length > 1;
-      const totalChars = wordText.replace(/\s+/g, '').length;
+      const rawWords = wordText.split(/\s+/).filter(Boolean);
 
-      // Adaptive tile sizing based on word complexity
+      // Suffix patterns for natural English syllable breaks
+      const SUFFIX_PATTERNS = [
+        /(tional|tionally)$/i,
+        /(tion|sion|tions|sions)$/i,
+        /(ment|ments)$/i,
+        /(ship|ships)$/i,
+        /(ness)$/i,
+        /(less)$/i,
+        /(ance|ence|ances|ences)$/i,
+        /(able|ible|ably|ibly)$/i,
+        /(tial|cial|tially|cially)$/i,
+        /(tious|cious|tiously|ciously)$/i,
+        /(ture|tures)$/i,
+        /(tive|sive|tively|sively)$/i,
+        /(nity|city|lity|rity|vity)$/i,
+        /(fully|fulness)$/i,
+        /(ing|ings)$/i,
+        /(ize|ise|ized|ised)$/i,
+        /(cal|ful|ous|ish)$/i,
+        /(est|ier|iest)$/i,
+        /([bcdfghjklmnpqrstvwxz]ly)$/i,
+        /(ed)$/i,
+        /(al|ally)$/i
+      ];
+
+      // Break long single words (>= 11 chars) by syllables so tiles never overflow screen width
+      function splitWordSyllables(word) {
+        if (word.length < 11) return [word];
+
+        if (word.includes('-')) {
+          const parts = word.split('-');
+          let p1 = '', p2 = '';
+          for (let i = 0; i < parts.length; i++) {
+            if ((p1 + (p1 ? '-' : '') + parts[i]).length <= 9) {
+              p1 += (p1 ? '-' : '') + parts[i];
+            } else {
+              p2 = parts.slice(i).join('-');
+              break;
+            }
+          }
+          if (p1 && p2) return [p1 + '-', p2];
+        }
+
+        for (const pat of SUFFIX_PATTERNS) {
+          const m = word.match(pat);
+          if (m && m.index > 0 && m.index >= 4 && (word.length - m.index <= 6)) {
+            const p1 = word.slice(0, m.index);
+            const p2 = word.slice(m.index);
+            if (p1.length <= 10 && p2.length <= 10) return [p1, p2];
+          }
+        }
+
+        const phonetic = word.match(/([bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*)$/i);
+        if (phonetic && phonetic.index >= 4 && phonetic[0].length >= 2 && phonetic[0].length <= 5) {
+          const p1 = word.slice(0, phonetic.index);
+          const p2 = word.slice(phonetic.index);
+          if (p1.length <= 10 && p2.length <= 10) return [p1, p2];
+        }
+
+        const target = Math.floor(word.length * 0.6);
+        let bestSplit = target;
+        for (let offset = 0; offset <= 3; offset++) {
+          for (const sign of [-1, 1]) {
+            const idx = target + sign * offset;
+            if (idx >= 4 && idx <= word.length - 3) {
+              const c1 = word[idx - 1], c2 = word[idx];
+              const isV1 = /[aeiouy]/i.test(c1), isV2 = /[aeiouy]/i.test(c2);
+              if (!isV1 && !isV2) { bestSplit = idx; break; }
+              if (isV1 && !isV2) { bestSplit = idx; break; }
+            }
+          }
+        }
+        return [word.slice(0, bestSplit), word.slice(bestSplit)];
+      }
+
+      const wordSegments = [];
+      rawWords.forEach((w, wIdx) => {
+        const parts = splitWordSyllables(w);
+        parts.forEach((p, pIdx) => {
+          wordSegments.push({
+            text: p,
+            isSyllableBreak: pIdx < parts.length - 1,
+            isWordBreak: pIdx === parts.length - 1 && wIdx < rawWords.length - 1,
+          });
+        });
+      });
+
+      // Adaptive tile sizing based on maximum segment character count
+      const maxSegmentChars = Math.max(...wordSegments.map((s) => s.text.length));
       let tileWidth = 32;
       let tileHeight = 38;
       let fontSize = 18;
       let gap = 4;
 
-      if (totalChars > 12 || (isMultiWord && totalChars > 8)) {
-        tileWidth = 26;
-        tileHeight = 34;
-        fontSize = 15;
-        gap = 3;
-      } else if (totalChars > 8) {
+      if (maxSegmentChars > 8) {
         tileWidth = 28;
         tileHeight = 36;
         fontSize = 16;
         gap = 3;
+      } else if (maxSegmentChars > 6) {
+        tileWidth = 30;
+        tileHeight = 36;
+        fontSize = 17;
+        gap = 4;
       }
 
       let globalCharIndex = 0;
-      const wordsHtml = words
-        .map((w, wIdx) => {
-          const lettersHtml = w
-            .split('')
-            .map((char) => {
-              const index = globalCharIndex++;
-              if (!isLetter(char) || isVowel(char)) {
-                return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: ${tileWidth}px; height: ${tileHeight}px; border-radius: 6px; font-size: ${fontSize}px; font-weight: 700; margin: 0; padding: 0 !important; text-align: center; vertical-align: middle; box-sizing: border-box; line-height: 1; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
-              } else {
-                return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: ${tileWidth}px; height: ${tileHeight}px; border-radius: 6px; font-size: ${fontSize}px; font-weight: 700; margin: 0; padding: 0 !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-indent: 0; line-height: 1; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
-              }
-            })
-            .join('');
+      let wordsHtml = '';
 
-          if (wIdx < words.length - 1) globalCharIndex++;
+      wordSegments.forEach((seg) => {
+        const lettersHtml = seg.text
+          .split('')
+          .map((char) => {
+            const index = globalCharIndex++;
+            if (!isLetter(char) || isVowel(char)) {
+              return `<span class="letter-box vowel" style="display: inline-flex; align-items: center; justify-content: center; width: ${tileWidth}px; height: ${tileHeight}px; border-radius: 6px; font-size: ${fontSize}px; font-weight: 700; margin: 0; padding: 0 !important; text-align: center; vertical-align: middle; box-sizing: border-box; line-height: 1; background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1.5px solid var(--border-color);">${char}</span>`;
+            } else {
+              return `<input type="text" class="letter-box consonant-input" data-index="${index}" data-correct="${char.toLowerCase()}" maxlength="1" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" style="display: inline-flex; align-items: center; justify-content: center; width: ${tileWidth}px; height: ${tileHeight}px; border-radius: 6px; font-size: ${fontSize}px; font-weight: 700; margin: 0; padding: 0 !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-indent: 0; line-height: 1; text-align: center; vertical-align: middle; box-sizing: border-box; background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color); caret-color: var(--text-main); outline: none; text-transform: lowercase; cursor: text;" />`;
+            }
+          })
+          .join('');
 
-          return `<div class="consonants-word-group" style="display: inline-flex; gap: ${gap}px; align-items: center; white-space: nowrap;">${lettersHtml}</div>`;
-        })
-        .join(`<div class="consonants-word-spacer" style="width: ${isMultiWord ? '10px' : '6px'}; height: ${tileHeight}px; flex-shrink: 0;"></div>`);
+        wordsHtml += `<div class="consonants-word-group" style="display: inline-flex; gap: ${gap}px; align-items: center; white-space: nowrap;">${lettersHtml}</div>`;
+
+        if (seg.isSyllableBreak) {
+          wordsHtml += `<div class="consonants-syllable-break" style="flex-basis: 100%; width: 100%; height: 6px;"></div>`;
+        } else if (seg.isWordBreak) {
+          globalCharIndex++;
+          wordsHtml += `<div class="consonants-word-spacer" style="width: 10px; height: ${tileHeight}px; flex-shrink: 0;"></div>`;
+        }
+      });
 
       practiceArea.innerHTML = `
-        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto; padding: 12px 0;">
-          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 12px; width: 100%;">
+        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 400px; margin: 0 auto; padding: 10px 0;">
+          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 10px; width: 100%;">
             ${wordsHtml}
           </div>
         </div>
