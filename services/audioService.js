@@ -941,6 +941,77 @@ function stopAllAudio() {
 }
 
 /**
+ * Intelligently scores and selects the most natural, human-sounding neural voice
+ * for the target language, heavily prioritizing Neural/Natural voices (Edge Natural, Chrome Google Neural, Apple Siri)
+ * and filtering out robotic legacy desktop voices (like Microsoft Irina / Pavel SAPI).
+ */
+function getPreferredVoiceForTargetLang(langCode = 'ru', fullLang = 'ru-RU', preferredGender = 'female') {
+  loadVoices();
+  const voices = (typeof window !== 'undefined' && window.speechSynthesis && window.speechSynthesis.getVoices().length > 0)
+    ? window.speechSynthesis.getVoices()
+    : cachedVoices;
+
+  if (!voices || voices.length === 0) return { voice: null, isRobotic: false };
+
+  const targetCode = (langCode || 'ru').toLowerCase().trim();
+  const fullCode = (fullLang || 'ru-RU').toLowerCase().trim();
+  const targetGender = (preferredGender || 'female').toLowerCase();
+
+  const candidates = voices.filter(v => {
+    if (!v.lang) return false;
+    const l = v.lang.toLowerCase().replace('_', '-');
+    return l === fullCode || l.startsWith(targetCode + '-') || l === targetCode;
+  });
+
+  if (candidates.length === 0) return { voice: null, isRobotic: false };
+
+  function scoreVoice(v) {
+    const name = (v.name || '').toLowerCase();
+    const l = (v.lang || '').toLowerCase().replace('_', '-');
+    let pts = 0;
+
+    // 1. Extreme bonus for Modern Neural / Natural voices (Edge Natural, Windows 11 Neural, Chrome Neural)
+    if (name.includes('natural')) pts += 160;
+    if (name.includes('neural')) pts += 140;
+    if (name.includes('online')) pts += 120;
+
+    // 2. High bonus for Google Cloud / Android Speech Services / Apple Siri / Yandex
+    if (name.includes('google')) pts += 100;
+    if (name.includes('premium') || name.includes('enhanced')) pts += 80;
+    if (name.includes('siri') || name.includes('yandex') || name.includes('alisa')) pts += 70;
+
+    // 3. Gender matching bonus
+    const isMaleKeyword = name.includes('dmitriy') || name.includes('david') || name.includes('pavel') || name.includes('guy') || name.includes('filipp') || name.includes('maxim') || name.includes('male');
+    const isFemaleKeyword = name.includes('svetlana') || name.includes('daria') || name.includes('zira') || name.includes('irina') || name.includes('tatyana') || name.includes('milena') || name.includes('alena') || name.includes('female');
+
+    if (targetGender === 'male' || targetGender === 'uk') {
+      if (isMaleKeyword) pts += 40;
+      if (isFemaleKeyword) pts -= 20;
+    } else {
+      if (isFemaleKeyword) pts += 40;
+      if (isMaleKeyword) pts -= 20;
+    }
+
+    // 4. Heavy penalty for legacy robotic SAPI / Desktop synthesizer voices (Irina, Pavel, etc.)
+    if (name.includes('desktop') || name.includes('irina') || name.includes('pavel') || name.includes('sapi')) {
+      pts -= 90;
+    }
+
+    // 5. Exact locale match bonus
+    if (l === fullCode) pts += 15;
+    if (v.default) pts += 5;
+
+    return pts;
+  }
+
+  candidates.sort((a, b) => scoreVoice(b) - scoreVoice(a));
+  const bestVoice = candidates[0];
+  const isRobotic = scoreVoice(bestVoice) <= 0;
+
+  return { voice: bestVoice, isRobotic };
+}
+
+/**
  * Speaks arbitrary text in specified language (e.g. 'ru', 'uk', 'en') and returns a Promise that resolves ONLY when speech completely ends.
  */
 function speakTextInLangAsync(text, langCode = 'ru') {
@@ -1035,16 +1106,16 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       }
     };
 
-    function playNetworkTts() {
+    function playNetworkTts(onFail = null) {
       if (resolved) return;
       try {
         const audio = getAutoplayAudio() || new Audio();
         activeAutoplayAudio = audio;
         audio.playbackRate = 1.0;
 
-        // Primary online TTS: Google Translate TTS supports full phrases, commas, and multi-word translations seamlessly
-        const googleUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(normLang)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
-        const googleUrl2 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(normLang)}&client=gtx&q=${encodeURIComponent(spokenText)}`;
+        // Primary online TTS: Google Translate modern TTS provides natural neural cloud voice
+        const googleUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(normLang)}&client=gtx&q=${encodeURIComponent(spokenText)}`;
+        const googleUrl2 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(normLang)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
 
         let triedFallback = false;
         audio.src = googleUrl1;
@@ -1069,16 +1140,19 @@ function speakTextInLangAsync(text, langCode = 'ru') {
               if (p2 !== undefined) {
                 p2.catch(() => {
                   clearTimeout(fallbackTimer);
-                  finish();
+                  if (typeof onFail === 'function') onFail();
+                  else finish();
                 });
               }
             } catch (e) {
               clearTimeout(fallbackTimer);
-              finish();
+              if (typeof onFail === 'function') onFail();
+              else finish();
             }
           } else {
             clearTimeout(fallbackTimer);
-            finish();
+            if (typeof onFail === 'function') onFail();
+            else finish();
           }
         };
 
@@ -1089,45 +1163,27 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           p.catch(tryFallbackOrFinish);
         }
       } catch (e) {
-        finish();
+        if (typeof onFail === 'function') onFail();
+        else finish();
       }
     }
 
-    // Primary & direct high-quality speech engine: Web Speech API (built-in offline on-device Google/Apple TTS)
-    if ('speechSynthesis' in window) {
+    function speakWithSynthesis(voice) {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        return playNetworkTts();
+      }
       try {
         if (window.speechSynthesis.paused) {
           window.speechSynthesis.resume();
         }
 
-        loadVoices();
-        const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
-          ? window.speechSynthesis.getVoices()
-          : cachedVoices;
-
-        let matched = null;
-        if (availableVoices && availableVoices.length > 0) {
-          const targetCode = normLang;
-          const fullCode = fullLang.toLowerCase();
-          matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === fullCode);
-          if (!matched) {
-            matched = availableVoices.find(v => v.lang && (v.lang.toLowerCase().startsWith(targetCode + '-') || v.lang.toLowerCase() === targetCode));
-          }
-        }
-
-        // If voices list is already populated and no matching voice for this language exists, skip Web Speech API to avoid wrong accent/silence
-        if (availableVoices && availableVoices.length > 0 && !matched) {
-          playNetworkTts();
-          return;
-        }
-
         const utterance = new SpeechSynthesisUtterance(spokenText);
         utterance.lang = fullLang;
-        utterance.rate = 1.0; // Steady, natural, unhurried cadence matching normal speech
-        utterance.pitch = 1.0;
-        if (matched) {
-          utterance.voice = matched;
-          if (matched.lang) utterance.lang = matched.lang;
+        utterance.rate = 1.0; // Steady, natural, unhurried cadence matching normal human speech
+        utterance.pitch = (gender === 'male' || gender === 'uk') ? 0.98 : 1.0;
+        if (voice) {
+          utterance.voice = voice;
+          if (voice.lang) utterance.lang = voice.lang;
         }
 
         // Global reference to prevent Chrome garbage-collection bug
@@ -1158,13 +1214,30 @@ function speakTextInLangAsync(text, langCode = 'ru') {
         window.__activeSpeechTimer = setTimeout(finish, expectedMs);
 
         window.speechSynthesis.speak(utterance);
-        return;
       } catch (e) {
-        console.warn('SpeechSynthesis invocation failed:', e);
+        playNetworkTts();
       }
     }
 
-    // Secondary fallback
+    const gender = getSavedVoiceGender();
+    const { voice: matchedVoice, isRobotic } = getPreferredVoiceForTargetLang(normLang, fullLang, gender);
+
+    // If only legacy robotic desktop synthesizer voices (like Windows Microsoft Irina) are installed,
+    // play Google Cloud neural online audio first so speech sounds human and warm!
+    // If offline, it smoothly falls back to local synthesis.
+    if (isRobotic) {
+      playNetworkTts(() => {
+        speakWithSynthesis(matchedVoice);
+      });
+      return;
+    }
+
+    if (matchedVoice) {
+      speakWithSynthesis(matchedVoice);
+      return;
+    }
+
+    // No voice in local list, use network TTS
     playNetworkTts();
   });
 }
