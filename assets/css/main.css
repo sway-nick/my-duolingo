@@ -5324,13 +5324,17 @@ button.leaderboard-header-chip:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
   background: #ffffff;
   border: 1.5px solid #16a34a;
   border-radius: var(--radius-md);
-  padding: 10px 14px;
+  padding: 8px 10px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
   margin-top: 10px;
   z-index: 10;
+  gap: 8px;
 }
 
 .dark-theme .my-leaderboard-bar {
@@ -5340,11 +5344,11 @@ button.leaderboard-header-chip:hover {
 }
 
 .my-rank-badge {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   background: #16a34a;
   color: #ffffff;
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: 6px;
   flex-shrink: 0;
 }
@@ -5355,10 +5359,10 @@ button.leaderboard-header-chip:hover {
 }
 
 .my-bar-avatar {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  min-height: 38px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
@@ -5366,10 +5370,10 @@ button.leaderboard-header-chip:hover {
 }
 
 .my-bar-avatar-placeholder {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  min-height: 38px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
   flex-shrink: 0;
   border-radius: 50%;
   background: #3b82f6;

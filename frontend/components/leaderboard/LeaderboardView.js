@@ -287,22 +287,23 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           ? t('lead_score_all_time')
           : t('lead_score_current')
         );
-    const rawMyName = (currentUser && currentUser.name != null) ? String(currentUser.name) : t('lead_guest_name');
+    const rawMyName = (currentUser && currentUser.name != null)
+      ? String(currentUser.name)
+      : (t('lead_guest_name') || 'You').replace(/\s*\([^)]*\)/g, '');
     const myName = escapeHtml(rawMyName);
     const myInitial = escapeHtml(rawMyName.trim().charAt(0).toUpperCase() || '👤');
     myStickyBarHtml = `
-      <div class="my-leaderboard-bar">
-        <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-          <span class="my-rank-badge" style="flex-shrink: 0;">#${myRank || '-'}</span>
+      <div class="my-leaderboard-bar" style="box-sizing: border-box; width: 100%; max-width: 100%; padding: 8px 10px; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;">
+          <span class="my-rank-badge" style="flex-shrink: 0; padding: 2px 6px; font-size: 13px;">#${myRank || '-'}</span>
           ${
             myAvatar
-              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 38px; height: 38px; min-width: 38px; min-height: 38px; border-radius: 50%;" />`
-              : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 38px; height: 38px; min-width: 38px; min-height: 38px; border-radius: 50%;">${myInitial}</div>`
+              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 50%;" />`
+              : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 50%; font-size: 15px;">${myInitial}</div>`
           }
-          <div style="min-width: 0;">
-            <div class="my-bar-name" style="font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          <div style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            <div class="my-bar-name" style="font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               <span>${myName}</span>
-              ${isIssue ? `<span class="sync-status-badge" id="leaderboard-player-sync-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
             </div>
             ${statusText ? `
             <div class="my-bar-status" style="font-size: 12px; color: ${isIssue ? '#ea580c' : 'var(--text-muted)'}; font-weight: ${isIssue ? '500' : 'normal'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -310,11 +311,14 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
             </div>` : ''}
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
-          <span class="my-bar-xp" style="white-space: nowrap; flex-shrink: 0;">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
+        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <span class="my-bar-xp" style="white-space: nowrap; flex-shrink: 0; font-size: 15px;">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
           ${
             !currentUser || isIssue
-              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px; flex-shrink: 0; white-space: nowrap;">${t('settings_login')}</button>`
+              ? `<button class="primary-button" id="leaderboard-login-btn" style="position: relative; padding: 6px 12px; min-height: 32px; height: 32px; font-size: 13px; flex-shrink: 0; white-space: nowrap; margin-right: 2px;">
+                  ${t('settings_login')}
+                  ${isGuest || isIssue ? `<span class="sync-status-badge" style="position: absolute; top: -3px; right: -3px; width: 8px; height: 8px; background-color: #ea580c; border: 1.5px solid var(--card-bg, #ffffff); border-radius: 50%;"></span>` : ''}
+                </button>`
               : ''
           }
         </div>
