@@ -20,6 +20,7 @@ import {
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
 } from './firebase.js?v=378.0';
+import { getInterfaceLanguage } from './i18n.js?v=378.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -2380,7 +2381,7 @@ async function getUserSettings() {
   const userId = getEffectiveUserId();
   const key = `settings_${userId}`;
   const saved = localStorage.getItem(key);
-  const activeLang = localStorage.getItem('myduo_interface_lang') || 'en';
+  const activeLang = getInterfaceLanguage();
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
@@ -2420,7 +2421,7 @@ async function saveUserSettings(settings) {
   const activeLocalLang = localStorage.getItem('myduo_interface_lang');
   let currentLang = (settings && settings.interfaceLang && settings.interfaceLang !== 'undefined')
     ? settings.interfaceLang
-    : (activeLocalLang || 'en');
+    : (activeLocalLang || getInterfaceLanguage());
   localStorage.setItem('myduo_interface_lang', currentLang);
 
   const currentTheme = localStorage.getItem('myduo_theme') || 'light';

@@ -191,7 +191,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   // Helper: auto-save function (non-blocking)
   function triggerAutoSave(langOverride) {
-    const activeLang = langOverride || localStorage.getItem('myduo_interface_lang') || 'en';
+    const activeLang = langOverride || getInterfaceLanguage();
     currentSettingsObj.interfaceLang = activeLang;
     const newSettings = {
       ...currentSettingsObj,
@@ -396,7 +396,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     mt: 'Malti',
   };
 
-  const currentLang = localStorage.getItem('myduo_interface_lang') || 'en';
+  const currentLang = getInterfaceLanguage();
 
   function updateLangUI(val) {
     if (langLabel) langLabel.textContent = langNames[val] || 'English';
