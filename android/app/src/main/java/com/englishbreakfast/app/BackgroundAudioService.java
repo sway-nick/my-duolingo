@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 
 public class BackgroundAudioService extends Service {
 
@@ -26,7 +27,7 @@ public class BackgroundAudioService extends Service {
     public static final String EXTRA_TRANSLATION = "extra_translation";
     public static final String EXTRA_PLAYING = "extra_playing";
 
-    private static final String CHANNEL_ID = "channel_englishbreakfast_audio";
+    private static final String CHANNEL_ID = "channel_englishbreakfast_audio_v2";
     private static final int NOTIFICATION_ID = 2001;
 
     private static volatile boolean running = false;
@@ -136,18 +137,25 @@ public class BackgroundAudioService extends Service {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                try {
+                    manager.deleteNotificationChannel("channel_englishbreakfast_audio");
+                } catch (Exception ignored) {}
+            }
+
             NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID,
                 "Аудиоплеер Избранного",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             );
-            channel.setDescription("Фоновое воспроизведение слов при выключенном экране");
-            channel.setShowBadge(false);
+            channel.setDescription("Фоновое воспроизведение слов на экране блокировки");
+            channel.setShowBadge(true);
             channel.setSound(null, null);
             channel.enableVibration(false);
             channel.enableLights(false);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-            NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) {
                 manager.createNotificationChannel(channel);
             }
@@ -177,7 +185,7 @@ public class BackgroundAudioService extends Service {
         String text = (currentTranslation != null && !currentTranslation.trim().isEmpty()) ? currentTranslation.trim() : "Избранное • Фоновое аудио";
 
         int toggleIcon = isPlaying ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play;
-        String toggleLabel = isPlaying ? "Пауза" : "Воспроизведение";
+        String toggleLabel = isPlaying ? "Пауза" : "Пуск";
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
@@ -188,7 +196,9 @@ public class BackgroundAudioService extends Service {
             .setOngoing(isPlaying)
             .setOnlyAlertOnce(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setStyle(new MediaStyle()
+                .setShowActionsInCompactView(0, 1))
             .addAction(toggleIcon, toggleLabel, pendingToggleIntent)
             .addAction(android.R.drawable.ic_media_next, "Следующее", pendingNextIntent);
 
