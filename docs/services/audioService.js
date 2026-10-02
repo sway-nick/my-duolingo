@@ -1244,13 +1244,15 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
 /**
  * Speaks an English word asynchronously and returns a Promise ONLY when speech completely ends.
+ * Supports customizable playback speed (e.g. 0.80 for 1st repetition, 0.90 for 2nd repetition).
  */
-function speakWordAsync(text, isUk = null) {
+function speakWordAsync(text, isUk = null, speedRate = 1.0) {
   return new Promise((resolve) => {
     if (!text || typeof window === 'undefined') return resolve();
 
     stopAllAudio();
 
+    const targetSpeed = Number(speedRate) || 1.0;
     const accent = isUk !== null ? (isUk ? 'uk' : 'us') : getSavedVoiceAccent();
     const isUkAccent = accent === 'uk' || accent === 'gb' || accent === 'male';
     const { local, cdn, primary, fallback } = getAudioUrls(text, isUkAccent);
@@ -1277,12 +1279,12 @@ function speakWordAsync(text, isUk = null) {
       }
     };
 
-    const maxTimer = setTimeout(finish, 6500);
+    const maxTimer = setTimeout(finish, 7500);
     window.__activeSpeechTimer = maxTimer;
 
     const audio = getAutoplayAudio() || new Audio();
     activeAutoplayAudio = audio;
-    audio.playbackRate = 1.0;
+    audio.playbackRate = targetSpeed;
     audio.src = local;
     audio.currentTime = 0;
     let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
@@ -1297,7 +1299,7 @@ function speakWordAsync(text, isUk = null) {
           }
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
-          utterance.rate = 0.90;
+          utterance.rate = targetSpeed;
           window.__activeSpeechUtterance = utterance;
           utterance.onend = finish;
           utterance.onerror = finish;
@@ -1326,18 +1328,21 @@ function speakWordAsync(text, isUk = null) {
         fallbackStage = 1;
         audio.src = cdn;
         audio.currentTime = 0;
+        audio.playbackRate = targetSpeed;
         const pCdn = audio.play();
         if (pCdn !== undefined) pCdn.then(() => cacheAudioOnline(cdn)).catch(handleStageError);
       } else if (fallbackStage === 1) {
         fallbackStage = 2;
         audio.src = primary;
         audio.currentTime = 0;
+        audio.playbackRate = targetSpeed;
         const p1 = audio.play();
         if (p1 !== undefined) p1.catch(handleStageError);
       } else if (fallbackStage === 2) {
         fallbackStage = 3;
         audio.src = fallback;
         audio.currentTime = 0;
+        audio.playbackRate = targetSpeed;
         const p2 = audio.play();
         if (p2 !== undefined) p2.catch(handleStageError);
       } else {
