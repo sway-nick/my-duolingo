@@ -951,18 +951,47 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
     stopAllAudio();
 
-    // Clean text: take clear main translation without notes/brackets
-    let clean = String(text)
-      .replace(/\([^)]*\)/g, '')
-      .replace(/[\[\]]/g, '')
+    // Clean text: remove brackets/parentheses characters while PRESERVING their content (e.g. "быть (кем-то)" -> "быть кем-то")
+    // Keep full text intact with natural commas for punctuation pauses
+    const clean = String(text)
+      .replace(/[\(\)\[\]{}«»""]/g, ' ')
+      .replace(/\s+/g, ' ')
       .trim();
     if (!clean) return resolve();
 
-    // If there are multiple comma-separated variants, keep up to first 2 for clean cadence
-    const parts = clean.split(/[;,]/).map(s => s.trim()).filter(Boolean);
-    const spokenText = parts.slice(0, 2).join(', ');
+    const spokenText = clean;
 
-    const fullLang = langCode === 'ru' ? 'ru-RU' : langCode === 'uk' ? 'uk-UA' : langCode;
+    const BCP47_LANG_MAP = {
+      ru: 'ru-RU',
+      uk: 'uk-UA',
+      en: 'en-US',
+      de: 'de-DE',
+      es: 'es-ES',
+      fr: 'fr-FR',
+      pl: 'pl-PL',
+      tr: 'tr-TR',
+      it: 'it-IT',
+      ro: 'ro-RO',
+      bg: 'bg-BG',
+      hu: 'hu-HU',
+      el: 'el-GR',
+      da: 'da-DK',
+      ga: 'ga-IE',
+      lv: 'lv-LV',
+      lt: 'lt-LT',
+      pt: 'pt-PT',
+      sk: 'sk-SK',
+      sl: 'sl-SI',
+      fi: 'fi-FI',
+      hr: 'hr-HR',
+      cs: 'cs-CZ',
+      sv: 'sv-SE',
+      et: 'et-EE',
+      mt: 'mt-MT',
+    };
+    const normLang = String(langCode || 'ru').toLowerCase().trim();
+    const fullLang = BCP47_LANG_MAP[normLang] || (normLang.includes('-') ? normLang : `${normLang}-${normLang.toUpperCase()}`);
+
     let resolved = false;
     let resumeInterval = null;
 
@@ -978,7 +1007,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           clearTimeout(window.__activeSpeechTimer);
           window.__activeSpeechTimer = null;
         }
-        setTimeout(resolve, 350); // 350ms guaranteed silence gap
+        setTimeout(resolve, 350); // 350ms guaranteed natural cadence gap
       }
     };
 
@@ -987,17 +1016,18 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       try {
         const audio = getAutoplayAudio() || new Audio();
         activeAutoplayAudio = audio;
+        audio.playbackRate = 1.0;
 
         // Primary online TTS: Google Translate TTS supports full phrases, commas, and multi-word translations seamlessly
-        const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(langCode)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
-        // Secondary fallback: Youdao accepts only single headwords (take parts[0] to prevent HTTP 500 error)
-        const youdaoUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(parts[0] || spokenText)}&le=${encodeURIComponent(langCode)}`;
+        const googleUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(normLang)}&client=tw-ob&q=${encodeURIComponent(spokenText)}`;
+        const googleUrl2 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(normLang)}&client=gtx&q=${encodeURIComponent(spokenText)}`;
 
         let triedFallback = false;
-        audio.src = googleUrl;
+        audio.src = googleUrl1;
         audio.currentTime = 0;
 
-        const fallbackTimer = setTimeout(finish, 5000);
+        const maxDurationMs = Math.max(5000, spokenText.length * 220);
+        const fallbackTimer = setTimeout(finish, maxDurationMs);
         window.__activeSpeechTimer = fallbackTimer;
 
         audio.onended = () => {
@@ -1009,7 +1039,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           if (!triedFallback) {
             triedFallback = true;
             try {
-              audio.src = youdaoUrl;
+              audio.src = googleUrl2;
               audio.currentTime = 0;
               const p2 = audio.play();
               if (p2 !== undefined) {
@@ -1039,25 +1069,25 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       }
     }
 
-    // Primary & direct high-quality speech engine: Web Speech API (if native voice for language exists)
-    // Note: on mobile devices when screen is locked/backgrounded or autoplay is active, Web Speech API freezes or fails silently.
-    // In that case, bypass speech synthesis and jump directly to reliable HTML5 Audio network TTS.
-    const isBackgroundOrHidden = (typeof document !== 'undefined' && document.hidden) || (typeof window !== 'undefined' && window.__favsAutoplayRunning);
-    if (!isBackgroundOrHidden && 'speechSynthesis' in window) {
+    // Primary & direct high-quality speech engine: Web Speech API (built-in offline on-device Google/Apple TTS)
+    if ('speechSynthesis' in window) {
       try {
         if (window.speechSynthesis.paused) {
           window.speechSynthesis.resume();
         }
 
+        loadVoices();
         const availableVoices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices().length > 0)
           ? window.speechSynthesis.getVoices()
           : cachedVoices;
 
         let matched = null;
         if (availableVoices && availableVoices.length > 0) {
-          matched = availableVoices.find(v => v.lang && (v.lang === fullLang || v.lang.replace('_', '-') === fullLang));
+          const targetCode = normLang;
+          const fullCode = fullLang.toLowerCase();
+          matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === fullCode);
           if (!matched) {
-            matched = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+            matched = availableVoices.find(v => v.lang && (v.lang.toLowerCase().startsWith(targetCode + '-') || v.lang.toLowerCase() === targetCode));
           }
         }
 
@@ -1069,10 +1099,11 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
         const utterance = new SpeechSynthesisUtterance(spokenText);
         utterance.lang = fullLang;
-        utterance.rate = 0.88;
+        utterance.rate = 1.0; // Steady, natural, unhurried cadence matching normal speech
         utterance.pitch = 1.0;
         if (matched) {
           utterance.voice = matched;
+          if (matched.lang) utterance.lang = matched.lang;
         }
 
         // Global reference to prevent Chrome garbage-collection bug
@@ -1099,7 +1130,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
           }
         }, 200);
 
-        const expectedMs = Math.max(3000, spokenText.length * 160);
+        const expectedMs = Math.max(3500, spokenText.length * 180);
         window.__activeSpeechTimer = setTimeout(finish, expectedMs);
 
         window.speechSynthesis.speak(utterance);
