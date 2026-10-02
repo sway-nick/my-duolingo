@@ -3349,9 +3349,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
             stopSilentAudioAnchor();
-            stopNativeBackgroundPlayback();
+            const translation = getWordTranslation(currentWord);
+            updateNativeBackgroundPlayback(currentWord.word, translation, false);
             releaseScreenWakeLock();
-            updateMediaSessionStatus(false);
+            updateMediaSessionStatus(false, currentWord, translation);
             newAutoplayBtn.classList.remove('is-playing');
             newAutoplayBtn.innerHTML = getFavsAutoplayBtnContent(false);
             if (flashcard) {
