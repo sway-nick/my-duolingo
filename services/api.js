@@ -125,6 +125,9 @@ try {
     const initialCache = JSON.parse(rawCache || '[]');
     if (Array.isArray(initialCache) && initialCache.length > 0) {
       cachedWordsList = initialCache;
+      try {
+        applyMultilingualTranslations(cachedWordsList);
+      } catch (e) {}
     }
   } else {
     localStorage.removeItem('myduo_cached_words');
@@ -152,7 +155,7 @@ function sanitizeTranscriptions(words) {
 
 function getActiveLang() {
   try {
-    return localStorage.getItem('myduo_interface_lang') || 'en';
+    return getInterfaceLanguage();
   } catch (e) {
     return 'en';
   }
@@ -3071,9 +3074,9 @@ async function addCustomWord({ word, translation, category, notes }) {
     zipf: 0,
   };
 
-  let lang = 'ru';
+  let lang = 'en';
   try {
-    lang = localStorage.getItem('myduo_interface_lang') || 'ru';
+    lang = getInterfaceLanguage();
   } catch (e) {}
 
   const payload = {
@@ -3221,9 +3224,9 @@ async function batchAddCustomWords(words = []) {
 const GAS_SCANNER_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
 async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
-  let lang = 'ru';
+  let lang = 'en';
   try {
-    const stored = localStorage.getItem('myduo_interface_lang');
+    const stored = getInterfaceLanguage();
     if (stored && ['ru', 'uk', 'en', 'de', 'es', 'fr'].includes(stored)) {
       lang = stored;
     }
@@ -3396,9 +3399,9 @@ async function suggestTranslations(word) {
   }
   const clean = String(word).trim().toLowerCase();
 
-  let targetLang = 'ru';
+  let targetLang = 'en';
   try {
-    const stored = localStorage.getItem('myduo_interface_lang');
+    const stored = getInterfaceLanguage();
     if (stored && ['ru', 'uk', 'de', 'es', 'fr', 'pl', 'it', 'tr', 'pt'].includes(stored)) {
       targetLang = stored;
     }
