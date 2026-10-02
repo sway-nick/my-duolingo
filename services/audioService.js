@@ -938,6 +938,11 @@ function stopAllAudio() {
       }
     } catch (e) {}
   }
+  if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopSpeech === 'function') {
+    try {
+      window.AndroidAudioBridge.stopSpeech();
+    } catch (e) {}
+  }
 }
 
 /**
@@ -1219,6 +1224,39 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       }
     }
 
+    // 1. Primary Native Android TTS Bridge (Android APK: 100% offline, native OS Google Speech Services, works with screen off)
+    if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.speakText === 'function') {
+      const utteranceId = 'tts_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+      let handled = false;
+      const finishNative = () => {
+        if (!handled) {
+          handled = true;
+          window.onNativeTtsComplete = null;
+          if (window.__activeSpeechTimer) {
+            clearTimeout(window.__activeSpeechTimer);
+            window.__activeSpeechTimer = null;
+          }
+          setTimeout(resolve, 350);
+        }
+      };
+
+      window.onNativeTtsComplete = (doneId) => {
+        if (!doneId || doneId === utteranceId) {
+          finishNative();
+        }
+      };
+
+      const expectedMs = Math.max(3500, spokenText.length * 200);
+      window.__activeSpeechTimer = setTimeout(finishNative, expectedMs);
+
+      try {
+        const started = window.AndroidAudioBridge.speakText(spokenText, normLang, utteranceId);
+        if (started) return;
+      } catch (e) {
+        console.warn('Native TTS bridge call failed, falling back:', e);
+      }
+    }
+
     const gender = getSavedVoiceGender();
     const { voice: matchedVoice, isRobotic } = getPreferredVoiceForTargetLang(normLang, fullLang, gender);
 
@@ -1232,12 +1270,13 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       return;
     }
 
-    if (matchedVoice) {
+    // Web Speech API fallback (browsers)
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       speakWithSynthesis(matchedVoice);
       return;
     }
 
-    // No voice in local list, use network TTS
+    // No voice in local list and no speech synthesis, use network TTS
     playNetworkTts();
   });
 }
