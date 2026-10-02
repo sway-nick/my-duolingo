@@ -1,9 +1,9 @@
-﻿import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=378.0';
+import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=378.0';
 
 const STORAGE_KEY_USER = 'myduo_current_user';
 const STORAGE_KEY_TOKEN = 'myduo_auth_token';
 const STORAGE_KEY_GUEST_ID = 'myduo_guest_device_id';
-const GUEST_WORD_LIMIT = 50;
+const GUEST_WORD_LIMIT = 100;
 
 let currentUser = null;
 
