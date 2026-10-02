@@ -1,40 +1,77 @@
-﻿import { speakWord } from '../../services/audioService.js?v=378.0';
+import { speakWord } from '../../services/audioService.js?v=378.0';
 import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=378.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=378.0';
 
 function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        let { width, height } = img;
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            height = Math.round((height * maxDimension) / width);
-            width = maxDimension;
-          } else {
-            width = Math.round((width * maxDimension) / height);
-            height = maxDimension;
+    if (typeof createImageBitmap === 'function') {
+      createImageBitmap(file)
+        .then((bitmap) => {
+          let { width, height } = bitmap;
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
           }
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-        resolve({
-          dataUrl,
-          base64: dataUrl.split(',')[1],
-          mimeType: 'image/jpeg',
-        });
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(bitmap, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve({
+            dataUrl,
+            base64: dataUrl.split(',')[1],
+            mimeType: 'image/jpeg',
+          });
+        })
+        .catch(() => fallbackWithReader());
+      return;
+    }
+
+    fallbackWithReader();
+
+    function fallbackWithReader() {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve({
+            dataUrl,
+            base64: dataUrl.split(',')[1],
+            mimeType: 'image/jpeg',
+          });
+        };
+        img.onerror = () => reject(new Error('Не удалось прочитать файл изображения.'));
+        img.src = e.target.result;
       };
-      img.onerror = () => reject(new Error('Не удалось прочитать файл изображения.'));
-      img.src = e.target.result;
-    };
-    reader.onerror = () => reject(new Error('Ошибка при чтении файла.'));
-    reader.readAsDataURL(file);
+      reader.onerror = () => reject(new Error('Ошибка при чтении файла.'));
+      reader.readAsDataURL(file);
+    }
   });
 }
 
@@ -193,7 +230,13 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   let selectedIndices = new Set();
   let currentGroupCategory = 'Elementary';
 
+  let activePreviewUrl = null;
+
   const closeModal = () => {
+    if (activePreviewUrl) {
+      try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
+      activePreviewUrl = null;
+    }
     modalEl.remove();
   };
 
@@ -318,6 +361,11 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   });
 
   rescanBtn.addEventListener('click', () => {
+    if (activePreviewUrl) {
+      try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
+      activePreviewUrl = null;
+    }
+    previewImg.removeAttribute('src');
     uploadView.style.display = 'block';
     pasteView.style.display = 'none';
     processingView.style.display = 'none';
@@ -326,7 +374,11 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   });
 
   async function handleFileSelected(file) {
-    if (!file || !file.type.startsWith('image/')) {
+    const isImage = file && (
+      (file.type && file.type.startsWith('image/')) ||
+      (file.name && file.name.match(/\.(jpe?g|png|webp|heic|heif)$/i))
+    );
+    if (!isImage) {
       showError('Пожалуйста, выберите файл изображения (JPEG, PNG, WEBP).');
       return;
     }
@@ -340,8 +392,28 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       previewImg.style.display = 'block';
       textIconPreview.style.display = 'none';
 
+      // 1. Instantly display actual photo thumbnail (0ms latency, never black)
+      if (activePreviewUrl) {
+        try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
+        activePreviewUrl = null;
+      }
+      try {
+        activePreviewUrl = URL.createObjectURL(file);
+        previewImg.src = activePreviewUrl;
+      } catch (err) {
+        const fr = new FileReader();
+        fr.onload = (ev) => {
+          previewImg.src = ev.target.result;
+        };
+        fr.readAsDataURL(file);
+      }
+
       const compressed = await compressImageFile(file, 1200, 0.82);
-      previewImg.src = compressed.dataUrl;
+
+      // Fallback in case objectUrl was blocked or empty
+      if (!previewImg.src || previewImg.naturalWidth === 0) {
+        previewImg.src = compressed.dataUrl;
+      }
 
       const res = await scanDocumentImage(compressed.base64, compressed.mimeType);
       displayResults(res);
