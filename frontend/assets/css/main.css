@@ -7513,24 +7513,29 @@ body.dark-theme #clear-app-cache-btn:hover {
   align-items: center;
   gap: 18px;
   padding: 10px 0;
+  width: 100%;
 }
 
 .scanner-preview-container {
   position: relative;
   max-width: 100%;
   max-height: 240px;
+  min-height: 140px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--border-color, #e2e8f0);
-  background: #000;
+  background: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .scanner-preview-img {
   max-width: 100%;
   max-height: 240px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   display: block;
 }
@@ -7543,6 +7548,7 @@ body.dark-theme #clear-app-cache-btn:hover {
   background: linear-gradient(90deg, rgba(2, 132, 199, 0) 0%, #38bdf8 50%, rgba(2, 132, 199, 0) 100%);
   box-shadow: 0 0 12px #38bdf8, 0 0 20px #0284c7;
   animation: laserScan 2s infinite alternate ease-in-out;
+  pointer-events: none;
 }
 
 @keyframes laserScan {
@@ -7554,12 +7560,21 @@ body.dark-theme #clear-app-cache-btn:hover {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
+  justify-content: center;
 }
 
 .scanner-spinner {
   width: 22px;
   height: 22px;
-  border: 3px solid rgba(2, 132, 199, 0.2);
+  min-width: 22px;
+  min-height: 22px;
+  max-width: 22px;
+  max-height: 22px;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  border: 3px solid rgba(2, 132, 199, 0.25);
   border-top-color: #0284c7;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -7570,6 +7585,8 @@ body.dark-theme #clear-app-cache-btn:hover {
   font-weight: 600;
   color: var(--text-main, #0f172a);
   margin: 0;
+  flex: 0 1 auto;
+  line-height: 1.4;
 }
 
 /* Snippet & Results */
