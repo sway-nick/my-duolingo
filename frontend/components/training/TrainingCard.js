@@ -470,7 +470,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }).length;
 
     const targetCount = Math.min(10, totalUnmastered.length || 10);
-    const currentDisplay = Math.max(1, Math.min(pickedCount + 1, targetCount));
+    const currentDisplay = Math.min(pickedCount, targetCount);
     cardsBadgeText = t('conveyor_in_learning', { current: currentDisplay, total: targetCount });
   }
 
