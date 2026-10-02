@@ -78,32 +78,31 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <span class="dropdown-arrow">▼</span>
           </button>
           <div class="custom-dropdown-menu" id="lang-dropdown-menu" role="listbox">
-            <div class="dropdown-item" data-value="en">English</div>
-            <div class="dropdown-item" data-value="ru">Русский</div>
-            <div class="dropdown-item" data-value="uk">Українська</div>
-            <div class="dropdown-item" data-value="de">Deutsch</div>
-            <div class="dropdown-item" data-value="es">Español</div>
-            <div class="dropdown-item" data-value="fr">Français</div>
-            <div class="dropdown-item" data-value="pl">Polski</div>
-            <div class="dropdown-item" data-value="it">Italiano</div>
-            <div class="dropdown-item" data-value="tr">Türkçe</div>
-            <div class="dropdown-item" data-value="pt">Português</div>
-            <div class="dropdown-item" data-value="ro">Română</div>
             <div class="dropdown-item" data-value="bg">Български</div>
             <div class="dropdown-item" data-value="cs">Čeština</div>
-            <div class="dropdown-item" data-value="sk">Slovenčina</div>
-            <div class="dropdown-item" data-value="hu">Magyar</div>
-            <div class="dropdown-item" data-value="el">Ελληνικά</div>
-            <div class="dropdown-item" data-value="sl">Slovenščina</div>
-            <div class="dropdown-item" data-value="et">Eesti</div>
-            <div class="dropdown-item" data-value="lt">Lietuvių</div>
-            <div class="dropdown-item" data-value="lv">Latviešu</div>
             <div class="dropdown-item" data-value="da">Dansk</div>
+            <div class="dropdown-item" data-value="de">Deutsch</div>
+            <div class="dropdown-item" data-value="et">Eesti</div>
+            <div class="dropdown-item" data-value="el">Ελληνικά</div>
+            <div class="dropdown-item" data-value="es">Español</div>
+            <div class="dropdown-item" data-value="fr">Français</div>
+            <div class="dropdown-item" data-value="ga">Gaeilge</div>
+            <div class="dropdown-item" data-value="hr">Hrvatski</div>
+            <div class="dropdown-item" data-value="it">Italiano</div>
+            <div class="dropdown-item" data-value="lv">Latviešu</div>
+            <div class="dropdown-item" data-value="lt">Lietuvių</div>
+            <div class="dropdown-item" data-value="hu">Magyar</div>
+            <div class="dropdown-item" data-value="mt">Malti</div>
+            <div class="dropdown-item" data-value="pl">Polski</div>
+            <div class="dropdown-item" data-value="pt">Português</div>
+            <div class="dropdown-item" data-value="ro">Română</div>
+            <div class="dropdown-item" data-value="ru">Русский</div>
+            <div class="dropdown-item" data-value="sk">Slovenčina</div>
+            <div class="dropdown-item" data-value="sl">Slovenščina</div>
             <div class="dropdown-item" data-value="fi">Suomi</div>
             <div class="dropdown-item" data-value="sv">Svenska</div>
-            <div class="dropdown-item" data-value="hr">Hrvatski</div>
-            <div class="dropdown-item" data-value="ga">Gaeilge</div>
-            <div class="dropdown-item" data-value="mt">Malti</div>
+            <div class="dropdown-item" data-value="tr">Türkçe</div>
+            <div class="dropdown-item" data-value="uk">Українська</div>
           </div>
         </div>
       </div>
