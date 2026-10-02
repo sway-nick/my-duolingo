@@ -6699,7 +6699,34 @@ const translations = {
 
 export function getInterfaceLanguage() {
   if (typeof localStorage === 'undefined') return 'en';
-  return localStorage.getItem('myduo_interface_lang') || 'en';
+
+  // 1. Explicit user choice in Settings always takes precedence
+  try {
+    const saved = localStorage.getItem('myduo_interface_lang');
+    if (saved && translations[saved]) {
+      return saved;
+    }
+  } catch (e) {}
+
+  // 2. First visit / no manual choice: detect system language
+  try {
+    const navLangs = (typeof navigator !== 'undefined' && Array.isArray(navigator.languages) && navigator.languages.length > 0)
+      ? navigator.languages
+      : (typeof navigator !== 'undefined' ? [navigator.language || navigator.userLanguage] : []);
+
+    for (const rawLang of navLangs) {
+      if (!rawLang || typeof rawLang !== 'string') continue;
+      const code = rawLang.toLowerCase().split(/[-_]/)[0];
+      if (translations[code]) {
+        return code;
+      }
+    }
+  } catch (e) {
+    console.warn('System language detection failed:', e);
+  }
+
+  // 3. Fallback to English if system language is not supported
+  return 'en';
 }
 
 export function setInterfaceLanguage(lang) {
