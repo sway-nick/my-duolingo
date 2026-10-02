@@ -9,7 +9,7 @@ function shouldShowSyncBadge() {
   try {
     const u = getCurrentUser();
     const isGuest = !u || !u.id || u.id === 'guest' || String(u.id).startsWith('guest_') || !u.email;
-    if (isGuest) return true;
+    if (isGuest) return false;
     return Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
   } catch (e) {
     return false;
@@ -279,42 +279,42 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   let myStickyBarHtml = '';
   if (myPlayer && (myRank > 4 || !currentUser)) {
     const myAvatar = sanitizeAvatarUrl(getUserAvatar());
-    const isIssue = shouldShowSyncBadge();
-    const statusText = isIssue
-      ? '⚠️ Прогресс на телефоне. Войдите для облака'
+    const isGuest = !currentUser || !currentUser.id || currentUser.id === 'guest' || String(currentUser.id).startsWith('guest_') || !currentUser.email;
+    const isIssue = !isGuest && shouldShowSyncBadge();
+    const statusText = isGuest
+      ? ''
       : (period === 'all'
           ? t('lead_score_all_time')
-          : (currentUser
-              ? t('lead_score_current')
-              : t('lead_login_to_save')
-            ));
+          : t('lead_score_current')
+        );
     const rawMyName = (currentUser && currentUser.name != null) ? String(currentUser.name) : t('lead_guest_name');
     const myName = escapeHtml(rawMyName);
     const myInitial = escapeHtml(rawMyName.trim().charAt(0).toUpperCase() || '👤');
     myStickyBarHtml = `
       <div class="my-leaderboard-bar">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="my-rank-badge">#${myRank || '-'}</span>
+        <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+          <span class="my-rank-badge" style="flex-shrink: 0;">#${myRank || '-'}</span>
           ${
             myAvatar
-              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" />`
-              : `<div class="my-bar-avatar-placeholder">${myInitial}</div>`
+              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 38px; height: 38px; min-width: 38px; min-height: 38px; border-radius: 50%;" />`
+              : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 38px; height: 38px; min-width: 38px; min-height: 38px; border-radius: 50%;">${myInitial}</div>`
           }
-          <div>
-            <div class="my-bar-name" style="font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+          <div style="min-width: 0;">
+            <div class="my-bar-name" style="font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               <span>${myName}</span>
               ${isIssue ? `<span class="sync-status-badge" id="leaderboard-player-sync-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
             </div>
-            <div class="my-bar-status" style="font-size: 12px; color: ${isIssue ? '#ea580c' : 'var(--text-muted)'}; font-weight: ${isIssue ? '500' : 'normal'};">
+            ${statusText ? `
+            <div class="my-bar-status" style="font-size: 12px; color: ${isIssue ? '#ea580c' : 'var(--text-muted)'}; font-weight: ${isIssue ? '500' : 'normal'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               ${statusText}
-            </div>
+            </div>` : ''}
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="my-bar-xp">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
+        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+          <span class="my-bar-xp" style="white-space: nowrap; flex-shrink: 0;">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
           ${
             !currentUser || isIssue
-              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px;">${t('settings_login')}</button>`
+              ? `<button class="primary-button" id="leaderboard-login-btn" style="padding: 6px 14px; min-height: 34px; height: 34px; font-size: 13px; flex-shrink: 0; white-space: nowrap;">${t('settings_login')}</button>`
               : ''
           }
         </div>
