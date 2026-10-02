@@ -951,12 +951,36 @@ function speakTextInLangAsync(text, langCode = 'ru') {
 
     stopAllAudio();
 
-    // Clean text: remove brackets/parentheses characters while PRESERVING their content (e.g. "быть (кем-то)" -> "быть кем-то")
-    // Keep full text intact with natural commas for punctuation pauses
-    const clean = String(text)
-      .replace(/[\(\)\[\]{}«»""]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+    // Sanitize punctuation for TTS: do NOT pronounce signs (commas, brackets, dashes, slashes, etc.)
+    // Convert brackets, slashes, and standalone dashes into commas/dots so TTS naturally breathes and pauses without vocalizing sign names
+    let clean = String(text);
+    // 1. Remove quotes and decorative marks
+    clean = clean.replace(/["'«»`“”„]/g, '');
+    // 2. Replace slashes, semicolons, colons, vertical bars with commas for natural pause (avoids saying "дробь" / "слэш")
+    clean = clean.replace(/[\/\\;:|]/g, ', ');
+    // 3. Replace standalone dashes or em-dashes (surrounded by spaces) with comma for natural pause (avoids saying "тире")
+    // while preserving word-internal hyphens like "кем-то", "кое-кто", "из-за"
+    clean = clean.replace(/\s+[-–—]+\s+/g, ', ');
+    clean = clean.replace(/(^|\s)[-–—]+/g, '$1, ');
+    clean = clean.replace(/[-–—]+(\s|$)/g, ', $1');
+    // 4. Replace brackets/parentheses with commas so speech engine pauses naturally around explanations without saying "скобка"
+    clean = clean.replace(/[\(\)\[\]\{\}]/g, ', ');
+    // 5. Remove symbols that could be vocalized as words
+    clean = clean.replace(/[_*~^#@<>=+]/g, ' ');
+    // 6. Clean up duplicate punctuation and spacing
+    clean = clean.replace(/\s+([,.:!?])/g, '$1');
+    clean = clean.replace(/,\s*,+/g, ',');
+    clean = clean.replace(/\.\s*\.+/g, '.');
+    clean = clean.replace(/,\s*\./g, '.');
+    clean = clean.replace(/\.\s*,/g, '.');
+    clean = clean.replace(/[!?]\s*,\s*/g, ' ');
+    // 7. Ensure space after punctuation
+    clean = clean.replace(/,([^\s])/g, ', $1');
+    clean = clean.replace(/\.([^\s])/g, '. $1');
+    // 8. Trim leading/trailing punctuation and whitespace
+    clean = clean.replace(/^[\s,.-]+|[\s,.-]+$/g, '').trim();
+    clean = clean.replace(/\s+/g, ' ');
+
     if (!clean) return resolve();
 
     const spokenText = clean;
