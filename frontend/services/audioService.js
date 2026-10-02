@@ -1543,14 +1543,23 @@ function updateMediaSessionStatus(isPlaying, currentWord = null, translationText
         navigator.mediaSession.playbackState = 'playing';
         if (currentWord && currentWord.word) {
           const artistText = translationText || currentWord.translation || 'English Breakfast';
+          let artworkList = [
+            { src: 'assets/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+            { src: 'favicon.png', sizes: '512x512', type: 'image/png' },
+          ];
+          try {
+            const loc = window.location.href;
+            const baseUrl = loc.substring(0, loc.lastIndexOf('/') + 1);
+            artworkList = [
+              { src: new URL('assets/icons/icon-192x192.png', baseUrl).href, sizes: '192x192', type: 'image/png' },
+              { src: new URL('favicon.png', baseUrl).href, sizes: '512x512', type: 'image/png' },
+            ];
+          } catch (e) {}
           navigator.mediaSession.metadata = new MediaMetadata({
             title: currentWord.word,
             artist: artistText,
             album: 'English Breakfast • Избранное',
-            artwork: [
-              { src: 'apple-touch-icon.png', sizes: '192x192', type: 'image/png' },
-              { src: 'apple-touch-icon.png', sizes: '512x512', type: 'image/png' },
-            ],
+            artwork: artworkList,
           });
         }
       } else {

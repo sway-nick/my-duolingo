@@ -11,6 +11,8 @@ import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
@@ -162,6 +164,17 @@ public class BackgroundAudioService extends Service {
         }
     }
 
+    private Bitmap artworkBitmap = null;
+
+    private Bitmap getArtworkBitmap() {
+        if (artworkBitmap == null || artworkBitmap.isRecycled()) {
+            try {
+                artworkBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_artwork_cup);
+            } catch (Exception ignored) {}
+        }
+        return artworkBitmap;
+    }
+
     private Notification buildNotification() {
         Intent contentIntent = new Intent(this, MainActivity.class);
         contentIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -188,7 +201,7 @@ public class BackgroundAudioService extends Service {
         String toggleLabel = isPlaying ? "Пауза" : "Пуск";
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_artwork_cup)
             .setContentTitle(title)
             .setContentText(text)
             .setSubText("English Breakfast")
@@ -201,6 +214,11 @@ public class BackgroundAudioService extends Service {
                 .setShowActionsInCompactView(0, 1))
             .addAction(toggleIcon, toggleLabel, pendingToggleIntent)
             .addAction(android.R.drawable.ic_media_next, "Следующее", pendingNextIntent);
+
+        Bitmap artwork = getArtworkBitmap();
+        if (artwork != null) {
+            builder.setLargeIcon(artwork);
+        }
 
         return builder.build();
     }
@@ -233,6 +251,12 @@ public class BackgroundAudioService extends Service {
     public void onDestroy() {
         running = false;
         releaseWakeLock();
+        if (artworkBitmap != null) {
+            try {
+                artworkBitmap.recycle();
+            } catch (Exception ignored) {}
+            artworkBitmap = null;
+        }
         super.onDestroy();
     }
 
