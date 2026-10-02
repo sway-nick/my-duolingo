@@ -7503,23 +7503,23 @@ const UK_VOICE_MODAL_I18N = {
 
 const CAT_VOICE_MODAL_I18N = {
   ru: {
-    title: "Загрузка озвучки",
-    formatDesc: (t, c, s) => `Для тренировки категории «<strong>${t}</strong>» требуется загрузить озвучку (${c} слов, ~${s} МБ). Скачать сейчас?`,
+    title: "Загрузка аудиофайлов",
+    formatDesc: (t, c, s) => `Для тренировки категории «<strong>${t}</strong>» требуется загрузить аудиофайлы (${c} слов, ~${s} МБ). Скачать сейчас?`,
     downloadBtn: (s) => `📥 Скачать (~${s} МБ)`,
     cancelBtn: "Отмена",
     retryBtn: "Повторить",
     downloading: "Загрузка аудиофайлов..."
   },
   uk: {
-    title: "Завантаження озвучення",
-    formatDesc: (t, c, s) => `Для тренування категорії «<strong>${t}</strong>» потрібно завантажити озвучення (${c} слів, ~${s} МБ). Завантажити зараз?`,
+    title: "Завантаження аудіофайлів",
+    formatDesc: (t, c, s) => `Для тренування категорії «<strong>${t}</strong>» потрібно завантажити аудіофайли (${c} слів, ~${s} МБ). Завантажити зараз?`,
     downloadBtn: (s) => `📥 Завантажити (~${s} МБ)`,
     cancelBtn: "Скасувати",
     retryBtn: "Повторити",
     downloading: "Завантаження аудіофайлів..."
   },
   en: {
-    title: "Download Audio",
+    title: "Download Audio Files",
     formatDesc: (t, c, s) => `To practice "<strong>${t}</strong>", you need to download audio files (${c} words, ~${s} MB). Download now?`,
     downloadBtn: (s) => `📥 Download (~${s} MB)`,
     cancelBtn: "Cancel",
@@ -7527,7 +7527,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Downloading audio files..."
   },
   de: {
-    title: "Audio herunterladen",
+    title: "Audiodateien herunterladen",
     formatDesc: (t, c, s) => `Um die Kategorie „<strong>${t}</strong>“ zu trainieren, müssen Audiodateien heruntergeladen werden (${c} Wörter, ~${s} MB). Jetzt herunterladen?`,
     downloadBtn: (s) => `📥 Herunterladen (~${s} MB)`,
     cancelBtn: "Abbrechen",
@@ -7535,7 +7535,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Audiodateien werden heruntergeladen..."
   },
   es: {
-    title: "Descargar audio",
+    title: "Descargar archivos de audio",
     formatDesc: (t, c, s) => `Para practicar la categoría "<strong>${t}</strong>", debes descargar los archivos de audio (${c} palabras, ~${s} MB). ¿Descargar ahora?`,
     downloadBtn: (s) => `📥 Descargar (~${s} MB)`,
     cancelBtn: "Cancelar",
@@ -7543,7 +7543,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Descargando archivos de audio..."
   },
   fr: {
-    title: "Télécharger l'audio",
+    title: "Télécharger les fichiers audio",
     formatDesc: (t, c, s) => `Pour pratiquer la catégorie « <strong>${t}</strong> », vous devez télécharger les fichiers audio (${c} mots, ~${s} Mo). Télécharger maintenant ?`,
     downloadBtn: (s) => `📥 Télécharger (~${s} Mo)`,
     cancelBtn: "Annuler",
@@ -7551,7 +7551,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Téléchargement des fichiers audio..."
   },
   pl: {
-    title: "Pobieranie dźwięku",
+    title: "Pobieranie plików audio",
     formatDesc: (t, c, s) => `Aby ćwiczyć kategorię „<strong>${t}</strong>”, należy pobrać pliki dźwiękowe (${c} słów, ~${s} MB). Pobrać teraz?`,
     downloadBtn: (s) => `📥 Pobierz (~${s} MB)`,
     cancelBtn: "Anuluj",
@@ -7559,7 +7559,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Pobieranie plików dźwiękowych..."
   },
   tr: {
-    title: "Sesi İndir",
+    title: "Ses dosyalarını indir",
     formatDesc: (t, c, s) => `"<strong>${t}</strong>" kategorisini çalışmak için ses dosyalarını indirmeniz gerekir (${c} kelime, ~${s} MB). Şimdi indirilsin mi?`,
     downloadBtn: (s) => `📥 İndir (~${s} MB)`,
     cancelBtn: "İptal",
@@ -7567,7 +7567,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Ses dosyaları indiriliyor..."
   },
   it: {
-    title: "Scarica audio",
+    title: "Scarica file audio",
     formatDesc: (t, c, s) => `Per allenare la categoria "<strong>${t}</strong>", è necessario scaricare i file audio (${c} parole, ~${s} MB). Scaricare ora?`,
     downloadBtn: (s) => `📥 Scarica (~${s} MB)`,
     cancelBtn: "Annulla",
@@ -7575,7 +7575,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Download dei file audio in corso..."
   },
   ro: {
-    title: "Descărcare audio",
+    title: "Descărcare fișiere audio",
     formatDesc: (t, c, s) => `Pentru categoria "<strong>${t}</strong>", trebuie să descărcați fișierele audio (${c} cuvinte, ~${s} MB). Descărcați acum?`,
     downloadBtn: (s) => `📥 Descărcare (~${s} MB)`,
     cancelBtn: "Anulare",
@@ -7583,7 +7583,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Se descarcă fișierele audio..."
   },
   bg: {
-    title: "Изтегляне на аудио",
+    title: "Изтегляне на аудио файлове",
     formatDesc: (t, c, s) => `За категория „<strong>${t}</strong>“ трябва да изтеглите аудио файлове (${c} думи, ~${s} MB). Изтегляне сега?`,
     downloadBtn: (s) => `📥 Изтегляне (~${s} MB)`,
     cancelBtn: "Отказ",
@@ -7591,7 +7591,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Изтегляне на аудио файлове..."
   },
   hu: {
-    title: "Hang letöltése",
+    title: "Hangfájlok letöltése",
     formatDesc: (t, c, s) => `A(z) „<strong>${t}</strong>” kategória gyakorlásához le kell tölteni a hangfájlokat (${c} szó, ~${s} MB). Letölti most?`,
     downloadBtn: (s) => `📥 Letöltés (~${s} MB)`,
     cancelBtn: "Mégse",
@@ -7599,7 +7599,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Hangfájlok letöltése..."
   },
   el: {
-    title: "Λήψη ήχου",
+    title: "Λήψη αρχείων ήχου",
     formatDesc: (t, c, s) => `Για την κατηγορία «<strong>${t}</strong>», πρέπει να κατεβάσετε αρχεία ήχου (${c} λέξεις, ~${s} MB). Λήψη τώρα;`,
     downloadBtn: (s) => `📥 Λήψη (~${s} MB)`,
     cancelBtn: "Άκυρο",
@@ -7607,7 +7607,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Λήψη αρχείων ήχου..."
   },
   da: {
-    title: "Download lyd",
+    title: "Download lydfiler",
     formatDesc: (t, c, s) => `For at øve kategorien "<strong>${t}</strong>", skal du downloade lydfiler (${c} ord, ~${s} MB). Hent nu?`,
     downloadBtn: (s) => `📥 Hent (~${s} MB)`,
     cancelBtn: "Annuller",
@@ -7615,7 +7615,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Downloader lydfiler..."
   },
   ga: {
-    title: "Íoslódáil Fuaim",
+    title: "Íoslódáil Comhaid Fhuaime",
     formatDesc: (t, c, s) => `Chun an catagóir "<strong>${t}</strong>" a chleachtadh, ní mór duit comhaid fuaime a íoslódáil (${c} focal, ~${s} MB). Íoslódáil anois?`,
     downloadBtn: (s) => `📥 Íoslódáil (~${s} MB)`,
     cancelBtn: "Cealaigh",
@@ -7623,7 +7623,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Comhaid fuaime á n-íoslódáil..."
   },
   lv: {
-    title: "Lejupielādēt audio",
+    title: "Lejupielādēt audio failus",
     formatDesc: (t, c, s) => `Lai trenētu kategoriju „<strong>${t}</strong>”, nepieciešams lejupielādēt audio failus (${c} vārdi, ~${s} MB). Lejupielādēt tagad?`,
     downloadBtn: (s) => `📥 Lejupielādēt (~${s} MB)`,
     cancelBtn: "Atcelt",
@@ -7631,7 +7631,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Lejupielādē audio failus..."
   },
   lt: {
-    title: "Atsisiųsti garsą",
+    title: "Atsisiųsti garso failus",
     formatDesc: (t, c, s) => `Norint treniruotis kategoriją „<strong>${t}</strong>“, reikia atsisiųsti garso failus (${c} žodžiai, ~${s} MB). Atsisiųsti dabar?`,
     downloadBtn: (s) => `📥 Atsisiųsti (~${s} MB)`,
     cancelBtn: "Atšaukti",
@@ -7639,7 +7639,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Atsisiunčiami garso failai..."
   },
   pt: {
-    title: "Baixar áudio",
+    title: "Baixar arquivos de áudio",
     formatDesc: (t, c, s) => `Para praticar a categoria "<strong>${t}</strong>", é necessário baixar os arquivos de áudio (${c} palavras, ~${s} MB). Baixar agora?`,
     downloadBtn: (s) => `📥 Baixar (~${s} MB)`,
     cancelBtn: "Cancelar",
@@ -7647,7 +7647,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Baixando arquivos de áudio..."
   },
   sk: {
-    title: "Stiahnuť zvuk",
+    title: "Stiahnuť zvukové súbory",
     formatDesc: (t, c, s) => `Pre precvičovanie kategórie „<strong>${t}</strong>“ je potrebné stiahnuť zvukové súbory (${c} slov, ~${s} MB). Stiahnuť teraz?`,
     downloadBtn: (s) => `📥 Stiahnuť (~${s} MB)`,
     cancelBtn: "Zrušiť",
@@ -7655,7 +7655,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Sťahujú sa zvukové súbory..."
   },
   sl: {
-    title: "Prenos zvoka",
+    title: "Prenos zvočnih datotek",
     formatDesc: (t, c, s) => `Za vadbo kategorije „<strong>${t}</strong>“ morate prenesti zvočne datoteke (${c} besed, ~${s} MB). Prenesi zdaj?`,
     downloadBtn: (s) => `📥 Prenesi (~${s} MB)`,
     cancelBtn: "Prekliči",
@@ -7663,7 +7663,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Prenašanje zvočnih datotek..."
   },
   fi: {
-    title: "Lataa ääni",
+    title: "Lataa äänitiedostot",
     formatDesc: (t, c, s) => `Harjoitellaksesi kategoriaa ”<strong>${t}</strong>” sinun on ladattava äänitiedostot (${c} sanaa, ~${s} Mt). Lataa nyt?`,
     downloadBtn: (s) => `📥 Lataa (~${s} Mt)`,
     cancelBtn: "Peruuta",
@@ -7671,7 +7671,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Ladataan äänitiedostoja..."
   },
   hr: {
-    title: "Preuzimanje zvuka",
+    title: "Preuzimanje audio datoteka",
     formatDesc: (t, c, s) => `Za vježbanje kategorije „<strong>${t}</strong>“ potrebno je preuzeti audio datoteke (${c} riječi, ~${s} MB). Preuzeti sada?`,
     downloadBtn: (s) => `📥 Preuzmi (~${s} MB)`,
     cancelBtn: "Odustani",
@@ -7679,7 +7679,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Preuzimanje audio datoteka..."
   },
   cs: {
-    title: "Stáhnout zvuk",
+    title: "Stáhnout zvukové soubory",
     formatDesc: (t, c, s) => `Pro procvičování kategorie „<strong>${t}</strong>“ je třeba stáhnout zvukové soubory (${c} slov, ~${s} MB). Stáhnout nyní?`,
     downloadBtn: (s) => `📥 Stáhnout (~${s} MB)`,
     cancelBtn: "Zrušit",
@@ -7687,7 +7687,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Stahování zvukových souborů..."
   },
   sv: {
-    title: "Ladda ner ljud",
+    title: "Ladda ner ljudfiler",
     formatDesc: (t, c, s) => `För att öva på kategorin "<strong>${t}</strong>" behöver du ladda ner ljudfilerna (${c} ord, ~${s} MB). Ladda ner nu?`,
     downloadBtn: (s) => `📥 Ladda ner (~${s} MB)`,
     cancelBtn: "Avbryt",
@@ -7695,7 +7695,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Laddar ner ljudfiler..."
   },
   et: {
-    title: "Laadi heli alla",
+    title: "Helifailide allalaadimine",
     formatDesc: (t, c, s) => `Kategooria „<strong>${t}</strong>“ harjutamiseks peate alla laadima helifailid (${c} sõna, ~${s} MB). Laadi alla kohe?`,
     downloadBtn: (s) => `📥 Laadi alla (~${s} MB)`,
     cancelBtn: "Loobu",
@@ -7703,7 +7703,7 @@ const CAT_VOICE_MODAL_I18N = {
     downloading: "Helifailide allalaadimine..."
   },
   mt: {
-    title: "Niżżel l-Awdjo",
+    title: "Niżżel il-fajls tal-awdjo",
     formatDesc: (t, c, s) => `Biex tipprattika l-kategorija "<strong>${t}</strong>", trid tniżżel il-fajls tal-awdjo (${c} kelma, ~${s} MB). Niżżel issa?`,
     downloadBtn: (s) => `📥 Niżżel (~${s} MB)`,
     cancelBtn: "Ikkanċella",
