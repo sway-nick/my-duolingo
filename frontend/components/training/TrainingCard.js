@@ -442,6 +442,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     if (step === 0) quizStage = 0; // En -> Ru choices
     else if (step === 1) quizStage = 2; // Ru -> En choices
     else quizStage = 4; // Consonants / Letter tiles
+  } else if (quizStage === 3) {
+    // Stage 3 (Microphone / AI speech recognition) is temporarily disabled per user request
+    quizStage = 4;
   }
 
   const isCardsMode = currentMethod === 'cards';
@@ -1999,7 +2002,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     } else if (quizStage === 2) {
       renderReverseQuiz();
     } else if (quizStage === 3) {
-      renderSpeechQuiz();
+      // Stage 3 (Microphone / AI speech recognition) is temporarily disabled per user request
+      renderConsonantsQuiz();
     } else {
       renderConsonantsQuiz();
     }
