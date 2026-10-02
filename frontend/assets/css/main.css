@@ -5386,7 +5386,7 @@ button.leaderboard-header-chip:hover {
 }
 
 .my-bar-xp {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   color: #16a34a;
   white-space: nowrap;
@@ -5395,6 +5395,42 @@ button.leaderboard-header-chip:hover {
 
 .dark-theme .my-bar-xp {
   color: #4ade80;
+}
+
+.my-bar-login-btn {
+  width: auto !important;
+  min-width: unset !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  position: relative !important;
+}
+
+.my-bar-login-dot {
+  position: absolute !important;
+  top: -3px !important;
+  right: -3px !important;
+  width: 7px !important;
+  height: 7px !important;
+  background-color: #ea580c !important;
+  border: 1.5px solid var(--card-bg, #ffffff) !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+}
+
+.dark-theme .my-bar-login-dot {
+  border-color: #1e293b !important;
 }
 
 @media (max-width: 480px) {

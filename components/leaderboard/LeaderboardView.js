@@ -293,16 +293,16 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
     const myName = escapeHtml(rawMyName);
     const myInitial = escapeHtml(rawMyName.trim().charAt(0).toUpperCase() || '👤');
     myStickyBarHtml = `
-      <div class="my-leaderboard-bar" style="box-sizing: border-box; width: 100%; max-width: 100%; padding: 8px 10px; gap: 8px;">
-        <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;">
-          <span class="my-rank-badge" style="flex-shrink: 0; padding: 2px 6px; font-size: 13px;">#${myRank || '-'}</span>
+      <div class="my-leaderboard-bar" style="box-sizing: border-box; width: 100%; max-width: 100%; padding: 6px 8px; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1;">
+          <span class="my-rank-badge" style="flex-shrink: 0; padding: 2px 5px; font-size: 12px;">#${myRank || '-'}</span>
           ${
             myAvatar
-              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 50%;" />`
-              : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 50%; font-size: 15px;">${myInitial}</div>`
+              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%;" />`
+              : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%; font-size: 14px;">${myInitial}</div>`
           }
           <div style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-            <div class="my-bar-name" style="font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <div class="my-bar-name" style="font-weight: 700; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               <span>${myName}</span>
             </div>
             ${statusText ? `
@@ -311,13 +311,13 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
             </div>` : ''}
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-          <span class="my-bar-xp" style="white-space: nowrap; flex-shrink: 0; font-size: 15px;">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
+        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+          <span class="my-bar-xp" style="white-space: nowrap; flex-shrink: 0; font-size: 14px;">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
           ${
             !currentUser || isIssue
-              ? `<button class="primary-button" id="leaderboard-login-btn" style="position: relative; padding: 6px 12px; min-height: 32px; height: 32px; font-size: 13px; flex-shrink: 0; white-space: nowrap; margin-right: 2px;">
-                  ${t('settings_login')}
-                  ${isGuest || isIssue ? `<span class="sync-status-badge" style="position: absolute; top: -3px; right: -3px; width: 8px; height: 8px; background-color: #ea580c; border: 1.5px solid var(--card-bg, #ffffff); border-radius: 50%;"></span>` : ''}
+              ? `<button class="primary-button my-bar-login-btn" id="leaderboard-login-btn" style="position: relative; width: auto; min-width: auto; height: 28px; min-height: 28px; max-height: 28px; padding: 0 10px; font-size: 12px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex-shrink: 0; white-space: nowrap; line-height: 1; margin-right: 2px;">
+                  <span>Log in</span>
+                  ${isGuest || isIssue ? `<span class="sync-status-badge my-bar-login-dot" style="position: absolute; top: -3px; right: -3px; width: 7px; height: 7px; background-color: #ea580c; border: 1.5px solid var(--card-bg, #ffffff); border-radius: 50%;"></span>` : ''}
                 </button>`
               : ''
           }
