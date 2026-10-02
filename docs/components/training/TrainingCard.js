@@ -3292,15 +3292,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         await autoplayDelay(120);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        await speakWordAsync(currentWord.word);
+        // 3. Show English (front face) and speak (1st pronunciation at 80% speed for distinct phoneme clarity)
+        await speakWordAsync(currentWord.word, null, 0.80);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         // 4. Distinct Pause 1.5s between 1st and 2nd English pronunciation
         await autoplayDelay(1500);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
-        // 5. Repeat English word (2nd pronunciation)
-        await speakWordAsync(currentWord.word);
+        // 5. Repeat English word (2nd pronunciation at 90% speed for natural conversational rhythm)
+        await speakWordAsync(currentWord.word, null, 0.90);
         if (!window.__favsAutoplayRunning || window.__favsAutoplayCycleId !== cycleId) return;
 
         // 6. Distinct Pause 2.2s before flipping to next card
