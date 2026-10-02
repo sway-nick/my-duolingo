@@ -6701,10 +6701,14 @@ export function getInterfaceLanguage() {
   if (typeof localStorage === 'undefined') return 'en';
 
   // 1. Explicit user choice in Settings always takes precedence
+  // Checked via 'myduo_lang_manual', or if an existing user previously selected a non-default language
   try {
+    const isManual = localStorage.getItem('myduo_lang_manual') === 'true';
     const saved = localStorage.getItem('myduo_interface_lang');
     if (saved && translations[saved]) {
-      return saved;
+      if (isManual || saved !== 'en') {
+        return saved;
+      }
     }
   } catch (e) {}
 
@@ -6718,6 +6722,9 @@ export function getInterfaceLanguage() {
       if (!rawLang || typeof rawLang !== 'string') continue;
       const code = rawLang.toLowerCase().split(/[-_]/)[0];
       if (translations[code]) {
+        try {
+          localStorage.setItem('myduo_interface_lang', code);
+        } catch (err) {}
         return code;
       }
     }
@@ -6731,7 +6738,10 @@ export function getInterfaceLanguage() {
 
 export function setInterfaceLanguage(lang) {
   if (!lang) return;
-  localStorage.setItem('myduo_interface_lang', lang);
+  try {
+    localStorage.setItem('myduo_lang_manual', 'true');
+    localStorage.setItem('myduo_interface_lang', lang);
+  } catch (e) {}
   window.dispatchEvent(new Event('myduo:lang_changed'));
 }
 

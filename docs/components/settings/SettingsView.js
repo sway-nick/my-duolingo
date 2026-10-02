@@ -191,6 +191,11 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   // Helper: auto-save function (non-blocking)
   function triggerAutoSave(langOverride) {
+    if (langOverride) {
+      try {
+        localStorage.setItem('myduo_lang_manual', 'true');
+      } catch (e) {}
+    }
     const activeLang = langOverride || getInterfaceLanguage();
     currentSettingsObj.interfaceLang = activeLang;
     const newSettings = {
@@ -434,7 +439,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         if (typeof setInterfaceLanguage === 'function') {
           setInterfaceLanguage(val);
         } else {
-          localStorage.setItem('myduo_interface_lang', val);
+          try {
+            localStorage.setItem('myduo_lang_manual', 'true');
+            localStorage.setItem('myduo_interface_lang', val);
+          } catch (e) {}
           window.dispatchEvent(new Event('myduo:lang_changed'));
         }
         updateLangUI(val);
