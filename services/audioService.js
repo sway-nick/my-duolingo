@@ -332,6 +332,12 @@ let currentAudioPlayer = null;
 const audioCache = new Map();
 
 const CDN_AUDIO_BASE = 'https://english-breakfast.pages.dev/assets/audio';
+// Mirrors tried in order; CDN_AUDIO_BASE remains the canonical CacheStorage key.
+const CDN_AUDIO_MIRRORS = [
+  'https://sway-nick.github.io/my-duolingo/assets/audio',
+  'https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
+  CDN_AUDIO_BASE,
+];
 const AUDIO_CACHE_NAME = 'myduo_audio_cache_v1';
 
 function getAudioUrls(text, isUk) {
@@ -376,30 +382,57 @@ async function cacheAudioOnline(url) {
 }
 
 /**
- * Plays audio from CacheStorage blob if available offline, otherwise streams from CDN
+ * Fetches an audio file trying every CDN mirror in order (some ISPs block individual domains,
+ * e.g. *.pages.dev). `cdnUrl` is the canonical URL (also used as the CacheStorage key).
+ * Returns the first successful Response or null.
+ */
+async function fetchAudioFromMirrors(cdnUrl) {
+  const path = cdnUrl.startsWith(CDN_AUDIO_BASE) ? cdnUrl.slice(CDN_AUDIO_BASE.length) : null;
+  const urls = path !== null ? CDN_AUDIO_MIRRORS.map(base => base + path) : [cdnUrl];
+  for (const url of urls) {
+    let timer = null;
+    try {
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      if (ctrl) timer = setTimeout(() => ctrl.abort(), 6000);
+      const resp = await fetch(url, { mode: 'cors', signal: ctrl ? ctrl.signal : undefined });
+      if (timer) clearTimeout(timer);
+      if (resp && resp.ok) return resp;
+    } catch (e) {
+      if (timer) clearTimeout(timer);
+    }
+  }
+  return null;
+}
+
+/**
+ * Plays audio from CacheStorage blob if available offline, otherwise downloads from the
+ * first reachable CDN mirror (and caches it for next time)
  */
 async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail) {
-  if (typeof window !== 'undefined' && 'caches' in window) {
-    try {
-      const cache = await caches.open(AUDIO_CACHE_NAME);
-      const match = await cache.match(cdnUrl);
-      if (match) {
-        const blob = await match.blob();
-        targetAudio.src = URL.createObjectURL(blob);
-        targetAudio.currentTime = 0;
-        trackPlayingAudio(targetAudio);
-        const p = targetAudio.play();
-        if (p !== undefined) p.catch(() => onFail());
-        return;
+  const hasCache = typeof window !== 'undefined' && 'caches' in window;
+  try {
+    let cache = null;
+    let resp = null;
+    if (hasCache) {
+      cache = await caches.open(AUDIO_CACHE_NAME);
+      resp = await cache.match(cdnUrl);
+    }
+    if (!resp) {
+      const fetched = await fetchAudioFromMirrors(cdnUrl);
+      if (!fetched) { onFail(); return; }
+      if (cache) {
+        try { await cache.put(cdnUrl, fetched.clone()); } catch (e) {}
       }
-    } catch (e) {}
-  }
-  targetAudio.src = cdnUrl;
-  targetAudio.currentTime = 0;
-  trackPlayingAudio(targetAudio);
-  const p = targetAudio.play();
-  if (p !== undefined) {
-    p.then(() => cacheAudioOnline(cdnUrl)).catch(() => onFail());
+      resp = fetched;
+    }
+    const blob = await resp.blob();
+    targetAudio.src = URL.createObjectURL(blob);
+    targetAudio.currentTime = 0;
+    trackPlayingAudio(targetAudio);
+    const p = targetAudio.play();
+    if (p !== undefined) p.catch(() => onFail());
+  } catch (e) {
+    onFail();
   }
 }
 
@@ -461,11 +494,8 @@ async function downloadVoicePack(accent = 'us', wordList = [], onProgress = () =
         try {
           const match = await cache.match(cdn);
           if (!match) {
-            let resp = null;
-            try {
-              resp = await fetch(cdn, { mode: 'cors' });
-            } catch (e) {}
-            if (!resp || !resp.ok) {
+            let resp = await fetchAudioFromMirrors(cdn);
+            if (!resp) {
               try {
                 resp = await fetch(fallback, { mode: 'cors' });
               } catch (e) {}
