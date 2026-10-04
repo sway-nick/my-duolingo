@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -161,7 +161,7 @@
 
     <script type="module">
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=383.21';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=383.21';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=383.22';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=383.21';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=383.21';
       import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=383.21';
@@ -308,11 +308,12 @@
       }
 
       // Expose a global function so SettingsView can trigger the "download UK Elementary audio" modal
-      window.showAccentDownloadModalIfNeeded = function(accent) {
+      window.showAccentDownloadModalIfNeeded = async function(accent) {
         if (accent !== 'uk') return false;
         // Elementary is the bundled category — check if its UK audio pack is downloaded
         const ELEMENTARY_CAT = 'Elementary';
-        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT)) return false;
+        const verifyWords = allWords.filter((w) => (w.category || '').toLowerCase().trim() === ELEMENTARY_CAT.toLowerCase());
+        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT) && await verifyCategoryAudioInCache(accent, ELEMENTARY_CAT, verifyWords)) return false;
 
         const catWords = allWords.filter((w) => {
           const wCat = (w.category || '').toLowerCase().trim();
@@ -1458,7 +1459,7 @@
                 if (!chosenCat) return;
 
                 const normCat = String(chosenCat || '').toLowerCase().trim();
-                const isBundled = normCat.includes('elementary');
+                const isBundled = normCat.includes('elementary') && !['uk', 'gb', 'male'].includes(getSavedVoiceAccent ? getSavedVoiceAccent() : 'us');
 
                 // 1. Only Elementary (US) is pre-packaged in the APK -> Open immediately
                 if (isBundled) {
@@ -1478,7 +1479,11 @@
 
                 // 2. For "Разговорные паттерны" and below: verify if audio is downloaded
                 const currentAccent = getSavedVoiceAccent ? getSavedVoiceAccent() : 'us';
-                const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat);
+                const verifyCatWords = allWords.filter(
+                  (w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat)
+                );
+                const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat)
+                  && await verifyCategoryAudioInCache(currentAccent, chosenCat, verifyCatWords);
 
                 if (!isDownloaded) {
                   const details = getCategoryDetails(chosenCat);

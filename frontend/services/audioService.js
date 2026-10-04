@@ -332,13 +332,24 @@ let currentAudioPlayer = null;
 const audioCache = new Map();
 
 const CDN_AUDIO_BASE = 'https://english-breakfast.pages.dev/assets/audio';
-// Mirrors tried in order; CDN_AUDIO_BASE remains the canonical CacheStorage key.
+// Mirrors tried in order (the last one that worked is remembered and tried first, see getOrderedMirrors).
+// Some ISPs block individual domains (e.g. *.pages.dev) or hijack their DNS, so we keep several
+// independent free hosts. CDN_AUDIO_BASE remains the canonical CacheStorage key.
 const CDN_AUDIO_MIRRORS = [
+  CDN_AUDIO_BASE,
   'https://sway-nick.github.io/my-duolingo/assets/audio',
   'https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
-  CDN_AUDIO_BASE,
+  'https://fastly.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
+  'https://gcore.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
+  'https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio',
 ];
 const AUDIO_CACHE_NAME = 'myduo_audio_cache_v1';
+const AUDIO_MIRROR_PREF_KEY = 'myduo_audio_mirror_pref';
+// Anything smaller is an error/block page, not a real mp3.
+const AUDIO_MIN_VALID_BYTES = 1000;
+// A pack is considered installed only if at least this share of its files is really in CacheStorage.
+const AUDIO_PACK_SUCCESS_THRESHOLD = 0.98;
+const mirrorFailStreak = new Map();
 
 function getAudioUrls(text, isUk) {
   const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
@@ -382,24 +393,56 @@ async function cacheAudioOnline(url) {
 }
 
 /**
- * Fetches an audio file trying every CDN mirror in order (some ISPs block individual domains,
- * e.g. *.pages.dev). `cdnUrl` is the canonical URL (also used as the CacheStorage key).
- * Returns the first successful Response or null.
+ * Mirrors ordered by "last one that worked first". Mirrors that failed 3+ times in a row during this
+ * session are skipped (so a blocked domain doesn't cost a timeout for every file).
+ */
+function getOrderedMirrors() {
+  let pref = null;
+  try { pref = localStorage.getItem(AUDIO_MIRROR_PREF_KEY); } catch (e) {}
+  let list = CDN_AUDIO_MIRRORS.slice();
+  if (pref && list.includes(pref)) list = [pref, ...list.filter((m) => m !== pref)];
+  const healthy = list.filter((m) => (mirrorFailStreak.get(m) || 0) < 3);
+  if (healthy.length > 0) return healthy;
+  mirrorFailStreak.clear();
+  return list;
+}
+
+/**
+ * Fetches an audio file trying every CDN mirror in order. `cdnUrl` is the canonical URL (also used
+ * as the CacheStorage key). A response is accepted only if it is a real audio payload (not an HTML
+ * block page of an ISP / captive portal). Returns a clean audio/mpeg Response or null.
  */
 async function fetchAudioFromMirrors(cdnUrl) {
   const path = cdnUrl.startsWith(CDN_AUDIO_BASE) ? cdnUrl.slice(CDN_AUDIO_BASE.length) : null;
-  const urls = path !== null ? CDN_AUDIO_MIRRORS.map(base => base + path) : [cdnUrl];
-  for (const url of urls) {
+  const bases = path !== null ? getOrderedMirrors() : [null];
+  for (const base of bases) {
+    const url = base === null ? cdnUrl : base + path;
     let timer = null;
+    let ok = false;
     try {
       const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      if (ctrl) timer = setTimeout(() => ctrl.abort(), 6000);
+      if (ctrl) timer = setTimeout(() => ctrl.abort(), 8000);
       const resp = await fetch(url, { mode: 'cors', signal: ctrl ? ctrl.signal : undefined });
-      if (timer) clearTimeout(timer);
-      if (resp && resp.ok) return resp;
+      if (resp && resp.ok) {
+        const type = (resp.headers.get('content-type') || '').toLowerCase();
+        if (!type.includes('text/') && !type.includes('json')) {
+          const blob = await resp.blob();
+          if (blob.size >= AUDIO_MIN_VALID_BYTES) {
+            ok = true;
+            if (base !== null) {
+              mirrorFailStreak.delete(base);
+              try { localStorage.setItem(AUDIO_MIRROR_PREF_KEY, base); } catch (e) {}
+            }
+            if (timer) clearTimeout(timer);
+            return new Response(blob, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
+          }
+        }
+      }
     } catch (e) {
-      if (timer) clearTimeout(timer);
+      // network error / timeout / CORS: try the next mirror
     }
+    if (timer) clearTimeout(timer);
+    if (!ok && base !== null) mirrorFailStreak.set(base, (mirrorFailStreak.get(base) || 0) + 1);
   }
   return null;
 }
@@ -468,51 +511,132 @@ function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
 }
 
 /**
- * Download voice pack in background with progress callback
+ * Ask the browser/WebView not to evict our CacheStorage under storage pressure.
+ */
+async function requestPersistentStorage() {
+  try {
+    if (typeof navigator !== 'undefined' && navigator.storage && navigator.storage.persist) {
+      if (navigator.storage.persisted && await navigator.storage.persisted()) return true;
+      return await navigator.storage.persist();
+    }
+  } catch (e) {}
+  return false;
+}
+
+/**
+ * Download voice pack in background with progress callback.
+ * Only studio mp3 files from our CDN mirrors are stored (no TTS fallbacks). Throws if fewer than
+ * AUDIO_PACK_SUCCESS_THRESHOLD of the files could be saved, so the UI can offer "Retry" and the
+ * "downloaded" flag is never set for an incomplete pack. Already cached files are not re-downloaded.
  */
 async function downloadVoicePack(accent = 'us', wordList = [], onProgress = () => {}) {
   if (typeof window === 'undefined' || !('caches' in window)) {
     throw new Error('Cache API not supported');
   }
+  const words = Array.isArray(wordList) ? wordList : [];
+  if (words.length === 0) return { downloaded: 0, total: 0, failed: [] };
+
+  await requestPersistentStorage();
   const cache = await caches.open(AUDIO_CACHE_NAME);
-  const words = Array.isArray(wordList) && wordList.length > 0 ? wordList : [];
-  if (words.length === 0) return { downloaded: 0, total: 0 };
 
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
-  let completed = 0;
-  const total = words.length;
-  const batchSize = 12;
 
-  for (let i = 0; i < words.length; i += batchSize) {
-    const batch = words.slice(i, i + batchSize);
-    await Promise.all(
-      batch.map(async (w) => {
-        const wordText = typeof w === 'string' ? w : (w.word || '');
-        if (!wordText) return;
-        const { cdn, fallback } = getAudioUrls(wordText, isUk);
-        try {
-          const match = await cache.match(cdn);
-          if (!match) {
-            let resp = await fetchAudioFromMirrors(cdn);
-            if (!resp) {
-              try {
-                resp = await fetch(fallback, { mode: 'cors' });
-              } catch (e) {}
-            }
-            if (resp && resp.ok) {
-              await cache.put(cdn, resp);
-            }
+  // Unique files only (different words may map to the same file name)
+  const files = new Map();
+  for (const w of words) {
+    const wordText = typeof w === 'string' ? w : ((w && w.word) || '');
+    if (!wordText) continue;
+    const { cdn } = getAudioUrls(wordText, isUk);
+    if (!files.has(cdn)) files.set(cdn, wordText);
+  }
+  const urls = Array.from(files.keys());
+  const total = urls.length;
+  if (total === 0) return { downloaded: 0, total: 0, failed: [] };
+
+  let processed = 0;
+  let saved = 0;
+  let failed = [];
+
+  const saveOne = async (cdn) => {
+    try {
+      if (await cache.match(cdn)) return true;
+      const resp = await fetchAudioFromMirrors(cdn);
+      if (resp) {
+        await cache.put(cdn, resp);
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  };
+
+  const runPass = async (list, batchSize, reportProgress) => {
+    const stillFailed = [];
+    for (let i = 0; i < list.length; i += batchSize) {
+      const batch = list.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (cdn) => {
+          const ok = await saveOne(cdn);
+          if (ok) saved++; else stillFailed.push(cdn);
+          if (reportProgress) {
+            processed++;
+            onProgress(Math.round((processed / total) * 100), processed, total);
           }
-        } catch (e) {}
-        completed++;
-        onProgress(Math.round((completed / total) * 100), completed, total);
-      })
-    );
+        })
+      );
+    }
+    return stillFailed;
+  };
+
+  failed = await runPass(urls, 12, true);
+  if (failed.length > 0) {
+    // One slower retry pass for files that failed (flaky network / a mirror hiccup)
+    failed = await runPass(failed, 4, false);
   }
 
-  localStorage.setItem(`myduo_pack_${accent}_downloaded`, 'true');
-  return { downloaded: completed, total };
+  if (saved / total < AUDIO_PACK_SUCCESS_THRESHOLD) {
+    throw new Error(`Voice pack incomplete: ${saved}/${total} files saved`);
+  }
+
+  localStorage.setItem(`myduo_pack_${targetAccent}_downloaded`, 'true');
+  return { downloaded: saved, total, failed };
+}
+
+/**
+ * Verifies that a category flagged as "downloaded" really has its files in CacheStorage
+ * (the browser may evict the cache while localStorage survives). Clears the stale flag and returns
+ * false if fewer than AUDIO_PACK_SUCCESS_THRESHOLD of the files are present.
+ */
+async function verifyCategoryAudioInCache(accent = 'us', category = 'Elementary', wordList = []) {
+  if (!isCategoryAudioDownloaded(accent, category)) return false;
+  const norm = String(category || '').toLowerCase().trim();
+  const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+  const targetAccent = isUk ? 'uk' : 'us';
+  if (!isUk && norm.includes('elementary')) return true; // bundled in the APK
+  if (typeof window === 'undefined' || !('caches' in window)) return true; // cannot verify
+
+  const words = Array.isArray(wordList) ? wordList : [];
+  if (words.length === 0) return true;
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const have = new Set((await cache.keys()).map((r) => r.url));
+    const wanted = new Set();
+    for (const w of words) {
+      const wordText = typeof w === 'string' ? w : ((w && w.word) || '');
+      if (wordText) wanted.add(getAudioUrls(wordText, isUk).cdn);
+    }
+    if (wanted.size === 0) return true;
+    let present = 0;
+    wanted.forEach((u) => { if (have.has(u)) present++; });
+    if (present / wanted.size >= AUDIO_PACK_SUCCESS_THRESHOLD) return true;
+    try {
+      localStorage.removeItem(`myduo_cat_downloaded_${targetAccent}_${norm}`);
+      localStorage.removeItem(`myduo_pack_${targetAccent}_downloaded`);
+    } catch (e) {}
+    return false;
+  } catch (e) {
+    return true;
+  }
 }
 
 /**
@@ -1640,6 +1764,8 @@ export const AudioService = {
   isCategoryAudioDownloaded,
   downloadVoicePack,
   downloadCategoryVoicePack,
+  verifyCategoryAudioInCache,
+  requestPersistentStorage,
 };
 
 export default AudioService;
@@ -1683,4 +1809,6 @@ export {
   isCategoryAudioDownloaded,
   downloadVoicePack,
   downloadCategoryVoicePack,
+  verifyCategoryAudioInCache,
+  requestPersistentStorage,
 };
