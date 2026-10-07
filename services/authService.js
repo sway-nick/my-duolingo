@@ -1,5 +1,5 @@
-import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=379.0';
-import { getIsoWeekKey } from './weekKey.js?v=379.0';
+import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=385.0';
+import { getIsoWeekKey } from './weekKey.js?v=385.0';
 
 const STORAGE_KEY_USER = 'myduo_current_user';
 const STORAGE_KEY_TOKEN = 'myduo_auth_token';
@@ -375,7 +375,7 @@ function getUserAvatar(targetUserId) {
   let saved = localStorage.getItem(`avatar_${userId}`);
   if (saved) {
     if (saved.startsWith('./assets/avatars/avatar_') && !saved.includes('?v=')) {
-      return `${saved}?v=18.0`;
+      return `${saved}?v=385.0`;
     }
     return saved;
   }
@@ -499,7 +499,7 @@ function compressAndCropAvatar(file, size = 128) {
   });
 }
 
-const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png?v=18.0`);
+const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png?v=385.0`);
 
 export {
   getCurrentUser,

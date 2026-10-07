@@ -60,6 +60,27 @@ function build() {
     }
   }
 
+  // 0.2. Align all ?v= import query versions across frontend to a single APP_BUILD_VERSION
+  const APP_BUILD_VERSION = '385.0';
+  function normalizeVersionsInDir(dir) {
+    fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        normalizeVersionsInDir(fullPath);
+      } else if (/\.(js|html)$/.test(entry.name)) {
+        let content = fs.readFileSync(fullPath, 'utf8');
+        if (/\?v=[0-9.]+/.test(content)) {
+          const replaced = content.replace(/\?v=[0-9.]+/g, `?v=${APP_BUILD_VERSION}`);
+          if (replaced !== content) {
+            fs.writeFileSync(fullPath, replaced, 'utf8');
+          }
+        }
+      }
+    });
+  }
+  normalizeVersionsInDir(path.join(__dirname, '../frontend'));
+  console.log(`📌 All module import query versions aligned to ?v=${APP_BUILD_VERSION}`);
+
   // 1. Sync frontend/ -> docs/
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });
   copyRecursiveSync('./frontend', './docs');
