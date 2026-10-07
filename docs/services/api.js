@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=379.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=385.0';
 import { 
   syncLeaderboardScoreFirestore, 
   commitXpDeltaFirestore,
@@ -22,9 +22,9 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=379.0';
-import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=379.0';
-import { getInterfaceLanguage } from './i18n.js?v=379.0';
+} from './firebase.js?v=385.0';
+import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=385.0';
+import { getInterfaceLanguage } from './i18n.js?v=385.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -2635,8 +2635,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
         }
 
         const idToken = getAuthToken() || '';
-        const tokenQuery = idToken ? `&idToken=${encodeURIComponent(idToken)}` : '';
-        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribe${tokenQuery}`, {
+        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribe`, {
           method: 'POST',
           headers: {
             'Content-Type': 'text/plain;charset=utf-8',
@@ -2688,8 +2687,7 @@ async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
       try {
         const base64Data = (reader.result || '').split(',')[1];
         const idToken = getAuthToken() || '';
-        const tokenQuery = idToken ? `&idToken=${encodeURIComponent(idToken)}` : '';
-        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribeping${tokenQuery}`, {
+        const response = await fetch(`${GAS_SCANNER_URL}?route=transcribeping`, {
           method: 'POST',
           headers: {
             'Content-Type': 'text/plain;charset=utf-8',
@@ -3151,10 +3149,9 @@ async function addCustomWord({ word, translation, category, notes }) {
   try {
     const idToken = getAuthToken() || '';
     payload.idToken = idToken;
-    const tokenQuery = idToken ? `&idToken=${encodeURIComponent(idToken)}` : '';
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 35000);
-    const response = await fetch(`${GAS_SCANNER_URL}?route=addword${tokenQuery}`, {
+    const response = await fetch(`${GAS_SCANNER_URL}?route=addword`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
@@ -3231,11 +3228,10 @@ async function batchAddCustomWords(words = []) {
   try {
     const idToken = getAuthToken() || '';
     payload.idToken = idToken;
-    const tokenQuery = idToken ? `&idToken=${encodeURIComponent(idToken)}` : '';
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-    const response = await fetch(`${GAS_SCANNER_URL}?route=batchadd${tokenQuery}`, {
+    const response = await fetch(`${GAS_SCANNER_URL}?route=batchadd`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
@@ -3321,8 +3317,7 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   try {
     const idToken = getAuthToken() || '';
     payload.idToken = idToken;
-    const tokenQuery = idToken ? `&idToken=${encodeURIComponent(idToken)}` : '';
-    const response = await fetch(`${GAS_SCANNER_URL}?route=scanimage${tokenQuery}`, {
+    const response = await fetch(`${GAS_SCANNER_URL}?route=scanimage`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
@@ -3689,4 +3684,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=379.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=385.0';

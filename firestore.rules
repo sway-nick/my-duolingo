@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ===============================================================
-    // Assumed Data Model & Security Definitions
+    // Assumed Data Model & Security Definitions (v3)
     // ===============================================================
     //
     // 1. Weekly Leaderboard: /leaderboards/{weekKey}/players/{userId}
@@ -11,8 +11,9 @@ service cloud.firestore {
     //    - userId: string matching authenticated request.auth.uid
     //    - Fields:
     //      * userId: string (must match document ID)
+    //      * weekKey: string (must match document path weekKey)
     //      * name: string (length <= 50)
-    //      * xp: int (>= 0)
+    //      * xp: int (>= 0 && <= 20000)
     //      * weekStartMs: int (valid week window relative to request.time)
     //      * updatedAt: timestamp (must equal request.time)
     //    - Constraints & Security:
@@ -20,7 +21,7 @@ service cloud.firestore {
     //      * Read: get allowed; list restricted to request.query.limit <= 120
     //      * Delete: owner only
     //      * create: xp <= 5000
-    //      * update: math.abs(new - old) <= 5000 && isAcceptableGrowthRate
+    //      * update: math.abs(new - old) <= 5000 && isAcceptableGrowthRate (3 XP/s + 150 margin)
     //
     // 2. All-Time Leaderboard: /leaderboard_alltime/{userId}
     //    - userId: string matching authenticated request.auth.uid
@@ -33,8 +34,8 @@ service cloud.firestore {
     //      * Auth requirement: request.auth.token.email_verified == true
     //      * Read: get allowed; list restricted to request.query.limit <= 120
     //      * Delete: owner only
-    //      * create: totalXp >= 0 && totalXp <= 5000
-    //      * update: totalXp >= old && (new - old) <= 5000 && isAcceptableGrowthRate
+    //      * create: totalXp >= 0 && totalXp <= 10000
+    //      * update: totalXp >= old && (new - old) <= 5000 && isAcceptableGrowthRate (3 XP/s + 150 margin)
     //
     // 3. User Profiles & Subcollections: /users/{userId}
     //    - allow get: true; allow list: false (denied)
@@ -69,7 +70,7 @@ service cloud.firestore {
       let delta = math.abs(newScore - oldScore);
       return prevTime == 0 || (
         request.time.toMillis() >= prevTime &&
-        delta <= (request.time.toMillis() - prevTime) / 1000 * 20 + 100
+        delta <= (request.time.toMillis() - prevTime) / 1000 * 3 + 150
       );
     }
 
@@ -78,10 +79,12 @@ service cloud.firestore {
         && isOwner(userId)
         && request.auth.token.email_verified == true
         && request.resource.data.userId == userId
+        && request.resource.data.weekKey == weekKey
         && request.resource.data.name is string
         && request.resource.data.name.size() <= 50
         && request.resource.data.xp is int
         && request.resource.data.xp >= 0
+        && request.resource.data.xp <= 20000
         && request.resource.data.weekStartMs is int
         && request.time.toMillis() >= request.resource.data.weekStartMs
         && request.time.toMillis() <= request.resource.data.weekStartMs + (7 * 86400000) + 3600000
@@ -120,7 +123,7 @@ service cloud.firestore {
 
       allow create: if isValidAlltimePlayer(userId)
         && request.resource.data.totalXp >= 0
-        && request.resource.data.totalXp <= 5000;
+        && request.resource.data.totalXp <= 10000;
 
       allow update: if isValidAlltimePlayer(userId)
         && request.resource.data.totalXp >= resource.data.totalXp

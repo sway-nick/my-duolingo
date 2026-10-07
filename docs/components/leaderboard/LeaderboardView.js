@@ -1,7 +1,8 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=379.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=379.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=379.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=379.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=385.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=385.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=385.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 
@@ -395,6 +396,26 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         </div>
       </div>
 
+      ${currentUser && currentUser.email && !isEmailVerified() ? `
+      <div class="email-verify-banner" id="email-verify-banner" style="margin: 10px 14px; padding: 10px 14px; background: rgba(234, 88, 12, 0.08); border: 1.5px solid rgba(234, 88, 12, 0.35); border-radius: 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #ea580c;">
+          <span style="font-size: 15px;">📧</span>
+          <span>Подтвердите email для участия в рейтинге</span>
+        </div>
+        <div style="color: var(--text-muted); font-size: 12px; line-height: 1.35;">
+          Чтобы ваши очки отображались в таблице лидеров, подтвердите ваш адрес электронной почты (${escapeHtml(currentUser.email)}).
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+          <button class="primary-button" id="btn-resend-verify" style="height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; background: #ea580c; border: none; border-radius: 7px; color: #fff; cursor: pointer;">
+            Отправить ещё раз
+          </button>
+          <button class="secondary-button" id="btn-check-verify" style="height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; border-radius: 7px; cursor: pointer;">
+            Я подтвердил
+          </button>
+        </div>
+      </div>
+      ` : ''}
+
       <!-- Scrollable Content -->
       <div id="leaderboard-content" style="min-height: 280px;">
         ${bodyData.restHtml}
@@ -403,6 +424,46 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   `;
 
   const contentEl = container.querySelector('#leaderboard-content');
+
+  const resendBtn = container.querySelector('#btn-resend-verify');
+  if (resendBtn) {
+    resendBtn.addEventListener('click', async () => {
+      resendBtn.disabled = true;
+      resendBtn.textContent = 'Отправка...';
+      try {
+        await sendEmailVerification();
+        resendBtn.textContent = 'Письмо отправлено! ✓';
+        setTimeout(() => { resendBtn.disabled = false; resendBtn.textContent = 'Отправить ещё раз'; }, 5000);
+      } catch (e) {
+        alert(e.message || 'Ошибка отправки письма');
+        resendBtn.disabled = false;
+        resendBtn.textContent = 'Отправить ещё раз';
+      }
+    });
+  }
+
+  const checkBtn = container.querySelector('#btn-check-verify');
+  if (checkBtn) {
+    checkBtn.addEventListener('click', async () => {
+      checkBtn.disabled = true;
+      checkBtn.textContent = 'Проверка...';
+      try {
+        const verified = await checkAndRefreshEmailVerification();
+        if (verified) {
+          const banner = container.querySelector('#email-verify-banner');
+          if (banner) banner.remove();
+          renderLeaderboardView(containerSelector, options);
+        } else {
+          alert('Email ещё не подтверждён. Пожалуйста, перейдите по ссылке в письме и нажмите «Я подтвердил» снова.');
+          checkBtn.disabled = false;
+          checkBtn.textContent = 'Я подтвердил';
+        }
+      } catch (e) {
+        checkBtn.disabled = false;
+        checkBtn.textContent = 'Я подтвердил';
+      }
+    });
+  }
 
   // Clean up previous event listeners to prevent duplicate execution
   if (container._xpHandler) window.removeEventListener('myduo:xp_changed', container._xpHandler);

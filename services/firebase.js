@@ -1,7 +1,7 @@
 // Firebase Integration for English Breakfast (Universal Web & Android Capacitor)
 // Uses direct native Google Identity & Firestore REST APIs (100% reliable in all WebViews with zero CDN dependency)
 
-import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=379.0';
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=385.0';
 
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc",
@@ -42,6 +42,53 @@ export function initFirebase() {
 }
 
 // ----------------- AUTHENTICATION -----------------
+const AUTH_BASE = 'https://identitytoolkit.googleapis.com/v1';
+
+export async function sendEmailVerification(idToken = '') {
+  const config = getFirebaseConfig();
+  const token = idToken || (await getValidIdToken());
+  if (!token) throw new Error('Не авторизован');
+  const res = await fetch(`${AUTH_BASE}/accounts:sendOobCode?key=${config.apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      requestType: 'VERIFY_EMAIL',
+      idToken: token
+    })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.error) {
+    throw new Error(data.error?.message || 'Ошибка отправки письма подтверждения');
+  }
+  return true;
+}
+
+export function isEmailVerified() {
+  const fb = readJson(FB_USER_KEY);
+  if (fb?.provider === 'google') return true;
+  const { token } = getStoredToken();
+  if (token) {
+    try {
+      const part = String(token).split('.')[1];
+      if (part) {
+        const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
+        const bin = atob(b64.padEnd(Math.ceil(b64.length / 4) * 4, '='));
+        const json = JSON.parse(bin);
+        if (json.email_verified === true) return true;
+      }
+    } catch (e) {}
+  }
+  return false;
+}
+
+export async function checkAndRefreshEmailVerification() {
+  await getValidIdToken({ force: true });
+  const verified = isEmailVerified();
+  if (verified && typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo:email_verified_updated', { detail: { verified: true } }));
+  }
+  return verified;
+}
 
 export async function registerWithEmail(email, password, name = '') {
   const config = getFirebaseConfig();
@@ -110,6 +157,8 @@ export async function registerWithEmail(email, password, name = '') {
   if (data.refreshToken) {
     try { localStorage.setItem('myduo_refresh_token', data.refreshToken); } catch (e) {}
   }
+  // Automatically send email verification link upon registration
+  sendEmailVerification(idToken).catch((e) => console.warn('sendEmailVerification:', e));
   return user;
 }
 
@@ -963,7 +1012,6 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
   if (!uid) return { success: false, reason: 'not_authenticated' };
 
   const delta = Math.round(Number(weeklyDelta) || 0);
-  if (delta === 0) return { success: true, delta: 0 };
 
   const cleanName = (userName != null) ? String(userName).slice(0, 50) : 'Гость';
   const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
@@ -985,7 +1033,7 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
 
   const writes = [
     // 1. Weekly leaderboard player doc:
-    // Update metadata, weekStartMs and apply atomic increment on xp with server timestamp
+    // Update metadata, weekKey, weekStartMs and apply atomic increment on xp with server timestamp
     {
       update: {
         name: weeklyDocPath,
@@ -993,12 +1041,13 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
           userId: { stringValue: String(uid) },
           name: { stringValue: cleanName },
           avatar: { stringValue: cleanAvatar },
+          weekKey: { stringValue: String(weekKey) },
           weekStartMs: { integerValue: String(weekStartMs) },
           expireAt: { timestampValue: expireAtIso }
         }
       },
       updateMask: {
-        fieldPaths: ['userId', 'name', 'avatar', 'weekStartMs', 'expireAt']
+        fieldPaths: ['userId', 'name', 'avatar', 'weekKey', 'weekStartMs', 'expireAt']
       },
       updateTransforms: [
         {
@@ -1031,7 +1080,9 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
         }
       ]
     },
-    // 3. All-time leaderboard doc
+    // 3. All-time leaderboard doc:
+    // ALWAYS includes totalXp transform (even when delta <= 0, totalDelta = 0)
+    // so leaderboard_alltime document contains totalXp upon creation
     {
       update: {
         name: alltimeDocPath,
@@ -1049,10 +1100,10 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
           fieldPath: 'updatedAt',
           setToServerValue: 'REQUEST_TIME'
         },
-        ...(totalDelta > 0 ? [{
+        {
           fieldPath: 'totalXp',
           increment: { integerValue: String(totalDelta) }
-        }] : [])
+        }
       ]
     }
   ];
@@ -1069,6 +1120,15 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
       console.warn('Firestore atomic commit delta failed:', res.status, errText);
+      if (res.status === 403 && !isEmailVerified() && typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo:sync-issue', {
+          detail: {
+            kind: 'email_not_verified',
+            status: 403,
+            message: 'Для участия в рейтинге подтвердите email. Проверьте ваш почтовый ящик.'
+          }
+        }));
+      }
       return { success: false, status: res.status, error: errText };
     }
     const data = await res.json().catch(() => ({}));
@@ -1087,7 +1147,9 @@ export async function commitXpDeltaFirestore(userId, weekKey, weeklyDelta, userN
   if (!uid) return { success: false, reason: 'not_authenticated' };
 
   const delta = Math.round(Number(weeklyDelta) || 0);
-  if (delta === 0) return { success: true, delta: 0 };
+  if (delta === 0) {
+    return sendCommitXpDeltaSingle(uid, weekKey, 0, userName, userAvatar);
+  }
 
   // Rule constraint: at most 5000 change per write
   if (Math.abs(delta) > 5000) {
@@ -1565,8 +1627,11 @@ export async function saveUserNotesFirestore(userId, notesMap) {
   if (!uid) return;
   const cleanNotes = notesMap && typeof notesMap === 'object' ? notesMap : {};
   const notesStr = JSON.stringify(cleanNotes);
-  if (notesStr.length > 900000) {
-    const errMsg = `Размер заметок (${notesStr.length} симв.) превышает лимит Firestore (900 000). Сохранение отменено.`;
+  const notesBytes = typeof TextEncoder !== 'undefined'
+    ? new TextEncoder().encode(notesStr).length
+    : Buffer.byteLength(notesStr, 'utf8');
+  if (notesBytes > 900000) {
+    const errMsg = `Размер заметок (${notesBytes} байт) превышает лимит Firestore (900 000 байт). Сохранение отменено.`;
     console.error(errMsg);
     if (typeof window !== 'undefined') {
       try {
@@ -1635,8 +1700,11 @@ export async function saveUserCustomWordsFirestore(userId, wordsArray) {
   if (!uid) return;
   const cleanWords = Array.isArray(wordsArray) ? wordsArray : [];
   const wordsStr = JSON.stringify(cleanWords);
-  if (wordsStr.length > 900000) {
-    const errMsg = `Размер словаря (${wordsStr.length} симв.) превышает лимит Firestore (900 000). Сохранение отменено.`;
+  const wordsBytes = typeof TextEncoder !== 'undefined'
+    ? new TextEncoder().encode(wordsStr).length
+    : Buffer.byteLength(wordsStr, 'utf8');
+  if (wordsBytes > 900000) {
+    const errMsg = `Размер словаря (${wordsBytes} байт) превышает лимит Firestore (900 000 байт). Сохранение отменено.`;
     console.error(errMsg);
     if (typeof window !== 'undefined') {
       try {
