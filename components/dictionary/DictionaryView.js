@@ -92,7 +92,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   modalEl.innerHTML = `
     <div class="scanner-modal-card">
       <div class="scanner-modal-header">
-        <h3 class="scanner-modal-title">${t('scan_modal_title')}</h3>
+        <div class="scanner-header-left" id="scanner-header-left">
+          <div class="scanner-spinner" id="scanner-header-spinner" style="visibility: hidden;"></div>
+        </div>
+        <h3 class="scanner-modal-title" id="scanner-modal-title">${t('scan_modal_title')}</h3>
         <button type="button" id="scanner-close-btn" class="scanner-close-btn" title="Закрыть">✕</button>
       </div>
 
@@ -145,10 +148,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
             <div id="scanner-text-icon-preview" style="display: none; padding: 24px; font-size: 42px; text-align: center;">📄</div>
             <div class="scanner-laser-line"></div>
           </div>
-          <div class="scanner-processing-status">
-            <div class="scanner-spinner"></div>
-            <p class="scanner-processing-text">${t('scan_processing')}</p>
-          </div>
         </div>
 
         <!-- 3. Results View -->
@@ -192,6 +191,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   document.body.appendChild(modalEl);
 
   const closeBtn = modalEl.querySelector('#scanner-close-btn');
+  const headerSpinner = modalEl.querySelector('#scanner-header-spinner');
   const uploadView = modalEl.querySelector('#scanner-upload-view');
   const pasteView = modalEl.querySelector('#scanner-paste-view');
   const processingView = modalEl.querySelector('#scanner-processing-view');
@@ -323,11 +323,13 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       resultsView.style.display = 'none';
       previewImg.style.display = 'none';
       textIconPreview.style.display = 'block';
+      if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
       const res = await scanDocumentImage({ text: rawText });
       displayResults(res);
     } catch (err) {
       console.error('Text scan error:', err);
+      if (headerSpinner) headerSpinner.style.visibility = 'hidden';
       pasteView.style.display = 'block';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
@@ -370,6 +372,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     pasteView.style.display = 'none';
     processingView.style.display = 'none';
     resultsView.style.display = 'none';
+    if (headerSpinner) headerSpinner.style.visibility = 'hidden';
     hideError();
   });
 
@@ -391,6 +394,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       resultsView.style.display = 'none';
       previewImg.style.display = 'block';
       textIconPreview.style.display = 'none';
+      if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
       // 1. Instantly display actual photo thumbnail (0ms latency, never black)
       if (activePreviewUrl) {
@@ -419,6 +423,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       displayResults(res);
     } catch (err) {
       console.error('Scan error:', err);
+      if (headerSpinner) headerSpinner.style.visibility = 'hidden';
       uploadView.style.display = 'block';
       pasteView.style.display = 'none';
       processingView.style.display = 'none';
@@ -430,6 +435,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   function displayResults(data) {
     processingView.style.display = 'none';
     resultsView.style.display = 'block';
+    if (headerSpinner) headerSpinner.style.visibility = 'hidden';
 
     const allLemmas = Array.isArray(data.lemmas) ? data.lemmas : [];
     const existingWordsSet = new Set(
