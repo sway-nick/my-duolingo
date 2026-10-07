@@ -202,7 +202,7 @@ test('4. Fetching leaderboard queries with orderBy xp DESC and limit 110 with 25
   assert.equal(players[99].xp, 1510);
 });
 
-test('5. Non-existent leaderboard_alltime creates record capped at totalXp <= 5000', async () => {
+test('5. Non-existent leaderboard_alltime creates record without artificial 5000 cap', async () => {
   const testUid = 'TestUserOwner1234567890abcde';
   localStorage.clear();
   localStorage.setItem('myduo_firebase_user', JSON.stringify({
@@ -232,12 +232,12 @@ test('5. Non-existent leaderboard_alltime creates record capped at totalXp <= 50
 
   const res = await reconcileAllTimeXpFirestore(testUid, 'Alice', '');
   assert.equal(res.reconciled, true);
-  assert.equal(res.totalXp, 5000);
+  assert.equal(res.totalXp, 6500);
 
-  // Must have 1 commit capped at 5000 with setToServerValue REQUEST_TIME
+  // Must have 1 commit with full 6500 and setToServerValue REQUEST_TIME
   assert.equal(commitWrites.length, 1);
   const firstWrite = commitWrites[0][0];
-  assert.equal(firstWrite.update.fields.totalXp.integerValue, '5000');
+  assert.equal(firstWrite.update.fields.totalXp.integerValue, '6500');
   assert.equal(firstWrite.updateTransforms[0].setToServerValue, 'REQUEST_TIME');
 });
 

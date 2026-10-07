@@ -130,26 +130,26 @@ test('Firestore Security Rules: Full Verification against Emulator', async (t) =
     await assertSucceeds(alice.firestore().doc('users/alice_uid').get());
   });
 
-  // (е) создание alltime с totalXp > 10000 отклоняется, <= 10000 разрешено
-  await t.test('(е) Создание alltime с totalXp > 10000 отклоняется, <= 10000 разрешено', async () => {
+  // (е) создание alltime с totalXp >= 0 разрешено (без искусственного потолка), < 0 отклоняется
+  await t.test('(е) Создание alltime с totalXp >= 0 разрешено (без искусственного потолка), < 0 отклоняется', async () => {
     const carol = testEnv.authenticatedContext('carol_uid', { email_verified: true });
 
-    // totalXp = 10001 -> rejected
+    // totalXp < 0 -> rejected
     await assertFails(
       carol.firestore().doc('leaderboard_alltime/carol_uid').set({
         userId: 'carol_uid',
         name: 'Carol',
-        totalXp: 10001,
+        totalXp: -5,
         updatedAt: serverTimestamp()
       })
     );
 
-    // totalXp = 10000 -> allowed
+    // totalXp = 25000 (высокий счёт без искусственного потолка) -> allowed
     await assertSucceeds(
       carol.firestore().doc('leaderboard_alltime/carol_uid').set({
         userId: 'carol_uid',
         name: 'Carol',
-        totalXp: 10000,
+        totalXp: 25000,
         updatedAt: serverTimestamp()
       })
     );

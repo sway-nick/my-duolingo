@@ -1078,7 +1078,7 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
         }
       ]
     },
-    // 3. All-time leaderboard doc:
+    // 3. All-time global leaderboard doc:
     // ALWAYS includes totalXp transform (even when delta <= 0, totalDelta = 0)
     // so leaderboard_alltime document contains totalXp upon creation
     {
@@ -1133,7 +1133,7 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
       return { success: false, status: res.status, error: errText };
     }
     const data = await res.json().catch(() => ({}));
-    return { success: true, data };
+    return { success: true, data, acceptedDelta: delta };
   } catch (err) {
     console.warn('Firestore atomic commit delta exception:', err);
     return { success: false, error: err.message };
@@ -1152,65 +1152,76 @@ export async function commitXpDeltaFirestore(userId, weekKey, weeklyDelta, userN
     return sendCommitXpDeltaSingle(uid, weekKey, 0, userName, userAvatar);
   }
 
-  // Rule constraint: at most 5000 change per write
-  if (Math.abs(delta) > 5000) {
-    let remaining = delta;
-    let lastRes = null;
-    while (remaining !== 0) {
-      const chunk = remaining > 0 ? Math.min(5000, remaining) : Math.max(-5000, remaining);
-      lastRes = await sendCommitXpDeltaSingle(uid, weekKey, chunk, userName, userAvatar);
-      if (!lastRes?.success) return lastRes;
-      remaining -= chunk;
-    }
-    return lastRes;
-  }
-
-  return sendCommitXpDeltaSingle(uid, weekKey, delta, userName, userAvatar);
+  // Single write limit in firestore.rules is 1000 per atomic commit (no more than 1000 XP per session).
+  const clampedDelta = delta > 1000 ? 1000 : (delta < -1000 ? -1000 : delta);
+  return sendCommitXpDeltaSingle(uid, weekKey, clampedDelta, userName, userAvatar);
 }
+
+const activeWeeklyReconciles = new Map();
+const activeAllTimeReconciles = new Map();
 
 export async function reconcileWeeklyXpFirestore(userId, weekKey, localXp, userName, userAvatar) {
   if (!userId || !weekKey) return null;
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return null;
 
-  if (hasPendingLeaderboardIncrements()) {
-    return { skipped: true, reason: 'pending_increments' };
+  const key = `${uid}_${weekKey}`;
+  if (activeWeeklyReconciles.has(key)) {
+    return activeWeeklyReconciles.get(key);
   }
 
-  const cleanLocalXp = Math.max(0, Math.round(Number(localXp) || 0));
+  const promise = (async () => {
+    if (hasPendingLeaderboardIncrements()) {
+      return { skipped: true, reason: 'pending_increments' };
+    }
 
-  let serverXp = 0;
-  try {
-    const config = getFirebaseConfig();
-    const docUrl = `${getFirestoreBase()}/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}?key=${config.apiKey}`;
-    const res = await firestoreFetch(docUrl, { headers: getAuthHeaders() });
-    if (res.ok) {
-      const data = await res.json();
-      serverXp = Number(data.fields?.xp?.integerValue || data.fields?.xp?.doubleValue || 0);
-    } else if (res.status === 404) {
-      serverXp = 0;
-    } else {
+    const cleanLocalXp = Math.max(0, Math.round(Number(localXp) || 0));
+
+    let serverXp = 0;
+    try {
+      const config = getFirebaseConfig();
+      const docUrl = `${getFirestoreBase()}/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}?key=${config.apiKey}`;
+      const res = await firestoreFetch(docUrl, { headers: getAuthHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        serverXp = Number(data.fields?.xp?.integerValue || data.fields?.xp?.doubleValue || 0);
+      } else if (res.status === 404) {
+        serverXp = 0;
+      } else {
+        return null;
+      }
+    } catch (e) {
       return null;
     }
-  } catch (e) {
-    return null;
-  }
 
-  if (cleanLocalXp > serverXp) {
-    const diff = cleanLocalXp - serverXp;
-    await commitXpDeltaFirestore(uid, weekKey, diff, userName, userAvatar);
-    return { reconciled: true, localXp: cleanLocalXp, serverXp: cleanLocalXp };
-  } else if (serverXp > cleanLocalXp) {
-    try {
-      localStorage.setItem(`xp_${uid}_${weekKey}`, String(serverXp));
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: serverXp, delta: 0 } }));
+    if (cleanLocalXp > serverXp) {
+      const diff = cleanLocalXp - serverXp;
+      const commitRes = await commitXpDeltaFirestore(uid, weekKey, diff, userName, userAvatar);
+      if (!commitRes || !commitRes.success) {
+        return { reconciled: false, localXp: cleanLocalXp, serverXp, error: commitRes?.error || 'commit_failed' };
       }
-    } catch (e) {}
-    return { reconciled: true, localXp: serverXp, serverXp };
-  }
+      const acceptedDelta = commitRes.acceptedDelta !== undefined ? commitRes.acceptedDelta : Math.min(diff, 1000);
+      const newServerXp = serverXp + acceptedDelta;
+      return { reconciled: true, localXp: cleanLocalXp, serverXp: newServerXp };
+    } else if (serverXp > cleanLocalXp) {
+      try {
+        localStorage.setItem(`xp_${uid}_${weekKey}`, String(serverXp));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: serverXp, delta: 0 } }));
+        }
+      } catch (e) {}
+      return { reconciled: true, localXp: serverXp, serverXp };
+    }
 
-  return { reconciled: false, localXp: cleanLocalXp, serverXp };
+    return { reconciled: false, localXp: cleanLocalXp, serverXp };
+  })();
+
+  activeWeeklyReconciles.set(key, promise);
+  try {
+    return await promise;
+  } finally {
+    activeWeeklyReconciles.delete(key);
+  }
 }
 
 export async function reconcileAllTimeXpFirestore(userId, userName, userAvatar) {
@@ -1218,127 +1229,145 @@ export async function reconcileAllTimeXpFirestore(userId, userName, userAvatar) 
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return null;
 
-  if (hasPendingLeaderboardIncrements()) {
-    return { skipped: true, reason: 'pending_increments' };
+  if (activeAllTimeReconciles.has(uid)) {
+    return activeAllTimeReconciles.get(uid);
   }
 
-  const cleanName = (userName != null) ? String(userName).slice(0, 50) : 'Гость';
-  const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
-
-  let totalLocalXp = 0;
-  try {
-    const prefix = `xp_${uid}_`;
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && k.startsWith(prefix)) {
-        totalLocalXp += Number(localStorage.getItem(k) || 0);
-      }
+  const promise = (async () => {
+    if (hasPendingLeaderboardIncrements()) {
+      return { skipped: true, reason: 'pending_increments' };
     }
-  } catch (e) {}
 
-  const config = getFirebaseConfig();
-  const projectId = config.projectId || DEFAULT_FIREBASE_CONFIG.projectId;
-  const alltimeDocName = `projects/${projectId}/databases/(default)/documents/leaderboard_alltime/${encodeURIComponent(uid)}`;
-  const docUrl = `${getFirestoreBase()}/leaderboard_alltime/${encodeURIComponent(uid)}?key=${config.apiKey}`;
+    const cleanName = (userName != null) ? String(userName).slice(0, 50) : 'Гость';
+    const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
 
-  let docExists = false;
-  let serverTotalXp = 0;
-  try {
-    const res = await firestoreFetch(docUrl, { headers: getAuthHeaders() });
-    if (res.ok) {
-      docExists = true;
-      const data = await res.json();
-      serverTotalXp = Number(data.fields?.totalXp?.integerValue || data.fields?.totalXp?.doubleValue || 0);
-    } else if (res.status === 404) {
-      docExists = false;
-      serverTotalXp = 0;
-    } else {
+    let totalLocalXp = 0;
+    try {
+      const prefix = `xp_${uid}_`;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(prefix)) {
+          totalLocalXp += Number(localStorage.getItem(k) || 0);
+        }
+      }
+    } catch (e) {}
+
+    const config = getFirebaseConfig();
+    const projectId = config.projectId || DEFAULT_FIREBASE_CONFIG.projectId;
+    const alltimeDocName = `projects/${projectId}/databases/(default)/documents/leaderboard_alltime/${encodeURIComponent(uid)}`;
+    const docUrl = `${getFirestoreBase()}/leaderboard_alltime/${encodeURIComponent(uid)}?key=${config.apiKey}`;
+
+    let docExists = false;
+    let serverTotalXp = 0;
+    try {
+      const res = await firestoreFetch(docUrl, { headers: getAuthHeaders() });
+      if (res.ok) {
+        docExists = true;
+        const data = await res.json();
+        serverTotalXp = Number(data.fields?.totalXp?.integerValue || data.fields?.totalXp?.doubleValue || 0);
+      } else if (res.status === 404) {
+        docExists = false;
+        serverTotalXp = 0;
+      } else {
+        return null;
+      }
+    } catch (e) {
       return null;
     }
-  } catch (e) {
-    return null;
-  }
 
-  if (!docExists) {
-    if (totalLocalXp <= 0) return null;
+    if (!docExists) {
+      if (totalLocalXp <= 0) return null;
 
-    // Initial creation: cap totalXp at max 5000 (historical values backfilled via migrate_alltime.mjs)
-    const initialTotalXp = Math.min(totalLocalXp, 5000);
-    const createWrite = {
-      update: {
-        name: alltimeDocName,
-        fields: {
-          userId: { stringValue: String(uid) },
-          name: { stringValue: cleanName },
-          avatar: { stringValue: cleanAvatar },
-          totalXp: { integerValue: String(initialTotalXp) }
-        }
-      },
-      updateMask: {
-        fieldPaths: ['userId', 'name', 'avatar', 'totalXp']
-      },
-      updateTransforms: [
-        {
-          fieldPath: 'updatedAt',
-          setToServerValue: 'REQUEST_TIME'
-        }
-      ]
-    };
-
-    pendingLeaderboardIncrementsCount++;
-    try {
-      const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
-      const cRes = await firestoreFetch(commitUrl, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ writes: [createWrite] })
-      });
-      if (!cRes.ok) return null;
-    } finally {
-      pendingLeaderboardIncrementsCount = Math.max(0, pendingLeaderboardIncrementsCount - 1);
-    }
-    return { reconciled: true, totalXp: initialTotalXp };
-  } else {
-    // Document exists: reconcile UPWARDS only, step capped at 5000
-    if (totalLocalXp > serverTotalXp) {
-      const chunk = Math.min(totalLocalXp - serverTotalXp, 5000);
-      const incWrite = {
+      const initialTotalXp = totalLocalXp;
+      const createWriteAlltime = {
         update: {
           name: alltimeDocName,
           fields: {
             userId: { stringValue: String(uid) },
             name: { stringValue: cleanName },
-            avatar: { stringValue: cleanAvatar }
+            avatar: { stringValue: cleanAvatar },
+            totalXp: { integerValue: String(initialTotalXp) }
           }
         },
         updateMask: {
-          fieldPaths: ['userId', 'name', 'avatar']
+          fieldPaths: ['userId', 'name', 'avatar', 'totalXp']
         },
         updateTransforms: [
           {
             fieldPath: 'updatedAt',
             setToServerValue: 'REQUEST_TIME'
-          },
-          {
-            fieldPath: 'totalXp',
-            increment: { integerValue: String(chunk) }
           }
         ]
       };
+
       pendingLeaderboardIncrementsCount++;
       try {
         const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
-        await firestoreFetch(commitUrl, {
+        const cRes = await firestoreFetch(commitUrl, {
           method: 'POST',
           headers: getAuthHeaders(),
-          body: JSON.stringify({ writes: [incWrite] })
+          body: JSON.stringify({ writes: [createWriteAlltime] })
         });
+        if (!cRes.ok) return { reconciled: false, totalXp: serverTotalXp };
       } finally {
         pendingLeaderboardIncrementsCount = Math.max(0, pendingLeaderboardIncrementsCount - 1);
       }
-      return { reconciled: true, totalXp: serverTotalXp + chunk };
+      return { reconciled: true, totalXp: initialTotalXp };
+    } else {
+      // Document exists: reconcile UPWARDS only, step capped at 1000
+      if (totalLocalXp > serverTotalXp) {
+        const chunk = Math.min(totalLocalXp - serverTotalXp, 1000);
+        const incWriteAlltime = {
+          update: {
+            name: alltimeDocName,
+            fields: {
+              userId: { stringValue: String(uid) },
+              name: { stringValue: cleanName },
+              avatar: { stringValue: cleanAvatar }
+            }
+          },
+          updateMask: {
+            fieldPaths: ['userId', 'name', 'avatar']
+          },
+          updateTransforms: [
+            {
+              fieldPath: 'updatedAt',
+              setToServerValue: 'REQUEST_TIME'
+            },
+            {
+              fieldPath: 'totalXp',
+              increment: { integerValue: String(chunk) }
+            }
+          ]
+        };
+
+        pendingLeaderboardIncrementsCount++;
+        try {
+          const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
+          const cRes = await firestoreFetch(commitUrl, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ writes: [incWriteAlltime] })
+          });
+          if (!cRes.ok) {
+            const errText = await cRes.text().catch(() => '');
+            return { reconciled: false, totalXp: serverTotalXp, error: errText };
+          }
+        } finally {
+          pendingLeaderboardIncrementsCount = Math.max(0, pendingLeaderboardIncrementsCount - 1);
+        }
+        return { reconciled: true, totalXp: serverTotalXp + chunk };
+      }
+
+      return { reconciled: false, totalXp: serverTotalXp };
     }
-    return { reconciled: false, totalXp: serverTotalXp };
+  })();
+
+  activeAllTimeReconciles.set(uid, promise);
+  try {
+    return await promise;
+  } finally {
+    activeAllTimeReconciles.delete(uid);
   }
 }
 

@@ -30,8 +30,9 @@ export function getIsoWeekStartMs(weekKey = getIsoWeekKey()) {
   const jan4 = new Date(Date.UTC(year, 0, 4));
   const day = jan4.getUTCDay() || 7;
   const monWeek1 = new Date(jan4.getTime() - (day - 1) * 86400000);
-  monWeek1.setUTCHours(0, 0, 0, 0);
   const monTarget = new Date(monWeek1.getTime() + (week - 1) * 7 * 86400000);
   return monTarget.getTime();
 }
+
+
 

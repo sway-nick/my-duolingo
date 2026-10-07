@@ -790,6 +790,18 @@ function generateDynamicBots(weekKey) {
   });
 }
 
+function sortLeaderboardEntries(list) {
+  return list.sort((a, b) => {
+    const diff = Number((b && b.xp) || 0) - Number((a && a.xp) || 0);
+    if (diff !== 0) return diff;
+    if (a?.isCurrentUser) return -1;
+    if (b?.isCurrentUser) return 1;
+    if (a?.isBot && !b?.isBot) return 1;
+    if (!a?.isBot && b?.isBot) return -1;
+    return String(a?.userId || '').localeCompare(String(b?.userId || ''));
+  });
+}
+
 function getCachedLeaderboard(weekKey = null, period = 'week') {
   const wKey = weekKey || getIsoWeekKey();
   const currentUser = getCurrentUser();
@@ -809,7 +821,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       userId: bot.userId,
       name: bot.name,
       avatar: bot.avatar,
-      xp: Math.floor(bot.xp * 3.5),
+      xp: Math.max(10, Math.floor(bot.xp * 3.5)),
       isBot: true,
     }));
     const combined = [...realPlayers, ...dynamicBots];
@@ -840,7 +852,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       });
     }
 
-    combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+    sortLeaderboardEntries(combined);
     return { success: true, data: combined, period: 'all' };
   }
 
@@ -871,7 +883,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
     });
   }
 
-  combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+  sortLeaderboardEntries(combined);
 
   return { success: true, data: combined, weekKey: wKey, userXP, period: 'week' };
 }
@@ -960,11 +972,11 @@ async function getLeaderboard(weekKey = null, period = 'week') {
           userId: bot.userId,
           name: bot.name,
           avatar: bot.avatar,
-          xp: Math.floor(bot.xp * 3.5),
+          xp: Math.max(10, Math.floor(bot.xp * 3.5)),
           isBot: true,
         }));
         const combined = [...fsPlayers, ...dynamicBots];
-        combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+        sortLeaderboardEntries(combined);
 
         localStorage.setItem('cache_leaderboard_all', JSON.stringify(combined));
         if (typeof window !== 'undefined') {
@@ -1021,7 +1033,7 @@ async function getLeaderboard(weekKey = null, period = 'week') {
 
       const dynamicBots = generateDynamicBots(wKey);
       const combined = [...validFsPlayers, ...dynamicBots];
-      combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+      sortLeaderboardEntries(combined);
       localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'week' } }));
@@ -1045,6 +1057,16 @@ async function getLeaderboard(weekKey = null, period = 'week') {
 }
 
 if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    try {
+      const uId = getEffectiveUserId();
+      const wKey = getIsoWeekKey();
+      const xp = getUserWeeklyXP(uId, wKey);
+      const user = getCurrentUser();
+      syncWeeklyXpApi(uId, wKey, xp, user?.name, user?.avatar);
+    } catch (e) {}
+  });
+
   window.addEventListener('myduo:avatar_changed', (e) => {
     const uId = (e.detail && e.detail.userId) || getEffectiveUserId();
     const wKey = getIsoWeekKey();
