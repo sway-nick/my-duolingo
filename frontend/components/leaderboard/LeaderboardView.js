@@ -315,10 +315,9 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
         <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
           <span class="my-bar-xp" style="white-space: nowrap; flex-shrink: 0; font-size: 14px;">${formatLeaderboardXp(myPlayer.xp, period)} XP</span>
           ${
-            !currentUser || isIssue
+            isGuest
               ? `<button class="primary-button my-bar-login-btn" id="leaderboard-login-btn" style="position: relative; width: auto; min-width: auto; height: 28px; min-height: 28px; max-height: 28px; padding: 0 10px; font-size: 12px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex-shrink: 0; white-space: nowrap; line-height: 1; margin-right: 2px;">
                   <span>Log in</span>
-                  ${isGuest || isIssue ? `<span class="sync-status-badge my-bar-login-dot" style="position: absolute; top: -3px; right: -3px; width: 7px; height: 7px; background-color: #ea580c; border: 1.5px solid var(--card-bg, #ffffff); border-radius: 50%;"></span>` : ''}
                 </button>`
               : ''
           }

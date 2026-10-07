@@ -869,7 +869,8 @@ const FIRESTORE_WRITE_METHODS = new Set(['PATCH', 'PUT', 'POST', 'DELETE']);
 
 export async function firestoreFetch(url, options = {}) {
   const method = String(options.method || 'GET').toUpperCase();
-  const isWrite = FIRESTORE_WRITE_METHODS.has(method);
+  const isQuery = url.includes(':runQuery');
+  const isWrite = !isQuery && FIRESTORE_WRITE_METHODS.has(method);
 
   const send = (token) => {
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
@@ -1110,11 +1111,26 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
 
   pendingLeaderboardIncrementsCount++;
   try {
-    const res = await firestoreFetch(commitUrl, {
+    let res = await firestoreFetch(commitUrl, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ writes })
     });
+
+    // Fallback for transitional environments where server rules do not yet support leaderboard_alltime:
+    // Retry with weekly-only writes so weekly XP sync is not blocked!
+    if (res.status === 403 && writes.length > 2) {
+      const weeklyOnlyWrites = writes.slice(0, 2);
+      const retryRes = await firestoreFetch(commitUrl, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ writes: weeklyOnlyWrites })
+      });
+      if (retryRes.ok) {
+        res = retryRes;
+      }
+    }
+
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
       console.warn('Firestore atomic commit delta failed:', res.status, errText);

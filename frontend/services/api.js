@@ -812,7 +812,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   if (period === 'all') {
     let rawList = [];
     try {
-      const raw = localStorage.getItem('cache_leaderboard_all');
+      const raw = localStorage.getItem('cache_leaderboard_all') || localStorage.getItem(`cache_leaderboard_${wKey}`);
       if (raw) rawList = JSON.parse(raw);
     } catch (e) {}
 
@@ -929,9 +929,33 @@ async function getLeaderboard(weekKey = null, period = 'week') {
 
   if (period === 'all') {
     // 1. Query Cloud Firestore all-time leaderboard
+    let fsPlayers = null;
     try {
-      const fsPlayers = await getAllTimeLeaderboardFirestore(100);
-      if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
+      fsPlayers = await getAllTimeLeaderboardFirestore(100);
+    } catch (fsErr) {
+      console.warn('Firestore all-time leaderboard query fallback:', fsErr);
+    }
+
+    // 2. Seamless fallback: if leaderboard_alltime is empty, not migrated, or inaccessible,
+    // fetch real players from weekly leaderboard so users always see their real friends!
+    if (!fsPlayers || !Array.isArray(fsPlayers) || fsPlayers.length === 0) {
+      try {
+        const weeklyPlayers = await getWeeklyLeaderboardFirestore(wKey, 100);
+        if (weeklyPlayers && Array.isArray(weeklyPlayers) && weeklyPlayers.length > 0) {
+          fsPlayers = weeklyPlayers.map((p) => ({
+            userId: p.userId,
+            name: p.name,
+            avatar: p.avatar,
+            xp: Number(p.xp || 0),
+            isCurrentUser: p.isCurrentUser
+          }));
+        }
+      } catch (wErr) {
+        console.warn('Weekly fallback for all-time leaderboard failed:', wErr);
+      }
+    }
+
+    if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
         let totalLocalXP = 0;
         try {
           const prefix = `xp_${currentUserId}_`;
@@ -989,9 +1013,6 @@ async function getLeaderboard(weekKey = null, period = 'week') {
 
         return getCachedLeaderboard(wKey, 'all');
       }
-    } catch (fsErr) {
-      console.warn('Firestore all-time leaderboard query fallback:', fsErr);
-    }
 
     if (isAuth) {
       reconcileAllTimeXpFirestore(fsUid, userName, userAvatar).catch(() => {});
