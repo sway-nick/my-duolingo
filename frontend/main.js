@@ -1,6 +1,6 @@
-﻿import { AudioService } from './services/audioService.js?v=378.0';
+import { AudioService } from './services/audioService.js?v=378.0';
 import { StorageService } from './services/storageService.js?v=378.0';
-import { ApiService } from './services/api.js?v=378.0';
+import { ApiService } from './services/api.js?v=384.0';
 import { renderHeader, updateHeader } from './components/Header.js?v=378.0';
 import { renderSkillPath } from './components/SkillPath.js?v=378.0';
 import { renderLesson, destroyLesson } from './components/LessonEngine.js?v=378.0';
