@@ -130,26 +130,26 @@ test('Firestore Security Rules: Full Verification against Emulator', async (t) =
     await assertSucceeds(alice.firestore().doc('users/alice_uid').get());
   });
 
-  // (е) создание alltime с totalXp > 5000 отклоняется
-  await t.test('(е) Создание alltime с totalXp > 5000 отклоняется, <= 5000 разрешено', async () => {
+  // (е) создание alltime с totalXp > 10000 отклоняется, <= 10000 разрешено
+  await t.test('(е) Создание alltime с totalXp > 10000 отклоняется, <= 10000 разрешено', async () => {
     const carol = testEnv.authenticatedContext('carol_uid', { email_verified: true });
 
-    // totalXp = 5001 -> rejected
+    // totalXp = 10001 -> rejected
     await assertFails(
       carol.firestore().doc('leaderboard_alltime/carol_uid').set({
         userId: 'carol_uid',
         name: 'Carol',
-        totalXp: 5001,
+        totalXp: 10001,
         updatedAt: serverTimestamp()
       })
     );
 
-    // totalXp = 5000 -> allowed
+    // totalXp = 10000 -> allowed
     await assertSucceeds(
       carol.firestore().doc('leaderboard_alltime/carol_uid').set({
         userId: 'carol_uid',
         name: 'Carol',
-        totalXp: 5000,
+        totalXp: 10000,
         updatedAt: serverTimestamp()
       })
     );
@@ -217,6 +217,7 @@ test('Firestore Security Rules: Full Verification against Emulator', async (t) =
         userId: 'frank_uid',
         name: 'Frank',
         xp: 100,
+        weekKey: currentWeek,
         weekStartMs: currentWeekStartMs,
         updatedAt: serverTimestamp()
       })
@@ -296,6 +297,93 @@ test('Firestore Security Rules: Full Verification against Emulator', async (t) =
     assert.ok(fullData, 'Full user data should be loaded');
     assert.deepEqual(fullData.notes, testNotes);
     assert.deepEqual(fullData.customWords, testWords);
+  });
+
+  // (к) Сквозной тест REST :commit с increment, REQUEST_TIME и проверкой правил
+  await t.test('(к) Сквозной тест REST :commit с increment, REQUEST_TIME и проверкой правил', async () => {
+    process.env.FIRESTORE_EMULATOR_HOST = '127.0.0.1:8088';
+    const playerA = 'PlayerRestAlpha1234567890';
+    const playerB = 'PlayerRestBeta12345678901';
+
+    function setSessionUser(uid) {
+      const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64url');
+      const payload = Buffer.from(JSON.stringify({
+        user_id: uid,
+        sub: uid,
+        email_verified: true,
+        exp: Math.floor(Date.now() / 1000) + 3600
+      })).toString('base64url');
+      const mockJwt = header + '.' + payload + '.';
+
+      localStorage.setItem('myduo_firebase_config', JSON.stringify({
+        projectId: 'demo-rules-test',
+        apiKey: 'fake-api-key'
+      }));
+
+      localStorage.setItem('myduo_firebase_user', JSON.stringify({
+        id: uid,
+        idToken: mockJwt,
+        expiresAt: Date.now() + 3600000
+      }));
+    }
+
+    const { commitXpDeltaFirestore } = await import('../frontend/services/firebase.js');
+
+    // 1. Создание нового игрока при дельте > 0 (+100)
+    setSessionUser(playerA);
+    const resA = await commitXpDeltaFirestore(playerA, currentWeek, 100, 'PlayerA', '');
+    assert.equal(resA.success, true, 'Commit with delta > 0 must succeed for new player');
+
+    const snapA_week = await testEnv.unauthenticatedContext().firestore().doc(`leaderboards/${currentWeek}/players/${playerA}`).get();
+    assert.equal(snapA_week.exists, true);
+    assert.equal(snapA_week.data().xp, 100);
+    assert.equal(snapA_week.data().weekKey, currentWeek);
+
+    const snapA_all = await testEnv.unauthenticatedContext().firestore().doc(`leaderboard_alltime/${playerA}`).get();
+    assert.equal(snapA_all.exists, true);
+    assert.equal(snapA_all.data().totalXp, 100);
+
+    // 2. Создание нового игрока при дельте = 0
+    setSessionUser(playerB);
+    const resB = await commitXpDeltaFirestore(playerB, currentWeek, 0, 'PlayerB', '');
+    assert.equal(resB.success, true, 'Commit with delta = 0 must succeed and initialize documents');
+
+    const snapB_week = await testEnv.unauthenticatedContext().firestore().doc(`leaderboards/${currentWeek}/players/${playerB}`).get();
+    assert.equal(snapB_week.exists, true);
+    assert.equal(snapB_week.data().xp, 0);
+
+    const snapB_all = await testEnv.unauthenticatedContext().firestore().doc(`leaderboard_alltime/${playerB}`).get();
+    assert.equal(snapB_all.exists, true);
+    assert.equal(snapB_all.data().totalXp, 0);
+
+    // 3. Дельта < 0:
+    // 3a. Для игрока с 0 очков прямая посылка delta < 0 (-5) отклоняется правилом xp >= 0
+    const rawNegativeRes = await commitXpDeltaFirestore(playerB, currentWeek, -5, 'PlayerB', '');
+    assert.equal(rawNegativeRes.success, false, 'Commit causing xp < 0 must be rejected by rules');
+
+    // 3b. Для игрока с 100 очками (Player A) штраф -5 уменьшает недельный xp до 95, а totalXp не уменьшается
+    setSessionUser(playerA);
+    const penaltyRes = await commitXpDeltaFirestore(playerA, currentWeek, -5, 'PlayerA', '');
+    assert.equal(penaltyRes.success, true, 'Penalty commit for user with enough score must succeed');
+
+    const snapA_penalty_week = await testEnv.unauthenticatedContext().firestore().doc(`leaderboards/${currentWeek}/players/${playerA}`).get();
+    assert.equal(snapA_penalty_week.data().xp, 95);
+
+    const snapA_penalty_all = await testEnv.unauthenticatedContext().firestore().doc(`leaderboard_alltime/${playerA}`).get();
+    assert.equal(snapA_penalty_all.data().totalXp, 100, 'totalXp must not be decreased by penalty');
+
+    // 4. Обновление в пределах скорости (+10 XP)
+    const fairUpdateRes = await commitXpDeltaFirestore(playerA, currentWeek, 10, 'PlayerA', '');
+    assert.equal(fairUpdateRes.success, true, 'Fair XP increase within acceptable rate must succeed');
+
+    // 5. Отказ при превышении скорости (+1000 XP мгновенно)
+    const cheatUpdateRes = await commitXpDeltaFirestore(playerA, currentWeek, 1000, 'PlayerA', '');
+    assert.equal(cheatUpdateRes.success, false, 'Instant excessive XP gain (+1000) must be rejected by rate limit');
+
+    // 6. Отказ при чужом uid
+    setSessionUser(playerA);
+    const alienRes = await commitXpDeltaFirestore(playerB, currentWeek, 10, 'Alien', '');
+    assert.equal(alienRes.success, false, 'Commit targeting foreign uid must be rejected');
   });
 });
 

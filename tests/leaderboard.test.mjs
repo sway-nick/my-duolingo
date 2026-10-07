@@ -108,7 +108,7 @@ test('2. Atomic commit body contains increment transform instead of absolute val
   assert.equal(penaltyWeeklyXp?.increment?.integerValue, '-5');
   const penaltyAlltime = penaltyBody.writes.find(w => w.update?.name?.includes('/leaderboard_alltime/'));
   const penaltyAlltimeXp = penaltyAlltime?.updateTransforms?.find(t => t.fieldPath === 'totalXp');
-  assert.ok(!penaltyAlltimeXp, 'totalXp must NOT be decremented on penalty');
+  assert.equal(penaltyAlltimeXp?.increment?.integerValue, '0', 'totalXp must NOT be decremented on penalty (increment is 0 to initialize document if absent)');
 });
 
 test('3. Reconcile only upwards and never lowers score', async () => {
@@ -241,58 +241,66 @@ test('5. Non-existent leaderboard_alltime creates record capped at totalXp <= 50
   assert.equal(firstWrite.updateTransforms[0].setToServerValue, 'REQUEST_TIME');
 });
 
-test('6. User with big history and legacy xp key enters new week -> weekly XP starts at 0', async () => {
-  const testUid = 'TestUserOwner1234567890abcde';
-  const newWeekKey = '2026-W42';
+test('6. User with big history and legacy xp key enters new week -> weekly XP starts at 0', async (t) => {
+  const { mock } = await import('node:test');
+  // Advance mock time to Monday of next week: 2026-10-12T02:00:00.000Z
+  mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-12T02:00:00.000Z') });
 
-  localStorage.clear();
-  localStorage.setItem('myduo_current_user', JSON.stringify({
-    id: testUid,
-    email: 'user@example.com',
-    name: 'Alice',
-    firebaseUid: testUid
-  }));
-  localStorage.setItem('myduo_firebase_user', JSON.stringify({
-    id: testUid,
-    idToken: 'test.id.token',
-    expiresAt: Date.now() + 3600000
-  }));
+  try {
+    const testUid = 'TestUserOwner1234567890abcde';
+    const currentWeekKey = getIsoWeekKey(); // dynamically evaluates to '2026-W42'
 
-  // Old legacy keys: xp = 1250 (from past week)
-  localStorage.setItem('xp', '1250');
-  localStorage.setItem('dl_xp', '1250');
-  // Past week XP key:
-  localStorage.setItem(`xp_${testUid}_2026-W41`, '1250');
+    localStorage.clear();
+    localStorage.setItem('myduo_current_user', JSON.stringify({
+      id: testUid,
+      email: 'user@example.com',
+      name: 'Alice',
+      firebaseUid: testUid
+    }));
+    localStorage.setItem('myduo_firebase_user', JSON.stringify({
+      id: testUid,
+      idToken: 'test.id.token',
+      expiresAt: Date.now() + 3600000
+    }));
 
-  // User has 50 mastered words in progress
-  const bigProgress = {};
-  for (let i = 1; i <= 50; i++) {
-    bigProgress[`word_${i}`] = { mastered: true, stage: 'mastered' };
-  }
-  localStorage.setItem(`progress_${testUid}`, JSON.stringify(bigProgress));
+    // Old legacy keys: xp = 1250 (from past week)
+    localStorage.setItem('xp', '1250');
+    localStorage.setItem('dl_xp', '1250');
+    // Past week XP key:
+    localStorage.setItem(`xp_${testUid}_2026-W41`, '1250');
 
-  // Migrate guest data (simulates app load/login)
-  const { setCurrentUser } = await import('../frontend/services/authService.js');
-  setCurrentUser({ id: testUid, email: 'user@example.com', name: 'Alice', firebaseUid: testUid }, 'test.token');
+    // User has 50 mastered words in progress
+    const bigProgress = {};
+    for (let i = 1; i <= 50; i++) {
+      bigProgress[`word_${i}`] = { mastered: true, stage: 'mastered' };
+    }
+    localStorage.setItem(`progress_${testUid}`, JSON.stringify(bigProgress));
 
-  // New week key must NOT get past week's 1250 points
-  let currentWeeklyXp = getUserWeeklyXP(testUid, newWeekKey);
-  assert.equal(currentWeeklyXp, 0, 'migrateGuestData must NOT transfer old plain xp to new week');
+    // Migrate guest data (simulates app load/login)
+    const { setCurrentUser } = await import('../frontend/services/authService.js');
+    setCurrentUser({ id: testUid, email: 'user@example.com', name: 'Alice', firebaseUid: testUid }, 'test.token');
 
-  globalThis.fetch = async (url) => {
-    // Return empty weekly XP (0) from Firestore
-    return {
-      ok: true,
-      status: 200,
-      json: async () => ({ documents: [] })
+    // Current week key must NOT get past week's 1250 points
+    let currentWeeklyXp = getUserWeeklyXP(testUid, currentWeekKey);
+    assert.equal(currentWeeklyXp, 0, `migrateGuestData must NOT transfer old plain xp to current week ${currentWeekKey}`);
+
+    globalThis.fetch = async (url) => {
+      // Return empty weekly XP (0) from Firestore
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ documents: [] })
+      };
     };
-  };
 
-  await fetchUserDataFromCloud(testUid, newWeekKey);
+    await fetchUserDataFromCloud(testUid, currentWeekKey);
 
-  const weeklyXpAfterCloud = getUserWeeklyXP(testUid, newWeekKey);
-  assert.equal(weeklyXpAfterCloud, 0, 'fetchUserDataFromCloud must NOT transfer calcXp or plain xp');
-  assert.equal(localStorage.getItem('xp'), null, 'Legacy xp key must be cleared from storage');
+    const weeklyXpAfterCloud = getUserWeeklyXP(testUid, currentWeekKey);
+    assert.equal(weeklyXpAfterCloud, 0, 'fetchUserDataFromCloud must NOT transfer calcXp or plain xp');
+    assert.equal(localStorage.getItem('xp'), null, 'Legacy xp key must be cleared from storage');
+  } finally {
+    mock.timers.reset();
+  }
 });
 
 test('7. deleteAllUserFirestoreData deletes leaderboard_alltime and recent 8 weeks', async () => {

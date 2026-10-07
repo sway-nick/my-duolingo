@@ -7,6 +7,9 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 
+process.env.FIRESTORE_EMULATOR_HOST = process.env.FIRESTORE_EMULATOR_HOST || '127.0.0.1:8088';
+process.env.GCLOUD_PROJECT = 'demo-rules-test';
+
 if (getApps().length === 0) {
   initializeApp({ projectId: 'demo-rules-test' });
 }
