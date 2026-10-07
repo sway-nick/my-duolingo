@@ -1,9 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
-const ROOT_SOURCE = 'c:/projects/my-duolingo';
-const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT_SOURCE = path.resolve(__dirname, '..');
+const ANDROID_PROJECT = process.env.ANDROID_PROJECT_PATH || path.resolve(ROOT_SOURCE, '../my-duolingo-android');
 const userJdks = path.join(process.env.USERPROFILE || 'C:\\Users\\user', '.jdks', 'jbr-21.0.11');
 const JAVA_HOME = fs.existsSync(userJdks) ? userJdks : 'C:\\Program Files\\Android\\Android Studio\\jbr';
 

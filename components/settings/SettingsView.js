@@ -1,12 +1,12 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=383.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=383.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=383.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=383.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=383.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=383.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=383.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=383.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=383.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=385.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=385.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=385.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=385.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=385.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=385.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=385.0';
 
 function escapeHtml(str) {
   if (str == null) return '';

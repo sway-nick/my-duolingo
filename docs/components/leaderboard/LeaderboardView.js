@@ -1,7 +1,8 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=378.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=378.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=378.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=385.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=385.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=385.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 
@@ -395,6 +396,26 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         </div>
       </div>
 
+      ${currentUser && currentUser.email && !isEmailVerified() ? `
+      <div class="email-verify-banner" id="email-verify-banner" style="margin: 10px 14px; padding: 10px 14px; background: rgba(234, 88, 12, 0.08); border: 1.5px solid rgba(234, 88, 12, 0.35); border-radius: 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #ea580c;">
+          <span style="font-size: 15px;">📧</span>
+          <span>${t('lead_verify_email_title')}</span>
+        </div>
+        <div style="color: var(--text-muted); font-size: 12px; line-height: 1.35;">
+          ${t('lead_verify_email_desc', { email: escapeHtml(currentUser.email) })}
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+          <button class="primary-button" id="btn-resend-verify" style="height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; background: #ea580c; border: none; border-radius: 7px; color: #fff; cursor: pointer;">
+            ${t('lead_verify_email_resend')}
+          </button>
+          <button class="secondary-button" id="btn-check-verify" style="height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; border-radius: 7px; cursor: pointer;">
+            ${t('lead_verify_email_check')}
+          </button>
+        </div>
+      </div>
+      ` : ''}
+
       <!-- Scrollable Content -->
       <div id="leaderboard-content" style="min-height: 280px;">
         ${bodyData.restHtml}
@@ -403,6 +424,46 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   `;
 
   const contentEl = container.querySelector('#leaderboard-content');
+
+  const resendBtn = container.querySelector('#btn-resend-verify');
+  if (resendBtn) {
+    resendBtn.addEventListener('click', async () => {
+      resendBtn.disabled = true;
+      resendBtn.textContent = t('lead_verify_email_sending');
+      try {
+        await sendEmailVerification();
+        resendBtn.textContent = t('lead_verify_email_sent');
+        setTimeout(() => { resendBtn.disabled = false; resendBtn.textContent = t('lead_verify_email_resend'); }, 5000);
+      } catch (e) {
+        alert(e.message || t('auth_err_failed'));
+        resendBtn.disabled = false;
+        resendBtn.textContent = t('lead_verify_email_resend');
+      }
+    });
+  }
+
+  const checkBtn = container.querySelector('#btn-check-verify');
+  if (checkBtn) {
+    checkBtn.addEventListener('click', async () => {
+      checkBtn.disabled = true;
+      resendBtn && (resendBtn.disabled = true);
+      try {
+        const verified = await checkAndRefreshEmailVerification();
+        if (verified) {
+          const banner = container.querySelector('#email-verify-banner');
+          if (banner) banner.remove();
+          renderLeaderboardView(containerSelector, options);
+        } else {
+          alert(t('lead_verify_email_not_yet'));
+          checkBtn.disabled = false;
+          resendBtn && (resendBtn.disabled = false);
+        }
+      } catch (e) {
+        checkBtn.disabled = false;
+        resendBtn && (resendBtn.disabled = false);
+      }
+    });
+  }
 
   // Clean up previous event listeners to prevent duplicate execution
   if (container._xpHandler) window.removeEventListener('myduo:xp_changed', container._xpHandler);

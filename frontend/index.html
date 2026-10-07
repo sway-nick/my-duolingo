@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -71,7 +71,7 @@
         };
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function() {
-            navigator.serviceWorker.register('./sw.js?v=383.10').catch(function() {});
+            navigator.serviceWorker.register('./sw.js?v=385.0').catch(function() {});
           });
         }
       })();
@@ -92,7 +92,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=383.10" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=385.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -160,19 +160,19 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=383.21';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, getSavedVoiceAccent } from './services/audioService.js?v=383.21';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=383.21';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=383.21';
-      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=383.21';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=383.21';
-      import { renderStatsView } from './components/stats/StatsView.js?v=383.21';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=383.21';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=383.21';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=383.21';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=383.21';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=383.21';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=383.21';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=385.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=385.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=385.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=385.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=385.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=385.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=385.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=385.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=385.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=385.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=385.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=385.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=385.0';
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -308,11 +308,12 @@
       }
 
       // Expose a global function so SettingsView can trigger the "download UK Elementary audio" modal
-      window.showAccentDownloadModalIfNeeded = function(accent) {
+      window.showAccentDownloadModalIfNeeded = async function(accent) {
         if (accent !== 'uk') return false;
         // Elementary is the bundled category — check if its UK audio pack is downloaded
         const ELEMENTARY_CAT = 'Elementary';
-        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT)) return false;
+        const verifyWords = allWords.filter((w) => (w.category || '').toLowerCase().trim() === ELEMENTARY_CAT.toLowerCase());
+        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT) && await verifyCategoryAudioInCache(accent, ELEMENTARY_CAT, verifyWords)) return false;
 
         const catWords = allWords.filter((w) => {
           const wCat = (w.category || '').toLowerCase().trim();
@@ -1458,7 +1459,7 @@
                 if (!chosenCat) return;
 
                 const normCat = String(chosenCat || '').toLowerCase().trim();
-                const isBundled = normCat.includes('elementary');
+                const isBundled = normCat.includes('elementary') && !['uk', 'gb', 'male'].includes(getSavedVoiceAccent ? getSavedVoiceAccent() : 'us');
 
                 // 1. Only Elementary (US) is pre-packaged in the APK -> Open immediately
                 if (isBundled) {
@@ -1478,7 +1479,11 @@
 
                 // 2. For "Разговорные паттерны" and below: verify if audio is downloaded
                 const currentAccent = getSavedVoiceAccent ? getSavedVoiceAccent() : 'us';
-                const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat);
+                const verifyCatWords = allWords.filter(
+                  (w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat)
+                );
+                const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat)
+                  && await verifyCategoryAudioInCache(currentAccent, chosenCat, verifyCatWords);
 
                 if (!isDownloaded) {
                   const details = getCategoryDetails(chosenCat);

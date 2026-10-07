@@ -1,7 +1,11 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=378.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=385.0';
 import { 
   syncLeaderboardScoreFirestore, 
-  getWeeklyLeaderboardFirestore, 
+  commitXpDeltaFirestore,
+  reconcileWeeklyXpFirestore,
+  reconcileAllTimeXpFirestore,
+  getWeeklyLeaderboardFirestore,
+  getAllTimeLeaderboardFirestore,
   getUserWeeklyXpFirestore,
   saveUserProgressFirestore, 
   saveBulkProgressFirestore,
@@ -13,14 +17,14 @@ import {
   saveUserNotesFirestore,
   loadUserNotesFirestore,
   saveUserCustomWordsFirestore,
-  loadUserCustomWordsFirestore,
   fetchSharedVocabularyUpdatesFirestore,
   saveUserAnalyticsFirestore,
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=378.0';
-import { getInterfaceLanguage } from './i18n.js?v=378.0';
+} from './firebase.js?v=385.0';
+import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=385.0';
+import { getInterfaceLanguage } from './i18n.js?v=385.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -524,14 +528,6 @@ async function googleAuthUser(email, name, avatar) {
   };
 }
 
-function getIsoWeekKey(d = new Date()) {
-  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
-  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
-}
-
 function getUserWeeklyXP(userId = null, weekKey = null) {
   const uId = userId || getEffectiveUserId();
   const wKey = weekKey || getIsoWeekKey();
@@ -563,8 +559,6 @@ function getUserWeeklyXP(userId = null, weekKey = null) {
       if (guestXp > xp) xp = guestXp;
     }
 
-
-
     if (xp > 0) {
       localStorage.setItem(key, String(xp));
     }
@@ -580,14 +574,17 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   const current = getUserWeeklyXP(uId, wKey);
   const oldRank = getUserWeeklyRank(uId, wKey);
   const next = Math.max(0, current + delta);
+  const effectiveDelta = next - current;
   localStorage.setItem(key, String(next));
 
-  // Sync to backend asynchronously
+  // Sync to backend asynchronously via atomic commit increment
   const user = getCurrentUser();
   const userName = user && user.name ? user.name : 'Гость';
   const avatar = localStorage.getItem(`avatar_${uId}`) || (user && user.avatar) || '';
 
-  syncWeeklyXpApi(uId, wKey, next, userName, avatar);
+  if (effectiveDelta !== 0) {
+    commitXpDeltaFirestore(getFirestoreUserId(uId), wKey, effectiveDelta, userName, avatar).catch(() => {});
+  }
 
   const newRank = getUserWeeklyRank(uId, wKey);
 
@@ -615,9 +612,10 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
   const cleanAvatar = avatar || '';
   const cleanXp = Math.max(0, Number(xp || 0));
 
-  // Sync to Cloud Firestore (Real-time, instant)
+  // Reconcile upwards only with Cloud Firestore
   try {
-    syncLeaderboardScoreFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    reconcileWeeklyXpFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    reconcileAllTimeXpFirestore(getFirestoreUserId(userId), cleanName, cleanAvatar).catch(() => {});
   } catch (e) {}
 }
 
@@ -911,19 +909,90 @@ function formatCompactXp(xp) {
 async function getLeaderboard(weekKey = null, period = 'week') {
   const wKey = weekKey || getIsoWeekKey();
   const currentUserId = getEffectiveUserId();
-  const userXP = getUserWeeklyXP(currentUserId, wKey);
   const currentUser = getCurrentUser();
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
   const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
+  const fsUid = getFirestoreUserId(currentUserId);
+  const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
 
-  // Automatically ensure current user's local XP & avatar are synced to Firestore
-  if (userXP > 0 && currentUser && currentUser.id && !String(currentUser.id).startsWith('guest')) {
-    syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
+  if (period === 'all') {
+    // 1. Query Cloud Firestore all-time leaderboard
+    try {
+      const fsPlayers = await getAllTimeLeaderboardFirestore(100);
+      if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
+        let totalLocalXP = 0;
+        try {
+          const prefix = `xp_${currentUserId}_`;
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(prefix)) {
+              totalLocalXP += Number(localStorage.getItem(k) || 0);
+            }
+          }
+        } catch (e) {}
+
+        const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
+        const fbUid = currentUser?.firebaseUid || null;
+
+        const myIdx = fsPlayers.findIndex((u) => u && (
+          String(u.userId) === String(currentUserId) ||
+          (fbUid && String(u.userId) === String(fbUid)) ||
+          (detId && String(u.userId) === String(detId))
+        ));
+
+        if (myIdx >= 0) {
+          fsPlayers[myIdx].xp = Math.max(Number(fsPlayers[myIdx].xp || 0), totalLocalXP);
+          fsPlayers[myIdx].userId = currentUserId;
+          fsPlayers[myIdx].name = userName;
+          if (userAvatar) fsPlayers[myIdx].avatar = userAvatar;
+          fsPlayers[myIdx].isCurrentUser = true;
+        } else if (totalLocalXP > 0) {
+          fsPlayers.push({
+            userId: currentUserId,
+            name: userName,
+            avatar: userAvatar,
+            xp: totalLocalXP,
+            isCurrentUser: true,
+          });
+        }
+
+        const dynamicBots = generateDynamicBots(wKey).map((bot) => ({
+          userId: bot.userId,
+          name: bot.name,
+          avatar: bot.avatar,
+          xp: Math.floor(bot.xp * 3.5),
+          isBot: true,
+        }));
+        const combined = [...fsPlayers, ...dynamicBots];
+        combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+
+        localStorage.setItem('cache_leaderboard_all', JSON.stringify(combined));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'all' } }));
+        }
+
+        if (isAuth) {
+          reconcileAllTimeXpFirestore(fsUid, userName, userAvatar).catch(() => {});
+        }
+
+        return getCachedLeaderboard(wKey, 'all');
+      }
+    } catch (fsErr) {
+      console.warn('Firestore all-time leaderboard query fallback:', fsErr);
+    }
+
+    if (isAuth) {
+      reconcileAllTimeXpFirestore(fsUid, userName, userAvatar).catch(() => {});
+    }
+    return getCachedLeaderboard(wKey, 'all');
   }
 
-  // 1. Query Cloud Firestore first (5-20ms instant response)
+  // period === 'week'
+  const userXP = getUserWeeklyXP(currentUserId, wKey);
+
+  // 1. Query Cloud Firestore weekly leaderboard
   try {
-    const fsPlayers = await getWeeklyLeaderboardFirestore(wKey);
+    const fsPlayers = await getWeeklyLeaderboardFirestore(wKey, 100);
     if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
       const validFsPlayers = fsPlayers.filter((p) => p && p.userId);
       const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
@@ -955,15 +1024,24 @@ async function getLeaderboard(weekKey = null, period = 'week') {
       combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
       localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period } }));
+        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'week' } }));
       }
-      return getCachedLeaderboard(wKey, period);
+
+      if (isAuth && userXP > 0) {
+        reconcileWeeklyXpFirestore(fsUid, wKey, userXP, userName, userAvatar).catch(() => {});
+      }
+
+      return getCachedLeaderboard(wKey, 'week');
     }
   } catch (fsErr) {
-    console.warn('Firestore leaderboard query fallback:', fsErr);
+    console.warn('Firestore weekly leaderboard query fallback:', fsErr);
   }
 
-  return getCachedLeaderboard(wKey, period);
+  if (isAuth && userXP > 0) {
+    reconcileWeeklyXpFirestore(fsUid, wKey, userXP, userName, userAvatar).catch(() => {});
+  }
+
+  return getCachedLeaderboard(wKey, 'week');
 }
 
 if (typeof window !== 'undefined') {
@@ -1391,56 +1469,28 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 
     localStorage.setItem(progKey, JSON.stringify(mergedProg));
 
-    // Merge XP from Firestore and local
+    // Merge weekly XP from Firestore and local (strictly for current weekKey, no all-time or calcXp fallback)
     const xpKey = `xp_${uId}_${wKey}`;
     const localXp = getUserWeeklyXP(uId, wKey);
     let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0));
 
-    // Check profile XP
-    if (fullDoc?.profile?.xp || fullDoc?.profile?.totalXp) {
-      const pXp = Number(fullDoc.profile.xp || fullDoc.profile.totalXp || 0);
-      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
-    }
-    if (detDoc?.profile?.xp || detDoc?.profile?.totalXp) {
-      const pXp = Number(detDoc.profile.xp || detDoc.profile.totalXp || 0);
-      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
-    }
-    if (fbDoc?.profile?.xp || fbDoc?.profile?.totalXp) {
-      const pXp = Number(fbDoc.profile.xp || fbDoc.profile.totalXp || 0);
-      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
-    }
-
-    // Fallback: calculate XP from merged progress
-    if (finalFirestoreXp <= 0 && mergedProg && Object.keys(mergedProg).length > 0) {
-      let calcXp = 0;
-      Object.values(mergedProg).forEach((p) => {
-        if (p) {
-          if (p.mastered) calcXp += 50;
-          else if (p.stage === 'test' || (p.inputCorrect && p.inputCorrect > 0)) calcXp += 25;
-          else if (p.stage === 'pairs' || (p.pairsCorrect && p.pairsCorrect > 0)) calcXp += 15;
-          else if (p.stage === 'quiz' || (p.quizCorrect && p.quizCorrect > 0)) calcXp += 5;
-          else if (p.seenInCards) calcXp += 2;
-        }
-      });
-      if (calcXp > 0) finalFirestoreXp = calcXp;
-    }
-
-
-
-    if (finalFirestoreXp > 0) {
+    if (finalFirestoreXp > localXp) {
       localStorage.setItem(xpKey, String(finalFirestoreXp));
-      localStorage.setItem('xp', String(finalFirestoreXp));
+      localStorage.removeItem('xp');
       if (detId && detId !== uId) {
         localStorage.setItem(`xp_${detId}_${wKey}`, String(finalFirestoreXp));
       }
       if (fbUid && fbUid !== uId) {
         localStorage.setItem(`xp_${fbUid}_${wKey}`, String(finalFirestoreXp));
       }
-      syncLeaderboardScoreFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp, delta: 0 } }));
       }
     }
+
+    // Reconcile upwards only
+    reconcileWeeklyXpFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '').catch(() => {});
+    reconcileAllTimeXpFirestore(getFirestoreUserId(uId), user?.name || 'User', foundAvatar || user?.avatar || '').catch(() => {});
 
     if (fbUid && fbUid !== uId) {
       const fbFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]'));
@@ -1606,8 +1656,9 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     try {
       saveUserProfileFirestore(firestoreUid, { name: userName, avatar }).catch(() => {});
       if (weeklyXp > 0) {
-        syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
+        reconcileWeeklyXpFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
+      reconcileAllTimeXpFirestore(firestoreUid, userName, avatar).catch(() => {});
       saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
       const delFavsList = Array.from(getDeletedFavoritesSet(uId));
       if (delFavsList.length > 0) {
@@ -2583,6 +2634,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
           });
         }
 
+        const idToken = getAuthToken() || '';
         const response = await fetch(`${GAS_SCANNER_URL}?route=transcribe`, {
           method: 'POST',
           headers: {
@@ -2593,6 +2645,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
             audioBase64: base64Data,
             mimeType: mimeType || 'audio/webm',
             expectedWord: expectedWord || '',
+            idToken,
           }),
         });
         const json = await response.json();
@@ -2633,6 +2686,7 @@ async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
     reader.onloadend = async () => {
       try {
         const base64Data = (reader.result || '').split(',')[1];
+        const idToken = getAuthToken() || '';
         const response = await fetch(`${GAS_SCANNER_URL}?route=transcribeping`, {
           method: 'POST',
           headers: {
@@ -2643,6 +2697,7 @@ async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
             audioBase64: base64Data || '',
             mimeType: mimeType || 'audio/webm',
             expectedWord: expectedWord || '',
+            idToken,
           }),
         });
         const json = await response.json();
@@ -3092,6 +3147,8 @@ async function addCustomWord({ word, translation, category, notes }) {
 
   let savedWord = localWord;
   try {
+    const idToken = getAuthToken() || '';
+    payload.idToken = idToken;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 35000);
     const response = await fetch(`${GAS_SCANNER_URL}?route=addword`, {
@@ -3169,6 +3226,8 @@ async function batchAddCustomWords(words = []) {
 
   let savedWords = formattedWords;
   try {
+    const idToken = getAuthToken() || '';
+    payload.idToken = idToken;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
 
@@ -3256,6 +3315,8 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
 
   let resJson = null;
   try {
+    const idToken = getAuthToken() || '';
+    payload.idToken = idToken;
     const response = await fetch(`${GAS_SCANNER_URL}?route=scanimage`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -3611,6 +3672,7 @@ export {
   getUserWeeklyRank,
   formatCompactXp,
   getIsoWeekKey,
+  getRecentWeekKeys,
   fetchUserDataFromCloud,
   pushUserDataToCloud,
   transcribeAudio,
@@ -3622,4 +3684,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=378.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=385.0';

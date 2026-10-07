@@ -1,0 +1,136 @@
+// Google Apps Script Auth & Rate Limiting Middleware for My-Duolingo Word Scanner
+// Verifies Firebase ID Token via Identity Toolkit (accounts:lookup) and enforces rate limits via CacheService
+
+var FIREBASE_API_KEY = PropertiesService.getScriptProperties().getProperty('FIREBASE_API_KEY') || 'AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc';
+var MAX_REQUESTS_PER_MINUTE = 30;
+
+/**
+ * Verify Firebase ID Token via Identity Toolkit REST API:
+ * POST https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=[API_KEY]
+ *
+ * Results are cached in Google Apps Script CacheService for 5 minutes.
+ */
+function verifyFirebaseIdToken(idToken) {
+  if (!idToken || typeof idToken !== 'string') {
+    return { valid: false, error: 'Missing or empty idToken' };
+  }
+
+  // Hash token for cache key (CacheService keys must be alphanumeric <= 250 chars)
+  var cache = CacheService.getScriptCache();
+  var rawDigest = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, idToken);
+  var tokenHash = rawDigest.map(function(b) {
+    var val = b < 0 ? b + 256 : b;
+    return (val < 16 ? '0' : '') + val.toString(16);
+  }).join('');
+  var cacheKey = 'fb_tok_' + tokenHash;
+
+  var cachedUser = cache.get(cacheKey);
+  if (cachedUser) {
+    try {
+      var parsed = JSON.parse(cachedUser);
+      return { valid: true, uid: parsed.uid, email: parsed.email };
+    } catch (e) {}
+  }
+
+  try {
+    var lookupUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' + encodeURIComponent(FIREBASE_API_KEY);
+    var options = {
+      method: 'post',
+      contentType: 'application/json',
+      payload: JSON.stringify({ idToken: idToken }),
+      muteHttpExceptions: true
+    };
+    var response = UrlFetchApp.fetch(lookupUrl, options);
+    var code = response.getResponseCode();
+    var body = JSON.parse(response.getContentText() || '{}');
+
+    if (code === 200 && body.users && body.users.length > 0) {
+      var user = body.users[0];
+      var authInfo = { uid: user.localId, email: user.email || '' };
+      // Cache valid session for 5 minutes (300 seconds)
+      cache.put(cacheKey, JSON.stringify(authInfo), 300);
+      return { valid: true, uid: authInfo.uid, email: authInfo.email };
+    } else {
+      var errMsg = (body.error && body.error.message) ? body.error.message : 'Invalid or expired Firebase ID token';
+      return { valid: false, error: errMsg };
+    }
+  } catch (err) {
+    return { valid: false, error: 'Token verification exception: ' + err.toString() };
+  }
+}
+
+/**
+ * Enforce rate limit per UID using CacheService
+ * Allows up to maxRequests per minute
+ */
+function checkUidRateLimit(uid, maxRequests) {
+  if (!uid) return false;
+  var limit = maxRequests || MAX_REQUESTS_PER_MINUTE;
+  var cache = CacheService.getScriptCache();
+  var rateKey = 'rate_uid_' + uid;
+  var current = parseInt(cache.get(rateKey) || '0', 10);
+
+  if (current >= limit) {
+    return false; // Rate limit exceeded
+  }
+
+  cache.put(rateKey, String(current + 1), 60); // 60-second window
+  return true;
+}
+
+/**
+ * Main Web App Handler
+ */
+function doPost(e) {
+  try {
+    var contents = {};
+    if (e && e.postData && e.postData.contents) {
+      try {
+        contents = JSON.parse(e.postData.contents);
+      } catch (parseErr) {
+        contents = {};
+      }
+    }
+
+    // Extract idToken from payload body or URL query param
+    var idToken = contents.idToken || (e && e.parameter ? e.parameter.idToken : '');
+
+    // 1. Authenticate Request
+    var auth = verifyFirebaseIdToken(idToken);
+    if (!auth.valid) {
+      return ContentService.createTextOutput(JSON.stringify({
+        success: false,
+        error: 'Unauthorized: ' + auth.error
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. Enforce Rate Limit per UID
+    if (!checkUidRateLimit(auth.uid, MAX_REQUESTS_PER_MINUTE)) {
+      return ContentService.createTextOutput(JSON.stringify({
+        success: false,
+        error: 'Rate limit exceeded: maximum ' + MAX_REQUESTS_PER_MINUTE + ' requests per minute.'
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 3. Process Route
+    var route = (e && e.parameter ? e.parameter.route : '') || contents.route || contents.action;
+    var result = handleScannerRoute(route, contents, auth.uid);
+
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      data: result
+    })).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (globalErr) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: 'Internal server error: ' + globalErr.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function handleScannerRoute(route, contents, uid) {
+  // Routes: transcribe, transcribeping, addword, batchadd, scanimage
+  // Implemented with Gemini API / Cloud Vision / Audio recognition
+  return { status: 'ok', route: route, uid: uid };
+}

@@ -24,7 +24,17 @@ function copyRecursiveSync(src, dest) {
 function build() {
   console.log('📦 Building English Trainer PWA from frontend/ source...');
 
-  // 0. Automatically generate playlist.json and inject real video list into index.html
+  // 0. Validate words.json encoding (Zero U+FFFD tolerance)
+  const wordsPath = path.join(__dirname, '../frontend/assets/data/words.json');
+  if (fs.existsSync(wordsPath)) {
+    const rawWords = fs.readFileSync(wordsPath, 'utf8');
+    if (rawWords.includes('\ufffd')) {
+      throw new Error('❌ BUILD FAILED: Detected corrupted UTF-8 replacement character (U+FFFD) in frontend/assets/data/words.json!');
+    }
+    console.log('🔍 Data integrity check passed: 0 corrupted U+FFFD characters in words.json.');
+  }
+
+  // 0.1. Automatically generate playlist.json and inject real video list into index.html
   const videoDir = path.join(__dirname, '../frontend/assets/video');
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
   const videoFiles = fs.readdirSync(videoDir)
@@ -49,6 +59,27 @@ function build() {
       fs.writeFileSync(indexPath, indexHtml, 'utf8');
     }
   }
+
+  // 0.2. Align all ?v= import query versions across frontend to a single APP_BUILD_VERSION
+  const APP_BUILD_VERSION = '385.0';
+  function normalizeVersionsInDir(dir) {
+    fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        normalizeVersionsInDir(fullPath);
+      } else if (/\.(js|html)$/.test(entry.name)) {
+        let content = fs.readFileSync(fullPath, 'utf8');
+        if (/\?v=[0-9.]+/.test(content)) {
+          const replaced = content.replace(/\?v=[0-9.]+/g, `?v=${APP_BUILD_VERSION}`);
+          if (replaced !== content) {
+            fs.writeFileSync(fullPath, replaced, 'utf8');
+          }
+        }
+      }
+    });
+  }
+  normalizeVersionsInDir(path.join(__dirname, '../frontend'));
+  console.log(`📌 All module import query versions aligned to ?v=${APP_BUILD_VERSION}`);
 
   // 1. Sync frontend/ -> docs/
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });

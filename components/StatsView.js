@@ -1,5 +1,5 @@
-﻿import { StorageService } from '../services/storageService.js?v=378.0';
-import { ACHIEVEMENTS } from '../services/initialData.js?v=378.0';
+﻿import { StorageService } from '../services/storageService.js?v=385.0';
+import { ACHIEVEMENTS } from '../services/initialData.js?v=385.0';
 
 export function renderStats(container) {
     if (!container) return;

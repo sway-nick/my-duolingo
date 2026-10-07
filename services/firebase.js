@@ -1,6 +1,8 @@
 // Firebase Integration for English Breakfast (Universal Web & Android Capacitor)
 // Uses direct native Google Identity & Firestore REST APIs (100% reliable in all WebViews with zero CDN dependency)
 
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=385.0';
+
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc",
   authDomain: "english-breakfast-181ba.firebaseapp.com",
@@ -21,7 +23,18 @@ function getFirebaseConfig() {
   return DEFAULT_FIREBASE_CONFIG;
 }
 
-const AUTH_BASE = 'https://identitytoolkit.googleapis.com/v1';
+export function getFirestoreBase() {
+  const config = getFirebaseConfig();
+  if (typeof process !== 'undefined' && process.env && process.env.FIRESTORE_EMULATOR_HOST) {
+    return `http://${process.env.FIRESTORE_EMULATOR_HOST}/v1/projects/${config.projectId}/databases/(default)/documents`;
+  }
+  if (config.firestoreBase) {
+    return `${config.firestoreBase}/projects/${config.projectId}/databases/(default)/documents`;
+  }
+  return `https://firestore.googleapis.com/v1/projects/${config.projectId || DEFAULT_FIREBASE_CONFIG.projectId}/databases/(default)/documents`;
+}
+
+// For existing template literals
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${DEFAULT_FIREBASE_CONFIG.projectId}/databases/(default)/documents`;
 
 export function initFirebase() {
@@ -29,6 +42,53 @@ export function initFirebase() {
 }
 
 // ----------------- AUTHENTICATION -----------------
+const AUTH_BASE = 'https://identitytoolkit.googleapis.com/v1';
+
+export async function sendEmailVerification(idToken = '') {
+  const config = getFirebaseConfig();
+  const token = idToken || (await getValidIdToken());
+  if (!token) throw new Error('Не авторизован');
+  const res = await fetch(`${AUTH_BASE}/accounts:sendOobCode?key=${config.apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      requestType: 'VERIFY_EMAIL',
+      idToken: token
+    })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.error) {
+    throw new Error(data.error?.message || 'Ошибка отправки письма подтверждения');
+  }
+  return true;
+}
+
+export function isEmailVerified() {
+  const fb = readJson(FB_USER_KEY);
+  if (fb?.provider === 'google') return true;
+  const { token } = getStoredToken();
+  if (token) {
+    try {
+      const part = String(token).split('.')[1];
+      if (part) {
+        const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
+        const bin = atob(b64.padEnd(Math.ceil(b64.length / 4) * 4, '='));
+        const json = JSON.parse(bin);
+        if (json.email_verified === true) return true;
+      }
+    } catch (e) {}
+  }
+  return false;
+}
+
+export async function checkAndRefreshEmailVerification() {
+  await getValidIdToken({ force: true });
+  const verified = isEmailVerified();
+  if (verified && typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo:email_verified_updated', { detail: { verified: true } }));
+  }
+  return verified;
+}
 
 export async function registerWithEmail(email, password, name = '') {
   const config = getFirebaseConfig();
@@ -97,6 +157,8 @@ export async function registerWithEmail(email, password, name = '') {
   if (data.refreshToken) {
     try { localStorage.setItem('myduo_refresh_token', data.refreshToken); } catch (e) {}
   }
+  // Automatically send email verification link upon registration
+  sendEmailVerification(idToken).catch((e) => console.warn('sendEmailVerification:', e));
   return user;
 }
 
@@ -318,7 +380,7 @@ export async function logoutFirebase() {
 
 // Удаляет все Firestore-документы пользователя перед удалением аккаунта.
 // Использует REST API напрямую, без Firebase SDK.
-async function deleteAllUserFirestoreData(userId, idToken) {
+export async function deleteAllUserFirestoreData(userId, idToken) {
   const config = getFirebaseConfig();
   const authHeader = idToken ? { 'Authorization': `Bearer ${idToken}` } : {};
   const headers = { 'Content-Type': 'application/json', ...authHeader };
@@ -337,7 +399,7 @@ async function deleteAllUserFirestoreData(userId, idToken) {
     try {
       let pageToken = '';
       do {
-        const listUrl = `${FIRESTORE_BASE}${subcollPath}?pageSize=300${pageToken ? '&pageToken=' + pageToken : ''}&key=${config.apiKey}`;
+        const listUrl = `${getFirestoreBase()}${subcollPath}?pageSize=300${pageToken ? '&pageToken=' + pageToken : ''}&key=${config.apiKey}`;
         const res = await fetch(listUrl, { headers });
         if (!res.ok) break;
         const data = await res.json();
@@ -369,32 +431,17 @@ async function deleteAllUserFirestoreData(userId, idToken) {
   await delSubcollection(`/users/${uid}/analytics`);
 
   // 5. Удаляем корневой документ users/{uid}
-  await delDoc(`${FIRESTORE_BASE}/users/${uid}`);
+  await delDoc(`${getFirestoreBase()}/users/${uid}`);
 
-  // 5. Обнуляем и удаляем запись в leaderboard текущей и прошлой недели
+  // 6. Удаляем all-time leaderboard документ
+  await delDoc(`${getFirestoreBase()}/leaderboard_alltime/${uid}`);
+
+  // 7. Обнуляем и удаляем записи в leaderboards за последние 8 недель
   try {
-    function getISOWeekKey(d = new Date()) {
-      const target = new Date(d.valueOf());
-      const dayNr = (d.getDay() + 6) % 7;
-      target.setDate(target.getDate() - dayNr + 3);
-      const firstThursday = target.valueOf();
-      target.setMonth(0, 1);
-      if (target.getDay() !== 4) {
-        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
-      }
-      const weekNumber = 1 + Math.ceil((firstThursday - target) / 604800000);
-      return `${target.getFullYear()}-W${String(weekNumber).padStart(2, '0')}`;
-    }
-    const now = new Date();
-    const currentWeek = getISOWeekKey(now);
-    const prevWeekDate = new Date(now);
-    prevWeekDate.setDate(prevWeekDate.getDate() - 7);
-    const prevWeek = getISOWeekKey(prevWeekDate);
-
-    const weekKeys = [currentWeek, prevWeek, currentWeek.replace('-W', '-'), prevWeek.replace('-W', '-')];
+    const weekKeys = getRecentWeekKeys(8);
     for (const wKey of weekKeys) {
       // 1) Сначала обнуляем счёт (разрешено правилами create/update)
-      const zeroUrl = `${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(wKey)}/players/${uid}?key=${config.apiKey}`;
+      const zeroUrl = `${getFirestoreBase()}/leaderboards/${encodeURIComponent(wKey)}/players/${uid}?key=${config.apiKey}`;
       try {
         await fetch(zeroUrl, {
           method: 'PATCH',
@@ -409,12 +456,25 @@ async function deleteAllUserFirestoreData(userId, idToken) {
           })
         });
       } catch (e) {}
-      // 2) Затем удаляем документ полностью
-      await delDoc(`${FIRESTORE_BASE}/leaderboards/${encodeURIComponent(wKey)}/players/${uid}`);
+      // 2) Затем удаляем документ недели полностью
+      await delDoc(`${getFirestoreBase()}/leaderboards/${encodeURIComponent(wKey)}/players/${uid}`);
+      // 3) Удаляем личную недельную копию в users/{uid}/data
+      await delDoc(`${getFirestoreBase()}/users/${uid}/data/weekly_xp_${encodeURIComponent(wKey)}`);
     }
   } catch (e) {
     console.warn('deleteAllUserFirestoreData: leaderboard cleanup error', e);
   }
+
+  // 8. Очищаем локальные кэши рейтингов
+  try {
+    localStorage.removeItem('cache_leaderboard_all');
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith('cache_leaderboard_') || k.startsWith(`xp_${uid}_`))) {
+        localStorage.removeItem(k);
+      }
+    }
+  } catch (e) {}
 }
 
 export async function deleteCurrentUserAccount() {
@@ -500,7 +560,7 @@ export function subscribeToAuthState(callback) {
 function getFirestoreUrl(path) {
   const config = getFirebaseConfig();
   const sep = path.includes('?') ? '&' : '?';
-  return `${FIRESTORE_BASE}${path}${sep}key=${config.apiKey}`;
+  return `${getFirestoreBase()}${path}${sep}key=${config.apiKey}`;
 }
 
 // ----------------- ТОКЕНЫ И ИДЕНТИФИКАТОРЫ ПОЛЬЗОВАТЕЛЯ -----------------
@@ -710,6 +770,76 @@ export async function getValidIdToken({ force = false } = {}) {
   return null;
 }
 
+let appCheckConfig = {
+  enabled: false,
+  siteKey: '', // reCAPTCHA v3 site key for web
+  playIntegrityProjectId: '',
+  isAndroid: false
+};
+let appCheckTokenCache = null;
+
+export function configureAppCheck(options = {}) {
+  appCheckConfig = { ...appCheckConfig, ...options };
+}
+
+export async function getAppCheckToken() {
+  if (!appCheckConfig.enabled) return null;
+  if (appCheckTokenCache && appCheckTokenCache.expiresAt > Date.now() + 60000) {
+    return appCheckTokenCache.token;
+  }
+  const config = getFirebaseConfig();
+  try {
+    if (appCheckConfig.isAndroid && typeof window !== 'undefined' && window.Capacitor?.Plugins?.PlayIntegrity) {
+      const integrityResult = await window.Capacitor.Plugins.PlayIntegrity.requestIntegrityToken();
+      if (integrityResult?.token) {
+        const exchangeUrl = `https://content-firebaseappcheck.googleapis.com/v1/projects/${config.projectId}/apps/${config.appId}:exchangePlayIntegrityToken?key=${config.apiKey}`;
+        const res = await fetch(exchangeUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ playIntegrityToken: integrityResult.token })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const ttlMs = (parseInt(data.ttl, 10) || 3600) * 1000;
+          appCheckTokenCache = { token: data.token, expiresAt: Date.now() + ttlMs };
+          return data.token;
+        }
+      }
+    }
+
+    if (typeof window !== 'undefined' && window.grecaptcha && appCheckConfig.siteKey) {
+      const recaptchaToken = await new Promise((resolve) => {
+        window.grecaptcha.ready(async () => {
+          try {
+            const tok = await window.grecaptcha.execute(appCheckConfig.siteKey, { action: 'firestore' });
+            resolve(tok);
+          } catch (e) {
+            resolve(null);
+          }
+        });
+      });
+
+      if (recaptchaToken) {
+        const exchangeUrl = `https://content-firebaseappcheck.googleapis.com/v1/projects/${config.projectId}/apps/${config.appId}:exchangeRecaptchaV3Token?key=${config.apiKey}`;
+        const res = await fetch(exchangeUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recaptchaV3Token: recaptchaToken })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const ttlMs = (parseInt(data.ttl, 10) || 3600) * 1000;
+          appCheckTokenCache = { token: data.token, expiresAt: Date.now() + ttlMs };
+          return data.token;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('App Check token fetch error:', err);
+  }
+  return null;
+}
+
 // Оставлена для совместимости с вызывающим кодом (`headers: getAuthHeaders()`).
 // Авторизацию окончательно выставляет firestoreFetch — он же обновляет токен.
 function getAuthHeaders() {
@@ -717,6 +847,9 @@ function getAuthHeaders() {
   const { token, expiresAt } = getStoredToken();
   if (token && (!expiresAt || Date.now() < expiresAt - TOKEN_SKEW_MS)) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+  if (appCheckTokenCache?.token) {
+    headers['X-Firebase-AppCheck'] = appCheckTokenCache.token;
   }
   return headers;
 }
@@ -866,54 +999,357 @@ export async function loadUserProgressFirestore(userId) {
   return combinedMap;
 }
 
-const SHARED_ADMIN_UID = 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
+let pendingLeaderboardIncrementsCount = 0;
+
+export function hasPendingLeaderboardIncrements() {
+  return pendingLeaderboardIncrementsCount > 0;
+}
+
+async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, userAvatar) {
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return { success: false, reason: 'not_authenticated' };
+
+  const delta = Math.round(Number(weeklyDelta) || 0);
+
+  const cleanName = (userName != null) ? String(userName).slice(0, 50) : 'Гость';
+  const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
+  const nowMs = Date.now();
+  const expireAtIso = new Date(nowMs + 35 * 86400000).toISOString();
+
+  // In totalXp go strictly positive increments (penalties do not reduce totalXp)
+  const totalDelta = Math.max(0, delta);
+
+  const config = getFirebaseConfig();
+  const projectId = config.projectId || DEFAULT_FIREBASE_CONFIG.projectId;
+  const dbDocPrefix = `projects/${projectId}/databases/(default)/documents`;
+
+  const weeklyDocPath = `${dbDocPrefix}/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}`;
+  const alltimeDocPath = `${dbDocPrefix}/leaderboard_alltime/${encodeURIComponent(uid)}`;
+  const userWeeklyDocPath = `${dbDocPrefix}/users/${encodeURIComponent(uid)}/data/weekly_xp_${encodeURIComponent(weekKey)}`;
+
+  const weekStartMs = getIsoWeekStartMs(weekKey);
+
+  const writes = [
+    // 1. Weekly leaderboard player doc:
+    // Update metadata, weekKey, weekStartMs and apply atomic increment on xp with server timestamp
+    {
+      update: {
+        name: weeklyDocPath,
+        fields: {
+          userId: { stringValue: String(uid) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          weekKey: { stringValue: String(weekKey) },
+          weekStartMs: { integerValue: String(weekStartMs) },
+          expireAt: { timestampValue: expireAtIso }
+        }
+      },
+      updateMask: {
+        fieldPaths: ['userId', 'name', 'avatar', 'weekKey', 'weekStartMs', 'expireAt']
+      },
+      updateTransforms: [
+        {
+          fieldPath: 'updatedAt',
+          setToServerValue: 'REQUEST_TIME'
+        },
+        {
+          fieldPath: 'xp',
+          increment: { integerValue: String(delta) }
+        }
+      ]
+    },
+    // 2. Personal weekly copy: users/{uid}/data/weekly_xp_{week}
+    {
+      update: {
+        name: userWeeklyDocPath,
+        fields: {
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          updatedAt: { integerValue: String(nowMs) }
+        }
+      },
+      updateMask: {
+        fieldPaths: ['name', 'avatar', 'updatedAt']
+      },
+      updateTransforms: [
+        {
+          fieldPath: 'xp',
+          increment: { integerValue: String(delta) }
+        }
+      ]
+    },
+    // 3. All-time leaderboard doc:
+    // ALWAYS includes totalXp transform (even when delta <= 0, totalDelta = 0)
+    // so leaderboard_alltime document contains totalXp upon creation
+    {
+      update: {
+        name: alltimeDocPath,
+        fields: {
+          userId: { stringValue: String(uid) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar }
+        }
+      },
+      updateMask: {
+        fieldPaths: ['userId', 'name', 'avatar']
+      },
+      updateTransforms: [
+        {
+          fieldPath: 'updatedAt',
+          setToServerValue: 'REQUEST_TIME'
+        },
+        {
+          fieldPath: 'totalXp',
+          increment: { integerValue: String(totalDelta) }
+        }
+      ]
+    }
+  ];
+
+  const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
+
+  pendingLeaderboardIncrementsCount++;
+  try {
+    const res = await firestoreFetch(commitUrl, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ writes })
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.warn('Firestore atomic commit delta failed:', res.status, errText);
+      if (res.status === 403 && typeof window !== 'undefined') {
+        const kind = !isEmailVerified() ? 'email_not_verified' : 'permission_denied';
+        window.dispatchEvent(new CustomEvent('myduo:sync-issue', {
+          detail: {
+            kind,
+            status: 403,
+            message: kind === 'email_not_verified'
+              ? 'Для участия в рейтинге подтвердите email. Проверьте ваш почтовый ящик.'
+              : 'Ошибка синхронизации рейтинга: доступ ограничен.'
+          }
+        }));
+      }
+      return { success: false, status: res.status, error: errText };
+    }
+    const data = await res.json().catch(() => ({}));
+    return { success: true, data };
+  } catch (err) {
+    console.warn('Firestore atomic commit delta exception:', err);
+    return { success: false, error: err.message };
+  } finally {
+    pendingLeaderboardIncrementsCount = Math.max(0, pendingLeaderboardIncrementsCount - 1);
+  }
+}
+
+export async function commitXpDeltaFirestore(userId, weekKey, weeklyDelta, userName, userAvatar) {
+  if (!userId || !weekKey) return { success: false, reason: 'missing_args' };
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return { success: false, reason: 'not_authenticated' };
+
+  const delta = Math.round(Number(weeklyDelta) || 0);
+  if (delta === 0) {
+    return sendCommitXpDeltaSingle(uid, weekKey, 0, userName, userAvatar);
+  }
+
+  // Rule constraint: at most 5000 change per write
+  if (Math.abs(delta) > 5000) {
+    let remaining = delta;
+    let lastRes = null;
+    while (remaining !== 0) {
+      const chunk = remaining > 0 ? Math.min(5000, remaining) : Math.max(-5000, remaining);
+      lastRes = await sendCommitXpDeltaSingle(uid, weekKey, chunk, userName, userAvatar);
+      if (!lastRes?.success) return lastRes;
+      remaining -= chunk;
+    }
+    return lastRes;
+  }
+
+  return sendCommitXpDeltaSingle(uid, weekKey, delta, userName, userAvatar);
+}
+
+export async function reconcileWeeklyXpFirestore(userId, weekKey, localXp, userName, userAvatar) {
+  if (!userId || !weekKey) return null;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return null;
+
+  if (hasPendingLeaderboardIncrements()) {
+    return { skipped: true, reason: 'pending_increments' };
+  }
+
+  const cleanLocalXp = Math.max(0, Math.round(Number(localXp) || 0));
+
+  let serverXp = 0;
+  try {
+    const config = getFirebaseConfig();
+    const docUrl = `${getFirestoreBase()}/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}?key=${config.apiKey}`;
+    const res = await firestoreFetch(docUrl, { headers: getAuthHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      serverXp = Number(data.fields?.xp?.integerValue || data.fields?.xp?.doubleValue || 0);
+    } else if (res.status === 404) {
+      serverXp = 0;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+
+  if (cleanLocalXp > serverXp) {
+    const diff = cleanLocalXp - serverXp;
+    await commitXpDeltaFirestore(uid, weekKey, diff, userName, userAvatar);
+    return { reconciled: true, localXp: cleanLocalXp, serverXp: cleanLocalXp };
+  } else if (serverXp > cleanLocalXp) {
+    try {
+      localStorage.setItem(`xp_${uid}_${weekKey}`, String(serverXp));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: serverXp, delta: 0 } }));
+      }
+    } catch (e) {}
+    return { reconciled: true, localXp: serverXp, serverXp };
+  }
+
+  return { reconciled: false, localXp: cleanLocalXp, serverXp };
+}
+
+export async function reconcileAllTimeXpFirestore(userId, userName, userAvatar) {
+  if (!userId) return null;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return null;
+
+  if (hasPendingLeaderboardIncrements()) {
+    return { skipped: true, reason: 'pending_increments' };
+  }
+
+  const cleanName = (userName != null) ? String(userName).slice(0, 50) : 'Гость';
+  const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
+
+  let totalLocalXp = 0;
+  try {
+    const prefix = `xp_${uid}_`;
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(prefix)) {
+        totalLocalXp += Number(localStorage.getItem(k) || 0);
+      }
+    }
+  } catch (e) {}
+
+  const config = getFirebaseConfig();
+  const projectId = config.projectId || DEFAULT_FIREBASE_CONFIG.projectId;
+  const alltimeDocName = `projects/${projectId}/databases/(default)/documents/leaderboard_alltime/${encodeURIComponent(uid)}`;
+  const docUrl = `${getFirestoreBase()}/leaderboard_alltime/${encodeURIComponent(uid)}?key=${config.apiKey}`;
+
+  let docExists = false;
+  let serverTotalXp = 0;
+  try {
+    const res = await firestoreFetch(docUrl, { headers: getAuthHeaders() });
+    if (res.ok) {
+      docExists = true;
+      const data = await res.json();
+      serverTotalXp = Number(data.fields?.totalXp?.integerValue || data.fields?.totalXp?.doubleValue || 0);
+    } else if (res.status === 404) {
+      docExists = false;
+      serverTotalXp = 0;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+
+  if (!docExists) {
+    if (totalLocalXp <= 0) return null;
+
+    // Initial creation: cap totalXp at max 5000 (historical values backfilled via migrate_alltime.mjs)
+    const initialTotalXp = Math.min(totalLocalXp, 5000);
+    const createWrite = {
+      update: {
+        name: alltimeDocName,
+        fields: {
+          userId: { stringValue: String(uid) },
+          name: { stringValue: cleanName },
+          avatar: { stringValue: cleanAvatar },
+          totalXp: { integerValue: String(initialTotalXp) }
+        }
+      },
+      updateMask: {
+        fieldPaths: ['userId', 'name', 'avatar', 'totalXp']
+      },
+      updateTransforms: [
+        {
+          fieldPath: 'updatedAt',
+          setToServerValue: 'REQUEST_TIME'
+        }
+      ]
+    };
+
+    pendingLeaderboardIncrementsCount++;
+    try {
+      const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
+      const cRes = await firestoreFetch(commitUrl, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ writes: [createWrite] })
+      });
+      if (!cRes.ok) return null;
+    } finally {
+      pendingLeaderboardIncrementsCount = Math.max(0, pendingLeaderboardIncrementsCount - 1);
+    }
+    return { reconciled: true, totalXp: initialTotalXp };
+  } else {
+    // Document exists: reconcile UPWARDS only, step capped at 5000
+    if (totalLocalXp > serverTotalXp) {
+      const chunk = Math.min(totalLocalXp - serverTotalXp, 5000);
+      const incWrite = {
+        update: {
+          name: alltimeDocName,
+          fields: {
+            userId: { stringValue: String(uid) },
+            name: { stringValue: cleanName },
+            avatar: { stringValue: cleanAvatar }
+          }
+        },
+        updateMask: {
+          fieldPaths: ['userId', 'name', 'avatar']
+        },
+        updateTransforms: [
+          {
+            fieldPath: 'updatedAt',
+            setToServerValue: 'REQUEST_TIME'
+          },
+          {
+            fieldPath: 'totalXp',
+            increment: { integerValue: String(chunk) }
+          }
+        ]
+      };
+      pendingLeaderboardIncrementsCount++;
+      try {
+        const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
+        await firestoreFetch(commitUrl, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ writes: [incWrite] })
+        });
+      } finally {
+        pendingLeaderboardIncrementsCount = Math.max(0, pendingLeaderboardIncrementsCount - 1);
+      }
+      return { reconciled: true, totalXp: serverTotalXp + chunk };
+    }
+    return { reconciled: false, totalXp: serverTotalXp };
+  }
+}
 
 export async function syncLeaderboardScoreFirestore(userId, weekKey, xp, userName, userAvatar) {
   if (!userId || !weekKey) return;
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return;
-  const newXp = Math.round(Number(xp) || 0);
-  const cleanName = (userName != null) ? String(userName) : 'Гость';
+  const cleanName = (userName != null) ? String(userName).slice(0, 50) : 'Гость';
   const cleanAvatar = (userAvatar != null) ? String(userAvatar) : '';
-
-  // 1. Primary distributed sync: save to isolated player document /leaderboards/{weekKey}/players/{uid}
-  // This scales to 100k+ players without hitting the single-document 1 write/sec limit!
-  try {
-    const rootUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players/${encodeURIComponent(uid)}`);
-    await firestoreFetch(rootUrl, {
-      method: 'PATCH',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({
-        fields: {
-          userId: { stringValue: String(uid) },
-          name: { stringValue: cleanName },
-          avatar: { stringValue: cleanAvatar },
-          xp: { integerValue: String(newXp) },
-          updatedAt: { integerValue: String(Date.now()) }
-        }
-      })
-    });
-  } catch (err) {
-    console.warn('Distributed player leaderboard doc sync warning:', err);
-  }
-
-  // 2. Save to user's personal document
-  try {
-    const userUrl = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/weekly_xp_${encodeURIComponent(weekKey)}`);
-    await firestoreFetch(userUrl, {
-      method: 'PATCH',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({
-        fields: {
-          xp: { integerValue: String(newXp) },
-          name: { stringValue: cleanName },
-          avatar: { stringValue: cleanAvatar },
-          updatedAt: { integerValue: String(Date.now()) }
-        }
-      })
-    });
-  } catch (e) {}
-
+  await reconcileWeeklyXpFirestore(uid, weekKey, xp, cleanName, cleanAvatar).catch(() => {});
+  reconcileAllTimeXpFirestore(uid, cleanName, cleanAvatar).catch(() => {});
 }
 
 export async function getUserWeeklyXpFirestore(userId, weekKey) {
@@ -942,14 +1378,31 @@ export async function getUserWeeklyXpFirestore(userId, weekKey) {
 export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
   if (!weekKey) return null;
 
-  // 1. Primary query: fetch from distributed /leaderboards/{weekKey}/players collection (Scalable to 100k)
+  // 1. Primary query: structuredQuery via :runQuery ordered by xp DESCENDING
   try {
-    const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}/players?pageSize=100`);
-    const res = await firestoreFetch(url, { headers: getAuthHeaders() });
+    const url = getFirestoreUrl(`/leaderboards/${encodeURIComponent(weekKey)}:runQuery`);
+    const queryBody = {
+      structuredQuery: {
+        from: [{ collectionId: 'players' }],
+        orderBy: [{ field: { fieldPath: 'xp' }, direction: 'DESCENDING' }],
+        limit: Math.max(10, limitCount + 10) // Buffer for filtered deleted players
+      }
+    };
+
+    const res = await firestoreFetch(url, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(queryBody)
+    });
+
     if (res.ok) {
       const data = await res.json();
-      if (Array.isArray(data.documents) && data.documents.length > 0) {
-        const players = data.documents.map((doc) => {
+      const docs = (Array.isArray(data) ? data : [])
+        .map(item => item && item.document)
+        .filter(Boolean);
+
+      if (docs.length > 0) {
+        const players = docs.map((doc) => {
           const obj = {};
           for (const [k, f] of Object.entries(doc.fields || {})) {
             if ('stringValue' in f) obj[k] = f.stringValue;
@@ -959,93 +1412,74 @@ export async function getWeeklyLeaderboardFirestore(weekKey, limitCount = 100) {
           }
           return obj;
         });
-        const DELETED_ORPHANED_UIDS = new Set([
-          'b9Puaf5jtthwQlOPvAdZJ1o5CBC3',
-          'jf0lHNZnwXVKzQpNh1FSYwkrDfl1'
-        ]);
 
         const validPlayers = players.filter(p => {
           if (!p || !p.userId) return false;
-          const uid = String(p.userId || p.uid || '');
-          if (DELETED_ORPHANED_UIDS.has(uid)) return false;
           if (p.name === 'Deleted') return false;
           if (Number(p.xp || 0) <= 0) return false;
           return true;
         });
 
         validPlayers.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0));
-        const topPlayers = validPlayers.slice(0, limitCount);
-
-        // Filter out deleted accounts: check users/{uid} existence (rule: allow read: if true)
-        // We batch-check all UIDs in parallel; if 404 → user was deleted → remove from leaderboard.
-        const config2 = getFirebaseConfig();
-        const existChecks = await Promise.all(
-          topPlayers.map(async (p) => {
-            const uid = p.userId || p.uid;
-            if (!uid) return false;
-            try {
-              const r = await fetch(`${FIRESTORE_BASE}/users/${encodeURIComponent(uid)}?key=${config2.apiKey}`);
-              return r.ok; // 200 = exists, 404 = deleted
-            } catch (e) {
-              return true; // network error → assume exists (don't hide)
-            }
-          })
-        );
-        return topPlayers.filter((_, i) => existChecks[i]);
+        return validPlayers.slice(0, limitCount);
       }
     }
   } catch (err) {
-    console.warn('Distributed Firestore leaderboard fetch warning:', err);
+    console.warn('Distributed Firestore weekly leaderboard runQuery warning:', err);
   }
 
-  // 2. Fallback: read from legacy shared leaderboard document (query collection so never 404s)
+  return null;
+}
+
+export async function getAllTimeLeaderboardFirestore(limitCount = 100) {
   try {
-    const config = getFirebaseConfig();
-    const colUrl = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data?key=${config.apiKey}`;
-    const res = await fetch(colUrl);
+    const url = getFirestoreUrl(':runQuery');
+    const queryBody = {
+      structuredQuery: {
+        from: [{ collectionId: 'leaderboard_alltime' }],
+        orderBy: [{ field: { fieldPath: 'totalXp' }, direction: 'DESCENDING' }],
+        limit: Math.max(10, limitCount + 10)
+      }
+    };
+
+    const res = await firestoreFetch(url, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(queryBody)
+    });
+
     if (res.ok) {
       const data = await res.json();
-      const docs = Array.isArray(data.documents) ? data.documents : [];
-      const targetName = `leaderboard_${weekKey}`;
-      const doc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === targetName);
-      if (doc?.fields?.playersJson?.stringValue) {
-        const map = JSON.parse(doc.fields.playersJson.stringValue);
-        if (map && typeof map === 'object') {
-          const DELETED_ORPHANED_UIDS = new Set([
-            'b9Puaf5jtthwQlOPvAdZJ1o5CBC3',
-            'jf0lHNZnwXVKzQpNh1FSYwkrDfl1'
-          ]);
+      const docs = (Array.isArray(data) ? data : [])
+        .map(item => item && item.document)
+        .filter(Boolean);
 
-          const players = Object.values(map).filter(p => {
-            if (!p || !p.userId) return false;
-            const uid = String(p.userId || p.uid || '');
-            if (DELETED_ORPHANED_UIDS.has(uid)) return false;
-            if (p.name === 'Deleted') return false;
-            return Number(p.xp || 0) > 0;
-          });
-          players.sort((a, b) => Number(b.xp || 0) - Number(a.xp || 0));
-          const topPlayers = players.slice(0, limitCount);
+      if (docs.length > 0) {
+        const players = docs.map((doc) => {
+          const obj = {};
+          for (const [k, f] of Object.entries(doc.fields || {})) {
+            if ('stringValue' in f) obj[k] = f.stringValue;
+            else if ('integerValue' in f) obj[k] = Number(f.integerValue);
+            else if ('doubleValue' in f) obj[k] = Number(f.doubleValue);
+            else if ('booleanValue' in f) obj[k] = f.booleanValue;
+          }
+          obj.xp = Number(obj.totalXp != null ? obj.totalXp : (obj.xp || 0));
+          return obj;
+        });
 
-          // Filter out deleted accounts (same as primary path)
-          const cfg = getFirebaseConfig();
-          const checks = await Promise.all(
-            topPlayers.map(async (p) => {
-              const uid = p.userId || p.uid;
-              if (!uid) return false;
-              try {
-                const r = await fetch(`${FIRESTORE_BASE}/users/${encodeURIComponent(uid)}?key=${cfg.apiKey}`);
-                return r.ok;
-              } catch (e) {
-                return true;
-              }
-            })
-          );
-          return topPlayers.filter((_, i) => checks[i]);
-        }
+        const validPlayers = players.filter(p => {
+          if (!p || !p.userId) return false;
+          if (p.name === 'Deleted') return false;
+          if (Number(p.xp || 0) <= 0) return false;
+          return true;
+        });
+
+        validPlayers.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0));
+        return validPlayers.slice(0, limitCount);
       }
     }
-  } catch (sharedErr) {
-    console.warn('Shared Firestore leaderboard fetch failed:', sharedErr);
+  } catch (err) {
+    console.warn('Distributed Firestore all-time leaderboard runQuery warning:', err);
   }
 
   return null;
@@ -1192,21 +1626,52 @@ export async function saveUserNotesFirestore(userId, notesMap) {
   if (!userId) return;
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return;
+  const cleanNotes = notesMap && typeof notesMap === 'object' ? notesMap : {};
+  const notesStr = JSON.stringify(cleanNotes);
+  const notesBytes = typeof TextEncoder !== 'undefined'
+    ? new TextEncoder().encode(notesStr).length
+    : Buffer.byteLength(notesStr, 'utf8');
+  if (notesBytes > 900000) {
+    const errMsg = `Размер заметок (${notesBytes} байт) превышает лимит Firestore (900 000 байт). Сохранение отменено.`;
+    console.error(errMsg);
+    if (typeof window !== 'undefined') {
+      try {
+        window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind: 'notes_save', message: errMsg } }));
+      } catch (e) {}
+    }
+    throw new Error(errMsg);
+  }
+
   try {
     const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/notes`);
-    const cleanNotes = notesMap && typeof notesMap === 'object' ? notesMap : {};
     const fields = {
-      notesJson: { stringValue: JSON.stringify(cleanNotes) },
+      notesJson: { stringValue: notesStr },
       updatedAt: { integerValue: String(Date.now()) }
     };
 
-    await firestoreFetch(url, {
+    const res = await firestoreFetch(url, {
       method: 'PATCH',
       headers: getAuthHeaders(),
       body: JSON.stringify({ fields }),
     });
+    if (!res.ok) {
+      const errMsg = `Ошибка сохранения заметок в Firestore: HTTP ${res.status}`;
+      console.error(errMsg);
+      if (typeof window !== 'undefined') {
+        try {
+          window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind: 'notes_save', status: res.status, message: errMsg } }));
+        } catch (e) {}
+      }
+      throw new Error(errMsg);
+    }
   } catch (err) {
-    console.warn('Firestore notes save failed:', err);
+    console.error('Firestore notes save failed:', err);
+    if (typeof window !== 'undefined') {
+      try {
+        window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind: 'notes_save', message: err.message } }));
+      } catch (e) {}
+    }
+    throw err;
   }
 }
 
@@ -1234,28 +1699,59 @@ export async function saveUserCustomWordsFirestore(userId, wordsArray) {
   if (!userId) return;
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return;
+  const cleanWords = Array.isArray(wordsArray) ? wordsArray : [];
+  const wordsStr = JSON.stringify(cleanWords);
+  const wordsBytes = typeof TextEncoder !== 'undefined'
+    ? new TextEncoder().encode(wordsStr).length
+    : Buffer.byteLength(wordsStr, 'utf8');
+  if (wordsBytes > 900000) {
+    const errMsg = `Размер словаря (${wordsBytes} байт) превышает лимит Firestore (900 000 байт). Сохранение отменено.`;
+    console.error(errMsg);
+    if (typeof window !== 'undefined') {
+      try {
+        window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind: 'custom_words_save', message: errMsg } }));
+      } catch (e) {}
+    }
+    throw new Error(errMsg);
+  }
+
   try {
     const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/custom_words`);
-    const cleanWords = Array.isArray(wordsArray) ? wordsArray : [];
     const fields = {
-      wordsJson: { stringValue: JSON.stringify(cleanWords) },
+      wordsJson: { stringValue: wordsStr },
       count: { integerValue: String(cleanWords.length) },
       updatedAt: { integerValue: String(Date.now()) }
     };
 
-    await firestoreFetch(url, {
+    const res = await firestoreFetch(url, {
       method: 'PATCH',
       headers: getAuthHeaders(),
       body: JSON.stringify({ fields }),
     });
+    if (!res.ok) {
+      const errMsg = `Ошибка сохранения пользовательских слов в Firestore: HTTP ${res.status}`;
+      console.error(errMsg);
+      if (typeof window !== 'undefined') {
+        try {
+          window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind: 'custom_words_save', status: res.status, message: errMsg } }));
+        } catch (e) {}
+      }
+      throw new Error(errMsg);
+    }
   } catch (err) {
-    console.warn('Firestore custom words save failed:', err);
+    console.error('Firestore custom words save failed:', err);
+    if (typeof window !== 'undefined') {
+      try {
+        window.dispatchEvent(new CustomEvent('myduo:sync-issue', { detail: { kind: 'custom_words_save', message: err.message } }));
+      } catch (e) {}
+    }
+    throw err;
   }
 }
 
 export async function fetchSharedVocabularyUpdatesFirestore() {
   const config = getFirebaseConfig();
-  const url = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/vocabulary_updates?key=${config.apiKey}`;
+  const url = `${getFirestoreBase()}/shared/vocabulary_updates?key=${config.apiKey}`;
   try {
     const res = await fetch(url);
     if (!res.ok) return {};
@@ -1277,7 +1773,7 @@ export async function saveSharedVocabularyUpdatesFirestore(newUpdatesMap) {
     if (newUpdatesMap[k]) current[k] = newUpdatesMap[k];
   });
 
-  const url = `${FIRESTORE_BASE}/users/${SHARED_ADMIN_UID}/data/vocabulary_updates?key=${config.apiKey}`;
+  const url = `${getFirestoreBase()}/shared/vocabulary_updates?key=${config.apiKey}`;
   try {
     await firestoreFetch(url, {
       method: 'PATCH',
@@ -1291,10 +1787,6 @@ export async function saveSharedVocabularyUpdatesFirestore(newUpdatesMap) {
       })
     });
   } catch (e) {}
-}
-
-export async function loadUserCustomWordsFirestore(userId) {
-  return [];
 }
 
 function toFirestoreValue(val) {
@@ -1415,11 +1907,32 @@ export async function loadFullUserDataFirestore(userId) {
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return null;
   try {
+    const config = getFirebaseConfig();
     const authHeaders = getAuthHeaders();
-    const [progress, userDocRes, dataColRes, setDocRes] = await Promise.all([
+    const fetchAllDataDocs = async () => {
+      let docs = [];
+      let pageToken = '';
+      do {
+        let pageUrl = `${getFirestoreBase()}/users/${encodeURIComponent(uid)}/data?pageSize=100&key=${config.apiKey}`;
+        if (pageToken) {
+          pageUrl += `&pageToken=${encodeURIComponent(pageToken)}`;
+        }
+        const res = await firestoreFetch(pageUrl, { headers: authHeaders }).catch(() => null);
+        if (!res || !res.ok) break;
+        const data = await res.json().catch(() => null);
+        if (!data) break;
+        if (Array.isArray(data.documents)) {
+          docs.push(...data.documents);
+        }
+        pageToken = data.nextPageToken || '';
+      } while (pageToken);
+      return docs;
+    };
+
+    const [progress, userDocRes, dataDocs, setDocRes] = await Promise.all([
       loadUserProgressFirestore(uid),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`), { headers: authHeaders }).catch(() => null),
+      fetchAllDataDocs().catch(() => []),
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings`), { headers: authHeaders }).catch(() => null),
     ]);
 
@@ -1432,10 +1945,9 @@ export async function loadFullUserDataFirestore(userId) {
 
     // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words, progress)
     // This avoids 404 Not Found network errors when documents do not exist yet!
-    if (dataColRes && dataColRes.ok) {
+    if (Array.isArray(dataDocs) && dataDocs.length > 0) {
       try {
-        const colData = await dataColRes.json();
-        const docs = Array.isArray(colData.documents) ? colData.documents : [];
+        const docs = dataDocs;
         for (const doc of docs) {
           const docName = doc.name ? doc.name.split('/').pop() : '';
           if (docName === 'deleted_favorites') {

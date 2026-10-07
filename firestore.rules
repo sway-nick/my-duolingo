@@ -2,40 +2,157 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 1. Weekly Leaderboard:
-    // Anyone can read leaderboard standings.
-    // An authenticated user can only create or update their own record in the leaderboard.
-    match /leaderboards/{weekKey}/players/{userId} {
-      allow read: if true;
-      allow write: if request.auth != null && (
-        request.auth.uid == userId ||
-        (request.auth.token.email != null && request.resource.data.userId == userId)
+    // ===============================================================
+    // Assumed Data Model & Security Definitions (v3)
+    // ===============================================================
+    //
+    // 1. Weekly Leaderboard: /leaderboards/{weekKey}/players/{userId}
+    //    - weekKey: string matching '^[0-9]{4}-W[0-9]{2}$'
+    //    - userId: string matching authenticated request.auth.uid
+    //    - Fields:
+    //      * userId: string (must match document ID)
+    //      * weekKey: string (must match document path weekKey)
+    //      * name: string (length <= 50)
+    //      * xp: int (>= 0 && <= 20000)
+    //      * weekStartMs: int (valid week window relative to request.time)
+    //      * updatedAt: timestamp (must equal request.time)
+    //    - Constraints & Security:
+    //      * Auth requirement: request.auth.token.email_verified == true
+    //      * Read: get allowed; list restricted to request.query.limit <= 120
+    //      * Delete: owner only
+    //      * create: xp <= 5000
+    //      * update: math.abs(new - old) <= 5000 && isAcceptableGrowthRate (3 XP/s + 150 margin)
+    //
+    // 2. All-Time Leaderboard: /leaderboard_alltime/{userId}
+    //    - userId: string matching authenticated request.auth.uid
+    //    - Fields:
+    //      * userId: string (must match document ID)
+    //      * name: string (length <= 50)
+    //      * totalXp: int (>= 0)
+    //      * updatedAt: timestamp (must equal request.time)
+    //    - Constraints & Security:
+    //      * Auth requirement: request.auth.token.email_verified == true
+    //      * Read: get allowed; list restricted to request.query.limit <= 120
+    //      * Delete: owner only
+    //      * create: totalXp >= 0 && totalXp <= 10000
+    //      * update: totalXp >= old && (new - old) <= 5000 && isAcceptableGrowthRate (3 XP/s + 150 margin)
+    //
+    // 3. User Profiles & Subcollections: /users/{userId}
+    //    - allow get: true; allow list: false (denied)
+    //    - allow write: owner only
+    //    - Subcollections: /users/{userId}/{subcollection}/{docId}
+    //      * Allowed subcollections: progress, settings, data, sessions, analytics
+    //      * allow read, delete: owner only
+    //      * allow create, update: owner only with size limits (<= 900,000 chars)
+    //        on optional string fields notesJson, wordsJson, progressJson
+    //
+    // 4. Shared Vocabulary Updates: /shared/vocabulary_updates
+    //    - Read: allowed for all
+    //    - Write: admin UID 'wB3NVAmBarXHSBrtEzDCriS0XBy2' only
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getPrevUpdatedAtMillis() {
+      return resource.data.updatedAt is timestamp
+        ? resource.data.updatedAt.toMillis()
+        : (resource.data.updatedAt is int ? resource.data.updatedAt : 0);
+    }
+
+    function isAcceptableGrowthRate(newScore, oldScore) {
+      let prevTime = getPrevUpdatedAtMillis();
+      let delta = math.abs(newScore - oldScore);
+      return prevTime == 0 || (
+        request.time.toMillis() >= prevTime &&
+        delta <= (request.time.toMillis() - prevTime) / 1000 * 3 + 150
       );
     }
 
-    // 2. User Profiles and Private Data:
-    // Basic user profile is publicly readable for leaderboard rankings, avatars and podiums.
-    match /users/{userId} {
-      allow read: if true;
-      allow write: if request.auth != null && (
-        request.auth.uid == userId ||
-        request.auth.token.email != null
-      );
+    function isValidWeeklyPlayer(userId, weekKey) {
+      return weekKey.matches('^[0-9]{4}-W[0-9]{2}$')
+        && isOwner(userId)
+        && request.auth.token.email_verified == true
+        && request.resource.data.userId == userId
+        && request.resource.data.weekKey == weekKey
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 50
+        && request.resource.data.xp is int
+        && request.resource.data.xp >= 0
+        && request.resource.data.xp <= 20000
+        && request.resource.data.weekStartMs is int
+        && request.time.toMillis() >= request.resource.data.weekStartMs
+        && request.time.toMillis() <= request.resource.data.weekStartMs + (7 * 86400000) + 3600000
+        && request.resource.data.updatedAt == request.time;
+    }
 
-      // Private subcollections (progress, favorites, settings, custom words, notes)
-      // Strictly accessible ONLY by the account owner
+    function isValidAlltimePlayer(userId) {
+      return isOwner(userId)
+        && request.auth.token.email_verified == true
+        && request.resource.data.userId == userId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 50
+        && request.resource.data.totalXp is int
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // 1. Weekly Leaderboard
+    match /leaderboards/{weekKey}/players/{userId} {
+      allow get: if true;
+      allow list: if request.query.limit <= 120;
+      allow delete: if isOwner(userId);
+
+      allow create: if isValidWeeklyPlayer(userId, weekKey)
+        && request.resource.data.xp <= 5000;
+
+      allow update: if isValidWeeklyPlayer(userId, weekKey)
+        && math.abs(request.resource.data.xp - resource.data.xp) <= 5000
+        && isAcceptableGrowthRate(request.resource.data.xp, resource.data.xp);
+    }
+
+    // 2. All-Time Leaderboard
+    match /leaderboard_alltime/{userId} {
+      allow get: if true;
+      allow list: if request.query.limit <= 120;
+      allow delete: if isOwner(userId);
+
+      allow create: if isValidAlltimePlayer(userId)
+        && request.resource.data.totalXp >= 0
+        && request.resource.data.totalXp <= 10000;
+
+      allow update: if isValidAlltimePlayer(userId)
+        && request.resource.data.totalXp >= resource.data.totalXp
+        && (request.resource.data.totalXp - resource.data.totalXp) <= 5000
+        && isAcceptableGrowthRate(request.resource.data.totalXp, resource.data.totalXp);
+    }
+
+    // 3. User Profiles and Private Subcollections
+    match /users/{userId} {
+      allow get: if true;
+      allow list: if false;
+      allow write: if isOwner(userId);
+
       match /{subcollection}/{docId} {
-        allow read, write: if request.auth != null && (
-          request.auth.uid == userId ||
-          request.auth.token.email != null
-        );
+        allow read, delete: if isOwner(userId)
+          && subcollection in ['progress', 'settings', 'data', 'sessions', 'analytics'];
+
+        allow create, update: if isOwner(userId)
+          && subcollection in ['progress', 'settings', 'data', 'sessions', 'analytics']
+          && (!('notesJson' in request.resource.data) || (request.resource.data.notesJson is string && request.resource.data.notesJson.size() <= 900000))
+          && (!('wordsJson' in request.resource.data) || (request.resource.data.wordsJson is string && request.resource.data.wordsJson.size() <= 900000))
+          && (!('progressJson' in request.resource.data) || (request.resource.data.progressJson is string && request.resource.data.progressJson.size() <= 900000));
       }
     }
 
-    // 3. Shared leaderboard backup document (administered migration path)
-    match /users/wB3NVAmBarXHSBrtEzDCriS0XBy2/data/{docId} {
+    // 4. Shared Vocabulary Updates
+    match /shared/vocabulary_updates {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAuthenticated() && request.auth.uid == 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
     }
 
     // Default deny for all other paths
