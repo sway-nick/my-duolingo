@@ -999,8 +999,6 @@ export async function loadUserProgressFirestore(userId) {
   return combinedMap;
 }
 
-const SHARED_ADMIN_UID = 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
-
 let pendingLeaderboardIncrementsCount = 0;
 
 export function hasPendingLeaderboardIncrements() {
@@ -1120,12 +1118,15 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
       console.warn('Firestore atomic commit delta failed:', res.status, errText);
-      if (res.status === 403 && !isEmailVerified() && typeof window !== 'undefined') {
+      if (res.status === 403 && typeof window !== 'undefined') {
+        const kind = !isEmailVerified() ? 'email_not_verified' : 'permission_denied';
         window.dispatchEvent(new CustomEvent('myduo:sync-issue', {
           detail: {
-            kind: 'email_not_verified',
+            kind,
             status: 403,
-            message: 'Для участия в рейтинге подтвердите email. Проверьте ваш почтовый ящик.'
+            message: kind === 'email_not_verified'
+              ? 'Для участия в рейтинге подтвердите email. Проверьте ваш почтовый ящик.'
+              : 'Ошибка синхронизации рейтинга: доступ ограничен.'
           }
         }));
       }

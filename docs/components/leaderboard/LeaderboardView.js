@@ -400,17 +400,17 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       <div class="email-verify-banner" id="email-verify-banner" style="margin: 10px 14px; padding: 10px 14px; background: rgba(234, 88, 12, 0.08); border: 1.5px solid rgba(234, 88, 12, 0.35); border-radius: 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px;">
         <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #ea580c;">
           <span style="font-size: 15px;">📧</span>
-          <span>Подтвердите email для участия в рейтинге</span>
+          <span>${t('lead_verify_email_title')}</span>
         </div>
         <div style="color: var(--text-muted); font-size: 12px; line-height: 1.35;">
-          Чтобы ваши очки отображались в таблице лидеров, подтвердите ваш адрес электронной почты (${escapeHtml(currentUser.email)}).
+          ${t('lead_verify_email_desc', { email: escapeHtml(currentUser.email) })}
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
           <button class="primary-button" id="btn-resend-verify" style="height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; background: #ea580c; border: none; border-radius: 7px; color: #fff; cursor: pointer;">
-            Отправить ещё раз
+            ${t('lead_verify_email_resend')}
           </button>
           <button class="secondary-button" id="btn-check-verify" style="height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; border-radius: 7px; cursor: pointer;">
-            Я подтвердил
+            ${t('lead_verify_email_check')}
           </button>
         </div>
       </div>
@@ -429,15 +429,15 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   if (resendBtn) {
     resendBtn.addEventListener('click', async () => {
       resendBtn.disabled = true;
-      resendBtn.textContent = 'Отправка...';
+      resendBtn.textContent = t('lead_verify_email_sending');
       try {
         await sendEmailVerification();
-        resendBtn.textContent = 'Письмо отправлено! ✓';
-        setTimeout(() => { resendBtn.disabled = false; resendBtn.textContent = 'Отправить ещё раз'; }, 5000);
+        resendBtn.textContent = t('lead_verify_email_sent');
+        setTimeout(() => { resendBtn.disabled = false; resendBtn.textContent = t('lead_verify_email_resend'); }, 5000);
       } catch (e) {
-        alert(e.message || 'Ошибка отправки письма');
+        alert(e.message || t('auth_err_failed'));
         resendBtn.disabled = false;
-        resendBtn.textContent = 'Отправить ещё раз';
+        resendBtn.textContent = t('lead_verify_email_resend');
       }
     });
   }
@@ -446,7 +446,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   if (checkBtn) {
     checkBtn.addEventListener('click', async () => {
       checkBtn.disabled = true;
-      checkBtn.textContent = 'Проверка...';
+      resendBtn && (resendBtn.disabled = true);
       try {
         const verified = await checkAndRefreshEmailVerification();
         if (verified) {
@@ -454,13 +454,13 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
           if (banner) banner.remove();
           renderLeaderboardView(containerSelector, options);
         } else {
-          alert('Email ещё не подтверждён. Пожалуйста, перейдите по ссылке в письме и нажмите «Я подтвердил» снова.');
+          alert(t('lead_verify_email_not_yet'));
           checkBtn.disabled = false;
-          checkBtn.textContent = 'Я подтвердил';
+          resendBtn && (resendBtn.disabled = false);
         }
       } catch (e) {
         checkBtn.disabled = false;
-        checkBtn.textContent = 'Я подтвердил';
+        resendBtn && (resendBtn.disabled = false);
       }
     });
   }

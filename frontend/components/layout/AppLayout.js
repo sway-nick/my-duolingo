@@ -3,6 +3,7 @@ import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../servi
 import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
 import { openShareDialog } from '../modals/ShareModal.js?v=385.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { isEmailVerified } from '../../services/firebase.js?v=385.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -683,14 +684,50 @@ if (typeof window !== 'undefined') {
   });
 
   // Handle sync issues (token expiration, network, Firestore rule issues)
-  // Instead of ugly intrusive black toast, gracefully activate orange badge on menu/settings/leaderboard
   window.addEventListener('myduo:sync-issue', (e) => {
     updateSyncBadges(true);
+    const detail = e.detail || {};
+    if (detail.kind === 'email_not_verified') {
+      showToast(t('lead_verify_email_prompt'));
+    } else if (detail.status === 403 || detail.kind === 'permission_denied') {
+      showToast(t('lead_sync_error_403'));
+    }
   });
 
   window.addEventListener('myduo:auth_changed', () => {
     updateSyncBadges(false);
   });
+
+  // Prompt unverified email user upon startup/initialization
+  try {
+    const curUser = getCurrentUser();
+    if (curUser && curUser.email && !isEmailVerified()) {
+      setTimeout(() => {
+        showToast(t('lead_verify_email_prompt'));
+      }, 1200);
+    }
+  } catch (e) {}
+}
+
+/**
+ * Show a floating toast notification across the app
+ */
+export function showToast(message, duration = 4000) {
+  if (typeof document === 'undefined') return;
+  let toast = document.querySelector('#app-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.className = 'share-toast';
+    toast.style.zIndex = '99999';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
 }
 
 export { renderAppLayout, updateHeaderUser, applyTheme, getSavedTheme, toggleTheme };
