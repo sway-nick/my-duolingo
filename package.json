@@ -19,6 +19,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@google/clasp": "^3.3.0"
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "@google/clasp": "^3.3.0",
+    "firebase-admin": "^14.5.0"
   }
 }
