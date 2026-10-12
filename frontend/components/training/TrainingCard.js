@@ -14,8 +14,6 @@ import {
   isSfxMuted,
   requestScreenWakeLock,
   releaseScreenWakeLock,
-  startSilentAudioAnchor,
-  stopSilentAudioAnchor,
   startNativeBackgroundPlayback,
   updateNativeBackgroundPlayback,
   stopNativeBackgroundPlayback,
@@ -36,6 +34,7 @@ import {
   transcribePingAudio,
 } from '../../services/api.js?v=385.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
+import { AdService } from '../../services/adService.js?v=385.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -419,6 +418,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
   } = options;
+
+  const isSingleWordMode = Boolean(
+    isSingleRemaining ||
+    (activeWords && activeWords.length <= 1)
+  );
 
   if (activeWords && activeWords.length > 0) {
     activeWords.slice(0, 3).forEach((w) => {
@@ -892,7 +896,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             speakWord(currentWord.word, currentWord.id);
           }
 
-          await saveProgress(currentWord.id, isCorrect, 'quiz', { isFavPractice });
+          await saveProgress(currentWord.id, isCorrect, 'quiz', {
+            isFavPractice,
+            isSingleRemaining: isSingleWordMode,
+          });
           onNextAfterSpeech(onNext, 1000, 8000);
         });
       });
@@ -928,943 +935,18 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           speakWord(currentWord.word, currentWord.id);
           if (isCorrect) playSuccessSound();
           else playErrorSound();
-          await saveProgress(currentWord.id, isCorrect, 'quiz', { skipXp: isFromSpeechFallback, isFavPractice });
+          await saveProgress(currentWord.id, isCorrect, 'quiz', {
+            skipXp: isFromSpeechFallback,
+            isFavPractice,
+            isSingleRemaining: isSingleWordMode,
+          });
           onNextAfterSpeech(onNext, 1000, 8000);
         });
       });
     }
 
     function renderSpeechQuiz() {
-      let speechAttempts = 0;
-
-      const CUTE_AI_ROBOT_HTML = `<img src="./assets/icons/cute_ai_robot.png" alt="AI Robot" class="cute-ai-robot-img" />`;
-
-      practiceArea.innerHTML = `
-        <div class="speech-quiz-container">
-          <button type="button" class="speech-mic-btn" id="speech-mic-btn" title="Tap to speak word">
-            🎙️
-          </button>
-          <div class="speech-hold-hint" id="speech-hold-hint">
-            ${t('speech_tap_to_speak')}
-          </div>
-          <div class="speech-transcript-box" id="speech-transcript-box" style="display: none; margin-top: 10px;"></div>
-          <button type="button" class="primary-button btn-green" id="mic-fallback-quiz-btn" style="margin-top: 12px; width: 100%; max-width: 220px; min-height: 42px; font-size: 15px; padding: 8px 18px; border-radius: 12px; font-weight: 700; cursor: pointer;">
-            ${t('train_answer_quiz')}
-          </button>
-          <button type="button" class="primary-button btn-green" id="speech-continue-btn" style="display: none; margin-top: 12px; width: 100%; max-width: 220px; padding: 10px 20px; border-radius: 12px; font-weight: 700; cursor: pointer;">
-            ${t('train_next_btn')}
-          </button>
-          <button type="button" class="card-bottom-diag-btn" id="speech-diag-trigger-btn" title="Check microphone" style="position: absolute; bottom: 8px; left: 8px; margin: 0;">
-            ⚙️
-          </button>
-        </div>
-      `;
-
-      const micBtn = practiceArea.querySelector('#speech-mic-btn');
-      const holdHint = practiceArea.querySelector('#speech-hold-hint');
-      const transcriptBox = practiceArea.querySelector('#speech-transcript-box');
-      const fallbackBtn = practiceArea.querySelector('#mic-fallback-quiz-btn');
-      const continueBtn = practiceArea.querySelector('#speech-continue-btn');
-      const diagBtn = practiceArea.querySelector('#speech-diag-trigger-btn');
-
-      if (fallbackBtn) {
-        fallbackBtn.addEventListener('click', () => renderConsonantsQuiz());
-      }
-
-      function showFallbackButton(errorText = null) {
-        if (errorText && transcriptBox) {
-          transcriptBox.style.display = 'block';
-          transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${errorText}</span>`;
-        }
-        if (fallbackBtn) fallbackBtn.style.display = 'block';
-      }
-
-      showFallbackButton();
-
-      if (diagBtn) {
-        diagBtn.addEventListener('click', () => {
-          openMicDiagnosticModal();
-        });
-      }
-
-      const isMobileDevice = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent || '',
-      );
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const preferNativeSpeech = !isMobileDevice && Boolean(SpeechRecognition);
-
-      let mediaStream = null;
-      let audioContext = null;
-      let mediaRecorder = null;
-      let nativeRecognition = null;
-      let recordedChunks = [];
-      let isListening = false;
-      let isProcessing = false;
-      let isCompleted = false;
-      let autoStopTimer = null;
-      let safetyWatchdog = null;
-
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const mimeCandidates = isIOS
-        ? [
-            'audio/mp4',
-            'audio/aac',
-            'audio/webm;codecs=opus',
-            'audio/webm',
-            'audio/ogg',
-            'audio/wav',
-          ]
-        : [
-            'audio/webm;codecs=opus',
-            'audio/webm',
-            'audio/mp4',
-            'audio/aac',
-            'audio/ogg',
-            'audio/wav',
-          ];
-      let supportedMimeType = '';
-      if (typeof MediaRecorder !== 'undefined') {
-        supportedMimeType = mimeCandidates.find((m) => MediaRecorder.isTypeSupported(m)) || '';
-      }
-
-      function clearAllTimers() {
-        if (autoStopTimer) clearTimeout(autoStopTimer);
-        if (safetyWatchdog) clearTimeout(safetyWatchdog);
-        autoStopTimer = null;
-        safetyWatchdog = null;
-      }
-
-      function stopSensorStreams() {
-        if (mediaStream) {
-          mediaStream.getTracks().forEach((track) => track.stop());
-          mediaStream = null;
-        }
-        if (nativeRecognition) {
-          try {
-            nativeRecognition.stop();
-          } catch (e) {}
-          nativeRecognition = null;
-        }
-        if (audioContext && audioContext.state !== 'closed') {
-          try {
-            audioContext.close();
-          } catch (e) {}
-          audioContext = null;
-        }
-      }
-
-      // ===== ИСПРАВЛЕННАЯ handleNoSpeechHeard с разделением счётчиков =====
-      function handleNoSpeechHeard(customMsg = null, isTechnical = false) {
-        clearAllTimers();
-        stopSensorStreams();
-        if (isCompleted) return;
-        isProcessing = false;
-        isListening = false;
-        if (micBtn) {
-          micBtn.classList.remove('listening', 'processing', 'holding', 'ai-thinking');
-          micBtn.innerHTML = '🎙️';
-        }
-
-        // Увеличиваем speechAttempts только если это НЕ техническая ошибка
-        if (!isTechnical) {
-          speechAttempts++;
-        }
-
-        const defaultRetryText = t('speech_not_recognized');
-
-        // Filter out any raw technical JSON from customMsg
-        let cleanErrorText = customMsg || defaultRetryText;
-        if (cleanErrorText.includes('{') || cleanErrorText.includes('Key #') || cleanErrorText.includes('error (') || cleanErrorText.includes('failed across') || cleanErrorText.includes('ModelService')) {
-          cleanErrorText = defaultRetryText;
-        }
-
-        if (speechAttempts < 5) {
-          if (holdHint) {
-            const attemptText = isTechnical
-              ? t('train_try_again_mic')
-              : t('train_try_n_of_m').replace('{n}', speechAttempts).replace('{m}', '5');
-            holdHint.innerHTML = attemptText;
-          }
-          showFallbackButton(cleanErrorText);
-        } else {
-          // Достигнут лимит реальных попыток (5) – штраф
-          isCompleted = true;
-          if (micBtn) {
-            micBtn.disabled = true;
-            micBtn.classList.remove('listening', 'processing', 'holding', 'ai-thinking');
-            micBtn.classList.add('wrong');
-            micBtn.innerHTML = '❌';
-          }
-          if (holdHint) {
-            holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${escapeHtml(currentWord.word)}</strong></span>`;
-          }
-          saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
-          if (continueBtn) {
-            continueBtn.style.display = 'block';
-            continueBtn.onclick = () => onNext();
-          }
-          if (fallbackBtn) fallbackBtn.style.display = 'none';
-          if (transcriptBox) {
-            transcriptBox.style.display = 'block';
-            transcriptBox.innerHTML = `<span style="color: #ef4444; font-size: 14px; font-weight: 500;">⚠️ ${t('train_attempts_exhausted')}</span>`;
-          }
-        }
-      }
-
-      let isEvaluated = false;
-
-      function startDesktopNativeSpeech() {
-        if (isProcessing || isCompleted) return;
-        clearAllTimers();
-        isListening = true;
-        isEvaluated = false;
-
-        try {
-          if (window.speechSynthesis) window.speechSynthesis.cancel();
-        } catch (e) {}
-
-        setTimeout(() => {
-          if (isProcessing || isCompleted || !isListening) {
-            return;
-          }
-
-          try {
-            nativeRecognition = new SpeechRecognition();
-            nativeRecognition.lang = 'en-US';
-            nativeRecognition.continuous = false;
-            nativeRecognition.interimResults = true;
-            nativeRecognition.maxAlternatives = 5;
-
-            nativeRecognition.onstart = () => {
-              if (micBtn) {
-                micBtn.classList.remove('processing', 'success', 'ai-thinking');
-                micBtn.classList.add('listening');
-                micBtn.innerHTML = '🎙️';
-              }
-              if (holdHint) {
-                holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
-              }
-
-              // Даем комфортные 6 секунд на произнесение слова
-              const timeoutMs = 6000;
-              autoStopTimer = setTimeout(() => {
-                if (isListening && !isEvaluated) {
-                  if (micBtn) {
-                    micBtn.classList.remove('listening', 'processing');
-                    micBtn.classList.add('ai-thinking');
-                    micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
-                  }
-                  if (holdHint) {
-                    holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
-                  }
-                  try {
-                    nativeRecognition.stop();
-                  } catch (e) {}
-
-                  // Watchdog: если Web Speech API завис и не вызвал onend/onresult
-                  if (safetyWatchdog) clearTimeout(safetyWatchdog);
-                  safetyWatchdog = setTimeout(() => {
-                    if (!isEvaluated && !isCompleted) {
-                      isListening = false;
-                      isProcessing = false;
-                      handleNoSpeechHeard(t('speech_not_recognized'), true);
-                    }
-                  }, 3000);
-                }
-              }, timeoutMs);
-            };
-
-            nativeRecognition.onspeechend = () => {
-              if (isEvaluated || isCompleted || isProcessing) return;
-              if (isListening && !isEvaluated) {
-                if (micBtn) {
-                  micBtn.classList.remove('listening', 'processing');
-                  micBtn.classList.add('ai-thinking');
-                  micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
-                }
-                if (holdHint) {
-                  holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
-                }
-                setTimeout(() => {
-                  if (isListening && !isEvaluated) {
-                    try {
-                      nativeRecognition.stop();
-                    } catch (e) {}
-                  }
-                }, 2000);
-              }
-            };
-
-            nativeRecognition.onresult = (event) => {
-              if (isEvaluated || isCompleted || isProcessing) return;
-
-              const allResults = [];
-              const finalResults = [];
-              let isAnyFinal = false;
-
-              for (let i = 0; i < event.results.length; i++) {
-                const result = event.results[i];
-                if (result.isFinal) isAnyFinal = true;
-                for (let j = 0; j < result.length; j++) {
-                  const text = (result[j].transcript || '').trim();
-                  if (text) {
-                    allResults.push(text);
-                    if (result.isFinal) finalResults.push(text);
-                  }
-                }
-              }
-
-              if (allResults.length > 0 && transcriptBox) {
-                transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = `🎤 <strong>«${allResults[0]}»</strong>`;
-              }
-
-              // Мгновенная проверка: если уже есть верное произношение, сразу засчитываем!
-              if (checkSpeechMatch(allResults, currentWord.word)) {
-                isEvaluated = true;
-                clearAllTimers();
-                isListening = false;
-                try {
-                  nativeRecognition.stop();
-                } catch (e) {}
-                evaluateSpeech(allResults, true);
-                return;
-              }
-
-              // Финальная оценка после завершения распознавания фразы
-              if (isAnyFinal && (finalResults.length > 0 || allResults.length > 0)) {
-                isEvaluated = true;
-                clearAllTimers();
-                isListening = false;
-                try {
-                  nativeRecognition.stop();
-                } catch (e) {}
-                evaluateSpeech(finalResults.length > 0 ? finalResults : allResults);
-              }
-            };
-
-            nativeRecognition.onerror = (err) => {
-              if (isEvaluated || isCompleted || isProcessing) return;
-              console.warn('Native speech error:', err.error);
-              clearAllTimers();
-              isListening = false;
-
-              // Технические ошибки – не списываем попытку
-              if (err.error === 'not-allowed' || err.error === 'audio-capture') {
-                isEvaluated = true;
-                handleNoSpeechHeard(t('train_mic_allow_browser'), true);
-                return;
-              }
-
-              // Сетевые ошибки или блокировка сервиса Google Speech — переключаем на Gemini AI (MediaRecorder)
-              if (err.error === 'network' || err.error === 'service-not-allowed') {
-                isEvaluated = true;
-                console.warn('Native speech network/service error, falling back to Gemini AI via MediaRecorder');
-                if (transcriptBox) {
-                  transcriptBox.style.display = 'block';
-                  transcriptBox.innerHTML = t('train_switching_alt');
-                }
-                if (holdHint) {
-                  holdHint.innerHTML = t('train_switching_alt');
-                }
-                startMobileMediaRecorder();
-                return;
-              }
-
-              if (err.error === 'no-speech') {
-                isEvaluated = true;
-                handleNoSpeechHeard(t('train_voice_not_detected'), true);
-                return;
-              }
-
-              // Остальные технические ошибки – переключаем на MediaRecorder (тоже не списываем)
-              isEvaluated = true;
-              console.warn('Переключение на MediaRecorder (ошибка:', err.error, ')');
-              if (transcriptBox) {
-                transcriptBox.style.display = 'block';
-                transcriptBox.innerHTML = t('train_switching_alt');
-              }
-              if (holdHint) {
-                holdHint.innerHTML = t('train_switching_alt');
-              }
-              startMobileMediaRecorder();
-            };
-
-            nativeRecognition.onend = () => {
-              clearAllTimers();
-              if (!isEvaluated && !isCompleted && !isProcessing) {
-                isListening = false;
-                handleNoSpeechHeard(t('train_voice_not_detected'), true);
-              }
-            };
-
-            nativeRecognition.start();
-          } catch (e) {
-            console.warn('Native speech launch failed, using MediaRecorder:', e);
-            if (transcriptBox) {
-              transcriptBox.style.display = 'block';
-              transcriptBox.innerHTML = t('train_switching_alt');
-            }
-            if (holdHint) {
-              holdHint.innerHTML = t('train_switching_alt');
-            }
-            startMobileMediaRecorder();
-          }
-        }, 150);
-      }
-
-      async function inspectAudioBlob(blob) {
-        return new Promise((resolve) => {
-          try {
-            const url = URL.createObjectURL(blob);
-            const audio = new Audio();
-            const cleanup = () => {
-              try {
-                URL.revokeObjectURL(url);
-              } catch (e) {}
-            };
-            const timer = setTimeout(() => {
-              cleanup();
-              resolve({ ok: true, duration: 0, size: blob.size, type: blob.type });
-            }, 600);
-
-            audio.onloadedmetadata = () => {
-              clearTimeout(timer);
-              const result = {
-                ok: true,
-                duration: Math.round((audio.duration || 0) * 10) / 10,
-                size: blob.size,
-                type: blob.type,
-              };
-              cleanup();
-              resolve(result);
-            };
-
-            audio.onerror = () => {
-              clearTimeout(timer);
-              cleanup();
-              resolve({
-                ok: false,
-                duration: 0,
-                size: blob.size,
-                type: blob.type,
-              });
-            };
-
-            audio.src = url;
-            audio.load();
-          } catch (e) {
-            resolve({ ok: true, duration: 0, size: blob.size, type: blob.type });
-          }
-        });
-      }
-
-      async function startMobileMediaRecorder() {
-        if (isProcessing || isCompleted) return;
-
-        if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
-          stopAndTranscribe();
-          return;
-        }
-
-        clearAllTimers();
-        isListening = true;
-
-        try {
-          if (window.speechSynthesis) window.speechSynthesis.cancel();
-        } catch (e) {}
-
-        await new Promise((resolve) => setTimeout(resolve, 150));
-
-        if (isProcessing || isCompleted || !isListening) {
-          return;
-        }
-
-        if (!localStorage.getItem('myduo_mic_prompt_seen')) {
-          await new Promise((resolve) => {
-            const modal = document.createElement('div');
-            modal.className = 'modal-backdrop';
-            modal.id = 'mic-explainer-modal';
-            modal.innerHTML = `
-              <div class="modal-content" style="text-align: center; max-width: 340px; padding: 26px 20px; box-sizing: border-box; animation: scaleUp 0.2s ease;">
-                <div style="font-size: 48px; margin-bottom: 12px; line-height: 1;">🎙️</div>
-                <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">${t('mic_modal_title')}</h3>
-                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.45; margin: 0 0 20px;">
-                  ${t('mic_modal_desc')}
-                </p>
-                <button class="primary-button btn-green" id="mic-explainer-allow-btn" style="min-height: 46px; height: 46px; font-size: 15px; font-weight: 700; width: 100%;">
-                  ${t('mic_modal_allow')}
-                </button>
-              </div>
-            `;
-            document.body.appendChild(modal);
-            modal.querySelector('#mic-explainer-allow-btn').addEventListener('click', () => {
-              localStorage.setItem('myduo_mic_prompt_seen', 'true');
-              modal.remove();
-              resolve(true);
-            });
-          });
-        }
-
-        try {
-          try {
-            mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          } catch (cErr) {
-            mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          }
-
-          if (!isListening) {
-            if (mediaStream) mediaStream.getTracks().forEach((t) => t.stop());
-            return;
-          }
-
-          let options = {};
-          if (supportedMimeType) {
-            options.mimeType = supportedMimeType;
-          }
-
-          try {
-            mediaRecorder = new MediaRecorder(mediaStream, options);
-          } catch (e1) {
-            mediaRecorder = new MediaRecorder(mediaStream);
-          }
-
-          recordedChunks = [];
-
-          mediaRecorder.ondataavailable = (event) => {
-            if (event.data && event.data.size > 0) {
-              recordedChunks.push(event.data);
-            }
-          };
-
-          mediaRecorder.onstop = async () => {
-            clearAllTimers();
-            isListening = false;
-            isProcessing = true;
-
-            const mime = mediaRecorder.mimeType || supportedMimeType || 'audio/webm';
-            const audioBlob = new Blob(recordedChunks, { type: mime });
-            stopSensorStreams();
-
-            if (micBtn) {
-              micBtn.classList.remove('listening', 'processing');
-              micBtn.classList.add('ai-thinking');
-              micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
-            }
-            if (holdHint) {
-              holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
-            }
-
-            try {
-              const result = await transcribeAudio(audioBlob, mime, currentWord.word);
-              const isAiCorrect = !!(result && result.isCorrect);
-              const spokenWord = (result && (result.transcribed || result.heard || result.text) ? (result.transcribed || result.heard || result.text) : '').trim();
-              const score = result && result.score !== undefined ? result.score : null;
-              const feedback = result && result.feedback ? result.feedback : '';
-
-              if (spokenWord || isAiCorrect) {
-                if (transcriptBox) {
-                  transcriptBox.style.display = 'block';
-                  let heardHtml = '';
-                  if (spokenWord) {
-                    heardHtml += `🎤 «<strong>${escapeHtml(spokenWord)}</strong>»`;
-                  }
-                  if (score !== null) {
-                    heardHtml += `${heardHtml ? ' — ' : ''}${t('stats_accuracy')}: <strong>${score}%</strong>`;
-                  }
-                  if (feedback) {
-                    const fbColor = isAiCorrect ? '#16a34a' : '#d97706';
-                    heardHtml += `<br><span style="font-size: 13px; color: ${fbColor}; font-style: italic;">💡 ${escapeHtml(feedback)}</span>`;
-                  }
-                  transcriptBox.innerHTML = heardHtml;
-                }
-                await evaluateSpeech([spokenWord], isAiCorrect);
-              } else {
-                handleNoSpeechHeard(t('train_voice_not_detected'), true);
-              }
-            } catch (transcribeErr) {
-              console.warn('AI Transcribe error:', transcribeErr);
-              const errMsg =
-                transcribeErr && transcribeErr.message
-                  ? transcribeErr.message
-                  : t('train_try_again_mic');
-              handleNoSpeechHeard(errMsg, true);
-            }
-          };
-
-          // One-shot запись без timeslice (дает цельный закрытый медиа-контейнер)
-          mediaRecorder.start();
-
-          if (micBtn) {
-            micBtn.classList.remove('processing', 'success', 'ai-thinking');
-            micBtn.classList.add('listening');
-            micBtn.innerHTML = '🎙️';
-          }
-          if (holdHint) {
-            holdHint.innerHTML = `<span class="speech-listening-text"><span class="speech-live-dot">●</span> ${t('speech_listening')}</span>`;
-          }
-
-          const isPhrase = currentWord.word && currentWord.word.includes(' ');
-          const timeoutMs = isPhrase ? 4500 : 3500;
-          autoStopTimer = setTimeout(() => {
-            if (isListening && mediaRecorder && mediaRecorder.state === 'recording') {
-              stopAndTranscribe();
-            }
-          }, timeoutMs);
-        } catch (micErr) {
-          isListening = false;
-          console.warn('Microphone access failed:', micErr);
-          if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
-            handleNoSpeechHeard(
-              t('train_mic_allow_browser'),
-              true,
-            );
-          } else {
-            handleNoSpeechHeard(t('train_mic_launch_failed'), true);
-          }
-        }
-      }
-
-      function startSpeechSession() {
-        if (typeof MediaRecorder !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          startMobileMediaRecorder();
-        } else if (SpeechRecognition) {
-          startDesktopNativeSpeech();
-        } else {
-          startMobileMediaRecorder();
-        }
-      }
-
-      function stopAndTranscribe() {
-        clearAllTimers();
-        isListening = false;
-        if (micBtn) {
-          micBtn.classList.remove('listening', 'processing');
-          micBtn.classList.add('ai-thinking');
-          micBtn.innerHTML = CUTE_AI_ROBOT_HTML;
-        }
-        if (holdHint) {
-          holdHint.innerHTML = `<span class="ai-thinking-text">✨ ${t('speech_evaluating')}</span>`;
-        }
-
-        if (nativeRecognition) {
-          try {
-            nativeRecognition.stop();
-          } catch (e) {}
-        }
-        if (mediaRecorder && mediaRecorder.state === 'recording') {
-          try {
-            mediaRecorder.stop();
-          } catch (e) {}
-        }
-      }
-
-      function openMicDiagnosticModal() {
-        const modalEl = document.createElement('div');
-        modalEl.className = 'speech-diag-modal';
-        modalEl.innerHTML = `
-          <div class="speech-diag-card">
-            <h3 class="speech-diag-title">🛠️ Проверка микрофона</h3>
-            
-            <div class="speech-diag-item">
-              <span>MediaRecorder STT:</span>
-              <strong style="color: #16a34a;">${typeof MediaRecorder !== 'undefined' ? '✅ Поддерживается' : '❌ Не поддерживается'}</strong>
-            </div>
-
-            <div class="speech-diag-item">
-              <span>Доступ к микрофону:</span>
-              <strong id="diag-perm-status" style="color: #d97706;">⏳ Проверка...</strong>
-            </div>
-
-            <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-top: 2px;">
-              Датчик звука (скажите что-нибудь):
-            </div>
-            <div class="speech-volume-meter-container">
-              <div class="speech-volume-meter-bar" id="diag-volume-bar"></div>
-            </div>
-
-            <div class="speech-diag-live-box" id="diag-transcript-box" style="display: none;"></div>
-
-            <div style="display: flex; gap: 8px; margin-top: 4px; width: 100%;">
-              <button type="button" class="primary-button btn-blue" id="diag-start-test-btn" style="flex: 1 1 0; min-width: 0; min-height: 42px; font-size: clamp(12px, 3.4vw, 13.5px); font-weight: 600; padding: 6px 4px; white-space: nowrap; display: flex; align-items: center; justify-content: center; text-align: center;">
-                Test AI
-              </button>
-              <button type="button" class="primary-button" id="diag-ping-btn" style="flex: 1 1 0; min-width: 0; min-height: 42px; font-size: clamp(12px, 3.4vw, 13.5px); font-weight: 600; padding: 6px 4px; white-space: nowrap; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; display: flex; align-items: center; justify-content: center; text-align: center;">
-                Ping
-              </button>
-              <button type="button" class="primary-button" id="diag-close-btn" style="flex: 1 1 0; min-width: 0; min-height: 42px; font-size: clamp(12px, 3.4vw, 13.5px); font-weight: 600; padding: 6px 4px; white-space: nowrap; background: rgba(0,0,0,0.08); color: var(--text-main); display: flex; align-items: center; justify-content: center; text-align: center;">
-                Закрыть
-              </button>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(modalEl);
-
-        let diagAudioCtx = null;
-        let diagAnalyser = null;
-        let diagStream = null;
-        let diagAnimFrame = null;
-        let diagRecorder = null;
-        let diagChunks = [];
-
-        const permStatus = modalEl.querySelector('#diag-perm-status');
-        const volBar = modalEl.querySelector('#diag-volume-bar');
-        const transcriptBox = modalEl.querySelector('#diag-transcript-box');
-        const startBtn = modalEl.querySelector('#diag-start-test-btn');
-        const pingBtn = modalEl.querySelector('#diag-ping-btn');
-        const closeBtn = modalEl.querySelector('#diag-close-btn');
-
-        async function initMicSensor() {
-          try {
-            diagStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            if (permStatus)
-              permStatus.innerHTML = '<span style="color: #16a34a;">✅ Разрешено</span>';
-
-            diagAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            diagAnalyser = diagAudioCtx.createAnalyser();
-            diagAnalyser.fftSize = 256;
-            const source = diagAudioCtx.createMediaStreamSource(diagStream);
-            source.connect(diagAnalyser);
-
-            const dataArray = new Uint8Array(diagAnalyser.frequencyBinCount);
-
-            function updateMeter() {
-              if (!diagAnalyser) return;
-              diagAnalyser.getByteFrequencyData(dataArray);
-              let sum = 0;
-              for (let i = 0; i < dataArray.length; i++) {
-                sum += dataArray[i];
-              }
-              const average = sum / dataArray.length;
-              const volumePercent = Math.min(100, Math.round((average / 100) * 100));
-              if (volBar) volBar.style.width = `${Math.max(4, volumePercent * 1.5)}%`;
-              diagAnimFrame = requestAnimationFrame(updateMeter);
-            }
-            updateMeter();
-          } catch (err) {
-            console.warn('Diag mic access failed:', err);
-            if (permStatus)
-              permStatus.innerHTML = '<span style="color: #ef4444;">🔒 Заблокировано</span>';
-          }
-        }
-
-        initMicSensor();
-
-        function stopDiagSensorStreams() {
-          if (diagAnimFrame) {
-            cancelAnimationFrame(diagAnimFrame);
-            diagAnimFrame = null;
-          }
-          if (diagStream) {
-            diagStream.getTracks().forEach((t) => t.stop());
-            diagStream = null;
-          }
-          if (diagAudioCtx) {
-            try {
-              diagAudioCtx.close();
-            } catch (e) {}
-            diagAudioCtx = null;
-          }
-          if (volBar) volBar.style.width = '0%';
-        }
-
-        async function runDiagRecording(isPingOnly = false) {
-          const expectedTarget = (currentWord && currentWord.word ? currentWord.word : 'hello').trim();
-
-          transcriptBox.style.display = 'block';
-          transcriptBox.innerHTML = isPingOnly
-            ? `<span style="color: #0284c7; font-weight: 700;">🟡 Запись (2.5 сек)... Проверяю связь без AI</span>`
-            : `<span style="color: #d97706; font-weight: 700;">🟡 Запись (2.5 сек)... Чётко скажите: «${expectedTarget}»!</span>`;
-
-          startBtn.disabled = true;
-          pingBtn.disabled = true;
-          if (isPingOnly) {
-            pingBtn.textContent = 'Ping...';
-          } else {
-            startBtn.textContent = 'Слушаю...';
-          }
-
-          try {
-            let testStream = diagStream;
-            if (!testStream || !testStream.active) {
-              testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-              diagStream = testStream;
-            }
-
-            let testOptions = {};
-            if (supportedMimeType) testOptions.mimeType = supportedMimeType;
-
-            try {
-              diagRecorder = new MediaRecorder(testStream, testOptions);
-            } catch (e) {
-              diagRecorder = new MediaRecorder(testStream);
-            }
-
-            diagChunks = [];
-            diagRecorder.ondataavailable = (e) => {
-              if (e.data && e.data.size > 0) diagChunks.push(e.data);
-            };
-
-            diagRecorder.onstop = async () => {
-              await new Promise((r) => setTimeout(r, 80));
-              testStream.getTracks().forEach((t) => t.stop());
-              transcriptBox.innerHTML = isPingOnly ? '⏳ Проверяю связь с сервером (Ping)...' : '⏳ Проверяю через AI Gemini...';
-
-              const mime = diagRecorder.mimeType || supportedMimeType || 'audio/webm';
-              const blob = new Blob(diagChunks, { type: mime });
-
-              const inspect = await inspectAudioBlob(blob);
-              console.log('DIAG AUDIO INSPECT', inspect);
-
-              try {
-                if (isPingOnly) {
-                  const pingRes = await transcribePingAudio(blob, mime, expectedTarget);
-                  const keysInfo = pingRes.keysFoundCount !== undefined
-                    ? `🔑 Ключей Gemini на сервере: <strong>${pingRes.keysFoundCount}</strong> (${pingRes.keysPreview || ''})<br>`
-                    : '';
-                  transcriptBox.innerHTML = `
-                    <span style="color: #16a34a; font-weight: 700;">⚡ Ping успешен!</span><br>
-                    <span style="font-size: 13px; color: var(--text-main);">
-                      ${keysInfo}
-                      Размер: <strong>${Math.round(blob.size / 1024 * 10) / 10} КБ</strong> | Длительность: <strong>${inspect.duration}с</strong> (${blob.type})<br>
-                      Клиентский Roundtrip: <strong>${pingRes.totalClientMs} мс</strong> | Серверный парсинг: <strong>${pingRes.serverParseMs} мс</strong>
-                    </span>
-                  `;
-                } else {
-                  const res = await transcribeAudio(blob, mime, expectedTarget);
-                  const heardWord = (res && (res.transcribed || res.heard || res.text)) || '';
-                  if (heardWord) {
-                    const scoreHtml = res.score !== undefined ? ` (Точность: <strong>${res.score}%</strong>)` : '';
-                    const fbHtml = res.feedback ? `<br><span style="font-size: 13px; color: #16a34a; font-style: italic;">💡 ${res.feedback}</span>` : '';
-                    let timeInfo = '';
-                    if (res.timings) {
-                      const totalSec = Math.round((res.timings.totalClientMs || res.timings.totalServerMs || 0) / 100) / 10;
-                      const geminiSec = Math.round((res.timings.geminiMs || 0) / 100) / 10;
-                      timeInfo = `<br><span style="font-size: 12px; color: var(--text-muted);">⏱️ Время: ${totalSec}с (Gemini: ${geminiSec}с, модель: ${res.modelUsed || '3.5-transcribe'})</span>`;
-                    }
-                    let debugInfo = '';
-                    if (res.debug) {
-                      debugInfo = `<br><span style="font-size: 11px; color: var(--text-muted);">Размер: ${Math.round(blob.size / 1024 * 10) / 10}КБ, ${inspect.duration}с | Raw: "${res.debug.rawText || ''}"</span>`;
-                    }
-                    transcriptBox.innerHTML = `Услышано AI: <strong style="color: #16a34a; font-size: 16px;">«${heardWord}»</strong>${scoreHtml}${fbHtml}${timeInfo}${debugInfo}`;
-                  } else {
-                    let debugInfo = '';
-                    if (res && res.debug) {
-                      debugInfo = `<br><span style="font-size: 11px; color: var(--text-muted);">Аудио: ${Math.round(blob.size / 1024 * 10) / 10}КБ, ${inspect.duration}с | Raw: "${res.debug.rawText || ''}" (${res.modelUsed})</span>`;
-                    }
-                    transcriptBox.innerHTML =
-                      `<span style="color: var(--text-muted);">Голос не распознан. Попробуйте произнести громче «${expectedTarget}».</span>${debugInfo}`;
-                  }
-                }
-              } catch (transErr) {
-                transcriptBox.innerHTML = `<span style="color: #ef4444; font-weight: 600;">Ошибка: ${transErr.message}</span>`;
-              }
-
-              startBtn.disabled = false;
-              pingBtn.disabled = false;
-              startBtn.textContent = 'Test AI';
-              pingBtn.textContent = 'Ping';
-            };
-
-            // One-shot запись без timeslice
-            diagRecorder.start();
-
-            setTimeout(() => {
-              if (diagRecorder && diagRecorder.state === 'recording') {
-                diagRecorder.stop();
-              }
-            }, 2500);
-          } catch (err) {
-            transcriptBox.innerHTML = `<span style="color: #ef4444;">Ошибка микрофона: ${err.message}</span>`;
-            startBtn.disabled = false;
-            pingBtn.disabled = false;
-            startBtn.textContent = 'Test AI';
-            pingBtn.textContent = 'Ping';
-          }
-        }
-
-        startBtn.addEventListener('click', () => runDiagRecording(false));
-        pingBtn.addEventListener('click', () => runDiagRecording(true));
-
-        function cleanupDiag() {
-          stopDiagSensorStreams();
-          if (diagRecorder && diagRecorder.state === 'recording') {
-            try {
-              diagRecorder.stop();
-            } catch (e) {}
-          }
-          modalEl.remove();
-        }
-
-        closeBtn.addEventListener('click', cleanupDiag);
-        modalEl.addEventListener('click', (e) => {
-          if (e.target === modalEl) cleanupDiag();
-        });
-      }
-
-      async function evaluateSpeech(alternatives, forceCorrect = false) {
-        if (isCompleted) return;
-        clearAllTimers();
-        isProcessing = true;
-        const isMatch = forceCorrect || checkSpeechMatch(alternatives, currentWord.word);
-
-        if (isMatch) {
-          isCompleted = true;
-          playSuccessSound();
-          micBtn.classList.remove('listening', 'processing', 'ai-thinking');
-          micBtn.classList.add('success');
-          micBtn.innerHTML = '✓';
-          if (holdHint) {
-            holdHint.innerHTML = `<span style="color: #16a34a; font-weight: 700; font-size: 16px;">${t('train_speech_correct')}</span>`;
-          }
-
-          await saveProgress(currentWord.id, true, 'quiz', { isFavPractice });
-          if (continueBtn) {
-            continueBtn.style.display = 'block';
-            continueBtn.onclick = () => onNext();
-          }
-          if (fallbackBtn) fallbackBtn.style.display = 'none';
-        } else {
-          // РЕАЛЬНАЯ ошибка произношения – списываем попытку
-          speechAttempts++;
-          micBtn.classList.remove('listening', 'processing', 'ai-thinking');
-
-          if (speechAttempts < 5) {
-            micBtn.innerHTML = '🎙️';
-            if (holdHint) {
-              holdHint.innerHTML = t('train_try_n_of_m', { n: speechAttempts, m: 5 });
-            }
-            setTimeout(() => {
-              isProcessing = false;
-            }, 1200);
-          } else {
-            isCompleted = true;
-            micBtn.disabled = true;
-            micBtn.classList.add('wrong');
-            micBtn.innerHTML = '❌';
-
-            if (holdHint) {
-              holdHint.innerHTML = `<span style="color: #ef4444; font-weight: 700;">${t('train_penalty_xp')} <strong>${escapeHtml(currentWord.word)}</strong></span>`;
-            }
-            await saveProgress(currentWord.id, false, 'quiz', { isFavPractice });
-            if (continueBtn) {
-              continueBtn.style.display = 'block';
-              continueBtn.onclick = () => onNext();
-            }
-            if (fallbackBtn) fallbackBtn.style.display = 'none';
-          }
-        }
-      }
-
-      micBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isProcessing || isCompleted) return;
-        if (isListening) {
-          stopAndTranscribe();
-        } else {
-          startSpeechSession();
-        }
-      });
+      renderConsonantsQuiz();
     }
 
     function renderConsonantsQuiz() {
@@ -2056,7 +1138,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (allCorrect) {
               playSuccessSound();
               speakWord(currentWord.word, currentWord.id);
-              await saveProgress(currentWord.id, true, 'quiz', { isFavPractice });
+              await saveProgress(currentWord.id, true, 'quiz', {
+                isFavPractice,
+                isSingleRemaining: isSingleWordMode,
+              });
               onNextAfterSpeech(onNext, 1000, 8000);
             } else {
               focusNext(index);
@@ -2415,7 +1500,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           curLeft.classList.add('matched');
           curRight.classList.add('matched');
 
-          await saveProgress(leftId, true, 'pairs', { isFavPractice });
+          const isLastPairInRound = (matchedCount + 1 === totalPairs);
+
+          await saveProgress(leftId, true, 'pairs', {
+            isFavPractice,
+            roundComplete: isLastPairInRound && !isFavPractice,
+            perfectRound: isLastPairInRound && (errorsInRound === 0) && !isFavPractice,
+          });
           matchedCount++;
 
           if (matchedCount === totalPairs) {
@@ -2438,13 +1529,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               }, idx * 80);
             });
 
-            setTimeout(async () => {
+            setTimeout(() => {
               if (errorsInRound === 0 && !isFavPractice) {
                 playCoinDropSound();
-                try {
-                  const uid = (typeof getEffectiveUserId === 'function') ? getEffectiveUserId() : null;
-                  if (typeof addWeeklyXP === 'function') addWeeklyXP(5, uid);
-                } catch (e) {}
               }
             }, 1350);
 
@@ -2773,12 +1860,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       } else {
         input.classList.add('wrong');
         feedback.style.display = 'block';
-        feedback.innerHTML = `
-          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
-          <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
-            ${escapeHtml(currentWord.word)}
-          </div>
-        `;
 
         const favBtn = container.querySelector('#fav-toggle-btn');
         if (favBtn) {
@@ -2798,39 +1879,159 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         (activeWords && activeWords.length <= 1)
       );
 
-      saveProgress(currentWord.id, isCorrect, 'input', {
-        secondChanceFix: isSecondChanceFix,
-        isSingleRemaining: isSingleWordMode,
-        isFavPractice,
-      }).then((prog) => {
-        const inputCount = prog?.inputCorrect || (isCorrect ? 1 : 0);
-        if (isCorrect) {
+      if (isCorrect) {
+        saveProgress(currentWord.id, isCorrect, 'input', {
+          secondChanceFix: isSecondChanceFix,
+          isSingleRemaining: isSingleWordMode,
+          isFavPractice,
+        }).then((prog) => {
+          const inputCount = prog?.inputCorrect || 1;
           if ((prog?.mastered || inputCount >= 2) && !favorited) {
             feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">${t('train_word_mastered')}</div>`;
           }
+        }).catch((e) => console.warn(e));
+
+        const minDelay = 1600;
+        const maxWait = 3500;
+        const isFinalCard = (isSingleWordMode && isCorrect) || (isLastWord && isCorrect && activeWords.length <= 1);
+        if (isFinalCard) {
+          window._trainingRoundJustCompleted = true;
         }
+        onNextAfterSpeech(onNext, minDelay, maxWait);
+      } else {
+        // MISTAKE LOGIC: Check AdMob Shield availability
         if (isManyMistakes) {
           favorited = true;
           toggleFavoriteApi(currentWord.id, true).catch(() => {});
           onFavoriteToggle(currentWord.id, true);
-        } else if (prog?.autoFavorited) {
-          favorited = true;
-          onFavoriteToggle(currentWord.id, true);
         }
-      }).catch((e) => console.warn(e));
 
-      // 3. EXTENDED DISPLAY DURATION FOR MISTAKES (4200ms)
-      // For correct answers: 1600ms
-      // For wrong answers: 4200ms so user has ample time to review and memorize correct spelling
-      const minDelay = isCorrect ? 1600 : 4200;
-      const maxWait = isCorrect ? 3500 : 7000;
+        const shieldsLeft = typeof AdService !== 'undefined' ? AdService.getShieldsRemaining() : 0;
+        const isOnline = typeof AdService !== 'undefined' ? AdService.isOnline() : true;
 
-      const isFinalCard = (isSingleWordMode && isCorrect) || (isLastWord && isCorrect && activeWords.length <= 1);
-      if (isFinalCard) {
-        window._trainingRoundJustCompleted = true;
+        if (shieldsLeft > 0 && isOnline) {
+          // Rule 2: Offer Shield via Rewarded Ad (2 shields max per round)
+          feedback.innerHTML = `
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
+              ${escapeHtml(currentWord.word)}
+            </div>
+            <div class="test-shield-offer-box" style="margin-top: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%;">
+              <button type="button" class="primary-button btn-orange" id="btn-claim-ad-shield" style="min-height: 44px; height: 44px; padding: 0 16px; font-size: 14px; font-weight: 700; width: 100%; max-width: 290px; box-shadow: 0 4px 14px rgba(230,81,0,0.3); border-radius: 12px; cursor: pointer;">
+                ${t('train_shield_btn')}
+              </button>
+              <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">
+                ${(t('train_shield_remaining') || 'Осталось спасений: {n}/2').replace('{n}', shieldsLeft)}
+              </div>
+              <button type="button" class="btn-text-subtle" id="btn-skip-ad-shield" style="background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px; text-decoration: underline;">
+                ${t('train_shield_continue')}
+              </button>
+            </div>
+          `;
+
+          let handled = false;
+          let autoSkipTimer = null;
+
+          const finalizeMistake = (shieldUsed, penaltyOverride) => {
+            if (handled) return;
+            handled = true;
+            if (autoSkipTimer) clearTimeout(autoSkipTimer);
+
+            saveProgress(currentWord.id, false, 'input', {
+              shieldUsed,
+              penaltyOverride,
+              isSingleRemaining: isSingleWordMode,
+              isFavPractice,
+            }).catch((e) => console.warn(e));
+
+            onNext({ repeatSoon: true });
+          };
+
+          const claimBtn = feedback.querySelector('#btn-claim-ad-shield');
+          const skipBtn = feedback.querySelector('#btn-skip-ad-shield');
+
+          if (claimBtn) {
+            claimBtn.addEventListener('click', async () => {
+              if (handled) return;
+              claimBtn.disabled = true;
+              claimBtn.textContent = '...';
+
+              try {
+                const res = await AdService.showShieldRewardedAd();
+                if (res && res.rewardEarned) {
+                  feedback.innerHTML = `
+                    <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
+                    <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
+                      ${escapeHtml(currentWord.word)}
+                    </div>
+                    <div style="font-size: 18px; font-weight: 800; color: #16a34a; margin-top: 14px;">
+                      ${t('train_shield_saved')}
+                    </div>
+                  `;
+                  try { playSuccessSound(); } catch (e) {}
+                  setTimeout(() => {
+                    finalizeMistake(true, 0);
+                  }, 1200);
+                  return;
+                }
+              } catch (e) {
+                console.warn(e);
+              }
+              finalizeMistake(false, -20);
+            });
+          }
+
+          if (skipBtn) {
+            skipBtn.addEventListener('click', () => {
+              finalizeMistake(false, -20);
+            });
+          }
+
+          autoSkipTimer = setTimeout(() => {
+            finalizeMistake(false, -20);
+          }, 10000);
+
+        } else if (shieldsLeft > 0 && !isOnline) {
+          // Rule 3: Graceful Fallback offline -> -10 XP
+          feedback.innerHTML = `
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
+              ${escapeHtml(currentWord.word)}
+            </div>
+            <div style="font-size: 13px; font-weight: 600; color: #f59e0b; margin-top: 10px;">
+              ${t('train_offline_penalty')}
+            </div>
+          `;
+
+          saveProgress(currentWord.id, false, 'input', {
+            isOfflineFallback: true,
+            isSingleRemaining: isSingleWordMode,
+            isFavPractice,
+          }).catch((e) => console.warn(e));
+
+          onNextAfterSpeech(() => onNext({ repeatSoon: true }), 4200, 7000);
+
+        } else {
+          // Rule 1 & 2: Shields exhausted -> standard -20 XP without ad delay
+          feedback.innerHTML = `
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
+            <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
+              ${escapeHtml(currentWord.word)}
+            </div>
+            <div style="font-size: 15px; font-weight: 700; color: var(--error-color, #dc2626); margin-top: 8px;">
+              ${t('train_penalty_20xp')}
+            </div>
+          `;
+
+          saveProgress(currentWord.id, false, 'input', {
+            penaltyOverride: -20,
+            isSingleRemaining: isSingleWordMode,
+            isFavPractice,
+          }).catch((e) => console.warn(e));
+
+          onNextAfterSpeech(() => onNext({ repeatSoon: true }), 4200, 7000);
+        }
       }
-
-      onNextAfterSpeech(onNext, minDelay, maxWait);
     };
 
     checkBtn.addEventListener('click', handleCheck);
@@ -3259,7 +2460,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       async function runAutoplayCycle() {
         if (!window.__favsAutoplayRunning) return;
         requestScreenWakeLock();
-        startSilentAudioAnchor();
         const translation = getWordTranslation(currentWord);
         updateNativeBackgroundPlayback(currentWord.word, translation, true);
         updateMediaSessionStatus(true, currentWord, translation);
@@ -3349,7 +2549,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (window.__favsAutoplayStartTimeout) clearTimeout(window.__favsAutoplayStartTimeout);
             stopAllAudio();
-            stopSilentAudioAnchor();
             const translation = getWordTranslation(currentWord);
             updateNativeBackgroundPlayback(currentWord.word, translation, false);
             releaseScreenWakeLock();
@@ -3365,7 +2564,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             window.__favsAutoplayRunning = true;
             window.__favsAutoplayCycleId = (window.__favsAutoplayCycleId || 0) + 1;
             requestScreenWakeLock();
-            startSilentAudioAnchor();
             const translation = getWordTranslation(currentWord);
             startNativeBackgroundPlayback(currentWord.word, translation);
             updateMediaSessionStatus(true, currentWord, translation);

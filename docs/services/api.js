@@ -1308,8 +1308,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
           prog.roundPairsDone = true;
         }
       }
-      if (options && options.perfectRound) {
-        xpDelta = 5; // +5 XP for complete group of pairs without mistakes
+      if (options && (options.roundComplete || options.perfectRound)) {
+        xpDelta = 5; // +5 XP for completing a set of pairs
       }
     } else {
       prog.error = (prog.error || 0) + 1;
@@ -1364,7 +1364,15 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
       }
-      xpDelta = -5; // -5 XP for wrong word typing
+      if (options && options.shieldUsed) {
+        xpDelta = 0; // Shield used: penalty eliminated by AdMob rewarded video!
+      } else if (options && options.isOfflineFallback) {
+        xpDelta = -10; // Graceful offline/ad-unavailable fallback: -10 XP instead of -20 XP
+      } else if (options && typeof options.penaltyOverride === 'number') {
+        xpDelta = options.penaltyOverride;
+      } else {
+        xpDelta = -20; // Major mistake standard penalty: -20 XP
+      }
     }
   }
 
