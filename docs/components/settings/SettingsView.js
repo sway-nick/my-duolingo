@@ -103,6 +103,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="sv">Svenska</div>
             <div class="dropdown-item" data-value="tr">Türkçe</div>
             <div class="dropdown-item" data-value="uk">Українська</div>
+            <div class="dropdown-item" data-value="hi">हिन्दी</div>
+            <div class="dropdown-item" data-value="ar">العربية</div>
+            <div class="dropdown-item" data-value="id">Bahasa Indonesia</div>
+            <div class="dropdown-item" data-value="vi">Tiếng Việt</div>
+            <div class="dropdown-item" data-value="th">ไทย</div>
+            <div class="dropdown-item" data-value="ko">한국어</div>
+            <div class="dropdown-item" data-value="ja">日本語</div>
           </div>
         </div>
       </div>
@@ -398,6 +405,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     hr: 'Hrvatski',
     ga: 'Gaeilge',
     mt: 'Malti',
+    hi: 'हिन्दी',
+    ar: 'العربية',
+    id: 'Bahasa Indonesia',
+    vi: 'Tiếng Việt',
+    th: 'ไทย',
+    ko: '한국어',
+    ja: '日本語',
   };
 
   const currentLang = getInterfaceLanguage();
