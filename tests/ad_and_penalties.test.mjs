@@ -87,7 +87,10 @@ test('6. Minimum Boundary: Weekly XP never drops below 0 despite multiple -20 XP
 
 test('7. AdService: Shield limits and round lifecycle', () => {
   AdService.resetRoundShields();
-  assert.equal(AdService.getShieldsRemaining(), 2, 'Initial shields in round must be 2');
+  assert.equal(AdService.getShieldsRemaining(), 3, 'Initial shields in round must be 3');
+
+  AdService.shieldsUsedInRound++;
+  assert.equal(AdService.getShieldsRemaining(), 2, '2 shields remaining');
 
   AdService.shieldsUsedInRound++;
   assert.equal(AdService.getShieldsRemaining(), 1, '1 shield remaining');
@@ -97,7 +100,7 @@ test('7. AdService: Shield limits and round lifecycle', () => {
   assert.equal(AdService.canUseShield(), false, 'Cannot use shield when 0 remain');
 
   AdService.resetRoundShields();
-  assert.equal(AdService.getShieldsRemaining(), 2, 'Resets back to 2 shields for new round');
+  assert.equal(AdService.getShieldsRemaining(), 3, 'Resets back to 3 shields for new round');
 });
 
 test('8. AdService Config: Verifies correct AdMob App ID and Ad Unit IDs', () => {

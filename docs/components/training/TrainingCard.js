@@ -1910,7 +1910,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const isOnline = typeof AdService !== 'undefined' ? AdService.isOnline() : true;
 
         if (shieldsLeft > 0 && isOnline) {
-          // Rule 2: Offer Shield via Rewarded Ad (2 shields max per round)
+          // Rule 2: Offer Shield via Rewarded Ad (3 shields max per round)
           feedback.innerHTML = `
             <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
             <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
@@ -1921,7 +1921,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 ${t('train_shield_btn')}
               </button>
               <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">
-                ${(t('train_shield_remaining') || 'Осталось спасений: {n}/2').replace('{n}', shieldsLeft)}
+                ${(t('train_shield_remaining') || 'Осталось спасений: {n}/3').replace('{n}', shieldsLeft)}
               </div>
               <button type="button" class="btn-text-subtle" id="btn-skip-ad-shield" style="background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px; text-decoration: underline;">
                 ${t('train_shield_continue')}
