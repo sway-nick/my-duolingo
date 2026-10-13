@@ -7,6 +7,17 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J1YTNL2LZX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-J1YTNL2LZX', {
+        cookie_flags: 'SameSite=None;Secure',
+        send_page_view: true
+      });
+    </script>
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
@@ -20,6 +31,21 @@
           );
           if (isAndroid) {
             document.documentElement.classList.add('is-android-app');
+          }
+        } catch (e) {}
+        try {
+          var userLang = (localStorage.getItem('myduo_interface_lang') || '').toLowerCase();
+          if (!userLang && navigator.languages && navigator.languages.length > 0) {
+            userLang = (navigator.languages[0] || '').toLowerCase().split(/[-_]/)[0];
+          }
+          if (userLang === 'ar') {
+            document.documentElement.setAttribute('dir', 'rtl');
+            document.documentElement.setAttribute('lang', 'ar');
+            document.documentElement.classList.add('is-rtl');
+          } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+            if (userLang) document.documentElement.setAttribute('lang', userLang);
+            document.documentElement.classList.remove('is-rtl');
           }
         } catch (e) {}
         try {
@@ -173,6 +199,25 @@
       import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=385.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=385.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=385.0';
+      import { AdService } from './services/adService.js?v=385.0';
+
+      // Initialize AdMob service
+      try {
+        AdService.init().catch(() => {});
+      } catch (e) {}
+
+      // Reset irregular verbs and UK audio download flags once so user can test AdMob rewarded video in both places
+      try {
+        if (!localStorage.getItem('myduo_admob_audio_test_reset_v2')) {
+          localStorage.setItem('myduo_admob_audio_test_reset_v2', 'true');
+          localStorage.removeItem('myduo_cat_downloaded_us_irregular verb');
+          localStorage.removeItem('myduo_cat_downloaded_us_irregular verbs');
+          localStorage.removeItem('myduo_cat_downloaded_uk_irregular verb');
+          localStorage.removeItem('myduo_cat_downloaded_uk_irregular verbs');
+          localStorage.removeItem('myduo_cat_downloaded_uk_elementary');
+          localStorage.removeItem('myduo_pack_uk_downloaded');
+        }
+      } catch (e) {}
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -346,7 +391,7 @@
               </div>
               <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div id="cat-modal-actions" style="display: flex; flex-direction: column; gap: 8px;">
               <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
                 ${strings.downloadBtn}
               </button>
@@ -364,12 +409,31 @@
         const progressBar = modal.querySelector('#cat-progress-bar');
         const progressText = modal.querySelector('#cat-progress-text');
         const descEl = modal.querySelector('#cat-modal-desc');
+        const actionsWrap = modal.querySelector('#cat-modal-actions');
 
         cancelBtn.addEventListener('click', () => { modal.remove(); });
 
         downloadBtn.addEventListener('click', async () => {
           downloadBtn.disabled = true;
-          cancelBtn.style.display = 'none';
+          const prevBtnText = downloadBtn.innerHTML;
+          downloadBtn.innerHTML = '⏳ Загрузка видео...';
+
+          // 1. Show Rewarded Ad if online
+          if (window.AdService && AdService.isOnline()) {
+            try {
+              const adRes = await AdService.showLanguagePackRewardedAd('UK Accent');
+              // If ad was shown but dismissed early without reward
+              if (adRes && adRes.success && !adRes.rewardEarned) {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = prevBtnText;
+                return;
+              }
+            } catch (adErr) {
+              console.warn('UK accent ad error (proceeding gracefully):', adErr);
+            }
+          }
+
+          if (actionsWrap) actionsWrap.style.display = 'none';
           progressWrap.style.display = 'block';
           if (descEl) descEl.style.display = 'none';
           try {
@@ -380,6 +444,7 @@
             modal.remove();
           } catch (err) {
             console.warn('UK accent download failed:', err);
+            if (actionsWrap) actionsWrap.style.display = 'flex';
             downloadBtn.disabled = false;
             cancelBtn.style.display = 'block';
             if (descEl) descEl.style.display = 'block';
@@ -997,6 +1062,9 @@
                 pushUserDataToCloud(null, null, true);
               } catch (e) {}
               playFanfareSound();
+              try {
+                AdService.showRoundFinishInterstitial().catch(() => {});
+              } catch (e) {}
             }
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
@@ -1513,7 +1581,7 @@
                         </div>
                         <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
                       </div>
-                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <div id="cat-modal-actions" style="display: flex; flex-direction: column; gap: 8px;">
                         <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
                           ${strings.downloadBtn}
                         </button>
@@ -1531,6 +1599,7 @@
                   const progressBar = modal.querySelector('#cat-progress-bar');
                   const progressText = modal.querySelector('#cat-progress-text');
                   const descEl = modal.querySelector('#cat-modal-desc');
+                  const actionsWrap = modal.querySelector('#cat-modal-actions');
 
                   cancelBtn.addEventListener('click', () => {
                     modal.remove();
@@ -1538,7 +1607,25 @@
 
                   downloadBtn.addEventListener('click', async () => {
                     downloadBtn.disabled = true;
-                    cancelBtn.style.display = 'none';
+                    const prevBtnText = downloadBtn.innerHTML;
+                    downloadBtn.innerHTML = '⏳ Загрузка видео...';
+
+                    // 1. Show Rewarded Ad if online
+                    if (window.AdService && AdService.isOnline()) {
+                      try {
+                        const adRes = await AdService.showLanguagePackRewardedAd(details.title || chosenCat);
+                        // If ad was shown but dismissed early without reward
+                        if (adRes && adRes.success && !adRes.rewardEarned) {
+                          downloadBtn.disabled = false;
+                          downloadBtn.innerHTML = prevBtnText;
+                          return;
+                        }
+                      } catch (adErr) {
+                        console.warn('Category voice ad error (proceeding gracefully):', adErr);
+                      }
+                    }
+
+                    if (actionsWrap) actionsWrap.style.display = 'none';
                     progressWrap.style.display = 'block';
                     if (descEl) descEl.style.display = 'none';
                     try {
@@ -1561,6 +1648,7 @@
                       renderTrainingTab();
                     } catch (err) {
                       console.warn('Category voice download failed:', err);
+                      if (actionsWrap) actionsWrap.style.display = 'flex';
                       downloadBtn.disabled = false;
                       cancelBtn.style.display = 'block';
                       if (descEl) descEl.style.display = 'block';
@@ -1681,7 +1769,10 @@
           if (currentMethod === 'input') return (p.inputCorrect || 0) < 2 && !p.roundTestDone && !isWordMastered(p);
           return true;
         });
-        const isSingleRemainingWord = unfinishedInQueue.length <= 1 || (currentMethod === 'input' && testQueue.length <= 1);
+        const isSingleRemainingWord =
+          unfinishedInQueue.length <= 1 ||
+          (currentMethod === 'input' && testQueue.length <= 1) ||
+          (currentMethod === 'quiz' && quizQueue.length <= 1);
 
         if (isFavPracticeActive && currentWordIndex >= activeWords.length) {
           if (window.__favsAutoplayRunning) {
@@ -1701,6 +1792,16 @@
           if (testQueue.length === 0 || unfinishedInQueue.length === 0) {
             window._trainingRoundJustCompleted = true;
             window._showHubScreen = true;
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          } else {
+            currentWordIndex = 0;
+          }
+        }
+
+        if (!isFavPracticeActive && currentMethod === 'quiz' && currentWordIndex >= activeWords.length) {
+          if (quizQueue.length === 0 || unfinishedInQueue.length === 0) {
             currentWordIndex = 0;
             renderTrainingTab();
             return;
@@ -1743,7 +1844,6 @@
           onMethodChange: (newMethod) => {
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
-            stopSilentAudioAnchor();
             stopNativeBackgroundPlayback();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -1761,7 +1861,6 @@
           onCategoryChange: (newCategory) => {
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
-            stopSilentAudioAnchor();
             stopNativeBackgroundPlayback();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -1826,12 +1925,18 @@
         navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === tabName));
         const content = document.querySelector('#app-content');
 
+        // Banner management: show strictly in Stats (no audio conflict)
+        if (tabName === 'stats') {
+          try { AdService.showBottomBanner(); } catch (e) {}
+        } else {
+          try { AdService.hideBottomBanner(); } catch (e) {}
+        }
+
         if (tabName !== 'training') {
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           window.__favsAutoplayRunning = false;
           releaseScreenWakeLock();
-          stopSilentAudioAnchor();
           stopNativeBackgroundPlayback();
           if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
           if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
