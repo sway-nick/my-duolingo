@@ -143,7 +143,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
 
             case ACTION_SPEAK:
                 WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                if (curWord != null && !curWord.word.isEmpty()) {
+                if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
                     WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
                 } else {
                     if (onAudioDone != null) onAudioDone.run();
@@ -174,7 +174,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                             && WidgetDataManager.isWithinSpeakHours(context)
                             && !WidgetAudioPlayer.isSystemAudioBusy(context)) {
                         WidgetDataManager.WidgetWord w = WidgetDataManager.getCurrentWord(context);
-                        if (w != null && !w.word.isEmpty()) {
+                        if (w != null && !w.word.isEmpty() && !"fav_empty".equals(w.id)) {
                             WidgetAudioPlayer.playWord(context, w.word, onAudioDone);
                             break;
                         }
@@ -293,8 +293,9 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 );
             }
 
-            // Favorite Counter: справа от динамика (показывается только в 4x2+ если есть фавориты)
-            if (!isCompact1Row && WidgetDataManager.hasUserFavorites(context)) {
+            // Favorite Counter: справа от динамика (показывается только в 4x2+ если есть реальные фавориты)
+            boolean isFavEmpty = "fav_empty".equals(word.id);
+            if (!isCompact1Row && WidgetDataManager.hasUserFavorites(context) && !isFavEmpty) {
                 int totalFavs = WidgetDataManager.getTotalFavoritesCount(context);
                 int curFavIdx = WidgetDataManager.getCurrentFavoriteIndex(context);
                 if (totalFavs > 0) {
@@ -306,6 +307,9 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             } else {
                 views.setViewVisibility(R.id.widget_fav_counter, View.GONE);
             }
+
+            // Speaker button: hide on empty favorites card
+            views.setViewVisibility(R.id.widget_btn_speaker, isFavEmpty ? View.GONE : View.VISIBLE);
 
             // Rank Badge: слева от сердечка (показывается только в 4x2+, максимум топ-100, без '#')
             if (!isCompact1Row) {

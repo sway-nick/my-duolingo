@@ -204,7 +204,7 @@ public class WidgetDataManager {
         // Fallback: If list is empty (e.g. before first sync or 0 favorites), provide clear context
         if (list.isEmpty()) {
             if (hasFavs) {
-                list.add(new WidgetWord("fav_empty", "Favorites is Empty", "", "Добавьте слова в избранное в приложении", "FAVORITES", "Нажмите ❤️ в приложении", false, true));
+                list.add(new WidgetWord("fav_empty", "No Favorites Yet", "", "Добавьте слова в избранное в приложении", "FAVORITES", "Нажмите ❤️ в приложении", false, true));
             } else {
                 list.add(new WidgetWord("w_know", "Knowledge", "/ˈnɒl.ɪdʒ/", "Знание, познания", "ELEMENTARY", "Knowledge is power.", false, true));
                 list.add(new WidgetWord("w_opp", "Opportunity", "/ˌɒp.əˈtjuː.nə.ti/", "Возможность, удобный случай", "INTERMEDIATE", "Every day brings new opportunities.", false, true));
