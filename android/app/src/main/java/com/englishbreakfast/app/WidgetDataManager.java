@@ -51,8 +51,13 @@ public class WidgetDataManager {
         public String level;
         public String example;
         public boolean isFavorite;
+        public boolean isFallback;
 
         public WidgetWord(String id, String word, String transcription, String translation, String level, String example, boolean isFavorite) {
+            this(id, word, transcription, translation, level, example, isFavorite, false);
+        }
+
+        public WidgetWord(String id, String word, String transcription, String translation, String level, String example, boolean isFavorite, boolean isFallback) {
             this.id = id != null ? id : word;
             this.word = word != null ? word : "";
             this.transcription = transcription != null ? transcription : "";
@@ -60,6 +65,7 @@ public class WidgetDataManager {
             this.level = level != null && !level.isEmpty() ? level.toUpperCase() : "ELEMENTARY";
             this.example = example != null && !example.isEmpty() ? "«" + example.replaceAll("^[«\"']|[»\"']$", "") + "»" : "";
             this.isFavorite = isFavorite;
+            this.isFallback = isFallback;
         }
     }
 
@@ -197,11 +203,11 @@ public class WidgetDataManager {
 
         // Fallback: If list is empty (e.g. before first sync), provide starter category words
         if (list.isEmpty()) {
-            list.add(new WidgetWord("w_know", "Knowledge", "/ˈnɒl.ɪdʒ/", "Знание, познания", "ELEMENTARY", "Knowledge is power.", false));
-            list.add(new WidgetWord("w_opp", "Opportunity", "/ˌɒp.əˈtjuː.nə.ti/", "Возможность, удобный случай", "INTERMEDIATE", "Every day brings new opportunities.", false));
-            list.add(new WidgetWord("w_conf", "Confidence", "/ˈkɒn.fɪ.dəns/", "Уверенность, доверие", "INTERMEDIATE", "Practice builds your confidence.", false));
-            list.add(new WidgetWord("w_insp", "Inspiration", "/ˌɪn.spɪˈreɪ.ʃən/", "Вдохновение", "ELEMENTARY", "Find inspiration in small things.", false));
-            list.add(new WidgetWord("w_succ", "Success", "/səkˈses/", "Успех, удача", "ELEMENTARY", "Success comes with persistence.", false));
+            list.add(new WidgetWord("w_know", "Knowledge", "/ˈnɒl.ɪdʒ/", "Знание, познания", "ELEMENTARY", "Knowledge is power.", false, true));
+            list.add(new WidgetWord("w_opp", "Opportunity", "/ˌɒp.əˈtjuː.nə.ti/", "Возможность, удобный случай", "INTERMEDIATE", "Every day brings new opportunities.", false, true));
+            list.add(new WidgetWord("w_conf", "Confidence", "/ˈkɒn.fɪ.dəns/", "Уверенность, доверие", "INTERMEDIATE", "Practice builds your confidence.", false, true));
+            list.add(new WidgetWord("w_insp", "Inspiration", "/ˌɪn.spɪˈreɪ.ʃən/", "Вдохновение", "ELEMENTARY", "Find inspiration in small things.", false, true));
+            list.add(new WidgetWord("w_succ", "Success", "/səkˈses/", "Успех, удача", "ELEMENTARY", "Success comes with persistence.", false, true));
         }
 
         sCachedWords = new ArrayList<>(list);
@@ -216,7 +222,7 @@ public class WidgetDataManager {
     public static synchronized WidgetWord getCurrentWord(Context context) {
         List<WidgetWord> words = getWords(context);
         if (words.isEmpty()) {
-            return new WidgetWord("def", "English", "/ˈɪŋ.ɡlɪʃ/", "Английский язык", "A2", "Practice makes perfect", true);
+            return new WidgetWord("def", "English", "/ˈɪŋ.ɡlɪʃ/", "Английский язык", "A2", "Practice makes perfect", true, true);
         }
 
         SharedPreferences prefs = getPrefs(context);
@@ -274,7 +280,7 @@ public class WidgetDataManager {
 
     public static synchronized boolean toggleFavorite(Context context) {
         WidgetWord cur = getCurrentWord(context);
-        if (cur == null || cur.id == null) return false;
+        if (cur == null || cur.id == null || cur.isFallback) return false;
 
         SharedPreferences prefs = getPrefs(context);
         Set<String> unfavs = new HashSet<>(prefs.getStringSet(KEY_PENDING_UNFAVS, new HashSet<>()));

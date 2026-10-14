@@ -45,7 +45,7 @@
         <!-- Golden Card Interactive Home Screen Widget (4x1) -->
         <receiver
             android:name=".GoldCardWidgetProvider"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/widget_gold_card_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

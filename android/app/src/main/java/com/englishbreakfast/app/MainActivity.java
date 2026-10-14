@@ -39,6 +39,8 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.net.Uri;
 import android.provider.Settings;
+import android.webkit.WebView;
+import com.getcapacitor.WebViewListener;
 
 public class MainActivity extends BridgeActivity {
 
@@ -49,6 +51,36 @@ public class MainActivity extends BridgeActivity {
     private ActivityResultLauncher<Intent> googleSignInLauncher;
     private TextToSpeech tts;
     private boolean ttsInitialized = false;
+    private volatile boolean isPageOriginTrusted = true;
+
+    private void updateTrustedOriginState(WebView view) {
+        if (view == null) {
+            isPageOriginTrusted = false;
+            return;
+        }
+        String url = view.getUrl();
+        if (url == null || url.trim().isEmpty() || "about:blank".equalsIgnoreCase(url)) {
+            return;
+        }
+        try {
+            Uri uri = Uri.parse(url);
+            String scheme = uri.getScheme();
+            String host = uri.getHost();
+            if (host == null || scheme == null) {
+                isPageOriginTrusted = false;
+                return;
+            }
+            boolean hostOk = "localhost".equalsIgnoreCase(host);
+            boolean schemeOk = "https".equalsIgnoreCase(scheme) || "http".equalsIgnoreCase(scheme) || "capacitor".equalsIgnoreCase(scheme);
+            isPageOriginTrusted = hostOk && schemeOk;
+        } catch (Exception e) {
+            isPageOriginTrusted = false;
+        }
+    }
+
+    private boolean isTrustedOrigin() {
+        return isPageOriginTrusted;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +119,23 @@ public class MainActivity extends BridgeActivity {
         setupWidgetBridge();
         initNativeTts();
         lockWebViewTextZoom();
+
+        if (bridge != null) {
+            bridge.addWebViewListener(new WebViewListener() {
+                @Override
+                public void onPageStarted(WebView webView) {
+                    updateTrustedOriginState(webView);
+                }
+
+                @Override
+                public void onPageLoaded(WebView webView) {
+                    updateTrustedOriginState(webView);
+                }
+            });
+            if (bridge.getWebView() != null) {
+                updateTrustedOriginState(bridge.getWebView());
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -272,6 +321,7 @@ public class MainActivity extends BridgeActivity {
                 bridge.getWebView().addJavascriptInterface(new Object() {
                     @JavascriptInterface
                     public void setWindowThemeColor(final String themeOrColor) {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 boolean isDark = themeOrColor.equalsIgnoreCase("dark") || 
@@ -297,11 +347,13 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public float getStatusBarHeightDp() {
+                        if (!isTrustedOrigin()) return 0f;
                         return statusBarHeightDp > 0 ? statusBarHeightDp : 28f;
                     }
 
                     @JavascriptInterface
                     public float getNavigationBarHeightDp() {
+                        if (!isTrustedOrigin()) return 0f;
                         return navigationBarHeightDp >= 0 ? navigationBarHeightDp : 0f;
                     }
                 }, "AndroidThemeBridge");
@@ -330,11 +382,13 @@ public class MainActivity extends BridgeActivity {
                 bridge.getWebView().addJavascriptInterface(new Object() {
                     @JavascriptInterface
                     public boolean isAvailable() {
+                        if (!isTrustedOrigin()) return false;
                         return true;
                     }
 
                     @JavascriptInterface
                     public void signInWithGoogle() {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 if (googleSignInClient != null && googleSignInLauncher != null) {
@@ -353,6 +407,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void signOutGoogle() {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 if (googleSignInClient != null) {
@@ -521,6 +576,7 @@ public class MainActivity extends BridgeActivity {
                 bridge.getWebView().addJavascriptInterface(new Object() {
                     @JavascriptInterface
                     public void startBackgroundMode(final String word, final String translation) {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
@@ -539,6 +595,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void updateNotification(final String word, final String translation, final boolean isPlaying) {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
@@ -557,6 +614,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void stopBackgroundMode() {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 Intent intent = new Intent(MainActivity.this, BackgroundAudioService.class);
@@ -568,11 +626,13 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public boolean speakText(final String text, final String langCode, final String utteranceId) {
+                        if (!isTrustedOrigin()) return false;
                         return speakText(text, langCode, utteranceId, 1.0f);
                     }
 
                     @JavascriptInterface
                     public boolean speakText(final String text, final String langCode, final String utteranceId, final float speechRate) {
+                        if (!isTrustedOrigin()) return false;
                         if (text == null || text.trim().isEmpty()) {
                             return false;
                         }
@@ -621,6 +681,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void stopSpeech() {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 if (tts != null) {
@@ -638,30 +699,6 @@ public class MainActivity extends BridgeActivity {
         try {
             if (bridge != null && bridge.getWebView() != null) {
                 bridge.getWebView().addJavascriptInterface(new Object() {
-                    private boolean isTrustedOrigin() {
-                        try {
-                            if (bridge == null || bridge.getWebView() == null) return false;
-                            String url;
-                            if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
-                                url = bridge.getWebView().getUrl();
-                            } else {
-                                java.util.concurrent.FutureTask<String> task = new java.util.concurrent.FutureTask<>(() -> bridge.getWebView().getUrl());
-                                bridge.getWebView().post(task);
-                                url = task.get(300, java.util.concurrent.TimeUnit.MILLISECONDS);
-                            }
-                            if (url == null) return false;
-                            android.net.Uri uri = android.net.Uri.parse(url);
-                            String scheme = uri.getScheme();
-                            String host = uri.getHost();
-                            if (host == null || scheme == null) return false;
-                            boolean hostOk = "localhost".equalsIgnoreCase(host);
-                            boolean schemeOk = "https".equalsIgnoreCase(scheme) || "http".equalsIgnoreCase(scheme) || "capacitor".equalsIgnoreCase(scheme);
-                            return hostOk && schemeOk;
-                        } catch (Exception e) {
-                            return false;
-                        }
-                    }
-
                     @JavascriptInterface
                     public void syncFavorites(final String wordsJson) {
                         if (!isTrustedOrigin()) return;
