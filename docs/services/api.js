@@ -2058,14 +2058,18 @@ async function syncPendingWidgetFavorites() {
     // 1. Process pending unfavorites
     if (typeof window.AndroidWidgetBridge.getPendingUnfavorites === 'function') {
       const pendingStr = window.AndroidWidgetBridge.getPendingUnfavorites();
-      if (typeof window.AndroidWidgetBridge.clearPendingUnfavorites === 'function') {
-        window.AndroidWidgetBridge.clearPendingUnfavorites();
-      }
       if (pendingStr && pendingStr.length > 2) {
         const pendingArr = JSON.parse(pendingStr);
         if (Array.isArray(pendingArr) && pendingArr.length > 0) {
           for (const id of pendingArr) {
-            await toggleFavoriteApi(id, false);
+            try {
+              await toggleFavoriteApi(id, false);
+              if (typeof window.AndroidWidgetBridge.removePendingUnfavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingUnfavorite(id);
+              }
+            } catch (err) {
+              console.warn('[Widget] Failed to sync unfavorite id:', id, err);
+            }
           }
         }
       }
@@ -2074,14 +2078,18 @@ async function syncPendingWidgetFavorites() {
     // 2. Process pending favorites
     if (typeof window.AndroidWidgetBridge.getPendingFavorites === 'function') {
       const pendingFavStr = window.AndroidWidgetBridge.getPendingFavorites();
-      if (typeof window.AndroidWidgetBridge.clearPendingFavorites === 'function') {
-        window.AndroidWidgetBridge.clearPendingFavorites();
-      }
       if (pendingFavStr && pendingFavStr.length > 2) {
         const pendingFavArr = JSON.parse(pendingFavStr);
         if (Array.isArray(pendingFavArr) && pendingFavArr.length > 0) {
           for (const id of pendingFavArr) {
-            await toggleFavoriteApi(id, true);
+            try {
+              await toggleFavoriteApi(id, true);
+              if (typeof window.AndroidWidgetBridge.removePendingFavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingFavorite(id);
+              }
+            } catch (err) {
+              console.warn('[Widget] Failed to sync favorite id:', id, err);
+            }
           }
         }
       }
@@ -2137,7 +2145,8 @@ function syncFavoritesToNativeWidget(wordsList = null) {
         return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
       });
 
-      const fallbackList = catWords.length > 0 ? catWords : (allWords || []).slice(0, 50);
+      // Cap at 100 words to avoid massive SharedPreferences memory footprint and ANR
+      const fallbackList = (catWords.length > 0 ? catWords : (allWords || [])).slice(0, 100);
       exportWords = fallbackList.map(w => ({
         id: String(w.id || w.word),
         word: w.word || '',
