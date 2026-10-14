@@ -53,12 +53,7 @@ public class MainActivity extends BridgeActivity {
     private boolean ttsInitialized = false;
     private volatile boolean isPageOriginTrusted = true;
 
-    private void updateTrustedOriginState(WebView view) {
-        if (view == null) {
-            isPageOriginTrusted = false;
-            return;
-        }
-        String url = view.getUrl();
+    private void updateTrustedOriginState(String url) {
         if (url == null || url.trim().isEmpty() || "about:blank".equalsIgnoreCase(url)) {
             return;
         }
@@ -76,6 +71,14 @@ public class MainActivity extends BridgeActivity {
         } catch (Exception e) {
             isPageOriginTrusted = false;
         }
+    }
+
+    private void updateTrustedOriginState(WebView view) {
+        if (view == null) {
+            isPageOriginTrusted = false;
+            return;
+        }
+        updateTrustedOriginState(view.getUrl());
     }
 
     private boolean isTrustedOrigin() {
@@ -130,6 +133,11 @@ public class MainActivity extends BridgeActivity {
                 @Override
                 public void onPageLoaded(WebView webView) {
                     updateTrustedOriginState(webView);
+                }
+
+                @Override
+                public void onPageCommitVisible(WebView webView, String url) {
+                    updateTrustedOriginState(url);
                 }
             });
             if (bridge.getWebView() != null) {

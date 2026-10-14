@@ -281,11 +281,16 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 views.setViewPadding(R.id.widget_btn_next, 0, 0, 0, padBottom4x2);
             }
 
-            // Heart Icon state
-            views.setImageViewResource(
-                R.id.widget_btn_heart,
-                word.isFavorite ? R.drawable.ic_widget_heart_active : R.drawable.ic_widget_heart_inactive
-            );
+            // Heart Icon state: hide for fallback/starter words
+            if (word.isFallback) {
+                views.setViewVisibility(R.id.widget_btn_heart, View.GONE);
+            } else {
+                views.setViewVisibility(R.id.widget_btn_heart, View.VISIBLE);
+                views.setImageViewResource(
+                    R.id.widget_btn_heart,
+                    word.isFavorite ? R.drawable.ic_widget_heart_active : R.drawable.ic_widget_heart_inactive
+                );
+            }
 
             // Favorite Counter: справа от динамика (показывается только в 4x2+ если есть фавориты)
             if (!isCompact1Row && WidgetDataManager.hasUserFavorites(context)) {

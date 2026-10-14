@@ -222,7 +222,7 @@ public class WidgetDataManager {
     public static synchronized WidgetWord getCurrentWord(Context context) {
         List<WidgetWord> words = getWords(context);
         if (words.isEmpty()) {
-            return new WidgetWord("def", "English", "/ˈɪŋ.ɡlɪʃ/", "Английский язык", "A2", "Practice makes perfect", true, true);
+            return new WidgetWord("def", "English", "/ˈɪŋ.ɡlɪʃ/", "Английский язык", "A2", "Practice makes perfect", false, true);
         }
 
         SharedPreferences prefs = getPrefs(context);
