@@ -2050,6 +2050,12 @@ async function clearAllFavoritesApi() {
   pushUserDataToCloud(userId);
 }
 
+function isFallbackWordId(id) {
+  if (id === null || id === undefined) return true;
+  const s = String(id);
+  return s.startsWith('w_') || s === 'def';
+}
+
 let isSyncingPending = false;
 async function syncPendingWidgetFavorites() {
   if (isSyncingPending || !window.AndroidWidgetBridge) return;
@@ -2062,6 +2068,12 @@ async function syncPendingWidgetFavorites() {
         const pendingArr = JSON.parse(pendingStr);
         if (Array.isArray(pendingArr) && pendingArr.length > 0) {
           for (const id of pendingArr) {
+            if (isFallbackWordId(id)) {
+              if (typeof window.AndroidWidgetBridge.removePendingUnfavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingUnfavorite(id);
+              }
+              continue;
+            }
             try {
               await toggleFavoriteApi(id, false);
               if (typeof window.AndroidWidgetBridge.removePendingUnfavorite === 'function') {
@@ -2082,6 +2094,12 @@ async function syncPendingWidgetFavorites() {
         const pendingFavArr = JSON.parse(pendingFavStr);
         if (Array.isArray(pendingFavArr) && pendingFavArr.length > 0) {
           for (const id of pendingFavArr) {
+            if (isFallbackWordId(id)) {
+              if (typeof window.AndroidWidgetBridge.removePendingFavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingFavorite(id);
+              }
+              continue;
+            }
             try {
               await toggleFavoriteApi(id, true);
               if (typeof window.AndroidWidgetBridge.removePendingFavorite === 'function') {
