@@ -331,14 +331,22 @@ function getPreferredVoice(gender = 'female') {
 let currentAudioPlayer = null;
 const audioCache = new Map();
 
-const CDN_AUDIO_BASE = 'https://english-breakfast.pages.dev/assets/audio';
-// Mirrors tried in order; CDN_AUDIO_BASE remains the canonical CacheStorage key.
+const CDN_AUDIO_BASE = 'https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio';
+// High-speed CDN mirrors (jsDelivr, Fastly, Gcore, GitHub Pages, GitHub Raw).
+// pages.dev removed to prevent regional ISP blocks / timeouts.
 const CDN_AUDIO_MIRRORS = [
-  'https://sway-nick.github.io/my-duolingo/assets/audio',
-  'https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
   CDN_AUDIO_BASE,
+  'https://fastly.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
+  'https://gcore.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
+  'https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio',
 ];
 const AUDIO_CACHE_NAME = 'myduo_audio_cache_v1';
+const AUDIO_MIRROR_PREF_KEY = 'myduo_audio_mirror_pref';
+// Anything smaller is an error/block page, not a real mp3.
+const AUDIO_MIN_VALID_BYTES = 1000;
+// A pack is considered installed only if at least this share of its files is really in CacheStorage.
+const AUDIO_PACK_SUCCESS_THRESHOLD = 0.98;
+const mirrorFailStreak = new Map();
 
 function getAudioUrls(text, isUk) {
   const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
@@ -382,24 +390,56 @@ async function cacheAudioOnline(url) {
 }
 
 /**
- * Fetches an audio file trying every CDN mirror in order (some ISPs block individual domains,
- * e.g. *.pages.dev). `cdnUrl` is the canonical URL (also used as the CacheStorage key).
- * Returns the first successful Response or null.
+ * Mirrors ordered by "last one that worked first". Mirrors that failed 3+ times in a row during this
+ * session are skipped (so a blocked domain doesn't cost a timeout for every file).
  */
-async function fetchAudioFromMirrors(cdnUrl) {
+function getOrderedMirrors() {
+  let pref = null;
+  try { pref = localStorage.getItem(AUDIO_MIRROR_PREF_KEY); } catch (e) {}
+  let list = CDN_AUDIO_MIRRORS.slice();
+  if (pref && list.includes(pref)) list = [pref, ...list.filter((m) => m !== pref)];
+  const healthy = list.filter((m) => (mirrorFailStreak.get(m) || 0) < 3);
+  if (healthy.length > 0) return healthy;
+  mirrorFailStreak.clear();
+  return list;
+}
+
+/**
+ * Fetches an audio file trying every CDN mirror in order. `cdnUrl` is the canonical URL (also used
+ * as the CacheStorage key). A response is accepted only if it is a real audio payload (not an HTML
+ * block page of an ISP / captive portal). Returns a clean audio/mpeg Response or null.
+ */
+async function fetchAudioFromMirrors(cdnUrl, timeoutMs = 7000) {
   const path = cdnUrl.startsWith(CDN_AUDIO_BASE) ? cdnUrl.slice(CDN_AUDIO_BASE.length) : null;
-  const urls = path !== null ? CDN_AUDIO_MIRRORS.map(base => base + path) : [cdnUrl];
-  for (const url of urls) {
+  const bases = path !== null ? getOrderedMirrors() : [null];
+  for (const base of bases) {
+    const url = base === null ? cdnUrl : base + path;
     let timer = null;
+    let ok = false;
     try {
       const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      if (ctrl) timer = setTimeout(() => ctrl.abort(), 6000);
+      if (ctrl) timer = setTimeout(() => ctrl.abort(), timeoutMs);
       const resp = await fetch(url, { mode: 'cors', signal: ctrl ? ctrl.signal : undefined });
-      if (timer) clearTimeout(timer);
-      if (resp && resp.ok) return resp;
+      if (resp && resp.ok) {
+        const type = (resp.headers.get('content-type') || '').toLowerCase();
+        if (!type.includes('text/') && !type.includes('json')) {
+          const blob = await resp.blob();
+          if (blob.size >= AUDIO_MIN_VALID_BYTES) {
+            ok = true;
+            if (base !== null) {
+              mirrorFailStreak.delete(base);
+              try { localStorage.setItem(AUDIO_MIRROR_PREF_KEY, base); } catch (e) {}
+            }
+            if (timer) clearTimeout(timer);
+            return new Response(blob, { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
+          }
+        }
+      }
     } catch (e) {
-      if (timer) clearTimeout(timer);
+      // network error / timeout / CORS: try the next mirror
     }
+    if (timer) clearTimeout(timer);
+    if (!ok && base !== null) mirrorFailStreak.set(base, (mirrorFailStreak.get(base) || 0) + 1);
   }
   return null;
 }
@@ -468,51 +508,132 @@ function isCategoryAudioDownloaded(accent = 'us', category = 'Elementary') {
 }
 
 /**
- * Download voice pack in background with progress callback
+ * Ask the browser/WebView not to evict our CacheStorage under storage pressure.
+ */
+async function requestPersistentStorage() {
+  try {
+    if (typeof navigator !== 'undefined' && navigator.storage && navigator.storage.persist) {
+      if (navigator.storage.persisted && await navigator.storage.persisted()) return true;
+      return await navigator.storage.persist();
+    }
+  } catch (e) {}
+  return false;
+}
+
+/**
+ * Download voice pack in background with progress callback.
+ * Only studio mp3 files from our CDN mirrors are stored (no TTS fallbacks). Throws if fewer than
+ * AUDIO_PACK_SUCCESS_THRESHOLD of the files could be saved, so the UI can offer "Retry" and the
+ * "downloaded" flag is never set for an incomplete pack. Already cached files are not re-downloaded.
  */
 async function downloadVoicePack(accent = 'us', wordList = [], onProgress = () => {}) {
   if (typeof window === 'undefined' || !('caches' in window)) {
     throw new Error('Cache API not supported');
   }
+  const words = Array.isArray(wordList) ? wordList : [];
+  if (words.length === 0) return { downloaded: 0, total: 0, failed: [] };
+
+  await requestPersistentStorage();
   const cache = await caches.open(AUDIO_CACHE_NAME);
-  const words = Array.isArray(wordList) && wordList.length > 0 ? wordList : [];
-  if (words.length === 0) return { downloaded: 0, total: 0 };
 
   const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
   const targetAccent = isUk ? 'uk' : 'us';
-  let completed = 0;
-  const total = words.length;
-  const batchSize = 12;
 
-  for (let i = 0; i < words.length; i += batchSize) {
-    const batch = words.slice(i, i + batchSize);
-    await Promise.all(
-      batch.map(async (w) => {
-        const wordText = typeof w === 'string' ? w : (w.word || '');
-        if (!wordText) return;
-        const { cdn, fallback } = getAudioUrls(wordText, isUk);
-        try {
-          const match = await cache.match(cdn);
-          if (!match) {
-            let resp = await fetchAudioFromMirrors(cdn);
-            if (!resp) {
-              try {
-                resp = await fetch(fallback, { mode: 'cors' });
-              } catch (e) {}
-            }
-            if (resp && resp.ok) {
-              await cache.put(cdn, resp);
-            }
+  // Unique files only (different words may map to the same file name)
+  const files = new Map();
+  for (const w of words) {
+    const wordText = typeof w === 'string' ? w : ((w && w.word) || '');
+    if (!wordText) continue;
+    const { cdn } = getAudioUrls(wordText, isUk);
+    if (!files.has(cdn)) files.set(cdn, wordText);
+  }
+  const urls = Array.from(files.keys());
+  const total = urls.length;
+  if (total === 0) return { downloaded: 0, total: 0, failed: [] };
+
+  let processed = 0;
+  let saved = 0;
+  let failed = [];
+
+  const saveOne = async (cdn) => {
+    try {
+      if (await cache.match(cdn)) return true;
+      const resp = await fetchAudioFromMirrors(cdn);
+      if (resp) {
+        await cache.put(cdn, resp);
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  };
+
+  const runPass = async (list, batchSize, reportProgress) => {
+    const stillFailed = [];
+    for (let i = 0; i < list.length; i += batchSize) {
+      const batch = list.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (cdn) => {
+          const ok = await saveOne(cdn);
+          if (ok) saved++; else stillFailed.push(cdn);
+          if (reportProgress) {
+            processed++;
+            onProgress(Math.round((processed / total) * 100), processed, total);
           }
-        } catch (e) {}
-        completed++;
-        onProgress(Math.round((completed / total) * 100), completed, total);
-      })
-    );
+        })
+      );
+    }
+    return stillFailed;
+  };
+
+  failed = await runPass(urls, 12, true);
+  if (failed.length > 0) {
+    // One slower retry pass for files that failed (flaky network / a mirror hiccup)
+    failed = await runPass(failed, 4, false);
   }
 
-  localStorage.setItem(`myduo_pack_${accent}_downloaded`, 'true');
-  return { downloaded: completed, total };
+  if (saved / total < AUDIO_PACK_SUCCESS_THRESHOLD) {
+    throw new Error(`Voice pack incomplete: ${saved}/${total} files saved`);
+  }
+
+  localStorage.setItem(`myduo_pack_${targetAccent}_downloaded`, 'true');
+  return { downloaded: saved, total, failed };
+}
+
+/**
+ * Verifies that a category flagged as "downloaded" really has its files in CacheStorage
+ * (the browser may evict the cache while localStorage survives). Clears the stale flag and returns
+ * false if fewer than AUDIO_PACK_SUCCESS_THRESHOLD of the files are present.
+ */
+async function verifyCategoryAudioInCache(accent = 'us', category = 'Elementary', wordList = []) {
+  if (!isCategoryAudioDownloaded(accent, category)) return false;
+  const norm = String(category || '').toLowerCase().trim();
+  const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+  const targetAccent = isUk ? 'uk' : 'us';
+  if (!isUk && norm.includes('elementary')) return true; // bundled in the APK
+  if (typeof window === 'undefined' || !('caches' in window)) return true; // cannot verify
+
+  const words = Array.isArray(wordList) ? wordList : [];
+  if (words.length === 0) return true;
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const have = new Set((await cache.keys()).map((r) => r.url));
+    const wanted = new Set();
+    for (const w of words) {
+      const wordText = typeof w === 'string' ? w : ((w && w.word) || '');
+      if (wordText) wanted.add(getAudioUrls(wordText, isUk).cdn);
+    }
+    if (wanted.size === 0) return true;
+    let present = 0;
+    wanted.forEach((u) => { if (have.has(u)) present++; });
+    if (present / wanted.size >= AUDIO_PACK_SUCCESS_THRESHOLD) return true;
+    try {
+      localStorage.removeItem(`myduo_cat_downloaded_${targetAccent}_${norm}`);
+      localStorage.removeItem(`myduo_pack_${targetAccent}_downloaded`);
+    } catch (e) {}
+    return false;
+  } catch (e) {
+    return true;
+  }
 }
 
 /**
@@ -1316,7 +1437,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
  * Supports customizable playback speed (e.g. 0.80 for 1st repetition, 0.90 for 2nd repetition).
  */
 function speakWordAsync(text, isUk = null, speedRate = 1.0) {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     if (!text || typeof window === 'undefined') return resolve();
 
     stopAllAudio();
@@ -1324,7 +1445,8 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
     const targetSpeed = Number(speedRate) || 1.0;
     const accent = isUk !== null ? (isUk ? 'uk' : 'us') : getSavedVoiceAccent();
     const isUkAccent = accent === 'uk' || accent === 'gb' || accent === 'male';
-    const { local, cdn, primary, fallback } = getAudioUrls(text, isUkAccent);
+    const langCode = isUkAccent ? 'en-GB' : 'en-US';
+    const { local, cdn } = getAudioUrls(text, isUkAccent);
 
     let resolved = false;
     let resumeInterval = null;
@@ -1348,26 +1470,40 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
       }
     };
 
-    const maxTimer = setTimeout(finish, 7500);
-    window.__activeSpeechTimer = maxTimer;
-
-    const audio = getAutoplayAudio() || new Audio();
-    activeAutoplayAudio = audio;
-    audio.playbackRate = targetSpeed;
-    audio.src = local;
-    audio.currentTime = 0;
-    let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
-    let stageLock = false;
+    function speakViaNativeAndroidTts() {
+      if (resolved) return true;
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.speakText === 'function') {
+        const utteranceId = 'tts_en_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        window.onNativeTtsComplete = (doneId) => {
+          if (!doneId || doneId === utteranceId) {
+            window.onNativeTtsComplete = null;
+            finish();
+          }
+        };
+        const safetyMs = Math.max(2500, text.length * 180);
+        window.__activeSpeechTimer = setTimeout(finish, safetyMs);
+        try {
+          const started = window.AndroidAudioBridge.speakText(text, langCode, utteranceId, targetSpeed);
+          if (started) return true;
+        } catch (e) {
+          console.warn('Native English TTS failed:', e);
+        }
+      }
+      return false;
+    }
 
     function playSpeechFallback() {
       clearTimeout(maxTimer);
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+        if (speakViaNativeAndroidTts()) return;
+      }
       if ('speechSynthesis' in window) {
         try {
           if (window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
           }
           const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
+          utterance.lang = langCode;
           utterance.rate = targetSpeed;
           window.__activeSpeechUtterance = utterance;
           utterance.onend = finish;
@@ -1379,6 +1515,9 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
             }
           }, 200);
 
+          const synthTimeout = setTimeout(finish, Math.max(2500, text.length * 180));
+          window.__activeSpeechTimer = synthTimeout;
+
           window.speechSynthesis.speak(utterance);
         } catch (e) {
           finish();
@@ -1388,43 +1527,104 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
       }
     }
 
-    const handleStageError = () => {
-      if (stageLock || resolved) return;
-      stageLock = true;
-      setTimeout(() => { stageLock = false; }, 50);
-
-      if (fallbackStage === 0) {
-        fallbackStage = 1;
-        audio.src = cdn;
-        audio.currentTime = 0;
-        audio.playbackRate = targetSpeed;
-        const pCdn = audio.play();
-        if (pCdn !== undefined) pCdn.then(() => cacheAudioOnline(cdn)).catch(handleStageError);
-      } else if (fallbackStage === 1) {
-        fallbackStage = 2;
-        audio.src = primary;
-        audio.currentTime = 0;
-        audio.playbackRate = targetSpeed;
-        const p1 = audio.play();
-        if (p1 !== undefined) p1.catch(handleStageError);
-      } else if (fallbackStage === 2) {
-        fallbackStage = 3;
-        audio.src = fallback;
-        audio.currentTime = 0;
-        audio.playbackRate = targetSpeed;
-        const p2 = audio.play();
-        if (p2 !== undefined) p2.catch(handleStageError);
-      } else {
-        playSpeechFallback();
+    const maxTimer = setTimeout(() => {
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+        if (speakViaNativeAndroidTts()) return;
       }
-    };
+      finish();
+    }, 4500);
+    window.__activeSpeechTimer = maxTimer;
+
+    const audio = getAutoplayAudio() || new Audio();
+    activeAutoplayAudio = audio;
+    audio.playbackRate = targetSpeed;
 
     audio.onended = () => {
       clearTimeout(maxTimer);
       finish();
     };
 
+    // Level 1: Check downloaded voice packs in device CacheStorage (100% offline studio quality)
+    let cachedBlobUrl = null;
+    const hasCache = typeof window !== 'undefined' && 'caches' in window;
+    if (hasCache) {
+      try {
+        const cache = await caches.open(AUDIO_CACHE_NAME);
+        const match = (await cache.match(cdn)) || (await cache.match(local));
+        if (match) {
+          const blob = await match.blob();
+          if (blob && blob.size >= AUDIO_MIN_VALID_BYTES) {
+            cachedBlobUrl = URL.createObjectURL(blob);
+          }
+        }
+      } catch (e) {}
+    }
+
+    if (cachedBlobUrl) {
+      audio.src = cachedBlobUrl;
+      audio.currentTime = 0;
+      audio.onerror = () => {
+        if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+          if (speakViaNativeAndroidTts()) return;
+        }
+        playSpeechFallback();
+      };
+      const pCached = audio.play();
+      if (pCached !== undefined) {
+        pCached.catch(() => {
+          if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+            if (speakViaNativeAndroidTts()) return;
+          }
+          playSpeechFallback();
+        });
+      }
+      return;
+    }
+
+    // Level 2 & 3: Try local bundled APK file -> then fast jsDelivr CDN -> then Native TTS
+    let stageLock = false;
+    let triedCdn = false;
+
+    const handleStageError = async () => {
+      if (stageLock || resolved) return;
+      stageLock = true;
+      setTimeout(() => { stageLock = false; }, 50);
+
+      // Level 3: Fetch studio mp3 from fast CDN mirrors with 1.5s timeout
+      if (!triedCdn) {
+        triedCdn = true;
+        try {
+          const fetched = await fetchAudioFromMirrors(cdn, 1500);
+          if (fetched && !resolved) {
+            if (hasCache) {
+              try {
+                const cache = await caches.open(AUDIO_CACHE_NAME);
+                await cache.put(cdn, fetched.clone());
+              } catch (_) {}
+            }
+            const blob = await fetched.blob();
+            if (blob && blob.size >= AUDIO_MIN_VALID_BYTES && !resolved) {
+              audio.src = URL.createObjectURL(blob);
+              audio.currentTime = 0;
+              audio.playbackRate = targetSpeed;
+              const pMirr = audio.play();
+              if (pMirr !== undefined) pMirr.catch(handleStageError);
+              return;
+            }
+          }
+        } catch (_) {}
+      }
+
+      // Level 4: Immediate native Android TTS fallback
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+        if (speakViaNativeAndroidTts()) return;
+      }
+      playSpeechFallback();
+    };
+
     audio.onerror = handleStageError;
+    audio.src = local;
+    audio.currentTime = 0;
 
     const p = audio.play();
     if (p !== undefined) {
@@ -1471,38 +1671,12 @@ if (typeof document !== 'undefined') {
   });
 }
 
-let silentAudioLoopElement = null;
-
 /**
- * Starts a silent audio loop to keep mobile browsers (Safari/Chrome/WebView)
- * and OS audio sessions active without throttling JS timers when screen turns off.
+ * Legacy Safari silent audio anchor removed: App is built for Android
+ * and uses native Android BackgroundAudioService and WakeLock.
  */
-function startSilentAudioAnchor() {
-  if (typeof window === 'undefined') return;
-  try {
-    if (!silentAudioLoopElement) {
-      // 1-second silent WAV audio data URI
-      const silentWav = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-      silentAudioLoopElement = new Audio(silentWav);
-      silentAudioLoopElement.loop = true;
-      silentAudioLoopElement.volume = 0.001; // virtually silent, keeps hardware audio pipeline open
-    }
-    const p = silentAudioLoopElement.play();
-    if (p !== undefined) p.catch(() => {});
-  } catch (e) {}
-}
-
-/**
- * Stops and resets the silent audio anchor.
- */
-function stopSilentAudioAnchor() {
-  if (silentAudioLoopElement) {
-    try {
-      silentAudioLoopElement.pause();
-      silentAudioLoopElement.currentTime = 0;
-    } catch (e) {}
-  }
-}
+function startSilentAudioAnchor() {}
+function stopSilentAudioAnchor() {}
 
 /**
  * Interfaces with native Android foreground service bridge if running in APK
@@ -1640,6 +1814,8 @@ export const AudioService = {
   isCategoryAudioDownloaded,
   downloadVoicePack,
   downloadCategoryVoicePack,
+  verifyCategoryAudioInCache,
+  requestPersistentStorage,
 };
 
 export default AudioService;
@@ -1683,4 +1859,6 @@ export {
   isCategoryAudioDownloaded,
   downloadVoicePack,
   downloadCategoryVoicePack,
+  verifyCategoryAudioInCache,
+  requestPersistentStorage,
 };

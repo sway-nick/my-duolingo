@@ -1,4 +1,5 @@
-﻿import AudioService from '../../services/audioService.js?v=378.0';
+import AudioService from '../../services/audioService.js?v=385.0';
+import { t, getWordTranslation } from '../../services/i18n.js?v=385.0';
 
 let currentKeyHandler = null;
 
@@ -15,7 +16,7 @@ export function renderIrregularVerbs(container, exerciseData, onComplete) {
     prompt.className = 'iv-prompt';
     
     const translationTitle = document.createElement('h3');
-    translationTitle.textContent = verb.translation;
+    translationTitle.textContent = getWordTranslation(verb) || verb.translation;
     prompt.appendChild(translationTitle);
 
     if (verb.hint) {
@@ -75,7 +76,7 @@ export function renderIrregularVerbs(container, exerciseData, onComplete) {
     // Check Button
     const checkBtn = document.createElement('button');
     checkBtn.className = 'check-button';
-    checkBtn.textContent = 'Проверить';
+    checkBtn.textContent = t('train_check') || 'Check';
     checkBtn.addEventListener('click', handleCheck);
     wrapper.appendChild(checkBtn);
 
@@ -136,10 +137,10 @@ export function renderIrregularVerbs(container, exerciseData, onComplete) {
 
         if (allCorrect) {
             AudioService.playCorrect();
-            showFeedback(true, 'Отлично!');
+            showFeedback(true, t('train_speech_correct') || 'Correct!');
         } else {
             AudioService.playWrong();
-            showFeedback(false, 'Есть ошибки. Посмотрите правильные ответы.');
+            showFeedback(false, `${t('train_correct_label') || 'Mistakes found. Review correct answers.'}`);
         }
 
         setTimeout(() => {

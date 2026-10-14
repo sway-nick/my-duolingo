@@ -1,7 +1,8 @@
-﻿import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=378.0';
-import { setCurrentUser } from '../../services/authService.js?v=378.0';
-import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail } from '../../services/firebase.js?v=378.0';
-import { t } from '../../services/i18n.js?v=378.0';
+import { loginUser, registerUser, googleAuthUser, fetchUserDataFromCloud } from '../../services/api.js?v=385.0';
+import { setCurrentUser } from '../../services/authService.js?v=385.0';
+import { loginWithGoogle, signInWithGoogleIdToken, registerWithEmail, loginWithEmail, isEmailVerified } from '../../services/firebase.js?v=385.0';
+import { showToast } from '../layout/AppLayout.js?v=385.0';
+import { t } from '../../services/i18n.js?v=385.0';
 
 const GOOGLE_CLIENT_ID = '249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com';
 
@@ -23,6 +24,10 @@ function parseJwt(token) {
 }
 
 function renderAuthModal(onSuccessCallback, initialMode = 'login') {
+  if (window.trackScreen) {
+    window.trackScreen('auth_modal', 'AuthModal');
+  }
+
   const existing = document.querySelector('#auth-modal');
   if (existing) existing.remove();
 
@@ -196,6 +201,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
           await fetchUserDataFromCloud(userWithGoogle.id);
         } catch (e) {}
         modal.remove();
+        if (window.trackEvent) {
+          window.trackEvent('login', { method: 'google' });
+        }
         if (onSuccessCallback) onSuccessCallback(userWithGoogle);
       } else {
         throw new Error(res?.error || t('auth_err_failed'));
@@ -215,7 +223,7 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
 
     const payload = parseJwt(response.credential);
     if (!payload || !payload.email) {
-      errorBox.textContent = 'Не удалось получить данные аккаунта Google';
+      errorBox.textContent = t('auth_err_failed');
       errorBox.style.display = 'block';
       return;
     }
@@ -274,6 +282,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
           await fetchUserDataFromCloud(userWithGoogle.id);
         } catch (e) {}
         modal.remove();
+        if (window.trackEvent) {
+          window.trackEvent('login', { method: 'google' });
+        }
         if (onSuccessCallback) onSuccessCallback(userWithGoogle);
       } else {
         throw new Error(res?.error || t('auth_err_failed'));
@@ -373,6 +384,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
                 await fetchUserDataFromCloud(userWithGoogle.id);
               } catch (e) {}
               modal.remove();
+              if (window.trackEvent) {
+                window.trackEvent('login', { method: 'google' });
+              }
               if (onSuccessCallback) onSuccessCallback(userWithGoogle);
               return;
             } else {
@@ -438,7 +452,7 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
         return;
       }
       if (password.length < 6) {
-        errorBox.textContent = 'Пароль должен содержать не менее 6 символов';
+        errorBox.textContent = t('auth_err_password_length') || 'Password must be at least 6 characters';
         errorBox.style.display = 'block';
         return;
       }
@@ -477,6 +491,12 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
             await fetchUserDataFromCloud(finalUser.id);
           } catch (e) {}
           modal.remove();
+          if (window.trackEvent) {
+            window.trackEvent('sign_up', { method: 'email' });
+          }
+          if (finalUser && finalUser.email && !isEmailVerified()) {
+            setTimeout(() => showToast(t('lead_verify_email_prompt')), 500);
+          }
           if (onSuccessCallback) onSuccessCallback(finalUser);
           return;
         } else {
@@ -517,6 +537,12 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
             await fetchUserDataFromCloud(finalUser.id);
           } catch (e) {}
           modal.remove();
+          if (window.trackEvent) {
+            window.trackEvent('login', { method: 'email' });
+          }
+          if (finalUser && finalUser.email && !isEmailVerified()) {
+            setTimeout(() => showToast(t('lead_verify_email_prompt')), 500);
+          }
           if (onSuccessCallback) onSuccessCallback(finalUser);
           return;
         } else if (res && res.success && res.data?.user) {
@@ -525,6 +551,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
             await fetchUserDataFromCloud(res.data.user.id);
           } catch (e) {}
           modal.remove();
+          if (window.trackEvent) {
+            window.trackEvent('login', { method: 'email' });
+          }
           if (onSuccessCallback) onSuccessCallback(res.data.user);
           return;
         } else {

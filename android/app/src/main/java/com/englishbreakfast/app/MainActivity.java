@@ -1,5 +1,6 @@
 package com.englishbreakfast.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -27,6 +28,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import org.json.JSONObject;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.media.Ringtone;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import androidx.core.app.NotificationCompat;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.net.Uri;
+import android.provider.Settings;
 
 public class MainActivity extends BridgeActivity {
 
@@ -72,12 +84,51 @@ public class MainActivity extends BridgeActivity {
         setupBackNavigation();
         setupGoogleAuthBridge();
         setupAudioBridge();
+        setupWidgetBridge();
         initNativeTts();
         lockWebViewTextZoom();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+
+        StudyReminderManager.scheduleReminder(this);
+        handleWidgetConfigIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleWidgetConfigIntent(intent);
+    }
+
+    private void handleWidgetConfigIntent(Intent intent) {
+        if (intent == null) return;
+        if (intent.getBooleanExtra("open_widget_config", false)) {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().postDelayed(() -> {
+                    bridge.getWebView().evaluateJavascript(
+                        "(function() { if (typeof window.openWidgetConfigBottomSheet === 'function') { window.openWidgetConfigBottomSheet(); } })()", null);
+                }, 500);
+            }
+        }
+        String openTab = intent.getStringExtra("open_tab");
+        if ("leaderboard".equalsIgnoreCase(openTab)) {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().postDelayed(() -> {
+                    bridge.getWebView().evaluateJavascript(
+                        "(function() { if (typeof window.setActiveTab === 'function') { window.setActiveTab('leaderboard'); } else { const b = document.querySelector('[data-tab=\"leaderboard\"]'); if (b) b.click(); } })()", null);
+                }, 500);
+            }
+        } else if ("favorites".equalsIgnoreCase(openTab)) {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().postDelayed(() -> {
+                    bridge.getWebView().evaluateJavascript(
+                        "(function() { if (typeof window.setActiveTab === 'function') { window.setActiveTab('favorites'); } else { const b = document.querySelector('[data-tab=\"favorites\"]'); if (b) b.click(); } })()", null);
+                }, 500);
             }
         }
     }
@@ -88,6 +139,7 @@ public class MainActivity extends BridgeActivity {
                 bridge.getWebView().post(() -> {
                     try {
                         bridge.getWebView().getSettings().setTextZoom(100);
+                        bridge.getWebView().getSettings().setMediaPlaybackRequiresUserGesture(false);
                     } catch (Exception e) {}
                 });
             }
@@ -161,10 +213,19 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onResume() {
         super.onResume();
+        WidgetDataManager.setAppInForeground(true);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         lockWebViewTextZoom();
         injectSafeTopToWebView();
         injectSafeBottomToWebView();
+        GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+
+        if (bridge != null && bridge.getWebView() != null) {
+            bridge.getWebView().post(() -> {
+                bridge.getWebView().evaluateJavascript(
+                    "(function() { if (typeof window.syncPendingWidgetFavorites === 'function') { window.syncPendingWidgetFavorites(); } if (typeof window.syncCurrentWidgetRank === 'function') { window.syncCurrentWidgetRank(); } })()", null);
+            });
+        }
     }
 
     private void injectSafeTopToWebView() {
@@ -361,6 +422,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onPause() {
         super.onPause();
+        WidgetDataManager.setAppInForeground(false);
         // If background audio service is actively running, ensure WebView JavaScript timers keep firing while screen is off
         if (BackgroundAudioService.isRunning() && bridge != null && bridge.getWebView() != null) {
             bridge.getWebView().resumeTimers();
@@ -489,6 +551,11 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public boolean speakText(final String text, final String langCode, final String utteranceId) {
+                        return speakText(text, langCode, utteranceId, 1.0f);
+                    }
+
+                    @JavascriptInterface
+                    public boolean speakText(final String text, final String langCode, final String utteranceId, final float speechRate) {
                         if (text == null || text.trim().isEmpty()) {
                             return false;
                         }
@@ -499,15 +566,19 @@ public class MainActivity extends BridgeActivity {
                                     return;
                                 }
                                 Locale locale;
-                                if ("uk".equalsIgnoreCase(langCode)) {
+                                if ("uk".equalsIgnoreCase(langCode) || "uk-UA".equalsIgnoreCase(langCode)) {
                                     locale = new Locale("uk", "UA");
-                                } else if ("ru".equalsIgnoreCase(langCode)) {
+                                } else if ("ru".equalsIgnoreCase(langCode) || "ru-RU".equalsIgnoreCase(langCode)) {
                                     locale = new Locale("ru", "RU");
-                                } else if ("de".equalsIgnoreCase(langCode)) {
+                                } else if ("en-GB".equalsIgnoreCase(langCode) || "gb".equalsIgnoreCase(langCode)) {
+                                    locale = Locale.UK;
+                                } else if ("en".equalsIgnoreCase(langCode) || "en-US".equalsIgnoreCase(langCode) || "us".equalsIgnoreCase(langCode)) {
+                                    locale = Locale.US;
+                                } else if ("de".equalsIgnoreCase(langCode) || "de-DE".equalsIgnoreCase(langCode)) {
                                     locale = Locale.GERMANY;
-                                } else if ("fr".equalsIgnoreCase(langCode)) {
+                                } else if ("fr".equalsIgnoreCase(langCode) || "fr-FR".equalsIgnoreCase(langCode)) {
                                     locale = Locale.FRANCE;
-                                } else if ("es".equalsIgnoreCase(langCode)) {
+                                } else if ("es".equalsIgnoreCase(langCode) || "es-ES".equalsIgnoreCase(langCode)) {
                                     locale = new Locale("es", "ES");
                                 } else if (langCode != null && langCode.contains("-")) {
                                     String[] parts = langCode.split("-");
@@ -518,7 +589,8 @@ public class MainActivity extends BridgeActivity {
                                     locale = new Locale("ru", "RU");
                                 }
                                 tts.setLanguage(locale);
-                                tts.setSpeechRate(1.0f);
+                                float rate = speechRate > 0.1f ? speechRate : 1.0f;
+                                tts.setSpeechRate(rate);
                                 tts.setPitch(1.0f);
                                 Bundle params = new Bundle();
                                 params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
@@ -544,4 +616,194 @@ public class MainActivity extends BridgeActivity {
             }
         } catch (Exception ignored) {}
     }
+
+    private void setupWidgetBridge() {
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().addJavascriptInterface(new Object() {
+                    @JavascriptInterface
+                    public void syncFavorites(final String wordsJson) {
+                        try {
+                            WidgetDataManager.saveFavorites(MainActivity.this, wordsJson);
+                            GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public boolean requestPinWidget(final String size) {
+                        return requestPinWidget();
+                    }
+
+                    @JavascriptInterface
+                    public boolean requestPinWidget() {
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                                if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
+                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    appWidgetManager.requestPinAppWidget(provider, null, null);
+                                    return true;
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+
+                    @JavascriptInterface
+                    public boolean isPinSupported() {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                            return appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported();
+                        }
+                        return false;
+                    }
+
+                    @JavascriptInterface
+                    public boolean isWidgetInstalled() {
+                        try {
+                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(MainActivity.this);
+                            ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                            int[] ids = appWidgetManager.getAppWidgetIds(provider);
+                            return ids != null && ids.length > 0;
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public String getPendingUnfavorites() {
+                        return WidgetDataManager.getPendingUnfavoritesJson(MainActivity.this);
+                    }
+
+                    @JavascriptInterface
+                    public void clearPendingUnfavorites() {
+                        WidgetDataManager.clearPendingUnfavorites(MainActivity.this);
+                    }
+
+                    @JavascriptInterface
+                    public String getPendingFavorites() {
+                        return WidgetDataManager.getPendingFavoritesJson(MainActivity.this);
+                    }
+
+                    @JavascriptInterface
+                    public void clearPendingFavorites() {
+                        WidgetDataManager.clearPendingFavorites(MainActivity.this);
+                    }
+
+                    @JavascriptInterface
+                    public void syncUserRank(final int rank) {
+                        try {
+                            WidgetDataManager.setUserRank(MainActivity.this, rank);
+                            GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public void triggerOvertakenAlert(final String localizedMessage) {
+                        runOnUiThread(() -> {
+                            try {
+                                String text = (localizedMessage != null && !localizedMessage.trim().isEmpty())
+                                    ? localizedMessage.trim()
+                                    : "Вас обошли соперники!";
+                                WidgetDataManager.setAlertBannerText(MainActivity.this, "⚡ " + text);
+                                WidgetDataManager.setReminderAlertActive(MainActivity.this, true);
+                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+
+                                // Post system notification with sound (plays exactly ONCE)
+                                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                if (nm != null) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        NotificationChannel channel = new NotificationChannel(
+                                            "english_breakfast_rank_alert",
+                                            "Оповещения турнира",
+                                            NotificationManager.IMPORTANCE_HIGH
+                                        );
+                                        channel.setDescription("Оповещения о смещении в таблице лидеров");
+                                        channel.enableVibration(true);
+                                        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                            .build();
+                                        channel.setSound(soundUri, audioAttributes);
+                                        nm.createNotificationChannel(channel);
+                                    }
+
+                                    Intent launchIntent = new Intent(MainActivity.this, MainActivity.class);
+                                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) flags |= PendingIntent.FLAG_IMMUTABLE;
+                                    PendingIntent pi = PendingIntent.getActivity(MainActivity.this, 7005, launchIntent, flags);
+
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "english_breakfast_rank_alert")
+                                        .setSmallIcon(R.mipmap.ic_launcher)
+                                        .setContentTitle("🏆 " + text)
+                                        .setContentText("Вернитесь в топ-4 лидеров, пока неделя не завершилась!")
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                        .setSound(soundUri)
+                                        .setAutoCancel(true)
+                                        .setContentIntent(pi);
+
+                                    nm.notify(1005, builder.build());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @JavascriptInterface
+                    public String getWidgetConfig() {
+                        return WidgetDataManager.getConfigJson(MainActivity.this);
+                    }
+
+                    @JavascriptInterface
+                    public void saveWidgetConfig(final String configJson) {
+                        try {
+                            WidgetDataManager.saveConfigJson(MainActivity.this, configJson);
+                            GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
+                            GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                            StudyReminderManager.scheduleReminder(MainActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public void openHomeScreenSettings() {
+                        runOnUiThread(() -> {
+                            try {
+                                Intent miuiIntent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                                miuiIntent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
+                                miuiIntent.putExtra("extra_pkgname", getPackageName());
+                                miuiIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(miuiIntent);
+                                return;
+                            } catch (Exception ignored) {}
+
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                try {
+                                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                } catch (Exception ignored) {}
+                            }
+                        });
+                    }
+                }, "AndroidWidgetBridge");
+            }
+        } catch (Exception ignored) {}
+    }
 }
+

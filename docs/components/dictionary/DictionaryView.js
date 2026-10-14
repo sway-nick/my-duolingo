@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=378.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=378.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=378.0';
+import { speakWord } from '../../services/audioService.js?v=385.0';
+import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=385.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
 
 function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
   return new Promise((resolve, reject) => {
@@ -76,6 +76,13 @@ function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
 }
 
 function openDocScannerModal(words = [], onWordsSaved = () => {}) {
+  if (window.trackScreen) {
+    window.trackScreen('scanner_modal', 'ScannerModal');
+  }
+  if (window.trackEvent) {
+    window.trackEvent('scanner_open');
+  }
+
   const modalEl = document.createElement('div');
   modalEl.id = 'doc-scanner-modal-overlay';
   modalEl.className = 'scanner-modal-overlay';
@@ -92,7 +99,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   modalEl.innerHTML = `
     <div class="scanner-modal-card">
       <div class="scanner-modal-header">
-        <h3 class="scanner-modal-title">${t('scan_modal_title')}</h3>
+        <div class="scanner-header-left" id="scanner-header-left">
+          <div class="scanner-spinner" id="scanner-header-spinner" style="visibility: hidden;"></div>
+        </div>
+        <h3 class="scanner-modal-title" id="scanner-modal-title">${t('scan_modal_title')}</h3>
         <button type="button" id="scanner-close-btn" class="scanner-close-btn" title="Закрыть">✕</button>
       </div>
 
@@ -145,10 +155,6 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
             <div id="scanner-text-icon-preview" style="display: none; padding: 24px; font-size: 42px; text-align: center;">📄</div>
             <div class="scanner-laser-line"></div>
           </div>
-          <div class="scanner-processing-status">
-            <div class="scanner-spinner"></div>
-            <p class="scanner-processing-text">${t('scan_processing')}</p>
-          </div>
         </div>
 
         <!-- 3. Results View -->
@@ -192,6 +198,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   document.body.appendChild(modalEl);
 
   const closeBtn = modalEl.querySelector('#scanner-close-btn');
+  const headerSpinner = modalEl.querySelector('#scanner-header-spinner');
   const uploadView = modalEl.querySelector('#scanner-upload-view');
   const pasteView = modalEl.querySelector('#scanner-paste-view');
   const processingView = modalEl.querySelector('#scanner-processing-view');
@@ -258,18 +265,21 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   takePhotoBtn.addEventListener('click', () => {
     hideError();
+    if (window.trackEvent) window.trackEvent('scan_source_photo');
     cameraInput.value = '';
     cameraInput.click();
   });
 
   galleryBtn.addEventListener('click', () => {
     hideError();
+    if (window.trackEvent) window.trackEvent('scan_source_gallery');
     galleryInput.value = '';
     galleryInput.click();
   });
 
   openPasteBtn.addEventListener('click', async () => {
     hideError();
+    if (window.trackEvent) window.trackEvent('scan_source_paste');
     uploadView.style.display = 'none';
     pasteView.style.display = 'block';
 
@@ -318,16 +328,21 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       hideError();
+      if (window.trackEvent) {
+        window.trackEvent('scan_paste_submit', { length: rawText.length });
+      }
       pasteView.style.display = 'none';
       processingView.style.display = 'flex';
       resultsView.style.display = 'none';
       previewImg.style.display = 'none';
       textIconPreview.style.display = 'block';
+      if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
       const res = await scanDocumentImage({ text: rawText });
       displayResults(res);
     } catch (err) {
       console.error('Text scan error:', err);
+      if (headerSpinner) headerSpinner.style.visibility = 'hidden';
       pasteView.style.display = 'block';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
@@ -370,6 +385,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     pasteView.style.display = 'none';
     processingView.style.display = 'none';
     resultsView.style.display = 'none';
+    if (headerSpinner) headerSpinner.style.visibility = 'hidden';
     hideError();
   });
 
@@ -385,12 +401,16 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       hideError();
+      if (window.trackEvent) {
+        window.trackEvent('scan_image_upload', { size_kb: Math.round((file.size || 0) / 1024) });
+      }
       uploadView.style.display = 'none';
       pasteView.style.display = 'none';
       processingView.style.display = 'flex';
       resultsView.style.display = 'none';
       previewImg.style.display = 'block';
       textIconPreview.style.display = 'none';
+      if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
       // 1. Instantly display actual photo thumbnail (0ms latency, never black)
       if (activePreviewUrl) {
@@ -419,6 +439,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       displayResults(res);
     } catch (err) {
       console.error('Scan error:', err);
+      if (headerSpinner) headerSpinner.style.visibility = 'hidden';
       uploadView.style.display = 'block';
       pasteView.style.display = 'none';
       processingView.style.display = 'none';
@@ -430,6 +451,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   function displayResults(data) {
     processingView.style.display = 'none';
     resultsView.style.display = 'block';
+    if (headerSpinner) headerSpinner.style.visibility = 'hidden';
 
     const allLemmas = Array.isArray(data.lemmas) ? data.lemmas : [];
     const existingWordsSet = new Set(
@@ -796,6 +818,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       }
 
       onWordsSaved(added);
+
+      if (window.trackEvent) {
+        window.trackEvent('scanner_words_added', { count: added.length, category: currentGroupCategory });
+      }
 
       submitBtn.textContent = `🎉 ${t('scan_added_success')}${added.length}!`;
       setTimeout(() => {
@@ -1557,7 +1583,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     if (renderedCount < filteredWords.length) {
       if (sentinel) {
         sentinel.style.display = 'block';
-        sentinel.textContent = 'Загрузка слов...';
+        sentinel.textContent = t('auth_loading') || 'Loading...';
       }
     } else {
       if (sentinel) sentinel.style.display = 'none';

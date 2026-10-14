@@ -23,7 +23,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Device Permissions',
         intro: '',
         bullets: [
-          { bold: 'Microphone:', text: 'Used solely for real-time speech recognition during pronunciation practice. Voice recordings are never stored on our servers.' },
           { bold: 'Camera & Photo Gallery:', text: 'Used for optical character recognition (OCR) to scan text from images and add vocabulary to your personal dictionary.' }
         ]
       },
@@ -65,7 +64,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Разрешения устройства',
         intro: '',
         bullets: [
-          { bold: 'Микрофон:', text: 'используется исключительно для интерактивной тренировки произношения в реальном времени. Аудиозаписи голоса не сохраняются на серверах.' },
           { bold: 'Камера и галерея:', text: 'используются для распознавания текста (OCR) с фото и изображений для быстрого добавления слов в словарь.' }
         ]
       },
@@ -107,7 +105,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Дозволи пристрою',
         intro: '',
         bullets: [
-          { bold: 'Мікрофон:', text: 'використовується виключно для тренування вимови в реальному часі. Голосові записи не зберігаються на наших серверах.' },
           { bold: 'Камера та галерея:', text: 'використовується для розпізнавання тексту (OCR) із зображень для швидкого додавання слів до словника.' }
         ]
       },
@@ -149,7 +146,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Geräteberechtigungen',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Wird nur für die Echtzeit-Spracherkennung beim Aussprachetraining genutzt. Es werden keine Sprachaufnahmen auf Servern gespeichert.' },
           { bold: 'Kamera & Galerie:', text: 'Wird für OCR-Texterkennung verwendet, um Wörter per Foto direkt ins Wörterbuch aufzunehmen.' }
         ]
       },
@@ -191,7 +187,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Permisos del dispositivo',
         intro: '',
         bullets: [
-          { bold: 'Micrófono:', text: 'Se utiliza exclusivamente para la práctica de pronunciación en tiempo real. No se almacenan grabaciones en servidores.' },
           { bold: 'Cámara y galería:', text: 'Se utiliza para el reconocimiento óptico de caracteres (OCR) a partir de fotos para agregar palabras a su diccionario.' }
         ]
       },
@@ -233,7 +228,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Autorisations de l’appareil',
         intro: '',
         bullets: [
-          { bold: 'Microphone :', text: 'Utilisé uniquement pour la reconnaissance vocale en temps réel lors de la pratique de la prononciation. Aucun enregistrement n’est conservé.' },
           { bold: 'Appareil photo et galerie :', text: 'Utilisé pour la reconnaissance optique de texte (OCR) afin d’ajouter des mots à votre dictionnaire personnel.' }
         ]
       },
@@ -275,7 +269,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Uprawnienia urządzenia',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'wykorzystywany wyłącznie do rozpoznawania mowy podczas ćwiczeń wymowy w czasie rzeczywistym. Nagrania nie są zapisywane.' },
           { bold: 'Aparat i galeria:', text: 'wykorzystywany do optycznego rozpoznawania tekstu (OCR) ze zdjęć w celu dodawania słówek do słownika.' }
         ]
       },
@@ -317,7 +310,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Autorizzazioni del dispositivo',
         intro: '',
         bullets: [
-          { bold: 'Microfono:', text: 'Utilizzato unicamente per il riconoscimento vocale in tempo reale durante gli esercizi di pronuncia. Nessuna registrazione viene salvata sui server.' },
           { bold: 'Fotocamera e galleria:', text: 'Utilizzata per il riconoscimento ottico dei caratteri (OCR) da immagini per aggiungere parole al dizionario.' }
         ]
       },
@@ -359,7 +351,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Cihaz İzinleri',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Yalnızca telaffuz pratiği sırasında gerçek zamanlı ses tanıma için kullanılır. Ses kayıtları sunucularda saklanmaz.' },
           { bold: 'Kamera ve Galeri:', text: 'Görsellerden metin tanıma (OCR) yoluyla sözlüğe kelime eklemek için kullanılır.' }
         ]
       },
@@ -401,7 +392,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Permissões do dispositivo',
         intro: '',
         bullets: [
-          { bold: 'Microfone:', text: 'Utilizado apenas para reconhecimento de voz em tempo real durante os exercícios de pronúncia. Nenhuma gravação é armazenada.' },
           { bold: 'Câmara e galeria:', text: 'Utilizado para reconhecimento ótico de caracteres (OCR) a partir de imagens para adicionar termos ao dicionário.' }
         ]
       },
@@ -443,7 +433,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Permisiuni ale dispozitivului',
         intro: '',
         bullets: [
-          { bold: 'Microfon:', text: 'Utilizat exclusiv pentru recunoașterea vocală în timp real în timpul exercițiilor de pronunție. Nu se salvează înregistrări pe servere.' },
           { bold: 'Cameră și galerie foto:', text: 'Utilizată pentru recunoașterea optică a caracterelor (OCR) din fotografii pentru adăugarea rapidă a cuvintelor.' }
         ]
       },
@@ -485,7 +474,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Разрешения на устройството',
         intro: '',
         bullets: [
-          { bold: 'Микрофон:', text: 'Използва се само за гласово разпознаване в реално време по време на упражненията за произношение. Записи не се пазят на сървърите.' },
           { bold: 'Камера и галерия:', text: 'Използва се за оптично разпознаване на текст (OCR) от снимки за бързо добавяне на думи в речника.' }
         ]
       },
@@ -527,7 +515,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Oprávnění zařízení',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Používá se výhradně pro rozpoznávání řeči v reálném čase při procvičování výslovnosti. Zvukové nahrávky se na serverech neukládají.' },
           { bold: 'Fotoaparát a galerie:', text: 'Používá se pro optické rozpoznávání znaků (OCR) z fotografií k přidání slovíček do slovníku.' }
         ]
       },
@@ -569,7 +556,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Povolenia zariadenia',
         intro: '',
         bullets: [
-          { bold: 'Mikrofón:', text: 'Používa sa výhradne na rozpoznávanie reči v reálnom čase pri precvičovaní výslovnosti. Nahrávky sa na serveroch neukladajú.' },
           { bold: 'Fotoaparát a galéria:', text: 'Používa sa na optické rozpoznávanie znakov (OCR) z obrázkov na pridanie slov do slovníka.' }
         ]
       },
@@ -611,7 +597,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Eszközengedélyek',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Kizárólag a valós idejű kiejtési gyakorlatok beszédfelismerésére szolgál. Semmilyen hangfelvételt nem tárolunk a szervereken.' },
           { bold: 'Kamera és képtár:', text: 'Optikai szövegfelismerésre (OCR) szolgál, hogy fényképekről közvetlenül szavakat adhasson a szótárához.' }
         ]
       },
@@ -653,7 +638,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Άδειες συσκευής',
         intro: '',
         bullets: [
-          { bold: 'Μικρόφωνο:', text: 'Χρησιμοποιείται αποκλειστικά για αναγνώριση ομιλίας σε πραγματικό χρόνο κατά την εξάσκηση προφοράς. Δεν αποθηκεύεται ήχος στους διακομιστές.' },
           { bold: 'Κάμερα και συλλογή εικόνων:', text: 'Χρησιμοποιείται για οπτική αναγνώριση κειμένου (OCR) από φωτογραφίες για γρήγορη προσθήκη λέξεων.' }
         ]
       },
@@ -695,7 +679,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Dovoljenja naprave',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Uporablja se izključno za sprotno prepoznavanje govora pri vadbi izgovorjave. Posnetki se ne shranjujejo na strežnikih.' },
           { bold: 'Kamera in galerija:', text: 'Uporablja se za optično prepoznavanje besedila (OCR) iz slik za dodajanje besed v slovar.' }
         ]
       },
@@ -737,7 +720,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Seadme load',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Kasutatakse ainult reaalajas hääletuvastuseks hääldusharjutustes. Helisalvestisi serverites ei talletata.' },
           { bold: 'Kaamera ja galerii:', text: 'Kasutatakse optiliseks tekstituvastuseks (OCR) piltidelt sõnade sõnastikku lisamiseks.' }
         ]
       },
@@ -779,7 +761,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Įrenginio leidimai',
         intro: '',
         bullets: [
-          { bold: 'Mikrofonas:', text: 'Naudojamas tik balso atpažinimui realiuoju laiku tarties pratimų metu. Garso įrašai serveriuose nesaugomi.' },
           { bold: 'Kamera ir galerija:', text: 'Naudojama optiniam teksto atpažinimui (OCR) iš nuotraukų žodžiams į žodyną įtraukti.' }
         ]
       },
@@ -821,7 +802,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Ierīces atļaujas',
         intro: '',
         bullets: [
-          { bold: 'Mikrofons:', text: 'Tiek izmantots tikai reāllaika runas atpazīšanai izrunas vingrinājumos. Balss ieraksti serveros netiek saglabāti.' },
           { bold: 'Kamera un galerija:', text: 'Tiek izmantota optiskajai teksta atpazīšanai (OCR) no attēliem, lai pievienotu vārdus vārdnīcai.' }
         ]
       },
@@ -863,7 +843,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Enhedstilladelser',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Anvendes udelukkende til stemmegenkendelse i realtid under udtaleøvelser. Lydoptagelser gemmes ikke på servere.' },
           { bold: 'Kamera og galleri:', text: 'Anvendes til optisk tegngenkendelse (OCR) fra fotos for nemt at tilføje ord til ordbogen.' }
         ]
       },
@@ -905,7 +884,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Laitteen käyttöoikeudet',
         intro: '',
         bullets: [
-          { bold: 'Mikrofoni:', text: 'Käytetään ainoastaan reaaliaikaiseen puheentunnistukseen ääntämisharjoituksissa. Äänitallenteita ei tallenneta palvelimille.' },
           { bold: 'Kamera ja kuvagalleria:', text: 'Käytetään tekstintunnistukseen (OCR) kuvista sanojen lisäämiseksi sanastoon.' }
         ]
       },
@@ -947,7 +925,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Enhetsbehörigheter',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Används uteslutande för taligenkänning i realtid under uttalsövningar. Röstinspelningar sparas inte på servrar.' },
           { bold: 'Kamera och fotogalleri:', text: 'Används för optisk teckenigenkänning (OCR) från bilder för att lägga till ord i ordlistan.' }
         ]
       },
@@ -989,7 +966,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Dozvole uređaja',
         intro: '',
         bullets: [
-          { bold: 'Mikrofon:', text: 'Koristi se isključivo za prepoznavanje glasa u stvarnom vremenu tijekom vježbi izgovora. Glasovni zapisi se ne spremaju.' },
           { bold: 'Kamera i galerija:', text: 'Koristi se za optičko prepoznavanje teksta (OCR) sa slika radi dodavanja riječi u rječnik.' }
         ]
       },
@@ -1031,7 +1007,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Ceadanna Gléis',
         intro: '',
         bullets: [
-          { bold: 'Micreafón:', text: 'Úsáidtear go heisiach é le haghaidh aithint cainte fíor-ama le linn cleachtadh foghraíochta. Ní shábháiltear taifeadtaí ar fhreastalaithe.' },
           { bold: 'Ceamara agus Gailearaí:', text: 'Úsáidtear é le haghaidh aithint optúil carachtar (OCR) ó íomhánna chun focail a chur leis an bhfoclóir.' }
         ]
       },
@@ -1073,7 +1048,6 @@ export const PRIVACY_POLICY_DATA = {
         title: '2. Permessi tal-Apparat',
         intro: '',
         bullets: [
-          { bold: 'Mikrofonu:', text: 'Użat biss għall-għarfien tal-vuċi waqt il-prattika tal-pronunzja f’ħin reali. Ir-reġistrazzjonijiet ma jinħażnux fuq is-servers.' },
           { bold: 'Kamera u Gallarija tar-ritratti:', text: 'Użati għall-għarfien ottiku tat-test (OCR) minn ritratti biex iżżid kliem ġdid fid-dizzjunarju.' }
         ]
       },
@@ -1093,5 +1067,293 @@ export const PRIVACY_POLICY_DATA = {
         contactEmail: 'lipniagovnikola@gmail.com'
       }
     ]
-  }
+  },
+
+  ja: {
+    modalTitle: 'プライバシーポリシー',
+    backBtn: '戻る',
+    appName: 'English Breakfast',
+    updated: '最終更新: 2026年9月',
+    intro: '本プライバシーポリシーは、<strong>English Breakfast</strong>モバイルおよびウェブアプリケーションがお客様の情報をどのように収集、利用、保護するかについて説明するものです。',
+    sections: [
+      {
+        title: '1. 収集する情報',
+        intro: 'パーソナライズされた語彙学習を提供するために必要最小限の情報を収集します:',
+        bullets: [
+          { bold: '学習の進捗状況:', text: 'マスターした単語、正解率、経験値（XP）、連続学習日数は端末にローカル保存され、ログイン時には安全なデータベースと同期されます。' },
+          { bold: 'アカウント情報:', text: 'Googleアカウントでログインまたは登録した場合、認証およびランキング表示のみを目的としてお名前とメールアドレスを安全に保存します。' },
+          { bold: 'お気に入り・設定:', text: '保存した単語リスト、選択した難易度、音声アクセント、表示テーマ。' }
+        ]
+      },
+      {
+        title: '2. デバイスの権限',
+        intro: '',
+        bullets: [
+          { bold: 'カメラおよびギャラリー:', text: '画像からテキストを読み取り（OCR）、単語帳に単語を追加する機能のみに使用されます。' }
+        ]
+      },
+      {
+        title: '3. データの保護とセキュリティ',
+        intro: 'すべての通信はHTTPS暗号化により保護されています。個人データを第三者の広告主や外部企業に販売、貸与、共有することは一切ありません。',
+        bullets: []
+      },
+      {
+        title: '4. ユーザーの権利とデータ削除',
+        intro: '学習履歴の消去、お気に入り単語の削除、またはアカウントの完全な削除は、アプリの設定画面（「アカウントとデータを削除」ボタン）または開発者への問い合わせによりいつでも実行できます。',
+        bullets: []
+      },
+      {
+        title: '5. お問い合わせ',
+        intro: '本プライバシーポリシーに関するご質問やご不明な点がございましたら、お気軽にお問い合わせください:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
+  hi: {
+    modalTitle: 'गोपनीयता नीति',
+    backBtn: 'वापस',
+    appName: 'English Breakfast',
+    updated: 'अंतिम अपडेट: सितंबर 2026',
+    intro: 'यह गोपनीयता नीति बताती है कि <strong>English Breakfast</strong> मोबाइल और वेब ऐप आपकी जानकारी कैसे एकत्र, उपयोग और सुरक्षित करता है।',
+    sections: [
+      {
+        title: '1. एकत्रित की जाने वाली जानकारी',
+        intro: 'हम व्यक्तिगत शब्दावली सीखने के लिए केवल आवश्यक न्यूनतम जानकारी एकत्र करते हैं:',
+        bullets: [
+          { bold: 'सीखने की प्रगति:', text: 'याद किए गए शब्द, अभ्यास सटीकता, अनुभव अंक (XP) और अध्ययन स्ट्रीक डिवाइस पर स्थानीय रूप से सहेजे जाते हैं और लॉग इन होने पर हमारे सुरक्षित डेटाबेस के साथ सिंक किए जाते हैं।' },
+          { bold: 'खाता जानकारी:', text: 'यदि आप Google से साइन अप या लॉग इन करते हैं, तो हम केवल प्रमाणीकरण और लीडरबोर्ड रैंकिंग के लिए आपका नाम और ईमेल पता संग्रहीत करते हैं।' },
+          { bold: 'पसंदीदा और सेटिंग्स:', text: 'आपकी सहेजी गई शब्दावली सूची, चुनी गई कठिनाई का स्तर, आवाज का लहजा और डिस्प्ले थीम।' }
+        ]
+      },
+      {
+        title: '2. डिवाइस अनुमतियाँ',
+        intro: '',
+        bullets: [
+          { bold: 'कैमरा और फोटो गैलरी:', text: 'छवियों से पाठ स्कैन करने (OCR) और अपनी व्यक्तिगत शब्दावली में शब्द जोड़ने के लिए उपयोग किया जाता है।' }
+        ]
+      },
+      {
+        title: '3. डेटा सुरक्षा',
+        intro: 'सभी डेटा ट्रांसमिशन HTTPS एन्क्रिप्शन द्वारा सुरक्षित हैं। हम व्यक्तिगत उपयोगकर्ता डेटा को कभी भी किसी तीसरे पक्ष के विज्ञापनदाताओं को नहीं बेचते या साझा नहीं करते हैं।',
+        bullets: []
+      },
+      {
+        title: '4. उपयोगकर्ता अधिकार और डेटा हटाना',
+        intro: 'आप सीधे ऐप सेटिंग्स में या डेवलपर से संपर्क करके कभी भी अपना सीखने का इतिहास साफ़ कर सकते हैं, पसंदीदा शब्द हटा सकते हैं या पूर्ण खाता हटाने का अनुरोध कर सकते हैं।',
+        bullets: []
+      },
+      {
+        title: '5. संपर्क करें',
+        intro: 'यदि इस गोपनीयता नीति के संबंध में आपके कोई प्रश्न हैं, तो कृपया हमसे संपर्क करें:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
+  ar: {
+    modalTitle: 'سياسة الخصوصية',
+    backBtn: 'رجوع',
+    appName: 'English Breakfast',
+    updated: 'آخر تحديث: سبتمبر 2026',
+    intro: 'توضح سياسة الخصوصية هذه كيف يجمع تطبيق <strong>English Breakfast</strong> للهواتف والويب معلوماتك ويستخدمها ويحميها.',
+    sections: [
+      {
+        title: '1. المعلومات التي نجمعها',
+        intro: 'نجمع الحد الأدنى من المعلومات اللازمة لتقديم تجربة تعلم مفردات مخصصة:',
+        bullets: [
+          { bold: 'تقدم التعلم:', text: 'يتم حفظ الكلمات المتقنة ودقة التمارين ونقاط الخبرة (XP) وأيام المتابعة محلياً وتتم مزامنتها مع قاعدة بياناتنا الآمنة عند تسجيل الدخول.' },
+          { bold: 'معلومات الحساب:', text: 'إذا اخترت التسجيل أو تسجيل الدخول عبر Google، فإننا نخزن اسمك وعنوان بريدك الإلكتروني فقط للمصادقة وتصنيف لوحة المتصدرين.' },
+          { bold: 'المفضلة والإعدادات:', text: 'قوائم المفردات المحفوظة ومستوى الصعوبة المختار ونبرة الصوت ومظهر التطبيق.' }
+        ]
+      },
+      {
+        title: '2. أذونات الجهاز',
+        intro: '',
+        bullets: [
+          { bold: 'الكاميرا ومعرض الصور:', text: 'تُستخدم للتعرف الضوئي على الحروف (OCR) لمسح النصوص من الصور وإضافة الكلمات إلى قاموسك الشخصي.' }
+        ]
+      },
+      {
+        title: '3. حماية البيانات',
+        intro: 'تتم حماية جميع عمليات نقل البيانات باستخدام تشفير HTTPS. نحن لا نبيع ولا نؤجر ولا نشارك بيانات المستخدم الشخصية مع أي معلنين من أطراف ثالثة.',
+        bullets: []
+      },
+      {
+        title: '4. حقوق المستخدم وحذف البيانات',
+        intro: 'يمكنك مسح سجل التعلم أو إزالة الكلمات المفضلة أو طلب حذف الحساب بالكامل في أي وقت مباشرة من إعدادات التطبيق أو عن طريق التواصل مع المطور.',
+        bullets: []
+      },
+      {
+        title: '5. اتصل بنا',
+        intro: 'إذا كانت لديك أي أسئلة بخصوص سياسة الخصوصية هذه، يرجى التواصل معنا:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
+  id: {
+    modalTitle: 'Kebijakan Privasi',
+    backBtn: 'Kembali',
+    appName: 'English Breakfast',
+    updated: 'Terakhir Diperbarui: September 2026',
+    intro: 'Kebijakan Privasi ini menjelaskan bagaimana aplikasi seluler dan web <strong>English Breakfast</strong> mengumpulkan, menggunakan, dan melindungi informasi Anda.',
+    sections: [
+      {
+        title: '1. Informasi yang Kami Kumpulkan',
+        intro: 'Kami mengumpulkan informasi minimal yang diperlukan untuk menyediakan pembelajaran kosakata yang dipersonalisasi:',
+        bullets: [
+          { bold: 'Kemajuan Belajar:', text: 'Kata-kata yang dikuasai, akurasi latihan, poin pengalaman (XP), dan rekor beruntun disimpan secara lokal dan disinkronkan dengan database aman kami saat masuk.' },
+          { bold: 'Informasi Akun:', text: 'Jika Anda mendaftar atau masuk dengan Google, kami menyimpan nama dan alamat email Anda semata-mata untuk autentikasi dan peringkat papan peringkat.' },
+          { bold: 'Favorit & Pengaturan:', text: 'Daftar kosakata yang disimpan, tingkat kesulitan yang dipilih, aksen suara, dan tema tampilan.' }
+        ]
+      },
+      {
+        title: '2. Izin Perangkat',
+        intro: '',
+        bullets: [
+          { bold: 'Kamera & Galeri Foto:', text: 'Digunakan untuk pengenalan teks (OCR) guna memindai teks dari gambar dan menambahkan kosakata ke kamus pribadi Anda.' }
+        ]
+      },
+      {
+        title: '3. Perlindungan Data',
+        intro: 'Semua transmisi data diamankan menggunakan enkripsi HTTPS. Kami tidak menjual, menyewakan, atau membagikan data pribadi pengguna kepada pengiklan pihak ketiga mana pun.',
+        bullets: []
+      },
+      {
+        title: '4. Hak Pengguna & Penghapusan Data',
+        intro: 'Anda dapat menghapus riwayat belajar, menghapus kata favorit, atau meminta penghapusan akun lengkap kapan saja langsung di pengaturan aplikasi atau dengan menghubungi pengembang.',
+        bullets: []
+      },
+      {
+        title: '5. Hubungi Kami',
+        intro: 'Jika Anda memiliki pertanyaan tentang Kebijakan Privasi ini, silakan hubungi kami:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
+  vi: {
+    modalTitle: 'Chính sách bảo mật',
+    backBtn: 'Quay lại',
+    appName: 'English Breakfast',
+    updated: 'Cập nhật lần cuối: Tháng 9 năm 2026',
+    intro: 'Chính sách bảo mật này giải thích cách ứng dụng di động và web <strong>English Breakfast</strong> thu thập, sử dụng và bảo vệ thông tin của bạn.',
+    sections: [
+      {
+        title: '1. Thông tin chúng tôi thu thập',
+        intro: 'Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết để mang lại trải nghiệm học từ vựng cá nhân hóa:',
+        bullets: [
+          { bold: 'Tiến độ học tập:', text: 'Các từ đã nắm vững, độ chính xác khi luyện tập, điểm kinh nghiệm (XP) và chuỗi ngày học được lưu cục bộ và đồng bộ hóa với cơ sở dữ liệu an toàn của chúng tôi khi đăng nhập.' },
+          { bold: 'Thông tin tài khoản:', text: 'Nếu bạn đăng ký hoặc đăng nhập bằng Google, chúng tôi lưu trữ tên và địa chỉ email của bạn chỉ cho mục đích xác thực và xếp hạng trên bảng xếp hạng.' },
+          { bold: 'Yêu thích & Cài đặt:', text: 'Danh sách từ vựng đã lưu, cấp độ khó đã chọn, giọng đọc và chủ đề giao diện.' }
+        ]
+      },
+      {
+        title: '2. Quyền của thiết bị',
+        intro: '',
+        bullets: [
+          { bold: 'Máy ảnh & Thư viện ảnh:', text: 'Được sử dụng để nhận dạng văn bản (OCR) nhằm quét văn bản từ hình ảnh và thêm từ vựng vào từ điển cá nhân của bạn.' }
+        ]
+      },
+      {
+        title: '3. Bảo vệ dữ liệu',
+        intro: 'Tất cả quá trình truyền dữ liệu đều được bảo mật bằng mã hóa HTTPS. Chúng tôi không bán, cho thuê hoặc chia sẻ dữ liệu cá nhân của người dùng với bất kỳ nhà quảng cáo bên thứ ba nào.',
+        bullets: []
+      },
+      {
+        title: '4. Quyền của người dùng & Xóa dữ liệu',
+        intro: 'Bạn có thể xóa lịch sử học tập, xóa từ yêu thích hoặc yêu cầu xóa toàn bộ tài khoản bất cứ lúc nào trực tiếp trong phần cài đặt ứng dụng hoặc bằng cách liên hệ với nhà phát triển.',
+        bullets: []
+      },
+      {
+        title: '5. Liên hệ với chúng tôi',
+        intro: 'Nếu bạn có bất kỳ câu hỏi nào về Chính sách bảo mật này, vui lòng liên hệ với chúng tôi:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
+  th: {
+    modalTitle: 'นโยบายความเป็นส่วนตัว',
+    backBtn: 'ย้อนกลับ',
+    appName: 'English Breakfast',
+    updated: 'อัปเดตล่าสุด: กันยายน 2026',
+    intro: 'นโยบายความเป็นส่วนตัวนี้อธิบายถึงวิธีที่แอปพลิเคชันมือถือและเว็บ <strong>English Breakfast</strong> เก็บรวบรวม ใช้ และปกป้องข้อมูลของคุณ',
+    sections: [
+      {
+        title: '1. ข้อมูลที่เราเก็บรวบรวม',
+        intro: 'เราเก็บรวบรวมข้อมูลขั้นต่ำที่จำเป็นเพื่อมอบประสบการณ์การเรียนรู้คำศัพท์เฉพาะบุคคล:',
+        bullets: [
+          { bold: 'ความคืบหน้าในการเรียนรู้:', text: 'คำศัพท์ที่เชี่ยวชาญ ความแม่นยำในการฝึกฝน คะแนนประสบการณ์ (XP) และสถิติการเรียนรู้ต่อเนื่องจะถูกบันทึกไว้ในอุปกรณ์ และซิงค์กับฐานข้อมูลที่ปลอดภัยเมื่อเข้าสู่ระบบ' },
+          { bold: 'ข้อมูลบัญชี:', text: 'หากคุณลงทะเบียนหรือเข้าสู่ระบบด้วย Google เราจะจัดเก็บชื่อและที่อยู่อีเมลของคุณเพื่อการยืนยันตัวตนและการจัดอันดับในตารางผู้นำเท่านั้น' },
+          { bold: 'รายการโปรดและการตั้งค่า:', text: 'รายการคำศัพท์ที่บันทึกไว้ ระดับความยากที่เลือก สำเนียงเสียง และธีมการแสดงผล' }
+        ]
+      },
+      {
+        title: '2. สิทธิ์การเข้าถึงอุปกรณ์',
+        intro: '',
+        bullets: [
+          { bold: 'กล้องและคลังรูปภาพ:', text: 'ใช้สำหรับระบบรู้จำอักขระ (OCR) เพื่อสแกนข้อความจากรูปภาพและเพิ่มคำศัพท์ลงในพจนานุกรมส่วนตัวของคุณ' }
+        ]
+      },
+      {
+        title: '3. การคุ้มครองข้อมูล',
+        intro: 'การส่งข้อมูลทั้งหมดได้รับการรักษาความปลอดภัยด้วยการเข้ารหัส HTTPS เราไม่ขาย ให้เช่า หรือเปิดเผยข้อมูลส่วนบุคคลของผู้ใช้กับผู้โฆษณาภายนอกใดๆ',
+        bullets: []
+      },
+      {
+        title: '4. สิทธิ์ของผู้ใช้และการลบข้อมูล',
+        intro: 'คุณสามารถล้างประวัติการเรียนรู้ ลบคำศัพท์โปรด หรือขอลบบัญชีอย่างสมบูรณ์ได้ตลอดเวลาโดยตรงในการตั้งค่าแอป หรือติดต่อผู้พัฒนา',
+        bullets: []
+      },
+      {
+        title: '5. ติดต่อเรา',
+        intro: 'หากคุณมีคำถามใดๆ เกี่ยวกับนโยบายความเป็นส่วนตัวนี้ โปรดติดต่อเรา:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
+  ko: {
+    modalTitle: '개인정보 처리방침',
+    backBtn: '뒤로',
+    appName: 'English Breakfast',
+    updated: '최종 업데이트: 2026년 9월',
+    intro: '본 개인정보 처리방침은 <strong>English Breakfast</strong> 모바일 및 웹 애플리케이션이 사용자의 정보를 수집, 사용 및 보호하는 방법을 설명합니다.',
+    sections: [
+      {
+        title: '1. 수집하는 정보',
+        intro: '맞춤형 어휘 학습을 제공하기 위해 필요한 최소한의 정보만 수집합니다:',
+        bullets: [
+          { bold: '학습 진행 상황:', text: '마스터한 단어, 학습 정확도, 경험치(XP), 연속 학습일은 기기에 로컬로 저장되며, 로그인 시 안전한 데이터베이스와 동기화됩니다.' },
+          { bold: '계정 정보:', text: 'Google 계정으로 가입하거나 로그인하는 경우, 인증 및 리더보드 순위 지정을 위해서만 이름과 이메일 주소를 안전하게 저장합니다.' },
+          { bold: '즐겨찾기 및 설정:', text: '저장된 단어장, 선택한 난이도, 음성 억양 및 디스플레이 테마.' }
+        ]
+      },
+      {
+        title: '2. 기기 권한',
+        intro: '',
+        bullets: [
+          { bold: '카메라 및 갤러리:', text: '이미지에서 텍스트를 인식(OCR)하여 단어장에 추가하는 데 사용됩니다.' }
+        ]
+      },
+      {
+        title: '3. 데이터 보호 및 보안',
+        intro: '모든 데이터 전송은 HTTPS 암호화를 사용하여 보호됩니다. 개인 사용자 데이터를 제3자 광고주에게 판매, 대여 또는 공유하지 않습니다.',
+        bullets: []
+      },
+      {
+        title: '4. 사용자 권리 및 데이터 삭제',
+        intro: '앱 설정(「계정 및 데이터 삭제」 버튼)에서 직접 또는 개발자에게 문의하여 언제든지 학습 기록 지우기, 즐겨찾기 단어 삭제 또는 전체 계정 삭제를 요청할 수 있습니다.',
+        bullets: []
+      },
+      {
+        title: '5. 문의하기',
+        intro: '본 개인정보 처리방침에 대해 질문이 있으시면 언제든지 문의해 주세요:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+
 };

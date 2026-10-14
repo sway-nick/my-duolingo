@@ -1,4 +1,5 @@
-﻿import AudioService from '../../services/audioService.js?v=378.0';
+import AudioService from '../../services/audioService.js?v=385.0';
+import { t, getWordTranslation } from '../../services/i18n.js?v=385.0';
 
 let currentKeyHandler = null;
 
@@ -47,7 +48,7 @@ export function renderFlashcardMode(container, exerciseData, onComplete) {
     back.className = 'flashcard-back';
     
     const backTrans = document.createElement('h2');
-    backTrans.textContent = word.translation;
+    backTrans.textContent = getWordTranslation(word);
     back.appendChild(backTrans);
 
     if (word.example) {
@@ -77,17 +78,17 @@ export function renderFlashcardMode(container, exerciseData, onComplete) {
 
     const btnForgot = document.createElement('button');
     btnForgot.className = 'srs-btn srs-forgot';
-    btnForgot.textContent = 'Не помню 😞';
+    btnForgot.textContent = `${t('review_repeat') || 'Repeat'} 😞`;
     btnForgot.addEventListener('click', () => handleSRS('forgot'));
 
     const btnHard = document.createElement('button');
     btnHard.className = 'srs-btn srs-hard';
-    btnHard.textContent = 'Трудно 🤔';
+    btnHard.textContent = `${t('train_try_again') || 'Hard'} 🤔`;
     btnHard.addEventListener('click', () => handleSRS('hard'));
 
     const btnEasy = document.createElement('button');
     btnEasy.className = 'srs-btn srs-easy';
-    btnEasy.textContent = 'Легко 😊';
+    btnEasy.textContent = `${t('train_know') || 'Easy'} 😊`;
     btnEasy.addEventListener('click', () => handleSRS('easy'));
 
     srsButtons.appendChild(btnForgot);

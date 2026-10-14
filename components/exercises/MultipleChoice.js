@@ -1,4 +1,5 @@
-﻿import AudioService from '../../services/audioService.js?v=378.0';
+import AudioService from '../../services/audioService.js?v=385.0';
+import { t, getWordTranslation } from '../../services/i18n.js?v=385.0';
 
 let currentKeyHandler = null;
 
@@ -13,7 +14,7 @@ export function renderMultipleChoice(container, exerciseData, onComplete) {
     // Prompt area
     const prompt = document.createElement('div');
     prompt.className = 'mc-prompt';
-    prompt.textContent = direction === 'en-ru' ? word.word : word.translation;
+    prompt.textContent = direction === 'en-ru' ? word.word : (getWordTranslation(word) || word.translation);
     wrapper.appendChild(prompt);
 
     // Audio button for English words
@@ -60,7 +61,7 @@ export function renderMultipleChoice(container, exerciseData, onComplete) {
         if (idx === correctIndex) {
             btn.classList.add('correct');
             AudioService.playCorrect();
-            showFeedback(true, 'Правильно!');
+            showFeedback(true, t('train_speech_correct') || 'Correct!');
             
             setTimeout(() => {
                 destroyMultipleChoice();
@@ -70,7 +71,7 @@ export function renderMultipleChoice(container, exerciseData, onComplete) {
             btn.classList.add('wrong');
             allOptions[correctIndex].classList.add('correct');
             AudioService.playWrong();
-            showFeedback(false, `Неправильно. Правильный ответ: ${options[correctIndex]}`);
+            showFeedback(false, `${t('train_correct_label') || 'Correct answer:'} ${options[correctIndex]}`);
             
             setTimeout(() => {
                 destroyMultipleChoice();

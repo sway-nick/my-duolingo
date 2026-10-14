@@ -1,21 +1,42 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Preserve debugging stack traces
+-keepattributes SourceFile,LineNumberTable
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Preserve JavaScript Interface for WebView & Capacitor
+-keepattributes JavascriptInterface
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Preserve Capacitor Bridge and Plugins
+-keep class com.getcapacitor.** { *; }
+-keep interface com.getcapacitor.** { *; }
+-keep public class * extends com.getcapacitor.Plugin { public *; }
+-keep public class * extends com.getcapacitor.BridgeActivity { public *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Preserve Application Components
+-keep class com.englishbreakfast.app.** { *; }
+
+# Preserve Google Sign-In & Auth
+-keep class com.google.android.gms.auth.api.signin.** { *; }
+-keep class com.google.android.gms.common.** { *; }
+-keep class com.google.android.gms.tasks.** { *; }
+
+# Preserve Google AdMob
+-keep class com.google.android.gms.ads.** { *; }
+-keep class com.google.ads.** { *; }
+-keep class com.getcapacitor.community.admob.** { *; }
+
+# Preserve Media & Background Audio Service
+-keep class androidx.media.** { *; }
+-keep class android.support.v4.media.** { *; }
+
+# Preserve Firebase Analytics
+-keep class com.google.firebase.analytics.** { *; }
+
+# Suppress harmless warnings from third-party libraries
+-dontwarn com.google.android.gms.**
+-dontwarn com.getcapacitor.**

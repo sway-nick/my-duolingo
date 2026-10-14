@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_glass_card_bg">
+
+    <!-- 1. Center Word Block: 100% mathematically centered in the entire card -->
+    <LinearLayout
+        android:id="@+id/widget_center_click_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="58dp"
+        android:layout_marginEnd="58dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- Reminder Alert Banner -->
+        <TextView
+            android:id="@+id/widget_reminder_banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:includeFontPadding="false"
+            android:text="⚡ Не отставай от других!"
+            android:textSize="10.5sp"
+            android:textStyle="bold"
+            android:textColor="#C2410C"
+            android:layout_marginBottom="2dp"
+            android:visibility="gone" />
+
+        <!-- Front: English Word (Centered in Card, 2 lines max) -->
+        <TextView
+            android:id="@+id/widget_word_english"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:includeFontPadding="false"
+            android:text="Knowledge"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:visibility="visible" />
+
+        <!-- Back: Translation (Centered in Card, 2 lines max) - 1 size smaller than English -->
+        <TextView
+            android:id="@+id/widget_word_translation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:includeFontPadding="false"
+            android:text="Знание, познания"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:textColor="#1E293B"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Corner 1: Top-Left - Speaker Button (🔊) with generous touch zone -->
+    <ImageView
+        android:id="@+id/widget_btn_speaker"
+        android:layout_width="50dp"
+        android:layout_height="46dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="centerInside"
+        android:padding="1dp"
+        android:src="@drawable/ic_widget_speaker"
+        android:contentDescription="Произнести слово" />
+
+    <!-- Top-Left: Favorite Counter (e.g. 4/30) right of Speaker -->
+    <TextView
+        android:id="@+id/widget_fav_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_toEndOf="@id/widget_btn_speaker"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="2dp"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:text="4/30"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#475569"
+        android:visibility="gone" />
+
+    <!-- Corner 2: Top-Right - Ruby Heart (❤️) with generous touch zone -->
+    <ImageView
+        android:id="@+id/widget_btn_heart"
+        android:layout_width="50dp"
+        android:layout_height="46dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="centerInside"
+        android:padding="1dp"
+        android:src="@drawable/ic_widget_heart_active"
+        android:contentDescription="Избранное" />
+
+    <!-- Top-Right: Rank Badge (🏆 1) left of Heart -->
+    <TextView
+        android:id="@+id/widget_rank_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_toStartOf="@id/widget_btn_heart"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="3dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="@drawable/widget_rank_badge_glass"
+        android:text="🏆 1"
+        android:textSize="12.5sp"
+        android:textStyle="bold"
+        android:textColor="#0F172A"
+        android:visibility="visible" />
+
+    <!-- Corner 3: Bottom-Left - Navigation Arrow Left (‹) with generous touch zone and elevated baseline -->
+    <TextView
+        android:id="@+id/widget_btn_prev"
+        android:layout_width="58dp"
+        android:layout_height="52dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="6dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingBottom="4dp"
+        android:text="‹"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#334155"
+        android:contentDescription="Предыдущее слово" />
+
+    <!-- Corner 4: Bottom-Right - Navigation Arrow Right (›) with generous touch zone and elevated baseline -->
+    <TextView
+        android:id="@+id/widget_btn_next"
+        android:layout_width="58dp"
+        android:layout_height="52dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="6dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingBottom="4dp"
+        android:text="›"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#334155"
+        android:contentDescription="Следующее слово" />
+
+</RelativeLayout>

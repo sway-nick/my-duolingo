@@ -1,7 +1,7 @@
-﻿import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.js?v=378.0';
-import { getCurrentUser } from '../../services/authService.js?v=378.0';
-import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=378.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=378.0';
+import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.js?v=385.0';
+import { getCurrentUser } from '../../services/authService.js?v=385.0';
+import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=385.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
 
 function getCategoryMeta(catName) {
   const name = String(catName || '').toLowerCase().trim();
@@ -243,7 +243,7 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     `;
 
     container.innerHTML = `
-      <div id="stats-content" style="padding-bottom: 0; margin-top: 0;">
+      <div id="stats-content" style="padding-bottom: 70px; margin-top: 0;">
         <!-- Top Stats Widgets Grid (1x3) -->
         <div class="stats-grid">
           <div class="stat-card">

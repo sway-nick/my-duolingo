@@ -1,12 +1,17 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=383.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=383.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=383.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=383.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=383.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=383.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=383.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=383.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=383.0';
+import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=385.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=385.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
+import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=385.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=385.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=385.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { deleteCurrentUserAccount } from '../../services/firebase.js?v=385.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=385.0';
+import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=385.0';
+
+if (typeof window !== 'undefined') {
+  window.openWidgetConfigBottomSheet = openWidgetConfigBottomSheet;
+}
 
 function escapeHtml(str) {
   if (str == null) return '';
@@ -29,6 +34,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const currentTheme = getSavedTheme();
   const hasSyncIssue = Boolean(window.__myduo_sync_issue || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('myduo_sync_issue') === '1'));
   const showBadge = !isLoggedIn || hasSyncIssue;
+
+  let isWidgetInstalled = false;
+  try {
+    if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.isWidgetInstalled === 'function') {
+      isWidgetInstalled = Boolean(window.AndroidWidgetBridge.isWidgetInstalled());
+    }
+  } catch (e) {}
 
   const displayName = isLoggedIn
     ? (user.name || user.email.split('@')[0])
@@ -103,6 +115,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="sv">Svenska</div>
             <div class="dropdown-item" data-value="tr">Türkçe</div>
             <div class="dropdown-item" data-value="uk">Українська</div>
+            <div class="dropdown-item" data-value="hi">हिन्दी</div>
+            <div class="dropdown-item" data-value="ar">العربية</div>
+            <div class="dropdown-item" data-value="id">Bahasa Indonesia</div>
+            <div class="dropdown-item" data-value="vi">Tiếng Việt</div>
+            <div class="dropdown-item" data-value="th">ไทย</div>
+            <div class="dropdown-item" data-value="ko">한국어</div>
+            <div class="dropdown-item" data-value="ja">日本語</div>
           </div>
         </div>
       </div>
@@ -169,6 +188,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             </svg>
           </button>
         </div>
+      </div>
+
+      <!-- Widget Button -->
+      <div class="settings-card" id="widget-promo-section" style="padding: 16px 12px;">
+        <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center;">
+          ${t('settings_configure_widget') || 'Настроить виджет'}
+        </button>
       </div>
 
       <div class="settings-footer">
@@ -398,6 +424,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     hr: 'Hrvatski',
     ga: 'Gaeilge',
     mt: 'Malti',
+    hi: 'हिन्दी',
+    ar: 'العربية',
+    id: 'Bahasa Indonesia',
+    vi: 'Tiếng Việt',
+    th: 'ไทย',
+    ko: '한국어',
+    ja: '日本語',
   };
 
   const currentLang = getInterfaceLanguage();
@@ -580,6 +613,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     openPrivacyBtn.addEventListener('click', (e) => {
       e.preventDefault();
       openPrivacyModal();
+    });
+  }
+
+  // Bind Pin Widget button: open sleek bottom sheet
+  const btnPinWidget = container.querySelector('#btn-pin-widget');
+  if (btnPinWidget) {
+    btnPinWidget.addEventListener('click', (e) => {
+      e.preventDefault();
+      openWidgetConfigBottomSheet();
     });
   }
 

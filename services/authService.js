@@ -1,4 +1,5 @@
-import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=378.0';
+import { logoutFirebase, saveUserProfileFirestore, syncLeaderboardScoreFirestore } from './firebase.js?v=385.0';
+import { getIsoWeekKey } from './weekKey.js?v=385.0';
 
 const STORAGE_KEY_USER = 'myduo_current_user';
 const STORAGE_KEY_TOKEN = 'myduo_auth_token';
@@ -70,14 +71,6 @@ function isGuestLimitReached() {
   return getGuestTrainingCount() >= GUEST_WORD_LIMIT;
 }
 
-function getIsoWeekKey(d = new Date()) {
-  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
-  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
-}
-
 function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar = '') {
   if (!newUserId) return;
   const guestId = getGuestId();
@@ -136,15 +129,9 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
       }
     } catch (e) {}
 
-    // Merge from dl_xp if exists
-    try {
-      const dlXp = Number(localStorage.getItem('dl_xp') || 0);
-      if (dlXp > migratedXp) migratedXp = dlXp;
-    } catch (e) {}
-
     const isGuestKey = (k) => {
       const kl = String(k || '').toLowerCase();
-      return kl.includes('guest') || kl.startsWith('dl_') || kl === 'favorites' || kl === 'favs' || kl === 'xp';
+      return kl.includes('guest') || kl.startsWith('dl_') || kl === 'favorites' || kl === 'favs';
     };
 
     const allKeys = Object.keys(localStorage);
@@ -210,18 +197,21 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         } catch (e) {}
       }
 
-      // 5. Migrate XP (ONLY guest keys)
+      // 5. Migrate XP (ONLY guest keys with explicit ISO week key)
       if (k.startsWith('xp_') && !k.startsWith(`xp_${newUserId}_`) && isGuestKey(k)) {
         const match = k.match(/(\d{4}-W\d{2})/);
-        const wKey = match ? match[1] : currentWeek;
-        const xpVal = Number(localStorage.getItem(k) || 0);
-        const targetXpKey = `xp_${newUserId}_${wKey}`;
-        const currentTargetXp = Number(localStorage.getItem(targetXpKey) || 0);
-        const best = Math.max(currentTargetXp, xpVal);
-        if (best > 0) {
-          localStorage.setItem(targetXpKey, String(best));
-          if (wKey === currentWeek && best > migratedXp) {
-            migratedXp = best;
+        if (match) {
+          const wKey = match[1];
+          const xpVal = Number(localStorage.getItem(k) || 0);
+          const targetXpKey = `xp_${newUserId}_${wKey}`;
+          const currentTargetXp = Number(localStorage.getItem(targetXpKey) || 0);
+          const best = Math.max(currentTargetXp, xpVal);
+          if (best > 0) {
+            localStorage.setItem(targetXpKey, String(best));
+            // Only current week points update current week's migratedXp
+            if (wKey === currentWeek && best > migratedXp) {
+              migratedXp = best;
+            }
           }
         }
       }
@@ -234,35 +224,6 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
         }
       }
     });
-
-    // Also check plain 'xp' key if present
-    const plainXp = Number(localStorage.getItem('xp') || 0);
-    if (plainXp > 0) {
-      const targetXpKey = `xp_${newUserId}_${currentWeek}`;
-      const cur = Number(localStorage.getItem(targetXpKey) || 0);
-      const best = Math.max(cur, plainXp);
-      localStorage.setItem(targetXpKey, String(best));
-      if (best > migratedXp) migratedXp = best;
-    }
-
-
-
-    // If migratedXp is still 0, calculate from mergedProg
-    if (migratedXp <= 0 && mergedProg && Object.keys(mergedProg).length > 0) {
-      let calcXp = 0;
-      Object.values(mergedProg).forEach((p) => {
-        if (p) {
-          if (p.mastered) calcXp += 50;
-          else if (p.stage === 'test' || (p.inputCorrect && p.inputCorrect > 0)) calcXp += 25;
-          else if (p.stage === 'pairs' || (p.pairsCorrect && p.pairsCorrect > 0)) calcXp += 15;
-          else if (p.stage === 'quiz' || (p.quizCorrect && p.quizCorrect > 0)) calcXp += 5;
-          else if (p.seenInCards) calcXp += 2;
-        }
-      });
-      if (calcXp > 0) {
-        migratedXp = calcXp;
-      }
-    }
 
     if (userAvatar) {
       localStorage.setItem(`avatar_${newUserId}`, userAvatar);
@@ -286,8 +247,9 @@ function migrateGuestData(newUserId, userEmail = '', userName = '', userAvatar =
     localStorage.setItem(userDatesKey, JSON.stringify(Array.from(mergedDates).sort()));
     if (migratedXp > 0) {
       localStorage.setItem(`xp_${newUserId}_${currentWeek}`, String(migratedXp));
-      localStorage.setItem('xp', String(migratedXp));
     }
+    localStorage.removeItem('xp');
+    localStorage.removeItem('dl_xp');
 
     // Clean up temporary guest keys after migration
     try {
@@ -413,7 +375,7 @@ function getUserAvatar(targetUserId) {
   let saved = localStorage.getItem(`avatar_${userId}`);
   if (saved) {
     if (saved.startsWith('./assets/avatars/avatar_') && !saved.includes('?v=')) {
-      return `${saved}?v=18.0`;
+      return `${saved}?v=385.0`;
     }
     return saved;
   }
@@ -483,12 +445,7 @@ function saveUserAvatar(userId, base64Data) {
     if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) {
       return;
     }
-    const d = new Date();
-    const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-    date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-    const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-    const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
-    const wKey = `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+    const wKey = getIsoWeekKey();
 
     const userName = user.name || user.email.split('@')[0];
     const xp = Number(localStorage.getItem(`xp_${id}_${wKey}`) || 0);
@@ -542,7 +499,7 @@ function compressAndCropAvatar(file, size = 128) {
   });
 }
 
-const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png?v=18.0`);
+const VECTOR_AVATARS = Array.from({ length: 16 }, (_, i) => `./assets/avatars/avatar_${i + 1}.png?v=385.0`);
 
 export {
   getCurrentUser,
