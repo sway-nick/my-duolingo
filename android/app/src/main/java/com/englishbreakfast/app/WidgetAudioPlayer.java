@@ -76,7 +76,14 @@ public class WidgetAudioPlayer {
     }
 
     public static synchronized void playWord(Context context, String word) {
-        if (context == null || word == null || word.trim().isEmpty()) return;
+        playWord(context, word, null);
+    }
+
+    public static synchronized void playWord(Context context, String word, final Runnable onDone) {
+        if (context == null || word == null || word.trim().isEmpty()) {
+            if (onDone != null) onDone.run();
+            return;
+        }
 
         final Context appCtx = context.getApplicationContext();
         final String cleanWord = word.trim();
@@ -102,11 +109,12 @@ public class WidgetAudioPlayer {
             player.setOnCompletionListener(mp -> {
                 mp.release();
                 if (activePlayer == mp) activePlayer = null;
+                if (onDone != null) onDone.run();
             });
             player.setOnErrorListener((mp, what, extra) -> {
                 mp.release();
                 if (activePlayer == mp) activePlayer = null;
-                playViaTts(appCtx, cleanWord);
+                playViaTts(appCtx, cleanWord, onDone);
                 return true;
             });
 
@@ -131,6 +139,13 @@ public class WidgetAudioPlayer {
                 player.setOnCompletionListener(mp -> {
                     mp.release();
                     if (activePlayer == mp) activePlayer = null;
+                    if (onDone != null) onDone.run();
+                });
+                player.setOnErrorListener((mp, what, extra) -> {
+                    mp.release();
+                    if (activePlayer == mp) activePlayer = null;
+                    playViaTts(appCtx, cleanWord, onDone);
+                    return true;
                 });
                 player.prepare();
                 player.start();
@@ -140,10 +155,10 @@ public class WidgetAudioPlayer {
         } catch (Exception cacheEx) {}
 
         // 3. Fallback: Android Text-To-Speech
-        playViaTts(appCtx, cleanWord);
+        playViaTts(appCtx, cleanWord, onDone);
     }
 
-    private static void playViaTts(Context context, String text) {
+    private static void playViaTts(Context context, String text, final Runnable onDone) {
         new Handler(Looper.getMainLooper()).post(() -> {
             try {
                 if (fallbackTts == null) {
@@ -151,14 +166,47 @@ public class WidgetAudioPlayer {
                         if (status == TextToSpeech.SUCCESS) {
                             ttsReady = true;
                             fallbackTts.setLanguage(Locale.US);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                                fallbackTts.setOnUtteranceProgressListener(new android.speech.tts.UtteranceProgressListener() {
+                                    @Override
+                                    public void onStart(String utteranceId) {}
+                                    @Override
+                                    public void onDone(String utteranceId) {
+                                        if (onDone != null) onDone.run();
+                                    }
+                                    @Override
+                                    public void onError(String utteranceId) {
+                                        if (onDone != null) onDone.run();
+                                    }
+                                });
+                            }
                             fallbackTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "widget_tts");
+                        } else {
+                            if (onDone != null) onDone.run();
                         }
                     });
                 } else if (ttsReady) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                        fallbackTts.setOnUtteranceProgressListener(new android.speech.tts.UtteranceProgressListener() {
+                            @Override
+                            public void onStart(String utteranceId) {}
+                            @Override
+                            public void onDone(String utteranceId) {
+                                if (onDone != null) onDone.run();
+                            }
+                            @Override
+                            public void onError(String utteranceId) {
+                                if (onDone != null) onDone.run();
+                            }
+                        });
+                    }
                     fallbackTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "widget_tts");
+                } else {
+                    if (onDone != null) onDone.run();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                if (onDone != null) onDone.run();
             }
         });
     }

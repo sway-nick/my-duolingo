@@ -312,8 +312,12 @@ public class WidgetDataManager {
                 }
             }
             if (!anyFavsLeft) {
-                // If user removed the last favorite, reset hasFavorites so widget doesn't stay in fake favorites mode
-                prefs.edit().putBoolean(KEY_HAS_FAVORITES, false).putInt(KEY_CURRENT_INDEX, 0).apply();
+                // If user removed the last favorite, reset hasFavorites and remove former favorites JSON so widget immediately shows starter words
+                prefs.edit()
+                    .putBoolean(KEY_HAS_FAVORITES, false)
+                    .remove(KEY_WORDS_JSON)
+                    .putInt(KEY_CURRENT_INDEX, 0)
+                    .apply();
                 invalidateCache();
             } else {
                 int idx = prefs.getInt(KEY_CURRENT_INDEX, 0);

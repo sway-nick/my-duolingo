@@ -55,32 +55,44 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         if (intent == null || intent.getAction() == null) return;
         final String action = intent.getAction();
 
-        // Security check for internal widget actions: only accept from our own package
+        // Security check for internal widget actions: strictly require our own package
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)) {
-            if (intent.getPackage() != null && !context.getPackageName().equals(intent.getPackage())) {
+            if (!context.getPackageName().equals(intent.getPackage())) {
                 return;
             }
         }
 
-        // Use goAsync for speech to prevent BroadcastReceiver lifecycle killing MediaPlayer/TTS on main thread
-        if (ACTION_SPEAK.equals(action)) {
-            final PendingResult asyncResult = goAsync();
-            new Thread(() -> {
+        final PendingResult asyncResult = goAsync();
+        final java.util.concurrent.atomic.AtomicBoolean finished = new java.util.concurrent.atomic.AtomicBoolean(false);
+        final Runnable onDone = () -> {
+            if (finished.compareAndSet(false, true)) {
                 try {
-                    handleWidgetAction(context, action);
-                } finally {
                     asyncResult.finish();
-                }
-            }).start();
-            return;
-        }
+                } catch (Exception ignored) {}
+            }
+        };
+        // Watchdog timeout: release receiver after at most 6 seconds
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(onDone, 6000L);
 
-        handleWidgetAction(context, action);
+        new Thread(() -> {
+            try {
+                handleWidgetAction(context, action, onDone);
+            } catch (Exception e) {
+                onDone.run();
+            }
+        }).start();
     }
 
     public static void handleWidgetAction(Context context, String action) {
-        if (action == null) return;
+        handleWidgetAction(context, action, null);
+    }
+
+    public static void handleWidgetAction(Context context, String action, final Runnable onAudioDone) {
+        if (action == null) {
+            if (onAudioDone != null) onAudioDone.run();
+            return;
+        }
         // Clear reminder alert when user interacts with widget
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action) || ACTION_SPEAK.equals(action)) {
             WidgetDataManager.setReminderAlertActive(context, false);
@@ -93,6 +105,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                     WidgetAudioPlayer.playPageTurn(context);
                 }
                 updateAllWidgets(context);
+                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             case ACTION_NEXT:
@@ -100,13 +113,15 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 if (WidgetDataManager.isSoundFlipEnabled(context)) {
                     WidgetAudioPlayer.playPageTurn(context);
                 }
+                updateAllWidgets(context);
                 if (WidgetDataManager.isAutoSpeakEnabled(context)) {
                     WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
                     if (curWord != null && !curWord.word.isEmpty()) {
-                        WidgetAudioPlayer.playWord(context, curWord.word);
+                        WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
+                        break;
                     }
                 }
-                updateAllWidgets(context);
+                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             case ACTION_PREV:
@@ -114,19 +129,23 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 if (WidgetDataManager.isSoundFlipEnabled(context)) {
                     WidgetAudioPlayer.playPageTurn(context);
                 }
+                updateAllWidgets(context);
                 if (WidgetDataManager.isAutoSpeakEnabled(context)) {
                     WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
                     if (curWord != null && !curWord.word.isEmpty()) {
-                        WidgetAudioPlayer.playWord(context, curWord.word);
+                        WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
+                        break;
                     }
                 }
-                updateAllWidgets(context);
+                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             case ACTION_SPEAK:
                 WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
                 if (curWord != null && !curWord.word.isEmpty()) {
-                    WidgetAudioPlayer.playWord(context, curWord.word);
+                    WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
+                } else {
+                    if (onAudioDone != null) onAudioDone.run();
                 }
                 break;
 
@@ -136,10 +155,18 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                     WidgetAudioPlayer.playPageTurn(context);
                 }
                 updateAllWidgets(context);
+                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             case ACTION_AUTO_ROTATE:
+                if (!hasActiveWidgets(context)) {
+                    cancelRotation(context);
+                    if (onAudioDone != null) onAudioDone.run();
+                    return;
+                }
                 WidgetDataManager.nextWord(context);
+                updateAllWidgets(context);
+                scheduleNextRotation(context);
                 if (WidgetDataManager.isAutoSpeakEnabled(context)) {
                     // Suppress auto-speech if app in foreground, outside quiet hours, or system audio is busy (calls, video, games, silent mode)
                     if (!WidgetDataManager.isAppInForeground() 
@@ -147,12 +174,16 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                             && !WidgetAudioPlayer.isSystemAudioBusy(context)) {
                         WidgetDataManager.WidgetWord w = WidgetDataManager.getCurrentWord(context);
                         if (w != null && !w.word.isEmpty()) {
-                            WidgetAudioPlayer.playWord(context, w.word);
+                            WidgetAudioPlayer.playWord(context, w.word, onAudioDone);
+                            break;
                         }
                     }
                 }
-                updateAllWidgets(context);
-                scheduleNextRotation(context);
+                if (onAudioDone != null) onAudioDone.run();
+                break;
+
+            default:
+                if (onAudioDone != null) onAudioDone.run();
                 break;
         }
     }
@@ -339,7 +370,24 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         return PendingIntent.getBroadcast(context, requestCode, intent, flags);
     }
 
+    public static boolean hasActiveWidgets(Context context) {
+        if (context == null) return false;
+        try {
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
+            int[] allIds = manager.getAppWidgetIds(cn);
+            return allIds != null && allIds.length > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static void scheduleNextRotation(Context context) {
+        if (context == null) return;
+        if (!hasActiveWidgets(context)) {
+            cancelRotation(context);
+            return;
+        }
         try {
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (am == null) return;

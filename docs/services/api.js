@@ -2145,8 +2145,14 @@ function syncFavoritesToNativeWidget(wordsList = null) {
         return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
       });
 
-      // Cap at 100 words to avoid massive SharedPreferences memory footprint and ANR
-      const fallbackList = (catWords.length > 0 ? catWords : (allWords || [])).slice(0, 100);
+      // Pick a diverse daily sliding window of 100 words to cover the full dictionary without SharedPreferences bloat
+      const fullList = catWords.length > 0 ? catWords : (allWords || []);
+      let fallbackList = fullList;
+      if (fullList.length > 100) {
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+        const offset = (dayOfYear * 37) % (fullList.length - 100);
+        fallbackList = fullList.slice(offset, offset + 100);
+      }
       exportWords = fallbackList.map(w => ({
         id: String(w.id || w.word),
         word: w.word || '',

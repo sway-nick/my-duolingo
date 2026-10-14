@@ -639,13 +639,27 @@ public class MainActivity extends BridgeActivity {
             if (bridge != null && bridge.getWebView() != null) {
                 bridge.getWebView().addJavascriptInterface(new Object() {
                     private boolean isTrustedOrigin() {
-                        if (bridge != null && bridge.getWebView() != null) {
-                            String url = bridge.getWebView().getUrl();
-                            if (url != null) {
-                                return url.startsWith("https://localhost") || url.startsWith("http://localhost") || url.startsWith("capacitor://localhost");
+                        try {
+                            if (bridge == null || bridge.getWebView() == null) return false;
+                            String url;
+                            if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+                                url = bridge.getWebView().getUrl();
+                            } else {
+                                java.util.concurrent.FutureTask<String> task = new java.util.concurrent.FutureTask<>(() -> bridge.getWebView().getUrl());
+                                bridge.getWebView().post(task);
+                                url = task.get(300, java.util.concurrent.TimeUnit.MILLISECONDS);
                             }
+                            if (url == null) return false;
+                            android.net.Uri uri = android.net.Uri.parse(url);
+                            String scheme = uri.getScheme();
+                            String host = uri.getHost();
+                            if (host == null || scheme == null) return false;
+                            boolean hostOk = "localhost".equalsIgnoreCase(host);
+                            boolean schemeOk = "https".equalsIgnoreCase(scheme) || "http".equalsIgnoreCase(scheme) || "capacitor".equalsIgnoreCase(scheme);
+                            return hostOk && schemeOk;
+                        } catch (Exception e) {
+                            return false;
                         }
-                        return true;
                     }
 
                     @JavascriptInterface
@@ -661,11 +675,13 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public boolean requestPinWidget(final String size) {
+                        if (!isTrustedOrigin()) return false;
                         return requestPinWidget();
                     }
 
                     @JavascriptInterface
                     public boolean requestPinWidget() {
+                        if (!isTrustedOrigin()) return false;
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
@@ -683,6 +699,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public boolean isPinSupported() {
+                        if (!isTrustedOrigin()) return false;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                             return appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported();
@@ -692,6 +709,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public boolean isWidgetInstalled() {
+                        if (!isTrustedOrigin()) return false;
                         try {
                             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(MainActivity.this);
                             ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
@@ -704,6 +722,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public String getPendingUnfavorites() {
+                        if (!isTrustedOrigin()) return "[]";
                         return WidgetDataManager.getPendingUnfavoritesJson(MainActivity.this);
                     }
 
@@ -721,6 +740,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public String getPendingFavorites() {
+                        if (!isTrustedOrigin()) return "[]";
                         return WidgetDataManager.getPendingFavoritesJson(MainActivity.this);
                     }
 
@@ -804,6 +824,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public String getWidgetConfig() {
+                        if (!isTrustedOrigin()) return "{}";
                         return WidgetDataManager.getConfigJson(MainActivity.this);
                     }
 
