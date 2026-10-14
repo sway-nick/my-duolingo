@@ -221,6 +221,11 @@ public class WidgetAudioPlayer {
             } catch (Exception ignored) {}
             activePlayer = null;
         }
+        if (fallbackTts != null) {
+            try {
+                fallbackTts.stop();
+            } catch (Exception ignored) {}
+        }
     }
 
     public static synchronized void playPageTurn(Context context) {

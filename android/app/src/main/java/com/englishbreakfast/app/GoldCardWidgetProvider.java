@@ -22,6 +22,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_SPEAK = "com.englishbreakfast.app.widget.ACTION_SPEAK";
     public static final String ACTION_TOGGLE_FAV = "com.englishbreakfast.app.widget.ACTION_TOGGLE_FAV";
     public static final String ACTION_AUTO_ROTATE = "com.englishbreakfast.app.widget.ACTION_AUTO_ROTATE";
+    private static final java.util.concurrent.ExecutorService sSerialExecutor = java.util.concurrent.Executors.newSingleThreadExecutor();
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -75,13 +76,13 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         // Watchdog timeout: release receiver after at most 6 seconds
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(onDone, 6000L);
 
-        new Thread(() -> {
+        sSerialExecutor.execute(() -> {
             try {
                 handleWidgetAction(context, action, onDone);
             } catch (Exception e) {
                 onDone.run();
             }
-        }).start();
+        });
     }
 
     public static void handleWidgetAction(Context context, String action) {

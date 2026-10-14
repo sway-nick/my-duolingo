@@ -16,12 +16,22 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    if (!keystorePropertiesFile.exists()) {
+        keystorePropertiesFile = file("keystore.properties")
+    }
+    def keystoreProperties = new Properties()
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
     signingConfigs {
         release {
-            storeFile file('upload-keystore.jks')
-            storePassword 'REDACTED_KEYSTORE_PASSWORD'
-            keyAlias 'englishbreakfast'
-            keyPassword 'REDACTED_KEYSTORE_PASSWORD'
+            def ksFile = keystoreProperties['storeFile'] ?: System.getenv("KEYSTORE_FILE") ?: 'upload-keystore.jks'
+            storeFile file(ksFile)
+            storePassword keystoreProperties['storePassword'] ?: System.getenv("KEYSTORE_PASSWORD") ?: ''
+            keyAlias keystoreProperties['keyAlias'] ?: System.getenv("KEY_ALIAS") ?: 'englishbreakfast'
+            keyPassword keystoreProperties['keyPassword'] ?: System.getenv("KEY_PASSWORD") ?: ''
         }
     }
     buildTypes {

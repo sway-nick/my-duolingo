@@ -197,17 +197,21 @@ public class WidgetDataManager {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                android.util.Log.e("WidgetDataManager", "Error parsing widget words JSON: " + e.getMessage(), e);
             }
         }
 
-        // Fallback: If list is empty (e.g. before first sync), provide starter category words
+        // Fallback: If list is empty (e.g. before first sync or 0 favorites), provide clear context
         if (list.isEmpty()) {
-            list.add(new WidgetWord("w_know", "Knowledge", "/ˈnɒl.ɪdʒ/", "Знание, познания", "ELEMENTARY", "Knowledge is power.", false, true));
-            list.add(new WidgetWord("w_opp", "Opportunity", "/ˌɒp.əˈtjuː.nə.ti/", "Возможность, удобный случай", "INTERMEDIATE", "Every day brings new opportunities.", false, true));
-            list.add(new WidgetWord("w_conf", "Confidence", "/ˈkɒn.fɪ.dəns/", "Уверенность, доверие", "INTERMEDIATE", "Practice builds your confidence.", false, true));
-            list.add(new WidgetWord("w_insp", "Inspiration", "/ˌɪn.spɪˈreɪ.ʃən/", "Вдохновение", "ELEMENTARY", "Find inspiration in small things.", false, true));
-            list.add(new WidgetWord("w_succ", "Success", "/səkˈses/", "Успех, удача", "ELEMENTARY", "Success comes with persistence.", false, true));
+            if (hasFavs) {
+                list.add(new WidgetWord("fav_empty", "Favorites is Empty", "", "Добавьте слова в избранное в приложении", "FAVORITES", "Нажмите ❤️ в приложении", false, true));
+            } else {
+                list.add(new WidgetWord("w_know", "Knowledge", "/ˈnɒl.ɪdʒ/", "Знание, познания", "ELEMENTARY", "Knowledge is power.", false, true));
+                list.add(new WidgetWord("w_opp", "Opportunity", "/ˌɒp.əˈtjuː.nə.ti/", "Возможность, удобный случай", "INTERMEDIATE", "Every day brings new opportunities.", false, true));
+                list.add(new WidgetWord("w_conf", "Confidence", "/ˈkɒn.fɪ.dəns/", "Уверенность, доверие", "INTERMEDIATE", "Practice builds your confidence.", false, true));
+                list.add(new WidgetWord("w_insp", "Inspiration", "/ˌɪn.spɪˈreɪ.ʃən/", "Вдохновение", "ELEMENTARY", "Find inspiration in small things.", false, true));
+                list.add(new WidgetWord("w_succ", "Success", "/səkˈses/", "Успех, удача", "ELEMENTARY", "Success comes with persistence.", false, true));
+            }
         }
 
         sCachedWords = new ArrayList<>(list);

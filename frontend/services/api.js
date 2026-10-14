@@ -2053,7 +2053,7 @@ async function clearAllFavoritesApi() {
 function isFallbackWordId(id) {
   if (id === null || id === undefined) return true;
   const s = String(id);
-  return s.startsWith('w_') || s === 'def';
+  return s.startsWith('w_') || s.startsWith('fav_') || s === 'def';
 }
 
 let isSyncingPending = false;
