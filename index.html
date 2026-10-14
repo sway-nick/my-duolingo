@@ -7,16 +7,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J1YTNL2LZX"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-J1YTNL2LZX', {
-        cookie_flags: 'SameSite=None;Secure',
-        send_page_view: true
-      });
+      // Analytics disabled: no-op safe helpers
+      window.trackScreen = function() {};
+      window.trackEvent = function() {};
     </script>
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
@@ -1054,9 +1048,18 @@
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
           const isHubScreen = (!activeWords || activeWords.length === 0) && (currentMethod === 'input' || window._showHubScreen || learningCount === 0);
 
+          if (isHubScreen) {
+            if (window.trackScreen) {
+              window.trackScreen('training_hub', 'TrainingHub');
+            }
+          }
+
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
               clearActiveConveyorBatch();
+              if (window.trackEvent) {
+                window.trackEvent('round_completed', { method: currentMethod });
+              }
               try {
                 trackRoundCompleted(getEffectiveUserId());
                 pushUserDataToCloud(null, null, true);
@@ -1344,6 +1347,13 @@
                     let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                     if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
 
+                    if (window.trackEvent) {
+                      window.trackEvent('cat_video_started', {
+                        video_name: currentWotdVideo,
+                        round_word: wotd ? wotd.word : ''
+                      });
+                    }
+
                     // Advance index for next time and preload next video
                     localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
                     preloadNextWotdVideo();
@@ -1381,6 +1391,11 @@
 
                     cardVideo.addEventListener('ended', () => {
                       dismissVideo();
+                      if (window.trackEvent) {
+                        window.trackEvent('cat_video_completed', {
+                          video_name: currentWotdVideo
+                        });
+                      }
                     }, { once: true });
 
                     cardVideo.addEventListener('error', () => {
@@ -1434,6 +1449,9 @@
                 btn.addEventListener('click', async (e) => {
                   e.stopPropagation();
                   isWotdFav = !isWotdFav;
+                  if (window.trackEvent) {
+                    window.trackEvent('wotd_favorite_toggle', { word: wotd ? wotd.word : '', active: isWotdFav });
+                  }
                   handleFavoriteToggle(wotd.id, isWotdFav);
                   favButtons.forEach((b) => {
                     b.classList.toggle('is-active', isWotdFav);
@@ -1446,6 +1464,9 @@
 
           function renderCategorySelectorScreen() {
             window._isCategorySelectOpen = true;
+            if (window.trackScreen) {
+              window.trackScreen('category_selector', 'CategoryModal');
+            }
             const content = document.querySelector('#app-content');
             if (!content) return;
 
@@ -1849,6 +1870,12 @@
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
             }
+            if (window.trackScreen) {
+              window.trackScreen('training_' + newMethod, 'TrainingMode');
+            }
+            if (window.trackEvent) {
+              window.trackEvent('training_mode_select', { mode: newMethod });
+            }
             if (isFavPracticeActive) {
               favoritePracticeMethod = newMethod;
             } else {
@@ -1865,6 +1892,9 @@
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+            if (window.trackEvent) {
+              window.trackEvent('category_change', { category: newCategory });
             }
             favoritePracticeWords = null;
             favoritePracticeMethod = 'cards';
@@ -1921,6 +1951,9 @@
         }
         activeTab = tabName;
         window._activeTab = tabName;
+        if (window.trackScreen) {
+          window.trackScreen(tabName, 'MainTab');
+        }
         const navTabs = document.querySelectorAll('.nav-tab');
         navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === tabName));
         const content = document.querySelector('#app-content');
@@ -2063,9 +2096,54 @@
           }
         });
 
+        function syncFavoritesToAndroidWidget() {
+          try {
+            if (!window.AndroidWidgetBridge || typeof window.AndroidWidgetBridge.syncFavorites !== 'function') return;
+
+            // 1. Process any pending un-favorites toggled directly on the widget while app was closed
+            if (typeof window.AndroidWidgetBridge.getPendingUnfavorites === 'function') {
+              const pendingStr = window.AndroidWidgetBridge.getPendingUnfavorites();
+              if (pendingStr && pendingStr.length > 2) {
+                const pendingArr = JSON.parse(pendingStr);
+                if (Array.isArray(pendingArr) && pendingArr.length > 0) {
+                  pendingArr.forEach(id => {
+                    handleFavoriteToggle(id, false);
+                  });
+                  window.AndroidWidgetBridge.clearPendingUnfavorites();
+                }
+              }
+            }
+
+            // 2. Extract full word objects for all current favorites
+            const favIds = getUserFavorites();
+            const favSet = new Set(favIds.map(String));
+            let favWords = (allWords || []).filter(w => favSet.has(String(w.id)));
+
+            // If user has no favorites yet, send top elementary words as fallback
+            if (favWords.length === 0 && allWords && allWords.length > 0) {
+              favWords = allWords.slice(0, 20);
+            }
+
+            const exportList = favWords.map(w => ({
+              id: String(w.id || w.word),
+              word: w.word || '',
+              transcription: w.transcription || '',
+              translation: getWordTranslation(w) || '',
+              level: w.category || w.level || 'ELEMENTARY',
+              example: (w.example || w.notes || '').trim()
+            }));
+
+            window.AndroidWidgetBridge.syncFavorites(JSON.stringify(exportList));
+          } catch (e) {
+            console.warn('[Widget] syncFavorites error:', e);
+          }
+        }
+        window.syncFavoritesToAndroidWidget = syncFavoritesToAndroidWidget;
+
         window.addEventListener('myduo_favorites_updated', (e) => {
           const favs = e.detail || getUserFavorites();
           favoriteIds = new Set(favs.map(String));
+          syncFavoritesToAndroidWidget();
           if (window._isAppInitializing) return;
           if (!window._isCategorySelectOpen && (activeTab === 'favorites' || activeTab === 'dictionary')) {
             renderTab(activeTab);
@@ -2086,6 +2164,7 @@
           updateHeaderUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
+          syncFavoritesToAndroidWidget();
           if (activeTab === 'training' && window._showHubScreen) {
             return;
           }
@@ -2210,6 +2289,9 @@
               if (typeof window.hideAppSplashScreen === 'function') {
                 window.hideAppSplashScreen();
               }
+              try {
+                syncFavoritesToAndroidWidget();
+              } catch (e) {}
             });
           });
         }
