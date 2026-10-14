@@ -24,7 +24,7 @@ import {
   loadFullUserDataFirestore
 } from './firebase.js?v=385.0';
 import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=385.0';
-import { getInterfaceLanguage } from './i18n.js?v=385.0';
+import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=385.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -2050,6 +2050,115 @@ async function clearAllFavoritesApi() {
   pushUserDataToCloud(userId);
 }
 
+let isSyncingPending = false;
+async function syncPendingWidgetFavorites() {
+  if (isSyncingPending || !window.AndroidWidgetBridge) return;
+  isSyncingPending = true;
+  try {
+    // 1. Process pending unfavorites
+    if (typeof window.AndroidWidgetBridge.getPendingUnfavorites === 'function') {
+      const pendingStr = window.AndroidWidgetBridge.getPendingUnfavorites();
+      if (typeof window.AndroidWidgetBridge.clearPendingUnfavorites === 'function') {
+        window.AndroidWidgetBridge.clearPendingUnfavorites();
+      }
+      if (pendingStr && pendingStr.length > 2) {
+        const pendingArr = JSON.parse(pendingStr);
+        if (Array.isArray(pendingArr) && pendingArr.length > 0) {
+          for (const id of pendingArr) {
+            await toggleFavoriteApi(id, false);
+          }
+        }
+      }
+    }
+
+    // 2. Process pending favorites
+    if (typeof window.AndroidWidgetBridge.getPendingFavorites === 'function') {
+      const pendingFavStr = window.AndroidWidgetBridge.getPendingFavorites();
+      if (typeof window.AndroidWidgetBridge.clearPendingFavorites === 'function') {
+        window.AndroidWidgetBridge.clearPendingFavorites();
+      }
+      if (pendingFavStr && pendingFavStr.length > 2) {
+        const pendingFavArr = JSON.parse(pendingFavStr);
+        if (Array.isArray(pendingFavArr) && pendingFavArr.length > 0) {
+          for (const id of pendingFavArr) {
+            await toggleFavoriteApi(id, true);
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('[Widget] Error syncing pending favorites:', e);
+  } finally {
+    isSyncingPending = false;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.syncPendingWidgetFavorites = syncPendingWidgetFavorites;
+}
+
+function syncFavoritesToNativeWidget(wordsList = null) {
+  try {
+    if (!window.AndroidWidgetBridge || typeof window.AndroidWidgetBridge.syncFavorites !== 'function') return;
+    let allWords = wordsList || window.__allWordsList || (typeof cachedWordsList !== 'undefined' ? cachedWordsList : null) || [];
+    if (!Array.isArray(allWords) || allWords.length === 0) {
+      try {
+        allWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+      } catch (e) {}
+    }
+    if (!Array.isArray(allWords) || allWords.length === 0) {
+      return; // Never overwrite widget with empty list while words are still loading
+    }
+    const favIds = getUserFavorites();
+    const favSet = new Set((favIds || []).map(String));
+    let favWords = allWords.filter(w => favSet.has(String(w.id)) || (w.word && favSet.has(String(w.word))));
+    const hasFavorites = favWords.length > 0;
+    let exportWords = [];
+
+    if (hasFavorites) {
+      exportWords = favWords.map(w => ({
+        id: String(w.id || w.word),
+        word: w.word || '',
+        transcription: w.transcription || w.transcription_ipa || '',
+        translation: typeof getWordTranslation === 'function' ? getWordTranslation(w) : (w.translation || w.translation_ru || ''),
+        level: w.category || w.level || 'ELEMENTARY',
+        example: (w.example || w.notes || '').trim(),
+        isFavorite: true
+      }));
+    } else {
+      // User has no favorites: pass words from user's selected category in sequential order
+      const selectedCat = (typeof getUserSettings === 'function' ? getUserSettings()?.category : null)
+        || localStorage.getItem('myduo_dict_category')
+        || 'Elementary';
+
+      const catWords = (allWords || []).filter(w => {
+        const wCat = (w.category || w.level || '').toLowerCase().trim();
+        const sCat = selectedCat.toLowerCase().trim();
+        return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
+      });
+
+      const fallbackList = catWords.length > 0 ? catWords : (allWords || []).slice(0, 50);
+      exportWords = fallbackList.map(w => ({
+        id: String(w.id || w.word),
+        word: w.word || '',
+        transcription: w.transcription || w.transcription_ipa || '',
+        translation: typeof getWordTranslation === 'function' ? getWordTranslation(w) : (w.translation || w.translation_ru || ''),
+        level: w.category || w.level || 'ELEMENTARY',
+        example: (w.example || w.notes || '').trim(),
+        isFavorite: false
+      }));
+    }
+
+    const payload = {
+      hasFavorites: hasFavorites,
+      words: exportWords
+    };
+    window.AndroidWidgetBridge.syncFavorites(JSON.stringify(payload));
+  } catch (e) {
+    console.warn('[Widget] Sync favorites error:', e);
+  }
+}
+
 function isWordMastered(prog) {
   if (!prog) return false;
   return Boolean(
@@ -3710,6 +3819,8 @@ export {
   flushProgressQueue,
   toggleFavoriteApi,
   clearAllFavoritesApi,
+  syncPendingWidgetFavorites,
+  syncFavoritesToNativeWidget,
   getUserStats,
   getGlobalWordOfTheDay,
   getUserSettings,

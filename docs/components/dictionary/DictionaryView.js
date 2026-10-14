@@ -76,6 +76,13 @@ function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
 }
 
 function openDocScannerModal(words = [], onWordsSaved = () => {}) {
+  if (window.trackScreen) {
+    window.trackScreen('scanner_modal', 'ScannerModal');
+  }
+  if (window.trackEvent) {
+    window.trackEvent('scanner_open');
+  }
+
   const modalEl = document.createElement('div');
   modalEl.id = 'doc-scanner-modal-overlay';
   modalEl.className = 'scanner-modal-overlay';
@@ -258,18 +265,21 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   takePhotoBtn.addEventListener('click', () => {
     hideError();
+    if (window.trackEvent) window.trackEvent('scan_source_photo');
     cameraInput.value = '';
     cameraInput.click();
   });
 
   galleryBtn.addEventListener('click', () => {
     hideError();
+    if (window.trackEvent) window.trackEvent('scan_source_gallery');
     galleryInput.value = '';
     galleryInput.click();
   });
 
   openPasteBtn.addEventListener('click', async () => {
     hideError();
+    if (window.trackEvent) window.trackEvent('scan_source_paste');
     uploadView.style.display = 'none';
     pasteView.style.display = 'block';
 
@@ -318,6 +328,9 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       hideError();
+      if (window.trackEvent) {
+        window.trackEvent('scan_paste_submit', { length: rawText.length });
+      }
       pasteView.style.display = 'none';
       processingView.style.display = 'flex';
       resultsView.style.display = 'none';
@@ -388,6 +401,9 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       hideError();
+      if (window.trackEvent) {
+        window.trackEvent('scan_image_upload', { size_kb: Math.round((file.size || 0) / 1024) });
+      }
       uploadView.style.display = 'none';
       pasteView.style.display = 'none';
       processingView.style.display = 'flex';
@@ -802,6 +818,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       }
 
       onWordsSaved(added);
+
+      if (window.trackEvent) {
+        window.trackEvent('scanner_words_added', { count: added.length, category: currentGroupCategory });
+      }
 
       submitBtn.textContent = `🎉 ${t('scan_added_success')}${added.length}!`;
       setTimeout(() => {
@@ -1563,7 +1583,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     if (renderedCount < filteredWords.length) {
       if (sentinel) {
         sentinel.style.display = 'block';
-        sentinel.textContent = 'Загрузка слов...';
+        sentinel.textContent = t('auth_loading') || 'Loading...';
       }
     } else {
       if (sentinel) sentinel.style.display = 'none';

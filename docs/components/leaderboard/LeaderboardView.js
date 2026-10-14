@@ -235,6 +235,25 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
   const myRank = myRankIndex >= 0 ? myRankIndex + 1 : null;
   const myPlayer = myRankIndex >= 0 ? safePlayers[myRankIndex] : null;
 
+  if (myRank) {
+    try {
+      const prevRankStr = localStorage.getItem('myduo_cached_rank');
+      const prevRank = prevRankStr ? parseInt(prevRankStr, 10) : null;
+
+      // Check if player was in top-4 and has been knocked out (overtaken)
+      if (prevRank && prevRank <= 4 && myRank > 4) {
+        if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.triggerOvertakenAlert === 'function') {
+          window.AndroidWidgetBridge.triggerOvertakenAlert(t('widget_overtaken'));
+        }
+      }
+
+      if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncUserRank === 'function') {
+        window.AndroidWidgetBridge.syncUserRank(myRank);
+      }
+      localStorage.setItem('myduo_cached_rank', String(myRank));
+    } catch (e) {}
+  }
+
   const podiumHtml = `
     <div class="podium-grid">
       ${top4.map((p, idx) => renderPodiumCard(p, idx + 1, period)).join('')}
@@ -317,7 +336,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           ${
             isGuest
               ? `<button class="primary-button my-bar-login-btn" id="leaderboard-login-btn" style="position: relative; width: auto; min-width: auto; height: 28px; min-height: 28px; max-height: 28px; padding: 0 10px; font-size: 12px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex-shrink: 0; white-space: nowrap; line-height: 1; margin-right: 2px;">
-                  <span>Log in</span>
+                  <span>${t('auth_btn_login')}</span>
                 </button>`
               : ''
           }

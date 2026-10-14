@@ -1,4 +1,5 @@
-﻿import AudioService from '../../services/audioService.js?v=385.0';
+import AudioService from '../../services/audioService.js?v=385.0';
+import { t } from '../../services/i18n.js?v=385.0';
 
 let currentKeyHandler = null;
 
@@ -50,13 +51,13 @@ export function renderListeningExercise(container, exerciseData, onComplete) {
     const inputField = document.createElement('input');
     inputField.type = 'text';
     inputField.className = 'listening-input';
-    inputField.placeholder = 'Введите услышанное слово';
+    inputField.placeholder = t('train_input_placeholder') || 'Type what you hear...';
     wrapper.appendChild(inputField);
 
     // Check button
     const checkBtn = document.createElement('button');
     checkBtn.className = 'check-button';
-    checkBtn.textContent = 'Проверить';
+    checkBtn.textContent = t('train_check') || 'Check';
     checkBtn.addEventListener('click', handleCheck);
     wrapper.appendChild(checkBtn);
 

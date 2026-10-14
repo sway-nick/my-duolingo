@@ -1,5 +1,5 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=385.0';
-import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=385.0';
+import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=385.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
 import { openShareDialog } from '../modals/ShareModal.js?v=385.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
@@ -388,6 +388,52 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       }
     });
   });
+
+  // Expose setActiveTab globally for native widget deep links (e.g. clicking 🏆 rank badge)
+  window.setActiveTab = (targetTab) => {
+    const targetEl = app.querySelector(`.nav-tab[data-tab="${targetTab}"]`);
+    if (targetEl) {
+      tabs.forEach((t) => t.classList.remove('active'));
+      targetEl.classList.add('active');
+      closeDrawer();
+      if (typeof onTabChange === 'function') {
+        try {
+          onTabChange(targetTab);
+        } catch (err) {
+          console.error('Error changing tab:', err);
+        }
+      }
+    }
+  };
+
+  // Sync cached or newly calculated rank to Android widget on app startup & resume
+  function syncCurrentWidgetRank() {
+    try {
+      let r = null;
+      const cachedRank = localStorage.getItem('myduo_cached_rank');
+      if (cachedRank) r = parseInt(cachedRank, 10);
+      if (!r || isNaN(r)) {
+        const lb = getCachedLeaderboard(null, 'week');
+        if (lb && Array.isArray(lb.data)) {
+          const idx = lb.data.findIndex((p) => p && p.isCurrentUser);
+          if (idx >= 0) {
+            r = idx + 1;
+            localStorage.setItem('myduo_cached_rank', String(r));
+          }
+        }
+      }
+      if (r > 0 && window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncUserRank === 'function') {
+        window.AndroidWidgetBridge.syncUserRank(r);
+      }
+    } catch (e) {
+      console.warn('[Widget] Error syncing current rank:', e);
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    window.syncCurrentWidgetRank = syncCurrentWidgetRank;
+  }
+  syncCurrentWidgetRank();
 
   // Click on top avatar / profile in drawer -> navigate to Settings tab
   const drawerProfileBtn = app.querySelector('#drawer-profile-btn') || app.querySelector('.drawer-profile');

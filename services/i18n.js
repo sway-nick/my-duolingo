@@ -1,3 +1,5 @@
+import { WIDGET_TRANSLATIONS } from './widgetTranslations.js?v=385.0';
+
 const translations = {
   ru: {
     // Nav / Drawer
@@ -138,6 +140,10 @@ const translations = {
     settings_sfx_on: "Включены",
     settings_sfx_off: "Выключены",
     settings_voice: "Акцент озвучки",
+    settings_widget: "📱 Виджет",
+    settings_install_widget: "Настроить виджет",
+    settings_configure_widget: "Настроить виджет",
+    widget_overtaken: "Вас обошли соперники!",
     settings_goal: "📌 Дневная цель",
     settings_lang: "🌐 Язык интерфейса",
     avatar_choose_title: "🎭 Выберите персонажа",
@@ -424,6 +430,10 @@ const translations = {
     settings_sfx_on: "🔔 Увімкнено",
     settings_sfx_off: "🔕 Вимкнено",
     settings_voice: "Акцент озвучення",
+    settings_widget: "📱 Віджет",
+    settings_install_widget: "Налаштувати віджет",
+    settings_configure_widget: "Налаштувати віджет",
+    widget_overtaken: "Вас обігнали суперники!",
     settings_goal: "📌 Денна ціль",
     settings_lang: "🌐 Мова інтерфейсу",
     avatar_choose_title: "🎭 Оберіть персонажа",
@@ -712,6 +722,10 @@ const translations = {
     settings_sfx_on: "🔔 Enabled",
     settings_sfx_off: "🔕 Disabled",
     settings_voice: "Voice Accent",
+    settings_widget: "📱 Widget",
+    settings_install_widget: "Configure Widget",
+    settings_configure_widget: "Configure Widget",
+    widget_overtaken: "You've been overtaken!",
     settings_goal: "📌 Daily Goal",
     settings_lang: "🌐 Interface Language",
     avatar_choose_title: "🎭 Choose Character",
@@ -9300,6 +9314,16 @@ export function getSpeechPrompt(type = 'listening') {
 export function t(key, params = null) {
   let val = '';
   const lang = getInterfaceLanguage();
+
+  if (typeof WIDGET_TRANSLATIONS !== 'undefined' && WIDGET_TRANSLATIONS) {
+    if (WIDGET_TRANSLATIONS[lang] && typeof WIDGET_TRANSLATIONS[lang][key] === 'string') {
+      return WIDGET_TRANSLATIONS[lang][key];
+    }
+    if (WIDGET_TRANSLATIONS['en'] && typeof WIDGET_TRANSLATIONS['en'][key] === 'string') {
+      return WIDGET_TRANSLATIONS['en'][key];
+    }
+  }
+
   const dict = translations[lang] || translations['en'];
 
   if (dict && typeof dict[key] === 'string' && dict[key].length > 0) {

@@ -24,6 +24,10 @@ function parseJwt(token) {
 }
 
 function renderAuthModal(onSuccessCallback, initialMode = 'login') {
+  if (window.trackScreen) {
+    window.trackScreen('auth_modal', 'AuthModal');
+  }
+
   const existing = document.querySelector('#auth-modal');
   if (existing) existing.remove();
 
@@ -197,6 +201,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
           await fetchUserDataFromCloud(userWithGoogle.id);
         } catch (e) {}
         modal.remove();
+        if (window.trackEvent) {
+          window.trackEvent('login', { method: 'google' });
+        }
         if (onSuccessCallback) onSuccessCallback(userWithGoogle);
       } else {
         throw new Error(res?.error || t('auth_err_failed'));
@@ -216,7 +223,7 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
 
     const payload = parseJwt(response.credential);
     if (!payload || !payload.email) {
-      errorBox.textContent = 'Не удалось получить данные аккаунта Google';
+      errorBox.textContent = t('auth_err_failed');
       errorBox.style.display = 'block';
       return;
     }
@@ -275,6 +282,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
           await fetchUserDataFromCloud(userWithGoogle.id);
         } catch (e) {}
         modal.remove();
+        if (window.trackEvent) {
+          window.trackEvent('login', { method: 'google' });
+        }
         if (onSuccessCallback) onSuccessCallback(userWithGoogle);
       } else {
         throw new Error(res?.error || t('auth_err_failed'));
@@ -374,6 +384,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
                 await fetchUserDataFromCloud(userWithGoogle.id);
               } catch (e) {}
               modal.remove();
+              if (window.trackEvent) {
+                window.trackEvent('login', { method: 'google' });
+              }
               if (onSuccessCallback) onSuccessCallback(userWithGoogle);
               return;
             } else {
@@ -439,7 +452,7 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
         return;
       }
       if (password.length < 6) {
-        errorBox.textContent = 'Пароль должен содержать не менее 6 символов';
+        errorBox.textContent = t('auth_err_password_length') || 'Password must be at least 6 characters';
         errorBox.style.display = 'block';
         return;
       }
@@ -478,6 +491,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
             await fetchUserDataFromCloud(finalUser.id);
           } catch (e) {}
           modal.remove();
+          if (window.trackEvent) {
+            window.trackEvent('sign_up', { method: 'email' });
+          }
           if (finalUser && finalUser.email && !isEmailVerified()) {
             setTimeout(() => showToast(t('lead_verify_email_prompt')), 500);
           }
@@ -521,6 +537,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
             await fetchUserDataFromCloud(finalUser.id);
           } catch (e) {}
           modal.remove();
+          if (window.trackEvent) {
+            window.trackEvent('login', { method: 'email' });
+          }
           if (finalUser && finalUser.email && !isEmailVerified()) {
             setTimeout(() => showToast(t('lead_verify_email_prompt')), 500);
           }
@@ -532,6 +551,9 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
             await fetchUserDataFromCloud(res.data.user.id);
           } catch (e) {}
           modal.remove();
+          if (window.trackEvent) {
+            window.trackEvent('login', { method: 'email' });
+          }
           if (onSuccessCallback) onSuccessCallback(res.data.user);
           return;
         } else {

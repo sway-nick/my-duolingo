@@ -1,4 +1,4 @@
-﻿import { renderMultipleChoice, destroyMultipleChoice } from './exercises/MultipleChoice.js?v=385.0';
+import { renderMultipleChoice, destroyMultipleChoice } from './exercises/MultipleChoice.js?v=385.0';
 import { renderSentenceBuilder, destroySentenceBuilder } from './exercises/SentenceBuilder.js?v=385.0';
 import { renderListeningExercise, destroyListeningExercise } from './exercises/ListeningExercise.js?v=385.0';
 import { renderMatchingPairs, destroyMatchingPairs } from './exercises/MatchingPairs.js?v=385.0';
@@ -8,6 +8,7 @@ import { renderIrregularVerbs, destroyIrregularVerbs } from './exercises/Irregul
 import AudioService from '../services/audioService.js?v=385.0';
 import StorageService from '../services/storageService.js?v=385.0';
 import { WORDS, IRREGULAR_VERBS, LESSONS } from '../services/initialData.js?v=385.0';
+import { t } from '../services/i18n.js?v=385.0';
 
 let currentExerciseIndex = 0;
 let exerciseQueue = [];
@@ -78,7 +79,7 @@ function renderLessonShell(container) {
     `;
 
     container.querySelector('.lesson-close-btn').addEventListener('click', () => {
-        if (confirm('Вы уверены? Прогресс будет потерян.')) {
+        if (confirm(t('confirm_quit_lesson') || 'Are you sure? Progress will be lost.')) {
             destroyLesson();
             // Dispatch event to go back to home screen
             document.dispatchEvent(new CustomEvent('lesson-quit'));

@@ -20,8 +20,8 @@ service cloud.firestore {
     //      * Auth requirement: request.auth.token.email_verified == true
     //      * Read: get allowed; list restricted to request.query.limit <= 120
     //      * Delete: owner only
-    //      * create: xp <= 1000
-    //      * update: math.abs(new - old) <= 1000 && isAcceptableGrowthRate (3 XP/s + 150 margin)
+    //      * create: xp <= 25000 (allows initial migration/restore XP)
+    //      * update: (reconcile from 0 / uninitialized <= 25000) || (delta <= 10000 && isAcceptableGrowthRate (3 XP/s + 150 margin))
     //
     // 2. All-Time Leaderboard: /leaderboard_alltime/{userId}
     //    - userId: string matching authenticated request.auth.uid
@@ -35,7 +35,7 @@ service cloud.firestore {
     //      * Read: get allowed; list restricted to request.query.limit <= 120
     //      * Delete: owner only
     //      * create: totalXp >= 0
-    //      * update: totalXp >= old && (new - old) <= 1000 && isAcceptableGrowthRate (3 XP/s + 150 margin)
+    //      * update: totalXp >= old && (new - old) <= 25000 && (reconcile from 0 / uninitialized || isAcceptableGrowthRate (3 XP/s + 150 margin))
     //
     // 3. User Profiles & Subcollections: /users/{userId}
     //    - allow get: true; allow list: false (denied)
@@ -107,11 +107,16 @@ service cloud.firestore {
       allow delete: if isOwner(userId);
 
       allow create: if isValidWeeklyPlayer(userId, weekKey)
-        && request.resource.data.xp <= 1000;
+        && request.resource.data.xp <= 25000;
 
       allow update: if isValidWeeklyPlayer(userId, weekKey)
-        && math.abs(request.resource.data.xp - resource.data.xp) <= 1000
-        && isAcceptableGrowthRate(request.resource.data.xp, resource.data.xp);
+        && (
+          ((resource.data.xp == 0 || getPrevUpdatedAtMillis() == 0) && request.resource.data.xp <= 25000)
+          || (
+            math.abs(request.resource.data.xp - resource.data.xp) <= 10000
+            && isAcceptableGrowthRate(request.resource.data.xp, resource.data.xp)
+          )
+        );
     }
 
     // 2. All-Time Leaderboard
@@ -125,8 +130,12 @@ service cloud.firestore {
 
       allow update: if isValidAlltimePlayer(userId)
         && request.resource.data.totalXp >= resource.data.totalXp
-        && (request.resource.data.totalXp - resource.data.totalXp) <= 1000
-        && isAcceptableGrowthRate(request.resource.data.totalXp, resource.data.totalXp);
+        && (request.resource.data.totalXp - resource.data.totalXp) <= 25000
+        && (
+          resource.data.totalXp == 0
+          || getPrevUpdatedAtMillis() == 0
+          || isAcceptableGrowthRate(request.resource.data.totalXp, resource.data.totalXp)
+        );
     }
 
     // 3. User Profiles and Private Subcollections

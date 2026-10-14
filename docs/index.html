@@ -89,6 +89,12 @@
             }, 320);
           }
         };
+        // Watchdog: guarantee splash screen is dismissed even if unexpected error occurs
+        setTimeout(function() {
+          if (typeof window.hideAppSplashScreen === 'function') {
+            window.hideAppSplashScreen();
+          }
+        }, 4000);
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function() {
             navigator.serviceWorker.register('./sw.js?v=385.0').catch(function() {});
@@ -180,7 +186,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=385.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=385.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=385.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=385.0';
       import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=385.0';
@@ -2100,45 +2106,86 @@
           try {
             if (!window.AndroidWidgetBridge || typeof window.AndroidWidgetBridge.syncFavorites !== 'function') return;
 
-            // 1. Process any pending un-favorites toggled directly on the widget while app was closed
-            if (typeof window.AndroidWidgetBridge.getPendingUnfavorites === 'function') {
-              const pendingStr = window.AndroidWidgetBridge.getPendingUnfavorites();
-              if (pendingStr && pendingStr.length > 2) {
-                const pendingArr = JSON.parse(pendingStr);
-                if (Array.isArray(pendingArr) && pendingArr.length > 0) {
-                  pendingArr.forEach(id => {
-                    handleFavoriteToggle(id, false);
-                  });
-                  window.AndroidWidgetBridge.clearPendingUnfavorites();
-                }
-              }
-            }
-
-            // 2. Extract full word objects for all current favorites
+            // Extract full word objects for all current favorites
             const favIds = getUserFavorites();
-            const favSet = new Set(favIds.map(String));
-            let favWords = (allWords || []).filter(w => favSet.has(String(w.id)));
-
-            // If user has no favorites yet, send top elementary words as fallback
-            if (favWords.length === 0 && allWords && allWords.length > 0) {
-              favWords = allWords.slice(0, 20);
+            let effectiveWords = allWords;
+            if (!Array.isArray(effectiveWords) || effectiveWords.length === 0) {
+              try {
+                effectiveWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+              } catch (e) {}
+            }
+            if (!Array.isArray(effectiveWords) || effectiveWords.length === 0) {
+              return; // Do not overwrite widget while words are still loading
             }
 
-            const exportList = favWords.map(w => ({
-              id: String(w.id || w.word),
-              word: w.word || '',
-              transcription: w.transcription || '',
-              translation: getWordTranslation(w) || '',
-              level: w.category || w.level || 'ELEMENTARY',
-              example: (w.example || w.notes || '').trim()
-            }));
+            const favSet = new Set((favIds || []).map(String));
+            let favWords = effectiveWords.filter(w => favSet.has(String(w.id)) || (w.word && favSet.has(String(w.word))));
 
-            window.AndroidWidgetBridge.syncFavorites(JSON.stringify(exportList));
+            const hasFavorites = favWords.length > 0;
+            let exportWords = [];
+
+            if (hasFavorites) {
+              exportWords = favWords.map(w => ({
+                id: String(w.id || w.word),
+                word: w.word || '',
+                transcription: w.transcription || '',
+                translation: getWordTranslation(w) || '',
+                level: w.category || w.level || 'ELEMENTARY',
+                example: (w.example || w.notes || '').trim(),
+                isFavorite: true
+              }));
+            } else {
+              const selectedCat = (userSettings && userSettings.category) || 'Elementary';
+              const catWords = (allWords || []).filter(w => {
+                const wCat = (w.category || w.level || '').toLowerCase().trim();
+                const sCat = selectedCat.toLowerCase().trim();
+                return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
+              });
+              const fallbackList = catWords.length > 0 ? catWords : (allWords || []).slice(0, 50);
+              exportWords = fallbackList.map(w => ({
+                id: String(w.id || w.word),
+                word: w.word || '',
+                transcription: w.transcription || '',
+                translation: getWordTranslation(w) || '',
+                level: w.category || w.level || 'ELEMENTARY',
+                example: (w.example || w.notes || '').trim(),
+                isFavorite: false
+              }));
+            }
+
+            const payload = {
+              hasFavorites: hasFavorites,
+              words: exportWords
+            };
+            window.AndroidWidgetBridge.syncFavorites(JSON.stringify(payload));
           } catch (e) {
             console.warn('[Widget] syncFavorites error:', e);
           }
         }
         window.syncFavoritesToAndroidWidget = syncFavoritesToAndroidWidget;
+
+        // Reconcile favorites toggled on home screen widget whenever user returns to app
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            if (typeof syncPendingWidgetFavorites === 'function') {
+              syncPendingWidgetFavorites();
+            }
+          }
+        });
+        window.addEventListener('focus', () => {
+          if (typeof syncPendingWidgetFavorites === 'function') {
+            syncPendingWidgetFavorites();
+          }
+        });
+
+        try {
+          if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncUserRank === 'function') {
+            const cachedRank = parseInt(localStorage.getItem('myduo_cached_rank') || '0', 10);
+            if (cachedRank > 0) {
+              window.AndroidWidgetBridge.syncUserRank(cachedRank);
+            }
+          }
+        } catch (e) {}
 
         window.addEventListener('myduo_favorites_updated', (e) => {
           const favs = e.detail || getUserFavorites();

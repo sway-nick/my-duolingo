@@ -172,6 +172,10 @@ class AdServiceImpl {
    * Returns Promise<{ success: boolean, rewardEarned: boolean, isOffline: boolean }>
    */
   async showShieldRewardedAd() {
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_shield_requested');
+    }
+
     if (!this.isOnline()) {
       return { success: false, rewardEarned: false, isOffline: true };
     }
@@ -208,6 +212,9 @@ class AdServiceImpl {
           const onReward = () => {
             console.log('🏆 AdMob Rewarded video reward earned!');
             rewardGranted = true;
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('ad_shield_reward_earned');
+            }
           };
 
           const onDismiss = () => {
@@ -263,6 +270,10 @@ class AdServiceImpl {
    * Show Rewarded Ad to download a language or audio pack
    */
   async showLanguagePackRewardedAd(packTitle = 'Языковой пакет') {
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_pack_requested', { pack: packTitle });
+    }
+
     if (!this.isOnline()) {
       return { success: false, rewardEarned: false, isOffline: true };
     }
@@ -292,6 +303,9 @@ class AdServiceImpl {
           const onReward = () => {
             console.log('🏆 Language pack reward earned!');
             rewardGranted = true;
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('ad_pack_reward_earned', { pack: packTitle });
+            }
           };
           const onDismiss = () => {
             console.log('📺 Language pack ad dismissed, reward =', rewardGranted);
@@ -358,6 +372,9 @@ class AdServiceImpl {
         }
 
         await AdMob.showInterstitial();
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('ad_interstitial_shown');
+        }
         this.roundsCompletedSinceLastAd = 0;
         this.lastInterstitialTime = Date.now();
         return true;
@@ -368,6 +385,9 @@ class AdServiceImpl {
     }
 
     console.log('ℹ️ [Web Simulator] Round finish interstitial shown');
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_interstitial_shown');
+    }
     this.roundsCompletedSinceLastAd = 0;
     this.lastInterstitialTime = Date.now();
     return true;

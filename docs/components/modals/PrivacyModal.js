@@ -1,11 +1,16 @@
-﻿import { PRIVACY_POLICY_DATA } from './privacyTranslations.js?v=385.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { PRIVACY_POLICY_DATA } from './privacyTranslations.js?v=385.0';
 
 export function openPrivacyModal() {
+  if (typeof window !== 'undefined' && window.trackScreen) {
+    window.trackScreen('privacy_policy', 'PrivacyModal');
+  }
+
   const existing = document.querySelector('#privacy-policy-modal-overlay');
   if (existing) existing.remove();
 
   // If user selected an interface language in settings, use it. Otherwise default to English.
-  const userLang = (localStorage.getItem('myduo_interface_lang') || '').toLowerCase();
+  const userLang = (typeof getInterfaceLanguage === 'function' ? getInterfaceLanguage() : (localStorage.getItem('myduo_interface_lang') || '')).toLowerCase();
   const activeLang = (userLang && PRIVACY_POLICY_DATA[userLang]) ? userLang : 'en';
   const policy = PRIVACY_POLICY_DATA[activeLang] || PRIVACY_POLICY_DATA.en;
 

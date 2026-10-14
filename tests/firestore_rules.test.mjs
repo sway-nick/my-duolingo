@@ -36,6 +36,7 @@ const testEnv = await initializeTestEnvironment({
 const { getIsoWeekKey, getIsoWeekStartMs } = await import('../frontend/services/weekKey.js');
 
 test('Firestore Security Rules: Full Verification against Emulator', async (t) => {
+  await testEnv.clearFirestore();
   const currentWeek = getIsoWeekKey();
   const currentWeekStartMs = getIsoWeekStartMs(currentWeek);
 
@@ -384,6 +385,84 @@ test('Firestore Security Rules: Full Verification against Emulator', async (t) =
     setSessionUser(playerA);
     const alienRes = await commitXpDeltaFirestore(playerB, currentWeek, 10, 'Alien', '');
     assert.equal(alienRes.success, false, 'Commit targeting foreign uid must be rejected');
+  });
+
+  // (л) Миграция и синхронизация пользователя с 4,200 XP в недельный и all-time лидерборд
+  await t.test('(л) Миграция и синхронизация пользователя с 4,200 XP в недельный и all-time лидерборд', async () => {
+    const migrant = testEnv.authenticatedContext('migrant_4200_uid', { email_verified: true });
+    const db = migrant.firestore();
+
+    // 1. Weekly: создание с 4,200 XP разрешено
+    await assertSucceeds(
+      db.doc(`leaderboards/${currentWeek}/players/migrant_4200_uid`).set({
+        userId: 'migrant_4200_uid',
+        name: 'Learner4200',
+        xp: 4200,
+        weekKey: currentWeek,
+        weekStartMs: currentWeekStartMs,
+        updatedAt: serverTimestamp()
+      })
+    );
+
+    // 2. Weekly: создание с > 25,000 XP отклоняется
+    const cheater = testEnv.authenticatedContext('cheater_uid', { email_verified: true });
+    await assertFails(
+      cheater.firestore().doc(`leaderboards/${currentWeek}/players/cheater_uid`).set({
+        userId: 'cheater_uid',
+        name: 'Cheater',
+        xp: 25001,
+        weekKey: currentWeek,
+        weekStartMs: currentWeekStartMs,
+        updatedAt: serverTimestamp()
+      })
+    );
+
+    // 3. Weekly: начальная синхронизация/reconcile из 0 XP до 4,200 XP разрешена
+    const freshPlayer = testEnv.authenticatedContext('fresh_player_uid', { email_verified: true });
+    const freshDb = freshPlayer.firestore();
+
+    await assertSucceeds(
+      freshDb.doc(`leaderboards/${currentWeek}/players/fresh_player_uid`).set({
+        userId: 'fresh_player_uid',
+        name: 'FreshPlayer',
+        xp: 0,
+        weekKey: currentWeek,
+        weekStartMs: currentWeekStartMs,
+        updatedAt: serverTimestamp()
+      })
+    );
+
+    await assertSucceeds(
+      freshDb.doc(`leaderboards/${currentWeek}/players/fresh_player_uid`).update({
+        xp: 4200,
+        updatedAt: serverTimestamp()
+      })
+    );
+
+    // 4. All-time: начальная синхронизация/reconcile из 0 XP до 4,200 XP разрешена
+    await assertSucceeds(
+      freshDb.doc('leaderboard_alltime/fresh_player_uid').set({
+        userId: 'fresh_player_uid',
+        name: 'FreshPlayer',
+        totalXp: 0,
+        updatedAt: serverTimestamp()
+      })
+    );
+
+    await assertSucceeds(
+      freshDb.doc('leaderboard_alltime/fresh_player_uid').update({
+        totalXp: 4200,
+        updatedAt: serverTimestamp()
+      })
+    );
+
+    // 5. All-time: прирост дельты > 25,000 XP отклоняется
+    await assertFails(
+      freshDb.doc('leaderboard_alltime/fresh_player_uid').update({
+        totalXp: 4200 + 25001,
+        updatedAt: serverTimestamp()
+      })
+    );
   });
 });
 
