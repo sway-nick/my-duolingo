@@ -105,31 +105,45 @@ public class MainActivity extends BridgeActivity {
         handleWidgetConfigIntent(intent);
     }
 
+    private void runJsWhenReady(final String jsCheckAndExecute, final int maxAttempts) {
+        if (bridge == null || bridge.getWebView() == null) return;
+        final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            int attempts = 0;
+            @Override
+            public void run() {
+                if (isFinishing() || isDestroyed() || bridge == null || bridge.getWebView() == null) return;
+                attempts++;
+                bridge.getWebView().evaluateJavascript(jsCheckAndExecute, result -> {
+                    boolean handled = "true".equalsIgnoreCase(result) || "\"true\"".equalsIgnoreCase(result);
+                    if (!handled && attempts < maxAttempts) {
+                        handler.postDelayed(this, 300);
+                    }
+                });
+            }
+        };
+        handler.postDelayed(runnable, 200);
+    }
+
     private void handleWidgetConfigIntent(Intent intent) {
         if (intent == null) return;
         if (intent.getBooleanExtra("open_widget_config", false)) {
-            if (bridge != null && bridge.getWebView() != null) {
-                bridge.getWebView().postDelayed(() -> {
-                    bridge.getWebView().evaluateJavascript(
-                        "(function() { if (typeof window.openWidgetConfigBottomSheet === 'function') { window.openWidgetConfigBottomSheet(); } })()", null);
-                }, 500);
-            }
+            runJsWhenReady(
+                "(function() { if (typeof window.openWidgetConfigBottomSheet === 'function') { window.openWidgetConfigBottomSheet(); return true; } return false; })()",
+                25
+            );
         }
         String openTab = intent.getStringExtra("open_tab");
         if ("leaderboard".equalsIgnoreCase(openTab)) {
-            if (bridge != null && bridge.getWebView() != null) {
-                bridge.getWebView().postDelayed(() -> {
-                    bridge.getWebView().evaluateJavascript(
-                        "(function() { if (typeof window.setActiveTab === 'function') { window.setActiveTab('leaderboard'); } else { const b = document.querySelector('[data-tab=\"leaderboard\"]'); if (b) b.click(); } })()", null);
-                }, 500);
-            }
+            runJsWhenReady(
+                "(function() { if (typeof window.setActiveTab === 'function') { window.setActiveTab('leaderboard'); return true; } const b = document.querySelector('[data-tab=\"leaderboard\"]'); if (b) { b.click(); return true; } return false; })()",
+                25
+            );
         } else if ("favorites".equalsIgnoreCase(openTab)) {
-            if (bridge != null && bridge.getWebView() != null) {
-                bridge.getWebView().postDelayed(() -> {
-                    bridge.getWebView().evaluateJavascript(
-                        "(function() { if (typeof window.setActiveTab === 'function') { window.setActiveTab('favorites'); } else { const b = document.querySelector('[data-tab=\"favorites\"]'); if (b) b.click(); } })()", null);
-                }, 500);
-            }
+            runJsWhenReady(
+                "(function() { if (typeof window.setActiveTab === 'function') { window.setActiveTab('favorites'); return true; } const b = document.querySelector('[data-tab=\"favorites\"]'); if (b) { b.click(); return true; } return false; })()",
+                25
+            );
         }
     }
 
@@ -140,6 +154,9 @@ public class MainActivity extends BridgeActivity {
                     try {
                         bridge.getWebView().getSettings().setTextZoom(100);
                         bridge.getWebView().getSettings().setMediaPlaybackRequiresUserGesture(false);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            bridge.getWebView().getSettings().setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+                        }
                     } catch (Exception e) {}
                 });
             }
@@ -621,8 +638,19 @@ public class MainActivity extends BridgeActivity {
         try {
             if (bridge != null && bridge.getWebView() != null) {
                 bridge.getWebView().addJavascriptInterface(new Object() {
+                    private boolean isTrustedOrigin() {
+                        if (bridge != null && bridge.getWebView() != null) {
+                            String url = bridge.getWebView().getUrl();
+                            if (url != null) {
+                                return url.startsWith("https://localhost") || url.startsWith("http://localhost") || url.startsWith("capacitor://localhost");
+                            }
+                        }
+                        return true;
+                    }
+
                     @JavascriptInterface
                     public void syncFavorites(final String wordsJson) {
+                        if (!isTrustedOrigin()) return;
                         try {
                             WidgetDataManager.saveFavorites(MainActivity.this, wordsJson);
                             GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
@@ -680,7 +708,14 @@ public class MainActivity extends BridgeActivity {
                     }
 
                     @JavascriptInterface
+                    public void removePendingUnfavorite(final String id) {
+                        if (!isTrustedOrigin()) return;
+                        WidgetDataManager.removePendingUnfavorite(MainActivity.this, id);
+                    }
+
+                    @JavascriptInterface
                     public void clearPendingUnfavorites() {
+                        if (!isTrustedOrigin()) return;
                         WidgetDataManager.clearPendingUnfavorites(MainActivity.this);
                     }
 
@@ -690,12 +725,20 @@ public class MainActivity extends BridgeActivity {
                     }
 
                     @JavascriptInterface
+                    public void removePendingFavorite(final String id) {
+                        if (!isTrustedOrigin()) return;
+                        WidgetDataManager.removePendingFavorite(MainActivity.this, id);
+                    }
+
+                    @JavascriptInterface
                     public void clearPendingFavorites() {
+                        if (!isTrustedOrigin()) return;
                         WidgetDataManager.clearPendingFavorites(MainActivity.this);
                     }
 
                     @JavascriptInterface
                     public void syncUserRank(final int rank) {
+                        if (!isTrustedOrigin()) return;
                         try {
                             WidgetDataManager.setUserRank(MainActivity.this, rank);
                             GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
@@ -706,6 +749,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void triggerOvertakenAlert(final String localizedMessage) {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 String text = (localizedMessage != null && !localizedMessage.trim().isEmpty())
@@ -765,6 +809,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void saveWidgetConfig(final String configJson) {
+                        if (!isTrustedOrigin()) return;
                         try {
                             WidgetDataManager.saveConfigJson(MainActivity.this, configJson);
                             GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
@@ -777,6 +822,7 @@ public class MainActivity extends BridgeActivity {
 
                     @JavascriptInterface
                     public void openHomeScreenSettings() {
+                        if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
                                 Intent miuiIntent = new Intent("miui.intent.action.APP_PERM_EDITOR");

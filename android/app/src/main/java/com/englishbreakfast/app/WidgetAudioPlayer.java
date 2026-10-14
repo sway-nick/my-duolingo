@@ -178,6 +178,14 @@ public class WidgetAudioPlayer {
     public static synchronized void playPageTurn(Context context) {
         if (context == null) return;
         try {
+            // Respect silent and vibrate modes
+            AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (am != null) {
+                int ringerMode = am.getRingerMode();
+                if (ringerMode == AudioManager.RINGER_MODE_SILENT || ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                    return;
+                }
+            }
             int resId = context.getResources().getIdentifier("page_turn", "raw", context.getPackageName());
             if (resId != 0) {
                 MediaPlayer player = MediaPlayer.create(context.getApplicationContext(), resId);

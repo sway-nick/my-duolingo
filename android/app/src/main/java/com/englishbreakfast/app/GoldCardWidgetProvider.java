@@ -23,8 +23,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_TOGGLE_FAV = "com.englishbreakfast.app.widget.ACTION_TOGGLE_FAV";
     public static final String ACTION_AUTO_ROTATE = "com.englishbreakfast.app.widget.ACTION_AUTO_ROTATE";
 
-    private static final long ROTATION_INTERVAL_MS = 30 * 60 * 1000L; // 30 minutes
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
@@ -55,7 +53,30 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if (intent == null || intent.getAction() == null) return;
-        handleWidgetAction(context, intent.getAction());
+        final String action = intent.getAction();
+
+        // Security check for internal widget actions: only accept from our own package
+        if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
+                || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)) {
+            if (intent.getPackage() != null && !context.getPackageName().equals(intent.getPackage())) {
+                return;
+            }
+        }
+
+        // Use goAsync for speech to prevent BroadcastReceiver lifecycle killing MediaPlayer/TTS on main thread
+        if (ACTION_SPEAK.equals(action)) {
+            final PendingResult asyncResult = goAsync();
+            new Thread(() -> {
+                try {
+                    handleWidgetAction(context, action);
+                } finally {
+                    asyncResult.finish();
+                }
+            }).start();
+            return;
+        }
+
+        handleWidgetAction(context, action);
     }
 
     public static void handleWidgetAction(Context context, String action) {
@@ -310,6 +331,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public static PendingIntent getPendingIntent(Context context, String action, int requestCode) {
         Intent intent = new Intent(context, GoldCardWidgetProvider.class);
         intent.setAction(action);
+        intent.setPackage(context.getPackageName());
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             flags |= PendingIntent.FLAG_IMMUTABLE;
@@ -324,6 +346,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
 
             Intent intent = new Intent(context, GoldCardWidgetProvider.class);
             intent.setAction(ACTION_AUTO_ROTATE);
+            intent.setPackage(context.getPackageName());
 
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -337,7 +360,11 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             }
 
             long triggerAt = SystemClock.elapsedRealtime() + intervalMs;
-            am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, triggerAt, intervalMs, pi);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                am.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, triggerAt, pi);
+            } else {
+                am.set(AlarmManager.ELAPSED_REALTIME, triggerAt, pi);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -350,6 +377,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
 
             Intent intent = new Intent(context, GoldCardWidgetProvider.class);
             intent.setAction(ACTION_AUTO_ROTATE);
+            intent.setPackage(context.getPackageName());
 
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

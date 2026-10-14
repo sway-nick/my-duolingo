@@ -24,6 +24,7 @@ public class StudyReminderReceiver extends BroadcastReceiver {
             if (!WidgetDataManager.isReminderEnabled(context)) return;
 
             // 1. Activate motivation text on home screen widget: "⚡ Не отставай от других!"
+            WidgetDataManager.setAlertBannerText(context, context.getString(R.string.widget_reminder_default_alert));
             WidgetDataManager.setReminderAlertActive(context, true);
             GoldCardWidgetProvider.updateAllWidgets(context);
 

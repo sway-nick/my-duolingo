@@ -44,20 +44,10 @@ public class StudyReminderManager {
 
             long triggerAt = target.getTimeInMillis();
 
-            // Use setAlarmClock for 100% precision and Doze bypass across all Android vendors
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Intent showIntent = new Intent(context, MainActivity.class);
-                int showFlags = PendingIntent.FLAG_UPDATE_CURRENT;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showFlags |= PendingIntent.FLAG_IMMUTABLE;
-                }
-                PendingIntent showPi = PendingIntent.getActivity(context, 7002, showIntent, showFlags);
-                AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(triggerAt, showPi);
-                am.setAlarmClock(clockInfo, pi);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pi);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pi);
             } else {
-                am.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pi);
+                am.set(AlarmManager.RTC_WAKEUP, triggerAt, pi);
             }
         } catch (Exception e) {
             e.printStackTrace();

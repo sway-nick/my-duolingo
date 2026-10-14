@@ -20,6 +20,21 @@ public class WidgetDataManager {
     private static final String KEY_HAS_FAVORITES = "key_has_favorites";
     private static volatile boolean isAppInForeground = false;
 
+    // In-memory cache to prevent repetitive JSON parsing on main thread during widget taps
+    private static List<WidgetWord> sCachedWords = null;
+    private static String sCachedWordsJson = null;
+    private static Set<String> sCachedUnfavs = null;
+    private static Set<String> sCachedFavs = null;
+    private static Boolean sCachedHasFavs = null;
+
+    public static synchronized void invalidateCache() {
+        sCachedWords = null;
+        sCachedWordsJson = null;
+        sCachedUnfavs = null;
+        sCachedFavs = null;
+        sCachedHasFavs = null;
+    }
+
     public static void setAppInForeground(boolean inForeground) {
         isAppInForeground = inForeground;
     }
@@ -77,6 +92,7 @@ public class WidgetDataManager {
                 .putString(KEY_WORDS_JSON, wordsJson)
                 .putBoolean(KEY_HAS_FAVORITES, hasFavs)
                 .apply();
+            invalidateCache();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,6 +142,15 @@ public class WidgetDataManager {
         Set<String> unfavs = prefs.getStringSet(KEY_PENDING_UNFAVS, new HashSet<>());
         Set<String> favs = prefs.getStringSet(KEY_PENDING_FAVS, new HashSet<>());
         boolean hasFavs = hasUserFavorites(context);
+
+        // Return from in-memory cache if inputs match
+        if (sCachedWords != null 
+                && sCachedWordsJson != null && sCachedWordsJson.equals(jsonStr)
+                && sCachedUnfavs != null && sCachedUnfavs.equals(unfavs)
+                && sCachedFavs != null && sCachedFavs.equals(favs)
+                && sCachedHasFavs != null && sCachedHasFavs == hasFavs) {
+            return new ArrayList<>(sCachedWords);
+        }
 
         if (jsonStr != null && !jsonStr.trim().isEmpty()) {
             try {
@@ -178,6 +203,12 @@ public class WidgetDataManager {
             list.add(new WidgetWord("w_insp", "Inspiration", "/ˌɪn.spɪˈreɪ.ʃən/", "Вдохновение", "ELEMENTARY", "Find inspiration in small things.", false));
             list.add(new WidgetWord("w_succ", "Success", "/səkˈses/", "Успех, удача", "ELEMENTARY", "Success comes with persistence.", false));
         }
+
+        sCachedWords = new ArrayList<>(list);
+        sCachedWordsJson = jsonStr;
+        sCachedUnfavs = new HashSet<>(unfavs);
+        sCachedFavs = new HashSet<>(favs);
+        sCachedHasFavs = hasFavs;
 
         return list;
     }
@@ -267,17 +298,32 @@ public class WidgetDataManager {
             .putStringSet(KEY_PENDING_UNFAVS, unfavs)
             .putStringSet(KEY_PENDING_FAVS, favs)
             .apply();
+        invalidateCache();
 
         // If the user un-favorited the word while in favorites mode, advance to the next word immediately!
         if (hasFavs && !newFavState) {
             List<WidgetWord> remaining = getWords(context);
-            int idx = prefs.getInt(KEY_CURRENT_INDEX, 0);
-            if (remaining.isEmpty()) {
-                idx = 0;
-            } else {
-                idx = idx % remaining.size();
+            // Check if there are any remaining user favorites
+            boolean anyFavsLeft = false;
+            for (WidgetWord w : remaining) {
+                if (w.isFavorite) {
+                    anyFavsLeft = true;
+                    break;
+                }
             }
-            prefs.edit().putInt(KEY_CURRENT_INDEX, idx).putBoolean(KEY_IS_FLIPPED, false).apply();
+            if (!anyFavsLeft) {
+                // If user removed the last favorite, reset hasFavorites so widget doesn't stay in fake favorites mode
+                prefs.edit().putBoolean(KEY_HAS_FAVORITES, false).putInt(KEY_CURRENT_INDEX, 0).apply();
+                invalidateCache();
+            } else {
+                int idx = prefs.getInt(KEY_CURRENT_INDEX, 0);
+                if (remaining.isEmpty()) {
+                    idx = 0;
+                } else {
+                    idx = idx % remaining.size();
+                }
+                prefs.edit().putInt(KEY_CURRENT_INDEX, idx).putBoolean(KEY_IS_FLIPPED, false).apply();
+            }
         }
 
         return newFavState;
@@ -292,8 +338,19 @@ public class WidgetDataManager {
         return arr.toString();
     }
 
+    public static synchronized void removePendingUnfavorite(Context context, String id) {
+        if (context == null || id == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> unfavs = new HashSet<>(prefs.getStringSet(KEY_PENDING_UNFAVS, new HashSet<>()));
+        if (unfavs.remove(id)) {
+            prefs.edit().putStringSet(KEY_PENDING_UNFAVS, unfavs).apply();
+            invalidateCache();
+        }
+    }
+
     public static synchronized void clearPendingUnfavorites(Context context) {
         getPrefs(context).edit().remove(KEY_PENDING_UNFAVS).apply();
+        invalidateCache();
     }
 
     public static synchronized String getPendingFavoritesJson(Context context) {
@@ -305,8 +362,19 @@ public class WidgetDataManager {
         return arr.toString();
     }
 
+    public static synchronized void removePendingFavorite(Context context, String id) {
+        if (context == null || id == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> favs = new HashSet<>(prefs.getStringSet(KEY_PENDING_FAVS, new HashSet<>()));
+        if (favs.remove(id)) {
+            prefs.edit().putStringSet(KEY_PENDING_FAVS, favs).apply();
+            invalidateCache();
+        }
+    }
+
     public static synchronized void clearPendingFavorites(Context context) {
         getPrefs(context).edit().remove(KEY_PENDING_FAVS).apply();
+        invalidateCache();
     }
 
     // --- Widget Customization Settings ---
@@ -431,7 +499,7 @@ public class WidgetDataManager {
                 return nowMin >= startMin || nowMin <= endMin;
             }
         } catch (Exception e) {
-            return true;
+            return false;
         }
     }
 
