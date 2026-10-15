@@ -211,7 +211,7 @@ public class WidgetAudioPlayer {
         });
     }
 
-    private static synchronized void stopPlayback() {
+    public static synchronized void stopPlayback() {
         if (activePlayer != null) {
             try {
                 if (activePlayer.isPlaying()) {

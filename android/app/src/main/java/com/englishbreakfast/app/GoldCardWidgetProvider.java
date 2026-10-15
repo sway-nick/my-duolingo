@@ -22,7 +22,10 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_SPEAK = "com.englishbreakfast.app.widget.ACTION_SPEAK";
     public static final String ACTION_TOGGLE_FAV = "com.englishbreakfast.app.widget.ACTION_TOGGLE_FAV";
     public static final String ACTION_AUTO_ROTATE = "com.englishbreakfast.app.widget.ACTION_AUTO_ROTATE";
+    public static final String ACTION_TOGGLE_PLAY_PAUSE = "com.englishbreakfast.app.widget.ACTION_TOGGLE_PLAY_PAUSE";
     private static final java.util.concurrent.ExecutorService sSerialExecutor = java.util.concurrent.Executors.newSingleThreadExecutor();
+    private static final android.os.Handler sSpeechHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private static volatile int sContinuousSessionId = 0;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -48,6 +51,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         super.onDisabled(context);
         cancelRotation(context);
+        stopContinuousPlay(context);
     }
 
     @Override
@@ -58,7 +62,8 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
 
         // Security check for internal widget actions: strictly require our own package
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
-                || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)) {
+                || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)
+                || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
             if (!context.getPackageName().equals(intent.getPackage())) {
                 return;
             }
@@ -85,6 +90,61 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         });
     }
 
+    public static synchronized void startContinuousPlay(Context context) {
+        if (context == null) return;
+        sContinuousSessionId++;
+        final int sessionId = sContinuousSessionId;
+        WidgetDataManager.setContinuousPlayActive(context, true);
+        updateAllWidgets(context);
+
+        playNextContinuousWord(context.getApplicationContext(), sessionId);
+    }
+
+    public static synchronized void stopContinuousPlay(Context context) {
+        if (context == null) return;
+        sContinuousSessionId++;
+        sSpeechHandler.removeCallbacksAndMessages(null);
+        WidgetDataManager.setContinuousPlayActive(context, false);
+        WidgetAudioPlayer.stopPlayback();
+        updateAllWidgets(context);
+    }
+
+    private static void playNextContinuousWord(final Context context, final int sessionId) {
+        sSerialExecutor.execute(() -> {
+            if (sessionId != sContinuousSessionId || !WidgetDataManager.isContinuousPlayActive(context)) {
+                return;
+            }
+            android.media.AudioManager am = (android.media.AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (am != null) {
+                int mode = am.getMode();
+                if (mode == android.media.AudioManager.MODE_IN_CALL || mode == android.media.AudioManager.MODE_IN_COMMUNICATION) {
+                    stopContinuousPlay(context);
+                    return;
+                }
+            }
+
+            WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
+            if (curWord == null || curWord.word.isEmpty() || "fav_empty".equals(curWord.id)) {
+                stopContinuousPlay(context);
+                return;
+            }
+
+            WidgetAudioPlayer.playWord(context, curWord.word, () -> {
+                // Speech finished -> wait 2 seconds pause, then change card and speak new word
+                sSpeechHandler.postDelayed(() -> {
+                    sSerialExecutor.execute(() -> {
+                        if (sessionId != sContinuousSessionId || !WidgetDataManager.isContinuousPlayActive(context)) {
+                            return;
+                        }
+                        WidgetDataManager.nextWord(context);
+                        updateAllWidgets(context);
+                        playNextContinuousWord(context, sessionId);
+                    });
+                }, 2000L);
+            });
+        });
+    }
+
     public static void handleWidgetAction(Context context, String action) {
         handleWidgetAction(context, action, null);
     }
@@ -95,11 +155,21 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             return;
         }
         // Clear reminder alert when user interacts with widget
-        if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action) || ACTION_SPEAK.equals(action)) {
+        if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
+                || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
             WidgetDataManager.setReminderAlertActive(context, false);
         }
 
         switch (action) {
+            case ACTION_TOGGLE_PLAY_PAUSE:
+                if (WidgetDataManager.isContinuousPlayActive(context)) {
+                    stopContinuousPlay(context);
+                } else {
+                    startContinuousPlay(context);
+                }
+                if (onAudioDone != null) onAudioDone.run();
+                break;
+
             case ACTION_FLIP:
                 WidgetDataManager.toggleFlip(context);
                 if (WidgetDataManager.isSoundFlipEnabled(context)) {
@@ -110,6 +180,9 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 break;
 
             case ACTION_NEXT:
+                if (WidgetDataManager.isContinuousPlayActive(context)) {
+                    stopContinuousPlay(context);
+                }
                 WidgetDataManager.nextWord(context);
                 if (WidgetDataManager.isSoundFlipEnabled(context)) {
                     WidgetAudioPlayer.playPageTurn(context);
@@ -126,6 +199,9 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 break;
 
             case ACTION_PREV:
+                if (WidgetDataManager.isContinuousPlayActive(context)) {
+                    stopContinuousPlay(context);
+                }
                 WidgetDataManager.prevWord(context);
                 if (WidgetDataManager.isSoundFlipEnabled(context)) {
                     WidgetAudioPlayer.playPageTurn(context);
@@ -142,6 +218,9 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 break;
 
             case ACTION_SPEAK:
+                if (WidgetDataManager.isContinuousPlayActive(context)) {
+                    stopContinuousPlay(context);
+                }
                 WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
                 if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
                     WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
@@ -162,6 +241,13 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             case ACTION_AUTO_ROTATE:
                 if (!hasActiveWidgets(context)) {
                     cancelRotation(context);
+                    if (onAudioDone != null) onAudioDone.run();
+                    return;
+                }
+                if (WidgetDataManager.isContinuousPlayActive(context)) {
+                    // Continuous active speech is currently running and driving card progression.
+                    // Reschedule next rotation without interrupting active speech.
+                    scheduleNextRotation(context);
                     if (onAudioDone != null) onAudioDone.run();
                     return;
                 }
@@ -254,18 +340,20 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 // English: 20sp, Translation is 1 less: 19sp
                 views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 20f);
                 views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 19f);
-                views.setTextViewTextSize(R.id.widget_fav_counter, TypedValue.COMPLEX_UNIT_SP, 13f);
-                views.setTextViewTextSize(R.id.widget_rank_badge, TypedValue.COMPLEX_UNIT_SP, 12.5f);
                 views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 28f);
                 views.setTextViewTextSize(R.id.widget_btn_next, TypedValue.COMPLEX_UNIT_SP, 28f);
-                int pad4 = Math.round(4f * density);
-                views.setViewPadding(R.id.widget_btn_speaker, pad4, pad4, pad4, pad4);
-                views.setViewPadding(R.id.widget_btn_heart, pad4, pad4, pad4, pad4);
                 int padBottom4x1 = Math.round(2f * density);
                 views.setViewPadding(R.id.widget_btn_prev, 0, 0, 0, padBottom4x1);
                 views.setViewPadding(R.id.widget_btn_next, 0, 0, 0, padBottom4x1);
+
+                // 4x1: ONLY arrows remain visible (hide speaker, heart, play/pause, counter, rank)
+                views.setViewVisibility(R.id.widget_btn_speaker, View.GONE);
+                views.setViewVisibility(R.id.widget_btn_heart, View.GONE);
+                views.setViewVisibility(R.id.widget_btn_play_pause, View.GONE);
+                views.setViewVisibility(R.id.widget_fav_counter, View.GONE);
+                views.setViewVisibility(R.id.widget_rank_badge, View.GONE);
             } else {
-                // 4x2: all elements increased by 1
+                // 4x2: all elements balanced
                 // English: 23sp (+1 from 22sp), Translation is 1 less: 22sp
                 views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 23f);
                 views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 22f);
@@ -273,17 +361,23 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 views.setTextViewTextSize(R.id.widget_rank_badge, TypedValue.COMPLEX_UNIT_SP, 14.5f);
                 views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 31f);
                 views.setTextViewTextSize(R.id.widget_btn_next, TypedValue.COMPLEX_UNIT_SP, 31f);
-                int pad1 = Math.round(1f * density);
-                views.setViewPadding(R.id.widget_btn_speaker, pad1, pad1, pad1, pad1);
-                views.setViewPadding(R.id.widget_btn_heart, pad1, pad1, pad1, pad1);
+
+                // Make speaker, heart, and play/pause smaller and balanced (matching earlier compact look)
+                int padIcon = Math.round(10f * density);
+                views.setViewPadding(R.id.widget_btn_speaker, padIcon, padIcon, padIcon, padIcon);
+                views.setViewPadding(R.id.widget_btn_heart, padIcon, padIcon, padIcon, padIcon);
+                views.setViewPadding(R.id.widget_btn_play_pause, padIcon, padIcon, padIcon, padIcon);
+
                 // Lift arrows higher in 4x2 to center in corner curvature
                 int padBottom4x2 = Math.round(7f * density);
                 views.setViewPadding(R.id.widget_btn_prev, 0, 0, 0, padBottom4x2);
                 views.setViewPadding(R.id.widget_btn_next, 0, 0, 0, padBottom4x2);
             }
 
-            // Heart Icon state: hide for fallback/starter words
-            if (word.isFallback) {
+            boolean isFavEmpty = "fav_empty".equals(word.id);
+
+            // Heart Icon state: hide in 4x1 and for fallback/starter words
+            if (isCompact1Row || word.isFallback) {
                 views.setViewVisibility(R.id.widget_btn_heart, View.GONE);
             } else {
                 views.setViewVisibility(R.id.widget_btn_heart, View.VISIBLE);
@@ -294,7 +388,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             }
 
             // Favorite Counter: справа от динамика (показывается только в 4x2+ если есть реальные фавориты)
-            boolean isFavEmpty = "fav_empty".equals(word.id);
             if (!isCompact1Row && WidgetDataManager.hasUserFavorites(context) && !isFavEmpty) {
                 int totalFavs = WidgetDataManager.getTotalFavoritesCount(context);
                 int curFavIdx = WidgetDataManager.getCurrentFavoriteIndex(context);
@@ -308,8 +401,28 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 views.setViewVisibility(R.id.widget_fav_counter, View.GONE);
             }
 
-            // Speaker button: hide on empty favorites card
-            views.setViewVisibility(R.id.widget_btn_speaker, isFavEmpty ? View.GONE : View.VISIBLE);
+            // Speaker button: hide in 4x1 or on empty favorites card
+            if (isCompact1Row || isFavEmpty) {
+                views.setViewVisibility(R.id.widget_btn_speaker, View.GONE);
+            } else {
+                views.setViewVisibility(R.id.widget_btn_speaker, View.VISIBLE);
+            }
+
+            // Play/Pause button: hide in 4x1 or on empty favorites card
+            if (isCompact1Row || isFavEmpty) {
+                views.setViewVisibility(R.id.widget_btn_play_pause, View.GONE);
+            } else {
+                views.setViewVisibility(R.id.widget_btn_play_pause, View.VISIBLE);
+                boolean isPlaying = WidgetDataManager.isContinuousPlayActive(context);
+                boolean isDark = "dark_glass".equalsIgnoreCase(theme);
+                int iconRes;
+                if (isPlaying) {
+                    iconRes = isDark ? R.drawable.ic_widget_pause_light : R.drawable.ic_widget_pause;
+                } else {
+                    iconRes = isDark ? R.drawable.ic_widget_play_light : R.drawable.ic_widget_play;
+                }
+                views.setImageViewResource(R.id.widget_btn_play_pause, iconRes);
+            }
 
             // Rank Badge: слева от сердечка (показывается только в 4x2+, максимум топ-100, без '#')
             if (!isCompact1Row) {
@@ -357,11 +470,12 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.widget_fav_counter, flipPi);
             views.setOnClickPendingIntent(R.id.widget_reminder_banner, flipPi);
 
-            // 3. Интерактивные угловые кнопки
+            // 3. Интерактивные кнопки
             views.setOnClickPendingIntent(R.id.widget_btn_prev, getPendingIntent(context, ACTION_PREV, 102));
             views.setOnClickPendingIntent(R.id.widget_btn_next, getPendingIntent(context, ACTION_NEXT, 103));
             views.setOnClickPendingIntent(R.id.widget_btn_speaker, getPendingIntent(context, ACTION_SPEAK, 104));
             views.setOnClickPendingIntent(R.id.widget_btn_heart, getPendingIntent(context, ACTION_TOGGLE_FAV, 105));
+            views.setOnClickPendingIntent(R.id.widget_btn_play_pause, getPendingIntent(context, ACTION_TOGGLE_PLAY_PAUSE, 106));
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         } catch (Exception e) {

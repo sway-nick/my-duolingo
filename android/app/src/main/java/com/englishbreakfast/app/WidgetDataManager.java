@@ -18,6 +18,7 @@ public class WidgetDataManager {
     private static final String KEY_PENDING_UNFAVS = "key_pending_unfavs";
     private static final String KEY_PENDING_FAVS = "key_pending_favs";
     private static final String KEY_HAS_FAVORITES = "key_has_favorites";
+    private static final String KEY_CONTINUOUS_PLAY = "key_continuous_play_active";
     private static volatile boolean isAppInForeground = false;
 
     // In-memory cache to prevent repetitive JSON parsing on main thread during widget taps
@@ -432,6 +433,16 @@ public class WidgetDataManager {
     public static synchronized void setAlertBannerText(Context context, String text) {
         if (context == null || text == null) return;
         getPrefs(context).edit().putString(KEY_ALERT_BANNER_TEXT, text).apply();
+    }
+
+    public static synchronized boolean isContinuousPlayActive(Context context) {
+        if (context == null) return false;
+        return getPrefs(context).getBoolean(KEY_CONTINUOUS_PLAY, false);
+    }
+
+    public static synchronized void setContinuousPlayActive(Context context, boolean active) {
+        if (context == null) return;
+        getPrefs(context).edit().putBoolean(KEY_CONTINUOUS_PLAY, active).apply();
     }
 
     public static synchronized String getWidgetTheme(Context context) {
