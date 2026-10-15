@@ -1,7 +1,11 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId } from './authService.js?v=378.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=385.0';
 import { 
   syncLeaderboardScoreFirestore, 
-  getWeeklyLeaderboardFirestore, 
+  commitXpDeltaFirestore,
+  reconcileWeeklyXpFirestore,
+  reconcileAllTimeXpFirestore,
+  getWeeklyLeaderboardFirestore,
+  getAllTimeLeaderboardFirestore,
   getUserWeeklyXpFirestore,
   saveUserProgressFirestore, 
   saveBulkProgressFirestore,
@@ -13,14 +17,14 @@ import {
   saveUserNotesFirestore,
   loadUserNotesFirestore,
   saveUserCustomWordsFirestore,
-  loadUserCustomWordsFirestore,
   fetchSharedVocabularyUpdatesFirestore,
   saveUserAnalyticsFirestore,
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=378.0';
-import { getInterfaceLanguage } from './i18n.js?v=378.0';
+} from './firebase.js?v=385.0';
+import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=385.0';
+import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=385.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -524,14 +528,6 @@ async function googleAuthUser(email, name, avatar) {
   };
 }
 
-function getIsoWeekKey(d = new Date()) {
-  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
-  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
-}
-
 function getUserWeeklyXP(userId = null, weekKey = null) {
   const uId = userId || getEffectiveUserId();
   const wKey = weekKey || getIsoWeekKey();
@@ -563,8 +559,6 @@ function getUserWeeklyXP(userId = null, weekKey = null) {
       if (guestXp > xp) xp = guestXp;
     }
 
-
-
     if (xp > 0) {
       localStorage.setItem(key, String(xp));
     }
@@ -580,14 +574,17 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   const current = getUserWeeklyXP(uId, wKey);
   const oldRank = getUserWeeklyRank(uId, wKey);
   const next = Math.max(0, current + delta);
+  const effectiveDelta = next - current;
   localStorage.setItem(key, String(next));
 
-  // Sync to backend asynchronously
+  // Sync to backend asynchronously via atomic commit increment
   const user = getCurrentUser();
   const userName = user && user.name ? user.name : 'Гость';
   const avatar = localStorage.getItem(`avatar_${uId}`) || (user && user.avatar) || '';
 
-  syncWeeklyXpApi(uId, wKey, next, userName, avatar);
+  if (effectiveDelta !== 0) {
+    commitXpDeltaFirestore(getFirestoreUserId(uId), wKey, effectiveDelta, userName, avatar).catch(() => {});
+  }
 
   const newRank = getUserWeeklyRank(uId, wKey);
 
@@ -615,9 +612,10 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
   const cleanAvatar = avatar || '';
   const cleanXp = Math.max(0, Number(xp || 0));
 
-  // Sync to Cloud Firestore (Real-time, instant)
+  // Reconcile upwards only with Cloud Firestore
   try {
-    syncLeaderboardScoreFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    reconcileWeeklyXpFirestore(getFirestoreUserId(userId), weekKey, cleanXp, cleanName, cleanAvatar).catch(() => {});
+    reconcileAllTimeXpFirestore(getFirestoreUserId(userId), cleanName, cleanAvatar).catch(() => {});
   } catch (e) {}
 }
 
@@ -792,6 +790,18 @@ function generateDynamicBots(weekKey) {
   });
 }
 
+function sortLeaderboardEntries(list) {
+  return list.sort((a, b) => {
+    const diff = Number((b && b.xp) || 0) - Number((a && a.xp) || 0);
+    if (diff !== 0) return diff;
+    if (a?.isCurrentUser) return -1;
+    if (b?.isCurrentUser) return 1;
+    if (a?.isBot && !b?.isBot) return 1;
+    if (!a?.isBot && b?.isBot) return -1;
+    return String(a?.userId || '').localeCompare(String(b?.userId || ''));
+  });
+}
+
 function getCachedLeaderboard(weekKey = null, period = 'week') {
   const wKey = weekKey || getIsoWeekKey();
   const currentUser = getCurrentUser();
@@ -802,7 +812,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   if (period === 'all') {
     let rawList = [];
     try {
-      const raw = localStorage.getItem('cache_leaderboard_all');
+      const raw = localStorage.getItem('cache_leaderboard_all') || localStorage.getItem(`cache_leaderboard_${wKey}`);
       if (raw) rawList = JSON.parse(raw);
     } catch (e) {}
 
@@ -811,7 +821,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       userId: bot.userId,
       name: bot.name,
       avatar: bot.avatar,
-      xp: Math.floor(bot.xp * 3.5),
+      xp: Math.max(10, Math.floor(bot.xp * 3.5)),
       isBot: true,
     }));
     const combined = [...realPlayers, ...dynamicBots];
@@ -842,7 +852,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       });
     }
 
-    combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+    sortLeaderboardEntries(combined);
     return { success: true, data: combined, period: 'all' };
   }
 
@@ -873,7 +883,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
     });
   }
 
-  combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+  sortLeaderboardEntries(combined);
 
   return { success: true, data: combined, weekKey: wKey, userXP, period: 'week' };
 }
@@ -911,19 +921,111 @@ function formatCompactXp(xp) {
 async function getLeaderboard(weekKey = null, period = 'week') {
   const wKey = weekKey || getIsoWeekKey();
   const currentUserId = getEffectiveUserId();
-  const userXP = getUserWeeklyXP(currentUserId, wKey);
   const currentUser = getCurrentUser();
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
   const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
+  const fsUid = getFirestoreUserId(currentUserId);
+  const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
 
-  // Automatically ensure current user's local XP & avatar are synced to Firestore
-  if (userXP > 0 && currentUser && currentUser.id && !String(currentUser.id).startsWith('guest')) {
-    syncWeeklyXpApi(currentUserId, wKey, userXP, userName, userAvatar);
+  if (period === 'all') {
+    // 1. Query Cloud Firestore all-time leaderboard
+    let fsPlayers = null;
+    try {
+      fsPlayers = await getAllTimeLeaderboardFirestore(100);
+    } catch (fsErr) {
+      console.warn('Firestore all-time leaderboard query fallback:', fsErr);
+    }
+
+    // 2. Seamless fallback: if leaderboard_alltime is empty, not migrated, or inaccessible,
+    // fetch real players from weekly leaderboard so users always see their real friends!
+    if (!fsPlayers || !Array.isArray(fsPlayers) || fsPlayers.length === 0) {
+      try {
+        const weeklyPlayers = await getWeeklyLeaderboardFirestore(wKey, 100);
+        if (weeklyPlayers && Array.isArray(weeklyPlayers) && weeklyPlayers.length > 0) {
+          fsPlayers = weeklyPlayers.map((p) => ({
+            userId: p.userId,
+            name: p.name,
+            avatar: p.avatar,
+            xp: Number(p.xp || 0),
+            isCurrentUser: p.isCurrentUser
+          }));
+        }
+      } catch (wErr) {
+        console.warn('Weekly fallback for all-time leaderboard failed:', wErr);
+      }
+    }
+
+    if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
+        let totalLocalXP = 0;
+        try {
+          const prefix = `xp_${currentUserId}_`;
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(prefix)) {
+              totalLocalXP += Number(localStorage.getItem(k) || 0);
+            }
+          }
+        } catch (e) {}
+
+        const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
+        const fbUid = currentUser?.firebaseUid || null;
+
+        const myIdx = fsPlayers.findIndex((u) => u && (
+          String(u.userId) === String(currentUserId) ||
+          (fbUid && String(u.userId) === String(fbUid)) ||
+          (detId && String(u.userId) === String(detId))
+        ));
+
+        if (myIdx >= 0) {
+          fsPlayers[myIdx].xp = Math.max(Number(fsPlayers[myIdx].xp || 0), totalLocalXP);
+          fsPlayers[myIdx].userId = currentUserId;
+          fsPlayers[myIdx].name = userName;
+          if (userAvatar) fsPlayers[myIdx].avatar = userAvatar;
+          fsPlayers[myIdx].isCurrentUser = true;
+        } else if (totalLocalXP > 0) {
+          fsPlayers.push({
+            userId: currentUserId,
+            name: userName,
+            avatar: userAvatar,
+            xp: totalLocalXP,
+            isCurrentUser: true,
+          });
+        }
+
+        const dynamicBots = generateDynamicBots(wKey).map((bot) => ({
+          userId: bot.userId,
+          name: bot.name,
+          avatar: bot.avatar,
+          xp: Math.max(10, Math.floor(bot.xp * 3.5)),
+          isBot: true,
+        }));
+        const combined = [...fsPlayers, ...dynamicBots];
+        sortLeaderboardEntries(combined);
+
+        localStorage.setItem('cache_leaderboard_all', JSON.stringify(combined));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'all' } }));
+        }
+
+        if (isAuth) {
+          reconcileAllTimeXpFirestore(fsUid, userName, userAvatar).catch(() => {});
+        }
+
+        return getCachedLeaderboard(wKey, 'all');
+      }
+
+    if (isAuth) {
+      reconcileAllTimeXpFirestore(fsUid, userName, userAvatar).catch(() => {});
+    }
+    return getCachedLeaderboard(wKey, 'all');
   }
 
-  // 1. Query Cloud Firestore first (5-20ms instant response)
+  // period === 'week'
+  const userXP = getUserWeeklyXP(currentUserId, wKey);
+
+  // 1. Query Cloud Firestore weekly leaderboard
   try {
-    const fsPlayers = await getWeeklyLeaderboardFirestore(wKey);
+    const fsPlayers = await getWeeklyLeaderboardFirestore(wKey, 100);
     if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
       const validFsPlayers = fsPlayers.filter((p) => p && p.userId);
       const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
@@ -952,21 +1054,40 @@ async function getLeaderboard(weekKey = null, period = 'week') {
 
       const dynamicBots = generateDynamicBots(wKey);
       const combined = [...validFsPlayers, ...dynamicBots];
-      combined.sort((a, b) => Number((b && b.xp) || 0) - Number((a && a.xp) || 0));
+      sortLeaderboardEntries(combined);
       localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period } }));
+        window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'week' } }));
       }
-      return getCachedLeaderboard(wKey, period);
+
+      if (isAuth && userXP > 0) {
+        reconcileWeeklyXpFirestore(fsUid, wKey, userXP, userName, userAvatar).catch(() => {});
+      }
+
+      return getCachedLeaderboard(wKey, 'week');
     }
   } catch (fsErr) {
-    console.warn('Firestore leaderboard query fallback:', fsErr);
+    console.warn('Firestore weekly leaderboard query fallback:', fsErr);
   }
 
-  return getCachedLeaderboard(wKey, period);
+  if (isAuth && userXP > 0) {
+    reconcileWeeklyXpFirestore(fsUid, wKey, userXP, userName, userAvatar).catch(() => {});
+  }
+
+  return getCachedLeaderboard(wKey, 'week');
 }
 
 if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    try {
+      const uId = getEffectiveUserId();
+      const wKey = getIsoWeekKey();
+      const xp = getUserWeeklyXP(uId, wKey);
+      const user = getCurrentUser();
+      syncWeeklyXpApi(uId, wKey, xp, user?.name, user?.avatar);
+    } catch (e) {}
+  });
+
   window.addEventListener('myduo:avatar_changed', (e) => {
     const uId = (e.detail && e.detail.userId) || getEffectiveUserId();
     const wKey = getIsoWeekKey();
@@ -1187,8 +1308,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
           prog.roundPairsDone = true;
         }
       }
-      if (options && options.perfectRound) {
-        xpDelta = 5; // +5 XP for complete group of pairs without mistakes
+      if (options && (options.roundComplete || options.perfectRound)) {
+        xpDelta = 5; // +5 XP for completing a set of pairs
       }
     } else {
       prog.error = (prog.error || 0) + 1;
@@ -1243,7 +1364,15 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
       }
-      xpDelta = -5; // -5 XP for wrong word typing
+      if (options && options.shieldUsed) {
+        xpDelta = 0; // Shield used: penalty eliminated by AdMob rewarded video!
+      } else if (options && options.isOfflineFallback) {
+        xpDelta = -10; // Graceful offline/ad-unavailable fallback: -10 XP instead of -20 XP
+      } else if (options && typeof options.penaltyOverride === 'number') {
+        xpDelta = options.penaltyOverride;
+      } else {
+        xpDelta = -20; // Major mistake standard penalty: -20 XP
+      }
     }
   }
 
@@ -1391,56 +1520,28 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
 
     localStorage.setItem(progKey, JSON.stringify(mergedProg));
 
-    // Merge XP from Firestore and local
+    // Merge weekly XP from Firestore and local (strictly for current weekKey, no all-time or calcXp fallback)
     const xpKey = `xp_${uId}_${wKey}`;
     const localXp = getUserWeeklyXP(uId, wKey);
     let finalFirestoreXp = Math.max(localXp, Number(xp1 || 0), Number(xp2 || 0), Number(xpFb || 0));
 
-    // Check profile XP
-    if (fullDoc?.profile?.xp || fullDoc?.profile?.totalXp) {
-      const pXp = Number(fullDoc.profile.xp || fullDoc.profile.totalXp || 0);
-      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
-    }
-    if (detDoc?.profile?.xp || detDoc?.profile?.totalXp) {
-      const pXp = Number(detDoc.profile.xp || detDoc.profile.totalXp || 0);
-      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
-    }
-    if (fbDoc?.profile?.xp || fbDoc?.profile?.totalXp) {
-      const pXp = Number(fbDoc.profile.xp || fbDoc.profile.totalXp || 0);
-      if (pXp > finalFirestoreXp) finalFirestoreXp = pXp;
-    }
-
-    // Fallback: calculate XP from merged progress
-    if (finalFirestoreXp <= 0 && mergedProg && Object.keys(mergedProg).length > 0) {
-      let calcXp = 0;
-      Object.values(mergedProg).forEach((p) => {
-        if (p) {
-          if (p.mastered) calcXp += 50;
-          else if (p.stage === 'test' || (p.inputCorrect && p.inputCorrect > 0)) calcXp += 25;
-          else if (p.stage === 'pairs' || (p.pairsCorrect && p.pairsCorrect > 0)) calcXp += 15;
-          else if (p.stage === 'quiz' || (p.quizCorrect && p.quizCorrect > 0)) calcXp += 5;
-          else if (p.seenInCards) calcXp += 2;
-        }
-      });
-      if (calcXp > 0) finalFirestoreXp = calcXp;
-    }
-
-
-
-    if (finalFirestoreXp > 0) {
+    if (finalFirestoreXp > localXp) {
       localStorage.setItem(xpKey, String(finalFirestoreXp));
-      localStorage.setItem('xp', String(finalFirestoreXp));
+      localStorage.removeItem('xp');
       if (detId && detId !== uId) {
         localStorage.setItem(`xp_${detId}_${wKey}`, String(finalFirestoreXp));
       }
       if (fbUid && fbUid !== uId) {
         localStorage.setItem(`xp_${fbUid}_${wKey}`, String(finalFirestoreXp));
       }
-      syncLeaderboardScoreFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp, delta: 0 } }));
       }
     }
+
+    // Reconcile upwards only
+    reconcileWeeklyXpFirestore(getFirestoreUserId(uId), wKey, finalFirestoreXp, user?.name || 'User', foundAvatar || user?.avatar || '').catch(() => {});
+    reconcileAllTimeXpFirestore(getFirestoreUserId(uId), user?.name || 'User', foundAvatar || user?.avatar || '').catch(() => {});
 
     if (fbUid && fbUid !== uId) {
       const fbFavs = sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]'));
@@ -1606,8 +1707,9 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     try {
       saveUserProfileFirestore(firestoreUid, { name: userName, avatar }).catch(() => {});
       if (weeklyXp > 0) {
-        syncLeaderboardScoreFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
+        reconcileWeeklyXpFirestore(firestoreUid, wKey, weeklyXp, userName, avatar).catch(() => {});
       }
+      reconcileAllTimeXpFirestore(firestoreUid, userName, avatar).catch(() => {});
       saveUserFavoritesFirestore(firestoreUid, favorites).catch(() => {});
       const delFavsList = Array.from(getDeletedFavoritesSet(uId));
       if (delFavsList.length > 0) {
@@ -1946,6 +2048,148 @@ async function clearAllFavoritesApi() {
   }
 
   pushUserDataToCloud(userId);
+}
+
+function isFallbackWordId(id) {
+  if (id === null || id === undefined) return true;
+  const s = String(id);
+  return s.startsWith('w_') || s.startsWith('fav_') || s === 'def';
+}
+
+let isSyncingPending = false;
+async function syncPendingWidgetFavorites() {
+  if (isSyncingPending || !window.AndroidWidgetBridge) return;
+  isSyncingPending = true;
+  try {
+    // 1. Process pending unfavorites
+    if (typeof window.AndroidWidgetBridge.getPendingUnfavorites === 'function') {
+      const pendingStr = window.AndroidWidgetBridge.getPendingUnfavorites();
+      if (pendingStr && pendingStr.length > 2) {
+        const pendingArr = JSON.parse(pendingStr);
+        if (Array.isArray(pendingArr) && pendingArr.length > 0) {
+          for (const id of pendingArr) {
+            if (isFallbackWordId(id)) {
+              if (typeof window.AndroidWidgetBridge.removePendingUnfavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingUnfavorite(id);
+              }
+              continue;
+            }
+            try {
+              await toggleFavoriteApi(id, false);
+              if (typeof window.AndroidWidgetBridge.removePendingUnfavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingUnfavorite(id);
+              }
+            } catch (err) {
+              console.warn('[Widget] Failed to sync unfavorite id:', id, err);
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Process pending favorites
+    if (typeof window.AndroidWidgetBridge.getPendingFavorites === 'function') {
+      const pendingFavStr = window.AndroidWidgetBridge.getPendingFavorites();
+      if (pendingFavStr && pendingFavStr.length > 2) {
+        const pendingFavArr = JSON.parse(pendingFavStr);
+        if (Array.isArray(pendingFavArr) && pendingFavArr.length > 0) {
+          for (const id of pendingFavArr) {
+            if (isFallbackWordId(id)) {
+              if (typeof window.AndroidWidgetBridge.removePendingFavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingFavorite(id);
+              }
+              continue;
+            }
+            try {
+              await toggleFavoriteApi(id, true);
+              if (typeof window.AndroidWidgetBridge.removePendingFavorite === 'function') {
+                window.AndroidWidgetBridge.removePendingFavorite(id);
+              }
+            } catch (err) {
+              console.warn('[Widget] Failed to sync favorite id:', id, err);
+            }
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('[Widget] Error syncing pending favorites:', e);
+  } finally {
+    isSyncingPending = false;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.syncPendingWidgetFavorites = syncPendingWidgetFavorites;
+}
+
+function syncFavoritesToNativeWidget(wordsList = null) {
+  try {
+    if (!window.AndroidWidgetBridge || typeof window.AndroidWidgetBridge.syncFavorites !== 'function') return;
+    let allWords = wordsList || window.__allWordsList || (typeof cachedWordsList !== 'undefined' ? cachedWordsList : null) || [];
+    if (!Array.isArray(allWords) || allWords.length === 0) {
+      try {
+        allWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+      } catch (e) {}
+    }
+    if (!Array.isArray(allWords) || allWords.length === 0) {
+      return; // Never overwrite widget with empty list while words are still loading
+    }
+    const favIds = getUserFavorites();
+    const favSet = new Set((favIds || []).map(String));
+    let favWords = allWords.filter(w => favSet.has(String(w.id)) || (w.word && favSet.has(String(w.word))));
+    const hasFavorites = favWords.length > 0;
+    let exportWords = [];
+
+    if (hasFavorites) {
+      exportWords = favWords.map(w => ({
+        id: String(w.id || w.word),
+        word: w.word || '',
+        transcription: w.transcription || w.transcription_ipa || '',
+        translation: typeof getWordTranslation === 'function' ? getWordTranslation(w) : (w.translation || w.translation_ru || ''),
+        level: w.category || w.level || 'ELEMENTARY',
+        example: (w.example || w.notes || '').trim(),
+        isFavorite: true
+      }));
+    } else {
+      // User has no favorites: pass words from user's selected category in sequential order
+      const selectedCat = (typeof getUserSettings === 'function' ? getUserSettings()?.category : null)
+        || localStorage.getItem('myduo_dict_category')
+        || 'Elementary';
+
+      const catWords = (allWords || []).filter(w => {
+        const wCat = (w.category || w.level || '').toLowerCase().trim();
+        const sCat = selectedCat.toLowerCase().trim();
+        return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
+      });
+
+      // Pick a diverse daily sliding window of 100 words to cover the full dictionary without SharedPreferences bloat
+      const fullList = catWords.length > 0 ? catWords : (allWords || []);
+      let fallbackList = fullList;
+      if (fullList.length > 100) {
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+        const offset = (dayOfYear * 37) % (fullList.length - 100);
+        fallbackList = fullList.slice(offset, offset + 100);
+      }
+      exportWords = fallbackList.map(w => ({
+        id: String(w.id || w.word),
+        word: w.word || '',
+        transcription: w.transcription || w.transcription_ipa || '',
+        translation: typeof getWordTranslation === 'function' ? getWordTranslation(w) : (w.translation || w.translation_ru || ''),
+        level: w.category || w.level || 'ELEMENTARY',
+        example: (w.example || w.notes || '').trim(),
+        isFavorite: false
+      }));
+    }
+
+    const payload = {
+      hasFavorites: hasFavorites,
+      words: exportWords
+    };
+    window.AndroidWidgetBridge.syncFavorites(JSON.stringify(payload));
+  } catch (e) {
+    console.warn('[Widget] Sync favorites error:', e);
+  }
 }
 
 function isWordMastered(prog) {
@@ -2583,6 +2827,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
           });
         }
 
+        const idToken = getAuthToken() || '';
         const response = await fetch(`${GAS_SCANNER_URL}?route=transcribe`, {
           method: 'POST',
           headers: {
@@ -2593,6 +2838,7 @@ async function transcribeAudio(audioBlob, mimeType, expectedWord) {
             audioBase64: base64Data,
             mimeType: mimeType || 'audio/webm',
             expectedWord: expectedWord || '',
+            idToken,
           }),
         });
         const json = await response.json();
@@ -2633,6 +2879,7 @@ async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
     reader.onloadend = async () => {
       try {
         const base64Data = (reader.result || '').split(',')[1];
+        const idToken = getAuthToken() || '';
         const response = await fetch(`${GAS_SCANNER_URL}?route=transcribeping`, {
           method: 'POST',
           headers: {
@@ -2643,6 +2890,7 @@ async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
             audioBase64: base64Data || '',
             mimeType: mimeType || 'audio/webm',
             expectedWord: expectedWord || '',
+            idToken,
           }),
         });
         const json = await response.json();
@@ -3092,6 +3340,8 @@ async function addCustomWord({ word, translation, category, notes }) {
 
   let savedWord = localWord;
   try {
+    const idToken = getAuthToken() || '';
+    payload.idToken = idToken;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 35000);
     const response = await fetch(`${GAS_SCANNER_URL}?route=addword`, {
@@ -3169,6 +3419,8 @@ async function batchAddCustomWords(words = []) {
 
   let savedWords = formattedWords;
   try {
+    const idToken = getAuthToken() || '';
+    payload.idToken = idToken;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
 
@@ -3256,6 +3508,8 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
 
   let resJson = null;
   try {
+    const idToken = getAuthToken() || '';
+    payload.idToken = idToken;
     const response = await fetch(`${GAS_SCANNER_URL}?route=scanimage`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -3598,6 +3852,8 @@ export {
   flushProgressQueue,
   toggleFavoriteApi,
   clearAllFavoritesApi,
+  syncPendingWidgetFavorites,
+  syncFavoritesToNativeWidget,
   getUserStats,
   getGlobalWordOfTheDay,
   getUserSettings,
@@ -3611,6 +3867,7 @@ export {
   getUserWeeklyRank,
   formatCompactXp,
   getIsoWeekKey,
+  getRecentWeekKeys,
   fetchUserDataFromCloud,
   pushUserDataToCloud,
   transcribeAudio,
@@ -3622,4 +3879,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=378.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=385.0';

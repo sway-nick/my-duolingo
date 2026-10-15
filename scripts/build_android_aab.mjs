@@ -49,6 +49,12 @@ if (fs.existsSync(aabSource)) {
   fs.copyFileSync(aabSource, aabDestRoot);
   fs.copyFileSync(aabSource, aabDestGooglePlay);
 
+  const mappingSource = path.join(ANDROID_PROJECT, 'android/app/build/outputs/mapping/release/mapping.txt');
+  const mappingDest = path.join(ROOT_SOURCE, 'google_play_assets/mapping.txt');
+  if (fs.existsSync(mappingSource)) {
+    fs.copyFileSync(mappingSource, mappingDest);
+  }
+
   const sizeMb = (fs.statSync(aabSource).size / (1024 * 1024)).toFixed(2);
   console.log('\n====================================================');
   console.log('✅ SIGNED RELEASE AAB GENERATED SUCCESSFULLY!');
@@ -56,6 +62,9 @@ if (fs.existsSync(aabSource)) {
   console.log('📍 Locations:');
   console.log('   - ' + aabDestRoot);
   console.log('   - ' + aabDestGooglePlay);
+  if (fs.existsSync(mappingDest)) {
+    console.log('🗺️ Deobfuscation file: ' + mappingDest);
+  }
   console.log('🎯 Ready for upload to Google Play Console!');
   console.log('====================================================');
 } else {

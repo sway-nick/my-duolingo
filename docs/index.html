@@ -8,6 +8,11 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <script>
+      // Analytics disabled: no-op safe helpers
+      window.trackScreen = function() {};
+      window.trackEvent = function() {};
+    </script>
+    <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
       (function() {
         var APP_BUILD = '20261003_v383_21';
@@ -20,6 +25,21 @@
           );
           if (isAndroid) {
             document.documentElement.classList.add('is-android-app');
+          }
+        } catch (e) {}
+        try {
+          var userLang = (localStorage.getItem('myduo_interface_lang') || '').toLowerCase();
+          if (!userLang && navigator.languages && navigator.languages.length > 0) {
+            userLang = (navigator.languages[0] || '').toLowerCase().split(/[-_]/)[0];
+          }
+          if (userLang === 'ar') {
+            document.documentElement.setAttribute('dir', 'rtl');
+            document.documentElement.setAttribute('lang', 'ar');
+            document.documentElement.classList.add('is-rtl');
+          } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+            if (userLang) document.documentElement.setAttribute('lang', userLang);
+            document.documentElement.classList.remove('is-rtl');
           }
         } catch (e) {}
         try {
@@ -69,9 +89,15 @@
             }, 320);
           }
         };
+        // Watchdog: guarantee splash screen is dismissed even if unexpected error occurs
+        setTimeout(function() {
+          if (typeof window.hideAppSplashScreen === 'function') {
+            window.hideAppSplashScreen();
+          }
+        }, 4000);
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function() {
-            navigator.serviceWorker.register('./sw.js?v=383.10').catch(function() {});
+            navigator.serviceWorker.register('./sw.js?v=385.0').catch(function() {});
           });
         }
       })();
@@ -92,7 +118,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=383.10" />
+    <link rel="stylesheet" href="./assets/css/main.css?v=385.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -160,19 +186,38 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId } from './services/api.js?v=383.21';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=383.22';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=383.21';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=383.21';
-      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=383.21';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=383.21';
-      import { renderStatsView } from './components/stats/StatsView.js?v=383.21';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=383.21';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=383.21';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=383.21';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=383.21';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=383.21';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=383.21';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=385.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=385.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=385.0';
+      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=385.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=385.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=385.0';
+      import { renderStatsView } from './components/stats/StatsView.js?v=385.0';
+      import { renderSettingsView } from './components/settings/SettingsView.js?v=385.0';
+      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=385.0';
+      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=385.0';
+      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=385.0';
+      import { renderAuthModal } from './components/auth/AuthModal.js?v=385.0';
+      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=385.0';
+      import { AdService } from './services/adService.js?v=385.0';
+
+      // Initialize AdMob service
+      try {
+        AdService.init().catch(() => {});
+      } catch (e) {}
+
+      // Reset irregular verbs and UK audio download flags once so user can test AdMob rewarded video in both places
+      try {
+        if (!localStorage.getItem('myduo_admob_audio_test_reset_v2')) {
+          localStorage.setItem('myduo_admob_audio_test_reset_v2', 'true');
+          localStorage.removeItem('myduo_cat_downloaded_us_irregular verb');
+          localStorage.removeItem('myduo_cat_downloaded_us_irregular verbs');
+          localStorage.removeItem('myduo_cat_downloaded_uk_irregular verb');
+          localStorage.removeItem('myduo_cat_downloaded_uk_irregular verbs');
+          localStorage.removeItem('myduo_cat_downloaded_uk_elementary');
+          localStorage.removeItem('myduo_pack_uk_downloaded');
+        }
+      } catch (e) {}
 
       // One-time cleanup of phantom words that were never actively learned in Cards
       (function cleanPhantomWords() {
@@ -233,6 +278,14 @@
           })
           .catch(() => {});
       } catch (e) {}
+
+      function getDailyVideoDateKey() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      }
 
       function preloadNextWotdVideo() {
         try {
@@ -346,7 +399,7 @@
               </div>
               <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div id="cat-modal-actions" style="display: flex; flex-direction: column; gap: 8px;">
               <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
                 ${strings.downloadBtn}
               </button>
@@ -364,12 +417,31 @@
         const progressBar = modal.querySelector('#cat-progress-bar');
         const progressText = modal.querySelector('#cat-progress-text');
         const descEl = modal.querySelector('#cat-modal-desc');
+        const actionsWrap = modal.querySelector('#cat-modal-actions');
 
         cancelBtn.addEventListener('click', () => { modal.remove(); });
 
         downloadBtn.addEventListener('click', async () => {
           downloadBtn.disabled = true;
-          cancelBtn.style.display = 'none';
+          const prevBtnText = downloadBtn.innerHTML;
+          downloadBtn.innerHTML = '⏳ Загрузка видео...';
+
+          // 1. Show Rewarded Ad if online
+          if (window.AdService && AdService.isOnline()) {
+            try {
+              const adRes = await AdService.showLanguagePackRewardedAd('UK Accent');
+              // If ad was shown but dismissed early without reward
+              if (adRes && adRes.success && !adRes.rewardEarned) {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = prevBtnText;
+                return;
+              }
+            } catch (adErr) {
+              console.warn('UK accent ad error (proceeding gracefully):', adErr);
+            }
+          }
+
+          if (actionsWrap) actionsWrap.style.display = 'none';
           progressWrap.style.display = 'block';
           if (descEl) descEl.style.display = 'none';
           try {
@@ -380,6 +452,7 @@
             modal.remove();
           } catch (err) {
             console.warn('UK accent download failed:', err);
+            if (actionsWrap) actionsWrap.style.display = 'flex';
             downloadBtn.disabled = false;
             cancelBtn.style.display = 'block';
             if (descEl) descEl.style.display = 'block';
@@ -989,14 +1062,31 @@
           const isTrainingRoundJustCompleted = Boolean(window._trainingRoundJustCompleted);
           const isHubScreen = (!activeWords || activeWords.length === 0) && (currentMethod === 'input' || window._showHubScreen || learningCount === 0);
 
+          if (isHubScreen) {
+            if (window.trackScreen) {
+              window.trackScreen('training_hub', 'TrainingHub');
+            }
+          }
+
+          const todayVideoKey = getDailyVideoDateKey();
+          const lastWatchedVideoDate = localStorage.getItem('myduo_wotd_video_last_date');
+          const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey);
+
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
+              window._trainingRoundJustCompleted = false;
               clearActiveConveyorBatch();
+              if (window.trackEvent) {
+                window.trackEvent('round_completed', { method: currentMethod });
+              }
               try {
                 trackRoundCompleted(getEffectiveUserId());
                 pushUserDataToCloud(null, null, true);
               } catch (e) {}
               playFanfareSound();
+              try {
+                AdService.showRoundFinishInterstitial().catch(() => {});
+              } catch (e) {}
             }
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
@@ -1083,7 +1173,7 @@
                         </div>
 
                         <div class="card-footer">
-                          <div class="hint" style="white-space: nowrap;">TOUCH TO FLIP BACK</div>
+                          <div class="hint" id="wotd-card-hint" style="white-space: nowrap;">${canPlayDailyVideo ? '🎬 TOUCH TO WATCH' : 'TOUCH TO FLIP BACK'}</div>
                           <div class="badge-tier">${wotdTier}</div>
                         </div>
                       </div>
@@ -1095,7 +1185,7 @@
                         <div class="card-glow"></div>
                         <div class="card-sheen"></div>
 
-                        <!-- Full-size video covering entire golden card face with instant preloading (strictly on round victory) -->
+                        <!-- Full-size video covering entire golden card face with instant preloading (1 daily clip before round) -->
                         <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                         </div>
@@ -1214,7 +1304,6 @@
             if (flashcard) {
               let isFlipped = false;
               let videoStarted = false;
-              const canPlayRewardVideo = Boolean(isTrainingRoundJustCompleted);
 
               const cardVideo = flashcard.querySelector('#wotd-card-video');
               const videoContainer = flashcard.querySelector('#wotd-video-container');
@@ -1254,8 +1343,8 @@
                 tiltContainer.addEventListener('touchend', resetCardTilt);
               }
 
-              // Immediately pre-buffer video into memory if reward can be played
-              if (canPlayRewardVideo && cardVideo) {
+              // Immediately pre-buffer video into memory if daily video is ready to be watched
+              if (canPlayDailyVideo && cardVideo) {
                 cardVideo.load();
               }
 
@@ -1268,13 +1357,26 @@
                 flashcard.classList.toggle('is-flipped', isFlipped);
 
                 if (isFlipped) {
-                  // Only launch cat video if user JUST completed a training round!
-                  if (canPlayRewardVideo && !videoStarted && cardVideo && videoContainer) {
+                  // Only launch cat video if user hasn't watched today's video yet!
+                  const todayKey = getDailyVideoDateKey();
+                  const canPlayToday = (localStorage.getItem('myduo_wotd_video_last_date') !== todayKey);
+
+                  if (canPlayToday && !videoStarted && cardVideo && videoContainer) {
                     videoStarted = true;
-                    window._trainingRoundJustCompleted = false;
+                    localStorage.setItem('myduo_wotd_video_last_date', todayKey);
+
+                    const hintEl = flashcard.querySelector('#wotd-card-hint');
+                    if (hintEl) hintEl.textContent = 'TOUCH TO FLIP BACK';
 
                     let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                     if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
+
+                    if (window.trackEvent) {
+                      window.trackEvent('cat_video_started', {
+                        video_name: currentWotdVideo,
+                        round_word: wotd ? wotd.word : ''
+                      });
+                    }
 
                     // Advance index for next time and preload next video
                     localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
@@ -1313,6 +1415,11 @@
 
                     cardVideo.addEventListener('ended', () => {
                       dismissVideo();
+                      if (window.trackEvent) {
+                        window.trackEvent('cat_video_completed', {
+                          video_name: currentWotdVideo
+                        });
+                      }
                     }, { once: true });
 
                     cardVideo.addEventListener('error', () => {
@@ -1366,6 +1473,9 @@
                 btn.addEventListener('click', async (e) => {
                   e.stopPropagation();
                   isWotdFav = !isWotdFav;
+                  if (window.trackEvent) {
+                    window.trackEvent('wotd_favorite_toggle', { word: wotd ? wotd.word : '', active: isWotdFav });
+                  }
                   handleFavoriteToggle(wotd.id, isWotdFav);
                   favButtons.forEach((b) => {
                     b.classList.toggle('is-active', isWotdFav);
@@ -1378,6 +1488,9 @@
 
           function renderCategorySelectorScreen() {
             window._isCategorySelectOpen = true;
+            if (window.trackScreen) {
+              window.trackScreen('category_selector', 'CategoryModal');
+            }
             const content = document.querySelector('#app-content');
             if (!content) return;
 
@@ -1513,7 +1626,7 @@
                         </div>
                         <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
                       </div>
-                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <div id="cat-modal-actions" style="display: flex; flex-direction: column; gap: 8px;">
                         <button class="primary-button btn-green" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
                           ${strings.downloadBtn}
                         </button>
@@ -1531,6 +1644,7 @@
                   const progressBar = modal.querySelector('#cat-progress-bar');
                   const progressText = modal.querySelector('#cat-progress-text');
                   const descEl = modal.querySelector('#cat-modal-desc');
+                  const actionsWrap = modal.querySelector('#cat-modal-actions');
 
                   cancelBtn.addEventListener('click', () => {
                     modal.remove();
@@ -1538,7 +1652,25 @@
 
                   downloadBtn.addEventListener('click', async () => {
                     downloadBtn.disabled = true;
-                    cancelBtn.style.display = 'none';
+                    const prevBtnText = downloadBtn.innerHTML;
+                    downloadBtn.innerHTML = '⏳ Загрузка видео...';
+
+                    // 1. Show Rewarded Ad if online
+                    if (window.AdService && AdService.isOnline()) {
+                      try {
+                        const adRes = await AdService.showLanguagePackRewardedAd(details.title || chosenCat);
+                        // If ad was shown but dismissed early without reward
+                        if (adRes && adRes.success && !adRes.rewardEarned) {
+                          downloadBtn.disabled = false;
+                          downloadBtn.innerHTML = prevBtnText;
+                          return;
+                        }
+                      } catch (adErr) {
+                        console.warn('Category voice ad error (proceeding gracefully):', adErr);
+                      }
+                    }
+
+                    if (actionsWrap) actionsWrap.style.display = 'none';
                     progressWrap.style.display = 'block';
                     if (descEl) descEl.style.display = 'none';
                     try {
@@ -1561,6 +1693,7 @@
                       renderTrainingTab();
                     } catch (err) {
                       console.warn('Category voice download failed:', err);
+                      if (actionsWrap) actionsWrap.style.display = 'flex';
                       downloadBtn.disabled = false;
                       cancelBtn.style.display = 'block';
                       if (descEl) descEl.style.display = 'block';
@@ -1681,7 +1814,10 @@
           if (currentMethod === 'input') return (p.inputCorrect || 0) < 2 && !p.roundTestDone && !isWordMastered(p);
           return true;
         });
-        const isSingleRemainingWord = unfinishedInQueue.length <= 1 || (currentMethod === 'input' && testQueue.length <= 1);
+        const isSingleRemainingWord =
+          unfinishedInQueue.length <= 1 ||
+          (currentMethod === 'input' && testQueue.length <= 1) ||
+          (currentMethod === 'quiz' && quizQueue.length <= 1);
 
         if (isFavPracticeActive && currentWordIndex >= activeWords.length) {
           if (window.__favsAutoplayRunning) {
@@ -1701,6 +1837,16 @@
           if (testQueue.length === 0 || unfinishedInQueue.length === 0) {
             window._trainingRoundJustCompleted = true;
             window._showHubScreen = true;
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          } else {
+            currentWordIndex = 0;
+          }
+        }
+
+        if (!isFavPracticeActive && currentMethod === 'quiz' && currentWordIndex >= activeWords.length) {
+          if (quizQueue.length === 0 || unfinishedInQueue.length === 0) {
             currentWordIndex = 0;
             renderTrainingTab();
             return;
@@ -1743,11 +1889,16 @@
           onMethodChange: (newMethod) => {
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
-            stopSilentAudioAnchor();
             stopNativeBackgroundPlayback();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+            if (window.trackScreen) {
+              window.trackScreen('training_' + newMethod, 'TrainingMode');
+            }
+            if (window.trackEvent) {
+              window.trackEvent('training_mode_select', { mode: newMethod });
             }
             if (isFavPracticeActive) {
               favoritePracticeMethod = newMethod;
@@ -1761,11 +1912,13 @@
           onCategoryChange: (newCategory) => {
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
-            stopSilentAudioAnchor();
             stopNativeBackgroundPlayback();
             if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
               try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+            if (window.trackEvent) {
+              window.trackEvent('category_change', { category: newCategory });
             }
             favoritePracticeWords = null;
             favoritePracticeMethod = 'cards';
@@ -1822,16 +1975,25 @@
         }
         activeTab = tabName;
         window._activeTab = tabName;
+        if (window.trackScreen) {
+          window.trackScreen(tabName, 'MainTab');
+        }
         const navTabs = document.querySelectorAll('.nav-tab');
         navTabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === tabName));
         const content = document.querySelector('#app-content');
+
+        // Banner management: show strictly in Stats (no audio conflict)
+        if (tabName === 'stats') {
+          try { AdService.showBottomBanner(); } catch (e) {}
+        } else {
+          try { AdService.hideBottomBanner(); } catch (e) {}
+        }
 
         if (tabName !== 'training') {
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           window.__favsAutoplayRunning = false;
           releaseScreenWakeLock();
-          stopSilentAudioAnchor();
           stopNativeBackgroundPlayback();
           if (window.__favsAutoplayTimer) clearTimeout(window.__favsAutoplayTimer);
           if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -1958,9 +2120,95 @@
           }
         });
 
+        function syncFavoritesToAndroidWidget() {
+          try {
+            if (!window.AndroidWidgetBridge || typeof window.AndroidWidgetBridge.syncFavorites !== 'function') return;
+
+            // Extract full word objects for all current favorites
+            const favIds = getUserFavorites();
+            let effectiveWords = allWords;
+            if (!Array.isArray(effectiveWords) || effectiveWords.length === 0) {
+              try {
+                effectiveWords = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+              } catch (e) {}
+            }
+            if (!Array.isArray(effectiveWords) || effectiveWords.length === 0) {
+              return; // Do not overwrite widget while words are still loading
+            }
+
+            const favSet = new Set((favIds || []).map(String));
+            let favWords = effectiveWords.filter(w => favSet.has(String(w.id)) || (w.word && favSet.has(String(w.word))));
+
+            const hasFavorites = favWords.length > 0;
+            let exportWords = [];
+
+            if (hasFavorites) {
+              exportWords = favWords.map(w => ({
+                id: String(w.id || w.word),
+                word: w.word || '',
+                transcription: w.transcription || '',
+                translation: getWordTranslation(w) || '',
+                level: w.category || w.level || 'ELEMENTARY',
+                example: (w.example || w.notes || '').trim(),
+                isFavorite: true
+              }));
+            } else {
+              const selectedCat = (userSettings && userSettings.category) || 'Elementary';
+              const catWords = (allWords || []).filter(w => {
+                const wCat = (w.category || w.level || '').toLowerCase().trim();
+                const sCat = selectedCat.toLowerCase().trim();
+                return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
+              });
+              const fallbackList = catWords.length > 0 ? catWords : (allWords || []).slice(0, 50);
+              exportWords = fallbackList.map(w => ({
+                id: String(w.id || w.word),
+                word: w.word || '',
+                transcription: w.transcription || '',
+                translation: getWordTranslation(w) || '',
+                level: w.category || w.level || 'ELEMENTARY',
+                example: (w.example || w.notes || '').trim(),
+                isFavorite: false
+              }));
+            }
+
+            const payload = {
+              hasFavorites: hasFavorites,
+              words: exportWords
+            };
+            window.AndroidWidgetBridge.syncFavorites(JSON.stringify(payload));
+          } catch (e) {
+            console.warn('[Widget] syncFavorites error:', e);
+          }
+        }
+        window.syncFavoritesToAndroidWidget = syncFavoritesToAndroidWidget;
+
+        // Reconcile favorites toggled on home screen widget whenever user returns to app
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            if (typeof syncPendingWidgetFavorites === 'function') {
+              syncPendingWidgetFavorites();
+            }
+          }
+        });
+        window.addEventListener('focus', () => {
+          if (typeof syncPendingWidgetFavorites === 'function') {
+            syncPendingWidgetFavorites();
+          }
+        });
+
+        try {
+          if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncUserRank === 'function') {
+            const cachedRank = parseInt(localStorage.getItem('myduo_cached_rank') || '0', 10);
+            if (cachedRank > 0) {
+              window.AndroidWidgetBridge.syncUserRank(cachedRank);
+            }
+          }
+        } catch (e) {}
+
         window.addEventListener('myduo_favorites_updated', (e) => {
           const favs = e.detail || getUserFavorites();
           favoriteIds = new Set(favs.map(String));
+          syncFavoritesToAndroidWidget();
           if (window._isAppInitializing) return;
           if (!window._isCategorySelectOpen && (activeTab === 'favorites' || activeTab === 'dictionary')) {
             renderTab(activeTab);
@@ -1981,6 +2229,7 @@
           updateHeaderUser();
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
+          syncFavoritesToAndroidWidget();
           if (activeTab === 'training' && window._showHubScreen) {
             return;
           }
@@ -2105,6 +2354,9 @@
               if (typeof window.hideAppSplashScreen === 'function') {
                 window.hideAppSplashScreen();
               }
+              try {
+                syncFavoritesToAndroidWidget();
+              } catch (e) {}
             });
           });
         }

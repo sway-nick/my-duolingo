@@ -1,8 +1,9 @@
-import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=378.0';
-import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp } from '../../services/api.js?v=378.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=378.0';
-import { openShareDialog } from '../modals/ShareModal.js?v=378.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=378.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=385.0';
+import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=385.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
+import { openShareDialog } from '../modals/ShareModal.js?v=385.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { isEmailVerified } from '../../services/firebase.js?v=385.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -388,6 +389,52 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   });
 
+  // Expose setActiveTab globally for native widget deep links (e.g. clicking 🏆 rank badge)
+  window.setActiveTab = (targetTab) => {
+    const targetEl = app.querySelector(`.nav-tab[data-tab="${targetTab}"]`);
+    if (targetEl) {
+      tabs.forEach((t) => t.classList.remove('active'));
+      targetEl.classList.add('active');
+      closeDrawer();
+      if (typeof onTabChange === 'function') {
+        try {
+          onTabChange(targetTab);
+        } catch (err) {
+          console.error('Error changing tab:', err);
+        }
+      }
+    }
+  };
+
+  // Sync cached or newly calculated rank to Android widget on app startup & resume
+  function syncCurrentWidgetRank() {
+    try {
+      let r = null;
+      const cachedRank = localStorage.getItem('myduo_cached_rank');
+      if (cachedRank) r = parseInt(cachedRank, 10);
+      if (!r || isNaN(r)) {
+        const lb = getCachedLeaderboard(null, 'week');
+        if (lb && Array.isArray(lb.data)) {
+          const idx = lb.data.findIndex((p) => p && p.isCurrentUser);
+          if (idx >= 0) {
+            r = idx + 1;
+            localStorage.setItem('myduo_cached_rank', String(r));
+          }
+        }
+      }
+      if (r > 0 && window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncUserRank === 'function') {
+        window.AndroidWidgetBridge.syncUserRank(r);
+      }
+    } catch (e) {
+      console.warn('[Widget] Error syncing current rank:', e);
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    window.syncCurrentWidgetRank = syncCurrentWidgetRank;
+  }
+  syncCurrentWidgetRank();
+
   // Click on top avatar / profile in drawer -> navigate to Settings tab
   const drawerProfileBtn = app.querySelector('#drawer-profile-btn') || app.querySelector('.drawer-profile');
   if (drawerProfileBtn) {
@@ -683,14 +730,50 @@ if (typeof window !== 'undefined') {
   });
 
   // Handle sync issues (token expiration, network, Firestore rule issues)
-  // Instead of ugly intrusive black toast, gracefully activate orange badge on menu/settings/leaderboard
   window.addEventListener('myduo:sync-issue', (e) => {
     updateSyncBadges(true);
+    const detail = e.detail || {};
+    if (detail.kind === 'email_not_verified') {
+      showToast(t('lead_verify_email_prompt'));
+    } else if (detail.status === 403 || detail.kind === 'permission_denied') {
+      showToast(t('lead_sync_error_403'));
+    }
   });
 
   window.addEventListener('myduo:auth_changed', () => {
     updateSyncBadges(false);
   });
+
+  // Prompt unverified email user upon startup/initialization
+  try {
+    const curUser = getCurrentUser();
+    if (curUser && curUser.email && !isEmailVerified()) {
+      setTimeout(() => {
+        showToast(t('lead_verify_email_prompt'));
+      }, 1200);
+    }
+  } catch (e) {}
+}
+
+/**
+ * Show a floating toast notification across the app
+ */
+export function showToast(message, duration = 4000) {
+  if (typeof document === 'undefined') return;
+  let toast = document.querySelector('#app-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.className = 'share-toast';
+    toast.style.zIndex = '99999';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
 }
 
 export { renderAppLayout, updateHeaderUser, applyTheme, getSavedTheme, toggleTheme };

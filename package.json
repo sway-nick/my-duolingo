@@ -9,6 +9,9 @@
     "prepare:assets": "node scripts/prepare_android_assets.mjs",
     "build:apk": "node scripts/build_android_apk.mjs",
     "start": "echo Frontend runs as static files",
+    "test": "node --test tests/leaderboard.test.mjs tests/leaderboard_e2e_scenarios.test.mjs tests/ad_and_penalties.test.mjs",
+    "test:weekly": "node scripts/weekly_test.mjs",
+    "test:weekly:report": "node scripts/weekly_test.mjs --save-report",
     "lint": "echo ESLint will be configured later",
     "format": "echo Prettier will be configured later"
   },
@@ -19,6 +22,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@google/clasp": "^3.3.0"
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "@google/clasp": "^3.3.0",
+    "firebase-admin": "^14.5.0"
   }
 }

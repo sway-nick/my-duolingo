@@ -331,14 +331,11 @@ function getPreferredVoice(gender = 'female') {
 let currentAudioPlayer = null;
 const audioCache = new Map();
 
-const CDN_AUDIO_BASE = 'https://english-breakfast.pages.dev/assets/audio';
-// Mirrors tried in order (the last one that worked is remembered and tried first, see getOrderedMirrors).
-// Some ISPs block individual domains (e.g. *.pages.dev) or hijack their DNS, so we keep several
-// independent free hosts. CDN_AUDIO_BASE remains the canonical CacheStorage key.
+const CDN_AUDIO_BASE = 'https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio';
+// High-speed CDN mirrors (jsDelivr, Fastly, Gcore, GitHub Pages, GitHub Raw).
+// pages.dev removed to prevent regional ISP blocks / timeouts.
 const CDN_AUDIO_MIRRORS = [
   CDN_AUDIO_BASE,
-  'https://sway-nick.github.io/my-duolingo/assets/audio',
-  'https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
   'https://fastly.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
   'https://gcore.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio',
   'https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio',
@@ -412,7 +409,7 @@ function getOrderedMirrors() {
  * as the CacheStorage key). A response is accepted only if it is a real audio payload (not an HTML
  * block page of an ISP / captive portal). Returns a clean audio/mpeg Response or null.
  */
-async function fetchAudioFromMirrors(cdnUrl) {
+async function fetchAudioFromMirrors(cdnUrl, timeoutMs = 7000) {
   const path = cdnUrl.startsWith(CDN_AUDIO_BASE) ? cdnUrl.slice(CDN_AUDIO_BASE.length) : null;
   const bases = path !== null ? getOrderedMirrors() : [null];
   for (const base of bases) {
@@ -421,7 +418,7 @@ async function fetchAudioFromMirrors(cdnUrl) {
     let ok = false;
     try {
       const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      if (ctrl) timer = setTimeout(() => ctrl.abort(), 8000);
+      if (ctrl) timer = setTimeout(() => ctrl.abort(), timeoutMs);
       const resp = await fetch(url, { mode: 'cors', signal: ctrl ? ctrl.signal : undefined });
       if (resp && resp.ok) {
         const type = (resp.headers.get('content-type') || '').toLowerCase();
@@ -1440,7 +1437,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
  * Supports customizable playback speed (e.g. 0.80 for 1st repetition, 0.90 for 2nd repetition).
  */
 function speakWordAsync(text, isUk = null, speedRate = 1.0) {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     if (!text || typeof window === 'undefined') return resolve();
 
     stopAllAudio();
@@ -1448,7 +1445,8 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
     const targetSpeed = Number(speedRate) || 1.0;
     const accent = isUk !== null ? (isUk ? 'uk' : 'us') : getSavedVoiceAccent();
     const isUkAccent = accent === 'uk' || accent === 'gb' || accent === 'male';
-    const { local, cdn, primary, fallback } = getAudioUrls(text, isUkAccent);
+    const langCode = isUkAccent ? 'en-GB' : 'en-US';
+    const { local, cdn } = getAudioUrls(text, isUkAccent);
 
     let resolved = false;
     let resumeInterval = null;
@@ -1472,26 +1470,40 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
       }
     };
 
-    const maxTimer = setTimeout(finish, 7500);
-    window.__activeSpeechTimer = maxTimer;
-
-    const audio = getAutoplayAudio() || new Audio();
-    activeAutoplayAudio = audio;
-    audio.playbackRate = targetSpeed;
-    audio.src = local;
-    audio.currentTime = 0;
-    let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
-    let stageLock = false;
+    function speakViaNativeAndroidTts() {
+      if (resolved) return true;
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge && typeof window.AndroidAudioBridge.speakText === 'function') {
+        const utteranceId = 'tts_en_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        window.onNativeTtsComplete = (doneId) => {
+          if (!doneId || doneId === utteranceId) {
+            window.onNativeTtsComplete = null;
+            finish();
+          }
+        };
+        const safetyMs = Math.max(2500, text.length * 180);
+        window.__activeSpeechTimer = setTimeout(finish, safetyMs);
+        try {
+          const started = window.AndroidAudioBridge.speakText(text, langCode, utteranceId, targetSpeed);
+          if (started) return true;
+        } catch (e) {
+          console.warn('Native English TTS failed:', e);
+        }
+      }
+      return false;
+    }
 
     function playSpeechFallback() {
       clearTimeout(maxTimer);
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+        if (speakViaNativeAndroidTts()) return;
+      }
       if ('speechSynthesis' in window) {
         try {
           if (window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
           }
           const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = isUkAccent ? 'en-GB' : 'en-US';
+          utterance.lang = langCode;
           utterance.rate = targetSpeed;
           window.__activeSpeechUtterance = utterance;
           utterance.onend = finish;
@@ -1503,6 +1515,9 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
             }
           }, 200);
 
+          const synthTimeout = setTimeout(finish, Math.max(2500, text.length * 180));
+          window.__activeSpeechTimer = synthTimeout;
+
           window.speechSynthesis.speak(utterance);
         } catch (e) {
           finish();
@@ -1512,43 +1527,104 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
       }
     }
 
-    const handleStageError = () => {
-      if (stageLock || resolved) return;
-      stageLock = true;
-      setTimeout(() => { stageLock = false; }, 50);
-
-      if (fallbackStage === 0) {
-        fallbackStage = 1;
-        audio.src = cdn;
-        audio.currentTime = 0;
-        audio.playbackRate = targetSpeed;
-        const pCdn = audio.play();
-        if (pCdn !== undefined) pCdn.then(() => cacheAudioOnline(cdn)).catch(handleStageError);
-      } else if (fallbackStage === 1) {
-        fallbackStage = 2;
-        audio.src = primary;
-        audio.currentTime = 0;
-        audio.playbackRate = targetSpeed;
-        const p1 = audio.play();
-        if (p1 !== undefined) p1.catch(handleStageError);
-      } else if (fallbackStage === 2) {
-        fallbackStage = 3;
-        audio.src = fallback;
-        audio.currentTime = 0;
-        audio.playbackRate = targetSpeed;
-        const p2 = audio.play();
-        if (p2 !== undefined) p2.catch(handleStageError);
-      } else {
-        playSpeechFallback();
+    const maxTimer = setTimeout(() => {
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+        if (speakViaNativeAndroidTts()) return;
       }
-    };
+      finish();
+    }, 4500);
+    window.__activeSpeechTimer = maxTimer;
+
+    const audio = getAutoplayAudio() || new Audio();
+    activeAutoplayAudio = audio;
+    audio.playbackRate = targetSpeed;
 
     audio.onended = () => {
       clearTimeout(maxTimer);
       finish();
     };
 
+    // Level 1: Check downloaded voice packs in device CacheStorage (100% offline studio quality)
+    let cachedBlobUrl = null;
+    const hasCache = typeof window !== 'undefined' && 'caches' in window;
+    if (hasCache) {
+      try {
+        const cache = await caches.open(AUDIO_CACHE_NAME);
+        const match = (await cache.match(cdn)) || (await cache.match(local));
+        if (match) {
+          const blob = await match.blob();
+          if (blob && blob.size >= AUDIO_MIN_VALID_BYTES) {
+            cachedBlobUrl = URL.createObjectURL(blob);
+          }
+        }
+      } catch (e) {}
+    }
+
+    if (cachedBlobUrl) {
+      audio.src = cachedBlobUrl;
+      audio.currentTime = 0;
+      audio.onerror = () => {
+        if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+          if (speakViaNativeAndroidTts()) return;
+        }
+        playSpeechFallback();
+      };
+      const pCached = audio.play();
+      if (pCached !== undefined) {
+        pCached.catch(() => {
+          if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+            if (speakViaNativeAndroidTts()) return;
+          }
+          playSpeechFallback();
+        });
+      }
+      return;
+    }
+
+    // Level 2 & 3: Try local bundled APK file -> then fast jsDelivr CDN -> then Native TTS
+    let stageLock = false;
+    let triedCdn = false;
+
+    const handleStageError = async () => {
+      if (stageLock || resolved) return;
+      stageLock = true;
+      setTimeout(() => { stageLock = false; }, 50);
+
+      // Level 3: Fetch studio mp3 from fast CDN mirrors with 1.5s timeout
+      if (!triedCdn) {
+        triedCdn = true;
+        try {
+          const fetched = await fetchAudioFromMirrors(cdn, 1500);
+          if (fetched && !resolved) {
+            if (hasCache) {
+              try {
+                const cache = await caches.open(AUDIO_CACHE_NAME);
+                await cache.put(cdn, fetched.clone());
+              } catch (_) {}
+            }
+            const blob = await fetched.blob();
+            if (blob && blob.size >= AUDIO_MIN_VALID_BYTES && !resolved) {
+              audio.src = URL.createObjectURL(blob);
+              audio.currentTime = 0;
+              audio.playbackRate = targetSpeed;
+              const pMirr = audio.play();
+              if (pMirr !== undefined) pMirr.catch(handleStageError);
+              return;
+            }
+          }
+        } catch (_) {}
+      }
+
+      // Level 4: Immediate native Android TTS fallback
+      if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
+        if (speakViaNativeAndroidTts()) return;
+      }
+      playSpeechFallback();
+    };
+
     audio.onerror = handleStageError;
+    audio.src = local;
+    audio.currentTime = 0;
 
     const p = audio.play();
     if (p !== undefined) {
@@ -1595,38 +1671,12 @@ if (typeof document !== 'undefined') {
   });
 }
 
-let silentAudioLoopElement = null;
-
 /**
- * Starts a silent audio loop to keep mobile browsers (Safari/Chrome/WebView)
- * and OS audio sessions active without throttling JS timers when screen turns off.
+ * Legacy Safari silent audio anchor removed: App is built for Android
+ * and uses native Android BackgroundAudioService and WakeLock.
  */
-function startSilentAudioAnchor() {
-  if (typeof window === 'undefined') return;
-  try {
-    if (!silentAudioLoopElement) {
-      // 1-second silent WAV audio data URI
-      const silentWav = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-      silentAudioLoopElement = new Audio(silentWav);
-      silentAudioLoopElement.loop = true;
-      silentAudioLoopElement.volume = 0.001; // virtually silent, keeps hardware audio pipeline open
-    }
-    const p = silentAudioLoopElement.play();
-    if (p !== undefined) p.catch(() => {});
-  } catch (e) {}
-}
-
-/**
- * Stops and resets the silent audio anchor.
- */
-function stopSilentAudioAnchor() {
-  if (silentAudioLoopElement) {
-    try {
-      silentAudioLoopElement.pause();
-      silentAudioLoopElement.currentTime = 0;
-    } catch (e) {}
-  }
-}
+function startSilentAudioAnchor() {}
+function stopSilentAudioAnchor() {}
 
 /**
  * Interfaces with native Android foreground service bridge if running in APK

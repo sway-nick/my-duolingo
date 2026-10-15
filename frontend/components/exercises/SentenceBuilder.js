@@ -1,4 +1,5 @@
-﻿import AudioService from '../../services/audioService.js?v=378.0';
+import AudioService from '../../services/audioService.js?v=385.0';
+import { t } from '../../services/i18n.js?v=385.0';
 
 export function renderSentenceBuilder(container, exerciseData, onComplete) {
     container.innerHTML = '';
@@ -65,7 +66,7 @@ export function renderSentenceBuilder(container, exerciseData, onComplete) {
     // Check Button
     const checkBtn = document.createElement('button');
     checkBtn.className = 'check-button';
-    checkBtn.textContent = 'Проверить';
+    checkBtn.textContent = t('train_check') || 'Check';
     checkBtn.disabled = true;
     checkBtn.addEventListener('click', handleCheck);
     wrapper.appendChild(checkBtn);
@@ -96,13 +97,13 @@ export function renderSentenceBuilder(container, exerciseData, onComplete) {
 
         if (cleanUserAnswer === cleanCorrectAnswer) {
             AudioService.playCorrect();
-            showFeedback(true, 'Отлично!');
+            showFeedback(true, t('train_speech_correct') || 'Correct!');
             setTimeout(() => {
                 onComplete({ correct: true, sentence });
             }, 1200);
         } else {
             AudioService.playWrong();
-            showFeedback(false, `Неправильно. Правильный ответ: ${sentence}`);
+            showFeedback(false, `${t('train_correct_label') || 'Correct answer:'} ${sentence}`);
             setTimeout(() => {
                 onComplete({ correct: false, sentence, userAnswer, correctAnswer: sentence });
             }, 2500);
