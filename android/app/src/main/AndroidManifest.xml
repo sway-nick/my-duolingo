@@ -45,7 +45,7 @@
         <!-- Golden Card Interactive Home Screen Widget (4x1) -->
         <receiver
             android:name=".GoldCardWidgetProvider"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/widget_gold_card_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -73,7 +73,7 @@
         <!-- Reschedule reminders and rotation on device boot and time/zone changes -->
         <receiver
             android:name=".BootReceiver"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
