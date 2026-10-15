@@ -172,9 +172,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
 
             case ACTION_FLIP:
                 WidgetDataManager.toggleFlip(context);
-                if (WidgetDataManager.isSoundFlipEnabled(context)) {
-                    WidgetAudioPlayer.playPageTurn(context);
-                }
                 updateAllWidgets(context);
                 if (onAudioDone != null) onAudioDone.run();
                 break;
@@ -184,18 +181,15 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                     stopContinuousPlay(context);
                 }
                 WidgetDataManager.nextWord(context);
-                if (WidgetDataManager.isSoundFlipEnabled(context)) {
-                    WidgetAudioPlayer.playPageTurn(context);
-                }
                 updateAllWidgets(context);
-                if (WidgetDataManager.isAutoSpeakEnabled(context)) {
+                {
                     WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                    if (curWord != null && !curWord.word.isEmpty()) {
+                    if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
                         WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
-                        break;
+                    } else {
+                        if (onAudioDone != null) onAudioDone.run();
                     }
                 }
-                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             case ACTION_PREV:
@@ -203,18 +197,15 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                     stopContinuousPlay(context);
                 }
                 WidgetDataManager.prevWord(context);
-                if (WidgetDataManager.isSoundFlipEnabled(context)) {
-                    WidgetAudioPlayer.playPageTurn(context);
-                }
                 updateAllWidgets(context);
-                if (WidgetDataManager.isAutoSpeakEnabled(context)) {
+                {
                     WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                    if (curWord != null && !curWord.word.isEmpty()) {
+                    if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
                         WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
-                        break;
+                    } else {
+                        if (onAudioDone != null) onAudioDone.run();
                     }
                 }
-                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             case ACTION_SPEAK:
@@ -337,9 +328,9 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             float density = context.getResources().getDisplayMetrics().density;
             if (isCompact1Row) {
                 // 4x1: standard base sizes
-                // English: 20sp, Translation is 1 less: 19sp
+                // English: 20sp, Translation reduced by 1: 18sp
                 views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 20f);
-                views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 19f);
+                views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 18f);
                 views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 28f);
                 views.setTextViewTextSize(R.id.widget_btn_next, TypedValue.COMPLEX_UNIT_SP, 28f);
                 int padBottom4x1 = Math.round(2f * density);
