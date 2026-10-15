@@ -74,3 +74,14 @@ try {
 } catch(Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }
+
+tasks.register('validateWidget', Exec) {
+    description = 'Validates widget RemoteViews, ID symmetry, drawables and manifest integrity before building'
+    workingDir rootProject.projectDir.parentFile
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'python scripts\\validate_widget.py'
+    } else {
+        commandLine 'python3', 'scripts/validate_widget.py'
+    }
+}
+preBuild.dependsOn validateWidget
