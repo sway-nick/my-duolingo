@@ -279,6 +279,14 @@
           .catch(() => {});
       } catch (e) {}
 
+      function getDailyVideoDateKey() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      }
+
       function preloadNextWotdVideo() {
         try {
           let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
@@ -1060,8 +1068,13 @@
             }
           }
 
+          const todayVideoKey = getDailyVideoDateKey();
+          const lastWatchedVideoDate = localStorage.getItem('myduo_wotd_video_last_date');
+          const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey);
+
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
+              window._trainingRoundJustCompleted = false;
               clearActiveConveyorBatch();
               if (window.trackEvent) {
                 window.trackEvent('round_completed', { method: currentMethod });
@@ -1160,7 +1173,7 @@
                         </div>
 
                         <div class="card-footer">
-                          <div class="hint" style="white-space: nowrap;">TOUCH TO FLIP BACK</div>
+                          <div class="hint" id="wotd-card-hint" style="white-space: nowrap;">${canPlayDailyVideo ? '🎬 TOUCH TO WATCH' : 'TOUCH TO FLIP BACK'}</div>
                           <div class="badge-tier">${wotdTier}</div>
                         </div>
                       </div>
@@ -1172,7 +1185,7 @@
                         <div class="card-glow"></div>
                         <div class="card-sheen"></div>
 
-                        <!-- Full-size video covering entire golden card face with instant preloading (strictly on round victory) -->
+                        <!-- Full-size video covering entire golden card face with instant preloading (1 daily clip before round) -->
                         <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                         </div>
@@ -1291,7 +1304,6 @@
             if (flashcard) {
               let isFlipped = false;
               let videoStarted = false;
-              const canPlayRewardVideo = Boolean(isTrainingRoundJustCompleted);
 
               const cardVideo = flashcard.querySelector('#wotd-card-video');
               const videoContainer = flashcard.querySelector('#wotd-video-container');
@@ -1331,8 +1343,8 @@
                 tiltContainer.addEventListener('touchend', resetCardTilt);
               }
 
-              // Immediately pre-buffer video into memory if reward can be played
-              if (canPlayRewardVideo && cardVideo) {
+              // Immediately pre-buffer video into memory if daily video is ready to be watched
+              if (canPlayDailyVideo && cardVideo) {
                 cardVideo.load();
               }
 
@@ -1345,10 +1357,16 @@
                 flashcard.classList.toggle('is-flipped', isFlipped);
 
                 if (isFlipped) {
-                  // Only launch cat video if user JUST completed a training round!
-                  if (canPlayRewardVideo && !videoStarted && cardVideo && videoContainer) {
+                  // Only launch cat video if user hasn't watched today's video yet!
+                  const todayKey = getDailyVideoDateKey();
+                  const canPlayToday = (localStorage.getItem('myduo_wotd_video_last_date') !== todayKey);
+
+                  if (canPlayToday && !videoStarted && cardVideo && videoContainer) {
                     videoStarted = true;
-                    window._trainingRoundJustCompleted = false;
+                    localStorage.setItem('myduo_wotd_video_last_date', todayKey);
+
+                    const hintEl = flashcard.querySelector('#wotd-card-hint');
+                    if (hintEl) hintEl.textContent = 'TOUCH TO FLIP BACK';
 
                     let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                     if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
