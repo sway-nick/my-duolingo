@@ -20,7 +20,7 @@ export function openWidgetConfigBottomSheet() {
     widgetTheme: 'gold',
     rotationIntervalMin: 30,
     soundFlipEnabled: true,
-    autoSpeakEnabled: false,
+    autoSpeakEnabled: true,
     speakStartTime: '09:00',
     speakEndTime: '20:00',
     reminderEnabled: true,
@@ -47,8 +47,6 @@ export function openWidgetConfigBottomSheet() {
 
   backdrop.innerHTML = `
     <div class="widget-sheet-container" role="dialog" aria-modal="true">
-      <div class="widget-sheet-drag-handle"></div>
-
       <div class="widget-sheet-header">
         <h3 class="widget-sheet-title">
           <span>⚙️</span>
@@ -67,54 +65,7 @@ export function openWidgetConfigBottomSheet() {
         </div>
       </div>
 
-      <!-- 2. Rotation Interval -->
-      <div class="widget-sheet-section">
-        <label class="widget-sheet-label">${t('widget_interval_label') || 'Смена слова на карточке'}</label>
-        <div class="widget-sheet-pills" id="interval-pills">
-          <button type="button" class="widget-sheet-pill ${config.rotationIntervalMin === 15 ? 'active' : ''}" data-val="15">${t('widget_interval_15m') || '15 мин'}</button>
-          <button type="button" class="widget-sheet-pill ${config.rotationIntervalMin === 30 ? 'active' : ''}" data-val="30">${t('widget_interval_30m') || '30 мин'}</button>
-          <button type="button" class="widget-sheet-pill ${config.rotationIntervalMin === 60 ? 'active' : ''}" data-val="60">${t('widget_interval_1h') || '1 час'}</button>
-          <button type="button" class="widget-sheet-pill ${config.rotationIntervalMin === 120 ? 'active' : ''}" data-val="120">${t('widget_interval_2h') || '2 часа'}</button>
-        </div>
-      </div>
-
-      <!-- 3. Page Turn Sound -->
-      <div class="widget-sheet-section">
-        <label class="widget-sheet-label">${t('widget_sound_flip_label') || 'Звук перелистывания'}</label>
-        <div class="widget-sheet-pills" id="sound-pills">
-          <button type="button" class="widget-sheet-pill ${config.soundFlipEnabled ? 'active' : ''}" data-val="true">${t('widget_enabled') || 'Включен'}</button>
-          <button type="button" class="widget-sheet-pill ${!config.soundFlipEnabled ? 'active' : ''}" data-val="false">${t('widget_disabled') || 'Выключен'}</button>
-        </div>
-      </div>
-
-      <!-- 4. Auto Pronounce Word -->
-      <div class="widget-sheet-section">
-        <label class="widget-sheet-label">${t('widget_auto_speak_label') || 'Озвучивать слово при смене'}</label>
-        <div class="widget-sheet-pills" id="autospeak-pills">
-          <button type="button" class="widget-sheet-pill ${config.autoSpeakEnabled ? 'active' : ''}" data-val="true">${t('widget_enabled') || 'Включено'}</button>
-          <button type="button" class="widget-sheet-pill ${!config.autoSpeakEnabled ? 'active' : ''}" data-val="false">${t('widget_disabled') || 'Выключено'}</button>
-        </div>
-      </div>
-
-      <!-- 5. Speak Window / Repeat Period -->
-      <div class="widget-sheet-section" id="speak-hours-section" style="${config.autoSpeakEnabled ? '' : 'opacity: 0.45; pointer-events: none;'}">
-        <label class="widget-sheet-label">${t('widget_speak_hours_label') || 'Период повторений'}</label>
-        <div class="widget-sheet-time-range-row">
-          <div class="widget-sheet-time-picker-wrap" id="speak-start-wrap">
-            <span style="font-size: 13px; color: var(--text-muted, #64748b);">${t('widget_time_from') || 'с'}</span>
-            <span class="widget-sheet-time-label" id="speak-start-label">${config.speakStartTime || '09:00'}</span>
-            <input type="time" class="widget-sheet-time-input" id="speak-start-input" value="${config.speakStartTime || '09:00'}" />
-          </div>
-          <span style="font-weight: 700; color: var(--text-muted, #94a3b8); font-size: 16px;">—</span>
-          <div class="widget-sheet-time-picker-wrap" id="speak-end-wrap">
-            <span style="font-size: 13px; color: var(--text-muted, #64748b);">${t('widget_time_to') || 'до'}</span>
-            <span class="widget-sheet-time-label" id="speak-end-label">${config.speakEndTime || '20:00'}</span>
-            <input type="time" class="widget-sheet-time-input" id="speak-end-input" value="${config.speakEndTime || '20:00'}" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 6. Study Reminder -->
+      <!-- 2. Study Reminder -->
       <div class="widget-sheet-section">
         <label class="widget-sheet-label">${t('widget_reminder_label') || 'Напоминать про занятие'}</label>
         <div class="widget-sheet-reminder-row">
@@ -130,7 +81,7 @@ export function openWidgetConfigBottomSheet() {
         </div>
       </div>
 
-      <!-- 7. Submit Button -->
+      <!-- 3. Submit Button -->
       <div class="widget-sheet-actions">
         <button type="button" class="primary-button widget-sheet-submit-btn" id="btn-apply-widget-config">
           ${isInstalled ? (t('widget_save_changes') || 'Сохранить изменения') : `✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}`}
@@ -141,12 +92,29 @@ export function openWidgetConfigBottomSheet() {
 
   document.body.appendChild(backdrop);
 
-  // Trigger smooth slide up
+  // Trigger smooth appearance
   requestAnimationFrame(() => {
     backdrop.classList.add('visible');
   });
 
+  // System back button handling: exit modal and go to Settings tab
+  const previousBackHandler = window.handleAndroidBackButton;
+  const customBackHandler = function() {
+    closeSheet();
+    if (typeof window.setActiveTab === 'function') {
+      window.setActiveTab('settings');
+    } else {
+      const settingsTabBtn = document.querySelector('[data-tab="settings"]');
+      if (settingsTabBtn) settingsTabBtn.click();
+    }
+    return true;
+  };
+  window.handleAndroidBackButton = customBackHandler;
+
   const closeSheet = () => {
+    if (window.handleAndroidBackButton === customBackHandler) {
+      window.handleAndroidBackButton = previousBackHandler;
+    }
     backdrop.classList.remove('visible');
     setTimeout(() => backdrop.remove(), 250);
   };
@@ -167,65 +135,6 @@ export function openWidgetConfigBottomSheet() {
       config.widgetTheme = p.getAttribute('data-val') || 'gold';
     });
   });
-
-  // Interval selection
-  const intervalPills = backdrop.querySelectorAll('#interval-pills .widget-sheet-pill');
-  intervalPills.forEach(p => {
-    p.addEventListener('click', () => {
-      intervalPills.forEach(x => x.classList.remove('active'));
-      p.classList.add('active');
-      config.rotationIntervalMin = parseInt(p.getAttribute('data-val'), 10) || 30;
-    });
-  });
-
-  // Sound selection
-  const soundPills = backdrop.querySelectorAll('#sound-pills .widget-sheet-pill');
-  soundPills.forEach(p => {
-    p.addEventListener('click', () => {
-      soundPills.forEach(x => x.classList.remove('active'));
-      p.classList.add('active');
-      config.soundFlipEnabled = p.getAttribute('data-val') === 'true';
-    });
-  });
-
-  // Auto-speak selection
-  const autoSpeakPills = backdrop.querySelectorAll('#autospeak-pills .widget-sheet-pill');
-  const speakHoursSection = backdrop.querySelector('#speak-hours-section');
-  autoSpeakPills.forEach(p => {
-    p.addEventListener('click', () => {
-      autoSpeakPills.forEach(x => x.classList.remove('active'));
-      p.classList.add('active');
-      const enabled = p.getAttribute('data-val') === 'true';
-      config.autoSpeakEnabled = enabled;
-      if (speakHoursSection) {
-        speakHoursSection.style.opacity = enabled ? '1' : '0.45';
-        speakHoursSection.style.pointerEvents = enabled ? 'auto' : 'none';
-      }
-    });
-  });
-
-  // Speak time window inputs
-  const speakStartInput = backdrop.querySelector('#speak-start-input');
-  const speakStartLabel = backdrop.querySelector('#speak-start-label');
-  if (speakStartInput && speakStartLabel) {
-    speakStartInput.addEventListener('change', (e) => {
-      if (e.target.value) {
-        config.speakStartTime = e.target.value;
-        speakStartLabel.textContent = e.target.value;
-      }
-    });
-  }
-
-  const speakEndInput = backdrop.querySelector('#speak-end-input');
-  const speakEndLabel = backdrop.querySelector('#speak-end-label');
-  if (speakEndInput && speakEndLabel) {
-    speakEndInput.addEventListener('change', (e) => {
-      if (e.target.value) {
-        config.speakEndTime = e.target.value;
-        speakEndLabel.textContent = e.target.value;
-      }
-    });
-  }
 
   // Reminder toggle
   const reminderPills = backdrop.querySelectorAll('#reminder-pills .widget-sheet-pill');
