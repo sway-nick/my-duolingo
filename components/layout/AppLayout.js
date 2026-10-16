@@ -4,6 +4,7 @@ import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
 import { openShareDialog } from '../modals/ShareModal.js?v=385.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
 import { isEmailVerified } from '../../services/firebase.js?v=385.0';
+import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=385.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -222,6 +223,8 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
         </div>
       </header>
 
+      <div id="monday-ticker-container" class="monday-ticker-container"></div>
+
       <main class="app-main-content">
         <div id="app-content"></div>
       </main>
@@ -379,6 +382,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       tab.classList.add('active');
       const targetTab = tab.getAttribute('data-tab');
       closeDrawer();
+      updateMondayTickerTabVisibility(targetTab);
       if (typeof onTabChange === 'function') {
         try {
           onTabChange(targetTab);
@@ -396,6 +400,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       tabs.forEach((t) => t.classList.remove('active'));
       targetEl.classList.add('active');
       closeDrawer();
+      updateMondayTickerTabVisibility(targetTab);
       if (typeof onTabChange === 'function') {
         try {
           onTabChange(targetTab);
@@ -469,6 +474,8 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   });
 
   bindHeaderActionButtons(app);
+  initMondayWinnersTickerListener();
+  renderMondayWinnersTicker();
 }
 
 function showFeedbackToast(msg) {
@@ -776,4 +783,12 @@ export function showToast(message, duration = 4000) {
   }, duration);
 }
 
-export { renderAppLayout, updateHeaderUser, applyTheme, getSavedTheme, toggleTheme };
+export {
+  renderAppLayout,
+  updateHeaderUser,
+  applyTheme,
+  getSavedTheme,
+  toggleTheme,
+  renderMondayWinnersTicker,
+  updateMondayTickerTabVisibility
+};

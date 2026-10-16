@@ -197,6 +197,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </button>
       </div>
 
+      <!-- Monday Winners Ticker Demo (Test APK) -->
+      <div class="settings-card" id="monday-ticker-demo-section" style="padding: 14px 12px; text-align: center;">
+        <button type="button" class="theme-option-btn" id="btn-test-monday-ticker" style="width: 100%; justify-content: center; font-size: 14px; gap: 8px;">
+          <span>🏆</span>
+          <span>${t('test_ticker_btn') || 'Проверить бегущую строку (Топ-4)'}</span>
+        </button>
+      </div>
+
       <div class="settings-footer">
         <button type="button" id="open-privacy-btn" class="settings-privacy-btn">
           ${t('settings_privacy_policy')}
@@ -622,6 +630,28 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     btnPinWidget.addEventListener('click', (e) => {
       e.preventDefault();
       openWidgetConfigBottomSheet();
+    });
+  }
+
+  // Bind test button for Monday Winners Ticker (Test APK)
+  const btnTestTicker = container.querySelector('#btn-test-monday-ticker');
+  if (btnTestTicker) {
+    btnTestTicker.addEventListener('click', (e) => {
+      e.preventDefault();
+      try {
+        localStorage.removeItem('myduo_trial_ticker_seen');
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const k = sessionStorage.key(i);
+          if (k && k.startsWith('myduo_monday_ticker_dismissed_')) {
+            sessionStorage.removeItem(k);
+          }
+        }
+      } catch (err) {}
+
+      window.dispatchEvent(new CustomEvent('myduo:show_monday_ticker', { detail: { force: true } }));
+      if (typeof window.setActiveTab === 'function') {
+        window.setActiveTab('training');
+      }
     });
   }
 

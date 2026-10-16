@@ -189,7 +189,7 @@
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=385.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=385.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=385.0';
-      import { renderAppLayout, updateHeaderUser } from './components/layout/AppLayout.js?v=385.0';
+      import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=385.0';
       import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=385.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=385.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=385.0';
@@ -1988,6 +1988,10 @@
         } else {
           try { AdService.hideBottomBanner(); } catch (e) {}
         }
+
+        try {
+          updateMondayTickerTabVisibility(tabName);
+        } catch (e) {}
 
         if (tabName !== 'training') {
           favoritePracticeWords = null;
