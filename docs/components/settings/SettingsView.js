@@ -197,11 +197,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </button>
       </div>
 
-      <!-- Monday Winners Ticker Demo (Test APK) -->
+      <!-- Monday Winners Ticker & Cat Meme Demo (Test APK) -->
       <div class="settings-card" id="monday-ticker-demo-section" style="padding: 14px 12px; text-align: center;">
         <button type="button" class="theme-option-btn" id="btn-test-monday-ticker" style="width: 100%; justify-content: center; font-size: 14px; gap: 8px;">
           <span>🏆</span>
           <span>${t('test_ticker_btn') || 'Проверить бегущую строку (Топ-4)'}</span>
+        </button>
+        <button type="button" class="theme-option-btn" id="btn-test-monday-meme" style="width: 100%; justify-content: center; font-size: 14px; gap: 8px; margin-top: 8px;">
+          <span>🎬</span>
+          <span>Проверить мем с котом (Золотая карта)</span>
         </button>
       </div>
 
@@ -649,6 +653,21 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       } catch (err) {}
 
       window.dispatchEvent(new CustomEvent('myduo:show_monday_ticker', { detail: { force: true } }));
+      if (typeof window.setActiveTab === 'function') {
+        window.setActiveTab('training');
+      }
+    });
+  }
+
+  // Bind test button for Monday Cat Meme (Golden Card)
+  const btnTestMeme = container.querySelector('#btn-test-monday-meme');
+  if (btnTestMeme) {
+    btnTestMeme.addEventListener('click', (e) => {
+      e.preventDefault();
+      try {
+        localStorage.removeItem('myduo_wotd_video_last_date');
+        localStorage.setItem('myduo_trial_monday_meme', '1');
+      } catch (err) {}
       if (typeof window.setActiveTab === 'function') {
         window.setActiveTab('training');
       }

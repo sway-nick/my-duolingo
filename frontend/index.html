@@ -1070,7 +1070,10 @@
 
           const todayVideoKey = getDailyVideoDateKey();
           const lastWatchedVideoDate = localStorage.getItem('myduo_wotd_video_last_date');
-          const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey);
+          const isMonday = new Date().getDay() === 1;
+          const isTrialMeme = localStorage.getItem('myduo_trial_monday_meme') === '1' || (typeof window !== 'undefined' && window.__forceMondayMeme) || (localStorage.getItem('myduo_monday_meme_tested') !== '1');
+          const isMondayMeme = isMonday || isTrialMeme;
+          const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isTrialMeme;
 
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
@@ -1095,7 +1098,11 @@
 
             let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
             if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
-            currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
+            if (isMondayMeme) {
+              currentWotdVideo = 'meme_monday_look.mp4';
+            } else {
+              currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
+            }
 
             const wotdTier = (wotd.category || wotd.level || wotd.tier || 'ELEMENTARY').toUpperCase();
             const rawTrans = String(wotd.transcription || '').replace(/[\[\]]/g, '').replace(/^\/+|\/+$/g, '').trim();
@@ -1188,6 +1195,9 @@
                         <!-- Full-size video covering entire golden card face with instant preloading (1 daily clip before round) -->
                         <div id="wotd-video-container" style="display: none; opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 15; border-radius: inherit; overflow: hidden; background: #000; transition: opacity 0.25s ease; pointer-events: none;">
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
+                          <div id="wotd-top4-cut" style="display: none;">
+                            <img id="wotd-top4-img" src="assets/images/leaderboard_top4_cut.png" alt="Лидеры недели">
+                          </div>
                         </div>
 
                         <div class="card-header" style="z-index: 2;">
@@ -1348,6 +1358,8 @@
                 cardVideo.load();
               }
 
+              let memeTimeout = null;
+
               flashcard.addEventListener('click', (e) => {
                 if (e.target.closest('.card-fav') || e.target.closest('#wotd-fav-front') || e.target.closest('#wotd-fav-back')) {
                   return;
@@ -1357,19 +1369,28 @@
                 flashcard.classList.toggle('is-flipped', isFlipped);
 
                 if (isFlipped) {
-                  // Only launch cat video if user hasn't watched today's video yet!
+                  // Only launch cat video if user hasn't watched today's video yet (or trial meme active)!
                   const todayKey = getDailyVideoDateKey();
-                  const canPlayToday = (localStorage.getItem('myduo_wotd_video_last_date') !== todayKey);
+                  const canPlayToday = (localStorage.getItem('myduo_wotd_video_last_date') !== todayKey) || isTrialMeme;
 
                   if (canPlayToday && !videoStarted && cardVideo && videoContainer) {
                     videoStarted = true;
-                    localStorage.setItem('myduo_wotd_video_last_date', todayKey);
+                    if (!isTrialMeme) {
+                      localStorage.setItem('myduo_wotd_video_last_date', todayKey);
+                    }
 
                     const hintEl = flashcard.querySelector('#wotd-card-hint');
                     if (hintEl) hintEl.textContent = 'TOUCH TO FLIP BACK';
 
-                    let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
-                    if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
+                    if (isMondayMeme) {
+                      currentWotdVideo = 'meme_monday_look.mp4';
+                      cardVideo.src = 'assets/video/meme_monday_look.mp4';
+                    } else {
+                      let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
+                      if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
+                      localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
+                      preloadNextWotdVideo();
+                    }
 
                     if (window.trackEvent) {
                       window.trackEvent('cat_video_started', {
@@ -1377,10 +1398,6 @@
                         round_word: wotd ? wotd.word : ''
                       });
                     }
-
-                    // Advance index for next time and preload next video
-                    localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
-                    preloadNextWotdVideo();
 
                     let isVideoRevealed = false;
                     const flipStartTime = Date.now();
@@ -1407,20 +1424,72 @@
                       }, 350);
                     };
 
+                    const top4Cut = document.getElementById('wotd-top4-cut');
+                    const top4Img = document.getElementById('wotd-top4-img');
+
                     // Reveal video strictly when first real frame starts playing (prevents black screen!)
                     cardVideo.addEventListener('playing', revealVideo, { once: true });
                     cardVideo.addEventListener('timeupdate', () => {
                       if (cardVideo.currentTime > 0.05) revealVideo();
                     }, { once: true });
 
-                    cardVideo.addEventListener('ended', () => {
-                      dismissVideo();
-                      if (window.trackEvent) {
-                        window.trackEvent('cat_video_completed', {
-                          video_name: currentWotdVideo
-                        });
-                      }
-                    }, { once: true });
+                    if (isMondayMeme) {
+                      // STEP 1: Video 1 (Cat looks at screen)
+                      cardVideo.addEventListener('ended', () => {
+                        if (!isFlipped) return;
+
+                        // STEP 2: Show Top 4 Leaders screen cut for 1.8 seconds
+                        cardVideo.style.display = 'none';
+                        if (top4Cut) {
+                          if (top4Img) {
+                            const cachedCut = localStorage.getItem('myduo_leaderboard_last_cut');
+                            if (cachedCut) top4Img.src = cachedCut;
+                          }
+                          top4Cut.style.display = 'flex';
+                        }
+
+                        memeTimeout = setTimeout(() => {
+                          memeTimeout = null;
+                          if (!isFlipped) return;
+
+                          // STEP 3: Cat screams "WHAT?!"
+                          if (top4Cut) top4Cut.style.display = 'none';
+                          cardVideo.style.display = 'block';
+                          cardVideo.src = 'assets/video/meme_monday_what.mp4';
+                          cardVideo.muted = false;
+                          cardVideo.volume = 1.0;
+
+                          const play2 = cardVideo.play();
+                          if (play2 !== undefined) {
+                            play2.catch((err) => {
+                              console.warn('Video 2 audio autoplay restricted, falling back to muted:', err);
+                              cardVideo.muted = true;
+                              cardVideo.play().catch(() => {});
+                            });
+                          }
+
+                          cardVideo.addEventListener('ended', () => {
+                            dismissVideo();
+                            localStorage.setItem('myduo_monday_meme_tested', '1');
+                            localStorage.removeItem('myduo_trial_monday_meme');
+                            if (window.trackEvent) {
+                              window.trackEvent('cat_video_completed', {
+                                video_name: 'meme_monday_sequence'
+                              });
+                            }
+                          }, { once: true });
+                        }, 1800);
+                      }, { once: true });
+                    } else {
+                      cardVideo.addEventListener('ended', () => {
+                        dismissVideo();
+                        if (window.trackEvent) {
+                          window.trackEvent('cat_video_completed', {
+                            video_name: currentWotdVideo
+                          });
+                        }
+                      }, { once: true });
+                    }
 
                     cardVideo.addEventListener('error', () => {
                       dismissVideo();
@@ -1449,6 +1518,14 @@
                     }
                   }
                 } else {
+                  if (memeTimeout) {
+                    clearTimeout(memeTimeout);
+                    memeTimeout = null;
+                  }
+                  const top4Cut = document.getElementById('wotd-top4-cut');
+                  if (top4Cut) {
+                    top4Cut.style.display = 'none';
+                  }
                   if (cardVideo && !cardVideo.paused) {
                     cardVideo.pause();
                   }

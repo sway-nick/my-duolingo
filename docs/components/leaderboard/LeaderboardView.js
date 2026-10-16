@@ -645,4 +645,4 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   }
 }
 
-export { renderLeaderboardView };
+export { renderLeaderboardView, renderPodiumCard };
