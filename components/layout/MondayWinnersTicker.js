@@ -157,21 +157,19 @@ let isTickerActive = false;
 export function shouldShowMondayTicker(force = false) {
   if (force) return true;
 
-  const recentWeeks = getRecentWeekKeys(2);
-  const prevWeekKey = recentWeeks[1] || recentWeeks[0];
-  const dismissKey = `myduo_monday_ticker_dismissed_${prevWeekKey}`;
+  const curWeekKey = getIsoWeekKey();
+  const seenKey = `myduo_ticker_seen_week_${curWeekKey}`;
+  const dismissKey = `myduo_monday_ticker_dismissed_${curWeekKey}`;
 
   if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(dismissKey) === '1') {
     return false;
   }
+  if (typeof localStorage !== 'undefined' && localStorage.getItem(seenKey) === '1') {
+    return false;
+  }
 
-  // Monday check: Monday is ISO day 1 (JavaScript getDay() === 1)
-  const isMonday = new Date().getDay() === 1;
-
-  // In this trial build, also allow showing on first trial launch so user can evaluate it immediately
-  const isTrialFirstRun = typeof localStorage !== 'undefined' && !localStorage.getItem('myduo_trial_ticker_seen');
-
-  return isMonday || isTrialFirstRun;
+  // Shown upon first visit in the new week (regardless of weekday: Monday, Tuesday, etc.)
+  return true;
 }
 
 export function renderMondayWinnersTicker(options = {}) {
@@ -183,9 +181,12 @@ export function renderMondayWinnersTicker(options = {}) {
   const container = document.querySelector('#monday-ticker-container');
   if (!container) return;
 
+  const curWeekKey = getIsoWeekKey();
+  const seenKey = `myduo_ticker_seen_week_${curWeekKey}`;
+  const dismissKey = `myduo_monday_ticker_dismissed_${curWeekKey}`;
+
   const recentWeeks = getRecentWeekKeys(2);
   const prevWeekKey = recentWeeks[1] || recentWeeks[0];
-  const dismissKey = `myduo_monday_ticker_dismissed_${prevWeekKey}`;
 
   const texts = getTickerTexts();
   let winners = getTop4Winners(prevWeekKey);
@@ -217,6 +218,25 @@ export function renderMondayWinnersTicker(options = {}) {
     <button type="button" class="ticker-close-btn" id="ticker-close-btn" title="${texts.close}" aria-label="${texts.close}">✕</button>
   `;
 
+  // Show ticker exactly 2 times (2 complete marquee passes), then smoothly dismiss
+  let loopCount = 0;
+  const track = tickerEl.querySelector('.ticker-track');
+  if (track) {
+    track.addEventListener('animationiteration', () => {
+      loopCount++;
+      if (loopCount >= 2) {
+        tickerEl.classList.add('ticker-dismissing');
+        setTimeout(() => {
+          tickerEl.remove();
+          isTickerActive = false;
+        }, 350);
+        try {
+          localStorage.setItem(seenKey, '1');
+        } catch (err) {}
+      }
+    });
+  }
+
   // Click on ticker (except close button) -> Navigate to Leaderboard
   tickerEl.addEventListener('click', (e) => {
     if (e.target.closest('#ticker-close-btn')) return;
@@ -237,7 +257,7 @@ export function renderMondayWinnersTicker(options = {}) {
       }, 300);
       try {
         sessionStorage.setItem(dismissKey, '1');
-        localStorage.setItem('myduo_trial_ticker_seen', '1');
+        localStorage.setItem(seenKey, '1');
       } catch (err) {}
     });
   }

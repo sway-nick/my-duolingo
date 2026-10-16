@@ -1,4 +1,4 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=385.0';
+import { getUserSettings, saveUserSettings, getWords, getIsoWeekKey } from '../../services/api.js?v=385.0';
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=385.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=385.0';
@@ -643,6 +643,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     btnTestTicker.addEventListener('click', (e) => {
       e.preventDefault();
       try {
+        const curWeekKey = getIsoWeekKey();
+        localStorage.removeItem(`myduo_ticker_seen_week_${curWeekKey}`);
+        sessionStorage.removeItem(`myduo_monday_ticker_dismissed_${curWeekKey}`);
         localStorage.removeItem('myduo_trial_ticker_seen');
         for (let i = 0; i < sessionStorage.length; i++) {
           const k = sessionStorage.key(i);
@@ -665,6 +668,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     btnTestMeme.addEventListener('click', (e) => {
       e.preventDefault();
       try {
+        const curWeekKey = getIsoWeekKey();
+        localStorage.removeItem(`myduo_meme_seen_week_${curWeekKey}`);
         localStorage.removeItem('myduo_wotd_video_last_date');
         localStorage.setItem('myduo_trial_monday_meme', '1');
       } catch (err) {}

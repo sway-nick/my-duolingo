@@ -186,7 +186,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=385.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=385.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=385.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=385.0';
       import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=385.0';
@@ -1070,10 +1070,12 @@
 
           const todayVideoKey = getDailyVideoDateKey();
           const lastWatchedVideoDate = localStorage.getItem('myduo_wotd_video_last_date');
-          const isMonday = new Date().getDay() === 1;
-          const isTrialMeme = localStorage.getItem('myduo_trial_monday_meme') === '1' || (typeof window !== 'undefined' && window.__forceMondayMeme) || (localStorage.getItem('myduo_monday_meme_tested') !== '1');
-          const isMondayMeme = isMonday || isTrialMeme;
-          const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isTrialMeme;
+          const curWeekKey = getIsoWeekKey();
+          const memeSeenKey = `myduo_meme_seen_week_${curWeekKey}`;
+          const isWeeklyMemePending = (localStorage.getItem(memeSeenKey) !== '1');
+          const isTrialMeme = (localStorage.getItem('myduo_trial_monday_meme') === '1') || (typeof window !== 'undefined' && window.__forceMondayMeme);
+          const isMemeActive = isWeeklyMemePending || isTrialMeme;
+          const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isMemeActive;
 
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
@@ -1098,7 +1100,7 @@
 
             let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
             if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
-            if (isMondayMeme) {
+            if (isMemeActive) {
               currentWotdVideo = 'meme_monday_look.mp4';
             } else {
               currentWotdVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
@@ -1371,18 +1373,18 @@
                 if (isFlipped) {
                   // Only launch cat video if user hasn't watched today's video yet (or trial meme active)!
                   const todayKey = getDailyVideoDateKey();
-                  const canPlayToday = (localStorage.getItem('myduo_wotd_video_last_date') !== todayKey) || isTrialMeme;
+                  const canPlayToday = (localStorage.getItem('myduo_wotd_video_last_date') !== todayKey) || isMemeActive;
 
                   if (canPlayToday && !videoStarted && cardVideo && videoContainer) {
                     videoStarted = true;
-                    if (!isTrialMeme) {
+                    if (!isTrialMeme && !isWeeklyMemePending) {
                       localStorage.setItem('myduo_wotd_video_last_date', todayKey);
                     }
 
                     const hintEl = flashcard.querySelector('#wotd-card-hint');
                     if (hintEl) hintEl.textContent = 'TOUCH TO FLIP BACK';
 
-                    if (isMondayMeme) {
+                    if (isMemeActive) {
                       currentWotdVideo = 'meme_monday_look.mp4';
                       cardVideo.src = 'assets/video/meme_monday_look.mp4';
                     } else {
@@ -1433,7 +1435,7 @@
                       if (cardVideo.currentTime > 0.05) revealVideo();
                     }, { once: true });
 
-                    if (isMondayMeme) {
+                    if (isMemeActive) {
                       // STEP 1: Video 1 (Cat looks at screen)
                       cardVideo.addEventListener('ended', () => {
                         if (!isFlipped) return;
@@ -1470,7 +1472,8 @@
 
                           cardVideo.addEventListener('ended', () => {
                             dismissVideo();
-                            localStorage.setItem('myduo_monday_meme_tested', '1');
+                            localStorage.setItem(memeSeenKey, '1');
+                            localStorage.setItem('myduo_wotd_video_last_date', todayKey);
                             localStorage.removeItem('myduo_trial_monday_meme');
                             if (window.trackEvent) {
                               window.trackEvent('cat_video_completed', {
