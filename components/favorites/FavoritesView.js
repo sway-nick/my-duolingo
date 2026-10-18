@@ -159,15 +159,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       ${backBtnHtml}
       <div class="page-header" style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
         <h2 style="font-size: 19px; font-weight: 700; margin: 0; white-space: nowrap; letter-spacing: -0.2px; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0;">${escapeHtml(displayTitle)}: ${favoriteWords.length}</h2>
-        ${
-          !isMyFavorites && !isCustomCol && isBuiltinCollectionOverridden(collectionId)
-            ? `
-          <button type="button" id="header-reset-col-btn" class="secondary-button" style="padding: 4px 10px; font-size: 12px; font-weight: 600; border-radius: 8px; flex-shrink: 0;" title="${escapeHtml(t('col_reset_to_default') || 'Сбросить к исходным')}">
-            🔄 ${escapeHtml(t('col_reset_to_default') || 'Сбросить')}
-          </button>
-        `
-            : ''
-        }
       </div>
 
       <!-- 50% / 50% Actions Row -->
@@ -253,13 +244,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   container.querySelector('#header-set-widget-btn')?.addEventListener('click', handleWidgetButtonClick);
   container.querySelector('#header-add-words-btn')?.addEventListener('click', triggerAddWords);
 
-  container.querySelector('#header-reset-col-btn')?.addEventListener('click', () => {
-    resetBuiltinCollection(collectionId);
-    if (getActiveCollectionId() === collectionId) {
-      syncCollectionToAndroidWidget(collectionId, allWords);
-    }
-    if (onRefresh) onRefresh();
-  });
 
   // Bind practice button
   container.querySelector('#start-fav-practice-btn')?.addEventListener('click', () => {
