@@ -38,7 +38,7 @@ function build() {
   const videoDir = path.join(__dirname, '../frontend/assets/video');
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
   const videoFiles = fs.readdirSync(videoDir)
-    .filter(f => /\.(mp4|webm|mov)$/i.test(f))
+    .filter(f => /^cat\d+\.(mp4|webm|mov)$/i.test(f))
     .sort((a, b) => {
       const numA = parseInt((a.match(/\d+/) || [0])[0], 10);
       const numB = parseInt((b.match(/\d+/) || [0])[0], 10);
@@ -99,7 +99,8 @@ function build() {
     'web-app-manifest-512x512.png',
     'privacy.html',
     '.nojekyll',
-    'sw.js'
+    'sw.js',
+    'app-ads.txt'
   ];
 
   rootFilesToSync.forEach((filename) => {

@@ -1,4 +1,4 @@
-import { getUserSettings, saveUserSettings, getWords } from '../../services/api.js?v=385.0';
+import { getUserSettings, saveUserSettings, getWords, getIsoWeekKey } from '../../services/api.js?v=385.0';
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=385.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=385.0';
@@ -196,6 +196,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${t('settings_configure_widget') || 'Настроить виджет'}
         </button>
       </div>
+
+      ${(typeof localStorage !== 'undefined' && localStorage.getItem('myduo_debug_mode') === 'true') ? `
+      <!-- Monday Cat Meme Demo (Debug only) -->
+      <div class="settings-card" id="monday-ticker-demo-section" style="padding: 14px 12px; text-align: center;">
+        <button type="button" class="theme-option-btn" id="btn-test-monday-meme" style="width: 100%; justify-content: center; font-size: 14px; gap: 8px;">
+          <span>🎬</span>
+          <span>Проверить мем с котом (Золотая карта)</span>
+        </button>
+      </div>
+      ` : ''}
 
       <div class="settings-footer">
         <button type="button" id="open-privacy-btn" class="settings-privacy-btn">
@@ -622,6 +632,23 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     btnPinWidget.addEventListener('click', (e) => {
       e.preventDefault();
       openWidgetConfigBottomSheet();
+    });
+  }
+
+  // Bind test button for Monday Cat Meme (Golden Card)
+  const btnTestMeme = container.querySelector('#btn-test-monday-meme');
+  if (btnTestMeme) {
+    btnTestMeme.addEventListener('click', (e) => {
+      e.preventDefault();
+      try {
+        const curWeekKey = getIsoWeekKey();
+        localStorage.removeItem(`myduo_meme_seen_week_${curWeekKey}`);
+        localStorage.removeItem('myduo_wotd_video_last_date');
+        localStorage.setItem('myduo_trial_monday_meme', '1');
+      } catch (err) {}
+      if (typeof window.setActiveTab === 'function') {
+        window.setActiveTab('training');
+      }
     });
   }
 

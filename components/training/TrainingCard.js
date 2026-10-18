@@ -35,6 +35,8 @@ import {
 } from '../../services/api.js?v=385.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
 import { AdService } from '../../services/adService.js?v=385.0';
+import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=385.0';
+import { attachHeartLongPress } from '../modals/CollectionListsBottomSheet.js?v=385.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
@@ -417,7 +419,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     isSingleRemaining = false,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
+    favCollectionTitle = '',
   } = options;
+
+  const effectiveFavTitle = favCollectionTitle || (isFavPractice ? getCollectionTitle(getActiveCollectionId()) : '') || t('train_favs_chip');
 
   const isSingleWordMode = Boolean(
     isSingleRemaining ||
@@ -544,7 +549,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 isFavPractice
                   ? `
                   <div class="train-left-badge" id="fav-counter-badge">
-                    ${t('train_favs_chip')}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>
+                    ${effectiveFavTitle}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>
                   </div>
                 `
                   : `
@@ -695,7 +700,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const leftBadge = container.querySelector('.cards-learning-badge') || container.querySelector('.train-left-badge');
     if (leftBadge) {
       if (isFavPractice) {
-        const favLabel = t('fav_title') || 'Избранное';
+        const favLabel = effectiveFavTitle || t('fav_title') || 'Избранное';
         leftBadge.innerHTML = `${favLabel}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>`;
       } else if (isCardsMode) {
         leftBadge.innerHTML = `<strong>${cardsBadgeText}</strong>`;
@@ -2091,7 +2096,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       existingWrapper.outerHTML = cardHtml;
       const favBadge = container.querySelector('#fav-counter-badge') || container.querySelector('.train-left-badge');
       if (favBadge) {
-        const favLabel = t('favorites');
+        const favLabel = effectiveFavTitle || t('favorites') || 'Избранное';
         const currentNum = activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1;
         favBadge.innerHTML = `${favLabel}: <strong>${currentNum}/${activeWords.length}</strong>`;
       }
@@ -2422,7 +2427,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     practiceArea.querySelector('#fc-sound-back')?.addEventListener('click', handleCardSpeak);
 
     const handleCardFav = async (e) => {
-      e.stopPropagation();
       favorited = !favorited;
       const favFront = practiceArea.querySelector('#fc-fav-front');
       const favBack = practiceArea.querySelector('#fc-fav-back');
@@ -2437,8 +2441,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       await toggleFavoriteApi(currentWord.id, favorited);
       onFavoriteToggle(currentWord.id, favorited);
     };
-    practiceArea.querySelector('#fc-fav-front')?.addEventListener('click', handleCardFav);
-    practiceArea.querySelector('#fc-fav-back')?.addEventListener('click', handleCardFav);
+
+    const favFrontBtn = practiceArea.querySelector('#fc-fav-front');
+    const favBackBtn = practiceArea.querySelector('#fc-fav-back');
+    if (favFrontBtn) attachHeartLongPress(favFrontBtn, currentWord, allWords, handleCardFav);
+    if (favBackBtn) attachHeartLongPress(favBackBtn, currentWord, allWords, handleCardFav);
 
     practiceArea.querySelector('#btn-learn')?.addEventListener('click', handleLearnCard);
     practiceArea.querySelector('#btn-know')?.addEventListener('click', handleKnowCard);

@@ -9,7 +9,7 @@
     "prepare:assets": "node scripts/prepare_android_assets.mjs",
     "build:apk": "node scripts/build_android_apk.mjs",
     "start": "echo Frontend runs as static files",
-    "test": "node --test tests/leaderboard.test.mjs tests/leaderboard_e2e_scenarios.test.mjs tests/ad_and_penalties.test.mjs",
+    "test": "node --test tests/leaderboard.test.mjs tests/leaderboard_e2e_scenarios.test.mjs tests/ad_and_penalties.test.mjs tests/collections.test.mjs tests/monday_ticker.test.mjs tests/monday_meme.test.mjs",
     "test:weekly": "node scripts/weekly_test.mjs",
     "test:weekly:report": "node scripts/weekly_test.mjs --save-report",
     "lint": "echo ESLint will be configured later",
