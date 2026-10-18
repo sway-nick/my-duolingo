@@ -1316,6 +1316,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
     try {
       const res = await addCustomWord({ word, translation, category, notes });
+      if (window.trackEvent) {
+        window.trackEvent('custom_word_create', { word: word, category: category });
+      }
       cleanup();
 
       // Automatically add newly created word to creator's Favorites ❤️

@@ -4,6 +4,10 @@ import { setCollectionWords, getCustomCollections, saveCustomCollections, syncCo
 export function openAddWordsToCollectionModal({ collection, allWords = [], onSaved = () => {}, onClose = () => {} }) {
   if (!collection) return;
 
+  if (window.trackScreen) {
+    window.trackScreen('modal_add_words', 'AddWordsModal', { collection_id: collection.id });
+  }
+
   const existingModal = document.querySelector('#add-words-modal-root');
   if (existingModal) existingModal.remove();
 
@@ -207,6 +211,18 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
   // Save handler
   saveBtn.addEventListener('click', () => {
     const arr = Array.from(selectedSet);
+    const addedCount = arr.filter((id) => !initialSet.has(id)).length;
+    const removedCount = Array.from(initialSet).filter((id) => !selectedSet.has(id)).length;
+
+    if (window.trackEvent) {
+      window.trackEvent('collection_words_update', {
+        collection_id: collection.id,
+        total_words: arr.length,
+        added_count: addedCount,
+        removed_count: removedCount,
+      });
+    }
+
     setCollectionWords(collection.id, arr);
     if (getActiveCollectionId() === collection.id) {
       syncCollectionToAndroidWidget(collection.id, allWords);

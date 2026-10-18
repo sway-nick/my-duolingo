@@ -361,6 +361,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       updateVoiceButtons();
       speakWord('Hello', null, 'en-GB', 'uk', true);
       triggerAutoSave();
+      if (window.trackEvent) {
+        window.trackEvent('settings_accent_change', { accent: 'uk' });
+      }
       // Show download modal for UK Elementary audio pack if not yet downloaded
       if (typeof window.showAccentDownloadModalIfNeeded === 'function') {
         window.showAccentDownloadModalIfNeeded('uk');
@@ -373,6 +376,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       updateVoiceButtons();
       speakWord('Hello', null, 'en-US', 'us', true);
       triggerAutoSave();
+      if (window.trackEvent) {
+        window.trackEvent('settings_accent_change', { accent: 'us' });
+      }
     });
   }
 
@@ -390,6 +396,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       applyTheme('light');
       setActiveThemeBtn(lightBtn);
       triggerAutoSave();
+      if (window.trackEvent) {
+        window.trackEvent('settings_theme_change', { theme: 'light' });
+      }
     });
   }
 
@@ -398,6 +407,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       applyTheme('dark');
       setActiveThemeBtn(darkBtn);
       triggerAutoSave();
+      if (window.trackEvent) {
+        window.trackEvent('settings_theme_change', { theme: 'dark' });
+      }
     });
   }
 
@@ -478,6 +490,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         e.preventDefault();
         e.stopPropagation();
         const val = item.dataset.value;
+        if (window.trackEvent) {
+          window.trackEvent('settings_language_change', { lang: val });
+        }
         if (typeof setInterfaceLanguage === 'function') {
           setInterfaceLanguage(val);
         } else {
@@ -604,6 +619,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
     modal.querySelector('#modal-logout-btn').addEventListener('click', async () => {
       closeModal();
+      if (window.trackEvent) {
+        window.trackEvent('logout');
+      }
       logoutUser();
       await onUserChange();
       if (!window._activeTab || window._activeTab === 'settings') {

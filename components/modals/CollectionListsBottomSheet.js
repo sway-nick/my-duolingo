@@ -15,6 +15,10 @@ import {
 export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated = () => {}, onClose = () => {} }) {
   if (!word) return;
 
+  if (window.trackScreen) {
+    window.trackScreen('modal_collection_picker', 'CollectionPickerSheet', { word_id: word.id });
+  }
+
   const existingSheet = document.querySelector('#collection-sheet-root');
   if (existingSheet) {
     if (typeof existingSheet._cleanup === 'function') {
@@ -177,6 +181,16 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
 
     const type = cb.getAttribute('data-type');
     const checked = cb.checked;
+    const targetColId = type === 'custom' ? cb.getAttribute('data-col-id') : 'my_favorites';
+
+    if (window.trackEvent) {
+      window.trackEvent('collection_word_toggle', {
+        type: type,
+        checked: checked,
+        word_id: word.id,
+        collection_id: targetColId,
+      });
+    }
 
     if (type === 'favorite') {
       await toggleFavoriteApi(word.id);
@@ -217,6 +231,9 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
 
     const newCol = createCustomCollection(name, '📘');
     if (newCol) {
+      if (window.trackEvent) {
+        window.trackEvent('collection_create', { collection_id: newCol.id, name: name });
+      }
       addWordToCollection(newCol.id, word.id, allWords);
       newColForm.style.display = 'none';
       newColInput.value = '';

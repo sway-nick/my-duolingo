@@ -51,6 +51,9 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
   const handleWidgetButtonClick = () => {
     // 1. Switch active collection to this collection and sync words to Android widget
+    if (window.trackEvent) {
+      window.trackEvent('collection_set_widget', { collection_id: collectionId });
+    }
     setActiveCollectionId(collectionId);
     syncCollectionToAndroidWidget(collectionId, allWords);
 
@@ -285,6 +288,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         const card = container.querySelector(`.fav-card[data-id="${id}"]`);
         if (card) {
           card.remove();
+        }
+
+        if (window.trackEvent) {
+          window.trackEvent('collection_word_remove', {
+            collection_id: collectionId,
+            word_id: id,
+          });
         }
 
         const remainingCards = container.querySelectorAll('.fav-card');

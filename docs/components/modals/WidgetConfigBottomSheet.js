@@ -2,6 +2,10 @@ import { t } from '../../services/i18n.js?v=385.0';
 import { showToast } from '../layout/AppLayout.js?v=385.0';
 
 export function openWidgetConfigBottomSheet() {
+  if (window.trackScreen) {
+    window.trackScreen('modal_widget_config', 'WidgetConfigSheet');
+  }
+
   const existing = document.querySelector('#widget-config-bottom-sheet');
   if (existing) existing.remove();
 
@@ -171,11 +175,22 @@ export function openWidgetConfigBottomSheet() {
       const configJson = JSON.stringify(config);
       localStorage.setItem('myduo_widget_config', configJson);
 
+      if (window.trackEvent) {
+        window.trackEvent('widget_config_save', {
+          is_installed: isInstalled,
+          theme: config.widgetTheme,
+          reminder_enabled: config.reminderEnabled,
+        });
+      }
+
       if (window.AndroidWidgetBridge) {
         if (typeof window.AndroidWidgetBridge.saveWidgetConfig === 'function') {
           window.AndroidWidgetBridge.saveWidgetConfig(configJson);
         }
         if (!isInstalled && typeof window.AndroidWidgetBridge.requestPinWidget === 'function') {
+          if (window.trackEvent) {
+            window.trackEvent('widget_pin_request');
+          }
           window.AndroidWidgetBridge.requestPinWidget();
         } else if (isInstalled) {
           try {

@@ -32,6 +32,10 @@ function getShareUrl() {
  * Render and display the Share Modal on Desktop or fallback
  */
 export function showShareModal() {
+  if (window.trackScreen) {
+    window.trackScreen('modal_share', 'ShareModal');
+  }
+
   // Remove any existing share modal
   const existing = document.querySelector('#share-modal-overlay');
   if (existing) existing.remove();
@@ -160,6 +164,7 @@ export function showShareModal() {
   const tgBtn = overlay.querySelector('#share-channel-tg');
   if (tgBtn) {
     tgBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'telegram' });
       const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
       window.open(tgUrl, '_blank', 'noopener,noreferrer');
       closeModal();
@@ -170,6 +175,7 @@ export function showShareModal() {
   const waBtn = overlay.querySelector('#share-channel-wa');
   if (waBtn) {
     waBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'whatsapp' });
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
       window.open(waUrl, '_blank', 'noopener,noreferrer');
       closeModal();
@@ -180,6 +186,7 @@ export function showShareModal() {
   const vbBtn = overlay.querySelector('#share-channel-vb');
   if (vbBtn) {
     vbBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'viber' });
       const vbUrl = `viber://forward?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
       window.location.href = vbUrl;
       closeModal();
@@ -190,6 +197,7 @@ export function showShareModal() {
   const ttBtn = overlay.querySelector('#share-channel-tt');
   if (ttBtn) {
     ttBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'tiktok' });
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareUrl).catch(() => {});
       }
@@ -205,6 +213,7 @@ export function showShareModal() {
   const emBtn = overlay.querySelector('#share-channel-em');
   if (emBtn) {
     emBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'email' });
       const mailtoUrl = `mailto:?subject=${encodeURIComponent('English Breakfast')}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`;
       window.location.href = mailtoUrl;
       closeModal();
@@ -215,6 +224,7 @@ export function showShareModal() {
   const smsBtn = overlay.querySelector('#share-channel-sms');
   if (smsBtn) {
     smsBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'sms' });
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       const delimiter = isIOS ? '&' : '?';
       const smsUrl = `sms:${delimiter}body=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
@@ -228,6 +238,7 @@ export function showShareModal() {
   const linkInput = overlay.querySelector('#share-link-input');
   if (copyBtn && linkInput) {
     copyBtn.onclick = () => {
+      if (window.trackEvent) window.trackEvent('share_app', { method: 'copy_link' });
       linkInput.select();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareUrl).then(() => {
@@ -269,6 +280,9 @@ export function openShareDialog() {
   const shareText = t('share_message_text');
 
   if (navigator.share && isMobile) {
+    if (window.trackEvent) {
+      window.trackEvent('share_app', { method: 'system_native' });
+    }
     navigator.share({
       title: 'English Breakfast',
       text: shareText,

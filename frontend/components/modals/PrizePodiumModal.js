@@ -1,4 +1,4 @@
-﻿import { playFanfareSound } from '../../services/audioService.js?v=385.0';
+import { playFanfareSound } from '../../services/audioService.js?v=385.0';
 import { t } from '../../services/i18n.js?v=385.0';
 
 function getPrizeDetails(rank) {
@@ -87,6 +87,13 @@ function spawnConfetti() {
 }
 
 function showPrizePodiumModal(rank = 4, xp = 0, onDismiss = () => {}) {
+  if (window.trackScreen) {
+    window.trackScreen('modal_prize_podium', 'PrizePodiumModal', { rank, xp });
+  }
+  if (window.trackEvent) {
+    window.trackEvent('prize_podium_view', { rank, xp });
+  }
+
   // Remove existing modal if already open
   const existing = document.querySelector('#prize-podium-modal');
   if (existing) existing.remove();

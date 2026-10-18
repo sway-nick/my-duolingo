@@ -8,9 +8,31 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <script>
-      // Analytics disabled: no-op safe helpers
-      window.trackScreen = function() {};
-      window.trackEvent = function() {};
+      (function() {
+        function sanitize(str) {
+          return String(str || '').trim().toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 40);
+        }
+        window.trackScreen = function(screenName, screenClass, params) {
+          try {
+            var sName = sanitize(screenName);
+            var sClass = screenClass || 'Screen';
+            if (window.AndroidAnalyticsBridge && typeof window.AndroidAnalyticsBridge.trackScreen === 'function') {
+              window.AndroidAnalyticsBridge.trackScreen(sName, sClass);
+              if (params && Object.keys(params).length > 0) {
+                window.AndroidAnalyticsBridge.logEvent('screen_' + sName, JSON.stringify(params));
+              }
+            }
+          } catch (e) {}
+        };
+        window.trackEvent = function(eventName, params) {
+          try {
+            var eName = sanitize(eventName);
+            if (window.AndroidAnalyticsBridge && typeof window.AndroidAnalyticsBridge.logEvent === 'function') {
+              window.AndroidAnalyticsBridge.logEvent(eName, JSON.stringify(params || {}));
+            }
+          } catch (e) {}
+        };
+      })();
     </script>
     <script>
       // Force instant auto-restart and cache-bust for all users and Android devices
@@ -2054,6 +2076,13 @@
             incrementGuestTrainingCount();
             updateHeaderUser();
 
+            if (window.trackEvent) {
+              window.trackEvent('word_studied', {
+                method: currentMethod,
+                is_favorite_practice: Boolean(isFavPracticeActive),
+              });
+            }
+
             if (currentMethod === 'input' && (isSingleRemainingWord || unfinishedInQueue.length <= 1)) {
               window._trainingRoundJustCompleted = true;
             }
@@ -2154,6 +2183,13 @@
             }
             currentWordIndex = 0;
 
+            if (window.trackEvent) {
+              window.trackEvent('collection_practice_start', {
+                collection_id: targetId,
+                words_count: practiceList ? practiceList.length : 0,
+              });
+            }
+
             activeTab = 'training';
             window._activeTab = 'training';
             const tabs = document.querySelectorAll('.nav-tab');
@@ -2166,6 +2202,13 @@
             const title = getCollectionTitle(colId);
             window._isInsideCollectionCards = true;
             window._currentOpenCollectionId = colId;
+
+            if (window.trackScreen) {
+              window.trackScreen('collection_cards', 'CollectionCards', { collection_id: colId });
+            }
+            if (window.trackEvent) {
+              window.trackEvent('collection_view', { collection_id: colId, words_count: words.length });
+            }
             renderFavoritesView(words, '#app-content', {
               collectionId: colId,
               collectionTitle: title,
@@ -2278,6 +2321,11 @@
           favoriteIds = new Set(favList.map(String));
           updateHeaderUser();
           if (user && user.id) {
+            try {
+              if (window.AndroidAnalyticsBridge && typeof window.AndroidAnalyticsBridge.setUserId === 'function') {
+                window.AndroidAnalyticsBridge.setUserId(String(user.id));
+              }
+            } catch (e) {}
             try {
               await fetchUserDataFromCloud(user.id);
             } catch (e) {}

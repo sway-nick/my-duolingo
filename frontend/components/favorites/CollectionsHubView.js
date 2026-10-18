@@ -19,6 +19,10 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
+  if (window.trackScreen) {
+    window.trackScreen('collections_hub', 'CollectionsHubView');
+  }
+
   const {
     onStartPractice = () => {},
     onOpenCardsView = () => {},
@@ -359,12 +363,19 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     const trimmedName = Array.from(name.trim()).slice(0, 20).join('');
     const newCol = createCustomCollection(trimmedName, '📘');
     if (newCol) {
+      if (window.trackEvent) {
+        window.trackEvent('collection_create', { collection_id: newCol.id, name: trimmedName });
+      }
       onOpenCardsView(newCol.id);
     }
   }
 
   // Manage actions modal for custom and built-in collections (33-locale support)
   function openCollectionActionsModal(col, isCustom = false) {
+    if (window.trackScreen) {
+      window.trackScreen('collection_actions_modal', 'CollectionActionsModal', { collection_id: col.id });
+    }
+
     const existingModal = document.querySelector('#col-actions-modal-overlay');
     if (existingModal) existingModal.remove();
 
@@ -452,6 +463,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
 
     modalRoot.querySelector('#col-btn-set-widget')?.addEventListener('click', () => {
       close();
+      if (window.trackEvent) {
+        window.trackEvent('collection_set_widget', { collection_id: col.id });
+      }
       setActiveCollectionId(col.id);
       syncCollectionToAndroidWidget(col.id, allWords);
       renderCollectionsHubView(allWords, containerSelector, options);
@@ -463,6 +477,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
         const renamePromptText = t('col_menu_rename_prompt') || 'Новое название списка:';
         const newName = window.prompt(renamePromptText, col.title);
         if (newName && newName.trim()) {
+          if (window.trackEvent) {
+            window.trackEvent('collection_rename', { collection_id: col.id });
+          }
           renameCustomCollection(col.id, newName.trim(), undefined, allWords);
           renderCollectionsHubView(allWords, containerSelector, options);
         }
@@ -473,6 +490,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
         const deleteConfirmTemplate = t('col_menu_delete_confirm') || 'Удалить список «{name}»?';
         const deleteConfirmText = deleteConfirmTemplate.replace('{name}', col.title);
         if (window.confirm(deleteConfirmText)) {
+          if (window.trackEvent) {
+            window.trackEvent('collection_delete', { collection_id: col.id });
+          }
           deleteCustomCollection(col.id, allWords);
           renderCollectionsHubView(allWords, containerSelector, options);
         }
@@ -480,6 +500,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     } else if (isOverridden) {
       modalRoot.querySelector('#col-btn-reset')?.addEventListener('click', () => {
         close();
+        if (window.trackEvent) {
+          window.trackEvent('collection_reset', { collection_id: col.id });
+        }
         resetBuiltinCollection(col.id);
         if (getActiveCollectionId() === col.id) {
           syncCollectionToAndroidWidget(col.id, allWords);

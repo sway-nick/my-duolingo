@@ -18,6 +18,10 @@ function shouldShowSyncBadge() {
 }
 
 function showTop100Modal(rank) {
+  if (window.trackScreen) {
+    window.trackScreen('modal_top100_congrats', 'Top100Modal', { rank });
+  }
+
   const existing = document.querySelector('#top100-congrats-modal');
   if (existing) existing.remove();
 
@@ -525,6 +529,9 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         item.addEventListener('click', (e) => {
           e.stopPropagation();
           currentPeriod = item.getAttribute('data-value');
+          if (window.trackEvent) {
+            window.trackEvent('leaderboard_period_switch', { period: currentPeriod });
+          }
           localStorage.setItem('myduo_leaderboard_period', currentPeriod);
           typeDropdown.classList.remove('open');
           renderLeaderboardView(containerSelector, options);
