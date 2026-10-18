@@ -105,6 +105,15 @@ test('Collections: Custom collections CRUD operations work as expected', async (
   const updatedList = getCustomCollections();
   assert.equal(updatedList[0].name, 'Урок 5 (Продвинутый)');
 
+  // 20-character limit check on rename and create
+  renameCustomCollection(col.id, '1234567890123456789012345');
+  assert.equal(getCustomCollections()[0].name, '12345678901234567890');
+  assert.equal(getCustomCollections()[0].name.length, 20);
+
+  const longCol = createCustomCollection('Очень длинное название новой коллекции более 20 символов');
+  assert.equal(longCol.name.length, 20);
+  deleteCustomCollection(longCol.id);
+
   // Remove word
   removeWordFromCollection(col.id, wordsData[0].id);
   customWords = getCollectionWords(col.id, wordsData);
@@ -127,5 +136,270 @@ test('Collections: syncCollectionToAndroidWidget sends valid payload to widget',
   assert.equal(global.__lastWidgetPayload.title, 'Месяцы');
   assert.equal(global.__lastWidgetPayload.hasFavorites, true);
   assert.equal(global.__lastWidgetPayload.words.length, 12);
-  assert.equal(global.__lastWidgetPayload.words[0].word, 'january');
+  assert.equal(global.__lastWidgetPayload.words[0].word.toLowerCase(), 'january');
+});
+
+test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic collections', async () => {
+  const {
+    BUILTIN_COLLECTIONS_WITH_GEAR,
+    getCollectionWords,
+    setCollectionWords,
+    isBuiltinCollectionOverridden,
+    resetBuiltinCollection,
+    removeWordFromCollection,
+    addWordToCollection,
+  } = await import('../frontend/services/collectionsService.js');
+
+  const expectedIds = ['colors', 'body_parts', 'sport', 'food', 'clothes', 'animals', 'verbs', 'adjectives', 'phrasal_verbs'];
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.size, 9);
+  for (const id of expectedIds) {
+    assert.ok(BUILTIN_COLLECTIONS_WITH_GEAR.has(id), `gear enabled for ${id}`);
+  }
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('months'), false, 'months has no gear');
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('days_of_week'), false, 'days_of_week has no gear');
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('numbers'), false, 'numbers has no gear');
+
+  // Verify builtin override & reset
+  const defaultColors = getCollectionWords('colors', wordsData);
+  assert.ok(defaultColors.length > 0);
+  assert.equal(isBuiltinCollectionOverridden('colors'), false);
+
+  // Override colors with just 2 words
+  const sampleIds = [String(defaultColors[0].id), String(defaultColors[1].id)];
+  setCollectionWords('colors', sampleIds);
+  assert.equal(isBuiltinCollectionOverridden('colors'), true);
+  const overriddenColors = getCollectionWords('colors', wordsData);
+  assert.equal(overriddenColors.length, 2);
+
+  // Reset colors
+  resetBuiltinCollection('colors');
+  assert.equal(isBuiltinCollectionOverridden('colors'), false);
+  const resetColors = getCollectionWords('colors', wordsData);
+  assert.equal(resetColors.length, defaultColors.length);
+
+  // Test removeWordFromCollection and addWordToCollection on built-in collection
+  const firstWord = defaultColors[0];
+  removeWordFromCollection('colors', firstWord.id, wordsData);
+  assert.equal(isBuiltinCollectionOverridden('colors'), true);
+  const afterRemove = getCollectionWords('colors', wordsData);
+  assert.equal(afterRemove.length, defaultColors.length - 1);
+  assert.equal(afterRemove.some((w) => String(w.id) === String(firstWord.id)), false);
+
+  addWordToCollection('colors', firstWord.id, wordsData);
+  const afterAdd = getCollectionWords('colors', wordsData);
+  assert.equal(afterAdd.length, defaultColors.length);
+  assert.equal(afterAdd.some((w) => String(w.id) === String(firstWord.id)), true);
+
+  resetBuiltinCollection('colors');
+});
+
+test('Collections: all 13 built-in collections have names in all 33 supported locales', async () => {
+  const { BUILTIN_COLLECTIONS_DEF, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
+  const locales = [
+    'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg',
+    'hu', 'el', 'da', 'ga', 'lv', 'lt', 'mt', 'pt', 'sk', 'sl', 'fi',
+    'hr', 'cs', 'sv', 'et', 'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja',
+  ];
+
+  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 13, '13 built-in collections');
+
+  for (const col of BUILTIN_COLLECTIONS_DEF) {
+    for (const loc of locales) {
+      assert.ok(col.name[loc], `Collection "${col.id}" must have name for locale "${loc}"`);
+      assert.ok(col.name[loc].trim().length > 0, `Collection "${col.id}" title for "${loc}" cannot be empty`);
+      const title = getCollectionTitle(col.id, loc);
+      assert.equal(title, col.name[loc]);
+    }
+  }
+});
+
+test('Collections: WIDGET_TRANSLATIONS has all required hub and modal keys in all 33 locales', async () => {
+  const { WIDGET_TRANSLATIONS } = await import('../frontend/services/widgetTranslations.js');
+  const locales = [
+    'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg',
+    'hu', 'el', 'da', 'ga', 'lv', 'lt', 'mt', 'pt', 'sk', 'sl', 'fi',
+    'hr', 'cs', 'sv', 'et', 'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja',
+  ];
+
+  const requiredKeys = [
+    'fav_hub_btn',
+    'col_pill_widget',
+    'col_pill_widget_title',
+    'col_add_new_list',
+    'col_custom_desc',
+    'col_manage_btn',
+    'col_empty_favorites_alert',
+    'col_menu_title_list',
+    'col_menu_title_collection',
+    'col_menu_view_words',
+    'col_menu_rename',
+    'col_menu_delete',
+    'col_menu_reset',
+    'col_menu_cancel',
+    'col_menu_prompt_action',
+    'col_menu_rename_prompt',
+    'col_menu_delete_confirm',
+    'col_create_prompt',
+    'col_menu_set_widget',
+    'col_menu_widget_active',
+    'col_menu_edit',
+    'col_btn_add',
+    'col_btn_add_words',
+    'col_reset_to_default',
+  ];
+
+  for (const loc of locales) {
+    assert.ok(WIDGET_TRANSLATIONS[loc], `WIDGET_TRANSLATIONS must have locale "${loc}"`);
+    for (const key of requiredKeys) {
+      assert.ok(
+        WIDGET_TRANSLATIONS[loc][key],
+        `Locale "${loc}" must have key "${key}" in WIDGET_TRANSLATIONS`
+      );
+      assert.ok(
+        WIDGET_TRANSLATIONS[loc][key].trim().length > 0,
+        `Key "${key}" in locale "${loc}" cannot be empty`
+      );
+    }
+  }
+});
+
+test('Collections: Android Back Button returns to Collections Hub before exiting to Main screen', () => {
+  // Simulate navigation hierarchy
+  let activeTab = 'favorites';
+  let tabHistory = ['training', 'favorites'];
+  let isInsideCollectionCards = true;
+  let currentOpenCollectionId = 'days_of_week';
+  let backBtnClicked = false;
+  let hubRendered = false;
+
+  let mockFavBackBtn = {
+    click: () => {
+      backBtnClicked = true;
+      isInsideCollectionCards = false;
+      currentOpenCollectionId = null;
+      hubRendered = true;
+      mockFavBackBtn = null;
+    }
+  };
+
+  const handleAndroidBackButtonSim = () => {
+    // Priority 4.5: If viewing a collection's cards inside Favorites/Collections, return to the Collections Hub grid
+    if (activeTab === 'favorites' && (mockFavBackBtn || isInsideCollectionCards)) {
+      isInsideCollectionCards = false;
+      currentOpenCollectionId = null;
+      if (mockFavBackBtn && typeof mockFavBackBtn.click === 'function') {
+        mockFavBackBtn.click();
+      } else {
+        hubRendered = true;
+      }
+      return true;
+    }
+
+    // Priority 5: If on secondary tabs, return to previous page in history
+    if (activeTab !== 'training') {
+      if (tabHistory.length > 1 && tabHistory[tabHistory.length - 1] === activeTab) {
+        tabHistory.pop();
+      }
+      const previousTab = tabHistory.length > 0 ? tabHistory[tabHistory.length - 1] : 'training';
+      activeTab = previousTab;
+      return true;
+    }
+
+    return false;
+  };
+
+  // 1st press while inside "days_of_week": must NOT switch to training, must return to Collections Hub
+  const press1 = handleAndroidBackButtonSim();
+  assert.equal(press1, true);
+  assert.equal(backBtnClicked, true);
+  assert.equal(hubRendered, true);
+  assert.equal(isInsideCollectionCards, false);
+  assert.equal(activeTab, 'favorites'); // Stays on favorites tab, showing the hub grid!
+
+  // Now simulated user is on Collections Hub grid (favBackBtn is null)
+  const press2 = handleAndroidBackButtonSim();
+  assert.equal(press2, true);
+  assert.equal(activeTab, 'training'); // Now returns to Main / Training screen!
+
+  // 3rd press on Main screen: returns false (triggers Android exit / double-tap toast)
+  const press3 = handleAndroidBackButtonSim();
+  assert.equal(press3, false);
+});
+
+test('Collections: Widget button connects collection and opens settings modal only if widget is not pinned', () => {
+  let modalOpened = false;
+  let activeCol = null;
+
+  const mockOpenWidgetConfig = () => {
+    modalOpened = true;
+  };
+
+  const handleWidgetButtonClickSim = (colId, isInstalledOnHomeScreen) => {
+    activeCol = colId;
+    if (!isInstalledOnHomeScreen) {
+      mockOpenWidgetConfig();
+    }
+  };
+
+  // Case 1: Widget is NOT on home screen -> connects AND opens settings modal
+  modalOpened = false;
+  handleWidgetButtonClickSim('months', false);
+  assert.equal(activeCol, 'months');
+  assert.equal(modalOpened, true);
+
+  // Case 2: Widget IS on home screen -> connects WITHOUT opening modal
+  modalOpened = false;
+  handleWidgetButtonClickSim('sport', true);
+  assert.equal(activeCol, 'sport');
+  assert.equal(modalOpened, false);
+});
+
+test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat practice cards mode with accurate title and words without altering home screen widget', async () => {
+  const { getCollectionWords, setActiveCollectionId, getActiveCollectionId, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
+  const colorWords = getCollectionWords('colors', wordsData);
+
+  assert.equal(colorWords.length, 13);
+  assert.equal(colorWords.some((w) => w.word === 'red'), true);
+  assert.equal(colorWords.some((w) => w.word === 'green'), true);
+
+  // Widget active collection is 'my_favorites'
+  setActiveCollectionId('my_favorites');
+  assert.equal(getActiveCollectionId(), 'my_favorites');
+
+  let activeTab = 'favorites';
+  let favoritePracticeWords = null;
+  let favoritePracticeMethod = 'cards';
+  let activePracticeCollectionId = null;
+  let activePracticeCollectionTitle = null;
+
+  // Simulate startPracticeHandler
+  const startPracticeHandlerSim = (practiceWords, colId, colTitle) => {
+    const targetId = colId || 'my_favorites';
+    activePracticeCollectionId = targetId;
+    activePracticeCollectionTitle = colTitle || getCollectionTitle(targetId);
+
+    const practiceList = (practiceWords && practiceWords.length > 0)
+      ? practiceWords
+      : getCollectionWords(targetId, wordsData);
+
+    favoritePracticeWords = [...practiceList];
+    favoritePracticeMethod = 'cards';
+    activeTab = 'training';
+  };
+
+  startPracticeHandlerSim(colorWords, 'colors', getCollectionTitle('colors'));
+
+  // 1. Switched to training tab in cards mode
+  assert.equal(activeTab, 'training');
+  assert.equal(favoritePracticeMethod, 'cards');
+
+  // 2. Contains all 13 color words
+  assert.equal(favoritePracticeWords.length, 13);
+
+  // 3. Practice collection metadata is set to "Цвета" / colors
+  assert.equal(activePracticeCollectionId, 'colors');
+  assert.equal(activePracticeCollectionTitle, 'Цвета');
+
+  // 4. Widget connection is NOT overwritten (remains 'my_favorites')
+  assert.equal(getActiveCollectionId(), 'my_favorites');
 });

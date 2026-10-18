@@ -21,7 +21,8 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
   modalRoot.innerHTML = `
     <div class="modal-content add-words-modal-card" style="max-width: 480px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.3);">

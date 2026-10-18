@@ -150,6 +150,10 @@ async function run() {
     if (!targetWordObj.all_notes) targetWordObj.all_notes = {};
 
     let hasChange = false;
+    if (rawWord && targetWordObj.word !== rawWord) {
+      targetWordObj.word = rawWord;
+      hasChange = true;
+    }
     TARGET_LANGS.forEach(lang => {
       const idx = colIndices[lang];
       if (idx !== undefined && row[idx]) {

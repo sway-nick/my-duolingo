@@ -99,7 +99,8 @@ function build() {
     'web-app-manifest-512x512.png',
     'privacy.html',
     '.nojekyll',
-    'sw.js'
+    'sw.js',
+    'app-ads.txt'
   ];
 
   rootFilesToSync.forEach((filename) => {

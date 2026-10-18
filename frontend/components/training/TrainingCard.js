@@ -700,7 +700,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const leftBadge = container.querySelector('.cards-learning-badge') || container.querySelector('.train-left-badge');
     if (leftBadge) {
       if (isFavPractice) {
-        const favLabel = t('fav_title') || 'Избранное';
+        const favLabel = effectiveFavTitle || t('fav_title') || 'Избранное';
         leftBadge.innerHTML = `${favLabel}: <strong>${activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1}/${activeWords.length}</strong>`;
       } else if (isCardsMode) {
         leftBadge.innerHTML = `<strong>${cardsBadgeText}</strong>`;
@@ -2096,7 +2096,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       existingWrapper.outerHTML = cardHtml;
       const favBadge = container.querySelector('#fav-counter-badge') || container.querySelector('.train-left-badge');
       if (favBadge) {
-        const favLabel = t('favorites');
+        const favLabel = effectiveFavTitle || t('favorites') || 'Избранное';
         const currentNum = activeWords.length > 0 ? (currentWordIndex % activeWords.length) + 1 : 1;
         favBadge.innerHTML = `${favLabel}: <strong>${currentNum}/${activeWords.length}</strong>`;
       }

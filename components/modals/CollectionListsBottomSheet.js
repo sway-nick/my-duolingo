@@ -33,7 +33,8 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
   sheetRoot.innerHTML = `
     <div class="collection-sheet-backdrop"></div>
@@ -72,8 +73,8 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
           <input
             type="text"
             id="new-col-name-input"
-            placeholder="Название списка (напр. Урок 5)..."
-            maxlength="40"
+            placeholder="Название списка (напр. Урок 1)..."
+            maxlength="20"
             style="flex: 1; min-width: 0; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 14.5px; outline: none; box-sizing: border-box;"
           />
           <button type="button" id="btn-submit-new-col" class="primary-button btn-green" style="padding: 0 16px; min-height: 42px; font-size: 14px; font-weight: 700; border-radius: 12px; flex-shrink: 0;">
