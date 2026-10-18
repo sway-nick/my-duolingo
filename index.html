@@ -495,6 +495,9 @@
         }
 
         if (activeTab === 'favorites') {
+          if (window._isInsideCollectionCards) {
+            return;
+          }
           renderTab(activeTab);
         }
       }
@@ -2186,6 +2189,11 @@
             });
           };
 
+          if (window._isInsideCollectionCards && window._currentOpenCollectionId) {
+            openCardsHandler(window._currentOpenCollectionId);
+            return;
+          }
+
           window._isInsideCollectionCards = false;
           window._currentOpenCollectionId = null;
           renderCollectionsHubView(allWords, '#app-content', {
@@ -2320,6 +2328,7 @@
           favoriteIds = new Set(favs.map(String));
           syncFavoritesToAndroidWidget();
           if (window._isAppInitializing) return;
+          if (window._isInsideCollectionCards) return;
           if (!window._isCategorySelectOpen && (activeTab === 'favorites' || activeTab === 'dictionary')) {
             renderTab(activeTab);
           }
@@ -2402,6 +2411,10 @@
             if (tabName === 'training') {
               favoritePracticeWords = null;
               window._showHubScreen = true;
+            }
+            if (tabName === 'favorites') {
+              window._isInsideCollectionCards = false;
+              window._currentOpenCollectionId = null;
             }
             renderTab(tabName);
           },

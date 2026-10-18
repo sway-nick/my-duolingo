@@ -297,8 +297,23 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         e.stopPropagation();
         const id = removeBtn.getAttribute('data-id');
 
+        // Immediately remove card from DOM
+        const card = container.querySelector(`.fav-card[data-id="${id}"]`);
+        if (card) {
+          card.remove();
+        }
+
+        const remainingCards = container.querySelectorAll('.fav-card');
+        const titleEl = container.querySelector('.page-header h2');
+        if (titleEl) {
+          titleEl.textContent = `${displayTitle}: ${remainingCards.length}`;
+        }
+        if (remainingCards.length === 0) {
+          renderFavoritesView([], containerSelector, options);
+        }
+
         if (isMyFavorites) {
-          await toggleFavoriteApi(id, false);
+          toggleFavoriteApi(id, false).catch((err) => console.warn('toggleFavoriteApi error:', err));
           onRemoveFavorite(id);
           if (getActiveCollectionId() === 'my_favorites') {
             syncCollectionToAndroidWidget('my_favorites', allWords);
@@ -308,18 +323,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           if (getActiveCollectionId() === collectionId) {
             syncCollectionToAndroidWidget(collectionId, allWords);
           }
-        }
-
-        const card = container.querySelector(`.fav-card[data-id="${id}"]`);
-        if (card) card.remove();
-
-        const remainingCards = container.querySelectorAll('.fav-card');
-        const titleEl = container.querySelector('.page-header h2');
-        if (titleEl) {
-          titleEl.textContent = `${displayTitle}: ${remainingCards.length}`;
-        }
-        if (remainingCards.length === 0) {
-          renderFavoritesView([], containerSelector, options);
         }
       }
     });
