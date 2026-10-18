@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import { BUILTIN_COLLECTIONS_DEF } from '../frontend/services/collectionsService.js';
 
 const ROOT_SOURCE = 'c:/projects/my-duolingo';
 const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
 
 export function prepareAndroidAssets() {
-  console.log('--- 1. Loading words.json & filtering strictly Elementary (US only, Section 12) ---');
+  console.log('--- 1. Loading words.json & filtering Elementary + all Standard Built-in Collections ---');
   const wordsPath = path.join(ROOT_SOURCE, 'frontend/assets/data/words.json');
   const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
 
@@ -15,10 +16,19 @@ export function prepareAndroidAssets() {
       .replace(/\s+/g, '_') + '.mp3';
   }
 
-  // Section 12: In APK, strictly 'elementary' category words are prepackaged
+  // Collect all word keys from standard built-in collections (numbers, verbs, colors, food, clothes, etc.)
+  const collectionWordsSet = new Set();
+  BUILTIN_COLLECTIONS_DEF.forEach(col => {
+    if (col.wordKeys) {
+      col.wordKeys.forEach(k => collectionWordsSet.add(k.toLowerCase().trim()));
+    }
+  });
+
+  // Include strictly Elementary words PLUS all words from standard collections regardless of difficulty level
   const targetWords = words.filter(w => {
+    const wordKey = String(w.word || '').toLowerCase().trim();
     const cat = String(w.category || '').toLowerCase();
-    return cat.includes('elementary');
+    return cat.includes('elementary') || collectionWordsSet.has(wordKey);
   });
 
   const targetFileNames = new Set();
@@ -28,7 +38,7 @@ export function prepareAndroidAssets() {
     }
   });
 
-  console.log('Found ' + targetWords.length + ' Elementary words (' + targetFileNames.size + ' unique audio files for US).');
+  console.log('Found ' + targetWords.length + ' words (Elementary + ' + collectionWordsSet.size + ' standard collection words) -> ' + targetFileNames.size + ' unique audio files for US.');
 
   const androidAudioDir = path.join(ANDROID_PROJECT, 'frontend/assets/audio');
   const sourceAudioDir = path.join(ROOT_SOURCE, 'frontend/assets/audio');
