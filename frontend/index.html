@@ -2241,10 +2241,11 @@
 
         // 1. Instant local cache restore (0ms)
         try {
+          const cacheVer = localStorage.getItem('myduo_words_cache_ver');
           const cachedRaw = localStorage.getItem('myduo_cached_words');
-          if (cachedRaw) {
+          if (cachedRaw && cacheVer === 'v220_numbers_collections') {
             const parsed = JSON.parse(cachedRaw);
-            if (Array.isArray(parsed) && parsed.length > 0) {
+            if (Array.isArray(parsed) && parsed.length >= 6886) {
               allWords = parsed;
             }
           }

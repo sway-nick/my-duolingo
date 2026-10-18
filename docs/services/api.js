@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v219_damage_sync';
+const WORDS_CACHE_VERSION = 'v220_numbers_collections';
 
 let cachedWordsList = null;
 try {
@@ -127,7 +127,7 @@ try {
   const rawCache = localStorage.getItem('myduo_cached_words') || '';
   if (cacheVer === WORDS_CACHE_VERSION && !rawCache.includes('\ufffd') && !rawCache.includes('плщадь')) {
     const initialCache = JSON.parse(rawCache || '[]');
-    if (Array.isArray(initialCache) && initialCache.length > 0) {
+    if (Array.isArray(initialCache) && initialCache.length >= 6886) {
       cachedWordsList = initialCache;
       try {
         applyMultilingualTranslations(cachedWordsList);
@@ -378,7 +378,7 @@ async function getWords(forceRefresh = false) {
 
       if (cacheVer === WORDS_CACHE_VERSION && !rawCache.includes('\ufffd') && !rawCache.includes('плщадь')) {
         let localCached = JSON.parse(rawCache || '[]');
-        const hasMultilingual = Array.isArray(localCached) && localCached.length > 0 && localCached.some((w) => w && w.translations && typeof w.translations === 'object');
+        const hasMultilingual = Array.isArray(localCached) && localCached.length >= 6886 && localCached.some((w) => w && w.translations && typeof w.translations === 'object');
 
         if (hasMultilingual) {
           sanitizeTranscriptions(localCached);
