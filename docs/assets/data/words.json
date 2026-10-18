@@ -312956,5 +312956,113 @@
     "notes": "",
     "all_notes": {},
     "zipf": 3
+  },
+  {
+    "id": 6812,
+    "word": "tuesday",
+    "transcription": "ˈtjuːzdeɪ",
+    "translation": "вторник",
+    "translations": {
+      "ru": "вторник",
+      "uk": "вівторок",
+      "en": "tuesday",
+      "de": "Dienstag",
+      "es": "martes",
+      "fr": "mardi"
+    },
+    "category": "Elementary",
+    "level": "A1",
+    "notes": "день недели",
+    "zipf": 4.8
+  },
+  {
+    "id": 6813,
+    "word": "friday",
+    "transcription": "ˈfraɪdeɪ",
+    "translation": "пятница",
+    "translations": {
+      "ru": "пятница",
+      "uk": "п'ятниця",
+      "en": "friday",
+      "de": "Freitag",
+      "es": "viernes",
+      "fr": "vendredi"
+    },
+    "category": "Elementary",
+    "level": "A1",
+    "notes": "день недели",
+    "zipf": 5.1
+  },
+  {
+    "id": 6814,
+    "word": "saturday",
+    "transcription": "ˈsætədeɪ",
+    "translation": "суббота",
+    "translations": {
+      "ru": "суббота",
+      "uk": "субота",
+      "en": "saturday",
+      "de": "Samstag",
+      "es": "sábado",
+      "fr": "samedi"
+    },
+    "category": "Elementary",
+    "level": "A1",
+    "notes": "день недели",
+    "zipf": 5
+  },
+  {
+    "id": 6815,
+    "word": "sunday",
+    "transcription": "ˈsʌndeɪ",
+    "translation": "воскресенье",
+    "translations": {
+      "ru": "воскресенье",
+      "uk": "неділя",
+      "en": "sunday",
+      "de": "Sonntag",
+      "es": "domingo",
+      "fr": "dimanche"
+    },
+    "category": "Elementary",
+    "level": "A1",
+    "notes": "день недели",
+    "zipf": 5.2
+  },
+  {
+    "id": 6816,
+    "word": "september",
+    "transcription": "sɛpˈtɛmbə",
+    "translation": "сентябрь",
+    "translations": {
+      "ru": "сентябрь",
+      "uk": "вересень",
+      "en": "september",
+      "de": "September",
+      "es": "septiembre",
+      "fr": "septembre"
+    },
+    "category": "Elementary",
+    "level": "A1",
+    "notes": "месяц года",
+    "zipf": 4.7
+  },
+  {
+    "id": 6817,
+    "word": "november",
+    "transcription": "noʊˈvɛmbə",
+    "translation": "ноябрь",
+    "translations": {
+      "ru": "ноябрь",
+      "uk": "листопад",
+      "en": "november",
+      "de": "November",
+      "es": "noviembre",
+      "fr": "novembre"
+    },
+    "category": "Elementary",
+    "level": "A1",
+    "notes": "месяц года",
+    "zipf": 4.7
   }
 ]

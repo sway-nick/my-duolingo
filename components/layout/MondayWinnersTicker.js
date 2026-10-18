@@ -155,21 +155,8 @@ function buildMarqueeHtml(winners, texts) {
 let isTickerActive = false;
 
 export function shouldShowMondayTicker(force = false) {
-  if (force) return true;
-
-  const curWeekKey = getIsoWeekKey();
-  const seenKey = `myduo_ticker_seen_week_${curWeekKey}`;
-  const dismissKey = `myduo_monday_ticker_dismissed_${curWeekKey}`;
-
-  if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(dismissKey) === '1') {
-    return false;
-  }
-  if (typeof localStorage !== 'undefined' && localStorage.getItem(seenKey) === '1') {
-    return false;
-  }
-
-  // Shown upon first visit in the new week (regardless of weekday: Monday, Tuesday, etc.)
-  return true;
+  // Disabled per product decision
+  return false;
 }
 
 export function renderMondayWinnersTicker(options = {}) {

@@ -1,6 +1,7 @@
 import { speakWord } from '../../services/audioService.js?v=385.0';
 import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=385.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
+import { openCollectionListsBottomSheet } from '../modals/CollectionListsBottomSheet.js?v=385.0';
 
 function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
   return new Promise((resolve, reject) => {
@@ -1666,6 +1667,69 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     setupInfiniteScroll();
   };
 
+  let longPressTimer = null;
+  let didLongPress = false;
+  let pressStartX = 0;
+  let pressStartY = 0;
+  let targetWordForSheet = null;
+
+  grid.addEventListener(
+    'pointerdown',
+    (e) => {
+      const favBtn = e.target.closest('.fav-icon-btn');
+      if (!favBtn) return;
+      didLongPress = false;
+      pressStartX = e.clientX;
+      pressStartY = e.clientY;
+      const id = favBtn.getAttribute('data-id');
+      targetWordForSheet = (words || []).find((w) => String(w.id) === String(id));
+
+      longPressTimer = setTimeout(() => {
+        didLongPress = true;
+        try {
+          if (typeof navigator !== 'undefined' && navigator.vibrate) {
+            navigator.vibrate(40);
+          }
+        } catch (err) {}
+        if (targetWordForSheet) {
+          openCollectionListsBottomSheet({
+            word: targetWordForSheet,
+            allWords: words,
+            onUpdated: () => {
+              const currentFavs = getUserFavorites().map(String);
+              const isFav = currentFavs.includes(String(id));
+              if (isFav) favSet.add(String(id));
+              else favSet.delete(String(id));
+              favBtn.textContent = isFav ? '❤️' : '🤍';
+              favBtn.classList.toggle('active', isFav);
+            },
+          });
+        }
+      }, 400);
+    },
+    { passive: true }
+  );
+
+  const cancelLongPress = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+  };
+
+  grid.addEventListener('pointerup', cancelLongPress, { passive: true });
+  grid.addEventListener('pointercancel', cancelLongPress, { passive: true });
+  grid.addEventListener(
+    'pointermove',
+    (e) => {
+      if (!longPressTimer) return;
+      if (Math.hypot(e.clientX - pressStartX, e.clientY - pressStartY) > 12) {
+        cancelLongPress();
+      }
+    },
+    { passive: true }
+  );
+
   grid.addEventListener('click', async (e) => {
     const soundBtn = e.target.closest('.dict-audio-btn');
     if (soundBtn) {
@@ -1679,6 +1743,10 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     const favBtn = e.target.closest('.fav-icon-btn');
     if (favBtn) {
       e.stopPropagation();
+      if (didLongPress) {
+        didLongPress = false;
+        return;
+      }
       const id = favBtn.getAttribute('data-id');
       const isCurrentlyFav = favSet.has(String(id));
       const nextFav = !isCurrentlyFav;

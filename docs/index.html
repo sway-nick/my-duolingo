@@ -195,6 +195,9 @@
       import { renderStatsView } from './components/stats/StatsView.js?v=385.0';
       import { renderSettingsView } from './components/settings/SettingsView.js?v=385.0';
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=385.0';
+      import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=385.0';
+      import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=385.0';
+      import { attachHeartLongPress } from './components/modals/CollectionListsBottomSheet.js?v=385.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=385.0';
       import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=385.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=385.0';
@@ -1550,8 +1553,7 @@
 
               const favButtons = content.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
               favButtons.forEach((btn) => {
-                btn.addEventListener('click', async (e) => {
-                  e.stopPropagation();
+                const handleQuickToggle = () => {
                   isWotdFav = !isWotdFav;
                   if (window.trackEvent) {
                     window.trackEvent('wotd_favorite_toggle', { word: wotd ? wotd.word : '', active: isWotdFav });
@@ -1561,7 +1563,8 @@
                     b.classList.toggle('is-active', isWotdFav);
                     b.classList.toggle('is-off', !isWotdFav);
                   });
-                });
+                };
+                attachHeartLongPress(btn, wotd, allWords, handleQuickToggle);
               });
             }
           }
@@ -1860,21 +1863,11 @@
               window._showHubScreen = false;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
-              const favList = getUserFavorites();
-              const favIds = new Set(favList.map(String));
-              const favWords = allWords.filter((w) => favIds.has(String(w.id)));
-              if (favWords && favWords.length > 0) {
-                favoritePracticeWords = [...favWords];
-                favoritePracticeMethod = 'cards';
-                currentWordIndex = 0;
-                renderTrainingTab();
+              const tabBtn = document.querySelector('.nav-tab[data-tab="favorites"]');
+              if (tabBtn) {
+                tabBtn.click();
               } else {
-                const tabBtn = document.querySelector('.nav-tab[data-tab="favorites"]');
-                if (tabBtn) {
-                  tabBtn.click();
-                } else {
-                  renderTab('favorites');
-                }
+                renderTab('favorites');
               }
             });
           }
@@ -1963,6 +1956,7 @@
           dailyGoal,
           availableModes,
           isFavPractice: isFavPracticeActive,
+          favCollectionTitle: isFavPracticeActive ? getCollectionTitle(getActiveCollectionId()) : '',
           onCategoryBadgeClick: () => {
             renderCategorySelectorScreen();
           },
@@ -2090,31 +2084,44 @@
         } else if (tabName === 'stats') {
           await renderStatsView(allWords, '#app-content');
         } else if (tabName === 'favorites') {
-          const favList = getUserFavorites();
-          favoriteIds = new Set(favList.map(String));
-          const favWords = allWords.filter((w) => w && (favoriteIds.has(String(w.id)) || favoriteIds.has(String(w.word || '').toLowerCase().trim())));
-          renderFavoritesView(favWords, '#app-content', {
-            onFavoriteToggle: handleFavoriteToggle,
-            onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
-            onClearAllFavorites: () => {
-              favoriteIds.clear();
-            },
-            onStartFavoritePractice: (practiceWords) => {
-              window._explicitCardsOpened = false;
-              window._trainingRoundJustCompleted = false;
-              window._showHubScreen = false;
-              if (practiceWords && practiceWords.length > 0) {
-                favoritePracticeWords = [...practiceWords];
-                favoritePracticeMethod = 'cards';
-              } else {
-                favoritePracticeWords = null;
-                favoritePracticeMethod = 'cards';
-              }
-              currentWordIndex = 0;
-              const tabs = document.querySelectorAll('.nav-tab');
-              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
-              renderTab('training', true);
-            },
+          const startPracticeHandler = (practiceWords) => {
+            window._explicitCardsOpened = false;
+            window._trainingRoundJustCompleted = false;
+            window._showHubScreen = false;
+            if (practiceWords && practiceWords.length > 0) {
+              favoritePracticeWords = [...practiceWords];
+              favoritePracticeMethod = 'cards';
+            } else {
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'cards';
+            }
+            currentWordIndex = 0;
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
+            renderTab('training', true);
+          };
+
+          const openCardsHandler = (colId) => {
+            const words = getCollectionWords(colId, allWords);
+            const title = getCollectionTitle(colId);
+            renderFavoritesView(words, '#app-content', {
+              collectionId: colId,
+              collectionTitle: title,
+              allWords,
+              onBack: () => renderTab('favorites'),
+              onRefresh: () => openCardsHandler(colId),
+              onFavoriteToggle: handleFavoriteToggle,
+              onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
+              onClearAllFavorites: () => {
+                favoriteIds.clear();
+              },
+              onStartFavoritePractice: startPracticeHandler,
+            });
+          };
+
+          renderCollectionsHubView(allWords, '#app-content', {
+            onStartPractice: startPracticeHandler,
+            onOpenCardsView: openCardsHandler,
           });
         } else if (tabName === 'leaderboard') {
           try {
