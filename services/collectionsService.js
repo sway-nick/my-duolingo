@@ -682,11 +682,21 @@ export function saveCustomCollections(collections) {
   }
 }
 
+export const MAX_CUSTOM_COLLECTIONS = 50;
+
 export function createCustomCollection(name, icon = '📘') {
   const trimmedName = Array.from(String(name || '').trim()).slice(0, 20).join('');
   if (!trimmedName) return null;
 
   const collections = getCustomCollections();
+  if (collections.length >= MAX_CUSTOM_COLLECTIONS) {
+    return null;
+  }
+  const isDuplicate = collections.some((c) => c.name.toLowerCase().trim() === trimmedName.toLowerCase().trim());
+  if (isDuplicate) {
+    return null;
+  }
+
   const newCol = {
     id: 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
     name: trimmedName,
@@ -719,6 +729,9 @@ export function renameCustomCollection(collectionId, newName, newIcon, allWords 
   const collections = getCustomCollections();
   const target = collections.find((c) => c.id === collectionId);
   if (target) {
+    const isDuplicate = collections.some((c) => c.id !== collectionId && c.name.toLowerCase().trim() === trimmedName.toLowerCase().trim());
+    if (isDuplicate) return;
+
     target.name = trimmedName;
     if (newIcon) target.icon = newIcon;
     saveCustomCollections(collections);
