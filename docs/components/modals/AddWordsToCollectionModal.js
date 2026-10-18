@@ -7,6 +7,7 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
   const existingModal = document.querySelector('#add-words-modal-root');
   if (existingModal) existingModal.remove();
 
+  const initialSet = new Set((collection.wordIds || []).map(String));
   const selectedSet = new Set((collection.wordIds || []).map(String));
   let searchQuery = '';
 
@@ -33,7 +34,7 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
             ➕ Добавить слова: ${escapeHtml(collection.name)}
           </h3>
           <p style="margin: 2px 0 0; font-size: 13px; color: var(--text-muted);" id="modal-selected-counter">
-            Выбрано: ${selectedSet.size}
+            В подборке: ${initialSet.size}
           </p>
         </div>
         <button type="button" id="close-add-words-modal" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 4px 8px; line-height: 1;">
@@ -64,7 +65,7 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
           Отмена
         </button>
         <button type="button" id="btn-save-add-words" class="primary-button btn-green" style="min-height: 42px; padding: 0 20px; font-size: 14px; font-weight: 700; border-radius: 12px;">
-          Сохранить (${selectedSet.size})
+          Сохранить
         </button>
       </div>
     </div>
@@ -78,8 +79,28 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
   const saveBtn = modalRoot.querySelector('#btn-save-add-words');
 
   function updateCounters() {
-    if (counterEl) counterEl.textContent = `Выбрано: ${selectedSet.size}`;
-    if (saveBtn) saveBtn.textContent = `Сохранить (${selectedSet.size})`;
+    const addedCount = Array.from(selectedSet).filter((id) => !initialSet.has(id)).length;
+    const removedCount = Array.from(initialSet).filter((id) => !selectedSet.has(id)).length;
+
+    if (counterEl) {
+      if (addedCount > 0 && removedCount === 0) {
+        counterEl.textContent = `В подборке: ${initialSet.size} • Новых: +${addedCount}`;
+      } else if (removedCount > 0) {
+        counterEl.textContent = `В подборке: ${selectedSet.size} (${addedCount > 0 ? `+${addedCount}, ` : ''}-${removedCount})`;
+      } else {
+        counterEl.textContent = `В подборке: ${initialSet.size}`;
+      }
+    }
+
+    if (saveBtn) {
+      if (addedCount > 0 && removedCount === 0) {
+        saveBtn.textContent = `Добавить (+${addedCount})`;
+      } else if (addedCount > 0 || removedCount > 0) {
+        saveBtn.textContent = `Сохранить (${selectedSet.size})`;
+      } else {
+        saveBtn.textContent = `Сохранить`;
+      }
+    }
   }
 
   function renderList() {
@@ -110,6 +131,8 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
       .map((w) => {
         const idStr = String(w.id);
         const isChecked = selectedSet.has(idStr);
+        const isInitiallyInCol = initialSet.has(idStr);
+        const isNewlyAdded = isChecked && !isInitiallyInCol;
         const trans = getWordTranslation(w);
         return `
           <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; margin-bottom: 6px; border-radius: 10px; background: var(--bg-hover); cursor: pointer; user-select: none; transition: background 0.15s ease;">
@@ -130,12 +153,18 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
                 </div>
               </div>
             </div>
-            ${w.category ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,0.06); color: var(--text-muted); flex-shrink: 0; margin-left: 8px;">${escapeHtml(w.category)}</span>` : ''}
+            <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 8px;">
+              ${isNewlyAdded ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(34, 197, 94, 0.15); color: #16a34a; font-weight: 700;">+Новое</span>` : ''}
+              ${isInitiallyInCol && isChecked ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,0.06); color: var(--text-muted); font-weight: 600;">В подборке</span>` : ''}
+              ${w.category ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,0.06); color: var(--text-muted);">${escapeHtml(w.category)}</span>` : ''}
+            </div>
           </label>
         `;
       })
       .join('');
   }
+
+  updateCounters();
 
   renderList();
 
