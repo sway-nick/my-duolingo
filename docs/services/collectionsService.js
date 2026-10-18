@@ -34,7 +34,7 @@ function saveBuiltinOverrides(overrides) {
 
 export function isBuiltinCollectionOverridden(collectionId) {
   const overrides = getBuiltinOverrides();
-  return Array.isArray(overrides[collectionId]) && overrides[collectionId].length > 0;
+  return Array.isArray(overrides[collectionId]);
 }
 
 export function resetBuiltinCollection(collectionId) {
@@ -643,7 +643,7 @@ export const BUILTIN_COLLECTIONS_DEF = [
 
 let cachedWordMap = null;
 function getWordLookupMap(allWords) {
-  if (cachedWordMap && cachedWordMap._sourceLen === (allWords ? allWords.length : 0)) {
+  if (cachedWordMap && cachedWordMap._sourceRef === allWords && cachedWordMap._sourceLen === (allWords ? allWords.length : 0)) {
     return cachedWordMap;
   }
   const map = new Map();
@@ -654,6 +654,7 @@ function getWordLookupMap(allWords) {
       }
     });
   }
+  map._sourceRef = allWords;
   map._sourceLen = allWords ? allWords.length : 0;
   cachedWordMap = map;
   return map;
@@ -682,7 +683,7 @@ export function saveCustomCollections(collections) {
 }
 
 export function createCustomCollection(name, icon = '📘') {
-  const trimmedName = String(name || '').trim().slice(0, 20);
+  const trimmedName = Array.from(String(name || '').trim()).slice(0, 20).join('');
   if (!trimmedName) return null;
 
   const collections = getCustomCollections();
@@ -699,18 +700,20 @@ export function createCustomCollection(name, icon = '📘') {
   return newCol;
 }
 
-export function deleteCustomCollection(collectionId) {
+export function deleteCustomCollection(collectionId, allWords = []) {
   const collections = getCustomCollections();
   const filtered = collections.filter((c) => c.id !== collectionId);
   saveCustomCollections(filtered);
 
   if (getActiveCollectionId() === collectionId) {
     setActiveCollectionId('my_favorites');
+    const words = (allWords && allWords.length > 0) ? allWords : _cachedAllWords;
+    syncCollectionToAndroidWidget('my_favorites', words);
   }
 }
 
-export function renameCustomCollection(collectionId, newName, newIcon) {
-  const trimmedName = String(newName || '').trim().slice(0, 20);
+export function renameCustomCollection(collectionId, newName, newIcon, allWords = []) {
+  const trimmedName = Array.from(String(newName || '').trim()).slice(0, 20).join('');
   if (!trimmedName) return;
 
   const collections = getCustomCollections();
@@ -719,19 +722,24 @@ export function renameCustomCollection(collectionId, newName, newIcon) {
     target.name = trimmedName;
     if (newIcon) target.icon = newIcon;
     saveCustomCollections(collections);
+
+    if (getActiveCollectionId() === collectionId) {
+      const words = (allWords && allWords.length > 0) ? allWords : _cachedAllWords;
+      syncCollectionToAndroidWidget(collectionId, words);
+    }
   }
 }
 
 let _cachedAllWords = [];
 
 export function setCachedAllWords(words) {
-  if (Array.isArray(words) && words.length > 0) {
+  if (Array.isArray(words) && words.length >= _cachedAllWords.length) {
     _cachedAllWords = words;
   }
 }
 
 export function addWordToCollection(collectionId, wordId, allWords = []) {
-  if (Array.isArray(allWords) && allWords.length > 0) {
+  if (Array.isArray(allWords) && allWords.length >= _cachedAllWords.length) {
     _cachedAllWords = allWords;
   }
 
@@ -768,7 +776,7 @@ export function addWordToCollection(collectionId, wordId, allWords = []) {
 }
 
 export function removeWordFromCollection(collectionId, wordId, allWords = []) {
-  if (Array.isArray(allWords) && allWords.length > 0) {
+  if (Array.isArray(allWords) && allWords.length >= _cachedAllWords.length) {
     _cachedAllWords = allWords;
   }
 
@@ -802,7 +810,7 @@ export function removeWordFromCollection(collectionId, wordId, allWords = []) {
 }
 
 export function isWordInCollection(collectionId, wordId, allWords = []) {
-  if (Array.isArray(allWords) && allWords.length > 0) {
+  if (Array.isArray(allWords) && allWords.length >= _cachedAllWords.length) {
     _cachedAllWords = allWords;
   }
 
@@ -824,7 +832,7 @@ export function isWordInCollection(collectionId, wordId, allWords = []) {
 }
 
 export function getCollectionWords(collectionId, allWords = []) {
-  if (Array.isArray(allWords) && allWords.length > 0) {
+  if (Array.isArray(allWords) && allWords.length >= _cachedAllWords.length) {
     _cachedAllWords = allWords;
   }
   const effectiveWords = (Array.isArray(allWords) && allWords.length > 0) ? allWords : _cachedAllWords;

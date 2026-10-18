@@ -356,7 +356,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     const name = window.prompt(promptText, '');
     if (!name || !name.trim()) return;
 
-    const trimmedName = name.trim().slice(0, 20);
+    const trimmedName = Array.from(name.trim()).slice(0, 20).join('');
     const newCol = createCustomCollection(trimmedName, '📘');
     if (newCol) {
       onOpenCardsView(newCol.id);
@@ -463,7 +463,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
         const renamePromptText = t('col_menu_rename_prompt') || 'Новое название списка:';
         const newName = window.prompt(renamePromptText, col.title);
         if (newName && newName.trim()) {
-          renameCustomCollection(col.id, newName.trim().slice(0, 20));
+          renameCustomCollection(col.id, newName.trim(), undefined, allWords);
           renderCollectionsHubView(allWords, containerSelector, options);
         }
       });
@@ -473,7 +473,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
         const deleteConfirmTemplate = t('col_menu_delete_confirm') || 'Удалить список «{name}»?';
         const deleteConfirmText = deleteConfirmTemplate.replace('{name}', col.title);
         if (window.confirm(deleteConfirmText)) {
-          deleteCustomCollection(col.id);
+          deleteCustomCollection(col.id, allWords);
           renderCollectionsHubView(allWords, containerSelector, options);
         }
       });

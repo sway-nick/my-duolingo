@@ -2444,8 +2444,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     const favFrontBtn = practiceArea.querySelector('#fc-fav-front');
     const favBackBtn = practiceArea.querySelector('#fc-fav-back');
-    if (favFrontBtn) attachHeartLongPress(favFrontBtn, currentWord, activeWords, handleCardFav);
-    if (favBackBtn) attachHeartLongPress(favBackBtn, currentWord, activeWords, handleCardFav);
+    if (favFrontBtn) attachHeartLongPress(favFrontBtn, currentWord, allWords, handleCardFav);
+    if (favBackBtn) attachHeartLongPress(favBackBtn, currentWord, allWords, handleCardFav);
 
     practiceArea.querySelector('#btn-learn')?.addEventListener('click', handleLearnCard);
     practiceArea.querySelector('#btn-know')?.addEventListener('click', handleKnowCard);

@@ -1,4 +1,4 @@
-import { getWordTranslation } from '../../services/i18n.js?v=385.0';
+import { t, getWordTranslation } from '../../services/i18n.js?v=385.0';
 import {
   getUserFavorites,
   toggleFavoriteApi,
@@ -54,13 +54,13 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
             ${escapeHtml(wordTrans)}
           </p>
         </div>
-        <button type="button" id="close-col-sheet-btn" class="collection-sheet-close" aria-label="Закрыть">
+        <button type="button" id="close-col-sheet-btn" class="collection-sheet-close" aria-label="${escapeHtml(t('widget_close') || 'Закрыть')}">
           ✕
         </button>
       </div>
 
       <div style="padding: 10px 18px 4px; font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-        Списки
+        ${escapeHtml(t('fav_hub_btn') || 'Списки')}
       </div>
 
       <!-- Collections List -->
@@ -73,12 +73,12 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
           <input
             type="text"
             id="new-col-name-input"
-            placeholder="Название списка (напр. Урок 1)..."
+            placeholder="${escapeHtml(t('col_create_prompt') || 'Название списка (напр. Урок 1)...')}"
             maxlength="20"
             style="flex: 1; min-width: 0; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 14.5px; outline: none; box-sizing: border-box;"
           />
           <button type="button" id="btn-submit-new-col" class="primary-button btn-green" style="padding: 0 16px; min-height: 42px; font-size: 14px; font-weight: 700; border-radius: 12px; flex-shrink: 0;">
-            Создать
+            ${escapeHtml(t('col_btn_add') || 'Создать')}
           </button>
         </div>
       </div>
@@ -87,10 +87,10 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
       <div class="collection-sheet-footer">
         <button type="button" id="btn-toggle-new-col-form" class="primary-button btn-graphite" style="flex: 1; min-height: 44px; font-size: 14px; font-weight: 600; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
           <span>➕</span>
-          <span>Создать список</span>
+          <span>${escapeHtml(t('col_add_new_list') || 'Создать список')}</span>
         </button>
         <button type="button" id="btn-done-col-sheet" class="primary-button btn-green" style="min-width: 110px; min-height: 44px; font-size: 14px; font-weight: 700; border-radius: 12px;">
-          Готово
+          ${escapeHtml(t('done') || 'Готово')}
         </button>
       </div>
     </div>
@@ -125,8 +125,8 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
           />
           <span style="font-size: 18px; flex-shrink: 0;">⭐</span>
           <div style="min-width: 0;">
-            <div style="font-weight: 600; font-size: 15px; color: var(--text-main);">Мои фавориты</div>
-            <div style="font-size: 12px; color: var(--text-muted);">Основной список избранного</div>
+            <div style="font-weight: 600; font-size: 15px; color: var(--text-main);">${escapeHtml(t('fav_title') || 'Мои фавориты')}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">${escapeHtml(t('col_custom_desc') || 'Основной список избранного')}</div>
           </div>
         </div>
       </label>
@@ -151,7 +151,7 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
                 <div style="font-weight: 600; font-size: 15px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                   ${escapeHtml(col.name)}
                 </div>
-                <div style="font-size: 12px; color: var(--text-muted);">${(col.wordIds || []).length} слов</div>
+                <div style="font-size: 12px; color: var(--text-muted);">${(col.wordIds || []).length} ${escapeHtml(t('words') || 'слов')}</div>
               </div>
             </div>
           </label>
@@ -206,12 +206,12 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
 
   // Submit new list
   sheetRoot.querySelector('#btn-submit-new-col')?.addEventListener('click', () => {
-    const name = (newColInput.value || '').trim();
+    const name = Array.from((newColInput.value || '').trim()).slice(0, 20).join('');
     if (!name) return;
 
     const newCol = createCustomCollection(name, '📘');
     if (newCol) {
-      addWordToCollection(newCol.id, word.id);
+      addWordToCollection(newCol.id, word.id, allWords);
       newColForm.style.display = 'none';
       newColInput.value = '';
       renderCollectionItems();
@@ -219,13 +219,24 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
     }
   });
 
+  let isClosing = false;
   function closeSheet() {
+    if (isClosing) return;
+    isClosing = true;
+    document.removeEventListener('keydown', handleKeyDown);
     sheetRoot.classList.remove('is-open');
     setTimeout(() => {
       sheetRoot.remove();
       onClose();
     }, 240);
   }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      closeSheet();
+    }
+  };
+  document.addEventListener('keydown', handleKeyDown);
 
   sheetRoot.querySelector('#close-col-sheet-btn')?.addEventListener('click', closeSheet);
   sheetRoot.querySelector('#btn-done-col-sheet')?.addEventListener('click', closeSheet);

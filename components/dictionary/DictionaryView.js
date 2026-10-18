@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=385.0';
-import { toggleFavoriteApi, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=385.0';
+import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=385.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
 import { openCollectionListsBottomSheet } from '../modals/CollectionListsBottomSheet.js?v=385.0';
 

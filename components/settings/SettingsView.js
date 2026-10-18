@@ -197,13 +197,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </button>
       </div>
 
-      <!-- Monday Cat Meme Demo (Test APK) -->
+      ${(typeof localStorage !== 'undefined' && localStorage.getItem('myduo_debug_mode') === 'true') ? `
+      <!-- Monday Cat Meme Demo (Debug only) -->
       <div class="settings-card" id="monday-ticker-demo-section" style="padding: 14px 12px; text-align: center;">
         <button type="button" class="theme-option-btn" id="btn-test-monday-meme" style="width: 100%; justify-content: center; font-size: 14px; gap: 8px;">
           <span>🎬</span>
           <span>Проверить мем с котом (Золотая карта)</span>
         </button>
       </div>
+      ` : ''}
 
       <div class="settings-footer">
         <button type="button" id="open-privacy-btn" class="settings-privacy-btn">

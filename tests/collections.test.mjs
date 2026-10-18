@@ -15,7 +15,10 @@ global.window = {
   },
 };
 global.localStorage = {
-  _store: {},
+  _store: {
+    myduo_interface_lang: 'ru',
+    myduo_lang_manual: 'true',
+  },
   getItem(k) {
     return this._store[k] || null;
   },
@@ -26,7 +29,10 @@ global.localStorage = {
     delete this._store[k];
   },
   clear() {
-    this._store = {};
+    this._store = {
+      myduo_interface_lang: 'ru',
+      myduo_lang_manual: 'true',
+    };
   },
 };
 global.CustomEvent = class {
@@ -403,3 +409,64 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   // 4. Widget connection is NOT overwritten (remains 'my_favorites')
   assert.equal(getActiveCollectionId(), 'my_favorites');
 });
+
+test('Auditor Fix: isBuiltinCollectionOverridden returns true even when collection has 0 words, allowing reset', async () => {
+  const { setCollectionWords, isBuiltinCollectionOverridden, resetBuiltinCollection, getCollectionWords } = await import('../frontend/services/collectionsService.js');
+
+  // Set override to empty array
+  setCollectionWords('months', []);
+  assert.equal(isBuiltinCollectionOverridden('months'), true, 'Must return true so reset button is visible in UI');
+
+  const words = getCollectionWords('months', wordsData);
+  assert.equal(words.length, 0);
+
+  // Reset collection
+  resetBuiltinCollection('months');
+  assert.equal(isBuiltinCollectionOverridden('months'), false);
+  const resetWords = getCollectionWords('months', wordsData);
+  assert.equal(resetWords.length, 12, 'Default 12 months restored');
+});
+
+test('Auditor Fix: getWordLookupMap caches by array reference, not only length', async () => {
+  const { getCollectionWords } = await import('../frontend/services/collectionsService.js');
+
+  const listA = [
+    { id: 101, word: 'red', translation: 'красный' },
+    { id: 102, word: 'green', translation: 'зеленый' }
+  ];
+  const listB = [
+    { id: 201, word: 'red', translation: 'красный (B)' },
+    { id: 202, word: 'yellow', translation: 'желтый' }
+  ];
+
+  const colA = getCollectionWords('colors', listA);
+  assert.equal(colA.some((w) => w.id === 101), true);
+
+  const colB = getCollectionWords('colors', listB);
+  assert.equal(colB.some((w) => w.id === 201), true, 'Must find ID 201 from listB, not stale 101 from listA');
+});
+
+test('Auditor Fix: deleteCustomCollection and renameCustomCollection update Android widget when active', async () => {
+  const {
+    createCustomCollection,
+    setActiveCollectionId,
+    getActiveCollectionId,
+    renameCustomCollection,
+    deleteCustomCollection,
+  } = await import('../frontend/services/collectionsService.js');
+
+  const col = createCustomCollection('Урок 99', '📘');
+  assert.ok(col);
+  setActiveCollectionId(col.id);
+  assert.equal(getActiveCollectionId(), col.id);
+
+  // Rename active collection
+  renameCustomCollection(col.id, 'Урок 100', '📗', wordsData);
+  assert.equal(global.__lastWidgetPayload?.title, 'Урок 100');
+
+  // Delete active collection -> must revert widget to my_favorites
+  deleteCustomCollection(col.id, wordsData);
+  assert.equal(getActiveCollectionId(), 'my_favorites');
+  assert.equal(global.__lastWidgetPayload?.collectionId, 'my_favorites');
+});
+
