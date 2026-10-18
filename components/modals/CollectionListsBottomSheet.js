@@ -16,7 +16,13 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
   if (!word) return;
 
   const existingSheet = document.querySelector('#collection-sheet-root');
-  if (existingSheet) existingSheet.remove();
+  if (existingSheet) {
+    if (typeof existingSheet._cleanup === 'function') {
+      existingSheet._cleanup();
+    } else {
+      existingSheet.remove();
+    }
+  }
 
   const wordId = String(word.id);
   const wordText = word.word || '';
@@ -73,7 +79,7 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
           <input
             type="text"
             id="new-col-name-input"
-            placeholder="${escapeHtml(t('col_create_prompt') || 'Название списка (напр. Урок 1)...')}"
+            placeholder="${escapeHtml(t('col_create_placeholder') || 'Название списка (напр. «Урок 1»)...')}"
             maxlength="20"
             style="flex: 1; min-width: 0; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 14.5px; outline: none; box-sizing: border-box;"
           />
@@ -90,7 +96,7 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
           <span>${escapeHtml(t('col_add_new_list') || 'Создать список')}</span>
         </button>
         <button type="button" id="btn-done-col-sheet" class="primary-button btn-green" style="min-width: 110px; min-height: 44px; font-size: 14px; font-weight: 700; border-radius: 12px;">
-          ${escapeHtml(t('done') || 'Готово')}
+          ${escapeHtml(t('col_btn_done') || 'Готово')}
         </button>
       </div>
     </div>
@@ -126,7 +132,7 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
           <span style="font-size: 18px; flex-shrink: 0;">⭐</span>
           <div style="min-width: 0;">
             <div style="font-weight: 600; font-size: 15px; color: var(--text-main);">${escapeHtml(t('fav_title') || 'Мои фавориты')}</div>
-            <div style="font-size: 12px; color: var(--text-muted);">${escapeHtml(t('col_custom_desc') || 'Основной список избранного')}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">${escapeHtml(t('col_fav_desc') || 'Основной список избранного')}</div>
           </div>
         </div>
       </label>
@@ -237,6 +243,11 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
     }
   };
   document.addEventListener('keydown', handleKeyDown);
+
+  sheetRoot._cleanup = () => {
+    document.removeEventListener('keydown', handleKeyDown);
+    sheetRoot.remove();
+  };
 
   sheetRoot.querySelector('#close-col-sheet-btn')?.addEventListener('click', closeSheet);
   sheetRoot.querySelector('#btn-done-col-sheet')?.addEventListener('click', closeSheet);

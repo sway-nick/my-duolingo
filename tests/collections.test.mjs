@@ -68,7 +68,7 @@ test('Collections: months and days_of_week are complete in words.json', async ()
   assert.equal(dayWords.length, 7, 'all 7 days present in dictionary');
 });
 
-test('Collections: all 12 thematic collections have non-empty words in dictionary', async () => {
+test('Collections: all 12 thematic collections have 100% of their words in dictionary', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionWords } = await import('../frontend/services/collectionsService.js');
 
   const thematicCols = BUILTIN_COLLECTIONS_DEF.filter((c) => c.id !== 'my_favorites');
@@ -76,7 +76,7 @@ test('Collections: all 12 thematic collections have non-empty words in dictionar
 
   for (const col of thematicCols) {
     const words = getCollectionWords(col.id, wordsData);
-    assert.ok(words.length > 0, `Collection ${col.id} has words in dictionary (found ${words.length})`);
+    assert.equal(words.length, col.wordKeys.length, `Collection ${col.id} has all ${col.wordKeys.length} words in dictionary (found ${words.length})`);
   }
 });
 
@@ -252,6 +252,9 @@ test('Collections: WIDGET_TRANSLATIONS has all required hub and modal keys in al
     'col_btn_add',
     'col_btn_add_words',
     'col_reset_to_default',
+    'col_btn_done',
+    'col_fav_desc',
+    'col_create_placeholder',
   ];
 
   for (const loc of locales) {
@@ -364,8 +367,9 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   const { getCollectionWords, setActiveCollectionId, getActiveCollectionId, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const colorWords = getCollectionWords('colors', wordsData);
 
-  assert.equal(colorWords.length, 13);
+  assert.equal(colorWords.length, 14);
   assert.equal(colorWords.some((w) => w.word === 'red'), true);
+  assert.equal(colorWords.some((w) => w.word === 'blue'), true);
   assert.equal(colorWords.some((w) => w.word === 'green'), true);
 
   // Widget active collection is 'my_favorites'
@@ -399,8 +403,8 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   assert.equal(activeTab, 'training');
   assert.equal(favoritePracticeMethod, 'cards');
 
-  // 2. Contains all 13 color words
-  assert.equal(favoritePracticeWords.length, 13);
+  // 2. Contains all 14 color words
+  assert.equal(favoritePracticeWords.length, 14);
 
   // 3. Practice collection metadata is set to "Цвета" / colors
   assert.equal(activePracticeCollectionId, 'colors');

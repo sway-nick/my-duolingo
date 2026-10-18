@@ -48,7 +48,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Добавить слова",
     col_reset_to_default: "Сбросить к исходным",
     col_empty_favorites_alert: "В избранном пока нет слов. Добавляйте слова сердечком ❤️ во время уроков.",
-    fav_hub_btn: "Коллекции и списки"
+    fav_hub_btn: "Коллекции и списки",
+    col_btn_done: "Готово",
+    col_fav_desc: "Основной список избранного",
+    col_create_placeholder: "Название списка (напр. «Урок 1»)..."
   },
   uk: {
     settings_configure_widget: "Налаштування віджета",
@@ -98,7 +101,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Додати слова",
     col_reset_to_default: "Скинути до початкових",
     col_empty_favorites_alert: "В обраному поки немає слів. Додавайте слова сердечком ❤️ під час уроків.",
-    fav_hub_btn: "Колекції та списки"
+    fav_hub_btn: "Колекції та списки",
+    col_btn_done: "Готово",
+    col_fav_desc: "Головний список обраного",
+    col_create_placeholder: "Назва списку (напр. «Урок 1»)..."
   },
   en: {
     settings_configure_widget: "Widget Settings",
@@ -148,7 +154,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Add words",
     col_reset_to_default: "Reset to default",
     col_empty_favorites_alert: "There are no words in favorites yet. Add words with the ❤️ heart during lessons.",
-    fav_hub_btn: "Collections & Lists"
+    fav_hub_btn: "Collections & Lists",
+    col_btn_done: "Done",
+    col_fav_desc: "Main favorites list",
+    col_create_placeholder: "List name (e.g. \"Lesson 1\")..."
   },
   de: {
     settings_configure_widget: "Widget-Einstellungen",
@@ -198,7 +207,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Wörter hinzufügen",
     col_reset_to_default: "Auf Standard zurücksetzen",
     col_empty_favorites_alert: "Noch keine Wörter in den Favoriten. Fügen Sie während der Lektionen Wörter mit ❤️ hinzu.",
-    fav_hub_btn: "Sammlungen & Listen"
+    fav_hub_btn: "Sammlungen & Listen",
+    col_btn_done: "Fertig",
+    col_fav_desc: "Hauptfavoritenliste",
+    col_create_placeholder: "Listenname (z. B. „Lektion 1“)..."
   },
   es: {
     settings_configure_widget: "Ajustes del widget",
@@ -248,7 +260,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Añadir palabras",
     col_reset_to_default: "Restablecer a valores predeterminados",
     col_empty_favorites_alert: "Aún no hay palabras en favoritos. Agrega palabras con el corazón ❤️ durante las lecciones.",
-    fav_hub_btn: "Colecciones y listas"
+    fav_hub_btn: "Colecciones y listas",
+    col_btn_done: "Listo",
+    col_fav_desc: "Lista principal de favoritos",
+    col_create_placeholder: "Nombre de la lista (ej. «Lección 1»)..."
   },
   fr: {
     settings_configure_widget: "Paramètres du widget",
@@ -298,7 +313,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Ajouter des mots",
     col_reset_to_default: "Rétablir par défaut",
     col_empty_favorites_alert: "Aucun mot dans les favoris pour le moment. Ajoutez des mots avec le cœur ❤️ pendant les leçons.",
-    fav_hub_btn: "Collections et listes"
+    fav_hub_btn: "Collections et listes",
+    col_btn_done: "Terminé",
+    col_fav_desc: "Liste principale des favoris",
+    col_create_placeholder: "Nom de la liste (ex. « Leçon 1 »)..."
   },
   pl: {
     settings_configure_widget: "Ustawienia widżetu",
@@ -348,7 +366,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Dodaj słowa",
     col_reset_to_default: "Przywróć domyślne",
     col_empty_favorites_alert: "Brak słów w ulubionych. Dodawaj słowa serduszkiem ❤️ podczas lekcji.",
-    fav_hub_btn: "Kolekcje i listy"
+    fav_hub_btn: "Kolekcje i listy",
+    col_btn_done: "Gotowe",
+    col_fav_desc: "Główna lista ulubionych",
+    col_create_placeholder: "Nazwa listy (np. „Lekcja 1”)..."
   },
   tr: {
     settings_configure_widget: "Widget Ayarları",
@@ -398,7 +419,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Kelime ekle",
     col_reset_to_default: "Varsayılana sıfırla",
     col_empty_favorites_alert: "Favorilerde henüz kelime yok. Dersler sırasında ❤️ kalbiyle kelimeler ekleyin.",
-    fav_hub_btn: "Koleksiyonlar ve Listeler"
+    fav_hub_btn: "Koleksiyonlar ve Listeler",
+    col_btn_done: "Bitti",
+    col_fav_desc: "Ana favori listesi",
+    col_create_placeholder: "Liste adı (örn. “Ders 1”)..."
   },
   it: {
     settings_configure_widget: "Impostazioni widget",
@@ -448,7 +472,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Aggiungi parole",
     col_reset_to_default: "Ripristina predefiniti",
     col_empty_favorites_alert: "Nessuna parola nei preferiti. Aggiungi parole con il cuore ❤️ durante le lezioni.",
-    fav_hub_btn: "Collezioni ed elenchi"
+    fav_hub_btn: "Collezioni ed elenchi",
+    col_btn_done: "Fatto",
+    col_fav_desc: "Elenco principale dei preferiti",
+    col_create_placeholder: "Nome dell'elenco (es. “Lezione 1”)..."
   },
   ro: {
     settings_configure_widget: "Setări widget",
@@ -498,7 +525,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Adaugă cuvinte",
     col_reset_to_default: "Resetează la implicite",
     col_empty_favorites_alert: "Nu există cuvinte la favorite. Adaugă cuvinte cu inimioara ❤️ în timpul lecțiilor.",
-    fav_hub_btn: "Colecții și liste"
+    fav_hub_btn: "Colecții și liste",
+    col_btn_done: "Gata",
+    col_fav_desc: "Lista principală de favorite",
+    col_create_placeholder: "Numele listei (de ex. „Lecția 1”)..."
   },
   bg: {
     settings_configure_widget: "Настройки на уиджета",
@@ -548,7 +578,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Добавяне на думи",
     col_reset_to_default: "Възстановяване по подразбиране",
     col_empty_favorites_alert: "Все още няма думи в любими. Добавяйте думи със сърчицето ❤️ по време на уроците.",
-    fav_hub_btn: "Колекции и списъци"
+    fav_hub_btn: "Колекции и списъци",
+    col_btn_done: "Готово",
+    col_fav_desc: "Основен списък с любими",
+    col_create_placeholder: "Име на списъка (напр. „Урок 1“)..."
   },
   hu: {
     settings_configure_widget: "Widget beállítások",
@@ -598,7 +631,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Szavak hozzáadása",
     col_reset_to_default: "Visszaállítás alapértelmezettre",
     col_empty_favorites_alert: "Még nincsenek szavak a kedvencekben. Adjon hozzá szavakat a ❤️ szívvel a leckék során.",
-    fav_hub_btn: "Gyűjtemények és listák"
+    fav_hub_btn: "Gyűjtemények és listák",
+    col_btn_done: "Kész",
+    col_fav_desc: "Fő kedvencek lista",
+    col_create_placeholder: "Lista neve (pl. „1. lecke”)..."
   },
   el: {
     settings_configure_widget: "Ρυθμίσεις widget",
@@ -648,7 +684,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Προσθήκη λέξεων",
     col_reset_to_default: "Επαναφορά προεπιλογών",
     col_empty_favorites_alert: "Δεν υπάρχουν ακόμη λέξεις στα αγαπημένα. Προσθέστε λέξεις με την καρδιά ❤️ κατά τη διάρκεια των μαθημάτων.",
-    fav_hub_btn: "Συλλογές και λίστες"
+    fav_hub_btn: "Συλλογές και λίστες",
+    col_btn_done: "Τέλος",
+    col_fav_desc: "Κύρια λίστα αγαπημένων",
+    col_create_placeholder: "Όνομα λίστας (π.χ. «Μάθημα 1»)..."
   },
   da: {
     settings_configure_widget: "Widget-indstillinger",
@@ -698,7 +737,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Tilføj ord",
     col_reset_to_default: "Nulstil til standard",
     col_empty_favorites_alert: "Ingen ord i favoritter endnu. Tilføj ord med hjertet ❤️ under lektionerne.",
-    fav_hub_btn: "Samlinger og lister"
+    fav_hub_btn: "Samlinger og lister",
+    col_btn_done: "Færdig",
+    col_fav_desc: "Hovedliste over favoritter",
+    col_create_placeholder: "Listenavn (f.eks. \"Lektion 1\")..."
   },
   ga: {
     settings_configure_widget: "Socruithe giuirléidí",
@@ -748,7 +790,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Cuir focail leis",
     col_reset_to_default: "Athshocraigh go réamhshocrú",
     col_empty_favorites_alert: "Níl aon fhocal sna roghanna fós. Cuir focail leis an gcroí ❤️ le linn na gceachtanna.",
-    fav_hub_btn: "Bailiúcháin & Liostaí"
+    fav_hub_btn: "Bailiúcháin & Liostaí",
+    col_btn_done: "Déanta",
+    col_fav_desc: "Príomhliosta roghanna",
+    col_create_placeholder: "Ainm an liosta (m.sh. \"Ceacht 1\")..."
   },
   lv: {
     settings_configure_widget: "Logrīka iestatījumi",
@@ -798,7 +843,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Pievienot vārdus",
     col_reset_to_default: "Atiestatīt uz noklusējumu",
     col_empty_favorites_alert: "Izlasē vēl nav vārdu. Pievienojiet vārdus ar sirsniņu ❤️ nodarbību laikā.",
-    fav_hub_btn: "Kolekcijas un saraksti"
+    fav_hub_btn: "Kolekcijas un saraksti",
+    col_btn_done: "Gatavs",
+    col_fav_desc: "Galvenais favorītu saraksts",
+    col_create_placeholder: "Saraksta nosaukums (piem., \"1. nodarbība\")..."
   },
   lt: {
     settings_configure_widget: "Valdiklio nustatymai",
@@ -848,7 +896,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Pridėti žodžius",
     col_reset_to_default: "Atkurti numatytąsias reikšmes",
     col_empty_favorites_alert: "Mėgstamiausiuose dar nėra žodžių. Pamokų metu pridėkite žodžių su širdele ❤️.",
-    fav_hub_btn: "Kolekcijos ir sąrašai"
+    fav_hub_btn: "Kolekcijos ir sąrašai",
+    col_btn_done: "Atlikta",
+    col_fav_desc: "Pagrindinis mėgstamiausių sąrašas",
+    col_create_placeholder: "Sąrašo pavadinimas (pvz., „1 pamoka“)..."
   },
   mt: {
     settings_configure_widget: "Settings tal-widget",
@@ -898,7 +949,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Żid kliem",
     col_reset_to_default: "Irrisettja għal default",
     col_empty_favorites_alert: "Għad m'hemmx kliem fil-favoriti. Żid kliem bil-qalb ❤️ waqt il-lezzjonijiet.",
-    fav_hub_btn: "Kollezzjonijiet u Listi"
+    fav_hub_btn: "Kollezzjonijiet u Listi",
+    col_btn_done: "Lest",
+    col_fav_desc: "Lista ewlenija tal-favoriti",
+    col_create_placeholder: "Isem il-lista (eż. \"Lezzjoni 1\")..."
   },
   pt: {
     settings_configure_widget: "Configurações do widget",
@@ -948,7 +1002,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Adicionar palavras",
     col_reset_to_default: "Redefinir para o padrão",
     col_empty_favorites_alert: "Ainda não há palavras nos favoritos. Adicione palavras com o coração ❤️ durante as lições.",
-    fav_hub_btn: "Coleções e listas"
+    fav_hub_btn: "Coleções e listas",
+    col_btn_done: "Concluído",
+    col_fav_desc: "Lista principal de favoritos",
+    col_create_placeholder: "Nome da lista (ex. «Lição 1»)..."
   },
   sk: {
     settings_configure_widget: "Nastavenia widgetu",
@@ -998,7 +1055,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Pridať slová",
     col_reset_to_default: "Obnoviť predvolené",
     col_empty_favorites_alert: "V obľúbených zatiaľ nie sú žiadne slová. Pridávajte slová srdiečkom ❤️ počas lekcií.",
-    fav_hub_btn: "Zbierky a zoznamy"
+    fav_hub_btn: "Zbierky a zoznamy",
+    col_btn_done: "Hotovo",
+    col_fav_desc: "Hlavný zoznam obľúbených",
+    col_create_placeholder: "Názov zoznamu (napr. „Lekcia 1“)..."
   },
   sl: {
     settings_configure_widget: "Nastavitve pripomočka",
@@ -1048,7 +1108,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Dodaj besede",
     col_reset_to_default: "Ponastavi na privzeto",
     col_empty_favorites_alert: "V priljubljenih še ni besed. Med lekcijami dodajajte besede s srčkom ❤️.",
-    fav_hub_btn: "Zbirke in seznami"
+    fav_hub_btn: "Zbirke in seznami",
+    col_btn_done: "Končano",
+    col_fav_desc: "Glavni seznam priljubljenih",
+    col_create_placeholder: "Ime seznama (npr. »Lekcija 1«)..."
   },
   fi: {
     settings_configure_widget: "Widgetin asetukset",
@@ -1098,7 +1161,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Lisää sanoja",
     col_reset_to_default: "Palauta oletukset",
     col_empty_favorites_alert: "Suosikeissa ei ole vielä sanoja. Lisää sanoja sydämellä ❤️ oppituntien aikana.",
-    fav_hub_btn: "Kokoelmat ja listat"
+    fav_hub_btn: "Kokoelmat ja listat",
+    col_btn_done: "Valmis",
+    col_fav_desc: "Pääsuosikkiluettelo",
+    col_create_placeholder: "Luettelon nimi (esim. \"Oppitunti 1\")..."
   },
   hr: {
     settings_configure_widget: "Postavke widgeta",
@@ -1148,7 +1214,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Dodaj riječi",
     col_reset_to_default: "Vrati na zadano",
     col_empty_favorites_alert: "U favoritima još nema riječi. Dodajte riječi sa srcem ❤️ tijekom lekcija.",
-    fav_hub_btn: "Kolekcije i popisi"
+    fav_hub_btn: "Kolekcije i popisi",
+    col_btn_done: "Gotovo",
+    col_fav_desc: "Glavni popis favorita",
+    col_create_placeholder: "Naziv popisa (npr. „Lekcija 1“)..."
   },
   cs: {
     settings_configure_widget: "Nastavení widgetu",
@@ -1198,7 +1267,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Přidat slova",
     col_reset_to_default: "Obnovit výchozí",
     col_empty_favorites_alert: "V oblíbených zatím nejsou žádná slova. Přidávejte slova srdíčkem ❤️ během lekcí.",
-    fav_hub_btn: "Sbírky a seznamy"
+    fav_hub_btn: "Sbírky a seznamy",
+    col_btn_done: "Hotovo",
+    col_fav_desc: "Hlavní seznam oblíbených",
+    col_create_placeholder: "Název seznamu (např. „Lekce 1“)..."
   },
   sv: {
     settings_configure_widget: "Widgetinställningar",
@@ -1248,7 +1320,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Lägg till ord",
     col_reset_to_default: "Återställ till standard",
     col_empty_favorites_alert: "Inga ord i favoriter ännu. Lägg till ord med hjärtat ❤️ under lektionerna.",
-    fav_hub_btn: "Samlingar och listor"
+    fav_hub_btn: "Samlingar och listor",
+    col_btn_done: "Klar",
+    col_fav_desc: "Huvudlista med favoriter",
+    col_create_placeholder: "Listnamn (t.ex. \"Lektion 1\")..."
   },
   et: {
     settings_configure_widget: "Vidina seaded",
@@ -1298,7 +1373,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Lisa sõnu",
     col_reset_to_default: "Taasta vaikeväärtused",
     col_empty_favorites_alert: "Lemmikutes pole veel sõnu. Lisa sõnu südamega ❤️ tundide ajal.",
-    fav_hub_btn: "Kogud ja loendid"
+    fav_hub_btn: "Kogud ja loendid",
+    col_btn_done: "Valmis",
+    col_fav_desc: "Peamiste lemmikute loend",
+    col_create_placeholder: "Loendi nimi (nt \"1. tund\")..."
   },
   hi: {
     settings_configure_widget: "विजेट सेटिंग्स",
@@ -1348,7 +1426,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "शब्द जोड़ें",
     col_reset_to_default: "डिफ़ॉल्ट पर रीसेट करें",
     col_empty_favorites_alert: "पसंदीदा में अभी कोई शब्द नहीं हैं। पाठ के दौरान ❤️ दिल से शब्द जोड़ें।",
-    fav_hub_btn: "संग्रह और सूचियाँ"
+    fav_hub_btn: "संग्रह और सूचियाँ",
+    col_btn_done: "पूर्ण",
+    col_fav_desc: "मुख्य पसंदीदा सूची",
+    col_create_placeholder: "सूची का नाम (उदा. \"पाठ 1\")..."
   },
   ar: {
     settings_configure_widget: "إعدادات الأداة",
@@ -1398,7 +1479,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "إضافة كلمات",
     col_reset_to_default: "إعادة تعيين إلى الافتراضي",
     col_empty_favorites_alert: "لا توجد كلمات في المفضلة بعد. أضف كلمات برمز القلب ❤️ أثناء الدروس.",
-    fav_hub_btn: "المجموعات والقوائم"
+    fav_hub_btn: "المجموعات والقوائم",
+    col_btn_done: "تم",
+    col_fav_desc: "قائمة المفضلة الرئيسية",
+    col_create_placeholder: "اسم القائمة (مثل \"الدرس 1\")..."
   },
   id: {
     settings_configure_widget: "Pengaturan widget",
@@ -1448,7 +1532,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Tambah kata",
     col_reset_to_default: "Atur ulang ke default",
     col_empty_favorites_alert: "Belum ada kata di favorit. Tambahkan kata dengan ikon hati ❤️ selama pelajaran.",
-    fav_hub_btn: "Koleksi & Daftar"
+    fav_hub_btn: "Koleksi & Daftar",
+    col_btn_done: "Selesai",
+    col_fav_desc: "Daftar favorit utama",
+    col_create_placeholder: "Nama daftar (mis. \"Pelajaran 1\")..."
   },
   vi: {
     settings_configure_widget: "Cài đặt tiện ích",
@@ -1498,7 +1585,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "Thêm từ",
     col_reset_to_default: "Đặt lại về mặc định",
     col_empty_favorites_alert: "Chưa có từ nào trong mục yêu thích. Thêm từ bằng biểu tượng trái tim ❤️ trong các bài học.",
-    fav_hub_btn: "Bộ sưu tập & danh sách"
+    fav_hub_btn: "Bộ sưu tập & danh sách",
+    col_btn_done: "Xong",
+    col_fav_desc: "Danh sách yêu thích chính",
+    col_create_placeholder: "Tên danh sách (ví dụ: \"Bài 1\")..."
   },
   th: {
     settings_configure_widget: "ตั้งค่าวิดเจ็ต",
@@ -1548,7 +1638,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "เพิ่มคำศัพท์",
     col_reset_to_default: "รีเซ็ตเป็นค่าเริ่มต้น",
     col_empty_favorites_alert: "ยังไม่มีคำในรายการโปรด เพิ่มคำด้วยรูปหัวใจ ❤️ ระหว่างบทเรียน",
-    fav_hub_btn: "คอลเลกชันและรายการ"
+    fav_hub_btn: "คอลเลกชันและรายการ",
+    col_btn_done: "เสร็จสิ้น",
+    col_fav_desc: "รายการโปรดหลัก",
+    col_create_placeholder: "ชื่อรายการ (เช่น \"บทเรียน 1\")..."
   },
   ko: {
     settings_configure_widget: "위젯 설정",
@@ -1598,7 +1691,10 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "단어 추가",
     col_reset_to_default: "기본값으로 재설정",
     col_empty_favorites_alert: "즐겨찾기에 아직 단어가 없습니다. 학습 중에 하트 ❤️로 단어를 추가하세요.",
-    fav_hub_btn: "컬렉션 및 목록"
+    fav_hub_btn: "컬렉션 및 목록",
+    col_btn_done: "완료",
+    col_fav_desc: "기본 즐겨찾기 목록",
+    col_create_placeholder: "목록 이름 (예: \"1과\")..."
   },
   ja: {
     settings_configure_widget: "ウィジェット設定",
@@ -1648,6 +1744,9 @@ export const WIDGET_TRANSLATIONS = {
     col_btn_add_words: "単語を追加",
     col_reset_to_default: "デフォルトに戻す",
     col_empty_favorites_alert: "お気に入りにまだ単語がありません。レッスン中にハート❤️で単語を追加してください。",
-    fav_hub_btn: "コレクションとリスト"
+    fav_hub_btn: "コレクションとリスト",
+    col_btn_done: "完了",
+    col_fav_desc: "メインのお気に入りリスト",
+    col_create_placeholder: "リスト名（例: 「レッスン 1」）..."
   },
 };
