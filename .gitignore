@@ -22,6 +22,7 @@ dist/
 build/
 *.apk
 *.aab
+mapping.txt
 
 # Google Apps Script
 .clasp.json
