@@ -109,7 +109,7 @@ async def process_task(sem, item, progress, force_overwrite):
     tts_text = format_tts_query(word_text, category)
     is_irregular = "irregular" in (category or "").lower()
     voice = "en-US-JennyNeural" if accent == "us" else "en-GB-SoniaNeural"
-    rate = "-12%" if is_irregular else "0%"
+    rate = "-12%" if is_irregular else "+0%"
 
     async with sem:
         success = False
