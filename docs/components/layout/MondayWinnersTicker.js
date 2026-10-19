@@ -1,6 +1,6 @@
-import { getCachedLeaderboard, getLeaderboard, formatCompactXp } from '../../services/api.js?v=385.0';
-import { getRecentWeekKeys, getIsoWeekKey } from '../../services/weekKey.js?v=385.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+import { getCachedLeaderboard, getLeaderboard, formatCompactXp } from '../../services/api.js?v=386.0';
+import { getRecentWeekKeys, getIsoWeekKey } from '../../services/weekKey.js?v=386.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
 const TICKER_TEXTS = {
   ru: {

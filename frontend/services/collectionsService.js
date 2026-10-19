@@ -1,5 +1,5 @@
-import { getUserFavorites, toggleFavoriteApi } from './api.js?v=385.0';
-import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=385.0';
+import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
+import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
 
 const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
 const STORAGE_KEY_ACTIVE_COLLECTION = 'myduo_active_collection_id';

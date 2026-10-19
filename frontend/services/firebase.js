@@ -1,7 +1,7 @@
 // Firebase Integration for English Breakfast (Universal Web & Android Capacitor)
 // Uses direct native Google Identity & Firestore REST APIs (100% reliable in all WebViews with zero CDN dependency)
 
-import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=385.0';
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=386.0';
 
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc",

@@ -1,5 +1,5 @@
-import { getWordTranslation } from '../../services/i18n.js?v=385.0';
-import { setCollectionWords, getCustomCollections, saveCustomCollections, syncCollectionToAndroidWidget, getActiveCollectionId } from '../../services/collectionsService.js?v=385.0';
+import { getWordTranslation } from '../../services/i18n.js?v=386.0';
+import { setCollectionWords, getCustomCollections, saveCustomCollections, syncCollectionToAndroidWidget, getActiveCollectionId } from '../../services/collectionsService.js?v=386.0';
 
 export function openAddWordsToCollectionModal({ collection, allWords = [], onSaved = () => {}, onClose = () => {} }) {
   if (!collection) return;

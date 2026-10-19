@@ -1,5 +1,5 @@
-import { getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
-import { PRIVACY_POLICY_DATA } from './privacyTranslations.js?v=385.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { PRIVACY_POLICY_DATA } from './privacyTranslations.js?v=386.0';
 
 export function openPrivacyModal() {
   if (typeof window !== 'undefined' && window.trackScreen) {

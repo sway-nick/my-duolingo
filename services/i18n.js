@@ -1,4 +1,4 @@
-import { WIDGET_TRANSLATIONS } from './widgetTranslations.js?v=385.0';
+import { WIDGET_TRANSLATIONS } from './widgetTranslations.js?v=386.0';
 
 const translations = {
   ru: {

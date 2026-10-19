@@ -20,7 +20,7 @@ import {
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
-} from '../../services/audioService.js?v=385.0';
+} from '../../services/audioService.js?v=386.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -32,11 +32,11 @@ import {
   clearActiveConveyorBatch,
   transcribeAudio,
   transcribePingAudio,
-} from '../../services/api.js?v=385.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
-import { AdService } from '../../services/adService.js?v=385.0';
-import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=385.0';
-import { attachHeartLongPress } from '../modals/CollectionListsBottomSheet.js?v=385.0';
+} from '../../services/api.js?v=386.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
+import { AdService } from '../../services/adService.js?v=386.0';
+import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=386.0';
+import { attachHeartLongPress } from '../modals/CollectionListsBottomSheet.js?v=386.0';
 
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';

@@ -1,4 +1,4 @@
-import { t } from '../../services/i18n.js?v=385.0';
+import { t } from '../../services/i18n.js?v=386.0';
 
 export function openWidgetInstallModal() {
   const existing = document.querySelector('#widget-install-modal');

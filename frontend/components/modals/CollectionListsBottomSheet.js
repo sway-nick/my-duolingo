@@ -1,8 +1,8 @@
-import { t, getWordTranslation } from '../../services/i18n.js?v=385.0';
+import { t, getWordTranslation } from '../../services/i18n.js?v=386.0';
 import {
   getUserFavorites,
   toggleFavoriteApi,
-} from '../../services/api.js?v=385.0';
+} from '../../services/api.js?v=386.0';
 import {
   getCustomCollections,
   createCustomCollection,
@@ -10,7 +10,7 @@ import {
   removeWordFromCollection,
   syncCollectionToAndroidWidget,
   getActiveCollectionId,
-} from '../../services/collectionsService.js?v=385.0';
+} from '../../services/collectionsService.js?v=386.0';
 
 export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated = () => {}, onClose = () => {} }) {
   if (!word) return;

@@ -43,18 +43,21 @@ test('Monday Golden Card Meme: renderMondayMemeTop4Cut dynamically renders actua
     key: (i) => Array.from(store.keys())[i] || null,
   };
 
+  const { getRecentWeekKeys } = await import('../frontend/services/weekKey.js');
+  const targetCompletedWeek = getRecentWeekKeys(2)[1];
+
   const realCompletedWeekTop4 = [
     { userId: 'u1', name: 'Julia Lipa (VoLAnD_98)', xp: 1544, avatar: 'https://lh3.googleusercontent.com/a/1' },
     { userId: 'u2', name: 'Nikola Lipniagov', xp: 1111, avatar: 'https://lh3.googleusercontent.com/a/2' },
     { userId: 'u3', name: 'Irina Mahotenko', xp: 876, avatar: 'https://lh3.googleusercontent.com/a/3' },
     { userId: 'u4', name: 'Rika Step', xp: 441, avatar: 'https://lh3.googleusercontent.com/a/4' },
   ];
-  localStorage.setItem('cache_leaderboard_2026-W42', JSON.stringify(realCompletedWeekTop4));
+  localStorage.setItem(`cache_leaderboard_${targetCompletedWeek}`, JSON.stringify(realCompletedWeekTop4));
 
   const { renderMondayMemeTop4Cut } = await import('../frontend/components/leaderboard/LeaderboardView.js');
 
   const container = { innerHTML: '' };
-  renderMondayMemeTop4Cut(container, '2026-W42');
+  renderMondayMemeTop4Cut(container, targetCompletedWeek);
 
   // Verify structure & styling
   assert.ok(container.innerHTML.includes('wotd-top4-frame'), 'Must contain wotd-top4-frame wrapper');

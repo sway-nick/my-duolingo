@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=385.0';
-import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=385.0';
-import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=385.0';
+import { speakWord } from '../../services/audioService.js?v=386.0';
+import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=386.0';
+import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
 import {
   removeWordFromCollection,
   syncCollectionToAndroidWidget,
@@ -9,9 +9,9 @@ import {
   getCollectionWords,
   isBuiltinCollectionOverridden,
   resetBuiltinCollection,
-} from '../../services/collectionsService.js?v=385.0';
-import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=385.0';
-import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=385.0';
+} from '../../services/collectionsService.js?v=386.0';
+import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
+import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);

@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=385.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
 import { 
   syncLeaderboardScoreFirestore, 
   commitXpDeltaFirestore,
@@ -22,9 +22,9 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=385.0';
-import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=385.0';
-import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=385.0';
+} from './firebase.js?v=386.0';
+import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=386.0';
+import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -1036,9 +1036,16 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
   }
 
   // period === 'week'
+  const curWeekKey = getIsoWeekKey();
+  const isPastWeek = Boolean(wKey && (wKey < curWeekKey));
   const weekCacheTimeKey = `cache_leaderboard_time_${wKey}`;
   const lastFetchedWeek = parseInt(localStorage.getItem(weekCacheTimeKey) || '0', 10);
-  const isWeekFresh = (Date.now() - lastFetchedWeek) < LEADERBOARD_CACHE_TTL;
+  // Completed past weeks are immutable: permanent cache once fetched.
+  // Current active week uses 30-minute TTL.
+  const isWeekFresh = isPastWeek
+    ? (lastFetchedWeek > 0)
+    : ((Date.now() - lastFetchedWeek) < LEADERBOARD_CACHE_TTL);
+
   if (!force && isWeekFresh) {
     const cached = getCachedLeaderboard(wKey, 'week');
     if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
@@ -1430,6 +1437,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     xpDelta,
   });
 
+  hasPendingCloudSync = true;
+
   if (options && (options.roundComplete || options.batchComplete)) {
     try {
       flushProgressQueue();
@@ -1439,6 +1448,9 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   return { ...prog, autoFavorited };
 }
+
+let hasPendingCloudSync = false;
+let autoSyncInterval = null;
 
 async function flushProgressQueue() {
   if (pendingProgressQueue.length === 0) return;
@@ -1450,7 +1462,7 @@ async function flushProgressQueue() {
       continue; // Skip guests from cloud progress sync
     }
     try {
-      saveUserProgressFirestore(getFirestoreUserId(item.userId), item.wordId, item);
+      saveUserProgressFirestore(getFirestoreUserId(item.userId), item.wordId, item).catch(() => {});
     } catch (e) {
       console.warn('Failed to sync progress item to Firestore:', item, e);
     }
@@ -1728,6 +1740,7 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     const userName = user && user.name ? user.name : (user.email.split('@')[0] || 'Участник');
 
     // 100% Cloud Firestore sync using Firebase UID
+    hasPendingCloudSync = false;
     try {
       saveUserProfileFirestore(firestoreUid, { name: userName, avatar }).catch(() => {});
       if (weeklyXp > 0) {
@@ -1768,6 +1781,14 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
 }
 
 if (typeof window !== 'undefined') {
+  if (!autoSyncInterval) {
+    autoSyncInterval = setInterval(() => {
+      if (hasPendingCloudSync) {
+        flushProgressQueue();
+        pushUserDataToCloud(null, null, true);
+      }
+    }, 60000);
+  }
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       flushProgressQueue();
@@ -3903,4 +3924,4 @@ export {
   saveUserNote,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=385.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=386.0';

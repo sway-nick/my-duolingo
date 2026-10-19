@@ -61,7 +61,7 @@ function build() {
   }
 
   // 0.2. Align all ?v= import query versions across frontend to a single APP_BUILD_VERSION
-  const APP_BUILD_VERSION = '385.0';
+  const APP_BUILD_VERSION = '386.0';
   function normalizeVersionsInDir(dir) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
       const fullPath = path.join(dir, entry.name);

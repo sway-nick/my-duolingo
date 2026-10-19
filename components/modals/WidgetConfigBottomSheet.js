@@ -1,5 +1,5 @@
-import { t } from '../../services/i18n.js?v=385.0';
-import { showToast } from '../layout/AppLayout.js?v=385.0';
+import { t } from '../../services/i18n.js?v=386.0';
+import { showToast } from '../layout/AppLayout.js?v=386.0';
 
 export function openWidgetConfigBottomSheet() {
   if (window.trackScreen) {

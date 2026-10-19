@@ -11,9 +11,9 @@ import {
   BUILTIN_COLLECTIONS_WITH_GEAR,
   isBuiltinCollectionOverridden,
   resetBuiltinCollection,
-} from '../../services/collectionsService.js?v=385.0';
-import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=385.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
+} from '../../services/collectionsService.js?v=386.0';
+import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
 export function renderCollectionsHubView(allWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);

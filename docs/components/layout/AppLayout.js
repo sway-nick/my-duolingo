@@ -1,10 +1,10 @@
-import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=385.0';
-import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=385.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
-import { openShareDialog } from '../modals/ShareModal.js?v=385.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
-import { isEmailVerified } from '../../services/firebase.js?v=385.0';
-import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=385.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=386.0';
+import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=386.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
+import { openShareDialog } from '../modals/ShareModal.js?v=386.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { isEmailVerified } from '../../services/firebase.js?v=386.0';
+import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=386.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
