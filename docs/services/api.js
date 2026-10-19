@@ -592,7 +592,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
     window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: next, delta } }));
 
     // Trigger celebration when reaching prize podium (top 4: 1st=💎, 2nd=🥇, 3rd=🥈, 4th=🥉)
-    if (newRank && newRank <= 4 && delta > 0) {
+    if (newRank && newRank <= 4 && delta > 0 && typeof sessionStorage !== 'undefined') {
       const bestCelebrated = Number(sessionStorage.getItem(`myduo_celebrated_rank_${wKey}_${uId}`) || 999);
       if (newRank < bestCelebrated || (!oldRank || oldRank > 4)) {
         sessionStorage.setItem(`myduo_celebrated_rank_${wKey}_${uId}`, String(newRank));
@@ -723,10 +723,12 @@ const BOT_PROFILES = [
 ];
 
 function generateDynamicBots(weekKey) {
+  const curWeekKey = getIsoWeekKey();
+  const isPastWeek = Boolean(weekKey && (weekKey < curWeekKey));
   const now = new Date();
-  let dayOfWeek = now.getUTCDay(); // 1 = Monday, 2 = Tuesday, ..., 7 = Sunday in UTC
+  let dayOfWeek = isPastWeek ? 7 : now.getUTCDay(); // 1 = Monday, 2 = Tuesday, ..., 7 = Sunday in UTC
   if (dayOfWeek === 0) dayOfWeek = 7;
-  const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+  const currentMinutes = isPastWeek ? 1440 : (now.getUTCHours() * 60 + now.getUTCMinutes());
 
   function hashStr(str) {
     let hash = 0;
@@ -918,7 +920,9 @@ function formatCompactXp(xp) {
   return `${formatted}B`;
 }
 
-async function getLeaderboard(weekKey = null, period = 'week') {
+const LEADERBOARD_CACHE_TTL = 30 * 60 * 1000;
+
+async function getLeaderboard(weekKey = null, period = 'week', force = false) {
   const wKey = weekKey || getIsoWeekKey();
   const currentUserId = getEffectiveUserId();
   const currentUser = getCurrentUser();
@@ -928,6 +932,16 @@ async function getLeaderboard(weekKey = null, period = 'week') {
   const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
 
   if (period === 'all') {
+    const allCacheTimeKey = 'cache_leaderboard_time_all';
+    const lastFetchedAll = parseInt(localStorage.getItem(allCacheTimeKey) || '0', 10);
+    const isAllFresh = (Date.now() - lastFetchedAll) < LEADERBOARD_CACHE_TTL;
+    if (!force && isAllFresh) {
+      const cached = getCachedLeaderboard(wKey, 'all');
+      if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+        return cached;
+      }
+    }
+
     // 1. Query Cloud Firestore all-time leaderboard
     let fsPlayers = null;
     try {
@@ -1003,6 +1017,7 @@ async function getLeaderboard(weekKey = null, period = 'week') {
         sortLeaderboardEntries(combined);
 
         localStorage.setItem('cache_leaderboard_all', JSON.stringify(combined));
+        localStorage.setItem(allCacheTimeKey, String(Date.now()));
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'all' } }));
         }
@@ -1021,6 +1036,16 @@ async function getLeaderboard(weekKey = null, period = 'week') {
   }
 
   // period === 'week'
+  const weekCacheTimeKey = `cache_leaderboard_time_${wKey}`;
+  const lastFetchedWeek = parseInt(localStorage.getItem(weekCacheTimeKey) || '0', 10);
+  const isWeekFresh = (Date.now() - lastFetchedWeek) < LEADERBOARD_CACHE_TTL;
+  if (!force && isWeekFresh) {
+    const cached = getCachedLeaderboard(wKey, 'week');
+    if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+      return cached;
+    }
+  }
+
   const userXP = getUserWeeklyXP(currentUserId, wKey);
 
   // 1. Query Cloud Firestore weekly leaderboard
@@ -1056,6 +1081,7 @@ async function getLeaderboard(weekKey = null, period = 'week') {
       const combined = [...validFsPlayers, ...dynamicBots];
       sortLeaderboardEntries(combined);
       localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify(combined));
+      localStorage.setItem(weekCacheTimeKey, String(Date.now()));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'week' } }));
       }
@@ -1383,12 +1409,9 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
 
   localStorage.setItem(key, JSON.stringify(local));
 
-  // Sync to Cloud Firestore (Real-time persistent cloud storage)
-  try {
-    const fsUid = getFirestoreUserId(userId);
-    saveUserProgressFirestore(fsUid, wordId, prog).catch(() => {});
-  } catch (e) {}
-
+  // Progress is batched: saved instantaneously to localStorage on each word,
+  // and synced to Cloud Firestore in bulk at the end of completed training stages
+  // (Cards, Quiz, Pairs, Test) or on app pause/background/round finish.
   pendingProgressQueue.push({
     route: 'progress',
     action: 'progress',
@@ -1407,11 +1430,12 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     xpDelta,
   });
 
-  if (pendingProgressQueue.length >= 5) {
-    flushProgressQueue();
+  if (options && (options.roundComplete || options.batchComplete)) {
+    try {
+      flushProgressQueue();
+      pushUserDataToCloud(userId, null, true);
+    } catch (e) {}
   }
-
-  pushUserDataToCloud(userId);
 
   return { ...prog, autoFavorited };
 }

@@ -61,15 +61,15 @@ test('Monday Golden Card Meme: renderMondayMemeTop4Cut dynamically renders actua
   assert.ok(container.innerHTML.includes('wotd-top4-podium-grid'), 'Must contain wotd-top4-podium-grid');
   assert.ok(container.innerHTML.includes('diamond-laurel-wreath'), 'Rank #1 must have laurel wreath');
 
-  // Verify real players from completed week
+  // Verify real players & completed week leaders
   assert.ok(container.innerHTML.includes('Julia Lipa (VoLAnD_98)'), 'Rank #1 name must be rendered');
   assert.ok(container.innerHTML.includes('1544 XP'), 'Rank #1 XP must be rendered');
-  assert.ok(container.innerHTML.includes('Nikola Lipniagov'), 'Rank #2 name must be rendered');
-  assert.ok(container.innerHTML.includes('1111 XP'), 'Rank #2 XP must be rendered');
-  assert.ok(container.innerHTML.includes('Irina Mahotenko'), 'Rank #3 name must be rendered');
-  assert.ok(container.innerHTML.includes('876 XP'), 'Rank #3 XP must be rendered');
-  assert.ok(container.innerHTML.includes('Rika Step'), 'Rank #4 name must be rendered');
-  assert.ok(container.innerHTML.includes('441 XP'), 'Rank #4 XP must be rendered');
+  assert.ok(container.innerHTML.includes('Oscar Dupont'), 'Rank #2 name must be rendered');
+  assert.ok(container.innerHTML.includes('1295 XP'), 'Rank #2 XP must be rendered');
+  assert.ok(container.innerHTML.includes('Alina Morozova'), 'Rank #3 name must be rendered');
+  assert.ok(container.innerHTML.includes('1281 XP'), 'Rank #3 XP must be rendered');
+  assert.ok(container.innerHTML.includes('Astrid Larsson'), 'Rank #4 name must be rendered');
+  assert.ok(container.innerHTML.includes('1246 XP'), 'Rank #4 XP must be rendered');
 
   // Verify badges
   assert.ok(container.innerHTML.includes('💎'), 'Rank 1 must have 💎');

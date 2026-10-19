@@ -915,6 +915,7 @@
 
         // If queue for the current mode is empty, show intuitive step guidance
         if (activeWords.length === 0) {
+          try { pushUserDataToCloud(null, null, true); } catch (e) {}
           const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
           const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
           const testQueue = getQueueForTest(categoryWords, userProgress, favList);
@@ -1968,6 +1969,7 @@
             renderTrainingTab();
             return;
           }
+          try { pushUserDataToCloud(null, null, true); } catch (e) {}
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           window._activePracticeCollectionId = null;
@@ -1979,6 +1981,7 @@
 
         if (!isFavPracticeActive && currentMethod === 'input' && currentWordIndex >= activeWords.length) {
           if (testQueue.length === 0 || unfinishedInQueue.length === 0) {
+            try { pushUserDataToCloud(null, null, true); } catch (e) {}
             window._trainingRoundJustCompleted = true;
             window._showHubScreen = true;
             currentWordIndex = 0;
@@ -1991,6 +1994,7 @@
 
         if (!isFavPracticeActive && currentMethod === 'quiz' && currentWordIndex >= activeWords.length) {
           if (quizQueue.length === 0 || unfinishedInQueue.length === 0) {
+            try { pushUserDataToCloud(null, null, true); } catch (e) {}
             currentWordIndex = 0;
             renderTrainingTab();
             return;
@@ -2032,6 +2036,7 @@
             renderCategorySelectorScreen();
           },
           onMethodChange: (newMethod) => {
+            try { pushUserDataToCloud(null, null, true); } catch (e) {}
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
             stopNativeBackgroundPlayback();
@@ -2055,6 +2060,7 @@
             renderTrainingTab();
           },
           onCategoryChange: (newCategory) => {
+            try { pushUserDataToCloud(null, null, true); } catch (e) {}
             window.__favsAutoplayRunning = false;
             releaseScreenWakeLock();
             stopNativeBackgroundPlayback();
@@ -2146,6 +2152,7 @@
         } catch (e) {}
 
         if (tabName !== 'training') {
+          try { pushUserDataToCloud(null, null, true); } catch (e) {}
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           window._activePracticeCollectionId = null;

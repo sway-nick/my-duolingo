@@ -36,7 +36,7 @@ const {
   deleteAllUserFirestoreData,
   hasPendingLeaderboardIncrements
 } = await import('../frontend/services/firebase.js');
-const { fetchUserDataFromCloud, addWeeklyXP, getUserWeeklyXP } = await import('../frontend/services/api.js');
+const { fetchUserDataFromCloud, addWeeklyXP, getUserWeeklyXP, getLeaderboard } = await import('../frontend/services/api.js');
 
 test('1. ISO week key at boundary conditions (UTC)', () => {
   // Sunday 2026-12-27 23:59:59.999Z -> 2026-W52
@@ -327,4 +327,34 @@ test('7. deleteAllUserFirestoreData deletes leaderboard_alltime and recent 8 wee
       `Must delete player doc for ${wKey}`
     );
   }
+});
+
+test('8. getLeaderboard caches data for 30 minutes without re-querying network', async () => {
+  let fetchCount = 0;
+  globalThis.fetch = async (url) => {
+    if (url.includes('runQuery') || url.includes('/leaderboards/')) {
+      fetchCount++;
+    }
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ([])
+    };
+  };
+
+  const wKey = '2026-W43';
+  localStorage.setItem(`cache_leaderboard_${wKey}`, JSON.stringify([
+    { userId: 'u1', name: 'Alice', xp: 500 }
+  ]));
+  localStorage.setItem(`cache_leaderboard_time_${wKey}`, String(Date.now()));
+
+  // Call 1: Within 30 minutes -> returns from cache, fetchCount must NOT increase
+  const initialFetchCount = fetchCount;
+  const res1 = await getLeaderboard(wKey, 'week', false);
+  assert.equal(res1.success, true);
+  assert.equal(fetchCount, initialFetchCount, 'Should not query network within 30 min TTL');
+
+  // Call 2: Force refresh -> bypasses cache, queries network
+  await getLeaderboard(wKey, 'week', true);
+  assert.ok(fetchCount > initialFetchCount, 'Force refresh must query network');
 });
