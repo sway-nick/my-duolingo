@@ -3,8 +3,8 @@
 # min_api: 24
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: 27a51a07b89bdda942d30c9544b95a0af19cd4ae3164c3ec9e95f750695fe5bf
-# pg_map_hash: SHA-256 27a51a07b89bdda942d30c9544b95a0af19cd4ae3164c3ec9e95f750695fe5bf
+# pg_map_id: 638c22e98e62473d2244c8bcc2aecb36ecd98561ee12ccb8938445c66a9cf05c
+# pg_map_hash: SHA-256 638c22e98e62473d2244c8bcc2aecb36ecd98561ee12ccb8938445c66a9cf05c
 ByteStringStoreKt$Dsl -> R8$$REMOVED$$CLASS$$0:
 # {"id":"sourceFile","fileName":"ByteStringStoreKt.kt"}
 ByteStringStoreKtKt -> R8$$REMOVED$$CLASS$$1:
@@ -80191,9 +80191,9 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$SXq5oZ9-uYRYuXoD3RqmhD611qQ(int,android.content.Context):0:0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$Z5VUm2M5X210npYaTDK4iOBNvQg(android.content.Context,java.lang.String,com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0):0:0 -> c
+    1:4:void $r8$lambda$Z5VUm2M5X210npYaTDK4iOBNvQg(android.content.Context,java.lang.String,com.englishbreakfast.app.MainActivity$10$$ExternalSyntheticLambda7):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Ljava/lang/String;Lcom/englishbreakfast/app/i;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Ljava/lang/String;Lcom/englishbreakfast/app/g;)V"}
     1:11:void cancelRotation(android.content.Context):538:538 -> cancelRotation
     12:18:void cancelRotation(android.content.Context):541:541 -> cancelRotation
     19:23:void cancelRotation(android.content.Context):542:542 -> cancelRotation
@@ -80431,259 +80431,265 @@ com.englishbreakfast.app.MainActivity -> com.englishbreakfast.app.MainActivity:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
     androidx.activity.result.ActivityResultLauncher googleSignInLauncher -> googleSignInLauncher
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ld/c;"}
-    1:4:void <init>():45:45 -> <init>
-    5:6:void <init>():47:47 -> <init>
-    7:10:void <init>():48:48 -> <init>
-    11:13:void <init>():49:49 -> <init>
-    14:16:void <init>():53:53 -> <init>
-    17:19:void <init>():54:54 -> <init>
-    1:4:void -$$Nest$mnotifyTtsDone(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> A
+    1:4:void <init>():46:46 -> <init>
+    5:6:void <init>():49:49 -> <init>
+    7:10:void <init>():50:50 -> <init>
+    11:13:void <init>():51:51 -> <init>
+    14:16:void <init>():55:55 -> <init>
+    17:19:void <init>():56:56 -> <init>
+    1:4:void -$$Nest$mnotifyJsGoogleAuthError(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> A
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void -$$Nest$mupdateTrustedOriginState(com.englishbreakfast.app.MainActivity,android.webkit.WebView):0:0 -> B
+    1:4:void -$$Nest$mnotifyTtsDone(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> B
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void -$$Nest$mupdateTrustedOriginState(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> C
+    1:4:void -$$Nest$mupdateTrustedOriginState(com.englishbreakfast.app.MainActivity,android.webkit.WebView):0:0 -> C
       # {"id":"com.android.tools.r8.synthesized"}
-    1:3:com.getcapacitor.Bridge access$000(com.englishbreakfast.app.MainActivity):45:45 -> access$000
-    1:3:com.getcapacitor.Bridge access$100(com.englishbreakfast.app.MainActivity):45:45 -> access$100
-    1:3:com.getcapacitor.Bridge access$1000(com.englishbreakfast.app.MainActivity):45:45 -> access$1000
-    1:3:com.getcapacitor.Bridge access$1100(com.englishbreakfast.app.MainActivity):45:45 -> access$1100
-    1:3:com.getcapacitor.Bridge access$1200(com.englishbreakfast.app.MainActivity):45:45 -> access$1200
-    1:3:com.getcapacitor.Bridge access$1300(com.englishbreakfast.app.MainActivity):45:45 -> access$1300
-    1:3:com.getcapacitor.Bridge access$1400(com.englishbreakfast.app.MainActivity):45:45 -> access$1400
-    1:3:com.getcapacitor.Bridge access$1500(com.englishbreakfast.app.MainActivity):45:45 -> access$1500
-    1:3:com.getcapacitor.Bridge access$200(com.englishbreakfast.app.MainActivity):45:45 -> access$200
-    1:3:com.getcapacitor.Bridge access$300(com.englishbreakfast.app.MainActivity):45:45 -> access$300
-    1:3:com.getcapacitor.Bridge access$400(com.englishbreakfast.app.MainActivity):45:45 -> access$400
-    1:3:com.getcapacitor.Bridge access$500(com.englishbreakfast.app.MainActivity):45:45 -> access$500
-    1:3:com.getcapacitor.Bridge access$600(com.englishbreakfast.app.MainActivity):45:45 -> access$600
-    1:3:com.getcapacitor.Bridge access$700(com.englishbreakfast.app.MainActivity):45:45 -> access$700
-    1:3:com.getcapacitor.Bridge access$800(com.englishbreakfast.app.MainActivity):45:45 -> access$800
-    1:3:com.getcapacitor.Bridge access$900(com.englishbreakfast.app.MainActivity):45:45 -> access$900
+    1:4:void -$$Nest$mupdateTrustedOriginState(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> D
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:3:com.getcapacitor.Bridge access$000(com.englishbreakfast.app.MainActivity):46:46 -> access$000
+    1:3:com.getcapacitor.Bridge access$100(com.englishbreakfast.app.MainActivity):46:46 -> access$100
+    1:3:com.getcapacitor.Bridge access$1000(com.englishbreakfast.app.MainActivity):46:46 -> access$1000
+    1:3:com.getcapacitor.Bridge access$1100(com.englishbreakfast.app.MainActivity):46:46 -> access$1100
+    1:3:com.getcapacitor.Bridge access$1200(com.englishbreakfast.app.MainActivity):46:46 -> access$1200
+    1:3:com.getcapacitor.Bridge access$1300(com.englishbreakfast.app.MainActivity):46:46 -> access$1300
+    1:3:com.getcapacitor.Bridge access$1400(com.englishbreakfast.app.MainActivity):46:46 -> access$1400
+    1:3:com.getcapacitor.Bridge access$1500(com.englishbreakfast.app.MainActivity):46:46 -> access$1500
+    1:3:com.getcapacitor.Bridge access$200(com.englishbreakfast.app.MainActivity):46:46 -> access$200
+    1:3:com.getcapacitor.Bridge access$300(com.englishbreakfast.app.MainActivity):46:46 -> access$300
+    1:3:com.getcapacitor.Bridge access$400(com.englishbreakfast.app.MainActivity):46:46 -> access$400
+    1:3:com.getcapacitor.Bridge access$500(com.englishbreakfast.app.MainActivity):46:46 -> access$500
+    1:3:com.getcapacitor.Bridge access$600(com.englishbreakfast.app.MainActivity):46:46 -> access$600
+    1:3:com.getcapacitor.Bridge access$700(com.englishbreakfast.app.MainActivity):46:46 -> access$700
+    1:3:com.getcapacitor.Bridge access$800(com.englishbreakfast.app.MainActivity):46:46 -> access$800
+    1:3:com.getcapacitor.Bridge access$900(com.englishbreakfast.app.MainActivity):46:46 -> access$900
     1:5:f0.WindowInsetsCompat $r8$lambda$0pU2SP45rMa5BBHom5t-KBDOVIE(com.englishbreakfast.app.MainActivity,android.view.View,f0.WindowInsetsCompat):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/MainActivity;Landroid/view/View;Lf0/q1;)Lf0/q1;"}
     1:4:void $r8$lambda$2-FFcbAEJWo9unewAZnxNrBL4xs(com.englishbreakfast.app.MainActivity,int):0:0 -> h
       # {"id":"com.android.tools.r8.synthesized"}
-    1:10:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):434:434 -> handleGoogleSignInResult
-    11:29:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):436:436 -> handleGoogleSignInResult
-    30:41:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):437:437 -> handleGoogleSignInResult
-    42:53:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):438:438 -> handleGoogleSignInResult
-    54:69:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):439:439 -> handleGoogleSignInResult
-    70:79:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):440:440 -> handleGoogleSignInResult
-    80:84:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):442:442 -> handleGoogleSignInResult
-    85:89:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):443:443 -> handleGoogleSignInResult
-    90:94:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):444:444 -> handleGoogleSignInResult
-    95:99:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):445:445 -> handleGoogleSignInResult
-    100:104:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):446:446 -> handleGoogleSignInResult
-    105:109:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):447:447 -> handleGoogleSignInResult
-    110:117:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):449:449 -> handleGoogleSignInResult
-    118:123:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):451:451 -> handleGoogleSignInResult
-    124:145:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):469:469 -> handleGoogleSignInResult
-    146:162:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):454:454 -> handleGoogleSignInResult
-    163:168:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):461:461 -> handleGoogleSignInResult
-    169:171:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):463:463 -> handleGoogleSignInResult
-    172:175:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):465:465 -> handleGoogleSignInResult
+    1:10:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):509:509 -> handleGoogleSignInResult
+    11:29:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):511:511 -> handleGoogleSignInResult
+    30:41:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):512:512 -> handleGoogleSignInResult
+    42:53:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):513:513 -> handleGoogleSignInResult
+    54:69:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):514:514 -> handleGoogleSignInResult
+    70:79:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):515:515 -> handleGoogleSignInResult
+    80:84:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):517:517 -> handleGoogleSignInResult
+    85:89:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):518:518 -> handleGoogleSignInResult
+    90:94:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):519:519 -> handleGoogleSignInResult
+    95:99:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):520:520 -> handleGoogleSignInResult
+    100:104:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):521:521 -> handleGoogleSignInResult
+    105:109:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):522:522 -> handleGoogleSignInResult
+    110:117:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):524:524 -> handleGoogleSignInResult
+    118:123:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):526:526 -> handleGoogleSignInResult
+    124:145:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):544:544 -> handleGoogleSignInResult
+    146:162:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):529:529 -> handleGoogleSignInResult
+    163:168:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):536:536 -> handleGoogleSignInResult
+    169:171:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):538:538 -> handleGoogleSignInResult
+    172:175:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):540:540 -> handleGoogleSignInResult
     176:179:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):0:0 -> handleGoogleSignInResult
       # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":199,"3":201,"6":204,"9":208},"outline":"Landroid/support/v4/media/a;p(ILjava/lang/String;Ljava/lang/String;)Ljava/lang/StringBuilder;"}
-    180:190:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):465:465 -> handleGoogleSignInResult
-    191:194:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):467:467 -> handleGoogleSignInResult
-    195:198:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):456:456 -> handleGoogleSignInResult
-    199:199:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):465:465 -> handleGoogleSignInResult
-    201:201:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):465:465 -> handleGoogleSignInResult
-    204:204:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):465:465 -> handleGoogleSignInResult
-    208:208:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):465:465 -> handleGoogleSignInResult
-    4:14:void handleWidgetConfigIntent(android.content.Intent):187:187 -> handleWidgetConfigIntent
-    15:19:void handleWidgetConfigIntent(android.content.Intent):188:188 -> handleWidgetConfigIntent
-    20:25:void handleWidgetConfigIntent(android.content.Intent):193:193 -> handleWidgetConfigIntent
-    26:33:void handleWidgetConfigIntent(android.content.Intent):194:194 -> handleWidgetConfigIntent
-    34:39:void handleWidgetConfigIntent(android.content.Intent):195:195 -> handleWidgetConfigIntent
-    40:47:void handleWidgetConfigIntent(android.content.Intent):199:199 -> handleWidgetConfigIntent
-    48:53:void handleWidgetConfigIntent(android.content.Intent):200:200 -> handleWidgetConfigIntent
+    180:190:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):540:540 -> handleGoogleSignInResult
+    191:194:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):542:542 -> handleGoogleSignInResult
+    195:198:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):531:531 -> handleGoogleSignInResult
+    199:199:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):540:540 -> handleGoogleSignInResult
+    201:201:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):540:540 -> handleGoogleSignInResult
+    204:204:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):540:540 -> handleGoogleSignInResult
+    208:208:void handleGoogleSignInResult(com.google.android.gms.tasks.Task):540:540 -> handleGoogleSignInResult
+    4:14:void handleWidgetConfigIntent(android.content.Intent):190:190 -> handleWidgetConfigIntent
+    15:19:void handleWidgetConfigIntent(android.content.Intent):191:191 -> handleWidgetConfigIntent
+    20:25:void handleWidgetConfigIntent(android.content.Intent):196:196 -> handleWidgetConfigIntent
+    26:33:void handleWidgetConfigIntent(android.content.Intent):197:197 -> handleWidgetConfigIntent
+    34:39:void handleWidgetConfigIntent(android.content.Intent):198:198 -> handleWidgetConfigIntent
+    40:47:void handleWidgetConfigIntent(android.content.Intent):202:202 -> handleWidgetConfigIntent
+    48:53:void handleWidgetConfigIntent(android.content.Intent):203:203 -> handleWidgetConfigIntent
     1:4:void $r8$lambda$35H0e-WPNxK5HkBFRDsb5HDzWSY(com.englishbreakfast.app.MainActivity):0:0 -> i
       # {"id":"com.android.tools.r8.synthesized"}
-    1:13:void initNativeTts():526:526 -> initNativeTts
-    1:10:void injectSafeBottomToWebView():317:317 -> injectSafeBottomToWebView
-    11:19:void injectSafeBottomToWebView():318:318 -> injectSafeBottomToWebView
-    20:35:void injectSafeBottomToWebView():319:319 -> injectSafeBottomToWebView
-    1:10:void injectSafeTopToWebView():306:306 -> injectSafeTopToWebView
-    11:20:void injectSafeTopToWebView():307:307 -> injectSafeTopToWebView
-    21:29:void injectSafeTopToWebView():308:308 -> injectSafeTopToWebView
-    30:45:void injectSafeTopToWebView():309:309 -> injectSafeTopToWebView
-    1:3:boolean isTrustedOrigin():85:85 -> isTrustedOrigin
+    1:13:void initNativeTts():601:601 -> initNativeTts
+    1:10:void injectSafeBottomToWebView():320:320 -> injectSafeBottomToWebView
+    11:19:void injectSafeBottomToWebView():321:321 -> injectSafeBottomToWebView
+    20:35:void injectSafeBottomToWebView():322:322 -> injectSafeBottomToWebView
+    1:10:void injectSafeTopToWebView():309:309 -> injectSafeTopToWebView
+    11:20:void injectSafeTopToWebView():310:310 -> injectSafeTopToWebView
+    21:29:void injectSafeTopToWebView():311:311 -> injectSafeTopToWebView
+    30:45:void injectSafeTopToWebView():312:312 -> injectSafeTopToWebView
+    1:3:boolean isTrustedOrigin():87:87 -> isTrustedOrigin
     1:4:void $r8$lambda$Ct5P3rLMufxgGJjAywf5DLEYlac(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> j
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$IEQ19tS1pgsbS5nSPnVodJmDP94(com.englishbreakfast.app.MainActivity,float):0:0 -> k
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$OKtHjCRlZAKCkuF7AhdpE6IzoYc(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> l
       # {"id":"com.android.tools.r8.synthesized"}
-    4:5:void lambda$initNativeTts$9(int):528:528 -> lambda$initNativeTts$9
-    6:16:void lambda$initNativeTts$9(int):530:530 -> lambda$initNativeTts$9
-    1:30:void lambda$injectSafeBottomToWebView$4(float):320:320 -> lambda$injectSafeBottomToWebView$4
-    1:30:void lambda$injectSafeTopToWebView$3(float):310:310 -> lambda$injectSafeTopToWebView$3
-    1:15:void lambda$lockWebViewTextZoom$1():212:212 -> lambda$lockWebViewTextZoom$1
-    16:29:void lambda$lockWebViewTextZoom$1():213:213 -> lambda$lockWebViewTextZoom$1
-    30:44:void lambda$lockWebViewTextZoom$1():215:215 -> lambda$lockWebViewTextZoom$1
-    1:13:void lambda$notifyJsGoogleAuthCancelled$7():485:485 -> lambda$notifyJsGoogleAuthCancelled$7
-    1:5:void lambda$notifyJsGoogleAuthError$8(java.lang.String):494:494 -> lambda$notifyJsGoogleAuthError$8
-    6:10:void lambda$notifyJsGoogleAuthError$8(java.lang.String):495:495 -> lambda$notifyJsGoogleAuthError$8
-    11:23:void lambda$notifyJsGoogleAuthError$8(java.lang.String):496:496 -> lambda$notifyJsGoogleAuthError$8
-    24:40:void lambda$notifyJsGoogleAuthError$8(java.lang.String):497:497 -> lambda$notifyJsGoogleAuthError$8
-    41:44:void lambda$notifyJsGoogleAuthError$8(java.lang.String):496:496 -> lambda$notifyJsGoogleAuthError$8
-    1:30:void lambda$notifyJsGoogleAuthSuccess$6(java.lang.String):476:476 -> lambda$notifyJsGoogleAuthSuccess$6
-    1:30:void lambda$notifyTtsDone$10(java.lang.String):553:553 -> lambda$notifyTtsDone$10
+    4:5:void lambda$initNativeTts$9(int):603:603 -> lambda$initNativeTts$9
+    6:16:void lambda$initNativeTts$9(int):605:605 -> lambda$initNativeTts$9
+    1:30:void lambda$injectSafeBottomToWebView$4(float):323:323 -> lambda$injectSafeBottomToWebView$4
+    1:30:void lambda$injectSafeTopToWebView$3(float):313:313 -> lambda$injectSafeTopToWebView$3
+    1:15:void lambda$lockWebViewTextZoom$1():215:215 -> lambda$lockWebViewTextZoom$1
+    16:29:void lambda$lockWebViewTextZoom$1():216:216 -> lambda$lockWebViewTextZoom$1
+    30:44:void lambda$lockWebViewTextZoom$1():218:218 -> lambda$lockWebViewTextZoom$1
+    1:13:void lambda$notifyJsGoogleAuthCancelled$7():560:560 -> lambda$notifyJsGoogleAuthCancelled$7
+    1:5:void lambda$notifyJsGoogleAuthError$8(java.lang.String):569:569 -> lambda$notifyJsGoogleAuthError$8
+    6:10:void lambda$notifyJsGoogleAuthError$8(java.lang.String):570:570 -> lambda$notifyJsGoogleAuthError$8
+    11:23:void lambda$notifyJsGoogleAuthError$8(java.lang.String):571:571 -> lambda$notifyJsGoogleAuthError$8
+    24:40:void lambda$notifyJsGoogleAuthError$8(java.lang.String):572:572 -> lambda$notifyJsGoogleAuthError$8
+    41:44:void lambda$notifyJsGoogleAuthError$8(java.lang.String):571:571 -> lambda$notifyJsGoogleAuthError$8
+    1:30:void lambda$notifyJsGoogleAuthSuccess$6(java.lang.String):551:551 -> lambda$notifyJsGoogleAuthSuccess$6
+    1:30:void lambda$notifyTtsDone$10(java.lang.String):628:628 -> lambda$notifyTtsDone$10
     2:3:androidx.core.graphics.Insets androidx.core.view.WindowInsetsCompat.getInsets(int):667:667 -> lambda$onCreate$0
-    2:3:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):103 -> lambda$onCreate$0
+    2:3:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):105 -> lambda$onCreate$0
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/view/View;Lf0/q1;)Lf0/q1;"}
     4:7:androidx.core.graphics.Insets androidx.core.view.WindowInsetsCompat.getInsets(int):667:667 -> lambda$onCreate$0
-    4:7:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):103 -> lambda$onCreate$0
-    8:11:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):104:104 -> lambda$onCreate$0
-    12:21:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):105:105 -> lambda$onCreate$0
-    22:27:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):106:106 -> lambda$onCreate$0
-    28:31:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):107:107 -> lambda$onCreate$0
+    4:7:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):105 -> lambda$onCreate$0
+    8:11:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):106:106 -> lambda$onCreate$0
+    12:21:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):107:107 -> lambda$onCreate$0
+    22:27:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):108:108 -> lambda$onCreate$0
+    28:31:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):109:109 -> lambda$onCreate$0
     32:37:androidx.core.graphics.Insets androidx.core.view.WindowInsetsCompat.getInsets(int):667:667 -> lambda$onCreate$0
-    32:37:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):109 -> lambda$onCreate$0
-    38:41:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):110:110 -> lambda$onCreate$0
-    42:51:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):111:111 -> lambda$onCreate$0
-    52:57:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):112:112 -> lambda$onCreate$0
-    58:61:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):113:113 -> lambda$onCreate$0
-    1:13:void lambda$onResume$2():299:299 -> lambda$onResume$2
+    32:37:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):111 -> lambda$onCreate$0
+    38:41:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):112:112 -> lambda$onCreate$0
+    42:51:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):113:113 -> lambda$onCreate$0
+    52:57:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):114:114 -> lambda$onCreate$0
+    58:61:androidx.core.view.WindowInsetsCompat lambda$onCreate$0(android.view.View,androidx.core.view.WindowInsetsCompat):115:115 -> lambda$onCreate$0
+    1:13:void lambda$onResume$2():302:302 -> lambda$onResume$2
     1:2:android.content.Intent androidx.activity.result.ActivityResult.getData():35:35 -> lambda$setupGoogleAuthBridge$5
-    1:2:void lambda$setupGoogleAuthBridge$5(androidx.activity.result.ActivityResult):383 -> lambda$setupGoogleAuthBridge$5
+    1:2:void lambda$setupGoogleAuthBridge$5(androidx.activity.result.ActivityResult):458 -> lambda$setupGoogleAuthBridge$5
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Ld/a;)V"}
-    3:6:void lambda$setupGoogleAuthBridge$5(androidx.activity.result.ActivityResult):384:384 -> lambda$setupGoogleAuthBridge$5
-    7:10:void lambda$setupGoogleAuthBridge$5(androidx.activity.result.ActivityResult):385:385 -> lambda$setupGoogleAuthBridge$5
-    1:10:void lockWebViewTextZoom():209:209 -> lockWebViewTextZoom
-    11:26:void lockWebViewTextZoom():210:210 -> lockWebViewTextZoom
+    3:6:void lambda$setupGoogleAuthBridge$5(androidx.activity.result.ActivityResult):459:459 -> lambda$setupGoogleAuthBridge$5
+    7:10:void lambda$setupGoogleAuthBridge$5(androidx.activity.result.ActivityResult):460:460 -> lambda$setupGoogleAuthBridge$5
+    1:10:void lockWebViewTextZoom():212:212 -> lockWebViewTextZoom
+    11:26:void lockWebViewTextZoom():213:213 -> lockWebViewTextZoom
     1:4:void $r8$lambda$dxEyj45TD--YLjr0kHT4iLI56zk(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> m
       # {"id":"com.android.tools.r8.synthesized"}
-    1:3:void measureDimensions():255:255 -> measureDimensions
-    4:7:void measureDimensions():256:256 -> measureDimensions
-    1:4:void measureNavigationBarHeight():275:275 -> measureNavigationBarHeight
-    5:16:void measureNavigationBarHeight():276:276 -> measureNavigationBarHeight
-    17:20:void measureNavigationBarHeight():278:278 -> measureNavigationBarHeight
-    21:28:void measureNavigationBarHeight():279:279 -> measureNavigationBarHeight
-    29:32:void measureNavigationBarHeight():280:280 -> measureNavigationBarHeight
-    33:35:void measureNavigationBarHeight():283:283 -> measureNavigationBarHeight
-    1:4:void measureStatusBarHeight():261:261 -> measureStatusBarHeight
-    5:16:void measureStatusBarHeight():262:262 -> measureStatusBarHeight
-    17:20:void measureStatusBarHeight():264:264 -> measureStatusBarHeight
-    21:28:void measureStatusBarHeight():265:265 -> measureStatusBarHeight
-    29:33:void measureStatusBarHeight():266:266 -> measureStatusBarHeight
-    34:36:void measureStatusBarHeight():269:269 -> measureStatusBarHeight
+    1:3:void measureDimensions():258:258 -> measureDimensions
+    4:7:void measureDimensions():259:259 -> measureDimensions
+    1:4:void measureNavigationBarHeight():278:278 -> measureNavigationBarHeight
+    5:16:void measureNavigationBarHeight():279:279 -> measureNavigationBarHeight
+    17:20:void measureNavigationBarHeight():281:281 -> measureNavigationBarHeight
+    21:28:void measureNavigationBarHeight():282:282 -> measureNavigationBarHeight
+    29:32:void measureNavigationBarHeight():283:283 -> measureNavigationBarHeight
+    33:35:void measureNavigationBarHeight():286:286 -> measureNavigationBarHeight
+    1:4:void measureStatusBarHeight():264:264 -> measureStatusBarHeight
+    5:16:void measureStatusBarHeight():265:265 -> measureStatusBarHeight
+    17:20:void measureStatusBarHeight():267:267 -> measureStatusBarHeight
+    21:28:void measureStatusBarHeight():268:268 -> measureStatusBarHeight
+    29:33:void measureStatusBarHeight():269:269 -> measureStatusBarHeight
+    34:36:void measureStatusBarHeight():272:272 -> measureStatusBarHeight
     1:4:void $r8$lambda$mGujhzvsnfNJV8U7o5qO9HUfR8g(com.englishbreakfast.app.MainActivity,d.ActivityResult):0:0 -> n
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/MainActivity;Ld/a;)V"}
-    1:10:void notifyJsGoogleAuthCancelled():483:483 -> notifyJsGoogleAuthCancelled
-    11:26:void notifyJsGoogleAuthCancelled():484:484 -> notifyJsGoogleAuthCancelled
-    1:10:void notifyJsGoogleAuthError(java.lang.String):492:492 -> notifyJsGoogleAuthError
-    11:26:void notifyJsGoogleAuthError(java.lang.String):493:493 -> notifyJsGoogleAuthError
-    1:10:void notifyJsGoogleAuthSuccess(java.lang.String):474:474 -> notifyJsGoogleAuthSuccess
-    11:26:void notifyJsGoogleAuthSuccess(java.lang.String):475:475 -> notifyJsGoogleAuthSuccess
-    1:10:void notifyTtsDone(java.lang.String):551:551 -> notifyTtsDone
-    11:26:void notifyTtsDone(java.lang.String):552:552 -> notifyTtsDone
+    1:10:void notifyJsGoogleAuthCancelled():558:558 -> notifyJsGoogleAuthCancelled
+    11:26:void notifyJsGoogleAuthCancelled():559:559 -> notifyJsGoogleAuthCancelled
+    1:10:void notifyJsGoogleAuthError(java.lang.String):567:567 -> notifyJsGoogleAuthError
+    11:26:void notifyJsGoogleAuthError(java.lang.String):568:568 -> notifyJsGoogleAuthError
+    1:10:void notifyJsGoogleAuthSuccess(java.lang.String):549:549 -> notifyJsGoogleAuthSuccess
+    11:26:void notifyJsGoogleAuthSuccess(java.lang.String):550:550 -> notifyJsGoogleAuthSuccess
+    1:10:void notifyTtsDone(java.lang.String):626:626 -> notifyTtsDone
+    11:26:void notifyTtsDone(java.lang.String):627:627 -> notifyTtsDone
     1:4:void $r8$lambda$raO-lQ3fG3ywTAs2PhBDmfUVx_I(com.englishbreakfast.app.MainActivity,float):0:0 -> o
       # {"id":"com.android.tools.r8.synthesized"}
-    1:3:void onCreate(android.os.Bundle):90:90 -> onCreate
-    4:10:void onCreate(android.os.Bundle):93:93 -> onCreate
-    11:16:void onCreate(android.os.Bundle):94:94 -> onCreate
-    17:23:void onCreate(android.os.Bundle):95:95 -> onCreate
-    24:30:void onCreate(android.os.Bundle):96:96 -> onCreate
-    31:33:void onCreate(android.os.Bundle):99:99 -> onCreate
-    34:48:void onCreate(android.os.Bundle):102:102 -> onCreate
+    1:3:void onCreate(android.os.Bundle):92:92 -> onCreate
+    4:10:void onCreate(android.os.Bundle):95:95 -> onCreate
+    11:16:void onCreate(android.os.Bundle):96:96 -> onCreate
+    17:23:void onCreate(android.os.Bundle):97:97 -> onCreate
+    24:30:void onCreate(android.os.Bundle):98:98 -> onCreate
+    31:33:void onCreate(android.os.Bundle):101:101 -> onCreate
+    34:48:void onCreate(android.os.Bundle):104:104 -> onCreate
     49:51:void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View,androidx.core.view.OnApplyWindowInsetsListener):2973:2973 -> onCreate
-    49:51:void onCreate(android.os.Bundle):102 -> onCreate
-    52:54:void onCreate(android.os.Bundle):118:118 -> onCreate
-    55:57:void onCreate(android.os.Bundle):119:119 -> onCreate
-    58:60:void onCreate(android.os.Bundle):120:120 -> onCreate
-    61:63:void onCreate(android.os.Bundle):121:121 -> onCreate
-    64:66:void onCreate(android.os.Bundle):122:122 -> onCreate
-    67:69:void onCreate(android.os.Bundle):123:123 -> onCreate
-    70:72:void onCreate(android.os.Bundle):124:124 -> onCreate
-    73:76:void onCreate(android.os.Bundle):126:126 -> onCreate
-    77:84:void onCreate(android.os.Bundle):127:127 -> onCreate
-    85:92:void onCreate(android.os.Bundle):143:143 -> onCreate
-    93:101:void onCreate(android.os.Bundle):144:144 -> onCreate
-    102:107:void onCreate(android.os.Bundle):148:148 -> onCreate
-    108:115:void onCreate(android.os.Bundle):149:149 -> onCreate
-    116:124:void onCreate(android.os.Bundle):150:150 -> onCreate
-    125:127:void onCreate(android.os.Bundle):154:154 -> onCreate
-    128:135:void onCreate(android.os.Bundle):155:155 -> onCreate
-    2:4:void onDestroy():514:514 -> onDestroy
-    5:8:void onDestroy():515:515 -> onDestroy
-    9:11:void onDestroy():517:517 -> onDestroy
-    12:16:void onDestroy():518:518 -> onDestroy
-    17:20:void onDestroy():521:521 -> onDestroy
-    1:3:void onNewIntent(android.content.Intent):160:160 -> onNewIntent
-    4:6:void onNewIntent(android.content.Intent):161:161 -> onNewIntent
-    7:10:void onNewIntent(android.content.Intent):162:162 -> onNewIntent
-    1:4:void onPause():504:504 -> onPause
-    5:7:void onPause():505:505 -> onPause
-    8:23:void onPause():507:507 -> onPause
-    24:33:void onPause():508:508 -> onPause
-    1:4:void onResume():289:289 -> onResume
-    5:7:void onResume():290:290 -> onResume
-    8:14:void onResume():291:291 -> onResume
-    15:17:void onResume():292:292 -> onResume
-    18:20:void onResume():293:293 -> onResume
-    21:23:void onResume():294:294 -> onResume
-    24:26:void onResume():295:295 -> onResume
-    27:36:void onResume():297:297 -> onResume
-    37:52:void onResume():298:298 -> onResume
+    49:51:void onCreate(android.os.Bundle):104 -> onCreate
+    52:54:void onCreate(android.os.Bundle):120:120 -> onCreate
+    55:57:void onCreate(android.os.Bundle):121:121 -> onCreate
+    58:60:void onCreate(android.os.Bundle):122:122 -> onCreate
+    61:63:void onCreate(android.os.Bundle):123:123 -> onCreate
+    64:66:void onCreate(android.os.Bundle):124:124 -> onCreate
+    67:69:void onCreate(android.os.Bundle):125:125 -> onCreate
+    70:72:void onCreate(android.os.Bundle):126:126 -> onCreate
+    73:75:void onCreate(android.os.Bundle):127:127 -> onCreate
+    76:79:void onCreate(android.os.Bundle):129:129 -> onCreate
+    80:87:void onCreate(android.os.Bundle):130:130 -> onCreate
+    88:95:void onCreate(android.os.Bundle):146:146 -> onCreate
+    96:104:void onCreate(android.os.Bundle):147:147 -> onCreate
+    105:110:void onCreate(android.os.Bundle):151:151 -> onCreate
+    111:118:void onCreate(android.os.Bundle):152:152 -> onCreate
+    119:127:void onCreate(android.os.Bundle):153:153 -> onCreate
+    128:130:void onCreate(android.os.Bundle):157:157 -> onCreate
+    131:138:void onCreate(android.os.Bundle):158:158 -> onCreate
+    2:4:void onDestroy():589:589 -> onDestroy
+    5:8:void onDestroy():590:590 -> onDestroy
+    9:11:void onDestroy():592:592 -> onDestroy
+    12:16:void onDestroy():593:593 -> onDestroy
+    17:20:void onDestroy():596:596 -> onDestroy
+    1:3:void onNewIntent(android.content.Intent):163:163 -> onNewIntent
+    4:6:void onNewIntent(android.content.Intent):164:164 -> onNewIntent
+    7:10:void onNewIntent(android.content.Intent):165:165 -> onNewIntent
+    1:4:void onPause():579:579 -> onPause
+    5:7:void onPause():580:580 -> onPause
+    8:23:void onPause():582:582 -> onPause
+    24:33:void onPause():583:583 -> onPause
+    1:4:void onResume():292:292 -> onResume
+    5:7:void onResume():293:293 -> onResume
+    8:14:void onResume():294:294 -> onResume
+    15:17:void onResume():295:295 -> onResume
+    18:20:void onResume():296:296 -> onResume
+    21:23:void onResume():297:297 -> onResume
+    24:26:void onResume():298:298 -> onResume
+    27:36:void onResume():300:300 -> onResume
+    37:52:void onResume():301:301 -> onResume
     1:4:void $r8$lambda$tuXa2D02XqJWt4FYG5eQYz8Evqk(com.englishbreakfast.app.MainActivity):0:0 -> p
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$ylsDUQVV4GOtmIhHLt9V7GBd1WI(com.englishbreakfast.app.MainActivity):0:0 -> q
       # {"id":"com.android.tools.r8.synthesized"}
     1:3:com.google.android.gms.auth.api.signin.GoogleSignInClient -$$Nest$fgetgoogleSignInClient(com.englishbreakfast.app.MainActivity):0:0 -> r
       # {"id":"com.android.tools.r8.synthesized"}
-    1:11:void runJsWhenReady(java.lang.String,int):166:166 -> runJsWhenReady
-    12:20:void runJsWhenReady(java.lang.String,int):167:167 -> runJsWhenReady
-    21:27:void runJsWhenReady(java.lang.String,int):168:168 -> runJsWhenReady
-    28:31:void runJsWhenReady(java.lang.String,int):182:182 -> runJsWhenReady
+    1:11:void runJsWhenReady(java.lang.String,int):169:169 -> runJsWhenReady
+    12:20:void runJsWhenReady(java.lang.String,int):170:170 -> runJsWhenReady
+    21:27:void runJsWhenReady(java.lang.String,int):171:171 -> runJsWhenReady
+    28:31:void runJsWhenReady(java.lang.String,int):185:185 -> runJsWhenReady
     1:3:d.ActivityResultLauncher -$$Nest$fgetgoogleSignInLauncher(com.englishbreakfast.app.MainActivity):0:0 -> s
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/MainActivity;)Ld/c;"}
-    1:8:void setupAudioBridge():560:560 -> setupAudioBridge
-    9:18:void setupAudioBridge():583:583 -> setupAudioBridge
-    19:35:void setupAudioBridge():584:584 -> setupAudioBridge
-    1:14:void setupBackNavigation():224:224 -> setupBackNavigation
-    1:9:void setupGoogleAuthBridge():374:374 -> setupGoogleAuthBridge
-    10:13:void setupGoogleAuthBridge():375:375 -> setupGoogleAuthBridge
-    14:17:void setupGoogleAuthBridge():376:376 -> setupGoogleAuthBridge
-    18:21:void setupGoogleAuthBridge():377:377 -> setupGoogleAuthBridge
-    22:27:void setupGoogleAuthBridge():378:378 -> setupGoogleAuthBridge
-    28:30:void setupGoogleAuthBridge():380:380 -> setupGoogleAuthBridge
+    1:6:void setupAnalyticsBridge():331:331 -> setupAnalyticsBridge
+    7:16:void setupAnalyticsBridge():332:332 -> setupAnalyticsBridge
+    17:33:void setupAnalyticsBridge():333:333 -> setupAnalyticsBridge
+    1:8:void setupAudioBridge():635:635 -> setupAudioBridge
+    9:18:void setupAudioBridge():658:658 -> setupAudioBridge
+    19:35:void setupAudioBridge():659:659 -> setupAudioBridge
+    1:14:void setupBackNavigation():227:227 -> setupBackNavigation
+    1:9:void setupGoogleAuthBridge():449:449 -> setupGoogleAuthBridge
+    10:13:void setupGoogleAuthBridge():450:450 -> setupGoogleAuthBridge
+    14:17:void setupGoogleAuthBridge():451:451 -> setupGoogleAuthBridge
+    18:21:void setupGoogleAuthBridge():452:452 -> setupGoogleAuthBridge
+    22:27:void setupGoogleAuthBridge():453:453 -> setupGoogleAuthBridge
+    28:30:void setupGoogleAuthBridge():455:455 -> setupGoogleAuthBridge
     31:33:void androidx.activity.result.contract.ActivityResultContract.<init>():29:29 -> setupGoogleAuthBridge
     31:33:void androidx.activity.result.contract.ActivityResultContracts$StartActivityForResult.<init>():66 -> setupGoogleAuthBridge
-    31:33:void setupGoogleAuthBridge():380 -> setupGoogleAuthBridge
-    34:44:void setupGoogleAuthBridge():380:380 -> setupGoogleAuthBridge
-    45:54:void setupGoogleAuthBridge():389:389 -> setupGoogleAuthBridge
-    55:71:void setupGoogleAuthBridge():390:390 -> setupGoogleAuthBridge
-    1:10:void setupThemeBridge():328:328 -> setupThemeBridge
-    11:27:void setupThemeBridge():329:329 -> setupThemeBridge
-    1:10:void setupWidgetBridge():708:708 -> setupWidgetBridge
-    11:27:void setupWidgetBridge():709:709 -> setupWidgetBridge
+    31:33:void setupGoogleAuthBridge():455 -> setupGoogleAuthBridge
+    34:44:void setupGoogleAuthBridge():455:455 -> setupGoogleAuthBridge
+    45:54:void setupGoogleAuthBridge():464:464 -> setupGoogleAuthBridge
+    55:71:void setupGoogleAuthBridge():465:465 -> setupGoogleAuthBridge
+    1:10:void setupThemeBridge():403:403 -> setupThemeBridge
+    11:27:void setupThemeBridge():404:404 -> setupThemeBridge
+    1:10:void setupWidgetBridge():783:783 -> setupWidgetBridge
+    11:27:void setupWidgetBridge():784:784 -> setupWidgetBridge
     1:3:long -$$Nest$fgetlastBackPressTime(com.englishbreakfast.app.MainActivity):0:0 -> t
       # {"id":"com.android.tools.r8.synthesized"}
-    1:3:float -$$Nest$fgetnavigationBarHeightDp(com.englishbreakfast.app.MainActivity):0:0 -> u
+    1:3:com.google.firebase.analytics.FirebaseAnalytics -$$Nest$fgetmFirebaseAnalytics(com.englishbreakfast.app.MainActivity):0:0 -> u
       # {"id":"com.android.tools.r8.synthesized"}
-    1:1:void updateTrustedOriginState(java.lang.String):57:57 -> updateTrustedOriginState
-    2:4:void updateTrustedOriginState(java.lang.String):61:63 -> updateTrustedOriginState
-    5:7:void updateTrustedOriginState(java.lang.String):68:70 -> updateTrustedOriginState
-    8:8:void updateTrustedOriginState(java.lang.String):65:65 -> updateTrustedOriginState
-    9:9:void updateTrustedOriginState(java.lang.String):72:72 -> updateTrustedOriginState
-    10:10:void updateTrustedOriginState(android.webkit.WebView):78:78 -> updateTrustedOriginState
-    11:11:void updateTrustedOriginState(android.webkit.WebView):81:81 -> updateTrustedOriginState
-    1:3:float -$$Nest$fgetstatusBarHeightDp(com.englishbreakfast.app.MainActivity):0:0 -> v
+    1:1:void updateTrustedOriginState(java.lang.String):59:59 -> updateTrustedOriginState
+    2:4:void updateTrustedOriginState(java.lang.String):63:65 -> updateTrustedOriginState
+    5:7:void updateTrustedOriginState(java.lang.String):70:72 -> updateTrustedOriginState
+    8:8:void updateTrustedOriginState(java.lang.String):67:67 -> updateTrustedOriginState
+    9:9:void updateTrustedOriginState(java.lang.String):74:74 -> updateTrustedOriginState
+    10:10:void updateTrustedOriginState(android.webkit.WebView):80:80 -> updateTrustedOriginState
+    11:11:void updateTrustedOriginState(android.webkit.WebView):83:83 -> updateTrustedOriginState
+    1:3:float -$$Nest$fgetnavigationBarHeightDp(com.englishbreakfast.app.MainActivity):0:0 -> v
       # {"id":"com.android.tools.r8.synthesized"}
-    1:3:android.speech.tts.TextToSpeech -$$Nest$fgettts(com.englishbreakfast.app.MainActivity):0:0 -> w
+    1:3:float -$$Nest$fgetstatusBarHeightDp(com.englishbreakfast.app.MainActivity):0:0 -> w
       # {"id":"com.android.tools.r8.synthesized"}
-    1:3:void -$$Nest$fputlastBackPressTime(com.englishbreakfast.app.MainActivity,long):0:0 -> x
+    1:3:android.speech.tts.TextToSpeech -$$Nest$fgettts(com.englishbreakfast.app.MainActivity):0:0 -> x
       # {"id":"com.android.tools.r8.synthesized"}
-    1:5:boolean -$$Nest$misTrustedOrigin(com.englishbreakfast.app.MainActivity):0:0 -> y
+    1:3:void -$$Nest$fputlastBackPressTime(com.englishbreakfast.app.MainActivity,long):0:0 -> y
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void -$$Nest$mnotifyJsGoogleAuthError(com.englishbreakfast.app.MainActivity,java.lang.String):0:0 -> z
+    1:5:boolean -$$Nest$misTrustedOrigin(com.englishbreakfast.app.MainActivity):0:0 -> z
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.b:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
@@ -80748,23 +80754,152 @@ com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda8 -> com.englishbr
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$1 -> com.englishbreakfast.app.MainActivity$1:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):127:127 -> <init>
-    1:6:void onPageCommitVisible(android.webkit.WebView,java.lang.String):140:140 -> onPageCommitVisible
-    1:6:void onPageLoaded(android.webkit.WebView):135:135 -> onPageLoaded
-    1:6:void onPageStarted(android.webkit.WebView):130:130 -> onPageStarted
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):130:130 -> <init>
+    1:6:void onPageCommitVisible(android.webkit.WebView,java.lang.String):143:143 -> onPageCommitVisible
+    1:6:void onPageLoaded(android.webkit.WebView):138:138 -> onPageLoaded
+    1:6:void onPageStarted(android.webkit.WebView):133:133 -> onPageStarted
+com.englishbreakfast.app.MainActivity$10 -> com.englishbreakfast.app.MainActivity$10:
+# {"id":"sourceFile","fileName":"MainActivity.java"}
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):784:784 -> <init>
+    1:4:void $r8$lambda$QNQBqjfWtjE6z18B_SZJNifkjXE(com.englishbreakfast.app.MainActivity$10,java.lang.String):0:0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$WIMhI8WGb98w6iziB7fMZ8cZPco(com.englishbreakfast.app.MainActivity$10):0:0 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:9:void clearPendingFavorites():875:875 -> clearPendingFavorites
+    10:15:void clearPendingFavorites():876:876 -> clearPendingFavorites
+    1:9:void clearPendingUnfavorites():857:857 -> clearPendingUnfavorites
+    10:15:void clearPendingUnfavorites():858:858 -> clearPendingUnfavorites
+    1:11:java.lang.String getPendingFavorites():863:863 -> getPendingFavorites
+    12:18:java.lang.String getPendingFavorites():864:864 -> getPendingFavorites
+    1:11:java.lang.String getPendingUnfavorites():845:845 -> getPendingUnfavorites
+    12:18:java.lang.String getPendingUnfavorites():846:846 -> getPendingUnfavorites
+    1:11:java.lang.String getWidgetConfig():947:947 -> getWidgetConfig
+    12:18:java.lang.String getWidgetConfig():948:948 -> getWidgetConfig
+    1:9:boolean isPinSupported():822:822 -> isPinSupported
+    10:15:boolean isPinSupported():823:823 -> isPinSupported
+    16:27:boolean isPinSupported():824:824 -> isPinSupported
+    28:37:boolean isPinSupported():825:825 -> isPinSupported
+    1:10:boolean isWidgetInstalled():832:832 -> isWidgetInstalled
+    11:16:boolean isWidgetInstalled():834:834 -> isWidgetInstalled
+    17:25:boolean isWidgetInstalled():835:835 -> isWidgetInstalled
+    26:31:boolean isWidgetInstalled():836:836 -> isWidgetInstalled
+    32:37:boolean isWidgetInstalled():837:837 -> isWidgetInstalled
+    1:11:void lambda$openHomeScreenSettings$1():969:969 -> lambda$openHomeScreenSettings$1
+    12:18:void lambda$openHomeScreenSettings$1():970:970 -> lambda$openHomeScreenSettings$1
+    19:29:void lambda$openHomeScreenSettings$1():971:971 -> lambda$openHomeScreenSettings$1
+    30:32:void lambda$openHomeScreenSettings$1():972:972 -> lambda$openHomeScreenSettings$1
+    33:38:void lambda$openHomeScreenSettings$1():973:973 -> lambda$openHomeScreenSettings$1
+    39:45:void lambda$openHomeScreenSettings$1():978:978 -> lambda$openHomeScreenSettings$1
+    46:70:void lambda$openHomeScreenSettings$1():979:979 -> lambda$openHomeScreenSettings$1
+    71:73:void lambda$openHomeScreenSettings$1():980:980 -> lambda$openHomeScreenSettings$1
+    74:79:void lambda$openHomeScreenSettings$1():981:981 -> lambda$openHomeScreenSettings$1
+    80:86:void lambda$openHomeScreenSettings$1():984:984 -> lambda$openHomeScreenSettings$1
+    87:89:void lambda$openHomeScreenSettings$1():985:985 -> lambda$openHomeScreenSettings$1
+    90:95:void lambda$openHomeScreenSettings$1():986:986 -> lambda$openHomeScreenSettings$1
+    1:18:void lambda$triggerOvertakenAlert$0(java.lang.String):895:895 -> lambda$triggerOvertakenAlert$0
+    19:26:void lambda$triggerOvertakenAlert$0(java.lang.String):896:896 -> lambda$triggerOvertakenAlert$0
+    27:28:void lambda$triggerOvertakenAlert$0(java.lang.String):897:897 -> lambda$triggerOvertakenAlert$0
+    29:45:void lambda$triggerOvertakenAlert$0(java.lang.String):898:898 -> lambda$triggerOvertakenAlert$0
+    46:51:void lambda$triggerOvertakenAlert$0(java.lang.String):899:899 -> lambda$triggerOvertakenAlert$0
+    52:57:void lambda$triggerOvertakenAlert$0(java.lang.String):900:900 -> lambda$triggerOvertakenAlert$0
+    58:61:void lambda$triggerOvertakenAlert$0(java.lang.String):903:903 -> lambda$triggerOvertakenAlert$0
+    62:73:void lambda$triggerOvertakenAlert$0(java.lang.String):904:904 -> lambda$triggerOvertakenAlert$0
+    74:81:void lambda$triggerOvertakenAlert$0(java.lang.String):906:906 -> lambda$triggerOvertakenAlert$0
+    82:88:void lambda$triggerOvertakenAlert$0(java.lang.String):907:907 -> lambda$triggerOvertakenAlert$0
+    89:91:void lambda$triggerOvertakenAlert$0(java.lang.String):912:912 -> lambda$triggerOvertakenAlert$0
+    92:94:void lambda$triggerOvertakenAlert$0(java.lang.String):913:913 -> lambda$triggerOvertakenAlert$0
+    95:99:void lambda$triggerOvertakenAlert$0(java.lang.String):914:914 -> lambda$triggerOvertakenAlert$0
+    100:103:void lambda$triggerOvertakenAlert$0(java.lang.String):915:915 -> lambda$triggerOvertakenAlert$0
+    104:107:void lambda$triggerOvertakenAlert$0(java.lang.String):916:916 -> lambda$triggerOvertakenAlert$0
+    108:111:void lambda$triggerOvertakenAlert$0(java.lang.String):917:917 -> lambda$triggerOvertakenAlert$0
+    112:114:void lambda$triggerOvertakenAlert$0(java.lang.String):918:918 -> lambda$triggerOvertakenAlert$0
+    115:117:void lambda$triggerOvertakenAlert$0(java.lang.String):919:919 -> lambda$triggerOvertakenAlert$0
+    118:128:void lambda$triggerOvertakenAlert$0(java.lang.String):922:922 -> lambda$triggerOvertakenAlert$0
+    129:131:void lambda$triggerOvertakenAlert$0(java.lang.String):923:923 -> lambda$triggerOvertakenAlert$0
+    132:141:void lambda$triggerOvertakenAlert$0(java.lang.String):926:926 -> lambda$triggerOvertakenAlert$0
+    142:150:void lambda$triggerOvertakenAlert$0(java.lang.String):928:928 -> lambda$triggerOvertakenAlert$0
+    151:154:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSmallIcon(int):1426:1426 -> lambda$triggerOvertakenAlert$0
+    151:154:void lambda$triggerOvertakenAlert$0(java.lang.String):929 -> lambda$triggerOvertakenAlert$0
+    155:166:void lambda$triggerOvertakenAlert$0(java.lang.String):929:929 -> lambda$triggerOvertakenAlert$0
+    167:172:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentTitle(java.lang.CharSequence):1472:1472 -> lambda$triggerOvertakenAlert$0
+    167:172:void lambda$triggerOvertakenAlert$0(java.lang.String):930 -> lambda$triggerOvertakenAlert$0
+    173:174:void lambda$triggerOvertakenAlert$0(java.lang.String):930:930 -> lambda$triggerOvertakenAlert$0
+    175:180:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentText(java.lang.CharSequence):1480:1480 -> lambda$triggerOvertakenAlert$0
+    175:180:void lambda$triggerOvertakenAlert$0(java.lang.String):931 -> lambda$triggerOvertakenAlert$0
+    181:182:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setPriority(int):1960:1960 -> lambda$triggerOvertakenAlert$0
+    181:182:void lambda$triggerOvertakenAlert$0(java.lang.String):932 -> lambda$triggerOvertakenAlert$0
+    183:187:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1731:1731 -> lambda$triggerOvertakenAlert$0
+    183:187:void lambda$triggerOvertakenAlert$0(java.lang.String):933 -> lambda$triggerOvertakenAlert$0
+    188:189:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1732:1732 -> lambda$triggerOvertakenAlert$0
+    188:189:void lambda$triggerOvertakenAlert$0(java.lang.String):933 -> lambda$triggerOvertakenAlert$0
+    190:193:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1734:1734 -> lambda$triggerOvertakenAlert$0
+    190:193:void lambda$triggerOvertakenAlert$0(java.lang.String):933 -> lambda$triggerOvertakenAlert$0
+    194:197:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1735:1735 -> lambda$triggerOvertakenAlert$0
+    194:197:void lambda$triggerOvertakenAlert$0(java.lang.String):933 -> lambda$triggerOvertakenAlert$0
+    198:201:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1737:1737 -> lambda$triggerOvertakenAlert$0
+    198:201:void lambda$triggerOvertakenAlert$0(java.lang.String):933 -> lambda$triggerOvertakenAlert$0
+    202:209:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1738:1738 -> lambda$triggerOvertakenAlert$0
+    202:209:void lambda$triggerOvertakenAlert$0(java.lang.String):933 -> lambda$triggerOvertakenAlert$0
+    210:212:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setAutoCancel(boolean):1874:1874 -> lambda$triggerOvertakenAlert$0
+    210:212:void lambda$triggerOvertakenAlert$0(java.lang.String):934 -> lambda$triggerOvertakenAlert$0
+    213:214:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentIntent(android.app.PendingIntent):1625:1625 -> lambda$triggerOvertakenAlert$0
+    213:214:void lambda$triggerOvertakenAlert$0(java.lang.String):935 -> lambda$triggerOvertakenAlert$0
+    215:224:void lambda$triggerOvertakenAlert$0(java.lang.String):937:937 -> lambda$triggerOvertakenAlert$0
+    225:228:void lambda$triggerOvertakenAlert$0(java.lang.String):940:940 -> lambda$triggerOvertakenAlert$0
+    1:9:void openHomeScreenSettings():966:966 -> openHomeScreenSettings
+    10:21:void openHomeScreenSettings():967:967 -> openHomeScreenSettings
+    1:9:void removePendingFavorite(java.lang.String):869:869 -> removePendingFavorite
+    10:15:void removePendingFavorite(java.lang.String):870:870 -> removePendingFavorite
+    1:9:void removePendingUnfavorite(java.lang.String):851:851 -> removePendingUnfavorite
+    10:15:void removePendingUnfavorite(java.lang.String):852:852 -> removePendingUnfavorite
+    1:2:boolean requestPinWidget(java.lang.String):798:799 -> requestPinWidget
+    3:3:boolean requestPinWidget():804:804 -> requestPinWidget
+    4:8:boolean requestPinWidget():806:810 -> requestPinWidget
+    9:9:boolean requestPinWidget():815:815 -> requestPinWidget
+    1:9:void saveWidgetConfig(java.lang.String):953:953 -> saveWidgetConfig
+    10:14:void saveWidgetConfig(java.lang.String):955:955 -> saveWidgetConfig
+    15:19:void saveWidgetConfig(java.lang.String):956:956 -> saveWidgetConfig
+    20:24:void saveWidgetConfig(java.lang.String):957:957 -> saveWidgetConfig
+    25:31:void saveWidgetConfig(java.lang.String):958:958 -> saveWidgetConfig
+    32:35:void saveWidgetConfig(java.lang.String):960:960 -> saveWidgetConfig
+    1:9:void syncFavorites(java.lang.String):787:787 -> syncFavorites
+    10:14:void syncFavorites(java.lang.String):789:789 -> syncFavorites
+    15:21:void syncFavorites(java.lang.String):790:790 -> syncFavorites
+    22:25:void syncFavorites(java.lang.String):792:792 -> syncFavorites
+    1:9:void syncUserRank(int):881:881 -> syncUserRank
+    10:14:void syncUserRank(int):883:883 -> syncUserRank
+    15:21:void syncUserRank(int):884:884 -> syncUserRank
+    22:25:void syncUserRank(int):886:886 -> syncUserRank
+    1:9:void triggerOvertakenAlert(java.lang.String):892:892 -> triggerOvertakenAlert
+    10:21:void triggerOvertakenAlert(java.lang.String):893:893 -> triggerOvertakenAlert
+com.englishbreakfast.app.MainActivity$10$$ExternalSyntheticLambda7 -> com.englishbreakfast.app.g:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int $r8$classId -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$10$$InternalSyntheticLambda$1$40e139e88f2fe2dcaa356cb8874b0ad909573d42a648353a452bdfa021445840$0.f$1 -> b
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$10 com.englishbreakfast.app.MainActivity$10$$InternalSyntheticLambda$1$40e139e88f2fe2dcaa356cb8874b0ad909573d42a648353a452bdfa021445840$0.f$0 -> c
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:void <init>(java.lang.Object,int,java.lang.Object):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:54:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$2 -> com.englishbreakfast.app.MainActivity$2:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:12:void <init>(com.englishbreakfast.app.MainActivity,java.lang.String,int,android.os.Handler):168:168 -> <init>
-    13:15:void <init>(com.englishbreakfast.app.MainActivity,java.lang.String,int,android.os.Handler):169:169 -> <init>
+    1:12:void <init>(com.englishbreakfast.app.MainActivity,java.lang.String,int,android.os.Handler):171:171 -> <init>
+    13:15:void <init>(com.englishbreakfast.app.MainActivity,java.lang.String,int,android.os.Handler):172:172 -> <init>
     1:4:void $r8$lambda$3juenEWTPItPZOsbgSDmcuaIxtU(com.englishbreakfast.app.MainActivity$2,int,android.os.Handler,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:17:void lambda$run$0(int,android.os.Handler,java.lang.String):175:175 -> lambda$run$0
-    18:23:void lambda$run$0(int,android.os.Handler,java.lang.String):176:176 -> lambda$run$0
-    24:27:void lambda$run$0(int,android.os.Handler,java.lang.String):177:177 -> lambda$run$0
-    1:37:void run():172:172 -> run
-    38:43:void run():173:173 -> run
-    44:68:void run():174:174 -> run
-com.englishbreakfast.app.MainActivity$2$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.g:
+    1:17:void lambda$run$0(int,android.os.Handler,java.lang.String):178:178 -> lambda$run$0
+    18:23:void lambda$run$0(int,android.os.Handler,java.lang.String):179:179 -> lambda$run$0
+    24:27:void lambda$run$0(int,android.os.Handler,java.lang.String):180:180 -> lambda$run$0
+    1:37:void run():175:175 -> run
+    38:43:void run():176:176 -> run
+    44:68:void run():177:177 -> run
+com.englishbreakfast.app.MainActivity$2$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.h:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$2 com.englishbreakfast.app.MainActivity$2$$InternalSyntheticLambda$1$8c3e04dd22da2db14a593f9e9a2f34dfdbdee9deaa1f312a7666e1afa2a959b9$0.f$0 -> a
@@ -80779,21 +80914,21 @@ com.englishbreakfast.app.MainActivity$2$$ExternalSyntheticLambda0 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$3 -> com.englishbreakfast.app.MainActivity$3:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity,boolean):224:224 -> <init>
+    1:6:void <init>(com.englishbreakfast.app.MainActivity,boolean):227:227 -> <init>
     1:4:void $r8$lambda$NX4SZT4wEMuKsr9SGraO2QKpAzY(com.englishbreakfast.app.MainActivity$3,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:20:void handleOnBackPressed():227:227 -> handleOnBackPressed
-    21:41:void handleOnBackPressed():228:228 -> handleOnBackPressed
-    42:47:void handleOnBackPressed():248:248 -> handleOnBackPressed
-    1:17:void lambda$handleOnBackPressed$0(java.lang.String):231:231 -> lambda$handleOnBackPressed$0
-    18:33:void lambda$handleOnBackPressed$0(java.lang.String):233:233 -> lambda$handleOnBackPressed$0
-    34:47:void lambda$handleOnBackPressed$0(java.lang.String):234:234 -> lambda$handleOnBackPressed$0
-    48:51:void lambda$handleOnBackPressed$0(java.lang.String):237:237 -> lambda$handleOnBackPressed$0
-    52:65:void lambda$handleOnBackPressed$0(java.lang.String):238:238 -> lambda$handleOnBackPressed$0
-    66:71:void lambda$handleOnBackPressed$0(java.lang.String):239:239 -> lambda$handleOnBackPressed$0
-    72:76:void lambda$handleOnBackPressed$0(java.lang.String):241:241 -> lambda$handleOnBackPressed$0
-    77:89:void lambda$handleOnBackPressed$0(java.lang.String):242:242 -> lambda$handleOnBackPressed$0
-com.englishbreakfast.app.MainActivity$3$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.h:
+    1:20:void handleOnBackPressed():230:230 -> handleOnBackPressed
+    21:41:void handleOnBackPressed():231:231 -> handleOnBackPressed
+    42:47:void handleOnBackPressed():251:251 -> handleOnBackPressed
+    1:17:void lambda$handleOnBackPressed$0(java.lang.String):234:234 -> lambda$handleOnBackPressed$0
+    18:33:void lambda$handleOnBackPressed$0(java.lang.String):236:236 -> lambda$handleOnBackPressed$0
+    34:47:void lambda$handleOnBackPressed$0(java.lang.String):237:237 -> lambda$handleOnBackPressed$0
+    48:51:void lambda$handleOnBackPressed$0(java.lang.String):240:240 -> lambda$handleOnBackPressed$0
+    52:65:void lambda$handleOnBackPressed$0(java.lang.String):241:241 -> lambda$handleOnBackPressed$0
+    66:71:void lambda$handleOnBackPressed$0(java.lang.String):242:242 -> lambda$handleOnBackPressed$0
+    72:76:void lambda$handleOnBackPressed$0(java.lang.String):244:244 -> lambda$handleOnBackPressed$0
+    77:89:void lambda$handleOnBackPressed$0(java.lang.String):245:245 -> lambda$handleOnBackPressed$0
+com.englishbreakfast.app.MainActivity$3$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.i:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$3 com.englishbreakfast.app.MainActivity$3$$InternalSyntheticLambda$1$cc8b93a4cdd490645d9a797123bfae8cb38e899f55ab1c255e051e87900bceb2$0.f$0 -> a
@@ -80804,239 +80939,313 @@ com.englishbreakfast.app.MainActivity$3$$ExternalSyntheticLambda0 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$4 -> com.englishbreakfast.app.MainActivity$4:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):329:329 -> <init>
-    1:4:void $r8$lambda$yjPwWF9MM2lPEmA4YflhENQOKCw(com.englishbreakfast.app.MainActivity$4,java.lang.String):0:0 -> a
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):333:333 -> <init>
+    1:4:void $r8$lambda$QsVghhbwuxLQHBs8e-EqLymJyv0(com.englishbreakfast.app.MainActivity$4,java.lang.String,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:10:float getNavigationBarHeightDp():364:364 -> getNavigationBarHeightDp
-    11:28:float getNavigationBarHeightDp():365:365 -> getNavigationBarHeightDp
-    1:10:float getStatusBarHeightDp():358:358 -> getStatusBarHeightDp
-    11:30:float getStatusBarHeightDp():359:359 -> getStatusBarHeightDp
-    1:12:void lambda$setWindowThemeColor$0(java.lang.String):335:335 -> lambda$setWindowThemeColor$0
-    13:20:void lambda$setWindowThemeColor$0(java.lang.String):336:336 -> lambda$setWindowThemeColor$0
-    21:30:void lambda$setWindowThemeColor$0(java.lang.String):337:337 -> lambda$setWindowThemeColor$0
-    31:40:void lambda$setWindowThemeColor$0(java.lang.String):338:338 -> lambda$setWindowThemeColor$0
-    41:47:void lambda$setWindowThemeColor$0(java.lang.String):339:339 -> lambda$setWindowThemeColor$0
-    48:49:void lambda$setWindowThemeColor$0(java.lang.String):340:340 -> lambda$setWindowThemeColor$0
-    50:63:void lambda$setWindowThemeColor$0(java.lang.String):341:341 -> lambda$setWindowThemeColor$0
+    1:4:void $r8$lambda$jKzkMNb2uHnh0s5K1FcpD3ERM4U(com.englishbreakfast.app.MainActivity$4,java.lang.String,java.lang.String):0:0 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$u2rBbvpnCb4UrIrMjnrHF6e7Ygw(com.englishbreakfast.app.MainActivity$4,java.lang.String):0:0 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$wnKTYj4j86WqHpWtHBWPAKXAqnE(com.englishbreakfast.app.MainActivity$4,java.lang.String,java.lang.String):0:0 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:7:void lambda$logEvent$0(java.lang.String,java.lang.String):339:339 -> lambda$logEvent$0
+    8:25:void lambda$logEvent$0(java.lang.String,java.lang.String):340:340 -> lambda$logEvent$0
+    26:30:void lambda$logEvent$0(java.lang.String,java.lang.String):341:341 -> lambda$logEvent$0
+    31:34:void lambda$logEvent$0(java.lang.String,java.lang.String):342:342 -> lambda$logEvent$0
+    35:40:void lambda$logEvent$0(java.lang.String,java.lang.String):343:343 -> lambda$logEvent$0
+    41:46:void lambda$logEvent$0(java.lang.String,java.lang.String):344:344 -> lambda$logEvent$0
+    47:50:void lambda$logEvent$0(java.lang.String,java.lang.String):345:345 -> lambda$logEvent$0
+    51:54:void lambda$logEvent$0(java.lang.String,java.lang.String):346:346 -> lambda$logEvent$0
+    55:64:void lambda$logEvent$0(java.lang.String,java.lang.String):347:347 -> lambda$logEvent$0
+    65:68:void lambda$logEvent$0(java.lang.String,java.lang.String):348:348 -> lambda$logEvent$0
+    69:78:void lambda$logEvent$0(java.lang.String,java.lang.String):349:349 -> lambda$logEvent$0
+    79:82:void lambda$logEvent$0(java.lang.String,java.lang.String):350:350 -> lambda$logEvent$0
+    83:92:void lambda$logEvent$0(java.lang.String,java.lang.String):351:351 -> lambda$logEvent$0
+    93:96:void lambda$logEvent$0(java.lang.String,java.lang.String):352:352 -> lambda$logEvent$0
+    97:104:void lambda$logEvent$0(java.lang.String,java.lang.String):353:353 -> lambda$logEvent$0
+    105:112:void lambda$logEvent$0(java.lang.String,java.lang.String):355:355 -> lambda$logEvent$0
+    113:122:void lambda$logEvent$0(java.lang.String,java.lang.String):359:359 -> lambda$logEvent$0
+    1:10:void lambda$setUserId$2(java.lang.String):382:382 -> lambda$setUserId$2
+    1:10:void lambda$setUserProperty$3(java.lang.String,java.lang.String):392:392 -> lambda$setUserProperty$3
+    1:5:void lambda$trackScreen$1(java.lang.String,java.lang.String):369:369 -> lambda$trackScreen$1
+    6:10:void lambda$trackScreen$1(java.lang.String,java.lang.String):370:370 -> lambda$trackScreen$1
+    11:20:void lambda$trackScreen$1(java.lang.String,java.lang.String):371:371 -> lambda$trackScreen$1
+    21:32:void lambda$trackScreen$1(java.lang.String,java.lang.String):372:372 -> lambda$trackScreen$1
+    1:19:void logEvent(java.lang.String,java.lang.String):336:336 -> logEvent
+    20:31:void logEvent(java.lang.String,java.lang.String):337:337 -> logEvent
+    1:17:void setUserId(java.lang.String):379:379 -> setUserId
+    18:29:void setUserId(java.lang.String):380:380 -> setUserId
+    1:19:void setUserProperty(java.lang.String,java.lang.String):389:389 -> setUserProperty
+    20:31:void setUserProperty(java.lang.String,java.lang.String):390:390 -> setUserProperty
+    1:19:void trackScreen(java.lang.String,java.lang.String):366:366 -> trackScreen
+    20:31:void trackScreen(java.lang.String,java.lang.String):367:367 -> trackScreen
+com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.j:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int $r8$classId -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$4 com.englishbreakfast.app.MainActivity$4$$InternalSyntheticLambda$1$03aefaa33f3845c569f6f869aab2a32bc0a33e32bb9b94d574c9e08ec817f4d3$0.f$0 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$4$$InternalSyntheticLambda$1$03aefaa33f3845c569f6f869aab2a32bc0a33e32bb9b94d574c9e08ec817f4d3$0.f$1 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$4$$InternalSyntheticLambda$1$03aefaa33f3845c569f6f869aab2a32bc0a33e32bb9b94d574c9e08ec817f4d3$0.f$2 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:12:void <init>(com.englishbreakfast.app.MainActivity$4,java.lang.String,java.lang.String,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:36:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.MainActivity$5 -> com.englishbreakfast.app.MainActivity$5:
+# {"id":"sourceFile","fileName":"MainActivity.java"}
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):404:404 -> <init>
+    1:4:void $r8$lambda$QxL8tpdR73Mv9yQutxQYkYVjNyk(com.englishbreakfast.app.MainActivity$5,java.lang.String):0:0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:float getNavigationBarHeightDp():439:439 -> getNavigationBarHeightDp
+    11:28:float getNavigationBarHeightDp():440:440 -> getNavigationBarHeightDp
+    1:10:float getStatusBarHeightDp():433:433 -> getStatusBarHeightDp
+    11:30:float getStatusBarHeightDp():434:434 -> getStatusBarHeightDp
+    1:12:void lambda$setWindowThemeColor$0(java.lang.String):410:410 -> lambda$setWindowThemeColor$0
+    13:20:void lambda$setWindowThemeColor$0(java.lang.String):411:411 -> lambda$setWindowThemeColor$0
+    21:30:void lambda$setWindowThemeColor$0(java.lang.String):412:412 -> lambda$setWindowThemeColor$0
+    31:40:void lambda$setWindowThemeColor$0(java.lang.String):413:413 -> lambda$setWindowThemeColor$0
+    41:47:void lambda$setWindowThemeColor$0(java.lang.String):414:414 -> lambda$setWindowThemeColor$0
+    48:49:void lambda$setWindowThemeColor$0(java.lang.String):415:415 -> lambda$setWindowThemeColor$0
+    50:63:void lambda$setWindowThemeColor$0(java.lang.String):416:416 -> lambda$setWindowThemeColor$0
     64:68:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):129:129 -> lambda$setWindowThemeColor$0
     64:68:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    64:68:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    64:68:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     69:74:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):131:131 -> lambda$setWindowThemeColor$0
     69:74:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    69:74:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    69:74:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     75:77:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):132:132 -> lambda$setWindowThemeColor$0
     75:77:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    75:77:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    75:77:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     78:85:void androidx.core.view.WindowInsetsControllerCompat$Impl31.<init>(android.view.Window,androidx.core.view.WindowInsetsControllerCompat,androidx.core.view.SoftwareKeyboardControllerCompat):876:876 -> lambda$setWindowThemeColor$0
     78:85:void androidx.core.view.WindowInsetsControllerCompat$Impl35.<init>(android.view.Window,androidx.core.view.WindowInsetsControllerCompat,androidx.core.view.SoftwareKeyboardControllerCompat):916 -> lambda$setWindowThemeColor$0
     78:85:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):132 -> lambda$setWindowThemeColor$0
     78:85:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    78:85:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    78:85:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     86:96:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):134:134 -> lambda$setWindowThemeColor$0
     86:96:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    86:96:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    86:96:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     97:99:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):136:136 -> lambda$setWindowThemeColor$0
     97:99:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    97:99:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    97:99:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     100:103:void androidx.core.view.WindowInsetsControllerCompat$Impl23.<init>(android.view.Window,androidx.core.view.SoftwareKeyboardControllerCompat):576:576 -> lambda$setWindowThemeColor$0
     100:103:void androidx.core.view.WindowInsetsControllerCompat$Impl26.<init>(android.view.Window,androidx.core.view.SoftwareKeyboardControllerCompat):602 -> lambda$setWindowThemeColor$0
     100:103:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):136 -> lambda$setWindowThemeColor$0
     100:103:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    100:103:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    100:103:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     104:106:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):138:138 -> lambda$setWindowThemeColor$0
     104:106:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    104:106:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    104:106:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     107:111:void androidx.core.view.WindowInsetsControllerCompat$Impl23.<init>(android.view.Window,androidx.core.view.SoftwareKeyboardControllerCompat):576:576 -> lambda$setWindowThemeColor$0
     107:111:void androidx.core.view.WindowInsetsControllerCompat.<init>(android.view.Window,android.view.View):138 -> lambda$setWindowThemeColor$0
     107:111:androidx.core.view.WindowInsetsControllerCompat androidx.core.view.WindowCompat.getInsetsController(android.view.Window,android.view.View):141 -> lambda$setWindowThemeColor$0
-    107:111:void lambda$setWindowThemeColor$0(java.lang.String):341 -> lambda$setWindowThemeColor$0
+    107:111:void lambda$setWindowThemeColor$0(java.lang.String):416 -> lambda$setWindowThemeColor$0
     112:114:void androidx.core.view.WindowInsetsControllerCompat.setAppearanceLightStatusBars(boolean):231:231 -> lambda$setWindowThemeColor$0
-    112:114:void lambda$setWindowThemeColor$0(java.lang.String):345 -> lambda$setWindowThemeColor$0
+    112:114:void lambda$setWindowThemeColor$0(java.lang.String):420 -> lambda$setWindowThemeColor$0
     115:119:void androidx.core.view.WindowInsetsControllerCompat.setAppearanceLightNavigationBars(boolean):265:265 -> lambda$setWindowThemeColor$0
-    115:119:void lambda$setWindowThemeColor$0(java.lang.String):346 -> lambda$setWindowThemeColor$0
-    120:126:void lambda$setWindowThemeColor$0(java.lang.String):348:348 -> lambda$setWindowThemeColor$0
-    127:137:void lambda$setWindowThemeColor$0(java.lang.String):349:349 -> lambda$setWindowThemeColor$0
-    138:146:void lambda$setWindowThemeColor$0(java.lang.String):350:350 -> lambda$setWindowThemeColor$0
-    147:156:void lambda$setWindowThemeColor$0(java.lang.String):351:351 -> lambda$setWindowThemeColor$0
-    1:9:void setWindowThemeColor(java.lang.String):332:332 -> setWindowThemeColor
-    10:21:void setWindowThemeColor(java.lang.String):333:333 -> setWindowThemeColor
-com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.i:
-# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
-# {"id":"com.android.tools.r8.synthesized"}
-    int $r8$classId -> a
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$4$$InternalSyntheticLambda$1$8ffbcadb60bc1fd086f9961b68547fa63af4dd5effa6878387c7e6873a678352$0.f$1 -> b
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$4 com.englishbreakfast.app.MainActivity$4$$InternalSyntheticLambda$1$8ffbcadb60bc1fd086f9961b68547fa63af4dd5effa6878387c7e6873a678352$0.f$0 -> c
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:10:void <init>(java.lang.Object,int,java.lang.Object):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:42:void run():0:0 -> run
-      # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$5 -> com.englishbreakfast.app.MainActivity$5:
+    115:119:void lambda$setWindowThemeColor$0(java.lang.String):421 -> lambda$setWindowThemeColor$0
+    120:126:void lambda$setWindowThemeColor$0(java.lang.String):423:423 -> lambda$setWindowThemeColor$0
+    127:137:void lambda$setWindowThemeColor$0(java.lang.String):424:424 -> lambda$setWindowThemeColor$0
+    138:146:void lambda$setWindowThemeColor$0(java.lang.String):425:425 -> lambda$setWindowThemeColor$0
+    147:156:void lambda$setWindowThemeColor$0(java.lang.String):426:426 -> lambda$setWindowThemeColor$0
+    1:9:void setWindowThemeColor(java.lang.String):407:407 -> setWindowThemeColor
+    10:21:void setWindowThemeColor(java.lang.String):408:408 -> setWindowThemeColor
+com.englishbreakfast.app.MainActivity$6 -> com.englishbreakfast.app.MainActivity$6:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):390:390 -> <init>
-    1:4:void $r8$lambda$9qrfRhKQgNmIJZ3CqPrr6AhwSWc(com.englishbreakfast.app.MainActivity$5):0:0 -> a
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):465:465 -> <init>
+    1:4:void $r8$lambda$87p4bIXxbHxD3mD7THFH7uxnbQQ(com.englishbreakfast.app.MainActivity$6):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$Gbkp215OIQvnqbmTP_7AfSKkANI(com.englishbreakfast.app.MainActivity$5,com.google.android.gms.tasks.Task):0:0 -> b
+    1:4:void $r8$lambda$EA3d4sz8BllYSR01SoOd_F976bI(com.englishbreakfast.app.MainActivity$6,com.google.android.gms.tasks.Task):0:0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$UkUlrcOVEwrFhKY81rOQPiFzEoo(com.englishbreakfast.app.MainActivity$5):0:0 -> c
+    1:4:void $r8$lambda$RfMQWweT8_R4OobVff9oO9FNDOw(com.englishbreakfast.app.MainActivity$6):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
-    1:12:boolean isAvailable():393:393 -> isAvailable
-    1:10:void lambda$signInWithGoogle$0(com.google.android.gms.tasks.Task):404:404 -> lambda$signInWithGoogle$0
-    11:16:void lambda$signInWithGoogle$0(com.google.android.gms.tasks.Task):405:405 -> lambda$signInWithGoogle$0
+    1:12:boolean isAvailable():468:468 -> isAvailable
+    1:10:void lambda$signInWithGoogle$0(com.google.android.gms.tasks.Task):479:479 -> lambda$signInWithGoogle$0
+    11:16:void lambda$signInWithGoogle$0(com.google.android.gms.tasks.Task):480:480 -> lambda$signInWithGoogle$0
     17:20:void androidx.activity.result.ActivityResultLauncher.launch(java.lang.Object):37:37 -> lambda$signInWithGoogle$0
-    17:20:void lambda$signInWithGoogle$0(com.google.android.gms.tasks.Task):405 -> lambda$signInWithGoogle$0
+    17:20:void lambda$signInWithGoogle$0(com.google.android.gms.tasks.Task):480 -> lambda$signInWithGoogle$0
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
-    1:16:void lambda$signInWithGoogle$1():402:402 -> lambda$signInWithGoogle$1
-    17:37:void lambda$signInWithGoogle$1():403:403 -> lambda$signInWithGoogle$1
-    38:45:void lambda$signInWithGoogle$1():408:408 -> lambda$signInWithGoogle$1
-    46:69:void lambda$signInWithGoogle$1():411:411 -> lambda$signInWithGoogle$1
-    1:8:void lambda$signOutGoogle$2():421:421 -> lambda$signOutGoogle$2
-    9:18:void lambda$signOutGoogle$2():422:422 -> lambda$signOutGoogle$2
-    1:9:void signInWithGoogle():399:399 -> signInWithGoogle
-    10:21:void signInWithGoogle():400:400 -> signInWithGoogle
-    1:9:void signOutGoogle():418:418 -> signOutGoogle
-    10:21:void signOutGoogle():419:419 -> signOutGoogle
-com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.j:
+    1:16:void lambda$signInWithGoogle$1():477:477 -> lambda$signInWithGoogle$1
+    17:37:void lambda$signInWithGoogle$1():478:478 -> lambda$signInWithGoogle$1
+    38:45:void lambda$signInWithGoogle$1():483:483 -> lambda$signInWithGoogle$1
+    46:69:void lambda$signInWithGoogle$1():486:486 -> lambda$signInWithGoogle$1
+    1:8:void lambda$signOutGoogle$2():496:496 -> lambda$signOutGoogle$2
+    9:18:void lambda$signOutGoogle$2():497:497 -> lambda$signOutGoogle$2
+    1:9:void signInWithGoogle():474:474 -> signInWithGoogle
+    10:21:void signInWithGoogle():475:475 -> signInWithGoogle
+    1:9:void signOutGoogle():493:493 -> signOutGoogle
+    10:21:void signOutGoogle():494:494 -> signOutGoogle
+com.englishbreakfast.app.MainActivity$6$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.k:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$5 com.englishbreakfast.app.MainActivity$5$$InternalSyntheticLambda$1$6d2d7511df48402446f2fd21dddb5951bde74d193c19eef3ef2f1cf436aa9441$0.f$0 -> b
+    com.englishbreakfast.app.MainActivity$6 com.englishbreakfast.app.MainActivity$6$$InternalSyntheticLambda$1$473059381b1d42438ea5731333eddd2a99304afddaae3bb2f51017f15e362584$0.f$0 -> b
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
     1:8:void <init>(java.lang.Object,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
     1:30:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$6 -> com.englishbreakfast.app.MainActivity$6:
-# {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):530:530 -> <init>
-    1:6:void onDone(java.lang.String):536:536 -> onDone
-    1:6:void onError(java.lang.String):541:541 -> onError
-    1:1:void onStart(java.lang.String):0:0 -> onStart
 com.englishbreakfast.app.MainActivity$7 -> com.englishbreakfast.app.MainActivity$7:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):560:560 -> <init>
-    1:4:void $r8$lambda$LiaLhjzwjuGDhGzNO1uKGGucIow(com.englishbreakfast.app.MainActivity$7):0:0 -> a
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$zEEvNjfAbwggVvrwdjimYM_D0_0(com.englishbreakfast.app.MainActivity$7):0:0 -> b
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:17:void lambda$onNextWord$1():575:575 -> lambda$onNextWord$1
-    1:17:void lambda$onTogglePlay$0():565:565 -> lambda$onTogglePlay$0
-    1:20:void onNextWord():573:573 -> onNextWord
-    21:40:void onNextWord():574:574 -> onNextWord
-    1:20:void onTogglePlay():563:563 -> onTogglePlay
-    21:40:void onTogglePlay():564:564 -> onTogglePlay
-com.englishbreakfast.app.MainActivity$7$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.k:
-# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
-# {"id":"com.android.tools.r8.synthesized"}
-    int $r8$classId -> a
-      # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$7 com.englishbreakfast.app.MainActivity$7$$InternalSyntheticLambda$1$58ff103263820cc5d5e5c2adbc4180487d1e14f1bc6748c126e4c4f6f7cc3296$0.f$0 -> b
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:8:void <init>(com.englishbreakfast.app.MainActivity$7,int):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:18:void run():0:0 -> run
-      # {"id":"com.android.tools.r8.synthesized"}
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):605:605 -> <init>
+    1:6:void onDone(java.lang.String):611:611 -> onDone
+    1:6:void onError(java.lang.String):616:616 -> onError
+    1:1:void onStart(java.lang.String):0:0 -> onStart
 com.englishbreakfast.app.MainActivity$8 -> com.englishbreakfast.app.MainActivity$8:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):584:584 -> <init>
-    1:4:void $r8$lambda$DpWXNurwRUVTDRDk9wGKakqWqyQ(com.englishbreakfast.app.MainActivity$8):0:0 -> a
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):635:635 -> <init>
+    1:4:void $r8$lambda$alVT35qG8LkCX815ap-QBowSuJc(com.englishbreakfast.app.MainActivity$8):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$Tm4WJw4zeQyuDyUIlbH9Ks6hROk(com.englishbreakfast.app.MainActivity$8,java.lang.String,java.lang.String,float,java.lang.String):0:0 -> b
+    1:4:void $r8$lambda$cyxAtlcCd_-pzpJHPz3wZG_ckv8(com.englishbreakfast.app.MainActivity$8):0:0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$lRHxE6D-n-YfMjNYXkA-VrC1UtQ(com.englishbreakfast.app.MainActivity$8,java.lang.String,java.lang.String,boolean):0:0 -> c
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$tAXPjqrmIAWxOLIS96eQ1R-AW70(com.englishbreakfast.app.MainActivity$8,java.lang.String,java.lang.String):0:0 -> d
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$v0Mz9LFaz_EhchCSUQ0NJWI3lis(com.englishbreakfast.app.MainActivity$8):0:0 -> e
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:16:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):649:649 -> lambda$speakText$3
-    17:22:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):650:650 -> lambda$speakText$3
-    23:39:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):654:654 -> lambda$speakText$3
-    40:57:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):656:656 -> lambda$speakText$3
-    58:75:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):658:658 -> lambda$speakText$3
-    76:101:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):660:660 -> lambda$speakText$3
-    102:118:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):662:662 -> lambda$speakText$3
-    119:135:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):664:664 -> lambda$speakText$3
-    136:152:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):666:666 -> lambda$speakText$3
-    153:158:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):668:668 -> lambda$speakText$3
-    159:162:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):669:669 -> lambda$speakText$3
-    163:175:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):670:670 -> lambda$speakText$3
-    176:181:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):672:672 -> lambda$speakText$3
-    182:187:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):674:674 -> lambda$speakText$3
-    188:195:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):667:667 -> lambda$speakText$3
-    196:198:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):665:665 -> lambda$speakText$3
-    199:201:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):663:663 -> lambda$speakText$3
-    202:204:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):661:661 -> lambda$speakText$3
-    205:207:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):659:659 -> lambda$speakText$3
-    208:213:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):657:657 -> lambda$speakText$3
-    214:220:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):655:655 -> lambda$speakText$3
-    221:240:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):676:676 -> lambda$speakText$3
-    241:249:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):678:678 -> lambda$speakText$3
-    250:258:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):679:679 -> lambda$speakText$3
-    259:263:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):680:680 -> lambda$speakText$3
-    264:268:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):681:681 -> lambda$speakText$3
-    269:278:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):682:682 -> lambda$speakText$3
-    279:284:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):684:684 -> lambda$speakText$3
-    1:9:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):590:590 -> lambda$startBackgroundMode$0
-    10:14:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):591:591 -> lambda$startBackgroundMode$0
-    15:19:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):592:592 -> lambda$startBackgroundMode$0
-    20:24:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):593:593 -> lambda$startBackgroundMode$0
-    25:30:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):594:594 -> lambda$startBackgroundMode$0
-    31:36:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):595:595 -> lambda$startBackgroundMode$0
-    37:42:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):596:596 -> lambda$startBackgroundMode$0
-    43:48:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):598:598 -> lambda$startBackgroundMode$0
-    1:9:void lambda$stopBackgroundMode$2():628:628 -> lambda$stopBackgroundMode$2
-    10:14:void lambda$stopBackgroundMode$2():629:629 -> lambda$stopBackgroundMode$2
-    15:20:void lambda$stopBackgroundMode$2():630:630 -> lambda$stopBackgroundMode$2
-    1:8:void lambda$stopSpeech$4():695:695 -> lambda$stopSpeech$4
-    9:18:void lambda$stopSpeech$4():696:696 -> lambda$stopSpeech$4
-    1:9:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):609:609 -> lambda$updateNotification$1
-    10:14:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):610:610 -> lambda$updateNotification$1
-    15:19:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):611:611 -> lambda$updateNotification$1
-    20:24:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):612:612 -> lambda$updateNotification$1
-    25:29:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):613:613 -> lambda$updateNotification$1
-    30:35:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):614:614 -> lambda$updateNotification$1
-    36:41:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):615:615 -> lambda$updateNotification$1
-    42:47:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):617:617 -> lambda$updateNotification$1
-    1:2:boolean speakText(java.lang.String,java.lang.String,java.lang.String):637:638 -> speakText
-    3:4:boolean speakText(java.lang.String,java.lang.String,java.lang.String,float):643:644 -> speakText
-    5:5:boolean speakText(java.lang.String,java.lang.String,java.lang.String,float):647:647 -> speakText
-    1:9:void startBackgroundMode(java.lang.String,java.lang.String):587:587 -> startBackgroundMode
-    10:21:void startBackgroundMode(java.lang.String,java.lang.String):588:588 -> startBackgroundMode
-    1:9:void stopBackgroundMode():625:625 -> stopBackgroundMode
-    10:21:void stopBackgroundMode():626:626 -> stopBackgroundMode
-    1:9:void stopSpeech():692:692 -> stopSpeech
-    10:21:void stopSpeech():693:693 -> stopSpeech
-    1:9:void updateNotification(java.lang.String,java.lang.String,boolean):606:606 -> updateNotification
-    10:20:void updateNotification(java.lang.String,java.lang.String,boolean):607:607 -> updateNotification
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.l:
+    1:17:void lambda$onNextWord$1():650:650 -> lambda$onNextWord$1
+    1:17:void lambda$onTogglePlay$0():640:640 -> lambda$onTogglePlay$0
+    1:20:void onNextWord():648:648 -> onNextWord
+    21:40:void onNextWord():649:649 -> onNextWord
+    1:20:void onTogglePlay():638:638 -> onTogglePlay
+    21:40:void onTogglePlay():639:639 -> onTogglePlay
+com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.l:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$330d22f5915d3fdd822bcf6add6f37f67986a3e3717cc1eaa04e7529353e61f9$0.f$0 -> b
+    com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$144431aa3950e1ff39449572b4ca3cd1dc598095a25472ad4ff3c78a10273c9e$0.f$0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
     1:8:void <init>(com.englishbreakfast.app.MainActivity$8,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
     1:18:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.m:
+com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity$9:
+# {"id":"sourceFile","fileName":"MainActivity.java"}
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):659:659 -> <init>
+    1:4:void $r8$lambda$-vP0X-TyNsQbQ3Ed95yyozE8zx4(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,boolean):0:0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$8paGLOCVL6-e8VTCoMZRlWZ1pMA(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String):0:0 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$NEC0iMhYusxSz4N-VKpGWoL7IOE(com.englishbreakfast.app.MainActivity$9):0:0 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$Vh105pp7e4UyW7sCOaIdoVjFSZk(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,float,java.lang.String):0:0 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$vA1AVmYOX7lh4Ag2Cc5FVphxT7Q(com.englishbreakfast.app.MainActivity$9):0:0 -> e
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:16:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):724:724 -> lambda$speakText$3
+    17:22:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):725:725 -> lambda$speakText$3
+    23:39:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):729:729 -> lambda$speakText$3
+    40:57:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):731:731 -> lambda$speakText$3
+    58:75:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):733:733 -> lambda$speakText$3
+    76:101:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):735:735 -> lambda$speakText$3
+    102:118:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):737:737 -> lambda$speakText$3
+    119:135:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):739:739 -> lambda$speakText$3
+    136:152:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):741:741 -> lambda$speakText$3
+    153:158:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):743:743 -> lambda$speakText$3
+    159:162:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):744:744 -> lambda$speakText$3
+    163:175:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):745:745 -> lambda$speakText$3
+    176:181:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):747:747 -> lambda$speakText$3
+    182:187:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):749:749 -> lambda$speakText$3
+    188:195:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):742:742 -> lambda$speakText$3
+    196:198:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):740:740 -> lambda$speakText$3
+    199:201:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):738:738 -> lambda$speakText$3
+    202:204:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):736:736 -> lambda$speakText$3
+    205:207:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):734:734 -> lambda$speakText$3
+    208:213:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):732:732 -> lambda$speakText$3
+    214:220:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):730:730 -> lambda$speakText$3
+    221:240:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):751:751 -> lambda$speakText$3
+    241:249:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):753:753 -> lambda$speakText$3
+    250:258:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):754:754 -> lambda$speakText$3
+    259:263:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):755:755 -> lambda$speakText$3
+    264:268:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):756:756 -> lambda$speakText$3
+    269:278:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):757:757 -> lambda$speakText$3
+    279:284:void lambda$speakText$3(java.lang.String,java.lang.String,float,java.lang.String):759:759 -> lambda$speakText$3
+    1:9:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):665:665 -> lambda$startBackgroundMode$0
+    10:14:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):666:666 -> lambda$startBackgroundMode$0
+    15:19:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):667:667 -> lambda$startBackgroundMode$0
+    20:24:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):668:668 -> lambda$startBackgroundMode$0
+    25:30:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):669:669 -> lambda$startBackgroundMode$0
+    31:36:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):670:670 -> lambda$startBackgroundMode$0
+    37:42:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):671:671 -> lambda$startBackgroundMode$0
+    43:48:void lambda$startBackgroundMode$0(java.lang.String,java.lang.String):673:673 -> lambda$startBackgroundMode$0
+    1:9:void lambda$stopBackgroundMode$2():703:703 -> lambda$stopBackgroundMode$2
+    10:14:void lambda$stopBackgroundMode$2():704:704 -> lambda$stopBackgroundMode$2
+    15:20:void lambda$stopBackgroundMode$2():705:705 -> lambda$stopBackgroundMode$2
+    1:8:void lambda$stopSpeech$4():770:770 -> lambda$stopSpeech$4
+    9:18:void lambda$stopSpeech$4():771:771 -> lambda$stopSpeech$4
+    1:9:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):684:684 -> lambda$updateNotification$1
+    10:14:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):685:685 -> lambda$updateNotification$1
+    15:19:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):686:686 -> lambda$updateNotification$1
+    20:24:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):687:687 -> lambda$updateNotification$1
+    25:29:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):688:688 -> lambda$updateNotification$1
+    30:35:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):689:689 -> lambda$updateNotification$1
+    36:41:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):690:690 -> lambda$updateNotification$1
+    42:47:void lambda$updateNotification$1(java.lang.String,java.lang.String,boolean):692:692 -> lambda$updateNotification$1
+    1:2:boolean speakText(java.lang.String,java.lang.String,java.lang.String):712:713 -> speakText
+    3:4:boolean speakText(java.lang.String,java.lang.String,java.lang.String,float):718:719 -> speakText
+    5:5:boolean speakText(java.lang.String,java.lang.String,java.lang.String,float):722:722 -> speakText
+    1:9:void startBackgroundMode(java.lang.String,java.lang.String):662:662 -> startBackgroundMode
+    10:21:void startBackgroundMode(java.lang.String,java.lang.String):663:663 -> startBackgroundMode
+    1:9:void stopBackgroundMode():700:700 -> stopBackgroundMode
+    10:21:void stopBackgroundMode():701:701 -> stopBackgroundMode
+    1:9:void stopSpeech():767:767 -> stopSpeech
+    10:21:void stopSpeech():768:768 -> stopSpeech
+    1:9:void updateNotification(java.lang.String,java.lang.String,boolean):681:681 -> updateNotification
+    10:20:void updateNotification(java.lang.String,java.lang.String,boolean):682:682 -> updateNotification
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.m:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$07b561e655cb7f0c61a6447755ee4e599e152d5ede42ec937cfafa1d72f8cb8a$0.f$0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$07b561e655cb7f0c61a6447755ee4e599e152d5ede42ec937cfafa1d72f8cb8a$0.f$1 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$07b561e655cb7f0c61a6447755ee4e599e152d5ede42ec937cfafa1d72f8cb8a$0.f$2 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    boolean com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$07b561e655cb7f0c61a6447755ee4e599e152d5ede42ec937cfafa1d72f8cb8a$0.f$3 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:12:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,boolean):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:12:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda2 -> com.englishbreakfast.app.n:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$a94ffb4718638d7bb1516d3d18aba3f7e1d9af4c5c426afabb79de7ee0d9fde4$0.f$1 -> b
+    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$315b7f25b2aae69b6ba7939454b14083b8158481a097a44877cbe9f8857bba0f$0.f$0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$a94ffb4718638d7bb1516d3d18aba3f7e1d9af4c5c426afabb79de7ee0d9fde4$0.f$0 -> c
+    1:8:void <init>(com.englishbreakfast.app.MainActivity$9,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:18:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.o:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$65bd9cde13e69826117b875609a86608bb72d897ae7e8d747c3b646de8cc1f75$0.f$0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$65bd9cde13e69826117b875609a86608bb72d897ae7e8d747c3b646de8cc1f75$0.f$1 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$65bd9cde13e69826117b875609a86608bb72d897ae7e8d747c3b646de8cc1f75$0.f$2 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    float com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$65bd9cde13e69826117b875609a86608bb72d897ae7e8d747c3b646de8cc1f75$0.f$3 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$65bd9cde13e69826117b875609a86608bb72d897ae7e8d747c3b646de8cc1f75$0.f$4 -> e
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:14:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,float,java.lang.String):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:14:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.p:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int $r8$classId -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$cfcef3f665c203c47af9839f4100c5df4a34d0b5794a2c585ef1b62d36460839$0.f$1 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$cfcef3f665c203c47af9839f4100c5df4a34d0b5794a2c585ef1b62d36460839$0.f$0 -> c
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$a94ffb4718638d7bb1516d3d18aba3f7e1d9af4c5c426afabb79de7ee0d9fde4$0.f$2 -> d
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$cfcef3f665c203c47af9839f4100c5df4a34d0b5794a2c585ef1b62d36460839$0.f$2 -> d
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
     1:1:void <init>(int,java.lang.Object,java.lang.Object,java.lang.String):0:0 -> <init>
@@ -81045,152 +81254,6 @@ com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda3 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
     1:48:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.n:
-# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
-# {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$b4fb515caf6b7d93eb61a434ab28aedac2800e1cc26a61820283c87a177935d3$0.f$0 -> a
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$b4fb515caf6b7d93eb61a434ab28aedac2800e1cc26a61820283c87a177935d3$0.f$1 -> b
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$b4fb515caf6b7d93eb61a434ab28aedac2800e1cc26a61820283c87a177935d3$0.f$2 -> c
-      # {"id":"com.android.tools.r8.synthesized"}
-    float com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$b4fb515caf6b7d93eb61a434ab28aedac2800e1cc26a61820283c87a177935d3$0.f$3 -> d
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$b4fb515caf6b7d93eb61a434ab28aedac2800e1cc26a61820283c87a177935d3$0.f$4 -> e
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:14:void <init>(com.englishbreakfast.app.MainActivity$8,java.lang.String,java.lang.String,float,java.lang.String):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:14:void run():0:0 -> run
-      # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.o:
-# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
-# {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$e99f6486ff6fdbc8be41363cf3c0fdf86f49764a3e84b1cc37204d9a511f606b$0.f$0 -> a
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$e99f6486ff6fdbc8be41363cf3c0fdf86f49764a3e84b1cc37204d9a511f606b$0.f$1 -> b
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$e99f6486ff6fdbc8be41363cf3c0fdf86f49764a3e84b1cc37204d9a511f606b$0.f$2 -> c
-      # {"id":"com.android.tools.r8.synthesized"}
-    boolean com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$e99f6486ff6fdbc8be41363cf3c0fdf86f49764a3e84b1cc37204d9a511f606b$0.f$3 -> d
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:12:void <init>(com.englishbreakfast.app.MainActivity$8,java.lang.String,java.lang.String,boolean):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:12:void run():0:0 -> run
-      # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity$9:
-# {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):709:709 -> <init>
-    1:4:void $r8$lambda$umGwimolGFrjK0bopzXpAkGDtek(com.englishbreakfast.app.MainActivity$9):0:0 -> a
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$v30xtNoFTAiUtZlY3hE8JlzClXQ(com.englishbreakfast.app.MainActivity$9,java.lang.String):0:0 -> b
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:9:void clearPendingFavorites():800:800 -> clearPendingFavorites
-    10:15:void clearPendingFavorites():801:801 -> clearPendingFavorites
-    1:9:void clearPendingUnfavorites():782:782 -> clearPendingUnfavorites
-    10:15:void clearPendingUnfavorites():783:783 -> clearPendingUnfavorites
-    1:11:java.lang.String getPendingFavorites():788:788 -> getPendingFavorites
-    12:18:java.lang.String getPendingFavorites():789:789 -> getPendingFavorites
-    1:11:java.lang.String getPendingUnfavorites():770:770 -> getPendingUnfavorites
-    12:18:java.lang.String getPendingUnfavorites():771:771 -> getPendingUnfavorites
-    1:11:java.lang.String getWidgetConfig():872:872 -> getWidgetConfig
-    12:18:java.lang.String getWidgetConfig():873:873 -> getWidgetConfig
-    1:9:boolean isPinSupported():747:747 -> isPinSupported
-    10:15:boolean isPinSupported():748:748 -> isPinSupported
-    16:27:boolean isPinSupported():749:749 -> isPinSupported
-    28:37:boolean isPinSupported():750:750 -> isPinSupported
-    1:10:boolean isWidgetInstalled():757:757 -> isWidgetInstalled
-    11:16:boolean isWidgetInstalled():759:759 -> isWidgetInstalled
-    17:25:boolean isWidgetInstalled():760:760 -> isWidgetInstalled
-    26:31:boolean isWidgetInstalled():761:761 -> isWidgetInstalled
-    32:37:boolean isWidgetInstalled():762:762 -> isWidgetInstalled
-    1:11:void lambda$openHomeScreenSettings$1():894:894 -> lambda$openHomeScreenSettings$1
-    12:18:void lambda$openHomeScreenSettings$1():895:895 -> lambda$openHomeScreenSettings$1
-    19:29:void lambda$openHomeScreenSettings$1():896:896 -> lambda$openHomeScreenSettings$1
-    30:32:void lambda$openHomeScreenSettings$1():897:897 -> lambda$openHomeScreenSettings$1
-    33:38:void lambda$openHomeScreenSettings$1():898:898 -> lambda$openHomeScreenSettings$1
-    39:45:void lambda$openHomeScreenSettings$1():903:903 -> lambda$openHomeScreenSettings$1
-    46:70:void lambda$openHomeScreenSettings$1():904:904 -> lambda$openHomeScreenSettings$1
-    71:73:void lambda$openHomeScreenSettings$1():905:905 -> lambda$openHomeScreenSettings$1
-    74:79:void lambda$openHomeScreenSettings$1():906:906 -> lambda$openHomeScreenSettings$1
-    80:86:void lambda$openHomeScreenSettings$1():909:909 -> lambda$openHomeScreenSettings$1
-    87:89:void lambda$openHomeScreenSettings$1():910:910 -> lambda$openHomeScreenSettings$1
-    90:95:void lambda$openHomeScreenSettings$1():911:911 -> lambda$openHomeScreenSettings$1
-    1:18:void lambda$triggerOvertakenAlert$0(java.lang.String):820:820 -> lambda$triggerOvertakenAlert$0
-    19:26:void lambda$triggerOvertakenAlert$0(java.lang.String):821:821 -> lambda$triggerOvertakenAlert$0
-    27:28:void lambda$triggerOvertakenAlert$0(java.lang.String):822:822 -> lambda$triggerOvertakenAlert$0
-    29:45:void lambda$triggerOvertakenAlert$0(java.lang.String):823:823 -> lambda$triggerOvertakenAlert$0
-    46:51:void lambda$triggerOvertakenAlert$0(java.lang.String):824:824 -> lambda$triggerOvertakenAlert$0
-    52:57:void lambda$triggerOvertakenAlert$0(java.lang.String):825:825 -> lambda$triggerOvertakenAlert$0
-    58:61:void lambda$triggerOvertakenAlert$0(java.lang.String):828:828 -> lambda$triggerOvertakenAlert$0
-    62:73:void lambda$triggerOvertakenAlert$0(java.lang.String):829:829 -> lambda$triggerOvertakenAlert$0
-    74:81:void lambda$triggerOvertakenAlert$0(java.lang.String):831:831 -> lambda$triggerOvertakenAlert$0
-    82:88:void lambda$triggerOvertakenAlert$0(java.lang.String):832:832 -> lambda$triggerOvertakenAlert$0
-    89:91:void lambda$triggerOvertakenAlert$0(java.lang.String):837:837 -> lambda$triggerOvertakenAlert$0
-    92:94:void lambda$triggerOvertakenAlert$0(java.lang.String):838:838 -> lambda$triggerOvertakenAlert$0
-    95:99:void lambda$triggerOvertakenAlert$0(java.lang.String):839:839 -> lambda$triggerOvertakenAlert$0
-    100:103:void lambda$triggerOvertakenAlert$0(java.lang.String):840:840 -> lambda$triggerOvertakenAlert$0
-    104:107:void lambda$triggerOvertakenAlert$0(java.lang.String):841:841 -> lambda$triggerOvertakenAlert$0
-    108:111:void lambda$triggerOvertakenAlert$0(java.lang.String):842:842 -> lambda$triggerOvertakenAlert$0
-    112:114:void lambda$triggerOvertakenAlert$0(java.lang.String):843:843 -> lambda$triggerOvertakenAlert$0
-    115:117:void lambda$triggerOvertakenAlert$0(java.lang.String):844:844 -> lambda$triggerOvertakenAlert$0
-    118:128:void lambda$triggerOvertakenAlert$0(java.lang.String):847:847 -> lambda$triggerOvertakenAlert$0
-    129:131:void lambda$triggerOvertakenAlert$0(java.lang.String):848:848 -> lambda$triggerOvertakenAlert$0
-    132:141:void lambda$triggerOvertakenAlert$0(java.lang.String):851:851 -> lambda$triggerOvertakenAlert$0
-    142:150:void lambda$triggerOvertakenAlert$0(java.lang.String):853:853 -> lambda$triggerOvertakenAlert$0
-    151:154:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSmallIcon(int):1426:1426 -> lambda$triggerOvertakenAlert$0
-    151:154:void lambda$triggerOvertakenAlert$0(java.lang.String):854 -> lambda$triggerOvertakenAlert$0
-    155:166:void lambda$triggerOvertakenAlert$0(java.lang.String):854:854 -> lambda$triggerOvertakenAlert$0
-    167:172:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentTitle(java.lang.CharSequence):1472:1472 -> lambda$triggerOvertakenAlert$0
-    167:172:void lambda$triggerOvertakenAlert$0(java.lang.String):855 -> lambda$triggerOvertakenAlert$0
-    173:174:void lambda$triggerOvertakenAlert$0(java.lang.String):855:855 -> lambda$triggerOvertakenAlert$0
-    175:180:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentText(java.lang.CharSequence):1480:1480 -> lambda$triggerOvertakenAlert$0
-    175:180:void lambda$triggerOvertakenAlert$0(java.lang.String):856 -> lambda$triggerOvertakenAlert$0
-    181:182:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setPriority(int):1960:1960 -> lambda$triggerOvertakenAlert$0
-    181:182:void lambda$triggerOvertakenAlert$0(java.lang.String):857 -> lambda$triggerOvertakenAlert$0
-    183:187:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1731:1731 -> lambda$triggerOvertakenAlert$0
-    183:187:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
-    188:189:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1732:1732 -> lambda$triggerOvertakenAlert$0
-    188:189:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
-    190:193:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1734:1734 -> lambda$triggerOvertakenAlert$0
-    190:193:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
-    194:197:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1735:1735 -> lambda$triggerOvertakenAlert$0
-    194:197:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
-    198:201:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1737:1737 -> lambda$triggerOvertakenAlert$0
-    198:201:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
-    202:209:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1738:1738 -> lambda$triggerOvertakenAlert$0
-    202:209:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
-    210:212:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setAutoCancel(boolean):1874:1874 -> lambda$triggerOvertakenAlert$0
-    210:212:void lambda$triggerOvertakenAlert$0(java.lang.String):859 -> lambda$triggerOvertakenAlert$0
-    213:214:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentIntent(android.app.PendingIntent):1625:1625 -> lambda$triggerOvertakenAlert$0
-    213:214:void lambda$triggerOvertakenAlert$0(java.lang.String):860 -> lambda$triggerOvertakenAlert$0
-    215:224:void lambda$triggerOvertakenAlert$0(java.lang.String):862:862 -> lambda$triggerOvertakenAlert$0
-    225:228:void lambda$triggerOvertakenAlert$0(java.lang.String):865:865 -> lambda$triggerOvertakenAlert$0
-    1:9:void openHomeScreenSettings():891:891 -> openHomeScreenSettings
-    10:21:void openHomeScreenSettings():892:892 -> openHomeScreenSettings
-    1:9:void removePendingFavorite(java.lang.String):794:794 -> removePendingFavorite
-    10:15:void removePendingFavorite(java.lang.String):795:795 -> removePendingFavorite
-    1:9:void removePendingUnfavorite(java.lang.String):776:776 -> removePendingUnfavorite
-    10:15:void removePendingUnfavorite(java.lang.String):777:777 -> removePendingUnfavorite
-    1:2:boolean requestPinWidget(java.lang.String):723:724 -> requestPinWidget
-    3:3:boolean requestPinWidget():729:729 -> requestPinWidget
-    4:8:boolean requestPinWidget():731:735 -> requestPinWidget
-    9:9:boolean requestPinWidget():740:740 -> requestPinWidget
-    1:9:void saveWidgetConfig(java.lang.String):878:878 -> saveWidgetConfig
-    10:14:void saveWidgetConfig(java.lang.String):880:880 -> saveWidgetConfig
-    15:19:void saveWidgetConfig(java.lang.String):881:881 -> saveWidgetConfig
-    20:24:void saveWidgetConfig(java.lang.String):882:882 -> saveWidgetConfig
-    25:31:void saveWidgetConfig(java.lang.String):883:883 -> saveWidgetConfig
-    32:35:void saveWidgetConfig(java.lang.String):885:885 -> saveWidgetConfig
-    1:9:void syncFavorites(java.lang.String):712:712 -> syncFavorites
-    10:14:void syncFavorites(java.lang.String):714:714 -> syncFavorites
-    15:21:void syncFavorites(java.lang.String):715:715 -> syncFavorites
-    22:25:void syncFavorites(java.lang.String):717:717 -> syncFavorites
-    1:9:void syncUserRank(int):806:806 -> syncUserRank
-    10:14:void syncUserRank(int):808:808 -> syncUserRank
-    15:21:void syncUserRank(int):809:809 -> syncUserRank
-    22:25:void syncUserRank(int):811:811 -> syncUserRank
-    1:9:void triggerOvertakenAlert(java.lang.String):817:817 -> triggerOvertakenAlert
-    10:21:void triggerOvertakenAlert(java.lang.String):818:818 -> triggerOvertakenAlert
 com.englishbreakfast.app.R -> com.englishbreakfast.app.R:
     1:4:void <init>():0:0 -> <init>
 com.englishbreakfast.app.R$color -> com.englishbreakfast.app.R$color:
@@ -81378,12 +81441,12 @@ com.englishbreakfast.app.WidgetAudioPlayer -> com.englishbreakfast.app.WidgetAud
     30:33:void stopPlayback():224:224 -> stopPlayback
     34:36:void stopPlayback():226:226 -> stopPlayback
     37:40:void stopPlayback():229:229 -> stopPlayback
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.p:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.q:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:4:void onCompletion(android.media.MediaPlayer):0:0 -> onCompletion
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.q:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.s:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     java.lang.Runnable com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$1ebb34101b64d7b06448ada959ef4388316478aaa51c1c072b02b8fa891abce6$0.f$0 -> a
@@ -81394,7 +81457,7 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.engl
       # {"id":"com.android.tools.r8.synthesized"}
     1:8:void onInit(int):0:0 -> onInit
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda6 -> com.englishbreakfast.app.s:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda6 -> com.englishbreakfast.app.t:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -81405,7 +81468,7 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda6 -> com.engl
       # {"id":"com.android.tools.r8.synthesized"}
     1:18:void onCompletion(android.media.MediaPlayer):0:0 -> onCompletion
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda7 -> com.englishbreakfast.app.t:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda7 -> com.englishbreakfast.app.u:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
