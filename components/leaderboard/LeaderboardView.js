@@ -1,4 +1,5 @@
 import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=385.0';
+import { getRecentWeekKeys } from '../../services/weekKey.js?v=385.0';
 import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=385.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=385.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=385.0';
@@ -650,6 +651,51 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
       if (btn) btn.onclick = () => renderLeaderboardView(containerSelector, options);
     }
   }
+}
+
+export function renderMondayMemeTop4Cut(containerEl, weekKey = null) {
+  if (!containerEl) return;
+
+  const targetWeekKey = weekKey || (getRecentWeekKeys ? (getRecentWeekKeys(2)[1] || getIsoWeekKey()) : getIsoWeekKey());
+  let lb = getCachedLeaderboard(targetWeekKey, 'week');
+  let players = (lb && Array.isArray(lb.data)) ? lb.data.filter((p) => p && p.name) : [];
+
+  if (players.length < 4) {
+    const curWeekKey = getIsoWeekKey();
+    if (targetWeekKey !== curWeekKey) {
+      const curLb = getCachedLeaderboard(curWeekKey, 'week');
+      const curPlayers = (curLb && Array.isArray(curLb.data)) ? curLb.data.filter((p) => p && p.name) : [];
+      if (curPlayers.length > players.length) {
+        players = curPlayers;
+      }
+    }
+  }
+
+  const defaultWinners = [
+    { name: 'Elena', xp: 2450, avatar: 'assets/avatars/avatar_1.png' },
+    { name: 'Alex', xp: 1980, avatar: 'assets/avatars/avatar_2.png' },
+    { name: 'Max', xp: 1620, avatar: 'assets/avatars/avatar_3.png' },
+    { name: 'Anna', xp: 1350, avatar: 'assets/avatars/avatar_4.png' },
+  ];
+
+  const top4 = [];
+  for (let i = 0; i < 4; i++) {
+    if (players[i] && (Number(players[i].xp || 0) > 0 || players[i].name)) {
+      top4.push(players[i]);
+    } else {
+      top4.push(defaultWinners[i]);
+    }
+  }
+
+  const cardsHtml = top4.map((player, idx) => renderPodiumCard(player, idx + 1, 'week')).join('');
+
+  containerEl.innerHTML = `
+    <div class="wotd-top4-frame dark-theme">
+      <div class="podium-grid wotd-top4-podium-grid">
+        ${cardsHtml}
+      </div>
+    </div>
+  `;
 }
 
 export { renderLeaderboardView, renderPodiumCard };

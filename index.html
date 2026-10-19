@@ -209,6 +209,7 @@
 
     <script type="module">
       import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=385.0';
+      import { getRecentWeekKeys } from './services/weekKey.js?v=385.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=385.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=385.0';
       import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=385.0';
@@ -221,7 +222,7 @@
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=385.0';
       import { attachHeartLongPress } from './components/modals/CollectionListsBottomSheet.js?v=385.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=385.0';
-      import { renderLeaderboardView } from './components/leaderboard/LeaderboardView.js?v=385.0';
+      import { renderLeaderboardView, renderMondayMemeTop4Cut } from './components/leaderboard/LeaderboardView.js?v=385.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=385.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=385.0';
       import { AdService } from './services/adService.js?v=385.0';
@@ -1102,11 +1103,20 @@
           const todayVideoKey = getDailyVideoDateKey();
           const lastWatchedVideoDate = localStorage.getItem('myduo_wotd_video_last_date');
           const curWeekKey = getIsoWeekKey();
+          const recentWeeks = getRecentWeekKeys(2);
+          const completedWeekKey = recentWeeks[1] || curWeekKey;
           const memeSeenKey = `myduo_meme_seen_week_${curWeekKey}`;
           const isWeeklyMemePending = (localStorage.getItem(memeSeenKey) !== '1');
           const isTrialMeme = (localStorage.getItem('myduo_trial_monday_meme') === '1') || (typeof window !== 'undefined' && window.__forceMondayMeme);
           const isMemeActive = isWeeklyMemePending || isTrialMeme;
           const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isMemeActive;
+
+          if (isMemeActive) {
+            getLeaderboard(completedWeekKey, 'week').then(() => {
+              const cCut = document.getElementById('wotd-top4-cut');
+              if (cCut) renderMondayMemeTop4Cut(cCut, completedWeekKey);
+            }).catch(() => {});
+          }
 
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
@@ -1465,6 +1475,9 @@
 
                     const top4Cut = document.getElementById('wotd-top4-cut');
                     const top4Img = document.getElementById('wotd-top4-img');
+                    if (isMemeActive && top4Cut) {
+                      renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
+                    }
 
                     // Reveal video strictly when first real frame starts playing (prevents black screen!)
                     cardVideo.addEventListener('playing', revealVideo, { once: true });
@@ -1480,10 +1493,7 @@
                         // STEP 2: Show Top 4 Leaders screen cut for 1.8 seconds
                         cardVideo.style.display = 'none';
                         if (top4Cut) {
-                          if (top4Img) {
-                            const cachedCut = localStorage.getItem('myduo_leaderboard_last_cut');
-                            if (cachedCut) top4Img.src = cachedCut;
-                          }
+                          renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
                           top4Cut.style.display = 'flex';
                         }
 
