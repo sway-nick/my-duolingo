@@ -47,3 +47,6 @@ backend/src/config/config.local.js
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Reports
+reports/

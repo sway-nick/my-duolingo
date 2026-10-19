@@ -23,7 +23,7 @@ import {
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
 } from './firebase.js?v=386.0';
-import { getIsoWeekKey, getRecentWeekKeys } from './weekKey.js?v=386.0';
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
 
 async function getHealth() {
@@ -1040,10 +1040,12 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
   const isPastWeek = Boolean(wKey && (wKey < curWeekKey));
   const weekCacheTimeKey = `cache_leaderboard_time_${wKey}`;
   const lastFetchedWeek = parseInt(localStorage.getItem(weekCacheTimeKey) || '0', 10);
-  // Completed past weeks are immutable: permanent cache once fetched.
+  // Completed past weeks are immutable only if fetched AFTER that week ended.
+  // If fetched mid-week, it must refresh once when the week has ended.
   // Current active week uses 30-minute TTL.
+  const weekEndMs = getIsoWeekStartMs(wKey) + 7 * 86400000;
   const isWeekFresh = isPastWeek
-    ? (lastFetchedWeek > 0)
+    ? (lastFetchedWeek >= weekEndMs)
     : ((Date.now() - lastFetchedWeek) < LEADERBOARD_CACHE_TTL);
 
   if (!force && isWeekFresh) {
@@ -1783,11 +1785,20 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
 if (typeof window !== 'undefined') {
   if (!autoSyncInterval) {
     autoSyncInterval = setInterval(() => {
+      const curUser = getCurrentUser();
+      if (!curUser || !curUser.email || !curUser.id || String(curUser.id).startsWith('guest')) {
+        hasPendingCloudSync = false;
+        return;
+      }
       if (hasPendingCloudSync) {
         flushProgressQueue();
         pushUserDataToCloud(null, null, true);
       }
-    }, 60000);
+    }, 180000);
+    // In Node.js environment (e.g. unit tests), prevent timer from keeping event loop alive
+    if (typeof autoSyncInterval?.unref === 'function') {
+      autoSyncInterval.unref();
+    }
   }
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {

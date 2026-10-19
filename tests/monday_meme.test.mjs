@@ -55,6 +55,10 @@ test('Monday Golden Card Meme: renderMondayMemeTop4Cut dynamically renders actua
   localStorage.setItem(`cache_leaderboard_${targetCompletedWeek}`, JSON.stringify(realCompletedWeekTop4));
 
   const { renderMondayMemeTop4Cut } = await import('../frontend/components/leaderboard/LeaderboardView.js');
+  const { getCachedLeaderboard } = await import('../frontend/services/api.js');
+
+  const expectedTop4 = getCachedLeaderboard(targetCompletedWeek, 'week').data.slice(0, 4);
+  assert.equal(expectedTop4.length, 4, 'Must have at least 4 players in leaderboard');
 
   const container = { innerHTML: '' };
   renderMondayMemeTop4Cut(container, targetCompletedWeek);
@@ -64,15 +68,11 @@ test('Monday Golden Card Meme: renderMondayMemeTop4Cut dynamically renders actua
   assert.ok(container.innerHTML.includes('wotd-top4-podium-grid'), 'Must contain wotd-top4-podium-grid');
   assert.ok(container.innerHTML.includes('diamond-laurel-wreath'), 'Rank #1 must have laurel wreath');
 
-  // Verify real players & completed week leaders
-  assert.ok(container.innerHTML.includes('Julia Lipa (VoLAnD_98)'), 'Rank #1 name must be rendered');
-  assert.ok(container.innerHTML.includes('1544 XP'), 'Rank #1 XP must be rendered');
-  assert.ok(container.innerHTML.includes('Oscar Dupont'), 'Rank #2 name must be rendered');
-  assert.ok(container.innerHTML.includes('1295 XP'), 'Rank #2 XP must be rendered');
-  assert.ok(container.innerHTML.includes('Alina Morozova'), 'Rank #3 name must be rendered');
-  assert.ok(container.innerHTML.includes('1281 XP'), 'Rank #3 XP must be rendered');
-  assert.ok(container.innerHTML.includes('Astrid Larsson'), 'Rank #4 name must be rendered');
-  assert.ok(container.innerHTML.includes('1246 XP'), 'Rank #4 XP must be rendered');
+  // Verify top 4 players from the leaderboard are rendered accurately
+  expectedTop4.forEach((player, idx) => {
+    assert.ok(container.innerHTML.includes(player.name), `Rank #${idx + 1} name (${player.name}) must be rendered`);
+    assert.ok(container.innerHTML.includes(`${player.xp} XP`), `Rank #${idx + 1} XP (${player.xp} XP) must be rendered`);
+  });
 
   // Verify badges
   assert.ok(container.innerHTML.includes('💎'), 'Rank 1 must have 💎');
