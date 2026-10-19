@@ -811,6 +811,16 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
   const userName = currentUser && currentUser.name ? currentUser.name : 'Вы (Гость)';
 
+  const fbUid = currentUser?.firebaseUid ? String(currentUser.firebaseUid) : null;
+  const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
+  const isMe = (u) => {
+    if (!u || !u.userId) return false;
+    const uidStr = String(u.userId);
+    return uidStr === String(currentUserId) ||
+      (fbUid && uidStr === fbUid) ||
+      (detId && uidStr === detId);
+  };
+
   if (period === 'all') {
     let rawList = [];
     try {
@@ -819,6 +829,16 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
     } catch (e) {}
 
     let realPlayers = (Array.isArray(rawList) ? rawList : []).filter((u) => u && u.userId && !String(u.userId).startsWith('bot_'));
+    // Deduplicate any repeated entries of current user in realPlayers
+    const myRealIndices = [];
+    realPlayers.forEach((p, idx) => {
+      if (isMe(p)) myRealIndices.push(idx);
+    });
+    if (myRealIndices.length > 1) {
+      // Keep only first occurrence
+      realPlayers = realPlayers.filter((p, idx) => !isMe(p) || idx === myRealIndices[0]);
+    }
+
     const dynamicBots = generateDynamicBots(wKey).map((bot) => ({
       userId: bot.userId,
       name: bot.name,
@@ -838,9 +858,10 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       }
     } catch (e) {}
 
-    const myIdx = combined.findIndex((u) => u && String(u.userId) === String(currentUserId));
+    const myIdx = combined.findIndex(isMe);
     if (myIdx >= 0) {
       combined[myIdx].xp = Math.max(Number(combined[myIdx].xp || 0), totalLocalXP);
+      combined[myIdx].userId = currentUserId;
       combined[myIdx].name = userName;
       if (userAvatar) combined[myIdx].avatar = userAvatar;
       combined[myIdx].isCurrentUser = true;
@@ -866,12 +887,23 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   } catch (e) {}
 
   let realPlayers = (Array.isArray(rawList) ? rawList : []).filter((u) => u && u.userId && !String(u.userId).startsWith('bot_'));
+  // Deduplicate any repeated entries of current user in realPlayers
+  const myRealIndices = [];
+  realPlayers.forEach((p, idx) => {
+    if (isMe(p)) myRealIndices.push(idx);
+  });
+  if (myRealIndices.length > 1) {
+    // Keep only first occurrence
+    realPlayers = realPlayers.filter((p, idx) => !isMe(p) || idx === myRealIndices[0]);
+  }
+
   const dynamicBots = generateDynamicBots(wKey);
   const combined = [...realPlayers, ...dynamicBots];
 
-  const myIdx = combined.findIndex((u) => u && String(u.userId) === String(currentUserId));
+  const myIdx = combined.findIndex(isMe);
   if (myIdx >= 0) {
     combined[myIdx].xp = userXP;
+    combined[myIdx].userId = currentUserId;
     combined[myIdx].name = userName;
     if (userAvatar) combined[myIdx].avatar = userAvatar;
     combined[myIdx].isCurrentUser = true;
@@ -1063,19 +1095,28 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
     if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
       const validFsPlayers = fsPlayers.filter((p) => p && p.userId);
       const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
-      const fbUid = currentUser?.firebaseUid || null;
+      const fbUid = currentUser?.firebaseUid ? String(currentUser.firebaseUid) : null;
+      const isMe = (u) => {
+        if (!u || !u.userId) return false;
+        const uidStr = String(u.userId);
+        return uidStr === String(currentUserId) ||
+          (fbUid && uidStr === fbUid) ||
+          (detId && uidStr === detId);
+      };
 
-      const myIdx = validFsPlayers.findIndex((u) => u && (
-        String(u.userId) === String(currentUserId) ||
-        (fbUid && String(u.userId) === String(fbUid)) ||
-        (detId && String(u.userId) === String(detId))
-      ));
+      const myIdx = validFsPlayers.findIndex(isMe);
       if (myIdx >= 0) {
         validFsPlayers[myIdx].xp = Math.max(Number(validFsPlayers[myIdx].xp || 0), userXP);
         validFsPlayers[myIdx].userId = currentUserId;
         validFsPlayers[myIdx].name = userName;
         if (userAvatar) validFsPlayers[myIdx].avatar = userAvatar;
         validFsPlayers[myIdx].isCurrentUser = true;
+        // Purge any accidental duplicates of current user in validFsPlayers
+        for (let i = validFsPlayers.length - 1; i >= 0; i--) {
+          if (i !== myIdx && isMe(validFsPlayers[i])) {
+            validFsPlayers.splice(i, 1);
+          }
+        }
       } else if (userXP > 0) {
         validFsPlayers.push({
           userId: currentUserId,
