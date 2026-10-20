@@ -9016,14 +9016,14 @@ const translations = {
 };
 
 export function getInterfaceLanguage() {
-  if (typeof localStorage === 'undefined') return 'en';
+  if (typeof localStorage === 'undefined') return 'ru';
 
   // 1. Explicit user choice in Settings always takes precedence
   try {
     const isManual = localStorage.getItem('myduo_lang_manual') === 'true';
-    if (isManual) {
-      const saved = localStorage.getItem('myduo_interface_lang');
-      if (saved && translations[saved]) {
+    const saved = localStorage.getItem('myduo_interface_lang');
+    if (saved && translations[saved]) {
+      if (isManual || saved === 'ru') {
         return saved;
       }
     }
@@ -9037,7 +9037,23 @@ export function getInterfaceLanguage() {
     }
   } catch (e) {}
 
-  // 3. Detect system language from navigator
+  // 3. Native Android system language check (most reliable on Android devices)
+  try {
+    if (typeof window !== 'undefined' && window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.getSystemLanguage === 'function') {
+      const nativeLang = window.AndroidWidgetBridge.getSystemLanguage();
+      if (nativeLang) {
+        const code = nativeLang.toLowerCase().split(/[-_]/)[0];
+        if (translations[code]) {
+          try {
+            localStorage.setItem('myduo_detected_lang', code);
+          } catch (err) {}
+          return code;
+        }
+      }
+    }
+  } catch (e) {}
+
+  // 4. Detect system language from navigator
   try {
     const navLangs = (typeof navigator !== 'undefined' && Array.isArray(navigator.languages) && navigator.languages.length > 0)
       ? navigator.languages
@@ -9057,8 +9073,8 @@ export function getInterfaceLanguage() {
     console.warn('System language detection failed:', e);
   }
 
-  // 4. Fallback to English if system language is not supported
-  return 'en';
+  // 5. Default to Russian for English Breakfast app
+  return 'ru';
 }
 
 
@@ -9483,20 +9499,19 @@ export function getWordTranslation(wordObj) {
     }
   }
 
-  // 2. Base translation field (if user's language is Russian or matches base)
-  if (lang === 'ru' && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
+  // 2. Base translation field (for Russian and English learners / default)
+  if ((lang === 'ru' || lang === 'en') && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
     return wordObj.translation;
   }
 
-  // 3. Fallback: if active language translation is missing, check Russian translation
-  // (only when active language is Russian or as secondary fallback)
+  // 3. Fallback: check Russian translation for Russian and English learners
   if (wordObj.translations && typeof wordObj.translations === 'object') {
-    if (lang === 'ru' && wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
+    if ((lang === 'ru' || lang === 'en') && wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
       return wordObj.translations.ru;
     }
   }
 
-  // 4. Default: fallback to English original word if no translation in user's language exists
+  // 4. Default: fallback to English original word if no translation in user's foreign language exists
   // NEVER iterate random foreign languages (e.g. cs, de, sk) into other locales!
   return wordObj.word || '';
 }

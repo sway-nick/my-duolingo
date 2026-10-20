@@ -887,6 +887,17 @@ public class MainActivity extends BridgeActivity {
                     }
 
                     @JavascriptInterface
+                    public String getSystemLanguage() {
+                        if (!isTrustedOrigin()) return "ru";
+                        try {
+                            Locale loc = Locale.getDefault();
+                            return loc != null ? loc.getLanguage() : "ru";
+                        } catch (Exception e) {
+                            return "ru";
+                        }
+                    }
+
+                    @JavascriptInterface
                     public void openHomeScreenSettings() {
                         if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {

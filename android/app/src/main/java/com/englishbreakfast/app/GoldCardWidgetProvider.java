@@ -64,7 +64,11 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)
                 || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
-            if (!context.getPackageName().equals(intent.getPackage())) {
+            String pkg = intent.getPackage();
+            ComponentName comp = intent.getComponent();
+            boolean isOurPackage = (pkg != null && context.getPackageName().equals(pkg))
+                    || (comp != null && context.getPackageName().equals(comp.getPackageName()));
+            if (!isOurPackage) {
                 return;
             }
         }
