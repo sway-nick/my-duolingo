@@ -175,4 +175,14 @@ test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrit
     firebaseCode.includes('setToServerValue') || firebaseCode.includes('REQUEST_TIME'),
     'firebase.js must use server-side atomic transforms (REQUEST_TIME) to reduce read/write roundtrips'
   );
+
+  // 5. Verify batching of training stages/rounds into bulk progress sync
+  assert.ok(
+    apiCode.includes('pendingProgressQueue') && apiCode.includes('saveBulkProgressFirestore'),
+    'api.js must buffer progress in pendingProgressQueue and sync via saveBulkProgressFirestore'
+  );
+  assert.ok(
+    apiCode.includes('options.roundComplete || options.batchComplete') || apiCode.includes('batchComplete'),
+    'api.js must support stage/round completion bulk sync'
+  );
 });
