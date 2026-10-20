@@ -955,12 +955,22 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }
 
     function renderConsonantsQuiz() {
-      const VOWELS = new Set(['a', 'e', 'i', 'o', 'u', 'y']);
-      const isVowel = (c) => VOWELS.has(c.toLowerCase());
+      const BASE_VOWELS = new Set(['a', 'e', 'i', 'o', 'u']);
       const isLetter = (c) => /[a-zA-Z]/.test(c);
 
       // Strip invisible/soft-hyphen characters (U+00AD, U+200B, U+FEFF) before processing
       const wordText = (currentWord.word || '').replace(/[\u00ad\u200b\ufeff]/g, '');
+
+      // Check if word has traditional consonants (excluding a, e, i, o, u, y)
+      const lettersInWord = wordText.toLowerCase().split('').filter(isLetter);
+      const hasConsonantsExcludingY = lettersInWord.some((c) => !BASE_VOWELS.has(c) && c !== 'y');
+
+      // If word has no consonants other than 'y' (e.g. "eye"), treat 'y' as a consonant to insert.
+      // Otherwise 'y' acts as a vowel.
+      const VOWELS = hasConsonantsExcludingY
+        ? new Set(['a', 'e', 'i', 'o', 'u', 'y'])
+        : BASE_VOWELS;
+      const isVowel = (c) => VOWELS.has(c.toLowerCase());
 
       // Split by words to prevent awkward mid-word breaks and avoid rendering giant space boxes
       const rawWords = wordText.split(/\s+/).filter(Boolean);
@@ -1106,6 +1116,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       `;
 
       const inputs = Array.from(practiceArea.querySelectorAll('.consonant-input'));
+
+      // Fail-safe: if a word somehow has 0 input boxes, fallback to standard quiz or advance cleanly
+      if (inputs.length === 0) {
+        if (typeof renderStandardQuiz === 'function') {
+          renderStandardQuiz();
+        } else {
+          onNext();
+        }
+        return;
+      }
 
       function focusNext(currentIndex) {
         const nextInput = inputs.find(
