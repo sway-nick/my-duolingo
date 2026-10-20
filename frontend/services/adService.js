@@ -125,17 +125,19 @@ class AdServiceImpl {
     if (this.useTestAds) {
       return AD_CONFIG.TEST_UNITS[type] || AD_CONFIG.TEST_UNITS.REWARDED_SHIELD;
     }
-    return AD_CONFIG.UNITS[type] || AD_CONFIG.TEST_UNITS[type];
+    return AD_CONFIG.UNITS[type] || '';
   }
 
   /**
-   * Prepare rewarded ad with automatic fallback to test unit if live unit is pending review
+   * Prepare rewarded ad for display
    */
   async prepareRewarded(unitType = 'REWARDED_SHIELD') {
     const AdMob = this.getNativeAdMob();
     if (!AdMob || !this.isNative() || !this.isOnline()) return false;
 
     const primaryId = this.getUnitId(unitType);
+    if (!primaryId) return false;
+
     try {
       await AdMob.prepareRewardVideoAd({ adId: primaryId });
       if (unitType === 'REWARDED_SHIELD') {
@@ -143,21 +145,9 @@ class AdServiceImpl {
       }
       return true;
     } catch (e) {
-      console.warn(`AdMob unit ${primaryId} failed to load, attempting official Google test unit:`, e);
-      const fallbackId = AD_CONFIG.TEST_UNITS[unitType] || AD_CONFIG.TEST_UNITS.REWARDED_SHIELD;
-      if (primaryId !== fallbackId) {
-        try {
-          await AdMob.prepareRewardVideoAd({ adId: fallbackId });
-          if (unitType === 'REWARDED_SHIELD') {
-            this.isShieldAdPrepared = true;
-          }
-          return true;
-        } catch (e2) {
-          console.warn('Fallback test unit also failed:', e2);
-        }
-      }
+      console.warn(`AdMob unit ${primaryId} failed to load:`, e);
+      return false;
     }
-    return false;
   }
 
   /**
@@ -363,14 +353,9 @@ class AdServiceImpl {
     const AdMob = this.getNativeAdMob();
     if (AdMob && this.isNative()) {
       try {
-        let adId = this.getUnitId('INTERSTITIAL_ROUND');
-        try {
-          await AdMob.prepareInterstitial({ adId });
-        } catch (e) {
-          adId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
-          await AdMob.prepareInterstitial({ adId });
-        }
-
+        const adId = this.getUnitId('INTERSTITIAL_ROUND');
+        if (!adId) return false;
+        await AdMob.prepareInterstitial({ adId });
         await AdMob.showInterstitial();
         if (typeof window !== 'undefined' && window.trackEvent) {
           window.trackEvent('ad_interstitial_shown');
@@ -379,7 +364,7 @@ class AdServiceImpl {
         this.lastInterstitialTime = Date.now();
         return true;
       } catch (err) {
-        console.warn('AdMob interstitial error:', err);
+        console.warn('AdMob interstitial failed to load/show:', err);
         return false;
       }
     }
@@ -402,24 +387,14 @@ class AdServiceImpl {
 
     if (AdMob && this.isNative()) {
       try {
-        let adId = this.getUnitId('BANNER_FAVORITES');
-        try {
-          await AdMob.showBanner({
-            adId,
-            adSize: 'ADAPTIVE_BANNER',
-            position: 'BOTTOM_CENTER',
-            margin: 0
-          });
-        } catch (e) {
-          console.warn('AdMob live banner failed, trying test fallback:', e);
-          adId = AD_CONFIG.TEST_UNITS.BANNER_FAVORITES;
-          await AdMob.showBanner({
-            adId,
-            adSize: 'ADAPTIVE_BANNER',
-            position: 'BOTTOM_CENTER',
-            margin: 0
-          });
-        }
+        const adId = this.getUnitId('BANNER_FAVORITES');
+        if (!adId) return;
+        await AdMob.showBanner({
+          adId,
+          adSize: 'ADAPTIVE_BANNER',
+          position: 'BOTTOM_CENTER',
+          margin: 0
+        });
         this.bannerCreated = true;
         this.isBannerActive = true;
       } catch (e) {
