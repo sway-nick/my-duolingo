@@ -8,7 +8,7 @@ import { renderIrregularVerbs, destroyIrregularVerbs } from './exercises/Irregul
 import AudioService from '../services/audioService.js?v=386.0';
 import StorageService from '../services/storageService.js?v=386.0';
 import { WORDS, IRREGULAR_VERBS, LESSONS } from '../services/initialData.js?v=386.0';
-import { t } from '../services/i18n.js?v=386.0';
+import { t, getWordTranslation } from '../services/i18n.js?v=386.0';
 
 let currentExerciseIndex = 0;
 let exerciseQueue = [];
@@ -213,7 +213,7 @@ function generateExerciseQueue(lesson, words) {
 
     // Always add a matching pairs at the beginning if enough words
     if (words.length >= 4) {
-        const pairs = words.slice(0, 5).map(w => ({ word: w.word, translation: w.translation }));
+        const pairs = words.slice(0, 5).map(w => ({ word: w.word, translation: getWordTranslation(w) || w.translation }));
         queue.push({ type: EXERCISE_TYPES.MATCHING, data: { pairs } });
     }
 
@@ -271,7 +271,8 @@ function generateExerciseQueue(lesson, words) {
 
 function generateMultipleChoiceData(targetWord, allWords, direction) {
     const isEnRu = direction === 'en-ru';
-    const correctAnswer = isEnRu ? targetWord.translation : targetWord.word;
+    const targetTrans = getWordTranslation(targetWord) || targetWord.translation;
+    const correctAnswer = isEnRu ? targetTrans : targetWord.word;
     
     // Pick 3 random wrong options
     const wrongOptions = [];
@@ -279,7 +280,7 @@ function generateMultipleChoiceData(targetWord, allWords, direction) {
     shuffleArray(pool);
     
     for (let i = 0; i < 3 && i < pool.length; i++) {
-        wrongOptions.push(isEnRu ? pool[i].translation : pool[i].word);
+        wrongOptions.push(isEnRu ? (getWordTranslation(pool[i]) || pool[i].translation) : pool[i].word);
     }
 
     const options = [correctAnswer, ...wrongOptions];

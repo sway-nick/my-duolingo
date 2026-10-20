@@ -9019,18 +9019,25 @@ export function getInterfaceLanguage() {
   if (typeof localStorage === 'undefined') return 'en';
 
   // 1. Explicit user choice in Settings always takes precedence
-  // Checked via 'myduo_lang_manual', or if an existing user previously selected a non-default language
   try {
     const isManual = localStorage.getItem('myduo_lang_manual') === 'true';
-    const saved = localStorage.getItem('myduo_interface_lang');
-    if (saved && translations[saved]) {
-      if (isManual || saved !== 'en') {
+    if (isManual) {
+      const saved = localStorage.getItem('myduo_interface_lang');
+      if (saved && translations[saved]) {
         return saved;
       }
     }
   } catch (e) {}
 
-  // 2. First visit / no manual choice: detect system language
+  // 2. Check previously detected system language
+  try {
+    const detected = localStorage.getItem('myduo_detected_lang');
+    if (detected && translations[detected]) {
+      return detected;
+    }
+  } catch (e) {}
+
+  // 3. Detect system language from navigator
   try {
     const navLangs = (typeof navigator !== 'undefined' && Array.isArray(navigator.languages) && navigator.languages.length > 0)
       ? navigator.languages
@@ -9041,7 +9048,7 @@ export function getInterfaceLanguage() {
       const code = rawLang.toLowerCase().split(/[-_]/)[0];
       if (translations[code]) {
         try {
-          localStorage.setItem('myduo_interface_lang', code);
+          localStorage.setItem('myduo_detected_lang', code);
         } catch (err) {}
         return code;
       }
@@ -9050,7 +9057,7 @@ export function getInterfaceLanguage() {
     console.warn('System language detection failed:', e);
   }
 
-  // 3. Fallback to English if system language is not supported
+  // 4. Fallback to English if system language is not supported
   return 'en';
 }
 
@@ -9476,29 +9483,22 @@ export function getWordTranslation(wordObj) {
     }
   }
 
-  // 2. Main translation field
-  if (typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
+  // 2. Base translation field (if user's language is Russian or matches base)
+  if (lang === 'ru' && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
     return wordObj.translation;
   }
 
-  // 3. Fallback: check Russian or other available language translations
+  // 3. Fallback: if active language translation is missing, check Russian translation
+  // (only when active language is Russian or as secondary fallback)
   if (wordObj.translations && typeof wordObj.translations === 'object') {
-    if (wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
+    if (lang === 'ru' && wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
       return wordObj.translations.ru;
-    }
-    for (const l of Object.keys(wordObj.translations)) {
-      const alt = wordObj.translations[l];
-      if (!isInvalidTranslation(alt)) {
-        return alt;
-      }
     }
   }
 
-  const fallback = (wordObj.translation || '').replace(/\ufffd+/g, '').trim();
-  if (rawWord && fallback.toLowerCase() === rawWord) {
-    return '';
-  }
-  return fallback;
+  // 4. Default: fallback to English original word if no translation in user's language exists
+  // NEVER iterate random foreign languages (e.g. cs, de, sk) into other locales!
+  return wordObj.word || '';
 }
 
 

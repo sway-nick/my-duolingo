@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v220_numbers_collections';
+const WORDS_CACHE_VERSION = 'v386_clean_translations';
 
 let cachedWordsList = null;
 try {
@@ -170,9 +170,6 @@ function applyMultilingualTranslations(words) {
   const lang = getActiveLang();
   words.forEach((w) => {
     if (w) {
-      if (w.translations && w.translations[lang]) {
-        w.translation = w.translations[lang];
-      }
       if (w.all_notes && typeof w.all_notes === 'object') {
         w.notes = w.all_notes[lang] || '';
       } else if (lang !== 'ru') {
