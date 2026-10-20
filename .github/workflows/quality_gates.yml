@@ -2,35 +2,42 @@ name: Quality Gates & Automated Controls
 
 on:
   push:
-    branches: [ main, master, fix/*, feature/*, release/* ]
+    branches:
+      - 'main'
+      - 'master'
+      - 'fix/**'
+      - 'feature/**'
+      - 'release/**'
   pull_request:
-    branches: [ main, master ]
+    branches:
+      - 'main'
+      - 'master'
 
 jobs:
   quality-checks:
-    name: Verify Quality Gates (Ad Mediation, Widget Safety, 33 Locales)
+    name: "Verify Quality Gates"
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: "Setup Node.js"
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: "Install dependencies"
         run: npm ci || npm install
 
-      - name: Run Quality Gate Tests (54 suites: Mediation, Widget, 33 Locales, Leaderboard)
+      - name: "Run Quality Gate Tests (55 suites)"
         run: npm test
 
-      - name: Setup Python
+      - name: "Setup Python"
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Validate Widget, Manifest, Layouts & Mediation Integrity
+      - name: "Validate Widget, Manifest, Layouts & Mediation Integrity"
         run: python scripts/validate_widget.py
