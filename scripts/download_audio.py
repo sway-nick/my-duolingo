@@ -182,7 +182,7 @@ async def async_main():
 
     tasks = []
     for w in words:
-        word_text = w.get("word", "").strip()
+        word_text = str(w.get("word") or "").strip()
         category = w.get("category", "")
         if not word_text:
             continue

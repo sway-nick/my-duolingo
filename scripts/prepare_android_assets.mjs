@@ -11,7 +11,7 @@ export function prepareAndroidAssets() {
   const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
 
   function getAudioFileName(text) {
-    return text.toLowerCase().trim()
+    return String(text || '').toLowerCase().trim()
       .replace(/[^a-z0-9\s'-]/g, '')
       .replace(/\s+/g, '_') + '.mp3';
   }

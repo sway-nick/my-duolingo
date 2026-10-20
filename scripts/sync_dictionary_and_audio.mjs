@@ -64,6 +64,14 @@ async function syncDictionaryAndAudio() {
       if (existing.translation !== rw.translation || existing.transcription !== rw.transcription) {
         updatedWordsCount++;
       }
+      // CRITICAL DATA INTEGRITY: Preserve all existing translations (e.g. ja, ko, hi, ar, etc.)
+      // so that an API returning fewer languages never strips existing multi-language translations!
+      if (existing.translations) {
+        rw.translations = { ...existing.translations, ...(rw.translations || {}) };
+      }
+      if (existing.all_notes) {
+        rw.all_notes = { ...existing.all_notes, ...(rw.all_notes || {}) };
+      }
     }
   });
 

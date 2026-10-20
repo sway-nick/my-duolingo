@@ -181,6 +181,24 @@ test('Collections: syncCollectionToAndroidWidget preserves translation when inte
   }
 });
 
+test('i18n: Japanese interface language returns Japanese translation from words.json', async () => {
+  const { getWordTranslation } = await import('../frontend/services/i18n.js');
+  const oldManual = global.localStorage.getItem('myduo_lang_manual');
+  const oldLang = global.localStorage.getItem('myduo_interface_lang');
+  global.localStorage.setItem('myduo_lang_manual', 'true');
+  global.localStorage.setItem('myduo_interface_lang', 'ja');
+
+  try {
+    const testWord = wordsData.find((w) => w.word && w.word.toLowerCase() === 'knowledge');
+    assert.ok(testWord, 'knowledge word found in dictionary');
+    const trans = getWordTranslation(testWord);
+    assert.equal(trans, '知識', 'Knowledge translation in Japanese must be 知識');
+  } finally {
+    global.localStorage.setItem('myduo_lang_manual', oldManual);
+    global.localStorage.setItem('myduo_interface_lang', oldLang);
+  }
+});
+
 test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic collections', async () => {
   const {
     BUILTIN_COLLECTIONS_WITH_GEAR,
