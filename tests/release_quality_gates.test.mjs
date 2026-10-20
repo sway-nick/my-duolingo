@@ -142,3 +142,37 @@ test('Gate 3: 33 Languages Dictionary and Widget Translation completeness', asyn
 
   assert.equal(typeof getWordTranslation, 'function', 'getWordTranslation must be exposed');
 });
+
+test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrity', () => {
+  const apiPath = path.join(ROOT_DIR, 'frontend/services/api.js');
+  assert.ok(fs.existsSync(apiPath), 'frontend/services/api.js must exist');
+  const apiCode = fs.readFileSync(apiPath, 'utf-8');
+
+  // 1. Verify Leaderboard 30-minute cache TTL (prevents thousands of redundant reads)
+  assert.ok(
+    apiCode.includes('LEADERBOARD_CACHE_TTL = 30 * 60 * 1000') || apiCode.includes('30 * 60 * 1000'),
+    'api.js must enforce at least 30-minute LEADERBOARD_CACHE_TTL'
+  );
+
+  // 2. Verify Debounce timer on pushUserDataToCloud
+  assert.ok(
+    apiCode.includes('syncDebounceTimer'),
+    'api.js must use syncDebounceTimer to avoid spamming Firestore on every keystroke'
+  );
+
+  // 3. Verify in-flight deduplication of concurrent reconciliation calls
+  const firebasePath = path.join(ROOT_DIR, 'frontend/services/firebase.js');
+  assert.ok(fs.existsSync(firebasePath), 'frontend/services/firebase.js must exist');
+  const firebaseCode = fs.readFileSync(firebasePath, 'utf-8');
+
+  assert.ok(
+    firebaseCode.includes('activeWeeklyReconciles') && firebaseCode.includes('activeAllTimeReconciles'),
+    'firebase.js must deduplicate concurrent in-flight reconciliation calls via activeWeeklyReconciles and activeAllTimeReconciles maps'
+  );
+
+  // 4. Verify atomic server transforms instead of read-modify-write cycles
+  assert.ok(
+    firebaseCode.includes('setToServerValue') || firebaseCode.includes('REQUEST_TIME'),
+    'firebase.js must use server-side atomic transforms (REQUEST_TIME) to reduce read/write roundtrips'
+  );
+});
