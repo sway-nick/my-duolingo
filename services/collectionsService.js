@@ -991,15 +991,21 @@ export function getAllCollectionsSummary(allWords = []) {
 export function syncCollectionToAndroidWidget(collectionId = null, allWords = []) {
   if (typeof window === 'undefined') return;
   const targetId = collectionId || getActiveCollectionId() || 'my_favorites';
-  const words = getCollectionWords(targetId, allWords);
+  let words = getCollectionWords(targetId, allWords);
   const title = getCollectionTitle(targetId);
+  const hasFavs = words.length > 0;
+
+  if (words.length === 0 && Array.isArray(allWords) && allWords.length > 0) {
+    // Curated starter words if collection/favorites is empty
+    words = allWords.slice(0, 50);
+  }
 
   if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncFavorites === 'function') {
     try {
       const payload = {
         title: title,
         collectionId: targetId,
-        hasFavorites: words.length > 0,
+        hasFavorites: hasFavs,
         words: words.map((w) => ({
           id: String(w.id || w.word || ''),
           word: String(w.word || ''),
@@ -1007,7 +1013,7 @@ export function syncCollectionToAndroidWidget(collectionId = null, allWords = []
           translation: String(getWordTranslation(w) || w.translation || ''),
           level: String(w.category || w.level || title || 'ELEMENTARY'),
           example: String(w.example || w.notes || '').trim(),
-          isFavorite: true,
+          isFavorite: hasFavs,
         })),
       };
       window.AndroidWidgetBridge.syncFavorites(JSON.stringify(payload));

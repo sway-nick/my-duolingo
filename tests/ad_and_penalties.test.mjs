@@ -115,16 +115,16 @@ test('8b. AdService Interstitial: Preload and round completion lifecycle', async
   assert.equal(typeof AdService.preloadInterstitial, 'function', 'preloadInterstitial must be exposed');
   assert.equal(typeof AdService.showRoundFinishInterstitial, 'function', 'showRoundFinishInterstitial must be exposed');
 
-  // Initial state: last ad just shown, 0 rounds completed
+  // Initial state: 0 rounds completed
   AdService.roundsCompletedSinceLastAd = 0;
   AdService.lastInterstitialTime = Date.now();
 
-  // Round 1 (deferred because roundsCompletedSinceLastAd = 1 < minRoundsBetweenInterstitials 2)
+  // Round 1 (triggers interstitial after every round)
   const res1 = await AdService.showRoundFinishInterstitial();
-  assert.equal(res1, false, 'Round 1 is deferred by frequency cap');
-  assert.equal(AdService.roundsCompletedSinceLastAd, 1);
+  assert.equal(res1, true, 'Round 1 displays interstitial');
+  assert.equal(AdService.roundsCompletedSinceLastAd, 0, 'Rounds counter resets after show');
 
-  // Round 2 (triggers interstitial in Web Simulator mode)
+  // Round 2 (triggers interstitial again on next round)
   const res2 = await AdService.showRoundFinishInterstitial();
   assert.equal(res2, true, 'Round 2 displays interstitial');
   assert.equal(AdService.roundsCompletedSinceLastAd, 0, 'Rounds counter resets after show');

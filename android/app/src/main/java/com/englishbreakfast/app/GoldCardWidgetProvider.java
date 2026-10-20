@@ -60,15 +60,16 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         if (intent == null || intent.getAction() == null) return;
         final String action = intent.getAction();
 
-        // Security check for internal widget actions: strictly require our own package
+        // Security check for internal widget actions: reject if originating from a foreign package
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)
                 || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
             String pkg = intent.getPackage();
+            if (pkg != null && !context.getPackageName().equals(pkg)) {
+                return;
+            }
             ComponentName comp = intent.getComponent();
-            boolean isOurPackage = (pkg != null && context.getPackageName().equals(pkg))
-                    || (comp != null && context.getPackageName().equals(comp.getPackageName()));
-            if (!isOurPackage) {
+            if (comp != null && !context.getPackageName().equals(comp.getPackageName())) {
                 return;
             }
         }

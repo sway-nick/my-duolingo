@@ -30,6 +30,11 @@
 -keep class com.google.ads.** { *; }
 -keep class com.getcapacitor.community.admob.** { *; }
 
+# Preserve Unity Ads & Mediation
+-keep class com.unity3d.ads.** { *; }
+-keep class com.unity3d.services.** { *; }
+-keep class com.google.ads.mediation.unity.** { *; }
+
 # Preserve Media & Background Audio Service
 -keep class androidx.media.** { *; }
 -keep class android.support.v4.media.** { *; }
@@ -40,3 +45,5 @@
 # Suppress harmless warnings from third-party libraries
 -dontwarn com.google.android.gms.**
 -dontwarn com.getcapacitor.**
+-dontwarn com.unity3d.**
+-dontwarn com.google.ads.mediation.unity.**

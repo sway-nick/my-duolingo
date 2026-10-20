@@ -34,7 +34,7 @@ class AdServiceImpl {
     this.isBannerActive = false;
     this.bannerCreated = false;
     this.roundsCompletedSinceLastAd = 0;
-    this.minRoundsBetweenInterstitials = 2;
+    this.minRoundsBetweenInterstitials = 1;
     this.lastInterstitialTime = 0;
 
     // Production AdMob ads enabled (account approved by Google).
@@ -148,7 +148,19 @@ class AdServiceImpl {
       }
       return true;
     } catch (e) {
-      console.warn(`AdMob unit ${primaryId} failed to load:`, e);
+      console.warn(`AdMob unit ${primaryId} failed to load, trying test unit fallback:`, e);
+      try {
+        const testId = AD_CONFIG.TEST_UNITS[unitType];
+        if (testId && testId !== primaryId) {
+          await AdMob.prepareRewardVideoAd({ adId: testId });
+          if (unitType === 'REWARDED_SHIELD') {
+            this.isShieldAdPrepared = true;
+          }
+          return true;
+        }
+      } catch (fallbackErr) {
+        console.warn('⚠️ AdMob rewarded test fallback failed:', fallbackErr);
+      }
       return false;
     }
   }
@@ -178,7 +190,18 @@ class AdServiceImpl {
       console.log('✅ AdMob Interstitial preloaded and ready in memory');
       return true;
     } catch (err) {
-      console.warn('⚠️ AdMob Interstitial preload error:', err);
+      console.warn('⚠️ AdMob Interstitial primary preload failed, trying test unit fallback:', err);
+      try {
+        const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
+        if (adId !== testAdId) {
+          await AdMob.prepareInterstitial({ adId: testAdId });
+          this.isInterstitialPrepared = true;
+          console.log('✅ AdMob Interstitial preloaded via official test unit');
+          return true;
+        }
+      } catch (fallbackErr) {
+        console.warn('⚠️ AdMob test unit fallback failed:', fallbackErr);
+      }
       this.isInterstitialPrepared = false;
       return false;
     } finally {
@@ -370,10 +393,8 @@ class AdServiceImpl {
    */
   async showRoundFinishInterstitial() {
     this.roundsCompletedSinceLastAd++;
-    const now = Date.now();
-    const cooldownMs = 3 * 60 * 1000; // 3 minutes
 
-    if (this.roundsCompletedSinceLastAd < this.minRoundsBetweenInterstitials && (now - this.lastInterstitialTime) < cooldownMs) {
+    if (this.roundsCompletedSinceLastAd < this.minRoundsBetweenInterstitials) {
       console.log(`ℹ️ Interstitial deferred: round ${this.roundsCompletedSinceLastAd}/${this.minRoundsBetweenInterstitials}`);
       this.preloadInterstitial().catch(() => {});
       return false;
@@ -389,8 +410,17 @@ class AdServiceImpl {
 
         if (!this.isInterstitialPrepared) {
           console.log('⏳ Interstitial not preloaded, preparing now...');
-          await AdMob.prepareInterstitial({ adId });
-          this.isInterstitialPrepared = true;
+          try {
+            await AdMob.prepareInterstitial({ adId });
+            this.isInterstitialPrepared = true;
+          } catch (prepErr) {
+            console.warn('⚠️ Primary prepare failed, falling back to test unit:', prepErr);
+            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
+            if (adId !== testAdId) {
+              await AdMob.prepareInterstitial({ adId: testAdId });
+              this.isInterstitialPrepared = true;
+            }
+          }
         }
 
         await AdMob.showInterstitial();
