@@ -7,7 +7,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec?route=words';
 const LOCAL_WORDS_PATH = path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json');
 const US_AUDIO_DIR = path.join(ROOT_DIR, 'frontend', 'assets', 'audio', 'us');
 const UK_AUDIO_DIR = path.join(ROOT_DIR, 'frontend', 'assets', 'audio', 'uk');
@@ -25,23 +24,15 @@ console.log('🔄 DICTIONARY & AUDIO SYNCHRONIZATION TOOL');
 console.log('====================================================');
 
 async function syncDictionaryAndAudio() {
-  console.log('\n[1/4] Fetching latest vocabulary from Google Sheets API...');
-  let remoteWords = [];
+  console.log('\n[1/4] Synchronizing vocabulary directly from Google Sheets (all 32 languages)...');
   try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    if (!json.success || !Array.isArray(json.data)) {
-      throw new Error(json.error || 'Invalid API response format');
-    }
-    remoteWords = json.data;
-    console.log(`✅ Successfully fetched ${remoteWords.length} words from Google Sheets.`);
+    execSync('node scripts/sync_translations_from_sheet.mjs', { stdio: 'inherit', cwd: ROOT_DIR });
   } catch (err) {
-    console.error(`❌ Failed to fetch from Google Sheets API: ${err.message}`);
+    console.error(`❌ Failed to sync from Google Sheets: ${err.message}`);
     process.exit(1);
   }
 
-  console.log('\n[2/4] Comparing with local words.json database...');
+  console.log('\n[2/4] Verifying local words.json database...');
   let localWords = [];
   if (fs.existsSync(LOCAL_WORDS_PATH)) {
     try {
@@ -51,45 +42,13 @@ async function syncDictionaryAndAudio() {
     }
   }
 
-  const localMap = new Map(localWords.map((w) => [String(w.id || w.word), w]));
-  let newWordsCount = 0;
-  let updatedWordsCount = 0;
-
-  remoteWords.forEach((rw) => {
-    const key = String(rw.id || rw.word);
-    const existing = localMap.get(key);
-    if (!existing) {
-      newWordsCount++;
-    } else {
-      if (existing.translation !== rw.translation || existing.transcription !== rw.transcription) {
-        updatedWordsCount++;
-      }
-      // CRITICAL DATA INTEGRITY: Preserve all existing translations (e.g. ja, ko, hi, ar, etc.)
-      // so that an API returning fewer languages never strips existing multi-language translations!
-      if (existing.translations) {
-        rw.translations = { ...existing.translations, ...(rw.translations || {}) };
-      }
-      if (existing.all_notes) {
-        rw.all_notes = { ...existing.all_notes, ...(rw.all_notes || {}) };
-      }
-    }
-  });
-
-  console.log(`📊 Diff summary:`);
-  console.log(`   - Total Remote Words: ${remoteWords.length}`);
-  console.log(`   - Local Words:        ${localWords.length}`);
-  console.log(`   - New Words:          ${newWordsCount}`);
-  console.log(`   - Modified Words:     ${updatedWordsCount}`);
-
-  // Update local words.json
-  fs.writeFileSync(LOCAL_WORDS_PATH, JSON.stringify(remoteWords, null, 2), 'utf8');
-  console.log(`💾 Updated: ${LOCAL_WORDS_PATH}`);
+  console.log(`📊 Total words in dictionary: ${localWords.length}`);
 
   console.log('\n[3/4] Verifying audio coverage in assets/audio/us and assets/audio/uk...');
   const missingUs = [];
   const missingUk = [];
 
-  remoteWords.forEach((w) => {
+  localWords.forEach((w) => {
     const wordText = String(w.word || '').trim();
     if (!wordText) return;
     const cleanName = cleanFilename(wordText);
@@ -111,17 +70,17 @@ async function syncDictionaryAndAudio() {
   if (missingUs.length > 0 || missingUk.length > 0) {
     console.log('\n[4/4] Launching Python TTS generation for missing audio...');
     try {
-      execSync('python scripts/download_audio.py', { cwd: ROOT_DIR, stdio: 'inherit' });
+      execSync('python scripts/download_audio.py', { stdio: 'inherit', cwd: ROOT_DIR });
     } catch (e) {
       console.warn('⚠️ TTS download encountered issues or python/edge-tts not present:', e.message);
     }
   } else {
-    console.log('\n[4/4] ✅ All dictionary words already have full US and UK audio coverage!');
+    console.log('\n[4/4] All audio files are present and complete! Skipping TTS generation.');
   }
 
   console.log('\n====================================================');
   console.log('🎉 SYNC COMPLETE!');
-  console.log('====================================================\n');
+  console.log('====================================================');
 }
 
-syncDictionaryAndAudio();
+syncDictionaryAndAudio().catch(console.error);
