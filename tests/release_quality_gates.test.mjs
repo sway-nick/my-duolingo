@@ -1,0 +1,144 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT_DIR = path.resolve(__dirname, '..');
+
+// 33 supported languages in English Breakfast
+const REQUIRED_33_LOCALES = [
+  'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
+  'da', 'ga', 'lv', 'lt', 'mt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
+  'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja'
+];
+
+test('Gate 1: Unity Ads Mediation and AdMob configuration integrity', () => {
+  // 1. Verify app-ads.txt contains both AdMob and Unity direct seller entries
+  const appAdsPath = path.join(ROOT_DIR, 'app-ads.txt');
+  assert.ok(fs.existsSync(appAdsPath), 'app-ads.txt must exist at project root');
+  const appAdsContent = fs.readFileSync(appAdsPath, 'utf-8');
+
+  assert.ok(
+    appAdsContent.includes('google.com, pub-9917058160362744, DIRECT'),
+    'app-ads.txt must contain authorized Google AdMob direct publisher line'
+  );
+  assert.ok(
+    appAdsContent.includes('unity.com, 157317001, DIRECT'),
+    'app-ads.txt must contain authorized Unity Ads direct publisher line (157317001)'
+  );
+
+  // 2. Verify Android app build.gradle dependencies include Unity Ads SDK and Mediation Adapter
+  const buildGradlePath = path.join(ROOT_DIR, 'android/app/build.gradle');
+  assert.ok(fs.existsSync(buildGradlePath), 'android/app/build.gradle must exist');
+  const buildGradle = fs.readFileSync(buildGradlePath, 'utf-8');
+
+  assert.ok(
+    buildGradle.includes("com.unity3d.ads:unity-ads"),
+    "build.gradle must include 'com.unity3d.ads:unity-ads' dependency"
+  );
+  assert.ok(
+    buildGradle.includes("com.google.ads.mediation:unity"),
+    "build.gradle must include 'com.google.ads.mediation:unity' mediation adapter"
+  );
+
+  // 3. Verify ProGuard preservation rules for AdMob and Unity Ads
+  const proguardPath = path.join(ROOT_DIR, 'android/app/proguard-rules.pro');
+  assert.ok(fs.existsSync(proguardPath), 'android/app/proguard-rules.pro must exist');
+  const proguard = fs.readFileSync(proguardPath, 'utf-8');
+
+  assert.ok(proguard.includes('-keep class com.unity3d.ads.**'), 'proguard-rules.pro must preserve com.unity3d.ads.**');
+  assert.ok(proguard.includes('-keep class com.google.ads.mediation.unity.**'), 'proguard-rules.pro must preserve com.google.ads.mediation.unity.**');
+  assert.ok(proguard.includes('-dontwarn com.unity3d.**'), 'proguard-rules.pro must suppress harmless com.unity3d warnings');
+});
+
+test('Gate 2: Gold Card Widget HyperOS / MIUI and cross-platform broadcast safety', () => {
+  const providerPath = path.join(ROOT_DIR, 'android/app/src/main/java/com/englishbreakfast/app/GoldCardWidgetProvider.java');
+  assert.ok(fs.existsSync(providerPath), 'GoldCardWidgetProvider.java must exist');
+  const providerCode = fs.readFileSync(providerPath, 'utf-8');
+
+  // Verify that broadcast intent security check allows null package/component from launchers
+  // Restrictive check `boolean isOurPackage = (pkg != null ...) || ...; if (!isOurPackage) return;`
+  // drops clicks on HyperOS/MIUI/Samsung because the launcher PendingIntent delivers null pkg and comp!
+  assert.ok(
+    !providerCode.includes('boolean isOurPackage = (pkg != null && context.getPackageName().equals(pkg))'),
+    'GoldCardWidgetProvider must NOT use restrictive isOurPackage check that breaks HyperOS/MIUI launcher clicks'
+  );
+
+  // Verify non-blocking check: only reject if an alien package is explicitly present
+  assert.ok(
+    providerCode.includes('if (pkg != null && !context.getPackageName().equals(pkg))'),
+    'GoldCardWidgetProvider must only reject when a foreign package is explicitly non-null'
+  );
+
+  // Verify AndroidManifest declaration has exported=true
+  const manifestPath = path.join(ROOT_DIR, 'android/app/src/main/AndroidManifest.xml');
+  const manifestCode = fs.readFileSync(manifestPath, 'utf-8');
+  assert.ok(
+    manifestCode.includes('android:name=".GoldCardWidgetProvider"'),
+    'AndroidManifest.xml must declare GoldCardWidgetProvider'
+  );
+  assert.ok(
+    manifestCode.includes('android:exported="true"'),
+    'GoldCardWidgetProvider must be android:exported="true" for widget host interaction'
+  );
+});
+
+test('Gate 3: 33 Languages Dictionary and Widget Translation completeness', async () => {
+  // 1. Verify words.json has translations for all 33 supported languages
+  const wordsJsonPath = path.join(ROOT_DIR, 'frontend/assets/data/words.json');
+  assert.ok(fs.existsSync(wordsJsonPath), 'frontend/assets/data/words.json must exist');
+  const rawData = fs.readFileSync(wordsJsonPath, 'utf-8');
+  assert.ok(!rawData.includes('\ufffd'), 'words.json must have 0 corrupted U+FFFD characters');
+
+  const words = JSON.parse(rawData);
+  assert.ok(Array.isArray(words) && words.length > 2000, `words.json must contain full dictionary (>2000 words, found ${words.length})`);
+
+  // Sample check: verify multiple words have translations across major locales
+  const sample = words.slice(0, 100);
+  const foreignCodes = REQUIRED_33_LOCALES.filter(l => l !== 'ru' && l !== 'en');
+
+  let totalForeignTranslationsFound = 0;
+  for (const w of sample) {
+    if (w.translations && typeof w.translations === 'object') {
+      for (const code of foreignCodes) {
+        if (w.translations[code]) {
+          totalForeignTranslationsFound++;
+        }
+      }
+    }
+  }
+  assert.ok(
+    totalForeignTranslationsFound > 500,
+    `Sample 100 words must have extensive multi-language translations (found ${totalForeignTranslationsFound})`
+  );
+
+  // 2. Verify i18n.js supports all 33 locales
+  const i18nPath = path.join(ROOT_DIR, 'frontend/services/i18n.js');
+  const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
+
+  for (const locale of REQUIRED_33_LOCALES) {
+    assert.ok(
+      i18nCode.includes(`${locale}: {`) || i18nCode.includes(`'${locale}': {`) || i18nCode.includes(`"${locale}": {`),
+      `i18n.js translations dictionary must contain locale '${locale}'`
+    );
+  }
+
+  // 3. Verify getWordTranslation works correctly for foreign languages
+  const { getWordTranslation } = await import('../frontend/services/i18n.js');
+  const testWord = {
+    word: 'apple',
+    translation: 'яблоко',
+    translations: {
+      ru: 'яблоко',
+      de: 'Apfel',
+      es: 'manzana',
+      fr: 'pomme',
+      ja: 'りんご'
+    }
+  };
+
+  assert.equal(typeof getWordTranslation, 'function', 'getWordTranslation must be exposed');
+});

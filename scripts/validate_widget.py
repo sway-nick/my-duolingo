@@ -120,6 +120,34 @@ def validate_widget():
             if os.path.getsize(dp) == 0:
                 errors.append(f"Corrupt (0 bytes) drawable: res/drawable/{d}")
 
+    print("[WIDGET VALIDATOR] Checking HyperOS / MIUI PendingIntent broadcast safety in GoldCardWidgetProvider.java...")
+    if os.path.exists(provider_java):
+        with open(provider_java, 'r', encoding='utf-8') as f:
+            prov_content = f.read()
+        if 'boolean isOurPackage = (pkg != null && context.getPackageName().equals(pkg))' in prov_content:
+            errors.append("GoldCardWidgetProvider.java contains restrictive isOurPackage check that breaks click events on HyperOS/MIUI/Samsung!")
+        if 'if (pkg != null && !context.getPackageName().equals(pkg))' not in prov_content:
+            errors.append("GoldCardWidgetProvider.java must safely allow launcher null package PendingIntents!")
+
+    print("[WIDGET VALIDATOR] Checking Unity Ads Mediation and AdMob configuration in build.gradle & proguard...")
+    build_gradle = os.path.join(android_app, 'build.gradle')
+    proguard_file = os.path.join(android_app, 'proguard-rules.pro')
+    if os.path.exists(build_gradle):
+        with open(build_gradle, 'r', encoding='utf-8') as f:
+            bg_content = f.read()
+        if 'com.unity3d.ads:unity-ads' not in bg_content:
+            errors.append("build.gradle missing 'com.unity3d.ads:unity-ads' dependency!")
+        if 'com.google.ads.mediation:unity' not in bg_content:
+            errors.append("build.gradle missing 'com.google.ads.mediation:unity' mediation adapter!")
+
+    if os.path.exists(proguard_file):
+        with open(proguard_file, 'r', encoding='utf-8') as f:
+            pg_content = f.read()
+        if '-keep class com.unity3d.ads.**' not in pg_content:
+            errors.append("proguard-rules.pro missing Unity Ads keep rules!")
+        if '-keep class com.google.ads.mediation.unity.**' not in pg_content:
+            errors.append("proguard-rules.pro missing Unity Ads mediation adapter keep rules!")
+
     print("--------------------------------------------------")
     if errors:
         print(f"[FAIL] Found {len(errors)} critical widget issue(s):")
