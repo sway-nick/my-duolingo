@@ -143,6 +143,42 @@ test('Collections: syncCollectionToAndroidWidget sends valid payload to widget',
   assert.equal(global.__lastWidgetPayload.hasFavorites, true);
   assert.equal(global.__lastWidgetPayload.words.length, 12);
   assert.equal(global.__lastWidgetPayload.words[0].word.toLowerCase(), 'january');
+  // Regression guard: translation must not collapse to English word itself!
+  assert.ok(global.__lastWidgetPayload.words[0].translation, 'translation must exist');
+  assert.notEqual(
+    global.__lastWidgetPayload.words[0].translation.toLowerCase(),
+    global.__lastWidgetPayload.words[0].word.toLowerCase(),
+    'widget front and back must never be identical (translation != word)'
+  );
+  assert.equal(global.__lastWidgetPayload.words[0].translation.toLowerCase(), 'январь');
+});
+
+test('Collections: syncCollectionToAndroidWidget preserves translation when interface lang is en or unconfigured', async () => {
+  const { syncCollectionToAndroidWidget } = await import('../frontend/services/collectionsService.js');
+  const { getWordTranslation } = await import('../frontend/services/i18n.js');
+
+  // Clear manual settings to simulate fresh WebView/default locale
+  const oldManual = global.localStorage.getItem('myduo_lang_manual');
+  const oldLang = global.localStorage.getItem('myduo_interface_lang');
+  global.localStorage.removeItem('myduo_lang_manual');
+  global.localStorage.setItem('myduo_interface_lang', 'en');
+
+  try {
+    const testWord = wordsData.find((w) => w.word && w.word.toLowerCase() === 'knowledge');
+    assert.ok(testWord, 'knowledge word found in dictionary');
+    const trans = getWordTranslation(testWord);
+    assert.ok(trans, 'translation must not be empty');
+    assert.notEqual(trans.toLowerCase(), 'knowledge', 'Knowledge translation must not be Knowledge');
+    assert.ok(trans.toLowerCase().includes('знани'), `Expected Russian translation, got: ${trans}`);
+
+    global.__lastWidgetPayload = null;
+    syncCollectionToAndroidWidget('months', wordsData);
+    assert.ok(global.__lastWidgetPayload);
+    assert.equal(global.__lastWidgetPayload.words[0].translation.toLowerCase(), 'январь');
+  } finally {
+    global.localStorage.setItem('myduo_lang_manual', oldManual);
+    global.localStorage.setItem('myduo_interface_lang', oldLang);
+  }
 });
 
 test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic collections', async () => {
