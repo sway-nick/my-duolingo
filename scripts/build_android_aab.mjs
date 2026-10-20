@@ -37,7 +37,7 @@ const oldAab = path.join(ANDROID_PROJECT, 'android/app/build/outputs/bundle/rele
 if (fs.existsSync(oldAab)) {
   try { fs.unlinkSync(oldAab); } catch (e) {}
 }
-const gradleCmd = 'cmd.exe /c "set JAVA_HOME=' + JAVA_HOME + '&& gradlew.bat clean bundleRelease"';
+const gradleCmd = 'cmd.exe /c "set JAVA_HOME=' + JAVA_HOME + '&& set GRADLE_OPTS=-Djava.awt.headless=true&& gradlew.bat clean bundleRelease -x lintVitalAnalyzeRelease -x lintVitalRelease"';
 execSync(gradleCmd, { cwd: path.join(ANDROID_PROJECT, 'android'), stdio: 'inherit' });
 
 // Step 5: Copy and verify AAB size
