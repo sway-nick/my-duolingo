@@ -30,6 +30,7 @@ class AdServiceImpl {
     this.shieldsUsedInRound = 0;
     this.isShieldAdPrepared = false;
     this.isInterstitialPrepared = false;
+    this.isPreparingInterstitial = false;
     this.isBannerActive = false;
     this.bannerCreated = false;
     this.roundsCompletedSinceLastAd = 0;
@@ -84,8 +85,9 @@ class AdServiceImpl {
         });
         this.initialized = true;
         console.log('✅ Google AdMob initialized on Android');
-        // Preload first rewarded ad in the background
+        // Preload first rewarded ad and interstitial ad in the background
         this.preloadShieldAd().catch(() => {});
+        this.preloadInterstitial().catch(() => {});
       } catch (err) {
         console.warn('⚠️ AdMob native init error:', err);
       }
@@ -102,6 +104,7 @@ class AdServiceImpl {
     this.shieldsUsedInRound = 0;
     console.log('🛡️ Round shields reset. Available: 3/3');
     this.preloadShieldAd().catch(() => {});
+    this.preloadInterstitial().catch(() => {});
   }
 
   /**
@@ -155,6 +158,32 @@ class AdServiceImpl {
    */
   async preloadShieldAd() {
     return this.prepareRewarded('REWARDED_SHIELD');
+  }
+
+  /**
+   * Preload Interstitial Ad in background so it displays with 0ms delay when a round finishes
+   */
+  async preloadInterstitial() {
+    if (this.isPreparingInterstitial || this.isInterstitialPrepared) return false;
+    const AdMob = this.getNativeAdMob();
+    if (!AdMob || !this.isNative() || !this.isOnline()) return false;
+
+    const adId = this.getUnitId('INTERSTITIAL_ROUND');
+    if (!adId) return false;
+
+    this.isPreparingInterstitial = true;
+    try {
+      await AdMob.prepareInterstitial({ adId });
+      this.isInterstitialPrepared = true;
+      console.log('✅ AdMob Interstitial preloaded and ready in memory');
+      return true;
+    } catch (err) {
+      console.warn('⚠️ AdMob Interstitial preload error:', err);
+      this.isInterstitialPrepared = false;
+      return false;
+    } finally {
+      this.isPreparingInterstitial = false;
+    }
   }
 
   /**
@@ -337,6 +366,7 @@ class AdServiceImpl {
   /**
    * Show Interstitial Ad at the end of a round
    * Includes frequency capping (at least 2 rounds or 3 minutes)
+   * Displays with 0ms delay if preloaded, and queues next preload in background
    */
   async showRoundFinishInterstitial() {
     this.roundsCompletedSinceLastAd++;
@@ -345,6 +375,7 @@ class AdServiceImpl {
 
     if (this.roundsCompletedSinceLastAd < this.minRoundsBetweenInterstitials && (now - this.lastInterstitialTime) < cooldownMs) {
       console.log(`ℹ️ Interstitial deferred: round ${this.roundsCompletedSinceLastAd}/${this.minRoundsBetweenInterstitials}`);
+      this.preloadInterstitial().catch(() => {});
       return false;
     }
 
@@ -355,16 +386,34 @@ class AdServiceImpl {
       try {
         const adId = this.getUnitId('INTERSTITIAL_ROUND');
         if (!adId) return false;
-        await AdMob.prepareInterstitial({ adId });
+
+        if (!this.isInterstitialPrepared) {
+          console.log('⏳ Interstitial not preloaded, preparing now...');
+          await AdMob.prepareInterstitial({ adId });
+          this.isInterstitialPrepared = true;
+        }
+
         await AdMob.showInterstitial();
+        this.isInterstitialPrepared = false;
+
         if (typeof window !== 'undefined' && window.trackEvent) {
           window.trackEvent('ad_interstitial_shown');
         }
         this.roundsCompletedSinceLastAd = 0;
         this.lastInterstitialTime = Date.now();
+
+        // Immediately preload NEXT interstitial in background for next round
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 1500);
+
         return true;
       } catch (err) {
         console.warn('AdMob interstitial failed to load/show:', err);
+        this.isInterstitialPrepared = false;
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 3000);
         return false;
       }
     }

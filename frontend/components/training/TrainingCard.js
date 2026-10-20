@@ -429,6 +429,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     (activeWords && activeWords.length <= 1)
   );
 
+  if (currentWordIndex === 0) {
+    try {
+      if (typeof AdService !== 'undefined') {
+        AdService.resetRoundShields();
+        if (typeof AdService.preloadInterstitial === 'function') {
+          AdService.preloadInterstitial().catch(() => {});
+        }
+      }
+    } catch (_) {}
+  }
+
   if (activeWords && activeWords.length > 0) {
     activeWords.slice(0, 3).forEach((w) => {
       if (w && w.word) preloadWordAudio(w.word);
@@ -1921,6 +1932,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const isFinalCard = (isSingleWordMode && isCorrect) || (isLastWord && isCorrect && activeWords.length <= 1);
         if (isFinalCard) {
           window._trainingRoundJustCompleted = true;
+          try {
+            if (typeof AdService !== 'undefined' && typeof AdService.preloadInterstitial === 'function') {
+              AdService.preloadInterstitial().catch(() => {});
+            }
+          } catch (_) {}
         }
         onNextAfterSpeech(onNext, minDelay, maxWait);
       } else {
