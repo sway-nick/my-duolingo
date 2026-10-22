@@ -1,4 +1,4 @@
-﻿import { WORDS, CATEGORIES } from '../services/initialData.js?v=386.0';
+import { WORDS, CATEGORIES } from '../services/initialData.js?v=386.0';
 import { StorageService } from '../services/storageService.js?v=386.0';
 import { AudioService } from '../services/audioService.js?v=386.0';
 
@@ -39,6 +39,7 @@ export function renderVocabulary(container, favoritesOnly = false) {
             <div class="vocab-count">Найдено: <span id="vocab-count-num">0</span> слов</div>
             
             <div class="vocab-list"></div>
+            <div class="vocab-scroll-sentinel" style="height: 32px;"></div>
         </div>
     `;
     
@@ -49,35 +50,77 @@ export function renderVocabulary(container, favoritesOnly = false) {
     const levelPills = container.querySelectorAll('.level-pill');
     const sortSelect = container.querySelector('#vocab-sort-select');
     const vocabList = container.querySelector('.vocab-list');
+    const sentinel = container.querySelector('.vocab-scroll-sentinel');
     const countNum = container.querySelector('#vocab-count-num');
     
     let currentCategory = 'all';
     let currentLevel = 'all';
     let currentSort = 'alpha';
     let currentSearch = '';
+    let filtered = [];
+    let renderedCount = 0;
+    let observer = null;
+    const VOCAB_BATCH_SIZE = 50;
+
+    const renderVocabItemHtml = (word) => {
+        const isFav = StorageService.isFavorite(word.id);
+        const progress = StorageService.getWordProgress(word.id) || 0;
+        return `
+            <div class="vocab-item">
+                <div class="vocab-item-main">
+                    <div class="vocab-word">
+                        <strong>${word.english}</strong>
+                        <span class="vocab-transcription">${word.transcription || ''}</span>
+                    </div>
+                    <div class="vocab-translation">${word.russian}</div>
+                    <div class="vocab-meta">
+                        <span class="level-badge level-${word.level}">${word.level}</span>
+                        <div class="srs-progress" title="Прогресс: ${progress}">
+                            ${'<div class="srs-dot active"></div>'.repeat(Math.min(5, progress))}
+                            ${'<div class="srs-dot"></div>'.repeat(Math.max(0, 5 - progress))}
+                        </div>
+                    </div>
+                </div>
+                <div class="vocab-item-actions">
+                    <button class="vocab-audio-btn" data-word="${word.english}">🔊</button>
+                    <button class="vocab-fav-btn ${isFav ? 'active' : ''}" data-id="${word.id}">
+                        ${isFav ? '♥' : '♡'}
+                    </button>
+                </div>
+            </div>
+        `;
+    };
+
+    const appendNextBatch = () => {
+        const slice = filtered.slice(renderedCount, renderedCount + VOCAB_BATCH_SIZE);
+        if (slice.length === 0) return;
+        vocabList.insertAdjacentHTML('beforeend', slice.map(renderVocabItemHtml).join(''));
+        renderedCount += slice.length;
+        if (sentinel) {
+            sentinel.style.display = renderedCount < filtered.length ? 'block' : 'none';
+        }
+    };
+
+    const setupObserver = () => {
+        if (observer) observer.disconnect();
+        if (!sentinel || typeof IntersectionObserver === 'undefined') return;
+        observer = new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting) && renderedCount < filtered.length) {
+                appendNextBatch();
+            }
+        }, { rootMargin: '250px' });
+        observer.observe(sentinel);
+    };
     
     const updateList = () => {
-        let filtered = [...WORDS];
-        
-        if (favoritesOnly) {
-            filtered = filtered.filter(w => StorageService.isFavorite(w.id));
-        }
-        
-        if (currentCategory !== 'all') {
-            filtered = filtered.filter(w => w.categoryId === currentCategory);
-        }
-        
-        if (currentLevel !== 'all') {
-            filtered = filtered.filter(w => w.level === currentLevel);
-        }
-        
-        if (currentSearch) {
-            const query = currentSearch.toLowerCase();
-            filtered = filtered.filter(w => 
-                w.english.toLowerCase().includes(query) || 
-                w.russian.toLowerCase().includes(query)
-            );
-        }
+        const query = currentSearch ? currentSearch.trim().toLowerCase() : '';
+        filtered = WORDS.filter(w => {
+            if (favoritesOnly && !StorageService.isFavorite(w.id)) return false;
+            if (currentCategory !== 'all' && w.categoryId !== currentCategory) return false;
+            if (currentLevel !== 'all' && w.level !== currentLevel) return false;
+            if (query && !w.english.toLowerCase().includes(query) && !w.russian.toLowerCase().includes(query)) return false;
+            return true;
+        });
         
         if (currentSort === 'alpha') {
             filtered.sort((a, b) => a.english.localeCompare(b.english));
@@ -92,49 +135,24 @@ export function renderVocabulary(container, favoritesOnly = false) {
         }
         
         countNum.textContent = filtered.length;
+        vocabList.innerHTML = '';
+        renderedCount = 0;
         
         if (filtered.length === 0) {
             vocabList.innerHTML = '<div class="empty-state">Слова не найдены</div>';
+            if (sentinel) sentinel.style.display = 'none';
             return;
         }
         
-        let listHtml = '';
-        filtered.forEach(word => {
-            const isFav = StorageService.isFavorite(word.id);
-            const progress = StorageService.getWordProgress(word.id) || 0;
-            
-            listHtml += `
-                <div class="vocab-item">
-                    <div class="vocab-item-main">
-                        <div class="vocab-word">
-                            <strong>${word.english}</strong>
-                            <span class="vocab-transcription">${word.transcription || ''}</span>
-                        </div>
-                        <div class="vocab-translation">${word.russian}</div>
-                        <div class="vocab-meta">
-                            <span class="level-badge level-${word.level}">${word.level}</span>
-                            <div class="srs-progress" title="Прогресс: ${progress}">
-                                ${'<div class="srs-dot active"></div>'.repeat(Math.min(5, progress))}
-                                ${'<div class="srs-dot"></div>'.repeat(Math.max(0, 5 - progress))}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="vocab-item-actions">
-                        <button class="vocab-audio-btn" data-word="${word.english}">🔊</button>
-                        <button class="vocab-fav-btn ${isFav ? 'active' : ''}" data-id="${word.id}">
-                            ${isFav ? '♥' : '♡'}
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
-        
-        vocabList.innerHTML = listHtml;
+        appendNextBatch();
+        setupObserver();
     };
     
+    let searchDebounceTimer = null;
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
-        updateList();
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(updateList, 120);
     });
     
     categoryChips.forEach(chip => {

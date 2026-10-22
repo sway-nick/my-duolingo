@@ -38,13 +38,16 @@ import { AdService } from '../../services/adService.js?v=386.0';
 import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=386.0';
 import { attachHeartLongPress } from '../modals/CollectionListsBottomSheet.js?v=386.0';
 
+const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
   if (!cat) return 'Общие';
-  return (
-    String(cat)
-      .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
-      .trim() || String(cat).trim()
-  );
+  const raw = String(cat);
+  const cached = _sanitizedCategoryCache.get(raw);
+  if (cached !== undefined) return cached;
+  const cleaned =
+    raw.replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() || raw.trim();
+  _sanitizedCategoryCache.set(raw, cleaned);
+  return cleaned;
 }
 
 function escapeHtml(str) {
@@ -680,14 +683,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       setTimeout(() => positionGlider(initialActive, false), 50);
     }
 
-    window.addEventListener(
-      'resize',
-      () => {
-        const activeBtn = container.querySelector('.mode-pill-btn.active');
-        if (activeBtn) positionGlider(activeBtn, false);
-      },
-      { passive: true },
-    );
+    if (window._myduoTrainingResizeHandler) {
+      window.removeEventListener('resize', window._myduoTrainingResizeHandler);
+    }
+    window._myduoTrainingResizeHandler = () => {
+      const activeBtn = container.querySelector('.mode-pill-btn.active');
+      if (activeBtn) positionGlider(activeBtn, false);
+    };
+    window.addEventListener('resize', window._myduoTrainingResizeHandler, { passive: true });
 
     modePills.forEach((btn) => {
       btn.addEventListener('click', (e) => {
@@ -1426,19 +1429,37 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       `;
 
       requestAnimationFrame(() => {
+        // Batch-read geometry for all pairs cards first to prevent synchronous layout thrashing
+        const cardMeasurements = [];
         practiceArea.querySelectorAll('.pairs-card').forEach((card) => {
           const inner = card.querySelector('.pairs-card-inner');
           if (!inner) return;
-
-          let size = parseFloat(window.getComputedStyle(card).fontSize) || 17.5;
+          const size = parseFloat(card.style.fontSize) || parseFloat(window.getComputedStyle(card).fontSize) || 17.5;
           const maxHeight = card.clientHeight - 8;
           const maxWidth = card.clientWidth - 8;
-
-          while ((inner.scrollHeight > maxHeight || inner.scrollWidth > maxWidth) && size > 9.5) {
-            size -= 0.5;
-            card.style.fontSize = `${size}px`;
+          const sh = inner.scrollHeight;
+          const sw = inner.scrollWidth;
+          if ((sh > maxHeight || sw > maxWidth) && maxHeight > 0 && maxWidth > 0 && size > 9.5) {
+            const ratioH = maxHeight > 0 && sh > maxHeight ? maxHeight / sh : 1;
+            const ratioW = maxWidth > 0 && sw > maxWidth ? maxWidth / sw : 1;
+            const scale = Math.min(ratioH, ratioW, 0.94);
+            const nextSize = Math.max(9.5, Math.floor(size * scale * 2) / 2);
+            cardMeasurements.push({ card, inner, maxHeight, maxWidth, size: nextSize });
           }
         });
+        // Batch-write computed font sizes in a single DOM mutation pass
+        for (let i = 0; i < cardMeasurements.length; i++) {
+          const m = cardMeasurements[i];
+          m.card.style.fontSize = `${m.size}px`;
+        }
+        // Single verification pass if any long multi-line text still overflows after line-wrap shift
+        for (let i = 0; i < cardMeasurements.length; i++) {
+          const m = cardMeasurements[i];
+          if ((m.inner.scrollHeight > m.maxHeight || m.inner.scrollWidth > m.maxWidth) && m.size > 9.5) {
+            m.size = Math.max(9.5, m.size - 1.5);
+            m.card.style.fontSize = `${m.size}px`;
+          }
+        }
       });
 
       const leftBtns = practiceArea.querySelectorAll('.pairs-card[data-side="left"]');

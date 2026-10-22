@@ -274,13 +274,18 @@ function generateMultipleChoiceData(targetWord, allWords, direction) {
     const targetTrans = getWordTranslation(targetWord) || targetWord.translation;
     const correctAnswer = isEnRu ? targetTrans : targetWord.word;
     
-    // Pick 3 random wrong options
+    // Pick 3 random wrong options in O(1) without cloning and shuffling the full WORDS array
     const wrongOptions = [];
-    const pool = [...WORDS].filter(w => w.id !== targetWord.id);
-    shuffleArray(pool);
-    
-    for (let i = 0; i < 3 && i < pool.length; i++) {
-        wrongOptions.push(isEnRu ? (getWordTranslation(pool[i]) || pool[i].translation) : pool[i].word);
+    const usedIds = new Set([targetWord.id]);
+    const sourcePool = Array.isArray(WORDS) && WORDS.length > 4 ? WORDS : (allWords || []);
+    let attempts = 0;
+    while (wrongOptions.length < 3 && attempts < 30 && sourcePool.length > 1) {
+        attempts++;
+        const candidate = sourcePool[Math.floor(Math.random() * sourcePool.length)];
+        if (candidate && !usedIds.has(candidate.id)) {
+            usedIds.add(candidate.id);
+            wrongOptions.push(isEnRu ? (getWordTranslation(candidate) || candidate.translation) : candidate.word);
+        }
     }
 
     const options = [correctAnswer, ...wrongOptions];
