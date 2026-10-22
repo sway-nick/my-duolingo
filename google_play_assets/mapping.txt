@@ -3,8 +3,8 @@
 # min_api: 24
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: afe36bc98c19658b405faa3321981176ab689b944937350b63350c0e1bed75f8
-# pg_map_hash: SHA-256 afe36bc98c19658b405faa3321981176ab689b944937350b63350c0e1bed75f8
+# pg_map_id: 5d817da6f7c2a63ad5d0e6ccc5dfd70e7f5feeed2567e411dc03fdedc8443f14
+# pg_map_hash: SHA-256 5d817da6f7c2a63ad5d0e6ccc5dfd70e7f5feeed2567e411dc03fdedc8443f14
 _COROUTINE.ArtificialStackFrames -> R8$$REMOVED$$CLASS$$0:
 # {"id":"sourceFile","fileName":"CoroutineDebugging.kt"}
 _COROUTINE.CoroutineDebuggingKt -> R8$$REMOVED$$CLASS$$1:
@@ -78307,13 +78307,13 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$P5xzceo2IjVPISiGSIrc9hWQoFA(int,android.content.Context):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
-    1:11:void cancelRotation(android.content.Context):564:564 -> cancelRotation
-    12:18:void cancelRotation(android.content.Context):567:567 -> cancelRotation
-    19:23:void cancelRotation(android.content.Context):568:568 -> cancelRotation
-    24:34:void cancelRotation(android.content.Context):569:569 -> cancelRotation
-    35:38:void cancelRotation(android.content.Context):575:575 -> cancelRotation
-    39:43:void cancelRotation(android.content.Context):576:576 -> cancelRotation
-    44:47:void cancelRotation(android.content.Context):578:578 -> cancelRotation
+    1:11:void cancelRotation(android.content.Context):589:589 -> cancelRotation
+    12:18:void cancelRotation(android.content.Context):592:592 -> cancelRotation
+    19:23:void cancelRotation(android.content.Context):593:593 -> cancelRotation
+    24:34:void cancelRotation(android.content.Context):594:594 -> cancelRotation
+    35:38:void cancelRotation(android.content.Context):600:600 -> cancelRotation
+    39:43:void cancelRotation(android.content.Context):601:601 -> cancelRotation
+    44:47:void cancelRotation(android.content.Context):603:603 -> cancelRotation
     1:4:void $r8$lambda$SXq5oZ9-uYRYuXoD3RqmhD611qQ(int,android.content.Context):0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$Z5VUm2M5X210npYaTDK4iOBNvQg(android.content.Context,java.lang.String,com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0):0:0 -> e
@@ -78324,230 +78324,241 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/b;Ljava/util/concurrent/atomic/AtomicBoolean;ILandroid/content/Context;)V"}
     1:4:void $r8$lambda$v-1rdCf48IUoeu6Nz9mjLM9IOnk(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
-    1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):504:504 -> getPendingIntent
-    8:10:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):505:505 -> getPendingIntent
-    11:19:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):506:506 -> getPendingIntent
-    20:24:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):511:511 -> getPendingIntent
+    1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):529:529 -> getPendingIntent
+    8:10:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):530:530 -> getPendingIntent
+    11:19:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):531:531 -> getPendingIntent
+    20:24:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):536:536 -> getPendingIntent
     1:4:void $r8$lambda$zWXyiMQHdVpMNz53a1FmuiNOZa4(int,android.content.Context):0:0 -> h
       # {"id":"com.android.tools.r8.synthesized"}
-    1:1:void handleWidgetAction(android.content.Context,java.lang.String):175:175 -> handleWidgetAction
-    2:2:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):180:180 -> handleWidgetAction
-    3:5:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):184:186 -> handleWidgetAction
-    6:6:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):189:189 -> handleWidgetAction
-    7:7:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):290:290 -> handleWidgetAction
-    8:10:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):259:261 -> handleWidgetAction
-    11:11:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):264:264 -> handleWidgetAction
-    12:13:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):267:268 -> handleWidgetAction
-    14:17:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):271:274 -> handleWidgetAction
-    18:23:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):276:281 -> handleWidgetAction
-    24:24:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):286:286 -> handleWidgetAction
-    25:26:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):238:239 -> handleWidgetAction
-    27:29:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):241:243 -> handleWidgetAction
-    30:30:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):245:245 -> handleWidgetAction
-    31:32:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):222:223 -> handleWidgetAction
-    33:34:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):225:226 -> handleWidgetAction
-    35:37:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):228:230 -> handleWidgetAction
-    38:38:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):232:232 -> handleWidgetAction
-    39:40:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):206:207 -> handleWidgetAction
-    41:42:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):209:210 -> handleWidgetAction
-    43:45:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):212:214 -> handleWidgetAction
-    46:46:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):216:216 -> handleWidgetAction
-    47:49:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):200:202 -> handleWidgetAction
-    50:52:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):250:252 -> handleWidgetAction
-    53:54:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):254:255 -> handleWidgetAction
-    55:56:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):191:192 -> handleWidgetAction
-    57:57:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):194:194 -> handleWidgetAction
-    58:58:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):196:196 -> handleWidgetAction
-    5:8:boolean hasActiveWidgets(android.content.Context):517:517 -> hasActiveWidgets
-    9:15:boolean hasActiveWidgets(android.content.Context):518:518 -> hasActiveWidgets
-    16:21:boolean hasActiveWidgets(android.content.Context):519:519 -> hasActiveWidgets
-    22:27:boolean hasActiveWidgets(android.content.Context):520:520 -> hasActiveWidgets
-    3:8:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):80:80 -> lambda$onReceive$0
-    9:12:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):82:82 -> lambda$onReceive$0
-    1:4:void lambda$onReceive$1(android.content.Context,java.lang.String,java.lang.Runnable):91:91 -> lambda$onReceive$1
-    5:8:void lambda$onReceive$1(android.content.Context,java.lang.String,java.lang.Runnable):93:93 -> lambda$onReceive$1
-    1:11:void lambda$playNextContinuousWord$2(int,android.content.Context):142:142 -> lambda$playNextContinuousWord$2
-    12:14:void lambda$playNextContinuousWord$2(int,android.content.Context):145:145 -> lambda$playNextContinuousWord$2
-    15:17:void lambda$playNextContinuousWord$2(int,android.content.Context):146:146 -> lambda$playNextContinuousWord$2
-    18:21:void lambda$playNextContinuousWord$2(int,android.content.Context):147:147 -> lambda$playNextContinuousWord$2
-    1:12:void lambda$playNextContinuousWord$3(int,android.content.Context,java.util.concurrent.atomic.AtomicBoolean):139:139 -> lambda$playNextContinuousWord$3
-    13:18:void lambda$playNextContinuousWord$3(int,android.content.Context,java.util.concurrent.atomic.AtomicBoolean):140:140 -> lambda$playNextContinuousWord$3
-    19:30:void lambda$playNextContinuousWord$3(int,android.content.Context,java.util.concurrent.atomic.AtomicBoolean):141:141 -> lambda$playNextContinuousWord$3
-    1:11:void lambda$playNextContinuousWord$4(int,android.content.Context):161:161 -> lambda$playNextContinuousWord$4
-    12:14:void lambda$playNextContinuousWord$4(int,android.content.Context):164:164 -> lambda$playNextContinuousWord$4
-    15:17:void lambda$playNextContinuousWord$4(int,android.content.Context):165:165 -> lambda$playNextContinuousWord$4
-    18:21:void lambda$playNextContinuousWord$4(int,android.content.Context):166:166 -> lambda$playNextContinuousWord$4
-    1:12:void lambda$playNextContinuousWord$5(int,android.content.Context):160:160 -> lambda$playNextContinuousWord$5
-    1:7:void lambda$playNextContinuousWord$6(java.lang.Runnable,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):156:156 -> lambda$playNextContinuousWord$6
-    8:13:void lambda$playNextContinuousWord$6(java.lang.Runnable,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):157:157 -> lambda$playNextContinuousWord$6
-    14:25:void lambda$playNextContinuousWord$6(java.lang.Runnable,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):159:159 -> lambda$playNextContinuousWord$6
-    1:11:void lambda$playNextContinuousWord$7(int,android.content.Context):119:119 -> lambda$playNextContinuousWord$7
-    12:21:void lambda$playNextContinuousWord$7(int,android.content.Context):122:122 -> lambda$playNextContinuousWord$7
-    22:31:void lambda$playNextContinuousWord$7(int,android.content.Context):124:124 -> lambda$playNextContinuousWord$7
-    32:35:void lambda$playNextContinuousWord$7(int,android.content.Context):126:126 -> lambda$playNextContinuousWord$7
-    36:41:void lambda$playNextContinuousWord$7(int,android.content.Context):131:131 -> lambda$playNextContinuousWord$7
-    42:60:void lambda$playNextContinuousWord$7(int,android.content.Context):132:132 -> lambda$playNextContinuousWord$7
-    61:66:void lambda$playNextContinuousWord$7(int,android.content.Context):137:137 -> lambda$playNextContinuousWord$7
-    67:71:void lambda$playNextContinuousWord$7(int,android.content.Context):138:138 -> lambda$playNextContinuousWord$7
-    72:78:void lambda$playNextContinuousWord$7(int,android.content.Context):153:153 -> lambda$playNextContinuousWord$7
-    79:89:void lambda$playNextContinuousWord$7(int,android.content.Context):155:155 -> lambda$playNextContinuousWord$7
-    90:93:void lambda$playNextContinuousWord$7(int,android.content.Context):133:133 -> lambda$playNextContinuousWord$7
-    1:3:void onAppWidgetOptionsChanged(android.content.Context,android.appwidget.AppWidgetManager,int,android.os.Bundle):40:40 -> onAppWidgetOptionsChanged
-    4:7:void onAppWidgetOptionsChanged(android.content.Context,android.appwidget.AppWidgetManager,int,android.os.Bundle):41:41 -> onAppWidgetOptionsChanged
-    1:3:void onDisabled(android.content.Context):52:52 -> onDisabled
-    4:6:void onDisabled(android.content.Context):53:53 -> onDisabled
-    7:10:void onDisabled(android.content.Context):54:54 -> onDisabled
-    1:3:void onEnabled(android.content.Context):46:46 -> onEnabled
-    4:7:void onEnabled(android.content.Context):47:47 -> onEnabled
-    1:5:void onReceive(android.content.Context,android.content.Intent):59:59 -> onReceive
-    6:13:void onReceive(android.content.Context,android.content.Intent):60:60 -> onReceive
-    14:17:void onReceive(android.content.Context,android.content.Intent):61:61 -> onReceive
-    18:43:void onReceive(android.content.Context,android.content.Intent):64:64 -> onReceive
-    44:67:void onReceive(android.content.Context,android.content.Intent):65:65 -> onReceive
-    68:73:void onReceive(android.content.Context,android.content.Intent):66:66 -> onReceive
-    74:79:void onReceive(android.content.Context,android.content.Intent):67:67 -> onReceive
-    80:90:void onReceive(android.content.Context,android.content.Intent):68:68 -> onReceive
-    91:96:void onReceive(android.content.Context,android.content.Intent):71:71 -> onReceive
-    97:111:void onReceive(android.content.Context,android.content.Intent):72:72 -> onReceive
-    112:115:void onReceive(android.content.Context,android.content.Intent):77:77 -> onReceive
-    116:121:void onReceive(android.content.Context,android.content.Intent):78:78 -> onReceive
-    122:127:void onReceive(android.content.Context,android.content.Intent):79:79 -> onReceive
-    128:141:void onReceive(android.content.Context,android.content.Intent):87:87 -> onReceive
-    142:153:void onReceive(android.content.Context,android.content.Intent):89:89 -> onReceive
-    1:6:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):32:32 -> onUpdate
-    7:12:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):33:33 -> onUpdate
-    13:16:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):35:35 -> onUpdate
-    1:12:void playNextContinuousWord(android.content.Context,int):118:118 -> playNextContinuousWord
-    4:9:void scheduleNextRotation(android.content.Context):528:528 -> scheduleNextRotation
-    10:13:void scheduleNextRotation(android.content.Context):529:529 -> scheduleNextRotation
-    14:24:void scheduleNextRotation(android.content.Context):533:533 -> scheduleNextRotation
-    25:31:void scheduleNextRotation(android.content.Context):536:536 -> scheduleNextRotation
-    32:36:void scheduleNextRotation(android.content.Context):537:537 -> scheduleNextRotation
-    37:47:void scheduleNextRotation(android.content.Context):538:538 -> scheduleNextRotation
-    48:51:void scheduleNextRotation(android.content.Context):544:544 -> scheduleNextRotation
-    52:69:void scheduleNextRotation(android.content.Context):546:546 -> scheduleNextRotation
-    70:75:void scheduleNextRotation(android.content.Context):551:551 -> scheduleNextRotation
-    76:80:void scheduleNextRotation(android.content.Context):553:553 -> scheduleNextRotation
-    81:84:void scheduleNextRotation(android.content.Context):558:558 -> scheduleNextRotation
-    6:7:void startContinuousPlay(android.content.Context):99:99 -> startContinuousPlay
-    8:13:void startContinuousPlay(android.content.Context):100:100 -> startContinuousPlay
-    14:15:void startContinuousPlay(android.content.Context):101:101 -> startContinuousPlay
-    16:18:void startContinuousPlay(android.content.Context):102:102 -> startContinuousPlay
-    19:21:void startContinuousPlay(android.content.Context):103:103 -> startContinuousPlay
-    22:28:void startContinuousPlay(android.content.Context):105:105 -> startContinuousPlay
-    29:33:void startContinuousPlay(android.content.Context):106:106 -> startContinuousPlay
-    6:7:void stopContinuousPlay(android.content.Context):109:109 -> stopContinuousPlay
-    8:13:void stopContinuousPlay(android.content.Context):110:110 -> stopContinuousPlay
-    14:20:void stopContinuousPlay(android.content.Context):111:111 -> stopContinuousPlay
-    21:23:void stopContinuousPlay(android.content.Context):112:112 -> stopContinuousPlay
-    24:26:void stopContinuousPlay(android.content.Context):113:113 -> stopContinuousPlay
-    27:29:void stopContinuousPlay(android.content.Context):114:114 -> stopContinuousPlay
-    30:34:void stopContinuousPlay(android.content.Context):115:115 -> stopContinuousPlay
-    4:7:void updateAllWidgets(android.content.Context):298:298 -> updateAllWidgets
-    8:14:void updateAllWidgets(android.content.Context):299:299 -> updateAllWidgets
-    15:18:void updateAllWidgets(android.content.Context):300:300 -> updateAllWidgets
-    19:24:void updateAllWidgets(android.content.Context):301:301 -> updateAllWidgets
-    25:32:void updateAllWidgets(android.content.Context):302:302 -> updateAllWidgets
-    33:36:void updateAllWidgets(android.content.Context):305:305 -> updateAllWidgets
-    1:8:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):311:311 -> updateAppWidget
-    9:14:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):313:313 -> updateAppWidget
-    15:17:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):314:314 -> updateAppWidget
-    18:25:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):315:315 -> updateAppWidget
-    26:28:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):316:316 -> updateAppWidget
-    29:30:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):318:318 -> updateAppWidget
-    31:39:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):320:320 -> updateAppWidget
-    40:43:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):322:322 -> updateAppWidget
-    44:47:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):323:323 -> updateAppWidget
-    48:54:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):326:326 -> updateAppWidget
-    55:66:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):327:327 -> updateAppWidget
-    67:71:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):331:331 -> updateAppWidget
-    72:77:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):332:332 -> updateAppWidget
-    78:82:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):334:334 -> updateAppWidget
-    83:87:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):335:335 -> updateAppWidget
-    88:91:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):338:338 -> updateAppWidget
-    92:110:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):339:339 -> updateAppWidget
-    111:120:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):340:340 -> updateAppWidget
-    121:147:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):341:341 -> updateAppWidget
-    148:159:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):354:354 -> updateAppWidget
-    160:166:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):358:358 -> updateAppWidget
-    167:173:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):359:359 -> updateAppWidget
-    174:180:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):360:360 -> updateAppWidget
-    181:188:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):361:361 -> updateAppWidget
-    189:192:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):362:362 -> updateAppWidget
-    193:200:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):363:363 -> updateAppWidget
-    201:208:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):364:364 -> updateAppWidget
-    209:213:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):367:367 -> updateAppWidget
-    214:218:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):368:368 -> updateAppWidget
-    219:223:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):369:369 -> updateAppWidget
-    224:228:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):370:370 -> updateAppWidget
-    229:234:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):371:371 -> updateAppWidget
-    235:241:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):375:375 -> updateAppWidget
-    242:248:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):376:376 -> updateAppWidget
-    249:255:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):377:377 -> updateAppWidget
-    256:262:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):378:378 -> updateAppWidget
-    263:269:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):379:379 -> updateAppWidget
-    270:277:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):380:380 -> updateAppWidget
-    278:281:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):383:383 -> updateAppWidget
-    282:289:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):384:384 -> updateAppWidget
-    290:297:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):385:385 -> updateAppWidget
-    298:308:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):386:386 -> updateAppWidget
-    309:312:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):389:389 -> updateAppWidget
-    313:320:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):390:390 -> updateAppWidget
-    321:328:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):391:391 -> updateAppWidget
-    329:338:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):394:394 -> updateAppWidget
-    339:343:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):397:397 -> updateAppWidget
-    344:348:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):400:400 -> updateAppWidget
-    349:350:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
-    351:359:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):403:403 -> updateAppWidget
-    360:363:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
-    364:370:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):398:398 -> updateAppWidget
-    371:378:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):408:408 -> updateAppWidget
-    379:382:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):409:409 -> updateAppWidget
-    383:388:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):410:410 -> updateAppWidget
-    389:413:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):412:412 -> updateAppWidget
-    414:419:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):413:413 -> updateAppWidget
-    420:425:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):415:415 -> updateAppWidget
-    426:435:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):418:418 -> updateAppWidget
-    436:441:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):425:425 -> updateAppWidget
-    442:451:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
-    452:456:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):432:432 -> updateAppWidget
-    457:460:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):433:433 -> updateAppWidget
-    461:468:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):434:434 -> updateAppWidget
-    469:476:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):437:437 -> updateAppWidget
-    477:481:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):439:439 -> updateAppWidget
-    482:487:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):441:441 -> updateAppWidget
-    488:494:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):430:430 -> updateAppWidget
-    495:504:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):446:446 -> updateAppWidget
-    505:521:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):448:448 -> updateAppWidget
-    522:529:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):449:449 -> updateAppWidget
-    530:536:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):452:452 -> updateAppWidget
-    537:542:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):453:453 -> updateAppWidget
-    543:548:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):456:456 -> updateAppWidget
-    549:553:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):459:459 -> updateAppWidget
-    554:559:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):463:463 -> updateAppWidget
-    560:563:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):465:465 -> updateAppWidget
-    564:568:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):466:466 -> updateAppWidget
-    569:574:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):467:467 -> updateAppWidget
-    575:579:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):469:469 -> updateAppWidget
-    580:588:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):475:475 -> updateAppWidget
-    589:591:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):476:476 -> updateAppWidget
-    592:605:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):477:477 -> updateAppWidget
-    606:609:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):478:478 -> updateAppWidget
-    610:614:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):479:479 -> updateAppWidget
-    615:622:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):482:482 -> updateAppWidget
-    623:627:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):483:483 -> updateAppWidget
-    628:632:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):484:484 -> updateAppWidget
-    633:637:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):485:485 -> updateAppWidget
-    638:642:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):486:486 -> updateAppWidget
-    643:647:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):487:487 -> updateAppWidget
-    648:652:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):488:488 -> updateAppWidget
-    653:665:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):491:491 -> updateAppWidget
-    666:678:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):492:492 -> updateAppWidget
-    679:691:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):493:493 -> updateAppWidget
-    692:704:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):494:494 -> updateAppWidget
-    705:719:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):495:495 -> updateAppWidget
-    720:725:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):497:497 -> updateAppWidget
-    726:729:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):499:499 -> updateAppWidget
+    1:1:void handleWidgetAction(android.content.Context,java.lang.String):195:195 -> handleWidgetAction
+    2:2:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):200:200 -> handleWidgetAction
+    3:5:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):204:206 -> handleWidgetAction
+    6:8:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):208:210 -> handleWidgetAction
+    9:9:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):214:214 -> handleWidgetAction
+    10:10:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):315:315 -> handleWidgetAction
+    11:13:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):284:286 -> handleWidgetAction
+    14:14:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):289:289 -> handleWidgetAction
+    15:16:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):292:293 -> handleWidgetAction
+    17:20:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):296:299 -> handleWidgetAction
+    21:26:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):301:306 -> handleWidgetAction
+    27:27:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):311:311 -> handleWidgetAction
+    28:29:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):263:264 -> handleWidgetAction
+    30:32:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):266:268 -> handleWidgetAction
+    33:33:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):270:270 -> handleWidgetAction
+    34:35:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):247:248 -> handleWidgetAction
+    36:37:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):250:251 -> handleWidgetAction
+    38:40:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):253:255 -> handleWidgetAction
+    41:41:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):257:257 -> handleWidgetAction
+    42:43:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):231:232 -> handleWidgetAction
+    44:45:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):234:235 -> handleWidgetAction
+    46:48:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):237:239 -> handleWidgetAction
+    49:49:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):241:241 -> handleWidgetAction
+    50:52:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):225:227 -> handleWidgetAction
+    53:55:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):275:277 -> handleWidgetAction
+    56:57:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):279:280 -> handleWidgetAction
+    58:59:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):216:217 -> handleWidgetAction
+    60:60:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):219:219 -> handleWidgetAction
+    61:61:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):221:221 -> handleWidgetAction
+    5:8:boolean hasActiveWidgets(android.content.Context):542:542 -> hasActiveWidgets
+    9:15:boolean hasActiveWidgets(android.content.Context):543:543 -> hasActiveWidgets
+    16:19:boolean hasActiveWidgets(android.content.Context):544:544 -> hasActiveWidgets
+    20:25:boolean hasActiveWidgets(android.content.Context):545:545 -> hasActiveWidgets
+    3:8:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):100:100 -> lambda$onReceive$0
+    9:12:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):102:102 -> lambda$onReceive$0
+    1:4:void lambda$onReceive$1(android.content.Context,java.lang.String,java.lang.Runnable):111:111 -> lambda$onReceive$1
+    5:8:void lambda$onReceive$1(android.content.Context,java.lang.String,java.lang.Runnable):113:113 -> lambda$onReceive$1
+    1:11:void lambda$playNextContinuousWord$2(int,android.content.Context):162:162 -> lambda$playNextContinuousWord$2
+    12:14:void lambda$playNextContinuousWord$2(int,android.content.Context):165:165 -> lambda$playNextContinuousWord$2
+    15:17:void lambda$playNextContinuousWord$2(int,android.content.Context):166:166 -> lambda$playNextContinuousWord$2
+    18:21:void lambda$playNextContinuousWord$2(int,android.content.Context):167:167 -> lambda$playNextContinuousWord$2
+    1:12:void lambda$playNextContinuousWord$3(int,android.content.Context,java.util.concurrent.atomic.AtomicBoolean):159:159 -> lambda$playNextContinuousWord$3
+    13:18:void lambda$playNextContinuousWord$3(int,android.content.Context,java.util.concurrent.atomic.AtomicBoolean):160:160 -> lambda$playNextContinuousWord$3
+    19:30:void lambda$playNextContinuousWord$3(int,android.content.Context,java.util.concurrent.atomic.AtomicBoolean):161:161 -> lambda$playNextContinuousWord$3
+    1:11:void lambda$playNextContinuousWord$4(int,android.content.Context):181:181 -> lambda$playNextContinuousWord$4
+    12:14:void lambda$playNextContinuousWord$4(int,android.content.Context):184:184 -> lambda$playNextContinuousWord$4
+    15:17:void lambda$playNextContinuousWord$4(int,android.content.Context):185:185 -> lambda$playNextContinuousWord$4
+    18:21:void lambda$playNextContinuousWord$4(int,android.content.Context):186:186 -> lambda$playNextContinuousWord$4
+    1:12:void lambda$playNextContinuousWord$5(int,android.content.Context):180:180 -> lambda$playNextContinuousWord$5
+    1:7:void lambda$playNextContinuousWord$6(java.lang.Runnable,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):176:176 -> lambda$playNextContinuousWord$6
+    8:13:void lambda$playNextContinuousWord$6(java.lang.Runnable,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):177:177 -> lambda$playNextContinuousWord$6
+    14:25:void lambda$playNextContinuousWord$6(java.lang.Runnable,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):179:179 -> lambda$playNextContinuousWord$6
+    1:11:void lambda$playNextContinuousWord$7(int,android.content.Context):139:139 -> lambda$playNextContinuousWord$7
+    12:21:void lambda$playNextContinuousWord$7(int,android.content.Context):142:142 -> lambda$playNextContinuousWord$7
+    22:31:void lambda$playNextContinuousWord$7(int,android.content.Context):144:144 -> lambda$playNextContinuousWord$7
+    32:35:void lambda$playNextContinuousWord$7(int,android.content.Context):146:146 -> lambda$playNextContinuousWord$7
+    36:41:void lambda$playNextContinuousWord$7(int,android.content.Context):151:151 -> lambda$playNextContinuousWord$7
+    42:60:void lambda$playNextContinuousWord$7(int,android.content.Context):152:152 -> lambda$playNextContinuousWord$7
+    61:66:void lambda$playNextContinuousWord$7(int,android.content.Context):157:157 -> lambda$playNextContinuousWord$7
+    67:71:void lambda$playNextContinuousWord$7(int,android.content.Context):158:158 -> lambda$playNextContinuousWord$7
+    72:78:void lambda$playNextContinuousWord$7(int,android.content.Context):173:173 -> lambda$playNextContinuousWord$7
+    79:89:void lambda$playNextContinuousWord$7(int,android.content.Context):175:175 -> lambda$playNextContinuousWord$7
+    90:93:void lambda$playNextContinuousWord$7(int,android.content.Context):153:153 -> lambda$playNextContinuousWord$7
+    1:4:void onAppWidgetOptionsChanged(android.content.Context,android.appwidget.AppWidgetManager,int,android.os.Bundle):41:41 -> onAppWidgetOptionsChanged
+    5:7:void onAppWidgetOptionsChanged(android.content.Context,android.appwidget.AppWidgetManager,int,android.os.Bundle):42:42 -> onAppWidgetOptionsChanged
+    8:11:void onAppWidgetOptionsChanged(android.content.Context,android.appwidget.AppWidgetManager,int,android.os.Bundle):43:43 -> onAppWidgetOptionsChanged
+    1:3:void onDeleted(android.content.Context,int[]):48:48 -> onDeleted
+    4:7:void onDeleted(android.content.Context,int[]):49:49 -> onDeleted
+    1:3:void onDisabled(android.content.Context):60:60 -> onDisabled
+    4:7:void onDisabled(android.content.Context):62:62 -> onDisabled
+    8:14:void onDisabled(android.content.Context):63:63 -> onDisabled
+    15:21:void onDisabled(android.content.Context):64:64 -> onDisabled
+    22:24:void onDisabled(android.content.Context):66:66 -> onDisabled
+    25:28:void onDisabled(android.content.Context):67:67 -> onDisabled
+    1:3:void onEnabled(android.content.Context):54:54 -> onEnabled
+    4:7:void onEnabled(android.content.Context):55:55 -> onEnabled
+    1:5:void onReceive(android.content.Context,android.content.Intent):72:72 -> onReceive
+    6:13:void onReceive(android.content.Context,android.content.Intent):73:73 -> onReceive
+    14:17:void onReceive(android.content.Context,android.content.Intent):74:74 -> onReceive
+    18:49:void onReceive(android.content.Context,android.content.Intent):77:77 -> onReceive
+    50:67:void onReceive(android.content.Context,android.content.Intent):78:78 -> onReceive
+    68:73:void onReceive(android.content.Context,android.content.Intent):79:79 -> onReceive
+    74:91:void onReceive(android.content.Context,android.content.Intent):84:84 -> onReceive
+    92:109:void onReceive(android.content.Context,android.content.Intent):85:85 -> onReceive
+    110:115:void onReceive(android.content.Context,android.content.Intent):86:86 -> onReceive
+    116:121:void onReceive(android.content.Context,android.content.Intent):87:87 -> onReceive
+    122:132:void onReceive(android.content.Context,android.content.Intent):88:88 -> onReceive
+    133:138:void onReceive(android.content.Context,android.content.Intent):91:91 -> onReceive
+    139:153:void onReceive(android.content.Context,android.content.Intent):92:92 -> onReceive
+    154:157:void onReceive(android.content.Context,android.content.Intent):97:97 -> onReceive
+    158:163:void onReceive(android.content.Context,android.content.Intent):98:98 -> onReceive
+    164:169:void onReceive(android.content.Context,android.content.Intent):99:99 -> onReceive
+    170:183:void onReceive(android.content.Context,android.content.Intent):107:107 -> onReceive
+    184:195:void onReceive(android.content.Context,android.content.Intent):109:109 -> onReceive
+    1:7:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):32:32 -> onUpdate
+    8:10:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):33:33 -> onUpdate
+    11:16:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):34:34 -> onUpdate
+    17:20:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):36:36 -> onUpdate
+    1:12:void playNextContinuousWord(android.content.Context,int):138:138 -> playNextContinuousWord
+    4:9:void scheduleNextRotation(android.content.Context):553:553 -> scheduleNextRotation
+    10:13:void scheduleNextRotation(android.content.Context):554:554 -> scheduleNextRotation
+    14:24:void scheduleNextRotation(android.content.Context):558:558 -> scheduleNextRotation
+    25:31:void scheduleNextRotation(android.content.Context):561:561 -> scheduleNextRotation
+    32:36:void scheduleNextRotation(android.content.Context):562:562 -> scheduleNextRotation
+    37:47:void scheduleNextRotation(android.content.Context):563:563 -> scheduleNextRotation
+    48:51:void scheduleNextRotation(android.content.Context):569:569 -> scheduleNextRotation
+    52:69:void scheduleNextRotation(android.content.Context):571:571 -> scheduleNextRotation
+    70:75:void scheduleNextRotation(android.content.Context):576:576 -> scheduleNextRotation
+    76:80:void scheduleNextRotation(android.content.Context):578:578 -> scheduleNextRotation
+    81:84:void scheduleNextRotation(android.content.Context):583:583 -> scheduleNextRotation
+    6:7:void startContinuousPlay(android.content.Context):119:119 -> startContinuousPlay
+    8:13:void startContinuousPlay(android.content.Context):120:120 -> startContinuousPlay
+    14:15:void startContinuousPlay(android.content.Context):121:121 -> startContinuousPlay
+    16:18:void startContinuousPlay(android.content.Context):122:122 -> startContinuousPlay
+    19:21:void startContinuousPlay(android.content.Context):123:123 -> startContinuousPlay
+    22:28:void startContinuousPlay(android.content.Context):125:125 -> startContinuousPlay
+    29:33:void startContinuousPlay(android.content.Context):126:126 -> startContinuousPlay
+    6:7:void stopContinuousPlay(android.content.Context):129:129 -> stopContinuousPlay
+    8:13:void stopContinuousPlay(android.content.Context):130:130 -> stopContinuousPlay
+    14:20:void stopContinuousPlay(android.content.Context):131:131 -> stopContinuousPlay
+    21:23:void stopContinuousPlay(android.content.Context):132:132 -> stopContinuousPlay
+    24:26:void stopContinuousPlay(android.content.Context):133:133 -> stopContinuousPlay
+    27:29:void stopContinuousPlay(android.content.Context):134:134 -> stopContinuousPlay
+    30:34:void stopContinuousPlay(android.content.Context):135:135 -> stopContinuousPlay
+    4:7:void updateAllWidgets(android.content.Context):323:323 -> updateAllWidgets
+    8:14:void updateAllWidgets(android.content.Context):324:324 -> updateAllWidgets
+    15:18:void updateAllWidgets(android.content.Context):325:325 -> updateAllWidgets
+    19:24:void updateAllWidgets(android.content.Context):326:326 -> updateAllWidgets
+    25:32:void updateAllWidgets(android.content.Context):327:327 -> updateAllWidgets
+    33:36:void updateAllWidgets(android.content.Context):330:330 -> updateAllWidgets
+    1:8:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):336:336 -> updateAppWidget
+    9:14:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):338:338 -> updateAppWidget
+    15:17:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):339:339 -> updateAppWidget
+    18:25:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):340:340 -> updateAppWidget
+    26:28:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):341:341 -> updateAppWidget
+    29:30:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):343:343 -> updateAppWidget
+    31:39:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):345:345 -> updateAppWidget
+    40:43:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):347:347 -> updateAppWidget
+    44:47:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):348:348 -> updateAppWidget
+    48:54:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):351:351 -> updateAppWidget
+    55:66:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):352:352 -> updateAppWidget
+    67:71:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):356:356 -> updateAppWidget
+    72:77:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):357:357 -> updateAppWidget
+    78:82:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):359:359 -> updateAppWidget
+    83:87:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):360:360 -> updateAppWidget
+    88:91:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):363:363 -> updateAppWidget
+    92:110:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):364:364 -> updateAppWidget
+    111:120:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):365:365 -> updateAppWidget
+    121:147:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):366:366 -> updateAppWidget
+    148:159:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):379:379 -> updateAppWidget
+    160:166:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):383:383 -> updateAppWidget
+    167:173:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):384:384 -> updateAppWidget
+    174:180:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):385:385 -> updateAppWidget
+    181:188:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):386:386 -> updateAppWidget
+    189:192:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):387:387 -> updateAppWidget
+    193:200:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):388:388 -> updateAppWidget
+    201:208:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):389:389 -> updateAppWidget
+    209:213:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):392:392 -> updateAppWidget
+    214:218:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):393:393 -> updateAppWidget
+    219:223:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):394:394 -> updateAppWidget
+    224:228:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):395:395 -> updateAppWidget
+    229:234:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):396:396 -> updateAppWidget
+    235:241:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):400:400 -> updateAppWidget
+    242:248:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
+    249:255:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):402:402 -> updateAppWidget
+    256:262:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):403:403 -> updateAppWidget
+    263:269:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):404:404 -> updateAppWidget
+    270:277:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):405:405 -> updateAppWidget
+    278:281:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):408:408 -> updateAppWidget
+    282:289:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):409:409 -> updateAppWidget
+    290:297:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):410:410 -> updateAppWidget
+    298:308:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):411:411 -> updateAppWidget
+    309:312:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):414:414 -> updateAppWidget
+    313:320:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):415:415 -> updateAppWidget
+    321:328:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):416:416 -> updateAppWidget
+    329:338:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):419:419 -> updateAppWidget
+    339:343:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):422:422 -> updateAppWidget
+    344:348:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):425:425 -> updateAppWidget
+    349:350:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):426:426 -> updateAppWidget
+    351:359:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):428:428 -> updateAppWidget
+    360:363:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):426:426 -> updateAppWidget
+    364:370:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
+    371:378:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):433:433 -> updateAppWidget
+    379:382:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):434:434 -> updateAppWidget
+    383:388:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):435:435 -> updateAppWidget
+    389:413:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):437:437 -> updateAppWidget
+    414:419:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):438:438 -> updateAppWidget
+    420:425:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):440:440 -> updateAppWidget
+    426:435:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):443:443 -> updateAppWidget
+    436:441:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):450:450 -> updateAppWidget
+    442:451:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):448:448 -> updateAppWidget
+    452:456:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):457:457 -> updateAppWidget
+    457:460:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):458:458 -> updateAppWidget
+    461:468:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):459:459 -> updateAppWidget
+    469:476:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):462:462 -> updateAppWidget
+    477:481:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):464:464 -> updateAppWidget
+    482:487:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):466:466 -> updateAppWidget
+    488:494:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):455:455 -> updateAppWidget
+    495:504:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):471:471 -> updateAppWidget
+    505:521:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):473:473 -> updateAppWidget
+    522:529:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):474:474 -> updateAppWidget
+    530:536:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):477:477 -> updateAppWidget
+    537:542:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):478:478 -> updateAppWidget
+    543:548:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):481:481 -> updateAppWidget
+    549:553:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):484:484 -> updateAppWidget
+    554:559:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):488:488 -> updateAppWidget
+    560:563:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):490:490 -> updateAppWidget
+    564:568:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):491:491 -> updateAppWidget
+    569:574:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):492:492 -> updateAppWidget
+    575:579:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):494:494 -> updateAppWidget
+    580:588:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):500:500 -> updateAppWidget
+    589:591:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):501:501 -> updateAppWidget
+    592:605:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):502:502 -> updateAppWidget
+    606:609:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):503:503 -> updateAppWidget
+    610:614:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):504:504 -> updateAppWidget
+    615:622:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):507:507 -> updateAppWidget
+    623:627:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):508:508 -> updateAppWidget
+    628:632:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):509:509 -> updateAppWidget
+    633:637:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):510:510 -> updateAppWidget
+    638:642:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):511:511 -> updateAppWidget
+    643:647:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):512:512 -> updateAppWidget
+    648:652:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):513:513 -> updateAppWidget
+    653:665:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):516:516 -> updateAppWidget
+    666:678:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):517:517 -> updateAppWidget
+    679:691:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):518:518 -> updateAppWidget
+    692:704:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):519:519 -> updateAppWidget
+    705:719:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):520:520 -> updateAppWidget
+    720:725:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):522:522 -> updateAppWidget
+    726:729:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):524:524 -> updateAppWidget
 com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.a:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
@@ -79243,121 +79254,208 @@ com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda5 -> com.english
 com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity$9:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
     1:6:void <init>(com.englishbreakfast.app.MainActivity):709:709 -> <init>
-    1:4:void $r8$lambda$umGwimolGFrjK0bopzXpAkGDtek(com.englishbreakfast.app.MainActivity$9):0:0 -> a
+    1:4:void $r8$lambda$_pkKuiFjFbEoXPwZYRZHKUaAmAA(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$v30xtNoFTAiUtZlY3hE8JlzClXQ(com.englishbreakfast.app.MainActivity$9,java.lang.String):0:0 -> b
+    1:4:void $r8$lambda$kvTBKwUUvL07JLQttOIxV-3HiBs(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String):0:0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    1:9:void clearPendingFavorites():800:800 -> clearPendingFavorites
-    10:15:void clearPendingFavorites():801:801 -> clearPendingFavorites
-    1:9:void clearPendingUnfavorites():782:782 -> clearPendingUnfavorites
-    10:15:void clearPendingUnfavorites():783:783 -> clearPendingUnfavorites
-    1:11:java.lang.String getPendingFavorites():788:788 -> getPendingFavorites
-    12:18:java.lang.String getPendingFavorites():789:789 -> getPendingFavorites
-    1:11:java.lang.String getPendingUnfavorites():770:770 -> getPendingUnfavorites
-    12:18:java.lang.String getPendingUnfavorites():771:771 -> getPendingUnfavorites
-    1:11:java.lang.String getSystemLanguage():891:891 -> getSystemLanguage
-    12:17:java.lang.String getSystemLanguage():893:893 -> getSystemLanguage
-    18:23:java.lang.String getSystemLanguage():894:894 -> getSystemLanguage
-    1:11:java.lang.String getWidgetConfig():872:872 -> getWidgetConfig
-    12:18:java.lang.String getWidgetConfig():873:873 -> getWidgetConfig
-    1:9:boolean isPinSupported():747:747 -> isPinSupported
-    10:15:boolean isPinSupported():748:748 -> isPinSupported
-    16:27:boolean isPinSupported():749:749 -> isPinSupported
-    28:37:boolean isPinSupported():750:750 -> isPinSupported
-    1:10:boolean isWidgetInstalled():757:757 -> isWidgetInstalled
-    11:16:boolean isWidgetInstalled():759:759 -> isWidgetInstalled
-    17:25:boolean isWidgetInstalled():760:760 -> isWidgetInstalled
-    26:31:boolean isWidgetInstalled():761:761 -> isWidgetInstalled
-    32:37:boolean isWidgetInstalled():762:762 -> isWidgetInstalled
-    1:11:void lambda$openHomeScreenSettings$1():905:905 -> lambda$openHomeScreenSettings$1
-    12:18:void lambda$openHomeScreenSettings$1():906:906 -> lambda$openHomeScreenSettings$1
-    19:29:void lambda$openHomeScreenSettings$1():907:907 -> lambda$openHomeScreenSettings$1
-    30:32:void lambda$openHomeScreenSettings$1():908:908 -> lambda$openHomeScreenSettings$1
-    33:38:void lambda$openHomeScreenSettings$1():909:909 -> lambda$openHomeScreenSettings$1
-    39:45:void lambda$openHomeScreenSettings$1():914:914 -> lambda$openHomeScreenSettings$1
-    46:70:void lambda$openHomeScreenSettings$1():915:915 -> lambda$openHomeScreenSettings$1
-    71:73:void lambda$openHomeScreenSettings$1():916:916 -> lambda$openHomeScreenSettings$1
-    74:79:void lambda$openHomeScreenSettings$1():917:917 -> lambda$openHomeScreenSettings$1
-    80:86:void lambda$openHomeScreenSettings$1():920:920 -> lambda$openHomeScreenSettings$1
-    87:89:void lambda$openHomeScreenSettings$1():921:921 -> lambda$openHomeScreenSettings$1
-    90:95:void lambda$openHomeScreenSettings$1():922:922 -> lambda$openHomeScreenSettings$1
-    1:18:void lambda$triggerOvertakenAlert$0(java.lang.String):820:820 -> lambda$triggerOvertakenAlert$0
-    19:26:void lambda$triggerOvertakenAlert$0(java.lang.String):821:821 -> lambda$triggerOvertakenAlert$0
-    27:28:void lambda$triggerOvertakenAlert$0(java.lang.String):822:822 -> lambda$triggerOvertakenAlert$0
-    29:45:void lambda$triggerOvertakenAlert$0(java.lang.String):823:823 -> lambda$triggerOvertakenAlert$0
-    46:51:void lambda$triggerOvertakenAlert$0(java.lang.String):824:824 -> lambda$triggerOvertakenAlert$0
-    52:57:void lambda$triggerOvertakenAlert$0(java.lang.String):825:825 -> lambda$triggerOvertakenAlert$0
-    58:61:void lambda$triggerOvertakenAlert$0(java.lang.String):828:828 -> lambda$triggerOvertakenAlert$0
-    62:73:void lambda$triggerOvertakenAlert$0(java.lang.String):829:829 -> lambda$triggerOvertakenAlert$0
-    74:81:void lambda$triggerOvertakenAlert$0(java.lang.String):831:831 -> lambda$triggerOvertakenAlert$0
-    82:88:void lambda$triggerOvertakenAlert$0(java.lang.String):832:832 -> lambda$triggerOvertakenAlert$0
-    89:91:void lambda$triggerOvertakenAlert$0(java.lang.String):837:837 -> lambda$triggerOvertakenAlert$0
-    92:94:void lambda$triggerOvertakenAlert$0(java.lang.String):838:838 -> lambda$triggerOvertakenAlert$0
-    95:99:void lambda$triggerOvertakenAlert$0(java.lang.String):839:839 -> lambda$triggerOvertakenAlert$0
-    100:103:void lambda$triggerOvertakenAlert$0(java.lang.String):840:840 -> lambda$triggerOvertakenAlert$0
-    104:107:void lambda$triggerOvertakenAlert$0(java.lang.String):841:841 -> lambda$triggerOvertakenAlert$0
-    108:111:void lambda$triggerOvertakenAlert$0(java.lang.String):842:842 -> lambda$triggerOvertakenAlert$0
-    112:114:void lambda$triggerOvertakenAlert$0(java.lang.String):843:843 -> lambda$triggerOvertakenAlert$0
-    115:117:void lambda$triggerOvertakenAlert$0(java.lang.String):844:844 -> lambda$triggerOvertakenAlert$0
-    118:128:void lambda$triggerOvertakenAlert$0(java.lang.String):847:847 -> lambda$triggerOvertakenAlert$0
-    129:131:void lambda$triggerOvertakenAlert$0(java.lang.String):848:848 -> lambda$triggerOvertakenAlert$0
-    132:141:void lambda$triggerOvertakenAlert$0(java.lang.String):851:851 -> lambda$triggerOvertakenAlert$0
-    142:150:void lambda$triggerOvertakenAlert$0(java.lang.String):853:853 -> lambda$triggerOvertakenAlert$0
+    1:4:void $r8$lambda$umGwimolGFrjK0bopzXpAkGDtek(com.englishbreakfast.app.MainActivity$9):0:0 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:9:void clearPendingFavorites():804:804 -> clearPendingFavorites
+    10:15:void clearPendingFavorites():805:805 -> clearPendingFavorites
+    1:9:void clearPendingUnfavorites():786:786 -> clearPendingUnfavorites
+    10:15:void clearPendingUnfavorites():787:787 -> clearPendingUnfavorites
+    1:4:void $r8$lambda$v30xtNoFTAiUtZlY3hE8JlzClXQ(com.englishbreakfast.app.MainActivity$9,java.lang.String):0:0 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:11:java.lang.String getPendingFavorites():792:792 -> getPendingFavorites
+    12:18:java.lang.String getPendingFavorites():793:793 -> getPendingFavorites
+    1:11:java.lang.String getPendingUnfavorites():774:774 -> getPendingUnfavorites
+    12:18:java.lang.String getPendingUnfavorites():775:775 -> getPendingUnfavorites
+    1:11:java.lang.String getSystemLanguage():895:895 -> getSystemLanguage
+    12:17:java.lang.String getSystemLanguage():897:897 -> getSystemLanguage
+    18:23:java.lang.String getSystemLanguage():898:898 -> getSystemLanguage
+    1:11:java.lang.String getWidgetConfig():876:876 -> getWidgetConfig
+    12:18:java.lang.String getWidgetConfig():877:877 -> getWidgetConfig
+    1:9:boolean isPinSupported():751:751 -> isPinSupported
+    10:15:boolean isPinSupported():752:752 -> isPinSupported
+    16:27:boolean isPinSupported():753:753 -> isPinSupported
+    28:37:boolean isPinSupported():754:754 -> isPinSupported
+    1:10:boolean isWidgetInstalled():761:761 -> isWidgetInstalled
+    11:16:boolean isWidgetInstalled():763:763 -> isWidgetInstalled
+    17:25:boolean isWidgetInstalled():764:764 -> isWidgetInstalled
+    26:29:boolean isWidgetInstalled():765:765 -> isWidgetInstalled
+    30:37:boolean isWidgetInstalled():766:766 -> isWidgetInstalled
+    1:16:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):996:996 -> lambda$openFeedbackEmail$3
+    17:21:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):997:997 -> lambda$openFeedbackEmail$3
+    22:25:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):998:998 -> lambda$openFeedbackEmail$3
+    26:38:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1000:1000 -> lambda$openFeedbackEmail$3
+    39:50:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1002:1002 -> lambda$openFeedbackEmail$3
+    51:61:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1003:1003 -> lambda$openFeedbackEmail$3
+    62:65:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1000:1000 -> lambda$openFeedbackEmail$3
+    66:72:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1005:1005 -> lambda$openFeedbackEmail$3
+    73:79:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1006:1006 -> lambda$openFeedbackEmail$3
+    80:82:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1007:1007 -> lambda$openFeedbackEmail$3
+    83:85:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1008:1008 -> lambda$openFeedbackEmail$3
+    86:88:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1009:1009 -> lambda$openFeedbackEmail$3
+    89:94:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1010:1010 -> lambda$openFeedbackEmail$3
+    95:101:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1013:1013 -> lambda$openFeedbackEmail$3
+    102:106:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1014:1014 -> lambda$openFeedbackEmail$3
+    107:113:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1015:1015 -> lambda$openFeedbackEmail$3
+    114:116:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1016:1016 -> lambda$openFeedbackEmail$3
+    117:119:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1017:1017 -> lambda$openFeedbackEmail$3
+    120:123:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1018:1018 -> lambda$openFeedbackEmail$3
+    124:126:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1019:1019 -> lambda$openFeedbackEmail$3
+    127:132:void lambda$openFeedbackEmail$3(java.lang.String,java.lang.String,java.lang.String):1020:1020 -> lambda$openFeedbackEmail$3
+    1:11:void lambda$openHomeScreenSettings$1():909:909 -> lambda$openHomeScreenSettings$1
+    12:18:void lambda$openHomeScreenSettings$1():910:910 -> lambda$openHomeScreenSettings$1
+    19:29:void lambda$openHomeScreenSettings$1():911:911 -> lambda$openHomeScreenSettings$1
+    30:32:void lambda$openHomeScreenSettings$1():912:912 -> lambda$openHomeScreenSettings$1
+    33:38:void lambda$openHomeScreenSettings$1():913:913 -> lambda$openHomeScreenSettings$1
+    39:45:void lambda$openHomeScreenSettings$1():918:918 -> lambda$openHomeScreenSettings$1
+    46:70:void lambda$openHomeScreenSettings$1():919:919 -> lambda$openHomeScreenSettings$1
+    71:73:void lambda$openHomeScreenSettings$1():920:920 -> lambda$openHomeScreenSettings$1
+    74:79:void lambda$openHomeScreenSettings$1():921:921 -> lambda$openHomeScreenSettings$1
+    80:86:void lambda$openHomeScreenSettings$1():924:924 -> lambda$openHomeScreenSettings$1
+    87:89:void lambda$openHomeScreenSettings$1():925:925 -> lambda$openHomeScreenSettings$1
+    90:95:void lambda$openHomeScreenSettings$1():926:926 -> lambda$openHomeScreenSettings$1
+    1:22:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):936:936 -> lambda$shareToChannel$2
+    23:46:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):938:938 -> lambda$shareToChannel$2
+    47:58:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):940:940 -> lambda$shareToChannel$2
+    59:88:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):942:942 -> lambda$shareToChannel$2
+    89:93:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):943:943 -> lambda$shareToChannel$2
+    94:96:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):944:944 -> lambda$shareToChannel$2
+    97:102:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):945:945 -> lambda$shareToChannel$2
+    103:132:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):948:948 -> lambda$shareToChannel$2
+    133:137:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):949:949 -> lambda$shareToChannel$2
+    138:140:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):950:950 -> lambda$shareToChannel$2
+    141:147:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):951:951 -> lambda$shareToChannel$2
+    148:155:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):953:953 -> lambda$shareToChannel$2
+    156:175:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):955:955 -> lambda$shareToChannel$2
+    176:180:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):956:956 -> lambda$shareToChannel$2
+    181:183:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):957:957 -> lambda$shareToChannel$2
+    184:189:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):958:958 -> lambda$shareToChannel$2
+    190:209:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):961:961 -> lambda$shareToChannel$2
+    210:214:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):962:962 -> lambda$shareToChannel$2
+    215:217:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):963:963 -> lambda$shareToChannel$2
+    218:223:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):964:964 -> lambda$shareToChannel$2
+    224:231:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):966:966 -> lambda$shareToChannel$2
+    232:251:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):968:968 -> lambda$shareToChannel$2
+    252:256:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):969:969 -> lambda$shareToChannel$2
+    257:259:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):970:970 -> lambda$shareToChannel$2
+    260:265:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):971:971 -> lambda$shareToChannel$2
+    266:273:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):974:974 -> lambda$shareToChannel$2
+    274:279:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):975:975 -> lambda$shareToChannel$2
+    280:284:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):976:976 -> lambda$shareToChannel$2
+    285:287:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):977:977 -> lambda$shareToChannel$2
+    288:293:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):978:978 -> lambda$shareToChannel$2
+    294:300:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):982:982 -> lambda$shareToChannel$2
+    301:305:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):983:983 -> lambda$shareToChannel$2
+    306:310:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):984:984 -> lambda$shareToChannel$2
+    311:316:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):985:985 -> lambda$shareToChannel$2
+    317:319:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):986:986 -> lambda$shareToChannel$2
+    320:325:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):987:987 -> lambda$shareToChannel$2
+    1:18:void lambda$triggerOvertakenAlert$0(java.lang.String):824:824 -> lambda$triggerOvertakenAlert$0
+    19:26:void lambda$triggerOvertakenAlert$0(java.lang.String):825:825 -> lambda$triggerOvertakenAlert$0
+    27:28:void lambda$triggerOvertakenAlert$0(java.lang.String):826:826 -> lambda$triggerOvertakenAlert$0
+    29:45:void lambda$triggerOvertakenAlert$0(java.lang.String):827:827 -> lambda$triggerOvertakenAlert$0
+    46:51:void lambda$triggerOvertakenAlert$0(java.lang.String):828:828 -> lambda$triggerOvertakenAlert$0
+    52:57:void lambda$triggerOvertakenAlert$0(java.lang.String):829:829 -> lambda$triggerOvertakenAlert$0
+    58:61:void lambda$triggerOvertakenAlert$0(java.lang.String):832:832 -> lambda$triggerOvertakenAlert$0
+    62:73:void lambda$triggerOvertakenAlert$0(java.lang.String):833:833 -> lambda$triggerOvertakenAlert$0
+    74:81:void lambda$triggerOvertakenAlert$0(java.lang.String):835:835 -> lambda$triggerOvertakenAlert$0
+    82:88:void lambda$triggerOvertakenAlert$0(java.lang.String):836:836 -> lambda$triggerOvertakenAlert$0
+    89:91:void lambda$triggerOvertakenAlert$0(java.lang.String):841:841 -> lambda$triggerOvertakenAlert$0
+    92:94:void lambda$triggerOvertakenAlert$0(java.lang.String):842:842 -> lambda$triggerOvertakenAlert$0
+    95:99:void lambda$triggerOvertakenAlert$0(java.lang.String):843:843 -> lambda$triggerOvertakenAlert$0
+    100:103:void lambda$triggerOvertakenAlert$0(java.lang.String):844:844 -> lambda$triggerOvertakenAlert$0
+    104:107:void lambda$triggerOvertakenAlert$0(java.lang.String):845:845 -> lambda$triggerOvertakenAlert$0
+    108:111:void lambda$triggerOvertakenAlert$0(java.lang.String):846:846 -> lambda$triggerOvertakenAlert$0
+    112:114:void lambda$triggerOvertakenAlert$0(java.lang.String):847:847 -> lambda$triggerOvertakenAlert$0
+    115:117:void lambda$triggerOvertakenAlert$0(java.lang.String):848:848 -> lambda$triggerOvertakenAlert$0
+    118:128:void lambda$triggerOvertakenAlert$0(java.lang.String):851:851 -> lambda$triggerOvertakenAlert$0
+    129:131:void lambda$triggerOvertakenAlert$0(java.lang.String):852:852 -> lambda$triggerOvertakenAlert$0
+    132:141:void lambda$triggerOvertakenAlert$0(java.lang.String):855:855 -> lambda$triggerOvertakenAlert$0
+    142:150:void lambda$triggerOvertakenAlert$0(java.lang.String):857:857 -> lambda$triggerOvertakenAlert$0
     151:154:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSmallIcon(int):1426:1426 -> lambda$triggerOvertakenAlert$0
-    151:154:void lambda$triggerOvertakenAlert$0(java.lang.String):854 -> lambda$triggerOvertakenAlert$0
-    155:166:void lambda$triggerOvertakenAlert$0(java.lang.String):854:854 -> lambda$triggerOvertakenAlert$0
+    151:154:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    155:166:void lambda$triggerOvertakenAlert$0(java.lang.String):858:858 -> lambda$triggerOvertakenAlert$0
     167:172:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentTitle(java.lang.CharSequence):1472:1472 -> lambda$triggerOvertakenAlert$0
-    167:172:void lambda$triggerOvertakenAlert$0(java.lang.String):855 -> lambda$triggerOvertakenAlert$0
-    173:174:void lambda$triggerOvertakenAlert$0(java.lang.String):855:855 -> lambda$triggerOvertakenAlert$0
+    167:172:void lambda$triggerOvertakenAlert$0(java.lang.String):859 -> lambda$triggerOvertakenAlert$0
+    173:174:void lambda$triggerOvertakenAlert$0(java.lang.String):859:859 -> lambda$triggerOvertakenAlert$0
     175:180:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentText(java.lang.CharSequence):1480:1480 -> lambda$triggerOvertakenAlert$0
-    175:180:void lambda$triggerOvertakenAlert$0(java.lang.String):856 -> lambda$triggerOvertakenAlert$0
+    175:180:void lambda$triggerOvertakenAlert$0(java.lang.String):860 -> lambda$triggerOvertakenAlert$0
     181:182:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setPriority(int):1960:1960 -> lambda$triggerOvertakenAlert$0
-    181:182:void lambda$triggerOvertakenAlert$0(java.lang.String):857 -> lambda$triggerOvertakenAlert$0
+    181:182:void lambda$triggerOvertakenAlert$0(java.lang.String):861 -> lambda$triggerOvertakenAlert$0
     183:187:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1731:1731 -> lambda$triggerOvertakenAlert$0
-    183:187:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    183:187:void lambda$triggerOvertakenAlert$0(java.lang.String):862 -> lambda$triggerOvertakenAlert$0
     188:189:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1732:1732 -> lambda$triggerOvertakenAlert$0
-    188:189:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    188:189:void lambda$triggerOvertakenAlert$0(java.lang.String):862 -> lambda$triggerOvertakenAlert$0
     190:193:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1734:1734 -> lambda$triggerOvertakenAlert$0
-    190:193:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    190:193:void lambda$triggerOvertakenAlert$0(java.lang.String):862 -> lambda$triggerOvertakenAlert$0
     194:197:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1735:1735 -> lambda$triggerOvertakenAlert$0
-    194:197:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    194:197:void lambda$triggerOvertakenAlert$0(java.lang.String):862 -> lambda$triggerOvertakenAlert$0
     198:201:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1737:1737 -> lambda$triggerOvertakenAlert$0
-    198:201:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    198:201:void lambda$triggerOvertakenAlert$0(java.lang.String):862 -> lambda$triggerOvertakenAlert$0
     202:209:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setSound(android.net.Uri):1738:1738 -> lambda$triggerOvertakenAlert$0
-    202:209:void lambda$triggerOvertakenAlert$0(java.lang.String):858 -> lambda$triggerOvertakenAlert$0
+    202:209:void lambda$triggerOvertakenAlert$0(java.lang.String):862 -> lambda$triggerOvertakenAlert$0
     210:212:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setAutoCancel(boolean):1874:1874 -> lambda$triggerOvertakenAlert$0
-    210:212:void lambda$triggerOvertakenAlert$0(java.lang.String):859 -> lambda$triggerOvertakenAlert$0
+    210:212:void lambda$triggerOvertakenAlert$0(java.lang.String):863 -> lambda$triggerOvertakenAlert$0
     213:214:androidx.core.app.NotificationCompat$Builder androidx.core.app.NotificationCompat$Builder.setContentIntent(android.app.PendingIntent):1625:1625 -> lambda$triggerOvertakenAlert$0
-    213:214:void lambda$triggerOvertakenAlert$0(java.lang.String):860 -> lambda$triggerOvertakenAlert$0
-    215:224:void lambda$triggerOvertakenAlert$0(java.lang.String):862:862 -> lambda$triggerOvertakenAlert$0
-    225:228:void lambda$triggerOvertakenAlert$0(java.lang.String):865:865 -> lambda$triggerOvertakenAlert$0
-    1:9:void openHomeScreenSettings():902:902 -> openHomeScreenSettings
-    10:21:void openHomeScreenSettings():903:903 -> openHomeScreenSettings
-    1:9:void removePendingFavorite(java.lang.String):794:794 -> removePendingFavorite
-    10:15:void removePendingFavorite(java.lang.String):795:795 -> removePendingFavorite
-    1:9:void removePendingUnfavorite(java.lang.String):776:776 -> removePendingUnfavorite
-    10:15:void removePendingUnfavorite(java.lang.String):777:777 -> removePendingUnfavorite
+    213:214:void lambda$triggerOvertakenAlert$0(java.lang.String):864 -> lambda$triggerOvertakenAlert$0
+    215:224:void lambda$triggerOvertakenAlert$0(java.lang.String):866:866 -> lambda$triggerOvertakenAlert$0
+    225:228:void lambda$triggerOvertakenAlert$0(java.lang.String):869:869 -> lambda$triggerOvertakenAlert$0
+    1:9:void openFeedbackEmail(java.lang.String,java.lang.String,java.lang.String):994:994 -> openFeedbackEmail
+    10:25:void openFeedbackEmail(java.lang.String,java.lang.String,java.lang.String):995:995 -> openFeedbackEmail
+    1:9:void openHomeScreenSettings():906:906 -> openHomeScreenSettings
+    10:21:void openHomeScreenSettings():907:907 -> openHomeScreenSettings
+    1:9:void removePendingFavorite(java.lang.String):798:798 -> removePendingFavorite
+    10:15:void removePendingFavorite(java.lang.String):799:799 -> removePendingFavorite
+    1:9:void removePendingUnfavorite(java.lang.String):780:780 -> removePendingUnfavorite
+    10:15:void removePendingUnfavorite(java.lang.String):781:781 -> removePendingUnfavorite
     1:2:boolean requestPinWidget(java.lang.String):723:724 -> requestPinWidget
     3:3:boolean requestPinWidget():729:729 -> requestPinWidget
-    4:8:boolean requestPinWidget():731:735 -> requestPinWidget
-    9:9:boolean requestPinWidget():740:740 -> requestPinWidget
-    1:9:void saveWidgetConfig(java.lang.String):878:878 -> saveWidgetConfig
-    10:14:void saveWidgetConfig(java.lang.String):880:880 -> saveWidgetConfig
-    15:19:void saveWidgetConfig(java.lang.String):881:881 -> saveWidgetConfig
-    20:24:void saveWidgetConfig(java.lang.String):882:882 -> saveWidgetConfig
-    25:31:void saveWidgetConfig(java.lang.String):883:883 -> saveWidgetConfig
-    32:35:void saveWidgetConfig(java.lang.String):885:885 -> saveWidgetConfig
+    4:10:boolean requestPinWidget():731:737 -> requestPinWidget
+    11:11:boolean requestPinWidget():739:739 -> requestPinWidget
+    12:12:boolean requestPinWidget():744:744 -> requestPinWidget
+    1:9:void saveWidgetConfig(java.lang.String):882:882 -> saveWidgetConfig
+    10:14:void saveWidgetConfig(java.lang.String):884:884 -> saveWidgetConfig
+    15:19:void saveWidgetConfig(java.lang.String):885:885 -> saveWidgetConfig
+    20:24:void saveWidgetConfig(java.lang.String):886:886 -> saveWidgetConfig
+    25:31:void saveWidgetConfig(java.lang.String):887:887 -> saveWidgetConfig
+    32:35:void saveWidgetConfig(java.lang.String):889:889 -> saveWidgetConfig
+    1:9:void shareToChannel(java.lang.String,java.lang.String,java.lang.String):934:934 -> shareToChannel
+    10:25:void shareToChannel(java.lang.String,java.lang.String,java.lang.String):935:935 -> shareToChannel
     1:9:void syncFavorites(java.lang.String):712:712 -> syncFavorites
     10:14:void syncFavorites(java.lang.String):714:714 -> syncFavorites
     15:21:void syncFavorites(java.lang.String):715:715 -> syncFavorites
     22:25:void syncFavorites(java.lang.String):717:717 -> syncFavorites
-    1:9:void syncUserRank(int):806:806 -> syncUserRank
-    10:14:void syncUserRank(int):808:808 -> syncUserRank
-    15:21:void syncUserRank(int):809:809 -> syncUserRank
-    22:25:void syncUserRank(int):811:811 -> syncUserRank
-    1:9:void triggerOvertakenAlert(java.lang.String):817:817 -> triggerOvertakenAlert
-    10:21:void triggerOvertakenAlert(java.lang.String):818:818 -> triggerOvertakenAlert
-com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda7 -> com.englishbreakfast.app.s:
+    1:9:void syncUserRank(int):810:810 -> syncUserRank
+    10:14:void syncUserRank(int):812:812 -> syncUserRank
+    15:21:void syncUserRank(int):813:813 -> syncUserRank
+    22:25:void syncUserRank(int):815:815 -> syncUserRank
+    1:9:void triggerOvertakenAlert(java.lang.String):821:821 -> triggerOvertakenAlert
+    10:21:void triggerOvertakenAlert(java.lang.String):822:822 -> triggerOvertakenAlert
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.s:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int $r8$classId -> q
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$0 -> r
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$1 -> s
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$2 -> t
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$3 -> u
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:1:void <init>(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    2:2:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:54:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda8 -> com.englishbreakfast.app.t:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -79620,7 +79718,7 @@ com.englishbreakfast.app.WidgetAudioPlayer -> com.englishbreakfast.app.WidgetAud
     30:33:void stopPlayback():357:357 -> stopPlayback
     34:36:void stopPlayback():359:359 -> stopPlayback
     37:40:void stopPlayback():362:362 -> stopPlayback
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.t:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.u:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -79631,7 +79729,7 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.eng
       # {"id":"com.android.tools.r8.synthesized"}
     1:24:void onCompletion(android.media.MediaPlayer):0:0 -> onCompletion
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.englishbreakfast.app.u:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.englishbreakfast.app.v:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -79645,31 +79743,6 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.eng
     1:12:void <init>(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
     1:48:boolean onError(android.media.MediaPlayer,int,int):0:0 -> onError
-      # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.v:
-# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
-# {"id":"com.android.tools.r8.synthesized"}
-    int $r8$classId -> q
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$1 -> r
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    android.content.Context com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$0 -> s
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$3 -> t
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$2 -> u
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:1:void <init>(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    2:2:void <init>(com.getcapacitor.Bridge,com.getcapacitor.PluginHandle,java.lang.String,com.getcapacitor.PluginCall):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    3:3:void <init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:126:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.w:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
@@ -79736,309 +79809,368 @@ com.englishbreakfast.app.WidgetConfigActivity -> com.englishbreakfast.app.Widget
 com.englishbreakfast.app.WidgetDataManager -> com.englishbreakfast.app.WidgetDataManager:
 # {"id":"sourceFile","fileName":"WidgetDataManager.java"}
     1:4:void <init>():12:12 -> <init>
-    4:20:void clearPendingFavorites(android.content.Context):391:391 -> clearPendingFavorites
-    21:23:void clearPendingFavorites(android.content.Context):392:392 -> clearPendingFavorites
-    24:28:void clearPendingFavorites(android.content.Context):393:393 -> clearPendingFavorites
-    4:20:void clearPendingUnfavorites(android.content.Context):367:367 -> clearPendingUnfavorites
-    21:23:void clearPendingUnfavorites(android.content.Context):368:368 -> clearPendingUnfavorites
-    24:28:void clearPendingUnfavorites(android.content.Context):369:369 -> clearPendingUnfavorites
-    6:11:java.lang.String getAlertBannerText(android.content.Context):429:429 -> getAlertBannerText
-    12:27:java.lang.String getAlertBannerText(android.content.Context):430:430 -> getAlertBannerText
-    4:8:java.lang.String getConfigJson(android.content.Context):570:570 -> getConfigJson
-    9:17:java.lang.String getConfigJson(android.content.Context):572:572 -> getConfigJson
-    18:26:java.lang.String getConfigJson(android.content.Context):573:573 -> getConfigJson
-    27:35:java.lang.String getConfigJson(android.content.Context):574:574 -> getConfigJson
-    36:44:java.lang.String getConfigJson(android.content.Context):575:575 -> getConfigJson
-    45:53:java.lang.String getConfigJson(android.content.Context):576:576 -> getConfigJson
-    54:62:java.lang.String getConfigJson(android.content.Context):577:577 -> getConfigJson
-    63:71:java.lang.String getConfigJson(android.content.Context):578:578 -> getConfigJson
-    72:84:java.lang.String getConfigJson(android.content.Context):579:579 -> getConfigJson
-    85:87:java.lang.String getConfigJson(android.content.Context):581:581 -> getConfigJson
-    88:95:java.lang.String getConfigJson(android.content.Context):583:583 -> getConfigJson
-    4:7:int getCurrentFavoriteIndex(android.content.Context):133:133 -> getCurrentFavoriteIndex
-    8:16:int getCurrentFavoriteIndex(android.content.Context):134:134 -> getCurrentFavoriteIndex
-    17:20:int getCurrentFavoriteIndex(android.content.Context):135:135 -> getCurrentFavoriteIndex
-    21:28:int getCurrentFavoriteIndex(android.content.Context):136:136 -> getCurrentFavoriteIndex
-    29:41:int getCurrentFavoriteIndex(android.content.Context):137:137 -> getCurrentFavoriteIndex
-    42:45:int getCurrentFavoriteIndex(android.content.Context):140:140 -> getCurrentFavoriteIndex
-    4:7:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):228:228 -> getCurrentWord
-    8:13:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):229:229 -> getCurrentWord
-    14:37:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):230:230 -> getCurrentWord
-    38:41:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):233:233 -> getCurrentWord
-    42:50:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):234:234 -> getCurrentWord
-    51:59:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):235:235 -> getCurrentWord
-    60:72:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):237:237 -> getCurrentWord
-    73:82:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):239:239 -> getCurrentWord
-    4:18:java.lang.String getPendingFavoritesJson(android.content.Context):372:372 -> getPendingFavoritesJson
-    19:23:java.lang.String getPendingFavoritesJson(android.content.Context):373:373 -> getPendingFavoritesJson
-    24:39:java.lang.String getPendingFavoritesJson(android.content.Context):374:374 -> getPendingFavoritesJson
-    40:45:java.lang.String getPendingFavoritesJson(android.content.Context):375:375 -> getPendingFavoritesJson
-    46:53:java.lang.String getPendingFavoritesJson(android.content.Context):377:377 -> getPendingFavoritesJson
-    4:18:java.lang.String getPendingUnfavoritesJson(android.content.Context):348:348 -> getPendingUnfavoritesJson
-    19:23:java.lang.String getPendingUnfavoritesJson(android.content.Context):349:349 -> getPendingUnfavoritesJson
-    24:39:java.lang.String getPendingUnfavoritesJson(android.content.Context):350:350 -> getPendingUnfavoritesJson
-    40:45:java.lang.String getPendingUnfavoritesJson(android.content.Context):351:351 -> getPendingUnfavoritesJson
-    46:53:java.lang.String getPendingUnfavoritesJson(android.content.Context):353:353 -> getPendingUnfavoritesJson
-    1:8:android.content.SharedPreferences getPrefs(android.content.Context):74:74 -> getPrefs
-    4:7:int getReminderHour(android.content.Context):552:552 -> getReminderHour
-    8:24:int getReminderHour(android.content.Context):554:554 -> getReminderHour
-    25:30:int getReminderHour(android.content.Context):556:556 -> getReminderHour
-    4:7:int getReminderMinute(android.content.Context):561:561 -> getReminderMinute
-    8:24:int getReminderMinute(android.content.Context):563:563 -> getReminderMinute
-    25:29:int getReminderMinute(android.content.Context):565:565 -> getReminderMinute
-    6:11:java.lang.String getReminderTime(android.content.Context):542:542 -> getReminderTime
-    12:27:java.lang.String getReminderTime(android.content.Context):543:543 -> getReminderTime
-    8:9:int getRotationIntervalMin(android.content.Context):459:459 -> getRotationIntervalMin
-    10:24:int getRotationIntervalMin(android.content.Context):460:460 -> getRotationIntervalMin
-    6:11:java.lang.String getSpeakEndTime(android.content.Context):499:499 -> getSpeakEndTime
-    12:27:java.lang.String getSpeakEndTime(android.content.Context):500:500 -> getSpeakEndTime
-    6:11:java.lang.String getSpeakStartTime(android.content.Context):489:489 -> getSpeakStartTime
-    12:27:java.lang.String getSpeakStartTime(android.content.Context):490:490 -> getSpeakStartTime
-    4:7:int getTotalFavoritesCount(android.content.Context):128:128 -> getTotalFavoritesCount
-    8:16:int getTotalFavoritesCount(android.content.Context):129:129 -> getTotalFavoritesCount
-    7:8:int getUserRank(android.content.Context):409:409 -> getUserRank
-    9:23:int getUserRank(android.content.Context):410:410 -> getUserRank
-    6:11:java.lang.String getWidgetTheme(android.content.Context):449:449 -> getWidgetTheme
-    12:27:java.lang.String getWidgetTheme(android.content.Context):450:450 -> getWidgetTheme
-    4:10:java.util.List getWords(android.content.Context):144:144 -> getWords
-    11:12:java.util.List getWords(android.content.Context):145:145 -> getWords
-    13:16:java.util.List getWords(android.content.Context):147:147 -> getWords
-    17:24:java.util.List getWords(android.content.Context):148:148 -> getWords
-    25:35:java.util.List getWords(android.content.Context):149:149 -> getWords
-    36:46:java.util.List getWords(android.content.Context):150:150 -> getWords
-    47:50:java.util.List getWords(android.content.Context):151:151 -> getWords
-    51:58:java.util.List getWords(android.content.Context):154:154 -> getWords
-    59:68:java.util.List getWords(android.content.Context):155:155 -> getWords
-    69:78:java.util.List getWords(android.content.Context):156:156 -> getWords
-    79:88:java.util.List getWords(android.content.Context):157:157 -> getWords
-    89:94:java.util.List getWords(android.content.Context):158:158 -> getWords
-    95:108:java.util.List getWords(android.content.Context):159:159 -> getWords
-    109:118:java.util.List getWords(android.content.Context):162:162 -> getWords
-    119:122:java.util.List getWords(android.content.Context):165:165 -> getWords
-    123:130:java.util.List getWords(android.content.Context):166:166 -> getWords
-    131:135:java.util.List getWords(android.content.Context):167:167 -> getWords
-    136:145:java.util.List getWords(android.content.Context):168:168 -> getWords
-    146:153:java.util.List getWords(android.content.Context):169:169 -> getWords
-    154:165:java.util.List getWords(android.content.Context):170:170 -> getWords
-    166:171:java.util.List getWords(android.content.Context):174:174 -> getWords
-    172:175:java.util.List getWords(android.content.Context):175:175 -> getWords
-    176:183:java.util.List getWords(android.content.Context):176:176 -> getWords
-    184:191:java.util.List getWords(android.content.Context):177:177 -> getWords
-    192:205:java.util.List getWords(android.content.Context):178:178 -> getWords
-    206:219:java.util.List getWords(android.content.Context):179:179 -> getWords
-    220:233:java.util.List getWords(android.content.Context):180:180 -> getWords
-    234:247:java.util.List getWords(android.content.Context):181:181 -> getWords
-    248:253:java.util.List getWords(android.content.Context):182:182 -> getWords
-    254:262:java.util.List getWords(android.content.Context):183:183 -> getWords
-    263:271:java.util.List getWords(android.content.Context):185:185 -> getWords
-    272:285:java.util.List getWords(android.content.Context):189:189 -> getWords
-    286:296:java.util.List getWords(android.content.Context):192:192 -> getWords
-    297:308:java.util.List getWords(android.content.Context):195:195 -> getWords
-    309:334:java.util.List getWords(android.content.Context):201:201 -> getWords
-    335:342:java.util.List getWords(android.content.Context):206:206 -> getWords
-    343:365:java.util.List getWords(android.content.Context):208:208 -> getWords
-    366:387:java.util.List getWords(android.content.Context):210:210 -> getWords
-    388:410:java.util.List getWords(android.content.Context):211:211 -> getWords
-    411:434:java.util.List getWords(android.content.Context):212:212 -> getWords
-    435:458:java.util.List getWords(android.content.Context):213:213 -> getWords
-    459:482:java.util.List getWords(android.content.Context):214:214 -> getWords
-    483:489:java.util.List getWords(android.content.Context):218:218 -> getWords
-    490:491:java.util.List getWords(android.content.Context):219:219 -> getWords
-    492:498:java.util.List getWords(android.content.Context):220:220 -> getWords
-    499:505:java.util.List getWords(android.content.Context):221:221 -> getWords
-    506:511:java.util.List getWords(android.content.Context):222:222 -> getWords
-    512:515:java.util.List getWords(android.content.Context):224:224 -> getWords
-    7:8:boolean hasUserFavorites(android.content.Context):109:109 -> hasUserFavorites
-    9:12:boolean hasUserFavorites(android.content.Context):110:110 -> hasUserFavorites
-    13:20:boolean hasUserFavorites(android.content.Context):111:111 -> hasUserFavorites
-    21:28:boolean hasUserFavorites(android.content.Context):112:112 -> hasUserFavorites
-    29:40:boolean hasUserFavorites(android.content.Context):113:113 -> hasUserFavorites
-    41:47:boolean hasUserFavorites(android.content.Context):116:116 -> hasUserFavorites
-    48:55:boolean hasUserFavorites(android.content.Context):117:117 -> hasUserFavorites
-    56:68:boolean hasUserFavorites(android.content.Context):119:119 -> hasUserFavorites
-    69:70:boolean hasUserFavorites(android.content.Context):121:121 -> hasUserFavorites
-    71:90:boolean hasUserFavorites(android.content.Context):124:124 -> hasUserFavorites
-    5:6:void invalidateCache():32:32 -> invalidateCache
-    7:8:void invalidateCache():33:33 -> invalidateCache
-    9:10:void invalidateCache():34:34 -> invalidateCache
-    11:12:void invalidateCache():35:35 -> invalidateCache
-    13:14:void invalidateCache():36:36 -> invalidateCache
-    15:19:void invalidateCache():37:37 -> invalidateCache
-    1:3:boolean isAppInForeground():44:44 -> isAppInForeground
-    7:8:boolean isAutoSpeakEnabled(android.content.Context):479:479 -> isAutoSpeakEnabled
-    9:23:boolean isAutoSpeakEnabled(android.content.Context):480:480 -> isAutoSpeakEnabled
-    7:8:boolean isContinuousPlayActive(android.content.Context):439:439 -> isContinuousPlayActive
-    9:23:boolean isContinuousPlayActive(android.content.Context):440:440 -> isContinuousPlayActive
-    4:19:boolean isFlipped(android.content.Context):275:275 -> isFlipped
-    7:8:boolean isReminderAlertActive(android.content.Context):419:419 -> isReminderAlertActive
-    9:23:boolean isReminderAlertActive(android.content.Context):420:420 -> isReminderAlertActive
-    7:8:boolean isReminderEnabled(android.content.Context):532:532 -> isReminderEnabled
-    9:23:boolean isReminderEnabled(android.content.Context):533:533 -> isReminderEnabled
-    7:8:boolean isSoundFlipEnabled(android.content.Context):469:469 -> isSoundFlipEnabled
-    9:23:boolean isSoundFlipEnabled(android.content.Context):470:470 -> isSoundFlipEnabled
-    5:8:boolean isWithinSpeakHours(android.content.Context):510:510 -> isWithinSpeakHours
-    9:12:boolean isWithinSpeakHours(android.content.Context):511:511 -> isWithinSpeakHours
-    13:18:boolean isWithinSpeakHours(android.content.Context):512:512 -> isWithinSpeakHours
-    19:24:boolean isWithinSpeakHours(android.content.Context):513:513 -> isWithinSpeakHours
-    25:40:boolean isWithinSpeakHours(android.content.Context):514:514 -> isWithinSpeakHours
-    41:55:boolean isWithinSpeakHours(android.content.Context):515:515 -> isWithinSpeakHours
-    56:61:boolean isWithinSpeakHours(android.content.Context):517:517 -> isWithinSpeakHours
-    62:81:boolean isWithinSpeakHours(android.content.Context):518:518 -> isWithinSpeakHours
-    82:88:boolean isWithinSpeakHours(android.content.Context):521:521 -> isWithinSpeakHours
-    89:91:boolean isWithinSpeakHours(android.content.Context):524:524 -> isWithinSpeakHours
-    92:93:boolean isWithinSpeakHours(android.content.Context):526:526 -> isWithinSpeakHours
-    94:95:boolean isWithinSpeakHours(android.content.Context):527:527 -> isWithinSpeakHours
-    4:7:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):243:243 -> nextWord
-    8:21:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):244:244 -> nextWord
-    22:25:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):246:246 -> nextWord
-    26:34:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):247:247 -> nextWord
-    35:39:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):248:248 -> nextWord
-    40:45:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):250:250 -> nextWord
-    46:51:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):251:251 -> nextWord
-    52:55:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):252:252 -> nextWord
-    56:58:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):253:253 -> nextWord
-    59:68:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):255:255 -> nextWord
-    4:7:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):259:259 -> prevWord
-    8:21:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):260:260 -> prevWord
-    22:25:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):262:262 -> prevWord
-    26:34:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):263:263 -> prevWord
-    35:44:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):264:264 -> prevWord
-    45:50:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):266:266 -> prevWord
-    51:56:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):267:267 -> prevWord
-    57:60:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):268:268 -> prevWord
-    61:63:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):269:269 -> prevWord
-    64:73:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):271:271 -> prevWord
-    9:12:void removePendingFavorite(android.content.Context,java.lang.String):382:382 -> removePendingFavorite
-    13:28:void removePendingFavorite(android.content.Context,java.lang.String):383:383 -> removePendingFavorite
-    29:34:void removePendingFavorite(android.content.Context,java.lang.String):384:384 -> removePendingFavorite
-    35:47:void removePendingFavorite(android.content.Context,java.lang.String):385:385 -> removePendingFavorite
-    48:53:void removePendingFavorite(android.content.Context,java.lang.String):386:386 -> removePendingFavorite
-    54:57:void removePendingFavorite(android.content.Context,java.lang.String):388:388 -> removePendingFavorite
-    58:59:void removePendingFavorite(android.content.Context,java.lang.String):381:381 -> removePendingFavorite
-    9:12:void removePendingUnfavorite(android.content.Context,java.lang.String):358:358 -> removePendingUnfavorite
-    13:28:void removePendingUnfavorite(android.content.Context,java.lang.String):359:359 -> removePendingUnfavorite
-    29:34:void removePendingUnfavorite(android.content.Context,java.lang.String):360:360 -> removePendingUnfavorite
-    35:47:void removePendingUnfavorite(android.content.Context,java.lang.String):361:361 -> removePendingUnfavorite
-    48:53:void removePendingUnfavorite(android.content.Context,java.lang.String):362:362 -> removePendingUnfavorite
-    54:57:void removePendingUnfavorite(android.content.Context,java.lang.String):364:364 -> removePendingUnfavorite
-    58:59:void removePendingUnfavorite(android.content.Context,java.lang.String):357:357 -> removePendingUnfavorite
-    10:14:void saveConfigJson(android.content.Context,java.lang.String):589:589 -> saveConfigJson
-    15:22:void saveConfigJson(android.content.Context,java.lang.String):590:590 -> saveConfigJson
-    23:38:void saveConfigJson(android.content.Context,java.lang.String):591:591 -> saveConfigJson
-    39:46:void saveConfigJson(android.content.Context,java.lang.String):593:593 -> saveConfigJson
-    47:55:void saveConfigJson(android.content.Context,java.lang.String):594:594 -> saveConfigJson
-    56:63:void saveConfigJson(android.content.Context,java.lang.String):596:596 -> saveConfigJson
-    64:72:void saveConfigJson(android.content.Context,java.lang.String):597:597 -> saveConfigJson
-    73:80:void saveConfigJson(android.content.Context,java.lang.String):599:599 -> saveConfigJson
-    81:89:void saveConfigJson(android.content.Context,java.lang.String):600:600 -> saveConfigJson
-    90:97:void saveConfigJson(android.content.Context,java.lang.String):602:602 -> saveConfigJson
-    98:106:void saveConfigJson(android.content.Context,java.lang.String):603:603 -> saveConfigJson
-    107:114:void saveConfigJson(android.content.Context,java.lang.String):605:605 -> saveConfigJson
-    115:123:void saveConfigJson(android.content.Context,java.lang.String):606:606 -> saveConfigJson
-    124:131:void saveConfigJson(android.content.Context,java.lang.String):608:608 -> saveConfigJson
-    132:140:void saveConfigJson(android.content.Context,java.lang.String):609:609 -> saveConfigJson
-    141:148:void saveConfigJson(android.content.Context,java.lang.String):611:611 -> saveConfigJson
-    149:158:void saveConfigJson(android.content.Context,java.lang.String):612:612 -> saveConfigJson
-    159:161:void saveConfigJson(android.content.Context,java.lang.String):615:615 -> saveConfigJson
-    162:165:void saveConfigJson(android.content.Context,java.lang.String):617:617 -> saveConfigJson
-    166:167:void saveConfigJson(android.content.Context,java.lang.String):587:587 -> saveConfigJson
-    9:12:void saveFavorites(android.content.Context,java.lang.String):80:80 -> saveFavorites
-    13:16:void saveFavorites(android.content.Context,java.lang.String):82:82 -> saveFavorites
-    17:25:void saveFavorites(android.content.Context,java.lang.String):83:83 -> saveFavorites
-    26:30:void saveFavorites(android.content.Context,java.lang.String):84:84 -> saveFavorites
-    31:38:void saveFavorites(android.content.Context,java.lang.String):85:85 -> saveFavorites
-    39:45:void saveFavorites(android.content.Context,java.lang.String):86:86 -> saveFavorites
-    46:56:void saveFavorites(android.content.Context,java.lang.String):90:90 -> saveFavorites
-    57:58:void saveFavorites(android.content.Context,java.lang.String):88:88 -> saveFavorites
-    59:66:void saveFavorites(android.content.Context,java.lang.String):91:91 -> saveFavorites
-    67:71:void saveFavorites(android.content.Context,java.lang.String):92:92 -> saveFavorites
-    72:77:void saveFavorites(android.content.Context,java.lang.String):93:93 -> saveFavorites
-    78:79:void saveFavorites(android.content.Context,java.lang.String):94:94 -> saveFavorites
-    80:86:void saveFavorites(android.content.Context,java.lang.String):96:96 -> saveFavorites
-    87:92:void saveFavorites(android.content.Context,java.lang.String):98:98 -> saveFavorites
-    93:98:void saveFavorites(android.content.Context,java.lang.String):99:99 -> saveFavorites
-    99:102:void saveFavorites(android.content.Context,java.lang.String):100:100 -> saveFavorites
-    103:105:void saveFavorites(android.content.Context,java.lang.String):101:101 -> saveFavorites
-    106:109:void saveFavorites(android.content.Context,java.lang.String):102:102 -> saveFavorites
-    110:112:void saveFavorites(android.content.Context,java.lang.String):104:104 -> saveFavorites
-    113:116:void saveFavorites(android.content.Context,java.lang.String):106:106 -> saveFavorites
-    117:118:void saveFavorites(android.content.Context,java.lang.String):78:78 -> saveFavorites
-    9:25:void setAlertBannerText(android.content.Context,java.lang.String):435:435 -> setAlertBannerText
-    26:30:void setAlertBannerText(android.content.Context,java.lang.String):436:436 -> setAlertBannerText
-    31:32:void setAlertBannerText(android.content.Context,java.lang.String):434:434 -> setAlertBannerText
-    1:3:void setAppInForeground(boolean):40:40 -> setAppInForeground
-    6:7:void setAutoSpeakEnabled(android.content.Context,boolean):484:484 -> setAutoSpeakEnabled
-    8:24:void setAutoSpeakEnabled(android.content.Context,boolean):485:485 -> setAutoSpeakEnabled
-    25:29:void setAutoSpeakEnabled(android.content.Context,boolean):486:486 -> setAutoSpeakEnabled
-    6:7:void setContinuousPlayActive(android.content.Context,boolean):444:444 -> setContinuousPlayActive
-    8:24:void setContinuousPlayActive(android.content.Context,boolean):445:445 -> setContinuousPlayActive
-    25:29:void setContinuousPlayActive(android.content.Context,boolean):446:446 -> setContinuousPlayActive
-    6:7:void setReminderAlertActive(android.content.Context,boolean):424:424 -> setReminderAlertActive
-    8:24:void setReminderAlertActive(android.content.Context,boolean):425:425 -> setReminderAlertActive
-    25:29:void setReminderAlertActive(android.content.Context,boolean):426:426 -> setReminderAlertActive
-    6:7:void setReminderEnabled(android.content.Context,boolean):537:537 -> setReminderEnabled
-    8:24:void setReminderEnabled(android.content.Context,boolean):538:538 -> setReminderEnabled
-    25:29:void setReminderEnabled(android.content.Context,boolean):539:539 -> setReminderEnabled
-    9:25:void setReminderTime(android.content.Context,java.lang.String):548:548 -> setReminderTime
-    26:30:void setReminderTime(android.content.Context,java.lang.String):549:549 -> setReminderTime
-    31:32:void setReminderTime(android.content.Context,java.lang.String):547:547 -> setReminderTime
-    6:7:void setRotationIntervalMin(android.content.Context,int):464:464 -> setRotationIntervalMin
-    8:24:void setRotationIntervalMin(android.content.Context,int):465:465 -> setRotationIntervalMin
-    25:29:void setRotationIntervalMin(android.content.Context,int):466:466 -> setRotationIntervalMin
-    6:7:void setSoundFlipEnabled(android.content.Context,boolean):474:474 -> setSoundFlipEnabled
-    8:24:void setSoundFlipEnabled(android.content.Context,boolean):475:475 -> setSoundFlipEnabled
-    25:29:void setSoundFlipEnabled(android.content.Context,boolean):476:476 -> setSoundFlipEnabled
-    9:25:void setSpeakEndTime(android.content.Context,java.lang.String):505:505 -> setSpeakEndTime
-    26:30:void setSpeakEndTime(android.content.Context,java.lang.String):506:506 -> setSpeakEndTime
-    31:32:void setSpeakEndTime(android.content.Context,java.lang.String):504:504 -> setSpeakEndTime
-    9:25:void setSpeakStartTime(android.content.Context,java.lang.String):495:495 -> setSpeakStartTime
-    26:30:void setSpeakStartTime(android.content.Context,java.lang.String):496:496 -> setSpeakStartTime
-    31:32:void setSpeakStartTime(android.content.Context,java.lang.String):494:494 -> setSpeakStartTime
-    6:7:void setUserRank(android.content.Context,int):414:414 -> setUserRank
-    8:24:void setUserRank(android.content.Context,int):415:415 -> setUserRank
-    25:29:void setUserRank(android.content.Context,int):416:416 -> setUserRank
-    9:25:void setWidgetTheme(android.content.Context,java.lang.String):455:455 -> setWidgetTheme
-    26:30:void setWidgetTheme(android.content.Context,java.lang.String):456:456 -> setWidgetTheme
-    31:32:void setWidgetTheme(android.content.Context,java.lang.String):454:454 -> setWidgetTheme
-    4:10:boolean toggleFavorite(android.content.Context):287:287 -> toggleFavorite
-    11:20:boolean toggleFavorite(android.content.Context):288:288 -> toggleFavorite
-    21:24:boolean toggleFavorite(android.content.Context):290:290 -> toggleFavorite
-    25:40:boolean toggleFavorite(android.content.Context):291:291 -> toggleFavorite
-    41:56:boolean toggleFavorite(android.content.Context):292:292 -> toggleFavorite
-    57:60:boolean toggleFavorite(android.content.Context):293:293 -> toggleFavorite
-    61:64:boolean toggleFavorite(android.content.Context):295:295 -> toggleFavorite
-    65:69:boolean toggleFavorite(android.content.Context):299:299 -> toggleFavorite
-    70:79:boolean toggleFavorite(android.content.Context):300:300 -> toggleFavorite
-    80:84:boolean toggleFavorite(android.content.Context):303:303 -> toggleFavorite
-    85:90:boolean toggleFavorite(android.content.Context):304:304 -> toggleFavorite
-    91:96:boolean toggleFavorite(android.content.Context):308:308 -> toggleFavorite
-    97:102:boolean toggleFavorite(android.content.Context):309:309 -> toggleFavorite
-    103:106:boolean toggleFavorite(android.content.Context):310:310 -> toggleFavorite
-    107:109:boolean toggleFavorite(android.content.Context):311:311 -> toggleFavorite
-    110:116:boolean toggleFavorite(android.content.Context):312:312 -> toggleFavorite
-    117:120:boolean toggleFavorite(android.content.Context):316:316 -> toggleFavorite
-    121:136:boolean toggleFavorite(android.content.Context):319:319 -> toggleFavorite
-    137:140:boolean toggleFavorite(android.content.Context):320:320 -> toggleFavorite
-    141:146:boolean toggleFavorite(android.content.Context):334:334 -> toggleFavorite
-    147:154:boolean toggleFavorite(android.content.Context):335:335 -> toggleFavorite
-    155:159:boolean toggleFavorite(android.content.Context):338:338 -> toggleFavorite
-    160:179:boolean toggleFavorite(android.content.Context):340:340 -> toggleFavorite
-    180:185:boolean toggleFavorite(android.content.Context):327:327 -> toggleFavorite
-    186:191:boolean toggleFavorite(android.content.Context):328:328 -> toggleFavorite
-    192:197:boolean toggleFavorite(android.content.Context):329:329 -> toggleFavorite
-    198:201:boolean toggleFavorite(android.content.Context):330:330 -> toggleFavorite
-    202:204:boolean toggleFavorite(android.content.Context):331:331 -> toggleFavorite
-    205:207:boolean toggleFavorite(android.content.Context):332:332 -> toggleFavorite
-    208:209:boolean toggleFavorite(android.content.Context):344:344 -> toggleFavorite
-    210:213:boolean toggleFavorite(android.content.Context):288:288 -> toggleFavorite
-    4:7:boolean toggleFlip(android.content.Context):279:279 -> toggleFlip
-    8:16:boolean toggleFlip(android.content.Context):280:280 -> toggleFlip
-    17:29:boolean toggleFlip(android.content.Context):282:282 -> toggleFlip
-    30:34:boolean toggleFlip(android.content.Context):283:283 -> toggleFlip
+    4:20:void clearPendingFavorites(android.content.Context):393:393 -> clearPendingFavorites
+    21:23:void clearPendingFavorites(android.content.Context):394:394 -> clearPendingFavorites
+    24:28:void clearPendingFavorites(android.content.Context):395:395 -> clearPendingFavorites
+    4:20:void clearPendingUnfavorites(android.content.Context):369:369 -> clearPendingUnfavorites
+    21:23:void clearPendingUnfavorites(android.content.Context):370:370 -> clearPendingUnfavorites
+    24:28:void clearPendingUnfavorites(android.content.Context):371:371 -> clearPendingUnfavorites
+    6:11:java.lang.String getAlertBannerText(android.content.Context):431:431 -> getAlertBannerText
+    12:27:java.lang.String getAlertBannerText(android.content.Context):432:432 -> getAlertBannerText
+    4:8:java.lang.String getConfigJson(android.content.Context):572:572 -> getConfigJson
+    9:17:java.lang.String getConfigJson(android.content.Context):574:574 -> getConfigJson
+    18:26:java.lang.String getConfigJson(android.content.Context):575:575 -> getConfigJson
+    27:35:java.lang.String getConfigJson(android.content.Context):576:576 -> getConfigJson
+    36:44:java.lang.String getConfigJson(android.content.Context):577:577 -> getConfigJson
+    45:53:java.lang.String getConfigJson(android.content.Context):578:578 -> getConfigJson
+    54:62:java.lang.String getConfigJson(android.content.Context):579:579 -> getConfigJson
+    63:71:java.lang.String getConfigJson(android.content.Context):580:580 -> getConfigJson
+    72:84:java.lang.String getConfigJson(android.content.Context):581:581 -> getConfigJson
+    85:87:java.lang.String getConfigJson(android.content.Context):583:583 -> getConfigJson
+    88:95:java.lang.String getConfigJson(android.content.Context):585:585 -> getConfigJson
+    4:7:int getCurrentFavoriteIndex(android.content.Context):135:135 -> getCurrentFavoriteIndex
+    8:16:int getCurrentFavoriteIndex(android.content.Context):136:136 -> getCurrentFavoriteIndex
+    17:20:int getCurrentFavoriteIndex(android.content.Context):137:137 -> getCurrentFavoriteIndex
+    21:28:int getCurrentFavoriteIndex(android.content.Context):138:138 -> getCurrentFavoriteIndex
+    29:41:int getCurrentFavoriteIndex(android.content.Context):139:139 -> getCurrentFavoriteIndex
+    42:45:int getCurrentFavoriteIndex(android.content.Context):142:142 -> getCurrentFavoriteIndex
+    4:7:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):230:230 -> getCurrentWord
+    8:13:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):231:231 -> getCurrentWord
+    14:37:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):232:232 -> getCurrentWord
+    38:41:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):235:235 -> getCurrentWord
+    42:50:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):236:236 -> getCurrentWord
+    51:59:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):237:237 -> getCurrentWord
+    60:72:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):239:239 -> getCurrentWord
+    73:82:com.englishbreakfast.app.WidgetDataManager$WidgetWord getCurrentWord(android.content.Context):241:241 -> getCurrentWord
+    4:18:java.lang.String getPendingFavoritesJson(android.content.Context):374:374 -> getPendingFavoritesJson
+    19:23:java.lang.String getPendingFavoritesJson(android.content.Context):375:375 -> getPendingFavoritesJson
+    24:39:java.lang.String getPendingFavoritesJson(android.content.Context):376:376 -> getPendingFavoritesJson
+    40:45:java.lang.String getPendingFavoritesJson(android.content.Context):377:377 -> getPendingFavoritesJson
+    46:53:java.lang.String getPendingFavoritesJson(android.content.Context):379:379 -> getPendingFavoritesJson
+    4:18:java.lang.String getPendingUnfavoritesJson(android.content.Context):350:350 -> getPendingUnfavoritesJson
+    19:23:java.lang.String getPendingUnfavoritesJson(android.content.Context):351:351 -> getPendingUnfavoritesJson
+    24:39:java.lang.String getPendingUnfavoritesJson(android.content.Context):352:352 -> getPendingUnfavoritesJson
+    40:45:java.lang.String getPendingUnfavoritesJson(android.content.Context):353:353 -> getPendingUnfavoritesJson
+    46:53:java.lang.String getPendingUnfavoritesJson(android.content.Context):355:355 -> getPendingUnfavoritesJson
+    1:8:android.content.SharedPreferences getPrefs(android.content.Context):76:76 -> getPrefs
+    4:7:int getReminderHour(android.content.Context):554:554 -> getReminderHour
+    8:24:int getReminderHour(android.content.Context):556:556 -> getReminderHour
+    25:30:int getReminderHour(android.content.Context):558:558 -> getReminderHour
+    4:7:int getReminderMinute(android.content.Context):563:563 -> getReminderMinute
+    8:24:int getReminderMinute(android.content.Context):565:565 -> getReminderMinute
+    25:29:int getReminderMinute(android.content.Context):567:567 -> getReminderMinute
+    6:11:java.lang.String getReminderTime(android.content.Context):544:544 -> getReminderTime
+    12:27:java.lang.String getReminderTime(android.content.Context):545:545 -> getReminderTime
+    8:9:int getRotationIntervalMin(android.content.Context):461:461 -> getRotationIntervalMin
+    10:24:int getRotationIntervalMin(android.content.Context):462:462 -> getRotationIntervalMin
+    6:11:java.lang.String getSpeakEndTime(android.content.Context):501:501 -> getSpeakEndTime
+    12:27:java.lang.String getSpeakEndTime(android.content.Context):502:502 -> getSpeakEndTime
+    6:11:java.lang.String getSpeakStartTime(android.content.Context):491:491 -> getSpeakStartTime
+    12:27:java.lang.String getSpeakStartTime(android.content.Context):492:492 -> getSpeakStartTime
+    4:7:int getTotalFavoritesCount(android.content.Context):130:130 -> getTotalFavoritesCount
+    8:16:int getTotalFavoritesCount(android.content.Context):131:131 -> getTotalFavoritesCount
+    7:8:int getUserRank(android.content.Context):411:411 -> getUserRank
+    9:23:int getUserRank(android.content.Context):412:412 -> getUserRank
+    6:11:java.lang.String getWidgetTheme(android.content.Context):451:451 -> getWidgetTheme
+    12:27:java.lang.String getWidgetTheme(android.content.Context):452:452 -> getWidgetTheme
+    4:10:java.util.List getWords(android.content.Context):146:146 -> getWords
+    11:12:java.util.List getWords(android.content.Context):147:147 -> getWords
+    13:16:java.util.List getWords(android.content.Context):149:149 -> getWords
+    17:24:java.util.List getWords(android.content.Context):150:150 -> getWords
+    25:35:java.util.List getWords(android.content.Context):151:151 -> getWords
+    36:46:java.util.List getWords(android.content.Context):152:152 -> getWords
+    47:50:java.util.List getWords(android.content.Context):153:153 -> getWords
+    51:58:java.util.List getWords(android.content.Context):156:156 -> getWords
+    59:68:java.util.List getWords(android.content.Context):157:157 -> getWords
+    69:78:java.util.List getWords(android.content.Context):158:158 -> getWords
+    79:88:java.util.List getWords(android.content.Context):159:159 -> getWords
+    89:94:java.util.List getWords(android.content.Context):160:160 -> getWords
+    95:108:java.util.List getWords(android.content.Context):161:161 -> getWords
+    109:118:java.util.List getWords(android.content.Context):164:164 -> getWords
+    119:122:java.util.List getWords(android.content.Context):167:167 -> getWords
+    123:130:java.util.List getWords(android.content.Context):168:168 -> getWords
+    131:135:java.util.List getWords(android.content.Context):169:169 -> getWords
+    136:145:java.util.List getWords(android.content.Context):170:170 -> getWords
+    146:153:java.util.List getWords(android.content.Context):171:171 -> getWords
+    154:165:java.util.List getWords(android.content.Context):172:172 -> getWords
+    166:171:java.util.List getWords(android.content.Context):176:176 -> getWords
+    172:175:java.util.List getWords(android.content.Context):177:177 -> getWords
+    176:183:java.util.List getWords(android.content.Context):178:178 -> getWords
+    184:191:java.util.List getWords(android.content.Context):179:179 -> getWords
+    192:205:java.util.List getWords(android.content.Context):180:180 -> getWords
+    206:219:java.util.List getWords(android.content.Context):181:181 -> getWords
+    220:233:java.util.List getWords(android.content.Context):182:182 -> getWords
+    234:247:java.util.List getWords(android.content.Context):183:183 -> getWords
+    248:253:java.util.List getWords(android.content.Context):184:184 -> getWords
+    254:262:java.util.List getWords(android.content.Context):185:185 -> getWords
+    263:271:java.util.List getWords(android.content.Context):187:187 -> getWords
+    272:285:java.util.List getWords(android.content.Context):191:191 -> getWords
+    286:296:java.util.List getWords(android.content.Context):194:194 -> getWords
+    297:308:java.util.List getWords(android.content.Context):197:197 -> getWords
+    309:334:java.util.List getWords(android.content.Context):203:203 -> getWords
+    335:342:java.util.List getWords(android.content.Context):208:208 -> getWords
+    343:365:java.util.List getWords(android.content.Context):210:210 -> getWords
+    366:387:java.util.List getWords(android.content.Context):212:212 -> getWords
+    388:410:java.util.List getWords(android.content.Context):213:213 -> getWords
+    411:434:java.util.List getWords(android.content.Context):214:214 -> getWords
+    435:458:java.util.List getWords(android.content.Context):215:215 -> getWords
+    459:482:java.util.List getWords(android.content.Context):216:216 -> getWords
+    483:489:java.util.List getWords(android.content.Context):220:220 -> getWords
+    490:491:java.util.List getWords(android.content.Context):221:221 -> getWords
+    492:498:java.util.List getWords(android.content.Context):222:222 -> getWords
+    499:505:java.util.List getWords(android.content.Context):223:223 -> getWords
+    506:511:java.util.List getWords(android.content.Context):224:224 -> getWords
+    512:515:java.util.List getWords(android.content.Context):226:226 -> getWords
+    7:8:boolean hasRealInstalledWidgets(android.content.Context,int[]):622:622 -> hasRealInstalledWidgets
+    9:15:boolean hasRealInstalledWidgets(android.content.Context,int[]):623:623 -> hasRealInstalledWidgets
+    16:20:boolean hasRealInstalledWidgets(android.content.Context,int[]):624:624 -> hasRealInstalledWidgets
+    21:28:boolean hasRealInstalledWidgets(android.content.Context,int[]):632:632 -> hasRealInstalledWidgets
+    29:33:boolean hasRealInstalledWidgets(android.content.Context,int[]):633:633 -> hasRealInstalledWidgets
+    34:39:boolean hasRealInstalledWidgets(android.content.Context,int[]):634:634 -> hasRealInstalledWidgets
+    40:51:boolean hasRealInstalledWidgets(android.content.Context,int[]):635:635 -> hasRealInstalledWidgets
+    52:57:boolean hasRealInstalledWidgets(android.content.Context,int[]):637:637 -> hasRealInstalledWidgets
+    58:63:boolean hasRealInstalledWidgets(android.content.Context,int[]):638:638 -> hasRealInstalledWidgets
+    64:67:boolean hasRealInstalledWidgets(android.content.Context,int[]):639:639 -> hasRealInstalledWidgets
+    68:70:boolean hasRealInstalledWidgets(android.content.Context,int[]):640:640 -> hasRealInstalledWidgets
+    71:72:boolean hasRealInstalledWidgets(android.content.Context,int[]):641:641 -> hasRealInstalledWidgets
+    73:83:boolean hasRealInstalledWidgets(android.content.Context,int[]):644:644 -> hasRealInstalledWidgets
+    84:88:boolean hasRealInstalledWidgets(android.content.Context,int[]):645:645 -> hasRealInstalledWidgets
+    89:94:boolean hasRealInstalledWidgets(android.content.Context,int[]):647:647 -> hasRealInstalledWidgets
+    95:98:boolean hasRealInstalledWidgets(android.content.Context,int[]):648:648 -> hasRealInstalledWidgets
+    99:104:boolean hasRealInstalledWidgets(android.content.Context,int[]):649:649 -> hasRealInstalledWidgets
+    105:112:boolean hasRealInstalledWidgets(android.content.Context,int[]):650:650 -> hasRealInstalledWidgets
+    113:122:boolean hasRealInstalledWidgets(android.content.Context,int[]):655:655 -> hasRealInstalledWidgets
+    123:135:boolean hasRealInstalledWidgets(android.content.Context,int[]):656:656 -> hasRealInstalledWidgets
+    136:137:boolean hasRealInstalledWidgets(android.content.Context,int[]):658:658 -> hasRealInstalledWidgets
+    138:148:boolean hasRealInstalledWidgets(android.content.Context,int[]):625:625 -> hasRealInstalledWidgets
+    149:154:boolean hasRealInstalledWidgets(android.content.Context,int[]):626:626 -> hasRealInstalledWidgets
+    155:158:boolean hasRealInstalledWidgets(android.content.Context,int[]):627:627 -> hasRealInstalledWidgets
+    159:161:boolean hasRealInstalledWidgets(android.content.Context,int[]):628:628 -> hasRealInstalledWidgets
+    162:165:boolean hasRealInstalledWidgets(android.content.Context,int[]):629:629 -> hasRealInstalledWidgets
+    7:8:boolean hasUserFavorites(android.content.Context):111:111 -> hasUserFavorites
+    9:12:boolean hasUserFavorites(android.content.Context):112:112 -> hasUserFavorites
+    13:20:boolean hasUserFavorites(android.content.Context):113:113 -> hasUserFavorites
+    21:28:boolean hasUserFavorites(android.content.Context):114:114 -> hasUserFavorites
+    29:40:boolean hasUserFavorites(android.content.Context):115:115 -> hasUserFavorites
+    41:47:boolean hasUserFavorites(android.content.Context):118:118 -> hasUserFavorites
+    48:55:boolean hasUserFavorites(android.content.Context):119:119 -> hasUserFavorites
+    56:68:boolean hasUserFavorites(android.content.Context):121:121 -> hasUserFavorites
+    69:70:boolean hasUserFavorites(android.content.Context):123:123 -> hasUserFavorites
+    71:90:boolean hasUserFavorites(android.content.Context):126:126 -> hasUserFavorites
+    5:6:void invalidateCache():34:34 -> invalidateCache
+    7:8:void invalidateCache():35:35 -> invalidateCache
+    9:10:void invalidateCache():36:36 -> invalidateCache
+    11:12:void invalidateCache():37:37 -> invalidateCache
+    13:14:void invalidateCache():38:38 -> invalidateCache
+    15:19:void invalidateCache():39:39 -> invalidateCache
+    1:3:boolean isAppInForeground():46:46 -> isAppInForeground
+    7:8:boolean isAutoSpeakEnabled(android.content.Context):481:481 -> isAutoSpeakEnabled
+    9:23:boolean isAutoSpeakEnabled(android.content.Context):482:482 -> isAutoSpeakEnabled
+    7:8:boolean isContinuousPlayActive(android.content.Context):441:441 -> isContinuousPlayActive
+    9:23:boolean isContinuousPlayActive(android.content.Context):442:442 -> isContinuousPlayActive
+    4:19:boolean isFlipped(android.content.Context):277:277 -> isFlipped
+    7:8:boolean isReminderAlertActive(android.content.Context):421:421 -> isReminderAlertActive
+    9:23:boolean isReminderAlertActive(android.content.Context):422:422 -> isReminderAlertActive
+    7:8:boolean isReminderEnabled(android.content.Context):534:534 -> isReminderEnabled
+    9:23:boolean isReminderEnabled(android.content.Context):535:535 -> isReminderEnabled
+    7:8:boolean isSoundFlipEnabled(android.content.Context):471:471 -> isSoundFlipEnabled
+    9:23:boolean isSoundFlipEnabled(android.content.Context):472:472 -> isSoundFlipEnabled
+    5:8:boolean isWithinSpeakHours(android.content.Context):512:512 -> isWithinSpeakHours
+    9:12:boolean isWithinSpeakHours(android.content.Context):513:513 -> isWithinSpeakHours
+    13:18:boolean isWithinSpeakHours(android.content.Context):514:514 -> isWithinSpeakHours
+    19:24:boolean isWithinSpeakHours(android.content.Context):515:515 -> isWithinSpeakHours
+    25:40:boolean isWithinSpeakHours(android.content.Context):516:516 -> isWithinSpeakHours
+    41:55:boolean isWithinSpeakHours(android.content.Context):517:517 -> isWithinSpeakHours
+    56:61:boolean isWithinSpeakHours(android.content.Context):519:519 -> isWithinSpeakHours
+    62:81:boolean isWithinSpeakHours(android.content.Context):520:520 -> isWithinSpeakHours
+    82:88:boolean isWithinSpeakHours(android.content.Context):523:523 -> isWithinSpeakHours
+    89:91:boolean isWithinSpeakHours(android.content.Context):526:526 -> isWithinSpeakHours
+    92:93:boolean isWithinSpeakHours(android.content.Context):528:528 -> isWithinSpeakHours
+    94:95:boolean isWithinSpeakHours(android.content.Context):529:529 -> isWithinSpeakHours
+    6:7:void markPrePinGhostIds(android.content.Context,int[]):662:662 -> markPrePinGhostIds
+    8:11:void markPrePinGhostIds(android.content.Context,int[]):663:663 -> markPrePinGhostIds
+    12:18:void markPrePinGhostIds(android.content.Context,int[]):664:664 -> markPrePinGhostIds
+    19:24:void markPrePinGhostIds(android.content.Context,int[]):666:666 -> markPrePinGhostIds
+    25:36:void markPrePinGhostIds(android.content.Context,int[]):667:667 -> markPrePinGhostIds
+    37:42:void markPrePinGhostIds(android.content.Context,int[]):670:670 -> markPrePinGhostIds
+    43:49:void markPrePinGhostIds(android.content.Context,int[]):671:671 -> markPrePinGhostIds
+    50:53:void markPrePinGhostIds(android.content.Context,int[]):672:672 -> markPrePinGhostIds
+    54:56:void markPrePinGhostIds(android.content.Context,int[]):673:673 -> markPrePinGhostIds
+    57:60:void markPrePinGhostIds(android.content.Context,int[]):674:674 -> markPrePinGhostIds
+    4:7:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):245:245 -> nextWord
+    8:21:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):246:246 -> nextWord
+    22:25:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):248:248 -> nextWord
+    26:34:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):249:249 -> nextWord
+    35:39:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):250:250 -> nextWord
+    40:45:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):252:252 -> nextWord
+    46:51:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):253:253 -> nextWord
+    52:55:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):254:254 -> nextWord
+    56:58:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):255:255 -> nextWord
+    59:68:com.englishbreakfast.app.WidgetDataManager$WidgetWord nextWord(android.content.Context):257:257 -> nextWord
+    6:7:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):677:677 -> onWidgetPinnedOrInteracted
+    8:11:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):678:678 -> onWidgetPinnedOrInteracted
+    12:29:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):679:679 -> onWidgetPinnedOrInteracted
+    30:41:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):681:681 -> onWidgetPinnedOrInteracted
+    42:45:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):682:682 -> onWidgetPinnedOrInteracted
+    46:47:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):683:683 -> onWidgetPinnedOrInteracted
+    48:58:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):684:684 -> onWidgetPinnedOrInteracted
+    59:65:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):687:687 -> onWidgetPinnedOrInteracted
+    66:71:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):689:689 -> onWidgetPinnedOrInteracted
+    72:78:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):690:690 -> onWidgetPinnedOrInteracted
+    79:82:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):691:691 -> onWidgetPinnedOrInteracted
+    83:85:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):692:692 -> onWidgetPinnedOrInteracted
+    86:89:void onWidgetPinnedOrInteracted(android.content.Context,int,int[]):693:693 -> onWidgetPinnedOrInteracted
+    9:12:void onWidgetsDeleted(android.content.Context,int[]):697:697 -> onWidgetsDeleted
+    13:28:void onWidgetsDeleted(android.content.Context,int[]):698:698 -> onWidgetsDeleted
+    29:34:void onWidgetsDeleted(android.content.Context,int[]):699:699 -> onWidgetsDeleted
+    35:46:void onWidgetsDeleted(android.content.Context,int[]):700:700 -> onWidgetsDeleted
+    47:52:void onWidgetsDeleted(android.content.Context,int[]):702:702 -> onWidgetsDeleted
+    53:59:void onWidgetsDeleted(android.content.Context,int[]):703:703 -> onWidgetsDeleted
+    60:63:void onWidgetsDeleted(android.content.Context,int[]):704:704 -> onWidgetsDeleted
+    64:66:void onWidgetsDeleted(android.content.Context,int[]):705:705 -> onWidgetsDeleted
+    67:70:void onWidgetsDeleted(android.content.Context,int[]):706:706 -> onWidgetsDeleted
+    71:72:void onWidgetsDeleted(android.content.Context,int[]):696:696 -> onWidgetsDeleted
+    4:7:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):261:261 -> prevWord
+    8:21:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):262:262 -> prevWord
+    22:25:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):264:264 -> prevWord
+    26:34:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):265:265 -> prevWord
+    35:44:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):266:266 -> prevWord
+    45:50:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):268:268 -> prevWord
+    51:56:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):269:269 -> prevWord
+    57:60:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):270:270 -> prevWord
+    61:63:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):271:271 -> prevWord
+    64:73:com.englishbreakfast.app.WidgetDataManager$WidgetWord prevWord(android.content.Context):273:273 -> prevWord
+    9:12:void removePendingFavorite(android.content.Context,java.lang.String):384:384 -> removePendingFavorite
+    13:28:void removePendingFavorite(android.content.Context,java.lang.String):385:385 -> removePendingFavorite
+    29:34:void removePendingFavorite(android.content.Context,java.lang.String):386:386 -> removePendingFavorite
+    35:47:void removePendingFavorite(android.content.Context,java.lang.String):387:387 -> removePendingFavorite
+    48:53:void removePendingFavorite(android.content.Context,java.lang.String):388:388 -> removePendingFavorite
+    54:57:void removePendingFavorite(android.content.Context,java.lang.String):390:390 -> removePendingFavorite
+    58:59:void removePendingFavorite(android.content.Context,java.lang.String):383:383 -> removePendingFavorite
+    9:12:void removePendingUnfavorite(android.content.Context,java.lang.String):360:360 -> removePendingUnfavorite
+    13:28:void removePendingUnfavorite(android.content.Context,java.lang.String):361:361 -> removePendingUnfavorite
+    29:34:void removePendingUnfavorite(android.content.Context,java.lang.String):362:362 -> removePendingUnfavorite
+    35:47:void removePendingUnfavorite(android.content.Context,java.lang.String):363:363 -> removePendingUnfavorite
+    48:53:void removePendingUnfavorite(android.content.Context,java.lang.String):364:364 -> removePendingUnfavorite
+    54:57:void removePendingUnfavorite(android.content.Context,java.lang.String):366:366 -> removePendingUnfavorite
+    58:59:void removePendingUnfavorite(android.content.Context,java.lang.String):359:359 -> removePendingUnfavorite
+    10:14:void saveConfigJson(android.content.Context,java.lang.String):591:591 -> saveConfigJson
+    15:22:void saveConfigJson(android.content.Context,java.lang.String):592:592 -> saveConfigJson
+    23:38:void saveConfigJson(android.content.Context,java.lang.String):593:593 -> saveConfigJson
+    39:46:void saveConfigJson(android.content.Context,java.lang.String):595:595 -> saveConfigJson
+    47:55:void saveConfigJson(android.content.Context,java.lang.String):596:596 -> saveConfigJson
+    56:63:void saveConfigJson(android.content.Context,java.lang.String):598:598 -> saveConfigJson
+    64:72:void saveConfigJson(android.content.Context,java.lang.String):599:599 -> saveConfigJson
+    73:80:void saveConfigJson(android.content.Context,java.lang.String):601:601 -> saveConfigJson
+    81:89:void saveConfigJson(android.content.Context,java.lang.String):602:602 -> saveConfigJson
+    90:97:void saveConfigJson(android.content.Context,java.lang.String):604:604 -> saveConfigJson
+    98:106:void saveConfigJson(android.content.Context,java.lang.String):605:605 -> saveConfigJson
+    107:114:void saveConfigJson(android.content.Context,java.lang.String):607:607 -> saveConfigJson
+    115:123:void saveConfigJson(android.content.Context,java.lang.String):608:608 -> saveConfigJson
+    124:131:void saveConfigJson(android.content.Context,java.lang.String):610:610 -> saveConfigJson
+    132:140:void saveConfigJson(android.content.Context,java.lang.String):611:611 -> saveConfigJson
+    141:148:void saveConfigJson(android.content.Context,java.lang.String):613:613 -> saveConfigJson
+    149:158:void saveConfigJson(android.content.Context,java.lang.String):614:614 -> saveConfigJson
+    159:161:void saveConfigJson(android.content.Context,java.lang.String):617:617 -> saveConfigJson
+    162:165:void saveConfigJson(android.content.Context,java.lang.String):619:619 -> saveConfigJson
+    166:167:void saveConfigJson(android.content.Context,java.lang.String):589:589 -> saveConfigJson
+    9:12:void saveFavorites(android.content.Context,java.lang.String):82:82 -> saveFavorites
+    13:16:void saveFavorites(android.content.Context,java.lang.String):84:84 -> saveFavorites
+    17:25:void saveFavorites(android.content.Context,java.lang.String):85:85 -> saveFavorites
+    26:30:void saveFavorites(android.content.Context,java.lang.String):86:86 -> saveFavorites
+    31:38:void saveFavorites(android.content.Context,java.lang.String):87:87 -> saveFavorites
+    39:45:void saveFavorites(android.content.Context,java.lang.String):88:88 -> saveFavorites
+    46:56:void saveFavorites(android.content.Context,java.lang.String):92:92 -> saveFavorites
+    57:58:void saveFavorites(android.content.Context,java.lang.String):90:90 -> saveFavorites
+    59:66:void saveFavorites(android.content.Context,java.lang.String):93:93 -> saveFavorites
+    67:71:void saveFavorites(android.content.Context,java.lang.String):94:94 -> saveFavorites
+    72:77:void saveFavorites(android.content.Context,java.lang.String):95:95 -> saveFavorites
+    78:79:void saveFavorites(android.content.Context,java.lang.String):96:96 -> saveFavorites
+    80:86:void saveFavorites(android.content.Context,java.lang.String):98:98 -> saveFavorites
+    87:92:void saveFavorites(android.content.Context,java.lang.String):100:100 -> saveFavorites
+    93:98:void saveFavorites(android.content.Context,java.lang.String):101:101 -> saveFavorites
+    99:102:void saveFavorites(android.content.Context,java.lang.String):102:102 -> saveFavorites
+    103:105:void saveFavorites(android.content.Context,java.lang.String):103:103 -> saveFavorites
+    106:109:void saveFavorites(android.content.Context,java.lang.String):104:104 -> saveFavorites
+    110:112:void saveFavorites(android.content.Context,java.lang.String):106:106 -> saveFavorites
+    113:116:void saveFavorites(android.content.Context,java.lang.String):108:108 -> saveFavorites
+    117:118:void saveFavorites(android.content.Context,java.lang.String):80:80 -> saveFavorites
+    9:25:void setAlertBannerText(android.content.Context,java.lang.String):437:437 -> setAlertBannerText
+    26:30:void setAlertBannerText(android.content.Context,java.lang.String):438:438 -> setAlertBannerText
+    31:32:void setAlertBannerText(android.content.Context,java.lang.String):436:436 -> setAlertBannerText
+    1:3:void setAppInForeground(boolean):42:42 -> setAppInForeground
+    6:7:void setAutoSpeakEnabled(android.content.Context,boolean):486:486 -> setAutoSpeakEnabled
+    8:24:void setAutoSpeakEnabled(android.content.Context,boolean):487:487 -> setAutoSpeakEnabled
+    25:29:void setAutoSpeakEnabled(android.content.Context,boolean):488:488 -> setAutoSpeakEnabled
+    6:7:void setContinuousPlayActive(android.content.Context,boolean):446:446 -> setContinuousPlayActive
+    8:24:void setContinuousPlayActive(android.content.Context,boolean):447:447 -> setContinuousPlayActive
+    25:29:void setContinuousPlayActive(android.content.Context,boolean):448:448 -> setContinuousPlayActive
+    6:7:void setReminderAlertActive(android.content.Context,boolean):426:426 -> setReminderAlertActive
+    8:24:void setReminderAlertActive(android.content.Context,boolean):427:427 -> setReminderAlertActive
+    25:29:void setReminderAlertActive(android.content.Context,boolean):428:428 -> setReminderAlertActive
+    6:7:void setReminderEnabled(android.content.Context,boolean):539:539 -> setReminderEnabled
+    8:24:void setReminderEnabled(android.content.Context,boolean):540:540 -> setReminderEnabled
+    25:29:void setReminderEnabled(android.content.Context,boolean):541:541 -> setReminderEnabled
+    9:25:void setReminderTime(android.content.Context,java.lang.String):550:550 -> setReminderTime
+    26:30:void setReminderTime(android.content.Context,java.lang.String):551:551 -> setReminderTime
+    31:32:void setReminderTime(android.content.Context,java.lang.String):549:549 -> setReminderTime
+    6:7:void setRotationIntervalMin(android.content.Context,int):466:466 -> setRotationIntervalMin
+    8:24:void setRotationIntervalMin(android.content.Context,int):467:467 -> setRotationIntervalMin
+    25:29:void setRotationIntervalMin(android.content.Context,int):468:468 -> setRotationIntervalMin
+    6:7:void setSoundFlipEnabled(android.content.Context,boolean):476:476 -> setSoundFlipEnabled
+    8:24:void setSoundFlipEnabled(android.content.Context,boolean):477:477 -> setSoundFlipEnabled
+    25:29:void setSoundFlipEnabled(android.content.Context,boolean):478:478 -> setSoundFlipEnabled
+    9:25:void setSpeakEndTime(android.content.Context,java.lang.String):507:507 -> setSpeakEndTime
+    26:30:void setSpeakEndTime(android.content.Context,java.lang.String):508:508 -> setSpeakEndTime
+    31:32:void setSpeakEndTime(android.content.Context,java.lang.String):506:506 -> setSpeakEndTime
+    9:25:void setSpeakStartTime(android.content.Context,java.lang.String):497:497 -> setSpeakStartTime
+    26:30:void setSpeakStartTime(android.content.Context,java.lang.String):498:498 -> setSpeakStartTime
+    31:32:void setSpeakStartTime(android.content.Context,java.lang.String):496:496 -> setSpeakStartTime
+    6:7:void setUserRank(android.content.Context,int):416:416 -> setUserRank
+    8:24:void setUserRank(android.content.Context,int):417:417 -> setUserRank
+    25:29:void setUserRank(android.content.Context,int):418:418 -> setUserRank
+    9:25:void setWidgetTheme(android.content.Context,java.lang.String):457:457 -> setWidgetTheme
+    26:30:void setWidgetTheme(android.content.Context,java.lang.String):458:458 -> setWidgetTheme
+    31:32:void setWidgetTheme(android.content.Context,java.lang.String):456:456 -> setWidgetTheme
+    4:10:boolean toggleFavorite(android.content.Context):289:289 -> toggleFavorite
+    11:20:boolean toggleFavorite(android.content.Context):290:290 -> toggleFavorite
+    21:24:boolean toggleFavorite(android.content.Context):292:292 -> toggleFavorite
+    25:40:boolean toggleFavorite(android.content.Context):293:293 -> toggleFavorite
+    41:56:boolean toggleFavorite(android.content.Context):294:294 -> toggleFavorite
+    57:60:boolean toggleFavorite(android.content.Context):295:295 -> toggleFavorite
+    61:64:boolean toggleFavorite(android.content.Context):297:297 -> toggleFavorite
+    65:69:boolean toggleFavorite(android.content.Context):301:301 -> toggleFavorite
+    70:79:boolean toggleFavorite(android.content.Context):302:302 -> toggleFavorite
+    80:84:boolean toggleFavorite(android.content.Context):305:305 -> toggleFavorite
+    85:90:boolean toggleFavorite(android.content.Context):306:306 -> toggleFavorite
+    91:96:boolean toggleFavorite(android.content.Context):310:310 -> toggleFavorite
+    97:102:boolean toggleFavorite(android.content.Context):311:311 -> toggleFavorite
+    103:106:boolean toggleFavorite(android.content.Context):312:312 -> toggleFavorite
+    107:109:boolean toggleFavorite(android.content.Context):313:313 -> toggleFavorite
+    110:116:boolean toggleFavorite(android.content.Context):314:314 -> toggleFavorite
+    117:120:boolean toggleFavorite(android.content.Context):318:318 -> toggleFavorite
+    121:136:boolean toggleFavorite(android.content.Context):321:321 -> toggleFavorite
+    137:140:boolean toggleFavorite(android.content.Context):322:322 -> toggleFavorite
+    141:146:boolean toggleFavorite(android.content.Context):336:336 -> toggleFavorite
+    147:154:boolean toggleFavorite(android.content.Context):337:337 -> toggleFavorite
+    155:159:boolean toggleFavorite(android.content.Context):340:340 -> toggleFavorite
+    160:179:boolean toggleFavorite(android.content.Context):342:342 -> toggleFavorite
+    180:185:boolean toggleFavorite(android.content.Context):329:329 -> toggleFavorite
+    186:191:boolean toggleFavorite(android.content.Context):330:330 -> toggleFavorite
+    192:197:boolean toggleFavorite(android.content.Context):331:331 -> toggleFavorite
+    198:201:boolean toggleFavorite(android.content.Context):332:332 -> toggleFavorite
+    202:204:boolean toggleFavorite(android.content.Context):333:333 -> toggleFavorite
+    205:207:boolean toggleFavorite(android.content.Context):334:334 -> toggleFavorite
+    208:209:boolean toggleFavorite(android.content.Context):346:346 -> toggleFavorite
+    210:213:boolean toggleFavorite(android.content.Context):290:290 -> toggleFavorite
+    4:7:boolean toggleFlip(android.content.Context):281:281 -> toggleFlip
+    8:16:boolean toggleFlip(android.content.Context):282:282 -> toggleFlip
+    17:29:boolean toggleFlip(android.content.Context):284:284 -> toggleFlip
+    30:34:boolean toggleFlip(android.content.Context):285:285 -> toggleFlip
 com.englishbreakfast.app.WidgetDataManager$WidgetWord -> com.englishbreakfast.app.WidgetDataManager$WidgetWord:
 # {"id":"sourceFile","fileName":"WidgetDataManager.java"}
-    1:1:void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean):58:58 -> <init>
-    2:10:void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,boolean):61:69 -> <init>
+    1:1:void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean):60:60 -> <init>
+    2:10:void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,boolean):63:71 -> <init>
 com.getcapacitor.AndroidProtocolHandler -> com.getcapacitor.AndroidProtocolHandler:
 # {"id":"sourceFile","fileName":"AndroidProtocolHandler.java"}
     1:3:void <init>(android.content.Context):21:21 -> <init>
@@ -80613,7 +80745,31 @@ com.getcapacitor.Bridge -> com.getcapacitor.Bridge:
     142:147:boolean validatePermissions(com.getcapacitor.Plugin,com.getcapacitor.PluginCall,java.util.Map):1204:1204 -> validatePermissions
     148:170:boolean validatePermissions(com.getcapacitor.Plugin,com.getcapacitor.PluginCall,java.util.Map):1205:1205 -> validatePermissions
     171:180:boolean validatePermissions(com.getcapacitor.Plugin,com.getcapacitor.PluginCall,java.util.Map):1207:1207 -> validatePermissions
-com.getcapacitor.Bridge$$ExternalSyntheticLambda1 -> com.getcapacitor.a:
+com.getcapacitor.Bridge$$ExternalSyntheticLambda0 -> com.getcapacitor.a:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int $r8$classId -> q
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.getcapacitor.PluginCall com.getcapacitor.Bridge$$InternalSyntheticLambda$1$0de1dc8573ae2d9c6df5915de2b3ae7b72f76ecbefd8bf42780983c61b6ee1f2$0.f$3 -> r
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.getcapacitor.Bridge com.getcapacitor.Bridge$$InternalSyntheticLambda$1$0de1dc8573ae2d9c6df5915de2b3ae7b72f76ecbefd8bf42780983c61b6ee1f2$0.f$0 -> s
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.getcapacitor.PluginHandle com.getcapacitor.Bridge$$InternalSyntheticLambda$1$0de1dc8573ae2d9c6df5915de2b3ae7b72f76ecbefd8bf42780983c61b6ee1f2$0.f$1 -> t
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.getcapacitor.Bridge$$InternalSyntheticLambda$1$0de1dc8573ae2d9c6df5915de2b3ae7b72f76ecbefd8bf42780983c61b6ee1f2$0.f$2 -> u
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:1:void <init>(com.getcapacitor.Bridge,com.getcapacitor.PluginHandle,java.lang.String,com.getcapacitor.PluginCall):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    2:2:void <init>(com.getcapacitor.community.admob.models.Executor,com.getcapacitor.community.admob.models.AdOptions,com.getcapacitor.PluginCall,com.google.android.gms.common.util.BiConsumer,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    3:3:void <init>(com.getcapacitor.plugin.SystemBars,java.lang.String,java.lang.String,com.getcapacitor.PluginCall):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:96:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.getcapacitor.Bridge$$ExternalSyntheticLambda1 -> com.getcapacitor.b:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.getcapacitor.Bridge com.getcapacitor.Bridge$$InternalSyntheticLambda$1$25785894ec4f25e2dd18bf8f5dbce500f8447ae59b13806165f5f1217b688efe$0.f$0 -> q
@@ -80626,7 +80782,7 @@ com.getcapacitor.Bridge$$ExternalSyntheticLambda1 -> com.getcapacitor.a:
       # {"id":"com.android.tools.r8.synthesized"}
     1:10:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.Bridge$$ExternalSyntheticLambda2 -> com.getcapacitor.b:
+com.getcapacitor.Bridge$$ExternalSyntheticLambda2 -> com.getcapacitor.c:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -80635,7 +80791,7 @@ com.getcapacitor.Bridge$$ExternalSyntheticLambda2 -> com.getcapacitor.b:
       # {"id":"com.android.tools.r8.synthesized"}
     1:20:void onReceiveValue(java.lang.Object):0:0 -> onReceiveValue
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.Bridge$$ExternalSyntheticLambda3 -> com.getcapacitor.c:
+com.getcapacitor.Bridge$$ExternalSyntheticLambda3 -> com.getcapacitor.d:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -81039,7 +81195,7 @@ com.getcapacitor.BridgeWebChromeClient -> com.getcapacitor.BridgeWebChromeClient
     36:40:void androidx.activity.result.ActivityResultLauncher.launch(java.lang.Object):37:37 -> showVideoCapturePicker
     36:40:boolean showVideoCapturePicker(android.webkit.ValueCallback):370 -> showVideoCapturePicker
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda0 -> com.getcapacitor.d:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda0 -> com.getcapacitor.e:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -81051,7 +81207,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda0 -> com.getcapac
     1:18:void onActivityResult(d.ActivityResult):0:0 -> onActivityResult
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Ld/a;)V"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda10 -> com.getcapacitor.e:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda10 -> com.getcapacitor.f:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -81062,7 +81218,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda10 -> com.getcapa
       # {"id":"com.android.tools.r8.synthesized"}
     1:32:void onClick(android.content.DialogInterface,int):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda11 -> com.getcapacitor.f:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda11 -> com.getcapacitor.g:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -81073,7 +81229,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda11 -> com.getcapa
       # {"id":"com.android.tools.r8.synthesized"}
     1:26:void onCancel(android.content.DialogInterface):0:0 -> onCancel
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda12 -> com.getcapacitor.g:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda12 -> com.getcapacitor.h:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.getcapacitor.BridgeWebChromeClient com.getcapacitor.BridgeWebChromeClient$$InternalSyntheticLambda$1$d801017e76db50810ed523ea91e77f919a6bfba72ccb272c0bdfcf8ae67ac6a4$0.f$0 -> q
@@ -81088,7 +81244,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda12 -> com.getcapa
       # {"id":"com.android.tools.r8.synthesized"}
     1:12:void onPermissionSelect(java.lang.Boolean):0:0 -> onPermissionSelect
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda13 -> com.getcapacitor.h:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda13 -> com.getcapacitor.i:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.getcapacitor.BridgeWebChromeClient com.getcapacitor.BridgeWebChromeClient$$InternalSyntheticLambda$1$ecbf5038136409c89d10efd4aa25d4a8bd380503777217cfe8c5b7bc7fa00135$0.f$0 -> q
@@ -81101,7 +81257,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda13 -> com.getcapa
       # {"id":"com.android.tools.r8.synthesized"}
     1:10:void onPermissionSelect(java.lang.Boolean):0:0 -> onPermissionSelect
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda14 -> com.getcapacitor.i:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda14 -> com.getcapacitor.j:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -81112,7 +81268,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda14 -> com.getcapa
       # {"id":"com.android.tools.r8.synthesized"}
     1:22:void onActivityResult(java.lang.Object):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda2 -> com.getcapacitor.j:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda2 -> com.getcapacitor.k:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     android.widget.EditText com.getcapacitor.BridgeWebChromeClient$$InternalSyntheticLambda$1$353c0c984a2dee917c9d7b0c071896f3eac0095cec2a58f9fa63176ed9d77c2b$0.f$0 -> q
@@ -81123,7 +81279,7 @@ com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda2 -> com.getcapac
       # {"id":"com.android.tools.r8.synthesized"}
     1:8:void onClick(android.content.DialogInterface,int):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda5 -> com.getcapacitor.k:
+com.getcapacitor.BridgeWebChromeClient$$ExternalSyntheticLambda5 -> com.getcapacitor.l:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     android.webkit.PermissionRequest com.getcapacitor.BridgeWebChromeClient$$InternalSyntheticLambda$1$81bc6bdd4028dfff7c31ba631378816b24fc4b3b703f8f2b8f4699dd7d034afc$0.f$0 -> q
@@ -81841,7 +81997,7 @@ com.getcapacitor.MessageHandler -> com.getcapacitor.MessageHandler:
     172:188:void sendResponseMessage(com.getcapacitor.PluginCall,com.getcapacitor.PluginResult,com.getcapacitor.PluginResult):134:134 -> sendResponseMessage
     189:194:void sendResponseMessage(com.getcapacitor.PluginCall,com.getcapacitor.PluginResult,com.getcapacitor.PluginResult):136:136 -> sendResponseMessage
     195:200:void sendResponseMessage(com.getcapacitor.PluginCall,com.getcapacitor.PluginResult,com.getcapacitor.PluginResult):137:137 -> sendResponseMessage
-com.getcapacitor.MessageHandler$$ExternalSyntheticLambda0 -> com.getcapacitor.l:
+com.getcapacitor.MessageHandler$$ExternalSyntheticLambda0 -> com.getcapacitor.m:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     android.webkit.WebView com.getcapacitor.MessageHandler$$InternalSyntheticLambda$1$6fcdf3f1c73eb00869e2c3ee7dcd427f6294b8e4bc5d04caee6db3e672815fa2$0.f$0 -> q
@@ -81852,7 +82008,7 @@ com.getcapacitor.MessageHandler$$ExternalSyntheticLambda0 -> com.getcapacitor.l:
       # {"id":"com.android.tools.r8.synthesized"}
     1:8:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.getcapacitor.MessageHandler$$ExternalSyntheticLambda1 -> com.getcapacitor.m:
+com.getcapacitor.MessageHandler$$ExternalSyntheticLambda1 -> com.getcapacitor.n:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q
@@ -82125,7 +82281,7 @@ com.getcapacitor.Plugin -> com.getcapacitor.Plugin:
     22:24:void triggerPermissionCallback(java.lang.reflect.Method,java.util.Map):139:139 -> triggerPermissionCallback
     25:35:void triggerPermissionCallback(java.lang.reflect.Method,java.util.Map):140:140 -> triggerPermissionCallback
     36:39:void triggerPermissionCallback(java.lang.reflect.Method,java.util.Map):142:142 -> triggerPermissionCallback
-com.getcapacitor.Plugin$$ExternalSyntheticLambda0 -> com.getcapacitor.n:
+com.getcapacitor.Plugin$$ExternalSyntheticLambda0 -> com.getcapacitor.o:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> q

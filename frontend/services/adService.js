@@ -148,19 +148,7 @@ class AdServiceImpl {
       }
       return true;
     } catch (e) {
-      console.warn(`AdMob unit ${primaryId} failed to load, trying test unit fallback:`, e);
-      try {
-        const testId = AD_CONFIG.TEST_UNITS[unitType];
-        if (testId && testId !== primaryId) {
-          await AdMob.prepareRewardVideoAd({ adId: testId });
-          if (unitType === 'REWARDED_SHIELD') {
-            this.isShieldAdPrepared = true;
-          }
-          return true;
-        }
-      } catch (fallbackErr) {
-        console.warn('⚠️ AdMob rewarded test fallback failed:', fallbackErr);
-      }
+      console.warn(`AdMob rewarded unit ${primaryId} unavailable (no fill / region / network), skipping ad:`, e);
       return false;
     }
   }
@@ -190,18 +178,7 @@ class AdServiceImpl {
       console.log('✅ AdMob Interstitial preloaded and ready in memory');
       return true;
     } catch (err) {
-      console.warn('⚠️ AdMob Interstitial primary preload failed, trying test unit fallback:', err);
-      try {
-        const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
-        if (adId !== testAdId) {
-          await AdMob.prepareInterstitial({ adId: testAdId });
-          this.isInterstitialPrepared = true;
-          console.log('✅ AdMob Interstitial preloaded via official test unit');
-          return true;
-        }
-      } catch (fallbackErr) {
-        console.warn('⚠️ AdMob test unit fallback failed:', fallbackErr);
-      }
+      console.warn('⚠️ AdMob Interstitial preload unavailable (no fill / region / network), skipping ad:', err);
       this.isInterstitialPrepared = false;
       return false;
     } finally {
@@ -410,17 +387,8 @@ class AdServiceImpl {
 
         if (!this.isInterstitialPrepared) {
           console.log('⏳ Interstitial not preloaded, preparing now...');
-          try {
-            await AdMob.prepareInterstitial({ adId });
-            this.isInterstitialPrepared = true;
-          } catch (prepErr) {
-            console.warn('⚠️ Primary prepare failed, falling back to test unit:', prepErr);
-            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
-            if (adId !== testAdId) {
-              await AdMob.prepareInterstitial({ adId: testAdId });
-              this.isInterstitialPrepared = true;
-            }
-          }
+          await AdMob.prepareInterstitial({ adId });
+          this.isInterstitialPrepared = true;
         }
 
         await AdMob.showInterstitial();
@@ -502,16 +470,8 @@ class AdServiceImpl {
 
         if (!this.isInterstitialPrepared) {
           console.log('⏳ Collections exit interstitial not preloaded, preparing now...');
-          try {
-            await AdMob.prepareInterstitial({ adId });
-            this.isInterstitialPrepared = true;
-          } catch (prepErr) {
-            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
-            if (adId !== testAdId) {
-              await AdMob.prepareInterstitial({ adId: testAdId });
-              this.isInterstitialPrepared = true;
-            }
-          }
+          await AdMob.prepareInterstitial({ adId });
+          this.isInterstitialPrepared = true;
         }
 
         await AdMob.showInterstitial();
@@ -594,17 +554,8 @@ class AdServiceImpl {
 
         if (!this.isInterstitialPrepared) {
           console.log('⏳ Training early exit interstitial not preloaded, preparing now...');
-          try {
-            await AdMob.prepareInterstitial({ adId });
-            this.isInterstitialPrepared = true;
-          } catch (prepErr) {
-            console.warn('⚠️ Primary prepare failed, falling back to test unit:', prepErr);
-            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
-            if (adId !== testAdId) {
-              await AdMob.prepareInterstitial({ adId: testAdId });
-              this.isInterstitialPrepared = true;
-            }
-          }
+          await AdMob.prepareInterstitial({ adId });
+          this.isInterstitialPrepared = true;
         }
 
         await AdMob.showInterstitial();
@@ -666,16 +617,8 @@ class AdServiceImpl {
 
         if (!this.isInterstitialPrepared) {
           console.log('⏳ Transition interstitial not preloaded, preparing now...');
-          try {
-            await AdMob.prepareInterstitial({ adId });
-            this.isInterstitialPrepared = true;
-          } catch (prepErr) {
-            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
-            if (adId !== testAdId) {
-              await AdMob.prepareInterstitial({ adId: testAdId });
-              this.isInterstitialPrepared = true;
-            }
-          }
+          await AdMob.prepareInterstitial({ adId });
+          this.isInterstitialPrepared = true;
         }
 
         await AdMob.showInterstitial();
