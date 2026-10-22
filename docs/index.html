@@ -288,6 +288,7 @@
       let favoritePracticeMethod = 'cards';
       let currentWordIndex = 0;
       let activeTab = 'training';
+      let currentTrainingMethod = 'cards';
       let userSettings = { enabledMethods: 'quiz,cards,input', dailyGoal: 10 };
       let cloudWordOfTheDayId = null;
       let wotdPlaylist = ["cat1.mp4","cat2.mp4","cat3.mp4","cat4.mp4","cat5.mp4","cat7.mp4","cat8.mp4"];
@@ -731,6 +732,7 @@
         let currentMethod = isFavPracticeActive
           ? (favoritePracticeMethod || 'cards')
           : (userSettings.preferredMethod || 'cards');
+        currentTrainingMethod = currentMethod;
         if (isFavPracticeActive) {
           categoryWords = favoritePracticeWords;
         }
@@ -804,6 +806,7 @@
             userSettings.preferredMethod = currentMethod;
             saveUserSettings(userSettings);
           }
+          currentTrainingMethod = currentMethod;
         }
 
         // Filter words strictly based on the active training method queue
@@ -2167,7 +2170,7 @@
         // (Never for Cards, 60m cooldown, unlimited daily frequency)
         const isFavPracticeActiveOnTabSwitch = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
         if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTabSwitch && !window._activePracticeCollectionId && tabName !== 'training') {
-          if (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input') {
+          if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
             try {
               AdService.showTrainingEarlyExitInterstitial().catch(() => {});
             } catch (e) {}
@@ -2530,7 +2533,7 @@
             if (tabName === 'training') {
               const isFavPracticeActiveOnTrainingClick = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTrainingClick && !window._activePracticeCollectionId) {
-                if (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input') {
+                if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
                   try {
                     AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                   } catch (e) {}
@@ -2558,7 +2561,7 @@
                 try {
                   AdService.showCollectionsExitInterstitial().catch(() => {});
                 } catch (e) {}
-              } else if (activeTab === 'training' && !window._showHubScreen && (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input')) {
+              } else if (activeTab === 'training' && !window._showHubScreen && (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input')) {
                 try {
                   AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                 } catch (e) {}
@@ -2713,7 +2716,7 @@
                 try {
                   AdService.showCollectionsExitInterstitial().catch(() => {});
                 } catch (e) {}
-              } else if (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input') {
+              } else if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
                 try {
                   AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                 } catch (e) {}
