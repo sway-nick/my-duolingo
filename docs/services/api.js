@@ -1406,6 +1406,9 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   let xpDelta = 0;
 
   if (options && options.isFavPractice) {
+    if (typeof window !== 'undefined' && (method === 'quiz' || method === 'pairs' || method === 'input')) {
+      window._favPracticeCompletedNonCardWord = true;
+    }
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
     } else {

@@ -283,4 +283,38 @@ test('11. Round Progress Preservation: Exiting after Cards into Quiz preserves Q
   );
 });
 
+test('12. Favorites / Collections Interstitial Guard: Never shows on entering Favorites or practicing Cards, only after >=1 word in non-Cards mode', async () => {
+  storage.clear();
+  globalThis.window._favPracticeCompletedNonCardWord = false;
+
+  // Practicing Cards in a collection must NOT set _favPracticeCompletedNonCardWord
+  await saveProgress(301, true, 'cards_learn', { isFavPractice: true });
+  await saveProgress(302, true, 'cards_know', { isFavPractice: true });
+  assert.equal(
+    Boolean(globalThis.window._favPracticeCompletedNonCardWord),
+    false,
+    'Cards mode in collection must NOT mark _favPracticeCompletedNonCardWord'
+  );
+
+  // Completing 1 word in Quiz inside a collection sets _favPracticeCompletedNonCardWord = true
+  await saveProgress(301, true, 'quiz', { isFavPractice: true });
+  assert.equal(
+    globalThis.window._favPracticeCompletedNonCardWord,
+    true,
+    'Completing >=1 word in non-Cards mode inside collection sets _favPracticeCompletedNonCardWord = true'
+  );
+
+  // Verify #go-repeat-favs-btn in index.html does NOT set window._showHubScreen = false before opening Favorites
+  const indexHtml = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
+  const repeatFavsIdx = indexHtml.indexOf("content.querySelector('#go-repeat-favs-btn')");
+  assert.ok(repeatFavsIdx !== -1, '#go-repeat-favs-btn handler exists in index.html');
+  const repeatFavsBlock = indexHtml.slice(repeatFavsIdx, repeatFavsIdx + 450);
+  assert.equal(
+    repeatFavsBlock.includes('window._showHubScreen = false'),
+    false,
+    '#go-repeat-favs-btn must NOT set window._showHubScreen = false before switching to favorites tab'
+  );
+});
+
+
 
