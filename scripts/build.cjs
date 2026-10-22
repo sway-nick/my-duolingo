@@ -1,5 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+const { optimizeWordsData } = require('./optimize_words_data.cjs');
+
+function minifyCssContent(css) {
+  return css
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s*\n\s*/g, '')
+    .replace(/\s*([{}:;,])\s*/g, '$1')
+    .replace(/;}/g, '}')
+    .trim();
+}
 
 function copyRecursiveSync(src, dest) {
   const exists = fs.existsSync(src);
@@ -24,15 +34,35 @@ function copyRecursiveSync(src, dest) {
 function build() {
   console.log('📦 Building English Trainer PWA from frontend/ source...');
 
-  // 0. Validate words.json encoding (Zero U+FFFD tolerance)
+  // 0. Validate words.json encoding (Zero U+FFFD tolerance) & optimize JSON payload
   const wordsPath = path.join(__dirname, '../frontend/assets/data/words.json');
   if (fs.existsSync(wordsPath)) {
     const rawWords = fs.readFileSync(wordsPath, 'utf8');
     if (rawWords.includes('\ufffd')) {
       throw new Error('❌ BUILD FAILED: Detected corrupted UTF-8 replacement character (U+FFFD) in frontend/assets/data/words.json!');
     }
-    console.log('🔍 Data integrity check passed: 0 corrupted U+FFFD characters in words.json.');
+    optimizeWordsData();
+    console.log('🔍 Data integrity & compaction passed: 0 corrupted U+FFFD characters in words.json.');
   }
+
+  // 0.02. Optimize bloated favicon.svg & remove unused test icon assets
+  const faviconSvgPath = path.join(__dirname, '../frontend/favicon.svg');
+  const icon192Path = fs.existsSync(path.join(__dirname, '../frontend/web-app-manifest-192x192.png'))
+    ? path.join(__dirname, '../frontend/web-app-manifest-192x192.png')
+    : path.join(__dirname, '../frontend/favicon-96x96.png');
+  if (fs.existsSync(faviconSvgPath) && fs.existsSync(icon192Path)) {
+    const svgStat = fs.statSync(faviconSvgPath);
+    if (svgStat.size > 100000) {
+      const b64 = fs.readFileSync(icon192Path).toString('base64');
+      const compactSvg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 192 192" width="192" height="192"><image width="192" height="192" xlink:href="data:image/png;base64,${b64}"/></svg>`;
+      fs.writeFileSync(faviconSvgPath, compactSvg, 'utf8');
+      console.log(`🎨 Optimized frontend/favicon.svg: ${(svgStat.size / 1024).toFixed(1)} KB -> ${(Buffer.byteLength(compactSvg) / 1024).toFixed(1)} KB`);
+    }
+  }
+  ['../frontend/assets/icons/test_transparent_512.png', '../docs/assets/icons/test_transparent_512.png', '../assets/icons/test_transparent_512.png'].forEach((rel) => {
+    const p = path.join(__dirname, rel);
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  });
 
   // 0.05. Validate JavaScript syntax of all inline <script> tags in frontend/index.html
   const indexPath0 = path.join(__dirname, '../frontend/index.html');
@@ -109,6 +139,14 @@ function build() {
   // 1. Sync frontend/ -> docs/
   if (!fs.existsSync('./docs')) fs.mkdirSync('./docs', { recursive: true });
   copyRecursiveSync('./frontend', './docs');
+
+  // 1.1. Minify CSS assets in production docs/ output (used by Capacitor Android & Web)
+  ['./docs/assets/css/styles.css', './docs/assets/css/mobile-styles.css'].forEach((cssFile) => {
+    if (fs.existsSync(cssFile)) {
+      const rawCss = fs.readFileSync(cssFile, 'utf8');
+      fs.writeFileSync(cssFile, minifyCssContent(rawCss), 'utf8');
+    }
+  });
 
   // 2. Sync all root-level web app & favicon files from frontend/ to root
   const rootFilesToSync = [

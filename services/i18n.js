@@ -9478,9 +9478,9 @@ export function t(key, params = null) {
   return val;
 }
 
-export function getWordTranslation(wordObj) {
+export function getWordTranslation(wordObj, explicitLang) {
   if (!wordObj) return '';
-  const lang = getInterfaceLanguage();
+  const lang = explicitLang || getInterfaceLanguage();
   const rawWord = String(wordObj.word || '').trim().toLowerCase();
 
   const isInvalidTranslation = (val) => {
@@ -9516,8 +9516,10 @@ export function getWordTranslation(wordObj) {
   return wordObj.word || '';
 }
 
+let _cachedUserNotesRaw = null;
+let _cachedUserNotesObj = {};
 
-export function getWordNotes(wordObj) {
+export function getWordNotes(wordObj, explicitLang) {
   if (!wordObj) return '';
 
   // 1. Personal user note has highest priority
@@ -9526,7 +9528,12 @@ export function getWordNotes(wordObj) {
   }
   if (typeof localStorage !== 'undefined') {
     try {
-      const userNotes = JSON.parse(localStorage.getItem('myduo_user_notes') || '{}');
+      const rawNotes = localStorage.getItem('myduo_user_notes') || '{}';
+      if (rawNotes !== _cachedUserNotesRaw) {
+        _cachedUserNotesRaw = rawNotes;
+        _cachedUserNotesObj = JSON.parse(rawNotes);
+      }
+      const userNotes = _cachedUserNotesObj;
       const wId = wordObj.id ? String(wordObj.id) : '';
       const wText = wordObj.word ? String(wordObj.word).toLowerCase().trim() : '';
       const personalNote = (wId && userNotes[wId]) || (wText && userNotes[wText]);
@@ -9536,7 +9543,7 @@ export function getWordNotes(wordObj) {
     } catch (e) {}
   }
 
-  const lang = getInterfaceLanguage();
+  const lang = explicitLang || getInterfaceLanguage();
   if (wordObj.all_notes && typeof wordObj.all_notes === 'object') {
     const n = wordObj.all_notes[lang];
     if (n && typeof n === 'string' && n.trim().length > 0) return n.trim();

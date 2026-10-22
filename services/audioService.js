@@ -444,6 +444,20 @@ async function fetchAudioFromMirrors(cdnUrl, timeoutMs = 7000) {
   return null;
 }
 
+function assignBlobToAudio(audioEl, blob) {
+  if (!audioEl || !blob) return '';
+  if (audioEl._activeBlobUrl) {
+    try {
+      URL.revokeObjectURL(audioEl._activeBlobUrl);
+    } catch (e) {}
+    audioEl._activeBlobUrl = null;
+  }
+  const blobUrl = URL.createObjectURL(blob);
+  audioEl._activeBlobUrl = blobUrl;
+  audioEl.src = blobUrl;
+  return blobUrl;
+}
+
 /**
  * Plays audio from CacheStorage blob if available offline, otherwise downloads from the
  * first reachable CDN mirror (and caches it for next time)
@@ -466,7 +480,7 @@ async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail) {
       resp = fetched;
     }
     const blob = await resp.blob();
-    targetAudio.src = URL.createObjectURL(blob);
+    assignBlobToAudio(targetAudio, blob);
     targetAudio.currentTime = 0;
     trackPlayingAudio(targetAudio);
     const p = targetAudio.play();
@@ -1545,7 +1559,7 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
     };
 
     // Level 1: Check downloaded voice packs in device CacheStorage (100% offline studio quality)
-    let cachedBlobUrl = null;
+    let cachedBlob = null;
     const hasCache = typeof window !== 'undefined' && 'caches' in window;
     if (hasCache) {
       try {
@@ -1554,14 +1568,14 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
         if (match) {
           const blob = await match.blob();
           if (blob && blob.size >= AUDIO_MIN_VALID_BYTES) {
-            cachedBlobUrl = URL.createObjectURL(blob);
+            cachedBlob = blob;
           }
         }
       } catch (e) {}
     }
 
-    if (cachedBlobUrl) {
-      audio.src = cachedBlobUrl;
+    if (cachedBlob) {
+      assignBlobToAudio(audio, cachedBlob);
       audio.currentTime = 0;
       audio.onerror = () => {
         if (typeof window !== 'undefined' && window.AndroidAudioBridge) {
@@ -1604,7 +1618,7 @@ function speakWordAsync(text, isUk = null, speedRate = 1.0) {
             }
             const blob = await fetched.blob();
             if (blob && blob.size >= AUDIO_MIN_VALID_BYTES && !resolved) {
-              audio.src = URL.createObjectURL(blob);
+              assignBlobToAudio(audio, blob);
               audio.currentTime = 0;
               audio.playbackRate = targetSpeed;
               const pMirr = audio.play();

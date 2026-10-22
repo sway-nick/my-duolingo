@@ -954,7 +954,7 @@ export async function saveBulkProgressFirestore(userId, progressMap) {
   }
 }
 
-export async function loadUserProgressFirestore(userId) {
+export async function loadUserProgressFirestore(userId, preloadedDataDocs = null) {
   if (!userId) return {};
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return {};
@@ -962,14 +962,19 @@ export async function loadUserProgressFirestore(userId) {
   try {
     const authHeaders = getAuthHeaders();
     // Fetch collections in parallel — listing collections returns 200 OK with empty array, NEVER 404!
+    // If preloadedDataDocs is provided by loadFullUserDataFirestore, skip the duplicate /data fetch!
     const [subRes, dataColRes] = await Promise.all([
       firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/progress`), { headers: authHeaders }).catch(() => null),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`), { headers: authHeaders }).catch(() => null)
+      Array.isArray(preloadedDataDocs)
+        ? Promise.resolve(null)
+        : firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data`), { headers: authHeaders }).catch(() => null)
     ]);
 
-    if (dataColRes && dataColRes.ok) {
-      const colData = await dataColRes.json();
-      const docs = Array.isArray(colData.documents) ? colData.documents : [];
+    const docs = Array.isArray(preloadedDataDocs)
+      ? preloadedDataDocs
+      : (dataColRes && dataColRes.ok ? ((await dataColRes.json().catch(() => null))?.documents || []) : []);
+
+    if (Array.isArray(docs) && docs.length > 0) {
       const progDoc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === 'progress');
       if (progDoc?.fields?.progressJson?.stringValue) {
         try {
@@ -1947,144 +1952,183 @@ export async function saveUserAnalyticsFirestore(userId, analyticsObj) {
   }
 }
 
+const activeFullUserLoads = new Map();
+
 export async function loadFullUserDataFirestore(userId) {
   if (!userId) return null;
   const uid = getEffectiveFirestoreUid(userId);
   if (!uid) return null;
-  try {
-    const config = getFirebaseConfig();
-    const authHeaders = getAuthHeaders();
-    const fetchAllDataDocs = async () => {
-      let docs = [];
-      let pageToken = '';
-      do {
-        let pageUrl = `${getFirestoreBase()}/users/${encodeURIComponent(uid)}/data?pageSize=100&key=${config.apiKey}`;
-        if (pageToken) {
-          pageUrl += `&pageToken=${encodeURIComponent(pageToken)}`;
-        }
-        const res = await firestoreFetch(pageUrl, { headers: authHeaders }).catch(() => null);
-        if (!res || !res.ok) break;
-        const data = await res.json().catch(() => null);
-        if (!data) break;
-        if (Array.isArray(data.documents)) {
-          docs.push(...data.documents);
-        }
-        pageToken = data.nextPageToken || '';
-      } while (pageToken);
-      return docs;
-    };
+  if (activeFullUserLoads.has(uid)) {
+    return activeFullUserLoads.get(uid);
+  }
+  const loadPromise = (async () => {
+    try {
+      const config = getFirebaseConfig();
+      const authHeaders = getAuthHeaders();
+      const fetchAllDataDocs = async () => {
+        let docs = [];
+        let pageToken = '';
+        do {
+          let pageUrl = `${getFirestoreBase()}/users/${encodeURIComponent(uid)}/data?pageSize=100&key=${config.apiKey}`;
+          if (pageToken) {
+            pageUrl += `&pageToken=${encodeURIComponent(pageToken)}`;
+          }
+          const res = await firestoreFetch(pageUrl, { headers: authHeaders }).catch(() => null);
+          if (!res || !res.ok) break;
+          const data = await res.json().catch(() => null);
+          if (!data) break;
+          if (Array.isArray(data.documents)) {
+            docs.push(...data.documents);
+          }
+          pageToken = data.nextPageToken || '';
+        } while (pageToken);
+        return docs;
+      };
 
-    const [progress, userDocRes, dataDocs, setDocRes] = await Promise.all([
-      loadUserProgressFirestore(uid),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}`), { headers: authHeaders }).catch(() => null),
-      fetchAllDataDocs().catch(() => []),
-      firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings`), { headers: authHeaders }).catch(() => null),
-    ]);
+      // Fetch /users/{uid}, /users/{uid}/data, /users/{uid}/progress, and /users/{uid}/settings ONCE in parallel
+      const [subRes, userDocRes, dataDocs, setDocRes] = await Promise.all([
+        firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/progress`), { headers: authHeaders }).catch(() => null),
+        firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}`), { headers: authHeaders }).catch(() => null),
+        fetchAllDataDocs().catch(() => []),
+        firestoreFetch(getFirestoreUrl(`/users/${encodeURIComponent(uid)}/settings`), { headers: authHeaders }).catch(() => null),
+      ]);
 
-    let userProfile = {};
-    let favorites = [];
-    let deletedFavorites = [];
-    let hasExplicitFavDoc = false;
-    let notes = {};
-    let customWords = [];
+      let progress = {};
+      let userProfile = {};
+      let favorites = [];
+      let deletedFavorites = [];
+      let hasExplicitFavDoc = false;
+      let notes = {};
+      let customWords = [];
+      let weeklyXpMap = {};
 
-    // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words, progress)
-    // This avoids 404 Not Found network errors when documents do not exist yet!
-    if (Array.isArray(dataDocs) && dataDocs.length > 0) {
-      try {
-        const docs = dataDocs;
-        for (const doc of docs) {
-          const docName = doc.name ? doc.name.split('/').pop() : '';
-          if (docName === 'deleted_favorites') {
-            if (doc.fields?.deletedFavorites?.arrayValue?.values) {
-              const sub = doc.fields.deletedFavorites.arrayValue.values.map(v => v.stringValue || '').filter(Boolean);
-              deletedFavorites.push(...sub);
-            }
-          } else if (docName === 'favorites') {
-            if (doc.fields) {
-              hasExplicitFavDoc = true;
-              if (doc.fields.favorites?.arrayValue?.values) {
-                const subFavs = doc.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-                favorites.push(...subFavs);
-              } else if (doc.fields.items?.arrayValue?.values) {
-                const subFavs = doc.fields.items.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-                favorites.push(...subFavs);
+      // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words, progress, weekly_xp_*)
+      // This avoids 404 Not Found network errors and eliminates duplicate /data fetches!
+      if (Array.isArray(dataDocs) && dataDocs.length > 0) {
+        try {
+          const docs = dataDocs;
+          for (const doc of docs) {
+            const docName = doc.name ? doc.name.split('/').pop() : '';
+            if (docName === 'deleted_favorites') {
+              if (doc.fields?.deletedFavorites?.arrayValue?.values) {
+                const sub = doc.fields.deletedFavorites.arrayValue.values.map(v => v.stringValue || '').filter(Boolean);
+                deletedFavorites.push(...sub);
+              }
+            } else if (docName === 'favorites') {
+              if (doc.fields) {
+                hasExplicitFavDoc = true;
+                if (doc.fields.favorites?.arrayValue?.values) {
+                  const subFavs = doc.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+                  favorites.push(...subFavs);
+                } else if (doc.fields.items?.arrayValue?.values) {
+                  const subFavs = doc.fields.items.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+                  favorites.push(...subFavs);
+                }
+              }
+            } else if (docName === 'notes') {
+              if (doc.fields?.notesJson?.stringValue) {
+                try {
+                  notes = JSON.parse(doc.fields.notesJson.stringValue);
+                } catch (e) {}
+              }
+            } else if (docName === 'custom_words') {
+              if (doc.fields?.wordsJson?.stringValue) {
+                try {
+                  const parsed = JSON.parse(doc.fields.wordsJson.stringValue);
+                  if (Array.isArray(parsed)) customWords = parsed;
+                } catch (e) {}
+              }
+            } else if (docName === 'progress') {
+              if (doc.fields?.progressJson?.stringValue) {
+                try {
+                  Object.assign(progress, JSON.parse(doc.fields.progressJson.stringValue));
+                } catch (e) {}
+              }
+            } else if (docName.startsWith('weekly_xp_')) {
+              const wk = docName.slice('weekly_xp_'.length);
+              if (wk && doc.fields?.xp) {
+                weeklyXpMap[wk] = Number(doc.fields.xp.integerValue || doc.fields.xp.doubleValue || 0);
               }
             }
-          } else if (docName === 'notes') {
-            if (doc.fields?.notesJson?.stringValue) {
-              try {
-                notes = JSON.parse(doc.fields.notesJson.stringValue);
-              } catch (e) {}
-            }
-          } else if (docName === 'custom_words') {
-            if (doc.fields?.wordsJson?.stringValue) {
-              try {
-                const parsed = JSON.parse(doc.fields.wordsJson.stringValue);
-                if (Array.isArray(parsed)) customWords = parsed;
-              } catch (e) {}
-            }
-          } else if (docName === 'progress') {
-            if (doc.fields?.progressJson?.stringValue) {
-              try {
-                Object.assign(progress, JSON.parse(doc.fields.progressJson.stringValue));
-              } catch (e) {}
+          }
+        } catch (e) {}
+      }
+
+      if (subRes && subRes.ok) {
+        try {
+          const subData = await subRes.json();
+          if (Array.isArray(subData.documents)) {
+            for (const doc of subData.documents) {
+              const id = doc.name.split('/').pop();
+              const obj = {};
+              for (const [k, f] of Object.entries(doc.fields || {})) {
+                if ('stringValue' in f) obj[k] = f.stringValue;
+                else if ('integerValue' in f) obj[k] = Number(f.integerValue);
+                else if ('doubleValue' in f) obj[k] = Number(f.doubleValue);
+                else if ('booleanValue' in f) obj[k] = f.booleanValue;
+              }
+              progress[id] = { ...(progress[id] || {}), ...obj };
             }
           }
-        }
-      } catch (e) {}
-    }
+        } catch (e) {}
+      }
 
-    if (userDocRes && userDocRes.ok) {
-      const data = await userDocRes.json();
-      if (data.fields) {
-        for (const [k, f] of Object.entries(data.fields)) {
-          if ('stringValue' in f) userProfile[k] = f.stringValue;
-          else if ('integerValue' in f) userProfile[k] = Number(f.integerValue);
-          else if ('booleanValue' in f) userProfile[k] = f.booleanValue;
-        }
-        if (!hasExplicitFavDoc) {
-          if (data.fields.favorites?.arrayValue?.values) {
-            const rFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-            favorites.push(...rFavs);
-          } else if (data.fields.favorite_words?.arrayValue?.values) {
-            const rFavs = data.fields.favorite_words.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
-            favorites.push(...rFavs);
+      if (userDocRes && userDocRes.ok) {
+        const data = await userDocRes.json();
+        if (data.fields) {
+          for (const [k, f] of Object.entries(data.fields)) {
+            if ('stringValue' in f) userProfile[k] = f.stringValue;
+            else if ('integerValue' in f) userProfile[k] = Number(f.integerValue);
+            else if ('booleanValue' in f) userProfile[k] = f.booleanValue;
+          }
+          if (!hasExplicitFavDoc) {
+            if (data.fields.favorites?.arrayValue?.values) {
+              const rFavs = data.fields.favorites.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+              favorites.push(...rFavs);
+            } else if (data.fields.favorite_words?.arrayValue?.values) {
+              const rFavs = data.fields.favorite_words.arrayValue.values.map(v => v.stringValue || v.integerValue || v.doubleValue || '').filter(Boolean);
+              favorites.push(...rFavs);
+            }
           }
         }
       }
-    }
-    favorites = Array.from(new Set(favorites.map(String)));
+      favorites = Array.from(new Set(favorites.map(String)));
 
-    let settings = null;
-    if (setDocRes && setDocRes.ok) {
-      try {
-        const data = await setDocRes.json();
-        const docs = Array.isArray(data.documents) ? data.documents : [];
-        const genDoc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === 'general');
-        if (genDoc && genDoc.fields) {
-          settings = {};
-          for (const [k, f] of Object.entries(genDoc.fields)) {
-            if ('stringValue' in f) settings[k] = f.stringValue;
-            else if ('integerValue' in f) settings[k] = Number(f.integerValue);
-            else if ('booleanValue' in f) settings[k] = f.booleanValue;
+      let settings = null;
+      if (setDocRes && setDocRes.ok) {
+        try {
+          const data = await setDocRes.json();
+          const docs = Array.isArray(data.documents) ? data.documents : [];
+          const genDoc = docs.find(d => (d.name ? d.name.split('/').pop() : '') === 'general');
+          if (genDoc && genDoc.fields) {
+            settings = {};
+            for (const [k, f] of Object.entries(genDoc.fields)) {
+              if ('stringValue' in f) settings[k] = f.stringValue;
+              else if ('integerValue' in f) settings[k] = Number(f.integerValue);
+              else if ('booleanValue' in f) settings[k] = f.booleanValue;
+            }
           }
-        }
-      } catch (e) {}
-    }
+        } catch (e) {}
+      }
 
-    return {
-      progress,
-      profile: userProfile,
-      favorites,
-      deletedFavorites: Array.from(new Set(deletedFavorites.map(String))),
-      settings,
-      notes,
-      customWords
-    };
-  } catch (err) {
-    console.warn('Load full Firestore user data failed:', err);
-    return null;
-  }
+      return {
+        progress,
+        profile: userProfile,
+        favorites,
+        deletedFavorites: Array.from(new Set(deletedFavorites.map(String))),
+        settings,
+        notes,
+        customWords,
+        weeklyXpMap
+      };
+    } catch (err) {
+      console.warn('Load full Firestore user data failed:', err);
+      return null;
+    } finally {
+      activeFullUserLoads.delete(uid);
+    }
+  })();
+  activeFullUserLoads.set(uid, loadPromise);
+  return loadPromise;
 }
 

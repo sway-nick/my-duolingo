@@ -836,15 +836,19 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   });
 }
 
+const _dictCategoryCache = new Map();
 function sanitizeCategory(cat) {
   if (!cat) return 'Elementary';
-  const s = String(cat).trim();
-  if (['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'].includes(s)) {
-    return s;
+  const raw = String(cat);
+  const cached = _dictCategoryCache.get(raw);
+  if (cached !== undefined) return cached;
+  const s = raw.trim();
+  let cleaned = s;
+  if (!['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'].includes(s)) {
+    cleaned = s.replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() || 'Elementary';
   }
-  return (
-    s.replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() || 'Elementary'
-  );
+  _dictCategoryCache.set(raw, cleaned);
+  return cleaned;
 }
 
 function escapeHtml(str) {
@@ -871,7 +875,7 @@ function formatWordCount(count) {
 
 const BATCH_SIZE = 35;
 
-function renderWordCardHtml(w, isFav, prog) {
+function renderWordCardHtml(w, isFav, prog, activeLang) {
   const isMastered = isWordMastered(prog);
   const cleanCat = sanitizeCategory(w.category);
   const quizCount = prog?.quizCorrect || 0;
@@ -890,6 +894,9 @@ function renderWordCardHtml(w, isFav, prog) {
     stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
   }
 
+  const transText = getWordTranslation(w, activeLang);
+  const noteText = getWordNotes(w, activeLang);
+
   return `
     <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
       <div class="dict-card-header">
@@ -907,8 +914,8 @@ function renderWordCardHtml(w, isFav, prog) {
       
       <div class="dict-card-body">
         <h3>${escapeHtml(w.word)}</h3>
-        <p class="dict-translation">${escapeHtml(getWordTranslation(w))}</p>
-        ${getWordNotes(w) ? `<p class="dict-notes">${escapeHtml(getWordNotes(w))}</p>` : ''}
+        <p class="dict-translation">${escapeHtml(transText)}</p>
+        ${noteText ? `<p class="dict-notes">${escapeHtml(noteText)}</p>` : ''}
       </div>
     </div>
   `;
@@ -1395,9 +1402,14 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const addWordBtnText = t('dict_add_word_btn') || (lang === 'ru' ? '➕ Добавить слово' : lang === 'uk' ? '➕ Додати слово' : '➕ Add word');
   const scanBtnText = t('dict_scan_btn') || (lang === 'ru' ? '📷 Сканировать' : lang === 'uk' ? '📷 Сканувати' : '📷 Scan');
 
-  const getMasteredCount = (list) => {
-    const prog = getUserProgress();
-    return list.filter((w) => isWordMastered(prog[w.id] || prog[String(w.id)])).length;
+  const getMasteredCount = (list, progObj = userProgress) => {
+    const prog = progObj || userProgress || {};
+    let count = 0;
+    for (let i = 0; i < list.length; i++) {
+      const w = list[i];
+      if (w && isWordMastered(prog[w.id] || prog[String(w.id)])) count++;
+    }
+    return count;
   };
 
   container.innerHTML = `
@@ -1444,6 +1456,10 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     }
   };
   updateDictStickyTop();
+  if (window._myduoDictResizeHandler) {
+    window.removeEventListener('resize', window._myduoDictResizeHandler);
+  }
+  window._myduoDictResizeHandler = updateDictStickyTop;
   window.addEventListener('resize', updateDictStickyTop, { passive: true });
 
   const dictDropdown = container.querySelector('#dict-cat-dropdown');
@@ -1559,6 +1575,10 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
       toggleDropdown(false);
     }
   };
+  if (document._myduoDictOutsideClickHandler) {
+    document.removeEventListener('click', document._myduoDictOutsideClickHandler);
+  }
+  document._myduoDictOutsideClickHandler = closeDropdownOutside;
   document.addEventListener('click', closeDropdownOutside);
 
   const searchInput = container.querySelector('#dict-search');
@@ -1574,11 +1594,12 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     const nextBatch = filteredWords.slice(renderedCount, renderedCount + BATCH_SIZE);
     if (nextBatch.length === 0) return;
 
+    const currentLang = getInterfaceLanguage();
     const fragmentHtml = nextBatch
       .map((w) => {
         const isFav = favSet.has(String(w.id));
         const prog = userProgress[w.id] || userProgress[String(w.id)];
-        return renderWordCardHtml(w, isFav, prog);
+        return renderWordCardHtml(w, isFav, prog, currentLang);
       })
       .join('');
 
@@ -1617,19 +1638,19 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   const filterAndResetList = () => {
     const query = searchInput.value.trim().toLowerCase();
     const selectedCat = currentCategory;
+    const currentLang = getInterfaceLanguage();
 
     filteredWords = words.filter((w) => {
       const catClean = sanitizeCategory(w.category);
-      const matchQuery =
-        !query ||
-        (w.word && w.word.toLowerCase().includes(query)) ||
-        (w.translation && w.translation.toLowerCase().includes(query));
-      const matchCat = selectedCat === 'All' || catClean === selectedCat;
-      return matchQuery && matchCat;
+      if (selectedCat !== 'All' && catClean !== selectedCat) return false;
+      if (!query) return true;
+      if (w.word && w.word.toLowerCase().includes(query)) return true;
+      const trans = getWordTranslation(w, currentLang);
+      return Boolean(trans && trans.toLowerCase().includes(query));
     });
 
     if (wordCountEl) {
-      wordCountEl.textContent = `${getMasteredCount(filteredWords)} / ${filteredWords.length}`;
+      wordCountEl.textContent = `${getMasteredCount(filteredWords, userProgress)} / ${filteredWords.length}`;
     }
 
     grid.innerHTML = '';
