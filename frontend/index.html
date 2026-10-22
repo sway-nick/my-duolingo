@@ -208,7 +208,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=386.0';
       import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=386.0';
@@ -1686,16 +1686,17 @@
 
               const favButtons = content.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
               favButtons.forEach((btn) => {
-                const handleQuickToggle = () => {
-                  isWotdFav = !isWotdFav;
+                const handleQuickToggle = async () => {
+                  isWotdFav = !favoriteIds.has(String(wotd.id));
                   if (window.trackEvent) {
                     window.trackEvent('wotd_favorite_toggle', { word: wotd ? wotd.word : '', active: isWotdFav });
                   }
-                  handleFavoriteToggle(wotd.id, isWotdFav);
                   favButtons.forEach((b) => {
                     b.classList.toggle('is-active', isWotdFav);
                     b.classList.toggle('is-off', !isWotdFav);
                   });
+                  await toggleFavoriteApi(wotd.id, isWotdFav);
+                  handleFavoriteToggle(wotd.id, isWotdFav);
                 };
                 attachHeartLongPress(btn, wotd, allWords, handleQuickToggle);
               });
@@ -2477,6 +2478,12 @@
         } catch (e) {}
 
         try {
+          if (typeof syncPendingWidgetFavorites === 'function') {
+            await syncPendingWidgetFavorites();
+          }
+        } catch (e) {}
+
+        try {
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
         } catch (e) {}
@@ -2541,6 +2548,16 @@
         window.addEventListener('myduo_favorites_updated', (e) => {
           const favs = e.detail || getUserFavorites();
           favoriteIds = new Set(favs.map(String));
+          try {
+            const curWotd = getGlobalWordOfTheDay(allWords, cloudWordOfTheDayId);
+            if (curWotd) {
+              const wotdFavNow = favoriteIds.has(String(curWotd.id));
+              document.querySelectorAll('#wotd-fav-front, #wotd-fav-back').forEach((b) => {
+                b.classList.toggle('is-active', wotdFavNow);
+                b.classList.toggle('is-off', !wotdFavNow);
+              });
+            }
+          } catch (err) {}
           syncFavoritesToAndroidWidget();
           if (window._isAppInitializing) return;
           if (window._isInsideCollectionCards) return;

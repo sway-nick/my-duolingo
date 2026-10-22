@@ -757,9 +757,10 @@ export function addWordToCollection(collectionId, wordId, allWords = []) {
   }
 
   if (collectionId === 'my_favorites') {
-    const currentFavs = getUserFavorites();
-    if (!currentFavs.includes(wordId)) {
-      toggleFavoriteApi(wordId);
+    const currentFavs = getUserFavorites().map(String);
+    const idStr = String(wordId);
+    if (!currentFavs.includes(idStr)) {
+      toggleFavoriteApi(wordId, true);
     }
     return;
   }
@@ -794,9 +795,10 @@ export function removeWordFromCollection(collectionId, wordId, allWords = []) {
   }
 
   if (collectionId === 'my_favorites') {
-    const currentFavs = getUserFavorites();
-    if (currentFavs.includes(wordId)) {
-      toggleFavoriteApi(wordId);
+    const currentFavs = getUserFavorites().map(String);
+    const idStr = String(wordId);
+    if (currentFavs.includes(idStr)) {
+      toggleFavoriteApi(wordId, false);
     }
     return;
   }

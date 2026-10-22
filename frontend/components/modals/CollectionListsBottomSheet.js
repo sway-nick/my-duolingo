@@ -193,7 +193,7 @@ export function openCollectionListsBottomSheet({ word, allWords = [], onUpdated 
     }
 
     if (type === 'favorite') {
-      await toggleFavoriteApi(word.id);
+      await toggleFavoriteApi(word.id, checked);
       window.dispatchEvent(new CustomEvent('myduo:favorite_toggled', { detail: { wordId: word.id } }));
       if (getActiveCollectionId() === 'my_favorites') {
         syncCollectionToAndroidWidget('my_favorites', allWords);

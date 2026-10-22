@@ -2144,8 +2144,9 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   const guestId = getGuestId();
 
   let favs = getUserFavorites();
+  const shouldBeFavorite = typeof isFavorite === 'boolean' ? isFavorite : !favs.includes(wordIdStr);
 
-  if (isFavorite) {
+  if (shouldBeFavorite) {
     unrecordDeletedFavorite(wordIdStr, userId);
     if (!favs.includes(wordIdStr)) {
       favs.push(wordIdStr);
