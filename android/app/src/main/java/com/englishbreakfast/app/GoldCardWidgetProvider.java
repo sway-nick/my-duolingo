@@ -134,18 +134,39 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 return;
             }
 
+            final java.util.concurrent.atomic.AtomicBoolean wordFinished = new java.util.concurrent.atomic.AtomicBoolean(false);
+            final Runnable sessionWatchdog = () -> {
+                if (sessionId == sContinuousSessionId && WidgetDataManager.isContinuousPlayActive(context)) {
+                    if (wordFinished.compareAndSet(false, true)) {
+                        sSerialExecutor.execute(() -> {
+                            if (sessionId != sContinuousSessionId || !WidgetDataManager.isContinuousPlayActive(context)) {
+                                return;
+                            }
+                            WidgetDataManager.nextWord(context);
+                            updateAllWidgets(context);
+                            playNextContinuousWord(context, sessionId);
+                        });
+                    }
+                }
+            };
+            // 6.0s absolute safety ceiling per word - guarantees playback never hangs
+            sSpeechHandler.postDelayed(sessionWatchdog, 6000L);
+
             WidgetAudioPlayer.playWord(context, curWord.word, () -> {
-                // Speech finished -> wait 2 seconds pause, then change card and speak new word
-                sSpeechHandler.postDelayed(() -> {
-                    sSerialExecutor.execute(() -> {
-                        if (sessionId != sContinuousSessionId || !WidgetDataManager.isContinuousPlayActive(context)) {
-                            return;
-                        }
-                        WidgetDataManager.nextWord(context);
-                        updateAllWidgets(context);
-                        playNextContinuousWord(context, sessionId);
-                    });
-                }, 2000L);
+                sSpeechHandler.removeCallbacks(sessionWatchdog);
+                if (wordFinished.compareAndSet(false, true)) {
+                    // Speech finished -> wait 2 seconds pause, then change card and speak new word
+                    sSpeechHandler.postDelayed(() -> {
+                        sSerialExecutor.execute(() -> {
+                            if (sessionId != sContinuousSessionId || !WidgetDataManager.isContinuousPlayActive(context)) {
+                                return;
+                            }
+                            WidgetDataManager.nextWord(context);
+                            updateAllWidgets(context);
+                            playNextContinuousWord(context, sessionId);
+                        });
+                    }, 2000L);
+                }
             });
         });
     }

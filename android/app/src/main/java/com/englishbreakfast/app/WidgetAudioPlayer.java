@@ -11,14 +11,56 @@ import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WidgetAudioPlayer {
 
     private static MediaPlayer activePlayer = null;
     private static TextToSpeech fallbackTts = null;
     private static boolean ttsReady = false;
+    private static final ExecutorService sAudioExecutor = Executors.newSingleThreadExecutor();
+
+    /**
+     * Thread-safe callback wrapper with an automatic watchdog timeout.
+     * Guarantees that onDone is invoked at least once (and exactly once)
+     * even if MediaPlayer, network, or TTS hangs or throws an unhandled event.
+     */
+    public static class SafeAudioCallback implements Runnable {
+        private final Runnable target;
+        private final AtomicBoolean invoked = new AtomicBoolean(false);
+        private final Handler handler = new Handler(Looper.getMainLooper());
+        private final Runnable timeoutRunnable;
+
+        public SafeAudioCallback(Runnable target, long timeoutMs) {
+            this.target = target;
+            this.timeoutRunnable = () -> {
+                if (invoked.compareAndSet(false, true)) {
+                    if (this.target != null) {
+                        this.target.run();
+                    }
+                }
+            };
+            this.handler.postDelayed(this.timeoutRunnable, timeoutMs);
+        }
+
+        @Override
+        public void run() {
+            handler.removeCallbacks(timeoutRunnable);
+            if (invoked.compareAndSet(false, true)) {
+                if (target != null) {
+                    target.run();
+                }
+            }
+        }
+    }
 
     /**
      * Checks if the system audio is busy (phone/VoIP call, active video/music/gaming, or silent/vibrate mode)
@@ -85,6 +127,7 @@ public class WidgetAudioPlayer {
             return;
         }
 
+        final SafeAudioCallback safeDone = new SafeAudioCallback(onDone, 3800L);
         final Context appCtx = context.getApplicationContext();
         final String cleanWord = word.trim();
         final String audioFilename = cleanWord.toLowerCase()
@@ -109,12 +152,12 @@ public class WidgetAudioPlayer {
             player.setOnCompletionListener(mp -> {
                 mp.release();
                 if (activePlayer == mp) activePlayer = null;
-                if (onDone != null) onDone.run();
+                safeDone.run();
             });
             player.setOnErrorListener((mp, what, extra) -> {
                 mp.release();
                 if (activePlayer == mp) activePlayer = null;
-                playViaTts(appCtx, cleanWord, onDone);
+                playViaTts(appCtx, cleanWord, safeDone);
                 return true;
             });
 
@@ -123,7 +166,7 @@ public class WidgetAudioPlayer {
             activePlayer = player;
             return;
         } catch (Exception assetEx) {
-            // Asset not pre-packaged (e.g. non-elementary or custom word)
+            // Asset not pre-packaged in APK (e.g. Intermediate, Advanced or custom word)
         }
 
         // 2. Try playing from cached downloaded audio files in internal storage
@@ -139,12 +182,12 @@ public class WidgetAudioPlayer {
                 player.setOnCompletionListener(mp -> {
                     mp.release();
                     if (activePlayer == mp) activePlayer = null;
-                    if (onDone != null) onDone.run();
+                    safeDone.run();
                 });
                 player.setOnErrorListener((mp, what, extra) -> {
                     mp.release();
                     if (activePlayer == mp) activePlayer = null;
-                    playViaTts(appCtx, cleanWord, onDone);
+                    playViaTts(appCtx, cleanWord, safeDone);
                     return true;
                 });
                 player.prepare();
@@ -154,33 +197,120 @@ public class WidgetAudioPlayer {
             }
         } catch (Exception cacheEx) {}
 
-        // 3. Fallback: Android Text-To-Speech
-        playViaTts(appCtx, cleanWord, onDone);
+        // 3. Fallback: try fast download from CDN, or fallback to Android TTS
+        sAudioExecutor.execute(() -> {
+            boolean downloaded = downloadAudioToCache(appCtx, audioFilename);
+            if (downloaded) {
+                File newlyCached = new File(appCtx.getFilesDir(), "audio_cache/" + audioFilename);
+                if (newlyCached.exists() && newlyCached.length() > 0) {
+                    try {
+                        MediaPlayer player = new MediaPlayer();
+                        player.setDataSource(newlyCached.getAbsolutePath());
+                        player.setOnCompletionListener(mp -> {
+                            mp.release();
+                            if (activePlayer == mp) activePlayer = null;
+                            safeDone.run();
+                        });
+                        player.setOnErrorListener((mp, what, extra) -> {
+                            mp.release();
+                            if (activePlayer == mp) activePlayer = null;
+                            playViaTts(appCtx, cleanWord, safeDone);
+                            return true;
+                        });
+                        player.prepare();
+                        player.start();
+                        activePlayer = player;
+                        return;
+                    } catch (Exception playEx) {}
+                }
+            }
+            playViaTts(appCtx, cleanWord, safeDone);
+        });
+    }
+
+    private static boolean downloadAudioToCache(Context context, String filename) {
+        if (context == null || filename == null) return false;
+        try {
+            File cacheDir = new File(context.getFilesDir(), "audio_cache");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            File targetFile = new File(cacheDir, filename);
+            if (targetFile.exists() && targetFile.length() > 0) {
+                return true;
+            }
+
+            String[] cdnUrls = new String[] {
+                "https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/us/" + filename,
+                "https://fastly.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/us/" + filename,
+                "https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio/us/" + filename
+            };
+
+            for (String urlStr : cdnUrls) {
+                HttpURLConnection conn = null;
+                try {
+                    URL url = new URL(urlStr);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setInstanceFollowRedirects(true);
+                    if (conn.getResponseCode() == 200) {
+                        File tempFile = new File(cacheDir, filename + ".tmp");
+                        try (InputStream in = conn.getInputStream();
+                             FileOutputStream out = new FileOutputStream(tempFile)) {
+                            byte[] buffer = new byte[4096];
+                            int read;
+                            while ((read = in.read(buffer)) != -1) {
+                                out.write(buffer, 0, read);
+                            }
+                        }
+                        if (tempFile.exists() && tempFile.length() > 0) {
+                            if (tempFile.renameTo(targetFile)) {
+                                return true;
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {
+                } finally {
+                    if (conn != null) {
+                        conn.disconnect();
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        return false;
     }
 
     private static void playViaTts(Context context, String text, final Runnable onDone) {
         new Handler(Looper.getMainLooper()).post(() -> {
             try {
+                final String utteranceId = "widget_tts_" + System.currentTimeMillis();
                 if (fallbackTts == null) {
                     fallbackTts = new TextToSpeech(context, status -> {
                         if (status == TextToSpeech.SUCCESS) {
                             ttsReady = true;
-                            fallbackTts.setLanguage(Locale.US);
+                            int langRes = fallbackTts.setLanguage(Locale.US);
+                            if (langRes == TextToSpeech.LANG_MISSING_DATA || langRes == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                fallbackTts.setLanguage(Locale.getDefault());
+                            }
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                                 fallbackTts.setOnUtteranceProgressListener(new android.speech.tts.UtteranceProgressListener() {
                                     @Override
-                                    public void onStart(String utteranceId) {}
+                                    public void onStart(String id) {}
                                     @Override
-                                    public void onDone(String utteranceId) {
+                                    public void onDone(String id) {
                                         if (onDone != null) onDone.run();
                                     }
                                     @Override
-                                    public void onError(String utteranceId) {
+                                    public void onError(String id) {
                                         if (onDone != null) onDone.run();
                                     }
                                 });
                             }
-                            fallbackTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "widget_tts");
+                            int speakRes = fallbackTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+                            if (speakRes != TextToSpeech.SUCCESS) {
+                                if (onDone != null) onDone.run();
+                            }
                         } else {
                             if (onDone != null) onDone.run();
                         }
@@ -189,18 +319,21 @@ public class WidgetAudioPlayer {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                         fallbackTts.setOnUtteranceProgressListener(new android.speech.tts.UtteranceProgressListener() {
                             @Override
-                            public void onStart(String utteranceId) {}
+                            public void onStart(String id) {}
                             @Override
-                            public void onDone(String utteranceId) {
+                            public void onDone(String id) {
                                 if (onDone != null) onDone.run();
                             }
                             @Override
-                            public void onError(String utteranceId) {
+                            public void onError(String id) {
                                 if (onDone != null) onDone.run();
                             }
                         });
                     }
-                    fallbackTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "widget_tts");
+                    int speakRes = fallbackTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+                    if (speakRes != TextToSpeech.SUCCESS) {
+                        if (onDone != null) onDone.run();
+                    }
                 } else {
                     if (onDone != null) onDone.run();
                 }
