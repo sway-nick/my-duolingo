@@ -741,10 +741,12 @@
 
         const favListForMixing = isFavPracticeActive ? [] : favList;
 
-        const cardsQueue = getQueueForCards(categoryWords, userProgress, favList);
-        const quizQueue = getQueueForQuiz(categoryWords, userProgress, favList);
-        const pairsQueue = getQueueForPairs(categoryWords, userProgress, favList);
-        const testQueue = getQueueForTest(categoryWords, userProgress, favList);
+        // When practicing collections, NEVER call getQueueForCards/Quiz/Pairs/Test with collection words!
+        // Doing so would corrupt the persistent conveyor batch (conveyor_batch_*) in localStorage.
+        const cardsQueue = isFavPracticeActive ? favoritePracticeWords : getQueueForCards(categoryWords, userProgress, favList);
+        const quizQueue = isFavPracticeActive ? favoritePracticeWords : getQueueForQuiz(categoryWords, userProgress, favList);
+        const pairsQueue = isFavPracticeActive ? favoritePracticeWords : getQueueForPairs(categoryWords, userProgress, favList);
+        const testQueue = isFavPracticeActive ? favoritePracticeWords : getQueueForTest(categoryWords, userProgress, favList);
 
         function isMethodAvailable(method) {
           if (method === 'cards') return !isFavPracticeActive && cardsQueue.length > 0;
@@ -1879,6 +1881,10 @@
           const continueCardsBtn = content.querySelector('#go-continue-cards-btn');
           if (continueCardsBtn) {
             continueCardsBtn.addEventListener('click', () => {
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'cards';
+              window._activePracticeCollectionId = null;
+              window._activePracticeCollectionTitle = null;
               window._showHubScreen = false;
               window._trainingRoundJustCompleted = false;
 
@@ -1913,6 +1919,10 @@
           const goBtn = content.querySelector('#go-next-mode-btn');
           if (goBtn) {
             goBtn.addEventListener('click', () => {
+              favoritePracticeWords = null;
+              favoritePracticeMethod = 'cards';
+              window._activePracticeCollectionId = null;
+              window._activePracticeCollectionTitle = null;
               if (nextMode === 'select_category') {
                 renderCategorySelectorScreen();
                 return;
@@ -2147,10 +2157,18 @@
           }
         }
         // Interstitial strictly upon EXITING Collections ('favorites'), NEVER when entering Collections
+        // Capped at: max 2 times per day, not more than once per hour
         if (activeTab === 'favorites' && tabName && tabName !== 'favorites') {
           try {
-            AdService.showTransitionInterstitial(60).catch(() => {});
+            AdService.showCollectionsExitInterstitial().catch(() => {});
           } catch (e) {}
+        }
+        if (activeTab === 'favorites' && tabName === 'training') {
+          favoritePracticeWords = null;
+          favoritePracticeMethod = 'cards';
+          window._activePracticeCollectionId = null;
+          window._activePracticeCollectionTitle = null;
+          try { clearActiveConveyorBatch(); } catch (e) {}
         }
         activeTab = tabName;
         window._activeTab = tabName;
@@ -2517,13 +2535,16 @@
           () => {
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
-              if ((activeTab === 'favorites' || window._activePracticeCollectionId) && !window._showHubScreen) {
+              if (activeTab === 'favorites' || window._activePracticeCollectionId) {
                 try {
-                  AdService.showTransitionInterstitial(60).catch(() => {});
+                  AdService.showCollectionsExitInterstitial().catch(() => {});
                 } catch (e) {}
               }
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
+              window._activePracticeCollectionId = null;
+              window._activePracticeCollectionTitle = null;
+              try { clearActiveConveyorBatch(); } catch (e) {}
               window._showHubScreen = true;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
@@ -2665,13 +2686,16 @@
             // Priority 4: If inside practice / exercise mode or practicing favorites, return to hub (or to favorites if started from there)
             const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
             if (activeTab === 'training' && (!window._showHubScreen || isFavPracticeRunning)) {
-              try {
-                AdService.showTransitionInterstitial(60).catch(() => {});
-              } catch (e) {}
+              if (isFavPracticeRunning || window._activePracticeCollectionId) {
+                try {
+                  AdService.showCollectionsExitInterstitial().catch(() => {});
+                } catch (e) {}
+              }
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._activePracticeCollectionId = null;
               window._activePracticeCollectionTitle = null;
+              try { clearActiveConveyorBatch(); } catch (e) {}
               window._showHubScreen = true;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;

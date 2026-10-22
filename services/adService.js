@@ -458,6 +458,109 @@ class AdServiceImpl {
   }
 
   /**
+   * Show Interstitial Ad upon user-initiated exit from Collections & Lists.
+   * Strict limits:
+   * 1. Max 2 times per day (daily cap).
+   * 2. Not more frequently than once per hour (3600 seconds cooldown).
+   */
+  async showCollectionsExitInterstitial() {
+    if (!this.isOnline()) return false;
+    const now = Date.now();
+    const STORAGE_KEY_COL_EXIT = 'ad_col_exit_interstitial_stats';
+
+    let stats = { count: 0, date: '', lastShown: 0 };
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_COL_EXIT);
+      if (raw) stats = JSON.parse(raw);
+    } catch (e) {}
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    if (stats.date !== todayStr) {
+      stats.count = 0;
+      stats.date = todayStr;
+    }
+
+    if (stats.count >= 2) {
+      console.log(`ℹ️ Collections exit interstitial skipped: daily cap of 2 reached today (${stats.count}/2)`);
+      this.preloadInterstitial().catch(() => {});
+      return false;
+    }
+
+    const ONE_HOUR_MS = 60 * 60 * 1000;
+    if (stats.lastShown && (now - stats.lastShown < ONE_HOUR_MS)) {
+      const minutesRemaining = Math.ceil((ONE_HOUR_MS - (now - stats.lastShown)) / 60000);
+      console.log(`ℹ️ Collections exit interstitial skipped: 1-hour cooldown active (${minutesRemaining}m remaining)`);
+      this.preloadInterstitial().catch(() => {});
+      return false;
+    }
+
+    const AdMob = this.getNativeAdMob();
+    if (AdMob && this.isNative()) {
+      try {
+        const adId = this.getUnitId('INTERSTITIAL_ROUND');
+        if (!adId) return false;
+
+        if (!this.isInterstitialPrepared) {
+          console.log('⏳ Collections exit interstitial not preloaded, preparing now...');
+          try {
+            await AdMob.prepareInterstitial({ adId });
+            this.isInterstitialPrepared = true;
+          } catch (prepErr) {
+            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
+            if (adId !== testAdId) {
+              await AdMob.prepareInterstitial({ adId: testAdId });
+              this.isInterstitialPrepared = true;
+            }
+          }
+        }
+
+        await AdMob.showInterstitial();
+        this.isInterstitialPrepared = false;
+
+        stats.count = (stats.count || 0) + 1;
+        stats.lastShown = now;
+        stats.date = todayStr;
+        try {
+          localStorage.setItem(STORAGE_KEY_COL_EXIT, JSON.stringify(stats));
+        } catch (e) {}
+
+        this.lastInterstitialTime = now;
+        this.roundsCompletedSinceLastAd = 0;
+
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('ad_interstitial_col_exit_shown', { daily_count: stats.count });
+        }
+
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 1500);
+
+        return true;
+      } catch (err) {
+        console.warn('AdMob collections exit interstitial failed:', err);
+        this.isInterstitialPrepared = false;
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 3000);
+        return false;
+      }
+    }
+
+    console.log('ℹ️ [Web Simulator] Collections exit interstitial shown');
+    stats.count = (stats.count || 0) + 1;
+    stats.lastShown = now;
+    stats.date = todayStr;
+    try {
+      localStorage.setItem(STORAGE_KEY_COL_EXIT, JSON.stringify(stats));
+    } catch (e) {}
+    this.lastInterstitialTime = now;
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_interstitial_col_exit_shown', { daily_count: stats.count });
+    }
+    return true;
+  }
+
+  /**
    * Show Interstitial Ad upon user-initiated transition between training and other tabs/screens.
    * Protected with a 60-second cooldown so it never spams or causes accidental clicks.
    */

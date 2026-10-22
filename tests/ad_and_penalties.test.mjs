@@ -131,6 +131,37 @@ test('8b. AdService Interstitial: Preload and round completion lifecycle', async
   assert.ok(AdService.lastInterstitialTime > 0, 'Timestamp is updated');
 });
 
+test('8c. AdService Collections Exit Interstitial: Capped at max 2 times per day and min 1 hour interval', async () => {
+  assert.equal(typeof AdService.showCollectionsExitInterstitial, 'function', 'showCollectionsExitInterstitial must be exposed');
+
+  global.localStorage.removeItem('ad_col_exit_interstitial_stats');
+
+  // First show: succeeds
+  const res1 = await AdService.showCollectionsExitInterstitial();
+  assert.equal(res1, true, 'First collections exit shows ad');
+
+  // Immediate second show: blocked by 1-hour cooldown
+  const res2 = await AdService.showCollectionsExitInterstitial();
+  assert.equal(res2, false, 'Immediate second show is blocked by 1-hour cooldown');
+
+  // Fast-forward 1 hour (modify lastShown in storage)
+  const raw = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats'));
+  raw.lastShown = Date.now() - (3601 * 1000);
+  global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw));
+
+  // Second show after 1 hour: succeeds
+  const res3 = await AdService.showCollectionsExitInterstitial();
+  assert.equal(res3, true, 'Second show after 1 hour succeeds (count is now 2)');
+
+  // Fast-forward another hour: blocked because daily cap of 2 is reached!
+  const raw2 = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats'));
+  raw2.lastShown = Date.now() - (3601 * 1000);
+  global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw2));
+
+  const res4 = await AdService.showCollectionsExitInterstitial();
+  assert.equal(res4, false, 'Third show in same day is blocked by daily cap (max 2/day)');
+});
+
 test('9. Pairs Mode: Round completion awards +5 XP', async () => {
   storage.clear();
   const userId = getEffectiveUserId();
