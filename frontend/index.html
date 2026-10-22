@@ -802,11 +802,19 @@
           }
 
           // Keep userSettings.preferredMethod strictly synchronized with the current active conveyor mode
-          if (userSettings.preferredMethod !== currentMethod) {
+          // (Never overwrite preferredMethod with 'input' when merely displaying the Hub screen)
+          if (!window._showHubScreen && userSettings.preferredMethod !== currentMethod) {
             userSettings.preferredMethod = currentMethod;
             saveUserSettings(userSettings);
           }
-          currentTrainingMethod = currentMethod;
+          if (!window._showHubScreen) {
+            currentTrainingMethod = currentMethod;
+            if (currentMethod === 'quiz') {
+              try {
+                AdService.preloadInterstitial().catch(() => {});
+              } catch (e) {}
+            }
+          }
         }
 
         // Filter words strictly based on the active training method queue
@@ -873,6 +881,7 @@
           if (nextCatBtn && nextCategory) {
             nextCatBtn.addEventListener('click', () => {
               clearActiveConveyorBatch();
+              window._pausedRoundState = null;
               localStorage.setItem('myduo_dict_category', nextCategory);
               userSettings.category = nextCategory;
               userSettings.preferredMethod = 'cards';
@@ -950,6 +959,9 @@
               goQuizBtn.addEventListener('click', () => {
                 userSettings.preferredMethod = 'quiz';
                 saveUserSettings(userSettings);
+                try {
+                  AdService.preloadInterstitial().catch(() => {});
+                } catch (e) {}
                 currentWordIndex = 0;
                 renderTrainingTab();
               });
@@ -1132,6 +1144,7 @@
             if (isTrainingRoundJustCompleted) {
               window._trainingRoundJustCompleted = false;
               clearActiveConveyorBatch();
+              window._pausedRoundState = null;
               if (window.trackEvent) {
                 window.trackEvent('round_completed', { method: currentMethod });
               }
@@ -1317,12 +1330,42 @@
                   const newContinueBtn = content.querySelector('#go-continue-cards-btn');
                   if (newContinueBtn) {
                     newContinueBtn.addEventListener('click', () => {
+                      favoritePracticeWords = null;
+                      favoritePracticeMethod = 'cards';
+                      window._activePracticeCollectionId = null;
+                      window._activePracticeCollectionTitle = null;
                       window._showHubScreen = false;
                       window._trainingRoundJustCompleted = false;
                       getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
-                      userSettings.preferredMethod = 'cards';
+                      const curCards = getQueueForCards(categoryWords, getUserProgress(), favList);
+                      const curQuiz = getQueueForQuiz(categoryWords, getUserProgress(), favList);
+                      const curPairs = getQueueForPairs(categoryWords, getUserProgress(), favList);
+                      const curTest = getQueueForTest(categoryWords, getUserProgress(), favList);
+                      const paused = window._pausedRoundState;
+                      const queueByMethod = { cards: curCards, quiz: curQuiz, pairs: curPairs, input: curTest };
+                      if (paused && paused.category === selectedCategory && queueByMethod[paused.method] && queueByMethod[paused.method].length > 0) {
+                        userSettings.preferredMethod = paused.method;
+                        currentWordIndex = Math.min(paused.wordIndex || 0, Math.max(0, queueByMethod[paused.method].length - 1));
+                      } else if (curCards.length > 0) {
+                        userSettings.preferredMethod = 'cards';
+                        currentWordIndex = 0;
+                      } else if (curQuiz.length > 0) {
+                        userSettings.preferredMethod = 'quiz';
+                        currentWordIndex = 0;
+                      } else if (curPairs.length > 0) {
+                        userSettings.preferredMethod = 'pairs';
+                        currentWordIndex = 0;
+                      } else if (curTest.length > 0) {
+                        userSettings.preferredMethod = 'input';
+                        currentWordIndex = 0;
+                      } else {
+                        clearActiveConveyorBatch();
+                        window._pausedRoundState = null;
+                        getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
+                        userSettings.preferredMethod = 'cards';
+                        currentWordIndex = 0;
+                      }
                       saveUserSettings(userSettings);
-                      currentWordIndex = 0;
                       renderTrainingTab();
                     });
                   }
@@ -1742,6 +1785,7 @@
                   window._showHubScreen = false;
                   favoritePracticeWords = null;
                   clearActiveConveyorBatch();
+                  window._pausedRoundState = null;
                   userSettings.category = chosenCat;
                   userSettings.preferredMethod = 'cards';
                   window._explicitCardsOpened = true;
@@ -1846,6 +1890,7 @@
                       window._showHubScreen = false;
                       favoritePracticeWords = null;
                       clearActiveConveyorBatch();
+                      window._pausedRoundState = null;
                       userSettings.category = chosenCat;
                       userSettings.preferredMethod = 'cards';
                       window._explicitCardsOpened = true;
@@ -1870,6 +1915,7 @@
                 window._showHubScreen = false;
                 favoritePracticeWords = null;
                 clearActiveConveyorBatch();
+                window._pausedRoundState = null;
                 userSettings.category = chosenCat;
                 userSettings.preferredMethod = 'cards';
                 window._explicitCardsOpened = true;
@@ -1898,23 +1944,34 @@
               const curPairs = getQueueForPairs(categoryWords, getUserProgress(), favList);
               const curTest = getQueueForTest(categoryWords, getUserProgress(), favList);
 
-              if (curCards.length > 0) {
+              const paused = window._pausedRoundState;
+              const queueByMethod = { cards: curCards, quiz: curQuiz, pairs: curPairs, input: curTest };
+
+              if (paused && paused.category === selectedCategory && queueByMethod[paused.method] && queueByMethod[paused.method].length > 0) {
+                userSettings.preferredMethod = paused.method;
+                currentWordIndex = Math.min(paused.wordIndex || 0, Math.max(0, queueByMethod[paused.method].length - 1));
+              } else if (curCards.length > 0) {
                 userSettings.preferredMethod = 'cards';
+                currentWordIndex = 0;
               } else if (curQuiz.length > 0) {
                 userSettings.preferredMethod = 'quiz';
+                currentWordIndex = 0;
               } else if (curPairs.length > 0) {
                 userSettings.preferredMethod = 'pairs';
+                currentWordIndex = 0;
               } else if (curTest.length > 0) {
                 userSettings.preferredMethod = 'input';
+                currentWordIndex = 0;
               } else {
                 // If all queues are empty, clear and create fresh batch to start with cards
                 clearActiveConveyorBatch();
+                window._pausedRoundState = null;
                 getActiveConveyorBatch(categoryWords, getUserProgress(), favList);
                 userSettings.preferredMethod = 'cards';
+                currentWordIndex = 0;
               }
 
               saveUserSettings(userSettings);
-              currentWordIndex = 0;
               renderTrainingTab();
             });
           }
@@ -2044,6 +2101,14 @@
               input: currentMethod === 'input',
             };
 
+        if (!window._showHubScreen && !isFavPracticeActive) {
+          window._pausedRoundState = {
+            category: selectedCategory,
+            method: currentMethod,
+            wordIndex: currentWordIndex,
+          };
+        }
+
         renderTrainingCard(currentWord, allWords, {
           currentMethod,
           selectedCategory,
@@ -2083,6 +2148,11 @@
             } else {
               userSettings.preferredMethod = newMethod;
               saveUserSettings(userSettings);
+              if (newMethod === 'quiz') {
+                try {
+                  AdService.preloadInterstitial().catch(() => {});
+                } catch (e) {}
+              }
             }
             currentWordIndex = 0;
             renderTrainingTab();
@@ -2102,6 +2172,7 @@
             favoritePracticeWords = null;
             favoritePracticeMethod = 'cards';
             clearActiveConveyorBatch();
+            window._pausedRoundState = null;
             userSettings.category = newCategory;
             saveUserSettings(userSettings);
             currentWordIndex = 0;
@@ -2181,7 +2252,6 @@
           favoritePracticeMethod = 'cards';
           window._activePracticeCollectionId = null;
           window._activePracticeCollectionTitle = null;
-          try { clearActiveConveyorBatch(); } catch (e) {}
         }
         activeTab = tabName;
         window._activeTab = tabName;
@@ -2570,11 +2640,9 @@
               favoritePracticeMethod = 'cards';
               window._activePracticeCollectionId = null;
               window._activePracticeCollectionTitle = null;
-              try { clearActiveConveyorBatch(); } catch (e) {}
               window._showHubScreen = true;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
-              currentWordIndex = 0;
               const tabs = document.querySelectorAll('.nav-tab');
               tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
 
@@ -2725,11 +2793,9 @@
               favoritePracticeMethod = 'cards';
               window._activePracticeCollectionId = null;
               window._activePracticeCollectionTitle = null;
-              try { clearActiveConveyorBatch(); } catch (e) {}
               window._showHubScreen = true;
               window._explicitCardsOpened = false;
               window._trainingRoundJustCompleted = false;
-              currentWordIndex = 0;
               if (isFavPracticeRunning && tabHistory.length > 1 && tabHistory[tabHistory.length - 1] === 'favorites') {
                 tabHistory.pop();
                 const tabs = document.querySelectorAll('.nav-tab');

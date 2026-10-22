@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Mock localStorage for Node test runner
 const storage = new Map();
@@ -20,7 +22,16 @@ globalThis.window = {
 };
 
 // Import services
-import { saveProgress, getUserWeeklyXP, addWeeklyXP } from '../frontend/services/api.js';
+import {
+  saveProgress,
+  getUserWeeklyXP,
+  addWeeklyXP,
+  getUserProgress,
+  getActiveConveyorBatch,
+  getQueueForCards,
+  getQueueForQuiz,
+  clearActiveConveyorBatch,
+} from '../frontend/services/api.js';
 import { getEffectiveUserId } from '../frontend/services/authService.js';
 import { AdService, AD_CONFIG } from '../frontend/services/adService.js';
 
@@ -214,4 +225,62 @@ test('10. Pairs Mode: Wrong match applies -5 XP penalty', async () => {
   await saveProgress(203, false, 'pairs', { isPairMistake: true });
   assert.equal(getUserWeeklyXP(userId), 45, 'Wrong pair match applies -5 XP penalty: 50 XP - 5 XP = 45 XP');
 });
+
+test('11. Round Progress Preservation: Exiting after Cards into Quiz preserves Quiz queue and does not clear batch on Back/Logo/Tab switch', async () => {
+  storage.clear();
+  clearActiveConveyorBatch();
+
+  const mockCategoryWords = [
+    { id: 1001, word: 'apple', category: 'Elementary' },
+    { id: 1002, word: 'bread', category: 'Elementary' },
+    { id: 1003, word: 'cheese', category: 'Elementary' },
+    { id: 1004, word: 'drink', category: 'Elementary' },
+    { id: 1005, word: 'egg', category: 'Elementary' },
+  ];
+
+  // Step 1: Start round -> 5 words in Cards queue
+  getActiveConveyorBatch(mockCategoryWords, getUserProgress(), []);
+  let cardsQ = getQueueForCards(mockCategoryWords, getUserProgress(), []);
+  assert.equal(cardsQ.length, 5, 'Initial Cards queue has 5 words');
+
+  // Step 2: User completes Cards stage (marks all 5 words as learning)
+  for (const w of mockCategoryWords) {
+    await saveProgress(w.id, false, 'cards');
+  }
+
+  cardsQ = getQueueForCards(mockCategoryWords, getUserProgress(), []);
+  const quizQ = getQueueForQuiz(mockCategoryWords, getUserProgress(), []);
+  assert.equal(cardsQ.length, 0, 'Cards queue is now empty (0 words remaining)');
+  assert.equal(quizQ.length, 5, 'Quiz queue has all 5 words ready');
+
+  // Step 3: Verify index.html does NOT call clearActiveConveyorBatch() on Back button, Logo click, or renderTab
+  const indexHtml = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
+  const backHandlerIdx = indexHtml.indexOf('window.handleAndroidBackButton = function()');
+  assert.ok(backHandlerIdx !== -1, 'handleAndroidBackButton exists in index.html');
+  const backHandlerBody = indexHtml.slice(backHandlerIdx);
+  assert.equal(
+    backHandlerBody.includes('clearActiveConveyorBatch()'),
+    false,
+    'handleAndroidBackButton MUST NOT call clearActiveConveyorBatch()'
+  );
+
+  const logoCommentIdx = indexHtml.indexOf('// Click on Logo / Brand -> Exit any practice');
+  assert.ok(logoCommentIdx !== -1, 'Logo click handler exists in index.html');
+  const logoBody = indexHtml.slice(logoCommentIdx, logoCommentIdx + 1200);
+  assert.equal(
+    logoBody.includes('clearActiveConveyorBatch()'),
+    false,
+    'Logo click handler MUST NOT call clearActiveConveyorBatch()'
+  );
+
+  const renderTabIdx = indexHtml.indexOf('async function renderTab(tabName');
+  assert.ok(renderTabIdx !== -1, 'renderTab exists in index.html');
+  const renderTabHeader = indexHtml.slice(renderTabIdx, renderTabIdx + 1800);
+  assert.equal(
+    renderTabHeader.includes('clearActiveConveyorBatch()'),
+    false,
+    'renderTab MUST NOT call clearActiveConveyorBatch()'
+  );
+});
+
 
