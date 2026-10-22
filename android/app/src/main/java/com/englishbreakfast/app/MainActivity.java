@@ -729,53 +729,15 @@ public class MainActivity extends BridgeActivity {
                         if (!isTrustedOrigin()) return false;
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                final AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                                AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
-                                    final java.util.concurrent.atomic.AtomicBoolean pinResult = new java.util.concurrent.atomic.AtomicBoolean(false);
-                                    final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
-                                    runOnUiThread(() -> {
-                                        try {
-                                            ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
-                                            int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
-                                            if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
-                                                WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
-                                            }
-                                            Intent pinIntent = new Intent(MainActivity.this, GoldCardWidgetProvider.class);
-                                            pinIntent.setAction(GoldCardWidgetProvider.ACTION_PIN_SUCCESS);
-                                            pinIntent.setPackage(getPackageName());
-                                            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                                flags |= PendingIntent.FLAG_MUTABLE;
-                                            }
-                                            PendingIntent successCallback = PendingIntent.getBroadcast(
-                                                MainActivity.this,
-                                                108,
-                                                pinIntent,
-                                                flags
-                                            );
-                                            boolean ok = appWidgetManager.requestPinAppWidget(provider, null, successCallback);
-                                            pinResult.set(ok);
-                                            android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
-                                            h.postDelayed(() -> {
-                                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
-                                                GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
-                                            }, 500L);
-                                            h.postDelayed(() -> {
-                                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
-                                                GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
-                                            }, 1800L);
-                                            h.postDelayed(() -> {
-                                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
-                                                GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
-                                            }, 3500L);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            latch.countDown();
-                                        }
-                                    });
-                                    latch.await(1500L, java.util.concurrent.TimeUnit.MILLISECONDS);
-                                    return pinResult.get();
+                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
+                                    if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
+                                        WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
+                                    }
+                                    appWidgetManager.requestPinAppWidget(provider, null, null);
+                                    return true;
                                 }
                             }
                         } catch (Exception e) {

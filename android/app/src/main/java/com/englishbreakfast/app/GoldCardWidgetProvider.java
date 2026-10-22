@@ -23,7 +23,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_TOGGLE_FAV = "com.englishbreakfast.app.widget.ACTION_TOGGLE_FAV";
     public static final String ACTION_AUTO_ROTATE = "com.englishbreakfast.app.widget.ACTION_AUTO_ROTATE";
     public static final String ACTION_TOGGLE_PLAY_PAUSE = "com.englishbreakfast.app.widget.ACTION_TOGGLE_PLAY_PAUSE";
-    public static final String ACTION_PIN_SUCCESS = "com.englishbreakfast.app.widget.ACTION_PIN_SUCCESS";
     private static final java.util.concurrent.ExecutorService sSerialExecutor = java.util.concurrent.Executors.newSingleThreadExecutor();
     private static final android.os.Handler sSpeechHandler = new android.os.Handler(android.os.Looper.getMainLooper());
     private static volatile int sContinuousSessionId = 0;
@@ -31,6 +30,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
+            WidgetDataManager.onWidgetPinnedOrInteracted(context, appWidgetId, null);
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
         scheduleNextRotation(context);
@@ -76,22 +76,14 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         // Security check for internal widget actions: reject if originating from a foreign package
         boolean isCustomWidgetAction = ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)
-                || ACTION_TOGGLE_PLAY_PAUSE.equals(action) || ACTION_PIN_SUCCESS.equals(action);
+                || ACTION_TOGGLE_PLAY_PAUSE.equals(action);
         if (!isCustomWidgetAction) {
             return;
-        }
-        if (ACTION_PIN_SUCCESS.equals(action)) {
-            int pinnedId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            try {
-                AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-                ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
-                WidgetDataManager.onWidgetPinnedOrInteracted(context, pinnedId, mgr.getAppWidgetIds(cn));
-            } catch (Exception ignored) {}
         }
 
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)
-                || ACTION_TOGGLE_PLAY_PAUSE.equals(action) || ACTION_PIN_SUCCESS.equals(action)) {
+                || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
             String pkg = intent.getPackage();
             if (pkg != null && !context.getPackageName().equals(pkg)) {
                 return;
@@ -316,12 +308,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                         }
                     }
                 }
-                if (onAudioDone != null) onAudioDone.run();
-                break;
-
-            case ACTION_PIN_SUCCESS:
-                updateAllWidgets(context);
-                scheduleNextRotation(context);
                 if (onAudioDone != null) onAudioDone.run();
                 break;
 
