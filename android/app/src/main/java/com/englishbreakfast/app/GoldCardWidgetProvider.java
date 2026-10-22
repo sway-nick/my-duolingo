@@ -374,8 +374,8 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 // English: 23sp (+1 from 22sp), Translation is 1 less: 22sp
                 views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 23f);
                 views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 22f);
-                views.setTextViewTextSize(R.id.widget_fav_counter, TypedValue.COMPLEX_UNIT_SP, 15.5f);
-                views.setTextViewTextSize(R.id.widget_rank_badge, TypedValue.COMPLEX_UNIT_SP, 14.5f);
+                views.setTextViewTextSize(R.id.widget_fav_counter, TypedValue.COMPLEX_UNIT_SP, 15f);
+                views.setTextViewTextSize(R.id.widget_rank_badge, TypedValue.COMPLEX_UNIT_SP, 14f);
                 views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 31f);
                 views.setTextViewTextSize(R.id.widget_btn_next, TypedValue.COMPLEX_UNIT_SP, 31f);
 

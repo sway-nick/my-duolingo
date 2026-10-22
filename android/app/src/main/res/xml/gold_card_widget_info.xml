@@ -13,7 +13,5 @@
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:previewImage="@drawable/widget_preview_gold_card"
-    android:description="@string/widget_gold_card_description"
-    android:configure="com.englishbreakfast.app.WidgetConfigActivity"
-    android:widgetFeatures="reconfigurable|configuration_optional">
+    android:description="@string/widget_gold_card_description">
 </appwidget-provider>
