@@ -885,7 +885,11 @@
               window._activePracticeCollectionId = null;
               window._activePracticeCollectionTitle = null;
               currentWordIndex = 0;
-              renderTrainingTab();
+              activeTab = 'favorites';
+              window._activeTab = 'favorites';
+              const tabs = document.querySelectorAll('.nav-tab');
+              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
+              renderTab('favorites', true);
             });
           }
 
@@ -1970,12 +1974,20 @@
             return;
           }
           try { pushUserDataToCloud(null, null, true); } catch (e) {}
+          playFanfareSound();
+          try {
+            AdService.showRoundFinishInterstitial().catch(() => {});
+          } catch (e) {}
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
           window._activePracticeCollectionId = null;
           window._activePracticeCollectionTitle = null;
           currentWordIndex = 0;
-          renderTrainingTab();
+          activeTab = 'favorites';
+          window._activeTab = 'favorites';
+          const tabs = document.querySelectorAll('.nav-tab');
+          tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
+          renderTab('favorites', true);
           return;
         }
 
@@ -2052,6 +2064,9 @@
             }
             if (isFavPracticeActive) {
               favoritePracticeMethod = newMethod;
+              try {
+                AdService.preloadInterstitial().catch(() => {});
+              } catch (e) {}
             } else {
               userSettings.preferredMethod = newMethod;
               saveUserSettings(userSettings);
@@ -2186,6 +2201,11 @@
             const targetId = colId || 'my_favorites';
             window._activePracticeCollectionId = targetId;
             window._activePracticeCollectionTitle = colTitle || getCollectionTitle(targetId);
+
+            // Preload interstitial so it is 100% ready in RAM when round finishes
+            try {
+              AdService.preloadInterstitial().catch(() => {});
+            } catch (e) {}
 
             const practiceList = (practiceWords && practiceWords.length > 0)
               ? practiceWords
