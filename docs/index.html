@@ -2245,7 +2245,7 @@
           }
         }
         // Interstitial strictly upon EXITING Collection practice after completing at least 1 word in non-Cards mode,
-        // NEVER when entering Collections or exiting without practicing a non-Cards word.
+        // NEVER when entering Collections, NEVER when entering Stats (where Banner is shown), and NEVER without practicing a non-Cards word.
         // Capped at: max 2 times per day, not more than once per hour.
         const isFavPracticeActiveOnTabSwitch = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
         if (
@@ -2254,13 +2254,15 @@
           window._favPracticeCompletedNonCardWord
         ) {
           window._favPracticeCompletedNonCardWord = false;
-          try {
-            AdService.showCollectionsExitInterstitial().catch(() => {});
-          } catch (e) {}
+          if (tabName !== 'stats') {
+            try {
+              AdService.showCollectionsExitInterstitial().catch(() => {});
+            } catch (e) {}
+          }
         }
         // Interstitial upon early exit from Quiz, Pairs, or Test in training round
-        // (Never for Cards, 60m cooldown, unlimited daily frequency)
-        if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTabSwitch && !window._activePracticeCollectionId && tabName !== 'training') {
+        // (Never for Cards, Never when entering Stats where Banner is shown, 60m cooldown, unlimited daily frequency)
+        if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTabSwitch && !window._activePracticeCollectionId && tabName !== 'training' && tabName !== 'stats') {
           if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
             try {
               AdService.showTrainingEarlyExitInterstitial().catch(() => {});
