@@ -729,11 +729,42 @@ public class MainActivity extends BridgeActivity {
                         if (!isTrustedOrigin()) return false;
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                                final AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
-                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
-                                    appWidgetManager.requestPinAppWidget(provider, null, null);
-                                    return true;
+                                    final java.util.concurrent.atomic.AtomicBoolean pinResult = new java.util.concurrent.atomic.AtomicBoolean(false);
+                                    final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
+                                    runOnUiThread(() -> {
+                                        try {
+                                            ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                            PendingIntent successCallback = GoldCardWidgetProvider.getPendingIntent(
+                                                MainActivity.this,
+                                                GoldCardWidgetProvider.ACTION_PIN_SUCCESS,
+                                                108
+                                            );
+                                            boolean ok = appWidgetManager.requestPinAppWidget(provider, null, successCallback);
+                                            pinResult.set(ok);
+                                            // Also schedule follow-up widget refreshes in case launcher skips callback on OEM ROMs
+                                            android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
+                                            h.postDelayed(() -> {
+                                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                                                GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
+                                            }, 500L);
+                                            h.postDelayed(() -> {
+                                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                                                GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
+                                            }, 1800L);
+                                            h.postDelayed(() -> {
+                                                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                                                GoldCardWidgetProvider.scheduleNextRotation(MainActivity.this);
+                                            }, 3500L);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            latch.countDown();
+                                        }
+                                    });
+                                    latch.await(1500L, java.util.concurrent.TimeUnit.MILLISECONDS);
+                                    return pinResult.get();
                                 }
                             }
                         } catch (Exception e) {

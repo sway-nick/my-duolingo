@@ -21,6 +21,8 @@ execSync('node scripts/build.cjs', { cwd: ROOT_SOURCE, stdio: 'inherit' });
 // Sync changes to android project frontend & native source files
 console.log('\n[2/5] Synchronizing frontend and native Android sources to android project...');
 fs.cpSync(path.join(ROOT_SOURCE, 'frontend'), path.join(ANDROID_PROJECT, 'frontend'), { recursive: true, force: true });
+fs.cpSync(path.join(ROOT_SOURCE, 'android/app/src/main/java'), path.join(ANDROID_PROJECT, 'android/app/src/main/java'), { recursive: true, force: true });
+fs.cpSync(path.join(ROOT_SOURCE, 'android/app/src/main/res'), path.join(ANDROID_PROJECT, 'android/app/src/main/res'), { recursive: true, force: true });
 const syncPairs = [
   ['scripts/build.cjs', 'scripts/build.cjs'],
   ['scripts/optimize_words_data.cjs', 'scripts/optimize_words_data.cjs'],
@@ -28,7 +30,6 @@ const syncPairs = [
   ['android/app/build.gradle', 'android/app/build.gradle'],
   ['android/app/proguard-rules.pro', 'android/app/proguard-rules.pro'],
   ['android/app/src/main/AndroidManifest.xml', 'android/app/src/main/AndroidManifest.xml'],
-  ['android/app/src/main/java/com/englishbreakfast/app/MainActivity.java', 'android/app/src/main/java/com/englishbreakfast/app/MainActivity.java'],
 ];
 for (const [srcRel, destRel] of syncPairs) {
   const srcFile = path.join(ROOT_SOURCE, srcRel);

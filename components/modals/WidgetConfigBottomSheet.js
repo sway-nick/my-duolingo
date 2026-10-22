@@ -184,6 +184,11 @@ export function openWidgetConfigBottomSheet() {
       }
 
       if (window.AndroidWidgetBridge) {
+        if (typeof window.syncFavoritesToAndroidWidget === 'function') {
+          try {
+            window.syncFavoritesToAndroidWidget();
+          } catch (e) {}
+        }
         if (typeof window.AndroidWidgetBridge.saveWidgetConfig === 'function') {
           window.AndroidWidgetBridge.saveWidgetConfig(configJson);
         }
@@ -191,7 +196,15 @@ export function openWidgetConfigBottomSheet() {
           if (window.trackEvent) {
             window.trackEvent('widget_pin_request');
           }
-          window.AndroidWidgetBridge.requestPinWidget();
+          closeSheet();
+          setTimeout(() => {
+            try {
+              window.AndroidWidgetBridge.requestPinWidget();
+            } catch (e) {
+              console.warn('[Widget] requestPinWidget error:', e);
+            }
+          }, 80);
+          return;
         } else if (isInstalled) {
           try {
             showToast(t('widget_settings_saved') || 'Настройки виджета сохранены');
