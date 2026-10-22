@@ -561,6 +561,91 @@ class AdServiceImpl {
   }
 
   /**
+   * Show Interstitial Ad upon user-initiated early exit from Quiz, Pairs, or Test in a training round.
+   * Strict rules:
+   * 1. Never for Cards (handled at invocation site).
+   * 2. Cooldown of 60 minutes (3600 seconds) between early exit interstitials.
+   * 3. Unlimited daily frequency (no daily cap).
+   */
+  async showTrainingEarlyExitInterstitial() {
+    if (!this.isOnline()) return false;
+    const now = Date.now();
+    const STORAGE_KEY_EARLY_EXIT = 'ad_training_early_exit_last_time';
+    const COOLDOWN_MS = 60 * 60 * 1000; // 60 minutes
+
+    let lastShown = 0;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY_EARLY_EXIT);
+      if (stored) lastShown = parseInt(stored, 10) || 0;
+    } catch (e) {}
+
+    if (lastShown > 0 && (now - lastShown < COOLDOWN_MS)) {
+      const remainingMins = Math.ceil((COOLDOWN_MS - (now - lastShown)) / 60000);
+      console.log(`ℹ️ Training early exit interstitial skipped: 60-minute cooldown active (${remainingMins}m remaining)`);
+      this.preloadInterstitial().catch(() => {});
+      return false;
+    }
+
+    const AdMob = this.getNativeAdMob();
+    if (AdMob && this.isNative()) {
+      try {
+        const adId = this.getUnitId('INTERSTITIAL_ROUND');
+        if (!adId) return false;
+
+        if (!this.isInterstitialPrepared) {
+          console.log('⏳ Training early exit interstitial not preloaded, preparing now...');
+          try {
+            await AdMob.prepareInterstitial({ adId });
+            this.isInterstitialPrepared = true;
+          } catch (prepErr) {
+            console.warn('⚠️ Primary prepare failed, falling back to test unit:', prepErr);
+            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
+            if (adId !== testAdId) {
+              await AdMob.prepareInterstitial({ adId: testAdId });
+              this.isInterstitialPrepared = true;
+            }
+          }
+        }
+
+        await AdMob.showInterstitial();
+        this.isInterstitialPrepared = false;
+
+        try {
+          localStorage.setItem(STORAGE_KEY_EARLY_EXIT, String(now));
+        } catch (e) {}
+        this.lastInterstitialTime = now;
+
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('ad_interstitial_early_exit_shown');
+        }
+
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 1500);
+
+        return true;
+      } catch (err) {
+        console.warn('AdMob early exit interstitial failed to load/show:', err);
+        this.isInterstitialPrepared = false;
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 3000);
+        return false;
+      }
+    }
+
+    console.log('ℹ️ [Web Simulator] Training early exit interstitial shown');
+    try {
+      localStorage.setItem(STORAGE_KEY_EARLY_EXIT, String(now));
+    } catch (e) {}
+    this.lastInterstitialTime = now;
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_interstitial_early_exit_shown');
+    }
+    return true;
+  }
+
+  /**
    * Show Interstitial Ad upon user-initiated transition between training and other tabs/screens.
    * Protected with a 60-second cooldown so it never spams or causes accidental clicks.
    */

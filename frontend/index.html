@@ -2163,6 +2163,16 @@
             AdService.showCollectionsExitInterstitial().catch(() => {});
           } catch (e) {}
         }
+        // Interstitial upon early exit from Quiz, Pairs, or Test in training round
+        // (Never for Cards, 60m cooldown, unlimited daily frequency)
+        const isFavPracticeActiveOnTabSwitch = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+        if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTabSwitch && !window._activePracticeCollectionId && tabName !== 'training') {
+          if (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input') {
+            try {
+              AdService.showTrainingEarlyExitInterstitial().catch(() => {});
+            } catch (e) {}
+          }
+        }
         if (activeTab === 'favorites' && tabName === 'training') {
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
@@ -2518,6 +2528,14 @@
         renderAppLayout(
           (tabName) => {
             if (tabName === 'training') {
+              const isFavPracticeActiveOnTrainingClick = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+              if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTrainingClick && !window._activePracticeCollectionId) {
+                if (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input') {
+                  try {
+                    AdService.showTrainingEarlyExitInterstitial().catch(() => {});
+                  } catch (e) {}
+                }
+              }
               favoritePracticeWords = null;
               window._showHubScreen = true;
             }
@@ -2535,9 +2553,14 @@
           () => {
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
-              if (activeTab === 'favorites' || window._activePracticeCollectionId) {
+              const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
+              if (activeTab === 'favorites' || isFavPracticeRunning || window._activePracticeCollectionId) {
                 try {
                   AdService.showCollectionsExitInterstitial().catch(() => {});
+                } catch (e) {}
+              } else if (activeTab === 'training' && !window._showHubScreen && (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input')) {
+                try {
+                  AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                 } catch (e) {}
               }
               favoritePracticeWords = null;
@@ -2689,6 +2712,10 @@
               if (isFavPracticeRunning || window._activePracticeCollectionId) {
                 try {
                   AdService.showCollectionsExitInterstitial().catch(() => {});
+                } catch (e) {}
+              } else if (currentMethod === 'quiz' || currentMethod === 'pairs' || currentMethod === 'input') {
+                try {
+                  AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                 } catch (e) {}
               }
               favoritePracticeWords = null;

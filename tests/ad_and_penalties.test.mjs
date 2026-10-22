@@ -162,6 +162,35 @@ test('8c. AdService Collections Exit Interstitial: Capped at max 2 times per day
   assert.equal(res4, false, 'Third show in same day is blocked by daily cap (max 2/day)');
 });
 
+test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unlimited daily frequency', async () => {
+  assert.equal(typeof AdService.showTrainingEarlyExitInterstitial, 'function', 'showTrainingEarlyExitInterstitial must be exposed');
+
+  global.localStorage.removeItem('ad_training_early_exit_last_time');
+
+  // First show: succeeds
+  const res1 = await AdService.showTrainingEarlyExitInterstitial();
+  assert.equal(res1, true, 'First early exit shows ad');
+
+  // Immediate second show: blocked by 60-minute cooldown
+  const res2 = await AdService.showTrainingEarlyExitInterstitial();
+  assert.equal(res2, false, 'Immediate second show is blocked by 60-minute cooldown');
+
+  // Fast-forward 1 hour in storage
+  const stored1 = Date.now() - (3601 * 1000);
+  global.localStorage.setItem('ad_training_early_exit_last_time', String(stored1));
+
+  // Second show after 1 hour: succeeds
+  const res3 = await AdService.showTrainingEarlyExitInterstitial();
+  assert.equal(res3, true, 'Second show after 1 hour succeeds');
+
+  // Fast-forward another hour: succeeds again (no daily cap, unlimited per day!)
+  const stored2 = Date.now() - (3601 * 1000);
+  global.localStorage.setItem('ad_training_early_exit_last_time', String(stored2));
+
+  const res4 = await AdService.showTrainingEarlyExitInterstitial();
+  assert.equal(res4, true, 'Third show after another hour succeeds (unlimited daily frequency)');
+});
+
 test('9. Pairs Mode: Round completion awards +5 XP', async () => {
   storage.clear();
   const userId = getEffectiveUserId();
