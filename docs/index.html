@@ -2518,9 +2518,10 @@
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
               if ((activeTab === 'favorites' || window._activePracticeCollectionId) && !window._showHubScreen) {
-                AdService.showTransitionInterstitial(60).catch(() => {});
+                try {
+                  AdService.showTransitionInterstitial(60).catch(() => {});
+                } catch (e) {}
               }
-            } catch (e) {}
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._showHubScreen = true;

@@ -34,6 +34,31 @@ function build() {
     console.log('🔍 Data integrity check passed: 0 corrupted U+FFFD characters in words.json.');
   }
 
+  // 0.05. Validate JavaScript syntax of all inline <script> tags in frontend/index.html
+  const indexPath0 = path.join(__dirname, '../frontend/index.html');
+  if (fs.existsSync(indexPath0)) {
+    const html0 = fs.readFileSync(indexPath0, 'utf8');
+    const scriptRegex0 = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+    let match0;
+    let scriptIdx0 = 0;
+    while ((match0 = scriptRegex0.exec(html0)) !== null) {
+      const code0 = match0[1].trim();
+      if (!code0) continue;
+      scriptIdx0++;
+      const tmpFile0 = path.join(__dirname, `../.tmp_build_script_${scriptIdx0}.mjs`);
+      fs.writeFileSync(tmpFile0, code0, 'utf8');
+      try {
+        const { execSync } = require('child_process');
+        execSync(`node --check "${tmpFile0}"`);
+      } catch (err) {
+        try { fs.unlinkSync(tmpFile0); } catch (e) {}
+        throw new Error(`❌ BUILD FAILED: SyntaxError in frontend/index.html script #${scriptIdx0}!`);
+      }
+      try { fs.unlinkSync(tmpFile0); } catch (e) {}
+    }
+    console.log('🔍 HTML/JS syntax integrity passed: all scripts in index.html valid.');
+  }
+
   // 0.1. Automatically generate playlist.json and inject real video list into index.html
   const videoDir = path.join(__dirname, '../frontend/assets/video');
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
