@@ -494,31 +494,154 @@ function showFeedbackToast(msg) {
   }, 3500);
 }
 
+const FEEDBACK_EMAIL_TEMPLATES = {
+  ru: {
+    subject: 'English Breakfast — Отзыв / Пожелания',
+    body: (u, l, d) => `Здравствуйте!\n\nМой отзыв / пожелание:\n\n\n---\nПользователь: ${u}\nЯзык интерфейса: ${l}\nУстройство: ${d}`,
+  },
+  uk: {
+    subject: 'English Breakfast — Відгук / Пропозиції',
+    body: (u, l, d) => `Вітаємо!\n\nМій відгук / пропозиція:\n\n\n---\nКористувач: ${u}\nМова: ${l}\nПристрій: ${d}`,
+  },
+  en: {
+    subject: 'English Breakfast — Feedback / Suggestions',
+    body: (u, l, d) => `Hello!\n\nMy feedback / suggestion:\n\n\n---\nUser: ${u}\nLanguage: ${l}\nDevice: ${d}`,
+  },
+  de: {
+    subject: 'English Breakfast — Feedback / Vorschläge',
+    body: (u, l, d) => `Hallo!\n\nMein Feedback / Vorschlag:\n\n\n---\nBenutzer: ${u}\nSprache: ${l}\nGerät: ${d}`,
+  },
+  es: {
+    subject: 'English Breakfast — Comentarios / Sugerencias',
+    body: (u, l, d) => `¡Hola!\n\nMi comentario / sugerencia:\n\n\n---\nUsuario: ${u}\nIdioma: ${l}\nDispositivo: ${d}`,
+  },
+  fr: {
+    subject: 'English Breakfast — Commentaires / Suggestions',
+    body: (u, l, d) => `Bonjour !\n\nMon retour / suggestion :\n\n\n---\nUtilisateur : ${u}\nLangue : ${l}\nAppareil : ${d}`,
+  },
+  pl: {
+    subject: 'English Breakfast — Opinia / Sugestie',
+    body: (u, l, d) => `Cześć!\n\nMoja opinia / sugestia:\n\n\n---\nUżytkownik: ${u}\nJęzyk: ${l}\nUrządzenie: ${d}`,
+  },
+  it: {
+    subject: 'English Breakfast — Feedback / Suggerimenti',
+    body: (u, l, d) => `Ciao!\n\nIl mio feedback / suggerimento:\n\n\n---\nUtente: ${u}\nLingua: ${l}\nDispositivo: ${d}`,
+  },
+  tr: {
+    subject: 'English Breakfast — Geri Bildirim / Öneriler',
+    body: (u, l, d) => `Merhaba!\n\nGeri bildirimim / önerim:\n\n\n---\nKullanıcı: ${u}\nDil: ${l}\nCihaz: ${d}`,
+  },
+  pt: {
+    subject: 'English Breakfast — Comentários / Sugestões',
+    body: (u, l, d) => `Olá!\n\nMeu comentário / sugestão:\n\n\n---\nUsuário: ${u}\nIdioma: ${l}\nDispositivo: ${d}`,
+  },
+  ro: {
+    subject: 'English Breakfast — Feedback / Sugestii',
+    body: (u, l, d) => `Salut!\n\nFeedback-ul / sugestia mea:\n\n\n---\nUtilizator: ${u}\nLimbă: ${l}\nDispozitiv: ${d}`,
+  },
+  bg: {
+    subject: 'English Breakfast — Отзив / Предложения',
+    body: (u, l, d) => `Здравейте!\n\nМоят отзив / предложение:\n\n\n---\nПотребител: ${u}\nЕзик: ${l}\nУстройство: ${d}`,
+  },
+  cs: {
+    subject: 'English Breakfast — Zpětná vazba / Návrhy',
+    body: (u, l, d) => `Dobrý den!\n\nMoje zpětná vazba / návrh:\n\n\n---\nUživatel: ${u}\nJazyk: ${l}\nZařízení: ${d}`,
+  },
+  sk: {
+    subject: 'English Breakfast — Spätná väzba / Návrhy',
+    body: (u, l, d) => `Dobrý deň!\n\nMoja spätná väzba / návrh:\n\n\n---\nPoužívateľ: ${u}\nJazyk: ${l}\nZariadenie: ${d}`,
+  },
+  hu: {
+    subject: 'English Breakfast — Visszajelzés / Javaslatok',
+    body: (u, l, d) => `Szia!\n\nVisszajelzésem / javaslatom:\n\n\n---\nFelhasználó: ${u}\nNyelv: ${l}\nEszköz: ${d}`,
+  },
+  el: {
+    subject: 'English Breakfast — Σχόλια / Προτάσεις',
+    body: (u, l, d) => `Γεια σας!\n\nΤα σχόλια / η πρότασή μου:\n\n\n---\nΧρήστης: ${u}\nΓλώσσα: ${l}\nΣυσκευή: ${d}`,
+  },
+  sl: {
+    subject: 'English Breakfast — Povratne informacije / Predlogi',
+    body: (u, l, d) => `Pozdravljeni!\n\nMoje mnenje / predlog:\n\n\n---\nUporabnik: ${u}\nJezik: ${l}\nNaprava: ${d}`,
+  },
+  et: {
+    subject: 'English Breakfast — Tagasiside / Ettepanekud',
+    body: (u, l, d) => `Tere!\n\nMinu tagasiside / ettepanek:\n\n\n---\nKasutaja: ${u}\nKeel: ${l}\nSeade: ${d}`,
+  },
+  lt: {
+    subject: 'English Breakfast — Atsiliepimas / Pasiūlymai',
+    body: (u, l, d) => `Sveiki!\n\nMano atsiliepimas / pasiūlymas:\n\n\n---\nVartotojas: ${u}\nKalba: ${l}\nĮrenginys: ${d}`,
+  },
+  lv: {
+    subject: 'English Breakfast — Atsauksmes / Ieteikumi',
+    body: (u, l, d) => `Sveiki!\n\nMana atsauksme / ieteikums:\n\n\n---\nLietotājs: ${u}\nValoda: ${l}\nIerīce: ${d}`,
+  },
+  da: {
+    subject: 'English Breakfast — Feedback / Forslag',
+    body: (u, l, d) => `Hej!\n\nMin feedback / mit forslag:\n\n\n---\nBruger: ${u}\nSprog: ${l}\nEnhed: ${d}`,
+  },
+  fi: {
+    subject: 'English Breakfast — Palaute / Ehdotukset',
+    body: (u, l, d) => `Hei!\n\nPalautteeni / ehdotukseni:\n\n\n---\nKäyttäjä: ${u}\nKieli: ${l}\nLaite: ${d}`,
+  },
+  sv: {
+    subject: 'English Breakfast — Feedback / Förslag',
+    body: (u, l, d) => `Hej!\n\nMin feedback / mitt förslag:\n\n\n---\nAnvändare: ${u}\nSpråk: ${l}\nEnhet: ${d}`,
+  },
+  hr: {
+    subject: 'English Breakfast — Povratne informacije / Prijedlozi',
+    body: (u, l, d) => `Pozdrav!\n\nMoja povratna informacija / prijedlog:\n\n\n---\nKorisnik: ${u}\nJezik: ${l}\nUređaj: ${d}`,
+  },
+  ga: {
+    subject: 'English Breakfast — Aiseolas / Moltaí',
+    body: (u, l, d) => `Dia duit!\n\nMo chuid aiseolais / moltaí:\n\n\n---\nÚsáideoir: ${u}\nTeanga: ${l}\nGléas: ${d}`,
+  },
+  mt: {
+    subject: 'English Breakfast — Feedback / Suġġerimenti',
+    body: (u, l, d) => `Bongu!\n\nIl-feedback / is-suġġeriment tiegħi:\n\n\n---\nUtent: ${u}\nLingwa: ${l}\nApparat: ${d}`,
+  },
+  hi: {
+    subject: 'English Breakfast — प्रतिक्रिया / सुझाव',
+    body: (u, l, d) => `नमस्ते!\n\nमेरी प्रतिक्रिया / सुझाव:\n\n\n---\nउपयोगकर्ता: ${u}\nभाषा: ${l}\nडिवाइस: ${d}`,
+  },
+  ar: {
+    subject: 'English Breakfast — ملاحظات / اقتراحات',
+    body: (u, l, d) => `مرحباً!\n\nملاحظتي / اقتراحي:\n\n\n---\nالمستخدم: ${u}\nاللغة: ${l}\nالجهاز: ${d}`,
+  },
+  id: {
+    subject: 'English Breakfast — Masukan / Saran',
+    body: (u, l, d) => `Halo!\n\nMasukan / saran saya:\n\n\n---\nPengguna: ${u}\nBahasa: ${l}\nPerangkat: ${d}`,
+  },
+  vi: {
+    subject: 'English Breakfast — Phản hồi / Đề xuất',
+    body: (u, l, d) => `Xin chào!\n\nPhản hồi / đề xuất của tôi:\n\n\n---\nNgười dùng: ${u}\nNgôn ngữ: ${l}\nThiết bị: ${d}`,
+  },
+  th: {
+    subject: 'English Breakfast — ข้อเสนอแนะ / ความคิดเห็น',
+    body: (u, l, d) => `สวัสดี!\n\nความคิดเห็น / ข้อเสนอแนะของฉัน:\n\n\n---\nผู้ใช้: ${u}\nภาษา: ${l}\nอุปกรณ์: ${d}`,
+  },
+  ko: {
+    subject: 'English Breakfast — 피드백 / 제안',
+    body: (u, l, d) => `안녕하세요!\n\n제 피드백 / 제안:\n\n\n---\n사용자: ${u}\n언어: ${l}\n기기: ${d}`,
+  },
+  ja: {
+    subject: 'English Breakfast — フィードバック / ご提案',
+    body: (u, l, d) => `こんにちは！\n\nフィードバック / ご提案：\n\n\n---\nユーザー: ${u}\n言語: ${l}\nデバイス: ${d}`,
+  },
+};
+
 function handleFeedbackClick() {
   const email = 'lipniagovnikola@gmail.com';
   const currentUser = getCurrentUser();
   const userName = currentUser ? (currentUser.name || currentUser.email) : 'User';
-  const lang = getInterfaceLanguage ? getInterfaceLanguage() : (localStorage.getItem('myduo_interface_lang') || 'ru');
+  const rawLang = (typeof getInterfaceLanguage === 'function' && getInterfaceLanguage())
+    || localStorage.getItem('myduo_interface_lang')
+    || (typeof document !== 'undefined' && document.documentElement && document.documentElement.getAttribute('lang'))
+    || 'en';
+  const lang = String(rawLang).toLowerCase().trim().split(/[-_]/)[0];
 
-  let subjectText = 'English Breakfast — Отзыв / Пожелания';
-  let bodyText = `Здравствуйте!\n\nМой отзыв / пожелание:\n\n\n---\nПользователь: ${userName}\nЯзык интерфейса: ${lang}\nУстройство: ${navigator.userAgent}`;
-
-  if (lang === 'uk') {
-    subjectText = 'English Breakfast — Відгук / Пропозиції';
-    bodyText = `Вітаємо!\n\nМій відгук / пропозиція:\n\n\n---\nКористувач: ${userName}\nМова: ${lang}\nПристрій: ${navigator.userAgent}`;
-  } else if (lang === 'en') {
-    subjectText = 'English Breakfast — Feedback / Suggestions';
-    bodyText = `Hello!\n\nMy feedback / suggestion:\n\n\n---\nUser: ${userName}\nLanguage: ${lang}\nDevice: ${navigator.userAgent}`;
-  } else if (lang === 'de') {
-    subjectText = 'English Breakfast — Feedback / Vorschläge';
-    bodyText = `Hallo!\n\nMein Feedback / Vorschlag:\n\n\n---\nBenutzer: ${userName}\nSprache: ${lang}\nGerät: ${navigator.userAgent}`;
-  } else if (lang === 'es') {
-    subjectText = 'English Breakfast — Comentarios / Sugerencias';
-    bodyText = `¡Hola!\n\nMi comentario / sugerencia:\n\n\n---\nUsuario: ${userName}\nIdioma: ${lang}\nDispositivo: ${navigator.userAgent}`;
-  } else if (lang === 'fr') {
-    subjectText = 'English Breakfast — Commentaires / Suggestions';
-    bodyText = `Bonjour !\n\nMon retour / suggestion :\n\n\n---\nUtilisateur : ${userName}\nLangue : ${lang}\nAppareil : ${navigator.userAgent}`;
-  }
+  const tpl = FEEDBACK_EMAIL_TEMPLATES[lang] || FEEDBACK_EMAIL_TEMPLATES.en;
+  const subjectText = tpl.subject;
+  const bodyText = tpl.body(userName, lang, navigator.userAgent);
 
   const subject = encodeURIComponent(subjectText);
   const body = encodeURIComponent(bodyText);
@@ -531,9 +654,17 @@ function handleFeedbackClick() {
 
   showFeedbackToast(t('feedback_copied_toast'));
 
-  // Trigger mailto link
+  // Trigger mail client (use native Android Intent with explicit EXTRA_SUBJECT and EXTRA_TEXT when available)
   setTimeout(() => {
-    window.location.href = mailtoUrl;
+    if (
+      typeof window !== 'undefined' &&
+      window.AndroidWidgetBridge &&
+      typeof window.AndroidWidgetBridge.openFeedbackEmail === 'function'
+    ) {
+      window.AndroidWidgetBridge.openFeedbackEmail(email, subjectText, bodyText);
+    } else {
+      window.location.href = mailtoUrl;
+    }
   }, 100);
 
   closeDrawer();

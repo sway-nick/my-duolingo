@@ -984,6 +984,40 @@ public class MainActivity extends BridgeActivity {
                             } catch (Exception ignored) {}
                         });
                     }
+
+                    @JavascriptInterface
+                    public void openFeedbackEmail(final String email, final String subject, final String body) {
+                        if (!isTrustedOrigin()) return;
+                        runOnUiThread(() -> {
+                            String safeEmail = email != null ? email : "lipniagovnikola@gmail.com";
+                            String safeSubject = subject != null ? subject : "English Breakfast — Feedback";
+                            String safeBody = body != null ? body : "";
+                            try {
+                                Uri mailtoUri = Uri.parse(
+                                    "mailto:" + safeEmail +
+                                    "?subject=" + Uri.encode(safeSubject) +
+                                    "&body=" + Uri.encode(safeBody)
+                                );
+                                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, mailtoUri);
+                                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{safeEmail});
+                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, safeSubject);
+                                emailIntent.putExtra(Intent.EXTRA_TEXT, safeBody);
+                                emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(emailIntent);
+                            } catch (Exception e) {
+                                try {
+                                    Intent fallback = new Intent(Intent.ACTION_SEND);
+                                    fallback.setType("message/rfc822");
+                                    fallback.putExtra(Intent.EXTRA_EMAIL, new String[]{safeEmail});
+                                    fallback.putExtra(Intent.EXTRA_SUBJECT, safeSubject);
+                                    fallback.putExtra(Intent.EXTRA_TEXT, safeBody);
+                                    Intent chooser = Intent.createChooser(fallback, safeSubject);
+                                    chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(chooser);
+                                } catch (Exception ignored) {}
+                            }
+                        });
+                    }
                 }, "AndroidWidgetBridge");
             }
         } catch (Exception ignored) {}

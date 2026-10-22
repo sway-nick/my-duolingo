@@ -9018,14 +9018,11 @@ const translations = {
 export function getInterfaceLanguage() {
   if (typeof localStorage === 'undefined') return 'ru';
 
-  // 1. Explicit user choice in Settings always takes precedence
+  // 1. Explicit user choice or saved setting in localStorage always takes precedence
   try {
-    const isManual = localStorage.getItem('myduo_lang_manual') === 'true';
     const saved = localStorage.getItem('myduo_interface_lang');
     if (saved && translations[saved]) {
-      if (isManual || saved === 'ru') {
-        return saved;
-      }
+      return saved;
     }
   } catch (e) {}
 
