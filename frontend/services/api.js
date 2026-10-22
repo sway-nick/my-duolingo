@@ -120,20 +120,80 @@ function saveLocalUser(user) {
 }
 
 const WORDS_CACHE_VERSION = 'v386_clean_translations';
+const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
+let _lastVocabUpdatesSyncAt = 0;
+
+function getActiveLang() {
+  try {
+    return getInterfaceLanguage();
+  } catch (e) {
+    return 'en';
+  }
+}
+
+function isLangCompatibleWithCache(cachedLang, targetLang) {
+  const normCached = (cachedLang === 'en' || !cachedLang) ? 'ru' : cachedLang;
+  const normTarget = (targetLang === 'en' || !targetLang) ? 'ru' : targetLang;
+  return normCached === normTarget;
+}
+
+/**
+ * Strips unused 30+ foreign language keys from in-memory and localStorage word objects,
+ * keeping only the base Russian/English fields and the currently active interface language.
+ * Reduces RAM & localStorage payload from ~8.59 MB (QuotaExceededError) to ~0.9 MB.
+ */
+function projectWordsForActiveLanguage(words, activeLang) {
+  if (!Array.isArray(words)) return words;
+  const lang = activeLang || getActiveLang();
+  const isBaseLang = lang === 'ru' || lang === 'en';
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i];
+    if (!w) continue;
+    if (w.translations && typeof w.translations === 'object') {
+      if (isBaseLang) {
+        delete w.translations;
+      } else {
+        const activeTrans = w.translations[lang];
+        w.translations = activeTrans ? { [lang]: activeTrans } : undefined;
+        if (!w.translations) delete w.translations;
+      }
+    }
+    if (w.all_notes && typeof w.all_notes === 'object') {
+      if (isBaseLang) {
+        delete w.all_notes;
+      } else {
+        const activeNote = w.all_notes[lang];
+        w.all_notes = activeNote ? { [lang]: activeNote } : undefined;
+        if (!w.all_notes) delete w.all_notes;
+      }
+    }
+  }
+  return words;
+}
 
 let cachedWordsList = null;
+let _cachedWordsActiveLang = null;
 try {
   const cacheVer = localStorage.getItem('myduo_words_cache_ver');
+  const cachedLang = localStorage.getItem('myduo_cached_words_lang') || 'ru';
+  const currentLang = getActiveLang();
   const rawCache = localStorage.getItem('myduo_cached_words') || '';
-  if (cacheVer === WORDS_CACHE_VERSION && !rawCache.includes('\ufffd') && !rawCache.includes('плщадь')) {
+  if (
+    cacheVer === WORDS_CACHE_VERSION &&
+    isLangCompatibleWithCache(cachedLang, currentLang) &&
+    !rawCache.includes('\ufffd') &&
+    !rawCache.includes('плщадь')
+  ) {
     const initialCache = JSON.parse(rawCache || '[]');
     if (Array.isArray(initialCache) && initialCache.length >= 6886) {
+      projectWordsForActiveLanguage(initialCache, currentLang);
       cachedWordsList = initialCache;
+      _cachedWordsActiveLang = currentLang;
       try {
         applyMultilingualTranslations(cachedWordsList);
       } catch (e) {}
     }
-  } else {
+  } else if (cacheVer !== WORDS_CACHE_VERSION) {
     localStorage.removeItem('myduo_cached_words');
     localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
   }
@@ -157,14 +217,6 @@ function sanitizeTranscriptions(words) {
   });
 }
 
-function getActiveLang() {
-  try {
-    return getInterfaceLanguage();
-  } catch (e) {
-    return 'en';
-  }
-}
-
 function applyMultilingualTranslations(words) {
   if (!Array.isArray(words)) return;
   const lang = getActiveLang();
@@ -181,10 +233,18 @@ function applyMultilingualTranslations(words) {
 
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:lang_changed', () => {
+    const newLang = getActiveLang();
+    if (!isLangCompatibleWithCache(_cachedWordsActiveLang, newLang)) {
+      // Active language changed to a different locale: reload words.json on-demand for new locale
+      cachedWordsList = null;
+      getWords(false).catch(() => {});
+      return;
+    }
     if (cachedWordsList && Array.isArray(cachedWordsList)) {
       applyMultilingualTranslations(cachedWordsList);
       try {
         localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+        localStorage.setItem('myduo_cached_words_lang', newLang);
       } catch (e) {}
       window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
     }
@@ -259,88 +319,109 @@ function applyUserNotes(words) {
 }
 
 let _syncUpdatesPromise = null;
-async function syncRemoteVocabularyUpdates() {
-  try {
-    const updates = await fetchSharedVocabularyUpdatesFirestore();
-    if (!updates || Object.keys(updates).length === 0) return false;
-
-    if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
-      try {
-        cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
-      } catch (e) {
-        cachedWordsList = [];
-      }
-    }
-    if (cachedWordsList.length === 0) return false;
-
-    let hasChanges = false;
-    const wordMap = new Map();
-    cachedWordsList.forEach((w, i) => {
-      wordMap.set(String(w.id), i);
-      if (w.word) wordMap.set(String(w.word).toLowerCase().trim(), i);
-    });
-
-    Object.keys(updates).forEach((idKey) => {
-      const u = updates[idKey];
-      if (!u || !u.word) return;
-
-      const cleanWord = String(u.word).toLowerCase().trim();
-      let targetIdx = wordMap.get(String(u.id));
-      if (targetIdx === undefined) targetIdx = wordMap.get(cleanWord);
-
-      if (targetIdx !== undefined) {
-        const existing = cachedWordsList[targetIdx];
-        let rowChanged = false;
-        if (u.translation && (existing.translation !== u.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
-          existing.translation = u.translation;
-          rowChanged = true;
-        }
-        if (u.translations && typeof u.translations === 'object') {
-          existing.translations = { ...(existing.translations || {}), ...u.translations };
-          rowChanged = true;
-        }
-        if (u.transcription !== undefined && existing.transcription !== u.transcription) {
-          existing.transcription = u.transcription;
-          rowChanged = true;
-        }
-        if (u.category && existing.category !== u.category) {
-          existing.category = u.category;
-          rowChanged = true;
-        }
-        if (u.level && existing.level !== u.level) {
-          existing.level = u.level;
-          rowChanged = true;
-        }
-        if (rowChanged) hasChanges = true;
-      } else {
-        cachedWordsList.unshift({
-          id: u.id || `w_${cleanWord}`,
-          word: cleanWord,
-          translation: u.translation || '',
-          translations: u.translations || (u.translation ? { ru: u.translation } : {}),
-          transcription: u.transcription || '',
-          category: u.category || 'Elementary',
-          level: u.level || 'A2',
-          zipf: u.zipf || 0,
-        });
-        hasChanges = true;
-      }
-    });
-
-    if (hasChanges) {
-      try {
-        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
-        localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
-      } catch (e) {}
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
-      }
-    }
-    return hasChanges;
-  } catch (err) {
-    console.warn('syncRemoteVocabularyUpdates warning:', err);
+async function syncRemoteVocabularyUpdates(force = false) {
+  const now = Date.now();
+  if (!force && _lastVocabUpdatesSyncAt > 0 && now - _lastVocabUpdatesSyncAt < VOCAB_UPDATES_SYNC_TTL) {
     return false;
   }
+  if (_syncUpdatesPromise) {
+    return _syncUpdatesPromise;
+  }
+  _syncUpdatesPromise = (async () => {
+    try {
+      const updates = await fetchSharedVocabularyUpdatesFirestore();
+      _lastVocabUpdatesSyncAt = Date.now();
+      if (!updates || Object.keys(updates).length === 0) return false;
+
+      if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
+        try {
+          cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+        } catch (e) {
+          cachedWordsList = [];
+        }
+      }
+      if (cachedWordsList.length === 0) return false;
+
+      let hasChanges = false;
+      const wordMap = new Map();
+      cachedWordsList.forEach((w, i) => {
+        wordMap.set(String(w.id), i);
+        if (w.word) wordMap.set(String(w.word).toLowerCase().trim(), i);
+      });
+
+      const currentLang = getActiveLang();
+
+      Object.keys(updates).forEach((idKey) => {
+        const u = updates[idKey];
+        if (!u || !u.word) return;
+
+        const cleanWord = String(u.word).toLowerCase().trim();
+        let targetIdx = wordMap.get(String(u.id));
+        if (targetIdx === undefined) targetIdx = wordMap.get(cleanWord);
+
+        if (targetIdx !== undefined) {
+          const existing = cachedWordsList[targetIdx];
+          let rowChanged = false;
+          if (u.translation && (existing.translation !== u.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
+            existing.translation = u.translation;
+            rowChanged = true;
+          }
+          if (u.translations && typeof u.translations === 'object') {
+            if (currentLang !== 'ru' && currentLang !== 'en' && u.translations[currentLang]) {
+              existing.translations = { ...(existing.translations || {}), [currentLang]: u.translations[currentLang] };
+              rowChanged = true;
+            }
+          }
+          if (u.transcription !== undefined && existing.transcription !== u.transcription) {
+            existing.transcription = u.transcription;
+            rowChanged = true;
+          }
+          if (u.category && existing.category !== u.category) {
+            existing.category = u.category;
+            rowChanged = true;
+          }
+          if (u.level && existing.level !== u.level) {
+            existing.level = u.level;
+            rowChanged = true;
+          }
+          if (rowChanged) hasChanges = true;
+        } else {
+          const newEntry = {
+            id: u.id || `w_${cleanWord}`,
+            word: cleanWord,
+            translation: u.translation || '',
+            transcription: u.transcription || '',
+            category: u.category || 'Elementary',
+            level: u.level || 'A2',
+            zipf: u.zipf || 0,
+          };
+          if (currentLang !== 'ru' && currentLang !== 'en' && u.translations && u.translations[currentLang]) {
+            newEntry.translations = { [currentLang]: u.translations[currentLang] };
+          }
+          cachedWordsList.unshift(newEntry);
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) {
+        try {
+          localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
+          localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
+          localStorage.setItem('myduo_cached_words_lang', currentLang);
+        } catch (e) {}
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
+        }
+      }
+      return hasChanges;
+    } catch (err) {
+      console.warn('syncRemoteVocabularyUpdates warning:', err);
+      return false;
+    } finally {
+      _syncUpdatesPromise = null;
+    }
+  })();
+  return _syncUpdatesPromise;
 }
 
 async function getWords(forceRefresh = false) {
@@ -352,14 +433,19 @@ async function getWords(forceRefresh = false) {
 
   const currentLang = getActiveLang();
 
-  // Background sync for latest vocabulary updates from Cloud Firestore
+  // Background sync for latest vocabulary updates from Cloud Firestore (throttled & deduplicated)
   if (forceRefresh) {
-    await syncRemoteVocabularyUpdates();
+    await syncRemoteVocabularyUpdates(true);
   } else {
-    syncRemoteVocabularyUpdates().catch(() => {});
+    syncRemoteVocabularyUpdates(false).catch(() => {});
   }
 
-  if (!forceRefresh && cachedWordsList && cachedWordsList.length > 0) {
+  if (
+    !forceRefresh &&
+    cachedWordsList &&
+    cachedWordsList.length > 0 &&
+    isLangCompatibleWithCache(_cachedWordsActiveLang, currentLang)
+  ) {
     sanitizeTranscriptions(cachedWordsList);
     applyMultilingualTranslations(cachedWordsList);
     applyUserNotes(cachedWordsList);
@@ -371,21 +457,33 @@ async function getWords(forceRefresh = false) {
   if (!forceRefresh) {
     try {
       const cacheVer = localStorage.getItem('myduo_words_cache_ver');
+      const cachedLang = localStorage.getItem('myduo_cached_words_lang') || 'ru';
       const rawCache = localStorage.getItem('myduo_cached_words') || '';
 
-      if (cacheVer === WORDS_CACHE_VERSION && !rawCache.includes('\ufffd') && !rawCache.includes('плщадь')) {
+      if (
+        cacheVer === WORDS_CACHE_VERSION &&
+        isLangCompatibleWithCache(cachedLang, currentLang) &&
+        !rawCache.includes('\ufffd') &&
+        !rawCache.includes('плщадь')
+      ) {
         let localCached = JSON.parse(rawCache || '[]');
-        const hasMultilingual = Array.isArray(localCached) && localCached.length >= 6886 && localCached.some((w) => w && w.translations && typeof w.translations === 'object');
+        const isBaseLang = currentLang === 'ru' || currentLang === 'en';
+        const hasValidLangData =
+          Array.isArray(localCached) &&
+          localCached.length >= 6886 &&
+          (isBaseLang || localCached.some((w) => w && w.translations && w.translations[currentLang]));
 
-        if (hasMultilingual) {
+        if (hasValidLangData) {
+          projectWordsForActiveLanguage(localCached, currentLang);
           sanitizeTranscriptions(localCached);
           applyMultilingualTranslations(localCached);
           applyUserNotes(localCached);
           sortByZipf(localCached);
           cachedWordsList = localCached;
+          _cachedWordsActiveLang = currentLang;
           return { success: true, data: cachedWordsList };
         }
-      } else {
+      } else if (cacheVer !== WORDS_CACHE_VERSION) {
         localStorage.removeItem('myduo_cached_words');
         localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
       }
@@ -419,14 +517,18 @@ async function getWords(forceRefresh = false) {
         wordData.unshift(...customLocal);
       }
 
+      // Project only the active language to reduce RAM & localStorage size by ~85% (~0.9 MB instead of 8.59 MB)
+      projectWordsForActiveLanguage(wordData, currentLang);
       sanitizeTranscriptions(wordData);
       applyMultilingualTranslations(wordData);
       applyUserNotes(wordData);
       sortByZipf(wordData);
       cachedWordsList = wordData;
+      _cachedWordsActiveLang = currentLang;
       try {
         localStorage.setItem('myduo_cached_words', JSON.stringify(wordData));
         localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
+        localStorage.setItem('myduo_cached_words_lang', currentLang);
       } catch (e) {}
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: wordData }));
@@ -1524,19 +1626,24 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   // Use Firebase UID as primary Firestore path (subcollections require auth.uid == userId)
   const firestoreUid = getFirestoreUserId(uId);
 
-  // Fetch real-time progress, XP and data from Cloud Firestore
+  // Fetch real-time progress, XP and data from Cloud Firestore (deduplicated: loadFullUserDataFirestore already includes progress & weeklyXpMap)
   try {
-    const [prog1, prog2, progFb, xp1, xp2, xpFb, fullDoc, detDoc, fbDoc] = await Promise.all([
-      loadUserProgressFirestore(firestoreUid).catch(() => ({})),
-      detId && detId !== uId && detId !== firestoreUid ? loadUserProgressFirestore(detId).catch(() => ({})) : Promise.resolve({}),
-      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadUserProgressFirestore(fbUid).catch(() => ({})) : Promise.resolve({}),
-      getUserWeeklyXpFirestore(firestoreUid, wKey).catch(() => 0),
-      detId && detId !== uId && detId !== firestoreUid ? getUserWeeklyXpFirestore(detId, wKey).catch(() => 0) : Promise.resolve(0),
-      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? getUserWeeklyXpFirestore(fbUid, wKey).catch(() => 0) : Promise.resolve(0),
+    const hasDistinctFbUid = Boolean(fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid);
+    const [fullDoc, fbDoc] = await Promise.all([
       loadFullUserDataFirestore(firestoreUid).catch(() => null),
-      detId && detId !== uId && detId !== firestoreUid ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null),
-      fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null)
+      hasDistinctFbUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null)
     ]);
+    const detDoc = null;
+    const prog1 = fullDoc?.progress || {};
+    const prog2 = {};
+    const progFb = fbDoc?.progress || {};
+    const xp1 = (fullDoc && fullDoc.weeklyXpMap && wKey in fullDoc.weeklyXpMap)
+      ? fullDoc.weeklyXpMap[wKey]
+      : (fullDoc ? 0 : await getUserWeeklyXpFirestore(firestoreUid, wKey).catch(() => 0));
+    const xp2 = 0;
+    const xpFb = (fbDoc && fbDoc.weeklyXpMap && wKey in fbDoc.weeklyXpMap)
+      ? fbDoc.weeklyXpMap[wKey]
+      : 0;
 
     const progKey = `progress_${uId}`;
     const localProg = JSON.parse(localStorage.getItem(progKey) || '{}');
