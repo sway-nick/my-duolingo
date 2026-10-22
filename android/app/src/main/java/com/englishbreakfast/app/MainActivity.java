@@ -924,6 +924,66 @@ public class MainActivity extends BridgeActivity {
                             }
                         });
                     }
+
+                    @JavascriptInterface
+                    public void shareToChannel(final String channel, final String text, final String url) {
+                        if (!isTrustedOrigin()) return;
+                        runOnUiThread(() -> {
+                            String safeText = text != null ? text : "";
+                            String safeUrl = url != null ? url : "";
+                            String combined = (safeText + " " + safeUrl).trim();
+                            try {
+                                if ("telegram".equalsIgnoreCase(channel)) {
+                                    try {
+                                        Uri tgUri = Uri.parse("tg://msg_url?url=" + Uri.encode(safeUrl) + "&text=" + Uri.encode(safeText));
+                                        Intent tgIntent = new Intent(Intent.ACTION_VIEW, tgUri);
+                                        tgIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(tgIntent);
+                                        return;
+                                    } catch (Exception ignored) {}
+                                    Uri webTgUri = Uri.parse("https://t.me/share/url?url=" + Uri.encode(safeUrl) + "&text=" + Uri.encode(safeText));
+                                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webTgUri);
+                                    webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(webIntent);
+                                    return;
+                                } else if ("whatsapp".equalsIgnoreCase(channel)) {
+                                    try {
+                                        Uri waUri = Uri.parse("whatsapp://send?text=" + Uri.encode(combined));
+                                        Intent waIntent = new Intent(Intent.ACTION_VIEW, waUri);
+                                        waIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(waIntent);
+                                        return;
+                                    } catch (Exception ignored) {}
+                                    Uri webWaUri = Uri.parse("https://api.whatsapp.com/send?text=" + Uri.encode(combined));
+                                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webWaUri);
+                                    webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(webIntent);
+                                    return;
+                                } else if ("viber".equalsIgnoreCase(channel)) {
+                                    try {
+                                        Uri vbUri = Uri.parse("viber://forward?text=" + Uri.encode(combined));
+                                        Intent vbIntent = new Intent(Intent.ACTION_VIEW, vbUri);
+                                        vbIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(vbIntent);
+                                        return;
+                                    } catch (Exception ignored) {}
+                                } else if ("tiktok".equalsIgnoreCase(channel)) {
+                                    Uri ttUri = Uri.parse("https://www.tiktok.com/");
+                                    Intent ttIntent = new Intent(Intent.ACTION_VIEW, ttUri);
+                                    ttIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(ttIntent);
+                                    return;
+                                }
+
+                                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                                sendIntent.setType("text/plain");
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, combined);
+                                Intent chooser = Intent.createChooser(sendIntent, "Поделиться");
+                                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(chooser);
+                            } catch (Exception ignored) {}
+                        });
+                    }
                 }, "AndroidWidgetBridge");
             }
         } catch (Exception ignored) {}

@@ -88,10 +88,22 @@
             android:value="ca-app-pub-9917058160362744~9932614693"/>
     </application>
 
-    <!-- Query Android TTS engines on Android 11+ (API 30+) -->
+    <!-- Query Android TTS engines and external share apps on Android 11+ (API 30+) -->
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="tg" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="whatsapp" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="viber" />
         </intent>
     </queries>
 

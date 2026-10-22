@@ -160,14 +160,30 @@ export function showShareModal() {
     if (e.target === overlay) closeModal();
   });
 
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const hasNativeShareBridge = Boolean(
+    typeof window !== 'undefined' &&
+    window.AndroidWidgetBridge &&
+    typeof window.AndroidWidgetBridge.shareToChannel === 'function'
+  );
+
   // Telegram click
   const tgBtn = overlay.querySelector('#share-channel-tg');
   if (tgBtn) {
     tgBtn.onclick = () => {
       if (window.trackEvent) window.trackEvent('share_app', { method: 'telegram' });
-      const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-      window.open(tgUrl, '_blank', 'noopener,noreferrer');
       closeModal();
+      if (hasNativeShareBridge) {
+        window.AndroidWidgetBridge.shareToChannel('telegram', shareText, shareUrl);
+        return;
+      }
+      if (isMobile) {
+        const tgDeepLink = `tg://msg_url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+        window.location.href = tgDeepLink;
+      } else {
+        const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+        window.open(tgUrl, '_blank', 'noopener,noreferrer');
+      }
     };
   }
 
@@ -176,9 +192,18 @@ export function showShareModal() {
   if (waBtn) {
     waBtn.onclick = () => {
       if (window.trackEvent) window.trackEvent('share_app', { method: 'whatsapp' });
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
-      window.open(waUrl, '_blank', 'noopener,noreferrer');
       closeModal();
+      if (hasNativeShareBridge) {
+        window.AndroidWidgetBridge.shareToChannel('whatsapp', shareText, shareUrl);
+        return;
+      }
+      if (isMobile) {
+        const waDeepLink = `whatsapp://send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+        window.location.href = waDeepLink;
+      } else {
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+      }
     };
   }
 
@@ -187,9 +212,13 @@ export function showShareModal() {
   if (vbBtn) {
     vbBtn.onclick = () => {
       if (window.trackEvent) window.trackEvent('share_app', { method: 'viber' });
+      closeModal();
+      if (hasNativeShareBridge) {
+        window.AndroidWidgetBridge.shareToChannel('viber', shareText, shareUrl);
+        return;
+      }
       const vbUrl = `viber://forward?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
       window.location.href = vbUrl;
-      closeModal();
     };
   }
 
@@ -202,10 +231,16 @@ export function showShareModal() {
         navigator.clipboard.writeText(shareUrl).catch(() => {});
       }
       showShareToast(t('share_tiktok_copied_toast'));
-      setTimeout(() => {
-        window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
-      }, 500);
       closeModal();
+      setTimeout(() => {
+        if (hasNativeShareBridge) {
+          window.AndroidWidgetBridge.shareToChannel('tiktok', shareText, shareUrl);
+        } else if (isMobile) {
+          window.location.href = 'https://www.tiktok.com/';
+        } else {
+          window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
+        }
+      }, 500);
     };
   }
 
