@@ -2146,7 +2146,8 @@
             tabHistory.push(tabName);
           }
         }
-        if (activeTab === 'training' && tabName && tabName !== 'training') {
+        // Interstitial strictly upon EXITING Collections ('favorites'), NEVER when entering Collections
+        if (activeTab === 'favorites' && tabName && tabName !== 'favorites') {
           try {
             AdService.showTransitionInterstitial(60).catch(() => {});
           } catch (e) {}
@@ -2516,9 +2517,10 @@
           () => {
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
-              if (activeTab === 'training' && !window._showHubScreen) {
+              if ((activeTab === 'favorites' || window._activePracticeCollectionId) && !window._showHubScreen) {
                 AdService.showTransitionInterstitial(60).catch(() => {});
               }
+            } catch (e) {}
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._showHubScreen = true;
