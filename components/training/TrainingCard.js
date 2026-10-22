@@ -1158,8 +1158,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const index = parseInt(input.getAttribute('data-index'));
 
         input.addEventListener('input', async (e) => {
+          // If whitespace was entered (e.g. via virtual keyboard / speech / paste), clean it out immediately
+          if (/\s/.test(input.value)) {
+            input.value = input.value.replace(/\s+/g, '');
+          }
           const val = input.value.trim().toLowerCase();
-          if (!val) return;
+          if (!val) {
+            input.value = '';
+            return;
+          }
 
           if (val === correctChar) {
             input.classList.remove('wrong');
@@ -1202,6 +1209,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         });
 
         input.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
+            e.preventDefault();
+            return;
+          }
           if (e.key === 'Backspace' && input.hasAttribute('readonly')) {
             e.preventDefault();
           }
