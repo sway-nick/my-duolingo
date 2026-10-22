@@ -421,7 +421,7 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   const { getCollectionWords, setActiveCollectionId, getActiveCollectionId, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const colorWords = getCollectionWords('colors', wordsData);
 
-  assert.equal(colorWords.length, 14);
+  assert.equal(colorWords.length, 13);
   assert.equal(colorWords.some((w) => w.word === 'red'), true);
   assert.equal(colorWords.some((w) => w.word === 'blue'), true);
   assert.equal(colorWords.some((w) => w.word === 'green'), true);
@@ -457,8 +457,8 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   assert.equal(activeTab, 'training');
   assert.equal(favoritePracticeMethod, 'cards');
 
-  // 2. Contains all 14 color words
-  assert.equal(favoritePracticeWords.length, 14);
+  // 2. Contains all 13 color words
+  assert.equal(favoritePracticeWords.length, 13);
 
   // 3. Practice collection metadata is set to "Цвета" / colors
   assert.equal(activePracticeCollectionId, 'colors');

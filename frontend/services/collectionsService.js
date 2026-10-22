@@ -219,7 +219,7 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ko": "색상",
           "ja": "色"
     },
-    wordKeys: ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown', 'grey', 'gray', 'gold', 'silver'],
+    wordKeys: ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown', 'grey', 'gold', 'silver'],
   },
   {
     id: 'numbers',
