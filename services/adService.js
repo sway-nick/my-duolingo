@@ -458,6 +458,73 @@ class AdServiceImpl {
   }
 
   /**
+   * Show Interstitial Ad upon user-initiated transition between training and other tabs/screens.
+   * Protected with a 60-second cooldown so it never spams or causes accidental clicks.
+   */
+  async showTransitionInterstitial(minCooldownSeconds = 60) {
+    if (!this.isOnline()) return false;
+    const now = Date.now();
+    if (this.lastInterstitialTime && (now - this.lastInterstitialTime < minCooldownSeconds * 1000)) {
+      console.log(`ℹ️ Transition interstitial skipped: only ${Math.round((now - this.lastInterstitialTime)/1000)}s since last ad (cooldown: ${minCooldownSeconds}s)`);
+      this.preloadInterstitial().catch(() => {});
+      return false;
+    }
+
+    const AdMob = this.getNativeAdMob();
+    if (AdMob && this.isNative()) {
+      try {
+        const adId = this.getUnitId('INTERSTITIAL_ROUND');
+        if (!adId) return false;
+
+        if (!this.isInterstitialPrepared) {
+          console.log('⏳ Transition interstitial not preloaded, preparing now...');
+          try {
+            await AdMob.prepareInterstitial({ adId });
+            this.isInterstitialPrepared = true;
+          } catch (prepErr) {
+            const testAdId = AD_CONFIG.TEST_UNITS.INTERSTITIAL_ROUND;
+            if (adId !== testAdId) {
+              await AdMob.prepareInterstitial({ adId: testAdId });
+              this.isInterstitialPrepared = true;
+            }
+          }
+        }
+
+        await AdMob.showInterstitial();
+        this.isInterstitialPrepared = false;
+
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('ad_interstitial_transition_shown');
+        }
+        this.lastInterstitialTime = Date.now();
+        this.roundsCompletedSinceLastAd = 0;
+
+        // Preload next interstitial in background
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 1500);
+
+        return true;
+      } catch (err) {
+        console.warn('AdMob transition interstitial failed:', err);
+        this.isInterstitialPrepared = false;
+        setTimeout(() => {
+          this.preloadInterstitial().catch(() => {});
+        }, 3000);
+        return false;
+      }
+    }
+
+    console.log('ℹ️ [Web Simulator] Transition interstitial shown');
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_interstitial_transition_shown');
+    }
+    this.lastInterstitialTime = Date.now();
+    this.roundsCompletedSinceLastAd = 0;
+    return true;
+  }
+
+  /**
    * Show Bottom Banner (Stats & Leaderboard)
    */
   async showBottomBanner() {

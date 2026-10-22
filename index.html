@@ -2146,6 +2146,11 @@
             tabHistory.push(tabName);
           }
         }
+        if (activeTab === 'training' && tabName && tabName !== 'training') {
+          try {
+            AdService.showTransitionInterstitial(60).catch(() => {});
+          } catch (e) {}
+        }
         activeTab = tabName;
         window._activeTab = tabName;
         if (window.trackScreen) {
@@ -2511,6 +2516,9 @@
           () => {
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
+              if (activeTab === 'training' && !window._showHubScreen) {
+                AdService.showTransitionInterstitial(60).catch(() => {});
+              }
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._showHubScreen = true;
@@ -2654,6 +2662,9 @@
             // Priority 4: If inside practice / exercise mode or practicing favorites, return to hub (or to favorites if started from there)
             const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
             if (activeTab === 'training' && (!window._showHubScreen || isFavPracticeRunning)) {
+              try {
+                AdService.showTransitionInterstitial(60).catch(() => {});
+              } catch (e) {}
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._activePracticeCollectionId = null;
