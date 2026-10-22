@@ -19,6 +19,8 @@ public class WidgetDataManager {
     private static final String KEY_PENDING_FAVS = "key_pending_favs";
     private static final String KEY_HAS_FAVORITES = "key_has_favorites";
     private static final String KEY_CONTINUOUS_PLAY = "key_continuous_play_active";
+    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v2";
+    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v2";
     private static volatile boolean isAppInForeground = false;
 
     // In-memory cache to prevent repetitive JSON parsing on main thread during widget taps
@@ -614,5 +616,92 @@ public class WidgetDataManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static synchronized boolean hasRealInstalledWidgets(Context context, int[] systemIds) {
+        if (context == null) return false;
+        SharedPreferences prefs = getPrefs(context);
+        if (systemIds == null || systemIds.length == 0) {
+            prefs.edit()
+                .putStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>())
+                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                .apply();
+            return false;
+        }
+
+        if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
+            Set<String> initialGhosts = new HashSet<>();
+            for (int id : systemIds) {
+                initialGhosts.add(String.valueOf(id));
+            }
+            prefs.edit()
+                .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
+                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                .apply();
+            return false;
+        }
+
+        Set<String> savedGhosts = prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>());
+        Set<String> activeGhosts = new HashSet<>();
+        boolean hasRealWidget = false;
+        for (int id : systemIds) {
+            String idStr = String.valueOf(id);
+            if (savedGhosts.contains(idStr)) {
+                activeGhosts.add(idStr);
+            } else {
+                hasRealWidget = true;
+            }
+        }
+        if (activeGhosts.size() != savedGhosts.size()) {
+            prefs.edit().putStringSet(KEY_GHOST_WIDGET_IDS, activeGhosts).apply();
+        }
+        return hasRealWidget;
+    }
+
+    public static synchronized void markPrePinGhostIds(Context context, int[] systemIds) {
+        if (context == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> ghosts = new HashSet<>();
+        if (systemIds != null) {
+            for (int id : systemIds) {
+                ghosts.add(String.valueOf(id));
+            }
+        }
+        prefs.edit()
+            .putStringSet(KEY_GHOST_WIDGET_IDS, ghosts)
+            .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+            .apply();
+    }
+
+    public static synchronized void onWidgetPinnedOrInteracted(Context context, int appWidgetId, int[] systemIds) {
+        if (context == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> ghosts = new HashSet<>(prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>()));
+        if (appWidgetId != android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID) {
+            ghosts.remove(String.valueOf(appWidgetId));
+        } else if (systemIds != null && systemIds.length > 0) {
+            int maxId = systemIds[0];
+            for (int id : systemIds) {
+                if (id > maxId) maxId = id;
+            }
+            ghosts.remove(String.valueOf(maxId));
+        }
+        prefs.edit()
+            .putStringSet(KEY_GHOST_WIDGET_IDS, ghosts)
+            .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+            .apply();
+    }
+
+    public static synchronized void onWidgetsDeleted(Context context, int[] deletedIds) {
+        if (context == null || deletedIds == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> ghosts = new HashSet<>(prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>()));
+        for (int id : deletedIds) {
+            ghosts.add(String.valueOf(id));
+        }
+        prefs.edit()
+            .putStringSet(KEY_GHOST_WIDGET_IDS, ghosts)
+            .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+            .apply();
     }
 }

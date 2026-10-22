@@ -196,15 +196,7 @@ export function openWidgetConfigBottomSheet() {
           if (window.trackEvent) {
             window.trackEvent('widget_pin_request');
           }
-          closeSheet();
-          setTimeout(() => {
-            try {
-              window.AndroidWidgetBridge.requestPinWidget();
-            } catch (e) {
-              console.warn('[Widget] requestPinWidget error:', e);
-            }
-          }, 80);
-          return;
+          window.AndroidWidgetBridge.requestPinWidget();
         } else if (isInstalled) {
           try {
             showToast(t('widget_settings_saved') || 'Настройки виджета сохранены');

@@ -39,7 +39,14 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+        WidgetDataManager.onWidgetPinnedOrInteracted(context, appWidgetId, null);
         updateAppWidget(context, appWidgetManager, appWidgetId);
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+        WidgetDataManager.onWidgetsDeleted(context, appWidgetIds);
     }
 
     @Override
@@ -51,6 +58,11 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
+        try {
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
+            WidgetDataManager.markPrePinGhostIds(context, manager.getAppWidgetIds(cn));
+        } catch (Exception ignored) {}
         cancelRotation(context);
         stopContinuousPlay(context);
     }
@@ -67,6 +79,14 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 || ACTION_TOGGLE_PLAY_PAUSE.equals(action) || ACTION_PIN_SUCCESS.equals(action);
         if (!isCustomWidgetAction) {
             return;
+        }
+        if (ACTION_PIN_SUCCESS.equals(action)) {
+            int pinnedId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            try {
+                AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+                ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
+                WidgetDataManager.onWidgetPinnedOrInteracted(context, pinnedId, mgr.getAppWidgetIds(cn));
+            } catch (Exception ignored) {}
         }
 
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
@@ -188,10 +208,15 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             if (onAudioDone != null) onAudioDone.run();
             return;
         }
-        // Clear reminder alert when user interacts with widget
+        // Clear reminder alert and confirm widget active when user interacts with widget
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
-                || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
+                || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
             WidgetDataManager.setReminderAlertActive(context, false);
+            try {
+                AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+                ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
+                WidgetDataManager.onWidgetPinnedOrInteracted(context, AppWidgetManager.INVALID_APPWIDGET_ID, mgr.getAppWidgetIds(cn));
+            } catch (Exception ignored) {}
         }
 
         switch (action) {
@@ -531,7 +556,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
             int[] allIds = manager.getAppWidgetIds(cn);
-            return allIds != null && allIds.length > 0;
+            return WidgetDataManager.hasRealInstalledWidgets(context, allIds);
         } catch (Exception e) {
             return false;
         }

@@ -736,14 +736,25 @@ public class MainActivity extends BridgeActivity {
                                     runOnUiThread(() -> {
                                         try {
                                             ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
-                                            PendingIntent successCallback = GoldCardWidgetProvider.getPendingIntent(
+                                            int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
+                                            if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
+                                                WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
+                                            }
+                                            Intent pinIntent = new Intent(MainActivity.this, GoldCardWidgetProvider.class);
+                                            pinIntent.setAction(GoldCardWidgetProvider.ACTION_PIN_SUCCESS);
+                                            pinIntent.setPackage(getPackageName());
+                                            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                                flags |= PendingIntent.FLAG_MUTABLE;
+                                            }
+                                            PendingIntent successCallback = PendingIntent.getBroadcast(
                                                 MainActivity.this,
-                                                GoldCardWidgetProvider.ACTION_PIN_SUCCESS,
-                                                108
+                                                108,
+                                                pinIntent,
+                                                flags
                                             );
                                             boolean ok = appWidgetManager.requestPinAppWidget(provider, null, successCallback);
                                             pinResult.set(ok);
-                                            // Also schedule follow-up widget refreshes in case launcher skips callback on OEM ROMs
                                             android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
                                             h.postDelayed(() -> {
                                                 GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
@@ -790,7 +801,7 @@ public class MainActivity extends BridgeActivity {
                             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(MainActivity.this);
                             ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
                             int[] ids = appWidgetManager.getAppWidgetIds(provider);
-                            return ids != null && ids.length > 0;
+                            return WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, ids);
                         } catch (Exception e) {
                             return false;
                         }
