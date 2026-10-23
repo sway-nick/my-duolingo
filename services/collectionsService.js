@@ -1,4 +1,4 @@
-import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
+﻿import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
 
 const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
@@ -917,7 +917,7 @@ export function getCollectionTitle(collectionId, lang = null) {
   const target = collections.find((c) => c.id === collectionId);
   if (target) return target.name;
 
-  return 'Коллекция';
+  return { ru: 'Коллекция', uk: 'Колекція', en: 'Collection', pt: 'Coleção', es: 'Colección', de: 'Sammlung', fr: 'Collection' }[currentLang] || 'Collection';
 }
 
 export function getActiveCollectionId() {

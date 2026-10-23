@@ -1,3 +1,4 @@
+import { getInterfaceLanguage } from './i18n.js?v=386.0';
 /**
  * Google AdMob Integration Service
  * Manages Rewarded Ads, Interstitials, Banners and Shield mechanisms
@@ -6,6 +7,18 @@
  */
 
 // Production AdMob Unit IDs
+const MOCK_AD_I18N = {
+  ru: { shield: 'Защита 20 XP', pack: 'Языковой пакет', download: 'Скачивание', watch: 'Просмотр рекламы', wait: 'Вознаграждение будет начислено после окончания таймера:', sec: 'с', skip: 'Пропустить (без награды)', done: 'Награда получена!' },
+  uk: { shield: 'Захист 20 XP', pack: 'Мовний пакет', download: 'Завантаження', watch: 'Перегляд реклами', wait: 'Винагороду буде нараховано після завершення таймера:', sec: 'с', skip: 'Пропустити (без нагороди)', done: 'Нагороду отримано!' },
+  en: { shield: '20 XP Shield', pack: 'Language pack', download: 'Download', watch: 'Watch ad', wait: 'Your reward will be granted when the timer ends:', sec: 's', skip: 'Skip (no reward)', done: 'Reward earned!' },
+  pt: { shield: 'Proteção de 20 XP', pack: 'Pacote de idioma', download: 'Download', watch: 'Assistir ao anúncio', wait: 'A recompensa será concedida quando o cronômetro terminar:', sec: 's', skip: 'Pular (sem recompensa)', done: 'Recompensa recebida!' },
+};
+
+function mockAdText(key) {
+  let lang = 'en';
+  try { lang = getInterfaceLanguage(); } catch (e) {}
+  return (MOCK_AD_I18N[lang] || MOCK_AD_I18N.en)[key];
+}
 export const AD_CONFIG = {
   APP_ID: 'ca-app-pub-9917058160362744~9932614693',
   UNITS: {
@@ -282,13 +295,13 @@ class AdServiceImpl {
     }
 
     // 2. Web / Browser Test Simulator Modal
-    return this.showWebMockRewardedAd('🛡️ Защита 20 XP', true);
+    return this.showWebMockRewardedAd('🛡️ ' + mockAdText('shield'), true);
   }
 
   /**
    * Show Rewarded Ad to download a language or audio pack
    */
-  async showLanguagePackRewardedAd(packTitle = 'Языковой пакет') {
+  async showLanguagePackRewardedAd(packTitle = mockAdText('pack')) {
     if (typeof window !== 'undefined' && window.trackEvent) {
       window.trackEvent('ad_pack_requested', { pack: packTitle });
     }
@@ -360,7 +373,7 @@ class AdServiceImpl {
       });
     }
 
-    return this.showWebMockRewardedAd(`📦 Скачивание: ${packTitle}`, false);
+    return this.showWebMockRewardedAd(`📦 ${mockAdText('download')}: ${packTitle}`, false);
   }
 
   /**
@@ -710,7 +723,7 @@ class AdServiceImpl {
   /**
    * Web Mock Rewarded Ad Modal (for local browser testing and dev preview)
    */
-  showWebMockRewardedAd(title = 'Просмотр рекламы', isShield = false) {
+  showWebMockRewardedAd(title = mockAdText('watch'), isShield = false) {
     return new Promise((resolve) => {
       const existing = document.getElementById('admob-mock-modal');
       if (existing) existing.remove();
@@ -740,16 +753,16 @@ class AdServiceImpl {
           </div>
           <div style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">${title}</div>
           <p style="font-size: 14px; color: #94a3b8; margin: 0 0 20px 0;">
-            Вознаграждение будет начислено после окончания таймера:
+            ${mockAdText('wait')}
           </p>
           <div id="mock-ad-timer" style="font-size: 42px; font-weight: 900; color: #f59e0b; margin-bottom: 20px; font-variant-numeric: tabular-nums;">
-            ${timeLeft}с
+            ${timeLeft}${mockAdText('sec')}
           </div>
           <div style="background: #334155; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 24px;">
             <div id="mock-ad-progress" style="background: #f59e0b; height: 100%; width: 0%; transition: width 1s linear;"></div>
           </div>
           <button id="mock-ad-close-btn" style="background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; display: none;">
-            Пропустить (без награды)
+            ${mockAdText('skip')}
           </button>
         </div>
       `;
@@ -763,12 +776,12 @@ class AdServiceImpl {
       const interval = setInterval(() => {
         timeLeft--;
         if (progressEl) progressEl.style.width = `${((5 - timeLeft) / 5) * 100}%`;
-        if (timerEl) timerEl.textContent = `${timeLeft}с`;
+        if (timerEl) timerEl.textContent = `${timeLeft}${mockAdText('sec')}`;
 
         if (timeLeft <= 0) {
           clearInterval(interval);
           if (timerEl) {
-            timerEl.textContent = '✓ Награда получена!';
+            timerEl.textContent = '✓ ' + mockAdText('done');
             timerEl.style.color = '#22c55e';
             timerEl.style.fontSize = '24px';
           }

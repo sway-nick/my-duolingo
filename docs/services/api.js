@@ -1,4 +1,4 @@
-﻿import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
 import { 
   syncLeaderboardScoreFirestore, 
   commitXpDeltaFirestore,
@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v388_brazil_audit_v2';
+const WORDS_CACHE_VERSION = 'v389_brazil_100pct';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
 
@@ -368,8 +368,18 @@ async function syncRemoteVocabularyUpdates(force = false) {
           }
           if (u.translations && typeof u.translations === 'object') {
             if (currentLang !== 'ru' && currentLang !== 'en' && u.translations[currentLang]) {
-              existing.translations = { ...(existing.translations || {}), [currentLang]: u.translations[currentLang] };
-              rowChanged = true;
+              let remoteVal = u.translations[currentLang];
+              // Guard curated Brazilian Portuguese translations against stale remote regression
+              if (currentLang === 'pt' && existing.translations?.pt) {
+                const stalePtReg = /^(veado|usar roupas|jantar|espiga|único|couro|mundo|chão|trancar)$/i;
+                if (stalePtReg.test(String(remoteVal).trim()) && !stalePtReg.test(String(existing.translations.pt).trim())) {
+                  remoteVal = existing.translations.pt;
+                }
+              }
+              if (existing.translations?.[currentLang] !== remoteVal) {
+                existing.translations = { ...(existing.translations || {}), [currentLang]: remoteVal };
+                rowChanged = true;
+              }
             }
           }
           if (u.transcription !== undefined && existing.transcription !== u.transcription) {

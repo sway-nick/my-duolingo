@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -291,7 +291,7 @@
       let currentTrainingMethod = 'cards';
       let userSettings = { enabledMethods: 'quiz,cards,input', dailyGoal: 10 };
       let cloudWordOfTheDayId = null;
-      let wotdPlaylist = ["cat1.mp4","cat2.mp4","cat3.mp4","cat4.mp4","cat5.mp4","cat7.mp4","cat8.mp4"];
+      let wotdPlaylist = ["cat1.mp4","cat2.mp4","cat3.mp4","cat4.mp4","cat5.mp4","cat6.mp4","cat7.mp4","cat8.mp4"];
 
       // Fetch dynamic playlist if available
       try {
@@ -451,7 +451,7 @@
         downloadBtn.addEventListener('click', async () => {
           downloadBtn.disabled = true;
           const prevBtnText = downloadBtn.innerHTML;
-          downloadBtn.innerHTML = '⏳ Загрузка видео...';
+          downloadBtn.innerHTML = '⏳ ' + strings.downloading;
 
           // 1. Show Rewarded Ad if online
           if (window.AdService && AdService.isOnline()) {
@@ -1274,7 +1274,7 @@
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                           <video id="wotd-card-video-what" playsinline preload="auto" muted src="assets/video/meme_monday_what.mp4" style="width: 100%; height: 100%; object-fit: cover; display: none; border-radius: inherit;"></video>
                           <div id="wotd-top4-cut" style="display: none; pointer-events: none;">
-                            <img id="wotd-top4-img" src="assets/images/leaderboard_top4_cut.png" alt="Лидеры недели">
+                            <img id="wotd-top4-img" src="assets/images/leaderboard_top4_cut.png" alt="">
                           </div>
                         </div>
 
@@ -1762,7 +1762,7 @@
                   <div>
                     <h2 style="margin: 0; font-size: 20px; font-weight: 800; line-height: 1.2;">${t('train_categories_title')}</h2>
                   </div>
-                  <button type="button" id="cat-select-back-btn" class="cat-select-circle-btn" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; border: 1.5px solid var(--border-color, #334155); background: var(--bg-hover, #1e293b); color: var(--text-muted, #94a3b8); display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; box-sizing: border-box; flex-shrink: 0; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);" aria-label="Закрыть">
+                  <button type="button" id="cat-select-back-btn" class="cat-select-circle-btn" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; border: 1.5px solid var(--border-color, #334155); background: var(--bg-hover, #1e293b); color: var(--text-muted, #94a3b8); display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; box-sizing: border-box; flex-shrink: 0; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);" aria-label="${t('modal_close')}">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <line x1="18" y1="6" x2="6" y2="18"></line>
                       <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -1871,7 +1871,7 @@
                   downloadBtn.addEventListener('click', async () => {
                     downloadBtn.disabled = true;
                     const prevBtnText = downloadBtn.innerHTML;
-                    downloadBtn.innerHTML = '⏳ Загрузка видео...';
+                    downloadBtn.innerHTML = '⏳ ' + strings.downloading;
 
                     // 1. Show Rewarded Ad if online
                     if (window.AdService && AdService.isOnline()) {
@@ -2811,7 +2811,7 @@
                 '#top100-close-btn, #prize-continue-btn, #cat-modal-cancel-btn, #close-settings-btn, ' +
                 '#diag-close-btn, #mic-explainer-allow-btn, #btn-close-widget-sheet, ' +
                 '#col-actions-close-btn, #col-btn-cancel, #add-words-close-btn, #add-words-cancel-btn, #col-lists-close-btn, #col-lists-sheet-close, ' +
-                '.modal-close, .close-btn, [data-action="close"], [aria-label="Close"], [aria-label="Закрыть"], [aria-label="Отмена"]'
+                '.modal-close, .close-btn, [data-action="close"], [aria-label="Close"], [aria-label="Закрыть"], [aria-label="Отмена"], [aria-label="Fechar"], [aria-label="Закрити"], [aria-label="Cancelar"]'
               );
               if (closeBtn && typeof closeBtn.click === 'function') {
                 closeBtn.click();

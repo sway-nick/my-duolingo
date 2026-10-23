@@ -9452,6 +9452,9 @@ export function t(key, params = null) {
       th: "เพิ่มในรายการโปรด", ko: "즐겨찾기에 추가", ja: "お気に入りへ"
     };
     val = map[lang] || map['en'] || "To favorites";
+  } else if (key === 'modal_close') {
+    const map = { ru: 'Закрыть', uk: 'Закрити', en: 'Close', pt: 'Fechar', es: 'Cerrar', de: 'Schließen', fr: 'Fermer', it: 'Chiudi', pl: 'Zamknij', tr: 'Kapat' };
+    val = map[lang] || 'Close';
   } else if (key === 'word_notes_title') {
     if (lang === 'ru') val = 'Примечание';
     else if (lang === 'uk') val = 'Примітка';
@@ -9504,8 +9507,8 @@ export function getWordTranslation(wordObj, explicitLang) {
     }
   }
 
-  // 2. Base translation field (for Russian and English learners / default)
-  if ((lang === 'ru' || lang === 'en') && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
+  // 2. Base translation field (for Russian and English learners / default, or user custom words)
+  if ((lang === 'ru' || lang === 'en' || !wordObj.translations || Object.keys(wordObj.translations).length === 0 || String(wordObj.id || '').startsWith('custom_')) && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
     return wordObj.translation;
   }
 
@@ -9767,7 +9770,9 @@ export function getCategoryDetails(rawCategory) {
     ? `Слова из категории «${rawCategory}»`
     : lang === 'uk'
       ? `Слова з категорії «${rawCategory}»`
-      : `Words from "${rawCategory}" category`;
+      : lang === 'pt'
+        ? `Palavras da categoria «${rawCategory}»`
+        : `Words from "${rawCategory}" category`;
   return { title: rawCategory || 'Category', desc: fallbackDesc };
 }
 
