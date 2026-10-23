@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Cartão Dourado</string>
+    <string name="widget_gold_card_description">Cartão dourado interativo para praticar palavras dos Favoritos com pronúncia e setas</string>
+    <string name="widget_reminder_default_alert">⚡ Não fique para trás!</string>
+    <string name="shortcut_widget_title">Adicionar widget</string>
+    <string name="shortcut_widget_short">Adicionar widget</string>
+</resources>

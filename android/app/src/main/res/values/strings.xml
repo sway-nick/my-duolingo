@@ -4,9 +4,9 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Золотая карточка</string>
-    <string name="widget_gold_card_description">Интерактивная золотая карточка для изучения слов из Избранного со стрелками и озвучкой</string>
-    <string name="widget_reminder_default_alert">⚡ Не отставай от других!</string>
-    <string name="shortcut_widget_title">Добавить виджет</string>
-    <string name="shortcut_widget_short">Добавить виджет</string>
+    <string name="widget_gold_card_name">Gold Card</string>
+    <string name="widget_gold_card_description">Interactive gold card for learning words from Favorites with arrows and voice</string>
+    <string name="widget_reminder_default_alert">⚡ Keep up the pace!</string>
+    <string name="shortcut_widget_title">Add Widget</string>
+    <string name="shortcut_widget_short">Add Widget</string>
 </resources>
