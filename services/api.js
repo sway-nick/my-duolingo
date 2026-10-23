@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v386_clean_translations';
+const WORDS_CACHE_VERSION = 'v387_clean_pt_br';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
 

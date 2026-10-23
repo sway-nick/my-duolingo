@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { applyPtFixesToWordsArray } from './apply_pt_br_fixes.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -179,6 +180,9 @@ async function run() {
   console.log(`   - Existing words updated: ${updatedCount}`);
   console.log(`   - New words added:        ${newlyAddedCount}`);
   console.log(`   - Total words in dataset: ${existingWords.length}`);
+
+  const ptFixed = applyPtFixesToWordsArray(existingWords);
+  console.log(`   - PT-BR curated fixes:    ${ptFixed}`);
 
   // Safety check: ensure 0 corrupted UTF-8 replacement characters
   const jsonOutput = JSON.stringify(existingWords, null, 2);
