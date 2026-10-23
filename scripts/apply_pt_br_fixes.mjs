@@ -1,4 +1,4 @@
-import fs from 'fs';
+﻿import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -163,6 +163,32 @@ export const PT_BR_WORD_OVERRIDES = {
   'ceo': 'diretor-geral (CEO)',
 };
 
+export const PT_BR_WORD_OVERRIDES_V2 = {
+  'lunch':'almoço','arm':'braço','foot':'pé','ear':'orelha, ouvido','skin':'pele','chest':'peito, tórax','tongue':'língua','face':'rosto, face',
+  'bear':'urso','deer':'cervo','deer deer':'cervo - cervos','fifty':'cinquenta','score':'placar, pontuação','match':'partida, combinar, fósforo',
+  'running':'corrida','meal':'refeição','shoe':'sapato','wear':'vestir, usar','scarf':'cachecol, lenço','cap':'boné',
+  'peace':'paz','gender':'gênero','castle':'castelo','clock':'relógio de parede','watch':'assistir, relógio de pulso','bench':'banco',
+  'handle':'maçaneta, alça, lidar com','port':'porto','sort':'ordenar, tipo','turn':'virar, vez','plate':'prato, placa','change':'mudar, troco',
+  'miss':'sentir falta, perder','live':'viver, morar','like':'gostar, como','keep':'manter, guardar','learn':'aprender, estudar','fall':'cair, outono',
+  'clean':'limpo, limpar','warm':'morno, quente','ready':'pronto','different':'diferente','own':'próprio, possuir','whole':'inteiro, todo',
+  'criminal':'criminoso','corrupt':'corrupto','laptop':'notebook','menu':'cardápio, menu','rude':'grosseiro, mal-educado','poster':'pôster, cartaz',
+  'cookie':'biscoito, cookie','backup':'backup, cópia de segurança','relative':'parente','sensitive':'sensível','contest':'concurso, competição',
+  'educated':'instruído, culto','resume':'currículo, retomar','intend':'pretender, tencionar','compromise':'acordo, concessão',
+  'sympathy':'compaixão, solidariedade','prejudice':'preconceito','succeed':'ter sucesso, conseguir','attend':'frequentar, comparecer',
+  'record':'gravar, registro','course':'curso, rumo','custom':'costume, personalizado','tap':'torneira, tocar','net':'rede, líquido',
+  'eat ate eaten':'comer','teach taught taught':'ensinar','shoot shot shot':'atirar, disparar','cost cost cost':'custar','cut cut cut':'cortar',
+  'drink drank drunk':'beber','sweat sweat sweat':'suar','dig dug dug':'cavar','smell smelt smelt':'cheirar','quit quit quit':'desistir, largar, sair',
+  'bear bore born':'suportar, dar à luz','sink sank sunk':'afundar','spin spun spun':'girar','ring rang rung':'tocar, telefonar',
+  'lie lay lain':'deitar-se, jazer','learn learnt learnt':'aprender','stand stood stood':'ficar de pé','strike struck struck':'golpear, fazer greve',
+  'stick stuck stuck':'colar, emperrar','fit fit fit':'caber, servir','rid rid rid':'livrar, libertar','wind wound wound':'dar corda, serpentear',
+  'come in':'entrar','turn on':'ligar','get up':'levantar-se','bring up':'criar (educar), mencionar','run out':'acabar, esgotar-se',
+  'get on':'embarcar, dar-se bem','on time':'na hora certa, pontualmente','in front of':'na frente de','at home':'em casa','give back':'devolver',
+  'just looking':'só dando uma olhada','foot feet':'pé - pés','focus foci':'foco - focos','analysis analyses':'análise - análises',
+  'person people':'pessoa - pessoas','medium media':'meio - meios (mídia)','consist of':'consistir em','object to':'opor-se a','refer to':'referir-se a',
+  'laugh at':'rir de','smile at':'sorrir para','promise to':'prometer','scrambled eggs':'ovos mexidos','sour cream':'creme azedo (sour cream)',
+  'a piece of cake':'mamão com açúcar, muito fácil','when pigs fly':'no dia de São Nunca','no pain no gain':'sem esforço não há ganho',
+};
+Object.assign(PT_BR_WORD_OVERRIDES, PT_BR_WORD_OVERRIDES_V2);
 /**
  * Sanitizes a single Portuguese translation string:
  * - Applies explicit PT_BR_WORD_OVERRIDES if the word matches
@@ -230,3 +256,4 @@ if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
     }
   }
 }
+

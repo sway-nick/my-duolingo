@@ -1,4 +1,4 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
+﻿import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
 import { 
   syncLeaderboardScoreFirestore, 
   commitXpDeltaFirestore,
@@ -35,7 +35,7 @@ function getFirestoreUserId(userId = null) {
   let fbUid = user?.firebaseUid ? String(user.firebaseUid) : '';
 
   // Migration: myduo_firebase_user.id always stores fbRes.localId (real Firebase UID).
-  // Old auth code stored Google Sub ID in user.firebaseUid — detect and fix on the fly.
+  // Old auth code stored Google Sub ID in user.firebaseUid вЂ” detect and fix on the fly.
   try {
     const stored = localStorage.getItem('myduo_firebase_user');
     if (stored) {
@@ -77,14 +77,14 @@ function getFirestoreUserId(userId = null) {
 }
 
 const MOCK_WORDS = [
-  { id: '1', word: 'apple', transcription: '[ˈæp.əl]', translation: 'яблоко', category: 'Еда и напитки', level: 'A1' },
-  { id: '2', word: 'book', transcription: '[bʊk]', translation: 'книга', category: 'Обучение', level: 'A1' },
-  { id: '3', word: 'journey', transcription: '[ˈdʒɜː.ni]', translation: 'путешествие', category: 'Путешествия', level: 'B1' },
-  { id: '4', word: 'courage', transcription: '[ˈkʌr.ɪdʒ]', translation: 'смелость', category: 'Эмоции', level: 'B2' },
-  { id: '5', word: 'sunrise', transcription: '[ˈsʌn.raɪz]', translation: 'рассвет', category: 'Природа', level: 'A2' },
-  { id: '6', word: 'freedom', transcription: '[ˈfriː.dəm]', translation: 'свобода', category: 'Общие', level: 'B1' },
-  { id: '7', word: 'adventure', transcription: '[ədˈven.tʃər]', translation: 'приключение', category: 'Путешествия', level: 'B1' },
-  { id: '8', word: 'friendship', transcription: '[ˈfrend.ʃɪp]', translation: 'дружба', category: 'Отношения', level: 'A2' },
+  { id: '1', word: 'apple', transcription: '[Л€Г¦p.Й™l]', translation: 'СЏР±Р»РѕРєРѕ', category: 'Р•РґР° Рё РЅР°РїРёС‚РєРё', level: 'A1' },
+  { id: '2', word: 'book', transcription: '[bКЉk]', translation: 'РєРЅРёРіР°', category: 'РћР±СѓС‡РµРЅРёРµ', level: 'A1' },
+  { id: '3', word: 'journey', transcription: '[Л€dК’ЙњЛђ.ni]', translation: 'РїСѓС‚РµС€РµСЃС‚РІРёРµ', category: 'РџСѓС‚РµС€РµСЃС‚РІРёСЏ', level: 'B1' },
+  { id: '4', word: 'courage', transcription: '[Л€kКЊr.ЙЄdК’]', translation: 'СЃРјРµР»РѕСЃС‚СЊ', category: 'Р­РјРѕС†РёРё', level: 'B2' },
+  { id: '5', word: 'sunrise', transcription: '[Л€sКЊn.raЙЄz]', translation: 'СЂР°СЃСЃРІРµС‚', category: 'РџСЂРёСЂРѕРґР°', level: 'A2' },
+  { id: '6', word: 'freedom', transcription: '[Л€friЛђ.dЙ™m]', translation: 'СЃРІРѕР±РѕРґР°', category: 'РћР±С‰РёРµ', level: 'B1' },
+  { id: '7', word: 'adventure', transcription: '[Й™dЛ€ven.tКѓЙ™r]', translation: 'РїСЂРёРєР»СЋС‡РµРЅРёРµ', category: 'РџСѓС‚РµС€РµСЃС‚РІРёСЏ', level: 'B1' },
+  { id: '8', word: 'friendship', transcription: '[Л€frend.КѓЙЄp]', translation: 'РґСЂСѓР¶Р±Р°', category: 'РћС‚РЅРѕС€РµРЅРёСЏ', level: 'A2' },
 ];
 
 let pendingProgressQueue = [];
@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v387_clean_pt_br';
+const WORDS_CACHE_VERSION = 'v388_brazil_audit_v2';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
 
@@ -182,7 +182,7 @@ try {
     cacheVer === WORDS_CACHE_VERSION &&
     isLangCompatibleWithCache(cachedLang, currentLang) &&
     !rawCache.includes('\ufffd') &&
-    !rawCache.includes('плщадь')
+    !rawCache.includes('РїР»С‰Р°РґСЊ')
   ) {
     const initialCache = JSON.parse(rawCache || '[]');
     if (Array.isArray(initialCache) && initialCache.length >= 6886) {
@@ -464,7 +464,7 @@ async function getWords(forceRefresh = false) {
         cacheVer === WORDS_CACHE_VERSION &&
         isLangCompatibleWithCache(cachedLang, currentLang) &&
         !rawCache.includes('\ufffd') &&
-        !rawCache.includes('плщадь')
+        !rawCache.includes('РїР»С‰Р°РґСЊ')
       ) {
         let localCached = JSON.parse(rawCache || '[]');
         const isBaseLang = currentLang === 'ru' || currentLang === 'en';
@@ -598,7 +598,7 @@ async function loginUser(email, password) {
 
   return {
     success: false,
-    error: 'Пользователь не найден. Пожалуйста, войдите через Email или Google.',
+    error: 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРѕР№РґРёС‚Рµ С‡РµСЂРµР· Email РёР»Рё Google.',
   };
 }
 
@@ -678,7 +678,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 
   // Sync to backend asynchronously via atomic commit increment
   const user = getCurrentUser();
-  const userName = user && user.name ? user.name : 'Гость';
+  const userName = user && user.name ? user.name : 'Р“РѕСЃС‚СЊ';
   const avatar = localStorage.getItem(`avatar_${uId}`) || (user && user.avatar) || '';
 
   if (effectiveDelta !== 0) {
@@ -690,7 +690,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: next, delta } }));
 
-    // Trigger celebration when reaching prize podium (top 4: 1st=💎, 2nd=🥇, 3rd=🥈, 4th=🥉)
+    // Trigger celebration when reaching prize podium (top 4: 1st=рџ’Ћ, 2nd=рџҐ‡, 3rd=рџҐ€, 4th=рџҐ‰)
     if (newRank && newRank <= 4 && delta > 0 && typeof sessionStorage !== 'undefined') {
       const bestCelebrated = Number(sessionStorage.getItem(`myduo_celebrated_rank_${wKey}_${uId}`) || 999);
       if (newRank < bestCelebrated || (!oldRank || oldRank > 4)) {
@@ -707,7 +707,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 
 async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
   if (!userId) return;
-  const cleanName = name || 'Гость';
+  const cleanName = name || 'Р“РѕСЃС‚СЊ';
   const cleanAvatar = avatar || '';
   const cleanXp = Math.max(0, Number(xp || 0));
 
@@ -908,7 +908,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   const currentUser = getCurrentUser();
   const currentUserId = getEffectiveUserId();
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
-  const userName = currentUser && currentUser.name ? currentUser.name : 'Вы (Гость)';
+  const userName = currentUser && currentUser.name ? currentUser.name : 'Р’С‹ (Р“РѕСЃС‚СЊ)';
 
   const fbUid = currentUser?.firebaseUid ? String(currentUser.firebaseUid) : null;
   const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
@@ -1058,7 +1058,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
   const currentUserId = getEffectiveUserId();
   const currentUser = getCurrentUser();
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
-  const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
+  const userName = currentUser && currentUser.name ? currentUser.name : 'Р“РѕСЃС‚СЊ';
   const fsUid = getFirestoreUserId(currentUserId);
   const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
 
@@ -1268,7 +1268,7 @@ if (typeof window !== 'undefined') {
     const wKey = getIsoWeekKey();
     const currentXp = getUserWeeklyXP(uId, wKey);
     const user = getCurrentUser();
-    const userName = user && user.name ? user.name : 'Гость';
+    const userName = user && user.name ? user.name : 'Р“РѕСЃС‚СЊ';
     const avatar = (e.detail && typeof e.detail.avatar !== 'undefined')
       ? e.detail.avatar
       : localStorage.getItem(`avatar_${uId}`) || '';
@@ -1887,7 +1887,7 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     const weeklyXp = getUserWeeklyXP(uId, wKey);
     const settings = JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}');
     const avatar = localStorage.getItem(`avatar_${uId}`) || '';
-    const userName = user && user.name ? user.name : (user.email.split('@')[0] || 'Участник');
+    const userName = user && user.name ? user.name : (user.email.split('@')[0] || 'РЈС‡Р°СЃС‚РЅРёРє');
 
     // 100% Cloud Firestore sync using Firebase UID
     hasPendingCloudSync = false;
@@ -2365,7 +2365,7 @@ function syncFavoritesToNativeWidget(wordsList = null) {
       const catWords = (allWords || []).filter(w => {
         const wCat = (w.category || w.level || '').toLowerCase().trim();
         const sCat = selectedCat.toLowerCase().trim();
-        return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
+        return sCat === 'all' || sCat === 'РІСЃРµ РєР°С‚РµРіРѕСЂРёРё' || wCat === sCat;
       });
 
       // Pick a diverse daily sliding window of 100 words to cover the full dictionary without SharedPreferences bloat
@@ -2865,7 +2865,7 @@ async function getUserSettings() {
 
 async function saveUserSettings(settings) {
   const userId = getEffectiveUserId();
-  const cat = (settings.category && settings.category !== 'All' && settings.category !== 'Все категории')
+  const cat = (settings.category && settings.category !== 'All' && settings.category !== 'Р’СЃРµ РєР°С‚РµРіРѕСЂРёРё')
     ? settings.category
     : 'Elementary';
 
@@ -3372,7 +3372,7 @@ async function sendUserAnalytics(isClosing = false, customStatus = null) {
   try {
     const currentUser = getCurrentUser();
     const email = currentUser && currentUser.email ? currentUser.email : 'guest';
-    const name = currentUser && currentUser.name ? currentUser.name : 'Гость';
+    const name = currentUser && currentUser.name ? currentUser.name : 'Р“РѕСЃС‚СЊ';
 
     const env = getClientEnvironmentMetrics();
     const geo = await fetchGeoLocation();
@@ -3503,7 +3503,7 @@ try {
 async function addCustomWord({ word, translation, category, notes }) {
   const cleanW = String(word || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
   let cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
-  const cleanCat = String(category || 'Общие').trim();
+  const cleanCat = String(category || 'РћР±С‰РёРµ').trim();
   const cleanNotes = String(notes || '').trim();
 
   // If translation was left empty or equals the word itself, auto-resolve with suggestTranslations
@@ -3516,10 +3516,16 @@ async function addCustomWord({ word, translation, category, notes }) {
     } catch (e) {}
   }
 
+  let uiLang = 'en';
+  try {
+    uiLang = getInterfaceLanguage() || 'en';
+  } catch (e) {}
+
   const localWord = {
     id: `custom_${Date.now()}`,
     word: cleanW,
     translation: cleanTrans,
+    translations: { [uiLang]: cleanTrans },
     category: cleanCat,
     level: (cleanCat === 'Pattern' || cleanCat === 'Irregular verbs') ? '' : 'A2',
     transcription: '',
@@ -3560,10 +3566,10 @@ async function addCustomWord({ word, translation, category, notes }) {
     if (json && json.success && json.data && json.data.word) {
       savedWord = json.data.word;
     } else if (json && json.success === false) {
-      throw new Error(json.error || 'Слово или фраза отклонена сервером.');
+      throw new Error(json.error || 'РЎР»РѕРІРѕ РёР»Рё С„СЂР°Р·Р° РѕС‚РєР»РѕРЅРµРЅР° СЃРµСЂРІРµСЂРѕРј.');
     }
   } catch (netErr) {
-    if (netErr.message && netErr.message.includes('отклонена')) throw netErr;
+    if (netErr.message && netErr.message.includes('РѕС‚РєР»РѕРЅРµРЅР°')) throw netErr;
     console.warn('Network error during addCustomWord, saving locally:', netErr);
   }
 
@@ -3605,11 +3611,17 @@ async function batchAddCustomWords(words = []) {
     return { addedCount: 0, words: [] };
   }
 
+  let batchLang = 'en';
+  try {
+    batchLang = getInterfaceLanguage() || 'en';
+  } catch (e) {}
+
   const formattedWords = words.map((w, idx) => ({
     id: w.id || `custom_${Date.now()}_${idx}`,
     word: String(w.word || '').trim().toLowerCase(),
     translation: String(w.translation || '').trim().toLowerCase(),
-    category: String(w.category || 'Общие').trim(),
+    translations: { ...(w.translations || {}), [batchLang]: String(w.translation || '').trim().toLowerCase() },
+    category: String(w.category || 'РћР±С‰РёРµ').trim(),
     level: (w.category === 'Pattern' || w.category === 'Irregular verbs') ? '' : String(w.level || 'A2').trim(),
     transcription: w.category === 'Pattern' ? '' : String(w.transcription || '').trim(),
     notes: String(w.notes || '').trim(),
@@ -3684,7 +3696,7 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   let lang = 'en';
   try {
     const stored = getInterfaceLanguage();
-    if (stored && ['ru', 'uk', 'en', 'de', 'es', 'fr'].includes(stored)) {
+    if (stored && /^[a-z]{2,3}$/.test(stored)) {
       lang = stored;
     }
   } catch (e) {}
@@ -3743,12 +3755,12 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
     return resJson.data;
   }
 
-  let errMsg = resJson?.error || 'Не удалось распознать слова с фото или текста';
+  let errMsg = resJson?.error || 'РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ СЃР»РѕРІР° СЃ С„РѕС‚Рѕ РёР»Рё С‚РµРєСЃС‚Р°';
   throw new Error(errMsg);
 }
 
 async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
-  const lines = rawText.split(/[\r\n]+|[;•·\t]+/);
+  const lines = rawText.split(/[\r\n]+|[;вЂўВ·\t]+/);
   const items = [];
   const seen = new Set();
 
@@ -3804,7 +3816,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
     }
   }
 
-  const targetLang = lang === 'uk' ? 'uk' : (lang === 'en' ? 'en' : 'ru');
+  const targetLang = lang || 'en';
   const lemmas = await Promise.all(
     items.map(async (item) => {
       const tokens = item.word.split(/\s+/).filter(Boolean);
@@ -3854,7 +3866,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
 
 async function suggestTranslations(word) {
   if (!word || String(word).trim().length < 2) {
-    return { suggestions: [], category: 'Общие', transcription: '' };
+    return { suggestions: [], category: 'РћР±С‰РёРµ', transcription: '' };
   }
   const clean = String(word).trim().toLowerCase();
 
@@ -3877,7 +3889,7 @@ async function suggestTranslations(word) {
           const unique = Array.from(new Set([tVal.toLowerCase(), ...parts]));
           return {
             suggestions: unique.slice(0, 4),
-            category: match.category || 'Общие',
+            category: match.category || 'РћР±С‰РёРµ',
             transcription: match.transcription || '',
           };
         }
@@ -3931,7 +3943,7 @@ async function suggestTranslations(word) {
     if (suggestions.length > 0) {
       return {
         suggestions: suggestions.slice(0, 4),
-        category: 'Общие',
+        category: 'РћР±С‰РёРµ',
         transcription: '',
       };
     }
@@ -3966,7 +3978,7 @@ async function suggestTranslations(word) {
       if (suggestions.length > 0) {
         return {
           suggestions: suggestions.slice(0, 4),
-          category: 'Общие',
+          category: 'РћР±С‰РёРµ',
           transcription: '',
         };
       }
@@ -3975,7 +3987,7 @@ async function suggestTranslations(word) {
     console.warn('MyMemory fallback error:', err);
   }
 
-  return { suggestions: [], category: 'Общие', transcription: '' };
+  return { suggestions: [], category: 'РћР±С‰РёРµ', transcription: '' };
 }
 
 const ApiService = {
