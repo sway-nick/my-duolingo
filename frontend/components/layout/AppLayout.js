@@ -5,6 +5,7 @@ import { openShareDialog } from '../modals/ShareModal.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { isEmailVerified } from '../../services/firebase.js?v=386.0';
 import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=386.0';
+import { triggerHaptic } from '../../services/audioService.js?v=386.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -476,6 +477,208 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   bindHeaderActionButtons(app);
   initMondayWinnersTickerListener();
   renderMondayWinnersTicker();
+  initSwipeNavigation(app);
+}
+
+/**
+ * Initializes gesture navigation: swipe left / right to navigate across main tabs.
+ * Safe against gesture conflicts with active learning cards, forms, and modals.
+ */
+function initSwipeNavigation(app) {
+  if (!app) return;
+  const MAIN_TABS = ['training', 'leaderboard', 'dictionary', 'favorites', 'stats', 'settings'];
+
+  let startX = 0;
+  let startY = 0;
+  let startTime = 0;
+  let isTracking = false;
+  let isHorizontalGesture = false;
+
+  function isModalOrDrawerOpen() {
+    const drawer = document.querySelector('#burger-drawer');
+    if (drawer && drawer.classList.contains('open')) return true;
+    const overlay = document.querySelector('#drawer-overlay');
+    if (overlay && overlay.classList.contains('open')) return true;
+    const modal = document.querySelector(
+      '.modal-overlay.open, .auth-modal-overlay.open, .voice-modal-overlay.open, .collection-list-sheet.open, .collection-list-sheet.is-open, .accent-download-modal.open, .bottom-sheet.open'
+    );
+    if (modal) return true;
+    const podiumModal = document.querySelector('#prize-podium-modal');
+    if (podiumModal && podiumModal.style.display !== 'none' && podiumModal.classList.contains('open')) return true;
+    return false;
+  }
+
+  function isSwipeAllowedOnCurrentScreen(target) {
+    if (isModalOrDrawerOpen()) return false;
+
+    // Do not initiate swipe if touch started on interactive controls or interactive card elements
+    if (target) {
+      if (
+        target.closest(
+          'input, textarea, select, button, .wotd-card, #wotd-flashcard-3d, .consonant-slot, .letter-tile, .pairs-card, .quiz-option, .answer-input, [contenteditable="true"]'
+        )
+      ) {
+        return false;
+      }
+    }
+
+    const currentTab = window._activeTab || 'training';
+
+    // On Training tab: allow swipe ONLY when on the Hub (before Start / after round / idle)
+    // NEVER when inside active word training cards, quiz, pairs, or test conveyor!
+    if (currentTab === 'training') {
+      const isHubScreen = window._showHubScreen !== false;
+      const hasActiveCards = Boolean(
+        document.querySelector(
+          '.flashcard-container, .flashcard-wrapper, .conveyor-container, .pairs-grid, .quiz-grid'
+        )
+      );
+      const isFavPracticeActive = Boolean(
+        window._favPracticeActive ||
+          (window.favoritePracticeWords && window.favoritePracticeWords.length > 0)
+      );
+      const isCollectionActive = Boolean(window._activePracticeCollectionId);
+      if (!isHubScreen || hasActiveCards || isFavPracticeActive || isCollectionActive) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  app.addEventListener(
+    'touchstart',
+    (e) => {
+      if (e.touches.length !== 1) {
+        isTracking = false;
+        return;
+      }
+      const touch = e.touches[0];
+      if (!isSwipeAllowedOnCurrentScreen(touch.target)) {
+        isTracking = false;
+        return;
+      }
+
+      startX = touch.clientX;
+      startY = touch.clientY;
+      startTime = Date.now();
+      isTracking = true;
+      isHorizontalGesture = false;
+    },
+    { passive: true }
+  );
+
+  app.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!isTracking || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+
+      // If movement is predominantly vertical, cancel swipe so native vertical scrolling stays buttery smooth
+      if (absY > 12 && absY > absX) {
+        isTracking = false;
+        return;
+      }
+
+      // If movement is predominantly horizontal
+      if (absX > 15 && absX > absY * 1.3) {
+        isHorizontalGesture = true;
+      }
+    },
+    { passive: true }
+  );
+
+  app.addEventListener(
+    'touchend',
+    (e) => {
+      if (!isTracking || !isHorizontalGesture) {
+        isTracking = false;
+        return;
+      }
+      isTracking = false;
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (!touch) return;
+
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+      const dt = Date.now() - startTime;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+
+      // Threshold: at least 45px horizontal travel, horizontally dominant, and completed within 650ms
+      if (absX >= 45 && absX > absY * 1.3 && dt <= 650) {
+        const currentTab = window._activeTab || 'training';
+
+        // Special case in Favorites: if inside a collection word list, swipe right returns to Collections Hub
+        if (currentTab === 'favorites' && dx > 0) {
+          const favBackBtn = document.querySelector('#fav-view-back-btn');
+          if (favBackBtn && typeof favBackBtn.click === 'function') {
+            try { triggerHaptic('light'); } catch (err) {}
+            favBackBtn.click();
+            return;
+          }
+        }
+
+        const curIdx = MAIN_TABS.indexOf(currentTab);
+        if (curIdx === -1) return;
+
+        if (dx < 0) {
+          // SWIPE LEFT -> Next Tab to the right
+          const nextIdx = curIdx + 1;
+          if (nextIdx < MAIN_TABS.length) {
+            try { triggerHaptic('light'); } catch (err) {}
+            if (typeof window.setActiveTab === 'function') {
+              window.setActiveTab(MAIN_TABS[nextIdx]);
+            }
+          }
+        } else if (dx > 0) {
+          // SWIPE RIGHT -> Previous Tab to the left
+          const prevIdx = curIdx - 1;
+          if (prevIdx >= 0) {
+            try { triggerHaptic('light'); } catch (err) {}
+            if (typeof window.setActiveTab === 'function') {
+              window.setActiveTab(MAIN_TABS[prevIdx]);
+            }
+          } else if (prevIdx < 0 && currentTab === 'training') {
+            // On first tab (Training Hub) -> swiping right opens Hamburger Drawer!
+            try { triggerHaptic('light'); } catch (err) {}
+            openDrawer();
+          }
+        }
+      }
+    },
+    { passive: true }
+  );
+
+  // Swipe left inside open Hamburger Drawer to close it
+  const drawerEl = app.querySelector('#burger-drawer');
+  if (drawerEl) {
+    let drawerStartX = 0;
+    drawerEl.addEventListener(
+      'touchstart',
+      (e) => {
+        if (e.touches.length === 1) drawerStartX = e.touches[0].clientX;
+      },
+      { passive: true }
+    );
+    drawerEl.addEventListener(
+      'touchend',
+      (e) => {
+        if (e.changedTouches && e.changedTouches[0]) {
+          const dx = e.changedTouches[0].clientX - drawerStartX;
+          if (dx < -40) {
+            try { triggerHaptic('light'); } catch (err) {}
+            closeDrawer();
+          }
+        }
+      },
+      { passive: true }
+    );
+  }
 }
 
 function showFeedbackToast(msg) {
