@@ -885,12 +885,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
       const choices = shuffleArray([currentTrans, ...uniqueDistractors]);
 
-      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice, idx) => `<button type="button" class="quiz-option" data-choice-index="${idx}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${escapeHtml(choice)}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
+          const choiceIdx = parseInt(optionBtn.getAttribute('data-choice-index'), 10);
+          const chosenText = choices[choiceIdx];
           const isCorrect =
-            String(optionBtn.getAttribute('data-choice')).trim() ===
+            String(chosenText).trim() ===
             String(currentTrans).trim();
 
           const listenText = container.querySelector('#listening-word-text');
@@ -902,7 +904,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
           practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
             b.disabled = true;
-            if (b.getAttribute('data-choice') === currentTrans)
+            const bIdx = parseInt(b.getAttribute('data-choice-index'), 10);
+            if (String(choices[bIdx]).trim() === String(currentTrans).trim())
               b.classList.add('correct');
             else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
           });
@@ -939,16 +942,19 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       }
       const choices = shuffleArray([currentWord.word, ...uniqueDistractors]);
 
-      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice) => `<button type="button" class="quiz-option" data-choice="${choice}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${choice}</span></button>`).join('')}</div>`;
+      practiceArea.innerHTML = `<div class="quiz-grid">${choices.map((choice, idx) => `<button type="button" class="quiz-option" data-choice-index="${idx}"><span class="quiz-option-inner" style="${getQuizOptionStyle(choice)}">${escapeHtml(choice)}</span></button>`).join('')}</div>`;
       practiceArea.querySelectorAll('.quiz-option').forEach((btn) => {
         btn.addEventListener('click', async (e) => {
           const optionBtn = e.currentTarget;
+          const choiceIdx = parseInt(optionBtn.getAttribute('data-choice-index'), 10);
+          const chosenText = choices[choiceIdx];
           const isCorrect =
-            String(optionBtn.getAttribute('data-choice')).trim() ===
+            String(chosenText).trim() ===
             String(currentWord.word).trim();
           practiceArea.querySelectorAll('.quiz-option').forEach((b) => {
             b.disabled = true;
-            if (b.getAttribute('data-choice') === currentWord.word) b.classList.add('correct');
+            const bIdx = parseInt(b.getAttribute('data-choice-index'), 10);
+            if (String(choices[bIdx]).trim() === String(currentWord.word).trim()) b.classList.add('correct');
             else if (b === optionBtn && !isCorrect) b.classList.add('wrong');
           });
           speakWord(currentWord.word, currentWord.id);
