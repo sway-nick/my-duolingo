@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Altın Kart</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">Favorilerdeki kelimeleri ses ve oklarla öğrenmek için etkileşimli altın kart</string>
     <string name="widget_reminder_default_alert">⚡ Geride kalma!</string>
     <string name="shortcut_widget_title">Widget ekle</string>

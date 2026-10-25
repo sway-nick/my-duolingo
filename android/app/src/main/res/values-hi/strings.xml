@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">गोल्ड कार्ड</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">पसंदीदा शब्दों के अभ्यास के लिए इंटरएक्टिव गोल्ड कार्ड (उच्चारण और तीरों के साथ)</string>
     <string name="widget_reminder_default_alert">⚡ दूसरों से पीछे न रहें!</string>
     <string name="shortcut_widget_title">विजेट जोड़ें</string>

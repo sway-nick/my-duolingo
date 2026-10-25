@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Carta Dorata</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">Carta dorata interattiva per imparare le parole dai Preferiti con pronuncia e frecce</string>
     <string name="widget_reminder_default_alert">⚡ Mantieni il ritmo!</string>
     <string name="shortcut_widget_title">Aggiungi widget</string>

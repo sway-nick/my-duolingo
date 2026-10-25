@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Arany Kártya</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">Interaktív arany kártya a Kedvencek szavainak tanulásához kiejtéssel és nyilakkal</string>
     <string name="widget_reminder_default_alert">⚡ Tartsd a lépést!</string>
     <string name="shortcut_widget_title">Widget hozzáadása</string>

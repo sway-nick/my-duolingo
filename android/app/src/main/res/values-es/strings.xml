@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Tarjeta Dorada</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">Tarjeta dorada interactiva para practicar palabras de Favoritos con pronunciación y flechas</string>
     <string name="widget_reminder_default_alert">⚡ ¡No te quedes atrás!</string>
     <string name="shortcut_widget_title">Añadir widget</string>

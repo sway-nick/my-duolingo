@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Card de Aur</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">Card auriu interactiv pentru învățarea cuvintelor din Favorite cu pronunție și săgeți</string>
     <string name="widget_reminder_default_alert">⚡ Ține pasul!</string>
     <string name="shortcut_widget_title">Adaugă widget</string>

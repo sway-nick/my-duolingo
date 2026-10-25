@@ -4,7 +4,7 @@
     <string name="title_activity_main">English Breakfast</string>
     <string name="package_name">com.englishbreakfast.app</string>
     <string name="custom_url_scheme">com.englishbreakfast.app</string>
-    <string name="widget_gold_card_name">Thẻ Vàng</string>
+    <string name="widget_gold_card_name">Gold Card</string>
     <string name="widget_gold_card_description">Thẻ vàng tương tác để học từ vựng trong mục Yêu thích với phát âm và mũi tên</string>
     <string name="widget_reminder_default_alert">⚡ Đừng để tụt lại phía sau!</string>
     <string name="shortcut_widget_title">Thêm tiện ích</string>
