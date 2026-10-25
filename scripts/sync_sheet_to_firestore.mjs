@@ -154,11 +154,19 @@ async function run() {
         if (sheetUk) fsWord.translations.uk = sheetUk;
         if (sheetPt) fsWord.translations.pt = sheetPt;
         if (sheetHi) fsWord.translations.hi = sheetHi;
+        if (!fsWord.translation && localWord?.translation) fsWord.translation = localWord.translation;
+        if (!fsWord.transcription && localWord?.transcription) fsWord.transcription = localWord.transcription;
+        if (!fsWord.category && localWord?.category) fsWord.category = localWord.category;
+        if (!fsWord.level && localWord?.level) fsWord.level = localWord.level;
         cleanEmptyKeys(fsWord);
       } else {
         const delta = {
           id: localWord ? localWord.id : (id || word),
           word: localWord ? localWord.word : word,
+          translation: localWord?.translation || '',
+          transcription: localWord?.transcription || '',
+          category: localWord?.category || 'Elementary',
+          level: localWord?.level || 'A2',
           translations: {}
         };
         if (sheetUk) delta.translations.uk = sheetUk;

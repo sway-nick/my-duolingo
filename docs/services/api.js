@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v389_brazil_100pct';
+const WORDS_CACHE_VERSION = 'v390_thermos_fix';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
 
@@ -362,7 +362,7 @@ async function syncRemoteVocabularyUpdates(force = false) {
         if (targetIdx !== undefined) {
           const existing = cachedWordsList[targetIdx];
           let rowChanged = false;
-          if (u.translation && (existing.translation !== u.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
+          if (u.translation && (existing.translation !== u.translation || !existing.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
             existing.translation = u.translation;
             rowChanged = true;
           }
@@ -396,10 +396,15 @@ async function syncRemoteVocabularyUpdates(force = false) {
           }
           if (rowChanged) hasChanges = true;
         } else {
+          const wordTranslation = u.translation || '';
+          if (!wordTranslation || wordTranslation.toLowerCase().trim() === cleanWord) {
+            // Never insert incomplete words without a valid translation into conveyor
+            return;
+          }
           const newEntry = {
             id: u.id || `w_${cleanWord}`,
             word: cleanWord,
-            translation: u.translation || '',
+            translation: wordTranslation,
             transcription: u.transcription || '',
             category: u.category || 'Elementary',
             level: u.level || 'A2',
@@ -478,7 +483,11 @@ async function getWords(forceRefresh = false) {
       ) {
         let localCached = JSON.parse(rawCache || '[]');
         const isBaseLang = currentLang === 'ru' || currentLang === 'en';
+        const hasCorruptedTranslation = localCached.some(
+          (w) => w && w.word && (!w.translation || String(w.translation).toLowerCase().trim() === String(w.word).toLowerCase().trim())
+        );
         const hasValidLangData =
+          !hasCorruptedTranslation &&
           Array.isArray(localCached) &&
           localCached.length >= 6886 &&
           (isBaseLang || localCached.some((w) => w && w.translations && w.translations[currentLang]));
