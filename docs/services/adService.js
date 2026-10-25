@@ -13,6 +13,18 @@ const MOCK_AD_I18N = {
   en: { shield: '20 XP Shield', pack: 'Language pack', download: 'Download', watch: 'Watch ad', wait: 'Your reward will be granted when the timer ends:', sec: 's', skip: 'Skip (no reward)', done: 'Reward earned!' },
   pt: { shield: 'Proteção de 20 XP', pack: 'Pacote de idioma', download: 'Download', watch: 'Assistir ao anúncio', wait: 'A recompensa será concedida quando o cronômetro terminar:', sec: 's', skip: 'Pular (sem recompensa)', done: 'Recompensa recebida!' },
   hi: { shield: '20 XP शील्ड', pack: 'भाषा पैक', download: 'डाउनलोड', watch: 'विज्ञापन देखें', wait: 'टाइमर समाप्त होने पर आपका पुरस्कार दिया जाएगा:', sec: 'सेकंड', skip: 'छोड़ें (बिना इनाम)', done: 'इनाम प्राप्त हुआ!' },
+  es: { shield: 'Protección 20 XP', pack: 'Paquete de idioma', download: 'Descarga', watch: 'Ver anuncio', wait: 'Tu recompensa se otorgará al finalizar el temporizador:', sec: 's', skip: 'Omitir (sin recompensa)', done: '¡Recompensa obtenida!' },
+  de: { shield: '20 XP Schutz', pack: 'Sprachpaket', download: 'Download', watch: 'Werbung ansehen', wait: 'Deine Belohnung wird nach Ablauf des Timers vergeben:', sec: 's', skip: 'Überspringen (keine Belohnung)', done: 'Belohnung erhalten!' },
+  fr: { shield: 'Bouclier 20 XP', pack: 'Pack de langue', download: 'Téléchargement', watch: 'Regarder la pub', wait: 'Votre récompense sera accordée à la fin du compte à rebours :', sec: 's', skip: 'Passer (sans récompense)', done: 'Récompense obtenue !' },
+  it: { shield: 'Scudo 20 XP', pack: 'Pacchetto lingua', download: 'Download', watch: 'Guarda annuncio', wait: 'La ricompensa verrà assegnata al termine del timer:', sec: 's', skip: 'Salta (senza ricompensa)', done: 'Ricompensa ottenuta!' },
+  pl: { shield: 'Tarcza 20 XP', pack: 'Pakiet językowy', download: 'Pobieranie', watch: 'Obejrzyj reklamę', wait: 'Nagroda zostanie przyznana po zakończeniu odliczania:', sec: 's', skip: 'Pomiń (bez nagrody)', done: 'Nagroda zdobyta!' },
+  tr: { shield: '20 XP Kalkanı', pack: 'Dil paketi', download: 'İndirme', watch: 'Reklamı izle', wait: 'Ödülünüz zamanlayıcı sona erdiğinde verilecektir:', sec: 'sn', skip: 'Atla (ödülsüz)', done: 'Ödül kazanıldı!' },
+  ja: { shield: '20 XP シールド', pack: '言語パック', download: 'ダウンロード', watch: '広告を見る', wait: 'タイマー終了後にリワードが付与されます:', sec: '秒', skip: 'スキップ（報酬なし）', done: '報酬を獲得しました！' },
+  ko: { shield: '20 XP 방패', pack: '언어 팩', download: '다운로드', watch: '광고 시청', wait: '타이머가 끝나면 보상이 지급됩니다:', sec: '초', skip: '건너뛰기 (보상 없음)', done: '보상 획득!' },
+  ar: { shield: 'درع 20 XP', pack: 'حزمة اللغة', download: 'تنزيل', watch: 'مشاهدة الإعلان', wait: 'ستحصل على المكافأة بعد انتهاء المؤقت:', sec: 'ث', skip: 'تخطي (بدون مكافأة)', done: 'تم الحصول على المكافأة!' },
+  id: { shield: 'Perisai 20 XP', pack: 'Paket bahasa', download: 'Unduh', watch: 'Tonton iklan', wait: 'Hadiah Anda akan diberikan setelah penghitung waktu selesai:', sec: 'dtk', skip: 'Lewati (tanpa hadiah)', done: 'Hadiah didapatkan!' },
+  vi: { shield: 'Khiên 20 XP', pack: 'Gói ngôn ngữ', download: 'Tải xuống', watch: 'Xem quảng cáo', wait: 'Phần thưởng sẽ được trao sau khi hết giờ:', sec: 'giây', skip: 'Bỏ qua (không có thưởng)', done: 'Đã nhận thưởng!' },
+  th: { shield: 'โล่ 20 XP', pack: 'แพ็กเกจภาษา', download: 'ดาวน์โหลด', watch: 'ดูโฆษณา', wait: 'คุณจะได้รับรางวัลเมื่อตัวจับเวลาสิ้นสุดลง:', sec: 'วินาที', skip: 'ข้าม (ไม่รับรางวัล)', done: 'ได้รับรางวัลแล้ว!' },
 };
 
 function mockAdText(key) {

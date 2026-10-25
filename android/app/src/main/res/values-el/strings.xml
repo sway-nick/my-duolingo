@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Χρυσή Κάρτα</string>
+    <string name="widget_gold_card_description">Διαδραστική χρυσή κάρτα για εκμάθηση λέξεων από τα Αγαπημένα με προφορά και βέλη</string>
+    <string name="widget_reminder_default_alert">⚡ Μείνε σε ρυθμό!</string>
+    <string name="shortcut_widget_title">Προσθήκη widget</string>
+    <string name="shortcut_widget_short">Προσθήκη widget</string>
+</resources>

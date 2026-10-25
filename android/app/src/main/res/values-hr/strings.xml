@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Zlatna kartica</string>
+    <string name="widget_gold_card_description">Interaktivna zlatna kartica za učenje riječi iz Favorita s izgovorom i strelicama</string>
+    <string name="widget_reminder_default_alert">⚡ Drži korak!</string>
+    <string name="shortcut_widget_title">Dodaj widget</string>
+    <string name="shortcut_widget_short">Dodaj widget</string>
+</resources>

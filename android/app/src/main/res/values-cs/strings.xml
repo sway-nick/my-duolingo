@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Zlatá karta</string>
+    <string name="widget_gold_card_description">Interaktivní zlatá karta pro procvičování slov z Oblíbených s výslovností a šipkami</string>
+    <string name="widget_reminder_default_alert">⚡ Drž krok s ostatními!</string>
+    <string name="shortcut_widget_title">Přidat widget</string>
+    <string name="shortcut_widget_short">Přidat widget</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Zelta karte</string>
+    <string name="widget_gold_card_description">Interaktīva zelta karte vārdu apguvei no Izlases ar izrunu un bultiņām</string>
+    <string name="widget_reminder_default_alert">⚡ Neatpaliec!</string>
+    <string name="shortcut_widget_title">Pievienot logrīku</string>
+    <string name="shortcut_widget_short">Pievienot logrīku</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Cárta Órga</string>
+    <string name="widget_gold_card_description">Cárta órga idirghníomhach chun focail ó Cheanáin a fhoghlaim le fuaimniú agus saigheada</string>
+    <string name="widget_reminder_default_alert">⚡ Coinnigh an luas!</string>
+    <string name="shortcut_widget_title">Cuir giuirléid leis</string>
+    <string name="shortcut_widget_short">Cuir giuirléid leis</string>
+</resources>

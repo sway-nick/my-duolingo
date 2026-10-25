@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">การ์ดทองคำ</string>
+    <string name="widget_gold_card_description">การ์ดทองคำแบบอินเทอร์แอคทีฟสำหรับเรียนรู้คำศัพท์จากรายการโปรดพร้อมเสียงและลูกศร</string>
+    <string name="widget_reminder_default_alert">⚡ อย่าหยุดพัฒนา!</string>
+    <string name="shortcut_widget_title">เพิ่มวิดเจ็ต</string>
+    <string name="shortcut_widget_short">เพิ่มวิดเจ็ต</string>
+</resources>

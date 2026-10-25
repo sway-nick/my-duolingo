@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">ゴールドカード</string>
+    <string name="widget_gold_card_description">お気に入りの単語を音声と矢印で学習できるインタラクティブなゴールドカード</string>
+    <string name="widget_reminder_default_alert">⚡ ペースを維持しよう！</string>
+    <string name="shortcut_widget_title">ウィジェットを追加</string>
+    <string name="shortcut_widget_short">ウィジェットを追加</string>
+</resources>

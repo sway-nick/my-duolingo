@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Kultainen kortti</string>
+    <string name="widget_gold_card_description">Interaktiivinen kultakortti Suosikit-sanojen opetteluun ääntämisen ja nuolten avulla</string>
+    <string name="widget_reminder_default_alert">⚡ Pysy vauhdissa mukana!</string>
+    <string name="shortcut_widget_title">Lisää widget</string>
+    <string name="shortcut_widget_short">Lisää widget</string>
+</resources>
