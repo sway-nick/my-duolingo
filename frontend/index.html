@@ -220,7 +220,6 @@
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=386.0';
       import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
-      import { attachHeartLongPress } from './components/modals/CollectionListsBottomSheet.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
       import { renderLeaderboardView, renderMondayMemeTop4Cut } from './components/leaderboard/LeaderboardView.js?v=386.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
@@ -1703,7 +1702,7 @@
                   await toggleFavoriteApi(wotd.id, isWotdFav);
                   handleFavoriteToggle(wotd.id, isWotdFav);
                 };
-                attachHeartLongPress(btn, wotd, allWords, handleQuickToggle);
+                btn.addEventListener('click', handleQuickToggle);
               });
             }
           }

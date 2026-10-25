@@ -36,7 +36,6 @@ import {
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
 import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=386.0';
-import { attachHeartLongPress } from '../modals/CollectionListsBottomSheet.js?v=386.0';
 
 const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
@@ -2518,8 +2517,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     const favFrontBtn = practiceArea.querySelector('#fc-fav-front');
     const favBackBtn = practiceArea.querySelector('#fc-fav-back');
-    if (favFrontBtn) attachHeartLongPress(favFrontBtn, currentWord, allWords, handleCardFav);
-    if (favBackBtn) attachHeartLongPress(favBackBtn, currentWord, allWords, handleCardFav);
+    if (favFrontBtn) favFrontBtn.addEventListener('click', handleCardFav);
+    if (favBackBtn) favBackBtn.addEventListener('click', handleCardFav);
 
     practiceArea.querySelector('#btn-learn')?.addEventListener('click', handleLearnCard);
     practiceArea.querySelector('#btn-know')?.addEventListener('click', handleKnowCard);
