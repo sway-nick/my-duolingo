@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -675,10 +675,15 @@
         }
 
         function sanitizeCategory(cat) {
-          if (!cat) return 'Общие';
-          return String(cat)
-            .replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '')
-            .trim() || String(cat).trim();
+          if (!cat) return 'Elementary';
+          const s = String(cat).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim();
+          const clean = s.toLowerCase();
+          if (clean.includes('elementary')) return 'Elementary';
+          if (clean.includes('irregular')) return 'Irregular verbs';
+          if (clean.includes('pattern')) return 'Pattern';
+          if (clean.includes('intermediate')) return 'Intermediate';
+          if (clean.includes('advanced')) return 'Advanced';
+          return 'Elementary';
         }
 
         const CANONICAL_CATEGORY_ORDER = ['Elementary', 'Irregular verb', 'Pattern', 'Intermediate', 'Advanced'];

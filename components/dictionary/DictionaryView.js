@@ -842,11 +842,14 @@ function sanitizeCategory(cat) {
   const raw = String(cat);
   const cached = _dictCategoryCache.get(raw);
   if (cached !== undefined) return cached;
-  const s = raw.trim();
-  let cleaned = s;
-  if (!['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'].includes(s)) {
-    cleaned = s.replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim() || 'Elementary';
-  }
+  const s = raw.replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim();
+  const clean = s.toLowerCase();
+  let cleaned = 'Elementary';
+  if (clean.includes('elementary')) cleaned = 'Elementary';
+  else if (clean.includes('irregular')) cleaned = 'Irregular verbs';
+  else if (clean.includes('pattern')) cleaned = 'Pattern';
+  else if (clean.includes('intermediate')) cleaned = 'Intermediate';
+  else if (clean.includes('advanced')) cleaned = 'Advanced';
   _dictCategoryCache.set(raw, cleaned);
   return cleaned;
 }

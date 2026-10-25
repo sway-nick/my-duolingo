@@ -119,7 +119,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v390_thermos_fix';
+const WORDS_CACHE_VERSION = 'v391_cat1_fix';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
 
@@ -387,8 +387,11 @@ async function syncRemoteVocabularyUpdates(force = false) {
             rowChanged = true;
           }
           if (u.category && existing.category !== u.category) {
-            existing.category = u.category;
-            rowChanged = true;
+            const cleanCat = String(u.category).trim();
+            if (['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'].some(c => c.toLowerCase() === cleanCat.toLowerCase())) {
+              existing.category = u.category;
+              rowChanged = true;
+            }
           }
           if (u.level && existing.level !== u.level) {
             existing.level = u.level;
