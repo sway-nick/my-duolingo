@@ -40,7 +40,7 @@ import { attachHeartLongPress } from '../modals/CollectionListsBottomSheet.js?v=
 
 const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
-  if (!cat) return 'Общие';
+  if (!cat) return t('cat_general') || 'Общие';
   const raw = String(cat);
   const cached = _sanitizedCategoryCache.get(raw);
   if (cached !== undefined) return cached;

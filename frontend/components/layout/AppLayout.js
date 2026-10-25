@@ -73,13 +73,14 @@ function toggleTheme() {
 function getHeaderRankBadge(rank, xp) {
   const numXp = Number(xp) || 0;
   if (numXp <= 0 || !rank) {
-    return { isIcon: false, content: 'Lv -', title: 'Лига недели (0 XP)' };
+    return { isIcon: false, content: 'Lv -', title: t('header_rank_guest') || 'Лига недели (0 XP)' };
   }
-  if (rank === 1) return { isIcon: true, content: '💎', title: '1 место в Лиге недели (Алмаз)' };
-  if (rank === 2) return { isIcon: true, content: '🥇', title: '2 место в Лиге недели (Золото)' };
-  if (rank === 3) return { isIcon: true, content: '🥈', title: '3 место в Лиге недели (Серебро)' };
-  if (rank === 4) return { isIcon: true, content: '🥉', title: '4 место в Лиге недели (Бронза)' };
-  return { isIcon: false, content: `Lv ${rank}`, title: `${rank} место в Лиге недели` };
+  if (rank === 1) return { isIcon: true, content: '💎', title: t('header_rank_diamond') || '1 место в Лиге недели (Алмаз)' };
+  if (rank === 2) return { isIcon: true, content: '🥇', title: t('header_rank_gold') || '2 место в Лиге недели (Золото)' };
+  if (rank === 3) return { isIcon: true, content: '🥈', title: t('header_rank_silver') || '3 место в Лиге недели (Серебро)' };
+  if (rank === 4) return { isIcon: true, content: '🥉', title: t('header_rank_bronze') || '4 место в Лиге недели (Бронза)' };
+  const nTitle = (t('header_rank_n') || '{n} место в Лиге недели').replace('{n}', rank);
+  return { isIcon: false, content: `Lv ${rank}`, title: nTitle };
 }
 
 function shouldShowSyncBadge(user = null) {
@@ -139,7 +140,7 @@ function renderHeaderRightActions(user) {
     : `<span class="xp-badge-level" id="header-xp-icon">${rankBadge.content}</span>`;
 
   const xpBadgeHtml = `
-    <button class="header-xp-badge" id="header-xp-btn" title="${rankBadge.title}. Нажмите, чтобы открыть рейтинг">
+    <button class="header-xp-badge" id="header-xp-btn" title="${rankBadge.title}. ${t('header_rank_click_hint') || 'Нажмите, чтобы открыть рейтинг'}">
       ${iconHtml}
       <span class="xp-badge-text"><span id="header-xp-val">${formattedXp}</span>&nbsp;XP</span>
     </button>
@@ -150,7 +151,7 @@ function renderHeaderRightActions(user) {
   return `
     <div style="display:flex; align-items:center; gap:10px;">
       ${xpBadgeHtml}
-      <button class="header-burger-btn" id="header-burger-btn" title="Меню" aria-label="Открыть меню" style="position: relative;">
+      <button class="header-burger-btn" id="header-burger-btn" title="${t('header_menu_title') || 'Меню'}" aria-label="${t('header_menu_aria') || 'Открыть меню'}" style="position: relative;">
         <svg class="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: var(--text-main);">
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -179,15 +180,17 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
     avatarHtml = `<div class="drawer-avatar-placeholder">${initial}</div>`;
   }
-  const username = user ? user.name : 'Гость (Демо)';
-  const email = user ? '' : `Прогресс: ${guestCount}/${GUEST_WORD_LIMIT} слов`;
+  const username = user ? user.name : (t('drawer_guest_user') || 'Гость (Демо)');
+  const email = user ? '' : (t('drawer_guest_progress') || 'Прогресс: {current}/{limit} слов')
+    .replace('{current}', guestCount)
+    .replace('{limit}', GUEST_WORD_LIMIT);
 
   app.innerHTML = `
     <div class="mobile-app ${currentTheme === 'dark' ? 'dark-theme' : ''}">
 
       <div class="safe-area-top-fill" aria-hidden="true"></div>
       <header class="mobile-header">
-        <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="Перейти на главную (режим Тест)">
+        <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="${t('header_brand_title') || 'Перейти на главную (режим Тест)'}">
           <!-- SVG Cup-with-Book Logo -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" style="display: block; width: 100%; max-width: 180px; height: 38px; min-width: 130px;">
             <!-- Steam lines (More wavy) -->

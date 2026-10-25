@@ -125,9 +125,9 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
         <div class="empty-favorites-box">
           <span class="empty-icon" style="font-size: 40px; display: block; margin-bottom: 8px;">🤍</span>
-          <h3 style="margin: 4px 0 8px;">${isMyFavorites ? t('fav_empty') : 'В этом списке пока нет слов'}</h3>
+          <h3 style="margin: 4px 0 8px;">${isMyFavorites ? t('fav_empty') : (t('fav_empty_custom') || 'В этом списке пока нет слов')}</h3>
           <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 16px;">
-            ${isMyFavorites ? t('fav_empty_sub') : 'Добавьте слова из словаря или во время тренировок.'}
+            ${isMyFavorites ? t('fav_empty_sub') : (t('fav_empty_custom_sub') || 'Добавьте слова из словаря или во время тренировок.')}
           </p>
           ${
             !isMyFavorites
@@ -208,10 +208,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
             (word) => `
           <div class="fav-card" data-id="${word.id}">
             <div class="fav-card-top">
-              <span class="category-badge">${word.category || 'Общие'}</span>
+              <span class="category-badge">${word.category || t('cat_general') || 'Общие'}</span>
               <div class="fav-card-actions">
-                <button class="fav-audio-btn" data-word="${word.word}" data-id="${word.id}" title="Слушать произношение">🔊</button>
-                <button class="remove-fav-btn" data-id="${word.id}" title="Удалить из списка">❤️</button>
+                <button class="fav-audio-btn" data-word="${word.word}" data-id="${word.id}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">🔊</button>
+                <button class="remove-fav-btn" data-id="${word.id}" title="${t('fav_remove_tooltip') || 'Удалить из списка'}">❤️</button>
               </div>
             </div>
             

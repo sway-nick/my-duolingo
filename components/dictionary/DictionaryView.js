@@ -104,7 +104,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
           <div class="scanner-spinner" id="scanner-header-spinner" style="visibility: hidden;"></div>
         </div>
         <h3 class="scanner-modal-title" id="scanner-modal-title">${t('scan_modal_title')}</h3>
-        <button type="button" id="scanner-close-btn" class="scanner-close-btn" title="Закрыть">✕</button>
+        <button type="button" id="scanner-close-btn" class="scanner-close-btn" title="${t('modal_close') || 'Закрыть'}" aria-label="${t('modal_close') || 'Закрыть'}">✕</button>
       </div>
 
       <div class="scanner-modal-body" id="scanner-modal-body">
@@ -887,11 +887,11 @@ function renderWordCardHtml(w, isFav, prog, activeLang) {
   if (isMastered) {
     stageBadge = `<span class="mastered-badge">🏆 ${t('dict_filter_mastered')}</span>`;
   } else if (pairsCount >= 2) {
-    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ Тест: ${testCount}/2</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#e0e7ff; color:#3730a3; border: 1px solid #818cf8;">✍️ ${t('dict_stage_test') || 'Тест'}: ${testCount}/2</span>`;
   } else if (quizCount >= 5) {
-    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 Пары: ${pairsCount}/2</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#f3e8ff; color:#6b21a8; border: 1px solid #c084fc;">🧩 ${t('dict_stage_pairs') || 'Пары'}: ${pairsCount}/2</span>`;
   } else if (seen) {
-    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 Квиз: ${quizCount}/5</span>`;
+    stageBadge = `<span class="in-progress-badge" style="background:#fef3c7; color:#92400e; border: 1px solid #f59e0b;">🎯 ${t('dict_stage_quiz') || 'Квиз'}: ${quizCount}/5</span>`;
   }
 
   const transText = getWordTranslation(w, activeLang);

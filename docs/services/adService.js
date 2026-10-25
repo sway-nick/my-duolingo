@@ -12,6 +12,7 @@ const MOCK_AD_I18N = {
   uk: { shield: 'Захист 20 XP', pack: 'Мовний пакет', download: 'Завантаження', watch: 'Перегляд реклами', wait: 'Винагороду буде нараховано після завершення таймера:', sec: 'с', skip: 'Пропустити (без нагороди)', done: 'Нагороду отримано!' },
   en: { shield: '20 XP Shield', pack: 'Language pack', download: 'Download', watch: 'Watch ad', wait: 'Your reward will be granted when the timer ends:', sec: 's', skip: 'Skip (no reward)', done: 'Reward earned!' },
   pt: { shield: 'Proteção de 20 XP', pack: 'Pacote de idioma', download: 'Download', watch: 'Assistir ao anúncio', wait: 'A recompensa será concedida quando o cronômetro terminar:', sec: 's', skip: 'Pular (sem recompensa)', done: 'Recompensa recebida!' },
+  hi: { shield: '20 XP शील्ड', pack: 'भाषा पैक', download: 'डाउनलोड', watch: 'विज्ञापन देखें', wait: 'टाइमर समाप्त होने पर आपका पुरस्कार दिया जाएगा:', sec: 'सेकंड', skip: 'छोड़ें (बिना इनाम)', done: 'इनाम प्राप्त हुआ!' },
 };
 
 function mockAdText(key) {

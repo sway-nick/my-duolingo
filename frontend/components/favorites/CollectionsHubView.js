@@ -91,8 +91,11 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     if (lang === 'de') {
       return count === 1 ? `${count} Wort` : `${count} Wörter`;
     }
-    if (lang === 'es' || lang === 'pt') {
+    if (lang === 'es') {
       return count === 1 ? `${count} palabra` : `${count} palabras`;
+    }
+    if (lang === 'pt') {
+      return count === 1 ? `${count} palavra` : `${count} palavras`;
     }
     if (lang === 'fr') {
       return count === 1 ? `${count} mot` : `${count} mots`;

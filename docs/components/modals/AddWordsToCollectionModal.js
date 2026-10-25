@@ -1,4 +1,4 @@
-import { getWordTranslation } from '../../services/i18n.js?v=386.0';
+import { getWordTranslation, t } from '../../services/i18n.js?v=386.0';
 import { setCollectionWords, getCustomCollections, saveCustomCollections, syncCollectionToAndroidWidget, getActiveCollectionId } from '../../services/collectionsService.js?v=386.0';
 
 export function openAddWordsToCollectionModal({ collection, allWords = [], onSaved = () => {}, onClose = () => {} }) {
@@ -35,13 +35,13 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
       <div style="padding: 16px 18px 12px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--card-bg);">
         <div style="min-width: 0;">
           <h3 style="margin: 0; font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-            ➕ Добавить слова: ${escapeHtml(collection.name)}
+            ➕ ${escapeHtml(t('col_add_words_title') || 'Добавить слова:')} ${escapeHtml(collection.name)}
           </h3>
           <p style="margin: 2px 0 0; font-size: 13px; color: var(--text-muted);" id="modal-selected-counter">
-            В подборке: ${initialSet.size}
+            ${escapeHtml((t('col_in_collection_count') || 'В подборке: {n}').replace('{n}', initialSet.size))}
           </p>
         </div>
-        <button type="button" id="close-add-words-modal" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 4px 8px; line-height: 1;">
+        <button type="button" id="close-add-words-modal" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 4px 8px; line-height: 1;" aria-label="${escapeHtml(t('modal_close') || 'Закрыть')}">
           ✕
         </button>
       </div>
@@ -52,7 +52,7 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
           <input
             type="text"
             id="add-words-search-input"
-            placeholder="Поиск по словарю..."
+            placeholder="${escapeHtml(t('col_search_placeholder') || 'Поиск по словарю...')}"
             style="width: 100%; padding: 10px 14px 10px 38px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; box-sizing: border-box;"
           />
           <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.6; pointer-events: none;">🔍</span>
@@ -66,10 +66,10 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
       <!-- Footer Actions -->
       <div style="padding: 12px 18px 16px; border-top: 1px solid var(--border-color); background: var(--card-bg); display: flex; gap: 10px; justify-content: flex-end;">
         <button type="button" id="btn-cancel-add-words" class="primary-button btn-graphite" style="min-height: 42px; padding: 0 16px; font-size: 14px; border-radius: 12px;">
-          Отмена
+          ${escapeHtml(t('col_btn_cancel') || 'Отмена')}
         </button>
         <button type="button" id="btn-save-add-words" class="primary-button btn-green" style="min-height: 42px; padding: 0 20px; font-size: 14px; font-weight: 700; border-radius: 12px;">
-          Сохранить
+          ${escapeHtml(t('col_btn_save') || 'Сохранить')}
         </button>
       </div>
     </div>
@@ -88,21 +88,27 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
 
     if (counterEl) {
       if (addedCount > 0 && removedCount === 0) {
-        counterEl.textContent = `В подборке: ${initialSet.size} • Новых: +${addedCount}`;
+        counterEl.textContent = (t('col_in_collection_new') || 'В подборке: {total} • Новых: +{added}')
+          .replace('{total}', initialSet.size)
+          .replace('{added}', addedCount);
       } else if (removedCount > 0) {
-        counterEl.textContent = `В подборке: ${selectedSet.size} (${addedCount > 0 ? `+${addedCount}, ` : ''}-${removedCount})`;
+        const diffStr = `${addedCount > 0 ? `+${addedCount}, ` : ''}-${removedCount}`;
+        counterEl.textContent = (t('col_in_collection_changed') || 'В подборке: {total} ({diff})')
+          .replace('{total}', selectedSet.size)
+          .replace('{diff}', diffStr);
       } else {
-        counterEl.textContent = `В подборке: ${initialSet.size}`;
+        counterEl.textContent = (t('col_in_collection_count') || 'В подборке: {n}')
+          .replace('{n}', initialSet.size);
       }
     }
 
     if (saveBtn) {
       if (addedCount > 0 && removedCount === 0) {
-        saveBtn.textContent = `Добавить (+${addedCount})`;
+        saveBtn.textContent = (t('col_btn_add_n') || 'Добавить (+{n})').replace('{n}', addedCount);
       } else if (addedCount > 0 || removedCount > 0) {
-        saveBtn.textContent = `Сохранить (${selectedSet.size})`;
+        saveBtn.textContent = (t('col_btn_save_n') || 'Сохранить ({n})').replace('{n}', selectedSet.size);
       } else {
-        saveBtn.textContent = `Сохранить`;
+        saveBtn.textContent = t('col_btn_save') || 'Сохранить';
       }
     }
   }
@@ -125,7 +131,7 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
     if (displayList.length === 0) {
       listEl.innerHTML = `
         <div style="text-align: center; padding: 40px 16px; color: var(--text-muted); font-size: 14px;">
-          Слова не найдены
+          ${escapeHtml(t('col_words_not_found') || 'Слова не найдены')}
         </div>
       `;
       return;
@@ -158,8 +164,8 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
               </div>
             </div>
             <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 8px;">
-              ${isNewlyAdded ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(34, 197, 94, 0.15); color: #16a34a; font-weight: 700;">+Новое</span>` : ''}
-              ${isInitiallyInCol && isChecked ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,0.06); color: var(--text-muted); font-weight: 600;">В подборке</span>` : ''}
+              ${isNewlyAdded ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(34, 197, 94, 0.15); color: #16a34a; font-weight: 700;">${escapeHtml(t('col_badge_new') || '+Новое')}</span>` : ''}
+              ${isInitiallyInCol && isChecked ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,0.06); color: var(--text-muted); font-weight: 600;">${escapeHtml(t('col_badge_in_collection') || 'В подборке')}</span>` : ''}
               ${w.category ? `<span style="font-size: 11px; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,0.06); color: var(--text-muted);">${escapeHtml(w.category)}</span>` : ''}
             </div>
           </label>

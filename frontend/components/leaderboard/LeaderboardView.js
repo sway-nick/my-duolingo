@@ -204,7 +204,7 @@ function renderPodiumCard(player, rank, period = 'week') {
       <div class="podium-info">
         <h4 class="podium-name" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
           <span>${playerName}</span>
-          ${player.isCurrentUser && shouldShowSyncBadge() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
+          ${player.isCurrentUser && shouldShowSyncBadge() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="${t('lead_sync_pending_hint') || 'Прогресс учтён локально. Войдите для обновления рейтинга'}"></span>` : ''}
         </h4>
         <span class="podium-xp">${formatLeaderboardXp(player.xp, period)} XP</span>
       </div>
@@ -290,7 +290,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               </div>
               <div class="row-name" style="display: flex; align-items: center; gap: 6px;">
                 <span>${pName}</span>
-                ${isMe && shouldShowSyncBadge() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="Прогресс учтён локально. Войдите для обновления рейтинга"></span>` : ''}
+                ${isMe && shouldShowSyncBadge() ? `<span class="sync-status-badge" style="position: relative; top: auto; right: auto;" title="${t('lead_sync_pending_hint') || 'Прогресс учтён локально. Войдите для обновления рейтинга'}"></span>` : ''}
               </div>
               <div class="row-xp">${formatLeaderboardXp(p.xp, period)} XP</div>
             </div>
@@ -323,7 +323,7 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           <span class="my-rank-badge" style="flex-shrink: 0; padding: 2px 5px; font-size: 12px;">#${myRank || '-'}</span>
           ${
             myAvatar
-              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="Вы" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%;" />`
+              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="${t('lead_guest_name') || 'Вы'}" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%;" />`
               : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%; font-size: 14px;">${myInitial}</div>`
           }
           <div style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -627,7 +627,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
     console.error('Leaderboard render fatal error:', err);
     try {
       const fallbackList = [
-        { userId: 'me', name: 'Вы', xp: 0, isCurrentUser: true }
+        { userId: 'me', name: t('lead_guest_name') || 'Вы', xp: 0, isCurrentUser: true }
       ];
       const fallbackBody = buildLeaderboardBodyHtml(fallbackList, null, currentPeriod);
       container.innerHTML = `

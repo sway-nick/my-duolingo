@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">English Breakfast</string>
+    <string name="title_activity_main">English Breakfast</string>
+    <string name="package_name">com.englishbreakfast.app</string>
+    <string name="custom_url_scheme">com.englishbreakfast.app</string>
+    <string name="widget_gold_card_name">Золота картка</string>
+    <string name="widget_gold_card_description">Інтерактивна золота картка для вивчення слів з Обраного зі стрілками та озвученням</string>
+    <string name="widget_reminder_default_alert">⚡ Не відставай від інших!</string>
+    <string name="shortcut_widget_title">Додати віджет</string>
+    <string name="shortcut_widget_short">Додати віджет</string>
+</resources>
