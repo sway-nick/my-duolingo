@@ -202,6 +202,21 @@ test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unl
   assert.equal(res4, true, 'Third show after another hour succeeds (unlimited daily frequency)');
 });
 
+test('8e. AdService Double XP Rewarded Ad: Exposes method, translation and web simulator fallback', async () => {
+  assert.equal(typeof AdService.showDoubleXpRewardedAd, 'function', 'showDoubleXpRewardedAd must be exposed');
+  assert.equal(typeof AdService.getI18nText, 'function', 'getI18nText must be exposed');
+
+  const text = AdService.getI18nText('double_xp');
+  assert.ok(text && text.length > 0, 'double_xp translation exists');
+
+  const textDone = AdService.getI18nText('double_xp_done');
+  assert.ok(textDone && textDone.length > 0, 'double_xp_done translation exists');
+
+  const res = await AdService.showDoubleXpRewardedAd(20);
+  assert.equal(res.success, true, 'Web mock succeeds');
+  assert.equal(res.rewardEarned, true, 'Reward is earned in web mock');
+});
+
 test('9. Pairs Mode: Round completion awards +5 XP', async () => {
   storage.clear();
   const userId = getEffectiveUserId();

@@ -208,7 +208,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites } from './services/api.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP } from './services/api.js?v=386.0';
       import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=386.0';
@@ -955,6 +955,7 @@
 
           // If words completed Cards -> show completion card with button to Quiz (or Pairs)
           if (!window._showHubScreen && currentMethod === 'cards' && quizQueue.length > 0) {
+            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
@@ -985,6 +986,7 @@
           }
 
           if (!window._showHubScreen && currentMethod === 'cards' && pairsQueue.length > 0) {
+            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
@@ -1013,6 +1015,7 @@
 
           // If words completed Quiz -> show completion card with button to Pairs (like Cards mode)
           if (!window._showHubScreen && currentMethod === 'quiz' && pairsQueue.length > 0) {
+            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
@@ -1041,6 +1044,7 @@
 
           // If words completed Pairs -> directly launch Test mode!
           if (!window._showHubScreen && currentMethod === 'pairs' && testQueue.length > 0) {
+            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             currentMethod = 'input';
             userSettings.preferredMethod = 'input';
             saveUserSettings(userSettings);
@@ -1158,6 +1162,7 @@
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
               window._trainingRoundJustCompleted = false;
+              window._canDoubleRoundXp = true;
               clearActiveConveyorBatch();
               window._pausedRoundState = null;
               if (window.trackEvent) {
@@ -1170,6 +1175,7 @@
               playFanfareSound();
               try {
                 AdService.showRoundFinishInterstitial().catch(() => {});
+                AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
               } catch (e) {}
             }
             preloadWordAudio(wotd.word);
@@ -1313,6 +1319,15 @@
 
           const hasWotdCard = Boolean(wotdHtml && wotdHtml.trim().length > 0);
 
+          const doubleXpBtnHtml = (window._canDoubleRoundXp && isHubScreen)
+            ? `
+              <button class="primary-button hub-choice-btn" id="go-double-xp-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15px, 4vw, 17px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: 1.5px solid #b45309; color: #ffffff; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35); text-shadow: 0 1px 2px rgba(0,0,0,0.25); margin-bottom: 2px;">
+                <span class="hub-btn-icon" style="position: absolute; left: 16px; font-size: 20px;">⚡</span>
+                <span class="hub-btn-text" style="text-align: center; width: 100%; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${AdService.getI18nText('double_xp')} 🎬</span>
+              </button>
+            `
+            : '';
+
           const continueCardsBtnHtml = unmasteredCount > 0
             ? `
               <button class="primary-button btn-green hub-choice-btn" id="go-continue-cards-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.2vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
@@ -1399,6 +1414,7 @@
               ${emptyMsg ? `<p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.4;">${emptyMsg}</p>` : ''}
               <div class="hub-content-cluster" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; ${hasWotdCard ? 'transform: translateY(-44px);' : ''}">
                 <div class="hub-buttons-stack" style="display: flex; flex-direction: column; gap: ${hasWotdCard ? '11px' : '15px'}; width: 100%; max-width: 340px; margin: 0 auto; ${hasWotdCard ? '' : 'transform: translateY(-25px);'}">
+                  ${doubleXpBtnHtml}
                   ${continueCardsBtnHtml}
                   <button class="primary-button btn-green hub-choice-btn" id="go-next-mode-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.2vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                     <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${nextBtnSvg}</span>
@@ -1419,6 +1435,47 @@
               </div>
             </div>
           `;
+
+          const doubleXpBtn = content.querySelector('#go-double-xp-btn');
+          if (doubleXpBtn) {
+            doubleXpBtn.addEventListener('click', async () => {
+              doubleXpBtn.disabled = true;
+              const originalHtml = doubleXpBtn.innerHTML;
+              doubleXpBtn.innerHTML = '<span style="font-size: 16px;">⏳ ...</span>';
+
+              try {
+                const res = await AdService.showDoubleXpRewardedAd(20);
+                if (res && res.rewardEarned) {
+                  addWeeklyXP(20, getEffectiveUserId());
+                  try { pushUserDataToCloud(null, null, true); } catch (e) {}
+                  updateHeaderUser();
+                  playFanfareSound();
+                  window._canDoubleRoundXp = false;
+                  doubleXpBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                  doubleXpBtn.style.borderColor = '#047857';
+                  doubleXpBtn.innerHTML = `<span>🎉 ${AdService.getI18nText('double_xp_done')}</span>`;
+                  setTimeout(() => {
+                    if (doubleXpBtn && doubleXpBtn.parentNode) {
+                      doubleXpBtn.style.transition = 'all 0.4s ease';
+                      doubleXpBtn.style.opacity = '0';
+                      doubleXpBtn.style.height = '0';
+                      doubleXpBtn.style.minHeight = '0';
+                      doubleXpBtn.style.padding = '0';
+                      doubleXpBtn.style.margin = '0';
+                      setTimeout(() => { doubleXpBtn.remove(); }, 400);
+                    }
+                  }, 2000);
+                } else {
+                  doubleXpBtn.disabled = false;
+                  doubleXpBtn.innerHTML = originalHtml;
+                }
+              } catch (err) {
+                console.warn('Double XP ad error:', err);
+                doubleXpBtn.disabled = false;
+                doubleXpBtn.innerHTML = originalHtml;
+              }
+            });
+          }
 
           if (wotd && isHubScreen) {
             const tiltContainer = content.querySelector('#wotd-tilt-container');
@@ -2095,6 +2152,8 @@
         if (!isFavPracticeActive && currentMethod === 'quiz' && currentWordIndex >= activeWords.length) {
           if (quizQueue.length === 0 || unfinishedInQueue.length === 0) {
             try { pushUserDataToCloud(null, null, true); } catch (e) {}
+            window._trainingRoundJustCompleted = true;
+            window._showHubScreen = true;
             currentWordIndex = 0;
             renderTrainingTab();
             return;
