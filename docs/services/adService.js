@@ -260,8 +260,13 @@ class AdServiceImpl {
         let rewardGranted = false;
         let isResolved = false;
         const listeners = [];
+        let fallbackTimer = null;
 
         const cleanup = () => {
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = null;
+          }
           listeners.forEach((sub) => {
             try { if (sub && typeof sub.remove === 'function') sub.remove(); } catch (e) {}
           });
@@ -274,6 +279,11 @@ class AdServiceImpl {
           cleanup();
           resolve(result);
         };
+
+        fallbackTimer = setTimeout(() => {
+          console.warn('⚠️ AdMob Double XP timeout (10s), releasing button smoothly');
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }, 10000);
 
         try {
           const onReward = () => {
@@ -347,8 +357,13 @@ class AdServiceImpl {
         let rewardGranted = false;
         let isResolved = false;
         const listeners = [];
+        let fallbackTimer = null;
 
         const cleanup = () => {
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = null;
+          }
           listeners.forEach((sub) => {
             try { if (sub && typeof sub.remove === 'function') sub.remove(); } catch (e) {}
           });
@@ -361,6 +376,11 @@ class AdServiceImpl {
           cleanup();
           resolve(result);
         };
+
+        fallbackTimer = setTimeout(() => {
+          console.warn('⚠️ AdMob Double XP timeout (10s), releasing button smoothly');
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }, 10000);
 
         try {
           // Listen to BOTH standard plugin event names to guarantee callback
@@ -439,8 +459,13 @@ class AdServiceImpl {
         let rewardGranted = false;
         let isResolved = false;
         const listeners = [];
+        let fallbackTimer = null;
 
         const cleanup = () => {
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = null;
+          }
           listeners.forEach((sub) => {
             try { if (sub && typeof sub.remove === 'function') sub.remove(); } catch (e) {}
           });
@@ -453,6 +478,11 @@ class AdServiceImpl {
           cleanup();
           resolve(result);
         };
+
+        fallbackTimer = setTimeout(() => {
+          console.warn('⚠️ AdMob Double XP timeout (10s), releasing button smoothly');
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }, 10000);
 
         try {
           const onReward = () => {
