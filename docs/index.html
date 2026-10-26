@@ -364,6 +364,7 @@
         try {
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
+          if (typeof syncFavoritesToAndroidWidget === 'function') { syncFavoritesToAndroidWidget(); }
         } catch (e) {
           console.warn('Failed to load favorites:', e);
         }
@@ -2570,8 +2571,6 @@
         window.addEventListener('myduo:auth_changed', async (e) => {
           if (window._isAppInitializing) return;
           const user = e.detail?.user || getCurrentUser();
-          const favList = getUserFavorites();
-          favoriteIds = new Set(favList.map(String));
           updateHeaderUser();
           if (user && user.id) {
             try {
@@ -2585,6 +2584,9 @@
             pushUserDataToCloud(user.id, null, false);
           }
           await loadData();
+          const favList = getUserFavorites();
+          favoriteIds = new Set(favList.map(String));
+          syncFavoritesToAndroidWidget();
           if (!window._isCategorySelectOpen) {
             renderTab(activeTab);
           }

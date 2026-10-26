@@ -1644,11 +1644,12 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
   // Fetch real-time progress, XP and data from Cloud Firestore (deduplicated: loadFullUserDataFirestore already includes progress & weeklyXpMap)
   try {
     const hasDistinctFbUid = Boolean(fbUid && fbUid !== uId && fbUid !== detId && fbUid !== firestoreUid);
-    const [fullDoc, fbDoc] = await Promise.all([
+    const hasDistinctDetId = Boolean(detId && detId !== firestoreUid && detId !== fbUid);
+    const [fullDoc, fbDoc, detDoc] = await Promise.all([
       loadFullUserDataFirestore(firestoreUid).catch(() => null),
-      hasDistinctFbUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null)
+      hasDistinctFbUid ? loadFullUserDataFirestore(fbUid).catch(() => null) : Promise.resolve(null),
+      hasDistinctDetId ? loadFullUserDataFirestore(detId).catch(() => null) : Promise.resolve(null)
     ]);
-    const detDoc = null;
     const prog1 = fullDoc?.progress || {};
     const prog2 = {};
     const progFb = fbDoc?.progress || {};
@@ -1694,11 +1695,15 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
         .filter(id => id && !deletedFavs.has(id));
     };
 
+    const guestId = getGuestId();
     const mergedFavsSet = new Set([
       ...sanitizeFavArray(fullDoc?.favorites),
       ...sanitizeFavArray(fbDoc?.favorites),
+      ...sanitizeFavArray(detDoc?.favorites),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
+      ...(detId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]')) : []),
       ...(fbUid ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]')) : []),
+      ...(guestId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${guestId}`) || '[]')) : []),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('dl_favorites') || '[]')),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favorites') || '[]')),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem('favs_guest') || '[]'))
@@ -2089,8 +2094,8 @@ function getUserFavorites() {
 
   const deletedSet = getDeletedFavoritesSet(userId);
 
-  // ONLY if the key was never initialized in localStorage (null), perform one-time migration
-  if (!Array.isArray(favs)) {
+  // If the key was never initialized in localStorage or is empty, merge from guest/other profiles
+  if (!Array.isArray(favs) || favs.length === 0) {
     const merged = new Set();
     try {
       const user = getCurrentUser();
