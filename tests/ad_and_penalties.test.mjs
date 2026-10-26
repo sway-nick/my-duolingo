@@ -202,9 +202,12 @@ test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unl
   assert.equal(res4, true, 'Third show after another hour succeeds (unlimited daily frequency)');
 });
 
-test('8e. AdService Double XP Rewarded Ad: All 33 locales translated (including pt-BR, es-MX, hi)', async () => {
+test('8e. AdService Bonus XP Rewarded Ad: All 33 locales translated (including pt-BR, es-MX, hi)', async () => {
   assert.equal(typeof AdService.showDoubleXpRewardedAd, 'function', 'showDoubleXpRewardedAd must be exposed');
+  assert.equal(typeof AdService.showBonusXpRewardedAd, 'function', 'showBonusXpRewardedAd must be exposed');
   assert.equal(typeof AdService.getI18nText, 'function', 'getI18nText must be exposed');
+  assert.equal(typeof AdService.canClaimDailyBonus, 'function', 'canClaimDailyBonus must be exposed');
+  assert.equal(typeof AdService.markDailyBonusClaimed, 'function', 'markDailyBonusClaimed must be exposed');
 
   const REQUIRED_33_LOCALES = [
     'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
@@ -214,31 +217,37 @@ test('8e. AdService Double XP Rewarded Ad: All 33 locales translated (including 
 
   for (const loc of REQUIRED_33_LOCALES) {
     global.localStorage.setItem('myduo_interface_lang', loc);
-    const text = AdService.getI18nText('double_xp');
-    assert.ok(text && text.length > 0 && text !== 'double_xp', `Locale ${loc} must have valid double_xp translation`);
+    const text = AdService.getI18nText('bonus_xp');
+    assert.ok(text && text.length > 0 && text !== 'bonus_xp', `Locale ${loc} must have valid bonus_xp translation`);
 
-    const textDone = AdService.getI18nText('double_xp_done');
-    assert.ok(textDone && textDone.length > 0 && textDone !== 'double_xp_done', `Locale ${loc} must have valid double_xp_done translation`);
+    const textDone = AdService.getI18nText('bonus_xp_done');
+    assert.ok(textDone && textDone.length > 0 && textDone !== 'bonus_xp_done', `Locale ${loc} must have valid bonus_xp_done translation`);
   }
 
   // Regional nuances verification
   global.localStorage.setItem('myduo_interface_lang', 'pt');
-  assert.equal(AdService.getI18nText('double_xp'), 'Dobrar XP (+20 XP)', 'Brazilian Portuguese pt uses Dobrar XP');
+  assert.equal(AdService.getI18nText('bonus_xp'), 'Bônus (+100 XP)', 'Brazilian Portuguese pt uses Bônus (+100 XP)');
 
   global.localStorage.setItem('myduo_interface_lang', 'es');
-  assert.equal(AdService.getI18nText('double_xp'), 'Duplicar XP (+20 XP)', 'Mexican Spanish es uses Duplicar XP');
+  assert.equal(AdService.getI18nText('bonus_xp'), 'Bono (+100 XP)', 'Spanish es uses Bono (+100 XP)');
 
   global.localStorage.setItem('myduo_interface_lang', 'hi');
-  assert.equal(AdService.getI18nText('double_xp'), 'XP दोगुना करें (+20 XP)', 'Hindi hi uses grammatically correct Hindi');
+  assert.equal(AdService.getI18nText('bonus_xp'), 'बोनस (+100 XP)', 'Hindi hi uses grammatically correct Hindi');
 
   global.localStorage.setItem('myduo_interface_lang', 'uk');
-  assert.equal(AdService.getI18nText('double_xp'), 'Подвоїти XP (+20 XP)', 'Ukrainian uses Подвоїти XP');
+  assert.equal(AdService.getI18nText('bonus_xp'), 'Бонус (+100 XP)', 'Ukrainian uses Бонус (+100 XP)');
 
   global.localStorage.setItem('myduo_interface_lang', 'ru');
-  assert.equal(AdService.getI18nText('double_xp'), 'Удвоить XP (+20 XP)', 'Russian uses Удвоить XP');
+  assert.equal(AdService.getI18nText('bonus_xp'), 'Бонус (+100 XP)', 'Russian uses Бонус (+100 XP)');
+
+  // Daily limit lifecycle verification
+  global.localStorage.removeItem('daily_bonus_xp_last_date');
+  assert.equal(AdService.canClaimDailyBonus(), true, 'Bonus available on clean state');
+  AdService.markDailyBonusClaimed();
+  assert.equal(AdService.canClaimDailyBonus(), false, 'Bonus not available once claimed today');
 
   // Test Web Simulator execution
-  const res = await AdService.showDoubleXpRewardedAd(20);
+  const res = await AdService.showBonusXpRewardedAd(100);
   assert.equal(res.success, true, 'Web mock succeeds');
   assert.equal(res.rewardEarned, true, 'Reward is earned in web mock');
 });
