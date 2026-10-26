@@ -2100,7 +2100,7 @@
           if (!p) return true;
           if (currentMethod === 'quiz') return (p.quizCorrect || 0) < 5 && !p.roundQuizDone && !isWordMastered(p);
           if (currentMethod === 'pairs') return (p.pairsCorrect || 0) < 1 && !p.roundPairsDone;
-          if (currentMethod === 'input') return (p.inputCorrect || 0) < 2 && !p.roundTestDone && !isWordMastered(p);
+          if (currentMethod === 'input') return ((p.inputCorrect || 0) < 1 || p.needsTestRepeat) && !p.roundTestDone && !isWordMastered(p);
           return true;
         });
         const isSingleRemainingWord =

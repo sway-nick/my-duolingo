@@ -1959,7 +1959,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           isFavPractice,
         }).then((prog) => {
           const inputCount = prog?.inputCorrect || 1;
-          if ((prog?.mastered || inputCount >= 2) && !favorited) {
+          if ((prog?.mastered || (inputCount >= 1 && !prog?.needsTestRepeat)) && !favorited) {
             feedback.innerHTML = `<div style="font-size: 18px; font-weight: 700; color: var(--success-color, #16a34a);">${t('train_word_mastered')}</div>`;
           }
         }).catch((e) => console.warn(e));

@@ -1518,12 +1518,13 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   } else if (method === 'input') {
     if (isCorrect) {
       if (options && options.secondChanceFix) {
-        // Second chance fix: deduct 1 point as penalty instead of 5
+        // Second chance fix: deduct 1 point as penalty instead of 5, mark that clean repetition is needed
         xpDelta = -1;
         prog.inputMistakes = (prog.inputMistakes || 0) + 1;
+        prog.needsTestRepeat = true;
         if (options && options.isSingleRemaining) {
-          // Single remaining word: master immediately on fix so user isn't forced to re-type 3 times
-          prog.inputCorrect = Math.max(prog.inputCorrect || 0, 2);
+          prog.inputCorrect = Math.max(prog.inputCorrect || 0, 1);
+          prog.needsTestRepeat = false;
           prog.mastered = true;
           if (!prog.masteredAt) prog.masteredAt = Date.now();
           prog.stage = 'mastered';
@@ -1531,35 +1532,24 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
         }
       } else {
         prog.correct = (prog.correct || 0) + 1;
-        if (isWordMastered(prog)) {
-          prog.roundTestDone = true;
-        } else {
-          if (options && options.isSingleRemaining) {
-            // Single remaining word: master immediately after exactly 1 correct check!
-            prog.inputCorrect = Math.max(prog.inputCorrect || 0, 2);
-            prog.mastered = true;
-            if (!prog.masteredAt) {
-              prog.masteredAt = Date.now();
-            }
-            prog.stage = 'mastered';
-            prog.roundTestDone = true;
-          } else {
-            prog.inputCorrect = (prog.inputCorrect || 0) + 1;
-            if (prog.inputCorrect >= 2) {
-              prog.mastered = true;
-              if (!prog.masteredAt) {
-                prog.masteredAt = Date.now();
-              }
-              prog.stage = 'mastered';
-              prog.roundTestDone = true;
-            }
-          }
+        prog.inputCorrect = (prog.inputCorrect || 0) + 1;
+        // Clean first-try or successful error repetition: 1 correct input is enough to master!
+        prog.needsTestRepeat = false;
+        prog.mastered = true;
+        if (!prog.masteredAt) {
+          prog.masteredAt = Date.now();
         }
-        xpDelta = 3; // +3 XP for first-try correct word typing
+        prog.stage = 'mastered';
+        prog.roundTestDone = true;
+        xpDelta = 3; // +3 XP for correct word typing
       }
     } else {
       prog.error = (prog.error || 0) + 1;
       prog.inputMistakes = (prog.inputMistakes || 0) + 1;
+      // Mistake occurred: word MUST be repeated in this round!
+      prog.needsTestRepeat = true;
+      prog.mastered = false;
+      prog.roundTestDone = false;
       if (prog.inputMistakes >= 2) {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
@@ -2424,7 +2414,7 @@ function isWordMastered(prog) {
   return Boolean(
     prog.mastered === true ||
     prog.known === true ||
-    (prog.inputCorrect !== undefined && Number(prog.inputCorrect) >= 2)
+    (prog.inputCorrect !== undefined && Number(prog.inputCorrect) >= 1 && !prog.needsTestRepeat)
   );
 }
 
@@ -2615,7 +2605,7 @@ function getActiveConveyorBatch(categoryWords, userProgress, favorites = []) {
       if (isWordMastered(p)) {
         return !p.roundTestDone;
       }
-      return !p.roundTestDone && (p.inputCorrect || 0) < 2;
+      return !p.roundTestDone && ((p.inputCorrect || 0) < 1 || p.needsTestRepeat);
     });
 
     if (hasActiveWords && resolved.length > 0) {
@@ -2747,7 +2737,7 @@ function getQueueForTest(words, progress, favorites = null) {
     return Boolean(
       p.roundCardsDone === true &&
       (p.pairsCorrect || 0) >= 1 &&
-      (p.inputCorrect || 0) < 2 &&
+      ((p.inputCorrect || 0) < 1 || p.needsTestRepeat === true) &&
       p.roundTestDone !== true
     );
   });
