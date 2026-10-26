@@ -202,16 +202,42 @@ test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unl
   assert.equal(res4, true, 'Third show after another hour succeeds (unlimited daily frequency)');
 });
 
-test('8e. AdService Double XP Rewarded Ad: Exposes method, translation and web simulator fallback', async () => {
+test('8e. AdService Double XP Rewarded Ad: All 33 locales translated (including pt-BR, es-MX, hi)', async () => {
   assert.equal(typeof AdService.showDoubleXpRewardedAd, 'function', 'showDoubleXpRewardedAd must be exposed');
   assert.equal(typeof AdService.getI18nText, 'function', 'getI18nText must be exposed');
 
-  const text = AdService.getI18nText('double_xp');
-  assert.ok(text && text.length > 0, 'double_xp translation exists');
+  const REQUIRED_33_LOCALES = [
+    'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
+    'da', 'ga', 'lv', 'lt', 'mt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
+    'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja'
+  ];
 
-  const textDone = AdService.getI18nText('double_xp_done');
-  assert.ok(textDone && textDone.length > 0, 'double_xp_done translation exists');
+  for (const loc of REQUIRED_33_LOCALES) {
+    global.localStorage.setItem('myduo_interface_lang', loc);
+    const text = AdService.getI18nText('double_xp');
+    assert.ok(text && text.length > 0 && text !== 'double_xp', `Locale ${loc} must have valid double_xp translation`);
 
+    const textDone = AdService.getI18nText('double_xp_done');
+    assert.ok(textDone && textDone.length > 0 && textDone !== 'double_xp_done', `Locale ${loc} must have valid double_xp_done translation`);
+  }
+
+  // Regional nuances verification
+  global.localStorage.setItem('myduo_interface_lang', 'pt');
+  assert.equal(AdService.getI18nText('double_xp'), 'Dobrar XP (+20 XP)', 'Brazilian Portuguese pt uses Dobrar XP');
+
+  global.localStorage.setItem('myduo_interface_lang', 'es');
+  assert.equal(AdService.getI18nText('double_xp'), 'Duplicar XP (+20 XP)', 'Mexican Spanish es uses Duplicar XP');
+
+  global.localStorage.setItem('myduo_interface_lang', 'hi');
+  assert.equal(AdService.getI18nText('double_xp'), 'XP दोगुना करें (+20 XP)', 'Hindi hi uses grammatically correct Hindi');
+
+  global.localStorage.setItem('myduo_interface_lang', 'uk');
+  assert.equal(AdService.getI18nText('double_xp'), 'Подвоїти XP (+20 XP)', 'Ukrainian uses Подвоїти XP');
+
+  global.localStorage.setItem('myduo_interface_lang', 'ru');
+  assert.equal(AdService.getI18nText('double_xp'), 'Удвоить XP (+20 XP)', 'Russian uses Удвоить XP');
+
+  // Test Web Simulator execution
   const res = await AdService.showDoubleXpRewardedAd(20);
   assert.equal(res.success, true, 'Web mock succeeds');
   assert.equal(res.rewardEarned, true, 'Reward is earned in web mock');
