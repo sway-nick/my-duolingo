@@ -955,7 +955,6 @@
 
           // If words completed Cards -> show completion card with button to Quiz (or Pairs)
           if (!window._showHubScreen && currentMethod === 'cards' && quizQueue.length > 0) {
-            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
@@ -986,7 +985,6 @@
           }
 
           if (!window._showHubScreen && currentMethod === 'cards' && pairsQueue.length > 0) {
-            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             content.innerHTML = `
               <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
                 <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
@@ -1044,7 +1042,6 @@
 
           // If words completed Pairs -> directly launch Test mode!
           if (!window._showHubScreen && currentMethod === 'pairs' && testQueue.length > 0) {
-            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             currentMethod = 'input';
             userSettings.preferredMethod = 'input';
             saveUserSettings(userSettings);
@@ -1163,7 +1160,7 @@
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
               window._trainingRoundJustCompleted = false;
-              window._canDoubleRoundXp = true;
+              if (AdService.canClaimDailyBonus()) { window._canClaimRoundBonus = true; }
               clearActiveConveyorBatch();
               window._pausedRoundState = null;
               if (window.trackEvent) {
@@ -1175,7 +1172,6 @@
               } catch (e) {}
               playFanfareSound();
               try {
-                AdService.showRoundFinishInterstitial().catch(() => {});
                 AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
               } catch (e) {}
             }
@@ -1321,7 +1317,7 @@
           const hasWotdCard = Boolean(wotdHtml && wotdHtml.trim().length > 0);
           const canClaimDailyBonus = AdService.canClaimDailyBonus();
 
-          const bonusXpBtnHtml = (canClaimDailyBonus && isHubScreen)
+          const bonusXpBtnHtml = (window._canClaimRoundBonus && canClaimDailyBonus && isHubScreen)
             ? `
               <button class="primary-button btn-orange hub-choice-btn" id="go-double-xp-btn" style="position: relative; min-height: ${hasWotdCard ? '48px' : '52px'}; font-size: clamp(15.5px, 4.2vw, 18px); font-weight: 700; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box;">
                 <span class="hub-btn-icon" style="position: absolute; left: 16px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">${lightningSvg}</span>
@@ -1355,7 +1351,7 @@
                   try { pushUserDataToCloud(null, null, true); } catch (e) {}
                   updateHeaderUser();
                   playFanfareSound();
-                  window._canDoubleRoundXp = false;
+                  window._canClaimRoundBonus = false;
                   btn.className = 'primary-button btn-green hub-choice-btn';
                   btn.innerHTML = `<span>🎉 ${AdService.getI18nText('bonus_xp_done')}</span>`;
                   setTimeout(() => {
@@ -1394,7 +1390,7 @@
             });
 
             const curBonusBtn = content.querySelector('#go-double-xp-btn');
-            if (canClaimDailyBonus && !curBonusBtn) {
+            if (window._canClaimRoundBonus && canClaimDailyBonus && !curBonusBtn) {
               const buttonsStack = content.querySelector('.hub-buttons-stack');
               if (buttonsStack) {
                 const tempDiv = document.createElement('div');
@@ -2352,7 +2348,7 @@
         // Interstitial upon early exit from Quiz, Pairs, or Test in training round
         // (Never for Cards, Never when entering Stats where Banner is shown, 60m cooldown, unlimited daily frequency)
         if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTabSwitch && !window._activePracticeCollectionId && tabName !== 'training' && tabName !== 'stats') {
-          if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
+          if (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
             try {
               AdService.showTrainingEarlyExitInterstitial().catch(() => {});
             } catch (e) {}
@@ -2734,7 +2730,7 @@
                   } catch (e) {}
                 }
               } else if (activeTab === 'training' && !window._showHubScreen) {
-                if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
+                if (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
                   try {
                     AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                   } catch (e) {}
@@ -2765,7 +2761,7 @@
                     AdService.showCollectionsExitInterstitial().catch(() => {});
                   } catch (e) {}
                 }
-              } else if (activeTab === 'training' && !window._showHubScreen && (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input')) {
+              } else if (activeTab === 'training' && !window._showHubScreen && (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input')) {
                 try {
                   AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                 } catch (e) {}
@@ -2921,7 +2917,7 @@
                     AdService.showCollectionsExitInterstitial().catch(() => {});
                   } catch (e) {}
                 }
-              } else if (currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
+              } else if (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
                 try {
                   AdService.showTrainingEarlyExitInterstitial().catch(() => {});
                 } catch (e) {}

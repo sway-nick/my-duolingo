@@ -595,6 +595,11 @@ class AdServiceImpl {
         }
         this.roundsCompletedSinceLastAd = 0;
         this.lastInterstitialTime = Date.now();
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('ad_training_early_exit_last_time', String(Date.now()));
+          }
+        } catch (e) {}
 
         // Immediately preload NEXT interstitial in background for next round
         setTimeout(() => {
@@ -618,6 +623,11 @@ class AdServiceImpl {
     }
     this.roundsCompletedSinceLastAd = 0;
     this.lastInterstitialTime = Date.now();
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('ad_training_early_exit_last_time', String(Date.now()));
+          }
+        } catch (e) {}
     return true;
   }
 
@@ -737,7 +747,7 @@ class AdServiceImpl {
 
     if (lastShown > 0 && (now - lastShown < COOLDOWN_MS)) {
       const remainingMins = Math.ceil((COOLDOWN_MS - (now - lastShown)) / 60000);
-      console.log(`ℹ️ Training early exit interstitial skipped: 60-minute cooldown active (${remainingMins}m remaining)`);
+      console.log(`ℹ️ Training early exit interstitial skipped: 10-minute cooldown active (${remainingMins}m remaining)`);
       this.preloadInterstitial().catch(() => {});
       return false;
     }
@@ -824,6 +834,11 @@ class AdServiceImpl {
           window.trackEvent('ad_interstitial_transition_shown');
         }
         this.lastInterstitialTime = Date.now();
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('ad_training_early_exit_last_time', String(Date.now()));
+          }
+        } catch (e) {}
         this.roundsCompletedSinceLastAd = 0;
 
         // Preload next interstitial in background
@@ -847,6 +862,11 @@ class AdServiceImpl {
       window.trackEvent('ad_interstitial_transition_shown');
     }
     this.lastInterstitialTime = Date.now();
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('ad_training_early_exit_last_time', String(Date.now()));
+          }
+        } catch (e) {}
     this.roundsCompletedSinceLastAd = 0;
     return true;
   }
