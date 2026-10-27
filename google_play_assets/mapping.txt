@@ -3,8 +3,8 @@
 # min_api: 24
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: 5d817da6f7c2a63ad5d0e6ccc5dfd70e7f5feeed2567e411dc03fdedc8443f14
-# pg_map_hash: SHA-256 5d817da6f7c2a63ad5d0e6ccc5dfd70e7f5feeed2567e411dc03fdedc8443f14
+# pg_map_id: 7b165844106b48889a2337b41d3662508e5eaf5a6914ded0f51bdfd72c368239
+# pg_map_hash: SHA-256 7b165844106b48889a2337b41d3662508e5eaf5a6914ded0f51bdfd72c368239
 _COROUTINE.ArtificialStackFrames -> R8$$REMOVED$$CLASS$$0:
 # {"id":"sourceFile","fileName":"CoroutineDebugging.kt"}
 _COROUTINE.CoroutineDebuggingKt -> R8$$REMOVED$$CLASS$$1:
@@ -78307,13 +78307,13 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$P5xzceo2IjVPISiGSIrc9hWQoFA(int,android.content.Context):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
-    1:11:void cancelRotation(android.content.Context):589:589 -> cancelRotation
-    12:18:void cancelRotation(android.content.Context):592:592 -> cancelRotation
-    19:23:void cancelRotation(android.content.Context):593:593 -> cancelRotation
-    24:34:void cancelRotation(android.content.Context):594:594 -> cancelRotation
-    35:38:void cancelRotation(android.content.Context):600:600 -> cancelRotation
-    39:43:void cancelRotation(android.content.Context):601:601 -> cancelRotation
-    44:47:void cancelRotation(android.content.Context):603:603 -> cancelRotation
+    1:11:void cancelRotation(android.content.Context):587:587 -> cancelRotation
+    12:18:void cancelRotation(android.content.Context):590:590 -> cancelRotation
+    19:23:void cancelRotation(android.content.Context):591:591 -> cancelRotation
+    24:34:void cancelRotation(android.content.Context):592:592 -> cancelRotation
+    35:38:void cancelRotation(android.content.Context):598:598 -> cancelRotation
+    39:43:void cancelRotation(android.content.Context):599:599 -> cancelRotation
+    44:47:void cancelRotation(android.content.Context):601:601 -> cancelRotation
     1:4:void $r8$lambda$SXq5oZ9-uYRYuXoD3RqmhD611qQ(int,android.content.Context):0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$Z5VUm2M5X210npYaTDK4iOBNvQg(android.content.Context,java.lang.String,com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0):0:0 -> e
@@ -78324,10 +78324,10 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/b;Ljava/util/concurrent/atomic/AtomicBoolean;ILandroid/content/Context;)V"}
     1:4:void $r8$lambda$v-1rdCf48IUoeu6Nz9mjLM9IOnk(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
-    1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):529:529 -> getPendingIntent
-    8:10:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):530:530 -> getPendingIntent
-    11:19:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):531:531 -> getPendingIntent
-    20:24:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):536:536 -> getPendingIntent
+    1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):527:527 -> getPendingIntent
+    8:10:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):528:528 -> getPendingIntent
+    11:19:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):529:529 -> getPendingIntent
+    20:24:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):534:534 -> getPendingIntent
     1:4:void $r8$lambda$zWXyiMQHdVpMNz53a1FmuiNOZa4(int,android.content.Context):0:0 -> h
       # {"id":"com.android.tools.r8.synthesized"}
     1:1:void handleWidgetAction(android.content.Context,java.lang.String):195:195 -> handleWidgetAction
@@ -78335,34 +78335,31 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     3:5:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):204:206 -> handleWidgetAction
     6:8:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):208:210 -> handleWidgetAction
     9:9:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):214:214 -> handleWidgetAction
-    10:10:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):315:315 -> handleWidgetAction
-    11:13:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):284:286 -> handleWidgetAction
-    14:14:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):289:289 -> handleWidgetAction
-    15:16:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):292:293 -> handleWidgetAction
-    17:20:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):296:299 -> handleWidgetAction
-    21:26:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):301:306 -> handleWidgetAction
-    27:27:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):311:311 -> handleWidgetAction
-    28:29:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):263:264 -> handleWidgetAction
-    30:32:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):266:268 -> handleWidgetAction
-    33:33:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):270:270 -> handleWidgetAction
-    34:35:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):247:248 -> handleWidgetAction
-    36:37:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):250:251 -> handleWidgetAction
-    38:40:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):253:255 -> handleWidgetAction
-    41:41:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):257:257 -> handleWidgetAction
+    10:10:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):313:313 -> handleWidgetAction
+    11:13:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):283:285 -> handleWidgetAction
+    14:14:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):288:288 -> handleWidgetAction
+    15:16:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):291:292 -> handleWidgetAction
+    17:21:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):295:299 -> handleWidgetAction
+    22:27:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):301:306 -> handleWidgetAction
+    28:29:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):261:262 -> handleWidgetAction
+    30:30:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):264:264 -> handleWidgetAction
+    31:33:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):266:268 -> handleWidgetAction
+    34:35:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):246:247 -> handleWidgetAction
+    36:38:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):249:251 -> handleWidgetAction
+    39:41:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):253:255 -> handleWidgetAction
     42:43:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):231:232 -> handleWidgetAction
-    44:45:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):234:235 -> handleWidgetAction
-    46:48:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):237:239 -> handleWidgetAction
-    49:49:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):241:241 -> handleWidgetAction
+    44:46:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):234:236 -> handleWidgetAction
+    47:49:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):238:240 -> handleWidgetAction
     50:52:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):225:227 -> handleWidgetAction
-    53:55:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):275:277 -> handleWidgetAction
-    56:57:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):279:280 -> handleWidgetAction
+    53:55:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):274:276 -> handleWidgetAction
+    56:57:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):278:279 -> handleWidgetAction
     58:59:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):216:217 -> handleWidgetAction
     60:60:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):219:219 -> handleWidgetAction
     61:61:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):221:221 -> handleWidgetAction
-    5:8:boolean hasActiveWidgets(android.content.Context):542:542 -> hasActiveWidgets
-    9:15:boolean hasActiveWidgets(android.content.Context):543:543 -> hasActiveWidgets
-    16:19:boolean hasActiveWidgets(android.content.Context):544:544 -> hasActiveWidgets
-    20:25:boolean hasActiveWidgets(android.content.Context):545:545 -> hasActiveWidgets
+    5:8:boolean hasActiveWidgets(android.content.Context):540:540 -> hasActiveWidgets
+    9:15:boolean hasActiveWidgets(android.content.Context):541:541 -> hasActiveWidgets
+    16:19:boolean hasActiveWidgets(android.content.Context):542:542 -> hasActiveWidgets
+    20:25:boolean hasActiveWidgets(android.content.Context):543:543 -> hasActiveWidgets
     3:8:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):100:100 -> lambda$onReceive$0
     9:12:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):102:102 -> lambda$onReceive$0
     1:4:void lambda$onReceive$1(android.content.Context,java.lang.String,java.lang.Runnable):111:111 -> lambda$onReceive$1
@@ -78429,17 +78426,17 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     11:16:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):34:34 -> onUpdate
     17:20:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):36:36 -> onUpdate
     1:12:void playNextContinuousWord(android.content.Context,int):138:138 -> playNextContinuousWord
-    4:9:void scheduleNextRotation(android.content.Context):553:553 -> scheduleNextRotation
-    10:13:void scheduleNextRotation(android.content.Context):554:554 -> scheduleNextRotation
-    14:24:void scheduleNextRotation(android.content.Context):558:558 -> scheduleNextRotation
-    25:31:void scheduleNextRotation(android.content.Context):561:561 -> scheduleNextRotation
-    32:36:void scheduleNextRotation(android.content.Context):562:562 -> scheduleNextRotation
-    37:47:void scheduleNextRotation(android.content.Context):563:563 -> scheduleNextRotation
-    48:51:void scheduleNextRotation(android.content.Context):569:569 -> scheduleNextRotation
-    52:69:void scheduleNextRotation(android.content.Context):571:571 -> scheduleNextRotation
-    70:75:void scheduleNextRotation(android.content.Context):576:576 -> scheduleNextRotation
-    76:80:void scheduleNextRotation(android.content.Context):578:578 -> scheduleNextRotation
-    81:84:void scheduleNextRotation(android.content.Context):583:583 -> scheduleNextRotation
+    4:9:void scheduleNextRotation(android.content.Context):551:551 -> scheduleNextRotation
+    10:13:void scheduleNextRotation(android.content.Context):552:552 -> scheduleNextRotation
+    14:24:void scheduleNextRotation(android.content.Context):556:556 -> scheduleNextRotation
+    25:31:void scheduleNextRotation(android.content.Context):559:559 -> scheduleNextRotation
+    32:36:void scheduleNextRotation(android.content.Context):560:560 -> scheduleNextRotation
+    37:47:void scheduleNextRotation(android.content.Context):561:561 -> scheduleNextRotation
+    48:51:void scheduleNextRotation(android.content.Context):567:567 -> scheduleNextRotation
+    52:69:void scheduleNextRotation(android.content.Context):569:569 -> scheduleNextRotation
+    70:75:void scheduleNextRotation(android.content.Context):574:574 -> scheduleNextRotation
+    76:80:void scheduleNextRotation(android.content.Context):576:576 -> scheduleNextRotation
+    81:84:void scheduleNextRotation(android.content.Context):581:581 -> scheduleNextRotation
     6:7:void startContinuousPlay(android.content.Context):119:119 -> startContinuousPlay
     8:13:void startContinuousPlay(android.content.Context):120:120 -> startContinuousPlay
     14:15:void startContinuousPlay(android.content.Context):121:121 -> startContinuousPlay
@@ -78454,111 +78451,111 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     24:26:void stopContinuousPlay(android.content.Context):133:133 -> stopContinuousPlay
     27:29:void stopContinuousPlay(android.content.Context):134:134 -> stopContinuousPlay
     30:34:void stopContinuousPlay(android.content.Context):135:135 -> stopContinuousPlay
-    4:7:void updateAllWidgets(android.content.Context):323:323 -> updateAllWidgets
-    8:14:void updateAllWidgets(android.content.Context):324:324 -> updateAllWidgets
-    15:18:void updateAllWidgets(android.content.Context):325:325 -> updateAllWidgets
-    19:24:void updateAllWidgets(android.content.Context):326:326 -> updateAllWidgets
-    25:32:void updateAllWidgets(android.content.Context):327:327 -> updateAllWidgets
-    33:36:void updateAllWidgets(android.content.Context):330:330 -> updateAllWidgets
-    1:8:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):336:336 -> updateAppWidget
-    9:14:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):338:338 -> updateAppWidget
-    15:17:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):339:339 -> updateAppWidget
-    18:25:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):340:340 -> updateAppWidget
-    26:28:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):341:341 -> updateAppWidget
-    29:30:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):343:343 -> updateAppWidget
-    31:39:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):345:345 -> updateAppWidget
-    40:43:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):347:347 -> updateAppWidget
-    44:47:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):348:348 -> updateAppWidget
-    48:54:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):351:351 -> updateAppWidget
-    55:66:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):352:352 -> updateAppWidget
-    67:71:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):356:356 -> updateAppWidget
-    72:77:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):357:357 -> updateAppWidget
-    78:82:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):359:359 -> updateAppWidget
-    83:87:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):360:360 -> updateAppWidget
-    88:91:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):363:363 -> updateAppWidget
-    92:110:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):364:364 -> updateAppWidget
-    111:120:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):365:365 -> updateAppWidget
-    121:147:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):366:366 -> updateAppWidget
-    148:159:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):379:379 -> updateAppWidget
-    160:166:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):383:383 -> updateAppWidget
-    167:173:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):384:384 -> updateAppWidget
-    174:180:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):385:385 -> updateAppWidget
-    181:188:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):386:386 -> updateAppWidget
-    189:192:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):387:387 -> updateAppWidget
-    193:200:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):388:388 -> updateAppWidget
-    201:208:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):389:389 -> updateAppWidget
-    209:213:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):392:392 -> updateAppWidget
-    214:218:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):393:393 -> updateAppWidget
-    219:223:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):394:394 -> updateAppWidget
-    224:228:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):395:395 -> updateAppWidget
-    229:234:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):396:396 -> updateAppWidget
-    235:241:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):400:400 -> updateAppWidget
-    242:248:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
-    249:255:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):402:402 -> updateAppWidget
-    256:262:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):403:403 -> updateAppWidget
-    263:269:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):404:404 -> updateAppWidget
-    270:277:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):405:405 -> updateAppWidget
-    278:281:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):408:408 -> updateAppWidget
-    282:289:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):409:409 -> updateAppWidget
-    290:297:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):410:410 -> updateAppWidget
-    298:308:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):411:411 -> updateAppWidget
-    309:312:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):414:414 -> updateAppWidget
-    313:320:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):415:415 -> updateAppWidget
-    321:328:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):416:416 -> updateAppWidget
-    329:338:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):419:419 -> updateAppWidget
-    339:343:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):422:422 -> updateAppWidget
-    344:348:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):425:425 -> updateAppWidget
-    349:350:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):426:426 -> updateAppWidget
-    351:359:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):428:428 -> updateAppWidget
-    360:363:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):426:426 -> updateAppWidget
-    364:370:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
-    371:378:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):433:433 -> updateAppWidget
-    379:382:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):434:434 -> updateAppWidget
-    383:388:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):435:435 -> updateAppWidget
-    389:413:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):437:437 -> updateAppWidget
-    414:419:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):438:438 -> updateAppWidget
-    420:425:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):440:440 -> updateAppWidget
-    426:435:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):443:443 -> updateAppWidget
-    436:441:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):450:450 -> updateAppWidget
-    442:451:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):448:448 -> updateAppWidget
-    452:456:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):457:457 -> updateAppWidget
-    457:460:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):458:458 -> updateAppWidget
-    461:468:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):459:459 -> updateAppWidget
-    469:476:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):462:462 -> updateAppWidget
-    477:481:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):464:464 -> updateAppWidget
-    482:487:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):466:466 -> updateAppWidget
-    488:494:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):455:455 -> updateAppWidget
-    495:504:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):471:471 -> updateAppWidget
-    505:521:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):473:473 -> updateAppWidget
-    522:529:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):474:474 -> updateAppWidget
-    530:536:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):477:477 -> updateAppWidget
-    537:542:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):478:478 -> updateAppWidget
-    543:548:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):481:481 -> updateAppWidget
-    549:553:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):484:484 -> updateAppWidget
-    554:559:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):488:488 -> updateAppWidget
-    560:563:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):490:490 -> updateAppWidget
-    564:568:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):491:491 -> updateAppWidget
-    569:574:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):492:492 -> updateAppWidget
-    575:579:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):494:494 -> updateAppWidget
-    580:588:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):500:500 -> updateAppWidget
-    589:591:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):501:501 -> updateAppWidget
-    592:605:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):502:502 -> updateAppWidget
-    606:609:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):503:503 -> updateAppWidget
-    610:614:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):504:504 -> updateAppWidget
-    615:622:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):507:507 -> updateAppWidget
-    623:627:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):508:508 -> updateAppWidget
-    628:632:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):509:509 -> updateAppWidget
-    633:637:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):510:510 -> updateAppWidget
-    638:642:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):511:511 -> updateAppWidget
-    643:647:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):512:512 -> updateAppWidget
-    648:652:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):513:513 -> updateAppWidget
-    653:665:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):516:516 -> updateAppWidget
-    666:678:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):517:517 -> updateAppWidget
-    679:691:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):518:518 -> updateAppWidget
-    692:704:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):519:519 -> updateAppWidget
-    705:719:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):520:520 -> updateAppWidget
-    720:725:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):522:522 -> updateAppWidget
-    726:729:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):524:524 -> updateAppWidget
+    4:7:void updateAllWidgets(android.content.Context):321:321 -> updateAllWidgets
+    8:14:void updateAllWidgets(android.content.Context):322:322 -> updateAllWidgets
+    15:18:void updateAllWidgets(android.content.Context):323:323 -> updateAllWidgets
+    19:24:void updateAllWidgets(android.content.Context):324:324 -> updateAllWidgets
+    25:32:void updateAllWidgets(android.content.Context):325:325 -> updateAllWidgets
+    33:36:void updateAllWidgets(android.content.Context):328:328 -> updateAllWidgets
+    1:8:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):334:334 -> updateAppWidget
+    9:14:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):336:336 -> updateAppWidget
+    15:17:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):337:337 -> updateAppWidget
+    18:25:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):338:338 -> updateAppWidget
+    26:28:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):339:339 -> updateAppWidget
+    29:30:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):341:341 -> updateAppWidget
+    31:39:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):343:343 -> updateAppWidget
+    40:43:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):345:345 -> updateAppWidget
+    44:47:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):346:346 -> updateAppWidget
+    48:54:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):349:349 -> updateAppWidget
+    55:66:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):350:350 -> updateAppWidget
+    67:71:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):354:354 -> updateAppWidget
+    72:77:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):355:355 -> updateAppWidget
+    78:82:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):357:357 -> updateAppWidget
+    83:87:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):358:358 -> updateAppWidget
+    88:91:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):361:361 -> updateAppWidget
+    92:110:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):362:362 -> updateAppWidget
+    111:120:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):363:363 -> updateAppWidget
+    121:147:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):364:364 -> updateAppWidget
+    148:159:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):377:377 -> updateAppWidget
+    160:166:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):381:381 -> updateAppWidget
+    167:173:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):382:382 -> updateAppWidget
+    174:180:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):383:383 -> updateAppWidget
+    181:188:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):384:384 -> updateAppWidget
+    189:192:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):385:385 -> updateAppWidget
+    193:200:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):386:386 -> updateAppWidget
+    201:208:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):387:387 -> updateAppWidget
+    209:213:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):390:390 -> updateAppWidget
+    214:218:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):391:391 -> updateAppWidget
+    219:223:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):392:392 -> updateAppWidget
+    224:228:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):393:393 -> updateAppWidget
+    229:234:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):394:394 -> updateAppWidget
+    235:241:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):398:398 -> updateAppWidget
+    242:248:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):399:399 -> updateAppWidget
+    249:255:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):400:400 -> updateAppWidget
+    256:262:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
+    263:269:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):402:402 -> updateAppWidget
+    270:277:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):403:403 -> updateAppWidget
+    278:281:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):406:406 -> updateAppWidget
+    282:289:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):407:407 -> updateAppWidget
+    290:297:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):408:408 -> updateAppWidget
+    298:308:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):409:409 -> updateAppWidget
+    309:312:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):412:412 -> updateAppWidget
+    313:320:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):413:413 -> updateAppWidget
+    321:328:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):414:414 -> updateAppWidget
+    329:338:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):417:417 -> updateAppWidget
+    339:343:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):420:420 -> updateAppWidget
+    344:348:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
+    349:350:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):424:424 -> updateAppWidget
+    351:359:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):426:426 -> updateAppWidget
+    360:363:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):424:424 -> updateAppWidget
+    364:370:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):421:421 -> updateAppWidget
+    371:378:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):431:431 -> updateAppWidget
+    379:382:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):432:432 -> updateAppWidget
+    383:388:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):433:433 -> updateAppWidget
+    389:413:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):435:435 -> updateAppWidget
+    414:419:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):436:436 -> updateAppWidget
+    420:425:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):438:438 -> updateAppWidget
+    426:435:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):441:441 -> updateAppWidget
+    436:441:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):448:448 -> updateAppWidget
+    442:451:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):446:446 -> updateAppWidget
+    452:456:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):455:455 -> updateAppWidget
+    457:460:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):456:456 -> updateAppWidget
+    461:468:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):457:457 -> updateAppWidget
+    469:476:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):460:460 -> updateAppWidget
+    477:481:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):462:462 -> updateAppWidget
+    482:487:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):464:464 -> updateAppWidget
+    488:494:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):453:453 -> updateAppWidget
+    495:504:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):469:469 -> updateAppWidget
+    505:521:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):471:471 -> updateAppWidget
+    522:529:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):472:472 -> updateAppWidget
+    530:536:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):475:475 -> updateAppWidget
+    537:542:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):476:476 -> updateAppWidget
+    543:548:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):479:479 -> updateAppWidget
+    549:553:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):482:482 -> updateAppWidget
+    554:559:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):486:486 -> updateAppWidget
+    560:563:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):488:488 -> updateAppWidget
+    564:568:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):489:489 -> updateAppWidget
+    569:574:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):490:490 -> updateAppWidget
+    575:579:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):492:492 -> updateAppWidget
+    580:588:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):498:498 -> updateAppWidget
+    589:591:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):499:499 -> updateAppWidget
+    592:605:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):500:500 -> updateAppWidget
+    606:609:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):501:501 -> updateAppWidget
+    610:614:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):502:502 -> updateAppWidget
+    615:622:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):505:505 -> updateAppWidget
+    623:627:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):506:506 -> updateAppWidget
+    628:632:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):507:507 -> updateAppWidget
+    633:637:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):508:508 -> updateAppWidget
+    638:642:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):509:509 -> updateAppWidget
+    643:647:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):510:510 -> updateAppWidget
+    648:652:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):511:511 -> updateAppWidget
+    653:665:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):514:514 -> updateAppWidget
+    666:678:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):515:515 -> updateAppWidget
+    679:691:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):516:516 -> updateAppWidget
+    692:704:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):517:517 -> updateAppWidget
+    705:719:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):518:518 -> updateAppWidget
+    720:725:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):520:520 -> updateAppWidget
+    726:729:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):522:522 -> updateAppWidget
 com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.a:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
@@ -79440,20 +79437,16 @@ com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englis
     int $r8$classId -> q
       # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$0 -> r
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$1 -> s
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$2 -> t
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$3 -> u
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
-    1:1:void <init>(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):0:0 -> <init>
+    1:14:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    2:2:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String,int):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:54:void run():0:0 -> run
+    1:30:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda8 -> com.englishbreakfast.app.t:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
@@ -79572,6 +79565,8 @@ com.englishbreakfast.app.StudyReminderReceiver -> com.englishbreakfast.app.Study
 com.englishbreakfast.app.WidgetAudioPlayer -> com.englishbreakfast.app.WidgetAudioPlayer:
 # {"id":"sourceFile","fileName":"WidgetAudioPlayer.java"}
     1:7:void <clinit>():29:29 -> <clinit>
+    8:10:void <clinit>():30:30 -> <clinit>
+    11:13:void <clinit>():31:31 -> <clinit>
     1:4:void <init>():24:24 -> <init>
     1:4:void $r8$lambda$C6Pq5Pbu5Q-99yxV_STCZ9y2cIw(android.content.Context,java.lang.Runnable,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
@@ -79581,37 +79576,36 @@ com.englishbreakfast.app.WidgetAudioPlayer -> com.englishbreakfast.app.WidgetAud
       # {"id":"com.android.tools.r8.synthesized"}
     1:5:boolean $r8$lambda$Lj0GCFb_e17PqTHJMBYftJzJMMU(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
-    1:13:boolean downloadAudioToCache(android.content.Context,java.lang.String):232:232 -> downloadAudioToCache
-    14:24:boolean downloadAudioToCache(android.content.Context,java.lang.String):234:234 -> downloadAudioToCache
-    25:30:boolean downloadAudioToCache(android.content.Context,java.lang.String):235:235 -> downloadAudioToCache
-    31:33:boolean downloadAudioToCache(android.content.Context,java.lang.String):236:236 -> downloadAudioToCache
-    34:38:boolean downloadAudioToCache(android.content.Context,java.lang.String):238:238 -> downloadAudioToCache
-    39:56:boolean downloadAudioToCache(android.content.Context,java.lang.String):239:239 -> downloadAudioToCache
-    57:76:boolean downloadAudioToCache(android.content.Context,java.lang.String):243:243 -> downloadAudioToCache
-    77:79:boolean downloadAudioToCache(android.content.Context,java.lang.String):249:249 -> downloadAudioToCache
-    80:84:boolean downloadAudioToCache(android.content.Context,java.lang.String):252:252 -> downloadAudioToCache
-    85:92:boolean downloadAudioToCache(android.content.Context,java.lang.String):253:253 -> downloadAudioToCache
-    93:95:boolean downloadAudioToCache(android.content.Context,java.lang.String):254:254 -> downloadAudioToCache
-    96:98:boolean downloadAudioToCache(android.content.Context,java.lang.String):255:255 -> downloadAudioToCache
-    99:101:boolean downloadAudioToCache(android.content.Context,java.lang.String):256:256 -> downloadAudioToCache
-    102:109:boolean downloadAudioToCache(android.content.Context,java.lang.String):257:257 -> downloadAudioToCache
-    110:131:boolean downloadAudioToCache(android.content.Context,java.lang.String):258:258 -> downloadAudioToCache
-    132:135:boolean downloadAudioToCache(android.content.Context,java.lang.String):259:259 -> downloadAudioToCache
-    136:142:boolean downloadAudioToCache(android.content.Context,java.lang.String):260:260 -> downloadAudioToCache
-    143:144:boolean downloadAudioToCache(android.content.Context,java.lang.String):261:261 -> downloadAudioToCache
-    145:151:boolean downloadAudioToCache(android.content.Context,java.lang.String):263:263 -> downloadAudioToCache
-    152:157:boolean downloadAudioToCache(android.content.Context,java.lang.String):264:264 -> downloadAudioToCache
-    158:163:boolean downloadAudioToCache(android.content.Context,java.lang.String):266:266 -> downloadAudioToCache
-    164:177:boolean downloadAudioToCache(android.content.Context,java.lang.String):267:267 -> downloadAudioToCache
-    178:183:boolean downloadAudioToCache(android.content.Context,java.lang.String):268:268 -> downloadAudioToCache
-    184:194:boolean downloadAudioToCache(android.content.Context,java.lang.String):276:276 -> downloadAudioToCache
-    195:214:boolean downloadAudioToCache(android.content.Context,java.lang.String):259:259 -> downloadAudioToCache
-    215:224:boolean downloadAudioToCache(android.content.Context,java.lang.String):276:276 -> downloadAudioToCache
-    225:227:boolean downloadAudioToCache(android.content.Context,java.lang.String):278:278 -> downloadAudioToCache
-    228:235:boolean downloadAudioToCache(android.content.Context,java.lang.String):276:276 -> downloadAudioToCache
+    1:11:boolean downloadAudioToCache(android.content.Context,java.lang.String):245:245 -> downloadAudioToCache
+    12:22:boolean downloadAudioToCache(android.content.Context,java.lang.String):247:247 -> downloadAudioToCache
+    23:28:boolean downloadAudioToCache(android.content.Context,java.lang.String):248:248 -> downloadAudioToCache
+    29:31:boolean downloadAudioToCache(android.content.Context,java.lang.String):249:249 -> downloadAudioToCache
+    32:36:boolean downloadAudioToCache(android.content.Context,java.lang.String):251:251 -> downloadAudioToCache
+    37:54:boolean downloadAudioToCache(android.content.Context,java.lang.String):252:252 -> downloadAudioToCache
+    55:59:boolean downloadAudioToCache(android.content.Context,java.lang.String):257:257 -> downloadAudioToCache
+    60:64:boolean downloadAudioToCache(android.content.Context,java.lang.String):260:260 -> downloadAudioToCache
+    65:72:boolean downloadAudioToCache(android.content.Context,java.lang.String):261:261 -> downloadAudioToCache
+    73:75:boolean downloadAudioToCache(android.content.Context,java.lang.String):262:262 -> downloadAudioToCache
+    76:78:boolean downloadAudioToCache(android.content.Context,java.lang.String):263:263 -> downloadAudioToCache
+    79:81:boolean downloadAudioToCache(android.content.Context,java.lang.String):264:264 -> downloadAudioToCache
+    82:89:boolean downloadAudioToCache(android.content.Context,java.lang.String):265:265 -> downloadAudioToCache
+    90:98:boolean downloadAudioToCache(android.content.Context,java.lang.String):266:266 -> downloadAudioToCache
+    99:102:boolean downloadAudioToCache(android.content.Context,java.lang.String):267:267 -> downloadAudioToCache
+    103:109:boolean downloadAudioToCache(android.content.Context,java.lang.String):268:268 -> downloadAudioToCache
+    110:111:boolean downloadAudioToCache(android.content.Context,java.lang.String):269:269 -> downloadAudioToCache
+    112:118:boolean downloadAudioToCache(android.content.Context,java.lang.String):271:271 -> downloadAudioToCache
+    119:124:boolean downloadAudioToCache(android.content.Context,java.lang.String):272:272 -> downloadAudioToCache
+    125:130:boolean downloadAudioToCache(android.content.Context,java.lang.String):274:274 -> downloadAudioToCache
+    131:144:boolean downloadAudioToCache(android.content.Context,java.lang.String):275:275 -> downloadAudioToCache
+    145:148:boolean downloadAudioToCache(android.content.Context,java.lang.String):276:276 -> downloadAudioToCache
+    149:159:boolean downloadAudioToCache(android.content.Context,java.lang.String):282:282 -> downloadAudioToCache
+    160:179:boolean downloadAudioToCache(android.content.Context,java.lang.String):267:267 -> downloadAudioToCache
+    180:189:boolean downloadAudioToCache(android.content.Context,java.lang.String):282:282 -> downloadAudioToCache
+    190:192:boolean downloadAudioToCache(android.content.Context,java.lang.String):284:284 -> downloadAudioToCache
+    193:196:boolean downloadAudioToCache(android.content.Context,java.lang.String):282:282 -> downloadAudioToCache
     1:5:boolean $r8$lambda$RvB-ULOxyt75hJTUyMWrg3qqpPQ(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):0:0 -> e
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$V_eMexUIQcRZaQ1u7zASLy44qRc(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):0:0 -> f
+    1:4:void $r8$lambda$aiBdGXZrfYhj0HOhfWXMStdzZNw(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):0:0 -> f
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$e2PeTxnAInJt7d4S3SxtRqNhUsw(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
@@ -79619,105 +79613,112 @@ com.englishbreakfast.app.WidgetAudioPlayer -> com.englishbreakfast.app.WidgetAud
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$m_SuWb5Z8EEZgj503fWez5y16Dk(java.lang.Runnable,java.lang.String,java.lang.String,int):0:0 -> i
       # {"id":"com.android.tools.r8.synthesized"}
-    4:14:boolean isSystemAudioBusy(android.content.Context):72:72 -> isSystemAudioBusy
-    15:28:boolean isSystemAudioBusy(android.content.Context):76:76 -> isSystemAudioBusy
-    29:35:boolean isSystemAudioBusy(android.content.Context):84:84 -> isSystemAudioBusy
-    36:41:boolean isSystemAudioBusy(android.content.Context):89:89 -> isSystemAudioBusy
-    42:47:boolean isSystemAudioBusy(android.content.Context):90:90 -> isSystemAudioBusy
-    48:65:boolean isSystemAudioBusy(android.content.Context):92:92 -> isSystemAudioBusy
-    66:71:boolean isSystemAudioBusy(android.content.Context):93:93 -> isSystemAudioBusy
-    72:86:boolean isSystemAudioBusy(android.content.Context):95:95 -> isSystemAudioBusy
-    87:97:boolean isSystemAudioBusy(android.content.Context):108:108 -> isSystemAudioBusy
-    4:5:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):291:291 -> lambda$playViaTts$7
-    6:19:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):292:292 -> lambda$playViaTts$7
-    20:28:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):294:294 -> lambda$playViaTts$7
-    29:38:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):297:297 -> lambda$playViaTts$7
-    39:50:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):310:310 -> lambda$playViaTts$7
-    51:56:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):312:312 -> lambda$playViaTts$7
-    57:60:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):315:315 -> lambda$playViaTts$7
-    1:18:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):287:287 -> lambda$playViaTts$8
-    19:22:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):288:288 -> lambda$playViaTts$8
-    23:37:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):289:289 -> lambda$playViaTts$8
-    38:41:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):318:318 -> lambda$playViaTts$8
-    42:49:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):320:320 -> lambda$playViaTts$8
-    50:61:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):333:333 -> lambda$playViaTts$8
-    62:67:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):335:335 -> lambda$playViaTts$8
-    68:71:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):338:338 -> lambda$playViaTts$8
-    72:76:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):341:341 -> lambda$playViaTts$8
-    77:80:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):342:342 -> lambda$playViaTts$8
-    1:3:void lambda$playWord$0(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):153:153 -> lambda$playWord$0
-    4:10:void lambda$playWord$0(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):154:154 -> lambda$playWord$0
-    11:14:void lambda$playWord$0(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):155:155 -> lambda$playWord$0
-    1:3:boolean lambda$playWord$1(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):158:158 -> lambda$playWord$1
-    4:10:boolean lambda$playWord$1(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):159:159 -> lambda$playWord$1
-    11:15:boolean lambda$playWord$1(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):160:160 -> lambda$playWord$1
-    1:3:void lambda$playWord$2(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):183:183 -> lambda$playWord$2
-    4:10:void lambda$playWord$2(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):184:184 -> lambda$playWord$2
-    11:14:void lambda$playWord$2(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):185:185 -> lambda$playWord$2
-    1:3:boolean lambda$playWord$3(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):188:188 -> lambda$playWord$3
-    4:10:boolean lambda$playWord$3(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):189:189 -> lambda$playWord$3
-    11:15:boolean lambda$playWord$3(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):190:190 -> lambda$playWord$3
-    1:3:void lambda$playWord$4(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):210:210 -> lambda$playWord$4
-    4:10:void lambda$playWord$4(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):211:211 -> lambda$playWord$4
-    11:14:void lambda$playWord$4(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):212:212 -> lambda$playWord$4
-    1:3:boolean lambda$playWord$5(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):215:215 -> lambda$playWord$5
-    4:10:boolean lambda$playWord$5(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):216:216 -> lambda$playWord$5
-    11:15:boolean lambda$playWord$5(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):217:217 -> lambda$playWord$5
-    1:6:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):202:202 -> lambda$playWord$6
-    7:14:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):204:204 -> lambda$playWord$6
-    15:18:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):0:0 -> lambda$playWord$6
-      # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":81,"3":83,"6":86,"9":90},"outline":"Lcom/google/android/gms/internal/ads/pn0;p(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"}
-    19:21:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):204:204 -> lambda$playWord$6
-    22:37:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):205:205 -> lambda$playWord$6
-    38:42:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):207:207 -> lambda$playWord$6
-    43:49:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):208:208 -> lambda$playWord$6
-    50:58:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):209:209 -> lambda$playWord$6
-    59:67:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):214:214 -> lambda$playWord$6
-    68:70:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):220:220 -> lambda$playWord$6
-    71:73:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):221:221 -> lambda$playWord$6
-    74:76:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):222:222 -> lambda$playWord$6
-    77:80:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):227:227 -> lambda$playWord$6
-    81:81:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):204:204 -> lambda$playWord$6
-    83:83:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):204:204 -> lambda$playWord$6
-    86:86:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):204:204 -> lambda$playWord$6
-    90:90:void lambda$playWord$6(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,java.lang.String):204:204 -> lambda$playWord$6
-    6:7:void playPageTurn(android.content.Context):365:365 -> playPageTurn
-    8:17:void playPageTurn(android.content.Context):368:368 -> playPageTurn
-    18:26:void playPageTurn(android.content.Context):370:370 -> playPageTurn
-    27:32:void playPageTurn(android.content.Context):372:372 -> playPageTurn
-    33:50:void playPageTurn(android.content.Context):375:375 -> playPageTurn
-    51:63:void playPageTurn(android.content.Context):377:377 -> playPageTurn
-    64:66:void playPageTurn(android.content.Context):379:379 -> playPageTurn
-    67:74:void playPageTurn(android.content.Context):380:380 -> playPageTurn
-    75:78:void playPageTurn(android.content.Context):381:381 -> playPageTurn
-    79:81:void playPageTurn(android.content.Context):385:385 -> playPageTurn
-    82:85:void playPageTurn(android.content.Context):387:387 -> playPageTurn
-    1:18:void playViaTts(android.content.Context,java.lang.String,java.lang.Runnable):285:285 -> playViaTts
-    1:2:void playWord(android.content.Context,java.lang.String):121:122 -> playWord
-    3:3:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):125:125 -> playWord
-    4:9:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):130:135 -> playWord
-    10:10:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):138:138 -> playWord
-    11:17:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):142:148 -> playWord
-    18:18:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):145:145 -> playWord
-    19:20:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):149:150 -> playWord
-    21:21:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):152:152 -> playWord
-    22:22:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):157:157 -> playWord
-    23:26:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):164:167 -> playWord
-    27:29:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):174:176 -> playWord
-    30:33:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):179:182 -> playWord
-    34:34:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):187:187 -> playWord
-    35:38:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):193:196 -> playWord
-    39:39:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):201:201 -> playWord
-    40:40:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):229:229 -> playWord
-    41:42:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):126:127 -> playWord
-    4:7:void stopPlayback():348:348 -> stopPlayback
-    8:13:void stopPlayback():350:350 -> stopPlayback
-    14:21:void stopPlayback():351:351 -> stopPlayback
-    22:27:void stopPlayback():353:353 -> stopPlayback
-    28:29:void stopPlayback():355:355 -> stopPlayback
-    30:33:void stopPlayback():357:357 -> stopPlayback
-    34:36:void stopPlayback():359:359 -> stopPlayback
-    37:40:void stopPlayback():362:362 -> stopPlayback
+    4:14:boolean isSystemAudioBusy(android.content.Context):74:74 -> isSystemAudioBusy
+    15:28:boolean isSystemAudioBusy(android.content.Context):78:78 -> isSystemAudioBusy
+    29:35:boolean isSystemAudioBusy(android.content.Context):86:86 -> isSystemAudioBusy
+    36:41:boolean isSystemAudioBusy(android.content.Context):91:91 -> isSystemAudioBusy
+    42:47:boolean isSystemAudioBusy(android.content.Context):92:92 -> isSystemAudioBusy
+    48:65:boolean isSystemAudioBusy(android.content.Context):94:94 -> isSystemAudioBusy
+    66:71:boolean isSystemAudioBusy(android.content.Context):95:95 -> isSystemAudioBusy
+    72:86:boolean isSystemAudioBusy(android.content.Context):97:97 -> isSystemAudioBusy
+    87:97:boolean isSystemAudioBusy(android.content.Context):110:110 -> isSystemAudioBusy
+    4:5:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):296:296 -> lambda$playViaTts$7
+    6:19:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):297:297 -> lambda$playViaTts$7
+    20:28:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):299:299 -> lambda$playViaTts$7
+    29:38:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):302:302 -> lambda$playViaTts$7
+    39:50:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):315:315 -> lambda$playViaTts$7
+    51:56:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):317:317 -> lambda$playViaTts$7
+    57:60:void lambda$playViaTts$7(java.lang.Runnable,java.lang.String,java.lang.String,int):320:320 -> lambda$playViaTts$7
+    1:18:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):292:292 -> lambda$playViaTts$8
+    19:22:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):293:293 -> lambda$playViaTts$8
+    23:37:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):294:294 -> lambda$playViaTts$8
+    38:41:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):323:323 -> lambda$playViaTts$8
+    42:49:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):325:325 -> lambda$playViaTts$8
+    50:61:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):338:338 -> lambda$playViaTts$8
+    62:67:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):340:340 -> lambda$playViaTts$8
+    68:71:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):343:343 -> lambda$playViaTts$8
+    72:76:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):346:346 -> lambda$playViaTts$8
+    77:80:void lambda$playViaTts$8(android.content.Context,java.lang.Runnable,java.lang.String):347:347 -> lambda$playViaTts$8
+    1:3:void lambda$playWord$0(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):158:158 -> lambda$playWord$0
+    4:10:void lambda$playWord$0(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):159:159 -> lambda$playWord$0
+    11:14:void lambda$playWord$0(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):160:160 -> lambda$playWord$0
+    1:3:boolean lambda$playWord$1(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):163:163 -> lambda$playWord$1
+    4:10:boolean lambda$playWord$1(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):164:164 -> lambda$playWord$1
+    11:15:boolean lambda$playWord$1(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):165:165 -> lambda$playWord$1
+    1:3:void lambda$playWord$2(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):188:188 -> lambda$playWord$2
+    4:10:void lambda$playWord$2(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):189:189 -> lambda$playWord$2
+    11:14:void lambda$playWord$2(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):190:190 -> lambda$playWord$2
+    1:3:boolean lambda$playWord$3(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):193:193 -> lambda$playWord$3
+    4:10:boolean lambda$playWord$3(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):194:194 -> lambda$playWord$3
+    11:15:boolean lambda$playWord$3(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):195:195 -> lambda$playWord$3
+    1:3:void lambda$playWord$4(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):223:223 -> lambda$playWord$4
+    4:10:void lambda$playWord$4(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):224:224 -> lambda$playWord$4
+    11:14:void lambda$playWord$4(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer):225:225 -> lambda$playWord$4
+    1:3:boolean lambda$playWord$5(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):228:228 -> lambda$playWord$5
+    4:10:boolean lambda$playWord$5(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):229:229 -> lambda$playWord$5
+    11:15:boolean lambda$playWord$5(android.content.Context,java.lang.String,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.media.MediaPlayer,int,int):230:230 -> lambda$playWord$5
+    1:4:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):207:207 -> lambda$playWord$6
+    5:8:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):208:208 -> lambda$playWord$6
+    9:12:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):211:211 -> lambda$playWord$6
+    13:16:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):212:212 -> lambda$playWord$6
+    17:22:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):213:213 -> lambda$playWord$6
+    23:30:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):217:217 -> lambda$playWord$6
+    31:34:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):0:0 -> lambda$playWord$6
+      # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":97,"3":99,"6":102,"9":106},"outline":"Lcom/google/android/gms/internal/ads/pn0;p(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"}
+    35:37:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):217:217 -> lambda$playWord$6
+    38:53:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):218:218 -> lambda$playWord$6
+    54:58:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):220:220 -> lambda$playWord$6
+    59:65:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):221:221 -> lambda$playWord$6
+    66:74:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):222:222 -> lambda$playWord$6
+    75:83:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):227:227 -> lambda$playWord$6
+    84:86:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):233:233 -> lambda$playWord$6
+    87:89:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):234:234 -> lambda$playWord$6
+    90:92:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):235:235 -> lambda$playWord$6
+    93:96:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):240:240 -> lambda$playWord$6
+    97:97:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):217:217 -> lambda$playWord$6
+    99:99:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):217:217 -> lambda$playWord$6
+    102:102:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):217:217 -> lambda$playWord$6
+    106:106:void lambda$playWord$6(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):217:217 -> lambda$playWord$6
+    6:7:void playPageTurn(android.content.Context):374:374 -> playPageTurn
+    8:17:void playPageTurn(android.content.Context):377:377 -> playPageTurn
+    18:26:void playPageTurn(android.content.Context):379:379 -> playPageTurn
+    27:32:void playPageTurn(android.content.Context):381:381 -> playPageTurn
+    33:50:void playPageTurn(android.content.Context):384:384 -> playPageTurn
+    51:63:void playPageTurn(android.content.Context):386:386 -> playPageTurn
+    64:66:void playPageTurn(android.content.Context):388:388 -> playPageTurn
+    67:74:void playPageTurn(android.content.Context):389:389 -> playPageTurn
+    75:78:void playPageTurn(android.content.Context):390:390 -> playPageTurn
+    79:81:void playPageTurn(android.content.Context):394:394 -> playPageTurn
+    82:85:void playPageTurn(android.content.Context):396:396 -> playPageTurn
+    1:18:void playViaTts(android.content.Context,java.lang.String,java.lang.Runnable):290:290 -> playViaTts
+    1:2:void playWord(android.content.Context,java.lang.String):123:124 -> playWord
+    3:3:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):127:127 -> playWord
+    4:11:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):132:139 -> playWord
+    12:13:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):142:143 -> playWord
+    14:20:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):147:153 -> playWord
+    21:21:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):150:150 -> playWord
+    22:23:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):154:155 -> playWord
+    24:24:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):157:157 -> playWord
+    25:25:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):162:162 -> playWord
+    26:29:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):169:172 -> playWord
+    30:32:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):179:181 -> playWord
+    33:36:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):184:187 -> playWord
+    37:37:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):192:192 -> playWord
+    38:41:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):198:201 -> playWord
+    42:42:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):206:206 -> playWord
+    43:43:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):242:242 -> playWord
+    44:45:void playWord(android.content.Context,java.lang.String,java.lang.Runnable):128:129 -> playWord
+    4:8:void stopPlayback():353:353 -> stopPlayback
+    9:11:void stopPlayback():354:354 -> stopPlayback
+    12:16:void stopPlayback():355:355 -> stopPlayback
+    17:20:void stopPlayback():357:357 -> stopPlayback
+    21:26:void stopPlayback():359:359 -> stopPlayback
+    27:31:void stopPlayback():360:360 -> stopPlayback
+    32:36:void stopPlayback():362:362 -> stopPlayback
+    37:38:void stopPlayback():364:364 -> stopPlayback
+    39:42:void stopPlayback():366:366 -> stopPlayback
+    43:45:void stopPlayback():368:368 -> stopPlayback
+    46:49:void stopPlayback():371:371 -> stopPlayback
 com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.u:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
@@ -79744,12 +79745,29 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.eng
       # {"id":"com.android.tools.r8.synthesized"}
     1:48:boolean onError(android.media.MediaPlayer,int,int):0:0 -> onError
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.w:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.w:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$0 -> q
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$1 -> r
+      # {"id":"com.android.tools.r8.synthesized"}
+    android.content.Context com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$2 -> s
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$3 -> t
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$4 -> u
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:14:void <init>(int,com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback,android.content.Context,java.lang.String,java.lang.String):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:14:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.x:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:4:void onCompletion(android.media.MediaPlayer):0:0 -> onCompletion
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.x:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.y:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     java.lang.Runnable com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$109f19453e4e189a776a66d7fca7722cc86702b145d4093e536cfdb90dfb80ab$0.f$0 -> a
@@ -79764,33 +79782,33 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.engl
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.WidgetAudioPlayer$1 -> com.englishbreakfast.app.WidgetAudioPlayer$1:
 # {"id":"sourceFile","fileName":"WidgetAudioPlayer.java"}
-    1:6:void <init>(java.lang.Runnable):297:297 -> <init>
-    1:8:void onDone(java.lang.String):302:302 -> onDone
-    1:8:void onError(java.lang.String):306:306 -> onError
+    1:6:void <init>(java.lang.Runnable):302:302 -> <init>
+    1:8:void onDone(java.lang.String):307:307 -> onDone
+    1:8:void onError(java.lang.String):311:311 -> onError
     1:1:void onStart(java.lang.String):0:0 -> onStart
 com.englishbreakfast.app.WidgetAudioPlayer$2 -> com.englishbreakfast.app.WidgetAudioPlayer$2:
 # {"id":"sourceFile","fileName":"WidgetAudioPlayer.java"}
-    1:6:void <init>(java.lang.Runnable):320:320 -> <init>
-    1:8:void onDone(java.lang.String):325:325 -> onDone
-    1:8:void onError(java.lang.String):329:329 -> onError
+    1:6:void <init>(java.lang.Runnable):325:325 -> <init>
+    1:8:void onDone(java.lang.String):330:330 -> onDone
+    1:8:void onError(java.lang.String):334:334 -> onError
     1:1:void onStart(java.lang.String):0:0 -> onStart
 com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback -> com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback:
 # {"id":"sourceFile","fileName":"WidgetAudioPlayer.java"}
-    1:3:void <init>(java.lang.Runnable,long):42:42 -> <init>
-    4:11:void <init>(java.lang.Runnable,long):38:38 -> <init>
-    12:22:void <init>(java.lang.Runnable,long):39:39 -> <init>
-    23:24:void <init>(java.lang.Runnable,long):43:43 -> <init>
-    25:32:void <init>(java.lang.Runnable,long):44:44 -> <init>
-    33:36:void <init>(java.lang.Runnable,long):51:51 -> <init>
+    1:3:void <init>(java.lang.Runnable,long):44:44 -> <init>
+    4:11:void <init>(java.lang.Runnable,long):40:40 -> <init>
+    12:22:void <init>(java.lang.Runnable,long):41:41 -> <init>
+    23:24:void <init>(java.lang.Runnable,long):45:45 -> <init>
+    25:32:void <init>(java.lang.Runnable,long):46:46 -> <init>
+    33:36:void <init>(java.lang.Runnable,long):53:53 -> <init>
     1:4:void $r8$lambda$1XzLYGnJE07muiFp44WTFUhQ72I(com.englishbreakfast.app.WidgetAudioPlayer$SafeAudioCallback):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:10:void lambda$new$0():45:45 -> lambda$new$0
-    11:14:void lambda$new$0():46:46 -> lambda$new$0
-    15:18:void lambda$new$0():47:47 -> lambda$new$0
-    1:7:void run():56:56 -> run
-    8:17:void run():57:57 -> run
-    18:21:void run():58:58 -> run
-    22:25:void run():59:59 -> run
+    1:10:void lambda$new$0():47:47 -> lambda$new$0
+    11:14:void lambda$new$0():48:48 -> lambda$new$0
+    15:18:void lambda$new$0():49:49 -> lambda$new$0
+    1:7:void run():58:58 -> run
+    8:17:void run():59:59 -> run
+    18:21:void run():60:60 -> run
+    22:25:void run():61:61 -> run
 com.englishbreakfast.app.WidgetConfigActivity -> com.englishbreakfast.app.WidgetConfigActivity:
 # {"id":"sourceFile","fileName":"WidgetConfigActivity.java"}
     1:4:void <init>():12:12 -> <init>
