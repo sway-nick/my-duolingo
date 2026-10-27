@@ -987,60 +987,56 @@
 
           if (!window._showHubScreen && currentMethod === 'cards' && pairsQueue.length > 0) {
             content.innerHTML = `
-              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
-                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                  ${t('train_congrats_mastered')}
-                </p>
-                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                  <button class="primary-button btn-green" id="go-pairs-btn" style="min-height: 44px; font-weight: 700;">
-                    🧩 ${t('train_go_pairs')}
-                  </button>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
+                <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
+                  <div class="cat-loader-bar"></div>
+                  <div class="cat-loader-paws">
+                    <span class="cat-paw-print">🐾</span>
+                    <span class="cat-paw-print">🐾</span>
+                    <span class="cat-paw-print">🐾</span>
+                    <span class="cat-paw-print">🐾</span>
+                  </div>
                 </div>
               </div>
             `;
-
-            const goPairsBtn = content.querySelector('#go-pairs-btn');
-            if (goPairsBtn) {
-              goPairsBtn.addEventListener('click', async () => {
-                try {
-                  await AdService.showRoundFinishInterstitial();
-                } catch (e) {}
-                userSettings.preferredMethod = 'pairs';
-                saveUserSettings(userSettings);
-                currentWordIndex = 0;
-                renderTrainingTab();
-              });
-            }
+            (async () => {
+              try {
+                await AdService.showRoundFinishInterstitial();
+              } catch (e) {}
+              currentMethod = 'pairs';
+              userSettings.preferredMethod = 'pairs';
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              renderTrainingTab();
+            })();
             return;
           }
 
-          // If words completed Quiz -> show completion card with button to Pairs (like Cards mode)
+          // If words completed Quiz -> show interstitial ad and immediately launch Pairs mode without extra button
           if (!window._showHubScreen && currentMethod === 'quiz' && pairsQueue.length > 0) {
-            try { AdService.showRoundFinishInterstitial().catch(() => {}); } catch (e) {}
             content.innerHTML = `
-              <div class="empty-state-card" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 56px; margin-bottom: 18px;">👍</div>
-                <p style="color: var(--text-main); font-size: 19px; font-weight: 700; margin-bottom: 26px; line-height: 1.45;">
-                  ${t('train_congrats_mastered')}
-                </p>
-                <div style="width: 100%; max-width: 340px; margin: 0 auto;">
-                  <button class="primary-button btn-green" id="go-pairs-btn">
-                    ${t('train_go_pairs')}
-                  </button>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
+                <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
+                  <div class="cat-loader-bar"></div>
+                  <div class="cat-loader-paws">
+                    <span class="cat-paw-print">🐾</span>
+                    <span class="cat-paw-print">🐾</span>
+                    <span class="cat-paw-print">🐾</span>
+                    <span class="cat-paw-print">🐾</span>
+                  </div>
                 </div>
               </div>
             `;
-
-            const goPairsBtn = content.querySelector('#go-pairs-btn');
-            if (goPairsBtn) {
-              goPairsBtn.addEventListener('click', () => {
-                userSettings.preferredMethod = 'pairs';
-                saveUserSettings(userSettings);
-                currentWordIndex = 0;
-                renderTrainingTab();
-              });
-            }
+            (async () => {
+              try {
+                await AdService.showRoundFinishInterstitial();
+              } catch (e) {}
+              currentMethod = 'pairs';
+              userSettings.preferredMethod = 'pairs';
+              saveUserSettings(userSettings);
+              currentWordIndex = 0;
+              renderTrainingTab();
+            })();
             return;
           }
 
