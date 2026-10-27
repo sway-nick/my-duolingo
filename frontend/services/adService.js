@@ -311,9 +311,9 @@ class AdServiceImpl {
         };
 
         fallbackTimer = setTimeout(() => {
-          console.warn('⚠️ AdMob Double XP timeout (10s), releasing button smoothly');
+          console.warn('⚠️ AdMob Double XP timeout (120s), releasing button smoothly');
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
-        }, 10000);
+        }, 120000);
 
         try {
           const onReward = () => {
@@ -325,12 +325,14 @@ class AdServiceImpl {
           };
 
           const onDismiss = () => {
-            console.log('📺 AdMob Double XP ad dismissed, reward =', rewardGranted);
-            if (rewardGranted) {
-              safeResolve({ success: true, rewardEarned: true, isOffline: false });
-            } else {
-              safeResolve({ success: false, rewardEarned: false, isOffline: false });
-            }
+            setTimeout(() => {
+              console.log('📺 AdMob Double XP ad dismissed, reward =', rewardGranted);
+              if (rewardGranted) {
+                safeResolve({ success: true, rewardEarned: true, isOffline: false });
+              } else {
+                safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              }
+            }, 400);
           };
 
           const onFailed = (err) => {
@@ -344,6 +346,8 @@ class AdServiceImpl {
           listeners.push(await AdMob.addListener('onDismissed', onDismiss));
           listeners.push(await AdMob.addListener('onRewardedVideoAdFailedToShow', onFailed));
           listeners.push(await AdMob.addListener('onFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => { console.log('📺 Double XP rewarded ad started playing'); }));
+          listeners.push(await AdMob.addListener('showed', () => { console.log('📺 Double XP rewarded ad started playing'); }));
 
           const prepared = await this.prepareRewarded('REWARDED_SHIELD');
           if (!prepared) {
@@ -408,9 +412,9 @@ class AdServiceImpl {
         };
 
         fallbackTimer = setTimeout(() => {
-          console.warn('⚠️ AdMob Double XP timeout (10s), releasing button smoothly');
+          console.warn('⚠️ AdMob Shield timeout (120s), releasing button smoothly');
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
-        }, 10000);
+        }, 120000);
 
         try {
           // Listen to BOTH standard plugin event names to guarantee callback
@@ -423,15 +427,17 @@ class AdServiceImpl {
           };
 
           const onDismiss = () => {
-            console.log('📺 AdMob Rewarded video dismissed, reward =', rewardGranted);
-            if (rewardGranted) {
-              this.shieldsUsedInRound++;
-              this.isShieldAdPrepared = false;
-              this.preloadShieldAd().catch(() => {});
-              safeResolve({ success: true, rewardEarned: true, isOffline: false });
-            } else {
-              safeResolve({ success: false, rewardEarned: false, isOffline: false });
-            }
+            setTimeout(() => {
+              console.log('📺 AdMob Rewarded video dismissed, reward =', rewardGranted);
+              if (rewardGranted) {
+                this.shieldsUsedInRound++;
+                this.isShieldAdPrepared = false;
+                this.preloadShieldAd().catch(() => {});
+                safeResolve({ success: true, rewardEarned: true, isOffline: false });
+              } else {
+                safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              }
+            }, 400);
           };
 
           const onFailed = (err) => {
@@ -510,9 +516,9 @@ class AdServiceImpl {
         };
 
         fallbackTimer = setTimeout(() => {
-          console.warn('⚠️ AdMob Double XP timeout (10s), releasing button smoothly');
+          console.warn('⚠️ AdMob Language pack timeout (120s), releasing button smoothly');
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
-        }, 10000);
+        }, 120000);
 
         try {
           const onReward = () => {
@@ -523,8 +529,10 @@ class AdServiceImpl {
             }
           };
           const onDismiss = () => {
-            console.log('📺 Language pack ad dismissed, reward =', rewardGranted);
-            safeResolve({ success: true, rewardEarned: rewardGranted, isOffline: false });
+            setTimeout(() => {
+              console.log('📺 Language pack ad dismissed, reward =', rewardGranted);
+              safeResolve({ success: true, rewardEarned: rewardGranted, isOffline: false });
+            }, 400);
           };
           const onFailed = (err) => {
             console.warn('❌ Language pack ad failed to show:', err);
