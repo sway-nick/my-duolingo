@@ -1002,7 +1002,10 @@
 
             const goPairsBtn = content.querySelector('#go-pairs-btn');
             if (goPairsBtn) {
-              goPairsBtn.addEventListener('click', () => {
+              goPairsBtn.addEventListener('click', async () => {
+                try {
+                  await AdService.showRoundFinishInterstitial();
+                } catch (e) {}
                 userSettings.preferredMethod = 'pairs';
                 saveUserSettings(userSettings);
                 currentWordIndex = 0;
@@ -2068,7 +2071,7 @@
 
           const goBtn = content.querySelector('#go-next-mode-btn');
           if (goBtn) {
-            goBtn.addEventListener('click', () => {
+            goBtn.addEventListener('click', async () => {
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._activePracticeCollectionId = null;
@@ -2076,6 +2079,11 @@
               if (nextMode === 'select_category') {
                 renderCategorySelectorScreen();
                 return;
+              }
+              if (nextMode === 'pairs') {
+                try {
+                  await AdService.showRoundFinishInterstitial();
+                } catch (e) {}
               }
               window._showHubScreen = false;
               if (nextMode === 'cards') {
@@ -2169,8 +2177,8 @@
         if (!isFavPracticeActive && currentMethod === 'quiz' && currentWordIndex >= activeWords.length) {
           if (quizQueue.length === 0 || unfinishedInQueue.length === 0) {
             try { pushUserDataToCloud(null, null, true); } catch (e) {}
-            window._trainingRoundJustCompleted = true;
-            window._showHubScreen = true;
+            window._trainingRoundJustCompleted = false;
+            window._showHubScreen = false;
             currentWordIndex = 0;
             renderTrainingTab();
             return;
