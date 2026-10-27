@@ -1359,39 +1359,41 @@
             btn._bonusListenerAttached = true;
             btn.addEventListener('click', async () => {
               btn.disabled = true;
-              const originalHtml = btn.innerHTML;
-              btn.innerHTML = '<span style="font-size: 16px;">⏳ ...</span>';
+              window._canClaimRoundBonus = false;
+              AdService.markDailyBonusClaimed();
+
+              btn.style.transition = 'all 0.4s ease';
+              btn.innerHTML = `<span style="font-size: 16px;">⏳ ${AdService.getI18nText('bonus_xp')}</span>`;
+
+              // Remove button smoothly after 3 seconds so that while ad plays, button is completely gone
+              setTimeout(() => {
+                if (btn && btn.parentNode) {
+                  btn.style.transition = 'all 0.5s ease';
+                  btn.style.opacity = '0';
+                  btn.style.height = '0';
+                  btn.style.minHeight = '0';
+                  btn.style.padding = '0';
+                  btn.style.margin = '0';
+                  setTimeout(() => {
+                    if (btn && btn.parentNode) btn.remove();
+                  }, 500);
+                }
+              }, 2500);
 
               try {
                 const res = await AdService.showBonusXpRewardedAd(100);
                 if (res && res.rewardEarned) {
-                  AdService.markDailyBonusClaimed();
                   addWeeklyXP(100, getEffectiveUserId());
                   try { pushUserDataToCloud(null, null, true); } catch (e) {}
                   updateHeaderUser();
                   playFanfareSound();
-                  window._canClaimRoundBonus = false;
-                  btn.className = 'primary-button btn-green hub-choice-btn';
-                  btn.innerHTML = `<span>🎉 ${AdService.getI18nText('bonus_xp_done')}</span>`;
-                  setTimeout(() => {
-                    if (btn && btn.parentNode) {
-                      btn.style.transition = 'all 0.4s ease';
-                      btn.style.opacity = '0';
-                      btn.style.height = '0';
-                      btn.style.minHeight = '0';
-                      btn.style.padding = '0';
-                      btn.style.margin = '0';
-                      setTimeout(() => { btn.remove(); }, 400);
-                    }
-                  }, 2000);
                 } else {
-                  btn.disabled = false;
-                  btn.innerHTML = originalHtml;
+                  console.warn('Bonus XP ad was not completed, restoring daily bonus eligibility');
+                  AdService.unmarkDailyBonusClaimed();
                 }
               } catch (err) {
                 console.warn('Bonus XP ad error:', err);
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
+                AdService.unmarkDailyBonusClaimed();
               }
             });
           };

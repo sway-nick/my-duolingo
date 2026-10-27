@@ -98,6 +98,14 @@ class AdServiceImpl {
     } catch (e) {}
   }
 
+  unmarkDailyBonusClaimed() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('daily_bonus_xp_last_date');
+      }
+    } catch (e) {}
+  }
+
   async showBonusXpRewardedAd(bonusAmount = 100) {
     return this.showDoubleXpRewardedAd(bonusAmount);
   }
