@@ -808,6 +808,25 @@
             }
             if (currentMethod !== prevMethod) {
               currentWordIndex = 0;
+              // Interstitial ad strictly between Quiz and Pairs
+              if ((prevMethod === 'quiz' || (prevMethod === 'cards' && quizQueue.length === 0)) && currentMethod === 'pairs') {
+                content.innerHTML = `
+                  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
+                    <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
+                      <div class="cat-loader-bar"></div>
+                      <div class="cat-loader-paws">
+                        <span class="cat-paw-print">🐾</span>
+                        <span class="cat-paw-print">🐾</span>
+                        <span class="cat-paw-print">🐾</span>
+                        <span class="cat-paw-print">🐾</span>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                try {
+                  await AdService.showRoundFinishInterstitial();
+                } catch (e) {}
+              }
             }
           }
 
