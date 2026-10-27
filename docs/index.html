@@ -225,10 +225,12 @@
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
       import { AdService } from './services/adService.js?v=386.0';
+      import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
       // Initialize AdMob service
       try {
         AdService.init().catch(() => {});
+        syncRemoteVideos().catch(() => {});
       } catch (e) {}
 
       // Reset irregular verbs and UK audio download flags once so user can test AdMob rewarded video in both places
@@ -318,7 +320,6 @@
           let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
           if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
           const selectedVideo = wotdPlaylist[currentIdx % wotdPlaylist.length];
-          const videoUrl = 'assets/video/' + selectedVideo;
 
           // Preload via background video element into memory buffer (clean, no console warnings)
           if (!window._wotdPreloadVideo) {
@@ -327,10 +328,13 @@
             window._wotdPreloadVideo.muted = true;
             window._wotdPreloadVideo.playsInline = true;
           }
-          if (window._wotdPreloadVideo.src !== window.location.origin + '/' + videoUrl && !window._wotdPreloadVideo.src.endsWith(videoUrl)) {
-            window._wotdPreloadVideo.src = videoUrl;
-            window._wotdPreloadVideo.load();
-          }
+
+          resolveVideoUrl(selectedVideo).then((videoUrl) => {
+            if (window._wotdPreloadVideo.src !== videoUrl && !window._wotdPreloadVideo.src.endsWith(videoUrl)) {
+              window._wotdPreloadVideo.src = videoUrl;
+              window._wotdPreloadVideo.load();
+            }
+          }).catch(() => {});
         } catch (e) {}
       }
 
@@ -1562,7 +1566,14 @@
 
               // Immediately pre-buffer video into memory if daily video is ready to be watched
               if (canPlayDailyVideo) {
-                if (cardVideo) cardVideo.load();
+                if (cardVideo) {
+                  resolveVideoUrl(currentWotdVideo).then((url) => {
+                    if (url && cardVideo.src !== url && !cardVideo.src.endsWith(url)) {
+                      cardVideo.src = url;
+                    }
+                    cardVideo.load();
+                  }).catch(() => { if (cardVideo) cardVideo.load(); });
+                }
                 if (cardVideoWhat && isMemeActive) cardVideoWhat.load();
               }
 
@@ -1597,6 +1608,11 @@
                       let currentIdx = parseInt(localStorage.getItem('myduo_wotd_video_idx') || '0', 10);
                       if (isNaN(currentIdx) || currentIdx < 0) currentIdx = 0;
                       localStorage.setItem('myduo_wotd_video_idx', String((currentIdx + 1) % wotdPlaylist.length));
+                      resolveVideoUrl(currentWotdVideo).then((url) => {
+                        if (url && cardVideo.src !== url && !cardVideo.src.endsWith(url)) {
+                          cardVideo.src = url;
+                        }
+                      }).catch(() => {});
                       preloadNextWotdVideo();
                     }
 
@@ -2640,6 +2656,10 @@
           }
         }
         window.syncFavoritesToAndroidWidget = syncFavoritesToAndroidWidget;
+
+        window.addEventListener('online', () => {
+          syncRemoteVideos().catch(() => {});
+        });
 
         // Reconcile favorites toggled on home screen widget whenever user returns to app
         document.addEventListener('visibilitychange', () => {

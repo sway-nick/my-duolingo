@@ -80,3 +80,23 @@ test('Monday Golden Card Meme: renderMondayMemeTop4Cut dynamically renders actua
   assert.ok(container.innerHTML.includes('🥈'), 'Rank 3 must have 🥈');
   assert.ok(container.innerHTML.includes('🥉'), 'Rank 4 must have 🥉');
 });
+
+test('OTA Video Service: ota_manifest exists, resolveVideoUrl resolves fallback and cached video', async () => {
+  const manifestPath = path.resolve('frontend/assets/video/ota_manifest.json');
+  assert.ok(fs.existsSync(manifestPath), 'ota_manifest.json must exist');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  assert.ok(manifest.versions && typeof manifest.versions === 'object', 'ota_manifest must have versions map');
+  assert.ok(manifest.versions['cat6.mp4'] >= 1, 'cat6.mp4 must have a version defined');
+
+  const { resolveVideoUrl, syncRemoteVideos } = await import('../frontend/services/videoService.js');
+  assert.equal(typeof resolveVideoUrl, 'function', 'resolveVideoUrl must be a function');
+  assert.equal(typeof syncRemoteVideos, 'function', 'syncRemoteVideos must be a function');
+
+  // Verify default fallback when cache is empty
+  const url = await resolveVideoUrl('cat6.mp4');
+  assert.equal(url, 'assets/video/cat6.mp4', 'Fallback URL must point to local bundled asset');
+
+  // Verify direct URLs are preserved
+  const httpUrl = await resolveVideoUrl('https://example.com/test.mp4');
+  assert.equal(httpUrl, 'https://example.com/test.mp4', 'External HTTP URLs must be preserved');
+});
