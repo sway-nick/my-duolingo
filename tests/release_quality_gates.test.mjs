@@ -186,3 +186,38 @@ test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrit
     'api.js must support stage/round completion bulk sync'
   );
 });
+
+test('Gate 5: Swipe Gestures and Dual Drawer Architecture (Burger Right & Leaderboard Left)', () => {
+  const layoutPath = path.join(ROOT_DIR, 'frontend/components/layout/AppLayout.js');
+  assert.ok(fs.existsSync(layoutPath), 'AppLayout.js must exist');
+  const layoutCode = fs.readFileSync(layoutPath, 'utf-8');
+
+  // 1. Dual drawer DOM elements present
+  assert.ok(layoutCode.includes('id="burger-drawer"'), 'AppLayout must define #burger-drawer');
+  assert.ok(layoutCode.includes('id="leaderboard-drawer"'), 'AppLayout must define #leaderboard-drawer');
+  assert.ok(layoutCode.includes('id="leaderboard-drawer-close-btn"'), 'AppLayout must include close button for leaderboard drawer');
+
+  // 2. Both drawers exported and exposed
+  assert.ok(layoutCode.includes('openLeaderboardDrawer') && layoutCode.includes('closeLeaderboardDrawer'), 'AppLayout must export openLeaderboardDrawer and closeLeaderboardDrawer');
+  assert.ok(layoutCode.includes('openDrawer') && layoutCode.includes('closeDrawer'), 'AppLayout must export openDrawer and closeDrawer');
+
+  // 3. CSS transitions for both drawers
+  const cssPath = path.join(ROOT_DIR, 'frontend/assets/css/main.css');
+  const cssCode = fs.readFileSync(cssPath, 'utf-8');
+  assert.ok(cssCode.includes('.leaderboard-drawer'), 'main.css must define .leaderboard-drawer');
+  assert.ok(cssCode.includes('transform: translateX(-100%)'), 'main.css must position .leaderboard-drawer off-canvas to the left');
+  assert.ok(cssCode.includes('.leaderboard-drawer.open'), 'main.css must define .leaderboard-drawer.open');
+
+  // 4. Gesture swipe listeners in index.html
+  const indexPath = path.join(ROOT_DIR, 'frontend/index.html');
+  const indexHtml = fs.readFileSync(indexPath, 'utf-8');
+  assert.ok(indexHtml.includes('handleHubSwipeGesture'), 'index.html must implement handleHubSwipeGesture');
+  assert.ok(indexHtml.includes('openLeaderboardDrawer'), 'index.html must invoke openLeaderboardDrawer on swipe right');
+  assert.ok(indexHtml.includes('openDrawer'), 'index.html must invoke openDrawer on swipe left');
+
+  // 5. Leaderboard title localized in all 33 locales
+  const i18nPath = path.join(ROOT_DIR, 'frontend/services/i18n.js');
+  const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
+  const lbMatches = i18nCode.match(/leaderboard:\s*["']/g) || [];
+  assert.equal(lbMatches.length, 33, 'leaderboard translation key must be present for all 33 locales');
+});

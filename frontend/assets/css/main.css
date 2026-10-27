@@ -6938,6 +6938,82 @@ body.notebook-theme,
   transform: translateX(0);
 }
 
+.leaderboard-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 340px;
+  max-width: 88vw;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-main, #ffffff);
+  border-right: 1.5px solid var(--border-color);
+  z-index: 130;
+  box-shadow: 4px 0 28px rgba(0, 0, 0, 0.16);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  will-change: transform;
+}
+
+.leaderboard-drawer.open {
+  transform: translateX(0);
+}
+
+.leaderboard-drawer-header {
+  padding: 18px 16px;
+  border-bottom: 1.5px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  background: var(--bg-main, #ffffff);
+}
+
+.leaderboard-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 4px 30px;
+  overscroll-behavior-y: contain;
+}
+
+#leaderboard-drawer-content .leaderboard-page {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 24px;
+}
+
+#leaderboard-drawer-content .leaderboard-sticky-group {
+  top: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .leaderboard-drawer {
+  background: #0f172a;
+  border-right-color: #334155;
+  box-shadow: 4px 0 28px rgba(0, 0, 0, 0.45);
+}
+
+.dark-theme .leaderboard-drawer-header {
+  background: #0f172a;
+  border-bottom-color: #334155;
+}
+
+.notebook-theme .leaderboard-drawer {
+  background: #fffdf8;
+  border-right-color: #e2d9cc;
+}
+
+.notebook-theme .leaderboard-drawer-header {
+  background: #fffdf8;
+  border-bottom-color: #e2d9cc;
+}
+
 .drawer-header {
   padding: 20px 16px;
   border-bottom: 1.5px solid var(--border-color);
@@ -7409,7 +7485,8 @@ body.notebook-theme,
   min-width: 130px;
 }
 
-.burger-drawer {
+.burger-drawer,
+.leaderboard-drawer {
   padding-top: calc(16px + var(--safe-top, env(safe-area-inset-top, 0px))) !important;
   padding-bottom: calc(16px + var(--safe-bottom, env(safe-area-inset-bottom, 0px))) !important;
 }

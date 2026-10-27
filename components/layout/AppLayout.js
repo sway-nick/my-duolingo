@@ -235,6 +235,23 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       <!-- Drawer Overlay -->
       <div class="drawer-overlay" id="drawer-overlay"></div>
 
+      <!-- Leaderboard Drawer (slides from left) -->
+      <div class="leaderboard-drawer" id="leaderboard-drawer">
+        <div class="drawer-header leaderboard-drawer-header">
+          <div class="leaderboard-drawer-title" style="display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 800; color: var(--text-main);">
+            <span style="font-size: 22px;">🏆</span>
+            <span id="leaderboard-drawer-heading">${t('leaderboard')}</span>
+          </div>
+          <button class="drawer-close-btn" id="leaderboard-drawer-close-btn" aria-label="Close" title="${t('close') || 'Закрыть'}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="leaderboard-drawer-content" id="leaderboard-drawer-content"></div>
+      </div>
+
       <!-- Hamburger Drawer -->
       <div class="burger-drawer" id="burger-drawer">
         <div class="drawer-header">
@@ -385,6 +402,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       tab.classList.add('active');
       const targetTab = tab.getAttribute('data-tab');
       closeDrawer();
+      closeLeaderboardDrawer();
       updateMondayTickerTabVisibility(targetTab);
       if (typeof onTabChange === 'function') {
         try {
@@ -462,17 +480,27 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     });
   }
 
+    const lbCloseBtn = app.querySelector('#leaderboard-drawer-close-btn');
+  if (lbCloseBtn) {
+    lbCloseBtn.onclick = (e) => {
+      e.stopPropagation();
+      closeLeaderboardDrawer();
+    };
+  }
+
   const overlay = app.querySelector('#drawer-overlay');
   if (overlay) {
     overlay.addEventListener('click', () => {
       closeDrawer();
+      closeLeaderboardDrawer();
     });
   }
 
-  // Close drawer on escape key
+  // Close drawers on escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeDrawer();
+      closeLeaderboardDrawer();
     }
   });
 
@@ -708,6 +736,11 @@ export function updateDrawerTranslations() {
     if (textEl) textEl.textContent = t('share_title');
     shareBtn.title = t('share_title');
   }
+
+  const lbHeading = document.querySelector('#leaderboard-drawer-heading');
+  if (lbHeading) {
+    lbHeading.textContent = t('leaderboard');
+  }
 }
 
 if (typeof window !== 'undefined') {
@@ -719,6 +752,9 @@ if (typeof window !== 'undefined') {
 function openDrawer() {
   const drawer = document.querySelector('#burger-drawer');
   const overlay = document.querySelector('#drawer-overlay');
+  const lbDrawer = document.querySelector('#leaderboard-drawer');
+  if (lbDrawer) lbDrawer.classList.remove('open');
+
   if (drawer && overlay) {
     updateDrawerTranslations();
     drawer.classList.add('open');
@@ -729,10 +765,48 @@ function openDrawer() {
 function closeDrawer() {
   const drawer = document.querySelector('#burger-drawer');
   const overlay = document.querySelector('#drawer-overlay');
-  if (drawer && overlay) {
-    drawer.classList.remove('open');
+  if (drawer) drawer.classList.remove('open');
+  const lbDrawer = document.querySelector('#leaderboard-drawer');
+  if (overlay && (!lbDrawer || !lbDrawer.classList.contains('open'))) {
     overlay.classList.remove('open');
   }
+}
+
+function openLeaderboardDrawer() {
+  const lbDrawer = document.querySelector('#leaderboard-drawer');
+  const overlay = document.querySelector('#drawer-overlay');
+  const burgerDrawer = document.querySelector('#burger-drawer');
+  if (burgerDrawer) burgerDrawer.classList.remove('open');
+
+  if (lbDrawer && overlay) {
+    updateDrawerTranslations();
+    lbDrawer.classList.add('open');
+    overlay.classList.add('open');
+    if (typeof window._renderLeaderboardDrawerContent === 'function') {
+      try {
+        window._renderLeaderboardDrawerContent();
+      } catch (err) {
+        console.error('Error rendering leaderboard drawer content:', err);
+      }
+    }
+  }
+}
+
+function closeLeaderboardDrawer() {
+  const lbDrawer = document.querySelector('#leaderboard-drawer');
+  const overlay = document.querySelector('#drawer-overlay');
+  if (lbDrawer) lbDrawer.classList.remove('open');
+  const burgerDrawer = document.querySelector('#burger-drawer');
+  if (overlay && (!burgerDrawer || !burgerDrawer.classList.contains('open'))) {
+    overlay.classList.remove('open');
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.openDrawer = openDrawer;
+  window.closeDrawer = closeDrawer;
+  window.openLeaderboardDrawer = openLeaderboardDrawer;
+  window.closeLeaderboardDrawer = closeLeaderboardDrawer;
 }
 
 function bindHeaderActionButtons(container) {
@@ -924,5 +998,9 @@ export {
   getSavedTheme,
   toggleTheme,
   renderMondayWinnersTicker,
-  updateMondayTickerTabVisibility
+  updateMondayTickerTabVisibility,
+  openDrawer,
+  closeDrawer,
+  openLeaderboardDrawer,
+  closeLeaderboardDrawer
 };
