@@ -1695,11 +1695,29 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
         .filter(id => id && !deletedFavs.has(id));
     };
 
+    const isDevAccount = Boolean(user?.email && (
+      user.email.toLowerCase().includes('lipniagov') ||
+      user.email.toLowerCase().includes('sway1976')
+    ));
+    let devLegacyFavs = [];
+    if (isDevAccount) {
+      const devUids = ['b9Puaf5jtthwQlOPvAdZJ1o5CBC3', '6pJq8Z2hmWQre5NpY5AjhfDhPIG2'];
+      for (const devUid of devUids) {
+        if (devUid !== firestoreUid && devUid !== fbUid) {
+          const devDoc = await loadFullUserDataFirestore(devUid).catch(() => null);
+          if (devDoc?.favorites && Array.isArray(devDoc.favorites)) {
+            devLegacyFavs.push(...devDoc.favorites);
+          }
+        }
+      }
+    }
+
     const guestId = getGuestId();
     const mergedFavsSet = new Set([
       ...sanitizeFavArray(fullDoc?.favorites),
       ...sanitizeFavArray(fbDoc?.favorites),
       ...sanitizeFavArray(detDoc?.favorites),
+      ...sanitizeFavArray(devLegacyFavs),
       ...sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${uId}`) || '[]')),
       ...(detId ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${detId}`) || '[]')) : []),
       ...(fbUid ? sanitizeFavArray(JSON.parse(localStorage.getItem(`favs_${fbUid}`) || '[]')) : []),
