@@ -66,10 +66,10 @@ function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
             mimeType: 'image/jpeg',
           });
         };
-        img.onerror = () => reject(new Error('Не удалось прочитать файл изображения.'));
+        img.onerror = () => reject(new Error(t('scan_err_read_image')));
         img.src = e.target.result;
       };
-      reader.onerror = () => reject(new Error('Ошибка при чтении файла.'));
+      reader.onerror = () => reject(new Error(t('scan_err_read_file')));
       reader.readAsDataURL(file);
     }
   });
@@ -160,8 +160,8 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         <!-- 3. Results View -->
         <div id="scanner-results-view" class="scanner-results-view" style="display: none;">
           <div class="scanner-lemmas-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
-            <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="Сменить категорию для всех слов">
-              <span style="opacity: 0.75;">🏷️ Все:</span>
+            <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="${t('scan_group_cat_title')}">
+              <span style="opacity: 0.75;">${t('scan_group_cat_all')}</span>
               <strong id="scanner-group-cat-label" class="scanner-group-cat-label">Elementary ⇄</strong>
             </button>
             <div class="scanner-select-actions">
@@ -306,10 +306,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
           textInput.focus();
         }
       } else {
-        showError('Буфер обмена недоступен через браузер. Вставьте текст вручную.');
+        showError(t('scan_err_clipboard_denied'));
       }
     } catch (e) {
-      showError('Не удалось прочитать буфер обмена. Вставьте текст вручную (Ctrl+V / долгое нажатие).');
+      showError(t('scan_err_clipboard_read'));
     }
   });
 
@@ -322,7 +322,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   pasteSubmitBtn.addEventListener('click', async () => {
     const rawText = textInput.value.trim();
     if (!rawText || rawText.length < 2) {
-      showError('Пожалуйста, введите или вставьте английский текст.');
+      showError(t('scan_err_empty_text'));
       return;
     }
 
@@ -346,7 +346,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       pasteView.style.display = 'block';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
-      showError(err.message || 'Ошибка извлечения лемм. Попробуйте снова.');
+      showError(err.message || t('scan_err_lemmas'));
     }
   });
 
@@ -395,7 +395,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       (file.name && file.name.match(/\.(jpe?g|png|webp|heic|heif)$/i))
     );
     if (!isImage) {
-      showError('Пожалуйста, выберите файл изображения (JPEG, PNG, WEBP).');
+      showError(t('scan_err_select_image'));
       return;
     }
 
@@ -444,7 +444,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       pasteView.style.display = 'none';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
-      showError(err.message || 'Ошибка распознавания. Проверьте фото и попробуйте снова.');
+      showError(err.message || t('scan_err_ocr'));
     }
   }
 
@@ -535,18 +535,18 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         const isChecked = selectedIndices.has(idx);
         const isSpecialCategory = item.category === 'Pattern' || item.category === 'Irregular verbs';
         const catClass = `cat-${item.category.toLowerCase().replace(/\s+/g, '-')}`;
-        const catBadge = `<button type="button" class="scanner-lemma-cat ${catClass}" data-lemma-idx="${idx}" title="Нажмите, чтобы переключить категорию (${escapeHtml(item.category)})">${escapeHtml(item.category)} ⇄</button>`;
+        const catBadge = `<button type="button" class="scanner-lemma-cat ${catClass}" data-lemma-idx="${idx}" title="${t('scan_click_change_cat')} (${escapeHtml(item.category)})">${escapeHtml(item.category)} ⇄</button>`;
         const ipaText = (!isSpecialCategory && item.transcription) ? `<span class="scanner-lemma-ipa">${escapeHtml(item.transcription)}</span>` : '';
         const origSnippet = item.original && item.original.toLowerCase() !== item.word.toLowerCase()
-          ? `<span style="font-size: 11px; color: var(--text-muted);"> (в тексте: «${escapeHtml(item.original)}»)</span>`
+          ? `<span style="font-size: 11px; color: var(--text-muted);">${escapeHtml(t('scan_in_text', { orig: item.original }))}</span>`
           : '';
 
         let transHtml = '';
         if (item.isEditingTrans) {
           transHtml = `
             <div class="scanner-trans-edit-row">
-              <input type="text" class="scanner-trans-input" data-lemma-idx="${idx}" value="${escapeHtml(item.customTranslation)}" placeholder="Введите перевод через запятую..." />
-              <button type="button" class="scanner-trans-done-btn" data-lemma-idx="${idx}" title="Сохранить перевод">✓</button>
+              <input type="text" class="scanner-trans-input" data-lemma-idx="${idx}" value="${escapeHtml(item.customTranslation)}" placeholder="${t('scan_trans_placeholder')}" />
+              <button type="button" class="scanner-trans-done-btn" data-lemma-idx="${idx}" title="${t('scan_save_trans_title')}">✓</button>
             </div>
           `;
         } else {
@@ -555,13 +555,13 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
               ${item.translationVariants.map((v, vIdx) => {
                 const isVariantSelected = item.selectedVariants.has(v);
                 return `
-                  <button type="button" class="scanner-trans-chip ${isVariantSelected ? 'selected' : 'unselected'}" data-lemma-idx="${idx}" data-variant-idx="${vIdx}" title="Нажмите, чтобы включить/исключить вариант перевода">
+                  <button type="button" class="scanner-trans-chip ${isVariantSelected ? 'selected' : 'unselected'}" data-lemma-idx="${idx}" data-variant-idx="${vIdx}" title="${t('scan_toggle_variant_title')}">
                     <span class="scanner-chip-check">${isVariantSelected ? '✓' : '✕'}</span>
                     <span>${escapeHtml(v)}</span>
                   </button>
                 `;
               }).join('')}
-              <button type="button" class="scanner-trans-edit-btn" data-lemma-idx="${idx}" title="Редактировать перевод вручную">✏️</button>
+              <button type="button" class="scanner-trans-edit-btn" data-lemma-idx="${idx}" title="${t('scan_edit_trans_manual_title')}">✏️</button>
             </div>
           `;
         }
@@ -805,7 +805,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="hourglass-flip">⏳</span> Добавляю в словарь...';
+      submitBtn.innerHTML = `<span class="hourglass-flip">⏳</span> ${t('scan_adding_to_dict')}`;
 
       const res = await batchAddCustomWords(selectedWords);
       const added = res.words || selectedWords;
@@ -830,7 +830,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     } catch (err) {
       submitBtn.disabled = false;
       updateSubmitButton();
-      showError(err.message || 'Ошибка сохранения слов');
+      showError(err.message || t('scan_err_save_words'));
     }
   });
 }
@@ -960,7 +960,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-word-input">${wordLabel}</label>
             <span id="add-word-len" style="color: var(--text-muted); font-size: 11px;">0/50</span>
           </div>
-          <input type="text" id="add-word-input" class="search-input" maxlength="50" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="например: every cloud has a silver lining" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
+          <input type="text" id="add-word-input" class="search-input" maxlength="50" required value="${escapeHtml(initialWord.toLowerCase())}" placeholder="${t('dict_word_placeholder')}" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
         </div>
 
         <div>
@@ -968,9 +968,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-trans-input">${transLabel}</label>
             <span id="add-trans-len" style="color: var(--text-muted); font-size: 11px;">0/75</span>
           </div>
-          <input type="text" id="add-trans-input" class="search-input" maxlength="75" required placeholder="например: нет худа без добра" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
+          <input type="text" id="add-trans-input" class="search-input" maxlength="75" required placeholder="${t('dict_trans_placeholder')}" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px; font-size: 15px; box-sizing: border-box;" />
           <div id="add-trans-suggestions" style="display: none; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center;">
-            <span style="font-size: 11px; color: var(--text-muted);">💡 Варианты:</span>
+            <span style="font-size: 11px; color: var(--text-muted);">${t('dict_variants_label')}</span>
             <div id="add-trans-pills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
           </div>
         </div>
@@ -989,7 +989,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
             <label for="add-notes-input">${notesLabel}</label>
             <span id="add-notes-len" style="color: var(--text-muted); font-size: 11px;">0/100</span>
           </div>
-          <textarea id="add-notes-input" maxlength="100" rows="2" placeholder="Пример: Don't worry, every cloud has a silver lining" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
+          <textarea id="add-notes-input" maxlength="100" rows="2" placeholder="${t('dict_notes_placeholder')}" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--card-bg, #1a2234); color: var(--text-main); font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 8px;">
@@ -1039,7 +1039,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     if (suggestionsBox) {
       suggestionsBox.style.display = 'flex';
       if (pillsBox) {
-        pillsBox.innerHTML = '<span style="font-size: 11.5px; color: var(--text-muted); padding: 3px 6px;">⏳ Ищу перевод...</span>';
+        pillsBox.innerHTML = `<span style="font-size: 11.5px; color: var(--text-muted); padding: 3px 6px;">${t('dict_searching_trans')}</span>`;
       }
     }
 
@@ -1052,7 +1052,8 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
     if (data && Array.isArray(data.suggestions) && data.suggestions.length > 0) {
       if (data.suggestions[0]) {
-        transInput.placeholder = `например: ${data.suggestions[0]}`;
+        const egPrefix = (t('dict_word_placeholder').split(':')[0] || 'e.g.').trim();
+        transInput.placeholder = `${egPrefix}: ${data.suggestions[0]}`;
       }
 
       if (pillsBox) {
@@ -1171,7 +1172,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       const existingTrans = getWordTranslation(existing) || existing.translation || '';
       const existingNotes = getWordNotes(existing) || '';
       noticeBox.style.display = 'block';
-      noticeBox.innerHTML = `💡 Слово уже есть в словаре (перевод: <strong>«${escapeHtml(existingTrans)}»</strong>, категория: <strong>«${escapeHtml(existing.category)}»</strong>).<br>Вы можете дополнить или обновить примечание к нему.`;
+      noticeBox.innerHTML = t('dict_word_already_exists_notice', { trans: escapeHtml(existingTrans), cat: escapeHtml(existing.category) });
       transInput.value = existingTrans;
       transInput.disabled = true;
       transInput.setAttribute('readonly', 'true');
@@ -1203,12 +1204,12 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       val = val.replace(/[^a-z\s\-\']/g, '');
       wordInput.value = val;
       errorBox.style.display = 'block';
-      errorBox.textContent = '⚠️ Разрешены только строчные английские буквы (без цифр и кириллицы).';
+      errorBox.textContent = t('dict_err_english_chars_only');
     } else if (isClientProfane(val)) {
       errorBox.style.display = 'block';
-      errorBox.textContent = '⚠️ Ненормативная лексика строго запрещена.';
+      errorBox.textContent = t('dict_err_profanity');
     } else {
-      if (errorBox.textContent.includes('буквы') || errorBox.textContent.includes('Ненормативная')) {
+      if (errorBox.textContent === t('dict_err_english_chars_only') || errorBox.textContent === t('dict_err_profanity')) {
         errorBox.style.display = 'none';
       }
       wordInput.value = val;
@@ -1273,50 +1274,50 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
 
     if (word.length < 2 || word.length > 50) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Длина английского слова или фразы должна быть от 2 до 50 символов.';
+      errorBox.textContent = t('dict_err_word_length');
       return;
     }
 
     if (translation.length < 1 || translation.length > 75) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Длина перевода должна быть от 1 до 75 символов.';
+      errorBox.textContent = t('dict_err_trans_length');
       return;
     }
 
     if (notes.length > 100) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Длина примечания не должна превышать 100 символов.';
+      errorBox.textContent = t('dict_err_notes_length');
       return;
     }
 
     const wordTokens = word.split(/\s+/).filter(Boolean);
     if (wordTokens.length > 6) {
       errorBox.style.display = 'block';
-      errorBox.textContent = '⚠️ Фраза не должна содержать более 6 слов (максимум для шаблонов и идиом — 6 слов).';
+      errorBox.textContent = t('dict_err_phrase_max_words');
       return;
     }
 
     if (!/^[a-z\s\-\']+$/i.test(word) || /[0-9\u0400-\u04FF]/.test(word)) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Поле английского слова должно содержать только английские буквы.';
+      errorBox.textContent = t('dict_err_english_only');
       return;
     }
 
     if (!/[aeiouy]/i.test(word)) {
       errorBox.style.display = 'block';
-      errorBox.textContent = '⚠️ Английское слово должно содержать хотя бы одну гласную букву (a, e, i, o, u, y).';
+      errorBox.textContent = t('dict_err_need_vowel');
       return;
     }
 
     if (/[bcdfghjklmnpqrstvwxz]{5,}/i.test(word)) {
       errorBox.style.display = 'block';
-      errorBox.textContent = '⚠️ Слово похоже на случайный набор букв. Проверьте правильность написания.';
+      errorBox.textContent = t('dict_err_gibberish');
       return;
     }
 
     if (isClientProfane(word) || isClientProfane(translation)) {
       errorBox.style.display = 'block';
-      errorBox.textContent = 'Ненормативная лексика строго запрещена.';
+      errorBox.textContent = t('dict_err_profanity');
       return;
     }
 
@@ -1344,7 +1345,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
       submitBtn.disabled = false;
       submitBtn.textContent = saveBtnText;
       errorBox.style.display = 'block';
-      errorBox.textContent = err.message || 'Ошибка сохранения слова.';
+      errorBox.textContent = err.message || t('dict_err_save_word');
     }
   });
 

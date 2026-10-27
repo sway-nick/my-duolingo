@@ -242,7 +242,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             <span style="font-size: 22px;">🏆</span>
             <span id="leaderboard-drawer-heading">${t('leaderboard')}</span>
           </div>
-          <button class="drawer-close-btn" id="leaderboard-drawer-close-btn" aria-label="Close" title="${t('close') || 'Закрыть'}">
+          <button class="drawer-close-btn" id="leaderboard-drawer-close-btn" aria-label="${t('modal_close') || 'Close'}" title="${t('modal_close') || 'Закрыть'}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>

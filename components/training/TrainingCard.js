@@ -734,10 +734,15 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
-  if (!isFavPractice && !window.__favsAutoplayRunning && !isAccessibilityMuted && (currentMethod === 'cards' || (currentMethod === 'quiz' && quizStage <= 1))) {
+  const shouldAutoSpeak = !window.__favsAutoplayRunning && !isAccessibilityMuted && (
+    (currentMethod === 'cards' && !isFavPractice) ||
+    (currentMethod === 'quiz' && quizStage <= 1)
+  );
+
+  if (shouldAutoSpeak) {
     setTimeout(() => {
       try {
-        if (!isFavPractice && !window.__favsAutoplayRunning && !isAccessibilityMuted) {
+        if (!window.__favsAutoplayRunning && !isAccessibilityMuted) {
           speakWord(currentWord.word, currentWord.id);
         }
       } catch (e) {}
