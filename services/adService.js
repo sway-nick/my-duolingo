@@ -315,6 +315,8 @@ class AdServiceImpl {
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
         }, 120000);
 
+        let adStartedPlaying = false;
+
         try {
           const onReward = () => {
             console.log('🏆 AdMob Double XP reward earned!');
@@ -326,13 +328,13 @@ class AdServiceImpl {
 
           const onDismiss = () => {
             setTimeout(() => {
-              console.log('📺 AdMob Double XP ad dismissed, reward =', rewardGranted);
-              if (rewardGranted) {
+              console.log('📺 AdMob Double XP ad dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              if (rewardGranted || adStartedPlaying) {
                 safeResolve({ success: true, rewardEarned: true, isOffline: false });
               } else {
                 safeResolve({ success: false, rewardEarned: false, isOffline: false });
               }
-            }, 400);
+            }, 800);
           };
 
           const onFailed = (err) => {
@@ -346,8 +348,14 @@ class AdServiceImpl {
           listeners.push(await AdMob.addListener('onDismissed', onDismiss));
           listeners.push(await AdMob.addListener('onRewardedVideoAdFailedToShow', onFailed));
           listeners.push(await AdMob.addListener('onFailedToShow', onFailed));
-          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => { console.log('📺 Double XP rewarded ad started playing'); }));
-          listeners.push(await AdMob.addListener('showed', () => { console.log('📺 Double XP rewarded ad started playing'); }));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => {
+            console.log('📺 Double XP rewarded ad started playing');
+            adStartedPlaying = true;
+          }));
+          listeners.push(await AdMob.addListener('showed', () => {
+            console.log('📺 Double XP rewarded ad started playing');
+            adStartedPlaying = true;
+          }));
 
           const prepared = await this.prepareRewarded('REWARDED_SHIELD');
           if (!prepared) {
@@ -356,10 +364,16 @@ class AdServiceImpl {
             return;
           }
 
-          AdMob.showRewardVideoAd().catch((err) => {
-            console.warn('AdMob show error in Double XP:', err);
-            onFailed(err);
-          });
+          AdMob.showRewardVideoAd()
+            .then((res) => {
+              console.log('🏆 AdMob Double XP showRewardVideoAd native promise resolved:', res);
+              rewardGranted = true;
+              safeResolve({ success: true, rewardEarned: true, isOffline: false });
+            })
+            .catch((err) => {
+              console.warn('AdMob show error in Double XP:', err);
+              onFailed(err);
+            });
         } catch (e) {
           console.warn('⚠️ Exception in showDoubleXpRewardedAd:', e);
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
@@ -416,6 +430,8 @@ class AdServiceImpl {
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
         }, 120000);
 
+        let adStartedPlaying = false;
+
         try {
           // Listen to BOTH standard plugin event names to guarantee callback
           const onReward = () => {
@@ -428,8 +444,8 @@ class AdServiceImpl {
 
           const onDismiss = () => {
             setTimeout(() => {
-              console.log('📺 AdMob Rewarded video dismissed, reward =', rewardGranted);
-              if (rewardGranted) {
+              console.log('📺 AdMob Rewarded video dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              if (rewardGranted || adStartedPlaying) {
                 this.shieldsUsedInRound++;
                 this.isShieldAdPrepared = false;
                 this.preloadShieldAd().catch(() => {});
@@ -437,7 +453,7 @@ class AdServiceImpl {
               } else {
                 safeResolve({ success: false, rewardEarned: false, isOffline: false });
               }
-            }, 400);
+            }, 800);
           };
 
           const onFailed = (err) => {
@@ -452,6 +468,14 @@ class AdServiceImpl {
           listeners.push(await AdMob.addListener('onDismissed', onDismiss));
           listeners.push(await AdMob.addListener('onRewardedVideoAdFailedToShow', onFailed));
           listeners.push(await AdMob.addListener('onFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => {
+            console.log('📺 AdMob Shield ad started playing');
+            adStartedPlaying = true;
+          }));
+          listeners.push(await AdMob.addListener('showed', () => {
+            console.log('📺 AdMob Shield ad started playing');
+            adStartedPlaying = true;
+          }));
 
           // Ensure video is prepared
           if (!this.isShieldAdPrepared) {
@@ -462,10 +486,19 @@ class AdServiceImpl {
             }
           }
 
-          AdMob.showRewardVideoAd().catch((err) => {
-            console.warn('AdMob show error, falling back:', err);
-            onFailed(err);
-          });
+          AdMob.showRewardVideoAd()
+            .then((res) => {
+              console.log('🏆 AdMob showRewardVideoAd (shield) native promise resolved:', res);
+              rewardGranted = true;
+              this.shieldsUsedInRound++;
+              this.isShieldAdPrepared = false;
+              this.preloadShieldAd().catch(() => {});
+              safeResolve({ success: true, rewardEarned: true, isOffline: false });
+            })
+            .catch((err) => {
+              console.warn('AdMob show error, falling back:', err);
+              onFailed(err);
+            });
         } catch (err) {
           console.warn('AdMob show exception, falling back:', err);
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
@@ -520,6 +553,8 @@ class AdServiceImpl {
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
         }, 120000);
 
+        let adStartedPlaying = false;
+
         try {
           const onReward = () => {
             console.log('🏆 Language pack reward earned!');
@@ -530,9 +565,13 @@ class AdServiceImpl {
           };
           const onDismiss = () => {
             setTimeout(() => {
-              console.log('📺 Language pack ad dismissed, reward =', rewardGranted);
-              safeResolve({ success: true, rewardEarned: rewardGranted, isOffline: false });
-            }, 400);
+              console.log('📺 Language pack ad dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              if (rewardGranted || adStartedPlaying) {
+                safeResolve({ success: true, rewardEarned: true, isOffline: false });
+              } else {
+                safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              }
+            }, 800);
           };
           const onFailed = (err) => {
             console.warn('❌ Language pack ad failed to show:', err);
@@ -545,6 +584,14 @@ class AdServiceImpl {
           listeners.push(await AdMob.addListener('onDismissed', onDismiss));
           listeners.push(await AdMob.addListener('onRewardedVideoAdFailedToShow', onFailed));
           listeners.push(await AdMob.addListener('onFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => {
+            console.log('📺 Language pack ad started playing');
+            adStartedPlaying = true;
+          }));
+          listeners.push(await AdMob.addListener('showed', () => {
+            console.log('📺 Language pack ad started playing');
+            adStartedPlaying = true;
+          }));
 
           const prepared = await this.prepareRewarded('REWARDED_PACKS');
           if (!prepared) {
@@ -553,10 +600,16 @@ class AdServiceImpl {
             return;
           }
 
-          AdMob.showRewardVideoAd().catch((err) => {
-            console.warn('AdMob language pack show error:', err);
-            onFailed(err);
-          });
+          AdMob.showRewardVideoAd()
+            .then((res) => {
+              console.log('🏆 Language pack showRewardVideoAd native promise resolved:', res);
+              rewardGranted = true;
+              safeResolve({ success: true, rewardEarned: true, isOffline: false });
+            })
+            .catch((err) => {
+              console.warn('AdMob language pack show error:', err);
+              onFailed(err);
+            });
         } catch (e) {
           console.warn('⚠️ Exception in showLanguagePackRewardedAd:', e);
           safeResolve({ success: false, rewardEarned: false, isOffline: false });
