@@ -55,7 +55,7 @@ const oldApk = path.join(ANDROID_PROJECT, 'android/app/build/outputs/apk/debug/a
 if (fs.existsSync(oldApk)) {
   try { fs.unlinkSync(oldApk); } catch (e) {}
 }
-const gradleCmd = 'cmd.exe /c "set JAVA_HOME=' + JAVA_HOME + '&& gradlew.bat clean assembleDebug"';
+const gradleCmd = 'cmd.exe /c "set JAVA_HOME=' + JAVA_HOME + '&& set GRADLE_OPTS=-Djava.awt.headless=true&& gradlew.bat clean assembleDebug"';
 execSync(gradleCmd, { cwd: path.join(ANDROID_PROJECT, 'android'), stdio: 'inherit' });
 
 // Step 5: Copy and verify APK size
