@@ -233,12 +233,11 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 }
                 WidgetDataManager.nextWord(context);
                 updateAllWidgets(context);
+                if (onAudioDone != null) onAudioDone.run();
                 {
                     WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
                     if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
-                        WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
-                    } else {
-                        if (onAudioDone != null) onAudioDone.run();
+                        WidgetAudioPlayer.playWord(context, curWord.word, null);
                     }
                 }
                 break;
@@ -249,12 +248,11 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 }
                 WidgetDataManager.prevWord(context);
                 updateAllWidgets(context);
+                if (onAudioDone != null) onAudioDone.run();
                 {
                     WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
                     if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
-                        WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
-                    } else {
-                        if (onAudioDone != null) onAudioDone.run();
+                        WidgetAudioPlayer.playWord(context, curWord.word, null);
                     }
                 }
                 break;
@@ -263,11 +261,12 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 if (WidgetDataManager.isContinuousPlayActive(context)) {
                     stopContinuousPlay(context);
                 }
-                WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
-                    WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
-                } else {
-                    if (onAudioDone != null) onAudioDone.run();
+                if (onAudioDone != null) onAudioDone.run();
+                {
+                    WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
+                    if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
+                        WidgetAudioPlayer.playWord(context, curWord.word, null);
+                    }
                 }
                 break;
 
@@ -296,6 +295,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 WidgetDataManager.nextWord(context);
                 updateAllWidgets(context);
                 scheduleNextRotation(context);
+                if (onAudioDone != null) onAudioDone.run();
                 if (WidgetDataManager.isAutoSpeakEnabled(context)) {
                     // Suppress auto-speech if app in foreground, outside quiet hours, or system audio is busy (calls, video, games, silent mode)
                     if (!WidgetDataManager.isAppInForeground() 
@@ -303,12 +303,10 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                             && !WidgetAudioPlayer.isSystemAudioBusy(context)) {
                         WidgetDataManager.WidgetWord w = WidgetDataManager.getCurrentWord(context);
                         if (w != null && !w.word.isEmpty() && !"fav_empty".equals(w.id)) {
-                            WidgetAudioPlayer.playWord(context, w.word, onAudioDone);
-                            break;
+                            WidgetAudioPlayer.playWord(context, w.word, null);
                         }
                     }
                 }
-                if (onAudioDone != null) onAudioDone.run();
                 break;
 
             default:

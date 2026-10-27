@@ -27,6 +27,8 @@ public class WidgetAudioPlayer {
     private static TextToSpeech fallbackTts = null;
     private static boolean ttsReady = false;
     private static final ExecutorService sAudioExecutor = Executors.newSingleThreadExecutor();
+    private static volatile int sCurrentAudioRequestId = 0;
+    private static SafeAudioCallback sActiveCallback = null;
 
     /**
      * Thread-safe callback wrapper with an automatic watchdog timeout.
@@ -127,7 +129,9 @@ public class WidgetAudioPlayer {
             return;
         }
 
+        final int requestId = ++sCurrentAudioRequestId;
         final SafeAudioCallback safeDone = new SafeAudioCallback(onDone, 3800L);
+        sActiveCallback = safeDone;
         final Context appCtx = context.getApplicationContext();
         final String cleanWord = word.trim();
         final String audioFilename = cleanWord.toLowerCase()
@@ -136,6 +140,7 @@ public class WidgetAudioPlayer {
 
         // Stop any previous playback
         stopPlayback();
+        sActiveCallback = safeDone;
 
         // 1. Try playing from bundled APK assets (Elementary US)
         try {
@@ -197,9 +202,17 @@ public class WidgetAudioPlayer {
             }
         } catch (Exception cacheEx) {}
 
-        // 3. Fallback: try fast download from CDN, or fallback to Android TTS
+        // 3. Fallback: try fast download from CDN (with quick abort if a newer request arrived), or fallback to Android TTS
         sAudioExecutor.execute(() -> {
+            if (requestId != sCurrentAudioRequestId) {
+                safeDone.run();
+                return;
+            }
             boolean downloaded = downloadAudioToCache(appCtx, audioFilename);
+            if (requestId != sCurrentAudioRequestId) {
+                safeDone.run();
+                return;
+            }
             if (downloaded) {
                 File newlyCached = new File(appCtx.getFilesDir(), "audio_cache/" + audioFilename);
                 if (newlyCached.exists() && newlyCached.length() > 0) {
@@ -240,41 +253,33 @@ public class WidgetAudioPlayer {
                 return true;
             }
 
-            String[] cdnUrls = new String[] {
-                "https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/us/" + filename,
-                "https://fastly.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/us/" + filename,
-                "https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio/us/" + filename
-            };
-
-            for (String urlStr : cdnUrls) {
-                HttpURLConnection conn = null;
-                try {
-                    URL url = new URL(urlStr);
-                    conn = (HttpURLConnection) url.openConnection();
-                    conn.setConnectTimeout(2000);
-                    conn.setReadTimeout(2000);
-                    conn.setInstanceFollowRedirects(true);
-                    if (conn.getResponseCode() == 200) {
-                        File tempFile = new File(cacheDir, filename + ".tmp");
-                        try (InputStream in = conn.getInputStream();
-                             FileOutputStream out = new FileOutputStream(tempFile)) {
-                            byte[] buffer = new byte[4096];
-                            int read;
-                            while ((read = in.read(buffer)) != -1) {
-                                out.write(buffer, 0, read);
-                            }
-                        }
-                        if (tempFile.exists() && tempFile.length() > 0) {
-                            if (tempFile.renameTo(targetFile)) {
-                                return true;
-                            }
+            // Fast single CDN check with strict 1200ms timeout to prevent widget queue stall
+            String primaryUrl = "https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/us/" + filename;
+            HttpURLConnection conn = null;
+            try {
+                URL url = new URL(primaryUrl);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(1200);
+                conn.setReadTimeout(1200);
+                conn.setInstanceFollowRedirects(true);
+                if (conn.getResponseCode() == 200) {
+                    File tempFile = new File(cacheDir, filename + ".tmp");
+                    try (InputStream in = conn.getInputStream();
+                         FileOutputStream out = new FileOutputStream(tempFile)) {
+                        byte[] buffer = new byte[4096];
+                        int read;
+                        while ((read = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
                         }
                     }
-                } catch (Exception ignored) {
-                } finally {
-                    if (conn != null) {
-                        conn.disconnect();
+                    if (tempFile.exists() && tempFile.length() > 0) {
+                        return tempFile.renameTo(targetFile);
                     }
+                }
+            } catch (Exception ignored) {
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
                 }
             }
         } catch (Exception ignored) {}
@@ -345,6 +350,10 @@ public class WidgetAudioPlayer {
     }
 
     public static synchronized void stopPlayback() {
+        if (sActiveCallback != null) {
+            sActiveCallback.run();
+            sActiveCallback = null;
+        }
         if (activePlayer != null) {
             try {
                 if (activePlayer.isPlaying()) {

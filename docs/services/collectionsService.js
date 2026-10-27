@@ -1,4 +1,4 @@
-﻿import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
+import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
 
 const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
@@ -1000,6 +1000,9 @@ export function syncCollectionToAndroidWidget(collectionId = null, allWords = []
   if (words.length === 0 && Array.isArray(allWords) && allWords.length > 0) {
     // Curated starter words if collection/favorites is empty
     words = allWords.slice(0, 50);
+  } else if (words.length > 100) {
+    // Cap at 100 words for Android widget to prevent SharedPreferences memory bloat and ANR
+    words = words.slice(0, 100);
   }
 
   if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.syncFavorites === 'function') {
