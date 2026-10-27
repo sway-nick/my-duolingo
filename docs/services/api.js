@@ -1475,17 +1475,22 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
   } else if (method === 'quiz') {
     if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
-      if (isWordMastered(prog)) {
+      const favList = typeof getUserFavorites === 'function' ? getUserFavorites() : [];
+      const favSet = new Set((favList || []).map(String));
+      const isReviewWord = isWordMastered(prog) || favSet.has(String(wordId));
+
+      if (isReviewWord) {
+        // Review words (Favorites and Mastered) require only 1 successful check in Quiz!
         prog.roundQuizDone = true;
       } else {
         if (options && options.isSingleRemaining) {
           // If this is the last/only remaining word, advance to next mode after exactly 1 check!
-          prog.quizCorrect = Math.max(prog.quizCorrect || 0, 5);
+          prog.quizCorrect = Math.max(prog.quizCorrect || 0, 4);
           prog.stage = 'pairs';
           prog.roundQuizDone = true;
         } else {
           prog.quizCorrect = (prog.quizCorrect || 0) + 1;
-          if (prog.quizCorrect >= 5) {
+          if (prog.quizCorrect >= 4) {
             prog.stage = 'pairs';
             prog.roundQuizDone = true;
           }
@@ -2450,7 +2455,7 @@ function getWordStage(prog) {
   if (!prog) return 'new';
   if (isWordMastered(prog)) return 'mastered';
   if ((prog.pairsCorrect || 0) >= 1) return 'test';
-  if ((prog.quizCorrect || 0) >= 5) return 'pairs';
+  if ((prog.quizCorrect || 0) >= 4) return 'pairs';
   if (prog.seenInCards) return 'quiz';
   return 'new';
 }
@@ -2715,7 +2720,7 @@ function getQueueForQuiz(words, progress, favorites = null) {
     if (!p) return false;
     // New words must have completed Cards first
     if (p.roundCardsDone !== true) return false;
-    return (p.quizCorrect || 0) < 5 && p.roundQuizDone !== true;
+    return (p.quizCorrect || 0) < 4 && p.roundQuizDone !== true;
   });
 }
 
@@ -2737,7 +2742,7 @@ function getQueueForPairs(words, progress, favorites = null) {
 
     // New words must have completed Cards first
     if (p.roundCardsDone !== true) return false;
-    return (p.quizCorrect || 0) >= 5 && (p.pairsCorrect || 0) < 1 && p.roundPairsDone !== true;
+    return (p.quizCorrect || 0) >= 4 && (p.pairsCorrect || 0) < 1 && p.roundPairsDone !== true;
   });
 }
 
@@ -2974,7 +2979,7 @@ function resetWordsProgressForPractice(words) {
       localProg[id] = {
         ...(localProg[id] || {}),
         seenInCards: true,
-        quizCorrect: 5,
+        quizCorrect: 4,
         pairsCorrect: 0,
         inputCorrect: 0,
         mastered: false,

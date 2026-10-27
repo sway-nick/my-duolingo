@@ -2140,7 +2140,7 @@
         const unfinishedInQueue = activeWords.filter((w) => {
           const p = userProgress[w.id] || userProgress[String(w.id)];
           if (!p) return true;
-          if (currentMethod === 'quiz') return (p.quizCorrect || 0) < 5 && !p.roundQuizDone && !isWordMastered(p);
+          if (currentMethod === 'quiz') return (p.quizCorrect || 0) < 4 && !p.roundQuizDone && !isWordMastered(p);
           if (currentMethod === 'pairs') return (p.pairsCorrect || 0) < 1 && !p.roundPairsDone;
           if (currentMethod === 'input') return ((p.inputCorrect || 0) < 1 || p.needsTestRepeat) && !p.roundTestDone && !isWordMastered(p);
           return true;

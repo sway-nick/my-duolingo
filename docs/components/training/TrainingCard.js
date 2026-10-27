@@ -452,10 +452,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const progressMap = getUserProgress() || {};
   const currentProg = progressMap[currentWord?.id] || {};
-  const rawQuizStage = isWordMastered(currentProg) ? 0 : (currentProg.quizCorrect || 0);
+  const favList = (typeof getUserFavorites === 'function' ? getUserFavorites() : []) || [];
+  const favSet = new Set(favList.map(String));
+  const isReviewWord = isWordMastered(currentProg) || favSet.has(String(currentWord?.id));
+
+  const rawQuizStage = isReviewWord
+    ? (Math.abs(Number(currentWord?.id) || 0) % 4)
+    : (currentProg.quizCorrect || 0);
 
   // Accessibility for deaf / hard-of-hearing / mute users:
-  // When sound effects are turned off, exclude stage 1 (Audio/Listening) and stage 3 (Microphone/Speech) in conveyor
+  // When sound effects are turned off, exclude stage 1 (Audio/Listening)
   const isAccessibilityMuted = Boolean(typeof isSfxMuted === 'function' && isSfxMuted() && !isFavPractice);
 
   let quizStage = rawQuizStage;
@@ -463,10 +469,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     const step = rawQuizStage % 3;
     if (step === 0) quizStage = 0; // En -> Ru choices
     else if (step === 1) quizStage = 2; // Ru -> En choices
-    else quizStage = 4; // Consonants / Letter tiles
-  } else if (quizStage === 3) {
-    // Stage 3 (Microphone / AI speech recognition) is temporarily disabled per user request
-    quizStage = 4;
+    else quizStage = 3; // Consonants / Letter tiles
+  } else {
+    quizStage = rawQuizStage % 4; // 0: En->Ru, 1: Audio->Ru, 2: Ru->En, 3: Consonants
   }
 
   const isCardsMode = currentMethod === 'cards';
@@ -603,7 +608,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </div>
             `
                   : `
-              ${quizStage === 0 || quizStage === 1 || quizStage === 3 || quizStage === 4 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
+              ${quizStage === 0 || quizStage === 1 || quizStage === 3 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
               <div class="train-left-badge">
                 🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
               </div>
@@ -1232,9 +1237,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       renderStandardQuiz();
     } else if (quizStage === 2) {
       renderReverseQuiz();
-    } else if (quizStage === 3) {
-      // Stage 3 (Microphone / AI speech recognition) is temporarily disabled per user request
-      renderConsonantsQuiz();
     } else {
       renderConsonantsQuiz();
     }
