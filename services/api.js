@@ -82,7 +82,7 @@ const MOCK_WORDS = [
   { id: '3', word: 'journey', transcription: '[Л€dК’ЙњЛђ.ni]', translation: 'РїСѓС‚РµС€РµСЃС‚РІРёРµ', category: 'РџСѓС‚РµС€РµСЃС‚РІРёСЏ', level: 'B1' },
   { id: '4', word: 'courage', transcription: '[Л€kКЊr.ЙЄdК’]', translation: 'СЃРјРµР»РѕСЃС‚СЊ', category: 'Р­РјРѕС†РёРё', level: 'B2' },
   { id: '5', word: 'sunrise', transcription: '[Л€sКЊn.raЙЄz]', translation: 'СЂР°СЃСЃРІРµС‚', category: 'РџСЂРёСЂРѕРґР°', level: 'A2' },
-  { id: '6', word: 'freedom', transcription: '[Л€friЛђ.dЙ™m]', translation: 'СЃРІРѕР±РѕРґР°', category: 'РћР±С‰РёРµ', level: 'B1' },
+  { id: '6', word: 'freedom', transcription: '[ˈfriː.dəm]', translation: 'свобода', category: 'Общие', level: 'B1' },
   { id: '7', word: 'adventure', transcription: '[Й™dЛ€ven.tКѓЙ™r]', translation: 'РїСЂРёРєР»СЋС‡РµРЅРёРµ', category: 'РџСѓС‚РµС€РµСЃС‚РІРёСЏ', level: 'B1' },
   { id: '8', word: 'friendship', transcription: '[Л€frend.КѓЙЄp]', translation: 'РґСЂСѓР¶Р±Р°', category: 'РћС‚РЅРѕС€РµРЅРёСЏ', level: 'A2' },
 ];
@@ -3543,7 +3543,7 @@ try {
 async function addCustomWord({ word, translation, category, notes }) {
   const cleanW = String(word || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
   let cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
-  const cleanCat = String(category || 'РћР±С‰РёРµ').trim();
+  const cleanCat = String(category || 'Общие').trim();
   const cleanNotes = String(notes || '').trim();
 
   // If translation was left empty or equals the word itself, auto-resolve with suggestTranslations
@@ -3661,7 +3661,7 @@ async function batchAddCustomWords(words = []) {
     word: String(w.word || '').trim().toLowerCase(),
     translation: String(w.translation || '').trim().toLowerCase(),
     translations: { ...(w.translations || {}), [batchLang]: String(w.translation || '').trim().toLowerCase() },
-    category: String(w.category || 'РћР±С‰РёРµ').trim(),
+    category: String(w.category || 'Общие').trim(),
     level: (w.category === 'Pattern' || w.category === 'Irregular verbs') ? '' : String(w.level || 'A2').trim(),
     transcription: w.category === 'Pattern' ? '' : String(w.transcription || '').trim(),
     notes: String(w.notes || '').trim(),
@@ -3906,15 +3906,18 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
 
 async function suggestTranslations(word) {
   if (!word || String(word).trim().length < 2) {
-    return { suggestions: [], category: 'РћР±С‰РёРµ', transcription: '' };
+    return { suggestions: [], category: 'Общие', transcription: '' };
   }
   const clean = String(word).trim().toLowerCase();
 
-  let targetLang = 'en';
+  let targetLang = 'ru';
   try {
     const stored = getInterfaceLanguage();
-    if (stored && ['ru', 'uk', 'de', 'es', 'fr', 'pl', 'it', 'tr', 'pt'].includes(stored)) {
-      targetLang = stored;
+    if (stored && typeof stored === 'string') {
+      const code = stored.toLowerCase().split(/[-_]/)[0];
+      if (code !== 'en') {
+        targetLang = code;
+      }
     }
   } catch (e) {}
 
@@ -3923,13 +3926,13 @@ async function suggestTranslations(word) {
     if (cachedWordsList && Array.isArray(cachedWordsList)) {
       const match = cachedWordsList.find((w) => w.word && w.word.toLowerCase() === clean);
       if (match) {
-        let tVal = (match.translations && match.translations[targetLang]) || match.translation || '';
+        let tVal = (match.translations && match.translations[targetLang]) || (targetLang === 'ru' ? match.translation : '') || '';
         if (tVal) {
           const parts = tVal.split(/[,;\/]/).map((s) => s.trim().toLowerCase()).filter(Boolean);
           const unique = Array.from(new Set([tVal.toLowerCase(), ...parts]));
           return {
             suggestions: unique.slice(0, 4),
-            category: match.category || 'РћР±С‰РёРµ',
+            category: match.category || 'Общие',
             transcription: match.transcription || '',
           };
         }
@@ -3983,7 +3986,7 @@ async function suggestTranslations(word) {
     if (suggestions.length > 0) {
       return {
         suggestions: suggestions.slice(0, 4),
-        category: 'РћР±С‰РёРµ',
+        category: 'Общие',
         transcription: '',
       };
     }
@@ -4018,7 +4021,7 @@ async function suggestTranslations(word) {
       if (suggestions.length > 0) {
         return {
           suggestions: suggestions.slice(0, 4),
-          category: 'РћР±С‰РёРµ',
+          category: 'Общие',
           transcription: '',
         };
       }
@@ -4027,7 +4030,7 @@ async function suggestTranslations(word) {
     console.warn('MyMemory fallback error:', err);
   }
 
-  return { suggestions: [], category: 'РћР±С‰РёРµ', transcription: '' };
+  return { suggestions: [], category: 'Общие', transcription: '' };
 }
 
 const ApiService = {
