@@ -72,8 +72,8 @@ async function run() {
   const TARGET_LANGS = [
     'ru', 'uk', 'de', 'es', 'fr', 'pl', 'it', 'tr',
     'pt', 'ro', 'bg', 'cs', 'sk', 'hu', 'el', 'sl',
-    'et', 'lt', 'da', 'fi', 'sv', 'hr', 'lv', 'ga', 'mt',
-    'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja'
+    'et', 'lt', 'da', 'fi', 'sv', 'hr', 'lv', 'zh',
+    'hi', 'bn', 'ar', 'fa', 'id', 'vi', 'th', 'ko', 'ja'
   ];
 
   const colIndices = {};
@@ -119,6 +119,7 @@ async function run() {
 
   let updatedCount = 0;
   let newlyAddedCount = 0;
+  const finalWords = [];
 
   for (let r = 1; r < rows.length; r++) {
     const row = rows[r];
@@ -143,7 +144,6 @@ async function run() {
         all_notes: {},
         zipf: zipfCol >= 0 ? (parseFloat(row[zipfCol]) || 3.5) : 3.5
       };
-      existingWords.push(targetWordObj);
       newlyAddedCount++;
     }
 
@@ -173,19 +173,29 @@ async function run() {
       }
     });
 
+    if (targetWordObj.translations) {
+      delete targetWordObj.translations.ga;
+      delete targetWordObj.translations.mt;
+    }
+    if (targetWordObj.all_notes) {
+      delete targetWordObj.all_notes.ga;
+      delete targetWordObj.all_notes.mt;
+    }
+
     if (hasChange) updatedCount++;
+    finalWords.push(targetWordObj);
   }
 
   console.log(`📊 Result:`);
   console.log(`   - Existing words updated: ${updatedCount}`);
   console.log(`   - New words added:        ${newlyAddedCount}`);
-  console.log(`   - Total words in dataset: ${existingWords.length}`);
+  console.log(`   - Total words in dataset: ${finalWords.length}`);
 
-  const ptFixed = applyPtFixesToWordsArray(existingWords);
+  const ptFixed = applyPtFixesToWordsArray(finalWords);
   console.log(`   - PT-BR curated fixes:    ${ptFixed}`);
 
   // Safety check: ensure 0 corrupted UTF-8 replacement characters
-  const jsonOutput = JSON.stringify(existingWords, null, 2);
+  const jsonOutput = JSON.stringify(finalWords, null, 2);
   if (jsonOutput.includes('\ufffd')) {
     throw new Error('❌ Detected U+FFFD replacement characters in output!');
   }

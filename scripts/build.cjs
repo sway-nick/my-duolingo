@@ -64,7 +64,25 @@ function build() {
     if (fs.existsSync(p)) fs.unlinkSync(p);
   });
 
-  // 0.05. Validate JavaScript syntax of all inline <script> tags in frontend/index.html
+  // 0.05. Validate JavaScript syntax of all frontend JS files and inline <script> tags in frontend/index.html
+  const { execSync } = require('child_process');
+  function validateAllJsSyntax(dir) {
+    for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, f.name);
+      if (f.isDirectory() && !['node_modules', '.git', 'audio', 'dist'].includes(f.name)) {
+        validateAllJsSyntax(p);
+      } else if (f.isFile() && f.name.endsWith('.js')) {
+        try {
+          execSync(`node --check "${p}"`, { stdio: 'pipe' });
+        } catch (err) {
+          throw new Error(`❌ BUILD FAILED: SyntaxError in ${p}!\n${err.stderr ? err.stderr.toString() : err.message}`);
+        }
+      }
+    }
+  }
+  validateAllJsSyntax(path.join(__dirname, '../frontend'));
+  console.log('🔍 Comprehensive JS syntax integrity passed: all frontend JS files valid.');
+
   const indexPath0 = path.join(__dirname, '../frontend/index.html');
   if (fs.existsSync(indexPath0)) {
     const html0 = fs.readFileSync(indexPath0, 'utf8');
@@ -78,7 +96,6 @@ function build() {
       const tmpFile0 = path.join(__dirname, `../.tmp_build_script_${scriptIdx0}.mjs`);
       fs.writeFileSync(tmpFile0, code0, 'utf8');
       try {
-        const { execSync } = require('child_process');
         execSync(`node --check "${tmpFile0}"`);
       } catch (err) {
         try { fs.unlinkSync(tmpFile0); } catch (e) {}

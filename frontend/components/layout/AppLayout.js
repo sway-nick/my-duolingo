@@ -622,14 +622,6 @@ const FEEDBACK_EMAIL_TEMPLATES = {
     subject: 'English Breakfast — Povratne informacije / Prijedlozi',
     body: (u, l, d) => `Pozdrav!\n\nMoja povratna informacija / prijedlog:\n\n\n---\nKorisnik: ${u}\nJezik: ${l}\nUređaj: ${d}`,
   },
-  ga: {
-    subject: 'English Breakfast — Aiseolas / Moltaí',
-    body: (u, l, d) => `Dia duit!\n\nMo chuid aiseolais / moltaí:\n\n\n---\nÚsáideoir: ${u}\nTeanga: ${l}\nGléas: ${d}`,
-  },
-  mt: {
-    subject: 'English Breakfast — Feedback / Suġġerimenti',
-    body: (u, l, d) => `Bongu!\n\nIl-feedback / is-suġġeriment tiegħi:\n\n\n---\nUtent: ${u}\nLingwa: ${l}\nApparat: ${d}`,
-  },
   hi: {
     subject: 'English Breakfast — प्रतिक्रिया / सुझाव',
     body: (u, l, d) => `नमस्ते!\n\nमेरी प्रतिक्रिया / सुझाव:\n\n\n---\nउपयोगकर्ता: ${u}\nभाषा: ${l}\nडिवाइस: ${d}`,
@@ -657,6 +649,18 @@ const FEEDBACK_EMAIL_TEMPLATES = {
   ja: {
     subject: 'English Breakfast — フィードバック / ご提案',
     body: (u, l, d) => `こんにちは！\n\nフィードバック / ご提案：\n\n\n---\nユーザー: ${u}\n言語: ${l}\nデバイス: ${d}`,
+  },
+  zh: {
+    subject: 'English Breakfast — 反馈与建议',
+    body: (u, l, d) => `您好！\n\n我的反馈 / 建议：\n\n\n---\n用户: ${u}\n语言: ${l}\n设备: ${d}`,
+  },
+  bn: {
+    subject: 'English Breakfast — মতামত / পরামর্শ',
+    body: (u, l, d) => `নমস্কার / হ্যালো!\n\nআমার মতামত / পরামর্শ:\n\n\n---\nব্যবহারকারী: ${u}\nভাষা: ${l}\nডিভাইস: ${d}`,
+  },
+  fa: {
+    subject: 'English Breakfast — بازخورد / پیشنهادات',
+    body: (u, l, d) => `سلام!\n\nبازخورد یا پیشنهاد من:\n\n\n---\nکاربر: ${u}\nزبان: ${l}\nدستگاه: ${d}`,
   },
 };
 

@@ -202,7 +202,7 @@ test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unl
   assert.equal(res4, true, 'Third show after another hour succeeds (unlimited daily frequency)');
 });
 
-test('8e. AdService Bonus XP Rewarded Ad: All 33 locales translated (including pt-BR, es-MX, hi)', async () => {
+test('8e. AdService Bonus XP Rewarded Ad: All 34 locales translated (including pt-BR, es-MX, hi)', async () => {
   assert.equal(typeof AdService.showDoubleXpRewardedAd, 'function', 'showDoubleXpRewardedAd must be exposed');
   assert.equal(typeof AdService.showBonusXpRewardedAd, 'function', 'showBonusXpRewardedAd must be exposed');
   assert.equal(typeof AdService.getI18nText, 'function', 'getI18nText must be exposed');
@@ -211,8 +211,8 @@ test('8e. AdService Bonus XP Rewarded Ad: All 33 locales translated (including p
 
   const REQUIRED_33_LOCALES = [
     'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
-    'da', 'ga', 'lv', 'lt', 'mt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
-    'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja'
+    'da', 'lv', 'lt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
+    'hi', 'bn', 'ar', 'fa', 'zh', 'id', 'vi', 'th', 'ko', 'ja'
   ];
 
   for (const loc of REQUIRED_33_LOCALES) {

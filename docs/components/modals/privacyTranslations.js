@@ -987,83 +987,43 @@ export const PRIVACY_POLICY_DATA = {
     ]
   },
 
-  ga: {
-    modalTitle: 'Polasaí Príobháideachais',
-    backBtn: 'Ar ais',
-    appName: 'English Breakfast',
-    updated: 'Nuashonraithe Deireanach: Meán Fómhair 2026',
-    intro: 'Míníonn an Polasaí Príobháideachais seo conas a bhailíonn, a úsáideann agus a chosnaíonn feidhmchlár <strong>English Breakfast</strong> do chuid sonraí.',
-    sections: [
-      {
-        title: '1. Faisnéis a Bhailímid',
-        intro: 'Ní bhailímid ach an t-eolas íosta is gá chun d’eispéireas foghlama a chur ar fáil:',
-        bullets: [
-          { bold: 'Dul chun cinn foghlama:', text: 'Focail fhoghlamtha, cruinneas, pointí taithí (XP) agus sraitheanna staidéir, sioncronaithe go slán nuair a logálann tú isteach.' },
-          { bold: 'Eolas cuntais:', text: 'Má logálann tú isteach trí Google, coinnímid d’ainm agus do ríomhphost amháin le haghaidh fíordheimhnithe agus an chláir ceannairí.' },
-          { bold: 'Ceanáin agus socruithe:', text: 'Focail shábháilte, blas gutha agus téama taispeána.' }
-        ]
-      },
-      {
-        title: '2. Ceadanna Gléis',
-        intro: '',
-        bullets: [
-          { bold: 'Ceamara agus Gailearaí:', text: 'Úsáidtear é le haghaidh aithint optúil carachtar (OCR) ó íomhánna chun focail a chur leis an bhfoclóir.' }
-        ]
-      },
-      {
-        title: '3. Cosaint Sonraí',
-        intro: 'Déantar gach tarchur sonraí a dhaingniú le criptiú HTTPS. Ní dhíolaimid agus ní roinnimid sonraí pearsanta le fógraíocht tríú páirtí.',
-        bullets: []
-      },
-      {
-        title: '4. Scriosadh Sonraí',
-        intro: 'Is féidir leat do stair foghlama a ghlanadh nó do chuntas a scriosadh am ar bith go díreach i socruithe an aip.',
-        bullets: []
-      },
-      {
-        title: '5. Teagmháil',
-        intro: 'Má tá aon cheist agat faoin bPolasaí Príobháideachais seo, déan teagmháil linn:',
-        contactEmail: 'lipniagovnikola@gmail.com'
-      }
-    ]
-  },
 
-  mt: {
-    modalTitle: 'Politika ta’ Privatezza',
-    backBtn: 'Lura',
+  zh: {
+    modalTitle: '隐私政策',
+    backBtn: '返回',
     appName: 'English Breakfast',
-    updated: 'L-aħħar Aġġornament: Settembru 2026',
-    intro: 'Din il-Politika ta’ Privatezza tispjega kif l-applikazzjoni <strong>English Breakfast</strong> tiġbor, tuża u tħares l-informazzjoni tiegħek.',
+    updated: '最近更新：2026年9月',
+    intro: '本隐私政策说明了 <strong>English Breakfast</strong> 移动与网页应用程序如何收集、使用和保护您的个人信息。',
     sections: [
       {
-        title: '1. Informazzjoni li Niġbru',
-        intro: 'Niġbru biss l-informazzjoni minima meħtieġa għat-tagħlim tal-vokabularju:',
+        title: '1. 我们收集的信息',
+        intro: '我们仅收集提供个性化词汇学习所必需的最少量信息：',
         bullets: [
-          { bold: 'Progress fit-tagħlim:', text: 'Kliem mitgħallem, preċiżjoni, punti ta’ esperjenza (XP) u ġranet konsekuttivi, sinkronizzati mas-server sikur meta tidħol fil-kont.' },
-          { bold: 'Informazzjoni tal-kont:', text: 'Jekk tidħol permezz ta’ Google, inżommu ismek u l-email tiegħek biss għall-awtentikazzjoni u l-klassifika.' },
-          { bold: 'Favoriti u settings:', text: 'Kliem salvat, aċċent tal-vuċi u tema tal-interface.' }
+          { bold: '学习进度与统计：', text: '已掌握单词、学习准确率、经验值 (XP) 以及连续学习天数，保存在本地设备并在登录时同步。' },
+          { bold: '账号信息：', text: '如果您通过 Google 登录，我们仅保留您的姓名和电子邮件地址用于身份验证和排行榜。' },
+          { bold: '收藏夹与设置：', text: '已保存单词、发音口音以及界面主题设置。' }
         ]
       },
       {
-        title: '2. Permessi tal-Apparat',
+        title: '2. 设备权限',
         intro: '',
         bullets: [
-          { bold: 'Kamera u Gallarija tar-ritratti:', text: 'Użati għall-għarfien ottiku tat-test (OCR) minn ritratti biex iżżid kliem ġdid fid-dizzjunarju.' }
+          { bold: '相机与相册：', text: '用于从图片中光学字符识别 (OCR) 文本以添加生词到单词本。' }
         ]
       },
       {
-        title: '3. Protezzjoni tad-Dejta',
-        intro: 'Kull trażmissjoni ta’ dejta hija mħarsa b’kriptaġġ HTTPS. Qatt ma nbiegħu jew naqsmu dejta personali ma’ partijiet terzi.',
+        title: '3. 数据安全与保护',
+        intro: '所有网络数据传输均使用行业标准 HTTPS 加密。我们绝不会将您的个人数据出售、出租或分享给任何第三方广告商。',
         bullets: []
       },
       {
-        title: '4. Tħassir tad-Dejta',
-        intro: 'Tista’ tħassar l-istorja tat-tagħlim jew il-kont tiegħek fi kwalunkwe ħin direttament mis-settings tal-applikazzjoni.',
+        title: '4. 用户权利与数据删除',
+        intro: '您可以随时在应用设置（“删除数据与账户”按钮）中直接清空学习记录、删除收藏单词，或通过联系开发者申请彻底清除服务器数据。',
         bullets: []
       },
       {
-        title: '5. Kuntatt',
-        intro: 'Għal kwalunkwe mistoqsija dwar din il-Politika ta’ Privatezza, tista’ tikkuntattjana fuq:',
+        title: '5. 联系我们',
+        intro: '如果您对本隐私政策有任何疑问或建议，欢迎随时与我们联系：',
         contactEmail: 'lipniagovnikola@gmail.com'
       }
     ]
@@ -1355,5 +1315,84 @@ export const PRIVACY_POLICY_DATA = {
       }
     ]
   },
-
+  bn: {
+    modalTitle: 'গোপনীয়তা নীতি',
+    backBtn: 'ফিরে যান',
+    appName: 'English Breakfast',
+    updated: 'সর্বশেষ আপডেট: সেপ্টেম্বর ২০২৬',
+    intro: 'এই গোপনীয়তা নীতি ব্যাখ্যা করে কীভাবে <strong>English Breakfast</strong> মোবাইল এবং ওয়েব অ্যাপ্লিকেশন আপনার তথ্য সংগ্রহ, ব্যবহার এবং সুরক্ষিত রাখে।',
+    sections: [
+      {
+        title: '১. আমরা যে তথ্য সংগ্রহ করি',
+        intro: 'আমরা ব্যক্তিগতকৃত শব্দভাণ্ডার শিক্ষার জন্য প্রয়োজনীয় ন্যূনতম তথ্য সংগ্রহ করি:',
+        bullets: [
+          { bold: 'শেখার অগ্রগতি:', text: 'আয়ত্ত করা শব্দ, সঠিকতা, অভিজ্ঞতা পয়েন্ট (XP) এবং অধ্যয়নের ধারা, যা আপনি সাইন ইন করলে নিরাপদে সিঙ্ক হয়।' },
+          { bold: 'অ্যাকাউন্ট তথ্য:', text: 'আপনি যদি Google দিয়ে সাইন ইন করেন, আমরা প্রমাণীকরণ এবং লিডারবোর্ডের জন্য শুধুমাত্র আপনার নাম এবং ইমেল রাখি।' },
+          { bold: 'পছন্দ এবং সেটিংস:', text: 'সংরক্ষিত শব্দ তালিকা, ভয়েস উচ্চারণ এবং ইন্টারফেস থিম।' }
+        ]
+      },
+      {
+        title: '২. ডিভাইসের অনুমতি',
+        intro: '',
+        bullets: [
+          { bold: 'ক্যামেরা এবং গ্যালারি:', text: 'অভিধানে নতুন শব্দ যোগ করতে ছবি থেকে পাঠ্য শনাক্তকরণে (OCR) ব্যবহৃত হয়।' }
+        ]
+      },
+      {
+        title: '৩. ডেটা সুরক্ষা',
+        intro: 'সমস্ত ডেটা ট্রান্সমিশন HTTPS এনক্রিপশন দিয়ে সুরক্ষিত। আমরা কখনই তৃতীয় পক্ষের কাছে ব্যক্তিগত ডেটা বিক্রি বা শেয়ার করি না।',
+        bullets: []
+      },
+      {
+        title: '৪. ব্যবহারকারীর অধিকার এবং ডেটা মুছে ফেলা',
+        intro: 'আপনি সরাসরি অ্যাপ সেটিংসে আপনার অধ্যয়নের ইতিহাস পরিষ্কার করতে বা অ্যাকাউন্ট মুছে ফেলার অনুরোধ করতে পারেন।',
+        bullets: []
+      },
+      {
+        title: '৫. যোগাযোগ',
+        intro: 'এই গোপনীয়তা নীতি সম্পর্কে কোনো প্রশ্ন থাকলে, আমাদের সাথে যোগাযোগ করুন:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
+  fa: {
+    modalTitle: 'سیاست حفظ حریم خصوصی',
+    backBtn: 'بازگشت',
+    appName: 'English Breakfast',
+    updated: 'آخرین به‌روزرسانی: سپتامبر ۲۰۲۶',
+    intro: 'این سیاست حفظ حریم خصوصی توضیح می‌دهد که چگونه برنامه تلفن همراه و وب <strong>English Breakfast</strong> اطلاعات شما را جمع‌آوری، استفاده و محافظت می‌کند.',
+    sections: [
+      {
+        title: '۱. اطلاعاتی که جمع‌آوری می‌کنیم',
+        intro: 'ما فقط حداقل اطلاعات لازم را برای ارائه یادگیری واژگان جمع‌آوری می‌کنیم:',
+        bullets: [
+          { bold: 'پیشرفت یادگیری:', text: 'کلمات یادگرفته‌شده، دقت، امتیاز تجربه (XP) و روزهای متوالی مطالعه که هنگام ورود به حساب همگام‌سازی می‌شوند.' },
+          { bold: 'اطلاعات حساب:', text: 'اگر از طریق Google وارد شوید، نام و ایمیل شما فقط برای احراز هویت و جدول امتیازات نگهداری می‌شود.' },
+          { bold: 'علاقه‌مندی‌ها و تنظیمات:', text: 'کلمات ذخیره‌شده، لهجه صوتی و تم ظاهری.' }
+        ]
+      },
+      {
+        title: '۲. مجوزهای دستگاه',
+        intro: '',
+        bullets: [
+          { bold: 'دوربین و گالری:', text: 'برای تشخیص متن (OCR) از تصاویر جهت افزودن کلمات به فرهنگ لغت استفاده می‌شود.' }
+        ]
+      },
+      {
+        title: '۳. حفاظت و امنیت داده‌ها',
+        intro: 'تمامی داده‌ها با رمزگذاری HTTPS منتقل می‌شوند. ما هرگز اطلاعات شخصی کاربران را به تبلیغ‌کنندگان ثالث نمی‌فروشیم یا به اشتراک نمی‌گذاریم.',
+        bullets: []
+      },
+      {
+        title: '۴. حقوق کاربر و حذف داده‌ها',
+        intro: 'شما می‌توانید در هر زمان مستقیماً در تنظیمات برنامه، سابقه یادگیری خود را پاک کنید یا درخواست حذف کامل حساب دهید.',
+        bullets: []
+      },
+      {
+        title: '۵. تماس با ما',
+        intro: 'اگر سؤالی درباره این سیاست حفظ حریم خصوصی دارید، با ما تماس بگیرید:',
+        contactEmail: 'lipniagovnikola@gmail.com'
+      }
+    ]
+  },
 };

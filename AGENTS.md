@@ -1,13 +1,17 @@
 # Project Directives & Coding Standards for English Breakfast
 
-> **CRITICAL RULE #1: 33 LOCALES (NOT 17)**
-> English Breakfast officially supports **EXACTLY 33 LOCALES**.
-> Any reference to "17 languages" is an obsolete legacy assumption and is STRICTLY PROHIBITED.
-> Whenever localizing any new feature, button, dialog, ad modal, or widget text, it MUST be translated for ALL 33 LOCALES without exception.
+> **CRITICAL RULE #1: 34 LOCALES (EXACTLY 34)**
+> English Breakfast officially supports **EXACTLY 34 LOCALES** (31 core + `bn` Bengali + `fa` Persian/Farsi with RTL + `zh` Simplified Chinese; Maltese `mt` and Irish `ga` permanently removed).
+> Whenever localizing any new feature, button, dialog, ad modal, or widget text, it MUST be translated for ALL 34 LOCALES without exception.
+
+> **CRITICAL RULE #2: STRICT PROHIBITION OF AUTONOMOUS APK / AAB BUILDS**
+> **NEVER build an APK (`EnglishBreakfast.apk`) or AAB (`EnglishBreakfast.aab`) unless the USER EXPLICITLY ASKS FOR IT.**
+> Proactive, automatic, or background builds of APK or AAB upon updating code, dictionary, or assets are **STRICTLY FORBIDDEN**.
+> Only run APK/AAB build scripts when directly commanded by the user.
 
 ---
 
-### The 33 Supported Locales
+### The 34 Supported Locales
 1. `ru` - Russian
 2. `uk` - Ukrainian
 3. `en` - English (US / UK)
@@ -22,25 +26,26 @@
 12. `hu` - Hungarian
 13. `el` - Greek
 14. `da` - Danish
-15. `ga` - Irish
-16. `lv` - Latvian
-17. `lt` - Lithuanian
-18. `mt` - Maltese
-19. `pt` (and `pt-br`) - Portuguese (Brazilian: *Dobrar XP*)
-20. `sk` - Slovak
-21. `sl` - Slovenian
-22. `fi` - Finnish
-23. `hr` - Croatian
-24. `cs` - Czech
-25. `sv` - Swedish
-26. `et` - Estonian
-27. `hi` - Hindi (India: *XP दोगुना करें*)
-28. `ar` - Arabic
-29. `id` - Indonesian
-30. `vi` - Vietnamese
-31. `th` - Thai
-32. `ko` - Korean
-33. `ja` - Japanese
+15. `lv` - Latvian
+16. `lt` - Lithuanian
+17. `pt` (and `pt-br`) - Portuguese (Brazilian: *Dobrar XP*)
+18. `sk` - Slovak
+19. `sl` - Slovenian
+20. `fi` - Finnish
+21. `hr` - Croatian
+22. `cs` - Czech
+23. `sv` - Swedish
+24. `et` - Estonian
+25. `hi` - Hindi (India: *XP दोगुना करें*)
+26. `ar` - Arabic
+27. `id` - Indonesian
+28. `vi` - Vietnamese
+29. `th` - Thai
+30. `ko` - Korean
+31. `ja` - Japanese
+32. `bn` - Bengali
+33. `fa` - Persian / Farsi (RTL)
+34. `zh` - Chinese Simplified (*双倍经验*)
 
 ---
 

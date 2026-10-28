@@ -118,9 +118,6 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     if (lang === 'da' || lang === 'sv') {
       return `${count} ord`;
     }
-    if (lang === 'ga') {
-      return count === 1 ? `${count} focal` : `${count} focail`;
-    }
     if (lang === 'lv') {
       return count === 1 ? `${count} vārds` : `${count} vārdi`;
     }
@@ -128,9 +125,6 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
       if (mod100 >= 11 && mod100 <= 19) return `${count} žodžių`;
       if (mod10 === 1) return `${count} žodis`;
       return `${count} žodžiai`;
-    }
-    if (lang === 'mt') {
-      return count === 1 ? `${count} kelma` : `${count} kelmiet`;
     }
     if (lang === 'fi') {
       return count === 1 ? `${count} sana` : `${count} sanaa`;
@@ -140,6 +134,15 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     }
     if (lang === 'hi') {
       return `${count} शब्द`;
+    }
+    if (lang === 'zh') {
+      return `${count} 个单词`;
+    }
+    if (lang === 'bn') {
+      return `${count} শব্দ`;
+    }
+    if (lang === 'fa') {
+      return `${count} کلمه`;
     }
     if (lang === 'ar') {
       if (count === 1) return `كلمة واحدة`;

@@ -54,7 +54,7 @@
           if (!userLang && navigator.languages && navigator.languages.length > 0) {
             userLang = (navigator.languages[0] || '').toLowerCase().split(/[-_]/)[0];
           }
-          if (userLang === 'ar') {
+          if (userLang === 'ar' || userLang === 'fa') {
             document.documentElement.setAttribute('dir', 'rtl');
             document.documentElement.setAttribute('lang', 'ar');
             document.documentElement.classList.add('is-rtl');
@@ -208,10 +208,10 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP } from './services/api.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted } from './services/api.js?v=386.0';
       import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT } from './services/authService.js?v=386.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=386.0';
       import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=386.0';
       import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=386.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=386.0';
@@ -1388,9 +1388,9 @@
                 const res = await AdService.showBonusXpRewardedAd(100);
                 if (res && res.rewardEarned) {
                   addWeeklyXP(100, getEffectiveUserId());
-                  try { pushUserDataToCloud(null, null, true); } catch (e) {}
                   updateHeaderUser();
                   playFanfareSound();
+                  try { pushUserDataToCloud(null, null, true); } catch (e) {}
                 } else {
                   console.warn('Bonus XP ad was not completed, restoring daily bonus eligibility');
                   AdService.unmarkDailyBonusClaimed();

@@ -98,13 +98,11 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="el">Ελληνικά</div>
             <div class="dropdown-item" data-value="es">Español</div>
             <div class="dropdown-item" data-value="fr">Français</div>
-            <div class="dropdown-item" data-value="ga">Gaeilge</div>
             <div class="dropdown-item" data-value="hr">Hrvatski</div>
             <div class="dropdown-item" data-value="it">Italiano</div>
             <div class="dropdown-item" data-value="lv">Latviešu</div>
             <div class="dropdown-item" data-value="lt">Lietuvių</div>
             <div class="dropdown-item" data-value="hu">Magyar</div>
-            <div class="dropdown-item" data-value="mt">Malti</div>
             <div class="dropdown-item" data-value="pl">Polski</div>
             <div class="dropdown-item" data-value="pt">Português</div>
             <div class="dropdown-item" data-value="ro">Română</div>
@@ -116,12 +114,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <div class="dropdown-item" data-value="tr">Türkçe</div>
             <div class="dropdown-item" data-value="uk">Українська</div>
             <div class="dropdown-item" data-value="hi">हिन्दी</div>
+            <div class="dropdown-item" data-value="bn">বাংলা</div>
             <div class="dropdown-item" data-value="ar">العربية</div>
+            <div class="dropdown-item" data-value="fa">فارسی</div>
             <div class="dropdown-item" data-value="id">Bahasa Indonesia</div>
             <div class="dropdown-item" data-value="vi">Tiếng Việt</div>
             <div class="dropdown-item" data-value="th">ไทย</div>
             <div class="dropdown-item" data-value="ko">한국어</div>
             <div class="dropdown-item" data-value="ja">日本語</div>
+            <div class="dropdown-item" data-value="zh">中文 (zh)</div>
           </div>
         </div>
       </div>
@@ -444,15 +445,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     fi: 'Suomi',
     sv: 'Svenska',
     hr: 'Hrvatski',
-    ga: 'Gaeilge',
-    mt: 'Malti',
     hi: 'हिन्दी',
+    bn: 'বাংলা',
     ar: 'العربية',
+    fa: 'فارسی',
     id: 'Bahasa Indonesia',
     vi: 'Tiếng Việt',
     th: 'ไทย',
     ko: '한국어',
     ja: '日本語',
+    zh: '中文',
   };
 
   const currentLang = getInterfaceLanguage();

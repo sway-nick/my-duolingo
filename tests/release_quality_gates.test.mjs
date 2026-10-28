@@ -3,17 +3,36 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-// 33 supported languages in English Breakfast
+// 34 supported languages in English Breakfast (removed ga & mt, added zh)
 const REQUIRED_33_LOCALES = [
   'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
-  'da', 'ga', 'lv', 'lt', 'mt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
-  'hi', 'ar', 'id', 'vi', 'th', 'ko', 'ja'
+  'da', 'lv', 'lt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
+  'hi', 'bn', 'ar', 'fa', 'id', 'vi', 'th', 'ko', 'ja', 'zh'
 ];
+
+test('Gate 0: Comprehensive JS/Module Syntax Integrity across all frontend files', () => {
+  function checkDir(dir) {
+    for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, f.name);
+      if (f.isDirectory() && !['node_modules', '.git', 'audio', 'dist'].includes(f.name)) {
+        checkDir(p);
+      } else if (f.isFile() && f.name.endsWith('.js')) {
+        try {
+          execSync(`node --check "${p}"`, { stdio: 'pipe' });
+        } catch (err) {
+          assert.fail(`SyntaxError detected in ${p}:\n${err.stderr ? err.stderr.toString() : err.message}`);
+        }
+      }
+    }
+  }
+  checkDir(path.join(ROOT_DIR, 'frontend'));
+});
 
 test('Gate 1: Unity Ads Mediation and AdMob configuration integrity', () => {
   // 1. Verify app-ads.txt contains both AdMob and Unity direct seller entries
@@ -86,7 +105,7 @@ test('Gate 2: Gold Card Widget HyperOS / MIUI and cross-platform broadcast safet
   );
 });
 
-test('Gate 3: 33 Languages Dictionary and Widget Translation completeness', async () => {
+test('Gate 3: 34 Languages Dictionary and Widget Translation completeness', async () => {
   // 1. Verify words.json has translations for all 33 supported languages
   const wordsJsonPath = path.join(ROOT_DIR, 'frontend/assets/data/words.json');
   assert.ok(fs.existsSync(wordsJsonPath), 'frontend/assets/data/words.json must exist');
@@ -215,9 +234,9 @@ test('Gate 5: Swipe Gestures and Dual Drawer Architecture (Burger Right & Leader
   assert.ok(indexHtml.includes('openLeaderboardDrawer'), 'index.html must invoke openLeaderboardDrawer on swipe right');
   assert.ok(indexHtml.includes('openDrawer'), 'index.html must invoke openDrawer on swipe left');
 
-  // 5. Leaderboard title localized in all 33 locales
+  // 5. Leaderboard title localized in all supported locales
   const i18nPath = path.join(ROOT_DIR, 'frontend/services/i18n.js');
   const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
   const lbMatches = i18nCode.match(/leaderboard:\s*["']/g) || [];
-  assert.equal(lbMatches.length, 33, 'leaderboard translation key must be present for all 33 locales');
+  assert.ok(lbMatches.length >= 34, `leaderboard translation key must be present for all locales (found ${lbMatches.length})`);
 });

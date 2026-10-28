@@ -1,0 +1,1382 @@
+[
+  {
+    "key": "share_channel_telegram",
+    "en": "Telegram",
+    "ru": "Telegram"
+  },
+  {
+    "key": "share_channel_whatsapp",
+    "en": "WhatsApp",
+    "ru": "WhatsApp"
+  },
+  {
+    "key": "share_channel_viber",
+    "en": "Viber",
+    "ru": "Viber"
+  },
+  {
+    "key": "share_channel_tiktok",
+    "en": "TikTok",
+    "ru": "TikTok"
+  },
+  {
+    "key": "lead_verify_email_title",
+    "en": "Verify your email to join the leaderboard",
+    "ru": "Подтвердите email для участия в рейтинге"
+  },
+  {
+    "key": "lead_verify_email_desc",
+    "en": "To display your points on the leaderboard, please verify your email address ({email}).",
+    "ru": "Чтобы ваши очки отображались в таблице лидеров, подтвердите ваш адрес электронной почты ({email})."
+  },
+  {
+    "key": "lead_verify_email_resend",
+    "en": "Resend email",
+    "ru": "Отправить ещё раз"
+  },
+  {
+    "key": "lead_verify_email_check",
+    "en": "I've verified",
+    "ru": "Я подтвердил"
+  },
+  {
+    "key": "lead_verify_email_sending",
+    "en": "Sending...",
+    "ru": "Отправка..."
+  },
+  {
+    "key": "lead_verify_email_sent",
+    "en": "Email sent! ✓",
+    "ru": "Письмо отправлено! ✓"
+  },
+  {
+    "key": "lead_verify_email_not_yet",
+    "en": "Email is not verified yet. Please click the link in the email and press \"I've verified\" again.",
+    "ru": "Email ещё не подтверждён. Пожалуйста, перейдите по ссылке в письме и нажмите «Я подтвердил» снова."
+  },
+  {
+    "key": "lead_verify_email_prompt",
+    "en": "Please verify your email to join the leaderboard. Check your inbox.",
+    "ru": "Для участия в рейтинге подтвердите email. Проверьте ваш почтовый ящик."
+  },
+  {
+    "key": "lead_sync_error_403",
+    "en": "Leaderboard sync error: access restricted.",
+    "ru": "Ошибка синхронизации рейтинга: доступ ограничен."
+  },
+  {
+    "key": "train_left",
+    "en": "Words left",
+    "ru": "Осталось слов"
+  },
+  {
+    "key": "train_in_progress",
+    "en": "In training",
+    "ru": "В обучении"
+  },
+  {
+    "key": "train_know",
+    "en": "Know",
+    "ru": "Знаю"
+  },
+  {
+    "key": "train_learn",
+    "en": "Learn",
+    "ru": "Учить"
+  },
+  {
+    "key": "train_cant_speak",
+    "en": "Can't speak",
+    "ru": "Не могу говорить"
+  },
+  {
+    "key": "train_check",
+    "en": "Check",
+    "ru": "Проверить"
+  },
+  {
+    "key": "train_continue",
+    "en": "Continue",
+    "ru": "Продолжить"
+  },
+  {
+    "key": "train_continue_round",
+    "en": "Start",
+    "ru": "Старт"
+  },
+  {
+    "key": "train_mastered_title",
+    "en": "Congratulations!",
+    "ru": "Поздравляем!"
+  },
+  {
+    "key": "train_mastered_all_favs",
+    "en": "All favorite words mastered!",
+    "ru": "Все избранные слова изучены!"
+  },
+  {
+    "key": "train_mastered_sub_favs",
+    "en": "You have successfully learned all favorite words!",
+    "ru": "Вы успешно изучили все избранные слова!"
+  },
+  {
+    "key": "train_mastered_sub_cat",
+    "en": "All words in the category have been successfully mastered!",
+    "ru": "Все слова в категории успешно выучены!"
+  },
+  {
+    "key": "train_exit_favs",
+    "en": "Return to general program",
+    "ru": "Вернуться в общую программу"
+  },
+  {
+    "key": "train_select_category",
+    "en": "Select Category",
+    "ru": "Выбрать категорию"
+  },
+  {
+    "key": "train_categories_title",
+    "en": "Choose Category",
+    "ru": "Выберите категорию"
+  },
+  {
+    "key": "train_categories_sub",
+    "en": "Words and exercises will be generated from this group",
+    "ru": "Слова и тренировки будут сформированы из выбранной группы"
+  },
+  {
+    "key": "train_no_words_test",
+    "en": "No words for Test",
+    "ru": "Нет слов для Теста"
+  },
+  {
+    "key": "train_no_words_test_sub",
+    "en": "Words enter here after passing the Pairs stage.",
+    "ru": "Сюди попадают слова, прошедшие режим «Пары»."
+  },
+  {
+    "key": "train_no_words_quiz",
+    "en": "No words for Quiz",
+    "ru": "Нет слов для Квиза"
+  },
+  {
+    "key": "train_no_words_quiz_sub",
+    "en": "Words enter here after clicking 'Learn' in Cards.",
+    "ru": "Сюда попадают слова из Карточек по кнопке «Учить»."
+  },
+  {
+    "key": "train_no_words_pairs",
+    "en": "No words for Pairs",
+    "ru": "Нет слов для режима «Пары»"
+  },
+  {
+    "key": "train_no_words_pairs_sub",
+    "en": "Words enter here after passing the Quiz or tapping 'Know'.",
+    "ru": "Сюда попадают слова из Квиза или отмеченные «Знаю»."
+  },
+  {
+    "key": "train_go_quiz",
+    "en": "Go to Quiz",
+    "ru": "Перейти в Квиз"
+  },
+  {
+    "key": "train_go_pairs",
+    "en": "Go to Pairs",
+    "ru": "Перейти в Пары"
+  },
+  {
+    "key": "train_go_test",
+    "en": "Go to Test",
+    "ru": "Перейти в Тест"
+  },
+  {
+    "key": "settings_logout",
+    "en": "Log Out",
+    "ru": "Выйти"
+  },
+  {
+    "key": "settings_login",
+    "en": "Log In",
+    "ru": "Войти"
+  },
+  {
+    "key": "settings_login_sub",
+    "en": "Log in to sync progress",
+    "ru": "Войдите для синхронизации прогресса"
+  },
+  {
+    "key": "settings_theme",
+    "en": "🎨 Theme",
+    "ru": "🎨 Тема"
+  },
+  {
+    "key": "settings_theme_notebook",
+    "en": "Notebook",
+    "ru": "Тетрадь"
+  },
+  {
+    "key": "settings_sfx",
+    "en": "✨ Sound Effects",
+    "ru": "✨ Звуковые эффекты"
+  },
+  {
+    "key": "settings_sfx_on",
+    "en": "🔔 Enabled",
+    "ru": "Включены"
+  },
+  {
+    "key": "settings_sfx_off",
+    "en": "🔕 Disabled",
+    "ru": "Выключены"
+  },
+  {
+    "key": "settings_voice",
+    "en": "Voice Accent",
+    "ru": "Акцент озвучки"
+  },
+  {
+    "key": "settings_widget",
+    "en": "📱 Widget",
+    "ru": "📱 Виджет"
+  },
+  {
+    "key": "settings_install_widget",
+    "en": "Configure Widget",
+    "ru": "Настроить виджет"
+  },
+  {
+    "key": "settings_configure_widget",
+    "en": "Configure Widget",
+    "ru": "Настроить виджет"
+  },
+  {
+    "key": "test_ticker_btn",
+    "en": "Test Monday Ticker (Top-4)",
+    "ru": "Проверить бегущую строку (Топ-4)"
+  },
+  {
+    "key": "widget_overtaken",
+    "en": "You've been overtaken!",
+    "ru": "Вас обошли соперники!"
+  },
+  {
+    "key": "settings_goal",
+    "en": "📌 Daily Goal",
+    "ru": "📌 Дневная цель"
+  },
+  {
+    "key": "settings_lang",
+    "en": "🌐 Interface Language",
+    "ru": "🌐 Язык интерфейса"
+  },
+  {
+    "key": "avatar_choose_title",
+    "en": "🎭 Choose Character",
+    "ru": "🎭 Выберите персонажа"
+  },
+  {
+    "key": "avatar_upload_btn",
+    "en": "📁 Upload Custom Photo",
+    "ru": "📁 Загрузить своё фото"
+  },
+  {
+    "key": "avatar_reset_btn",
+    "en": "✕ Reset to Default",
+    "ru": "✕ Сбросить на стандартный"
+  },
+  {
+    "key": "settings_sync_btn",
+    "en": "Sync with server",
+    "ru": "Синхронизация с сервером"
+  },
+  {
+    "key": "settings_sync_confirm",
+    "en": "Are you sure you want to sync data with the server and reload?",
+    "ru": "Вы уверены, что хотите синхронизировать данные с сервером и перезагрузить?"
+  },
+  {
+    "key": "feedback_title",
+    "en": "Help us improve",
+    "ru": "Помогите нам стать лучше"
+  },
+  {
+    "key": "feedback_desc",
+    "en": "Have an idea or found a bug?",
+    "ru": "Есть идея или нашли ошибку?"
+  },
+  {
+    "key": "feedback_btn",
+    "en": "Write to developer",
+    "ru": "Написать разработчику"
+  },
+  {
+    "key": "feedback_copied_toast",
+    "en": "✉️ Mail client opened (lipniagovnikola@gmail.com copied)",
+    "ru": "✉️ Почта открыта (адрес lipniagovnikola@gmail.com скопирован)"
+  },
+  {
+    "key": "settings_account_mgmt",
+    "en": "Account Management",
+    "ru": "Управление аккаунтом"
+  },
+  {
+    "key": "settings_account_delete_desc",
+    "en": "You can permanently delete your profile and all learning progress.",
+    "ru": "Вы можете безвозвратно удалить свой профиль и все данные обучения."
+  },
+  {
+    "key": "settings_account_delete_btn",
+    "en": "Delete Account & Data",
+    "ru": "Удалить аккаунт и данные"
+  },
+  {
+    "key": "settings_account_delete_confirm",
+    "en": "Are you sure you want to permanently delete your account and all learning progress? This cannot be undone.",
+    "ru": "Вы уверены, что хотите навсегда удалить свой аккаунт и все данные? Это действие необратимо."
+  },
+  {
+    "key": "settings_account_deleting",
+    "en": "Deleting...",
+    "ru": "Удаление..."
+  },
+  {
+    "key": "settings_account_deleted",
+    "en": "Account successfully deleted.",
+    "ru": "Аккаунт успешно удалён."
+  },
+  {
+    "key": "settings_saving",
+    "en": "Saving...",
+    "ru": "Сохранение..."
+  },
+  {
+    "key": "settings_saved",
+    "en": "✓ Saved in profile",
+    "ru": "✓ Сохранено в профиле"
+  },
+  {
+    "key": "settings_avatar_updated",
+    "en": "✓ Avatar updated",
+    "ru": "✓ Аватар обновлён"
+  },
+  {
+    "key": "settings_guest_mode",
+    "en": "Guest (Demo)",
+    "ru": "Гость (Демо)"
+  },
+  {
+    "key": "settings_avatar_choose_tooltip",
+    "en": "Click to choose character or photo",
+    "ru": "Нажмите, чтобы выбрать персонажа или фото"
+  },
+  {
+    "key": "settings_avatar_edit_tooltip",
+    "en": "Change avatar",
+    "ru": "Сменить аватар"
+  },
+  {
+    "key": "settings_voice_uk_title",
+    "en": "British English (UK)",
+    "ru": "Британский английский (UK)"
+  },
+  {
+    "key": "settings_voice_us_title",
+    "en": "American English (US)",
+    "ru": "Американский английский (US)"
+  },
+  {
+    "key": "mic_modal_title",
+    "en": "Allow Microphone",
+    "ru": "Разрешите микрофон"
+  },
+  {
+    "key": "mic_modal_desc",
+    "en": "Microphone is required for pronunciation training. In the next system prompt, tap \"Allow\".",
+    "ru": "Микрофон нужен для тренировки произношения слов. В следующем системном окне нажмите «Разрешить»."
+  },
+  {
+    "key": "mic_modal_allow",
+    "en": "Got it, continue",
+    "ru": "Понятно, продолжить"
+  },
+  {
+    "key": "mic_modal_text",
+    "en": "Answer with text",
+    "ru": "Ответить текстом"
+  },
+  {
+    "key": "word_notes_title",
+    "en": "Note",
+    "ru": "Примечание"
+  },
+  {
+    "key": "word_notes_close",
+    "en": "Close",
+    "ru": "Закрыть"
+  },
+  {
+    "key": "podium_congrats_title",
+    "en": "🎉 Congratulations!",
+    "ru": "🎉 Поздравляем!"
+  },
+  {
+    "key": "podium_congrats_subtitle",
+    "en": "You achieved a prize place!",
+    "ru": "Вы заняли призовое место!"
+  },
+  {
+    "key": "podium_top_desc",
+    "en": "Top 4 players of the week",
+    "ru": "Топ-4 игроков недели"
+  },
+  {
+    "key": "podium_continue_btn",
+    "en": "Hooray! Continue 🚀",
+    "ru": "Ура! Продолжить 🚀"
+  },
+  {
+    "key": "podium_diamond_cup",
+    "en": "Diamond Cup!",
+    "ru": "Алмазный кубок!"
+  },
+  {
+    "key": "podium_gold_medal",
+    "en": "Gold Medal!",
+    "ru": "Золотая медаль!"
+  },
+  {
+    "key": "podium_silver_medal",
+    "en": "Silver Medal!",
+    "ru": "Серебряная медаль!"
+  },
+  {
+    "key": "podium_bronze_medal",
+    "en": "Bronze Medal!",
+    "ru": "Бронзовая медаль!"
+  },
+  {
+    "key": "podium_rank_1_badge",
+    "en": "1ST PLACE IN WEEKLY LEAGUE",
+    "ru": "1 МЕСТО В ЛИГЕ НЕДЕЛИ"
+  },
+  {
+    "key": "podium_rank_2_badge",
+    "en": "2ND PLACE IN WEEKLY LEAGUE",
+    "ru": "2 МЕСТО В ЛИГЕ НЕДЕЛИ"
+  },
+  {
+    "key": "podium_rank_3_badge",
+    "en": "3RD PLACE IN WEEKLY LEAGUE",
+    "ru": "3 МЕСТО В ЛИГЕ НЕДЕЛИ"
+  },
+  {
+    "key": "podium_rank_4_badge",
+    "en": "4TH PLACE IN WEEKLY LEAGUE",
+    "ru": "4 МЕСТО В ЛИГЕ НЕДЕЛИ"
+  },
+  {
+    "key": "auth_tab_login",
+    "en": "Log In",
+    "ru": "Вход"
+  },
+  {
+    "key": "auth_tab_register",
+    "en": "Register",
+    "ru": "Регистрация"
+  },
+  {
+    "key": "auth_google_continue",
+    "en": "Continue with Google",
+    "ru": "Продолжить с Google"
+  },
+  {
+    "key": "auth_divider_or",
+    "en": "or via email and password",
+    "ru": "или через email и пароль"
+  },
+  {
+    "key": "auth_field_name",
+    "en": "Name",
+    "ru": "Имя"
+  },
+  {
+    "key": "auth_field_name_placeholder",
+    "en": "Your name",
+    "ru": "Ваше имя"
+  },
+  {
+    "key": "auth_field_email",
+    "en": "Email",
+    "ru": "Email"
+  },
+  {
+    "key": "auth_field_password",
+    "en": "Password",
+    "ru": "Пароль"
+  },
+  {
+    "key": "auth_field_password_confirm",
+    "en": "Confirm password",
+    "ru": "Повторите пароль"
+  },
+  {
+    "key": "auth_btn_login",
+    "en": "Log In",
+    "ru": "Войти"
+  },
+  {
+    "key": "auth_btn_register",
+    "en": "Register",
+    "ru": "Зарегистрироваться"
+  },
+  {
+    "key": "auth_loading",
+    "en": "Loading...",
+    "ru": "Загрузка..."
+  },
+  {
+    "key": "auth_google_authorizing",
+    "en": "Authorizing via Google...",
+    "ru": "Авторизация через Google..."
+  },
+  {
+    "key": "auth_err_name_required",
+    "en": "Please enter your name",
+    "ru": "Пожалуйста, введите ваше имя"
+  },
+  {
+    "key": "auth_err_password_match",
+    "en": "Passwords do not match. Please enter matching passwords.",
+    "ru": "Пароли не совпадают. Введите одинаковые пароли."
+  },
+  {
+    "key": "auth_err_password_length",
+    "en": "Password must be at least 4 characters long",
+    "ru": "Пароль должен содержать не менее 4 символов"
+  },
+  {
+    "key": "auth_err_failed",
+    "en": "Authentication error occurred",
+    "ru": "Произошла ошибка при авторизации"
+  },
+  {
+    "key": "auth_google_connecting",
+    "en": "Connecting to Google services, try again in a moment...",
+    "ru": "Сервис Google подключается, попробуйте ещё раз через секунду..."
+  },
+  {
+    "key": "avatar_img_process_error",
+    "en": "Failed to process image. Please try another file.",
+    "ru": "Не удалось обработать изображение. Попробуйте другой файл."
+  },
+  {
+    "key": "train_cards_chip",
+    "en": "Cards",
+    "ru": "Карточки"
+  },
+  {
+    "key": "train_favs_chip",
+    "en": "Favorites",
+    "ru": "Избранные"
+  },
+  {
+    "key": "train_find_pairs",
+    "en": "Find the pairs",
+    "ru": "Найдите пары"
+  },
+  {
+    "key": "train_listen_chip",
+    "en": "Listen...",
+    "ru": "Слушайте..."
+  },
+  {
+    "key": "train_answer_quiz",
+    "en": "Answer in Quiz",
+    "ru": "Ответить в Квизе"
+  },
+  {
+    "key": "train_next_btn",
+    "en": "Next",
+    "ru": "Дальше"
+  },
+  {
+    "key": "train_try_again_mic",
+    "en": "Try again 🎙️",
+    "ru": "Попробуйте еще раз 🎙️"
+  },
+  {
+    "key": "train_try_n_of_m",
+    "en": "Try again 🎙️ (Attempt {n} of {m})",
+    "ru": "Попробуйте еще раз 🎙️ (Попытка {n} из {m})"
+  },
+  {
+    "key": "train_penalty_xp",
+    "en": "Penalty -1 XP. Correct:",
+    "ru": "Штраф -1 XP. Правильно:"
+  },
+  {
+    "key": "train_attempts_exhausted",
+    "en": "Attempts exhausted. Tap \"Continue\" to proceed to the next word.",
+    "ru": "Попытки исчерпаны. Нажмите «Продолжить» для перехода к следующему слову."
+  },
+  {
+    "key": "train_mic_allow_browser",
+    "en": "🔒 Please allow microphone in browser",
+    "ru": "🔒 Разрешите микрофон в браузере"
+  },
+  {
+    "key": "train_voice_not_detected",
+    "en": "Voice not detected. Tap 🎙️ to retry",
+    "ru": "Голос не обнаружен. Нажмите 🎙️ для повтора"
+  },
+  {
+    "key": "train_switching_alt",
+    "en": "⏳ Switching to alternative speech recognition...",
+    "ru": "⏳ Переключаемся на альтернативное распознавание..."
+  },
+  {
+    "key": "train_congrats_selected",
+    "en": "Excellent!<br/>You selected {n} words for study",
+    "ru": "Отлично!<br/>Вы отобрали {n} слов для изучения"
+  },
+  {
+    "key": "train_congrats_mastered",
+    "en": "Excellent!<br/>All words in this mode have been mastered!",
+    "ru": "Отлично!<br/>Все слова в этом режиме изучены!"
+  },
+  {
+    "key": "train_queue_empty",
+    "en": "Queue is empty",
+    "ru": "Очередь пуста"
+  },
+  {
+    "key": "train_queue_empty_desc",
+    "en": "Select words in \"Cards\" mode first!",
+    "ru": "Сначала отберите слова в режиме «Карточки»!"
+  },
+  {
+    "key": "train_open_cards",
+    "en": "Open Cards",
+    "ru": "Открыть Карточки"
+  },
+  {
+    "key": "train_select_words_cards",
+    "en": "Select words in Cards",
+    "ru": "Отобрать слова в Карточках"
+  },
+  {
+    "key": "train_goal_achieved",
+    "en": "Excellent!<br/>Goal achieved!",
+    "ru": "Отлично!<br/>Задача выполнена!"
+  },
+  {
+    "key": "stats_accuracy",
+    "en": "Accuracy",
+    "ru": "Точность"
+  },
+  {
+    "key": "stats_streak",
+    "en": "Streak",
+    "ru": "Серия"
+  },
+  {
+    "key": "stats_days_short",
+    "en": "d",
+    "ru": "дн"
+  },
+  {
+    "key": "stats_of",
+    "en": "of",
+    "ru": "из"
+  },
+  {
+    "key": "stats_words_unit",
+    "en": "words",
+    "ru": "слов"
+  },
+  {
+    "key": "stats_levels",
+    "en": "Difficulty Levels",
+    "ru": "Уровни сложности"
+  },
+  {
+    "key": "stats_special_courses",
+    "en": "Special Courses",
+    "ru": "Специальные курсы"
+  },
+  {
+    "key": "stats_study_dynamics",
+    "en": "Learning Dynamics",
+    "ru": "Динамика изучения"
+  },
+  {
+    "key": "stats_daily",
+    "en": "Daily",
+    "ru": "За день"
+  },
+  {
+    "key": "stats_total",
+    "en": "Total",
+    "ru": "Всего"
+  },
+  {
+    "key": "category_irregular_short",
+    "en": "Verbs",
+    "ru": "Глаголы"
+  },
+  {
+    "key": "category_pattern_short",
+    "en": "Speech",
+    "ru": "Речь"
+  },
+  {
+    "key": "lead_updating_title",
+    "en": "Leaderboard updating",
+    "ru": "Рейтинг обновляется"
+  },
+  {
+    "key": "lead_updating_desc",
+    "en": "Loading live data from server. If table does not appear, tap below:",
+    "ru": "Загружаем актуальные данные с сервера. Если таблица не появилась, нажмите кнопку ниже:"
+  },
+  {
+    "key": "lead_refresh_btn",
+    "en": "Refresh Leaderboard",
+    "ru": "Обновить рейтинг"
+  },
+  {
+    "key": "lead_guest_name",
+    "en": "You",
+    "ru": "Вы"
+  },
+  {
+    "key": "lead_student_default",
+    "en": "Student",
+    "ru": "Ученик"
+  },
+  {
+    "key": "lead_score_all_time",
+    "en": "Your result of all time",
+    "ru": "Ваш результат за всё время"
+  },
+  {
+    "key": "lead_score_current",
+    "en": "Your current result",
+    "ru": "Ваш текущий результат"
+  },
+  {
+    "key": "lead_login_to_save",
+    "en": "Log in to save your result",
+    "ru": "Войдите, чтобы закрепить результат"
+  },
+  {
+    "key": "train_speech_correct",
+    "en": "✓ Perfect! Correct pronunciation!",
+    "ru": "✓ Отлично! Произношение верное!"
+  },
+  {
+    "key": "train_time_up",
+    "en": "Time's up!",
+    "ru": "Время вышло!"
+  },
+  {
+    "key": "train_penalty_5xp",
+    "en": "Penalty -5 XP",
+    "ru": "Штраф -5 XP"
+  },
+  {
+    "key": "train_penalty_20xp",
+    "en": "Penalty -20 XP",
+    "ru": "Штраф -20 XP"
+  },
+  {
+    "key": "train_shield_btn",
+    "en": "🛡️ Save 20 XP (Watch Video)",
+    "ru": "🛡️ Спасти 20 XP (Смотреть видео)"
+  },
+  {
+    "key": "train_shield_remaining",
+    "en": "Shields left: {n}/3",
+    "ru": "Осталось спасений: {n}/3"
+  },
+  {
+    "key": "train_shield_saved",
+    "en": "🛡️ Score Saved! (0 XP)",
+    "ru": "🛡️ Очки спасены! (0 XP)"
+  },
+  {
+    "key": "train_shield_continue",
+    "en": "Continue (-20 XP)",
+    "ru": "Продолжить (-20 XP)"
+  },
+  {
+    "key": "train_offline_penalty",
+    "en": "Offline mode: gentle penalty -10 XP",
+    "ru": "Офлайн-режим: мягкий штраф -10 XP"
+  },
+  {
+    "key": "train_try_again",
+    "en": "🔄 Try again",
+    "ru": "🔄 Попробовать снова"
+  },
+  {
+    "key": "train_input_placeholder",
+    "en": "Type in English...",
+    "ru": "Введите на английском..."
+  },
+  {
+    "key": "train_typo_warning",
+    "en": "⚠️ Typo! Fix the mistake:",
+    "ru": "⚠️ Опечатка! Исправьте ошибку:"
+  },
+  {
+    "key": "train_fix_penalty",
+    "en": "Fix (-1 XP)",
+    "ru": "Исправить (-1 XP)"
+  },
+  {
+    "key": "train_fixed_success",
+    "en": "✓ Fixed! (-1 XP)",
+    "ru": "✓ Исправлено! (-1 XP)"
+  },
+  {
+    "key": "train_correct_xp",
+    "en": "✓ Correct! (+3 XP)",
+    "ru": "✓ Верно! (+3 XP)"
+  },
+  {
+    "key": "train_correct_label",
+    "en": "Correct:",
+    "ru": "Правильно:"
+  },
+  {
+    "key": "train_word_mastered",
+    "en": "🎉 Word mastered!",
+    "ru": "🎉 Слово выучено!"
+  },
+  {
+    "key": "train_flip_card_hint",
+    "en": "Tap to flip card",
+    "ru": "Нажмите, чтобы перевернуть карточку"
+  },
+  {
+    "key": "train_listen_audio",
+    "en": "Listen",
+    "ru": "Прослушать"
+  },
+  {
+    "key": "train_to_favorites",
+    "en": "To Favorites",
+    "ru": "В Избранное"
+  },
+  {
+    "key": "train_mic_launch_failed",
+    "en": "Failed to start microphone",
+    "ru": "Не удалось запустить микрофон"
+  },
+  {
+    "key": "guest_limit_title",
+    "en": "Demo Mode Finished",
+    "ru": "Демо-режим завершен"
+  },
+  {
+    "key": "guest_limit_signup",
+    "en": "✨ Sign up for free",
+    "ru": "✨ Зарегистрироваться бесплатно"
+  },
+  {
+    "key": "guest_limit_login",
+    "en": "Already have an account? Log In",
+    "ru": "Уже есть аккаунт? Войти"
+  },
+  {
+    "key": "lead_top100_title",
+    "en": "You are in TOP 100!",
+    "ru": "Вы в ТОП 100!"
+  },
+  {
+    "key": "lead_top100_desc",
+    "en": "Congratulations! You reached rank <strong>#{rank}</strong> on the leaderboard. Keep it up! 🚀",
+    "ru": "Поздравляем! Вы заняли <strong>#{rank}</strong> место в рейтинге. Так держать! 🚀"
+  },
+  {
+    "key": "lead_top100_btn",
+    "en": "Hooray!",
+    "ru": "Ура!"
+  },
+  {
+    "key": "lead_days_short",
+    "en": "d",
+    "ru": "д"
+  },
+  {
+    "key": "lead_hours_short",
+    "en": "h",
+    "ru": "ч"
+  },
+  {
+    "key": "lead_minutes_short",
+    "en": "m",
+    "ru": "м"
+  },
+  {
+    "key": "dict_add_word_title",
+    "en": "✨ Add word",
+    "ru": "✨ Добавить слово"
+  },
+  {
+    "key": "dict_word_label",
+    "en": "English word or phrase *",
+    "ru": "Английское слово или фраза *"
+  },
+  {
+    "key": "dict_trans_label",
+    "en": "Translation *",
+    "ru": "Перевод *"
+  },
+  {
+    "key": "dict_cat_label",
+    "en": "Category",
+    "ru": "Категория"
+  },
+  {
+    "key": "dict_notes_label",
+    "en": "Note / Example (optional)",
+    "ru": "Заметка / Пример (необязательно)"
+  },
+  {
+    "key": "dict_save_btn",
+    "en": "Save",
+    "ru": "Сохранить"
+  },
+  {
+    "key": "dict_cancel_btn",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "key": "dict_update_note_btn",
+    "en": "Update note",
+    "ru": "Обновить заметку"
+  },
+  {
+    "key": "dict_checking_btn",
+    "en": "Checking...",
+    "ru": "Проверяю..."
+  },
+  {
+    "key": "dict_no_words_found",
+    "en": "No words found.",
+    "ru": "Слова не найдены."
+  },
+  {
+    "key": "dict_quick_add",
+    "en": "➕ Add \"{query}\" to dictionary",
+    "ru": "➕ Добавить «{query}» в словарь"
+  },
+  {
+    "key": "stats_load_error",
+    "en": "Failed to load stats.",
+    "ru": "Ошибка загрузки статистики."
+  },
+  {
+    "key": "sound_on",
+    "en": "Pronounce word",
+    "ru": "Озвучить слово"
+  },
+  {
+    "key": "fav_toggle",
+    "en": "Add to favorites",
+    "ru": "В избранное"
+  },
+  {
+    "key": "confirm_quit_lesson",
+    "en": "Are you sure? Progress will be lost.",
+    "ru": "Вы уверены? Прогресс тренировки будет потерян."
+  },
+  {
+    "key": "conveyor_in_learning",
+    "en": "In progress {current} of {total}",
+    "ru": "В обучении {current} из {total}"
+  },
+  {
+    "key": "modal_close",
+    "en": "Close",
+    "ru": "Закрыть"
+  },
+  {
+    "key": "col_add_words_title",
+    "en": "Add words:",
+    "ru": "Добавить слова:"
+  },
+  {
+    "key": "col_in_collection_count",
+    "en": "In collection: {n}",
+    "ru": "В подборке: {n}"
+  },
+  {
+    "key": "col_in_collection_new",
+    "en": "In collection: {total} • New: +{added}",
+    "ru": "В подборке: {total} • Новых: +{added}"
+  },
+  {
+    "key": "col_in_collection_changed",
+    "en": "In collection: {total} ({diff})",
+    "ru": "В подборке: {total} ({diff})"
+  },
+  {
+    "key": "col_search_placeholder",
+    "en": "Search dictionary...",
+    "ru": "Поиск по словарю..."
+  },
+  {
+    "key": "col_btn_cancel",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "key": "col_btn_save",
+    "en": "Save",
+    "ru": "Сохранить"
+  },
+  {
+    "key": "col_btn_add_n",
+    "en": "Add (+{n})",
+    "ru": "Добавить (+{n})"
+  },
+  {
+    "key": "col_btn_save_n",
+    "en": "Save ({n})",
+    "ru": "Сохранить ({n})"
+  },
+  {
+    "key": "col_words_not_found",
+    "en": "No words found",
+    "ru": "Слова не найдены"
+  },
+  {
+    "key": "col_badge_new",
+    "en": "+New",
+    "ru": "+Новое"
+  },
+  {
+    "key": "col_badge_in_collection",
+    "en": "In collection",
+    "ru": "В подборке"
+  },
+  {
+    "key": "widget_install_title",
+    "en": "Widget Installation",
+    "ru": "Установка виджета"
+  },
+  {
+    "key": "widget_install_warning_title",
+    "en": "If screen layout is locked:",
+    "ru": "Если экран защищён от изменений:"
+  },
+  {
+    "key": "widget_install_warning_desc",
+    "en": "On Xiaomi (MIUI / HyperOS), Samsung etc., the 'Lock Home screen layout' setting might be enabled. When locked, the system blocks new widgets and shows a grey outline.",
+    "ru": "На смартфонах Xiaomi (MIUI / HyperOS), Samsung и др. может быть включена функция «Защитить от изменений» (блокировка сетки экрана). При активной защите система блокирует виджет и показывает серую рамку."
+  },
+  {
+    "key": "widget_install_how_to",
+    "en": "How to allow installation:",
+    "ru": "Как разрешить установку:"
+  },
+  {
+    "key": "widget_install_step1",
+    "en": "1. Touch and hold an empty space on your home screen.",
+    "ru": "1. Зажмите свободное место на рабочем столе телефона."
+  },
+  {
+    "key": "widget_install_step2",
+    "en": "2. Open screen 'Settings' (gear icon) and temporarily disable 'Lock Home screen layout'.",
+    "ru": "2. Откройте «Настройки» экрана (шестерёнка) и временно выключите «Защитить от изменений»."
+  },
+  {
+    "key": "widget_install_step3",
+    "en": "3. Tap the add button below:",
+    "ru": "3. Нажмите кнопку добавления ниже:"
+  },
+  {
+    "key": "widget_install_btn_pin",
+    "en": "✨ Add Widget (4×1)",
+    "ru": "✨ Добавить виджет (4×1)"
+  },
+  {
+    "key": "widget_install_btn_perms",
+    "en": "⚙️ App Permissions in Settings",
+    "ru": "⚙️ Разрешения приложения в телефоне"
+  },
+  {
+    "key": "widget_install_hint",
+    "en": "Or touch and hold the app icon on your home screen and select 'Add Widget'.",
+    "ru": "Или зажмите иконку приложения на рабочем столе и выберите «Добавить виджет»."
+  },
+  {
+    "key": "widget_install_fallback_alert",
+    "en": "Touch and hold the English Breakfast icon on your home screen and select 'Add Widget'.",
+    "ru": "Зажмите иконку English Breakfast на рабочем столе телефона и выберите «Добавить виджет»."
+  },
+  {
+    "key": "fav_empty_custom",
+    "en": "No words in this list yet",
+    "ru": "В этом списке пока нет слов"
+  },
+  {
+    "key": "fav_empty_custom_sub",
+    "en": "Add words from the dictionary or during practice.",
+    "ru": "Добавьте слова из словаря или во время тренировок."
+  },
+  {
+    "key": "fav_listen_tooltip",
+    "en": "Listen to pronunciation",
+    "ru": "Слушать произношение"
+  },
+  {
+    "key": "fav_remove_tooltip",
+    "en": "Remove from list",
+    "ru": "Удалить из списка"
+  },
+  {
+    "key": "cat_general",
+    "en": "General",
+    "ru": "Общие"
+  },
+  {
+    "key": "header_rank_guest",
+    "en": "Weekly League (0 XP)",
+    "ru": "Лига недели (0 XP)"
+  },
+  {
+    "key": "header_rank_diamond",
+    "en": "1st place in Weekly League (Diamond)",
+    "ru": "1 место в Лиге недели (Алмаз)"
+  },
+  {
+    "key": "header_rank_gold",
+    "en": "2nd place in Weekly League (Gold)",
+    "ru": "2 место в Лиге недели (Золото)"
+  },
+  {
+    "key": "header_rank_silver",
+    "en": "3rd place in Weekly League (Silver)",
+    "ru": "3 место в Лиге недели (Серебро)"
+  },
+  {
+    "key": "header_rank_bronze",
+    "en": "4th place in Weekly League (Bronze)",
+    "ru": "4 место в Лиге недели (Бронза)"
+  },
+  {
+    "key": "header_rank_n",
+    "en": "{n} place in Weekly League",
+    "ru": "{n} место в Лиге недели"
+  },
+  {
+    "key": "header_rank_click_hint",
+    "en": "Tap to open leaderboard",
+    "ru": "Нажмите, чтобы открыть рейтинг"
+  },
+  {
+    "key": "header_menu_title",
+    "en": "Menu",
+    "ru": "Меню"
+  },
+  {
+    "key": "header_menu_aria",
+    "en": "Open menu",
+    "ru": "Открыть меню"
+  },
+  {
+    "key": "drawer_guest_user",
+    "en": "Guest (Demo)",
+    "ru": "Гость (Демо)"
+  },
+  {
+    "key": "drawer_guest_progress",
+    "en": "Progress: {current}/{limit} words",
+    "ru": "Прогресс: {current}/{limit} слов"
+  },
+  {
+    "key": "header_brand_title",
+    "en": "Go to home (Test mode)",
+    "ru": "Перейти на главную (режим Тест)"
+  },
+  {
+    "key": "lead_sync_pending_hint",
+    "en": "Progress saved locally. Log in to update the leaderboard",
+    "ru": "Прогресс учтён локально. Войдите для обновления рейтинга"
+  },
+  {
+    "key": "scan_err_read_image",
+    "en": "Failed to read image file.",
+    "ru": "Не удалось прочитать файл изображения."
+  },
+  {
+    "key": "scan_err_read_file",
+    "en": "Error reading file.",
+    "ru": "Ошибка при чтении файла."
+  },
+  {
+    "key": "scan_err_select_image",
+    "en": "Please select an image file (JPEG, PNG, WEBP).",
+    "ru": "Пожалуйста, выберите файл изображения (JPEG, PNG, WEBP)."
+  },
+  {
+    "key": "scan_err_empty_text",
+    "en": "Please enter or paste English text.",
+    "ru": "Пожалуйста, введите или вставьте английский текст."
+  },
+  {
+    "key": "scan_err_clipboard_denied",
+    "en": "Clipboard access is unavailable in browser. Please paste text manually.",
+    "ru": "Буфер обмена недоступен через браузер. Вставьте текст вручную."
+  },
+  {
+    "key": "scan_err_clipboard_read",
+    "en": "Failed to read clipboard. Please paste text manually (Ctrl+V / long press).",
+    "ru": "Не удалось прочитать буфер обмена. Вставьте текст вручную (Ctrl+V / долгое нажатие)."
+  },
+  {
+    "key": "scan_err_lemmas",
+    "en": "Error extracting words. Please try again.",
+    "ru": "Ошибка извлечения лемм. Попробуйте снова."
+  },
+  {
+    "key": "scan_err_ocr",
+    "en": "Recognition error. Check the photo and try again.",
+    "ru": "Ошибка распознавания. Проверьте фото и попробуйте снова."
+  },
+  {
+    "key": "scan_adding_to_dict",
+    "en": "Adding to dictionary...",
+    "ru": "Добавляю в словарь..."
+  },
+  {
+    "key": "scan_err_save_words",
+    "en": "Error saving words",
+    "ru": "Ошибка сохранения слов"
+  },
+  {
+    "key": "dict_err_word_length",
+    "en": "English word or phrase length must be between 2 and 50 characters.",
+    "ru": "Длина английского слова или фразы должна быть от 2 до 50 символов."
+  },
+  {
+    "key": "dict_err_trans_length",
+    "en": "Translation length must be between 1 and 75 characters.",
+    "ru": "Длина перевода должна быть от 1 до 75 символов."
+  },
+  {
+    "key": "dict_err_notes_length",
+    "en": "Note length must not exceed 100 characters.",
+    "ru": "Длина примечания не должна превышать 100 символов."
+  },
+  {
+    "key": "dict_err_phrase_max_words",
+    "en": "⚠️ Phrase must not contain more than 6 words (maximum 6 words for patterns and idioms).",
+    "ru": "⚠️ Фраза не должна содержать более 6 слов (максимум для шаблонов и идиом — 6 слов)."
+  },
+  {
+    "key": "dict_err_english_only",
+    "en": "English word field must contain only English letters.",
+    "ru": "Поле английского слова должно содержать только английские буквы."
+  },
+  {
+    "key": "dict_err_need_vowel",
+    "en": "⚠️ English word must contain at least one vowel letter (a, e, i, o, u, y).",
+    "ru": "⚠️ Английское слово должно содержать хотя бы одну гласную букву (a, e, i, o, u, y)."
+  },
+  {
+    "key": "dict_err_gibberish",
+    "en": "⚠️ The word looks like random letters. Check the spelling.",
+    "ru": "⚠️ Слово похоже на случайный набор букв. Проверьте правильность написания."
+  },
+  {
+    "key": "dict_err_profanity",
+    "en": "Profanity is strictly prohibited.",
+    "ru": "Ненормативная лексика строго запрещена."
+  },
+  {
+    "key": "dict_err_english_chars_only",
+    "en": "⚠️ Only lowercase English letters are allowed (no digits or Cyrillic).",
+    "ru": "⚠️ Разрешены только строчные английские буквы (без цифр и кириллицы)."
+  },
+  {
+    "key": "dict_err_save_word",
+    "en": "Error saving word.",
+    "ru": "Ошибка сохранения слова."
+  },
+  {
+    "key": "scan_group_cat_title",
+    "en": "Change category for all words",
+    "ru": "Сменить категорию для всех слов"
+  },
+  {
+    "key": "scan_group_cat_all",
+    "en": "🏷️ All:",
+    "ru": "🏷️ Все:"
+  },
+  {
+    "key": "scan_click_change_cat",
+    "en": "Click to switch category",
+    "ru": "Нажмите, чтобы переключить категорию"
+  },
+  {
+    "key": "scan_in_text",
+    "en": " (in text: \"{orig}\")",
+    "ru": " (в тексте: «{orig}»)"
+  },
+  {
+    "key": "scan_trans_placeholder",
+    "en": "Enter translations separated by comma...",
+    "ru": "Введите перевод через запятую..."
+  },
+  {
+    "key": "scan_save_trans_title",
+    "en": "Save translation",
+    "ru": "Сохранить перевод"
+  },
+  {
+    "key": "scan_toggle_variant_title",
+    "en": "Click to toggle translation variant",
+    "ru": "Нажмите, чтобы включить/исключить вариант перевода"
+  },
+  {
+    "key": "scan_edit_trans_manual_title",
+    "en": "Edit translation manually",
+    "ru": "Редактировать перевод вручную"
+  },
+  {
+    "key": "dict_word_placeholder",
+    "en": "e.g.: every cloud has a silver lining",
+    "ru": "например: every cloud has a silver lining"
+  },
+  {
+    "key": "dict_trans_placeholder",
+    "en": "e.g.: every cloud has a silver lining",
+    "ru": "например: нет худа без добра"
+  },
+  {
+    "key": "dict_variants_label",
+    "en": "💡 Variants:",
+    "ru": "💡 Варианты:"
+  },
+  {
+    "key": "dict_notes_placeholder",
+    "en": "Example: Don't worry, every cloud has a silver lining",
+    "ru": "Пример: Don't worry, every cloud has a silver lining"
+  },
+  {
+    "key": "dict_searching_trans",
+    "en": "⏳ Searching translation...",
+    "ru": "⏳ Ищу перевод..."
+  },
+  {
+    "key": "dict_word_already_exists_notice",
+    "en": "💡 Word is already in dictionary (translation: <strong>\"{trans}\"</strong>, category: <strong>\"{cat}\"</strong>).<br>You can add or update its note.",
+    "ru": "💡 Слово уже есть в словаре (перевод: <strong>«{trans}»</strong>, категория: <strong>«{cat}»</strong>).<br>Вы можете дополнить или обновить примечание к нему."
+  }
+]

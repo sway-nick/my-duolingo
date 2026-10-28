@@ -77,10 +77,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Kedvenceim",
           "el": "Τα αγαπημένα μου",
           "da": "Mine favoritter",
-          "ga": "Mo Chuid Roghanna",
           "lv": "Mani favorīti",
           "lt": "Mano mėgstamiausi",
-          "mt": "Il-favoriti tiegħi",
           "pt": "Meus Favoritos",
           "sk": "Moje obľúbené",
           "sl": "Moji priljubljeni",
@@ -95,7 +93,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Yêu thích của tôi",
           "th": "รายการโปรดของฉัน",
           "ko": "내 즐겨찾기",
-          "ja": "お気に入り"
+          "ja": "お気に入り",
+          "bn": "আমার পছন্দসমূহ",
+          "fa": "علاقه‌مندی‌های من",
+          "zh": "我的收藏"
     },
   },
   {
@@ -117,10 +118,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Hónapok",
           "el": "Μήνες",
           "da": "Måneder",
-          "ga": "Míonna",
           "lv": "Mēneši",
           "lt": "Mėnesiai",
-          "mt": "Xhur",
           "pt": "Meses",
           "sk": "Mesiace",
           "sl": "Meseci",
@@ -135,7 +134,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Các tháng",
           "th": "เดือน",
           "ko": "월",
-          "ja": "月"
+          "ja": "月",
+          "bn": "মাসসমূহ",
+          "fa": "ماه‌ها",
+          "zh": "月份"
     },
     wordKeys: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
   },
@@ -158,10 +160,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "A hét napjai",
           "el": "Ημέρες της εβδομάδας",
           "da": "Ugedage",
-          "ga": "Laethanta na seachtaine",
           "lv": "Nedēļas dienas",
           "lt": "Savaitės dienos",
-          "mt": "Ġranet tal-ġimgħa",
           "pt": "Dias da semana",
           "sk": "Dni v týždni",
           "sl": "Dnevi v tednu",
@@ -176,7 +176,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Các ngày trong tuần",
           "th": "วันในสัปดาห์",
           "ko": "요일",
-          "ja": "曜日"
+          "ja": "曜日",
+          "bn": "সপ্তাহের দিন",
+          "fa": "روزهای هفته",
+          "zh": "星期"
     },
     wordKeys: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
   },
@@ -199,10 +202,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Színek",
           "el": "Χρώματα",
           "da": "Farver",
-          "ga": "Dathanna",
           "lv": "Krāsas",
           "lt": "Spalvos",
-          "mt": "Kuluri",
           "pt": "Cores",
           "sk": "Farby",
           "sl": "Barve",
@@ -217,7 +218,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Màu sắc",
           "th": "สี",
           "ko": "색상",
-          "ja": "色"
+          "ja": "色",
+          "bn": "রং",
+          "fa": "رنگ‌ها",
+          "zh": "颜色"
     },
     wordKeys: ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown', 'grey', 'gold', 'silver'],
   },
@@ -240,10 +244,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Számok",
           "el": "Αριθμοί",
           "da": "Tal",
-          "ga": "Uimhreacha",
           "lv": "Skaitļi",
           "lt": "Skaičiai",
-          "mt": "Numri",
           "pt": "Números",
           "sk": "Čísla",
           "sl": "Številke",
@@ -258,7 +260,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Con số",
           "th": "ตัวเลข",
           "ko": "숫자",
-          "ja": "数字"
+          "ja": "数字",
+          "bn": "সংখ্যা",
+          "fa": "اعداد",
+          "zh": "数字"
     },
     wordKeys: [
       'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
@@ -285,10 +290,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Testrészek",
           "el": "Μέρη του σώματος",
           "da": "Kropsdele",
-          "ga": "Codanna den chorp",
           "lv": "Ķermeņa daļas",
           "lt": "Kūno dalys",
-          "mt": "Partijiet tal-ġisem",
           "pt": "Partes do corpo",
           "sk": "Časti tela",
           "sl": "Deli telesa",
@@ -303,7 +306,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Bộ phận cơ thể",
           "th": "ส่วนต่างๆ ของร่างกาย",
           "ko": "신체 부위",
-          "ja": "体の部位"
+          "ja": "体の部位",
+          "bn": "শরীরের অঙ্গ",
+          "fa": "اعضای بدن",
+          "zh": "身体部位"
     },
     wordKeys: [
       'head', 'arm', 'leg', 'hand', 'foot', 'feet', 'eye', 'ear', 'nose', 'mouth',
@@ -330,10 +336,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Sport",
           "el": "Αθλητισμός",
           "da": "Sport",
-          "ga": "Spórt",
           "lv": "Sports",
           "lt": "Sportas",
-          "mt": "Sport",
           "pt": "Esporte",
           "sk": "Šport",
           "sl": "Šport",
@@ -348,7 +352,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Thể thao",
           "th": "กีฬา",
           "ko": "스포츠",
-          "ja": "スポーツ"
+          "ja": "スポーツ",
+          "bn": "খেলাধুলা",
+          "fa": "ورزش",
+          "zh": "体育运动"
     },
     wordKeys: [
       'football', 'basketball', 'tennis', 'baseball', 'run', 'running', 'swimming', 'swim',
@@ -375,10 +382,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Ételek és italok",
           "el": "Φαγητό και ποτά",
           "da": "Mad og drikke",
-          "ga": "Bia agus deochanna",
           "lv": "Ēdiens un dzērieni",
           "lt": "Maistas ir gėrimai",
-          "mt": "Ikel u xorb",
           "pt": "Comida e bebidas",
           "sk": "Jedlo a nápoje",
           "sl": "Hrana in pijača",
@@ -393,7 +398,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Thức ăn & đồ uống",
           "th": "อาหารและเครื่องดื่ม",
           "ko": "음식 및 음료",
-          "ja": "食べ物と飲み物"
+          "ja": "食べ物と飲み物",
+          "bn": "খাবার",
+          "fa": "غذا",
+          "zh": "美食与餐饮"
     },
     wordKeys: [
       'bread', 'water', 'tea', 'coffee', 'milk', 'meat', 'cheese', 'pizza', 'fish', 'sugar',
@@ -421,10 +429,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Ruházat",
           "el": "Ρούχα",
           "da": "Tøj",
-          "ga": "Éadaí",
           "lv": "Apģērbs",
           "lt": "Drabužiai",
-          "mt": "Ħwejjeġ",
           "pt": "Roupas",
           "sk": "Oblečenie",
           "sl": "Oblačila",
@@ -439,7 +445,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Quần áo",
           "th": "เสื้อผ้า",
           "ko": "옷",
-          "ja": "服"
+          "ja": "服",
+          "bn": "পোশাক",
+          "fa": "لباس",
+          "zh": "服饰与穿搭"
     },
     wordKeys: [
       'shirt', 'shoes', 'shoe', 'pants', 'dress', 'coat', 'hat', 'jacket', 'socks', 'suit',
@@ -465,10 +474,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Állatok",
           "el": "Ζώα",
           "da": "Dyr",
-          "ga": "Ainmhithe",
           "lv": "Dzīvnieki",
           "lt": "Gyvūnai",
-          "mt": "Annimali",
           "pt": "Animais",
           "sk": "Zvieratá",
           "sl": "Živali",
@@ -483,7 +490,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Động vật",
           "th": "สัตว์",
           "ko": "동물",
-          "ja": "動物"
+          "ja": "動物",
+          "bn": "প্রাণী",
+          "fa": "حیوانات",
+          "zh": "动物世界"
     },
     wordKeys: [
       'dog', 'cat', 'bird', 'horse', 'fish', 'bear', 'lion', 'wolf', 'elephant', 'tiger',
@@ -510,10 +520,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Gyakori igék",
           "el": "Δημοφιλή ρήματα",
           "da": "Populære udsagnsord",
-          "ga": "Briathra coitianta",
           "lv": "Biežāk lietotie darbības vārdi",
           "lt": "Populiarūs veiksmažodžiai",
-          "mt": "Verbi popolari",
           "pt": "Verbos populares",
           "sk": "Populárne slovesá",
           "sl": "Priljubljeni glagoli",
@@ -528,7 +536,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Động từ phổ biến",
           "th": "คำกริยายอดนิยม",
           "ko": "자주 쓰는 동사",
-          "ja": "よく使われる動詞"
+          "ja": "よく使われる動詞",
+          "bn": "ক্রিয়াপদ",
+          "fa": "افعال",
+          "zh": "常用动词"
     },
     wordKeys: [
       'be', 'have', 'do', 'say', 'go', 'get', 'make', 'know', 'think', 'take', 'see', 'come',
@@ -562,10 +573,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Melléknevek",
           "el": "Επίθετα",
           "da": "Tillægsord",
-          "ga": "Aidiachtaí",
           "lv": "Īpašības vārdi",
           "lt": "Būdvardžiai",
-          "mt": "Aġġettivi",
           "pt": "Adjetivos",
           "sk": "Prídavné mená",
           "sl": "Pridavniki",
@@ -580,7 +589,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Tính từ",
           "th": "คำคุณศัพท์",
           "ko": "형용사",
-          "ja": "形容詞"
+          "ja": "形容詞",
+          "bn": "বিশেষণ",
+          "fa": "صفات",
+          "zh": "常用形容词"
     },
     wordKeys: [
       'good', 'new', 'first', 'last', 'long', 'great', 'little', 'own', 'other', 'old',
@@ -611,10 +623,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "hu": "Vonzatos igék",
           "el": "Φραστικά ρήματα",
           "da": "Frasalverber",
-          "ga": "Briathra frásacha",
           "lv": "Frāzālie darbības vārdi",
           "lt": "Fraziniai veiksmažodžiai",
-          "mt": "Verbi frażali",
           "pt": "Verbos frasais",
           "sk": "Frázové slovesá",
           "sl": "Frazni glagoli",
@@ -629,7 +639,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "vi": "Cụm động từ",
           "th": "กริยาวลี",
           "ko": "구동사",
-          "ja": "句動詞"
+          "ja": "句動詞",
+          "bn": "Phrasal Verbs",
+          "fa": "افعال عبارتی",
+          "zh": "短语动词"
     },
     wordKeys: [
       'have to', 'get in', 'get on', 'turn on', 'turn off', 'wake up', 'get up', 'come in',
