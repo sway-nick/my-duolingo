@@ -5,6 +5,7 @@ import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=386.0';
 import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=386.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=386.0';
 import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js?v=386.0';
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=386.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
@@ -90,39 +91,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <span class="dropdown-arrow">▼</span>
           </button>
           <div class="custom-dropdown-menu" id="lang-dropdown-menu" role="listbox">
-            <div class="dropdown-item" data-value="bg">Български</div>
-            <div class="dropdown-item" data-value="cs">Čeština</div>
-            <div class="dropdown-item" data-value="da">Dansk</div>
-            <div class="dropdown-item" data-value="de">Deutsch</div>
-            <div class="dropdown-item" data-value="et">Eesti</div>
-            <div class="dropdown-item" data-value="el">Ελληνικά</div>
-            <div class="dropdown-item" data-value="es">Español</div>
-            <div class="dropdown-item" data-value="fr">Français</div>
-            <div class="dropdown-item" data-value="hr">Hrvatski</div>
-            <div class="dropdown-item" data-value="it">Italiano</div>
-            <div class="dropdown-item" data-value="lv">Latviešu</div>
-            <div class="dropdown-item" data-value="lt">Lietuvių</div>
-            <div class="dropdown-item" data-value="hu">Magyar</div>
-            <div class="dropdown-item" data-value="pl">Polski</div>
-            <div class="dropdown-item" data-value="pt">Português</div>
-            <div class="dropdown-item" data-value="ro">Română</div>
-            <div class="dropdown-item" data-value="ru">Русский</div>
-            <div class="dropdown-item" data-value="sk">Slovenčina</div>
-            <div class="dropdown-item" data-value="sl">Slovenščina</div>
-            <div class="dropdown-item" data-value="fi">Suomi</div>
-            <div class="dropdown-item" data-value="sv">Svenska</div>
-            <div class="dropdown-item" data-value="tr">Türkçe</div>
-            <div class="dropdown-item" data-value="uk">Українська</div>
-            <div class="dropdown-item" data-value="hi">हिन्दी</div>
-            <div class="dropdown-item" data-value="bn">বাংলা</div>
-            <div class="dropdown-item" data-value="ar">العربية</div>
-            <div class="dropdown-item" data-value="fa">فارسی</div>
-            <div class="dropdown-item" data-value="id">Bahasa Indonesia</div>
-            <div class="dropdown-item" data-value="vi">Tiếng Việt</div>
-            <div class="dropdown-item" data-value="th">ไทย</div>
-            <div class="dropdown-item" data-value="ko">한국어</div>
-            <div class="dropdown-item" data-value="ja">日本語</div>
-            <div class="dropdown-item" data-value="zh">中文 (zh)</div>
+            ${SUPPORTED_LOCALES.map((l) => `<div class="dropdown-item" data-value="${l.code}">${l.name} (${l.code})</div>`).join('\n            ')}
           </div>
         </div>
       </div>
@@ -420,47 +389,10 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const langLabel = container.querySelector('#lang-dropdown-label');
   const langItems = container.querySelectorAll('#lang-dropdown-menu .dropdown-item');
 
-  const langNames = {
-    en: 'English',
-    ru: 'Русский',
-    uk: 'Українська',
-    de: 'Deutsch',
-    es: 'Español',
-    fr: 'Français',
-    pl: 'Polski',
-    it: 'Italiano',
-    tr: 'Türkçe',
-    pt: 'Português',
-    ro: 'Română',
-    bg: 'Български',
-    cs: 'Čeština',
-    sk: 'Slovenčina',
-    hu: 'Magyar',
-    el: 'Ελληνικά',
-    sl: 'Slovenščina',
-    et: 'Eesti',
-    lt: 'Lietuvių',
-    lv: 'Latviešu',
-    da: 'Dansk',
-    fi: 'Suomi',
-    sv: 'Svenska',
-    hr: 'Hrvatski',
-    hi: 'हिन्दी',
-    bn: 'বাংলা',
-    ar: 'العربية',
-    fa: 'فارسی',
-    id: 'Bahasa Indonesia',
-    vi: 'Tiếng Việt',
-    th: 'ไทย',
-    ko: '한국어',
-    ja: '日本語',
-    zh: '中文',
-  };
-
   const currentLang = getInterfaceLanguage();
 
   function updateLangUI(val) {
-    if (langLabel) langLabel.textContent = langNames[val] || 'English';
+    if (langLabel) langLabel.textContent = getLocaleDisplayName(val, true);
     langItems.forEach((item) => {
       item.classList.toggle('selected', item.dataset.value === val);
     });

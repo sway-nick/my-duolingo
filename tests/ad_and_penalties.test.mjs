@@ -209,11 +209,8 @@ test('8e. AdService Bonus XP Rewarded Ad: All 34 locales translated (including p
   assert.equal(typeof AdService.canClaimDailyBonus, 'function', 'canClaimDailyBonus must be exposed');
   assert.equal(typeof AdService.markDailyBonusClaimed, 'function', 'markDailyBonusClaimed must be exposed');
 
-  const REQUIRED_33_LOCALES = [
-    'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
-    'da', 'lv', 'lt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
-    'hi', 'bn', 'ar', 'fa', 'zh', 'id', 'vi', 'th', 'ko', 'ja'
-  ];
+  const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
+  const REQUIRED_33_LOCALES = SUPPORTED_LOCALE_CODES;
 
   for (const loc of REQUIRED_33_LOCALES) {
     global.localStorage.setItem('myduo_interface_lang', loc);

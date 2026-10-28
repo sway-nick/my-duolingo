@@ -5,16 +5,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 
+import { SUPPORTED_LOCALE_CODES } from '../frontend/config/locales.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-// 34 supported languages in English Breakfast (removed ga & mt, added zh)
-const REQUIRED_33_LOCALES = [
-  'ru', 'uk', 'en', 'de', 'es', 'fr', 'pl', 'tr', 'it', 'ro', 'bg', 'hu', 'el',
-  'da', 'lv', 'lt', 'pt', 'sk', 'sl', 'fi', 'hr', 'cs', 'sv', 'et',
-  'hi', 'bn', 'ar', 'fa', 'id', 'vi', 'th', 'ko', 'ja', 'zh'
-];
+// Single source of truth for all supported languages
+const REQUIRED_33_LOCALES = SUPPORTED_LOCALE_CODES;
 
 test('Gate 0: Comprehensive JS/Module Syntax Integrity across all frontend files', () => {
   function checkDir(dir) {

@@ -1,4 +1,7 @@
 import { WIDGET_TRANSLATIONS } from './widgetTranslations.js?v=386.0';
+import { isRtlLocale, SUPPORTED_LOCALES, SUPPORTED_LOCALE_CODES, isLocaleSupported } from '../config/locales.js?v=386.0';
+
+export { SUPPORTED_LOCALES, SUPPORTED_LOCALE_CODES, isLocaleSupported };
 
 const translations = {
   ru: {
@@ -12444,9 +12447,9 @@ export function getInterfaceLanguage() {
 
 export function applyInterfaceDirection(lang) {
   if (typeof document !== 'undefined' && document.documentElement) {
-    if (lang === 'ar' || lang === 'fa') {
+    if (isRtlLocale(lang)) {
       document.documentElement.setAttribute('dir', 'rtl');
-      document.documentElement.setAttribute('lang', 'ar');
+      document.documentElement.setAttribute('lang', lang);
       document.documentElement.classList.add('is-rtl');
     } else {
       document.documentElement.setAttribute('dir', 'ltr');
