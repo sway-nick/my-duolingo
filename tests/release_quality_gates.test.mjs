@@ -103,7 +103,7 @@ test('Gate 2: Gold Card Widget HyperOS / MIUI and cross-platform broadcast safet
   );
 });
 
-test('Gate 3: 34 Languages Dictionary and Widget Translation completeness', async () => {
+test('Gate 3: 35 Languages Dictionary and Widget Translation completeness', async () => {
   // 1. Verify words.json has translations for all 33 supported languages
   const wordsJsonPath = path.join(ROOT_DIR, 'frontend/assets/data/words.json');
   assert.ok(fs.existsSync(wordsJsonPath), 'frontend/assets/data/words.json must exist');
@@ -236,5 +236,5 @@ test('Gate 5: Swipe Gestures and Dual Drawer Architecture (Burger Right & Leader
   const i18nPath = path.join(ROOT_DIR, 'frontend/services/i18n.js');
   const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
   const lbMatches = i18nCode.match(/leaderboard:\s*["']/g) || [];
-  assert.ok(lbMatches.length >= 34, `leaderboard translation key must be present for all locales (found ${lbMatches.length})`);
+  assert.ok(lbMatches.length >= 35, `leaderboard translation key must be present for all locales (found ${lbMatches.length})`);
 });

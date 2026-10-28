@@ -96,7 +96,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "お気に入り",
           "bn": "আমার পছন্দসমূহ",
           "fa": "علاقه‌مندی‌های من",
-          "zh": "我的收藏"
+          "zh": "我的收藏",
+          "ur": "میرے پسندیدہ"
     },
   },
   {
@@ -137,7 +138,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "月",
           "bn": "মাসসমূহ",
           "fa": "ماه‌ها",
-          "zh": "月份"
+          "zh": "月份",
+          "ur": "مہینے"
     },
     wordKeys: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
   },
@@ -179,7 +181,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "曜日",
           "bn": "সপ্তাহের দিন",
           "fa": "روزهای هفته",
-          "zh": "星期"
+          "zh": "星期",
+          "ur": "ہفتے کے دن"
     },
     wordKeys: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
   },
@@ -221,7 +224,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "色",
           "bn": "রং",
           "fa": "رنگ‌ها",
-          "zh": "颜色"
+          "zh": "颜色",
+          "ur": "رنگ"
     },
     wordKeys: ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown', 'grey', 'gold', 'silver'],
   },
@@ -263,7 +267,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "数字",
           "bn": "সংখ্যা",
           "fa": "اعداد",
-          "zh": "数字"
+          "zh": "数字",
+          "ur": "نمبرز"
     },
     wordKeys: [
       'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
@@ -309,7 +314,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "体の部位",
           "bn": "শরীরের অঙ্গ",
           "fa": "اعضای بدن",
-          "zh": "身体部位"
+          "zh": "身体部位",
+          "ur": "جسم کے اعضاء"
     },
     wordKeys: [
       'head', 'arm', 'leg', 'hand', 'foot', 'feet', 'eye', 'ear', 'nose', 'mouth',
@@ -355,7 +361,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "スポーツ",
           "bn": "খেলাধুলা",
           "fa": "ورزش",
-          "zh": "体育运动"
+          "zh": "体育运动",
+          "ur": "کھیل"
     },
     wordKeys: [
       'football', 'basketball', 'tennis', 'baseball', 'run', 'running', 'swimming', 'swim',
@@ -401,7 +408,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "食べ物と飲み物",
           "bn": "খাবার",
           "fa": "غذا",
-          "zh": "美食与餐饮"
+          "zh": "美食与餐饮",
+          "ur": "کھانا اور مشروبات"
     },
     wordKeys: [
       'bread', 'water', 'tea', 'coffee', 'milk', 'meat', 'cheese', 'pizza', 'fish', 'sugar',
@@ -448,7 +456,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "服",
           "bn": "পোশাক",
           "fa": "لباس",
-          "zh": "服饰与穿搭"
+          "zh": "服饰与穿搭",
+          "ur": "لباس اور کپڑے"
     },
     wordKeys: [
       'shirt', 'shoes', 'shoe', 'pants', 'dress', 'coat', 'hat', 'jacket', 'socks', 'suit',
@@ -493,7 +502,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "動物",
           "bn": "প্রাণী",
           "fa": "حیوانات",
-          "zh": "动物世界"
+          "zh": "动物世界",
+          "ur": "جانور"
     },
     wordKeys: [
       'dog', 'cat', 'bird', 'horse', 'fish', 'bear', 'lion', 'wolf', 'elephant', 'tiger',
@@ -539,7 +549,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "よく使われる動詞",
           "bn": "ক্রিয়াপদ",
           "fa": "افعال",
-          "zh": "常用动词"
+          "zh": "常用动词",
+          "ur": "اہم افعال"
     },
     wordKeys: [
       'be', 'have', 'do', 'say', 'go', 'get', 'make', 'know', 'think', 'take', 'see', 'come',
@@ -592,7 +603,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "形容詞",
           "bn": "বিশেষণ",
           "fa": "صفات",
-          "zh": "常用形容词"
+          "zh": "常用形容词",
+          "ur": "اہم صفات"
     },
     wordKeys: [
       'good', 'new', 'first', 'last', 'long', 'great', 'little', 'own', 'other', 'old',
@@ -642,7 +654,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ja": "句動詞",
           "bn": "Phrasal Verbs",
           "fa": "افعال عبارتی",
-          "zh": "短语动词"
+          "zh": "短语动词",
+          "ur": "مرکب افعال"
     },
     wordKeys: [
       'have to', 'get in', 'get on', 'turn on', 'turn off', 'wake up', 'get up', 'come in',

@@ -654,6 +654,10 @@ const FEEDBACK_EMAIL_TEMPLATES = {
     subject: 'English Breakfast — 反馈与建议',
     body: (u, l, d) => `您好！\n\n我的反馈 / 建议：\n\n\n---\n用户: ${u}\n语言: ${l}\n设备: ${d}`,
   },
+  ur: {
+    subject: 'English Breakfast — رائے اور تجاویز',
+    body: (u, l, d) => `ہیلو!\n\nمیری رائے / تجویز:\n\n\n---\nصارف: ${u}\nزبان: ${l}\nڈیوائس: ${d}`,
+  },
   bn: {
     subject: 'English Breakfast — মতামত / পরামর্শ',
     body: (u, l, d) => `নমস্কার / হ্যালো!\n\nআমার মতামত / পরামর্শ:\n\n\n---\nব্যবহারকারী: ${u}\nভাষা: ${l}\nডিভাইস: ${d}`,

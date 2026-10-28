@@ -253,7 +253,7 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic
   resetBuiltinCollection('colors');
 });
 
-test('Collections: all 13 built-in collections have names in all 34 supported locales', async () => {
+test('Collections: all 13 built-in collections have names in all 35 supported locales', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const locales = SUPPORTED_LOCALE_CODES;
@@ -270,7 +270,7 @@ test('Collections: all 13 built-in collections have names in all 34 supported lo
   }
 });
 
-test('Collections: WIDGET_TRANSLATIONS has all required hub and modal keys in all 34 locales', async () => {
+test('Collections: WIDGET_TRANSLATIONS has all required hub and modal keys in all 35 locales', async () => {
   const { WIDGET_TRANSLATIONS } = await import('../frontend/services/widgetTranslations.js');
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const locales = SUPPORTED_LOCALE_CODES;

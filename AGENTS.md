@@ -1,8 +1,8 @@
 # Project Directives & Coding Standards for English Breakfast
 
-> **CRITICAL RULE #1: 34 LOCALES (EXACTLY 34)**
-> English Breakfast officially supports **EXACTLY 34 LOCALES** (31 core + `bn` Bengali + `fa` Persian/Farsi with RTL + `zh` Simplified Chinese; Maltese `mt` and Irish `ga` permanently removed).
-> Whenever localizing any new feature, button, dialog, ad modal, or widget text, it MUST be translated for ALL 34 LOCALES without exception.
+> **CRITICAL RULE #1: 35 LOCALES (EXACTLY 35)**
+> English Breakfast officially supports **EXACTLY 35 LOCALES** (31 core + `bn` Bengali + `fa` Persian/Farsi with RTL + `zh` Simplified Chinese + `ur` Urdu with RTL; Maltese `mt` and Irish `ga` permanently removed).
+> Whenever localizing any new feature, button, dialog, ad modal, or widget text, it MUST be translated for ALL 35 LOCALES without exception.
 
 > **CRITICAL RULE #2: STRICT PROHIBITION OF AUTONOMOUS APK / AAB BUILDS**
 > **NEVER build an APK (`EnglishBreakfast.apk`) or AAB (`EnglishBreakfast.aab`) unless the USER EXPLICITLY ASKS FOR IT.**
@@ -11,7 +11,7 @@
 
 ---
 
-### The 34 Supported Locales
+### The 35 Supported Locales
 1. `ru` - Russian
 2. `uk` - Ukrainian
 3. `en` - English (US / UK)
@@ -37,15 +37,16 @@
 23. `sv` - Swedish
 24. `et` - Estonian
 25. `hi` - Hindi (India: *XP दोगुना करें*)
-26. `ar` - Arabic
-27. `id` - Indonesian
-28. `vi` - Vietnamese
-29. `th` - Thai
-30. `ko` - Korean
-31. `ja` - Japanese
-32. `bn` - Bengali
-33. `fa` - Persian / Farsi (RTL)
-34. `zh` - Chinese Simplified (*双倍经验*)
+26. `bn` - Bengali
+27. `ar` - Arabic
+28. `fa` - Persian / Farsi (RTL)
+29. `ur` - Urdu (RTL: *ڈبل XP*)
+30. `id` - Indonesian
+31. `vi` - Vietnamese
+32. `th` - Thai
+33. `ko` - Korean
+34. `ja` - Japanese
+35. `zh` - Chinese Simplified (*双倍经验*)
 
 ---
 

@@ -1,5 +1,5 @@
 // Single Source of Truth for all supported languages in English Breakfast
-// Exactly 34 official locales
+// Exactly 35 official locales
 
 export const SUPPORTED_LOCALES = [
   { code: 'ru', name: 'Русский', dir: 'ltr' },
@@ -30,6 +30,7 @@ export const SUPPORTED_LOCALES = [
   { code: 'bn', name: 'বাংলা', dir: 'ltr' },
   { code: 'ar', name: 'العربية', dir: 'rtl' },
   { code: 'fa', name: 'فارسی', dir: 'rtl' },
+  { code: 'ur', name: 'اردو', dir: 'rtl' },
   { code: 'id', name: 'Bahasa Indonesia', dir: 'ltr' },
   { code: 'vi', name: 'Tiếng Việt', dir: 'ltr' },
   { code: 'th', name: 'ไทย', dir: 'ltr' },

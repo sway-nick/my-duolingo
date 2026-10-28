@@ -141,6 +141,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     if (lang === 'bn') {
       return `${count} শব্দ`;
     }
+    if (lang === 'ur') {
+      return `${count} الفاظ`;
+    }
     if (lang === 'fa') {
       return `${count} کلمه`;
     }
