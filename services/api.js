@@ -3606,10 +3606,10 @@ async function addCustomWord({ word, translation, category, notes }) {
     if (json && json.success && json.data && json.data.word) {
       savedWord = json.data.word;
     } else if (json && json.success === false) {
-      throw new Error(json.error || 'РЎР»РѕРІРѕ РёР»Рё С„СЂР°Р·Р° РѕС‚РєР»РѕРЅРµРЅР° СЃРµСЂРІРµСЂРѕРј.');
+      throw new Error(json.error || 'Слово или фраза отклонена сервером.');
     }
   } catch (netErr) {
-    if (netErr.message && netErr.message.includes('РѕС‚РєР»РѕРЅРµРЅР°')) throw netErr;
+    if (netErr.message && netErr.message.includes('отклонена')) throw netErr;
     console.warn('Network error during addCustomWord, saving locally:', netErr);
   }
 
@@ -3736,8 +3736,8 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   let lang = 'en';
   try {
     const stored = getInterfaceLanguage();
-    if (stored && /^[a-z]{2,3}$/.test(stored)) {
-      lang = stored;
+    if (stored && typeof stored === 'string') {
+      lang = stored.toLowerCase().split(/[-_]/)[0] || 'en';
     }
   } catch (e) {}
 
@@ -3795,12 +3795,12 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
     return resJson.data;
   }
 
-  let errMsg = resJson?.error || 'РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ СЃР»РѕРІР° СЃ С„РѕС‚Рѕ РёР»Рё С‚РµРєСЃС‚Р°';
+  let errMsg = resJson?.error || 'Не удалось распознать слова с фото или текста';
   throw new Error(errMsg);
 }
 
 async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
-  const lines = rawText.split(/[\r\n]+|[;вЂўВ·\t]+/);
+  const lines = rawText.split(/[\r\n]+|[;•·\t]+/);
   const items = [];
   const seen = new Set();
 

@@ -153,11 +153,33 @@ test('Gate 3: 35 Languages Dictionary and Widget Translation completeness', asyn
       de: 'Apfel',
       es: 'manzana',
       fr: 'pomme',
-      ja: 'りんご'
+      ja: 'りんご',
+      ur: 'سیب',
+      zh: '苹果'
     }
   };
 
   assert.equal(typeof getWordTranslation, 'function', 'getWordTranslation must be exposed');
+  assert.equal(getWordTranslation(testWord, 'ur'), 'سیب', 'Urdu translation must be returned for ur locale');
+  assert.equal(getWordTranslation(testWord, 'zh'), '苹果', 'Chinese translation must be returned for zh locale');
+
+  // 4. Verify Constructor Architecture & Translation Suggestion Engine in api.js
+  const apiPath = path.join(ROOT_DIR, 'frontend/services/api.js');
+  assert.ok(fs.existsSync(apiPath), 'frontend/services/api.js must exist');
+  const apiCode = fs.readFileSync(apiPath, 'utf-8');
+
+  assert.ok(
+    !apiCode.includes("['ru', 'uk', 'de', 'es', 'fr', 'pl', 'it', 'tr', 'pt'].includes"),
+    'suggestTranslations must not contain hardcoded 9-language whitelist'
+  );
+  assert.ok(
+    apiCode.includes('match.translations[targetLang]'),
+    'suggestTranslations must dynamically match cached words across all supported locales'
+  );
+  assert.ok(
+    apiCode.includes('scanDocumentImage') && apiCode.includes('stored.toLowerCase().split(/[-_]/)[0]'),
+    'scanDocumentImage must dynamically resolve OCR target language from interface language'
+  );
 });
 
 test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrity', () => {
