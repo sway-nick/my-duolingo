@@ -177,8 +177,6 @@ class AdServiceImpl {
         });
         this.initialized = true;
         console.log('✅ Google AdMob initialized on Android');
-        // Preload interstitial ad in the background (rewarded ads preloaded just-in-time)
-        this.preloadInterstitial().catch(() => {});
       } catch (err) {
         console.warn('⚠️ AdMob native init error:', err);
       }
@@ -194,7 +192,6 @@ class AdServiceImpl {
   resetRoundShields() {
     this.shieldsUsedInRound = 0;
     console.log('🛡️ Round shields reset. Available: 3/3');
-    this.preloadInterstitial().catch(() => {});
   }
 
   /**
@@ -640,7 +637,6 @@ class AdServiceImpl {
 
     if (this.roundsCompletedSinceLastAd < this.minRoundsBetweenInterstitials) {
       console.log(`ℹ️ Interstitial deferred: round ${this.roundsCompletedSinceLastAd}/${this.minRoundsBetweenInterstitials}`);
-      this.preloadInterstitial().catch(() => {});
       return false;
     }
 
@@ -704,9 +700,9 @@ class AdServiceImpl {
 
   /**
    * Show Interstitial Ad upon user-initiated exit from Collections & Lists.
-   * Strict limits:
-   * 1. Max 2 times per day (daily cap).
-   * 2. Not more frequently than once per hour (3600 seconds cooldown).
+   * Smart pacing:
+   * 1. 3-minute cooldown (180 seconds) between interstitials.
+   * 2. Unlimited daily frequency (no arbitrary daily cap).
    */
   async showCollectionsExitInterstitial() {
     if (!this.isOnline()) return false;
@@ -725,17 +721,10 @@ class AdServiceImpl {
       stats.date = todayStr;
     }
 
-    if (stats.count >= 2) {
-      console.log(`ℹ️ Collections exit interstitial skipped: daily cap of 2 reached today (${stats.count}/2)`);
-      this.preloadInterstitial().catch(() => {});
-      return false;
-    }
-
-    const ONE_HOUR_MS = 60 * 60 * 1000;
-    if (stats.lastShown && (now - stats.lastShown < ONE_HOUR_MS)) {
-      const minutesRemaining = Math.ceil((ONE_HOUR_MS - (now - stats.lastShown)) / 60000);
-      console.log(`ℹ️ Collections exit interstitial skipped: 1-hour cooldown active (${minutesRemaining}m remaining)`);
-      this.preloadInterstitial().catch(() => {});
+    const COOLDOWN_MS = 3 * 60 * 1000;
+    if (stats.lastShown && (now - stats.lastShown < COOLDOWN_MS)) {
+      const secondsRemaining = Math.ceil((COOLDOWN_MS - (now - stats.lastShown)) / 1000);
+      console.log(`ℹ️ Collections exit interstitial skipped: 3-minute cooldown active (${secondsRemaining}s remaining)`);
       return false;
     }
 
@@ -801,14 +790,14 @@ class AdServiceImpl {
    * Show Interstitial Ad upon user-initiated early exit from Quiz, Pairs, or Test in a training round.
    * Strict rules:
    * 1. Never for Cards (handled at invocation site).
-   * 2. Cooldown of 60 minutes (3600 seconds) between early exit interstitials.
+   * 2. Cooldown of 3 minutes (180 seconds) between early exit interstitials.
    * 3. Unlimited daily frequency (no daily cap).
    */
   async showTrainingEarlyExitInterstitial() {
     if (!this.isOnline()) return false;
     const now = Date.now();
     const STORAGE_KEY_EARLY_EXIT = 'ad_training_early_exit_last_time';
-    const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes (was 60m)
+    const COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes (180s)
 
     let lastShown = 0;
     try {
@@ -817,9 +806,8 @@ class AdServiceImpl {
     } catch (e) {}
 
     if (lastShown > 0 && (now - lastShown < COOLDOWN_MS)) {
-      const remainingMins = Math.ceil((COOLDOWN_MS - (now - lastShown)) / 60000);
-      console.log(`ℹ️ Training early exit interstitial skipped: 10-minute cooldown active (${remainingMins}m remaining)`);
-      this.preloadInterstitial().catch(() => {});
+      const secondsRemaining = Math.ceil((COOLDOWN_MS - (now - lastShown)) / 1000);
+      console.log(`ℹ️ Training early exit interstitial skipped: 3-minute cooldown active (${secondsRemaining}s remaining)`);
       return false;
     }
 
@@ -882,7 +870,6 @@ class AdServiceImpl {
     const now = Date.now();
     if (this.lastInterstitialTime && (now - this.lastInterstitialTime < minCooldownSeconds * 1000)) {
       console.log(`ℹ️ Transition interstitial skipped: only ${Math.round((now - this.lastInterstitialTime)/1000)}s since last ad (cooldown: ${minCooldownSeconds}s)`);
-      this.preloadInterstitial().catch(() => {});
       return false;
     }
 

@@ -435,9 +435,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     try {
       if (typeof AdService !== 'undefined') {
         AdService.resetRoundShields();
-        if (typeof AdService.preloadInterstitial === 'function') {
-          AdService.preloadInterstitial().catch(() => {});
-        }
+      }
+    } catch (_) {}
+  } else if (currentWordIndex === 2) {
+    // Just-In-Time preload: User is actively engaged and reached 3rd word in round
+    try {
+      if (typeof AdService !== 'undefined' && typeof AdService.preloadInterstitial === 'function') {
+        AdService.preloadInterstitial().catch(() => {});
       }
     } catch (_) {}
   }
@@ -1995,6 +1999,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const isOnline = typeof AdService !== 'undefined' ? AdService.isOnline() : true;
 
         if (shieldsLeft > 0 && isOnline) {
+          // Just-in-time preload for Rewarded Shield ad on mistake
+          try {
+            if (typeof AdService !== 'undefined' && typeof AdService.prepareRewarded === 'function') {
+              AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
+            }
+          } catch (_) {}
           // Rule 2: Offer Shield via Rewarded Ad (3 shields max per round)
           feedback.innerHTML = `
             <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>

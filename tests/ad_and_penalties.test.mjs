@@ -142,7 +142,7 @@ test('8b. AdService Interstitial: Preload and round completion lifecycle', async
   assert.ok(AdService.lastInterstitialTime > 0, 'Timestamp is updated');
 });
 
-test('8c. AdService Collections Exit Interstitial: Capped at max 2 times per day and min 1 hour interval', async () => {
+test('8c. AdService Collections Exit Interstitial: Capped at min 3-minute cooldown and unlimited daily frequency', async () => {
   assert.equal(typeof AdService.showCollectionsExitInterstitial, 'function', 'showCollectionsExitInterstitial must be exposed');
 
   global.localStorage.removeItem('ad_col_exit_interstitial_stats');
@@ -151,29 +151,29 @@ test('8c. AdService Collections Exit Interstitial: Capped at max 2 times per day
   const res1 = await AdService.showCollectionsExitInterstitial();
   assert.equal(res1, true, 'First collections exit shows ad');
 
-  // Immediate second show: blocked by 1-hour cooldown
+  // Immediate second show: blocked by 3-minute cooldown
   const res2 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res2, false, 'Immediate second show is blocked by 1-hour cooldown');
+  assert.equal(res2, false, 'Immediate second show is blocked by 3-minute cooldown');
 
-  // Fast-forward 1 hour (modify lastShown in storage)
+  // Fast-forward 3 minutes (modify lastShown in storage)
   const raw = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats'));
-  raw.lastShown = Date.now() - (3601 * 1000);
+  raw.lastShown = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw));
 
-  // Second show after 1 hour: succeeds
+  // Second show after 3 minutes: succeeds
   const res3 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res3, true, 'Second show after 1 hour succeeds (count is now 2)');
+  assert.equal(res3, true, 'Second show after 3 minutes succeeds');
 
-  // Fast-forward another hour: blocked because daily cap of 2 is reached!
+  // Fast-forward another 3 minutes: succeeds again (unlimited daily frequency, no artificial 2/day cap)
   const raw2 = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats'));
-  raw2.lastShown = Date.now() - (3601 * 1000);
+  raw2.lastShown = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw2));
 
   const res4 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res4, false, 'Third show in same day is blocked by daily cap (max 2/day)');
+  assert.equal(res4, true, 'Third show after another 3 minutes succeeds (unlimited daily frequency)');
 });
 
-test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unlimited daily frequency', async () => {
+test('8d. AdService Training Early Exit Interstitial: 3-minute cooldown and unlimited daily frequency', async () => {
   assert.equal(typeof AdService.showTrainingEarlyExitInterstitial, 'function', 'showTrainingEarlyExitInterstitial must be exposed');
 
   global.localStorage.removeItem('ad_training_early_exit_last_time');
@@ -182,24 +182,24 @@ test('8d. AdService Training Early Exit Interstitial: 60-minute cooldown and unl
   const res1 = await AdService.showTrainingEarlyExitInterstitial();
   assert.equal(res1, true, 'First early exit shows ad');
 
-  // Immediate second show: blocked by 60-minute cooldown
+  // Immediate second show: blocked by 3-minute cooldown
   const res2 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res2, false, 'Immediate second show is blocked by 60-minute cooldown');
+  assert.equal(res2, false, 'Immediate second show is blocked by 3-minute cooldown');
 
-  // Fast-forward 1 hour in storage
-  const stored1 = Date.now() - (3601 * 1000);
+  // Fast-forward 3 minutes in storage
+  const stored1 = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_training_early_exit_last_time', String(stored1));
 
-  // Second show after 1 hour: succeeds
+  // Second show after 3 minutes: succeeds
   const res3 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res3, true, 'Second show after 1 hour succeeds');
+  assert.equal(res3, true, 'Second show after 3 minutes succeeds');
 
-  // Fast-forward another hour: succeeds again (no daily cap, unlimited per day!)
-  const stored2 = Date.now() - (3601 * 1000);
+  // Fast-forward another 3 minutes: succeeds again (no daily cap, unlimited per day!)
+  const stored2 = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_training_early_exit_last_time', String(stored2));
 
   const res4 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res4, true, 'Third show after another hour succeeds (unlimited daily frequency)');
+  assert.equal(res4, true, 'Third show after another 3 minutes succeeds (unlimited daily frequency)');
 });
 
 test('8e. AdService Bonus XP Rewarded Ad: All 35 locales translated (including pt-BR, es-MX, hi)', async () => {

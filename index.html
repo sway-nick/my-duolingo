@@ -1194,9 +1194,6 @@
                 pushUserDataToCloud(null, null, true);
               } catch (e) {}
               playFanfareSound();
-              try {
-                AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
-              } catch (e) {}
             }
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
