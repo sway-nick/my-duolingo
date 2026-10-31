@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    width: 720px;
+    height: 1460px;
+    overflow: hidden;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    color: #ffffff;
+    /* Iconic iOS 18 / iPhone 16 Pro Deep Titanium Fluid Mesh Wallpaper */
+    background: radial-gradient(circle at 75% 20%, rgba(255, 140, 60, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 20% 45%, rgba(120, 60, 220, 0.4) 0%, transparent 55%),
+                radial-gradient(circle at 80% 75%, rgba(45, 120, 255, 0.35) 0%, transparent 50%),
+                radial-gradient(circle at 30% 90%, rgba(230, 80, 160, 0.3) 0%, transparent 45%),
+                linear-gradient(160deg, #0b0d17 0%, #111528 35%, #0d1020 70%, #060810 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 32px 30px;
+}
+
+/* Ambient glow blobs */
+.glow-orb-1 {
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(235, 160, 60, 0.28) 0%, rgba(220, 100, 40, 0.05) 60%, transparent 75%);
+    top: 240px;
+    left: 120px;
+    filter: blur(40px);
+    pointer-events: none;
+}
+.glow-orb-2 {
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(90, 70, 240, 0.25) 0%, rgba(30, 140, 255, 0.08) 60%, transparent 80%);
+    bottom: 260px;
+    right: 20px;
+    filter: blur(50px);
+    pointer-events: none;
+}
+
+/* Top Status Bar */
+.status-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px 0;
+    z-index: 10;
+}
+.clock {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+/* Dynamic Island */
+.dynamic-island {
+    width: 175px;
+    height: 44px;
+    background: #000000;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+.di-camera {
+    width: 13px;
+    height: 13px;
+    background: radial-gradient(circle, #0d2038 35%, #050a12 100%);
+    border-radius: 50%;
+}
+.di-sensor {
+    width: 11px;
+    height: 11px;
+    background: #080c14;
+    border-radius: 50%;
+}
+.status-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.status-icon-svg {
+    width: 22px;
+    height: 22px;
+    fill: #ffffff;
+}
+
+/* Date Header */
+.date-header {
+    margin-top: 48px;
+    text-align: center;
+    z-index: 5;
+}
+.date-day {
+    font-size: 19px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.78);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.2px;
+}
+.time-display {
+    font-size: 92px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-top: 4px;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.85) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* Golden Card Widget */
+.widget-container {
+    width: 100%;
+    margin-top: 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+}
+.widget-label {
+    align-self: flex-start;
+    margin-left: 14px;
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+.widget-card {
+    width: 100%;
+    height: 350px;
+    border-radius: 38px;
+    /* Luxurious gold satin gradient */
+    background: linear-gradient(135deg, #fce085 0%, #eeb444 38%, #d99327 75%, #be7815 100%);
+    box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.75),
+                0 10px 24px rgba(220, 150, 40, 0.35),
+                inset 0 1.5px 1px rgba(255, 255, 255, 0.75),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+    padding: 26px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+.widget-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, transparent 100%);
+    border-radius: 38px 38px 0 0;
+    pointer-events: none;
+}
+
+/* Top row inside widget */
+.w-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+.w-left-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.w-icon-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(65, 35, 5, 0.14);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #432407;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.w-counter {
+    font-size: 22px;
+    font-weight: 800;
+    color: #4a2807;
+    letter-spacing: 0.5px;
+}
+.w-play-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(65, 35, 5, 0.14);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #432407;
+    font-size: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.w-heart-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    filter: drop-shadow(0 2px 6px rgba(220, 38, 38, 0.45));
+}
+
+/* Word Center */
+.w-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    margin: 10px 0;
+}
+.w-word {
+    font-size: 58px;
+    font-weight: 900;
+    color: #2b1704;
+    letter-spacing: -1px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+    text-align: center;
+    line-height: 1.1;
+}
+.w-phonetic {
+    font-size: 21px;
+    font-weight: 600;
+    color: #5d350b;
+    margin-top: 6px;
+    letter-spacing: 0.3px;
+}
+
+/* Bottom row */
+.w-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+.w-arrow-btn {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 900;
+    color: #4a2807;
+}
+.w-tap-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #5d350b;
+    background: rgba(255, 255, 255, 0.28);
+    padding: 6px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Mid Apps Grid */
+.apps-grid {
+    width: 100%;
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 0 10px;
+    z-index: 5;
+}
+.app-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.app-icon {
+    width: 82px;
+    height: 82px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+.app-icon-owl {
+    background: linear-gradient(135deg, #ff9f43 0%, #ee5253 100%);
+    box-shadow: 0 14px 28px rgba(238, 82, 83, 0.4);
+}
+.app-icon-photos {
+    background: #ffffff;
+}
+.app-icon-music {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+}
+.app-icon-notes {
+    background: #f1c40f;
+}
+.app-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Page Dots */
+.page-dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    margin-bottom: 24px;
+    z-index: 5;
+}
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+}
+.dot.active {
+    width: 22px;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+/* Bottom Glassmorphic Dock */
+.dock {
+    width: 100%;
+    height: 114px;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 36px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    z-index: 10;
+}
+.dock-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+}
+.icon-phone {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+.icon-messages {
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+}
+.icon-safari {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+.icon-camera {
+    background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+}
+
+/* Home Indicator */
+.home-bar {
+    width: 180px;
+    height: 5px;
+    background: #ffffff;
+    border-radius: 10px;
+    margin-top: 18px;
+    z-index: 10;
+    opacity: 0.85;
+}
+</style>
+</head>
+<body>
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="clock">09:41</div>
+        <div class="dynamic-island">
+            <div class="di-camera"></div>
+            <div class="di-sensor"></div>
+        </div>
+        <div class="status-icons">
+            <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.64 10.59 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+            <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+    </div>
+
+    <!-- Date & Clock Header -->
+    <div class="date-header">
+        <div class="date-day">Saturday, October 31</div>
+        <div class="time-display">09:41</div>
+    </div>
+
+    <!-- Golden Card Widget -->
+    <div class="widget-container">
+        <div class="widget-label">
+            <span>✨</span> English Breakfast Widget
+        </div>
+        <div class="widget-card">
+            <!-- Top Row -->
+            <div class="w-top-row">
+                <div class="w-left-group">
+                    <div class="w-icon-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                    </div>
+                    <div class="w-counter">1 / 67</div>
+                </div>
+                <div class="w-play-btn">▶</div>
+                <div class="w-heart-btn">❤️</div>
+            </div>
+
+            <!-- Center -->
+            <div class="w-center">
+                <div class="w-word">especially</div>
+                <div class="w-phonetic">[ɪˈspeʃ.əl.i] • особенно</div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="w-bottom-row">
+                <div class="w-arrow-btn">❮</div>
+                <div class="w-tap-hint">
+                    <span>↻</span> Tap to flip
+                </div>
+                <div class="w-arrow-btn">❯</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apps Row -->
+    <div class="apps-grid">
+        <div class="app-item">
+            <div class="app-icon app-icon-owl">
+                <span style="font-size: 42px;">🍳</span>
+            </div>
+            <div class="app-name">Breakfast</div>
+        </div>
+        <div class="app-item">
+            <div class="app-icon app-icon-photos">
+                <span style="font-size: 40px;">🌸</span>
+            </div>
+            <div class="app-name">Photos</div>
+        </div>
+        <div class="app-item">
+            <div class="app-icon app-icon-music">
+                <span style="font-size: 38px;">🎵</span>
+            </div>
+            <div class="app-name">Music</div>
+        </div>
+        <div class="app-item">
+            <div class="app-icon app-icon-notes">
+                <span style="font-size: 38px;">📝</span>
+            </div>
+            <div class="app-name">Notes</div>
+        </div>
+    </div>
+
+    <!-- Page Dots -->
+    <div class="page-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <!-- Bottom Dock -->
+    <div class="dock">
+        <div class="dock-icon icon-phone">
+            <span style="font-size: 38px;">📞</span>
+        </div>
+        <div class="dock-icon icon-safari">
+            <span style="font-size: 38px;">🧭</span>
+        </div>
+        <div class="dock-icon icon-messages">
+            <span style="font-size: 38px;">💬</span>
+        </div>
+        <div class="dock-icon icon-camera">
+            <span style="font-size: 38px;">📷</span>
+        </div>
+    </div>
+
+    <div class="home-bar"></div>
+</body>
+</html>
