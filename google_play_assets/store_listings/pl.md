@@ -1,59 +1,64 @@
 # Polish (Polski) — Google Play Store Listing
 
-## Title
+## Title (max 30 chars)
 English Breakfast: Angielski
 
-## Short Description
-Częste słówka, skaner zadań, własne notatki i podcast z ciemnym ekranem!
+## Short Description (max 80 chars)
+Widżet na pulpit, częste słówka, skaner zadań i podcast z ciemnym ekranem!
 
-## Full Description
-English Breakfast to Twój inteligentny trener słownictwa angielskiego! Ucz się słówek, które naprawdę pojawiają się w codziennej mowie, skanuj zadania domowe aparatem, twórz własne notatki i zapamiętuj wszystko na zawsze.
+## Full Description (max 4000 chars)
+English Breakfast to Twój inteligentny codzienny trener słownictwa angielskiego z interaktywnym widżetem na ekran główny!
 
-🍳 DLACZEGO ENGLISH BREAKFAST DZIAŁA?
-Większość kursów uczy rzadkich słów, których nikt nie używa. W English Breakfast nauka opiera się na analizie frekwencyjnej: zaczynasz od najpopularniejszych słów współczesnego języka angielskiego (CEFR A1–C2). Od pierwszego dnia rozumiesz rozmowy, filmy, seriale i podcasty.
+Zapomnij o bezużytecznych zwrotach i nudnym wkuwaniu na pamięć. Ucz się słówek o najwyższej realnej częstotliwości występowania w żywej mowie, skanuj podręczniki aparatem, czytaj interaktywne opowiadania i opanuj angielski w naturalny sposób!
 
-🌟 NAJWAŻNIEJSZE FUNKCJE:
+🍳 10 GŁÓWNYCH ZALET ENGLISH BREAKFAST:
 
-• 📈 NAUKA WG CZĘSTOTLIWOŚCI (OD NAJPROSTSZYCH DO ZAAWANSOWANYCH):
-Baza ponad 6 600 słów i zwrotów uszeregowana według realnej częstotliwości występowania w żywym języku. Opanuj bazę konwersacyjną bez marnowania czasu!
+1. 📈 NAUKA WG REALNEJ CZĘSTOTLIWOŚCI (PRAWO ZIPFA)
+Metoda opiera się na rzeczywistej częstotliwości użycia (poziomy CEFR A1–C2). Pierwsze 1 000 słów pokrywa do 85% codziennego języka mówionego, filmów i czatów. Prawie 7 000 słówek bez marnowania czasu.
 
-• 📝 WŁASNY SŁOWNIK I OSOBISTE NOTATKI:
-Znalazłeś nowe słówko w książce lub artykule? Dodaj je jednym dotknięciem! Do każdego hasła możesz dołączyć własne skojarzenia mnemotechniczne, kontekst czy przykłady z życia. Własne notatki budują najsilniejsze ścieżki w pamięci długotrwałej.
+2. 📱 INTERAKTYWNY WIDŻET NA EKRAN GŁÓWNY (ZŁOTA KARTA)
+Ucz się angielskiego za każdym razem, gdy bierzesz telefon do ręki! Umieść stylowy widżet Złotej Karty na pulpicie: odwracaj kartę jednym dotknięciem, aby sprawdzić znaczenie, słuchaj studyjnej wymowy i przeglądaj słówka bez otwierania aplikacji. Podłącz gotowe kolekcje lub własne Ulubione.
 
-• 📷 INTELIGENTNY SKANER ZDJĘĆ ZADAŃ I KSIĄŻEK (OCR):
-Masz zadanie domowe ze szkoły lub artykuł do przeczytania? Zrób zdjęcie! Skaner automatycznie rozpozna tekst, wykryje brakujące w Twojej bazie słowa i doda je do nauki jednym kliknięciem, bez ręcznego wpisywania.
+3. 📖 INTERAKTYWNE OPOWIADANIA CO 100 SŁÓWEK
+Utrwalaj słownictwo w naturalnym kontekście! Każde 100 opanowanych słówek odblokowuje nowe opowiadanie, złożone wyłącznie z poznanych już przez Ciebie słów. Dotknij dowolnego słowa, aby wyświetlić tłumaczenie tuż nad nim, dodaj do Ulubionych lub otwórz pełne tłumaczenie równoległe.
 
-• ⭐ ULUBIONE I GWARANTOWANE ZAPAMIĘTYWANIE (SRS):
-Musisz szybko opanować materiał do sprawdzianu lub egzaminu? Oznacz słowa gwiazdką jako Ulubione! Naukowo sprawdzony algorytm powtórek w odstępach (Spaced Repetition) zaplanuje powtórki tak, by zagwarantować 100% trwałego zapamiętania.
+4. 🔓 BEZ DROGICH SUBSKRYPCJI I LIMITÓW
+Brak ukrytych opłat, wymuszonych abonamentów i sztucznych limitów „żyć” (serduszek). Pełny dostęp do wszystkich słówek i trybów nauki — ucz się we własnym tempie, kiedy tylko chcesz.
 
-• 🎮 ĆWICZ ULUBIONE WE WSZYSTKICH TRYBACH:
-Trenuj wybrane słówka w sposób, który lubisz najbardziej:
-  — Fiszki 3D z gestami przesuwania
-  — Błyskawiczne quizy na czas
-  — Rozumienie ze słuchu (Audio)
-  — Układanie zdań i łączenie par
-  — Trening pisowni i czasowników nieregularnych
+5. 🧠 INTELIGENTNY ARCHITEKT RUNDY
+Algorytm analizuje Twoje odpowiedzi w czasie rzeczywistym. Jeśli dane słówko sprawia trudność, system adaptacyjnie powtórzy je w kolejnych krokach, dopóki nie opanujesz go w 100%.
 
-• 🎧 PODCAST W DRODZE Z WYŁĄCZONYM EKRANEM:
-Ucz się w drodze do pracy lub szkoły, w samochodzie, na spacerze i podczas biegania bez patrzenia w ekran! Odtwarzanie w tle działa przy wygaszonym ekranie, oszczędzając baterię: słyszysz polskie tłumaczenie, przerwę na przypomnienie oraz wyraźną wymowę po angielsku.
+6. 📷 INTELIGENTNY SKANER ZDJĘĆ ZADAŃ I PODRĘCZNIKÓW (OCR)
+Musisz nauczyć się słówek z podręcznika lub artykułu? Zrób zdjęcie! Skaner OCR automatycznie rozpoznaje tekst, wyłapuje nieznane słówka i dodaje je do treningu jednym kliknięciem, bez ręcznego wpisywania.
 
-• 🎙️ TRENER WYMOWY I AKCENTU (UK & US):
-Ćwicz mówienie: powtarzaj słówka do mikrofonu i otrzymuj natychmiastową ocenę. Wybieraj między akcentem brytyjskim a amerykańskim z transkrypcją fonetyczną IPA.
+7. 📝 WŁASNY SŁOWNIK I OSOBISTE NOTATKI
+Nowe słówko w grze lub serialu? Dodaj je od razu. Dołączaj własne skojarzenia, przykłady i notatki mnemotechniczne, budując trwałe ścieżki w pamięci długoterminowej.
 
-• 🌍 33 JĘZYKI INTERFEJSU:
-Pełna lokalizacja na 33 języki, w tym obsługa języka arabskiego (RTL).
+8. ⭐ LISTY ULUBIONYCH POD KONKRETNY CEL
+Twórz zestawy pod konkretne zadania: na jutrzejszy sprawdzian, rozmowę o pracę, wyjazd za granicę czy egzaminy (matura, FCE, CAE, IELTS).
 
-• ☁️ BEZPIECZNA SYNCHRONIZACJA W CHMURZE:
-Logowanie Google jednym kliknięciem. Twoje słówka, notatki, ulubione i statystyki są bezpiecznie zapisane na wszystkich urządzeniach.
+9. 🎧 TRYB PODCASTU Z WYŁĄCZONYM EKRANEM
+Ucz się w drodze, na spacerze lub podczas treningu ze słuchawkami! Odtwarzanie w tle działa przy wygaszonym, czarnym ekranie, oszczędzając baterię: polskie tłumaczenie, pauza na przypomnienie i podwójna wyraźna wymowa w języku angielskim.
 
-• 🏆 COTYGODNIOWE LIGI I SERIE DNI (STREAK):
-Rywalizuj z innymi uczniami, zdobywaj punkty i utrwalaj codzienny nawyk nauki.
+10. 🎙️ DWA STANDARDY STUDYJNE: US I UK
+Krystalicznie czysty dźwięk nagrany przez native speakerów. Przełączaj się między akcentem amerykańskim a brytyjskim w dowolnym momencie.
 
-🚀 DLA KOGO JEST TA APLIKACJA:
-• Dla uczniów i studentów — skanuj podręczniki, dodawaj zadania do ulubionych i zdobywaj najlepsze oceny.
-• Dla początkujących (A1–A2) — zacznij od najważniejszych słów bez przeciążenia.
-• Dla średniozaawansowanych i zaawansowanych (B1–C2) — rozwijaj słownictwo do pracy, podróży oraz egzaminów (matura, FCE, CAE, IELTS).
+🔄 PEŁNY CYKL ZAPAMIĘTYWANIA (4 ETAPY):
+1. Fiszki — rozpoznawanie wzrokowe i wymowa
+2. Quiz — szybkie rozumienie ze słuchu i znaczenie
+3. Pary — szybkość reakcji i kojarzenie
+4. Pisownia — bezbłędne wpisywanie litera po literze.
 
-Rozpocznij dzień od pożywnego „angielskiego śniadania” — wystarczy 10–15 minut dziennie!
+🌍 36 JĘZYKÓW INTERFEJSU I WSPARCIE RTL:
+Ucz się wygodnie w języku ojczystym — interfejs przetłumaczony na 36 języków, w tym arabski, perski i urdu (RTL).
 
-Pobierz English Breakfast już teraz i mów płynnie po angielsku!
+🏆 COTYGODNIOWE LIGI I SYNCHRONIZACJA W CHMURZE:
+Rywalizuj w ligach, zdobywaj podium, utrzymuj codzienną passę (streak) i zapisuj postępy jednym kliknięciem przez konto Google.
+
+🚀 DLA KOGO:
+• Uczniowie i studenci: skanuj zadania i zdobywaj najlepsze oceny.
+• Początkujący (A1–A2): zbuduj solidną bazę najważniejszych słów.
+• Średniozaawansowani i zaawansowani (B1–C2): rozwijaj słownictwo do pracy i podróży.
+
+Wystarczy 10–15 minut pożywnego „angielskiego śniadania” dziennie, aby osiągnąć płynność!
+Pobierz English Breakfast już teraz i mów pewnie po angielsku!
