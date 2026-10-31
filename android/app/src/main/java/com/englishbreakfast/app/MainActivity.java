@@ -41,6 +41,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.webkit.WebView;
 import com.getcapacitor.WebViewListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends BridgeActivity {
 
@@ -52,6 +53,7 @@ public class MainActivity extends BridgeActivity {
     private TextToSpeech tts;
     private boolean ttsInitialized = false;
     private volatile boolean isPageOriginTrusted = true;
+    private FirebaseAnalytics firebaseAnalytics;
 
     private void updateTrustedOriginState(String url) {
         if (url == null || url.trim().isEmpty() || "about:blank".equalsIgnoreCase(url)) {
@@ -120,6 +122,8 @@ public class MainActivity extends BridgeActivity {
         setupGoogleAuthBridge();
         setupAudioBridge();
         setupWidgetBridge();
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        setupAnalyticsBridge();
         initNativeTts();
         lockWebViewTextZoom();
 
@@ -1023,6 +1027,85 @@ public class MainActivity extends BridgeActivity {
                         });
                     }
                 }, "AndroidWidgetBridge");
+            }
+        } catch (Exception ignored) {}
+    }
+
+    private void setupAnalyticsBridge() {
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().addJavascriptInterface(new Object() {
+                    @JavascriptInterface
+                    public void logEvent(final String eventName, final String jsonParams) {
+                        if (!isTrustedOrigin() || eventName == null || eventName.trim().isEmpty()) return;
+                        try {
+                            final Bundle bundle = new Bundle();
+                            if (jsonParams != null && !jsonParams.trim().isEmpty()) {
+                                JSONObject json = new JSONObject(jsonParams);
+                                java.util.Iterator<String> keys = json.keys();
+                                while (keys.hasNext()) {
+                                    String key = keys.next();
+                                    Object val = json.opt(key);
+                                    if (val instanceof Number) {
+                                        if (val instanceof Integer || val instanceof Long) {
+                                            bundle.putLong(key, ((Number) val).longValue());
+                                        } else {
+                                            bundle.putDouble(key, ((Number) val).doubleValue());
+                                        }
+                                    } else if (val instanceof Boolean) {
+                                        bundle.putBoolean(key, (Boolean) val);
+                                    } else if (val != null) {
+                                        bundle.putString(key, String.valueOf(val));
+                                    }
+                                }
+                            }
+                            if (firebaseAnalytics != null) {
+                                firebaseAnalytics.logEvent(eventName, bundle);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public void trackScreen(final String screenName, final String screenClass) {
+                        if (!isTrustedOrigin() || screenName == null || screenName.trim().isEmpty()) return;
+                        try {
+                            final Bundle bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName);
+                            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass != null && !screenClass.trim().isEmpty() ? screenClass : "MainActivity");
+                            if (firebaseAnalytics != null) {
+                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public void setUserId(final String userId) {
+                        if (!isTrustedOrigin()) return;
+                        try {
+                            if (firebaseAnalytics != null) {
+                                firebaseAnalytics.setUserId(userId != null && !userId.trim().isEmpty() ? userId : null);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @JavascriptInterface
+                    public void setUserProperty(final String name, final String value) {
+                        if (!isTrustedOrigin() || name == null || name.trim().isEmpty()) return;
+                        try {
+                            if (firebaseAnalytics != null) {
+                                firebaseAnalytics.setUserProperty(name, value);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, "AndroidAnalyticsBridge");
             }
         } catch (Exception ignored) {}
     }

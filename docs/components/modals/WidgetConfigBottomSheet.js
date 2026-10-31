@@ -86,10 +86,15 @@ export function openWidgetConfigBottomSheet() {
       </div>
 
       <!-- 3. Submit Button -->
-      <div class="widget-sheet-actions">
+      <div class="widget-sheet-actions" style="display: flex; flex-direction: column; gap: 8px;">
         <button type="button" class="primary-button widget-sheet-submit-btn" id="btn-apply-widget-config">
           ${isInstalled ? (t('widget_save_changes') || 'Сохранить изменения') : `✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}`}
         </button>
+        ${isInstalled ? `
+        <button type="button" class="theme-option-btn widget-sheet-pin-btn" id="btn-repin-widget" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px;">
+          ✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}
+        </button>
+        ` : ''}
       </div>
     </div>
   `;
@@ -169,43 +174,54 @@ export function openWidgetConfigBottomSheet() {
   }
 
   // Apply & Add Widget button
+  const saveAndSync = (requestPin = false) => {
+    const configJson = JSON.stringify(config);
+    localStorage.setItem('myduo_widget_config', configJson);
+
+    if (window.trackEvent) {
+      window.trackEvent('widget_config_save', {
+        is_installed: isInstalled,
+        theme: config.widgetTheme,
+        reminder_enabled: config.reminderEnabled,
+        requested_pin: requestPin
+      });
+    }
+
+    if (window.AndroidWidgetBridge) {
+      if (typeof window.syncFavoritesToAndroidWidget === 'function') {
+        try {
+          window.syncFavoritesToAndroidWidget();
+        } catch (e) {}
+      }
+      if (typeof window.AndroidWidgetBridge.saveWidgetConfig === 'function') {
+        window.AndroidWidgetBridge.saveWidgetConfig(configJson);
+      }
+      if (requestPin && typeof window.AndroidWidgetBridge.requestPinWidget === 'function') {
+        if (window.trackEvent) {
+          window.trackEvent('widget_pin_request');
+        }
+        window.AndroidWidgetBridge.requestPinWidget();
+      }
+      try {
+        showToast(t('widget_settings_saved') || 'Настройки сохранены');
+      } catch (e) {}
+    } else {
+      alert('Зажмите свободное место на рабочем столе и выберите «Виджеты» → English Breakfast.');
+    }
+    closeSheet();
+  };
+
   const submitBtn = backdrop.querySelector('#btn-apply-widget-config');
   if (submitBtn) {
     submitBtn.addEventListener('click', () => {
-      const configJson = JSON.stringify(config);
-      localStorage.setItem('myduo_widget_config', configJson);
+      saveAndSync(!isInstalled);
+    });
+  }
 
-      if (window.trackEvent) {
-        window.trackEvent('widget_config_save', {
-          is_installed: isInstalled,
-          theme: config.widgetTheme,
-          reminder_enabled: config.reminderEnabled,
-        });
-      }
-
-      if (window.AndroidWidgetBridge) {
-        if (typeof window.syncFavoritesToAndroidWidget === 'function') {
-          try {
-            window.syncFavoritesToAndroidWidget();
-          } catch (e) {}
-        }
-        if (typeof window.AndroidWidgetBridge.saveWidgetConfig === 'function') {
-          window.AndroidWidgetBridge.saveWidgetConfig(configJson);
-        }
-        if (!isInstalled && typeof window.AndroidWidgetBridge.requestPinWidget === 'function') {
-          if (window.trackEvent) {
-            window.trackEvent('widget_pin_request');
-          }
-          window.AndroidWidgetBridge.requestPinWidget();
-        } else if (isInstalled) {
-          try {
-            showToast(t('widget_settings_saved') || 'Настройки виджета сохранены');
-          } catch (e) {}
-        }
-      } else {
-        alert('Зажмите свободное место на рабочем столе и выберите «Виджеты» → English Breakfast.');
-      }
-      closeSheet();
+  const repinBtn = backdrop.querySelector('#btn-repin-widget');
+  if (repinBtn) {
+    repinBtn.addEventListener('click', () => {
+      saveAndSync(true);
     });
   }
 }
