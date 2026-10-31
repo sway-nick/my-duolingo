@@ -578,6 +578,23 @@
         }
       }
 
+      function checkMilestoneStoryTrigger(delay = 800) {
+        try {
+          const mastered = getMasteredWordsCount();
+          const milestones = [100, 200, 300, 400, 500, 600, 700, 800];
+          for (const m of milestones) {
+            const shown = localStorage.getItem(`myduo_milestone_story_${m}_shown`);
+            if (mastered >= m && !shown) {
+              localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
+              setTimeout(() => {
+                showMilestoneStoryModal(m);
+              }, delay);
+              break;
+            }
+          }
+        } catch (_) {}
+      }
+
       async function renderTrainingTab() {
         preloadNextWotdVideo();
         const content = document.querySelector('#app-content');
@@ -2372,20 +2389,7 @@
             }
 
             // Check Milestone Story trigger (100 to 800 words)
-            try {
-              const mastered = getMasteredWordsCount();
-              const milestones = [100, 200, 300, 400, 500, 600, 700, 800];
-              for (const m of milestones) {
-                const shown = localStorage.getItem(`myduo_milestone_story_${m}_shown`);
-                if (mastered >= m && !shown) {
-                  localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
-                  setTimeout(() => {
-                    showMilestoneStoryModal(m);
-                  }, 800);
-                  break;
-                }
-              }
-            } catch (_) {}
+            checkMilestoneStoryTrigger(800);
 
             renderTrainingTab();
           },
@@ -2924,6 +2928,9 @@
               }
               try {
                 syncFavoritesToAndroidWidget();
+              } catch (e) {}
+              try {
+                checkMilestoneStoryTrigger(1200);
               } catch (e) {}
             });
           });
