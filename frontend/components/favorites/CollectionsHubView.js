@@ -190,7 +190,18 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     <div class="collections-hub-page">
       <!-- 2-Column Grid -->
       <div class="collections-grid" id="collections-grid">
-        <!-- 1. My Favorites Tile -->
+        <!-- 1. Add New Custom List Tile (Top Left) -->
+        <div class="col-tile col-tile-add" id="btn-add-new-collection" role="button" tabindex="0">
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon col-add-plus">➕</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(t('col_add_new_list') || 'Новый список')}</h3>
+            <span class="col-tile-count">${escapeHtml(t('col_custom_desc') || 'Своя подборка')}</span>
+          </div>
+        </div>
+
+        <!-- 2. My Favorites Tile (Top Right, right of New List) -->
         <div class="col-tile ${activeColId === 'my_favorites' ? 'is-active-col' : ''}" data-col-id="my_favorites" role="button" tabindex="0">
           <div class="col-tile-icon-box">
             <span class="col-tile-icon">⭐</span>
@@ -201,25 +212,14 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
-        <!-- 2. Milestone Stories Folder Tile -->
+        <!-- 3. Milestone Dialogues Folder Tile (Below, Row 2) -->
         <div class="col-tile col-tile-stories" data-col-id="milestone_stories" role="button" tabindex="0">
           <div class="col-tile-icon-box">
-            <span class="col-tile-icon">📖</span>
+            <span class="col-tile-icon">💬</span>
           </div>
           <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Рассказы')}</h3>
+            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Диалоги')}</h3>
             <span class="col-tile-count">${escapeHtml(storiesCountLabel)}</span>
-          </div>
-        </div>
-
-        <!-- 3. Add New Custom List Tile -->
-        <div class="col-tile col-tile-add" id="btn-add-new-collection" role="button" tabindex="0">
-          <div class="col-tile-icon-box">
-            <span class="col-tile-icon col-add-plus">➕</span>
-          </div>
-          <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(t('col_add_new_list') || 'Новый список')}</h3>
-            <span class="col-tile-count">${escapeHtml(t('col_custom_desc') || 'Своя подборка')}</span>
           </div>
         </div>
 

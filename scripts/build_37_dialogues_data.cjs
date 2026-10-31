@@ -46,6 +46,123 @@ const MODAL_TITLE_TRANSLATIONS = {
   kk: "Құттықтаймыз! Келесі мәтінді аштыңыз"
 };
 
+const DIALOGUES_FOLDER_TITLE = {
+  ru: "Диалоги",
+  uk: "Діалоги",
+  en: "Dialogues",
+  de: "Dialoge",
+  es: "Diálogos",
+  fr: "Dialogues",
+  pl: "Dialogi",
+  tr: "Diyaloglar",
+  it: "Dialoghi",
+  ro: "Dialoguri",
+  bg: "Диалози",
+  hu: "Párbeszédek",
+  el: "Διάλογοι",
+  da: "Dialoger",
+  lv: "Dialogi",
+  lt: "Dialogai",
+  pt: "Diálogos",
+  sk: "Dialógy",
+  sl: "Dialogi",
+  fi: "Vuoropuhelut",
+  hr: "Dijalozi",
+  cs: "Dialogy",
+  sv: "Dialoger",
+  et: "Dialoogid",
+  hi: "संवाद",
+  bn: "কথোপকথন",
+  ar: "حوارات",
+  fa: "گفتگوها",
+  ur: "مکالمات",
+  id: "Dialog",
+  vi: "Hội thoại",
+  th: "บทสนทนา",
+  ko: "대화",
+  ja: "対話",
+  zh: "对话",
+  kk: "Диалогтар"
+};
+
+const DIALOGUES_FOLDER_DESC = {
+  ru: "Диалоги по выученным словам",
+  uk: "Діалоги за вивченими словами",
+  en: "Dialogues from learned words",
+  de: "Dialoge basierend auf gelernten Wörtern",
+  es: "Diálogos con palabras aprendidas",
+  fr: "Dialogues à partir des mots appris",
+  pl: "Dialogi z poznanych słów",
+  tr: "Öğrenilen kelimelerle diyaloglar",
+  it: "Dialoghi con le parole imparate",
+  ro: "Dialoguri cu cuvintele învățate",
+  bg: "Диалози от научените думи",
+  hu: "Párbeszédek a megtanult szavakból",
+  el: "Διάλογοι από τις λέξεις που μάθατε",
+  da: "Dialoger fra lærte ord",
+  lv: "Dialogi no iemācītajiem vārdiem",
+  lt: "Dialogai iš išmoktų žodžių",
+  pt: "Diálogos com palavras aprendidas",
+  sk: "Dialógy z naučených slov",
+  sl: "Dialogi iz naučenih besed",
+  fi: "Vuoropuhelut opituista sanoista",
+  hr: "Dijalozi iz naučenih riječi",
+  cs: "Dialogy z naučených slov",
+  sv: "Dialoger med inlärda ord",
+  et: "Dialoogid õpitud sõnadest",
+  hi: "सीखे गए शब्दों से संवाद",
+  bn: "শেখা शब्द দিয়ে কথোপকথন",
+  ar: "حوارات من الكلمات المكتسبة",
+  fa: "گفتگوها با کلمات آموخته‌شده",
+  ur: "سیکھے گئے الفاظ سے مکالمات",
+  id: "Dialog dari kata yang dipelajari",
+  vi: "Hội thoại từ các từ đã học",
+  th: "บทสนทนาจากคำศัพท์ที่เรียนรู้",
+  ko: "학습한 단어로 이루어진 대화",
+  ja: "学習した単語による対話",
+  zh: "基于已学单词的对话",
+  kk: "Үйренген сөздерден құралған диалогтар"
+};
+
+const SETTINGS_BTN_TRANSLATIONS = {
+  ru: "💬 Диалоги по рубежам",
+  uk: "💬 Діалоги за рубежами",
+  en: "💬 Milestone Dialogues",
+  de: "💬 Meilenstein-Dialoge",
+  es: "💬 Diálogos por hitos",
+  fr: "💬 Dialogues d'étapes",
+  pl: "💬 Dialogi według kamieni milowych",
+  tr: "💬 Hedef Diyalogları",
+  it: "💬 Dialoghi dei traguardi",
+  ro: "💬 Dialoguri pe etape",
+  bg: "💬 Диалози по рубежи",
+  hu: "💬 Mérföldkő párbeszédek",
+  el: "💬 Διάλογοι οροσήμων",
+  da: "💬 Milepæl-dialoger",
+  lv: "💬 Pavērsienu dialogi",
+  lt: "💬 Gairių dialogai",
+  pt: "💬 Diálogos por marcos",
+  sk: "💬 Míľnikové dialógy",
+  sl: "💬 Mejniški dialogi",
+  fi: "💬 Virstanpylväsvuoropuhelut",
+  hr: "💬 Dijalozi po prekretnicama",
+  cs: "💬 Milníkové dialogy",
+  sv: "💬 Milstolpedialoger",
+  et: "💬 Teetähiste dialoogid",
+  hi: "💬 मील का पत्थर संवाद",
+  bn: "💬 মাইলফলক কথোপকথন",
+  ar: "💬 حوارات الإنجازات",
+  fa: "💬 گفتگوهای نقطه عطف",
+  ur: "💬 سنگ میل مکالمات",
+  id: "💬 Dialog Pencapaian",
+  vi: "💬 Hội thoại cột mốc",
+  th: "💬 บทสนทนาก้าวสำคัญ",
+  ko: "💬 이정표 대화",
+  ja: "💬 マイルストーン対話",
+  zh: "💬 里程碑对话",
+  kk: "💬 Межелік диалогтар"
+};
+
 // Badges helper
 function getBadge(loc, m) {
   if (m === 0) {
@@ -163,8 +280,11 @@ async function run() {
     for (const k of baseKeys) {
       obj[k] = existing[k] || currentTranslations['en'][k] || '';
     }
-    // Update modalTitle
+    // Update modalTitle, storiesFolderTitle, storiesFolderDesc, settingsBtn
     obj['modalTitle'] = MODAL_TITLE_TRANSLATIONS[loc];
+    obj['storiesFolderTitle'] = DIALOGUES_FOLDER_TITLE[loc] || 'Dialogues';
+    obj['storiesFolderDesc'] = DIALOGUES_FOLDER_DESC[loc] || 'Dialogues from learned words';
+    obj['settingsBtn'] = SETTINGS_BTN_TRANSLATIONS[loc] || '💬 Milestone Dialogues';
 
     // Add all 37 dialogues
     dialogues.forEach((d, idx) => {
