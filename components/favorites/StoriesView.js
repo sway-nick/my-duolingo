@@ -20,34 +20,19 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
 
-  const allMilestones = [100, 200, 300, 400, 500, 600, 700, 800];
+  const allMilestones = Array.from({ length: 37 }, (_, i) => i * 50);
   const unlockedMilestones = allMilestones.filter(m => masteredWords >= m);
 
-  let storyCardsHtml = '';
-  if (unlockedMilestones.length === 0) {
-    storyCardsHtml = `
-      <div class="stories-empty-card" style="text-align: center; padding: 40px 20px; background: rgba(15, 23, 42, 0.6); border: 1.5px dashed rgba(245, 158, 11, 0.3); border-radius: 20px; margin-top: 10px;">
-        <div style="font-size: 44px; margin-bottom: 12px;">📖</div>
-        <h3 style="font-size: 18px; font-weight: 800; color: #f8fafc; margin: 0 0 8px;">
-          ${escapeHtml(strings.storiesEmptyTitle || 'Здесь появятся ваши рассказы')}
-        </h3>
-        <p style="font-size: 14px; color: #94a3b8; max-width: 380px; margin: 0 auto 16px; line-height: 1.5;">
-          ${escapeHtml(strings.storiesEmptyDesc || 'Первый рассказ откроется, когда вы выучите 100 слов.')}
-        </p>
-        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 700; color: #fde68a;">
-          🎯 Прогресс: ${masteredWords} / 100 слов
-        </div>
-      </div>
-    `;
-  } else {
-    storyCardsHtml = unlockedMilestones.map(m => {
-      const story = MILESTONE_STORIES[m];
-      if (!story) return '';
-      const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
-      const title = strings[story.titleKey] || story.title;
-      const preview = story.paragraphs[0] || '';
-      const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
+  const storyCardsHtml = allMilestones.map(m => {
+    const story = MILESTONE_STORIES[m];
+    if (!story) return '';
+    const isUnlocked = masteredWords >= m;
+    const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
+    const title = strings[story.titleKey] || story.title;
+    const preview = story.paragraphs[0] || '';
+    const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
 
+    if (isUnlocked) {
       const statusBadge = `
         <span class="story-card-status status-unlocked">
           ${isCompleted ? '✓ ' : ''}${escapeHtml(strings.statusUnlocked || 'Открыто')}
@@ -69,8 +54,23 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
           </div>
         </div>
       `;
-    }).join('');
-  }
+    } else {
+      const lockText = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', m);
+      return `
+        <div class="story-list-card is-locked" data-milestone="${m}" data-locked="true" tabindex="-1">
+          <div class="story-card-top">
+            <div class="story-card-badge story-badge-locked">${escapeHtml(badge)}</div>
+            <span class="story-card-status status-locked">🔒 ${escapeHtml(lockText)}</span>
+          </div>
+          <h3 class="story-card-title story-title-locked">${escapeHtml(title)}</h3>
+          <p class="story-card-preview">“${escapeHtml(preview)}”</p>
+          <div class="story-card-action">
+            <span class="story-card-locked-hint">🔒 ${escapeHtml(lockText)}</span>
+          </div>
+        </div>
+      `;
+    }
+  }).join('');
 
   container.innerHTML = `
     <style>
@@ -138,10 +138,18 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
         cursor: pointer;
       }
-      .story-list-card:hover {
+      .story-list-card.is-unlocked:hover {
         border-color: rgba(251, 191, 36, 0.6);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         transform: translateY(-2px);
+      }
+      .story-list-card.is-locked {
+        opacity: 0.62;
+        border-color: rgba(148, 163, 184, 0.2);
+        cursor: default;
+      }
+      .story-list-card.is-locked:hover {
+        border-color: rgba(148, 163, 184, 0.35);
       }
       .story-card-top {
         display: flex;
@@ -158,6 +166,10 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         padding: 3px 8px;
         border-radius: 9999px;
       }
+      .story-badge-locked {
+        color: #94a3b8;
+        background: rgba(148, 163, 184, 0.12);
+      }
       .story-card-status {
         font-size: 11.5px;
         font-weight: 600;
@@ -169,11 +181,19 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         color: #34d399;
         border: 1px solid rgba(16, 185, 129, 0.3);
       }
+      .status-locked {
+        background: rgba(148, 163, 184, 0.12);
+        color: #94a3b8;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+      }
       .story-card-title {
         font-size: 17px;
         font-weight: 800;
         color: #f8fafc;
         margin: 0 0 6px;
+      }
+      .story-title-locked {
+        color: #94a3b8;
       }
       .story-card-preview {
         font-size: 13.5px;
@@ -204,6 +224,15 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         background: #f59e0b;
         color: #0f172a;
       }
+      .story-card-locked-hint {
+        font-size: 12.5px;
+        color: #64748b;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 10px;
+      }
     </style>
 
     <div class="stories-view-page">
@@ -215,7 +244,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         <h2 class="stories-view-title">📖 <span>${escapeHtml(strings.storiesFolderTitle || 'Рассказы')}</span></h2>
         <p class="stories-view-subtitle">${escapeHtml(strings.storiesFolderDesc || 'Тексты по выученным словам')}</p>
         <div class="stories-view-progress">
-          <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно рассказов: <strong>${unlockedMilestones.length}</strong>)</span>
+          <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно рассказов: <strong>${unlockedMilestones.length}</strong> / ${allMilestones.length})</span>
         </div>
       </div>
 
@@ -233,10 +262,11 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     });
   }
 
-  // Story click bindings
-  container.querySelectorAll('.story-list-card').forEach(card => {
+  // Story click bindings (only for unlocked cards)
+  container.querySelectorAll('.story-list-card.is-unlocked').forEach(card => {
     card.addEventListener('click', (e) => {
-      const milestone = Number(card.getAttribute('data-milestone')) || 100;
+      const raw = card.getAttribute('data-milestone');
+      const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
       showMilestoneStoryModal(milestone);
     });
   });

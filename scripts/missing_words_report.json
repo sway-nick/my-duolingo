@@ -1,0 +1,137 @@
+{
+  "latte": {
+    "word": "latte",
+    "dialogues": [
+      3
+    ],
+    "examples": [
+      "— Hi! What can I get for you?"
+    ]
+  },
+  "film": {
+    "word": "film",
+    "dialogues": [
+      8
+    ],
+    "examples": [
+      "— Are you free on Saturday?"
+    ]
+  },
+  "per": {
+    "word": "per",
+    "dialogues": [
+      10
+    ],
+    "examples": [
+      "— Excuse me, where can I find rice?"
+    ]
+  },
+  "kilo": {
+    "word": "kilo",
+    "dialogues": [
+      10
+    ],
+    "examples": [
+      "— Excuse me, where can I find rice?"
+    ]
+  },
+  "scale": {
+    "word": "scale",
+    "dialogues": [
+      14
+    ],
+    "examples": [
+      "— Good morning. Can I see your passport, please?"
+    ]
+  },
+  "id": {
+    "word": "id",
+    "dialogues": [
+      15
+    ],
+    "examples": [
+      "— Hello, I have a reservation under the name Patel."
+    ]
+  },
+  "password": {
+    "word": "password",
+    "dialogues": [
+      15
+    ],
+    "examples": [
+      "— Hello, I have a reservation under the name Patel."
+    ]
+  },
+  "expired": {
+    "word": "expired",
+    "dialogues": [
+      16
+    ],
+    "examples": [
+      "— Excuse me, my room key isn't working."
+    ]
+  },
+  "activate": {
+    "word": "activate",
+    "dialogues": [
+      16
+    ],
+    "examples": [
+      "— Excuse me, my room key isn't working."
+    ]
+  },
+  "aboard": {
+    "word": "aboard",
+    "dialogues": [
+      18
+    ],
+    "examples": [
+      "— Hi, you must be Emma. I'm Daniel, your team lead."
+    ]
+  },
+  "support": {
+    "word": "support",
+    "dialogues": [
+      21
+    ],
+    "examples": [
+      "— Thanks for calling support. How can I help?"
+    ]
+  },
+  "outage": {
+    "word": "outage",
+    "dialogues": [
+      21
+    ],
+    "examples": [
+      "— Thanks for calling support. How can I help?"
+    ]
+  },
+  "track": {
+    "word": "track",
+    "dialogues": [
+      25
+    ],
+    "examples": [
+      "— You've been studying English for a while, haven't you?"
+    ]
+  },
+  "overnight": {
+    "word": "overnight",
+    "dialogues": [
+      31
+    ],
+    "examples": [
+      "— What are you going to do this weekend?"
+    ]
+  },
+  "metro": {
+    "word": "metro",
+    "dialogues": [
+      34
+    ],
+    "examples": [
+      "— Are we still meeting Anna for dinner on Friday?"
+    ]
+  }
+}

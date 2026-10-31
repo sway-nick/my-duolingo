@@ -5,126 +5,634 @@ import { toggleFavoriteApi, getUserFavorites, getWords, addWeeklyXP } from '../.
 import { AdService } from '../../services/adService.js?v=386.0';
 
 export const MILESTONE_STORIES = {
-  100: {
-    milestone: 100,
-    titleKey: 'storyTitle100',
-    translationKey: 'storyFull100',
-    badgeKey: 'badge100',
-    title: 'Lunch by the Coast',
-    paragraphs: [
-      'A professor and his colleague organize lunch by the coast.',
-      'The rain was slow, and soft clouds surround the tall bridge.',
-      'They select tea, sugar, and chicken on a comfortable plate.',
-      'Their boss is busy in the studio, but he prefers an email.',
-      'A colleague repeats a joke, and the host confirms the lunch.',
-      'The moon was grand on the ocean, and soft flowers surround the pool.',
-      'It was a unique beginning for the united community.'
+  "0": {
+    "milestone": 0,
+    "titleKey": "storyTitle0",
+    "translationKey": "storyFull0",
+    "badgeKey": "badge0",
+    "title": "Meeting Someone New",
+    "paragraphs": [
+      "— Hi, is this seat free?",
+      "— Yes, go ahead.",
+      "— Thanks. I'm Maya. What's your name?",
+      "— I'm Leo. Nice to meet you.",
+      "— Nice to meet you too. Are you new here?",
+      "— Yes, I moved here last week.",
+      "— Welcome! How are you finding the city?",
+      "— I like it so far. People are really friendly."
     ]
   },
-  200: {
-    milestone: 200,
-    titleKey: 'storyTitle200',
-    translationKey: 'storyFull200',
-    badgeKey: 'badge200',
-    title: 'A Holiday on Campus',
-    paragraphs: [
-      'A professor and his uncle celebrate a birthday on campus.',
-      'The rain was slow, and soft yellow clouds surround the tall bridge by the coast.',
-      'They organize a comfortable lunch with tea, sugar, fruit, and chicken on a brown plate.',
-      'A colleague knocks on the desk and repeats a joke.',
-      'A gentleman in a golden shirt and a brown hat selects a package from his pocket.',
-      'In the package is an album of unique beauty and rare flowers.',
-      'They dance, mix tea with sugar, and celebrate with confidence.',
-      'It was a proper holiday for the united community.'
+  "50": {
+    "milestone": 50,
+    "titleKey": "storyTitle50",
+    "translationKey": "storyFull50",
+    "badgeKey": "badge50",
+    "title": "At Home",
+    "paragraphs": [
+      "— Have you seen my keys?",
+      "— They're on the table, next to your bag.",
+      "— Oh, thanks. I'm always losing them.",
+      "— No problem. Are you going out?",
+      "— Yes, I need to buy some milk.",
+      "— Can you get some bread too?",
+      "— Sure. Do we need anything else?",
+      "— Just apples. We have everything else."
     ]
   },
-  300: {
-    milestone: 300,
-    titleKey: 'storyTitle300',
-    translationKey: 'storyFull300',
-    badgeKey: 'badge300',
-    title: 'A Relaxing Breakfast',
-    paragraphs: [
-      'An engineer and his girlfriend organize breakfast by the gate.',
-      'They wash round dishes and pour milk into a brown pot.',
-      'They select soft bread, cheese, yellow fruit, and cake.',
-      'They taste the meal and relax on the soft grass by the sand.',
-      'A designer in a brown cap repeats an awesome joke with confidence.',
-      'It was a comfortable holiday for their united community.'
+  "100": {
+    "milestone": 100,
+    "titleKey": "storyTitle100",
+    "translationKey": "storyFull100",
+    "badgeKey": "badge100",
+    "title": "At the Coffee Shop",
+    "paragraphs": [
+      "— Hi! What can I get for you?",
+      "— Could I have a small latte, please?",
+      "— Sure. Would you like it hot or iced?",
+      "— Hot, please. And a cheese sandwich.",
+      "— For here or to go?",
+      "— To go, please. How much is that?",
+      "— That's six fifty.",
+      "— Here you go. Thanks!"
     ]
   },
-  400: {
-    milestone: 400,
-    titleKey: 'storyTitle400',
-    translationKey: 'storyFull400',
-    badgeKey: 'badge400',
-    title: 'A Friendly Chef on Vacation',
-    paragraphs: [
-      'A friendly chef and his aunt organize a vacation by the port.',
-      'They select a brown jacket and a pink coat in the rain.',
-      'A hungry tourist borrows a mobile phone.',
-      'The chef selects round potatoes, butter, tomatoes, and juice.',
-      'They pack a package with bread, cheese, and cake.',
-      'A singer repeats a poem at the concert by the historic tower.',
-      'They celebrate their friendship with joy and fortune.'
+  "150": {
+    "milestone": 150,
+    "titleKey": "storyTitle150",
+    "translationKey": "storyFull150",
+    "badgeKey": "badge150",
+    "title": "At the Store",
+    "paragraphs": [
+      "— Excuse me, do you have this shirt in blue?",
+      "— Let me check. What size do you need?",
+      "— Medium, please.",
+      "— Here you are. Would you like to try it on?",
+      "— Yes. Where are the fitting rooms?",
+      "— Over there, next to the mirror.",
+      "— It fits well. How much is it?",
+      "— It's twenty-five. I'll take it."
     ]
   },
-  500: {
-    milestone: 500,
-    titleKey: 'storyTitle500',
-    translationKey: 'storyFull500',
-    badgeKey: 'badge500',
-    title: 'A Creative Celebration',
-    paragraphs: [
-      'A calm photographer and a poet organize a celebration.',
-      'They bake bread in the oven and select soup.',
-      'A wooden shelf displays orange juice, salad, and beef.',
-      'They mix lemon, onion, and chicken in a round pan.',
-      'A poet repeats a poem with a wooden guitar.',
-      'The studio shines with happiness and magic.'
+  "200": {
+    "milestone": 200,
+    "titleKey": "storyTitle200",
+    "translationKey": "storyFull200",
+    "badgeKey": "badge200",
+    "title": "On the Street",
+    "paragraphs": [
+      "— Excuse me, is there a bank near here?",
+      "— Yes. Go straight and turn left at the traffic lights.",
+      "— Is it far?",
+      "— No, about five minutes on foot.",
+      "— Is it next to the supermarket?",
+      "— That's right, across from the bus stop.",
+      "— Great, thanks for your help.",
+      "— You're welcome. Have a nice day!"
     ]
   },
-  600: {
-    milestone: 600,
-    titleKey: 'storyTitle600',
-    translationKey: 'storyFull600',
-    badgeKey: 'badge600',
-    title: 'A Sunny Weekend at the Cafe',
-    paragraphs: [
-      'On a sunny weekend, a dancer and a runner hurry to a cafe with a bicycle.',
-      'A clever runner selects comfortable jeans and a purple t-shirt.',
-      'They select bananas, cake, and tea by the soft curtain.',
-      'A dancer tunes the piano in the cafe.',
-      'They scan a laptop screen, chat with colleagues, and celebrate.'
+  "250": {
+    "milestone": 250,
+    "titleKey": "storyTitle250",
+    "translationKey": "storyFull250",
+    "badgeKey": "badge250",
+    "title": "At the Bus Stop",
+    "paragraphs": [
+      "— Does this bus go downtown?",
+      "— Yes, but it takes about twenty minutes.",
+      "— Can I pay by card?",
+      "— Of course. Just tap when you get on.",
+      "— Could you tell me when we reach the museum?",
+      "— Sure. It's three stops after the library.",
+      "— Thanks. I'm new to this route.",
+      "— No worries. I'll let you know."
     ]
   },
-  700: {
-    milestone: 700,
-    titleKey: 'storyTitle700',
-    translationKey: 'storyFull700',
-    badgeKey: 'badge700',
-    title: 'Morning Coffee in the Garden',
-    paragraphs: [
-      'In the morning, a father and his sister select coffee in the garden.',
-      'A friendly neighbor supplies fruit from the public market.',
-      'A doctor contacts the family, and they chat together with respect.',
-      'They finish writing an analysis for a hospital client.',
-      'It was a calm morning for the united family.'
+  "300": {
+    "milestone": 300,
+    "titleKey": "storyTitle300",
+    "translationKey": "storyFull300",
+    "badgeKey": "badge300",
+    "title": "A Phone Call",
+    "paragraphs": [
+      "— Hi, it's Nina. Is Tom there?",
+      "— One moment. I'll get him.",
+      "— Hi, Nina. What's up?",
+      "— Are we still meeting after work?",
+      "— Yes, but I may be ten minutes late.",
+      "— That's fine. I'll wait by the entrance.",
+      "— Great. I'll call if anything changes.",
+      "— See you soon."
     ]
   },
-  800: {
-    milestone: 800,
-    titleKey: 'storyTitle800',
-    translationKey: 'storyFull800',
-    badgeKey: 'badge800',
-    title: 'A Walk with the Dog',
-    paragraphs: [
-      'In the quiet morning, a dad and his kid walk with their dog.',
-      'The dog walks under the tall tree and enjoys a fun game.',
-      'They talk together and feed the dog by a store.',
-      'They rest on a rock in the sun.',
-      'At the store, they select a cup of tea at a table.',
-      'It was an easy walk with joy and fun for the family.'
+  "350": {
+    "milestone": 350,
+    "titleKey": "storyTitle350",
+    "translationKey": "storyFull350",
+    "badgeKey": "badge350",
+    "title": "Making Plans",
+    "paragraphs": [
+      "— Are you free on Saturday?",
+      "— I think so. What's the plan?",
+      "— There's a new film at the cinema.",
+      "— Sounds good. What time does it start?",
+      "— At seven. Shall we meet at half past six?",
+      "— Can we meet a little later? I finish work at six.",
+      "— Sure. Let's meet at quarter past six.",
+      "— Perfect. I'll book the tickets."
+    ]
+  },
+  "400": {
+    "milestone": 400,
+    "titleKey": "storyTitle400",
+    "translationKey": "storyFull400",
+    "badgeKey": "badge400",
+    "title": "At the Restaurant",
+    "paragraphs": [
+      "— Good evening. Do you have a table for two?",
+      "— Yes. Do you have a reservation?",
+      "— No, we don't. Is that a problem?",
+      "— Not at all. Please follow me.",
+      "— Could we see the menu, please?",
+      "— Of course. The chicken is very popular today.",
+      "— Great. I'll have that, and water, please.",
+      "— Certainly. I'll be back in a moment."
+    ]
+  },
+  "450": {
+    "milestone": 450,
+    "titleKey": "storyTitle450",
+    "translationKey": "storyFull450",
+    "badgeKey": "badge450",
+    "title": "At the Supermarket",
+    "paragraphs": [
+      "— Excuse me, where can I find rice?",
+      "— Aisle four, next to the pasta.",
+      "— Thanks. Is this brand any good?",
+      "— Yes, I buy it all the time.",
+      "— Oh, it's on sale today.",
+      "— It is. The larger bag is cheaper per kilo.",
+      "— Good point. I'll take that one.",
+      "— Do you need a bag?",
+      "— No, thanks. I brought my own."
+    ]
+  },
+  "500": {
+    "milestone": 500,
+    "titleKey": "storyTitle500",
+    "translationKey": "storyFull500",
+    "badgeKey": "badge500",
+    "title": "At the Doctor's",
+    "paragraphs": [
+      "— Hello, I have an appointment at ten.",
+      "— What's your name, please?",
+      "— Daniel Reed.",
+      "— Thank you. Please take a seat; the doctor will be with you soon.",
+      "— Should I fill out this form?",
+      "— Yes, just add your address and phone number.",
+      "— Here you go. I've had a cough for three days.",
+      "— All right. The doctor will ask you a few questions."
+    ]
+  },
+  "550": {
+    "milestone": 550,
+    "titleKey": "storyTitle550",
+    "translationKey": "storyFull550",
+    "badgeKey": "badge550",
+    "title": "At the Pharmacy",
+    "paragraphs": [
+      "— Hi, can you help me? I need something for a headache.",
+      "— Of course. How long have you had it?",
+      "— Since this morning. I don't have a fever.",
+      "— Are you taking any other medicine?",
+      "— No, nothing at the moment.",
+      "— All right. Please read the instructions on the package.",
+      "— Can I take it with food?",
+      "— Check the label, and ask a doctor if you are unsure."
+    ]
+  },
+  "600": {
+    "milestone": 600,
+    "titleKey": "storyTitle600",
+    "translationKey": "storyFull600",
+    "badgeKey": "badge600",
+    "title": "At the Train Station",
+    "paragraphs": [
+      "— Hi, I'd like a return ticket to Brighton.",
+      "— Sure. When would you like to come back?",
+      "— Tomorrow evening, please.",
+      "— The next train leaves at 10:15 from platform three.",
+      "— Does it stop at Central Station?",
+      "— Yes, and the journey takes just under an hour.",
+      "— Great. Is a seat reserved for me?",
+      "— Yes, seat 14A. Have a good trip!"
+    ]
+  },
+  "650": {
+    "milestone": 650,
+    "titleKey": "storyTitle650",
+    "translationKey": "storyFull650",
+    "badgeKey": "badge650",
+    "title": "At the Airport",
+    "paragraphs": [
+      "— Good morning. Can I see your passport, please?",
+      "— Of course. Here it is.",
+      "— Are you checking in any bags?",
+      "— Just this suitcase. I have a backpack with me.",
+      "— Please put the suitcase on the scale.",
+      "— No problem. Is everything okay?",
+      "— Yes. Here's your boarding pass. Your gate is 18.",
+      "— When does boarding start?"
+    ]
+  },
+  "700": {
+    "milestone": 700,
+    "titleKey": "storyTitle700",
+    "translationKey": "storyFull700",
+    "badgeKey": "badge700",
+    "title": "At the Hotel",
+    "paragraphs": [
+      "— Hello, I have a reservation under the name Patel.",
+      "— Welcome. Could I see your ID, please?",
+      "— Sure. Is breakfast included?",
+      "— Yes, it's served from seven to ten.",
+      "— What's the Wi-Fi password?",
+      "— It's on this card. Check-out is at eleven.",
+      "— Could I leave my bags here after check-out?",
+      "— Of course. Enjoy your stay!"
+    ]
+  },
+  "750": {
+    "milestone": 750,
+    "titleKey": "storyTitle750",
+    "translationKey": "storyFull750",
+    "badgeKey": "badge750",
+    "title": "Something Went Wrong",
+    "paragraphs": [
+      "— Excuse me, my room key isn't working.",
+      "— Sorry about that. Which room are you in?",
+      "— Room 305. The light flashes, but the door won't open.",
+      "— Let me try it. You're right; the card has expired.",
+      "— Could you make me a new one?",
+      "— Of course. I'll activate this card for you.",
+      "— Thanks. Could you check that it works?",
+      "— Sure. Try it now. Have a good evening."
+    ]
+  },
+  "800": {
+    "milestone": 800,
+    "titleKey": "storyTitle800",
+    "translationKey": "storyFull800",
+    "badgeKey": "badge800",
+    "title": "Meeting a New Neighbor",
+    "paragraphs": [
+      "— Hi, I think we're neighbors. I moved into the flat next door.",
+      "— Oh, welcome! I'm Sara.",
+      "— Nice to meet you. I'm Ben.",
+      "— Do you need a hand with those boxes?",
+      "— That's very kind, thanks. I've got a few more in the car.",
+      "— No problem. I can help you carry them upstairs.",
+      "— Thanks! I'll bring the boxes in, then make some coffee.",
+      "— Sounds good. Come by later if you need anything."
+    ]
+  },
+  "850": {
+    "milestone": 850,
+    "titleKey": "storyTitle850",
+    "translationKey": "storyFull850",
+    "badgeKey": "badge850",
+    "title": "At Work",
+    "paragraphs": [
+      "— Hi, you must be Emma. I'm Daniel, your team lead.",
+      "— Nice to meet you. It's my first day.",
+      "— Welcome aboard. Did you find the office easily?",
+      "— Yes, thanks. Where should I sit?",
+      "— At that desk near the window. Your laptop is ready.",
+      "— Great. Is there anything I should read first?",
+      "— I'll send you the team guide and introduce you at lunch.",
+      "— Thanks. I'm looking forward to getting started."
+    ]
+  },
+  "900": {
+    "milestone": 900,
+    "titleKey": "storyTitle900",
+    "translationKey": "storyFull900",
+    "badgeKey": "badge900",
+    "title": "A Team Meeting",
+    "paragraphs": [
+      "— Can we start with a quick update on the report?",
+      "— I've finished the first part, but I'm waiting for the sales numbers.",
+      "— When do you expect them?",
+      "— By tomorrow morning. I can finish the report after that.",
+      "— That works. Please flag any issues early.",
+      "— Sure. I also found two figures that don't match.",
+      "— Let's check them together after the meeting.",
+      "— Good idea. I'll share the file now."
+    ]
+  },
+  "950": {
+    "milestone": 950,
+    "titleKey": "storyTitle950",
+    "translationKey": "storyFull950",
+    "badgeKey": "badge950",
+    "title": "Shopping Online",
+    "paragraphs": [
+      "— Hello, I'm calling about order 5821.",
+      "— Sure. What seems to be the problem?",
+      "— The shoes are too small. I'd like to return them.",
+      "— Would you prefer a different size or a refund?",
+      "— A larger size, please. Do I need to pay for shipping?",
+      "— No, the return label is free. I'll email it to you.",
+      "— Great. How long will the exchange take?",
+      "— Once we receive the shoes, the new pair will be sent within two days."
+    ]
+  },
+  "1000": {
+    "milestone": 1000,
+    "titleKey": "storyTitle1000",
+    "translationKey": "storyFull1000",
+    "badgeKey": "badge1000",
+    "title": "Calling Customer Support",
+    "paragraphs": [
+      "— Thanks for calling support. How can I help?",
+      "— My internet has been very slow since yesterday.",
+      "— Have you tried restarting your router?",
+      "— Yes, twice. The connection comes back, then drops again.",
+      "— Are the lights on the router green or red?",
+      "— One is red. Does that mean there's an outage?",
+      "— There is a service issue in your area. Our team is working on it.",
+      "— Thanks. Can you text me when it's fixed?"
+    ]
+  },
+  "1050": {
+    "milestone": 1050,
+    "titleKey": "storyTitle1050",
+    "translationKey": "storyFull1050",
+    "badgeKey": "badge1050",
+    "title": "A Weekend Trip",
+    "paragraphs": [
+      "— Are we still going hiking this weekend?",
+      "— Yes, but the weather looks rainy on Saturday.",
+      "— Should we move the trip to Sunday?",
+      "— That works for me. The trail is usually quieter then.",
+      "— Do we need to book the bus in advance?",
+      "— I checked; there are still seats available.",
+      "— Great. I'll pack lunch and bring extra water.",
+      "— Perfect. Let's meet at the station at eight."
+    ]
+  },
+  "1100": {
+    "milestone": 1100,
+    "titleKey": "storyTitle1100",
+    "translationKey": "storyFull1100",
+    "badgeKey": "badge1100",
+    "title": "Talking About the Past",
+    "paragraphs": [
+      "— How was your trip to the coast?",
+      "— Really good, but I missed my train on the way back.",
+      "— Oh no! What happened?",
+      "— I got the time wrong and arrived ten minutes late.",
+      "— How did you get home?",
+      "— A woman at the station showed me another route.",
+      "— That was kind of her. Did you have to wait long?",
+      "— No, I caught a bus twenty minutes later."
+    ]
+  },
+  "1150": {
+    "milestone": 1150,
+    "titleKey": "storyTitle1150",
+    "translationKey": "storyFull1150",
+    "badgeKey": "badge1150",
+    "title": "A Job Interview",
+    "paragraphs": [
+      "— Thanks for coming in. Could you tell me a little about yourself?",
+      "— I work as a business analyst and help teams understand user needs.",
+      "— What kind of projects have you worked on?",
+      "— I've worked on reporting tools and an online booking system.",
+      "— What would you say is your strongest skill?",
+      "— I ask clear questions and turn complex problems into practical steps.",
+      "— Can you tell me about a challenge you faced?",
+      "— We had a tight deadline, so I helped the team agree on priorities."
+    ]
+  },
+  "1200": {
+    "milestone": 1200,
+    "titleKey": "storyTitle1200",
+    "translationKey": "storyFull1200",
+    "badgeKey": "badge1200",
+    "title": "Future Plans and Goals",
+    "paragraphs": [
+      "— You've been studying English for a while, haven't you?",
+      "— Yes. I understand meetings better, but speaking still takes effort.",
+      "— What would you like to improve next?",
+      "— I want to explain my ideas more confidently and lead discussions.",
+      "— Have you thought about how to practise?",
+      "— I'll join a weekly conversation group and speak up more at work.",
+      "— That sounds realistic. How will you track your progress?",
+      "— I'll record a short update each month and compare it with the last one."
+    ]
+  },
+  "1250": {
+    "milestone": 1250,
+    "titleKey": "storyTitle1250",
+    "translationKey": "storyFull1250",
+    "badgeKey": "badge1250",
+    "title": "A Calm Start (Present Simple)",
+    "paragraphs": [
+      "— What time do you usually get up?",
+      "— I usually get up at seven, but I don't rush.",
+      "— Do you make breakfast at home?",
+      "— Yes, I make coffee and pack lunch for work.",
+      "— Does your bus stop near your building?",
+      "— Yes, it comes every ten minutes.",
+      "— Do you like your morning routine?",
+      "— I do. It helps me start the day calmly."
+    ]
+  },
+  "1300": {
+    "milestone": 1300,
+    "titleKey": "storyTitle1300",
+    "translationKey": "storyFull1300",
+    "badgeKey": "badge1300",
+    "title": "The Meeting Room (Present Continuous)",
+    "paragraphs": [
+      "— Hi, are you using the meeting room right now?",
+      "— No, we're just leaving. You can take it.",
+      "— Thanks. I'm waiting for a video call with a client.",
+      "— Is your team joining from the office?",
+      "— Two people are sitting next to me, and the others are working from home.",
+      "— Are you sharing the presentation?",
+      "— Yes, I'm opening it now.",
+      "— Great. I'll ask everyone in the hallway to keep quiet."
+    ]
+  },
+  "1350": {
+    "milestone": 1350,
+    "titleKey": "storyTitle1350",
+    "translationKey": "storyFull1350",
+    "badgeKey": "badge1350",
+    "title": "The Wrong Order (Past Simple)",
+    "paragraphs": [
+      "— Excuse me, I think you brought me the wrong order.",
+      "— I'm sorry. What did you order?",
+      "— I ordered the vegetable soup and a cheese sandwich.",
+      "— Did you get the chicken salad?",
+      "— Yes, but I don't eat chicken.",
+      "— I'll change it right away.",
+      "— Thank you. How long did it take last time?",
+      "— About five minutes."
+    ]
+  },
+  "1400": {
+    "milestone": 1400,
+    "titleKey": "storyTitle1400",
+    "translationKey": "storyFull1400",
+    "badgeKey": "badge1400",
+    "title": "When the Alarm Went Off (Past Continuous + Past Simple)",
+    "paragraphs": [
+      "— What were you doing when the alarm went off?",
+      "— I was paying at the counter.",
+      "— Did everyone leave the building?",
+      "— Yes, the staff opened the doors and guided us outside.",
+      "— Were you feeling scared?",
+      "— A little, but the manager stayed calm.",
+      "— What happened after that?",
+      "— The fire team checked the building and said it was safe."
+    ]
+  },
+  "1450": {
+    "milestone": 1450,
+    "titleKey": "storyTitle1450",
+    "translationKey": "storyFull1450",
+    "badgeKey": "badge1450",
+    "title": "I’ll Send It Now (Will: offers, promises and quick decisions)",
+    "paragraphs": [
+      "— I can't find the address for tomorrow's meeting.",
+      "— Don't worry. I'll send it to you now.",
+      "— Thanks. Will you also share the train details?",
+      "— Of course. I'll add them to the message.",
+      "— I think I'll leave a little earlier.",
+      "— Good idea. I'll call a taxi if it starts raining.",
+      "— That helps a lot.",
+      "— No problem. I'll see you tomorrow."
+    ]
+  },
+  "1500": {
+    "milestone": 1500,
+    "titleKey": "storyTitle1500",
+    "translationKey": "storyFull1500",
+    "badgeKey": "badge1500",
+    "title": "Weekend Plans (Be Going To)",
+    "paragraphs": [
+      "— What are you going to do this weekend?",
+      "— I'm going to visit my aunt outside the city.",
+      "— Are you going to drive?",
+      "— No, we're going to take the train.",
+      "— What are you going to do there?",
+      "— We're going to cook together and walk by the lake.",
+      "— That sounds lovely. Are you going to stay overnight?",
+      "— Yes, I'm going to come back on Sunday."
+    ]
+  },
+  "1550": {
+    "milestone": 1550,
+    "titleKey": "storyTitle1550",
+    "translationKey": "storyFull1550",
+    "badgeKey": "badge1550",
+    "title": "The Lost Backpack (Present Perfect)",
+    "paragraphs": [
+      "— Have you seen a blue backpack?",
+      "— Yes, someone has left one at the front desk.",
+      "— Has anyone opened it?",
+      "— No, we haven't touched it.",
+      "— Have you contacted the owner?",
+      "— Yes, I've just sent a message.",
+      "— Has the owner replied yet?",
+      "— Not yet, but we've kept it in a safe place."
+    ]
+  },
+  "1600": {
+    "milestone": 1600,
+    "titleKey": "storyTitle1600",
+    "translationKey": "storyFull1600",
+    "badgeKey": "badge1600",
+    "title": "A Trip to Lisbon (Present Perfect vs Past Simple)",
+    "paragraphs": [
+      "— Have you ever been to Lisbon?",
+      "— Yes, I have. I went there last spring.",
+      "— What did you like most?",
+      "— I loved the old streets, and I tried a local dessert.",
+      "— Have you visited the coast too?",
+      "— Yes, we took a train there on our last day.",
+      "— Did you enjoy the trip?",
+      "— Definitely. I've wanted to go back ever since."
+    ]
+  },
+  "1650": {
+    "milestone": 1650,
+    "titleKey": "storyTitle1650",
+    "translationKey": "storyFull1650",
+    "badgeKey": "badge1650",
+    "title": "Dinner on Friday (Present Continuous for Future Arrangements)",
+    "paragraphs": [
+      "— Are we still meeting Anna for dinner on Friday?",
+      "— Yes, we're meeting her at seven outside the station.",
+      "— Is she coming straight from work?",
+      "— No, she's finishing early and taking the metro.",
+      "— Are you booking a table?",
+      "— I've already booked one for three.",
+      "— Great. What are we doing after dinner?",
+      "— We're walking along the river if the weather is good."
+    ]
+  },
+  "1700": {
+    "milestone": 1700,
+    "titleKey": "storyTitle1700",
+    "translationKey": "storyFull1700",
+    "badgeKey": "badge1700",
+    "title": "If the Train Is Late (First Conditional)",
+    "paragraphs": [
+      "— What will we do if the train is late?",
+      "— If it arrives after nine, we'll take a taxi.",
+      "— Will we miss the start of the show?",
+      "— We won't if we leave the station quickly.",
+      "— What if the taxi gets stuck in traffic?",
+      "— If that happens, I'll call the theatre and explain.",
+      "— Will they hold our tickets?",
+      "— Yes, they'll keep our seats for fifteen minutes."
+    ]
+  },
+  "1750": {
+    "milestone": 1750,
+    "titleKey": "storyTitle1750",
+    "translationKey": "storyFull1750",
+    "badgeKey": "badge1750",
+    "title": "The Email I Hadn't Read (Past Perfect + Past Simple)",
+    "paragraphs": [
+      "— Why didn't you come to the meeting yesterday?",
+      "— I hadn't seen the updated invitation, so I went to the old room.",
+      "— Had you checked your email?",
+      "— I had, but the new message arrived while I was on the bus.",
+      "— What happened when you got there?",
+      "— Everyone had already moved to another floor.",
+      "— Did you join them in the end?",
+      "— Yes, I found the room and joined ten minutes later."
+    ]
+  },
+  "1800": {
+    "milestone": 1800,
+    "titleKey": "storyTitle1800",
+    "translationKey": "storyFull1800",
+    "badgeKey": "badge1800",
+    "title": "This Time Tomorrow (Future Continuous + Future Perfect)",
+    "paragraphs": [
+      "— What will you be doing this time tomorrow?",
+      "— I'll be flying to Berlin for the conference.",
+      "— Will you have finished the presentation by then?",
+      "— Yes, I'll have sent it to the team tonight.",
+      "— Will you be staying near the venue?",
+      "— Yes, I'll be staying at a hotel across the street.",
+      "— How long will you have been there by Friday?",
+      "— By Friday, I’ll have been there for two days. Then I’ll be heading home."
     ]
   }
 };
@@ -277,12 +785,12 @@ function showStoryToast(message) {
  * Show the Milestone Story Reader modal
  * @param {number} milestone - 100 to 800
  */
-export async function showMilestoneStoryModal(milestone = 100) {
+export async function showMilestoneStoryModal(milestone = 0) {
   const existing = document.querySelector('#milestone-story-modal-overlay');
   if (existing) existing.remove();
 
-  const currentMilestone = Number(milestone) || 100;
-  const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[100];
+  const currentMilestone = Number.isFinite(Number(milestone)) ? Number(milestone) : 0;
+  const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[0];
 
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
@@ -616,24 +1124,32 @@ export async function showMilestoneStoryModal(milestone = 100) {
       .story-btn-primary:active {
         transform: scale(0.98);
       }
-      .story-btn-secondary {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        color: #cbd5e1;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 11px 16px;
-        border-radius: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        transition: all 0.15s ease;
+      .story-btn-translation {
+        background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%) !important;
+        border: none !important;
+        color: #ffffff !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        padding: 13px 20px !important;
+        min-height: 48px !important;
+        border-radius: 16px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.45) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease !important;
+        width: 100% !important;
       }
-      .story-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: #f8fafc;
+      .story-btn-translation:hover:not(:disabled) {
+        filter: brightness(1.05) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45) !important;
+      }
+      .story-btn-translation:active:not(:disabled) {
+        transform: translateY(1.5px) !important;
+        box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25) !important;
       }
 
       .story-milestone-toast {
@@ -704,11 +1220,8 @@ export async function showMilestoneStoryModal(milestone = 100) {
       </div>
 
       <div class="milestone-story-footer">
-        <button class="story-btn-secondary" id="story-toggle-translation-btn">
+        <button class="story-btn-translation btn-orange" id="story-toggle-translation-btn">
           🎬 <span id="story-translation-btn-label">${strings.btnShowTranslation}</span>
-        </button>
-        <button class="story-btn-primary" id="story-understood-btn">
-          ${strings.btnUnderstood}
         </button>
       </div>
     </div>
@@ -718,8 +1231,7 @@ export async function showMilestoneStoryModal(milestone = 100) {
 
   // Element handles
   const closeBtn = overlay.querySelector('#story-close-btn');
-  const understoodBtn = overlay.querySelector('#story-understood-btn');
-  const toggleTranslationBtn = overlay.querySelector('#story-toggle-translation-btn');
+    const toggleTranslationBtn = overlay.querySelector('#story-toggle-translation-btn');
   const translationBtnLabel = overlay.querySelector('#story-translation-btn-label');
   const translationBlock = overlay.querySelector('#story-full-translation');
   const storyBody = overlay.querySelector('#story-modal-body');
@@ -930,19 +1442,16 @@ export async function showMilestoneStoryModal(milestone = 100) {
     if (e.target === overlay) closeModal();
   });
 
-  // Button: Understood (+25 XP)
-  understoodBtn.addEventListener('click', () => {
+  // Mark story as viewed & completed on modal open
+  localStorage.setItem(`myduo_milestone_story_${currentMilestone}_shown`, 'true');
+  const wasAlreadyCompleted = localStorage.getItem(`myduo_milestone_story_${currentMilestone}_completed`) === 'true';
+  if (!wasAlreadyCompleted) {
     localStorage.setItem(`myduo_milestone_story_${currentMilestone}_completed`, 'true');
-    localStorage.setItem(`myduo_milestone_story_${currentMilestone}_shown`, 'true');
-
-    // Award +25 XP
     try {
       addWeeklyXP(25);
+      showStoryToast(strings.xpAwarded);
     } catch (e) {}
-
-    showStoryToast(strings.xpAwarded);
-    closeModal();
-  });
+  }
 
   // Android hardware Back Button handler
   const handleAndroidBack = (e) => {

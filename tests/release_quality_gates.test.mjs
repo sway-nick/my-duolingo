@@ -198,10 +198,13 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
   }
 
   const { MILESTONE_STORIES } = await import('../frontend/components/modals/MilestoneStoryModal.js');
-  for (let m = 100; m <= 800; m += 100) {
+  assert.equal(Object.keys(MILESTONE_STORIES).length, 37, 'MILESTONE_STORIES must include all 37 dialogues');
+  for (let i = 0; i < 37; i++) {
+    const m = i * 50;
     assert.ok(MILESTONE_STORIES[m], `MILESTONE_STORIES must include milestone ${m}`);
     assert.ok(MILESTONE_STORIES[m].paragraphs.length > 0, `Story ${m} has paragraphs`);
   }
+  assert.equal(STORY_TRANSLATIONS.ru.modalTitle, 'Поздравляем! Вы открыли следующий текст');
 });
 
 test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrity', () => {

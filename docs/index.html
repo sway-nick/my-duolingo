@@ -581,7 +581,7 @@
       function checkMilestoneStoryTrigger(delay = 800) {
         try {
           const mastered = getMasteredWordsCount();
-          const milestones = [100, 200, 300, 400, 500, 600, 700, 800];
+          const milestones = Array.from({ length: 37 }, (_, i) => i * 50).filter(m => m > 0);
           for (const m of milestones) {
             const shown = localStorage.getItem(`myduo_milestone_story_${m}_shown`);
             if (mastered >= m && !shown) {

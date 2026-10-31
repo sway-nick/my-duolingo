@@ -181,11 +181,10 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
   let unlockedStoriesCount = 0;
   try {
     const masteredWords = getMasteredWordsCount();
-    unlockedStoriesCount = [100, 200, 300, 400, 500, 600, 700, 800].filter(m => masteredWords >= m).length;
+    const allMilestones = Array.from({ length: 37 }, (_, i) => i * 50);
+    unlockedStoriesCount = allMilestones.filter(m => masteredWords >= m).length;
   } catch (_) {}
-  const storiesCountLabel = unlockedStoriesCount > 0
-    ? `${unlockedStoriesCount} ${storyStrings.storiesFolderTitle || 'рассказов'}`
-    : '0 / 100 слов';
+  const storiesCountLabel = `${unlockedStoriesCount} / 37`;
 
   container.innerHTML = `
     <div class="collections-hub-page">
