@@ -4,53 +4,61 @@
 English Breakfast: Inglese
 
 ### Short Description (max 80 chars)
-Parole frequenti, note personali, scanner foto, podcast a schermo spento e SRS!
+Widget schermata iniziale, parole frequenti, scanner compiti & podcast off
 
 ### Full Description (max 4000 chars)
-English Breakfast è il tuo allenatore quotidiano intelligente per imparare l'inglese! Memorizza i vocaboli realmente utilizzati nella vita di tutti i giorni, aggiungi le tue note personali, scansiona i compiti con la fotocamera e fissa le parole per sempre nella memoria a lungo termine.
+English Breakfast è il tuo allenatore quotidiano intelligente per imparare l'inglese con widget interattivo per la schermata iniziale!
 
-🍳 PERCHÉ ENGLISH BREAKFAST FUNZIONA:
-La maggior parte dei corsi insegna parole rare e poco usate. In English Breakfast l'apprendimento si basa sulla frequenza reale d'uso (livelli QCER da A1 a C2): impari prima le parole più indispensabili nelle conversazioni quotidiane, riuscendo subito a comprendere dialoghi, film e serie TV in lingua originale.
+Dimentica le frasi poco pratiche e la noiosa memorizzazione a memoria. Inizia dalle parole con la più alta frequenza d'uso nella lingua parlata, scansiona i testi con la fotocamera, leggi storie interattive e impara l'inglese con naturalezza!
 
-🌟 FUNZIONALITÀ PRINCIPALI:
+🍳 10 VANTAGGI PRINCIPALI:
 
-• 📈 APPRENDIMENTO BASATO SULLA FREQUENZA (A1–C2):
-Oltre 6.600 parole ed espressioni selezionate in base alla frequenza effettiva nell'inglese moderno parlato e scritto. Costruisci rapidamente una solida base comunicativa.
+1. 📈 APPRENDIMENTO BASATO SULLA FREQUENZA REALE (ZIPF)
+Il metodo si basa sulla reale frequenza d'uso (QCER A1–C2). I primi 1.000 vocaboli coprono fino all'85% dell'inglese parlato quotidiano, dei film e delle chat. Quasi 7.000 parole senza inutili perdite di tempo.
 
-• 📝 DIZIONARIO PERSONALE E NOTE SU MISURA:
-Aggiungi nuovi vocaboli quando vuoi. Collega associazioni mentali, esempi pratici e suggerimenti di contesto a ogni parola: le note personali sono il metodo più efficace per fissare i termini nella memoria.
+2. 📱 WIDGET INTERATTIVO PER SCHERMATA INIZIALE (GOLDEN CARD)
+Impara vocaboli ogni volta che prendi in mano il telefono! Inserisci il widget Carta Dorata sulla schermata home: capovolgi la carta con un tocco per verificare la traduzione, ascolta la pronuncia chiara e cambia parola senza aprire l'app.
 
-• 📷 SCANNER FOTOGRAFICO INTELLIGENTE PER COMPITI E LIBRI:
-Devi studiare un testo dal libro scolastico? Fai una foto alla pagina! Lo scanner OCR riconosce il testo, individua le parole mancanti e le aggiunge alla tua lista di studio con un semplice tocco, senza digitare nulla a mano.
+3. 📖 STORIE INTERATTIVE OGNI 100 PAROLE
+Consolida il lessico in un contesto vivo! Ogni 100 parole padroneggiate sbloccano una nuova storia, composta rigorosamente solo da vocaboli che conosci già. Tocca qualsiasi parola per vederne la traduzione istantanea, aggiungila ai Preferiti o apri la traduzione completa.
 
-• ⭐ PREFERITI E MEMORIZZAZIONE GARANTITA (SRS):
-Hai un'interrogazione o un esame imminente? Aggiungi le parole ai Preferiti! L'algoritmo scientifico di ripetizione spaziata (Spaced Repetition) pianifica le sessioni di ripasso per garantire una ritenzione duratura al 100%.
+4. 🔓 SENZA COSTOSI ABBONAMENTI NÉ LIMITI
+Nessun paywall forzato e nessun limite artificiale di vite (cuoricini). Accesso illimitato a tutti i vocaboli e modalità: impara al tuo ritmo quando vuoi.
 
-• 🎮 ALLENATI SUI PREFERITI IN TUTTE LE MODALITÀ:
-Ripassa i tuoi vocaboli preferiti nel modo che preferisci:
-  — Flashcard 3D interattive con swipe
-  — Quiz veloci a tempo
-  — Ascolto e comprensione orale
-  — Costruzione di frasi e abbinamento di coppie
-  — Ortografia e verbi irregolari
+5. 🧠 ARCHITETTO INTELLIGENTE DEI ROUND
+L'algoritmo analizza le risposte in tempo reale. Se hai dubbi su una parola, il sistema la ripropone in modo adattivo nei passaggi successivi fino a quando non la padroneggi al 100%.
 
-• 🎧 PODCAST AUDIO PER VIAGGI A SCHERMO SPENTO:
-Impara mentre sei sui mezzi, alla guida, a passeggio o ti alleni, senza toccare il telefono! La riproduzione in background funziona perfettamente anche a schermo spento per risparmiare batteria: ascolta la traduzione in italiano, fai una pausa per ricordare e ascolta la pronuncia inglese chiara in qualità da studio.
+6. 📷 SCANNER FOTOGRAFICO INTELLIGENTE PER COMPITI
+Devi imparare parole da un libro scolastico o da un articolo? Fai una foto alla pagina! Lo scanner OCR rileva i vocaboli sconosciuti e li importa nella tua sessione di studio con un tocco, senza digitare nulla a mano.
 
-• 🎙️ TRAINER DI PRONUNCIA E ACCENTO:
-Parla al microfono e ottieni una valutazione immediata della tua pronuncia. Scegli tra accento britannico (UK) e americano (US) con trascrizione fonetica IPA.
+7. 📝 DIZIONARIO PERSONALE E NOTE SU MISURA
+Hai trovato una nuova parola in un film o videogioco? Aggiungila al volo. Associa esempi pratici e note personali per una memoria a lungo termine indistruttibile.
 
-• 🌍 33 LINGUE E SINCRONIZZAZIONE CLOUD:
-Tradotto interamente in 33 lingue. Accesso con Google in 1 clic per salvare vocaboli, note e serie di studio al sicuro nel cloud su tutti i tuoi dispositivi.
+8. ⭐ LISTE DI PREFERITI PER OGNI OBIETTIVO
+Organizza i vocaboli per traguardi mirati: per l'interrogazione di domani, un colloquio di lavoro, un viaggio o per esami internazionali (IELTS, TOEFL, Cambridge).
 
-• 🏆 LEGHE SETTIMANALI E STREAK:
-Sfida altri studenti nelle classifiche settimanali, mantieni viva la tua striscia quotidiana e conquista il podio.
+9. 🎧 MODALITÀ PODCAST A SCHERMO SPENTO
+Impara mentre sei sui mezzi, cammini o fai sport! La riproduzione in background funziona a schermo spento per risparmiare batteria: ascolta la traduzione, una pausa per ricordare e la pronuncia inglese chiara due volte.
+
+10. 🎙️ DUE STANDARD DA STUDIO: US E UK
+Audio cristallino registrato da madrelingua. Passa dall'accento americano a quello britannico in qualsiasi momento.
+
+🔄 CICLO COMPLETO DI MEMORIZZAZIONE (4 FASI):
+1. Flashcard — riconoscimento visivo e pronuncia
+2. Quiz — rapida comprensione all'ascolto e significato
+3. Coppie — velocità di reazione e associazione
+4. Scrittura — ortografia esatta lettera per lettera.
+
+🌍 36 LINGUE E SUPPORTO RTL:
+Studia comodamente nella tua lingua madre: interfaccia interamente tradotta in 36 lingue, inclusi arabo, persiano e urdu (RTL).
+
+🏆 LEGHE SETTIMANALI E CLOUD SYNC:
+Sfida altri studenti nelle leghe, conquista il podio, mantieni vivo lo streak quotidiano e sincronizza i progressi con 1 clic tramite Google.
 
 🚀 IDEALE PER:
-• Studenti: scansiona i compiti, salva le parole nei preferiti e prendi voti eccellenti.
-• Principianti (A1–A2): impara le parole chiave fondamentali senza sentirti sopraffatto.
-• Intermedi e Avanzati (B1–C2): amplia il lessico per il lavoro, i viaggi e le certificazioni (Cambridge, TOEFL, IELTS).
+• Studenti: scansiona i compiti e prendi voti eccellenti.
+• Principianti (A1–A2): costruisci una base solida con le parole essenziali.
+• Avanzati (B1–C2): amplia il lessico per il lavoro e certificazioni.
 
-Inizia la giornata con un ricco "English Breakfast": bastano 10-15 minuti al giorno per fare un vero salto di qualità!
-
-Scarica English Breakfast adesso e parla inglese con disinvoltura!
+Bastano 10–15 minuti al giorno di "English Breakfast" per fare un vero salto di qualità!
+Scarica English Breakfast adesso e parla inglese con sicurezza!
