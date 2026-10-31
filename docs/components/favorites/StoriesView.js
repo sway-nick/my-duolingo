@@ -20,7 +20,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
 
-  const allMilestones = Array.from({ length: 37 }, (_, i) => i * 50);
+  const allMilestones = Object.keys(MILESTONE_STORIES).map(Number).sort((a, b) => a - b);
   const unlockedMilestones = allMilestones.filter(m => masteredWords >= m);
 
   const storyCardsHtml = allMilestones.map(m => {
@@ -44,6 +44,11 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
             <div class="story-card-badge">${escapeHtml(badge)}</div>
             ${statusBadge}
           </div>
+          ${story.coverImage ? `
+            <div class="story-card-cover-wrapper" style="margin: 8px 0 12px 0; border-radius: 12px; overflow: hidden; max-height: 140px;">
+              <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: 100%; height: 140px; object-fit: cover; display: block;" />
+            </div>
+          ` : ''}
           <h3 class="story-card-title">${escapeHtml(title)}</h3>
           <div class="story-card-action">
             <button type="button" class="story-card-btn" data-milestone="${m}">

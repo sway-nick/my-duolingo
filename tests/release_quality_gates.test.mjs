@@ -198,8 +198,8 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
   }
 
   const { MILESTONE_STORIES } = await import('../frontend/components/modals/MilestoneStoryModal.js');
-  assert.equal(Object.keys(MILESTONE_STORIES).length, 37, 'MILESTONE_STORIES must include all 37 dialogues');
-  for (let i = 0; i < 37; i++) {
+  assert.equal(Object.keys(MILESTONE_STORIES).length, 38, 'MILESTONE_STORIES must include all 38 stories');
+  for (let i = 0; i < 38; i++) {
     const m = i * 50;
     assert.ok(MILESTONE_STORIES[m], `MILESTONE_STORIES must include milestone ${m}`);
     assert.ok(MILESTONE_STORIES[m].paragraphs.length > 0, `Story ${m} has paragraphs`);

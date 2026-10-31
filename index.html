@@ -604,7 +604,7 @@
           const savedHighest = Number(localStorage.getItem('myduo_milestone_highest_unlocked')) || 0;
 
           // Trigger ONLY if the user just crossed a brand new milestone > savedHighest
-          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1800) {
+          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1850) {
             localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
             localStorage.setItem(`myduo_milestone_story_${currentPassedMilestone}_shown`, 'true');
             setTimeout(() => {

@@ -10,6 +10,62 @@ export const MILESTONE_STORIES = {
     "titleKey": "storyTitle0",
     "translationKey": "storyFull0",
     "badgeKey": "badge0",
+    "title": "My Lord Bag of Rice",
+    "author": "Yei Theodora Ozaki",
+    "coverImage": "assets/images/my_lord_bag_of_rice.webp",
+    "hideFullTranslation": true,
+    "paragraphs": [
+      "Long, long ago there lived, in Japan a brave warrior known to all as Tawara Toda, or “My Lord Bag of Rice.” His true name was Fujiwara Hidesato, and there is a very interesting story of how he came to change his name.",
+      "One day he sallied forth in search of adventures, for he had the nature of a warrior and could not bear to be idle. So he buckled on his two swords, took his huge bow, much taller than himself, in his hand, and slinging his quiver on his back started out. He had not gone far when he came to the bridge of Seta-no-Karashi spanning one end of the beautiful Lake Biwa. No sooner had he set foot on the bridge than he saw lying right across his path a huge serpent-dragon. Its body was so big that it looked like the trunk of a large pine tree and it took up the whole width of the bridge. One of its huge claws rested on the parapet of one side of the bridge, while its tail lay right against the other. The monster seemed to be asleep, and as it breathed, fire and smoke came out of its nostrils.",
+      "At first Hidesato could not help feeling alarmed at the sight of this horrible reptile lying in his path, for he must either turn back or walk right over its body. He was a brave man, however, and putting aside all fear went forward dauntlessly. Crunch, crunch! he stepped now on the dragon’s body, now between its coils, and without even one glance backward he went on his way.",
+      "He had only gone a few steps when he heard some one calling him from behind. On turning back he was much surprised to see that the monster dragon had entirely disappeared and in its place was a strange-looking man, who was bowing most ceremoniously to the ground. His red hair streamed over his shoulders and was surmounted by a crown in the shape of a dragon’s head, and his sea-green dress was patterned with shells. Hidesato knew at once that this was no ordinary mortal and he wondered much at the strange occurrence. Where had the dragon gone in such a short space of time? Or had it transformed itself into this man, and what did the whole thing mean? While these thoughts passed through his mind he had come up to the man on the bridge and now addressed him:",
+      "“Was it you that called me just now?”",
+      "“Yes, it was I,” answered the man: “I have an earnest request to make to you. Do you think you can grant it to me?”",
+      "“If it is in my power to do so I will,” answered Hidesato, “but first tell me who you are?”",
+      "“I am the Dragon King of the Lake, and my home is in these waters just under this bridge.”",
+      "“And what is it you have to ask of me!” said Hidesato.",
+      "“I want you to kill my mortal enemy the centipede, who lives on the mountain beyond,” and the Dragon King pointed to a high peak on the opposite shore of the lake.",
+      "“I have lived now for many years in this lake and I have a large family of children and grand-children. For some time past we have lived in terror, for a monster centipede has discovered our home, and night after night it comes and carries off one of my family. I am powerless to save them. If it goes on much longer like this, not only shall I lose all my children, but I myself must fall a victim to the monster. I am, therefore, very unhappy, and in my extremity I determined to ask the help of a human being. For many days with this intention I have waited on the bridge in the shape of the horrible serpent-dragon that you saw, in the hope that some strong brave man would come along. But all who came this way, as soon as they saw me were terrified and ran away as fast as they could. You are the first man I have found able to look at me without fear, so I knew at once that you were a man of great courage. I beg you to have pity upon me. Will you not help me and kill my enemy the centipede?”",
+      "Hidesato felt very sorry for the Dragon King on hearing his story, and readily promised to do what he could to help him. The warrior asked where the centipede lived, so that he might attack the creature at once. The Dragon King replied that its home was on the mountain Mikami, but that as it came every night at a certain hour to the palace of the lake, it would be better to wait till then. So Hidesato was conducted to the palace of the Dragon King, under the bridge. Strange to say, as he followed his host downwards the waters parted to let them pass, and his clothes did not even feel damp as he passed through the flood. Never had Hidesato seen anything so beautiful as this palace built of white marble beneath the lake. He had often heard of the Sea King’s palace at the bottom of the sea, where all the servants and retainers were salt-water fishes, but here was a magnificent building in the heart of Lake Biwa. The dainty goldfishes, red carp, and silvery trout, waited upon the Dragon King and his guest.",
+      "Hidesato was astonished at the feast that was spread for him. The dishes were crystallized lotus leaves and flowers, and the chopsticks were of the rarest ebony. As soon as they sat down, the sliding doors opened and ten lovely goldfish dancers came out, and behind them followed ten red-carp musicians with the koto and the samisen. Thus the hours flew by till midnight, and the beautiful music and dancing had banished all thoughts of the centipede. The Dragon King was about to pledge the warrior in a fresh cup of wine when the palace was suddenly shaken by a tramp, tramp! as if a mighty army had begun to march not far away.",
+      "Hidesato and his host both rose to their feet and rushed to the balcony, and the warrior saw on the opposite mountain two great balls of glowing fire coming nearer and nearer. The Dragon King stood by the warrior’s side trembling with fear.",
+      "“The centipede! The centipede! Those two balls of fire are its eyes. It is coming for its prey! Now is the time to kill it.”",
+      "Hidesato looked where his host pointed, and, in the dim light of the starlit evening, behind the two balls of fire he saw the long body of an enormous centipede winding round the mountains, and the light in its hundred feet glowed like so many distant lanterns moving slowly towards the shore.",
+      "Hidesato showed not the least sign of fear. He tried to calm the Dragon King.",
+      "“Don’t be afraid. I shall surely kill the centipede. Just bring me my bow and arrows.”",
+      "The Dragon King did as he was bid, and the warrior noticed that he had only three arrows left in his quiver. He took the bow, and fitting an arrow to the notch, took careful aim and let fly.",
+      "The arrow hit the centipede right in the middle of its head, but instead of penetrating, it glanced off harmless and fell to the ground.",
+      "Nothing daunted, Hidesato took another arrow, fitted it to the notch of the bow and let fly. Again the arrow hit the mark, it struck the centipede right in the middle of its head, only to glance off and fall to the ground. The centipede was invulnerable to weapons! When the Dragon King saw that even this brave warrior’s arrows were powerless to kill the centipede, he lost heart and began to tremble with fear.",
+      "The warrior saw that he had now only one arrow left in his quiver, and if this one failed he could not kill the centipede. He looked across the waters. The huge reptile had wound its horrid body seven times round the mountain and would soon come down to the lake. Nearer and nearer gleamed fireballs of eyes, and the light of its hundred feet began to throw reflections in the still waters of the lake.",
+      "Then suddenly the warrior remembered that he had heard that human saliva was deadly to centipedes. But this was no ordinary centipede. This was so monstrous that even to think of such a creature made one creep with horror. Hidesato determined to try his last chance. So taking his last arrow and first putting the end of it in his mouth, he fitted the notch to his bow, took careful aim once more and let fly.",
+      "This time the arrow again hit the centipede right in the middle of its head, but instead of glancing off harmlessly as before, it struck home to the creature’s brain. Then with a convulsive shudder the serpentine body stopped moving, and the fiery light of its great eyes and hundred feet darkened to a dull glare like the sunset of a stormy day, and then went out in blackness. A great darkness now overspread the heavens, the thunder rolled and the lightning flashed, and the wind roared in fury, and it seemed as if the world were coming to an end. The Dragon King and his children and retainers all crouched in different parts of the palace, frightened to death, for the building was shaken to its foundation. At last the dreadful night was over. Day dawned beautiful and clear. The centipede was gone from the mountain.",
+      "Then Hidesato called to the Dragon King to come out with him on the balcony, for the centipede was dead and he had nothing more to fear.",
+      "Then all the inhabitants of the palace came out with joy, and Hidesato pointed to the lake. There lay the body of the dead centipede floating on the water, which was dyed red with its blood.",
+      "The gratitude of the Dragon King knew no bounds. The whole family came and bowed down before the warrior, calling him their preserver and the bravest warrior in all Japan.",
+      "Another feast was prepared, more sumptuous than the first. All kinds of fish, prepared in every imaginable way, raw, stewed, boiled and roasted, served on coral trays and crystal dishes, were put before him, and the wine was the best that Hidesato had ever tasted in his life. To add to the beauty of everything the sun shone brightly, the lake glittered like a liquid diamond, and the palace was a thousand times more beautiful by day than by night.",
+      "His host tried to persuade the warrior to stay a few days, but Hidesato insisted on going home, saying that he had now finished what he had come to do, and must return. The Dragon King and his family were all very sorry to have him leave so soon, but since he would go they begged him to accept a few small presents (so they said) in token of their gratitude to him for delivering them forever from their horrible enemy the centipede.",
+      "As the warrior stood in the porch taking leave, a train of fish was suddenly transformed into a retinue of men, all wearing ceremonial robes and dragon’s crowns on their heads to show that they were servants of the great Dragon King. The presents that they carried were as follows:",
+      "First, a large bronze bell.",
+      "Second, a bag of rice.",
+      "Third, a roll of silk.",
+      "Fourth, a cooking pot.",
+      "Fifth, a bell.",
+      "Hidesato did not want to accept all these presents, but as the Dragon King insisted, he could not well refuse.",
+      "The Dragon King himself accompanied the warrior as far as the bridge, and then took leave of him with many bows and good wishes, leaving the procession of servants to accompany Hidesato to his house with the presents.",
+      "The warrior’s household and servants had been very much concerned when they found that he did not return the night before, but they finally concluded that he had been kept by the violent storm and had taken shelter somewhere. When the servants on the watch for his return caught sight of him they called to every one that he was approaching, and the whole household turned out to meet him, wondering much what the retinue of men, bearing presents and banners, that followed him, could mean.",
+      "As soon as the Dragon King’s retainers had put down the presents they vanished, and Hidesato told all that had happened to him.",
+      "The presents which he had received from the grateful Dragon King were found to be of magic power. The bell only was ordinary, and as Hidesato had no use for it he presented it to the temple near by, where it was hung up, to boom out the hour of day over the surrounding neighborhood.",
+      "The single bag of rice, however much was taken from it day after day for the meals of the knight and his whole family, never grew less—the supply in the bag was inexhaustible.",
+      "The roll of silk, too, never grew shorter, though time after time long pieces were cut off to make the warrior a new suit of clothes to go to Court in at the New Year.",
+      "The cooking pot was wonderful, too. No matter what was put into it, it cooked deliciously whatever was wanted without any firing—truly a very economical saucepan.",
+      "The fame of Hidesato’s fortune spread far and wide, and as there was no need for him to spend money on rice or silk or firing, he became very rich and prosperous, and was henceforth known as My Lord Bag of Rice."
+    ]
+  },
+  "50": {
+    "milestone": 50,
+    "titleKey": "storyTitle50",
+    "translationKey": "storyFull50",
+    "badgeKey": "badge50",
     "title": "Meeting Someone New",
     "paragraphs": [
       "— Hi, is this seat free?",
@@ -22,11 +78,11 @@ export const MILESTONE_STORIES = {
       "— I like it so far. People are really friendly."
     ]
   },
-  "50": {
-    "milestone": 50,
-    "titleKey": "storyTitle50",
-    "translationKey": "storyFull50",
-    "badgeKey": "badge50",
+  "100": {
+    "milestone": 100,
+    "titleKey": "storyTitle100",
+    "translationKey": "storyFull100",
+    "badgeKey": "badge100",
     "title": "At Home",
     "paragraphs": [
       "— Have you seen my keys?",
@@ -39,11 +95,11 @@ export const MILESTONE_STORIES = {
       "— Just apples. We have everything else."
     ]
   },
-  "100": {
-    "milestone": 100,
-    "titleKey": "storyTitle100",
-    "translationKey": "storyFull100",
-    "badgeKey": "badge100",
+  "150": {
+    "milestone": 150,
+    "titleKey": "storyTitle150",
+    "translationKey": "storyFull150",
+    "badgeKey": "badge150",
     "title": "At the Coffee Shop",
     "paragraphs": [
       "— Hi! What can I get for you?",
@@ -56,11 +112,11 @@ export const MILESTONE_STORIES = {
       "— Here you go. Thanks!"
     ]
   },
-  "150": {
-    "milestone": 150,
-    "titleKey": "storyTitle150",
-    "translationKey": "storyFull150",
-    "badgeKey": "badge150",
+  "200": {
+    "milestone": 200,
+    "titleKey": "storyTitle200",
+    "translationKey": "storyFull200",
+    "badgeKey": "badge200",
     "title": "At the Store",
     "paragraphs": [
       "— Excuse me, do you have this shirt in blue?",
@@ -73,11 +129,11 @@ export const MILESTONE_STORIES = {
       "— It's twenty-five. I'll take it."
     ]
   },
-  "200": {
-    "milestone": 200,
-    "titleKey": "storyTitle200",
-    "translationKey": "storyFull200",
-    "badgeKey": "badge200",
+  "250": {
+    "milestone": 250,
+    "titleKey": "storyTitle250",
+    "translationKey": "storyFull250",
+    "badgeKey": "badge250",
     "title": "On the Street",
     "paragraphs": [
       "— Excuse me, is there a bank near here?",
@@ -90,11 +146,11 @@ export const MILESTONE_STORIES = {
       "— You're welcome. Have a nice day!"
     ]
   },
-  "250": {
-    "milestone": 250,
-    "titleKey": "storyTitle250",
-    "translationKey": "storyFull250",
-    "badgeKey": "badge250",
+  "300": {
+    "milestone": 300,
+    "titleKey": "storyTitle300",
+    "translationKey": "storyFull300",
+    "badgeKey": "badge300",
     "title": "At the Bus Stop",
     "paragraphs": [
       "— Does this bus go downtown?",
@@ -107,11 +163,11 @@ export const MILESTONE_STORIES = {
       "— No worries. I'll let you know."
     ]
   },
-  "300": {
-    "milestone": 300,
-    "titleKey": "storyTitle300",
-    "translationKey": "storyFull300",
-    "badgeKey": "badge300",
+  "350": {
+    "milestone": 350,
+    "titleKey": "storyTitle350",
+    "translationKey": "storyFull350",
+    "badgeKey": "badge350",
     "title": "A Phone Call",
     "paragraphs": [
       "— Hi, it's Nina. Is Tom there?",
@@ -124,11 +180,11 @@ export const MILESTONE_STORIES = {
       "— See you soon."
     ]
   },
-  "350": {
-    "milestone": 350,
-    "titleKey": "storyTitle350",
-    "translationKey": "storyFull350",
-    "badgeKey": "badge350",
+  "400": {
+    "milestone": 400,
+    "titleKey": "storyTitle400",
+    "translationKey": "storyFull400",
+    "badgeKey": "badge400",
     "title": "Making Plans",
     "paragraphs": [
       "— Are you free on Saturday?",
@@ -141,11 +197,11 @@ export const MILESTONE_STORIES = {
       "— Perfect. I'll book the tickets."
     ]
   },
-  "400": {
-    "milestone": 400,
-    "titleKey": "storyTitle400",
-    "translationKey": "storyFull400",
-    "badgeKey": "badge400",
+  "450": {
+    "milestone": 450,
+    "titleKey": "storyTitle450",
+    "translationKey": "storyFull450",
+    "badgeKey": "badge450",
     "title": "At the Restaurant",
     "paragraphs": [
       "— Good evening. Do you have a table for two?",
@@ -158,11 +214,11 @@ export const MILESTONE_STORIES = {
       "— Certainly. I'll be back in a moment."
     ]
   },
-  "450": {
-    "milestone": 450,
-    "titleKey": "storyTitle450",
-    "translationKey": "storyFull450",
-    "badgeKey": "badge450",
+  "500": {
+    "milestone": 500,
+    "titleKey": "storyTitle500",
+    "translationKey": "storyFull500",
+    "badgeKey": "badge500",
     "title": "At the Supermarket",
     "paragraphs": [
       "— Excuse me, where can I find rice?",
@@ -176,11 +232,11 @@ export const MILESTONE_STORIES = {
       "— No, thanks. I brought my own."
     ]
   },
-  "500": {
-    "milestone": 500,
-    "titleKey": "storyTitle500",
-    "translationKey": "storyFull500",
-    "badgeKey": "badge500",
+  "550": {
+    "milestone": 550,
+    "titleKey": "storyTitle550",
+    "translationKey": "storyFull550",
+    "badgeKey": "badge550",
     "title": "At the Doctor's",
     "paragraphs": [
       "— Hello, I have an appointment at ten.",
@@ -193,11 +249,11 @@ export const MILESTONE_STORIES = {
       "— All right. The doctor will ask you a few questions."
     ]
   },
-  "550": {
-    "milestone": 550,
-    "titleKey": "storyTitle550",
-    "translationKey": "storyFull550",
-    "badgeKey": "badge550",
+  "600": {
+    "milestone": 600,
+    "titleKey": "storyTitle600",
+    "translationKey": "storyFull600",
+    "badgeKey": "badge600",
     "title": "At the Pharmacy",
     "paragraphs": [
       "— Hi, can you help me? I need something for a headache.",
@@ -210,11 +266,11 @@ export const MILESTONE_STORIES = {
       "— Check the label, and ask a doctor if you are unsure."
     ]
   },
-  "600": {
-    "milestone": 600,
-    "titleKey": "storyTitle600",
-    "translationKey": "storyFull600",
-    "badgeKey": "badge600",
+  "650": {
+    "milestone": 650,
+    "titleKey": "storyTitle650",
+    "translationKey": "storyFull650",
+    "badgeKey": "badge650",
     "title": "At the Train Station",
     "paragraphs": [
       "— Hi, I'd like a return ticket to Brighton.",
@@ -227,11 +283,11 @@ export const MILESTONE_STORIES = {
       "— Yes, seat 14A. Have a good trip!"
     ]
   },
-  "650": {
-    "milestone": 650,
-    "titleKey": "storyTitle650",
-    "translationKey": "storyFull650",
-    "badgeKey": "badge650",
+  "700": {
+    "milestone": 700,
+    "titleKey": "storyTitle700",
+    "translationKey": "storyFull700",
+    "badgeKey": "badge700",
     "title": "At the Airport",
     "paragraphs": [
       "— Good morning. Can I see your passport, please?",
@@ -244,11 +300,11 @@ export const MILESTONE_STORIES = {
       "— When does boarding start?"
     ]
   },
-  "700": {
-    "milestone": 700,
-    "titleKey": "storyTitle700",
-    "translationKey": "storyFull700",
-    "badgeKey": "badge700",
+  "750": {
+    "milestone": 750,
+    "titleKey": "storyTitle750",
+    "translationKey": "storyFull750",
+    "badgeKey": "badge750",
     "title": "At the Hotel",
     "paragraphs": [
       "— Hello, I have a reservation under the name Patel.",
@@ -261,11 +317,11 @@ export const MILESTONE_STORIES = {
       "— Of course. Enjoy your stay!"
     ]
   },
-  "750": {
-    "milestone": 750,
-    "titleKey": "storyTitle750",
-    "translationKey": "storyFull750",
-    "badgeKey": "badge750",
+  "800": {
+    "milestone": 800,
+    "titleKey": "storyTitle800",
+    "translationKey": "storyFull800",
+    "badgeKey": "badge800",
     "title": "Something Went Wrong",
     "paragraphs": [
       "— Excuse me, my room key isn't working.",
@@ -278,11 +334,11 @@ export const MILESTONE_STORIES = {
       "— Sure. Try it now. Have a good evening."
     ]
   },
-  "800": {
-    "milestone": 800,
-    "titleKey": "storyTitle800",
-    "translationKey": "storyFull800",
-    "badgeKey": "badge800",
+  "850": {
+    "milestone": 850,
+    "titleKey": "storyTitle850",
+    "translationKey": "storyFull850",
+    "badgeKey": "badge850",
     "title": "Meeting a New Neighbor",
     "paragraphs": [
       "— Hi, I think we're neighbors. I moved into the flat next door.",
@@ -295,11 +351,11 @@ export const MILESTONE_STORIES = {
       "— Sounds good. Come by later if you need anything."
     ]
   },
-  "850": {
-    "milestone": 850,
-    "titleKey": "storyTitle850",
-    "translationKey": "storyFull850",
-    "badgeKey": "badge850",
+  "900": {
+    "milestone": 900,
+    "titleKey": "storyTitle900",
+    "translationKey": "storyFull900",
+    "badgeKey": "badge900",
     "title": "At Work",
     "paragraphs": [
       "— Hi, you must be Emma. I'm Daniel, your team lead.",
@@ -312,11 +368,11 @@ export const MILESTONE_STORIES = {
       "— Thanks. I'm looking forward to getting started."
     ]
   },
-  "900": {
-    "milestone": 900,
-    "titleKey": "storyTitle900",
-    "translationKey": "storyFull900",
-    "badgeKey": "badge900",
+  "950": {
+    "milestone": 950,
+    "titleKey": "storyTitle950",
+    "translationKey": "storyFull950",
+    "badgeKey": "badge950",
     "title": "A Team Meeting",
     "paragraphs": [
       "— Can we start with a quick update on the report?",
@@ -329,11 +385,11 @@ export const MILESTONE_STORIES = {
       "— Good idea. I'll share the file now."
     ]
   },
-  "950": {
-    "milestone": 950,
-    "titleKey": "storyTitle950",
-    "translationKey": "storyFull950",
-    "badgeKey": "badge950",
+  "1000": {
+    "milestone": 1000,
+    "titleKey": "storyTitle1000",
+    "translationKey": "storyFull1000",
+    "badgeKey": "badge1000",
     "title": "Shopping Online",
     "paragraphs": [
       "— Hello, I'm calling about order 5821.",
@@ -346,11 +402,11 @@ export const MILESTONE_STORIES = {
       "— Once we receive the shoes, the new pair will be sent within two days."
     ]
   },
-  "1000": {
-    "milestone": 1000,
-    "titleKey": "storyTitle1000",
-    "translationKey": "storyFull1000",
-    "badgeKey": "badge1000",
+  "1050": {
+    "milestone": 1050,
+    "titleKey": "storyTitle1050",
+    "translationKey": "storyFull1050",
+    "badgeKey": "badge1050",
     "title": "Calling Customer Support",
     "paragraphs": [
       "— Thanks for calling support. How can I help?",
@@ -363,11 +419,11 @@ export const MILESTONE_STORIES = {
       "— Thanks. Can you text me when it's fixed?"
     ]
   },
-  "1050": {
-    "milestone": 1050,
-    "titleKey": "storyTitle1050",
-    "translationKey": "storyFull1050",
-    "badgeKey": "badge1050",
+  "1100": {
+    "milestone": 1100,
+    "titleKey": "storyTitle1100",
+    "translationKey": "storyFull1100",
+    "badgeKey": "badge1100",
     "title": "A Weekend Trip",
     "paragraphs": [
       "— Are we still going hiking this weekend?",
@@ -380,11 +436,11 @@ export const MILESTONE_STORIES = {
       "— Perfect. Let's meet at the station at eight."
     ]
   },
-  "1100": {
-    "milestone": 1100,
-    "titleKey": "storyTitle1100",
-    "translationKey": "storyFull1100",
-    "badgeKey": "badge1100",
+  "1150": {
+    "milestone": 1150,
+    "titleKey": "storyTitle1150",
+    "translationKey": "storyFull1150",
+    "badgeKey": "badge1150",
     "title": "Talking About the Past",
     "paragraphs": [
       "— How was your trip to the coast?",
@@ -397,11 +453,11 @@ export const MILESTONE_STORIES = {
       "— No, I caught a bus twenty minutes later."
     ]
   },
-  "1150": {
-    "milestone": 1150,
-    "titleKey": "storyTitle1150",
-    "translationKey": "storyFull1150",
-    "badgeKey": "badge1150",
+  "1200": {
+    "milestone": 1200,
+    "titleKey": "storyTitle1200",
+    "translationKey": "storyFull1200",
+    "badgeKey": "badge1200",
     "title": "A Job Interview",
     "paragraphs": [
       "— Thanks for coming in. Could you tell me a little about yourself?",
@@ -414,11 +470,11 @@ export const MILESTONE_STORIES = {
       "— We had a tight deadline, so I helped the team agree on priorities."
     ]
   },
-  "1200": {
-    "milestone": 1200,
-    "titleKey": "storyTitle1200",
-    "translationKey": "storyFull1200",
-    "badgeKey": "badge1200",
+  "1250": {
+    "milestone": 1250,
+    "titleKey": "storyTitle1250",
+    "translationKey": "storyFull1250",
+    "badgeKey": "badge1250",
     "title": "Future Plans and Goals",
     "paragraphs": [
       "— You've been studying English for a while, haven't you?",
@@ -431,11 +487,11 @@ export const MILESTONE_STORIES = {
       "— I'll record a short update each month and compare it with the last one."
     ]
   },
-  "1250": {
-    "milestone": 1250,
-    "titleKey": "storyTitle1250",
-    "translationKey": "storyFull1250",
-    "badgeKey": "badge1250",
+  "1300": {
+    "milestone": 1300,
+    "titleKey": "storyTitle1300",
+    "translationKey": "storyFull1300",
+    "badgeKey": "badge1300",
     "title": "A Calm Start (Present Simple)",
     "paragraphs": [
       "— What time do you usually get up?",
@@ -448,11 +504,11 @@ export const MILESTONE_STORIES = {
       "— I do. It helps me start the day calmly."
     ]
   },
-  "1300": {
-    "milestone": 1300,
-    "titleKey": "storyTitle1300",
-    "translationKey": "storyFull1300",
-    "badgeKey": "badge1300",
+  "1350": {
+    "milestone": 1350,
+    "titleKey": "storyTitle1350",
+    "translationKey": "storyFull1350",
+    "badgeKey": "badge1350",
     "title": "The Meeting Room (Present Continuous)",
     "paragraphs": [
       "— Hi, are you using the meeting room right now?",
@@ -465,11 +521,11 @@ export const MILESTONE_STORIES = {
       "— Great. I'll ask everyone in the hallway to keep quiet."
     ]
   },
-  "1350": {
-    "milestone": 1350,
-    "titleKey": "storyTitle1350",
-    "translationKey": "storyFull1350",
-    "badgeKey": "badge1350",
+  "1400": {
+    "milestone": 1400,
+    "titleKey": "storyTitle1400",
+    "translationKey": "storyFull1400",
+    "badgeKey": "badge1400",
     "title": "The Wrong Order (Past Simple)",
     "paragraphs": [
       "— Excuse me, I think you brought me the wrong order.",
@@ -482,11 +538,11 @@ export const MILESTONE_STORIES = {
       "— About five minutes."
     ]
   },
-  "1400": {
-    "milestone": 1400,
-    "titleKey": "storyTitle1400",
-    "translationKey": "storyFull1400",
-    "badgeKey": "badge1400",
+  "1450": {
+    "milestone": 1450,
+    "titleKey": "storyTitle1450",
+    "translationKey": "storyFull1450",
+    "badgeKey": "badge1450",
     "title": "When the Alarm Went Off (Past Continuous + Past Simple)",
     "paragraphs": [
       "— What were you doing when the alarm went off?",
@@ -499,11 +555,11 @@ export const MILESTONE_STORIES = {
       "— The fire team checked the building and said it was safe."
     ]
   },
-  "1450": {
-    "milestone": 1450,
-    "titleKey": "storyTitle1450",
-    "translationKey": "storyFull1450",
-    "badgeKey": "badge1450",
+  "1500": {
+    "milestone": 1500,
+    "titleKey": "storyTitle1500",
+    "translationKey": "storyFull1500",
+    "badgeKey": "badge1500",
     "title": "I’ll Send It Now (Will: offers, promises and quick decisions)",
     "paragraphs": [
       "— I can't find the address for tomorrow's meeting.",
@@ -516,11 +572,11 @@ export const MILESTONE_STORIES = {
       "— No problem. I'll see you tomorrow."
     ]
   },
-  "1500": {
-    "milestone": 1500,
-    "titleKey": "storyTitle1500",
-    "translationKey": "storyFull1500",
-    "badgeKey": "badge1500",
+  "1550": {
+    "milestone": 1550,
+    "titleKey": "storyTitle1550",
+    "translationKey": "storyFull1550",
+    "badgeKey": "badge1550",
     "title": "Weekend Plans (Be Going To)",
     "paragraphs": [
       "— What are you going to do this weekend?",
@@ -533,11 +589,11 @@ export const MILESTONE_STORIES = {
       "— Yes, I'm going to come back on Sunday."
     ]
   },
-  "1550": {
-    "milestone": 1550,
-    "titleKey": "storyTitle1550",
-    "translationKey": "storyFull1550",
-    "badgeKey": "badge1550",
+  "1600": {
+    "milestone": 1600,
+    "titleKey": "storyTitle1600",
+    "translationKey": "storyFull1600",
+    "badgeKey": "badge1600",
     "title": "The Lost Backpack (Present Perfect)",
     "paragraphs": [
       "— Have you seen a blue backpack?",
@@ -550,11 +606,11 @@ export const MILESTONE_STORIES = {
       "— Not yet, but we've kept it in a safe place."
     ]
   },
-  "1600": {
-    "milestone": 1600,
-    "titleKey": "storyTitle1600",
-    "translationKey": "storyFull1600",
-    "badgeKey": "badge1600",
+  "1650": {
+    "milestone": 1650,
+    "titleKey": "storyTitle1650",
+    "translationKey": "storyFull1650",
+    "badgeKey": "badge1650",
     "title": "A Trip to Lisbon (Present Perfect vs Past Simple)",
     "paragraphs": [
       "— Have you ever been to Lisbon?",
@@ -567,11 +623,11 @@ export const MILESTONE_STORIES = {
       "— Definitely. I've wanted to go back ever since."
     ]
   },
-  "1650": {
-    "milestone": 1650,
-    "titleKey": "storyTitle1650",
-    "translationKey": "storyFull1650",
-    "badgeKey": "badge1650",
+  "1700": {
+    "milestone": 1700,
+    "titleKey": "storyTitle1700",
+    "translationKey": "storyFull1700",
+    "badgeKey": "badge1700",
     "title": "Dinner on Friday (Present Continuous for Future Arrangements)",
     "paragraphs": [
       "— Are we still meeting Anna for dinner on Friday?",
@@ -584,11 +640,11 @@ export const MILESTONE_STORIES = {
       "— We're walking along the river if the weather is good."
     ]
   },
-  "1700": {
-    "milestone": 1700,
-    "titleKey": "storyTitle1700",
-    "translationKey": "storyFull1700",
-    "badgeKey": "badge1700",
+  "1750": {
+    "milestone": 1750,
+    "titleKey": "storyTitle1750",
+    "translationKey": "storyFull1750",
+    "badgeKey": "badge1750",
     "title": "If the Train Is Late (First Conditional)",
     "paragraphs": [
       "— What will we do if the train is late?",
@@ -601,11 +657,11 @@ export const MILESTONE_STORIES = {
       "— Yes, they'll keep our seats for fifteen minutes."
     ]
   },
-  "1750": {
-    "milestone": 1750,
-    "titleKey": "storyTitle1750",
-    "translationKey": "storyFull1750",
-    "badgeKey": "badge1750",
+  "1800": {
+    "milestone": 1800,
+    "titleKey": "storyTitle1800",
+    "translationKey": "storyFull1800",
+    "badgeKey": "badge1800",
     "title": "The Email I Hadn't Read (Past Perfect + Past Simple)",
     "paragraphs": [
       "— Why didn't you come to the meeting yesterday?",
@@ -618,11 +674,11 @@ export const MILESTONE_STORIES = {
       "— Yes, I found the room and joined ten minutes later."
     ]
   },
-  "1800": {
-    "milestone": 1800,
-    "titleKey": "storyTitle1800",
-    "translationKey": "storyFull1800",
-    "badgeKey": "badge1800",
+  "1850": {
+    "milestone": 1850,
+    "titleKey": "storyTitle1850",
+    "translationKey": "storyFull1850",
+    "badgeKey": "badge1850",
     "title": "This Time Tomorrow (Future Continuous + Future Perfect)",
     "paragraphs": [
       "— What will you be doing this time tomorrow?",
@@ -1204,6 +1260,11 @@ export async function showMilestoneStoryModal(milestone = 0) {
           <div class="story-popover-arrow" id="popover-arrow"></div>
         </div>
 
+        ${story.coverImage ? `
+          <div class="story-cover-wrapper" style="margin-bottom: 20px; text-align: center;">
+            <img src="${story.coverImage}" alt="${escapeHtml(storyTitle)}" class="story-cover-image" style="width: 100%; max-height: 260px; object-fit: cover; border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); display: block;" />
+          </div>
+        ` : ''}
         <div class="story-text-container" id="story-tokens-wrapper">
           ${paragraphsHtml}
         </div>
@@ -1215,11 +1276,13 @@ export async function showMilestoneStoryModal(milestone = 0) {
         </div>
       </div>
 
+      ${!story.hideFullTranslation && translationParagraphs.length > 0 ? `
       <div class="milestone-story-footer">
         <button class="story-btn-translation btn-orange" id="story-toggle-translation-btn">
           🎬 <span id="story-translation-btn-label">${strings.btnShowTranslation}</span>
         </button>
       </div>
+      ` : ''}
     </div>
   `;
 
@@ -1378,7 +1441,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
   });
 
   // Full translation toggle button with Rewarded Video Ad trigger
-  toggleTranslationBtn.addEventListener('click', async () => {
+  if (toggleTranslationBtn) toggleTranslationBtn.addEventListener('click', async () => {
     if (!isTranslationUnlocked) {
       toggleTranslationBtn.disabled = true;
       toggleTranslationBtn.style.opacity = '0.7';
