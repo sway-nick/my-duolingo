@@ -172,12 +172,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         </button>
       </div>
 
-      <!-- Milestone Story Reader Button -->
+      <!-- Milestone Story Reader Buttons -->
       <div class="settings-card" id="milestone-story-section" style="padding: 14px 12px; text-align: center;">
-        <button type="button" class="theme-option-btn active" id="btn-open-milestone-story" style="width: 100%; justify-content: center; gap: 8px; font-weight: 700; border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%); color: #fde68a;">
-          <span>📖</span>
-          <span>${storyStrings.settingsBtn}</span>
-        </button>
+        <div style="font-size: 13px; font-weight: 700; color: #fcd34d; margin-bottom: 8px;">
+          📖 ${storyStrings.storiesFolderTitle || 'Рассказы по рубежам'}
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="theme-option-btn active" id="btn-open-milestone-story-100" style="flex: 1; justify-content: center; gap: 6px; font-weight: 700; border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%); color: #fde68a;">
+            <span>📖 100 слов</span>
+          </button>
+          <button type="button" class="theme-option-btn active" id="btn-open-milestone-story-200" style="flex: 1; justify-content: center; gap: 6px; font-weight: 700; border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%); color: #fde68a;">
+            <span>📖 200 слов</span>
+          </button>
+        </div>
       </div>
 
       ${(typeof localStorage !== 'undefined' && localStorage.getItem('myduo_debug_mode') === 'true') ? `
@@ -600,7 +607,23 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind button for Milestone Story Reader
+  // Bind buttons for Milestone Story Reader (100 and 200 words)
+  const btnStory100 = container.querySelector('#btn-open-milestone-story-100');
+  if (btnStory100) {
+    btnStory100.addEventListener('click', (e) => {
+      e.preventDefault();
+      showMilestoneStoryModal(100);
+    });
+  }
+
+  const btnStory200 = container.querySelector('#btn-open-milestone-story-200');
+  if (btnStory200) {
+    btnStory200.addEventListener('click', (e) => {
+      e.preventDefault();
+      showMilestoneStoryModal(200);
+    });
+  }
+
   const btnStory = container.querySelector('#btn-open-milestone-story');
   if (btnStory) {
     btnStory.addEventListener('click', (e) => {

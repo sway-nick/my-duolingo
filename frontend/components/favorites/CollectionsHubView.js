@@ -13,6 +13,7 @@ import {
   resetBuiltinCollection,
 } from '../../services/collectionsService.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
+import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
 export function renderCollectionsHubView(allWords = [], containerSelector = '#app-content', options = {}) {
@@ -174,6 +175,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     return count === 1 ? `${count} word` : `${count} words`;
   };
 
+  const lang = getInterfaceLanguage();
+  const storyStrings = getStoryStrings(lang);
+
   container.innerHTML = `
     <div class="collections-hub-page">
       <!-- 2-Column Grid -->
@@ -189,7 +193,18 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
-        <!-- 2. Add New Custom List Tile -->
+        <!-- 2. Milestone Stories Folder Tile -->
+        <div class="col-tile col-tile-stories" data-col-id="milestone_stories" role="button" tabindex="0">
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">📖</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Рассказы')}</h3>
+            <span class="col-tile-count">${escapeHtml(storyStrings.storiesFolderDesc || 'Тексты по рубежам')}</span>
+          </div>
+        </div>
+
+        <!-- 3. Add New Custom List Tile -->
         <div class="col-tile col-tile-add" id="btn-add-new-collection" role="button" tabindex="0">
           <div class="col-tile-icon-box">
             <span class="col-tile-icon col-add-plus">➕</span>

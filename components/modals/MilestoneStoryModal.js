@@ -3,19 +3,40 @@ import { getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js
 import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getWords, addWeeklyXP } from '../../services/api.js?v=386.0';
 
-const STORY_DATA_200 = {
-  milestone: 200,
-  title: 'A Holiday on Campus',
-  paragraphs: [
-    'At the beginning of a grand holiday, a professor and his uncle celebrate a birthday on campus.',
-    'The rain was slow, and soft yellow clouds surround the tall bridge by the coast.',
-    'They organize a comfortable lunch with tea, sugar, fruit, and chicken on a brown plate.',
-    'A colleague knocks on the desk and repeats a rare joke.',
-    'A gentleman in a golden shirt and a brown hat selects a package from his pocket.',
-    'In the package is an album of unique beauty and rare flowers.',
-    'They dance, mix tea with sugar, and smell the meal with luck and confidence.',
-    'It was a proper holiday for the united community.'
-  ]
+export const MILESTONE_STORIES = {
+  100: {
+    milestone: 100,
+    titleKey: 'storyTitle100',
+    translationKey: 'storyFull100',
+    badgeKey: 'badge100',
+    title: 'Lunch by the Coast',
+    paragraphs: [
+      'A professor and his colleague organize lunch by the coast.',
+      'The rain was slow, and soft clouds surround the tall bridge.',
+      'They select tea, sugar, and chicken on a comfortable plate.',
+      'Their boss is busy in the studio, but he prefers an email.',
+      'A colleague repeats a joke, and the host confirms the lunch.',
+      'The moon was grand on the ocean, and soft flowers surround the pool.',
+      'It was a unique beginning for the united community.'
+    ]
+  },
+  200: {
+    milestone: 200,
+    titleKey: 'storyTitle200',
+    translationKey: 'storyFull200',
+    badgeKey: 'badge200',
+    title: 'A Holiday on Campus',
+    paragraphs: [
+      'A professor and his uncle celebrate a birthday on campus.',
+      'The rain was slow, and soft yellow clouds surround the tall bridge by the coast.',
+      'They organize a comfortable lunch with tea, sugar, fruit, and chicken on a brown plate.',
+      'A colleague knocks on the desk and repeats a joke.',
+      'A gentleman in a golden shirt and a brown hat selects a package from his pocket.',
+      'In the package is an album of unique beauty and rare flowers.',
+      'They dance, mix tea with sugar, and celebrate with confidence.',
+      'It was a proper holiday for the united community.'
+    ]
+  }
 };
 
 // Fallback grammatical words translations across languages for smooth tap experience
@@ -131,19 +152,6 @@ function resolveWord(rawWord, dictMap, lang) {
     };
   }
 
-  // Fallback function words
-  if (FUNCTION_WORDS_MAP[clean]) {
-    const trans = FUNCTION_WORDS_MAP[clean][lang] || FUNCTION_WORDS_MAP[clean]['en'] || FUNCTION_WORDS_MAP[clean]['ru'];
-    return {
-      id: null,
-      word: clean,
-      transcription: '',
-      translation: trans,
-      isFromDict: false,
-      rawObj: null
-    };
-  }
-
   return {
     id: null,
     word: clean,
@@ -154,53 +162,35 @@ function resolveWord(rawWord, dictMap, lang) {
   };
 }
 
-/**
- * Show a floating quick toast inside or over the story modal
- */
-function showStoryToast(msg) {
-  let toast = document.querySelector('#story-reader-toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'story-reader-toast';
-    toast.style.cssText = `
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(15, 23, 42, 0.95);
-      color: #f8fafc;
-      padding: 12px 20px;
-      border-radius: 9999px;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-      border: 1px solid rgba(251, 191, 36, 0.4);
-      z-index: 1000002;
-      opacity: 0;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    `;
-    document.body.appendChild(toast);
-  }
-  toast.textContent = msg;
-  toast.style.opacity = '1';
-  toast.style.transform = 'translateX(-50%) translateY(0)';
-  clearTimeout(toast._timer);
-  toast._timer = setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(-50%) translateY(20px)';
-  }, 2400);
+function showStoryToast(message) {
+  const existing = document.querySelector('.story-milestone-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'story-milestone-toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 250);
+  }, 2200);
 }
 
 /**
- * Render and display the Milestone Story Modal
+ * Show the Milestone Story Reader modal
+ * @param {number} milestone - 100 or 200 (or custom)
  */
 export async function showMilestoneStoryModal(milestone = 200) {
   const existing = document.querySelector('#milestone-story-modal-overlay');
   if (existing) existing.remove();
+
+  const currentMilestone = Number(milestone) || 200;
+  const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[200];
 
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
@@ -221,8 +211,7 @@ export async function showMilestoneStoryModal(milestone = 200) {
   overlay.className = 'milestone-story-modal-overlay';
 
   // Build story HTML tokens
-  const paragraphsHtml = STORY_DATA_200.paragraphs.map((p, pIdx) => {
-    // Split paragraph preserving words and punctuation
+  const paragraphsHtml = storyData.paragraphs.map((p, pIdx) => {
     const tokens = p.match(/[a-zA-Z'-]+|[^a-zA-Z'-]+/g) || [p];
     const tokensHtml = tokens.map((token, tIdx) => {
       const isWord = /[a-zA-Z]/.test(token);
@@ -233,6 +222,15 @@ export async function showMilestoneStoryModal(milestone = 200) {
     }).join('');
     return `<p class="story-paragraph">${tokensHtml}</p>`;
   }).join('');
+
+  // Full translation HTML
+  const translatedParas = strings[storyData.translationKey] || [];
+  const translationParagraphsHtml = Array.isArray(translatedParas)
+    ? translatedParas.map(tp => `<p class="story-translation-para">${tp}</p>`).join('')
+    : `<p class="story-translation-para">${translatedParas}</p>`;
+
+  const badgeText = strings[storyData.badgeKey] || strings.badge || `🏆 ${currentMilestone} слов`;
+  const storyTitleText = strings[storyData.titleKey] || storyData.title;
 
   overlay.innerHTML = `
     <style>
@@ -274,13 +272,12 @@ export async function showMilestoneStoryModal(milestone = 200) {
         box-sizing: border-box;
       }
       .milestone-story-header {
-        padding: 20px 20px 14px;
+        padding: 18px 20px 14px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
         gap: 12px;
-        position: relative;
       }
       .milestone-story-badge {
         display: inline-flex;
@@ -295,19 +292,13 @@ export async function showMilestoneStoryModal(milestone = 200) {
         letter-spacing: 0.5px;
         padding: 4px 10px;
         border-radius: 9999px;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
       }
       .milestone-story-title {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 800;
         color: #f8fafc;
         line-height: 1.25;
-        margin: 0 0 4px;
-      }
-      .milestone-story-sub {
-        font-size: 12.5px;
-        color: #94a3b8;
-        line-height: 1.4;
         margin: 0;
       }
       .milestone-story-close {
@@ -333,33 +324,21 @@ export async function showMilestoneStoryModal(milestone = 200) {
         padding: 16px 20px;
         overflow-y: auto;
         flex: 1;
+        position: relative;
         -webkit-overflow-scrolling: touch;
-      }
-      .story-hint-banner {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(56, 189, 248, 0.1);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-        border-radius: 12px;
-        padding: 8px 12px;
-        margin-bottom: 16px;
-        font-size: 12px;
-        color: #7dd3fc;
-        line-height: 1.35;
       }
       .story-title-banner {
         font-size: 16px;
         font-weight: 800;
         color: #fbbf24;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
         text-align: center;
         font-family: inherit;
         letter-spacing: -0.2px;
       }
       .story-text-container {
         font-size: 16px;
-        line-height: 1.8;
+        line-height: 1.85;
         color: #e2e8f0;
         user-select: text;
         -webkit-user-select: text;
@@ -388,39 +367,47 @@ export async function showMilestoneStoryModal(milestone = 200) {
         border-bottom-color: transparent;
       }
       .story-word-token.clicked-token {
-        background: rgba(245, 158, 11, 0.15);
+        background: rgba(245, 158, 11, 0.25);
         color: #fde68a;
-        border-bottom: 1.5px solid rgba(245, 158, 11, 0.8);
+        border-bottom: 1.5px solid #f59e0b;
       }
-      .story-popover-card {
+
+      /* Floating Popover Tooltip positioned directly above the word */
+      .story-floating-popover {
+        position: absolute;
+        z-index: 1000;
         display: none;
         background: #0f172a;
         border: 1.5px solid #f59e0b;
         border-radius: 14px;
         padding: 10px 14px;
-        box-shadow: 0 12px 28px rgba(0,0,0,0.6);
-        margin: 10px 0 16px;
-        animation: storyPopoverPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75), 0 0 15px rgba(245, 158, 11, 0.25);
+        min-width: 170px;
+        max-width: 290px;
+        box-sizing: border-box;
+        pointer-events: auto;
+        animation: storyPopoverFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
       }
-      @keyframes storyPopoverPop {
-        from { opacity: 0; transform: translateY(-6px); }
-        to { opacity: 1; transform: translateY(0); }
+      @keyframes storyPopoverFade {
+        from { opacity: 0; transform: scale(0.96); }
+        to { opacity: 1; transform: scale(1); }
       }
       .story-popover-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 8px;
         margin-bottom: 4px;
       }
       .story-popover-word {
-        font-size: 17px;
+        font-size: 16.5px;
         font-weight: 800;
         color: #f8fafc;
       }
       .story-popover-transcription {
-        font-size: 13px;
+        font-size: 12.5px;
         color: #94a3b8;
-        margin-left: 8px;
+        margin-left: 6px;
         font-family: monospace;
       }
       .story-popover-actions {
@@ -438,26 +425,80 @@ export async function showMilestoneStoryModal(milestone = 200) {
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        color: #f8fafc;
-        font-size: 15px;
+        color: #94a3b8;
+        font-size: 14px;
         transition: all 0.15s ease;
       }
       .popover-btn:hover {
         background: rgba(255, 255, 255, 0.18);
+        color: #f8fafc;
       }
       .popover-btn.is-favorited {
-        color: #ef4444;
         border-color: rgba(239, 68, 68, 0.4);
         background: rgba(239, 68, 68, 0.15);
       }
       .story-popover-translation {
-        font-size: 14.5px;
+        font-size: 14px;
         color: #38bdf8;
         font-weight: 600;
         line-height: 1.35;
       }
+      .story-popover-arrow {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #0f172a;
+        border-right: 1.5px solid #f59e0b;
+        border-bottom: 1.5px solid #f59e0b;
+        transform: rotate(45deg);
+        bottom: -6px;
+        left: 50%;
+        margin-left: -5px;
+      }
+      .story-floating-popover.place-below .story-popover-arrow {
+        top: -6px;
+        bottom: auto;
+        border-right: none;
+        border-bottom: none;
+        border-left: 1.5px solid #f59e0b;
+        border-top: 1.5px solid #f59e0b;
+      }
+
+      /* Full translation block */
+      .story-full-translation-card {
+        margin-top: 18px;
+        padding: 14px 16px;
+        background: rgba(56, 189, 248, 0.08);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-left: 4px solid #38bdf8;
+        border-radius: 14px;
+        animation: storyTranslationFade 0.2s ease-out;
+      }
+      @keyframes storyTranslationFade {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .story-full-translation-header {
+        font-size: 13px;
+        font-weight: 700;
+        color: #7dd3fc;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+      }
+      .story-translation-para {
+        font-size: 14.5px;
+        line-height: 1.6;
+        color: #cbd5e1;
+        margin: 0 0 10px;
+      }
+      .story-translation-para:last-child {
+        margin-bottom: 0;
+      }
+
+      /* Footer */
       .milestone-story-footer {
-        padding: 14px 20px 20px;
+        padding: 14px 20px 18px;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         flex-direction: column;
@@ -470,7 +511,7 @@ export async function showMilestoneStoryModal(milestone = 200) {
         color: #ffffff;
         font-size: 15px;
         font-weight: 700;
-        padding: 14px 20px;
+        padding: 13px 20px;
         border-radius: 14px;
         cursor: pointer;
         box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
@@ -485,8 +526,8 @@ export async function showMilestoneStoryModal(milestone = 200) {
       }
       .story-btn-secondary {
         background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #cbd5e1;
         font-size: 14px;
         font-weight: 600;
         padding: 11px 16px;
@@ -499,36 +540,48 @@ export async function showMilestoneStoryModal(milestone = 200) {
         transition: all 0.15s ease;
       }
       .story-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.06);
-        color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f8fafc;
       }
-      .review-count-badge {
-        font-size: 12px;
-        color: #f59e0b;
-        text-align: center;
-        margin: 0;
+
+      .story-milestone-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #1e293b;
+        color: #f8fafc;
+        border: 1px solid #10b981;
+        border-radius: 12px;
+        padding: 10px 18px;
+        font-size: 13.5px;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        z-index: 100001;
+        opacity: 0;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+      }
+      .story-milestone-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
       }
     </style>
 
     <div class="milestone-story-card" role="dialog" aria-modal="true">
       <div class="milestone-story-header">
         <div>
-          <div class="milestone-story-badge">${strings.badge}</div>
+          <div class="milestone-story-badge">${badgeText}</div>
           <h2 class="milestone-story-title">${strings.modalTitle}</h2>
-          <p class="milestone-story-sub">${strings.modalSub}</p>
         </div>
         <button class="milestone-story-close" id="story-close-btn" aria-label="Close">&times;</button>
       </div>
 
-      <div class="milestone-story-body">
-        <div class="story-hint-banner">
-          <span>💡</span>
-          <span>${strings.tapHint}</span>
-        </div>
+      <div class="milestone-story-body" id="story-modal-body">
+        <div class="story-title-banner">📖 ${storyTitleText}</div>
 
-        <div class="story-title-banner">📖 ${strings.storyTitle}</div>
-
-        <div class="story-popover-card" id="story-popover">
+        <!-- Floating Popover over the tapped word -->
+        <div class="story-floating-popover" id="story-popover">
           <div class="story-popover-top">
             <div style="display: flex; align-items: baseline;">
               <span class="story-popover-word" id="popover-word-text"></span>
@@ -536,24 +589,34 @@ export async function showMilestoneStoryModal(milestone = 200) {
             </div>
             <div class="story-popover-actions">
               <button class="popover-btn" id="popover-audio-btn" title="Speak" aria-label="Audio">🔊</button>
-              <button class="popover-btn" id="popover-heart-btn" title="Add to favorites" aria-label="Favorite">❤️</button>
+              <button class="popover-btn" id="popover-heart-btn" title="Add to favorites" aria-label="Favorite">
+                <svg id="popover-heart-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </button>
             </div>
           </div>
           <div class="story-popover-translation" id="popover-translation-text"></div>
+          <div class="story-popover-arrow" id="popover-arrow"></div>
         </div>
 
         <div class="story-text-container" id="story-tokens-wrapper">
           ${paragraphsHtml}
         </div>
+
+        <!-- Full translation block toggled by button -->
+        <div class="story-full-translation-card" id="story-full-translation" style="display: none;">
+          <div class="story-full-translation-header">🌐 ${strings.translationTitle || 'Полный перевод'}</div>
+          ${translationParagraphsHtml}
+        </div>
       </div>
 
       <div class="milestone-story-footer">
-        <div class="review-count-badge" id="story-review-badge" style="display: none;"></div>
+        <button class="story-btn-secondary" id="story-toggle-translation-btn">
+          🌐 <span id="story-translation-btn-label">${strings.btnShowTranslation}</span>
+        </button>
         <button class="story-btn-primary" id="story-understood-btn">
           ${strings.btnUnderstood}
-        </button>
-        <button class="story-btn-secondary" id="story-difficult-btn">
-          ${strings.btnDifficult}
         </button>
       </div>
     </div>
@@ -564,28 +627,79 @@ export async function showMilestoneStoryModal(milestone = 200) {
   // Element handles
   const closeBtn = overlay.querySelector('#story-close-btn');
   const understoodBtn = overlay.querySelector('#story-understood-btn');
-  const difficultBtn = overlay.querySelector('#story-difficult-btn');
+  const toggleTranslationBtn = overlay.querySelector('#story-toggle-translation-btn');
+  const translationBtnLabel = overlay.querySelector('#story-translation-btn-label');
+  const translationBlock = overlay.querySelector('#story-full-translation');
+  const storyBody = overlay.querySelector('#story-modal-body');
   const popover = overlay.querySelector('#story-popover');
   const popoverWord = overlay.querySelector('#popover-word-text');
   const popoverTrans = overlay.querySelector('#popover-transcription-text');
   const popoverMeaning = overlay.querySelector('#popover-translation-text');
   const popoverAudio = overlay.querySelector('#popover-audio-btn');
   const popoverHeart = overlay.querySelector('#popover-heart-btn');
-  const reviewBadge = overlay.querySelector('#story-review-badge');
+  const popoverHeartIcon = overlay.querySelector('#popover-heart-icon');
 
   let activeTokenEl = null;
   let activeResolvedWord = null;
+  let isTranslationShown = false;
 
-  function updateReviewBadge() {
-    if (clickedWords.size > 0) {
-      reviewBadge.style.display = 'block';
-      reviewBadge.textContent = `${strings.wordsToReview}${clickedWords.size}`;
+  function updateHeartVisual(isFav) {
+    if (isFav) {
+      popoverHeart.classList.add('is-favorited');
+      popoverHeartIcon.setAttribute('fill', '#ef4444');
+      popoverHeartIcon.setAttribute('stroke', '#ef4444');
     } else {
-      reviewBadge.style.display = 'none';
+      popoverHeart.classList.remove('is-favorited');
+      popoverHeartIcon.setAttribute('fill', 'none');
+      popoverHeartIcon.setAttribute('stroke', '#94a3b8');
     }
   }
 
-  // Token click binding
+  function positionPopoverAboveToken(tokenEl) {
+    const bodyRect = storyBody.getBoundingClientRect();
+    const tokenRect = tokenEl.getBoundingClientRect();
+
+    popover.style.display = 'block';
+    popover.classList.remove('place-below');
+
+    const popWidth = popover.offsetWidth || 200;
+    const popHeight = popover.offsetHeight || 65;
+
+    // Token coordinates relative to storyBody taking scroll into account
+    const tokenTop = tokenRect.top - bodyRect.top + storyBody.scrollTop;
+    const tokenLeft = tokenRect.left - bodyRect.left;
+    const tokenCenter = tokenLeft + (tokenRect.width / 2);
+
+    let leftPos = tokenCenter - (popWidth / 2);
+    const minLeft = 10;
+    const maxLeft = bodyRect.width - popWidth - 10;
+    leftPos = Math.max(minLeft, Math.min(maxLeft, leftPos));
+
+    let topPos = tokenTop - popHeight - 8;
+    let placeBelow = false;
+
+    // If near the top, show below the word
+    if (topPos < storyBody.scrollTop + 4) {
+      topPos = tokenTop + tokenRect.height + 8;
+      placeBelow = true;
+    }
+
+    if (placeBelow) {
+      popover.classList.add('place-below');
+    }
+
+    popover.style.top = `${topPos}px`;
+    popover.style.left = `${leftPos}px`;
+
+    // Position arrow directly over the token center
+    const arrowEl = popover.querySelector('#popover-arrow');
+    if (arrowEl) {
+      const arrowLeft = Math.max(14, Math.min(popWidth - 14, tokenCenter - leftPos));
+      arrowEl.style.left = `${arrowLeft}px`;
+    }
+  }
+
+  // Token click binding: clicking toggles highlight
   overlay.querySelectorAll('.story-word-token').forEach(tokenEl => {
     tokenEl.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -593,30 +707,40 @@ export async function showMilestoneStoryModal(milestone = 200) {
       const resolved = resolveWord(rawText, dictMap, lang);
       if (!resolved) return;
 
-      // Unset previous active token
+      // Toggle clicked highlight state
+      if (tokenEl.classList.contains('clicked-token')) {
+        tokenEl.classList.remove('clicked-token');
+        clickedWords.delete(resolved.word);
+      } else {
+        tokenEl.classList.add('clicked-token');
+        clickedWords.add(resolved.word);
+      }
+
+      // Active token state
       if (activeTokenEl) activeTokenEl.classList.remove('active-token');
       tokenEl.classList.add('active-token');
-      tokenEl.classList.add('clicked-token');
       activeTokenEl = tokenEl;
       activeResolvedWord = resolved;
 
-      // Add to tracking set
-      clickedWords.add(resolved.word);
-      updateReviewBadge();
-
-      // Update Popover
+      // Update Popover content
       popoverWord.textContent = resolved.word;
       popoverTrans.textContent = resolved.transcription ? `/${resolved.transcription.replace(/^\/|\/$/g, '')}/` : '';
       popoverMeaning.textContent = resolved.translation || resolved.word;
 
-      // Check favorite status
-      const isFav = resolved.id ? favSet.has(String(resolved.id)) : false;
-      popoverHeart.classList.toggle('is-favorited', isFav);
-      popoverHeart.style.display = resolved.id ? 'flex' : 'none';
+      // Favorite button: check actual user favorites
+      if (resolved.id) {
+        popoverHeart.style.display = 'flex';
+        const isFav = favSet.has(String(resolved.id));
+        updateHeartVisual(isFav);
+      } else {
+        // Grammatical function words without dictionary IDs
+        popoverHeart.style.display = 'none';
+      }
 
-      popover.style.display = 'block';
+      // Position popover floating over the word
+      positionPopoverAboveToken(tokenEl);
 
-      // Automatically speak the word softly on first tap
+      // Speak word audio
       speakWord(resolved.word, resolved.id);
     });
   });
@@ -640,15 +764,31 @@ export async function showMilestoneStoryModal(milestone = 200) {
       await toggleFavoriteApi(wId, newFav);
       if (newFav) {
         favSet.add(wId);
-        popoverHeart.classList.add('is-favorited');
+        updateHeartVisual(true);
         showStoryToast(strings.favAdded);
       } else {
         favSet.delete(wId);
-        popoverHeart.classList.remove('is-favorited');
+        updateHeartVisual(false);
         showStoryToast(strings.favRemoved);
       }
     } catch (err) {
       console.warn('Favorite toggle error:', err);
+    }
+  });
+
+  // Full translation toggle button
+  toggleTranslationBtn.addEventListener('click', () => {
+    isTranslationShown = !isTranslationShown;
+    if (isTranslationShown) {
+      translationBlock.style.display = 'block';
+      translationBtnLabel.textContent = strings.btnHideTranslation;
+      // Scroll to translation smoothly
+      setTimeout(() => {
+        translationBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    } else {
+      translationBlock.style.display = 'none';
+      translationBtnLabel.textContent = strings.btnShowTranslation;
     }
   });
 
@@ -675,10 +815,10 @@ export async function showMilestoneStoryModal(milestone = 200) {
     if (e.target === overlay) closeModal();
   });
 
-  // Button 1: Understood (+25 XP)
+  // Button: Understood (+25 XP)
   understoodBtn.addEventListener('click', () => {
-    localStorage.setItem(`myduo_milestone_story_${milestone}_completed`, 'true');
-    localStorage.setItem(`myduo_milestone_story_${milestone}_shown`, 'true');
+    localStorage.setItem(`myduo_milestone_story_${currentMilestone}_completed`, 'true');
+    localStorage.setItem(`myduo_milestone_story_${currentMilestone}_shown`, 'true');
 
     // Award +25 XP
     try {
@@ -689,32 +829,12 @@ export async function showMilestoneStoryModal(milestone = 200) {
     closeModal();
   });
 
-  // Button 2: Difficult (auto-save clicked words to favorites if any)
-  difficultBtn.addEventListener('click', async () => {
-    localStorage.setItem(`myduo_milestone_story_${milestone}_shown`, 'true');
-
-    if (clickedWords.size > 0) {
-      let savedCount = 0;
-      for (const wordText of clickedWords) {
-        const entry = dictMap.get(wordText);
-        if (entry && entry.id) {
-          try {
-            await toggleFavoriteApi(entry.id, true);
-            savedCount++;
-          } catch (e) {}
-        }
-      }
-      if (savedCount > 0) {
-        showStoryToast(`❤️ ${savedCount} ${strings.wordsToReview.toLowerCase()}`);
-      }
+  // Android hardware Back Button handler
+  const handleAndroidBack = (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+      window.removeEventListener('keydown', handleAndroidBack);
     }
-    closeModal();
-  });
-
-  return overlay;
-}
-
-// Export for global invocation (console, settings, or automatic round trigger)
-if (typeof window !== 'undefined') {
-  window.showMilestoneStoryModal = showMilestoneStoryModal;
+  };
+  window.addEventListener('keydown', handleAndroidBack);
 }

@@ -219,6 +219,7 @@
       import { renderSettingsView } from './components/settings/SettingsView.js?v=386.0';
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=386.0';
       import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=386.0';
+      import { renderStoriesView } from './components/favorites/StoriesView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
       import { renderLeaderboardView, renderMondayMemeTop4Cut } from './components/leaderboard/LeaderboardView.js?v=386.0';
@@ -2370,15 +2371,19 @@
               currentWordIndex += 1;
             }
 
-            // Check Milestone Story (200 words) trigger
+            // Check Milestone Story trigger (100 and 200 words)
             try {
               const mastered = getMasteredWordsCount();
-              const shown = localStorage.getItem('myduo_milestone_story_200_shown');
-              if (mastered >= 200 && !shown) {
-                localStorage.setItem('myduo_milestone_story_200_shown', 'true');
-                setTimeout(() => {
-                  showMilestoneStoryModal(200);
-                }, 800);
+              const milestones = [100, 200];
+              for (const m of milestones) {
+                const shown = localStorage.getItem(`myduo_milestone_story_${m}_shown`);
+                if (mastered >= m && !shown) {
+                  localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
+                  setTimeout(() => {
+                    showMilestoneStoryModal(m);
+                  }, 800);
+                  break;
+                }
               }
             } catch (_) {}
 
@@ -2513,6 +2518,19 @@
           };
 
           const openCardsHandler = (colId) => {
+            if (colId === 'milestone_stories') {
+              window._isInsideCollectionCards = true;
+              window._currentOpenCollectionId = colId;
+              renderStoriesView('#app-content', {
+                onBack: () => {
+                  window._isInsideCollectionCards = false;
+                  window._currentOpenCollectionId = null;
+                  renderTab('favorites');
+                }
+              });
+              return;
+            }
+
             const words = getCollectionWords(colId, allWords);
             const title = getCollectionTitle(colId);
             window._isInsideCollectionCards = true;
