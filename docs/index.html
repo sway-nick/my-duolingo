@@ -2371,10 +2371,10 @@
               currentWordIndex += 1;
             }
 
-            // Check Milestone Story trigger (100 and 200 words)
+            // Check Milestone Story trigger (100 to 800 words)
             try {
               const mastered = getMasteredWordsCount();
-              const milestones = [100, 200];
+              const milestones = [100, 200, 300, 400, 500, 600, 700, 800];
               for (const m of milestones) {
                 const shown = localStorage.getItem(`myduo_milestone_story_${m}_shown`);
                 if (mastered >= m && !shown) {

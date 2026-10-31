@@ -2,6 +2,7 @@ import { getStoryStrings } from './storyTranslations.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=386.0';
 import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getWords, addWeeklyXP } from '../../services/api.js?v=386.0';
+import { AdService } from '../../services/adService.js?v=386.0';
 
 export const MILESTONE_STORIES = {
   100: {
@@ -36,6 +37,95 @@ export const MILESTONE_STORIES = {
       'They dance, mix tea with sugar, and celebrate with confidence.',
       'It was a proper holiday for the united community.'
     ]
+  },
+  300: {
+    milestone: 300,
+    titleKey: 'storyTitle300',
+    translationKey: 'storyFull300',
+    badgeKey: 'badge300',
+    title: 'A Relaxing Breakfast',
+    paragraphs: [
+      'An engineer and his girlfriend organize breakfast by the gate.',
+      'They wash round dishes and pour milk into a brown pot.',
+      'They select soft bread, cheese, yellow fruit, and cake.',
+      'They taste the meal and relax on the soft grass by the sand.',
+      'A designer in a brown cap repeats an awesome joke with confidence.',
+      'It was a comfortable holiday for their united community.'
+    ]
+  },
+  400: {
+    milestone: 400,
+    titleKey: 'storyTitle400',
+    translationKey: 'storyFull400',
+    badgeKey: 'badge400',
+    title: 'A Friendly Chef on Vacation',
+    paragraphs: [
+      'A friendly chef and his aunt organize a vacation by the port.',
+      'They select a brown jacket and a pink coat in the rain.',
+      'A hungry tourist borrows a mobile phone.',
+      'The chef selects round potatoes, butter, tomatoes, and juice.',
+      'They pack a package with bread, cheese, and cake.',
+      'A singer repeats a poem at the concert by the historic tower.',
+      'They celebrate their friendship with joy and fortune.'
+    ]
+  },
+  500: {
+    milestone: 500,
+    titleKey: 'storyTitle500',
+    translationKey: 'storyFull500',
+    badgeKey: 'badge500',
+    title: 'A Creative Celebration',
+    paragraphs: [
+      'A calm photographer and a poet organize a celebration.',
+      'They bake bread in the oven and select soup.',
+      'A wooden shelf displays orange juice, salad, and beef.',
+      'They mix lemon, onion, and chicken in a round pan.',
+      'A poet repeats a poem with a wooden guitar.',
+      'The studio shines with happiness and magic.'
+    ]
+  },
+  600: {
+    milestone: 600,
+    titleKey: 'storyTitle600',
+    translationKey: 'storyFull600',
+    badgeKey: 'badge600',
+    title: 'A Sunny Weekend at the Cafe',
+    paragraphs: [
+      'On a sunny weekend, a dancer and a runner hurry to a cafe with a bicycle.',
+      'A clever runner selects comfortable jeans and a purple t-shirt.',
+      'They select bananas, cake, and tea by the soft curtain.',
+      'A dancer tunes the piano in the cafe.',
+      'They scan a laptop screen, chat with colleagues, and celebrate.'
+    ]
+  },
+  700: {
+    milestone: 700,
+    titleKey: 'storyTitle700',
+    translationKey: 'storyFull700',
+    badgeKey: 'badge700',
+    title: 'Morning Coffee in the Garden',
+    paragraphs: [
+      'In the morning, a father and his sister select coffee in the garden.',
+      'A friendly neighbor supplies fruit from the public market.',
+      'A doctor contacts the family, and they chat together with respect.',
+      'They finish writing an analysis for a hospital client.',
+      'It was a calm morning for the united family.'
+    ]
+  },
+  800: {
+    milestone: 800,
+    titleKey: 'storyTitle800',
+    translationKey: 'storyFull800',
+    badgeKey: 'badge800',
+    title: 'A Walk with the Dog',
+    paragraphs: [
+      'In the quiet morning, a dad and his kid walk with their dog.',
+      'The dog walks under the tall tree and enjoys a fun game.',
+      'They talk together and feed the dog by a store.',
+      'They rest on a rock in the sun.',
+      'At the store, they select a cup of tea at a table.',
+      'It was an easy walk with joy and fun for the family.'
+    ]
   }
 };
 
@@ -50,6 +140,7 @@ const FUNCTION_WORDS_MAP = {
   'was': { ru: 'был, была, было (быть)', en: 'was (to be)', es: 'era, fue, estaba (ser/estar)', de: 'war (sein)', fr: 'était (être)', uk: 'був, була, було (бути)', cs: 'byl/byla/bylo (být)' },
   'it': { ru: 'оно, это', en: 'it', es: 'eso, ello', de: 'es', fr: 'il/elle, cela', uk: 'воно, це', cs: 'to, ono' },
   'his': { ru: 'его', en: 'his', es: 'su, de él', de: 'sein', fr: 'son/sa/ses (à lui)', uk: 'його', cs: 'jeho' },
+  'her': { ru: 'её', en: 'her', es: 'su, de ella', de: 'ihr', fr: 'son/sa/ses (à elle)', uk: 'її', cs: 'její' },
   'they': { ru: 'они', en: 'they', es: 'ellos/ellas', de: 'sie', fr: 'ils/elles', uk: 'вони', cs: 'oni' },
   'their': { ru: 'их', en: 'their', es: 'su, sus (de ellos)', de: 'ihr', fr: 'leur/leurs', uk: 'їхній, їх', cs: 'jejich' },
   'and': { ru: 'и, а', en: 'and', es: 'y, e', de: 'und', fr: 'et', uk: 'і, й, та', cs: 'a, i' },
@@ -59,7 +150,8 @@ const FUNCTION_WORDS_MAP = {
   'by': { ru: 'у, около, возле', en: 'by, near', es: 'junto a, por', de: 'bei, neben', fr: 'près de, par', uk: 'біля, поруч', cs: 'u, vedle' },
   'of': { ru: 'из, о, (родительный падеж)', en: 'of', es: 'de', de: 'von', fr: 'de', uk: 'з, про, (родовий відмінок)', cs: 'z, ze, o' },
   'for': { ru: 'для, ради', en: 'for', es: 'para, por', de: 'für', fr: 'pour', uk: 'для, заради', cs: 'pro' },
-  'with': { ru: 'с, вместе с', en: 'with', es: 'con', de: 'mit', fr: 'avec', uk: 'з, разом з', cs: 's, se' }
+  'with': { ru: 'с, вместе с', en: 'with', es: 'con', de: 'mit', fr: 'avec', uk: 'з, разом з', cs: 's, se' },
+  'under': { ru: 'под', en: 'under', es: 'debajo de, bajo', de: 'unter', fr: 'sous', uk: 'під', cs: 'pod' }
 };
 
 let _dictionaryCache = null;
@@ -183,14 +275,14 @@ function showStoryToast(message) {
 
 /**
  * Show the Milestone Story Reader modal
- * @param {number} milestone - 100 or 200 (or custom)
+ * @param {number} milestone - 100 to 800
  */
-export async function showMilestoneStoryModal(milestone = 200) {
+export async function showMilestoneStoryModal(milestone = 100) {
   const existing = document.querySelector('#milestone-story-modal-overlay');
   if (existing) existing.remove();
 
-  const currentMilestone = Number(milestone) || 200;
-  const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[200];
+  const currentMilestone = Number(milestone) || 100;
+  const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[100];
 
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
@@ -613,7 +705,7 @@ export async function showMilestoneStoryModal(milestone = 200) {
 
       <div class="milestone-story-footer">
         <button class="story-btn-secondary" id="story-toggle-translation-btn">
-          🌐 <span id="story-translation-btn-label">${strings.btnShowTranslation}</span>
+          🎬 <span id="story-translation-btn-label">${strings.btnShowTranslation}</span>
         </button>
         <button class="story-btn-primary" id="story-understood-btn">
           ${strings.btnUnderstood}
@@ -642,6 +734,7 @@ export async function showMilestoneStoryModal(milestone = 200) {
   let activeTokenEl = null;
   let activeResolvedWord = null;
   let isTranslationShown = false;
+  let isTranslationUnlocked = false;
 
   function updateHeartVisual(isFav) {
     if (isFav) {
@@ -776,8 +869,30 @@ export async function showMilestoneStoryModal(milestone = 200) {
     }
   });
 
-  // Full translation toggle button
-  toggleTranslationBtn.addEventListener('click', () => {
+  // Full translation toggle button with Rewarded Video Ad trigger
+  toggleTranslationBtn.addEventListener('click', async () => {
+    if (!isTranslationUnlocked) {
+      toggleTranslationBtn.disabled = true;
+      toggleTranslationBtn.style.opacity = '0.7';
+      try {
+        const adResult = await AdService.showStoryTranslationRewardedAd(storyTitleText);
+        if (adResult && (adResult.success || adResult.rewardEarned)) {
+          isTranslationUnlocked = true;
+        } else {
+          showStoryToast('📺 Посмотрите видео до конца, чтобы открыть перевод');
+          toggleTranslationBtn.disabled = false;
+          toggleTranslationBtn.style.opacity = '1';
+          return;
+        }
+      } catch (adErr) {
+        console.warn('Ad playback fallback:', adErr);
+        isTranslationUnlocked = true;
+      } finally {
+        toggleTranslationBtn.disabled = false;
+        toggleTranslationBtn.style.opacity = '1';
+      }
+    }
+
     isTranslationShown = !isTranslationShown;
     if (isTranslationShown) {
       translationBlock.style.display = 'block';

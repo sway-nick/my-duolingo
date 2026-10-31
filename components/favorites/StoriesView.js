@@ -20,36 +20,57 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
 
-  const milestones = [100, 200];
+  const allMilestones = [100, 200, 300, 400, 500, 600, 700, 800];
+  const unlockedMilestones = allMilestones.filter(m => masteredWords >= m);
 
-  const storyCardsHtml = milestones.map(m => {
-    const story = MILESTONE_STORIES[m];
-    const isUnlocked = masteredWords >= m;
-    const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
-    const title = strings[story.titleKey] || story.title;
-    const preview = story.paragraphs[0] || '';
-    const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
-
-    const statusBadge = isUnlocked
-      ? `<span class="story-card-status status-unlocked">${isCompleted ? '✓ ' : ''}${escapeHtml(strings.statusUnlocked || 'Открыто')}</span>`
-      : `<span class="story-card-status status-locked">🔒 ${masteredWords}/${m}</span>`;
-
-    return `
-      <div class="story-list-card ${isUnlocked ? 'is-unlocked' : 'is-locked'}" data-milestone="${m}" role="button" tabindex="0">
-        <div class="story-card-top">
-          <div class="story-card-badge">${escapeHtml(badge)}</div>
-          ${statusBadge}
-        </div>
-        <h3 class="story-card-title">${escapeHtml(title)}</h3>
-        <p class="story-card-preview">“${escapeHtml(preview)}”</p>
-        <div class="story-card-action">
-          <button type="button" class="story-card-btn" data-milestone="${m}">
-            📖 <span>${escapeHtml(strings.readStoryBtn || 'Читать')}</span>
-          </button>
+  let storyCardsHtml = '';
+  if (unlockedMilestones.length === 0) {
+    storyCardsHtml = `
+      <div class="stories-empty-card" style="text-align: center; padding: 40px 20px; background: rgba(15, 23, 42, 0.6); border: 1.5px dashed rgba(245, 158, 11, 0.3); border-radius: 20px; margin-top: 10px;">
+        <div style="font-size: 44px; margin-bottom: 12px;">📖</div>
+        <h3 style="font-size: 18px; font-weight: 800; color: #f8fafc; margin: 0 0 8px;">
+          ${escapeHtml(strings.storiesEmptyTitle || 'Здесь появятся ваши рассказы')}
+        </h3>
+        <p style="font-size: 14px; color: #94a3b8; max-width: 380px; margin: 0 auto 16px; line-height: 1.5;">
+          ${escapeHtml(strings.storiesEmptyDesc || 'Первый рассказ откроется, когда вы выучите 100 слов.')}
+        </p>
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 700; color: #fde68a;">
+          🎯 Прогресс: ${masteredWords} / 100 слов
         </div>
       </div>
     `;
-  }).join('');
+  } else {
+    storyCardsHtml = unlockedMilestones.map(m => {
+      const story = MILESTONE_STORIES[m];
+      if (!story) return '';
+      const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
+      const title = strings[story.titleKey] || story.title;
+      const preview = story.paragraphs[0] || '';
+      const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
+
+      const statusBadge = `
+        <span class="story-card-status status-unlocked">
+          ${isCompleted ? '✓ ' : ''}${escapeHtml(strings.statusUnlocked || 'Открыто')}
+        </span>
+      `;
+
+      return `
+        <div class="story-list-card is-unlocked" data-milestone="${m}" role="button" tabindex="0">
+          <div class="story-card-top">
+            <div class="story-card-badge">${escapeHtml(badge)}</div>
+            ${statusBadge}
+          </div>
+          <h3 class="story-card-title">${escapeHtml(title)}</h3>
+          <p class="story-card-preview">“${escapeHtml(preview)}”</p>
+          <div class="story-card-action">
+            <button type="button" class="story-card-btn" data-milestone="${m}">
+              📖 <span>${escapeHtml(strings.readStoryBtn || 'Читать')}</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
   container.innerHTML = `
     <style>
@@ -111,19 +132,16 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       }
       .story-list-card {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        border: 1.5px solid rgba(255, 255, 255, 0.1);
+        border: 1.5px solid rgba(245, 158, 11, 0.3);
         border-radius: 18px;
         padding: 16px 18px;
         transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
         cursor: pointer;
       }
       .story-list-card:hover {
-        border-color: rgba(251, 191, 36, 0.4);
+        border-color: rgba(251, 191, 36, 0.6);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         transform: translateY(-2px);
-      }
-      .story-list-card.is-unlocked {
-        border-color: rgba(245, 158, 11, 0.3);
       }
       .story-card-top {
         display: flex;
@@ -150,11 +168,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         background: rgba(16, 185, 129, 0.15);
         color: #34d399;
         border: 1px solid rgba(16, 185, 129, 0.3);
-      }
-      .status-locked {
-        background: rgba(148, 163, 184, 0.15);
-        color: #94a3b8;
-        border: 1px solid rgba(148, 163, 184, 0.25);
       }
       .story-card-title {
         font-size: 17px;
@@ -200,9 +213,9 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
 
       <div class="stories-view-header">
         <h2 class="stories-view-title">📖 <span>${escapeHtml(strings.storiesFolderTitle || 'Рассказы')}</span></h2>
-        <p class="stories-view-subtitle">${escapeHtml(strings.storiesFolderDesc || 'Тексты по рубежам выученных слов')}</p>
+        <p class="stories-view-subtitle">${escapeHtml(strings.storiesFolderDesc || 'Тексты по выученным словам')}</p>
         <div class="stories-view-progress">
-          <span>🎯 Выучено слов: <strong>${masteredWords}</strong></span>
+          <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно рассказов: <strong>${unlockedMilestones.length}</strong>)</span>
         </div>
       </div>
 

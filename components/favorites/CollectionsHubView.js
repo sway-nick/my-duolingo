@@ -14,6 +14,7 @@ import {
 } from '../../services/collectionsService.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
 import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
+import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
 export function renderCollectionsHubView(allWords = [], containerSelector = '#app-content', options = {}) {
@@ -177,6 +178,14 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
 
   const lang = getInterfaceLanguage();
   const storyStrings = getStoryStrings(lang);
+  let unlockedStoriesCount = 0;
+  try {
+    const masteredWords = getMasteredWordsCount();
+    unlockedStoriesCount = [100, 200, 300, 400, 500, 600, 700, 800].filter(m => masteredWords >= m).length;
+  } catch (_) {}
+  const storiesCountLabel = unlockedStoriesCount > 0
+    ? `${unlockedStoriesCount} ${storyStrings.storiesFolderTitle || 'рассказов'}`
+    : '0 / 100 слов';
 
   container.innerHTML = `
     <div class="collections-hub-page">
@@ -200,7 +209,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
           <div class="col-tile-content">
             <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Рассказы')}</h3>
-            <span class="col-tile-count">${escapeHtml(storyStrings.storiesFolderDesc || 'Тексты по рубежам')}</span>
+            <span class="col-tile-count">${escapeHtml(storiesCountLabel)}</span>
           </div>
         </div>
 
