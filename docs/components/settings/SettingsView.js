@@ -9,6 +9,8 @@ import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=386.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
+import { showMilestoneStoryModal } from '../modals/MilestoneStoryModal.js?v=386.0';
+import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
 
 if (typeof window !== 'undefined') {
   window.openWidgetConfigBottomSheet = openWidgetConfigBottomSheet;
@@ -49,6 +51,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   const displaySub = isLoggedIn
     ? (hasSyncIssue ? (t('lead_login_to_save') || 'Требуется войти заново для синхронизации') : (user.email || ''))
     : (t('settings_login_sub') || 'Log in to sync progress');
+
+  const activeStoryLang = getInterfaceLanguage();
+  const storyStrings = getStoryStrings(activeStoryLang);
 
   container.innerHTML = `
     <div class="settings-page" style="position: relative;">
@@ -164,6 +169,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       <div class="settings-card" id="widget-promo-section" style="padding: 16px 12px;">
         <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center;">
           ${t('settings_configure_widget') || 'Настроить виджет'}
+        </button>
+      </div>
+
+      <!-- Milestone Story Reader Button -->
+      <div class="settings-card" id="milestone-story-section" style="padding: 14px 12px; text-align: center;">
+        <button type="button" class="theme-option-btn active" id="btn-open-milestone-story" style="width: 100%; justify-content: center; gap: 8px; font-weight: 700; border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%); color: #fde68a;">
+          <span>📖</span>
+          <span>${storyStrings.settingsBtn}</span>
         </button>
       </div>
 
@@ -584,6 +597,15 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     btnPinWidget.addEventListener('click', (e) => {
       e.preventDefault();
       openWidgetConfigBottomSheet();
+    });
+  }
+
+  // Bind button for Milestone Story Reader
+  const btnStory = container.querySelector('#btn-open-milestone-story');
+  if (btnStory) {
+    btnStory.addEventListener('click', (e) => {
+      e.preventDefault();
+      showMilestoneStoryModal(200);
     });
   }
 

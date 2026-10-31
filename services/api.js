@@ -2446,6 +2446,19 @@ function isWordMastered(prog) {
   );
 }
 
+function getMasteredWordsCount() {
+  try {
+    const localProg = getUserProgress();
+    let count = 0;
+    for (const prog of Object.values(localProg || {})) {
+      if (isWordMastered(prog)) count++;
+    }
+    return count;
+  } catch (e) {
+    return 0;
+  }
+}
+
 function isWordLearning(prog) {
   if (!prog || isWordMastered(prog)) return false;
   return Boolean(prog.seenInCards === true);
@@ -4048,6 +4061,7 @@ const ApiService = {
   getUserProgress,
   getUserFavorites,
   isWordMastered,
+  getMasteredWordsCount,
   isWordLearning,
   getWordStage,
   getQueueForCards,
@@ -4100,6 +4114,7 @@ export {
   getUserProgress,
   getUserFavorites,
   isWordMastered,
+  getMasteredWordsCount,
   isWordLearning,
   getWordStage,
   getQueueForCards,

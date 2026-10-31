@@ -208,7 +208,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted } from './services/api.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted, getMasteredWordsCount } from './services/api.js?v=386.0';
       import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=386.0';
@@ -224,6 +224,7 @@
       import { renderLeaderboardView, renderMondayMemeTop4Cut } from './components/leaderboard/LeaderboardView.js?v=386.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
+      import { showMilestoneStoryModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
       import { AdService } from './services/adService.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
@@ -2368,6 +2369,19 @@
             } else {
               currentWordIndex += 1;
             }
+
+            // Check Milestone Story (200 words) trigger
+            try {
+              const mastered = getMasteredWordsCount();
+              const shown = localStorage.getItem('myduo_milestone_story_200_shown');
+              if (mastered >= 200 && !shown) {
+                localStorage.setItem('myduo_milestone_story_200_shown', 'true');
+                setTimeout(() => {
+                  showMilestoneStoryModal(200);
+                }, 800);
+              }
+            } catch (_) {}
+
             renderTrainingTab();
           },
         });
@@ -2913,6 +2927,7 @@
 
             // Priority 2: Close any open modal dialogs or overlays
             const modalSelectors = [
+              '#milestone-story-modal-overlay',
               '#privacy-policy-modal-overlay',
               '#doc-scanner-modal-overlay',
               '#add-word-modal-overlay',
@@ -2955,7 +2970,7 @@
             if (rootModals.length > 0) {
               const topModal = rootModals[rootModals.length - 1];
               const closeBtn = topModal.querySelector(
-                '#privacy-back-btn, #privacy-close-btn, ' +
+                '#story-close-btn, #privacy-back-btn, #privacy-close-btn, ' +
                 '#scanner-close-btn, .scanner-close-btn, ' +
                 '#add-word-close-btn, #add-word-cancel-btn, ' +
                 '#word-notes-close-btn, .word-notes-modal-close, ' +

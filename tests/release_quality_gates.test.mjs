@@ -180,6 +180,15 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
     apiCode.includes('scanDocumentImage') && apiCode.includes('stored.toLowerCase().split(/[-_]/)[0]'),
     'scanDocumentImage must dynamically resolve OCR target language from interface language'
   );
+
+  // 5. Verify Milestone Story translations support all 36 locales
+  const { STORY_TRANSLATIONS } = await import('../frontend/components/modals/storyTranslations.js');
+  assert.equal(Object.keys(STORY_TRANSLATIONS).length, 36, 'STORY_TRANSLATIONS must have exactly 36 locales');
+  for (const locale of REQUIRED_33_LOCALES) {
+    assert.ok(STORY_TRANSLATIONS[locale], `STORY_TRANSLATIONS must contain locale '${locale}'`);
+    assert.ok(STORY_TRANSLATIONS[locale].modalTitle, `STORY_TRANSLATIONS.${locale} must have modalTitle`);
+    assert.ok(STORY_TRANSLATIONS[locale].btnUnderstood, `STORY_TRANSLATIONS.${locale} must have btnUnderstood`);
+  }
 });
 
 test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrity', () => {
