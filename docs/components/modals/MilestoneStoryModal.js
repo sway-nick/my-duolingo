@@ -1178,10 +1178,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
     <div class="milestone-story-card" role="dialog" aria-modal="true">
       <div class="milestone-story-header">
-        <div>
-          <div class="milestone-story-badge">${badgeText}</div>
-          <h2 class="milestone-story-title">📖 ${storyTitleText}</h2>
-        </div>
+        <h2 class="milestone-story-title">📖 ${storyTitleText}</h2>
         <button class="milestone-story-close" id="story-close-btn" aria-label="Close">&times;</button>
       </div>
 

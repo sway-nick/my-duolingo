@@ -578,19 +578,38 @@
         }
       }
 
-      function checkMilestoneStoryTrigger(delay = 800) {
+      function initMilestoneBaseline() {
         try {
           const mastered = getMasteredWordsCount();
-          const milestones = Array.from({ length: 37 }, (_, i) => i * 50).filter(m => m > 0);
-          for (const m of milestones) {
-            const shown = localStorage.getItem(`myduo_milestone_story_${m}_shown`);
-            if (mastered >= m && !shown) {
+          const currentPassedMilestone = Math.floor(mastered / 50) * 50;
+          const rawSaved = localStorage.getItem('myduo_milestone_highest_unlocked');
+          const savedHighest = rawSaved !== null ? Number(rawSaved) : -1;
+
+          // If first time or saved highest is less than current mastered progress,
+          // sync up to current progress so we NEVER backfill/catch-up past milestones.
+          if (savedHighest < currentPassedMilestone) {
+            localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
+            for (let m = 50; m <= currentPassedMilestone; m += 50) {
               localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
-              setTimeout(() => {
-                showMilestoneStoryModal(m);
-              }, delay);
-              break;
             }
+          }
+        } catch (_) {}
+      }
+
+      function checkMilestoneStoryTrigger(delay = 800) {
+        try {
+          initMilestoneBaseline();
+          const mastered = getMasteredWordsCount();
+          const currentPassedMilestone = Math.floor(mastered / 50) * 50;
+          const savedHighest = Number(localStorage.getItem('myduo_milestone_highest_unlocked')) || 0;
+
+          // Trigger ONLY if the user just crossed a brand new milestone > savedHighest
+          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1800) {
+            localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
+            localStorage.setItem(`myduo_milestone_story_${currentPassedMilestone}_shown`, 'true');
+            setTimeout(() => {
+              showMilestoneStoryModal(currentPassedMilestone);
+            }, delay);
           }
         } catch (_) {}
       }
@@ -2930,7 +2949,7 @@
                 syncFavoritesToAndroidWidget();
               } catch (e) {}
               try {
-                checkMilestoneStoryTrigger(1200);
+                initMilestoneBaseline();
               } catch (e) {}
             });
           });
