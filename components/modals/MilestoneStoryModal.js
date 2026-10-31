@@ -1,7 +1,7 @@
 import { getStoryStrings } from './storyTranslations.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=386.0';
 import { speakWord } from '../../services/audioService.js?v=386.0';
-import { toggleFavoriteApi, getUserFavorites, getWords, addWeeklyXP } from '../../services/api.js?v=386.0';
+import { toggleFavoriteApi, getUserFavorites, getWords } from '../../services/api.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
 
 export const MILESTONE_STORIES = {
@@ -1180,13 +1180,12 @@ export async function showMilestoneStoryModal(milestone = 0) {
       <div class="milestone-story-header">
         <div>
           <div class="milestone-story-badge">${badgeText}</div>
-          <h2 class="milestone-story-title">${strings.modalTitle}</h2>
+          <h2 class="milestone-story-title">📖 ${storyTitleText}</h2>
         </div>
         <button class="milestone-story-close" id="story-close-btn" aria-label="Close">&times;</button>
       </div>
 
       <div class="milestone-story-body" id="story-modal-body">
-        <div class="story-title-banner">📖 ${storyTitleText}</div>
 
         <!-- Floating Popover over the tapped word -->
         <div class="story-floating-popover" id="story-popover">
@@ -1444,14 +1443,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
   // Mark story as viewed & completed on modal open
   localStorage.setItem(`myduo_milestone_story_${currentMilestone}_shown`, 'true');
-  const wasAlreadyCompleted = localStorage.getItem(`myduo_milestone_story_${currentMilestone}_completed`) === 'true';
-  if (!wasAlreadyCompleted) {
-    localStorage.setItem(`myduo_milestone_story_${currentMilestone}_completed`, 'true');
-    try {
-      addWeeklyXP(25);
-      showStoryToast(strings.xpAwarded);
-    } catch (e) {}
-  }
+  localStorage.setItem(`myduo_milestone_story_${currentMilestone}_completed`, 'true');
 
   // Android hardware Back Button handler
   const handleAndroidBack = (e) => {

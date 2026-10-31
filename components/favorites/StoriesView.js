@@ -29,7 +29,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     const isUnlocked = masteredWords >= m;
     const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
     const title = strings[story.titleKey] || story.title;
-    const preview = story.paragraphs[0] || '';
     const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
 
     if (isUnlocked) {
@@ -46,7 +45,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
             ${statusBadge}
           </div>
           <h3 class="story-card-title">${escapeHtml(title)}</h3>
-          <p class="story-card-preview">“${escapeHtml(preview)}”</p>
           <div class="story-card-action">
             <button type="button" class="story-card-btn" data-milestone="${m}">
               📖 <span>${escapeHtml(strings.readStoryBtn || 'Читать')}</span>
@@ -55,18 +53,12 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         </div>
       `;
     } else {
-      const lockText = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', m);
       return `
         <div class="story-list-card is-locked" data-milestone="${m}" data-locked="true" tabindex="-1">
           <div class="story-card-top">
             <div class="story-card-badge story-badge-locked">${escapeHtml(badge)}</div>
-            <span class="story-card-status status-locked">🔒 ${escapeHtml(lockText)}</span>
           </div>
           <h3 class="story-card-title story-title-locked">${escapeHtml(title)}</h3>
-          <p class="story-card-preview">“${escapeHtml(preview)}”</p>
-          <div class="story-card-action">
-            <span class="story-card-locked-hint">🔒 ${escapeHtml(lockText)}</span>
-          </div>
         </div>
       `;
     }
@@ -242,7 +234,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
 
       <div class="stories-view-header">
         <h2 class="stories-view-title">📖 <span>${escapeHtml(strings.storiesFolderTitle || 'Тексты')}</span></h2>
-        <p class="stories-view-subtitle">${escapeHtml(strings.storiesFolderDesc || 'Тексты по выученным словам')}</p>
         <div class="stories-view-progress">
           <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно текстов: <strong>${unlockedMilestones.length}</strong> / ${allMilestones.length})</span>
         </div>
