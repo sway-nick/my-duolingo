@@ -241,10 +241,10 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       </button>
 
       <div class="stories-view-header">
-        <h2 class="stories-view-title">💬 <span>${escapeHtml(strings.storiesFolderTitle || 'Диалоги')}</span></h2>
-        <p class="stories-view-subtitle">${escapeHtml(strings.storiesFolderDesc || 'Диалоги по выученным словам')}</p>
+        <h2 class="stories-view-title">📖 <span>${escapeHtml(strings.storiesFolderTitle || 'Тексты')}</span></h2>
+        <p class="stories-view-subtitle">${escapeHtml(strings.storiesFolderDesc || 'Тексты по выученным словам')}</p>
         <div class="stories-view-progress">
-          <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно диалогов: <strong>${unlockedMilestones.length}</strong> / ${allMilestones.length})</span>
+          <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно текстов: <strong>${unlockedMilestones.length}</strong> / ${allMilestones.length})</span>
         </div>
       </div>
 

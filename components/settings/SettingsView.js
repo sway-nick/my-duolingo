@@ -175,7 +175,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       <!-- Milestone Story Reader Buttons -->
       <div class="settings-card" id="milestone-story-section" style="padding: 14px 12px; text-align: center;">
         <div style="font-size: 13px; font-weight: 700; color: #fcd34d; margin-bottom: 8px;">
-          💬 ${storyStrings.storiesFolderTitle || 'Диалоги'}
+          📖 ${storyStrings.storiesFolderTitle || 'Тексты'}
         </div>
         <div style="display: flex; gap: 8px;">
           <button type="button" class="theme-option-btn active" id="btn-open-milestone-story-100" style="flex: 1; justify-content: center; gap: 6px; font-weight: 700; border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%); color: #fde68a;">

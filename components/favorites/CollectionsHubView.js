@@ -212,13 +212,13 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
-        <!-- 3. Milestone Dialogues Folder Tile (Below, Row 2) -->
+        <!-- 3. Milestone Texts Folder Tile (Below, Row 2) -->
         <div class="col-tile col-tile-stories" data-col-id="milestone_stories" role="button" tabindex="0">
           <div class="col-tile-icon-box">
-            <span class="col-tile-icon">💬</span>
+            <span class="col-tile-icon">📖</span>
           </div>
           <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Диалоги')}</h3>
+            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Тексты')}</h3>
             <span class="col-tile-count">${escapeHtml(storiesCountLabel)}</span>
           </div>
         </div>
