@@ -1,8 +1,8 @@
 # Project Directives & Coding Standards for English Breakfast
 
-> **CRITICAL RULE #1: 35 LOCALES (EXACTLY 35)**
-> English Breakfast officially supports **EXACTLY 35 LOCALES** (31 core + `bn` Bengali + `fa` Persian/Farsi with RTL + `zh` Simplified Chinese + `ur` Urdu with RTL; Maltese `mt` and Irish `ga` permanently removed).
-> Whenever localizing any new feature, button, dialog, ad modal, or widget text, it MUST be translated for ALL 35 LOCALES without exception.
+> **CRITICAL RULE #1: 36 LOCALES (EXACTLY 36)**
+> English Breakfast officially supports **EXACTLY 36 LOCALES** (31 core + `bn` Bengali + `fa` Persian/Farsi with RTL + `zh` Simplified Chinese + `ur` Urdu with RTL + `kk` Kazakh; Maltese `mt` and Irish `ga` permanently removed).
+> Whenever localizing any new feature, button, dialog, ad modal, or widget text, it MUST be translated for ALL 36 LOCALES without exception.
 
 > **CRITICAL RULE #2: STRICT PROHIBITION OF AUTONOMOUS APK / AAB BUILDS**
 > **NEVER build an APK (`EnglishBreakfast.apk`) or AAB (`EnglishBreakfast.aab`) unless the USER EXPLICITLY ASKS FOR IT.**
@@ -11,7 +11,7 @@
 
 ---
 
-### The 35 Supported Locales
+### The 36 Supported Locales
 1. `ru` - Russian
 2. `uk` - Ukrainian
 3. `en` - English (US / UK)
@@ -47,6 +47,7 @@
 33. `ko` - Korean
 34. `ja` - Japanese
 35. `zh` - Chinese Simplified (*双倍经验*)
+36. `kk` - Kazakh (*XP екі еселеу*)
 
 ---
 

@@ -202,7 +202,7 @@ test('8d. AdService Training Early Exit Interstitial: 3-minute cooldown and unli
   assert.equal(res4, true, 'Third show after another 3 minutes succeeds (unlimited daily frequency)');
 });
 
-test('8e. AdService Bonus XP Rewarded Ad: All 35 locales translated (including pt-BR, es-MX, hi)', async () => {
+test('8e. AdService Bonus XP Rewarded Ad: All 36 locales translated (including pt-BR, es-MX, hi)', async () => {
   assert.equal(typeof AdService.showDoubleXpRewardedAd, 'function', 'showDoubleXpRewardedAd must be exposed');
   assert.equal(typeof AdService.showBonusXpRewardedAd, 'function', 'showBonusXpRewardedAd must be exposed');
   assert.equal(typeof AdService.getI18nText, 'function', 'getI18nText must be exposed');

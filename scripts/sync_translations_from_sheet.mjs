@@ -73,7 +73,7 @@ async function run() {
     'ru', 'uk', 'de', 'es', 'fr', 'pl', 'it', 'tr',
     'pt', 'ro', 'bg', 'cs', 'sk', 'hu', 'el', 'sl',
     'et', 'lt', 'da', 'fi', 'sv', 'hr', 'lv', 'zh',
-    'hi', 'bn', 'ar', 'fa', 'ur', 'id', 'vi', 'th', 'ko', 'ja'
+    'hi', 'bn', 'ar', 'fa', 'ur', 'id', 'vi', 'th', 'ko', 'ja', 'kk'
   ];
 
   const colIndices = {};

@@ -103,7 +103,7 @@ test('Gate 2: Gold Card Widget HyperOS / MIUI and cross-platform broadcast safet
   );
 });
 
-test('Gate 3: 35 Languages Dictionary and Widget Translation completeness', async () => {
+test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', async () => {
   // 1. Verify words.json has translations for all 33 supported languages
   const wordsJsonPath = path.join(ROOT_DIR, 'frontend/assets/data/words.json');
   assert.ok(fs.existsSync(wordsJsonPath), 'frontend/assets/data/words.json must exist');
@@ -259,4 +259,38 @@ test('Gate 5: Swipe Gestures and Dual Drawer Architecture (Burger Right & Leader
   const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
   const lbMatches = i18nCode.match(/leaderboard:\s*["']/g) || [];
   assert.ok(lbMatches.length >= 35, `leaderboard translation key must be present for all locales (found ${lbMatches.length})`);
+});
+
+test('Gate 6: Google Analytics & Firebase Production Configuration Integrity', () => {
+  // 1. Verify production google-services.json has genuine App ID (not dummy placeholder)
+  const gsPath = path.join(ROOT_DIR, 'android/app/google-services.json');
+  assert.ok(fs.existsSync(gsPath), 'android/app/google-services.json must exist');
+  const gsJson = JSON.parse(fs.readFileSync(gsPath, 'utf-8'));
+  const client = gsJson.client?.[0];
+  const appId = client?.client_info?.mobilesdk_app_id;
+  assert.strictEqual(
+    appId,
+    '1:249517100642:android:8b7f946341a2dbc4b30b3b',
+    'google-services.json must contain official production mobilesdk_app_id'
+  );
+
+  // 2. Verify Android native bridge in MainActivity
+  const mainActivityPath = path.join(ROOT_DIR, 'android/app/src/main/java/com/englishbreakfast/app/MainActivity.java');
+  assert.ok(fs.existsSync(mainActivityPath), 'MainActivity.java must exist');
+  const mainActivityCode = fs.readFileSync(mainActivityPath, 'utf-8');
+  assert.ok(
+    mainActivityCode.includes('AndroidAnalyticsBridge') && mainActivityCode.includes('FirebaseAnalytics'),
+    'MainActivity must expose AndroidAnalyticsBridge with FirebaseAnalytics'
+  );
+
+  // 3. Verify frontend analyticsService dispatches to AndroidAnalyticsBridge
+  const analyticsServicePath = path.join(ROOT_DIR, 'frontend/services/analyticsService.js');
+  assert.ok(fs.existsSync(analyticsServicePath), 'analyticsService.js must exist');
+  const analyticsServiceCode = fs.readFileSync(analyticsServicePath, 'utf-8');
+  assert.ok(
+    analyticsServiceCode.includes('window.AndroidAnalyticsBridge') &&
+      analyticsServiceCode.includes('AndroidAnalyticsBridge.logEvent') &&
+      analyticsServiceCode.includes('AndroidAnalyticsBridge.trackScreen'),
+    'analyticsService.js must bridge events to native AndroidAnalyticsBridge'
+  );
 });

@@ -7,12 +7,52 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:249517100642:android:5a7b6c8d9e0f1a2b3c4d5e",
+        "mobilesdk_app_id": "1:249517100642:android:8b7f946341a2dbc4b30b3b",
         "android_client_info": {
           "package_name": "com.englishbreakfast.app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "249517100642-2c87772erimfvqsvf3j0oedfc8dn2hmi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishbreakfast.app",
+            "certificate_hash": "a8cc3700413f104ad705c5fbc5cc9d9cd6dc8ac7"
+          }
+        },
+        {
+          "client_id": "249517100642-6k20jga6vahj52ddade2jguu0po2rgo9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishbreakfast.app",
+            "certificate_hash": "5ba6634960e0d829ba09f9c9ef11a289d79ee179"
+          }
+        },
+        {
+          "client_id": "249517100642-ku5hc4hifh9kbp5jsnsnscg9amh3eam0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishbreakfast.app",
+            "certificate_hash": "dc3eef54c155b8b6fda177cf99509184493d2aea"
+          }
+        },
+        {
+          "client_id": "249517100642-lqa84lmsco5a0pkbiqnvb2h25jp6o5m0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishbreakfast.app",
+            "certificate_hash": "7fcb3b883c1a8f53653153da5429f299a37a3f0e"
+          }
+        },
+        {
+          "client_id": "249517100642-vlvomm9amcstuo09ubmu4j51t6jl8lja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishbreakfast.app",
+            "certificate_hash": "5ae6e3f9ae7582b1aef98caf9d7235e01cbf1955"
+          }
+        },
         {
           "client_id": "249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com",
           "client_type": 3
@@ -20,14 +60,14 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc"
+          "current_key": "AIzaSyD6N6pP4RmW9V-6ls4gn3hY47NmFLeQcFs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "249517100642-ma0f00l78ku4r4n5jghnt9q8tmhga6sf.apps.googleusercontent.com",
+              "client_id": "249517100642-67jglp0nt2n92vsf1p5bkre1k4hl945v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

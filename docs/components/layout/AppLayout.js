@@ -666,6 +666,10 @@ const FEEDBACK_EMAIL_TEMPLATES = {
     subject: 'English Breakfast — بازخورد / پیشنهادات',
     body: (u, l, d) => `سلام!\n\nبازخورد یا پیشنهاد من:\n\n\n---\nکاربر: ${u}\nزبان: ${l}\nدستگاه: ${d}`,
   },
+  kk: {
+    subject: 'English Breakfast — Кері байланыс / Ұсыныстар',
+    body: (u, l, d) => `Сәлеметсіз бе!\n\nМенің пікірім / ұсынысым:\n\n\n---\nПайдаланушы: ${u}\nТіл: ${l}\nҚұрылғы: ${d}`,
+  },
 };
 
 function handleFeedbackClick() {

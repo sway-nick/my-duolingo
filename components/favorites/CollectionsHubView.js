@@ -168,6 +168,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     if (lang === 'ja') {
       return `${count}単語`;
     }
+    if (lang === 'kk') {
+      return `${count} сөз`;
+    }
     return count === 1 ? `${count} word` : `${count} words`;
   };
 

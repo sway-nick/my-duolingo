@@ -97,7 +97,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "আমার পছন্দসমূহ",
           "fa": "علاقه‌مندی‌های من",
           "zh": "我的收藏",
-          "ur": "میرے پسندیدہ"
+          "ur": "میرے پسندیدہ",
+          "kk": "Менің таңдаулыларым"
     },
   },
   {
@@ -139,7 +140,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "মাসসমূহ",
           "fa": "ماه‌ها",
           "zh": "月份",
-          "ur": "مہینے"
+          "ur": "مہینے",
+          "kk": "Айлар"
     },
     wordKeys: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
   },
@@ -182,7 +184,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "সপ্তাহের দিন",
           "fa": "روزهای هفته",
           "zh": "星期",
-          "ur": "ہفتے کے دن"
+          "ur": "ہفتے کے دن",
+          "kk": "Апта күндері"
     },
     wordKeys: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
   },
@@ -225,7 +228,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "রং",
           "fa": "رنگ‌ها",
           "zh": "颜色",
-          "ur": "رنگ"
+          "ur": "رنگ",
+          "kk": "Түстер"
     },
     wordKeys: ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown', 'grey', 'gold', 'silver'],
   },
@@ -268,7 +272,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "সংখ্যা",
           "fa": "اعداد",
           "zh": "数字",
-          "ur": "نمبرز"
+          "ur": "نمبرز",
+          "kk": "Сандар"
     },
     wordKeys: [
       'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
@@ -315,7 +320,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "শরীরের অঙ্গ",
           "fa": "اعضای بدن",
           "zh": "身体部位",
-          "ur": "جسم کے اعضاء"
+          "ur": "جسم کے اعضاء",
+          "kk": "Дене мүшелері"
     },
     wordKeys: [
       'head', 'arm', 'leg', 'hand', 'foot', 'feet', 'eye', 'ear', 'nose', 'mouth',
@@ -362,7 +368,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "খেলাধুলা",
           "fa": "ورزش",
           "zh": "体育运动",
-          "ur": "کھیل"
+          "ur": "کھیل",
+          "kk": "Спорт"
     },
     wordKeys: [
       'football', 'basketball', 'tennis', 'baseball', 'run', 'running', 'swimming', 'swim',
@@ -409,7 +416,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "খাবার",
           "fa": "غذا",
           "zh": "美食与餐饮",
-          "ur": "کھانا اور مشروبات"
+          "ur": "کھانا اور مشروبات",
+          "kk": "Тағам мен сусындар"
     },
     wordKeys: [
       'bread', 'water', 'tea', 'coffee', 'milk', 'meat', 'cheese', 'pizza', 'fish', 'sugar',
@@ -457,7 +465,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "পোশাক",
           "fa": "لباس",
           "zh": "服饰与穿搭",
-          "ur": "لباس اور کپڑے"
+          "ur": "لباس اور کپڑے",
+          "kk": "Киім-кешек"
     },
     wordKeys: [
       'shirt', 'shoes', 'shoe', 'pants', 'dress', 'coat', 'hat', 'jacket', 'socks', 'suit',
@@ -503,7 +512,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "প্রাণী",
           "fa": "حیوانات",
           "zh": "动物世界",
-          "ur": "جانور"
+          "ur": "جانور",
+          "kk": "Жануарлар"
     },
     wordKeys: [
       'dog', 'cat', 'bird', 'horse', 'fish', 'bear', 'lion', 'wolf', 'elephant', 'tiger',
@@ -550,7 +560,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "ক্রিয়াপদ",
           "fa": "افعال",
           "zh": "常用动词",
-          "ur": "اہم افعال"
+          "ur": "اہم افعال",
+          "kk": "Жиі қолданылатын етістіктер"
     },
     wordKeys: [
       'be', 'have', 'do', 'say', 'go', 'get', 'make', 'know', 'think', 'take', 'see', 'come',
@@ -604,7 +615,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "বিশেষণ",
           "fa": "صفات",
           "zh": "常用形容词",
-          "ur": "اہم صفات"
+          "ur": "اہم صفات",
+          "kk": "Сын есімдер"
     },
     wordKeys: [
       'good', 'new', 'first', 'last', 'long', 'great', 'little', 'own', 'other', 'old',
@@ -655,7 +667,8 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "bn": "Phrasal Verbs",
           "fa": "افعال عبارتی",
           "zh": "短语动词",
-          "ur": "مرکب افعال"
+          "ur": "مرکب افعال",
+          "kk": "Тіркесті етістіктер"
     },
     wordKeys: [
       'have to', 'get in', 'get on', 'turn on', 'turn off', 'wake up', 'get up', 'come in',
