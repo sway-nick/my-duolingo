@@ -4,55 +4,61 @@
 English Breakfast: Kosakata
 
 ## Short Description (max 80 chars)
-Kosakata frekuensi, catatan pribadi, pemindai PR, podcast & hafalan pasti SRS!
+Widget layar utama, kata frekuensi, pemindai PR & podcast saat layar mati!
 
 ## Full Description (max 4000 chars)
-English Breakfast adalah aplikasi cerdas harian untuk memperkaya kosakata bahasa Inggris Anda! Kuasai kata-kata yang paling sering digunakan dalam percakapan nyata, pindai tugas sekolah dengan kamera, tambahkan catatan pribadi, dan ingat semuanya secara permanen.
+English Breakfast adalah aplikasi cerdas harian untuk memperkaya kosakata bahasa Inggris Anda dengan widget interaktif di layar utama!
 
-🍳 MENGAPA ENGLISH BREAKFAST BEGITU EFEKTIF?
-Banyak kursus memaksa Anda menghafal kata-kata rumit yang jarang digunakan dalam kehidupan nyata. English Breakfast menyusun kosakata berdasarkan frekuensi penggunaan nyata (CEFR A1 hingga C2). Sejak hari pertama, Anda mempelajari kata-kata inti yang benar-benar digunakan oleh penutur asli dalam percakapan, film, dan percakapan sehari-hari.
+Lupakan hafalan kaku dan frasa yang jarang digunakan. Pelajari kata-kata berdasarkan frekuensi penggunaan nyata dalam percakapan, pindai tugas sekolah dengan kamera, baca cerita interaktif, dan kuasai kosakata secara permanen!
 
-🌟 FITUR UTAMA:
+🍳 10 KEUNGGULAN UTAMA:
 
-• 📈 BELAJAR BERDASARKAN FREKUENSI KATA NYATA:
-Lebih dari 6.600 kata dan frasa pilihan yang diurutkan berdasarkan frekuensi kemunculannya dalam bahasa Inggris modern (CEFR A1–C2). Bangun pondasi percakapan yang kuat dengan cepat sebelum beralih ke materi lanjutan.
+1. 📈 BELAJAR BERDASARKAN FREKUENSI KATA NYATA (ZIPF)
+Kosakata disusun berdasarkan frekuensi penggunaan nyata (CEFR A1–C2). 1.000 kata pertama mencakup hingga 85% bahasa Inggris lisan, film, dan percakapan harian. Hampir 7.000 kata tanpa membuang waktu.
 
-• 📝 KAMUS PRIBADI & CATATAN KHUSUS:
-Menemukan kata baru saat membaca atau belajar? Tambahkan ke kamus pribadi Anda dengan satu ketukan! Sematkan catatan konteks, petunjuk asosiasi, dan contoh kalimat Anda sendiri — catatan pribadi adalah kunci ingatan jangka panjang yang paling kuat.
+2. 📱 WIDGET INTERAKTIF LAYAR UTAMA (GOLDEN CARD)
+Pelajari kosakata baru setiap kali memegang ponsel! Pasang widget Golden Card langsung di layar utama: balik kartu dengan sekali ketuk untuk memeriksa terjemahan, dengarkan pelafalan studio, dan ganti kata tanpa membuka aplikasi.
 
-• 📷 PEMINDAI FOTO PINTAR UNTUK PR & BUKU:
-Ada tugas menghafal kata dari buku teks? Cukup ambil fotonya! Pemindai OCR pintar mendeteksi teks secara instan, mengekstrak kata-kata yang belum ada di daftar kosakata Anda, dan menambahkannya ke sesi latihan tanpa perlu mengetik manual.
+3. 📖 CERITA INTERAKTIF SETIAP 100 KATA
+Kuasai kosakata dalam konteks nyata! Setiap 100 kata yang Anda kuasai membuka cerita baru yang memotivasi, ditulis khusus hanya dari kata-kata yang telah Anda pelajari. Ketuk kata apa pun untuk melihat terjemahan instan, simpan ke Favorit, atau buka terjemahan lengkap.
 
-• ⭐ FAVORIT & JAMINAN HAFAL DENGAN SRS:
-Perlu menguasai kata-kata tertentu untuk ujian atau tes besok? Tandai sebagai Favorit! Sistem Spaced Repetition (SRS) berbasis ilmiah menyusun jadwal pengulangan otomatis untuk menjamin daya ingat 100% permanen.
+4. 🔓 TANPA BIAYA LANGGANAN MAHAL & TANPA BATASAN
+Bebas biaya langganan dan tanpa batasan jumlah "nyawa" (hati). Akses penuh ke semua kata dan mode latihan — belajar sesuai kecepatan Anda sendiri kapan saja.
 
-• 🎮 LATIH KATA FAVORIT DI SEMUA MODE LATIHAN:
-Latih kata-kata favorit Anda dengan berbagai mode interaktif sesuai gaya belajar Anda:
-  — Flashcard 3D interaktif dengan gestur swipe
-  — Kuis kilat berbatas waktu
-  — Pemahaman mendengar (Listening)
-  — Susun kalimat (Sentence Builder) & Mencocokkan kata
-  — Latihan ejaan & Kata kerja tidak beraturan (Irregular Verbs)
+5. 🧠 ARSITEK PUTARAN LATIHAN CERDAS
+Algoritma cerdas menganalisis jawaban secara real-time. Jika Anda kesulitan pada suatu kata, sistem adaptif akan menampilkannya kembali di langkah berikutnya sampai Anda benar-benar menguasainya 100%.
 
-• 🎧 MODE PODCAST DENGAN LAYAR MATI SAAT BEPERGIAN:
-Belajar saat bepergian, berkendara, berjalan santai, atau berolahraga tanpa perlu melihat layar ponsel! Pemutaran audio latar belakang berjalan mulus meski layar mati sehingga menghemat baterai: dengarkan terjemahan bahasa Indonesia, jeda untuk mengingat, lalu dengarkan pengucapan bahasa Inggris yang jernih sebanyak dua kali.
+6. 📷 PEMINDAI FOTO PINTAR UNTUK PR & BUKU
+Ada tugas menghafal kata dari buku teks atau artikel? Cukup ambil fotonya! Pemindai OCR cerdas langsung mengekstrak kata-kata baru dan menambahkannya ke latihan tanpa perlu mengetik manual.
 
-• 🎙️ PELATIH PELAFALAN & AKSEN:
-Bicaralah ke mikrofon dan dapatkan umpan balik instan untuk pengucapan Anda. Beralih mudah antara aksen Amerika (US) dan Inggris (UK) lengkap dengan fonetik IPA.
+7. 📝 KAMUS PRIBADI & CATATAN KHUSUS
+Menemukan kata baru di film atau game? Tambahkan dengan satu ketukan. Sematkan catatan pribadi, contoh kalimat, dan asosiasi ingatan untuk daya ingat jangka panjang.
 
-• 🌍 TERSEDIA DALAM 33 BAHASA:
-Antarmuka lengkap dalam bahasa Indonesia dan 32 bahasa lainnya untuk kemudahan belajar Anda.
+8. ⭐ DAFTAR FAVORIT SESUAI KEBUTUHAN
+Kelompokkan kata untuk target tertentu: ujian sekolah besok, wawancara kerja, liburan, atau persiapan ujian internasional (IELTS, TOEFL, Cambridge).
 
-• ☁️ SINKRONISASI CLOUD AMAN:
-Masuk 1 ketukan dengan akun Google. Kosakata, catatan pribadi, favorit, dan streak Anda tersimpan aman di cloud.
+9. 🎧 MODE PODCAST SAAT BEPERGIAN DENGAN LAYAR MATI
+Belajar saat bepergian, berjalan santai, atau berolahraga! Pemutaran audio latar belakang berjalan mulus saat layar ponsel mati untuk hemat baterai: dengarkan terjemahan bahasa Indonesia, jeda berpikir, dan pelafalan bahasa Inggris jernih dua kali.
 
-• 🏆 LIGA MINGGUAN & TANTANGAN STREAK:
-Bersaing dengan pengguna lain di papan peringkat mingguan, pertahankan streak belajar harian Anda, dan raih posisi teratas!
+10. 🎙️ DUA STANDAR AUDIO STUDIO: US & UK
+Pelafalan jernih standar studio direkam oleh penutur asli. Beralih mudah antara aksen Amerika dan Inggris kapan saja.
 
-🚀 SANGAT COCOK UNTUK:
-• Pelajar & Mahasiswa: Pindai tugas buku, favoritkan kata tugas, dan raih nilai tinggi.
-• Pemula (A1–A2): Menguasai kosakata paling penting tanpa merasa kewalahan.
-• Tingkat Menengah & Mahir (B1–C2): Memperluas kosakata aktif untuk persiapan IELTS, TOEFL, kerja, dan karier.
+🔄 SIKLUS HAFAL LENGKAP (4 TAHAP):
+1. Kartu Kata — pengenalan visual dan pelafalan
+2. Kuis — pemahaman mendengar cepat dan mengingat arti
+3. Pasangan Kata — kecepatan reaksi dan asosiasi
+4. Mengetik — ejaan akurat huruf demi huruf.
 
-Awali pagi Anda dengan "English Breakfast" yang bernutrisi — hanya 10-15 menit sehari untuk kelancaran berbicara!
+🌍 DUKUNGAN LENGKAP 36 BAHASA & RTL:
+Belajar bahasa Inggris dengan nyaman dalam bahasa ibu Anda — antarmuka diterjemahkan ke 36 bahasa, termasuk bahasa Arab, Persia, dan Urdu (RTL).
+
+🏆 LIGA MINGGUAN & SINKRONISASI CLOUD:
+Bersaing di liga mingguan, raih podium juara, pertahankan streak harian, dan simpan kemajuan dengan 1 ketukan akun Google.
+
+🚀 COCOK UNTUK:
+• Pelajar & Mahasiswa: Pindai tugas buku dan raih nilai tinggi.
+• Pemula (A1–A2): Bangun fondasi kosakata penting tanpa bingung.
+• Tingkat Lanjutan (B1–C2): Perluas kosakata aktif untuk karier dan ujian.
+
+Hanya 10–15 menit sehari dengan "English Breakfast" untuk kelancaran berbicara!
 Unduh English Breakfast sekarang dan mulai bicara bahasa Inggris dengan percaya diri!
