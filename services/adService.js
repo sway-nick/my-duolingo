@@ -226,18 +226,34 @@ class AdServiceImpl {
     if (!AdMob || !this.isNative() || !this.isOnline()) return false;
 
     const primaryId = this.getUnitId(unitType);
-    if (!primaryId) return false;
+    const testId = AD_CONFIG.TEST_UNITS[unitType] || AD_CONFIG.TEST_UNITS.REWARDED_SHIELD;
 
-    try {
-      await AdMob.prepareRewardVideoAd({ adId: primaryId });
-      if (unitType === 'REWARDED_SHIELD') {
-        this.isShieldAdPrepared = true;
+    if (primaryId) {
+      try {
+        await AdMob.prepareRewardVideoAd({ adId: primaryId });
+        if (unitType === 'REWARDED_SHIELD') {
+          this.isShieldAdPrepared = true;
+        }
+        return true;
+      } catch (e) {
+        console.warn(`AdMob rewarded unit ${primaryId} unavailable (no fill / region / network), trying test unit:`, e);
       }
-      return true;
-    } catch (e) {
-      console.warn(`AdMob rewarded unit ${primaryId} unavailable (no fill / region / network), skipping ad:`, e);
-      return false;
     }
+
+    if (testId && testId !== primaryId) {
+      try {
+        await AdMob.prepareRewardVideoAd({ adId: testId });
+        if (unitType === 'REWARDED_SHIELD') {
+          this.isShieldAdPrepared = true;
+        }
+        console.log(`✅ AdMob fallback to test unit ${testId} prepared`);
+        return true;
+      } catch (e) {
+        console.warn(`AdMob test unit ${testId} unavailable:`, e);
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -344,9 +360,10 @@ class AdServiceImpl {
             }, 800);
           };
 
-          const onFailed = (err) => {
-            console.warn('❌ AdMob Double XP ad failed to show:', err);
-            safeResolve({ success: false, rewardEarned: false, isOffline: false });
+          const onFailed = async (err) => {
+            console.warn('❌ AdMob Double XP ad failed to show, falling back to mock ad:', err);
+            const mockRes = await this.showWebMockRewardedAd(`⚡ ${mockAdText('bonus_xp') || mockAdText('double_xp')} (+${bonusAmount} XP)`, false);
+            safeResolve(mockRes);
           };
 
           listeners.push(await AdMob.addListener('onRewardedVideoAdReward', onReward));
@@ -366,8 +383,9 @@ class AdServiceImpl {
 
           const prepared = await this.prepareRewarded('REWARDED_SHIELD');
           if (!prepared) {
-            console.warn('⚠️ Could not prepare Double XP rewarded ad');
-            safeResolve({ success: false, rewardEarned: false, isOffline: false });
+            console.warn('⚠️ Could not prepare Double XP rewarded ad natively, falling back to mock ad');
+            const mockRes = await this.showWebMockRewardedAd(`⚡ ${mockAdText('bonus_xp') || mockAdText('double_xp')} (+${bonusAmount} XP)`, false);
+            safeResolve(mockRes);
             return;
           }
 
