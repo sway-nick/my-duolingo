@@ -5,16 +5,16 @@ import { toggleFavoriteApi, getUserFavorites, getWords, addWeeklyXP } from '../.
 
 const STORY_DATA_200 = {
   milestone: 200,
-  title: 'A Morning at the Friendly Cafe',
+  title: 'A Holiday on Campus',
   paragraphs: [
-    'One warm morning, a man and a woman walk into a small cafe in the city.',
-    'They sit at a table near the window and look out at the street.',
-    'The sun is up, and people are walking with their dogs.',
-    'A little black cat comes to the door and looks at them with big eyes.',
-    'The woman smiles and says, "Look, what a good cat!"',
-    'The man gives the cat some food, and the cat is very happy.',
-    'They drink their hot coffee, talk about life, and enjoy the day.',
-    'It is a simple time, but it brings great joy to their hearts.'
+    'At the beginning of a grand holiday, a professor and his uncle celebrate a birthday on campus.',
+    'The rain was slow, and soft yellow clouds surround the tall bridge by the coast.',
+    'They organize a comfortable lunch with tea, sugar, fruit, and chicken on a brown plate.',
+    'A colleague knocks on the desk and repeats a rare joke.',
+    'A gentleman in a golden shirt and a brown hat selects a package from his pocket.',
+    'In the package is an album of unique beauty and rare flowers.',
+    'They dance, mix tea with sugar, and smell the meal with luck and confidence.',
+    'It was a proper holiday for the united community.'
   ]
 };
 
@@ -26,7 +26,19 @@ const FUNCTION_WORDS_MAP = {
   'to': { ru: 'к, в, по направлению к', en: 'towards, to', es: 'a, hacia', de: 'zu, nach', fr: 'à, vers', uk: 'до, в, назустріч', cs: 'k, do, směrem k' },
   'is': { ru: 'есть, является (быть)', en: 'is (to be)', es: 'es, está (ser/estar)', de: 'ist (sein)', fr: 'est (être)', uk: 'є, знаходиться (бути)', cs: 'je (být)' },
   'are': { ru: 'есть, находятся (быть)', en: 'are (to be)', es: 'son, están (ser/estar)', de: 'sind (sein)', fr: 'sont (être)', uk: 'є, знаходяться (бути)', cs: 'jsou (být)' },
-  'it': { ru: 'оно, это', en: 'it', es: 'eso, ello', de: 'es', fr: 'il/elle, cela', uk: 'воно, це', cs: 'to, ono' }
+  'was': { ru: 'был, была, было (быть)', en: 'was (to be)', es: 'era, fue, estaba (ser/estar)', de: 'war (sein)', fr: 'était (être)', uk: 'був, була, було (бути)', cs: 'byl/byla/bylo (být)' },
+  'it': { ru: 'оно, это', en: 'it', es: 'eso, ello', de: 'es', fr: 'il/elle, cela', uk: 'воно, це', cs: 'to, ono' },
+  'his': { ru: 'его', en: 'his', es: 'su, de él', de: 'sein', fr: 'son/sa/ses (à lui)', uk: 'його', cs: 'jeho' },
+  'they': { ru: 'они', en: 'they', es: 'ellos/ellas', de: 'sie', fr: 'ils/elles', uk: 'вони', cs: 'oni' },
+  'their': { ru: 'их', en: 'their', es: 'su, sus (de ellos)', de: 'ihr', fr: 'leur/leurs', uk: 'їхній, їх', cs: 'jejich' },
+  'and': { ru: 'и, а', en: 'and', es: 'y, e', de: 'und', fr: 'et', uk: 'і, й, та', cs: 'a, i' },
+  'in': { ru: 'в, внутри', en: 'in, inside', es: 'en, dentro de', de: 'in', fr: 'dans, en', uk: 'в, у, всередині', cs: 'v, ve' },
+  'on': { ru: 'на, по', en: 'on, upon', es: 'sobre, en', de: 'auf, an', fr: 'sur', uk: 'на', cs: 'na' },
+  'at': { ru: 'у, при, в', en: 'at', es: 'en, junto a', de: 'bei, an', fr: 'à, chez', uk: 'біля, при, в', cs: 'u, při, v' },
+  'by': { ru: 'у, около, возле', en: 'by, near', es: 'junto a, por', de: 'bei, neben', fr: 'près de, par', uk: 'біля, поруч', cs: 'u, vedle' },
+  'of': { ru: 'из, о, (родительный падеж)', en: 'of', es: 'de', de: 'von', fr: 'de', uk: 'з, про, (родовий відмінок)', cs: 'z, ze, o' },
+  'for': { ru: 'для, ради', en: 'for', es: 'para, por', de: 'für', fr: 'pour', uk: 'для, заради', cs: 'pro' },
+  'with': { ru: 'с, вместе с', en: 'with', es: 'con', de: 'mit', fr: 'avec', uk: 'з, разом з', cs: 's, se' }
 };
 
 let _dictionaryCache = null;
@@ -63,6 +75,19 @@ function resolveWord(rawWord, dictMap, lang) {
       translation: getWordTranslation(w, lang) || w.translation || '',
       isFromDict: true,
       rawObj: w
+    };
+  }
+
+  // Fallback function words (checked before lemmatization to prevent false stems like 'his' -> 'hi')
+  if (FUNCTION_WORDS_MAP[clean]) {
+    const trans = FUNCTION_WORDS_MAP[clean][lang] || FUNCTION_WORDS_MAP[clean]['en'] || FUNCTION_WORDS_MAP[clean]['ru'];
+    return {
+      id: null,
+      word: clean,
+      transcription: '',
+      translation: trans,
+      isFromDict: false,
+      rawObj: null
     };
   }
 
