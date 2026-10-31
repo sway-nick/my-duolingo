@@ -4,50 +4,61 @@
 English Breakfast: Inglés
 
 ### Short Description (max 80 chars)
-Palabras frecuentes, notas, escáner de tareas, podcast pantalla apagada y SRS
+Widget de inicio, palabras frecuentes, escáner de tareas y podcast pantalla off
 
 ### Full Description (max 4000 chars)
-¡English Breakfast es tu entrenador diario inteligente para dominar el vocabulario en inglés! Aprende las palabras que realmente se usan en la vida real, añade tus notas personales, escanea tus tareas con la cámara y memorízalas para siempre con repetición espaciada.
+¡English Breakfast es tu entrenador diario inteligente para dominar el vocabulario en inglés con widget interactivo en tu pantalla de inicio!
 
-🍳 ¿POR QUÉ FUNCIONA ENGLISH BREAKFAST?
-Muchos cursos te enseñan palabras raras que nadie usa. English Breakfast organiza el aprendizaje por frecuencia de uso real (niveles MCER A1 a C2): empiezas por las palabras más comunes de las conversaciones cotidianas y avanzas progresivamente, entendiendo diálogos, series y películas desde el primer momento.
+Olvídate de frases rebuscadas y de la memorización aburrida. Aprende las palabras con mayor frecuencia de uso real en conversaciones vivas, escanea tareas con tu cámara, lee historias interactivas y domina el inglés de forma natural.
 
-🌟 CARACTERÍSTICAS PRINCIPALES:
+🍳 10 VENTAJAS CLAVE DE ENGLISH BREAKFAST:
 
-• 📈 APRENDIZAJE POR FRECUENCIA REAL (A1–C2):
-Más de 6.600 palabras y frases seleccionadas según su frecuencia real en el inglés moderno. Construye una base sólida para hablar con soltura antes de pasar a temas avanzados.
+1. 📈 APRENDIZAJE POR FRECUENCIA REAL (LEY DE ZIPF)
+El método se basa en la frecuencia real de uso (niveles MCER A1 a C2). Las primeras 1.000 palabras cubren hasta el 85 % del inglés hablado cotidiano, películas y chats. Casi 7.000 palabras sin perder tiempo.
 
-• 📝 DICCIONARIO PERSONAL Y NOTAS PROPIAS:
-Añade tus propias palabras en cualquier instante. Agrega trucos mnemotécnicos, ejemplos cotidianos y notas de contexto: las notas personales crean las conexiones neuronales más fuertes en la memoria.
+2. 📱 WIDGET INTERACTIVO DE PANTALLA DE INICIO (GOLDEN CARD)
+¡Aprende inglés cada vez que tomas tu teléfono! Coloca el elegante widget Tarjeta Dorada en tu pantalla de inicio: gira la tarjeta con un toque para ver la traducción, escucha pronunciación de estudio y cambia palabras sin abrir la app. Conecta colecciones temáticas o tus Favoritos.
 
-• 📷 ESCÁNER FOTOGRÁFICO DE TAREAS Y LIBROS:
-¿Tienes tarea o un artículo de lectura? ¡Hazle una foto a la página! El escáner OCR inteligente reconoce el texto, detecta las palabras desconocidas y las importa a tu lista de estudio en un solo toque, sin necesidad de teclear.
+3. 📖 HISTORIAS INTERACTIVAS CADA 100 PALABRAS
+¡Afianza el vocabulario en un contexto real y motivador! Cada 100 palabras dominadas desbloquean una historia entretenida, redactada estrictamente con palabras que ya has aprendido. Toca cualquier palabra para ver su traducción instantánea justo encima, guárdala en Favoritos o accede a la traducción completa.
 
-• ⭐ FAVORITOS Y RETENCIÓN GARANTIZADA (SRS):
-¿Tienes un examen escolar o prueba de inglés mañana? ¡Marca las palabras como Favoritas! Nuestro sistema científico de repetición espaciada (Spaced Repetition System) programa tus repasos para asegurar una retención del 100 % a largo plazo.
+4. 🔓 SIN COSTOSAS SUSCRIPCIONES NI LÍMITES
+Sin barreras de pago forzadas, sin cuotas mensuales y sin límites artificiales de vidas (corazones). Acceso total a todas las palabras y modos: aprende a tu propio ritmo cuando quieras.
 
-• 🎮 PRACTICA FAVORITOS EN TODOS LOS MODOS:
-Entrena tus palabras favoritas con la metodología que mejor se adapte a ti:
-  — Tarjetas 3D interactivas con deslizamiento
-  — Cuestionarios rápidos contra el reloj
-  — Comprensión auditiva y escucha activa
-  — Constructor de oraciones y emparejamiento de palabras
-  — Práctica de ortografía y verbos irregulares
+5. 🧠 ARQUITECTO INTELIGENTE DE CADA RONDA
+El algoritmo analiza tus respuestas en tiempo real. Si dudas en una palabra, el sistema la reintroduce de forma adaptativa en los siguientes pasos hasta que la domines al 100 %.
 
-• 🎧 PODCAST DE AUDIO CON PANTALLA APAGADA:
-Aprende mientras viajas, conduces, caminas o haces ejercicio sin mirar el móvil. El reproductor en segundo plano funciona con la pantalla apagada para ahorrar batería: escucha la traducción en español, una pausa para recordar y la pronunciación en inglés con sonido de estudio.
+6. 📷 ESCÁNER FOTOGRÁFICO DE TAREAS Y LIBROS
+¿Tienes tarea o un artículo para leer? ¡Haz una foto a la página! El escáner OCR detecta las palabras desconocidas y las importa a tu lista de estudio con un solo toque, sin necesidad de teclear.
 
-• 🌍 33 IDIOMAS Y SINCRONIZACIÓN EN LA NUBE:
-Totalmente adaptado a 33 idiomas. Inicia sesión con Google en 1 clic y mantén tus palabras, notas y racha protegidas en la nube en todos tus dispositivos.
+7. 📝 DICCIONARIO PERSONAL Y NOTAS PROPIAS
+¿Viste una palabra nueva en una serie o juego? Agrégala al instante. Añade tus propios trucos mnemotécnicos, ejemplos y notas para crear recuerdos duraderos.
 
-• 🏆 LIGAS SEMANALES Y RACHA (STREAK):
-Compite cada semana con otros estudiantes, mantén tu racha diaria y sube a lo más alto de la clasificación.
+8. ⭐ LISTAS DE FAVORITOS PARA CADA OBJETIVO
+Organiza palabras para metas específicas: para el examen de mañana, una entrevista de trabajo, un viaje o certificaciones oficiales (Cambridge, TOEFL, IELTS).
+
+9. 🎧 MODO PODCAST CON PANTALLA APAGADA
+Aprende mientras viajas, caminas o haces deporte con auriculares. La reproducción en segundo plano funciona con la pantalla apagada para ahorrar batería: escucha la traducción, una pausa para pensar y pronunciación inglesa clara dos veces.
+
+10. 🎙️ DOS ESTÁNDARES DE ESTUDIO: US Y UK
+Pronunciación de estudio grabada por nativos. Cambia entre acento americano y británico en cualquier momento.
+
+🔄 CICLO COMPLETO DE FIJACIÓN (4 PASOS):
+1. Tarjetas — reconocimiento visual y pronunciación
+2. Cuestionario — comprensión auditiva rápida y recuerdo
+3. Parejas — velocidad de reacción y asociación
+4. Escritura — ortografía exacta letra por letra.
+
+🌍 36 IDIOMAS Y SOPORTE RTL:
+Aprende cómodamente en tu idioma nativo: interfaz totalmente traducida a 36 idiomas, incluidos árabe, persa y urdu (RTL).
+
+🏆 LIGAS SEMANALES Y SINCRONIZACIÓN EN LA NUBE:
+Compite en ligas, sube al podio, mantén tu racha diaria y guarda tu progreso de forma segura con 1 clic mediante Google.
 
 🚀 PERFECTO PARA:
-• Estudiantes: escanea tareas y libros, guarda palabras clave en favoritos y saca mejores notas.
-• Principiantes (A1–A2): aprende el vocabulario prioritario sin agobios.
-• Intermedios y Avanzados (B1–C2): amplía tu léxico para el trabajo, viajes y exámenes oficiales (Cambridge, TOEFL, IELTS).
+• Estudiantes: escanea tareas y saca mejores notas.
+• Principiantes (A1–A2): construye una base sólida con las palabras esenciales.
+• Avanzados (B1–C2): amplía tu vocabulario activo para trabajo y exámenes.
 
-Comienza tu día con un nutritivo "English Breakfast": ¡10 a 15 minutos al día bastan para transformar tu nivel de inglés!
-
+¡Solo 10–15 minutos al día garantizan un gran salto en tu fluidez!
 ¡Descarga English Breakfast ahora y habla inglés con total seguridad!
