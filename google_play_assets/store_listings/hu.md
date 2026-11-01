@@ -4,7 +4,7 @@
 English Breakfast: Angol
 
 ## Short Description (max 80 chars)
-Kezdőképernyő widget, gyakori szavak, fotószkenner és lezárt képernyős podcast!
+Tanulj angol szavakat: kártyák, 7000 szó, történetek és kezdőképernyő widget!
 
 ## Full Description (max 4000 chars)
 Az English Breakfast a te intelligens napi angol szókincsfejlesztőd interaktív kezdőképernyő widgettel!
