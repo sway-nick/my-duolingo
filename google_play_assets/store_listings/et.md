@@ -1,56 +1,64 @@
 # 🇪🇪 Estonian (Eesti) — Google Play Store Listing
 
-### App Name (up to 30 chars)
-English Breakfast: Õpi sõnu
+### Rakenduse nimi (kuni 30 märki)
+English Breakfast: Inglise
 
-### Short Description (up to 80 chars)
-Sagedussõnad, märkmed, fotoskanner, taustapodcast ja tõhus mälutreening (SRS)!
+### Lühikirjeldus (kuni 80 märki)
+Õpi inglise keele sõnu: sõnakaardid, 7000 sõna, lood ja avakuva vidin!
 
-### Full Description (up to 4000 chars)
-English Breakfast on sinu nutikas igapäevane inglise keele sõnavara treener! Õpi just neid sõnu, mida päriselus kõige sagedamini kasutatakse, skanni kodutöid kaameraga, lisa isiklikke märkmeid ja jäta sõnad päriseks meelde.
+### Täielik kirjeldus (kuni 4000 märki)
+English Breakfast on sinu nutikas igapäevane inglise keele sõnavara treener koos interaktiivse avakuva vidinaga!
 
-🍳 MIKS ENGLISH BREAKFAST TÖÖTAB?
-Ära raiska aega haruldaste ja ebavajalike sõnade tuupimisele. Rakenduses English Breakfast põhineb õppimine sõnade tegelikul esinemissagedusel (CEFR A1–C2). Juba esimesest päevast omandad põhisõnavara, mida emakeelena kõnelejad kasutavad vestlustes, filmides ja taskuhäälingutes.
+Unusta haruldaste sõnade tüütu tuupimine. Õpi üle 7 000 elava kõnekeele olulisema sõna Zipfi sagedusseaduse järgi (tasemed A1 kuni C2), loe illustreeritud jutte iga 50 sõna järel, skanni teksti kaameraga ja kuula taskuhäälingut suletud ekraaniga. 100% tasuta — ilma kallite tellimuste ja elupiiranguteta!
 
-🌟 PÕHIFUNKTSIOONID:
+🍳 10 PÕHJUST, MIKS VALIDA ENGLISH BREAKFAST:
 
-• 📈 ÕPPIMINE SAGEDUSE JÄRJEKORRAS (A1–C2):
-Rohkem kui 6600 hoolikalt valitud sõna ja väljendit järjestatuna nende tegeliku sageduse järgi tänapäeva inglise keeles. Loo kiiresti kindel suhtluspõhi enne keerukamate teemadeni jõudmist.
+1. 📈 7 000+ SAGEDASIMAT SÕNA (ZIPFI INDEKS)
+Õpi sõnavara rangelt selle tegeliku esinemissageduse järgi tänapäeva inglise keeles. Esimesed 1 000 sõna katavad kuni 85% igapäevastest vestlustest, filmidest ja sõnumitest. Sõnavara hõlmab tasemeid algajatest (A1–A2) kuni vilunud keelekasutajateni (C1–C2).
 
-• 📝 ISIKLIK SÕNASTIK JA OMA MÄRKMED:
-Leidsid raamatust või tunnist uue sõna? Lisa see oma sõnastikku ühe puudutusega! Seo iga sõnaga isiklikke seoseid, meeldejätmise nippe ja elulisi näiteid — isiklikud märkmed loovad mälus tugevaimad seosed.
+2. 📱 INTERAKTIIVNE AVAKUVA VIDIN (KULDNE KAART)
+Õpi inglise keelt iga kord, kui telefoni kätte võtad! Lisa stiilne Kuldne kaart oma Androidi avakuvale: pööra kaarti ühe puudutusega tõlke nägemiseks, kuula puhast stuudiohääldust ja lehitse sõnu ilma rakendust avamata.
 
-• 📷 NUTIKAS FOTOSKANNER KODUTÖÖDELE JA RAAMATUTELE:
-Kas õpikust anti õppida uued sõnad? Tee leheküljest lihtsalt foto! Nutikas OCR-skanner tuvastab teksti, leiab tundmatud sõnad ja lisab need otse sinu õppeloendisse ilma tüütu käsitsi trükkimiseta.
+3. 📖 38 INTERAKTIIVSET JUTTU JA MUINASJUTTU (IGA 50 SÕNA JÄREL)
+Kinnista sõnad elavas kontekstis! Iga 50 omandatud sõna järel avaneb uus haarav lugu või klassikaline muinasjutt (sealhulgas "My Lord Bag of Rice"), mis on kirjutatud ainult juba tuttavate sõnadega. Puuduta mis tahes sõna kohese tõlke ja häälduse nägemiseks.
 
-• ⭐ LEMMIKUD JA GARANTEERITUD MEELDEJÄTMINE (SRS):
-Kas homme on sõnade töö või eksam? Märgi sõnad Lemmikuteks! Teaduslikult tõestatud intervallkorduse süsteem (Spaced Repetition) koostab kordamisgraafiku ja garanteerib pikaajalise omandamise.
+4. 🔓 100% TASUTA — ILMA TELLIMUSTE JA PIIRANGUTETA
+Erinevalt teistest rakendustest on kogu 7 000 sõnaga andmebaas, jutud, helifailid ja harjutused kohe avatud. Ei mingeid kohustuslikke kuutasusid ega tüütuid elude (südamete) piiranguid — õpi omas tempos nii palju kui soovid!
 
-• 🎮 TREENI LEMMIKUID KÕIGIS HARJUTUSREŽIIMIDES:
-Harjuta oma lemmiksõnu endale sobivaimas vormis:
-  — Interaktiivsed 3D-sõnakaardid viibetega
-  — Kiirviktoriinid aja peale
-  — Kuulamisharjutused ja häälduse mõistmine
-  — Lausete koostamine ja paaride leidmine
-  — Õigekiri ja ebareeglipärased tegusõnad
+5. 🧠 NUTIKAS INTERVALLKORDUS (SRS)
+Nutikas algoritm analüüsib sinu vastuseid reaalajas. Kui mõni ingliskeelne sõna tekitab raskusi, suunab süsteem selle paindlikult kordamisele, kuni see on 100% omandatud.
 
-• 🎧 TASKUHÄÄLING SULETUD EKRAANIGA:
-Õpi teel olles, autos, jalutades või sörkides ilma telefoni vaatamata! Helirežiim töötab taustal ka täielikult väljalülitatud ekraaniga, säästes akut: kõlab eestikeelne tõlge, paus meenutamiseks ja puhas ingliskeelne stuudiohääldus kaks korda.
+6. 📷 FOTOSKANNER KODUTÖÖDELE JA RAAMATUTELE (OCR)
+Loed ingliskeelset õpikut, artiklit või raamatut? Tee leheküljest foto! OCR-skanner tuvastab tundmatud sõnad sekundiga ja lisab need ühe puudutusega sinu õppekaartide hulka.
 
-• 🌍 33 LIIDESEKEELE TUGI & RTL:
-Rakendus on tõlgitud 33 keelde, sealhulgas täieliku araabia keele (RTL) toega.
+7. 📝 ISIKLIK SÕNASTIK JA OMA MÄRKMED
+Kuulsid filmis või laulus uut sõna? Salvesta see hetkega. Lisa sõnale isiklikke seoseid, meeldejätmise nippe ja elulisi näiteid, mis kinnistavad sõna pikaajalisse mällu.
 
-• ☁️ PILVESÜNKROONIMINE:
-Kiire 1-klõpsuga Google'i sisselogimine. Sinu sõnad, märkmed, lemmikud ja õppepäevade jada on turvaliselt pilves talletatud.
+8. ⭐ LEMMIKUTE LOEND JA ETTEVALMISTUS EKSAMITEKS
+Loo teemapõhiseid loendeid oma eesmärkide järgi: kooliks, töövestluseks, reisimiseks või rahvusvahelisteks eksamiteks (IELTS, TOEFL, Cambridge).
 
-• 🏆 NÄDALA LIIGAD JA STREAK:
-Võistle edetabelis teiste õppijatega, hoia oma igapäevast seeriat ja jõua poodiumile.
+9. 🎧 TASKUHÄÄLING SULETUD EKRAANIGA
+Õpi teel olles, jalutades või sportides ilma ekraani vaatamata. Taustaheli töötab ka lukustatud ja väljalülitatud ekraaniga, säästes akut: eestikeelne tõlge, mõtlemispaus ja selge ingliskeelne hääldus.
+
+10. 🎙️ KAKS STUUDIOHÄÄLDUSSTANDARDIT: US JA UK
+Kõrgeima kvaliteediga hääldus emakeelena kõnelejatelt. Vaheta mugavalt Ameerika (US) ja Briti (UK) aktsendi vahel millal tahes.
+
+🔄 TÄIELIK ÕPPUTSÜKKEL (4 REŽIIMI):
+1. Sõnakaardid — visuaalne äratundmine ja selge hääldus
+2. Viktoriin — kuuldu mõistmine ja kiire tähenduse valik
+3. Paarid — nobe sõna ja tõlke kokkuviimine
+4. Õigekiri — sõna täpne kirjutamine klaviatuuril.
+
+🌍 36 KEELE TUGI KOOS RTL-KIRJAVIISIGA:
+Õpi inglise keelt oma emakeeles — tõlgitud 36 keelde, sealhulgas täieliku araabia, pärsia ja urdu keele toega.
+
+🏆 NÄDALA LIIGAD JA PILVESÜNKROONIMINE:
+Võistle edetabelis teiste õppijatega, hoia igapäevast seeriat ja talleta oma progress turvaliselt Google'i konto kaudu.
 
 🚀 SOBIB IDEAALSELT:
-• Kooliõpilastele ja tudengitele: skanni õpikuid, lisa kontrolltööde sõnad lemmikutesse ja saa häid hindeid.
-• Algajatele (A1–A2): omanda eluks vajalik põhisõnavara ilma ülekoormuseta.
-• Edasijõudnutele (B1–C2): laienda erialast ja akadeemilist sõnavara eksamiteks (IELTS, TOEFL) ja tööks.
+• Algajatele (A1–A2): tugev põhisõnavara ja kiire algus.
+• Edasijõudnutele (B1–C2): sõnavara laiendamine sujuvaks suhtluseks ja tööks.
+• Eksamiteks (IELTS, TOEFL) valmistujatele ja reisihuvilistele.
 
-Alusta oma hommikut värske "English Breakfastiga" — 10–15 minutit päevas toob reaalse keeleoskuse!
-
-Laadi English Breakfast alla kohe ja räägi inglise keelt enesekindlalt!
+Vaid 10–15 minutit päevas tagab vaba inglise keele oskuse!
+Laadi English Breakfast alla kohe ja alusta inglise keele õppimist juba täna!
