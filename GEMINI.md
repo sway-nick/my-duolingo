@@ -65,10 +65,13 @@
   * `onRewardedVideoAdDismissed` AND `onDismissed`
   * `onRewardedVideoAdFailedToShow` AND `onFailedToShow`
 * ProGuard rules must always preserve Unity and Google mediation classes.
-* `app-ads.txt` must maintain direct seller verification for both Google AdMob and Unity Ads.
+* `app-ads.txt` must maintain direct seller verification for Google AdMob (`pub-9917058160362744`), Unity Ads (`157317001`), and required partner resellers (`monetrix.ai`, `start.io`, `adwmg.com`, `appads.in`).
+* Public root domain `sway-nick.github.io` must always be synchronized:
+  * `https://sway-nick.github.io/app-ads.txt` must return HTTP 200 with full verified sellers.
+  * `https://sway-nick.github.io/` must contain valid `index.html` (HTTP 200, never 404).
 
 ---
 
 ### Verification Workflow
-* Always run `npm test` to verify all 60 quality gate tests pass.
+* Always run `npm test` to verify all 70 quality gate tests (including Gate 1b live probe) pass.
 * Always synchronize changes from `frontend/` (single source of truth) to `docs/` and root via `node scripts/build.cjs`.

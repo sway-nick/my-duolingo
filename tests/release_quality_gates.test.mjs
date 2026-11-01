@@ -33,7 +33,7 @@ test('Gate 0: Comprehensive JS/Module Syntax Integrity across all frontend files
 });
 
 test('Gate 1: Unity Ads Mediation and AdMob configuration integrity', () => {
-  // 1. Verify app-ads.txt contains both AdMob and Unity direct seller entries
+  // 1. Verify app-ads.txt contains both AdMob and Unity direct seller entries, plus key partner resellers
   const appAdsPath = path.join(ROOT_DIR, 'app-ads.txt');
   assert.ok(fs.existsSync(appAdsPath), 'app-ads.txt must exist at project root');
   const appAdsContent = fs.readFileSync(appAdsPath, 'utf-8');
@@ -43,9 +43,39 @@ test('Gate 1: Unity Ads Mediation and AdMob configuration integrity', () => {
     'app-ads.txt must contain authorized Google AdMob direct publisher line'
   );
   assert.ok(
-    appAdsContent.includes('unity.com, 157317001, DIRECT'),
+    appAdsContent.includes('unity.com, 157317001, DIRECT, 96cabb5fbdde37a7'),
     'app-ads.txt must contain authorized Unity Ads direct publisher line (157317001)'
   );
+  assert.ok(
+    appAdsContent.includes('monetrix.ai, 10761, RESELLER'),
+    'app-ads.txt must contain authorized Unity reseller monetrix.ai'
+  );
+  assert.ok(
+    appAdsContent.includes('start.io, 131192070, RESELLER'),
+    'app-ads.txt must contain authorized Unity reseller start.io'
+  );
+  assert.ok(
+    appAdsContent.includes('adwmg.com, 159512, RESELLER'),
+    'app-ads.txt must contain authorized Unity reseller adwmg.com'
+  );
+  assert.ok(
+    appAdsContent.includes('appads.in, 106246, RESELLER'),
+    'app-ads.txt must contain authorized Unity reseller appads.in'
+  );
+
+  // 1b. Verify docs/app-ads.txt is perfectly in sync
+  const docsAdsPath = path.join(ROOT_DIR, 'docs/app-ads.txt');
+  assert.ok(fs.existsSync(docsAdsPath), 'docs/app-ads.txt must exist');
+  assert.equal(fs.readFileSync(docsAdsPath, 'utf-8'), appAdsContent, 'docs/app-ads.txt must match root app-ads.txt');
+
+  // 1c. If sway-nick.github.io is cloned locally, verify it is in sync and has index.html
+  const githubIoPath = path.resolve(ROOT_DIR, '..', 'sway-nick.github.io');
+  if (fs.existsSync(githubIoPath)) {
+    const rootAds = path.join(githubIoPath, 'app-ads.txt');
+    assert.ok(fs.existsSync(rootAds), 'sway-nick.github.io/app-ads.txt must exist');
+    assert.equal(fs.readFileSync(rootAds, 'utf-8'), appAdsContent, 'sway-nick.github.io/app-ads.txt must be identical to app-ads.txt');
+    assert.ok(fs.existsSync(path.join(githubIoPath, 'index.html')), 'sway-nick.github.io must have index.html (prevent 404)');
+  }
 
   // 2. Verify Android app build.gradle dependencies include Unity Ads SDK and Mediation Adapter
   const buildGradlePath = path.join(ROOT_DIR, 'android/app/build.gradle');
@@ -69,6 +99,35 @@ test('Gate 1: Unity Ads Mediation and AdMob configuration integrity', () => {
   assert.ok(proguard.includes('-keep class com.unity3d.ads.**'), 'proguard-rules.pro must preserve com.unity3d.ads.**');
   assert.ok(proguard.includes('-keep class com.google.ads.mediation.unity.**'), 'proguard-rules.pro must preserve com.google.ads.mediation.unity.**');
   assert.ok(proguard.includes('-dontwarn com.unity3d.**'), 'proguard-rules.pro must suppress harmless com.unity3d warnings');
+});
+
+test('Gate 1b: Public live app-ads.txt availability and Unity / Google verification', async () => {
+  const https = await import('https');
+  const fetchUrl = (url) => new Promise((resolve) => {
+    const req = https.get(url, { timeout: 7000 }, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => resolve({ statusCode: res.statusCode, data }));
+    });
+    req.on('error', (err) => resolve({ statusCode: 0, error: err.message }));
+    req.on('timeout', () => { req.destroy(); resolve({ statusCode: 0, error: 'timeout' }); });
+  });
+
+  const res = await fetchUrl('https://sway-nick.github.io/app-ads.txt');
+  if (res.statusCode === 0) {
+    console.warn('⚠️ Network offline or unreachable during Gate 1b live check, skipping remote probe:', res.error);
+    return;
+  }
+
+  assert.equal(res.statusCode, 200, 'Public https://sway-nick.github.io/app-ads.txt must return 200 OK');
+  assert.ok(res.data.includes('google.com, pub-9917058160362744, DIRECT'), 'Live app-ads.txt must contain Google AdMob publisher ID');
+  assert.ok(res.data.includes('unity.com, 157317001, DIRECT, 96cabb5fbdde37a7'), 'Live app-ads.txt must contain Unity Ads direct publisher ID');
+  assert.ok(res.data.includes('monetrix.ai, 10761, RESELLER'), 'Live app-ads.txt must contain monetrix.ai reseller');
+  assert.ok(res.data.includes('start.io, 131192070, RESELLER'), 'Live app-ads.txt must contain start.io reseller');
+
+  // Verify root domain is not returning 404
+  const rootRes = await fetchUrl('https://sway-nick.github.io/');
+  assert.equal(rootRes.statusCode, 200, 'Public https://sway-nick.github.io/ root homepage must return 200 OK');
 });
 
 test('Gate 2: Gold Card Widget HyperOS / MIUI and cross-platform broadcast safety', () => {

@@ -5,20 +5,28 @@
 
 ---
 
-## 1. Медиация AdMob и Unity Ads (Gate 1)
+## 1. Медиация AdMob и Unity Ads (Gate 1 & Gate 1b)
 
 ### Обязательные требования:
 1. **Авторизация в `app-ads.txt`:**
    * Google AdMob Direct Publisher: `google.com, pub-9917058160362744, DIRECT, f08c47fec0942fa0`
    * Unity Ads Direct Publisher: `unity.com, 157317001, DIRECT, 96cabb5fbdde37a7`
-2. **Зависимости в `android/app/build.gradle`:**
+   * Авторизованные реселлеры Unity Ads:
+     * `monetrix.ai, 10761, RESELLER`
+     * `start.io, 131192070, RESELLER`
+     * `adwmg.com, 159512, RESELLER`
+     * `appads.in, 106246, RESELLER`
+2. **Синхронизация с боевым публичным хостингом (Gate 1b):**
+   * Публичный URL `https://sway-nick.github.io/app-ads.txt` обязан возвращать HTTP 200 и содержать все строки AdMob, Unity Ads и реселлеров.
+   * Главная страница `https://sway-nick.github.io/` обязана содержать рабочий `index.html` и возвращать HTTP 200 (не 404), чтобы краулеры Unity и Google не отклоняли URL разработчика (`badUrlForm`).
+3. **Зависимости в `android/app/build.gradle`:**
    * Unity Ads нативный SDK: `implementation 'com.unity3d.ads:unity-ads:4.12.5'`
    * Адаптер медиации AdMob: `implementation 'com.google.ads.mediation:unity:4.12.5.0'`
-3. **Правила ProGuard (`android/app/proguard-rules.pro`):**
+4. **Правила ProGuard (`android/app/proguard-rules.pro`):**
    * Сохранение классов: `-keep class com.unity3d.ads.** { *; }`
    * Сохранение медиации: `-keep class com.google.ads.mediation.unity.** { *; }`
    * Подавление ворнингов: `-dontwarn com.unity3d.**`, `-dontwarn com.google.ads.mediation.unity.**`
-4. **Межстраничная реклама:**
+5. **Межстраничная реклама:**
    * Показ после каждого завершённого раунда Теста (`minRoundsBetweenInterstitials = 1`).
    * Фоновая предзагрузка в RAM (`preloadInterstitial()`) с 0 мс задержкой при показе.
    * Автоматический fallback на официальный тестовый юнит при отсутствии заполнения (`NO_FILL`).
