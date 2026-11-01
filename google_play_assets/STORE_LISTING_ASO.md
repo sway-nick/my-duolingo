@@ -8,7 +8,7 @@
 English Breakfast: Vocabulary
 
 ### Short Description (up to 80 chars)
-Learn English vocabulary: 7000 words, flashcards, stories & home screen widget!
+English vocabulary builder: 7000 words, flashcards, stories & home screen widget
 
 ### Full Description (up to 4000 chars)
 English Breakfast is your ultimate English vocabulary app and daily words trainer with an interactive home screen widget!
