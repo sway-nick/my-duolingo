@@ -740,7 +740,13 @@ public class MainActivity extends BridgeActivity {
                                     if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
                                         WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
                                     }
-                                    appWidgetManager.requestPinAppWidget(provider, null, null);
+                                    runOnUiThread(() -> {
+                                        try {
+                                            appWidgetManager.requestPinAppWidget(provider, null, null);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    });
                                     return true;
                                 }
                             }
