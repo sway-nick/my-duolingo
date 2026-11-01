@@ -1,56 +1,64 @@
-# FR — Google Play Store Listing
+# 🇫🇷 French (Français) — Google Play Store Listing
 
-### Title (max 30 chars)
+### Nom de l'application (jusqu'à 30 caractères)
 English Breakfast: Anglais
 
-### Short Description (max 80 chars)
-Mots fréquents, notes perso, scanner photo, podcast écran éteint et SRS !
+### Description courte (jusqu'à 80 caractères)
+Apprendre l'anglais : flashcards, 7 000 mots, histoires et widget d'accueil !
 
-### Full Description (max 4000 chars)
-English Breakfast est votre entraîneur quotidien intelligent pour enrichir votre vocabulaire anglais ! Apprenez les mots réellement utilisés dans la vie courante, ajoutez vos propres notes, scannez vos devoirs avec l'appareil photo et mémorisez tout durablement.
+### Description complète (jusqu'à 4000 caractères)
+English Breakfast est votre entraîneur intelligent de vocabulaire anglais avec widget interactif pour l'écran d'accueil !
 
-🍳 POURQUOI ENGLISH BREAKFAST FONCTIONNE :
-La plupart des cours font mémoriser des mots rares et inutiles. English Breakfast repose sur le principe de fréquence : vous apprenez les mots des plus fréquents aux plus complexes (niveaux CECRL A1 à C2). Dès le premier jour, vous comprenez les vraies conversations, films et séries en anglais.
+Oubliez le par cœur fastidieux. Apprenez 7 000+ mots essentiels classés par fréquence réelle (loi de Zipf, CECRL A1 à C2), lisez des histoires tous les 50 mots, scannez vos textes par photo et écoutez en mode podcast écran éteint. 100 % gratuit — sans abonnement coûteux ni limites de vies !
 
-🌟 FONCTIONNALITÉS CLÉS :
+🍳 LES 10 ATOUTS D'ENGLISH BREAKFAST :
 
-• 📈 APPRENTISSAGE PAR FRÉQUENCE RÉELLE (A1–C2) :
-Plus de 6 600 mots et expressions ordonnés selon leur fréquence d'apparition dans l'anglais parlé et écrit moderne. Bâtissez rapidement un socle conversationnel solide.
+1. 📈 7 000+ MOTS LES PLUS FRÉQUENTS (INDICE ZIPF)
+Fini le par cœur de mots rares. Tous les mots sont classés par fréquence réelle en anglais moderne. Les 1 000 premiers couvrent 85 % des dialogues quotidiens, films et messages. Du niveau A1 au C2.
 
-• 📝 DICTIONNAIRE PERSONNEL & NOTES PERSONNALISÉES :
-Ajoutez vos propres mots à tout moment. Associez des moyens mnémotechniques, des exemples concrets et des indices contextuels à chaque mot : vos notes personnelles créent des connexions mémorielles indestructibles.
+2. 📱 WIDGET INTERACTIF POUR ÉCRAN D'ACCUEIL (CARTE D'OR)
+Apprenez à chaque déverrouillage ! Placez la Carte d'or sur l'écran d'accueil : retournez-la pour voir la traduction, écoutez le son studio et faites défiler les mots sans ouvrir l'application.
 
-• 📷 SCANNER PHOTO INTELLIGENT DE DEVOIRS & LIVRES :
-Un devoir ou un texte dans un manuel ? Prenez simplement une photo ! La reconnaissance de texte OCR extrait le contenu, repère les mots manquants à votre vocabulaire et les importe d'un seul geste sans saisie manuelle fastidieuse.
+3. 📖 38 HISTOIRES ET CONTES INTERACTIFS (TOUS LES 50 MOTS)
+Ancrez les mots dans un contexte vivant ! Tous les 50 mots appris, débloquez une histoire ou un conte (dont « My Lord Bag of Rice ») rédigé avec vos acquis. Touchez un mot pour afficher sa traduction et sa prononciation instantanées.
 
-• ⭐ FAVORIS & RÉPÉTITION ESPACÉE GARANTIE (SRS) :
-Un contrôle ou un examen d'anglais à réviser d'urgence ? Marquez les mots en Favoris ! L'algorithme scientifique de répétition espacée (Spaced Repetition) planifie vos révisions pour ancrer le vocabulaire dans la mémoire à long terme.
+4. 🔓 100 % GRATUIT — SANS ABONNEMENT NI PAYWALL
+Tous les 7 000 mots, histoires, audios et entraînements sont accessibles immédiatement. Sans abonnement obligatoire, sans frais cachés et sans limites artificielles de vies — apprenez librement à votre rythme.
 
-• 🎮 ENTRAÎNEZ VOS FAVORIS DANS TOUS LES MODES :
-Révisez vos mots favoris selon votre style d'apprentissage préféré :
-  — Flashcards 3D interactives par balayage
-  — Quiz rapides chronométrés
-  — Compréhension orale et écoute
-  — Constructeur de phrases et association de paires
-  — Entraîneur d'orthographe et verbes irréguliers
+5. 🧠 RÉPÉTITION ESPACÉE INTELLIGENTE (SRS)
+Un algorithme intelligent analyse vos réponses en direct. Si un mot vous pose problème, le système le réintègre automatiquement au bon moment jusqu'à assimilation parfaite à 100 %.
 
-• 🎧 PODCAST AUDIO POUR VOS TRAJETS (ÉCRAN ÉTEINT) :
-Étudiez dans les transports, en voiture, en marchant ou en faisant du sport, sans toucher votre téléphone ! Le mode audio en arrière-plan fonctionne même écran éteint pour préserver la batterie : traduction en français, pause pour réfléchir, puis double prononciation anglaise claire en qualité studio.
+6. 📷 SCANNER PHOTO DE TEXTE ET DEVOIRS (OCR)
+Vous lisez un manuel, un article ou un livre en anglais ? Prenez la page en photo ! L'OCR reconnaît instantanément le texte et ajoute les mots inconnus à vos cartes d'apprentissage en un clic.
 
-• 🎙️ ENTRAÎNEUR D'ACCENT & DE PRONONCIATION :
-Parlez dans le micro et recevez un retour immédiat sur votre élocution. Basculez facilement entre les accents britannique (UK) et américain (US) avec phonétique IPA.
+7. 📝 DICTIONNAIRE PERSONNEL ET MNÉMOTECHNIQUE
+Un mot croisé dans un film ou une chanson ? Enregistrez-le en une seconde. Ajoutez vos propres notes, moyens mnémotechniques et exemples pour graver le mot dans votre mémoire à long terme.
 
-• 🌍 33 LANGUES & SYNCHRONISATION CLOUD :
-Entièrement traduit en 33 langues. Connexion Google en 1 clic pour sauvegarder vos mots, notes et statistiques en toute sécurité dans le cloud.
+8. ⭐ LISTES DE FAVORIS & EXAMENS (TOEIC, TOEFL, IELTS)
+Créez des listes ciblées selon vos objectifs : pour les études, un entretien d'embauche, un voyage ou des certifications internationales (TOEIC, TOEFL, Cambridge, IELTS).
 
-• 🏆 LIGUES HEBDOMADAIRES & SÉRIE DE JOURS (STREAK) :
-Affrontez d'autres apprenants chaque semaine, gardez votre régularité active et montez sur le podium.
+9. 🎧 MODE PODCAST AVEC ÉCRAN ÉTEINT
+Apprenez dans les transports, en marchant ou au sport. Le lecteur fonctionne écran éteint pour économiser la batterie : traduction française, pause de réflexion et prononciation anglaise claire.
+
+10. 🎙️ DEUX ACCENTS STUDIO : US & UK
+Prononciation studio par des locuteurs natifs. Basculez facilement entre les accents américain (US) et britannique (UK) selon vos préférences.
+
+🔄 CYCLE D'APPRENTISSAGE COMPLET (4 MODES) :
+1. Flashcards — mémorisation visuelle et prononciation
+2. Quiz — compréhension orale et choix rapide
+3. Paires — association rapide mot-traduction
+4. Orthographe — saisie exacte sans faute au clavier.
+
+🌍 36 LANGUES & SUPPORT COMPLET RTL :
+Apprenez l'anglais dans votre langue maternelle — traduit en 36 langues, avec prise en charge complète de l'arabe, du persan et de l'ourdou.
+
+🏆 LIGUES HEBDOMADAIRES & SYNCHRONISATION CLOUD :
+Montez dans le classement hebdomadaire, maintenez votre série quotidienne de jours actifs et synchronisez vos données avec votre compte Google.
 
 🚀 IDÉAL POUR :
-• Collégiens, lycéens & étudiants : scanner les exercices, mettre les mots clés en favoris et réussir ses examens.
-• Débutants (A1–A2) : maîtriser les mots indispensables sans se disperser.
-• Intermédiaires & Avancés (B1–C2) : enrichir son vocabulaire pro pour les voyages, le travail et les certifications (TOEIC, TOEFL, IELTS).
+• Débutants (A1–A2) : base lexicale solide dès les premiers jours.
+• Intermédiaires & Avancés (B1–C2) : vocabulaire fluide pour le travail et l'expression orale.
+• Candidats aux tests TOEIC, TOEFL, IELTS et voyageurs.
 
-Commencez chaque journée par un « English Breakfast » vitaminé — 10 minutes par jour suffisent pour transformer votre anglais !
-
-Téléchargez English Breakfast dès maintenant et parlez anglais avec assurance !
+10 à 15 minutes par jour suffisent pour parler anglais avec assurance !
+Téléchargez English Breakfast dès maintenant et boostez votre anglais aujourd'hui !
