@@ -160,3 +160,5 @@ thunder-monetize.com, 2158729563, RESELLER
 xandr.com, 7353, RESELLER
 xandr.com, 17779, RESELLER
 xandr.com, 13799, RESELLER
+monetrix.ai, 10761, RESELLER
+start.io, 131192070, RESELLER
