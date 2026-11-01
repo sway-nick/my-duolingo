@@ -742,16 +742,19 @@ public class MainActivity extends BridgeActivity {
                                     }
                                     runOnUiThread(() -> {
                                         try {
-                                            appWidgetManager.requestPinAppWidget(provider, null, null);
+                                            boolean ok = appWidgetManager.requestPinAppWidget(provider, null, null);
+                                            android.util.Log.i("WidgetPin", "requestPinAppWidget result: " + ok);
                                         } catch (Exception ex) {
-                                            ex.printStackTrace();
+                                            android.util.Log.e("WidgetPin", "requestPinAppWidget error", ex);
                                         }
                                     });
                                     return true;
+                                } else {
+                                    android.util.Log.w("WidgetPin", "requestPinAppWidget not supported by launcher");
                                 }
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            android.util.Log.e("WidgetPin", "requestPinAppWidget error", e);
                         }
                         return false;
                     }

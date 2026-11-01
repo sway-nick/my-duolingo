@@ -19,9 +19,9 @@ public class WidgetDataManager {
     private static final String KEY_PENDING_FAVS = "key_pending_favs";
     private static final String KEY_HAS_FAVORITES = "key_has_favorites";
     private static final String KEY_CONTINUOUS_PLAY = "key_continuous_play_active";
-    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v8";
-    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v8";
-    public static final String KEY_WIDGET_ACTIVE_INSTALLED = "key_widget_active_installed_v8";
+    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v9";
+    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v9";
+    public static final String KEY_WIDGET_ACTIVE_INSTALLED = "key_widget_active_installed_v9";
     private static volatile boolean isAppInForeground = false;
 
     // In-memory cache to prevent repetitive JSON parsing on main thread during widget taps
@@ -643,43 +643,17 @@ public class WidgetDataManager {
 
         // 1. Ghost IDs migration for initial launch after fresh install or upgrade
         if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
-            boolean hasPreExistingActive = false;
-            try {
-                android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
-                for (int id : systemIds) {
-                    android.os.Bundle options = appWidgetManager.getAppWidgetOptions(id);
-                    if (options != null) {
-                        int minWidth = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
-                        int minHeight = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0);
-                        if (minWidth > 0 && minHeight > 0) {
-                            hasPreExistingActive = true;
-                            break;
-                        }
-                    }
-                }
-            } catch (Exception ignored) {}
-
-            if (hasPreExistingActive) {
-                // User upgraded with an already placed and rendered widget on home screen
-                prefs.edit()
-                    .putStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>())
-                    .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
-                    .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, true)
-                    .apply();
-                return true;
-            } else {
-                // Pre-existing unrendered or leftover IDs are treated as ghosts on clean install
-                Set<String> initialGhosts = new HashSet<>();
-                for (int id : systemIds) {
-                    initialGhosts.add(String.valueOf(id));
-                }
-                prefs.edit()
-                    .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
-                    .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
-                    .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, false)
-                    .apply();
-                return false;
+            // Treat all existing unverified system IDs prior to v9 as initial ghosts
+            Set<String> initialGhosts = new HashSet<>();
+            for (int id : systemIds) {
+                initialGhosts.add(String.valueOf(id));
             }
+            prefs.edit()
+                .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
+                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, false)
+                .apply();
+            return false;
         }
 
         // 2. Cross-reference system IDs against saved ghost IDs
@@ -701,42 +675,15 @@ public class WidgetDataManager {
         }
 
         // If all system IDs are confirmed ghosts, no real widget exists
-        if (candidateRealIds.isEmpty()) {
-            setWidgetActive(context, false);
-            return false;
-        }
-
-        // 3. We have candidate non-ghost IDs.
-        // Confirm real installation: a widget MUST physically occupy space on the launcher grid (minWidth > 0 && minHeight > 0)
-        boolean hasPhysicalWidget = false;
-        try {
-            android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
-            for (int id : candidateRealIds) {
-                android.os.Bundle options = appWidgetManager.getAppWidgetOptions(id);
-                if (options != null) {
-                    int minWidth = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
-                    int minHeight = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0);
-                    if (minWidth > 0 && minHeight > 0) {
-                        hasPhysicalWidget = true;
-                        break;
-                    }
-                }
-            }
-        } catch (Exception ignored) {}
-
-        if (hasPhysicalWidget) {
-            setWidgetActive(context, true);
-            return true;
-        } else {
-            setWidgetActive(context, false);
-            return false;
-        }
+        boolean hasRealWidget = !candidateRealIds.isEmpty();
+        setWidgetActive(context, hasRealWidget);
+        return hasRealWidget;
     }
 
     public static synchronized void markPrePinGhostIds(Context context, int[] systemIds) {
         if (context == null) return;
         SharedPreferences prefs = getPrefs(context);
-        Set<String> ghosts = new HashSet<>();
+        Set<String> ghosts = new HashSet<>(prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>()));
         if (systemIds != null) {
             for (int id : systemIds) {
                 ghosts.add(String.valueOf(id));

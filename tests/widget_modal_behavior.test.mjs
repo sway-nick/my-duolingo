@@ -55,7 +55,7 @@ test('Widget Modal Contract: EXACTLY 1 button, dynamic label and correct pin inv
     const managerPath = path.join(ROOT, 'android/app/src/main/java/com/englishbreakfast/app/WidgetDataManager.java');
     const managerCode = fs.readFileSync(managerPath, 'utf8');
 
-    assert.ok(managerCode.includes('key_ghost_widget_ids_v8'), 'Must use version v8 for ghost widget IDs');
-    assert.ok(managerCode.includes('key_widget_ghost_migrated_v8'), 'Must use version v8 for ghost migration flag');
+    assert.ok(managerCode.includes('key_ghost_widget_ids_v9'), 'Must use version v9 for ghost widget IDs');
+    assert.ok(managerCode.includes('key_widget_ghost_migrated_v9'), 'Must use version v9 for ghost migration flag');
   });
 });
