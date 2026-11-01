@@ -4,7 +4,7 @@
 English Breakfast: Kosakata
 
 ## Short Description (max 80 chars)
-Widget layar utama, kata frekuensi, pemindai PR & podcast saat layar mati!
+Belajar kata bahasa Inggris: kartu, 7000 kata, cerita & widget layar utama!
 
 ## Full Description (max 4000 chars)
 English Breakfast adalah aplikasi cerdas harian untuk memperkaya kosakata bahasa Inggris Anda dengan widget interaktif di layar utama!
