@@ -847,10 +847,19 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
   const currentMilestone = Number.isFinite(Number(milestone)) ? Number(milestone) : 0;
   const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[0];
+  const story = storyData;
 
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
   const dictMap = await getOrBuildDictionary();
+
+  const escapeHtml = (str) =>
+    String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
   // Load user favorites set for heart states
   let favSet = new Set();
@@ -884,9 +893,13 @@ export async function showMilestoneStoryModal(milestone = 0) {
   const translationParagraphsHtml = Array.isArray(translatedParas)
     ? translatedParas.map(tp => `<p class="story-translation-para">${tp}</p>`).join('')
     : `<p class="story-translation-para">${translatedParas}</p>`;
+  const translationParagraphs = Array.isArray(translatedParas)
+    ? translatedParas
+    : (translatedParas ? [translatedParas] : []);
 
   const badgeText = strings[storyData.badgeKey] || strings.badge || `🏆 ${currentMilestone} слов`;
   const storyTitleText = strings[storyData.titleKey] || storyData.title;
+  const storyTitle = storyTitleText;
 
   overlay.innerHTML = `
     <style>

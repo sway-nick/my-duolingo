@@ -1,5 +1,5 @@
 import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
-import { showMilestoneStoryModal, MILESTONE_STORIES } from '../modals/MilestoneStoryModal.js?v=386.0';
+import { showMilestoneStoryModal, showStoryToast, MILESTONE_STORIES } from '../modals/MilestoneStoryModal.js?v=386.0';
 import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
@@ -58,10 +58,12 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         </div>
       `;
     } else {
+      const lockLabel = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', m);
       return `
-        <div class="story-list-card is-locked" data-milestone="${m}" data-locked="true" tabindex="-1">
+        <div class="story-list-card is-locked" data-milestone="${m}" data-locked="true" role="button" tabindex="0">
           <div class="story-card-top">
             <div class="story-card-badge story-badge-locked">${escapeHtml(badge)}</div>
+            <span class="story-card-status status-locked">🔒 ${escapeHtml(lockLabel)}</span>
           </div>
           <h3 class="story-card-title story-title-locked">${escapeHtml(title)}</h3>
         </div>
@@ -258,12 +260,22 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     });
   }
 
-  // Story click bindings (only for unlocked cards)
+  // Story click bindings (unlocked cards open reader)
   container.querySelectorAll('.story-list-card.is-unlocked').forEach(card => {
     card.addEventListener('click', (e) => {
       const raw = card.getAttribute('data-milestone');
       const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
       showMilestoneStoryModal(milestone);
+    });
+  });
+
+  // Story click bindings for locked cards (show feedback toast)
+  container.querySelectorAll('.story-list-card.is-locked').forEach(card => {
+    card.addEventListener('click', () => {
+      const raw = card.getAttribute('data-milestone');
+      const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
+      const lockMsg = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', milestone);
+      showStoryToast(`🔒 ${lockMsg}`);
     });
   });
 }
