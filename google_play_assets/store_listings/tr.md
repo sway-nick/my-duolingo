@@ -27,10 +27,10 @@ Kelimeleri gerçek bağlamda pekiştirin! Öğrendiğiniz her 50 kelime, yalnız
 Zorunlu ödeme duvarı, aylık abonelik veya yapay "can" (kalp) sınırı yok. Tüm kelimelere ve modlara tam erişim — kendi hızınızda, istediğiniz kadar çalışın.
 
 • 📝 KİŞİSEL SÖZLÜK VE ÖZEL NOTLAR:
-Okuduğunuz bir kitapta veya haberde yeni bir kelime mi gördünüz? Tek dokunuşla kişisel sözlüğünüze ekleyin! Her kelimeye kendi çağrışımlarınızı, bağlam ipuçlarını ve hayatınızdan örnekleri not edin. Kişisel notlar, uzun süreli hafızadaki en güçlü bağları oluşturur.
+Okuduğunuz bir kitapta veya dizide yeni bir kelime mi gördünüz? Tek dokunuşla sözlüğünüze ekleyin ve kendi çağrışımlarınızı, örneklerinizi not edin — kişisel notlar en güçlü hafıza bağlarını oluşturur.
 
 • 📷 AKILLI ÖDEV VE KİTAP FOTOĞRAF TARAYICISI (OCR):
-Ders kitabından kelime ezberlemeniz mi gerekiyor? Sayfanın fotoğrafını çekin! Akıllı OCR tarayıcı metni anında tanır, eksik kelimeleri tespit eder ve elle yazma zahmeti olmadan tek dokunuşla çalışma listenize ekler.
+Ders kitabından kelime ezberlemeniz mi gerekiyor? Sayfanın fotoğrafını çekin! Akıllı OCR tarayıcı bilmediğiniz kelimeleri bulur ve elle yazmadan tek dokunuşla listenize ekler.
 
 • ⭐ FAVORİLER VE GARANTİLİ KALICI HAFIZA (SRS):
 Yarınki sınava belirli kelimeleri yetiştirmeniz mi lazım? Kelimeleri Favorilere ekleyin! Bilimsel olarak kanıtlanmış Aralıklı Tekrar (Spaced Repetition) sistemi, kelimeleri kalıcı olarak hafızanıza yerleştirmek için kişisel tekrar takviminizi oluşturur.
