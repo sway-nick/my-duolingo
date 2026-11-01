@@ -4,7 +4,7 @@
 English Breakfast: Angličtina
 
 ## Short Description
-Časté slová, foto skener, vlastné poznámky a podcast s vypnutou obrazovkou!
+Učte sa anglické slová: kartičky, 7000 slov, príbehy a widget na plochu!
 
 ## Full Description
 English Breakfast je váš šikovný každodenný tréner anglickej slovnej zásoby! Učte sa slová, ktoré sa reálne používajú v bežnej reči, skenujte školské úlohy fotoaparátom, píšte si vlastné poznámky a zapamätajte si všetko natrvalo.
@@ -40,8 +40,8 @@ Učte sa cestou do práce alebo školy, v aute či pri behu bez pozerania na mob
 • 🎙️ TRÉNER VÝSLOVNOSTI A PRÍZVUKU (UK & US):
 Hovorte do mikrofónu a získajte okamžité hodnotenie. Vyberte si britský alebo americký prízvuk s presným fonetickým prepisom IPA.
 
-• 🌍 33 JAZYKOV ROZHRANIA:
-Kompletná lokalizácia do 33 svetových jazykov vrátane plnej podpory arabčiny (RTL).
+• 🌍 36 JAZYKOV ROZHRANIA:
+Kompletná lokalizácia do 36 svetových jazykov vrátane plnej podpory arabčiny (RTL).
 
 • ☁️ SYNCHRONIZÁCIA CEZ CLOUD:
 Prihlásenie cez Google jedným klikom. Vaša slovná zásoba, poznámky, obľúbené slová a séria dní sú v bezpečí na všetkých zariadeniach.
