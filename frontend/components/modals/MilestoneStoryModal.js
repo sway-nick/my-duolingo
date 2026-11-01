@@ -1098,7 +1098,21 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
-  const dictMap = await getOrBuildDictionary(lang);
+
+  // Non-blocking async preload for 0ms instant modal display
+  let dictMap = _wordLookupMap;
+  const dictPromise = getOrBuildDictionary(lang).then((m) => {
+    dictMap = m;
+    return m;
+  }).catch(() => new Map());
+
+  let favSet = new Set();
+  try {
+    const favs = getUserFavorites();
+    if (Array.isArray(favs)) {
+      favs.forEach(f => favSet.add(String(f.id || f)));
+    }
+  } catch (e) {}
 
   const escapeHtml = (str) =>
     String(str || '')
@@ -1107,15 +1121,6 @@ export async function showMilestoneStoryModal(milestone = 0) {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
-
-  // Load user favorites set for heart states
-  let favSet = new Set();
-  try {
-    const favs = await getUserFavorites();
-    if (Array.isArray(favs)) {
-      favs.forEach(f => favSet.add(String(f.id || f)));
-    }
-  } catch (e) {}
 
   const clickedWords = new Set();
   const overlay = document.createElement('div');
@@ -1149,6 +1154,12 @@ export async function showMilestoneStoryModal(milestone = 0) {
   const storyTitleText = strings[storyData.titleKey] || storyData.title;
   const storyTitle = storyTitleText;
 
+  let headerTitleHtml = escapeHtml(storyTitleText);
+  const byMatch = storyTitleText.match(/^(.*?)\s+(by\s+.*)$/i);
+  if (byMatch) {
+    headerTitleHtml = `<span>${escapeHtml(byMatch[1])}</span><span style="display: block; font-size: 13.5px; font-weight: 500; opacity: 0.85; margin-top: 3px;">${escapeHtml(byMatch[2])}</span>`;
+  }
+
   overlay.innerHTML = `
     <style>
       .milestone-story-modal-overlay {
@@ -1162,6 +1173,8 @@ export async function showMilestoneStoryModal(milestone = 0) {
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
         padding: 16px;
+        padding-top: calc(max(36px, env(safe-area-inset-top, 0px)) + 12px);
+        padding-bottom: calc(max(48px, env(safe-area-inset-bottom, 0px)) + 16px);
         box-sizing: border-box;
         animation: storyOverlayFadeIn 0.25s ease-out;
       }
@@ -1255,23 +1268,28 @@ export async function showMilestoneStoryModal(milestone = 0) {
       }
       .story-text-container {
         font-size: 16px;
-        line-height: 1.85;
+        line-height: 1.75;
         color: #e2e8f0;
         user-select: text;
         -webkit-user-select: text;
       }
       .story-paragraph {
+        margin: 0 0 16px;
+        text-align: left;
+        text-indent: 26px;
+      }
+      .story-translation-para {
         margin: 0 0 14px;
         text-align: left;
+        text-indent: 26px;
       }
       .story-word-token {
-        display: inline-block;
-        padding: 1px 3px;
-        margin: 0 1px;
-        border-radius: 6px;
+        display: inline;
+        padding: 0;
+        margin: 0;
         cursor: pointer;
         transition: background-color 0.15s ease, color 0.15s ease;
-        border-bottom: 1.5px dashed rgba(245, 158, 11, 0.35);
+        border-bottom: 1.5px dashed rgba(245, 158, 11, 0.4);
       }
       .story-word-token:hover {
         background: rgba(245, 158, 11, 0.2);
@@ -1495,7 +1513,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
     <div class="milestone-story-card" role="dialog" aria-modal="true">
       <div class="milestone-story-header">
-        <h2 class="milestone-story-title">📖 ${storyTitleText}</h2>
+        <h2 class="milestone-story-title">${headerTitleHtml}</h2>
         <button class="milestone-story-close" id="story-close-btn" aria-label="Close">&times;</button>
       </div>
 
@@ -1626,10 +1644,11 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
   // Token click binding: clicking toggles highlight
   overlay.querySelectorAll('.story-word-token').forEach(tokenEl => {
-    tokenEl.addEventListener('click', (e) => {
+    tokenEl.addEventListener('click', async (e) => {
       e.stopPropagation();
       const rawText = tokenEl.getAttribute('data-word') || tokenEl.textContent;
-      const resolved = resolveWord(rawText, dictMap, lang);
+      const map = (dictMap && dictMap.size > 0) ? dictMap : await dictPromise;
+      const resolved = resolveWord(rawText, map, lang);
       if (!resolved) return;
 
       // Toggle clicked highlight state

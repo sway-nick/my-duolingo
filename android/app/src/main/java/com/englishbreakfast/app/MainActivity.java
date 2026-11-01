@@ -124,6 +124,7 @@ public class MainActivity extends BridgeActivity {
         setupWidgetBridge();
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setupAnalyticsBridge();
+        setupOcrBridge();
         initNativeTts();
         lockWebViewTextZoom();
 
@@ -1106,6 +1107,117 @@ public class MainActivity extends BridgeActivity {
                         }
                     }
                 }, "AndroidAnalyticsBridge");
+            }
+        } catch (Exception ignored) {}
+    }
+
+    private void setupOcrBridge() {
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().addJavascriptInterface(new Object() {
+                    @JavascriptInterface
+                    public boolean isAvailable() {
+                        if (!isTrustedOrigin()) return false;
+                        return true;
+                    }
+
+                    @JavascriptInterface
+                    public void recognizeText(final String base64Image, final String callbackId) {
+                        if (!isTrustedOrigin() || base64Image == null || base64Image.trim().isEmpty()) {
+                            dispatchOcrResult(callbackId, false, "Invalid payload", "");
+                            return;
+                        }
+                        new Thread(() -> {
+                            try {
+                                String cleanBase64 = base64Image;
+                                if (cleanBase64.contains(",")) {
+                                    cleanBase64 = cleanBase64.substring(cleanBase64.indexOf(",") + 1);
+                                }
+                                byte[] decodedBytes = android.util.Base64.decode(cleanBase64, android.util.Base64.DEFAULT);
+                                android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                                if (bitmap == null) {
+                                    dispatchOcrResult(callbackId, false, "Failed to decode image bitmap", "");
+                                    return;
+                                }
+
+                                final int imgHeight = bitmap.getHeight();
+                                com.google.mlkit.vision.common.InputImage inputImage =
+                                        com.google.mlkit.vision.common.InputImage.fromBitmap(bitmap, 0);
+                                com.google.mlkit.vision.text.TextRecognizer recognizer =
+                                        com.google.mlkit.vision.text.TextRecognition.getClient(
+                                                com.google.mlkit.vision.text.latin.TextRecognizerOptions.DEFAULT_OPTIONS
+                                        );
+
+                                recognizer.process(inputImage)
+                                        .addOnSuccessListener(visionText -> {
+                                            if (visionText == null) {
+                                                dispatchOcrResult(callbackId, true, "", "");
+                                                return;
+                                            }
+                                            java.util.List<com.google.mlkit.vision.text.Text.TextBlock> blocks =
+                                                    new java.util.ArrayList<>(visionText.getTextBlocks());
+                                            java.util.Collections.sort(blocks, (a, b) -> {
+                                                android.graphics.Rect ra = a.getBoundingBox();
+                                                android.graphics.Rect rb = b.getBoundingBox();
+                                                if (ra == null || rb == null) return 0;
+                                                if (Math.abs(ra.top - rb.top) > 24) {
+                                                    return Integer.compare(ra.top, rb.top);
+                                                }
+                                                return Integer.compare(ra.left, rb.left);
+                                            });
+
+                                            StringBuilder sb = new StringBuilder();
+                                            for (com.google.mlkit.vision.text.Text.TextBlock block : blocks) {
+                                                String blockText = block.getText() != null ? block.getText().trim() : "";
+                                                if (blockText.isEmpty()) continue;
+
+                                                android.graphics.Rect rect = block.getBoundingBox();
+                                                if (rect != null && imgHeight > 200) {
+                                                    boolean isExtremeEdge = (rect.bottom < imgHeight * 0.05f) || (rect.top > imgHeight * 0.94f);
+                                                    if (isExtremeEdge && blockText.length() <= 6 && blockText.matches("^[0-9ivxlcdmIVXLCDM\\-\\s\\.]+$")) {
+                                                        continue;
+                                                    }
+                                                }
+
+                                                String joinedPara = blockText
+                                                        .replaceAll("([a-zA-Z]{2,})-\\r?\\n\\s*([a-z]{2,})", "$1$2")
+                                                        .replaceAll("\\r?\\n", " ")
+                                                        .replaceAll("\\s{2,}", " ")
+                                                        .trim();
+                                                if (!joinedPara.isEmpty()) {
+                                                    if (sb.length() > 0) sb.append("\n\n");
+                                                    sb.append(joinedPara);
+                                                }
+                                            }
+
+                                            String finalOutput = sb.length() > 0 ? sb.toString() : visionText.getText();
+                                            dispatchOcrResult(callbackId, true, "", finalOutput);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            dispatchOcrResult(callbackId, false, e != null ? e.getMessage() : "OCR failed", "");
+                                        });
+                            } catch (Throwable t) {
+                                dispatchOcrResult(callbackId, false, t != null ? t.getMessage() : "Native OCR error", "");
+                            }
+                        }).start();
+                    }
+
+                    private void dispatchOcrResult(final String callbackId, final boolean success, final String error, final String text) {
+                        runOnUiThread(() -> {
+                            try {
+                                if (bridge != null && bridge.getWebView() != null) {
+                                    org.json.JSONObject obj = new org.json.JSONObject();
+                                    obj.put("callbackId", callbackId);
+                                    obj.put("success", success);
+                                    obj.put("error", error != null ? error : "");
+                                    obj.put("text", text != null ? text : "");
+                                    String script = "if (window.__onAndroidOcrResult) { window.__onAndroidOcrResult(" + obj.toString() + "); }";
+                                    bridge.getWebView().evaluateJavascript(script, null);
+                                }
+                            } catch (Exception ignored) {}
+                        });
+                    }
+                }, "AndroidOcrBridge");
             }
         } catch (Exception ignored) {}
     }

@@ -42,6 +42,10 @@
 # Preserve Firebase Analytics
 -keep class com.google.firebase.analytics.** { *; }
 
+# Preserve Google ML Kit Text Recognition
+-keep class com.google.mlkit.** { *; }
+-dontwarn com.google.mlkit.**
+
 # Suppress harmless warnings from third-party libraries
 -dontwarn com.google.android.gms.**
 -dontwarn com.getcapacitor.**

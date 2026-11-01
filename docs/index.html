@@ -229,6 +229,8 @@
       import { AdService } from './services/adService.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
+      window.showMilestoneStoryModal = showMilestoneStoryModal;
+
       // Initialize AdMob service
       try {
         AdService.init().catch(() => {});

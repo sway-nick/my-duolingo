@@ -1,76 +1,168 @@
 import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
+import { AdService } from '../../services/adService.js?v=386.0';
 
-function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
+function compressImageFile(file, maxDimension = 2048, quality = 0.88) {
   return new Promise((resolve, reject) => {
-    if (typeof createImageBitmap === 'function') {
-      createImageBitmap(file)
-        .then((bitmap) => {
-          let { width, height } = bitmap;
-          if (width > maxDimension || height > maxDimension) {
-            if (width > height) {
-              height = Math.round((height * maxDimension) / width);
-              width = maxDimension;
-            } else {
-              width = Math.round((width * maxDimension) / height);
-              height = maxDimension;
-            }
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, width, height);
-          ctx.drawImage(bitmap, 0, 0, width, height);
-          const dataUrl = canvas.toDataURL('image/jpeg', quality);
-          resolve({
-            dataUrl,
-            base64: dataUrl.split(',')[1],
-            mimeType: 'image/jpeg',
-          });
-        })
-        .catch(() => fallbackWithReader());
+    if (!file) {
+      reject(new Error(t('scan_err_read_file')));
       return;
     }
 
-    fallbackWithReader();
+    const reader = new FileReader();
 
-    function fallbackWithReader() {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          let { width, height } = img;
-          if (width > maxDimension || height > maxDimension) {
-            if (width > height) {
-              height = Math.round((height * maxDimension) / width);
-              width = maxDimension;
-            } else {
-              width = Math.round((width * maxDimension) / height);
-              height = maxDimension;
-            }
+    reader.onload = (e) => {
+      const dataUri = e.target?.result;
+      if (!dataUri || typeof dataUri !== 'string') {
+        reject(new Error(t('scan_err_read_file')));
+        return;
+      }
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+
+      const proceed = () => {
+        const natW = img.naturalWidth || img.width;
+        const natH = img.naturalHeight || img.height;
+        if (!natW || !natH) {
+          reject(new Error(t('scan_err_read_image')));
+          return;
+        }
+
+        let width = natW;
+        let height = natH;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
           }
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, width, height);
-          ctx.drawImage(img, 0, 0, width, height);
-          const dataUrl = canvas.toDataURL('image/jpeg', quality);
-          resolve({
-            dataUrl,
-            base64: dataUrl.split(',')[1],
-            mimeType: 'image/jpeg',
-          });
-        };
-        img.onerror = () => reject(new Error(t('scan_err_read_image')));
-        img.src = e.target.result;
+        }
+        width = Math.max(1, width);
+        height = Math.max(1, height);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error(t('scan_err_read_image')));
+          return;
+        }
+
+        // Draw image pixels first to guarantee image content is never overwritten
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Fill background with white ONLY under transparent regions (e.g. transparent PNG)
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        ctx.globalCompositeOperation = 'source-over';
+
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        const parts = dataUrl.split(',');
+        resolve({
+          dataUrl,
+          base64: parts.length > 1 ? parts[1] : '',
+          mimeType: 'image/jpeg',
+        });
       };
-      reader.onerror = () => reject(new Error(t('scan_err_read_file')));
-      reader.readAsDataURL(file);
+
+      img.onload = () => {
+        if (typeof img.decode === 'function') {
+          img.decode().then(proceed).catch(proceed);
+        } else {
+          proceed();
+        }
+      };
+
+      img.onerror = () => {
+        reject(new Error(t('scan_err_read_image')));
+      };
+
+      img.src = dataUri;
+    };
+
+    reader.onerror = () => {
+      reject(new Error(t('scan_err_read_file')));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+function cropAndCompressImage(sourceImg, cropNorm, rotationDeg = 0, enhanceContrast = false, maxDimension = 2048, quality = 0.88) {
+  return new Promise((resolve, reject) => {
+    try {
+      const natW = sourceImg.naturalWidth || sourceImg.width;
+      const natH = sourceImg.naturalHeight || sourceImg.height;
+      if (!natW || !natH) {
+        reject(new Error(t('scan_err_read_image')));
+        return;
+      }
+
+      const rot = ((rotationDeg % 360) + 360) % 360;
+      const rotCanvas = document.createElement('canvas');
+      if (rot === 90 || rot === 270) {
+        rotCanvas.width = natH;
+        rotCanvas.height = natW;
+      } else {
+        rotCanvas.width = natW;
+        rotCanvas.height = natH;
+      }
+      const rCtx = rotCanvas.getContext('2d');
+      rCtx.save();
+      rCtx.translate(rotCanvas.width / 2, rotCanvas.height / 2);
+      rCtx.rotate((rot * Math.PI) / 180);
+      rCtx.drawImage(sourceImg, -natW / 2, -natH / 2, natW, natH);
+      rCtx.restore();
+      rCtx.globalCompositeOperation = 'destination-over';
+      rCtx.fillStyle = '#ffffff';
+      rCtx.fillRect(0, 0, rotCanvas.width, rotCanvas.height);
+      rCtx.globalCompositeOperation = 'source-over';
+
+      const sx = Math.max(0, Math.round((cropNorm?.x || 0) * rotCanvas.width));
+      const sy = Math.max(0, Math.round((cropNorm?.y || 0) * rotCanvas.height));
+      const sw = Math.max(32, Math.min(rotCanvas.width - sx, Math.round((cropNorm?.w || 1) * rotCanvas.width)));
+      const sh = Math.max(32, Math.min(rotCanvas.height - sy, Math.round((cropNorm?.h || 1) * rotCanvas.height)));
+
+      let targetW = sw;
+      let targetH = sh;
+      if (targetW > maxDimension || targetH > maxDimension) {
+        if (targetW > targetH) {
+          targetH = Math.round((targetH * maxDimension) / targetW);
+          targetW = maxDimension;
+        } else {
+          targetW = Math.round((targetW * maxDimension) / targetH);
+          targetH = maxDimension;
+        }
+      }
+
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = targetW;
+      outCanvas.height = targetH;
+      const oCtx = outCanvas.getContext('2d');
+      if (enhanceContrast) {
+        oCtx.filter = 'contrast(1.38) brightness(1.06) saturate(0.15)';
+      }
+      oCtx.drawImage(rotCanvas, sx, sy, sw, sh, 0, 0, targetW, targetH);
+      oCtx.filter = 'none';
+      oCtx.globalCompositeOperation = 'destination-over';
+      oCtx.fillStyle = '#ffffff';
+      oCtx.fillRect(0, 0, targetW, targetH);
+      oCtx.globalCompositeOperation = 'source-over';
+
+      const dataUrl = outCanvas.toDataURL('image/jpeg', quality);
+      resolve({
+        dataUrl,
+        base64: dataUrl.split(',')[1],
+        mimeType: 'image/jpeg',
+      });
+    } catch (err) {
+      reject(err);
     }
   });
 }
@@ -91,13 +183,13 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const gallerySvg = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
   const pasteSvg = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>`;
 
-  const cleanBtnText = (str) => String(str || '').replace(/^[\p{Extended_Pictographic}\uFE0F\s]+/u, '').trim();
+  const cleanBtnText = (str) => String(str || '').replace(/^[^\p{L}\p{N}()«»"'¡¿]+/u, '').trim();
   const photoText = cleanBtnText(t('scan_take_photo')) || 'Фото';
   const galleryText = cleanBtnText(t('scan_choose_gallery')) || 'Галерея';
   const pasteText = cleanBtnText(t('scan_paste_btn')) || 'Вставить текст';
 
   modalEl.innerHTML = `
-    <div class="scanner-modal-card">
+    <div class="scanner-modal-card" id="scanner-modal-card">
       <div class="scanner-modal-header">
         <div class="scanner-header-left" id="scanner-header-left">
           <div class="scanner-spinner" id="scanner-header-spinner" style="visibility: hidden;"></div>
@@ -112,7 +204,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
         <div id="scanner-error" class="scanner-error" style="display: none; margin-bottom: 12px;"></div>
 
-        <!-- 1. Upload View -->
+        <!-- 1. Upload View (Compact 440px Dialog) -->
         <div id="scanner-upload-view" class="scanner-upload-view">
           <div class="scanner-actions-stack" id="scanner-dropzone">
             <button type="button" id="scanner-take-photo-btn" class="primary-button scanner-action-btn">
@@ -132,23 +224,69 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
         <!-- 1b. Paste Text View -->
         <div id="scanner-paste-view" class="scanner-paste-view" style="display: none;">
-          <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <button type="button" id="scanner-paste-back-btn" class="scanner-link-btn" style="font-size: 12.5px;">
+              ${cleanBtnText(t('scan_back_to_upload'))}
+            </button>
             <button type="button" id="scanner-clipboard-auto-btn" class="scanner-link-btn" style="font-size: 12.5px;">
-              ${t('scan_paste_clipboard_btn')}
+              ${cleanBtnText(t('scan_paste_clipboard_btn'))}
             </button>
           </div>
           <textarea id="scanner-text-input" class="search-input" rows="6" placeholder="${t('scan_paste_placeholder')}" style="width: 100%; height: auto; min-height: 130px; max-height: 220px; padding: 12px; font-size: 14px; font-family: inherit; resize: vertical; box-sizing: border-box; line-height: 1.45; border-radius: var(--radius-md);"></textarea>
-          <div style="display: flex; gap: 10px; margin-top: 12px;">
-            <button type="button" id="scanner-paste-back-btn" class="primary-button scanner-btn-rescan">
-              ${t('scan_back_to_upload')}
+          <div class="scanner-crop-actions" style="margin-top: 12px;">
+            <button type="button" id="scanner-paste-translate-btn" class="primary-button btn-orange scanner-crop-half-btn">
+              ${t('scan_crop_translate_btn')}
             </button>
-            <button type="button" id="scanner-paste-submit-btn" class="primary-button btn-green" style="flex: 1.5; min-height: 42px; font-size: 14px; font-weight: 700; border-radius: 10px;">
-              ${t('scan_paste_submit')}
+            <button type="button" id="scanner-paste-submit-btn" class="primary-button btn-blue scanner-crop-half-btn">
+              ${t('scan_crop_dict_btn')}
             </button>
           </div>
         </div>
 
-        <!-- 2. Processing View -->
+        <!-- 1c. Interactive Book Page Crop View (Full-Page) -->
+        <div id="scanner-crop-view" class="scanner-crop-view" style="display: none;">
+          <div class="scanner-crop-stage" id="scanner-crop-stage">
+            <div class="scanner-crop-img-wrap" id="scanner-crop-img-wrap">
+              <img id="scanner-crop-img" class="scanner-crop-img" alt="Crop Preview" />
+              <div class="scanner-crop-box" id="scanner-crop-box">
+                <div class="scanner-crop-grid"></div>
+                <div class="crop-handle nw" data-handle="nw"></div>
+                <div class="crop-handle ne" data-handle="ne"></div>
+                <div class="crop-handle se" data-handle="se"></div>
+                <div class="crop-handle sw" data-handle="sw"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scanner-crop-actions">
+            <button type="button" id="scanner-crop-translate-btn" class="primary-button btn-orange scanner-crop-half-btn">
+              ${t('scan_crop_translate_btn')}
+            </button>
+            <button type="button" id="scanner-crop-dict-btn" class="primary-button btn-blue scanner-crop-half-btn">
+              ${t('scan_crop_dict_btn')}
+            </button>
+          </div>
+        </div>
+
+        <!-- 1d. Full-Text Translation View (Full-Page) -->
+        <div id="scanner-translate-view" class="scanner-translate-view" style="display: none;">
+          <div class="scanner-translate-scroll">
+            <div class="scanner-translate-card scanner-translate-card--full">
+              <div class="scanner-translate-label">${t('scan_translation_title')}</div>
+              <div id="scanner-translated-text" class="scanner-translated-body" dir="auto"></div>
+            </div>
+          </div>
+          <div class="scanner-crop-actions">
+            <button type="button" id="scanner-translate-back-btn" class="primary-button btn-blue scanner-crop-half-btn">
+              ${t('scan_back_to_crop_btn')}
+            </button>
+            <button type="button" id="scanner-translate-to-dict-btn" class="primary-button btn-blue scanner-crop-half-btn">
+              ${t('scan_crop_dict_btn')}
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Processing View (Full-Page Preview for Photos) -->
         <div id="scanner-processing-view" class="scanner-processing-view" style="display: none;">
           <div class="scanner-preview-container" id="scanner-preview-container">
             <img id="scanner-preview-img" class="scanner-preview-img" alt="Scanned Document" style="display: none;" />
@@ -157,37 +295,39 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
           </div>
         </div>
 
-        <!-- 3. Results View -->
+        <!-- 3. Results View (Vocabulary Mode) -->
         <div id="scanner-results-view" class="scanner-results-view" style="display: none;">
-          <div class="scanner-lemmas-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
-            <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="${t('scan_group_cat_title')}">
-              <span style="opacity: 0.75;">${t('scan_group_cat_all')}</span>
-              <strong id="scanner-group-cat-label" class="scanner-group-cat-label">Elementary ⇄</strong>
-            </button>
-            <div class="scanner-select-actions">
-              <button type="button" id="scanner-toggle-select-btn" class="scanner-link-btn" style="font-size: 13px; font-weight: 700;">
-                ${t('scan_deselect_all')}
+          <div id="scanner-words-panel" class="scanner-words-panel">
+            <div class="scanner-lemmas-header">
+              <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="${t('scan_group_cat_title')}">
+                <span style="opacity: 0.75;">${cleanBtnText(t('scan_group_cat_all'))}</span>
+                <strong id="scanner-group-cat-label" class="scanner-group-cat-label">Elementary ⇄</strong>
               </button>
+              <div class="scanner-select-actions">
+                <button type="button" id="scanner-toggle-select-btn" class="scanner-link-btn">
+                  ${t('scan_deselect_all')}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div id="scanner-lemmas-list" class="scanner-lemmas-list"></div>
+            <div id="scanner-lemmas-list" class="scanner-lemmas-list"></div>
 
-          <!-- Existing Words Collapsible -->
-          <div id="scanner-existing-box" class="scanner-existing-box" style="display: none;">
-            <div class="scanner-existing-header" id="scanner-existing-toggle">
-              <span id="scanner-existing-title">${t('scan_already_exists')} (0)</span>
-              <span class="scanner-existing-arrow" id="scanner-existing-arrow">▼</span>
+            <!-- Existing Words Collapsible -->
+            <div id="scanner-existing-box" class="scanner-existing-box" style="display: none;">
+              <div class="scanner-existing-header" id="scanner-existing-toggle">
+                <span id="scanner-existing-title">${cleanBtnText(t('scan_already_exists'))} (0)</span>
+                <span class="scanner-existing-arrow" id="scanner-existing-arrow">▼</span>
+              </div>
+              <div id="scanner-existing-list" class="scanner-existing-list" style="display: none;"></div>
             </div>
-            <div id="scanner-existing-list" class="scanner-existing-list" style="display: none;"></div>
           </div>
 
           <div class="scanner-results-footer">
             <button type="button" id="scanner-rescan-btn" class="primary-button scanner-btn-rescan">
-              ${t('scan_rescan_btn')}
+              ${cleanBtnText(t('scan_rescan_btn'))}
             </button>
             <button type="button" id="scanner-submit-btn" class="primary-button btn-green scanner-btn-save">
-              ${t('scan_add_btn')}
+              ${cleanBtnText(t('scan_add_btn'))}
             </button>
           </div>
         </div>
@@ -197,10 +337,12 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   document.body.appendChild(modalEl);
 
+  const modalCard = modalEl.querySelector('#scanner-modal-card');
   const closeBtn = modalEl.querySelector('#scanner-close-btn');
   const headerSpinner = modalEl.querySelector('#scanner-header-spinner');
   const uploadView = modalEl.querySelector('#scanner-upload-view');
   const pasteView = modalEl.querySelector('#scanner-paste-view');
+  const cropView = modalEl.querySelector('#scanner-crop-view');
   const processingView = modalEl.querySelector('#scanner-processing-view');
   const resultsView = modalEl.querySelector('#scanner-results-view');
   const previewImg = modalEl.querySelector('#scanner-preview-img');
@@ -217,7 +359,32 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const textInput = modalEl.querySelector('#scanner-text-input');
   const clipboardAutoBtn = modalEl.querySelector('#scanner-clipboard-auto-btn');
   const pasteBackBtn = modalEl.querySelector('#scanner-paste-back-btn');
+  const pasteTranslateBtn = modalEl.querySelector('#scanner-paste-translate-btn');
   const pasteSubmitBtn = modalEl.querySelector('#scanner-paste-submit-btn');
+
+  // Crop & Translation View elements
+  const cropImg = modalEl.querySelector('#scanner-crop-img');
+  const cropBox = modalEl.querySelector('#scanner-crop-box');
+  const cropTranslateBtn = modalEl.querySelector('#scanner-crop-translate-btn');
+  const cropDictBtn = modalEl.querySelector('#scanner-crop-dict-btn');
+  const translateView = modalEl.querySelector('#scanner-translate-view');
+  const translatedTextEl = modalEl.querySelector('#scanner-translated-text');
+  const originalTextEl = modalEl.querySelector('#scanner-original-text');
+  const translateBackBtn = modalEl.querySelector('#scanner-translate-back-btn');
+  const translateToDictBtn = modalEl.querySelector('#scanner-translate-to-dict-btn');
+
+  // Reader & Tabs elements
+  const tabsRow = modalEl.querySelector('#scanner-tabs-row');
+  const tabWordsBtn = modalEl.querySelector('#scanner-tab-words-btn');
+  const tabWordsCount = modalEl.querySelector('#scanner-tab-words-count');
+  const tabReaderBtn = modalEl.querySelector('#scanner-tab-reader-btn');
+  const readerPanel = modalEl.querySelector('#scanner-reader-panel');
+  const wordsPanel = modalEl.querySelector('#scanner-words-panel');
+  const readerBody = modalEl.querySelector('#scanner-reader-body');
+  const wordPopover = modalEl.querySelector('#scanner-word-popover');
+  const readerPhotoToggle = modalEl.querySelector('#scanner-reader-photo-toggle');
+  const readerPhotoBox = modalEl.querySelector('#scanner-reader-photo-box');
+  const readerPhotoImg = modalEl.querySelector('#scanner-reader-photo-img');
 
   const groupCatBtn = modalEl.querySelector('#scanner-group-cat-btn');
   const groupCatLabel = modalEl.querySelector('#scanner-group-cat-label');
@@ -236,8 +403,21 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   let currentNewLemmas = [];
   let selectedIndices = new Set();
   let currentGroupCategory = 'Elementary';
+  let currentScannedText = '';
+  let currentScannedPhotoDataUrl = '';
 
   let activePreviewUrl = null;
+  let rawImageElement = null;
+  let cropRotationDeg = 0;
+  let cropEnhanceContrast = false;
+  let cropState = { x: 0, y: 0, w: 1, h: 1 };
+
+  const setFullpageMode = (enabled) => {
+    modalEl.classList.toggle('scanner-fullpage', Boolean(enabled));
+    if (modalCard) {
+      modalCard.classList.toggle('scanner-fullpage', Boolean(enabled));
+    }
+  };
 
   const closeModal = () => {
     if (activePreviewUrl) {
@@ -263,6 +443,175 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     if (errorBox) errorBox.style.display = 'none';
   };
 
+  // --- Interactive Crop Box Logic ---
+  function updateCropBoxStyles() {
+    if (!cropBox) return;
+    cropBox.style.left = `${(cropState.x * 100).toFixed(2)}%`;
+    cropBox.style.top = `${(cropState.y * 100).toFixed(2)}%`;
+    cropBox.style.width = `${(cropState.w * 100).toFixed(2)}%`;
+    cropBox.style.height = `${(cropState.h * 100).toFixed(2)}%`;
+  }
+
+  let dragMode = null;
+  let dragStart = { clientX: 0, clientY: 0, x: 0, y: 0, w: 0, h: 0 };
+
+  function onPointerDownCrop(e) {
+    if (!cropImg || !cropBox) return;
+    const handleEl = e.target.closest('.crop-handle');
+    const isBox = e.target === cropBox || handleEl;
+    if (!isBox) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    dragMode = handleEl ? handleEl.getAttribute('data-handle') : 'move';
+    const pt = e.touches ? e.touches[0] : e;
+    dragStart = {
+      clientX: pt.clientX,
+      clientY: pt.clientY,
+      x: cropState.x,
+      y: cropState.y,
+      w: cropState.w,
+      h: cropState.h,
+    };
+
+    window.addEventListener('mousemove', onPointerMoveCrop, { passive: false });
+    window.addEventListener('touchmove', onPointerMoveCrop, { passive: false });
+    window.addEventListener('mouseup', onPointerUpCrop);
+    window.addEventListener('touchend', onPointerUpCrop);
+  }
+
+  function onPointerMoveCrop(e) {
+    if (!dragMode || !cropImg) return;
+    e.preventDefault();
+    const rect = cropImg.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    const pt = e.touches ? e.touches[0] : e;
+    const dx = (pt.clientX - dragStart.clientX) / rect.width;
+    const dy = (pt.clientY - dragStart.clientY) / rect.height;
+    const minSize = 0.12;
+
+    if (dragMode === 'move') {
+      cropState.x = Math.max(0, Math.min(1 - dragStart.w, dragStart.x + dx));
+      cropState.y = Math.max(0, Math.min(1 - dragStart.h, dragStart.y + dy));
+    } else {
+      let nx = dragStart.x;
+      let ny = dragStart.y;
+      let nw = dragStart.w;
+      let nh = dragStart.h;
+
+      if (dragMode.includes('w')) {
+        const maxLeft = dragStart.x + dragStart.w - minSize;
+        nx = Math.max(0, Math.min(maxLeft, dragStart.x + dx));
+        nw = dragStart.w + (dragStart.x - nx);
+      }
+      if (dragMode.includes('e')) {
+        nw = Math.max(minSize, Math.min(1 - dragStart.x, dragStart.w + dx));
+      }
+      if (dragMode.includes('n')) {
+        const maxTop = dragStart.y + dragStart.h - minSize;
+        ny = Math.max(0, Math.min(maxTop, dragStart.y + dy));
+        nh = dragStart.h + (dragStart.y - ny);
+      }
+      if (dragMode.includes('s')) {
+        nh = Math.max(minSize, Math.min(1 - dragStart.y, dragStart.h + dy));
+      }
+
+      cropState = { x: nx, y: ny, w: nw, h: nh };
+    }
+    updateCropBoxStyles();
+  }
+
+  function onPointerUpCrop() {
+    dragMode = null;
+    window.removeEventListener('mousemove', onPointerMoveCrop);
+    window.removeEventListener('touchmove', onPointerMoveCrop);
+    window.removeEventListener('mouseup', onPointerUpCrop);
+    window.removeEventListener('touchend', onPointerUpCrop);
+  }
+
+  let lastScanData = null;
+
+  if (cropBox) {
+    cropBox.addEventListener('mousedown', onPointerDownCrop);
+    cropBox.addEventListener('touchstart', onPointerDownCrop, { passive: false });
+  }
+
+  if (cropTranslateBtn) {
+    cropTranslateBtn.addEventListener('click', async () => {
+      hideError();
+      cropTranslateBtn.disabled = true;
+      if (cropDictBtn) cropDictBtn.disabled = true;
+      try {
+        const adRes = await AdService.showScannerTranslationRewardedAd();
+        if (!adRes || (!adRes.rewardEarned && !adRes.success)) {
+          return;
+        }
+        await runImageScanWithCrop(cropState, 'translate');
+      } finally {
+        cropTranslateBtn.disabled = false;
+        if (cropDictBtn) cropDictBtn.disabled = false;
+      }
+    });
+  }
+
+  if (cropDictBtn) {
+    cropDictBtn.addEventListener('click', () => {
+      runImageScanWithCrop(cropState, 'dict');
+    });
+  }
+
+  if (translateBackBtn) {
+    translateBackBtn.addEventListener('click', () => {
+      if (translateView) translateView.style.display = 'none';
+      if (resultsView) resultsView.style.display = 'none';
+      if (rawImageElement) {
+        setFullpageMode(true);
+        cropView.style.display = 'flex';
+      } else if (currentScannedText || (textInput && textInput.value.trim())) {
+        setFullpageMode(false);
+        pasteView.style.display = 'block';
+      } else {
+        setFullpageMode(false);
+        uploadView.style.display = 'block';
+      }
+      hideError();
+    });
+  }
+
+  if (translateToDictBtn) {
+    translateToDictBtn.addEventListener('click', () => {
+      if (translateView) translateView.style.display = 'none';
+      if (lastScanData) {
+        displayResults(lastScanData);
+      }
+    });
+  }
+
+  // --- Tabs Switching (Vocabulary vs Book Reader) ---
+  function switchScannerTab(tabName) {
+    const isReader = tabName === 'reader';
+    if (tabWordsBtn) tabWordsBtn.classList.toggle('active', !isReader);
+    if (tabReaderBtn) tabReaderBtn.classList.toggle('active', isReader);
+    if (wordsPanel) wordsPanel.style.display = isReader ? 'none' : 'flex';
+    if (readerPanel) readerPanel.style.display = isReader ? 'flex' : 'none';
+  }
+
+  if (tabWordsBtn) {
+    tabWordsBtn.addEventListener('click', () => switchScannerTab('words'));
+  }
+  if (tabReaderBtn) {
+    tabReaderBtn.addEventListener('click', () => switchScannerTab('reader'));
+  }
+
+  if (readerPhotoToggle && readerPhotoBox) {
+    readerPhotoToggle.addEventListener('click', () => {
+      const isHidden = readerPhotoBox.style.display === 'none';
+      readerPhotoBox.style.display = isHidden ? 'flex' : 'none';
+      readerPhotoToggle.textContent = isHidden ? t('scan_hide_original') : t('scan_show_original');
+    });
+  }
+
   takePhotoBtn.addEventListener('click', () => {
     hideError();
     if (window.trackEvent) window.trackEvent('scan_source_photo');
@@ -280,6 +629,8 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   openPasteBtn.addEventListener('click', async () => {
     hideError();
     if (window.trackEvent) window.trackEvent('scan_source_paste');
+    rawImageElement = null;
+    setFullpageMode(false);
     uploadView.style.display = 'none';
     pasteView.style.display = 'block';
 
@@ -313,25 +664,26 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     }
   });
 
-  pasteBackBtn.addEventListener('click', () => {
-    hideError();
-    pasteView.style.display = 'none';
-    uploadView.style.display = 'block';
-  });
+  if (pasteBackBtn) {
+    pasteBackBtn.addEventListener('click', () => {
+      hideError();
+      pasteView.style.display = 'none';
+      uploadView.style.display = 'block';
+      setFullpageMode(false);
+    });
+  }
 
-  pasteSubmitBtn.addEventListener('click', async () => {
-    const rawText = textInput.value.trim();
-    if (!rawText || rawText.length < 2) {
-      showError(t('scan_err_empty_text'));
-      return;
-    }
-
+  async function runPasteScan(rawText, mode = 'dict') {
     try {
       hideError();
       if (window.trackEvent) {
-        window.trackEvent('scan_paste_submit', { length: rawText.length });
+        window.trackEvent('scan_paste_submit', { length: rawText.length, mode });
       }
+      rawImageElement = null;
+      currentScannedPhotoDataUrl = '';
+      currentScannedText = rawText;
       pasteView.style.display = 'none';
+      if (translateView) translateView.style.display = 'none';
       processingView.style.display = 'flex';
       resultsView.style.display = 'none';
       previewImg.style.display = 'none';
@@ -339,16 +691,74 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
       const res = await scanDocumentImage({ text: rawText });
+      if (!res.detected_text) res.detected_text = rawText;
+      lastScanData = res;
+
+      if (mode === 'translate') {
+        const translatedPassage = await translateFullTextToLocale(rawText);
+        if (headerSpinner) headerSpinner.style.visibility = 'hidden';
+        processingView.style.display = 'none';
+        setFullpageMode(true);
+        if (translateView) {
+          if (translatedTextEl) {
+            translatedTextEl.textContent = translatedPassage || rawText || t('scan_no_new_words');
+          }
+          if (originalTextEl) {
+            originalTextEl.textContent = rawText || '';
+          }
+          translateView.style.display = 'flex';
+        } else {
+          displayResults(res);
+        }
+        return;
+      }
+
       displayResults(res);
     } catch (err) {
       console.error('Text scan error:', err);
       if (headerSpinner) headerSpinner.style.visibility = 'hidden';
+      setFullpageMode(false);
       pasteView.style.display = 'block';
+      if (translateView) translateView.style.display = 'none';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
       showError(err.message || t('scan_err_lemmas'));
     }
-  });
+  }
+
+  if (pasteTranslateBtn) {
+    pasteTranslateBtn.addEventListener('click', async () => {
+      const rawText = textInput.value.trim();
+      if (!rawText || rawText.length < 2) {
+        showError(t('scan_err_empty_text'));
+        return;
+      }
+      hideError();
+      pasteTranslateBtn.disabled = true;
+      if (pasteSubmitBtn) pasteSubmitBtn.disabled = true;
+      try {
+        const adRes = await AdService.showScannerTranslationRewardedAd();
+        if (!adRes || (!adRes.rewardEarned && !adRes.success)) {
+          return;
+        }
+        await runPasteScan(rawText, 'translate');
+      } finally {
+        pasteTranslateBtn.disabled = false;
+        if (pasteSubmitBtn) pasteSubmitBtn.disabled = false;
+      }
+    });
+  }
+
+  if (pasteSubmitBtn) {
+    pasteSubmitBtn.addEventListener('click', async () => {
+      const rawText = textInput.value.trim();
+      if (!rawText || rawText.length < 2) {
+        showError(t('scan_err_empty_text'));
+        return;
+      }
+      await runPasteScan(rawText, 'dict');
+    });
+  }
 
   dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
@@ -380,9 +790,15 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
       activePreviewUrl = null;
     }
+    rawImageElement = null;
+    currentScannedPhotoDataUrl = '';
+    currentScannedText = '';
     previewImg.removeAttribute('src');
+    if (cropImg) cropImg.removeAttribute('src');
+    setFullpageMode(false);
     uploadView.style.display = 'block';
     pasteView.style.display = 'none';
+    cropView.style.display = 'none';
     processingView.style.display = 'none';
     resultsView.style.display = 'none';
     if (headerSpinner) headerSpinner.style.visibility = 'hidden';
@@ -401,47 +817,145 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       hideError();
+      if (headerSpinner) headerSpinner.style.visibility = 'visible';
       if (window.trackEvent) {
         window.trackEvent('scan_image_upload', { size_kb: Math.round((file.size || 0) / 1024) });
       }
+
+      if (activePreviewUrl) {
+        try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
+        activePreviewUrl = null;
+      }
+
+      // Pre-compress and convert to dataUrl (100% reliable across all Android WebViews, avoids blob: origin issues)
+      const compressed = await compressImageFile(file, 2048, 0.88);
+
+      const img = new Image();
+      const loadPromise = new Promise((resolve, reject) => {
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error(t('scan_err_read_image')));
+      });
+      img.src = compressed.dataUrl;
+
+      rawImageElement = await loadPromise;
+      cropRotationDeg = 0;
+      cropEnhanceContrast = false;
+      // Default to 100% full image capture so no text is ever cut off by default
+      cropState = { x: 0, y: 0, w: 1, h: 1 };
+
+      // Switch modal to Full-Page mode for Book Page Crop View
+      setFullpageMode(true);
       uploadView.style.display = 'none';
       pasteView.style.display = 'none';
+      processingView.style.display = 'none';
+      resultsView.style.display = 'none';
+      if (translateView) translateView.style.display = 'none';
+      cropView.style.display = 'flex';
+
+      cropImg.onload = () => {
+        updateCropBoxStyles();
+      };
+      cropImg.src = compressed.dataUrl;
+      if (cropImg.complete) {
+        updateCropBoxStyles();
+      }
+    } catch (err) {
+      console.error('Image load error:', err);
+      setFullpageMode(false);
+      showError(err.message || t('scan_err_read_image'));
+    } finally {
+      if (headerSpinner) headerSpinner.style.visibility = 'hidden';
+    }
+  }
+
+  async function translateFullTextToLocale(sourceText) {
+    const clean = String(sourceText || '').trim();
+    if (!clean) return '';
+    let targetLang = 'ru';
+    try {
+      const stored = getInterfaceLanguage();
+      if (stored && typeof stored === 'string') {
+        targetLang = stored.toLowerCase().split(/[-_]/)[0] || 'ru';
+      }
+    } catch (e) {}
+    const gtxLang = targetLang === 'zh' ? 'zh-CN' : targetLang;
+    try {
+      const gtxUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${encodeURIComponent(gtxLang)}&dt=t&q=${encodeURIComponent(clean)}`;
+      const res = await fetch(gtxUrl).then((r) => r.json());
+      if (res && Array.isArray(res[0])) {
+        return res[0].map((part) => (part && part[0] ? String(part[0]) : '')).join('').trim();
+      }
+    } catch (err) {
+      console.warn('Full text translation error:', err);
+    }
+    return '';
+  }
+
+  async function runImageScanWithCrop(selectedCropNorm, mode = 'dict') {
+    try {
+      hideError();
+      setFullpageMode(true);
+      uploadView.style.display = 'none';
+      pasteView.style.display = 'none';
+      cropView.style.display = 'none';
+      if (translateView) translateView.style.display = 'none';
       processingView.style.display = 'flex';
       resultsView.style.display = 'none';
       previewImg.style.display = 'block';
       textIconPreview.style.display = 'none';
       if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
-      // 1. Instantly display actual photo thumbnail (0ms latency, never black)
-      if (activePreviewUrl) {
-        try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
-        activePreviewUrl = null;
-      }
-      try {
-        activePreviewUrl = URL.createObjectURL(file);
-        previewImg.src = activePreviewUrl;
-      } catch (err) {
-        const fr = new FileReader();
-        fr.onload = (ev) => {
-          previewImg.src = ev.target.result;
-        };
-        fr.readAsDataURL(file);
-      }
+      const compressed = await cropAndCompressImage(
+        rawImageElement,
+        selectedCropNorm,
+        cropRotationDeg,
+        cropEnhanceContrast,
+        2048,
+        0.88
+      );
 
-      const compressed = await compressImageFile(file, 1200, 0.82);
-
-      // Fallback in case objectUrl was blocked or empty
-      if (!previewImg.src || previewImg.naturalWidth === 0) {
-        previewImg.src = compressed.dataUrl;
-      }
+      previewImg.src = compressed.dataUrl;
+      currentScannedPhotoDataUrl = compressed.dataUrl;
 
       const res = await scanDocumentImage(compressed.base64, compressed.mimeType);
+      lastScanData = res;
+
+      if (mode === 'translate') {
+        let extractedText = String(res.detected_text || res.detected_text_snippet || '').trim();
+        if (!extractedText && Array.isArray(res.lemmas) && res.lemmas.length > 0) {
+          const uniqueContexts = [];
+          res.lemmas.forEach((l) => {
+            const ctx = String(l.context || l.original || l.word || '').trim();
+            if (ctx && !uniqueContexts.includes(ctx)) uniqueContexts.push(ctx);
+          });
+          extractedText = uniqueContexts.join('\n');
+        }
+        const translatedPassage = await translateFullTextToLocale(extractedText);
+        if (headerSpinner) headerSpinner.style.visibility = 'hidden';
+        processingView.style.display = 'none';
+        if (translateView) {
+          if (translatedTextEl) {
+            translatedTextEl.textContent = translatedPassage || extractedText || t('scan_no_new_words');
+          }
+          if (originalTextEl) {
+            originalTextEl.textContent = extractedText || '';
+          }
+          translateView.style.display = 'flex';
+        } else {
+          displayResults(res);
+        }
+        return;
+      }
+
       displayResults(res);
     } catch (err) {
       console.error('Scan error:', err);
       if (headerSpinner) headerSpinner.style.visibility = 'hidden';
+      setFullpageMode(false);
       uploadView.style.display = 'block';
       pasteView.style.display = 'none';
+      cropView.style.display = 'none';
+      if (translateView) translateView.style.display = 'none';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
       showError(err.message || t('scan_err_ocr'));
@@ -449,11 +963,15 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   }
 
   function displayResults(data) {
+    setFullpageMode(true);
     processingView.style.display = 'none';
-    resultsView.style.display = 'block';
+    cropView.style.display = 'none';
+    resultsView.style.display = 'flex';
     if (headerSpinner) headerSpinner.style.visibility = 'hidden';
 
     const allLemmas = Array.isArray(data.lemmas) ? data.lemmas : [];
+    currentScannedText = String(data.detected_text || data.detected_text_snippet || currentScannedText || '').trim();
+
     const existingWordsSet = new Set(
       words.map((w) => String(w.word || '').trim().toLowerCase())
     );
@@ -509,9 +1027,177 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
 
+    if (tabWordsCount) {
+      tabWordsCount.textContent = `(${currentNewLemmas.length})`;
+    }
+
+    // Setup Reader Mode & Original Photo Comparison
+    if (currentScannedPhotoDataUrl && readerPhotoToggle && readerPhotoImg && readerPhotoBox) {
+      readerPhotoToggle.style.display = 'inline-block';
+      readerPhotoToggle.textContent = t('scan_show_original');
+      readerPhotoBox.style.display = 'none';
+      readerPhotoImg.src = currentScannedPhotoDataUrl;
+    } else if (readerPhotoToggle && readerPhotoBox) {
+      readerPhotoToggle.style.display = 'none';
+      readerPhotoBox.style.display = 'none';
+    }
+
+    renderBookReaderView(existingLemmas);
+    if (tabsRow) {
+      tabsRow.style.display = currentScannedText.length >= 15 ? 'flex' : 'none';
+    }
+    switchScannerTab('words');
+
     renderLemmasList();
     renderExistingSection(existingLemmas);
     updateSubmitButton();
+  }
+
+  function renderBookReaderView(existingLemmas = []) {
+    if (!readerBody) return;
+    if (wordPopover) wordPopover.style.display = 'none';
+
+    const textToRender = currentScannedText || currentNewLemmas.map((l) => l.context || l.original || l.word).join('\n');
+    if (!textToRender.trim()) {
+      readerBody.innerHTML = `<p class="scanner-reader-paragraph" style="color: var(--text-muted);">${escapeHtml(t('scan_no_new_words'))}</p>`;
+      return;
+    }
+
+    // Build lookup map from both new lemmas and existing dictionary words
+    const lemmaLookup = new Map();
+    currentNewLemmas.forEach((item, idx) => {
+      lemmaLookup.set(item.word.toLowerCase(), { type: 'new', item, idx });
+      if (item.original) {
+        lemmaLookup.set(item.original.toLowerCase(), { type: 'new', item, idx });
+      }
+    });
+    existingLemmas.forEach((raw) => {
+      const wKey = String(raw.word || '').trim().toLowerCase();
+      if (wKey && !lemmaLookup.has(wKey)) {
+        lemmaLookup.set(wKey, { type: 'existing', item: raw });
+      }
+      if (raw.original && !lemmaLookup.has(String(raw.original).toLowerCase())) {
+        lemmaLookup.set(String(raw.original).toLowerCase(), { type: 'existing', item: raw });
+      }
+    });
+
+    const paragraphs = textToRender.split(/\n\s*\n|\r?\n/).map((p) => p.trim()).filter(Boolean);
+    readerBody.innerHTML = paragraphs
+      .map((para) => {
+        const tokensHtml = para.replace(/[a-zA-Z]+(?:'[a-zA-Z]+)?/g, (match) => {
+          const lower = match.toLowerCase();
+          let entry = lemmaLookup.get(lower);
+          if (!entry && lower.length > 3) {
+            const stripped = lower.replace(/(?:ing|ed|es|s)$/, '');
+            if (stripped.length >= 3) entry = lemmaLookup.get(stripped);
+          }
+          const cls = entry
+            ? entry.type === 'existing'
+              ? 'scanner-reader-word in-dict'
+              : 'scanner-reader-word is-lemma'
+            : 'scanner-reader-word';
+          return `<span class="${cls}" data-word="${escapeHtml(lower)}">${escapeHtml(match)}</span>`;
+        });
+        return `<p class="scanner-reader-paragraph">${tokensHtml}</p>`;
+      })
+      .join('');
+
+    readerBody.onclick = async (e) => {
+      const wordEl = e.target.closest('.scanner-reader-word');
+      if (!wordEl || !wordPopover) return;
+
+      readerBody.querySelectorAll('.scanner-reader-word.active-word').forEach((el) => el.classList.remove('active-word'));
+      wordEl.classList.add('active-word');
+
+      const clickedLower = (wordEl.getAttribute('data-word') || '').toLowerCase();
+      if (!clickedLower) return;
+
+      let entry = lemmaLookup.get(clickedLower);
+      if (!entry && clickedLower.length > 3) {
+        const stripped = clickedLower.replace(/(?:ing|ed|es|s)$/, '');
+        if (stripped.length >= 3) entry = lemmaLookup.get(stripped);
+      }
+
+      // Check existing user dictionary as well
+      const activeLang = getInterfaceLanguage();
+      const dictMatch = words.find((w) => w.word && w.word.trim().toLowerCase() === clickedLower);
+
+      let displayWord = entry?.item?.word || dictMatch?.word || clickedLower;
+      let displayIpa = entry?.item?.transcription || dictMatch?.transcription || '';
+      let displayTrans = entry?.item?.customTranslation || entry?.item?.translation || (dictMatch ? getWordTranslation(dictMatch, activeLang) : '');
+      let displayLevel = entry?.item?.level || '';
+      let isAlreadyInDict = Boolean(dictMatch || entry?.type === 'existing');
+
+      wordPopover.style.display = 'flex';
+      wordPopover.innerHTML = `
+        <div class="scanner-popover-main">
+          <div class="scanner-popover-head">
+            <span class="scanner-popover-word">${escapeHtml(displayWord)}</span>
+            ${displayIpa ? `<span class="scanner-popover-ipa">${escapeHtml(displayIpa)}</span>` : ''}
+            ${displayLevel ? `<span class="scanner-lemma-level">${escapeHtml(displayLevel)}</span>` : ''}
+          </div>
+          <div class="scanner-popover-trans" id="scanner-popover-trans-text">
+            ${displayTrans ? escapeHtml(displayTrans) : `⏳ ${escapeHtml(t('dict_searching_trans'))}`}
+          </div>
+        </div>
+        <div class="scanner-popover-actions">
+          <button type="button" class="scanner-popover-speak-btn" id="scanner-popover-speak-btn" title="${t('sound_on')}">🔊</button>
+          <button type="button" class="scanner-popover-add-btn" id="scanner-popover-add-btn" ${isAlreadyInDict ? 'disabled' : ''}>
+            ${isAlreadyInDict ? escapeHtml(t('scan_word_in_dict')) : escapeHtml(t('scan_word_add_btn'))}
+          </button>
+        </div>
+      `;
+
+      const speakBtnEl = wordPopover.querySelector('#scanner-popover-speak-btn');
+      if (speakBtnEl) {
+        speakBtnEl.addEventListener('click', () => speakWord(displayWord));
+      }
+
+      // If translation wasn't pre-extracted, fetch on-demand in user's locale
+      if (!displayTrans) {
+        try {
+          const sug = await suggestTranslations(displayWord);
+          if (sug && Array.isArray(sug.suggestions) && sug.suggestions.length > 0) {
+            displayTrans = sug.suggestions.slice(0, 2).join(', ');
+            if (!displayIpa && sug.transcription) displayIpa = sug.transcription;
+            const transEl = wordPopover.querySelector('#scanner-popover-trans-text');
+            if (transEl) transEl.textContent = displayTrans;
+          }
+        } catch (err) {}
+      }
+
+      const addBtnEl = wordPopover.querySelector('#scanner-popover-add-btn');
+      if (addBtnEl && !isAlreadyInDict) {
+        addBtnEl.addEventListener('click', () => {
+          const existingNewIdx = currentNewLemmas.findIndex((x) => x.word.toLowerCase() === displayWord.toLowerCase());
+          if (existingNewIdx >= 0) {
+            selectedIndices.add(existingNewIdx);
+          } else {
+            const finalTr = (displayTrans || displayWord).toLowerCase();
+            const newIdx = currentNewLemmas.length;
+            currentNewLemmas.push({
+              word: displayWord.toLowerCase(),
+              original: clickedLower,
+              category: currentGroupCategory || 'Elementary',
+              level: displayLevel || 'B1',
+              transcription: displayIpa || '',
+              context: '',
+              translationVariants: [finalTr],
+              selectedVariants: new Set([finalTr]),
+              isEditingTrans: false,
+              customTranslation: finalTr,
+            });
+            selectedIndices.add(newIdx);
+          }
+          wordEl.classList.add('in-dict');
+          addBtnEl.disabled = true;
+          addBtnEl.textContent = t('scan_word_in_dict');
+          if (tabWordsCount) tabWordsCount.textContent = `(${currentNewLemmas.length})`;
+          renderLemmasList();
+          updateSubmitButton();
+        });
+      }
+    };
   }
 
   function renderLemmasList() {
@@ -529,7 +1215,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     if (groupCatBtn) groupCatBtn.style.display = 'inline-flex';
     if (toggleSelectBtn) toggleSelectBtn.style.display = 'inline-block';
-    submitBtn.style.display = 'block';
+    submitBtn.style.display = 'flex';
     lemmasList.innerHTML = currentNewLemmas
       .map((item, idx) => {
         const isChecked = selectedIndices.has(idx);
@@ -572,6 +1258,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
             <div class="scanner-lemma-content">
               <div class="scanner-lemma-head">
                 <span class="scanner-lemma-word">${escapeHtml(item.word)}</span>
+                <button type="button" class="scanner-lemma-speak-btn" data-speak-word="${escapeHtml(item.word)}" title="${t('sound_on')}">🔊</button>
                 ${ipaText}
                 ${origSnippet}
                 ${catBadge}
@@ -591,9 +1278,9 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     }
 
     existingBox.style.display = 'block';
-    existingTitle.textContent = `${t('scan_already_exists')} (${existingLemmas.length})`;
+    existingTitle.textContent = `${cleanBtnText(t('scan_already_exists'))} (${existingLemmas.length})`;
     existingList.innerHTML = existingLemmas
-      .map((item) => `<span class="scanner-existing-chip">✔️ ${escapeHtml(item.word)}</span>`)
+      .map((item) => `<span class="scanner-existing-chip">${escapeHtml(item.word)}</span>`)
       .join('');
   }
 
@@ -614,6 +1301,15 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   });
 
   lemmasList.addEventListener('click', (e) => {
+    // 0. Audio Speak Button Click
+    const speakBtn = e.target.closest('.scanner-lemma-speak-btn');
+    if (speakBtn) {
+      e.stopPropagation();
+      const w = speakBtn.getAttribute('data-speak-word');
+      if (w) speakWord(w);
+      return;
+    }
+
     // 1. Category Badge Click -> Cycle Category
     const catBtn = e.target.closest('.scanner-lemma-cat');
     if (catBtn) {
@@ -769,7 +1465,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
   function updateSubmitButton() {
     const count = selectedIndices.size;
-    submitBtn.textContent = `${t('scan_add_btn')} (${count})`;
+    submitBtn.textContent = cleanBtnText(t('scan_add_btn'));
     submitBtn.disabled = count === 0;
     submitBtn.style.opacity = count === 0 ? '0.5' : '1';
 
@@ -805,7 +1501,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     try {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span class="hourglass-flip">⏳</span> ${t('scan_adding_to_dict')}`;
+      submitBtn.textContent = cleanBtnText(t('scan_adding_to_dict'));
 
       const res = await batchAddCustomWords(selectedWords);
       const added = res.words || selectedWords;
@@ -823,7 +1519,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         window.trackEvent('scanner_words_added', { count: added.length, category: currentGroupCategory });
       }
 
-      submitBtn.textContent = `🎉 ${t('scan_added_success')}${added.length}!`;
+      submitBtn.textContent = `${cleanBtnText(t('scan_added_success'))}${added.length}!`;
       setTimeout(() => {
         closeModal();
       }, 1100);

@@ -3597,6 +3597,8 @@ async function addCustomWord({ word, translation, category, notes }) {
   const payload = {
     action: 'addword',
     route: 'addword',
+    source: 'manual',
+    userId: typeof getEffectiveUserId === 'function' ? getEffectiveUserId() : 'guest',
     word: cleanW,
     translation: cleanTrans,
     category: cleanCat,
@@ -3680,6 +3682,7 @@ async function batchAddCustomWords(words = []) {
     category: String(w.category || 'Общие').trim(),
     level: (w.category === 'Pattern' || w.category === 'Irregular verbs') ? '' : String(w.level || 'A2').trim(),
     transcription: w.category === 'Pattern' ? '' : String(w.transcription || '').trim(),
+    context: String(w.context || w.original || '').trim(),
     notes: String(w.notes || '').trim(),
     zipf: parseFloat(w.zipf) || 0,
   }));
@@ -3687,6 +3690,9 @@ async function batchAddCustomWords(words = []) {
   const payload = {
     action: 'batchadd',
     route: 'batchadd',
+    source: 'scanner',
+    lang: batchLang,
+    userId: typeof getEffectiveUserId === 'function' ? getEffectiveUserId() : 'guest',
     words: formattedWords,
   };
 
@@ -3820,13 +3826,20 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
     }
   }
 
+  let fallbackFullText = payload.text || '';
+
   // If on Android and image is provided, try fast on-device ML Kit OCR first
   if (payload.imageBase64 && !payload.text && typeof window !== 'undefined' && window.AndroidOcrBridge && typeof window.AndroidOcrBridge.recognizeText === 'function') {
     try {
       const recognized = await recognizeTextNative(payload.imageBase64);
-      if (recognized && recognized.length >= 5) {
+      if (recognized && recognized.length >= 20) {
         payload.text = recognized;
+        fallbackFullText = recognized;
         payload.modelUsed = 'android-mlkit';
+        // Omit heavy base64 image when on-device OCR extracted full book text
+        delete payload.imageBase64;
+      } else if (recognized && recognized.length >= 4) {
+        fallbackFullText = recognized;
       }
     } catch (ocrErr) {
       console.warn('Native ML Kit OCR fallback to Gemini Vision:', ocrErr);
@@ -3848,127 +3861,370 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   }
 
   if (resJson && resJson.success && resJson.data && Array.isArray(resJson.data.lemmas) && resJson.data.lemmas.length > 0) {
-    return resJson.data;
+    return await enrichAndTranslateScanResult(resJson.data, lang, fallbackFullText);
   }
 
-  // Graceful offline fallback for text paste
-  if (payload.text && payload.text.trim().length >= 2) {
+  // Graceful offline / client fallback for text paste or on-device OCR text
+  const textToExtract = payload.text || fallbackFullText;
+  if (textToExtract && textToExtract.trim().length >= 2) {
     try {
       console.log('Using client-side fast text lemma extractor fallback...');
-      return await clientSideExtractTextLemmas(payload.text, lang);
+      const fallbackData = await clientSideExtractTextLemmas(textToExtract, lang);
+      return await enrichAndTranslateScanResult(fallbackData, lang, textToExtract);
     } catch (fallbackErr) {
       console.warn('Client fallback error:', fallbackErr);
     }
   }
 
   if (resJson && resJson.data) {
-    return resJson.data;
+    return await enrichAndTranslateScanResult(resJson.data, lang, fallbackFullText);
   }
 
   let errMsg = resJson?.error || 'Не удалось распознать слова с фото или текста';
   throw new Error(errMsg);
 }
 
+function cleanScannedBookText(rawText) {
+  if (!rawText || typeof rawText !== 'string') return '';
+  let text = rawText
+    // Rejoin hyphenated words split across line breaks (e.g. "impor-\ntant" -> "important")
+    .replace(/([a-zA-Z]{2,})-\r?\n\s*([a-z]{2,})/g, '$1$2');
+
+  const lines = text.split(/\r?\n/);
+  const cleanedLines = [];
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (!trimmed) {
+      if (cleanedLines.length > 0 && cleanedLines[cleanedLines.length - 1] !== '') {
+        cleanedLines.push('');
+      }
+      continue;
+    }
+    // Strip standalone page numbers or page headers/footers like "Page 42", "- 42 -", "124"
+    if (/^(?:page\s*)?\d{1,4}$/i.test(trimmed) || /^[-–—•·\s]*\d{1,4}[-–—•·\s]*$/.test(trimmed)) {
+      continue;
+    }
+    cleanedLines.push(trimmed);
+  }
+  return cleanedLines.join('\n').trim();
+}
+
+async function enrichAndTranslateScanResult(data, lang = 'en', fallbackFullText = '') {
+  if (!data || typeof data !== 'object') return data;
+  const targetLang = (lang || 'en').toLowerCase().split(/[-_]/)[0] || 'en';
+
+  let rawFullText = data.detected_text || fallbackFullText || data.detected_text_snippet || '';
+  if (Array.isArray(data.lemmas) && data.lemmas.length > 0 && rawFullText.length < 220) {
+    const parts = [];
+    if (rawFullText.trim()) parts.push(rawFullText.trim());
+    const combinedLower = () => parts.join(' ').toLowerCase();
+    for (const item of data.lemmas) {
+      const ctx = String(item?.context || '').trim();
+      if (ctx && ctx.length > 8 && !combinedLower().includes(ctx.toLowerCase())) {
+        parts.push(ctx.endsWith('.') || ctx.endsWith('!') || ctx.endsWith('?') ? ctx : `${ctx}.`);
+      }
+    }
+    rawFullText = parts.join(' ');
+  }
+  data.detected_text = cleanScannedBookText(rawFullText);
+  if (!data.detected_text_snippet && data.detected_text) {
+    data.detected_text_snippet = data.detected_text.slice(0, 120);
+  }
+
+  if (!Array.isArray(data.lemmas) || data.lemmas.length === 0) {
+    return data;
+  }
+
+  // Ensure local static dictionary (with 36 locales + IPA transcriptions) is loaded if possible
+  if (!cachedWordsList && typeof loadStaticWords === 'function') {
+    try {
+      await loadStaticWords();
+    } catch (e) {}
+  }
+
+  const dictMap = new Map();
+  if (Array.isArray(cachedWordsList)) {
+    for (const entry of cachedWordsList) {
+      if (entry && entry.word) {
+        const key = String(entry.word).trim().toLowerCase();
+        if (!dictMap.has(key)) dictMap.set(key, entry);
+      }
+    }
+  }
+
+  // Languages that legitimately use Cyrillic script
+  const cyrillicLangs = new Set(['ru', 'uk', 'bg', 'kk']);
+  const hasCyrillicRe = /[а-яёіїєґўА-ЯЁІЇЄҐЎ]/;
+  const strictlyRussianCharsRe = /[ыъэёЫЪЭЁ]/;
+
+  const indicesNeedingTranslation = [];
+
+  for (let i = 0; i < data.lemmas.length; i++) {
+    const item = data.lemmas[i];
+    if (!item || !item.word) continue;
+    const key = String(item.word).trim().toLowerCase();
+    const localEntry = dictMap.get(key);
+
+    if (localEntry) {
+      if (!item.transcription && localEntry.transcription) {
+        item.transcription = localEntry.transcription;
+      }
+      if ((!item.category || item.category === 'Elementary' || item.category === 'Общие') && localEntry.category) {
+        item.category = localEntry.category;
+      }
+    }
+
+    let currentTr = String(item.translation || '').trim();
+    const localTr = localEntry
+      ? String(
+          (localEntry.translations && localEntry.translations[targetLang]) ||
+          (targetLang === 'ru' ? localEntry.translation : '') ||
+          localEntry[`translation_${targetLang}`] ||
+          ''
+        ).trim()
+      : '';
+
+    // Check if the backend returned Russian when the interface language is NOT Russian
+    let isWrongLanguage = false;
+    if (!currentTr) {
+      isWrongLanguage = true;
+    } else if (targetLang !== 'en' && currentTr.toLowerCase() === key) {
+      isWrongLanguage = true;
+    } else if (!cyrillicLangs.has(targetLang) && hasCyrillicRe.test(currentTr)) {
+      isWrongLanguage = true;
+    } else if (targetLang === 'uk' && strictlyRussianCharsRe.test(currentTr)) {
+      isWrongLanguage = true;
+    }
+
+    if (isWrongLanguage) {
+      if (localTr) {
+        item.translation = localTr.split(',')[0].trim();
+      } else {
+        indicesNeedingTranslation.push(i);
+      }
+    }
+  }
+
+  if (indicesNeedingTranslation.length > 0) {
+    const gtxLang = targetLang === 'zh' ? 'zh-CN' : targetLang;
+    try {
+      // Batch translate all lemmas needing translation in a single request
+      const queryLines = indicesNeedingTranslation.map((idx) => data.lemmas[idx].word).join('\n');
+      const gtxUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${encodeURIComponent(gtxLang)}&dt=t&q=${encodeURIComponent(queryLines)}`;
+      const res = await fetch(gtxUrl).then((r) => r.json());
+      if (res && Array.isArray(res[0])) {
+        const combined = res[0].map((part) => (part && part[0] ? String(part[0]) : '')).join('');
+        const translatedLines = combined.split(/\r?\n/);
+        if (translatedLines.length === indicesNeedingTranslation.length) {
+          for (let j = 0; j < indicesNeedingTranslation.length; j++) {
+            const tr = translatedLines[j].trim().toLowerCase();
+            if (tr) {
+              data.lemmas[indicesNeedingTranslation[j]].translation = tr;
+            }
+          }
+        } else {
+          await Promise.all(
+            indicesNeedingTranslation.map(async (idx) => {
+              const w = data.lemmas[idx].word;
+              try {
+                const singleUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${encodeURIComponent(gtxLang)}&dt=t&q=${encodeURIComponent(w)}`;
+                const sRes = await fetch(singleUrl).then((r) => r.json());
+                if (sRes && sRes[0] && sRes[0][0] && sRes[0][0][0]) {
+                  data.lemmas[idx].translation = String(sRes[0][0][0]).trim().toLowerCase();
+                }
+              } catch (e) {}
+            })
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('Batch translation enrichment error:', err);
+    }
+  }
+
+  return data;
+}
+
 async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
-  const lines = rawText.split(/[\r\n]+|[;•·\t]+/);
+  const cleanedText = cleanScannedBookText(rawText);
+  if (!cachedWordsList && typeof loadStaticWords === 'function') {
+    try {
+      await loadStaticWords();
+    } catch (e) {}
+  }
+
+  const dictMap = new Map();
+  if (Array.isArray(cachedWordsList)) {
+    for (const entry of cachedWordsList) {
+      if (entry && entry.word) {
+        const k = String(entry.word).trim().toLowerCase();
+        if (!dictMap.has(k)) dictMap.set(k, entry);
+      }
+    }
+  }
+
+  const irregularToBase = {
+    went: 'go', gone: 'go', saw: 'see', seen: 'see', took: 'take', taken: 'take',
+    came: 'come', gave: 'give', given: 'give', found: 'find', thought: 'think',
+    told: 'tell', became: 'become', left: 'leave', felt: 'feel', brought: 'bring',
+    began: 'begin', begun: 'begin', kept: 'keep', held: 'hold', wrote: 'write',
+    written: 'write', stood: 'stand', heard: 'hear', Met: 'meet', met: 'meet',
+    ran: 'run', paid: 'pay', sat: 'sit', spoke: 'speak', spoken: 'speak',
+    lain: 'lie', led: 'lead', read: 'read', grew: 'grow', grown: 'grow',
+    lost: 'lose', fell: 'fall', fallen: 'fall', sent: 'send', built: 'build',
+    understood: 'understand', drew: 'draw', drawn: 'draw', broke: 'break', broken: 'break',
+    spent: 'spend', cut: 'cut', rose: 'rise', risen: 'rise', drove: 'drive',
+    driven: 'drive', bought: 'buy', wore: 'wear', worn: 'wear', chose: 'choose',
+    chosen: 'choose', sought: 'seek', threw: 'throw', thrown: 'throw', caught: 'catch',
+    dealt: 'deal', taught: 'teach', sold: 'sell', fought: 'fight', Ate: 'eat',
+    ate: 'eat', eaten: 'eat', sang: 'sing', sung: 'sing', flew: 'fly', flown: 'fly',
+    forgot: 'forget', forgotten: 'forget', swore: 'swear', sworn: 'swear',
+    stole: 'steal', stolen: 'steal', shook: 'shake', shaken: 'shake',
+    hid: 'hide', hidden: 'hide', rode: 'ride', ridden: 'ride',
+    children: 'child', men: 'man', women: 'woman', feet: 'foot', teeth: 'tooth', mice: 'mouse',
+  };
+
+  function toBaseLemma(wordLower) {
+    if (dictMap.has(wordLower)) return wordLower;
+    if (irregularToBase[wordLower]) return irregularToBase[wordLower];
+    if (wordLower.length > 5 && wordLower.endsWith('ies')) {
+      const cand = wordLower.slice(0, -3) + 'y';
+      if (dictMap.has(cand)) return cand;
+      return cand;
+    }
+    if (wordLower.length > 5 && wordLower.endsWith('ves')) {
+      const cand1 = wordLower.slice(0, -3) + 'f';
+      const cand2 = wordLower.slice(0, -3) + 'fe';
+      if (dictMap.has(cand1)) return cand1;
+      if (dictMap.has(cand2)) return cand2;
+    }
+    if (wordLower.length > 5 && wordLower.endsWith('ing')) {
+      const stem = wordLower.slice(0, -3);
+      if (dictMap.has(stem)) return stem;
+      if (dictMap.has(stem + 'e')) return stem + 'e';
+      if (stem.length >= 3 && stem[stem.length - 1] === stem[stem.length - 2]) {
+        const single = stem.slice(0, -1);
+        if (dictMap.has(single)) return single;
+      }
+      if (stem.length >= 4) return stem;
+    }
+    if (wordLower.length > 4 && wordLower.endsWith('ed')) {
+      const stem = wordLower.slice(0, -2);
+      if (dictMap.has(stem)) return stem;
+      if (dictMap.has(stem + 'e')) return stem + 'e';
+      if (wordLower.endsWith('ied') && wordLower.length > 5) {
+        const yCand = wordLower.slice(0, -3) + 'y';
+        if (dictMap.has(yCand)) return yCand;
+      }
+      if (stem.length >= 3 && stem[stem.length - 1] === stem[stem.length - 2]) {
+        const single = stem.slice(0, -1);
+        if (dictMap.has(single)) return single;
+      }
+      if (stem.length >= 4) return stem;
+    }
+    if (wordLower.length > 4 && wordLower.endsWith('es')) {
+      const stem = wordLower.slice(0, -2);
+      if (dictMap.has(stem)) return stem;
+      if (dictMap.has(wordLower.slice(0, -1))) return wordLower.slice(0, -1);
+    }
+    if (wordLower.length > 3 && wordLower.endsWith('s') && !wordLower.endsWith('ss') && !wordLower.endsWith('us') && !wordLower.endsWith('is')) {
+      const stem = wordLower.slice(0, -1);
+      if (dictMap.has(stem) || stem.length >= 4) return stem;
+    }
+    return wordLower;
+  }
+
+  const lines = cleanedText.split(/[\r\n]+/).map((l) => l.trim()).filter(Boolean);
+  const avgWordsPerLine = lines.length > 0
+    ? lines.reduce((sum, l) => sum + l.split(/\s+/).length, 0) / lines.length
+    : 0;
+  const isProseBookPage = avgWordsPerLine > 4.5 || cleanedText.length > 180;
+
   const items = [];
   const seen = new Set();
 
-  for (let rawLine of lines) {
-    let line = rawLine.trim();
-    if (!line || line.length < 2) continue;
+  const stopWords = new Set([
+    'the', 'and', 'for', 'that', 'this', 'with', 'you', 'your', 'yours', 'are', 'was', 'were',
+    'have', 'has', 'had', 'from', 'they', 'them', 'their', 'what', 'when', 'where', 'which',
+    'who', 'whom', 'whose', 'will', 'would', 'could', 'should', 'shall', 'may', 'might', 'must',
+    'about', 'into', 'onto', 'upon', 'over', 'under', 'between', 'through', 'during', 'before',
+    'after', 'above', 'below', 'but', 'not', 'only', 'also', 'very', 'just', 'more', 'most',
+    'other', 'some', 'such', 'no', 'nor', 'too', 'can', 'her', 'his', 'him', 'she', 'he', 'it',
+    'its', 'our', 'ours', 'out', 'all', 'any', 'both', 'each', 'few', 'many', 'much', 'own',
+    'same', 'so', 'than', 'then', 'there', 'these', 'those', 'been', 'being', 'did', 'does',
+    'doing', 'done', 'get', 'got', 'here', 'how', 'now', 'off', 'once', 'one', 'two', 'three',
+    'said', 'say', 'says', 'like', 'back', 'even', 'still', 'way', 'well', 'down', 'make', 'made'
+  ]);
 
-    // Remove bullets/numbers e.g. "1. ", "- "
-    line = line.replace(/^[\d\.\-\*\#\>\s]+/, '').trim();
-    if (!line) continue;
-
-    let original = line;
-    let clean = line.replace(/^[^\w\s']+|[^\w\s']+$/g, '').trim();
-    if (!clean) continue;
-
-    let lemma = clean;
-    if (lemma.toLowerCase().startsWith('to ')) {
-      lemma = lemma.slice(3).trim();
-    } else if (lemma.toLowerCase().startsWith('a ')) {
-      lemma = lemma.slice(2).trim();
-    } else if (lemma.toLowerCase().startsWith('an ')) {
-      lemma = lemma.slice(3).trim();
-    } else if (lemma.toLowerCase().startsWith('the ')) {
-      lemma = lemma.slice(4).trim();
+  if (!isProseBookPage) {
+    for (let rawLine of lines) {
+      let line = rawLine.replace(/^[\d\.\-\*\#\>\•\·\s]+/, '').trim();
+      if (!line || line.length < 2) continue;
+      let original = line;
+      let clean = line.replace(/^[^\w\s'\/]+|[^\w\s'\/]+$/g, '').trim();
+      if (!clean) continue;
+      let lemma = clean.replace(/^(?:to|a|an|the)\s+/i, '').trim().toLowerCase();
+      if (!lemma || lemma.length < 2 || seen.has(lemma)) continue;
+      seen.add(lemma);
+      items.push({ word: lemma, original, context: original });
+      if (items.length >= 40) break;
     }
-
-    const key = lemma.toLowerCase();
-    if (!key || key.length < 2 || seen.has(key)) continue;
-    seen.add(key);
-
-    items.push({
-      word: key,
-      original: original,
-      context: original,
-    });
-    if (items.length >= 40) break;
-  }
-
-  if (items.length <= 1 && rawText.length > 50) {
-    const words = rawText.match(/[a-zA-Z']+/g) || [];
-    const stopWords = new Set(['the', 'and', 'for', 'that', 'this', 'with', 'you', 'are', 'was', 'were', 'have', 'has', 'had', 'from', 'they', 'what', 'when', 'where', 'which', 'who', 'will', 'would', 'could', 'should', 'about']);
-    for (const w of words) {
-      const lower = w.toLowerCase().trim();
-      if (lower.length > 2 && !stopWords.has(lower) && !seen.has(lower)) {
-        seen.add(lower);
+  } else {
+    const sentences = cleanedText.split(/(?<=[.!?])\s+|\r?\n+/).map((s) => s.trim()).filter(Boolean);
+    for (const sentence of sentences) {
+      const rawTokens = sentence.match(/[a-zA-Z]+(?:'[a-zA-Z]+)?/g) || [];
+      for (const token of rawTokens) {
+        if (token.includes("'")) continue;
+        const lower = token.toLowerCase();
+        if (lower.length < 3 || stopWords.has(lower)) continue;
+        const base = toBaseLemma(lower);
+        if (base.length < 3 || stopWords.has(base) || seen.has(base)) continue;
+        seen.add(base);
         items.push({
-          word: lower,
-          original: w,
-          context: '',
+          word: base,
+          original: token,
+          context: sentence.slice(0, 140),
         });
-        if (items.length >= 30) break;
+        if (items.length >= 35) break;
       }
+      if (items.length >= 35) break;
     }
   }
 
-  const targetLang = lang || 'en';
-  const lemmas = await Promise.all(
-    items.map(async (item) => {
-      const tokens = item.word.split(/\s+/).filter(Boolean);
-      let cat = 'Elementary';
-      if (tokens.length === 3 && (item.word.includes('/') || item.original.includes('/'))) {
-        cat = 'Irregular verbs';
-      } else if (tokens.length >= 2) {
-        cat = 'Pattern';
-      }
+  const targetLang = (lang || 'en').toLowerCase().split(/[-_]/)[0] || 'en';
+  const lemmas = items.map((item) => {
+    const tokens = item.word.split(/\s+/).filter(Boolean);
+    const localEntry = dictMap.get(item.word);
+    let cat = localEntry?.category || 'Elementary';
+    if (tokens.length === 3 && (item.word.includes('/') || item.original.includes('/'))) {
+      cat = 'Irregular verbs';
+    } else if (tokens.length >= 2) {
+      cat = 'Pattern';
+    }
+    const localTr = localEntry
+      ? String(
+          (localEntry.translations && localEntry.translations[targetLang]) ||
+          (targetLang === 'ru' ? localEntry.translation : '') ||
+          localEntry[`translation_${targetLang}`] ||
+          ''
+        ).trim()
+      : '';
+    const levelGuess = item.word.length >= 9 ? 'B2' : item.word.length >= 6 ? 'B1' : 'A2';
 
-      try {
-        const gtxUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(item.word)}`;
-        const res = await fetch(gtxUrl).then((r) => r.json());
-        let translation = '';
-        if (res && res[0] && res[0][0] && res[0][0][0]) {
-          translation = String(res[0][0][0]).trim().toLowerCase();
-        }
-        return {
-          word: item.word,
-          original: item.original,
-          translation: translation || '',
-          transcription: '',
-          level: 'A2',
-          category: cat,
-          context: item.context,
-        };
-      } catch (e) {
-        return {
-          word: item.word,
-          original: item.original,
-          translation: '',
-          transcription: '',
-          level: 'A2',
-          category: cat,
-          context: item.context,
-        };
-      }
-    })
-  );
+    return {
+      word: item.word,
+      original: item.original,
+      translation: localTr ? localTr.split(',')[0].trim() : '',
+      transcription: localEntry?.transcription || '',
+      level: levelGuess,
+      category: cat,
+      context: item.context,
+    };
+  });
 
   return {
-    detected_text_snippet: rawText.slice(0, 100),
+    detected_text: cleanedText,
+    detected_text_snippet: cleanedText.slice(0, 120),
     lemmas: lemmas,
     modelUsed: 'client-fallback',
   };

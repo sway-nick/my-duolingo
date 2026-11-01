@@ -751,6 +751,120 @@ class AdServiceImpl {
   }
 
   /**
+   * Show high-tier Rewarded Video Ad (1 rewarded ad) to unlock scanner page translation
+   * Uses high-eCPM REWARDED_PACKS with fallback to REWARDED_SHIELD unit and dual listeners.
+   */
+  async showScannerTranslationRewardedAd() {
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_scanner_translation_requested');
+    }
+
+    if (!this.isOnline()) {
+      return { success: false, rewardEarned: false, isOffline: true };
+    }
+
+    const AdMob = this.getNativeAdMob();
+    if (AdMob && this.isNative()) {
+      return new Promise(async (resolve) => {
+        let rewardGranted = false;
+        let isResolved = false;
+        const listeners = [];
+        let fallbackTimer = null;
+
+        const cleanup = () => {
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = null;
+          }
+          listeners.forEach((sub) => {
+            try { if (sub && typeof sub.remove === 'function') sub.remove(); } catch (e) {}
+          });
+          listeners.length = 0;
+        };
+
+        const safeResolve = (result) => {
+          if (isResolved) return;
+          isResolved = true;
+          cleanup();
+          resolve(result);
+        };
+
+        fallbackTimer = setTimeout(() => {
+          console.warn('⚠️ AdMob scanner translation ad timeout (120s)');
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }, 120000);
+
+        let adStartedPlaying = false;
+
+        try {
+          const onReward = () => {
+            console.log('🏆 Scanner translation reward earned!');
+            rewardGranted = true;
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('ad_scanner_translation_reward');
+            }
+          };
+          const onDismiss = () => {
+            setTimeout(() => {
+              console.log('📺 Scanner translation ad dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              if (rewardGranted || adStartedPlaying) {
+                safeResolve({ success: true, rewardEarned: true, isOffline: false });
+              } else {
+                safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              }
+            }, 800);
+          };
+          const onFailed = (err) => {
+            console.warn('❌ AdMob Scanner translation ad failed to show:', err);
+            safeResolve({ success: false, rewardEarned: false, isOffline: false });
+          };
+
+          listeners.push(await AdMob.addListener('onRewardedVideoAdReward', onReward));
+          listeners.push(await AdMob.addListener('onRewarded', onReward));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdDismissed', onDismiss));
+          listeners.push(await AdMob.addListener('onDismissed', onDismiss));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => {
+            console.log('📺 Scanner translation ad started playing');
+            adStartedPlaying = true;
+          }));
+          listeners.push(await AdMob.addListener('showed', () => {
+            console.log('📺 Scanner translation ad started playing');
+            adStartedPlaying = true;
+          }));
+
+          let prepared = await this.prepareRewarded('REWARDED_PACKS');
+          if (!prepared) {
+            prepared = await this.prepareRewarded('REWARDED_SHIELD');
+            if (!prepared) {
+              safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              return;
+            }
+          }
+
+          AdMob.showRewardVideoAd()
+            .then((res) => {
+              console.log('🏆 Scanner translation showRewardVideoAd native promise resolved:', res);
+              rewardGranted = true;
+              safeResolve({ success: true, rewardEarned: true, isOffline: false });
+            })
+            .catch((err) => {
+              console.warn('AdMob scanner translation show error:', err);
+              onFailed(err);
+            });
+        } catch (e) {
+          console.warn('⚠️ Exception in scanner translation ad:', e);
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }
+      });
+    }
+
+    const mockRes = await this.showWebMockRewardedAd('🎬 Перевод страницы', false);
+    return mockRes;
+  }
+
+  /**
    * Show Interstitial Ad at the end of a round
    * Includes frequency capping (at least 2 rounds or 3 minutes)
    * Displays with 0ms delay if preloaded, and queues next preload in background
