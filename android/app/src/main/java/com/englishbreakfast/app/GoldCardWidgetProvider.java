@@ -30,7 +30,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            WidgetDataManager.onWidgetPinnedOrInteracted(context, appWidgetId, null);
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
         scheduleNextRotation(context);

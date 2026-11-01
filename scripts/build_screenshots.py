@@ -117,6 +117,13 @@ slides = [
         'subtitle': 'Earn XP, Keep Streaks & Top the Weekly Podium',
         'screen': 'screen_4.png',
         'output': 'screenshot_4.png'
+    },
+    {
+        'badge': '📱 VOCABULARY WIDGET',
+        'title': 'HOME SCREEN <span>WIDGET</span>',
+        'subtitle': 'Flip, Listen & Master Words on Autopilot',
+        'screen': 'screen_5.png',
+        'output': 'screenshot_5.png'
     }
 ]
 

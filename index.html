@@ -208,7 +208,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted } from './services/api.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted, getMasteredWordsCount } from './services/api.js?v=386.0';
       import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=386.0';
@@ -219,11 +219,13 @@
       import { renderSettingsView } from './components/settings/SettingsView.js?v=386.0';
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=386.0';
       import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=386.0';
+      import { renderStoriesView } from './components/favorites/StoriesView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
       import { renderLeaderboardView, renderMondayMemeTop4Cut } from './components/leaderboard/LeaderboardView.js?v=386.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
+      import { showMilestoneStoryModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
       import { AdService } from './services/adService.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
@@ -574,6 +576,42 @@
         } catch (e) {
           console.warn('Failed to reset words progress for practice:', e);
         }
+      }
+
+      function initMilestoneBaseline() {
+        try {
+          const mastered = getMasteredWordsCount();
+          const currentPassedMilestone = Math.floor(mastered / 50) * 50;
+          const rawSaved = localStorage.getItem('myduo_milestone_highest_unlocked');
+          const savedHighest = rawSaved !== null ? Number(rawSaved) : -1;
+
+          // If first time or saved highest is less than current mastered progress,
+          // sync up to current progress so we NEVER backfill/catch-up past milestones.
+          if (savedHighest < currentPassedMilestone) {
+            localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
+            for (let m = 50; m <= currentPassedMilestone; m += 50) {
+              localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
+            }
+          }
+        } catch (_) {}
+      }
+
+      function checkMilestoneStoryTrigger(delay = 800) {
+        try {
+          initMilestoneBaseline();
+          const mastered = getMasteredWordsCount();
+          const currentPassedMilestone = Math.floor(mastered / 50) * 50;
+          const savedHighest = Number(localStorage.getItem('myduo_milestone_highest_unlocked')) || 0;
+
+          // Trigger ONLY if the user just crossed a brand new milestone > savedHighest
+          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1850) {
+            localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
+            localStorage.setItem(`myduo_milestone_story_${currentPassedMilestone}_shown`, 'true');
+            setTimeout(() => {
+              showMilestoneStoryModal(currentPassedMilestone);
+            }, delay);
+          }
+        } catch (_) {}
       }
 
       async function renderTrainingTab() {
@@ -2368,6 +2406,10 @@
             } else {
               currentWordIndex += 1;
             }
+
+            // Check Milestone Story trigger (100 to 800 words)
+            checkMilestoneStoryTrigger(800);
+
             renderTrainingTab();
           },
         });
@@ -2499,6 +2541,19 @@
           };
 
           const openCardsHandler = (colId) => {
+            if (colId === 'milestone_stories') {
+              window._isInsideCollectionCards = true;
+              window._currentOpenCollectionId = colId;
+              renderStoriesView('#app-content', {
+                onBack: () => {
+                  window._isInsideCollectionCards = false;
+                  window._currentOpenCollectionId = null;
+                  renderTab('favorites');
+                }
+              });
+              return;
+            }
+
             const words = getCollectionWords(colId, allWords);
             const title = getCollectionTitle(colId);
             window._isInsideCollectionCards = true;
@@ -2514,6 +2569,7 @@
               collectionId: colId,
               collectionTitle: title,
               allWords,
+              favoriteIds: Array.from(favoriteIds),
               onBack: () => {
                 window._isInsideCollectionCards = false;
                 window._currentOpenCollectionId = null;
@@ -2893,6 +2949,9 @@
               try {
                 syncFavoritesToAndroidWidget();
               } catch (e) {}
+              try {
+                initMilestoneBaseline();
+              } catch (e) {}
             });
           });
         }
@@ -2913,6 +2972,7 @@
 
             // Priority 2: Close any open modal dialogs or overlays
             const modalSelectors = [
+              '#milestone-story-modal-overlay',
               '#privacy-policy-modal-overlay',
               '#doc-scanner-modal-overlay',
               '#add-word-modal-overlay',
@@ -2955,7 +3015,7 @@
             if (rootModals.length > 0) {
               const topModal = rootModals[rootModals.length - 1];
               const closeBtn = topModal.querySelector(
-                '#privacy-back-btn, #privacy-close-btn, ' +
+                '#story-close-btn, #privacy-back-btn, #privacy-close-btn, ' +
                 '#scanner-close-btn, .scanner-close-btn, ' +
                 '#add-word-close-btn, #add-word-cancel-btn, ' +
                 '#word-notes-close-btn, .word-notes-modal-close, ' +

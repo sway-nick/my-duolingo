@@ -4,7 +4,7 @@
 English Breakfast: Angleščina
 
 ### Short Description (up to 80 chars)
-Pogoste besede, opombe, foto skener, zvočni podcast v ozadju in pametni SRS!
+Učite se angleških besed: kartice, 7000 besed, zgodbe in gradnik za zaslon!
 
 ### Full Description (up to 4000 chars)
 English Breakfast je vaš pametni dnevni trener angleškega besedišča! Učite se besed, ki se dejansko uporabljajo v vsakdanjem govoru, skenirajte domače naloge s kamero, dodajajte osebne opombe in si besede zapomnite za vedno.
@@ -40,8 +40,8 @@ Učite se med vožnjo, na poti v šolo ali službo, med sprehodom ali tekom! Zvo
 • 🎙️ TRENER IZGOVORJAVE IN NAGLASI:
 Govorite v mikrofon in prejmite takojšnjo povratno informacijo o svoji izgovorjavi. Izbirajte med britanskim (UK) in ameriškim (US) naglasom z natančnim zapisom IPA.
 
-• 🌍 33 JEZIKOV VMESNIKA & RTL PODPORA:
-Popolnoma prevedeno v 33 jezikov z vključeno podporo za arabščino (RTL).
+• 🌍 36 JEZIKOV VMESNIKA & RTL PODPORA:
+Popolnoma prevedeno v 36 jezikov z vključeno podporo za arabščino (RTL).
 
 • ☁️ SINHRONIZACIJA V OBLAKU:
 Hitra prijava z Google računom. Vse vaše besede, opombe, priljubljene in dnevni nizi (streak) so varno shranjeni v oblaku.

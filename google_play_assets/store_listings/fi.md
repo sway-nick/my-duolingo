@@ -1,56 +1,63 @@
 # 🇫🇮 Finnish (Suomi) — Google Play Store Listing
 
-### App Name (up to 30 chars)
+### Sovelluksen nimi (enintään 30 merkkiä)
 English Breakfast: Englanti
 
-### Short Description (up to 80 chars)
-Yleiset sanat, omat muistiinpanot, tekstiskanneri, taskupodcast & tehokas SRS!
+### Lyhyt kuvaus (enintään 80 merkkiä)
+Opi englantia: muistikortit, 7 000 sanaa, tarinat ja aloitusnäytön widget!
 
-### Full Description (up to 4000 chars)
-English Breakfast on älykäs päivittäinen englannin sanaston tehotreeni! Opi oikeassa elämässä eniten käytetyt sanat, skannaa kotitehtävät kameralla, lisää omia muistiinpanoja ja paina sanat pysyvästi mieleen.
+### Täysi kuvaus (enintään 4000 merkkiä)
+English Breakfast on älykäs päivittäinen englannin sanaston tehotreeni interaktiivisella aloitusnäytön widgetillä!
 
-🍳 MIKSI ENGLISH BREAKFAST TOIMII?
-Älä haaskaa aikaa harvinaisten ja turhien sanojen opetteluun. English Breakfast järjestää sanaston tiukasti todellisen puhekielen yleisyyden mukaan (CEFR A1–C2). Heti ensimmäisestä päivästä alkaen opit juuri ne avainsanat, joita äidinkieliset puhujat käyttävät arjessa, elokuvissa ja podcasteissa.
+Unohda harvinaiset sanat ja mekaaninen pänttäys. Opi 7 000+ tärkeintä sanaa Zipf-yleisyyslain mukaan (A1–C2), lue tarinoita 50 sanan välein, skannaa tekstit kameralla ja kuuntele podcastia näyttö pimeänä. 100 % ilmainen — ei kalliita tilauksia tai sydänrajoituksia!
 
-🌟 TÄRKEIMMÄT OMINAISUUDET:
+🍳 10 TÄRKEINTÄ SYYTÄ VALITA ENGLISH BREAKFAST:
 
-• 📈 SANOJEN OPISKELU YLEISYYSJÄRJESTYKSESSÄ (A1–C2):
-Yli 6 600 kuratoitua sanaa ja fraasia järjestettynä niiden todellisen esiintymistiheyden mukaan nykyenglannissa. Rakenna vahva keskustelupohja nopeasti ennen vaativampia aihealueita.
+1. 📈 7 000+ YLEISINTÄ ENGLANNIN SANAA (ZIPF-INDEKSI)
+Opiskele sanastoa todellisen esiintymistiheyden mukaan. Ensimmäiset 1 000 sanaa kattavat jopa 85 % arkikeskusteluista, elokuvista ja viesteistä. Sanasto kattaa tasot A1–C2 ilman turhaa ajanhukkaa.
 
-• 📝 OMA SANAKIRJA JA HENKILÖKOHTAISET MUISTIINPANOT:
-Löysitkö uuden sanan lukiessasi tai oppitunnilla? Lisää se omaan sanakirjaasi yhdellä napautuksella! Liitä mihin tahansa sanaan omia muistisääntöjä, esimerkkejä ja lisähuomioita — henkilökohtaiset muistiinpanot ankkuroivat sanat parhaiten pitkäkestoiseen muistiin.
+2. 📱 INTERAKTIIVINEN ALOITUSNÄYTÖN WIDGET (KULTAINEN KORTTI)
+Opi englantia aina puhelinta avatessasi! Lisää kultainen kortti kotinäytölle: käännä kortti yhdellä napautuksella nähdäksesi käännöksen, kuuntele studioääntämys ja selaa sanoja avaamatta sovellusta.
 
-• 📷 ÄLYKÄS TEKSTISKANNERI KOTITEHTÄVILLE JA KIRJOILLE:
-Pitääkö oppikirjasta opetella sanasto? Nappaa vain valokuva sivusta! Älykäs OCR-tekstintunnistus erottaa tekstin, tunnistaa puuttuvat sanat ja tuo ne opiskelulistallesi ilman hidasta käsin kirjoittamista.
+3. 📖 38 INTERAKTIIVISTA TARINAA JA SATUA (JOKA 50 SANAN VÄLEIN)
+Kiinnitä sanat aitoon kontekstiin! Joka 50 opitun sanan välein avautuu uusi tarina tai satu (kuten "My Lord Bag of Rice"), joka on kirjoitettu täysin tutuilla sanoilla. Napauta mitä tahansa sanaa nähdäksesi käännöksen ja ääntämisen.
 
-• ⭐ SUOSIKIT JA VARMA OPPIMINEN (SRS):
-Onko edessä koe tai sanakoe? Merkitse sanat Suosikeiksi! Tieteellisesti todistettu jaksotetun kertauksen järjestelmä (Spaced Repetition) ajoittaa toistot automaattisesti taaten sanojen pysyvän muistamisen.
+4. 🔓 100 % ILMAINEN — EI KALLIITA TILAUSMAKSUJA EIKÄ MUUREJA
+Kaikki 7 000 sanaa, tarinat, äänet ja harjoitukset ovat heti auki. Ei pakollisia tilauksia, ei maksumuureja eikä elämärajoituksia — opiskele vapaasti omaan tahtiisi.
 
-• 🎮 HARJOITTELE SUOSIKKEJA KAIKISSA MOODEISSA:
-Kertaa suosikkisanojasi juuri sinulle parhaiten sopivalla tavalla:
-  — Interaktiiviset 3D-sanajyvät (flashcards) pyyhkäisyllä
-  — Nopeat aikavisat
-  — Kuullunymmärtäminen ja ääniharjoitukset
-  — Lauseiden muodostaminen ja parien yhdistäminen
-  — Oikeinkirjoitus ja epäsäännölliset verbit
+5. 🧠 ÄLYKÄS JAKSOTETTU KERTAUS (SRS)
+Älykäs algoritmi analysoi vastauksiasi reaaliajassa. Jos jokin englannin sana tuntuu haastavalta, järjestelmä palauttaa sen joustavasti harjoituksiin, kunnes hallitset sanan sataprosenttisesti.
 
-• 🎧 TASKUPODCAST SAMMUTETULLA NÄYTÖLLÄ:
-Opiskele työmatkalla, autossa, kävelyllä tai juoksulenkillä puhelimeen katsomatta! Taustaääni toimii saumattomasti myös näyttö kokonaan sammutettuna säästäen akkua: kuulet suomenkielisen käännöksen, pienen mietintätauon ja luonnollisen englanninkielisen ääntämisen kahdesti studiolaadulla.
+6. 📷 ÄLYKÄS TEKSTISKANNERI LÄKSYILLE JA KIRJOILLE (OCR)
+Luetko englanninkielistä kirjaa, artikkelia tai opintomonistetta? Nappaa vain kuva sivusta! OCR-tekstintunnistus poimii tuntemattomat sanat välittömästi ja tuo ne opiskelukorteillesi yhdellä klikkauksella.
 
-• 🌍 33 KÄYTTÖLIITTYMÄKIELTÄ & RTL-TUKI:
-Täysin lokalisoitu 33 kielelle, mukaan lukien täysi arabian (RTL) tuki.
+7. 📝 OMA SANAKIRJA JA HENKILÖKOHTAISET MUISTISÄÄNNÖT
+Kuulitko uuden sanan sarjassa tai podcastissa? Tallenna se sekunnissa. Liitä sanaan omat muistisäännöt, esimerkkilauseet ja huomiot, jotka ankkuroivat sanan pitkäkestoiseen muistiin.
 
-• ☁️ SAUMATON PILVISYNKRONOINTI:
-Nopea Google-kirjautuminen yhdellä klikkauksella. Omat sanasi, muistiinpanosi, suosikkisi ja opiskeluputkesi pysyvät turvassa pilvessä kaikilla laitteillasi.
+8. ⭐ SUOSIKKILISTAT JA VALMISTAUTUMINEN KOKEISIIN
+Luo omia sanalistoja tavoitteidesi mukaan: kouluun, työhaastatteluun, matkalle tai kansainvälisiin kielikokeisiin (IELTS, TOEFL, Cambridge).
 
-• 🏆 VIIKOITTAISET LIIGAT JA PUTKET (STREAK):
-Kilpaile viikoittaisissa sarjoissa, pidä päivittäinen oppimisputki käynnissä ja nouse palkintopallille.
+9. 🎧 TASKUPODCAST SAMMUTETULLA NÄYTÖLLÄ
+Opi englantia työmatkalla, kävelyllä tai urheillessa. Taustasoitin toimii myös puhelimen näytön ollessa lukittuna: kuuntele käännös, mieti hetki ja toista perässä selkeä ääntämys.
 
-🚀 KENELLE SOVELLUS SOPII:
-• Koululaisille ja opiskelijoille: Skannaa läksyt, merkitse koe-sanat suosikeiksi ja saavuta huippuarvosanat.
-• Aloittelijoille (A1–A2): Opi tärkeimmät yleiset sanat helposti ja tehokkaasti.
-• Edistyneille (B1–C2): Laajenna ammatillista sanavarastoa työhön, matkailuun ja kielikokeisiin (IELTS, TOEFL).
+10. 🎙️ KAKSI STUDIOTASON ÄÄNTÄMISTAPAISTOA: US JA UK
+Aito äidinkielisten puhujien ääntämys. Vaihda vapaasti amerikkalaisen (US) ja brittiläisen (UK) aksentin välillä milloin tahansa.
 
-Aloita aamusi raikkaalla "English Breakfastilla" — 10–15 minuuttia päivässä tuo varman kielitaidon!
+🔄 KATTAVA OPPIMISKETJU (4 HARJOITUSTILAA):
+1. Muistikortit — visuaalinen tunnistus ja puhdas ääntäminen
+2. Visa — kuullunymmärtäminen ja nopea merkityksen valinta
+3. Parit — salamannopea sanan ja käännöksen yhdistäminen
+4. Oikeinkirjoitus — sanan kirjoittaminen virheettömästi näppäimistöllä.
 
-Lataa English Breakfast heti ja opi englantia vaivattomasti!
+🌍 36 KÄYTTÖLIITTYMÄKIELTÄ & TÄYSI RTL-TUKI:
+Opi englantia omalla äidinkielelläsi — sovellus tukee 36 kieltä, mukaan lukien täysi tuki oikealta vasemmalle kirjoitettaville kielille (arabia, persia/farsi, urdu).
+
+🏆 VIIKOITTAISET LIIGAT JA PILVISYNKRONOINTI:
+Kilpaile muita oppijoita vastaan sarjataulukossa, pidä yllä päivittäistä oppimisputkea ja tallenna edistymisesi Googlen kautta pilveen.
+
+🚀 SOPII ERINOMAISESTI:
+• Aloittelijoille (A1–A2): Vahva pohja ja tärkeimmät sanat nopeasti.
+• Edistyneille (B1–C2): Sanaston laajennus työhön ja sujuvaan keskusteluun.
+• Kielikokeisiin valmistautuville (IELTS, TOEFL) sekä matkailijoille.
+
+Vain 10–15 minuuttia päivässä riittää sujuvaan englannin taitoon! Lataa English Breakfast nyt ja aloita opiskelu jo tänään!

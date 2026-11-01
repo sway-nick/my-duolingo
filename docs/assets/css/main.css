@@ -4551,7 +4551,7 @@ body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing:active {
   gap: 4px;
 }
 
-.fav-audio-btn, .dict-audio-btn, .remove-fav-btn, .fav-icon-btn {
+.fav-audio-btn, .dict-audio-btn, .remove-fav-btn, .fav-icon-btn, .remove-col-word-btn {
   background: transparent;
   border: none;
   font-size: 18px;
@@ -4567,16 +4567,16 @@ body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing:active {
   line-height: 1;
 }
 
-.fav-audio-btn:hover, .dict-audio-btn:hover, .remove-fav-btn:hover, .fav-icon-btn:hover {
+.fav-audio-btn:hover, .dict-audio-btn:hover, .remove-fav-btn:hover, .fav-icon-btn:hover, .remove-col-word-btn:hover {
   background: rgba(0, 0, 0, 0.06);
   transform: scale(1.12);
 }
 
-.fav-audio-btn:active, .dict-audio-btn:active, .remove-fav-btn:active, .fav-icon-btn:active {
+.fav-audio-btn:active, .dict-audio-btn:active, .remove-fav-btn:active, .fav-icon-btn:active, .remove-col-word-btn:active {
   transform: scale(0.92);
 }
 
-.dark-theme .fav-audio-btn:hover, .dark-theme .dict-audio-btn:hover, .dark-theme .remove-fav-btn:hover, .dark-theme .fav-icon-btn:hover {
+.dark-theme .fav-audio-btn:hover, .dark-theme .dict-audio-btn:hover, .dark-theme .remove-fav-btn:hover, .dark-theme .fav-icon-btn:hover, .dark-theme .remove-col-word-btn:hover {
   background: rgba(255, 255, 255, 0.12);
 }
 
@@ -9321,14 +9321,18 @@ html.is-rtl {
 }
 
 .widget-sheet-pills {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
 .widget-sheet-pill {
-  flex: 1;
+  width: 100%;
+  min-width: 0;
   height: 38px;
   min-height: 38px;
+  padding: 0 6px;
+  box-sizing: border-box;
   border-radius: 10px;
   border: 1px solid var(--border-color, rgba(148, 163, 184, 0.35));
   background: rgba(148, 163, 184, 0.08);
@@ -9351,9 +9355,14 @@ html.is-rtl {
 }
 
 .widget-sheet-reminder-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+
+.widget-sheet-reminder-row > .widget-sheet-pills {
+  display: contents;
 }
 
 .widget-sheet-time-range-row {
@@ -9369,17 +9378,22 @@ html.is-rtl {
 
 .widget-sheet-time-picker-wrap {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 0 14px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 6px;
   height: 38px;
+  min-height: 38px;
+  box-sizing: border-box;
   border-radius: 10px;
   border: 1px solid var(--border-color, rgba(148, 163, 184, 0.35));
   background: rgba(148, 163, 184, 0.08);
   cursor: pointer;
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: var(--text-main, #1e293b);
 }
 
@@ -9393,12 +9407,60 @@ html.is-rtl {
 }
 
 .widget-sheet-actions {
-  margin-top: 16px;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.widget-sheet-btn {
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-decoration: none;
+  transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+}
+
+.widget-sheet-btn:active {
+  transform: scale(0.98);
+  filter: brightness(0.95);
+}
+
+.widget-sheet-btn-blue {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.widget-sheet-btn-blue:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+.widget-sheet-btn-green {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.widget-sheet-btn-green:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
 }
 
 .widget-sheet-submit-btn {
   width: 100%;
-  height: 44px;
+  height: 48px;
   justify-content: center;
   font-size: 15px;
   font-weight: 700;

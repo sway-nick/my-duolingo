@@ -20,7 +20,7 @@ function getCategoryMeta(catName) {
   if (name.includes('pattern')) {
     return { badgeClass: 'badge-pattern', badgeText: '💬 ' + (t('category_pattern_short') || 'Речь'), isLevel: false, order: 5 };
   }
-  return { badgeClass: 'badge-general', badgeText: '📚', isLevel: false, order: 6 };
+  return null;
 }
 
 async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
@@ -49,8 +49,9 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
       const specialCards = [];
 
       stats.categoryBreakdown.forEach((cat) => {
-        const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
         const meta = getCategoryMeta(cat.category);
+        if (!meta) return; // Strict guard: never render categories below Pattern
+        const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
         const cardHtml = `
           <div class="category-card">
             <div class="category-info-row">

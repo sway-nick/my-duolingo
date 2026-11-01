@@ -234,20 +234,14 @@ function applyMultilingualTranslations(words) {
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:lang_changed', () => {
     const newLang = getActiveLang();
-    if (!isLangCompatibleWithCache(_cachedWordsActiveLang, newLang)) {
-      // Active language changed to a different locale: reload words.json on-demand for new locale
-      cachedWordsList = null;
-      getWords(false).catch(() => {});
-      return;
-    }
-    if (cachedWordsList && Array.isArray(cachedWordsList)) {
-      applyMultilingualTranslations(cachedWordsList);
-      try {
-        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
-        localStorage.setItem('myduo_cached_words_lang', newLang);
-      } catch (e) {}
-      window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
-    }
+    cachedWordsList = null;
+    _cachedWordsActiveLang = null;
+    getWords(true).then((res) => {
+      const list = Array.isArray(res) ? res : (res?.data || []);
+      if (list.length > 0) {
+        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: list }));
+      }
+    }).catch(() => {});
   });
 }
 
@@ -2446,6 +2440,19 @@ function isWordMastered(prog) {
   );
 }
 
+function getMasteredWordsCount() {
+  try {
+    const localProg = getUserProgress();
+    let count = 0;
+    for (const prog of Object.values(localProg || {})) {
+      if (isWordMastered(prog)) count++;
+    }
+    return count;
+  } catch (e) {
+    return 0;
+  }
+}
+
 function isWordLearning(prog) {
   if (!prog || isWordMastered(prog)) return false;
   return Boolean(prog.seenInCards === true);
@@ -2793,8 +2800,17 @@ async function getUserStats(customWords = null) {
 
   const categoryMap = {};
 
+  const normalizeStatsCategory = (rawCat, level) => {
+    const c = String(rawCat || '').toLowerCase().trim();
+    if (c.includes('irregular')) return 'Irregular verbs';
+    if (c.includes('pattern')) return 'Pattern';
+    if (c.includes('advanced') || String(level || '').toLowerCase().includes('advanced')) return 'Advanced';
+    if (c.includes('intermediate') || String(level || '').toLowerCase().includes('intermediate')) return 'Intermediate';
+    return 'Elementary';
+  };
+
   wordsList.forEach((w) => {
-    const cat = w.category || 'Elementary';
+    const cat = normalizeStatsCategory(w.category, w.level);
     if (!categoryMap[cat]) {
       categoryMap[cat] = { total: 0, learned: 0 };
     }
@@ -3732,6 +3748,47 @@ async function batchAddCustomWords(words = []) {
 
 const GAS_SCANNER_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
+async function recognizeTextNative(base64Image) {
+  if (typeof window === 'undefined' || !window.AndroidOcrBridge || typeof window.AndroidOcrBridge.recognizeText !== 'function') {
+    throw new Error('Native OCR bridge unavailable');
+  }
+
+  return new Promise((resolve, reject) => {
+    const callbackId = 'ocr_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    const timer = setTimeout(() => {
+      if (window.__ocrPending && window.__ocrPending[callbackId]) {
+        delete window.__ocrPending[callbackId];
+      }
+      reject(new Error('Native OCR timeout'));
+    }, 15000);
+
+    if (!window.__ocrPending) window.__ocrPending = {};
+    window.__ocrPending[callbackId] = (payload) => {
+      clearTimeout(timer);
+      delete window.__ocrPending[callbackId];
+      if (payload && payload.success && typeof payload.text === 'string' && payload.text.trim()) {
+        resolve(payload.text.trim());
+      } else {
+        reject(new Error(payload?.error || 'Native OCR returned empty text'));
+      }
+    };
+
+    window.__onAndroidOcrResult = (data) => {
+      if (data && data.callbackId && window.__ocrPending && window.__ocrPending[data.callbackId]) {
+        window.__ocrPending[data.callbackId](data);
+      }
+    };
+
+    try {
+      window.AndroidOcrBridge.recognizeText(base64Image, callbackId);
+    } catch (e) {
+      clearTimeout(timer);
+      if (window.__ocrPending) delete window.__ocrPending[callbackId];
+      reject(e);
+    }
+  });
+}
+
 async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   let lang = 'en';
   try {
@@ -3760,6 +3817,19 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
       payload.mimeType = mimeType || 'image/jpeg';
     } else {
       payload.text = payloadInput.trim();
+    }
+  }
+
+  // If on Android and image is provided, try fast on-device ML Kit OCR first
+  if (payload.imageBase64 && !payload.text && typeof window !== 'undefined' && window.AndroidOcrBridge && typeof window.AndroidOcrBridge.recognizeText === 'function') {
+    try {
+      const recognized = await recognizeTextNative(payload.imageBase64);
+      if (recognized && recognized.length >= 5) {
+        payload.text = recognized;
+        payload.modelUsed = 'android-mlkit';
+      }
+    } catch (ocrErr) {
+      console.warn('Native ML Kit OCR fallback to Gemini Vision:', ocrErr);
     }
   }
 
@@ -4038,6 +4108,7 @@ const ApiService = {
   addCustomWord,
   batchAddCustomWords,
   scanDocumentImage,
+  recognizeTextNative,
   sendUserAnalytics,
   getHealth,
   getWords,
@@ -4048,6 +4119,7 @@ const ApiService = {
   getUserProgress,
   getUserFavorites,
   isWordMastered,
+  getMasteredWordsCount,
   isWordLearning,
   getWordStage,
   getQueueForCards,
@@ -4090,6 +4162,7 @@ export {
   addCustomWord,
   batchAddCustomWords,
   scanDocumentImage,
+  recognizeTextNative,
   sendUserAnalytics,
   getHealth,
   getWords,
@@ -4100,6 +4173,7 @@ export {
   getUserProgress,
   getUserFavorites,
   isWordMastered,
+  getMasteredWordsCount,
   isWordLearning,
   getWordStage,
   getQueueForCards,

@@ -4,53 +4,60 @@
 English Breakfast: Vocabulary
 
 ### Short Description (up to 80 chars)
-Frequency words, custom notes, homework scanner, lock-screen podcast & smart SRS!
+English vocabulary builder: 7000 words, flashcards, stories & home screen widget
 
 ### Full Description (up to 4000 chars)
-English Breakfast is your smart, daily English vocabulary booster! Master high-frequency words used in real life, scan homework with your camera, add custom notes, and remember words permanently.
+English Breakfast is your ultimate English vocabulary app and daily words trainer with an interactive home screen widget!
 
-🍳 WHY ENGLISH BREAKFAST WORKS:
-Stop wasting time memorizing obscure words you will never hear. English Breakfast ranks vocabulary strictly by real-world conversational frequency (CEFR A1 to C2). From day one, you master the core words native speakers actually use in conversations, movies, and podcasts.
+Master English vocabulary fast with real-world frequency: study 7,000+ most used English words from CEFR A1 to C2, learn with flashcards, read illustrated milestone stories unlocked every 50 words, scan homework with OCR, and practice offline. 100% free with no paywalls or forced subscriptions!
 
-🌟 KEY FEATURES:
+🍳 10 REASONS TO LEARN ENGLISH WITH ENGLISH BREAKFAST:
 
-• 📈 REAL-WORLD FREQUENCY-FIRST LEARNING:
-6,600+ curated words and phrases ordered by frequency of occurrence in modern spoken and written English. Build a solid conversational core fast before moving into advanced topics.
+1. 📈 7,000+ FREQUENCY-FIRST ENGLISH WORDS (ZIPF'S LAW)
+Stop wasting time on rare textbook terms. English Breakfast ranks vocabulary strictly by real-world frequency. The first 1,000 words cover up to 85% of everyday spoken English, movies, and conversations. Complete levels from Beginner (A1–A2) to Advanced (C1–C2).
 
-• 📝 PERSONAL DICTIONARY & CUSTOM NOTES:
-Add your own words, idioms, and phrases anytime. Attach personal mnemonic associations, real-life examples, and contextual notes to any word — custom notes create the strongest memory pathways.
+2. 📱 INTERACTIVE HOME SCREEN WIDGET (GOLDEN CARD)
+Learn English words effortlessly every time you unlock your phone! Place the stylish Golden Card vocabulary widget on your Android home screen. Flip cards, listen to native pronunciation, and cycle through daily English words without opening the app.
 
-• 📷 SMART PHOTO SCANNER FOR HOMEWORK & BOOKS:
-Got a textbook assignment or article to read? Simply snap a photo! The intelligent OCR scanner extracts the text, identifies words missing from your vocabulary, and imports them into your training database in one tap without tedious typing.
+3. 📖 38 ILLUSTRATED MILESTONE STORIES (EVERY 50 WORDS)
+Reinforce your vocabulary in context! Unlock illustrated stories and fairy tales every 50 mastered words, using strictly the words you have learned. Tap any word for instant translation and audio.
 
-• ⭐ FAVORITES & GUARANTEED SPACED REPETITION (SRS):
-Need to nail specific words for an upcoming school test or exam? Mark them as Favorites! Our scientifically backed Spaced Repetition System automatically schedules reviews to guarantee 100% long-term retention.
+4. 🔓 100% FREE VOCABULARY — NO PAYWALLS
+All 7,000 words, stories, audio, and modes are completely unlocked. No expensive monthly subscriptions, no paywalls, and no artificial "hearts" or lives limiting your daily study.
 
-• 🎮 TRAIN FAVORITES ACROSS ALL PRACTICE MODES:
-Drill your favorite words in whichever mode fits your study style best:
-  — 3D Flashcards with swipe gestures
-  — Rapid-fire Quizzes
-  — Listening comprehension
-  — Sentence builder & Word matching
-  — Spelling sprint & Irregular verbs
+5. 🧠 ADAPTIVE SPACED REPETITION ENGINE
+Smart round architecture tracks your answers in real time. If an English word gives you trouble, the algorithm schedules it across multiple retention steps until you achieve 100% mastery.
 
-• 🎧 COMMUTE AUDIO PODCAST WITH SCREEN OFF:
-Study while commuting, driving, walking, or running without touching your phone! Background audio playback works seamlessly even with your screen turned off to save battery: hear the native translation, pause to recall, and listen to natural English pronunciation twice.
+6. 📷 SMART PHOTO SCANNER FOR TEXTBOOKS & ARTICLES
+Reading an English book, homework, or news article? Snap a picture! The smart OCR scanner extracts text, detects unknown words, and adds them to your personal flashcards in one tap.
 
-• 🌍 33 INTERFACE LANGUAGES & RTL SUPPORT:
-Fully localized into 33 languages worldwide, featuring full Arabic (RTL) support with protected English phonetics.
+7. 📝 PERSONAL DICTIONARY & MNEMONIC NOTES
+Encountered an interesting English word in a movie or song? Add it instantly. Attach custom mnemonic associations, notes, and personal examples to trigger long-term memory.
 
-• ☁️ SEAMLESS CLOUD SYNC:
-Instant 1-tap Google Sign-In securely backs up your custom words, notes, favorites, and streak on Firebase Firestore across all your devices.
+8. ⭐ CUSTOM FAVORITES LISTS & EXAM PREPARATION
+Create custom word collections tailored for specific goals: school tests, job interviews, travel, or international exams (IELTS, TOEFL, Cambridge, TOEIC).
 
-• 🏆 WEEKLY LEAGUES & STATS:
-Compete on weekly leaderboards, keep your streak alive, and climb to the winners' podium.
+9. 🎧 COMMUTE AUDIO PODCAST WITH SCREEN OFF
+Learn English hands-free on the go! Background audio playback works smoothly even with your screen turned off: listen to translations, pause to recall, and hear crystal-clear English pronunciation.
+
+10. 🎙️ DUAL NATIVE AUDIO: US & UK ACCENTS
+High-definition studio pronunciation recorded by native speakers. Switch between American and British accents with a single tap.
+
+🔄 4-STEP RETENTION WORKFLOW:
+1. Flashcards — visual introduction & clear pronunciation
+2. Quiz — active listening comprehension & recall
+3. Pairs — rapid word association & speed reaction
+4. Spelling — letter-by-letter keyboard accuracy.
+
+🌍 36 INTERFACE LANGUAGES:
+Learn English comfortably in your native language — complete localization across 36 languages, including Spanish, Portuguese, French, German, Arabic, Persian, Urdu (with RTL), Hindi, Chinese, and Kazakh.
+
+🏆 WEEKLY LEAGUES & CLOUD BACKUP:
+Compete with learners on weekly leaderboards, earn XP, maintain your streak, and sync progress seamlessly across devices with Google Sign-In.
 
 🚀 PERFECT FOR:
-• Students: Snap homework, favorite assigned words, and ace vocabulary tests.
-• Beginners (A1–A2): Learn the most frequently used words first.
-• Intermediate & Advanced (B1–C2): Expand your active vocabulary for IELTS, TOEFL, work, and travel.
+• Beginners (A1–A2): Build a strong conversational vocabulary fast.
+• Intermediate & Advanced (B1–C2): Expand active vocabulary for work, exams, and fluency.
+• Students & Self-learners: Prepare for IELTS, TOEFL, school, and travel.
 
-Start your morning with a fresh "English Breakfast" — 10 minutes a day creates lasting fluency!
-
-Download English Breakfast now and start speaking with confidence!
+Start your day with English Breakfast — 10 to 15 minutes of daily practice delivers real English fluency! Download now and start learning English words today!

@@ -180,6 +180,31 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
     apiCode.includes('scanDocumentImage') && apiCode.includes('stored.toLowerCase().split(/[-_]/)[0]'),
     'scanDocumentImage must dynamically resolve OCR target language from interface language'
   );
+
+  // 5. Verify Milestone Story translations support all 36 locales
+  const { STORY_TRANSLATIONS } = await import('../frontend/components/modals/storyTranslations.js');
+  assert.equal(Object.keys(STORY_TRANSLATIONS).length, 36, 'STORY_TRANSLATIONS must have exactly 36 locales');
+  for (const locale of REQUIRED_33_LOCALES) {
+    assert.ok(STORY_TRANSLATIONS[locale], `STORY_TRANSLATIONS must contain locale '${locale}'`);
+    assert.ok(STORY_TRANSLATIONS[locale].modalTitle, `STORY_TRANSLATIONS.${locale} must have modalTitle`);
+    assert.ok(STORY_TRANSLATIONS[locale].btnUnderstood, `STORY_TRANSLATIONS.${locale} must have btnUnderstood`);
+    assert.ok(STORY_TRANSLATIONS[locale].btnShowTranslation, `STORY_TRANSLATIONS.${locale} must have btnShowTranslation`);
+    assert.ok(STORY_TRANSLATIONS[locale].btnHideTranslation, `STORY_TRANSLATIONS.${locale} must have btnHideTranslation`);
+    assert.ok(STORY_TRANSLATIONS[locale].storyTitle100, `STORY_TRANSLATIONS.${locale} must have storyTitle100`);
+    assert.ok(STORY_TRANSLATIONS[locale].storyTitle200, `STORY_TRANSLATIONS.${locale} must have storyTitle200`);
+    assert.ok(STORY_TRANSLATIONS[locale].storyFull100, `STORY_TRANSLATIONS.${locale} must have storyFull100`);
+    assert.ok(STORY_TRANSLATIONS[locale].storyFull200, `STORY_TRANSLATIONS.${locale} must have storyFull200`);
+    assert.ok(STORY_TRANSLATIONS[locale].storiesFolderTitle, `STORY_TRANSLATIONS.${locale} must have storiesFolderTitle`);
+  }
+
+  const { MILESTONE_STORIES } = await import('../frontend/components/modals/MilestoneStoryModal.js');
+  assert.equal(Object.keys(MILESTONE_STORIES).length, 38, 'MILESTONE_STORIES must include all 38 stories');
+  for (let i = 0; i < 38; i++) {
+    const m = i * 50;
+    assert.ok(MILESTONE_STORIES[m], `MILESTONE_STORIES must include milestone ${m}`);
+    assert.ok(MILESTONE_STORIES[m].paragraphs.length > 0, `Story ${m} has paragraphs`);
+  }
+  assert.equal(STORY_TRANSLATIONS.ru.modalTitle, 'Поздравляем! Вы открыли следующий текст');
 });
 
 test('Gate 4: Firebase / Cloud Firestore quota and request optimization integrity', () => {

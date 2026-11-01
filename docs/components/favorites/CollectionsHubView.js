@@ -13,6 +13,8 @@ import {
   resetBuiltinCollection,
 } from '../../services/collectionsService.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
+import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
+import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
 export function renderCollectionsHubView(allWords = [], containerSelector = '#app-content', options = {}) {
@@ -174,11 +176,32 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
     return count === 1 ? `${count} word` : `${count} words`;
   };
 
+  const lang = getInterfaceLanguage();
+  const storyStrings = getStoryStrings(lang);
+  let unlockedStoriesCount = 0;
+  try {
+    const masteredWords = getMasteredWordsCount();
+    const allMilestones = Array.from({ length: 37 }, (_, i) => i * 50);
+    unlockedStoriesCount = allMilestones.filter(m => masteredWords >= m).length;
+  } catch (_) {}
+  const storiesCountLabel = `${unlockedStoriesCount} / 37`;
+
   container.innerHTML = `
     <div class="collections-hub-page">
       <!-- 2-Column Grid -->
       <div class="collections-grid" id="collections-grid">
-        <!-- 1. My Favorites Tile -->
+        <!-- 1. Add New Custom List Tile (Top Left) -->
+        <div class="col-tile col-tile-add" id="btn-add-new-collection" role="button" tabindex="0">
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon col-add-plus">➕</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(t('col_add_new_list') || 'Новый список')}</h3>
+            <span class="col-tile-count">${escapeHtml(t('col_custom_desc') || 'Своя подборка')}</span>
+          </div>
+        </div>
+
+        <!-- 2. My Favorites Tile (Top Right, right of New List) -->
         <div class="col-tile ${activeColId === 'my_favorites' ? 'is-active-col' : ''}" data-col-id="my_favorites" role="button" tabindex="0">
           <div class="col-tile-icon-box">
             <span class="col-tile-icon">⭐</span>
@@ -189,14 +212,14 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
-        <!-- 2. Add New Custom List Tile -->
-        <div class="col-tile col-tile-add" id="btn-add-new-collection" role="button" tabindex="0">
+        <!-- 3. Milestone Texts Folder Tile (Below, Row 2) -->
+        <div class="col-tile col-tile-stories" data-col-id="milestone_stories" role="button" tabindex="0">
           <div class="col-tile-icon-box">
-            <span class="col-tile-icon col-add-plus">➕</span>
+            <span class="col-tile-icon">📖</span>
           </div>
           <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(t('col_add_new_list') || 'Новый список')}</h3>
-            <span class="col-tile-count">${escapeHtml(t('col_custom_desc') || 'Своя подборка')}</span>
+            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Тексты')}</h3>
+            <span class="col-tile-count">${escapeHtml(storiesCountLabel)}</span>
           </div>
         </div>
 

@@ -4,53 +4,61 @@
 English Breakfast: Englisch
 
 ### Short Description (max 80 chars)
-Häufige Wörter, Notizen, Foto-Scanner, Audio-Podcast & smartes SRS!
+Englisch lernen: Karteikarten, 7000 Wörter, Stories & Startbildschirm-Widget!
 
 ### Full Description (max 4000 chars)
-English Breakfast ist dein smarter täglicher Englisch-Vokabeltrainer! Lerne genau die Wörter, die in der gesprochenen Sprache wirklich verwendet werden, füge eigene Notizen hinzu, scanne Hausaufgaben per Foto und behalte alles garantiert dauerhaft im Gedächtnis.
+English Breakfast ist dein smarter täglicher Englisch-Vokabeltrainer mit interaktivem Startbildschirm-Widget!
 
-🍳 WARUM ENGLISH BREAKFAST FUNKTIONIERT:
-Die meisten Sprachkurse überfordern mit seltenen und nutzlosen Vokabeln. English Breakfast basiert auf dem Häufigkeitsprinzip: Du lernst nach Häufigkeit sortiert – von den wichtigsten Alltagswörtern bis hin zu fortgeschrittenen Begriffen (CEFR A1 bis C2). So verstehst du sofort echte englische Gespräche, Filme und Podcasts.
+Vergiss praxisferne Phrasen und mühsames Auswendiglernen. Starte mit den Vokabeln mit der höchsten Nutzungshäufigkeit, scanne Texte per Handykamera, lies interaktive Geschichten und meistere Englisch ganz natürlich!
 
-🌟 DIE WICHTIGSTEN FUNKTIONEN:
+🍳 10 WICHTIGSTE VORTEILE:
 
-• 📈 HÄUFIGKEITSBASIERTES LERNEN (A1–C2):
-Über 6.600 sorgfältig kuratierte Wörter und Redewendungen, geordnet nach tatsächlicher Auftretenshäufigkeit im modernen Englisch. Baue schnell einen soliden Grundwortschatz auf, bevor du zu Spezialthemen übergehst.
+1. 📈 HÄUFIGKEITSBASIERTES LERNEN (ZIPF-GESETZ)
+Die Methode folgt der tatsächlichen Häufigkeit (CEFR A1–C2). Die ersten 1.000 Vokabeln decken bis zu 85 % der Alltagssprache, Filme und Chats ab. Fast 7.000 Wörter ohne Zeitverschwendung.
 
-• 📝 PERSÖNLICHES WÖRTERBUCH & EIGENE NOTIZEN:
-Füge jederzeit eigene Wörter und Redewendungen hinzu. Ergänze persönliche Eselsbrücken, Beispielsätze und Kontext-Tipps – persönliche Notizen schaffen nachweislich die stärksten Gedächtnisanker.
+2. 📱 INTERAKTIVES STARTBILDSCHIRM-WIDGET (GOLDENE KARTE)
+Lerne Englisch jedes Mal, wenn du dein Smartphone zur Hand nimmst! Platziere das stylische Goldene-Karte-Widget auf deinem Home-Bildschirm: Karte mit einem Fingertipp umdrehen, Übersetzung prüfen, Studio-Aussprache hören und Wörter durchblättern – ohne die App zu öffnen.
 
-• 📷 SMARTER FOTO-SCANNER FÜR HAUSAUFGABEN & BÜCHER:
-Hausaufgabe oder Artikel im Lehrbuch aufbekommen? Einfach fotografieren! Die intelligente Texterkennung (OCR) erfasst den Text, erkennt fehlende Wörter und fügt sie mit einem Fingertipp direkt in deine Lernliste ein – ganz ohne mühsames Eintippen.
+3. 📖 INTERAKTIVE GESCHICHTEN ALLE 100 WÖRTER
+Festige deinen Wortschatz im echten Kontext! Alle 100 gemeisterten Vokabeln schaltest du eine Kurzgeschichte frei, die ausschließlich aus bereits gelernten Wörtern besteht. Tippe auf jedes Wort für die Sofort-Übersetzung direkt darüber, speichere es in den Favoriten oder lies die parallele Übersetzung.
 
-• ⭐ FAVORITEN & GARANTIERTES BEHALTEN (SRS):
-Musst du bestimmte Wörter für den nächsten Test oder eine Prüfung lernen? Markiere sie als Favoriten! Unser wissenschaftlich fundiertes Spaced-Repetition-System (SRS) plant Wiederholungen automatisch für 100 % dauerhaften Lernerfolg.
+4. 🔓 OHNE TEURE ABOS UND LIMITS
+Keine versteckten Bezahlschranken und keine Limits für „Leben“ (Herzen). Uneingeschränkter Zugriff auf alle Wörter und Modi — lerne in deinem eigenen Tempo.
 
-• 🎮 FAVORITEN IN ALLEN TRAININGSMODI ÜBEN:
-Trainiere deine Favoriten in dem Format, das am besten zu dir passt:
-  — Interaktive 3D-Karteikarten mit Wischgesten
-  — Schnelle Quizze gegen die Zeit
-  — Hörverstehen & Audio-Training
-  — Satzbau-Trainer & Wortpaare finden
-  — Rechtschreibtraining & Unregelmäßige Verben
+5. 🧠 SMARTER RUNDEN-ARCHITEKT
+Der Algorithmus analysiert deine Antworten in Echtzeit. Machst du bei einem Wort einen Fehler, bringt das adaptive System es in den nächsten Schritten geschickt wieder ein, bis du es zu 100 % beherrschst.
 
-• 🎧 PENDLER-AUDIO-PODCAST BEI AUSGESCHALTETEM BILDSCHIRM:
-Lerne unterwegs in der Bahn, im Auto, beim Spaziergang oder beim Sport, ohne aufs Smartphone zu schauen! Die Hintergrundwiedergabe funktioniert nahtlos mit ausgeschaltetem Bildschirm und schont den Akku: deutsche Übersetzung hören, kurze Denkpause zum Erinnern und klare englische Aussprache im Studio-Sound.
+6. 📷 SMARTER FOTO-SCANNER FÜR HAUSAUFGABEN
+Musst du Vokabeln aus einem Lehrbuch lernen? Einfach fotografieren! Die intelligente OCR-Texterkennung erfasst neue Wörter und fügt sie mit einem Fingertipp in deine Lernliste ein — ganz ohne Tippen.
 
-• 🎙️ AKZENT- & AUSSPRACHETRAINER:
-Sprich ins Mikrofon und erhalte direktes Feedback zu deiner Aussprache. Wechsle flexibel zwischen britischem (UK) und amerikanischem (US) Akzent mit verständlicher IPA-Lautschrift.
+7. 📝 PERSÖNLICHES WÖRTERBUCH & EIGENE NOTIZEN
+Neues Wort in einer Serie entdeckt? Mit einem Fingertipp hinzufügen. Ergänze persönliche Eselsbrücken und Beispielsätze für ein starkes Langzeitgedächtnis.
 
-• 🌍 33 SPRACHEN & CLOUD-SYNCHRONISATION:
-Vollständig in 33 Sprachen lokalisiert. Mit der 1-Klick-Google-Anmeldung werden dein persönliches Wörterbuch, deine Notizen und dein Lern-Streak sicher in der Cloud synchronisiert.
+8. ⭐ ZIELGERICHTETE FAVORITENLISTEN
+Erstelle Vokabellisten für gezielte Aufgaben: für die Klassenarbeit von morgen, das Vorstellungsgespräch, eine Reise oder offizielle Prüfungen (IELTS, TOEFL, Cambridge).
 
-• 🏆 WÖCHENTLICHE LIGEN & STREAK:
-Miss dich mit anderen Lernenden in wöchentlichen Bestenlisten, halte deinen Streak aktiv und sichere dir deinen Platz auf dem Treppchen.
+9. 🎧 PENDLER-AUDIO-PODCAST BEI AUSGESCHALTETEM BILDSCHIRM
+Lerne unterwegs in der Bahn, beim Spaziergang oder Sport! Die Hintergrundwiedergabe funktioniert nahtlos bei schwarzem Bildschirm: deutsche Übersetzung, Denkpause und zweimal klare englische Studio-Aussprache.
+
+10. 🎙️ ZWEI TONSTUDIO-STANDARDS: US UND UK
+Kristallklarer Sound von Muttersprachlern. Wechsle jederzeit flexibel zwischen amerikanischem und britischem Akzent.
+
+🔄 VOLLSTÄNDIGER LERNZYKLUS (4 STUFEN):
+1. Karteikarten — visuelle Verknüpfung und Aussprache
+2. Quiz — schnelles Hörverstehen und Bedeutungsabruf
+3. Wortpaare — Reaktionsschnelligkeit und Assoziation
+4. Rechtschreibung — fehlerfreie Eingabe Buchstabe für Buchstabe.
+
+🌍 36 SPRACHEN & RTL-UNTERSTÜTZUNG:
+Lerne bequem in deiner Muttersprache — vollständig in 36 Sprachen übersetzt, inklusive Arabisch, Farsi und Urdu (RTL).
+
+🏆 WÖCHENTLICHE LIGEN & CLOUD-SYNCHRONISATION:
+Miss dich in Ligen, sichere dir deinen Platz auf dem Treppchen, halte deinen Streak aktiv und synchronisiere Fortschritte per 1-Klick-Google-Login.
 
 🚀 PERFEKT FÜR:
-• Schüler & Studenten: Hausaufgaben abfotografieren, Wörter zu Favoriten machen und Klassenarbeiten meistern.
-• Anfänger (A1–A2): Die wichtigsten Basiswörter ohne Überforderung lernen.
-• Fortgeschrittene (B1–C2): Fachwortschatz gezielt ausbauen für Beruf, Reisen und Prüfungen (TOEFL, IELTS).
+• Schüler & Studenten: Hausaufgaben abfotografieren und Top-Noten erzielen.
+• Anfänger (A1–A2): Soliden Grundwortschatz ohne Überforderung aufbauen.
+• Fortgeschrittene (B1–C2): Aktiven Wortschatz für Beruf und Reisen erweitern.
 
-Starte deinen Tag mit einem produktiven „English Breakfast“ – 10 bis 15 Minuten täglich reichen für spürbare Fortschritte!
-
+10 bis 15 Minuten täglich reichen für spürbare Fortschritte!
 Lade English Breakfast jetzt herunter und sprich sicherer Englisch!

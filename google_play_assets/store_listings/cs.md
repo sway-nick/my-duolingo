@@ -1,59 +1,64 @@
-# Czech (Čeština) — Google Play Store Listing
+# 🇨🇿 Czech (Čeština) — Google Play Store Listing
 
-## Title
+### Název aplikace (do 30 znaků)
 English Breakfast: Angličtina
 
-## Short Description
-Častá slova, foto skener, vlastní poznámky i podcast s vypnutým displejem!
+### Krátký popis (do 80 znaků)
+Učte se anglická slova: kartičky, 7000 slov, příběhy a widget na plochu!
 
-## Full Description
-English Breakfast je váš chytrý každodenní trenér anglické slovní zásoby! Učte se slova, která se skutečně používají v běžné mluvě, skenujte domácí úkoly fotoaparátem, pište si vlastní poznámky a pamatujte si vše navždy.
+### Úplný popis (do 4000 znaků)
+English Breakfast je váš chytrý každodenní trenér anglické slovní zásoby s interaktivním widgetem na domovskou obrazovku!
 
-🍳 PROČ ENGLISH BREAKFAST FUNGUJE?
-Většina kurzů nutí studenty biflovat vzácná a zbytečná slova. English Breakfast staví na frekvenční metodě: postupujete od nejčastějších slov v reálné komunikaci až po pokročilá (CEFR A1–C2). Od prvního dne rozumíte filmům, seriálům i rodilým mluvčím.
+Zapomeňte na zdlouhavé biflování vzácných slovíček. Naučte se 7 000+ nejdůležitějších slov moderní mluvené angličtiny podle Zipfova zákona frekvence (úrovně A1 až C2), čtěte ilustrované příběhy každých 50 slov, skenujte texty fotoaparátem a poslouchejte podcast s vypnutým displejem. 100% zdarma — bez drahého předplatného a bez limitů životů!
 
-🌟 HLAVNÍ FUNKCE APLIKACE:
+🍳 10 HLAVNÍCH VÝHOD ENGLISH BREAKFAST:
 
-• 📈 FREKVENČNÍ UČENÍ (OD NEJČASTĚJŠÍCH PO POKROČILÁ):
-Databáze více než 6 600 slov a frází seřazená podle skutečného výskytu v moderní mluvené i psané angličtině. Naučte se konverzační základ bez zbytečností!
+1. 📈 7 000+ NEJČASTĚJŠÍCH ANGLICKÝCH SLOV (ZIPFŮV INDEX)
+Slovní zásoba je seřazena podle reálného výskytu v živém jazyce. Prvních 1 000 slov pokrývá 85 % běžné konverzace, filmů i zpráv. Databáze pokrývá úrovně od A1 po C2 bez plýtvání časem.
 
-• 📝 OSOBNÍ SLOVNÍK A VLASTNÍ POZNÁMKY:
-Narazili jste na neznámé slovo při čtení? Přidejte si ho do osobního slovníku! Ke každému slovu můžete připsat své mnemotechnické pomůcky, kontext či příklady ze života. Vlastní poznámky vytvářejí nejsilnější paměťové stopy.
+2. 📱 INTERAKTIVNÍ WIDGET NA PLOCHU (ZLATÁ KARTA)
+Učte se anglicky při každém zvednutí telefonu! Přidejte si stylovou Zlatou kartu na domovskou obrazovku Androidu: otočte ji jedním klepnutím pro kontrolu překladu, poslechněte si studiovou výslovnost a listujte slovy bez otevírání aplikace.
 
-• 📷 CHYTRÝ FOTO SKENER TEXTU A ŠKOLNÍCH ÚKOLŮ:
-Dostali jste za úkol naučit se slovíčka z učebnice? Jednoduše stránku vyfoťte! Inteligentní OCR skener text okamžitě rozpozná, vyhledá neznámá slova a importuje je k procvičování jedním klepnutím bez zdlouhavého psaní.
+3. 📖 38 INTERAKTIVNÍCH PŘÍBĚHŮ A POHÁDEK (KAŽDÝCH 50 SLOV)
+Ukotvěte slovíčka v přirozeném kontextu! Každých 50 naučených slov odemkne nový čtivý příběh nebo klasickou pohádku (včetně „My Lord Bag of Rice“), napsanou výhradně ze slov, která už znáte. Klepněte na jakékoliv slovo pro okamžitý překlad a poslech.
 
-• ⭐ OBLÍBENÉ A ZARUČENÉ ZAPAMATOVÁNÍ (SRS):
-Potřebujete se rychle naučit slovíčka na zítřejší test? Označte je hvězdičkou jako Oblíbené! Vědecky ověřený algoritmus intervalového opakování (Spaced Repetition) naplánuje opakování tak, aby zaručil stoprocentní trvalé uložení do paměti.
+4. 🔓 100% ZDARMA — BEZ PŘEDPLATNÉHO A ZAMČENÉHO OBSAHU
+Všech 7 000 slov, příběhy, audia i tréninky máte k dispozici hned. Žádné nucené poplatky, skryté platby ani limity „životů“ — studujte vlastním tempem, kolik chcete!
 
-• 🎮 PROCVIČUJTE OBLÍBENÉ VE VŠECH REŽIMECH:
-Trénujte svá vybraná slova v režimu, který vám vyhovuje:
-  — Interaktivní 3D kartičky s gesty tažení
-  — Rychlé kvízy na čas
-  — Poslech a porozumění mluvenému slovu
-  — Skládání vět a spojování dvojic
-  — Pravopis a nepravidelná slovesa
+5. 🧠 CHYTRÉ INTERVALOVÉ OPAKOVÁNÍ (SRS)
+Inteligentní algoritmus analyzuje vaše odpovědi v reálném čase. Pokud v nějakém anglickém slově váháte, systém ho adaptivně vrací do procvičování, dokud si ho neosvojíte na 100 %.
 
-• 🎧 AUDIO PODCAST NA CESTY S VYPNUTOU OBRAZOVKOU:
-Učte se při dojíždění, řízení auta, chůzi nebo běhu, aniž byste se dívali na displej! Přehrávání na pozadí funguje i při zamknuté a zhasnuté obrazovce: uslyšíte český překlad, pauzu na vybavení a zřetelnou anglickou výslovnost.
+6. 📷 CHYTRÝ FOTO SKENER TEXTU A DOMÁCÍCH ÚKOLŮ (OCR)
+Čtete učebnici, článek nebo knihu v angličtině? Jednoduše stránku vyfoťte! OCR skener okamžitě rozpozná neznámá slova a jedním klepnutím je přidá do vašeho výukového plánu.
 
-• 🎙️ TRENÉR VÝSLOVNOSTI A PŘÍZVUKU (UK & US):
-Mluvte do mikrofonu a získejte okamžitou zpětnou vazbu. Trénujte britskou i americkou výslovnost s přehlednou fonetickou transkripcí IPA.
+7. 📝 OSOBNÍ SLOVNÍK A VLASTNÍ MNEMOTECHNIKA
+Zaslechli jste zajímavé slovo ve filmu či písničce? Uložte si ho během vteřiny. Přidejte k němu vlastní asociace, poznámky a příklady ze života pro spolehlivé uložení do dlouhodobé paměti.
 
-• 🌍 33 JAZYKŮ ROZHRANÍ:
-Kompletní lokalizace do 33 jazyků včetně plné podpory arabštiny (RTL).
+8. ⭐ OBLÍBENÉ POLOŽKY A PŘÍPRAVA NA ZKOUŠKY
+Vytvářejte si tematické seznamy podle svých cílů: do školy, na pracovní pohovor, na cesty nebo k mezinárodním certifikátům (IELTS, TOEFL, Cambridge).
 
-• ☁️ SPOLEHLIVÁ SYNCHRONIZACE V CLOUDU:
-Přihlášení přes Google na 1 kliknutí. Vaše slova, poznámky, oblíbené položky i série jsou bezpečně uloženy v cloudu na všech zařízeních.
+9. 🎧 REŽIM PODCAST S VYPNUTÝM DISPLEJEM
+Učte se při dojíždění, na procházce nebo při sportu bez nutnosti dívat se na obrazovku. Přehrávač na pozadí šetří baterii i při zamknutém telefonu: uslyšíte překlad, pauzu na rozmyšlenou a čistou anglickou výslovnost.
 
-• 🏆 TÝDENNÍ LIGY A NEPŘETRŽITÁ SÉRIE (STREAK):
-Soutěžte s ostatními studenty, postupujte do vyšších lig a udržujte každodenní studijní návyk.
+10. 🎙️ DVA STUDIOVÉ PŘÍZVUKY: US A UK
+Zřetelná a přirozená výslovnost rodilých mluvčích. Kdykoliv přepínejte mezi americkým (US) a britským (UK) přízvukem podle svých preferencí.
 
-🚀 PRO KOHO JE APLIKACE URČENA:
-• Žáci a studenti: Vyfoťte učebnici, uložte si slovíčka do oblíbených a získejte jedničky.
-• Začátečníci (A1–A2): Osvojte si nejdůležitější frekvenční slova bez přehlcení.
-• Pokročilí (B1–C2): Rozšiřte slovní zásobu pro práci, cestování a mezinárodní zkoušky.
+🔄 KOMPLETNÍ CYKLUS UČENÍ (4 REŽIMY):
+1. Kartičky — vizuální rozpoznání a čistá výslovnost
+2. Kvíz — porozumění poslechem a rychlá volba významu
+3. Dvojice — bleskové spojování slov a překladů
+4. Pravopis (Spelling) — bezchybné psaní slov na klávesnici.
 
-Začněte den vydatnou „anglickou snídaní“ — 10 až 15 minut denně vám zajistí plynulost!
+🌍 36 JAZYKŮ ROZHRANÍ VČETNĚ PLNÉ PODPORY RTL:
+Učte se angličtinu ve svém mateřském jazyce — přeloženo do 36 světových jazyků včetně plné podpory pro arabštinu, perštinu a urdštinu.
 
-Stáhněte si English Breakfast a mluvte anglicky s lehkostí!
+🏆 TÝDENNÍ LIGY A CLOUDOVÁ SYNCHRONIZACE:
+Soutěžte s ostatními studenty v žebříčku, udržujte denní sérii učení a zálohujte svůj pokrok přes Google účet.
+
+🚀 VHODNÉ PRO:
+• Začátečníky (A1–A2) — rychlý start a pevný základ nejdůležitějších slov.
+• Pokročilé (B1–C2) — rozšíření aktivní slovní zásoby pro práci a plynulou mluvu.
+• Přípravu na zkoušky IELTS, TOEFL a cestování.
+
+Pouhých 10 až 15 minut denně stačí k plynulé angličtině!
+Stáhněte si English Breakfast hned teď a začněte mluvit anglicky s jistotou!

@@ -2,162 +2,132 @@
 
 ---
 
-## 1. 🇷🇺 Russian (Русский — Основной язык)
-
-### Название приложения (до 30 символов)
-English Breakfast: Учи слова
-
-### Краткое описание (до 80 символов)
-Частотные слова, свои заметки, фотосканер текста и аудио-подкаст с черным экраном!
-
-### Полное описание (до 4000 символов)
-English Breakfast — твой умный ежедневный тренажер английского языка! Учи именно те слова, которые реально используются в живой речи, добавляй школьные и рабочие задания и гарантированно запоминай их навсегда.
-
-🍳 ПОЧЕМУ ENGLISH BREAKFAST РАБОТАЕТ?
-Большинство курсов заставляют учить редкие и бесполезные слова. В English Breakfast обучение построено на частотном принципе: вы осваиваете слова от самых популярных и необходимых в реальном общении к более сложным, сразу начиная понимать живую английскую речь, фильмы и диалоги.
-
-🌟 ГЛАВНЫЕ ВОЗМОЖНОСТИ ПРИЛОЖЕНИЯ:
-
-• 📈 ИЗУЧЕНИЕ ОТ САМЫХ ЧАСТОТНЫХ СЛОВ К СЛОЖНЫМ:
-База из 6 600+ слов строго ранжирована по реальной частотности употребления в современной речи и международным уровням CEFR (A1–C2). С первого дня вы учите только то, что действительно пригодится в разговоре!
-
-• 📝 ЛИЧНЫЙ СЛОВАРЬ И ПЕРСОНАЛЬНЫЕ ПРИМЕЧАНИЯ:
-Нашли незнакомое слово при чтении или на уроке? Легко добавьте его в личный словарь! К любому слову можно прикрепить свои заметки, контекстные подсказки, мнемонические ассоциации или примеры из жизни. Личные примечания — самый надежный способ закрепить слово в долговременной памяти.
-
-• 📷 УМНЫЙ ФОТОСКАНЕР ТЕКСТА И ШКОЛЬНЫХ ЗАДАНИЙ:
-Задали выучить слова из учебника? Просто сфотографируйте страницу книги, конспект или школьное задание! Сканер мгновенно распознает текст, выделит все недостающие слова и добавит их в вашу базу на изучение в один клик без утомительного ручного набора.
-
-• ⭐ ИЗБРАННОЕ И ГАРАНТИРОВАННОЕ ЗАПОМИНАНИЕ (SRS):
-Нужно срочно выучить слова к завтрашнему уроку или экзамену? Добавьте их в «Избранное» (Фавориты)! Научно доказанный алгоритм интервальных повторений (Spaced Repetition) выстроит персональный график тренировок и гарантированно обеспечит их заучивание до полного автоматизма.
-
-• 🎮 УЧИ ИЗБРАННОЕ ВО ВСЕХ РЕЖИМАХ ТРЕНИРОВОК:
-Вы можете тренировать свои избранные слова в любом удобном формате на выбор:
-  — Интерактивные 3D-флеш-карточки со свайпами
-  — Быстрый квиз на время
-  — Аудирование и понимание на слух
-  — Составление предложений и поиск пар
-  — Тренажер правописания и неправильных глаголов
-
-• 🎧 АУДИО-ПОДКАСТ В ДОРОГЕ С ВЫКЛЮЧЕННЫМ ЭКРАНОМ:
-Учите слова в поездке, за рулем, на прогулке или пробежке, не глядя в телефон! Режим фонового воспроизведения работает даже с полностью выключенным экраном, экономя батарею: звучит перевод на родном языке, пауза для вспоминания и двойное четкое студийное произношение на английском.
-
-• 🌍 33 ЯЗЫКА ИНТЕРФЕЙСА:
-Приложение полностью переведено на 33 языка, включая полноценную поддержку арабского языка (RTL — справа налево).
-
-• ☁️ НАДЕЖНАЯ ОБЛАЧНАЯ СИНХРОНИЗАЦИЯ:
-Вход через Google в 1 клик. Ваши личные слова, персональные заметки, избранное и статистика безопасно хранятся в облаке и доступны на любом устройстве.
-
-• 🏆 ЕЖЕНЕДЕЛЬНЫЕ ЛИГИ И УДАРНЫЙ РЕЖИМ (STREAK):
-Соревнуйтесь с другими учениками, занимайте призовые места на пьедестале и поддерживайте непрерывную привычку учиться каждый день.
-
-🚀 ДЛЯ КОГО ЭТО ПРИЛОЖЕНИЕ:
-• Школьникам и студентам — чтобы быстро сканировать параграфы учебников, вносить домашние задания в избранное и получать отличные оценки.
-• Начинающим (A1–A2) — чтобы освоить самые главные частотные слова без перегрузки.
-• Продолжающим и профи (B1–C2) — чтобы расширять профессиональный вокабуляр и готовиться к собеседованиям и экзаменам (IELTS, TOEFL).
-
-Начните свой день с полезного «английского завтрака» — всего 10–15 минут в день гарантируют прорыв в словарном запасе!
-
-Скачивайте English Breakfast прямо сейчас и учите английский легко и результативно!
-
----
-
-## 2. 🇬🇧 English (International Listing)
+## 1. 🇬🇧 English (International Listing & ASO Primary)
 
 ### App Name (up to 30 chars)
 English Breakfast: Vocabulary
 
 ### Short Description (up to 80 chars)
-Frequency words, custom notes, homework scanner, lock-screen podcast & smart SRS!
+English vocabulary builder: 7000 words, flashcards, stories & home screen widget
 
 ### Full Description (up to 4000 chars)
-English Breakfast is your smart, daily English vocabulary booster! Master high-frequency words used in real life, scan homework with your camera, add custom notes, and remember words permanently.
+English Breakfast is your ultimate English vocabulary app and daily words trainer with an interactive home screen widget!
 
-🍳 WHY ENGLISH BREAKFAST WORKS:
-Stop wasting time memorizing obscure words you will never hear. English Breakfast ranks vocabulary strictly by real-world conversational frequency (CEFR A1 to C2). From day one, you master the core words native speakers actually use in conversations, movies, and podcasts.
+Master English vocabulary fast with real-world frequency: study 7,000+ most used English words from CEFR A1 to C2, learn with flashcards, read illustrated milestone stories unlocked every 50 words, scan homework with OCR, and practice offline. 100% free with no paywalls or forced subscriptions!
 
-🌟 KEY FEATURES:
+🍳 10 REASONS TO LEARN ENGLISH WITH ENGLISH BREAKFAST:
 
-• 📈 REAL-WORLD FREQUENCY-FIRST LEARNING:
-6,600+ curated words and phrases ordered by frequency of occurrence in modern spoken and written English. Build a solid conversational core fast before moving into advanced topics.
+1. 📈 7,000+ FREQUENCY-FIRST ENGLISH WORDS (ZIPF'S LAW)
+Stop wasting time on rare textbook terms. English Breakfast ranks vocabulary strictly by real-world frequency. The first 1,000 words cover up to 85% of everyday spoken English, movies, and conversations. Complete levels from Beginner (A1–A2) to Advanced (C1–C2).
 
-• 📝 PERSONAL DICTIONARY & CUSTOM NOTES:
-Add your own words, idioms, and phrases anytime. Attach personal mnemonic associations, real-life examples, and contextual notes to any word — custom notes create the strongest memory pathways.
+2. 📱 INTERACTIVE HOME SCREEN WIDGET (GOLDEN CARD)
+Learn English words effortlessly every time you unlock your phone! Place the stylish Golden Card vocabulary widget on your Android home screen. Flip cards, listen to native pronunciation, and cycle through daily English words without opening the app.
 
-• 📷 SMART PHOTO SCANNER FOR HOMEWORK & BOOKS:
-Got a textbook assignment or article to read? Simply snap a photo! The intelligent OCR scanner extracts the text, identifies words missing from your vocabulary, and imports them into your training database in one tap without tedious typing.
+3. 📖 38 ILLUSTRATED MILESTONE STORIES (EVERY 50 WORDS)
+Reinforce your vocabulary in context! Unlock illustrated stories and fairy tales every 50 mastered words, using strictly the words you have learned. Tap any word for instant translation and audio.
 
-• ⭐ FAVORITES & GUARANTEED SPACED REPETITION (SRS):
-Need to nail specific words for an upcoming school test or exam? Mark them as Favorites! Our scientifically backed Spaced Repetition System automatically schedules reviews to guarantee 100% long-term retention.
+4. 🔓 100% FREE VOCABULARY — NO PAYWALLS
+All 7,000 words, stories, audio, and modes are completely unlocked. No expensive monthly subscriptions, no paywalls, and no artificial "hearts" or lives limiting your daily study.
 
-• 🎮 TRAIN FAVORITES ACROSS ALL PRACTICE MODES:
-Drill your favorite words in whichever mode fits your study style best:
-  — 3D Flashcards with swipe gestures
-  — Rapid-fire Quizzes
-  — Listening comprehension
-  — Sentence builder & Word matching
-  — Spelling sprint & Irregular verbs
+5. 🧠 ADAPTIVE SPACED REPETITION ENGINE
+Smart round architecture tracks your answers in real time. If an English word gives you trouble, the algorithm schedules it across multiple retention steps until you achieve 100% mastery.
 
-• 🎧 COMMUTE AUDIO PODCAST WITH SCREEN OFF:
-Study while commuting, driving, walking, or running without touching your phone! Background audio playback works seamlessly even with your screen turned off to save battery: hear the native translation, pause to recall, and listen to natural English pronunciation twice.
+6. 📷 SMART PHOTO SCANNER FOR TEXTBOOKS & ARTICLES
+Reading an English book, homework, or news article? Snap a picture! The smart OCR scanner extracts text, detects unknown words, and adds them to your personal flashcards in one tap.
 
-• 🌍 33 INTERFACE LANGUAGES & RTL SUPPORT:
-Fully localized into 33 languages worldwide, featuring full Arabic (RTL) support with protected English phonetics.
+7. 📝 PERSONAL DICTIONARY & MNEMONIC NOTES
+Encountered an interesting English word in a movie or song? Add it instantly. Attach custom mnemonic associations, notes, and personal examples to trigger long-term memory.
 
-• ☁️ SEAMLESS CLOUD SYNC:
-Instant 1-tap Google Sign-In securely backs up your custom words, notes, favorites, and streak on Firebase Firestore across all your devices.
+8. ⭐ CUSTOM FAVORITES LISTS & EXAM PREPARATION
+Create custom word collections tailored for specific goals: school tests, job interviews, travel, or international exams (IELTS, TOEFL, Cambridge, TOEIC).
 
-• 🏆 WEEKLY LEAGUES & STATS:
-Compete on weekly leaderboards, keep your streak alive, and climb to the winners' podium.
+9. 🎧 COMMUTE AUDIO PODCAST WITH SCREEN OFF
+Learn English hands-free on the go! Background audio playback works smoothly even with your screen turned off: listen to translations, pause to recall, and hear crystal-clear English pronunciation.
+
+10. 🎙️ DUAL NATIVE AUDIO: US & UK ACCENTS
+High-definition studio pronunciation recorded by native speakers. Switch between American and British accents with a single tap.
+
+🔄 4-STEP RETENTION WORKFLOW:
+1. Flashcards — visual introduction & clear pronunciation
+2. Quiz — active listening comprehension & recall
+3. Pairs — rapid word association & speed reaction
+4. Spelling — letter-by-letter keyboard accuracy.
+
+🌍 36 INTERFACE LANGUAGES:
+Learn English comfortably in your native language — complete localization across 36 languages, including Spanish, Portuguese, French, German, Arabic, Persian, Urdu (with RTL), Hindi, Chinese, and Kazakh.
+
+🏆 WEEKLY LEAGUES & CLOUD BACKUP:
+Compete with learners on weekly leaderboards, earn XP, maintain your streak, and sync progress seamlessly across devices with Google Sign-In.
 
 🚀 PERFECT FOR:
-• Students: Snap homework, favorite assigned words, and ace vocabulary tests.
-• Beginners (A1–A2): Learn the most frequently used words first.
-• Intermediate & Advanced (B1–C2): Expand your active vocabulary for IELTS, TOEFL, work, and travel.
+• Beginners (A1–A2): Build a strong conversational vocabulary fast.
+• Intermediate & Advanced (B1–C2): Expand active vocabulary for work, exams, and fluency.
+• Students & Self-learners: Prepare for IELTS, TOEFL, school, and travel.
 
-Start your morning with a fresh "English Breakfast" — 10 minutes a day creates lasting fluency!
-
-Download English Breakfast now and start speaking with confidence!
+Start your day with English Breakfast — 10 to 15 minutes of daily practice delivers real English fluency! Download now and start learning English words today!
 
 ---
 
-## 3. 🇺🇦 Ukrainian (Українська)
+## 2. 🇷🇺 Russian (Русский)
 
-### Назва додатка (до 30 символів)
-English Breakfast: Англійська
+### Название приложения (до 30 символов)
+English Breakfast: Учи слова
 
-### Короткий опис (до 80 символів)
-Частотні слова, власні нотатки, фотосканер завдань та аудіопідкаст з вимкненим екраном!
+### Краткое описание (до 80 символов)
+Учи английские слова: карточки, 7000 слов, рассказы и виджет на рабочий стол!
 
-### Повний опис (до 4000 символів)
-English Breakfast — твій розумний щоденний тренажер англійської мови! Вчи саме ті слова, які найчастіше зустрічаються в реальному житті, скануй домашні завдання камерою, додавай власні примітки та гарантовано запам'ятовуй усе назавжди.
+### Полное описание (до 4000 символов)
+English Breakfast — твой умный тренажер английских слов с интерактивным виджетом на рабочий стол!
 
-🍳 ЧОМУ ENGLISH BREAKFAST ДІЄВИЙ?
-Більшість курсів перевантажують рідкісними словами. В English Breakfast навчання побудовано за принципом частотності: ви вивчаєте слова від найпопулярніших у живій мові до складніших, швидко починаючи розуміти англійську на слух, фільми та діалоги.
+Учи английские слова легко и эффективно: 7 000+ самых нужных слов по закону частотности (Zipf) от уровня A1 до C2, умные карточки, иллюстрированные рассказы каждые 50 слов, сканер текста с фото и аудиоплеер с выключенным экраном. 100% бесплатно — без дорогих подписок и ограничений «жизней»!
 
-🌟 ОСНОВНІ МОЖЛИВОСТІ:
+🍳 10 ГЛАВНЫХ ПРЕИМУЩЕСТВ ENGLISH BREAKFAST:
 
-• 📈 ВИВЧЕННЯ ВІД НАЙЧАСТІШИХ СЛІВ ДО СКЛАДНИХ:
-База з понад 6 600 слів впорядкована за частотністю вживання в реальній мові та міжнародними рівнями CEFR (A1–C2).
+1. 📈 7 000+ САМЫХ ЧАСТЫХ АНГЛИЙСКИХ СЛОВ (ИНДЕКС ZIPF)
+Забудь про редкие книжные фразы и зубрежку. Мы расставили все английские слова строго по реальной частоте использования в живой речи. Первые 1 000 слов покрывают до 85% разговорного английского, диалогов из фильмов и переписки. База охватывает уровни от начинающего (A1–A2) до продвинутого (C1–C2).
 
-• 📝 ВЛАСНИЙ СЛОВНИК ТА ОСОБИСТІ ПРИМІТКИ:
-Знайшли нове слово? Додайте його до власного словника в один дотик. До кожного слова можна прикріпити особисті асоціації, підказки або приклади з життя — це найкращий спосіб закріпити слово в пам'яті.
+2. 📱 ИНТЕРАКТИВНЫЙ ВИДЖЕТ НА РАБОЧИЙ СТОЛ (GOLDEN CARD)
+Учи английский каждый раз, когда берешь телефон в руки! Добавь стильную «Золотую карточку» на экран Android: переворачивай карточки одним тапом, слушай студийное произношение и листай слова, не открывая приложение.
 
-• 📷 РОЗУМНИЙ ФОТОСКАНЕР ТЕКСТУ ТА ЗАВДАНЬ:
-Задали вивчити слова до уроку? Сфотографуйте сторінку підручника! Сканер розпізнає текст, виділить усі відсутні у вашій базі слова та миттєво додасть їх на вивчення без ручного набору.
+3. 📖 38 ИНТЕРАКТИВНЫХ РАССКАЗОВ И СКАЗОК (КАЖДЫЕ 50 СЛОВ)
+Закрепляй английские слова в настоящем контексте! Каждые 50 выученных слов открывают новый рассказ или классическую сказку (включая «My Lord Bag of Rice»), составленную строго из уже освоенных слов. Нажимай на любое слово в тексте для мгновенного перевода и озвучки.
 
-• ⭐ ОБРАНЕ ТА ГАРАНТОВАНЕ ЗАПАМ'ЯТОВУВАННЯ (SRS):
-Потрібно вивчити конкретні слова до контрольної або уроку? Позначте їх зірочкою (Фаворити)! Доведена методика інтервальних повторень вибудує індивідуальний розклад повторень і гарантує повне засвоєння.
+4. 🔓 100% БЕСПЛАТНО — БЕЗ ДОРОГИХ ПОДПИСОК И ПЕЙВОЛЛОВ
+В отличие от других приложений, весь словарь на 7 000 слов, все рассказы, аудио и тренировки доступны сразу. Никаких навязанных платных подписок и искусственных лимитов «жизней» (сердечек) — учись столько, сколько хочешь!
 
-• 🎮 ВЧИ ОБРАНЕ В УСІХ РЕЖИМАХ:
-Тренуйте обрані слова у будь-якому форматі: інтерактивні 3D-картки, швидкі квізи, аудіювання, складання речень, пошук пар та тренажер неправильних дієслів.
+5. 🧠 УМНОЕ ИНТЕРВАЛЬНОЕ ПОВТОРЕНИЕ
+Интеллектуальный алгоритм анализирует твои ответы в реальном времени. Если английское слово дается трудно, тренажер адаптивно возвращает его на разных этапах, пока ты не выучишь его на 100%.
 
-• 🎧 АУДІОПІДКАСТ У ДОРОЗІ З ВИМКНЕНИМ ЕКРАНОМ:
-Вчіть слова у поїздці, за кермом або на пробіжці навіть із повністю вимкненим екраном телефона: звучить переклад рідною мовою, пауза для згадування та чиста англійська вимова.
+6. 📷 УМНЫЙ ФОТОСКАНЕР ТЕКСТА И ДОМАШНИХ ЗАДАНИЙ
+Читаешь учебник, статью или книгу на английском? Просто сфотографируй страницу! Сканер текста (OCR) мгновенно найдет незнакомые слова и добавит их в твои карточки в один клик.
 
-• 🌍 ПОВНА ПІДТРИМКА 33 МОВ:
-Інтерфейс перекладено 33 мовами світу.
+7. 📝 ЛИЧНЫЙ СЛОВАРЬ И МНЕМОНИКА
+Встретил интересное слово в фильме или песне? Добавь его в словарь за секунду. Прикрепляй к слову свои ассоциации, заметки и примеры из жизни для крепкого запоминания.
 
-• ☁️ ХМАРНА СИНХРОНІЗАЦІЯ:
-Швидкий вхід через Google. Всі ваші слова, нотатки та стрік надійно збережені в хмарі.
+8. ⭐ СПИСКИ ИЗБРАННОГО И ПОДГОТОВКА К ЭКЗАМЕНАМ
+Формируй тематические списки слов под личные цели: подготовка к школе, работе, собеседованию, путешествию или сдаче международных экзаменов (IELTS, TOEFL, Cambridge).
 
-Завантажуй English Breakfast зараз та вивчай англійську легко і впевнено!
+9. 🎧 РЕЖИМ «ПОДКАСТ» С ВЫКЛЮЧЕННЫМ ЭКРАНОМ
+Учи английские слова на ходу, в транспорте или на пробежке. Фоновый аудиоплеер работает даже при заблокированном телефоне и черном экране: слушай перевод, делай паузу и повторяй правильное произношение.
+
+10. 🎙️ ДВА СТУДИЙНЫХ АКЦЕНТА: US И UK
+Качественное студийное произношение от носителей языка. Переключайся между американским и британским акцентом в любой момент.
+
+🔄 ПОЛНЫЙ ЦИКЛ ОБУЧЕНИЯ (4 РЕЖИМА):
+1. Карточки слов — знакомство и правильное произношение
+2. Квиз — тренировка понимания на слух и выбор значения
+3. Пары — скоростное сопоставление слов и перевод
+4. Спеллинг — безошибочный ввод слова по буквам.
+
+🌍 36 ЯЗЫКОВ ИНТЕРФЕЙСА:
+Учи английский язык на родном языке — все слова переведены для 36 языков, включая казахский, украинский, испанский, турецкий, арабский, урду и фарси.
+
+🏆 ЕЖЕНЕДЕЛЬНЫЕ ЛИГИ И СИНХРОНИЗАЦИЯ:
+Соревнуйся с другими учениками в таблице лидеров, держи ударный темп и сохраняй прогресс в облаке через Google-аккаунт.
+
+🚀 ПОДХОДИТ ДЛЯ:
+• Начинающих (A1–A2) — быстрый старт и базовый словарный запас.
+• Продолжающих (B1–C2) — расширение активного словаря для работы и беглой речи.
+• Подготовки к IELTS, TOEFL и поездкам за границу.
+
+Начни день с English Breakfast — всего 10–15 минут практики в день, и ты свободно заговоришь на английском! Скачивай приложение и учи английские слова уже сегодня!

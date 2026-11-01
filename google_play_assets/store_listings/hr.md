@@ -1,56 +1,64 @@
 # 🇭🇷 Croatian (Hrvatski) — Google Play Store Listing
 
-### App Name (up to 30 chars)
+### Naziv aplikacije (do 30 znakova)
 English Breakfast: Engleski
 
-### Short Description (up to 80 chars)
-Česte riječi, bilješke, foto skener, audio podcast u pozadini i pametni SRS!
+### Kratki opis (do 80 znakova)
+Uči engleske riječi: kartice, 7000 riječi, priče i widget za početni zaslon!
 
-### Full Description (up to 4000 chars)
-English Breakfast je tvoj pametni svakodnevni trener engleskog vokabulara! Uči riječi koje se stvarno koriste u svakodnevnom govoru, skeniraj domaće zadaće kamerom, dodaj vlastite bilješke i trajno zapamti svaku riječ.
+### Puni opis (do 4000 znakova)
+English Breakfast je tvoj pametni svakodnevni trener engleskog vokabulara s interaktivnim widgetom za početni zaslon!
 
-🍳 ZAŠTO ENGLISH BREAKFAST DJELUJE?
-Zaboravi na gubljenje vremena uz rijetke i beskorisne riječi. U English Breakfastu učenje se temelji na stvarnoj učestalosti riječi u govoru (CEFR A1 do C2). Od prvog dana učiš ključne riječi koje izvorni govornici svakodnevno koriste u razgovorima, filmovima i podcastima.
+Zaboravi na dosadno bubećenje rijetkih riječi. Nauči više od 7.000 najpotrebnijih riječi poredanih prema Zipfovom zakonu učestalosti (CEFR od A1 do C2), čitaj ilustrirane priče svakih 50 riječi, skeniraj tekstove kamerom i slušaj podcast s ugašenim zaslonom. 100% besplatno — bez skupih pretplata i bez ograničenja života!
 
-🌟 GLAVNE ZNAČAJKE:
+🍳 10 GLAVNIH PREDNOSTI ENGLISH BREAKFASTA:
 
-• 📈 UČENJE PREMA UČESTALOSTI OD A1 DO C2:
-Baza od preko 6.600 pažljivo odabranih riječi i fraza poredanih prema učestalosti u suvremenom engleskom jeziku. Brzo izgradi čvrste temelje za tečnu komunikaciju.
+1. 📈 7.000+ NAJUČESTALIJIH ENGLESKIH RIJEČI (ZIPF INDEKS)
+Uči riječi prema njihovoj stvarnoj učestalosti u suvremenom engleskom jeziku. Prvih 1.000 riječi pokriva čak 85% svakodnevnih razgovora, filmova i poruka. Baza obuhvaća razine od početne (A1–A2) do napredne (C1–C2) bez gubljenja vremena.
 
-• 📝 OSOBNI RJEČNIK I VLASTITE BILJEŠKE:
-Pronašao si novu riječ u knjizi ili na nastavi? Dodaj je u osobni rječnik jednim dodirom! Svakoj riječi možeš dodati vlastite asocijacije, primjere i podsjetnike — osobne bilješke stvaraju najjače tragove u pamćenju.
+2. 📱 INTERAKTIVNI WIDGET ZA POČETNI ZASLON (ZLATNA KARTICA)
+Uči engleski svaki put kada uzmeš mobitel u ruku! Postavi elegantnu Zlatnu karticu na početni zaslon: okreni karticu jednim dodirom za provjeru prijevoda, poslušaj čist studijski izgovor i listaj riječi bez otvaranja aplikacije.
 
-• 📷 PAMETNI FOTO SKENER ZA ZADAĆE I KNJIGE:
-Imaš popis riječi iz udžbenika? Samo fotografiraj stranicu! Pametni OCR skener prepoznaje tekst, izdvaja nepoznate riječi i unosi ih na tvoj popis za učenje bez napornog tipkanja.
+3. 📖 38 INTERAKTIVNIH PRIČA I BAJKI (SVAKIH 50 RIJEČI)
+Učvrsti riječi u stvarnom kontekstu! Svakih 50 naučenih riječi otključava novu uzbudljivu priču ili bajku (uključujući "My Lord Bag of Rice"), napisanu isključivo riječima koje već znaš. Dodirni bilo koju riječ za trenutačni prijevod i izgovor.
 
-• ⭐ FAVORITI I ZAJAMČENO PAMĆENJE (SRS):
-Spremaš se za test ili ispit? Označi riječi kao Favorite! Znanstveno dokazan sustav razmaknutog ponavljanja (Spaced Repetition) automatski raspoređuje vježbe i jamči trajno pamćenje.
+4. 🔓 100% BESPLATNO — BEZ SKUPIH PRETPLATA I ZIDOVA PLAĆANJA
+Za razliku od drugih aplikacija, svih 7.000 riječi, priče, audio zapisi i treninzi dostupni su odmah. Nema nametnutih mjesečnih naknada niti dosadnog čekanja "života" (srca) — uči vlastitim tempom koliko god želiš!
 
-• 🎮 VJEŽBAJ FAVORITE KROZ SVE NAČINE UČENJA:
-Ponavljaj svoje odabrane riječi u formatu koji ti najviše odgovara:
-  — Interaktivne 3D kartice s povlačenjem (flashcards)
-  — Brzi kvizovi na vrijeme
-  — Slušanje i razumijevanje govora
-  — Slaganje rečenica i spajanje parova
-  — Vježbe pravopisa i nepravilni glagoli
+5. 🧠 PAMETNO RAZMAKNUTO PONAVLJANJE (SRS)
+Inteligentni algoritam analizira tvoje odgovore u stvarnom vremenu. Ako ti neka engleska riječ stvara poteškoće, sustav je automatski vraća u vježbe sve dok je ne savladaš 100%.
 
-• 🎧 AUDIO PODCAST ZA PUTOVANJA S UGAŠENIM ZASLONOM:
-Uči u hodu, u automobilu, tijekom šetnje ili trčanja bez gledanja u telefon! Audio način rada besprijekorno radi u pozadini s potpuno ugašenim zaslonom radi uštede baterije: slušaj prijevod na hrvatskom, pauzu za razmišljanje i dvostruki čist engleski izgovor studijske kvalitete.
+6. 📷 PAMETNI FOTO SKENER ZA ZADAĆE I KNJIGE (OCR)
+Čitaš udžbenik, članak ili knjigu na engleskom? Samo fotografiraj stranicu! OCR skener u sekundi prepoznaje nepoznate riječi i jednim dodirom ih dodaje na tvoj popis kartica za učenje.
 
-• 🌍 33 JEZIKA SUČELJA I RTL PODRŠKA:
-Aplikacija je u potpunosti prevedena na 33 jezika, uključujući potpunu podršku za arapski (RTL).
+7. 📝 OSOBNI RJEČNIK I VLASTITE BILJEŠKE
+Čuo si novu riječ u seriji ili pjesmi? Spremi je u trenu. Dodaj vlastite asocijacije, mnemotehniku i primjere iz života kako bi riječ trajno ostala u dugoročnom pamćenju.
 
-• ☁️ POUZDANA SINKRONIZACIJA U OBLAKU:
-Jednostavna prijava putem Google računa. Tvoje riječi, bilješke, favoriti i niz učenja (streak) sigurno su pohranjeni u oblaku na svim uređajima.
+8. ⭐ LISTE FAVORITA I PRIPREMA ZA ISPITE
+Stvori tematske popise prema osobnim ciljevima: za školu, posao, razgovor za posao, putovanja ili međunarodne ispite (IELTS, TOEFL, Cambridge).
 
-• 🏆 TJEDNE LIGE I STATISTIKA:
-Natječi se s drugim korisnicima na tjednoj ljestvici, održavaj svoj dnevni niz i popni se na pobjedničko postolje.
+9. 🎧 PODCAST NAČIN S UGAŠENIM ZASLONOM
+Uči u hodu, u prijevozu ili tijekom rekreacije. Pozadinski audio player radi čak i sa zaključanim i ugašenim zaslonom radi uštede baterije: prijevod, stanka za razmišljanje i čist engleski izgovor.
+
+10. 🎙️ DVA STUDIJSKA NAGLASKA: US I UK
+Prirodan i jasan izgovor izvornih govornika. U bilo kojem trenutku prebaci se između američkog (US) i britanskog (UK) izgovora.
+
+🔄 POTPUNI CIKLUS UČENJA (4 NAČINA):
+1. Kartice — vizualno prepoznavanje i pravilan izgovor
+2. Kviz — slušno razumijevanje i brzi odabir značenja
+3. Parovi — munjevito spajanje riječi i prijevoda
+4. Pravopis (Spelling) — točno tipkanje riječi slovo po slovo.
+
+🌍 36 JEZIKA SUČELJA I POTPUNA RTL PODRŠKA:
+Uči engleski na svom materinjem jeziku — prevedeno na 36 jezika, uz punu podršku za arapski, perzijski i urdu.
+
+🏆 TJEDNE LIGE I SINKRONIZACIJA U OBLAKU:
+Natječi se s drugim korisnicima na ljestvici, održavaj svakodnevni niz učenja i sigurno spremi svoj napredak putem Google računa.
 
 🚀 SAVRŠENO ZA:
-• Učenike i studente: skeniraj udžbenike, spremi riječi za test u favorite i ostvari odlične ocjene.
-• Početnike (A1–A2): brzo nauči najvažnije svakodnevne riječi bez preopterećenja.
-• Napredne (B1–C2): proširi stručni vokabular za posao, putovanja i ispite (IELTS, TOEFL).
+• Početnike (A1–A2) — brz početak i čvrsti temelj osnovnog vokabulara.
+• Napredne (B1–C2) — proširenje rječnika za tečnu komunikaciju i posao.
+• Pripremu za IELTS, TOEFL i putovanja u inozemstvo.
 
-Započni jutro uz hranjivi "English Breakfast" — 10 do 15 minuta dnevno jamči siguran napredak!
-
-Preuzmi English Breakfast odmah i progovori engleski sa samopouzdanjem!
+Samo 10 do 15 minuta dnevno dovoljno je za tečan engleski!
+Preuzmi English Breakfast sada i počni učiti engleski već danas!

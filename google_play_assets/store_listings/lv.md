@@ -4,7 +4,7 @@
 English Breakfast: Angļu vārdi
 
 ### Short Description (up to 80 chars)
-Biežākie vārdi, piezīmes, foto skeneris, fona aplāde un viedā SRS atkārtošana!
+Mācies angļu vārdus: kartītes, 7000 vārdu, stāsti un sākuma ekrāna logrīks!
 
 ### Full Description (up to 4000 chars)
 English Breakfast ir tavs viedais ikdienas angļu valodas vārdu krājuma treneris! Apgūsti tieši tos vārdus, kurus reālajā dzīvē izmanto visbiežāk, skenē mājasdarbus ar kameru, pievieno savas piezīmes un atceries vārdus uz visiem laikiem.
@@ -40,8 +40,8 @@ Mācies ceļā, pie stūres, pastaigā vai skrienot, nepieskaroties tālrunim! F
 • 🎙️ IZRUNAS TRENERIS UN AKCENTI:
 Runā mikrofonā un saņem tūlītēju vērtējumu par savu izrunu. Izvēlies starp britu (UK) un amerikāņu (US) akcentiem ar saprotamu IPA transkripciju.
 
-• 🌍 33 SASKARNES VALODAS & RTL:
-Pilnībā lokalizēta 33 pasaules valodās, tostarp ar pilnu arābu valodas (RTL) atbalstu.
+• 🌍 36 SASKARNES VALODAS & RTL:
+Pilnībā lokalizēta 36 pasaules valodās, tostarp ar pilnu arābu valodas (RTL) atbalstu.
 
 • ☁️ MĀKOŅA SINHRONIZĀCIJA:
 Pieslēdzies ar Google vienā mirklī. Visi tavi vārdi, piezīmes, izlase un progresa sērija (streak) tiek droši glabāti mākonī.

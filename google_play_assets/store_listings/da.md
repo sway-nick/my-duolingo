@@ -4,53 +4,61 @@
 English Breakfast: Lær engelsk
 
 ### Short Description (up to 80 chars)
-Frekvensord, egne noter, fotoskanner, låseskærm-podcast & smart SRS-gentagelse!
+Lær engelske ord: kort, 7000 ord, historier & hjemmeskærm-widget!
 
 ### Full Description (up to 4000 chars)
-English Breakfast er din smarte, daglige træner til engelsk ordforråd! Lær de ord, der rent faktisk bruges i virkeligheden, skan lektier med kameraet, tilføj egne noter og husk ordene for altid.
+English Breakfast er din smarte, daglige træner til engelsk ordforråd med interaktiv hjemmeskærm-widget!
 
-🍳 HVORFOR ENGLISH BREAKFAST VIRKER:
-Spild ikke tiden på sjældne og ubrugelige gloser. I English Breakfast er indlæringen bygget op efter hyppighed i ægte samtaler (CEFR A1 til C2). Fra dag ét lærer du de kerneord, som indfødte talere rent faktisk bruger i samtaler, film og podcasts.
+Glem alt om ubrugelige vendinger og kedelig udenadslære. Begynd med de ord, der har den højeste reelle hyppighed i levende samtaler, skan lektier med kameraet, læs interaktive historier og lær engelsk med fuld selvtillid!
 
-🌟 NØGLEFUNKTIONER:
+🍳 10 VIGTIGSTE FORDELE VED ENGLISH BREAKFAST:
 
-• 📈 LÆR EFTER HYPPIGHED FRA A1 TIL C2:
-Over 6.600 udvalgte ord og udtryk, rangordnet efter hvor ofte de optræder i moderne engelsk. Opbyg et solidt hverdagsordforråd hurtigt, før du går videre til avancerede emner.
+1. 📈 INDLÆRING EFTER REEL HYPPIGHED (ZIPFS LOV)
+Indlæringen følger den reelle hyppighed i moderne engelsk (CEFR A1–C2). De første 1.000 ord dækker op til 85% af hverdagssproget, film og samtaler. Næsten 7.000 ord uden spildtid.
 
-• 📝 PERSONLIG ORDBOG OG EGNE NOTER:
-Stødt på et nyt ord i en bog eller lektie? Tilføj det til din personlige ordbog med ét tryk! Knyt dine egne huskeregler, associationer, eksempler og noter til hvert ord — personlige noter skaber den stærkeste hukommelse.
+2. 📱 INTERAKTIV HJEMMESKÆRM-WIDGET (GYLDENT KORT)
+Lær engelsk, hver gang du tager telefonen i hånden! Placer den stilfulde Gyldent Kort-widget direkte på din startskærm: vend kortet med ét tryk for at tjekke oversættelsen, lyt til krystalklar udtale og skift ord uden at åbne appen. Forbind samlinger eller gentag dine personlige Favoritter.
 
-• 📷 INTELLIGENT FOTOSKANNER TIL LEKTIER:
-Skal du lære ord fra en lærebog eller en artikel? Tag et hurtigt foto med kameraet! Den smarte tekstskanner (OCR) genkender teksten, finder ord, du endnu ikke kan, og tilføjer dem direkte til din træning uden manuel indtastning.
+3. 📖 INTERAKTIVE HISTORIER FOR HVER 100 ORD
+Træn ordforrådet i en levende kontekst! For hver 100 mestrede ord låser du op for en motiverende historie, der udelukkende består af ord, du allerede har lært. Tryk på ethvert ord for at se oversættelsen lige over ordet, gem i Favoritter med ét tryk eller åbn den fulde parallelle oversættelse.
 
-• ⭐ FAVORITTER OG GARANTERET INDLÆRING (SRS):
-Har du en prøve eller eksamen i morgen? Marker ord som Favoritter! Vores videnskabeligt dokumenterede algoritme for intervalgentagelse (Spaced Repetition) opretter en personlig tidsplan og sikrer, at du husker dem permanent.
+4. 🔓 UDEN DYRE ABONNEMENTER OG BEGRÆNSNINGER
+Ingen betalingsmure, ingen tvungne månedsgebyrer og ingen kunstige grænser for liv (hjerter). Ubegrænset adgang til alle ord og funktioner — lær i dit eget tempo, så meget du vil.
 
-• 🎮 TRÆN FAVORITTER I ALLE TILSTANDE:
-Øv dine udvalgte ord på præcis den måde, der passer dig bedst:
-  — Interaktive 3D-flashcards med swipe
-  — Hurtige tidsquizzer
-  — Lytteforståelse og lydtræning
-  — Sætningsbygger og par-matching
-  — Staveøvelser og uregelmæssige verber
+5. 🧠 INTELLIGENT RUNDE-ARKITEKT
+Algoritmen analyserer dine svar i realtid. Hvis et ord driller, genindfører systemet det automatisk i de næste trin, indtil du mestrer det 100%.
 
-• 🎧 PENDLER-PODCAST MED SLUKKET SKÆRM:
-Lær engelsk på farten, i bilen, under gåturen eller løbeturen uden at se på telefonen! Lydtilstanden kører problemfrit i baggrunden med helt slukket skærm: hør oversættelsen på dit modersmål, få en tænkepause og hør naturlig engelsk udtale to gange i studiekvalitet.
+6. 📷 INTELLIGENT FOTOSKANNER TIL LEKTIER
+Skal du lære ord fra en lærebog eller en artikel? Tag et billede af siden! OCR-skanneren genkender teksten, finder nye ord og tilføjer dem til din træning uden manuel indtastning.
 
-• 🌍 33 SPROG & FULD RTL-STØTTE:
-Fuldt lokaliseret til 33 sprog, inklusive arabisk (RTL) med beskyttede engelske gloser.
+7. 📝 PERSONLIG ORDBOG OG EGNE NOTER
+Mødt et nyt ord i et spil eller en serie? Tilføj det med ét tryk. Knyt dine egne eksempler, huskeregler og associationer til ordene for varig langtidshukommelse.
 
-• ☁️ SIKKER CLOUDSYNC:
-Log ind med Google med ét klik. Dine ord, noter, favoritter og fremskridt gemmes sikkert i skyen på tværs af alle enheder.
+8. ⭐ FAVORITLISTER TIL DINE MÅL
+Opret målrettede ordlister: til morgendagens prøve i skolen, jobsamtalen, ferien eller internationale eksamener (IELTS, TOEFL, Cambridge).
 
-• 🏆 UGENTLIGE LIGAER OG STREAKS:
-Dyst mod andre elever på ranglisten, hold din daglige stime i live og nå podiet!
+9. 🎧 PENDLER-PODCAST MED SLUKKET SKÆRM
+Lær engelsk på farten, i bussen eller under løbeturen! Baggrundsafspilning fungerer selv med slukket, sort skærm for at spare strøm: hør oversættelsen, pause til at huske og klar engelsk udtale to gange.
+
+10. 🎙️ TO STUDIE-STANDARDER: US OG UK
+Optaget af modersmålstalende med krystalklar lydkvalitet. Skift frit mellem amerikansk og britisk accent når som helst.
+
+🔄 FULD INDLÆRINGSCYKLUS (4 TRIN):
+1. Kort — visuel genkendelse og klar udtale
+2. Quiz — hurtig lytteforståelse og betydning
+3. Par — hurtig reaktionsevne og associationer
+4. Stavning — præcis tastaturskrivning bogstav for bogstav.
+
+🌍 36 SPROG OG FULD RTL-STØTTE:
+Lær engelsk på dit modersmål — fuldt oversat til 36 sprog, inklusive arabisk, persisk og urdu med højremargen (RTL).
+
+🏆 UGENTLIGE LIGAER OG CLOUD-SYNKRONISERING:
+Dyst i ligaerne, hold din daglige stime og gem dine fremskridt sikkert med 1-klik Google-login.
 
 🚀 PERFEKT TIL:
-• Skoleelever og studerende: Skan lektier, favoritmarkér ugens ord og få topkarakterer.
-• Begyndere (A1–A2): Lær de hyppigste basisord uden overvældelse.
-• Viderekomne (B1–C2): Udvid dit professionelle ordforråd til arbejde, rejser og eksamener (IELTS, TOEFL).
+• Elever og studerende: Skan lektier og få topkarakterer.
+• Begyndere (A1–A2): Opbyg et solidt ordforråd af de vigtigste ord.
+• Viderekomne (B1–C2): Udvid dit aktive ordforråd til karriere og rejser.
 
-Start morgenen med en frisk "English Breakfast" — 10-15 minutter om dagen gør en mærkbar forskel!
-
+Kun 10–15 minutter med en frisk "engelsk morgenmad" om dagen sikrer hurtig fremgang!
 Download English Breakfast nu, og tal engelsk med selvtillid!

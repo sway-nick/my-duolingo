@@ -647,6 +647,110 @@ class AdServiceImpl {
   }
 
   /**
+   * Show high-tier Rewarded Video Ad to unlock story translation
+   */
+  async showStoryTranslationRewardedAd(storyTitle = 'Story') {
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('ad_story_translation_requested', { story: storyTitle });
+    }
+
+    if (!this.isOnline()) {
+      return { success: false, rewardEarned: false, isOffline: true };
+    }
+
+    const AdMob = this.getNativeAdMob();
+    if (AdMob && this.isNative()) {
+      return new Promise(async (resolve) => {
+        let rewardGranted = false;
+        let isResolved = false;
+        const listeners = [];
+        let fallbackTimer = null;
+
+        const cleanup = () => {
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = null;
+          }
+          listeners.forEach((sub) => {
+            try { if (sub && typeof sub.remove === 'function') sub.remove(); } catch (e) {}
+          });
+          listeners.length = 0;
+        };
+
+        const safeResolve = (result) => {
+          if (isResolved) return;
+          isResolved = true;
+          cleanup();
+          resolve(result);
+        };
+
+        fallbackTimer = setTimeout(() => {
+          console.warn('⚠️ AdMob story translation timeout (120s), releasing button smoothly');
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }, 120000);
+
+        let adStartedPlaying = false;
+
+        try {
+          const onReward = () => {
+            console.log('🏆 Story translation reward earned!');
+            rewardGranted = true;
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('ad_story_translation_reward_earned', { story: storyTitle });
+            }
+          };
+          const onDismiss = () => {
+            setTimeout(() => {
+              console.log('📺 Story translation ad dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              if (rewardGranted || adStartedPlaying) {
+                safeResolve({ success: true, rewardEarned: true, isOffline: false });
+              } else {
+                safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              }
+            }, 800);
+          };
+          const onFailed = (err) => {
+            console.warn('❌ AdMob Story translation ad failed to show:', err);
+            safeResolve({ success: false, rewardEarned: false, isOffline: false });
+          };
+
+          listeners.push(await AdMob.addListener('onRewardedVideoAdReward', onReward));
+          listeners.push(await AdMob.addListener('onRewarded', onReward));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdDismissed', onDismiss));
+          listeners.push(await AdMob.addListener('onDismissed', onDismiss));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onFailedToShow', onFailed));
+          listeners.push(await AdMob.addListener('onRewardedVideoAdShowed', () => {
+            console.log('📺 Story translation ad started playing');
+            adStartedPlaying = true;
+          }));
+
+          const prepared = await this.prepareRewarded('REWARDED_PACKS');
+          if (!prepared) {
+            console.warn('⚠️ Could not prepare REWARDED_PACKS ad for story translation, using test unit');
+            const testPrepared = await this.prepareRewarded('REWARDED_SHIELD');
+            if (!testPrepared) {
+              safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              return;
+            }
+          }
+
+          await AdMob.showRewardVideoAd()
+            .catch((err) => {
+              console.warn('AdMob story translation show error:', err);
+              onFailed(err);
+            });
+        } catch (e) {
+          console.warn('⚠️ Exception in showStoryTranslationRewardedAd:', e);
+          safeResolve({ success: false, rewardEarned: false, isOffline: false });
+        }
+      });
+    }
+
+    return this.showWebMockRewardedAd(`🎬 Перевод рассказа: ${storyTitle}`, false);
+  }
+
+  /**
    * Show Interstitial Ad at the end of a round
    * Includes frequency capping (at least 2 rounds or 3 minutes)
    * Displays with 0ms delay if preloaded, and queues next preload in background
