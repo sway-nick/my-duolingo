@@ -12,14 +12,19 @@ test('Widget Modal Contract: EXACTLY 1 button, dynamic label and correct pin inv
   const widgetSheetPath = path.join(ROOT, 'frontend/components/modals/WidgetConfigBottomSheet.js');
   const code = fs.readFileSync(widgetSheetPath, 'utf8');
 
-  await t.test('1. Verify HTML template contains correct actions structure and repin support', () => {
-    // When installed, repin button is offered as secondary action
-    assert.ok(code.includes('id="btn-repin-widget"'), 'btn-repin-widget must be present when installed');
-    assert.ok(code.includes('btn-apply-widget-config'), 'btn-apply-widget-config must be present as primary button');
+  await t.test('1. Verify HTML template contains strictly ONE button in actions', () => {
+    // Check that there is no second button template like repin-widget
+    assert.strictEqual(code.includes('id="btn-repin-widget"'), false, 'btn-repin-widget must be completely absent');
+    assert.strictEqual(code.includes('widget-sheet-pin-btn'), false, 'widget-sheet-pin-btn must be absent');
 
     // Extract the actions block
     const actionsMatch = code.match(/<div class="widget-sheet-actions"[^>]*>([\s\S]*?)<\/div>/);
     assert.ok(actionsMatch, 'Must have .widget-sheet-actions block');
+    const actionsHtml = actionsMatch[1];
+
+    // Count <button tags in actionsHtml
+    const buttonCount = (actionsHtml.match(/<button/g) || []).length;
+    assert.strictEqual(buttonCount, 1, 'Must contain STRICTLY 1 button inside .widget-sheet-actions');
   });
 
   await t.test('2. Verify button label and behavior when widget is NOT installed (isInstalled = false)', () => {

@@ -86,16 +86,10 @@ export function openWidgetConfigBottomSheet() {
       </div>
 
       <!-- 3. Actions -->
-      <div class="widget-sheet-actions" style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="widget-sheet-actions">
         <button type="button" class="primary-button widget-sheet-submit-btn" id="btn-apply-widget-config">
           ${isInstalled ? (t('widget_save_changes') || 'Сохранить изменения') : `✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}`}
         </button>
-        ${isInstalled ? `
-          <button type="button" class="theme-option-btn" id="btn-repin-widget" style="width: 100%; justify-content: center; gap: 8px; font-weight: 600; padding: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;">
-            <span>✨</span>
-            <span>${t('widget_add_to_screen') || 'Добавить виджет на экран'}</span>
-          </button>
-        ` : ''}
       </div>
     </div>
   `;
@@ -227,13 +221,6 @@ export function openWidgetConfigBottomSheet() {
   if (submitBtn) {
     submitBtn.addEventListener('click', () => {
       saveAndSync(!isInstalled);
-    });
-  }
-
-  const repinBtn = backdrop.querySelector('#btn-repin-widget');
-  if (repinBtn) {
-    repinBtn.addEventListener('click', () => {
-      saveAndSync(true);
     });
   }
 }
