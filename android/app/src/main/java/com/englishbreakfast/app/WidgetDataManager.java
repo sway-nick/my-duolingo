@@ -19,9 +19,9 @@ public class WidgetDataManager {
     private static final String KEY_PENDING_FAVS = "key_pending_favs";
     private static final String KEY_HAS_FAVORITES = "key_has_favorites";
     private static final String KEY_CONTINUOUS_PLAY = "key_continuous_play_active";
-    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v7";
-    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v7";
-    public static final String KEY_WIDGET_ACTIVE_INSTALLED = "key_widget_active_installed_v7";
+    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v8";
+    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v8";
+    public static final String KEY_WIDGET_ACTIVE_INSTALLED = "key_widget_active_installed_v8";
     private static volatile boolean isAppInForeground = false;
 
     // In-memory cache to prevent repetitive JSON parsing on main thread during widget taps
@@ -707,11 +707,8 @@ public class WidgetDataManager {
         }
 
         // 3. We have candidate non-ghost IDs.
-        // Confirm real installation via active broadcast (onEnabled / pin success) OR launcher physical dimensions
-        if (isWidgetActive(context)) {
-            return true;
-        }
-
+        // Confirm real installation: a widget MUST physically occupy space on the launcher grid (minWidth > 0 && minHeight > 0)
+        boolean hasPhysicalWidget = false;
         try {
             android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
             for (int id : candidateRealIds) {
@@ -720,15 +717,20 @@ public class WidgetDataManager {
                     int minWidth = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
                     int minHeight = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0);
                     if (minWidth > 0 && minHeight > 0) {
-                        setWidgetActive(context, true);
-                        return true;
+                        hasPhysicalWidget = true;
+                        break;
                     }
                 }
             }
         } catch (Exception ignored) {}
 
-        // Neither active broadcast nor physical dimensions confirmed yet (e.g. canceled pin or pending placement)
-        return false;
+        if (hasPhysicalWidget) {
+            setWidgetActive(context, true);
+            return true;
+        } else {
+            setWidgetActive(context, false);
+            return false;
+        }
     }
 
     public static synchronized void markPrePinGhostIds(Context context, int[] systemIds) {
