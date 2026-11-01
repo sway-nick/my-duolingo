@@ -24,7 +24,7 @@ Stop wasting time on rare textbook terms. English Breakfast ranks vocabulary str
 Learn English words effortlessly every time you unlock your phone! Place the stylish Golden Card vocabulary widget on your Android home screen. Flip cards, listen to native pronunciation, and cycle through daily English words without opening the app.
 
 3. 📖 38 ILLUSTRATED MILESTONE STORIES (EVERY 50 WORDS)
-Reinforce your vocabulary in context! Unlock exciting stories and fairy tales (including "My Lord Bag of Rice") every 50 mastered words. All stories use strictly the words you have already learned. Tap any word for instant translation and audio.
+Reinforce your vocabulary in context! Unlock illustrated stories and fairy tales every 50 mastered words, using strictly the words you have learned. Tap any word for instant translation and audio.
 
 4. 🔓 100% FREE VOCABULARY — NO PAYWALLS
 All 7,000 words, stories, audio, and modes are completely unlocked. No expensive monthly subscriptions, no paywalls, and no artificial "hearts" or lives limiting your daily study.
@@ -33,10 +33,10 @@ All 7,000 words, stories, audio, and modes are completely unlocked. No expensive
 Smart round architecture tracks your answers in real time. If an English word gives you trouble, the algorithm schedules it across multiple retention steps until you achieve 100% mastery.
 
 6. 📷 SMART PHOTO SCANNER FOR TEXTBOOKS & ARTICLES
-Reading an English book, homework assignment, or news article? Snap a picture! The smart OCR scanner extracts text, detects unknown words, and adds them to your personal flashcards in one tap.
+Reading an English book, homework, or news article? Snap a picture! The smart OCR scanner extracts text, detects unknown words, and adds them to your personal flashcards in one tap.
 
 7. 📝 PERSONAL DICTIONARY & MNEMONIC NOTES
-Encountered an interesting English word in a game, movie, or song? Add it instantly. Attach custom mnemonic associations, notes, and personal examples to trigger long-term memory.
+Encountered an interesting English word in a movie or song? Add it instantly. Attach custom mnemonic associations, notes, and personal examples to trigger long-term memory.
 
 8. ⭐ CUSTOM FAVORITES LISTS & EXAM PREPARATION
 Create custom word collections tailored for specific goals: school tests, job interviews, travel, or international exams (IELTS, TOEFL, Cambridge, TOEIC).

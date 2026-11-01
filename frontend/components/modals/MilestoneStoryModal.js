@@ -818,7 +818,7 @@ function resolveWord(rawWord, dictMap, lang) {
   };
 }
 
-function showStoryToast(message) {
+export function showStoryToast(message) {
   const existing = document.querySelector('.story-milestone-toast');
   if (existing) existing.remove();
 
