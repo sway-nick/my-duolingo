@@ -76,7 +76,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
   container.innerHTML = `
     <style>
       .stories-view-page {
-        padding: 16px;
+        padding: 4px 16px 16px;
         max-width: 680px;
         margin: 0 auto;
         box-sizing: border-box;
