@@ -605,10 +605,29 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     }
   };
 
-  window.addEventListener('focus', refreshWidgetButton);
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) refreshWidgetButton();
-  });
+  // Cleanup any previous listeners to prevent memory leak across tab switches
+  if (typeof window._cleanupSettingsWidgetListener === 'function') {
+    try { window._cleanupSettingsWidgetListener(); } catch (e) {}
+  }
+
+  const handleWidgetStateCheck = () => {
+    refreshWidgetButton();
+    // Re-check with slight delays to cover slow launcher layout passes / broadcasts
+    setTimeout(refreshWidgetButton, 1200);
+    setTimeout(refreshWidgetButton, 3000);
+  };
+
+  const handleVisibility = () => {
+    if (!document.hidden) handleWidgetStateCheck();
+  };
+
+  window.addEventListener('focus', handleWidgetStateCheck);
+  document.addEventListener('visibilitychange', handleVisibility);
+
+  window._cleanupSettingsWidgetListener = () => {
+    window.removeEventListener('focus', handleWidgetStateCheck);
+    document.removeEventListener('visibilitychange', handleVisibility);
+  };
 
   // Bind test button for Monday Cat Meme (Golden Card)
   const btnTestMeme = container.querySelector('#btn-test-monday-meme');

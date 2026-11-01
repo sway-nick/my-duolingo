@@ -641,16 +641,52 @@ public class WidgetDataManager {
             return false;
         }
 
-        // 1. If actively confirmed via provider onEnabled, pin broadcast, or user interaction, it is installed
+        // 1. Ghost IDs migration for initial launch after fresh install
+        if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
+            Set<String> initialGhosts = new HashSet<>();
+            for (int id : systemIds) {
+                initialGhosts.add(String.valueOf(id));
+            }
+            prefs.edit()
+                .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
+                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, false)
+                .apply();
+            return false;
+        }
+
+        // 2. Cross-reference system IDs against saved ghost IDs
+        Set<String> savedGhosts = prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>());
+        Set<String> activeGhosts = new HashSet<>();
+        List<Integer> candidateRealIds = new ArrayList<>();
+
+        for (int id : systemIds) {
+            String idStr = String.valueOf(id);
+            if (savedGhosts.contains(idStr)) {
+                activeGhosts.add(idStr);
+            } else {
+                candidateRealIds.add(id);
+            }
+        }
+
+        if (activeGhosts.size() != savedGhosts.size()) {
+            prefs.edit().putStringSet(KEY_GHOST_WIDGET_IDS, activeGhosts).apply();
+        }
+
+        // If all system IDs are confirmed ghosts, no real widget exists
+        if (candidateRealIds.isEmpty()) {
+            setWidgetActive(context, false);
+            return false;
+        }
+
+        // 3. We have candidate non-ghost IDs. Check if explicitly active or confirmed by launcher dimensions
         if (isWidgetActive(context)) {
             return true;
         }
 
-        // 2. If launcher already provides non-zero dimensions, mark active and return true
-        // Note: launcher may return 0x0 before initial layout pass, so this is non-blocking
         try {
             android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
-            for (int id : systemIds) {
+            for (int id : candidateRealIds) {
                 android.os.Bundle options = appWidgetManager.getAppWidgetOptions(id);
                 if (options != null) {
                     int minWidth = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
@@ -663,40 +699,9 @@ public class WidgetDataManager {
             }
         } catch (Exception ignored) {}
 
-        // 3. Ghost IDs mechanism for initial launch after fresh install
-        if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
-            Set<String> initialGhosts = new HashSet<>();
-            for (int id : systemIds) {
-                initialGhosts.add(String.valueOf(id));
-            }
-            prefs.edit()
-                .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
-                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
-                .apply();
-            return false;
-        }
-
-        // 4. On subsequent checks, any ID not recorded as a ghost is a real widget added by the user
-        Set<String> savedGhosts = prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>());
-        Set<String> activeGhosts = new HashSet<>();
-        boolean hasRealWidget = false;
-        for (int id : systemIds) {
-            String idStr = String.valueOf(id);
-            if (savedGhosts.contains(idStr)) {
-                activeGhosts.add(idStr);
-            } else {
-                hasRealWidget = true;
-            }
-        }
-        if (activeGhosts.size() != savedGhosts.size()) {
-            prefs.edit().putStringSet(KEY_GHOST_WIDGET_IDS, activeGhosts).apply();
-        }
-        if (hasRealWidget) {
-            setWidgetActive(context, true);
-        } else {
-            setWidgetActive(context, false);
-        }
-        return hasRealWidget;
+        // Candidate IDs exist outside ghosts set -> mark active
+        setWidgetActive(context, true);
+        return true;
     }
 
     public static synchronized void markPrePinGhostIds(Context context, int[] systemIds) {
