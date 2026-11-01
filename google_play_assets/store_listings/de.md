@@ -4,7 +4,7 @@
 English Breakfast: Englisch
 
 ### Short Description (max 80 chars)
-Startbildschirm-Widget, Häufige Wörter, Foto-Scanner & Audio-Podcast!
+Englisch lernen: Karteikarten, 7000 Wörter, Stories & Startbildschirm-Widget!
 
 ### Full Description (max 4000 chars)
 English Breakfast ist dein smarter täglicher Englisch-Vokabeltrainer mit interaktivem Startbildschirm-Widget!
