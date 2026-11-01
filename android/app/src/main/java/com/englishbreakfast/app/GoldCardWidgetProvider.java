@@ -23,7 +23,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_TOGGLE_FAV = "com.englishbreakfast.app.widget.ACTION_TOGGLE_FAV";
     public static final String ACTION_AUTO_ROTATE = "com.englishbreakfast.app.widget.ACTION_AUTO_ROTATE";
     public static final String ACTION_TOGGLE_PLAY_PAUSE = "com.englishbreakfast.app.widget.ACTION_TOGGLE_PLAY_PAUSE";
-    public static final String ACTION_PIN_SUCCESS = "com.englishbreakfast.app.widget.ACTION_PIN_SUCCESS";
     private static final java.util.concurrent.ExecutorService sSerialExecutor = java.util.concurrent.Executors.newSingleThreadExecutor();
     private static final android.os.Handler sSpeechHandler = new android.os.Handler(android.os.Looper.getMainLooper());
     private static volatile int sContinuousSessionId = 0;
@@ -31,6 +30,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
+            WidgetDataManager.onWidgetPinnedOrInteracted(context, appWidgetId, null);
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
         scheduleNextRotation(context);
@@ -58,7 +58,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        WidgetDataManager.setWidgetActive(context, false);
         try {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             ComponentName cn = new ComponentName(context, GoldCardWidgetProvider.class);
@@ -77,7 +76,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         // Security check for internal widget actions: reject if originating from a foreign package
         boolean isCustomWidgetAction = ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_AUTO_ROTATE.equals(action)
-                || ACTION_TOGGLE_PLAY_PAUSE.equals(action) || ACTION_PIN_SUCCESS.equals(action);
+                || ACTION_TOGGLE_PLAY_PAUSE.equals(action);
         if (!isCustomWidgetAction) {
             return;
         }
@@ -201,7 +200,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             if (onAudioDone != null) onAudioDone.run();
             return;
         }
-        WidgetDataManager.setWidgetActive(context, true);
         // Clear reminder alert and confirm widget active when user interacts with widget
         if (ACTION_FLIP.equals(action) || ACTION_NEXT.equals(action) || ACTION_PREV.equals(action)
                 || ACTION_SPEAK.equals(action) || ACTION_TOGGLE_FAV.equals(action) || ACTION_TOGGLE_PLAY_PAUSE.equals(action)) {
@@ -214,13 +212,6 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         }
 
         switch (action) {
-            case ACTION_PIN_SUCCESS:
-                WidgetDataManager.setWidgetActive(context, true);
-                updateAllWidgets(context);
-                scheduleNextRotation(context);
-                if (onAudioDone != null) onAudioDone.run();
-                break;
-
             case ACTION_TOGGLE_PLAY_PAUSE:
                 if (WidgetDataManager.isContinuousPlayActive(context)) {
                     stopContinuousPlay(context);

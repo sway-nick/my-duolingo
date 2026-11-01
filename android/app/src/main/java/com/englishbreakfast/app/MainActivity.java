@@ -734,36 +734,29 @@ public class MainActivity extends BridgeActivity {
                         if (!isTrustedOrigin()) return false;
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                final AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                                AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
-                                    final ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
-                                    runOnUiThread(() -> {
-                                        try {
-                                            Intent pinSuccessIntent = new Intent(MainActivity.this, GoldCardWidgetProvider.class);
-                                            pinSuccessIntent.setAction(GoldCardWidgetProvider.ACTION_PIN_SUCCESS);
-                                            pinSuccessIntent.setPackage(getPackageName());
-                                            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                                flags |= PendingIntent.FLAG_MUTABLE;
-                                            }
-                                            PendingIntent successCallback = PendingIntent.getBroadcast(
-                                                MainActivity.this,
-                                                108,
-                                                pinSuccessIntent,
-                                                flags
-                                            );
-                                            appWidgetManager.requestPinAppWidget(provider, null, successCallback);
-                                        } catch (Exception ex) {
-                                            try {
-                                                appWidgetManager.requestPinAppWidget(provider, null, null);
-                                            } catch (Exception ignored) {}
-                                        }
-                                    });
+                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
+                                    if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
+                                        WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
+                                    }
+                                    appWidgetManager.requestPinAppWidget(provider, null, null);
                                     return true;
                                 }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+                        return false;
+                    }
+
+                    @JavascriptInterface
+                    public boolean isPinSupported() {
+                        if (!isTrustedOrigin()) return false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                            return appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported();
                         }
                         return false;
                     }
