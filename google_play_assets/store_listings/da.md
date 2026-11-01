@@ -4,7 +4,7 @@
 English Breakfast: Lær engelsk
 
 ### Short Description (up to 80 chars)
-Hjemmeskærm-widget, frekvensord, fotoskanner & podcast med slukket skærm!
+Lær engelske ord: kort, 7000 ord, historier & hjemmeskærm-widget!
 
 ### Full Description (up to 4000 chars)
 English Breakfast er din smarte, daglige træner til engelsk ordforråd med interaktiv hjemmeskærm-widget!
