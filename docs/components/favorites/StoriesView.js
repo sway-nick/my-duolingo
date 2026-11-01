@@ -45,8 +45,8 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
             ${statusBadge}
           </div>
           ${story.coverImage ? `
-            <div class="story-card-cover-wrapper" style="margin: 8px 0 12px 0; border-radius: 12px; overflow: hidden; max-height: 140px;">
-              <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: 100%; height: 140px; object-fit: cover; display: block;" />
+            <div class="story-card-cover-wrapper" style="margin: 8px 0 12px 0; border-radius: 12px; overflow: hidden; max-height: 160px; text-align: center; background: rgba(15, 23, 42, 0.6);">
+              <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: auto; max-width: 100%; height: 160px; object-fit: contain; display: inline-block; margin: 0 auto;" />
             </div>
           ` : ''}
           <h3 class="story-card-title">${escapeHtml(title)}</h3>

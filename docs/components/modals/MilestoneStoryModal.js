@@ -1275,7 +1275,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
         ${story.coverImage ? `
           <div class="story-cover-wrapper" style="margin-bottom: 20px; text-align: center;">
-            <img src="${story.coverImage}" alt="${escapeHtml(storyTitle)}" class="story-cover-image" style="width: 100%; max-height: 260px; object-fit: cover; border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); display: block;" />
+            <img src="${story.coverImage}" alt="${escapeHtml(storyTitle)}" class="story-cover-image" style="width: auto; max-width: 100%; max-height: 270px; object-fit: contain; border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); display: inline-block; margin: 0 auto;" />
           </div>
         ` : ''}
         <div class="story-text-container" id="story-tokens-wrapper">
