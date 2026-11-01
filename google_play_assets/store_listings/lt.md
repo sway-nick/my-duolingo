@@ -4,7 +4,7 @@
 English Breakfast: Anglų kalba
 
 ### Short Description (up to 80 chars)
-Dažni žodžiai, užrašai, foto skeneris, fono tinklalaidė ir patikimas SRS!
+Mokykis anglų žodžių: kortelės, 7000 žodžių, istorijos ir ekrano valdiklis!
 
 ### Full Description (up to 4000 chars)
 English Breakfast — tavo išmanusis kasdienis anglų kalbos žodyno treneris! Mokykis tuos žodžius, kurie realiai vartojami gyvoje kalboje, nuskenuok namų darbus kamera, pridėk asmeninius užrašus ir įsimink visam laikui.
@@ -40,8 +40,8 @@ Mokykis kelyje, vairuodamas, vaikščiodamas ar bėgiodamas nežiūrėdamas į e
 • 🎙️ TARSENOS TRENERIS IR TARMĖS:
 Tark žodžius į mikrofoną ir gauk akimirksniu grįžtamąjį ryšį. Rinkis tarp britų (UK) ir amerikiečių (US) tarimo su aiškia IPA transkripcija.
 
-• 🌍 33 KALBŲ PALAIKYMAS IR RTL:
-Pilnai išversta į 33 kalbas, įskaitant arabų kalbos (RTL) palaikymą.
+• 🌍 36 KALBŲ PALAIKYMAS IR RTL:
+Pilnai išversta į 36 kalbas, įskaitant arabų kalbos (RTL) palaikymą.
 
 • ☁️ DEBESIES SINCHRONIZACIJA:
 Greitas prisijungimas per Google. Visi tavo žodžiai, pastabos, favoritai ir dienos serija (streak) saugomi debesyje.
