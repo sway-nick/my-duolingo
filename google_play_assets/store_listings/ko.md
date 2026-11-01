@@ -4,7 +4,7 @@
 English Breakfast: 영어 단어장
 
 ## Short Description (max 80 chars)
-홈 화면 위젯, 빈도순 필수 단어, 사진 스캐너 & 화면 꺼짐 팟캐스트!
+영어 단어 암기: 플래시카드, 7000단어, 스토리와 홈 화면 위젯!
 
 ## Full Description (max 4000 chars)
 English Breakfast는 스마트한 영단어 트레이너로, 새로워진 홈 화면 인터랙티브 위젯과 함께합니다!
