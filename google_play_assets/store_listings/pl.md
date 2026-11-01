@@ -4,7 +4,7 @@
 English Breakfast: Angielski
 
 ## Short Description (max 80 chars)
-Widżet na pulpit, częste słówka, skaner zadań i podcast z ciemnym ekranem!
+Ucz się słówek angielskich: fiszki, 7000 słów, opowiadania i widżet na pulpit!
 
 ## Full Description (max 4000 chars)
 English Breakfast to Twój inteligentny codzienny trener słownictwa angielskiego z interaktywnym widżetem na ekran główny!
