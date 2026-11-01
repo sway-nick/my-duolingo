@@ -53,8 +53,8 @@ export function openWidgetConfigBottomSheet() {
     <div class="widget-sheet-container" role="dialog" aria-modal="true">
       <div class="widget-sheet-header">
         <h3 class="widget-sheet-title">
-          <span>⚙️</span>
-          <span>${t('settings_configure_widget') || 'Настройка виджета'}</span>
+          <span>${isInstalled ? '⚙️' : '✨'}</span>
+          <span>${isInstalled ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
         </h3>
         <button type="button" class="widget-sheet-close" id="btn-close-widget-sheet" aria-label="${t('widget_close') || 'Закрыть'}">✕</button>
       </div>
@@ -85,9 +85,9 @@ export function openWidgetConfigBottomSheet() {
         </div>
       </div>
 
-      <!-- 3. Actions -->
-      <div class="widget-sheet-actions" style="margin-top: 18px;">
-        <button type="button" class="widget-sheet-btn ${isInstalled ? 'widget-sheet-btn-blue' : 'widget-sheet-btn-green'}" id="btn-apply-widget-config">
+      <!-- 3. Submit Button -->
+      <div class="widget-sheet-actions">
+        <button type="button" class="primary-button widget-sheet-submit-btn" id="btn-apply-widget-config">
           ${isInstalled ? (t('widget_save_changes') || 'Сохранить изменения') : `✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}`}
         </button>
       </div>
@@ -169,43 +169,50 @@ export function openWidgetConfigBottomSheet() {
   }
 
   // Apply & Add Widget button
+  const saveAndSync = (requestPin = false) => {
+    const configJson = JSON.stringify(config);
+    localStorage.setItem('myduo_widget_config', configJson);
+
+    if (window.trackEvent) {
+      window.trackEvent('widget_config_save', {
+        is_installed: isInstalled,
+        theme: config.widgetTheme,
+        reminder_enabled: config.reminderEnabled,
+        requested_pin: requestPin
+      });
+    }
+
+    if (window.AndroidWidgetBridge) {
+      if (typeof window.syncFavoritesToAndroidWidget === 'function') {
+        try {
+          window.syncFavoritesToAndroidWidget();
+        } catch (e) {}
+      }
+      if (typeof window.AndroidWidgetBridge.saveWidgetConfig === 'function') {
+        window.AndroidWidgetBridge.saveWidgetConfig(configJson);
+      }
+      if (requestPin && typeof window.AndroidWidgetBridge.requestPinWidget === 'function') {
+        if (window.trackEvent) {
+          window.trackEvent('widget_pin_request');
+        }
+        window.AndroidWidgetBridge.requestPinWidget();
+        setTimeout(() => closeSheet(), 300);
+      } else {
+        closeSheet();
+        try {
+          showToast(t('widget_settings_saved') || 'Настройки сохранены');
+        } catch (e) {}
+      }
+    } else {
+      alert('Зажмите свободное место на рабочем столе и выберите «Виджеты» → English Breakfast.');
+      closeSheet();
+    }
+  };
+
   const submitBtn = backdrop.querySelector('#btn-apply-widget-config');
   if (submitBtn) {
     submitBtn.addEventListener('click', () => {
-      const configJson = JSON.stringify(config);
-      localStorage.setItem('myduo_widget_config', configJson);
-
-      if (window.trackEvent) {
-        window.trackEvent('widget_config_save', {
-          is_installed: isInstalled,
-          theme: config.widgetTheme,
-          reminder_enabled: config.reminderEnabled,
-        });
-      }
-
-      if (window.AndroidWidgetBridge) {
-        if (typeof window.syncFavoritesToAndroidWidget === 'function') {
-          try {
-            window.syncFavoritesToAndroidWidget();
-          } catch (e) {}
-        }
-        if (typeof window.AndroidWidgetBridge.saveWidgetConfig === 'function') {
-          window.AndroidWidgetBridge.saveWidgetConfig(configJson);
-        }
-        if (!isInstalled && typeof window.AndroidWidgetBridge.requestPinWidget === 'function') {
-          if (window.trackEvent) {
-            window.trackEvent('widget_pin_request');
-          }
-          window.AndroidWidgetBridge.requestPinWidget();
-        } else if (isInstalled) {
-          try {
-            showToast(t('widget_settings_saved') || 'Настройки сохранены');
-          } catch (e) {}
-        }
-      } else {
-        alert('Зажмите свободное место на рабочем столе и выберите «Виджеты» → English Breakfast.');
-      }
-      closeSheet();
+      saveAndSync(!isInstalled);
     });
   }
 }

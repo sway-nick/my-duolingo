@@ -19,9 +19,9 @@ public class WidgetDataManager {
     private static final String KEY_PENDING_FAVS = "key_pending_favs";
     private static final String KEY_HAS_FAVORITES = "key_has_favorites";
     private static final String KEY_CONTINUOUS_PLAY = "key_continuous_play_active";
-    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v3";
-    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v3";
-    public static final String KEY_WIDGET_ACTIVE_INSTALLED = "key_widget_active_installed_v4";
+    private static final String KEY_GHOST_WIDGET_IDS = "key_ghost_widget_ids_v7";
+    private static final String KEY_WIDGET_GHOST_MIGRATED_V2 = "key_widget_ghost_migrated_v7";
+    public static final String KEY_WIDGET_ACTIVE_INSTALLED = "key_widget_active_installed_v7";
     private static volatile boolean isAppInForeground = false;
 
     // In-memory cache to prevent repetitive JSON parsing on main thread during widget taps
@@ -630,50 +630,127 @@ public class WidgetDataManager {
     }
 
     public static synchronized boolean hasRealInstalledWidgets(Context context, int[] systemIds) {
-        if (context == null || systemIds == null || systemIds.length == 0) {
-            setWidgetActive(context, false);
+        if (context == null) return false;
+        SharedPreferences prefs = getPrefs(context);
+        if (systemIds == null || systemIds.length == 0) {
+            prefs.edit()
+                .putStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>())
+                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, false)
+                .apply();
             return false;
         }
 
+        // 1. If actively confirmed via provider onEnabled, pin broadcast, or user interaction, it is installed
+        if (isWidgetActive(context)) {
+            return true;
+        }
+
+        // 2. If launcher already provides non-zero dimensions, mark active and return true
+        // Note: launcher may return 0x0 before initial layout pass, so this is non-blocking
         try {
             android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
-            boolean wasMarkedActive = isWidgetActive(context);
-
             for (int id : systemIds) {
                 android.os.Bundle options = appWidgetManager.getAppWidgetOptions(id);
                 if (options != null) {
                     int minWidth = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
                     int minHeight = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0);
                     if (minWidth > 0 && minHeight > 0) {
-                        if (!wasMarkedActive) {
-                            setWidgetActive(context, true);
-                        }
+                        setWidgetActive(context, true);
                         return true;
                     }
                 }
             }
+        } catch (Exception ignored) {}
 
-            return wasMarkedActive;
-        } catch (Exception e) {
-            return isWidgetActive(context);
+        // 3. Ghost IDs mechanism for initial launch after fresh install
+        if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
+            Set<String> initialGhosts = new HashSet<>();
+            for (int id : systemIds) {
+                initialGhosts.add(String.valueOf(id));
+            }
+            prefs.edit()
+                .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
+                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                .apply();
+            return false;
         }
+
+        // 4. On subsequent checks, any ID not recorded as a ghost is a real widget added by the user
+        Set<String> savedGhosts = prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>());
+        Set<String> activeGhosts = new HashSet<>();
+        boolean hasRealWidget = false;
+        for (int id : systemIds) {
+            String idStr = String.valueOf(id);
+            if (savedGhosts.contains(idStr)) {
+                activeGhosts.add(idStr);
+            } else {
+                hasRealWidget = true;
+            }
+        }
+        if (activeGhosts.size() != savedGhosts.size()) {
+            prefs.edit().putStringSet(KEY_GHOST_WIDGET_IDS, activeGhosts).apply();
+        }
+        if (hasRealWidget) {
+            setWidgetActive(context, true);
+        } else {
+            setWidgetActive(context, false);
+        }
+        return hasRealWidget;
     }
 
     public static synchronized void markPrePinGhostIds(Context context, int[] systemIds) {
-        // Compatibility stub
+        if (context == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> ghosts = new HashSet<>();
+        if (systemIds != null) {
+            for (int id : systemIds) {
+                ghosts.add(String.valueOf(id));
+            }
+        }
+        prefs.edit()
+            .putStringSet(KEY_GHOST_WIDGET_IDS, ghosts)
+            .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+            .apply();
     }
 
     public static synchronized void onWidgetPinnedOrInteracted(Context context, int appWidgetId, int[] systemIds) {
+        if (context == null) return;
         setWidgetActive(context, true);
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> ghosts = new HashSet<>(prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>()));
+        if (appWidgetId != android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID) {
+            ghosts.remove(String.valueOf(appWidgetId));
+        } else if (systemIds != null && systemIds.length > 0) {
+            int maxId = systemIds[0];
+            for (int id : systemIds) {
+                if (id > maxId) maxId = id;
+            }
+            ghosts.remove(String.valueOf(maxId));
+        }
+        prefs.edit()
+            .putStringSet(KEY_GHOST_WIDGET_IDS, ghosts)
+            .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+            .apply();
     }
 
     public static synchronized void onWidgetsDeleted(Context context, int[] deletedIds) {
-        if (context == null) return;
+        if (context == null || deletedIds == null) return;
+        SharedPreferences prefs = getPrefs(context);
+        Set<String> ghosts = new HashSet<>(prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>()));
+        for (int id : deletedIds) {
+            ghosts.add(String.valueOf(id));
+        }
+        prefs.edit()
+            .putStringSet(KEY_GHOST_WIDGET_IDS, ghosts)
+            .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+            .apply();
+
         try {
             android.appwidget.AppWidgetManager manager = android.appwidget.AppWidgetManager.getInstance(context);
             android.content.ComponentName cn = new android.content.ComponentName(context, GoldCardWidgetProvider.class);
-            int[] remaining = manager.getAppWidgetIds(cn);
-            if (remaining == null || remaining.length == 0) {
+            int[] allIds = manager.getAppWidgetIds(cn);
+            if (allIds == null || allIds.length == 0) {
                 setWidgetActive(context, false);
             }
         } catch (Exception ignored) {}

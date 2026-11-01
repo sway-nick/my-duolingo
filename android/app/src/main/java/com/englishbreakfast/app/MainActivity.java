@@ -736,6 +736,10 @@ public class MainActivity extends BridgeActivity {
                                 final AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
                                     final ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
+                                    if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
+                                        WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
+                                    }
                                     runOnUiThread(() -> {
                                         try {
                                             Intent pinSuccessIntent = new Intent(MainActivity.this, GoldCardWidgetProvider.class);
@@ -751,7 +755,10 @@ public class MainActivity extends BridgeActivity {
                                                 pinSuccessIntent,
                                                 flags
                                             );
-                                            appWidgetManager.requestPinAppWidget(provider, null, successCallback);
+                                            boolean ok = appWidgetManager.requestPinAppWidget(provider, null, successCallback);
+                                            if (!ok) {
+                                                appWidgetManager.requestPinAppWidget(provider, null, null);
+                                            }
                                         } catch (Exception ex) {
                                             try {
                                                 appWidgetManager.requestPinAppWidget(provider, null, null);
@@ -763,6 +770,16 @@ public class MainActivity extends BridgeActivity {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+                        return false;
+                    }
+
+                    @JavascriptInterface
+                    public boolean isPinSupported() {
+                        if (!isTrustedOrigin()) return false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                            return appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported();
                         }
                         return false;
                     }

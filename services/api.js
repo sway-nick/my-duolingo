@@ -234,20 +234,14 @@ function applyMultilingualTranslations(words) {
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:lang_changed', () => {
     const newLang = getActiveLang();
-    if (!isLangCompatibleWithCache(_cachedWordsActiveLang, newLang)) {
-      // Active language changed to a different locale: reload words.json on-demand for new locale
-      cachedWordsList = null;
-      getWords(false).catch(() => {});
-      return;
-    }
-    if (cachedWordsList && Array.isArray(cachedWordsList)) {
-      applyMultilingualTranslations(cachedWordsList);
-      try {
-        localStorage.setItem('myduo_cached_words', JSON.stringify(cachedWordsList));
-        localStorage.setItem('myduo_cached_words_lang', newLang);
-      } catch (e) {}
-      window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: cachedWordsList }));
-    }
+    cachedWordsList = null;
+    _cachedWordsActiveLang = null;
+    getWords(true).then((res) => {
+      const list = Array.isArray(res) ? res : (res?.data || []);
+      if (list.length > 0) {
+        window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: list }));
+      }
+    }).catch(() => {});
   });
 }
 

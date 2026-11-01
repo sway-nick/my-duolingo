@@ -580,14 +580,17 @@
 
       function initMilestoneBaseline() {
         try {
+          const mastered = getMasteredWordsCount();
+          const currentPassedMilestone = Math.floor(mastered / 50) * 50;
           const rawSaved = localStorage.getItem('myduo_milestone_highest_unlocked');
-          if (rawSaved === null) {
-            const mastered = getMasteredWordsCount();
-            const currentPassedMilestone = Math.floor(mastered / 50) * 50;
+          const savedHighest = rawSaved !== null ? Number(rawSaved) : -1;
+
+          // If first time or saved highest is less than current mastered progress,
+          // sync up to current progress so we NEVER backfill/catch-up past milestones.
+          if (savedHighest < currentPassedMilestone) {
             localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
-            for (let m = 50; m < currentPassedMilestone; m += 50) {
+            for (let m = 50; m <= currentPassedMilestone; m += 50) {
               localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
-              localStorage.setItem(`myduo_milestone_story_${m}_completed`, 'true');
             }
           }
         } catch (_) {}
@@ -595,16 +598,13 @@
 
       function checkMilestoneStoryTrigger(delay = 800) {
         try {
+          initMilestoneBaseline();
           const mastered = getMasteredWordsCount();
           const currentPassedMilestone = Math.floor(mastered / 50) * 50;
-          if (currentPassedMilestone <= 0 || currentPassedMilestone > 1850) return;
+          const savedHighest = Number(localStorage.getItem('myduo_milestone_highest_unlocked')) || 0;
 
-          const isCompleted = localStorage.getItem(`myduo_milestone_story_${currentPassedMilestone}_completed`) === 'true';
-          const sessionKey = `__story_${currentPassedMilestone}_shown_session`;
-
-          // If current milestone reached and not yet completed, show modal
-          if (!isCompleted && !window[sessionKey]) {
-            window[sessionKey] = true;
+          // Trigger ONLY if the user just crossed a brand new milestone > savedHighest
+          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1850) {
             localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
             localStorage.setItem(`myduo_milestone_story_${currentPassedMilestone}_shown`, 'true');
             setTimeout(() => {
@@ -616,9 +616,6 @@
 
       async function renderTrainingTab() {
         preloadNextWotdVideo();
-        try {
-          checkMilestoneStoryTrigger(700);
-        } catch (_) {}
         const content = document.querySelector('#app-content');
         if (!content) return;
 

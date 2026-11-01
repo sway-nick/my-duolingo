@@ -14453,21 +14453,20 @@ export function getWordTranslation(wordObj, explicitLang) {
     }
   }
 
-  // 2. Base translation field (for Russian and English learners / default, or user custom words)
-  if ((lang === 'ru' || lang === 'en' || !wordObj.translations || Object.keys(wordObj.translations).length === 0 || String(wordObj.id || '').startsWith('custom_')) && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
+  // 2. Base translation field: for Russian and English interface, or custom user-created words
+  if ((lang === 'ru' || lang === 'en' || String(wordObj.id || '').startsWith('custom_')) && typeof wordObj.translation === 'string' && !isInvalidTranslation(wordObj.translation)) {
     return wordObj.translation;
   }
 
-  // 3. Fallback: check Russian translation for Russian and English learners
+  // 3. Fallback: check Russian translation ONLY for Russian interface
   if (wordObj.translations && typeof wordObj.translations === 'object') {
-    if ((lang === 'ru' || lang === 'en') && wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
+    if (lang === 'ru' && wordObj.translations.ru && !isInvalidTranslation(wordObj.translations.ru)) {
       return wordObj.translations.ru;
     }
   }
 
-  // 4. Default: fallback to English original word if no translation in user's foreign language exists
-  // NEVER iterate random foreign languages (e.g. cs, de, sk) into other locales!
-  return wordObj.word || '';
+  // 4. Default: return empty string so callers can handle cleanly without Russian/English bleeding
+  return '';
 }
 
 let _cachedUserNotesRaw = null;

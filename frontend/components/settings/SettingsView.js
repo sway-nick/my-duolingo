@@ -162,10 +162,9 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Widget Button -->
       <div class="settings-card" id="widget-promo-section" style="padding: 16px 12px;">
-        <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center;">
-          ${isWidgetInstalled
-            ? (t('settings_configure_widget') || 'Настройка виджета')
-            : ('✨ ' + (t('widget_add_to_screen') || 'Установить виджет'))}
+        <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center; gap: 8px;">
+          <span>${isWidgetInstalled ? '⚙️' : '✨'}</span>
+          <span>${isWidgetInstalled ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
         </button>
       </div>
 
@@ -580,33 +579,12 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind Pin / Configure Widget button: if not installed, trigger native system pin prompt immediately; if installed, open config sheet
+  // Bind Pin Widget button: open sleek bottom sheet
   const btnPinWidget = container.querySelector('#btn-pin-widget');
   if (btnPinWidget) {
     btnPinWidget.addEventListener('click', (e) => {
       e.preventDefault();
-      let installed = false;
-      try {
-        if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.isWidgetInstalled === 'function') {
-          installed = Boolean(window.AndroidWidgetBridge.isWidgetInstalled());
-        }
-      } catch (err) {}
-
-      if (!installed) {
-        if (typeof window.syncFavoritesToAndroidWidget === 'function') {
-          try { window.syncFavoritesToAndroidWidget(); } catch (err) {}
-        }
-        if (window.trackEvent) {
-          window.trackEvent('widget_pin_request');
-        }
-        if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.requestPinWidget === 'function') {
-          window.AndroidWidgetBridge.requestPinWidget();
-        } else {
-          openWidgetConfigBottomSheet();
-        }
-      } else {
-        openWidgetConfigBottomSheet();
-      }
+      openWidgetConfigBottomSheet();
     });
   }
 
