@@ -742,27 +742,9 @@ public class MainActivity extends BridgeActivity {
                                     }
                                     runOnUiThread(() -> {
                                         try {
-                                            Intent pinSuccessIntent = new Intent(MainActivity.this, GoldCardWidgetProvider.class);
-                                            pinSuccessIntent.setAction(GoldCardWidgetProvider.ACTION_PIN_SUCCESS);
-                                            pinSuccessIntent.setPackage(getPackageName());
-                                            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                                flags |= PendingIntent.FLAG_MUTABLE;
-                                            }
-                                            PendingIntent successCallback = PendingIntent.getBroadcast(
-                                                MainActivity.this,
-                                                108,
-                                                pinSuccessIntent,
-                                                flags
-                                            );
-                                            boolean ok = appWidgetManager.requestPinAppWidget(provider, null, successCallback);
-                                            if (!ok) {
-                                                appWidgetManager.requestPinAppWidget(provider, null, null);
-                                            }
+                                            appWidgetManager.requestPinAppWidget(provider, null, null);
                                         } catch (Exception ex) {
-                                            try {
-                                                appWidgetManager.requestPinAppWidget(provider, null, null);
-                                            } catch (Exception ignored) {}
+                                            ex.printStackTrace();
                                         }
                                     });
                                     return true;

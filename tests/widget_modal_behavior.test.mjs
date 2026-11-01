@@ -37,16 +37,14 @@ test('Widget Modal Contract: EXACTLY 1 button, dynamic label and correct pin inv
     assert.ok(code.includes('saveAndSync(!isInstalled)'), 'Submit button must call saveAndSync(!isInstalled)');
   });
 
-  await t.test('3. Verify Java requestPinWidget runs on UI thread with successCallback and null fallback', () => {
+  await t.test('3. Verify Java requestPinWidget runs on UI thread with direct null callback', () => {
     const mainActivityPath = path.join(ROOT, 'android/app/src/main/java/com/englishbreakfast/app/MainActivity.java');
     const javaCode = fs.readFileSync(mainActivityPath, 'utf8');
 
     // Must run on UI thread so Android WindowManager accepts the dialog
     assert.ok(javaCode.includes('runOnUiThread(() -> {'), 'Must call requestPinAppWidget on UI thread');
-    assert.ok(javaCode.includes('appWidgetManager.requestPinAppWidget(provider, null, successCallback)'),
-      'Must pass successCallback to bind MIUI / Android widget lifecycle');
     assert.ok(javaCode.includes('appWidgetManager.requestPinAppWidget(provider, null, null)'),
-      'Must have null fallback');
+      'Must pass null callback to prevent MIUI / OEM launcher PendingIntent rejection');
 
     const providerPath = path.join(ROOT, 'android/app/src/main/java/com/englishbreakfast/app/GoldCardWidgetProvider.java');
     const providerCode = fs.readFileSync(providerPath, 'utf8');
