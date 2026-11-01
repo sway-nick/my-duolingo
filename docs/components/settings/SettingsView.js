@@ -163,7 +163,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       <!-- Widget Button -->
       <div class="settings-card" id="widget-promo-section" style="padding: 16px 12px;">
         <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center; gap: 8px;">
-          <span>${isWidgetInstalled ? '⚙️' : '✨'}</span>
+          ${isWidgetInstalled ? '' : '<span>✨</span>'}
           <span>${isWidgetInstalled ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
         </button>
       </div>
@@ -599,7 +599,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     const btn = container.querySelector('#btn-pin-widget');
     if (btn) {
       btn.innerHTML = `
-        <span>${installed ? '⚙️' : '✨'}</span>
+        ${installed ? '' : '<span>✨</span>'}
         <span>${installed ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
       `;
     }

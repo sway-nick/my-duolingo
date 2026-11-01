@@ -53,7 +53,7 @@ export function openWidgetConfigBottomSheet() {
     <div class="widget-sheet-container" role="dialog" aria-modal="true">
       <div class="widget-sheet-header">
         <h3 class="widget-sheet-title">
-          <span>${isInstalled ? '⚙️' : '✨'}</span>
+          ${isInstalled ? '' : '<span>✨</span>'}
           <span>${isInstalled ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
         </h3>
         <button type="button" class="widget-sheet-close" id="btn-close-widget-sheet" aria-label="${t('widget_close') || 'Закрыть'}">✕</button>
