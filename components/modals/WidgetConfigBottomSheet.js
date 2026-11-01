@@ -85,16 +85,14 @@ export function openWidgetConfigBottomSheet() {
         </div>
       </div>
 
-      <!-- 3. Submit Button -->
-      <div class="widget-sheet-actions" style="display: flex; flex-direction: column; gap: 8px;">
-        <button type="button" class="primary-button widget-sheet-submit-btn" id="btn-apply-widget-config">
-          ${isInstalled ? (t('widget_save_changes') || 'Сохранить изменения') : `✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}`}
+      <!-- 3. Actions -->
+      <div class="widget-sheet-actions" style="display: flex; flex-direction: column; gap: 10px; margin-top: 18px;">
+        <button type="button" class="widget-sheet-btn widget-sheet-btn-blue" id="btn-apply-widget-config">
+          ${t('widget_save_changes') || 'Сохранить изменения'}
         </button>
-        ${isInstalled ? `
-        <button type="button" class="theme-option-btn widget-sheet-pin-btn" id="btn-repin-widget" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px;">
+        <button type="button" class="widget-sheet-btn widget-sheet-btn-green" id="btn-repin-widget">
           ✨ ${t('widget_add_to_screen') || 'Добавить виджет на экран'}
         </button>
-        ` : ''}
       </div>
     </div>
   `;
@@ -214,7 +212,7 @@ export function openWidgetConfigBottomSheet() {
   const submitBtn = backdrop.querySelector('#btn-apply-widget-config');
   if (submitBtn) {
     submitBtn.addEventListener('click', () => {
-      saveAndSync(!isInstalled);
+      saveAndSync(false);
     });
   }
 
