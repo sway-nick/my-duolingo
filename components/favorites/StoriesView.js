@@ -57,7 +57,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       return `
         <div class="story-list-card is-locked" data-milestone="${m}" data-locked="true" role="button" tabindex="0">
           <div class="story-card-top">
-            <div class="story-card-badge story-badge-locked">${escapeHtml(badge)}</div>
             <span class="story-card-status status-locked">🔒 ${escapeHtml(lockLabel)}</span>
           </div>
           <h3 class="story-card-title story-title-locked">${escapeHtml(title)}</h3>
