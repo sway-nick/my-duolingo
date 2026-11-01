@@ -197,6 +197,7 @@ export function openWidgetConfigBottomSheet() {
             window.trackEvent('widget_pin_request');
           }
           window.AndroidWidgetBridge.requestPinWidget();
+          closeSheet();
         } else if (isInstalled) {
           try {
             showToast(t('widget_settings_saved') || 'Настройки виджета сохранены');

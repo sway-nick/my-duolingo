@@ -879,6 +879,27 @@ const SPELLING_VARIANTS_MAP = {
 
 
 
+let _dictionaryCache = null;
+let _wordLookupMap = null;
+
+async function getOrBuildDictionary() {
+  if (_wordLookupMap) return _wordLookupMap;
+  try {
+    const res = await getWords();
+    const list = Array.isArray(res) ? res : (res?.data || []);
+    _dictionaryCache = list;
+    _wordLookupMap = new Map();
+    list.forEach(w => {
+      if (w && w.word) {
+        _wordLookupMap.set(String(w.word).toLowerCase().trim(), w);
+      }
+    });
+  } catch (e) {
+    _wordLookupMap = new Map();
+  }
+  return _wordLookupMap;
+}
+
 function resolveWord(rawWord, dictMap, lang) {
   let clean = String(rawWord || '')
     .toLowerCase()
@@ -1612,7 +1633,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
   });
 
   // Audio button in popover
-  popoverAudio.addEventListener('click', (e) => {
+  if (popoverAudio) popoverAudio.addEventListener('click', (e) => {
     e.stopPropagation();
     if (activeResolvedWord) {
       speakWord(activeResolvedWord.word, activeResolvedWord.id);
@@ -1620,7 +1641,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
   });
 
   // Heart button in popover
-  popoverHeart.addEventListener('click', async (e) => {
+  if (popoverHeart) popoverHeart.addEventListener('click', async (e) => {
     e.stopPropagation();
     if (!activeResolvedWord || !activeResolvedWord.id) return;
     const wId = String(activeResolvedWord.id);
@@ -1681,7 +1702,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
   });
 
   // Click outside word popover to dismiss it
-  overlay.querySelector('.milestone-story-card').addEventListener('click', (e) => {
+  overlay.querySelector(".milestone-story-card")?.addEventListener('click', (e) => {
     if (!e.target.closest('.story-word-token') && !e.target.closest('#story-popover')) {
       popover.style.display = 'none';
       if (activeTokenEl) {
@@ -1696,7 +1717,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
   }
 
   // Close X
-  closeBtn.addEventListener('click', closeModal);
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
 
   // Click background overlay
   overlay.addEventListener('click', (e) => {
