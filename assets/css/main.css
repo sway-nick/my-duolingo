@@ -9321,14 +9321,18 @@ html.is-rtl {
 }
 
 .widget-sheet-pills {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
 .widget-sheet-pill {
-  flex: 1;
+  width: 100%;
+  min-width: 0;
   height: 38px;
   min-height: 38px;
+  padding: 0 6px;
+  box-sizing: border-box;
   border-radius: 10px;
   border: 1px solid var(--border-color, rgba(148, 163, 184, 0.35));
   background: rgba(148, 163, 184, 0.08);
@@ -9351,9 +9355,14 @@ html.is-rtl {
 }
 
 .widget-sheet-reminder-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+
+.widget-sheet-reminder-row > .widget-sheet-pills {
+  display: contents;
 }
 
 .widget-sheet-time-range-row {
@@ -9369,17 +9378,22 @@ html.is-rtl {
 
 .widget-sheet-time-picker-wrap {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 0 14px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 6px;
   height: 38px;
+  min-height: 38px;
+  box-sizing: border-box;
   border-radius: 10px;
   border: 1px solid var(--border-color, rgba(148, 163, 184, 0.35));
   background: rgba(148, 163, 184, 0.08);
   cursor: pointer;
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: var(--text-main, #1e293b);
 }
 

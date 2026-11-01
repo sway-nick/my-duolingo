@@ -733,28 +733,19 @@ public class MainActivity extends BridgeActivity {
                         if (!isTrustedOrigin()) return false;
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                final AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                                AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
-                                    final ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
                                     int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
                                     if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
                                         WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
                                     }
-                                    runOnUiThread(() -> {
-                                        try {
-                                            boolean ok = appWidgetManager.requestPinAppWidget(provider, null, null);
-                                            android.util.Log.i("WidgetPin", "requestPinAppWidget result: " + ok);
-                                        } catch (Exception ex) {
-                                            android.util.Log.e("WidgetPin", "requestPinAppWidget error", ex);
-                                        }
-                                    });
+                                    appWidgetManager.requestPinAppWidget(provider, null, null);
                                     return true;
-                                } else {
-                                    android.util.Log.w("WidgetPin", "requestPinAppWidget not supported by launcher");
                                 }
                             }
                         } catch (Exception e) {
-                            android.util.Log.e("WidgetPin", "requestPinAppWidget error", e);
+                            e.printStackTrace();
                         }
                         return false;
                     }

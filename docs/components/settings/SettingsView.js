@@ -162,9 +162,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
       <!-- Widget Button -->
       <div class="settings-card" id="widget-promo-section" style="padding: 16px 12px;">
-        <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center; gap: 8px;">
-          ${isWidgetInstalled ? '' : '<span>✨</span>'}
-          <span>${isWidgetInstalled ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
+        <button type="button" class="theme-option-btn active" id="btn-pin-widget" style="width: 100%; justify-content: center;">
+          ${t('settings_configure_widget') || 'Настроить виджет'}
         </button>
       </div>
 
@@ -587,53 +586,6 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       openWidgetConfigBottomSheet();
     });
   }
-
-  // Auto-refresh widget button state on app focus / resume from system dialog
-  const refreshWidgetButton = () => {
-    let installed = false;
-    try {
-      if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.isWidgetInstalled === 'function') {
-        installed = Boolean(window.AndroidWidgetBridge.isWidgetInstalled());
-      }
-    } catch (err) {}
-    const btn = container.querySelector('#btn-pin-widget');
-    if (btn) {
-      btn.innerHTML = `
-        ${installed ? '' : '<span>✨</span>'}
-        <span>${installed ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
-      `;
-    }
-  };
-
-  // Cleanup any previous listeners to prevent memory leak across tab switches
-  if (typeof window._cleanupSettingsWidgetListener === 'function') {
-    try { window._cleanupSettingsWidgetListener(); } catch (e) {}
-  }
-
-  const handleWidgetStateCheck = () => {
-    if (!container.isConnected) {
-      if (typeof window._cleanupSettingsWidgetListener === 'function') {
-        window._cleanupSettingsWidgetListener();
-      }
-      return;
-    }
-    refreshWidgetButton();
-    // Re-check with slight delays to cover slow launcher layout passes / broadcasts
-    setTimeout(() => { if (container.isConnected) refreshWidgetButton(); }, 1200);
-    setTimeout(() => { if (container.isConnected) refreshWidgetButton(); }, 3000);
-  };
-
-  const handleVisibility = () => {
-    if (!document.hidden) handleWidgetStateCheck();
-  };
-
-  window.addEventListener('focus', handleWidgetStateCheck);
-  document.addEventListener('visibilitychange', handleVisibility);
-
-  window._cleanupSettingsWidgetListener = () => {
-    window.removeEventListener('focus', handleWidgetStateCheck);
-    document.removeEventListener('visibilitychange', handleVisibility);
-  };
 
   // Bind test button for Monday Cat Meme (Golden Card)
   const btnTestMeme = container.querySelector('#btn-test-monday-meme');
