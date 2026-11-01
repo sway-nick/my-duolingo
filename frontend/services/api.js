@@ -3754,6 +3754,47 @@ async function batchAddCustomWords(words = []) {
 
 const GAS_SCANNER_URL = 'https://script.google.com/macros/s/AKfycbwnXMvc0F37phkEvq7fEXcqLoFCVrAUYrC88d09pjDjer039oDmsciF-u18mZbuhngjxQ/exec';
 
+async function recognizeTextNative(base64Image) {
+  if (typeof window === 'undefined' || !window.AndroidOcrBridge || typeof window.AndroidOcrBridge.recognizeText !== 'function') {
+    throw new Error('Native OCR bridge unavailable');
+  }
+
+  return new Promise((resolve, reject) => {
+    const callbackId = 'ocr_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    const timer = setTimeout(() => {
+      if (window.__ocrPending && window.__ocrPending[callbackId]) {
+        delete window.__ocrPending[callbackId];
+      }
+      reject(new Error('Native OCR timeout'));
+    }, 15000);
+
+    if (!window.__ocrPending) window.__ocrPending = {};
+    window.__ocrPending[callbackId] = (payload) => {
+      clearTimeout(timer);
+      delete window.__ocrPending[callbackId];
+      if (payload && payload.success && typeof payload.text === 'string' && payload.text.trim()) {
+        resolve(payload.text.trim());
+      } else {
+        reject(new Error(payload?.error || 'Native OCR returned empty text'));
+      }
+    };
+
+    window.__onAndroidOcrResult = (data) => {
+      if (data && data.callbackId && window.__ocrPending && window.__ocrPending[data.callbackId]) {
+        window.__ocrPending[data.callbackId](data);
+      }
+    };
+
+    try {
+      window.AndroidOcrBridge.recognizeText(base64Image, callbackId);
+    } catch (e) {
+      clearTimeout(timer);
+      if (window.__ocrPending) delete window.__ocrPending[callbackId];
+      reject(e);
+    }
+  });
+}
+
 async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
   let lang = 'en';
   try {
@@ -3782,6 +3823,19 @@ async function scanDocumentImage(payloadInput, mimeType = 'image/jpeg') {
       payload.mimeType = mimeType || 'image/jpeg';
     } else {
       payload.text = payloadInput.trim();
+    }
+  }
+
+  // If on Android and image is provided, try fast on-device ML Kit OCR first
+  if (payload.imageBase64 && !payload.text && typeof window !== 'undefined' && window.AndroidOcrBridge && typeof window.AndroidOcrBridge.recognizeText === 'function') {
+    try {
+      const recognized = await recognizeTextNative(payload.imageBase64);
+      if (recognized && recognized.length >= 5) {
+        payload.text = recognized;
+        payload.modelUsed = 'android-mlkit';
+      }
+    } catch (ocrErr) {
+      console.warn('Native ML Kit OCR fallback to Gemini Vision:', ocrErr);
     }
   }
 
@@ -4060,6 +4114,7 @@ const ApiService = {
   addCustomWord,
   batchAddCustomWords,
   scanDocumentImage,
+  recognizeTextNative,
   sendUserAnalytics,
   getHealth,
   getWords,
@@ -4113,6 +4168,7 @@ export {
   addCustomWord,
   batchAddCustomWords,
   scanDocumentImage,
+  recognizeTextNative,
   sendUserAnalytics,
   getHealth,
   getWords,

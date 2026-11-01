@@ -2,7 +2,7 @@ import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
 
-function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
+function compressImageFile(file, maxDimension = 2048, quality = 0.88) {
   return new Promise((resolve, reject) => {
     if (typeof createImageBitmap === 'function') {
       createImageBitmap(file)
@@ -75,6 +75,71 @@ function compressImageFile(file, maxDimension = 1200, quality = 0.82) {
   });
 }
 
+
+function cropAndCompressImage(sourceImg, cropNorm, rotationDeg = 0, maxDimension = 2048, quality = 0.88) {
+  return new Promise((resolve, reject) => {
+    try {
+      const origW = sourceImg.naturalWidth || sourceImg.width;
+      const origH = sourceImg.naturalHeight || sourceImg.height;
+
+      const rot = ((rotationDeg % 360) + 360) % 360;
+      const rotW = (rot === 90 || rot === 270) ? origH : origW;
+      const rotH = (rot === 90 || rot === 270) ? origW : origH;
+
+      const rotCanvas = document.createElement('canvas');
+      rotCanvas.width = rotW;
+      rotCanvas.height = rotH;
+      const rotCtx = rotCanvas.getContext('2d');
+      rotCtx.fillStyle = '#ffffff';
+      rotCtx.fillRect(0, 0, rotW, rotH);
+
+      rotCtx.translate(rotW / 2, rotH / 2);
+      rotCtx.rotate((rot * Math.PI) / 180);
+      rotCtx.drawImage(sourceImg, -origW / 2, -origH / 2);
+
+      let cropX = Math.max(0, Math.round(cropNorm.x * rotW));
+      let cropY = Math.max(0, Math.round(cropNorm.y * rotH));
+      let cropW = Math.min(rotW - cropX, Math.round(cropNorm.w * rotW));
+      let cropH = Math.min(rotH - cropY, Math.round(cropNorm.h * rotH));
+
+      if (cropW <= 10 || cropH <= 10) {
+        cropX = 0; cropY = 0; cropW = rotW; cropH = rotH;
+      }
+
+      let outW = cropW;
+      let outH = cropH;
+      if (outW > maxDimension || outH > maxDimension) {
+        if (outW > outH) {
+          outH = Math.round((outH * maxDimension) / outW);
+          outW = maxDimension;
+        } else {
+          outW = Math.round((outW * maxDimension) / outH);
+          outH = maxDimension;
+        }
+      }
+
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = outW;
+      outCanvas.height = outH;
+      const outCtx = outCanvas.getContext('2d');
+      outCtx.fillStyle = '#ffffff';
+      outCtx.fillRect(0, 0, outW, outH);
+      outCtx.drawImage(rotCanvas, cropX, cropY, cropW, cropH, 0, 0, outW, outH);
+
+      const dataUrl = outCanvas.toDataURL('image/jpeg', quality);
+      resolve({
+        dataUrl,
+        base64: dataUrl.split(',')[1],
+        mimeType: 'image/jpeg',
+        width: outW,
+        height: outH
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
 function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   if (window.trackScreen) {
     window.trackScreen('scanner_modal', 'ScannerModal');
@@ -130,14 +195,49 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
           </div>
         </div>
 
-        <!-- 1b. Paste Text View -->
+        <!-- 1b. Interactive Crop View -->
+        <div id="scanner-crop-view" class="scanner-crop-view" style="display: none;">
+          <div class="scanner-crop-header">
+            <span class="scanner-crop-title">${t('scan_crop_title')}</span>
+            <button type="button" id="scanner-crop-rotate-btn" class="scanner-link-btn" style="font-weight: 700; font-size: 13.5px; display: inline-flex; align-items: center; gap: 4px;">
+              ${t('scan_rotate_btn')}
+            </button>
+          </div>
+          <div class="scanner-crop-stage" id="scanner-crop-stage">
+            <canvas id="scanner-crop-canvas" class="scanner-crop-canvas"></canvas>
+            <div id="scanner-crop-box" class="scanner-crop-box">
+              <div class="scanner-crop-grid"></div>
+              <div class="crop-handle handle-tl" data-handle="tl"></div>
+              <div class="crop-handle handle-tr" data-handle="tr"></div>
+              <div class="crop-handle handle-bl" data-handle="bl"></div>
+              <div class="crop-handle handle-br" data-handle="br"></div>
+              <div class="crop-handle handle-t" data-handle="t"></div>
+              <div class="crop-handle handle-b" data-handle="b"></div>
+              <div class="crop-handle handle-l" data-handle="l"></div>
+              <div class="crop-handle handle-r" data-handle="r"></div>
+            </div>
+          </div>
+          <div class="scanner-crop-footer">
+            <button type="button" id="scanner-crop-back-btn" class="primary-button scanner-btn-rescan">
+              ${t('scan_back_to_upload')}
+            </button>
+            <button type="button" id="scanner-crop-full-btn" class="primary-button scanner-btn-rescan" style="font-weight: 700;">
+              ${t('scan_full_page_btn')}
+            </button>
+            <button type="button" id="scanner-crop-submit-btn" class="primary-button btn-green" style="flex: 2; font-weight: 700; min-height: 42px; border-radius: 10px;">
+              ${t('scan_crop_btn')}
+            </button>
+          </div>
+        </div>
+
+        <!-- 1c. Paste Text View -->
         <div id="scanner-paste-view" class="scanner-paste-view" style="display: none;">
           <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
             <button type="button" id="scanner-clipboard-auto-btn" class="scanner-link-btn" style="font-size: 12.5px;">
               ${t('scan_paste_clipboard_btn')}
             </button>
           </div>
-          <textarea id="scanner-text-input" class="search-input" rows="6" placeholder="${t('scan_paste_placeholder')}" style="width: 100%; height: auto; min-height: 130px; max-height: 220px; padding: 12px; font-size: 14px; font-family: inherit; resize: vertical; box-sizing: border-box; line-height: 1.45; border-radius: var(--radius-md);"></textarea>
+          <textarea id="scanner-text-input" class="search-input" rows="8" placeholder="${t('scan_paste_placeholder')}" style="width: 100%; height: auto; min-height: 160px; max-height: 320px; padding: 12px; font-size: 14px; font-family: inherit; resize: vertical; box-sizing: border-box; line-height: 1.5; border-radius: var(--radius-md);"></textarea>
           <div style="display: flex; gap: 10px; margin-top: 12px;">
             <button type="button" id="scanner-paste-back-btn" class="primary-button scanner-btn-rescan">
               ${t('scan_back_to_upload')}
@@ -159,27 +259,53 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
         <!-- 3. Results View -->
         <div id="scanner-results-view" class="scanner-results-view" style="display: none;">
-          <div class="scanner-lemmas-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
-            <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="${t('scan_group_cat_title')}">
-              <span style="opacity: 0.75;">${t('scan_group_cat_all')}</span>
-              <strong id="scanner-group-cat-label" class="scanner-group-cat-label">Elementary ⇄</strong>
+          <div class="scanner-tabs-row" id="scanner-tabs-row">
+            <button type="button" id="scanner-tab-reader-btn" class="scanner-tab-btn active">
+              ${t('scan_tab_reader')}
             </button>
-            <div class="scanner-select-actions">
-              <button type="button" id="scanner-toggle-select-btn" class="scanner-link-btn" style="font-size: 13px; font-weight: 700;">
-                ${t('scan_deselect_all')}
-              </button>
-            </div>
+            <button type="button" id="scanner-tab-words-btn" class="scanner-tab-btn">
+              ${t('scan_tab_words')} (<span id="scanner-words-tab-count">0</span>)
+            </button>
           </div>
 
-          <div id="scanner-lemmas-list" class="scanner-lemmas-list"></div>
-
-          <!-- Existing Words Collapsible -->
-          <div id="scanner-existing-box" class="scanner-existing-box" style="display: none;">
-            <div class="scanner-existing-header" id="scanner-existing-toggle">
-              <span id="scanner-existing-title">${t('scan_already_exists')} (0)</span>
-              <span class="scanner-existing-arrow" id="scanner-existing-arrow">▼</span>
+          <!-- Reader Pane -->
+          <div id="scanner-reader-pane" class="scanner-reader-container">
+            <div class="scanner-reader-actions">
+              <span>${t('scan_reader_tip')}</span>
+              <button type="button" id="scanner-toggle-photo-btn" class="scanner-link-btn" style="font-weight: 700; font-size: 12.5px;">
+                ${t('scan_show_original')}
+              </button>
             </div>
-            <div id="scanner-existing-list" class="scanner-existing-list" style="display: none;"></div>
+            <div id="scanner-reader-photo-box" class="scanner-reader-photo-container" style="display: none;">
+              <img id="scanner-reader-photo-img" class="scanner-reader-photo-img" alt="Original Page" />
+            </div>
+            <div id="scanner-reader-body" class="scanner-reader-body"></div>
+          </div>
+
+          <!-- Words List Pane -->
+          <div id="scanner-words-pane" class="scanner-words-container" style="display: none;">
+            <div class="scanner-lemmas-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
+              <button type="button" id="scanner-group-cat-btn" class="scanner-group-cat-btn" title="${t('scan_group_cat_title')}">
+                <span style="opacity: 0.75;">${t('scan_group_cat_all')}</span>
+                <strong id="scanner-group-cat-label" class="scanner-group-cat-label">Elementary ⇄</strong>
+              </button>
+              <div class="scanner-select-actions">
+                <button type="button" id="scanner-toggle-select-btn" class="scanner-link-btn" style="font-size: 13px; font-weight: 700;">
+                  ${t('scan_deselect_all')}
+                </button>
+              </div>
+            </div>
+
+            <div id="scanner-lemmas-list" class="scanner-lemmas-list"></div>
+
+            <!-- Existing Words Collapsible -->
+            <div id="scanner-existing-box" class="scanner-existing-box" style="display: none;">
+              <div class="scanner-existing-header" id="scanner-existing-toggle">
+                <span id="scanner-existing-title">${t('scan_already_exists')} (0)</span>
+                <span class="scanner-existing-arrow" id="scanner-existing-arrow">▼</span>
+              </div>
+              <div id="scanner-existing-list" class="scanner-existing-list" style="display: none;"></div>
+            </div>
           </div>
 
           <div class="scanner-results-footer">
@@ -200,6 +326,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const closeBtn = modalEl.querySelector('#scanner-close-btn');
   const headerSpinner = modalEl.querySelector('#scanner-header-spinner');
   const uploadView = modalEl.querySelector('#scanner-upload-view');
+  const cropView = modalEl.querySelector('#scanner-crop-view');
   const pasteView = modalEl.querySelector('#scanner-paste-view');
   const processingView = modalEl.querySelector('#scanner-processing-view');
   const resultsView = modalEl.querySelector('#scanner-results-view');
@@ -213,6 +340,26 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const takePhotoBtn = modalEl.querySelector('#scanner-take-photo-btn');
   const galleryBtn = modalEl.querySelector('#scanner-gallery-btn');
   const openPasteBtn = modalEl.querySelector('#scanner-open-paste-btn');
+
+  // Crop View Elements
+  const cropStage = modalEl.querySelector('#scanner-crop-stage');
+  const cropCanvas = modalEl.querySelector('#scanner-crop-canvas');
+  const cropBox = modalEl.querySelector('#scanner-crop-box');
+  const cropRotateBtn = modalEl.querySelector('#scanner-crop-rotate-btn');
+  const cropBackBtn = modalEl.querySelector('#scanner-crop-back-btn');
+  const cropFullBtn = modalEl.querySelector('#scanner-crop-full-btn');
+  const cropSubmitBtn = modalEl.querySelector('#scanner-crop-submit-btn');
+
+  // Tabs & Reader Elements
+  const tabReaderBtn = modalEl.querySelector('#scanner-tab-reader-btn');
+  const tabWordsBtn = modalEl.querySelector('#scanner-tab-words-btn');
+  const wordsTabCount = modalEl.querySelector('#scanner-words-tab-count');
+  const readerPane = modalEl.querySelector('#scanner-reader-pane');
+  const wordsPane = modalEl.querySelector('#scanner-words-pane');
+  const readerBody = modalEl.querySelector('#scanner-reader-body');
+  const togglePhotoBtn = modalEl.querySelector('#scanner-toggle-photo-btn');
+  const readerPhotoBox = modalEl.querySelector('#scanner-reader-photo-box');
+  const readerPhotoImg = modalEl.querySelector('#scanner-reader-photo-img');
 
   const textInput = modalEl.querySelector('#scanner-text-input');
   const clipboardAutoBtn = modalEl.querySelector('#scanner-clipboard-auto-btn');
@@ -234,12 +381,28 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   const submitBtn = modalEl.querySelector('#scanner-submit-btn');
 
   let currentNewLemmas = [];
+  let existingLemmasList = [];
   let selectedIndices = new Set();
   let currentGroupCategory = 'Elementary';
-
   let activePreviewUrl = null;
+  let lastScannedDataUrl = null;
+  let activeWordPopover = null;
+
+  // Crop State
+  let loadedRawImage = null;
+  let cropRotation = 0;
+  let cropNorm = { x: 0.04, y: 0.04, w: 0.92, h: 0.92 };
+  let cropCanvasRect = { width: 0, height: 0, left: 0, top: 0 };
+
+  const closeWordPopover = () => {
+    if (activeWordPopover) {
+      activeWordPopover.remove();
+      activeWordPopover = null;
+    }
+  };
 
   const closeModal = () => {
+    closeWordPopover();
     if (activePreviewUrl) {
       try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
       activePreviewUrl = null;
@@ -263,6 +426,35 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     if (errorBox) errorBox.style.display = 'none';
   };
 
+  // Switch Tabs
+  tabReaderBtn.addEventListener('click', () => {
+    closeWordPopover();
+    tabReaderBtn.classList.add('active');
+    tabWordsBtn.classList.remove('active');
+    readerPane.style.display = 'flex';
+    wordsPane.style.display = 'none';
+  });
+
+  tabWordsBtn.addEventListener('click', () => {
+    closeWordPopover();
+    tabWordsBtn.classList.add('active');
+    tabReaderBtn.classList.remove('active');
+    wordsPane.style.display = 'block';
+    readerPane.style.display = 'none';
+  });
+
+  // Toggle Photo View in Reader Mode
+  togglePhotoBtn.addEventListener('click', () => {
+    const isVisible = readerPhotoBox.style.display !== 'none';
+    if (isVisible) {
+      readerPhotoBox.style.display = 'none';
+      togglePhotoBtn.textContent = t('scan_show_original');
+    } else {
+      readerPhotoBox.style.display = 'flex';
+      togglePhotoBtn.textContent = t('scan_hide_original');
+    }
+  });
+
   takePhotoBtn.addEventListener('click', () => {
     hideError();
     if (window.trackEvent) window.trackEvent('scan_source_photo');
@@ -281,6 +473,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     hideError();
     if (window.trackEvent) window.trackEvent('scan_source_paste');
     uploadView.style.display = 'none';
+    cropView.style.display = 'none';
     pasteView.style.display = 'block';
 
     try {
@@ -338,6 +531,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       textIconPreview.style.display = 'block';
       if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
+      lastScannedDataUrl = null;
       const res = await scanDocumentImage({ text: rawText });
       displayResults(res);
     } catch (err) {
@@ -376,12 +570,14 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   });
 
   rescanBtn.addEventListener('click', () => {
+    closeWordPopover();
     if (activePreviewUrl) {
       try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
       activePreviewUrl = null;
     }
     previewImg.removeAttribute('src');
     uploadView.style.display = 'block';
+    cropView.style.display = 'none';
     pasteView.style.display = 'none';
     processingView.style.display = 'none';
     resultsView.style.display = 'none';
@@ -389,6 +585,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     hideError();
   });
 
+  // Handle Image Selection -> Show Crop View
   async function handleFileSelected(file) {
     const isImage = file && (
       (file.type && file.type.startsWith('image/')) ||
@@ -404,54 +601,245 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       if (window.trackEvent) {
         window.trackEvent('scan_image_upload', { size_kb: Math.round((file.size || 0) / 1024) });
       }
-      uploadView.style.display = 'none';
-      pasteView.style.display = 'none';
+
+      const img = new Image();
+      img.onload = () => {
+        loadedRawImage = img;
+        cropRotation = 0;
+        cropNorm = { x: 0.04, y: 0.04, w: 0.92, h: 0.92 };
+
+        uploadView.style.display = 'none';
+        pasteView.style.display = 'none';
+        processingView.style.display = 'none';
+        resultsView.style.display = 'none';
+        cropView.style.display = 'flex';
+
+        setTimeout(() => {
+          renderCropStage();
+        }, 50);
+      };
+      img.onerror = () => {
+        showError(t('scan_err_read_image'));
+      };
+
+      if (activePreviewUrl) {
+        try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
+      }
+      activePreviewUrl = URL.createObjectURL(file);
+      img.src = activePreviewUrl;
+    } catch (err) {
+      showError(err.message || t('scan_err_read_file'));
+    }
+  }
+
+  // Render Crop Stage & Update Overlay Box
+  function renderCropStage() {
+    if (!loadedRawImage || !cropStage) return;
+
+    const stageW = cropStage.clientWidth || 320;
+    const stageH = cropStage.clientHeight || 300;
+
+    const rot = ((cropRotation % 360) + 360) % 360;
+    const isSideways = rot === 90 || rot === 270;
+    const imgW = isSideways ? loadedRawImage.naturalHeight : loadedRawImage.naturalWidth;
+    const imgH = isSideways ? loadedRawImage.naturalWidth : loadedRawImage.naturalHeight;
+
+    const scale = Math.min((stageW - 20) / imgW, (stageH - 20) / imgH, 1);
+    const drawW = Math.round(imgW * scale);
+    const drawH = Math.round(imgH * scale);
+
+    cropCanvas.width = drawW;
+    cropCanvas.height = drawH;
+    cropCanvas.style.width = `${drawW}px`;
+    cropCanvas.style.height = `${drawH}px`;
+
+    const ctx = cropCanvas.getContext('2d');
+    ctx.clearRect(0, 0, drawW, drawH);
+    ctx.save();
+    ctx.translate(drawW / 2, drawH / 2);
+    ctx.rotate((rot * Math.PI) / 180);
+
+    const origW = loadedRawImage.naturalWidth;
+    const origH = loadedRawImage.naturalHeight;
+    const drawOrigW = isSideways ? drawH : drawW;
+    const drawOrigH = isSideways ? drawW : drawH;
+    ctx.drawImage(loadedRawImage, -drawOrigW / 2, -drawOrigH / 2, drawOrigW, drawOrigH);
+    ctx.restore();
+
+    // Cache canvas position relative to cropStage
+    const stageRect = cropStage.getBoundingClientRect();
+    const canvasRect = cropCanvas.getBoundingClientRect();
+
+    cropCanvasRect = {
+      width: drawW,
+      height: drawH,
+      left: canvasRect.left - stageRect.left,
+      top: canvasRect.top - stageRect.top,
+    };
+
+    updateCropBoxDom();
+  }
+
+  function updateCropBoxDom() {
+    if (!cropBox) return;
+    const leftPx = cropCanvasRect.left + cropNorm.x * cropCanvasRect.width;
+    const topPx = cropCanvasRect.top + cropNorm.y * cropCanvasRect.height;
+    const widthPx = cropNorm.w * cropCanvasRect.width;
+    const heightPx = cropNorm.h * cropCanvasRect.height;
+
+    cropBox.style.left = `${Math.round(leftPx)}px`;
+    cropBox.style.top = `${Math.round(topPx)}px`;
+    cropBox.style.width = `${Math.round(widthPx)}px`;
+    cropBox.style.height = `${Math.round(heightPx)}px`;
+  }
+
+  // Rotate Button Click
+  cropRotateBtn.addEventListener('click', () => {
+    cropRotation = (cropRotation + 90) % 360;
+    cropNorm = { x: 0.04, y: 0.04, w: 0.92, h: 0.92 };
+    renderCropStage();
+  });
+
+  // Back from Crop
+  cropBackBtn.addEventListener('click', () => {
+    cropView.style.display = 'none';
+    uploadView.style.display = 'block';
+  });
+
+  // Full Page Scan (No Crop)
+  cropFullBtn.addEventListener('click', async () => {
+    cropNorm = { x: 0, y: 0, w: 1, h: 1 };
+    await triggerCroppedScan();
+  });
+
+  // Crop & Scan Submit
+  cropSubmitBtn.addEventListener('click', async () => {
+    await triggerCroppedScan();
+  });
+
+  // Execute Scan with Cropped Area at High Res (up to 2048px, quality 0.88)
+  async function triggerCroppedScan() {
+    if (!loadedRawImage) return;
+
+    try {
+      hideError();
+      cropView.style.display = 'none';
       processingView.style.display = 'flex';
-      resultsView.style.display = 'none';
       previewImg.style.display = 'block';
       textIconPreview.style.display = 'none';
       if (headerSpinner) headerSpinner.style.visibility = 'visible';
 
-      // 1. Instantly display actual photo thumbnail (0ms latency, never black)
-      if (activePreviewUrl) {
-        try { URL.revokeObjectURL(activePreviewUrl); } catch (e) {}
-        activePreviewUrl = null;
-      }
-      try {
-        activePreviewUrl = URL.createObjectURL(file);
-        previewImg.src = activePreviewUrl;
-      } catch (err) {
-        const fr = new FileReader();
-        fr.onload = (ev) => {
-          previewImg.src = ev.target.result;
-        };
-        fr.readAsDataURL(file);
-      }
+      const cropped = await cropAndCompressImage(loadedRawImage, cropNorm, cropRotation, 2048, 0.88);
+      previewImg.src = cropped.dataUrl;
+      lastScannedDataUrl = cropped.dataUrl;
 
-      const compressed = await compressImageFile(file, 1200, 0.82);
-
-      // Fallback in case objectUrl was blocked or empty
-      if (!previewImg.src || previewImg.naturalWidth === 0) {
-        previewImg.src = compressed.dataUrl;
-      }
-
-      const res = await scanDocumentImage(compressed.base64, compressed.mimeType);
+      const res = await scanDocumentImage(cropped.base64, cropped.mimeType);
       displayResults(res);
     } catch (err) {
-      console.error('Scan error:', err);
+      console.error('Cropped scan error:', err);
       if (headerSpinner) headerSpinner.style.visibility = 'hidden';
-      uploadView.style.display = 'block';
-      pasteView.style.display = 'none';
+      cropView.style.display = 'flex';
       processingView.style.display = 'none';
       resultsView.style.display = 'none';
       showError(err.message || t('scan_err_ocr'));
     }
   }
 
+  // Crop Box Drag & Resize Interactions
+  let isDraggingCrop = false;
+  let activeHandle = null;
+  let dragStart = { x: 0, y: 0, normX: 0, normY: 0, normW: 0, normH: 0 };
+
+  cropBox.addEventListener('pointerdown', (e) => {
+    const handleEl = e.target.closest('.crop-handle');
+    activeHandle = handleEl ? handleEl.getAttribute('data-handle') : null;
+    isDraggingCrop = true;
+    dragStart = {
+      x: e.clientX,
+      y: e.clientY,
+      normX: cropNorm.x,
+      normY: cropNorm.y,
+      normW: cropNorm.w,
+      normH: cropNorm.h,
+    };
+    cropBox.setPointerCapture(e.pointerId);
+    e.stopPropagation();
+  });
+
+  cropBox.addEventListener('pointermove', (e) => {
+    if (!isDraggingCrop || cropCanvasRect.width === 0 || cropCanvasRect.height === 0) return;
+
+    const dxNorm = (e.clientX - dragStart.x) / cropCanvasRect.width;
+    const dyNorm = (e.clientY - dragStart.y) / cropCanvasRect.height;
+
+    let nx = dragStart.normX;
+    let ny = dragStart.normY;
+    let nw = dragStart.normW;
+    let nh = dragStart.normH;
+
+    const MIN_SIZE = 0.08;
+
+    if (!activeHandle) {
+      // Moving entire crop box
+      nx = Math.max(0, Math.min(1 - nw, nx + dxNorm));
+      ny = Math.max(0, Math.min(1 - nh, ny + dyNorm));
+    } else {
+      // Resizing with handle
+      if (activeHandle.includes('l')) {
+        const rightEdge = nx + nw;
+        nx = Math.max(0, Math.min(rightEdge - MIN_SIZE, nx + dxNorm));
+        nw = rightEdge - nx;
+      }
+      if (activeHandle.includes('r')) {
+        nw = Math.max(MIN_SIZE, Math.min(1 - nx, nw + dxNorm));
+      }
+      if (activeHandle.includes('t')) {
+        const bottomEdge = ny + nh;
+        ny = Math.max(0, Math.min(bottomEdge - MIN_SIZE, ny + dyNorm));
+        nh = bottomEdge - ny;
+      }
+      if (activeHandle.includes('b')) {
+        nh = Math.max(MIN_SIZE, Math.min(1 - ny, nh + dyNorm));
+      }
+    }
+
+    cropNorm = { x: nx, y: ny, w: nw, h: nh };
+    updateCropBoxDom();
+  });
+
+  const stopCropDrag = (e) => {
+    if (isDraggingCrop) {
+      isDraggingCrop = false;
+      activeHandle = null;
+      try { cropBox.releasePointerCapture(e.pointerId); } catch (err) {}
+    }
+  };
+  cropBox.addEventListener('pointerup', stopCropDrag);
+  cropBox.addEventListener('pointercancel', stopCropDrag);
+
+  // Resize listener for responsive crop box placement
+  window.addEventListener('resize', () => {
+    if (cropView && cropView.style.display !== 'none') {
+      renderCropStage();
+    }
+  });
+
+  // Display Results (Book Reader & Vocabulary)
   function displayResults(data) {
     processingView.style.display = 'none';
     resultsView.style.display = 'block';
     if (headerSpinner) headerSpinner.style.visibility = 'hidden';
+
+    // Store photo for Book Reader Mode
+    if (lastScannedDataUrl && readerPhotoImg) {
+      readerPhotoImg.src = lastScannedDataUrl;
+      readerPhotoBox.style.display = 'none';
+      togglePhotoBtn.textContent = t('scan_show_original');
+      togglePhotoBtn.style.display = 'inline-block';
+    } else {
+      if (togglePhotoBtn) togglePhotoBtn.style.display = 'none';
+      if (readerPhotoBox) readerPhotoBox.style.display = 'none';
+    }
 
     const allLemmas = Array.isArray(data.lemmas) ? data.lemmas : [];
     const existingWordsSet = new Set(
@@ -459,14 +847,14 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     );
 
     currentNewLemmas = [];
-    const existingLemmas = [];
+    existingLemmasList = [];
     const catCounts = {};
 
     allLemmas.forEach((raw) => {
       const wClean = String(raw.word || '').trim().toLowerCase();
       if (!wClean) return;
       if (existingWordsSet.has(wClean)) {
-        existingLemmas.push(raw);
+        existingLemmasList.push(raw);
       } else {
         if (!currentNewLemmas.some((x) => x.word.toLowerCase() === wClean)) {
           const rawTrans = String(raw.translation || '').trim();
@@ -495,7 +883,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       }
     });
 
-    // Set initial group category based on dominant category
+    // Update group category
     let topCat = 'Elementary';
     let topCount = 0;
     Object.keys(catCounts).forEach((c) => {
@@ -509,10 +897,213 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
 
     selectedIndices = new Set(currentNewLemmas.map((_, i) => i));
 
+    if (wordsTabCount) {
+      wordsTabCount.textContent = String(currentNewLemmas.length);
+    }
+
+    // Default to Book Reader tab if book text was extracted, otherwise Vocabulary tab
+    const detectedFullText = String(data.detected_text || data.detected_text_snippet || '').trim();
+    if (detectedFullText.length > 40) {
+      tabReaderBtn.classList.add('active');
+      tabWordsBtn.classList.remove('active');
+      readerPane.style.display = 'flex';
+      wordsPane.style.display = 'none';
+      renderBookReader(detectedFullText);
+    } else {
+      tabWordsBtn.classList.add('active');
+      tabReaderBtn.classList.remove('active');
+      wordsPane.style.display = 'block';
+      readerPane.style.display = 'none';
+      renderBookReader(detectedFullText);
+    }
+
     renderLemmasList();
-    renderExistingSection(existingLemmas);
+    renderExistingSection(existingLemmasList);
     updateSubmitButton();
   }
+
+  // Render Book Reader with Paragraphs & Interactive Clickable Words
+  function renderBookReader(fullText) {
+    if (!readerBody) return;
+
+    if (!fullText || fullText.trim().length === 0) {
+      const fallbackSentences = currentNewLemmas.map((l) => l.context || l.word).filter(Boolean);
+      fullText = fallbackSentences.join(' ');
+    }
+
+    if (!fullText || fullText.trim().length === 0) {
+      readerBody.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px;">${t('scan_no_new_words')}</div>`;
+      return;
+    }
+
+    // Build lemma lookup map
+    const lemmaMap = new Map();
+    currentNewLemmas.forEach((lemma, idx) => {
+      lemmaMap.set(lemma.word.toLowerCase(), { lemma, idx, isNew: true });
+      if (lemma.original) {
+        lemmaMap.set(lemma.original.toLowerCase(), { lemma, idx, isNew: true });
+      }
+    });
+    existingLemmasList.forEach((raw) => {
+      const w = String(raw.word || '').toLowerCase().trim();
+      if (w && !lemmaMap.has(w)) {
+        lemmaMap.set(w, { lemma: raw, idx: -1, isNew: false });
+      }
+    });
+
+    const paragraphs = fullText.split(/\r?\n(?:\s*\r?\n)+|\r?\n(?=[A-Z0-9\"\'\“])/).filter((p) => p.trim().length > 0);
+    const htmlParas = paragraphs.map((p) => {
+      // Split paragraph tokens preserving words and punctuation
+      const tokens = p.split(/(\b[a-zA-Z\'\-]+\b)/g);
+      const renderedTokens = tokens.map((token) => {
+        if (/^[a-zA-Z\'\-]+$/.test(token)) {
+          const lower = token.toLowerCase();
+          const match = lemmaMap.get(lower);
+          const isHighlighted = match && match.isNew;
+          const highlightClass = isHighlighted ? 'highlight' : '';
+          return `<span class="scanner-reader-word ${highlightClass}" data-word="${escapeHtml(token)}">${escapeHtml(token)}</span>`;
+        }
+        return escapeHtml(token);
+      });
+      return `<p>${renderedTokens.join('')}</p>`;
+    });
+
+    readerBody.innerHTML = htmlParas.join('');
+  }
+
+  // Click on word inside Reader Mode -> Show Popover Card
+  readerBody.addEventListener('click', (e) => {
+    const wordSpan = e.target.closest('.scanner-reader-word');
+    if (!wordSpan) {
+      closeWordPopover();
+      return;
+    }
+    e.stopPropagation();
+
+    const clickedRawWord = wordSpan.getAttribute('data-word');
+    if (!clickedRawWord) return;
+
+    closeWordPopover();
+
+    const lower = clickedRawWord.toLowerCase();
+    let foundLemma = currentNewLemmas.find((l) => l.word === lower || l.original.toLowerCase() === lower);
+    let isExisting = false;
+
+    if (!foundLemma) {
+      const existingMatch = existingLemmasList.find((l) => String(l.word).toLowerCase() === lower || String(l.original).toLowerCase() === lower);
+      if (existingMatch) {
+        foundLemma = existingMatch;
+        isExisting = true;
+      }
+    }
+
+    if (!foundLemma) {
+      const dictMatch = words.find((w) => String(w.word).toLowerCase() === lower);
+      if (dictMatch) {
+        foundLemma = {
+          word: dictMatch.word,
+          original: clickedRawWord,
+          translation: getWordTranslation(dictMatch),
+          transcription: dictMatch.transcription || '',
+          category: dictMatch.category || 'Elementary',
+          level: dictMatch.level || 'A2',
+        };
+        isExisting = true;
+      }
+    }
+
+    const wordToDisplay = foundLemma ? foundLemma.word : lower;
+    const transToDisplay = foundLemma ? (foundLemma.translation || foundLemma.customTranslation || '') : '';
+    const ipaToDisplay = foundLemma ? (foundLemma.transcription || '') : '';
+    const catToDisplay = foundLemma ? (foundLemma.category || 'Elementary') : 'Elementary';
+    const isSpecialCategory = catToDisplay === 'Pattern' || catToDisplay === 'Irregular verbs';
+    const levelToDisplay = (!isSpecialCategory && foundLemma && foundLemma.level) ? foundLemma.level : '';
+
+    const popover = document.createElement('div');
+    popover.className = 'scanner-word-popover';
+
+    const cleanWordForSpeech = wordToDisplay.replace(/[^a-zA-Z\s']/g, ' ').trim();
+
+    popover.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+        <div>
+          <strong style="font-size: 16px; color: var(--text-main, #0f172a);">${escapeHtml(wordToDisplay)}</strong>
+          ${ipaToDisplay ? `<span style="font-size: 12.5px; color: var(--text-muted, #64748b); margin-left: 6px;">${escapeHtml(ipaToDisplay)}</span>` : ''}
+          ${levelToDisplay ? `<span class="scanner-lemma-level" style="margin-left: 6px;">${escapeHtml(levelToDisplay)}</span>` : ''}
+        </div>
+        <button type="button" id="popover-audio-btn" style="background: none; border: none; font-size: 18px; cursor: pointer; padding: 2px 4px; line-height: 1;" title="Play audio">🔊</button>
+      </div>
+      ${transToDisplay ? `<div style="font-size: 14px; font-weight: 600; color: #0284c7;">${escapeHtml(transToDisplay)}</div>` : ''}
+      <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+        <button type="button" id="popover-action-btn" class="primary-button btn-green" style="font-size: 12px; font-weight: 700; padding: 6px 12px; min-height: 32px; border-radius: 8px;">
+          ${isExisting ? t('scan_word_in_dict') : t('scan_word_add_btn')}
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(popover);
+    activeWordPopover = popover;
+
+    // Position Popover near clicked word
+    const spanRect = wordSpan.getBoundingClientRect();
+    const popoverW = 290;
+    let popoverX = Math.max(12, Math.min(window.innerWidth - popoverW - 12, spanRect.left - 20));
+    let popoverY = spanRect.bottom + 8;
+    if (popoverY + 120 > window.innerHeight) {
+      popoverY = Math.max(12, spanRect.top - 110);
+    }
+    popover.style.left = `${Math.round(popoverX)}px`;
+    popover.style.top = `${Math.round(popoverY)}px`;
+
+    // Audio click
+    const audioBtn = popover.querySelector('#popover-audio-btn');
+    audioBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      speakWord(cleanWordForSpeech);
+    });
+
+    // Action button
+    const actionBtn = popover.querySelector('#popover-action-btn');
+    actionBtn.addEventListener('click', async (ev) => {
+      ev.stopPropagation();
+      if (isExisting) {
+        closeWordPopover();
+        return;
+      }
+
+      actionBtn.disabled = true;
+      actionBtn.textContent = '...';
+
+      try {
+        const added = await addCustomWord(
+          wordToDisplay,
+          transToDisplay || wordToDisplay,
+          catToDisplay,
+          levelToDisplay,
+          ipaToDisplay,
+          ''
+        );
+        if (added && added.id) {
+          toggleFavoriteApi(added.id, true).catch(() => {});
+        }
+        words.push(added);
+        isExisting = true;
+        actionBtn.textContent = t('scan_word_in_dict');
+        actionBtn.classList.remove('btn-green');
+        actionBtn.classList.add('scanner-btn-rescan');
+        wordSpan.classList.remove('highlight');
+      } catch (err) {
+        actionBtn.disabled = false;
+        actionBtn.textContent = t('scan_word_add_btn');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (activeWordPopover && !activeWordPopover.contains(e.target)) {
+      closeWordPopover();
+    }
+  });
 
   function renderLemmasList() {
     if (currentNewLemmas.length === 0) {
@@ -614,7 +1205,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
   });
 
   lemmasList.addEventListener('click', (e) => {
-    // 1. Category Badge Click -> Cycle Category
+    // 1. Category Badge Click
     const catBtn = e.target.closest('.scanner-lemma-cat');
     if (catBtn) {
       e.stopPropagation();
@@ -641,7 +1232,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       return;
     }
 
-    // 2. Translation Variant Chip Click -> Toggle Translation Variant Checkbox
+    // 2. Translation Variant Chip Click
     const chipBtn = e.target.closest('.scanner-trans-chip');
     if (chipBtn) {
       e.stopPropagation();
@@ -701,7 +1292,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       return;
     }
 
-    // 5. Normal Item Selection Toggle
+    // 5. Item Selection Toggle
     const itemEl = e.target.closest('.scanner-lemma-item');
     if (!itemEl) return;
     const idx = parseInt(itemEl.getAttribute('data-idx'), 10);
@@ -722,7 +1313,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     updateSubmitButton();
   });
 
-  // Group Category Cycler (all words at once)
+  // Group Category Cycler
   if (groupCatBtn) {
     groupCatBtn.addEventListener('click', () => {
       const catCycle = ['Elementary', 'Intermediate', 'Advanced', 'Pattern', 'Irregular verbs'];
@@ -750,7 +1341,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     });
   }
 
-  // Single Toggle Select Button (Select all / Deselect all)
+  // Toggle Select Button (Select all / Deselect all)
   if (toggleSelectBtn) {
     toggleSelectBtn.addEventListener('click', () => {
       const allSelected = selectedIndices.size === currentNewLemmas.length && currentNewLemmas.length > 0;
@@ -772,6 +1363,10 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     submitBtn.textContent = `${t('scan_add_btn')} (${count})`;
     submitBtn.disabled = count === 0;
     submitBtn.style.opacity = count === 0 ? '0.5' : '1';
+
+    if (wordsTabCount) {
+      wordsTabCount.textContent = String(count);
+    }
 
     if (toggleSelectBtn) {
       const allSelected = count === currentNewLemmas.length && currentNewLemmas.length > 0;
