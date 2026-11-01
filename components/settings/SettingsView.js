@@ -611,10 +611,16 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   }
 
   const handleWidgetStateCheck = () => {
+    if (!container.isConnected) {
+      if (typeof window._cleanupSettingsWidgetListener === 'function') {
+        window._cleanupSettingsWidgetListener();
+      }
+      return;
+    }
     refreshWidgetButton();
     // Re-check with slight delays to cover slow launcher layout passes / broadcasts
-    setTimeout(refreshWidgetButton, 1200);
-    setTimeout(refreshWidgetButton, 3000);
+    setTimeout(() => { if (container.isConnected) refreshWidgetButton(); }, 1200);
+    setTimeout(() => { if (container.isConnected) refreshWidgetButton(); }, 3000);
   };
 
   const handleVisibility = () => {

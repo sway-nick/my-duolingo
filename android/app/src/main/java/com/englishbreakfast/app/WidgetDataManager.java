@@ -641,18 +641,45 @@ public class WidgetDataManager {
             return false;
         }
 
-        // 1. Ghost IDs migration for initial launch after fresh install
+        // 1. Ghost IDs migration for initial launch after fresh install or upgrade
         if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
-            Set<String> initialGhosts = new HashSet<>();
-            for (int id : systemIds) {
-                initialGhosts.add(String.valueOf(id));
+            boolean hasPreExistingActive = false;
+            try {
+                android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
+                for (int id : systemIds) {
+                    android.os.Bundle options = appWidgetManager.getAppWidgetOptions(id);
+                    if (options != null) {
+                        int minWidth = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
+                        int minHeight = options.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0);
+                        if (minWidth > 0 && minHeight > 0) {
+                            hasPreExistingActive = true;
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {}
+
+            if (hasPreExistingActive) {
+                // User upgraded with an already placed and rendered widget on home screen
+                prefs.edit()
+                    .putStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>())
+                    .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                    .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, true)
+                    .apply();
+                return true;
+            } else {
+                // Pre-existing unrendered or leftover IDs are treated as ghosts on clean install
+                Set<String> initialGhosts = new HashSet<>();
+                for (int id : systemIds) {
+                    initialGhosts.add(String.valueOf(id));
+                }
+                prefs.edit()
+                    .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
+                    .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
+                    .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, false)
+                    .apply();
+                return false;
             }
-            prefs.edit()
-                .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
-                .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
-                .putBoolean(KEY_WIDGET_ACTIVE_INSTALLED, false)
-                .apply();
-            return false;
         }
 
         // 2. Cross-reference system IDs against saved ghost IDs
@@ -679,7 +706,8 @@ public class WidgetDataManager {
             return false;
         }
 
-        // 3. We have candidate non-ghost IDs. Check if explicitly active or confirmed by launcher dimensions
+        // 3. We have candidate non-ghost IDs.
+        // Confirm real installation via active broadcast (onEnabled / pin success) OR launcher physical dimensions
         if (isWidgetActive(context)) {
             return true;
         }
@@ -699,9 +727,8 @@ public class WidgetDataManager {
             }
         } catch (Exception ignored) {}
 
-        // Candidate IDs exist outside ghosts set -> mark active
-        setWidgetActive(context, true);
-        return true;
+        // Neither active broadcast nor physical dimensions confirmed yet (e.g. canceled pin or pending placement)
+        return false;
     }
 
     public static synchronized void markPrePinGhostIds(Context context, int[] systemIds) {
