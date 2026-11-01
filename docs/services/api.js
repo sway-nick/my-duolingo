@@ -2806,8 +2806,17 @@ async function getUserStats(customWords = null) {
 
   const categoryMap = {};
 
+  const normalizeStatsCategory = (rawCat, level) => {
+    const c = String(rawCat || '').toLowerCase().trim();
+    if (c.includes('irregular')) return 'Irregular verbs';
+    if (c.includes('pattern')) return 'Pattern';
+    if (c.includes('advanced') || String(level || '').toLowerCase().includes('advanced')) return 'Advanced';
+    if (c.includes('intermediate') || String(level || '').toLowerCase().includes('intermediate')) return 'Intermediate';
+    return 'Elementary';
+  };
+
   wordsList.forEach((w) => {
-    const cat = w.category || 'Elementary';
+    const cat = normalizeStatsCategory(w.category, w.level);
     if (!categoryMap[cat]) {
       categoryMap[cat] = { total: 0, learned: 0 };
     }
