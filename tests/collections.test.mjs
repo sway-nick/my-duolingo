@@ -303,6 +303,8 @@ test('Collections: WIDGET_TRANSLATIONS has all required hub and modal keys in al
     'col_btn_done',
     'col_fav_desc',
     'col_create_placeholder',
+    'widget_save_changes',
+    'widget_add_to_screen',
   ];
 
   for (const loc of locales) {
