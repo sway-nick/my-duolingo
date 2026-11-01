@@ -4,7 +4,7 @@
 English Breakfast: 英语单词
 
 ### Short Description (max 80 chars)
-桌面小组件、高频词汇、拍照扫描作业、黑屏听力播客与智能记忆！
+高效背英语单词：闪卡记忆、7000核心词汇、分级阅读故事与桌面小组件！
 
 ### Full Description (max 4000 chars)
 English Breakfast 是你的智能每日英语词汇训练营，配备全新桌面互动小组件！
