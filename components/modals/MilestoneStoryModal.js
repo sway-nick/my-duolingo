@@ -693,56 +693,202 @@ export const MILESTONE_STORIES = {
   }
 };
 
-// Fallback grammatical words translations across languages for smooth tap experience
+// Comprehensive grammatical words, pronouns, contractions, and story vocabulary across all 36 locales
 const FUNCTION_WORDS_MAP = {
-  'a': { ru: 'артикль (один, какой-то)', en: 'article (one/any)', es: 'artículo (un/una)', de: 'Artikel (ein/eine)', fr: 'article (un/une)', uk: 'артикль (один, якийсь)', cs: 'člen (jeden/nějaký)' },
-  'an': { ru: 'артикль (один)', en: 'article (one)', es: 'artículo (un/una)', de: 'Artikel (ein/eine)', fr: 'article (un/une)', uk: 'артикль (один)', cs: 'člen (jeden)' },
-  'the': { ru: 'определенный артикль (этот)', en: 'definite article (this/that)', es: 'el/la/los/las', de: 'der/die/das', fr: 'le/la/les', uk: 'визначений артикль (цей)', cs: 'určitý člen (ten/ta/to)' },
-  'to': { ru: 'к, в, по направлению к', en: 'towards, to', es: 'a, hacia', de: 'zu, nach', fr: 'à, vers', uk: 'до, в, назустріч', cs: 'k, do, směrem k' },
-  'is': { ru: 'есть, является (быть)', en: 'is (to be)', es: 'es, está (ser/estar)', de: 'ist (sein)', fr: 'est (être)', uk: 'є, знаходиться (бути)', cs: 'je (být)' },
-  'are': { ru: 'есть, находятся (быть)', en: 'are (to be)', es: 'son, están (ser/estar)', de: 'sind (sein)', fr: 'sont (être)', uk: 'є, знаходяться (бути)', cs: 'jsou (být)' },
-  'was': { ru: 'был, была, было (быть)', en: 'was (to be)', es: 'era, fue, estaba (ser/estar)', de: 'war (sein)', fr: 'était (être)', uk: 'був, була, було (бути)', cs: 'byl/byla/bylo (být)' },
-  'it': { ru: 'оно, это', en: 'it', es: 'eso, ello', de: 'es', fr: 'il/elle, cela', uk: 'воно, це', cs: 'to, ono' },
-  'his': { ru: 'его', en: 'his', es: 'su, de él', de: 'sein', fr: 'son/sa/ses (à lui)', uk: 'його', cs: 'jeho' },
-  'her': { ru: 'её', en: 'her', es: 'su, de ella', de: 'ihr', fr: 'son/sa/ses (à elle)', uk: 'її', cs: 'její' },
-  'they': { ru: 'они', en: 'they', es: 'ellos/ellas', de: 'sie', fr: 'ils/elles', uk: 'вони', cs: 'oni' },
-  'their': { ru: 'их', en: 'their', es: 'su, sus (de ellos)', de: 'ihr', fr: 'leur/leurs', uk: 'їхній, їх', cs: 'jejich' },
-  'and': { ru: 'и, а', en: 'and', es: 'y, e', de: 'und', fr: 'et', uk: 'і, й, та', cs: 'a, i' },
-  'in': { ru: 'в, внутри', en: 'in, inside', es: 'en, dentro de', de: 'in', fr: 'dans, en', uk: 'в, у, всередині', cs: 'v, ve' },
-  'on': { ru: 'на, по', en: 'on, upon', es: 'sobre, en', de: 'auf, an', fr: 'sur', uk: 'на', cs: 'na' },
-  'at': { ru: 'у, при, в', en: 'at', es: 'en, junto a', de: 'bei, an', fr: 'à, chez', uk: 'біля, при, в', cs: 'u, při, v' },
-  'by': { ru: 'у, около, возле', en: 'by, near', es: 'junto a, por', de: 'bei, neben', fr: 'près de, par', uk: 'біля, поруч', cs: 'u, vedle' },
-  'of': { ru: 'из, о, (родительный падеж)', en: 'of', es: 'de', de: 'von', fr: 'de', uk: 'з, про, (родовий відмінок)', cs: 'z, ze, o' },
-  'for': { ru: 'для, ради', en: 'for', es: 'para, por', de: 'für', fr: 'pour', uk: 'для, заради', cs: 'pro' },
-  'with': { ru: 'с, вместе с', en: 'with', es: 'con', de: 'mit', fr: 'avec', uk: 'з, разом з', cs: 's, se' },
-  'under': { ru: 'под', en: 'under', es: 'debajo de, bajo', de: 'unter', fr: 'sous', uk: 'під', cs: 'pod' }
+  'a': { 'cs': 'člen (jeden/nějaký)', 'de': 'Artikel (ein/eine)', 'en': 'article (one/any)', 'es': 'artículo (un/una)', 'fr': 'article (un/une)', 'ru': 'артикль (один, какой-то)', 'uk': 'артикль (один, якийсь)' },
+  'accompanied': { 'de': 'begleitet', 'en': 'accompanied', 'es': 'acompañado', 'fr': 'accompagné', 'it': 'accompagnato', 'ja': '付き添われた', 'ko': '동행한', 'pl': 'w towarzystwie', 'ru': 'в сопровождении, сопровождал', 'tr': 'eşlik edilen', 'uk': 'у супроводі', 'zh': '陪同，陪伴' },
+  'against': { 'de': 'gegen', 'en': 'against', 'es': 'contra', 'fr': 'contre', 'it': 'contro', 'ja': '〜に対して、寄りかかって', 'ko': '~에 반대하여, 맞서', 'pl': 'przeciwko', 'ru': 'против, к, об', 'tr': 'karşı', 'uk': 'проти, до, об', 'zh': '反对，紧靠' },
+  'aim': { 'de': 'zielen, Ziel', 'en': 'aim', 'es': 'apuntar, objetivo', 'fr': 'viser, objectif', 'it': 'mirare, obiettivo', 'ja': '狙う、目的', 'ko': '겨냥하다, 목표', 'pl': 'cel, celować', 'ru': 'цель, целиться', 'tr': 'hedef, nişan almak', 'uk': 'ціль, цілитися', 'zh': '瞄准，目标' },
+  'an': { 'cs': 'člen (jeden)', 'de': 'Artikel (ein/eine)', 'en': 'article (one)', 'es': 'artículo (un/una)', 'fr': 'article (un/une)', 'ru': 'артикль (один)', 'uk': 'артикль (один)' },
+  'and': { 'cs': 'a, i', 'de': 'und', 'en': 'and', 'es': 'y, e', 'fr': 'et', 'ru': 'и, а', 'uk': 'і, й, та' },
+  'anna': { 'de': 'Anna', 'en': 'Anna (name)', 'es': 'Anna', 'fr': 'Anna', 'it': 'Anna', 'ja': 'アンナ', 'ko': '안나', 'pl': 'Anna', 'ru': 'Анна (имя)', 'tr': 'Anna', 'uk': 'Анна', 'zh': '安娜（人名）' },
+  'are': { 'cs': 'jsou (být)', 'de': 'sind (sein)', 'en': 'are (to be)', 'es': 'son, están (ser/estar)', 'fr': 'sont (être)', 'ru': 'есть, находятся (быть)', 'uk': 'є, знаходяться (бути)' },
+  'at': { 'cs': 'u, při, v', 'de': 'bei, an', 'en': 'at', 'es': 'en, junto a', 'fr': 'à, chez', 'ru': 'у, при, в', 'uk': 'біля, при, в' },
+  'ben': { 'de': 'Ben', 'en': 'Ben (name)', 'es': 'Ben', 'fr': 'Ben', 'it': 'Ben', 'ja': 'ベン', 'ko': '벤', 'pl': 'Ben', 'ru': 'Бен (имя)', 'tr': 'Ben', 'uk': 'Бен', 'zh': '本（人名）' },
+  'berlin': { 'de': 'Berlin', 'en': 'Berlin', 'es': 'Berlín', 'fr': 'Berlin', 'it': 'Berlino', 'ja': 'ベルリン', 'ko': '베를린', 'pl': 'Berlin', 'ru': 'Берлин', 'tr': 'Berlin', 'uk': 'Берлін', 'zh': '柏林' },
+  'bid': { 'de': 'gebot', 'en': 'bid', 'es': 'ordenó', 'fr': 'ordonna', 'it': 'ha ordinato', 'ja': '命じた', 'ko': '명령했다', 'pl': 'rozkazał', 'ru': 'велел, велеть, приказал', 'tr': 'emretti', 'uk': 'наказав', 'zh': '命令，吩咐' },
+  'biwa': { 'de': 'Biwa-See', 'en': 'Biwa (lake)', 'es': 'Biwa (lago)', 'fr': 'Biwa (lac)', 'it': 'Biwa (lago)', 'ja': '琵琶湖（びわこ）', 'ko': '비와호', 'pl': 'Biwa (jezioro)', 'ru': 'Бива (озеро)', 'tr': 'Biwa (göl)', 'uk': 'Біва (озеро)', 'zh': '琵琶湖' },
+  'bounds': { 'de': 'Grenzen', 'en': 'bounds', 'es': 'límites', 'fr': 'limites', 'it': 'limiti', 'ja': '限界、範囲', 'ko': '한계, 범위', 'pl': 'granice', 'ru': 'границы, пределы', 'tr': 'sınırlar', 'uk': 'межі', 'zh': '限度，界限' },
+  'brightly': { 'de': 'hell, strahlend', 'en': 'brightly', 'es': 'brillantemente', 'fr': 'brillamment', 'it': 'brillantemente', 'ja': '明るく', 'ko': '밝게', 'pl': 'jasno, jaskrawo', 'ru': 'ярко, светло', 'tr': 'parlak bir şekilde', 'uk': 'яскравo', 'zh': '明亮地' },
+  'brighton': { 'de': 'Brighton', 'en': 'Brighton', 'es': 'Brighton', 'fr': 'Brighton', 'it': 'Brighton', 'ja': 'ブライトン', 'ko': '브라이턴', 'pl': 'Brighton', 'ru': 'Брайтон (город)', 'tr': 'Brighton', 'uk': 'Брайтон (місто)', 'zh': '布莱顿' },
+  'by': { 'cs': 'u, vedle', 'de': 'bei, neben', 'en': 'by, near', 'es': 'junto a, por', 'fr': 'près de, par', 'ru': 'у, около, возле', 'uk': 'біля, поруч' },
+  'can\'t': { 'de': 'kann nicht', 'en': 'can\'t (cannot)', 'es': 'no puedo', 'fr': 'ne peux pas', 'it': 'non posso', 'ja': '〜できない', 'ko': '할 수 없다', 'pl': 'nie mogę', 'ru': 'не могу, нельзя', 'tr': 'yapamam', 'uk': 'не можу, не можна', 'zh': '不能，无法' },
+  'caught': { 'de': 'fing', 'en': 'caught', 'es': 'atrapó', 'fr': 'attrapé', 'it': 'ha catturato', 'ja': '捕まえた', 'ko': '잡았다', 'pl': 'złapał', 'ru': 'поймал, пойманный', 'tr': 'yakaladı', 'uk': 'спіймав', 'zh': '抓住，捕获' },
+  'ceremoniously': { 'de': 'feierlich', 'en': 'ceremoniously', 'es': 'ceremoniosamente', 'fr': 'cérémonieusement', 'it': 'cerimoniosamente', 'ja': '礼儀正しく', 'ko': '정중하게, 의식에 맞춰', 'pl': 'uroczyście', 'ru': 'церемонно, торжественно', 'tr': 'törensel olarak', 'uk': 'церемонно', 'zh': '隆重地，客套地' },
+  'certain': { 'de': 'bestimmt, gewiss', 'en': 'certain', 'es': 'cierto, seguro', 'fr': 'certain', 'it': 'certo', 'ja': 'ある、特定の', 'ko': '어떤, 특정한', 'pl': 'pewien, określony', 'ru': 'определенный, некоторый', 'tr': 'belirli, kesin', 'uk': 'певний', 'zh': '某种，确定的' },
+  'check-out': { 'de': 'Abreise, Check-out', 'en': 'check-out', 'es': 'salida, check-out', 'fr': 'départ, check-out', 'it': 'partenza, check-out', 'ja': 'チェックアウト', 'ko': '체크아웃, 퇴실', 'pl': 'wymeldowanie', 'ru': 'выезд (из отеля), расчет', 'tr': 'çıkış, check-out', 'uk': 'виїзд (з готелю)', 'zh': '结账退房' },
+  'creep': { 'de': 'kriechen', 'en': 'creep', 'es': 'arrastrarse', 'fr': 'ramper', 'it': 'strisciare', 'ja': '這う、ぞっとする', 'ko': '기어가다, 소름 끼치다', 'pl': 'czołgać się', 'ru': 'ползти, мурашки', 'tr': 'sürünmek', 'uk': 'повзти, мурашки', 'zh': '爬行，毛骨悚然' },
+  'daniel': { 'de': 'Daniel', 'en': 'Daniel (name)', 'es': 'Daniel', 'fr': 'Daniel', 'it': 'Daniel', 'ja': 'ダニエル', 'ko': '대니얼', 'pl': 'Daniel', 'ru': 'Даниэль (имя)', 'tr': 'Daniel', 'uk': 'Даніель', 'zh': '丹尼尔（人名）' },
+  'dauntlessly': { 'de': 'furchtlos', 'en': 'dauntlessly', 'es': 'intrépidamente', 'fr': 'intrépidement', 'it': 'intépidamente', 'ja': '恐れずに、勇敢に', 'ko': '용감하게, 굽히지 않고', 'pl': 'nieustraszenie', 'ru': 'бесстрашно, неустрашимо', 'tr': 'korkusuzca', 'uk': 'безстрашно', 'zh': '勇敢地，大无畏地' },
+  'deliciously': { 'de': 'köstlich', 'en': 'deliciously', 'es': 'deliciosamente', 'fr': 'délicieusement', 'it': 'deliziosamente', 'ja': 'とても美味しく', 'ko': '맛있게', 'pl': 'pysznie, wyśmienicie', 'ru': 'восхитительно, очень вкусно', 'tr': 'lezzetli bir şekilde', 'uk': 'чудово, дуже смачно', 'zh': '美味地' },
+  'didn\'t': { 'de': 'nicht (Vergangenheit)', 'en': 'didn\'t (did not)', 'es': 'no (pasado)', 'fr': 'n\'a pas', 'it': 'non (passato)', 'ja': '〜しなかった', 'ko': '~하지 않았다', 'pl': 'nie (w przeszłości)', 'ru': 'не (в прошлом времени)', 'tr': 'yapmadı', 'uk': 'не (в минулому)', 'zh': '没有（过去式否定）' },
+  'eat': { 'de': 'essen', 'en': 'eat', 'es': 'comer', 'fr': 'manger', 'it': 'mangiare', 'ja': '食べる', 'ko': '먹다', 'pl': 'jeść', 'ru': 'есть, кушать', 'tr': 'yemek yemek', 'uk': 'їсти', 'zh': '吃' },
+  'emma': { 'de': 'Emma', 'en': 'Emma (name)', 'es': 'Emma', 'fr': 'Emma', 'it': 'Emma', 'ja': 'エマ', 'ko': '엠마', 'pl': 'Emma', 'ru': 'Эмма (имя)', 'tr': 'Emma', 'uk': 'Емма', 'zh': '艾玛（人名）' },
+  'everything': { 'de': 'alles', 'en': 'everything', 'es': 'todo', 'fr': 'tout', 'it': 'tutto', 'ja': 'すべて', 'ko': '모든 것', 'pl': 'wszystko', 'ru': 'всё', 'tr': 'her şey', 'uk': 'все', 'zh': '一切，每件事' },
+  'explain': { 'de': 'erklären', 'en': 'explain', 'es': 'explicar', 'fr': 'expliquer', 'it': 'spiegare', 'ja': '説明する', 'ko': '설명하다', 'pl': 'wyjaśniać', 'ru': 'объяснять', 'tr': 'açıklamak', 'uk': 'пояснювати', 'zh': '解释，说明' },
+  'for': { 'cs': 'pro', 'de': 'für', 'en': 'for', 'es': 'para, por', 'fr': 'pour', 'ru': 'для, ради', 'uk': 'для, заради' },
+  'forward': { 'de': 'vorwärts', 'en': 'forward', 'es': 'adelante', 'fr': 'en avant', 'it': 'avanti', 'ja': '前へ', 'ko': '앞으로', 'pl': 'naprzód', 'ru': 'вперёд', 'tr': 'ileri', 'uk': 'вперед', 'zh': '向前' },
+  'fujiwara': { 'de': 'Fujiwara', 'en': 'Fujiwara', 'es': 'Fujiwara', 'fr': 'Fujiwara', 'it': 'Fujiwara', 'ja': '藤原（ふじわら）', 'ko': '후지와라', 'pl': 'Fujiwara', 'ru': 'Фудзивара (род самурая)', 'tr': 'Fujiwara', 'uk': 'Фудзівара', 'zh': '藤原氏' },
+  'grand-children': { 'de': 'Enkelkinder', 'en': 'grand-children', 'es': 'nietos', 'fr': 'petits-enfants', 'it': 'nipoti', 'ja': '孫たち', 'ko': '손주들', 'pl': 'wnuki', 'ru': 'внуки', 'tr': 'torunlar', 'uk': 'онуки', 'zh': '孙子孙女' },
+  'hadn\'t': { 'de': 'hatte nicht', 'en': 'hadn\'t (had not)', 'es': 'no había', 'fr': 'n\'avait pas', 'it': 'non aveva', 'ja': '〜していなかった', 'ko': '~하지 않았었다', 'pl': 'nie miał (zaprzeszły)', 'ru': 'не имел, не (предпрошедшее)', 'tr': 'yapmamıştı', 'uk': 'не мав', 'zh': '还没（过去完成否定）' },
+  'harmlessly': { 'de': 'harmlos', 'en': 'harmlessly', 'es': 'inofensivamente', 'fr': 'inoffensivement', 'it': 'innocuamente', 'ja': '害を与えずに', 'ko': '해를 끼치지 않고', 'pl': 'nieszkodliwie', 'ru': 'безвредно, безобидно', 'tr': 'zararsızca', 'uk': 'нешкідливо', 'zh': '无害地' },
+  'haven\'t': { 'de': 'habe nicht', 'en': 'haven\'t (have not)', 'es': 'no he, no tengo', 'fr': 'n\'ai pas', 'it': 'non ho', 'ja': 'まだ〜していない', 'ko': '~하지 않았다, 없다', 'pl': 'nie mam', 'ru': 'не имею, не', 'tr': 'yapmadım, yok', 'uk': 'не маю', 'zh': '还没有，没有' },
+  'he': { 'de': 'er', 'en': 'he', 'es': 'él', 'fr': 'il', 'it': 'lui', 'ja': '彼', 'ko': '그', 'pl': 'on', 'ru': 'он', 'tr': 'o', 'uk': 'він', 'zh': '他' },
+  'henceforth': { 'de': 'fortan', 'en': 'henceforth', 'es': 'de ahora en adelante', 'fr': 'dorénavant', 'it': 'd\'ora in poi', 'ja': 'これ以降', 'ko': '이제부터는', 'pl': 'odtąd', 'ru': 'впредь, с этого времени', 'tr': 'bundan böyle', 'uk': 'відтепер', 'zh': '从此以后' },
+  'her': { 'cs': 'její', 'de': 'ihr', 'en': 'her', 'es': 'su, de ella', 'fr': 'son/sa/ses (à elle)', 'ru': 'её', 'uk': 'її' },
+  'hidesato': { 'de': 'Hidesato', 'en': 'Hidesato', 'es': 'Hidesato', 'fr': 'Hidesato', 'it': 'Hidesato', 'ja': '秀郷（ひでさと）', 'ko': '히데사토', 'pl': 'Hidesato', 'ru': 'Хидэсато (имя самурая)', 'tr': 'Hidesato', 'uk': 'Хідесато', 'zh': '秀乡' },
+  'himself': { 'de': 'sich selbst', 'en': 'himself', 'es': 'él mismo', 'fr': 'lui-même', 'it': 'se stesso', 'ja': '彼自身', 'ko': '그 자신', 'pl': 'sam, siebie', 'ru': 'сам, себя', 'tr': 'kendisi', 'uk': 'сам, себе', 'zh': '他自己' },
+  'his': { 'cs': 'jeho', 'de': 'sein', 'en': 'his', 'es': 'su, de él', 'fr': 'son/sa/ses (à lui)', 'ru': 'его', 'uk': 'його' },
+  'hung': { 'de': 'hing', 'en': 'hung', 'es': 'colgó', 'fr': 'suspendu', 'it': 'ha appeso', 'ja': '掛けた、ぶら下がった', 'ko': '걸었다', 'pl': 'wisiał, powiesił', 'ru': 'висел, повесил', 'tr': 'astı', 'uk': 'висів, повісив', 'zh': '悬挂，挂着' },
+  'i': { 'de': 'ich', 'en': 'I', 'es': 'yo', 'fr': 'je', 'it': 'io', 'ja': '私', 'ko': '나, 저', 'pl': 'ja', 'ru': 'я', 'tr': 'ben', 'uk': 'я', 'zh': '我' },
+  'i\'d': { 'de': 'ich würde', 'en': 'I\'d (I would/had)', 'es': 'yo querría/había', 'fr': 'je voudrais', 'it': 'vorrei', 'ja': '私は〜したい', 'ko': '나는 ~하겠다', 'pl': 'ja bym', 'ru': 'я бы, я имел', 'tr': 'isterdim', 'uk': 'я б, я мав', 'zh': '我想要，我曾' },
+  'i\'ll': { 'de': 'ich werde', 'en': 'I\'ll (I will)', 'es': 'yo voy a', 'fr': 'je vais', 'it': 'io farò', 'ja': '私は〜します', 'ko': '나는 ~할 것이다', 'pl': 'ja będę', 'ru': 'я буду', 'tr': 'ben yapacağım', 'uk': 'я буду', 'zh': '我将会' },
+  'i\'m': { 'de': 'ich bin', 'en': 'I\'m (I am)', 'es': 'yo soy/estoy', 'fr': 'je suis', 'it': 'io sono', 'ja': '私は〜です', 'ko': '나는 ~이다', 'pl': 'jestem', 'ru': 'я (есть)', 'tr': 'ben', 'uk': 'я (є)', 'zh': '我是' },
+  'i\'ve': { 'de': 'ich habe', 'en': 'I\'ve (I have)', 'es': 'he, tengo', 'fr': 'j\'ai', 'it': 'ho', 'ja': '私は〜した', 'ko': '나는 ~했다, 가지고 있다', 'pl': 'mam', 'ru': 'у меня есть, я', 'tr': 'sahibim', 'uk': 'у мене є, я', 'zh': '我有，我已经' },
+  'in': { 'cs': 'v, ve', 'de': 'in', 'en': 'in, inside', 'es': 'en, dentro de', 'fr': 'dans, en', 'ru': 'в, внутри', 'uk': 'в, у, всередині' },
+  'is': { 'cs': 'je (být)', 'de': 'ist (sein)', 'en': 'is (to be)', 'es': 'es, está (ser/estar)', 'fr': 'est (être)', 'ru': 'есть, является (быть)', 'uk': 'є, знаходиться (бути)' },
+  'isn\'t': { 'de': 'ist nicht', 'en': 'isn\'t (is not)', 'es': 'no es, no está', 'fr': 'n\'est pas', 'it': 'non è', 'ja': '〜ではない', 'ko': '~이 아니다', 'pl': 'nie jest', 'ru': 'не является, нет', 'tr': 'değil', 'uk': 'не є', 'zh': '不是' },
+  'it': { 'cs': 'to, ono', 'de': 'es', 'en': 'it', 'es': 'eso, ello', 'fr': 'il/elle, cela', 'ru': 'оно, это', 'uk': 'воно, це' },
+  'it\'s': { 'de': 'es ist', 'en': 'it\'s (it is)', 'es': 'es, está', 'fr': 'c\'est', 'it': 'è', 'ja': 'それは〜です', 'ko': '그것은 ~이다', 'pl': 'to jest', 'ru': 'это, оно', 'tr': 'bu, o', 'uk': 'це', 'zh': '这是，它是' },
+  'itself': { 'de': 'sich selbst', 'en': 'itself', 'es': 'sí mismo', 'fr': 'lui-même', 'it': 'se stesso', 'ja': 'それ自体', 'ko': '그것 자체', 'pl': 'samo, siebie', 'ru': 'само, себя', 'tr': 'kendisi', 'uk': 'саме, себе', 'zh': '它本身' },
+  'japan': { 'de': 'Japan', 'en': 'Japan', 'es': 'Japón', 'fr': 'Japon', 'it': 'Giappone', 'ja': '日本', 'ko': '일본', 'pl': 'Japonia', 'ru': 'Япония', 'tr': 'Japonya', 'uk': 'Японія', 'zh': '日本' },
+  'koto': { 'de': 'Koto (Harfe)', 'en': 'koto (harp)', 'es': 'koto (arpa)', 'fr': 'koto (instrument)', 'it': 'koto', 'ja': '箏（こと）', 'ko': '고토 (악기)', 'pl': 'koto (instrument)', 'ru': 'кото (японский инструмент)', 'tr': 'koto', 'uk': 'кото (інструмент)', 'zh': '古筝（日本筝）' },
+  'leo': { 'de': 'Leo', 'en': 'Leo (name)', 'es': 'Leo', 'fr': 'Leo', 'it': 'Leo', 'ja': 'レオ', 'ko': '레오', 'pl': 'Leo', 'ru': 'Лео (имя)', 'tr': 'Leo', 'uk': 'Лео', 'zh': '里奥（人名）' },
+  'let\'s': { 'de': 'lass uns', 'en': 'let\'s (let us)', 'es': 'vamos a', 'fr': 'allons-y', 'it': 'facciamo', 'ja': '〜しましょう', 'ko': '~하자', 'pl': 'chodźmy, zróbmy', 'ru': 'давайте, давай', 'tr': 'hadi, yapalım', 'uk': 'давайте', 'zh': '让我们，咱们' },
+  'lisbon': { 'de': 'Lissabon', 'en': 'Lisbon', 'es': 'Lisboa', 'fr': 'Lisbonne', 'it': 'Lisbona', 'ja': 'リスボン', 'ko': '리스본', 'pl': 'Lizbona', 'ru': 'Лиссабон', 'tr': 'Lizbon', 'uk': 'Лісабон', 'zh': '里斯本' },
+  'man': { 'de': 'Mann, Mensch', 'en': 'man', 'es': 'hombre', 'fr': 'homme', 'it': 'uomo', 'ja': '男、人間', 'ko': '남자, 사람', 'pl': 'mężczyzna, człowiek', 'ru': 'человек, мужчина', 'tr': 'adam, insan', 'uk': 'людина, чоловік', 'zh': '男人，人类' },
+  'maya': { 'de': 'Maya', 'en': 'Maya (name)', 'es': 'Maya', 'fr': 'Maya', 'it': 'Maya', 'ja': 'マヤ', 'ko': '마야', 'pl': 'Maja', 'ru': 'Майя (имя)', 'tr': 'Maya', 'uk': 'Майя', 'zh': '玛雅（人名）' },
+  'mikami': { 'de': 'Berg Mikami', 'en': 'Mikami (mountain)', 'es': 'Mikami (montaña)', 'fr': 'Mont Mikami', 'it': 'Monte Mikami', 'ja': '三上山（みかみやま）', 'ko': '미카미산', 'pl': 'Mikami (góra)', 'ru': 'Миками (гора)', 'tr': 'Mikami (dağ)', 'uk': 'Мікамі (гора)', 'zh': '三上山' },
+  'myself': { 'de': 'mich selbst', 'en': 'myself', 'es': 'yo mismo', 'fr': 'moi-même', 'it': 'me stesso', 'ja': '自分自身', 'ko': '나 자신', 'pl': 'sam, siebie', 'ru': 'сам, себя', 'tr': 'kendim', 'uk': 'сам, себе', 'zh': '我自己' },
+  'nina': { 'de': 'Nina', 'en': 'Nina (name)', 'es': 'Nina', 'fr': 'Nina', 'it': 'Nina', 'ja': 'ニーナ', 'ko': '니나', 'pl': 'Nina', 'ru': 'Нина (имя)', 'tr': 'Nina', 'uk': 'Ніна', 'zh': '妮娜（人名）' },
+  'of': { 'cs': 'z, ze, o', 'de': 'von', 'en': 'of', 'es': 'de', 'fr': 'de', 'ru': 'из, о, (родительный падеж)', 'uk': 'з, про, (родовий відмінок)' },
+  'oh': { 'de': 'oh!', 'en': 'oh', 'es': '¡oh!, ¡ah!', 'fr': 'oh !', 'it': 'oh!', 'ja': 'ああ！', 'ko': '오!, 아!', 'pl': 'o!, och!', 'ru': 'о!, ой!', 'tr': 'oh!, ah!', 'uk': 'о!, ой!', 'zh': '哦！哎呀！' },
+  'on': { 'cs': 'na', 'de': 'auf, an', 'en': 'on, upon', 'es': 'sobre, en', 'fr': 'sur', 'ru': 'на, по', 'uk': 'на' },
+  'or': { 'de': 'oder', 'en': 'or', 'es': 'o', 'fr': 'ou', 'it': 'o, oppure', 'ja': 'または', 'ko': '또는', 'pl': 'lub, albo', 'ru': 'или, либо', 'tr': 'veya, ya da', 'uk': 'або, чи', 'zh': '或者' },
+  'patel': { 'de': 'Patel', 'en': 'Patel (surname)', 'es': 'Patel', 'fr': 'Patel', 'it': 'Patel', 'ja': 'パテル', 'ko': '파텔', 'pl': 'Patel', 'ru': 'Патель (фамилия)', 'tr': 'Patel', 'uk': 'Патель', 'zh': '帕特尔（姓氏）' },
+  'practise': { 'de': 'üben', 'en': 'practise', 'es': 'practicar', 'fr': 'pratiquer', 'it': 'esercitarsi', 'ja': '練習する', 'ko': '연습하다', 'pl': 'ćwiczyć', 'ru': 'практиковать, упражняться', 'tr': 'pratik yapmak', 'uk': 'практикувати', 'zh': '练习，实习' },
+  'promised': { 'de': 'versprach', 'en': 'promised', 'es': 'prometió', 'fr': 'promis', 'it': 'ha promesso', 'ja': '約束した', 'ko': '약속했다', 'pl': 'obiecał', 'ru': 'обещал, обещанный', 'tr': 'söz verdi', 'uk': 'обіцяв', 'zh': '答应，许诺' },
+  'rainy': { 'de': 'regnerisch', 'en': 'rainy', 'es': 'lluvioso', 'fr': 'pluvieux', 'it': 'piovoso', 'ja': '雨降りの', 'ko': '비가 오는', 'pl': 'deszczowy', 'ru': 'дождливый', 'tr': 'yağmurlu', 'uk': 'дощовий', 'zh': '下雨的，多雨的' },
+  'red-carp': { 'de': 'roter Karpfen', 'en': 'red carp', 'es': 'carpa roja', 'fr': 'carpe rouge', 'it': 'carpa rossa', 'ja': '赤鯉（あかごい）', 'ko': '붉은 잉어', 'pl': 'czerwony karp', 'ru': 'красный карп', 'tr': 'kızıl sazan', 'uk': 'червоний короп', 'zh': '红鲤鱼' },
+  'restarting': { 'de': 'Neustart', 'en': 'restarting', 'es': 'reiniciando', 'fr': 'redémarrage', 'it': 'riavvio', 'ja': '再起動中', 'ko': '다시 시작하는 중', 'pl': 'restartowanie', 'ru': 'перезапуск, перезагрузка', 'tr': 'yeniden başlatma', 'uk': 'перезапуск', 'zh': '重新启动' },
+  'salt-water': { 'de': 'Salzwasser-', 'en': 'salt water', 'es': 'de agua salada', 'fr': 'd\'eau salée', 'it': 'di acqua salata', 'ja': '海水、塩水', 'ko': '바닷물, 염수', 'pl': 'słonowodny', 'ru': 'морской, солоноводный', 'tr': 'tuzlu su', 'uk': 'морський', 'zh': '咸水，海洋的' },
+  'samisen': { 'de': 'Schamisen', 'en': 'shamisen (lute)', 'es': 'shamisen', 'fr': 'shamisen', 'it': 'shamisen', 'ja': '三味線（しゃみせん）', 'ko': '샤미센 (악기)', 'pl': 'shamisen', 'ru': 'сямисэн (японская лютня)', 'tr': 'şamisen', 'uk': 'сямісен', 'zh': '三味线' },
+  'sara': { 'de': 'Sara', 'en': 'Sara (name)', 'es': 'Sara', 'fr': 'Sara', 'it': 'Sara', 'ja': 'サラ', 'ko': '사라', 'pl': 'Sara', 'ru': 'Сара (имя)', 'tr': 'Sara', 'uk': 'Сара', 'zh': '萨拉（人名）' },
+  'sea-green': { 'de': 'meergrün', 'en': 'sea green', 'es': 'verde mar', 'fr': 'vert d\'eau', 'it': 'verde mare', 'ja': 'シーグリーン（海緑色）', 'ko': '바다 녹색', 'pl': 'morski (kolor)', 'ru': 'морской волны (цвет)', 'tr': 'deniz yeşili', 'uk': 'кольору морської хвилі', 'zh': '海绿色' },
+  'serpent-dragon': { 'de': 'Schlangendrache', 'en': 'serpent dragon', 'es': 'serpiente dragón', 'fr': 'serpent-dragon', 'it': 'serpente drago', 'ja': '大蛇の竜', 'ko': '뱀 용', 'pl': 'wąż-smok', 'ru': 'змей-дракон', 'tr': 'yılan ejderha', 'uk': 'змій-дракон', 'zh': '巨蛇神龙' },
+  'seta-no-karashi': { 'de': 'Seta-no-Karashi-Brücke', 'en': 'Seta-no-Karashi (bridge)', 'es': 'Seta-no-Karashi (puente)', 'fr': 'Seta-no-Karashi (pont)', 'it': 'Seta-no-Karashi (ponte)', 'ja': '瀬田の唐橋', 'ko': '세타노카라하시 (다리)', 'pl': 'Seta-no-Karashi (most)', 'ru': 'Сета-но-Караси (мост)', 'tr': 'Seta-no-Karashi (köprü)', 'uk': 'Сета-но-Карасі (міст)', 'zh': '势多唐桥' },
+  'she\'s': { 'de': 'sie ist', 'en': 'she\'s (she is)', 'es': 'ella es/está', 'fr': 'elle est', 'it': 'lei è', 'ja': '彼女は〜です', 'ko': '그녀는 ~이다', 'pl': 'ona jest', 'ru': 'она (есть)', 'tr': 'o (kadın)', 'uk': 'вона (є)', 'zh': '她是' },
+  'someone': { 'de': 'jemand', 'en': 'someone', 'es': 'alguien', 'fr': 'quelqu\'un', 'it': 'qualcuno', 'ja': '誰か', 'ko': '누군가', 'pl': 'ktoś', 'ru': 'кто-то, кое-кто', 'tr': 'biri, birisi', 'uk': 'хтось', 'zh': '某人，有人' },
+  'strange-looking': { 'de': 'seltsam aussehend', 'en': 'strange looking', 'es': 'de aspecto extraño', 'fr': 'à l\'allure étrange', 'it': 'dall\'aspetto strano', 'ja': '奇妙な見た目の', 'ko': '이상하게 생긴', 'pl': 'dziwnie wyglądający', 'ru': 'странного вида, необычный', 'tr': 'garip görünümlü', 'uk': 'дивовижного вигляду', 'zh': '样貌奇特的' },
+  'tawara': { 'de': 'Tawara', 'en': 'Tawara', 'es': 'Tawara', 'fr': 'Tawara', 'it': 'Tawara', 'ja': '俵（たわら）', 'ko': '타와라', 'pl': 'Tawara', 'ru': 'Тавара (прозвище: мешок)', 'tr': 'Tawara', 'uk': 'Тавара (мішок)', 'zh': '俵（米袋）' },
+  'the': { 'cs': 'určitý člen (ten/ta/to)', 'de': 'der/die/das', 'en': 'definite article (this/that)', 'es': 'el/la/los/las', 'fr': 'le/la/les', 'ru': 'определенный артикль (этот)', 'uk': 'визначений артикль (цей)' },
+  'theatre': { 'de': 'Theater', 'en': 'theatre', 'es': 'teatro', 'fr': 'théâtre', 'it': 'teatro', 'ja': '劇場', 'ko': '극장', 'pl': 'teatr', 'ru': 'театр', 'tr': 'tiyatro', 'uk': 'театр', 'zh': '剧场，戏院' },
+  'their': { 'cs': 'jejich', 'de': 'ihr', 'en': 'their', 'es': 'su, sus (de ellos)', 'fr': 'leur/leurs', 'ru': 'их', 'uk': 'їхній, їх' },
+  'there\'s': { 'de': 'es gibt', 'en': 'there\'s (there is)', 'es': 'hay', 'fr': 'il y a', 'it': 'c\'è', 'ja': '〜がある', 'ko': '~이 있다', 'pl': 'jest, znajduje się', 'ru': 'там есть, имеется', 'tr': 'var, bulunur', 'uk': 'там є, є', 'zh': '有，存在' },
+  'they': { 'cs': 'oni', 'de': 'sie', 'en': 'they', 'es': 'ellos/ellas', 'fr': 'ils/elles', 'ru': 'они', 'uk': 'вони' },
+  'they\'ll': { 'de': 'sie werden', 'en': 'they\'ll (they will)', 'es': 'ellos van a', 'fr': 'ils vont', 'it': 'loro faranno', 'ja': '彼らは〜するでしょう', 'ko': '그들은 ~할 것이다', 'pl': 'oni będą', 'ru': 'они будут', 'tr': 'onlar yapacak', 'uk': 'вони будуть', 'zh': '他们将会' },
+  'they\'re': { 'de': 'sie sind', 'en': 'they\'re (they are)', 'es': 'ellos son/están', 'fr': 'ils sont', 'it': 'loro sono', 'ja': '彼らは〜です', 'ko': '그들은 ~이다', 'pl': 'oni są', 'ru': 'они (являются)', 'tr': 'onlar', 'uk': 'вони (є)', 'zh': '他们是' },
+  'throw': { 'de': 'werfen', 'en': 'throw', 'es': 'lanzar, tirar', 'fr': 'jeter, lancer', 'it': 'lanciare', 'ja': '投げる', 'ko': '던지다', 'pl': 'rzucać', 'ru': 'бросать, кидать', 'tr': 'atmak, fırlatmak', 'uk': 'кидати', 'zh': '扔，抛' },
+  'to': { 'cs': 'k, do, směrem k', 'de': 'zu, nach', 'en': 'towards, to', 'es': 'a, hacia', 'fr': 'à, vers', 'ru': 'к, в, по направлению к', 'uk': 'до, в, назустріч' },
+  'toda': { 'de': 'Toda', 'en': 'Toda', 'es': 'Toda', 'fr': 'Toda', 'it': 'Toda', 'ja': '藤太（とうた）', 'ko': '토다', 'pl': 'Toda', 'ru': 'Тода (имя воина)', 'tr': 'Toda', 'uk': 'Тода (ім’я)', 'zh': '藤太' },
+  'tom': { 'de': 'Tom', 'en': 'Tom (name)', 'es': 'Tom', 'fr': 'Tom', 'it': 'Tom', 'ja': 'トム', 'ko': '톰', 'pl': 'Tom', 'ru': 'Том (имя)', 'tr': 'Tom', 'uk': 'Том', 'zh': '汤姆（人名）' },
+  'twenty-five': { 'de': 'fünfundzwanzig (25)', 'en': 'twenty-five', 'es': 'veinticinco (25)', 'fr': 'vingt-cinq (25)', 'it': 'venticinque (25)', 'ja': '二十五 (25)', 'ko': '스물다섯 (25)', 'pl': 'dwadzieścia pięć (25)', 'ru': 'двадцать пять (25)', 'tr': 'yirmi beş (25)', 'uk': 'двадцять п\'ять (25)', 'zh': '二十五 (25)' },
+  'under': { 'cs': 'pod', 'de': 'unter', 'en': 'under', 'es': 'debajo de, bajo', 'fr': 'sous', 'ru': 'под', 'uk': 'під' },
+  'unsure': { 'de': 'unsicher', 'en': 'unsure', 'es': 'inseguro', 'fr': 'incertain', 'it': 'insicuro', 'ja': '不確かな', 'ko': '확신하지 못하는', 'pl': 'niepewny', 'ru': 'неуверенный', 'tr': 'emin olmayan', 'uk': 'невпевнений', 'zh': '不确定的' },
+  'was': { 'cs': 'byl/byla/bylo (být)', 'de': 'war (sein)', 'en': 'was (to be)', 'es': 'era, fue, estaba (ser/estar)', 'fr': 'était (être)', 'ru': 'был, была, было (быть)', 'uk': 'був, була, було (бути)' },
+  'we': { 'de': 'wir', 'en': 'we', 'es': 'nosotros', 'fr': 'nous', 'it': 'noi', 'ja': '私たち', 'ko': '우리', 'pl': 'my', 'ru': 'мы', 'tr': 'biz', 'uk': 'ми', 'zh': '我们' },
+  'we\'ll': { 'de': 'wir werden', 'en': 'we\'ll (we will)', 'es': 'nosotros vamos a', 'fr': 'nous allons', 'it': 'noi faremo', 'ja': '私たちは〜するでしょう', 'ko': '우리는 ~할 것이다', 'pl': 'my będziemy', 'ru': 'мы будем', 'tr': 'biz yapacağız', 'uk': 'ми будемо', 'zh': '我们将会' },
+  'we\'re': { 'de': 'wir sind', 'en': 'we\'re (we are)', 'es': 'nosotros somos/estamos', 'fr': 'nous sommes', 'it': 'noi siamo', 'ja': '私たちは〜です', 'ko': '우리는 ~이다', 'pl': 'my jesteśmy', 'ru': 'мы (являемся)', 'tr': 'biziz', 'uk': 'ми (є)', 'zh': '我们是' },
+  'we\'ve': { 'de': 'wir haben', 'en': 'we\'ve (we have)', 'es': 'hemos, tenemos', 'fr': 'nous avons', 'it': 'abbiamo', 'ja': '私たちは〜した', 'ko': '우리는 ~했다, 가지고 있다', 'pl': 'mamy', 'ru': 'у нас есть, мы', 'tr': 'biz sahibiz', 'uk': 'у нас є, ми', 'zh': '我们已经，我们有' },
+  'what\'s': { 'de': 'was ist', 'en': 'what\'s (what is)', 'es': 'qué es', 'fr': 'qu\'est-ce que', 'it': 'cos\'è', 'ja': '何ですか', 'ko': '무엇인가', 'pl': 'co to jest', 'ru': 'что такое, в чём', 'tr': 'nedir, ne', 'uk': 'що таке', 'zh': '什么是，怎么了' },
+  'when': { 'de': 'wann, wenn', 'en': 'when', 'es': 'cuándo, cuando', 'fr': 'quand', 'it': 'quando', 'ja': 'いつ、〜の時', 'ko': '언제, ~할 때', 'pl': 'kiedy, gdy', 'ru': 'когда', 'tr': 'ne zaman, -dığı zaman', 'uk': 'коли', 'zh': '当……时候，何时' },
+  'wi-fi': { 'de': 'WLAN', 'en': 'Wi-Fi', 'es': 'wifi', 'fr': 'wi-fi', 'it': 'wi-fi', 'ja': 'Wi-Fi（ワイファイ）', 'ko': '와이파이 (Wi-Fi)', 'pl': 'wi-fi', 'ru': 'вай-фай (беспроводной интернет)', 'tr': 'wi-fi', 'uk': 'вай-фай', 'zh': '无线网络 (Wi-Fi)' },
+  'with': { 'cs': 's, se', 'de': 'mit', 'en': 'with', 'es': 'con', 'fr': 'avec', 'ru': 'с, вместе с', 'uk': 'з, разом з' },
+  'worries': { 'de': 'Sorgen', 'en': 'worries', 'es': 'preocupaciones', 'fr': 'soucis', 'it': 'preoccupazioni', 'ja': '心配事', 'ko': '걱정거리', 'pl': 'zmartwienia', 'ru': 'заботы, беспокоится', 'tr': 'endişeler', 'uk': 'турботи, хвилюється', 'zh': '烦恼，担心' },
+  'worry': { 'de': 'sich sorgen', 'en': 'worry', 'es': 'preocuparse', 'fr': 's\'inquiéter', 'it': 'preoccuparsi', 'ja': '心配する', 'ko': '걱정하다', 'pl': 'martwić się', 'ru': 'беспокоиться, волноваться', 'tr': 'endişelenmek', 'uk': 'хвилюватися', 'zh': '担心' },
+  'you': { 'de': 'du, Sie', 'en': 'you', 'es': 'tú, usted', 'fr': 'tu, vous', 'it': 'tu, voi', 'ja': 'あなた', 'ko': '당신, 너', 'pl': 'ty, wy', 'ru': 'ты, вы', 'tr': 'sen, siz', 'uk': 'ти, ви', 'zh': '你，您' },
+  'you\'re': { 'de': 'du bist, Sie sind', 'en': 'you\'re (you are)', 'es': 'tú eres, usted es', 'fr': 'tu es, vous êtes', 'it': 'tu sei, voi siete', 'ja': 'あなたは〜です', 'ko': '당신은 ~이다', 'pl': 'jesteś, jesteście', 'ru': 'ты (являешься), вы', 'tr': 'sensin, sizsiniz', 'uk': 'ти (є), ви', 'zh': '你是，您是' },
+  'you\'ve': { 'de': 'du hast, Sie haben', 'en': 'you\'ve (you have)', 'es': 'has, tienes', 'fr': 'tu as, vous avez', 'it': 'hai, avete', 'ja': 'あなたは〜した', 'ko': '당신은 ~했다, 가지고 있다', 'pl': 'masz, macie', 'ru': 'у тебя есть, вы', 'tr': 'sen sahipsin', 'uk': 'у тебе є, ви', 'zh': '你已经，你有' },
+  'yourself': { 'de': 'du selbst', 'en': 'yourself', 'es': 'tú mismo', 'fr': 'toi-même', 'it': 'te stesso', 'ja': 'あなた自身', 'ko': '당신 자신', 'pl': 'sam, siebie', 'ru': 'сам, себя', 'tr': 'kendin', 'uk': 'сам, себе', 'zh': '你自己' },
 };
 
-let _dictionaryCache = null;
-let _wordLookupMap = null;
 
-async function getOrBuildDictionary() {
-  if (_wordLookupMap) return _wordLookupMap;
-  try {
-    const res = await getWords();
-    const list = Array.isArray(res) ? res : (res?.data || []);
-    _dictionaryCache = list;
-    _wordLookupMap = new Map();
-    list.forEach(w => {
-      if (w && w.word) {
-        _wordLookupMap.set(String(w.word).toLowerCase().trim(), w);
-      }
-    });
-  } catch (e) {
-    _wordLookupMap = new Map();
-  }
-  return _wordLookupMap;
-}
+const IRREGULAR_VERBS_MAP = {
+  'am': 'be', 'is': 'be', 'are': 'be', 'was': 'be', 'were': 'be', 'been': 'be',
+  'has': 'have', 'had': 'have', 'having': 'have',
+  'does': 'do', 'did': 'do', 'doing': 'do', 'done': 'do',
+  'goes': 'go', 'went': 'go', 'gone': 'go', 'going': 'go',
+  'said': 'say', 'says': 'say', 'saying': 'say',
+  'gave': 'give', 'given': 'give', 'gives': 'give', 'giving': 'give',
+  'came': 'come', 'comes': 'come', 'coming': 'come',
+  'drank': 'drink', 'drunk': 'drink', 'drinks': 'drink', 'drinking': 'drink',
+  'saw': 'see', 'seen': 'see', 'sees': 'see', 'seeing': 'see',
+  'became': 'become', 'becomes': 'become', 'becoming': 'become',
+  'began': 'begin', 'begun': 'begin', 'begins': 'begin', 'beginning': 'begin',
+  'brought': 'bring', 'brings': 'bring', 'bringing': 'bring',
+  'built': 'build', 'builds': 'build', 'building': 'build',
+  'caught': 'catch', 'catches': 'catch', 'catching': 'catch',
+  'fell': 'fall', 'fallen': 'fall', 'falls': 'fall', 'falling': 'fall',
+  'felt': 'feel', 'feels': 'feel', 'feeling': 'feel',
+  'flew': 'fly', 'flown': 'fly', 'flies': 'fly', 'flying': 'fly',
+  'found': 'find', 'finds': 'find', 'finding': 'find',
+  'got': 'get', 'gotten': 'get', 'gets': 'get', 'getting': 'get',
+  'grew': 'grow', 'grown': 'grow', 'grows': 'grow', 'growing': 'grow',
+  'heard': 'hear', 'hears': 'hear', 'hearing': 'hear',
+  'hung': 'hang', 'hangs': 'hang', 'hanging': 'hang',
+  'kept': 'keep', 'keeps': 'keep', 'keeping': 'keep',
+  'knew': 'know', 'known': 'know', 'knows': 'know', 'knowing': 'know',
+  'made': 'make', 'makes': 'make', 'making': 'make',
+  'ran': 'run', 'runs': 'run', 'running': 'run',
+  'sat': 'sit', 'sits': 'sit', 'sitting': 'sit',
+  'shone': 'shine', 'shines': 'shine', 'shining': 'shine',
+  'shaken': 'shake', 'shook': 'shake', 'shakes': 'shake',
+  'stood': 'stand', 'stands': 'stand', 'standing': 'stand',
+  'struck': 'strike', 'strikes': 'strike', 'striking': 'strike',
+  'stuck': 'stick', 'sticks': 'stick', 'sticking': 'stick',
+  'took': 'take', 'taken': 'take', 'takes': 'take', 'taking': 'take',
+  'told': 'tell', 'tells': 'tell', 'telling': 'tell',
+  'sent': 'send', 'sends': 'send', 'sending': 'send',
+  'slept': 'sleep', 'sleeps': 'sleep', 'sleeping': 'sleep',
+  'thought': 'think', 'thinks': 'think', 'thinking': 'think',
+  'won': 'win', 'wins': 'win', 'winning': 'win',
+  'wrote': 'write', 'written': 'write', 'writes': 'write',
+  'lost': 'lose', 'loses': 'lose', 'losing': 'lose',
+  'left': 'leave', 'leaves': 'leave', 'leaving': 'leave',
+  'met': 'meet', 'meets': 'meet', 'meeting': 'meet',
+  'paid': 'pay', 'pays': 'pay', 'paying': 'pay',
+  'read': 'read', 'reads': 'read', 'reading': 'read',
+  'sold': 'sell', 'sells': 'sell', 'selling': 'sell',
+  'spent': 'spend', 'spends': 'spend', 'spending': 'spend',
+  'understood': 'understand', 'understands': 'understand',
+  'held': 'hold', 'holds': 'hold', 'holding': 'hold',
+  'men': 'man men', 'children': 'child',
+  'lying': 'lie', 'eat': 'eat',
+  'fitting': 'fit', 'fitted': 'fit',
+  'putting': 'put', 'stepped': 'step', 'stopped': 'stop',
+  'begged': 'beg', 'replied': 'reply', 'carried': 'carry', 'tried': 'try',
+  'worries': 'worry', 'worry': 'worry', 'promised': 'promise',
+  'terrified': 'terrify', 'sallied': 'sally', 'spanning': 'span',
+  'shipping': 'ship', 'restarting': 'restart',
+};
+
+const SPELLING_VARIANTS_MAP = {
+  'practise': 'practice',
+  'theatre': 'theater',
+};
+
+
 
 function resolveWord(rawWord, dictMap, lang) {
-  const clean = rawWord.toLowerCase().replace(/[^a-z'-]/g, '').trim();
+  let clean = String(rawWord || '')
+    .toLowerCase()
+    .replace(/[\u2018\u2019\u02BC\u02BB]/g, "'")
+    .replace(/[^a-z'-]/g, '')
+    .trim()
+    .replace(/^['-]+|['-]+$/g, '');
   if (!clean) return null;
 
+  // 1. Direct dictionary match
   if (dictMap.has(clean)) {
     const w = dictMap.get(clean);
     return {
@@ -755,9 +901,10 @@ function resolveWord(rawWord, dictMap, lang) {
     };
   }
 
-  // Fallback function words (checked before lemmatization to prevent false stems like 'his' -> 'hi')
+  // 2. Direct function / story words map (pronouns, contractions, names, function words across all 36 locales)
   if (FUNCTION_WORDS_MAP[clean]) {
-    const trans = FUNCTION_WORDS_MAP[clean][lang] || FUNCTION_WORDS_MAP[clean]['en'] || FUNCTION_WORDS_MAP[clean]['ru'];
+    const entry = FUNCTION_WORDS_MAP[clean];
+    const trans = entry[lang] || entry['en'] || entry['ru'] || clean;
     return {
       id: null,
       word: clean,
@@ -768,7 +915,64 @@ function resolveWord(rawWord, dictMap, lang) {
     };
   }
 
-  // Lemmatization: plurals & 3rd person -s/-es
+  // 3. Possessive 's (e.g. dragon's -> dragon)
+  if (clean.endsWith("'s")) {
+    const base = clean.slice(0, -2);
+    const resolvedBase = resolveWord(base, dictMap, lang);
+    if (resolvedBase && resolvedBase.translation && resolvedBase.translation !== base) {
+      return {
+        ...resolvedBase,
+        word: clean
+      };
+    }
+  }
+
+  // 4. UK / US spelling variants
+  if (SPELLING_VARIANTS_MAP[clean]) {
+    const alt = SPELLING_VARIANTS_MAP[clean];
+    const resolvedAlt = resolveWord(alt, dictMap, lang);
+    if (resolvedAlt && resolvedAlt.translation && resolvedAlt.translation !== alt) {
+      return {
+        ...resolvedAlt,
+        word: clean
+      };
+    }
+  }
+
+  // 5. Comparatives (-er) & Superlatives (-est)
+  if (clean.endsWith('est') || clean.endsWith('er')) {
+    const candidates = clean.endsWith('est')
+      ? [clean.slice(0, -3), clean.slice(0, -2), clean.slice(0, -4) + 'y', clean.slice(0, -4)]
+      : [clean.slice(0, -2), clean.slice(0, -1), clean.slice(0, -3) + 'y', clean.slice(0, -3)];
+    for (const cand of candidates) {
+      if (dictMap.has(cand)) {
+        const w = dictMap.get(cand);
+        return {
+          id: w.id,
+          word: clean,
+          transcription: w.transcription || '',
+          translation: getWordTranslation(w, lang) || w.translation || '',
+          isFromDict: true,
+          rawObj: w
+        };
+      }
+    }
+  }
+
+  // 6. Irregular verbs & inflections
+  if (IRREGULAR_VERBS_MAP[clean] && dictMap.has(IRREGULAR_VERBS_MAP[clean])) {
+    const w = dictMap.get(IRREGULAR_VERBS_MAP[clean]);
+    return {
+      id: w.id,
+      word: clean,
+      transcription: w.transcription || '',
+      translation: getWordTranslation(w, lang) || w.translation || '',
+      isFromDict: true,
+      rawObj: w
+    };
+  }
+
+  // 7. Regular morphology: plurals & 3rd person -s/-es/-ies, -ed, -ing
   let baseCandidate = null;
   if (clean.endsWith('ies') && dictMap.has(clean.slice(0, -3) + 'y')) baseCandidate = clean.slice(0, -3) + 'y';
   else if (clean.endsWith('es') && dictMap.has(clean.slice(0, -2))) baseCandidate = clean.slice(0, -2);
@@ -777,24 +981,6 @@ function resolveWord(rawWord, dictMap, lang) {
   else if (clean.endsWith('ing') && dictMap.has(clean.slice(0, -3) + 'e')) baseCandidate = clean.slice(0, -3) + 'e';
   else if (clean.endsWith('ed') && dictMap.has(clean.slice(0, -2))) baseCandidate = clean.slice(0, -2);
   else if (clean.endsWith('ed') && dictMap.has(clean.slice(0, -1))) baseCandidate = clean.slice(0, -1);
-
-  // Common irregulars
-  const irregulars = {
-    'is': 'be', 'are': 'be', 'was': 'be', 'were': 'be', 'been': 'be',
-    'has': 'have', 'had': 'have',
-    'does': 'do', 'did': 'do',
-    'goes': 'go', 'went': 'go', 'gone': 'go',
-    'said': 'say', 'says': 'say',
-    'gave': 'give', 'given': 'give', 'gives': 'give',
-    'came': 'come', 'comes': 'come',
-    'drank': 'drink', 'drunk': 'drink', 'drinks': 'drink',
-    'saw': 'see', 'seen': 'see', 'sees': 'see',
-    'men': 'man men', 'man': 'man men',
-    'smiles': 'smile at', 'smile': 'smile at'
-  };
-  if (!baseCandidate && irregulars[clean] && dictMap.has(irregulars[clean])) {
-    baseCandidate = irregulars[clean];
-  }
 
   if (baseCandidate && dictMap.has(baseCandidate)) {
     const w = dictMap.get(baseCandidate);
@@ -808,15 +994,17 @@ function resolveWord(rawWord, dictMap, lang) {
     };
   }
 
+  // 8. Fallback
   return {
     id: null,
     word: clean,
     transcription: '',
-    translation: clean,
+    translation: '',
     isFromDict: false,
     rawObj: null
   };
 }
+
 
 export function showStoryToast(message) {
   const existing = document.querySelector('.story-milestone-toast');
@@ -877,7 +1065,8 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
   // Build story HTML tokens
   const paragraphsHtml = storyData.paragraphs.map((p, pIdx) => {
-    const tokens = p.match(/[a-zA-Z'-]+|[^a-zA-Z'-]+/g) || [p];
+    const normalizedP = p.replace(/[\u2018\u2019\u02BC\u02BB]/g, "'");
+    const tokens = normalizedP.match(/[a-zA-Z'-]+|[^a-zA-Z'-]+/g) || [normalizedP];
     const tokensHtml = tokens.map((token, tIdx) => {
       const isWord = /[a-zA-Z]/.test(token);
       if (!isWord) {
