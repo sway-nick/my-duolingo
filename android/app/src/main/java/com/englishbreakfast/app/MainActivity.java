@@ -124,6 +124,7 @@ public class MainActivity extends BridgeActivity {
         setupWidgetBridge();
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setupAnalyticsBridge();
+        setupOcrBridge();
         initNativeTts();
         lockWebViewTextZoom();
 
@@ -733,29 +734,36 @@ public class MainActivity extends BridgeActivity {
                         if (!isTrustedOrigin()) return false;
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
+                                final AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
-                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
-                                    int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
-                                    if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
-                                        WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
-                                    }
-                                    appWidgetManager.requestPinAppWidget(provider, null, null);
+                                    final ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    runOnUiThread(() -> {
+                                        try {
+                                            Intent pinSuccessIntent = new Intent(MainActivity.this, GoldCardWidgetProvider.class);
+                                            pinSuccessIntent.setAction(GoldCardWidgetProvider.ACTION_PIN_SUCCESS);
+                                            pinSuccessIntent.setPackage(getPackageName());
+                                            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                                flags |= PendingIntent.FLAG_MUTABLE;
+                                            }
+                                            PendingIntent successCallback = PendingIntent.getBroadcast(
+                                                MainActivity.this,
+                                                108,
+                                                pinSuccessIntent,
+                                                flags
+                                            );
+                                            appWidgetManager.requestPinAppWidget(provider, null, successCallback);
+                                        } catch (Exception ex) {
+                                            try {
+                                                appWidgetManager.requestPinAppWidget(provider, null, null);
+                                            } catch (Exception ignored) {}
+                                        }
+                                    });
                                     return true;
                                 }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }
-                        return false;
-                    }
-
-                    @JavascriptInterface
-                    public boolean isPinSupported() {
-                        if (!isTrustedOrigin()) return false;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
-                            return appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported();
                         }
                         return false;
                     }
@@ -1106,6 +1114,76 @@ public class MainActivity extends BridgeActivity {
                         }
                     }
                 }, "AndroidAnalyticsBridge");
+            }
+        } catch (Exception ignored) {}
+    }
+
+    private void setupOcrBridge() {
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().addJavascriptInterface(new Object() {
+                    @JavascriptInterface
+                    public boolean isAvailable() {
+                        if (!isTrustedOrigin()) return false;
+                        return true;
+                    }
+
+                    @JavascriptInterface
+                    public void recognizeText(final String base64Image, final String callbackId) {
+                        if (!isTrustedOrigin() || base64Image == null || base64Image.trim().isEmpty()) {
+                            dispatchOcrResult(callbackId, false, "Invalid payload", "");
+                            return;
+                        }
+                        new Thread(() -> {
+                            try {
+                                String cleanBase64 = base64Image;
+                                if (cleanBase64.contains(",")) {
+                                    cleanBase64 = cleanBase64.substring(cleanBase64.indexOf(",") + 1);
+                                }
+                                byte[] decodedBytes = android.util.Base64.decode(cleanBase64, android.util.Base64.DEFAULT);
+                                android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                                if (bitmap == null) {
+                                    dispatchOcrResult(callbackId, false, "Failed to decode image bitmap", "");
+                                    return;
+                                }
+
+                                com.google.mlkit.vision.common.InputImage inputImage =
+                                        com.google.mlkit.vision.common.InputImage.fromBitmap(bitmap, 0);
+                                com.google.mlkit.vision.text.TextRecognizer recognizer =
+                                        com.google.mlkit.vision.text.TextRecognition.getClient(
+                                                com.google.mlkit.vision.text.latin.TextRecognizerOptions.DEFAULT_OPTIONS
+                                        );
+
+                                recognizer.process(inputImage)
+                                        .addOnSuccessListener(visionText -> {
+                                            String text = visionText != null ? visionText.getText() : "";
+                                            dispatchOcrResult(callbackId, true, "", text);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            dispatchOcrResult(callbackId, false, e != null ? e.getMessage() : "OCR failed", "");
+                                        });
+                            } catch (Throwable t) {
+                                dispatchOcrResult(callbackId, false, t != null ? t.getMessage() : "Native OCR error", "");
+                            }
+                        }).start();
+                    }
+
+                    private void dispatchOcrResult(final String callbackId, final boolean success, final String error, final String text) {
+                        runOnUiThread(() -> {
+                            try {
+                                if (bridge != null && bridge.getWebView() != null) {
+                                    org.json.JSONObject obj = new org.json.JSONObject();
+                                    obj.put("callbackId", callbackId);
+                                    obj.put("success", success);
+                                    obj.put("error", error != null ? error : "");
+                                    obj.put("text", text != null ? text : "");
+                                    String script = "if (window.__onAndroidOcrResult) { window.__onAndroidOcrResult(" + obj.toString() + "); }";
+                                    bridge.getWebView().evaluateJavascript(script, null);
+                                }
+                            } catch (Exception ignored) {}
+                        });
+                    }
+                }, "AndroidOcrBridge");
             }
         } catch (Exception ignored) {}
     }
