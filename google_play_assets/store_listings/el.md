@@ -4,7 +4,7 @@
 English Breakfast: Αγγλικά
 
 ## Short Description (max 80 chars)
-Widget αρχικής οθόνης, συχνές λέξεις, σαρωτής & podcast με σβηστή οθόνη!
+Μάθετε αγγλικές λέξεις: κάρτες, 7000 λέξεις, ιστορίες & widget αρχικής οθόνης!
 
 ## Full Description (max 4000 chars)
 Το English Breakfast είναι ο έξυπνος καθημερινός εκπαιδευτής λεξιλογίου αγγλικών με διαδραστικό widget αρχικής οθόνης!
