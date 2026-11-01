@@ -50,11 +50,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
             </div>
           ` : ''}
           <h3 class="story-card-title">${escapeHtml(title)}</h3>
-          <div class="story-card-action">
-            <button type="button" class="story-card-btn" data-milestone="${m}">
-              📖 <span>${escapeHtml(strings.readStoryBtn || 'Читать')}</span>
-            </button>
-          </div>
         </div>
       `;
     } else {
@@ -189,7 +184,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         font-size: 17px;
         font-weight: 800;
         color: #f8fafc;
-        margin: 0 0 6px;
+        margin: 0;
       }
       .story-title-locked {
         color: #94a3b8;

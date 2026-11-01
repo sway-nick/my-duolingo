@@ -10,7 +10,7 @@ export const MILESTONE_STORIES = {
     "titleKey": "storyTitle0",
     "translationKey": "storyFull0",
     "badgeKey": "badge0",
-    "title": "My Lord Bag of Rice",
+    "title": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "author": "Yei Theodora Ozaki",
     "coverImage": "assets/images/my_lord_bag_of_rice.webp",
     "hideFullTranslation": true,
