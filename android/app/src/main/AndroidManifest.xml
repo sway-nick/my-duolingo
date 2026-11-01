@@ -55,15 +55,6 @@
                 android:resource="@xml/gold_card_widget_info" />
         </receiver>
 
-        <!-- Widget Configuration Activity for Launcher Long-Press menu -->
-        <activity
-            android:name=".WidgetConfigActivity"
-            android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
 
         <!-- Daily Study Reminder Receiver -->
         <receiver

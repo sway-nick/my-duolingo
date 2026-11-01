@@ -588,6 +588,28 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
+  // Auto-refresh widget button state on app focus / resume from system dialog
+  const refreshWidgetButton = () => {
+    let installed = false;
+    try {
+      if (window.AndroidWidgetBridge && typeof window.AndroidWidgetBridge.isWidgetInstalled === 'function') {
+        installed = Boolean(window.AndroidWidgetBridge.isWidgetInstalled());
+      }
+    } catch (err) {}
+    const btn = container.querySelector('#btn-pin-widget');
+    if (btn) {
+      btn.innerHTML = `
+        <span>${installed ? '⚙️' : '✨'}</span>
+        <span>${installed ? (t('settings_configure_widget') || 'Настройка виджета') : (t('widget_add_to_screen') || 'Добавить виджет')}</span>
+      `;
+    }
+  };
+
+  window.addEventListener('focus', refreshWidgetButton);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refreshWidgetButton();
+  });
+
   // Bind test button for Monday Cat Meme (Golden Card)
   const btnTestMeme = container.querySelector('#btn-test-monday-meme');
   if (btnTestMeme) {
