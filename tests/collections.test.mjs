@@ -522,3 +522,75 @@ test('Auditor Fix: deleteCustomCollection and renameCustomCollection update Andr
   assert.equal(global.__lastWidgetPayload?.collectionId, 'my_favorites');
 });
 
+test('FavoritesView: collection words are NOT favorited by default (🤍) unless present in favoriteIds', async () => {
+  const container = {
+    innerHTML: '',
+    querySelector(sel) {
+      if (sel === '#favorites-grid') return null;
+      if (sel === '.mobile-header') return null;
+      return null;
+    },
+    querySelectorAll() {
+      return [];
+    }
+  };
+  global.document = {
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    querySelector(sel) {
+      if (sel === '#app-content') return container;
+      return null;
+    },
+    querySelectorAll() {
+      return [];
+    },
+    documentElement: {
+      getPropertyValue: () => '0px'
+    }
+  };
+  global.getComputedStyle = () => ({
+    getPropertyValue: () => '0px'
+  });
+
+  const { renderFavoritesView } = await import('../frontend/components/favorites/FavoritesView.js');
+
+  const sampleMonths = [
+    { id: 101, word: 'January', translation: 'январь', category: 'Elementary' },
+    { id: 102, word: 'February', translation: 'февраль', category: 'Elementary' },
+    { id: 103, word: 'March', translation: 'март', category: 'Elementary' }
+  ];
+
+  // Case 1: No favoriteIds -> all 3 months must render with 🤍, none with ❤️
+  renderFavoritesView(sampleMonths, '#app-content', {
+    collectionId: 'months',
+    collectionTitle: 'Месяцы',
+    allWords: sampleMonths,
+    favoriteIds: []
+  });
+
+  assert.ok(container.innerHTML.includes('Месяцы: 3'));
+  assert.equal((container.innerHTML.match(/🤍/g) || []).length, 3, 'All 3 words in months should have 🤍 by default');
+  assert.equal((container.innerHTML.match(/❤️/g) || []).length, 0, 'No words should have ❤️ in months by default');
+
+  // Case 2: Only word 102 (February) is favorited -> February has ❤️, January & March have 🤍
+  renderFavoritesView(sampleMonths, '#app-content', {
+    collectionId: 'months',
+    collectionTitle: 'Месяцы',
+    allWords: sampleMonths,
+    favoriteIds: [102]
+  });
+
+  assert.equal((container.innerHTML.match(/🤍/g) || []).length, 2, 'January and March have 🤍');
+  assert.equal((container.innerHTML.match(/❤️/g) || []).length, 1, 'Only February has ❤️');
+
+  // Case 3: In my_favorites, all word cards render with ❤️
+  renderFavoritesView([sampleMonths[1]], '#app-content', {
+    collectionId: 'my_favorites',
+    collectionTitle: 'Избранные',
+    allWords: sampleMonths,
+    favoriteIds: [102]
+  });
+  assert.equal((container.innerHTML.match(/class="[^"]*remove-fav-btn[^"]*"[^>]*>❤️/g) || []).length, 1, 'In my_favorites, cards show ❤️');
+  assert.equal((container.innerHTML.match(/🤍/g) || []).length, 0, 'In my_favorites, no 🤍');
+});
+

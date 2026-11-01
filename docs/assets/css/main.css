@@ -4551,7 +4551,7 @@ body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing:active {
   gap: 4px;
 }
 
-.fav-audio-btn, .dict-audio-btn, .remove-fav-btn, .fav-icon-btn {
+.fav-audio-btn, .dict-audio-btn, .remove-fav-btn, .fav-icon-btn, .remove-col-word-btn {
   background: transparent;
   border: none;
   font-size: 18px;
@@ -4567,16 +4567,16 @@ body:not(.dark-theme) .autoplay-favs-btn-bottom.is-playing:active {
   line-height: 1;
 }
 
-.fav-audio-btn:hover, .dict-audio-btn:hover, .remove-fav-btn:hover, .fav-icon-btn:hover {
+.fav-audio-btn:hover, .dict-audio-btn:hover, .remove-fav-btn:hover, .fav-icon-btn:hover, .remove-col-word-btn:hover {
   background: rgba(0, 0, 0, 0.06);
   transform: scale(1.12);
 }
 
-.fav-audio-btn:active, .dict-audio-btn:active, .remove-fav-btn:active, .fav-icon-btn:active {
+.fav-audio-btn:active, .dict-audio-btn:active, .remove-fav-btn:active, .fav-icon-btn:active, .remove-col-word-btn:active {
   transform: scale(0.92);
 }
 
-.dark-theme .fav-audio-btn:hover, .dark-theme .dict-audio-btn:hover, .dark-theme .remove-fav-btn:hover, .dark-theme .fav-icon-btn:hover {
+.dark-theme .fav-audio-btn:hover, .dark-theme .dict-audio-btn:hover, .dark-theme .remove-fav-btn:hover, .dark-theme .fav-icon-btn:hover, .dark-theme .remove-col-word-btn:hover {
   background: rgba(255, 255, 255, 0.12);
 }
 

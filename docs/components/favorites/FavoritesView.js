@@ -1,5 +1,5 @@
 import { speakWord } from '../../services/audioService.js?v=386.0';
-import { toggleFavoriteApi, clearAllFavoritesApi } from '../../services/api.js?v=386.0';
+import { toggleFavoriteApi, clearAllFavoritesApi, getUserFavorites } from '../../services/api.js?v=386.0';
 import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
 import {
   removeWordFromCollection,
@@ -21,10 +21,12 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     onStartFavoritePractice = () => {},
     onRemoveFavorite = () => {},
     onClearAllFavorites = () => {},
+    onFavoriteToggle = () => {},
     onBack = null,
     collectionId = 'my_favorites',
     collectionTitle = null,
     allWords = [],
+    favoriteIds = null,
     onRefresh = null,
   } = options;
 
@@ -32,6 +34,11 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   const isMyFavorites = collectionId === 'my_favorites';
   const isCustomCol = !isMyFavorites && String(collectionId).startsWith('col_');
   const isWidgetActive = getActiveCollectionId() === collectionId;
+
+  const initialFavList = favoriteIds !== null && favoriteIds !== undefined
+    ? favoriteIds
+    : (typeof getUserFavorites === 'function' ? getUserFavorites() : []);
+  const favSet = new Set((initialFavList || []).map(String));
 
   const escapeHtml = (str) =>
     String(str || '')
@@ -204,25 +211,35 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
       <div class="favorites-grid" id="favorites-grid">
         ${favoriteWords
-          .map(
-            (word) => `
+          .map((word) => {
+            const isFav = isMyFavorites ? true : favSet.has(String(word.id));
+            return `
           <div class="fav-card" data-id="${word.id}">
             <div class="fav-card-top">
               <span class="category-badge">${word.category || t('cat_general') || 'Общие'}</span>
               <div class="fav-card-actions">
-                <button class="fav-audio-btn" data-word="${word.word}" data-id="${word.id}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">🔊</button>
-                <button class="remove-fav-btn" data-id="${word.id}" title="${t('fav_remove_tooltip') || 'Удалить из списка'}">❤️</button>
+                <button type="button" class="fav-audio-btn" data-word="${escapeHtml(word.word)}" data-id="${word.id}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">🔊</button>
+                ${
+                  isMyFavorites
+                    ? `<button type="button" class="fav-action-btn remove-fav-btn" data-id="${word.id}" title="${t('fav_remove_tooltip') || 'Удалить из списка'}">❤️</button>`
+                    : `<button type="button" class="fav-action-btn fav-toggle-btn fav-icon-btn ${isFav ? 'active' : ''}" data-id="${word.id}" title="${isFav ? (t('fav_remove_tooltip') || 'Удалить из избранного') : (t('fav_toggle') || 'В избранное')}">${isFav ? '❤️' : '🤍'}</button>`
+                }
+                ${
+                  isCustomCol
+                    ? `<button type="button" class="fav-action-btn remove-col-word-btn" data-id="${word.id}" title="${t('fav_remove_tooltip') || 'Удалить из подборки'}">🗑️</button>`
+                    : ''
+                }
               </div>
             </div>
             
             <div class="fav-card-body">
-              <h3 class="fav-word">${word.word}</h3>
-              <p class="fav-translation">${getWordTranslation(word)}</p>
-              ${getWordNotes(word) ? `<p class="dict-notes">${getWordNotes(word)}</p>` : ''}
+              <h3 class="fav-word">${escapeHtml(word.word)}</h3>
+              <p class="fav-translation">${escapeHtml(getWordTranslation(word))}</p>
+              ${getWordNotes(word) ? `<p class="dict-notes">${escapeHtml(getWordNotes(word))}</p>` : ''}
             </div>
           </div>
-        `
-          )
+        `;
+          })
           .join('')}
       </div>
     </div>
@@ -246,7 +263,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
   container.querySelector('#header-set-widget-btn')?.addEventListener('click', handleWidgetButtonClick);
   container.querySelector('#header-add-words-btn')?.addEventListener('click', triggerAddWords);
-
 
   // Bind practice button
   container.querySelector('#start-fav-practice-btn')?.addEventListener('click', () => {
@@ -278,7 +294,40 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         return;
       }
 
-      // 2. Remove favorite / collection word button
+      // 2. Favorite toggle button (in thematic & custom collections)
+      const favBtn = e.target.closest('.fav-toggle-btn');
+      if (favBtn) {
+        e.stopPropagation();
+        const id = favBtn.getAttribute('data-id');
+        const isCurrentlyFav = favSet.has(String(id));
+        const nextFav = !isCurrentlyFav;
+
+        if (nextFav) {
+          favSet.add(String(id));
+        } else {
+          favSet.delete(String(id));
+        }
+
+        favBtn.textContent = nextFav ? '❤️' : '🤍';
+        favBtn.classList.toggle('active', nextFav);
+        favBtn.title = nextFav
+          ? (t('fav_remove_tooltip') || 'Удалить из избранного')
+          : (t('fav_toggle') || 'В избранное');
+
+        toggleFavoriteApi(id, nextFav).catch((err) => console.warn('toggleFavoriteApi error:', err));
+        if (typeof onFavoriteToggle === 'function') {
+          onFavoriteToggle(id, nextFav);
+        }
+        if (!nextFav && typeof onRemoveFavorite === 'function') {
+          onRemoveFavorite(id);
+        }
+        if (getActiveCollectionId() === 'my_favorites') {
+          syncCollectionToAndroidWidget('my_favorites', allWords);
+        }
+        return;
+      }
+
+      // 3. Remove favorite from "My Favorites" list (where isMyFavorites is true)
       const removeBtn = e.target.closest('.remove-fav-btn');
       if (removeBtn) {
         e.stopPropagation();
@@ -306,18 +355,51 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           renderFavoritesView([], containerSelector, options);
         }
 
-        if (isMyFavorites) {
-          toggleFavoriteApi(id, false).catch((err) => console.warn('toggleFavoriteApi error:', err));
+        toggleFavoriteApi(id, false).catch((err) => console.warn('toggleFavoriteApi error:', err));
+        if (typeof onRemoveFavorite === 'function') {
           onRemoveFavorite(id);
-          if (getActiveCollectionId() === 'my_favorites') {
-            syncCollectionToAndroidWidget('my_favorites', allWords);
-          }
-        } else {
-          removeWordFromCollection(collectionId, id, allWords);
-          if (getActiveCollectionId() === collectionId) {
-            syncCollectionToAndroidWidget(collectionId, allWords);
-          }
         }
+        if (typeof onFavoriteToggle === 'function') {
+          onFavoriteToggle(id, false);
+        }
+        if (getActiveCollectionId() === 'my_favorites') {
+          syncCollectionToAndroidWidget('my_favorites', allWords);
+        }
+        return;
+      }
+
+      // 4. Remove word from custom collection (where isCustomCol is true)
+      const removeColBtn = e.target.closest('.remove-col-word-btn');
+      if (removeColBtn) {
+        e.stopPropagation();
+        const id = removeColBtn.getAttribute('data-id');
+
+        const card = container.querySelector(`.fav-card[data-id="${id}"]`);
+        if (card) {
+          card.remove();
+        }
+
+        if (window.trackEvent) {
+          window.trackEvent('collection_word_remove', {
+            collection_id: collectionId,
+            word_id: id,
+          });
+        }
+
+        removeWordFromCollection(collectionId, id, allWords);
+        if (getActiveCollectionId() === collectionId) {
+          syncCollectionToAndroidWidget(collectionId, allWords);
+        }
+
+        const remainingCards = container.querySelectorAll('.fav-card');
+        const titleEl = container.querySelector('.page-header h2');
+        if (titleEl) {
+          titleEl.textContent = `${displayTitle}: ${remainingCards.length}`;
+        }
+        if (remainingCards.length === 0) {
+          renderFavoritesView([], containerSelector, options);
+        }
+        return;
       }
     });
   }
