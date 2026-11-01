@@ -4,7 +4,7 @@
 English Breakfast: İngilizce
 
 ## Short Description
-Sık kelimeler, ödev tarayıcı, özel notlar ve ekran kapalı sesli podcast!
+İngilizce kelime öğren: kartlar, 7000 kelime, hikayeler ve ana ekran widget'ı!
 
 ## Full Description
 English Breakfast, günlük akıllı İngilizce kelime geliştiricinizdir! Günlük konuşma dilinde gerçekten kullanılan kelimeleri öğrenin, ödevlerinizi kamerayla tarayın, özel notlar ekleyin ve kelimeleri kalıcı olarak hafızanıza kazıyın.
@@ -15,7 +15,16 @@ English Breakfast, günlük akıllı İngilizce kelime geliştiricinizdir! Günl
 🌟 ÖNE ÇIKAN ÖZELLİKLER:
 
 • 📈 SIKLIK SIRASINA GÖRE ÖĞRENME (TEMELDEN İLERİ SEVİYEYE):
-Canlı dildeki gerçek kullanım sıklığına göre dizilmiş 6.600'den fazla kelime ve kalıp. Gereksiz ezberle vakit kaybetmeden konuşma temelinizi hemen kurun!
+Canlı dildeki gerçek kullanım sıklığına göre dizilmiş 7.000'e yakın kelime ve kalıp. Gereksiz ezberle vakit kaybetmeden konuşma temelinizi hemen kurun!
+
+• 📱 ANA EKRAN İÇİN ETKİLEŞİMLİ WIDGET (ALTIN KART):
+Telefonu her elinize aldığınızda İngilizce öğrenin! Şık Altın Kart widget'ını ana ekranınıza yerleştirin: tek dokunuşla kartı çevirip anlamını görün, stüdyo telaffuzunu dinleyin ve uygulamayı açmadan kelimeler arasında geçiş yapın.
+
+• 📖 HER 50 KELİMEDE BİR RESİMLİ HİKAYE:
+Kelimeleri gerçek bağlamda pekiştirin! Öğrendiğiniz her 50 kelime, yalnızca bildiğiniz kelimelerden oluşan yeni bir resimli hikaye veya masalın kilidini açar. Metindeki herhangi bir kelimeye dokunarak anında çevirisini ve telaffuzunu görün.
+
+• 🔓 PAHALI ABONELİK YOK, SINIR YOK:
+Zorunlu ödeme duvarı, aylık abonelik veya yapay "can" (kalp) sınırı yok. Tüm kelimelere ve modlara tam erişim — kendi hızınızda, istediğiniz kadar çalışın.
 
 • 📝 KİŞİSEL SÖZLÜK VE ÖZEL NOTLAR:
 Okuduğunuz bir kitapta veya haberde yeni bir kelime mi gördünüz? Tek dokunuşla kişisel sözlüğünüze ekleyin! Her kelimeye kendi çağrışımlarınızı, bağlam ipuçlarını ve hayatınızdan örnekleri not edin. Kişisel notlar, uzun süreli hafızadaki en güçlü bağları oluşturur.
@@ -37,8 +46,8 @@ Favori kelimelerinizi dilediğiniz çalışma modunda pekiştirin:
 • 🎧 EKRAN KAPALIYKEN YOLDA SESLİ PODCAST:
 Yolda, trafikte, yürüyüşte veya koşuda ekrana bakmadan kelime öğrenin! Arka planda ses çalma modu, ekran kapalıyken bile kesintisiz çalışarak şarjınızı korur: Türkçe anlamı, hatırlama duraklaması ve net stüdyo İngilizce telaffuzu peş peşe dinleyin.
 
-• 🌍 33 ARAYÜZ DİLİ:
-Tam Arapça (RTL) desteği dahil 33 dilde eksiksiz yerelleştirme.
+• 🌍 36 ARAYÜZ DİLİ:
+Tam Arapça, Farsça ve Urduca (RTL) desteği dahil 36 dilde eksiksiz yerelleştirme.
 
 • ☁️ GÜVENLİ BULUT SENKRONİZASYONU:
 Google ile tek tıkla giriş yapın. Kelimeleriniz, notlarınız, favorileriniz ve seri günleriniz tüm cihazlarınızda güvenle saklanır.
