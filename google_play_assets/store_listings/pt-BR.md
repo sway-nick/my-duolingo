@@ -4,7 +4,7 @@
 English Breakfast: Inglês
 
 ### Short Description (max 80 chars)
-Widget de tela inicial, palavras frequentes, scanner de fotos e podcast off!
+Aprenda inglês: flashcards, 7000 palavras, histórias e widget de tela inicial!
 
 ### Full Description (max 4000 chars)
 English Breakfast é o seu treinador diário inteligente para dominar o vocabulário em inglês com widget interativo na tela inicial!
