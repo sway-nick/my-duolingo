@@ -31,6 +31,14 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     const title = strings[story.titleKey] || story.title;
     const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
 
+    let titleHtml = escapeHtml(title);
+    if (m === 0) {
+      const byMatch = title.match(/^(.*?)\s+by\s+(.*)$/i);
+      if (byMatch) {
+        titleHtml = `<span style="display: block;">${escapeHtml(byMatch[1])}</span><span style="display: block; font-style: italic; font-weight: 500; opacity: 0.9; margin-top: 2px;">${escapeHtml(byMatch[2])}</span>`;
+      }
+    }
+
     if (isUnlocked) {
       const statusBadge = `
         <span class="story-card-status status-unlocked">
@@ -49,7 +57,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
               <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: auto; max-width: 100%; height: 160px; object-fit: contain; display: inline-block; margin: 0 auto;" />
             </div>
           ` : ''}
-          <h3 class="story-card-title">${escapeHtml(title)}</h3>
+          <h3 class="story-card-title"${m === 0 ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
         </div>
       `;
     } else {
@@ -59,7 +67,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
           <div class="story-card-top">
             <span class="story-card-status status-locked">🔒 ${escapeHtml(lockLabel)}</span>
           </div>
-          <h3 class="story-card-title story-title-locked">${escapeHtml(title)}</h3>
+          <h3 class="story-card-title story-title-locked"${m === 0 ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
         </div>
       `;
     }
@@ -229,17 +237,6 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     </style>
 
     <div class="stories-view-page">
-      <button type="button" class="stories-view-back" id="stories-back-btn">
-        <span>‹</span> <span>${escapeHtml(t('fav_hub_btn') || 'Назад к коллекциям')}</span>
-      </button>
-
-      <div class="stories-view-header">
-        <h2 class="stories-view-title">📖 <span>${escapeHtml(strings.storiesFolderTitle || 'Тексты')}</span></h2>
-        <div class="stories-view-progress">
-          <span>🎯 Выучено слов: <strong>${masteredWords}</strong> (доступно текстов: <strong>${unlockedMilestones.length}</strong> / ${allMilestones.length})</span>
-        </div>
-      </div>
-
       <div class="stories-list-grid">
         ${storyCardsHtml}
       </div>
