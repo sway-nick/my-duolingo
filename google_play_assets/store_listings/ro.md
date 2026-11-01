@@ -4,7 +4,7 @@
 English Breakfast: Engleză
 
 ## Short Description (max 80 chars)
-Widget ecran principal, cuvinte frecvente, scanner foto & podcast ecran stins!
+Învață engleză: flashcards, 7000 cuvinte, povești și widget ecran principal!
 
 ## Full Description (max 4000 chars)
 English Breakfast este antrenorul tău inteligent pentru vocabularul limbii engleze cu widget interactiv pentru ecranul principal!
