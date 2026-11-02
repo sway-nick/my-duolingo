@@ -221,7 +221,40 @@ async function run() {
     { id: 692, word: 'pace', lang: 'ja', expected: 'ペース, 歩調, 速度' },
     { id: 695, word: 'advise', lang: 'sv', expected: 'råda, tillråda, ge råd' },
     { id: 696, word: 'initially', lang: 'it', expected: "inizialmente, all'inizio, dapprima" },
-    { id: 698, word: 'unlikely', lang: 'cs', expected: 'nepravděpodobný, pochybný' }
+    { id: 698, word: 'unlikely', lang: 'cs', expected: 'nepravděpodobný, pochybný' },
+
+    // Batch 701-750
+    { id: 706, word: 'translate', lang: 'fr', expected: 'traduire, transposer' },
+    { id: 706, word: 'translate', lang: 'cs', expected: 'přeložit, překládat' },
+    { id: 706, word: 'translate', lang: 'it', expected: 'tradurre, interpretare' },
+    { id: 711, word: 'dismiss', lang: 'fr', expected: 'licencier, renvoyer, rejeter' },
+    { id: 711, word: 'dismiss', lang: 'it', expected: 'licenziare, respingere, archiviare' },
+    { id: 711, word: 'dismiss', lang: 'cs', expected: 'propustit, zamítnout, vyloučit' },
+    { id: 719, word: 'possess', lang: 'fr', expected: 'posséder, détenir, jouir de' },
+    { id: 719, word: 'possess', lang: 'it', expected: 'possedere, detenere, godere di' },
+    { id: 719, word: 'possess', lang: 'cs', expected: 'vlastnit, mít, disponovat' },
+    { id: 721, word: 'hurry', lang: 'de', expected: 'eilen, sich beeilen, Eile' },
+    { id: 721, word: 'hurry', lang: 'fr', expected: 'se dépêcher, hâter, hâte' },
+    { id: 722, word: 'bite', lang: 'cs', expected: 'kousat, uštknout, kousnutí, sousto' },
+    { id: 726, word: 'encounter', lang: 'fr', expected: 'rencontrer, faire face à, rencontre' },
+    { id: 726, word: 'encounter', lang: 'it', expected: 'incontrare, imbattersi in, incontro' },
+    { id: 726, word: 'encounter', lang: 'cs', expected: 'potkat, narazit na, setkání' },
+    { id: 733, word: 'relative', lang: 'de', expected: 'Verwandter, relativ, verhältnismäßig' },
+    { id: 733, word: 'relative', lang: 'fr', expected: 'parent, proche, relatif' },
+    { id: 733, word: 'relative', lang: 'it', expected: 'parente, familiare, relativo' },
+    { id: 733, word: 'relative', lang: 'cs', expected: 'příbuzný, relativní, poměrný' },
+    { id: 736, word: 'nut', lang: 'cs', expected: 'ořech, oříšek, blázen, matice' },
+    { id: 737, word: 'rank', lang: 'fr', expected: 'rang, grade, rangée, classer' },
+    { id: 737, word: 'rank', lang: 'it', expected: 'rango, grado, posizione, classificare' },
+    { id: 740, word: 'fortune', lang: 'cs', expected: 'jmění, bohatství, štěstí, osud' },
+    { id: 741, word: 'freeze froze frozen', lang: 'da', expected: 'fryse, nedfryse, stivne' },
+    { id: 741, word: 'freeze froze frozen', lang: 'fi', expected: 'jäätyä, pakastaa, jähmettyä' },
+    { id: 746, word: 'retain', lang: 'fr', expected: 'retenir, conserver, garder' },
+    { id: 746, word: 'retain', lang: 'it', expected: 'trattenere, conservare, mantenere' },
+    { id: 746, word: 'retain', lang: 'cs', expected: 'uchovat, udržet, ponechat si' },
+    { id: 749, word: 'qualify', lang: 'ar', expected: 'يؤهل, يتأهل, ينال الأهلية' },
+    { id: 750, word: 'scheme', lang: 'fr', expected: 'projet, plan, dispositif, combine' },
+    { id: 750, word: 'scheme', lang: 'cs', expected: 'plán, projekt, schéma, intrika' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -264,6 +297,10 @@ async function run() {
   const calib14FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_651_700_calibrations.cjs'), 'utf8');
   const calib14ObjStr = calib14FileContent.slice(calib14FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib14FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs14 = eval('(' + calib14ObjStr + ')');
+
+  const calib15FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_701_750_calibrations.cjs'), 'utf8');
+  const calib15ObjStr = calib15FileContent.slice(calib15FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib15FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs15 = eval('(' + calib15ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -336,6 +373,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 701-750 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs15)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -375,7 +435,8 @@ async function run() {
     ...calibs11.map(c => String(c.id)),
     ...calibs12.map(c => String(c.id)),
     ...calibs13.map(c => String(c.id)),
-    ...Object.keys(calibs14)
+    ...Object.keys(calibs14),
+    ...Object.keys(calibs15)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
