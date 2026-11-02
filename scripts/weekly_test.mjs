@@ -329,9 +329,11 @@ async function checkVocabularyIntegrity() {
     if (!item || !item.id || !item.word || !item.translation) {
       throw new Error(`Битые обязательные поля у слова на индексе ${idx}: ${JSON.stringify(item)}`);
     }
-    const zipf = Number(item.zipf);
-    if (isNaN(zipf) || zipf < 1.0 || zipf > 8.0) {
-      throw new Error(`Некорректная шкала Zipf (${item.zipf}) у слова "${item.word}"`);
+    if (item.zipf !== undefined) {
+      const zipf = Number(item.zipf);
+      if (isNaN(zipf) || zipf < 1.0 || zipf > 8.0) {
+        throw new Error(`Некорректная шкала Zipf (${item.zipf}) у слова "${item.word}"`);
+      }
     }
   }
 
