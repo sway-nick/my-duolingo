@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { SPANISH_WORD_REFINEMENTS } from './apply_es_refinements.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,6 +39,7 @@ async function getFirebaseAuthToken() {
 }
 
 const MANUAL_OVERRIDES_ES = {
+  ...SPANISH_WORD_REFINEMENTS,
   2088: 'palabra',
   4299: 'llamado, convocatoria, llamada',
   4661: 'delito, infracción, ofensa',
@@ -108,7 +110,9 @@ async function run() {
   for (const w of words) {
     const origEs = w.translations?.es || '';
     const newEs = cleanSpanish(w.id, w.word, origEs);
-    if (origEs !== newEs) {
+    
+    // Always include explicit overrides in OTA payload
+    if (MANUAL_OVERRIDES_ES[w.id] || origEs !== newEs) {
       modifiedCount++;
       w.translations = w.translations || {};
       w.translations.es = newEs;
@@ -127,7 +131,7 @@ async function run() {
     }
   }
 
-  console.log(`1. Total Spanish words refined: ${modifiedCount}`);
+  console.log(`1. Total Spanish words ready for OTA: ${Object.keys(esUpdates).length}`);
   console.log('   Applied global multi-language fix for word 2088 ("word").');
 
   // Safety checks
@@ -141,9 +145,19 @@ async function run() {
     throw new Error(`Safety check failed: word 2088 es is "${w2088.translations?.es}", expected "palabra"!`);
   }
 
-  const w5531 = words.find(w => w.id === 5531);
-  if (!w5531.translations?.es?.includes('alegar')) {
-    throw new Error(`Safety check failed: word 5531 es is "${w5531.translations?.es}", expected to include "alegar"!`);
+  const w2182 = words.find(w => w.id === 2182);
+  if (w2182.translations?.es !== 'gen') {
+    throw new Error(`Safety check failed: word 2182 es is "${w2182.translations?.es}", expected "gen"!`);
+  }
+
+  const w28 = words.find(w => w.id === 28);
+  if (w28.translations?.es !== 'emergencia') {
+    throw new Error(`Safety check failed: word 28 es is "${w28.translations?.es}", expected "emergencia"!`);
+  }
+
+  const w243 = words.find(w => w.id === 243);
+  if (w243.translations?.es !== 'hoja') {
+    throw new Error(`Safety check failed: word 243 es is "${w243.translations?.es}", expected "hoja"!`);
   }
 
   // 2. Save to all words.json paths
@@ -239,11 +253,13 @@ async function run() {
   const verifyMap = JSON.parse(verifyData.fields?.updatesJson?.stringValue || '{}');
 
   console.log(`   Verified ID 2088 ("word"): es="${verifyMap['2088']?.translations?.es}", de="${verifyMap['2088']?.translations?.de}"`);
-  console.log(`   Verified ID 5531 ("allege"): es="${verifyMap['5531']?.translations?.es}"`);
-  console.log(`   Verified ID 4005 ("on"): es="${verifyMap['4005']?.translations?.es}"`);
-  console.log(`   Verified ID 4299 ("call of"): es="${verifyMap['4299']?.translations?.es}"`);
-  console.log(`   Verified ID 4661 ("offence"): es="${verifyMap['4661']?.translations?.es}"`);
-  console.log(`   Verified ID 5140 ("trump"): es="${verifyMap['5140']?.translations?.es}"`);
+  console.log(`   Verified ID 2182 ("gene"): es="${verifyMap['2182']?.translations?.es}"`);
+  console.log(`   Verified ID 28 ("emergency"): es="${verifyMap['28']?.translations?.es}"`);
+  console.log(`   Verified ID 243 ("leaf"): es="${verifyMap['243']?.translations?.es}"`);
+  console.log(`   Verified ID 116 ("chairman"): es="${verifyMap['116']?.translations?.es}"`);
+  console.log(`   Verified ID 5530 ("apportion"): es="${verifyMap['5530']?.translations?.es}"`);
+  console.log(`   Verified ID 5352 ("relegate"): es="${verifyMap['5352']?.translations?.es}"`);
+  console.log(`   Verified ID 6839 ("bookcase"): es="${verifyMap['6839']?.translations?.es}"`);
 
   console.log('\n🎉 SPANISH OTA LOCALIZATION REFINEMENT APPLIED AND PUBLISHED SUCCESSFULLY!');
 }
