@@ -112,7 +112,20 @@ async function run() {
     { id: 395, word: 'waste', lang: 'fr', expected: 'gaspiller, déchets' },
     { id: 398, word: 'wrap', lang: 'da', expected: 'pakke ind, vikle' },
     { id: 398, word: 'wrap', lang: 'fi', expected: 'kääriä, paketoida' },
-    { id: 398, word: 'wrap', lang: 'ja', expected: '包む、包装する' }
+    { id: 398, word: 'wrap', lang: 'ja', expected: '包む、包装する' },
+
+    // Batch 401-450
+    { id: 401, word: 'rush', lang: 'fr', expected: 'se dépêcher, précipiter, ruée' },
+    { id: 402, word: 'gate', lang: 'de', expected: 'Tor, Pforte, Flugsteig' },
+    { id: 413, word: 'deeply', lang: 'it', expected: 'profondamente' },
+    { id: 416, word: 'fairly', lang: 'fr', expected: 'assez, plutôt, équitablement' },
+    { id: 426, word: 'violent', lang: 'de', expected: 'gewalttätig, gewaltsam' },
+    { id: 442, word: 'round', lang: 'kk', expected: 'дөңгелек, жұмыр, раунд' },
+    { id: 443, word: 'detective', lang: 'it', expected: 'investigatore, detective' },
+    { id: 444, word: 'pack', lang: 'fr', expected: 'emballer, paquet, meute' },
+    { id: 450, word: 'command', lang: 'fr', expected: 'ordre, commander, commandement' },
+    { id: 450, word: 'command', lang: 'it', expected: 'ordine, comandare, comando' },
+    { id: 450, word: 'command', lang: 'ja', expected: '命令、指揮する、指令' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -146,6 +159,7 @@ async function run() {
   const calibs6 = loadBatchCalibs('scripts/apply_batch_251_300_calibrations.cjs');
   const calibs7 = loadBatchCalibs('scripts/apply_batch_301_350_calibrations.cjs');
   const calibs8 = loadBatchCalibs('scripts/apply_batch_351_400_calibrations.cjs');
+  const calibs9 = loadBatchCalibs('scripts/apply_batch_401_450_calibrations.cjs');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -171,8 +185,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8]) {
+  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
