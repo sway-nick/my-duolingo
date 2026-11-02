@@ -287,7 +287,45 @@ async function run() {
     { id: 799, word: 'satellite', lang: 'ko', expected: '인공위성, 위성' },
     { id: 800, word: 'stable', lang: 'sv', expected: 'stabil, stadig, stall' },
     { id: 800, word: 'stable', lang: 'fi', expected: 'vakaa, luja, talli' },
-    { id: 800, word: 'stable', lang: 'cs', expected: 'stabilní, stálý, stáj, maštal' }
+    { id: 800, word: 'stable', lang: 'cs', expected: 'stabilní, stálý, stáj, maštal' },
+
+    // Batch 801-850
+    { id: 801, word: 'script', lang: 'fr', expected: 'scénario, écriture manuscrite, script' },
+    { id: 801, word: 'script', lang: 'it', expected: 'sceneggiatura, scrittura, copione' },
+    { id: 803, word: 'efficient', lang: 'sl', expected: 'učinkovit, smotrn, zmogljiv' },
+    { id: 807, word: 'ideal', lang: 'sl', expected: 'idealen, popoln, vzor' },
+    { id: 810, word: 'reserve', lang: 'cs', expected: 'rezervovat, zamluvit, záloha, rezervace' },
+    { id: 812, word: 'quietly', lang: 'fr', expected: 'silencieusement, doucement, calmement' },
+    { id: 814, word: 'loose', lang: 'fr', expected: 'ample, lâche, desserré, fluide' },
+    { id: 814, word: 'loose', lang: 'it', expected: 'largo, allentato, sfuso, morbido' },
+    { id: 814, word: 'loose', lang: 'sk', expected: 'voľný, uvoľnený, plandavý' },
+    { id: 814, word: 'loose', lang: 'hu', expected: 'laza, tág, bő, laza illesztésű' },
+    { id: 820, word: 'missing', lang: 'sv', expected: 'saknad, försvunnen, fattas' },
+    { id: 820, word: 'missing', lang: 'fi', expected: 'kadonnut, puuttuva, kadoksissa' },
+    { id: 820, word: 'missing', lang: 'ar', expected: 'مفقود, ضائع, ناقص' },
+    { id: 824, word: 'remote', lang: 'sv', expected: 'avlägsen, avskild, fjärrkontroll' },
+    { id: 824, word: 'remote', lang: 'fi', expected: 'etäinen, syrjäinen, kaukosäädin' },
+    { id: 824, word: 'remote', lang: 'da', expected: 'fjern, afsides, fjernbetjening' },
+    { id: 824, word: 'remote', lang: 'ar', expected: 'بعيد, ناءٍ, جهاز تحكم عن بعد' },
+    { id: 824, word: 'remote', lang: 'ja', expected: '遠く離れた, 人里離れた, リモコン, 遠隔の' },
+    { id: 824, word: 'remote', lang: 'ko', expected: '외딴, 먼, 원격의, 리모컨' },
+    { id: 826, word: 'everyday', lang: 'fr', expected: 'quotidien, habituel, de tous les jours' },
+    { id: 826, word: 'everyday', lang: 'it', expected: 'quotidiano, giornaliero, abituale' },
+    { id: 830, word: 'measurement', lang: 'it', expected: 'misura, misurazione, dimensione' },
+    { id: 830, word: 'measurement', lang: 'ja', expected: '測定, 寸法, 計測' },
+    { id: 837, word: 'upset', lang: 'cs', expected: 'rozrušený, znechucený, naštvaný, zarmoutit' },
+    { id: 837, word: 'upset', lang: 'sk', expected: 'rozrušený, znechutený, nahnevaný, zarmútiť' },
+    { id: 837, word: 'upset', lang: 'hu', expected: 'feldúlt, ideges, zaklatott, bánt' },
+    { id: 837, word: 'upset', lang: 'el', expected: 'αναστατωμένος, εκνευρισμένος, στενοχωρημένος' },
+    { id: 842, word: 'ban', lang: 'it', expected: 'divieto, bandire, vietare, proscrivere' },
+    { id: 844, word: 'badly', lang: 'fr', expected: 'mal, gravement, durement' },
+    { id: 846, word: 'slight', lang: 'fr', expected: 'léger, minime, discret, affront' },
+    { id: 846, word: 'slight', lang: 'it', expected: 'lieve, leggero, impercettibile, sgarbo' },
+    { id: 846, word: 'slight', lang: 'cs', expected: 'nepatrný, mírný, lehký, urážka' },
+    { id: 846, word: 'slight', lang: 'fi', expected: 'vähäinen, lievä, pieni, loukkaus' },
+    { id: 850, word: 'incredibly', lang: 'fr', expected: 'incroyablement, prodigieusement, extrêmement' },
+    { id: 850, word: 'incredibly', lang: 'it', expected: 'incredibilmente, straordinariamente, oltremodo' },
+    { id: 850, word: 'incredibly', lang: 'cs', expected: 'neuvěřitelně, neskutečně, ohromně' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -338,6 +376,10 @@ async function run() {
   const calib16FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_751_800_calibrations.cjs'), 'utf8');
   const calib16ObjStr = calib16FileContent.slice(calib16FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib16FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs16 = eval('(' + calib16ObjStr + ')');
+
+  const calib17FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_801_850_calibrations.cjs'), 'utf8');
+  const calib17ObjStr = calib17FileContent.slice(calib17FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib17FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs17 = eval('(' + calib17ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -456,6 +498,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 801-850 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs17)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -497,7 +562,8 @@ async function run() {
     ...calibs13.map(c => String(c.id)),
     ...Object.keys(calibs14),
     ...Object.keys(calibs15),
-    ...Object.keys(calibs16)
+    ...Object.keys(calibs16),
+    ...Object.keys(calibs17)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
