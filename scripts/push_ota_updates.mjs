@@ -254,7 +254,40 @@ async function run() {
     { id: 746, word: 'retain', lang: 'cs', expected: 'uchovat, udržet, ponechat si' },
     { id: 749, word: 'qualify', lang: 'ar', expected: 'يؤهل, يتأهل, ينال الأهلية' },
     { id: 750, word: 'scheme', lang: 'fr', expected: 'projet, plan, dispositif, combine' },
-    { id: 750, word: 'scheme', lang: 'cs', expected: 'plán, projekt, schéma, intrika' }
+    { id: 750, word: 'scheme', lang: 'cs', expected: 'plán, projekt, schéma, intrika' },
+
+    // Batch 751-800
+    { id: 751, word: 'shame', lang: 'fr', expected: 'honte, déshonneur, dommage' },
+    { id: 754, word: 'tube', lang: 'ar', expected: 'أنبوب, ماسورة, مترو الأنفاق' },
+    { id: 755, word: 'chef', lang: 'it', expected: 'chef, capocuoco, cuoco' },
+    { id: 755, word: 'chef', lang: 'fr', expected: 'chef cuisinier, chef, cuisinier' },
+    { id: 758, word: 'tongue', lang: 'sv', expected: 'tunga, språk' },
+    { id: 758, word: 'tongue', lang: 'ar', expected: 'لسان, لغة' },
+    { id: 758, word: 'tongue', lang: 'ja', expected: '舌, 言語, 言葉' },
+    { id: 761, word: 'flat', lang: 'fr', expected: 'plat, aplati, appartement' },
+    { id: 761, word: 'flat', lang: 'it', expected: 'piatto, piano, appartamento' },
+    { id: 761, word: 'flat', lang: 'cs', expected: 'plochý, rovný, byt' },
+    { id: 763, word: 'register', lang: 'fr', expected: "s'inscrire, enregistrer, registre" },
+    { id: 763, word: 'register', lang: 'cs', expected: 'zaregistrovat se, zapsat se, rejstřík' },
+    { id: 766, word: 'port', lang: 'it', expected: 'porto, scalo marittimo, porta di connessione' },
+    { id: 770, word: 'appointment', lang: 'fr', expected: 'rendez-vous, consultation, nomination' },
+    { id: 770, word: 'appointment', lang: 'cs', expected: 'schůzka, objednání k lékaři, jmenování' },
+    { id: 771, word: 'convert', lang: 'cs', expected: 'přeměnit, převést, obrátit na víru' },
+    { id: 788, word: 'asleep', lang: 'fr', expected: 'endormi, assoupi' },
+    { id: 788, word: 'asleep', lang: 'it', expected: 'addormentato, assopito' },
+    { id: 788, word: 'asleep', lang: 'cs', expected: 'spící, usnutý' },
+    { id: 788, word: 'asleep', lang: 'ja', expected: '眠っている, 眠って' },
+    { id: 796, word: 'borrow', lang: 'fr', expected: 'emprunter, contracter un emprunt' },
+    { id: 796, word: 'borrow', lang: 'cs', expected: 'půjčit si, vypůjčit si' },
+    { id: 798, word: 'custom', lang: 'kk', expected: 'салт, дәстүр, әдет-ғұрып, тапсырыспен жасалған' },
+    { id: 799, word: 'satellite', lang: 'sv', expected: 'satellit, konstgjord måne' },
+    { id: 799, word: 'satellite', lang: 'fi', expected: 'satelliitti, kiertolainen' },
+    { id: 799, word: 'satellite', lang: 'ar', expected: 'قمر صناعي, ساتل, تابع فضائي' },
+    { id: 799, word: 'satellite', lang: 'ja', expected: '人工衛星, 衛星' },
+    { id: 799, word: 'satellite', lang: 'ko', expected: '인공위성, 위성' },
+    { id: 800, word: 'stable', lang: 'sv', expected: 'stabil, stadig, stall' },
+    { id: 800, word: 'stable', lang: 'fi', expected: 'vakaa, luja, talli' },
+    { id: 800, word: 'stable', lang: 'cs', expected: 'stabilní, stálý, stáj, maštal' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -301,6 +334,10 @@ async function run() {
   const calib15FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_701_750_calibrations.cjs'), 'utf8');
   const calib15ObjStr = calib15FileContent.slice(calib15FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib15FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs15 = eval('(' + calib15ObjStr + ')');
+
+  const calib16FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_751_800_calibrations.cjs'), 'utf8');
+  const calib16ObjStr = calib16FileContent.slice(calib16FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib16FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs16 = eval('(' + calib16ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -396,6 +433,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 751-800 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs16)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -436,20 +496,30 @@ async function run() {
     ...calibs12.map(c => String(c.id)),
     ...calibs13.map(c => String(c.id)),
     ...Object.keys(calibs14),
-    ...Object.keys(calibs15)
+    ...Object.keys(calibs15),
+    ...Object.keys(calibs16)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
+    if (allCalibIds.has(idStr)) continue;
     const localW = wordsMap.get(Number(idStr));
     if (!localW) continue;
-    if (allCalibIds.has(idStr)) continue;
 
-    const trKeys = Object.keys(entry.translations || {});
-    if (trKeys.length === 2 && trKeys.includes('fr') && trKeys.includes('vi')) {
-      if (entry.translations.fr === localW.translations?.fr && entry.translations.vi === localW.translations?.vi) {
-        delete fsMap[idStr];
-        pruned++;
+    let identical = true;
+    if (entry.translation && entry.translation !== localW.translation) {
+      identical = false;
+    }
+    if (entry.translations) {
+      for (const [l, v] of Object.entries(entry.translations)) {
+        if (localW.translations?.[l] !== v) {
+          identical = false;
+          break;
+        }
       }
+    }
+    if (identical) {
+      delete fsMap[idStr];
+      pruned++;
     }
   }
 
