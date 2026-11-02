@@ -325,7 +325,49 @@ async function run() {
     { id: 846, word: 'slight', lang: 'fi', expected: 'vähäinen, lievä, pieni, loukkaus' },
     { id: 850, word: 'incredibly', lang: 'fr', expected: 'incroyablement, prodigieusement, extrêmement' },
     { id: 850, word: 'incredibly', lang: 'it', expected: 'incredibilmente, straordinariamente, oltremodo' },
-    { id: 850, word: 'incredibly', lang: 'cs', expected: 'neuvěřitelně, neskutečně, ohromně' }
+    { id: 850, word: 'incredibly', lang: 'cs', expected: 'neuvěřitelně, neskutečně, ohromně' },
+
+    // Batch 851-900
+    { id: 851, word: 'orange', lang: 'it', expected: 'arancia, arancione' },
+    { id: 853, word: 'running', lang: 'fr', expected: 'course, course à pied, courant, en marche' },
+    { id: 855, word: 'stairs', lang: 'fr', expected: 'escalier, marches' },
+    { id: 855, word: 'stairs', lang: 'cs', expected: 'schody, schodiště, stupně' },
+    { id: 857, word: 'assignment', lang: 'fr', expected: 'devoir, tâche, mission, affectation' },
+    { id: 857, word: 'assignment', lang: 'it', expected: 'compito, incarico, assegnazione' },
+    { id: 857, word: 'assignment', lang: 'cs', expected: 'úkol, zadání, pověření' },
+    { id: 857, word: 'assignment', lang: 'ar', expected: 'مهمة, واجب, تكليف' },
+    { id: 867, word: 'decrease', lang: 'fr', expected: 'baisse, diminution, diminuer, réduire' },
+    { id: 867, word: 'decrease', lang: 'cs', expected: 'pokles, snížení, klesat, snižovat' },
+    { id: 867, word: 'decrease', lang: 'sk', expected: 'pokles, zníženie, klesať, znižovať' },
+    { id: 867, word: 'decrease', lang: 'fi', expected: 'väheneminen, lasku, vähentää, vähentyä' },
+    { id: 867, word: 'decrease', lang: 'hr', expected: 'smanjenje, pad, smanjivati, opadati' },
+    { id: 868, word: 'resort', lang: 'fr', expected: 'station balnéaire, complexe hôtelier, recourir à' },
+    { id: 868, word: 'resort', lang: 'da', expected: 'feriested, kursted, ty til' },
+    { id: 868, word: 'resort', lang: 'fi', expected: 'lomakeskus, lomakohde, turvautua johonkin' },
+    { id: 869, word: 'cancel', lang: 'fr', expected: 'annuler, résilier, annulation' },
+    { id: 869, word: 'cancel', lang: 'cs', expected: 'zrušit, odvolat, stornovat, storno' },
+    { id: 881, word: 'lung', lang: 'da', expected: 'lunge' },
+    { id: 881, word: 'lung', lang: 'fi', expected: 'keuhko, keuhkot' },
+    { id: 881, word: 'lung', lang: 'sv', expected: 'lunga' },
+    { id: 881, word: 'lung', lang: 'ar', expected: 'رئة, رئتان' },
+    { id: 881, word: 'lung', lang: 'ko', expected: '폐, 허파' },
+    { id: 881, word: 'lung', lang: 'ja', expected: '肺, 肺臓' },
+    { id: 882, word: 'steady', lang: 'fr', expected: 'constant, régulier, stable, ferme' },
+    { id: 882, word: 'steady', lang: 'sl', expected: 'stalen, stanoviten, miren, zanesljiv' },
+    { id: 883, word: 'headline', lang: 'da', expected: 'overskrift, avisoverskrift, blikfang' },
+    { id: 883, word: 'headline', lang: 'sv', expected: 'rubrik, tidningsrubrik, löpsedel' },
+    { id: 883, word: 'headline', lang: 'fi', expected: 'otsikko, lehtiotsikko, pääotsikko' },
+    { id: 883, word: 'headline', lang: 'ar', expected: 'عنوان رئيسي, مانشيت' },
+    { id: 885, word: 'successfully', lang: 'da', expected: 'med succes, succesfuldt, vellykket' },
+    { id: 885, word: 'successfully', lang: 'sv', expected: 'framgångsrikt, med framgång, lyckat' },
+    { id: 885, word: 'successfully', lang: 'fi', expected: 'onnistuneesti, menestyksekkäästi, tuloksellisesti' },
+    { id: 897, word: 'oven', lang: 'de', expected: 'Backofen, Ofen, Röhre' },
+    { id: 897, word: 'oven', lang: 'fr', expected: 'four, fourneau' },
+    { id: 897, word: 'oven', lang: 'it', expected: 'forno, fornetto' },
+    { id: 897, word: 'oven', lang: 'cs', expected: 'trouba, pečicí trouba, pec' },
+    { id: 897, word: 'oven', lang: 'ja', expected: 'オーブン, 天火, 窯' },
+    { id: 900, word: 'heel', lang: 'de', expected: 'Ferse, Absatz, Hacke' },
+    { id: 900, word: 'heel', lang: 'it', expected: 'tallone, tacco' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -380,6 +422,10 @@ async function run() {
   const calib17FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_801_850_calibrations.cjs'), 'utf8');
   const calib17ObjStr = calib17FileContent.slice(calib17FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib17FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs17 = eval('(' + calib17ObjStr + ')');
+
+  const calib18FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_851_900_calibrations.cjs'), 'utf8');
+  const calib18ObjStr = calib18FileContent.slice(calib18FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib18FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs18 = eval('(' + calib18ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -521,6 +567,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 851-900 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs18)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -563,7 +632,8 @@ async function run() {
     ...Object.keys(calibs14),
     ...Object.keys(calibs15),
     ...Object.keys(calibs16),
-    ...Object.keys(calibs17)
+    ...Object.keys(calibs17),
+    ...Object.keys(calibs18)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
