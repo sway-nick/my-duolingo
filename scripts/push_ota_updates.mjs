@@ -193,7 +193,35 @@ async function run() {
     { id: 634, word: 'arrange', lang: 'cs', expected: 'zorganizovat, zařídit, uspořádat' },
     { id: 634, word: 'arrange', lang: 'da', expected: 'arrangere, organisere, tilrettelægge' },
     { id: 639, word: 'properly', lang: 'fr', expected: 'correctement, convenablement, comme il faut' },
-    { id: 639, word: 'properly', lang: 'cs', expected: 'správně, řádně, jak se patří' }
+    { id: 639, word: 'properly', lang: 'cs', expected: 'správně, řádně, jak se patří' },
+
+    // Batch 651-700
+    { id: 651, word: 'friendly', lang: 'ru', expected: 'дружелюбный, приветливый' },
+    { id: 656, word: 'trick', lang: 'fr', expected: 'tour, astuce, tromper' },
+    { id: 656, word: 'trick', lang: 'cs', expected: 'trik, lest, kouzlo, oklamat' },
+    { id: 661, word: 'approval', lang: 'fr', expected: 'approbation, accord, consentement' },
+    { id: 661, word: 'approval', lang: 'it', expected: 'approvazione, consenso, assenso' },
+    { id: 661, word: 'approval', lang: 'cs', expected: 'schválení, souhlas, uznání' },
+    { id: 663, word: 'permanent', lang: 'fr', expected: 'permanent, durable, fixe' },
+    { id: 663, word: 'permanent', lang: 'cs', expected: 'trvalý, stálý, permanentní' },
+    { id: 663, word: 'permanent', lang: 'ko', expected: '영구적인, 불변의, 상설의' },
+    { id: 667, word: 'objective', lang: 'fr', expected: 'objectif, but, impartial' },
+    { id: 667, word: 'objective', lang: 'it', expected: 'obiettivo, scopo, imparziale' },
+    { id: 672, word: 'cent', lang: 'it', expected: 'centesimo, cent' },
+    { id: 674, word: 'crucial', lang: 'fr', expected: 'crucial, capital, décisif' },
+    { id: 674, word: 'crucial', lang: 'pl', expected: 'kluczowy, decydujący, przełomowy' },
+    { id: 674, word: 'crucial', lang: 'it', expected: 'cruciale, fondamentale, decisivo' },
+    { id: 674, word: 'crucial', lang: 'cs', expected: 'klíčový, rozhodující, zásadní' },
+    { id: 674, word: 'crucial', lang: 'ja', expected: '決定的な, 極めて重要な, 肝心な' },
+    { id: 674, word: 'crucial', lang: 'ko', expected: '결정적인, 중대한' },
+    { id: 686, word: 'rough', lang: 'it', expected: 'ruvido, grezzo, approssimativo' },
+    { id: 690, word: 'inner', lang: 'cs', expected: 'vnitřní, niterný' },
+    { id: 692, word: 'pace', lang: 'fr', expected: 'allure, rythme, cadence, pas' },
+    { id: 692, word: 'pace', lang: 'it', expected: 'ritmo, passo, andatura' },
+    { id: 692, word: 'pace', lang: 'ja', expected: 'ペース, 歩調, 速度' },
+    { id: 695, word: 'advise', lang: 'sv', expected: 'råda, tillråda, ge råd' },
+    { id: 696, word: 'initially', lang: 'it', expected: "inizialmente, all'inizio, dapprima" },
+    { id: 698, word: 'unlikely', lang: 'cs', expected: 'nepravděpodobný, pochybný' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -232,6 +260,10 @@ async function run() {
   const calibs11 = loadBatchCalibs('scripts/apply_batch_501_550_calibrations.cjs');
   const calibs12 = loadBatchCalibs('scripts/apply_batch_551_600_calibrations.cjs');
   const calibs13 = loadBatchCalibs('scripts/apply_batch_601_650_calibrations.cjs');
+
+  const calib14FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_651_700_calibrations.cjs'), 'utf8');
+  const calib14ObjStr = calib14FileContent.slice(calib14FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib14FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs14 = eval('(' + calib14ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -281,6 +313,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 651-700 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs14)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -313,7 +368,14 @@ async function run() {
     ...calibs4.map(c => String(c.id)),
     ...calibs5.map(c => String(c.id)),
     ...calibs6.map(c => String(c.id)),
-    ...calibs7.map(c => String(c.id))
+    ...calibs7.map(c => String(c.id)),
+    ...calibs8.map(c => String(c.id)),
+    ...calibs9.map(c => String(c.id)),
+    ...calibs10.map(c => String(c.id)),
+    ...calibs11.map(c => String(c.id)),
+    ...calibs12.map(c => String(c.id)),
+    ...calibs13.map(c => String(c.id)),
+    ...Object.keys(calibs14)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
