@@ -367,7 +367,39 @@ async function run() {
     { id: 897, word: 'oven', lang: 'cs', expected: 'trouba, pečicí trouba, pec' },
     { id: 897, word: 'oven', lang: 'ja', expected: 'オーブン, 天火, 窯' },
     { id: 900, word: 'heel', lang: 'de', expected: 'Ferse, Absatz, Hacke' },
-    { id: 900, word: 'heel', lang: 'it', expected: 'tallone, tacco' }
+    { id: 900, word: 'heel', lang: 'it', expected: 'tallone, tacco' },
+
+    // Batch 901-950
+    { id: 903, word: 'cheat', lang: 'fr', expected: 'tricher, tromper' },
+    { id: 903, word: 'cheat', lang: 'it', expected: 'imbrogliare, barare, tradire' },
+    { id: 903, word: 'cheat', lang: 'cs', expected: 'podvádět, opisovat' },
+    { id: 907, word: 'celebration', lang: 'fr', expected: 'célébration, fête' },
+    { id: 907, word: 'celebration', lang: 'it', expected: 'celebrazione, festa' },
+    { id: 907, word: 'celebration', lang: 'cs', expected: 'oslava, slavnost' },
+    { id: 918, word: 'intelligent', lang: 'fr', expected: 'intelligent, brillant' },
+    { id: 918, word: 'intelligent', lang: 'it', expected: 'intelligente, brillante' },
+    { id: 920, word: 'delay', lang: 'fr', expected: 'retarder, différer, retard' },
+    { id: 920, word: 'delay', lang: 'it', expected: 'ritardare, posticipare, ritardo' },
+    { id: 922, word: 'examination', lang: 'fi', expected: 'tutkinto, koe, lääkärintarkastus' },
+    { id: 922, word: 'examination', lang: 'cs', expected: 'zkouška, vyšetření, prohlídka' },
+    { id: 926, word: 'float', lang: 'fr', expected: 'flotter, surnager' },
+    { id: 926, word: 'float', lang: 'el', expected: 'επιπλέω, πλέω' },
+    { id: 928, word: 'rapid', lang: 'it', expected: 'rapido, veloce' },
+    { id: 934, word: 'leather', lang: 'da', expected: 'læder' },
+    { id: 934, word: 'leather', lang: 'fi', expected: 'nahka' },
+    { id: 934, word: 'leather', lang: 'ja', expected: '革、レザー' },
+    { id: 937, word: 'uncomfortable', lang: 'ru', expected: 'неудобный, некомфортный' },
+    { id: 937, word: 'uncomfortable', lang: 'uk', expected: 'незручний, дискомфортний' },
+    { id: 940, word: 'grain', lang: 'fr', expected: 'grain, céréale' },
+    { id: 940, word: 'grain', lang: 'it', expected: 'grano, chicco, cereale' },
+    { id: 940, word: 'grain', lang: 'cs', expected: 'zrno, obilí' },
+    { id: 942, word: 'collapse', lang: 'da', expected: 'styrte sammen, kollapse, kollaps' },
+    { id: 942, word: 'collapse', lang: 'fi', expected: 'luhistua, romahtaa, romahdus' },
+    { id: 947, word: 'behave', lang: 'fr', expected: 'se comporter, agir' },
+    { id: 947, word: 'behave', lang: 'ru', expected: 'вести себя, поступать' },
+    { id: 949, word: 'elderly', lang: 'ru', expected: 'пожилой, преклонного возраста' },
+    { id: 949, word: 'elderly', lang: 'es', expected: 'anciano, de edad avanzada, mayor' },
+    { id: 950, word: 'virtual', lang: 'el', expected: 'εικονικός' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -426,6 +458,10 @@ async function run() {
   const calib18FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_851_900_calibrations.cjs'), 'utf8');
   const calib18ObjStr = calib18FileContent.slice(calib18FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib18FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs18 = eval('(' + calib18ObjStr + ')');
+
+  const calib19FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_901_950_calibrations.cjs'), 'utf8');
+  const calib19ObjStr = calib19FileContent.slice(calib19FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib19FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs19 = eval('(' + calib19ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -590,6 +626,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 901-950 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs19)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -633,7 +692,8 @@ async function run() {
     ...Object.keys(calibs15),
     ...Object.keys(calibs16),
     ...Object.keys(calibs17),
-    ...Object.keys(calibs18)
+    ...Object.keys(calibs18),
+    ...Object.keys(calibs19)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
