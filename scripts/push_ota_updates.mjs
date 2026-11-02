@@ -141,7 +141,24 @@ async function run() {
     { id: 490, word: 'rural', lang: 'it', expected: 'rurale, campestre' },
     { id: 491, word: 'wage', lang: 'fr', expected: 'salaire, rémunération, mener' },
     { id: 491, word: 'wage', lang: 'de', expected: 'Lohn, Gehalt, führen' },
-    { id: 491, word: 'wage', lang: 'ja', expected: '賃金、給料、行う' }
+    { id: 491, word: 'wage', lang: 'ja', expected: '賃金、給料、行う' },
+
+    // Batch 501-550
+    { id: 501, word: 'transfer', lang: 'fr', expected: 'transfert, transférer, virement' },
+    { id: 506, word: 'owe', lang: 'cs', expected: 'dlužit, vděčit' },
+    { id: 506, word: 'owe', lang: 'fr', expected: 'devoir, être redevable' },
+    { id: 511, word: 'abandon', lang: 'cs', expected: 'opustit, zanechat, vzdát se' },
+    { id: 514, word: 'suggestion', lang: 'fr', expected: 'suggestion, proposition, conseil' },
+    { id: 514, word: 'suggestion', lang: 'it', expected: 'suggerimento, proposta, consiglio' },
+    { id: 514, word: 'suggestion', lang: 'ja', expected: '提案、助言、示唆' },
+    { id: 528, word: 'leading', lang: 'da', expected: 'førende, ledende' },
+    { id: 529, word: 'widely', lang: 'cs', expected: 'široce, hojně' },
+    { id: 535, word: 'cap', lang: 'es', expected: 'gorra, gorro, tapa, tope' },
+    { id: 536, word: 'secure', lang: 'cs', expected: 'bezpečný, spolehlivý, zajistit' },
+    { id: 542, word: 'boyfriend', lang: 'fr', expected: 'petit ami, copain' },
+    { id: 545, word: 'preserve', lang: 'fr', expected: 'préserver, conserver, confiture' },
+    { id: 545, word: 'preserve', lang: 'cs', expected: 'zachovat, uchovat, chránit' },
+    { id: 545, word: 'preserve', lang: 'ja', expected: '保存する、保護する、ジャム' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -177,6 +194,7 @@ async function run() {
   const calibs8 = loadBatchCalibs('scripts/apply_batch_351_400_calibrations.cjs');
   const calibs9 = loadBatchCalibs('scripts/apply_batch_401_450_calibrations.cjs');
   const calibs10 = loadBatchCalibs('scripts/apply_batch_451_500_calibrations.cjs');
+  const calibs11 = loadBatchCalibs('scripts/apply_batch_501_550_calibrations.cjs');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -202,8 +220,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450, 451-500 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9, ...calibs10]) {
+  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450, 451-500, 501-550 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9, ...calibs10, ...calibs11]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
