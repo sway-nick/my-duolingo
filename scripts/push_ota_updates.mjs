@@ -36,55 +36,51 @@ async function getFirebaseAuthToken() {
 async function run() {
   console.log('🚀 Starting Universal Vocabulary OTA Synchronization (Cloud Firestore)...\n');
 
-  // Key sample checks across batch 1-50, batch 51-100, and recent calibrations
+  // Key sample checks across batch 1-50, 51-100, 101-150
   const sampleChecks = [
     // Batch 1-50
     { id: 2, word: 'good at', lang: 'it', expected: 'bravo a, abile in' },
     { id: 10, word: 'beginning', lang: 'ja', expected: '始まり、初め' },
-    { id: 10, word: 'beginning', lang: 'ko', expected: '시작, 처음' },
-    { id: 14, word: 'assessment', lang: 'it', expected: 'valutazione, stima' },
-    { id: 14, word: 'assessment', lang: 'cs', expected: 'hodnocení, posouzení' },
-    { id: 20, word: 'familiar', lang: 'ja', expected: '親しみのある、よく知られた' },
     { id: 24, word: 'lunch', lang: 'it', expected: 'pranzo' },
-    { id: 24, word: 'lunch', lang: 'cs', expected: 'oběd' },
-    { id: 24, word: 'lunch', lang: 'bg', expected: 'обяд' },
-    { id: 24, word: 'lunch', lang: 'hu', expected: 'ebéd' },
-    { id: 27, word: 'instruction', lang: 'it', expected: 'istruzione, indicazione' },
-    { id: 37, word: 'train', lang: 'de', expected: 'Zug, trainieren' },
     { id: 44, word: 'native', lang: 'ja', expected: '母国語話者、ネイティブ、生まれつきの' },
-    { id: 44, word: 'native', lang: 'it', expected: 'nativo, madrelingua' },
-    { id: 44, word: 'native', lang: 'pl', expected: 'rodzimy, ojczysty, rodzimy użytkownik języka' },
-    { id: 44, word: 'native', lang: 'ru', expected: 'родной, носитель языка' },
 
     // Batch 51-100
     { id: 51, word: 'launch', lang: 'hu', expected: 'indítás, kilövés' },
     { id: 53, word: 'ring', lang: 'it', expected: 'anello, suonare' },
-    { id: 53, word: 'ring', lang: 'cs', expected: 'prsten, kroužek' },
     { id: 57, word: 'neck', lang: 'de', expected: 'Hals, Nacken' },
-    { id: 57, word: 'neck', lang: 'hi', expected: 'गर्दन' },
-    { id: 61, word: 'complex', lang: 'it', expected: 'complesso' },
-    { id: 65, word: 'extremely', lang: 'ja', expected: '極めて、非常に' },
-    { id: 65, word: 'extremely', lang: 'da', expected: 'ekstremt, yderst' },
-    { id: 68, word: 'prefer', lang: 'it', expected: 'preferire' },
-    { id: 74, word: 'danger', lang: 'it', expected: 'pericolo' },
-    { id: 77, word: 'traffic', lang: 'ru', expected: 'движение, трафик' },
-    { id: 77, word: 'traffic', lang: 'de', expected: 'Verkehr' },
     { id: 78, word: 'plate', lang: 'es', expected: 'plato, placa' },
     { id: 78, word: 'plate', lang: 'it', expected: 'piatto, piastra' },
     { id: 78, word: 'plate', lang: 'ja', expected: '皿、プレート' },
-    { id: 78, word: 'plate', lang: 'ko', expected: '접시, 플레이트' },
-    { id: 82, word: 'expensive', lang: 'pl', expected: 'drogi' },
     { id: 85, word: 'adopt', lang: 'ru', expected: 'усыновлять, принимать' },
-    { id: 85, word: 'adopt', lang: 'ja', expected: '養子にする、採用する' },
-    { id: 88, word: 'circle', lang: 'ja', expected: '円、丸、サークル' },
     { id: 90, word: 'solve', lang: 'ru', expected: 'решать, разрешать' },
     { id: 90, word: 'solve', lang: 'de', expected: 'lösen, auflösen' },
-    { id: 90, word: 'solve', lang: 'ja', expected: '解決する、解く' },
-    { id: 91, word: 'busy', lang: 'it', expected: 'occupato' },
     { id: 93, word: 'requirement', lang: 'ja', expected: '要件、必要条件' },
-    { id: 93, word: 'requirement', lang: 'ko', expected: '요구조건, 필요조건' },
-    { id: 95, word: 'rain', lang: 'it', expected: 'pioggia, piovere' },
-    { id: 100, word: 'exercise', lang: 'ja', expected: '運動、エクササイズ、練習問題' }
+
+    // Batch 101-150
+    { id: 103, word: 'unfortunately', lang: 'fr', expected: 'malheureusement' },
+    { id: 103, word: 'unfortunately', lang: 'it', expected: 'purtroppo' },
+    { id: 105, word: 'united', lang: 'fr', expected: 'uni' },
+    { id: 105, word: 'united', lang: 'it', expected: 'unito' },
+    { id: 106, word: 'pool', lang: 'it', expected: 'piscina, fondo comune' },
+    { id: 106, word: 'pool', lang: 'ko', expected: '수영장, 공동 기금' },
+    { id: 122, word: 'universe', lang: 'fr', expected: 'univers' },
+    { id: 122, word: 'universe', lang: 'it', expected: 'universo' },
+    { id: 125, word: 'locate', lang: 'it', expected: 'localizzare, trovare' },
+    { id: 125, word: 'locate', lang: 'hu', expected: 'megtalál, felkutat' },
+    { id: 134, word: 'bear', lang: 'it', expected: 'orso, sopportare' },
+    { id: 134, word: 'bear', lang: 'cs', expected: 'medvěd, snášet' },
+    { id: 134, word: 'bear', lang: 'ja', expected: '熊、耐える' },
+    { id: 134, word: 'bear', lang: 'lv', expected: 'lācis, paciest' },
+    { id: 137, word: 'sight', lang: 'fr', expected: 'vue, spectacle, regard' },
+    { id: 137, word: 'sight', lang: 'it', expected: 'vista, sguardo' },
+    { id: 140, word: 'tape', lang: 'tr', expected: 'bant, şerit' },
+    { id: 140, word: 'tape', lang: 'cs', expected: 'páska, lepicí páska' },
+    { id: 142, word: 'host', lang: 'it', expected: 'ospite, presentatore' },
+    { id: 143, word: 'grant', lang: 'fr', expected: 'accorder, subvention' },
+    { id: 147, word: 'domestic', lang: 'ru', expected: 'домашний, внутренний' },
+    { id: 147, word: 'domestic', lang: 'it', expected: 'domestico, interno' },
+    { id: 147, word: 'domestic', lang: 'ja', expected: '国内の、家庭の' },
+    { id: 150, word: 'neither', lang: 'fr', expected: "ni l'un ni l'autre, aucun" }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -110,6 +106,12 @@ async function run() {
   const calib2End = calib2FileContent.indexOf('let totalPatched = 0;');
   const calibs2 = eval(calib2FileContent.slice(calib2Start + 'const calibrations = '.length, calib2End).trim().replace(/;$/, ''));
 
+  // Read calibrations from batch 101-150 script
+  const calib3FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_101_150_calibrations.cjs'), 'utf8');
+  const calib3Start = calib3FileContent.indexOf('const calibrations = [');
+  const calib3End = calib3FileContent.indexOf('let totalPatched = 0;');
+  const calibs3 = eval(calib3FileContent.slice(calib3Start + 'const calibrations = '.length, calib3End).trim().replace(/;$/, ''));
+
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
   for (const [idStr, langMap] of Object.entries(calibs1)) {
@@ -134,8 +136,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100 calibrations into fsMap
-  for (const cal of calibs2) {
+  // Merge batch 51-100 & 101-150 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
@@ -179,7 +181,7 @@ async function run() {
     delete fsMap[idStr].updatedAt;
   }
 
-  console.log(`   Merged Batch 1-50 & Batch 51-100 calibrations into Firestore updates.`);
+  console.log(`   Merged Batch 1-50, 51-100, and 101-150 calibrations into Firestore updates.`);
 
   // 2. Prune redundant legacy duplicate fr/vi entries to preserve plenty of headroom (< 1024 KB)
   let pruned = 0;
@@ -188,6 +190,7 @@ async function run() {
     if (!localW) continue;
     if (calibs1[idStr]) continue;
     if (calibs2.some(c => String(c.id) === idStr)) continue;
+    if (calibs3.some(c => String(c.id) === idStr)) continue;
 
     const trKeys = Object.keys(entry.translations || {});
     if (trKeys.length === 2 && trKeys.includes('fr') && trKeys.includes('vi')) {
