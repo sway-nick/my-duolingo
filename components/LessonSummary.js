@@ -124,8 +124,10 @@ export function renderLessonSummary(container, results) {
         const completedLessonsMap = StorageService.getCompletedLessons() || {};
         const completedCount = (stats.lessonsCompleted) || Object.keys(completedLessonsMap).length || 0;
         const isSurveyDone = typeof localStorage !== 'undefined' && localStorage.getItem('myduo_fairy_tale_survey_done') === 'true';
+        const ftDelayedUntil = typeof localStorage !== 'undefined' ? Number(localStorage.getItem('myduo_ft_survey_delayed_until') || 0) : 0;
+        const isFtDelayed = Date.now() < ftDelayedUntil;
 
-        if (!isSurveyDone && completedCount >= 3) {
+        if (!isSurveyDone && !isFtDelayed && completedCount >= 3) {
             if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('myduo_ft_survey_auto_shown')) {
                 sessionStorage.setItem('myduo_ft_survey_auto_shown', 'true');
                 setTimeout(() => {

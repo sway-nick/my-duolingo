@@ -1198,6 +1198,16 @@ let isSurveyActive = false;
 export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
   if (isSurveyActive) return;
 
+  if (triggerSource === 'auto_lesson_3') {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        if (localStorage.getItem('myduo_fairy_tale_survey_done') === 'true') return;
+        const delayedUntil = Number(localStorage.getItem('myduo_ft_survey_delayed_until') || 0);
+        if (Date.now() < delayedUntil) return;
+      }
+    } catch (e) {}
+  }
+
   const existing = document.querySelector('#fairy-tale-survey-overlay');
   if (existing) existing.remove();
 
@@ -1465,6 +1475,20 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
   // Close X
   overlay.querySelector('#fts-close-survey')?.addEventListener('click', () => {
     if (window.trackEvent) window.trackEvent('survey_fairy_tale_dismissed');
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const dismissCount = Number(localStorage.getItem('myduo_ft_survey_dismiss_count') || 0);
+        if (dismissCount >= 1) {
+          // Closed for the second time -> never ask again
+          localStorage.setItem('myduo_fairy_tale_survey_done', 'true');
+          localStorage.removeItem('myduo_ft_survey_delayed_until');
+        } else {
+          // First dismissal -> ask once later after 7 days
+          localStorage.setItem('myduo_ft_survey_dismiss_count', '1');
+          localStorage.setItem('myduo_ft_survey_delayed_until', String(Date.now() + 7 * 24 * 60 * 60 * 1000));
+        }
+      }
+    } catch (e) {}
     dismiss();
   });
 
