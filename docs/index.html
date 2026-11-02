@@ -222,7 +222,7 @@
       import { renderStoriesView } from './components/favorites/StoriesView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
-      import { renderLeaderboardView, renderMondayMemeTop4Cut } from './components/leaderboard/LeaderboardView.js?v=386.0';
+      import { renderLeaderboardView, renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } from './components/leaderboard/LeaderboardView.js?v=386.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
       import { showMilestoneStoryModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
@@ -235,6 +235,14 @@
       try {
         AdService.init().catch(() => {});
         syncRemoteVideos().catch(() => {});
+
+        // Eagerly prefetch completed week leaderboard on Monday so meme cut is ready instantly
+        const _curWk = getIsoWeekKey();
+        const _pastWk = getRecentWeekKeys ? (getRecentWeekKeys(2)[1] || _curWk) : _curWk;
+        const _memeKey = `myduo_meme_seen_week_${_curWk}`;
+        if (localStorage.getItem(_memeKey) !== '1') {
+          getLeaderboard(_pastWk, 'week', true).catch(() => {});
+        }
       } catch (e) {}
 
       // Reset irregular verbs and UK audio download flags once so user can test AdMob rewarded video in both places
@@ -1214,7 +1222,7 @@
           const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isMemeActive;
 
           if (isMemeActive) {
-            getLeaderboard(completedWeekKey, 'week').then(() => {
+            getLeaderboard(completedWeekKey, 'week', true).then(() => {
               const cCut = document.getElementById('wotd-top4-cut');
               if (cCut) renderMondayMemeTop4Cut(cCut, completedWeekKey);
             }).catch(() => {});
@@ -1341,7 +1349,7 @@
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                           <video id="wotd-card-video-what" playsinline preload="auto" muted src="assets/video/meme_monday_what.mp4" style="width: 100%; height: 100%; object-fit: cover; display: none; border-radius: inherit;"></video>
                           <div id="wotd-top4-cut" style="display: none; pointer-events: none;">
-                            <img id="wotd-top4-img" src="assets/images/leaderboard_top4_cut.png" alt="">
+                            ${isMemeActive ? getMondayMemeTop4CutHtml(completedWeekKey) : ''}
                           </div>
                         </div>
 
@@ -1704,7 +1712,6 @@
                     };
 
                     const top4Cut = document.getElementById('wotd-top4-cut');
-                    const top4Img = document.getElementById('wotd-top4-img');
                     if (isMemeActive && top4Cut) {
                       renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
                     }

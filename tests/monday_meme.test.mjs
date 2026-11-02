@@ -54,11 +54,16 @@ test('Monday Golden Card Meme: renderMondayMemeTop4Cut dynamically renders actua
   ];
   localStorage.setItem(`cache_leaderboard_${targetCompletedWeek}`, JSON.stringify(realCompletedWeekTop4));
 
-  const { renderMondayMemeTop4Cut } = await import('../frontend/components/leaderboard/LeaderboardView.js');
+  const { renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } = await import('../frontend/components/leaderboard/LeaderboardView.js');
   const { getCachedLeaderboard } = await import('../frontend/services/api.js');
 
   const expectedTop4 = getCachedLeaderboard(targetCompletedWeek, 'week').data.slice(0, 4);
   assert.equal(expectedTop4.length, 4, 'Must have at least 4 players in leaderboard');
+
+  // Verify getMondayMemeTop4CutHtml returns valid template string
+  const directHtml = getMondayMemeTop4CutHtml(targetCompletedWeek);
+  assert.ok(typeof directHtml === 'string' && directHtml.length > 0, 'getMondayMemeTop4CutHtml must return non-empty HTML string');
+  assert.ok(directHtml.includes('wotd-top4-frame'), 'Must contain wotd-top4-frame wrapper');
 
   const container = { innerHTML: '' };
   renderMondayMemeTop4Cut(container, targetCompletedWeek);

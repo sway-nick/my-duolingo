@@ -653,9 +653,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   }
 }
 
-export function renderMondayMemeTop4Cut(containerEl, weekKey = null) {
-  if (!containerEl) return;
-
+export function getMondayMemeTop4CutHtml(weekKey = null) {
   const targetWeekKey = weekKey || (getRecentWeekKeys ? (getRecentWeekKeys(2)[1] || getIsoWeekKey()) : getIsoWeekKey());
   let lb = getCachedLeaderboard(targetWeekKey, 'week');
   let players = (lb && Array.isArray(lb.data)) ? lb.data.filter((p) => p && p.name) : [];
@@ -689,13 +687,20 @@ export function renderMondayMemeTop4Cut(containerEl, weekKey = null) {
 
   const cardsHtml = top4.map((player, idx) => renderPodiumCard(player, idx + 1, 'week')).join('');
 
-  containerEl.innerHTML = `
+  return `
     <div class="wotd-top4-frame dark-theme">
       <div class="podium-grid wotd-top4-podium-grid">
         ${cardsHtml}
       </div>
     </div>
   `;
+}
+
+export function renderMondayMemeTop4Cut(containerEl, weekKey = null) {
+  if (!containerEl) return '';
+  const html = getMondayMemeTop4CutHtml(weekKey);
+  containerEl.innerHTML = html;
+  return html;
 }
 
 export { renderLeaderboardView, renderPodiumCard };
