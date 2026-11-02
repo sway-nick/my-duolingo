@@ -3,8 +3,8 @@
 # min_api: 24
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: 06547845f054081ab4e87807d4f336b14d6cba452ef25717aa622a0753038eca
-# pg_map_hash: SHA-256 06547845f054081ab4e87807d4f336b14d6cba452ef25717aa622a0753038eca
+# pg_map_id: 1a1595bccc663b3d92fdae4f5b619a763063e591551afe7423a981f3c747760f
+# pg_map_hash: SHA-256 1a1595bccc663b3d92fdae4f5b619a763063e591551afe7423a981f3c747760f
 _COROUTINE.ArtificialStackFrames -> R8$$REMOVED$$CLASS$$0:
 # {"id":"sourceFile","fileName":"CoroutineDebugging.kt"}
 _COROUTINE.CoroutineDebuggingKt -> R8$$REMOVED$$CLASS$$1:
@@ -78527,8 +78527,8 @@ com.englishbreakfast.app.MainActivity -> com.englishbreakfast.app.MainActivity:
     28:31:void runJsWhenReady(java.lang.String,int):187:187 -> runJsWhenReady
     1:3:com.google.android.gms.auth.api.signin.GoogleSignInClient -$$Nest$fgetgoogleSignInClient(com.englishbreakfast.app.MainActivity):0:0 -> s
       # {"id":"com.android.tools.r8.synthesized"}
-    1:10:void setupAnalyticsBridge():1037:1037 -> setupAnalyticsBridge
-    11:27:void setupAnalyticsBridge():1038:1038 -> setupAnalyticsBridge
+    1:10:void setupAnalyticsBridge():1057:1057 -> setupAnalyticsBridge
+    11:27:void setupAnalyticsBridge():1058:1058 -> setupAnalyticsBridge
     1:8:void setupAudioBridge():565:565 -> setupAudioBridge
     9:18:void setupAudioBridge():588:588 -> setupAudioBridge
     19:35:void setupAudioBridge():589:589 -> setupAudioBridge
@@ -78545,8 +78545,8 @@ com.englishbreakfast.app.MainActivity -> com.englishbreakfast.app.MainActivity:
     34:44:void setupGoogleAuthBridge():385:385 -> setupGoogleAuthBridge
     45:54:void setupGoogleAuthBridge():394:394 -> setupGoogleAuthBridge
     55:71:void setupGoogleAuthBridge():395:395 -> setupGoogleAuthBridge
-    1:10:void setupOcrBridge():1116:1116 -> setupOcrBridge
-    11:27:void setupOcrBridge():1117:1117 -> setupOcrBridge
+    1:10:void setupOcrBridge():1136:1136 -> setupOcrBridge
+    11:27:void setupOcrBridge():1137:1137 -> setupOcrBridge
     1:10:void setupThemeBridge():333:333 -> setupThemeBridge
     11:27:void setupThemeBridge():334:334 -> setupThemeBridge
     1:10:void setupWidgetBridge():713:713 -> setupWidgetBridge
@@ -78642,43 +78642,43 @@ com.englishbreakfast.app.MainActivity$1 -> com.englishbreakfast.app.MainActivity
     1:6:void onPageStarted(android.webkit.WebView):135:135 -> onPageStarted
 com.englishbreakfast.app.MainActivity$10 -> com.englishbreakfast.app.MainActivity$10:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):1038:1038 -> <init>
-    1:22:void logEvent(java.lang.String,java.lang.String):1041:1041 -> logEvent
-    23:29:void logEvent(java.lang.String,java.lang.String):1043:1043 -> logEvent
-    30:39:void logEvent(java.lang.String,java.lang.String):1044:1044 -> logEvent
-    40:44:void logEvent(java.lang.String,java.lang.String):1045:1045 -> logEvent
-    45:48:void logEvent(java.lang.String,java.lang.String):1046:1046 -> logEvent
-    49:54:void logEvent(java.lang.String,java.lang.String):1047:1047 -> logEvent
-    55:60:void logEvent(java.lang.String,java.lang.String):1048:1048 -> logEvent
-    61:64:void logEvent(java.lang.String,java.lang.String):1049:1049 -> logEvent
-    65:68:void logEvent(java.lang.String,java.lang.String):1050:1050 -> logEvent
-    69:77:void logEvent(java.lang.String,java.lang.String):1051:1051 -> logEvent
-    78:89:void logEvent(java.lang.String,java.lang.String):1054:1054 -> logEvent
-    90:99:void logEvent(java.lang.String,java.lang.String):1052:1052 -> logEvent
-    100:103:void logEvent(java.lang.String,java.lang.String):1056:1056 -> logEvent
-    104:115:void logEvent(java.lang.String,java.lang.String):1057:1057 -> logEvent
-    116:123:void logEvent(java.lang.String,java.lang.String):1059:1059 -> logEvent
-    124:131:void logEvent(java.lang.String,java.lang.String):1063:1063 -> logEvent
-    132:141:void logEvent(java.lang.String,java.lang.String):1064:1064 -> logEvent
-    142:145:void logEvent(java.lang.String,java.lang.String):1067:1067 -> logEvent
-    1:9:void setUserId(java.lang.String):1088:1088 -> setUserId
-    10:17:void setUserId(java.lang.String):1090:1090 -> setUserId
-    18:43:void setUserId(java.lang.String):1091:1091 -> setUserId
-    44:47:void setUserId(java.lang.String):1094:1094 -> setUserId
-    1:21:void setUserProperty(java.lang.String,java.lang.String):1100:1100 -> setUserProperty
-    22:29:void setUserProperty(java.lang.String,java.lang.String):1102:1102 -> setUserProperty
-    30:40:void setUserProperty(java.lang.String,java.lang.String):1103:1103 -> setUserProperty
-    41:44:void setUserProperty(java.lang.String,java.lang.String):1106:1106 -> setUserProperty
-    1:21:void trackScreen(java.lang.String,java.lang.String):1073:1073 -> trackScreen
-    22:26:void trackScreen(java.lang.String,java.lang.String):1075:1075 -> trackScreen
-    27:31:void trackScreen(java.lang.String,java.lang.String):1076:1076 -> trackScreen
-    32:53:void trackScreen(java.lang.String,java.lang.String):1077:1077 -> trackScreen
-    54:61:void trackScreen(java.lang.String,java.lang.String):1078:1078 -> trackScreen
-    62:73:void trackScreen(java.lang.String,java.lang.String):1079:1079 -> trackScreen
-    74:77:void trackScreen(java.lang.String,java.lang.String):1082:1082 -> trackScreen
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):1058:1058 -> <init>
+    1:22:void logEvent(java.lang.String,java.lang.String):1061:1061 -> logEvent
+    23:29:void logEvent(java.lang.String,java.lang.String):1063:1063 -> logEvent
+    30:39:void logEvent(java.lang.String,java.lang.String):1064:1064 -> logEvent
+    40:44:void logEvent(java.lang.String,java.lang.String):1065:1065 -> logEvent
+    45:48:void logEvent(java.lang.String,java.lang.String):1066:1066 -> logEvent
+    49:54:void logEvent(java.lang.String,java.lang.String):1067:1067 -> logEvent
+    55:60:void logEvent(java.lang.String,java.lang.String):1068:1068 -> logEvent
+    61:64:void logEvent(java.lang.String,java.lang.String):1069:1069 -> logEvent
+    65:68:void logEvent(java.lang.String,java.lang.String):1070:1070 -> logEvent
+    69:77:void logEvent(java.lang.String,java.lang.String):1071:1071 -> logEvent
+    78:89:void logEvent(java.lang.String,java.lang.String):1074:1074 -> logEvent
+    90:99:void logEvent(java.lang.String,java.lang.String):1072:1072 -> logEvent
+    100:103:void logEvent(java.lang.String,java.lang.String):1076:1076 -> logEvent
+    104:115:void logEvent(java.lang.String,java.lang.String):1077:1077 -> logEvent
+    116:123:void logEvent(java.lang.String,java.lang.String):1079:1079 -> logEvent
+    124:131:void logEvent(java.lang.String,java.lang.String):1083:1083 -> logEvent
+    132:141:void logEvent(java.lang.String,java.lang.String):1084:1084 -> logEvent
+    142:145:void logEvent(java.lang.String,java.lang.String):1087:1087 -> logEvent
+    1:9:void setUserId(java.lang.String):1108:1108 -> setUserId
+    10:17:void setUserId(java.lang.String):1110:1110 -> setUserId
+    18:43:void setUserId(java.lang.String):1111:1111 -> setUserId
+    44:47:void setUserId(java.lang.String):1114:1114 -> setUserId
+    1:21:void setUserProperty(java.lang.String,java.lang.String):1120:1120 -> setUserProperty
+    22:29:void setUserProperty(java.lang.String,java.lang.String):1122:1122 -> setUserProperty
+    30:40:void setUserProperty(java.lang.String,java.lang.String):1123:1123 -> setUserProperty
+    41:44:void setUserProperty(java.lang.String,java.lang.String):1126:1126 -> setUserProperty
+    1:21:void trackScreen(java.lang.String,java.lang.String):1093:1093 -> trackScreen
+    22:26:void trackScreen(java.lang.String,java.lang.String):1095:1095 -> trackScreen
+    27:31:void trackScreen(java.lang.String,java.lang.String):1096:1096 -> trackScreen
+    32:53:void trackScreen(java.lang.String,java.lang.String):1097:1097 -> trackScreen
+    54:61:void trackScreen(java.lang.String,java.lang.String):1098:1098 -> trackScreen
+    62:73:void trackScreen(java.lang.String,java.lang.String):1099:1099 -> trackScreen
+    74:77:void trackScreen(java.lang.String,java.lang.String):1102:1102 -> trackScreen
 com.englishbreakfast.app.MainActivity$11 -> com.englishbreakfast.app.MainActivity$11:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
-    1:6:void <init>(com.englishbreakfast.app.MainActivity):1117:1117 -> <init>
+    1:6:void <init>(com.englishbreakfast.app.MainActivity):1137:1137 -> <init>
     1:5:int $r8$lambda$7_Fuyk7rO1tYb7IUXgXd89Lszh0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$Ab993d7ISVK3oHLjofXDyTxyRDs(com.englishbreakfast.app.MainActivity$11,java.lang.String,java.lang.Exception):0:0 -> b
@@ -78687,64 +78687,64 @@ com.englishbreakfast.app.MainActivity$11 -> com.englishbreakfast.app.MainActivit
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$c6-0GwV3DC9B6c8CG-i6Ll7mgkk(com.englishbreakfast.app.MainActivity$11,java.lang.String,boolean,java.lang.String,java.lang.String):0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
-    1:16:void dispatchOcrResult(java.lang.String,boolean,java.lang.String,java.lang.String):1206:1206 -> dispatchOcrResult
+    1:16:void dispatchOcrResult(java.lang.String,boolean,java.lang.String,java.lang.String):1226:1226 -> dispatchOcrResult
     1:4:void $r8$lambda$cvRXYBtlv3Zh-RaW2IQJeas90YA(com.englishbreakfast.app.MainActivity$11,java.lang.String,java.lang.String):0:0 -> e
       # {"id":"com.android.tools.r8.synthesized"}
-    1:12:boolean isAvailable():1120:1120 -> isAvailable
-    1:22:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1208:1208 -> lambda$dispatchOcrResult$4
-    23:27:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1209:1209 -> lambda$dispatchOcrResult$4
-    28:32:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1210:1210 -> lambda$dispatchOcrResult$4
-    33:37:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1211:1211 -> lambda$dispatchOcrResult$4
-    38:48:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1212:1212 -> lambda$dispatchOcrResult$4
-    49:57:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1213:1213 -> lambda$dispatchOcrResult$4
-    58:78:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1214:1214 -> lambda$dispatchOcrResult$4
-    79:93:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1215:1215 -> lambda$dispatchOcrResult$4
-    1:4:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1160:1160 -> lambda$recognizeText$0
-    5:13:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1161:1161 -> lambda$recognizeText$0
-    14:26:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1163:1163 -> lambda$recognizeText$0
-    27:35:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1164:1164 -> lambda$recognizeText$0
-    36:46:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1166:1166 -> lambda$recognizeText$0
-    2:5:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1153:1153 -> lambda$recognizeText$1
-    6:9:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1154:1154 -> lambda$recognizeText$1
-    10:11:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1157:1157 -> lambda$recognizeText$1
-    12:18:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1158:1158 -> lambda$recognizeText$1
-    19:26:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1159:1159 -> lambda$recognizeText$1
-    27:31:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1169:1169 -> lambda$recognizeText$1
-    32:46:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1170:1170 -> lambda$recognizeText$1
-    47:62:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1171:1171 -> lambda$recognizeText$1
-    63:69:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1172:1172 -> lambda$recognizeText$1
-    70:79:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1174:1174 -> lambda$recognizeText$1
-    80:102:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1176:1176 -> lambda$recognizeText$1
-    103:118:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1177:1177 -> lambda$recognizeText$1
-    119:122:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1182:1182 -> lambda$recognizeText$1
-    123:128:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1183:1183 -> lambda$recognizeText$1
-    129:136:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1184:1184 -> lambda$recognizeText$1
-    137:140:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1185:1185 -> lambda$recognizeText$1
-    141:144:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1186:1186 -> lambda$recognizeText$1
-    145:150:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1187:1187 -> lambda$recognizeText$1
-    151:161:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1188:1188 -> lambda$recognizeText$1
-    162:166:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1189:1189 -> lambda$recognizeText$1
-    167:181:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1193:1193 -> lambda$recognizeText$1
-    182:185:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1194:1194 -> lambda$recognizeText$1
-    3:16:void lambda$recognizeText$2(java.lang.String,java.lang.Exception):1197:1197 -> lambda$recognizeText$2
-    1:5:void lambda$recognizeText$3(java.lang.String,java.lang.String):1132:1132 -> lambda$recognizeText$3
-    6:11:void lambda$recognizeText$3(java.lang.String,java.lang.String):1133:1133 -> lambda$recognizeText$3
-    12:24:void lambda$recognizeText$3(java.lang.String,java.lang.String):1134:1134 -> lambda$recognizeText$3
-    25:28:void lambda$recognizeText$3(java.lang.String,java.lang.String):1136:1136 -> lambda$recognizeText$3
-    29:35:void lambda$recognizeText$3(java.lang.String,java.lang.String):1137:1137 -> lambda$recognizeText$3
-    36:41:void lambda$recognizeText$3(java.lang.String,java.lang.String):1139:1139 -> lambda$recognizeText$3
-    42:45:void lambda$recognizeText$3(java.lang.String,java.lang.String):1143:1143 -> lambda$recognizeText$3
-    46:49:void lambda$recognizeText$3(java.lang.String,java.lang.String):1145:1145 -> lambda$recognizeText$3
-    50:51:void lambda$recognizeText$3(java.lang.String,java.lang.String):1146:1146 -> lambda$recognizeText$3
-    52:55:void lambda$recognizeText$3(java.lang.String,java.lang.String):1147:1147 -> lambda$recognizeText$3
-    56:64:void lambda$recognizeText$3(java.lang.String,java.lang.String):1151:1151 -> lambda$recognizeText$3
-    65:73:void lambda$recognizeText$3(java.lang.String,java.lang.String):1152:1152 -> lambda$recognizeText$3
-    74:77:void lambda$recognizeText$3(java.lang.String,java.lang.String):1196:1196 -> lambda$recognizeText$3
-    78:85:void lambda$recognizeText$3(java.lang.String,java.lang.String):1200:1200 -> lambda$recognizeText$3
-    1:21:void recognizeText(java.lang.String,java.lang.String):1126:1126 -> recognizeText
-    22:32:void recognizeText(java.lang.String,java.lang.String):1130:1130 -> recognizeText
-    33:36:void recognizeText(java.lang.String,java.lang.String):1202:1202 -> recognizeText
-    37:45:void recognizeText(java.lang.String,java.lang.String):1127:1127 -> recognizeText
+    1:12:boolean isAvailable():1140:1140 -> isAvailable
+    1:22:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1228:1228 -> lambda$dispatchOcrResult$4
+    23:27:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1229:1229 -> lambda$dispatchOcrResult$4
+    28:32:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1230:1230 -> lambda$dispatchOcrResult$4
+    33:37:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1231:1231 -> lambda$dispatchOcrResult$4
+    38:48:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1232:1232 -> lambda$dispatchOcrResult$4
+    49:57:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1233:1233 -> lambda$dispatchOcrResult$4
+    58:78:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1234:1234 -> lambda$dispatchOcrResult$4
+    79:93:void lambda$dispatchOcrResult$4(java.lang.String,boolean,java.lang.String,java.lang.String):1235:1235 -> lambda$dispatchOcrResult$4
+    1:4:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1180:1180 -> lambda$recognizeText$0
+    5:13:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1181:1181 -> lambda$recognizeText$0
+    14:26:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1183:1183 -> lambda$recognizeText$0
+    27:35:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1184:1184 -> lambda$recognizeText$0
+    36:46:int lambda$recognizeText$0(com.google.mlkit.vision.text.Text$TextBlock,com.google.mlkit.vision.text.Text$TextBlock):1186:1186 -> lambda$recognizeText$0
+    2:5:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1173:1173 -> lambda$recognizeText$1
+    6:9:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1174:1174 -> lambda$recognizeText$1
+    10:11:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1177:1177 -> lambda$recognizeText$1
+    12:18:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1178:1178 -> lambda$recognizeText$1
+    19:26:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1179:1179 -> lambda$recognizeText$1
+    27:31:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1189:1189 -> lambda$recognizeText$1
+    32:46:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1190:1190 -> lambda$recognizeText$1
+    47:62:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1191:1191 -> lambda$recognizeText$1
+    63:69:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1192:1192 -> lambda$recognizeText$1
+    70:79:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1194:1194 -> lambda$recognizeText$1
+    80:102:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1196:1196 -> lambda$recognizeText$1
+    103:118:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1197:1197 -> lambda$recognizeText$1
+    119:122:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1202:1202 -> lambda$recognizeText$1
+    123:128:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1203:1203 -> lambda$recognizeText$1
+    129:136:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1204:1204 -> lambda$recognizeText$1
+    137:140:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1205:1205 -> lambda$recognizeText$1
+    141:144:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1206:1206 -> lambda$recognizeText$1
+    145:150:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1207:1207 -> lambda$recognizeText$1
+    151:161:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1208:1208 -> lambda$recognizeText$1
+    162:166:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1209:1209 -> lambda$recognizeText$1
+    167:181:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1213:1213 -> lambda$recognizeText$1
+    182:185:void lambda$recognizeText$1(java.lang.String,int,com.google.mlkit.vision.text.Text):1214:1214 -> lambda$recognizeText$1
+    3:16:void lambda$recognizeText$2(java.lang.String,java.lang.Exception):1217:1217 -> lambda$recognizeText$2
+    1:5:void lambda$recognizeText$3(java.lang.String,java.lang.String):1152:1152 -> lambda$recognizeText$3
+    6:11:void lambda$recognizeText$3(java.lang.String,java.lang.String):1153:1153 -> lambda$recognizeText$3
+    12:24:void lambda$recognizeText$3(java.lang.String,java.lang.String):1154:1154 -> lambda$recognizeText$3
+    25:28:void lambda$recognizeText$3(java.lang.String,java.lang.String):1156:1156 -> lambda$recognizeText$3
+    29:35:void lambda$recognizeText$3(java.lang.String,java.lang.String):1157:1157 -> lambda$recognizeText$3
+    36:41:void lambda$recognizeText$3(java.lang.String,java.lang.String):1159:1159 -> lambda$recognizeText$3
+    42:45:void lambda$recognizeText$3(java.lang.String,java.lang.String):1163:1163 -> lambda$recognizeText$3
+    46:49:void lambda$recognizeText$3(java.lang.String,java.lang.String):1165:1165 -> lambda$recognizeText$3
+    50:51:void lambda$recognizeText$3(java.lang.String,java.lang.String):1166:1166 -> lambda$recognizeText$3
+    52:55:void lambda$recognizeText$3(java.lang.String,java.lang.String):1167:1167 -> lambda$recognizeText$3
+    56:64:void lambda$recognizeText$3(java.lang.String,java.lang.String):1171:1171 -> lambda$recognizeText$3
+    65:73:void lambda$recognizeText$3(java.lang.String,java.lang.String):1172:1172 -> lambda$recognizeText$3
+    74:77:void lambda$recognizeText$3(java.lang.String,java.lang.String):1216:1216 -> lambda$recognizeText$3
+    78:85:void lambda$recognizeText$3(java.lang.String,java.lang.String):1220:1220 -> lambda$recognizeText$3
+    1:21:void recognizeText(java.lang.String,java.lang.String):1146:1146 -> recognizeText
+    22:32:void recognizeText(java.lang.String,java.lang.String):1150:1150 -> recognizeText
+    33:36:void recognizeText(java.lang.String,java.lang.String):1222:1222 -> recognizeText
+    37:45:void recognizeText(java.lang.String,java.lang.String):1147:1147 -> recognizeText
 com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.i:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
@@ -78964,10 +78964,11 @@ com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda1 -> com.english
     int $r8$classId -> r
       # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$5 com.englishbreakfast.app.MainActivity$5$$InternalSyntheticLambda$1$6d2d7511df48402446f2fd21dddb5951bde74d193c19eef3ef2f1cf436aa9441$0.f$0 -> s
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
-    1:8:void <init>(com.englishbreakfast.app.MainActivity$5,int):0:0 -> <init>
+    1:8:void <init>(java.lang.Object,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    1:18:void run():0:0 -> run
+    1:30:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.MainActivity$6 -> com.englishbreakfast.app.MainActivity$6:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
@@ -79118,17 +79119,19 @@ com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda5 -> com.english
 com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity$9:
 # {"id":"sourceFile","fileName":"MainActivity.java"}
     1:6:void <init>(com.englishbreakfast.app.MainActivity):714:714 -> <init>
-    1:4:void $r8$lambda$_pkKuiFjFbEoXPwZYRZHKUaAmAA(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String):0:0 -> a
+    1:4:void $r8$lambda$V1FP9eFQ5zJm9UdUbhMPsQeB61o(com.englishbreakfast.app.MainActivity$9):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$kvTBKwUUvL07JLQttOIxV-3HiBs(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String):0:0 -> b
+    1:4:void $r8$lambda$_pkKuiFjFbEoXPwZYRZHKUaAmAA(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String):0:0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$umGwimolGFrjK0bopzXpAkGDtek(com.englishbreakfast.app.MainActivity$9):0:0 -> c
+    1:4:void $r8$lambda$kvTBKwUUvL07JLQttOIxV-3HiBs(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
     1:9:void clearPendingFavorites():809:809 -> clearPendingFavorites
     10:15:void clearPendingFavorites():810:810 -> clearPendingFavorites
     1:9:void clearPendingUnfavorites():791:791 -> clearPendingUnfavorites
     10:15:void clearPendingUnfavorites():792:792 -> clearPendingUnfavorites
-    1:4:void $r8$lambda$v30xtNoFTAiUtZlY3hE8JlzClXQ(com.englishbreakfast.app.MainActivity$9,java.lang.String):0:0 -> d
+    1:4:void $r8$lambda$umGwimolGFrjK0bopzXpAkGDtek(com.englishbreakfast.app.MainActivity$9):0:0 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void $r8$lambda$v30xtNoFTAiUtZlY3hE8JlzClXQ(com.englishbreakfast.app.MainActivity$9,java.lang.String):0:0 -> e
       # {"id":"com.android.tools.r8.synthesized"}
     1:11:java.lang.String getPendingFavorites():797:797 -> getPendingFavorites
     12:18:java.lang.String getPendingFavorites():798:798 -> getPendingFavorites
@@ -79181,6 +79184,14 @@ com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity
     80:86:void lambda$openHomeScreenSettings$1():929:929 -> lambda$openHomeScreenSettings$1
     87:89:void lambda$openHomeScreenSettings$1():930:930 -> lambda$openHomeScreenSettings$1
     90:95:void lambda$openHomeScreenSettings$1():931:931 -> lambda$openHomeScreenSettings$1
+    1:30:void lambda$openStoreListing$4():1036:1036 -> lambda$openStoreListing$4
+    31:35:void lambda$openStoreListing$4():1037:1037 -> lambda$openStoreListing$4
+    36:38:void lambda$openStoreListing$4():1038:1038 -> lambda$openStoreListing$4
+    39:44:void lambda$openStoreListing$4():1039:1039 -> lambda$openStoreListing$4
+    45:66:void lambda$openStoreListing$4():1042:1042 -> lambda$openStoreListing$4
+    67:71:void lambda$openStoreListing$4():1043:1043 -> lambda$openStoreListing$4
+    72:74:void lambda$openStoreListing$4():1044:1044 -> lambda$openStoreListing$4
+    75:80:void lambda$openStoreListing$4():1045:1045 -> lambda$openStoreListing$4
     1:22:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):941:941 -> lambda$shareToChannel$2
     23:46:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):943:943 -> lambda$shareToChannel$2
     47:58:void lambda$shareToChannel$2(java.lang.String,java.lang.String,java.lang.String):945:945 -> lambda$shareToChannel$2
@@ -79271,6 +79282,8 @@ com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity
     10:25:void openFeedbackEmail(java.lang.String,java.lang.String,java.lang.String):1000:1000 -> openFeedbackEmail
     1:9:void openHomeScreenSettings():911:911 -> openHomeScreenSettings
     10:21:void openHomeScreenSettings():912:912 -> openHomeScreenSettings
+    1:9:void openStoreListing():1033:1033 -> openStoreListing
+    10:21:void openStoreListing():1034:1034 -> openStoreListing
     1:9:void removePendingFavorite(java.lang.String):803:803 -> removePendingFavorite
     10:15:void removePendingFavorite(java.lang.String):804:804 -> removePendingFavorite
     1:9:void removePendingUnfavorite(java.lang.String):785:785 -> removePendingUnfavorite
@@ -79303,6 +79316,17 @@ com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englis
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> r
       # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$e1da4abd6b97658a63211214c38ce654daa313e3e6da48610d29a9a707e8dfb9$0.f$0 -> s
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:8:void <init>(com.englishbreakfast.app.MainActivity$9,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:18:void run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda11 -> com.englishbreakfast.app.x:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int $r8$classId -> r
+      # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$0 -> s
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$1 -> t
@@ -79314,18 +79338,6 @@ com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englis
     1:14:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
     1:30:void run():0:0 -> run
-      # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda8 -> com.englishbreakfast.app.x:
-# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
-# {"id":"com.android.tools.r8.synthesized"}
-    int $r8$classId -> r
-      # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$6e2b04e051501ae8731f92c46acde3e20f591ca10a049bd2552cbb8d1e87bee6$0.f$0 -> s
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:8:void <init>(java.lang.Object,int):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    1:22:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.R -> com.englishbreakfast.app.R:
     1:4:void <init>():0:0 -> <init>

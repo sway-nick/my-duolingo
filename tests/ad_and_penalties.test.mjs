@@ -126,6 +126,9 @@ test('8b. AdService Interstitial: Preload and round completion lifecycle', async
   assert.equal(typeof AdService.preloadInterstitial, 'function', 'preloadInterstitial must be exposed');
   assert.equal(typeof AdService.showRoundFinishInterstitial, 'function', 'showRoundFinishInterstitial must be exposed');
 
+  // Bypass grace period for cooldown lifecycle testing
+  global.localStorage.setItem('myduo_first_install_time', '0');
+
   // Initial state: 0 rounds completed
   AdService.roundsCompletedSinceLastAd = 0;
   AdService.lastInterstitialTime = Date.now();
@@ -145,6 +148,8 @@ test('8b. AdService Interstitial: Preload and round completion lifecycle', async
 test('8c. AdService Collections Exit Interstitial: Capped at min 3-minute cooldown and unlimited daily frequency', async () => {
   assert.equal(typeof AdService.showCollectionsExitInterstitial, 'function', 'showCollectionsExitInterstitial must be exposed');
 
+  // Bypass grace period for cooldown testing
+  global.localStorage.setItem('myduo_first_install_time', '0');
   global.localStorage.removeItem('ad_col_exit_interstitial_stats');
 
   // First show: succeeds
@@ -176,6 +181,8 @@ test('8c. AdService Collections Exit Interstitial: Capped at min 3-minute cooldo
 test('8d. AdService Training Early Exit Interstitial: 3-minute cooldown and unlimited daily frequency', async () => {
   assert.equal(typeof AdService.showTrainingEarlyExitInterstitial, 'function', 'showTrainingEarlyExitInterstitial must be exposed');
 
+  // Bypass grace period for cooldown testing
+  global.localStorage.setItem('myduo_first_install_time', '0');
   global.localStorage.removeItem('ad_training_early_exit_last_time');
 
   // First show: succeeds
@@ -247,6 +254,26 @@ test('8e. AdService Bonus XP Rewarded Ad: All 36 locales translated (including p
   const res = await AdService.showBonusXpRewardedAd(100);
   assert.equal(res.success, true, 'Web mock succeeds');
   assert.equal(res.rewardEarned, true, 'Reward is earned in web mock');
+});
+
+test('8f. AdService 7-Day Grace Period: Interstitials suppressed for new users, enabled after 7 days', async () => {
+  assert.equal(typeof AdService.isGracePeriodActive, 'function', 'isGracePeriodActive must be exposed');
+
+  // Case 1: Fresh install (less than 7 days) -> Grace period active
+  global.localStorage.setItem('myduo_first_install_time', String(Date.now() - (2 * 86400000)));
+  assert.equal(AdService.isGracePeriodActive(), true, '2-day old user is in grace period');
+  const resGrace = await AdService.showRoundFinishInterstitial();
+  assert.equal(resGrace, false, 'Interstitial is silently suppressed during 7-day grace period');
+
+  // Case 2: Past 7 days -> Grace period expired -> Normal interstitials
+  global.localStorage.setItem('myduo_first_install_time', String(Date.now() - (8 * 86400000)));
+  assert.equal(AdService.isGracePeriodActive(), false, '8-day old user is outside grace period');
+  AdService.roundsCompletedSinceLastAd = 1;
+  const resNormal = await AdService.showRoundFinishInterstitial();
+  assert.equal(resNormal, true, 'Interstitial is shown after 7-day grace period');
+
+  // Reset to bypass for remaining tests
+  global.localStorage.setItem('myduo_first_install_time', '0');
 });
 
 test('9. Pairs Mode: Round completion awards +5 XP', async () => {

@@ -4410,6 +4410,48 @@ const ApiService = {
   sendUserAnalyticsDebounced,
 };
 
+async function submitSurveyFeedbackApi(data = {}) {
+  try {
+    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
+    const email = user ? (user.email || '') : '';
+    const name = user ? (user.name || '') : '';
+    const lang = (typeof getInterfaceLanguage === 'function' ? getInterfaceLanguage() : 'en') || 'en';
+
+    const payload = {
+      route: 'feedback',
+      userId,
+      email,
+      name,
+      rating: data.rating !== undefined ? data.rating : '',
+      feature: data.feature || '',
+      feedbackText: data.text || '',
+      language: lang,
+      deviceType: typeof navigator !== 'undefined' ? (navigator.userAgentData?.platform || navigator.platform || 'Android') : 'Android',
+      os: 'Android/Web',
+      appVersion: '1.0.32'
+    };
+
+    fetch(`${GAS_SCANNER_URL}?route=feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).catch((err) => {
+      console.warn('[Feedback] GAS sync warning:', err);
+    });
+
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('survey_feedback_recorded', {
+        rating: data.rating,
+        feature: data.feature,
+        hasText: Boolean(data.text)
+      });
+    }
+  } catch (e) {
+    console.warn('[Feedback] Submit error:', e);
+  }
+}
+
 export default ApiService;
 
 export {
@@ -4467,6 +4509,7 @@ export {
   sendUserAnalyticsDebounced,
   getUserNotesLocal,
   saveUserNote,
+  submitSurveyFeedbackApi,
 };
 
 export { getWordTranslation, getWordNotes } from './i18n.js?v=386.0';

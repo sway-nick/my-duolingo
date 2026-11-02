@@ -134,6 +134,32 @@ class AdServiceImpl {
     this.init = this.init.bind(this);
   }
 
+  /**
+   * 7-Day Beginner Grace Period (Silent)
+   * Suppresses forced interstitial ads for the first 7 days of app usage.
+   * Completely silent to the player (no UI notices).
+   * Rewarded ads (Double XP, Error Shields, Scanner) remain fully functional.
+   * @returns {boolean}
+   */
+  isGracePeriodActive() {
+    try {
+      if (typeof localStorage === 'undefined') return false;
+      const val = localStorage.getItem('myduo_first_install_time');
+      if (val === '0' || val === 'disabled' || val === 'test') return false;
+      if (!val) {
+        localStorage.setItem('myduo_first_install_time', String(Date.now()));
+        return true;
+      }
+      const installTime = Number(val);
+      if (!installTime || isNaN(installTime)) return false;
+      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+      const elapsed = Date.now() - installTime;
+      return elapsed >= 0 && elapsed < SEVEN_DAYS_MS;
+    } catch (e) {
+      return false;
+    }
+  }
+
   getNativeAdMob() {
     if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.Plugins) {
       return window.Capacitor.Plugins.AdMob || null;
@@ -268,6 +294,7 @@ class AdServiceImpl {
    * Preload Interstitial Ad in background so it displays with 0ms delay when a round finishes
    */
   async preloadInterstitial() {
+    if (this.isGracePeriodActive()) return false;
     if (this.isPreparingInterstitial || this.isInterstitialPrepared) return false;
     const AdMob = this.getNativeAdMob();
     if (!AdMob || !this.isNative() || !this.isOnline()) return false;
@@ -870,6 +897,9 @@ class AdServiceImpl {
    * Displays with 0ms delay if preloaded, and queues next preload in background
    */
   async showRoundFinishInterstitial() {
+    if (this.isGracePeriodActive()) {
+      return false;
+    }
     this.roundsCompletedSinceLastAd++;
 
     if (this.roundsCompletedSinceLastAd < this.minRoundsBetweenInterstitials) {
@@ -942,6 +972,9 @@ class AdServiceImpl {
    * 2. Unlimited daily frequency (no arbitrary daily cap).
    */
   async showCollectionsExitInterstitial() {
+    if (this.isGracePeriodActive()) {
+      return false;
+    }
     if (!this.isOnline()) return false;
     const now = Date.now();
     const STORAGE_KEY_COL_EXIT = 'ad_col_exit_interstitial_stats';
@@ -1031,6 +1064,9 @@ class AdServiceImpl {
    * 3. Unlimited daily frequency (no daily cap).
    */
   async showTrainingEarlyExitInterstitial() {
+    if (this.isGracePeriodActive()) {
+      return false;
+    }
     if (!this.isOnline()) return false;
     const now = Date.now();
     const STORAGE_KEY_EARLY_EXIT = 'ad_training_early_exit_last_time';
@@ -1103,6 +1139,9 @@ class AdServiceImpl {
    * Protected with a 60-second cooldown so it never spams or causes accidental clicks.
    */
   async showTransitionInterstitial(minCooldownSeconds = 60) {
+    if (this.isGracePeriodActive()) {
+      return false;
+    }
     if (!this.isOnline()) return false;
     const now = Date.now();
     if (this.lastInterstitialTime && (now - this.lastInterstitialTime < minCooldownSeconds * 1000)) {

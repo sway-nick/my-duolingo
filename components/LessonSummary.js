@@ -1,6 +1,8 @@
 import { AudioService } from '../services/audioService.js?v=386.0';
 import { StorageService } from '../services/storageService.js?v=386.0';
 import { t } from '../services/i18n.js?v=386.0';
+import { checkAndPromptReviewFunnel } from './modals/ReviewFunnelModal.js?v=386.0';
+import { showFairyTaleSurveyModal, getFairyTaleStrings } from './modals/FairyTaleSurveyModal.js?v=386.0';
 
 export function renderLessonSummary(container, results) {
     if (!container) return;
@@ -82,6 +84,26 @@ export function renderLessonSummary(container, results) {
         `;
     }
     
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('myduo_fairy_tale_survey_done') !== 'true') {
+        const ftStrings = getFairyTaleStrings();
+        const stats = StorageService.getStats() || {};
+        const completedCount = (stats.lessonsCompleted) || Object.keys(StorageService.getCompletedLessons() || {}).length || 0;
+        const bannerTitle = (completedCount >= 3 && ftStrings.congratsTitle) ? ftStrings.congratsTitle : ftStrings.title;
+        const bannerBadge = (completedCount >= 3 && ftStrings.congratsBadge) ? ftStrings.congratsBadge : ftStrings.badge;
+        html += `
+            <div class="summary-fairy-tale-banner" id="summary-fairy-tale-banner" style="margin: 16px 0 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(234, 88, 12, 0.18) 100%); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: transform 0.12s ease;">
+                <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
+                    <span style="font-size: 26px;">🎁</span>
+                    <div>
+                        <div style="font-size: 13.5px; font-weight: 800; color: #fef08a;">${bannerBadge}</div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 1px;">${bannerTitle}</div>
+                    </div>
+                </div>
+                <span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 10px; white-space: nowrap; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);">▶</span>
+            </div>
+        `;
+    }
+
     html += `
             <div class="summary-actions">
                 <button class="summary-continue-btn primary-btn">${t('train_continue') || 'Continue'}</button>
@@ -97,11 +119,37 @@ export function renderLessonSummary(container, results) {
         StorageService.completeLesson(lessonId);
     }
     
+    try {
+        const stats = StorageService.getStats() || {};
+        const completedLessonsMap = StorageService.getCompletedLessons() || {};
+        const completedCount = (stats.lessonsCompleted) || Object.keys(completedLessonsMap).length || 0;
+        const isSurveyDone = typeof localStorage !== 'undefined' && localStorage.getItem('myduo_fairy_tale_survey_done') === 'true';
+
+        if (!isSurveyDone && completedCount >= 3) {
+            if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('myduo_ft_survey_auto_shown')) {
+                sessionStorage.setItem('myduo_ft_survey_auto_shown', 'true');
+                setTimeout(() => {
+                    showFairyTaleSurveyModal('auto_lesson_3');
+                }, 850);
+            }
+        } else if (isSurveyDone) {
+            const streak = StorageService.getStreak() || 0;
+            checkAndPromptReviewFunnel('summary', { streak, accuracy });
+        }
+    } catch (e) {}
+    
     const continueBtn = container.querySelector('.summary-continue-btn');
     if (continueBtn) {
         continueBtn.addEventListener('click', () => {
             const event = new CustomEvent('back-to-path');
             document.dispatchEvent(event);
+        });
+    }
+
+    const ftBanner = container.querySelector('#summary-fairy-tale-banner');
+    if (ftBanner) {
+        ftBanner.addEventListener('click', () => {
+            showFairyTaleSurveyModal('lesson_summary');
         });
     }
     

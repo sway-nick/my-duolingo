@@ -1,5 +1,6 @@
 import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
 import { showMilestoneStoryModal, showStoryToast, MILESTONE_STORIES } from '../modals/MilestoneStoryModal.js?v=386.0';
+import { showFairyTaleSurveyModal, getFairyTaleStrings } from '../modals/FairyTaleSurveyModal.js?v=386.0';
 import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
@@ -29,7 +30,10 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     const isUnlocked = masteredWords >= m;
     const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
     const title = strings[story.titleKey] || story.title;
-    const badge = strings[story.badgeKey] || `🏆 ${m} слов`;
+    let badge = strings[story.badgeKey] || `🏆 ${m} слов`;
+    if (m === 0 && localStorage.getItem('myduo_fairy_tale_survey_done') !== 'true') {
+      badge = getFairyTaleStrings().badge;
+    }
 
     let titleHtml = escapeHtml(title);
     if (m === 0) {
@@ -256,6 +260,10 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     card.addEventListener('click', (e) => {
       const raw = card.getAttribute('data-milestone');
       const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
+      if (milestone === 0 && localStorage.getItem('myduo_fairy_tale_survey_done') !== 'true') {
+        showFairyTaleSurveyModal('story_tile');
+        return;
+      }
       showMilestoneStoryModal(milestone);
     });
   });

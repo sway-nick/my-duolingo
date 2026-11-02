@@ -1,16 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-const WORDS_JSON_FILES = [
-  path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'docs', 'assets', 'data', 'words.json')
-];
+const WORDS_JSON_PATH = path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json');
 
 const FS_PROJECT_ID = 'english-breakfast-181ba';
 const FS_API_KEY = 'AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc';
@@ -37,87 +34,72 @@ async function getFirebaseAuthToken() {
   return data.idToken;
 }
 
-const MANUAL_OVERRIDES = {
-  68: 'preferire',
-  505: 'rilassarsi',
-  1505: 'libbra, sterlina',
-  2390: 'evolversi',
-  3745: 'se, sia che... sia che...',
-  4311: 'dovrà',
-  4324: 'piuttosto buono',
-  4454: 'muoversi furtivamente',
-  4456: 'larghezza',
-  4787: 'indiretto',
-  5045: 'ecco a te',
-  5140: 'briscola',
-  5531: 'sostenere, asserire',
-  5808: 'fulminare, inveire',
-  6759: 'scozzese'
-};
-
-function cleanItalian(id, word, originalIt) {
-  if (MANUAL_OVERRIDES[id]) {
-    return MANUAL_OVERRIDES[id];
-  }
-  if (!originalIt) return originalIt;
-
-  let cleaned = originalIt.trim();
-  cleaned = cleaned.replace(/[,;]+$/, '').trim();
-
-  const parts = cleaned.split(',').map(s => s.trim()).filter(Boolean);
-  const seen = new Set();
-  const uniqueParts = [];
-  for (const part of parts) {
-    const lower = part.toLowerCase();
-    if (!seen.has(lower)) {
-      seen.add(lower);
-      uniqueParts.push(part);
-    }
-  }
-
-  return uniqueParts.join(', ');
-}
-
 async function run() {
   console.log('🚀 Starting Italian (it) Vocabulary OTA Synchronization...\n');
 
-  // 1. Load local words.json
-  const wordsPath = WORDS_JSON_FILES[0];
-  const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
+  const sampleChecks = [
+    { id: 1641, word: 'shop', expected: 'negozio, bottega' },
+    { id: 3772, word: 'shoot', expected: 'sparare, tirare' },
+    { id: 3784, word: 'am is are', expected: 'essere, sono, è, siamo' },
+    { id: 3802, word: 'than', expected: 'di, che' },
+    { id: 3859, word: 'the', expected: 'il, lo, la, i, gli, le' },
+    { id: 4007, word: 'prom', expected: 'ballo di fine anno' },
+    { id: 4124, word: 'scared of', expected: 'avere paura di, spaventato da' },
+    { id: 5064, word: 'when pigs fly', expected: 'quando gli asini voleranno' },
+    { id: 6012, word: 'acrimony', expected: 'acrimonia, asprezza' },
+    { id: 6013, word: 'acumen', expected: 'acume, perspicacia' },
+    { id: 6037, word: 'arrant', expected: 'notorio, matricolato' },
+    { id: 6496, word: 'mettle', expected: 'coraggio, tempra' },
+    { id: 6510, word: 'stracism', expected: 'ostracismo, esclusione' },
+    { id: 6743, word: 'no pain no gain', expected: 'chi non risica non rosica' },
+    { id: 6932, word: 'utilise', expected: 'utilizzare, impiegare' }
+  ];
 
-  let modifiedCount = 0;
+  // 1. Detect all changed words in words.json compared to git HEAD
+  console.log('1. Detecting refined Italian entries...');
+  const headWordsStr = execSync('git show HEAD:frontend/assets/data/words.json', { maxBuffer: 50 * 1024 * 1024 }).toString('utf8');
+  const headWords = JSON.parse(headWordsStr);
+  const headMap = new Map(headWords.map(w => [w.id, w.translations.it]));
+
+  const currentWords = JSON.parse(fs.readFileSync(WORDS_JSON_PATH, 'utf8'));
   const itUpdates = {};
 
-  for (const w of words) {
-    const origIt = w.translations?.it || '';
-    const newIt = cleanItalian(w.id, w.word, origIt);
-    if (origIt !== newIt) {
-      modifiedCount++;
-      w.translations = w.translations || {};
-      w.translations.it = newIt;
+  for (const w of currentWords) {
+    const origIt = headMap.get(w.id);
+    if (origIt !== w.translations.it) {
       itUpdates[String(w.id)] = {
         id: w.id,
         word: w.word,
-        it: newIt
+        it: w.translations.it
       };
     }
   }
 
-  console.log(`1. Total Italian words modified: ${modifiedCount}`);
-
-  // Safety check: ensure 0 corrupted UTF-8 replacement characters
-  const jsonStr = JSON.stringify(words);
-  if (jsonStr.includes('\ufffd')) {
-    throw new Error('❌ Detected U+FFFD replacement characters in words.json!');
+  // Ensure key sample checks are present
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (w) {
+      itUpdates[String(w.id)] = {
+        id: w.id,
+        word: w.word,
+        it: w.translations.it
+      };
+    }
   }
 
-  // 2. Save to all words.json paths
-  WORDS_JSON_FILES.forEach(filePath => {
-    fs.writeFileSync(filePath, jsonStr, 'utf8');
-    console.log(`   Saved ${filePath}`);
-  });
+  const updateCount = Object.keys(itUpdates).length;
+  console.log(`   Found ${updateCount} refined Italian entries ready for OTA.`);
 
-  // 3. Update Cloud Firestore shared/vocabulary_updates
+  // Safety assertions on key IDs
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (!w || w.translations.it !== check.expected) {
+      throw new Error(`Safety check failed: word ${check.id} (${check.word}) is "${w?.translations?.it}", expected "${check.expected}"`);
+    }
+  }
+  console.log('   All safety checks passed.');
+
+  // 2. Fetch current Firestore shared/vocabulary_updates
   console.log('\n2. Fetching current Firestore shared/vocabulary_updates...');
   const fsUrl = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents/${FS_DOC_PATH}?key=${FS_API_KEY}`;
   const fsRes = await fetch(fsUrl);
@@ -127,27 +109,34 @@ async function run() {
   console.log(`   Current entries in Firestore: ${Object.keys(fsMap).length}`);
 
   let itMerged = 0;
-  for (const [id, update] of Object.entries(itUpdates)) {
-    if (!fsMap[id]) {
-      fsMap[id] = {
+  for (const [idStr, update] of Object.entries(itUpdates)) {
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
         id: update.id,
         word: update.word,
         translations: { it: update.it }
       };
     } else {
-      if (!fsMap[id].translations) fsMap[id].translations = {};
-      fsMap[id].translations.it = update.it;
+      if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+      fsMap[idStr].translations.it = update.it;
     }
+    delete fsMap[idStr].updatedAt;
     itMerged++;
   }
 
-  console.log(`   Merged Italian translations for ${itMerged} words into Firestore updates.`);
+  console.log(`   Merged refined Italian translations for ${itMerged} words into Firestore updates.`);
+
+  // Clean redundant fields
+  for (const entry of Object.values(fsMap)) {
+    delete entry.updatedAt;
+  }
 
   const updatedPayloadStr = JSON.stringify(fsMap);
   const payloadBytes = Buffer.byteLength(updatedPayloadStr, 'utf8');
-  console.log(`\n3. Firestore payload summary:`);
+  console.log('\n3. Firestore payload summary:');
   console.log(`   - Total entries in Firestore: ${Object.keys(fsMap).length}`);
   console.log(`   - Payload size: ${payloadBytes} bytes (${(payloadBytes / 1024).toFixed(1)} KB / 1024 KB max)`);
+  console.log(`   - Headroom remaining: ${(1024 - payloadBytes / 1024).toFixed(1)} KB`);
 
   if (payloadBytes > 1048576) {
     throw new Error(`Payload exceeds 1MB Firestore limit (${payloadBytes} bytes)! Aborting write.`);
@@ -178,26 +167,33 @@ async function run() {
   });
 
   if (!patchRes.ok) {
-    const errText = await patchRes.text();
-    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status} - ${errText}`);
+    const patchErr = await patchRes.text();
+    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status}: ${patchErr}`);
   }
-  console.log('   ✅ Firestore document updated successfully (OTA published)!');
 
-  // 6. Verify Firestore document
-  console.log('\n6. Verifying published Firestore document...');
+  const patchData = await patchRes.json();
+  console.log('   Successfully patched shared/vocabulary_updates in Cloud Firestore!');
+  console.log(`   Doc update time: ${patchData.updateTime}`);
+
+  // 6. Verification read-back
+  console.log('\n6. Verifying read-back from Firestore...');
   const verifyRes = await fetch(fsUrl);
+  if (!verifyRes.ok) throw new Error(`HTTP ${verifyRes.status} verifying Firestore readback`);
   const verifyData = await verifyRes.json();
   const verifyMap = JSON.parse(verifyData.fields?.updatesJson?.stringValue || '{}');
 
-  console.log(`   Verified ID 37 ("train"): it="${verifyMap['37']?.translations?.it}"`);
-  console.log(`   Verified ID 68 ("prefer"): it="${verifyMap['68']?.translations?.it}"`);
-  console.log(`   Verified ID 4787 ("indirect"): it="${verifyMap['4787']?.translations?.it}"`);
-  console.log(`   Verified ID 5140 ("trump"): it="${verifyMap['5140']?.translations?.it}"`);
+  for (const check of sampleChecks) {
+    const readVal = verifyMap[String(check.id)]?.translations?.it;
+    console.log(`   - ID ${check.id} (${check.word}): "${readVal}"`);
+    if (readVal !== check.expected) {
+      throw new Error(`Verification mismatch on read-back for ID ${check.id}! Got "${readVal}", expected "${check.expected}"`);
+    }
+  }
 
-  console.log('\n🎉 ITALIAN OTA LOCALIZATION FIX APPLIED AND PUBLISHED SUCCESSFULLY!');
+  console.log('\n✅ OTA Update for Italian (it) verified successfully! Users will automatically receive all updates over-the-air.');
 }
 
 run().catch(err => {
-  console.error('\n❌ ERROR during sync:', err);
+  console.error('\n❌ OTA sync failed:', err);
   process.exit(1);
 });

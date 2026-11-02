@@ -1,16 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-const WORDS_JSON_FILES = [
-  path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'docs', 'assets', 'data', 'words.json')
-];
+const WORDS_JSON_PATH = path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json');
 
 const FS_PROJECT_ID = 'english-breakfast-181ba';
 const FS_API_KEY = 'AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc';
@@ -37,121 +34,76 @@ async function getFirebaseAuthToken() {
   return data.idToken;
 }
 
-const MANUAL_OVERRIDES_JA = {
-  1505: 'ポンド',
-  1615: 'よく、上手に、ええと',
-  3745: '～かどうか、いずれにせよ',
-  4005: '〜の上に、〜で、オンにして',
-  4456: '幅',
-  4661: '違反、犯罪、攻撃',
-  4787: '間接的な',
-  5808: '激しく非難する、怒りを爆発させる',
-  6766: 'うっかり忘れていました'
-};
-
-const WORD_4661_FIXES = {
-  translation: 'правонарушение, преступление, обида',
-  uk: 'правопорушення, злочин, образа',
-  de: 'Straftat, Vergehen, Beleidigung',
-  fr: 'infraction, délit, offense',
-  pl: 'wykroczenie, przestępstwo, obraza',
-  it: 'reato, infrazione, offesa',
-  ro: 'infracțiune, delict, ofensă',
-  bg: 'правонарушение, престъпление, обида',
-  cs: 'přestupek, trestný čin, urážka',
-  sk: 'priestupok, trestný čin, urážka',
-  hu: 'szabálysértés, bűncselekmény, sértés',
-  el: 'αδίκημα, παράβαση, προσβολή',
-  sl: 'prekršek, kaznivo dejanje, žalitev',
-  et: 'õigusrikkumine, süütegu, solvang',
-  lt: 'nusižengimas, teisės pažeidimas, įžeidimas',
-  da: 'overtrædelse, lovovertrædelse, fornærmelse',
-  fi: 'rikos, rikkomus, loukkaus',
-  sv: 'brott, förseelse, förolämpning',
-  hr: 'prekršaj, kazneno djelo, uvreda',
-  lv: 'pārkāpums, noziedzīgs nodarījums, aizskārums',
-  ar: 'جريمة، مخالفة، إساءة',
-  vi: 'tội phạm, vi phạm, xúc phạm',
-  th: 'การกระทำผิด, ความผิด, การล่วงเกิน',
-  ko: '위반, 범죄, 모욕',
-  ja: '違反、犯罪、攻撃',
-  kk: 'құқық бұзушылық, қылмыс, реніш'
-};
-
-function cleanJapanese(id, word, originalJa) {
-  if (MANUAL_OVERRIDES_JA[id]) {
-    return MANUAL_OVERRIDES_JA[id];
-  }
-  if (!originalJa) return originalJa;
-
-  let cleaned = originalJa.trim();
-  cleaned = cleaned.replace(/[,;、]+$/, '').trim();
-
-  const parts = cleaned.split(/[,、]/).map(s => s.trim()).filter(Boolean);
-  const seen = new Set();
-  const uniqueParts = [];
-  for (const part of parts) {
-    const lower = part.toLowerCase();
-    if (!seen.has(lower)) {
-      seen.add(lower);
-      uniqueParts.push(part);
-    }
-  }
-
-  return uniqueParts.join('、');
-}
-
 async function run() {
   console.log('🚀 Starting Japanese (ja) Vocabulary OTA Synchronization...\n');
 
-  // 1. Load local words.json
-  const wordsPath = WORDS_JSON_FILES[0];
-  const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
+  const sampleChecks = [
+    { id: 1641, word: 'shop', expected: '店、買い物をする' },
+    { id: 3772, word: 'shoot', expected: '撃つ、撮影する' },
+    { id: 3784, word: 'am is are', expected: '～である、いる' },
+    { id: 3802, word: 'than', expected: '～より、～よりも' },
+    { id: 3815, word: 'if', expected: 'もし、～なら' },
+    { id: 3859, word: 'the', expected: 'その、あの' },
+    { id: 4007, word: 'prom', expected: 'プロム、卒業ダンス会' },
+    { id: 4124, word: 'scared of', expected: '怖がる、恐れる' },
+    { id: 4457, word: 'restroom', expected: 'トイレ、お手洗い' },
+    { id: 4787, word: 'indirect', expected: '間接的な、遠回しの' },
+    { id: 5064, word: 'when pigs fly', expected: 'あり得ない、豚が空を飛ぶ' },
+    { id: 6012, word: 'acrimony', expected: '辛辣さ、悪感情' },
+    { id: 6013, word: 'acumen', expected: '洞察力、鋭敏さ' },
+    { id: 6037, word: 'arrant', expected: '全くの、名うての' },
+    { id: 6496, word: 'mettle', expected: '気骨、勇気' },
+    { id: 6510, word: 'stracism', expected: '排斥、村八分' },
+    { id: 6742, word: 'easy come easy go', expected: '悪銭身につかず' },
+    { id: 6743, word: 'no pain no gain', expected: '労なくして益なし、蒔かぬ種は生えぬ' },
+    { id: 6932, word: 'utilise', expected: '利用する、活用する' }
+  ];
 
-  let modifiedCount = 0;
+  // 1. Detect all changed words in words.json compared to git HEAD
+  console.log('1. Detecting refined Japanese entries...');
+  const headWordsStr = execSync('git show HEAD:frontend/assets/data/words.json', { maxBuffer: 50 * 1024 * 1024 }).toString('utf8');
+  const headWords = JSON.parse(headWordsStr);
+  const headMap = new Map(headWords.map(w => [w.id, w.translations.ja]));
+
+  const currentWords = JSON.parse(fs.readFileSync(WORDS_JSON_PATH, 'utf8'));
   const jaUpdates = {};
 
-  for (const w of words) {
-    const origJa = w.translations?.ja || '';
-    const newJa = cleanJapanese(w.id, w.word, origJa);
-    if (origJa !== newJa) {
-      modifiedCount++;
-      w.translations = w.translations || {};
-      w.translations.ja = newJa;
+  for (const w of currentWords) {
+    const origJa = headMap.get(w.id);
+    if (origJa !== w.translations.ja) {
       jaUpdates[String(w.id)] = {
         id: w.id,
         word: w.word,
-        ja: newJa
+        ja: w.translations.ja
       };
     }
+  }
 
-    // Fix word 4661 across all affected languages
-    if (w.id === 4661) {
-      w.translation = WORD_4661_FIXES.translation;
-      for (const [lang, val] of Object.entries(WORD_4661_FIXES)) {
-        if (lang !== 'translation') {
-          w.translations[lang] = val;
-        }
-      }
+  // Ensure key sample checks are present
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (w) {
+      jaUpdates[String(w.id)] = {
+        id: w.id,
+        word: w.word,
+        ja: w.translations.ja
+      };
     }
   }
 
-  console.log(`1. Total Japanese words modified: ${modifiedCount}`);
-  console.log('   Applied global multi-language fix for word 4661 ("offence").');
+  const updateCount = Object.keys(jaUpdates).length;
+  console.log(`   Found ${updateCount} refined Japanese entries ready for OTA.`);
 
-  // Safety check: ensure 0 corrupted UTF-8 replacement characters
-  const jsonStr = JSON.stringify(words);
-  if (jsonStr.includes('\ufffd')) {
-    throw new Error('❌ Detected U+FFFD replacement characters in words.json!');
+  // Safety assertions on key IDs
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (!w || w.translations.ja !== check.expected) {
+      throw new Error(`Safety check failed: word ${check.id} (${check.word}) is "${w?.translations?.ja}", expected "${check.expected}"`);
+    }
   }
+  console.log('   All safety checks passed.');
 
-  // 2. Save to all words.json paths
-  WORDS_JSON_FILES.forEach(filePath => {
-    fs.writeFileSync(filePath, jsonStr, 'utf8');
-    console.log(`   Saved ${filePath}`);
-  });
-
-  // 3. Update Cloud Firestore shared/vocabulary_updates
+  // 2. Fetch current Firestore shared/vocabulary_updates
   console.log('\n2. Fetching current Firestore shared/vocabulary_updates...');
   const fsUrl = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents/${FS_DOC_PATH}?key=${FS_API_KEY}`;
   const fsRes = await fetch(fsUrl);
@@ -161,40 +113,34 @@ async function run() {
   console.log(`   Current entries in Firestore: ${Object.keys(fsMap).length}`);
 
   let jaMerged = 0;
-  for (const [id, update] of Object.entries(jaUpdates)) {
-    if (!fsMap[id]) {
-      fsMap[id] = {
+  for (const [idStr, update] of Object.entries(jaUpdates)) {
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
         id: update.id,
         word: update.word,
         translations: { ja: update.ja }
       };
     } else {
-      if (!fsMap[id].translations) fsMap[id].translations = {};
-      fsMap[id].translations.ja = update.ja;
+      if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+      fsMap[idStr].translations.ja = update.ja;
     }
+    delete fsMap[idStr].updatedAt;
     jaMerged++;
   }
 
-  // Also merge word 4661 fixes into Firestore map
-  if (!fsMap['4661']) {
-    fsMap['4661'] = { id: 4661, word: 'offence', translation: WORD_4661_FIXES.translation, translations: {} };
-  } else {
-    fsMap['4661'].translation = WORD_4661_FIXES.translation;
-    if (!fsMap['4661'].translations) fsMap['4661'].translations = {};
-  }
-  for (const [lang, val] of Object.entries(WORD_4661_FIXES)) {
-    if (lang !== 'translation') {
-      fsMap['4661'].translations[lang] = val;
-    }
-  }
+  console.log(`   Merged refined Japanese translations for ${jaMerged} words into Firestore updates.`);
 
-  console.log(`   Merged Japanese translations for ${jaMerged} words into Firestore updates.`);
+  // Clean redundant fields
+  for (const entry of Object.values(fsMap)) {
+    delete entry.updatedAt;
+  }
 
   const updatedPayloadStr = JSON.stringify(fsMap);
   const payloadBytes = Buffer.byteLength(updatedPayloadStr, 'utf8');
-  console.log(`\n3. Firestore payload summary:`);
+  console.log('\n3. Firestore payload summary:');
   console.log(`   - Total entries in Firestore: ${Object.keys(fsMap).length}`);
   console.log(`   - Payload size: ${payloadBytes} bytes (${(payloadBytes / 1024).toFixed(1)} KB / 1024 KB max)`);
+  console.log(`   - Headroom remaining: ${(1024 - payloadBytes / 1024).toFixed(1)} KB`);
 
   if (payloadBytes > 1048576) {
     throw new Error(`Payload exceeds 1MB Firestore limit (${payloadBytes} bytes)! Aborting write.`);
@@ -225,26 +171,33 @@ async function run() {
   });
 
   if (!patchRes.ok) {
-    const errText = await patchRes.text();
-    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status} - ${errText}`);
+    const patchErr = await patchRes.text();
+    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status}: ${patchErr}`);
   }
-  console.log('   ✅ Firestore document updated successfully (OTA published)!');
 
-  // 6. Verify Firestore document
-  console.log('\n6. Verifying published Firestore document...');
+  const patchData = await patchRes.json();
+  console.log('   Successfully patched shared/vocabulary_updates in Cloud Firestore!');
+  console.log(`   Doc update time: ${patchData.updateTime}`);
+
+  // 6. Verification read-back
+  console.log('\n6. Verifying read-back from Firestore...');
   const verifyRes = await fetch(fsUrl);
+  if (!verifyRes.ok) throw new Error(`HTTP ${verifyRes.status} verifying Firestore readback`);
   const verifyData = await verifyRes.json();
   const verifyMap = JSON.parse(verifyData.fields?.updatesJson?.stringValue || '{}');
 
-  console.log(`   Verified ID 37 ("train"): ja="${verifyMap['37']?.translations?.ja}"`);
-  console.log(`   Verified ID 4005 ("on"): ja="${verifyMap['4005']?.translations?.ja}"`);
-  console.log(`   Verified ID 4661 ("offence"): ja="${verifyMap['4661']?.translations?.ja}", ru="${verifyMap['4661']?.translation}"`);
-  console.log(`   Verified ID 4787 ("indirect"): ja="${verifyMap['4787']?.translations?.ja}"`);
+  for (const check of sampleChecks) {
+    const readVal = verifyMap[String(check.id)]?.translations?.ja;
+    console.log(`   - ID ${check.id} (${check.word}): "${readVal}"`);
+    if (readVal !== check.expected) {
+      throw new Error(`Verification mismatch on read-back for ID ${check.id}! Got "${readVal}", expected "${check.expected}"`);
+    }
+  }
 
-  console.log('\n🎉 JAPANESE OTA LOCALIZATION FIX APPLIED AND PUBLISHED SUCCESSFULLY!');
+  console.log('\n✅ OTA Update for Japanese (ja) verified successfully! Users will automatically receive all updates over-the-air.');
 }
 
 run().catch(err => {
-  console.error('\n❌ ERROR during sync:', err);
+  console.error('\n❌ OTA sync failed:', err);
   process.exit(1);
 });

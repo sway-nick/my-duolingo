@@ -25,6 +25,7 @@ const filesOrder = [
   'api/sync.js',
   'api/transcribe.js',
   'api/analytics.js',
+  'api/feedback.js',
   'router.js',
   'postRouter.js',
   'Code.js',

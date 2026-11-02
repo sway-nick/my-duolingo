@@ -3,6 +3,7 @@ import { getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js
 import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getWords } from '../../services/api.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
+import { checkAndPromptReviewFunnel } from './ReviewFunnelModal.js?v=386.0';
 
 export const MILESTONE_STORIES = {
   "0": {
@@ -1771,6 +1772,11 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
   function closeModal() {
     overlay.remove();
+    if (currentMilestone >= 50) {
+      try {
+        checkAndPromptReviewFunnel('milestone', { milestone: currentMilestone });
+      } catch (e) {}
+    }
   }
 
   // Close X

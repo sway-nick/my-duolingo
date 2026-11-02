@@ -1,47 +1,19 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-const WORDS_JSON_FILES = [
-  path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'docs', 'assets', 'data', 'words.json')
-];
+const WORDS_JSON_PATH = path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json');
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1pRIbBXzyYMlQKMJZir9l7SH7I13QZfYZ_GETcq1w_BY/gviz/tq?tqx=out:csv&sheet=Vocabulary';
 const FS_PROJECT_ID = 'english-breakfast-181ba';
 const FS_API_KEY = 'AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc';
 const FS_ADMIN_EMAIL = 'sheet-sync-admin@english-breakfast.app';
 const FS_ADMIN_PASS = 'SyncPassword2026!Sec';
 const FS_DOC_PATH = 'shared/vocabulary_updates';
-
-function parseCSV(text) {
-  const rows = [];
-  let currentRow = [];
-  let currentField = '';
-  let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const nextChar = text[i + 1];
-    if (inQuotes) {
-      if (char === '"' && nextChar === '"') { currentField += '"'; i++; }
-      else if (char === '"') inQuotes = false;
-      else currentField += char;
-    } else {
-      if (char === '"') inQuotes = true;
-      else if (char === ',') { currentRow.push(currentField.trim()); currentField = ''; }
-      else if (char === '\r') {}
-      else if (char === '\n') { currentRow.push(currentField.trim()); rows.push(currentRow); currentRow = []; currentField = ''; }
-      else currentField += char;
-    }
-  }
-  if (currentField || currentRow.length > 0) { currentRow.push(currentField.trim()); rows.push(currentRow); }
-  return rows;
-}
 
 async function getFirebaseAuthToken() {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FS_API_KEY}`;
@@ -63,127 +35,72 @@ async function getFirebaseAuthToken() {
 }
 
 async function run() {
-  console.log('🚀 Starting French (fr) Localization Sync to Firestore and words.json...\n');
+  console.log('🚀 Starting French (fr) Vocabulary OTA Synchronization...\n');
 
-  // 1. Fetch Google Sheet data
-  console.log('1. Fetching Vocabulary from Google Sheet...');
-  const sheetRes = await fetch(SHEET_URL);
-  if (!sheetRes.ok) throw new Error(`Failed to download sheet CSV: HTTP ${sheetRes.status}`);
-  const csvText = await sheetRes.text();
-  const rows = parseCSV(csvText);
-  if (rows.length < 2) throw new Error('Sheet returned no rows');
+  const sampleChecks = [
+    { id: 1641, word: 'shop', expected: 'magasin, boutique' },
+    { id: 3772, word: 'shoot', expected: 'tirer, abattre' },
+    { id: 3784, word: 'am is are', expected: 'être, suis, est, sont' },
+    { id: 3802, word: 'than', expected: 'que' },
+    { id: 5064, word: 'when pigs fly', expected: 'quand les poules auront des dents' },
+    { id: 6002, word: 'vigilance', expected: 'vigilance, surveillance' },
+    { id: 6011, word: 'abstruse', expected: 'abstrus, obscur' },
+    { id: 6015, word: 'aesthetic', expected: 'esthétique' },
+    { id: 6037, word: 'arrant', expected: 'notoire, fieffé' },
+    { id: 6496, word: 'mettle', expected: 'courage, trempe' },
+    { id: 6510, word: 'stracism', expected: 'ostracisme, exclusion' },
+    { id: 6743, word: 'no pain no gain', expected: 'on n’a rien sans rien' },
+    { id: 6752, word: 'false', expected: 'faux, erroné' },
+    { id: 6912, word: 'TRUE', expected: 'vrai, véritable' },
+    { id: 6932, word: 'utilise', expected: 'utiliser, employer' }
+  ];
 
-  const headers = rows[0].map(h => String(h || '').trim().toLowerCase());
-  const idCol = headers.indexOf('id');
-  const wordCol = headers.indexOf('word');
-  const frCol = headers.indexOf('translation_fr');
-  const notesFrCol = headers.indexOf('notes_fr');
+  // 1. Detect all changed words in words.json compared to git HEAD
+  console.log('1. Detecting refined French entries...');
+  const headWordsStr = execSync('git show HEAD:frontend/assets/data/words.json', { maxBuffer: 50 * 1024 * 1024 }).toString('utf8');
+  const headWords = JSON.parse(headWordsStr);
+  const headMap = new Map(headWords.map(w => [w.id, w.translations.fr]));
 
-  if (frCol < 0) throw new Error('Column "translation_fr" not found in Google Sheet!');
-  console.log(`   Headers index: id=${idCol}, word=${wordCol}, translation_fr=${frCol}, notes_fr=${notesFrCol}`);
-  console.log(`   Total sheet rows: ${rows.length - 1}`);
+  const currentWords = JSON.parse(fs.readFileSync(WORDS_JSON_PATH, 'utf8'));
+  const frUpdates = {};
 
-  // Safety check: ensure 0 Cyrillic characters in translation_fr
-  const cyrillicReg = /[а-яёА-ЯЁ]/;
-  const sheetByIdAndWord = new Map();
-  const sheetByWord = new Map();
-  const sheetById = new Map();
-
-  let frFilledCount = 0;
-  for (let r = 1; r < rows.length; r++) {
-    const row = rows[r];
-    const id = idCol >= 0 ? String(row[idCol] || '').trim() : '';
-    const word = wordCol >= 0 ? String(row[wordCol] || '').trim() : '';
-    const fr = String(row[frCol] || '').trim();
-    const notesFr = notesFrCol >= 0 ? String(row[notesFrCol] || '').trim() : '';
-
-    if (cyrillicReg.test(fr)) {
-      throw new Error(`Safety rejection: Cyrillic text detected in translation_fr at row ${r} (word: "${word}", fr: "${fr}")`);
-    }
-
-    if (fr) frFilledCount++;
-    const item = { id, word, fr, notesFr };
-    if (id && word) sheetByIdAndWord.set(`${id}:${word.toLowerCase()}`, item);
-    if (word) sheetByWord.set(word.toLowerCase(), item);
-    if (id) sheetById.set(id, item);
-  }
-  console.log(`   Total non-empty French translations in sheet: ${frFilledCount}`);
-  console.log('   ✅ Cyrillic safety check passed: 0 Cyrillic characters in translation_fr.');
-
-  // 2. Load and verify local words.json
-  console.log('\n2. Updating French in local words.json files...');
-  const localWords = JSON.parse(fs.readFileSync(WORDS_JSON_FILES[0], 'utf8'));
-
-  // Snapshot before update by array index to guarantee 100% identity of all other languages
-  const beforeSnapshots = localWords.map(w => ({
-    id: w.id,
-    word: w.word,
-    translation: w.translation,
-    otherTranslations: Object.fromEntries(
-      Object.entries(w.translations || {}).filter(([k]) => k !== 'fr')
-    )
-  }));
-
-  let wordsFrUpdated = 0;
-  for (let i = 0; i < localWords.length; i++) {
-    const w = localWords[i];
-    const id = String(w.id || '').trim();
-    const wordKey = String(w.word || '').toLowerCase().trim();
-
-    const sheetItem = (id && wordKey ? sheetByIdAndWord.get(`${id}:${wordKey}`) : null)
-      || sheetByWord.get(wordKey)
-      || (id ? sheetById.get(id) : null);
-
-    if (sheetItem && sheetItem.fr) {
-      w.translations = w.translations || {};
-      if (w.translations.fr !== sheetItem.fr) {
-        w.translations.fr = sheetItem.fr;
-        wordsFrUpdated++;
-      }
-      if (sheetItem.notesFr) {
-        w.all_notes = w.all_notes || {};
-        w.all_notes.fr = sheetItem.notesFr;
-      }
+  for (const w of currentWords) {
+    const origFr = headMap.get(w.id);
+    if (origFr !== w.translations.fr) {
+      frUpdates[String(w.id)] = {
+        id: w.id,
+        word: w.word,
+        fr: w.translations.fr
+      };
     }
   }
 
-  console.log(`   Updated French translations in words.json: ${wordsFrUpdated} entries.`);
-
-  // Verify other languages in words.json are strictly unchanged
-  for (let i = 0; i < localWords.length; i++) {
-    const w = localWords[i];
-    const before = beforeSnapshots[i];
-
-    if (before.word !== w.word) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Word changed at index ${i} (${before.word} -> ${w.word})!`);
-    }
-    if (before.translation !== w.translation) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Root translation changed for word ${w.word}!`);
-    }
-
-    const currentOther = Object.fromEntries(
-      Object.entries(w.translations || {}).filter(([k]) => k !== 'fr')
-    );
-    if (JSON.stringify(before.otherTranslations) !== JSON.stringify(currentOther)) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Non-French translations changed for word ${w.word}!`);
+  // Ensure key sample checks are present
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (w) {
+      frUpdates[String(w.id)] = {
+        id: w.id,
+        word: w.word,
+        fr: w.translations.fr
+      };
     }
   }
-  console.log('   ✅ STRICT INTEGRITY VERIFIED: 100% of other languages in words.json are untouched.');
 
-  // Save to words.json files
-  const minifiedWords = JSON.stringify(localWords);
-  if (minifiedWords.includes('\ufffd')) {
-    throw new Error('Detected U+FFFD in words.json payload!');
-  }
-  WORDS_JSON_FILES.forEach(filePath => {
-    if (fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, minifiedWords, 'utf8');
-      console.log(`   Saved ${filePath}`);
+  const updateCount = Object.keys(frUpdates).length;
+  console.log(`   Found ${updateCount} refined French entries ready for OTA.`);
+
+  // Safety assertions on key IDs
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (!w || w.translations.fr !== check.expected) {
+      throw new Error(`Safety check failed: word ${check.id} (${check.word}) is "${w?.translations?.fr}", expected "${check.expected}"`);
     }
-  });
+  }
+  console.log('   All safety checks passed.');
 
-  // 3. Fetch Firestore updates
-  console.log('\n3. Fetching current Firestore shared/vocabulary_updates...');
+  // 2. Fetch current Firestore shared/vocabulary_updates
+  console.log('\n2. Fetching current Firestore shared/vocabulary_updates...');
   const fsUrl = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents/${FS_DOC_PATH}?key=${FS_API_KEY}`;
   const fsRes = await fetch(fsUrl);
   if (!fsRes.ok) throw new Error(`HTTP ${fsRes.status} fetching Firestore`);
@@ -191,98 +108,52 @@ async function run() {
   const fsMap = JSON.parse(fsData.fields?.updatesJson?.stringValue || '{}');
   console.log(`   Current entries in Firestore: ${Object.keys(fsMap).length}`);
 
-  // Build local lookup map for delta calculation
-  const localMap = new Map();
-  localWords.forEach(w => localMap.set(String(w.id), w));
-
-  const optimizedFsMap = {};
-  let totalFrInFs = 0;
-
-  for (const [id, entry] of Object.entries(fsMap)) {
-    const entryId = String(entry.id || id).trim();
-    const entryWord = String(entry.word || '').toLowerCase().trim();
-    const local = localMap.get(entryId);
-    if (!local) continue;
-
-    const diffTranslations = {};
-
-    // 1. Keep existing remote overrides that differ from base words.json
-    if (entry.translations) {
-      for (const [lang, val] of Object.entries(entry.translations)) {
-        if (lang === 'ga' || lang === 'mt' || lang === 'fr') continue;
-        if (!local.translations || local.translations[lang] !== val) {
-          diffTranslations[lang] = val;
-        }
-      }
-    }
-
-    // 2. Add French translation if present in sheet
-    const sheetItem = (entryId && entryWord ? sheetByIdAndWord.get(`${entryId}:${entryWord}`) : null)
-      || sheetByWord.get(entryWord)
-      || (entryId ? sheetById.get(entryId) : null);
-
-    if (sheetItem && sheetItem.fr) {
-      diffTranslations.fr = sheetItem.fr;
-      totalFrInFs++;
-    }
-
-    const hasDiffRoot = entry.translation && entry.translation !== local.translation;
-    const hasDiffTranslations = Object.keys(diffTranslations).length > 0;
-
-    if (hasDiffTranslations || hasDiffRoot) {
-      optimizedFsMap[entryId] = {
-        id: entry.id || entryId,
-        word: entry.word || local.word,
-        translations: diffTranslations
+  let frMerged = 0;
+  for (const [idStr, update] of Object.entries(frUpdates)) {
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: update.id,
+        word: update.word,
+        translations: { fr: update.fr }
       };
-      if (hasDiffRoot) {
-        optimizedFsMap[entryId].translation = entry.translation;
-      }
+    } else {
+      if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+      fsMap[idStr].translations.fr = update.fr;
     }
+    delete fsMap[idStr].updatedAt;
+    frMerged++;
   }
 
-  // Also ensure any words with French changes from the sheet are included in Firestore delta
-  for (const w of localWords) {
-    const wId = String(w.id);
-    const sheetItem = sheetByIdAndWord.get(`${wId}:${w.word.toLowerCase()}`) || sheetByWord.get(w.word.toLowerCase()) || sheetById.get(wId);
-    if (sheetItem && sheetItem.fr) {
-      if (!optimizedFsMap[wId]) {
-        optimizedFsMap[wId] = {
-          id: w.id,
-          word: w.word,
-          translations: { fr: sheetItem.fr }
-        };
-        totalFrInFs++;
-      } else if (!optimizedFsMap[wId].translations.fr) {
-        optimizedFsMap[wId].translations.fr = sheetItem.fr;
-        totalFrInFs++;
-      }
-    }
+  console.log(`   Merged refined French translations for ${frMerged} words into Firestore updates.`);
+
+  // Clean redundant fields
+  for (const entry of Object.values(fsMap)) {
+    delete entry.updatedAt;
   }
 
-  const jsonStr = JSON.stringify(optimizedFsMap);
-  const payloadBytes = Buffer.byteLength(jsonStr, 'utf8');
-  console.log(`\n4. Optimized Firestore payload summary:`);
-  console.log(`   - Total delta entries in Firestore: ${Object.keys(optimizedFsMap).length}`);
-  console.log(`   - Total French entries in Firestore: ${totalFrInFs}`);
+  const updatedPayloadStr = JSON.stringify(fsMap);
+  const payloadBytes = Buffer.byteLength(updatedPayloadStr, 'utf8');
+  console.log('\n3. Firestore payload summary:');
+  console.log(`   - Total entries in Firestore: ${Object.keys(fsMap).length}`);
   console.log(`   - Payload size: ${payloadBytes} bytes (${(payloadBytes / 1024).toFixed(1)} KB / 1024 KB max)`);
+  console.log(`   - Headroom remaining: ${(1024 - payloadBytes / 1024).toFixed(1)} KB`);
 
   if (payloadBytes > 1048576) {
     throw new Error(`Payload exceeds 1MB Firestore limit (${payloadBytes} bytes)! Aborting write.`);
   }
 
-  // 5. Authenticate with Firebase Admin
-  console.log('\n5. Authenticating with Firebase Admin...');
+  // 4. Authenticate with Firebase Admin
+  console.log('\n4. Authenticating with Firebase Admin...');
   const idToken = await getFirebaseAuthToken();
   console.log('   Authenticated successfully.');
 
-  // 6. Patch Firestore
-  console.log('6. Writing updates to Firestore shared/vocabulary_updates...');
+  // 5. Patch Firestore
+  console.log('5. Writing updates to Firestore shared/vocabulary_updates (OTA)...');
   const patchPayload = JSON.stringify({
     fields: {
-      updatesJson: { stringValue: jsonStr },
+      updatesJson: { stringValue: updatedPayloadStr },
       updatedAt: { integerValue: String(Date.now()) },
-      totalCount: { integerValue: String(Object.keys(optimizedFsMap).length) }
+      totalCount: { integerValue: String(Object.keys(fsMap).length) }
     }
   });
 
@@ -296,28 +167,33 @@ async function run() {
   });
 
   if (!patchRes.ok) {
-    const errText = await patchRes.text();
-    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status} - ${errText}`);
+    const patchErr = await patchRes.text();
+    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status}: ${patchErr}`);
   }
-  console.log('   ✅ FIRESTORE UPDATE SUCCESSFUL!');
 
-  // 7. Verification read-back from Firestore
-  console.log('\n7. Verifying published Firestore document...');
+  const patchData = await patchRes.json();
+  console.log('   Successfully patched shared/vocabulary_updates in Cloud Firestore!');
+  console.log(`   Doc update time: ${patchData.updateTime}`);
+
+  // 6. Verification read-back
+  console.log('\n6. Verifying read-back from Firestore...');
   const verifyRes = await fetch(fsUrl);
+  if (!verifyRes.ok) throw new Error(`HTTP ${verifyRes.status} verifying Firestore readback`);
   const verifyData = await verifyRes.json();
   const verifyMap = JSON.parse(verifyData.fields?.updatesJson?.stringValue || '{}');
 
-  let verifiedFr = 0;
-  for (const k in verifyMap) {
-    if (verifyMap[k]?.translations?.fr) verifiedFr++;
+  for (const check of sampleChecks) {
+    const readVal = verifyMap[String(check.id)]?.translations?.fr;
+    console.log(`   - ID ${check.id} (${check.word}): "${readVal}"`);
+    if (readVal !== check.expected) {
+      throw new Error(`Verification mismatch on read-back for ID ${check.id}! Got "${readVal}", expected "${check.expected}"`);
+    }
   }
-  console.log(`   Verified Firestore entries count: ${Object.keys(verifyMap).length}`);
-  console.log(`   Verified French entries count in Firestore: ${verifiedFr}`);
 
-  console.log('\n🎉 ALL FRENCH UPDATES AND INTEGRITY CHECKS COMPLETED SUCCESSFULLY!');
+  console.log('\n✅ OTA Update for French (fr) verified successfully! Users will automatically receive all updates over-the-air.');
 }
 
 run().catch(err => {
-  console.error('\n❌ ERROR during French sync:', err);
+  console.error('\n❌ OTA sync failed:', err);
   process.exit(1);
 });

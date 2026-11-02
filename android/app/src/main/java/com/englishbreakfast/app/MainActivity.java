@@ -1027,6 +1027,26 @@ public class MainActivity extends BridgeActivity {
                             }
                         });
                     }
+
+                    @JavascriptInterface
+                    public void openStoreListing() {
+                        if (!isTrustedOrigin()) return;
+                        runOnUiThread(() -> {
+                            try {
+                                Uri marketUri = Uri.parse("market://details?id=" + getPackageName());
+                                Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+                                marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(marketIntent);
+                            } catch (Exception e) {
+                                try {
+                                    Uri webUri = Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName());
+                                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+                                    webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(webIntent);
+                                } catch (Exception ignored) {}
+                            }
+                        });
+                    }
                 }, "AndroidWidgetBridge");
             }
         } catch (Exception ignored) {}

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { GERMAN_WORD_REFINEMENTS } from './apply_de_refinements.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,36 +13,11 @@ const WORDS_JSON_FILES = [
   path.join(ROOT_DIR, 'docs', 'assets', 'data', 'words.json')
 ];
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1pRIbBXzyYMlQKMJZir9l7SH7I13QZfYZ_GETcq1w_BY/gviz/tq?tqx=out:csv&sheet=Vocabulary';
 const FS_PROJECT_ID = 'english-breakfast-181ba';
 const FS_API_KEY = 'AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc';
 const FS_ADMIN_EMAIL = 'sheet-sync-admin@english-breakfast.app';
 const FS_ADMIN_PASS = 'SyncPassword2026!Sec';
 const FS_DOC_PATH = 'shared/vocabulary_updates';
-
-function parseCSV(text) {
-  const rows = [];
-  let currentRow = [];
-  let currentField = '';
-  let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const nextChar = text[i + 1];
-    if (inQuotes) {
-      if (char === '"' && nextChar === '"') { currentField += '"'; i++; }
-      else if (char === '"') inQuotes = false;
-      else currentField += char;
-    } else {
-      if (char === '"') inQuotes = true;
-      else if (char === ',') { currentRow.push(currentField.trim()); currentField = ''; }
-      else if (char === '\r') {}
-      else if (char === '\n') { currentRow.push(currentField.trim()); rows.push(currentRow); currentRow = []; currentField = ''; }
-      else currentField += char;
-    }
-  }
-  if (currentField || currentRow.length > 0) { currentRow.push(currentField.trim()); rows.push(currentRow); }
-  return rows;
-}
 
 async function getFirebaseAuthToken() {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FS_API_KEY}`;
@@ -63,210 +39,86 @@ async function getFirebaseAuthToken() {
 }
 
 async function run() {
-  console.log('🚀 Starting German (de) Localization Sync to Firestore and words.json...\n');
+  console.log('🚀 Starting German (de) Vocabulary OTA Synchronization...\n');
 
-  // 1. Fetch Google Sheet data
-  console.log('1. Fetching Vocabulary from Google Sheet...');
-  const sheetRes = await fetch(SHEET_URL);
-  if (!sheetRes.ok) throw new Error(`Failed to download sheet CSV: HTTP ${sheetRes.status}`);
-  const csvText = await sheetRes.text();
-  const rows = parseCSV(csvText);
-  if (rows.length < 2) throw new Error('Sheet returned no rows');
+  // 1. Load local words.json
+  const wordsPath = WORDS_JSON_FILES[0];
+  const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
 
-  const headers = rows[0].map(h => String(h || '').trim().toLowerCase());
-  const idCol = headers.indexOf('id');
-  const wordCol = headers.indexOf('word');
-  const deCol = headers.indexOf('translation_de');
-  const notesDeCol = headers.indexOf('notes_de');
-
-  if (deCol < 0) throw new Error('Column "translation_de" not found in Google Sheet!');
-  console.log(`   Headers index: id=${idCol}, word=${wordCol}, translation_de=${deCol}, notes_de=${notesDeCol}`);
-  console.log(`   Total sheet rows: ${rows.length - 1}`);
-
-  const sheetByIdAndWord = new Map();
-  const sheetByWord = new Map();
-  const sheetById = new Map();
-
-  let deFilledCount = 0;
-  for (let r = 1; r < rows.length; r++) {
-    const row = rows[r];
-    const id = idCol >= 0 ? String(row[idCol] || '').trim() : '';
-    const word = wordCol >= 0 ? String(row[wordCol] || '').trim() : '';
-    const de = String(row[deCol] || '').trim();
-    const notesDe = notesDeCol >= 0 ? String(row[notesDeCol] || '').trim() : '';
-
-    if (de) deFilledCount++;
-    const item = { id, word, de, notesDe };
-    if (id && word) sheetByIdAndWord.set(`${id}:${word.toLowerCase()}`, item);
-    if (word) sheetByWord.set(word.toLowerCase(), item);
-    if (id) sheetById.set(id, item);
-  }
-  console.log(`   Total non-empty German translations in sheet: ${deFilledCount}`);
-
-  // 2. Load and verify local words.json
-  console.log('\n2. Updating German in local words.json files...');
-  const localWords = JSON.parse(fs.readFileSync(WORDS_JSON_FILES[0], 'utf8'));
-
-  // Snapshot before update by array index to guarantee 100% identity of all other languages
-  const beforeSnapshots = localWords.map(w => ({
-    id: w.id,
-    word: w.word,
-    translation: w.translation,
-    otherTranslations: Object.fromEntries(
-      Object.entries(w.translations || {}).filter(([k]) => k !== 'de')
-    )
-  }));
-
-  let wordsDeUpdated = 0;
-  for (let i = 0; i < localWords.length; i++) {
-    const w = localWords[i];
-    const id = String(w.id || '').trim();
-    const wordKey = String(w.word || '').toLowerCase().trim();
-
-    const sheetItem = (id && wordKey ? sheetByIdAndWord.get(`${id}:${wordKey}`) : null)
-      || sheetByWord.get(wordKey)
-      || (id ? sheetById.get(id) : null);
-
-    if (sheetItem && sheetItem.de) {
-      w.translations = w.translations || {};
-      if (w.translations.de !== sheetItem.de) {
-        w.translations.de = sheetItem.de;
-        wordsDeUpdated++;
-      }
-      if (sheetItem.notesDe) {
-        w.all_notes = w.all_notes || {};
-        w.all_notes.de = sheetItem.notesDe;
-      }
+  const deUpdates = {};
+  for (const [idStr, deVal] of Object.entries(GERMAN_WORD_REFINEMENTS)) {
+    const id = parseInt(idStr, 10);
+    const wordObj = words.find(w => w.id === id);
+    if (wordObj) {
+      deUpdates[idStr] = {
+        id: id,
+        word: wordObj.word,
+        de: deVal
+      };
     }
   }
 
-  console.log(`   Updated German translations in words.json: ${wordsDeUpdated} entries.`);
+  console.log(`1. Total German refined entries ready for OTA: ${Object.keys(deUpdates).length}`);
 
-  // Verify other languages in words.json are strictly unchanged
-  for (let i = 0; i < localWords.length; i++) {
-    const w = localWords[i];
-    const before = beforeSnapshots[i];
-
-    if (before.word !== w.word) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Word changed at index ${i} (${before.word} -> ${w.word})!`);
-    }
-    if (before.translation !== w.translation) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Root translation changed for word ${w.word}!`);
-    }
-
-    const currentOther = Object.fromEntries(
-      Object.entries(w.translations || {}).filter(([k]) => k !== 'de')
-    );
-    if (JSON.stringify(before.otherTranslations) !== JSON.stringify(currentOther)) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Non-German translations changed for word ${w.word}!`);
-    }
+  // Safety assertions
+  const w1641 = words.find(w => w.id === 1641);
+  if (w1641?.translations?.de !== 'Laden, einkaufen') {
+    throw new Error(`Safety check failed: word 1641 de is "${w1641?.translations?.de}", expected "Laden, einkaufen"!`);
   }
-  console.log('   ✅ STRICT INTEGRITY VERIFIED: 100% of other languages in words.json are untouched.');
 
-  // Save to words.json files
-  const minifiedWords = JSON.stringify(localWords);
-  if (minifiedWords.includes('\ufffd')) {
-    throw new Error('Detected U+FFFD in words.json payload!');
+  const w1810 = words.find(w => w.id === 1810);
+  if (w1810?.translations?.de !== 'primär, grundlegend') {
+    throw new Error(`Safety check failed: word 1810 de is "${w1810?.translations?.de}", expected "primär, grundlegend"!`);
   }
-  WORDS_JSON_FILES.forEach(filePath => {
-    if (fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, minifiedWords, 'utf8');
-      console.log(`   Saved ${filePath}`);
-    }
-  });
 
-  // 3. Fetch Firestore updates
-  console.log('\n3. Fetching current Firestore shared/vocabulary_updates...');
+  const w6752 = words.find(w => w.id === 6752);
+  if (w6752?.translations?.de !== 'falsch') {
+    throw new Error(`Safety check failed: word 6752 de is "${w6752?.translations?.de}", expected "falsch"!`);
+  }
+
+  const w6912 = words.find(w => w.id === 6912);
+  if (w6912?.translations?.de !== 'wahr, richtig') {
+    throw new Error(`Safety check failed: word 6912 de is "${w6912?.translations?.de}", expected "wahr, richtig"!`);
+  }
+
+  // 2. Fetch current Firestore shared/vocabulary_updates
+  console.log('\n2. Fetching current Firestore shared/vocabulary_updates...');
   const fsUrl = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents/${FS_DOC_PATH}?key=${FS_API_KEY}`;
   const fsRes = await fetch(fsUrl);
   if (!fsRes.ok) throw new Error(`HTTP ${fsRes.status} fetching Firestore`);
   const fsData = await fsRes.json();
   const fsMap = JSON.parse(fsData.fields?.updatesJson?.stringValue || '{}');
-  const initialCount = Object.keys(fsMap).length;
-  console.log(`   Current entries in Firestore: ${initialCount}`);
+  console.log(`   Current entries in Firestore: ${Object.keys(fsMap).length}`);
 
-  // Snapshot before update of Firestore entries (excluding de, ga, mt)
-  const beforeFsSnapshot = new Map();
-  for (const [id, entry] of Object.entries(fsMap)) {
-    const otherTranslations = Object.fromEntries(
-      Object.entries(entry.translations || {}).filter(([k]) => k !== 'de' && k !== 'ga' && k !== 'mt')
-    );
-    beforeFsSnapshot.set(id, {
-      word: entry.word,
-      otherTranslations
-    });
+  let deMerged = 0;
+  for (const [idStr, update] of Object.entries(deUpdates)) {
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: update.id,
+        word: update.word,
+        translations: { de: update.de }
+      };
+    } else {
+      if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+      fsMap[idStr].translations.de = update.de;
+    }
+    delete fsMap[idStr].updatedAt;
+    deMerged++;
   }
 
-  // Build local map for redundant metadata cleanup
-  const localMap = new Map();
-  localWords.forEach(w => localMap.set(String(w.id), w));
+  console.log(`   Merged refined German translations for ${deMerged} words into Firestore updates.`);
 
-  // Update German in Firestore entries & optimize payload size to stay safely within 1MB Firestore limit
-  let fsUpdatedCount = 0;
-  for (const [id, entry] of Object.entries(fsMap)) {
-    const entryId = String(entry.id || id).trim();
-    const entryWord = String(entry.word || '').toLowerCase().trim();
-
-    // 1. Remove permanently decommissioned Maltese (mt) and Irish (ga) per Critical Rule #1
-    if (entry.translations) {
-      delete entry.translations.ga;
-      delete entry.translations.mt;
-    }
-
-    // 2. Remove unused zipf
-    delete entry.zipf;
+  // Clean redundant fields to preserve headroom
+  for (const entry of Object.values(fsMap)) {
     delete entry.updatedAt;
-
-    // 3. Remove redundant metadata that exactly matches base word
-    const local = localMap.get(entryId);
-    if (local) {
-      if (entry.transcription === local.transcription) delete entry.transcription;
-      if (entry.translation === local.translation) delete entry.translation;
-      if (entry.category === local.category) delete entry.category;
-      if (entry.level === local.level) delete entry.level;
-    }
-
-    // 4. Apply German translation from sheet
-    const sheetItem = (entryId && entryWord ? sheetByIdAndWord.get(`${entryId}:${entryWord}`) : null)
-      || sheetByWord.get(entryWord)
-      || (entryId ? sheetById.get(entryId) : null);
-
-    if (sheetItem && sheetItem.de) {
-      entry.translations = entry.translations || {};
-      if (entry.translations.de !== sheetItem.de) {
-        entry.translations.de = sheetItem.de;
-        fsUpdatedCount++;
-      }
-    }
   }
 
-  console.log(`   Updated German translations in Firestore map: ${fsUpdatedCount} entries.`);
+  const updatedPayloadStr = JSON.stringify(fsMap);
+  const payloadBytes = Buffer.byteLength(updatedPayloadStr, 'utf8');
+  console.log(`\n3. Firestore payload summary:`);
+  console.log(`   - Total entries in Firestore: ${Object.keys(fsMap).length}`);
+  console.log(`   - Payload size: ${payloadBytes} bytes (${(payloadBytes / 1024).toFixed(1)} KB / 1024 KB max)`);
 
-  // Strict verification of Firestore entries:
-  // 1. Entry count must be unchanged
-  if (Object.keys(fsMap).length !== initialCount) {
-    throw new Error(`CRITICAL INTEGRITY FAILURE: Firestore entry count changed from ${initialCount} to ${Object.keys(fsMap).length}!`);
-  }
-
-  // 2. Every other active language in every entry must be 100% identical
-  for (const [id, entry] of Object.entries(fsMap)) {
-    const before = beforeFsSnapshot.get(id);
-    if (!before) throw new Error(`CRITICAL: ID ${id} not found in before snapshot!`);
-    if (before.word !== entry.word) throw new Error(`CRITICAL: Word changed for ID ${id}!`);
-
-    const currentOther = Object.fromEntries(
-      Object.entries(entry.translations || {}).filter(([k]) => k !== 'de' && k !== 'ga' && k !== 'mt')
-    );
-    if (JSON.stringify(before.otherTranslations) !== JSON.stringify(currentOther)) {
-      throw new Error(`CRITICAL INTEGRITY FAILURE: Non-German translation modified in Firestore for ID ${id}!`);
-    }
-  }
-  console.log('   ✅ STRICT INTEGRITY VERIFIED: 100% of non-German active translations in Firestore are identical.');
-
-  // Check payload size
-  const jsonStr = JSON.stringify(fsMap);
-  const payloadBytes = Buffer.byteLength(jsonStr, 'utf8');
-  console.log(`   Payload size: ${payloadBytes} bytes (${(payloadBytes / 1024).toFixed(1)} KB / 1024 KB max)`);
   if (payloadBytes > 1048576) {
     throw new Error(`Payload exceeds 1MB Firestore limit (${payloadBytes} bytes)! Aborting write.`);
   }
@@ -277,10 +129,10 @@ async function run() {
   console.log('   Authenticated successfully.');
 
   // 5. Patch Firestore
-  console.log('5. Writing updates to Firestore shared/vocabulary_updates...');
+  console.log('5. Writing updates to Firestore shared/vocabulary_updates (OTA)...');
   const patchPayload = JSON.stringify({
     fields: {
-      updatesJson: { stringValue: jsonStr },
+      updatesJson: { stringValue: updatedPayloadStr },
       updatedAt: { integerValue: String(Date.now()) },
       totalCount: { integerValue: String(Object.keys(fsMap).length) }
     }
@@ -296,28 +148,44 @@ async function run() {
   });
 
   if (!patchRes.ok) {
-    const errText = await patchRes.text();
-    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status} - ${errText}`);
+    const patchErr = await patchRes.text();
+    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status}: ${patchErr}`);
   }
-  console.log('   ✅ FIRESTORE UPDATE SUCCESSFUL!');
 
-  // 6. Verification read-back from Firestore
-  console.log('\n6. Verifying published Firestore document...');
+  const patchData = await patchRes.json();
+  console.log('   Successfully patched shared/vocabulary_updates in Cloud Firestore!');
+  console.log(`   Doc update time: ${patchData.updateTime}`);
+
+  // 6. Verification read-back
+  console.log('\n6. Verifying read-back from Firestore...');
   const verifyRes = await fetch(fsUrl);
+  if (!verifyRes.ok) throw new Error(`HTTP ${verifyRes.status} verifying Firestore readback`);
   const verifyData = await verifyRes.json();
   const verifyMap = JSON.parse(verifyData.fields?.updatesJson?.stringValue || '{}');
 
-  let deCountInFirestore = 0;
-  for (const k in verifyMap) {
-    if (verifyMap[k]?.translations?.de) deCountInFirestore++;
-  }
-  console.log(`   Verified Firestore entries count: ${Object.keys(verifyMap).length}`);
-  console.log(`   Verified German entries count in Firestore: ${deCountInFirestore} / ${Object.keys(verifyMap).length}`);
+  console.log(`   - ID 1641 (shop): "${verifyMap['1641']?.translations?.de}"`);
+  console.log(`   - ID 1664 (tough): "${verifyMap['1664']?.translations?.de}"`);
+  console.log(`   - ID 1732 (commit): "${verifyMap['1732']?.translations?.de}"`);
+  console.log(`   - ID 1810 (primary): "${verifyMap['1810']?.translations?.de}"`);
+  console.log(`   - ID 3556 (piss off): "${verifyMap['3556']?.translations?.de}"`);
+  console.log(`   - ID 5064 (when pigs fly): "${verifyMap['5064']?.translations?.de}"`);
+  console.log(`   - ID 5411 (spike): "${verifyMap['5411']?.translations?.de}"`);
+  console.log(`   - ID 6752 (false): "${verifyMap['6752']?.translations?.de}"`);
+  console.log(`   - ID 6912 (TRUE): "${verifyMap['6912']?.translations?.de}"`);
 
-  console.log('\n🎉 ALL GERMAN UPDATES AND INTEGRITY CHECKS COMPLETED SUCCESSFULLY!');
+  if (
+    verifyMap['1641']?.translations?.de !== 'Laden, einkaufen' ||
+    verifyMap['1810']?.translations?.de !== 'primär, grundlegend' ||
+    verifyMap['6752']?.translations?.de !== 'falsch' ||
+    verifyMap['6912']?.translations?.de !== 'wahr, richtig'
+  ) {
+    throw new Error('Verification mismatch on read-back!');
+  }
+
+  console.log('\n✅ OTA Update for German (de) verified successfully! Users will automatically receive all updates over-the-air.');
 }
 
 run().catch(err => {
-  console.error('\n❌ ERROR during German sync:', err);
+  console.error('\n❌ OTA sync failed:', err);
   process.exit(1);
 });

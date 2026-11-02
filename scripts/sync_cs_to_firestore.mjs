@@ -1,16 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-const WORDS_JSON_FILES = [
-  path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'assets', 'data', 'words.json'),
-  path.join(ROOT_DIR, 'docs', 'assets', 'data', 'words.json')
-];
+const WORDS_JSON_PATH = path.join(ROOT_DIR, 'frontend', 'assets', 'data', 'words.json');
 
 const FS_PROJECT_ID = 'english-breakfast-181ba';
 const FS_API_KEY = 'AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc';
@@ -37,110 +34,117 @@ async function getFirebaseAuthToken() {
   return data.idToken;
 }
 
-const MANUAL_OVERRIDES_CS = {
-  1398: 'kde, kam',
-  1505: 'libra, bušit',
-  1641: 'obchod, nakupovat',
-  3949: 'no a co, a co jako',
-  4005: 'na, o, zapnuto',
-  4124: 'bát se, mít strach z',
-  4292: 's tím naprosto souhlasím',
-  4311: 'bude muset',
-  4324: 'docela dobré',
-  4456: 'šířka',
-  4787: 'nepřímý, oklikou',
-  4863: 'zamýšlený, určený',
-  4903: 'promiňte, omlouvám se, líto',
-  5045: 'tady to máte, prosím',
-  5531: 'tvrdit, prohlašovat, údajně tvrdit',
-  6766: 'zapomněl jsem na to'
-};
-
-function cleanCzech(id, word, originalCs) {
-  if (MANUAL_OVERRIDES_CS[id]) {
-    return MANUAL_OVERRIDES_CS[id];
-  }
-  if (!originalCs) return originalCs;
-
-  let cleaned = String(originalCs).trim();
-
-  // Remove trailing period from non-abbreviation entries
-  if (/\.\s*$/.test(cleaned) && !/\b(apod|atd|tzv|např)\.$/i.test(cleaned)) {
-    cleaned = cleaned.replace(/\.\s*$/, '');
-  }
-
-  // Remove trailing commas/semicolons
-  cleaned = cleaned.replace(/[,;]\s*$/, '');
-
-  // Standardize semicolons to commas
-  cleaned = cleaned.replace(/;/g, ',');
-
-  // Split by commas, clean and deduplicate parts
-  const parts = cleaned.split(',').map(s => s.trim()).filter(Boolean);
-  const seen = new Set();
-  const uniqueParts = [];
-
-  for (const part of parts) {
-    const normalized = part.toLowerCase();
-    if (!seen.has(normalized)) {
-      seen.add(normalized);
-      uniqueParts.push(part);
-    }
-  }
-
-  return uniqueParts.join(', ');
-}
-
 async function run() {
   console.log('🚀 Starting Czech (cs) Vocabulary OTA Synchronization...\n');
 
-  // 1. Load local words.json
-  const wordsPath = WORDS_JSON_FILES[0];
-  const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
+  const sampleChecks = [
+    { id: 2, word: 'good at', expected: 'být dobrý v, ovládat' },
+    { id: 44, word: 'native', expected: 'rodilý, rodilý mluvčí, domorodý' },
+    { id: 643, word: 'dear', expected: 'drahý, vážený, milý' },
+    { id: 1396, word: 'it', expected: 'to, ono, ten' },
+    { id: 1415, word: 'up', expected: 'nahoru, nahoře' },
+    { id: 1468, word: 'reach', expected: 'dosáhnout, dospět k' },
+    { id: 1537, word: 'so', expected: 'tak, tedy, natolik' },
+    { id: 1662, word: 'ago', expected: 'před, zpátky' },
+    { id: 1734, word: 'achieve', expected: 'dosáhnout, uskutečnit' },
+    { id: 2046, word: 'about', expected: 'o, kolem, přibližně' },
+    { id: 2130, word: 'spin spun spun', expected: 'točit se, příst' },
+    { id: 3033, word: 'spouse', expected: 'manžel, manželka' },
+    { id: 3175, word: 'limb', expected: 'končetina, větev' },
+    { id: 3772, word: 'shoot', expected: 'střílet, natáčet, fotit' },
+    { id: 3784, word: 'am is are', expected: 'jsem, jsi, je, jsou' },
+    { id: 3786, word: 'of', expected: 'z, ze, od' },
+    { id: 3788, word: 'in', expected: 'v, ve, uvnitř' },
+    { id: 3802, word: 'than', expected: 'než' },
+    { id: 3809, word: 'speak', expected: 'mluvit, říci' },
+    { id: 3815, word: 'if', expected: 'pokud, jestliže, když' },
+    { id: 3842, word: 'at', expected: 'u, v, na' },
+    { id: 3859, word: 'the', expected: 'ten, ta, to' },
+    { id: 3865, word: 'into', expected: 'do, dovnitř' },
+    { id: 3974, word: 'so-so', expected: 'tak akorát, jakž takž' },
+    { id: 4007, word: 'prom', expected: 'maturitní ples, ples' },
+    { id: 4091, word: 'used to', expected: 'mívat ve zvyku, dříve' },
+    { id: 4112, word: 'torch', expected: 'pochodeň, baterka' },
+    { id: 4143, word: 'married to', expected: 'ženatý s, vdaná za' },
+    { id: 4151, word: 'care about', expected: 'záležet na, dělat si starosti' },
+    { id: 4160, word: 'sick of', expected: 'mít po krk, otrávený z' },
+    { id: 4174, word: 'black dog', expected: 'deprese, těžká melancholie' },
+    { id: 4197, word: "I don't mind", expected: 'nevadí mi, nemám nic proti' },
+    { id: 4257, word: 'work out', expected: 'vyřešit, trénovat, cvičit' },
+    { id: 4308, word: "couldn't", expected: 'nemohl, nedokázal' },
+    { id: 4333, word: "I'd like to", expected: 'chtěl bych, ráda bych' },
+    { id: 4350, word: "I'm sure", expected: 'jsem si jistý, nepochybně' },
+    { id: 4387, word: 'adverb', expected: 'příslovce' },
+    { id: 4457, word: 'restroom', expected: 'toaleta, záchod' },
+    { id: 4787, word: 'indirect', expected: 'nepřímý, oklikou' },
+    { id: 4989, word: 'came out', expected: 'vyšel, objevil se' },
+    { id: 5018, word: 'co', expected: 'spolu-, spolupracovník' },
+    { id: 5021, word: 'gotta', expected: 'muset, je třeba' },
+    { id: 5023, word: 'won\'t', expected: 'nebude, odmítá' },
+    { id: 5031, word: 'to take something for granted', expected: 'brát jako samozřejmost, podceňovat' },
+    { id: 5034, word: 'feel left out', expected: 'cítit se vyloučený, cítit se odstrčený' },
+    { id: 5064, word: 'when pigs fly', expected: 'až naprší a uschne, nikdy' },
+    { id: 5092, word: 'run errands', expected: 'vyřizovat pochůzky, běhat po úřadech' },
+    { id: 5202, word: 'perpetrate', expected: 'spáchat, dopustit se' },
+    { id: 5716, word: 'filial', expected: 'synovský, dceřiný' },
+    { id: 5775, word: 'vouchsafe', expected: 'ráčit, dopřát, milostivě udělit' },
+    { id: 6012, word: 'acrimony', expected: 'hořkost, jízlivost, zášť' },
+    { id: 6013, word: 'acumen', expected: 'bystrost, prozíravost, vnímavost' },
+    { id: 6037, word: 'arrant', expected: 'naprostý, bezostyšný, zjevný' },
+    { id: 6496, word: 'mettle', expected: 'odvaha, kuráž, nezdolnost' },
+    { id: 6510, word: 'stracism', expected: 'ostrakismus, vyloučení, vyhnanství' },
+    { id: 6742, word: 'easy come easy go', expected: 'lehce nabyl, lehce pozbyl' },
+    { id: 6743, word: 'no pain no gain', expected: 'bez práce nejsou koláče' },
+    { id: 7004, word: 'liquid', expected: 'tekutina, tekutý' },
+    { id: 7039, word: 'stew', expected: 'dusit, dušené maso' },
+    { id: 7043, word: 'thunder', expected: 'hrom, hřmít' }
+  ];
 
-  let modifiedCount = 0;
+  // 1. Detect all changed words in words.json compared to git HEAD
+  console.log('1. Detecting refined Czech entries...');
+  const headWordsStr = execSync('git show HEAD:frontend/assets/data/words.json', { maxBuffer: 50 * 1024 * 1024 }).toString('utf8');
+  const headWords = JSON.parse(headWordsStr);
+  const headMap = new Map(headWords.map(w => [w.id, w.translations.cs]));
+
+  const currentWords = JSON.parse(fs.readFileSync(WORDS_JSON_PATH, 'utf8'));
   const csUpdates = {};
 
-  for (const w of words) {
-    const origCs = w.translations?.cs || '';
-    const newCs = cleanCzech(w.id, w.word, origCs);
-    if (origCs !== newCs) {
-      modifiedCount++;
-      w.translations = w.translations || {};
-      w.translations.cs = newCs;
+  for (const w of currentWords) {
+    const origCs = headMap.get(w.id);
+    if (origCs !== w.translations.cs) {
       csUpdates[String(w.id)] = {
         id: w.id,
         word: w.word,
-        cs: newCs
+        cs: w.translations.cs
       };
     }
   }
 
-  console.log(`1. Total Czech words refined: ${modifiedCount}`);
-
-  // Safety checks
-  const jsonStr = JSON.stringify(words);
-  if (jsonStr.includes('\ufffd')) {
-    throw new Error('❌ Detected U+FFFD replacement characters in words.json!');
+  // Ensure ALL sample checks are present
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (w) {
+      csUpdates[String(w.id)] = {
+        id: w.id,
+        word: w.word,
+        cs: w.translations.cs
+      };
+    }
   }
 
-  const w4787 = words.find(w => w.id === 4787);
-  if (w4787.translations?.cs?.includes('Internet')) {
-    throw new Error(`Safety check failed: word 4787 cs contains "Internet"!`);
+  const updateCount = Object.keys(csUpdates).length;
+  console.log(`   Found ${updateCount} refined Czech entries ready for OTA.`);
+
+  // Safety assertions on key IDs
+  for (const check of sampleChecks) {
+    const w = currentWords.find(item => item.id === check.id);
+    if (!w || w.translations.cs !== check.expected) {
+      throw new Error(`Safety check failed: word ${check.id} (${check.word}) is "${w?.translations?.cs}", expected "${check.expected}"`);
+    }
   }
+  console.log('   All safety checks passed.');
 
-  const w5531 = words.find(w => w.id === 5531);
-  if (w5531.translations?.cs === 'schválit') {
-    throw new Error(`Safety check failed: word 5531 cs is "schválit"!`);
-  }
-
-  // 2. Save to all words.json paths
-  WORDS_JSON_FILES.forEach(filePath => {
-    fs.writeFileSync(filePath, jsonStr, 'utf8');
-    console.log(`   Saved ${filePath}`);
-  });
-
-  // 3. Fetch current Firestore shared/vocabulary_updates
+  // 2. Fetch current Firestore shared/vocabulary_updates
   console.log('\n2. Fetching current Firestore shared/vocabulary_updates...');
   const fsUrl = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents/${FS_DOC_PATH}?key=${FS_API_KEY}`;
   const fsRes = await fetch(fsUrl);
@@ -150,18 +154,18 @@ async function run() {
   console.log(`   Current entries in Firestore: ${Object.keys(fsMap).length}`);
 
   let csMerged = 0;
-  for (const [id, update] of Object.entries(csUpdates)) {
-    if (!fsMap[id]) {
-      fsMap[id] = {
+  for (const [idStr, update] of Object.entries(csUpdates)) {
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
         id: update.id,
         word: update.word,
         translations: { cs: update.cs }
       };
     } else {
-      if (!fsMap[id].translations) fsMap[id].translations = {};
-      fsMap[id].translations.cs = update.cs;
+      if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+      fsMap[idStr].translations.cs = update.cs;
     }
-    delete fsMap[id].updatedAt;
+    delete fsMap[idStr].updatedAt;
     csMerged++;
   }
 
@@ -174,9 +178,10 @@ async function run() {
 
   const updatedPayloadStr = JSON.stringify(fsMap);
   const payloadBytes = Buffer.byteLength(updatedPayloadStr, 'utf8');
-  console.log(`\n3. Firestore payload summary:`);
+  console.log('\n3. Firestore payload summary:');
   console.log(`   - Total entries in Firestore: ${Object.keys(fsMap).length}`);
   console.log(`   - Payload size: ${payloadBytes} bytes (${(payloadBytes / 1024).toFixed(1)} KB / 1024 KB max)`);
+  console.log(`   - Headroom remaining: ${(1024 - payloadBytes / 1024).toFixed(1)} KB`);
 
   if (payloadBytes > 1048576) {
     throw new Error(`Payload exceeds 1MB Firestore limit (${payloadBytes} bytes)! Aborting write.`);
@@ -207,28 +212,33 @@ async function run() {
   });
 
   if (!patchRes.ok) {
-    const errText = await patchRes.text();
-    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status} - ${errText}`);
+    const patchErr = await patchRes.text();
+    throw new Error(`Firestore PATCH failed: HTTP ${patchRes.status}: ${patchErr}`);
   }
-  console.log('   ✅ Firestore document updated successfully (OTA published)!');
 
-  // 6. Verify Firestore document
-  console.log('\n6. Verifying published Firestore document...');
+  const patchData = await patchRes.json();
+  console.log('   Successfully patched shared/vocabulary_updates in Cloud Firestore!');
+  console.log(`   Doc update time: ${patchData.updateTime}`);
+
+  // 6. Verification read-back
+  console.log('\n6. Verifying read-back from Firestore...');
   const verifyRes = await fetch(fsUrl);
+  if (!verifyRes.ok) throw new Error(`HTTP ${verifyRes.status} verifying Firestore readback`);
   const verifyData = await verifyRes.json();
   const verifyMap = JSON.parse(verifyData.fields?.updatesJson?.stringValue || '{}');
 
-  console.log(`   Verified ID 4787 ("indirect"): cs="${verifyMap['4787']?.translations?.cs}"`);
-  console.log(`   Verified ID 5531 ("allege"): cs="${verifyMap['5531']?.translations?.cs}"`);
-  console.log(`   Verified ID 1641 ("shop"): cs="${verifyMap['1641']?.translations?.cs}"`);
-  console.log(`   Verified ID 4124 ("scared of"): cs="${verifyMap['4124']?.translations?.cs}"`);
-  console.log(`   Verified ID 4005 ("on"): cs="${verifyMap['4005']?.translations?.cs}"`);
-  console.log(`   Verified ID 37 ("train"): cs="${verifyMap['37']?.translations?.cs}"`);
+  for (const check of sampleChecks) {
+    const readVal = verifyMap[String(check.id)]?.translations?.cs;
+    console.log(`   - ID ${check.id} (${check.word}): "${readVal}"`);
+    if (readVal !== check.expected) {
+      throw new Error(`Verification mismatch on read-back for ID ${check.id}! Got "${readVal}", expected "${check.expected}"`);
+    }
+  }
 
-  console.log('\n🎉 CZECH OTA LOCALIZATION REFINEMENT APPLIED AND PUBLISHED SUCCESSFULLY!');
+  console.log('\n✅ OTA Update for Czech (cs) verified successfully! Users will automatically receive all updates over-the-air.');
 }
 
 run().catch(err => {
-  console.error('\n❌ ERROR during sync:', err);
+  console.error('\n❌ OTA sync failed:', err);
   process.exit(1);
 });
