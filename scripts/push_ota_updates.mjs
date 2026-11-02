@@ -399,7 +399,68 @@ async function run() {
     { id: 947, word: 'behave', lang: 'ru', expected: 'вести себя, поступать' },
     { id: 949, word: 'elderly', lang: 'ru', expected: 'пожилой, преклонного возраста' },
     { id: 949, word: 'elderly', lang: 'es', expected: 'anciano, de edad avanzada, mayor' },
-    { id: 950, word: 'virtual', lang: 'el', expected: 'εικονικός' }
+    { id: 950, word: 'virtual', lang: 'el', expected: 'εικονικός' },
+
+    // Batch 951-1000
+    { id: 955, word: 'donate', lang: 'da', expected: 'donere, skænke' },
+    { id: 955, word: 'donate', lang: 'fi', expected: 'lahjoittaa, antaa hyväntekeväisyyteen' },
+    { id: 955, word: 'donate', lang: 'sv', expected: 'donera, skänka' },
+    { id: 955, word: 'donate', lang: 'vi', expected: 'quyên góp, hiến tặng' },
+    { id: 956, word: 'toe', lang: 'it', expected: 'dito del piede, punta della scarpa' },
+    { id: 956, word: 'toe', lang: 'lt', expected: 'kojos pirštas, bato noselė' },
+    { id: 956, word: 'toe', lang: 'ja', expected: '足の指、つま先' },
+    { id: 957, word: 'prescription', lang: 'fr', expected: 'ordonnance, prescription médicale' },
+    { id: 957, word: 'prescription', lang: 'da', expected: 'recept, lægerecept' },
+    { id: 957, word: 'prescription', lang: 'vi', expected: 'đơn thuốc, toa thuốc' },
+    { id: 957, word: 'prescription', lang: 'th', expected: 'ใบสั่งยา' },
+    { id: 957, word: 'prescription', lang: 'ko', expected: '처방전, 처방약' },
+    { id: 957, word: 'prescription', lang: 'ja', expected: '処方箋、処方薬' },
+    { id: 965, word: 'nail', lang: 'fr', expected: 'clou, ongle' },
+    { id: 965, word: 'nail', lang: 'it', expected: 'chiodo, unghia' },
+    { id: 965, word: 'nail', lang: 'cs', expected: 'hřebík, nehet' },
+    { id: 967, word: 'interrupt', lang: 'hu', expected: 'félbeszakít, beleszól' },
+    { id: 967, word: 'interrupt', lang: 'el', expected: 'διακόπτω' },
+    { id: 967, word: 'interrupt', lang: 'da', expected: 'afbryde, falde i talen' },
+    { id: 970, word: 'melt', lang: 'it', expected: 'sciogliersi, fondere' },
+    { id: 970, word: 'melt', lang: 'sl', expected: 'taliti se, stopiti se' },
+    { id: 975, word: 'toilet', lang: 'ru', expected: 'туалет, унитаз, уборная' },
+    { id: 975, word: 'toilet', lang: 'fr', expected: 'toilettes, cabinet, WC' },
+    { id: 978, word: 'organ', lang: 'sl', expected: 'organ, orgle' },
+    { id: 978, word: 'organ', lang: 'hr', expected: 'organ, orgulje' },
+    { id: 978, word: 'organ', lang: 'ko', expected: '장기, 기관, 오르간' },
+    { id: 978, word: 'organ', lang: 'ja', expected: '臓器、器官、オルガン' },
+    { id: 979, word: 'brush', lang: 'de', expected: 'Bürste, Pinsel, bürsten' },
+    { id: 979, word: 'brush', lang: 'fr', expected: 'brosse, pinceau, brosser' },
+    { id: 979, word: 'brush', lang: 'it', expected: 'spazzola, pennello, spazzolare' },
+    { id: 979, word: 'brush', lang: 'cs', expected: 'kartáč, štětec, kartáčovat' },
+    { id: 981, word: 'disappointed', lang: 'it', expected: 'deluso, amareggiato' },
+    { id: 981, word: 'disappointed', lang: 'de', expected: 'enttäuscht, ernüchtert' },
+    { id: 981, word: 'disappointed', lang: 'fr', expected: 'déçu, désenchanté' },
+    { id: 981, word: 'disappointed', lang: 'cs', expected: 'zklamaný, rozčarovaný' },
+    { id: 981, word: 'disappointed', lang: 'ko', expected: '실망한, 낙담한' },
+    { id: 983, word: 'rescue', lang: 'fr', expected: 'secourir, sauver, le sauvetage' },
+    { id: 983, word: 'rescue', lang: 'it', expected: 'soccorrere, salvare, il salvataggio' },
+    { id: 983, word: 'rescue', lang: 'cs', expected: 'zachránit, vyprostit, záchrana' },
+    { id: 983, word: 'rescue', lang: 'da', expected: 'redde, bjærge, redning' },
+    { id: 983, word: 'rescue', lang: 'fi', expected: 'pelastaa, auttaa pulasta, pelastus' },
+    { id: 986, word: 'costume', lang: 'da', expected: 'udklædning, karnevalskostume' },
+    { id: 986, word: 'costume', lang: 'hr', expected: 'maska, maškare, nošnja' },
+    { id: 986, word: 'costume', lang: 'ja', expected: '舞台衣装、仮装、コスチューム' },
+    { id: 986, word: 'costume', lang: 'ko', expected: '무대 의상, 코스튬' },
+    { id: 990, word: 'injure', lang: 'fr', expected: 'blesser, faire du mal, estropier' },
+    { id: 990, word: 'injure', lang: 'it', expected: 'ferire, farsi male, lesionare' },
+    { id: 990, word: 'injure', lang: 'cs', expected: 'zranit, poranit, ublížit' },
+    { id: 993, word: 'associated', lang: 'da', expected: 'forbundet med, tilknyttet' },
+    { id: 993, word: 'associated', lang: 'fi', expected: 'liittyvä, yhdistetty, yhteydessä oleva' },
+    { id: 993, word: 'associated', lang: 'sv', expected: 'associerad, förknippad' },
+    { id: 993, word: 'associated', lang: 'ja', expected: '関連した、付随する' },
+    { id: 993, word: 'associated', lang: 'ko', expected: '연관된, 결부된' },
+    { id: 994, word: 'fascinating', lang: 'de', expected: 'faszinierend, fesselnd, packend' },
+    { id: 994, word: 'fascinating', lang: 'fr', expected: 'fascinant, captivant, passionnant' },
+    { id: 994, word: 'fascinating', lang: 'cs', expected: 'fascinující, úchvatný' },
+    { id: 1000, word: 'alarm', lang: 'hu', expected: 'riasztó, ébresztőóra, vészjelzés' },
+    { id: 1000, word: 'alarm', lang: 'cs', expected: 'poplach, budík, výstražný signál' },
+    { id: 1000, word: 'alarm', lang: 'ru', expected: 'будильник, тревога, сигнал тревоги' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -462,6 +523,10 @@ async function run() {
   const calib19FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_901_950_calibrations.cjs'), 'utf8');
   const calib19ObjStr = calib19FileContent.slice(calib19FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib19FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs19 = eval('(' + calib19ObjStr + ')');
+
+  const calib20FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_951_1000_calibrations.cjs'), 'utf8');
+  const calib20ObjStr = calib20FileContent.slice(calib20FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib20FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs20 = eval('(' + calib20ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -649,6 +714,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 951-1000 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs20)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -693,7 +781,8 @@ async function run() {
     ...Object.keys(calibs16),
     ...Object.keys(calibs17),
     ...Object.keys(calibs18),
-    ...Object.keys(calibs19)
+    ...Object.keys(calibs19),
+    ...Object.keys(calibs20)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
