@@ -1238,7 +1238,9 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 16px 16px max(36px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 20px));
+        padding: 16px;
+        padding-top: calc(max(44px, var(--safe-top, env(safe-area-inset-top, 0px))) + 12px);
+        padding-bottom: calc(max(36px, var(--safe-bottom, env(safe-area-inset-bottom, 0px))) + 16px);
         box-sizing: border-box;
         animation: ftsFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       }
@@ -1254,8 +1256,8 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         border-radius: 24px;
         width: 100%;
         max-width: 410px;
-        max-height: calc(100dvh - max(48px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 32px)));
-        max-height: calc(100vh - max(48px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 32px)));
+        max-height: calc(100dvh - max(44px, var(--safe-top, env(safe-area-inset-top, 0px))) - max(36px, var(--safe-bottom, env(safe-area-inset-bottom, 0px))) - 28px);
+        max-height: calc(100vh - max(44px, var(--safe-top, env(safe-area-inset-top, 0px))) - max(36px, var(--safe-bottom, env(safe-area-inset-bottom, 0px))) - 28px);
         overflow-y: auto;
         padding: 22px 20px max(24px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 12px));
         box-sizing: border-box;
@@ -1266,7 +1268,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
       }
       .fts-cover-wrap {
         width: 100%;
-        height: 125px;
+        height: 120px;
         border-radius: 16px;
         overflow: hidden;
         margin-top: 4px;
