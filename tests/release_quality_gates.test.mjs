@@ -274,6 +274,19 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
     assert.ok(STORY_TRANSLATIONS[locale].storiesFolderTitle, `STORY_TRANSLATIONS.${locale} must have storiesFolderTitle`);
   }
 
+  // 6. Verify Fairy Tale Survey translations support all 36 locales
+  const { FAIRY_TALE_SURVEY_TRANSLATIONS } = await import('../frontend/components/modals/FairyTaleSurveyModal.js');
+  for (const locale of REQUIRED_33_LOCALES) {
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale], `FAIRY_TALE_SURVEY_TRANSLATIONS must contain locale '${locale}'`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].submitBtn, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have submitBtn`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].optQuiz, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have optQuiz`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].optFavorites, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have optFavorites`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].optWidget, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have optWidget`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].optScanner, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have optScanner`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].btnRate, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have btnRate`);
+    assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].starLabels?.length >= 5, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have all 5 starLabels`);
+  }
+
   const { MILESTONE_STORIES } = await import('../frontend/components/modals/MilestoneStoryModal.js');
   assert.equal(Object.keys(MILESTONE_STORIES).length, 38, 'MILESTONE_STORIES must include all 38 stories');
   for (let i = 0; i < 38; i++) {
