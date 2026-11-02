@@ -15,16 +15,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Fair",
       "Good",
       "Great!",
-      "In love! 😍"
+      "Well done!"
     ],
-    "q2": "2. Which feature do you find most useful?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favorites",
-    "optWidget": "📱 Home Screen Widget",
-    "optScanner": "📷 Text Scanner",
-    "submitBtn": "🎁 Unlock & Get Fairy Tale",
-    "posTitle": "Fairy Tale Unlocked! 🎉",
-    "posSub": "We are thrilled that you love English Breakfast! Would you take 5 seconds to give us 5 stars on Google Play? It means the world to our indie team!",
+    "q2": "Which features did you like?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favorites",
+    "optWidget": "Home Screen Widget",
+    "optScanner": "Text Scanner",
+    "submitBtn": "Claim Gift!",
+    "posTitle": "Fairy Tale Unlocked!",
+    "posSub": "Please support our mission to make English learning accessible to everyone. Your rating on Google Play helps our project grow. Thank you!",
     "btnRate": "⭐ Rate 5 Stars on Google Play",
     "negTitle": "Thank You for Your Honesty! 💖",
     "negSub": "Thank you for your honest feedback! We want to make English Breakfast even better for you.",
@@ -46,16 +46,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Так себе",
       "Нормально",
       "Хорошо!",
-      "Восторг! 😍"
+      "Молодцы!"
     ],
-    "q2": "2. Какая функция вам полезнее всего?",
-    "optQuiz": "🧠 Квиз",
-    "optFavorites": "⭐ Избранное",
-    "optWidget": "📱 Виджет на экран",
-    "optScanner": "📷 Сканер текста",
-    "submitBtn": "🎁 Забрать и открыть сказку",
-    "posTitle": "Сказка разблокирована! 🎉",
-    "posSub": "Мы безумно рады, что вам нравится English Breakfast! Пожалуйста, подарите нам 5 секунд — поставьте 5 звёзд в Google Play. Это лучшая поддержка проекта!",
+    "q2": "Какая функция вам понравилась?",
+    "optQuiz": "Квиз",
+    "optFavorites": "Избранное",
+    "optWidget": "Виджет на экран",
+    "optScanner": "Сканер текста",
+    "submitBtn": "Забрать подарок!",
+    "posTitle": "Сказка разблокирована!",
+    "posSub": "Пожалуйста, поддержите наше стремление сделать изучение английского языка доступным. Ваша оценка в Google Play очень поможет развитию проекта. Спасибо!",
     "btnRate": "⭐ Поставить 5 звёзд в Google Play",
     "negTitle": "Спасибо за честность! 💖",
     "negSub": "Спасибо за честный ответ! Мы хотим сделать English Breakfast лучше для вас.",
@@ -77,16 +77,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Так собі",
       "Нормально",
       "Добре!",
-      "У захваті! 😍"
+      "Молодці!"
     ],
-    "q2": "2. Яка функція для вас найкорисніша?",
-    "optQuiz": "🧠 Квіз",
-    "optFavorites": "⭐ Обране",
-    "optWidget": "📱 Віджет на екран",
-    "optScanner": "📷 Сканер тексту",
-    "submitBtn": "🎁 Забрати й відкрити казку",
-    "posTitle": "Казку розблоковано! 🎉",
-    "posSub": "Ми безмежно раді, що вам подобається English Breakfast! Подаруйте нам 5 секунд — поставте 5 зірок у Google Play!",
+    "q2": "Яка функція вам сподобалася?",
+    "optQuiz": "Квіз",
+    "optFavorites": "Обране",
+    "optWidget": "Віджет на екран",
+    "optScanner": "Сканер тексту",
+    "submitBtn": "Забрати подарунок!",
+    "posTitle": "Казку розблоковано!",
+    "posSub": "Будь ласка, підтримайте наше прагнення зробити вивчення англійської мови доступним. Ваша оцінка в Google Play дуже допоможе розвитку проєкту. Дякуємо!",
     "btnRate": "⭐ Поставити 5 зірок у Google Play",
     "negTitle": "Дякуємо за чесність! 💖",
     "negSub": "Дякуємо за чесну відповідь! Ми хочемо зробити English Breakfast кращим для вас.",
@@ -108,16 +108,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Geht so",
       "Gut",
       "Super!",
-      "Begeistert! 😍"
+      "Klasse gemacht!"
     ],
-    "q2": "2. Welche Funktion findest du am nützlichsten?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoriten",
-    "optWidget": "📱 Startbildschirm-Widget",
-    "optScanner": "📷 Text-Scanner",
-    "submitBtn": "🎁 Märchen freischalten",
-    "posTitle": "Märchen freigeschaltet! 🎉",
-    "posSub": "Wir freuen uns riesig, dass dir English Breakfast gefällt! Schenkst du uns 5 Sekunden für 5 Sterne bei Google Play?",
+    "q2": "Welche Funktion hat dir gefallen?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoriten",
+    "optWidget": "Startbildschirm-Widget",
+    "optScanner": "Text-Scanner",
+    "submitBtn": "Geschenk abholen!",
+    "posTitle": "Märchen freigeschaltet!",
+    "posSub": "Bitte unterstütze unsere Mission, das Englischlernen für alle zugänglich zu machen. Deine Bewertung bei Google Play hilft unserem Projekt zu wachsen. Danke!",
     "btnRate": "⭐ 5 Sterne bei Google Play bewerten",
     "negTitle": "Danke für deine Ehrlichkeit! 💖",
     "negSub": "Vielen Dank für dein ehrliches Feedback! Wir möchten English Breakfast weiter verbessern.",
@@ -139,16 +139,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Regular",
       "Bueno",
       "¡Genial!",
-      "¡Me encanta! 😍"
+      "¡Bien hecho!"
     ],
-    "q2": "2. ¿Qué función te resulta más útil?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoritos",
-    "optWidget": "📱 Widget de pantalla de inicio",
-    "optScanner": "📷 Escáner de texto",
-    "submitBtn": "🎁 Desbloquear y leer cuento",
-    "posTitle": "¡Cuento desbloqueado! 🎉",
-    "posSub": "¡Nos alegra muchísimo que te encante English Breakfast! ¿Nos regalarías 5 segundos con 5 estrellas en Google Play?",
+    "q2": "¿Qué función te gustó?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoritos",
+    "optWidget": "Widget de pantalla de inicio",
+    "optScanner": "Escáner de texto",
+    "submitBtn": "¡Reclamar regalo!",
+    "posTitle": "¡Cuento desbloqueado!",
+    "posSub": "Por favor, apoya nuestra misión de hacer que aprender inglés sea accesible para todos. Tu valoración en Google Play ayuda a crecer el proyecto. ¡Gracias!",
     "btnRate": "⭐ Valorar con 5 estrellas en Google Play",
     "negTitle": "¡Gracias por tu sinceridad! 💖",
     "negSub": "¡Gracias por tu honestidad! Queremos que English Breakfast sea cada vez mejor para ti.",
@@ -170,16 +170,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Regular",
       "Bueno",
       "¡Genial!",
-      "¡Me encanta! 😍"
+      "¡Bien hecho!"
     ],
-    "q2": "2. ¿Qué función te resulta más útil?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoritos",
-    "optWidget": "📱 Widget de pantalla de inicio",
-    "optScanner": "📷 Escáner de texto",
-    "submitBtn": "🎁 Desbloquear y leer cuento",
-    "posTitle": "¡Cuento desbloqueado! 🎉",
-    "posSub": "¡Nos alegra muchísimo que disfrutes English Breakfast! ¿Nos regalas 5 segundos para calificarnos con 5 estrellas en Google Play?",
+    "q2": "¿Qué función te gustó?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoritos",
+    "optWidget": "Widget de pantalla de inicio",
+    "optScanner": "Escáner de texto",
+    "submitBtn": "¡Reclamar regalo!",
+    "posTitle": "¡Cuento desbloqueado!",
+    "posSub": "Por favor, apoya nuestra misión de hacer que aprender inglés sea accesible para todos. Tu valoración en Google Play ayuda a crecer el proyecto. ¡Gracias!",
     "btnRate": "⭐ Calificar con 5 estrellas en Google Play",
     "negTitle": "¡Gracias por tu sinceridad! 💖",
     "negSub": "¡Gracias por tu honestidad! Queremos mejorar English Breakfast para ti.",
@@ -201,16 +201,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Moyen",
       "Bien",
       "Super !",
-      "J'adore ! 😍"
+      "Bravo !"
     ],
-    "q2": "2. Quelle fonctionnalité vous est la plus utile ?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoris",
-    "optWidget": "📱 Widget pour écran d'accueil",
-    "optScanner": "📷 Scanner de texte",
-    "submitBtn": "🎁 Débloquer le conte",
-    "posTitle": "Conte débloqué ! 🎉",
-    "posSub": "Nous sommes ravis qu'English Breakfast vous plaise ! Pourriez-vous prendre 5 secondes pour nous attribuer 5 étoiles sur Google Play ?",
+    "q2": "Quelle fonctionnalité avez-vous aimée ?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoris",
+    "optWidget": "Widget pour écran d'accueil",
+    "optScanner": "Scanner de texte",
+    "submitBtn": "Récupérer le cadeau !",
+    "posTitle": "Conte débloqué !",
+    "posSub": "Merci de soutenir notre mission de rendre l'apprentissage de l'anglais accessible à tous. Votre avis sur Google Play aide le projet à grandir. Merci !",
     "btnRate": "⭐ Noter 5 étoiles sur Google Play",
     "negTitle": "Merci pour votre franchise ! 💖",
     "negSub": "Merci pour votre franchise ! Nous tenons à perfectionner English Breakfast pour vous.",
@@ -232,16 +232,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Średnio",
       "Dobrze",
       "Świetnie!",
-      "Uwielbiam! 😍"
+      "Świetnie!"
     ],
-    "q2": "2. Która funkcja jest dla Ciebie najbardziej przydatna?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Ulubione",
-    "optWidget": "📱 Widżet na ekran główny",
-    "optScanner": "📷 Skaner tekstu",
-    "submitBtn": "🎁 Odblokuj bajkę",
-    "posTitle": "Baśń odblokowana! 🎉",
-    "posSub": "Cieszymy się niesamowicie, że lubisz English Breakfast! Czy poświęcisz 5 sekund na ocenę 5 gwiazdek w Google Play?",
+    "q2": "Która funkcja Ci się spodobała?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Ulubione",
+    "optWidget": "Widżet na ekran główny",
+    "optScanner": "Skaner tekstu",
+    "submitBtn": "Odbierz prezent!",
+    "posTitle": "Baśń odblokowana!",
+    "posSub": "Wesprzyj naszą misję, by nauka angielskiego była dostępna dla każdego. Twoja ocena w Google Play pomaga rozwijać projekt. Dziękujemy!",
     "btnRate": "⭐ Oceń na 5 gwiazdek w Google Play",
     "negTitle": "Dziękujemy za szczerość! 💖",
     "negSub": "Dziękujemy za szczerą opinię! Chcemy stale ulepszać English Breakfast.",
@@ -263,16 +263,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "İdare eder",
       "İyi",
       "Harika!",
-      "Bayıldım! 😍"
+      "Aferin!"
     ],
-    "q2": "2. En çok hangi özelliği faydalı buluyorsun?",
-    "optQuiz": "🧠 Bilgi Yarışması (Quiz)",
-    "optFavorites": "⭐ Favoriler",
-    "optWidget": "📱 Ana Ekran Widget'ı",
-    "optScanner": "📷 Metin Tarayıcı",
-    "submitBtn": "🎁 Masalın Kilidini Aç",
-    "posTitle": "Masalın Kilidi Açıldı! 🎉",
-    "posSub": "English Breakfast'ı beğendiğin için çok mutluyuz! Google Play'de 5 yıldız vermek için 5 saniyeni ayırır mısın?",
+    "q2": "Hangi özelliği beğendiniz?",
+    "optQuiz": "Bilgi Yarışması (Quiz)",
+    "optFavorites": "Favoriler",
+    "optWidget": "Ana Ekran Widget'ı",
+    "optScanner": "Metin Tarayıcı",
+    "submitBtn": "Hediyeni Al!",
+    "posTitle": "Masalın Kilidi Açıldı!",
+    "posSub": "Lütfen İngilizce öğrenimini herkes için erişilebilir kılma misyonumuzu destekleyin. Google Play puanınız projemizin büyümesine yardımcı olur. Teşekkürler!",
     "btnRate": "⭐ Google Play'de 5 Yıldız Ver",
     "negTitle": "Dürüstlüğün için teşekkürler! 💖",
     "negSub": "Dürüst geri bildirimin için teşekkür ederiz! English Breakfast'ı senin için daha da geliştirmek istiyoruz.",
@@ -294,16 +294,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Così così",
       "Bene",
       "Ottimo!",
-      "Lo adoro! 😍"
+      "Bravi!"
     ],
-    "q2": "2. Quale funzione trovi più utile?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Preferiti",
-    "optWidget": "📱 Widget schermata iniziale",
-    "optScanner": "📷 Scanner di testo",
-    "submitBtn": "🎁 Sblocca la favola",
-    "posTitle": "Favola sbloccata! 🎉",
-    "posSub": "Siamo felicissimi che English Breakfast ti piaccia! Ti andrebbe di dedicarci 5 secondi per votare 5 stelle su Google Play?",
+    "q2": "Quale funzione ti è piaciuta?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Preferiti",
+    "optWidget": "Widget schermata iniziale",
+    "optScanner": "Scanner di testo",
+    "submitBtn": "Ritira il regalo!",
+    "posTitle": "Favola sbloccata!",
+    "posSub": "Sostieni la nostra missione di rendere l'apprendimento dell'inglese accessibile a tutti. La tua recensione su Google Play aiuta a far crescere il progetto. Grazie!",
     "btnRate": "⭐ Vota 5 stelle su Google Play",
     "negTitle": "Grazie per la tua sincerità! 💖",
     "negSub": "Grazie per la tua opinione sincera! Desideriamo migliorare costantemente English Breakfast per te.",
@@ -325,16 +325,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Așa și așa",
       "Bun",
       "Grozav!",
-      "Îmi place la nebunie! 😍"
+      "Bravo!"
     ],
-    "q2": "2. Ce funcționalitate ți se pare cea mai utilă?",
-    "optQuiz": "🧠 Test / Quiz",
-    "optFavorites": "⭐ Favorite",
-    "optWidget": "📱 Widget pentru ecran",
-    "optScanner": "📷 Scaner de text",
-    "submitBtn": "🎁 Deblochează povestea",
-    "posTitle": "Poveste deblocată! 🎉",
-    "posSub": "Ne bucurăm enorm că apreciezi English Breakfast! Ne ajuți cu 5 stele pe Google Play în doar 5 secunde?",
+    "q2": "Ce funcționalitate ți-a plăcut?",
+    "optQuiz": "Test / Quiz",
+    "optFavorites": "Favorite",
+    "optWidget": "Widget pentru ecran",
+    "optScanner": "Scaner de text",
+    "submitBtn": "Revendică cadoul!",
+    "posTitle": "Poveste deblocată!",
+    "posSub": "Te rugăm să susții misiunea noastră de a face învățarea limbii engleze accesibilă tuturor. Evaluarea ta pe Google Play ajută proiectul să crească. Mulțumim!",
     "btnRate": "⭐ Evaluează cu 5 stele pe Google Play",
     "negTitle": "Îți mulțumim pentru sinceritate! 💖",
     "negSub": "Mulțumim pentru feedback-ul tău cinstit! Vrem să perfecționăm English Breakfast pentru tine.",
@@ -356,16 +356,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Горе-долу",
       "Добре",
       "Чудесно!",
-      "Обожавам го! 😍"
+      "Браво!"
     ],
-    "q2": "2. Коя функция ти е най-полезна?",
-    "optQuiz": "🧠 Куиз",
-    "optFavorites": "⭐ Любими",
-    "optWidget": "📱 Уиджет за начален екран",
-    "optScanner": "📷 Текстов скенер",
-    "submitBtn": "🎁 Отключи приказката",
-    "posTitle": "Приказката е отключена! 🎉",
-    "posSub": "Много се радваме, че харесваш English Breakfast! Би ли отделил 5 секунди за 5 звезди в Google Play?",
+    "q2": "Коя функция ви хареса?",
+    "optQuiz": "Куиз",
+    "optFavorites": "Любими",
+    "optWidget": "Уиджет за начален екран",
+    "optScanner": "Текстов скенер",
+    "submitBtn": "Вземи подаръка!",
+    "posTitle": "Приказката е отключена!",
+    "posSub": "Моля, подкрепете нашата мисия да направим ученето на английски достъпно за всички. Вашата оценка в Google Play помага на проекта да расте. Благодаря!",
     "btnRate": "⭐ Оцени с 5 звезди в Google Play",
     "negTitle": "Благодарим за откровеността! 💖",
     "negSub": "Благодарим за честния отговор! Искаме да направим English Breakfast още по-добър.",
@@ -387,16 +387,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Elmegy",
       "Jó",
       "Szuper!",
-      "Imádom! 😍"
+      "Szép munka!"
     ],
-    "q2": "2. Melyik funkciót találod a leghasznosabbnak?",
-    "optQuiz": "🧠 Kvíz",
-    "optFavorites": "⭐ Kedvencek",
-    "optWidget": "📱 Főképernyő widget",
-    "optScanner": "📷 Szövegszkenner",
-    "submitBtn": "🎁 Mese feloldása",
-    "posTitle": "Mese feloldva! 🎉",
-    "posSub": "Nagyon örülünk, hogy tetszik az English Breakfast! Értékelnél minket 5 csillaggal a Google Playen?",
+    "q2": "Melyik funkció tetszett?",
+    "optQuiz": "Kvíz",
+    "optFavorites": "Kedvencek",
+    "optWidget": "Főképernyő widget",
+    "optScanner": "Szövegszkenner",
+    "submitBtn": "Ajándék átvétele!",
+    "posTitle": "Mese feloldva!",
+    "posSub": "Kérjük, támogasd küldetésünket, hogy az angoltanulás mindenki számára elérhető legyen. A Google Play értékelésed segíti a projekt fejlődését. Köszönjük!",
     "btnRate": "⭐ 5 csillag a Google Playen",
     "negTitle": "Köszönjük az őszinteségedet! 💖",
     "negSub": "Köszönjük az őszinte választ! Szeretnénk még jobbá tenni az English Breakfast alkalmazást számodra.",
@@ -418,16 +418,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Έτσι κι έτσι",
       "Καλό",
       "Πολύ καλό!",
-      "Το λατρεύω! 😍"
+      "Μπράβο!"
     ],
-    "q2": "2. Ποια λειτουργία βρίσκετε πιο χρήσιμη;",
-    "optQuiz": "🧠 Κουίζ",
-    "optFavorites": "⭐ Αγαπημένα",
-    "optWidget": "📱 Widget αρχικής οθόνης",
-    "optScanner": "📷 Σαρωτής κειμένου",
-    "submitBtn": "🎁 Ξεκλείδωμα ιστορίας",
-    "posTitle": "Η ιστορία ξεκλειδώθηκε! 🎉",
-    "posSub": "Χαιρόμαστε πολύ που σας αρέσει το English Breakfast! Μας χαρίζετε 5 δευτερόλεπτα με 5 αστέρια στο Google Play;",
+    "q2": "Ποια λειτουργία σας άρεσε;",
+    "optQuiz": "Κουίζ",
+    "optFavorites": "Αγαπημένα",
+    "optWidget": "Widget αρχικής οθόνης",
+    "optScanner": "Σαρωτής κειμένου",
+    "submitBtn": "Πάρτε το δώρο σας!",
+    "posTitle": "Η ιστορία ξεκλειδώθηκε!",
+    "posSub": "Υποστηρίξτε την αποστολή μας να κάνουμε την εκμάθηση αγγλικών προσιτή σε όλους. Η αξιολόγησή σας στο Google Play βοηθά το έργο μας να αναπτυχθεί. Ευχαριστούμε!",
     "btnRate": "⭐ 5 αστέρια στο Google Play",
     "negTitle": "Ευχαριστούμε για την ειλικρίνειά σας! 💖",
     "negSub": "Σας ευχαριστούμε για την ειλικρινή σας γνώμη! Θέλουμε να κάνουμε το English Breakfast ακόμη καλύτερο.",
@@ -449,16 +449,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Middel",
       "Fint",
       "Rigtig godt!",
-      "Helt vild med det! 😍"
+      "Godt gået!"
     ],
-    "q2": "2. Hvilken funktion finder du mest nyttig?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoritter",
-    "optWidget": "📱 Startskærm-widget",
-    "optScanner": "📷 Tekstscanner",
-    "submitBtn": "🎁 Lås op for eventyret",
-    "posTitle": "Eventyret er låst op! 🎉",
-    "posSub": "Vi er så glade for, at du kan lide English Breakfast! Vil du bruge 5 sekunder på at give os 5 stjerner på Google Play?",
+    "q2": "Hvilken funktion kunne du lide?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoritter",
+    "optWidget": "Startskærm-widget",
+    "optScanner": "Tekstscanner",
+    "submitBtn": "Hent gave!",
+    "posTitle": "Eventyret er låst op!",
+    "posSub": "Støt venligst vores mission om at gøre engelskindlæring tilgængelig for alle. Din anmeldelse på Google Play hjælper projektet med at vokse. Tak!",
     "btnRate": "⭐ Giv 5 stjerner på Google Play",
     "negTitle": "Tak for din ærlighed! 💖",
     "negSub": "Tak for din ærlige feedback! Vi vil gøre English Breakfast endnu bedre for dig.",
@@ -480,16 +480,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Vidēji",
       "Labi",
       "Lieliski!",
-      "Esmu sajūsmā! 😍"
+      "Malači!"
     ],
-    "q2": "2. Kura funkcija tev ir visnoderīgākā?",
-    "optQuiz": "🧠 Viktorīna",
-    "optFavorites": "⭐ Izlase",
-    "optWidget": "📱 Sākuma ekrāna logrīks",
-    "optScanner": "📷 Teksta skeneris",
-    "submitBtn": "🎁 Atbloķēt pasaku",
-    "posTitle": "Pasaka atbloķēta! 🎉",
-    "posSub": "Mēs ļoti priecājamies, ka tev patīk English Breakfast! Vai veltīsi 5 sekundes, lai novērtētu ar 5 zvaigznēm Google Play?",
+    "q2": "Kura funkcija tev patika?",
+    "optQuiz": "Viktorīna",
+    "optFavorites": "Izlase",
+    "optWidget": "Sākuma ekrāna logrīks",
+    "optScanner": "Teksta skeneris",
+    "submitBtn": "Saņemt dāvanu!",
+    "posTitle": "Pasaka atbloķēta!",
+    "posSub": "Lūdzu, atbalstiet mūsu misiju padarīt angļu valodas apguvi pieejamu ikvienam. Jūsu vērtējums Google Play palīdz projektam augt. Paldies!",
     "btnRate": "⭐ Novērtēt ar 5 zvaigznēm Google Play",
     "negTitle": "Paldies par tavu godīgumu! 💖",
     "negSub": "Paldies par godīgo vērtējumu! Mēs vēlamies padarīt English Breakfast vēl labāku.",
@@ -511,16 +511,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Vidutiniškai",
       "Gerai",
       "Puikiai!",
-      "Esu sužavėtas! 😍"
+      "Šaunuoliai!"
     ],
-    "q2": "2. Kuri funkcija tau naudingiausia?",
-    "optQuiz": "🧠 Viktorina",
-    "optFavorites": "⭐ Mėgstamiausi",
-    "optWidget": "📱 Pagrindinio ekrano valdiklis",
-    "optScanner": "📷 Teksto skaitytuvas",
-    "submitBtn": "🎁 Atrakinti pasaką",
-    "posTitle": "Pasaka atrakinta! 🎉",
-    "posSub": "Labai džiaugiamės, kad tau patinka English Breakfast! Ar skirtum 5 sekundes įvertinti 5 žvaigždutėmis „Google Play“?",
+    "q2": "Kuri funkcija tau patiko?",
+    "optQuiz": "Viktorina",
+    "optFavorites": "Mėgstamiausi",
+    "optWidget": "Pagrindinio ekrano valdiklis",
+    "optScanner": "Teksto skaitytuvas",
+    "submitBtn": "Atsiimti dovaną!",
+    "posTitle": "Pasaka atrakinta!",
+    "posSub": "Palaikykite mūsų misiją padaryti anglų kalbos mokymąsi prieinamą visiems. Jūsų įvertinimas Google Play padeda projektui augti. Ačiū!",
     "btnRate": "⭐ Įvertinti 5 žvaigždutėmis „Google Play“",
     "negTitle": "Ačiū už tavo nuoširdumą! 💖",
     "negSub": "Ačiū už atvirą atsakymą! Siekiame paversti English Breakfast dar patogesne programėle.",
@@ -542,16 +542,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Regular",
       "Bom",
       "Ótimo!",
-      "Adorando! 😍"
+      "Muito bem!"
     ],
-    "q2": "2. Qual funcionalidade você acha mais útil?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoritos",
-    "optWidget": "📱 Widget de tela inicial",
-    "optScanner": "📷 Scanner de texto",
-    "submitBtn": "🎁 Desbloquear conto",
-    "posTitle": "Conto desbloqueado! 🎉",
-    "posSub": "Ficamos muito felizes que você esteja gostando do English Breakfast! Que tal nos dedicar 5 segundos e deixar 5 estrelas no Google Play?",
+    "q2": "Qual funcionalidade você gostou?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoritos",
+    "optWidget": "Widget de tela inicial",
+    "optScanner": "Scanner de texto",
+    "submitBtn": "Resgatar presente!",
+    "posTitle": "Conto desbloqueado!",
+    "posSub": "Por favor, apoie nossa missão de tornar o aprendizado de inglês acessível a todos. Sua avaliação no Google Play ajuda o projeto a crescer. Obrigado!",
     "btnRate": "⭐ Avaliar com 5 estrelas no Google Play",
     "negTitle": "Obrigado pela sua sinceridade! 💖",
     "negSub": "Agradecemos pelo seu feedback sincero! Queremos aprimorar o English Breakfast para você.",
@@ -573,16 +573,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Regular",
       "Bom",
       "Ótimo!",
-      "Adorando! 😍"
+      "Muito bem!"
     ],
-    "q2": "2. Qual funcionalidade você acha mais útil?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoritos",
-    "optWidget": "📱 Widget de tela inicial",
-    "optScanner": "📷 Scanner de texto",
-    "submitBtn": "🎁 Desbloquear conto",
-    "posTitle": "Conto desbloqueado! 🎉",
-    "posSub": "Ficamos felizes demais que você esteja curtindo o English Breakfast! Pode doar 5 segundos para nos avaliar com 5 estrelas na Google Play?",
+    "q2": "Qual funcionalidade você gostou?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoritos",
+    "optWidget": "Widget de tela inicial",
+    "optScanner": "Scanner de texto",
+    "submitBtn": "Resgatar presente!",
+    "posTitle": "Conto desbloqueado!",
+    "posSub": "Por favor, apoie nossa missão de tornar o aprendizado de inglês acessível a todos. Sua avaliação no Google Play ajuda o projeto a crescer. Obrigado!",
     "btnRate": "⭐ Avaliar com 5 estrelas na Google Play",
     "negTitle": "Obrigado pela sua sinceridade! 💖",
     "negSub": "Agradecemos muito pelo seu retorno sincero! Queremos deixar o English Breakfast ainda melhor para você.",
@@ -604,16 +604,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Ujde to",
       "Dobré",
       "Skvelé!",
-      "Milujem to! 😍"
+      "Výborne!"
     ],
-    "q2": "2. Ktorá funkcia je pre teba najužitočnejšia?",
-    "optQuiz": "🧠 Kvíz",
-    "optFavorites": "⭐ Obľúbené",
-    "optWidget": "📱 Widget na domovskú obrazovku",
-    "optScanner": "📷 Skener textu",
-    "submitBtn": "🎁 Odomknúť rozprávku",
-    "posTitle": "Rozprávka odomknutá! 🎉",
-    "posSub": "Veľmi sa tešíme, že sa ti English Breakfast páči! Venuješ nám 5 sekúnd a ohodnotíš nás 5 hviezdičkami na Google Play?",
+    "q2": "Ktorá funkcia sa ti páčila?",
+    "optQuiz": "Kvíz",
+    "optFavorites": "Obľúbené",
+    "optWidget": "Widget na domovskú obrazovku",
+    "optScanner": "Skener textu",
+    "submitBtn": "Vyzdvihnúť darček!",
+    "posTitle": "Rozprávka odomknutá!",
+    "posSub": "Podporte prosím našu misiu sprístupniť výučbu angličtiny pre všetkých. Vaše hodnotenie v Google Play pomáha projektu rásť. Ďakujeme!",
     "btnRate": "⭐ Ohodnotiť 5 hviezdičkami na Google Play",
     "negTitle": "Ďakujeme za tvoju úprimnosť! 💖",
     "negSub": "Ďakujeme za úprimnú spätnú väzbu! Chceme pre teba aplikáciu English Breakfast ešte viac vylepšiť.",
@@ -635,16 +635,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Tako tako",
       "Dobro",
       "Odlično!",
-      "Navdušen! 😍"
+      "Odlično!"
     ],
-    "q2": "2. Katera funkcija se ti zdi najbolj uporabna?",
-    "optQuiz": "🧠 Kviz",
-    "optFavorites": "⭐ Priljubljene",
-    "optWidget": "📱 Gradnik za domači zaslon",
-    "optScanner": "📷 Bralnik besedila",
-    "submitBtn": "🎁 Odkleni pravljico",
-    "posTitle": "Pravljica je odklenjena! 🎉",
-    "posSub": "Zelo smo veseli, da ti je English Breakfast všeč! Bi si vzel 5 sekund in nas na Google Play ocenil s 5 zvezdicami?",
+    "q2": "Katera funkcija ti je bila všeč?",
+    "optQuiz": "Kviz",
+    "optFavorites": "Priljubljene",
+    "optWidget": "Gradnik za domači zaslon",
+    "optScanner": "Bralnik besedila",
+    "submitBtn": "Prevzemi darilo!",
+    "posTitle": "Pravljica je odklenjena!",
+    "posSub": "Podprite našo misijo, da učenje angleščine postane dostopno vsem. Vaša ocena v Google Play pomaga projektu rasti. Hvala!",
     "btnRate": "⭐ Oceni s 5 zvezdicami na Google Play",
     "negTitle": "Hvala za tvojo iskrenost! 💖",
     "negSub": "Hvala za iskren odgovor! Aplikacijo English Breakfast želimo zate še izboljšati.",
@@ -666,16 +666,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Kohtalainen",
       "Hyvä",
       "Loistava!",
-      "Rakastan tätä! 😍"
+      "Hienoa työtä!"
     ],
-    "q2": "2. Mikä toiminto on sinulle hyödyllisin?",
-    "optQuiz": "🧠 Tietovisa (Quiz)",
-    "optFavorites": "⭐ Suosikit",
-    "optWidget": "📱 Aloitusnäytön widget",
-    "optScanner": "📷 Tekstiskanneri",
-    "submitBtn": "🎁 Avaa satu",
-    "posTitle": "Satu avattu! 🎉",
-    "posSub": "Olemme todella iloisia, että pidät English Breakfastista! Voisitko antaa meille 5 sekuntia ja 5 tähteä Google Playssa?",
+    "q2": "Mistä toiminnosta pidit?",
+    "optQuiz": "Tietovisa (Quiz)",
+    "optFavorites": "Suosikit",
+    "optWidget": "Aloitusnäytön widget",
+    "optScanner": "Tekstiskanneri",
+    "submitBtn": "Lunasta lahja!",
+    "posTitle": "Satu avattu!",
+    "posSub": "Tue missiotamme tehdä englannin oppimisesta saavutettavaa kaikille. Arviosi Google Playssa auttaa projektia kasvamaan. Kiitos!",
     "btnRate": "⭐ Anna 5 tähteä Google Playssa",
     "negTitle": "Kiitos rehellisyydestäsi! 💖",
     "negSub": "Kiitos rehellisestä palautteestasi! Haluamme tehdä English Breakfastista entistä paremman.",
@@ -697,16 +697,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Onako",
       "Dobro",
       "Sjajno!",
-      "Oduševljen! 😍"
+      "Bravo!"
     ],
-    "q2": "2. Koja ti je funkcija najkorisnija?",
-    "optQuiz": "🧠 Kviz",
-    "optFavorites": "⭐ Favoriti",
-    "optWidget": "📱 Widget za početni zaslon",
-    "optScanner": "📷 Skener teksta",
-    "submitBtn": "🎁 Otključaj bajku",
-    "posTitle": "Bajka otključana! 🎉",
-    "posSub": "Presretni smo što ti se sviđa English Breakfast! Možeš li odvojiti 5 sekundi za 5 zvjezdica na Google Playu?",
+    "q2": "Koja ti se funkcija svidjela?",
+    "optQuiz": "Kviz",
+    "optFavorites": "Favoriti",
+    "optWidget": "Widget za početni zaslon",
+    "optScanner": "Skener teksta",
+    "submitBtn": "Preuzmi dar!",
+    "posTitle": "Bajka otključana!",
+    "posSub": "Podržite našu misiju da učenje engleskog učinimo dostupnim svima. Vaša ocjena na Google Playu pomaže razvoju projekta. Hvala!",
     "btnRate": "⭐ Ocijeni s 5 zvjezdica na Google Playu",
     "negTitle": "Hvala ti na iskrenosti! 💖",
     "negSub": "Hvala ti na iskrenoj povratnoj informaciji! Želimo učiniti English Breakfast još boljim za tebe.",
@@ -728,16 +728,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Ujde to",
       "Dobré",
       "Skvělé!",
-      "Nadšení! 😍"
+      "Skvělá práce!"
     ],
-    "q2": "2. Která funkce je pro tebe nejužitečnější?",
-    "optQuiz": "🧠 Kvíz",
-    "optFavorites": "⭐ Oblíbené",
-    "optWidget": "📱 Widget na domovskou obrazovku",
-    "optScanner": "📷 Skener textu",
-    "submitBtn": "🎁 Odemknout pohádku",
-    "posTitle": "Pohádka odemčena! 🎉",
-    "posSub": "Máme obrovskou radost, že se ti English Breakfast líbí! Věnuješ nám 5 vteřin a ohodnotíš nás 5 hvězdičkami na Google Play?",
+    "q2": "Která funkce se ti líbila?",
+    "optQuiz": "Kvíz",
+    "optFavorites": "Oblíbené",
+    "optWidget": "Widget na domovskou obrazovku",
+    "optScanner": "Skener textu",
+    "submitBtn": "Vyzvednout dárek!",
+    "posTitle": "Pohádka odemčena!",
+    "posSub": "Podpořte prosím naši misi zpřístupnit výuku angličtiny všem. Vaše hodnocení v Google Play pomáhá projektu růst. Děkujeme!",
     "btnRate": "⭐ Dát 5 hvězdiček na Google Play",
     "negTitle": "Děkujeme za tvou upřímnost! 💖",
     "negSub": "Děkujeme za upřímnou odpověď! Chceme English Breakfast udělat pro tebe ještě lepší.",
@@ -759,16 +759,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Helt okej",
       "Bra",
       "Toppen!",
-      "Älskar det! 😍"
+      "Bra jobbat!"
     ],
-    "q2": "2. Vilken funktion tycker du är mest användbar?",
-    "optQuiz": "🧠 Quiz",
-    "optFavorites": "⭐ Favoriter",
-    "optWidget": "📱 Startskärmswidget",
-    "optScanner": "📷 Textskanner",
-    "submitBtn": "🎁 Lås upp sagan",
-    "posTitle": "Sagan är upplåst! 🎉",
-    "posSub": "Vi är otroligt glada att du gillar English Breakfast! Skulle du vilja ge oss 5 sekunder och 5 stjärnor på Google Play?",
+    "q2": "Vilken funktion gillade du?",
+    "optQuiz": "Quiz",
+    "optFavorites": "Favoriter",
+    "optWidget": "Startskärmswidget",
+    "optScanner": "Textskanner",
+    "submitBtn": "Hämta gåvan!",
+    "posTitle": "Sagan är upplåst!",
+    "posSub": "Stöd vårt uppdrag att göra engelskinlärning tillgänglig för alla. Ditt betyg på Google Play hjälper projektet att växa. Tack!",
     "btnRate": "⭐ Betygsätt med 5 stjärnor på Google Play",
     "negTitle": "Tack för din ärlighet! 💖",
     "negSub": "Tack för din ärliga feedback! Vi vill göra English Breakfast ännu bättre för dig.",
@@ -790,16 +790,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Käib kah",
       "Hea",
       "Väga hea!",
-      "Vaimustuses! 😍"
+      "Hästi tehtud!"
     ],
-    "q2": "2. Milline funktsioon on sinu jaoks kõige kasulikum?",
-    "optQuiz": "🧠 Viktoriin",
-    "optFavorites": "⭐ Lemmikud",
-    "optWidget": "📱 Avakuva vidin",
-    "optScanner": "📷 Tekstiskanner",
-    "submitBtn": "🎁 Ava muinasjutt",
-    "posTitle": "Muinasjutt on avatud! 🎉",
-    "posSub": "Meil on ääretult hea meel, et sulle meeldib English Breakfast! Kas pühendaksid 5 sekundit ja annaksid meile Google Plays 5 tärni?",
+    "q2": "Milline funktsioon sulle meeldis?",
+    "optQuiz": "Viktoriin",
+    "optFavorites": "Lemmikud",
+    "optWidget": "Avakuva vidin",
+    "optScanner": "Tekstiskanner",
+    "submitBtn": "Võta kingitus vastu!",
+    "posTitle": "Muinasjutt on avatud!",
+    "posSub": "Palun toeta meie missiooni teha inglise keele õppimine kõigile kättesaadavaks. Sinu hinnang Google Plays aitab projektil kasvada. Aitäh!",
     "btnRate": "⭐ Hinda 5 tärniga Google Plays",
     "negTitle": "Aitäh aususe eest! 💖",
     "negSub": "Täname ausa tagasiside eest! Soovime teha English Breakfasti sinu jaoks veelgi paremaks.",
@@ -821,16 +821,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "ठीक-ठाक",
       "अच्छा",
       "बहुत बढ़िया!",
-      "शानदार! 😍"
+      "शाबाश!"
     ],
-    "q2": "2. आपके लिए कौन सा फ़ीचर सबसे उपयोगी है?",
-    "optQuiz": "🧠 क्विज़",
-    "optFavorites": "⭐ पसंदीदा शब्द",
-    "optWidget": "📱 होम स्क्रीन विजेट",
-    "optScanner": "📷 टेक्स्ट स्कैनर",
-    "submitBtn": "🎁 कहानी अनलॉक करें",
-    "posTitle": "कहानी अनलॉक हो गई! 🎉",
-    "posSub": "हमें बहुत खुशी है कि आपको English Breakfast पसंद आ रहा है! क्या आप Google Play पर 5 स्टार देने के लिए 5 सेकंड निकाल सकते हैं?",
+    "q2": "आपको कौन सा फ़ीचर पसंद आया?",
+    "optQuiz": "क्विज़",
+    "optFavorites": "पसंदीदा शब्द",
+    "optWidget": "होम स्क्रीन विजेट",
+    "optScanner": "टेक्स्ट स्कैनर",
+    "submitBtn": "उपहार प्राप्त करें!",
+    "posTitle": "कहानी अनलॉक हो गई!",
+    "posSub": "कृपया अंग्रेज़ी सीखने को सभी के लिए सुलभ बनाने के हमारे मिशन का समर्थन करें। Google Play पर आपकी रेटिंग प्रोजेक्ट को आगे बढ़ाने में मदद करती है। धन्यवाद!",
     "btnRate": "⭐ Google Play पर 5 स्टार दें",
     "negTitle": "आपकी ईमानदारी के लिए धन्यवाद! 💖",
     "negSub": "सच्ची प्रतिक्रिया के लिए धन्यवाद! हम आपके लिए English Breakfast को और बेहतर बनाना चाहते हैं।",
@@ -852,16 +852,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "মোটামুটি",
       "ভালো",
       "দারুণ!",
-      "খুবই পছন্দের! 😍"
+      "দারুণ কাজ!"
     ],
-    "q2": "2. কোন ফিচারটি আপনার সবচেয়ে বেশি কার্যকর মনে হয়?",
-    "optQuiz": "🧠 কুইজ",
-    "optFavorites": "⭐ প্রিয় শব্দ তালিকা",
-    "optWidget": "📱 হোম স্ক্রিন উইজেট",
-    "optScanner": "📷 টেক্সট স্ক্যানার",
-    "submitBtn": "🎁 রূপকথা আনলক করুন",
-    "posTitle": "রূপকথা আনলক করা হয়েছে! 🎉",
-    "posSub": "English Breakfast আপনার ভালো লেগেছে জেনে আমরা দারুণ আনন্দিত! Google Play-তে আমাদের ৫ স্টার রেটিং দিতে ৫ সেকেন্ড সময় দেবেন কি?",
+    "q2": "কোন ফিচারটি আপনার ভালো লেগেছে?",
+    "optQuiz": "কুইজ",
+    "optFavorites": "প্রিয় শব্দ তালিকা",
+    "optWidget": "হোম স্ক্রিন উইজেট",
+    "optScanner": "টেক্সট স্ক্যানার",
+    "submitBtn": "উপহার গ্রহণ করুন!",
+    "posTitle": "রূপকথা আনলক করা হয়েছে!",
+    "posSub": "ইংরেজি শেখাকে সবার কাছে সহজলভ্য করার আমাদের লক্ষ্যকে অনুগ্রহ করে সমর্থন করুন। Google Play-তে আপনার রেটিং প্রজেক্টটির প্রসারে সাহায্য করে। ধন্যবাদ!",
     "btnRate": "⭐ Google Play-তে ৫ স্টার দিন",
     "negTitle": "আপনার সততার জন্য ধন্যবাদ! 💖",
     "negSub": "আপনার আন্তরিক মতামতের জন্য ধন্যবাদ! আমরা English Breakfast-কে আপনার জন্য আরও উন্নত করতে চাই।",
@@ -883,16 +883,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "مقبول",
       "جيد",
       "رائع!",
-      "أعجبني بشدة! 😍"
+      "أحسنتم!"
     ],
-    "q2": "2. ما الميزة الأكثر فائدة بالنسبة لك؟",
-    "optQuiz": "🧠 اختبار قصير (كويز)",
-    "optFavorites": "⭐ الكلمات المفضلة",
-    "optWidget": "📱 ويدجت الشاشة الرئيسية",
-    "optScanner": "📷 ماسح النصوص الذكي",
-    "submitBtn": "🎁 فتح القصة الآن",
-    "posTitle": "تم فتح القصة بنجاح! 🎉",
-    "posSub": "يسعدنا جداً أن English Breakfast قد نال إعجابك! هل تمنحنا 5 ثوانٍ لتقييم التطبيق بـ 5 نجوم على Google Play؟",
+    "q2": "ما الميزة التي نالت إعجابك؟",
+    "optQuiz": "اختبار قصير (كويز)",
+    "optFavorites": "الكلمات المفضلة",
+    "optWidget": "ويدجت الشاشة الرئيسية",
+    "optScanner": "ماسح النصوص الذكي",
+    "submitBtn": "استلام الهدية!",
+    "posTitle": "تم فتح القصة بنجاح!",
+    "posSub": "يرجى دعم سعينا لجعل تعلم اللغة الإنجليزية في متناول الجميع. تقييمك على Google Play يساعد مشروعنا على النمو والتطور. شكرًا لك!",
     "btnRate": "⭐ تقييم 5 نجوم على Google Play",
     "negTitle": "شكراً لصراحتك معنا! 💖",
     "negSub": "نشكرك على تقييمك الصادق! نسعى دائماً لجعل English Breakfast أفضل لك.",
@@ -914,16 +914,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "متوسط",
       "خوب",
       "عالی!",
-      "فوق‌العاده! 😍"
+      "آفرین!"
     ],
-    "q2": "۲. کدام قابلیت برای شما مفیدتر است؟",
-    "optQuiz": "🧠 آزمون (کوییز)",
-    "optFavorites": "⭐ واژه‌های نشان‌شده",
-    "optWidget": "📱 ابزارک صفحه اصلی",
-    "optScanner": "📷 اسکنر متن",
-    "submitBtn": "🎁 باز کردن و خواندن داستان",
-    "posTitle": "داستان باز شد! 🎉",
-    "posSub": "بسیار خوشحالیم که English Breakfast را دوست دارید! آیا می‌توانید ۵ ثانیه وقت بگذارید و به ما در گوگل‌پلی ۵ ستاره دهید؟",
+    "q2": "کدام قابلیت را دوست داشتید؟",
+    "optQuiz": "آزمون (کوییز)",
+    "optFavorites": "واژه‌های نشان‌شده",
+    "optWidget": "ابزارک صفحه اصلی",
+    "optScanner": "اسکنر متن",
+    "submitBtn": "دریافت جایزه!",
+    "posTitle": "داستان باز شد!",
+    "posSub": "لطفاً از هدف ما برای در دسترس قرار دادن آموزش زبان انگلیسی برای همگان حمایت کنید. امتیاز شما در Google Play به پیشرفت پروژه کمک می‌کند. سپاسگزاریم!",
     "btnRate": "⭐ ثبت ۵ ستاره در Google Play",
     "negTitle": "از صداقت شما سپاسگزاریم! 💖",
     "negSub": "از بازخورد صادقانه‌تان بسیار متشکریم! می‌خواهیم English Breakfast را برای شما بسیار بهتر کنیم.",
@@ -945,16 +945,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "ٹھیک ٹھاک",
       "اچھا",
       "بہت زبردست!",
-      "بہت پسند آیا! 😍"
+      "شاباش!"
     ],
-    "q2": "2. آپ کے لیے کون سا فیچر سب سے زیادہ مفید ہے؟",
-    "optQuiz": "🧠 کوئز",
-    "optFavorites": "⭐ پسندیدہ الفاظ",
-    "optWidget": "📱 ہوم اسکرین ویجیٹ",
-    "optScanner": "📷 ٹیکسٹ اسکینر",
-    "submitBtn": "🎁 کہانی انلاک کریں",
-    "posTitle": "کہانی انلاک ہو گئی! 🎉",
-    "posSub": "ہمیں بے حد خوشی ہے کہ آپ کو English Breakfast پسند آیا! کیا آپ گوگل پلے پر 5 اسٹار دینے کے لیے 5 سیکنڈ نکال سکتے ہیں؟",
+    "q2": "آپ کو کون سا فیچر پسند آیا؟",
+    "optQuiz": "کوئز",
+    "optFavorites": "پسندیدہ الفاظ",
+    "optWidget": "ہوم اسکرین ویجیٹ",
+    "optScanner": "ٹیکسٹ اسکینر",
+    "submitBtn": "تحفہ حاصل کریں!",
+    "posTitle": "کہانی انلاک ہو گئی!",
+    "posSub": "انگریزی سیکھنے کو سب کے لیے آسان بنانے کے ہمارے مشن کی حمایت کریں۔ Google Play پر آپ کی ریٹنگ پروجیکٹ کی ترقی میں مدد کرتی ہے۔ شکریہ!",
     "btnRate": "⭐ گوگل پلے پر 5 اسٹار دیں",
     "negTitle": "آپ کی سچائی کا شکریہ! 💖",
     "negSub": "ایماندارانہ رائے کے لیے آپ کا شکریہ! ہم آپ کے لیے English Breakfast کو مزید بہتر بنانا چاہتے ہیں۔",
@@ -976,16 +976,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Biasa saja",
       "Bagus",
       "Mantap!",
-      "Suka banget! 😍"
+      "Luar biasa!"
     ],
-    "q2": "2. Fitur mana yang paling bermanfaat buatmu?",
-    "optQuiz": "🧠 Kuis",
-    "optFavorites": "⭐ Favorit",
-    "optWidget": "📱 Widget Layar Utama",
-    "optScanner": "📷 Pemindai Teks",
-    "submitBtn": "🎁 Buka Dongeng",
-    "posTitle": "Dongeng Berhasil Dibuka! 🎉",
-    "posSub": "Kami sangat senang kamu menyukai English Breakfast! Maukah meluangkan 5 detik untuk memberi 5 bintang di Google Play?",
+    "q2": "Fitur mana yang kamu sukai?",
+    "optQuiz": "Kuis",
+    "optFavorites": "Favorit",
+    "optWidget": "Widget Layar Utama",
+    "optScanner": "Pemindai Teks",
+    "submitBtn": "Ambil Hadiah!",
+    "posTitle": "Dongeng Berhasil Dibuka!",
+    "posSub": "Dukung misi kami untuk membuat belajar bahasa Inggris dapat diakses oleh semua orang. Penilaian Anda di Google Play membantu proyek ini berkembang. Terima kasih!",
     "btnRate": "⭐ Beri 5 Bintang di Google Play",
     "negTitle": "Terima kasih atas kejujuranmu! 💖",
     "negSub": "Terima kasih atas masukan jujurmu! Kami ingin membuat English Breakfast semakin baik untukmu.",
@@ -1007,16 +1007,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Tạm ổn",
       "Tốt",
       "Tuyệt vời!",
-      "Cực kỳ thích! 😍"
+      "Làm tốt lắm!"
     ],
-    "q2": "2. Bạn thấy tính năng nào hữu ích nhất?",
-    "optQuiz": "🧠 Trắc nghiệm (Quiz)",
-    "optFavorites": "⭐ Từ vựng yêu thích",
-    "optWidget": "📱 Tiện ích màn hình chính",
-    "optScanner": "📷 Quét văn bản (Scanner)",
-    "submitBtn": "🎁 Mở khóa truyện ngay",
-    "posTitle": "Đã mở khóa truyện! 🎉",
-    "posSub": "Chúng tôi rất vui vì bạn yêu thích English Breakfast! Bạn có thể dành 5 giây để đánh giá 5 sao trên Google Play không?",
+    "q2": "Bạn thích tính năng nào?",
+    "optQuiz": "Trắc nghiệm (Quiz)",
+    "optFavorites": "Từ vựng yêu thích",
+    "optWidget": "Tiện ích màn hình chính",
+    "optScanner": "Quét văn bản (Scanner)",
+    "submitBtn": "Nhận quà ngay!",
+    "posTitle": "Đã mở khóa truyện!",
+    "posSub": "Vui lòng ủng hộ sứ mệnh giúp việc học tiếng Anh dễ tiếp cận với mọi người. Đánh giá của bạn trên Google Play giúp dự án phát triển hơn. Cảm ơn bạn!",
     "btnRate": "⭐ Đánh giá 5 sao trên Google Play",
     "negTitle": "Cảm ơn sự chân thành của bạn! 💖",
     "negSub": "Cảm ơn phản hồi thẳng thắn của bạn! Chúng tôi luôn nỗ lực hoàn thiện English Breakfast hơn nữa.",
@@ -1038,16 +1038,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "พอใช้",
       "ดี",
       "ยอดเยี่ยม!",
-      "ประทับใจมาก! 😍"
+      "ยอดเยี่ยมมาก!"
     ],
-    "q2": "2. ฟีเจอร์ใดที่คุณพบว่ามีประโยชน์ที่สุด?",
-    "optQuiz": "🧠 แบบทดสอบ (Quiz)",
-    "optFavorites": "⭐ คำศัพท์ที่บันทึกไว้",
-    "optWidget": "📱 วิดเจ็ตหน้าจอหลัก",
-    "optScanner": "📷 สแกนเนอร์ข้อความ",
-    "submitBtn": "🎁 ปลดล็อกนิทาน",
-    "posTitle": "ปลดล็อกนิทานแล้ว! 🎉",
-    "posSub": "เราดีใจมากที่คุณชื่นชอบ English Breakfast! สละเวลาเพียง 5 วินาทีให้ 5 ดาวบน Google Play ได้ไหม?",
+    "q2": "คุณชอบฟีเจอร์ใด?",
+    "optQuiz": "แบบทดสอบ (Quiz)",
+    "optFavorites": "คำศัพท์ที่บันทึกไว้",
+    "optWidget": "วิดเจ็ตหน้าจอหลัก",
+    "optScanner": "สแกนเนอร์ข้อความ",
+    "submitBtn": "รับของขวัญ!",
+    "posTitle": "ปลดล็อกนิทานแล้ว!",
+    "posSub": "โปรดสนับสนุนภารกิจของเราในการทำให้การเรียนภาษาอังกฤษเข้าถึงได้สำหรับทุกคน คะแนนของคุณใน Google Play ช่วยให้โครงการเติบโต ขอบคุณครับ/ค่ะ!",
     "btnRate": "⭐ ให้ 5 ดาวบน Google Play",
     "negTitle": "ขอบคุณสำหรับความจริงใจ! 💖",
     "negSub": "ขอบคุณสำหรับความคิดเห็นที่จริงใจ! เราอยากทำให้ English Breakfast ดียิ่งขึ้นสำหรับคุณ",
@@ -1069,16 +1069,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "그저 그래요",
       "좋아요",
       "매우 좋아요!",
-      "완전 반했어요! 😍"
+      "잘했어요!"
     ],
-    "q2": "2. 가장 유용한 기능은 무엇인가요?",
-    "optQuiz": "🧠 퀴즈",
-    "optFavorites": "⭐ 즐겨찾기 단어",
-    "optWidget": "📱 홈 화면 위젯",
-    "optScanner": "📷 텍스트 스캐너",
-    "submitBtn": "🎁 동화 잠금 해제",
-    "posTitle": "동화 잠금 해제 완료! 🎉",
-    "posSub": "English Breakfast가 마음에 드셨다니 정말 기쁩니다! Google Play에서 별 5개 평점을 남겨주시는 데 5초만 내어주시겠어요?",
+    "q2": "어떤 기능이 마음에 드셨나요?",
+    "optQuiz": "퀴즈",
+    "optFavorites": "즐겨찾기 단어",
+    "optWidget": "홈 화면 위젯",
+    "optScanner": "텍스트 스캐너",
+    "submitBtn": "선물 받기!",
+    "posTitle": "동화 잠금 해제 완료!",
+    "posSub": "모두가 쉽게 영어를 배울 수 있도록 돕는 저희의 도전을 응원해 주세요. Google Play 평점은 프로젝트 성장에 큰 힘이 됩니다. 감사합니다!",
     "btnRate": "⭐ Google Play에서 별 5개 주기",
     "negTitle": "솔직한 의견 감사드립니다! 💖",
     "negSub": "솔직한 답변 감사드립니다! 더 유용한 English Breakfast를 만들기 위해 최선을 다하겠습니다.",
@@ -1100,16 +1100,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "普通",
       "良い",
       "とても良い！",
-      "最高！ 😍"
+      "よくできました！"
     ],
-    "q2": "2. どの機能が最も役立っていますか？",
-    "optQuiz": "🧠 クイズ",
-    "optFavorites": "⭐ お気に入り単語",
-    "optWidget": "📱 ホーム画面ウィジェット",
-    "optScanner": "📷 テキストスキャナー",
-    "submitBtn": "🎁 昔話をアンロックする",
-    "posTitle": "昔話がアンロックされました！ 🎉",
-    "posSub": "English Breakfastを気に入っていただけて大変嬉しいです！Google Playで星5つの評価をいただくために5秒だけお時間をいただけますか？",
+    "q2": "どの機能が気に入りましたか？",
+    "optQuiz": "クイズ",
+    "optFavorites": "お気に入り単語",
+    "optWidget": "ホーム画面ウィジェット",
+    "optScanner": "テキストスキャナー",
+    "submitBtn": "プレゼントを受け取る！",
+    "posTitle": "昔話がアンロックされました！!",
+    "posSub": "誰もが気軽に英語を学べる環境を目指す私たちの取り組みを応援してください。Google Playでの評価がプロジェクトの励みになります。ありがとうございます！",
     "btnRate": "⭐ Google Playで星5つをつける",
     "negTitle": "率直なご意見ありがとうございます！ 💖",
     "negSub": "率直なご回答をありがとうございます！English Breakfastをより良いアプリへと改善してまいります。",
@@ -1131,16 +1131,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "一般",
       "不错",
       "非常好！",
-      "超爱！ 😍"
+      "做得太棒了！"
     ],
-    "q2": "2. 您觉得哪个功能对您最有用？",
-    "optQuiz": "🧠 测验 (Quiz)",
-    "optFavorites": "⭐ 单词收藏夹",
-    "optWidget": "📱 桌面单词小组件",
-    "optScanner": "📷 文本扫描器",
-    "submitBtn": "🎁 立即解锁故事",
-    "posTitle": "故事已成功解锁！ 🎉",
-    "posSub": "很高兴您喜欢 English Breakfast！能请您花 5 秒钟在 Google Play 给我们留个 5 星好评吗？这对我们意义重大！",
+    "q2": "您最喜欢哪个功能？",
+    "optQuiz": "测验 (Quiz)",
+    "optFavorites": "单词收藏夹",
+    "optWidget": "桌面单词小组件",
+    "optScanner": "文本扫描器",
+    "submitBtn": "领取礼物！",
+    "posTitle": "故事已成功解锁！!",
+    "posSub": "请支持我们让英语学习普惠大众的初心。您在 Google Play 上的好评将极大助力项目发展。非常感谢！",
     "btnRate": "⭐ 在 Google Play 给出 5 星好评",
     "negTitle": "感谢您的坦诚反馈！ 💖",
     "negSub": "非常感谢您的坦诚回答！我们希望将 English Breakfast 做得更好。",
@@ -1162,16 +1162,16 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Орташа",
       "Жақсы",
       "Керемет!",
-      "Өте қатты ұнайды! 😍"
+      "Жарайсыңдар!"
     ],
-    "q2": "2. Қай функция сізге ең пайдалы?",
-    "optQuiz": "🧠 Викторина",
-    "optFavorites": "⭐ Таңдаулы сөздер",
-    "optWidget": "📱 Басты экран виджеті",
-    "optScanner": "📷 Мәтін сканері",
-    "submitBtn": "🎁 Ертегіні ашу",
-    "posTitle": "Ертегі ашылды! 🎉",
-    "posSub": "English Breakfast сізге ұнағанына шексіз қуаныштымыз! Google Play-де бізге 5 жұлдыз қою үшін 5 секунд бөле аласыз ба?",
+    "q2": "Сізге қай функция ұнады?",
+    "optQuiz": "Викторина",
+    "optFavorites": "Таңдаулы сөздер",
+    "optWidget": "Басты экран виджеті",
+    "optScanner": "Мәтін сканері",
+    "submitBtn": "Сыйлықты алу!",
+    "posTitle": "Ертегі ашылды!",
+    "posSub": "Ағылшын тілін үйренуді баршаға қолжетімді ету мақсатымызды қолдауыңызды сұраймыз. Google Play-дегі бағаңыз жобаның дамуына зор көмек береді. Рақмет!",
     "btnRate": "⭐ Google Play-де 5 жұлдыз беру",
     "negTitle": "Шынайылығыңызға рақмет! 💖",
     "negSub": "Шынайы жауабыңызға рақмет! English Breakfast қолданбасын сіз үшін одан әрі жетілдіргіміз келеді.",
@@ -1183,9 +1183,6 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
   }
 };
 
-/**
- * Get active survey strings
- */
 export function getFairyTaleStrings() {
   const lang = (typeof getInterfaceLanguage === 'function' ? getInterfaceLanguage() : 'en') || 'en';
   const cleanLang = String(lang).toLowerCase().trim().replace('_', '-');
@@ -1208,7 +1205,6 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
   const strings = getFairyTaleStrings();
   const isAutoLesson = triggerSource === 'auto_lesson_3';
   const displayTitle = isAutoLesson && strings.congratsTitle ? strings.congratsTitle : strings.title;
-  const displayBadge = isAutoLesson && strings.congratsBadge ? strings.congratsBadge : strings.badge;
 
   if (window.trackScreen) window.trackScreen('survey_fairy_tale_q1', 'FairyTaleSurveyModal');
   if (window.trackEvent) window.trackEvent('survey_fairy_tale_opened', { source: triggerSource });
@@ -1218,7 +1214,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
   overlay.className = 'fairy-tale-survey-overlay';
 
   let selectedStars = 5;
-  let selectedFeature = 'quiz';
+  const selectedFeatures = new Set();
 
   overlay.innerHTML = `
     <style>
@@ -1232,7 +1228,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 16px;
+        padding: 16px 16px max(36px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 20px));
         box-sizing: border-box;
         animation: ftsFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       }
@@ -1248,33 +1244,22 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         border-radius: 24px;
         width: 100%;
         max-width: 410px;
-        max-height: 90vh;
+        max-height: calc(100dvh - max(48px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 32px)));
+        max-height: calc(100vh - max(48px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 32px)));
         overflow-y: auto;
-        padding: 24px 22px;
+        padding: 22px 20px max(24px, calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + 12px));
         box-sizing: border-box;
         text-align: center;
         position: relative;
         font-family: inherit;
         -webkit-overflow-scrolling: touch;
       }
-      .fts-badge {
-        display: inline-block;
-        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-        color: #ffffff;
-        font-size: 12.5px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        padding: 4px 12px;
-        border-radius: 20px;
-        margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
-      }
       .fts-cover-wrap {
         width: 100%;
         height: 125px;
         border-radius: 16px;
         overflow: hidden;
+        margin-top: 4px;
         margin-bottom: 14px;
         background: rgba(15, 23, 42, 0.8);
         border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1376,10 +1361,17 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         justify-content: center;
         gap: 8px;
         margin-top: 8px;
-        transition: transform 0.12s ease, filter 0.12s ease;
+        margin-bottom: 4px;
+        transition: transform 0.12s ease, filter 0.12s ease, opacity 0.15s ease;
       }
       .fts-btn-submit:active {
         transform: scale(0.98);
+      }
+      .fts-btn-submit.is-disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        box-shadow: none;
+        pointer-events: none;
       }
       .fts-btn-secondary {
         background: rgba(255, 255, 255, 0.08);
@@ -1402,10 +1394,11 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         position: absolute;
         top: 14px;
         right: 14px;
+        z-index: 10;
         width: 32px;
         height: 32px;
-        background: rgba(255, 255, 255, 0.08);
-        border: none;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 50%;
         color: #94a3b8;
         font-size: 18px;
@@ -1424,10 +1417,8 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
     <div class="fts-card" id="fts-card">
       <button class="fts-close-btn" id="fts-close-survey" aria-label="Close">&times;</button>
 
-      <span class="fts-badge">${displayBadge}</span>
-
       <div class="fts-cover-wrap">
-        <img class="fts-cover-img" src="assets/images/stories/0_my_lord_bag_of_rice.png" alt="My Lord Bag of Rice" onerror="this.style.display='none'" />
+        <img class="fts-cover-img" src="assets/images/my_lord_bag_of_rice.png" alt="My Lord Bag of Rice" onerror="this.src='assets/images/my_lord_bag_of_rice.webp'" />
       </div>
 
       <h2 class="fts-title">${displayTitle}</h2>
@@ -1450,15 +1441,15 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
       <div class="fts-q-block">
         <div class="fts-q-title">${strings.q2}</div>
         <div class="fts-chips-grid">
-          <button type="button" class="fts-chip-btn is-selected" data-feat="quiz">${strings.optQuiz}</button>
-          <button type="button" class="fts-chip-btn" data-feat="favorites">${strings.optFavorites}</button>
-          <button type="button" class="fts-chip-btn" data-feat="widget">${strings.optWidget}</button>
-          <button type="button" class="fts-chip-btn" data-feat="scanner">${strings.optScanner}</button>
+          <button type="button" class="fts-chip-btn" data-feat="quiz" aria-pressed="false">${strings.optQuiz}</button>
+          <button type="button" class="fts-chip-btn" data-feat="favorites" aria-pressed="false">${strings.optFavorites}</button>
+          <button type="button" class="fts-chip-btn" data-feat="widget" aria-pressed="false">${strings.optWidget}</button>
+          <button type="button" class="fts-chip-btn" data-feat="scanner" aria-pressed="false">${strings.optScanner}</button>
         </div>
       </div>
 
       <!-- Submit button -->
-      <button class="fts-btn-submit" id="fts-btn-submit">
+      <button class="fts-btn-submit is-disabled" id="fts-btn-submit" disabled aria-disabled="true">
         ${strings.submitBtn}
       </button>
     </div>
@@ -1503,22 +1494,57 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
     });
   });
 
-  // Feature chips
+  // Feature chips: multi-select (none selected initially)
+  const submitBtn = overlay.querySelector('#fts-btn-submit');
+
+  function updateSubmitState() {
+    if (!submitBtn) return;
+    const canSubmit = selectedFeatures.size > 0;
+    if (canSubmit) {
+      submitBtn.classList.remove('is-disabled');
+      submitBtn.removeAttribute('disabled');
+      submitBtn.removeAttribute('aria-disabled');
+      submitBtn.style.opacity = '1';
+      submitBtn.style.pointerEvents = 'auto';
+      submitBtn.style.cursor = 'pointer';
+    } else {
+      submitBtn.classList.add('is-disabled');
+      submitBtn.setAttribute('disabled', 'true');
+      submitBtn.setAttribute('aria-disabled', 'true');
+      submitBtn.style.opacity = '0.45';
+      submitBtn.style.pointerEvents = 'none';
+      submitBtn.style.cursor = 'not-allowed';
+    }
+  }
+  updateSubmitState();
+
   const featChips = overlay.querySelectorAll('.fts-chip-btn');
   featChips.forEach(chip => {
     chip.addEventListener('click', () => {
-      featChips.forEach(c => c.classList.remove('is-selected'));
-      chip.classList.add('is-selected');
-      selectedFeature = chip.getAttribute('data-feat') || 'quiz';
+      const feat = chip.getAttribute('data-feat');
+      if (!feat) return;
+      if (selectedFeatures.has(feat)) {
+        selectedFeatures.delete(feat);
+        chip.classList.remove('is-selected');
+        chip.setAttribute('aria-pressed', 'false');
+      } else {
+        selectedFeatures.add(feat);
+        chip.classList.add('is-selected');
+        chip.setAttribute('aria-pressed', 'true');
+      }
+      updateSubmitState();
     });
   });
 
   // Submit action
-  overlay.querySelector('#fts-btn-submit')?.addEventListener('click', () => {
+  submitBtn?.addEventListener('click', () => {
+    if (selectedFeatures.size === 0) return;
+    const featureListStr = Array.from(selectedFeatures).join(',');
+
     // Record survey completion and unlock story 0
     localStorage.setItem('myduo_fairy_tale_survey_done', 'true');
     localStorage.setItem('myduo_survey_rating', String(selectedStars));
-    localStorage.setItem('myduo_survey_feature', selectedFeature);
+    localStorage.setItem('myduo_survey_feature', featureListStr);
     localStorage.setItem('myduo_story_0_unlocked', 'true');
 
     try {
@@ -1528,14 +1554,15 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
     if (window.trackEvent) {
       window.trackEvent('survey_fairy_tale_submitted', {
         rating: selectedStars,
-        feature: selectedFeature
+        features: Array.from(selectedFeatures),
+        feature: featureListStr
       });
     }
 
     try {
       submitSurveyFeedbackApi({
         rating: selectedStars,
-        feature: selectedFeature,
+        feature: featureListStr,
         text: ''
       });
     } catch (e) {}
@@ -1551,10 +1578,9 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         <button class="fts-close-btn" id="fts-close-done" aria-label="Close">&times;</button>
         <div style="font-size: 54px; margin: 12px 0 8px;">🎉</div>
         <h3 class="fts-title">${strings.posTitle}</h3>
-        <p class="fts-subtitle" style="font-size: 14.5px; margin-bottom: 24px;">${strings.posSub}</p>
+        <p class="fts-subtitle" style="font-size: 14.5px; margin-bottom: 24px; line-height: 1.5;">${strings.posSub}</p>
 
-        <button class="fts-btn-submit" id="fts-rate-google" style="margin-bottom: 12px;">${strings.btnRate}</button>
-        <button class="fts-btn-secondary" id="fts-btn-done-pos">${strings.btnClose}</button>
+        <button class="fts-btn-submit" id="fts-rate-google" style="margin-bottom: 6px;">${strings.btnRate}</button>
       `;
 
       card.querySelector('#fts-close-done')?.addEventListener('click', dismiss);
@@ -1565,8 +1591,6 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         openGooglePlayStore();
         dismiss();
       });
-
-      card.querySelector('#fts-btn-done-pos')?.addEventListener('click', dismiss);
 
     } else {
       // Neutral/Critical outcome: Rated 1-3 stars -> Ask what to improve with feedback form!
@@ -1604,7 +1628,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
           try {
             submitSurveyFeedbackApi({
               rating: selectedStars,
-              feature: selectedFeature,
+              feature: Array.from(selectedFeatures).join(','),
               text: text
             });
           } catch (e) {}
