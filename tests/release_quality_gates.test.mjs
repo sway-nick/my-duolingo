@@ -103,8 +103,22 @@ test('Gate 1: Unity Ads Mediation and AdMob configuration integrity', () => {
 
 test('Gate 1b: Public live app-ads.txt availability and Unity / Google verification', async () => {
   const https = await import('https');
-  const fetchUrl = (url) => new Promise((resolve) => {
-    const req = https.get(url, { timeout: 7000 }, (res) => {
+  const fetchUrl = (url, depth = 0) => new Promise((resolve) => {
+    if (depth > 3) return resolve({ statusCode: 0, error: 'Too many redirects' });
+    const parsed = new URL(url);
+    const options = {
+      hostname: parsed.hostname,
+      path: parsed.pathname + parsed.search,
+      headers: {
+        'User-Agent': 'EnglishBreakfast-QualityGate/1.0 (Node.js)'
+      },
+      timeout: 10000
+    };
+    const req = https.get(options, (res) => {
+      if ([301, 302, 307, 308].includes(res.statusCode) && res.headers.location) {
+        const redirectUrl = new URL(res.headers.location, url).toString();
+        return resolve(fetchUrl(redirectUrl, depth + 1));
+      }
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => resolve({ statusCode: res.statusCode, data }));
@@ -114,8 +128,8 @@ test('Gate 1b: Public live app-ads.txt availability and Unity / Google verificat
   });
 
   const res = await fetchUrl('https://sway-nick.github.io/app-ads.txt');
-  if (res.statusCode === 0) {
-    console.warn('⚠️ Network offline or unreachable during Gate 1b live check, skipping remote probe:', res.error);
+  if (res.statusCode === 0 || res.statusCode === 429 || res.statusCode >= 500) {
+    console.warn(`⚠️ Network offline, rate-limited, or server busy during Gate 1b probe (${res.statusCode || res.error}), skipping live app-ads.txt verification`);
     return;
   }
 
@@ -127,6 +141,10 @@ test('Gate 1b: Public live app-ads.txt availability and Unity / Google verificat
 
   // Verify root domain is not returning 404
   const rootRes = await fetchUrl('https://sway-nick.github.io/');
+  if (rootRes.statusCode === 0 || rootRes.statusCode === 429 || rootRes.statusCode >= 500) {
+    console.warn(`⚠️ Network offline, rate-limited, or server busy during Gate 1b probe (${rootRes.statusCode || rootRes.error}), skipping live homepage verification`);
+    return;
+  }
   assert.equal(rootRes.statusCode, 200, 'Public https://sway-nick.github.io/ root homepage must return 200 OK');
 });
 
