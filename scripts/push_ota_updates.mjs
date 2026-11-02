@@ -490,7 +490,39 @@ async function run() {
     { id: 1045, word: 'palace', lang: 'it', expected: 'palazzo, reggia, sontuosa dimora' },
     { id: 1045, word: 'palace', lang: 'cs', expected: 'palác, zámecké sídlo' },
     { id: 1048, word: 'shell', lang: 'it', expected: 'conchiglia, guscio, proiettile di cannone' },
-    { id: 1048, word: 'shell', lang: 'cs', expected: 'lastura, skořápka, dělostřelecký granát' }
+    { id: 1048, word: 'shell', lang: 'cs', expected: 'lastura, skořápka, dělostřelecký granát' },
+
+    // Batch 1051-1100
+    { id: 1058, word: 'greet', lang: 'it', expected: 'salutare, dare il benvenuto' },
+    { id: 1058, word: 'greet', lang: 'cs', expected: 'pozdravit, přivítat' },
+    { id: 1058, word: 'greet', lang: 'hu', expected: 'üdvözölni, köszönteni' },
+    { id: 1065, word: 'spell', lang: 'fr', expected: 'épeler, sortilège, enchantement' },
+    { id: 1065, word: 'spell', lang: 'it', expected: 'compitare, incantesimo, maleficio' },
+    { id: 1065, word: 'spell', lang: 'cs', expected: 'hláskovat, kouzlo, zaklínadlo' },
+    { id: 1065, word: 'spell', lang: 'ru', expected: 'писать по буквам, заклинание, чары' },
+    { id: 1066, word: 'conscious', lang: 'ru', expected: 'сознательный, находящийся в сознании' },
+    { id: 1066, word: 'conscious', lang: 'it', expected: 'consapevole, cosciente' },
+    { id: 1066, word: 'conscious', lang: 'cs', expected: 'vědomý, při vědomí' },
+    { id: 1068, word: 'teenage', lang: 'ru', expected: 'подростковый, юношеский' },
+    { id: 1068, word: 'teenage', lang: 'it', expected: 'adolescenziale, giovanile' },
+    { id: 1070, word: 'photography', lang: 'it', expected: 'fotografia, arte fotografica' },
+    { id: 1070, word: 'photography', lang: 'hu', expected: 'fotózás, fényképészet' },
+    { id: 1076, word: 'bath', lang: 'fr', expected: 'bain, baignoire' },
+    { id: 1076, word: 'bath', lang: 'it', expected: 'bagno, vasca da bagno' },
+    { id: 1085, word: 'regret', lang: 'fr', expected: 'regretter, déplorer, regret' },
+    { id: 1085, word: 'regret', lang: 'it', expected: 'rimpiangere, pentirsi, rimpianto' },
+    { id: 1085, word: 'regret', lang: 'cs', expected: 'litovat, mrzet, lítost' },
+    { id: 1091, word: 'castle', lang: 'fr', expected: 'château fort, forteresse, castel' },
+    { id: 1091, word: 'castle', lang: 'it', expected: 'castello, fortezza, rocca' },
+    { id: 1091, word: 'castle', lang: 'hu', expected: 'vár, várkastély, erőd' },
+    { id: 1091, word: 'castle', lang: 'el', expected: 'κάστρο, φρούριο' },
+    { id: 1098, word: 'artificial', lang: 'cs', expected: 'umělý, syntetický' },
+    { id: 1098, word: 'artificial', lang: 'hu', expected: 'mesterséges, mű-' },
+    { id: 1101, word: 'outdoor', lang: 'fr', expected: 'en plein air, extérieur, de plein air' },
+    { id: 1101, word: 'outdoor', lang: 'it', expected: "all'aperto, esterno, da esterno" },
+    { id: 1101, word: 'outdoor', lang: 'cs', expected: 'venkovní, pod širým nebem' },
+    { id: 1101, word: 'outdoor', lang: 'hu', expected: 'szabadtéri, kültéri, szabadban lévő' },
+    { id: 1101, word: 'outdoor', lang: 'ru', expected: 'на открытом воздухе, уличный, наружный' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -561,6 +593,10 @@ async function run() {
   const calib21FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1001_1050_calibrations.cjs'), 'utf8');
   const calib21ObjStr = calib21FileContent.slice(calib21FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib21FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs21 = eval('(' + calib21ObjStr + ')');
+
+  const calib22FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1051_1100_calibrations.cjs'), 'utf8');
+  const calib22ObjStr = calib22FileContent.slice(calib22FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib22FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs22 = eval('(' + calib22ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -794,6 +830,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1051-1100 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs22)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -840,7 +899,8 @@ async function run() {
     ...Object.keys(calibs18),
     ...Object.keys(calibs19),
     ...Object.keys(calibs20),
-    ...Object.keys(calibs21)
+    ...Object.keys(calibs21),
+    ...Object.keys(calibs22)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
