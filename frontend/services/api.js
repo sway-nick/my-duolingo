@@ -4429,7 +4429,7 @@ async function submitSurveyFeedbackApi(data = {}) {
       language: lang,
       deviceType: typeof navigator !== 'undefined' ? (navigator.userAgentData?.platform || navigator.platform || 'Android') : 'Android',
       os: 'Android/Web',
-      appVersion: '1.0.32'
+      appVersion: '1.0.33'
     };
 
     fetch(`${GAS_SCANNER_URL}?route=feedback`, {
