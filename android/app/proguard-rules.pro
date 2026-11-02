@@ -35,6 +35,11 @@
 -keep class com.unity3d.services.** { *; }
 -keep class com.google.ads.mediation.unity.** { *; }
 
+# Preserve Start.io & Mediation
+-keep class com.startapp.** { *; }
+-keep class com.truenet.** { *; }
+-keep class io.start.mediation.admob.** { *; }
+
 # Preserve Media & Background Audio Service
 -keep class androidx.media.** { *; }
 -keep class android.support.v4.media.** { *; }
@@ -51,3 +56,5 @@
 -dontwarn com.getcapacitor.**
 -dontwarn com.unity3d.**
 -dontwarn com.google.ads.mediation.unity.**
+-dontwarn com.startapp.**
+-dontwarn io.start.mediation.admob.**
