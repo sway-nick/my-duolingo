@@ -175,7 +175,25 @@ async function run() {
     { id: 597, word: 'mess', lang: 'ja', expected: '散らかり、混乱、散らかす' },
     { id: 597, word: 'mess', lang: 'ko', expected: '엉망진창, 난장판, 엉망으로 만들다' },
     { id: 598, word: 'joy', lang: 'de', expected: 'Freude, Entzücken, Wonne' },
-    { id: 598, word: 'joy', lang: 'fr', expected: 'joie, allégresse, bonheur' }
+    { id: 598, word: 'joy', lang: 'fr', expected: 'joie, allégresse, bonheur' },
+
+    // Batch 601-650
+    { id: 616, word: 'plot', lang: 'fr', expected: 'intrigue, trame, complot, parcelle' },
+    { id: 616, word: 'plot', lang: 'it', expected: 'trama, intreccio, complotto' },
+    { id: 616, word: 'plot', lang: 'cs', expected: 'děj, zápletka, spiknutí, pozemek' },
+    { id: 617, word: 'angle', lang: 'fr', expected: 'angle, point de vue' },
+    { id: 617, word: 'angle', lang: 'cs', expected: 'úhel, zorný úhel, pohled' },
+    { id: 622, word: 'desert', lang: 'sv', expected: 'öken, ödemark' },
+    { id: 626, word: 'bullet', lang: 'da', expected: 'kugle, projektil, punkt' },
+    { id: 627, word: 'sequence', lang: 'fr', expected: 'séquence, ordre, suite' },
+    { id: 629, word: 'minor', lang: 'da', expected: 'mindre, uvæsentlig, mindreårig' },
+    { id: 633, word: 'clock', lang: 'da', expected: 'ur, vægur' },
+    { id: 633, word: 'clock', lang: 'fi', expected: 'kello, seinäkello' },
+    { id: 634, word: 'arrange', lang: 'fr', expected: 'organiser, arranger, disposer' },
+    { id: 634, word: 'arrange', lang: 'cs', expected: 'zorganizovat, zařídit, uspořádat' },
+    { id: 634, word: 'arrange', lang: 'da', expected: 'arrangere, organisere, tilrettelægge' },
+    { id: 639, word: 'properly', lang: 'fr', expected: 'correctement, convenablement, comme il faut' },
+    { id: 639, word: 'properly', lang: 'cs', expected: 'správně, řádně, jak se patří' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -213,6 +231,7 @@ async function run() {
   const calibs10 = loadBatchCalibs('scripts/apply_batch_451_500_calibrations.cjs');
   const calibs11 = loadBatchCalibs('scripts/apply_batch_501_550_calibrations.cjs');
   const calibs12 = loadBatchCalibs('scripts/apply_batch_551_600_calibrations.cjs');
+  const calibs13 = loadBatchCalibs('scripts/apply_batch_601_650_calibrations.cjs');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -238,8 +257,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450, 451-500, 501-550, 551-600 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9, ...calibs10, ...calibs11, ...calibs12]) {
+  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450, 451-500, 501-550, 551-600, 601-650 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9, ...calibs10, ...calibs11, ...calibs12, ...calibs13]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
