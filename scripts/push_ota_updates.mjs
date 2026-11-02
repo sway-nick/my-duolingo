@@ -125,7 +125,23 @@ async function run() {
     { id: 444, word: 'pack', lang: 'fr', expected: 'emballer, paquet, meute' },
     { id: 450, word: 'command', lang: 'fr', expected: 'ordre, commander, commandement' },
     { id: 450, word: 'command', lang: 'it', expected: 'ordine, comandare, comando' },
-    { id: 450, word: 'command', lang: 'ja', expected: '命令、指揮する、指令' }
+    { id: 450, word: 'command', lang: 'ja', expected: '命令、指揮する、指令' },
+
+    // Batch 451-500
+    { id: 451, word: 'shooting', lang: 'fr', expected: 'tir, tournage' },
+    { id: 456, word: 'pure', lang: 'fr', expected: 'pur, sans mélange, authentique' },
+    { id: 459, word: 'fellow', lang: 'de', expected: 'Kollege, Gefährte, Kerl' },
+    { id: 464, word: 'sharp', lang: 'fr', expected: 'tranchant, pointu, aiguisé' },
+    { id: 464, word: 'sharp', lang: 'it', expected: 'affilato, tagliente, acuto' },
+    { id: 464, word: 'sharp', lang: 'ja', expected: '鋭い、尖った' },
+    { id: 471, word: 'load', lang: 'fr', expected: 'charge, chargement, charger' },
+    { id: 471, word: 'load', lang: 'it', expected: 'carico, caricare, carico di lavoro' },
+    { id: 485, word: 'advance', lang: 'fr', expected: 'avancer, progrès, avance' },
+    { id: 490, word: 'rural', lang: 'fr', expected: 'rural, champêtre' },
+    { id: 490, word: 'rural', lang: 'it', expected: 'rurale, campestre' },
+    { id: 491, word: 'wage', lang: 'fr', expected: 'salaire, rémunération, mener' },
+    { id: 491, word: 'wage', lang: 'de', expected: 'Lohn, Gehalt, führen' },
+    { id: 491, word: 'wage', lang: 'ja', expected: '賃金、給料、行う' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -160,6 +176,7 @@ async function run() {
   const calibs7 = loadBatchCalibs('scripts/apply_batch_301_350_calibrations.cjs');
   const calibs8 = loadBatchCalibs('scripts/apply_batch_351_400_calibrations.cjs');
   const calibs9 = loadBatchCalibs('scripts/apply_batch_401_450_calibrations.cjs');
+  const calibs10 = loadBatchCalibs('scripts/apply_batch_451_500_calibrations.cjs');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -185,8 +202,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9]) {
+  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450, 451-500 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9, ...calibs10]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
