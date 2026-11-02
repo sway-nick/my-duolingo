@@ -460,7 +460,37 @@ async function run() {
     { id: 994, word: 'fascinating', lang: 'cs', expected: 'fascinující, úchvatný' },
     { id: 1000, word: 'alarm', lang: 'hu', expected: 'riasztó, ébresztőóra, vészjelzés' },
     { id: 1000, word: 'alarm', lang: 'cs', expected: 'poplach, budík, výstražný signál' },
-    { id: 1000, word: 'alarm', lang: 'ru', expected: 'будильник, тревога, сигнал тревоги' }
+    { id: 1000, word: 'alarm', lang: 'ru', expected: 'будильник, тревога, сигнал тревоги' },
+
+    // Batch 1001-1050
+    { id: 1008, word: 'lend', lang: 'cs', expected: 'půjčit, zapůjčit, poskytnout úvěr' },
+    { id: 1008, word: 'lend', lang: 'el', expected: 'δανείζω, παραχωρώ προσωρινά' },
+    { id: 1008, word: 'lend', lang: 'hu', expected: 'kölcsönad, kölcsönöz' },
+    { id: 1009, word: 'correctly', lang: 'it', expected: 'correttamente, esattamente, a dovere' },
+    { id: 1009, word: 'correctly', lang: 'bg', expected: 'правилно, коректно' },
+    { id: 1009, word: 'correctly', lang: 'cs', expected: 'správně, bezchybně' },
+    { id: 1010, word: 'govern', lang: 'it', expected: 'governare, amministrare, reggere' },
+    { id: 1010, word: 'govern', lang: 'fr', expected: 'gouverner, diriger, administrer' },
+    { id: 1021, word: 'sum', lang: 'it', expected: 'somma, importo, totale' },
+    { id: 1021, word: 'sum', lang: 'fr', expected: 'somme, montant, total' },
+    { id: 1022, word: 'lecture', lang: 'it', expected: 'lezione universitaria, conferenza' },
+    { id: 1022, word: 'lecture', lang: 'fr', expected: 'cours magistral, conférence' },
+    { id: 1023, word: 'upstairs', lang: 'it', expected: 'al piano superiore, di sopra' },
+    { id: 1023, word: 'upstairs', lang: 'bg', expected: 'на горния етаж, горе по стълбите' },
+    { id: 1033, word: 'boring', lang: 'hu', expected: 'unalmas, egyhangú' },
+    { id: 1033, word: 'boring', lang: 'cs', expected: 'nudný, nezáživný' },
+    { id: 1034, word: 'closed', lang: 'cs', expected: 'zavřený, uzamčený' },
+    { id: 1034, word: 'closed', lang: 'hu', expected: 'zárt, becsukott' },
+    { id: 1037, word: 'tablet', lang: 'cs', expected: 'tablet, tableta, pilulka' },
+    { id: 1037, word: 'tablet', lang: 'el', expected: 'τάμπλετ, δισκίο, χάπι' },
+    { id: 1040, word: 'artistic', lang: 'it', expected: "artistico, d'arte, creativo" },
+    { id: 1040, word: 'artistic', lang: 'cs', expected: 'umělecký, výtvarný' },
+    { id: 1044, word: 'excitement', lang: 'it', expected: 'entusiasmo, trepidazione, fervore' },
+    { id: 1044, word: 'excitement', lang: 'cs', expected: 'nadšení, vzrušení, elán' },
+    { id: 1045, word: 'palace', lang: 'it', expected: 'palazzo, reggia, sontuosa dimora' },
+    { id: 1045, word: 'palace', lang: 'cs', expected: 'palác, zámecké sídlo' },
+    { id: 1048, word: 'shell', lang: 'it', expected: 'conchiglia, guscio, proiettile di cannone' },
+    { id: 1048, word: 'shell', lang: 'cs', expected: 'lastura, skořápka, dělostřelecký granát' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -527,6 +557,10 @@ async function run() {
   const calib20FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_951_1000_calibrations.cjs'), 'utf8');
   const calib20ObjStr = calib20FileContent.slice(calib20FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib20FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs20 = eval('(' + calib20ObjStr + ')');
+
+  const calib21FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1001_1050_calibrations.cjs'), 'utf8');
+  const calib21ObjStr = calib21FileContent.slice(calib21FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib21FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs21 = eval('(' + calib21ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -737,6 +771,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1001-1050 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs21)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -782,30 +839,15 @@ async function run() {
     ...Object.keys(calibs17),
     ...Object.keys(calibs18),
     ...Object.keys(calibs19),
-    ...Object.keys(calibs20)
+    ...Object.keys(calibs20),
+    ...Object.keys(calibs21)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
     if (allCalibIds.has(idStr)) continue;
-    const localW = wordsMap.get(Number(idStr));
-    if (!localW) continue;
-
-    let identical = true;
-    if (entry.translation && entry.translation !== localW.translation) {
-      identical = false;
-    }
-    if (entry.translations) {
-      for (const [l, v] of Object.entries(entry.translations)) {
-        if (localW.translations?.[l] !== v) {
-          identical = false;
-          break;
-        }
-      }
-    }
-    if (identical) {
-      delete fsMap[idStr];
-      pruned++;
-    }
+    // Any entry outside of calibrated batches is legacy uncalibrated partial data
+    delete fsMap[idStr];
+    pruned++;
   }
 
   for (const entry of Object.values(fsMap)) {
