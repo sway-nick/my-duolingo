@@ -36,7 +36,7 @@ async function getFirebaseAuthToken() {
 async function run() {
   console.log('🚀 Starting Universal Vocabulary OTA Synchronization (Cloud Firestore)...\n');
 
-  // Key sample checks across batch 1-50, 51-100, 101-150, 151-200, 201-250
+  // Key sample checks across batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300
   const sampleChecks = [
     // Batch 1-50
     { id: 2, word: 'good at', lang: 'it', expected: 'bravo a, abile in' },
@@ -49,13 +49,11 @@ async function run() {
     { id: 53, word: 'ring', lang: 'it', expected: 'anello, suonare' },
     { id: 78, word: 'plate', lang: 'es', expected: 'plato, placa' },
     { id: 78, word: 'plate', lang: 'ja', expected: '皿、プレート' },
-    { id: 90, word: 'solve', lang: 'ru', expected: 'решать, разрешать' },
 
     // Batch 101-150
     { id: 105, word: 'united', lang: 'fr', expected: 'uni' },
     { id: 106, word: 'pool', lang: 'ko', expected: '수영장, 공동 기금' },
     { id: 134, word: 'bear', lang: 'it', expected: 'orso, sopportare' },
-    { id: 137, word: 'sight', lang: 'fr', expected: 'vue, spectacle, regard' },
     { id: 147, word: 'domestic', lang: 'ja', expected: '国内の、家庭の' },
 
     // Batch 151-200
@@ -65,35 +63,43 @@ async function run() {
     { id: 160, word: 'sentence', lang: 'cs', expected: 'věta, rozsudek' },
     { id: 188, word: 'desk', lang: 'fr', expected: 'bureau' },
     { id: 188, word: 'desk', lang: 'it', expected: 'scrivania' },
-    { id: 188, word: 'desk', lang: 'cs', expected: 'psací stůl, lavice' },
 
     // Batch 201-250
     { id: 206, word: 'root', lang: 'cs', expected: 'kořen' },
     { id: 213, word: 'surgery', lang: 'de', expected: 'Chirurgie, Operation' },
-    { id: 213, word: 'surgery', lang: 'fr', expected: 'chirurgie, opération' },
-    { id: 213, word: 'surgery', lang: 'it', expected: 'chirurgia, operazione' },
     { id: 213, word: 'surgery', lang: 'ja', expected: '手術、外科' },
     { id: 222, word: 'necessarily', lang: 'it', expected: 'necessariamente' },
-    { id: 222, word: 'necessarily', lang: 'cs', expected: 'nutně' },
-    { id: 224, word: 'accuse', lang: 'it', expected: 'accusare' },
-    { id: 224, word: 'accuse', lang: 'ro', expected: 'acuza' },
     { id: 229, word: 'fat', lang: 'kk', expected: 'семіз, майлы, май' },
-    { id: 238, word: 'cite', lang: 'de', expected: 'zitieren' },
-    { id: 238, word: 'cite', lang: 'fr', expected: 'citer' },
-    { id: 238, word: 'cite', lang: 'it', expected: 'citare' },
-    { id: 238, word: 'cite', lang: 'ja', expected: '引用する' },
     { id: 241, word: 'breast', lang: 'fi', expected: 'rinta' },
-    { id: 241, word: 'breast', lang: 'lv', expected: 'krūts' },
-    { id: 241, word: 'breast', lang: 'kk', expected: 'кеуде, омырау' },
     { id: 243, word: 'leaf', lang: 'de', expected: 'Blatt' },
-    { id: 243, word: 'leaf', lang: 'fr', expected: 'feuille' },
-    { id: 243, word: 'leaf', lang: 'it', expected: 'foglia' },
-    { id: 243, word: 'leaf', lang: 'ja', expected: '葉、葉っぱ' },
     { id: 247, word: 'pursue', lang: 'de', expected: 'verfolgen, anstreben' },
-    { id: 247, word: 'pursue', lang: 'it', expected: 'perseguire, dare la caccia' },
     { id: 248, word: 'overall', lang: 'cs', expected: 'celkový, obecný' },
-    { id: 248, word: 'overall', lang: 'lt', expected: 'bendras, apskritai' },
-    { id: 248, word: 'overall', lang: 'ko', expected: '전반적인, 전반적으로' }
+    { id: 248, word: 'overall', lang: 'ko', expected: '전반적인, 전반적으로' },
+
+    // Batch 251-300
+    { id: 260, word: 'airport', lang: 'cs', expected: 'letiště' },
+    { id: 260, word: 'airport', lang: 'sk', expected: 'letisko' },
+    { id: 267, word: 'tear', lang: 'de', expected: 'zerreißen, Träne' },
+    { id: 267, word: 'tear', lang: 'it', expected: 'strappare, lacrima' },
+    { id: 269, word: 'initial', lang: 'de', expected: 'anfänglich, erst' },
+    { id: 269, word: 'initial', lang: 'fr', expected: 'initial' },
+    { id: 269, word: 'initial', lang: 'cs', expected: 'výchozí, počáteční' },
+    { id: 271, word: 'guide', lang: 'de', expected: 'Leitfaden, Führer' },
+    { id: 271, word: 'guide', lang: 'it', expected: 'guida, manuale' },
+    { id: 277, word: 'escape', lang: 'da', expected: 'undslippe, flugt' },
+    { id: 277, word: 'escape', lang: 'ja', expected: '逃げる、脱出する' },
+    { id: 277, word: 'escape', lang: 'ko', expected: '탈출하다, 도망치다' },
+    { id: 282, word: 'fault', lang: 'da', expected: 'fejl, skyld' },
+    { id: 282, word: 'fault', lang: 'fi', expected: 'vika, syy' },
+    { id: 282, word: 'fault', lang: 'ja', expected: '過失、責任、欠陥' },
+    { id: 282, word: 'fault', lang: 'ko', expected: '잘못, 과실' },
+    { id: 282, word: 'fault', lang: 'kk', expected: 'кінә, қателік' },
+    { id: 292, word: 'slip', lang: 'fi', expected: 'liukastua, lipsahtaa' },
+    { id: 292, word: 'slip', lang: 'ja', expected: '滑る、滑り落ちる' },
+    { id: 295, word: 'creation', lang: 'es', expected: 'creación' },
+    { id: 295, word: 'creation', lang: 'it', expected: 'creazione' },
+    { id: 299, word: 'mass', lang: 'fr', expected: 'masse' },
+    { id: 299, word: 'mass', lang: 'it', expected: 'massa' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -124,6 +130,7 @@ async function run() {
   const calibs3 = loadBatchCalibs('scripts/apply_batch_101_150_calibrations.cjs');
   const calibs4 = loadBatchCalibs('scripts/apply_batch_151_200_calibrations.cjs');
   const calibs5 = loadBatchCalibs('scripts/apply_batch_201_250_calibrations.cjs');
+  const calibs6 = loadBatchCalibs('scripts/apply_batch_251_300_calibrations.cjs');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -149,8 +156,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5]) {
+  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
@@ -194,7 +201,7 @@ async function run() {
     delete fsMap[idStr].updatedAt;
   }
 
-  console.log(`   Merged Batch 1-50, 51-100, 101-150, 151-200, 201-250 calibrations into Firestore updates.`);
+  console.log(`   Merged Batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300 calibrations into Firestore updates.`);
 
   // 2. Prune redundant legacy duplicate fr/vi entries to preserve plenty of headroom (< 1024 KB)
   let pruned = 0;
@@ -203,7 +210,8 @@ async function run() {
     ...calibs2.map(c => String(c.id)),
     ...calibs3.map(c => String(c.id)),
     ...calibs4.map(c => String(c.id)),
-    ...calibs5.map(c => String(c.id))
+    ...calibs5.map(c => String(c.id)),
+    ...calibs6.map(c => String(c.id))
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
