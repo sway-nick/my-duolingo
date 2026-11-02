@@ -36,7 +36,7 @@ async function getFirebaseAuthToken() {
 async function run() {
   console.log('🚀 Starting Universal Vocabulary OTA Synchronization (Cloud Firestore)...\n');
 
-  // Key sample checks across batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300, 301-350
+  // Key sample checks across batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400
   const sampleChecks = [
     // Batch 1-50
     { id: 2, word: 'good at', lang: 'it', expected: 'bravo a, abile in' },
@@ -102,7 +102,17 @@ async function run() {
     { id: 337, word: 'appeal', lang: 'ko', expected: '항소하다, 매력' },
     { id: 338, word: 'quote', lang: 'fr', expected: 'citer, citation' },
     { id: 338, word: 'quote', lang: 'it', expected: 'citare, citazione' },
-    { id: 344, word: 'row', lang: 'fi', expected: 'rivi, meloa' }
+    { id: 344, word: 'row', lang: 'fi', expected: 'rivi, meloa' },
+
+    // Batch 351-400
+    { id: 370, word: 'agenda', lang: 'es', expected: 'agenda, orden del día' },
+    { id: 381, word: 'tank', lang: 'cs', expected: 'tank, nádrž' },
+    { id: 387, word: 'perfectly', lang: 'it', expected: 'perfettamente' },
+    { id: 390, word: 'disagree', lang: 'cs', expected: 'nesouhlasit' },
+    { id: 395, word: 'waste', lang: 'fr', expected: 'gaspiller, déchets' },
+    { id: 398, word: 'wrap', lang: 'da', expected: 'pakke ind, vikle' },
+    { id: 398, word: 'wrap', lang: 'fi', expected: 'kääriä, paketoida' },
+    { id: 398, word: 'wrap', lang: 'ja', expected: '包む、包装する' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -135,6 +145,7 @@ async function run() {
   const calibs5 = loadBatchCalibs('scripts/apply_batch_201_250_calibrations.cjs');
   const calibs6 = loadBatchCalibs('scripts/apply_batch_251_300_calibrations.cjs');
   const calibs7 = loadBatchCalibs('scripts/apply_batch_301_350_calibrations.cjs');
+  const calibs8 = loadBatchCalibs('scripts/apply_batch_351_400_calibrations.cjs');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -160,8 +171,8 @@ async function run() {
     mergedCount++;
   }
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7]) {
+  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400 calibrations into fsMap
+  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8]) {
     const idStr = String(cal.id);
     const localW = wordsMap.get(cal.id);
     if (!fsMap[idStr]) {
