@@ -522,7 +522,37 @@ async function run() {
     { id: 1101, word: 'outdoor', lang: 'it', expected: "all'aperto, esterno, da esterno" },
     { id: 1101, word: 'outdoor', lang: 'cs', expected: 'venkovní, pod širým nebem' },
     { id: 1101, word: 'outdoor', lang: 'hu', expected: 'szabadtéri, kültéri, szabadban lévő' },
-    { id: 1101, word: 'outdoor', lang: 'ru', expected: 'на открытом воздухе, уличный, наружный' }
+    { id: 1101, word: 'outdoor', lang: 'ru', expected: 'на открытом воздухе, уличный, наружный' },
+
+    // Batch 1102-1151
+    { id: 1108, word: 'alright', lang: 'el', expected: 'εντάξει, σύμφωνοι, καλά' },
+    { id: 1108, word: 'alright', lang: 'cs', expected: 'v pořádku, dobře, ujednáno' },
+    { id: 1108, word: 'alright', lang: 'hu', expected: 'rendben, jó, minden oké' },
+    { id: 1109, word: 'mild', lang: 'fr', expected: 'doux, clément, modéré' },
+    { id: 1109, word: 'mild', lang: 'it', expected: 'mite, dolce, leggero' },
+    { id: 1109, word: 'mild', lang: 'cs', expected: 'mírný, jemný, nepálivý' },
+    { id: 1113, word: 'hockey', lang: 'el', expected: 'χόκεϊ' },
+    { id: 1114, word: 'clever', lang: 'de', expected: 'klug, schlau, geschickt' },
+    { id: 1114, word: 'clever', lang: 'fr', expected: 'intelligent, astucieux, ingénieux' },
+    { id: 1114, word: 'clever', lang: 'cs', expected: 'chytrý, bystrý, vynalézavý' },
+    { id: 1125, word: 'hesitate', lang: 'it', expected: 'esitare, tentennare, indugiare' },
+    { id: 1125, word: 'hesitate', lang: 'el', expected: 'διστάζω, αμφιταλαντεύομαι' },
+    { id: 1125, word: 'hesitate', lang: 'hu', expected: 'habozni, tétovázni, hezitálni' },
+    { id: 1135, word: 'sadly', lang: 'it', expected: 'tristemente, con amarezza, purtroppo' },
+    { id: 1135, word: 'sadly', lang: 'de', expected: 'traurigerweise, leider, wehmütig' },
+    { id: 1135, word: 'sadly', lang: 'cs', expected: 'smutně, bohužel, s lítostí' },
+    { id: 1145, word: 'sail', lang: 'de', expected: 'Segel, segeln, in See stechen' },
+    { id: 1145, word: 'sail', lang: 'fr', expected: 'voile, faire de la voile, naviguer' },
+    { id: 1145, word: 'sail', lang: 'it', expected: 'vela, veleggiare, navigare' },
+    { id: 1147, word: 'sympathy', lang: 'it', expected: 'compassione, cordoglio, solidarietà' },
+    { id: 1147, word: 'sympathy', lang: 'fr', expected: 'compassion, condoléances, empathie' },
+    { id: 1147, word: 'sympathy', lang: 'es', expected: 'compasión, empatía, condolencia' },
+    { id: 1148, word: 'inappropriate', lang: 'de', expected: 'unangemessen, unpassend, ungebührlich' },
+    { id: 1148, word: 'inappropriate', lang: 'fr', expected: 'inapproprié, inadapté, inconvenant' },
+    { id: 1148, word: 'inappropriate', lang: 'cs', expected: 'nevhodný, nepatřičný, nepřístojný' },
+    { id: 1149, word: 'o\'clock', lang: 'de', expected: 'Uhr, Punkt auf der Uhr' },
+    { id: 1149, word: 'o\'clock', lang: 'fr', expected: 'heures, pile à l\'heure' },
+    { id: 1149, word: 'o\'clock', lang: 'it', expected: 'in punto, ore precise' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -597,6 +627,10 @@ async function run() {
   const calib22FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1051_1100_calibrations.cjs'), 'utf8');
   const calib22ObjStr = calib22FileContent.slice(calib22FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib22FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs22 = eval('(' + calib22ObjStr + ')');
+
+  const calib23FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1102_1151_calibrations.cjs'), 'utf8');
+  const calib23ObjStr = calib23FileContent.slice(calib23FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib23FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs23 = eval('(' + calib23ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -853,6 +887,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1102-1151 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs23)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -900,7 +957,8 @@ async function run() {
     ...Object.keys(calibs19),
     ...Object.keys(calibs20),
     ...Object.keys(calibs21),
-    ...Object.keys(calibs22)
+    ...Object.keys(calibs22),
+    ...Object.keys(calibs23)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
