@@ -1628,21 +1628,17 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         <h3 class="fts-title">${strings.negTitle}</h3>
         <p class="fts-subtitle" style="font-size: 14.5px; margin-bottom: 16px;">${strings.negSub}</p>
 
-        <div class="fts-neg-feedback-box" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; margin-bottom: 16px; text-align: left;">
+        <div class="fts-neg-feedback-box" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; margin-bottom: 6px; text-align: left;">
           <div style="font-size: 13.5px; font-weight: 700; color: #f1f5f9; margin-bottom: 8px;">${strings.negAsk}</div>
           <textarea id="fts-neg-input" rows="3" style="width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; padding: 10px; font-size: 13.5px; resize: none; font-family: inherit; line-height: 1.4;" placeholder="${strings.negPlaceholder}"></textarea>
           <button type="button" id="fts-btn-send-feedback" style="margin-top: 10px; width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none; color: #ffffff; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);">${strings.negBtnSend}</button>
-          <div id="fts-neg-toast" style="display: none; font-size: 12.5px; font-weight: 600; color: #86efac; text-align: center; margin-top: 8px;">${strings.negSentToast}</div>
         </div>
-
-        <button class="fts-btn-secondary" id="fts-btn-done-neg">${strings.btnClose}</button>
       `;
 
       card.querySelector('#fts-close-done')?.addEventListener('click', dismiss);
 
       const feedbackInput = card.querySelector('#fts-neg-input');
       const sendBtn = card.querySelector('#fts-btn-send-feedback');
-      const toastEl = card.querySelector('#fts-neg-toast');
 
       sendBtn?.addEventListener('click', () => {
         const text = feedbackInput ? feedbackInput.value.trim() : '';
@@ -1661,13 +1657,14 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         }
         if (sendBtn) {
           sendBtn.disabled = true;
-          sendBtn.style.opacity = '0.6';
-          sendBtn.textContent = '✓ ' + (strings.negSentToast.split('!')[0] || 'OK');
+          sendBtn.style.opacity = '0.85';
+          sendBtn.style.background = '#10b981';
+          sendBtn.textContent = '✓';
         }
-        if (toastEl) toastEl.style.display = 'block';
+        setTimeout(() => {
+          dismiss();
+        }, 1500);
       });
-
-      card.querySelector('#fts-btn-done-neg')?.addEventListener('click', dismiss);
     }
   });
 }
