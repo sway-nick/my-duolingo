@@ -552,7 +552,25 @@ async function run() {
     { id: 1148, word: 'inappropriate', lang: 'cs', expected: 'nevhodný, nepatřičný, nepřístojný' },
     { id: 1149, word: 'o\'clock', lang: 'de', expected: 'Uhr, Punkt auf der Uhr' },
     { id: 1149, word: 'o\'clock', lang: 'fr', expected: 'heures, pile à l\'heure' },
-    { id: 1149, word: 'o\'clock', lang: 'it', expected: 'in punto, ore precise' }
+    { id: 1149, word: 'o\'clock', lang: 'it', expected: 'in punto, ore precise' },
+
+    // Batch 1152-1201
+    { id: 1154, word: 'boil', lang: 'fr', expected: 'bouillir, faire bouillir' },
+    { id: 1154, word: 'boil', lang: 'de', expected: 'kochen, sieden, aufkochen' },
+    { id: 1155, word: 'shallow', lang: 'de', expected: 'seicht, untief, oberflächlich' },
+    { id: 1155, word: 'shallow', lang: 'fr', expected: 'peu profond, superficiel' },
+    { id: 1158, word: 'outline', lang: 'de', expected: 'Umriss, Entwurf, Gliederung' },
+    { id: 1158, word: 'outline', lang: 'cs', expected: 'obrys, nárys, osnova' },
+    { id: 1162, word: 'disabled', lang: 'de', expected: 'behindert, deaktiviert' },
+    { id: 1162, word: 'disabled', lang: 'fr', expected: 'handicapé, désactivé' },
+    { id: 1164, word: 'steep', lang: 'fr', expected: 'raide, escarpé, abrupt' },
+    { id: 1164, word: 'steep', lang: 'de', expected: 'steil, schroff, drastisch' },
+    { id: 1178, word: 'stiff', lang: 'it', expected: 'rigido, intorpidito, teso' },
+    { id: 1178, word: 'stiff', lang: 'ro', expected: 'rigid, țeapăn, înțepenit' },
+    { id: 1184, word: 'sunny', lang: 'de', expected: 'sonnig, heiter' },
+    { id: 1184, word: 'sunny', lang: 'fr', expected: 'ensoleillé, radieux' },
+    { id: 1194, word: 'generation', lang: 'el', expected: 'γενιά, γενεά' },
+    { id: 1197, word: 'president', lang: 'fi', expected: 'presidentti, puheenjohtaja' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -631,6 +649,10 @@ async function run() {
   const calib23FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1102_1151_calibrations.cjs'), 'utf8');
   const calib23ObjStr = calib23FileContent.slice(calib23FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib23FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs23 = eval('(' + calib23ObjStr + ')');
+
+  const calib24FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1152_1201_calibrations.cjs'), 'utf8');
+  const calib24ObjStr = calib24FileContent.slice(calib24FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib24FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs24 = eval('(' + calib24ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -910,6 +932,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1152-1201 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs24)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -977,6 +1022,7 @@ async function run() {
     ...Object.keys(calibs21),
     ...Object.keys(calibs22),
     ...Object.keys(calibs23),
+    ...Object.keys(calibs24),
     ...functionalIds.map(String)
   ]);
 
