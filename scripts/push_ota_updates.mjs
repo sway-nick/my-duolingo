@@ -570,7 +570,28 @@ async function run() {
     { id: 1184, word: 'sunny', lang: 'de', expected: 'sonnig, heiter' },
     { id: 1184, word: 'sunny', lang: 'fr', expected: 'ensoleillé, radieux' },
     { id: 1194, word: 'generation', lang: 'el', expected: 'γενιά, γενεά' },
-    { id: 1197, word: 'president', lang: 'fi', expected: 'presidentti, puheenjohtaja' }
+    { id: 1197, word: 'president', lang: 'fi', expected: 'presidentti, puheenjohtaja' },
+
+    // Batch 1202-1251
+    { id: 1204, word: 'introduce', lang: 'fr', expected: 'présenter, faire les présentations, introduire' },
+    { id: 1204, word: 'introduce', lang: 'de', expected: 'vorstellen, bekanntmachen, einführen' },
+    { id: 1205, word: 'statement', lang: 'fr', expected: 'déclaration, affirmation, relevé' },
+    { id: 1205, word: 'statement', lang: 'de', expected: 'Aussage, Erklärung, Kontoauszug' },
+    { id: 1209, word: 'perspective', lang: 'de', expected: 'Perspektive, Blickwinkel, Sichtweise' },
+    { id: 1209, word: 'perspective', lang: 'fr', expected: 'perspective, point de vue' },
+    { id: 1214, word: 'relationship', lang: 'fr', expected: 'relation, rapport, lien' },
+    { id: 1214, word: 'relationship', lang: 'it', expected: 'relazione, rapporto, legame' },
+    { id: 1221, word: 'manage', lang: 'pt', expected: 'gerenciar, administrar, conseguir' },
+    { id: 1224, word: 'weapon', lang: 'pt', expected: 'arma' },
+    { id: 1229, word: 'growth', lang: 'fr', expected: 'croissance, développement, essor' },
+    { id: 1229, word: 'growth', lang: 'it', expected: 'crescita, sviluppo, incremento' },
+    { id: 1237, word: 'religion', lang: 'pt', expected: 'religião, crença' },
+    { id: 1241, word: 'straight', lang: 'cs', expected: 'rovný, přímý, přímo' },
+    { id: 1241, word: 'straight', lang: 'hi', expected: 'सीधा, सरल, साफ-साफ' },
+    { id: 1247, word: 'easily', lang: 'fi', expected: 'helposti, vaivattomasti' },
+    { id: 1247, word: 'easily', lang: 'hi', expected: 'आसानी से, सरलता से' },
+    { id: 1251, word: 'target', lang: 'fr', expected: 'cible, objectif, viser' },
+    { id: 1251, word: 'target', lang: 'it', expected: 'bersaglio, obiettivo, traguardo' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -653,6 +674,10 @@ async function run() {
   const calib24FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1152_1201_calibrations.cjs'), 'utf8');
   const calib24ObjStr = calib24FileContent.slice(calib24FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib24FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs24 = eval('(' + calib24ObjStr + ')');
+
+  const calib25FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1202_1251_calibrations.cjs'), 'utf8');
+  const calib25ObjStr = calib25FileContent.slice(calib25FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib25FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs25 = eval('(' + calib25ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -955,6 +980,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1202-1251 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs25)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -1023,6 +1071,7 @@ async function run() {
     ...Object.keys(calibs22),
     ...Object.keys(calibs23),
     ...Object.keys(calibs24),
+    ...Object.keys(calibs25),
     ...functionalIds.map(String)
   ]);
 
