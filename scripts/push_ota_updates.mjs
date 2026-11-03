@@ -931,7 +931,25 @@ async function run() {
     delete fsMap[idStr].updatedAt;
   }
 
-  console.log(`   Merged Batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300, 301-350 calibrations into Firestore updates.`);
+  // Merge functional grammar words exclusion (category: Advanced, level: C2)
+  const functionalIds = [1396, 1677, 2049, 3786, 3788, 3797, 3802, 3819, 3842, 3854, 3859, 3865, 3909, 3910, 3911, 3912, 4005, 4075, 4077];
+  for (const id of functionalIds) {
+    const localW = wordsMap.get(id);
+    if (!localW) continue;
+    const idStr = String(id);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: localW.id,
+        word: localW.word,
+        translations: {}
+      };
+    }
+    fsMap[idStr].category = 'Advanced';
+    fsMap[idStr].level = 'C2';
+    delete fsMap[idStr].updatedAt;
+  }
+
+  console.log(`   Merged Batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300, 301-350 calibrations and functional word exclusions into Firestore updates.`);
 
   // 2. Prune redundant legacy duplicate fr/vi entries to preserve plenty of headroom (< 1024 KB)
   let pruned = 0;
@@ -958,7 +976,8 @@ async function run() {
     ...Object.keys(calibs20),
     ...Object.keys(calibs21),
     ...Object.keys(calibs22),
-    ...Object.keys(calibs23)
+    ...Object.keys(calibs23),
+    ...functionalIds.map(String)
   ]);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {

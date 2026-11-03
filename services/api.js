@@ -391,6 +391,10 @@ async function syncRemoteVocabularyUpdates(force = false) {
             existing.level = u.level;
             rowChanged = true;
           }
+          if (u.excludeFromTraining !== undefined && existing.excludeFromTraining !== u.excludeFromTraining) {
+            existing.excludeFromTraining = u.excludeFromTraining;
+            rowChanged = true;
+          }
           if (rowChanged) hasChanges = true;
         } else {
           const wordTranslation = u.translation || '';
@@ -2467,6 +2471,20 @@ function getWordStage(prog) {
   return 'new';
 }
 
+// Standalone functional grammar words (prepositions, articles, deictic pronouns)
+// taught in Grammar/Sentences modules; excluded from vocabulary training conveyor
+const FUNCTIONAL_GRAMMAR_WORDS = new Set([
+  'the', 'it', 'this', 'that', 'these', 'those', 'its',
+  'in', 'at', 'into', 'on', 'upon', 'of', 'from', 'for', 'with', 'by', 'than', 'as'
+]);
+
+function isExcludedFromConveyor(w) {
+  if (!w) return true;
+  if (w.excludeFromTraining === true) return true;
+  const cleanWord = String(w.word || '').toLowerCase().trim();
+  return FUNCTIONAL_GRAMMAR_WORDS.has(cleanWord);
+}
+
 function getQueueForCards(words, progress, favorites = null) {
   if (!words || words.length === 0) return [];
   const favs = favorites !== null ? favorites : (typeof getUserFavorites === 'function' ? getUserFavorites() : []);
@@ -2474,11 +2492,13 @@ function getQueueForCards(words, progress, favorites = null) {
 
   // Count unmastered words already accepted into the learning batch this round
   const pickedInRound = words.filter((w) => {
+    if (isExcludedFromConveyor(w)) return false;
     const p = progress[w.id] || progress[String(w.id)];
     return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
   });
 
   const totalUnmastered = words.filter((w) => {
+    if (isExcludedFromConveyor(w)) return false;
     const p = progress[w.id] || progress[String(w.id)];
     return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
   });
@@ -2492,6 +2512,7 @@ function getQueueForCards(words, progress, favorites = null) {
 
   // Candidate unmastered words that have NOT yet been accepted
   const candidates = words.filter((w) => {
+    if (isExcludedFromConveyor(w)) return false;
     const p = progress[w.id] || progress[String(w.id)];
     if (favSet.has(String(w.id))) return false;
     if (p && isWordMastered(p)) return false;
@@ -2516,6 +2537,7 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
   } else {
     // Filter out any word that is in favorites or already mastered
     const candidateNewWords = categoryWords.filter((w) => {
+      if (isExcludedFromConveyor(w)) return false;
       const p = userProgress[w.id] || userProgress[String(w.id)];
       return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
     });
@@ -2558,7 +2580,7 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
 
   // Word pool for review words (favorites and mastered):
   // STRICTLY within categoryWords! Words from other categories must NEVER be mixed into the conveyor.
-  const reviewWordPool = [...categoryWords];
+  const reviewWordPool = categoryWords.filter((w) => !isExcludedFromConveyor(w));
 
   // 2. Pick up to 5 oldest Favorites (LRU by lastReviewedAt / lastPracticed ascending)
   let injectedFavs = [];
@@ -4510,6 +4532,8 @@ export {
   getUserNotesLocal,
   saveUserNote,
   submitSurveyFeedbackApi,
+  isExcludedFromConveyor,
+  FUNCTIONAL_GRAMMAR_WORDS,
 };
 
 export { getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
