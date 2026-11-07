@@ -1,0 +1,153 @@
+Batch 5752-5801 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5752 to 5801) from dump slice 'scripts/dump_5752_5801.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5752_5801_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5775 (vouchsafe) - Extreme Statistical Machine Translation Hallucination:
+   - The dump contained an astonishing, systemic MT hallucination where "vouchsafe" was split as "vouch safe" or matched with an inflected 1st-person conjugated phrase ("I will be able to"):
+     ru: "сподоблюсь" (1st-person future reflexive)
+     uk: "сподоблюсь"
+     fr: "je pourrai" ("I will be able to")
+     pl: "będę w stanie" ("I will be able to")
+     it: "sarò in grado di" ("I will be able to")
+     tr: "yapabileceğim" ("I will be able to")
+     pt: "eu serei capaz de" ("I will be able to")
+     sk: "budem schopný" ("I will be able to")
+     sl: "zmogel bom" ("I will be able to")
+     et: "ma suudan" ("I will be able to")
+     lt: "aš galėsiu" ("I will be able to")
+     da: "Jeg vil være i stand til at" ("I will be able to")
+     fi: "Pystyn" ("I can")
+     sv: "jag kommer att kunna" ("I will be able to")
+     hr: "moći ću" ("I will be able to")
+     lv: "es varēšu" ("I will be able to")
+     vi: "Tôi sẽ có thể" ("I will be able to")
+     ja: "私はできるでしょう" ("I will probably be able to")
+   - Calibrated across all locales to its genuine archaic/literary verb meaning ("to deign, condescend to grant, confer graciously"):
+     ru: "соблаговолить, соизволить, пожаловать"
+     fr: "daigner accorder, octroyer, gratifier"
+     pl: "raczyć, łaskawie obdarzyć, przyzwolić"
+     it: "concedere, accordare con condiscendenza, degnarsi"
+     tr: "bahşetmek, lütfetmek, tenezzül etmek"
+     pt: "conceder benignamente, outorgar, dignar-se"
+     da: "nådigt skænke, nedlade sig til, bevilge"
+     fi: "suvaita myöntää, suoda armollisesti, alantua"
+     sv: "nådigt bevilja, värdigas, förunna"
+     ja: "恩恵として賜る、賜る、寛大にも与える"
+     ko: "너그러이 허락하다, 하사하다, 은혜를 베풀다"
+     kk: "қайырымдылықпен беру, сыйлау, нәсіп ету"
+
+2. Word 5798 (guile) - Conflation with Treason / Betrayal:
+   - The dump erroneously translated "guile" as treason, high treason, or betrayal across over 20 target languages:
+     fr: "trahison", pl: "zdrada", it: "tradimento", tr: "ihanet", pt: "traição", ro: "trădare", bg: "предателство", cs: "zrada", sk: "zrada", hu: "árulás", el: "προδοσία", sl: "izdaja", et: "reetlikkus", lt: "išdavystė", da: "forræderi", fi: "petollisuus", sv: "förräderi", hr: "izdaja", lv: "nodevība", ar: "الخيانة", vi: "phản bội", th: "การทรยศ", ko: "배신", ja: "裏切り", kk: "опасыздық".
+   - Guile is slyness, cunning, artful trickery, deceitfulness, or craftiness (NOT treachery or treason).
+   - Calibrated accurately across all locales:
+     ru: "коварство, хитрость, лукавство"
+     fr: "ruse, fourberie, artifice"
+     pl: "podstęp, chytrość, przebiegłość"
+     it: "astuzia, scaltrezza maliziosa, doppiezza"
+     tr: "kurnazlık, hilekarlık, desise"
+     pt: "astúcia ardilosa, manha, dissimulação"
+     ro: "viclenie, șiretenie, tertip"
+     ar: "دهاء، مكر، حيلة خبيثة"
+     fa: "فریب، حیله‌گری، نیرنگ"
+     ur: "مکاری، عیاری، فریب دہی"
+     kk: "айлакерлік, қулық, аярлық"
+
+3. Word 5791 (gamut) - Confused with Greek Letter "gamma":
+   - The dump transliterated or translated "gamut" as the Greek letter or radiation term "gamma" in nearly every language:
+     de: "gamma", fr: "gamma", pl: "gamma", it: "gamma", ro: "gamma", cs: "gama", sk: "gama", hu: "gamma", da: "gamma", fi: "gamma", sv: "gamma", hi: "गामा", ar: "غاما", id: "gamma", vi: "gamma", th: "แกมมา", ko: "감마", ja: "ガンマ", kk: "гамма".
+   - "Gamut" means the entire scale, full range, or comprehensive spectrum (originally the full musical scale).
+   - Calibrated to complete scope / spectrum:
+     ru: "диапазон, гамма, весь спектр"
+     de: "Tonleiter, Spektrum, ganze Bandbreite"
+     es: "gama, espectro, escala completa"
+     fr: "éventail, gamme, spectre complet"
+     pl: "skala, wachlarz, pełna gama"
+     it: "gamma, spettro, serie completa"
+     tr: "yelpaze, skala, geniş kapsam"
+     pt: "espectro, gama completa, conjunto amplo"
+     hi: "संपूर्ण विस्तार, दायरा, संपूर्ण क्षेत्र"
+     ar: "نطاق كامل، طيف واسع، مدى شامل"
+     fa: "طیف کامل، دامنه گسترده، گستره"
+     ur: "مکمل حد, وسیع دائرہ، تمام سلسلہ"
+     ko: "전 범위, 전체 영역, 전음계"
+     ja: "全範囲、全音域、全領域"
+     zh: "全范围、全集、完整谱系"
+     kk: "толық ауқым, кең ауқымды қамту, толық диапазон"
+
+4. Word 5793 (gentry) - Confused with "gentleness" / "gentility":
+   - The dump mistakenly mapped "gentry" (landed social class / minor nobility) to character virtues (gentleness, politeness, magnanimity):
+     cs: "ušlechtilost" (nobility of mind/virtue)
+     hu: "nemeslelkűség" (generosity/magnanimity)
+     el: "ευγένεια" (politeness/courtesy)
+     et: "õilsus" (nobility of spirit)
+     lt: "kilnumas" (virtue/magnanimity)
+     lv: "cēlsirdība" (magnanimity of heart)
+     th: "ความสูงส่ง", ko: "고귀함", ja: "高貴さ"
+   - Calibrated to the social class (landed gentry, minor aristocracy, upper class):
+     ru: "мелкопоместное дворянство, высший свет, знать"
+     de: "Landadel, Oberschicht, Edelleute"
+     es: "nobleza rural, alta burguesía, linaje acomodado"
+     fr: "petite noblesse, haute société, hobereaux"
+     pl: "szlachta, ziemiaństwo, warstwy wyższe"
+     it: "piccola nobiltà, ceto nobiliare, alta società"
+     pt: "pequena nobreza, aristocracia rural, fidalgos"
+     cs: "venkovská šlechta, zámožní lidé, panská vrstva"
+     hu: "köznemesség, nemesi réteg, tehetős urak"
+     ar: "طبقة النبلاء، علية القوم، أرستقراطية ريفية"
+     fa: "طبقه اشراف زمین‌دار، نجبا، نخبگان محلی"
+     kk: "ақсүйектер табы, тектілер, жер иелері"
+
+5. Word 5783 (obtuse) - False Cognate "dull" -> "boring":
+   - The dump translated "obtuse" (slow-witted, dense, or blunt angle) as "boring / tedious":
+     da: "kedelig" (boring)
+     sv: "tråkig" (boring)
+     hr: "dosadan" (boring)
+     ar: "ممل" (boring)
+     lv: "blāvs" (dim/faint)
+   - Calibrated to slow-witted / blunt:
+     da: "tungnem, uforstående, stump"
+     sv: "trögfattad, trubbig, okänslig"
+     hr: "tup, tvrdoglavo nerazuman, tupi"
+     ar: "بليد الفهم، كليل الذهن، منفرج الزاوية"
+     ru: "тупой, бестолковый, тупоугольный"
+
+6. Word 5784 (officious) - Conflation with "annoying" or "official":
+   - The dump generalized "officious" to mere "annoying / irritant":
+     fr: "agaçant", it: "fastidioso", tr: "sinir bozucu", pt: "irritante", ro: "enervant", cs/sk: "otravný", hu: "idegesítő", da/sv: "irriterende", fi: "ärsyttävä", hr: "dosadan", lv: "kaitinošs", ar: "مزعج", vi: "khó chịu", th: "น่ารำคาญ", ko: "성가신", ja: "迷惑な", kk: "тітіркендіргіш".
+   - "Officious" specifically denotes meddlesome, domineering, pushy assertion of unwanted authority or advice.
+   - Calibrated to proper meddlesome/bossy nuance across all languages.
+
+7. Word 5781 (obstreperous) - Over-translation as physically violent:
+   - The dump translated "obstreperous" as "violent" in 17 languages:
+     es: "violento", fr: "violent", it: "violento", pt: "violento", ro: "violent", cs/sk: "násilný", da: "voldelig", fi/sv: "väkivaltainen", hr: "nasilan", lv: "vardarbīgs", hi: "हिंसक", ar: "عنيف", vi: "bạo lực", th: "รุนแรง", ko: "폭력적인", ja: "暴力的な", kk: "зорлық-зомбылық".
+   - Obstreperous means noisy, unruly, disorderly, clamorous, defiant — not physically violent.
+   - Calibrated to boisterous/unruly/defiant across all languages.
+
+8. Word 5762 (frontier) - Framing / Edge Error:
+   - The dump confused border with decorative border/edge:
+     ro: "chenar" (picture frame/border), cs/sk: "okraj" (margin/edge), hu: "szegély" (trimming/hem), et: "äär" (rim), fi: "reuna" (edge).
+   - Calibrated to geopolitical frontier, national border, and uncharted pioneer territory.
+
+9. Word 5795 (glutton) - Grammatical POS Mismatch:
+   - Hungarian had abstract noun "falánkság" (gluttony), Indonesian had adjective "rakus" (greedy), Kazakh had abstract noun "ашкөздік" (greediness).
+   - Calibrated to the person (обжора, Vielfraß, glotón, glouton, żarłok, ghiottone, falánk ember, обыр адам).
+
+10. Word 5768 (funnel) - Kazakh Russian loanword:
+    - Kazakh dump had Russian loanword "воронка". Calibrated to authentic Kazakh terms: "құйғыш, шұңғыма, түтікше".
+
+11. Word 5769 (furor) - Over-reduction to personal anger:
+    - Reduced in 15 languages to mere anger/rage (düh, raev, raivo, amarah, etc.). Calibrated to public uproar, outcry, sensation, and furor.
+
+12. Systematic Grammatical & Stylistic Harmonization:
+    - German: 100% initial capitalization for all nouns (Duft, Schwäche, Offenheit, Brüderlichkeit, Raserei, Reibung, Schreck, Fransen, Leichtfertigkeit, Vorderseite, Grenze, Frost, Sparsamkeit, Flüchtling, Erfüllung, Fonds, Trichter, Aufruhr, Fusion, Sinnlosigkeit, Tonleiter, Entstehung, Landadel, Kernaussage, Vielfraß, Hochmut der Sprache, Beschwerde, List, Leichtgläubigkeit, Guru).
+    - Verbs (5772 vitiate, 5773 vituperate, 5774 vociferate, 5775 vouchsafe, 5776 wheedle, 5777 whet, 5778 writhe, 5779 yearn, 5780 yoke, 5801 bifurcate): Romanian standard infinitive prefix "a", Greek first person active, Kazakh verbal infinitive in -у, Russian/Slavic aspectual pairs in infinitive.
+    - Arabic: Systematic omission of spurious definite article "الـ", accurate Arabic commas (،), natural indefinite verbal nouns/adjectives.
+    - Persian & Urdu: Standard orthography with ZWNJ where appropriate, correct commas (،), idiomatic register.
+    - Brazilian Portuguese: Modern Brazilian spelling and vocabulary.

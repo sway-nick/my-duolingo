@@ -1,0 +1,133 @@
+Batch 5552-5601 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 5592 (penurious): CATASTROPHIC BEGGAR NOUN MISTRANSLATION ACROSS 25 LANGUAGES!
+   - Dump translated the advanced adjective "penurious" (destitute, extremely poor, or parsimonious/stingy) as the literal noun "BEGGAR / MENDICANT" (someone asking for alms on the street):
+     uk: "жебрак" (beggar)
+     es: "mendigo" (beggar)
+     fr: "mendiant" (beggar)
+     it: "mendicante" (beggar)
+     tr: "dilenci" (beggar)
+     pt: "mendigo" (beggar)
+     ro: "cerșetor" (beggar)
+     bg: "просяк" (beggar)
+     cs: "žebrák" (beggar)
+     sk: "žobrák" (beggar)
+     hu: "koldus" (beggar)
+     el: "ζητιάνος" (beggar)
+     sl: "berač" (beggar)
+     et: "kerjus" (beggar)
+     lt: "elgeta" (beggar)
+     da: "tigger" (beggar)
+     fi: "kerjäläinen" (beggar)
+     sv: "tiggare" (beggar)
+     hr: "prosjak" (beggar)
+     lv: "ubags" (beggar)
+     ar: "متسول" (beggar)
+     vi: "người ăn xin" (beggar)
+     th: "ขอทาน" (beggar)
+     ko: "거지" (beggar)
+     ja: "乞食" (beggar)
+     kk: "қайыршы" (beggar)
+   - Calibrated to correct adjective forms signifying extreme poverty and stinginess (e.g., ru: "нищенский, крайне бедный, скупой", de: "mittellos, bettelarm, knauserig", es: "indigente, paupérrimo, miserable", etc.).
+
+2. Word 5574 (partisan): CATASTROPHIC "PASSIONATE / PASSION" MISTRANSLATION ACROSS 16 LANGUAGES!
+   - Dump translated political/guerrilla term "partisan" as romantic/emotional "passionate / fanatical":
+     de: "leidenschaftlich, fanatisch"
+     es: "apasionado, fanático"
+     fr: "passionné, fanatique"
+     it: "appassionato, fanatico"
+     tr: "tutkulu, fanatik"
+     pt: "apaixonado, fanático"
+     ro: "pasionat, fanatic"
+     bg: "страстен, фанатичен"
+     cs: "vášnivý, fanatický"
+     sk: "vášnivý, fanatický"
+     hu: "szenvedélyes, fanatikus"
+     el: "παθιασμένος, φανατικός"
+     sl: "strasten, fanatičen"
+     et: "kirglik, fanaatiline"
+     lt: "aistringas, fanatiškas"
+     kk: "құмар, фанатикалық"
+   - Calibrated across all locales to partisan/biased/guerrilla (ru: "пристрастный, партийный, сторонник, партизан", de: "parteiisch, voreingenommen, Partisan, Anhänger", es: "partidista, sectario, partidario, partisano", etc.).
+
+3. Word 5568 (pallid): DULL / BORING MISTRANSLATION ACROSS 12 LANGUAGES!
+   - Dump translated "pallid" (pale, wan, sickly) exclusively as "boring / dull" (confusing figurative lack of luster with tediousness):
+     bg: "скучен" (boring)
+     cs: "nudný" (boring)
+     sk: "nudný" (boring)
+     hu: "unalmas" (boring)
+     sl: "dolgočasen" (boring)
+     lt: "nuobodus" (boring)
+     da: "kedelig" (boring)
+     fi: "tylsä" (boring)
+     sv: "tråkig" (boring)
+     hr: "dosadno" (boring)
+     vi: "buồn tẻ" (boring)
+     ja: "つまらない" (boring)
+   - Calibrated across all 36 locales to accurately denote paleness / wan complexion and faintness (e.g., cs: "bledý, pobledlý, bezkrevný", da: "bleg, blegnæbbet, farveløs", ja: "青白い、血色の悪い、生気のない", etc.).
+
+4. Word 5553 (assuage): CONFUSED WITH "ASSURE" & PART-OF-SPEECH COLLAPSE!
+   - Dump translated the verb "assuage" (calm, soothe, relieve, ease) as a noun in ru ("успокоение"), uk ("заспокоєння"), da ("beroligelse"), and confused it with the verb "assure" / "reassure" in over 10 languages:
+     tr: "güvence vermek" (give assurance)
+     cs: "ujistit" (assure)
+     sk: "uistiť" (assure)
+     ro: "a asigura" (to assure/insure)
+     sv: "försäkran" (assurance)
+     hr: "uvjeravanje" (persuasion/assurance)
+     lv: "pārliecināšana" (persuading)
+     id: "jaminan" (guarantee/assurance)
+     th: "ให้ความมั่นใจ" (give confidence)
+     kk: "сендірді" (convinced/assured)
+   - Calibrated to correct verb forms meaning to soothe/alleviate/relieve (ru: "успокаивать, смягчать, утолять", tr: "yatıştırmak, dindirmek, hafifletmek", cs: "utišit, zmírnit, uklidnit", etc.).
+
+5. Word 5560 (autograph): COPY-PASTE BUG FROM AUTHENTICATE!
+   - es had "autenticar" and fr had "authentifier" for autograph!
+   - tr had lowercase dotted i issue ("i̇mzalamak").
+   - Calibrated to authentic signature / autograph terms (es: "autógrafo, firmar autógrafos", fr: "autographe, dédicacer").
+
+6. Word 5576 (pastoral): NOUN "SHEPHERD" REPLACING ADJECTIVE IN 15+ LANGUAGES!
+   - es ("pastor"), fr ("berger"), it ("pastore"), tr ("çoban"), ro ("păstor"), el ("βοσκός"), et ("karjane"), lt ("piemuo"), da ("hyrde"), fi ("paimen"), sv ("herde"), lv ("gans"), hi ("चरवाहा"), id ("gembala"), vi ("chăn cừu"), th ("คนเลี้ยงแกะ"), ko ("목동"), kk ("бақташы") had the literal noun "shepherd" rather than pastoral/bucolic/rural adjective.
+   - Calibrated to proper adjectives describing rural idyll / pastoral life.
+
+7. Word 5585 (pedestrian): DUAL NOUN / ADJECTIVE MEANINGS HARMONIZED!
+   - Dump was split: half the languages translated it as "walker/pedestrian" (пешеход), and half translated it as "dull/mundane" (alltäglich, banal).
+   - Calibrated comprehensively to encompass both literal walker and figurative mundane/ordinary meanings.
+
+8. Word 5587 (peevish): "BRAWLER / VIOLENT QUARREL" CONFUSION!
+   - Dump translated peevish (cranky, irritable, petulant) as aggressive physical fighters or argumentative brawlers:
+     es: "pendenciero" (brawler)
+     it: "litigioso" (litigious/quarrelsome)
+     tr: "kavgacı" (brawler)
+     pt: "briguento" (brawler)
+     ja: "喧嘩好きな" (fond of fighting)
+     th: "ชอบทะเลาะวิวาท" (likes brawling)
+     kk: "жанжалшыл" (scandalmonger)
+   - Calibrated to cranky / irritable / grumpy / bad-tempered across all locales.
+
+9. Word 5590 (penchant):
+   - de: fixed uncapitalized noun "neigung" -> "Vorliebe, Neigung, Faible".
+   - sv: fixed physical slope/tilt "lutning" -> "förkärlek, böjelse, svaghet för".
+   - fr: fixed adjective "enclin" -> noun "penchant, inclination, faible".
+
+10. Word 5591 (pensive):
+   - pt ("atencioso"), ro ("atent"), cs ("ohleduplný"), hu ("megfontolt"), sl ("premišljen"), lt ("apgalvotas") mistranslated pensive as "considerate/attentive towards others" or "deliberate".
+   - Calibrated to deeply reflective / thoughtful / meditative.
+
+11. Word 5601 (perishable):
+   - bg: fixed broken translation "нетрайно развален" -> "бързоразвалящ се, нетраен, тленен".
+   - de: fixed human-transient "vergänglich" -> "leicht verderblich, vergänglich, hinfällig".
+   - ar: fixed ephemeral "سريع الزوال" -> "سريع التلف، قابل للفساد، فانٍ".
+   - ko: fixed mortal "소멸하기 쉬운" -> "상하기 쉬운, 부패하기 쉬운, 소멸하기 마련인".
+
+12. Words 5552 (assent), 5562 (avenge), 5563 (aver), 5565 (avow):
+   - Fixed noun-for-verb substitutions in Arabic, Danish, Hindi, etc.
+   - Refined nuanced legal/formal consent in assent vs generic bilateral treaty (e.g. fi: "suostumus", sv: "samtycke", hi: "सहमति", ar: "موافقة").
+
+====================================================
+Batch Complete: 50 words (5552–5601) calibrated across EXACTLY 36 LOCALES.
+Single source of calibrations: scripts/apply_batch_5552_5601_calibrations.cjs
+words.json untouched directly as mandated by directives.
+Android build rules respected (0 builds executed).

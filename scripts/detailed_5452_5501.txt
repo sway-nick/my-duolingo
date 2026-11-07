@@ -1,0 +1,82 @@
+Batch 5452-5501 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5452 to 5501) from dump slice 'scripts/dump_5452_5501.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5452_5501_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 5452 (resilience):
+   - In dump, Romanian was machine-translated as a verb 'a persevera' instead of the noun 'reziliență, capacitate de adaptare, rezistență'.
+   - Italian in dump was 'fermezza' (firmness) which omitted the psychological bounce-back / elastic recovery core of resilience; calibrated to 'resilienza, capacità di recupero, resistenza'.
+   - Polish in dump was 'wytrwałość' (perseverance); calibrated to include 'odporność, sprężystość, rezyliencja'.
+   - Portuguese in dump was 'firmeza'; calibrated to 'resiliência, capacidade de recuperação, resistência'.
+
+2. Word 5453 (torture):
+   - In dump, several European languages provided bare verbs (de: 'foltern', fr: 'torturer', es: 'torturar', it: 'torturare', pl: 'torturować') while the headword Russian definition in dump was a noun ('пытка').
+   - Calibrated noun forms across all 35 target languages (de: 'Folter, Qual, Marter', fr: 'torture, supplice, calvaire', es: 'tortura, suplicio, tormento', pl: 'tortury, katusze, męka', it: 'tortura, supplizio, strazio').
+
+3. Word 5460 (transplant):
+   - Addressed part-of-speech divergence between noun / verb by providing clear medical and botanical terms covering transplantation and replanting.
+
+4. Word 5470 (understate):
+   - Dump had generic single translations that obscured the nuance of minimizing, playing down, or rhetorical understatement. Calibrated to convey 'bagatellisieren / untertreiben' (de), 'minimiser, atténuer' (fr), 'atenuar, minimizar' (es), 'prezenta drept mai mic / a minimaliza' (ro).
+
+5. Word 5471 (unearth):
+   - Dump translated strictly as physical digging in several languages; calibrated to encompass both physical excavation and investigative unearthing/discovery ('выкапывать, извлекать на свет, раскрывать', 'déterrer, exhumer, mettre au jour', 'ausgraben, ans Tageslicht bringen', 'desenterrar, sacar a la luz').
+
+6. Word 5474 (unravel):
+   - Dump captured only 'разгадать' (solving a mystery); calibrated to also support the literal physical unraveling/disentangling and metaphorical unraveling/falling apart across all languages.
+
+7. Word 5478 (abdicate):
+   - Dump had narrow translations; calibrated to encompass royal abdication and legal/moral abdication of duties/responsibilities.
+
+8. Word 5479 (abet):
+   - Critical legal error in dump: Romanian had 'promova' (to promote!), Italian had 'promuovere' (to promote!), Portuguese had 'promover' (to promote!). These were completely wrong false translations.
+   - 'Abet' specifically means aiding and abetting crime/wrongdoing. Calibrated across all locales: ro: 'a fi complice, a instiga, a ajuta la comiterea unei fapte', it: 'istigare, favorire, essere complice', pt: 'ser cúmplice, instigar, secundar', de: 'Beihilfe leisten, anstiften, begünstigen', fr: 'encourager au crime, être complice de, inciter', pl: 'podżegać, pomagać w przestępstwie, popleczniczyć'.
+
+9. Word 5480 (abhor):
+   - Dump had generic 'hassen' (hate) in German; calibrated to high-register abhorrence: de: 'verabscheuen, zutiefst hassen, anwidern', fr: 'abhorrer, détester, exécrer', es: 'aborrecer, detestar, repudiar'.
+
+10. Word 5482 (abnegate):
+    - Severe bug in dump: Romanian had 'dezamăgește' (disappoints!), which was an absurd machine translation error.
+    - Calibrated to correct self-abnegation / renunciation: ro: 'a renunța la, a-și refuza, a se jertfi', de: 'sich versagen, verzichten, ablehnen', fr: 'renoncer à, sacrifier, s'abstenir de'.
+
+11. Word 5483 (abound):
+    - Dump had Russian 3rd person plural 'изобилуют' instead of infinitive; Romanian had 3rd person singular 'abundă'. Calibrated all languages to consistent infinitive forms: ru: 'изобиловать, быть в избытке, кишеть', ro: 'a abunda, a colcăi, a prisosi'.
+
+12. Word 5485 (abrogate):
+    - Dump had German 'stornieren' (cancel an order/booking); this was a false friend. Abrogate is legal repeal of a law or treaty. Calibrated to de: 'aufheben, für nichtig erklären, außer Kraft setzen', es: 'derogar, abrogar, revocar', fr: 'abroger, révoquer, annuler', it: 'abrogare, revocare, sopprimere'.
+
+13. Word 5486 (abscond):
+    - Dump had transitive 'hide' in Italian ('nascondere'), Portuguese ('esconder'), and Romanian ('ascunde'). Abscond is intransitive fleeing to evade law/justice.
+    - Calibrated to: it: 'darsi alla fuga, rendersi latitante, squagliarsela', pt: 'evadir-se, dar no pé, fugir às escondidas', ro: 'a fugi pe furiș, a se sustrage justiției, a se furișa', de: 'sich absetzen, fliehen, untertauchen'.
+
+14. Word 5487 (absolve):
+    - Dump had Italian 'rilasciare' (release) and Portuguese 'libertar' (set free). Calibrated to genuine absolution: it: 'assolvere, perdonare i peccati, esimere', pt: 'absolver, inocentar, perdoar pecados', ro: 'a absolvi, a ierta păcatele, a scuti de pedeapsă'.
+
+15. Word 5492 (accost):
+    - Calibrated to capture aggressive, confrontational verbal approach rather than pleasant greeting: it: 'abbordare bruscamente, importunare, apostrofare', ro: 'a acosta, a aborda agresiv, a interpela', pl: 'zaczepiać, nagabywać, podchodzić wyzywająco'.
+
+16. Word 5496 (acquit):
+    - Severe dump error: Italian had 'giustificare' (justify), Portuguese had 'justificar' (justify), Romanian had 'justifică' (justifies). Acquit is legal exoneration / verdict of not guilty!
+    - Calibrated to: it: 'assolvere, scagionare, dichiarare non colpevole', pt: 'absolver, inocentar, desculpar', ro: 'a achita, a dezvinovăți, a declara nevinovat'.
+
+17. Word 5498 (addict):
+    - Balanced noun and behavioral connotations: 'Abhängiger, Suchtkranker, Süchtiger' (de), 'adicto, dependiente, aficionado apasionado' (es), 'uzależniony, nałogowiec, entuzjasta' (pl).
+
+18. Word 5500 (adjourn):
+    - Calibrated formal parliamentary/judicial meaning: 'vertagen, unterbrechen, die Sitzung schließen' (de), 'ajourner, suspendre la séance, reporter' (fr), 'a amâna, a suspenda ședința, a întrerupe dezbaterile' (ro).
+
+19. Word 5501 (adjudicate):
+    - Calibrated formal judicial decision / arbitration: 'richterlich entscheiden, ein Urteil fällen, schlichten' (de), 'trancher un litige, juger, statuer' (fr), 'arbitrar, fallar, resolver judicialmente' (es), 'a judeca, a tranșa un litigiu, a pronunța o sentință' (ro).
+
+Quality Gate Verification:
+--------------------------
+- Total words audited: 50 (IDs 5452 to 5501).
+- Total target locales per word: 35 (en headword makes 36).
+- Zero build scripts executed (strict adherence to Rule #2).
+- Zero direct modifications to 'frontend/assets/data/words.json' (strict adherence to Rule #3).

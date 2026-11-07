@@ -1,0 +1,290 @@
+Batch 5652-5701 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 5697 (fare): CATASTROPHIC FOOD INFECTION ACROSS 14 EUROPEAN LANGUAGES!
+   - Dump translated English "fare" (transportation ticket price / passenger cost) as "food / meal" across 14 languages:
+     ro: "mâncare" (food / meal!)
+     bg: "храна" (food / meal!)
+     cs: "jídlo" (food / meal!)
+     sk: "jedlo" (food / meal!)
+     hu: "kószaság" (wandering / food archaic corruption!)
+     el: "φαγητό" (food / meal!)
+     sl: "hrana" (food / meal!)
+     et: "söök" (food / meal!)
+     lt: "maistas" (food / meal!)
+     da: "mad" (food / meal!)
+     fi: "ruoka" (food / meal!)
+     sv: "mat" (food / meal!)
+     hr: "hrana" (food / meal!)
+     lv: "ēdiens" (food / meal!)
+     kk: "баға" (generic price!)
+     vi: "giá cả" (generic price!)
+   - Root Cause: MT engine picked up archaic English "bill of fare" / "wholesome fare" meaning food rather than transportation fare ("Fahrpreis", "стоимость проезда", "tarifa").
+   - Calibrated: Corrected all languages to transit fare, travel ticket cost, and passage tariff:
+     ro: "tarif de călătorie, costul biletului", cs: "jízdné, tarif dopravy", sk: "cestovné, dopravná taxa",
+     hu: "viteldíj, utazási költség", el: "κόμιστρο, αντίτιμο εισιτηρίου", sl: "voznina, cena prevoza",
+     et: "sõidutasu, piletiraha", lt: "važiavimo kaina, bilieto mokestis", da: "billetpris, takst",
+     fi: "matkalippu, matkaveloitus, taksa", sv: "biljettpris, färdavgift", hr: "vozna karta, cijena vožnje",
+     lv: "braukšanas maksa, biļetes cena", vi: "tiền vé, giá vé đi lại", kk: "жолақы, билет құны".
+
+2. Word 5682 (pressing): CATASTROPHIC MECHANICAL BUTTON-PRESS INFECTION!
+   - Dump translated English adjective "pressing" (as in "pressing need", "pressing matter", "urgent") as physical keyboard / button pressing:
+     ru: "нажатие" (physical button push!)
+     uk: "натискання" (pushing a button / keystroke!)
+     fa: "فشار دادن" (act of pressing/squeezing!)
+     bn: "চাপ" (physical mechanical pressure!)
+     kk: "қысым жасау" (exerting mechanical pressure!)
+     tr: "baskıcı" (oppressive / dictatorial!)
+     sl: "nujnost" (abstract noun!)
+     et: "pealetükkiv" (intrusive / pushy person!)
+     lv: "uzstājīgs" (stubborn / persistent!)
+     fi: "painostava" (oppressive / burdensome!)
+     hi: "दबावयुक्त" (pressurized / compressed!)
+     ur: "دبانا" (to press physically!)
+     zh: "按压" (pressing a button!)
+   - Calibrated: Fixed to urgent, burning, acute, and imperative:
+     ru: "неотложный, срочный, насущный", uk: "невідкладний, терміновий, нагальний",
+     de: "dringend, drängend, unaufschiebbar", es: "urgente, apremiante, imperioso",
+     fr: "pressant, urgent, impérieux", pl: "pilny, naglący, palący",
+     it: "urgente, improrogabile, pressante", tr: "acil, ivedi, ertelenemez",
+     pt: "urgente, premente, imperioso", ro: "urgent, presant, de maximă importanță",
+     bg: "спешен, неотложен, належащ", cs: "naléhavý, neodkladný",
+     sk: "naliehavý, neodkladný", hu: "sürgős, halaszthatatlan, égető",
+     el: "επείγων, επιτακτικός", sl: "nujen, pereč, neodložljiv",
+     et: "kiireloomuline, pakiline, tungiv", lt: "neatidėliotinas, skubus, degantis",
+     da: "presserende, uopsættelig, påtrængende", fi: "kiireellinen, polttava, painava",
+     sv: "brådskande, angelägen, överhängande", hr: "hitan, neodgodiv, gorući",
+     lv: "neatliekams, steidzams", hi: "अति आवश्यक, तात्कालिक, जरूरी",
+     ar: "ملح, عاجل, طارئ", fa: "فوری, مبرم, اضطراری",
+     ur: "فوری, اشد ضروری, ناگزیر", id: "mendesak, genting, urgen",
+     vi: "cấp bách, cấp thiết, khẩn cấp", th: "เร่งด่วน, ชะลอไม่ได้",
+     ko: "긴급한, 다급한, 절박한", ja: "切迫した, 差し迫った, 緊急の",
+     zh: "紧迫的, 刻不容缓的", bn: "জরুরি, অত্যন্ত গুরুত্বপূর্ণ",
+     kk: "шұғыл, кезек күттірмейтін".
+
+3. Word 5678 (prerequisite): PREMISE VS PREREQUISITE COLLAPSE & INDONESIAN CORRUPTION!
+   - Dump translated English "prerequisite" (required prior condition) as philosophical syllogistic "premise" or "hypothesis":
+     fr: "prémisse" (syllogism premise!)
+     it: "premessa" (premise!)
+     tr: "öncül" (logical premise!)
+     pt: "premissa" (premise!)
+     ro: "premisă" (premise!)
+     el: "υπόθεση" (hypothesis / assumption!)
+     da: "præmis" (premise!)
+     sv: "premiss" (premise!)
+     hr: "premisa" (premise!)
+     ar: "فرضية" (hypothesis / conjecture!)
+     vi: "tiền đề" (premise!)
+     th: "ข้อสมมติฐาน" (hypothesis!)
+     ko: "전제" (premise!)
+     ja: "前提" (premise!)
+     id: "kebetulan untung" (Bizarre catastrophic corruption: "accidental luck / fluke" for prerequisite!)
+   - Calibrated: Corrected to prior requirement, indispensable condition, and prerequisite across all locales:
+     fr: "condition préalable, prérequis", pl: "warunek wstępny, wymóg konieczny",
+     it: "prerequisito, condizione essenziale", tr: "ön koşul, ön şart",
+     pt: "pré-requisito, condição prévia", ro: "condiție prealabilă, cerință preliminară",
+     el: "προαπαιτούμενο, προϋπόθεση", da: "forudsætning, betingelse",
+     fi: "edellytys, perusedellytys", sv: "förutsättning, förhandskrav",
+     hr: "preduvjet, nužan uvjet", ar: "شرط مسبق, متطلب رئيسي",
+     fa: "پیش‌نیاز, شرط لازم", ur: "لازمی شرط, پیشگی تقاضا",
+     id: "prasyarat, syarat mutlak", vi: "điều kiện tiên quyết, tiền đề bắt buộc",
+     th: "เงื่อนไขเบื้องต้น, สิ่งที่จำเป็นต้องมีก่อน", ko: "필수 요건, 필요조건",
+     ja: "必須条件, 前提条件", zh: "先决条件, 必要条件",
+     kk: "алғышарт, міндетті шарт".
+
+4. Word 5695 (famine): HUNGER SENSATION VS MASS FAMINE DISASTER COLLAPSE!
+   - Dump translated English "famine" (widespread catastrophic food scarcity / mass starvation) as mere physiological appetite or feeling hungry:
+     de: "hunger" (feeling hungry!)
+     es: "hambre" (hunger!)
+     fr: "faim" (hunger!)
+     pl: "głód" (hunger!)
+     it: "fame" (hunger!)
+     tr: "açlık" (hunger!)
+     pt: "fome" (hunger!)
+     ro: "foame" (hunger!)
+     cs: "hlad" (hunger!)
+     sk: "hlad" (hunger!)
+     hu: "éhség" (hunger!)
+     el: "πείνα" (hunger!)
+     et: "nälg" (hunger!)
+     lt: "alkis" (hunger!)
+     da: "sult" (hunger!)
+     fi: "nälkä" (hunger!)
+     sv: "hunger" (hunger!)
+     lv: "izsalkums" (hunger!)
+     hi: "भूख" (hunger!)
+     ar: "جوع" (hunger!)
+     vi: "đói" (hungry!)
+     th: "ความหิว" (hunger!)
+     ko: "배고픔" (feeling hungry / tummy rumbling!)
+     ja: "空腹" (empty stomach!)
+   - Calibrated: Corrected to mass famine, starvation crisis, and extreme famine emergency:
+     de: "Hungersnot, Massenhunger", es: "hambruna, inanición general",
+     fr: "famine, disette", pl: "klęska głodu, wielki głód",
+     it: "carestia, fame nera", tr: "kıtlık, açlık felaketi",
+     pt: "fome endêmica, escassez de alimentos, carestia" (pt-BR: "fome extrema, crise de fome, carestia"),
+     ro: "foamete, penurie de alimente", cs: "hladomor, hladová kalamita",
+     sk: "hladomor, nedostatok potravín", hu: "éhínség",
+     el: "λιμός, γενικευμένη πείνα", et: "näljahäda",
+     lt: "badas, bado metai", da: "hungersnød",
+     fi: "nälänhätä", sv: "hungersnöd",
+     lv: "bads, bada laiki", hi: "अकाल, भुखमरी",
+     ar: "مجاعة, قحط", fa: "قحطی, گرسنگی همگانی",
+     ur: "قحط, فاقہ کشی", id: "kelaparan massal, paceklik hebat",
+     vi: "nạn đói", th: "ความอดอยากครั้งใหญ่, ภาวะข้าวยากหมากแพง",
+     ko: "기근, 대기근", ja: "飢饉, 食糧危機",
+     zh: "饥荒, 严重粮荒", bn: "দুর্ভিক্ষ, তীব্র খাদ্যসংকট",
+     kk: "жұт, ашаршылық, аштық апаты".
+
+5. Word 5692 (fad): ODDITY / ECCENTRIC QUIRK CONFUSION!
+   - Dump translated English "fad" (short-lived craze / trend) as eccentricity, bizarre trait, or quirk:
+     ru: "причуда" (quirk / eccentricity!)
+     uk: "примха" (caprice / whim!)
+     es: "peculiaridad" (peculiarity!)
+     fr: "bizarrerie" (bizarre habit!)
+     it: "stranezza" (oddity!)
+     tr: "tuhaflık" (weirdness!)
+     pt: "peculiaridade" (peculiarity!)
+     ro: "ciudățenie" (oddity!)
+     cs: "vrtoch" (whim / caprice!)
+     sk: "zvláštnosť" (oddity!)
+     hu: "furcsaság" (strangeness!)
+     el: "ιδιορρυθμία" (idiosyncrasy!)
+     sl: "posebnost" (singularity!)
+     et: "iseärasus" (peculiarity!)
+     lt: "keistenybė" (strangeness!)
+     da: "særhed" (oddity!)
+     fi: "omituisuus" (strangeness!)
+     sv: "egenhet" (peculiarity!)
+     lv: "īpatnība" (peculiarity!)
+     hi: "विचित्रता" (weirdness!)
+     ar: "نزوة" (whim!)
+     vi: "thói quen kỳ quặc" (weird habit!)
+     th: "ลักษณะเฉพาะ" (peculiarity!)
+     ko: "기행" (eccentric behavior / bizarre deed!)
+     ja: "奇癖" (odd habit!)
+     bn: "খেয়াল" (whim!)
+     kk: "қызық" (amusing thing!)
+   - Calibrated: Corrected to short-lived craze, passing fashion, temporary trend, and hype:
+     ru: "мимолётное увлечение, поветрие, мода", uk: "короткочасне захоплення, пошесть, писк моди",
+     de: "kurzlebige Mode, Hype, Modetorheit", es: "moda pasajera, furor momentáneo",
+     fr: "engouement passager, toquade, mode éphémère", pl: "chwilowa moda, szał, bzik",
+     it: "moda passeggera, tormentone, voga temporanea", tr: "gelip geçici heves, anlık akım",
+     pt: "moda passageira, febre, onda" (pt-BR: "modismo, febre passageira"),
+     ro: "modă trecătoare, pasiune de moment", cs: "módní výstřelek, krátkodobý trend",
+     sk: "módny výstrelok, chvíľkový ošiaľ", hu: "múló divathóbort, hirtelen hóbort",
+     el: "εφήμερη μόδα, τρέλα της εποχής", sl: "modna muha, hipna vročica",
+     et: "moehullus, üürike vaimustus", lt: "trumpalaikė mada, pamišimas",
+     da: "døgnflue, dille, modegille", fi: "muotivillitys, hetken huuma",
+     sv: "fluga, modefluga, modenyck", hr: "prolazan hir, pomodnost",
+     lv: "īslaicīga modes kaprīze, aizraušanās", hi: "अल्पकालिक धुन, क्षणिक शौक",
+     ar: "صرعة مؤقتة, موضة عابرة", fa: "تب تند, مد زودگذر",
+     ur: "عارضی جنون, وقتی فیشن", id: "tren sesaat, kegilaan sesaat",
+     vi: "trào lưu nhất thời, cơn sốt ngắn ngủi", th: "แฟชั่นชั่วคราว, ความนิยมประเดี๋ยวประด๋าว",
+     ko: "일시적 유행, 반짝 열풍", ja: "一時的流行, ブーム",
+     zh: "一时的狂热, 短暂的流行", bn: "সাময়িক উন্মাদনা, ক্ষণস্থায়ী ফ্যাশন",
+     kk: "уақытша сән, өткінші әуестік".
+
+6. Word 5693 (fallacy): PSYCHIATRIC DELUSION / HALLUCINATION MISTRANSLATION!
+   - Dump translated English "fallacy" (flawed reasoning / logical error / misconception) as clinical delusion or psychiatric hallucination:
+     lt: "kliedesys" (feverish delirium / incoherent raving!)
+     da: "vrangforestilling" (psychiatric delusion!)
+     sv: "vanföreställning" (clinical psychiatric delusion!)
+     ko: "망상" (clinical paranoia / delusion!)
+     ja: "妄想" (wild fantasy / psychiatric delusion!)
+     vi: "ảo tưởng" (delusion / fantasy!)
+     th: "ความหลงผิด" (mental delusion!)
+     ar: "وهم" (sensory illusion / mirage!)
+     kk: "алдау" (deceiving / cheating!)
+   - Calibrated: Corrected to logical flaw, fallacious inference, sophism, and misconception:
+     ru: "заблуждение, логическая ошибка, софизм", de: "Fehlschluss, Trugschluss, Irrlehre",
+     es: "falacia, argumento falso, engaño", fr: "sophisme, illusion, raisonnement fallacieux",
+     pl: "błąd logiczny, fałszywe przekonanie, sofizmat", it: "fallacia, errore di ragionamento, sofisma",
+     tr: "yanılgı, safsata, mantık hatası", pt: "falácia, sofisma, engano",
+     ro: "sofism, eroare de raționament, iluzie", cs: "klam, logická chyba, mylný úsudek",
+     sk: "klam, logická chyba, mylná predstava", hu: "tévedés, logikai hiba, érvelési hiba",
+     el: "πλάνη, λογικό σφάλμα, σοφιστεία", sl: "zabloda, logična napaka, zmotno mišljenje",
+     et: "väärarusaam, loogikaviga", lt: "klaidinga išvada, loginė klaida",
+     da: "fejlvurdering, vrangslutning, tankefejl", fi: "virhepäätelmä, harhaluulo, looginen virhe",
+     sv: "felslut, tankevurpa, felaktigt antagande", hr: "logička pogreška, zabluda",
+     lv: "maldīgs uzskats, aplams spriedums", hi: "भ्रामक तर्क, मिथ्या धारणा, हेत्वाभास",
+     ar: "مغالطة, استدلال باطل", fa: "مغالطه, سفسطه, پندار بیهوده",
+     ur: "مغالطہ, غلط فہمی, فریبِ نظر", id: "kesesatan logika, kekeliruan berpikir",
+     vi: "ngụy biện, quan niệm sai lầm", th: "เหตุผลวิบัติ, ความเข้าใจผิด",
+     ko: "오류, 그릇된 논리", ja: "誤謬, 誤った考え",
+     zh: "谬误, 谬论, 逻辑错误", kk: "жалған ұғым, қисынсыз ой қорыту".
+
+7. Word 5694 (familiarity): HUMAN ACQUAINTANCE (PERSON) INFECTION!
+   - Dump translated English "familiarity" (noun of state: closeness, thorough knowledge, lack of ceremony) as a human acquaintance (person you know):
+     es: "conocido" (an acquaintance / acquaintance person!)
+     fr: "connaissance" (an acquaintance!)
+     it: "conoscente" (an acquaintance person!)
+     pt: "conhecido" (an acquaintance person!)
+     ro: "cunoștință" (an acquaintance person!)
+     lv: "paziņa" (an acquaintance person!)
+     vi: "người quen" (an acquaintance person!)
+     th: "คนรู้จัก" (an acquaintance person!)
+     ko: "지인" (an acquaintance person!)
+     ja: "知り合い" (an acquaintance person!)
+   - Calibrated: Corrected to intimate knowledge, closeness, and overfamiliarity:
+     es: "familiaridad, conocimiento profundo, confianza excesiva",
+     fr: "familiarité, connaissance intime", pl: "poufałość, zaznajomienie, zażyłość",
+     it: "familiarità, confidenza, dimestichezza", pt: "familiaridade, intimidade, conhecimento aprofundado",
+     ro: "familiaritate, intimitate, cunoaștere", lv: "laba pārzināšana, familiārums",
+     vi: "sự quen thuộc, sự thông thạo, thân mật quá trớn", th: "ความคุ้นเคย, ความรู้ความเข้าใจดี",
+     ko: "친숙함, 정통함, 스스럼없음", ja: "親しさ, 熟知, なれなれしさ",
+     zh: "熟悉, 通晓, 亲昵无礼", kk: "жақсы білушілік, етене таныстық, еркінсіну".
+
+8. Word 5668 (prefabricated): COMPOSITE / COMPOUND MATERIAL CONFUSION!
+   - Dump translated English "prefabricated" (manufactured in sections in advance) as "composite / compound":
+     fr: "composite" (composite material!)
+     it: "composito" (composite!)
+     tr: "bileşik" (chemical compound!)
+     pt: "composto" (compound!)
+     ro: "compozit" (composite!)
+     bg: "съставен" (compound / composite!)
+     cs: "složený" (compound!)
+     sk: "zložený" (compound!)
+     hu: "összetett" (complex / composite!)
+     el: "σύνθετος" (composite / compound!)
+     sl: "sestavljen" (compound!)
+     et: "liit-" (compound prefix!)
+     lt: "sudėtinis" (compound!)
+   - Calibrated: Corrected to prefabricated, precast, pre-assembled, modular:
+     fr: "préfabriqué", it: "prefabbricato", tr: "prefabrik, hazır yapı",
+     pt: "pré-fabricado", ro: "prefabricat", bg: "сглобяем, префабрикуван",
+     cs: "montovaný, prefabrikovaný", sk: "montovaný, prefabrikovaný",
+     hu: "előregyártott, paneles", el: "προκατασκευασμένος",
+     sl: "montažen, sestavljen vnaprej", et: "monteeritav, valmiselementidest",
+     lt: "surenkamas, fabrikinės gamybos".
+
+9. Word 5659 (preconceived) and 5671 (prejudiced): KAZAKH ANTONYM CRASH!
+   - In Kazakh, dump had "бейтарап" (neutral, unbiased, impartial) for BOTH preconceived and prejudiced!
+   - This was an inverse meaning catastrophic error.
+   - Calibrated:
+     5659 kk: "алдын ала қалыптасқан, жаңсақ" (formed beforehand, preconceived).
+     5671 kk: "жаңсақ пікірдегі, көзқарасы бұрмаланған" (biased, holding prejudiced views).
+
+10. Word 5663 (predicament): ESTONIAN "PRAISEWORTHY" LEAK!
+    - In Estonian, dump had "kiiduväärt olukord" (praiseworthy situation!) due to cross-contamination from word 5655 (praiseworthy).
+    - Calibrated et: "täbar olukord, kitsikus, ummikseis" (precarious situation, dilemma, impasse).
+
+11. Word 5675 (premier): FINNISH "PRIMEVAL" CONFUSION!
+    - In Finnish, dump had "alkuvoimainen" (primeval, elemental force!).
+    - Calibrated fi: "johtava, ensiluokkainen, pääministeri" (leading, top-tier, prime minister).
+
+12. Word 5684 (presumptuous): CROATIAN "ASSUMED" FALSE FRIEND!
+    - In Croatian, dump had "pretpostavljen" (assumed / presumed / subordinate!).
+    - Calibrated hr: "preuzet, drzak, prepotentan" (audacious, insolent, overstepping boundaries).
+
+13. Word 5698 (fascination): CHARM VS FASCINATION ENTHRALLMENT!
+    - Across ru, uk, de, fr, it, pt, ro, bg, cs, sk, hu, da, sv, hr, lv, dump rendered "fascination" as mere charm ("обаяние", "charme", "kouzlo", "šarm", "báj", "farmec").
+    - Fascination denotes intense captivation, deep wonder, and enthrallment.
+    - Calibrated: ru: "увлечение, очарование, восхищение", uk: "захоплення, зачарування, зачарованість",
+      de: "Faszination, Verzauberung, Begeisterung", es: "fascinación, embrujo, hechizo",
+      fr: "fascination, ravissement, engouement", pl: "fascynacja, zauroczenie, zachwyt",
+      pt: "fascinação, fascínio, deslumbramento", kk: "тамсану, елігу, құмарлық".
+
+All 50 words across all 35 target languages (36 locales total) have been thoroughly audited, verified, and saved to `scripts/apply_batch_5652_5701_calibrations.cjs`.

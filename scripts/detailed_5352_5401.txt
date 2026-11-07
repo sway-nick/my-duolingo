@@ -1,0 +1,171 @@
+Batch 5352-5401 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5352 to 5401) from dump slice 'scripts/dump_5352_5401.json'.
+- Verified parts of speech, polysemy, false friends, homonyms, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5352_5401_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 5401 (smuggle) — Massive "Ferry Boat" Machine Translation Hallucination across 18+ Locales:
+   - Root Cause: Russian pivot "переправлять" (used colloquially in "переправлять через границу" / ferry illicitly across a border) was misinterpreted by machine translation engines across eighteen languages as a literal water ferry boat / ferry transport service!
+   - Key Bugs Fixed:
+     * tr: "feribotla taşımak" (transport by ferry) -> calibrated to "kaçakçılık yapmak, kaçak sokmak, kaçırmak".
+     * bg: "превозвам с ферибот" (transport by ferry) -> calibrated to "пренасям контрабандно, внасям нелегално, шмугля".
+     * sl: "prepeljati s trajektom" (transport by ferry) -> calibrated to "tihotapiti, pretihotapiti, švercati".
+     * et: "parvlaev" (ferry boat - noun!) -> calibrated to "salakaubana vedama, salaja sisse tooma, smugeldama".
+     * lt: "keltas" (ferry boat - noun!) -> calibrated to "kontrabanda gabenti, gabenti nelegaliai, prasmukti".
+     * da: "færge" (ferry boat) -> calibrated to "smugle, indsmugle, smugle over grænsen".
+     * fi: "lautta" (ferry boat - noun!) -> calibrated to "salakuljettaa, salakuljettaa maahan, tuoda laittomasti".
+     * sv: "färja" (ferry boat) -> calibrated to "smuggla, smuggla in, smuggla ut".
+     * hr: "trajekt" (ferry boat - noun!) -> calibrated to "krijumčariti, švercati, ilegalno uvoziti".
+     * lv: "prāmis" (ferry boat - noun!) -> calibrated to "ievest kontrabandas ceļā, nodarboties ar kontrabandu, kontrabandēt".
+     * vi: "phà" (ferry boat) -> calibrated to "buôn lậu, vận chuyển lậu, tuồn hàng lậu".
+     * th: "ข้ามฟาก" (cross river by ferry) -> calibrated to "ลักลอบนำเข้า, ขนของเถื่อน, ลักลอบส่งออก".
+     * ko: "나룻배를 타다" (ride a ferry boat) -> calibrated to "밀수하다, 밀수입하다, 몰래 들여오다".
+     * kk: "паром" (ferry boat - noun!) -> calibrated to "контрабанда жасау, жасырын өткізу, заңсыз тасу".
+     * hu: "komppal megragad" (grab with a ferry) -> calibrated to "csempészik, becsempész, titokban áthoz".
+     * it: "traghettare" (ferry across by boat) -> calibrated to "contrabbandare, trafficare di frodo, introdurre clandestinamente".
+     * ar: "نقل" (just transportation) -> calibrated to "يهرّب، يقوم بالتهريب، يدخل سراً".
+     * pl: "przewozić" (transport) -> calibrated to "przemycać, szmuglować, przewozić ukradkiem".
+     * pt: "transportar" -> calibrated to "contrabandear, traficar, passar clandestinamente".
+     * ru / uk: calibrated to explicit contraband terminology: "провозить контрабандой, заниматься контрабандой, проносить тайно" / "проносити контрабандою, займатися контрабандою, завозити таємно".
+
+2. Word 5391 (sculpt) — "Mold / Fungus / Rot" Homonym Confusion across 11 Locales:
+   - Root Cause: English "sculpt" was linked to "mold" (in the sense of casting/shaping sculptures), which machine translation engines confounded with fungal mold, mildew, and putrefaction!
+   - Key Bugs Fixed:
+     * ar: "تعفن" (rot / putrefy / decompose!) -> calibrated to proper sculpting terminology: "ينحت، يصوغ، يشكّل تمثالاً".
+     * da: "skimmelsvamp" (mold fungus) -> calibrated to "skulpturere, hugge i sten, forme".
+     * fi: "homehtua" (become moldy) -> calibrated to "veistää, muovailla, kuvanveistää".
+     * sv: "mögla" (become moldy) -> calibrated to "skulptera, mejsla, forma".
+     * hr: "plijesan" (mold fungus) -> calibrated to "kipariti, isklesati, modelirati".
+     * lv: "pelējums" (mold/mildew) -> calibrated to "tēlot, veidot skulptūru, kalt".
+     * vi: "mốc" (mold / fungus) -> calibrated to "điêu khắc, tạc tượng, đắp tượng".
+     * th: "เชื้อรา" (mold fungus) -> calibrated to "ปั้น, แกะสลัก, หล่อรูป".
+     * ko: "곰팡이를 피우다" (grow mold!) -> calibrated to "조각하다, 조소하다, 빚다".
+     * ru / uk / others: expanded to complete sculptural terms ("лепить, ваять, высекать" / "ліпити, ліпити скульптуру, висікати").
+
+3. Word 5370 (reside) — "Experience" Polysemy Catastrophe across 22 Locales:
+   - Root Cause: Russian verb "проживать" possesses two primary meanings: 1. reside / dwell somewhere; 2. live through / experience an emotion or trauma. Machine translation picked sense 2 and translated "reside" into 22 languages as "to experience":
+     * pl: "doświadczyć" (experience) -> "zamieszkiwać, rezydować, mieszkać".
+     * it: "sperimentare" (experience/experiment) -> "risiedere, abitare, dimorare".
+     * tr: "deneyimlemek" (experience) -> "ikamet etmek, oturmak, yaşamak".
+     * ro: "experimentează" (experience) -> "a locui, a domicilia, a rezida".
+     * bg: "преживявам" (experience) -> "живея, обитавам, пребивавам".
+     * cs: "zažít" (experience) -> "sídlit, bydlet, pobývat".
+     * sk: "zažiť" (experience) -> "bývať, sídliť, zdržiavať sa".
+     * hu: "megtapasztal" (experience) -> "lakik, él, székel".
+     * el: "εμπειρία" (noun: experience) -> "κατοικώ, διαμένω, εδρεύω".
+     * sl: "izkusiti" (experience) -> "prebivati, stanovati, imeti sedež".
+     * et: "kogema" (experience) -> "elama, elunema, asuma".
+     * lt: "patirti" (experience) -> "gyventi, reziduoti, apsigyventi".
+     * da: "opleve" (experience) -> "bo, have bopæl, residere".
+     * fi: "kokea" (experience) -> "asua, oleskella, majailla".
+     * sv: "uppleva" (experience) -> "bo, ha sin hemvist, residera".
+     * hr: "iskusiti" (experience) -> "boraviti, stanovati, prebivati".
+     * lv: "piedzīvot" (experience) -> "dzīvot, mitināties, rezidēt".
+     * ar: "تجربة" (noun: experiment/experience) -> "يقيم، يقطن، يسكن".
+     * vi: "trải nghiệm" (experience) -> "cư trú, trú ngụ, định cư".
+     * th: "ประสบการณ์" (noun: experience) -> "อยู่อาศัย, พำนัก, สถิต".
+     * ko: "경험하다" (experience) -> "거주하다, 살다, 머무르다".
+     * ja: "経験する" (experience) -> "居住する、住む、駐在する".
+
+4. Word 5357 (remit) — "Translate Languages" Pivot Polysemy Disaster across 23 Locales:
+   - Root Cause: Russian pivot "переводить" means both "to transfer/remit money" and "to translate languages". Twenty-three languages translated "remit" as translating languages:
+     * uk: "перекладати" -> "переказувати (гроші), прощати, скасовувати; повноваження".
+     * it: "tradurre" -> "rimettere, trasferire (denaro), condonare; sfera di competenza".
+     * tr: "çevirmek" -> "para havale etmek, borcu bağışlamak; yetki alanı, görev".
+     * ro: "traduce" -> "a trimite (bani), a transfera, a anula (o datorie); arie de competență".
+     * bg: "превод" -> "превеждам (пари), опрощавам; обхват на компетенции".
+     * cs: "překládat" -> "poukázat (peníze), odpustit (trest/dluh); rozsah působnosti, pravomoc".
+     * sk: "preložiť" -> "poukázať (peniaze), odpustiť (trest/dlh); rozsah právomocí".
+     * hu: "fordítani" -> "átutal (pénzt), elenged (tartozást); hatáskör, megbízatás".
+     * el: "μετάφραση" -> "εμβάζω (χρήματα), διαγράφω (χρέος); αρμοδιότητα, εντολή".
+     * sl: "prevesti" -> "nakazati (denar), odpustiti (dolg); pristojnost, področje delovanja".
+     * et: "tõlkima" -> "raha üle kandma, võlga kustutama; pädevus, tegevusvaldkond".
+     * lt: "versti" -> "pervesti (pinigus), atleisti (skolą); kompetencijos sritis".
+     * da: "oversætte" -> "overføre (penge), eftergive (straf/gæld); kommissorium, ansvarsområde".
+     * fi: "kääntää" -> "maksaa, siirtää rahaa, antaa anteeksi; toimivalta, tehtävänkuva".
+     * sv: "översätta" -> "överföra (pengar), efterskänka; ansvarsområde, befogenhet".
+     * hr: "prevesti" -> "doznačiti (novac), oprostiti (dug); nadležnost, djelokrug".
+     * lv: "tulkot" -> "pārskaitīt (naudu), dzēst (parādu); kompetences joma".
+     * ar: "ترجمة" -> "يحوّل أموالاً، يُسقط عقوبة، صلاحية أو اختصاص".
+     * vi: "dịch" -> "chuyển tiền, miễn giảm (nợ/hình phạt), thẩm quyền".
+     * th: "แปล" -> "โอนเงิน, ยกเว้นโทษ, ขอบเขตหน้าที่".
+     * ko: "번역하다" -> "송금하다, 면제하다, 권한 범위".
+     * ja: "翻訳する" -> "送金する、免除する、所管事項".
+     * kk: "аудару" -> "ақша аудару, кешіру (борышты), өкілеттік саласы".
+
+5. Word 5376 (salvage) — Theological "Salvation of Soul" Mistranslation across 18 Locales:
+   - Root Cause: Commercial / maritime "salvage" (recovery of wrecked ships, damaged cargo, salvage scrap) was conflated with theological salvation / spiritual deliverance:
+     * pl: "zbawienie" (salvation of soul by Christ!) -> "ratowanie mienia, wydobycie wraku; ocalić mienie, wydobyć".
+     * fr: "salut" (theological salvation) -> "sauvetage de biens, récupération; récupérer, sauver des décombres".
+     * pt: "salvação" (spiritual salvation) -> "salvamento de carga, resgate de bens; recuperar, salvar do naufrágio".
+     * it: "salvezza" (salvation) -> "salvataggio di beni, recupero di relitto; recuperare".
+     * cs / sk: "spása" (theological salvation) -> "záchrana majetku, vyproštění vraku; zachránit majetek".
+     * hu: "megváltás" (redemption by Christ!) -> "mentés (roncsé/vagyoné); megment, kiment".
+     * el: "σωτηρία" (spiritual salvation) -> "διάσωση ναυαγίου, ανάσυρση φορτίου; διασώζω".
+     * sl: "odrešitev" (theological redemption) -> "reševanje blaga, rešitev tovora; rešiti tovor".
+     * da: "frelse" (theological salvation) -> "bjærgning, redning af vrag; bjærge, redde".
+     * sv: "frälsning" (theological salvation) -> "bärgning, räddning av egendom; bärga".
+     * lv: "pestīšana" (theological salvation) -> "glābšana (kuģa/kravas); izglābt mantu, izcelt vraku".
+     * ar: "خلاص" (spiritual deliverance) -> "إنقاذ الحطام، انتشال البضائع؛ ينتشل، ينقذ ممتلكات".
+     * vi: "cứu rỗi" (theological salvation) -> "trục vớt, cứu hộ hàng hóa; cứu vãn, tận dụng lại".
+     * th: "ความรอด" (Christian salvation) -> "การกู้ซากเรือ, การกู้ภัยทรัพย์สิน; กู้ซาก, กู้ภัย".
+     * ko: "구원" (spiritual salvation) -> "인양, 난파선 구조; 인양하다, 구조하다".
+     * ja: "救済" (spiritual relief) -> "引き揚げ、沈没船救助；回収する、引き揚げる".
+     * hr: "spasenje" (theological salvation) -> "spašavanje imovine, izvlačenje olupine; spasiti imovinu".
+
+6. Word 5385 (scour) — "Lurk / Ambush / Stalk" Confusion across 13 Locales:
+   - Root Cause: Russian pivot "рыскать" (roam / scour in search of something) led machine translation engines to confuse scouring with lurking / stalking in ambush:
+     * pl: "czaić się" (lurk) -> "przetrząsać, przeszukiwać; szorować, czyścić".
+     * it: "aggirarsi furtivamente" (prowl furtively) -> "perlustrare, setacciare; strofinare, sgrassare".
+     * tr: "sinsice dolaşmak" (sneak around) -> "altını üstüne getirmek, didik didik aramak; ovalamak, ovmak".
+     * ro: "a pândi" (lie in ambush) -> "a cerceta amănunțit, a scotoci; a freca, a curăța".
+     * bg: "дебна" (stalk) -> "претърсвам, обхождам подробно; излъсквам, търкам".
+     * cs: "plížit se" (creep/sneak) -> "pročesávat, prohledávat; drhnout, čistit".
+     * sk: "sliediť sa" (skulk) -> "prečesávať, prehľadávať; drhnúť, vyčistiť".
+     * hu: "lesben áll" (lie in wait) -> "átfésül, alaposan átkutat; súrol, dörzsöl".
+     * sl: "prežiti" (lie in ambush) -> "prečesati, temeljito preiskati; zdrgniti, očistiti".
+     * et: "luurama" (spy/lurk) -> "läbi kammima, läbi otsima; küürima, hõõruma".
+     * lt: "sėlinti" (sneak) -> "išnaršyti, atidžiai apieškoti; šveisti, trinti".
+     * kk: "қырқу" (shear sheep!) -> "бәрін тінтіп шығу, барлық жерді шарлау; қатты ысқылау".
+
+7. Word 5356 (reminisce) — Product/Diplomatic Recall and Phone Callback Confusion:
+   - In 7 locales, MT mistook "reminisce" for "recall" (product recall, diplomatic recall, phone callback):
+     * cs: "odvolání" (recall of ambassador / legal appeal) -> "vzpomínat, oddávat se vzpomínkám".
+     * hu: "visszahívás" (phone callback!) -> "nosztalgiázik, felidézi az emlékeket".
+     * el: "ανάκληση" (product recall / revocation) -> "αναπολώ, φέρνω στη μνήμη, θυμάμαι με νοσταλγία".
+     * sl: "odpoklic" (recall of politician) -> "obujati spomine, spominjati se preteklosti".
+     * et: "tagasikutsumine" (product recall) -> "meenutama, mälestusi heietama".
+     * ro: "rechemare" (product recall) -> "a-și aminti cu nostalgie, a depăna amintiri".
+     * it: "richiamo" (noun: call back / recall) -> "ricordare con nostalgia, evocare ricordi, rimembrare".
+
+8. Word 5352 (relegate) — "Lower / Bottom" Comparative Adjective/Adverb Mistranslation:
+   - Relegate was translated as comparative "lower" (pl: "niżej", it: "inferiore", tr: "daha düşük", ro: "mai jos", bg: "по-ниска", cs: "spodní", sk: "nižšie", hu: "alacsonyabb", el: "χαμηλότερος", sl: "nižje", et: "madalam", lt: "apatinis", kk: "азайту").
+   - Calibrated properly across all 35 languages to verb "demote / banish / relegate to a lower division" (e.g. pt-BR: "relegar, rebaixar, despromover"; es: "relegar, descender de categoría, degradar").
+
+9. Word 5354 (relinquish) — "Garbage / Trash" Total Mistranslation:
+   - Hungarian: "hulladék" (garbage/trash!) and Greek: "απορρίμματα" (garbage/refuse!) mistook refuse (rubbish) for refuse/relinquish.
+   - Calibrated to: hu: "lemond vmiről, átenged, felad"; el: "παραιτούμαι, εγκαταλείπω, παραδίδω".
+
+10. Word 5384 (scorn) — German "Burn / Scorch" Copy-Paste Artifact:
+    - German had "verbrennen, versengen" (machine translation copied 5383 scorch into 5384 scorn!).
+    - Fixed to: "Verachtung, Hohn; verschmähen, verachten".
+
+11. Word 5400 (smother) vs Strangle / Choke Nuance:
+    - Smother is suffocating by obstruction of airway (pillow) or cutting oxygen from fire/emotions. The dump translated this as literal strangulation with hands across 9 languages (DE: erwürgen, FR: étrangler, PT: estrangular, IT: strangolare, EL: στραγγαλίζω, ET: kägistama, SV: strypa, CS: škrtit, SK: škrtiť). Calibrated to precise suffocation/asphyxiation/smothering terminology across all locales (e.g., pt: "sufocar, abafar, apagar (fogo); reprimir", de: "ersticken, die Luft abschnüren, ersticken (Feuer); unterdrücken").
+
+12. Word 5379 (scavenge) — Literal Garbage Collector Mistranslation:
+    - Dump translated "scavenge" simply as municipal trash collection ("müll sammeln", "recoger basura", "coletar lixo", "raccogliere la spazzatura").
+    - Calibrated to true zoological and material scavenging: feeding on carrion, foraging through discarded waste, scouring for usable items (e.g., de: "Aas fressen, im Müll wühlen, nach Verwertbarem suchen"; pt-BR: "catar lixo, alimentar-se de carniça, garimpar restos"; es: "hurgar en la basura, buscar carroña, rebuscar").
+
+13. Word 5394 (secrete) — Glandular Secretion vs Concealment Dual Polysemy:
+    - Captured both physiological secretion (glandular release) and concealment (hiding away treasures / secret stashing) across all locales.
+
+14. Word 5399 (verbs) & German Capitalization / Grammar:
+    - Standardized German "verben" -> "Verben, Zeitwörter" (capitalized).
+    - German nouns capitalized across all 50 entries (e.g. Würzsoße, Beilage, Aufgabenbereich, Zuständigkeit, Narbe, Schaufel, Kugel, Exklusivmeldung, Verachtung, Hohn, Handgemenge, Rauferei, Gerangel, Suchen, Fahndung, Verben, Zeitwörter).
+    - Arabic verbs and nouns stripped of spurious prefixes and calibrated to standard dictionary citation forms.

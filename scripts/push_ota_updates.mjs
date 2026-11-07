@@ -938,7 +938,47 @@ async function run() {
 
     // Batch 5302-5351
     { id: 5302, word: 'concealment', lang: 'es', expected: 'ocultamiento, encubrimiento, camuflaje' },
-    { id: 5337, word: 'behold beheld beheld', lang: 'de', expected: 'erblicken, schauen, gewahr werden' }
+    { id: 5337, word: 'behold beheld beheld', lang: 'de', expected: 'erblicken, schauen, gewahr werden' },
+
+    // Batch 5352-5401
+    { id: 5401, word: 'smuggle', lang: 'de', expected: 'schmuggeln, einschmuggeln, herausschmuggeln' },
+    { id: 5376, word: 'salvage', lang: 'pl', expected: 'ratowanie mienia, wydobycie wraku; ocalić mienie, wydobyć' },
+
+    // Batch 5402-5451
+    { id: 5407, word: 'span', lang: 'pt', expected: 'abranger, estender-se por, cruzar' },
+    { id: 5421, word: 'stall', lang: 'fr', expected: 'caler, tergiverser, bloquer' },
+
+    // Batch 5452-5501
+    { id: 5485, word: 'abrogate', lang: 'de', expected: 'aufheben, für nichtig erklären, außer Kraft setzen' },
+    { id: 5496, word: 'acquit', lang: 'it', expected: 'assolvere, scagionare, dichiarare non colpevole' },
+
+    // Batch 5502-5551
+    { id: 5514, word: 'amortize', lang: 'lt', expected: 'amortizuoti, išmokėti dalimis' },
+    { id: 5531, word: 'allege', lang: 'fr', expected: 'alléguer, prétendre, arguer' },
+
+    // Batch 5552-5601
+    { id: 5552, word: 'assent', lang: 'de', expected: 'Zustimmung, zustimmen, einwilligen' },
+    { id: 5601, word: 'perishable', lang: 'de', expected: 'leicht verderblich, vergänglich, hinfällig' },
+
+    // Batch 5602-5651
+    { id: 5607, word: 'perquisite', lang: 'ru', expected: 'привилегия, служебная льгота, дополнительное благо' },
+    { id: 5645, word: 'politic', lang: 'de', expected: 'klug, umsichtig, wohlüberlegt' },
+
+    // Batch 5652-5701
+    { id: 5697, word: 'fare', lang: 'cs', expected: 'jízdné, tarif dopravy' },
+    { id: 5695, word: 'famine', lang: 'de', expected: 'Hungersnot, Massenhunger' },
+
+    // Batch 5702-5751
+    { id: 5746, word: 'forte', lang: 'de', expected: 'Stärke, Spezialität, Paradedisziplin, Forte (laut)' },
+    { id: 5715, word: 'filament', lang: 'pt', expected: 'filamento, fio incandescente, fibra' },
+
+    // Batch 5752-5801
+    { id: 5798, word: 'guile', lang: 'fr', expected: 'ruse, fourberie, artifice' },
+    { id: 5791, word: 'gamut', lang: 'de', expected: 'Tonleiter, Spektrum, ganze Bandbreite' },
+
+    // Batch 5802-5851
+    { id: 5808, word: 'fulminate', lang: 'ru', expected: 'громить, метать громы и молнии, бурно протестовать, взрываться' },
+    { id: 5803, word: 'castigate', lang: 'de', expected: 'züchtigen, scharf kritisieren, maßregeln' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -959,21 +999,21 @@ async function run() {
     return require(filePath);
   }
 
-  // Batches 1 to 97 (words 1-4851) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-97 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 98-107 (words 4852-5351, 498 words)
+  // Batches 1 to 107 (words 1-5351) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-107 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 108-117 (words 5352-5851, 498 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_4852_4901_calibrations.cjs',
-    'apply_batch_4902_4951_calibrations.cjs',
-    'apply_batch_4952_5001_calibrations.cjs',
-    'apply_batch_5002_5051_calibrations.cjs',
-    'apply_batch_5052_5101_calibrations.cjs',
-    'apply_batch_5102_5151_calibrations.cjs',
-    'apply_batch_5152_5201_calibrations.cjs',
-    'apply_batch_5202_5251_calibrations.cjs',
-    'apply_batch_5252_5301_calibrations.cjs',
-    'apply_batch_5302_5351_calibrations.cjs'
+    'apply_batch_5352_5401_calibrations.cjs',
+    'apply_batch_5402_5451_calibrations.cjs',
+    'apply_batch_5452_5501_calibrations.cjs',
+    'apply_batch_5502_5551_calibrations.cjs',
+    'apply_batch_5552_5601_calibrations.cjs',
+    'apply_batch_5602_5651_calibrations.cjs',
+    'apply_batch_5652_5701_calibrations.cjs',
+    'apply_batch_5702_5751_calibrations.cjs',
+    'apply_batch_5752_5801_calibrations.cjs',
+    'apply_batch_5802_5851_calibrations.cjs'
   ];
 
   let mergedCount = 0;

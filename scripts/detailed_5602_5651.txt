@@ -1,0 +1,223 @@
+Batch 5602-5651 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5602 to 5651) from dump slice 'scripts/dump_5602_5651.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5602_5651_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 5603 (permeable) - "Permeable" vs "Penetrating / Piercing":
+   - The dump had a massive false-sense substitution across 14+ languages, confusing physical permeability (allowing liquids/gases to pass through) with "penetrating/piercing/insightful":
+     * fr: "pénétrant" -> calibrated to "perméable, pénétrable".
+     * it: "penetrante" -> calibrated to "permeabile, penetrabile".
+     * pt (pt-BR): "penetrante" -> calibrated to "permeável, penetrável".
+     * ro: "pătrunzător" -> calibrated to "permeabil, penetrabil".
+     * bg: "проницателен" (insightful?!) -> calibrated to "пропусклив, проницаем".
+     * cs: "pronikavý" -> calibrated to "propustný, permeabilní".
+     * sk: "prenikavý" -> calibrated to "priepustný, permeabilný".
+     * hu: "átható" -> calibrated to "áteresztő, átjárható".
+     * el: "διεισδυτικός" -> calibrated to "διαπερατός, πορώδης".
+     * sl: "prodoren" -> calibrated to "prepusten, permeabilen".
+     * et: "läbitungiv" -> calibrated to "läbilaskev, läbitav".
+     * lt: "skvarbus" -> calibrated to "pralaidus, persismelkiantis".
+     * hr: "prodoran" -> calibrated to "propusan, permeabilan".
+     * lv: "caururbjams" -> calibrated to "caurlaidīgs, caurspīdīgs".
+
+2. Word 5607 (perquisite) - Massive Part-of-Speech Failure ("Perquisite" vs "Privileged"):
+   - The dump mistook noun "perquisite" (an employee perk, fringe benefit, customary privilege) for the adjective "privileged" across virtually all target languages:
+     * ru: "привилегированный" -> calibrated to noun: "привилегия, служебная льгота, дополнительное благо".
+     * uk: "привілейований" -> calibrated to noun: "пільга, привілей, додаткова вигода".
+     * fr: "privilégié" -> calibrated to noun: "avantage accessoire, privilège, gratification".
+     * it: "privilegiato" -> calibrated to noun: "gratifica, indennità, beneficio accessorio".
+     * tr: "ayrıcalıklı" -> calibrated to noun: "ek hak, menfaat, ayrıcalık".
+     * pt (pt-BR): "privilegiado" -> calibrated to noun: "regalia, benefício extra, vantagem".
+     * ro: "privilegiat" -> calibrated to noun: "beneficiu suplimentar, privilegiu, spor".
+     * bg: "привилегирован" -> calibrated to noun: "допълнителна придобивка, привилегия".
+     * cs: "privilegovaný" -> calibrated to noun: "vedlejší požitek, zaměstnanecká výhoda".
+     * sk: "privilegovaný" -> calibrated to noun: "vedľajší požitok, zamestnanecká výhoda".
+     * hu: "kiváltságos" -> calibrated to noun: "mellékjövedelem, juttatás, előjog".
+     * el: "προνομιούχος" -> calibrated to noun: "πρόσθετη παροχή, προνόμιο, επίδομα".
+     * sl: "privilegiran" -> calibrated to noun: "dodatna ugodnost, boniteta, ugodnost".
+     * et: "privilegeeritud" -> calibrated to noun: "lisatasu, erisoodustus, lisahüve".
+     * lt: "privilegijuotas" -> calibrated to noun: "papildoma nauda, privilegija, priedas".
+     * da: "privilegeret" -> calibrated to noun: "frynsegode, ekstra fordel, forret".
+     * fi: "etuoikeutettu" -> calibrated to noun: "luontoisetu, lisäetu, erioikeus".
+     * sv: "privilegierad" -> calibrated to noun: "löneförmån, förmån, extra förmån".
+     * hr: "povlašten" -> calibrated to noun: "povlastica, dodatna pogodnost, beneficij".
+     * lv: "priviliģēts" -> calibrated to noun: "papildu ienākums, priekšrocība, bonuss".
+     * ko: "특권적인" -> calibrated to noun: "부수 수입, 특전, 직무상 특권".
+     * ja: "特権的な" -> calibrated to noun: "役得、臨時収入、特権".
+     * th: "มีสิทธิพิเศษ" -> calibrated to noun: "ผลประโยชน์ตอบแทนพิเศษ, สิทธิพิเศษ".
+     * kk: "артықшылықты" -> calibrated to noun: "қосымша табыс, артықшылық, қызметтік жеңілдік".
+
+3. Word 5611 (perspicuous) - Classic False Friend with "Perspicacious":
+   - "Perspicacious" means acute, keen-witted, discerning.
+   - "Perspicuous" means clearly expressed, lucid, plain to the understanding, easily understood.
+   - The dump fell into this false friend trap across almost every language:
+     * ru: "проницательный" -> calibrated to "ясный, понятный, вразумительный".
+     * uk: "проникливий" -> calibrated to "ясний, чіткий, зрозумілий".
+     * fr: "clairvoyant" -> calibrated to "clair, limpide, intelligible".
+     * it: "intuitivo" -> calibrated to "chiaro, limpido, comprensibile".
+     * tr: "algılayıcı" -> calibrated to "açık, anlaşılır, sarih".
+     * pt: "perceptivo" -> calibrated to "claro, lúcido, inteligível".
+     * ro: "perceptiv" -> calibrated to "clar, inteligibil, limpede".
+     * bg: "проницателен" -> calibrated to "ясен, прегледен, разбираем".
+     * cs: "vnímavý" -> calibrated to "jasný, srozumitelný, zřetelný".
+     * sk: "vnímavý" -> calibrated to "jasný, zrozumiteľný, zreteľný".
+     * hu: "érzékeny" -> calibrated to "világos, egyértelmű, könnyen érthető".
+     * el: "διορατικός" -> calibrated to "ευκρινής, διαυγής, σαφής".
+     * sl: "pronicljiv" -> calibrated to "jasen, razumljiv, razločen".
+     * et: "läbinägelik" -> calibrated to "selge, arusaadav, selgesõnaline".
+     * lt: "įžvalgus" -> calibrated to "aiškus, suprantamas, vaizdus".
+     * da: "skarpsindig" -> calibrated to "letfattelig, klar, tydelig".
+     * fi: "tarkkanäköinen" -> calibrated to "selkeä, ymmärrettävä, kirkas".
+     * sv: "skarpsinnig" -> calibrated to "lättfattlig, klar, tydlig".
+     * hr: "pronicljiv" -> calibrated to "jasan, razgovijetan, razumljiv".
+     * lv: "uztverīgs" -> calibrated to "skaidrs, saprotams, nepārprotams".
+     * ar: "فطن" -> calibrated to "واضح، جلي، بَيّن".
+     * vi: "tinh ý" -> calibrated to "rõ ràng, mạch lạc, dễ hiểu".
+     * th: "ช่างสังเกต" -> calibrated to "ชัดเจน, กระจ่าง, เข้าใจง่าย".
+     * ko: "예리한" -> calibrated to "명쾌한, 명료한, 알기 쉬운".
+     * ja: "鋭敏な" -> calibrated to "明快な、明瞭な、わかりやすい".
+
+4. Word 5620 (phlegmatic) - Part of Speech Standardization:
+   - Russian ("флегматик") and Ukrainian ("флегматик") were nouns instead of the adjective corresponding to "phlegmatic".
+   - Standardized to adjectives: "флегматичный, невозмутимый, хладнокровный" and "флегматичний, незворушний, холоднокровний".
+
+5. Word 5623 (piercing) - Homonym / Body Modification Confusion:
+   - The dump confused adjective "piercing" (shrill, biting, penetrating cold/sound) with the noun "piercing" (body piercing):
+     * ru: "пирсинг" -> "пронзительный, пронизывающий, резкий"
+     * uk: "пірсинг" -> "пронизливий, різкий, проникливий"
+     * id: "tindik, penindikan" -> "menusuk, tajam menyengat, melengking"
+     * bn: "ছিদ্র করা" -> "মর্মভেদী, তীক্ষ্ণ, কানফাটা"
+     * zh: "刺穿、尖锐的" -> "尖锐的、刺骨的、刺耳的"
+
+6. Word 5627 (pivotal) - "Turning Point / Crucial" vs "Decisive / Resolute Person":
+   - Over 15 languages translated "pivotal" as "resolute, determined" (as in a decisive person) instead of "crucial, serving as a pivot/turning point":
+     * cs: "rozhodný" -> "klíčový, stěžejní, přelomový"
+     * sk: "rozhodný" -> "kľúčový, ťažiskový, zlomový"
+     * hu: "határozott" -> "kulcsfontosságú, sorsdöntő, sarokponti"
+     * el: "αποφασιστικός" -> "κομβικός, καθοριστικός, κρίσιμος"
+     * sl: "odločen" -> "ključen, odločilen, bistven"
+     * lt: "ryžtingas" -> "lemiamas, kertinis, esminis"
+     * fi: "päättäväinen" -> "keskeinen, ratkaiseva, käänteentekevä"
+     * sv: "beslutsam" -> "avgörande, central, kardinal"
+     * hr: "odlučan" -> "ključan, presudan, prijeloman"
+     * lv: "izlēmīgs" -> "izšķirošs, centrāls, kardināls"
+     * vi: "quyết đoán" -> "then chốt, mang tính chất quyết định"
+     * th: "เด็ดขาด" -> "เป็นจุดศูนย์กลาง, สำคัญยิ่ง, เป็นจุดเปลี่ยน"
+     * ko: "단호한" -> "극히 중요한, 중추적인, 회전축의"
+     * ja: "決断力のある" -> "極めて重要な、旋回軸となる、要となる"
+
+7. Word 5633 (plenary) - Truncation to "Plenary Session":
+   - Standalone adjective "plenary" (complete, entire, attended by all members) was narrowed to the noun phrase "plenary session":
+     * da: "plenarmøde" -> "plenar-, fuldstændig, uindskrænket"
+     * fi: "täysistunto" -> "täysivaltainen, täysistunto-, ehdoton"
+     * sv: "plenarsession" -> "fulltalig, plenar-, oinskränkt"
+     * hr: "plenarna sjednica" -> "plenaran, cjelovit, sveobuhvatan"
+     * lv: "plenārsesija" -> "plenārs, pilns, neierobežots"
+     * hi: "पूर्ण सत्र" -> "पूर्ण, समग्र, सर्वाधिकारयुक्त"
+     * ar: "جلسة عامة" -> "كامل، عام، غير مقيد"
+     * id: "sidang pleno" -> "paripurna, lengkap, penuh"
+     * vi: "phiên họp toàn thể" -> "toàn thể, tuyệt đối, đầy đủ"
+     * th: "การประชุมเต็มคณะ" -> "ครบองค์ประชุม, สมบูรณ์, ไม่มีข้อจำกัด"
+     * ko: "본회의" -> "전원 출석의, 총회의, 완전한"
+     * ja: "全体会議" -> "総会の、全員出席の、完全な"
+     * bn: "পূর্ণাঙ্গ অধিবেশন" -> "পূর্ণাঙ্গ, সর্বজনীন, সীমাহীন"
+     * kk: "пленарлық отырыс" -> "пленарлық, толық құрамды, шексіз"
+
+8. Word 5637 (plummet) - Part of Speech (Noun/Participle vs Active Verb):
+   - In multiple languages, the verb "plummet" (to plunge steeply, drop sharply) was entered as a noun ("fall/drop") or participle:
+     * it: "caduta" -> calibrated to verb: "crollare, precipitare, colare a picco".
+     * pt: "queda" -> calibrated to verb: "despencar, cair a pique, desabar".
+     * ro: "cădere" -> calibrated to verb: "a se prăbuși, a cădea vertiginos".
+     * hu: "bukás" -> calibrated to verb: "zuhanni, meredeken esni, lezuhanni".
+     * el: "πτώση" -> calibrated to verb: "γκρεμίζομαι, πέφτω κατακόρυφα".
+     * sl: "padec" -> calibrated to verb: "strmoglaviti, pasti navzdol, zgrmeti".
+     * bg: "падащ" -> calibrated to verb: "сривам се, падам главоломно".
+     * cs: "padající" -> calibrated to verb: "prudce klesnout, zřítit se, padat střemhlav".
+     * sk: "padajúci" -> calibrated to verb: "prudko klesnúť, zrútiť sa, strmhlav padať".
+
+9. Word 5640 (poignant) - Catastrophic "Sharp / Pointed" Machine Translation Bug:
+   - Poignant in English means evoking a keen sense of sadness, deeply touching, heart-rending, or bittersweet.
+   - Almost the entire dump translated poignant literally as a sharp needle or knife!
+     * ru: "острый" -> "пронзительный, щемящий, трогательный"
+     * uk: "гострий" -> "пронизливий, щемливий, зворушливий"
+     * fr: "pointu" (pointed?!) -> "poignant, émouvant, déchirant"
+     * it: "acuto" -> "toccante, commovente, straziante"
+     * tr: "keskin" -> "dokunaklı, yürek burkan, acı"
+     * pt: "afiado" (sharp blade?!) -> "comovente, pungente, emocionante"
+     * ro: "ascuțit" -> "sfâșietor, emoționant, mișcător"
+     * bg: "остър" -> "покъртителен, трогателен, прочувствен"
+     * cs: "ostrý" -> "dojemný, jímavý, trpký"
+     * sk: "ostrý" -> "dojímavý, bolestný, precítený"
+     * hu: "éles" -> "szívbemarkoló, megrendítő, fájó"
+     * el: "αιχμηρός" -> "συγκινητικός, σπαρακτικός, δριμύς"
+     * sl: "oster" -> "ganljiv, pretresljiv, bridak"
+     * et: "terav" -> "südantlõhestav, liigutav, hingeminev"
+     * lt: "aštrus" -> "jaudinantis, graudus, veriantis"
+     * da: "skarp" -> "gribende, rørende, hjerteskærende"
+     * fi: "terävä" -> "koskettava, riipaiseva, pistävä"
+     * sv: "skarp" -> "gripande, smärtsam, djupt rörande"
+     * hr: "oštar" -> "dirljiv, potresan, bolan"
+     * lv: "ass" -> "aizkustinošs, sāpīgs, sirdi plosošs"
+     * hi: "तीक्ष्ण" -> "हृदयस्पर्शी, मर्मस्पर्शी, दर्दनाक"
+     * ar: "حاد" -> "مؤثر، مبكٍ، يدمي القلب"
+     * id: "tajam" -> "mengharukan, menyentuh hati, memilukan"
+     * vi: "sắc bén" -> "chua xót, thấm thía, làm đau lòng"
+     * th: "คม" -> "กินใจ, บาดอารมณ์, สะเทือนอารมณ์"
+     * ko: "날카로운" -> "가슴에 사무치는, 애절한, 통렬한"
+     * ja: "鋭い" -> "胸に迫る、切実な、痛切な"
+     * bn: "তীব্র" -> "মর্মস্পর্শী, হৃদয়বিদারক, বেদনার্ত"
+     * kk: "өткір" -> "жан тебірентерлік, жүрекке тиетін, әсерлі"
+
+10. Word 5642 (poised) - "Prefabricated / Ready-Made" Bizarre Hallucination:
+    - Dump translated "poised" (composed, self-assured, gracefully positioned, ready to act) as "pre-packaged / ready-made":
+      * fr: "tout fait" -> "plein d'assurance, posé, paré"
+      * it: "preconfezionato" -> "sicuro di sé, equilibrato, pronto"
+      * ro: "gata făcut" -> "stăpân pe sine, echilibrat, pregătit"
+      * cs: "hotový" -> "vyrovnaný, suverénní, nachystaný"
+      * sk: "hotový" -> "vyrovnaný, sebavedomý, nachystaný"
+
+11. Word 5645 (politic) - Huge False Friend Trap ("Politic" vs "Political"):
+    - "Politic" means prudent, wise, expedient, diplomatic, sagacious.
+    - "Political" relates to politics and government.
+    - In 32 out of 35 languages, the dump mistakenly translated "politic" as "political":
+      * ru: "политический" -> calibrated to "благоразумный, рассудительный, дипломатичный".
+      * uk: "політичний" -> calibrated to "розсудливий, обачний, проникливий".
+      * de: "politisch" -> calibrated to "klug, umsichtig, wohlüberlegt".
+      * es: "político" -> calibrated to "prudente, juicioso, diplomático".
+      * fr: "politique" -> calibrated to "avisé, prudent, diplomatique".
+      * it: "politico" -> calibrated to "accorto, prudente, giudizioso".
+      * tr: "politik" -> calibrated to "tedbirli, ihtiyatlı, akıllıca".
+      * pt (pt-BR): "político" -> calibrated to "prudente, diplomático, sagaz".
+      * ro: "politic" -> calibrated to "prudent, înțelept, chibzuit".
+      * bg: "политически" -> calibrated to "благоразумен, предвидлив, тактичен".
+      * cs: "politický" -> calibrated to "prozíravý, taktní, diplomatický".
+      * sk: "politický" -> calibrated to "prozíravý, taktný, rozvážny".
+      * hu: "politikai" -> calibrated to "körültekintő, okos, megfontolt".
+      * el: "πολιτικός" -> calibrated to "σώφρων, συνετός, διπλωματικός".
+      * sl: "političen" -> calibrated to "preudaren, diplomatski, pameten".
+      * et: "poliitiline" -> calibrated to "mõistlik, ettenägelik, diplomaatiline".
+      * lt: "politinis" -> calibrated to "apdairus, įžvalgus, diplomatiškas".
+      * da: "politisk" -> calibrated to "klog, fornuftig, hensigtsmæssig".
+      * fi: "poliittinen" -> calibrated to "viisas, tarkkaavainen, diplomaattinen".
+      * sv: "politisk" -> calibrated to "klok, taktisk, diplomatisk".
+      * hr: "politički" -> calibrated to "promišljen, razborit, taktičan".
+      * lv: "politisks" -> calibrated to "apdomīgs, tālredzīgs, prātīgs".
+      * hi: "राजनीतिक" -> calibrated to "विवेकपूर्ण, नीतिपूर्ण, बुद्धिमत्तापूर्ण".
+      * ar: "سياسي" -> calibrated to "حكيم، حصيف، ديبلوماسي".
+      * vi: "chính trị" -> calibrated to "khôn ngoan, thận trọng, sắc sảo".
+      * th: "ทางการเมือง" -> calibrated to "รอบคอบ, ฉลาดหลักแหลม, มีชั้นเชิง".
+      * ko: "정치적인" -> calibrated to "현명한, 사려 깊은, 책략적인".
+      * ja: "政治的な" -> calibrated to "賢明な、思慮深い、得策の".
+      * bn: "রাজনৈতিক" -> calibrated to "বিচক্ষণ, সুবিবেচক, কূটবুদ্ধিসম্পন্ন".
+      * kk: "саяси" -> calibrated to "парасатты, ақылға қонымды, дипломатиялық".
+
+12. Word 5651 (portentous) - "Ominous / Foreboding" vs "Important / Significant":
+    - Portentous primarily means ominous, threatening, giving sign of evil/disaster.
+    - 25+ locales in the dump translated it simply as "significant/important" (знаменательный, significativo, önemli, jelentős, märkimisväärne, etc.).
+    - Calibrated to ominous, foreboding: зловещий, грозный, unheilvoll, aciago, de mauvais augure, infausto, uğursuz, agourento, baljós, δυσοίωνος, zlovešč, kurjakuulutav, pahaenteinen, olycksbådande, zloslutan, مشؤوم, شوم, منحوس, etc.

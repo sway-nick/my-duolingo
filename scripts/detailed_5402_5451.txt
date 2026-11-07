@@ -1,0 +1,217 @@
+Batch 5402-5451 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5402 to 5451) from dump slice 'scripts/dump_5402_5451.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5402_5451_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5402 (snatch):
+   - Machine translation provided narrow single-sense translation (ru: "вырвать").
+   - Expanded across all 35 languages to encompass rapid physical snatching/grabbing, sudden seizure, and colloquial kidnapping/theft.
+   - Calibrated natural verbal forms: es: "arrebatar, quitar, agarrar", pt: "arrebatar, agarrar, puxar bruscamente", fr: "arracher, saisir, s'emparer de", de: "schnappen, ergreifen, wegschnappen".
+
+2. Word 5403 (soar):
+   - Severe machine translation blunders detected in Japanese and Korean:
+     ja: "ホバリングする" (hovering stationary!) -> fixed to "高く舞い上がる、急上昇する、空高く飛ぶ".
+     ko: "맴돌다" (hovering / circling around!) -> fixed to "치솟다, 높이 날다, 급상승하다".
+   - "Soar" represents rapid upward ascent or high glide, not stationary hovering.
+   - Calibrated across all locales to cover soaring birds, soaring prices, and soaring spirits (de: "aufsteigen, schweben, in die Höhe schnellen", es: "elevarse, planear, dispararse").
+
+3. Word 5404 (solicit):
+   - Blatant MT distortion in Russian and Portuguese:
+     ru: "требовать" (to demand!) -> fixed to "ходатайствовать, запрашивать, выпрашивать".
+     pt: "exigir" (to demand!) -> fixed to "solicitar, pedir, angariar".
+   - "Solicit" is an earnest, respectful, or persuasive request (funds, votes, opinions), the exact opposite of an aggressive demand.
+
+4. Word 5405 (solidify):
+   - Broadened from narrow chemical/physical solidification to metaphorical consolidation of relationships, business partnerships, and strategic plans (ru: "затвердевать, закреплять, укрепляться", de: "erstarren, festigen, verhärten", es: "solidificar, consolidar, endurecer").
+
+5. Word 5406 (soothe):
+   - Calibrated multi-faceted relief: soothing physical irritation/pain, soothing agitated nerves, and comforting distressed children or pets (pt: "acalmar, suavizar, serenar", fr: "apaiser, calmer, soulager", ja: "なだめる、和らげる、落ち着かせる").
+
+6. Word 5407 (span):
+   - Wild machine translation failure across multiple Asian and European locales:
+     pt: "abraçar" (to embrace/hug!) -> corrected to "abranger, estender-se por, cruzar".
+     ja: "抱擁する" (to hug/embrace!) -> corrected to "またがる、架ける、及ぶ".
+     ko: "껴안다" (to hug/embrace!) -> corrected to "걸치다, 가로지르다, 포괄하다".
+     es: "lapso" (noun only!) -> corrected to "abarcar, cruzar, cubrir (un período)".
+   - Span means to bridge physical gaps, stretch across distances, or encompass periods of time.
+
+7. Word 5408 (spawn):
+   - Reconciled biological reproduction (laying fish/amphibian roe) with contemporary colloquial/gaming/metaphorical spawning of entities, processes, and ideas (de: "laichen, hervorbringen, zeugen", fr: "frayer, engendrer, donner naissance à", zh: "产卵、大量产生、繁衍").
+
+8. Word 5409 (spearhead):
+   - Fixed part-of-speech mismatch: MT provided static nouns for weapon tips (ru: "острие", pt: "ponta", fr: "fer de lance").
+   - Calibrated as an active leadership verb: ru: "возглавлять, инициировать, вести за собой", pt: "liderar, encabeçar, chefiar", fr: "être le fer de lance de, diriger, mener", es: "encabezar, liderar, ser la punta de lanza".
+
+9. Word 5410 (speculate):
+   - Fully unified the dual semantic domains: theoretical reflection/guesswork without proof versus financial market speculation for profit (ru: "размышлять, строить догадки, спекулировать", ar: "يتكهن، يخمن، يضارب", ja: "推測する、投機する、憶測する").
+
+10. Word 5411 (spike):
+    - Reconciled abrupt volumetric/statistical surge (traffic, inflation, infection spikes) with sharp physical spikes and impaling actions across all 35 locales.
+
+11. Word 5412 (spin):
+    - Balanced circular rotational physics, traditional textile spinning, and media spin-doctoring/interpretation twisting (ru: "крутиться, вращаться, прясть", es: "girar, hilar, dar vueltas", ko: "돌다, 회전시키다, 실을 잣다").
+
+12. Word 5413 (spiral):
+    - Fixed grammatical part-of-speech errors in German (unnatural verb "spiralen" -> "sich spiralförmig bewegen, eskalieren, trudeln") and Korean (static noun "나선형" -> dynamic verb "나선형으로 움직이다, 걷잡을 수 없이 악화되다, 소용돌이치다").
+    - Highlighted downward economic/emotional spirals and continuous spiral movement.
+
+13. Word 5414 (splash) & 5416 (spray):
+    - Corrected noun-dominated machine translations (ru: "всплеск", "спрей", fr: "éclaboussure", "pulvérisation") to rich verbal and nominal forms in all target languages.
+
+14. Word 5415 (sprawl):
+    - Calibrated two distinct idioms: physical reclining with limbs outstretched ("раскинуться, развалиться") and urban sprawl ("разрастаться", "nekontrolirano se širiti", "fläzen").
+
+15. Word 5417 (spur):
+    - Harmonized figurative inciting/motivating action with the rider's physical boot spur (es: "espolear, estimular, incitar", pl: "ponaglać, dopingować, ostroga", ja: "拍車をかける、刺激する、促す").
+
+16. Word 5418 (squander):
+    - Fixed French noun error ("gaspillage" -> "gaspiller, dilapider, dissiper") and aligned vivid idioms of reckless waste (tr: "har vurup harman savurmak, çarçur etmek", pt: "esbanjar, desperdiçar, dilapidar").
+
+17. Word 5419 (stabilize):
+    - Verified comprehensive coverage for economic stabilization, physical balance, and medical patient stabilization across all 35 languages.
+
+18. Word 5420 (stagger):
+    - Incorporated all three core meanings: tottering/unsteady movement, staggering schedules/shifts into phases, and astounding/overwhelming people with surprise (de: "torkeln, taumeln, staffeln", fr: "chanceler, tituber, échelonner").
+
+19. Word 5421 (stall):
+    - Flagrant homonym error caught! Machine translation chose market booth/bazaar stall (ru: "ларек", fr: "étal", es: "puesto").
+    - Calibrated to engine stall, stalling/playing for time, and hitting an impasse (ru: "заглохнуть, тянуть время, буксовать", de: "abwürgen, verzögern, ins Stocken geraten", es: "calarse, postergar, dar largas", ja: "エンストする、時間稼ぎをする、失速する").
+
+20. Word 5422 (startle):
+    - Calibrated sudden shock, jumping from fright, and abrupt alarm (es: "sobresaltar, asustar, alarmar", it: "spaventare, far sussultare, allarmare").
+
+21. Word 5423 (starve):
+    - Corrected Portuguese transitive-only "matar de fome" to natural intransitive suffering ("passar fome, morrer de fome, jejuar").
+    - Ensured accurate verbal paradigms in all Slavic and Germanic languages (de: "verhungern, hungern, aushungern").
+
+22. Word 5424 (stereotype):
+    - Transformed static noun-only outputs into versatile verb-and-noun formulations denoting societal pigeonholing and conventional generalizations.
+
+23. Word 5425 (stiffen):
+    - Catastrophic MT failure in Japanese and Korean:
+      ja: "緊張させる" (make nervous/anxious!) -> fixed to "硬直する、こわばる、硬くなる".
+      ko: "긴장시키다" (make nervous!) -> fixed to "뻣뻣해지다, 굳어지다, 긴장하여 굳다".
+      pt: "tensão" (static noun tension!) -> fixed to "enrijecer, ficar rígido, enrijecer-se".
+    - Stiffen refers to physical rigidity, muscular stiffness, or rigidifying resolve.
+
+24. Word 5426 (stun):
+    - Integrated physical concussive blow/daze with emotional bewilderment and astonishment.
+
+25. Word 5427 (subdue):
+    - Balanced martial conquering/subjugation with tempering/softening emotions, voices, or lights.
+
+26. Word 5428 (submerge):
+    - Absurd MT error corrected:
+      ja: "飛び込む" (to jump into / dive into water!) -> fixed to "水中に沈める、浸水させる、水没する".
+      ko: "뛰어들다" (to dive / jump into!) -> fixed to "물속에 잠기да, 잠수시키다, 침수시키다".
+    - "Submerge" is to cover completely with water, plunge underneath, or overwhelm with work.
+
+27. Word 5429 (subscribe):
+    - Covered digital subscriptions (services, newsletters, YouTube), financial underwriting, and ideological adherence ("subscribe to a theory").
+
+28. Word 5430 (subside):
+    - Calibrated easing of acute pain/storms, lowering of floodwaters, and geographical subsidence of ground.
+
+29. Word 5431 (subsidize):
+    - Encompassed governmental state grants, municipal funding, and corporate financial subsidies.
+
+30. Word 5432 (substantiate):
+    - Dangerous MT semantic distortion corrected:
+      ja: "正当化する" (to justify/legitimize!) -> corrected to "実証する、裏付ける、証拠立てる".
+      ko: "정당화하다" (to justify/legitimize!) -> corrected to "입증하다, 확증하다, 근거를 제시하다".
+      pt: "justificar" (to justify!) -> corrected to "corroborar, fundamentar, comprovar".
+    - Substantiating is supplying factual evidence to prove truth, not justifying moral culpability.
+
+31. Word 5433 (substitute):
+    - Calibrated sports substitutions, ingredient replacements, and proxy appointments across all locales.
+
+32. Word 5434 (subsume):
+    - Major MT confusion fixed:
+      pt: "relacionar" (to relate!) -> corrected to "subsumir, englobar, incluir".
+      ja: "参照する" (to refer/consult!) -> corrected to "包含する、包摂する、組み入れる".
+      ko: "참조하다" (to refer/consult!) -> corrected to "포괄하다, 포함시키다, 하위 범주에 넣다".
+      ru: "относить" -> corrected to "включать в категорию, охватывать, подчинять".
+    - Subsume is logical incorporation under a broader taxonomic category or overarching principle.
+
+33. Word 5435 (subtract):
+    - Verified proper mathematical terminology for subtraction and deductive withholding across all 35 languages.
+
+34. Word 5436 (subvert):
+    - Calibrated political subversion, undermining of institutional structures, and subverting expectations or tropes.
+
+35. Word 5437 (succumb):
+    - Addressed dual dimensions: yielding to peer pressure/temptation versus dying from a terminal illness.
+
+36. Word 5438 (suffocate):
+    - Calibrated literal asphyxiation and psychological claustrophobia/oppression.
+
+37. Word 5439 (summon):
+    - Corrected false-friend confusion with "evoke":
+      pt: "evocar" -> corrected to "convocar, intimar, chamar".
+      ja: "喚起する" -> corrected to "召喚する、呼び出す、召集する".
+      ko: "불러일으키다" -> corrected to "소환하다, 호출하다, 소집하다".
+    - "Summon" denotes authoritative convocation (court subpoenas, assembling troops) or mustering inner courage.
+
+38. Word 5440 (superimpose):
+    - Shocking MT blunder fixed:
+      pt: "impor" (to impose tax/burden!) -> corrected to "sobrepor, superpor, colocar por cima".
+      ja: "課す" (to levy/impose tax!) -> corrected to "重ね合わせる、スーパーインポーズする、重ねる".
+      ko: "부과하다" (to levy/impose tax!) -> corrected to "겹쳐 놓다, 얹다, 포개다".
+    - "Superimpose" is optical/physical layering of one image or element on top of another.
+
+39. Word 5441 (supersede):
+    - Captured lawful replacement, technological obsolescence, and successor replacement.
+
+40. Word 5442 (supervise):
+    - Fixed reduction to mechanical machine control:
+      ja: "制御する" -> corrected to "監督する、指揮する、管理する".
+      ko: "통제하다" -> corrected to "감독하다, 지도하다, 관리하다".
+      ru: "контролировать" -> expanded to "руководить, курировать, осуществлять надзор".
+
+41. Word 5443 (supplement):
+    - Integrated dietary vitamins/nutritional additives, magazine supplements, and supplemental actions.
+
+42. Word 5444 (suppress):
+    - Covered state suppression of rebellion, emotional repression of tears/anger, and suppressing evidence.
+
+43. Word 5445 (surge):
+    - Fixed notorious Portuguese false friend:
+      pt: "surgir" (which means to emerge/appear in Portuguese!) -> corrected to "disparar, onda súbita, avolumar-se".
+    - Calibrated electric surges, sudden price spikes, and surging oceanic waves across all locales.
+
+44. Word 5446 (surmise):
+    - Distinguished tentative conjecture based on incomplete clues from baseless assumptions.
+
+45. Word 5447 (surmount):
+    - Reconciled overcoming towering hardships with sitting perched atop a structure or monument.
+
+46. Word 5448 (surpass):
+    - Calibrated outperforming competitors, breaking records, and exceeding expectations.
+
+47. Word 5449 (surrender):
+    - Balanced military capitulation with yielding legal custody and emotional surrender.
+
+48. Word 5450 (survey):
+    - Gross MT blunder eliminated:
+      pt: "interrogar" (to interrogate a criminal suspect!) -> corrected to "pesquisar, vistoriar, sondar".
+      ja: "尋問する" (to interrogate/question suspect!) -> corrected to "調査する、見渡す、測量する".
+      ko: "심문하다" (to interrogate/cross-examine!) -> corrected to "설문 조사하다, 둘러보다, 측량하다".
+    - "Survey" is a statistical poll, inspection, or geographical land mapping.
+
+49. Word 5451 (swap):
+    - Replaced generic "change" (de: "ändern", fr: "changer", pt: "mudar", ja: "変える", ko: "바꾸다") with precise reciprocal trading, bartering, and swapping positions.
+
+Regional Nuance Highlights:
+- Brazilian Portuguese (pt / pt-BR):
+  * Filtered out false friends like "surgir" for surge and "interrogar" for survey.
+  * Applied natural Brazilian idioms: "disparar, onda súbita", "pesquisar, vistoriar", "trocar, permutar", "arrebatar, puxar bruscamente".
+- Mexican / Latin American Spanish (es):
+  * Calibrated dynamic verbs reflecting colloquial and standard Latin American conventions: "dispararse, oleada", "encuestar, sondear", "intercambiar, canjear", "arrebatar, quitar, agarrar".
+- Natural syntax, punctuation, and register verified across Asian and Middle Eastern languages:
+  * Hindi (hi), Bengali (bn), Urdu (ur), Persian (fa), Arabic (ar), and Kazakh (kk).
+  * Proper CJK punctuation marks (、) applied in Japanese and Chinese, and Arabic commas (،) in Arabic, Persian, and Urdu.

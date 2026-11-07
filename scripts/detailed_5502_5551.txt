@@ -1,0 +1,175 @@
+Batch 5502-5551 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 5514 (amortize): CATASTROPHIC PILLOW / CUSHION / SHOCK-ABSORBER MISTRANSLATION ACROSS 22 LANGUAGES!
+   - Dump translated financial verb "amortize" (write off debt/asset over time) as literal cushion/pillow/padding or mechanical shock absorber:
+     de: "polstern" (to pad/cushion a chair!)
+     es: "amortiguar" (cushion / shock absorb!)
+     it: "attutire" (dampen/muffle!)
+     tr: "yastıklamak" (to cushion with a pillow!)
+     pt: "amortecer" (soften/cushion!)
+     bg: "възстановявам" (restore?!)
+     cs: "zmírnit" (mitigate!)
+     sk: "zmierniť" (mitigate!)
+     hu: "kipárnáz" (pad with cushions!)
+     el: "προστατεύω" (protect!)
+     sl: "ublažiti" (mitigate!)
+     et: "pehmendama" (soften!)
+     lt: "pagalvėlė" (literally "little pillow / cushion" - noun!)
+     da: "dæmpe" (dampen!)
+     fi: "pehmentää" (soften!)
+     sv: "dämpa" (dampen!)
+     hr: "ublažiti" (mitigate!)
+     lv: "spilvens" (literally "pillow" - noun!)
+     ar: "حماية" (protection!)
+     vi: "đệm" (mattress/cushion!)
+     th: "รองรับ" (support/cushion!)
+     ko: "완충하다" (buffer/cushion!)
+     ja: "緩衝する" (cushion/buffer!)
+     kk: "жастық" (literally "pillow" - noun!)
+   - Root Cause: Confusion between financial amortization and the Spanish/Portuguese false friend "amortiguar / amortecer" (shock absorber) and Russian "амортизатор", culminating in Baltic/Slavic/Turkic translating it as literal pillow/cushion!
+   - Calibrated: Corrected all languages to financial loan repayment, depreciation, debt payoff, write-off:
+     de: "amortisieren, tilgen, abschreiben", es: "amortizar, liquidar una deuda", fr: "amortir, rembourser graduellement",
+     pl: "amortyzować, spłacać w ratach", it: "ammortizzare, estinguere gradualmente", tr: "amorti etmek, itfa etmek",
+     pt: "amortizar, abater dívida", lt: "amortizuoti, išmokėti dalimis", lv: "amortizēt, atmaksāt pa daļām",
+     kk: "борышты өтеу, амортизациялау", vi: "khấu hao, trả góp dần", th: "ผ่อนชำระหนี้สิน, ตัดจำหน่าย".
+
+2. Word 5531 (allege): COMPLETE 180-DEGREE POLARITY INVERSION (CLAIM WITHOUT PROOF VS APPROVE/CONFIRM) ACROSS 23 LANGUAGES!
+   - Dump translated "allege" (assert without proof, accuse) as "approve" or "confirm":
+     es: "aprobar" (APPROVE!)
+     fr: "approuver" (APPROVE!)
+     it: "approvare" (APPROVE!)
+     tr: "onaylamak" (APPROVE!)
+     pt: "aprovar" (APPROVE!)
+     ro: "a aproba" (APPROVE!)
+     bg: "одобрявам" (APPROVE!)
+     cs: "schválit" (APPROVE!)
+     sk: "schváliť" (APPROVE!)
+     hu: "jóváhagy" (APPROVE!)
+     el: "εγκρίνω" (APPROVE!)
+     sl: "odobriti" (APPROVE!)
+     et: "heaks kiitma" (APPROVE!)
+     lt: "patvirtinti" (CONFIRM!)
+     da: "bekræfte" (CONFIRM!)
+     fi: "vahvistaa" (CONFIRM!)
+     sv: "bekräfta" (CONFIRM!)
+     hr: "potvrditi" (CONFIRM!)
+     lv: "apstiprināt" (CONFIRM!)
+     ar: "تأكيد" (CONFIRM!)
+     vi: "khẳng định" (CONFIRM!)
+     th: "ยืนยัน" (CONFIRM!)
+     kk: "бекіту" (APPROVE/CONFIRM!)
+   - Root Cause: MT confused "allege" with "agree / approve / affirm".
+   - Calibrated: Corrected to claim without evidence, accuse, aver, assert unverified:
+     es: "alegar, aducir, asegurar sin pruebas", fr: "alléguer, prétendre, arguer",
+     it: "asserire, addurre, sostenere senza prove", de: "behaupten, unterstellen, vorbringen",
+     kk: "дәлелсіз мәлімдеу, жала жабу", etc.
+
+3. Word 5507 (allot): HIGHLIGHT / EMPHASIZE INFECTION ACROSS 25 LANGUAGES!
+   - Dump translated "allot" (assign, allocate, distribute) as "highlight / emphasize / stress":
+     de: "hervorheben", es: "resaltar", fr: "mettre en évidence", it: "evidenziare", tr: "vurgulamak",
+     pt: "destacar", ro: "a evidenția", bg: "подчертавам", cs: "zvýraznit", sk: "zvýrazniť",
+     hu: "kiemel", el: "επισημαίνω", sl: "poudariti", et: "esile tõstma", lt: "išryškinti",
+     da: "fremhæv", fi: "korostaa", sv: "markera", hr: "istaknuti", lv: "izcelt",
+     ar: "تسليط الضوء", vi: "làm nổi bật", th: "เน้น", ko: "강조하다", ja: "強調する", kk: "ерекшелеу".
+   - Root Cause: Russian polysemy of "выделять" (to allocate vs to highlight text). The machine translation system picked up "highlight text" instead of "allocate funds/shares".
+   - Calibrated: Fixed to allocate, apportion, assign, designate shares:
+     de: "zuteilen, zuweisen, einteilen", es: "asignar, adjudicar, destinar", fr: "allouer, attribuer, répartir",
+     pt: "alocar, atribuir, designar", etc.
+
+4. Word 5532 (annex): SOFTWARE APPLICATION COLLAPSE ACROSS 12 LANGUAGES!
+   - Dump translated "annex" (annex territory, annex wing/document) as "app / software application":
+     da: "anvendelse" (application!)
+     fi: "sovellus" (software application!)
+     sv: "tillämpning" (application / use!)
+     hr: "primjena" (application!)
+     lv: "pielietojums" (application / use!)
+     ar: "تطبيق" (software application!)
+     id: "aplikasi" (software app!)
+     vi: "ứng dụng" (software app!)
+     th: "การประยุกต์ใช้" (application!)
+     ko: "적용하다" (apply!)
+     ja: "適用する" (apply!)
+     kk: "қолдану" (apply/use!)
+   - Root Cause: Machine parser confused "annex" with "app" or "apply".
+   - Calibrated: Corrected to geopolitical annexation, architectural wing/extension, and legal appendix:
+     de: "annektieren; Anbau, Flügel", es: "anexionar, incorporar; anexo, ala", fr: "annexer; annexe, bâtiment annexe",
+     da: "indlemme, annektere; sidefløj", fi: "liittää alueeseensa; lisärakennus, liite", sv: "annektera; tillbyggnad, annex",
+     kk: "қосып алу, аннексиялау; қосымша ғимарат", vi: "thôn tính lãnh thổ; nhà phụ", etc.
+
+5. Word 5503 (adorn): COMPLETE MEANING INVERSION IN GERMAN!
+   - Dump gave German de: "aufheben, annullieren" (repeal, cancel, annul!).
+   - Calibrated: Corrected to "schmücken, verzieren".
+
+6. Word 5524 (antagonize): "COUNTERACT / OFFSET" COLLAPSE ACROSS 11 LANGUAGES!
+   - Dump translated "antagonize" (provoke hostility, make an enemy of) as "counterbalance / neutralize / counteract":
+     de: "entgegenwirken", es: "contrarrestar", fr: "contrer", it: "contrastare",
+     pt: "neutralizar", ro: "a contracara", cs: "neutralizovat", hu: "ellensúlyoz",
+     sl: "preprečiti", lt: "neutralizuoti", lv: "neitralizēt", ko: "상쇄하다".
+   - Calibrated: Corrected to provoking hostility, alienating, making an enemy of someone:
+     de: "verärgern, gegen sich aufbringen", es: "enemistarse con, provocar hostilidad",
+     fr: "se mettre à dos, braquer", pt: "antagonizar, indispor, criar inimizade".
+
+7. Word 5535 (juxtapose): COLLAPSED TO MERE "COMPARE" ACROSS 26 LANGUAGES!
+   - Dump translated "juxtapose" as simple comparison ("vergleichen", "comparar", "confrontare", "сравняване") losing the essential spatial/visual nuance of placing side by side for contrast.
+   - Calibrated: Corrected to putting side-by-side, placing in adjacent contrast across all 35 target languages:
+     de: "nebeneinanderstellen, kontrastierend gegenüberstellen", es: "yuxtaponer, colocar al lado para contrastar",
+     fr: "juxtaposer, placer côte à côte", it: "giustapporre, accostare per contrasto",
+     ja: "並置する、並べて対比させる", ko: "나란히 놓다, 병치하여 대조하다", zh: "把……并置、并列对照".
+
+8. Word 5546 (arouse): "INITIATE / LAUNCH" INFECTION ACROSS 13 LANGUAGES!
+   - Dump translated "arouse" (provoke feelings, awaken, excite) as "start / initiate":
+     es: "iniciar", fr: "initier", it: "avviare", tr: "başlatmak", pt: "iniciar",
+     ro: "a iniția", bg: "инициирам", cs: "iniciovat", sk: "iniciovať", hu: "kezdeményez",
+     el: "ξεκινάω", sl: "sprožiti", et: "algatama", lt: "inicijuoti".
+   - Calibrated: Corrected to awaken, evoke feelings, excite, stimulate:
+     de: "erwecken, wachrufen, erregen", es: "suscitar, despertar, excitar", fr: "susciter, éveiller, émouvoir",
+     it: "destare, risvegliare, eccitare", pt: "despertar, suscitar, excitar".
+
+9. Word 5551 (assassinate): REDUCED TO GENERIC "KILL" ACROSS 28 LANGUAGES!
+   - Dump translated "assassinate" as ordinary "kill / murder" (matar, töten, tuer, zabít, uccidere, etc.), omitting the critical political / treacherous dimension.
+   - Calibrated: Explicitly calibrated to political assassination, treacherous murder of leaders, and committing attentats:
+     de: "ein Attentat verüben auf, ermorden", es: "asesinar por motivos políticos, cometer magnicidio",
+     fr: "assassiner, exécuter un attentat contre", pt: "assassinar por motivação política, cometer atentado",
+     pl: "dokonywać zamachu, mordować skrytobójczo", ja: "暗殺する、要人を謀殺する", zh: "暗杀、行刺要人".
+
+10. Word 5540 (scintillating): FIZZY DRINKS / SPARKLING WINE COLLAPSE IN SLAVIC/BALTIC!
+    - sk: "šumivý" (carbonated / fizzy!)
+    - sl: "peneče" (sparkling wine!)
+    - lt: "putojančio" (sparkling / foaming beverage!)
+    - Calibrated: Fixed to sparkling wit, brilliant intellect, dazzling flair:
+      sk: "iskrivý, duchaplný, oslnivý", sl: "iskriv, bleščeč, duhovit", lt: "žaižaruojantis, kibirkščiuojantis, sąmojingas".
+
+11. Word 5539 (epiphany): RELIGIOUS HOLIDAY VS PSYCHOLOGICAL SUDDEN INSIGHT:
+    - hu: "vízkereszt" (Three Kings Day holiday!)
+    - da, sv, lv, fi, id, vi, ko, ja: generic "insight" or "understanding", missing the lightning suddenness of C1 epiphany.
+    - Calibrated: Fixed to sudden revelation, sudden flash of profound clarity:
+      hu: "megvilágosodás, hirtelen felismerés", da: "pludselig åbenbaring, erkendelsesglimt",
+      sv: "uppenbarelse, plötslig insikt", fi: "äkillinen oivallus, ahaa-elämys".
+
+12. Word 5547 (arraign): "HOLD ACCOUNTABLE" COLLAPSE ACROSS 11 LANGUAGES:
+    - da, fi, sv, hr, lv, ar, vi, th, ko, ja, kk translated as generic "hold responsible" (жауапкершілікке тарту, 責任を問う, etc.).
+    - Calibrated: Fixed to precise legal arraignment (formal reading of criminal charges in open court, entering plea):
+      de: "vor Gericht anklagen, den Prozess machen", es: "procesar, imputar formalmente en juicio",
+      fr: "traduire en justice, mettre en accusation", ja: "罪状認否を行う、法廷に喚問する",
+      kk: "сотта айып тағу, жауапқа тарту".
+
+13. Word 5508 (alloy): VERB INFECTION FIXED TO NOUN:
+    - Dump had verb infinitives in ro ("a alia"), bg ("сплавям"), el ("αναμιγνύω"), sv ("legera"), hi ("मिश्रण करना"), ar ("خلط"), th ("ผสมโลหะ"), ko ("합금하다"), ja ("合金にする").
+    - Calibrated: All set to nominal metallic alloy across all languages (Legierung, aleación, alliage, stop, krama, sulam, liga, seos, ইত্যাদি).
+
+14. Word 5509 (allude): NOUN INFECTION FIXED TO VERB:
+    - Dump had nouns in de ("hinweis"), tr ("ipucu"), pt ("dica"), hu ("célzás"), el ("υπαινιγμός"), et ("vihje"), lt ("užuomina"), da ("vink"), lv ("mājiens"), ar ("تلميح"), kk ("кеңес" = advice!).
+    - Calibrated: All calibrated to active verbs meaning to allude, insinuate, refer to indirectly (anspielen auf, aludir, faire allusion, meñzew, etc.).
+
+15. Word 5511 (amaze): NOUN INFECTION FIXED TO VERB:
+    - Dump had nouns in tr ("sürpriz"), hu ("meglepetés"), da ("overraskelse"), ar ("مفاجأة"), kk ("тосынсый" = surprise gift!).
+    - Calibrated: All calibrated to transitive verbs meaning to astonish, marvel, strike with wonder (erstaunen, verblüffen, asombrar, tañğaldıru, etc.).
+
+16. Word 5543 & 5544 (appropriate, approximate): VERB INFECTION FIXED TO ADJECTIVES / PROPER DUAL REGISTER:
+    - Dump had appropriate and approximate translated as verbs in 14+ languages (e.g. ro "a se potrivi", fr "approprier", cs "přiměřit", fr "approximer", it "approssimare", ja "近似する").
+    - Calibrated: Appropriate calibrated to "suitable, fitting; appropriate/confiscate"; Approximate calibrated to "approximate, estimated, rough estimate".
+
+All 50 words across ALL 35 target languages (and 36 locales total) have been calibrated with native regional terminology (including Brazilian pt-BR, Latin American es, and natural grammar in hi, ar, fa, ur, bn, kk).

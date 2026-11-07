@@ -1,0 +1,200 @@
+Batch 5702-5751 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 49 words (IDs 5702 to 5751, skipping missing ID 5739) from dump slice 'scripts/dump_5702_5751.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5702_5751_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 5707 (ferment):
+   - Severe confusion bug in dump: machine translation confused "ferment" with "fervor" in French ("ferveur"), Italian ("fervore"), Turkish ("coşku"), and Portuguese ("fervor").
+   - Calibrated to actual biochemical fermentation and political/social agitation, unrest, and brewing upheaval:
+     fr: "fermentation, effervescence, bouillonnement"
+     it: "fermentazione, fermento, agitazione"
+     tr: "fermantasyon, mayalanma, kargaşa"
+     pt: "fermentação, fermento, agitação"
+     ru: "брожение, волнение, бродить"
+     de: "Gärung, Aufruhr, gären"
+
+2. Word 5715 (filament):
+   - Critical Portuguese hallucination: dump contained "ameaça" (threat/menace), completely unrelated to filament!
+   - Calibrated pt to "filamento, fio incandescente, fibra".
+   - Expanded across locales to properly cover incandescent lamp filaments, textile/microfilament threads, botanical stamens, and 3D printing filaments:
+     ru: "нить накаливания, волосок, филамент, волокно"
+     de: "Glühfaden, Filament, Einzelfaser"
+     pl: "żarnik, włókno, nitka"
+     es: "filamento, filamento incandescente, fibra"
+
+3. Word 5721 (fixture):
+   - Major false friend/hallucination: French, Italian, Turkish, and Portuguese all had "adaptation" (fr: "adaptation", it: "adattamento", tr: "adaptasyon", pt: "adaptação").
+   - "Fixture" in English has three distinct prominent meanings:
+     a) Fixed furnishings/fittings or lighting devices (fixtures and fittings);
+     b) A sports match scheduled on a specific date (league fixture);
+     c) A long-standing, established person or custom.
+   - Calibrated correctly across all locales:
+     fr: "élément fixe, luminaire, match prévu, agencement"
+     it: "impianto fisso, apparecchio, incontro in calendario, arredo"
+     tr: "demirbaş, sabit donanım, fikstür maçı"
+     pt: "acessório fixo, instalação permanente, partida marcada, luminária"
+     ru: "стационарный элемент, светильник, запланированный матч, арматура"
+     de: "Inventarstück, Einrichtungsgegenstand, Spieltermin, feste Institution"
+
+4. Word 5724 (fleece):
+   - Dump had reduced "fleece" to merely synthetic polyester fabric ("флис", "vlies", "polar") or simple wool, omitting the core noun "sheep's coat / Golden Fleece" and the colloquial transitive verb "to fleece someone" (to swindle, overcharge, or strip of money):
+     ru: "руно, овечья шерсть, флис, обдирать (грабить)"
+     de: "Schafwolle, Vlies, Fleece, ausnehmen (übervorteilen)"
+     es: "vellón, lana de oveja, tela polar, timar (estafar)"
+     fr: "toison, laine polaire, tondre, plumer (escroquer)"
+     pl: "runo, wełna owcza, polar, oskubać (z pieniędzy)"
+     pt: "velo, lã de ovelha, tecido fleece, extorquir (tosquiar)"
+
+5. Word 5732 (foil):
+   - Dump had narrow or incomplete senses (Portuguese had only "contraponto").
+   - "Foil" exhibits rich polysemy in English:
+     a) Metal foil / aluminum foil;
+     b) Fencing épée / flexible training foil;
+     c) Literary/theatrical foil (contrasting character that enhances another);
+     d) Transitive verb: to thwart, defeat, or frustrate someone's plans.
+   - Fully calibrated across all 35 languages:
+     es: "papel aluminio, florete, contrapunto, frustrar"
+     fr: "feuille d'aluminium, fleuret, faire-valoir, déjouer"
+     pt: "papel-alumínio, florete, contraponto, frustrar planos"
+     ru: "фольга, рапира, контраст (фон), срывать (планы)"
+     de: "Folie, Florett, Kontrastfigur, vereiteln"
+     pl: "folia aluminiowa, floret, tło kontrastowe, udaremnić"
+
+6. Word 5735 (folly):
+   - Part of speech mismatch in French: dump had the adjective "stupide".
+   - Calibrated to appropriate noun forms:
+     fr: "folie, sottise, extravagance, bêtise"
+     ru: "глупость, безрассудство, безумие, каприз"
+     de: "Torheit, Unvernunft, Narrheit, Verrücktheit"
+     es: "insensatez, locura, disparate, desatino"
+     pt: "tolice, loucura, disparate, insensatez"
+
+7. Word 5737 (forbearance):
+   - The dump generalized "forbearance" into mere "tolerance" (терпимость, toleranz, tolerancia, tolérance), erasing its distinctive connotations:
+     a) Patient restraint, refraining from retaliation;
+     b) Clemency, leniency;
+     c) Financial forbearance (loan postponement / grace period).
+   - Calibrated:
+     ru: "воздержание, терпение, снисходительность, сдержанность"
+     de: "Nachsicht, Geduld, Zurückhaltung, Stundung"
+     es: "indulgencia, paciencia, tolerancia, abstención"
+     fr: "patience, retenue, indulgence, répit"
+     pl: "wyrozumiałość, cierpliwość, powściągliwość, tolerancja"
+     pt: "paciência, indulgência, tolerância, comedimento"
+
+8. Word 5746 (forte):
+   - Major English polysemy failure in dump: translated solely as the musical dynamic "forte" (ru: "форте", uk: "форте", pt: "forte").
+   - In general English vocabulary, "forte" overwhelmingly denotes someone's strong suit, specialty, or area of strength ("cooking is not her forte"):
+     ru: "сильная сторона, конёк, форте (громко)"
+     uk: "сильна сторона, коник, форте (гучно)"
+     de: "Stärke, Spezialität, Paradedisziplin, Forte (laut)"
+     es: "punto fuerte, especialidad, fuerte, forte (música)"
+     fr: "point fort, spécialité, domaine de prédilection, forté"
+     pl: "mocna strona, atut, konik, forte (głośno)"
+     it: "punto di forza, punto forte, cavallo di battaglia, forte"
+     pt: "ponto forte, especialidade, trunfo, forte (música)"
+     tr: "güçlü yön, uzmanlık alanı, baskın yön, forte"
+
+9. Word 5748 (fortress):
+   - Bizarre translation blunder in dump: confused "fortress" with "force" or "fortitude" in French ("force"), Italian ("vigore"), Turkish ("güç"), and Portuguese ("força").
+   - Restored authentic architectural and military terms (stronghold, citadel, fortified castle):
+     fr: "forteresse, citadelle, bastion, fort"
+     it: "fortezza, cittadella, fortilizio, roccaforte"
+     tr: "kale, hisar, müstahkem mevki, tahkimat"
+     pt: "fortaleza, praça-forte, cidadela, baluarte"
+     ru: "крепость, твердыня, цитадель, форт"
+     de: "Festung, Burg, Bollwerk, Zitadelle"
+
+10. Word 5704 (fellowship):
+    - Dump had translated "fellowship" simply as "communication" (ru: "общение", de: "kommunikation", es: "comunicación", fr: "communication", it: "comunicazione", tr: "iletişim", pt: "comunicação").
+    - "Fellowship" denotes friendly companionship/fraternity, a community of individuals with common interests, or an academic/medical research fellowship and stipend. Calibrated across all 35 languages:
+      ru: "содружество, товарищество, стипендия (исследовательская)"
+      de: "Gemeinschaft, Kameradschaft, Stipendium"
+      es: "confraternidad, compañerismo, beca de investigación"
+      fr: "confrérie, camaraderie, bourse de recherche"
+      pt: "fraternidade, companheirismo, bolsa de pesquisa"
+
+11. Word 5709 (fertility):
+    - Dump had overly narrow translation as "birth rate" (ru: "рождаемость", uk: "народжуваність", tr: "doğurganlık").
+    - Restored primary agricultural sense (soil fertility), biological fecundity, and reproductive capacity:
+      ru: "плодородие, плодовитость, фертильность"
+      de: "Fruchtbarkeit, Ertragsfähigkeit, Fertilität"
+      es: "fertilidad, fecundidad, productividad"
+      fr: "fertilité, fécondité, richesse"
+      tr: "verimlilik, doğurganlık, bereket"
+
+12. Word 5714 (fiend):
+    - Expanded beyond purely demonic/mythological sense to include common colloquial usage for an enthusiast or addict ("caffeine fiend", "speed fiend"):
+      ru: "бес, демон, злодей, одержимый фанат"
+      de: "Teufel, Dämon, Unmensch, Fanatiker"
+      fr: "démon, diable, être malfaisant, accro"
+      es: "demonio, diablo, malvado, fanático"
+
+13. Word 5716 (filial):
+    - Calibrated across Asian and European languages to specifically evoke filial duty and reverence toward parents (e.g. filial piety):
+      zh: "孝顺的、子女的、孝道的"
+      ja: "子としての、親孝行な、親への"
+      ko: "자식의, 효성의, 효성스러운"
+      de: "kindlich, filial, Sohnes-"
+      ru: "сыновний, дочерний, почтительный"
+
+14. Word 5728 (fluke):
+    - Dump missed biological and nautical homonyms. Calibrated to include both colloquial stroke of luck / lucky accident and parasitic trematode flatworm:
+      ru: "счастливая случайность, удача, везенье, трематода"
+      de: "Glücksfall, Zufallstreffer, Zufall, Leberegel"
+      es: "chiripa, golpe de suerte, casualidad, duela"
+      fr: "coup de chance, coup de bol, aubaine, douve"
+      pl: "szczęśliwy traf, fart, fuks, motylica"
+
+15. Word 5729 (flux):
+    - Calibrated metaphorical/dynamic continuous change ("state of flux"), metallurgical flux (soldering agent / Flussmittel / topnik / fondant), and fluid discharge:
+      ru: "постоянные изменения, поток, флюс (пайка)"
+      de: "ständiger Wandel, Fluss, Flussmittel"
+      es: "cambio constante, flujo, fundente"
+      pl: "ciągłe zmiany, strumień, topnik"
+
+16. Word 5736 (font):
+    - Calibrated typographical font, baptismal font (cuvette/basin for holy water), and spring/source:
+      ru: "шрифт, купель (крестильная), источник"
+      de: "Schriftart, Zeichensatz, Taufbecken, Quelle"
+      fr: "police de caractères, fonte, fonts baptismaux, source"
+      es: "fuente tipográfica, tipo de letra, pila bautismal, manantial"
+
+17. Word 5743 (foreman):
+    - Calibrated dual roles: industrial/construction site foreman/overseer and courtroom jury foreman (presiding juror):
+      ru: "бригадир, мастер, прораб, старшина присяжных"
+      de: "Vorarbeiter, Werkmeister, Polier, Obmann (der Geschworenen)"
+      es: "capataz, encargado, jefe de obra, presidente del jurado"
+      fr: "contremaître, chef d'équipe, brigadier, président du jury"
+
+18. Word 5744 (foresight):
+    - Calibrated cognitive forward planning/prudence and mechanical firearm front sight (мушка, Korn, mira, guidon):
+      ru: "предвидение, дальновидность, предусмотрительность, мушка"
+      de: "Weitsicht, Voraussicht, Vorsehung, Korn (Visier)"
+      fr: "prévoyance, clairvoyance, prescience, guidon (de visée)"
+
+19. Word 5749 (foundation):
+    - Calibrated architectural base (footing/groundwork), organizational/charitable endowment (foundation/trust), and cosmetic foundation makeup:
+      ru: "фундамент, основа, основание, фонд, тональный крем"
+      de: "Fundament, Grundlage, Stiftung, Grundierung"
+      fr: "fondation, fondement, base, fond de teint"
+      es: "cimiento, base, fundación, maquillaje base"
+      pt: "fundação, alicerce, base, base facial"
+
+20. German Orthography & Grammar:
+    - Capitalized all German substantives (e.g. Föderation, Bund, Vereinigung, Glückseligkeit, Gemeinschaft, Verbrechen, Feminismus, Gärung, Wildheit, Fruchtbarkeit, Inbrunst, Fetisch, Fehde, Treue, Teufel, Glühfaden, Schmutz, Finesse, Firmament, Fixierung, Inventarstück, Gespür, Jungvogel, Schafwolle, Herde, Flora, Fluidität, Glücksfall, ständiger Wandel, Brennpunkt, Futter, Folie, Laub, Folklore, Torheit, Schriftart, Nachsicht, Kraft, vorderste Front, Vordergrund, Ausländer, Vorarbeiter, Weitsicht, Fälschung, Stärke, Seelenstärke, Festung, Fundament, Bruch, Fragment).
+
+21. Regional Standards:
+    - Brazil (pt / pt-BR): applied natural Brazilian terms ("crime grave", "sujeira", "papel-alumínio", "ponto forte", "mestre de obras", "base facial").
+    - Latin America / Mexico (es): applied natural Latin American phrasing ("delito grave", "papel aluminio", "chiripa", "punto fuerte", "desatino", "maquillaje base").
+    - Accurate grammar, script conventions, and natural idiom verified for hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk.
+
+Verification:
+- Checked all 49 words in 'scripts/apply_batch_5702_5751_calibrations.cjs' via Node.js execution.
+- 100% complete coverage: 49 word objects x 35 target languages = 1715 translated entries.
