@@ -1,0 +1,492 @@
+================================================================================
+Batch 3752–3801 Linguistic Audit & Calibration Report (50 Words, EXACTLY 36 Locales)
+================================================================================
+
+Target Languages Audited (35) + English Headword (1) = EXACTLY 36 LOCALES:
+ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi,
+sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk + en headword.
+
+--------------------------------------------------------------------------------
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Batch 3752–3801 covers 50 essential English words spanning foundational grammar,
+closed-class function words (pronouns, prepositions, modal verbs), days/months,
+and polysemic high-frequency vocabulary.
+
+The linguistic audit detected and resolved five massive clusters of systematic bugs:
+1. Catastrophic Part-of-Speech & False Sense Collapses:
+   - Word 3774 ("put"): The verb "put" was translated as a NOUN meaning "place / location"
+     across 11 languages (Danish, Finnish, Swedish, Croatian, Latvian, Arabic, Vietnamese,
+     Thai, Korean, Japanese, Kazakh)!
+   - Word 3782 ("focus on"): The phrasal verb was translated as "juice / chemical concentrate"
+     in 6 languages (Czech, Bulgarian, Hungarian, Slovenian, Estonian, Lithuanian), with
+     Hungarian literally translating it as tomato paste/concentrate ("sűrítmény")!
+   - Word 3769 ("promise to"): Translated as the singular abstract noun "a promise"
+     (cs: slib, sk: sľub, fr: promesse, it: promessa, ro: promisiune, hu: ígéret, kk: уәде,
+     el: υπόσχεση, etc.) in 20+ locales instead of the verbal infinitive pattern "promise to [do]".
+   - Word 3768 ("during"): Translated as "for" or "because" across 9 European languages
+     (ro: pentru, bg: за, cs: pro, sk: pre, hu: mert, el: για, sl: za, et: eest, lt: už)!
+   - Word 3780 ("shall"): Czech had "mošt" (apple cider / must) due to a false friend
+     confusion between "must" and German "Most"! Romanian had "necesitate" (noun), and Slovak
+     had inflected 3rd person singular "musí".
+2. Pronoun Case & Morphological Corruption:
+   - Word 3798 ("me"): 14 languages had the nominative subjective pronoun "I" (it: io,
+     tr: ben, ro: eu, bg: аз, cs: já, sk: ja, hu: én, el: εγώ, sl: jaz, et: mina, lt: aš,
+     fi: minä, ar: أنا, kk: мен) instead of the objective pronoun "me / to me".
+   - Word 3789 ("them"): 9 languages had the possessive determiner "their" (da: deres,
+     fi: heidän, sv: deras, hr: njihov, vi: của họ, th: ของพวกเขา, ko: 그들의, ja: 彼らの, kk: олардың).
+   - Word 3785 ("whose"): 8 languages only supplied relative pronoun forms and completely
+     missed the primary interrogative pronoun "whose is this?" (cs: čí, pl: czyj, fr: à qui / de qui).
+   - Croatian Dative/Locative Case Glitch: Croatian raw dump systematically contained oblique
+     inflections instead of nominative headwords across 12 words (3755: učinku; 3756: drugome;
+     3757: europskom; 3758: aspektu; 3761: vjeri, uvjerenju; 3762: prestrašenom; 3766: nekome;
+     3770: rođenom; 3771: hrani; 3773: mogućem; 3776: mami; 3777: travnju). All restored to nominative.
+3. Polysemy Failures:
+   - Word 3791 ("fall"): Over 20 languages contained only "autumn" or only the verb "to drop",
+     missing the dual identity of the word in standard English.
+   - Word 3756 ("second"): Standardized to cover both ordinal (2nd) and temporal (1/60 min) meanings.
+   - Word 3772 ("shoot"): Covers both discharging firearms and filming/photographing; German fixed
+     from raw exclamation "Feuer" to "schießen, abfeuern; drehen, filmen".
+   - Word 3792 ("March"): Covers both the third month and the marching action.
+4. Homonym Traps & Calendar Collisions:
+   - Word 3773 ("may"): Spanish had "mayo" and Polish had "maj" (month of May). Purged and calibrated
+     strictly to modal verb senses (possibility / permission).
+   - Word 3796 ("wow"): Greek raw dump had "Εκπληκτική επιτυχία" ("stunning success"!) instead of
+     the interjection "ουάου, πω πω".
+   - Word 3797 ("from"): Finnish had "keneltä, keneltä tahansa" ("from whom, from whomever"!) instead
+     of the proper locative ablative/elative forms.
+5. Capitalization & Register Standards:
+   - Days and months (January 3764, Monday 3765, April 3777, March 3792): De-capitalized for
+     Romance and Slavic languages where capitalization is ungrammatical (e.g. es: enero, lunes,
+     abril, marzo; fr: janvier, lundi, avril, mars; it: gennaio, lunedì, aprile, marzo).
+   - Mom (3776): Calibrated from formal "Mother" (Mutter, Mère, Madre) to warm, authentic informal
+     maternal terms (Mama, Maman, Mamãe, Máma, Maminka, Anyu, Mamytė, etc.).
+
+--------------------------------------------------------------------------------
+WORD-BY-WORD AUDIT BREAKDOWN (3752–3801)
+--------------------------------------------------------------------------------
+
+3752. federal
+  - Semantic focus: Pertaining to a federation, national/central government.
+  - Fixes: Calibrated cs/sk/de/da/sv to cover both federal and union/state levels (de: föderal, bundesweit, Bundes-; cs/sk: federální, spolkový; hu: szövetségi; sl: zvezni; hr: savezni, federalni).
+  - All 35 languages calibrated.
+
+3753. thousand
+  - Semantic focus: Cardinal number 1,000.
+  - Fixes: Latvian dump had plural "tūkstoši" -> corrected to singular nominative "tūkstotis".
+  - Romanian calibrated to "mie, o mie".
+  - All 35 languages calibrated.
+
+3754. despite
+  - Semantic focus: Preposition meaning "in spite of, notwithstanding".
+  - Fixes: Ensured proper prepositional government (de: trotz; es: a pesar de; fr: malgré; pt: apesar de; ro: în ciuda, în pofida; hr: unatoč, usprkos; kk: қарамастан, бойламай).
+  - All 35 languages calibrated.
+
+3755. effect
+  - Semantic focus: Noun: result, consequence, influence, impact.
+  - Critical fix: Croatian dump had dative/locative "učinku, utjecaju" -> calibrated to nominative "učinak, utjecaj, posljedica".
+  - Thai dump had missing punctuation "ผลกระทบ อิทธิพล" -> formatted with commas "ผลกระทบ, ผลลัพธ์, อิทธิพล".
+  - All 35 languages calibrated.
+
+3756. second
+  - Semantic focus: Polysemic: 1. Ordinal number following first; 2. Unit of time (1/60 minute).
+  - Critical fixes:
+    * ro: Raw dump had truncated "doilea" -> calibrated to "al doilea; secundă".
+    * hr: Raw dump had dative "drugome" -> calibrated to "drugi; sekunda".
+    * th: Raw dump had glitchy repetition "วินาที วินาที" -> calibrated to "ที่สอง; วินาที".
+    * ar: Raw dump had only feminine "ثانية" -> calibrated to "ثانٍ، الثاني؛ ثانية".
+    * fr: Included both "deuxième, second; seconde".
+    * de: Capitalized noun "Sekunde" alongside adjective "zweiter, zweite, zweites".
+  - All 35 languages calibrated.
+
+3757. european
+  - Semantic focus: Adjective and noun relating to Europe.
+  - Critical fixes:
+    * hr: Raw dump had dative "europskom" -> calibrated to nominative "europski; Europljanin".
+    * sk/sl: Raw dump had capitalized "Európsky" / "Evropski" -> lowercase adjectives "európsky", "evropski".
+    * et/lt/lv: Added proper adjective derivations (et: euroopalik; lt: europietiškas; lv: eiropeisks).
+  - All 35 languages calibrated.
+
+3758. aspect
+  - Semantic focus: Noun: particular feature, facet, angle, side.
+  - Critical fixes:
+    * hr: Raw dump had dative "aspektu" -> calibrated to nominative "aspekt, gledište, strana".
+    * hu: Expanded beyond isolated "vonatkozás" to "aspektus, szempont, oldal".
+    * el: Refined to "πτυχή, άποψη, πλευρά".
+    * th: Fixed generic "ลักษณะ" to "แง่มุม, ด้าน, ลักษณะ".
+  - All 35 languages calibrated.
+
+3759. nobody
+  - Semantic focus: Pronoun (no person) and noun (unimportant person).
+  - Fixes: Provided both pronoun and idiomatic noun senses (es: nadie; don nadie; fr: personne; rien du tout; de: niemand; unbedeutende Person; pl: nikt; zero).
+  - All 35 languages calibrated.
+
+3760. within
+  - Semantic focus: Preposition/adverb: inside space, time limit, or scope.
+  - Fixes: Spanish "dentro de, en el plazo de, en el marco de"; French "dans les limites de, en l'espace de, au sein de"; Romanian "în cadrul, în termen de, înăuntrul"; German "innerhalb, im Bereich von, binnen".
+  - All 35 languages calibrated.
+
+3761. belief
+  - Semantic focus: Noun: trust, faith, conviction, acceptance as true.
+  - Critical fix: Croatian dump had dative "vjeri, uvjerenju" -> calibrated to nominative "vjera, uvjerenje, vjerovanje".
+  - Thai refined to "ความเชื่อ, ความศรัทธา, ความมั่นใจ".
+  - All 35 languages calibrated.
+
+3762. afraid of
+  - Semantic focus: Adjectival predicate: feeling fear towards sth/sb.
+  - Critical fix: Croatian dump had dative "prestrašenom" -> calibrated to nominative "prestrašen, uplašen od".
+  - German clarified preposition "Angst haben vor, ängstlich gegenüber"; Spanish "tener miedo de, temeroso de, asustado de".
+  - All 35 languages calibrated.
+
+3763. somehow
+  - Semantic focus: Adverb: in a way that is not known or specified.
+  - Critical fix: Thai dump had "อย่างไรก็ตาม" (meaning "however"!) -> calibrated to authentic "อย่างใดอย่างหนึ่ง, โดยวิธีใดวิธีหนึ่ง".
+  - All 35 languages calibrated.
+
+3764. January
+  - Semantic focus: First calendar month.
+  - Fixes: Capitalization fixed for languages where months are lowercase (es: enero, fr: janvier, pl: styczeń, it: gennaio, pt: janeiro, sl: januar, et: jaanuar).
+  - All 35 languages calibrated.
+
+3765. Monday
+  - Semantic focus: First day of the working week.
+  - Fixes: Capitalization fixed for Romance/Slavic languages (es: lunes, fr: lundi, pl: poniedziałek, it: lunedì with grave accent, et: esmaspäev, lt: pirmadienis).
+  - Urdu provided with both common variants "پیر، سوموار".
+  - All 35 languages calibrated.
+
+3766. anybody
+  - Semantic focus: Pronoun: any person (affirmative, negative, and interrogative).
+  - Critical fix: Croatian dump had dative "nekome" -> calibrated to nominative "netko, bilo tko".
+  - Calibrated across all locales to handle positive and negative contexts (es: alguien, cualquiera, nadie; fr: quelqu'un, n'importe qui, personne).
+  - All 35 languages calibrated.
+
+3767. toward
+  - Semantic focus: Preposition: in the direction of; regarding.
+  - Fixes: Romanian "spre, către, în direcția"; French "vers, en direction de, envers"; German "in Richtung, auf ... zu, gegenüber".
+  - All 35 languages calibrated.
+
+3768. during
+  - Semantic focus: Preposition: throughout the course or duration of an event.
+  - CATASTROPHIC BUG CAUGHT: The raw dump translated "during" as "for" or "because" across 9 languages!
+    * ro: "pentru" -> calibrated to "în timpul, pe durata, în cursul"
+    * bg: "за" -> calibrated to "по време на, през"
+    * cs: "pro" -> calibrated to "během, v průběhu"
+    * sk: "pre" -> calibrated to "počas, v priebehu"
+    * hu: "mert" -> calibrated to "alatt, folyamán, idején"
+    * el: "για" -> calibrated to "κατά τη διάρκεια, κατά"
+    * sl: "za" -> calibrated to "med, medtem ko, v času"
+    * et: "eest" -> calibrated to "ajal, vältel, jooksul"
+    * lt: "už" -> calibrated to "metu, per, laikotarpiu"
+  - All 35 languages calibrated.
+
+3769. promise to
+  - Semantic focus: Verb pattern: to commit or pledge to do something.
+  - CATASTROPHIC BUG CAUGHT: The raw dump translated this verbal pattern as an isolated abstract NOUN ("a promise") across 20+ languages!
+    * fr: "promesse" (noun) -> "promettre de, s'engager à" (verb)
+    * it: "promessa" (noun) -> "promettere di, impegnarsi a" (verb)
+    * ro: "promisiune" (noun) -> "a promite să, a făgădui" (verb)
+    * bg: "обещание" (noun) -> "обещавам да, заричам се" (verb)
+    * cs: "slib" (noun) -> "slíbit, zavázat se" (verb)
+    * sk: "sľub" (noun) -> "sľúbiť, zaviazať sa" (verb)
+    * hu: "ígéret" (noun) -> "megígér, ígéretet tesz" (verb)
+    * el: "υπόσχεση" (noun) -> "υπόσχομαι να, δεσμεύομαι να" (verb)
+    * sl: "obljuba" (noun) -> "obljubiti, zavezati se" (verb)
+    * et: "lubadus" (noun) -> "lubama, tõotama" (verb)
+    * lt: "pažadas" (noun) -> "pažadėti, prižadėti" (verb)
+    * da: "løfte" (noun) -> "love at, give løfte om" (verb)
+    * fi: "lupaus" (noun) -> "luvata tehdä, sitoutua" (verb)
+    * sv: "löfte" (noun) -> "lova att, avge löfte" (verb)
+    * hr: "obećanju" (dative noun) -> "obećati, zavjetovati se" (verb)
+    * lv: "solījums" (noun) -> "apsolīt, solīt" (verb)
+    * ar: "وعد" (noun) -> "وعد بأن، تعهد بـ" (verb)
+    * vi: "lời hứa" (noun) -> "hứa sẽ, cam kết" (verb)
+    * ko: "약속" (noun) -> "~하기로 약속하다, 다짐하다" (verb)
+    * kk: "уәде" (noun) -> "уәде беру, уәде ету" (verb)
+  - All 35 languages calibrated.
+
+3770. born
+  - Semantic focus: Adjective / past participle: brought into life.
+  - Critical fixes:
+    * hr: Raw dump had dative "rođenom" -> calibrated to nominative "rođen, urođen".
+    * pt: Raw dump had infinitive verb "nascer" -> calibrated to participle/adjective "nascido, nato".
+    * pl: Raw dump had infinitive "urodzić się" -> calibrated to adjective "urodzony, zrodzony".
+  - All 35 languages calibrated.
+
+3771. food
+  - Semantic focus: Noun: substance taken in for nutritional support.
+  - Critical fix: Croatian dump had dative "hrani" -> calibrated to nominative "hrana, jelo".
+  - All 35 languages calibrated.
+
+3772. shoot
+  - Semantic focus: Verb: discharge a weapon; film/photograph.
+  - Critical fixes:
+    * German raw dump had single exclamation "Feuer" -> calibrated to "schießen, abfeuern; drehen, filmen".
+    * Covered dual senses (firearms and cinematography) across all 35 languages.
+  - All 35 languages calibrated.
+
+3773. may
+  - Semantic focus: Modal auxiliary expressing possibility or permission.
+  - Critical fixes:
+    * Spanish raw dump had "mayo" (calendar month!) -> purged, calibrated to "poder, tener permiso de, quizás".
+    * Polish raw dump had "maj" (calendar month!) -> purged, calibrated to "móc, mieć pozwolenie".
+    * Croatian raw dump had dative "mogućem" -> calibrated to "smjeti, moći, možda".
+    * German refined to "dürfen, können, möglicherweise".
+  - All 35 languages calibrated.
+
+3774. put
+  - Semantic focus: Verb: move to or place in a particular position.
+  - CATASTROPHIC BUG CAUGHT: Machine translator translated the verb "put" as a NOUN meaning "location / place" across 11 languages!
+    * da: "sted" (a place!) -> "sætte, lægge, stille, putte"
+    * fi: "paikka" (a place!) -> "laittaa, panna, asettaa"
+    * sv: "plats" (a place!) -> "sätta, lägga, ställa, placera"
+    * hr: "mjestu" (dative of place!) -> "staviti, metnuti, položiti"
+    * lv: "vieta" (a place!) -> "likt, nolikt, novietot"
+    * ar: "مكان" (a place!) -> "يضع، يثبت"
+    * vi: "địa điểm" (a place!) -> "đặt, để, cho vào"
+    * th: "สถานที่" (a place!) -> "วาง, ใส่, ตั้ง"
+    * ko: "장소" (a place!) -> "놓다, 두다, 넣다"
+    * ja: "場所" (a place!) -> "置く、入れる、設置する"
+    * kk: "орын" (a place!) -> "қою, салу, орналастыру"
+  - All 35 languages calibrated to proper action verbs.
+
+3775. steal
+  - Semantic focus: Verb: take another person's property without permission.
+  - Fixes: Standardized verbal infinitives across all Slavic, Romance, Germanic, and Uralic languages (pl: kraść; es: robar, hurtar; fr: voler; tr: çalmak; kk: ұрлау, жымқыру).
+  - All 35 languages calibrated.
+
+3776. mom
+  - Semantic focus: Informal affectionate noun for mother.
+  - Critical fixes:
+    * Croatian dump had dative "mami" -> calibrated to nominative "mama, mamica".
+    * Replaced formal "Mother" across 12 languages with natural informal terms (de: Mama, Mutti; fr: maman; it: mamma; pt: mamãe, mãe; ro: mama, mami; cs: máma, maminka; sk: mama, mamička; hu: anyu, mami; lt: mama, mamytė; ja: ママ、お母さん; ar: أمي، ماما).
+  - All 35 languages calibrated.
+
+3777. April
+  - Semantic focus: Fourth calendar month.
+  - Critical fixes:
+    * Croatian dump had dative "travnju" -> calibrated to nominative "travanj".
+    * Fixed capitalization for languages where month names are lowercase (es: abril, fr: avril, pl: kwiecień, it: aprile, pt: abril, ro: aprilie, bg: април, sk: apríl, sl: april, et: aprill, lt: balandis).
+  - All 35 languages calibrated.
+
+3778. think about
+  - Semantic focus: Phrasal verb: consider, reflect on, ponder.
+  - Critical fixes:
+    * Turkish dump had imperative "düşün" -> infinitive "hakkında düşünmek, kafa yormak".
+    * Romanian dump had imperative "gândește-te la" -> infinitive "a se gândi la, a reflecta asupra".
+    * Bulgarian dump had imperative plural "помислете за" -> "мисля за, обмислям".
+    * Hungarian dump had imperative "gondolj rá" -> "gondolkodik vmin, fontolgat".
+    * Slovenian dump had imperative "razmisli o" -> "razmišljati o, premišljevati o".
+    * Portuguese refined to natural Brazilian "pensar em, refletir sobre".
+  - All 35 languages calibrated.
+
+3779. hell
+  - Semantic focus: Underworld / place of torment; colloquial exclamation.
+  - Critical fix: Croatian dump had only the interjection "dovraga" and completely omitted the noun "pakao" -> calibrated to "pakao; dovraga".
+  - All 35 languages calibrated.
+
+3780. shall
+  - Semantic focus: Modal auxiliary: determination, obligation, or offer ("shall we?").
+  - CATASTROPHIC BUG CAUGHT:
+    * Czech dump had "mošt" (apple cider / fruit juice!) -> calibrated to "mít, muset".
+    * Romanian dump had noun "necesitate" -> calibrated to "a trebui, va".
+    * Slovak dump had inflected 3rd person "musí" -> calibrated to "mať, musieť".
+    * Croatian refined from "trebao bi" to "trebati, hoćemo li".
+  - All 35 languages calibrated.
+
+3781. her
+  - Semantic focus: Pronoun: 3rd person feminine singular object ("see her") & possessive determiner ("her car").
+  - Fixes: Calibrated to provide both object pronoun and possessive forms across all languages (de: sie, ihr, ihre; es: la, le, su, sus; fr: la, lui, son, sa, ses; it: la, le, suo, sua; ro: o, îi, pe ea, ei, său; pt: a, lhe, dela, seu, sua; ru: её, ей, свой; uk: її, їй, своїй).
+  - All 35 languages calibrated.
+
+3782. focus on
+  - Semantic focus: Verb phrase: concentrate attention or effort on something.
+  - CATASTROPHIC BUG CAUGHT: Machine translator rendered "focus on" as a NOUN meaning "chemical/juice concentrate" in 6 languages!
+    * cs: "koncentrát" -> "soustředit se na, zaměřit se na"
+    * bg: "концентрат" -> "съсредоточавам се върху, фокусирам се върху"
+    * hu: "sűrítmény" (literally tomato paste / condensed liquid!) -> "összpontosít vmire, fókuszál vmire"
+    * sl: "koncentrat" -> "osredotočiti se na, usmeriti se na"
+    * et: "kontsentraat" -> "keskenduma millelegi, fokusseerima"
+    * lt: "koncentratas" -> "susitelkti į, susikoncentruoti į"
+    * ro: "concentrat" -> "a se concentra pe, a se focaliza pe"
+    * pt: "concentrado" -> "concentrar-se em, focar em"
+    * it: "specializzarsi" -> "concentrarsi su, focalizzarsi su"
+  - All 35 languages calibrated.
+
+3783. many
+  - Semantic focus: Quantifier: large number of (countable items).
+  - Fixes: Greek dump had typo "πολοί" -> corrected to "πολλοί, πολλές, πολλά".
+  - Handled gender and plural agreement across all languages (es: muchos, muchas; it: molti, molte; pt: muitos, muitas; ro: mulți, multe; ru: многие, много).
+  - All 35 languages calibrated.
+
+3784. am is are
+  - Semantic focus: Present tense indicative forms of the copula verb "to be".
+  - Fixes: Comprehensive grammatical annotations and conjugated present forms provided across all languages (de: sein (bin, bist, ist, sind, seid); es: ser, estar (soy, eres, es, somos, son); fr: être (suis, es, est, sommes, êtes, sont); pl: być (jestem, jesteś, jest, jesteśmy, jesteście, są); it: essere (sono, sei, è, siamo, siete, sono); ro: a fi (sunt, ești, este, suntem, sunteți); bg: съм (съм, си, е, сме, сте, са); cs: být (jsem, jsi, je, jsme, jste, jsou); sk: byť (som, si, je, sme, ste, sú); hu: lenni (vagyok, vagy, van, vagyunk, vagytok, vannak); hr: biti (sam, si, je, smo, ste, su)).
+  - All 35 languages calibrated.
+
+3785. whose
+  - Semantic focus: Interrogative pronoun ("whose is this?") and relative pronoun ("the person whose...").
+  - Critical fixes: Raw dump in 8 languages only provided relative pronouns and missed the interrogative form:
+    * cs: "jehož" -> "čí; jehož, jejíž"
+    * pl: "którego" -> "czyj, czyja, czyje; którego"
+    * sk: "ktorého" -> "čí, čia, čie; ktorého"
+    * bg: "чийто" -> "чий, чия, чие; чийто"
+    * fr: "dont" -> "de qui, à qui; dont, duquel"
+    * hu: "akinek" -> "kié, kinek a...; akinek a..."
+    * sv: "vars" -> "vems; vars, vilkens"
+    * lt: "kurio" -> "kieno; kurio, kurios"
+  - All 35 languages calibrated.
+
+3786. of
+  - Semantic focus: Core relational preposition (genitive relation, origin, composition, part of whole).
+  - Fixes: Calibrated functional equivalents and grammatical markers across all target systems (ru: из, от, о, об; передача родительного падежа; uk: з, від, про; передача родового відмінка; de: von, aus, über; es: de, del, sobre; fr: de, d', du; it: di, da, su; pt: de, do, da, sobre; hi: का, की, के, में से; ar: مِن، عَن، لإفادة الإضافة والملكية; ur: کا، کی، کے، میں سے; zh: ……的、关于、由……构成; kk: -ның/-нің, туралы, ішінен).
+  - All 35 languages calibrated.
+
+3787. our
+  - Semantic focus: First-person plural possessive determiner.
+  - Critical fixes:
+    * ro: Raw dump had feminine plural "noastre" -> calibrated to all genders "nostru, noastră, noștri, noastre".
+    * hu: Raw dump had predicative "a miénk" -> calibrated to "a mi...unk, a miénk".
+    * id: Provided both inclusive and exclusive forms "kami, kita, milik kami".
+    * ar: Provided pronominal suffix and possessive "ـنا، خاصتنا".
+  - All 35 languages calibrated.
+
+3788. in
+  - Semantic focus: Preposition of spatial containment, time period, and state.
+  - Fixes: Comprehensive locative coverage (de: in, im, innerhalb; es: en, dentro de; fr: dans, en, dedans; pl: w, we, wewnątrz; pt: em, no, na, dentro de; ro: în, înăuntru; ru: в, во, внутри, через; tr: içinde, -de, -da; zh: 在……里面、在……中; kk: ішінде, -да/-де).
+  - All 35 languages calibrated.
+
+3789. them
+  - Semantic focus: Third-person plural objective pronoun.
+  - CATASTROPHIC BUG CAUGHT: 9 languages translated "them" as possessive "their"!
+    * da: "deres" (their) -> calibrated to "dem"
+    * fi: "heidän" (their) -> calibrated to "heitä, heidät, heille"
+    * sv: "deras" (their) -> calibrated to "dem"
+    * hr: "njihov" (their) -> calibrated to "njih, njima, ih"
+    * vi: "của họ" (their) -> calibrated to "họ, chúng nó (tân ngữ)"
+    * th: "ของพวกเขา" (their) -> calibrated to "พวกเขา (กรรม)"
+    * ko: "그들의" (their) -> calibrated to "그들을, 그들에게"
+    * ja: "彼らの" (their) -> calibrated to "彼らを、彼女らを、それらを"
+    * kk: "олардың" (their) -> calibrated to "оларды, оларға"
+  - All 35 languages calibrated.
+
+3790. wait for
+  - Semantic focus: Verb phrase: stay in expectation of.
+  - Critical fixes: Purged imperative commands in 8 languages and restored proper dictionary infinitives:
+    * fr: "attendez" (imperative) -> "attendre, patienter pour"
+    * ro: "așteptați" (imperative) -> "a aștepta pe, a sta după"
+    * bg: "чакай" (imperative) -> "чакам, изчаквам"
+    * cs: "Počkejte" (imperative) -> "čekat na, počkat na"
+    * sk: "čakať" -> "čakať na, počkať na"
+    * hu: "Várjon" (imperative) -> "vár vmire, megvár"
+    * el: "Περιμένετε" (imperative) -> "περιμένω, προσμένω"
+    * sl: "počakajte" (imperative) -> "čakati na, počakati na"
+    * et: "oota" (imperative) -> "ootama kedagi/midagi"
+  - All 35 languages calibrated.
+
+3791. fall
+  - Semantic focus: Dual semantic identity: 1. Verb: to drop, plunge, descend; 2. Noun: autumn season.
+  - CATASTROPHIC BUG CAUGHT: Over 20 languages had ONLY "autumn" or ONLY the verb "drop":
+    * fr: "automne" only -> calibrated to "tomber, chuter; automne"
+    * it: "autunno" only -> calibrated to "cadere, precipitare; autunno"
+    * ro: "toamnă" only -> calibrated to "a cădea, a pica; toamnă"
+    * bg: "есен" only -> calibrated to "падам; есен"
+    * cs: "podzim" only -> calibrated to "padat, spadnout; podzim"
+    * sk: "jeseň" only -> calibrated to "padať, spadnúť; jeseň"
+    * hu: "ősz" only -> calibrated to "esik, zuhan; ősz"
+    * el: "φθινόπωρο" only -> calibrated to "πέφτω; φθινόπωρο"
+    * sl: "jesen" only -> calibrated to "pasti, padati; jesen"
+    * et: "sügis" only -> calibrated to "kukkuma, langema; sügis"
+    * lt: "ruduo" only -> calibrated to "kristi, pulti; ruduo"
+    * da: "efterår" only -> calibrated to "falde, drysse; efterår"
+    * fi: "syksy" only -> calibrated to "pudota, kaatua; syksy"
+    * sv: "höst" only -> calibrated to "falla, ramla; höst"
+    * hr: "jesen" only -> calibrated to "padati, pasti; jesen"
+    * ar: "الخريف" only -> calibrated to "يسقط، يقع؛ خريف"
+    * vi: "mùa thu" only -> calibrated to "rơi, ngã; mùa thu"
+    * th: "ฤดูใบไม้ร่วง" only -> calibrated to "ตก, ล้ม; ฤดูใบไม้ร่วง"
+    * ja: "秋" only -> calibrated to "落ちる、倒れる；秋"
+    * kk: "күз" only -> calibrated to "құлау, түсу; күз"
+    * bn: "পড়ে যাওয়া" only -> calibrated to "পড়ে যাওয়া, পতন; শরৎ, হেমন্ত"
+  - All 35 languages calibrated with dual senses.
+
+3792. March
+  - Semantic focus: Third calendar month & verb to walk with military precision.
+  - Fixes: Provided both month and marching step across all target languages (es: marzo; marchar; de: März; marschieren; fr: mars; marcher; it: marzo; marciare; pt: março; marchar; pl: marzec; maszerować; hr: ožujak; marširati; cs: březen; pochodovat; sk: marec; pochodovať; ja: 3月；行進する; zh: 三月；行进; kk: наурыз; саппен жүру).
+  - All 35 languages calibrated.
+
+3793. worry about
+  - Semantic focus: Verb phrase: feel anxious or apprehensive about sth/sb.
+  - Fixes: Turkish "... için endişelenmek" refined to "hakkında endişelenmek, kaygılanmak"; French "s'inquiéter de, se faire du souci pour"; German "sich Sorgen machen um, beunruhigt sein über"; Polish "martwić się o, niepokoić się czymś"; Romanian "a-și face griji pentru, a se îngrijora de".
+  - All 35 languages calibrated.
+
+3794. refer to
+  - Semantic focus: Verb phrase: mention, direct attention to, consult.
+  - Fixes: Romanian "referi" -> "a se referi la, a face trimitere la"; French "référer" -> "se référer à, faire référence à, mentionner"; Spanish "referirse a, aludir a, remitirse a"; German "verweisen auf, sich beziehen auf".
+  - All 35 languages calibrated.
+
+3795. she
+  - Semantic focus: Third-person singular feminine subjective pronoun.
+  - Fixes: Handled distinctions in grammatical gender and polite register across Asian and European languages (es: ella; de: sie; fr: elle; it: lei, essa; tr: o (kadın); hu: ő (nő); et: tema, ta (naine); fi: hän (nainen); hi: वह (स्त्रीलिंग); ur: وہ (عورت); id: dia (perempuan); vi: cô ấy, bà ấy, chị ấy; th: เธอ, หล่อน; ko: 그녀; ja: 彼女; zh: 她; bn: সে, তিনি (মহিলা); kk: ол (әйел)).
+  - All 35 languages calibrated.
+
+3796. wow
+  - Semantic focus: Interjection expressing astonishment, wonder, or admiration.
+  - Critical fixes:
+    * Greek dump had bizarre "Εκπληκτική επιτυχία" ("stunning success"!) -> calibrated to authentic interjections "ουάου, πω πω".
+    * Calibrated authentic interjections: es: guau, vaya, caramba; pt: uau, nossa, caramba; fr: ouah, waouh, ça alors; de: wow, boah, donnerwetter; it: wow, accidenti, caspita; tr: vay canına, vay be; pl: wow, ojej, kurczę; cs: páni, týjo, vau; sk: páni, fíha, vau; hu: hűha, azta, vau; kk: мәссаған, уау; hi: वाह, अरे वाह; ur: واہ، سبحان اللہ; zh: 哇、哇塞.
+  - All 35 languages calibrated.
+
+3797. from
+  - Semantic focus: Preposition expressing starting point, origin, or cause.
+  - Critical fixes:
+    * Finnish dump had bizarre "keneltä, keneltä tahansa" ("from whom, from whomever"!) -> calibrated to case endings/prepositions "-sta/-stä, -lta/-ltä, lähtien".
+    * Kazakh refined to affix notation "-дан/-ден, -нан/-нен, бастап".
+    * German "von, aus, ab"; French "de, depuis"; Spanish "de, desde"; Italian "da, a partire da".
+  - All 35 languages calibrated.
+
+3798. me
+  - Semantic focus: First-person singular objective pronoun ("me / to me").
+  - CATASTROPHIC BUG CAUGHT: 14 languages had the NOMINATIVE pronoun "I"!
+    * it: "io" (I) -> calibrated to "mi, me"
+    * tr: "ben" (I) -> calibrated to "beni, bana"
+    * ro: "eu" (I) -> calibrated to "mă, pe mine, mie, îmi"
+    * bg: "аз" (I) -> calibrated to "ме, мен, на мен"
+    * cs: "já" (I) -> calibrated to "mě, mně, mi"
+    * sk: "ja" (I) -> calibrated to "ma, mňa, mne, mi"
+    * hu: "én" (I) -> calibrated to "engem, nekem"
+    * el: "εγώ" (I) -> calibrated to "με, εμένα, μου"
+    * sl: "jaz" (I) -> calibrated to "me, mene, mi, meni"
+    * et: "mina" (I) -> calibrated to "mind, mulle, minule"
+    * lt: "aš" (I) -> calibrated to "mane, man"
+    * fi: "minä" (I) -> calibrated to "minua, minut, minulle"
+    * ar: "أنا" (I) -> calibrated to "ـني، إياي، لي"
+    * kk: "мен" (I) -> calibrated to "мені, маған"
+  - All 35 languages calibrated.
+
+3799. eight
+  - Semantic focus: Cardinal number 8.
+  - Fixes: Standardized forms across all 35 target languages (es: ocho; fr: huit; de: acht; it: otto; pt: oito; pl: osiem; ro: opt; el: οκτώ; hi: आठ; ar: ثمانية; fa: هشت; ur: آٹھ; zh: 八; ja: 8、八、八つ; ko: 여덟, 팔; kk: сегіз).
+  - All 35 languages calibrated.
+
+3800. their
+  - Semantic focus: Third-person plural possessive determiner.
+  - Fixes: Handled gender, number, and case agreement: es: su, sus (de ellos/ellas); fr: leur, leurs; it: loro, il loro, la loro; pt: seu, sua, seus, suas, deles, delas; de: ihr, ihre; ro: lor, al lor; bg: техен, тяхна, тяхно, техни; cs: jejich; sk: ich, ich vlastný; hu: az ő...uk, az ő...ük; hr: njihov, njihova, njihovo; sl: njihov, njihova, njihovo; ar: ـهم، ـهن، خاصتهم; ur: ان کا، ان کی، ان کے; zh: 他们的、她们的、它们的.
+  - All 35 languages calibrated.
+
+3801. what
+  - Semantic focus: Interrogative and relative pronoun/determiner.
+  - Fixes: Handled question word and relative connective forms: es: qué, lo que, cuál; fr: que, quoi, quel, ce que; de: was, welch; it: che cosa, che, cosa, quale; pt: o que, que, qual; ro: ce, ceea ce; pl: co, jaki; cs: co, jaký; sk: čo, aký; hu: mi, mit, milyen; el: τι, ό,τι, ποιος; sl: kaj, kakšen; hr: što, šta, kakav; hi: क्या, जो; ur: کیا، جو; ar: ماذا، ما، أي; fa: چه، چی، آنچه; zh: 什么、多么; ja: 何、どんなこと; ko: 무엇, 무슨, 어떤 것; kk: не, қандай, не нәрсе.
+  - All 35 languages calibrated.
+
+================================================================================
+VERIFICATION & QUALITY CHECK
+================================================================================
+- Output file 1: `scripts/apply_batch_3752_3801_calibrations.cjs`
+  * Exactly 50 word IDs (3752 through 3801)
+  * Exactly 35 target languages per word
+  * Syntactically valid CommonJS module exporting `calibrations` object
+- Output file 2: `scripts/detailed_3752_3801.txt`
+  * Complete linguistic analysis detailing all bugs, homonyms, register nuances, and calibrations.
+- Zero modifications to `frontend/assets/data/words.json` (preventing lock conflicts).
+- Zero APK/AAB build executions.
+================================================================================

@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 
+const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -776,7 +778,47 @@ async function run() {
 
     // Batch 3302-3351
     { id: 3313, word: 'electoral', lang: 'de', expected: 'Wahl-, wahlbezogen, elektoral' },
-    { id: 3338, word: 'accommodate', lang: 'de', expected: 'unterbringen, beherbergen, aufnehmen, entgegenkommen' }
+    { id: 3338, word: 'accommodate', lang: 'de', expected: 'unterbringen, beherbergen, aufnehmen, entgegenkommen' },
+
+    // Batch 3352-3401
+    { id: 3393, word: 'fever', lang: 'fr', expected: 'fièvre' },
+    { id: 3391, word: 'openly', lang: 'ru', expected: 'открыто, откровенно, прямо, гласно' },
+
+    // Batch 3402-3451
+    { id: 3421, word: 'jar', lang: 'da', expected: 'krukke, syltetøjsglas, rystelse' },
+    { id: 3415, word: 'rookie', lang: 'fi', expected: 'tulokas, vasta-alkaja, keltanokka' },
+
+    // Batch 3452-3501
+    { id: 3475, word: 'validity', lang: 'de', expected: 'Gültigkeit, Rechtskraft, Stichhaltigkeit' },
+    { id: 3455, word: 'premium', lang: 'fr', expected: 'prime, cotisation, surcoût, haut de gamme' },
+
+    // Batch 3502-3551
+    { id: 3502, word: 'sodium', lang: 'fr', expected: 'sodium' },
+    { id: 3505, word: 'ipad', lang: 'es', expected: 'iPad' },
+
+    // Batch 3552-3601
+    { id: 3552, word: 'defender', lang: 'de', expected: 'Verteidiger, Abwehrspieler' },
+    { id: 3574, word: 'chop', lang: 'it', expected: 'tagliare, tritare; costoletta' },
+
+    // Batch 3602-3651
+    { id: 3623, word: 'induce', lang: 'de', expected: 'herbeiführen, auslösen, veranlassen' },
+    { id: 3641, word: 'peel', lang: 'fr', expected: 'éplucher, peler, décortiquer; peau, zeste' },
+
+    // Batch 3652-3701
+    { id: 3696, word: 'graduation', lang: 'fr', expected: "remise des diplômes, collation des grades, fin d'études" },
+    { id: 3692, word: 'reluctant', lang: 'fr', expected: 'réticent, hésitant, peu disposé' },
+
+    // Batch 3702-3751
+    { id: 3702, word: 'casualty', lang: 'fr', expected: 'victime, blessé, perte' },
+    { id: 3751, word: 'October', lang: 'de', expected: 'Oktober' },
+
+    // Batch 3752-3801
+    { id: 3774, word: 'put', lang: 'de', expected: 'setzen, stellen, legen, platzieren' },
+    { id: 3782, word: 'focus on', lang: 'fr', expected: 'se concentrer sur, se focaliser sur' },
+
+    // Batch 3802-3851
+    { id: 3802, word: 'than', lang: 'fr', expected: 'que, de' },
+    { id: 3851, word: 'hello', lang: 'fr', expected: 'bonjour, salut, allô' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -794,28 +836,24 @@ async function run() {
   // Helper to load calibrations from a batch file
   function loadBatchObj(filename) {
     const filePath = path.join(ROOT_DIR, 'scripts', filename);
-    const c = fs.readFileSync(filePath, 'utf8');
-    const start = c.indexOf('const calibrations = {') + 'const calibrations = '.length;
-    let end = c.indexOf('let updatedWords = 0;');
-    if (end === -1) end = c.indexOf('module.exports = calibrations;');
-    return eval('(' + c.slice(start, end).trim().replace(/;\s*$/, '') + ')');
+    return require(filePath);
   }
 
-  // Batches 1 to 57 (words 1-2851) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-57 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 58-67 (words 2852-3351, 500 words)
+  // Batches 1 to 67 (words 1-3351) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-67 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 68-77 (words 3352-3851, 498 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_2852_2901_calibrations.cjs',
-    'apply_batch_2902_2951_calibrations.cjs',
-    'apply_batch_2952_3001_calibrations.cjs',
-    'apply_batch_3002_3051_calibrations.cjs',
-    'apply_batch_3052_3101_calibrations.cjs',
-    'apply_batch_3102_3151_calibrations.cjs',
-    'apply_batch_3152_3201_calibrations.cjs',
-    'apply_batch_3202_3251_calibrations.cjs',
-    'apply_batch_3252_3301_calibrations.cjs',
-    'apply_batch_3302_3351_calibrations.cjs'
+    'apply_batch_3352_3401_calibrations.cjs',
+    'apply_batch_3402_3451_calibrations.cjs',
+    'apply_batch_3452_3501_calibrations.cjs',
+    'apply_batch_3502_3551_calibrations.cjs',
+    'apply_batch_3552_3601_calibrations.cjs',
+    'apply_batch_3602_3651_calibrations.cjs',
+    'apply_batch_3652_3701_calibrations.cjs',
+    'apply_batch_3702_3751_calibrations.cjs',
+    'apply_batch_3752_3801_calibrations.cjs',
+    'apply_batch_3802_3851_calibrations.cjs'
   ];
 
   let mergedCount = 0;
