@@ -1,0 +1,32 @@
+Batch 6452-6501 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 49 words (IDs 6452 to 6501, note 6454 is absent) from dump slice 'scripts/dump_6452_6501.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, bn, ar, fa, ur, id, vi, th, ko, ja, zh, kk).
+
+Key Linguistic Bugs & Hallucinations Caught and Resolved:
+1. 6491 "mercurial":
+   - Raw Kazakh had "ұялы телефон" (literally 'cellular phone/mobile phone'!), conflating mobile/mercurial! Calibrated to "құбылмалы, көңіл-күйі тез өзгергіш, сынаптай ойнақшыған".
+   - Raw Japanese had "移動可能な" (movable) instead of volatile/erratic. Calibrated to "気まぐれな、移り気な、変わりやすい".
+   - Raw Arabic had "متنقل" (mobile) instead of mercurial temperament. Calibrated to "متقلب المزاج، زئبقي الطبع، سريع التحول".
+2. 6475 "malinger":
+   - Part-of-speech mismatch: Headword is a verb ('to feign illness to shirk duty'). Raw Russian had "симулянт" (noun: a malingerer!), French had "simulateur" (noun), Japanese had "仮病者" (noun), Kazakh had "жамандық жасаушы" (evildoer!). Calibrated across all locales to active verbs (ru: "симулировать болезнь, притворяться больным, отлынивать", fr: "feindre une maladie, simuler", ja: "仮病を使う、仕事をさぼるために病気のふりをする", kk: "жұмыстан қашу үшін аурусыну").
+3. 6481 "martinet":
+   - Serious mistranslation: Raw Japanese had "兵士" (soldier!) and Arabic had "جندي" (soldier!), confusing martinet with a generic soldier instead of a strict disciplinarian/stickler for rules. Calibrated to "厳しい規律主義者、口うるさい人" (JA), "ضابط صارم، متمسك بالقواعد بحذافيرها" (AR), and "қатал тәртіпті талап етуші" (KK).
+4. 6492 "meretricious":
+   - False friend / homonym confusion: Conflated with 'meritorious' or 'venal'. Raw Russian had "продажный", Kazakh had "сатқындық" (treachery), Japanese had "金銭欲の強い" (money-hungry), French had "vénal". Meretricious means flashy but lacking real integrity/value (tawdry). Calibrated to ru: "мишурный, показной, фальшивый", ja: "見かけ倒しの、安っぽい、うわべだけの", kk: "жылтырақ бірақ құнсыз, көз бояушы", fr: "trompeur, tape-à-l'œil, de pacotille".
+5. 6486 "maxim":
+   - Raw Kazakh had "максимум" (maximum!). Calibrated to "өсиет, нақыл сөз, өмірлік қағида, қағидат".
+6. 6473 "malfeasance":
+   - Raw Arabic had "حقد" (malice/spite) instead of official misconduct/wrongdoing. Raw Japanese had "悪意". Calibrated to "مخالفة قانونية، سوء تصرف وظيفي" (AR), "不正行為、職権乱用、背任行為" (JA).
+7. 6499 "minatory":
+   - Part-of-speech mismatch: Raw Russian had "угроза" (noun: threat), French had "menace" (noun), Japanese had "脅威" (noun), Kazakh had "қауіп" (noun). Minatory is an adjective meaning menacing/threatening. Calibrated to ru: "угрожающий, грозный, запугивающий", fr: "comminatoire, menaçant", ja: "威嚇的な、脅迫的な", kk: "қоқан-лоқылы, қатер төндіруші".
+8. 6488 "meander":
+   - Raw Japanese had "もがく" (struggle/writhe!). Raw Arabic had "يتململ" (fidget!). Calibrated to ja: "蛇行する、曲がりくねる、あてもなくさまよう", ar: "يتلوى، يتعرج، يهيم على وجهه".
+9. 6452 "laud":
+   - Verb translated as noun in French ("éloge") and Japanese ("賞賛"). Calibrated to fr: "louer, célébrer, faire l'éloge de", ja: "賞賛する、称える、褒めたたえる".
+10. 6463 "litany":
+    - Overly narrow religious term in Russian ("ектения"). In general vocabulary, litany refers to a tedious repetitive recitation or long list of grievances. Calibrated to "литания, длинный перечень, скучное повторение".
+
+All 49 words are completely calibrated and verified across all 36 locales.

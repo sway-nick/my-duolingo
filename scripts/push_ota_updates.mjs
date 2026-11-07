@@ -1018,7 +1018,47 @@ async function run() {
 
     // Batch 6302-6351
     { id: 6351, word: 'impious', lang: 'de', expected: 'gottlos, pietätlos, unfromm' },
-    { id: 6307, word: 'glib', lang: 'de', expected: 'schlagfertig aber oberflächlich, zungengewandt' }
+    { id: 6307, word: 'glib', lang: 'de', expected: 'schlagfertig aber oberflächlich, zungengewandt' },
+
+    // Batch 6352-6401
+    { id: 6353, word: 'implode', lang: 'de', expected: 'implodieren, nach innen zusammenstürzen' },
+    { id: 6394, word: 'ingenuous', lang: 'ru', expected: 'простодушный, наивный, искренний' },
+
+    // Batch 6402-6451
+    { id: 6436, word: 'knell', lang: 'fr', expected: 'glas funèbre, sonnerie de mort' },
+    { id: 6408, word: 'insolent', lang: 'ru', expected: 'дерзкий, наглый, высокомерный' },
+
+    // Batch 6452-6501
+    { id: 6491, word: 'mercurial', lang: 'kk', expected: 'құбылмалы, көңіл-күйі тез өзгергіш, сынаптай ойнақшыған' },
+    { id: 6486, word: 'maxim', lang: 'kk', expected: 'өсиет, нақыл сөз, өмірлік қағида, қағидат' },
+
+    // Batch 6502-6551
+    { id: 6510, word: 'ostracism', lang: 'ru', expected: 'остракизм, изгнание, бойкот, общественное неприятие' },
+    { id: 6544, word: 'remiss', lang: 'fr', expected: 'négligent, insouciant, coupable de manquement' },
+
+    // Batch 6552-6601
+    { id: 6556, word: 'scintilla', lang: 'ru', expected: 'крупица, искорка, малейшая доля' },
+    { id: 6573, word: 'singular', lang: 'ru', expected: 'исключительный, выдающийся, своеобразный, редкий' },
+
+    // Batch 6602-6651
+    { id: 6609, word: 'sonorous', lang: 'fr', expected: 'sonore, résonnant, harmonieux' },
+    { id: 6646, word: 'teetotaler', lang: 'kk', expected: 'мүлде ішімдік татпайтын адам, салауатты жан' },
+
+    // Batch 6652-6701
+    { id: 6652, word: 'temporize', lang: 'it', expected: 'temporeggiare, prendere tempo, esitare' },
+    { id: 6669, word: 'toady', lang: 'hu', expected: 'talpnyaló, hízelgő, talpnyaló alak' },
+
+    // Batch 6702-6751
+    { id: 6717, word: 'bind bound bound', lang: 'da', expected: 'binde, samle, forpligte' },
+    { id: 6747, word: 'better safe than sorry', lang: 'kk', expected: 'сақтансаң сақтайды, өкінгенше сақтанған жөн' },
+
+    // Batch 6752-6801
+    { id: 6752, word: 'false', lang: 'fi', expected: 'väärä, virheellinen, epätosi' },
+    { id: 6753, word: 'cheatsheet', lang: 'el', expected: 'σκονάκι' },
+
+    // Batch 6802-6851
+    { id: 6847, word: 'May', lang: 'de', expected: 'Mai' },
+    { id: 6834, word: 'lantern', lang: 'fr', expected: 'lanterne' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -1036,22 +1076,32 @@ async function run() {
   // Helper to load calibrations from a batch file
   function loadBatchObj(filename) {
     const filePath = path.join(ROOT_DIR, 'scripts', filename);
-    return require(filePath);
+    const mod = require(filePath);
+    const calibs = mod.batchCalibrations || mod.calibrations || mod;
+    const out = {};
+    for (const [id, entry] of Object.entries(calibs)) {
+      if (entry.translations) {
+        out[id] = { ru: entry.translation, ...entry.translations };
+      } else {
+        out[id] = entry;
+      }
+    }
+    return out;
   }
 
-  // Batches 1 to 119 (words 1-5951) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-119 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 120-127 (words 5952-6351, 392 words)
+  // Batches 1 to 129 (words 1-6451) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-129 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 130-137 (words 6452-6851, 392 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_5952_6001_calibrations.cjs',
-    'apply_batch_6002_6051_calibrations.cjs',
-    'apply_batch_6052_6101_calibrations.cjs',
-    'apply_batch_6102_6151_calibrations.cjs',
-    'apply_batch_6152_6201_calibrations.cjs',
-    'apply_batch_6202_6251_calibrations.cjs',
-    'apply_batch_6252_6301_calibrations.cjs',
-    'apply_batch_6302_6351_calibrations.cjs'
+    'apply_batch_6452_6501_calibrations.cjs',
+    'apply_batch_6502_6551_calibrations.cjs',
+    'apply_batch_6552_6601_calibrations.cjs',
+    'apply_batch_6602_6651_calibrations.cjs',
+    'apply_batch_6652_6701_calibrations.cjs',
+    'apply_batch_6702_6751_calibrations.cjs',
+    'apply_batch_6752_6801_calibrations.cjs',
+    'apply_batch_6802_6851_calibrations.cjs'
   ];
 
   let mergedCount = 0;

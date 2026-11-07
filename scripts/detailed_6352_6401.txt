@@ -1,0 +1,123 @@
+Batch 6352-6401 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 6352 to 6401) from dump slice 'scripts/dump_6352_6401.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6352_6401_calibrations.cjs'.
+
+Critical Bugs Caught, Register Distortions, and Calibrations Applied:
+--------------------------------------------------------------------
+1. Word 6353 (implode):
+   - CRITICAL PHYSICS / DIRECTION ERROR IN RAW DUMP:
+     The raw dump translated 'implode' as 'взрываться' (explode outward) in Russian,
+     'explodieren' in German, and 'exploser' in French. Implosion is violent inward collapse!
+   - Calibrated to inward collapse / inward bursting across all locales:
+     * ru: 'схлопываться, разрушаться внутрь, взрываться внутрь'
+     * de: 'implodieren, nach innen zusammenstürzen'
+     * fr: 'imploser, s'effondrer vers l'intérieur'
+     * ja: '内破する、内部へ崩壊する'
+
+2. Word 6354 (importune):
+   - PART OF SPEECH CONFUSION IN RAW DUMP:
+     Raw dump mistranslated 'importune' as an adjective 'назойливый' in Russian.
+     'Importune' is a transitive verb (to harass persistently with requests/pleas).
+   - Calibrated: Correct verbal forms restored across all 35 languages:
+     * ru: 'докучать, назойливо выпрашивать, приставать с просьбами'
+     * es: 'importunar, acosar con ruegos, atosigar'
+     * de: 'bedrängen, belästigen, hartnäckig bitten'
+
+3. Word 6363 (incandescent):
+   - TRUNCATION / NOUN SUBSTITUTION BUG IN RAW DUMP:
+     The raw dump translated 'incandescent' as the noun phrase 'лампа накаливания' (incandescent light bulb) in ru and fr ('lampe à incandescence'), and ja ('白熱灯').
+     The headword is purely an adjective ('glowing with white heat; brilliantly shining / passionate').
+   - Calibrated: Restored true adjective definitions (white-hot, radiant, glowing):
+     * ru: 'раскаленный добела, ярко светящийся, пламенный'
+     * fr: 'incandescent, éclatant, ardent'
+     * ja: '白熱した、白熱光を発する、情熱的な'
+
+4. Word 6374 (incumbent):
+   - OVERLY NARROW DEFINITION IN RAW DUMP:
+     Raw dump translated 'incumbent' as 'действующий президент' (active president).
+     While a president can be an incumbent, the word applies to any officeholder or as an adjective ('incumbent upon').
+   - Calibrated: Broadened and refined to accurately reflect office-holding and obligatory nuances:
+     * ru: 'действующий, занимающий должность; лицо на посту'
+     * de: 'amtierend, Amtsinhaber, obliegend'
+     * es: 'titular, en ejercicio, ocupante del cargo'
+
+5. Word 6387 (infamous):
+   - FALSE COGNATE / REGISTER DILUTION:
+     'Infamous' does not mean famous; it specifically carries the negative connotation of being known for wicked or disgraceful deeds.
+   - Calibrated across all locales to emphasize ill repute, notoriety, and disgrace:
+     * ru: 'пользующийся дурной славой, бесславный, позорный'
+     * de: 'berüchtigt, verrufen, niederträchtig'
+     * es: 'infame, de mala fama, nefando'
+
+6. Word 6389 (infer):
+   - FREQUENT CONFUSION WITH 'IMPLY':
+     Raw dump in some locales confused 'infer' (deducing from evidence) with 'imply' (hinting/suggesting).
+   - Calibrated to rigorous deduction and conclusion from evidence:
+     * ru: 'делать вывод, заключать, выводить заключение'
+     * de: 'schließen, folgern, herleiten'
+     * es: 'deducir, inferir, sacar por conclusión'
+
+7. Word 6394 (ingenuous):
+   - CONFUSION WITH 'INGENIOUS':
+     In some draft sources, 'ingenuous' (candid, naive, innocent) is mistranslated as 'ingenious' (clever, inventive) or insulted as 'simple-minded' ('simple d'esprit' in fr dump).
+   - Calibrated to innocent, frank, unsuspecting sincerity:
+     * ru: 'простодушный, наивный, искренний'
+     * fr: 'ingénu, candide, franc'
+     * de: 'arglos, naiv, treuherzig'
+
+Full Inventory of Calibrated Headwords (IDs 6352-6401):
+------------------------------------------------------
+ID 6352: неправдоподобный, маловероятный, сомнительный
+ID 6353: схлопываться, разрушаться внутрь, взрываться внутрь
+ID 6354: докучать, назойливо выпрашивать, приставать с просьбами
+ID 6355: проклятие, заклинание, насылание бед
+ID 6356: неприступный, несокрушимый, нерушимый
+ID 6357: неподобающее поведение, непристойность, неблаговидный поступок
+ID 6358: непредусмотрительный, расточительный, недальновидный
+ID 6359: оспаривать, ставить под сомнение, подвергать сомнению
+ID 6360: безнаказанность, ненаказуемость
+ID 6361: вменять, приписывать, ставить в вину
+ID 6362: торжественно открывать, вводить в должность, давать старт
+ID 6363: раскаленный добела, ярко светящийся, пламенный
+ID 6364: заклинание, магическая формула, заговор
+ID 6365: заключать в тюрьму, лишать свободы, бросать за решетку
+ID 6366: воплощенный, олицетворенный; воплощать
+ID 6367: зажигательный, провокационный, подстрекательский
+ID 6368: инкогнито, тайно, под вымышленным именем
+ID 6369: без права связи, в полной изоляции, лишенный контактов
+ID 6370: неисправимый, закоренелый, безнадежный
+ID 6371: недоверчивый, скептический, сомневающийся
+ID 6372: приращение, увеличение, надбавка, шаг
+ID 6373: внушать, прививать, насаждать
+ID 6374: действующий, занимающий должность; лицо на посту
+ID 6375: вторжение, набег, внезапное нападение
+ID 6376: неизгладимый, несмываемый, вечный
+ID 6377: возмещать ущерб, освобождать от ответственности, страховать
+ID 6378: предъявлять официальное обвинение, привлекать к суду
+ID 6379: нищий, бедствующий, неимущий
+ID 6380: возмущенный, негодующий, разгневанный
+ID 6381: неукротимый, несгибаемый, неустрашимый
+ID 6382: несомненный, бесспорный, очевидный
+ID 6383: неизбежный, неотвратимый, фатальный
+ID 6384: неумелый, некомпетентный, нелепый
+ID 6385: инертный, бездействующий, неподвижный
+ID 6386: неумолимый, непреклонный, беспощадный
+ID 6387: пользующийся дурной славой, бесславный, позорный
+ID 6388: безрассудная страсть, слепое увлечение, влюбленность
+ID 6389: делать вывод, заключать, выводить заключение
+ID 6390: бесконечно малый, микроскопический, исчезающе малый
+ID 6391: воспалительный, подстрекательский, провокационный
+ID 6392: нарушение, проступок, несоблюдение правил
+ID 6393: нарушать, посягать, ущемлять права
+ID 6394: простодушный, наивный, искренний
+ID 6395: присущий, неотъемлемый, свойственный
+ID 6396: враждебный, неблагоприятный, губительный
+ID 6397: беззаконие, вопиющая несправедливость, злодеяние
+ID 6398: судебный запрет, судебное предписание, предписание
+ID 6399: врожденный, прирожденный, природный
+ID 6400: безобидный, безвредный, безопасный
+ID 6401: вводить новшества, внедрять инновации, обновлять

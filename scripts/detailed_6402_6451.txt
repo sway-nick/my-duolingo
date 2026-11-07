@@ -1,0 +1,91 @@
+Batch 6402-6451 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 48 words (IDs 6402 to 6451, skipping missing IDs 6435 and 6445) from dump slice 'scripts/dump_6402_6451.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6402_6451_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 6436 (knell):
+   - CATASTROPHIC HOMONYMIC / MT HALLUCINATION ERROR IN RAW DUMP:
+     Raw MT confused "knell" (funeral toll / death bell) with "call / ring up":
+     * fr: "appel" (phone call / appeal) -> calibrated to "glas funèbre, sonnerie de mort"
+     * it: "chiamata" (phone call) -> calibrated to "rintocco funebre, campana a morto"
+     * pt: "chamado" (call / calling) -> calibrated to "dobre fúnebre, dobre a finados"
+     * tr: "çağrı" (call / summons) -> calibrated to "cenaze çanı, acı son habercisi"
+     * ro: "chemare" (call / summoning) -> calibrated to "clopot de înmormântare, dangăt de doliu"
+     * cs: "volání", sk: "volanie" (calling) -> calibrated to "umíráček, hrobový zvon", "umieračik, pohrebný zvon"
+     * hu: "hívás" (call) -> calibrated to "lélekharang, halálharang zúgása"
+     * el: "κλήση" (telephone call) -> calibrated to "πένθιμη καμπάνα, νεκρώσιμος ήχος"
+     * sl: "klic", hr: "poziv" (call) -> calibrated to "mrliški zvon, napoved pogube", "mrtvačko zvono, posmrtni jauk"
+     * ar: "نداء" (appeal / shout) -> calibrated to "ناقوس الموت، قرع جرس الجنازة"
+     * ko: "부르다", ja: "呼びかける" (to call) -> calibrated to "조종 소리, 종말의 징조", "弔鐘の音、破滅の凶兆"
+     * kk: "шақыру" (invitation / call) -> calibrated to "қаза қоңырауы, апат хабаршысы"
+     * bn: "কনেলল" (gibberish phonetic transliteration) -> calibrated to "অন্তিম ঘণ্টার ধ্বনি, মৃত্যুর আগমন বার্তা"
+   - Calibrated: Restored true meaning of solemn funeral toll and portent of demise across all 35 languages.
+
+2. Word 6418 (inure):
+   - SEVERE BIZARRE MT CONFUSION (CONFUSED WITH TEMPER / IRE):
+     Raw dump translated "inure" (to accustom to hardship/pain) as "temper / temperament / anger":
+     * fr: "tempérament", it: "temperamento", pt: "temperamento", ro: "temperament", cs: "temperament", sk: "temperament", lv: "temperaments", fi: "temperamentti", sv: "temperament", hr: "temperament", et: "temperament"
+     * bg: "нрав" (temperament/disposition)
+     * hu: "indulat" (passion/anger)
+     * el: "θυμός" (anger/rage), lt: "pyktis" (anger), sl: "jeza" (anger), ar: "غضب" (anger), ja: "怒り" (anger), ko: "성질" (temper), kk: "ашушаңдық" (irascibility)
+     * bn: "িনারে" (corrupt transliteration)
+   - Calibrated: Corrected across all languages to "accustom to hardship / toughen / harden / habituate" (закалять, aguerrir, curtir, abhärten, aculturar, 단련하다, 锻炼坚韧).
+
+3. Word 6446 (lampoon):
+   - COMPLETE TRANSLATION COLLAPSE & FALSE FRIENDS:
+     Raw MT produced nonsensical outputs:
+     * cs: "hanebný" (shameful) -> calibrated to "pamflet, kousavá satira, zesměšňovat"
+     * sk: "hanblivý" (shy/bashful) -> calibrated to "pamflet, ostrá satira, zosmiešňovať"
+     * hu: "lámpalázas" (stage-fright / nervous before audience!) -> calibrated to "gúnyirat, szatíra, pellengérre állít"
+     * lt: "pamišęs" (insane / mad) -> calibrated to "paskvilis, satyra, aštriai pašiepti"
+     * lv: "vieglprātīgs" (frivolous) -> calibrated to "paskvils, satīra, izsmiet"
+     * et, da, fi: "lampoon" (untranslated copy of English word) -> calibrated to proper native terms ("pilkelaul", "smædeskrift", "herjaruno")
+     * kk: "лампун" (crude transliteration) -> calibrated to "сықақ, өткір әжуа, келеке ету"
+   - Calibrated: Restored precise meaning of sharp public satire, scathing parody, and ridicule.
+
+4. Word 6448 (languish):
+   - RIDICULOUS FALSE FRIEND IN HUNGARIAN:
+     * hu: "vénás" (venous / having veins!) -> calibrated to "senyved, sorvad, eped"
+     * cs/sk/bg/lt/fi had participle/adjective forms -> calibrated to active verbs ("chřadnout", "chradnúť", "линея", "nykti", "riutua")
+     * kk: "жалқау" (lazy) -> calibrated to "солу, күйзелу, азап шегу" (suffer, waste away, languish)
+
+5. Word 6407 (insipid):
+   - FALSE SENSE OF "INSIPID" (CONFUSED WITH "IN BAD TASTE" / TACKY):
+     In several romance and eastern European languages, "insipid" (bland, dull, lacking flavor) was translated as "lacking good taste / tacky":
+     * fr: "de mauvais goût", it: "di cattivo gusto", pt: "de mau gosto", cs: "nekvusný", hu: "ízléstelen", lv: "bezgaumīgs", ar: "عديم الذوق", th: "ไร้รสนิยม"
+   - Calibrated: Fixed to denote blandness of taste, lack of flavor, or dullness/flatness ("fade, sans saveur", "insipido, scialbo", "desabrido, soso", "mdły, bezbarwny", "íztelen, sótlan", "hambar, tawar", "จืดชืด").
+
+6. Word 6406 (insinuate) vs 6402 (innuendo):
+   - PART OF SPEECH COLLAPSE:
+     In 6406 "insinuate" (verb), 18 languages had nominal translations copied from "innuendo" (e.g. fr: "allusion", it: "suggerimento", bg: "намек", ro: "aluzie", hu: "célzás", el: "υπόδειξη", ar: "تلميح", ko: "힌트", vi: "gợi ý").
+     In 6402 "innuendo" (noun), es, pt, cs, sk, sl, ja had verb translations ("insinuar", "naznačovat", "ほのめかす").
+   - Calibrated: Enforced strict noun forms for 6402 and verb forms for 6406 across all 35 languages.
+
+7. Word 6411 (integral):
+   - MATHEMATICAL SENSE CONFINEMENT:
+     * ru: "интеграл" (calculus integral)
+     * uk: "інтеграл" (calculus integral)
+     * kk: "интегралды" (calculus integral)
+   - Calibrated: Restored the advanced adjective sense "essential to completeness, inherent, constitutive" ("неотъемлемый, существенный", "невіддільний, істотний", "ажырамас, тұтас").
+
+8. Word 6408 (insolent):
+   - POLAR OPPOSITE TRANSLATION IN KAZAKH:
+     * kk: "ұялшақ" (shy / timid / bashful) -> calibrated to "арсыз, бетпақ, дөрекі" (shameless, insolent, brazen).
+
+9. Word 6433 (juggernaut):
+   - TRANSLITERATION / LOANWORD FALLBACKS:
+     * ru: "джаггернаут", uk: "джаггернаут", kk: "джуггернаут"
+   - Calibrated: Clarified with descriptive native phrases ("сокрушительная сила, непреодолимая мощь", "нищівна сила", "жойқын күш, бәрін жайпайтын алып қуат").
+
+10. Phonetic Bengli / Urdu / Kazakh Transliteration Cleanups:
+    Cleaned up dozens of broken transliterations in Bengali (e.g., "িননােনডো", "িনসোলেনট", "িনসারগেনট", "িনভেকটিভে", "জিংয়সম", "কাডোস") with authentic literary Bengali translations.
+
+Completeness & Verification:
+- All 48 entries validated.
+- All 35 target languages present for every word.
+- Clean syntax verified via Node.js require check.
