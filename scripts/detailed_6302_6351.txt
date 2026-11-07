@@ -1,0 +1,79 @@
+Batch 6302-6351 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 48 words (IDs 6302 to 6351, skipping missing IDs 6306 and 6335) from dump slice 'scripts/dump_6302_6351.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6302_6351_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 6351 (impious):
+   - CATASTROPHIC REGISTER & MEANING ERROR IN RAW DUMP:
+     In the raw dump, "impious" was mistranslated as generic "evil / naughty / wicked" across numerous languages:
+     * de: "böse" (evil/naughty) -> calibrated to "gottlos, pietätlos, unfromm"
+     * fr: "méchant" (naughty/mean) -> calibrated to "impie, sacrilège, irrévérencieux"
+     * es: "malvado" (wicked/evil) -> calibrated to "impío, sacrílego, falto de piedad"
+     * pt: "perverso" (perverse/wicked) -> calibrated to "impío, sacrílego, profano"
+     * ja: "邪悪な" (evil) -> calibrated to "不敬な、神仏を敬わない、不信心な"
+     * ko: "사악한" (wicked/evil) -> calibrated to "불경한, 신성 모독의, 믿음 없는"
+     * ar: "شرير" (evil person) -> calibrated to "فاسق، عديم التقوى، منتهك للمقدسات"
+   - Calibrated: Restored true meaning of lack of piety, irreverence toward sacred things, and profanity across all 35 languages.
+
+2. Word 6303 (gaudy):
+   - SEVERE REGISTER DILUTION IN RAW DUMP:
+     Raw dump translated "gaudy" as simply "bright / vivid":
+     * ja: "明るい" (cheerful/bright) -> calibrated to "悪趣味に派手な、けばけばしい、下品な"
+     * ko: "밝은" (bright) -> calibrated to "천박하게 화려한, 야한, 번지르르한"
+     * ru: "яркий" (bright) -> calibrated to "кричащий, безвкусный, аляповатый"
+   - Calibrated: Enriched across all locales with the distinct nuance of tasteless, ostentatious showiness (brega, kitsch, criard, fackligt).
+
+3. Word 6307 (glib):
+   - COMPLETE SEMANTIC OPPOSITE IN RAW DUMP:
+     Raw dump mistook "glib" (fluent but insincere, slick, shallow) for "lively / energetic":
+     * de: "lebhaft" (lively) -> calibrated to "schlagfertig aber oberflächlich, zungengewandt"
+     * fr: "vif" (sharp/lively) -> calibrated to "beau parleur, superficiel, à la langue bien pendue"
+     * ja: "活発な" (active/energetic) -> calibrated to "口先だけの、口達者な、調子のいい"
+     * ko: "활기찬" (energetic) -> calibrated to "말만 번지르르한, 능청스러운, 구변 좋은"
+   - Calibrated: Restored the core quality of slick, glib insincerity.
+
+4. Word 6341 (illusory):
+   - FALSE FRIEND IN EAST ASIAN LOCALES:
+     Raw dump used "幻想的" (fantastic, dreamy, magical):
+     * ja: "幻想的な" (whimsical/magical) -> calibrated to "錯覚の、実体のない、当てにならない"
+     * ko: "환상적인" (magical/fantastic) -> calibrated to "착각을 일으키는, 실체가 없는, 가공의"
+   - Calibrated: Corrected to deceptive, unreal, and illusory across all languages.
+
+5. Word 6326 (hidebound):
+   - PHYSICAL TIE-DOWN MISINTERPRETATION:
+     Raw dump interpreted "hidebound" as physical constraint ("tied up / constrained"):
+     * ru: "скованный" -> calibrated to "закоснелый, твердолобый, заскорузлый"
+     * de: "eingeschränkt" -> calibrated to "engstirnig, borniert, stur konservativ"
+     * fr: "contraint" -> calibrated to "borné, étroit d'esprit, rétrograde"
+     * pt: "constrangido" -> calibrated to "retrógrado, bitolado, mente fechada"
+     * ja: "制約された" -> calibrated to "頭の固い、偏狭な、旧態依然とした"
+     * ko: "제한된" -> calibrated to "편협한, 완고한, 융통성 없는"
+     * ar: "مقيد" -> calibrated to "متحجر الفكر، ضيق الأفق، متعصب للماضي"
+   - Calibrated: Restored metaphorical meaning of rigid dogmatism, bigotry, and narrow-minded conservatism.
+
+6. Word 6314 (guffaw) & 6318 (harangue):
+   - GENERIC DOWNSCALING FIXED:
+     * "guffaw" was downscaled to simple "laugh" (lachen, rire, riso, 笑い, 웃음) -> calibrated to boisterous belly laugh (гомерический хохот, schallendes Gelächter, rire aux éclats, gargalhada, ゲラゲラ笑う, 폭소, قهقهة).
+     * "harangue" was downscaled to neutral "speech" (речь, discours, discurso, スピーチ, 연설) -> calibrated to fiery tirade / dressing-down (тирада, Standpauke, arenga, 熱弁/説教, 장광설).
+
+7. Word 6330 (hoary):
+   - BASIC COLOR ERROR FIXED:
+     Raw dump translated "hoary" as plain color "gray" (grau, gris, cinza, 灰色の, 회색, رمادي) -> calibrated to white-haired with age, ancient, venerable (седой, убелённый сединами, weißhaarig, uralt, chenu, canoso, 白髪の, 백발의, أشيب).
+
+8. Word 6344 (impair) & 6342 (imbue):
+   - "impair" was translated as "humiliate/degrade" (erniedrigen, dégrader) -> calibrated to weaken, damage, compromise functionality (beeinträchtigen, schädigen, deteriorar, 損なう).
+   - "imbue" was translated as "fill out / preencher" -> calibrated to infuse, saturate, inspire (durchtränken, einflößen, impregner, 染み込ませる).
+
+9. FORMATTING, ENCODING & REGIONAL ACCURACY:
+   - Cleaned zero-width spaces (​) from raw strings (e.g. German '​unbeholfen' in 6302).
+   - Ensured all German nouns are properly capitalized (Hedonismus, Hegemonie, Ketzerei, Hierarchie, Vorbote, etc.).
+   - Verified RTL layout and idiom phrasing for Arabic, Persian (Farsi), and Urdu.
+   - Maintained native Latin American and Brazilian nuances without archaic continental phrasing.
+   - Guaranteed Kazakh Cyrillic precision across all 48 calibrated terms.
+
+Batch ID 6302–6351 (48 words total) is completely verified and calibrated.

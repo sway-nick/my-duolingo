@@ -1,0 +1,44 @@
+Batch 5952-6001 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5952 to 6001) from dump slice 'scripts/dump_5952_6001.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5952_6001_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5971 (turpitude):
+   - Raw dump mistranslated 'turpitude' as 'пошлость' (ru) and 'vulgarität' (de), confusing moral depravity/wickedness with vulgarity/platitude.
+   - Corrected to moral depravity/wickedness across all languages (ru: 'низость, подлость, развращенность, порочность', de: 'Schändlichkeit, Niedertracht, Verdorbenheit', pl: 'nikczemność, podłość, zepsucie moralne', etc.).
+
+2. Word 5967 (trite):
+   - Raw dump had adverb/predicative form ru: 'банально' instead of adjective 'избитый, банальный, затасканный'. Fixed part of speech across all locales.
+
+3. Word 5975 (unctuous):
+   - Raw dump had literal 'маслянистый' (ru), 'tłusty, oleisty' (pl), 'ölig' (de).
+   - Calibrated to prioritize the primary advanced English meaning: ingratiating, sycophantic, fawning ('елейный, подобострастный, вкрадчивый', 'salbungsvoll, heuchlerisch', 'zalamero, empalagoso', etc.) while preserving material sense where applicable.
+
+4. Word 5980 (upbraid):
+   - Raw dump had German noun 'vorwurf' instead of verb. Fixed to 'tadeln, Vorwürfe machen, rügen' and aligned verbal infinitives across all languages.
+
+5. Word 5981 (urbane):
+   - Raw dump provided weak/generic 'вежливый', 'höflich'. Calibrated to capture true nuance of sophisticated, worldly elegance and charm ('изысканный, светский, учтивый, утонченный', 'weltgewandt, weltmännisch, kultiviert', 'cortés, refinado, urbano').
+
+6. Word 5990 (veneer):
+   - Raw dump had only the literal carpentry term 'шпон'. Calibrated to include metaphorical social/psychological meanings ('шпон, внешний лоск, видимость, фасад', 'Fassade, dünner Firnis, Deckmantel', 'apariencia, fachada', etc.).
+
+7. Word 6000 (vicarious):
+   - Raw dump translated literally as 'заместительный'. Calibrated to reflect experienced through the feelings of another ('опосредованный, чужой, косвенный, сопереживаемый', 'miterlebt, stellvertretend, indirekt', 'par procuration, indirect').
+
+8. Word 5952 (tenable) & Word 5979 (untenable):
+   - Raw dump gave vague 'разумный' for tenable. Calibrated to defendable, sustainable, defensible ('обоснованный, убедительный, защитимый', 'haltbar, vertretbar', 'defendible, sostenible') and untenable to ('несостоятельный, необоснованный, неприемлемый', 'unhaltbar, untragbar').
+
+9. Word 5994 (verdant):
+   - Raw dump simply gave 'зеленый' (green). Calibrated to lush, green with vegetation ('зеленый, зеленеющий, цветущий, сочный', 'saftig grün, blühend', 'verdejante, vicejante').
+
+10. Word 5997 (vernacular):
+    - Calibrated dialectal and informal linguistic nuances ('народный язык, просторечие, местный говор', 'Umgangssprache, Mundart, Landessprache', 'lengua vernácula, habla popular').
+
+Audit Status:
+All 50 words calibrated and verified against 35 target languages + 1 English headword (36 locales total). Zero missing entries.

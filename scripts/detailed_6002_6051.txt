@@ -1,0 +1,159 @@
+Batch 6002-6051 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 49 words (IDs 6002 to 6051, skipping missing ID 6022) from dump slice 'scripts/dump_6002_6051.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6002_6051_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 6050 (avocation):
+   - CATASTROPHIC OPPOSITE MEANING IN RAW DUMP: Machine translation across more than 25 languages confused "avocation" (a hobby, secondary activity, minor pursuit pursued for enjoyment) with "vocation" (one's main career, calling, profession)!
+     * Dump had: ru: "призвание", uk: "покликання", es: "vocación", pl: "powołanie", pt: "vocação", ro: "vocație", bg: "призвание", cs: "povolání", sk: "povolanie", hu: "hivatás", el: "λειτούργημα", sl: "poklic", et: "kutsumus", lt: "pašaukimas", da: "kald", fi: "kutsumus", sv: "kallelse", hr: "poziv", lv: "aicinājums", vi: "nghề nghiệp", th: "อาชีพ", ko: "직업", ja: "天職", kk: "кәсіптік".
+     * Calibrated: Restored true meaning (hobby, secondary occupation, pastime) across all 35 languages:
+       ru: "хобби, любимое занятие, увлечение, побочное занятие",
+       uk: "хобі, улюблене заняття, захоплення, побічне заняття",
+       de: "Nebenbeschäftigung, Hobby, Steckenpferd, Liebhaberei",
+       es: "afición, pasatiempo, actividad secundaria, hobby",
+       fr: "passe-temps, violon d’Ingres, hobby, occupation secondaire",
+       pt-BR: "passatempo, passatempo preferido, ocupação secundária, hobby",
+       pl: "zamiłowanie, hobby, zajęcie uboczne, pasja",
+       cs: "koníček, záliba, vedlejší zaměstnání, hobby",
+       sk: "koníček, záľuba, vedľajšie zamestnanie, hobby",
+       hu: "kedvtelés, hobbi, mellékfoglalkozás, passzió",
+       el: "πάρεργο, χόμπι, ερασιτεχνική ασχολία, δευτερεύουσα απασχόληση",
+       zh: "业余爱好、副业、消遣",
+       ja: "趣味、余技、副業、道楽",
+       ko: "부업, 취미, 여가 활동, 부차적 관심사",
+       ar: "هواية، عمل جانبي، اهتمام ترفيهي، تسلية",
+       fa: "سرگرمی، مشغله جانبی، کار ذوقی، تفریح",
+       kk: "хобби, сүйікті іс, қосымша кәсіп, ермек".
+
+2. Word 6040 (asperity):
+   - SYSTEMIC LITERAL / PHYSICAL MISTRANSLATION: Machine translation translated "asperity" as physical unevenness/roughness or even "irregularity / heterogeneity" (uneven distribution) rather than harshness of tone, manner, or temper in literary English (GRE/C2 level):
+     * Dump had: ru: "неровность", uk: "нерівність", ro: "inegalitate", bg: "неравност", cs: "nerovnost", sk: "nerovnosť", hu: "egyenetlenség", el: "ανομοιομορφία", sl: "neenakomernost", et: "ebaühtlus", lt: "netolygumas", da: "ujævnhed", fi: "epätasaisuus", sv: "ojämnhet", hr: "neujednačenost", lv: "nevienmērīgums", vi: "sự không đồng đều", th: "ความไม่สม่ำเสมอ", ko: "불균형", ja: "不均一性", kk: "біркелкі еместік".
+     * Calibrated: Restored primary figurative and literary meaning (harshness of tone, severity, sharpness of manner):
+       ru: "резкость, суровость, огрубелость, колкость манер",
+       uk: "різкість, суворість, грубість тону, ущипливість",
+       de: "Schärfe, Rauheit, Strenge, Schroffheit",
+       es: "aspereza, severidad, acritud, desabrimiento",
+       fr: "âpreté, rudesse, dureté de ton, sévérité",
+       it: "asprezza, durezza, scortesia, acidità",
+       pl: "szorstkość, opryskliwość, uszczypliwość, surowość",
+       zh: "粗暴、严厉、尖刻的态度",
+       ja: "辛辣さ、粗暴さ、とげとげしい口調",
+       ko: "거침, 신랄함, 퉁명스러움, 가혹함",
+       ar: "خشونة المعاملة، حدة، جفاء، صرامة الطبع",
+       kk: "қаталдық, дөрекілік, өткір сөз, өрескелдік".
+
+3. Word 6037 (arrant):
+   - FALSE FRIEND CONFUSION WITH "ARDENT": In Nordic, Baltic, and several Slavic languages, MT confused "arrant" (complete, utter, unmitigated [as in arrant nonsense, arrant fool, arrant rogue]) with "ardent" (passionate, burning, zealous):
+     * Dump had: sk: "vášnivý", sl: "goreče", et: "tulihingeline", lt: "aistringas", da: "lidenskabelig", fi: "kiihkeä", sv: "ivrig", hr: "žarki", lv: "dedzīgs", ru: "ярый" (ambiguous).
+     * Calibrated: Restored correct intensifying meaning (outright, downright, unmitigated, consummate, notorious):
+       ru: "сущий, отъявленный, чистейший, беспросветный",
+       uk: "справжній, запеклий, чистісінький, відвертий",
+       de: "ausgemacht, vollkommen, schier, unverhohlen",
+       es: "absoluto, rematado, manifiesto, descarado",
+       fr: "fieffé, notoire, parfait, insigne",
+       pl: "wierutny, skończony, jawny, bezczelny",
+       it: "matricolato, palese, assoluto, consumato",
+       cs: "naprostý, zjevný, vyložený, dokonaný",
+       da: "fuldstændig, vaskeægte, uforfalsket, ren og skær",
+       fi: "ilmiselvä, läpikotainen, täysi, ehta",
+       sv: "fullständig, ren och skär, notorisk, fullblods-",
+       zh: "纯粹的、彻头彻尾的、极端的",
+       ja: "全くの、名うての、紛れもない",
+       ko: "순전한, 철저한, 더할 나위 없는".
+
+4. Word 6051 (avuncular):
+   - LOSS OF ETYMOLOGICAL & SEMANTIC CORE: Raw dump across almost all languages reduced "avuncular" (uncle-like, characteristic of an uncle; kindly and indulgent towards youth) to mere generic "good-natured / kind" (добродушный, hyväntahtoinen, dobroćudan, etc.), completely erasing the uncle connection.
+     * Calibrated: Restored uncle-like kindness and indulgent paternal warmth across all languages:
+       ru: "по-дядюшкински добродушный, дядюшкин, благодушный, отеческий",
+       uk: "по-дядьківськи доброзичливий, дядечків, добродушний",
+       de: "onkelhaft, väterlich wohlwollend, gutmütig",
+       es: "bonachón como un tío, avuncular, afable, paternal",
+       fr: "d'oncle, bienveillant comme un oncle, bonhomme",
+       it: "avuncolare, da zio, bonario, affettuoso",
+       pl: "wujowski, po wujowsku dobrotliwy, dobrotliwy",
+       pt-BR: "avuncular, paternal, bondoso como um tio, afetuoso",
+       zh: "伯父般的、慈爱的、慈祥的",
+       ja: "叔父のような、親身で優しい、おじさんらしい",
+       ko: "삼촌 같은, 다정다감한, 인자한",
+       ar: "كخال أو عم، ودود كالأعمام، أبوي العطف",
+       kk: "ағалық, ағадай қамқор, жайдары, ақкөңіл".
+
+5. Word 6012 (acrimony):
+   - SEMANTIC DRIFT TO IRRITABILITY: Raw dump translated "acrimony" (bitterness, ill-feeling, malice, rancor) as mere "irritability" (раздражительность, reizbarkeit, irritabilidad).
+     * Calibrated: Restored true meaning (bitterness, acrid hostility, rancor):
+       ru: "язвительность, желчность, злоба, враждебность",
+       de: "Bitterkeit, Schärfe, Bissigkeit, Gehässigkeit",
+       es: "acritud, aspereza, mordacidad, rencor",
+       fr: "acrimonie, aigreur, amertume, hargne",
+       it: "acrimonia, asprezza, livore, acidità",
+       pl: "zjadliwość, ciętość, żółć, zajadłość".
+
+6. Word 6003 (vilify) & 6041 (aspersion):
+   - PART OF SPEECH & AMBIGUITY FIXES:
+     * 6003 (vilify): In raw dump, Russian had single "поносить" (homographic ambiguity). Calibrated to: "очернять, порочить, поносить, клеветать". Arabic had noun "تشويه السمعة"; calibrated to verb: "يشوه سمعة، يفتري على، يقدح في، يذم".
+     * 6041 (aspersion): Disambiguated figurative attack on reputation ("cast aspersions") from archaic sprinkling: "клевета, очернение, выпад против репутации, порочащие слова".
+
+7. Word 6043 (astringent) & 6039 (ascetic):
+   - DUAL NOUN / ADJECTIVE COVERAGE:
+     * 6043 (astringent): Covered both cosmetic/medical astringent effect and sharp/severe critical tone across all languages.
+     * 6039 (ascetic): Covered both adjective (ascetic, austere) and noun (an ascetic, hermit).
+
+8. Systemic German Capitalization:
+   - In raw dump, all German nouns were lowercased (e.g., "wachsamkeit", "abweichung", "reizbarkeit", "alchemie", "anachronismus"). All calibrated entries restore correct German capitalization for all nouns.
+
+Summary of Calibrated Words in Batch (49 entries):
+--------------------------------------------------
+6002: vigilance (noun)
+6003: vilify (verb)
+6004: vindicate (verb)
+6005: vindictive (adj)
+6006: virtuoso (noun)
+6007: virulent (adj)
+6008: visceral (adj)
+6009: viscous (adj)
+6010: aberration (noun)
+6011: abstruse (adj)
+6012: acrimony (noun)
+6013: acumen (noun)
+6014: adulation (noun)
+6015: aesthetic (adj/noun)
+6016: affable (adj)
+6017: alacrity (noun)
+6018: alchemy (noun)
+6019: amenable (adj)
+6020: anachronism (noun)
+6021: anathema (noun)
+6023: antediluvian (adj)
+6024: antipathy (noun)
+6025: apocryphal (adj)
+6026: apogee (noun)
+6027: apostate (noun)
+6028: apotheosis (noun)
+6029: appellation (noun)
+6030: apposite (adj)
+6031: apprise (verb)
+6032: approbation (noun)
+6033: arabesque (noun)
+6034: arcane (adj)
+6035: archaic (adj)
+6036: arduous (adj)
+6037: arrant (adj)
+6038: artifice (noun)
+6039: ascetic (adj/noun)
+6040: asperity (noun)
+6041: aspersion (noun)
+6042: assiduous (adj)
+6043: astringent (adj/noun)
+6044: asylum (noun)
+6045: atavism (noun)
+6046: audacious (adj)
+6047: austere (adj)
+6048: autonomous (adj)
+6049: avarice (noun)
+6050: avocation (noun)
+6051: avuncular (adj)

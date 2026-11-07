@@ -1,0 +1,97 @@
+Batch 6052-6101 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 48 words (IDs 6053 to 6101, skipping missing IDs 6052 and 6075) from dump slice 'scripts/dump_6052_6101.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6052_6101_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 6058 (beatify):
+   - CRITICAL FALSE FRIEND ERROR IN RAW DUMP: Machine translation confused "beatify" (declare blessed in the Catholic Church; make blissfully happy) with "beautify" (make beautiful)!
+     * Raw dump had: ru: "приукрашивать" (beautify/embellish), uk: "прикрашати", cs: "zkrášlit", sk: "skrášliť", pl: "upiększać", ro: "a înfrumuseța", etc.
+     * Calibrated: Restored authentic beatification / supreme spiritual bliss meaning across all 35 languages:
+       ru: "причислять к лику блаженных, беатифицировать, озарять счастьем",
+       uk: "беатифікувати, зараховувати до лику блаженних, ощасливлювати",
+       de: "seligsprechen, selig preisen, beglücken",
+       es: "beatificar, declarar bienaventurado, colmar de dicha",
+       fr: "béatifier, déclarer bienheureux, béatifier au figuré",
+       it: "beatificare, proclamare beato, rendere beato",
+       pt-BR: "beatificar, declarar beato, beatificar espiritualmente".
+
+2. Word 6059 (bedizen):
+   - CRITICAL MACHINE TRANSLATION CONFUSION: MT confused "bedizen" (dress or adorn gaudily, bedeck tastelessly) with "bedding / bed linen" (bedding)!
+     * Raw dump had: ru: "постельное белье" (bed sheets!), uk: "постільна білизна", cs: "ložní prádlo", sk: "posteľná bielizeň", de: "Bettzeug", pl: "pościel", etc.
+     * Calibrated: Corrected to tasteless/gaudy ornamentation across all 35 languages:
+       ru: "безвкусно украшать, безвкусно наряжать, вычурно разодевать",
+       de: "aufdonnern, geschmacklos herausputzen, überladen schmücken",
+       es: "ataviar con mal gusto, engalanar chabacanamente, emperifollar",
+       fr: "orner de mauvais goût, fagoter, attifer avec excès",
+       pt-BR: "enfeitar com mau gosto, ataviar vulgarmente, peruar".
+
+3. Word 6060 (behemoth):
+   - SEMANTIC OVER-SPECIFICITY / FALSE FRIEND: Machine translation translated "behemoth" as literal common hippopotamus ("бегемот"), whereas in modern English literary/business register, "behemoth" refers to a colossal entity, corporate giant, titan, or monstrous colossus.
+     * Raw dump had: ru: "бегемот" (hippopotamus), uk: "бегемот", etc.
+     * Calibrated: Provided nuanced colossus/giant/monstrous titan meanings:
+       ru: "чудовище, исполин, колосс, гигант",
+       de: "Koloss, Riese, Gigant, Ungetüm",
+       es: "coloso, gigante, titán, monstruo mastodóntico",
+       fr: "béhémoth, colosse, monstre géant, géant",
+       zh: "巨兽、庞然大物、巨头".
+
+4. Word 6061 (belie):
+   - SEVERE LEXICAL ERROR IN RAW DUMP: MT translated "belie" as "лгать" (to tell lies / speak falsehoods). "Belie" means to contradict, show something to be false, fail to justify, or give a misleading impression of.
+     * Raw dump had: ru: "лгать", uk: "брехати", cs: "lhát", sk: "klamať", pl: "kłamać", de: "belügen", etc.
+     * Calibrated: Restored true semantic range:
+       ru: "противоречить, опровергать, искажать, разоблачать",
+       de: "Lügen strafen, widersprechen, fälschlich darstellen",
+       es: "desmentir, contradecir, dar una falsa impresión de",
+       fr: "démentir, contredire, donner une fausse idée de",
+       zh: "掩饰、与……相矛盾、证明……为虚假".
+
+5. Word 6074 (broach):
+   - MECHANICAL VS LINGUISTIC HOMONYM: MT mistook "broach" (to bring up a sensitive topic for discussion; to tap/pierce a cask) for the mechanical machining tool "broach / broaching machine" ("протяжка").
+     * Raw dump had: ru: "протяжка", uk: "протяжка", pl: "przeciągacz", cs: "protahovák", etc.
+     * Calibrated: Restored the conversational/figurative and tapping definitions:
+       ru: "поднимать тему, заводить разговор, откупоривать бочку",
+       de: "ansprechen, zur Sprache bringen, anstechen",
+       es: "plantear, sacar a colación, abordar un tema, espitar",
+       fr: "aborder, entamer une discussion, percer un fût",
+       pt-BR: "abordar, trazer à tona, ventilar, tocar no assunto".
+
+6. Word 6083 (canard):
+   - LITERAL VS IDIOMATIC MEANING: Machine translation took French loanword "canard" literally as "утка" (the aquatic bird duck), failing to capture the journalistic/idiomatic meaning: a fabricated story, hoax, or false rumor.
+     * Raw dump had: ru: "утка", uk: "качка", etc.
+     * Calibrated: Clarified to journalistic hoax / false rumor:
+       ru: "газетная утка, ложный слух, выдумка, фальшивка",
+       de: "Zeitungsente, Falschmeldung, Gerücht, Fake News",
+       es: "bulo, noticia falsa, patraña, infundio",
+       fr: "canard au sens figuré, fausse nouvelle, bobard, ragot",
+       it: "bufala, fandonia, notizia inventata, voce infondata".
+
+7. Word 6099 (chary):
+   - POLAR OPPOSITE CONFUSION: MT confused "chary" (wary, cautious, circumspect, sparing) with "charity / charitable" and translated it as "щедрый" (generous) - an exact polar antonym!
+     * Raw dump had: ru: "щедрый", uk: "щедрий", cs: "štědrý", sk: "štedrý", pl: "szczodry", etc.
+     * Calibrated: Restored cautious/frugal/circumspect meaning:
+       ru: "осторожный, осмотрительный, бережливый, скупой на что-либо",
+       de: "vorsichtig, bedächtig, sparsam, zögernd",
+       es: "cauteloso, receloso, parco, reservado",
+       fr: "circonspect, prudent, méfiant, avare de",
+       pt-BR: "cauteloso, prudente, comedido, receoso".
+
+8. Other Calibrated Words:
+   - 6053 (bacchanalian): Converted raw noun entries ("вакханалия") into rich adjectival and figurative forms ("вакхический, разгульный, пьяный, оргиастический").
+   - 6055 (banter): Handled both noun (playful teasing, badinage) and verb (to exchange playful remarks) senses.
+   - 6057 (bawdy): Calibrated humorous ribaldry/bawdiness across all locales (es: "verde, obsceno, procaz, pícaro", fr: "grivois, paillard").
+   - 6067 (bereft): Preserved both "deprived of" (лишённый) and "desolate with grief" (убитый горем).
+   - 6078 (buttress): Captured architectural buttress and figurative reinforcement (укреплять, опора, контрфорс).
+   - 6080 (cadge): Calibrated informal scrounging/sponging verbs (ru: "клянчить, выпрашивать, сшибать", de: "schnorren", fr: "quémander").
+   - 6088 (capricious) & 6089 (captious) & 6090 (carping): Distinctly separated capricious (whimsical/fickle) from captious/carping (fault-finding, nitpicking, hypercritical).
+   - 6096 (censure): Distinguished formal condemnation/reprimand from censorship (цензура).
+   - 6097 (chagrin): Captured distress, disappointment, and wounded pride.
+   - 6101 (chicanery): Calibrated legal trickery and sophistry across all jurisdictions.
+
+Locale Coverage Verification:
+----------------------------
+All 48 words audited and confirmed for all 36 locales (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).

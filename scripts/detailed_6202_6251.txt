@@ -1,0 +1,71 @@
+Batch 6202-6251 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 47 words (IDs 6202 to 6251, skipping missing IDs 6217, 6224, 6236) from dump slice 'scripts/dump_6202_6251.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6202_6251_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 6229 (equivocate):
+   - Part-of-speech mismatch: In the dump, the verb 'equivocate' (to speak ambiguously, prevaricate, avoid committing oneself) was erroneously translated into multiple languages as an adjective (meaning 'ambiguous' or 'equivocal'):
+     * Russian dump was 'двусмысленный' (adj) -> calibrated to verb 'юлить, говорить двусмысленно, увиливать'.
+     * Ukrainian dump was 'двозначний' (adj) -> calibrated to verb 'говорити двозначно, крутити, викручуватися'.
+     * German dump was 'mehrdeutig' (adj) -> calibrated to verb 'zweideutig reden, lavieren, herumreden'.
+     * French dump was 'ambigu' (adj) -> calibrated to verb 'tergiverser, biaiser, user d'ambiguïté'.
+     * Italian dump was 'ambiguo' (adj) -> calibrated to verb 'tergiversare, essere ambiguo, menare il can per l'aia'.
+     * Romanian dump was 'ambiguu' (adj) -> calibrated to verb 'a vorbi cu două înțelesuri, a umbla cu fofârlica'.
+     * Czech/Slovak was 'nejednoznačný' (adj) -> calibrated to 'mluvit vyhýbavě, kličkovat, mlžit'.
+     * Danish/Swedish was 'tvetydig' (adj) -> calibrated to 'tale i tåger, tale tvetydigt' / 'tala tvetydigt, slingra sig'.
+     * Japanese/Korean was '曖昧な' / '모호한' (adj) -> calibrated to '言葉を濁す, あいまいな言い方をする' / '얼버무리다, 발뺌하다, 애매하게 말하다'.
+     * Urdu dump was 'دو معنی والا' -> calibrated to 'گول مول بات کرنا, حیلہ حوالے کرنا'.
+
+2. Word 6243 (excoriate):
+   - Severe semantic bug in dump: In the dump, excoriate (to severely criticize / censure bitterly; or abrade skin) was mistranslated as mere mild irritation ('раздражать', 'reizen', 'irriter', 'a irita', 'дразня', 'dráždit', 'ärritama', 'erzinti', 'ärsyttää', 'إزعاج', 'làm phiền', '짜증나게 하다', '苛立たせる', 'پریشان کرنا'):
+     * Russian dump was 'раздражать' -> calibrated to 'бичевать, подвергать резкой критике, сдирать кожу'.
+     * German dump was 'reizen' -> calibrated to 'scharf verurteilen, niedermachen, geißeln'.
+     * French dump was 'irriter' -> calibrated to 'fustiger, vitrioler, écorcher vivement'.
+     * Italian dump was 'irritare' -> calibrated to 'criticare aspramente, fustigare, sferzare'.
+     * Turkish dump was improved to 'yerden yere vurmak, topa tutmak, kınamak'.
+     * Arabic dump was 'إزعاج' -> calibrated to 'انتقد بقسوة, شجب بعنف, سلخ'.
+     * Korean/Japanese were calibrated to '맹비난하다, 혹평하다, 가죽을 벗기다' / '激しく非難する, 酷評する'.
+
+3. Word 6247 (exemplar):
+   - In dump, German had 'probe' (sample) and French had 'échantillon' (sample / specimen swatch), confusing a material sample with an exemplary ideal model / paradigm / prototype.
+   - Calibrated: German -> 'Vorbild, Muster, Paradebeispiel'; French -> 'exemple, modèle, archétype'.
+
+4. Word 6213 (embezzle):
+   - German in dump had 'verschwenden' (squander, waste) instead of criminal financial breach of trust.
+   - Calibrated: German -> 'veruntreuen, unterschlagen'.
+
+5. Word 6214 (embroil):
+   - Russian dump had 'поссорить' (cause a quarrel between others) instead of deeply involving / entangling in conflict.
+   - Calibrated: Russian -> 'впутывать, вовлекать в конфликт, ссорить'; Ukrainian -> 'втягувати, вплутувати у сварку'.
+
+6. Word 6238 (evince):
+   - German dump had 'manifest' (adjective/noun) instead of a verb.
+   - Calibrated: German -> 'an den Tag legen, bekunden, zeigen'.
+
+7. Word 6239 (exacerbate):
+   - French dump had 'aiguiser' (to sharpen a blade) instead of aggravating / worsening a condition.
+   - Calibrated: French -> 'exacerber, aggraver, envenimer'.
+
+8. Word 6244 (exculpate) and Word 6250 (exonerate):
+   - Dump frequently used generic 'justifier' / 'rechtfertigen' (to justify an action) rather than clearing from legal/moral guilt / absolving / declaring innocent.
+   - Calibrated: French -> 'disculper, innocenter, blanchir' / 'exonérer, innocenter, disculper'; German -> 'entlasten, freisprechen, reinwaschen' / 'entlasten, freisprechen, von Vorwürfen befreien'; Spanish -> 'exculpar, absolver, disculpar' / 'exonerar, absolver, desculpar'.
+
+9. Word 6249 (exigency):
+   - Dump had generic 'необходимость' / 'notwendigkeit' (simple necessity).
+   - Calibrated to reflect urgency / crisis / pressing necessity: Russian -> 'острая необходимость, крайность, неотложность'; German -> 'Notlage, Dringlichkeit, zwingendes Erfordernis'; French -> 'exigence pressante, urgence, crise'.
+
+10. Regional Nuances & Script Verification:
+    - Brazilian Portuguese ('pt'): Natural Brazilian gaming terminology and phrasing maintained (e.g. 'desfaçatez', 'definhar', 'esgotar').
+    - Latin American / Mexican Spanish ('es'): Accurately reflects Latin American usage.
+    - RTL Locales (ar, fa, ur): Accurate Arabic, Persian, and Urdu grammar, vocabulary, and right-to-left formatting.
+    - Indic (hi, bn): Natural high-register vocabulary for advanced academic GRE-level English words.
+    - Central Asian (kk): Accurate Kazakh terminology for every advanced headword.
+
+Conclusion:
+All 47 words in Batch 6202-6251 have been thoroughly verified and calibrated across all 36 supported locales.

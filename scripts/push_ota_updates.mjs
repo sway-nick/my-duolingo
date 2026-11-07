@@ -978,7 +978,47 @@ async function run() {
 
     // Batch 5802-5851
     { id: 5808, word: 'fulminate', lang: 'ru', expected: 'громить, метать громы и молнии, бурно протестовать, взрываться' },
-    { id: 5803, word: 'castigate', lang: 'de', expected: 'züchtigen, scharf kritisieren, maßregeln' }
+    { id: 5803, word: 'castigate', lang: 'de', expected: 'züchtigen, scharf kritisieren, maßregeln' },
+
+    // Batch 5852-5901
+    { id: 5889, word: 'remonstrate', lang: 'it', expected: 'rimostrare, protestare, obiettare, contestare' },
+    { id: 5890, word: 'renege', lang: 'de', expected: 'sein Wort brechen, einen Rückzieher machen, vertragsbrüchig werden' },
+
+    // Batch 5902-5951
+    { id: 5909, word: 'scrupulous', lang: 'de', expected: 'gewissenhaft, peinlich genau, sorgfältig, skrupulös' },
+    { id: 5922, word: 'spendthrift', lang: 'fr', expected: 'dépensier, panier percé, prodigue, dissipateur' },
+
+    // Batch 5952-6001
+    { id: 5971, word: 'turpitude', lang: 'de', expected: 'Schändlichkeit, Niedertracht, Verdorbenheit, Lasterhaftigkeit' },
+    { id: 5980, word: 'upbraid', lang: 'de', expected: 'tadeln, Vorwürfe machen, rügen' },
+
+    // Batch 6002-6051
+    { id: 6050, word: 'avocation', lang: 'fr', expected: 'passe-temps, violon d’Ingres, hobby, occupation secondaire' },
+    { id: 6037, word: 'arrant', lang: 'de', expected: 'ausgemacht, vollkommen, schier, unverhohlen' },
+
+    // Batch 6052-6101
+    { id: 6058, word: 'beatify', lang: 'de', expected: 'seligsprechen, selig preisen, beglücken' },
+    { id: 6083, word: 'canard', lang: 'de', expected: 'Zeitungsente, Falschmeldung, Gerücht, Fake News' },
+
+    // Batch 6102-6151
+    { id: 6146, word: 'cursory', lang: 'it', expected: 'superficiale, rapido, sommario' },
+    { id: 6137, word: 'coterie', lang: 'de', expected: 'Koterie, Clique, Zirkel, geschlossene Gesellschaft' },
+
+    // Batch 6152-6201
+    { id: 6174, word: 'disabuse', lang: 'de', expected: 'eines Besseren belehren, enttäuschen' },
+    { id: 6158, word: 'demur', lang: 'it', expected: 'obiettare, fare obiezioni, esitare' },
+
+    // Batch 6202-6251
+    { id: 6229, word: 'equivocate', lang: 'de', expected: 'zweideutig reden, lavieren, herumreden' },
+    { id: 6243, word: 'excoriate', lang: 'fr', expected: 'fustiger, vitrioler, écorcher vivement' },
+
+    // Batch 6252-6301
+    { id: 6267, word: 'exuberant', lang: 'de', expected: 'überschwänglich, voller Lebensfreude, üppig, ausgelassen' },
+    { id: 6297, word: 'gainsay', lang: 'fr', expected: 'contredire, démentir, contester, nier' },
+
+    // Batch 6302-6351
+    { id: 6351, word: 'impious', lang: 'de', expected: 'gottlos, pietätlos, unfromm' },
+    { id: 6307, word: 'glib', lang: 'de', expected: 'schlagfertig aber oberflächlich, zungengewandt' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -999,21 +1039,19 @@ async function run() {
     return require(filePath);
   }
 
-  // Batches 1 to 107 (words 1-5351) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-107 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 108-117 (words 5352-5851, 498 words)
+  // Batches 1 to 119 (words 1-5951) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-119 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 120-127 (words 5952-6351, 392 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_5352_5401_calibrations.cjs',
-    'apply_batch_5402_5451_calibrations.cjs',
-    'apply_batch_5452_5501_calibrations.cjs',
-    'apply_batch_5502_5551_calibrations.cjs',
-    'apply_batch_5552_5601_calibrations.cjs',
-    'apply_batch_5602_5651_calibrations.cjs',
-    'apply_batch_5652_5701_calibrations.cjs',
-    'apply_batch_5702_5751_calibrations.cjs',
-    'apply_batch_5752_5801_calibrations.cjs',
-    'apply_batch_5802_5851_calibrations.cjs'
+    'apply_batch_5952_6001_calibrations.cjs',
+    'apply_batch_6002_6051_calibrations.cjs',
+    'apply_batch_6052_6101_calibrations.cjs',
+    'apply_batch_6102_6151_calibrations.cjs',
+    'apply_batch_6152_6201_calibrations.cjs',
+    'apply_batch_6202_6251_calibrations.cjs',
+    'apply_batch_6252_6301_calibrations.cjs',
+    'apply_batch_6302_6351_calibrations.cjs'
   ];
 
   let mergedCount = 0;

@@ -1,0 +1,225 @@
+Batch 6152-6201 Linguistic Audit and Calibration Report
+====================================================
+
+Word range: 6152 to 6201 (50 words)
+Languages: en (headword) + 35 target languages (ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk)
+Supported locales: EXACTLY 36 LOCALES
+
+Major Critical Bugs Caught & Calibrated:
+----------------------------------------
+
+1. Word 6174 (disabuse):
+   - Catastrophic "Remove Abuse / Stop Abuse" Machine Translation Error across 21 languages!
+   - Dump translated the verb "disabuse" (free someone from error or delusion) as literal "dis + abuse" (stop/eliminate mistreatment or misuse):
+     * ru: "избавиться от злоупотреблений"
+     * de: "missbräuche beseitigen"
+     * it: "sbarazzarsi degli abusi"
+     * ro: "scăpa de abuzuri"
+     * bg: "отървавам се от злоупотреби"
+     * cs: "zbavit se zneužívání"
+     * sk: "zbaviť sa zneužívania"
+     * hu: "megszabadul a visszaélésektől"
+     * el: "απαλλαγή από τις καταχρήσεις"
+     * sl: "znebiti se zlorab"
+     * et: "vabanema kuritarvitamisest"
+     * lt: "atsikratyti piktnaudžiavimo"
+     * da: "slippe af med misbrug"
+     * fi: "päästä eroon väärinkäytöksistä"
+     * sv: "bli av med övergrepp"
+     * hr: "riješiti se zlouporaba"
+     * lv: "atbrīvoties no pāridarījumiem"
+     * vi: "loại bỏ những lời lăng mạ"
+     * th: "กำจัดการละเมิด"
+     * ko: "남용을 없애다"
+     * ja: "不正を取り除く"
+     * ur: "غلط استعمال سے چھٹکارا پانا"
+     * kk: "теріс пайдаланудан арылу"
+   - Calibrated to correct semantic definitions (free from illusion, disabuse of error):
+     ru: "выводить из заблуждения, разубеждать, открывать глаза", de: "eines Besseren belehren, enttäuschen", ja: "迷いを解く、目を覚まさせる", zh: "使醒悟、纠正错误观念", etc.
+
+2. Word 6158 (demur):
+   - Catastrophic "Demur = Object" NOUN (physical item) Blunder across 14 languages!
+   - Dump translated "demur" (verb: to balk, hesitate, make objection) by looking up synonym "object" and picking physical object/thing/item:
+     * it: "oggetto" (physical item!)
+     * ro: "obiect" (physical object!)
+     * hu: "tárgy" (physical object!)
+     * el: "αντικείμενο" (physical object!)
+     * et: "objekt" (physical object!)
+     * lt: "objektas" (physical object!)
+     * lv: "objekts" (physical object!)
+     * hr: "predmet" (physical object!)
+     * da: "genstand" (physical object!)
+     * fi: "esine" (physical object!)
+     * sv: "objekt" (physical object!)
+     * vi: "đối tượng" (target / object!)
+     * ko: "대상" (target / object!)
+     * kk: "нысана" (target / mark!)
+   - Calibrated across all locales to genuine objection/hesitation verbs:
+     ru: "возражать, колебаться; возражение", it: "obiettare, fare obiezioni, esitare", fi: "vastustaa, epäröidä", ja: "異議を唱える、難色を示す", etc.
+
+3. Word 6194 (dross):
+   - Conflation of "dross" with "refuse" (verb: to reject / decline) across 9 languages!
+   - Dump translated "dross" (slag, waste, rubbish, impurity) as "to refuse / reject":
+     * ja: "拒否する" (to reject / refuse verb!)
+     * ko: "거부하다" (to refuse verb!)
+     * lv: "atteikt" (to refuse verb!)
+     * hr: "odbiti" (to refuse / reject verb!)
+     * da: "afvise" (to reject verb!)
+     * fi: "kieltäytyä" (to refuse verb!)
+     * sv: "vägra" (to refuse verb!)
+     * vi: "từ chối" (to refuse verb!)
+     * th: "ปฏิเสธ" (to refuse verb!)
+   - Calibrated to authentic terms for scum, dross, slag, waste:
+     ja: "金滓、鉱滓、くず、かす", fi: "kuona, jäte, arvoton aines", sv: "slagg, skräp, värdelöst avfall", ru: "шлак, отбросы, окалина, мусор", etc.
+
+4. Word 6170 (digress):
+   - Conflation of "digress" (depart from the topic) with "distract / disturb" across 22 languages!
+   - Dump translated digress as "to distract / divert someone's attention":
+     * de: "ablenken" (distract someone)
+     * it: "distrarre"
+     * ro: "distrage atenția"
+     * cs: "rozptylovat"
+     * sk: "rozptyľovať"
+     * hu: "eltereli a figyelmet"
+     * el: "αποσπά την προσοχή"
+     * sl: "odvrniti pozornost"
+     * fi: "häiritä" (disturb/bother)
+     * da: "distrahere"
+     * sv: "distrahera"
+     * ja: "気を散らす"
+     * ko: "주의를 분산시키다"
+     * vi: "gây xao nhãng"
+     * th: "ทำให้เสียสมาธิ"
+     * hi: "विचलित करना"
+     * ar: "تشتيت الانتباه"
+     * kk: "алаңдату"
+   - Calibrated to correct straying from topic / making digression:
+     de: "abschweifen, vom Thema abweichen", ru: "отклоняться от темы, делать отступление", ja: "本題からそれる、脱線する", fr: "digresser, s'écarter du sujet", etc.
+
+5. Word 6183 (disparate):
+   - Conflation of "disparate" (fundamentally unlike, incompatible) with "incomparable = matchless / peerless" across 16 languages!
+   - Dump translated disparate as peerless / matchless excellence:
+     * ja: "比類のない" (peerless, unrivaled!)
+     * fi: "vertaansa vailla oleva" (matchless, unrivaled!)
+     * da: "uforlignelig" (peerless!)
+     * sv: "ojämförlig" (peerless!)
+     * th: "หาที่เปรียบไม่ได้" (matchless!)
+     * ko: "비교할 수 없는" (incomparable!)
+   - Calibrated to correct meaning (fundamentally different, heterogeneous, clashing):
+     ja: "異種の、まったく異なる、共通点のない", fi: "täysin erilainen, yhteismitaton", sv: "väsensskild, helt olikartad", etc.
+
+6. Word 6176 (discordant):
+   - Political dissidence mistranslation!
+   - Dump translated "discordant" (dissonant, clashing, harsh-sounding) as "political dissident / dissenting":
+     * vi: "bất đồng chính kiến" (political dissident!)
+     * es: "disidente"
+     * it: "dissenziente"
+     * ro: "disident"
+     * ru: "несогласный"
+     * ja: "反対する"
+   - Calibrated to musical / aesthetic / conceptual dissonance and discord:
+     ru: "несозвучный, диссонирующий, противоречивый", ja: "不協和の、耳障りな、一致しない", vi: "nghịch tai, bất hòa, chói tai", etc.
+
+7. Word 6181 (disinterested):
+   - "Uninterested" vs "Disinterested" classic blunder!
+   - Dump translated "disinterested" (impartial, unbiased, selfless) as uninterested / bored / apathetic:
+     * da: "uinteresseret"
+     * fi: "välinpitämätön" (indifferent / apathetic)
+     * sv: "ointresserad"
+     * hu: "érdektelen"
+     * et: "huvitamatu"
+     * ko: "무관심한"
+     * ja: "無関心な"
+     * kk: "немқұрайлы"
+   - Calibrated to impartial, selfless, objective:
+     ru: "бескорыстный, беспристрастный, нейтральный", de: "uneigennützig, unparteiisch, sachlich", fi: "puolueeton, pyyteetön", etc.
+
+8. Word 6180 (disingenuous):
+   - Finnish Polar Opposite Bug!
+   - Dump had fi: "epävilpillinen" which literally means "not fraudulent" / "sincere"!
+   - Calibrated to fi: "epärehellinen, epävilpitön, kiero".
+
+9. Word 6184 (dissemble):
+   - Dump had lt: "išmesti" (to throw out!), et: "dissembleerima" (gibberish!), sk: "pretvárkať" (grammatically broken form).
+   - Calibrated across all locales.
+
+10. Word 6199 (edify):
+    - Physical construction mistranslation!
+    - Dump translated "edify" (intellectual/moral uplift) as physical building construction in cs ("budovat"), sk ("budovať"), hr ("izgraditi"), fi ("rakentaa").
+    - Calibrated to moral and intellectual instruction/enrichment.
+
+11. Word 6161 (derivative):
+    - Expanded from narrow single-sense mathematics (e.g. ru "производная") to full literary/artistic/conceptual breadth ("производный, вторичный; дериват, производная").
+
+12. Bengali Transliteration Fixes:
+    - Fixed raw phonetic transliterations in dump:
+      * 6158 bn: "ডেমার" -> "আপত্তি করা, ইতস্তত করা"
+      * 6160 bn: "ডেরিডে" -> "উপহাস করা, বিদ্রূপ করা"
+      * 6163 bn: "ডেসালটোরয়" -> "এলোমেলো, সংগতিহীন, উদ্দেশ্যহীন"
+      * 6164 bn: "ডেটেররেনট" -> "প্রতিবন্ধক, নিবারক"
+      * 6169 bn: "ডিফফিডেনট" -> "দ্বিধাগ্রস্ত, লাজুক, আত্মবিশ্বাসের অভাবযুক্ত"
+      * 6173 bn: "ডিরগে" -> "শোকগাথা, অন্ত্যেষ্টিক্রিয়া সঙ্গীত"
+      * 6175 bn: "ডিসকেরন" -> "পৃথক করা, উপলব্ধি করা"
+      * 6177 bn: "ডিসকরেডিট" -> "কলঙ্কিত করা, মানহানি করা"
+      * 6179 bn: "ডিসকরেটে" -> "স্বতন্ত্র, পৃথক, বিচ্ছিন্ন"
+      * 6190 bn: "ডিভেরগে" -> "অপসারিত হওয়া, ভিন্ন পথে যাওয়া"
+      * 6194 bn: "ডরোসস" -> "ধাতুর খাদ, আবর্জনা, বর্জ্য"
+      * 6196 bn: "েবাললিনট" -> "উচ্ছ্বসিত, অত্যন্ত প্রাণবন্ত"
+      * 6198 bn: "েকলেকটিক" -> "বিভিন্ন উৎস থেকে সংগৃহীত, উদার"
+      * 6199 bn: "েডিফয়" -> "নৈতিক শিক্ষা দান করা, চিত্তশুদ্ধি করা"
+      * 6201 bn: "েফফেরভেসকেনট" -> "বুদবুদকারী, উচ্ছ্বল ও স্ফূর্তিবান"
+
+13. German Capitalization & Grammatical Agreement:
+    - Capitalized all German nouns (Demagoge, Verleumdung, Respekt, Abschreckungsmittel, Schmähung, Klagelied, Diskrepanz, Auflösung, Dissonanz, Schlacke, etc.).
+
+Summary of 50 Words Calibrated:
+6152: decadence
+6153: decorous
+6154: defamation
+6155: deference
+6156: deleterious
+6157: demagogue
+6158: demur
+6159: denigrate
+6160: deride
+6161: derivative
+6162: desiccate
+6163: desultory
+6164: deterrent
+6165: detraction
+6166: diaphanous
+6167: diatribe
+6168: didactic
+6169: diffident
+6170: digress
+6171: dilatory
+6172: dilettante
+6173: dirge
+6174: disabuse
+6175: discern
+6176: discordant
+6177: discredit
+6178: discrepancy
+6179: discrete
+6180: disingenuous
+6181: disinterested
+6182: disparage
+6183: disparate
+6184: dissemble
+6185: disseminate
+6186: dissolution
+6187: dissonance
+6188: distend
+6189: distill
+6190: diverge
+6191: divest
+6192: dogmatic
+6193: dormant
+6194: dross
+6195: dupe
+6196: ebullient
+6197: eccentric
+6198: eclectic
+6199: edify
+6200: efface
+6201: effervescent

@@ -1,0 +1,118 @@
+Batch 6102-6151 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 6102 to 6151) from dump slice 'scripts/dump_6102_6151.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6102_6151_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Systemic Errors Calibrated:
+------------------------------------------------------------
+1. Word 6146 (cursory):
+   - CATASTROPHIC HOMONYM / POLYSEMY COLLAPSE ACROSS 20+ LANGUAGES:
+     * Raw dump had translated "cursory" (hasty, superficial, brief look) as "FUGITIVE / ESCAPEE / REFUGEE" across over 20 languages!
+       Dump had: it: "fuggitivo", ro: "fugar", bg: "беглец", cs: "uprchlík", sk: "utečenec", hu: "szökevény", el: "φυγάς", sl: "begunec", et: "põgenik", lt: "bėglys", da: "flygtning", fi: "pakolainen", sv: "flykting", hr: "bjegunac", lv: "bēglis", vi: "kẻ chạy trốn", th: "ผู้หลบหนี", ko: "도망자", ja: "逃亡者", kk: "қашқын", bn: "কারসোরয়" (gibberish transliteration).
+     * Root Cause: Russian source word "беглый" carries dual senses: "rapid / cursory" (беглый взгляд) vs "fugitive / runaway" (беглый каторжник). Machine translation naively mapped the fugitive sense across the entire database!
+     * Calibrated: Restored true adjective meaning (hasty, brief, superficial, skimmed) across all 35 languages:
+       ru: "беглый, поверхностный, поспешный", de: "flüchtig, oberflächlich, kursorisch", es: "somero, apresurado, superficial", fr: "sommaire, hâtif, cursif, superficiel", it: "superficiale, rapido, sommario", ja: "大雑把な, ぞんざいな, ざっと目を通す", ko: "대충하는, 피상적인, 서두르는", zh: "粗略的、草率的、仓促的", ar: "سريع, سطحي, عابر دون تدقيق".
+
+2. Word 6105 (circuitous):
+   - SYSTEMIC SEMANTIC DISTORTION ACROSS 24+ LANGUAGES:
+     * Machine translation conflated "circuitous" (roundabout, winding, indirect path) with "devious / crafty / underhanded / cunning" in over 24 languages!
+       Dump had: it: "subdolo", tr: "hileli", pt: "ardiloso", ro: "viclean", bg: "коварен", cs: "lstivý", sk: "prefíkaný", hu: "álnok", el: "ύπουλος", sl: "prebrisan", et: "kaval", lt: "gudrus", da: "lusket", fi: "kieroutunut", sv: "lömsk", hr: "lukav", lv: "viltīgs", hi: "कुटिल", ar: "ماكر", vi: "xảo quyệt", th: "เจ้าเล่ห์", ko: "교활한", ja: "狡猾な", kk: "айлакер".
+     * Calibrated: Restored true spatial and figurative meaning (roundabout, winding, indirect, tortuous) across all languages:
+       ru: "окольный, кружной, уклончивый", de: "weitschweifig, umwegig, umständlich", es: "tortuoso, indirecto, con rodeos", fr: "tortueux, indirect, sinueux", ja: "回り道の, 遠回りの, 迂回した", ko: "우회하는, 빙 도는, 완곡한", zh: "迂回的、拐弯抹角的、绕道的", ar: "ملتف, دائري, غير مباشر".
+
+3. Word 6137 (coterie):
+   - LITERAL TRANSLATION COLLAPSE ("CIRCLE" AS GEOMETRIC SHAPE) IN 20+ LANGUAGES:
+     * "Coterie" (small exclusive circle of friends / clique) was translated as a literal geometric circle or wheel in over 20 languages!
+       Dump had: cs: "kruh", sk: "kruh", hu: "kör", el: "κύκλος", sl: "krog", et: "ring", lt: "ratas", da: "cirkel", fi: "ympyrä", sv: "cirkel", hr: "krug", lv: "aplis", ar: "دائرة", id: "lingkaran", vi: "vòng tròn", th: "วงกลม", ko: "원", ja: "円", kk: "шеңбер", bn: "কোটেরি".
+     * Root Cause: Russian source "кружок" was translated literally as geometric circle/circle shape instead of an inner circle / exclusive club / clique.
+     * Calibrated: Restored true social group meaning (clique, inner circle, exclusive group) across all 35 languages:
+       ru: "кружок, клика, тесный круг единомышленников", de: "Koterie, Clique, Zirkel, geschlossene Gesellschaft", es: "camarilla, cenáculo, círculo cerrado", fr: "coterie, cercle fermé, clique", ja: "仲間, 同人, 派閥, 結社", ko: "동인, 파벌, 소수 집단", zh: "小圈子、同人圈、小集团", ar: "زمرة, حلقة ضيقة, شيعة خاصة".
+
+4. Word 6121 (condone):
+   - SYSTEMIC ERROR: "OVERLOOK / FORGIVE" MISTRANSLATED AS "INDULGE / PAMPER" IN 22+ LANGUAGES:
+     * In the dump, "condone" (to accept or forgive bad behavior, overlook, turn a blind eye to) was mistranslated as "to indulge oneself / pamper / spoil" (tr: "şımartmak", pt: "indulgente", ro: "complacere", bg: "отдавам се", cs: "dopřávat si", sk: "dopriať si", hu: "kényeztető", sl: "prepustiti se", et: "hellitama", lt: "mėgautis", da: "hengive sig", fi: "hemmotella", sv: "hänge sig", hr: "prepustiti se", lv: "ļauties", ar: "ينغمس", vi: "nuông chiều", th: "ตามใจ", ko: "탐닉하다", ja: "甘やかす", kk: "еркелету").
+     * Calibrated: Restored true meaning (overlook, tolerate, pardon, turn a blind eye to) across all 35 languages:
+       ru: "потворствовать, закрывать глаза на, прощать", de: "dulden, hinwegsehen über, billigen", es: "tolerar, pasar por alto, consentir", fr: "tolérer, fermer les yeux sur, cautionner", ja: "黙認する, 大目に見る, 容認する", ko: "묵인하다, 용납하다, 눈감아 주다", zh: "宽恕、姑息、纵容", ar: "يتغاضى عن, يتساهل مع, يغفر ذنباً".
+
+5. Word 6129 (contrite):
+   - PART-OF-SPEECH COLLAPSE (ADJECTIVE -> VERB) IN 24+ LANGUAGES:
+     * The adjective "contrite" (remorseful, penitent, feeling guilt) was translated as a verb meaning "to lament / mourn / weep" in over 24 languages due to Russian verbal root "сокрушаться":
+       Dump had: ru: "сокрушаться", uk: "журитися", it: "lamentarsi", pt: "lamentar", ro: "a se lamenta", bg: "оплаквам", cs: "naříkat", sk: "nariekať", hu: "siránkozik", el: "θρηνώ", sl: "objokovati", et: "leinama", lt: "raudoti", da: "klage", fi: "valittaa", sv: "klaga", hr: "jadikovati", lv: "žēloties", ar: "يرثي", vi: "than thở", th: "คร่ำครวญ", ko: "애도하다", ja: "嘆く", kk: "жоқтау".
+     * Calibrated: Restored adjective form (contrite, penitent, remorseful) across all 35 languages:
+       ru: "сокрушающийся, раскаивающийся, полный раскаяния", de: "reumütig, zerknirscht, bußfertig", es: "contrito, arrepentido, compungido", fr: "contrit, repentant, affligé de ses fautes", ja: "痛悔した, 悔恨の, 深く悔いている", ko: "깊이 뉘우치는, 통한의, 회개하는", zh: "悔罪的、深感痛悔的、忏悔的", ar: "نادم, منكسر الفؤاد, تائب".
+
+6. Word 6107 (circumscribe):
+   - PART-OF-SPEECH COLLAPSE (VERB -> NOUN) IN 20+ LANGUAGES:
+     * The verb "circumscribe" (to restrict, mark limits, draw a boundary around) was translated as a static noun "border / limit / boundary" in 20 languages (it: "limite", tr: "sınır", pt: "limite", ro: "limită", bg: "ограничение", cs: "limit", sk: "obmedzenie", hu: "korlát", el: "όριο", sl: "omejitev", et: "piir", lt: "riba", da: "grænse", fi: "raja", sv: "gräns", hr: "granica", lv: "robeža", ar: "حد", th: "ขีดจำกัด", ko: "한계").
+     * Calibrated: Restored active verb forms (to limit, bound, circumscribe, delimit) across all 35 languages.
+
+7. Word 6132 (convoluted):
+   - SEMANTIC CONFUSION ("COMPLEX / INTRICATE" -> "CONFUSED PERSON") IN 22+ LANGUAGES:
+     * Dump translated "convoluted" as "a confused, bewildered, perplexed person" (it: "confuso", pt: "confuso", cs: "zmatený", da: "forvirret", fi: "hämmentynyt", sv: "förvirrad", hr: "zbunjen", hi: "भ्रमित", ar: "مرتبك", vi: "bối rối", th: "สับสน", ko: "혼란스러운", ja: "混乱した").
+     * Calibrated: Restored objective complexity of arguments/structures (intricate, labyrinthine, tortuous, tangled):
+       ru: "запутанный, замысловатый, извилистый", de: "verschlungen, kompliziert, gewunden", es: "enrevesado, intrincado, tortuoso", fr: "alambiqué, tarabiscoté", ja: "入り組んだ, 複雑怪奇な, 难解な", ko: "복잡다단한, 뒤얽힌, 난해한", zh: "旋绕的、费解的、错综复杂的".
+
+8. Word 6116 (complacent) vs 6117 (complaisant):
+   - HIGH-RISK FALSE FRIENDS FIXED:
+     * In Romance languages, "complacent" was mistranslated as "complaciente / compiacente / complacente", which actually means "obliging / accommodating" (complaisant!).
+     * Calibrated 6116 to "smug, self-satisfied, uncritical" (es: "autosatisfecho, conformista", it: "autosoddisfatto, compiaciuto di sé", pt: "acomodado, autosatisfeito", fr: "autosatisfait, béat", de: "selbstgefällig, selbstzufrieden").
+     * Calibrated 6117 to "obliging, willing to please, accommodating" (es: "complaciente, servicial", fr: "complaisant, accommodant", pt: "complacente, prestativo", de: "entgegenkommend, gefällig").
+
+9. Word 6125 (congeal):
+   - MISTRANSLATION AS "FREEZING TO ICE" IN 18+ LANGUAGES:
+     * In 18 languages, "congeal" (to thicken, solidify, curdle, coagulate from cooling grease or blood) was mistranslated as "freeze into ice" (congelare, îngheța, zmrazit, megfagy, παγώνω, fryse, jäätyä, 얼리다, 凍らせる, қату).
+     * Calibrated to thickening / clotting / curdling / solidifying without freezing.
+
+10. Word 6115 (compendium):
+    - MISTRANSLATION AS "FUNDRAISER / COLLECTION DRIVE" IN 12+ LANGUAGES:
+      * Dump had translated "compendium" (handbook, digest, summary) as "fundraising / collection / collecting" (fi: "keräys", sv: "insamling", hu: "összeszedés", sl: "zbiranje", bg: "събираемост", ko: "수집", ar: "جمع").
+      * Calibrated to "handbook, concise summary, compendium, digest".
+
+11. Word 6141 (credulous):
+    - MISTRANSLATION AS "TRUSTING / CONFIDENT" INSTEAD OF "GULLIBLE":
+      * ja: "信頼する", ko: "신뢰하는", ar: "واثق" translated "credulous" as positive trust/confidence.
+      * Calibrated to "gullible, easily duped, naive" (ja: "騙されやすい", ko: "잘 속아 넘어가는", ar: "سريع التصدیق, ساذج", es: "crédulo, ingenuo").
+
+12. Systematic Bengali (bn) Transliteration Cleanup:
+    - Fixed phonetic transliterations and gibberish in Bengali:
+      * 6104: চারলিশ -> অভদ্র, রূঢ়, কর্কশ
+      * 6107: কিরকামসকরিবে -> সীমাবদ্ধ করা, পরিধি নির্দিষ্ট করা, ঘেরা
+      * 6108: কিরকামসপেকট -> সতর্ক, দূরদর্শী, সাবধানী
+      * 6110: কলেমেনকয় -> ক্ষমা, দয়া, সহানুভূতি
+      * 6112: কোগেনট -> অকাট্য, জোরালো, যুক্তিপূর্ণ
+      * 6115: কোমপেনডিাম -> সংক্ষিপ্ত বিবরণ, সারসংক্ষেপ, সারগ্রন্থ
+      * 6119: কোনকিলিঅটোরয় -> আপসকারী, মিলনমূলক, শান্তিকর
+      * 6121: কোনডোনে -> উপেক্ষা করা, চোখ বুজে থাকা, ক্ষমা করা
+      * 6125: কোংিল -> জমাট বাঁধা, ঘন হওয়া, জমে যাওয়া
+      * 6126: কোননয়সসোর -> রসপণ্ডিত, সমঝদার, শিল্পবোদ্ধা
+      * 6131: কোনভিভিঅল -> আমোদপ্রিয়, মিশুক, প্রফুল্ল, উৎসবমুখর
+      * 6132: কোনভোলাটেড -> জটিল, প্যাঁচালো, কুটিল
+      * 6134: কোরপোরিল -> শারীরিক, পার্থিব, দেহধারী, বস্তুগত
+      * 6139: কোভেট -> লোভ করা, লালসা করা, লালায়িত হওয়া
+      * 6142: করেসকেনডো -> স্বরবৃদ্ধি, ক্রমশ তীব্রতর হওয়া, চূড়ান্ত শিখর
+      * 6145: কারমাডগেোন -> বদমেজাজি লোক, খিটখিটে স্বভাবের ব্যক্তি
+      * 6146: কারসোরয় -> ভাসা-ভাসা, দ্রুত চোখ বোলানো, অসাবধানী
+
+13. German Noun Capitalization:
+    - Capitalized all German nouns that were lowercase in raw dump:
+      * 6102: chimäre -> Chimäre
+      * 6106: geschwätzigkeit -> Umschreibung, Weitschweifigkeit
+      * 6110: barmherzigkeit -> Milde, Barmherzigkeit
+      * 6115: sammlung -> Kompendium, Handbuch
+      * 6118: reue -> Gewissensbisse, Skrupel, Reue
+      * 6123: verschmelzung -> Zusammenfluss, Zusammentreffen
+      * 6126: kenner -> Kenner, Kunstkenner
+      * 6137: kreis -> Koterie, Clique, Zirkel
+      * 6142: anschwellend -> Crescendo, Anschwellen, Höhepunkt
+      * 6144: gier -> Gier, Habsucht, Geldgier
+      * 6149: fiasko -> Debakel, Fiasko
+      * 6150: ausschweifung -> Ausschweifung, Zügellosigkeit
+
+14. Verification and Rule Adherence:
+    - EXACTLY 36 LOCALES: 1 headword (en) + 35 target languages verified.
+    - Zero APK/AAB builds performed.
+    - 'frontend/assets/data/words.json' left untouched.
+    - Batch calibrated and ready for application.

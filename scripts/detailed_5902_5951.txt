@@ -1,0 +1,104 @@
+Batch 5902-5951 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 49 words (IDs 5902 to 5951, skipping missing ID 5933) from dump slice 'scripts/dump_5902_5951.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5902_5951_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5909 (scrupulous):
+   - CATASTROPHIC OPPOSITE FALSE FRIEND: Raw dump for German contained "skrupellos" (which literally means unscrupulous / ruthless / unscrupulous person!). Calibrated German to "gewissenhaft, peinlich genau, sorgfältig, skrupulös". All other locales calibrated to ensure positive conscientiousness and ethical rigor.
+
+2. Word 5905 (sanguine):
+   - PART-OF-SPEECH AND SENSE COLLAPSE: Raw dump in Russian had noun "сангвиник" (a sanguine temperament person) and Portuguese had "sanguíneo" (blood-like). In advanced English and GRE contexts, "sanguine" is overwhelmingly an adjective meaning cheerfully optimistic and confident, especially in adversity. Calibrated to adjectives: ru "оптимистичный, жизнерадостный, уверенный", de "optimistisch, lebensfroh, zuversichtlich", pt "otimista, confiante, esperançoso", etc.
+
+3. Word 5922 (spendthrift):
+   - AGENT NOUN vs ABSTRACT NOUN CONFUSION: Raw dump had ru "расточительность" and pt "extravagância" (the quality of extravagance). "Spendthrift" is the person who spends wastefully (transhira, mot, profligate). Calibrated to agent nouns and spending adjectives across all locales (ru "расточитель, транжира, мот", de "Verschwender, Prasser", pt "esbanjador, gastador, perdulário", es "derrochador, manirroto").
+
+4. Word 5920 (sparse):
+   - MISTRANSLATION AS "RARE/UNUSUAL": Raw dump had es "raro", pt "raro", de "selten". "Sparse" describes low density, scattered distribution, or thin dispersion (e.g. sparse vegetation, sparse population, sparse hair), not oddity. Calibrated to es "escaso, disperso, ralo", pt "escasso, ralo, disperso", de "spärlich, vereinzelt, schütter", ru "скудный, редкий, рассеянный".
+
+5. Word 5934 (strident):
+   - BIZARRE MACHINE TRANSLATION ERROR: Raw dump translated strident as pt "abrupto" and de "abrupt". "Strident" means loud and harsh, shrill, grating, or gratingly forceful in tone. Calibrated to pt "estridente, guinchante, penetrante", de "schrill, kreischend, scharf", ru "резкий, пронзительный, визгливый".
+
+6. Word 5927 (steadfast):
+   - DURATION vs RESOLUTION MISCONCEPTION: Raw dump had es "persistente", de "anhaltend" (continuous/lasting). "Steadfast" means unwavering, resolute, loyal, and firm in duty. Calibrated to es "firme, inquebrantable, leal", de "standhaft, unerschütterlich, treu", ru "стойкий, непоколебимый, верный".
+
+7. Word 5907 (satiate):
+   - PART-OF-SPEECH ERROR: Raw German dump had adjective "sättigend" (filling) instead of verb "sättigen, stillen, überdrüssig machen". Calibrated across all locales to true transitive verbal forms (satisfy fully, overfill).
+
+8. Word 5925 (squalor):
+   - PART-OF-SPEECH AND CASING ERROR: Raw German dump had lowercase adjective "elend". Squalor is a noun denoting wretched, filthy, dilapidated living conditions. Calibrated to de "Elend, Schmutz, Verwahrlosung", ru "нищета, убожество, грязь, запустение", es "escualidez, miseria, inmundicia".
+
+9. Word 5913 (seminal):
+   - FIGURATIVE vs LITERAL BIOLOGICAL SENSE: Raw dump focused strictly on literal fertility ("fructífero", "плодотворный"). In academic and advanced English, "seminal" denotes highly influential, groundbreaking, and formative works/discoveries. Calibrated to include foundational senses (ru "основополагающий, фундаментальный, новаторский", de "bahnbrechend, wegweisend", fr "séminal, fondateur, novateur").
+
+10. Word 5917 (solvent):
+    - POLYSEMY CALIBRATION: Included both the primary financial sense (able to pay all debts) and the scientific/chemical sense (dissolving agent) across all 35 target languages.
+
+11. Word 5942 (surfeit):
+    - OVERLY RESTRICTED SENSE: Raw dump had ru "переедание" (overeating). Surfeit encompasses general excess, superabundance, and the state of being over-supplied or surfeited. Expanded across locales to cover surplus and satiety.
+
+12. Word 5930 (stint):
+    - DUAL NOUN / VERB NATURE: Calibrated to capture both the duration/period of work (e.g. stint in the army) and the verbal sense to skimp/restrict.
+
+Comprehensive Word-by-Word Inventory (IDs 5902–5951):
+------------------------------------------------------
+5902 salient: (adj.) prominent, most noticeable, conspicuous, key. Captures salient points/features.
+5903 salutary: (adj.) producing good effects, beneficial, wholesome, salutary lesson.
+5904 sanctimonious: (adj.) making a hypocritical show of moral righteousness; holier-than-thou.
+5905 sanguine: (adj.) optimistic, cheerfully confident, hopeful even in adversity.
+5906 sardonic: (adj.) grimly mocking, cynical, mordant, biting.
+5907 satiate: (v.) satisfy fully, glut, sate, gorge.
+5908 schism: (n.) split, formal division or separation (ecclesiastical/political).
+5909 scrupulous: (adj.) diligent, painstaking, meticulously principled, conscientious.
+5910 scurrilous: (adj.) scandalous, vulgar, defaming, slanderously abusive.
+5911 sedentary: (adj.) characterized by sitting, inactive, desk-bound.
+5912 sedulous: (adj.) showing earnest diligence, persevering, painstaking.
+5913 seminal: (adj.) groundbreaking, formative, foundational, pioneering.
+5914 sententious: (adj.) moralizing pompously, aphoristic, full of preachy maxims.
+5915 servile: (adj.) submissive, fawning, cringing, slave-like.
+5916 solicitous: (adj.) attentive, showing anxious concern, eager to help.
+5917 solvent: (adj./n.) financially viable, debt-free; dissolving liquid.
+5918 soporific: (adj./n.) inducing sleep, drowsy; hypnotic sleep aid.
+5919 sordid: (adj.) vile, ignoble, squalid, morally base and filthy.
+5920 sparse: (adj.) thinly scattered, dispersed, meager, not dense.
+5921 specious: (adj.) deceptively plausible, superficially attractive but fallacious.
+5922 spendthrift: (n./adj.) wastrel, profligate person; lavishly wasteful.
+5923 sporadic: (adj.) scattered, occurring at irregular intervals, occasional.
+5924 spurious: (adj.) counterfeit, bogus, lacking authenticity or valid basis.
+5925 squalor: (n.) wretched filth, misery, utter degradation of environment.
+5926 static: (adj./n.) unchanging, motionless; atmospheric crackle/interference.
+5927 steadfast: (adj.) resolute, unwavering, loyal, felsenfest firm.
+5928 stentorian: (adj.) loud and booming (voice), thunderous, resonating.
+5929 stigma: (n.) mark of social disgrace, brand of infamy, blot.
+5930 stint: (n./v.) term/shift of work; to skimp, economize stingily.
+5931 stipulate: (v.) demand or specify as an essential contractual condition.
+5932 stolid: (adj.) unemotional, calm, impassive, phlegmatic.
+5934 strident: (adj.) shrill, grating, harshly vociferous and forceful.
+5935 stymie: (v.) thwart, stump, block, hinder progress of.
+5936 sublime: (adj.) of supreme nobility, awe-inspiring, majestic, exalted.
+5937 succinct: (adj.) concise, clearly expressed in few words, terse.
+5938 sully: (v.) besmirch, defile, tarnish reputation, soil.
+5939 supercilious: (adj.) arrogant, disdainful, looking down with contempt.
+5940 superfluous: (adj.) excess, redundant, beyond what is necessary.
+5941 supplant: (v.) replace by force or strategy, supersede, usurp place of.
+5942 surfeit: (n./v.) excess, satiety, plethora, overabundance.
+5943 surreptitious: (adj.) stealthy, clandestine, performed by stealth.
+5944 sycophant: (n.) fawning flatterer, toady, bootlicker.
+5945 tacit: (adj.) unspoken, implicit, understood without explicit declaration.
+5946 taciturn: (adj.) reserved in speech, uncommunicative, habitually silent.
+5947 tangential: (adj.) peripheral, digressive, merely touching upon.
+5948 tantamount: (adj.) virtually identical, equivalent in value/significance.
+5949 tautological: (adj.) redundant, containing needless self-repetition.
+5950 temerity: (n.) foolhardy audacity, reckless boldness, rashness.
+5951 temperance: (n.) moderation in action, restraint, sobriety.
+
+Verification:
+- Clean module export: require('./scripts/apply_batch_5902_5951_calibrations.cjs').
+- Exactly 49 words present (skipping absent ID 5933).
+- Exactly 35 target languages validated per word (plus 'en' headword = exactly 36 locales).
+- Zero autonomous APK/AAB build triggers executed.
+- 'frontend/assets/data/words.json' untouched.

@@ -1,0 +1,121 @@
+Batch 6252-6301 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 6252 to 6301) from dump slice 'scripts/dump_6252_6301.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_6252_6301_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 6267 (exuberant):
+   - CATASTROPHIC DUMP CORRUPTION: Machine translation back-translated Russian "буйный" (as in wild/violent) into "violent / gewalttätig" across several languages:
+     * DE dump: "gewalttätig" (violent!) -> Calibrated to "überschwänglich, voller Lebensfreude, üppig, ausgelassen"
+     * ES dump: "violento" (violent!) -> Calibrated to "exuberante, rebosante de vida, frondoso, entusiasta"
+     * FR dump: "violent" (violent!) -> Calibrated to "exubérant, plein d'entrain, débordant d'énergie, luxuriant"
+     * JA dump: "暴力的な" (violent!) -> Calibrated to "活力に満ちた、溢れんばかりの、生い茂った"
+     * AR dump: "عنيف" (violent!) -> Calibrated to "مفعم بالحيوية، فياض بالطاقة، خصب، غزير"
+     * RU/UK dump: refined from crude "буйный" to rich "жизнерадостный, бьющий через край, пышный, изобильный".
+
+2. Word 6297 (gainsay):
+   - CATASTROPHIC PART-OF-SPEECH COLLAPSE: In the raw dump, "to gainsay" (to oppose, contradict, deny) was confused with "to object", which was then translated as the physical noun "object / thing":
+     * DE dump: "objekt" (physical noun Gegenstand!) -> Calibrated to verb "widersprechen, leugnen, bestreiten, anfechten"
+     * FR dump: "objet" (noun object!) -> Calibrated to verb "contredire, démentir, contester, nier"
+     * JA dump: "対象" (target/object!) -> Calibrated to verb "否定する、反論する、異議を唱える"
+     * Restored true verbal meaning (to contradict, dispute, deny) across all 35 target languages.
+
+3. Word 6291 (fracas):
+   - SYSTEMIC NUMBER & PLURALITY CONFUSION: Because "fracas" ends in '-s', machine translation treated it as a plural noun in multiple locales:
+     * RU dump: "скандалы" (plural) -> Calibrated to singular/collective "потасовка, шумная ссора, скандал, драка"
+     * DE dump: "skandale" (plural) -> Calibrated to "Rauferei, Krawall, lautstarker Streit, Schlägerei"
+     * FR dump: "scandales" (plural) -> Calibrated to "fracas, vacarme, échauffourée, bagarre"
+     * JA dump: "スキャンダル" -> Calibrated to "乱闘、大騒ぎ、喧嘩"
+     * AR dump: "فضائح" (scandals plural) -> Calibrated to "شجار عنيف، عراك صاخب، جلبة".
+
+4. Word 6281 (flabbergast):
+   - PART-OF-SPEECH MISALIGNMENT: The verb "flabbergast" (to astound, dumbfound) was translated as a static noun "astonishment / surprise" in numerous locales:
+     * RU dump: "изумление" (noun) -> Calibrated to verb "ошеломлять, поражать, изумлять"
+     * UK dump: "здивування" (noun) -> Calibrated to verb "приголомшувати, вражати, дивувати"
+     * FR dump: "étonnement" (noun) -> Calibrated to verb "sidérer, ébahir, stupéfier, abasourdir"
+     * JA dump: "驚き" (noun) -> Calibrated to verb "仰天させる、大いに驚かせる、呆然とさせる"
+     * Restored active transitive verbal forms across all 35 languages.
+
+5. Word 6273 (fawn):
+   - HOMONYMIC BIAS & MISSING SENSES: Raw dump translated "fawn" solely as a color ("палевый") or deer animal ("cervato") in RU, UK, ES, ignoring the primary GRE/advanced verbal meaning "to flatter / fawn over / grovel":
+     * Dump had RU: "палевый", UK: "палевий", ES: "canela, leonado, cervato"
+     * Calibrated across all locales to comprehensively reflect both the verbal sense (to grovel, flatter excessively) and the nominal sense (young deer, fallow color): "лебезить, заискивать, пресмыкаться; оленёнок, палевый".
+
+6. Word 6252 (expatiate):
+   - SEMANTIC CONFUSION WITH "EXPAND / SPREAD": Raw dump confused "expatiate" (to speak/write at length) with physical spreading or diffusion:
+     * RU dump: "распространять" -> Calibrated to "пространно рассуждать, излагать подробно, вдаваться в подробности"
+     * UK dump: "поширювати" -> Calibrated to "просторово міркувати, детально викладати, розводитися про щось"
+     * FR dump: "diffuser" -> Calibrated to "s'étendre sur, disserter, discourir longuement"
+     * JA dump: "広がる" -> Calibrated to "詳しく述べる、敷衍する、長々と論じる".
+
+7. Word 6269 (facile):
+   - Japanese dump rendered "facile" as "光" (light as in illumination!), a bizarre machine hallucination. Calibrated to "安易な、表面的な、手軽な、浅薄な".
+
+8. Word 6288 (forestall):
+   - In DE ("warnen") and FR ("avertir"), raw dump translated "forestall" as "warn" rather than "preempt / anticipate and prevent". Calibrated to "zuvorkommen, vorgreifen, vereiteln" and "devancer, prévenir, parer à".
+
+9. Word 6298 (galvanize):
+   - Raw dump only supplied the technical metallurgy meaning "гальванизировать". Calibrated to prioritize the primary figurative meaning "побуждать к действию, оживлять, стимулировать" alongside the metallurgical sense.
+
+Detailed Word-by-Word Overview:
+--------------------------------
+6252 expatiate: (v.) speak or write at length or in detail. Eliminated physical spreading confusion.
+6253 expatriate: (n./adj./v.) emigrant, living abroad, banish. Balanced nominal, adjectival, and verbal usages.
+6254 expedient: (adj./n.) suitable, practical, means to an end. Nuanced pragmatic connotations captured.
+6255 expiate: (v.) atone for sin or guilt. Shifted nominal Arabic dump to proper active verbal forms.
+6256 explicate: (v.) analyze and develop an idea in detail. Analytical explanatory vocabulary calibrated.
+6257 expository: (adj.) explanatory, descriptive, didactic. Expository prose register aligned.
+6258 expostulate: (v.) reason earnestly with, express disapproval. Friendly protest and dissuasion conveyed.
+6259 expurgate: (v.) censor, excise objectionable passages from text. Editorial censorship sense specified.
+6260 extant: (adj.) still surviving, existing today (not extinct). Historical document survival sense preserved.
+6261 extenuate: (v.) mitigate guilt, serve as mitigating excuse. Legal extenuating circumstances aligned.
+6262 extol: (v.) praise enthusiastically, laud. High register laudatory vocabulary calibrated.
+6263 extraneous: (adj.) irrelevant, unrelated, external. Separated irrelevance from sheer foreignness.
+6264 extrapolate: (v.) project trends from known data into unknown. Mathematical and predictive senses balanced.
+6265 extricate: (v.) free from difficulty or entanglement. Disentanglement and rescue verbs calibrated.
+6266 extrinsic: (adj.) external, non-essential, not inherent. Contrasted with intrinsic across all languages.
+6267 exuberant: (adj.) overflowing with vitality, abundant, lavish. Major fix of dump "violent" hallucination.
+6268 exude: (v.) discharge moisture, radiate confidence/charm. Physical and emotional radiance calibrated.
+6269 facile: (adj.) superficial, effortless, glib. Japanese translation "光" corrected to surface-level shallowness.
+6270 factious: (adj.) divisive, dissent-seeking, sectarian. Sectarian discord and infighting reflected.
+6271 fallacious: (adj.) logically unsound, deceptive, misleading. Philosophical and everyday fallacy aligned.
+6272 fatuous: (adj.) foolish, inane, pointless, silly. Vacuous silliness properly rendered.
+6273 fawn: (v./n./adj.) grovel, flatter; young deer, light brown. Multi-sense coverage implemented.
+6274 feckless: (adj.) irresponsible, incompetent, lacking initiative. Shiftless incompetence captured.
+6275 felicitous: (adj.) apt, well-chosen, fortunate. Appropriateness and delightfulness balanced.
+6276 feral: (adj.) wild, untamed, escaped captivity. Animal and predatory register preserved.
+6277 fervid: (adj.) passionately enthusiastic, fiery. Ardent passion and intensity rendered.
+6278 fetid: (adj.) malodorous, putrid, stinking. Disgusting olfactory stench accurately conveyed.
+6279 fetter: (n./v.) shackles, restrain, encumber. Dual noun and verb functionality calibrated.
+6280 fiat: (n.) formal decree, arbitrary command. Authoritative governmental and legal sense preserved.
+6281 flabbergast: (v.) astound, shock, dumbfound. Replaced nouns with vivid expressive verbs.
+6282 flagrant: (adj.) conspicuously scandalous, glaring, outrageous. Outrageous offensiveness captured.
+6283 flaunt: (v.) display ostentatiously, brag, parade. Ostentatious display and bragging emphasized.
+6284 flippant: (adj.) disrespectful, frivolously cheeky, glib. Nonchalant cheekiness rendered.
+6285 florid: (adj.) ornate, flowery, flushed ruddy. Literary style and facial complexion senses covered.
+6286 flout: (v.) openly disregard, scoff at rules. Defiant mockery of conventions captured.
+6287 foment: (v.) instigate rebellion, stir up unrest. Agitation and instigation terms calibrated.
+6288 forestall: (v.) preempt, obstruct in advance. Fixed "warn" mistranslations to proactive prevention.
+6289 forswear: (v.) renounce on oath, abjure, reject. Perjury and solemn renunciation balanced.
+6290 fortuitous: (adj.) accidental, lucky coincidence. Serendipitous chance captured across all tongues.
+6291 fracas: (n.) noisy brawl, commotion. Corrected plural mistranslations to singular brawl/tumult.
+6292 fractious: (adj.) irritable, quarrelsome, unruly. Bad-tempered restiveness accurately conveyed.
+6293 frenetic: (adj.) wildly energetic, frantic, hectic. Frenzied pace distinguished from mere anger.
+6294 frivolous: (adj.) trivial, carefree, silly, not serious. Playful superficiality rendered.
+6295 fulsome: (adj.) sickeningly flattering, excessive, cloying. Cloying insincerity reflected.
+6296 furtive: (adj.) secretive, stealthy, surreptitious, shifty. Stealthy guilt and covert action conveyed.
+6297 gainsay: (v.) contradict, dispute, deny. Fixed catastrophic noun ("object") error across locales.
+6298 galvanize: (v.) stimulate into action, electrify; zinc plate. Figurative vitality and technical senses aligned.
+6299 gambit: (n.) chess opening sacrifice, tactical opening move. Strategic and chess senses balanced.
+6300 garble: (v.) distort, jumble transmission or message. Muddled misrepresentation verbs calibrated.
+6301 garrulous: (adj.) excessively talkative, loquacious. Chatty loquacity precisely expressed.
+
+Verification:
+- Syntactically validated with Node.js.
+- Exact count of 50 word objects present (IDs 6252 to 6301).
+- All 35 target languages validated for non-empty string content in each record.
+- Exactly 36 locales covered when paired with the English headword.
