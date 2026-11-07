@@ -1,0 +1,1879 @@
+Batch 3302-3351 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+1. Word 3313 (electoral): CATASTROPHIC BUG CAUGHT! Dump erroneously translated electoral as SELECTIVE in 20+ locales (fr: sélectif, it: selettivo, ro: selectiv, bg: селективен, cs: selektivní, sk: selektívny, hu: szelektív, el: εκλεκτικός, sl: selektivno, et: valikuline, lt: selektyvus, da: selektiv, fi: valikoiva, sv: selektiv, hr: selektivni, lv: selektīvs, ar: انتقائي, vi: chọn lọc, th: คัดเลือก, ko: 선택적인, ja: 選択的, kk: селективті)! Calibrated to genuine election-related terminology across all 35 languages (électoral, elettorale, volební, választási, εκλογικός, volilni, valimis-, rinkimų, valg-, vaali-, val-, izborni, vēlēšanu, انتخابي, bầu cử, เกี่ยวกับการเลือกตั้ง, 선거의, 選挙の, 选举的, নির্বাচনী, сайлау).
+2. Word 3338 (accommodate): CATASTROPHIC BUG CAUGHT! Dump translated the verb accommodate as a NOUN meaning place/location (fr: lieu, it: posto, ro: loc, bg: място, cs: místo, sk: miesto, hu: hely, el: θέση, sl: kraj, et: koht, lt: vieta, da: sted, fi: paikka, sv: plats, hr: mjesto, lv: vieta, ar: مكان, vi: địa điểm, th: สถานที่, ko: 장소, ja: 場所, kk: орын)! Restored active verbs covering lodging/housing (unterbringen, héberger, loger, alojar, hospedar, pomieścić, ubytovat, elszállásol, majutama, huse, majoittaa) and adapting to needs (przyjąć, dostosować się, vyhovět, вмещать, размещать, приспосабливать, يستضيف، يتسع لـ).
+3. Word 3348 (contributor): CATASTROPHIC BUG CAUGHT! Dump translated contributor as participant/attendee (participant, participante, katılımcı, participant, участник, účastník, résztvevő, συμμέτοχος, udeleženec, osaleja, dalyvis, deltager, osallistuja, deltagare, sudionik, dalībnieks, प्रतिभागी, مشارك, peserta, người tham gia, ผู้เข้าร่วม, 참가자, 参加者, қатысушы) across 20+ locales. Restored genuine contributor meanings: article author/collaborator and financial donor/supporter.
+4. Word 3318 (serving): SYSTEMIC BUG CAUGHT! In culinary and nutrition contexts, serving means a portion or helping of food. Dump translated it literally as table setting (сервировка стола: fr: mise en place de la table, ro: aranjarea mesei, bg: сервиране на маса, cs: prostírání, sk: prestieranie stola, hu: asztalterítés, el: στρώσιμο τραπεζιού, sl: postavitev mize, et: lauakujundus, lt: stalo serviravimas) or public service (ko: 봉사하는, ja: 奉仕する, kk: қызмет көрсету). Calibrated to food portions and dietary servings (порция, portion, ración, adag, μερίδα, porcija, portsjon, annos, खुराक, وجبة، حصة طعام, پرس غذا, 1인분, 1人前, 一份食物, тағам үлесі).
+5. Word 3333 (pickup): PART-OF-SPEECH BUG CAUGHT! Dump translated noun pickup as verb infinitives (подобрать, підібрати, ramasser, toplamak, vyzvednout, felvenni, σηκώνω, korja üles, menjemput, उठाना, алу) or imperatives (вземете, poberi). Calibrated to the noun pickup: pickup truck (пикап, Pritschenwagen, camioneta, picape, kisteherautó, ημιφορτηγό, ladvogn, avolavapakettiauto, kamionet, पिकअप ट्रक, شاحنة صغيرة, وانت, รถกระบะ, 픽업트럭, ピックアップトラック, 皮卡车, пикап көлігі), collection/retrieval of goods/passengers, and acoustic audio transducer.
+6. Word 3325 (contend): PART-OF-SPEECH BUG CAUGHT! Dump translated contend as a noun (fight, combat: lutte, combattimento, kavga, luptă, битка, boj, harc, πάλη, võitlus, kova, kamp, taistelu, borba, cīņa, قتال, การต่อสู้, 싸움, төбелес). Calibrated to verb contend in both senses: struggle/compete (бороться, соперничать, kämpfen, contender, lutter, rywalizować, çekişmek) AND argue/assert (contend that..., утверждать, отстаивать, behaupten, verfechten, sostener, soutenir, twierdzić, iddia etmek, afirmar, állít, ισχυρίζομαι, hävda).
+7. Word 3304 (herb): BOTANICAL CONFUSION CAUGHT! Dump conflated culinary/medicinal herb with lawn grass (Gras, Grün, grama, çimen, iarbă, γρασίδι, ruoho, græs, gräs, zāle, rumput, cỏ, หญ้า). Calibrated to culinary herbs and medicinal plants (Kraut, Küchenkräuter, hierba aromática, erva, erba aromatica, zioło, билка, gyógynövény, βότανο, zelišče, ravimtaim, vaistažolė, krydderurt, yrtti, ört, ljekovita biljka, ārstniecības augs, जड़ी-बूटी, عشب عطري، عشبة طبية, گیاه دارویی, جڑی بوٹی, rempah herbal, thảo mộc, สมุนไพร, 허브, ハーブ, 香草, ভেষজ, дәрілік шөп).
+8. Word 3312 (continuing): PART-OF-SPEECH BUG CAUGHT! Dump had continuation nouns (продолжение, Fortsetzung, continuation, continuazione, continuação, pokračování, jätkamine, fortsættelse, jatkuminen, fortsättning, nastavak, turpinājums, निरंतरता, استمرار, kelanjutan, жалғасы). Calibrated to active adjective/participle (продолжающийся, длящийся, непрерывный; fortlaufend, andauernd; continuo, permanente; continu, persistant; ciągły, nieustanny; devam eden; contínuo; continuu; продължаващ; pokračující; folyamatos; συνεχής; nadaljnji; jätkuv; tęstinis; vedvarende; jatkuva; pågående; kontinuiran; nepārtraukts; निरंतर; مستمر; ادامه‌دار; مسلسل; berkelanjutan; liên tục; ต่อเนื่อง; 지속적인; 継続的な; 持续的; ক্রমাগত; жалғасып жатқан).
+9. Word 3319 (safely): ADVERB / ADJECTIVE FIX! Dump used adjectives in da: sikker, fi: turvallinen, sv: säker, lv: drošs, ar: آمن, id: aman, th: ปลอดภัย, ko: 안전한, ja: 安全な. Calibrated to genuine adverbs (sikkert, turvallisesti, säkert, droši, بأمان، بسلام, dengan aman, อย่างปลอดภัย, 안전하게, 安全に, 安全地).
+10. Word 3345 (stance): SEMANTIC DRIFT CAUGHT! Dump translated stance as geographical position or office post (tr: konum, ar: منصب, vi: vị trí, th: ตำแหน่ง, ko: 위치, ja: 地位). Fixed to ideological stance/standpoint (Haltung, Standpunkt, postura, attitude, stanowisko, postoj, álláspont, στάση, stališče, seisukoht, ståndpunkt, stajalište, nostāja, रुख, موقف, دیدگاه, مؤقف, sikap, lập trường, ท่าที, 입장, 姿勢, 立场, ұстаным) and physical standing posture/body stance.
+11. Word 3347 (dot): Kazakh dump had ұпай (game score points!). Fixed to нүкте, дақ. Korean dump had 지점 (spatial location!). Fixed to 점, 반점.
+12. Word 3349 (cooperate): Kazakh dump had noun ынтымақтастық (cooperation). Fixed to verb ынтымақтасу, бірігіп жұмыс істеу. Arabic dump had noun/past تعاون. Fixed to active verb يتعاون، يتكاتف.
+13. Word 3351 (offend): Arabic dump had noun إهانة (insult). Fixed to verb يُهين، يجرح المشاعر. Romanian dump had 3rd person ofensează. Fixed to infinitive a jigni, a ofensa.
+14. Word 3346 (rabbit): Czech dump had adjective králičí (rabbit's). Fixed to noun králík. Croatian dump had zec (hare). Calibrated to kunić, pitomi zec.
+15. Word 3341 (comprise): Italian dump had affermare (to assert!). Fixed to comprendere, consistere in, includere. Bulgarian, Slovak, Slovenian had 3rd person plurals (включват, zahŕňajú, vključujejo). Fixed to proper lemmata.
+16. Word 3309 (mechanic): Turkish dump had adjective mekanik (mechanical). Fixed to tamirci, mekaniker, motor ustası.
+17. Word 3306 (fossil): Czech, Hungarian, Lithuanian dumps had adjectives (fosilní, fosszilis, iškastinis) omitting noun zkamenělina, kövület, iškasena. Calibrated across both noun and adjective senses.
+18. Word 3330 (abstract): Dump omitted polysemy (Greek, Croatian, Hindi, Vietnamese, Thai only translated summary/abstract noun, while others only translated adjective). Restored both abstract thought and paper abstract/summary across all locales.
+19. Brazilian Portuguese (pt / pt-BR) adaptations applied (picape, caminhonete, ônibus de traslado, vaivém, azeitona, verde-oliva, acomodar, colaborar, disco rígido).
+20. Latin American / Mexican Spanish (es) nuances applied (camioneta, reses, ganado bovino, proyección, furgoneta, disco rígido).
+
+====================================================
+Detailed Calibrated Entries for all 50 Words:
+====================================================
+
+ID 3302:
+  ru: дипломатический, дипломатичный, тактичный
+  uk: дипломатичний, дипломатичний, тактовний
+  de: diplomatisch, taktvoll, geschickt
+  es: diplomático, tacto, prudente
+  fr: diplomatique, diplomate, plein de tact
+  pl: dyplomatyczny, taktowny
+  it: diplomatico, accorto, pieno di tatto
+  tr: diplomatik, ince düşünceli, nazik
+  pt: diplomático, cortês, habilidoso
+  ro: diplomatic, abil, plin de tact
+  bg: дипломатически, дипломатичен, тактичен
+  cs: diplomatický, taktní
+  sk: diplomatický, taktný
+  hu: diplomáciai, diplomatikus, tapintatos
+  el: διπλωματικός, τακτικός, με λεπτότητα
+  sl: diplomatski, takten
+  et: diplomaatiline, taktitundeline
+  lt: diplomatinis, taktiškas
+  da: diplomatisk, taktfuld
+  fi: diplomaattinen, hienotunteinen
+  sv: diplomatisk, taktfull
+  hr: diplomatski, taktičan
+  lv: diplomātisks, taktisks
+  hi: राजनयिक, कूटनीतिक, व्यवहारकुशल
+  ar: دبلوماسي، لبق، حكيم
+  fa: دیپلماتیک، با نزاکت، زیرکانه
+  ur: سفارتی، مدبرانہ، با اخلاق
+  id: diplomatik, diplomatis, bijaksana
+  vi: ngoại giao, khéo léo trong ứng xử
+  th: ทางการทูต, มีชั้นเชิง, รู้กาลเทศะ
+  ko: 외교의, 외교적인, 수완 있는
+  ja: 外交の、外交的な、如才ない
+  zh: 外交的、圆滑的、有策略的
+  bn: কূটনৈতিক, চতুর, কৌশলপূর্ণ
+  kk: дипломатиялық, мәмілегерлік, сыпайы
+
+ID 3303:
+  ru: вор, похититель, грабитель
+  uk: злодій, крадій, грабіжник
+  de: Dieb, Einbrecher
+  es: ladrón, caco, ratero
+  fr: voleur, cambrioleur, larron
+  pl: złodziej, rabuś
+  it: ladro, scassinatore
+  tr: hırsız, soyguncu
+  pt: ladrão, assaltante, gatuno
+  ro: hoț, tâlhar
+  bg: крадец, апаш
+  cs: zloděj, nenechavec
+  sk: zlodej, kradmák
+  hu: tolvaj, rabló
+  el: κλέφτης, ληστής
+  sl: tat, ropar, vlomilec
+  et: varas, riisuja
+  lt: vagis, plėšikas
+  da: tyv, indbrudstyv
+  fi: varas, rosvo
+  sv: tjuv, inbrottstjuv
+  hr: lopov, kradljivac
+  lv: zaglis, laupītājs
+  hi: चोर, उठाईगीर
+  ar: لص، سارق
+  fa: دزد، سارق
+  ur: چور، سارق
+  id: pencuri, maling
+  vi: kẻ trộm, tên trộm
+  th: ขโมย, โจร, ผู้ร้ายลักทรัพย์
+  ko: 도둑, 절도범
+  ja: 泥棒、窃盗犯
+  zh: 小偷、窃贼
+  bn: চোর, তস্কর
+  kk: ұры, қары
+
+ID 3304:
+  ru: пряная трава, зелень, лекарственная трава
+  uk: пряна трава, зелень, лікарська трава
+  de: Kraut, Küchenkräuter, Heilkraut
+  es: hierba aromática, hierba medicinal, especia
+  fr: herbe aromatique, plante médicinale, herbe
+  pl: zioło, ziółko, roślina zielarska
+  it: erba aromatica, erba officinale
+  tr: şifalı ot, baharatlı ot, ot
+  pt: erva, erva aromática, erva medicinal
+  ro: plantă aromatică, plantă medicinală, verdeață
+  bg: билка, подправка, тревисто растение
+  cs: bylina, bylinka, koření
+  sk: bylina, bylinka, liečivá rastlina
+  hu: gyógynövény, fűszernövény, fűszerfű
+  el: βότανο, μυρωδικό, αρωματικό φυτό
+  sl: zelišče, zdravilna rastlina
+  et: ravimtaim, maitsetaim, rohttaim
+  lt: vaistažolė, prieskoninė žolė, žolė
+  da: krydderurt, lægeurt, urt
+  fi: yrtti, lääkekasvi, maustekasvi
+  sv: ört, kryddört, medicinalväxt
+  hr: ljekovita biljka, začinsko bilje, trava
+  lv: ārstniecības augs, garšaugs
+  hi: जड़ी-बूटी, वनस्पति, सुगन्धित पौधा
+  ar: عشب عطري، عشبة طبية
+  fa: گیاه دارویی، سبزی معطر
+  ur: جڑی بوٹی، نبات، دوا
+  id: rempah herbal, tanaman obat, daun herba
+  vi: thảo mộc, cây thuốc, rau gia vị
+  th: สมุนไพร, พืชสมุนไพร, ใบเครื่องเทศ
+  ko: 허브, 약초, 향초
+  ja: ハーブ、薬草、香草
+  zh: 香草、草药、草本植物
+  bn: ভেষজ, ভেষজ উদ্ভিদ, ঔষধি পাতা
+  kk: дәрілік шөп, дәмдеуіш шөп
+
+ID 3305:
+  ru: субсидия, дотация, государственная поддержка
+  uk: субсидія, дотація, фінансова допомога
+  de: Subvention, Beihilfe, Zuschuss
+  es: subsidio, subvención, ayuda financiera
+  fr: subvention, subside, aide financière
+  pl: dotacja, subwencja, zapomoga
+  it: sovvenzione, sussidio, contributo pubblico
+  tr: sübvansiyon, mali destek, devlet yardımı
+  pt: subsídio, subvenção, auxílio estatal
+  ro: subvenție, alocație, ajutor bănesc
+  bg: субсидия, държавна помощ, дотация
+  cs: dotace, subvence, finanční příspěvek
+  sk: dotácia, subvencia, príspevok
+  hu: állami támogatás, szubvenció, segély
+  el: επιδότηση, οικονομική ενίσχυση
+  sl: subvencija, denarna podpora
+  et: subsiidium, toetusraha, riigiabi
+  lt: subsidija, dotacija, pašalpa
+  da: tilskud, subsidie, statsstøtte
+  fi: tukipalkkio, avustus, valtiontuki
+  sv: subvention, statsbidrag, stöd
+  hr: subvencija, potpora, dotacija
+  lv: subsīdija, pabalsts, valsts atbalsts
+  hi: सब्सिडी, आर्थिक सहायता, अनुदान
+  ar: دعم مالي، إعانة حكومية
+  fa: یارانه، سوبسید، کمک مالی
+  ur: سبسڈی، مالی امداد، سرکاری رعایت
+  id: subsidi, bantuan dana pemerintah
+  vi: tiền trợ cấp, tiền bao cấp
+  th: เงินอุดหนุน, เงินช่วยเหลือของรัฐ
+  ko: 보조금, 장려금
+  ja: 補助金、助成金
+  zh: 补贴、财政补助
+  bn: ভর্তুকি, সরকারি অনুদান
+  kk: субсидия, қаржылай көмек, дотация
+
+ID 3306:
+  ru: ископаемое, окаменелость, реликт
+  uk: викопне, скам'янілість, релікт
+  de: Fossil, Versteinerung, Fossilie
+  es: fósil, petrificación, vestigio
+  fr: fossile, pétrification, vestige
+  pl: skamieniałość, kopalina
+  it: fossile, reperto fossile
+  tr: fosil, taşıl, kalıntı
+  pt: fóssil, petrificação, relíquia
+  ro: fosilă, pietrificare
+  bg: вкаменелост, фосил
+  cs: zkamenělina, fosilie
+  sk: fosília, skamenelina
+  hu: kövület, fosszília
+  el: απολίθωμα
+  sl: fosil, okamnina
+  et: fossiil, kivistis
+  lt: iškasena, fosilija
+  da: fossil, forstening
+  fi: fossiili, kivettymä
+  sv: fossil, förstening
+  hr: fosil, okamina
+  lv: fosilija, pārakmeņojums
+  hi: जीवाश्म, प्राचीन अवशेष
+  ar: أحفورة، مستحاثة
+  fa: سنگواره، فسیل
+  ur: فوسل، قدیم باقیات
+  id: fosil, sisa purbakala
+  vi: hóa thạch, di tích cổ
+  th: ฟอสซิล, ซากดึกดำบรรพ์
+  ko: 화석, 시대에 뒤진 사람
+  ja: 化石、時代遅れの人
+  zh: 化石、守旧者
+  bn: জীবাশ্ম, প্রাচীন প্রস্তরীভূত রূপ
+  kk: қазба, тасқа айналған қалдық
+
+ID 3307:
+  ru: патруль, дозор, патрулировать
+  uk: патруль, дозор, патрулювати
+  de: Patrouille, Streife, patrouillieren
+  es: patrulla, ronda, patrullar
+  fr: patrouille, ronde, patrouiller
+  pl: patrol, warta, patrolować
+  it: pattuglia, ronda, pattugliare
+  tr: devriye, kol gezme, devriye gezmek
+  pt: patrulha, ronda, patrulhar
+  ro: patrulă, patrulare, a patrula
+  bg: патрул, стража, патрулирам
+  cs: hlídka, patrola, hlídkovat
+  sk: hliadka, patrola, hliadkovať
+  hu: járőr, őrjárat, járőrözik
+  el: περιπολία, περίπολος, περιπολώ
+  sl: patrulja, straža, patruljirati
+  et: patrull, vahisalk, patrullima
+  lt: patrulis, sargyba, patruliuoti
+  da: patrulje, strejftog, patruljere
+  fi: partio, vartio, partioida
+  sv: patrull, vaktstyrka, patrullera
+  hr: patrola, ophodnja, patrolirati
+  lv: patruļa, apgaita, patrulēt
+  hi: गश्त, पहरा, गश्त लगाना
+  ar: دورية، حراسة، يطوف للحراسة
+  fa: گشت، پاسداری، گشت زدن
+  ur: گشت، پہرہ، گشت لگانا
+  id: patroli, ronda, berpatroli
+  vi: tuần tra, đội tuần tra
+  th: ลาดตระเวน, กองลาดตระเวน
+  ko: 순찰, 정찰, 순찰하다
+  ja: パトロール、巡回、巡回する
+  zh: 巡逻、巡查、巡逻队
+  bn: টহল, প্রহরা, টহল দেওয়া
+  kk: патруль, қарауыл, патрульдеу
+
+ID 3308:
+  ru: пульс, биение сердца, импульс, пульсировать
+  uk: пульс, биття серця, імпульс, пульсувати
+  de: Puls, Herzschlag, Impuls, pulsieren
+  es: pulso, latido, impulso, pulsar
+  fr: pouls, battement, impulsion, pulser
+  pl: puls, tętno, impuls, pulsować
+  it: polso, battito, impulso, pulsare
+  tr: nabız, kalp atışı, nabız gibi atmak
+  pt: pulso, pulsação, batimento, pulsar
+  ro: puls, bătaie a inimii, impuls
+  bg: пулс, пулсация, биене на сърцето
+  cs: puls, tep, impuls, pulzovat
+  sk: pulz, tep, impulz, pulzovať
+  hu: pulzus, szívverés, lüktetés
+  el: σφυγμός, παλμός, πάλλω
+  sl: utrip, srčni utrip, sunek
+  et: pulss, südame löögisagedus, tukslemine
+  lt: pulsas, tvinksnis, pulsavimas
+  da: puls, pulsslag, impuls
+  fi: pulssi, syke, sykkiä
+  sv: puls, hjärtslag, pulsera
+  hr: puls, otkucaj srca, bilo
+  lv: pulss, sirdspuksti, pulsēt
+  hi: नाड़ी, धड़कन, नब्ज, स्पंदन
+  ar: نبض، نبضان، نبضات القلب
+  fa: نبض، تپش، ریتم ضربان
+  ur: نبض، دھڑکن، تڑپ
+  id: denyut nadi, detak jantung, pulsa
+  vi: mạch đập, nhịp tim, xung nhịp
+  th: ชีพจร, จังหวะเต้นของหัวใจ
+  ko: 맥박, 고동, 파동, 뛰다
+  ja: 脈拍、鼓動、パルス、脈打つ
+  zh: 脉搏、跳动、脉冲
+  bn: নাড়ি, হৃদস্পন্দন, স্পন্দন
+  kk: тамыр соғысы, пульс, импульс
+
+ID 3309:
+  ru: механик, автомеханик, автослесарь
+  uk: механік, автомеханік, слюсар
+  de: Mechaniker, Automechaniker
+  es: mecánico, técnico mecánico
+  fr: mécanicien, garagiste
+  pl: mechanik, mechanik samochodowy
+  it: meccanico, motorista
+  tr: tamirci, mekaniker, motor ustası
+  pt: mecânico, mecânico de automóveis
+  ro: mecanic, mecanic auto
+  bg: механик, автомонтьор
+  cs: mechanik, automechanik
+  sk: mechanik, automechanik
+  hu: szerelő, autószerelő, gépmester
+  el: μηχανικός, τεχνικός αυτοκινήτων
+  sl: mehanik, avtomehanik
+  et: mehaanik, autolukksepp
+  lt: mechanikas, automechanikas
+  da: mekaniker, bilmekaniker
+  fi: mekaanikko, asentaja
+  sv: mekaniker, bilmekaniker
+  hr: mehaničar, automehaničar
+  lv: mehāniķis, automehāniķis
+  hi: मैकेनिक, मिस्त्री, यंत्रविद्
+  ar: ميكانيكي، فني صيانة
+  fa: مکانیک، تعمیرکار خودرو
+  ur: مکینک، مستری
+  id: mekanik, montir mobil
+  vi: thợ máy, thợ cơ khí
+  th: ช่างเครื่อง, ช่างยนต์
+  ko: 정비공, 수리공
+  ja: 整備士、修理工、メカニック
+  zh: 机械师、汽修工
+  bn: মেকানিক, কলকব্জা মিস্ত্রি
+  kk: механик, көлік жөндеуші
+
+ID 3310:
+  ru: крупный рогатый скот, коровы, скот
+  uk: велика рогата худоба, худоба, корови
+  de: Rindvieh, Vieh, Rinder
+  es: ganado bovino, reses, vacuno
+  fr: bétail, bovins, bêtes à cornes
+  pl: bydło, rogacizna, bydło rogate
+  it: bestiame, bovini, bestiame grosso
+  tr: sığır, büyükbaş hayvan, sığırlar
+  pt: gado bovino, gado, reses
+  ro: vite, bovine, cireadă
+  bg: едър рогат добитък, говеда
+  cs: hovězí dobytek, skot
+  sk: hovädzí dobytok, dobytok
+  hu: szarvasmarha, marhaállomány
+  el: βοοειδή, αγελάδες, κοπάδι
+  sl: govedo, goveja živina
+  et: veised, veisekari, sarvloomad
+  lt: galvijai, raguočiai
+  da: kvæg, hornkvæg, køer
+  fi: karja, nautakarja, naudat
+  sv: nötboskap, boskap, kor
+  hr: krupna stoka, goveda
+  lv: liellopi, govis
+  hi: मवेशी, गोवंश, ढोर
+  ar: ماشية، أبقار، مواشٍ
+  fa: دام، احشام، گاوها
+  ur: مویشی، چوپائے، گائے بیل
+  id: sapi ternak, lembu, hewan ternak
+  vi: gia súc, đàn bò
+  th: วัวควาย, ปศุสัตว์
+  ko: 소, 소 떼, 우경
+  ja: 牛、家畜牛、牛群
+  zh: 牛、牲畜、家畜
+  bn: গবাদি পশু, গরু-বাছুর
+  kk: ірі қара мал, сиыр малы
+
+ID 3311:
+  ru: скрининг, кинопоказ, обследование, отбор
+  uk: скринінг, кінопоказ, обстеження, відбір
+  de: Screening, Vorführung, Reihenuntersuchung
+  es: proyección, examen médico, detección, cribado
+  fr: projection, dépistage, contrôle, filtrage
+  pl: badanie przesiewowe, projekcja, weryfikacja
+  it: proiezione, screening, esame diagnostico, selezione
+  tr: film gösterimi, tarama testi, eleme
+  pt: exibição, triagem, rastreamento médico
+  ro: proiecție, triaj, screening medical
+  bg: прожекция, скрининг, предварителен подбор
+  cs: promítání, screening, prověrka
+  sk: premietanie, skríning, vyšetrenie
+  hu: filmvetítés, szűrővizsgálat, átvilágítás
+  el: προβολή ταινίας, προληπτικός έλεγχος, διαλογή
+  sl: predvajanje, presejanje, preventivni pregled
+  et: linastus, sõeluuring, taustakontroll
+  lt: filmo rodymas, profilaktinis patikrinimas, atranka
+  da: filmforevisning, screening, undersøgelse
+  fi: elokuvanäytös, seulonta, tarkastus
+  sv: filmvisning, screening, sållning
+  hr: filmska projekcija, probir, probirni pregled
+  lv: kinoseanss, skrīnings, caurskate
+  hi: स्क्रीनिंग, फिल्म प्रदर्शन, चिकित्सीय जांच
+  ar: عرض سينمائي، فحص طبي، فرز
+  fa: نمایش فیلم، غربالگری، بازبینی
+  ur: فلم کی نمائش، جانچ پڑتال، چھان بین
+  id: pemutaran film, pemeriksaan medis, penyaringan
+  vi: buổi chiếu phim, tầm soát y tế, thẩm tra
+  th: การฉายภาพยนตร์, การคัดกรองโรค, การตรวจสอบ
+  ko: 상영, 선별 검사, 스크리닝
+  ja: 上映、スクリーニング、ふるい分け
+  zh: 放映、筛查、甄选
+  bn: চলচ্চিত্র প্রদর্শনী, স্বাস্থ্য পরীক্ষা, যাচাই
+  kk: фильм көрсету, скринингтік тексеру, іріктеу
+
+ID 3312:
+  ru: продолжающийся, длящийся, непрерывный
+  uk: триваючий, неперервний, невпинний
+  de: fortlaufend, andauernd, kontinuierlich
+  es: continuo, permanente, en curso
+  fr: continu, persistant, en cours
+  pl: ciągły, nieustanny, trwający
+  it: continuo, prolungato, ininterrotto
+  tr: devam eden, süregelen, kesintisiz
+  pt: contínuo, permanente, em andamento
+  ro: continuu, neîntrerupt, în derulare
+  bg: продължаващ, постоянен, непрекъснат
+  cs: pokračující, trvající, nepřetržitý
+  sk: pokračujúci, pretrvávajúci, stály
+  hu: folyamatos, hosszan tartó, folytonos
+  el: συνεχής, συνεχιζόμενος, αδιάκοπος
+  sl: nadaljnji, neprekinjen, trajajoč
+  et: jätkuv, kestev, pidev
+  lt: tęstinis, trunkantis, nenutrūkstamas
+  da: vedvarende, fortsat, fortløbende
+  fi: jatkuva, keskeytymätön, alituinen
+  sv: fortlöpande, kontinuerlig, pågående
+  hr: kontinuiran, stalan, koji traje
+  lv: nepārtraukts, ilgstošs, tekošs
+  hi: निरंतर, लगातार, जारी रहने वाला
+  ar: مستمر، متواصل، دائم
+  fa: ادامه‌دار، پیوسته، مداوم
+  ur: مسلسل، جاری، غیر منقطع
+  id: berkelanjutan, terus-menerus, bersambung
+  vi: liên tục, tiếp diễn, kéo dài
+  th: ต่อเนื่อง, ยืดเยื้อ, ที่ดำเนินต่อไป
+  ko: 지속적인, 계속되는, 끊임없는
+  ja: 継続的な、引き続く、絶え間ない
+  zh: 持续的、不断延续的
+  bn: ক্রমাগত, চলমান, নিরবচ্ছিন্ন
+  kk: жалғасып жатқан, үздіксіз, созылмалы
+
+ID 3313:
+  ru: избирательный, выборный, электоральный
+  uk: виборчий, електоральний
+  de: Wahl-, wahlbezogen, elektoral
+  es: electoral, de elecciones
+  fr: électoral, relatif aux élections
+  pl: wyborczy, elektoralny
+  it: elettorale, dei comizi
+  tr: seçim, seçimle ilgili
+  pt: eleitoral, de votação
+  ro: electoral, de alegeri
+  bg: избирателен, изборен
+  cs: volební
+  sk: volebný
+  hu: választási, választókerületi
+  el: εκλογικός, των εκλογών
+  sl: volilni, volitev
+  et: valimis-, valimistega seotud
+  lt: rinkimų, rinkiminis
+  da: valg-, valgmæssig
+  fi: vaali-, vaaleihin liittyvä
+  sv: val-, valrelaterad
+  hr: izborni, birački
+  lv: vēlēšanu, elektorāls
+  hi: चुनावी, निर्वाचन संबंधी
+  ar: انتخابي، تصويتي
+  fa: انتخاباتی، مربوط به انتخابات
+  ur: انتخابی، چناؤ کا
+  id: pemilihan, elektoral
+  vi: thuộc bầu cử, thuộc tuyển cử
+  th: เกี่ยวกับการเลือกตั้ง
+  ko: 선거의, 선거구의
+  ja: 選挙の、有権者の
+  zh: 选举的、选民的
+  bn: নির্বাচনী, ভোট সংক্রান্ত
+  kk: сайлау, сайлауға қатысты
+
+ID 3314:
+  ru: предположительно, по общему мнению, якобы
+  uk: імовірно, за припущенням, буцімто
+  de: vermutlich, angeblich, mutmaßlich
+  es: supuestamente, presuntamente
+  fr: censément, soi-disant, supposément
+  pl: rzekomo, przypuszczalnie, ponoć
+  it: presumibilmente, a quanto pare
+  tr: güya, iddiaya göre, sözde
+  pt: supostamente, alegadamente
+  ro: se presupune, chipurile, după cât se pare
+  bg: уж, предполага се, ужким
+  cs: údajně, podle předpokladu, prý
+  sk: údajne, vraj, predpokladane
+  hu: feltehetőleg, állítólag, vélhetően
+  el: υποτίθεται, δήθεν, πιθανώς
+  sl: domnevno, bojda, menda
+  et: oletatavasti, väidetavalt, arvatavasti
+  lt: tariamai, esą, veikiausiai
+  da: formentlig, formodentlig, angiveligt
+  fi: oletettavasti, luultavasti, tiettävästi
+  sv: förmodligen, förment, enligt uppgift
+  hr: navodno, pretpostavlja se, tobože
+  lv: domājams, it kā, šķietami
+  hi: कथित तौर पर, शायद, संभवतः
+  ar: على ما يبدو، بزعمهم، مفترضاً
+  fa: ظاهراً، گویا، بر طبق فرض
+  ur: مبینہ طور پر، قیاس کے مطابق
+  id: konon, agaknya, diduga
+  vi: được cho là, tưởng như là
+  th: ตามที่คาดกัน, สันนิษฐานว่า
+  ko: 아마도, 전하는 바에 따르면
+  ja: 推定では、建前上は、たぶん
+  zh: 据推测、大概、按理说
+  bn: অনুমিতভাবে, ধারণা করা হয় যে
+  kk: шамасы, болжам бойынша, деген сыбыс бар
+
+ID 3315:
+  ru: достоинство, благородство, самоуважение
+  uk: гідність, почуття власної гідності, велич
+  de: Würde, Menschenwürde, Erhabenheit
+  es: dignidad, decoro, pundonor
+  fr: dignité, grandeur d'âme, tenue
+  pl: godność, powaga, dostojeństwo
+  it: dignità, nobiltà, decoro
+  tr: haysiyet, onur, vakar
+  pt: dignidade, decoro, nobreza
+  ro: demnitate, cinste, noblețe
+  bg: достойнство, благородство, чест
+  cs: důstojnost, vážnost, vznešenost
+  sk: dôstojnosť, ušľachtilosť, úcta
+  hu: méltóság, emberi méltóság, tisztelet
+  el: αξιοπρέπεια, αξίωμα, μεγαλοπρέπεια
+  sl: dostojanstvo, čast, ponos
+  et: väärikus, auväärsus, suursugusus
+  lt: orumas, kilnumas, pagarba
+  da: værdighed, ære, agtelse
+  fi: arvokkuus, ihmisarvo, ylpeys
+  sv: värdighet, självrespekt, höghet
+  hr: dostojanstvo, ponos, ugled
+  lv: cieņa, cēlums, pašcieņa
+  hi: गरिमा, मर्यादा, आत्मसम्मान
+  ar: كرامة، هيبة، عزة النفس
+  fa: کرامت، وقار، شرافت انسانی
+  ur: وقار، عزت نفس، خودداری
+  id: martabat, kehormatan, wibawa
+  vi: nhân phẩm, phẩm giá, lòng tự trọng
+  th: ศักดิ์ศรี, เกียรติภูมิ, ความสง่างาม
+  ko: 존엄, 위엄, 자존심
+  ja: 尊厳、品位、気品
+  zh: 尊严、庄严、尊贵
+  bn: মর্যাদা, সম্মান, আত্মমর্যাদা
+  kk: қадір-қасиет, абырой, ізгілік
+
+ID 3316:
+  ru: пророк, прорицатель, предсказатель
+  uk: пророк, провісник, віщун
+  de: Prophet, Seher, Weissager
+  es: profeta, visionario, adivino
+  fr: prophète, devin, visionnaire
+  pl: prorok, wieszcz
+  it: profeta, veggente, vaticinatore
+  tr: peygamber, nebi, kahin
+  pt: profeta, vidente, visionário
+  ro: profet, prooroc, văzător
+  bg: пророк, ясновидец, предсказател
+  cs: prorok, věštec, prognostik
+  sk: prorok, veštec, vizionár
+  hu: próféta, jós, látnok
+  el: προφήτης, μάντης
+  sl: prerok, jasnovidec, videnec
+  et: prohvet, ettekuulutaja, nägija
+  lt: pranašas, aiškiaregys, būrėjas
+  da: profet, spåmand, sandsiger
+  fi: profeetta, ennustaja, näkijä
+  sv: profet, siare, spåman
+  hr: prorok, vidjelac, navjestitelj
+  lv: pravietis, gaišreģis, vēstnesis
+  hi: पैगंबर, नबी, भविष्यवक्ता
+  ar: نبي، رسول، متنبئ
+  fa: پیامبر، نبی، غیب‌گو
+  ur: پیغمبر، نبی، پیشگو
+  id: nabi, rasul, peramal
+  vi: nhà tiên tri, sứ giả, ngôn sứ
+  th: ผู้เผยพระวจนะ, ศาสดา, ผู้พยากรณ์
+  ko: 예언자, 선지자, 대변자
+  ja: 預言者、予言者、先覚者
+  zh: 先知、预言家、传道者
+  bn: নবী, পয়গম্বর, দূরদ্রষ্টা
+  kk: пайғамбар, сәуегей, көріпкел
+
+ID 3317:
+  ru: комментарий, толкование, критический обзор
+  uk: коментар, розбір, тлумачення
+  de: Kommentar, Auslegung, Spielbericht
+  es: comentario, análisis, crónica
+  fr: commentaire, observation, exégèse
+  pl: komentarz, glosa, sprawozdanie
+  it: commento, chiosa, cronaca
+  tr: yorum, mütalaa, maç anlatımı
+  pt: comentário, observação, crônica
+  ro: comentariu, analiză critică, glosă
+  bg: коментар, тълкуване, бележки
+  cs: komentář, výklad, rozbor
+  sk: komentár, výklad, posudok
+  hu: kommentár, magyarázat, közvetítés
+  el: σχόλιο, σχολιασμός, υπόμνημα
+  sl: komentar, pripomba, razlaga
+  et: kommentaar, arvustus, selgitus
+  lt: komentaras, paaiškinimas, apžvalga
+  da: kommentar, bemærkning, vurdering
+  fi: kommentti, selostus, selitys
+  sv: kommentar, referat, utläggning
+  hr: komentar, osvrt, tumačenje
+  lv: komentārs, skaidrojums, apskats
+  hi: टिप्पणी, व्याख्या, समीक्षा
+  ar: تعليق، شرح، تحليل
+  fa: شرح، تفسیر، گزارش توصیفی
+  ur: تبصرہ، تشریح، تفسیری حاشیہ
+  id: komentar, ulasan, laporan pandangan mata
+  vi: bình luận, chú giải, lời thuyết minh
+  th: คำวิจารณ์, การบรรยายเหตุการณ์, บทวิเคราะห์
+  ko: 논평, 해설, 주석
+  ja: 解説、論評、実況中継
+  zh: 评论、解说、评注
+  bn: ভাষ্য, বিবরণী, মন্তব্য
+  kk: түсініктеме, пікір, шолу
+
+ID 3318:
+  ru: порция, порция еды, подача блюда
+  uk: порція, порція їжі, подача
+  de: Portion, Essensportion, Portionierung
+  es: porción, ración, ración de comida
+  fr: portion, part, ration d'aliment
+  pl: porcja, porcja jedzenia, talerz
+  it: porzione, razione, porzione di cibo
+  tr: porsiyon, servis miktarı, tabak
+  pt: porção, porção de comida, dose
+  ro: porție, rație de mâncare
+  bg: порция, сервиране, доза храна
+  cs: porce, dávka jídla, příděl
+  sk: porcia, dávka jedla, prídel
+  hu: adag, ételadag, tálalás
+  el: μερίδα, μερίδα φαγητού, σερβίρισμα
+  sl: porcija, obrok, odmerjeni del
+  et: portsjon, toiduports, serveering
+  lt: porcija, valgio norma, patiekimas
+  da: portion, tallerkenfuld, anretning
+  fi: annos, ruoka-annos, tarjoiluannos
+  sv: portion, serveringsportion, ranson
+  hr: porcija, obrok, posluživanje
+  lv: porcija, ēdiena deva, pasniegšana
+  hi: खुराक, परोसी गई थाली, भोजन की मात्रा
+  ar: وجبة، حصة طعام، تقديم الطعام
+  fa: وعده غذایی, پرس غذا, پیمانه سرو
+  ur: خوراک، کھانے کا حصہ، پروسنا
+  id: porsi, takaran saji, penyajian
+  vi: khẩu phần ăn, đĩa thức ăn
+  th: ส่วนอาหาร, ปริมาณต่อจาน, การเสิร์ฟ
+  ko: 1인분, 분량, 음식 한 그릇
+  ja: 1人前、配分、一皿
+  zh: 一份食物、一人份、配给量
+  bn: এক বেলার খাবার, পরিবেশন মাত্রা, অংশ
+  kk: тағам үлесі, порция, ас беру
+
+ID 3319:
+  ru: безопасно, благополучно, без риска
+  uk: безпечно, благополучно, надійно
+  de: sicher, gefahrlos, unversehrt
+  es: con seguridad, a salvo, de forma segura
+  fr: en toute sécurité, sans risque, sain et sauf
+  pl: bezpiecznie, bez szwanku, cało
+  it: in sicurezza, tranquillamente, felicemente
+  tr: güvenle, salimen, emniyetle
+  pt: com segurança, em segurança, a salvo
+  ro: în siguranță, teafăr, fără primejdie
+  bg: безопасно, невредим, благополучно
+  cs: bezpečně, bez úhony, s jistotou
+  sk: bezpečne, v bezpečí, bez úrazu
+  hu: biztonságosan, épségben, baj nélkül
+  el: με ασφάλεια, σώος, ακίνδυνα
+  sl: varno, brez nevarnosti, na varnem
+  et: ohutult, vigastusteta, turvaliselt
+  lt: saugiai, be pavojaus, sveikas ir gyvas
+  da: sikkert, trygt, uden fare
+  fi: turvallisesti, varmasti, vahingoittumatta
+  sv: säkert, tryggt, välbehållen
+  hr: sigurno, bez opasnosti, sretno
+  lv: droši, bez briesmām, sveiks un vesels
+  hi: सुरक्षित रूप से, सही-सलामत
+  ar: بأمان، بسلام، دون خطر
+  fa: با ایمنی، به سلامت، بدون خطر
+  ur: محفوظ طریقے سے، باحفاظت، خیریت سے
+  id: dengan aman, selamat, tanpa bahaya
+  vi: an toàn, bình an vô sự
+  th: อย่างปลอดภัย, โดยสวัสดิภาพ
+  ko: 안전하게, 무사히
+  ja: 安全に、無事に
+  zh: 安全地、平安地
+  bn: নিরাপদে, সুরক্ষিতভাবে, নির্বিঘ্নে
+  kk: қауіпсіз түрде, аман-есен
+
+ID 3320:
+  ru: якобы, по сообщениям, предположительно
+  uk: нібито, буцімто, як стверджують
+  de: angeblich, mutmaßlich, wie behauptet
+  es: supuestamente, presuntamente, al parecer
+  fr: prétendument, selon certaines affirmations, soi-disant
+  pl: rzekomo, jakoby, według doniesień
+  it: presumibilmente, a quanto pare, stando alle accuse
+  tr: iddiaya göre, sözde, ileri sürüldüğüne göre
+  pt: alegadamente, supostamente, segundo consta
+  ro: după cum se pretinde, presupus, chipurile
+  bg: уж, според твърденията, както се говори
+  cs: údajně, prý, jak se tvrdí
+  sk: údajne, vraj, podľa tvrdení
+  hu: állítólag, az állítások szerint, feltételezhetően
+  el: δήθεν, φερόμενος, όπως υποστηρίζεται
+  sl: domnevno, menda, kot se govori
+  et: väidetavalt, nagu väidetakse, kuuldavasti
+  lt: tariamai, esą, anot pranešimų
+  da: angiveligt, angivelig, efter sigende
+  fi: väitetysti, tiettävästi, kuulemma
+  sv: enligt uppgift, påstås, förment
+  hr: navodno, tobože, prema navodima
+  lv: kā apgalvots, it kā, pēc ziņām
+  hi: कथित तौर पर, आरोपों के अनुसार
+  ar: بحسب المزاعم، زعمًا، بادعاء
+  fa: بر اساس ادعاها، به گفته برخی، ظاهراً
+  ur: مبینہ طور پر، الزامات کے مطابق
+  id: konon, seperti yang dituduhkan, kabarnya
+  vi: được cho là, theo cáo buộc
+  th: ตามข้อกล่าวหา, ว่ากันว่า
+  ko: 전해진 바에 따르면, 주장하는 바에 의하면
+  ja: 伝えられるところによれば、申し立てによると
+  zh: 据称、依推测、被指称
+  bn: অভিযোগ মতে, তথাকথিতভাবে, দাবি করা হচ্ছে যে
+  kk: болжам бойынша, деген желеумен, сөз болып отырғандай
+
+ID 3321:
+  ru: андроид, человекоподобный робот, система Android
+  uk: андроїд, людиноподібний робот
+  de: Android, humanoider Roboter
+  es: androide, robot humanoide
+  fr: androïde, robot humanoïde
+  pl: android, robot humanoidalny
+  it: androide, robot umanoide
+  tr: android, insansı robot
+  pt: androide, robô humanoide
+  ro: android, robot umanoid
+  bg: андроид, хуманоиден робот
+  cs: android, humanoidní robot
+  sk: android, humanoidný robot
+  hu: android, emberszabású robot
+  el: ανδροειδές, ρομπότ με ανθρώπινη μορφή
+  sl: android, človekoliki robot
+  et: android, inimrobot
+  lt: androidas, žmogapangis robotas
+  da: android, menneskelignende robot
+  fi: androidi, ihmismäinen robotti
+  sv: android, människoliknande robot
+  hr: android, čovjekoliki robot
+  lv: androīds, cilvēkveidīgs robots
+  hi: एंड्रॉइड, मानव जैसा रोबोट
+  ar: أندرويد، روبوت شبيه بالبشر
+  fa: اندروید، ربات آدم‌نما
+  ur: اینڈرائیڈ، انسان نما روبوٹ
+  id: android, robot mirip manusia
+  vi: người máy, rô-bốt hình người
+  th: แอนดรอยด์, หุ่นยนต์คล้ายมนุษย์
+  ko: 안드로이드, 인조인간
+  ja: アンドロイド、人造人間
+  zh: 安卓、人形机器人
+  bn: অ্যান্ড্রয়েড, মানবসদৃশ রোবট
+  kk: андроид, адам пішіндес робот
+
+ID 3322:
+  ru: альфа, первая буква, доминирующий, альфа-версия
+  uk: альфа, домінантний, альфа-версія
+  de: Alpha, Leitwolf, Anfang, Alphaversion
+  es: alfa, primera letra, dominante
+  fr: alpha, première lettre, dominant
+  pl: alfa, litera alfa, osobnik dominujący
+  it: alfa, dominante, prima versione
+  tr: alfa, baskın, ilk harf
+  pt: alfa, líder da alcateia, dominante
+  ro: alfa, dominant, prima literă
+  bg: алфа, доминиращ, първа буква
+  cs: alfa, vůdčí, první písmeno
+  sk: alfa, dominantný, prvé písmeno
+  hu: alfa, domináns egyed, kezdőbetű
+  el: άλφα, πρώτο γράμμα, κυρίαρχος
+  sl: alfa, vodilni, prva črka
+  et: alfa, juhtiv isend, esimene täht
+  lt: alfa, dominuojantis, pirmoji raidė
+  da: alfa, alfahan, førende
+  fi: alfa, johtava, alfauros
+  sv: alfa, ledarindivid, dominant
+  hr: alfa, dominantan, predvodnik
+  lv: alfa, dominējošs, pirmais burts
+  hi: अल्फा, प्रमुख, प्रधान, पहला अक्षर
+  ar: ألفا، الحرف الأول، مهيمن
+  fa: آلفا، نخستین حرف، مسلط
+  ur: الفا، غالب، پہلا حرف
+  id: alfa, huruf pertama, dominan
+  vi: an-pha, thống trị, bản thử nghiệm
+  th: อัลฟา, จ่าฝูง, อักษรตัวแรก
+  ko: 알파, 우두머리, 첫째의
+  ja: アルファ、一番目の、首領格
+  zh: 阿尔法、第一位的、主导的
+  bn: আলফা, প্রধান, শীর্ষস্থানীয়
+  kk: альфа, көшбасшы, бірінші әріп
+
+ID 3323:
+  ru: вставлять, вкладывать, помещать, вкладыш
+  uk: вставляти, вкладати, вносити, вкладка
+  de: einfügen, einsetzen, einlegen, Beilage
+  es: insertar, introducir, meter, encarte
+  fr: insérer, introduire, intercaler, encart
+  pl: wkładać, wstawiać, zamieszczać, wkładka
+  it: inserire, infilare, immettere, inserto
+  tr: sokmak, yerleştirmek, eklemek, ek parça
+  pt: inserir, introduzir, encaixar, encarte
+  ro: a introduce, a insera, anexă
+  bg: вмъквам, поставям, вложка
+  cs: vložit, vsunout, zasunout, vložka
+  sk: vložiť, vsunúť, vsádzať, vložka
+  hu: beszúr, behelyez, betoldás
+  el: εισάγω, βάζω, ένθετο
+  sl: vstaviti, vložiti, vložek
+  et: sisestama, vahele panema, vaheleht
+  lt: įterpti, įdėti, įkišti, įdėklas
+  da: indsætte, indføre, bilag
+  fi: lisätä, asettaa, laittaa sisään, liite
+  sv: föra in, infoga, sätta in, bilaga
+  hr: umetnuti, ubaciti, dodatak
+  lv: ievietot, ielikt, iespraust, ieliktnis
+  hi: डालना, सम्मिलित करना, दाखिल करना
+  ar: يُدرج، يُدخل، يضع في الداخل
+  fa: درج کردن، قرار دادن، داخل کردن
+  ur: داخل کرنا، ڈالنا، شامل کرنا
+  id: menyisipkan, memasukkan, lembaran sisipan
+  vi: chèn vào, lồng vào, tờ rơi kẹp thêm
+  th: สอด, แทรก, ใส่เข้าไป
+  ko: 끼워 넣다, 삽입하다, 삽입물
+  ja: 挿入する、挟み込む、折り込み広告
+  zh: 插入、嵌入、插页
+  bn: ঢোকানো, স্থাপন করা, সংযোজন করা
+  kk: кірістіру, қосу, орналастыру
+
+ID 3324:
+  ru: смертность, уровень смертности, бренность
+  uk: смертність, коефіцієнт смертності, тлінність
+  de: Sterblichkeit, Mortalität, Sterberate
+  es: mortalidad, tasa de mortalidad, condición mortal
+  fr: mortalité, taux de mortalité
+  pl: śmiertelność, wskaźnik zgonów, znikomość
+  it: mortalità, tasso di mortalità
+  tr: ölüm oranı, ölümlülük, fani oluş
+  pt: mortalidade, taxa de mortalidade
+  ro: mortalitate, rată a mortalității
+  bg: смъртност, коефициент на смъртност
+  cs: úmrtnost, smrtelnost
+  sk: úmrtnosť, miera úmrtnosti
+  hu: halandóság, halálozási arány
+  el: θνησιμότητα, ποσοστό θανάτων
+  sl: umrljivost, stopnja umrljivosti
+  et: suremus, suremuse määr, surelikkus
+  lt: mirtingumas, mirtingumo lygis
+  da: dødelighed, dødsrate
+  fi: kuolleisuus, kuolevaisuus
+  sv: dödlighet, mortalitet
+  hr: smrtnost, stopa smrtnosti
+  lv: mirstība, mirstības līmenis
+  hi: मृत्यु दर, नश्वरता
+  ar: معدل الوفيات، فناء، هلاك
+  fa: نرخ مرگ‌ومیر، فناپذیری
+  ur: شرح اموات، فانی ہونے کی حالت
+  id: tingkat kematian, mortalitas
+  vi: tỷ lệ tử vong, sự chết
+  th: อัตราการเสียชีวิต, ความไม่เที่ยง
+  ko: 사망률, 필멸, 죽어야 할 운명
+  ja: 死亡率、死すべき運命
+  zh: 死亡率、终有一死
+  bn: মৃত্যুহার, নশ্বরতা
+  kk: өлім-жітім, өлім көрсеткіші, фәнилік
+
+ID 3325:
+  ru: бороться, соперничать, утверждать, отстаивать
+  uk: боротися, змагатися, стверджувати
+  de: kämpfen, streiten, behaupten, verfechten
+  es: contender, lidiar, sostener, afirmar
+  fr: lutter, rivaliser, prétendre, soutenir
+  pl: zmagać się, rywalizować, twierdzić
+  it: lottare, contendere, affermare, sostenere
+  tr: çekişmek, mücadele etmek, iddia etmek
+  pt: lutar, disputar, sustentar, afirmar
+  ro: a lupta, a rivaliza, a susține
+  bg: боря се, състезавам се, твърдя
+  cs: bojovat, zápolit, tvrdit, hájit
+  sk: bojovať, zápasiť, tvrdiť
+  hu: küzd, verseng, állít, bizonygat
+  el: αγωνίζομαι, μάχομαι, ισχυρίζομαι
+  sl: boriti se, potegovati se, trditi
+  et: võitlema, heitlema, väitma
+  lt: kovoti, varžytis, teigti
+  da: kæmpe, strides, hævde
+  fi: kamppailla, kilpailla, väittää
+  sv: kämpa, tävla, påstå, hävda
+  hr: boriti se, nadmetati se, tvrditi
+  lv: cīnīties, spēkoties, apgalvot
+  hi: मुकाबला करना, संघर्ष करना, दावा करना
+  ar: ينافس، يصارع، يزعم، يدعي
+  fa: رقابت کردن، مجادله کردن، ادعا کردن
+  ur: مقابلہ کرنا، دعویٰ کرنا، الجھنا
+  id: bertanding, bersaing, berpendapat
+  vi: đấu tranh, cạnh tranh, tranh cãi
+  th: แข่งขัน, สู้รบ, ยืนยันหนักแน่น
+  ko: 다투다, 겨루다, 강력히 주장하다
+  ja: 競い合う、争う、主張する
+  zh: 竞争、争夺、主张
+  bn: প্রতিদ্বন্দ্বিতা করা, লড়াই করা, দাবি করা
+  kk: күресу, бәсекелесу, дәлелдеу
+
+ID 3326:
+  ru: исключительно, только, лишь, единственно
+  uk: виключно, тільки, суто, єдино
+  de: ausschließlich, einzig, nur
+  es: exclusivamente, únicamente, sólo
+  fr: uniquement, exclusivement, seulement
+  pl: wyłącznie, jedynie, tylko
+  it: unicamente, esclusivamente, solo
+  tr: yalnızca, sadece, sırf
+  pt: exclusivamente, unicamente, apenas
+  ro: exclusiv, doar, numai
+  bg: единствено, само, изключително
+  cs: výhradně, pouze, jedině
+  sk: výlučne, iba, jedine
+  hu: kizárólag, egyedül, csupán
+  el: αποκλειστικά, μόνο, εξ ολοκλήρου
+  sl: izključno, zgolj, le
+  et: üksnes, ainult, ainuüksi
+  lt: vien tik, išimtinai, tiktai
+  da: udelukkende, ene og alene, kun
+  fi: ainoastaan, pelkästään, yksinomaan
+  sv: enbart, uteslutande, bara
+  hr: isključivo, jedino, samo
+  lv: vienīgi, tikai, ekskluzīvi
+  hi: केवल, सिर्फ, एकमात्र
+  ar: حصراً، فقط، دون غيره
+  fa: فقط، صرفاً، منحصراً
+  ur: صرف، محض، اکیلے
+  id: semata-mata, melulu, hanya
+  vi: chỉ, duy nhất, đơn thuần
+  th: โดยสิ้นเชิง, แต่เพียงผู้เดียว, เท่านั้น
+  ko: 오로지, 단지, 순전히
+  ja: もっぱら、単に、ただ一人で
+  zh: 仅、仅仅、完全由
+  bn: কেবল, একমাত্র, শুধুমাত্র
+  kk: тек қана, жалғыз, бір ғана
+
+ID 3327:
+  ru: экосистема, экологическая система
+  uk: екосистема
+  de: Ökosystem
+  es: ecosistema
+  fr: écosystème
+  pl: ekosystem
+  it: ecosistema
+  tr: ekosistem
+  pt: ecossistema
+  ro: ecosistem
+  bg: екосистема
+  cs: ekosystém
+  sk: ekosystém
+  hu: ökoszisztéma
+  el: οικοσύστημα
+  sl: ekosistem
+  et: ökosüsteem
+  lt: ekosistema
+  da: økosystem
+  fi: ekosysteemi
+  sv: ekosystem
+  hr: ekosustav
+  lv: ekosistēma
+  hi: पारिस्थितिकी तंत्र, पारिप्रणाली
+  ar: نظام بيئي، بيئة طبيعية
+  fa: بوم‌سازگان، زیست‌بوم
+  ur: ماحولیاتی نظام
+  id: ekosistem, tatanan lingkungan
+  vi: hệ sinh thái
+  th: ระบบนิเวศ
+  ko: 생태계
+  ja: 生態系、エコシステム
+  zh: 生态系统
+  bn: বাস্তুতন্ত্র, পরিবেশ ব্যবস্থা
+  kk: экожүйе
+
+ID 3328:
+  ru: оливка, маслина, оливковое дерево, оливковый цвет
+  uk: оливка, маслина, оливкове дерево, оливковий колір
+  de: Olive, Olivenbaum, olivgrün
+  es: aceituna, oliva, olivo, verde oliva
+  fr: olive, olivier, vert olive
+  pl: oliwka, drzewo oliwne, oliwkowy
+  it: oliva, olivo, verde oliva
+  tr: zeytin, zeytin ağacı, zeytuni
+  pt: azeitona, oliva, oliveira, verde-oliva
+  ro: măslină, măslin, oliv
+  bg: маслина, маслиново дърво
+  cs: oliva, olivovník, olivový
+  sk: oliva, olivovník, olivový
+  hu: olajbogyó, olajfa, olívazöld
+  el: ελιά, καρπός ελιάς, ελαιόδεντρο
+  sl: oliva, oljka, olivno zelena
+  et: oliiv, oliivipuu, oliiviroheline
+  lt: alyvuogė, alyvmedis, alyvuogių spalva
+  da: oliven, oliventræ, olivengrøn
+  fi: oliivi, oliivipuu, oliivinvihreä
+  sv: oliv, olivträd, olivgrön
+  hr: maslina, maslinovo drvo, maslinast
+  lv: olīva, olīvkoks, olīvzaļš
+  hi: जैतून, ऑलिव फल
+  ar: زيتون، شجرة زيتون
+  fa: زیتون، درخت زیتون، سبز زیتونی
+  ur: زیتون، زیتون کا پھل، زیتونی رنگ
+  id: buah zaitun, pohon zaitun, warna zaitun
+  vi: quả ô liu, cây ô liu, màu xanh ô liu
+  th: ผลมะกอก, ต้นมะกอก, สีเขียวมะกอก
+  ko: 올리브, 올리브 열매, 황록색
+  ja: オリーブ、オリーブの実、オリーブ色
+  zh: 橄榄、橄榄树、橄榄绿
+  bn: জলপাই, জলপাই গাছ
+  kk: зәйтүн, зәйтүн ағашы, зәйтүн түстес
+
+ID 3329:
+  ru: синдром, комплекс симптомов
+  uk: синдром
+  de: Syndrom, Symptomkomplex
+  es: síndrome
+  fr: syndrome
+  pl: zespół, syndrom
+  it: sindrome
+  tr: sendrom, belirtiler bütünü
+  pt: síndrome
+  ro: sindrom
+  bg: синдром
+  cs: syndrom
+  sk: syndróm
+  hu: szindróma, tünetegyüttes
+  el: σύνδρομο
+  sl: sindrom, skupek bolezenskih znakov
+  et: sündroom
+  lt: sindromas
+  da: syndrom
+  fi: oireyhtymä, syndrooma
+  sv: syndrom, symptomkomplex
+  hr: sindrom
+  lv: sindroms
+  hi: सिंड्रोम, संलक्षण
+  ar: متلازمة
+  fa: نشانگان، سندرم
+  ur: سنڈروم، علامات مرض
+  id: sindrom, kumpulan gejala
+  vi: hội chứng
+  th: กลุ่มอาการ, ซินโดรม
+  ko: 증후군, 신드롬
+  ja: 症候群、シンドローム
+  zh: 综合征、症候群
+  bn: সিনড্রোম, উপসর্গের সমষ্টি
+  kk: синдром, белгілер кешені
+
+ID 3330:
+  ru: абстрактный, отвлеченный, аннотация, конспект
+  uk: абстрактний, відсторонений, анотація, тези
+  de: abstrakt, gegenstandslos, Zusammenfassung, Kurzfassung
+  es: abstracto, teórico, resumen, extracto
+  fr: abstrait, théorique, résumé, extrait
+  pl: abstrakcyjny, oderwany, streszczenie
+  it: astratto, teorico, riassunto, sommario
+  tr: soyut, kuramsal, özet
+  pt: abstrato, teórico, resumo, síntese
+  ro: abstract, teoretic, rezumat
+  bg: абстрактен, отвлечен, резюме
+  cs: abstraktní, odtažitý, výtah, resumé
+  sk: abstraktný, teoretický, abstrakt, výťah
+  hu: absztrakt, elvont, összefoglaló
+  el: αφηρημένος, θεωρητικός, περίληψη
+  sl: abstrakten, neoprijemljiv, povzetek
+  et: abstraktne, kujuteldav, lühikokkuvõte
+  lt: abstraktus, nerealus, santrauka
+  da: abstrakt, teoretisk, resumé
+  fi: abstrakti, käsitteellinen, tiivistelmä
+  sv: abstrakt, teoretisk, sammandrag
+  hr: apstraktan, misaon, sažetak
+  lv: abstrakts, teorētisks, konspekts
+  hi: अमूर्त, काल्पनिक, संक्षिप्त सार
+  ar: مجرد، نظري، ملخص
+  fa: انتزاعی، مجرد، چکیده
+  ur: تجریدی، غیر مادی، خلاصہ
+  id: abstrak, nisbi, ikhtisar
+  vi: trừu tượng, bản tóm tắt
+  th: ที่เป็นนามธรรม, นัยทั่วไป, บทคัดย่อ
+  ko: 추상적인, 관념적인, 초록, 요약
+  ja: 抽象的な、観念的な、要約
+  zh: 抽象的、理论上的、摘要
+  bn: বিমূর্ত, তাত্ত্বিক, সারসংক্ষেপ
+  kk: дерексіз, абстрактілі, қысқаша мазмұн
+
+ID 3331:
+  ru: обвинение, упрек, обвинительный акт
+  uk: звинувачення, докір, закид
+  de: Anschuldigung, Vorwurf, Anklage
+  es: acusación, inculpación, cargo
+  fr: accusation, inculpation, grief
+  pl: oskarżenie, zarzut, obwinienie
+  it: accusa, imputazione, addebito
+  tr: suçlama, itham, isnat
+  pt: acusação, imputação, denúncia
+  ro: acuzație, învinuire, imputare
+  bg: обвинение, упрек, обвинителен акт
+  cs: obvinění, nařčení, žaloba
+  sk: obvinenie, obžaloba, výčitka
+  hu: vád, vádaskodás, rágalom
+  el: κατηγορία, καταγγελία, μομφή
+  sl: obtožba, očitek, tožba
+  et: süüdistus, etteheide
+  lt: kaltinimas, priekaištas, apskundimas
+  da: anklage, beskyldning, sigtelse
+  fi: syytös, syyte, moite
+  sv: anklagelse, beskyllning, åtal
+  hr: optužba, prijekor, okrivljavanje
+  lv: apsūdzība, pārmetums, vainošana
+  hi: आरोप, दोषारोपण, अभियोग
+  ar: اتهام، تهمة، ادعاء
+  fa: اتهام، بازخواست، سرزنش
+  ur: الزام، تہمت، فرد جرم
+  id: tuduhan, dakwaan, celaan
+  vi: lời buộc tội, sự cáo buộc
+  th: ข้อกล่าวหา, การปรักปรำ
+  ko: 고발, 비난, 기소
+  ja: 告発、非難、告訴
+  zh: 指控、控告、谴责
+  bn: অভিযোগ, দোষারোপ, অপবাদ
+  kk: айыптау, кінә тағу, жазғыру
+
+ID 3332:
+  ru: наступающий, грядущий, предстоящий, приход
+  uk: прийдешній, майбутній, надхідний, прихід
+  de: kommend, bevorstehend, Ankunft
+  es: próximo, venidero, entrante, llegada
+  fr: à venir, prochain, imminent, venue
+  pl: nadchodzący, przyszły, przybycie
+  it: imminente, venturo, prossimo, arrivo
+  tr: gelen, yaklaşan, gelecek, geliş
+  pt: vindouro, próximo, que vem, chegada
+  ro: viitor, apropiat, venire, sosire
+  bg: идващ, предстоящ, настъпващ, пристигане
+  cs: nadcházející, příští, budoucí, příchod
+  sk: nadchádzajúci, budúci, príchod
+  hu: elkövetkező, jövőbeli, érkezés
+  el: επερχόμενος, προσεχής, άφιξη
+  sl: prihajajoči, bodoči, prihod
+  et: tulev, saabuv, eelseisev, tulek
+  lt: ateinantis, būsimas, artėjantis, atėjimas
+  da: kommende, forestående, ankomst
+  fi: tuleva, ensi, lähestyvä, tulo
+  sv: kommande, förestående, ankomst
+  hr: nadolazeći, budući, dolazak
+  lv: nākamais, gaidāmais, ierašanās
+  hi: आगामी, आने वाला, भविष्य का, आगमन
+  ar: قادم، مقبل، وشيك، مجيء
+  fa: آینده، آینده‌نگر، در راه، ورود
+  ur: آنے والا، آئندہ، آمد
+  id: mendatang, berikutnya, kedatangan
+  vi: sắp tới, sắp đến, sự đến
+  th: ที่กำลังจะมาถึง, ใกล้เข้ามา, การมาถึง
+  ko: 다가오는, 차기의, 도래
+  ja: 来たるべき、次の、到来
+  zh: 即将到来的、未来的、到来
+  bn: আসন্ন, ভবিষ্যৎ, আগমন
+  kk: келе жатқан, алдағы, келу
+
+ID 3333:
+  ru: пикап, легкий грузовик, вывоз, сбор
+  uk: пікап, забирання, збір
+  de: Pickup, Pritschenwagen, Abholung
+  es: camioneta, recogida, furgoneta
+  fr: pick-up, camionnette, ramassage
+  pl: pikap, furgonetka, odbiór
+  it: pickup, furgoncino, ritiro
+  tr: pikap, kamyonet, teslim alma
+  pt: picape, caminhonete, coleta
+  ro: camionetă, preluare, ridicare
+  bg: пикап, малък камион, вземане
+  cs: pickup, malý nákladní vůz, vyzvednutí
+  sk: pikap, vyzdvihnutie, odvoz
+  hu: kisteherautó, felvétel, elszállítás
+  el: ημιφορτηγό, παραλαβή
+  sl: poltovornjak, prevzem
+  et: pikap, väikeveok, pealevõtt
+  lt: pikapas, paėmimas
+  da: ladvogn, afhentning
+  fi: avolavapakettiauto, nouto
+  sv: pickup, flakbil, hämtning
+  hr: kamionet, preuzimanje
+  lv: pikaps, paņemšana
+  hi: पिकअप ट्रक, सामान उठाना, संकलन
+  ar: شاحنة صغيرة، بيك آب، التقاط
+  fa: وانت، سوار کردن مسافر، جمع‌آوری
+  ur: پک اپ ٹرک، سامان کی ترسیل
+  id: mobil pikap, pengambilan, penjemputan
+  vi: xe bán tải, sự đón nhận
+  th: รถกระบะ, การรับของ
+  ko: 픽업트럭, 수거, 마중
+  ja: ピックアップトラック、集荷、回収
+  zh: 皮卡车、小货车、提货
+  bn: পিকআপ ভ্যান, পণ্য সংগ্রহ, তুলে নেওয়া
+  kk: пикап көлігі, жинап алу, алып кету
+
+ID 3334:
+  ru: шаттл, челночный автобус, космический челнок, курсировать
+  uk: шатл, човниковий автобус, курсувати
+  de: Shuttlebus, Zubringer, Raumfähre, pendeln
+  es: lanzadera, autobús de enlace, transbordador espacial
+  fr: navette, bus de liaison, faire la navette
+  pl: autobus wahadłowy, prom kosmiczny, kursować
+  it: navetta, bus navetta, spola
+  tr: servis aracı, mekik, gidip gelmek
+  pt: ônibus de traslado, vaivém, ônibus circular
+  ro: autobuz de transfer, navetă spațială, a face naveta
+  bg: маршрутка, совалка, превозвам
+  cs: kyvadlová doprava, kyvadlový spoj, pendlovat
+  sk: kyvadlová doprava, raketoplán, pendlovať
+  hu: ingajárat, transzferbusz, űrsikló
+  el: λεωφορείο σύνδεσης, διαστημικό λεωφορείο, πηγαινοέρχομαι
+  sl: primestni avtobus, prevoz, letalnik
+  et: liinibuss, süstikbuss, süstik
+  lt: maršrutinis autobusas, šaudyklė
+  da: shuttlebus, rumfærge, pendle
+  fi: sukkulabussi, sukkula, kulkea edestakaisin
+  sv: skyttelbuss, rymdfärja, pendla
+  hr: kombi prijevoz, svemirski brod, prometovati
+  lv: maršruta autobuss, atspoļkuģis, kursēt
+  hi: शटल बस, आने-जाने वाला वाहन
+  ar: حافلة نقل ترددية، مكوك فضائي
+  fa: اتوبوس شاتل، شاتل فضایی، رفت‌وآمد کردن
+  ur: شٹل بس، شٹل گاڑی، راؤنڈ ٹرپ
+  id: bus antar-jemput, pesawat ulang-alik
+  vi: xe buýt đưa đón, tàu con thoi
+  th: รถโดยสารรับส่ง, กระสวยอวกาศ
+  ko: 셔틀버스, 우주 왕복선, 정기 왕복하다
+  ja: シャトルバス、スペースシャトル、往復する
+  zh: 班车、穿梭巴士、航天飞机
+  bn: শাটল বাস, মহাকাশযান, নিয়মিত যাতায়াত
+  kk: маршруттық автобус, ғарыш кемесі, қатынау
+
+ID 3335:
+  ru: улучшенный, усовершенствованный
+  uk: покращений, удосконалений
+  de: verbessert, optimiert
+  es: mejorado, perfeccionado
+  fr: amélioré, perfectionné
+  pl: ulepszony, poprawiony
+  it: migliorato, perfezionato
+  tr: geliştirilmiş, iyileştirilmiş
+  pt: aprimorado, melhorado, aperfeiçoado
+  ro: îmbunătățit, perfecționat
+  bg: подобрен, усъвършенстван
+  cs: vylepšený, zdokonalený
+  sk: vylepšený, zdokonalený
+  hu: javított, továbbfejlesztett
+  el: βελτιωμένος, αναβαθμισμένος
+  sl: izboljšan, nadgrajen
+  et: täiustatud, paranenud
+  lt: patobulintas, pagerintas
+  da: forbedret, optimeret
+  fi: parannettu, kehitetty
+  sv: förbättrad, utvecklad
+  hr: poboljšan, unaprijeđen
+  lv: uzlabots, pilnveidots
+  hi: सुधरा हुआ, बेहतर बनाया गया
+  ar: محسَّن، مطوَّر
+  fa: بهبودیافته، اصلاح‌شده
+  ur: بہتر بنایا ہوا، سدھرا ہوا
+  id: disempurnakan, ditingkatkan
+  vi: được cải thiện, được nâng cấp
+  th: ที่ได้รับการปรับปรุง, พัฒนาขึ้น
+  ko: 개선된, 향상된
+  ja: 改良された、改善された
+  zh: 改善的、改良的
+  bn: উন্নত, পরিমার্জিত
+  kk: жақсартылған, жетілдірілген
+
+ID 3336:
+  ru: инновационный, новаторский, передовой
+  uk: інноваційний, новаторський, передовий
+  de: innovativ, bahnbrechend, neuartig
+  es: innovador, novedoso, pionero
+  fr: novateur, innovant, avant-gardiste
+  pl: innowacyjny, nowatorski, pionierski
+  it: innovativo, all'avanguardia
+  tr: yenilikçi, inovatif
+  pt: inovador, pioneiro, arrojado
+  ro: inovator, inovativ
+  bg: иновативен, новаторски
+  cs: inovativní, novátorský
+  sk: inovatívny, priekopnícky
+  hu: innovatív, újító szellemű
+  el: καινοτόμος, πρωτοποριακός
+  sl: inovativen, napreden
+  et: innovatiivne, uuenduslik
+  lt: inovatyvus, pažangus
+  da: innovativ, nyskabende
+  fi: innovatiivinen, uudistava
+  sv: innovativ, nyskapande
+  hr: inovativan, napredan
+  lv: inovatīvs, jaunatklājēju
+  hi: अभिनव, नवाचारी
+  ar: مبتكر، إبداعي
+  fa: نوآورانه، ابداعی
+  ur: جدید، اختراعی
+  id: inovatif, mutakhir
+  vi: đổi mới, sáng tạo
+  th: เชิงนวัตกรรม, แปลกใหม่
+  ko: 혁신적인, 쇄신적인
+  ja: 革新的な、刷新的な
+  zh: 创新的、革新的
+  bn: উদ্ভাবনী, নতুনত্বপূর্ণ
+  kk: инновациялық, жаңашыл
+
+ID 3337:
+  ru: демографический, демографическая группа
+  uk: демографічний, вікова категорія
+  de: demografisch, Zielgruppe, Bevölkerungsschicht
+  es: demográfico, grupo demográfico
+  fr: démographique, profil démographique
+  pl: demograficzny, grupa docelowa
+  it: demografico, segmento di popolazione
+  tr: demografik, nüfusbilimsel
+  pt: demográfico, perfil demográfico
+  ro: demografic, segment demografic
+  bg: демографски, демографска група
+  cs: demografický, demografická skupina
+  sk: demografický, demografická skupina
+  hu: demográfiai, népesedési csoport
+  el: δημογραφικός, πληθυσμιακός
+  sl: demografski, prebivalstveni
+  et: demograafiline, rahvastikualane
+  lt: demografinis, gyventojų grupė
+  da: demografisk, befolkningsmæssig
+  fi: demografinen, väestöllinen
+  sv: demografisk, befolkningsmässig
+  hr: demografski, populacijski
+  lv: demogrāfisks, iedzīvotāju
+  hi: जनसांख्यिकीय, आबादी से संबंधित
+  ar: ديمغرافي، سكاني
+  fa: جمعیت‌شناختی، مشخصات جمعیتی
+  ur: آبادیاتی، مردم شماری سے متعلق
+  id: demografis, kependudukan
+  vi: thuộc nhân khẩu học, nhóm dân số
+  th: ทางประชากรศาสตร์, กลุ่มประชากร
+  ko: 인구 통계학의, 특정 연령층
+  ja: 人口統計学の、特定客層
+  zh: 人口统计的、受众群体
+  bn: জনমিতিক, জনসংখ্যার বৈশিষ্ট্য
+  kk: демографиялық, халық құрылымы
+
+ID 3338:
+  ru: вмещать, размещать, приспосабливать
+  uk: розміщувати, вміщати, пристосовувати
+  de: unterbringen, beherbergen, aufnehmen, entgegenkommen
+  es: alojar, hospedar, dar cabida, amoldarse
+  fr: héberger, loger, accueillir, s'adapter à
+  pl: pomieścić, zakwaterować, dostosować się
+  it: alloggiare, ospitare, sistemare, venire incontro
+  tr: barındırmak, konaklatmak, uyum sağlamak
+  pt: acomodar, hospedar, albergar, atender
+  ro: a găzdui, a caza, a adapta
+  bg: настанявам, приютявам, побирам
+  cs: ubytovat, pojmout, vyhovět
+  sk: ubytovať, umiestniť, vyhovieť
+  hu: elszállásol, befogad, alkalmazkodik
+  el: στεγάζω, φιλοξενώ, εξυπηρετώ
+  sl: nastaniti, namestiti, prilagoditi
+  et: majutama, mahutama, kohanema
+  lt: apgyvendinti, sutalpinti, prisitaikyti
+  da: huse, indkvartere, rumme
+  fi: majoittaa, asuttaa, sopeutua
+  sv: härbärgera, hysa, anpassa
+  hr: smjestiti, udomiti, prilagoditi
+  lv: izmitināt, uzņemt, pielāgoties
+  hi: ठहराना, जगह देना, समायोजित करना
+  ar: يستضيف، يئوِي، يتسع لـ، يتكيف مع
+  fa: اسکان دادن، جا دادن، هماهنگ شدن با
+  ur: رہائش دینا، جگہ دینا، مطابقت پیدا کرنا
+  id: menampung, memuat, mengakomodasi
+  vi: cung cấp chỗ ở, chứa được, thích nghi
+  th: รองรับ, ให้ที่พัก, ปรับตัวตาม
+  ko: 수용하다, 숙박시키다, 부응하다
+  ja: 収容する、宿泊させる、適応させる
+  zh: 容纳、提供住宿、顺应
+  bn: জায়গা দেওয়া, থাকার ব্যবস্থা করা, মানিয়ে নেওয়া
+  kk: орналастыру, сыйғызу, бейімделу
+
+ID 3339:
+  ru: челюсть, пасть, подбородок
+  uk: щелепа, паща
+  de: Kiefer, Unterkiefer, Kinnlade
+  es: mandíbula, quijada
+  fr: mâchoire, mandibule
+  pl: szczęka, żuchwa
+  it: mascella, mandibola
+  tr: çene, çene kemiği
+  pt: mandíbula, queixo, maxilar
+  ro: maxilar, mandibulă
+  bg: челюст, чене
+  cs: čelist, sanice
+  sk: čeľusť, sánka
+  hu: állkapocs, pofa
+  el: σαγόνι, σιαγόνα, γνάθος
+  sl: čeljust, žval
+  et: lõualuu, lõug
+  lt: žandikaulis, nasrai
+  da: kæbe, kæbeben
+  fi: leuka, leukaluu
+  sv: käke, käkben
+  hr: čeljust, vilica
+  lv: žoklis, žokļa kauls
+  hi: जबड़ा, मुख अस्थि
+  ar: فك، حنك
+  fa: فک، آرواره
+  ur: جبڑا، ڈاڑھ
+  id: rahang, tulang rahang
+  vi: quai hàm, hàm
+  th: ขากรรไกร, กราม
+  ko: 턱, 턱뼈
+  ja: あご、顎骨
+  zh: 下颌、下巴、颌骨
+  bn: চোয়াল, দাঁতের পাটি
+  kk: жақ, жақ сүйегі
+
+ID 3340:
+  ru: трагический, трагичный, бедственный
+  uk: трагічний, жалісний, драматичний
+  de: tragisch, traurig, unheilvoll
+  es: trágico, dramático, desastroso
+  fr: tragique, dramatique, douloureux
+  pl: tragiczny, dramatyczny, żałosny
+  it: tragico, luttuoso, drammatico
+  tr: trajik, feci, acıklı
+  pt: trágico, dramático, fatídico
+  ro: tragic, cutremurător, dramatic
+  bg: трагичен, гибелен, печален
+  cs: tragický, žalostný, osudný
+  sk: tragický, katastrofálny, smutný
+  hu: tragikus, szomorú, sorscsapásszerű
+  el: τραγικός, ολέθριος, δραματικός
+  sl: tragičen, usoden, žalosten
+  et: traagiline, kurblooline, hukatuslik
+  lt: tragiškas, sukrečiantis, liūdnas
+  da: tragisk, sørgelig, ulykkelig
+  fi: traaginen, murheellinen, järkyttävä
+  sv: tragisk, sorglig, olycksalig
+  hr: tragičan, koban, zlosretan
+  lv: traģisks, bēdīgs, liktenīgs
+  hi: दुखद, त्रासद, शोकपूर्ण
+  ar: مأساوي، مفجع، تراجيدي
+  fa: غم‌انگیز، فاجعه‌بار، تراژیک
+  ur: المناک، دردناک، سانحاتی
+  id: tragis, memilukan, menyedihkan
+  vi: bi thảm, bi kịch, thê thảm
+  th: น่าสลดใจ, โศกนาฏกรรม, เศร้าสลด
+  ko: 비극적인, 참담한, 비참한
+  ja: 悲劇的な、悲惨な、痛ましい
+  zh: 悲剧的、悲惨的、令人痛苦的
+  bn: মর্মান্তিক, করুণ, বেদনাদায়ক
+  kk: қайғылы, қасіретті, трагедиялық
+
+ID 3341:
+  ru: включать в себя, состоять из, охватывать
+  uk: складатись із, охоплювати, містити в собі
+  de: umfassen, bestehen aus, beinhalten
+  es: comprender, abarcar, constar de
+  fr: comprendre, être composé de, englober
+  pl: obejmować, składać się z, zawierać
+  it: comprendere, consistere in, includere
+  tr: kapsamak, oluşmak, içermek
+  pt: compreender, compor-se de, abranger
+  ro: a include, a cuprinde, a fi alcătuit din
+  bg: обхващам, състоя се от, включвам
+  cs: zahrnovat, skládat se z, tvořit
+  sk: zahŕňať, skladať sa z, obsahovať
+  hu: magában foglal, tartalmaz, alkot
+  el: περιλαμβάνω, αποτελούμαι από, συνιστώ
+  sl: obsegati, vsebovati, sestojati iz
+  et: hõlmama, koosnema, sisaldama
+  lt: apimti, susidėti iš, sudaryti
+  da: omfatte, udgøre, bestå af
+  fi: käsittää, koostua, muodostaa
+  sv: omfatta, bestå av, utgöra
+  hr: obuhvaćati, sastojati se od, činiti
+  lv: ietvert, sastāvēt no, aptvert
+  hi: सम्मिलित करना, मिलकर बनना, शामिल होना
+  ar: يشمل، يتألف من، يضم
+  fa: شامل بودن، در بر گرفتن، تشکیل شدن از
+  ur: پر مشتمل ہونا, پر حاوی ہونا, احاطہ کرنا
+  id: meliputi, terdiri dari, mencakup
+  vi: bao gồm, cấu thành từ
+  th: ประกอบด้วย, รวมถึง, กอปรด้วย
+  ko: 구성되다, 포함하다, 차지하다
+  ja: 構成される、含む、占める
+  zh: 包含、由……组成、构成
+  bn: অন্তর্ভুক্ত করা, গঠিত হওয়া, নিয়ে গঠিত
+  kk: құралу, қамту, тұру
+
+ID 3342:
+  ru: быстрее, скорей, более быстрый
+  uk: швидше, скоріше, більш швидкий
+  de: schneller, rascher, zügiger
+  es: más rápido, más veloz
+  fr: plus vite, plus rapide
+  pl: szybciej, prędszy, bystrzejszy
+  it: più veloce, più rapidamente
+  tr: daha hızlı, daha çabuk
+  pt: mais rápido, mais veloz
+  ro: mai repede, mai iute, mai rapid
+  bg: по-бързо, по-бърз
+  cs: rychleji, rychlejší, svižnější
+  sk: rýchlejšie, rýchlejší
+  hu: gyorsabban, sebesebben, gyorsabb
+  el: πιο γρήγορα, ταχύτερος, γρηγορότερος
+  sl: hitreje, urnejši, hitrejši
+  et: kiiremini, kiirem, nobedam
+  lt: greičiau, spartesnis, vikresnis
+  da: hurtigere, kvikkere
+  fi: nopeammin, nopeampi, sukkelaan
+  sv: snabbare, fortare
+  hr: brže, hitrije, brži
+  lv: ātrāk, veiklāks, straujāks
+  hi: अधिक तेज़, तेज़ी से
+  ar: أسرع، أكثر سرعة
+  fa: سریع‌تر, تندتر
+  ur: زیادہ تیز، تیزی سے
+  id: lebih cepat, lebih kencang
+  vi: nhanh hơn, cấp tốc hơn
+  th: เร็วกว่า, ว่องไวกว่า
+  ko: 더 빠른, 더 빨리
+  ja: より速い、もっと速く
+  zh: 更快、更迅速
+  bn: আরও দ্রুত, অপেক্ষাকৃত দ্রুত
+  kk: жылдамырақ, тезірек
+
+ID 3343:
+  ru: питание, питательность, пищеварение
+  uk: харчування, поживність
+  de: Ernährung, Nahrung, Nährwert
+  es: nutrición, alimentación, sustento
+  fr: nutrition, alimentation, valeur nutritive
+  pl: odżywianie, żywienie, pokarm
+  it: nutrizione, alimentazione
+  tr: beslenme, gıda alımı
+  pt: nutrição, alimentação
+  ro: nutriție, alimentație, hrană
+  bg: хранене, хранителност
+  cs: výživa, stravování, pokrm
+  sk: výživa, stravovanie
+  hu: táplálkozás, tápérték, élelmezés
+  el: διατροφή, θρέψη
+  sl: prehrana, hranjenje
+  et: toitumine, toiteväärtus
+  lt: mityba, maitinimas, virškinimas
+  da: ernæring, føde
+  fi: ravitsemus, ravinto
+  sv: näring, näringstillförsel
+  hr: prehrana, hranidba
+  lv: uzturs, barošana
+  hi: पोषण, पौष्टिकता, आहार
+  ar: تغذية، قُوْت
+  fa: تغذیه، ارزش غذایی
+  ur: غذائیت، پرورش، خوراک
+  id: nutrisi, gizi, makanan
+  vi: dinh dưỡng, sự nuôi dưỡng
+  th: โภชนาการ, อาหารบำรุง
+  ko: 영양, 영양분, 음식물 섭취
+  ja: 栄養、栄養補給、食物
+  zh: 营养、营养学、滋养
+  bn: পুষ্টি, পুষ্টিমান
+  kk: тамақтану, тағамдық құндылық
+
+ID 3344:
+  ru: наставник, ментор, куратор, руководить
+  uk: наставник, ментор, дорадник
+  de: Mentor, Ratgeber, Vorbild
+  es: mentor, consejero, tutor
+  fr: mentor, tuteur, conseiller
+  pl: mentor, przewodnik, doradca
+  it: mentore, guida, consigliere
+  tr: akıl hocası, danışman, mentor
+  pt: mentor, orientador, tutor
+  ro: mentor, îndrumător, povățuitor
+  bg: наставник, ментор, ръководител
+  cs: mentor, rádce, školitel
+  sk: mentor, radca, tútor
+  hu: mentor, tanácsadó, pártfogó
+  el: μέντορας, καθοδηγητής, σύμβουλος
+  sl: mentor, svetovalec, vodnik
+  et: mentor, juhendaja, nõuandja
+  lt: mentorius, globėjas, patarėjas
+  da: mentor, vejleder, rådgiver
+  fi: mentori, ohjaaja, opastaja
+  sv: mentor, handledare, rådgivare
+  hr: mentor, savjetnik, voditelj
+  lv: mentors, padomdevējs, vadītājs
+  hi: मेंटर, परामर्शदाता, मार्गदर्शक
+  ar: مرشد، ناصح، معلّم موجه
+  fa: راهنما، مربی، مشاور مورد اعتماد
+  ur: رہنما، اتالیق، استاد
+  id: mentor, pembimbing, penasihat
+  vi: người cố vấn, người hướng dẫn
+  th: พี่เลี้ยง, ผู้ให้คำปรึกษา, ครูฝึก
+  ko: 멘토, 지도자, 조언자
+  ja: メンター、助言者、指導係
+  zh: 导师、良师益友、指导者
+  bn: পরামর্শদাতা, দিকনির্দেশক, অভিভাবক
+  kk: тәлімгер, ақылшы, ұстаз
+
+ID 3345:
+  ru: позиция, точка зрения, стойка, поза
+  uk: позиція, точка зору, стійка, постава
+  de: Haltung, Standpunkt, Körperhaltung
+  es: postura, posición, actitud, punto de vista
+  fr: posture, prise de position, attitude
+  pl: stanowisko, postawa, podejście
+  it: presa di posizione, atteggiamento, postura
+  tr: duruş, tavır, tutum, ayak pozisyonu
+  pt: postura, ponto de vista, posicionamento
+  ro: poziție, atitudine, postură
+  bg: позиция, становище, поза
+  cs: postoj, stanovisko, pozice
+  sk: postoj, stanovisko, postavenie nôh
+  hu: álláspont, fellépés, testhelyzet
+  el: στάση, άποψη, τοποθέτηση
+  sl: stališče, drža, odnos
+  et: seisukoht, kehahoiak, asend
+  lt: požiūris, pozicija, stovėsena
+  da: holdning, synspunkt, kropsstilling
+  fi: kanta, asenne, seisoma-asento
+  sv: ståndpunkt, hållning, ställning
+  hr: stajalište, stav, položaj tijela
+  lv: nostāja, viedoklis, stāja
+  hi: रुख, दृष्टिकोण, शारीरिक मुद्रा
+  ar: موقف، وجهة نظر، وضعية وقوف
+  fa: موضع، دیدگاه، شیوه ایستادن
+  ur: مؤقف، نقطۂ نظر، وضع داری
+  id: sikap, pendirian, posisi berdiri
+  vi: lập trường, thái độ, tư thế đứng
+  th: ท่าที, จุดยืน, ท่ายืน
+  ko: 입장, 태도, 발의 위치
+  ja: 姿勢、態度、スタンス、構え
+  zh: 立场、姿态、站姿
+  bn: অবস্থান, মনোভাব, দাঁড়ানোর ভঙ্গি
+  kk: ұстаным, көзқарас, тұрыс қалыбы
+
+ID 3346:
+  ru: кролик
+  uk: кролик, кріль
+  de: Kaninchen
+  es: conejo
+  fr: lapin
+  pl: królik
+  it: coniglio
+  tr: tavşan, ada tavşanı
+  pt: coelho
+  ro: iepure de casă, iepure
+  bg: заек, питомен заек
+  cs: králík
+  sk: králik
+  hu: házinyúl, nyúl
+  el: κουνέλι
+  sl: kunec, zajček
+  et: küülik, kodujänes
+  lt: triušis
+  da: kanin
+  fi: kani, kaniini
+  sv: kanin
+  hr: kunić, pitomi zec
+  lv: trusis
+  hi: ख़रगोश
+  ar: أرنب
+  fa: خرگوش
+  ur: خرگوش
+  id: kelinci
+  vi: con thỏ
+  th: กระต่าย
+  ko: 토끼
+  ja: ウサギ
+  zh: 兔子、家兔
+  bn: খরগোশ
+  kk: қоян, үй қояны
+
+ID 3347:
+  ru: точка, крапинка, усеивать
+  uk: крапка, цятка, мітити крапками
+  de: Punkt, Tupfen, übersäen
+  es: punto, lunar, mota, puntear
+  fr: point, pois, pointiller
+  pl: kropka, punkt, usypywać kropkami
+  it: punto, puntino, costellare
+  tr: nokta, benek, noktalamak
+  pt: ponto, pontinho, pontilhar
+  ro: punct, picățea, a împânzi
+  bg: точка, капчица, напръсквам
+  cs: tečka, bod, puntík, tečkovat
+  sk: bodka, tečka, škvrnka
+  hu: pont, pötty, teleszór
+  el: τελεία, κουκκίδα, στίγμα
+  sl: pika, pikica, posuti s pikami
+  et: täpp, punkt, tähniliseks tegema
+  lt: taškas, taškelis, marginti
+  da: prik, punktum, spætte
+  fi: piste, pilkku, täplä
+  sv: punkt, prick, pricka
+  hr: točka, točkica, prošarati
+  lv: punkts, punktiņš, raibums
+  hi: बिंदु, नुक्ता, बिंदियां लगाना
+  ar: نقطة، بقعة صغيرة، يُنقط
+  fa: نقطه، خال، نقطه‌گذاری کردن
+  ur: نقطہ، بندیا، نقطے لگانا
+  id: bintik, noktah, titik
+  vi: dấu chấm, chấm tròn, điểm xuyết
+  th: จุด, รอยแต้ม, จุดประ
+  ko: 점, 반점, 점을 찍다
+  ja: 点、水玉、散在する
+  zh: 圆点、斑点、点缀
+  bn: বিন্দু, ফুটকি, ফোঁটা
+  kk: нүкте, дақ, шашырату
+
+ID 3348:
+  ru: автор, вкладчик, даритель, жертвователь
+  uk: автор, дописувач, благодійник, жертводавець
+  de: Mitwirkender, Beitragszahler, Spender, Autor
+  es: colaborador, donante, aportador, articulista
+  fr: contributeur, collaborateur, donateur, auteur
+  pl: współtwórca, darczyńca, współpracownik
+  it: contributore, donatore, collaboratore
+  tr: katkıda bulunan, yazar, bağışçı
+  pt: colaborador, contribuinte, doador
+  ro: contribuitor, colaborator, donator
+  bg: сътрудник, съавтор, дарител
+  cs: přispěvatel, spolupracovník, dárce
+  sk: prispievateľ, spolupracovník, darca
+  hu: közreműködő, hozzájáruló, cikkíró, adományozó
+  el: συντελεστής, αρθρογράφος, δωρητής
+  sl: prispevalec, sodelavec, donator
+  et: kaastöötaja, panustaja, annetaja
+  lt: bendraautorius, rėmėjas, talkininkas
+  da: bidragsyder, bidragyder, skribent
+  fi: avustaja, lahjoittaja, kirjoittaja
+  sv: bidragsgivare, medarbetare, donator
+  hr: suradnik, donator, doprinositelj
+  lv: līdzstrādnieks, ziedotājs, rakstu autors
+  hi: योगदानकर्ता, लेखक, दानदाता
+  ar: مساهم، متبرع، كاتب مشارك
+  fa: مشارکت‌کننده، اهداکننده، مقاله‌نویس
+  ur: معاون، امداد دہندہ، مضمون نگار
+  id: kontributor, penyumbang, penulis pembantu
+  vi: người đóng góp, cộng tác viên, nhà hảo tâm
+  th: ผู้บริจาค, ผู้ร่วมเขียน, ผู้สนับสนุน
+  ko: 기고자, 기부자, 공헌자
+  ja: 寄稿者、貢献者、寄付者
+  zh: 贡献者、投稿人、捐赠者
+  bn: অবদানকারী, সহায়ক, দাতা
+  kk: үлес қосушы, автор, демеуші
+
+ID 3349:
+  ru: сотрудничать, взаимодействовать, кооперироваться
+  uk: співпрацювати, взаємодіяти
+  de: zusammenarbeiten, kooperieren, mitwirken
+  es: cooperar, colaborar, aunar esfuerzos
+  fr: coopérer, collaborer, s'entraider
+  pl: współpracować, kooperować
+  it: cooperare, collaborare
+  tr: iş birliği yapmak, yardımlaşmak
+  pt: cooperar, colaborar, trabalhar em conjunto
+  ro: a coopera, a colabora
+  bg: сътруднича, съдействам
+  cs: spolupracovat, kooperovat
+  sk: spolupracovať, kooperovať
+  hu: együttműködik, összedolgozik
+  el: συνεργάζομαι, συμπράττω
+  sl: sodelovati, pomagati si
+  et: koostööd tegema, koonduma
+  lt: bendradarbiauti, talkinti
+  da: samarbejde, bistå
+  fi: tehdä yhteistyötä, auttaa
+  sv: samarbeta, samverka
+  hr: surađivati, kooperirati
+  lv: sadarboties, kooperēties
+  hi: सहयोग करना, मिलकर काम करना
+  ar: يتعاون، يتكاتف، يعمل معاً
+  fa: همکاری کردن، تعاون داشتن
+  ur: تعاون کرنا، مل کر کام کرنا
+  id: bekerja sama, bergotong-royong
+  vi: hợp tác, cộng tác
+  th: ร่วมมือ, ประสานงาน
+  ko: 협력하다, 협조하다
+  ja: 協力する、協調する
+  zh: 合作、协作、配合
+  bn: সহযোগিতা করা, যৌথভাবে কাজ করা
+  kk: ынтымақтасу, бірігіп жұмыс істеу
+
+ID 3350:
+  ru: диск, пластинка, жесткий диск, накопитель
+  uk: диск, платівка, дисковий накопичувач
+  de: Diskette, Scheibe, Festplatte, Datenträger
+  es: disco, disco rígido, platillo
+  fr: disque, disque dur, disquette
+  pl: dysk, krążek, płyta
+  it: disco, disco rigido
+  tr: disk, disket, yuvarlak levha
+  pt: disco, disco rígido, placa
+  ro: disc, suport magnetic
+  bg: диск, шайба, плоча
+  cs: disk, plotna, záznamový kotouč
+  sk: disk, kotúč, platňa
+  hu: lemez, korong, merevlemez
+  el: δίσκος, μαγνητικός δίσκος
+  sl: disk, plošča, okrogla ploščica
+  et: ketas, kõvaketas, plaat
+  lt: diskas, skridulys
+  da: disk, skive, magnetdisk
+  fi: levy, kiintolevy, kiekko
+  sv: disk, datorskiva, platta
+  hr: disk, kolut, ploča
+  lv: disks, magnētiskais disks, ripa
+  hi: डिस्क, गोल तख्ती
+  ar: قرص، قرص تخزين، أسطوانة
+  fa: دیسک، لوح فشرده، صفحه گرد
+  ur: ڈسک، قرص، کمپیوٹر ڈسک
+  id: cakram, piringan, kandar disk
+  vi: đĩa từ, ổ đĩa, đĩa tròn
+  th: แผ่นดิสก์, จานแม่เหล็ก
+  ko: 디스크, 원반, 저장 디스크
+  ja: ディスク、円盤、記憶媒体
+  zh: 磁盘、圆盘、光盘
+  bn: ডিস্ক, গোল চাকতি
+  kk: диск, дөңгелек пластина
+
+ID 3351:
+  ru: обижать, оскорблять, задевать, нарушать закон
+  uk: ображати, кривдити, зачіпати, завинити
+  de: beleidigen, kränken, vor den Kopf stoßen, verstoßen
+  es: ofender, agraviar, herir susceptibilidades
+  fr: offenser, blesser, choquer, commettre un délit
+  pl: obrażać, urazić, zranić, uchybić
+  it: offendere, urtare, oltraggiare
+  tr: kırmak, gücendirmek, incitmek, suç işlemek
+  pt: ofender, melindrar, ultrajar, cometer infração
+  ro: a jigni, a ofensa, a răni
+  bg: обиждам, засягам, нарушавам закона
+  cs: urážet, dotknout se, provinit se
+  sk: urážať, dotknúť sa, pohoršiť
+  hu: megsért, megbánt, törvényt sért
+  el: προσβάλλω, θίγω, παρανομώ
+  sl: užaliti, raniti, prekršiti zakon
+  et: solvama, haavama, pahandama
+  lt: įžeisti, užgauti, nusižengti
+  da: forulempe, fornærme, krænke
+  fi: loukata, pahoittaa mieli, loukata lakia
+  sv: såra, förolämpa, förarga
+  hr: uvrijediti, povrijediti, ogriješiti se
+  lv: apvainot, aizskart, pārkāpt likumu
+  hi: नाराज़ करना, ठेस पहुँचाना, अपराध करना
+  ar: يُهين، يجرح المشاعر، يسيء، يخالف القانون
+  fa: رنجاندن، توهین کردن، مرتکب جرم شدن
+  ur: ناراض کرنا، دل آزاری کرنا، جرم کرنا
+  id: menyinggung, melukai perasaan, melanggar hukum
+  vi: làm phật lòng, xúc phạm, phạm tội
+  th: ทำให้เคือง, ขัดใจ, ละเมิดกฎหมาย
+  ko: 기분을 상하게 하다, 모욕하다, 죄를 범하다
+  ja: 感情を害する、不快にさせる、罪を犯す
+  zh: 冒犯、得罪、触犯
+  bn: অসন্তুষ্ট করা, আঘাত দেওয়া, অপরাধ করা
+  kk: ренжіту, көңіліне тию, заң бұзу
+

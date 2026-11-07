@@ -1,0 +1,1889 @@
+Batch 3252-3301 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+1. Word 3252 (execution): Dual-sense polysemy calibrated! Dump had one-sided translations in et, fi, da, sv, hr, ar, vi, th, ko, ja (only death penalty / capital punishment) vs ru, uk, de, cs (only task implementation). Calibrated both essential senses across all 35 target languages: 1) execution of a plan, command, program, or legal sentence ("исполнение, выполнение, Ausführung, réalisation, cumplimiento"); 2) capital punishment ("казнь, Hinrichtung, mise à mort, poprava, إعدام, 처형, 処刑, 处决").
+2. Word 3253 (pal): Fixed Romanian vocative form in dump ("prietene" -> "prieten, amic, tovarăș"). Calibrated colloquial friendship terms across all locales (de: Kumpel/Freund/Kamerad, es: amigo/compañero/colega, pt: amigo/companheiro/parceiro, fr: pote/copain/ami, ur: دوست، یار، ساتھی).
+3. Word 3254 (chuckle): Part-of-speech and tonal precision: dump had generic laughter verbs ("lachen" DE, "rire" FR, "cười" VI, "γέλιο" EL noun). Calibrated to quiet, suppressed chuckle, chortle, or giggle as both verb and noun ("хихикать, посмеиваться; смешок", "kichern, schmunzeln", "reír entre dientes; risita", "glousser; petit rire", "chichotać; chichot", "cluck/giggle" nuances).
+4. Word 3257 (kinda): CRITICAL SYSTEMIC BUG CAUGHT! Dump erroneously translated "kinda" (colloquial contraction of "kind of" = somewhat, rather, a bit, in a way) as "as if / though" across 7+ locales (Arabic كما لو, Hindi मानो, Japanese まるで, Korean 마치 ~처럼, Romanian ca și cum, Vietnamese như thể, Thai ราวกับว่า). Calibrated to genuine "rather / somewhat / kind of" across all locales ("вроде, типа, как бы, отчасти", "irgendwie, sozusagen, ein bisschen", "algo, un poco, más o menos", "un peu, en quelque sorte, plutôt", "نوعاً ما، إلى حد ما", "थोड़ा, कुछ हद तक", "약간, 다소, 어느 정도", "ちょっと、ある程度").
+5. Word 3258 (relieve): CATASTROPHIC MACHINE TRANSLATION BUG CAUGHT! In Portuguese dump had "torne isso mais fácil" (imperative sentence "make this easier"!), in Romanian "fă-o mai ușoară" (imperative sentence "make it easier"!), in Greek "κάνω το πιο εύκολο" (sentence "I make the easiest"!), and in French "faciliter les choses" (phrase). Calibrated to genuine verbs "облегчать, успокаивать, сменять", "aliviar, mitigar, relevar", "soulager, apaiser, relayer", "lindern, erleichtern, entlasten, ablösen", "a alina, a ușura, a schimba", "ανακουφίζω, καταπραΰνω, απαλλάσσω", covering both easing pain/burden and relieving on duty.
+6. Word 3260 (corridor): Improved Spanish from ambiguous "corredor" (which often means runner or financial broker) to standard "pasillo, corredor"; calibrated hallway/passageway and transit corridor senses across all locales.
+7. Word 3263 (pad): Polysemy bug! Dump included graphic software overlay layer ("suprapunere" RO, "қабаттастыру" KK, "επικάλυψη" EL, "lớp phủ" VI, "重ね合わせ" JA, "ओवरले" HI). Calibrated to real-world senses: writing notepad, protective cushion/guard, ink/launch pad ("блокнот, подушечка, накладка, щиток", "Notizblock, Polster, Kissen", "bloc de notas, almohadilla", "bloc-notes, tampon").
+8. Word 3264 (tuck): CATASTROPHIC "REFUEL" BUG CAUGHT! "tuck" was translated as "REFUEL / REFUELING" across 4 distinct locales! (Greek "εφοδιάζω πάλι με καύσιμα", Romanian "realimentare", Kazakh "жанармай құю", Portuguese "reabastecer"). Corrected to tucking in clothes/bed/folding edges ("заправлять, подтыкать, прятать, засовывать", "meter, doblar, remeter", "rentrer, border, replier", "hineinstecken, einstecken", "enfiar, dobrar, ajeitar", "a băga înăuntru, a împături", "διπλώνω, μαζεύω, χώνω", "қыстыру, тығу, бүгу").
+9. Word 3265 (railroad): Fixed adjective forms in Greek ("σιδηροδρομικός") and Romanian ("feroviar") to proper nouns "σιδηρόδρομος", "cale ferată".
+10. Word 3266 (minimize): RIDICULOUS BUG CAUGHT! Portuguese dump had "travesseiro" (pillow!). Calibrated to "minimizar, reduzir ao mínimo" across all locales.
+11. Word 3269 (nonsense): Fixed Spanish plural "disparates" to singular nouns "tontería, disparate, sinsentido"; fixed Romanian "Prostii" capitalization and plurality.
+12. Word 3270 (leap): Fixed Portuguese "quicar" (which means bounce like a ball!) to "salto, pulo; saltar, pular". Calibrated jump/spring action as verb and noun.
+13. Word 3271 (rider): Polysemy bug! German had "Fahrer" (driver!), Spanish "jinete" (horseman only), Portuguese "cavaleiro" (horseman only), Vietnamese "người cưỡi ngựa" (horse rider only). Calibrated to multi-faceted passenger, equestrian, cyclist, and legal/contract rider clause across all 35 locales ("всадник, наездник, пассажир, райдер", "Reiter, Mitfahrer, Beifahrer, Zusatzklausel", "jinete, pasajero, ciclista, cláusula adicional").
+14. Word 3273 (terrific): Prevented false-friend conflation with terrifying/frightening in Romance languages (es: magnífico/estupendo, fr: formidable/sensationnel, it: magnifico/straordinario, pt: sensacional/fantástico).
+15. Word 3275 (oversee): MAJOR BUG CAUGHT! German had "beobachten" (watch/observe!), Portuguese "observar", Arabic "يراقب", Romanian "observa", Greek "παρατηρώ", Vietnamese "quan sát", Japanese "観察する", Korean "관찰하다". All translated "oversee" as passive observation rather than executive supervision! Calibrated to supervise/manage/direct ("курировать, надзирать, beaufsichtigen/leiten, supervisar, superviser/chapeauter, يشرف على، يدير").
+16. Word 3278 (suburban): BIZARRE BUGS CAUGHT! Kazakh dump had "жұмысқа баратын адам" (a commuter!), Greek had "μικροαστικός" (petite-bourgeois!). Calibrated to suburban/residential outskirts ("пригородный, vorstädtisch, suburbano, de banlieue, қала маңындағы, προαστιακός").
+17. Word 3279 (momentum): CATASTROPHIC "PULSE" BUG CAUGHT! Romanian dump had "puls", Greek had "σφυγμός", Portuguese had "pulso" (all meaning heart pulse/wrist!). Arabic had "دافع" (motive), Japanese had "衝動" (impulse/urge), Korean had "충동" (impulse/urge). Calibrated to genuine physics and figurative momentum / impetus / forward drive ("импульс, инерция, Schwung, ímpeto/embalo, élan/dynamique, avânt/elan, ορμή/ώθηση, زخم/قوة دافعة, 탄력/추진력").
+18. Word 3281 (clerk): Turkish had archaic Ottoman "katip". Calibrated to modern administrative, retail sales, and court clerks across all locales ("клерк, служащий, конторщик, продавец", "Büroangestellter, Sachbearbeiter", "oficinista, empleado, dependiente", "funcionario, balconista, atendente").
+19. Word 3284 (proposition): Fixed verb infinitive bugs in Portuguese ("oferecer") and Romanian ("oferi"). Calibrated to formal proposition, assertion/thesis in logic, and business proposal ("предложение, тезис, суждение", "proposición, propuesta", "Vorschlag, Behauptung, Proposition").
+20. Word 3286 (beam): STRUCTURAL LOG/TRUNK BUG CAUGHT! Dump had "log / raw tree trunk" (бревно, tronco, kłoda, buștean, kütük, ท่อนซุง, khúc gỗ, бөрене) instead of shaped structural beam / girder / rafter / joist ("балка, брус, viga, Balken, poutre, grindă, δοκός, арқалық"). Balanced with light beam / laser beam.
+21. Word 3288 (verse): Fixed whole poem conflation (de: Gedicht, ro: poem, tr: şiir, ja: 詩). Calibrated to specific poetic line, stanza, or biblical verse ("стих, строфа, куплет, Vers, Strophe, verso, estrofe").
+22. Word 3289 (casual): MASSIVE "DAILY" BUG CAUGHT! German had "täglich" (daily!), Greek "καθημερινός", Romanian "în fiecare zi" (every day!), Thai "ทุกวัน" (every day!), Vietnamese "hàng ngày" (daily!), Indonesian "sehari-hari" (daily!), Kazakh "күнделікті" (daily!). Casual means relaxed, informal, nonchalant, or accidental! Calibrated across all locales ("повседневный, неформальный, непринужденный", "lässig, zwanglos, leger", "informal, desenfadado, casual", "décontracté, informel").
+23. Word 3291 (shove): Russian dump had narrow slang "засунуть" (shove it!). Calibrated to primary physical shove / thrust / push roughly ("толкать, пихать, совать; толчок", "schubsen, stoßen", "empujar, empellón").
+24. Word 3292 (carbohydrate): Fixed French plural "glucides" -> singular "glucide, hydrate de carbone".
+25. Word 3293 (steam): Fixed Romanian imperative "gătiți cu abur" and Turkish verb-only "buharla pişirmek". Restored noun water steam + verb to steam cook ("пар, водяной пар; варить на пару", "Dampf; dämpfen", "vapor; cocinar al vapor", "vapeur; cuire à la vapeur").
+26. Word 3296 (resume): DUAL HOMOGRAPH FIX! Resumé (CV / summary) vs. resume (restart / continue after pause). Dump had only summary in Arabic, Hindi, Japanese, Korean, only CV in French, and only verb in Turkish. Calibrated dual coverage across all 35 languages ("возобновлять, продолжать; резюме", "fortsetzen, wieder aufnehmen; Lebenslauf", "reanudar, continuar; currículum", "reprendre; CV", "retomar, recomeçar; currículo").
+27. Word 3297 (interior): Calibrated noun (inside, indoor space, domestic affairs) and adjective (inner, internal) across all locales ("интерьер, внутренность; внутренний", "Innenraum; innenliegend", "interior; interno").
+28. Word 3298 (full-time): CRITICAL "PERMANENT BASIS" BUG CAUGHT! Russian had "на постоянной основе", Portuguese "de forma contínua", Arabic "بشكل دائم", Hindi "स्थायी आधार पर", Japanese "恒久的に", Korean "영구적으로", Turkish "sürekli olarak", Romanian "în mod continuu", Greek "σε συνεχή βάση", Thai "อย่างถาวร", Kazakh "тұрақты негізде". ALL mistranslated full-time (working full hours / standard weekly workload) as permanent! Corrected to full working hours / full-time ("полный рабочий день, на полную ставку", "Vollzeit, vollzeitlich", "a tiempo completo", "à temps plein", "período integral", "cu normă întreagă", "دوام كامل", "पूर्णकालिक", "フルタイム", "전일제").
+29. Word 3299 (questionnaire): Enhanced Russian from rare "вопросник" to standard "анкета, опросный лист, вопросник".
+30. Word 3300 (behalf): Calibrated prepositional phrases "on behalf of / in behalf of" across all languages ("от имени, ради, в интересах", "im Namen von, zugunsten", "en nombre de, de parte de", "au nom de", "em nome de").
+31. Word 3301 (graph): CATASTROPHIC "SCHEDULE/CALENDAR" BUG CAUGHT! French dump had "calendrier" (calendar!), Arabic "جدول زمني" (timetable!), Hindi "अनुसूची" (schedule!), Japanese "スケジュール" (schedule!), Korean "일정" (schedule!), Greek "πρόγραμμα" (program/schedule!), Romanian "programa" (syllabus!), Thai "ตารางเวลา" (timetable!), Vietnamese "lịch trình" (itinerary!). ALL mistranslated "graph" as "schedule"! Calibrated to genuine mathematical graph / chart / plot ("график, диаграмма, граф", "Diagramm, Graph, Schaubild", "graphique, diagramme, graphe", "gráfica, gráfico, diagrama", "رسم بياني، مخطط", "图表、坐标图", "グラフ", "그래프").
+
+----------------------------------------------------
+Detailed calibrations per word (IDs 3252–3301):
+----------------------------------------------------
+
+ID 3252 (execution):
+  ru: исполнение, выполнение, казнь
+  uk: виконання, здійснення, страта
+  de: Ausführung, Durchführung, Hinrichtung
+  es: ejecución, realización, cumplimiento
+  fr: exécution, réalisation, mise à mort
+  pl: wykonanie, realizacja, egzekucja
+  it: esecuzione, attuazione, adempimento
+  tr: infaz, yürütme, yerine getirme
+  pt: execução, realização, cumprimento
+  ro: execuție, îndeplinire, realizare
+  bg: изпълнение, извършване, екзекуция
+  cs: provedení, výkon, poprava
+  sk: vykonanie, uskutočnenie, poprava
+  hu: végrehajtás, kivitelezés, kivégzés
+  el: εκτέλεση, εφαρμογή, πραγματοποίηση
+  sl: izvedba, uresničitev, usmrtitev
+  et: täideviimine, sooritamine, hukkamine
+  lt: vykdymas, atlikimas, mirties bausmės vykdymas
+  da: udførelse, gennemførelse, henrettelse
+  fi: suoritus, toteutus, teloitus
+  sv: verkställande, utförande, avrättning
+  hr: izvršenje, provedba, pogubljenje
+  lv: izpilde, īstenošana, nāvessoda izpilde
+  hi: निष्पादन, अमल, प्राणदंड
+  ar: تنفيذ، إنجاز، إعدام
+  fa: اجرا، پیاده‌سازی، اعدام
+  ur: عمل درآمد، تعمیل، سزائے موت
+  id: pelaksanaan, eksekusi, pengeksekusian
+  vi: sự thực hiện, thi hành, sự hành quyết
+  th: การปฏิบัติการ, การดำเนินการ, การประหารชีวิต
+  ko: 실행, 집행, 처형
+  ja: 実行、遂行、処刑
+  zh: 执行、实施、处决
+  bn: সম্পাদন, কার্যকরীকরণ, মৃত্যুদণ্ডাদেশ কার্যকর
+  kk: орындау, жүзеге асыру, өлім жазасын орындау
+
+ID 3253 (pal):
+  ru: приятель, друг, товарищ
+  uk: приятель, друг, друзяка
+  de: Kumpel, Freund, Kamerad
+  es: amigo, compañero, colega
+  fr: pote, copain, ami
+  pl: kumpel, przyjaciel, kolega
+  it: amico, compare, compagno
+  tr: ahbap, dost, arkadaş
+  pt: amigo, companheiro, parceiro
+  ro: prieten, amic, tovarăș
+  bg: приятел, авер, другар
+  cs: kamarád, přítel, parťák
+  sk: kamarát, priateľ, parťák
+  hu: pajtás, haver, barát
+  el: φίλος, κολλητός, φιλαράκος
+  sl: prijatelj, pajdaš, tovariš
+  et: sõber, kamraad, semu
+  lt: bičiulis, draugas, sėbras
+  da: ven, kammerat, makker
+  fi: kaveri, ystävä, toveri
+  sv: kompis, polare, vän
+  hr: prijatelj, drug, pajdaš
+  lv: draugs, biedrs, čoms
+  hi: दोस्त, मित्र, यार
+  ar: صديق، رفيق، صاحب
+  fa: رفیق، دوست، یار
+  ur: دوست، یار، ساتھی
+  id: teman, sahabat, sobat
+  vi: bạn bè, bạn thân, chiến hữu
+  th: เพื่อน, เกลอ, สหาย
+  ko: 친구, 동무, 벗
+  ja: 仲間、友達、相棒
+  zh: 朋友、伙伴、哥们
+  bn: বন্ধু, দোস্ত, সাথী
+  kk: дос, жолдас, тамыр
+
+ID 3254 (chuckle):
+  ru: хихикать, посмеиваться; смешок
+  uk: хихотіти, підсміюватися; смішок
+  de: kichern, schmunzeln; Schmunzeln
+  es: reír entre dientes, reírse por lo bajo; risita
+  fr: glousser, ricaner, rire sous cape; petit rire
+  pl: chichotać, podśmiewać się; chichot
+  it: ridacchiare, ridere sotto i baffi; risatina
+  tr: kıkırdamak, bıyık altından gülmek; kıkırdama
+  pt: rir baixinho, rir entre dentes; risinho
+  ro: a chicoti, a râde înfundat; chicotit
+  bg: хихикам, подсмихвам се; сдържано изсмиване
+  cs: chichotat se, uchechtnout se; chichot
+  sk: chichotať sa, posmievať sa; chichot
+  hu: kuncog, vihorászik; kuncogás
+  el: χαχανίζω, κρυφογελώ; κρυφό γέλιο
+  sl: hahljati se, muzati se; pridušen smeh
+  et: kihistama, muhelema; kihistus
+  lt: krizenti, kikenti; krizentelėjimas
+  da: klukle, småle; kluklatter
+  fi: hykerrellä, naureskella; hykerrys
+  sv: klucka, humma, småskratta; småskratt
+  hr: cerekati se, smijuljiti se; pritajeni smijeh
+  lv: ķiķināt, pasmīnēt; kluss smiekliņš
+  hi: धीमे से हँसना, खिलखिलाना; दबी हुई हँसी
+  ar: يضحك خلسة، يتقهقر؛ ضحكة خافتة
+  fa: پوزخند زدن، ریز خندیدن؛ خنده زیر لب
+  ur: دبی ہنسی ہنسنا، کھلکھلانا؛ دبی ہنسی
+  id: terkekeh, tertawa kecil; kekehan
+  vi: cười khúc khích, cười thầm; tiếng cười khẽ
+  th: หัวเราะคิกคัก, หัวเราะเบาๆ; เสียงหัวเราะในลำคอ
+  ko: 낄낄 웃다, 싱긋 웃다; 낄낄 웃음
+  ja: クスクス笑う、ほくそ笑む; クスクス笑い
+  zh: 轻声轻笑、咯咯地笑; 窃笑
+  bn: মৃদু হাসা, চাপা হাসি হাসা; চাপা হাসি
+  kk: жымиып күлу, мырс ету; мырс етушілік
+
+ID 3255 (density):
+  ru: плотность, густота, концентрация
+  uk: щільність, густина, компактність
+  de: Dichte, Kompaktheit, Massendichte
+  es: densidad, espesor, compacidad
+  fr: densité, compacité, épaisseur
+  pl: gęstość, zwartość, zagęszczenie
+  it: densità, compattezza, spessore
+  tr: yoğunluk, sıklık, kesafet
+  pt: densidade, compacidade, espessura
+  ro: densitate, desime, compactitate
+  bg: плътност, сгъстеност, компактност
+  cs: hustota, hutnost, koncentrace
+  sk: hustota, zhustenie, koncentrácia
+  hu: sűrűség, tömörség, fajsúly
+  el: πυκνότητα, συμπύκνωση
+  sl: gostota, zgoščenost, zbitost
+  et: tihedus, kompaktsus
+  lt: tankis, tankumas, tirštumas
+  da: massefylde, tæthed, densitet
+  fi: tiheys, taajuus, sakeus
+  sv: densitet, täthet, tjocklek
+  hr: gustoća, zbijenost
+  lv: blīvums, biezums, kompaktums
+  hi: घनत्व, सघनता, गाढ़ापन
+  ar: كثافة، تراصّ، تضاغط
+  fa: چگالی، تراکم، غلظت
+  ur: کثافت، کثیف پن، گنجان پن
+  id: kepadatan, kerapatan, densitas
+  vi: mật độ, độ dày đặc, tỷ trọng
+  th: ความหนาแน่น, ความทึบ, มวลรวม
+  ko: 밀도, 농도, 조밀함
+  ja: 密度、濃度、密集度
+  zh: 密度、稠密度、浓度
+  bn: ঘনত্ব, নিবিড়তা, গভীরতা
+  kk: тығыздық, қоюлық, жиілік
+
+ID 3256 (correction):
+  ru: исправление, поправка, корректировка
+  uk: виправлення, поправка, корегування
+  de: Korrektur, Berichtigung, Verbesserung
+  es: corrección, enmienda, rectificación
+  fr: correction, rectification, amendement
+  pl: korekta, poprawka, sprostowanie
+  it: correzione, rettifica, emendamento
+  tr: düzeltme, tashih, ıslah
+  pt: correção, retificação, emenda
+  ro: corecție, rectificare, îndreptare
+  bg: поправка, корекция, изправяне
+  cs: oprava, korekce, usměrnění
+  sk: oprava, korekcia, náprava
+  hu: javítás, helyesbítés, korrekció
+  el: διόρθωση, επανόρθωση, ρύθμιση
+  sl: popravek, korekcija, izboljšava
+  et: parandus, korrektsioon, õiendus
+  lt: pataisymas, korekcija, taisymas
+  da: korrektion, rettelse, berigtigelse
+  fi: korjaus, oikaisu, korjausliike
+  sv: korrigering, rättelse, justering
+  hr: ispravak, korekcija, poboljšanje
+  lv: labojums, korekcija, taisījums
+  hi: सुधार, संशोधन, शुद्धि
+  ar: تصحيح، تعديل، تنقيح
+  fa: تصحیح، اصلاح، دستکاری
+  ur: تصحیح، درستی، اصلاح
+  id: koreksi, pembetulan, perbaikan
+  vi: sự sửa đổi, hiệu chỉnh, sửa sai
+  th: การแก้ไข, การปรับปรุง, การดัดนิสัย
+  ko: 교정, 수정, 바로잡음
+  ja: 訂正、修正、是正
+  zh: 修正、校正、纠正
+  bn: সংশোধন, ত্রুটিমুক্তি, ঠিককরণ
+  kk: түзету, жөндеу, дұрыстау
+
+ID 3257 (kinda):
+  ru: вроде, типа, как бы, отчасти
+  uk: начебто, трохи, якось, типу
+  de: irgendwie, gewissermaßen, sozusagen, ein bisschen
+  es: algo, un poco, más o menos, medio
+  fr: un peu, en quelque sorte, plutôt, genre
+  pl: trochę, jakby, poniekąd, w pewnym sensie
+  it: un po', in un certo senso, quasi, tipo
+  tr: biraz, bir nevi, sanki, gibi
+  pt: meio que, um pouco, tipo, de certo modo
+  ro: un fel de, oarecum, cumva, oarece
+  bg: някак си, до известна степен, малко
+  cs: trochu, tak nějak, víceméně
+  sk: trochu, tak nejako, do istej miery
+  hu: kissé, afféle, bizonyos fokig, némileg
+  el: κάπως, κάπως έτσι, λίγο, κατά κάποιο τρόπο
+  sl: nekako, precej, malo, v nekem smislu
+  et: natuke, omamoodi, teatud määral
+  lt: šiek tiek, savotiškai, lyg ir
+  da: lidt, på en måde, nærmest
+  fi: vähän kuin, tavallaan, jokseenkin
+  sv: typ, på sätt och vis, lite grann
+  hr: pomalo, nekako, na neki način
+  lv: kaut kā, zināmā mērā, mazliet
+  hi: थोड़ा, कुछ हद तक, एक तरह से
+  ar: نوعاً ما، إلى حد ما، كأنما قليلاً
+  fa: یه جورایی، تا حدی، نوعی
+  ur: کسی حد تک، کچھ کچھ، ایک لحاظ سے
+  id: agak, semacam, sedikit banyak
+  vi: hơi hơi, có vẻ, phần nào
+  th: ค่อนข้าง, นิดหน่อย, ทำนองนั้น
+  ko: 약간, 다소, 어느 정도
+  ja: ちょっと、ある程度、何となく
+  zh: 有点儿、有几分、稍微
+  bn: কিছুটা, একরকম, সামান্য
+  kk: бірдеңе сияқты, біршама, әлдеқалай
+
+ID 3258 (relieve):
+  ru: облегчать, успокаивать, сменять
+  uk: полегшувати, заспокоювати, змінювати
+  de: lindern, erleichtern, entlasten, ablösen
+  es: aliviar, mitigar, calmar, relevar
+  fr: soulager, apaiser, décharger, relayer
+  pl: ulżyć, łagodzić, uśmierzać, zmieniać
+  it: alleviare, sollevare, mitigare, dare il cambio
+  tr: hafifletmek, dindirmek, rahatlatmak, nöbet devralmak
+  pt: aliviar, amenizar, acalmar, render
+  ro: a alina, a ușura, a calma, a schimba
+  bg: облекчавам, успокоявам, сменям
+  cs: ulevit, zmírnit, vystřídat
+  sk: uľaviť, zmierniť, vystriedať
+  hu: enyhít, megkönnyít, felvált
+  el: ανακουφίζω, καταπραΰνω, απαλλάσσω, αλλάζω βάρδια
+  sl: olajšati, pomiriti, razbremeniti, zamenjati
+  et: leevendama, kergendama, vahetama
+  lt: palengvinti, numalšinti, pakeisti
+  da: lindre, lette, afløse
+  fi: lievittää, huojentaa, helpottaa, korvata
+  sv: lindra, lätta, underlätta, avlösa
+  hr: olakšati, ublažiti, rasteretiti, odmijeniti
+  lv: atvieglot, remdēt, nomainīt
+  hi: राहत देना, कम करना, पीड़ा हरना
+  ar: يخفف، يهدئ، يسكن، يبدل
+  fa: تسکین دادن، آرام کردن، کاستن، کشیک تعویض کردن
+  ur: راحت پہنچانا، تخفیف کرنا، بوجھ ہلکا کرنا
+  id: meringankan, meredakan, menggantikan
+  vi: làm dịu, giảm bớt, giải tỏa, thay ca
+  th: บรรเทา, ผ่อนคลาย, ช่วยเหลือ, สับเปลี่ยนเวร
+  ko: 덜어주다, 완화하다, 안도케 하다, 교대하다
+  ja: 和らげる、軽減する、安心させる、交代する
+  zh: 减轻、缓和、解救、换班
+  bn: উপশম করা, লাঘব করা, মুক্তি দেওয়া
+  kk: жеңілдету, басу, сабасына түсіру, кезек алмастыру
+
+ID 3259 (teammate):
+  ru: товарищ по команде, сокомандник
+  uk: товариш по команді, партнер по команді
+  de: Teamkollege, Mannschaftskamerad, Mitspieler
+  es: compañero de equipo, coequipero
+  fr: coéquipier, équipier
+  pl: kolega z drużyny, partner z zespołu
+  it: compagno di squadra, coéquipier
+  tr: takım arkadaşı, ekip üyesi
+  pt: companheiro de equipe, colega de time
+  ro: coechipier, coleg de echipă
+  bg: съотборник, колега от отбора
+  cs: spoluhráč, týmový kolega
+  sk: spoluhráč, člen tímu
+  hu: csapattárs, játékostárs
+  el: συμπαίκτης, συναθλητής
+  sl: soigralec, sotekmovalec
+  et: meeskonnakaaslane, tiimikaaslane
+  lt: komandos draugas, bendražygis
+  da: holdkammerat, medspiller
+  fi: joukkuetoveri, tiimikaveri
+  sv: lagkamrat, lagmedlem
+  hr: suigrač, klupski kolega
+  lv: komandas biedrs, komandas biedrene
+  hi: साथी खिलाड़ी, टीम का साथी
+  ar: زميل فريق، عضو بالفريق
+  fa: هم‌تیمی، هم‌دسته‌ای
+  ur: ٹیم کا ساتھی، ساتھی کھلاڑی
+  id: rekan satu tim, rekan setim
+  vi: đồng đội, bạn cùng đội
+  th: เพื่อนร่วมทีม, คู่ร่วมแข่ง
+  ko: 팀원, 팀 동료
+  ja: チームメイト、チームの仲間
+  zh: 队友、同队队员
+  bn: দলসঙ্গী, দলের সহকর্মী
+  kk: командалас, құрамалас серік
+
+ID 3260 (corridor):
+  ru: коридор, проход, галерея
+  uk: коридор, передпокій, прохід
+  de: Korridor, Flur, Gang
+  es: pasillo, corredor, pasadizo
+  fr: couloir, corridor, passage
+  pl: korytarz, przejście, korytarz powietrzny
+  it: corridoio, passaggio
+  tr: koridor, geçit, hol
+  pt: corredor, passagem
+  ro: coridor, hol, culoar
+  bg: коридор, проход, кулоар
+  cs: chodba, koridor, průchod
+  sk: chodba, koridor, prechod
+  hu: folyosó, átjáró, korridor
+  el: διάδρομος, πέρασμα
+  sl: hodnik, koridor, prehod
+  et: koridor, vahekäik
+  lt: koridorius, praėjimas
+  da: gang, korridor
+  fi: käytävä, käytävätila
+  sv: korridor, passage, gång
+  hr: hodnik, prolaz, koridor
+  lv: gaitenis, koridors, eja
+  hi: गलियारा, बरामदा, राहदारी
+  ar: ممر، ردهة، دهليز
+  fa: راهرو، دالان، گذرگاه
+  ur: راہداری، گلیارہ، برآمدہ
+  id: koridor, lorong, selasar
+  vi: hành lang, lối đi
+  th: ทางเดิน, ระเบียง, ช่องทางผ่าน
+  ko: 복도, 통로
+  ja: 廊下、通路
+  zh: 走廊、过道、通道
+  bn: করিডর, বারান্দা, চলাচলের পথ
+  kk: дәліз, өткел, дәліз жолы
+
+ID 3261 (extended):
+  ru: расширенный, продленный, удлиненный
+  uk: розширений, подовжений, тривалий
+  de: erweitert, verlängert, ausgedehnt
+  es: extendido, ampliado, prorrogado
+  fr: étendu, prolongé, élargi
+  pl: rozszerzony, przedłużony, wydłużony
+  it: esteso, prolungato, allargato
+  tr: genişletilmiş, uzatılmış, süresi uzayan
+  pt: estendido, prorrogado, ampliado
+  ro: extins, prelungit, mărit
+  bg: удължен, разширен, продължителен
+  cs: prodloužený, rozšířený, rozsáhlý
+  sk: predĺžený, rozšírený, rozľahlý
+  hu: kiterjesztett, meghosszabbított, bővített
+  el: παρατεταμένος, εκτεταμένος, διευρυμένος
+  sl: razširjen, podaljšan, obsežen
+  et: pikendatud, laiendatud, kestev
+  lt: pratęstas, išplėstas, prailgintas
+  da: udvidet, forlænget, langstrakt
+  fi: laajennettu, pidennetty, pitkittynyt
+  sv: utvidgad, förlängd, utsträckt
+  hr: proširen, produžen, dugotrajan
+  lv: paplašināts, pagarināts, izvērsts
+  hi: विस्तारित, लंबा किया हुआ, विस्तृत
+  ar: ممتد، ممدد، مطول
+  fa: گسترش‌یافته، تمدیدشده، مفصل
+  ur: طویل، توسیع شدہ، دراز
+  id: diperpanjang, diperluas, berlanjut
+  vi: mở rộng, kéo dài, gia hạn
+  th: ขยายออก, ยืดเยื้อ, ยาวนานขึ้น
+  ko: 확장된, 연장된, 장기의
+  ja: 延長された、拡張された、長期にわたる
+  zh: 延长的、扩展的、广义的
+  bn: বর্ধিত, প্রলম্বিত, দীর্ঘায়িত
+  kk: ұзартылған, кеңейтілген, созылған
+
+ID 3262 (panic):
+  ru: паника, испуг; паниковать
+  uk: паніка, переляк; панікувати
+  de: Panik, panischer Schrecken; in Panik geraten
+  es: pánico, espanto; entrar en pánico
+  fr: panique, affolement; paniquer
+  pl: panika, popłoch; panikować
+  it: panico, sgomento; farsi prendere dal panico
+  tr: panik, dehşet; paniklemek
+  pt: pânico, pavor; entrar em pânico
+  ro: panică, spaimă; a se panica
+  bg: паника, смут; паникьосвам се
+  cs: panika, zděšení; panikařit
+  sk: panika, zdesenie; panikáriť
+  hu: pánik, rémület; pánikba esik
+  el: πανικός, αλλοφροσύνη; πανικοβάλλομαι
+  sl: panika, preplah; zapasti v paniko
+  et: paanika, kabuhirm; paanikasse sattuma
+  lt: panika, sumaištis; panikuoti
+  da: panik, panikstemning; gå i panik
+  fi: paniikki, pakokauhu; hätääntyä
+  sv: panik, panikångest; drabbas av panik
+  hr: panika, strah; paničariti
+  lv: panika, ārprātīgas bailes; panikot
+  hi: घबराहट, भगदड़, आतंक
+  ar: ذعر، هلع، فزع
+  fa: وحشت، هراس، دستپاچگی
+  ur: گھبراہٹ، خوف، افراتفری
+  id: panik, kepanikan, kegemparan
+  vi: hoảng loạn, sợ hãi cuống cuồng
+  th: ความตื่นตระหนก, ความหวาดกลัวอย่างรุนแรง
+  ko: 공황, 공포, 패닉
+  ja: パニック、大恐慌、狼狽
+  zh: 恐慌、惊慌; 慌乱
+  bn: আতঙ্ক, বিভীষিকা, তীব্র ভয়
+  kk: үрей, сасқалақтау, дүрбелең
+
+ID 3263 (pad):
+  ru: блокнот, подушечка, накладка, щиток
+  uk: блокнот, подушечка, накладка, щиток
+  de: Notizblock, Polster, Kissen, Schoner
+  es: bloc de notas, almohadilla, protector, talonario
+  fr: bloc-notes, tampon, coussinet, protège-tibia
+  pl: notatnik, podkładka, ochraniacz, poduszeczka
+  it: blocco per appunti, cuscinetto, tampone, parastinchi
+  tr: bloknot, ped, koruyucu yastık, minder
+  pt: bloco de notas, almofada, protetor, acolchoado
+  ro: carnețel, perniță, căptușeală, apărătoare
+  bg: бележник, подложка, възглавничка, протектор
+  cs: blok, podložka, chránič, polštářek
+  sk: blok, podložka, chránič, vankúšik
+  hu: jegyzettömb, párna, betét, védőpárna
+  el: μπλοκ σημειώσεων, μαξιλαράκι, επένδυση, επίθεμα
+  sl: beležnica, blazinica, ščitnik, podloga
+  et: märkmik, pehmendus, padi, polster
+  lt: bloknotas, pagalvėlė, paminkštinimas, apsauga
+  da: notesblok, pude, polstring, beskytter
+  fi: lehtiö, tyyny, suojus, pehmuste
+  sv: skrivblock, dyna, vaddering, skydd
+  hr: blok za pisanje, jastučić, štitnik, obloga
+  lv: piezīmju blociņš, polsterējums, spilventiņš, aizsargs
+  hi: पैड, गद्दी, नोटपैड, रक्षक गद्दी
+  ar: وسادة واقية، دفتر ملاحظات، بطانة
+  fa: پد، دفترچه یادداشت، بالشتک
+  ur: پیڈ، گدی، کاپی، نوٹ بک
+  id: bantalan, buku catatan, pelindung
+  vi: tập giấy ghi chú, miếng đệm, đệm bảo vệ
+  th: สมุดโน้ต, แผ่นรอง, นวมรองรับ
+  ko: 패드, 메모장, 쿠션
+  ja: メモ帳、当て物、パッド、緩衝材
+  zh: 便签本、垫子、护垫、按压
+  bn: প্যাড, লেখার প্যাড, নরম গদি
+  kk: блокнот, жастықша, қорғаныш төсемі
+
+ID 3264 (tuck):
+  ru: заправлять, подтыкать, прятать, засовывать
+  uk: заправляти, підтикати, ховати, засовувати
+  de: hineinstecken, einstecken, feststecken, unterbringen
+  es: meter, doblar, remeter, arropar
+  fr: rentrer, border, replier, coincer
+  pl: wsunąć, podwinąć, podtknąć, wetknąć
+  it: infiltrare, rimboccare, infilare, ripiegare
+  tr: sokmak, kıvırmak, tıkıştırmak, örtmek
+  pt: enfiar, dobrar, ajeitar, colocar para dentro
+  ro: a băga înăuntru, a împături, a sufleca, a ascunde
+  bg: пъхам, подгъвам, завивам грижливо
+  cs: zastrčit, podkasat, zavinout
+  sk: zastrčiť, podhrnúť, zabaliť
+  hu: betűr, becsomagol, behajt, begyűr
+  el: διπλώνω, μαζεύω, χώνω, βάζω μέσα
+  sl: zatakniti, podvihniti, vtakniti
+  et: sisse toppima, pistma, peitma
+  lt: užkišti, pasikišti, įsikišti
+  da: stoppe ind, stikke ind, folde sammen
+  fi: työntää sisään, kääriä, peitellä
+  sv: sticka in, stoppa om, vika in
+  hr: zataknuti, uvući, podvrnuti
+  lv: iebāzt, aizbāzt, ielocīt
+  hi: अंदर दबाना, मोड़ना, खोंसना
+  ar: يدسّ، يطوي، يدخل بإحكام
+  fa: تو گذاشتن، جمع کردن، تا زدن
+  ur: اندر اڑسنا، اندر موڑنا، ٹھونسنا
+  id: menyelipkan, memasukkan, melipat
+  vi: nhét vào, giắt vào, gấp nếp
+  th: เหน็บ, สอดเข้า, ซุกซ่อน
+  ko: 집어넣다, 밀어 넣다, 개다
+  ja: 押し込む、たくし込む、挟み込む
+  zh: 塞进、掖进、卷起
+  bn: গুঁজে দেওয়া, ভাঁজ করে রাখা, ঢোকানো
+  kk: қыстыру, тығу, бүгу, жасыру
+
+ID 3265 (railroad):
+  ru: железная дорога, железнодорожные пути
+  uk: залізниця, залізнична колія
+  de: Eisenbahn, Bahnstrecke, Bahn
+  es: ferrocarril, vía férrea, tren
+  fr: chemin de fer, voie ferrée
+  pl: kolej, linia kolejowa, żelazna droga
+  it: ferrovia, strada ferrata
+  tr: demiryolu, tren yolu
+  pt: ferrovia, linha férrea, caminho de ferro
+  ro: cale ferată, drum de fier
+  bg: железопътна линия, железница
+  cs: železnice, železniční trať
+  sk: železnica, železničná trať
+  hu: vasút, vasútvonal
+  el: σιδηρόδρομος, σιδηροδρομική γραμμή
+  sl: železnica, železniška proga
+  et: raudtee, raudteeliin
+  lt: geležinkelis, bėgiai
+  da: jernbane, togbane
+  fi: rautatie, junarata
+  sv: järnväg, järnvägsspår
+  hr: željeznica, željeznička pruga
+  lv: dzelzceļš, sliežu ceļš
+  hi: रेलमार्ग, रेलवे, पटरी
+  ar: سكة حديدية، خط حديدي
+  fa: راه‌آهن، خط آهن
+  ur: ریلوے، ریل کی پٹری
+  id: rel kereta api, jalur kereta
+  vi: đường sắt, đường xe lửa
+  th: ทางรถไฟ, รางรถไฟ
+  ko: 철도, 선로
+  ja: 鉄道、線路
+  zh: 铁路、铁道
+  bn: রেলপথ, রেললাইন
+  kk: теміржол, теміржол торабы
+
+ID 3266 (minimize):
+  ru: минимизировать, сводить к минимуму, преуменьшать
+  uk: мінімізувати, зводити до мінімуму, применшувати
+  de: minimieren, auf ein Minimum reduzieren, herabsetzen
+  es: minimizar, reducir al mínimo, restar importancia
+  fr: minimiser, réduire au minimum, atténuer
+  pl: minimalizować, ograniczać do minimum, umniejszać
+  it: minimizzare, ridurre al minimo, sottovalutare
+  tr: en aza indirmek, küçümsemek, asgariye indirmek
+  pt: minimizar, reduzir ao mínimo, desmerecer
+  ro: a minimiza, a reduce la minimum, a diminua
+  bg: свеждам до минимум, минимизирам, омаловажавам
+  cs: minimalizovat, snížit na minimum, zlehčovat
+  sk: minimalizovať, znížiť na minimum, zľahčovať
+  hu: minimalizál, a lehető legkisebbre csökkent, lekicsinyel
+  el: ελαχιστοποιώ, μειώνω στο ελάχιστο, υποτιμώ
+  sl: zmanjšati na minimum, minimalizirati, podcenjevati
+  et: minimeerima, võimalikult vähendama, pisendama
+  lt: sumažinti iki minimumo, sumenkinti, minimalizuoti
+  da: minimere, formindske mest muligt
+  fi: minimoida, vähentää mahdollisimman pieneksi
+  sv: minimera, minska till ett minimum, bagatellisera
+  hr: minimizirati, svesti na najmanju mjeru
+  lv: samazināt līdz minimumam, mazināt, noniecināt
+  hi: न्यूनतम करना, कम से कम करना, घटाना
+  ar: يقلل إلى أدنى حد، يحقر، يقلل من شأن
+  fa: به حداقل رساندن، کمینه کردن، دست‌کم گرفتن
+  ur: کم سے کم کرنا، گھٹانا، ہلکا جاننا
+  id: meminimalkan, memperkecil, menyepelekan
+  vi: giảm thiểu, giảm đến mức tối thiểu
+  th: ลดลงสู่ระดับต่ำสุด, ย่อส่วน, ทำให้เล็กที่สุด
+  ko: 최소화하다, 축소하다, 얕보다
+  ja: 最小限にする、最小化する、過小評価する
+  zh: 尽量减少、缩到最小、贬低
+  bn: সর্বনিম্ন করা, কমিয়ে আনা, তুচ্ছ করা
+  kk: азайту, ең аз шекке жеткізу, кеміту
+
+ID 3267 (amid):
+  ru: среди, посреди, в окружении
+  uk: серед, посеред, під час
+  de: inmitten, mitten in, unter
+  es: en medio de, entre, durante
+  fr: au milieu de, parmi, au milieu
+  pl: pośród, wśród, w trakcie
+  it: in mezzo a, tra, fra
+  tr: arasında, ortasında, esnasında
+  pt: em meio a, no meio de, entre
+  ro: în mijlocul, printre, în toiul
+  bg: посред, сред, в разгара на
+  cs: uprostřed, mezi, za
+  sk: uprostred, medzi, v priebehu
+  hu: közepette, között, kellős közepén
+  el: εν μέσω, ανάμεσα σε, καταμεσής
+  sl: sredi, med, v teku
+  et: keset, hulgas, seas
+  lt: viduryje, tarp, metu
+  da: midt i, blandt, under
+  fi: keskellä, seassa, keskuudessa
+  sv: mitt ibland, mitt i, bland
+  hr: usred, među, uslijed
+  lv: vidū, starp, vidū esošs
+  hi: के बीच में, के मध्य, के दौरान
+  ar: وسط، في خضم، بين
+  fa: در میان، در بحبوحه، در خلال
+  ur: کے درمیان، کے بیچ، دوران
+  id: di tengah-tengah, di antara, sewaktu
+  vi: ở giữa, trong lúc, giữa bối cảnh
+  th: ท่ามกลาง, ระหว่าง, ในช่วงเวลา
+  ko: ~의 한가운데에, ~중에, ~에 둘러싸여
+  ja: ～の真ん中に、～の最中に、～の中で
+  zh: 在……之中、在……气氛中
+  bn: মাঝে, মধ্যস্থলে, চলাকালীন
+  kk: арасында, ортасында, аралықта
+
+ID 3268 (inspection):
+  ru: инспекция, проверка, осмотр
+  uk: інспекція, перевірка, огляд
+  de: Inspektion, Überprüfung, Besichtigung
+  es: inspección, revisión, control
+  fr: inspection, contrôle, examen
+  pl: inspekcja, kontrola, przegląd
+  it: ispezione, controllo, perquisizione
+  tr: denetleme, muayene, teftiş
+  pt: inspeção, vistoria, fiscalização
+  ro: inspecție, verificare, control
+  bg: инспекция, проверка, ревизия
+  cs: inspekce, prohlídka, kontrola
+  sk: inšpekcia, prehliadka, revízia
+  hu: ellenőrzés, szemle, felülvizsgálat
+  el: επιθεώρηση, έλεγχος, αυτοψία
+  sl: inšpekcija, pregled, nadzor
+  et: ülevaatus, kontroll, inspektsioon
+  lt: patikrinimas, inspekcija, apžiūra
+  da: inspektion, eftersyn, syn
+  fi: tarkastus, katselmus, syyni
+  sv: inspektion, besiktning, granskning
+  hr: inspekcija, pregled, nadzor
+  lv: pārbaude, inspekcija, apskate
+  hi: निरीक्षण, मुआयना, जांच
+  ar: تفتيش، معاينة، فحص
+  fa: بازرسی، وارسی، معاینه
+  ur: معائنہ، پڑتال، تفتیش
+  id: inspeksi, pemeriksaan, peninjauan
+  vi: sự thanh tra, kiểm tra, duyệt xét
+  th: การตรวจสอบ, การตรวจตรา, การตรวจค้น
+  ko: 점검, 사찰, 검사
+  ja: 点検、検査、視察
+  zh: 检查、视察、审视
+  bn: পরিদর্শন, পর্যবেক্ষণ, খুঁটিয়ে দেখা
+  kk: тексеру, инспекция, байқау
+
+ID 3269 (nonsense):
+  ru: ерунда, бессмыслица, чушь
+  uk: нісенітниця, дурниця, безглуздя
+  de: Unsinn, Quatsch, Blödsinn
+  es: tontería, disparate, sinsentido
+  fr: absurdité, bêtise, non-sens
+  pl: nonsens, bzdura, brednie
+  it: sciocchezza, assurdità, fesseria
+  tr: saçmalık, abes, palavra
+  pt: besteira, absurdo, bobagem
+  ro: prostie, aberație, nonsens
+  bg: глупости, безсмислица, небивалица
+  cs: nesmysl, hloupost, žvást
+  sk: nezmysel, hlúposť, táraniny
+  hu: képtelenség, badarság, ostobaság
+  el: ανοησία, ασυναρτησία, μπούρδα
+  sl: neumnost, nesmisel, traparija
+  et: lollus, mõttetus, jama
+  lt: nesąmonė, niekai, paistalai
+  da: sludder, vrøvl, nonsens
+  fi: hölynpöly, järjettömyys, pöty
+  sv: nonsens, struntprat, dumheter
+  hr: besmislica, glupost, koješta
+  lv: muļķības, nieki, bezjēdzība
+  hi: बकवास, निरर्थक बात, बेहूदगी
+  ar: هراء، سخافة، كلام فارغ
+  fa: مزخرف، چرند، یاوه‌گویی
+  ur: بکواس، لغو بات، بے ہودگی
+  id: omong kosong, bualan, nonsens
+  vi: chuyện vô lý, nhảm nhí, điều vô nghĩa
+  th: เรื่องไร้สาระ, สิ่งเหลวไหล, ความโง่เขลา
+  ko: 헛소리, 터무니없는 말, 난센스
+  ja: ナンセンス、ばかげたこと、くだらない話
+  zh: 胡说、废话、无意义的话
+  bn: অর্থহীন কথা, বাজে কথা, অর্থহীনতা
+  kk: сандырақ, былжырақ, бос сөз
+
+ID 3270 (leap):
+  ru: прыжок, скачок; прыгать, скакать
+  uk: стрибок, скачок; стрибати, скакати
+  de: Sprung, Satz; springen, hüpfen
+  es: salto, brinco; saltar, brincar
+  fr: bond, saut; bondir, sauter
+  pl: skok, sus; skakać, przeskakiwać
+  it: balzo, salto; saltare, balzare
+  tr: sıçrama, atlama; sıçramak, atlamak
+  pt: salto, pulo; saltar, pular
+  ro: săritură, salt; a sări, a sălta
+  bg: скок, подскачане; скачам, подскачам
+  cs: skok, přeskok; skákat, přeskakovat
+  sk: skok, poskok; skákať, skočiť
+  hu: ugrás, szökellés; ugrik, szökken
+  el: άλμα, πήδημα; πηδώ, αναπηδώ
+  sl: skok, poskok; skočiti, poskočiti
+  et: hüpe, kargus; hüppama, sööstma
+  lt: šuolis, pašokimas; šokti, peršokti
+  da: spring, hop; springe, hoppe
+  fi: loikka, hyppy; loikata, hypätä
+  sv: språng, hopp; hoppa, ta ett språng
+  hr: skok, skakutanje; skočiti, preskočiti
+  lv: lēciens, šāviens; lēkt, pārvarēt
+  hi: छलांग, कूद; छलांग लगाना
+  ar: قفزة، طفرة؛ يقفز، يطفر
+  fa: جهش، پرش؛ جهیدن، پریدن
+  ur: چھلانگ، اچھل؛ چھلانگ لگانا
+  id: lompatan, loncatan; melompat
+  vi: bước nhảy, cú nhảy; nhảy vọt
+  th: การก้าวกระโดด; กระโดด, โผนทะยาน
+  ko: 도약, 뜀; 뛰어오르다, 도약하다
+  ja: 跳躍、飛躍; 跳ぶ、飛び跳ねる
+  zh: 跳跃、飞跃; 跳过
+  bn: লাফ, উল্লম্ফন; লাফানো
+  kk: секіру, қарғу; секіріп өту
+
+ID 3271 (rider):
+  ru: всадник, наездник, пассажир, райдер
+  uk: вершник, наїзник, пасажир, райдер
+  de: Reiter, Mitfahrer, Beifahrer, Zusatzklausel
+  es: jinete, pasajero, ciclista, cláusula adicional
+  fr: cavalier, motard, passager, clause additionnelle
+  pl: jeździec, rowerzysta, pasażer, aneks
+  it: cavaliere, passeggero, motociclista, clausola accessoria
+  tr: binici, sürücü, yolcu, ek madde
+  pt: cavaleiro, condutor, passageiro, cláusula anexa
+  ro: călăreț, pasager, motociclist, anexă contractuală
+  bg: ездач, колоездач, пътник, клауза
+  cs: jezdec, pasažér, dodatek smlouvy
+  sk: jazdec, cestujúci, zmluvný dodatok
+  hu: lovas, utas, záradék
+  el: αναβάτης, καβαλάρης, επιβάτης, πρόσθετος όρος
+  sl: jezdec, kolesar, potnik, dodatek k pogodbi
+  et: ratsanik, sõitja, lisaklausel
+  lt: raitelis, keleivis, papildoma sąlyga
+  da: rytter, passager, tillægsklausul
+  fi: ratsastaja, matkustaja, lisälauseke
+  sv: ryttare, förare, passagerare, tilläggsparagraf
+  hr: jahač, vozač, putnik, aneks
+  lv: jātnieks, braucējs, papildnoteikums
+  hi: सवार, घुड़सवार, यात्री, अनुबंध की धारा
+  ar: راكب، خيال، بند إضافي
+  fa: سوار، سوارکار، مسافر، ماده الحاقی
+  ur: سوار، گھڑ سوار، معاہدے کی شق
+  id: penunggang, pengendara, penumpang, pasal tambahan
+  vi: người cưỡi, hành khách, điều khoản bổ sung
+  th: ผู้ขี่, ผู้ขับขี่, ผู้โดยสาร, ข้อกำหนดเพิ่มเติม
+  ko: 기수, 승객, 탑승자, 특약 조항
+  ja: 乗り手、乗客、追条項
+  zh: 骑手、乘车人、附加条款
+  bn: আরোহী, সওয়ার, ঘোড়সওয়ার, অতিরিক্ত শর্ত
+  kk: шабандоз, жолаушы, жүргізуші, келісімшарт қосымшасы
+
+ID 3272 (theology):
+  ru: богословие, теология
+  uk: богослов'я, теологія
+  de: Theologie, Gotteslehre
+  es: teología, divinidad
+  fr: théologie
+  pl: teologia, teozofia
+  it: teologia
+  tr: teoloji, ilahiyat
+  pt: teologia
+  ro: teologie
+  bg: теология, богословие
+  cs: teologie, bohosloví
+  sk: teológia, bohoslovie
+  hu: teológia, hittudomány
+  el: θεολογία
+  sl: teologija, bogoslovje
+  et: teoloogia, usuteadus
+  lt: teologija, dievaslovystė
+  da: teologi, gudelære
+  fi: teologia, jumaluusoppi
+  sv: teologi, gudslära
+  hr: teologija, bogoslovlje
+  lv: teoloģija, dievvārdi
+  hi: धर्मशास्त्र, ब्रह्मविद्या, ईशमीमांसा
+  ar: علم اللاهوت، الإلهيات
+  fa: الهیات، دین‌پژوهی، کلام
+  ur: علم الہیات، دینیات
+  id: teologi, ilmu ketuhanan
+  vi: thần học
+  th: เทววิทยา, ศาสนศาสตร์
+  ko: 신학, 종교학
+  ja: 神学、宗教学
+  zh: 神学、宗教哲学
+  bn: ধর্মতত্ত্ব, ঈশ্বরতত্ত্ব
+  kk: теология, құдайтану
+
+ID 3273 (terrific):
+  ru: потрясающий, великолепный, прекрасный
+  uk: приголомшливий, чудовий, прекрасний
+  de: großartig, fantastisch, fabelhaft
+  es: magnífico, estupendo, sensacional
+  fr: formidable, sensationnel, épatant
+  pl: cudowny, niesamowity, kapitalny
+  it: magnifico, favoloso, straordinario
+  tr: muhteşem, harika, müthiş
+  pt: sensacional, fantástico, maravilhoso
+  ro: grozav, formidabil, uimitor
+  bg: страхотен, великолепен, чудесен
+  cs: úžasný, ohromný, báječný
+  sk: úžasný, ohromný, skvelý
+  hu: nagyszerű, remek, fantasztikus
+  el: καταπληκτικός, εξαιρετικός, φοβερός
+  sl: čudovit, izjemen, sijajen
+  et: suurepärane, vapustav, äge
+  lt: nuostabus, puikus, nepaprastas
+  da: fantastisk, herlig, formidabel
+  fi: mahtava, upea, upeaääninen
+  sv: fantastisk, fenomenal, härlig
+  hr: fantastičan, sjajan, izvanredan
+  lv: lielisks, satriecošs, brīnišķīgs
+  hi: शानदार, लाजवाब, कमाल का
+  ar: رائع، مذهل، باهر
+  fa: فوق‌العاده، عالی، محشر
+  ur: شاندار، لاجواب، زبردست
+  id: hebat, luar biasa, menakjubkan
+  vi: tuyệt vời, xuất sắc, kỳ diệu
+  th: ยอดเยี่ยม, เจ๋งมาก, มหัศจรรย์
+  ko: 아주 멋진, 훌륭한, 대단한
+  ja: すばらしい、ものすごい、最高の
+  zh: 极好的、了不起的、棒极了
+  bn: দারুণ, চমৎকার, অসাধারণ
+  kk: керемет, ғажап, тамаша
+
+ID 3274 (liar):
+  ru: лжец, обманщик, врун
+  uk: брехун, брехач, ошуканець
+  de: Lügner, Schwindler
+  es: mentiroso, embustero
+  fr: menteur, affabulateur
+  pl: kłamca, łgarz
+  it: bugiardo, mentitore
+  tr: yalancı, düzenbaz
+  pt: mentiroso, embusteiro
+  ro: mincinos, înșelător
+  bg: лъжец, превзетник
+  cs: lhář, podvodník
+  sk: klamár, luhár
+  hu: hazug, csaló
+  el: ψεύτης, απατεώνας
+  sl: lažnivec, lažnik
+  et: valetaja, petis
+  lt: melagis, apgavikas
+  da: løgner, bedrager
+  fi: valehtelija, huijari
+  sv: lögnare, bedragare
+  hr: lažac, lažov
+  lv: melis, krāpnieks
+  hi: झूठा, कपटी
+  ar: كاذب، دجال
+  fa: دروغگو، کذاب
+  ur: جھوٹا، کذاب
+  id: pembohong, pendusta
+  vi: kẻ nói dối, người lừa lọc
+  th: คนโกหก, คนหลอกลวง
+  ko: 거짓말쟁이, 사기꾼
+  ja: うそつき、ほら吹き
+  zh: 骗子、说谎者
+  bn: মিথ্যাবাদী, প্রতারক
+  kk: өтірікші, жалғаншы
+
+ID 3275 (oversee):
+  ru: курировать, надзирать, контролировать
+  uk: курирувати, наглядати, керувати
+  de: beaufsichtigen, überwachen, leiten
+  es: supervisar, coordinar, vigilar
+  fr: superviser, surveiller, chapeauter
+  pl: nadzorować, doglądać, kierować
+  it: sovrintendere, supervisionare, sorvegliare
+  tr: denetlemek, gözetmek, yönetmek
+  pt: supervisionar, fiscalizar, gerenciar
+  ro: a supraveghea, a monitoriza, a coordona
+  bg: контролирам, надзиравам, ръководя
+  cs: dohlížet, dozorovat, řídit
+  sk: dozerať, usmerňovať, dohliadať
+  hu: felügyel, ellenőriz, irányít
+  el: επιβλέπω, εποπτεύω, επιτηρώ
+  sl: nadzorovati, voditi, bdeti nad
+  et: valvama, juhendama, kontrollima
+  lt: prižiūrėti, vadovauti, kontroliuoti
+  da: overvåge, føre tilsyn med, lede
+  fi: valvoa, johtaa, pitää silmällä
+  sv: övervaka, leda, ha uppsikt över
+  hr: nadzirati, upravljati, nadgledati
+  lv: uzraudzīt, pārraudzīt, vadīt
+  hi: निगरानी करना, देखरेख करना, अधीक्षण करना
+  ar: يشرف على، يتولى رقابة، يدير
+  fa: نظارت کردن، سرپرستی کردن، پاییدن
+  ur: نگرانی کرنا، دیکھ بھال کرنا، سرپرستی کرنا
+  id: mengawasi, menyelia, memantau
+  vi: giám sát, quản lý, coi sóc
+  th: ควบคุมดูแล, สอดส่อง, กำกับงาน
+  ko: 감독하다, 감시하다, 총괄하다
+  ja: 監督する、統括する、見届ける
+  zh: 监督、管理、视察
+  bn: তদারকি করা, দেখাশোনা করা, পরিচালনা করা
+  kk: қадағалау, бақылау, басқару
+
+ID 3276 (awkward):
+  ru: неловкий, неуклюжий, стеснительный
+  uk: незграбний, незручний, недоладний
+  de: unbeholfen, peinlich, ungeschickt
+  es: torpe, incómodo, embarazoso
+  fr: maladroit, gênant, embarrassant
+  pl: niezręczny, niezdarny, kłopotliwy
+  it: goffo, imbarazzante, maldestro
+  tr: sakar, beceriksiz, garip
+  pt: desajeitado, embaraçoso, constrangedor
+  ro: stângaci, jenant, stânjenitor
+  bg: неловък, непохватен, сконфузен
+  cs: trapný, neobratný, nemotorný
+  sk: trápny, neobratný, neohrabaný
+  hu: kínos, esetlen, ügyetlen
+  el: αδέξιος, αμήχανος, δύσκολος
+  sl: neroden, neprijeten, zadregast
+  et: kohmakas, kohmetu, piinlik
+  lt: nerangus, nepatogus, varžantis
+  da: akavet, klodset, pinlig
+  fi: kömpelö, kiusallinen, vaivautunut
+  sv: obekväm, klumpig, pinsam
+  hr: nezgrapan, neugodan, nespretan
+  lv: neveikls, neērts, mulsinošs
+  hi: अटपटा, भद्दा, असहज
+  ar: محرج، أخرق، شائك
+  fa: ناجور، معذب، دست‌وپاچلفتی
+  ur: بھدا، نامناسب، کھٹکنے والا
+  id: canggung, kikuk, risih
+  vi: ngượng ngùng, vụng về, lúng túng
+  th: เคอะเขิน, อึดอัด, ซุ่มซ่าม
+  ko: 어색한, 서투른, 난처한
+  ja: 気まずい、不器用な、扱いにくい
+  zh: 尴尬的、笨拙的、别扭的
+  bn: অপ্রস্তুত, বেমানান, আনাড়ি
+  kk: ыңғайсыз, ебедейсіз, оғаш
+
+ID 3277 (registration):
+  ru: регистрация, учет, запись
+  uk: реєстрація, облік, оформлення
+  de: Registrierung, Anmeldung, Eintragung
+  es: registro, inscripción, matrícula
+  fr: inscription, enregistrement, immatriculation
+  pl: rejestracja, zapis, zameldowanie
+  it: registrazione, iscrizione, immatricolazione
+  tr: kayıt, tescil, yazılma
+  pt: registro, inscrição, matrícula
+  ro: înregistrare, înscriere, înmatriculare
+  bg: регистрация, вписване, записване
+  cs: registrace, zápis, zaevidování
+  sk: registrácia, zápis, prihlásenie
+  hu: regisztráció, bejegyzés, beiratkozás
+  el: εγγραφή, καταχώριση, δήλωση
+  sl: registracija, vpis, prijava
+  et: registreerimine, registreering, kandmine
+  lt: registracija, įregistravimas, užsirašymas
+  da: registrering, tilmelding, indskrivning
+  fi: rekisteröinti, ilmoittautuminen, kirjaus
+  sv: registrering, inskrivning, anmälan
+  hr: registracija, upis, prijava
+  lv: reģistrācija, reģistrēšana, ieraksts
+  hi: पंजीकरण, दाखिला, नाम-दर्ज
+  ar: تسجيل، تقييد، تدوين
+  fa: ثبت‌نام، ثبت، نگارش
+  ur: اندراج، رجسٹریشن، نام نویسی
+  id: registrasi, pendaftaran, pencatatan
+  vi: sự đăng ký, ghi danh
+  th: การลงทะเบียน, การจดทะเบียน
+  ko: 등록, 접수, 기재
+  ja: 登録、記名、登記
+  zh: 注册、登记、挂号
+  bn: নিবন্ধন, রেজিস্ট্রি, তালিকাভুক্তি
+  kk: тіркеу, есепке алу, жазылу
+
+ID 3278 (suburban):
+  ru: пригородный, загородный, дачный
+  uk: приміський, околичний, затишний
+  de: vorstädtisch, Vorort-, Außenbezirks-
+  es: suburbano, de las afueras, residencial
+  fr: de banlieue, périurbain, suburbain
+  pl: podmiejski, peryferyjny
+  it: suburbano, periferico, di periferia
+  tr: banliyö, varoş, kent dışı
+  pt: suburbano, de periferia, de subúrbio
+  ro: suburban, de suburbie, periferic
+  bg: предграден, покрайнинен, крайградски
+  cs: předměstský, příměstský
+  sk: predmestský, prímestský
+  hu: külvárosi, elővárosi
+  el: προαστιακός, των προαστίων
+  sl: primestni, predmestni
+  et: eeslinna-, äärelinna-
+  lt: priemiestinis, pakraščio
+  da: forstads-, forstadsagtig
+  fi: esikaupunki-, lähiö-
+  sv: förorts-, förortsboende
+  hr: prigradski, predgrađanski
+  lv: piepilsētas, priekšpilsētas
+  hi: उपनगरीय, नगर-उपांत का
+  ar: خاص بالضواحي، ضاحوي
+  fa: حومه‌ای، مربوط به حومه شهر
+  ur: مضافاتی، مضافات کا
+  id: pinggiran kota, kawasan suburban
+  vi: vùng ngoại ô, ngoại thành
+  th: แถบชานเมือง, รอบนอกเมือง
+  ko: 교외의, 도시 근교의
+  ja: 郊外の、近郊の
+  zh: 郊区的、市郊的
+  bn: উপশহরীয়, শহরতলীর
+  kk: қала маңындағы, қала сыртындағы
+
+ID 3279 (momentum):
+  ru: импульс, инерция, движущая сила, разгон
+  uk: імпульс, інерція, рушійна сила, розгін
+  de: Impuls, Schwung, Eigendynamik, Antrieb
+  es: impulso, ímpetu, inercia, momento lineal
+  fr: élan, dynamique, impulsion, quantité de mouvement
+  pl: pęd, dynamika, rozpęd, pędnik
+  it: slancio, inerzia, impulso, momento
+  tr: ivme, momentum, hız gücü, itici güç
+  pt: ímpeto, embalo, impulso, momento linear
+  ro: avânt, elan, impuls, viteză de mișcare
+  bg: инерция, импулс, устрем, движеща сила
+  cs: hybnost, spád, setrvačnost, rozmach
+  sk: hybnosť, spád, zotrvačnosť, rozmach
+  hu: lendület, iram, mozgatóerő, impulzus
+  el: ορμή, ώθηση, φόρα, κινητήρια δύναμη
+  sl: zagon, gibalna količina, zalet
+  et: hoog, impulss, liikumapanev jõud
+  lt: pagreitis, inercija, judesio kiekis
+  da: momentum, fremdrift, fart
+  fi: liike-energia, vauhti, liikevoima
+  sv: drivkraft, rörelsemängd, fart, momentum
+  hr: zamah, inercija, zalet, pogonska sila
+  lv: inerce, temps, impulss, gaitas spēks
+  hi: गति, संवेग, रफ़्तार का बल
+  ar: زخم، قوة دافعة، اندفاع
+  fa: تکانه، سرعت، نیروی محرک
+  ur: رفتار، رفتار میں تسلسل، جنبش
+  id: momentum, dorongan, daya laju
+  vi: đà, đà tiến triển, xung lượng
+  th: แรงส่ง, ความเฉื่อย, กำลังเคลื่อนที่
+  ko: 탄력, 가속도, 운동량, 추진력
+  ja: 勢い、推進力、運動量
+  zh: 势头、动力、冲力
+  bn: ভরবেগ, গতিশক্তি, ত্বরণ
+  kk: серпін, екпін, қозғалыс күші
+
+ID 3280 (instantly):
+  ru: мгновенно, немедленно, вмиг
+  uk: миттєво, негайно, враз
+  de: sofort, augenblicklich, blitzschnell
+  es: al instante, inmediatamente, al momento
+  fr: instantanément, sur-le-champ, tout de suite
+  pl: natychmiast, błyskawicznie, w mgnieniu oka
+  it: all'istante, istantaneamente, subito
+  tr: anında, derhal, hemen
+  pt: instantaneamente, de imediato, no ato
+  ro: instantaneu, imediat, pe loc
+  bg: мигновено, незабавно, начаса
+  cs: okamžitě, v mžiku, ihned
+  sk: okamžite, bleskovo, ihneď
+  hu: azonnal, tüstént, pillanatok alatt
+  el: αμέσως, ακαριαία, στη στιγμή
+  sl: takoj, v trenutku, hipoma
+  et: silmapilkselt, viivitamatult, otsekohe
+  lt: akimirksniu, tuojau pat, bematant
+  da: øjeblikkeligt, straks, prompte
+  fi: heti, silmänräpäyksessä, välittömästi
+  sv: omedelbart, på ögonblicket, genast
+  hr: smjesta, u trenu, istog časa
+  lv: acumirklī, nekavējoties, tūlīt
+  hi: तुरंत, झटपट, उसी क्षण
+  ar: فوراً، للحال، في رمشة عين
+  fa: فوراً، در یک لحظه، بی‌درنگ
+  ur: فوراً، پل بھر میں، اسی وقت
+  id: seketika, langsung, saat itu juga
+  vi: ngay lập tức, tức thì
+  th: ทันทีทันใด, ในพริบตา
+  ko: 즉각, 눈 깜짝할 사이에, 곧바로
+  ja: 瞬時に、即座に、たちまち
+  zh: 立即、刹那间、即刻
+  bn: তৎক্ষণাৎ, পলকের মধ্যে, সাথে সাথে
+  kk: лезде, бірден, көзді ашып-жұмғанша
+
+ID 3281 (clerk):
+  ru: клерк, служащий, конторщик, продавец
+  uk: клерк, службовець, секретар, продавець
+  de: Büroangestellter, Sachbearbeiter, Verkäufer, Urkundsbeamter
+  es: oficinista, empleado, dependiente
+  fr: employé de bureau, commis, vendeur, greffier
+  pl: urzędnik, pracownik biurowy, kasjer, sprzedawca
+  it: impiegato, commesso, cancelliere
+  tr: büro memuru, tezgâhtar, yazman
+  pt: funcionário de escritório, balconista, atendente, escrivão
+  ro: funcționar, impiegat, vânzător, arhivar
+  bg: чиновник, чиновник в кантора, продавач
+  cs: úředník, kancelářský pracovník, prodavač
+  sk: úradník, zamestnanec, predavač
+  hu: hivatalnok, irodai alkalmazott, segéd
+  el: υπάλληλος γραφείου, γραμματέας, ταμίας
+  sl: uradnik, pisarniški delavec, prodajalec
+  et: ametnik, kantseleitöötaja, müüja
+  lt: raštinės darbuotojas, tarnautojas, pardavėjas
+  da: kontorfunktionær, ekspedient, fuldmægtig
+  fi: toimistotyöntekijä, myyjä, kirjanpitäjä
+  sv: kontorist, expedit, tjänsteman
+  hr: činovnik, uredski službenik, referent
+  lv: ierēdnis, kancelejas darbinieks, pārdevējs
+  hi: मुंशी, लिपिक, बाबू, क्लर्क
+  ar: موظف كتابي، كاتب حسابات، مستخدم
+  fa: کارمند دفتری، متصدی، بایگان
+  ur: کلرک، محرر، منشی
+  id: juru tulis, pegawai kantor, staf administrasi
+  vi: nhân viên văn phòng, nhân viên bán hàng
+  th: เสมียน, เจ้าหน้าที่ธุรการ, พนักงานประจำร้าน
+  ko: 사무원, 점원, 서기
+  ja: 事務員、店員、書記
+  zh: 职员、店员、办事员
+  bn: কেরানি, হিসাবরক্ষক, বিক্রয়কর্মী
+  kk: кеңсе қызметкері, тіркеуші, сатушы
+
+ID 3282 (chin):
+  ru: подбородок
+  uk: підборіддя
+  de: Kinn
+  es: barbilla, mentón
+  fr: menton
+  pl: broda, podbródek
+  it: mento
+  tr: çene
+  pt: queixo, mento
+  ro: bărbie
+  bg: брадичка
+  cs: brada
+  sk: brada
+  hu: áll
+  el: πηγούνι, σαγόνι
+  sl: brada
+  et: lõug
+  lt: smakras
+  da: hage
+  fi: leuka
+  sv: haka
+  hr: brada, podbradak
+  lv: zods
+  hi: ठुड्डी, ठोड़ी
+  ar: ذقن
+  fa: چانه
+  ur: ٹھوڑی
+  id: dagu
+  vi: cằm
+  th: คาง
+  ko: 턱
+  ja: あご
+  zh: 下巴、下颌
+  bn: চিবুক, থুতনি
+  kk: иек
+
+ID 3283 (laser):
+  ru: лазер, лазерный луч
+  uk: лазер, лазерний промінь
+  de: Laser, Laserstrahl
+  es: láser, rayo láser
+  fr: laser, rayon laser
+  pl: laser, promień lasera
+  it: laser, raggio laser
+  tr: lazer, lazer ışını
+  pt: laser, raio laser
+  ro: laser, rază laser
+  bg: лазер, лазерен лъч
+  cs: laser, laserový paprsek
+  sk: laser, laserový lúč
+  hu: lézer, lézersugár
+  el: λέιζερ, ακτίνα λέιζερ
+  sl: laser, laserski žarek
+  et: laser, laserikiir
+  lt: lazeris, lazerio spindulys
+  da: laser, laserstråle
+  fi: laser, lasersäde
+  sv: laser, laserstråle
+  hr: laser, laserska zraka
+  lv: lāzers, lāzera stars
+  hi: लेज़र, लेज़र किरण
+  ar: ليزر، شعاع ليزري
+  fa: لیزر، پرتو لیزر
+  ur: لیزر، لیزر شعاع
+  id: laser, sinar laser
+  vi: la-de, tia laser
+  th: เลเซอร์, แสงเลเซอร์
+  ko: 레이저, 레이저 광선
+  ja: レーザー、レーザー光
+  zh: 激光、激光束
+  bn: লেজার, লেজার রশ্মি
+  kk: лазер, лазер сәулесі
+
+ID 3284 (proposition):
+  ru: предложение, тезис, суждение
+  uk: пропозиція, теза, твердження
+  de: Vorschlag, Behauptung, Proposition, Lehrsatz
+  es: proposición, propuesta, planteamiento
+  fr: proposition, énoncé, thèse
+  pl: propozycja, twierdzenie, teza
+  it: proposta, proposizione, asserzione
+  tr: önerme, teklif, sav
+  pt: proposição, proposta, tese
+  ro: propunere, propoziție, aserțiune
+  bg: предложение, твърдение, теза
+  cs: návrh, výrok, tvrzení
+  sk: návrh, tvrdenie, propozícia
+  hu: állítás, javaslat, tétel
+  el: πρόταση, ισχυρισμός, υπόθεση
+  sl: predlog, trditev, postavka
+  et: ettepanek, väide, lause
+  lt: pasiūlymas, teiginys, prielaida
+  da: forslag, påstand, præmis
+  fi: väite, ehdotus, otaksuma
+  sv: förslag, påstående, tes
+  hr: prijedlog, tvrdnja, stavka
+  lv: priekšlikums, tēze, apgalvojums
+  hi: प्रस्ताव, प्रमेय, प्रतिज्ञप्ति
+  ar: اقتراح، قضية منطقية، دعوى
+  fa: قضیه، گزاره، پیشنهاد
+  ur: تجویز، مفروضہ، قضیہ
+  id: proposisi, tawaran, dalil
+  vi: mệnh đề, lời đề nghị, kiến nghị
+  th: ญัตติ, ข้อเสนอ, ประพจน์
+  ko: 제안, 명제, 제의
+  ja: 提案、命題、主張
+  zh: 提议、主张、命题
+  bn: প্রস্তাব, প্রতিজ্ঞা, বিবৃতি
+  kk: ұсыныс, тұжырым, сөйлем
+
+ID 3285 (rob):
+  ru: грабить, обворовывать, лишать
+  uk: грабувати, обкрадати, позбавляти
+  de: berauben, ausrauben, bestehlen
+  es: robar, atracar, despojar
+  fr: voler, dévaliser, dépouiller
+  pl: rabować, obrabowywać, ograbiać
+  it: rapinare, derubare, svaligiare
+  tr: soymak, gasp etmek, yağmalamak
+  pt: roubar, assaltar, despojar
+  ro: a jefui, a prăda, a deposeda
+  bg: обирам, ограбвам, лишавам
+  cs: loupit, vykrást, okrádat
+  sk: lúpiť, vykrádať, okrádať
+  hu: rabol, kifoszt, meglop
+  el: ληστεύω, απογυμνώνω, κλέβω
+  sl: ropati, oropati, izropati
+  et: röövima, rüüstama, paljaks varastama
+  lt: plėšti, apiplėšti, apvogti
+  da: røve, udplyndre, bestjæle
+  fi: ryöstää, viedä väkivalloin
+  sv: råna, bestjäla, plundra
+  hr: pljačkati, orobiti, harati
+  lv: laupīt, aplaupīt, apzagt
+  hi: लूटना, डकैती डालना, छीनना
+  ar: ينهب، يسلب، يسرق
+  fa: سرقت کردن، دزدیدن، چپاول کردن
+  ur: لوٹنا، ڈاکہ ڈالنا، چھیننا
+  id: merampok, menjarah, mencuri
+  vi: cướp đoạt, cướp giật, trộm cắp
+  th: ปล้น, ชิงทรัพย์, แย่งชิง
+  ko: 강탈하다, 약탈하다, 털다
+  ja: 強盗する、奪う、強奪する
+  zh: 抢劫、强夺、剥夺
+  bn: ডাকাতি করা, লুঠ করা, কেড়ে নেওয়া
+  kk: тонау, басып алу, тартып алу
+
+ID 3286 (beam):
+  ru: балка, брус, луч, сияние
+  uk: балка, брус, промінь, сяйво
+  de: Balken, Träger, Strahl, Strahlenbündel
+  es: viga, vigueta, rayo, haz de luz
+  fr: poutre, madrier, faisceau, rayon
+  pl: belka, dźwigar, promień, snop światła
+  it: trave, sbarra, raggio, fascio
+  tr: kiriş, kalas, ışın, hüzme
+  pt: viga, trave, feixe de luz, raio
+  ro: grindă, bârnă, rază, fascicul
+  bg: греда, трегер, лъч, сноп светлина
+  cs: trám, traverza, paprsek, svazek
+  sk: trám, traverza, lúč, zväzok svetla
+  hu: gerenda, tartógerenda, sugár, fénysugár
+  el: δοκός, δοκάρι, ακτίνα, δέσμη φωτός
+  sl: tram, nosilec, žarek, snop
+  et: tala, palk, kiir, valgusvihk
+  lt: sija, skersinis, spindulys, pluoštas
+  da: bjælke, drager, stråle, lyskegle
+  fi: palkki, kannatin, säde, valokiila
+  sv: balk, bjälke, stråle, ljusstråle
+  hr: greda, nosač, zraka, snop svjetla
+  lv: sija, brusa, stars, gaismas kūlis
+  hi: शहतीर, बल्ली, किरण, प्रकाश-पुंज
+  ar: عارضة، جسر، شعاع، حزمة ضوئية
+  fa: تیرآهن، دیرک، پرتو، دسته شعاع
+  ur: شہتیر، بالابند، شعاع، کرن
+  id: balok penyangga, tiang, berkas cahaya, sinar
+  vi: dầm, xà ngang, chùm sáng, tia sáng
+  th: คานรับน้ำหนัก, เสาขื่อ, ลำแสง, ลำรังสี
+  ko: 대들보, 기둥, 광선, 빛줄기
+  ja: 梁、桁、光線、ビーム
+  zh: 梁、横梁、光束、射线
+  bn: কড়ি, বরগা, রশ্মি, আলোকচ্ছটা
+  kk: арқалық, бөрене, сәуле шоғы
+
+ID 3287 (ancestor):
+  ru: предок, прародитель
+  uk: предок, пращур, прабатько
+  de: Vorfahr, Ahne, Vorfahre
+  es: antepasado, ancestro, progenitor
+  fr: ancêtre, aïeul, ascendant
+  pl: przodek, protoplasta
+  it: antenato, avo, progenitore
+  tr: ata, cet, ecdat
+  pt: ancestral, antepassado, ascendente
+  ro: strămoș, înaintaș, ascendant
+  bg: предшественик, прародител, праотец
+  cs: předek, prapředek
+  sk: predok, praotec
+  hu: ős, előd, felmenő
+  el: πρόγονος, προπάτορας
+  sl: prednik, praoče
+  et: eellane, esivanem
+  lt: protėvis, prosenelis
+  da: forfader, ane
+  fi: esi-isä, esi-vanhempi
+  sv: förfader, förfaderlig, anmoder
+  hr: predak, predšasnik
+  lv: sencis, priekštecis
+  hi: पूर्वज, पुरखा, पितर
+  ar: سلف، جد أعلى، أصل
+  fa: نیاکان، جد، پیشینیان
+  ur: آبا و اجداد، بزرگ، اسلاف
+  id: leluhur, nenek moyang
+  vi: tổ tiên, tiền nhân
+  th: บรรพบุรุษ, ต้นตระกูล
+  ko: 조상, 선조
+  ja: 先祖、祖先
+  zh: 祖先、祖宗、先辈
+  bn: পূর্বপুরুষ, আদিপুরুষ
+  kk: ата-баба, арғы тегі
+
+ID 3288 (verse):
+  ru: стих, строфа, поэзия, куплет
+  uk: вірш, строфа, поезія, куплет
+  de: Vers, Strophe, Dichtung, Reim
+  es: verso, estrofa, poesía, copla
+  fr: vers, strophe, poésie, verset
+  pl: wiersz, zwrotka, strofa, wers
+  it: verso, strofa, versetto, poesia
+  tr: dize, mısra, kıta, şiir parçası
+  pt: verso, estrofe, versículo, poesia
+  ro: vers, strofă, verset, poezie
+  bg: стих, строфа, куплет
+  cs: verš, sloka, strofa
+  sk: verš, sloha, strofa
+  hu: vers, verssor, strófa, versszak
+  el: στίχος, στροφή, ποίημα, εδάφιο
+  sl: verz, kitica, pesniška vrstica
+  et: värss, salm, poeesia
+  lt: eilutė, posmelis, eiliuotas kūrinys
+  da: vers, strofe, digtlinje
+  fi: säe, säkeistö, runo
+  sv: vers, strof, rim
+  hr: stih, strofa, kitica
+  lv: vārsma, dzejolis, rinda, pantiņš
+  hi: पद्य, श्लोक, पद, छंद
+  ar: بيت شعري، نظم، آية
+  fa: بیت شعر، بند، قطعه، شعر
+  ur: شعر، مصرع، بیت، آیت
+  id: bait, ayat, sajak
+  vi: câu thơ, đoạn thơ, bài thơ
+  th: บทกวี, วรรคทอง, โคลงกลอน
+  ko: 운문, 시의 구절, 절
+  ja: 韻文、詩節、詩句、節
+  zh: 诗句、诗节、韵文
+  bn: শ্লোক, পংক্তি, স্তবক, কবিতা
+  kk: өлең жолы, шумақ, аят
+
+ID 3289 (casual):
+  ru: повседневный, неформальный, непринужденный, случайный
+  uk: повсякденний, неформальний, невимушений, випадковий
+  de: lässig, zwanglos, ungezwungen, leger
+  es: informal, desenfadado, casual, relajado
+  fr: décontracté, informel, négligé, occasionnel
+  pl: swobodny, nieformalny, luźny, codzienny
+  it: casuale, informale, disinvolto, rilassato
+  tr: rahat, gündelik, serbest, gayriresmi
+  pt: casual, descontraído, informal, espontâneo
+  ro: lejer, informal, degajat, ocazional
+  bg: неофициален, небрежен, свободен, непринуден
+  cs: ležérní, neformální, uvolněný, náhodný
+  sk: ležérny, neformálny, uvoľnený, náhodný
+  hu: hétköznapi, laza, fesztelen, alkalmi
+  el: καθημερινός, ανεπίσημος, χαλαρός, πρόχειρος
+  sl: sproščen, vsakdanji, neformalen, priložnosten
+  et: vaba, igapäevane, sundimatu, juhuslik
+  lt: kasdienis, laisvas, neformalus, nerūpestingas
+  da: afslappet, uformel, henkastet
+  fi: arkinen, rento, vapaamuotoinen, satunnainen
+  sv: avslappnad, vardaglig, otvungen, ledig
+  hr: ležeran, neformalan, opušten, svakodnevan
+  lv: ikdienišķs, nepiespiests, neformāls, nejaušs
+  hi: अनौपचारिक, बेतकल्लुफ, सहज, आकस्मिक
+  ar: غير رسمي، عفوي، مريح، غير متكلف
+  fa: غیررسمی، راحت، بی‌خیال، سرسری
+  ur: غیر رسمی، عامیانہ، بے تکلف
+  id: santai, kasual, tidak resmi
+  vi: bình thường, giản dị, tự nhiên, ngẫu nhiên
+  th: สบายๆ, ลำลอง, ไม่เป็นทางการ
+  ko: 캐주얼한, 편안한, 격식을 차리지 않는
+  ja: カジュアルな、気取らない、略式の
+  zh: 便装的、随意的、非正式的
+  bn: অনানুষ্ঠানিক, সাধারণ, সহজ-সরল
+  kk: күнделікті, бейресми, еркін, жайбарақат
+
+ID 3290 (objection):
+  ru: возражение, протест, несогласие
+  uk: заперечення, протест, незгода
+  de: Einwand, Einspruch, Widerspruch
+  es: objeción, reparo, protesta
+  fr: objection, contestation, opposition
+  pl: sprzeciw, zastrzeżenie, protest
+  it: obiezione, eccezione, contestazione
+  tr: itiraz, karşı çıkış, muhalefet
+  pt: objeção, ressalva, impugnação
+  ro: obiecție, dezaprobare, protest
+  bg: възражение, протест, несъгласие
+  cs: námitka, protest, nesouhlas
+  sk: námietka, protest, nesúhlas
+  hu: ellenvetés, kifogás, tiltakozás
+  el: ένσταση, αντίρρηση, διαφωνία
+  sl: ugovor, pripomba, pomislek
+  et: vastuväide, vastuseis, protest
+  lt: prieštaravimas, priekaištas, protestas
+  da: indsigelse, indvending, protest
+  fi: vastalause, vastaväite, muistutus
+  sv: invändning, protest, gensaga
+  hr: prigovor, zamjerka, protivljenje
+  lv: iebildums, pretstats, protests
+  hi: आपत्ति, विरोध, ऐतराज
+  ar: اعتراض، معارضة، مأخذ
+  fa: اعتراض، ایراد، مخالفت
+  ur: اعتراض، انگشت نمائی، ناپسندیدگی
+  id: keberatan, sanggahan, protes
+  vi: sự phản đối, kháng nghị, chê trách
+  th: การคัดค้าน, การท้วงติง, ข้อขัดแย้ง
+  ko: 이의, 반대, 불복
+  ja: 異議、反対、抗議
+  zh: 反对、异议、抗辩
+  bn: আপত্তি, দ্বিমত, প্রতিবাদ
+  kk: қарсылық, наразылық, келіспеушілік
+
+ID 3291 (shove):
+  ru: толкать, пихать, совать; толчок
+  uk: штовхати, пхати, совати; поштовх
+  de: schubsen, stoßen, drängeln; Stoß
+  es: empujar, empellón, empujar bruscamente
+  fr: pousser, bousculer, fourrer; bousculade
+  pl: pchnąć, popychać, szturchać; pchnięcie
+  it: spintonare, spingere, cacciare; spintone
+  tr: itmek, kakalamak, dürtmek; itiş
+  pt: empurrar, empurrar com força, enfiar; encontrão
+  ro: a împinge, a îmbrânci, a băga; îmbrâncitură
+  bg: блъскам, тикам, мушкам; тласък
+  cs: strčit, postrčit, vrazit; strčení
+  sk: sotiť, postrčiť, vstrčiť; sotenie
+  hu: lök, taszít, taszigál; lökés
+  el: σπρώχνω, χώνω, απωθώ; σπρώξιμο
+  sl: suniti, riniti, potisniti; sunek
+  et: tõukama, lükkama, toppima; tõuge
+  lt: pastumti, grūsti, kišti; stumtelinėjimas
+  da: skubbe, puffe, maste; skub
+  fi: tönäistä, töniä, puskea; tönäisy
+  sv: knuffa, puffa, skuffa; knuff
+  hr: gurnuti, gurati, tutnuti; guranje
+  lv: pagrūst, grūst, iestumt; grūdiens
+  hi: धक्का देना, ठेलना, धकेलना
+  ar: يدفع بقوة، يزج، يدس؛ دفعة عنيفة
+  fa: هل دادن، تنه زدن، چپاندن
+  ur: دھکا دینا، دھکیلنا، جھٹکا دینا
+  id: mendorong, menyenggol, menyodok
+  vi: xô đẩy, chen lấn, đẩy mạnh
+  th: ผลัก, ดันอย่างแรง, กระแทก
+  ko: 세게 밀다, 떠밀다, 밀치다
+  ja: 乱暴に押す、押しやる、突く
+  zh: 猛推、推挤、硬塞
+  bn: ধাক্কা মারা, ঠেলা দেওয়া, গুঁজে দেওয়া
+  kk: түрту, итеру, күшпен итеру
+
+ID 3292 (carbohydrate):
+  ru: углевод
+  uk: вуглевод
+  de: Kohlenhydrat
+  es: carbohidrato, glúcido
+  fr: glucide, hydrate de carbone
+  pl: węglowodan, cukier
+  it: carboidrato, glucide
+  tr: karbonhidrat
+  pt: carboidrato, hidrato de carbono
+  ro: carbohidrat, glucidă
+  bg: въглехидрат
+  cs: sacharid, uhlovodan
+  sk: sacharid, uhľohydrát
+  hu: szénhidrát
+  el: υδατάνθρακας
+  sl: ogljikov hidrat, saharid
+  et: süsivesik
+  lt: angliavandenis
+  da: kulhydrat
+  fi: hiilihydraatti
+  sv: kolhydrat
+  hr: ugljikohidrat
+  lv: ogļhidrāts
+  hi: कार्बोहाइड्रेट, शर्करा
+  ar: كربوهيدرات، هيدرات الكربون
+  fa: کربوهیدرات، قند
+  ur: کاربوہائیڈریٹ، نشاستہ
+  id: karbohidrat
+  vi: cacbohydrat, chất bột đường
+  th: คาร์โบไฮเดรต
+  ko: 탄수화물
+  ja: 炭水化物、糖質
+  zh: 碳水化合物、糖类
+  bn: শর্করা, কার্বোহাইড্রেট
+  kk: көмірсу
+
+ID 3293 (steam):
+  ru: пар, водяной пар; варить на пару
+  uk: пара, водяна пара; готувати на парі
+  de: Dampf, Wasserdampf; dämpfen
+  es: vapor, vapor de agua; cocinar al vapor
+  fr: vapeur, buée; cuire à la vapeur
+  pl: para, opary; gotować na parze
+  it: vapore, esalazione; cuocere a vapore
+  tr: buhar, buğu; buharda pişirmek
+  pt: vapor; cozinhar a vapor, fumegar
+  ro: abur; a găti la abur, a se aburi
+  bg: пара; готвя на пара, изпарявам се
+  cs: pára; vařit v páře, odpařovat
+  sk: para; variť v pare, dymiť
+  hu: gőz, pára; párol, gőzöl
+  el: ατμός, αχνός; μαγειρεύω στον ατμό
+  sl: para; kuhati na pari, sopariti
+  et: aur; aurutama, auruma
+  lt: garas, garai; virti garuose
+  da: damp; dampe, koge ved damp
+  fi: höyry; höyryttää, höyrytä
+  sv: ånga, vattenånga; ångkoka
+  hr: para; kuhati na pari, dimiti se
+  lv: tvaiks; tvaicēt, tvaikot
+  hi: भाप, वाष्प; भाप में पकाना
+  ar: بخار، بخار الماء؛ يطهو بالبخار
+  fa: بخار، بخار آب؛ بخارپز کردن
+  ur: بھاپ، بخارات؛ بھاپ سے پکانا
+  id: uap, uap air; mengukus
+  vi: hơi nước; hấp, nấu bằng hơi nước
+  th: ไอน้ำ; นึ่ง, หุงต้มด้วยไอน้ำ
+  ko: 증기, 김; 찌다
+  ja: 蒸気、湯気; 蒸す
+  zh: 蒸汽、水汽; 蒸煮
+  bn: বাষ্প, বাষ্পীভবন; ভাপে রান্না করা
+  kk: бу, су буы; буға пісіру
+
+ID 3294 (reportedly):
+  ru: как сообщается, по сообщениям, по слухам
+  uk: як повідомляється, за повідомленнями, за чутками
+  de: Berichten zufolge, wie verlautet, angeblich
+  es: según informes, según se dice, al parecer
+  fr: selon certaines sources, d'après les rapports, apparemment
+  pl: jak donoszą, rzekomo, według doniesień
+  it: secondo quanto riferito, a quanto si dice, presumibilmente
+  tr: bildirildiğine göre, rivayete göre, söylendiğine göre
+  pt: segundo relatos, de acordo com notícias, supostamente
+  ro: conform relatărilor, după cum se spune, potrivit zvonurilor
+  bg: както се съобщава, според съобщенията, по слухове
+  cs: podle zpráv, jak se uvádí, údajně
+  sk: podľa správ, ako sa uvádza, údajne
+  hu: jelentések szerint, állítólag, hírek szerint
+  el: σύμφωνα με αναφορές, όπως αναφέρεται, φέρεται ότι
+  sl: po poročilih, menda, kot se poroča
+  et: teadete kohaselt, väidetavalt, nagu teatatud
+  lt: pasak pranešimų, kaip pranešama, tariamai
+  da: forlydender efter, efter sigende, angiveligt
+  fi: raporttien mukaan, kerrotun mukaan, tiettävästi
+  sv: enligt uppgift, förljudes, påstås det
+  hr: prema izvješćima, navodno, kako se javlja
+  lv: saskaņā ar ziņām, kā ziņo, it kā
+  hi: कथित तौर पर, खबरों के अनुसार, जैसा कि बताया गया है
+  ar: وفقاً للتقارير، كما أُفيد، حسبما ورد
+  fa: بنا به گزارش‌ها، طبق گفته‌ها، ظاهراً
+  ur: اطلاعات کے مطابق، جیسا کہ بتایا گیا ہے، مبینہ طور پر
+  id: dilaporkan, konon, menurut kabar
+  vi: theo báo cáo, được cho là, tương truyền
+  th: ตามที่มีรายงาน, มีข่าวว่า, ว่ากันว่า
+  ko: 보도에 따르면, 전하는 바에 의하면, 소문에 의하면
+  ja: 報道によれば、伝えられるところでは
+  zh: 据报道、据说、传闻
+  bn: খবরে প্রকাশ, যা শোনা যায়, কথিত মতে
+  kk: хабарларға қарағанда, мәлімет бойынша, айтуларынша
+
+ID 3295 (forehead):
+  ru: лоб, чело
+  uk: лоб, чоло
+  de: Stirn
+  es: frente
+  fr: front
+  pl: czoło
+  it: fronte
+  tr: alın
+  pt: testa, fronte
+  ro: frunte
+  bg: чело, челна част
+  cs: čelo
+  sk: čelo
+  hu: homlok
+  el: μέτωπο
+  sl: čelo
+  et: otsmik, laup
+  lt: kakta
+  da: pande
+  fi: otsa
+  sv: panna
+  hr: čelo
+  lv: piere
+  hi: माथा, ललाट, पेशानी
+  ar: جبهة، جبين
+  fa: پیشانی، جبین
+  ur: ماتھا، پیشانی
+  id: dahi, kening
+  vi: trán
+  th: หน้าผาก
+  ko: 이마
+  ja: 額、おでこ
+  zh: 前额、额头
+  bn: কপাল, ললাট
+  kk: маңдай, шеке
+
+ID 3296 (resume):
+  ru: возобновлять, продолжать; резюме
+  uk: відновлювати, продовжувати; резюме
+  de: fortsetzen, wieder aufnehmen; Lebenslauf, Zusammenfassung
+  es: reanudar, continuar; currículum, resumen
+  fr: reprendre, recommencer; CV, résumé
+  pl: wznawiać, podejmować na nowo; życiorys, CV
+  it: riprendere, ricominciare; curriculum vitae, sintesi
+  tr: yeniden başlamak, devam ettirmek; özgeçmiş
+  pt: retomar, recomeçar; currículo, resumo
+  ro: a relua, a reîncepe; rezumat, curriculum vitae
+  bg: подновявам, възобновявам; автобиография, резюме
+  cs: obnovit, pokračovat; životopis, shrnutí
+  sk: obnoviť, pokračovať; životopis, zhrnutie
+  hu: folytat, újrakezd; önéletrajz, összefoglalás
+  el: συνεχίζω, ξαναρχίζω; βιογραφικό σημείωμα, περίληψη
+  sl: nadaljevati, obnoviti; življenjepis, povzetek
+  et: jätkama, uuesti alustama; elulookirjeldus, kokkuvõte
+  lt: atnaujinti, tęsti; gyvenimo aprašymas, reziumė
+  da: genoptage, fortsætte; curriculum vitae, resumé
+  fi: jatkaa, aloittaa uudelleen; ansioluettelo, tiivistelmä
+  sv: återuppta, fortsätta; meritförteckning, sammanfattning
+  hr: nastaviti, ponovno započeti; životopis, sažetak
+  lv: atsākt, turpināt; dzīvesgājums, kopsavilkums
+  hi: फिर से शुरू करना, आगे बढ़ाना; बायोडाटा, संक्षिप्त विवरण
+  ar: يستأنف، يواصل؛ سيرة ذاتية، ملخص
+  fa: از سر گرفتن، ادامه دادن؛ رزومه، چکیده
+  ur: دوبارہ شروع کرنا، جاری رکھنا؛ سی وی، خلاصہ
+  id: melanjutkan, memulai lagi; riwayat hidup, resume
+  vi: tiếp tục lại, bắt đầu lại; bản tóm tắt, sơ yếu lý lịch
+  th: เริ่มต้นใหม่, ดำเนินต่อไป; ประวัติย่อ, สรุปความ
+  ko: 재개하다, 다시 시작하다; 이력서, 요약
+  ja: 再開する、やり直す; 履歴書、要約
+  zh: 重新开始、恢复; 简历、概要
+  bn: পুনরায় শুরু করা; জীবনবৃত্তান্ত, সংক্ষিপ্ত বিবরণ
+  kk: қайта жалғастыру, қайта бастау; түйіндеме, қысқаша мазмұн
+
+ID 3297 (interior):
+  ru: интерьер, внутренность; внутренний
+  uk: інтер'єр, внутрішня частина; внутрішній
+  de: Innenraum, Inneres; innenliegend, innerlich
+  es: interior, parte interna; interno, doméstico
+  fr: intérieur, dedans; intérieur, interne
+  pl: wnętrze, środek; wewnętrzny
+  it: interno, interno di edificio; interiore
+  tr: iç kısım, iç mekân; dâhilî, iç
+  pt: interior, parte interna; interno, interiorano
+  ro: interior, spațiu interior; intern, dinăuntru
+  bg: вътрешност, интериор; вътрешен
+  cs: vnitřek, interiér; vnitřní
+  sk: vnútro, interiér; vnútorný
+  hu: belső rész, beltér; belső
+  el: εσωτερικό, ενδοχώρα; εσωτερικός
+  sl: notranjost, interier; notranji
+  et: siseosa, interjöör; sisemine
+  lt: vidus, interjeras; vidinis
+  da: interiør, indre; indvendig, intern
+  fi: sisusta, sisätila; sisäinen, sisä-
+  sv: interiör, det inre; invändig, inre
+  hr: unutrašnjost, interijer; unutarnji
+  lv: iekšiene, interjers; iekšējs
+  hi: आंतरिक भाग, भीतरी हिस्सा; आंतरिक
+  ar: داخل، جوف، داخلية؛ داخلي
+  fa: فضای داخلی، باطن؛ درون‌شهری، داخلی
+  ur: اندرونی حصہ، باطن؛ اندرونی
+  id: bagian dalam, interior; internal
+  vi: bên trong, phần nội thất; nội bộ
+  th: ภายใน, ส่วนใน; ภายในประเทศ
+  ko: 내부, 실내; 안의, 내륙의
+  ja: 内部、室内、インテリア; 内側の
+  zh: 内部、室内; 内部的、国内的
+  bn: অভ্যন্তরীণ ভাগ, ভেতর; অন্তস্থ, অভ্যন্তরীণ
+  kk: ішкі бөлік, ішкі жақ; ішкі
+
+ID 3298 (full-time):
+  ru: полный рабочий день, на полную ставку, штатный
+  uk: повний робочий день, повна зайнятість, на повну ставку
+  de: Vollzeit, vollzeitlich, Vollzeit-
+  es: a tiempo completo, de jornada completa, de tiempo completo
+  fr: à temps plein, plein temps, à plein temps
+  pl: pełnoetatowy, na pełny etat
+  it: a tempo pieno, a orario continuato
+  tr: tam zamanlı, tam gün, tam mesai
+  pt: período integral, em tempo integral, de tempo integral
+  ro: cu normă întreagă, cu program complet
+  bg: пълен работен ден, на пълно работно време
+  cs: na plný úvazek, plnoúvazkový
+  sk: na plný úväzok, plnoúväzkový
+  hu: teljes munkaidős, főállású
+  el: πλήρους απασχόλησης, ολικής απασχόλησης
+  sl: polni delovni čas, zaposlen za polni delovni čas
+  et: täistööajaga, täiskoormusega
+  lt: visą darbo dieną, pilnu etatu
+  da: fuldtids, på fuld tid
+  fi: kokoaikainen, päätoiminen
+  sv: heltid, på heltid
+  hr: puno radno vrijeme, na puno radno vrijeme
+  lv: pilna laika, pilnu darba dienu
+  hi: पूर्णकालिक, पूरे समय का, पूरे दिन का
+  ar: بدوام كامل، متفرغ تماماً
+  fa: تمام‌وقت، با وقت کامل
+  ur: کل وقتی، پورے وقت کا
+  id: penuh waktu, purnawaktu
+  vi: toàn thời gian, trọn thời gian
+  th: เต็มเวลา, เต็มเวลาทำงาน
+  ko: 전일제의, 풀타임의, 종일의
+  ja: フルタイムの、常勤の、全日制の
+  zh: 全职的、全日的
+  bn: পূর্ণকালীন, সার্বক্ষণিক
+  kk: толық жұмыс күні, толық мөлшерлемелі
+
+ID 3299 (questionnaire):
+  ru: анкета, опросный лист, вопросник
+  uk: анкета, опитувальник, опитний лист
+  de: Fragebogen, Umfragebogen
+  es: cuestionario, encuesta, formulario de preguntas
+  fr: questionnaire, formulaire d'enquête
+  pl: kwestionariusz, ankieta
+  it: questionario, modulo di inchiesta
+  tr: anket, soru kâğıdı, anket formu
+  pt: questionário, formulário de pesquisa
+  ro: chestionar, formular de întrebări
+  bg: въпросник, анкета, формуляр
+  cs: dotazník, anketní lístek
+  sk: dotazník, anketový formulár
+  hu: kérdőív, anketív
+  el: ερωτηματολόγιο, φυλλάδιο ερωτήσεων
+  sl: vprašalnik, anketa
+  et: küsimustik, ankeet
+  lt: klausimynas, anketa
+  da: spørgeskema, rundspørge
+  fi: kyselylomake, kysely
+  sv: frågeformulär, enkät
+  hr: upitnik, anketni listić
+  lv: anketa, jautājumu lapa
+  hi: प्रश्नावली, प्रश्नमाला
+  ar: استبيان، استمارة أسئلة
+  fa: پرسش‌نامه، سیاهه سؤالات
+  ur: سوالنامہ، پرسش نامہ
+  id: kuesioner, angket
+  vi: phiếu câu hỏi, bảng câu hỏi
+  th: แบบสอบถาม, ชุดคำถาม
+  ko: 설문지, 질문지
+  ja: アンケート、質問票
+  zh: 调查问卷、问卷
+  bn: প্রশ্নাবলী, প্রশ্নমালা
+  kk: сауалнама, сауалдама парағы
+
+ID 3300 (behalf):
+  ru: от имени, ради, в интересах
+  uk: від імені, заради, в інтересах
+  de: im Namen von, im Auftrag von, zugunsten
+  es: en nombre de, de parte de, por cuenta de
+  fr: au nom de, de la part de, pour le compte de
+  pl: w imieniu, na rzecz, z ramienia
+  it: a nome di, per conto di, nell'interesse di
+  tr: adına, namına, menfaatine
+  pt: em nome de, da parte de, em prol de
+  ro: în numele, din partea, în beneficiul
+  bg: от името на, в полза на
+  cs: jménem, v zájmu, ve prospěch
+  sk: v mene, v záujme, v prospech
+  hu: nevében, érdekében, képviseletében
+  el: εκ μέρους, για λογαριασμό, εκπρόσωπος
+  sl: v imenu, v korist, v dobro
+  et: nimel, huvides, eest
+  lt: vardu, kieno nors vardu, naudai
+  da: på vegne af, til fordel for
+  fi: puolesta, nimissä, edun nimissä
+  sv: på uppdrag av, för någons räkning, till förmån för
+  hr: u ime, u korist, za račun
+  lv: vārdā, labā, interesēs
+  hi: की ओर से, के निमित्त, के हित में
+  ar: بالنيابة عن، لصالح، باسم
+  fa: از طرف، به نمایندگی از، به سود
+  ur: کی جانب سے، کی خاطر، کی طرف سے
+  id: atas nama, demi kepentingan, mewakili
+  vi: thay mặt, nhân danh, vì lợi ích của
+  th: ในนามของ, เพื่อประโยชน์ของ, ในส่วนของ
+  ko: ~을 대신하여, ~의 이익을 위해
+  ja: ～のために、～を代表して、～に代わって
+  zh: 代表、为了……的利益
+  bn: পক্ষে, তরফে, স্বার্থে
+  kk: атынан, мүддесі үшін, пайдасына
+
+ID 3301 (graph):
+  ru: график, диаграмма, граф
+  uk: графік, діаграма, граф
+  de: Diagramm, Graph, Schaubild, Kurvenbild
+  es: gráfica, gráfico, diagrama
+  fr: graphique, diagramme, graphe
+  pl: wykres, diagram, graf
+  it: grafico, diagramma, grafo
+  tr: grafik, çizge, diyagram
+  pt: gráfico, diagrama, grafo
+  ro: grafic, diagramă, graf
+  bg: графика, диаграма, граф
+  cs: graf, diagram
+  sk: graf, diagram
+  hu: grafikon, diagram, gráf
+  el: γράφημα, διάγραμμα, γράφος
+  sl: grafikon, diagram, graf
+  et: graafik, diagramm, graaf
+  lt: grafikas, diagrama, grafas
+  da: graf, kurve, diagram
+  fi: kuvaaja, graafi, kaavio
+  sv: diagram, graf, kurva
+  hr: grafikon, dijagram, graf
+  lv: grafiks, diagramma, grafs
+  hi: ग्राफ़, आलेख, रेखाचित्र
+  ar: رسم بياني، مخطط، مبيان
+  fa: نمودار، گراف، خط‌نگار
+  ur: گراف، ترسیم، خاکہ
+  id: grafik, diagram, graf
+  vi: đồ thị, biểu đồ, sơ đồ quan hệ
+  th: กราฟ, แผนภูมิ, แผนภาพเส้น
+  ko: 그래프, 도표, 도식
+  ja: グラフ、図表、線図
+  zh: 图表、坐标图、图论中的图
+  bn: লেখচিত্র, গ্রাফ, নকশা
+  kk: график, сызба, диаграмма

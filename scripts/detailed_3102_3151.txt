@@ -1,0 +1,79 @@
+Batch 3102-3151 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+1. Word 3114 (liability): Massive MT bug where Russian prompt "пассив в балансе" was translated literally word-for-word into Hindi as "संतुलन में देयता" (literally liability in balance), Kazakh as "тепе-теңдіктегі жауапкершілік" (balance of responsibility), Japanese as "責任の均衡" (equilibrium of responsibility), Korean as "균형 잡힌 책임" (balanced responsibility)! Completely missing general legal and financial liability, obligations, and the figurative sense of disadvantage/burden ("a liability to the team"). Calibrated across all 35 locales.
+2. Word 3149 (immune): Part-of-speech error across the board! Dump had the noun "иммунитет" / "imunidade" / "immunité" / "Immunität" / "immunità" / "प्रतिरक्षा". Calibrated across all locales to genuine adjective forms ("иммунный, невосприимчивый, защищенный, освобожденный"; "inmune, exento"; "imune, imunizado"; "immunisé, exempt"; "immun, resistent"; "immunis, védett"; "مُحَصَّن، مَنِيع، معفى").
+3. Word 3109 (horn): Bizarre MT hallucination in German ("Horn, Umhang, Megafon, Hupe"), French ("corne, cap, porte-voix, klaxon"), and Arabic ("قرن، رأس، بوق، منبّه") where Russian "мыс" (cape/headland) was mistakenly mistranslated into "Umhang" (cloak/cape in clothing!) in German and "porte-voix / megáfono" in others. Calibrated to animal horn, musical wind instrument (corno/trompa/cor/Blasinstrument), and vehicle horn/klaxon.
+4. Word 3139 (sneak): Catastrophic translation error in Italian ("rubare" = to steal!). Also Korean had adverb only ("몰래" = secretly) and dump lacked the noun "ябеда / soplón / mouchard / kapuś / petzer". Calibrated to "muoversi furtivamente, sgattaiolare, intrufolarsi; spia", "красться, прокрадываться, ускользать; ябеда", and corresponding verbs/nouns in all 35 languages.
+5. Word 3148 (seal): Severe omissions and wrong definitions in dump: Italian had "sigillare, riempimento" (riempimento = filling/padding!), completely omitting the marine animal "foca" and noun stamp "sigillo"! German had "Robbe, Siegel" without verb "versiegeln, abdichten". Japanese had only "印章" (stamp), omitting "アザラシ" (seal animal) and "密閉する". Korean had only "인장" without "물개/바다표범" and "밀봉하다". Kazakh had only "мөр" without "итбалық". Hindi had only "मुहर" without "सील मछली". Fully calibrated across all 35 languages to cover the aquatic mammal, legal/official stamp, sealing gasket/watertight seal, and sealing action.
+6. Word 3146 (outlet): Narrow single-sense dump bug: Italian had only capitalized "Uscita" (exit), French had only "sortie", Kazakh had only "шығу". Completely missed electrical power outlet / wall socket ("розетка", "Steckdose", "enchufe", "prise de courant", "tomada", "priz", "контакт"), retail factory outlet / discount store, and emotional vent ("выход эмоциям", "afløb for følelser", "debușeu"). Calibrated across all 35 locales.
+7. Word 3144 (supervisor): Dump had Kazakh "көшбасшы" (political leader / pioneer), Japanese "指導者" (leader / ideological director), and Korean "지도자" (leader). Calibrated to workplace supervisor, team lead, inspector, or academic tutor ("руководитель, куратор, начальник смены, инспектор", "Vorgesetzter, Leiter, Betreuer", "supervisore, responsabile, caposquadra", "қадағалаушы, жетекші, инспектор").
+8. Word 3142 (hers): Kazakh dump had "оны" (accusative "him/her/it"), which is grammatically wrong for possessive pronoun "hers"! Fixed to Kazakh "оныкі, оның меншігі". In German, "ihre" (possessive determiner) was expanded to absolute possessive "ihres, ihrige (gehört ihr)". In French, dump had bulky plural list; clarified to "le sien, la sienne, à elle". In Spanish: "suyo, de ella, suya".
+9. Word 3102 (custody): Dump lacked the detention/police custody dimension in several languages (e.g. German "Pflege", Italian "cura", Kazakh "қамқорлық"). Calibrated to cover both legal parental custody/guardianship ("опека, попечение", "Sorgerecht, Vormundschaft", "tutela, guarda") and arrest/remand ("содержание под стражей, арест", "Gewahrsam, Haft", "detención, arresto", "garde à vue", "қамауда ұстау").
+10. Word 3103 (compromise): Expanded beyond mutual concession noun to include both verbal actions: reaching agreement ("идти на компромисс", "faire un compromis", "transigir") AND risking/jeopardizing security or integrity ("подвергать риску, компрометировать", "gefährden", "compromettre", "poner en riesgo").
+11. Word 3104 (trash): Expanded from simple noun garbage to verbal destruction and slang condemnation ("мусор, отбросы, хлам; выбрасывать, громить", "destrozar", "bousiller", "zerlegen").
+12. Word 3107 (assemble): Dump had simple "sammeln" in German and "raccogliere" in Italian, missing technical manufacturing assembly ("montieren, zusammenbauen", "assemblare, montare").
+13. Word 3111 (grip): Dump lacked noun senses: physical handle/grip, mechanical traction, and psychological hold, as well as captivating interest. Calibrated across all 35 locales.
+14. Word 3115 (crawl): Added sports style (freestyle swimming / crawl stroke: "кроль", "crol", "Kraulschwimmen") and slow movement/drudgery alongside physical crawling on hands and knees.
+15. Word 3118 (fluid): Dump only had narrow "жидкость в физике". Expanded to fluid adjectives (flowing, graceful, adaptable, volatile situation) and fluid noun.
+16. Word 3121 (anchor): Expanded beyond nautical anchor to broadcasting news anchor ("телеведущий", "Nachrichtensprecher", "presentador de noticias", "anchorman") and verbal anchoring.
+17. Word 3125 (mill): Dump only had grain mill ("мельница"). Added industrial plant/manufacturing mill (steel mill, paper mill, textile mill: "комбинат, фабрика, завод", "Walzwerk, Fabrik", "usina, fábrica", "huta") and machining verb (to mill: "фрезеровать", "fräsen", "fresar").
+18. Word 3126 (retrieve): Dump had crude "забрать". Expanded to data retrieval, recovery, and fetching ("извлекать, доставать, возвращать себе, восстанавливать", "abrufen, wiedergewinnen", "récupérer, extraire", "recuperar, rescatar").
+19. Word 3129 (offering): Expanded beyond religious sacrificial offering ("подношение, жертва") to commercial product offering and service packages ("предложение товаров/услуг", "termékkínálat", "offerta di prodotti").
+20. Word 3130 (oral): Added oral examination / spoken communication sense ("устный", "mündlich", "verbal") alongside anatomical/medical mouth cavity sense ("ротовой", "bucal", "Mund-").
+21. Word 3131 (bounce): Expanded noun and verb: bouncing off a surface, resilience/springiness, and returning undelivered email messages.
+22. Word 3134 (punch): Handled polysemy: fist strike ("удар кулаком"), hole puncher ("дырокол, перфоратор"), and fruit punch beverage ("пунш").
+23. Word 3135 (burst): Handled rupture/explosion ("лопаться, взрываться"), sudden outburst ("вспышка, порыв"), and rapid weapon volley ("очередь выстрелов", "rafale", "Feuerstoß").
+24. Word 3137 (landing): Handled dual senses: aviation/nautical arrival ("посадка, приземление, высадка") and staircase landing ("лестничная площадка", "Treppenabsatz", "palier d'escalier", "rellano de escalera", "pianerottolo").
+25. Word 3151 (identical): Broadened to exact match, cloned, and identical twins context ("идентичный, одинаковый, тождественный, точь-в-точь такой же", "deckungsgleich", "enægget / egypetéjű", "일란성의").
+26. Audited regional nuances:
+    - Brazilian Portuguese (pt / pt-BR): verified colloquial terms (e.g. "quicar" for bounce, "tomada" / "loja de fábrica" for outlet, "pouso" for landing, "soco" for punch, "passivo" for liability, "engatinhar" for crawl).
+    - Latin American / Mexican Spanish (es / es-MX): verified natural terminology ("desván/zaguán/pasillo", "tienda de descuento/outlet", "puñetazo", "gatear", "aterrizaje", "suyo/de ella").
+    - Natural grammar and idiomatic flow verified in Indic (hi, bn), Perso-Arabic (ar, fa, ur), Turkic (tr, kk), and East Asian languages (ja, zh, ko, vi, th).
+
+====================================================
+Sample Calibrated Entries:
+====================================================
+
+ID 3109 (horn):
+  ru: рог, рожок (муз.), гудок, клаксон
+  de: Horn, Blasinstrument, Hupe, Signalhorn
+  es: cuerno, asta, trompa (mús.), bocina, claxon
+  fr: corne (animale), cor (mus.), klaxon, avertisseur
+  pt: chifre, trompa (mús.), buzina (veículo)
+  ar: قرن (حيوان)، بوق، منبّه سيارة
+  kk: мүйіз, керней (муз.), көлік сигналы
+
+ID 3114 (liability):
+  ru: ответственность, обязательство, пассив (бухг.), обуза
+  de: Haftung, Verbindlichkeit, Passiva, Belastung
+  es: responsabilidad legal, obligación, pasivo financiero, desventaja
+  pt: responsabilidade legal, obrigação, passivo (fin.), desvantagem
+  hi: कानूनी दायित्व, देनदारी, कर्ज़, बोझ
+  ja: 法的責任、負債、債務、重荷
+  kk: заңды жауапкершілік, міндеттеме, қарыз, ауыртпалық
+
+ID 3139 (sneak):
+  ru: красться, прокрадываться, ускользать; ябеда
+  it: muoversi furtivamente, sgattaiolare, intrufolarsi; spia
+  es: escabullirse, colarse, moverse a hurtadillas; soplón
+  fr: se faufiler, se glisser furtivement, chaparder; mouchard
+  ko: 몰래 가다, 살금살금 걷다; 고자질쟁이
+  kk: жасырынып жүру, ұрланып өту; жағымпаз
+
+ID 3148 (seal):
+  ru: тюлень; печать, пломба; запечатывать, герметизировать
+  de: Robbe, Seehund; Siegel, Dichtung; versiegeln, abdichten
+  it: foca (animale); sigillo, guarnizione; sigillare, ermetizzare
+  es: foca (animal); sello, precinto; sellar, hermetizar
+  ja: アザラシ；印章、封印、パッキン；密封する、封印する
+  kk: итбалық; мөр, тығыздағыш; мөр басу, герметикалау
+
+ID 3149 (immune):
+  ru: иммунный, невосприимчивый, защищенный, освобожденный (от налога/наказания)
+  de: immun, resistent, geschützt, gefeit
+  es: inmune, exento, protegido, resistente
+  fr: immunisé, immunitaire, invulnérable, exempt
+  ar: مُحَصَّن، مَنِيع، ذو مناعة، معفى
+  kk: иммундық, төзімді, қорғалған, босатылған

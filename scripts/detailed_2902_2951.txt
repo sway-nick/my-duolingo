@@ -1,0 +1,1893 @@
+Batch 2902-2951 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+1. Word 2902 (promotion): CATASTROPHIC DUMP BUG CAUGHT! "promotion" was conflated with the verb "increase/raise" (fr: "augmenter", ro: "crește", hi: "वृद्धि करना", vi: "tăng lên", ko: "증가시키다", ja: "増加させる"). Fixed to noun: professional advancement ("повышение, продвижение по службе, Beförderung, ascenso, avancement") and marketing promotion ("промоакция, Verkaufsförderung, promoción").
+2. Word 2904 (ownership): CATASTROPHIC PART-OF-SPEECH BUG! Dump translated "ownership" as the adjective "own" across 12+ European languages (fr: propre, it: Proprio, ro: propriu, bg: собствен, cs: vlastní, sk: vlastný, hu: saját, el: ίδιος, sl: lastno, et: oma, lt: nuosavas). Calibrated to noun: property ownership/possession/title ("собственность, право собственности, владение; propriété, Eigentum, propiedad, vlastnictví").
+3. Word 2905 (officially): Part-of-speech correction: dump had adjectives or nouns (da: officiel, fi: virallinen, sv: officiell, hr: službenik [official/officer!], lv: oficiāls, hi: आधिकारिक, ar: رسمي, ko: 공무원 [civil servant!], ja: 公式の). Calibrated to accurate adverb ("официально, формально, officially, offiziell, oficialmente, officiellement, offiziāli, 공식적으로, 公式に").
+4. Word 2906 (tag): Polysemy calibrated: noun (label, price tag, metadata marker, game of tag) and verb (attach a label, mark, tag someone in social media).
+5. Word 2907 (stem): CATASTROPHIC BOTANICAL BLUNDER! Dump translated "stem" as "ROOT" ("корень", fr: racine, it: radice, pt: raiz, ro: rădăcină, bg: корен, sk: koreň, hu: gyökér, el: ρίζα, sl: koren, et: juur, lt: šaknis, da: rod, fi: juuri, sv: rot, hr: korijen, lv: sakne, hi: जड़, ar: جذر, id: akar, vi: gốc rễ, th: ราก, ko: 뿌리, ja: 根, kk: тамыр) across 23 languages! Calibrated to stem/stalk/trunk/linguistic base/originate from ("стебель, ствол, основа, происходить от; Stängel/Stamm, tige/tronc, tallo/tronco, caule/haste").
+6. Word 2908 (guilt): CATASTROPHIC HOMOPHONE/RUSSIAN OCR BUG! The word "guilt" ("вина" = guilt) was conflated with Russian "вина" (plural of вино = wines) in dump, leading to translations as "WINE" (da: vin, fi: viini, sv: vin, hr: vino, lv: vīns, ar: نبيذ, vi: rượu vang, th: ไวน์, ko: 와인, ja: ワイン, kk: шарап) across 11 languages! Corrected to moral guilt, culpability, and consciousness of wrongdoing ("вина, чувство вины, виновность; Schuld/Schuldgefühl, culpa/culpabilidad, culpabilité, colpa, suçluluk, ذنب/شعور بالذنب").
+7. Word 2909 (turkey): Dual meaning calibrated: domestic bird / poultry meat (индейка, Truthahn, pavo, dinde, tacchino, hindi, peru) AND the sovereign nation (Турция / Türkiye).
+8. Word 2910 (diagnose): Dump had nouns (lv: diagnoze, fi: diagnoosi, hi: निदान, ar: تشخيص) and Urdu had complete nonsense ("مرکزی، بنیادی" = central/fundamental!). Calibrated to active clinical verb ("диагностировать, ставить диагноз; diagnostizieren, diagnostiquer, diagnosticar, teşhis etmek, تشخيص کرنا").
+9. Word 2912 (swallow): Dual sense restored: action verb ("глотать, проглатывать, schlucken, avaler, tragar, engolir") and ornithological noun ("ласточка, Schwalbe, golondrina, hirondelle, rondine, kırlangıç").
+10. Word 2913 (initiate): Dump had passive adjectives/nouns (fr: initié, it: iniziato, hu: beavatott, el: μυημένος, fi: vihkiytyminen, lv: iesvētīts). Calibrated to transitive verb ("инициировать, начинать, приступать, посвящать").
+11. Word 2914 (restrict): POS fix: dump had nouns (fr/it/sk: limite, ro: limită, bg: лимит, hu: határ, el: όριο, sl: omejitev, et: piirang, lt: riba, da/sv: grænse/gräns, fi/lv: raja/robeža, hi/ar/ko: सीमा/حد/한계). Calibrated to active verb ("ограничивать, сдерживать, сжимать рамки; einschränken, restreindre, restringir/limitar, kısıtlamak").
+12. Word 2915 (gulf): Polysemy calibrated: maritime sea gulf/bay ("залив, морской рукав, Golf, golfe, golfo, körfez") and metaphorical abyss/chasm/deep division ("морская пучина, бездна, пропасть, Kluft, gouffre, abismo, هوة/فجوة").
+13. Word 2916 (mommy): Affectionate diminutive calibrated (мамочка, мамуля, Mami, maman, mami, mamusia, mamãe, anneciğim, ماما/أمي الحبيبة) distinguishing it from formal mother.
+14. Word 2917 (shrug): Calibrated gesture as both verb ("пожимать плечами, mit den Schultern zucken, hausser les épaules, encogerse de hombros") and noun ("пожатие плечами, Achselzucken, haussement d'épaules").
+15. Word 2919 (sacrifice): Dump had "victim" (vi: nạn nhân, th: เหยื่อ, ko: 희생자, ja: 犠牲者). Conflated victim (casualty) with sacrifice! Corrected to selfless offering, giving up for higher good, and sacrificial offering ("жертвовать, приносить в жертву, пожертвование; opfern, sacrifier, sacrificar, feda etmek, قربانی دینا").
+16. Word 2922 (shore): Fixed engineering over-emphasis in dump (fr: étai/fixation, it: fissaggio, fi: linnoitus). Calibrated primarily to coastal shore/shoreline ("берег, побережье, Küste/Ufer, rivage, orilla/costa, costa") plus support sense ("подпирать, укреплять").
+17. Word 2924 (cliff): Calibrated sheer rocky precipice / coastal bluff ("утес, обрыв, отвесная скала, Klippe, falaise, acantilado, penhasco, scogliera").
+18. Word 2926 (tackle): Conflation in dump with "accept / assume" (it: assumere, bg: поеме, cs: přijmout, sk: prevziať, hu: vállalni, sl: prevzeti). Calibrated to grappling with a problem ("браться за дело, решать проблему, angehen, s'attaquer à, abordar, ele almak") and athletic tackle ("захват, перехват, подкат, placar, tacle").
+19. Word 2929 (stimulus): Disentangled from mere "incentive" (dump had da/sv: incitament, fi: kannustin, ko/ja: 인센티브). Restored psychological/biological sensory stimulus ("стимул, раздражитель, импульс; Reiz, Stimulus, stimulus, estímulo, bodziec, uyarıcı").
+20. Word 2931 (harsh): CATASTROPHIC DUMP BUG! "harsh" (суровый, резкий, жестокий) was conflated with "hard" = "difficult" (трудный) in it: difficile, ro: greu, bg: трудно, lt: sunku, hr: teško, lv: grūts, hi: कठिन, ar: صعب, vi: khó khăn, th: ยาก, ko: 힘든, kk: қиын across 12 languages! Calibrated to severity, roughness, and abrasiveness ("суровый, резкий, жестокий, грубый; hart/rau/schroff, dur/sévère, duro/áspero, surowy/ostry, sert/acımasız").
+21. Word 2934 (surprisingly): CATASTROPHIC DUMP BUG! "surprisingly" was conflated with "wonderful/marvelous" (fr: merveilleux, it: meraviglioso, ro: minunat, bg: чудесен, cs: úžasný, sk: úžasný, hu: csodálatos, el: θαυμάσιος, sl: čudovito, et: imeline, lt: nuostabus) across 11 European languages! Calibrated to adverb expressing surprise ("удивительно, на удивление, поразительно; überraschenderweise, étonnamment, sorprendentemente, zaskakująco, şaşırtıcı bir şekilde").
+22. Word 2936 (shared): CATASTROPHIC DUMP BUG! "shared" was translated as "general / common / military general" (fr/it/ro: général/generale, cs: generál [military general!], lt: generolas [military general!], hu: általános, da: almindelig, fi: yleinen, sv: vanlig, hr: uobičajeno, hi: सामान्य, ar: شائع, vi: phổ biến, ko: 흔한, kk: кең таралған) across 15+ languages! Calibrated to shared / held jointly / partitioned ("общий, совместный, разделенный; gemeinsam/geteilt, partagé/commun, compartido/conjunto, condiviso, ortak/paylaşılan, مشترك").
+23. Word 2937 (overwhelming): Disentangled from "predominant" (dump had hu: túlnyomó, bg: преобладаващ, kk: басым). Calibrated to crushing, irresistible, stunning power ("подавляющий, ошеломляющий, непреодолимый; überwältigend, écrasant, abrumador, avassalador, przytłaczający, ezici, ساحق").
+24. Word 2938 (elevator): Comprehensive definition: passenger lift in American English and agricultural grain elevator ("лифт, подъемник, элеватор; Aufzug/Fahrstuhl, ascenseur, ascensor, elevador, winda, asansör").
+25. Word 2939 (hispanic): Fixed dump nouns (fr/it/pt/ro had "Amérique latine"). Calibrated as adjective and demonym ("испаноязычный, латиноамериканский, латиноамериканец; hispanisch, hispanique, hispano, hispânico, hiszpańskojęzyczny").
+26. Word 2940 (transmission): Dual domain calibrated: biological/epidemiological disease contagion ("передача, распространение инфекции, Übertragung, contagion, contagio, bulaşma") + automotive drivetrain ("коробка передач, трансмиссия, Getriebe, boîte de vitesses, caja de cambios, şanzıman").
+27. Word 2941 (butt): Homonyms calibrated: anatomy/rear ("задница, попа, Hintern, fesses, trasero, bunda, kıç") + cigarette stub ("окурок, Stummel, mégot, colilla, bituca, izmarit") + rifle stock ("приклад, Kolben, crosse, culata") + headbutt verb ("бодать, толкать лбом").
+28. Word 2945 (counseling): Conflation in dump with business consultancy (fr: consultant, hu: tanácsadó, sv: konsulttjänster, ko/ja: 컨설팅). Calibrated to psychological guidance and mental health counseling ("консультирование, психологическая помощь, Beratung, soutien psychologique, asesoramiento, psicoterapia, danışmanlık, مشاورة/إرشاد نفسي").
+29. Word 2948 (effectiveness): CRITICAL LINGUISTIC DISTINCTION! Separated "effectiveness" (producing the intended outcome: действенность, результативность, эффективность, Wirksamkeit, efficacité, eficacia, eficácia, etkililik, فاعلية) from "efficiency" (dump erroneously used efficienza, eficiência, दक्षता, كفاءة, 효율성).
+30. Word 2949 (statistical): Fixed Italian error in dump ("carenza" = deficiency/shortage!) and Portuguese noun ("estatística"). Calibrated to adjective ("статистический, statistico, statistisch, statistique, estadístico, estatístico").
+31. Word 2950 (longtime): CATASTROPHIC DUMP BUG! "longtime" (adjective: longtime friend, longtime supporter) was translated as "a lot of time / taking a long time" ("много времени", fr: beaucoup de temps, pl: dużo czasu, it: molto tempo, ro: mult timp, bg: много време, cs: hodně času, sk: veľa času, hu: sok idő, el: πολύ χρόνο, sl: veliko časa, et: palju aega, lt: daug laiko, da: meget tid, fi: paljon aikaa, sv: mycket tid, hr: puno vremena, lv: daudz laika, ar: الكثير من الوقت, vi: nhiều thời gian, th: ใช้เวลามาก, ko: 많은 시간, ja: たくさんの時間, kk: уақытты қажет ететін) across 25+ languages! Calibrated to adjective: enduring, old, longstanding ("давний, многолетний, старинный; langjährig, de longue date, de mucho tiempo, de longa data, wieloletni, eski/uzun süreli, دیرینه/باسابقه").
+32. Word 2951 (strain): CATASTROPHIC PHYSICS CONFUSION IN DUMP! "strain" was translated as electrical voltage in Italian ("voltaggio"), Romanian ("Voltaj"), and Greek ("δυναμικό")! Calibrated to mechanical/mental tension ("напряжение, нагрузка, Belastung, tension, tensión"), muscle pull ("растяжение связок, Zerrung, élongation, tirón muscular, estiramento"), and biological isolate ("штамм, Stamm, souche, cepa, szczep, suş, سلالة").
+33. Brazilian Portuguese (pt / pt-BR) nuanced usage verified: bunda, bituca, caubói, caixa de marcha, compenetrado.
+34. Latin American Spanish (es) tailored for natural usage: colilla, tacle, tirón muscular, veterano.
+35. Natural grammar & script validation confirmed for RTL locales (ar, fa, ur) and non-Latin scripts (hi, bn, kk, zh, ja, ko, th, el, ru, uk, bg).
+
+====================================================
+Detailed Calibrated Entries for all 50 Words:
+====================================================
+
+ID 2902 (promotion):
+  ru: повышение, продвижение по службе, промоакция
+  uk: підвищення, просування по службі, промоакція
+  de: Beförderung, Aufstieg, Verkaufsförderung
+  es: ascenso, promoción, fomento
+  fr: promotion, avancement
+  pl: awans, promocja
+  it: promozione, avanzamento
+  tr: terfi, promosyon, tanıtım
+  pt: promoção, avanço profissional
+  ro: promovare, avansare
+  bg: повишение, промоция
+  cs: povýšení, propagace
+  sk: povýšenie, propagácia
+  hu: előléptetés, népszerűsítés, promóció
+  el: προαγωγή, προώθηση
+  sl: napredovanje, promocija
+  et: ametikohtade kõrgendus, edutamine, edendus
+  lt: paaukštinimas, skatinimas, reklama
+  da: forfremmelse, kampagne, fremme
+  fi: ylennytys, edistäminen, myynninedistäminen
+  sv: befordran, kampanj, främjande
+  hr: unapređenje, promaknuće, promocija
+  lv: paaugstinājums, veicināšana, reklāma
+  hi: पदोन्नति, तरक्की, प्रचार
+  ar: ترقية، ترويج، تشجيع
+  fa: ترفیع، ارتقای شغلی، تبلیغ
+  ur: ترقی، تشہیر، فروغ
+  id: promosi, kenaikan jabatan
+  vi: thăng chức, khuyến mãi, quảng bá
+  th: การเลื่อนตำแหน่ง, การส่งเสริมการขาย
+  ko: 승진, 홍보, 촉진
+  ja: 昇進、促進、プロモーション
+  zh: 晋升、推广、促销
+  bn: পদোন্নতি, প্রচার, প্রসার
+  kk: лауазымды өсіру, жоғарылату, жылжыту
+
+ID 2903 (uncertainty):
+  ru: неопределенность, неуверенность, неизвестность
+  uk: невизначеність, непевність, невідомість
+  de: Unsicherheit, Ungewissheit
+  es: incertidumbre, duda
+  fr: incertitude, doute
+  pl: niepewność, niewiadoma
+  it: incertezza, insicurezza
+  tr: belirsizlik, şüphe
+  pt: incerteza, insegurança
+  ro: incertitudine, nesiguranță
+  bg: несигурност, неопределеност
+  cs: nejistota, nejasnost
+  sk: neistota, pochybnosť
+  hu: bizonytalanság, kétség
+  el: αβεβαιότητα, ανασφάλεια
+  sl: negotovost, negotov položaj
+  et: ebakindlus, teadmatus
+  lt: netikrumas, neapibrėžtumas
+  da: usikkerhed, uvished
+  fi: epävarmuus, epätietoisuus
+  sv: osäkerhet, ovisshet
+  hr: neizvjesnost, nesigurnost
+  lv: nenoteiktība, neziņa
+  hi: अनिश्चितता, संशय
+  ar: عدم يقين، شك، حيرة
+  fa: بلاتکلیفی، عدم قطعیت، تردید
+  ur: غیر یقینی، بے یقینی
+  id: ketidakpastian, keraguan
+  vi: sự không chắc chắn, tình trạng bất định
+  th: ความไม่แน่นอน, ความลังเล
+  ko: 불확실성, 불명확함
+  ja: 不確実性、不透明感
+  zh: 不确定性、未定
+  bn: অনিশ্চয়তা, সংশয়
+  kk: белгісіздік, күмәнділік
+
+ID 2904 (ownership):
+  ru: собственность, право собственности, владение
+  uk: власність, право власності, володіння
+  de: Eigentum, Besitz, Inhaberschaft
+  es: propiedad, titularidad, posesión
+  fr: propriété, possession, titularité
+  pl: własność, posiadanie
+  it: proprietà, possesso, titolarità
+  tr: sahiplik, mülkiyet
+  pt: propriedade, posse, titularidade
+  ro: proprietate, posesie, deținere
+  bg: собственост, притежание
+  cs: vlastnictví, držba
+  sk: vlastníctvo, držba
+  hu: tulajdonjog, birtoklás
+  el: ιδιοκτησία, κατοχή
+  sl: lastništvo, posest
+  et: omand, omandiõigus
+  lt: nuosavybė, valdymas
+  da: ejerskab, ejendomsret
+  fi: omistajuus, omistusoikeus
+  sv: äganderätt, ägarskap
+  hr: vlasništvo, posjed
+  lv: īpašumtiesības, īpašums
+  hi: स्वामित्व, मिल्कियत
+  ar: ملكية، حيازة
+  fa: مالکیت، حق مالکیت
+  ur: ملکیت، حق ملکیت
+  id: kepemilikan, hak milik
+  vi: quyền sở hữu, sự sở hữu
+  th: กรรมสิทธิ์, ความเป็นเจ้าของ
+  ko: 소유권, 소유
+  ja: 所有権、保有
+  zh: 所有权、所有制
+  bn: মালিকানা, স্বত্ব
+  kk: меншік, меншік құқығы
+
+ID 2905 (officially):
+  ru: официально, формально
+  uk: офіційно, формально
+  de: offiziell, förmlich
+  es: oficialmente, formalmente
+  fr: officiellement, formellement
+  pl: oficjalnie, formalnie
+  it: ufficialmente, formalmente
+  tr: resmen, resmi olarak
+  pt: oficialmente, formalmente
+  ro: oficial, în mod formal
+  bg: официално, формално
+  cs: oficiálně, formálně
+  sk: oficiálne, formálne
+  hu: hivatalosan, formálisan
+  el: επίσημα, τυπικά
+  sl: uradno, formalno
+  et: ametlikult, formaalselt
+  lt: oficialiai, formaliai
+  da: officielt, formelt
+  fi: virallisesti, muodollisesti
+  sv: officiellt, formellt
+  hr: službeno, formalno
+  lv: oficiāli, formāli
+  hi: आधिकारिक तौर पर, औपचारिक रूप से
+  ar: رسمياً، بصفة رسمية
+  fa: رسماً، به‌طور رسمی
+  ur: سرکاری طور پر، باضابطہ طور پر
+  id: secara resmi, secara formal
+  vi: chính thức, một cách chính thức
+  th: อย่างเป็นทางการ
+  ko: 공식적으로
+  ja: 公式に、正式に
+  zh: 正式地、官方地
+  bn: সরকারিভাবে, আনুষ্ঠানিকভাবে
+  kk: ресми түрде, ресми
+
+ID 2906 (tag):
+  ru: ярлык, бирка, тег, метить
+  uk: ярлик, бирка, тег, мітити
+  de: Etikett, Schildchen, Tag, markieren
+  es: etiqueta, rótulo, etiquetar
+  fr: étiquette, balise, étiqueter
+  pl: etykieta, metka, znacznik, oznaczać
+  it: etichetta, cartellino, targhetta, etichettare
+  tr: etiket, künye, etiketlemek
+  pt: etiqueta, tag, rotular, etiquetar
+  ro: etichetă, cartonaș, a eticheta
+  bg: етикет, таг, маркирам
+  cs: štítek, visačka, označit
+  sk: štítok, visačka, označiť
+  hu: címke, árcédula, megjelöl
+  el: ετικέτα, καρτελάκι, μαρκάρω
+  sl: etiketa, priponka, označiti
+  et: silt, lipik, märgendama
+  lt: etiketė, kortelė, žymėti
+  da: mærke, prismærke, tagge
+  fi: nimilappu, tunniste, merkitä
+  sv: etikett, prislapp, tagg, märka
+  hr: etiketa, privjesak, označiti
+  lv: etiķete, birka, iezīmēt
+  hi: टैग, लेबल, पहचान लगाना
+  ar: بطاقة تعريف، وسم، علامة، وضع علامة
+  fa: برچسب، پلاک، نشانه زدن
+  ur: ٹیگ، نشان، پرچی لگانا
+  id: label, tanda, memberi label
+  vi: nhãn dán, thẻ, gắn thẻ
+  th: ป้ายชื่อ, แท็ก, ติดป้าย
+  ko: 태그, 꼬리표, 달다
+  ja: タグ、荷札、ラベルを貼る
+  zh: 标签、标牌、加标签
+  bn: ট্যাগ, নামপত্র, চিহ্নিত করা
+  kk: жарлық, белгі, таңбалау
+
+ID 2907 (stem):
+  ru: стебель, ствол, основа, происходить от
+  uk: стебло, стовбур, основа слова, походити від
+  de: Stängel, Stamm, Wortstamm, herrühren
+  es: tallo, tronco, provenir de, frenar
+  fr: tige, tronc, radical, découler de
+  pl: łodyga, trzpień, rdzeń, pochodzić z
+  it: stelo, fusto, gambo, derivare da
+  tr: sap, gövde, köken almak
+  pt: caule, haste, tronco, originar-se de
+  ro: tulpină, lujer, a proveni din
+  bg: стъбло, ствол, произлизам от
+  cs: stonek, stvol, kmen slova, pramenit z
+  sk: stonka, stvol, kmeň slova, prameniť z
+  hu: szár, kocsány, tőszó, ered vmiből
+  el: μίσχος, στέλεχος, πηγάζω από
+  sl: steblo, deblo, izvirati iz
+  et: vars, tüvi, tulenema
+  lt: stiebas, kotelis, kilti iš
+  da: stilk, stængel, stamme fra
+  fi: varsi, runko, johtua jstak
+  sv: stjälk, stam, härstamma från
+  hr: stabljika, peteljka, potjecati od
+  lv: stiebrs, kāts, celties no
+  hi: तना, डंठल, उपजना
+  ar: ساق، جذع، يتفرع من، ينبع من
+  fa: ساقه، تنه، ریشه گرفتن از
+  ur: تنا، ڈنڈی، نکلنا
+  id: batang, tangkai, bersumber dari
+  vi: thân cây, cuống, bắt nguồn từ
+  th: ลำต้น, ก้าน, กำเนิดจาก
+  ko: 줄기, 자루, 유래하다
+  ja: 茎、幹、生じる
+  zh: 茎、柄、起源于、阻挡
+  bn: কাণ্ড, ডাঁটা, উৎপন্ন হওয়া
+  kk: сабақ, діңгек, туындау
+
+ID 2908 (guilt):
+  ru: вина, чувство вины, виновность
+  uk: вина, почуття провини, винуватість
+  de: Schuld, Schuldgefühl
+  es: culpa, culpabilidad, sentimiento de culpa
+  fr: culpabilité, faute
+  pl: wina, poczucie winy
+  it: colpa, senso di colpa, colpevolezza
+  tr: suçluluk, vicdan azabı, kabahat
+  pt: culpa, sentimento de culpa, culpabilidade
+  ro: vină, vinovăție, sentiment de vină
+  bg: вина, чувство за вина
+  cs: vina, pocit viny
+  sk: vina, pocit viny
+  hu: bűntudat, bűnösség
+  el: ενοχή, αίσθημα ενοχής
+  sl: krivda, občutek krivde
+  et: süü, süütunne
+  lt: kaltė, kaltės jausmas
+  da: skyld, skyldfølelse
+  fi: syyllisyys, syyllisyydentunne
+  sv: skuld, skuldkänsla
+  hr: krivnja, osjećaj krivnje
+  lv: vainas sajūta, vaina
+  hi: दोष, अपराध-बोध, गुनाह
+  ar: ذنب، شعور بالذنب، لوم
+  fa: گناه، احساس گناه، تقصیر
+  ur: جرم، احساس جرم، گناہ
+  id: kesalahan, rasa bersalah
+  vi: tội lỗi, cảm giác tội lỗi
+  th: ความรู้สึกผิด, ความผิด
+  ko: 죄책감, 유죄
+  ja: 罪悪感、罪、有罪
+  zh: 内疚、罪过、有罪
+  bn: দোষ, অপরাধবোধ, অপরাধ
+  kk: кінә, кінәлілік сезімі
+
+ID 2909 (turkey):
+  ru: индейка, Турция
+  uk: індичка, Туреччина
+  de: Truthahn, Pute, Türkei
+  es: pavo, Turquía
+  fr: dindon, dinde, Turquie
+  pl: indyk, Turcja
+  it: tacchino, Turchia
+  tr: hindi, Türkiye
+  pt: peru, Turquia
+  ro: curcan, Turcia
+  bg: пуйка, Турция
+  cs: krocan, krůta, Turecko
+  sk: moriak, morka, Turecko
+  hu: pulyka, Törökország
+  el: γαλοπούλα, Τουρκία
+  sl: puran, Turčija
+  et: kalkun, Türgi
+  lt: kalakutas, Turkija
+  da: kalkun, Tyrkiet
+  fi: kalkkuna, Turkki
+  sv: kalkon, Turkiet
+  hr: puran, Turska
+  lv: tītars, Turcija
+  hi: तुर्की, टर्की पक्षी
+  ar: ديك رومي، تركيا
+  fa: بوقلمون، ترکیه
+  ur: ٹرکی پرندہ، ترکی ملک
+  id: kalkun, Turki
+  vi: gà tây, Thổ Nhĩ Kỳ
+  th: ไก่งวง, ประเทศตุรกี
+  ko: 칠면조, 튀르키예
+  ja: 七面鳥、トルコ
+  zh: 火鸡、土耳其
+  bn: টার্কি পাখি, তুরস্ক
+  kk: күркетауық, Түркия
+
+ID 2910 (diagnose):
+  ru: диагностировать, ставить диагноз
+  uk: діагностувати, ставити діагноз
+  de: diagnostizieren, feststellen
+  es: diagnosticar, dictaminar
+  fr: diagnostiquer, déceler
+  pl: diagnozować, rozpoznawać
+  it: diagnosticare, riscontrare
+  tr: teşhis etmek, tanı koymak
+  pt: diagnosticar, identificar
+  ro: a diagnostica, a stabili diagnosticul
+  bg: диагностицирам, поставям диагноза
+  cs: diagnostikovat, určit diagnózu
+  sk: diagnostikovať, určiť diagnózu
+  hu: diagnosztizál, megállapít
+  el: διαγιγνώσκω, κάνω διάγνωση
+  sl: diagnosticirati, ugotoviti bolezen
+  et: diagnoosima, tõbe tuvastama
+  lt: diagnozuoti, nustatyti ligą
+  da: diagnosticere, stille diagnose
+  fi: diagnosoida, todeta sairaus
+  sv: diagnostisera, ställa diagnos
+  hr: dijagnosticirati, postaviti dijagnozu
+  lv: diagnosticēt, noteikt diagnozi
+  hi: रोग पहचानना, निदान करना
+  ar: يشخّص، يحدّد المرض
+  fa: تشخیص دادن، معاینه کردن
+  ur: تشخیص کرنا، مرض پہچاننا
+  id: mendiagnosis, menentukan penyakit
+  vi: chẩn đoán, xác định bệnh
+  th: วินิจฉัยโรค, ตรวจวินิจฉัย
+  ko: 진단하다, 원인을 규명하다
+  ja: 診断する、原因を特定する
+  zh: 诊断、判断
+  bn: রোগ নির্ণয় করা, নিরীক্ষণ করা
+  kk: диагноз қою, ауруды анықтау
+
+ID 2911 (precious):
+  ru: драгоценный, ценный, дорогой
+  uk: дорогоцінний, цінний, дорогий
+  de: kostbar, wertvoll, edel
+  es: precioso, valioso, querido
+  fr: précieux, de grande valeur
+  pl: cenny, drogocenny, szlachetny
+  it: prezioso, di valore, caro
+  tr: değerli, kıymetli
+  pt: precioso, valioso, querido
+  ro: prețios, valoros, scump
+  bg: скъпоценен, ценен, скъп
+  cs: drahocenný, vzácný, cenný
+  sk: drahocenný, vzácny, cenný
+  hu: értékes, drága, becses
+  el: πολύτιμος, πανάκριβος
+  sl: dragocen, vreden
+  et: hinnaline, väärtuslik, kallis
+  lt: brangus, vertingas
+  da: dyrebar, kostbar
+  fi: kallisarvoinen, arvokas
+  sv: dyrbar, värdefull
+  hr: dragocjen, vrijedan
+  lv: dārgakmeņu, dārgs, vērtīgs
+  hi: कीमती, बहुमूल्य, अनमोल
+  ar: ثمين، نفيس، غالٍ
+  fa: گران‌بها، باارزش، گران‌قدر
+  ur: قیمتی، گراں قدر، انمول
+  id: berharga, bernilai, mulia
+  vi: quý giá, quý báu
+  th: ล้ำค่า, มีค่ามาก
+  ko: 귀중한, 소중한
+  ja: 貴重な、大切な
+  zh: 宝贵的、珍贵的
+  bn: মূল্যবান, বহুমূল্য, প্রিয়
+  kk: құнды, қымбат, бағалы
+
+ID 2912 (swallow):
+  ru: глотать, проглатывать, ласточка
+  uk: ковтати, проковтувати, ластівка
+  de: schlucken, herunterschlucken, Schwalbe
+  es: tragar, deglutir, golondrina
+  fr: avaler, engloutir, hirondelle
+  pl: połykać, przełykać, jaskółka
+  it: ingoiare, deglutire, rondine
+  tr: yutmak, içine çekmek, kırlangıç
+  pt: engolir, deglutir, andorinha
+  ro: a înghiți, rândunică
+  bg: гълтам, поглъщам, лястовица
+  cs: polykat, spolknout, vlaštovka
+  sk: prehltnúť, hltať, lastovička
+  hu: lenyel, elnyel, fecske
+  el: καταπίνω, χελιδόνι
+  sl: pogoltniti, lastovka
+  et: neelama, alla neelama, pääsuke
+  lt: nuryti, praryti, kregždė
+  da: sluge, nedsvælge, svale
+  fi: niellä, sietää, pääsky
+  sv: svälja, svälja ner, svala
+  hr: gutati, progutati, lastavica
+  lv: norīt, rīt, bezdelīga
+  hi: निगलना, गटकना, अबाबील पक्षी
+  ar: يبتلع، يجرع، طائر السنونو
+  fa: بلعیدن، فرو بردن، پرستو
+  ur: نگلنا, ہڑپ کرنا, ابابیل
+  id: menelan, burung walet
+  vi: nuốt, nuốt trửng, chim én
+  th: กลืน, นกนางแอ่น
+  ko: 삼키다, 제비
+  ja: 飲み込む、ツバメ
+  zh: 吞咽、咽下、燕子
+  bn: গিলে ফেলা, গলাধঃকরণ করা, আবাবিল পাখি
+  kk: жұту, қарлығаш
+
+ID 2913 (initiate):
+  ru: инициировать, начинать, посвящать
+  uk: ініціювати, починати, присвячувати
+  de: initiieren, einleiten, anstoßen
+  es: iniciar, emprender, instruir
+  fr: initier, amorcer, lancer
+  pl: inicjować, zapoczątkować, wdrażać
+  it: avviare, iniziare, promuovere
+  tr: başlatmak, öncülük etmek
+  pt: iniciar, desencadear, introduzir
+  ro: a iniția, a declanșa, a începe
+  bg: инициирам, започвам, въвеждам
+  cs: zahájit, iniciovat, zasvětit
+  sk: iniciovať, začať, zasvätiť
+  hu: kezdeményez, elindít, beavat
+  el: ξεκινώ, εγκαινιάζω, μυώ
+  sl: sprožiti, začeti, posvetiti
+  et: algatama, käivitama, pühendama
+  lt: inicijuoti, pradėti, įtraukti
+  da: iværksætte, indlede, initiere
+  fi: käynnistää, aloittaa, vihkiä
+  sv: initiera, sätta igång, starta
+  hr: pokrenuti, započeti, inicirati
+  lv: ierosināt, uzsākt, ievadīt
+  hi: आरंभ करना, शुरुआत करना, शामिल करना
+  ar: يبدأ، يشرع، يستهل
+  fa: آغاز کردن، راه‌اندازی کردن، آشنا کردن
+  ur: شروع کرنا، آغاز کرنا، شامل کرنا
+  id: memulai, mencetuskan, memprakarsai
+  vi: khởi xướng, bắt đầu, kết nạp
+  th: ริเริ่ม, เริ่มต้น, สถาปนา
+  ko: 시작하다, 착수하다, 가입시키다
+  ja: 始める、着手する、加入させる
+  zh: 发起、开始、接纳
+  bn: শুরু করা, আরম্ভ করা, দীক্ষা দেওয়া
+  kk: бастау, бастама көтеру, енгізу
+
+ID 2914 (restrict):
+  ru: ограничивать, сдерживать
+  uk: обмежувати, стримувати
+  de: einschränken, beschränken, begrenzen
+  es: restringir, limitar, acotar
+  fr: restreindre, limiter
+  pl: ograniczać, zacieśniać
+  it: limitare, restringere, circoscrivere
+  tr: kısıtlamak, sınırlamak
+  pt: restringir, limitar, cercear
+  ro: a restricționa, a limita
+  bg: ограничавам, стеснявам
+  cs: omezit, zúžit, restrikovat
+  sk: obmedziť, zúžiť
+  hu: korlátoz, megszórít
+  el: περιορίζω, βάζω όρια
+  sl: omejiti, zožiti
+  et: piirama, kitsendama
+  lt: apriboti, suvaržyti
+  da: begrænse, indskrænke
+  fi: rajoittaa, supistaa
+  sv: begränsa, inskränka
+  hr: ograničiti, skučiti
+  lv: ierobežot, sašaurināt
+  hi: सीमित करना, पाबंदी लगाना
+  ar: يقيّد، يحصر، يحدّ من
+  fa: محدود کردن، منحصر کردن
+  ur: محدود کرنا، پابندی لگانا
+  id: membatasi, mempersempit
+  vi: giới hạn, hạn chế, thu hẹp
+  th: จำกัด, ยับยั้ง, ตีกรอบ
+  ko: 제한하다, 한정하다
+  ja: 制限する、限定する
+  zh: 限制、约束、限定
+  bn: সীমাবদ্ধ করা, সংকুচিত করা
+  kk: шектеу, тарылту
+
+ID 2915 (gulf):
+  ru: залив, морская пучина, бездна, пропасть
+  uk: затока, морська безодня, прірва
+  de: Golf, Bucht, Meeresarm, Kluft
+  es: golfo, bahía, abismo
+  fr: golfe, baie, gouffre
+  pl: zatoka, głębia, przepaść
+  it: golfo, insenatura, baratro
+  tr: körfez, derin uçurum
+  pt: golfo, abismo, grande vão
+  ro: golf, prăpastie, abis
+  bg: залив, пропаст, бездна
+  cs: záliv, propast, hlubina
+  sk: záliv, priepasť, hlbina
+  hu: öböl, szakadék, mélység
+  el: κόλπος, χάσμα, βάραθρο
+  sl: zaliv, prepad, globina
+  et: laht, kuristik, sügavik
+  lt: įlanka, bedugnė, praraja
+  da: golf, havbugt, kløft
+  fi: lahti, merenlahti, kuilu
+  sv: golf, havsvik, klyfta
+  hr: zaljev, jaz, ponor
+  lv: līcis, bezdibenis, aiza
+  hi: खाड़ी, खाई, रसातल
+  ar: خليج، هوة، فجوة عميقة
+  fa: خلیج، ورطه، دره عمیق
+  ur: خلیج، گہری کھائی
+  id: teluk, jurang pemisah
+  vi: vịnh biển, vực thẳm
+  th: อ่าว, หุบเหวลึก
+  ko: 만, 심연, 격차
+  ja: 湾、大きな隔たり、深淵
+  zh: 海湾、隔阂、鸿沟
+  bn: উপসাগর, সমুদ্রের খাঁড়ি, গভীর ব্যবধান
+  kk: шығанақ, тұңғиық, терең шыңырау
+
+ID 2916 (mommy):
+  ru: мамочка, мамуля, мама
+  uk: матуся, матуня, мама
+  de: Mami, Mama
+  es: mami, mamá
+  fr: maman, manman
+  pl: mamusia, mama
+  it: mamma, mammina
+  tr: anneciğim, anne
+  pt: mamãe, mãezinha
+  ro: mămică, mami
+  bg: мама, маминка
+  cs: maminka, mamka
+  sk: mamička, mamka
+  hu: anyu, mami, anyuci
+  el: μαμά, μανούλα
+  sl: mamica, mami
+  et: emme, emmeke
+  lt: mamytė, mama
+  da: mor, morlille
+  fi: äiti, äippä
+  sv: mamma, morsan
+  hr: mamica, mama
+  lv: māmiņa, mamma
+  hi: मम्मी, माँ
+  ar: ماما، أمي
+  fa: مامان، مامانی
+  ur: امی، ممی
+  id: mama, ibu tersayang
+  vi: mẹ, má
+  th: แม่จ๋า, ม่าม๊า
+  ko: 엄마
+  ja: ママ、お母ちゃん
+  zh: 妈妈、妈咪
+  bn: মাম্মি, মা
+  kk: анашым, мама
+
+ID 2917 (shrug):
+  ru: пожимать плечами, пожатие плечами
+  uk: знизувати плечима, знизування плечима
+  de: mit den Schultern zucken, Achselzucken
+  es: encogerse de hombros, encogimiento de hombros
+  fr: hausser les épaules, haussement d'épaules
+  pl: wzruszać ramionami, wzruszenie ramion
+  it: scrollare le spalle, scrollata di spalle
+  tr: omuz silkmek, omuz silkme
+  pt: dar de ombros, encolher de ombros
+  ro: a ridica din umeri, ridicare din umeri
+  bg: свивам рамене, свиване на рамене
+  cs: pokrčit rameny, pokrčení ramen
+  sk: pokrčiť plecami, pokrčenie pliec
+  hu: vállat von, vállvonás
+  el: σηκώνω τους ώμους, ανασήκωμα ώμων
+  sl: skomigniti z rameni, skomig
+  et: õlgu kehitama, õlakehitus
+  lt: gūžčioti pečiais, pečių gūžtelėjimas
+  da: trække på skuldrene, skuldertræk
+  fi: kohauttaa olkapäitään, olankohautus
+  sv: rycka på axlarna, axelryckning
+  hr: slegnuti ramenima, slijeganje ramenima
+  lv: paraustīt plecus, plecu paraustīšana
+  hi: कंधे उचकाना, उपेक्षा प्रकट करना
+  ar: يهز كتفيه، هزّة كتف
+  fa: شانه بالا انداختن
+  ur: کندھے اچکانا
+  id: mengangkat bahu, angkat bahu
+  vi: nhún vai, cái nhún vai
+  th: ยักไหล่, การยักไหล่
+  ko: 어깨를 으쓱하다, 으쓱하기
+  ja: 肩をすくめる、肩をすくめること
+  zh: 耸肩、耸耸肩
+  bn: কাঁধ ঝাঁকানো, উদাসীনতা প্রকাশ করা
+  kk: иығын қиқаң еткізу, иық көтеру
+
+ID 2918 (agricultural):
+  ru: сельскохозяйственный, аграрный
+  uk: сільськогосподарський, аграрний
+  de: landwirtschaftlich, agrarisch
+  es: agrícola, agrario
+  fr: agricole, agraire
+  pl: rolniczy, rolny, agronomiczny
+  it: agricolo, agrario
+  tr: tarımsal, zirai
+  pt: agrícola, agrário
+  ro: agricol, agrar
+  bg: селскостопански, земеделски
+  cs: zemědělský, agrární
+  sk: poľnohospodársky, agrárny
+  hu: mezőgazdasági, agrárius
+  el: αγροτικός, γεωργικός
+  sl: kmetijski, agrarni
+  et: põllumajanduslik, agraarne
+  lt: žemės ūkio, agrarinis
+  da: landbrugs-, landbrugsmæssig
+  fi: maatalous-, maataloudellinen
+  sv: jordbruks-, lantbruks-
+  hr: poljoprivredni, agrarni
+  lv: lauksaimniecības, agrārs
+  hi: कृषि-संबंधी, खेतिहर
+  ar: زراعي
+  fa: کشاورزی، زراعی
+  ur: زرعی, زراعت کا
+  id: pertanian, agraris
+  vi: thuộc nông nghiệp, nông vụ
+  th: ทางการเกษตร, เชิงเกษตรกรรม
+  ko: 농업의, 농경의
+  ja: 農業の、農耕の
+  zh: 农业的、农事的
+  bn: কৃষি সংক্রান্ত, কৃষিভিত্তিক
+  kk: ауылшаруашылық, аграрлық
+
+ID 2919 (sacrifice):
+  ru: жертвовать, приносить в жертву, пожертвование
+  uk: жертвувати, приносити в жертву, жертва
+  de: opfern, Opfer bringen, Opfergabe
+  es: sacrificar, renuncia, sacrificio
+  fr: sacrifier, renoncer à, sacrifice
+  pl: poświęcać, składać ofiarę, poświęcenie
+  it: sacrificare, rinunciare, sacrificio
+  tr: feda etmek, kurban etmek, fedakârlık
+  pt: sacrificar, abrir mão de, sacrifício
+  ro: a sacrifica, a renunța, sacrificiu
+  bg: жертвам, принасям в жертва, жертва
+  cs: obětovat, přinést oběť, oběť
+  sk: obetovať, priniesť obeť, obeť
+  hu: feláldoz, lemond vmiről, áldozat
+  el: θυσιάζω, κάνω θυσία, θυσία
+  sl: žrtvovati, odpovedati se, žrtev
+  et: ohverdama, ohvriks tooma, ohver
+  lt: aukoti, paaukoti, auka
+  da: ofre, give afkald på, offer
+  fi: uhrata, luopua, uhraus
+  sv: offra, göra avkall på, uppoffring
+  hr: žrtvovati, prinijeti žrtvu, žrtva
+  lv: upurēt, ziedot, upuris
+  hi: बलिदान देना, त्याग करना, आहुति
+  ar: يضحّي، تضحية، فداء
+  fa: قربانی کردن، فداکاری کردن، فداکاری
+  ur: قربانی دینا، فدا کرنا، ایثار
+  id: mengorbankan, menumbalkan, pengorbanan
+  vi: hy sinh, từ bỏ, sự hy sinh
+  th: เสียสละ, สละชีพ, การเสียสละ
+  ko: 희생하다, 제물로 바치다, 희생
+  ja: 犠牲にする、捧げる、生贄
+  zh: 牺牲、献出、祭品
+  bn: উৎসর্গ করা, ত্যাগ স্বীকার করা, কোরবানি
+  kk: құрбан ету, пида ету, құрбандық
+
+ID 2920 (spectrum):
+  ru: спектр, диапазон, шкала
+  uk: спектр, діапазон, шкала
+  de: Spektrum, Bandbreite, Farbspektrum
+  es: espectro, gama, abanico
+  fr: spectre, éventail, gamme
+  pl: spektrum, widmo, zakres
+  it: spettro, gamma, ventaglio
+  tr: spektrum, tayf, çeşitlilik
+  pt: espectro, gama, leque
+  ro: spectru, gamă, evantai
+  bg: спектър, диапазон
+  cs: spektrum, škála, vějíř
+  sk: spektrum, škála, rozsah
+  hu: spektrum, színkép, skála
+  el: φάσμα, εύρος
+  sl: spekter, razpon
+  et: spekter, skaala, ulatus
+  lt: spektras, diapazonas
+  da: spektrum, rækkevidde
+  fi: spektri, kirjo, asteikko
+  sv: spektrum, färgskala, omfång
+  hr: spektar, lepeza, raspon
+  lv: spektrs, diapazons
+  hi: वर्णक्रम, स्पेक्ट्रम, विस्तार
+  ar: طيف، نطاق، سلسلة خيارات
+  fa: طیف، گستره، دامنه
+  ur: طیف، دائرہ کار
+  id: spektrum, rentang warna
+  vi: quang phổ, phổ biến thiên
+  th: สเปกตรัม, ช่วงความถี่
+  ko: 스펙트럼, 범위
+  ja: スペクトル、波長範囲、領域
+  zh: 光谱、频谱、范围
+  bn: বর্ণালী, বিস্তার, পরিসর
+  kk: спектр, ауқым, өлшемшарт
+
+ID 2921 (dragon):
+  ru: дракон, сказочный змей
+  uk: дракон, змій
+  de: Drache
+  es: dragón
+  fr: dragon
+  pl: smok
+  it: drago
+  tr: ejderha
+  pt: dragão
+  ro: dragon, balaur
+  bg: дракон, змей
+  cs: drak
+  sk: drak, šarkan
+  hu: sárkány
+  el: δράκος
+  sl: zmaj
+  et: draakon, lohe
+  lt: drakonas, slibinas
+  da: drage
+  fi: lohikäärme
+  sv: drake
+  hr: zmaj
+  lv: pūķis
+  hi: ड्रैगन, अजगर
+  ar: تنين
+  fa: اژدها
+  ur: اژدہا، ڈریگن
+  id: naga
+  vi: rồng
+  th: มังกร
+  ko: 용, 드래곤
+  ja: 竜、ドラゴン
+  zh: 龙、巨龙
+  bn: ড্রাগন, পক্ষীরাজ সাপ
+  kk: айдаһар
+
+ID 2922 (shore):
+  ru: берег, побережье, подпирать
+  uk: берег, узбережжя, підпирати
+  de: Ufer, Küste, Strand, abstützen
+  es: orilla, costa, ribera, apuntalar
+  fr: rivage, côte, berge, étayer
+  pl: brzeg, wybrzeże, podpierać
+  it: riva, costa, sponda, puntellare
+  tr: kıyı, sahil, payandalamak
+  pt: costa, praia, margem, escorar
+  ro: țărm, mal, coastă, a sprijini
+  bg: бряг, крайбрежие, подпирам
+  cs: břeh, pobřeží, podepřít
+  sk: breh, pobrežie, podoprieť
+  hu: tengerpart, part, megtámaszt
+  el: ακτή, όχθη, υποστυλώνω
+  sl: obala, breg, podpreti
+  et: kallas, rand, toestama
+  lt: krantas, pakrantė, paremti
+  da: kyst, bred, strand, understøtte
+  fi: ranta, rannikko, tukea
+  sv: strand, kust, stötta upp
+  hr: obala, žal, poduprijeti
+  lv: krasts, piekraste, atbalstīt
+  hi: तट, किनारा, सहारा देना
+  ar: شاطئ، ساحل، ضفة، يدعم
+  fa: ساحل، کرانه، محکم کردن
+  ur: ساحل، کنارہ، ٹیک لگانا
+  id: pantai, tepi laut, menopang
+  vi: bờ biển, bờ hồ, chống đỡ
+  th: ชายฝั่ง, ริมหาด, ค้ำจุน
+  ko: 해안, 기슭, 지탱하다
+  ja: 岸、海岸、支える
+  zh: 岸、滨、支撑
+  bn: তীর, উপকূল, ভর দেওয়া
+  kk: жағалау, жаға, тіреу
+
+ID 2923 (pastor):
+  ru: пастор, священник, приходской священник
+  uk: пастор, священник, душпастир
+  de: Pastor, Pfarrer, Seelsorger
+  es: pastor, párroco, ministro
+  fr: pasteur, curé, prêtre
+  pl: pastor, duszpasterz
+  it: pastore, parroco, ministro di culto
+  tr: papaz, vaiz, din görevlisi
+  pt: pastor, ministro religioso
+  ro: pastor, preot
+  bg: пастор, свещеник
+  cs: pastor, duchovní, kazatel
+  sk: pastor, duchovný, kazateľ
+  hu: lelkipásztor, lelkész, pap
+  el: πάστορας, ιερέας
+  sl: pastor, župnik, duhovnik
+  et: pastor, vaimulik, kirikuõpetaja
+  lt: pastorius, dvasininkas
+  da: præst, sognepræst, pastor
+  fi: pastori, kirkkoherra, pappi
+  sv: pastor, präst
+  hr: pastor, svećenik, dušobrižnik
+  lv: mācītājs, prāvests
+  hi: पादरी, पास्टर, धर्मोपदेशक
+  ar: قس، راعي الكنيسة
+  fa: کشیش، پیشوای روحانی
+  ur: پادری، مذہبی پیشوا
+  id: pendeta, gembala jemaat
+  vi: mục sư, người chăn dắt
+  th: ศิษยาภิบาล, บาทหลวง
+  ko: 목사
+  ja: 牧師、聖職者
+  zh: 牧师、精神导师
+  bn: যাজক, ধর্মযাজক
+  kk: пастор, діни қызметкер
+
+ID 2924 (cliff):
+  ru: утес, обрыв, отвесная скала
+  uk: скеля, урвище, круча
+  de: Klippe, Felswand, Steilküste
+  es: acantilado, precipicio, risco
+  fr: falaise, escarpement
+  pl: klif, urwisko, przepaść
+  it: scogliera, falesia, dirupo
+  tr: uçurum, sarp kayalık
+  pt: penhasco, despenhadeiro, falésia
+  ro: stâncă abruptă, faleză, prăpastie
+  bg: скала, стръмен склон, пропаст
+  cs: útes, skalní stěna, sráz
+  sk: útes, skalné bralo, zráz
+  hu: sziklaszirt, meredély, sziklafal
+  el: γκρεμός, απόκρημνος βράχος
+  sl: pečina, klif, prepad
+  et: kalju, pankrannik, järsak
+  lt: skardis, uola, atbraila
+  da: klippe, klint, skrænt
+  fi: kalliojyrkänne, rantakallio
+  sv: klippa, stup, brant
+  hr: litica, stijena, greben
+  lv: klints, krauja, stāvkrasts
+  hi: चट्टान, ढलान, खड़ी पहाड़ी
+  ar: جرف صخري، هاوية
+  fa: صخره، پرتگاه، صخره ساحلی
+  ur: چٹان، کھڑی ڈھلوان
+  id: tebing terjal, jurang
+  vi: vách đá dựng đứng, vách đá ven biển
+  th: หน้าผาชัน, ชะง่อนผา
+  ko: 절벽, 낭떠러지
+  ja: 崖、断崖、絶壁
+  zh: 悬崖、绝壁、峭壁
+  bn: খাড়া পাহাড়, পাহাড়ি খাদ
+  kk: жартас, тік құз
+
+ID 2925 (adequate):
+  ru: достаточный, соответствующий, надлежащий
+  uk: достатній, відповідний, належний
+  de: angemessen, hinreichend, ausreichend
+  es: adecuado, suficiente, idóneo
+  fr: adéquat, suffisant, approprié
+  pl: odpowiedni, adekwatny, wystarczający
+  it: adeguato, sufficiente, congruo
+  tr: yeterli, uygun, kafi
+  pt: adequado, suficiente, apropriado
+  ro: adecvat, corespunzător, suficient
+  bg: адекватен, съответстващ, достатъчен
+  cs: adekvátní, přiměřený, dostatečný
+  sk: primeraný, zodpovedajúci, dostatočný
+  hu: megfelelő, elegendő, kielégítő
+  el: επαρκής, κατάλληλος
+  sl: ustrezen, zadosten, primeren
+  et: piisav, nõuetekohane, küllaldane
+  lt: tinkamas, pakankamas, atitinkamas
+  da: tilstrækkelig, passende, fyldestgørende
+  fi: riittävä, asianmukainen, sopiva
+  sv: tillräcklig, adekvat, godtagbar
+  hr: odgovarajući, dostatan, primjeren
+  lv: atbilstošs, pietiekams
+  hi: पर्याप्त, यथोचित, उपयुक्त
+  ar: كافٍ، ملائم، مناسب
+  fa: کافی، مناسب، بسنده
+  ur: کافی، مناسب، موزوں
+  id: memadai, cukup, pantas
+  vi: đầy đủ, thỏa đáng, tương xứng
+  th: เพียงพอ, เหมาะสม
+  ko: 적절한, 충분한
+  ja: 適切な、十分な
+  zh: 充分的、适当的、合格的
+  bn: পর্যাপ্ত, যথোপযুক্ত, মানানসই
+  kk: жеткілікті, сәйкес келетін
+
+ID 2926 (tackle):
+  ru: браться за дело, решать проблему, захват
+  uk: братися за, вирішувати проблему, захват
+  de: angehen, anpacken, bezwingen, Tackle
+  es: abordar, afrontar, placar, tacle
+  fr: s'attaquer à, aborder, plaquer, tacle
+  pl: uporać się z, stawić czoła, zablokować, wślizg
+  it: affrontare, contrastare, placcare, placcaggio
+  tr: ele almak, mücadele etmek, top çalma
+  pt: enfrentar, abordar, desarmar, desarme
+  ro: a aborda, a înfrunta, placaj
+  bg: захващам се с, решавам, пресрещане
+  cs: řešit, pustit se do, srazit k zemi
+  sk: riešiť, pustiť sa do, zraziť na zem
+  hu: megbirkózik vmivel, kezel, szerelés
+  el: καταπιάνομαι με, αντιμετωπίζω, μαρκάρισμα
+  sl: lotiti se, spoprijeti se, zaustavitev
+  et: käsile võtma, tegelema, taklama
+  lt: imtis spręsti, susidoroti, perimti kamuolį
+  da: takle, give sig i kast med, takling
+  fi: tarttua toimeen, ratkaista, taklata
+  sv: ta sig an, gripa sig an med, tackla
+  hr: uhvatiti se ukoštac s, riješiti, startati
+  lv: ķerties klāt, atrisināt, aizturēt
+  hi: मुकाबला करना, निपटना, टैकल करना
+  ar: يتصدى لـ، يعالج، يعرقل
+  fa: دست‌وپنجه نرم کردن با، رسیدگی کردن به، تکل زدن
+  ur: نمٹنا، قابو پانا، جکڑنا
+  id: menangani, mengatasi, menekel
+  vi: giải quyết, đón đầu, xoạc bóng
+  th: รับมือ, จัดการ, สกัดบอล
+  ko: 씨름하다, 해결하려 들다, 태클하다
+  ja: 取り組む、立ち向かう、タックルする
+  zh: 处理、解决、阻截、拦截
+  bn: মোকাবিলা করা, সমাধান করার চেষ্টা করা, ট্যাকেল করা
+  kk: мәселені шешуге кірісу, тұзақтау, допты тартып алу
+
+ID 2927 (occupation):
+  ru: профессия, род занятий, оккупация
+  uk: професія, рід занять, окупація
+  de: Beruf, Beschäftigung, Besatzung
+  es: ocupación, profesión, oficio
+  fr: métier, profession, occupation
+  pl: zawód, zajęcie, okupacja
+  it: occupazione, professione, mestiere
+  tr: meslek, iş güç, işgal
+  pt: ocupação, profissão, ofício
+  ro: ocupație, profesie, ocupație militară
+  bg: професия, занимание, окупация
+  cs: zaměstnání, povolání, okupace
+  sk: zamestnanie, povolanie, okupácia
+  hu: foglalkozás, hivatás, megszállás
+  el: επάγγελμα, ασχολία, κατοχή
+  sl: poklic, zaposlitev, okupacija
+  et: amet, elukutse, okupatsioon
+  lt: profesija, užsiėmimas, okupacija
+  da: erhverv, beskæftigelse, besættelse
+  fi: ammatti, työpaikka, miehitys
+  sv: yrke, sysselsättning, ockupation
+  hr: zanimanje, posao, okupacija
+  lv: profesija, nodarbošanās, okupācija
+  hi: व्यवसाय, पेशा, आजीविका
+  ar: مهنة، عمل، احتلال
+  fa: شغل، حرفه، اشغال
+  ur: پیشہ، کاروبار، قبضہ
+  id: pekerjaan, profesi, pendudukan
+  vi: nghề nghiệp, công việc, sự chiếm đóng
+  th: อาชีพ, การประกอบอาชีพ, การยึดครอง
+  ko: 직업, 점령, 심심풀이
+  ja: 職業、業務、占領
+  zh: 职业、行业、占领
+  bn: পেশা, বৃত্তি, দখল
+  kk: мамандық, кәсіп, басып алу
+
+ID 2928 (compose):
+  ru: сочинять, составлять, компоновать
+  uk: складати, творити, компонувати
+  de: komponieren, verfassen, bilden
+  es: componer, redactar, estructurar
+  fr: composer, rédiger, constituer
+  pl: komponować, układać, tworzyć
+  it: comporre, redigere, costituire
+  tr: bestelemek, oluşturmak, yazmak
+  pt: compor, elaborar, constituir
+  ro: a compune, a redacta, a alcătui
+  bg: композирам, съчинявам, съставям
+  cs: komponovat, skládat, vytvořit
+  sk: komponovať, skladať, vytvoriť
+  hu: komponál, összeállít, alkot
+  el: συνθέτω, συγγράφω, συγκροτώ
+  sl: komponirati, skladati, sestaviti
+  et: helindama, koostama, moodustama
+  lt: kurti muziką, sudaryti, komponuoti
+  da: komponere, forfatte, opbygge
+  fi: säveltää, laatia, muodostaa
+  sv: komponera, författa, utgöra
+  hr: skladati, komponirati, sastaviti
+  lv: komponēt, sacerēt, veidot
+  hi: रचना करना, लिखना, संयोजित करना
+  ar: يؤلف، يلحن، يكوّن
+  fa: تصنیف کردن، سرودن، تشکیل دادن
+  ur: ترتیب دینا، تصنیف کرنا، بنانا
+  id: menggubah, menyusun, merangkai
+  vi: sáng tác, biên soạn, cấu thành
+  th: แต่งเพลง, ประพันธ์, รวบรวม
+  ko: 작곡하다, 구성하다, 작성하다
+  ja: 作曲する、構成する、組み立てる
+  zh: 创作、作曲、组成
+  bn: রচনা করা, সুর বাঁধন করা, গঠন করা
+  kk: жазу, шығару, құрастыру
+
+ID 2929 (stimulus):
+  ru: стимул, раздражитель, импульс
+  uk: стимул, подразник, імпульс
+  de: Reiz, Stimulus, Anreiz
+  es: estímulo, aliciente, incentivo
+  fr: stimulus, stimulant, aiguillon
+  pl: bodziec, impuls, stymulator
+  it: stimolo, impulso, incentivo
+  tr: uyarıcı, dürtü, teşvik
+  pt: estímulo, incentivo, impulso
+  ro: stimul, imbold, impuls
+  bg: стимул, дразнител, подтик
+  cs: podnět, stimul, impulz
+  sk: podnet, stimul, impulz
+  hu: inger, ösztönzés, indíték
+  el: ερέθισμα, κίνητρο, ώθηση
+  sl: dražljaj, pobuda, spodbuda
+  et: stiimul, ärritaja, tõuge
+  lt: stimulas, dirgiklis, paskata
+  da: stimulus, stimulans, tilskyndelse
+  fi: ärsyke, kiihoke, virike
+  sv: stimulans, retning, sporre
+  hr: podražaj, poticaj, impuls
+  lv: stimuls, kairinājums, pamudinājums
+  hi: उत्तेजना, उद्दीपक, प्रोत्साहन
+  ar: حافز، منبّه، مثير
+  fa: محرک، انگیزه، عامل تحریک
+  ur: محرک، تحریک، ترغیب
+  id: stimulus, rangsangan, pendorong
+  vi: chất kích thích, tác nhân kích thích
+  th: สิ่งเร้า, สิ่งกระตุ้น
+  ko: 자극, 자극제
+  ja: 刺激、刺激物、誘因
+  zh: 刺激、刺激物、促进因素
+  bn: উদ্দীপক, অনুপ্রেরণা, উদ্দীপনা
+  kk: ынталандыру, қоздырғыш, түрткі
+
+ID 2930 (patent):
+  ru: патент, патентовать, очевидный
+  uk: патент, патентувати, очевидний
+  de: Patent, patentieren, offensichtlich
+  es: patente, patentar, evidente
+  fr: brevet, breveter, manifeste
+  pl: patent, patentować, oczywisty
+  it: brevetto, brevettare, palese
+  tr: patent, tescil etmek, bariz
+  pt: patente, patentear, evidente
+  ro: brevet, a breveta, evident
+  bg: патент, патентовам, очевиден
+  cs: patent, patentovat, zřejmý
+  sk: patent, patentovať, zjavný
+  hu: szabadalom, levédet, nyilvánvaló
+  el: δίπλωμα ευρεσιτεχνίας, πατέντα, πρόδηλος
+  sl: patent, patentirati, očiten
+  et: patent, patenteerima, ilmne
+  lt: patentas, patentuoti, akivaizdus
+  da: patent, patentere, åbenlys
+  fi: patentti, patentoida, ilmeinen
+  sv: patent, patentera, uppenbar
+  hr: patent, patentirati, očit
+  lv: patents, patentēt, acīmredzams
+  hi: पेटेंट, एकस्व, सुस्पष्ट
+  ar: براءة اختراع، تسجيل براءة، جلي
+  fa: حق ثبت اختراع، پتنت، آشکار
+  ur: پیٹنٹ، حق ایجاد، صریح
+  id: paten, mematenkan, kentara
+  vi: bằng sáng chế, cấp bằng sáng chế, rõ ràng
+  th: สิทธิบัตร, จดสิทธิบัตร, ชัดแจ้ง
+  ko: 특허, 특허를 받다, 명백한
+  ja: 特許、特許を取得する、明白な
+  zh: 专利、获得专利、明显的
+  bn: পেটেন্ট, স্বত্বাধিকার, স্পষ্ট
+  kk: патент, патенттеу, айқын
+
+ID 2931 (harsh):
+  ru: суровый, резкий, жестокий, грубый
+  uk: суворий, різкий, жорстокий, брутальний
+  de: hart, rau, schroff, unerbittlich
+  es: duro, severo, áspero, riguroso
+  fr: dur, sévère, rude, âpre
+  pl: surowy, ostry, szorstki, bezwzględny
+  it: duro, severo, aspro, tagliente
+  tr: sert, acımasız, haşin, kaba
+  pt: severo, áspero, rigoroso, duro
+  ro: aspru, sever, dur, nemilos
+  bg: суров, остър, безмилостен
+  cs: drsný, krutý, přísný, ostrý
+  sk: drsný, krutý, prísny, ostrý
+  hu: kemény, zord, kíméletlen, nyers
+  el: σκληρός, αυστηρός, δριμύς
+  sl: oster, neusmiljen, rezek
+  et: karm, range, kare, toores
+  lt: griežtas, atšiaurus, šiurkštus
+  da: barsk, streng, skrap, hård
+  fi: ankara, kova, tyly, karkea
+  sv: hård, sträng, barsk, skarp
+  hr: oštar, okrutan, grub, strog
+  lv: skarbs, ass, nežēlīgs
+  hi: कठोर, तीखा, रुखा, कर्कश
+  ar: قاسٍ، صارم، فظّ، خشن
+  fa: خشن، زننده، بی‌رحم، سخت‌گیر
+  ur: سخت، کڑا، کرخت، ناگوار
+  id: keras, kasar, kejam, menyengat
+  vi: khắc nghiệt, cay nghiệt, thô ráp
+  th: รุนแรง, หยาบกระด้าง, เกรี้ยวกราด
+  ko: 가혹한, 냉혹한, 거친
+  ja: 厳しい、過酷な、とげとげしい
+  zh: 严厉的、残酷的、刺耳的
+  bn: কঠোর, নির্দয়, কর্কশ
+  kk: қатал, қатаң, дөрекі
+
+ID 2932 (chaos):
+  ru: хаос, беспорядок, неразбериха
+  uk: хаос, безладдя, гармидер
+  de: Chaos, Durcheinander, Wirrwarr
+  es: caos, desorden, confusión
+  fr: chaos, désordre, pagaille
+  pl: chaos, zamęt, bałagan
+  it: caos, scompiglio, disordine
+  tr: kaos, kargaşa, keşmekeş
+  pt: caos, desordem, confusão
+  ro: haos, dezordine, debandadă
+  bg: хаос, безпорядък, суматоха
+  cs: chaos, zmatek, nepořádek
+  sk: chaos, zmätok, neporiadok
+  hu: káosz, zűrzavar, rendetlenség
+  el: χάος, αναταραχή, αταξία
+  sl: kaos, zmeda, nered
+  et: kaos, segadus, laastik
+  lt: chaosas, sumaištis, netvarka
+  da: kaos, forvirring, uorden
+  fi: kaaos, sekasorto, hämminki
+  sv: kaos, oreda, förvirring
+  hr: kaos, nered, rasulo
+  lv: haoss, jukums, nekārtība
+  hi: अराजकता, अव्यवस्था, घोर गड़बड़ी
+  ar: فوضى، اضطراب، بلبلة
+  fa: هرج و مرج، آشفتگی، بلبشو
+  ur: افراتفری، ابتری، بد نظمی
+  id: kekacauan, kericuhan, huru-hara
+  vi: sự hỗn loạn, tình trạng náo loạn
+  th: ความสับสนวุ่นวาย, ความอลหม่าน
+  ko: 혼돈, 대혼란
+  ja: 混乱、無秩序、カオス
+  zh: 混乱、杂乱无章
+  bn: বিশৃঙ্খলা, অরাজকতা, ঘোর অস্থিরতা
+  kk: бейберекеттік, былық, хаос
+
+ID 2933 (kit):
+  ru: набор, комплект, экипировка
+  uk: набір, комплект, екіпірування
+  de: Set, Bausatz, Ausrüstung, Trikot
+  es: kit, juego, botiquín, equipamiento
+  fr: kit, trousse, lot, équipement
+  pl: zestaw, komplet, apteczka
+  it: kit, corredo, valigetta, completo
+  tr: kit, takım, malzeme seti
+  pt: kit, conjunto, estojo, equipamento
+  ro: trusă, set, echipament, pachet
+  bg: комплект, набор, екипировка
+  cs: sada, souprava, výstroj
+  sk: súprava, výbava, výstroj
+  hu: készlet, felszerelés, garnitúra
+  el: κιτ, σετ, εξάρτυση
+  sl: komplet, pribor, oprema
+  et: komplekt, varustus, tarvikud
+  lt: rinkinys, komplektas, apranga
+  da: sæt, udstyrssæt, grej
+  fi: sarja, tarvikesarja, varusteet
+  sv: kit, sats, utrustning, förpackning
+  hr: pribor, garnitura, oprema
+  lv: komplekts, piederumu komplekts
+  hi: किट, साधन-सामग्री, उपकरण बक्सा
+  ar: عدّة، طقم، حقيبة أدوات
+  fa: کیت، جعبه ابزار، مجموعه
+  ur: سامان کا ڈبہ، کٹ، مجموعہ
+  id: peralatan, perlengkapan, set
+  vi: bộ dụng cụ, hành trang, bộ kit
+  th: ชุดอุปกรณ์, ชุดเครื่องมือ
+  ko: 키트, 조립 세트, 도구 모음
+  ja: 用具一式、キット、道具箱
+  zh: 成套工具、工具包、配套元件
+  bn: কিট, সাজসরঞ্জাম, উপকরণ সংকলন
+  kk: құрал-жабдықтар жиынтығы, жинақ
+
+ID 2934 (surprisingly):
+  ru: удивительно, на удивление, поразительно
+  uk: дивно, напрочуд, разюче
+  de: überraschenderweise, erstaunlich
+  es: sorprendentemente, asombrosamente
+  fr: étonnamment, de façon surprenante
+  pl: zaskakująco, zdumiewająco
+  it: sorprendentemente, incredibilmente
+  tr: şaşırtıcı bir şekilde, hayret verici biçimde
+  pt: surpreendentemente, espantosamente
+  ro: în mod surprinzător, uimitor de
+  bg: изненадващо, поразително
+  cs: překvapivě, udivujícím způsobem
+  sk: prekvapivo, udivujúco
+  hu: meglepően, meglepő módon
+  el: περιέργως, παραδόξως, απροσδόκητα
+  sl: presenetljivo, osupljivo
+  et: üllatavalt, hämmastavalt
+  lt: stebėtinai, netikėtai
+  da: overraskende, forbløffende
+  fi: yllättävän, hämmästyttävästi
+  sv: överraskande, förvånansvärt
+  hr: iznenađujuće, zapanjujuće
+  lv: pārsteidzoši, apbrīnojami
+  hi: आश्चर्यजनक रूप से, अनापेक्षित रूप से
+  ar: بشكل مدهش، على نحو غير متوقع
+  fa: به‌طور شگفت‌انگیز، به‌طرز غافلگیرکننده‌ای
+  ur: حیرت انگیز طور پر، غیر متوقع انداز سے
+  id: secara mengejutkan, tanpa diduga
+  vi: đáng ngạc nhiên, một cách bất ngờ
+  th: อย่างน่าประหลาดใจ, เกินคาด
+  ko: 놀랍게도, 의외로
+  ja: 驚くほど、意外にも
+  zh: 令人惊奇地、出乎意料地
+  bn: আশ্চর্যজনকভাবে, অপ্রত্যাশিতভাবে
+  kk: таңқаларлықтай, күтпеген жерден
+
+ID 2935 (modest):
+  ru: скромный, сдержанный, умеренный
+  uk: скромний, стриманий, помірний
+  de: bescheiden, zurückhaltend, maßvoll
+  es: modesto, comedido, austero
+  fr: modeste, discret, sobre
+  pl: skromny, umiarkowany
+  it: modesto, discreto, moderato
+  tr: mütevazı, alçakgönüllü, ılımlı
+  pt: modesto, humilde, moderado
+  ro: modest, cumpătat, reținut
+  bg: скромен, умерен, сдържан
+  cs: skromný, nenáročný, střídmý
+  sk: skromný, nenáročný, striedmy
+  hu: szerény, visszafogott, mérsékelt
+  el: σεμνός, μετριόφρων, λιτός
+  sl: skromen, nezahteven, zmeren
+  et: tagasihoidlik, kasin, malbe
+  lt: kuklus, nepretenzingas
+  da: beskeden, tilbageholdende, moderat
+  fi: vaatimaton, nöyrä, hillitty
+  sv: anspråkslös, måttlig, blygsam
+  hr: skroman, umjeren, povučen
+  lv: pieticīgs, neuzbāzīgs, mērens
+  hi: विनम्र, सादा, मामूली
+  ar: متواضع، معتدل، بسيط
+  fa: فروتن، متواضع، ناچیز
+  ur: منکسر المزاج، باحیا، معمولی
+  id: sederhana, rendah hati, tidak berlebihan
+  vi: khiêm tốn, giản dị, vừa phải
+  th: ถ่อมตัว, สุภาพเสงี่ยม, พอประมาณ
+  ko: 겸손한, 소박한, 적당한
+  ja: 控えめな、謙虚な、質素な
+  zh: 谦虚的、适度的、简朴的
+  bn: বিনয়ী, সংযত, মাঝারি
+  kk: қарапайым, ұстамды, кішіпейіл
+
+ID 2936 (shared):
+  ru: общий, совместный, разделенный
+  uk: спільний, розділений, сумісний
+  de: gemeinsam, geteilt, gemeinschaftlich
+  es: compartido, conjunto, mancomunado
+  fr: partagé, commun, conjoint
+  pl: wspólny, współdzielony, podzielany
+  it: condiviso, comune, collettivo
+  tr: ortak, paylaşılan, müşterek
+  pt: compartilhado, conjunto, comum
+  ro: împărtășit, comun, partajat
+  bg: споделен, общ, съвместен
+  cs: sdílený, společný
+  sk: zdieľaný, spoločný
+  hu: megosztott, közös
+  el: κοινός, διαμοιρασμένος
+  sl: deljen, skupen
+  et: jagatud, ühine
+  lt: bendras, pasidalytas
+  da: delt, fælles
+  fi: jaettu, yhteinen
+  sv: delad, gemensam
+  hr: zajednički, dijeljen
+  lv: kopīgs, dalīts
+  hi: साझा, संयुक्त, आपस में बांटा हुआ
+  ar: مشترك، متقاسم
+  fa: مشترک، همگانی، تسهیم‌شده
+  ur: مشترک، سانجھا
+  id: bersama, terbagi, dibagikan
+  vi: chung, được chia sẻ
+  th: ที่ใช้ร่วมกัน, ส่วนรวม
+  ko: 공유된, 공동의
+  ja: 共有の、共同の
+  zh: 共享的、共有的、共同的
+  bn: ভাগাভাগি করা, যৌথ, সার্বজনীন
+  kk: ортақ, бөлісілген, бірлескен
+
+ID 2937 (overwhelming):
+  ru: подавляющий, ошеломляющий, непреодолимый
+  uk: переважний, приголомшливий, нездоланний
+  de: überwältigend, erdrückend
+  es: abrumador, aplastante, sobrecogedor
+  fr: écrasant, accablant, renversant
+  pl: przytłaczający, druzgocący
+  it: schiacciante, travolgente, incontenibile
+  tr: ezici, karşı konulmaz, çok yoğun
+  pt: avassalador, esmagador, opressivo
+  ro: copleșitor, zdrobitor
+  bg: смазващ, съкрушителен, неустоим
+  cs: drtivý, ohromující, nepřekonatelný
+  sk: drvivý, ohromujúci, neprekonateľný
+  hu: elsöprő, lehengerlő, túlnyomó
+  el: συντριπτικός, ακατανίκητος
+  sl: premočljiv, osupljiv, neustavljiv
+  et: valdav, tohutu, vastupandamatu
+  lt: triuškinamas, priboškiantis
+  da: overvældende, knusende
+  fi: murskaava, ylivoimainen, huima
+  sv: överväldigande, krossande
+  hr: premoćan, golem, neobranjiv
+  lv: pārliecinošs, satriecošs, milzīgs
+  hi: अत्यधिक, भारी, दिल दहला देने वाला
+  ar: ساحق، كاسح، لا يُقاوم
+  fa: طاقت‌فرسا، خردکننده، کوبنده
+  ur: بے پناہ، زبردست، قابو سے باہر
+  id: luar biasa banyak, tak tertahankan
+  vi: áp đảo, choáng ngợp
+  th: ล้นหลาม, ท่วมท้น, เกินต้านทาน
+  ko: 압도적인, 저항할 수 없는
+  ja: 圧倒的な、途方もない
+  zh: 压倒性的、势不可挡的
+  bn: প্রবল, অপ্রতিরোধ্য, বিপুল
+  kk: басым, есеңгірететін, талқандайтын
+
+ID 2938 (elevator):
+  ru: лифт, подъемник, элеватор
+  uk: ліфт, підйомник, елеватор
+  de: Aufzug, Fahrstuhl, Lift
+  es: ascensor, elevador
+  fr: ascenseur, monte-charge
+  pl: winda, dźwig osobowy
+  it: ascensore, montacarichi
+  tr: asansör
+  pt: elevador
+  ro: ascensor, lift
+  bg: асансьор, подемник
+  cs: výtah, zdviž
+  sk: výťah, zdvihák
+  hu: lift, felvonó
+  el: ανελκυστήρας, ασανσέρ
+  sl: dvigalo
+  et: lift, tõstuk
+  lt: liftas, keltuvas
+  da: elevator, hejs
+  fi: hissi, nostin
+  sv: hiss, personhiss
+  hr: dizalo, lift
+  lv: lifts, pacēlājs
+  hi: लिफ्ट, उत्थापक
+  ar: مصعد، مصعد كهربائي
+  fa: آسانسور، بالابر
+  ur: لفٹ، برقی سیڑھی
+  id: lift, elevator
+  vi: thang máy
+  th: ลิฟต์, เครื่องยก
+  ko: 엘리베이터, 승강기
+  ja: エレベーター、昇降機
+  zh: 电梯、升降机
+  bn: লিফট, এলিভেটর
+  kk: лифт, жеделсаты
+
+ID 2939 (hispanic):
+  ru: испаноязычный, латиноамериканский, латиноамериканец
+  uk: іспаномовний, латиноамериканський, латиноамериканець
+  de: hispanisch, spanischstämmig, Latino
+  es: hispano, hispanoamericano
+  fr: hispanique, d'origine hispanique
+  pl: hiszpańskojęzyczny, latynoski
+  it: ispanico, latinoamericano
+  tr: Hispanik, İspanyol kökenli
+  pt: hispânico, latino-americano
+  ro: hispanic, latino-american
+  bg: испаноезичен, латиноамериканец
+  cs: hispánský, hispánec
+  sk: hispánsky, hispánsky hovoriaci
+  hu: hispán, spanyol ajkú
+  el: ισπανόφωνος, ισπανικής καταγωγής
+  sl: hispanski, latinskoameriški
+  et: hispaaniakeelne, hispaania päritolu
+  lt: ispanakalbis, ispanų kilmės
+  da: hispanisk, spansktalende
+  fi: hispano-, espanjankielinen
+  sv: spansktalande, latinamerikansk
+  hr: hispanoamerički, hispanski
+  lv: spāņvalodīgs, latīņamerikāņu
+  hi: हिस्पैनिक, लातिनी अमेरिकी
+  ar: من أصل إسباني، هسباني
+  fa: اسپانیایی‌تبار، لاتین‌تبار
+  ur: ہسپانوی نژاد، لاطینی امریکی
+  id: Hispanik, keturunan Spanyol
+  vi: gốc Tây Ban Nha, nói tiếng Tây Ban Nha
+  th: ชาวฮิสแปนิก, ที่พูดภาษาสเปน
+  ko: 히스패닉의, 스페인계 미국인
+  ja: ヒスパニックの、中南米系住民
+  zh: 西班牙裔的、拉丁裔的
+  bn: হিস্পানিক, স্পেনীয় বংশোদ্ভূত
+  kk: испан тілді, латынамерикалық
+
+ID 2940 (transmission):
+  ru: передача, распространение, коробка передач
+  uk: передача, трансмісія, поширення інфекції
+  de: Übertragung, Sendung, Getriebe
+  es: transmisión, contagio, caja de cambios
+  fr: transmission, émission, boîte de vitesses
+  pl: transmisja, przekaz, skrzynia biegów
+  it: trasmissione, contagio, cambio
+  tr: iletim, bulaşma, şanzıman
+  pt: transmissão, contágio, caixa de marcha
+  ro: transmisie, transmitere, cutie de viteze
+  bg: предаване, пренасяне, скоростна кутия
+  cs: přenos, vysílání, převodovka
+  sk: prenos, vysielanie, prevodovka
+  hu: átvitel, közvetítés, sebességváltó
+  el: μετάδοση, εκπομπή, κιβώτιο ταχυτήτων
+  sl: prenos, oddajanje, menjalnik
+  et: ülekanne, edastamine, käigukast
+  lt: perdavimas, plitimas, pavarų dėžė
+  da: transmission, overførsel, gearkasse
+  fi: lähetys, tartunta, vaihteisto
+  sv: överföring, sändning, växellåda
+  hr: prijenos, emitiranje, mjenjač
+  lv: pārraide, izplatīšanās, transmisija
+  hi: संचरण, प्रसारण, गियरबॉक्स
+  ar: انتقال، بث، ناقل حركة
+  fa: انتقال، سرایت، جعبه‌دنده
+  ur: منتقلی، ترسیل، گیئر بکس
+  id: transmisi, penularan, transmisi mobil
+  vi: sự truyền tải, lây lan, hộp số
+  th: การถ่ายทอด, การแพร่เชื้อ, ระบบเกียร์
+  ko: 전송, 전파, 변속기
+  ja: 伝達、感染、変速機
+  zh: 传输、传播、变速箱
+  bn: সংক্রমণ, সম্প্রচার, ট্রান্সমিশন
+  kk: беріліс, таралу, беріліс қорабы
+
+ID 2941 (butt):
+  ru: задница, окурок, приклад, бодать
+  uk: сідниці, недопалок, приклад, буцати
+  de: Hintern, Po, Stummel, stoßen
+  es: trasero, culo, colilla, embestir
+  fr: fesses, derrière, mégot, cogner
+  pl: tyłek, pupa, niedopałek, uderzyć łbem
+  it: sedere, mozzicone, calcio, cozzare
+  tr: kıç, popo, izmarit, tos vurmak
+  pt: bunda, bumbum, bituca, cabecear
+  ro: fund, posterior, chiștoc, a împunge
+  bg: задник, дупе, фас, мушкам с глава
+  cs: zadek, nedopalek, pažba, trkat
+  sk: zadok, ohorok, pažba, trkať
+  hu: fenék, cigarettacsikk, puskatus, lök
+  el: οπίσθια, γόπα, κοντάκι, κουτουλώ
+  sl: zadnjica, ogorek, kopito, butati
+  et: tagumik, koni, püssipära, puskema
+  lt: užpakalis, nuorūka, buožė, badyti kaktomis
+  da: numse, skod, kolbe, stange
+  fi: takapuoli, tumppi, perä, puskea
+  sv: rumpa, fimp, kolv, stångas
+  hr: stražnjica, opušak, kundak, udarati glavom
+  lv: pakaļa, izsmēķis, laide, badīt
+  hi: नितंब, सिगरेट का टुकड़ा, कुंदा, सींग मारना
+  ar: مؤخرة، عقب سيجارة، كعب البندقية، نطح
+  fa: باسن، ته‌سیگار، قنداق تفنگ، کله زدن
+  ur: چوتڑ، سگریٹ کا ٹوٹا، کندہ، سینگ مارنا
+  id: pantat, puntung rokok, menanduk
+  vi: mông, đầu lọc thuốc lá, báng súng, húc
+  th: ก้น, ก้นบุหรี่, พานท้ายปืน, โขก
+  ko: 엉덩이, 담배꽁초, 개머리판, 들이받다
+  ja: 尻、吸い殻、台尻、頭突きする
+  zh: 屁股、烟头、枪托、顶撞
+  bn: নিতম্ব, পাছা, সিগারেটের টুকরো, ঢুঁ মারা
+  kk: бөксе, темекі қалдығы, дүмі, сүзу
+
+ID 2942 (cowboy):
+  ru: ковбой, пастух
+  uk: ковбой, пастух
+  de: Cowboy, Kuhhirte
+  es: vaquero, gaucho
+  fr: cow-boy, vacher
+  pl: kowboj, pasterz bydła
+  it: cowboy, mandriano
+  tr: kovboy, sığırtmaç
+  pt: caubói, vaqueiro
+  ro: văcar, cowboy
+  bg: каубой, говедар
+  cs: kovboj, pastevec krav
+  sk: kovboj, pastier kráv
+  hu: cowboy, tehénpásztor
+  el: καουμπόι, γελαδάρης
+  sl: kavboj, govedar
+  et: kauboi, karjus
+  lt: kaubojus, piemuo
+  da: cowboy, kvægdriver
+  fi: lehmipoika, cowboy
+  sv: cowboy, kofösare
+  hr: kauboj, gonič stoke
+  lv: kovbojs, lopu gans
+  hi: चरवाहा, काउबॉय
+  ar: راعي بقر، كاوبوي
+  fa: گاوچران، کابوی
+  ur: چرواہا، گوالا
+  id: koboi, penggembala sapi
+  vi: người chăn bò, cao bồi
+  th: คาวบอย, คนต้อนวัว
+  ko: 카우보이, 목동
+  ja: カウボーイ、牛飼い
+  zh: 牛仔、牧童
+  bn: কাউবয়, রাখাল
+  kk: ковбой, бақташы
+
+ID 2943 (ease):
+  ru: легкость, простота, облегчать, успокаивать
+  uk: легкість, простота, полегшувати, заспокоювати
+  de: Leichtigkeit, Bequemlichkeit, lindern, erleichtern
+  es: facilidad, comodidad, aliviar, calmar
+  fr: facilité, aisance, soulager, apaiser
+  pl: łatwość, swoboda, łagodzić, uśmierzać
+  it: facilità, agio, alleviare, attenuare
+  tr: kolaylık, rahatlık, dindirmek, hafifletmek
+  pt: facilidade, desvelo, aliviar, amenizar
+  ro: ușurință, tihnă, a alina, a ușura
+  bg: лекота, спокойствие, облекчавам
+  cs: snadnost, lehkost, ulehčit, zmírnit
+  sk: ľahkosť, pohoda, uľahčiť, zmierniť
+  hu: könnyedség, kényelem, enyhít, csillapít
+  el: ευκολία, άνεση, ανακουφίζω, καταλαγιάζω
+  sl: lahkotnost, udobje, olajšati
+  et: kergus, muretus, leevendama
+  lt: lengvumas, ramybė, palengvinti
+  da: lethed, ubesværethed, lindre
+  fi: helppous, vaivattomuus, lievittää
+  sv: lätthet, bekvämlighet, lindra, underlätta
+  hr: lakoća, opuštenost, olakšati, ublažiti
+  lv: vieglums, bezrūpība, atvieglot
+  hi: आसानी, सुगमता, कम करना, चैन
+  ar: سهولة، يسر، راحة، يخفف
+  fa: آسانی، آرامش، تسکین دادن
+  ur: آسانی، سہولت، تخفیف کرنا
+  id: kemudahan, kenyamanan, meredakan
+  vi: sự thanh thản, dễ dàng, làm dịu bớt
+  th: ความสะดวกสบาย, บรรเทา, คลายกังวล
+  ko: 편안함, 수월함, 덜어주다
+  ja: 容易さ、気楽さ、和らげる
+  zh: 容易、安逸、缓解、减轻
+  bn: সহজতা, স্বাচ্ছন্দ্য, উপশম করা
+  kk: жеңілдік, оңайлық, жеңілдету
+
+ID 2944 (intent):
+  ru: намерение, умысел, сосредоточенный
+  uk: намір, умисел, зосереджений
+  de: Absicht, Vorhaben, entschlossen
+  es: intención, propósito, resuelto
+  fr: intention, dessein, résolu, attentif
+  pl: zamiar, intencja, skupiony
+  it: intento, intenzione, concentrato
+  tr: niyet, maksat, kararlı
+  pt: intenção, propósito, compenetrado
+  ro: intenție, scop, hotărât
+  bg: намерение, цел, съсредоточен
+  cs: záměr, úmysl, soustředěný
+  sk: zámer, úmysel, sústredený
+  hu: szándék, szándékolt cél, elszánt
+  el: πρόθεση, σκοπός, προσηλωμένος
+  sl: namen, naklep, osredotočen
+  et: kavatsus, plaan, süvenenud
+  lt: ketinimas, sumanymas, įdėmus
+  da: hensigt, intention, målbevidst
+  fi: aikomus, tarkoitus, keskittynyt
+  sv: avsikt, uppsåt, målmedveten
+  hr: namjera, nakana, usredotočen
+  lv: nodoms, nolūks, vērīgs
+  hi: इरादा, मंशा, ध्यानमग्न
+  ar: نية، قصد، عازم
+  fa: قصد، نیت، مصمم
+  ur: ارادہ، نیت، متوجہ
+  id: niat, maksud, bertekad
+  vi: ý định, mục đích, chú tâm
+  th: เจตนา, ความตั้งใจ, จดจ่อ
+  ko: 의도, 목적, 열중하는
+  ja: 意図、企て、熱心な
+  zh: 意图、打算、专注的
+  bn: উদ্দেশ্য, অভিপ্রায়, মগ্ন
+  kk: ниет, мақсат, зейінді
+
+ID 2945 (counseling):
+  ru: консультирование, психологическая помощь
+  uk: консультування, психологічна допомога
+  de: Beratung, psychologische Beratung, Betreuung
+  es: asesoramiento, psicoterapia, orientación
+  fr: conseil, soutien psychologique, orientation
+  pl: poradnictwo, pomoc psychologiczna
+  it: consulenza, orientamento, supporto psicologico
+  tr: psikolojik danışmanlık, rehberlik
+  pt: aconselhamento, orientação psicológica
+  ro: consiliere, asistență psihologică
+  bg: консултиране, психологическа помощ
+  cs: poradenství, psychologická podpora
+  sk: poradenstvo, psychologická pomoc
+  hu: tanácsadás, lelkisegély
+  el: συμβουλευτική, ψυχολογική καθοδήγηση
+  sl: svetovanje, psihološka pomoč
+  et: nõustamine, hingehoid
+  lt: konsultavimas, patarimų teikimas
+  da: rådgivning, vejledning
+  fi: neuvonta, terapia, ohjaus
+  sv: rådgivning, stödsamtal
+  hr: savjetovanje, psihološka pomoć
+  lv: konsultēšana, padomdošana
+  hi: परामर्श, सलाह, मनोवैज्ञानिक मार्गदर्शन
+  ar: استشارة، إرشاد نفسي
+  fa: مشاوره، روان‌درمانی، هدایت
+  ur: مشاورت، نفسیاتی رہنمائی
+  id: konseling, bimbingan psikologis
+  vi: tư vấn, tham vấn tâm lý
+  th: การให้คำปรึกษา, บริการแนะแนว
+  ko: 상담, 심리 치료 지원
+  ja: カウンセリング、相談指導
+  zh: 咨询、辅导、心理疏导
+  bn: পরামর্শদান, মনস্তাত্ত্বিক সহায়তা
+  kk: кеңес беру, психологиялық көмек
+
+ID 2946 (complexity):
+  ru: сложность, комплексность, запутанность
+  uk: складність, комплексність, заплутаність
+  de: Komplexität, Vielschichtigkeit, Verflechtung
+  es: complejidad, complicación
+  fr: complexité, intrication
+  pl: złożoność, skomplikowanie
+  it: complessità, intricata natura
+  tr: karmaşıklık, giriftlik
+  pt: complexidade, complicação
+  ro: complexitate, dificultate
+  bg: сложност, комплексност
+  cs: složitost, komplexnost
+  sk: zložitosť, komplexnosť
+  hu: összetettség, bonyolultság
+  el: πολυπλοκότητα, συνθετότητα
+  sl: zapletenost, kompleksnost
+  et: keerukus, liitsus
+  lt: sudėtingumas, kompleksiškumas
+  da: kompleksitet, indviklethed
+  fi: monimutkaisuus, monitahoisuus
+  sv: komplexitet, mångfald
+  hr: složenost, kompleksnost
+  lv: sarežģītība, kompleksums
+  hi: जटिलता, पेचीदगी
+  ar: تعقيد، تشابك
+  fa: پیچیدگی، بغرنجی
+  ur: پیچیدگی، الجھاؤ
+  id: kerumitan, kompleksitas
+  vi: sự phức tạp, tính rắc rối
+  th: ความซับซ้อน, ความยุ่งเหยิง
+  ko: 복잡성, 난해함
+  ja: 複雑さ、難解さ
+  zh: 复杂性、复杂的事物
+  bn: জটিলতা, দুরূহতা
+  kk: күрделілік, шытырмандық
+
+ID 2947 (nonetheless):
+  ru: тем не менее, все-таки, несмотря на это
+  uk: тим не менш, проте, попри це
+  de: dennoch, trotzdem, gleichwohl
+  es: no obstante, sin embargo
+  fr: néanmoins, toutefois, malgré tout
+  pl: niemniej jednak, mimo to
+  it: nondimeno, tuttavia, ciononostante
+  tr: yine de, buna rağmen
+  pt: não obstante, no entanto, contudo
+  ro: totuși, cu toate acestea
+  bg: все пак, въпреки това
+  cs: přesto, nicméně
+  sk: napriek tomu, predsa len
+  hu: mindazonáltal, ennek ellenére
+  el: παρ' όλα αυτά, εντούτοις
+  sl: kljub temu, vsekakor
+  et: sellest hoolimata, ometi
+  lt: vis dėlto, nepaisant to
+  da: ikke desto mindre, alligevel
+  fi: siitä huolimatta, silti
+  sv: icke desto mindre, ändå
+  hr: ipak, unatoč tome
+  lv: neskatoties uz to, tomēr
+  hi: फिर भी, इसके बावजूद
+  ar: مع ذلك، برغم ذلك
+  fa: با این حال، با این همه
+  ur: تاہم، اس کے باوجود
+  id: meskipun demikian, namun
+  vi: tuy nhiên, dù sao đi nữa
+  th: ถึงกระนั้น, แม้ว่าจะเป็นอย่างนั้น
+  ko: 그럼에도 불구하고, 그렇기는 하지만
+  ja: それにもかかわらず、それでもなお
+  zh: 尽管如此、依然
+  bn: তবুও, তা সত্ত্বেও
+  kk: соған қарамастан, дегенмен
+
+ID 2948 (effectiveness):
+  ru: действенность, результативность, эффективность
+  uk: дієвість, результативність, ефективність
+  de: Wirksamkeit, Effektivität
+  es: eficacia, efectividad
+  fr: efficacité, pertinence
+  pl: skuteczność, efektywność
+  it: efficacia, validità
+  tr: etkililik, geçerlilik
+  pt: eficácia, efetividade
+  ro: eficacitate, randament
+  bg: ефективност, ефикасност
+  cs: účinnost, efektivita
+  sk: účinnosť, efektívnosť
+  hu: eredményesség, hatékonyság
+  el: αποτελεσματικότητα, δραστικότητα
+  sl: učinkovitost, uspešnost
+  et: tõhusus, mõjusus
+  lt: veiksmingumas, efektyvumas
+  da: virksomhed, effektivitet
+  fi: tehokkuus, vaikuttavuus
+  sv: verkningsgrad, effektivitet
+  hr: učinkovitost, djelotvornost
+  lv: iedarbīgums, efektivitāte
+  hi: प्रभावकारिता, असर, सार्थकता
+  ar: فاعلية، نجاعة
+  fa: اثربخشی، کارایی، ثمربخشی
+  ur: اثر انگیزی، کارگر ہونا، موثریت
+  id: keefektifan, daya guna
+  vi: tính hiệu quả, sự đắc lực
+  th: ประสิทธิผล, ความได้ผล
+  ko: 유효성, 효과적임
+  ja: 有効性、効果の高さ
+  zh: 有效性、成效
+  bn: কার্যকারিতা, ফলপ্রসূতা
+  kk: нәтижелілік, тиімділік
+
+ID 2949 (statistical):
+  ru: статистический
+  uk: статистичний
+  de: statistisch
+  es: estadístico
+  fr: statistique
+  pl: statystyczny
+  it: statistico
+  tr: istatistiksel
+  pt: estatístico
+  ro: statistic
+  bg: статистически
+  cs: statistický
+  sk: štatistický
+  hu: statisztikai
+  el: στατιστικός
+  sl: statističen
+  et: statistiline
+  lt: statistinis
+  da: statistisk
+  fi: tilastollinen
+  sv: statistisk
+  hr: statistički
+  lv: statistisks
+  hi: सांख्यिकीय, आंकड़ों का
+  ar: إحصائي
+  fa: آماری
+  ur: شماریاتی
+  id: statistik, menurut statistik
+  vi: thuộc thống kê
+  th: ทางสถิติ, ด้านสถิติ
+  ko: 통계상의, 통계학적인
+  ja: 統計上の、統計的な
+  zh: 统计的、统计学上的
+  bn: পরিসংখ্যানগত, রাশিবিজ্ঞান বিষয়ক
+  kk: статистикалық
+
+ID 2950 (longtime):
+  ru: давний, многолетний, старинный
+  uk: давній, багаторічний, старовинний
+  de: langjährig, alt, alteingesessen
+  es: de mucho tiempo, veterano, de toda la vida
+  fr: de longue date, de longue durée
+  pl: wieloletni, długoletni, dawny
+  it: di lunga data, di vecchia data
+  tr: eski, uzun süreli, çok yıllık
+  pt: de longa data, antigo, de muitos anos
+  ro: de lungă durată, vechi, de mult timp
+  bg: дългогодишен, отдавнашен
+  cs: dlouholetý, dávný
+  sk: dlhoročný, dávny
+  hu: régi, régóta tartó, sokéves
+  el: μακροχρόνιος, παλιός
+  sl: dolgoleten, star
+  et: pikaajaline, kauaaegne
+  lt: ilgalaikis, ilgametis, senas
+  da: mangeårig, livslang
+  fi: pitkäaikainen, vanha
+  sv: långvarig, mångårig, sedan länge
+  hr: dugogodišnji, davni
+  lv: ilggadējs, sens
+  hi: दीर्घकालीन, बहुत पुराना, लंबे समय का
+  ar: قديم العهد، منذ أمد طويل
+  fa: دیرینه، دیرپای، باسابقه
+  ur: دیرینہ، پرانا، مدتوں کا
+  id: yang sudah lama, bertahun-tahun
+  vi: lâu năm, lâu đời
+  th: ที่มีมายาวนาน, ที่เป็นมานาน
+  ko: 오랜, 오랜 기간의
+  ja: 長年の、古くからの
+  zh: 长期的、多年的、老资格的
+  bn: দীর্ঘদিনের, বহুদিনের, পুরনো
+  kk: көпжылдық, байырғы, бұрыннан келе жатқан
+
+ID 2951 (strain):
+  ru: напряжение, нагрузка, штамм, растяжение связок
+  uk: напруга, навантаження, штам, розтягнення зв'язок
+  de: Belastung, Anstrengung, Zerrung, Stamm
+  es: tensión, esfuerzo, tirón muscular, cepa
+  fr: tension, surmenage, élongation, souche
+  pl: obciążenie, napięcie, naciągnięcie, szczep
+  it: tensione, sforzo, strappo muscolare, ceppo
+  tr: gerginlik, zorlanma, kas incinmesi, suş
+  pt: tensão, esforço, estiramento, cepa
+  ro: tensiune, efort intens, întindere musculară, tulpină
+  bg: напрежение, претоварване, разтежение, щам
+  cs: napětí, zátěž, namožení, kmen
+  sk: napätie, záťaž, natiahnutie svalu, kmeň
+  hu: megterhelés, feszültség, izomhúzódás, törzs
+  el: καταπόνηση, πίεση, τέντωμα, στέλεχος
+  sl: napetost, obremenitev, nateg, sev
+  et: pingutus, koormus, nikastus, tüvi
+  lt: įtampa, krūvis, patempimas, atmaina
+  da: belastning, overanstrengelse, forstrækning, stamme
+  fi: rasitus, ponnistus, venähdys, kanta
+  sv: påfrestning, belastning, sträckning, stam
+  hr: naprezanje, opterećenje, uganuće, soj
+  lv: slodze, sasprindzinājums, sastiepums, celms
+  hi: तनाव, खिंचाव, उपभेद
+  ar: إجهاد، شد عضلي، توتر، سلالة
+  fa: فشار، کشیدگی، گونه، سویه
+  ur: تناؤ، کھنچاؤ، سٹرین
+  id: ketegangan, regangan, galur
+  vi: sự căng thẳng, áp lực, chủng vi sinh
+  th: ความตึงเครียด, อาการเคล็ด, สายพันธุ์
+  ko: 긴장, 염좌, 균주, 부담
+  ja: 緊張、負担、筋違い、菌株
+  zh: 张力、劳损、菌株、拉紧
+  bn: চাপ, পেশীর টান, স্ট্রেন, প্রজাতি
+  kk: кернеу, салмақ түсу, сіңір созылуы, штамм

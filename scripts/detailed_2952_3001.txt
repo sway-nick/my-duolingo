@@ -1,0 +1,165 @@
+Batch 2952-3001 Linguistic Audit and Calibration Report
+====================================================
+
+Word Range: 2952 to 3001 (50 English headwords)
+Locales Calibrated: EXACTLY 36 LOCALES (35 target languages + en headword)
+Target Languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk.
+
+----------------------------------------------------
+EXECUTIVE SUMMARY OF SYSTEMIC BUGS & HALLUCINATIONS
+----------------------------------------------------
+
+1. Word 2957 (rod):
+   - SEVERITY: CATASTROPHIC MULTI-LINGUAL PIVOT COLLAPSE (20+ LOCALES AFFECTED)
+   - BUG: In the raw dump, "rod" was translated as "core", "kernel", "nucleus", or "fundamental" across more than 20 languages!
+     * French: "noyau" (kernel/core)
+     * Italian: "chicco" (grain/seed)
+     * Romanian: "nucleu" (kernel)
+     * Bulgarian: "ядро" (core)
+     * Czech: "jádro" (core)
+     * Slovak: "jadro" (core)
+     * Hungarian: "kernel" (OS kernel/seed)
+     * Greek: "πυρήνας" (core)
+     * Slovenian: "jedro" (core)
+     * Estonian: "tuum" (nucleus)
+     * Lithuanian: "branduolys" (nucleus)
+     * Danish: "kerne" (kernel)
+     * Finnish: "ydin" (core)
+     * Swedish: "kärna" (core)
+     * Croatian: "jezgra" (core)
+     * Latvian: "kodols" (core)
+     * Arabic: "جوهري" (fundamental/core)
+     * Vietnamese: "cốt lõi" (core)
+     * Thai: "แก่น" (core)
+     * Korean: "핵심" (core)
+     * Japanese: "核心" (core)
+     * Kazakh: "негізгі" (fundamental/core)
+   - ROOT CAUSE: The Russian translation in the database was "стержень". A machine translation system interpreted "стержень" in its figurative Russian idiom ("внутренний стержень" = inner core / moral backbone) and mapped it back as "core / nucleus" across dozens of languages!
+   - CALIBRATION: Restored physical rod, bar, stick, staff, and fishing rod across all 35 languages (e.g. tige/barre/canne à pêche, asta/barra/canna da pesca, tyč/prut, rúd/pálca, ράβδος/βέργα, قضيب/عصا, میله, 棒/杆, etc.).
+
+2. Word 2960 (loser):
+   - SEVERITY: CATASTROPHIC BIBLICAL HALLUCINATION (11 LOCALES AFFECTED)
+   - BUG: The word "loser" was translated as the biblical prophet JONAH:
+     * French: "Jonas"
+     * Italian: "Giona"
+     * Romanian: "Iona"
+     * Bulgarian: "Йона"
+     * Czech: "Jonáš"
+     * Slovak: "Jonáš"
+     * Hungarian: "Jónás"
+     * Slovenian: "Jona"
+     * Estonian: "Joona"
+     * Lithuanian: "Jona"
+     * Greek: "Γρουσούζης" (jinx)
+   - ROOT CAUSE: Obsolete 19th-century sailors' slang ("a Jonah" meaning an unlucky person aboard ship) was hallucinated by an LLM or older bilingual dictionary as the primary definition of modern "loser"!
+   - CALIBRATION: Calibrated across all locales to accurate standard terminology for someone who loses or fails (perdant/raté, perdente/fallito, pierzător/ratat, poražený/smolař, vesztes/lúzer, χαμένος/ηττημένος, etc.).
+
+3. Word 2997 (dramatically):
+   - SEVERITY: CATASTROPHIC HOMONYM COLLAPSE (18 LOCALES AFFECTED)
+   - BUG: "dramatically" (e.g. dramatically increased) was translated as physical knife/blade sharpness:
+     * French: "pointu" (pointed/sharp)
+     * Italian: "affilato" (sharp)
+     * Romanian: "ascuțit" (sharp)
+     * Bulgarian: "остър" (sharp)
+     * Czech: "ostrý" (sharp)
+     * Slovak: "ostrý" (sharp)
+     * Hungarian: "éles" (sharp)
+     * Greek: "αιχμηρός" (sharp)
+     * Slovenian: "oster" (sharp)
+     * Estonian: "terav" (sharp)
+     * Lithuanian: "aštrus" (sharp)
+     * Danish: "skarpt" (sharp)
+     * Swedish: "skarpt" (sharp)
+     * Croatian: "oštro" (sharp)
+     * Arabic: "بحدة" (sharply)
+     * Vietnamese: "sắc nét" (sharp/crisp)
+     * Korean: "날카롭게" (sharply)
+     * Japanese: "鋭く" (sharply)
+   - ROOT CAUSE: The Russian pivot word "резко" can mean sharp (резкий нож, резкий угол) as well as dramatically/drastically (резко возросло). Machine translators blindly chose the blade/physical sharpness sense.
+   - CALIBRATION: Calibrated to dramatic, substantial, spectacular, radical change (de façon spectaculaire/considérablement, in modo eclatante/drasticamente, drastisch/sprunghaft, drastično, dramatiskt, 눈에 띄게/극적으로, 剧烈地/显著地, etc.).
+
+4. Word 2975 (slam):
+   - SEVERITY: CATASTROPHIC PHYSICAL CONFLATION (18 LOCALES AFFECTED)
+   - BUG: "slam" (slam a door, slam dunk, slam critics) was translated as slapping a person's face across 18 languages:
+     * French: "gifler" (slap in the face)
+     * Italian: "schiaffeggiare" (slap)
+     * Romanian: "a pălmui" (slap)
+     * Bulgarian: "шамар" (slap)
+     * Czech: "fackovat" (slap)
+     * Slovak: "fackovať" (slap)
+     * Hungarian: "pofon" (slap)
+     * Greek: "χαστουκίζω" (slap)
+     * Slovenian: "klofutati" (slap)
+     * Danish: "lussing" (slap)
+     * Croatian: "šamar" (slap)
+     * Latvian: "iepļaukāt" (slap)
+     * Hindi: "थप्पड़ मारना" (slap)
+     * Arabic: "صفعة" (slap)
+     * Vietnamese: "tát" (slap)
+     * Thai: "ตบ" (slap)
+     * Japanese: "平手打ち" (slap)
+     * Kazakh: "шапалақтау" (slap)
+   - ROOT CAUSE: Conflation between "slam" and "slap".
+   - CALIBRATION: Calibrated to slamming doors/shutting violently AND fiercely criticizing/blasting (claquer violemment/critiquer vivement, sbattere con forza/stroncare, dar un portazo/vapulear, zuschlagen/scharf kritisieren, 쾅 닫다/맹비난하다, 砰地关上/猛烈抨击, etc.).
+
+5. Word 2965 (compound):
+   - SEVERITY: FALSE FRIEND / SEMANTIC CONFLATION (11 LOCALES AFFECTED)
+   - BUG: "compound" was translated as "difficult / hard":
+     * French: "difficile"
+     * Polish: "trudny"
+     * Italian: "difficile"
+     * Romanian: "dificil"
+     * Bulgarian: "трудно"
+     * Czech: "obtížný"
+     * Slovak: "ťažké"
+     * Hungarian: "nehéz"
+     * Greek: "δύσκολος"
+     * Slovenian: "težko"
+     * Lithuanian: "sunku"
+   - ROOT CAUSE: Russian "сложный" means both "composite/complex" (compound) and "difficult" (hard). Machine translation selected the "difficult" meaning.
+   - CALIBRATION: Calibrated to chemical compound, enclosed complex/enclosure, mixture, and composite adjective (composé/mélange/complexe, composto/miscela, Verbindung/Mischung/zusammengesetzt, sloučenina/směs, 화합물/혼합물/복합의, 化合物/复合物, etc.).
+
+6. Word 2956 (subtle):
+   - BUG: Translated as physical thinness or emaciation ("mince" in French, "magro" in Italian, "tenký" in Czech/Slovak, "õhuke" in Estonian, "vékony" in Hungarian, "plonas" in Lithuanian).
+   - CALIBRATION: Calibrated to subtle, nuanced, delicate, imperceptible, understated (subtil, fin, discret, sutil, jemný, finom, सूक्ष्म, ظریف, 미묘한, 繊細な, 微妙的).
+
+7. Word 2998 (caller):
+   - BUG: Translated as a house guest or visitor in Polish ("gość") and Greek ("επισκέπτης") due to archaic 19th-century usage of "calling upon someone".
+   - CALIBRATION: Restored to modern telephone caller / interlocutor (rozmówca telefoniczny, dzwoniący, καλών συνδρομητής, Anrufer, appelant, persona que llama, etc.).
+
+8. Word 2967 (province):
+   - BUG: Erroneously pluralized in 10 languages (provinces, prowincje, tartományok, επαρχίες, provintsid, provincijos).
+   - CALIBRATION: Reverted to singular noun base forms across all languages.
+
+9. Word 2981 (boost):
+   - BUG: Translated as long verbose explanatory phrases ("способствовать росту", "promouvoir la croissance", "Wachstum fördern", "fremme vækst", "spodbujajo rast").
+   - CALIBRATION: Calibrated to crisp, energetic action verbs (stimuler/dynamiser, steigern/ankurbeln, potenciar/impulsar, turbinar, zvýšit/posílit, 提升/增强, 북돋우다, etc.).
+
+10. Word 2994 (trailer) & Word 2995 (pitcher) & Word 3000 (hook):
+   - BUG: One-sided translation omitting key common meanings (e.g., trailer as vehicle trailer vs movie trailer; pitcher as pouring jug vs baseball pitcher; hook as hardware hook vs catch/captivating hook).
+   - CALIBRATION: Provided comprehensive multi-faceted translations covering both core semantic branches.
+
+----------------------------------------------------
+REGIONAL & CULTURAL CALIBRATIONS
+----------------------------------------------------
+- Portuguese (pt / pt-BR):
+  * "ranch" -> "fazenda, rancho agropecuário" (standard Brazilian terminology for large ranches/farms).
+  * "boost" -> "impulsionar, turbinar, aumentar" (natural Brazilian Portuguese).
+  * "garbage" -> "lixo, resíduos".
+- Spanish (es / es-MX):
+  * "slam" -> "dar un portazo, cerrar de golpe, vapulear".
+  * "pitcher" -> "jarra de agua; lanzador de béisbol".
+  * "contractor" -> "contratista, constructor".
+- Indic & Asian Languages (hi, ur, bn, ar, fa, kk):
+  * Natural vocabulary in Hindi ("कचरा", "समर्पित करना", "सूक्ष्म", "छड़", "झेलना", "वक्रपटुता").
+  * Proper Urdu RTL phrasing ("کوڑا کرکٹ", "وقف کرنا", "کاروباری مہم", "لطیف", "سلاخ", "ناگزیر").
+  * Accurate Kazakh morphology ("қоқыс, қалдық", "арнау", "нәзік", "таяқша, шыбық", "шапалақтау", "болмай қоймайтын").
+
+----------------------------------------------------
+COMPLIANCE VERIFICATION
+----------------------------------------------------
+- Target Locales: EXACTLY 35 target languages per word (36 locales including English headword).
+- Total Words: EXACTLY 50 words (2952 to 3001).
+- Direct Edits to words.json: ZERO (all changes output to scripts/apply_batch_2952_3001_calibrations.cjs).
+- APK / AAB Build Executions: ZERO (strictly adhered to project directives).
+- Syntax Check: Passed cleanly (`node -c scripts/apply_batch_2952_3001_calibrations.cjs`).

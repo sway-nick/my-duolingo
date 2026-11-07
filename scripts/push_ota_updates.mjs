@@ -736,7 +736,47 @@ async function run() {
 
     // Batch 2802-2851
     { id: 2803, word: 'log', lang: 'de', expected: 'Holzklotz, Baumstamm, Protokoll, Logbuch' },
-    { id: 2811, word: 'temple', lang: 'de', expected: 'Tempel, Schläfe (Anatomie)' }
+    { id: 2811, word: 'temple', lang: 'de', expected: 'Tempel, Schläfe (Anatomie)' },
+
+    // Batch 2852-2901
+    { id: 2861, word: 'eager', lang: 'de', expected: 'eifrig, begierig, ungeduldig, bestrebt' },
+    { id: 2901, word: 'plead', lang: 'de', expected: 'flehen, anflehen, plädieren, vor Gericht aussagen' },
+
+    // Batch 2902-2951
+    { id: 2907, word: 'stem', lang: 'de', expected: 'Stängel, Stamm, Wortstamm, herrühren' },
+    { id: 2908, word: 'guilt', lang: 'de', expected: 'Schuld, Schuldgefühl' },
+
+    // Batch 2952-3001
+    { id: 2960, word: 'loser', lang: 'de', expected: 'Verlierer, Versager' },
+    { id: 2975, word: 'slam', lang: 'de', expected: 'zuschlagen, knallen, scharf kritisieren' },
+
+    // Batch 3002-3051
+    { id: 3002, word: 'omit', lang: 'de', expected: 'auslassen, weglassen, übergehen, aussparen' },
+    { id: 3016, word: 'pine', lang: 'de', expected: 'Kiefer, Fichte, Pinie; sich sehnen, schmachten' },
+
+    // Batch 3052-3101
+    { id: 3066, word: 'sustainable', lang: 'de', expected: 'nachhaltig, zukunftsfähig' },
+    { id: 3092, word: 'output', lang: 'de', expected: 'Leistung, Produktionsmenge, Ausgabe' },
+
+    // Batch 3102-3151
+    { id: 3114, word: 'liability', lang: 'de', expected: 'Haftung, Verbindlichkeit, Passiva, Belastung' },
+    { id: 3149, word: 'immune', lang: 'de', expected: 'immun, resistent, geschützt, gefeit' },
+
+    // Batch 3152-3201
+    { id: 3158, word: 'elbow', lang: 'cs', expected: 'loket, postrkovat loktem' },
+    { id: 3195, word: 'cage', lang: 'de', expected: 'Käfig, Gehege; einsperren' },
+
+    // Batch 3202-3251
+    { id: 3232, word: 'automatic', lang: 'de', expected: 'automatisch, selbsttätig' },
+    { id: 3243, word: 'skull', lang: 'de', expected: 'Schädel, Totenkopf' },
+
+    // Batch 3252-3301
+    { id: 3264, word: 'tuck', lang: 'de', expected: 'hineinstecken, einstecken, feststecken, unterbringen' },
+    { id: 3301, word: 'graph', lang: 'de', expected: 'Diagramm, Graph, Schaubild, Kurvenbild' },
+
+    // Batch 3302-3351
+    { id: 3313, word: 'electoral', lang: 'de', expected: 'Wahl-, wahlbezogen, elektoral' },
+    { id: 3338, word: 'accommodate', lang: 'de', expected: 'unterbringen, beherbergen, aufnehmen, entgegenkommen' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -761,21 +801,21 @@ async function run() {
     return eval('(' + c.slice(start, end).trim().replace(/;\s*$/, '') + ')');
   }
 
-  // Batches 1 to 47 (words 1-2351) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-47 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 48-57 (words 2352-2851, 500 words)
+  // Batches 1 to 57 (words 1-2851) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-57 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 58-67 (words 2852-3351, 500 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_2352_2401_calibrations.cjs',
-    'apply_batch_2402_2451_calibrations.cjs',
-    'apply_batch_2452_2501_calibrations.cjs',
-    'apply_batch_2502_2551_calibrations.cjs',
-    'apply_batch_2552_2601_calibrations.cjs',
-    'apply_batch_2602_2651_calibrations.cjs',
-    'apply_batch_2652_2701_calibrations.cjs',
-    'apply_batch_2702_2751_calibrations.cjs',
-    'apply_batch_2752_2801_calibrations.cjs',
-    'apply_batch_2802_2851_calibrations.cjs'
+    'apply_batch_2852_2901_calibrations.cjs',
+    'apply_batch_2902_2951_calibrations.cjs',
+    'apply_batch_2952_3001_calibrations.cjs',
+    'apply_batch_3002_3051_calibrations.cjs',
+    'apply_batch_3052_3101_calibrations.cjs',
+    'apply_batch_3102_3151_calibrations.cjs',
+    'apply_batch_3152_3201_calibrations.cjs',
+    'apply_batch_3202_3251_calibrations.cjs',
+    'apply_batch_3252_3301_calibrations.cjs',
+    'apply_batch_3302_3351_calibrations.cjs'
   ];
 
   let mergedCount = 0;

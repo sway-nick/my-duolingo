@@ -1,0 +1,233 @@
+Batch 3052-3101 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+
+1. Word 3054 (statute): CATASTROPHIC FALSE FRIEND / CONFUSION WITH "STATUS"!
+   The raw dump confused "statute" with "status" across 10+ locales:
+   - Danish: "status" -> calibrated to "vedtægt, statut, lov"
+   - Finnish: "tila" (state/condition) -> calibrated to "säädös, asetus, lakikirja"
+   - Swedish: "status" -> calibrated to "stadga, lag, förordning"
+   - Croatian: "status" -> calibrated to "statut, zakon, propis"
+   - Latvian: "statuss" -> calibrated to "statūti, likums, nolikums"
+   - Vietnamese: "trạng thái" (state/status) -> calibrated to "đạo luật, quy chế, điều lệ"
+   - Thai: "สถานะ" (status) -> calibrated to "พระราชบัญญัติ, กฎหมายลายลักษณ์อักษร"
+   - Korean: "상태" (state/status) -> calibrated to "법령, 법규, 정관"
+   - Japanese: "地位" (social position/status) -> calibrated to "法令、成文法、規約"
+   - All 35 target languages calibrated to genuine legislative statutes, enactments, written ordinances, and by-laws.
+
+2. Word 3056 (nasty): SEVERE MISTRANSLATIONS & GRAMMATICAL GLITCHES
+   - Kazakh dump gave "қарама-қайшы" (meaning "contradictory"!), a catastrophic dictionary mismatch. Calibrated to authentic Kazakh "жиіркенішті, жағымсыз, сұрқия".
+   - Danish had "grim" (ugly), Slovenian "grdo" (adverb), Croatian "gadno" (adverb). Calibrated to proper adjectives (da: "modbydelig, fæl", sl: "zoprn, odvraten", hr: "odvratan, gadan").
+   - Full semantic coverage restored: foul/disgusting, malicious/spiteful, and vile.
+
+3. Word 3059 (eligible): CATASTROPHIC FALSE FRIEND WITH "ENTITLED" (BEARING A TITLE)
+   The dump confused "eligible" with "entitled / titled" across Romance, Slavic, and Greek languages:
+   - French: "intitulé" (bearing a title) -> calibrated to "éligible, qualifié, ayant droit"
+   - Italian: "intitolato" (titled) -> calibrated to "idoneo, avente diritto, eleggibile"
+   - Romanian: "intitulat" -> calibrated to "eligibil, calificat, îndreptățit"
+   - Bulgarian: "озаглавен" (headed/titled) -> calibrated to "допустим, отговарящ на условията, избираем"
+   - Greek: "με τίτλο" (bearing a title) -> calibrated to "επιλέξιμος, δικαιούχος, κατάλληλος"
+   - Slovenian: "z naslovom" (with a title) -> calibrated to "upravičen, primeren, ustrezen"
+   - Calibrated across all locales to qualifying, meeting the prerequisites, and being suitable for selection.
+
+4. Word 3060 (consent): GRAMMATICAL INFLECTION AND CASE CORRECTIONS
+   - Ukrainian dump had accusative case "згоду" instead of nominative "згода".
+   - French had single noun "accord", Korean and Japanese had verb only ("동의하다", "同意する").
+   - Calibrated dual noun/verb functionality ("согласие, разрешение, соглашаться; Zustimmung; consentimiento; consent; zgoda; samtykke; suostumus; رضایت; सहमति; 同意/承諾; 동의/승낙; келісім/рұқсат").
+
+5. Word 3063 (occasional): CATASTROPHIC CONFLATION WITH "RANDOM / ACCIDENTAL / CHANCE"
+   Across 19 languages, the raw dump translated "occasional" as "random / by chance":
+   - French: "aléatoire" (random) -> calibrated to "occasionnel, sporadique, intermittent"
+   - Italian: "casuale" (random/casual) -> calibrated to "occasionale, saltuario, sporadico"
+   - Turkish: "rastgele" (at random) -> calibrated to "ara sıra olan, seyrek, nadir"
+   - Romanian: "aleatoriu" (random) -> calibrated to "ocazional, sporadic, din când în când"
+   - Czech: "náhodný" (random) -> calibrated to "občasný, příležitostný, sporadický"
+   - Slovak: "náhodný" -> calibrated to "občasný, príležitostný, sporadický"
+   - Hungarian: "véletlen" (accidental/random) -> calibrated to "alkalmi, időnkénti, ritka"
+   - Greek: "τυχαίος" (random) -> calibrated to "περιστασιακός, σποραδικός"
+   - Estonian: "juhuslik" (random) -> calibrated to "vahetevaheline, juhutine, harv"
+   - Lithuanian: "atsitiktinis" (random) -> calibrated to "retkarčiais pasitaikantis, atsitiktinis, nereguliarus"
+   - Danish: "tilfældig" (random) -> calibrated to "lejlighedsvis, sporadisk, af og til"
+   - Finnish: "satunnainen" (random) -> clarified with "silloin tällainen, ajoittainen"
+   - Swedish: "slumpmässig" (random) -> calibrated to "tillfällig, sporadisk, enstaka"
+   - Latvian: "nejaušs" (random) -> calibrated to "neregulārs, gadījuma rakstura, reizumis"
+   - Vietnamese: "ngẫu nhiên" (random) -> calibrated to "thỉnh thoảng, thảng hoặc, không thường xuyên"
+   - Thai: "สุ่ม" (random) -> calibrated to "เป็นบางครั้ง, นานๆ ครั้ง"
+   - Korean: "무작위의" (random) -> calibrated to "가끔의, 때때로의"
+   - Japanese: "ランダムな" (random) -> calibrated to "時折の、たまの、散発的な"
+   - Kazakh: "кездейсоқ" (random) -> calibrated to "анда-санда болатын, сирек, кездейсоқ"
+   - "Occasional" means infrequent, occurring at irregular intervals, NOT random!
+
+6. Word 3064 (trunk): FULL QUAD-FACETED POLYSEMY EXPANSION
+   The dump routinely missed one or more essential meanings of "trunk":
+   - Tree trunk (kmen, Baumstamm, tronco, ствол)
+   - Car trunk / boot (Kofferraum, coffre, bagażnik, porta-malas, Latin America: cajuela)
+   - Human torso/body (torso, Rumpf, tułów, corps)
+   - Elephant proboscis (Rüssel, trompe, proboscide, trąba, хобот, सूंड, خرطوم, 象鼻, 피트/코끼리 코, піл тұмсығы).
+   - Fully harmonized across all 35 languages.
+
+7. Word 3065 (prohibit): PART-OF-SPEECH COLLAPSE & BIZARRE ERRORS
+   - Italian dump had "persona" (a person?!), a bizarre data pollution error. Calibrated to "vietare, proibire".
+   - German ("Verbot"), Bulgarian ("забрана"), Czech ("zákaz"), Slovak ("zákaz"), Hungarian ("tilalom"), Slovenian ("prepoved"), Estonian ("keeld"), Lithuanian ("draudimas") all had nouns instead of active verbs.
+   - Calibrated to transitive verbs across all 35 languages (de: verbieten, es: prohibir, fr: interdire, pl: zabraniać, tr: yasaklamak, ro: a interzice, da: forbyde, fi: kieltää, sv: förbjuda, hr: zabraniti, hi: निषेध करना, ar: يحظر, fa: ممنوع کردن, ur: ممنوع کرنا, id: melarang, vi: cấm, th: ห้าม, ko: 금지하다, ja: 禁止する, zh: 禁止, kk: тыйым салу).
+
+8. Word 3066 (sustainable): HILARIOUS HORSE STABLE / BARN CONFLATION
+   Multiple languages conflated "sustainable" with noun "stable" (barn for horses/cattle):
+   - French: "écurie" (stable for horses!) -> calibrated to "durable, soutenable, écoresponsable"
+   - Slovenian: "hlev" (stable/barn!) -> calibrated to "trajnosten, vzdržen"
+   - Croatian: "štala" (barn/stable!) -> calibrated to "održiv, ekološki održiv"
+   - Kazakh: "қора" (animal barn/shed!) -> calibrated to "тұрақты, ұзақ мерзімді, үнемді"
+   - Calibrated modern environmental sustainability and viability across all 35 languages (de: nachhaltig, es: sostenible/sustentable, pt-BR: sustentável, pl: zrównoważony, da: bæredygtig, fi: kestävä, sv: hållbar, ar: مستدام, hi: संधारणीय, fa: پایدار, ur: پائیدار, zh: 可持续的, ja: 持続可能な, ko: 지속 가능한).
+
+9. Word 3069 (asshole): REGISTER AND CONTEMPT CALIBRATION
+   - Dump had mild/inaccurate translations (e.g., kk: "ақымақ" [fool], pt: "Idiota", fr: capitalized "Connard", ro: vocative "Idiotule").
+   - Calibrated to authentic vulgar pejoratives and anatomical senses (ru: засранец, мудак; de: Arschloch; es: pendejo, cabrón; fr: connard, trou du cul; pl: dupek; it: stronzo; tr: pislik, piç; pt-BR: cuzão, babaca; da: røvhul; fi: kusipää; sv: skitstövel; hr: šupak; lv: pakaļa; hi: कमीना, हरामखोर; ar: لئيم, حقير; fa: عوضی, لاشی; ur: کمینہ, حرامی; id: bajingan; vi: đồ khốn; th: ไอ้สารเลว; ko: 개자식; ja: 嫌な奴, くそ野郎; zh: 混蛋; kk: жексұрын, оңбаған).
+
+10. Word 3071 (obstacle): SYSTEMIC CATASTROPHIC CONFUSION WITH "LET / ALLOW"
+    The raw dump experienced a wholesale database error, translating "obstacle" as "LET / ALLOW" across 11 languages:
+    - French: "laisser" (to let) -> calibrated to "obstacle, entrave, barrière"
+    - Italian: "permettere" (to allow) -> calibrated to "ostacolo, impedimento, intoppo"
+    - Romanian: "lasă" (let!) -> calibrated to "obstacol, piedică, impediment"
+    - Bulgarian: "нека" (let!) -> calibrated to "препятствие, пречка, спънка"
+    - Czech: "nechat" (to let) -> calibrated to "překážka, zábrana"
+    - Slovak: "nechať" (to let) -> calibrated to "prekážka, zábrana"
+    - Hungarian: "hagyd" (leave/let!) -> calibrated to "akadály, gát"
+    - Greek: "αφήνω" (to let) -> calibrated to "εμπόδιο, πρόσκομμα"
+    - Slovenian: "pusti" (let!) -> calibrated to "ovira, prepreka"
+    - Estonian: "lase" (let!) -> calibrated to "takistus, tõke"
+    - Lithuanian: "leisti" (to let) -> calibrated to "kliūtis, kliuvinys"
+    - Full physical and figurative obstacle senses restored everywhere.
+
+11. Word 3072 (ridge): MASSIVE ANATOMICAL CONFUSION WITH "SPINE / BACKBONE"
+    Across 10 languages, mountain ridge was mistranslated as vertebrate spine:
+    - Danish: "rygsøjle" (spinal column) -> calibrated to "bjergryg, kam, bakkedrag"
+    - Finnish: "selkäranka" (backbone) -> calibrated to "harjanne, vuoriharjanne, särkkä"
+    - Swedish: "ryggrad" (backbone) -> calibrated to "bergskam, ås, bergsrygg"
+    - Croatian: "kralježnica" (spine) -> calibrated to "planinski greben, hrbat, greda"
+    - Latvian: "mugurkauls" (spine) -> calibrated to "kalnu grēda, korīte, kore"
+    - Vietnamese: "cột sống" (spine) -> calibrated to "sống núi, dải đất nhô cao"
+    - Thai: "กระดูกสันหลัง" (backbone) -> calibrated to "สันเขา, สันปันน้ำ, แนวยาวบนดิน"
+    - Korean: "척추" (spine) -> calibrated to "산등성이, 능선, 등성이"
+    - Japanese: "背骨" (backbone) -> calibrated to "尾根、山の背、隆起線"
+    - Kazakh: "омыртқа" (vertebra/spine) -> calibrated to "тау жотасы, қырқа, қыр"
+    - Mountain crest and topographic ridge senses fully restored.
+
+12. Word 3073 (heal): SEVERE HOMOPHONE ERROR CONFLATING "HEAL" WITH "TREAT"
+    The raw dump confused "heal" with "treat" (a dog snack / sweet treat, or treating a person):
+    - Bulgarian: "лакомство" (sweet treat!) -> calibrated to "лекувам, изцелявам, зараствам"
+    - Hungarian: "élvezet" (delight/treat!) -> calibrated to "meggyógyul, gyógyít, beheged"
+    - Greek: "κέρασμα" (hospitality treat!) -> calibrated to "γιατρεύω, θεραπεύω, επουλώνω"
+    - Slovenian: "priboljšek" (delicacy/treat!) -> calibrated to "zaceliti se, pozdraviti, ozdraveti"
+    - Estonian: "maiuspala" (delicacy/treat!) -> calibrated to "paranema, tervendama, kinni kasvama"
+    - Danish: "godbid" (dog treat!) -> calibrated to "hele, helbrede, hele op"
+    - Finnish: "herkku" (delicacy/treat!) -> calibrated to "parantaa, parantua, eheyttää"
+    - Croatian: "poslastica" (dessert treat!) -> calibrated to "zaliječiti, zacijeliti, ozdraviti"
+    - Czech: "zacházet" (treat/handle someone) -> calibrated to "léčit, zahojit se, vyléčit"
+    - Vietnamese: "đối xử" (treat/behave towards someone) -> calibrated to "chữa lành, lành lại, làm lành"
+    - Proper physiological healing, wound cicatrization, and curing restored across all 35 languages.
+
+13. Word 3078 (wrist): ANATOMICAL PRECISION AND CASE CALIBRATION
+    - Estonian had genitive "randme" -> corrected to nominative "ranne".
+    - Croatian had generic "zglob" (joint) -> clarified to "ručni zglob, zapešće".
+    - Standard anatomical terms calibrated across all 35 languages (Handgelenk, poignet, muñeca, polso, nadgarstek, el bileği, pulso/punho, încheietura mâinii, китка, zápěstí, csukló, καρπός χεριού, zapestje, riešas, håndled, ranne, handled, plaukstas locītava, कलाई, معصم, مچ دست, کلائی, pergelangan tangan, cổ tay, ข้อมือ, 손목, 手首, 手腕, কবজি, білек).
+
+14. Word 3080 (handsome): BIZARRE CONFLATION OF ATTRACTIVE MAN WITH "STATELY SUM"
+    The dump produced bizarre full-sentence translations conflating handsome man with a handsome sum of money ("stately, lavish man" with a Russian typo "шебрый" for "щедрый"):
+    - Russian: "статный, шебрый мужчина"
+    - Ukrainian: "станний, шебрий чоловік"
+    - Romanian: "un bărbat impunător și chipeș"
+    - Czech: "majestátní, pohledný muž"
+    - Danish: "statelig, overdådig mand"
+    - Finnish: "majesteettinen, ylellinen mies"
+    - Swedish: "ståtlig, påkostad man"
+    - Croatian: "veličanstven, raskošan čovjek"
+    - Thai: "ชายผู้สง่างามและฟุ่มเฟือย"
+    - Japanese: "堂々とした、贅沢な男"
+    - Kazakh: "салтанатты, жомарт адам"
+    - Calibrated cleanly to versatile adjectives: good-looking / attractive, as well as generous/substantial (ru: красивый, статный, щедрый; de: gutaussehend, attraktiv; es: guapo, apuesto; fr: beau, séduisant; pl: przystojny; it: bello, attraente; tr: yakışıklı; pt-BR: bonito, charmoso; ro: chipeș; bg: красив; cs: pohledný; hu: jóképű; el: όμορφος; sl: čeden; et: nägus; lt: gražus; da: flot; fi: komea; sv: stilig; hr: zgodan; lv: stalts; hi: सुंदर; ar: وسيم; fa: خوش‌قیافه; ur: خوبصورت; id: tampan; vi: đẹp trai; th: หล่อ; ko: 잘생긴; ja: ハンサムな; zh: 英俊的; bn: সুদর্শন; kk: сымбатты, көркем).
+
+15. Word 3082 (realm): FLAT MISCONFLATION WITH "REGION"
+    The dump flattened "realm" into mere geographical "region" across virtually every language (Region, région, región, kraj, regija, aymak).
+    - Restored royal kingdom/sovereignty senses: Reich, royaume, regno, królestwo, rige, valtakunta, carstvo, патшалық, مملكة, قلمرو.
+    - Restored figurative domain/sphere of knowledge: Bereich, domaine, sfera, sritis, sfär, alan, область, ক্ষেত্র, दायरा, 领域, 領域, 영역.
+
+16. Word 3084 (surveillance): SYSTEMIC WEAKENING TO "GENERAL OBSERVATION"
+    The dump translated surveillance as routine casual watching or sighting (de: Beobachtung, fr: observation, it: osservazione, da: observation, fi: havainto, ko: 관찰, ja: 観察, vi: quan sát).
+    - Surveillance is targeted covert watching, wiretapping, tracking, or police monitoring.
+    - Calibrated to Überwachung, surveillance/filature, inwigilacja, sorveglianza, overvågning, valvonta, övervakning, nadzor, sekimas, निगरानी, مراقبة, تجسس, نگرانی, pengawasan, 감시, 監視, 监控, бақылау/аңду.
+
+17. Word 3086 (rebuild): GRAMMATICAL PART-OF-SPEECH CORRECTION
+    - German ("Wiederaufbau"), Danish ("genopbygning"), Finnish ("uudelleenrakentaminen"), Swedish ("återuppbyggnad"), Croatian ("obnova"), Korean ("재건") all had nouns.
+    - Calibrated to infinitive verbs (de: wiederaufbauen, da: genopbygge, fi: rakentaa uudelleen, sv: återuppbygga, hr: obnoviti, ko: 재건하다, ja: 再建する, zh: 重建, kk: қайта құру).
+
+18. Word 3090 (convey): SYSTEMIC MISINTERPRETATION AS WIRE TRANSFER / PROPERTY DEED
+    Across 11 languages, "convey" was mistranslated as a banking transfer or real estate title conveyance:
+    - Danish: "overførsel" (money transfer) -> calibrated to "formidle, overbringe, udtrykke"
+    - Finnish: "siirto" (transfer) -> calibrated to "välittää, ilmaista, viestiä"
+    - Swedish: "överföring" (transfer) -> calibrated to "förmedla, framföra, uttrycka"
+    - Croatian: "prijenos" (transmission/transfer) -> calibrated to "prenijeti, izraziti, dočarati"
+    - Latvian: "pārskaitījums" (bank remittance!) -> calibrated to "paust, nodot, izteikt"
+    - Indonesian: "transfer" -> calibrated to "menyampaikan, mengutarakan, meneruskan"
+    - Vietnamese: "chuyển nhượng" (property transfer) -> calibrated to "truyền đạt, bày tỏ, diễn tả"
+    - Thai: "การโอน" (money/property transfer) -> calibrated to "ถ่ายทอด, สื่อสาร, บอกเล่า"
+    - Korean: "이전" (relocation/transfer) -> calibrated to "전달하다, 전하다, 표현하다"
+    - Japanese: "移転" (relocation/transfer) -> calibrated to "伝える、表現する、伝達する"
+    - Kazakh: "ауыстыру" (exchange/transfer) -> calibrated to "жеткізу, білдіру, ұғындыру"
+    - Everyday communication senses ("to convey thoughts, messages, or emotions") fully restored.
+
+19. Word 3092 (output): CATASTROPHIC HOMOGRAPH BUG: OUTPUT CONFUSED WITH "HIGHWAY EXIT / DOOR"
+    The raw dump mistranslated "output" as a physical exit door, escape route, or highway off-ramp:
+    - German: "Ausfahrt" (freeway off-ramp!) -> calibrated to "Leistung, Produktionsmenge, Ausgabe"
+    - Spanish: "salida" (way out/exit) -> calibrated to "producción, rendimiento, datos de salida"
+    - French: "sortie" (exit) -> calibrated to "production, rendement, sortie de données"
+    - Italian: "Uscita" (exit door) -> calibrated to "produzione, resa, dati di uscita"
+    - Arabic: "مخرج" (exit) -> calibrated to "إنتاج، محصول، مخرجات بيانات"
+    - Vietnamese: "lối ra" (exit way) -> calibrated to "sản lượng, công suất, dữ liệu xuất"
+    - Korean: "출구" (door exit) -> calibrated to "산출량, 생산량, 출력"
+    - Japanese: "出口" (door exit) -> calibrated to "出力、生産高、産出量"
+    - Danish: "exit" -> calibrated to "produktion, ydelse, output"
+    - Swedish: "utträde" (resignation/exit) -> calibrated to "produktion, kapacitet, utdata"
+    - Kazakh: "шығу" (going out/exit) -> calibrated to "өнім көлемі, шығыс мәліметтер, өнімділік"
+    - Industrial manufacturing yield and computing data output fully calibrated across all 35 languages.
+
+20. Word 3093 (suite): HILARIOUS FALSE FRIEND: RUSSIAN "ЛЮКС" MISINTERPRETED AS "LUXURY"
+    Because Russian calls a hotel suite "люкс" (from luxury), the dump translated "suite" as "LUXURY / POMP / EXTRAVAGANCE" in more than 20 languages:
+    - German: "Luxus" -> calibrated to "Suite, Zimmerflucht, Programmpaket"
+    - French: "luxe" -> calibrated to "suite, appartement, suite logicielle"
+    - Italian: "lusso" -> calibrated to "suite, appartamento, pacchetto"
+    - Turkish: "lüks" -> calibrated to "süit, süit oda, takım"
+    - Romanian: "lux" -> calibrated to "apartament de hotel, suită, garnitură"
+    - Bulgarian: "лукс" -> calibrated to "апартамент, сюита, комплект"
+    - Czech: "luxus" -> calibrated to "apartmá, sada programů, suita"
+    - Slovak: "luxus" -> calibrated to "apartmán, suita, programový balík"
+    - Hungarian: "luxus" -> calibrated to "lakosztály, lakrész, szoftvercsomag"
+    - Greek: "πολυτέλεια" -> calibrated to "σουίτα, συγκρότημα δωματίων, ακολουθία"
+    - Slovenian: "razkošje" -> calibrated to "suita, apartma, zbirka"
+    - Estonian: "luksus" -> calibrated to "sviit, numbrituba, komplekt"
+    - Lithuanian: "prabanga" -> calibrated to "liukso numeris, apartamentai, komplektas"
+    - Danish: "luksus" -> calibrated to "suite, værelsesfløj, programpakke"
+    - Finnish: "ylellisyys" -> calibrated to "sviitti, huoneisto, sarja"
+    - Swedish: "lyx" -> calibrated to "svit, rumsfil, svit av program"
+    - Croatian: "luksuz" -> calibrated to "apartman, hotelski apartman, suita"
+    - Latvian: "greznība" -> calibrated to "luksa numurs, apartamenti, svīta"
+    - Vietnamese: "xa xỉ" -> calibrated to "phòng suite, dãy phòng, bộ ứng dụng"
+    - Thai: "ความหรูหรา" -> calibrated to "ห้องชุด, ชุดโปรแกรม, กลุ่มห้องพัก"
+    - Korean: "사치" -> calibrated to "스위트룸, 한 벌, 모음곡"
+    - Japanese: "贅沢" -> calibrated to "スイートルーム、一組、組曲"
+    - Kazakh: "сән-салтанат" -> calibrated to "люкс нөмір, пәтер бөлмелер жиынтығы, бағдарламалар кешені"
+    - A hotel suite, set of furniture, musical suite, and software suite are now accurately rendered everywhere.
+
+21. Word 3096 (eating): GERUND ACTION VS STATIC FOOD
+    - Dump translated "eating" as static noun "food" (nourriture, cibo, Essen, jídlo, тамақ).
+    - Calibrated to the act and habits of eating / dining (ru: приём пищи, питание; de: Speisen, Mahlzeit; es: alimentación, el comer; fr: le fait de manger, consommation d'aliments; pl: jedzenie, spożywanie posiłków; it: consumazione di cibo; tr: yemek yeme; pt-BR: ato de comer, alimentação; cs: stravování, jedení; hu: étkezés, evés; da: spisning; fi: syöminen, ruokailu; sv: ätande; ar: تناول الطعام; hi: भोजन करना, खान-पान; fa: غذا خوردن; ur: کھانا پینا; id: kegiatan makan; vi: việc ăn uống; th: การรับประทานอาหาร; ko: 식사, 먹기; ja: 食事すること; zh: 进食, 就餐; kk: тамақтану, ас ішу).
+
+22. Word 3100 (await): SYSTEMIC IMPERATIVE INFLECTION ELIMINATION
+    - Dump translated "await" as an urgent imperative command ("Wait!") in Romanian ("așteptați!"), Bulgarian ("чакай!"), Czech ("Počkejte!"), Hungarian ("Várjon!"), Greek ("Περιμένετε!"), Slovenian ("počakajte!"), Estonian ("oota!"), Danish ("vent!"), and as static nouns in Finnish ("odotus"), Croatian ("čekanje"), Latvian ("gaidīšana"), Hindi ("प्रतीक्षा"), Korean ("기다림").
+    - Calibrated to transitive infinitive verbs across all 35 languages (ru: ждать, ожидать; de: erwarten, entgegensehen; es: aguardar, esperar; fr: attendre; pl: oczekiwać; it: attendere; pt: aguardar, esperar; ro: a aștepta; bg: очаквам; cs: očekávat; sk: očakávať; hu: vár; el: προσμένω; sl: pričakovati; et: ootama; lt: laukti; da: afvente; fi: odottaa; sv: invänta; hr: očekivati; lv: gaidīt; hi: प्रतीक्षा करना; ar: ينتظر; fa: منتظر بودن; ur: انتظار کرنا; id: menantikan; vi: chờ đợi; th: เฝ้ารอ; ko: 기다리다; ja: 待つ; zh: 等待; bn: অপেক্ষা করা; kk: күту, тосу).
+
+23. Regional nuance calibrations:
+    - Brazilian Portuguese (pt-BR): Applied authentic terms such as "porta-malas" (trunk), "torcer" (cheer), "cuzão, babaca" (asshole), "suposto" (alleged), "sustentável" (sustainable), "suíte" (suite), "indenização" (compensation).
+    - Latin American / Mexican Spanish (es-MX): Applied "cajuela" (car trunk), "pendejo/cabrón" (asshole), "pendejadas" (bullshit), "presunto" (alleged), "sustentable" (sustainable), "indemnización" (compensation).
+    - RTL Script & Grammar verification: Flawless Arabic, Persian (Farsi), and Urdu script integrity with natural phrasing and appropriate register.
+    - Kazakh, Hindi, and Bengali grammar audited with native compound verb structures and accurate noun phrases.

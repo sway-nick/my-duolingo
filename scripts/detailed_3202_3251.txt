@@ -1,0 +1,99 @@
+Batch 3202-3251 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+
+1. Word 3243 (skull): CATASTROPHIC HOMOPHONE BUG!
+   Dump conflated "skull" (cranium / bony head framework) with "scull" (rowing boat oar / pair of oars) across 6 languages:
+   - fr: "godille" (scull oar) -> calibrated to "crâne, boîte crânienne"
+   - ro: "vâsle" (oars) -> calibrated to "craniu, țeastă"
+   - cs: "krátké veslo" (short oar) -> calibrated to "lebka, lební klenba"
+   - hu: "evezőlapát" (oar blade) -> calibrated to "koponya"
+   - el: "κωπή" (rowing) -> calibrated to "κρανίο, νεκροκεφαλή"
+   - lt: "irklas" (oar) -> calibrated to "kaukolė"
+
+2. Word 3244 (pursuit): TRIPLE BUG (SHIFT, PERSECUTION CONFLATION, AND ENCODING CORRUPTION)!
+   a) Copy shift: French had "crâne" (skull) carried over from previous line -> calibrated to "poursuite, quête, recherche".
+   b) Conflation with "persecution" (religious/ethnic oppression):
+      - vi: "bức hại" -> calibrated to "sự theo đuổi, sự truy đuổi, mưu cầu"
+      - th: "การข่มเหง" -> calibrated to "การไล่ตาม, การติดตาม, การมุ่งมั่นหา"
+      - ko: "박해" -> calibrated to "추구, 추적, 탐구"
+      - ja: "迫害" -> calibrated to "追求, 追跡, 探求"
+      - et: "tagakiusamine" -> calibrated to "jälitamine, püüdlus, tagaajamine"
+      - fi: "vaino" -> calibrated to "takaa-ajo, tavoittelu, pyrkimys"
+   c) Raw corrupted string in Arabic: dump contained "سعي، 追 pursuit، ملاحقة" -> sanitized to clean "ملاحقة, مطاردة, سعي".
+
+3. Word 3232 (automatic): CATASTROPHIC AUTOMOBILE CONFLATION!
+   Dump erroneously translated "automatic" as AUTOMOBILE / MOTOR VEHICLE across 10 languages:
+   - it: "auto" -> "automatico, involontario"
+   - pt: "auto" -> "automático, maquinal"
+   - ro: "auto" -> "automat, spontan"
+   - cs: "auto" -> "automatický, samovolný"
+   - sk: "auto" -> "automatický, samovoľný"
+   - hu: "autó" -> "automatikus, önműködő"
+   - sl: "avto" -> "avtomatski, samodejen"
+   - et: "auto" -> "automaatne, isetoimiv"
+   - lt: "automobilis" -> "automatinis, savaiminis"
+   - bg: "автоматично" (adverb) -> "автоматичен, машинен"
+
+4. Word 3230 (premise): CATASTROPHIC LIVING ROOM FALSE FRIEND!
+   Dump translated singular "premise" as an individual ROOM in an apartment across 11 languages:
+   - da: "rum", fi: "huone", sv: "rum", hr: "soba", lv: "istaba", vi: "phòng", th: "ห้อง", ko: "방", ja: "部屋", kk: "бөлме", ru/uk: "помещение / приміщення".
+   In English, singular "premise" in argumentation/logic is an assumption, thesis, hypothesis, or proposition ("предпосылка, исходное положение"); only in the plural ("premises") does it denote real estate or business grounds, and NEVER an individual living room. Calibrated accurately across all 35 languages.
+
+5. Word 3226 (loop): BICYCLING CONFLATION BUG!
+   Dump translated "loop" as "bicycling / cycling" across 10 languages through a mechanical machine translation chain (loop -> cycle -> bicycling):
+   - tr: "bisiklet sürme" -> "döngü, ilmik, halka"
+   - ro: "ciclism" -> "buclă, laț, circuit"
+   - bg: "колоездене" -> "примка, петля, цикъл"
+   - cs: "cyklistika" -> "smyčka, oblouk, cyklus"
+   - sk: "cyklistika" -> "slučka, okruh, cyklus"
+   - hu: "kerékpározás" -> "hurok, zárt lánc, ciklus"
+   - el: "ποδηλασία" -> "βρόχος, θηλιά, κύκλωμα"
+   - sl: "kolesarjenje" -> "zanka, obroč, ponavljalni cikel"
+   - et: "jalgrattasõit" -> "silmus, aas, tsükkel"
+   - lt: "važiavimas dviračiu" -> "kilpa, ciklas, žiedas"
+
+6. Word 3235 (credibility): SYSTEMIC SEMANTIC DISTORTION (CREDIBILITY vs POWER/AUTHORITY)!
+   Dump translated "credibility" as political/state authority or power ("власть", "autorità", "autoritate", "hatóság", "εξουσία", "quyền lực", "อำนาจ", "권위", "権威", "билік") across 20+ locales.
+   Credibility is believability, trustworthiness, plausibility, and credence.
+   Calibrated to: "достоверность, надежность, убедительность", "Glaubwürdigkeit", "credibilidad", "crédibilité", "wiarygodność", "αξιοπιστία", "verodostojnost", "troværdighed", "uskottavuus", "senimdilik".
+
+7. Word 3221 (parade): CATASTROPHIC COPY BUG!
+   Dump had Portuguese `"pt": "informação"` (copied from word 3218 "info").
+   Calibrated to "desfile, parada, desfilar".
+
+8. Word 3222 (archive): CATASTROPHIC COPY BUG!
+   Dump had Spanish `"es": "desfilar"` (copied from word 3221 "parade").
+   Calibrated to "archivo, archivar".
+
+9. Word 3211 (deploy): MASSIVE CORRUPTION & POS MISMATCHES!
+   - it: "download" (!) -> calibrated to "schierare, dispiegare, implementare"
+   - hu: "telepítés" (noun) -> "bevet, állomásoztat, telepít"
+   - bg: "разположи" (aorist past) -> "разгръщам, разполагам, внедрявам"
+   - fi: "käyttöönotto" (noun) -> "ottaa käyttöön, sijoittaa, ryhmittää"
+   - hr: "raspoređivanje" (verbal noun) -> "rasporediti, razmjestiti, razviti"
+
+10. Word 3227 (altogether): NEGATIVE POLARITY & GENERALIZATION BUGS!
+    - Negative polarity: pt ("de forma alguma"), ro ("deloc"), it ("affatto"), el ("καθόλου") meant "not at all".
+    - Conflation with "generally": da ("generelt"), fi ("yleisesti"), sv ("i allmänhet"), hr ("općenito"), vi ("nói chung"), th ("โดยทั่วไป"), ko ("일반적으로"), ja ("一般的に").
+    Calibrated to "completely, totally, all in all, in total" ("в целом, всего, полностью, совсем", "insgesamt, völlig", "en total, por completo").
+
+11. Word 3245 (therapist): HEALTHCARE FALSE FRIEND!
+    In Russian, Ukrainian, and Kazakh medicine, "терапевт" is a primary care internist / general practitioner (GP), whereas English "therapist" denotes a psychotherapist, physical therapist, or mental health counselor.
+    Calibrated to include "психотерапевт, терапевт, специалист по реабилитации".
+
+12. Word 3229 (crush): DUAL-SENSE COMPREHENSIVE ENRICHMENT!
+    - sl ("simpatija") and et ("armumine") only covered romantic crushes;
+    - most Western languages only covered mechanical crushing/flattening.
+    Calibrated dual senses (physical compression/destruction AND romantic infatuation) across all languages.
+
+13. Regional & Part-of-Speech Nuances:
+    - 3249 (bleed): da noun "blødning" -> verb "bløde"; hr noun "krvarenje" -> verb "krvariti".
+    - 3251 (disclose): hr noun "otkrivanje" -> verb "otkriti, obznaniti".
+    - 3239 (promising): lv noun "solījums" (promise) -> adjective "daudzsološs"; kk "уәде беретін" (promise maker) -> "болашағы зор, үміт күттіретін".
+    - 3240 (tide): kk "толқын" (wave) -> "толысу мен қайту".
+    - 3212 (debut): pt Brazilian spelling updated ("estréia" -> "estreia").
+    - 3215 (colonial): fi ("siirtomaa-aika"), et ("koloniaalajastu"), th ("ยุคอาณานิคม"), ko ("식민지") corrected from era/noun to adjective.
+    - 3247 (workplace): it "ufficio" (office only) -> "posto di lavoro, luogo di lavoro".
+    - Natural Persian/Arabic/Urdu/Bengali/Hindi grammar and orthography applied cleanly across all 50 words.
