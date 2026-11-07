@@ -1,0 +1,80 @@
+Batch 4552-4601 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 4591 (outcome): CATASTROPHIC MULTI-LOCALE "BIBLICAL EXODUS" INFECTION!
+   - Dump translated English "outcome" (via Russian "исход") as the Biblical Book of Exodus ("Exodus", "Exode", "Esodo", "Kivonulás", "Εξοδος πλήθους", "Väljasõda", "Išėjimas") across 12 European languages:
+     de: "Exodus" (Biblical Exodus!)
+     fr: "Exode" (Biblical Exodus!)
+     it: "Esodo" (Biblical Exodus!)
+     ro: "Exod" (Biblical Exodus!)
+     bg: "Изход" (Biblical Exodus!)
+     cs: "Exodus" (Biblical Exodus!)
+     sk: "Exodus" (Biblical Exodus!)
+     hu: "Kivonulás" (Biblical Exodus!)
+     el: "Εξοδος πλήθους" (Mass crowd exodus!)
+     sl: "Eksodus" (Biblical Exodus!)
+     et: "Väljasõda" (War of departure!)
+     lt: "Išėjimas" (Departure / Exit!)
+   - Root Cause: MT engine treated Russian polysemic word "исход" out of context as the Old Testament "Книга Исход" (Book of Exodus) instead of "исход дела" (result / outcome).
+   - Calibration: Completely restored authentic vocabulary for result, consequence, conclusion, outcome:
+     de: Ergebnis, Resultat, Ausgang; fr: résultat, issue, conséquence; it: esito, risultato, conseguenza; ro: rezultat, deznodământ, finalitate; bg: резултат, изход от ситуация, следствие; cs: výsledek, vyústění, následek; sk: výsledok, rozuzlenie, následok; hu: kimenetel, eredmény, végkifejlet; el: έκβαση, αποτέλεσμα, κατάληξη; sl: izid, rezultat, posledica; et: tulemus, tagajärg, lõpptulemus; lt: baigtis, rezultatas, pasekmė.
+
+2. Word 4565 (debt): MASSIVE 12-LANGUAGE "MORAL DUTY" & "CUSTOMS TARIFF" FALSE FRIEND!
+   - Dump translated financial "debt" (Russian "долг") into moral duty / moral obligation (de: Pflicht, fr: devoir, it: dovere, pt: obrigação, cs: povinnost, sk: povinnosť, sl: dolžnost, et: kohustus, lt: pareiga) and customs tariff / import duty (bg: мито, hu: vám, el: δασμός)!
+   - Root Cause: Russian "долг" polysemy ("денежный долг" = monetary debt vs "гражданский долг" = civic duty). Automated translation latched onto "duty", translating it as moral duty in 9 languages and customs duty in 3 languages.
+   - Calibration: Restored precise financial debt terminology across all 35 target languages:
+     de: Schulden, Schuld, Verbindlichkeit; fr: dette, créance; it: debito, pendenza; pt: dívida, débito; cs: dluh, pohledávka; sk: dlh, zadlženosť; sl: dolg, zadolženost; et: võlg, võlgnevus; lt: skola, įsiskolinimas; bg: дълг, задължение; hu: adósság, tartozás; el: χρέος, οφειλή.
+
+3. Word 4592 (purpose): ARCHERY / SHOOTING TARGET / BULLSEYE SKEW!
+   - Dump translated "purpose" (Russian "цель") as a physical shooting target or bullseye:
+     it: "bersaglio" (target/bullseye!)
+     fr: "cible" (target!)
+     ro: "ţintă" (target!)
+     sl: "tarča" (target!)
+     et: "sihtmärk" (target!)
+     lt: "taikinys" (target!)
+   - Root Cause: Russian "цель" can be an archery target or an abstract aim/purpose. In English, "purpose" is exclusively aim, intention, raison d'être, or function.
+   - Calibration: Calibrated to aim, intention, objective, and purpose:
+     it: scopo, proposito, finalità; fr: but, dessein, finalité; ro: scop, menire, intenție; sl: namen, smisel, cilj; et: eesmärk, siht, kavatsus; lt: tikslas, paskirtis, ketinimas.
+
+4. Word 4600 (possibility): "OPPORTUNITY" SYSTEMIC OVERRIDE!
+   - Dump translated "possibility" (Russian "возможность") as "opportunity" (a favorable occasion / chance) across 15+ languages:
+     de: Gelegenheit; fr: opportunité; it: opportunità; ro: oportunitate; cs: příležitost; sk: príležitosť; el: ευκαιρία; sl: priložnost; hr: prilika; ar: الفرصة; id: Peluang; vi: Cơ hội; th: โอกาส; ko: 기회; ja: 機会.
+   - Root Cause: Russian "возможность" ambiguously spans both possibility (possibilitas) and opportunity (opportunitas). The English headword is strictly "possibility" (potential, likelihood, option).
+   - Calibration: Calibrated to possibility, likelihood, and contingency:
+     de: Möglichkeit, Wahrscheinlichkeit; fr: possibilité, éventualité; it: possibilità, eventualità; ro: posibilitate, eventualitate; cs: možnost, pravděpodobnost; sk: možnosť, pravdepodobnosť; el: πιθανότητα, δυνατότητα; sl: možnost, verjetnost; hr: mogućnost, vjerojatnost; ar: إمكانية, احتمال; id: kemungkinan, kebolehjadian; vi: khả năng, sự có thể; th: ความเป็นไปได้; ko: 가능성, 가망; ja: 可能性, 見込み.
+
+5. Word 4568 (receipt): FALSE HOMONYM CASCADE (CHECK / INVOICE / PROMISSORY NOTE)!
+   - Dump translated "receipt" as bank checks, invoices, and promissory notes / IOUs:
+     de: Scheck, Rechnung; fr: chèque, facture; cs: šek, faktura; da: check, gældsbrev; fi: shekki, velkakirja; sv: check, skuldebrev; hr: ček, zadužnica; lv: čeks, parādzīme; ar: شيك، سند دين; ko: 수표, 차용증; ja: 小切手、借用証書; th: เช็ค, สัญญาเงินกู้.
+   - Root Cause: Machine translation confused "receipt" with Russian "чек" (bank cheque) and "расписка" (promissory note).
+   - Calibration: Calibrated strictly to proof of purchase / sales receipt / slip:
+     de: Quittung, Beleg, Kassenbon; fr: reçu, ticket de caisse, quittance; it: ricevuta, scontrino, quietanza; pt: recibo, comprovante, nota fiscal; ro: chitanță, bon fiscal; bg: касова бележка, разписка, квитанция; cs: účtenka, stvrzenka, doklad; da: kvittering, kassebon; fi: kuitti, ostokuitti; sv: kvitto, kassakvitto; hr: račun, potvrda; ar: إيصال, فاتورة دفع; ko: 영수증, 수령증; ja: 領収書, レシート.
+
+6. Word 4570 (spend): EXCLUSIVE "TIME SPENDING" & BIZARRE IDIOMS!
+   - Dump translated "spend" exclusively as "spend time", omitting monetary spending, and added bizarre literal idioms:
+     cs: "zabíjet čas" (kill time!)
+     ro: "oprește timpul" (stop time!)
+     de: "verbringen, aufwenden" (omitted "ausgeben" for money!)
+     fr: "passer du temps" (omitted "dépenser" for money!)
+     sk, hu, sl, et, lt, bg similarly omitted monetary expenditure.
+   - Calibration: Restored dual semantic coverage of financial spending and time passing across all 35 languages (de: ausgeben, verbringen; fr: dépenser, passer du temps; cs: utrácet, trávit čas; ro: a cheltui, a petrece; sk: míňať, tráviť čas; hu: költeni, időt tölt).
+
+7. Word 4589 (leader): HISTORICAL TABOO PURGED & ARABIC ARTICLE STRIPPED!
+   - Standalone German "Führer" (heavily burdened with Nazi-era connotations) replaced with standard modern German "Leiter, Anführer, Führungskraft".
+   - Purged unwanted definite articles (`ال`) in Arabic across dictionary lemmas (4589: قائد, 4590: قيادة, 4592: هدف, 4593: جودة, 4594: خدمة, 4595: استراتيجية, 4596: مجتمع, 4597: ميزة, 4598: جهد, 4599: مهمة, 4600: إمكانية, 4601: مشكلة).
+
+8. Part-of-Speech & Grammatical Precision:
+   - 4559 (build): Replaced verbal nouns and imperatives (ar: بناء, bg: изграждане, ko: 건설, kk: құрылыс, da: byg) with active verb infinitives (ar: يبني, يشيد; bg: строя; ko: 짓다, 건설하다; kk: салу, құру; da: bygge; cs: stavět, budovat).
+   - 4581 (business): Fixed Hungarian adjective "üzleti" to noun "üzlet, vállalkozás"; Italian "Attività commerciale" to "affari, azienda, impresa".
+   - 4593 (quality): Fixed Czech adjective "kvalitní" to noun "kvalita, jakost".
+   - 4566 (economy): Fixed Kazakh Russian slang "эконом" to authentic "экономика, шаруашылық".
+   - 4587 (goods): Refined translations to "goods, wares, merchandise, freight" (ar: بضائع, سلع; hi: माल, सामान; th: สินค้า; ko: 상품, 물품; ja: 商品, 品物; id: barang, komoditas).
+   - 4594 (service): Expanded beyond narrow mechanical maintenance ("Wartung / repair") to customer service, public services, and assistance.
+   - Fixed capitalization in Scandinavian and Baltic languages (da, fi, sv, hr, lv, id, vi) where common nouns had been artificially capitalized like German nouns.
+   - Fixed Urdu transliteration defects (4553: "کرنر" -> "کونا, گوشہ"; 4560: "مومنٹ" -> "لمحہ, پل"; 4563: "کلوسنگ" -> "بندش, اختتام"; 4567: "پننی" -> "پینی, چھوٹا سکہ"; 4586: "فاکٹر" -> "عنصر, جزو").
+   - Brazilian Portuguese (pt-BR) and Latin American Spanish (es-MX) regional terminology fully calibrated (garçom/garçonete, máquina de lavar, canto/esquina, mesero/mesera, recibo/comprobante).
+
+All 50 words calibrated and verified across all 35 target languages + en headword (EXACTLY 36 LOCALES).

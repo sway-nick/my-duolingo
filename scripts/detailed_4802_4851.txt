@@ -1,0 +1,128 @@
+Batch 4802-4851 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 4802 to 4851) from dump slice 'scripts/dump_4802_4851.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_4802_4851_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 4802 (aged): CATASTROPHIC MULTI-LOCALE "SEASONED WITH SPICES" CONFUSION!
+   - Dump translated "aged" (old, elderly, matured cheese/wine) as "seasoned with culinary spices" in 12+ European languages!
+     de: "gewürzt" (seasoned with spices!)
+     fr: "assaisonné" (flavored with spices/condiments!)
+     pl: "doprawiony" (spiced/seasoned!)
+     ro: "condimentat" (condimented/spiced!)
+     bg: "подправен" (spiced!)
+     cs: "kořeněný" (spiced!)
+     sk: "korenený" (spiced!)
+     hu: "fűszerezett" (spiced!)
+     el: "καρυκευμένος" (spiced/seasoned!)
+     sl: "začinjen" (spiced!)
+     et: "maitsestatud" (flavored!)
+     lt: "pagardintas" (seasoned!)
+   - Root Cause: Machine translation confused "aged" with "seasoned" (as in seasoned meat), completely corrupting the vocabulary entry.
+   - Fixed: Calibrated to accurate words for elderly/aged person and matured/vintage wine/cheese across all 35 languages (e.g. ru: "пожилой, престарелый, выдержанный", de: "gealtert, betagt, gereift", fr: "âgé, vieux, vieilli", pl: "w podeszłym wieku, sędziwy, dojrzały").
+
+2. Word 4812 (blonde): BIZARRE "FAIR-SKINNED / WHITE SKIN" RACE BUG ACROSS 12 LANGUAGES!
+   - Dump translated "blonde" (hair color) as "white skin" / "fair complexion":
+     ru: "белокожий" (white-skinned!)
+     uk: "білошкірий" (white-skinned!)
+     de: "hellhäutig" (fair-skinned!)
+     pl: "jasnoskóry" (fair-skinned!)
+     ro: "cu pielea deschisă la culoare" (with fair skin!)
+     bg: "светлокож" (fair-skinned!)
+     sk: "svetlopleťový" (fair-skinned!)
+     hu: "világos bőrű" (fair-skinned!)
+     sl: "svetlopolt" (fair-skinned!)
+     et: "heleda nahaga" (with light skin!)
+     lt: "šviesios odos" (of light skin!)
+     kk: "ақ терісі бар" (having white skin!)
+   - Root Cause: MT confused blonde hair with complexion/dermatological tones.
+   - Fixed: Removed references to skin color; calibrated strictly to yellow/golden hair: русый/светловолосый, blond, rubio/rubia, loiro/loira, etc.
+
+3. Word 4820 (confused): CATASTROPHIC MULTI-LOCALE "ASHAMED / EMBARRASSED" BUG ACROSS 20 LANGUAGES!
+   - Dump translated "confused" (perplexed, bewildered, disoriented) as "ashamed / humiliated / shy":
+     ru: "смущенный"
+     de: "beschämt" (shamed!)
+     es: "avergonzado" (ashamed!)
+     fr: "gêné" (embarrassed!)
+     it: "imbarazzato" (embarrassed!)
+     cs: "v rozpacích" (embarrassed!)
+     sk: "v rozpakoch" (embarrassed!)
+     sl: "osramočen" (humiliated/ashamed!)
+     et: "piinlikkust tundma" (feeling awkward/embarrassed!)
+     lt: "sugėdintas" (shamed!)
+     da: "flov" (embarrassed!)
+     fi: "nolostunut" (embarrassed!)
+     sv: "generad" (embarrassed!)
+     hr: "posramljen" (shamed!)
+     ar: "محرج" (embarrassed!)
+     id: "malu" (shy/ashamed!)
+     vi: "xấu hổ" (ashamed!)
+     th: "อาย" (shy/embarrassed!)
+     ja: "恥ずかしい" (ashamed!)
+     kk: "ұялған" (ashamed!)
+   - Root Cause: Conflation of "confused" with "embarrassed / bashful".
+   - Fixed: Replaced with proper words for bewildered/perplexed/disoriented (ru: "запутанный, растерянный, сбитый с толку", de: "verwirrt, durcheinander, konfus", es: "confundido, desconcertado", fr: "confus, désorienté", etc.).
+
+4. Word 4822 (connected): SEVERE "TIED UP WITH ROPES / BONDAGE" BUG IN 12+ LANGUAGES!
+   - Dump translated "connected" (linked, associated, online) as "bound by ropes / shackled":
+     da: "bundet" (tied up!)
+     fi: "sidottu" (tied up with rope!)
+     sv: "bunden" (tied up!)
+     hr: "vezan" (tied up!)
+     hi: "बंधा हुआ" (tied up!)
+     ar: "مقيد" (handcuffed/shackled!)
+     id: "terikat" (tied up/bound!)
+     vi: "bị trói buộc" (bound/constrained by ropes!)
+     th: "ผูกมัด" (bound/constrained!)
+     ko: "묶인" (tied up!)
+     ja: "縛られた" (tied up with ropes/bondage!)
+     kk: "байланған" (tied up!)
+   - Root Cause: MT parsed "connected" through a literal rope binding physical metaphor.
+   - Fixed: Calibrated to digital, network, structural, and social connections (connected, linked, related, online): ru: "связанный, соединенный, подключенный", ar: "متصل، مرتبط", ja: "接続された、繋がった", etc.
+
+5. Word 4828 (definite): RESOLUTE / DETERMINED CONFUSION IN 10+ LANGUAGES!
+   - Dump translated "definite" (clear, unambiguous, distinct) as "resolute / determined" (personality trait):
+     da: "beslutsom", fi: "päättäväinen", sv: "beslutsam", hr: "odlučan", lv: "apņēmīgs", ar: "مصمم", id: "bertekad", vi: "quyết tâm", th: "แน่วแน่", ko: "단호한", ja: "決意した".
+   - Fixed: Calibrated to precise, unambiguous, unquestionable: ru: "определенный, точный, несомненный", de: "eindeutig, definitiv, bestimmt", fr: "net, tranché, formel", etc.
+
+6. Word 4830 (delighted): UNWANTED PARTICIPLE CLAUSE BUG ("HAVING ENJOYED ONESELF")!
+   - Dump translated adjective "delighted" (overjoyed, thrilled) into participial temporal clauses:
+     fr: "s'étant amusé", ro: "după ce s-a distrat", bg: "след като се е насладил", cs: "který si užil", hu: "miután jól érezte magát", el: "έχοντας απολαύσει τον εαυτό του", etc.
+   - Fixed: Standardized to pure, high-register predicate and attributive adjectives meaning overjoyed, thrilled, enchanted (ru: "в восторге, обрадованный, очень довольный", fr: "enchanté, aux anges", de: "hocherfreut, entzückt", etc.).
+
+7. Word 4833 (different): "ANOTHER / THE REST / ONE MORE" CONFUSION IN 10+ LANGUAGES!
+   - Dump translated "different" as "another" (ein anderer, un autre, un altro, altul, še en, annat, ostalo, أخرى, その他).
+   - Fixed: Replaced with proper words for distinct, dissimilar, diverse (ru: "разный, различный, иной", de: "unterschiedlich, mannigfaltig, andersartig", es: "distinto, diferente", fr: "différent, dissemblable", etc.).
+
+8. Word 4840 (engaged): ABSURD "INTROVERTED / SHY" CONFUSION FROM "RESERVED"!
+   - Dump translated "engaged" as "introverted / shy / quiet":
+     da: "reserveret", fi: "varautunut", lv: "atturīgs", ar: "متحفظ", id: "pendiam" (shy/quiet!), vi: "kín đáo" (reserved/discreet!), th: "เก็บตัว" (introverted!), ko: "내성적인" (introverted!), ja: "控えめな" (modest/reserved!).
+   - Root Cause: MT went engaged -> booked/reserved -> reserved personality -> shy/introverted!
+   - Fixed: Calibrated to betrothed to be married (помолвленный, fiancé, noivo) and occupied/in use/busy (занято, besetzt, busy).
+
+9. Word 4842 (environmental): "ECO-FRIENDLY" CONFUSION ACROSS 12 LANGUAGES!
+   - Dump translated "environmental" as "eco-friendly / green":
+     da: "miljøvenlig", fi: "ympäristöystävällinen", sv: "miljövänlig", hr: "ekološki prihvatljivo", lv: "videi draudzīgs", ar: "صديق للبيئة", id: "ramah lingkungan", vi: "thân thiện với môi trường", th: "เป็นมิตรกับสิ่งแวดล้อม", ko: "환경 친화적인", ja: "環境に優しい", kk: "қоршаған ортаға зиян келтірмейтін".
+   - Fixed: Calibrated to relating to the environment/ecology (ru: "экологический, относящийся к окружающей среде", de: "umweltbezogen, ökologisch, Umwelt-", es: "ambiental, medioambiental", etc.).
+
+10. Word 4844 (experienced): ITALIAN "VIAGGIATO" (WELL-TRAVELED) MISTRANSLATION!
+    - Dump translated "experienced" (skilled, seasoned) in Italian as "viaggiato" (having traveled a lot!).
+    - Fixed: Calibrated to "esperto, navigato, consumato".
+
+11. Word 4846 (flying) & 4847 (folding): PART OF SPEECH & INVENTED "UNFOLDING" ANOMALIES!
+    - 4846: Dump had bare infinitives and nouns (de: fliegen, fr: vol, it: volare, ro: zbor). Standardized to adjectival and participle forms with gerund senses.
+    - 4847: Dump hallucinated "unfolding" (dépliage, dispiegare, desfășurare, разгъване, rozkládání, kibontható) into folding items (e.g. folding chair). Calibrated to collapsible/folding (pliant, pieghevole, dobrável, skládací, etc.).
+
+12. Word 4851 (general): EXCLUSION OF ADJECTIVAL SENSE IN 10 EUROPEAN LANGUAGES!
+    - Dump translated "general" exclusively as military rank or boss (Chef, náčelník, tábornok, στρατηγός, vadas, šef) and had typo in Russian ("генарал").
+    - Fixed: Included both universal/general adjective sense and military rank across all 35 languages (ru: "общий, всеобщий; генерал", de: "allgemein, universell; General", fr: "général, global; général", etc.).
+
+13. Grammatical, Typo, and Regional Nuance Calibrations:
+    - Brazil (pt / pt-BR): Calibrated "loiro/loira" (not European louro), "idoso", "cacheado/encaracolado", "noivo/noiva", "econômico".
+    - Mexico / Latin America (es): Calibrated "enojado", "chino/rizado", "abarrotado/lleno", "bochornoso/vergonzoso".
+    - Fixed case, gender, and inflectional endings across Slavic, Baltic, and Nordic languages (no dangling neuter adverbs like "ljutito", "depresivno", "uplašeno", "nepošteno").
+    - Fixed natural grammar and authentic phrasing for RTL (ar, fa, ur) and Asian scripts (hi, bn, zh, ja, ko, th, vi, id, kk).

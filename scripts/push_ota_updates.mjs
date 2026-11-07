@@ -858,7 +858,47 @@ async function run() {
 
     // Batch 4302-4351
     { id: 4319, word: 'at home', lang: 'de', expected: 'zu Hause, daheim' },
-    { id: 4344, word: 'safe travels', lang: 'de', expected: 'gute Reise, gute Fahrt, komm gut an' }
+    { id: 4344, word: 'safe travels', lang: 'de', expected: 'gute Reise, gute Fahrt, komm gut an' },
+
+    // Batch 4352-4401
+    { id: 4374, word: 'participle', lang: 'de', expected: 'Partizip, Mittelwort' },
+    { id: 4391, word: 'shoelace', lang: 'fr', expected: 'lacet, lacet de chaussure' },
+
+    // Batch 4402-4451
+    { id: 4424, word: 'bear bore born', lang: 'es', expected: 'soportar, aguantar, dar a luz' },
+    { id: 4449, word: 'scrambled eggs', lang: 'de', expected: 'Rührei, Rühreier' },
+
+    // Batch 4452-4501
+    { id: 4457, word: 'restroom', lang: 'fr', expected: 'toilettes, sanitaires' },
+    { id: 4488, word: 'guy', lang: 'da', expected: 'fyr, gut, mand' },
+
+    // Batch 4502-4551
+    { id: 4506, word: 'cooker', lang: 'de', expected: 'Herd, Küchenherd, Kocher' },
+    { id: 4545, word: 'cupboard', lang: 'de', expected: 'Schrank, Küchenschrank, Geschirrschrank' },
+
+    // Batch 4552-4601
+    { id: 4565, word: 'debt', lang: 'de', expected: 'Schulden, Schuld, Verbindlichkeit' },
+    { id: 4591, word: 'outcome', lang: 'de', expected: 'Ergebnis, Resultat, Ausgang' },
+
+    // Batch 4602-4651
+    { id: 4624, word: 'printing', lang: 'it', expected: 'stampa, stampaggio, tipografia' },
+    { id: 4637, word: 'pub', lang: 'de', expected: 'Pub, Kneipe, Gasthaus' },
+
+    // Batch 4652-4701
+    { id: 4661, word: 'offence', lang: 'ro', expected: 'infracțiune, abatere, ofensă' },
+    { id: 4693, word: 'learn', lang: 'de', expected: 'lernen, studieren, erfahren' },
+
+    // Batch 4702-4751
+    { id: 4705, word: 'movie', lang: 'ko', expected: '영화' },
+    { id: 4746, word: 'least', lang: 'ko', expected: '가장 적은, 최소한, 가장 적게' },
+
+    // Batch 4752-4801
+    { id: 4773, word: 'divorced', lang: 'de', expected: 'geschieden' },
+    { id: 4787, word: 'indirect', lang: 'de', expected: 'indirekt, mittelbar, umwegig' },
+
+    // Batch 4802-4851
+    { id: 4802, word: 'aged', lang: 'de', expected: 'gealtert, betagt, gereift' },
+    { id: 4851, word: 'general', lang: 'de', expected: 'allgemein, universell; General' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -879,21 +919,21 @@ async function run() {
     return require(filePath);
   }
 
-  // Batches 1 to 77 (words 1-3851) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-77 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 78-87 (words 3852-4351, 499 words)
+  // Batches 1 to 87 (words 1-4351) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-87 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 88-97 (words 4352-4851, 498 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_3852_3901_calibrations.cjs',
-    'apply_batch_3902_3951_calibrations.cjs',
-    'apply_batch_3952_4001_calibrations.cjs',
-    'apply_batch_4002_4051_calibrations.cjs',
-    'apply_batch_4052_4101_calibrations.cjs',
-    'apply_batch_4102_4151_calibrations.cjs',
-    'apply_batch_4152_4201_calibrations.cjs',
-    'apply_batch_4202_4251_calibrations.cjs',
-    'apply_batch_4252_4301_calibrations.cjs',
-    'apply_batch_4302_4351_calibrations.cjs'
+    'apply_batch_4352_4401_calibrations.cjs',
+    'apply_batch_4402_4451_calibrations.cjs',
+    'apply_batch_4452_4501_calibrations.cjs',
+    'apply_batch_4502_4551_calibrations.cjs',
+    'apply_batch_4552_4601_calibrations.cjs',
+    'apply_batch_4602_4651_calibrations.cjs',
+    'apply_batch_4652_4701_calibrations.cjs',
+    'apply_batch_4702_4751_calibrations.cjs',
+    'apply_batch_4752_4801_calibrations.cjs',
+    'apply_batch_4802_4851_calibrations.cjs'
   ];
 
   let mergedCount = 0;

@@ -1,0 +1,143 @@
+Batch 4352-4401 Linguistic Audit and Calibration Report
+====================================================
+
+Audit Scope: Batch ID 4352–4401 (49 words, skipping missing ID 4390)
+Locales Calibrated: EXACTLY 36 LOCALES (35 target languages + en headword):
+ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk.
+
+KEY BUGS CAUGHT, HOMONYMS FIXED, AND CALIBRATIONS APPLIED:
+---------------------------------------------------------
+
+1. Word 4374 (participle) - CATASTROPHIC SACRAMENT / GRAMMAR HOMONYM CONFUSION FIXED:
+   - Dump translated Russian "причастие" (grammatical participle) through MT into religious sacrament / Holy Communion across multiple languages:
+     - German dump had "Gemeinschaft" (church fellowship / communion) -> Fixed to "Partizip, Mittelwort".
+     - French dump had "Communion" (Holy Communion) -> Fixed to grammatical "participe".
+     - Ukrainian dump had "причастя" (Holy Communion) -> Fixed to correct Ukrainian linguistic term "дієприкметник".
+     - Kazakh calibrated to standard linguistic term "есімше".
+     - Hindi ("कृदंत"), Arabic ("اسم الفاعل أو المفعول"), Hungarian ("melléknévi igenév"), Polish ("imiesłów") all calibrated to authentic grammar terms.
+
+2. Word 4362 (look out) - ADVERBIAL SEVERITY / WARNING FIX:
+   - MT confused imperative exclamation "look out!" (warning of imminent danger) with "watchful / thorough / diligent":
+     - German dump had "sorgfältig" (carefully / diligently!) -> Fixed to "Pass auf!, Achtung!, Vorsicht!".
+     - French dump had "soigneusement" (neatly / carefully!) -> Fixed to "attention !, fais attention !, prends garde !".
+     - Spanish calibrated with Latin American / Mexican alert: "¡cuidado!, ¡atención!, ¡aguas!".
+
+3. Word 4391 (shoelace) - TEXTILE EMBROIDERY LACE BUG FIXED:
+   - MT mistranslated "shoelace" as ornamental fabric lace (embroidery / crochet):
+     - German dump had "Spitze" (textile lace / tip) -> Fixed to "Schnürsenkel, Schuhband, Schuhsenkel".
+     - French dump had "dentelle" (needle lace) -> Fixed to "lacet, lacet de chaussure".
+     - Spanish: calibrated to "cordón, cordón de zapato, agujeta" (including Mexican "agujeta").
+     - Portuguese: calibrated to "cadarço, atacador" (distinguishing Brazilian "cadarço").
+
+4. Word 4394 (saw) - DUAL HOMONYM DISAMBIGUATION (Saw Tool vs Past Tense of 'see'):
+   - The dump contained conflicting translations across locales: some languages had only the cutting tool (piła, testere), while others had only the past tense of see (viděl, nägi, a vu).
+   - All 35 target languages calibrated to comprehensively include both the primary intended tool/action ("пила, пилить; Säge, sägen; sierra, aserrar; scie, scier; testere, testereyle kesmek") and the past tense of see ("видел; sah; vio; a vu; gördü").
+
+5. Word 4397 (look up to) - NOUN TO PHRASAL VERB CALIBRATION:
+   - German dump had nouns "Respekt, Bewunderung" instead of active phrasal verbs.
+   - Calibrated to German verbs: "aufblicken zu, bewundern, verehren".
+   - Spanish: "admirar, respetar, tener como modelo".
+   - Brazilian Portuguese: "admirar, respeitar, espelhar-se em, se inspirar em".
+
+6. Word 4389 (harry up) - HEADWORD TYPO HANDLED & CALIBRATED:
+   - Headword in dump had typo "harry up" for "hurry up" (transcription "ˈhɝi ʌp", Russian "поторопись").
+   - Calibrated all 35 target languages to lively colloquial imperative expressions:
+     - German: "beeil dich, mach schnell, mach schon"
+     - Spanish: "date prisa, apresúrate, apúrate, córrele"
+     - French: "dépêche-toi, fais vite, magne-toi"
+     - Portuguese (Brazil): "apresse-se, despache-se, corre, se apressa"
+     - Turkish: "acele et, çabuk ol"
+     - Russian & Ukrainian: "поторопись, поспеши, давай быстрее" / "поспішай, квапся, швидше".
+
+7. Word 4352 (no way) - POLARITY REVERSAL RISK PREVENTED:
+   - French dump had truncated string "certainem..." which risked meaning "certainement" (the exact polar opposite of "no way!").
+   - Calibrated to authentic negative exclamations: "pas question, certainement pas, hors de question", Spanish "de ninguna manera, ni hablar, ¡para nada!", German "auf keinen Fall, keineswegs, niemals".
+
+8. Word 4400 (inside out) - PHYSICAL & METAPHORICAL ADVERBIAL PRECISION:
+   - Calibrated for clothing orientation as well as thorough knowledge:
+     - German: "auf links, umgedreht, von innen nach außen"
+     - Spanish: "al revés, del revés, de adentro hacia afuera"
+     - French: "à l'envers, de fond en comble"
+     - Portuguese: "do avesso, ao contrário, de dentro para fora"
+     - Russian & Ukrainian: "наизнанку, вывернутый наизнанку; вдоль и поперёк" / "навиворіт, вивернутий навиворіт".
+
+9. Word 4380 (shampoo) & Word 4387 (adverb):
+   - Authenticated specialized terms in Turkic and Central Asian languages (Kazakh shampoo: "сусабын", Kazakh adverb: "үстеу").
+
+REGIONAL NUANCES & SPECIALIZED LOCALIZATION:
+-------------------------------------------
+- Brazil (pt / pt-BR):
+  - 4352 (no way): "de jeito nenhum, nem pensar, sem chance"
+  - 4355 (I'll take it): "vou levar, fico com este, eu levo"
+  - 4356 (keep the change): "fique com o troco, pode guardar o troco"
+  - 4357 (just looking): "só estou olhando, estou só dando uma olhadinha"
+  - 4363 (cheer up): "anime-se, não desanime, levanta essa cabeça"
+  - 4365 (good job) & 4367 (well done): "bom trabalho, mandou bem, parabéns"
+  - 4380 (shampoo): "xampu"
+  - 4388 (take your time): "não tenha pressa, vá com calma, leve o tempo que precisar"
+  - 4391 (shoelace): "cadarço, atacador"
+  - 4400 (inside out): "do avesso, de dentro para fora"
+
+- Mexico / Latin America (es / es-MX):
+  - 4352 (no way): "de ninguna manera, ni hablar, ¡para nada!"
+  - 4356 (keep the change): "quédese con el cambio, quédate con la vuelta, guarde el cambio"
+  - 4362 (look out): "¡cuidado!, ¡atención!, ¡aguas!"
+  - 4363 (cheer up): "¡ánimo!, no te desanimes, alegra esa cara"
+  - 4375 (got it?): "¿entendido?, ¿lo pillas?, ¿ya quedó?"
+  - 4388 (take your time): "tómate tu tiempo, no te apures, con calma, sin prisas"
+  - 4389 (harry up): "date prisa, apresúrate, apúrate, córrele"
+  - 4391 (shoelace): "cordón, cordón de zapato, agujeta"
+  - 4398 (look over): "echar un vistazo a, repasar, examinar, revisar, checar"
+
+- Natural RTL & Indic Grammar:
+  - Urdu (ur):
+    - 4352: ہرگز نہیں، بالکل نہیں، سوال ہی پیدا نہیں ہوتا
+    - 4356: باقی پیسے آپ رکھ لیں، بقایا اپنے پاس رکھیں
+    - 4362: خبردار!، دھیان سے!، بچو!
+    - 4374: صفت فاعلی یا مفعولی، اسم فاعل
+    - 4388: جلدی مت کرو، آرام سے کرو، اپنا وقت لو
+    - 4391: جوتے کا تسمہ، فیتہ
+    - 4394: آرا، آری سے کاٹنا؛ دیکھا
+    - 4400: الٹا، اندر کا حصہ باہر کی طرف
+  - Persian (fa):
+    - 4352: به هیچ وجه، هرگز، عمراً
+    - 4356: بقیه‌اش مال خودتان، باقی پول را نگه دارید
+    - 4362: مواظب باش!، مراقب باش!، احتیاط کن!
+    - 4374: صفت مفعولی یا فاعلی، وجه وصفی
+    - 4388: عجله نکن، سر فرصت انجام بده، وقت داری
+    - 4391: بند کفش
+    - 4394: اره، اره کردن؛ دید
+    - 4400: وارونه، پشت و رو، از باطن به ظاهر
+  - Arabic (ar):
+    - 4352: مستحيل، لا على الإطلاق، بأي حال من الأحوال
+    - 4356: احتفظ بالباقي
+    - 4362: احذر!، انتبه!
+    - 4374: اسم الفاعل أو المفعول، اسم الفاعل
+    - 4388: خذ وقتك، لا تستعجل، على مهلك
+    - 4391: رباط الحذاء
+    - 4394: منشار، نشر بالمنشار؛ رأى
+  - Hindi (hi):
+    - 4352: बिलकुल नहीं, किसी भी कीमत पर नहीं, सवाल ही नहीं उठता
+    - 4356: बाकी पैसे आप रख लीजिए, छुट्टे रख लो
+    - 4362: ध्यान से!, बच के!, सावधान!
+    - 4374: कृदंत, कृदंतरूप
+    - 4388: आराम से करो, जल्दबाज़ी मत करो, अपना समय लो
+    - 4391: जूते का फीता, तस्मा
+  - Bengali (bn):
+    - 4352: কোনোভাবেই নয়, কখনোই না, অসম্ভব
+    - 4356: বাকি টাকাটা রেখে দিন, ভাংতি রাখতে পারেন
+    - 4362: সাবধান!, দেখে চলো!
+    - 4374: কৃদন্ত পদ, পার্টিসিপল
+    - 4388: সময় নিয়ে করো, তাড়াহুড়ো কোরো না
+    - 4391: জুতোর ফিতে
+  - Kazakh (kk):
+    - 4352: ешқашан, әсте мүмкін емес, мүмкін емес
+    - 4356: қайтарымы керек емес, қалдығы өзіңізде қалсын
+    - 4362: абайлаңыз!, сақ болыңыз!, қараңыз!
+    - 4374: есімше
+    - 4380: сусабын
+    - 4387: үстеу
+    - 4388: асықпаңыз, жайлап істеңіз, уақытың бар
+    - 4391: бәтеңке бауы, аяқ киім бауы
+
+All 49 words are 100% calibrated with high-register, natural idiomatic expressions across EXACTLY 36 LOCALES.

@@ -1,0 +1,116 @@
+Batch 4752-4801 Linguistic Audit and Calibration Report
+====================================================
+
+Word Range: ID 4752 ("off") to ID 4801 ("afraid") — 50 words across EXACTLY 36 LOCALES (35 target languages + en headword).
+Target Languages audited: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk.
+
+KEY LINGUISTIC BUGS CAUGHT & RECTIFIED:
+
+1. Word 4773 ("divorced") — Catastrophic Polysemy / False Friend Bug:
+   - In Russian, "разведённый" can mean either "divorced" (from брак/развод) or "diluted / dissolved" (e.g. разведённый раствор/спирт).
+   - Machine translation catastrophically picked the "diluted" sense for European languages:
+     * German: "verdünnt" (diluted liquid!) -> CALIBRATED to "geschieden".
+     * French: "dilué" (diluted!) -> CALIBRATED to "divorcé, divorcée".
+     * Polish: "rozcieńczony" (diluted!) -> CALIBRATED to "rozwiedziony, rozwiedziona".
+     * Italian: "diluito" (diluted!) -> CALIBRATED to "divorziato, divorziata".
+     * Greek: "αραιωμένο" (diluted!) -> CALIBRATED to "διαζευγμένος, χωρισμένος".
+     * Czech: "zředěný" (diluted!) -> CALIBRATED to "rozvedený, rozvedená".
+     * Slovak: "zriedený" (diluted!) -> CALIBRATED to "rozvedený, rozvedená".
+   - Aligned all 35 target languages to marital status dissolution.
+
+2. Word 4787 ("indirect") — Hallucinatory Machine Translation Artifact:
+   - In German and Slovak dumps, the word "Internet" was bizarrely hallucinated:
+     * German dump: "Internet, indirekt" -> CALIBRATED to "indirekt, mittelbar, umwegig".
+     * Slovak dump: "Internet, nepriamy" -> CALIBRATED to "nepriamy, sprostredkovaný".
+   - Removed all hallucinated "Internet" strings and calibrated all 35 languages to the accurate adjective senses of indirect, roundabout, and secondary.
+
+3. Word 4785 ("included") — Contextual Phrase Pollution:
+   - Russian source had explanatory gloss "включенный во что-то" ("included in something").
+   - Machine translators literally echoed the pronoun clause into awkward verb and noun phrases:
+     * German: "etwas beinhaltet" (verb phrase with "etwas") -> CALIBRATED to "inbegriffen, enthalten, eingeschlossen".
+     * French: "inclus dans quelque chose" -> CALIBRATED to "inclus, compris, incorporé".
+     * Polish: "zawarty w czymś" -> CALIBRATED to "zawarty, dołączony, wliczony".
+     * Italian: "incluso in qualcosa" -> CALIBRATED to "incluso, compreso, annesso".
+     * Greek: "περιλαμβάνεται σε κάτι" (verb phrase) -> CALIBRATED to "συμπεριλαμβανόμενος, ενσωματωμένος".
+     * Arabic: "مُضمّن في شيء ما" -> CALIBRATED to "مشمول، مُدرج، متضمَّن".
+     * Hindi: "किसी चीज़ में शामिल" -> CALIBRATED to "शामिल, सम्मिलित, समाविष्ट".
+     * Japanese: "何かに含まれる" -> CALIBRATED to "含まれた、同封された、込みの".
+     * Kazakh: "бір нәрсеге қосылған" -> CALIBRATED to "қамтылған, енгізілген, қосылған".
+
+4. Word 4788 ("hardworking") — Part-of-Speech Mismatch:
+   - German dump had verb infinitive "hart arbeiten" (to work hard) instead of adjective -> CALIBRATED to "fleißig, arbeitsam, emsig".
+   - French dump had verb infinitive "travailler dur" (to work hard) instead of adjective -> CALIBRATED to "travailleur, bûcheur, assidu".
+   - Calibrated all 35 languages to industrious, diligent, dedicated adjectives.
+
+5. Word 4766 ("unattractive") — Severe Semantic Deviation:
+   - Greek dump had "όχι αυθεντικός" (literally "not authentic"!) -> CALIBRATED to "μη ελκυστικός, άχαρος, άσχημος".
+   - Polish dump had colloquial "nieładny" -> CALIBRATED to "nieatrakcyjny, niepociągający, brzydki".
+
+6. Word 4763 ("wrongly") — Massive Part-of-Speech Confusion across 10+ Languages:
+   - Adverb was translated as nouns or adjectives:
+     * Polish: "zło" (noun: evil!) -> CALIBRATED to "błędnie, mylnie, niesłusznie".
+     * French: "faux" (adjective: false) -> CALIBRATED to "à tort, faussement, erronément".
+     * Italian: "sbagliato" (adjective) -> CALIBRATED to "erroneamente, a torto, scorrettamente".
+     * Greek: "λανθασμένος" (adjective) -> CALIBRATED to "λανθασμένα, εσφαλμένα, άδικα".
+     * Swedish: "felaktig" (adjective) -> CALIBRATED to "felaktigt, på fel sätt".
+     * Hungarian: "rossz" (adjective) -> CALIBRATED to "tévesen, helytelenül, hibásan".
+     * Japanese: "間違った" (adjective) -> CALIBRATED to "間違って、誤って、不当に".
+     * Korean: "잘못된" (adjective) -> CALIBRATED to "잘못하여, 그릇되게, 부당하게".
+     * Arabic: "غير صحيح" (adjective) -> CALIBRATED to "خطأً، بشكل خاطئ، بغير حق".
+     * Hindi: "गलत" (predicative adjective) -> CALIBRATED to "गलत तरीके से, अनुचित रूप से".
+
+7. Word 4768 ("bored") — False Friends & POS Errors:
+   - Ukrainian dump had "нудний" (active: boring / tiresome!) -> CALIBRATED to passive "знуджений, спантеличений нудьгою".
+   - Greek dump had "βαριέμαι" (1st person verb: I am bored) -> CALIBRATED to adjective "βαριεστημένος".
+   - Slovenian dump had "dolgčas" (noun: boredom) -> CALIBRATED to adjective "zdolgočasen, naveličan".
+   - Lithuanian dump had "nuobodu" (adverb: boringly) -> CALIBRATED to participle "nuobodžiaujantis".
+
+8. Word 4769 ("interested") — Czech & Slovak Noun Bug:
+   - Czech had noun "zájem" (interest) -> CALIBRATED to adjective "zainteresovaný, majíci zájem".
+   - Slovak had noun "záujem" (interest) -> CALIBRATED to adjective "zainteresovaný, majúci záujem".
+
+9. Word 4758 ("simply") — Capitalized "Only/Barely" MT Mistranslations:
+   - MT confused "simply" with "only / just / barely" and capitalized entries:
+     * German "Nur" -> CALIBRATED to "einfach, schlichtweg, bloß".
+     * French "Juste" -> CALIBRATED to "simplement, tout simplement".
+     * Polish "Tylko" -> CALIBRATED to "po prostu, prosto, zwyczajnie".
+     * Italian "Appena" (scarcely!) -> CALIBRATED to "semplicemente, puramente".
+     * Turkish "Sadece" -> CALIBRATED to "basitçe, yalnızca, sade bir şekilde".
+     * Greek "Μόλις" (barely!) -> CALIBRATED to "απλά, απλώς".
+     * Romanian "Doar" -> CALIBRATED to "simplu, pur și simplu".
+     * Hungarian "Éppen" -> CALIBRATED to "egyszerűen, csupán".
+
+10. Grammatical Case & Gender Rectifications:
+    - Word 4772 ("married"): Russian dump had "женатый, замужние" (mixed plural/neuter). Calibrated to gender-inclusive "женатый, замужняя, состоящий в браке". Ukrainian "одружений, заміжня".
+    - Word 4789 ("unlimited"): Russian dump had oblique feminine "неограниченной" -> CALIBRATED to nominative "неограниченный, беспредельный". Ukrainian "необмеженою" -> "необмежений, безмежний".
+    - Word 4790 ("limitless"): Russian dump had "безграничной" -> CALIBRATED to "безграничный, беспредельный". Ukrainian "безмежної" -> "безмежний, неосяжний".
+    - Word 4799 ("powerless"): Russian dump had "бессильный, беспомощной" (mixed case/gender) -> CALIBRATED to "бессильный, беспомощный, немощный". French had plural "impuissants, démunis" -> CALIBRATED to singular "impuissant, démuni".
+    - Word 4794 ("old-fashioned"): Greek neuter "παλιομοδίτικο" -> masculine/general "παλιομοδίτικος, παραδοσιακός".
+
+11. Regional & Nuance Calibrations:
+    - Portuguese (pt / pt-BR):
+      * 4776 foreign: "estrangeiro, forasteiro"
+      * 4778 rude: "grosseiro, mal-educado"
+      * 4788 hardworking: "trabalhador, esforçado, diligente"
+      * 4794 old-fashioned: "antiquado, fora de moda"
+      * 4795 painless: "indolor, sem dor"
+      * 4799 powerless: "impotente, desamparado"
+    - Spanish (es / es-MX):
+      * 4754 out: "fuera, afuera"
+      * 4755 outdoors: "al aire libre, a la intemperie"
+      * 4763 wrongly: "erróneamente, incorrectamente"
+      * 4778 rude: "grosero, maleducado"
+      * 4788 hardworking: "trabajador, diligente"
+      * 4794 old-fashioned: "anticuado, pasado de moda"
+    - Natural Non-Latin Grammar (ar, fa, ur, hi, bn, kk):
+      * Natural grammatical forms and idiomatic expressions calibrated across all Arabic, Persian, Urdu, Hindi, Bengali, and Kazakh entries.
+      * RTL directionality and proper typography maintained.
+
+VERIFICATION SUMMARY:
+- Batch 4752-4801 (50 words) fully covered.
+- EXACTLY 35 target languages per word (36 locales including English headword).
+- Output files created:
+  * `scripts/apply_batch_4752_4801_calibrations.cjs`
+  * `scripts/detailed_4752_4801.txt`
+- Verified node require and export syntax.
+- Zero APK / AAB builds performed.

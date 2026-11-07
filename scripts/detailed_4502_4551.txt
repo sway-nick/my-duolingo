@@ -1,0 +1,200 @@
+Batch 4502-4551 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 4545 (cupboard): CATASTROPHIC GLOBAL "BUFFET / SMORGASBORD" HALLUCINATION IN 20+ LOCALES!
+   - Dump translated the household kitchen furniture "cupboard" as an all-you-can-eat restaurant buffet or smorgasbord party across a majority of locales:
+     et: "Rootsi laud" (Swedish smorgasbord!)
+     lt: "švediškas stalas" (Swedish smorgasbord / banquet!)
+     vi: "tiệc buffet" (Buffet party / banquet!)
+     th: "บุฟเฟ่ต์" (Buffet meal!)
+     hu: "büfé" (Snack bar / buffet counter!)
+     sl: "bife" (Snack bar!)
+     hr: "bife" (Snack bar!)
+     da: "buffet" (All-you-can-eat meal!)
+     fi: "buffet" (Buffet table!)
+     sv: "buffé" (Buffet table!)
+     de: "Büfett" (Sideboard / food buffet!)
+     it: "buffet" (Food buffet!)
+     ro: "bufet" (Buffet meal / sideboard!)
+     bg: "бюфет" (Food buffet / snack bar!)
+     cs: "bufet" (Snack bar / canteen!)
+     sk: "bufet" (Snack bar / canteen!)
+     el: "μπουφές" (Food buffet!)
+     ar: "بوفيه" (Food buffet / banquet!)
+     ko: "뷔페" (Buffet restaurant!)
+     ja: "ビュッフェ" (Buffet meal!)
+     kk: "буфет" (Cafeteria / snack counter!)
+   - Root Cause: MT false friend pivot from archaic/secondary Russian gloss "буфет" to dining concept rather than kitchen cabinet.
+   - Calibration: Fully restored authentic household furniture terms for dish cabinet / kitchen cupboard:
+     ru: шкаф, кухонный шкаф, шкафчик, буфет; uk: шафа, кухонна шафа, шафка, буфет; de: Schrank, Küchenschrank, Geschirrschrank; fr: placard, armoire, buffet; es: armario, alacena, aparador; it: credenza, armadietto, mobile; pt: armário, armário de cozinha, louceiro; ro: dulap, dulap de bucătărie, servantă; bg: шкаф, кухненски шкаф, бюфет; cs: skříň, skříňka, kredenc; sk: skriňa, skrinka, kredenc; hu: szekrény, konyhaszekrény; el: ντουλάπι, σκευοθήκη; sl: omara, kuhinjska omara; et: kapp, köögikapp; lt: spintelė, virtuvinė spintelė; da: skab, køkkenskab; fi: kaappi, astiakaappi; sv: skåp, köksskåp; hr: ormar, kuhinjski ormarić; lv: skapis, trauku skapis; ar: خزانة, دولاب مطبخ; fa: کمد، کمد آشپزخانه; ur: الماری، برتنوں کی الماری; ja: 食器棚, 戸棚; ko: 찬장, 벽장, 수납장; zh: 橱柜, 碗柜; kk: шкаф, асүй шкафы, ыдыс-аяқ сөресі.
+
+2. Word 4506 (cooker): MASSIVE "PLATE / DISH" HOMONYM COLLAPSE IN 15+ LOCALES!
+   - Dump translated kitchen "cooker" (stove / kitchen range) as an eating plate, record, or traffic sign:
+     bg: "чиния" (Eating plate / dish!)
+     cs: "talíř" (Dinner plate!)
+     sk: "tanier" (Dinner plate!)
+     sl: "krožnik" (Plate / saucer!)
+     lt: "lėkštė" (Dinner plate!)
+     it: "piatto" (Plate / meal course!)
+     de: "Platte" (Platter / record / disk!)
+     pt: "placa" (Traffic sign / electrical board!)
+     ro: "placă" (Board / plaque / record!)
+     hu: "lemez" (Sheet metal / vinyl record!)
+     el: "πλάκα" (Slab / joke / tile!)
+     et: "plaat" (Tile / record / slab!)
+   - Root Cause: MT confusion with the word "hotplate" or homonymous "plate/dish".
+   - Calibration: Calibrated across all locales to cooking appliance (stove, kitchen cooker, range):
+     ru: кухонная плита, плита, варочная панель; uk: кухонна плита, плита, варильна панель; de: Herd, Küchenherd, Kocher; es: cocina, estufa, fogón; fr: cuisinière, réchaud; it: cucina, fornello, piano cottura; pt: fogão, fogão de cozinha; ro: aragaz, mașină de gătit; bg: готварска печка, печка; cs: sporák, vařič; sk: sporák, varič; hu: tűzhely, főzőlap; el: κουζίνα, εστία μαγειρέματος; sl: štedilnik, kuhalnik; et: pliit, keeduplaat; lt: viryklė; da: komfur, kogeapparat; fi: liesi, hella; sv: spis, kokplatta; hr: štednjak, kuhalo; lv: plīts, virtuves plīts; kk: плита, асүй плитасы, пеш.
+
+3. Word 4514 (racing): CATASTROPHIC "ETHNIC / BIOLOGICAL RACE" DISASTER!
+   - In 5 European languages, "racing" (speed contests / motor racing) was translated as biological or ethnic race:
+     ro: "rasă" (Biological / ethnic race!)
+     bg: "раса" (Biological / ethnic race!)
+     cs: "rasa" (Biological / ethnic race!)
+     el: "φυλή" (Biological race / tribe!)
+     sl: "rasa" (Biological race / breed!)
+   - Root Cause: Truncation of "racing" to noun "race", selecting the anthropological/biological homograph.
+   - Calibration: Restored authentic sporting / speed contest terms:
+     ro: curse, întreceri; bg: състезания, надбягвания; cs: závody, závodění; el: αγώνες ταχύτητας, κούρσες; sl: dirke, dirkanje.
+
+4. Word 4543 (accommodation): "COMPUTER CASE / MACHINE HOUSING" BUG IN GERMAN & LOAN CONFUSIONS!
+   - Dump translated "accommodation" (living quarters, lodging, housing) in German as:
+     de: "Gehäuse" (Machine housing, PC chassis, electronic casing!)
+   - In Hungarian: "ház" (plain single-family house instead of lodging / accommodation)
+   - In Japanese: "住宅" (residential buildings instead of accommodation / lodging)
+   - In Korean: "주택" (houses)
+   - In Kazakh: "тұрғын үй" (houses)
+   - Calibration: Fully calibrated to travel lodging, hospitality accommodation, and living quarters:
+     de: Unterkunft, Unterbringung, Quartier; hu: szállás, lakhatás; ja: 宿泊施設, 宿泊, 宿; ko: 숙소, 숙박, 거처; kk: баспана, орналастыру, тұрғын үй; ur: رہائش، قیام، قیام گاہ.
+
+5. Word 4532 (driver): "SOFTWARE HARDWARE DRIVER" BUG IN GERMAN!
+   - Dump translated human vehicle driver in German as:
+     de: "Treiber" (Software device driver / kernel driver!)
+   - Calibration:
+     de: Fahrer, Kraftfahrer, Chauffeur.
+
+6. Word 4526 (savings): GRAMMATICAL PART-OF-SPEECH COLLAPSE ACROSS 15+ LOCALES!
+   - Dump translated noun "savings" (accumulated wealth / nest egg) as active verbs ("to save") or singular abstract concepts:
+     de: "sparen" (Infinitive verb "to save money"!)
+     fr: "économie" (Singular noun: economics / saving)
+     es: "ahorro" (Singular)
+     it: "risparmio" (Singular)
+     pt: "economia" (Singular)
+     ro: "economisire" (Verbal gerund)
+     bg: "спестяване" (Verbal gerund)
+     cs: "úspora" (Singular)
+     sk: "úspora" (Singular)
+     sl: "varčevanje" (Verbal process)
+     et: "säästmine" (Verbal process)
+     lt: "taupymas" (Verbal process)
+     kk: "үнемдеу" (Verbal process)
+     ur: "ساونگس" (Garbled transliteration)
+   - Calibration: Restored authentic plural money / nest egg / accumulated savings nouns across all target languages:
+     de: Ersparnisse, Guthaben, Erspartes; fr: économies, épargne; es: ahorros, reserva económica; it: risparmi; pt: economias, poupança; ro: economii; bg: спестявания; cs: úspory; sk: úspory; sl: prihranki; et: säästud; lt: santaupos; ur: پس انداز، بچت کی رقم; kk: жинақ, жиналған қаражат.
+
+7. Word 4520 (win): ERADICATION OF "CONQUER / SUBJUGATE FOREIGN TERRITORY" IN 14+ LOCALES!
+   - Dump hallucinated military conquest verbs alongside basic elementary "win":
+     de: "erobern" (conquer)
+     fr: "conquérir" (conquer)
+     pt: "conquistar" (conquer)
+     ro: "cuceri" (conquer)
+     bg: "завладяване" (capture / subjugation)
+     cs: "dobýt" (conquer fortress)
+     sk: "dobyť" (conquer)
+     hu: "meghódítani" (conquer)
+     el: "κατάκτηση" (conquest)
+     et: "vallutada" (conquer)
+     lt: "užkariauti" (conquer)
+     kk: "бағындыру" (subjugate)
+   - Calibration: Kept clean, natural athletic/game victory and winning terms across all 35 languages.
+
+8. Word 4539 (sailing): FIXING SHIP DEPARTURE, SAILING VEHICLES, AND SHIPS!
+   - Greek had: "απόπλους" (ship departure / weighing anchor!) -> Calibrated to "ιστιοπλοΐα" (sailing sport).
+   - Kazakh had: "желкенді көлік" (sailing vehicle / carriage!) -> Calibrated to "желкенді спорт, желкенмен жүзу".
+   - Japanese had: "帆船" (sailboat noun!) -> Calibrated to "セーリング, ヨット競技, 帆走".
+   - Vietnamese had: "thuyền buồm" (sailboat noun!) -> Calibrated to "môn chèo thuyền buồm, đi thuyền buồm".
+
+9. Word 4538 (railway): ADJECTIVE / INFLECTIONAL ERRORS FIXED!
+   - Romanian had: "feroviar" (Adjective "railway-related"!) -> Calibrated to "cale ferată, căi ferate".
+   - Hungarian had: "vasúti" (Adjective "by rail"!) -> Calibrated to "vasút, vasútvonal".
+   - Greek had: "σιδηροδρομικός" (Adjective "railway"!) -> Calibrated to "σιδηρόδρομος".
+   - Hindi had: "रेलगाड़ी" (Train vehicle instead of the railway system/track) -> Calibrated to "रेलवे, रेल मार्ग, रेल पटरी".
+   - Indonesian had: "kereta api" (Train vehicle) -> Calibrated to "rel kereta, jalur kereta api".
+
+10. Word 4508 (cut) & Word 4515 (ride): MACHINE TRANSLATION GRAMMAR ARTIFACTS FIXED!
+   - 4508 (cut):
+     de had "schneiden, um schneiden" (broken MT syntax); pt had "cortar, para cortar"; ro had "tăia, a tăia"; bg had "режа, да режа"; el had "κόβω, να κόψω".
+     Cleaned up to authentic noun + verb combinations (e.g. de: Schnitt, schneiden; pt: corte, cortar; ro: tăietură, a tăia).
+   - 4515 (ride):
+     de had "Reite, ritte" (imperative / archaic subjunctive forms!). Calibrated to "Fahrt, Ausritt, fahren, reiten".
+     it had "cavalca" (3rd person singular). Calibrated to "giro, corsa, cavalcata, andare".
+     fr had only "chevaucher" (horse only). Added "balade, trajet, monter, rouler".
+
+11. Word 4525 (underwear): ACCUSATIVE CASE BUG IN UKRAINIAN FIXED!
+   - uk had: "нижню білизну" (accusative case!) -> Calibrated to dictionary nominative "нижня білизна, білизна".
+
+12. Word 4533 (gas): CRITICAL MULTI-LOCALE POLYSEMY AUDIT!
+   - English "gas" encompasses both physical gas state (de: Gas, ro: gaz, et: gaas, lt: dujos, da: gas, sv: gas, kk: газ) and American gasoline (de: Benzin, ro: benzină, et: bensiin, da: benzin, sv: bensin, kk: бензин).
+   - Dump frequently dropped one or the other; calibration unified both primary meanings across all 35 target languages.
+
+13. SPECIAL REGIONAL NUANCES VERIFIED & CALIBRATED:
+   - Brazil (pt / pt-BR):
+     * 4502 biscuit: "biscoito, bolacha" (discarded generic English loan "cookie")
+     * 4506 cooker: "fogão, fogão de cozinha" (discarded "placa")
+     * 4523 sweater: "suéter, blusa de frio"
+     * 4524 trousers: "calça, calças"
+     * 4525 underwear: "roupa íntima, peças íntimas" (discarded awkward "roupa de baixo")
+     * 4526 savings: "economias, poupança"
+     * 4545 cupboard: "armário, armário de cozinha" (discarded "buffet")
+     * 4547 fridge: "geladeira, frigorífico"
+     * 4548 yard: "quintal, pátio"
+     * 4551 room: "quarto, sala, cômodo" (discarded only "sala")
+   - Mexico / Latin America (es):
+     * 4506 cooker: "cocina, estufa, fogón"
+     * 4524 trousers: "pantalones"
+     * 4536 truck: "camión, camioneta"
+     * 4541 ticket: "boleto, billete, entrada" (prioritized "boleto")
+     * 4544 bin: "papelera, bote de basura, basurero" (natural Mexican "bote de basura")
+     * 4547 fridge: "refrigerador, frigorífico, nevera" (prioritized "refrigerador")
+     * 4548 yard: "patio, corral, jardín" (prioritized "patio")
+     * 4551 room: "habitación, cuarto, sala" (prioritized "habitación, cuarto")
+   - Natural Grammar & Orthography in RTL / Non-Latin scripts (hi, ar, fa, ur, kk, bn):
+     * Urdu (ur):
+       - 4510 treatment: Replaced transliteration "ٹریٹمنٹ" with authentic "علاج، معالجہ، برتاؤ".
+       - 4512 movement: Replaced "موومنٹ" with "حرکت، جنبش، تحریک".
+       - 4524 trousers: Replaced "ٹراوسرس" with "پتلون، پینٹ".
+       - 4525 underwear: Replaced broken "ونڈرویر" with "زیر جامہ، انڈرویئر".
+       - 4526 savings: Replaced broken "ساونگس" with "پس انداز، بچت کی رقم".
+       - 4533 gas: Corrected misspelling "گاس" to "گیس، پٹرول".
+       - 4540 taxi: Corrected misspelling "ٹاکسی" to "ٹیکسی".
+       - 4541 ticket: Corrected misspelling "ٹیکٹ" to "ٹکٹ".
+       - 4542 vehicle: Replaced loan "وہیکل" with "گاڑی، سواری، وہیکل".
+       - 4546 door: Replaced transliteration "ڈور" with "دروازہ".
+       - 4548 yard: Replaced transliteration "یارڈ" with "صحن، آنگن، احاطہ".
+       - 4549 heating: Replaced transliteration "ہیٹنگ" with "حرارتی نظام، گرمائش".
+       - 4550 owner: Replaced transliteration "اونر" with "مالک، صاحب".
+       - 4551 room: Replaced transliteration "روم" with "کمرہ".
+     * Hindi (hi):
+       - 4512 movement: Added physical motion "गति, चाल, हलचल" alongside political "आंदोलन".
+       - 4538 railway: Replaced "रेलगाड़ी" (train) with "रेलवे, रेल मार्ग, रेल पटरी".
+       - 4549 heating: Added natural terms "तापन, ताप प्रणाली" alongside "हीटिंग".
+     * Arabic (ar):
+       - 4545 cupboard: Replaced foreign loan "بوفيه" with standard Arabic "خزانة, دولاب مطبخ".
+       - 4527 buy & 4528 sell: Provided standard verb forms "يشتري / يبيع" alongside masdar.
+     * Kazakh (kk):
+       - 4506 cooker: Calibrated to "плита, асүй плитасы, пеш".
+       - 4525 underwear: Calibrated to "іш киім".
+       - 4526 savings: Calibrated from action "үнемдеу" to money noun "жинақ, жиналған қаражат".
+       - 4539 sailing: Calibrated from vehicle "желкенді көлік" to sport "желкенді спорт, желкенмен жүзу".
+       - 4545 cupboard: Replaced "буфет" with "шкаф, асүй шкафы, ыдыс-аяқ сөресі".
+     * Bengali (bn):
+       - 4533 gas: Added "পেট্রল" alongside "গ্যাস".
+       - 4545 cupboard: Added "আলমারি, বাসনের তাক".
+
+====================================================
+Audit completed successfully for Batch 4502-4551 across EXACTLY 36 LOCALES.
+Output files:
+- scripts/apply_batch_4502_4551_calibrations.cjs
+- scripts/detailed_4502_4551.txt

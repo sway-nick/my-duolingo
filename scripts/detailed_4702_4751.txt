@@ -1,0 +1,82 @@
+Batch 4702-4751 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 4746 (least): CATASTROPHIC OPPOSITE MEANING BUG IN KOREAN!
+   - Dump translated "least" into Korean as "무엇보다도" (which means "above all", "more than anything" — the direct polar opposite of "least"!).
+   - Root Cause: MT engine confused "least" with "at least / in the least / not in the least" and inverted polarity to "above all".
+   - Calibration: Restored authentic superlative terms meaning lowest/least degree:
+     ko: 가장 적은, 최소한, 가장 적게.
+
+2. Word 4705 (movie): PHOTOGRAPHIC CELLULOID FILM IN KO & JA!
+   - Dump translated "movie" into Korean as "필름" (celluloid roll of film) and Japanese as "フィルム" (camera/cinematographic film roll).
+   - In modern natural Korean and Japanese, a motion picture / film / movie is "영화" (ko) and "映画" (ja).
+   - Calibration:
+     ko: 영화; ja: 映画.
+
+3. Word 4749 (maybe): SYSTEMIC PART-OF-SPEECH COLLAPSE ("CAN BE" VERBS / SENTENCE SUFFIXES)!
+   - Automated translation systems translated "maybe" as literal verbal phrases ("can be") or dependent clause endings rather than standalone adverbs:
+     - Romanian: "Pot fi" ("they can be" — 3rd person plural verb!) -> Calibrated to: poate, posibil, s-ar putea.
+     - Czech: "Může být" (literal verbal phrase "can be") -> Calibrated to: možná, snad, třeba.
+     - Slovak: "Môže byť" (literal verbal phrase "can be") -> Calibrated to: možno, snáď, azda.
+     - Danish: "kan være" (literal verb phrase "can be") -> Calibrated to: måske, eventuelt, vel sagtens.
+     - Finnish: "saattaa olla" (literal verb phrase "may be") -> Calibrated to: ehkä, kenties, mahdollisesti.
+     - Swedish: "kan vara" (literal verb phrase "can be") -> Calibrated to: kanske, möjligen.
+     - Greek: "Μπορεί να είναι" (verbal phrase "it may be") -> Calibrated to: ίσως, μπορεί.
+     - Latvian: "varbūt ir" (literal "maybe is") -> Calibrated to: varbūt, iespējams.
+     - Arabic: "قد يكون" (verbal clause "it may be") -> Calibrated to: ربما، قد يكون، لعل.
+     - Korean: "~일 수도 있다" (dependent sentence ending suffix!) -> Calibrated to standalone adverb: 아마도, 어쩌면.
+     - Japanese: "～かもしれない" (dependent sentence ending grammar point!) -> Calibrated to standalone adverb: たぶん, おそらく.
+     - French: "Peut être" (spelled with space as two words instead of standard hyphenated adverb "peut-être").
+
+4. Word 4748 (loudly): SYSTEMIC ADJECTIVE INFECTION ACROSS 7+ LOCALES!
+   - Dump translated adverb "loudly" using nominative adjectives:
+     - Polish: "głośny" (masculine adjective) -> Calibrated to adverb: głośno, donośnie, hałaśliwie.
+     - Czech: "hlasitý" (adjective) -> Calibrated to adverb: nahlas, hlasitě.
+     - Slovak: "hlasný" (adjective) -> Calibrated to adverb: nahlas, hlasno.
+     - Hungarian: "hangos" (adjective) -> Calibrated to adverb: hangosan, lármásan.
+     - Greek: "μεγαλόφωνος" (adjective) -> Calibrated to adverb: δυνατά, μεγαλόφωνα.
+     - Estonian: "vali" (adjective) -> Calibrated to adverb: valjusti, valjult, kõva häälega.
+     - Bulgarian: "силен" (adjective) -> Calibrated to adverb: силно, гръмко, на висок глас.
+
+5. Word 4707 (performance): MECHANICAL EFFICIENCY / WORK PRODUCTIVITY FALSE FRIEND BUG!
+   - In Duolingo's curriculum, "performance" accompanies arts and entertainment (scene, cinema, movie, pop). MT engines mistranslated it into industrial output, engine horsepower, or employee KPI:
+     - Polish: "wydajność" (throughput, efficiency of a machine!) -> Calibrated to: występ, przedstawienie, wykonanie.
+     - Czech: "výkon" (power output!) -> Calibrated to: představení, vystoupení, výkon.
+     - Slovak: "výkon" -> Calibrated to: predstavenie, vystúpenie, výkon.
+     - German: "Leistung" (alone without theatrical context) -> Calibrated to: Aufführung, Vorstellung, Darbietung.
+     - Greek: "εκτέλεση" (execution / capital execution!) -> Calibrated to: παράσταση, ερμηνεία, εκτέλεση.
+     - Lithuanian: "našumas" (productivity / efficiency!) -> Calibrated to: pasirodymas, spektaklis, atlikimas.
+     - Slovenian: "uspešnost" (successfulness / KPI performance!) -> Calibrated to: predstava, nastop, izvedba.
+     - Hungarian: "teljesítmény" (alone) -> Calibrated to: előadás, fellépés, teljesítmény.
+
+6. Word 4706 (action): GENRE OVER-SPECIFICATION & LOANWORD CALQUES!
+   - Latvian dump had "asa sižeta filma" (action movie / thriller film!) instead of general noun "action" (darbība, rīcība).
+   - Kazakh dump had English transliteration "экшн" -> Calibrated to authentic: әрекет, іс-қимыл.
+   - Urdu dump had raw English transliteration "اکشن" -> Calibrated to: عمل، کارروائی، حرکت.
+   - Portuguese had erroneous uppercase "Ação" -> Calibrated to: ação, ato.
+
+7. Word 4710 (Earth): RAW EXPLANATORY GLOSS IN RU & ASTRONOMICAL CAPITALIZATION!
+   - Russian dump had raw unformatted gloss "земля планета". Calibrated to: "Земля, планета Земля".
+   - Astronomical capitalization standardized across target languages: Земля, Земля, Erde, Tierra, Terre, Ziemia, Terra, Dünya, Pământ, Föld, Γη, Jorden, Maa, Trái Đất, 지구, 地球, Жер.
+
+8. Word 4743 (firstly): RUSSIAN ORTHOGRAPHY BUG!
+   - Russian dump had missing hyphen: "во первых". Calibrated to correct hyphenated form: "во-первых, прежде всего, сперва".
+
+9. Word 4750 (more): INACCURATE URDU TRANSLATION!
+   - Urdu dump had "بہت، کافی، بڑا حصہ" ("a lot, enough, big part") which missed the core comparative meaning of "more". Calibrated to: "زیادہ، مزید، اور".
+
+10. Word 4747 (lot): POLYSEMY HARMONIZATION!
+    - "a lot" (quantity) vs "lot" (parcel of land / auction batch). Harmonized across all locales to convey both high quantity and physical parcel/lot.
+
+11. Word 4735 (cheaply): ADVERBIAL CONVERSIONS!
+    - Converted adjective forms to clean adverbs across all languages: e.g. ru: дешево, недорого; pl: tanio, niedrogo; cs: levně, lacino; sk: lacno; hu: olcsón; el: φθηνά, οικονομικά; fi: halvalla; da: billigt; sv: billigt; bg: евтино.
+
+12. Regional Nuances strictly enforced:
+    - Brazil (pt / pt-BR): "disco", "filme", "apresentação, espetáculo", "lixo, bobagem", "campo, zona rural, interior", "na verdade, de fato", "de qualquer forma, de qualquer jeito", "em marcha à ré".
+    - Latin America / Mexico (es): "película", "basura", "al revés, en reversa", "en voz alta", "tal vez, quizás", "de todos modos".
+    - Natural grammatical structures and native scripts calibrated in hi, ar, fa, ur, kk, bn.
+
+All 50 words calibrated across all 35 target languages (EXACTLY 36 LOCALES with English headword).
+Output exported in scripts/apply_batch_4702_4751_calibrations.cjs.

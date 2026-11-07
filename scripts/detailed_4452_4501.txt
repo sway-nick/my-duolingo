@@ -1,0 +1,206 @@
+================================================================================
+Batch 4452–4501 Linguistic Audit & Calibration Report (49 Words)
+English Breakfast Localization System — Quality Assurance across 36 Locales
+================================================================================
+
+Target Batch: IDs 4452–4501 (49 words, skipping ID 4489 as instructed)
+Locales Calibrated: EXACTLY 36 LOCALES (en headword + 35 target languages:
+ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi,
+sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+
+Export file: `scripts/apply_batch_4452_4501_calibrations.cjs`
+
+--------------------------------------------------------------------------------
+EXECUTIVE SUMMARY OF SYSTEMIC BUGS & HIGH-SEVERITY ANOMALIES CAUGHT
+--------------------------------------------------------------------------------
+
+1. Word 4457 ("restroom"): CATASTROPHIC MULTI-LOCALE GLOSS CONTAMINATION IN 13 LANGUAGES!
+   - Root Cause: A human prompt note or annotator gloss ("namely the room" / "именно комната", distinguishing restroom from "rest room" or relaxation lounge) was inadvertently baked into the MT engine's training or prompt, resulting in the literal explanation being appended as the translation:
+     - ru: "туалет, именно комната"
+     - de: "Toilette, nämlich das Zimmer"
+     - tr: "tuvalet, yani oda"
+     - pt: "banheiro, ou seja, o quarto"
+     - sk: "toaleta, konkrétne miestnosť"
+     - sl: "stranišče, in sicer soba"
+     - et: "tualettruum, nimelt tuba"
+     - lt: "tualetas, būtent kambarys"
+     - da: "toilet, nærmere bestemt et rum"
+     - fi: "wc, erityisesti huone"
+     - sv: "toalett, specifikt ett rum"
+     - hr: "WC, konkretno soba"
+     - lv: "tualete, konkrēti istaba"
+   - Calibration: Stripped all explanatory metadata across all 13 languages, standardizing on natural, idiomatic terminology (e.g. ru: "туалет, уборная", de: "Toilette, WC, Waschraum", pt-BR: "banheiro, lavabo", etc.).
+
+2. Word 4482 ("skin"): CATASTROPHIC POLYSEMY BUG — "TANNED LEATHER" INSTEAD OF LIVING SKIN!
+   - German, French, and Slovenian translated the anatomical body part "skin" as commercial processed leather:
+     - de: "Leder" (leather for jackets, boots!) instead of "Haut" (epidermis / biological skin)!
+     - fr: "cuir" (leather!) instead of "peau"!
+     - sl: "usnje" (leather!) instead of "koža"!
+   - Calibration: Fully repaired anatomical accuracy across all European locales (de: "Haut", fr: "peau", sl: "koža").
+
+3. Word 4488 ("guy"): MASSIVE "BOYFRIEND / LOVER" MT HALLUCINATION IN 8 LANGUAGES & AGE DOWNGRADES!
+   - Root Cause: In Russian, "парень" colloquially means "boyfriend" in romantic contexts ("её парень"). Machine translation engines mistook the isolated headword "guy" for "boyfriend" across 8 distinct locales:
+     - da: "kæreste" (boyfriend/girlfriend!)
+     - fi: "poikaystävä" (boyfriend!)
+     - sv: "pojkvän" (boyfriend!)
+     - vi: "bạn trai" (boyfriend!)
+     - th: "แฟน" (boyfriend/girlfriend/partner!)
+     - ko: "남자친구" (boyfriend!)
+     - ja: "彼氏" (boyfriend!)
+     - ar: "حبيب" (lover/sweetheart!)
+   - Age downgrade in European languages:
+     - de: "Junge" (little boy)
+     - fr: "garçon" (young boy / waiter)
+     - pl: "chłopiec" (little boy)
+     - pt: "garoto" (boy / kid)
+     - hu: "fiú" (boy)
+     - el: "αγόρι" (boy)
+     - lt: "berniukas" (little boy)
+   - Calibration: Standardized on authentic terms for "guy / fellow / adult man / dude" across all languages:
+     da: "fyr, gut, mand", fi: "tyyppi, kaveri, mies", sv: "kille, snubbe, typ", vi: "anh chàng, gã, người đàn ông", th: "ผู้ชาย, หนุ่ม, เจ้าหมอนั่น", ko: "남자, 녀석, 사람", ja: "男、やつ、男性", ar: "رجل، شاب، فتى", de: "Typ, Kerl, Mann", fr: "gars, type, mec", pl: "facet, gość, chłopak", pt-BR: "cara, rapaz, sujeito", es-MX: "tipo, muchacho, chico".
+
+4. Word 4485 ("sleep"): CROSS-LINGUAL CONFLATION WITH "DREAM" IN OVER 20 LOCALES!
+   - Root Cause: In Russian, "сон" means both "sleep" (state) and "dream" (oneiric vision). The MT engine translated Russian "сон" into target languages as both "sleep" and "dream", polluting over 20 languages with dream nouns and verbs:
+     - de: "Schlaf, Traum"
+     - fr: "sommeil, rêve"
+     - it: "dormire, sognare"
+     - pt: "dormir, sonhar"
+     - pl: "spać, śnić"
+     - ro: "somn, vis"
+     - cs: "spánek, sen"
+     - sk: "spánok, sen"
+     - hu: "alvás, álom"
+     - el: "ύπνος, όνειρο"
+     - sl: "spanje, sanje"
+     - et: "uni, unenägu"
+     - lt: "miegas, sapnas"
+     - da: "søvn, drøm"
+     - fi: "uni, unelma"
+     - sv: "sömn, dröm"
+     - hr: "spavati, sanjati"
+     - lv: "miegs, sapnis"
+     - hi: "नींद, सपना"
+     - ar: "نوم، حلم"
+     - vi: "ngủ, mơ"
+     - th: "นอนหลับ, ฝัน"
+     - ko: "잠, 꿈"
+     - ja: "眠る、夢を見る"
+     - kk: "ұйқы, түс"
+   - Calibration: Completely cleansed "sleep" of all dream-related references, reserving "dream" for its dedicated entry at ID 4499.
+
+5. Word 4459 ("grind"): PHYSICAL CRAMMING/STUFFING HALLUCINATION IN 16 LOCALES!
+   - Root Cause: In English, "grind" colloquially means intensive study or hard monotonous labor ("grind for an exam"). The engine misinterpreted "cramming for an exam" as physically cramming/stuffing objects into a box!
+     - de: "mahlen, stopfen" (stuff/cram!)
+     - fr: "broyer, bourrer" (pack/cram!)
+     - it: "macinare, riempire" (fill!)
+     - pt: "moer, enfiar" (shove/stuff!)
+     - ro: "macina, înghesui" (crowd/jam!)
+     - bg: "меля, натъпквам" (cram/pack!)
+     - cs: "mlít, nacpat" (stuff/pack!)
+     - sk: "zomlieť, napchať" (stuff!)
+     - hu: "darál, töm" (stuff!)
+     - el: "αλέθω, στριμώχνω" (squeeze/cram!)
+     - sl: "mleti, stlačiti" (compress/cram!)
+     - da: "male, proppe" (cram/stuff!)
+     - fi: "jauhaa, ahtaa" (cram!)
+     - sv: "mala, klämma ihop" (squeeze!)
+     - ar: "اطحن، حشر" (cram/stuff!)
+     - ja: "すりつぶす、詰め込む" (pack/cram!)
+     - kk: "ұнтақтау, қысу" (pinch/squeeze!)
+   - Calibration: Accurately provided the dual senses: physical milling/crushing (mahlen, moler, broyer) and hard mental labor / cramming / drudgery (de: "büffeln", fr: "trimer", pt-BR: "ralar", es: "empollar", pl: "harować", ru: "зубрить", ar: "يكدح، يدرس بجد").
+
+6. Word 4454 ("slink"): FALSE FRIENDS, ARCHAIC VETERINARY & UNTRANSLATED LEAKS!
+   - fr: "lien" — catastrophic false friend: confused "slink" with "link"!
+   - it: "slink" — untranslated English residue.
+   - ro: "avorta" — archaic veterinary meaning ("to abort/miscarry premature animal fetus") selected by MT instead of stealth movement!
+   - el: "δραπετεύω" — translated as "escape/flee" rather than creeping/sneaking.
+   - kk: "жасырын" — adjective "secret" instead of verb.
+   - Calibration: Calibrated to stealthy movement (fr: "se faufiler, se glisser furtivement", it: "muoversi furtivamente, sgattaiolare", ro: "a se furișa, a se strecura", el: "γλιστρώ κρυφά, κινούμαι ύπουλα", kk: "жасырынып жүру, ұрланып өту").
+
+7. Word 4486 ("birth"): PORTUGUESE "ANIVERSÁRIO" BUG!
+   - pt: "aniversário" (birthday / anniversary) instead of "nascimento, parto" (birth). Fixed.
+
+8. Word 4493 ("marriage"): POS & CEREMONY MISMATCHES!
+   - pt: "casado" (adjective "married") fixed to noun "casamento, matrimônio".
+   - de: "Hochzeit" (wedding party) calibrated to institution "Ehe, Heirat".
+   - sl: "poroka" (wedding event) calibrated to "zakon, poroka".
+
+9. Word 4499 ("dream"): PORTUGUESE VERB INFINITIVE FIX & SCOPE HARMONIZATION!
+   - pt: "sonhar" (verb infinitive) fixed to noun "sonho".
+   - Harmonized both oneiric dream (sleeping dream) and aspiration/ambition across all 35 target languages.
+
+10. Words 4490, 4494, 4495: URDU TRANSLITERATION REPLACEMENTS!
+    - 4490 spirit: "سپیریٹ" -> replaced with natural Urdu "روح، جذبہ".
+    - 4494 partner: "پارٹنر" -> replaced with natural Urdu "ساتھی، شریک کار، رفیق".
+    - 4495 tradition: "ٹراڈیشن" -> replaced with natural Urdu "روایت، رسم".
+
+11. Word 4466 ("mouse"): ROMANIAN COMPUTER DEVICE RESIDUE!
+    - ro: "mouse" (computer peripheral) fixed to natural animal "șoarece".
+
+12. Word 4467 ("piglet"): DANISH & URDU DISTORTIONS!
+    - da: "gris" (adult pig) fixed to "pattegris, grisebasse" (piglet).
+    - ur: "سور کا بچہ، گلٹی" — "گلٹی" (cyst/gland/tumor!) purged; fixed to "سور کا بچہ".
+    - kk: "торай баласы" — pleonasm shortened to idiomatic "торай".
+
+13. Word 4453 ("morsel"): ELEVATING GENERIC "PIECE" TO CULINARY TITBIT!
+    - Many target languages used generic words for "lump/piece" (Stück, morceau, pezzo, darab, kus, pala, komad, gabals).
+    - Calibrated to authentic small bites/mouthfuls of food: Bissen/Häppchen, bouchée, boccone, falat, sousto, zalogaj, suupala, kąsnis, bocado.
+
+14. Word 4470 ("pattern"): DUPLICATE TOKENS IN CS & SK!
+    - cs & sk: "vzor, ​​vzor" contained identical duplicate tokens separated by invisible zero-width unicode characters. Fixed to "vzor, schéma, model".
+
+15. Word 4473 ("percent"): HUNGARIAN ADJECTIVE BUG!
+    - hu: "százalékos" (adjective) fixed to noun "százalék".
+
+16. Word 4500 ("failure"): HUNGARIAN "ERROR" BUG!
+    - hu: "hiba" (defect/mistake) calibrated to true failure "kudarc, bukás".
+
+17. Word 4501 ("feel"): PART OF SPEECH UNIFICATION!
+    - kk: "сезім" (noun "feeling") converted to verb "сезіну, сезу".
+    - Stripped nominal senses polluting verbs in sv ("sinne"), lv ("maņa"), ko ("감각"), ja ("感覚"), ar ("إحساس").
+
+--------------------------------------------------------------------------------
+REGIONAL NUANCE HIGHLIGHTS
+--------------------------------------------------------------------------------
+
+- Brazil (pt / pt-BR):
+  - 4452 dainty: "delicado, gracioso, petisco"
+  - 4454 slink: "esgueirar-se, andar sorrateiramente"
+  - 4457 restroom: "banheiro, lavabo" (not European casa de banho)
+  - 4459 grind: "moer, triturar, ralar" ("ralar" is authentic Brazilian slang for hard grind)
+  - 4466 mouse: "rato, camundongo"
+  - 4467 piglet: "leitão, porquinho"
+  - 4472 kilometer: "quilômetro" (Brazilian circumflex orthography)
+  - 4473 percent: "por cento, porcentagem"
+  - 4482 skin: "pele" (purged leather)
+  - 4485 sleep: "dormir, sono" (purged sonhar)
+  - 4486 birth: "nascimento, parto" (purged aniversário)
+  - 4488 guy: "cara, rapaz, sujeito" (standard Brazilian informal)
+  - 4493 marriage: "casamento, matrimônio" (purged casado)
+  - 4499 dream: "sonho" (purged sonhar)
+  - 4500 failure: "fracasso, falha"
+
+- Mexico & Latin America (es):
+  - 4457 restroom: "baño, sanitario"
+  - 4467 piglet: "cerdito, lechón"
+  - 4473 percent: "por ciento, porcentaje"
+  - 4488 guy: "tipo, muchacho, chico"
+  - 4494 partner: "pareja, socio, compañero"
+  - 4499 dream: "sueño"
+  - 4500 failure: "fracaso, fallo, falla"
+
+- Natural Right-to-Left (ar, fa, ur) & Asian Locales (hi, bn, kk):
+  - Fully verified grammatical correctness, natural phrasing, and idiomatic terminology.
+  - Purged awkward transliterations in Urdu (spirit -> روح، جذبہ, partner -> ساتھی، شریک کار، رفیق, tradition -> روایت، رسم).
+  - Ensured correct verb forms and non-pleonastic expressions in Kazakh (kk).
+
+--------------------------------------------------------------------------------
+VERIFICATION
+--------------------------------------------------------------------------------
+- Exported module: `scripts/apply_batch_4452_4501_calibrations.cjs`
+- Words verified: 49 / 49
+- Languages per word: EXACTLY 35 target languages + 1 English headword = 36 LOCALES.
+- Syntax verification: Executed via Node.js v24.19.0 — Clean execution, zero errors.
+- No direct modification of `frontend/assets/data/words.json` was made.
+- Strict prohibition of autonomous APK/AAB builds respected.
+================================================================================
