@@ -1,0 +1,200 @@
+Batch 5102-5151 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5102 to 5151) from dump slice 'scripts/dump_5102_5151.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5102_5151_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5102 (work for): CATASTROPHIC "WORK ON" INSTEAD OF "WORK FOR" IN 10+ LANGUAGES!
+   - Dump translated "work for" (to be employed by someone/firm, or to suit someone) as "work on" (working on a project):
+     fr: "travailler sur" (work ON!)
+     it: "lavorare su" (work ON!)
+     ro: "lucru la" (noun 'work at'!)
+     bg: "работа върху" (noun 'work upon'!)
+     cs: "pracovat na" (work ON!)
+     sk: "pracovať na" (work ON!)
+     el: "δουλεύω πάνω" (work upon!)
+     sl: "delo na" (noun work on!)
+     lt: "dirbti ties" (work on!)
+     lv: "strādāt pie" (work at/on!)
+     bn: "জন্য কাজ করা" (missing proper object prefix 'কারো')
+     kk: "жұмыс істеу" (bare verb 'to work', missing 'біреу үшін')
+   - Root Cause: Machine translation confused preposition "for" with "on".
+   - Fixed: Calibrated to employment ("travailler pour", "lavorare per", "работать на", "arbeiten für", "trabajar para") and suitability ("that works for me" -> convenir à, andar bene a, passen für).
+
+2. Word 5105 (defer): BIZARRE ROMANIAN "SCOATE" (REMOVE/TAKE OUT) & NARROW COVERAGE!
+   - Dump had Romanian "scoate" (take out / extract?!) instead of "a amâna, a reprograma".
+   - Dump also omitted the polysemous sense of yielding to someone's opinion/judgment ("defer to").
+   - Fixed: Restored postponement/delaying across all locales, and added respectful deference ("a amâna; a ține cont de", "posponer; ceder ante", "reporter; s'en remettre à").
+
+3. Word 5106 (undefined): MASSIVE 12-LANGUAGE "UNCERTAIN / INSECURE / UNSAFE" HALLUCINATION!
+   - Dump translated "undefined" (not having a defined meaning or limits; math/computing undefined variable) as "uncertain / insecure / unsafe":
+     fr: "incertain" (uncertain!)
+     it: "incerto" (uncertain!)
+     pt: "incerto" (uncertain!)
+     ro: "nesigur" (unsafe / insecure!)
+     bg: "несигурен" (insecure!)
+     cs: "nejistý" (uncertain!)
+     sk: "neistý" (uncertain!)
+     hu: "bizonytalan" (uncertain!)
+     el: "αβέβαιος" (uncertain!)
+     sl: "negotov" (uncertain!)
+     et: "ebakindel" (insecure / hesitant!)
+     lt: "neaiškus" (unclear!)
+   - Root Cause: Machine translation confused "undefined" with "undecided / unsure / insecure".
+   - Fixed: Calibrated strictly to mathematical, technical, and lexical definition: indéfini, non défini, undefiniert, nedefinovaný, määrittelemätön, apibrėžtas, etc.
+
+4. Word 5107 (might): TENSE AND PERSON DISCORD ("POTEVO" = I COULD, PAST TENSE)!
+   - it: "Potevo" (1st person singular imperfect past tense: "I was able to / I could"!)
+   - ro: "aș putea" (1st person conditional "I could")
+   - bg: "можеше" (past tense 3rd person)
+   - cs: "mohl" (past tense masculine)
+   - sk: "mohol" (past tense masculine)
+   - hu: "tudott" (past tense)
+   - sv: "kunde" (past tense)
+   - da: "kunne" (past tense)
+   - Fixed: Restored present modal auxiliary expressing possibility (potrebbe, s-ar putea, pourrait, könnte, etc.) alongside the noun sense of physical power/might (force, Kraft, puissance, kekuatan).
+
+5. Word 5108 (must): PLURAL CONJUGATION HALLUCINATION IN 10+ LANGUAGES!
+   - Dump conjugated the modal verb in the 3rd person PLURAL:
+     fr: "doivent, sont obligés" (they must, they are obliged!)
+     it: "devono, sono obbligati" (they must, they are obliged!)
+     ro: "trebuie, sunt obligați"
+     bg: "трябва, са задължени"
+     cs: "musí, jsou povinni"
+     sk: "musia, sú povinní"
+     hu: "kötelesek" (plural!)
+     el: "πρέπει, είναι υποχρεωμένοι" (plural!)
+     sl: "morajo, so dolžni" (plural!)
+     et: "peavad, on kohustatud" (plural!)
+     lt: "privalo, yra įpareigoti" (plural!)
+   - Fixed: Standardized to infinitive modal verbs and general obligations (devoir, dovere, müssen, muset, musieť) and included the essential noun sense ("a must-have").
+
+6. Word 5110 (fill out): IMPERATIVE COMMANDS & CONFUSION WITH "FILLING A CUP"!
+   - Dump had raw formal imperatives: ro: "completați", bg: "попълнете", sl: "izpolni", et: "täitke", ar: "املأ", tr: "doldur".
+   - Asian locales confused filling a form with filling a liquid container or fuel tank:
+     ja: "満たす" (filling a glass/tank; satisfying a requirement!) -> calibrated to "（用紙に）記入する".
+     ko: "채우다" (filling a space/glass!) -> calibrated to "(양식을) 작성하다".
+     th: "เติม" (topping up fuel!) -> calibrated to "กรอก (แบบฟอร์ม)".
+     sv: "fylla" -> "fylla i (formulär)".
+   - Also captured the human bodily sense: "to fill out" (become rounder/fleshy).
+
+7. Word 5113 (get back): NOUN HALLUCINATIONS INSTEAD OF VERBS!
+   - Dump generated noun entries instead of phrasal verbs:
+     fr: "retour, réponse" (nouns: return, response!)
+     it: "ritorno, risposta" (nouns!)
+     ro: "întoarcere, răspuns" (nouns!)
+     bg: "връщане, отговор" (nouns!)
+     cs: "návrat, odpověď" (nouns!)
+     sk: "návrat, odpoveď" (nouns!)
+     hu: "visszaküldés, válasz" (nouns!)
+     el: "επιστροφή, απάντηση" (nouns!)
+     sl: "vrnitev, odgovor" (nouns!)
+     et: "tagasi, vastus" (adverb + noun!)
+   - Fixed: Calibrated to active verbs (revenir/recontacter, tornare/farsi risentire, a se întoarce/a reveni, etc.).
+
+8. Word 5115 (get out): IMPERATIVES & EXCLAMATIONS ("VYPADNI" = GET LOST)!
+   - cs: "vypadni" (rude imperative "get lost / piss off"!)
+   - sk: "vypadni" (rude imperative!)
+   - fr: "Sortez, sortez" (capitalized imperative!)
+   - it: "fuori" (preposition/adverb!)
+   - hu: "menj ki", el: "βγες έξω", sl: "pojdi ven", lt: "išeik", ar: "اخرج" (all imperatives!).
+   - Fixed: Calibrated to neutral infinitives (sortir/descendre/s'échapper, uscire/scendere/fuggire, vyjít/vystoupit/uniknout, etc.).
+
+9. Word 5122 (put away): PAST PARTICIPLES AND REFLEXIVE CONFUSION!
+   - fr: "remis en place" (past participle!)
+   - it: "rimesso al suo posto" (past participle!)
+   - bg: "върнат на мястото си" (past participle!)
+   - hr: "vratiti se" (reflexive "to return yourself"!)
+   - vi: "đặt lại" (reset!)
+   - Fixed: Calibrated to active verbs for tidying up / storing in proper place (ranger, mettre de côté, pospremiti, cất vào chỗ, etc.).
+
+10. Word 5128 (set off): BIZARRE 20-LANGUAGE "MAKE A PHONE CALL" HALLUCINATION!
+    - In over 20 languages, "set off" was translated as "to go somewhere and make a phone call" because MT mistook Russian "вызвать" (trigger / cause) for calling on the telephone:
+      fr: "partir, appeler" (call on phone?!)
+      it: "andare, chiamare" (call on phone?!)
+      ro: "a merge, a suna" (ring?!)
+      bg: "да отида, да се обадя" (call?!)
+      cs: "jít, zavolat" (call?!)
+      sk: "ísť, zavolať" (call?!)
+      hu: "menni, hívni" (call?!)
+      el: "να πάω, να τηλεφωνήσω" (make a phone call?!)
+      sl: "iti, poklicati" (call?!)
+      et: "minema, helistama" (call?!)
+      lt: "eiti, skambinti" (call?!)
+      da: "gå, ringe" (call?!)
+      fi: "mennä, soittaa" (ring/call?!)
+      sv: "gå, ringa" (ring/call?!)
+      hr: "ići, nazvati" (call?!)
+      lv: "iet, zvanīt" (call?!)
+      ar: "اذهب، اتصل" (call?!)
+      vi: "đi, gọi" (call?!)
+      th: "ไป โทร" (call on phone?!)
+      ko: "가다, 부르다" (call?!)
+      ja: "行く、呼ぶ" (call?!)
+      kk: "бару, қоңырау шалу" (make a phone call?!)
+    - Fixed: Calibrated to starting a journey (aufbrechen, partir, yola çıkmak), triggering an explosion/alarm (déclencher, auslösen, disparar), and aesthetic contrast.
+
+11. Word 5129 (show up): BIZARRE "INCREASE / TURN UP VOLUME" CONFUSION ACROSS 10+ LANGUAGES!
+    - ru: "появиться, увеличить" (увеличить = increase!)
+    - fr: "apparaître, augmenter" (augmenter = increase!)
+    - it: "apparire, aumentare"
+    - ro: "apară, crește"
+    - bg: "появяват се, увеличават се"
+    - cs: "objevit se, zvětšit se"
+    - sk: "objaviť sa, zvýšiť sa"
+    - hu: "megjelenni, növekedni"
+    - el: "εμφανίζονται, αυξάνονται"
+    - sl: "pojavijo se, povečajo se"
+    - et: "ilmuvad, suurenevad"
+    - Root Cause: MT confused "show up" with "turn up" (turn up volume)!
+    - Fixed: Calibrated strictly to arriving/appearing (se pointer, farsi vivo, dostavit se, etc.), being clearly visible, or outdoing/embarrassing someone.
+
+12. Word 5132 (need to): ADJECTIVES INSTEAD OF VERB PHRASE!
+    - fr: "nécessaire, requis" (adjectives!)
+    - de: "notwendig, erforderlich" (adjectives!)
+    - it: "necessario, richiesto" (adjectives!)
+    - ro: "necesar, obligatoriu", bg: "необходимо, изисквано", cs: "nezbytný, požadovaný", sk: "nevyhnutné, požadované", hu: "szükséges, kötelező", el: "απαραίτητος, απαιτούμενος", sl: "potrebno, zahtevano", et: "vajalik, nõutav", lt: "būtinas, privalomas", kk: "қажет, қажетті".
+    - Fixed: Calibrated to semi-modal verb phrase (avoir besoin de, devoir, müssen, aver bisogno di, dovere, muset, potřebovat, etc.).
+
+13. Word 5133 (ought to): "WORTH IT / WORTH THE EFFORT" CONFUSION ACROSS 12 LANGUAGES!
+    - Russian "следует, стоит" has "стоит" meaning "it is advisable", but MT confused it with "стоит (денег/усилий)" (it is worth the price/effort):
+      fr: "Ça vaut le coup." (It is worth it!)
+      it: "dovrebbe, ne vale la pena" (it is worth the effort!)
+      ro: "ar trebui, merită" (merits!)
+      bg: "трябва, струва си" (worth it!)
+      cs: "mělo by, stojí to za to" (worth it!)
+      sk: "malo by, stojí to za to" (worth it!)
+      hu: "kellene, megéri" (worth it!)
+      el: "πρέπει, αξίζει τον κόπο" (worth the trouble!)
+      sl: "bi moralo, vredno je" (worth it!)
+      et: "peaks, on seda väärt" (worth it!)
+      lt: "turėtų, verta" (worth it!)
+      kk: "керек, тұрарлық" (worth it!)
+    - Fixed: Removed "worth it" and restored pure moral obligation/advisability (devrait, il faudrait, dovrebbe, debería, sollte, etc.).
+
+14. Word 5140 (trump): POLITICIAN "DONALD TRUMP" HALLUCINATION!
+    - it: "Trump", sl: "Trump", lt: "Trumpas", ar: "ترامب", th: "ทรัมป์", fi: "trump", hr: "trump", lv: "tramps".
+    - Fixed: Restored playing card suit and overriding advantage / beating an opponent (briscola/atout, trunfo, adut, koz, ورقة رابحة, 切り札, 王牌, etc.).
+
+15. Word 5141 (defined): "DEFINITIVE / FINAL / CERTAIN" CONFUSION IN 16 LANGUAGES!
+    - it: "definitivo", pt: "definitivo", ro: "definitiv", sl: "dokončno", cs: "určitý", hu: "határozott", el: "σαφής", et: "kindel", lt: "neabejotinas", da: "sikker", fi: "tietty", sv: "viss", hr: "siguran", ar: "مؤكد", vi: "chắc chắn", th: "แน่นอน", ko: "확실한", ja: "確かな", kk: "сенімді".
+    - Confused "defined" (having a clear definition or distinct boundary) with "definite / definitive / certain".
+    - Fixed: Calibrated to defined, delimited, clearly outlined (definito, défini, definido, definovaný, määratletud, apibrėžtas, etc.).
+
+16. Word 5142 (console): VERB VS NOUN DISCREPANCY!
+    - In cs: "utěšit", ko: "위로하다", ja: "慰める" only the verb "to console / comfort" was present, while in other locales only the noun "gaming console / control panel" was present.
+    - Fixed: Included BOTH primary senses (hardware console & comforting verb) across all languages.
+
+17. Word 5145 (tasteless), 5149 (mock), 5150 (rust):
+    - 5145: Added both literal lack of taste/flavor (insípido, fade, bez chuti) and aesthetic lack of taste (de mauvais goût, nevkusný, kitsch).
+    - 5149: Fixed bare adjectives (falešný, ál) and bare nouns (hån, posmeh, batjocură) to properly include the primary verb (se moquer, vysmívat se, gúnyol) alongside mock/trial senses.
+    - 5150: Included both the noun (rust, oxide) and verb (to rust, corrode).
+
+18. Regional and Grammatical Nuances Calibrated:
+    - Brazil (pt / pt-BR): Calibrated "aspirador de pó (passar aspirador)", "jogar fora", "dar as caras", "preencher", "curtir / passar o tempo".
+    - Mexico / Latin America (es): Calibrated "aspiradora (pasar la aspiradora)", "tirar a la basura", "botar", "pasar el rato", "llenar / rellenar".
+    - Natural grammar and orthography for RTL (ar, fa, ur) and Asian scripts (hi, bn, zh, ja, ko, th, vi, id, kk) ensuring natural phrasing without machine-translation artifacts.

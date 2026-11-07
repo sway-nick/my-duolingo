@@ -1,0 +1,163 @@
+Batch 4852-4901 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 4852 to 4901) from dump slice 'scripts/dump_4852_4901.json'.
+- Every single word in this batch is an ADJECTIVE.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_4852_4901_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 4880 (pointed): CATASTROPHIC MULTI-LOCALE "SPICY / PIQUANT FOOD / AROMATIC PERFUME" DISASTER ACROSS 11+ LANGUAGES!
+   - Dump translated the adjective "pointed" (having a sharp tip, or a pointed cutting remark) as culinary spiciness, seasoned food, or perfume fragrance:
+     cs: "pikantní" (spicy / piquant food!)
+     sk: "pikantné" (spicy / piquant!)
+     bg: "пикантен" (spicy!)
+     sl: "pikantno" (spicy!)
+     it: "speziato" (flavored with spices / spiced!)
+     ro: "picant" (spicy food!)
+     et: "vürtsikas" (spicy / seasoned!)
+     hu: "fűszeres" (spicy / seasoned with paprika!)
+     el: "αρωματώδης" (fragrant / aromatic like perfume!)
+     hi: "तीखा" (spicy pungent food!)
+   - Root Cause: Machine translation pivot through French "piquant" (which can metaphorically mean a sharp remark, but primarily means spicy food), which recursively degraded into culinary seasoning and aromatic scent.
+   - Fixed: Replaced across all languages with precise terms for sharp/pointed shape (špičatý, appuntito, pontiagudo, spids, koničast, smailus, заостренный) and biting/cutting remarks (jízlivý, incisivo, caustico, mordaz, piker, καυστικός, колкий).
+
+2. Word 4894 (scared): MASSIVE PROMPT LEAKAGE / GLOSS CONTAMINATION ("EMOTIONALLY SCARY") ACROSS 19 LANGUAGES!
+   - The dump contained a bizarre internal parenthetical note "(emotionally scared)" that leaked into the MT prompt and was translated literally as "emotionally scary / emotionally frightened":
+     ru: "испуганный, эмоционально страшно"
+     cs: "vyděšený, emocionálně děsivý"
+     sk: "vystrašený, emocionálne desivý"
+     bg: "уплашен, емоционално плашещ"
+     hr: "prestrašen, emocionalno uplašen"
+     sl: "prestrašen, čustveno strašljiv"
+     ro: "speriat, înfricoșător emoțional"
+     da: "bange, følelsesmæssigt bange"
+     sv: "rädd, känslomässigt rädd"
+     fi: "peloissaan, emotionaalisesti peloissaan"
+     et: "hirmunud, emotsionaalselt hirmutav"
+     lv: "nobijies, emocionāli nobijies"
+     lt: "išsigandęs, emociškai bauginantis"
+     hu: "ijedt, érzelmileg ijesztő"
+     el: "φοβισμένος, συναισθηματικά τρομακτικός"
+     th: "หวาดกลัว, ตกใจทางอารมณ์"
+     ja: "怯えた、感情的に怖がった"
+     ar: "خائف، مُرتبك عاطفيًا"
+     kk: "қорқып, эмоционалды түрде қорқатын"
+   - Root Cause: Prompt leakage of an internal lexicographical clarification intended to separate "scared" (afraid) from "scarred" (having physical scars).
+   - Fixed: Cleaned all 35 target languages to concise, natural adjective forms (ru: "испуганный, напуганный, обуянный страхом", de: "verängstigt, ängstlich, erschrocken", fr: "effrayé, apeuré, terrorisé", etc.).
+
+3. Word 4861 (indoor): WILD MULTI-LOCALE "PLACEMENT / LODGING" HALLUCINATION IN 10+ LANGUAGES!
+   - Dump hallucinated that "indoor" meant "intended for placement / accommodation / arranging inside":
+     hr: "unutarnji, za smještaj" ("internal, for lodging/accommodation"!)
+     da: "intern, til placering" ("internal, for placement"!)
+     sv: "intern, för placering" ("internal, for placement"!)
+     fi: "sisäinen, sijoitettavaksi" ("internal, to be placed"!)
+     lv: "iekšējs, paredzēts izvietošanai" ("intended for accommodation/placement"!)
+     vi: "nội bộ, để đặt" ("internal, to put/place"!)
+     th: "ภายใน สำหรับการจัดวาง" ("internal, for arranging"!)
+     ko: "내부의, 배치용" ("internal, for layout/placement"!)
+     ar: "داخلي، للتحديد" ("internal, for determination"!)
+   - Root Cause: Confusion with CAD/architectural software strings like "indoor placement".
+   - Fixed: Calibrated to standard adjectives for indoor sports, plants, and enclosed halls (ru: "комнатный, закрытый, для помещений", de: "Hallen-, Indoor-, Innen-", es: "de interior, bajo techo, a cubierto", pl: "halowy, kryty, pokojowy", etc.).
+
+4. Word 4863 (intended): BIZARRE "SO-CALLED / NAMED / DUBBED" CONFUSION IN 22 LANGUAGES!
+   - In 22 languages, the dump translated "intended" as "called, named, or so-called":
+     cs: "má v úmyslu, tzv." ("so-called"!)
+     sk: "má v úmysle, nazývaný" ("called"!)
+     bg: "възнамерява, наречен" ("named"!)
+     hr: "namijenjen, nazvan" ("named"!)
+     sl: "namerava, imenovan" ("named"!)
+     it: "intende, chiamato" ("called"!)
+     ro: "intenționează, numit" ("called"!)
+     da: "tilsigtet, kaldet" ("called"!)
+     sv: "avsedd, kallad" ("called"!)
+     fi: "tarkoitettu, kutsuttu" ("called"!)
+     et: "kavatseb, nn" ("so-called"!)
+     lv: "paredzēts, saukts" ("called"!)
+     lt: "ketina, vadinamas" ("called"!)
+     hu: "szándékozik, úgynevezett" ("so-called"!)
+     el: "σκοπεύει, ονομάζεται" ("called"!)
+     id: "dimaksudkan, disebut" ("called"!)
+     vi: "dự định, được gọi" ("called"!)
+     ja: "意図された、呼ばれた" ("called"!)
+     ko: "의도된, 불리는" ("called"!)
+     ar: "مُراد، مُدعى" ("alleged/dubbed"!)
+     kk: "ниеттелген, шақырылған" ("called/invited"!)
+   - Root Cause: Conflation of "intended" with "so-called / purported / designated" and failure to recognise adjective part of speech (translating verbs "intends").
+   - Fixed: Calibrated to pure adjective forms for deliberate, planned, destined, target: ru: "преднамеренный, запланированный, целевой", de: "beabsichtigt, vorgesehen, geplant", fr: "prévu, destiné, intentionnel", etc.
+
+5. Word 4862 (injured): NOUN "VICTIM" CONTAMINATION IN 10 LANGUAGES!
+   - Dump translated the adjective "injured" using the noun "victim" (casualty):
+     cs: "oběť, zraněný"
+     sk: "obeť, zranený"
+     bg: "жертва, ранен"
+     sl: "žrtev, ranjen"
+     it: "vittima, ferito"
+     ro: "victimă, rănit"
+     et: "ohver, haavatud"
+     lt: "auka, sužeistas"
+     hu: "áldozat, sebesült"
+     el: "θύμα, τραυματίας"
+   - Fixed: Removed noun terms; calibrated strictly to adjective forms in masculine singular nominative: zraněný, rănit, ranjen, ferito, traumēts, τραυματισμένος, etc.
+
+6. Word 4860 (individual): NOUN ("PERSON / ATOM") INSTEAD OF ADJECTIVE!
+   - Dump translated adjective "individual" as nouns:
+     el: "άτομο" (noun: atom / person!)
+     cs/sk: "jednotlivec" (noun: individual person!)
+     bg: "индивид" (noun!)
+     hr: "pojedinac" (noun!)
+     sl: "posameznik" (noun!)
+     de: "Einzelperson" (noun!)
+     pt: "indivíduo" (noun!)
+     sv: "individ" (noun!)
+     ko: "개인" (noun!)
+     th: "ปัจเจกบุคคล" (noun!)
+   - Fixed: Calibrated to genuine adjectives (individual, separate, distinct, personal): ατομικός, individuální, pojedinačan, einzeln, particular, 개별적인, 個々の, etc.
+
+7. Word 4868 (located): VERBS AND BIZARRE "AUTHORIZED" CONFUSION!
+   - cs, sk, sl, el, et, lv, hu had 3rd person verbs ("nachází se", "atrodas", "βρίσκεται").
+   - it: "autorizzato" (AUTHORIZED?! Complete MT failure).
+   - Fixed: Calibrated to participle adjectives: расположенный, situé, situado, położony, yerleşik, орналасқан, etc.
+
+8. Word 4896 (sensible): FALSE FRIEND DISASTER IN ROMANCE LANGUAGES!
+   - In French, Spanish, Portuguese, Italian, and Romanian, cognate "sensible / sensibile" means "sensitive", NOT "sensible" (prudent / reasonable).
+   - Dump erroneously included Romanian "sensibil".
+   - Fixed: Calibrated to true equivalents of wise / reasonable / judicious: es: "sensato, razonable, prudente", fr: "raisonnable, sensé, avisé", it: "sensato, ragionevole, assennato", pt: "sensato, razoável, ajuizado", ro: "rezonabil, chibzuit, cu judecată".
+
+9. Word 4899 (shiny): "FOAMY SPARKLING WINE" CONFUSION IN 4 LANGUAGES!
+   - sl: "peneč" (sparkling wine / frothy!)
+   - el: "αφρώδης" (effervescent / foamy champagne!)
+   - lt: "putojantis" (foaming / bubbling!)
+   - lv: "dzirkstošs" (sparkling wine!)
+   - ko: "훌륭한" ("magnificent" instead of glossy/gleaming!)
+   - hi: "शानदार" ("splendid" instead of shiny!)
+   - Fixed: Replaced with true reflective/glossy terms: глянцевый, блестящий, glänzend, lustroso, lucido, blank, spīdīgs, στιλπνός, 锃亮的, etc.
+
+10. Word 4871 (mental): "TELEKINETIC ESP PSYCHIC POWERS" CONFUSION IN JAPANESE!
+    - ja: "超能力的な" (having supernatural ESP powers!).
+    - vi: "tâm linh" (spiritual / mysticism).
+    - Fixed: Calibrated to cognitive, intellectual, psychological: 精神の、知的な、頭脳の, mental, geistig, umysłowy, duševní, etc.
+
+11. Word 4885 (proud): "BRAGGART / ARROGANT" CONNOTATION IN KAZAKH AND URDU!
+    - kk: "мақтаншақ" (means boaster / braggart).
+    - ur: "مغرور" (arrogant / haughty).
+    - Fixed: Calibrated to positive pride / dignified sense: kk: "мақтанышты, абыройлы, өр", ur: "پروقار، فخریہ، خوددار".
+
+12. Word 4853 (hollow): VERB "EMPTY" IN GREEK!
+    - el: "αδειάζω" (1st person present verb: "I empty"!).
+    - Fixed: Calibrated to adjective "κούφιος, κοίλος, βαθουλωτός".
+
+13. Systemic Part-of-Speech and Agreement Normalization:
+    - Slavic languages (hr, sl, sk, cs, bg, ru, uk): eliminated neuter/adverbial endings ("-o", "-e") and standardized to masculine singular nominative (e.g. sl: "globalno" -> "globalen"; hr: "globalno" -> "globalan"; sl: "hrupno" -> "hrupen"; sl: "očitno" -> "očiten"; sk: "zrejmé" -> "zrejmý"; ru: "довольной" -> "довольный"; ru: "организованной" -> "организованный").
+    - Greek: fixed accusative plural forms ("πολλαπλούς" -> "πολλαπλός").
+    - French: fixed mismatched masculine/feminine pairs ("satisfait, contente" -> "satisfait, content, comblé").
+    - German: sanitized "befriedigt" -> "zufrieden, befriedigt, gesättigt" for word 4893 (satisfied).
+
+14. Regional Nuance Compliance:
+    - Brazil (pt / pt-BR): Calibrated terms to modern Brazilian gaming/educational vocabulary (e.g. "bem-humorado", "descontraído", "organizado").
+    - Mexico / Latin America (es): Natural Latin American usage (e.g. "enfermo", "animado", "apurado/ansioso").
+    - RTL natural grammar: Arabic (ar), Persian (fa), Urdu (ur) verified with proper comma spacing (،) and natural adjective order.
+    - Kazakh (kk) and Bengali (bn): Complete grammatical agreement with adjective stems.

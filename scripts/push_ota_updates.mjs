@@ -898,7 +898,47 @@ async function run() {
 
     // Batch 4802-4851
     { id: 4802, word: 'aged', lang: 'de', expected: 'gealtert, betagt, gereift' },
-    { id: 4851, word: 'general', lang: 'de', expected: 'allgemein, universell; General' }
+    { id: 4851, word: 'general', lang: 'de', expected: 'allgemein, universell; General' },
+
+    // Batch 4852-4901
+    { id: 4880, word: 'pointed', lang: 'de', expected: 'spitz, zugespitzt, pointiert' },
+    { id: 4894, word: 'scared', lang: 'de', expected: 'verängstigt, ängstlich, erschrocken' },
+
+    // Batch 4902-4951
+    { id: 4945, word: 'intend', lang: 'cs', expected: 'mít v úmyslu, zamýšlet, hodlat' },
+    { id: 4942, word: 'imagine', lang: 'de', expected: 'sich vorstellen, ausmalen, wähnen' },
+
+    // Batch 4952-5001
+    { id: 4962, word: 'refuse', lang: 'de', expected: 'ablehnen, sich weigern, verweigern' },
+    { id: 4980, word: 'rid rid rid', lang: 'de', expected: 'befreien, entledigen, loswerden' },
+
+    // Batch 5002-5051
+    { id: 5050, word: 'cheer for', lang: 'da', expected: 'heppe på, bakke op om' },
+    { id: 5043, word: 'postpone', lang: 'fr', expected: 'reporter, ajourner, différer' },
+
+    // Batch 5052-5101
+    { id: 5053, word: 'preposition', lang: 'fr', expected: 'préposition' },
+    { id: 5065, word: 'a piece of cake', lang: 'fr', expected: "du gâteau, un jeu d'enfant, simple comme bonjour" },
+
+    // Batch 5102-5151
+    { id: 5128, word: 'set off', lang: 'fr', expected: 'se mettre en route, partir; déclencher, faire exploser; faire ressortir' },
+    { id: 5140, word: 'trump', lang: 'de', expected: 'Trumpf; übertrumpfen, stechen' },
+
+    // Batch 5152-5201
+    { id: 5158, word: 'lash out', lang: 'es', expected: 'arremeter, despotricar, abalanzarse' },
+    { id: 5181, word: 'mitigate', lang: 'de', expected: 'mildern, abschwächen, abfedern' },
+
+    // Batch 5202-5251
+    { id: 5216, word: 'reciprocate', lang: 'ja', expected: 'お返しをする、報いる、応える' },
+    { id: 5246, word: 'hypocritical', lang: 'el', expected: 'υποκριτικός, φαρισαϊκός' },
+
+    // Batch 5252-5301
+    { id: 5255, word: 'imminent', lang: 'de', expected: 'bevorstehend, unmittelbar bevorstehend, drohend' },
+    { id: 5270, word: 'impudent', lang: 'de', expected: 'unverschämt, dreist, frech' },
+
+    // Batch 5302-5351
+    { id: 5302, word: 'concealment', lang: 'es', expected: 'ocultamiento, encubrimiento, camuflaje' },
+    { id: 5337, word: 'behold beheld beheld', lang: 'de', expected: 'erblicken, schauen, gewahr werden' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -919,21 +959,21 @@ async function run() {
     return require(filePath);
   }
 
-  // Batches 1 to 87 (words 1-4351) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-87 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 88-97 (words 4352-4851, 498 words)
+  // Batches 1 to 97 (words 1-4851) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-97 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 98-107 (words 4852-5351, 498 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_4352_4401_calibrations.cjs',
-    'apply_batch_4402_4451_calibrations.cjs',
-    'apply_batch_4452_4501_calibrations.cjs',
-    'apply_batch_4502_4551_calibrations.cjs',
-    'apply_batch_4552_4601_calibrations.cjs',
-    'apply_batch_4602_4651_calibrations.cjs',
-    'apply_batch_4652_4701_calibrations.cjs',
-    'apply_batch_4702_4751_calibrations.cjs',
-    'apply_batch_4752_4801_calibrations.cjs',
-    'apply_batch_4802_4851_calibrations.cjs'
+    'apply_batch_4852_4901_calibrations.cjs',
+    'apply_batch_4902_4951_calibrations.cjs',
+    'apply_batch_4952_5001_calibrations.cjs',
+    'apply_batch_5002_5051_calibrations.cjs',
+    'apply_batch_5052_5101_calibrations.cjs',
+    'apply_batch_5102_5151_calibrations.cjs',
+    'apply_batch_5152_5201_calibrations.cjs',
+    'apply_batch_5202_5251_calibrations.cjs',
+    'apply_batch_5252_5301_calibrations.cjs',
+    'apply_batch_5302_5351_calibrations.cjs'
   ];
 
   let mergedCount = 0;

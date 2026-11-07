@@ -1,0 +1,129 @@
+Batch 5002-5051 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 49 words (IDs 5002 to 5051, skipping missing ID 5012) from dump slice 'scripts/dump_5002_5051.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5002_5051_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5050 (cheer for): CATASTROPHIC MULTI-LOCALE "BOTANICAL ROOT / METADATA" DISASTER!
+   - In Danish: dump translated 'cheer for' as "rod for" (botanical plant root / mess)!
+   - In Finnish: dump translated 'cheer for' as "juuri sanalle" (linguistic/grammatical root of the word)!
+   - In Swedish: dump translated 'cheer for' as "root för" (verbatim English word root)!
+   - In Latvian: ASTONISHING BUG: dump translated 'cheer for' as 'sakne vārdam "darīt prieka pēc"' (literally "root of the word 'do for fun'", referencing the next word ID 5051 in the database)!
+   - In Kazakh: dump translated 'cheer for' as "түбірін алу" (to extract a square root / botanical root)!
+   - Calibrated across all locales: ru "болеть за, поддерживать", da "heppe på, bakke op om", fi "kannustaa, hurrata", sv "heja på, hålla på", lv "just līdzi, atbalstīt", kk "қолдау көрсету, жанкүйер болу", pt "torcer por, apoiar" (Brazilian gaming standard).
+
+2. Word 5043 (postpone): 12-LANGUAGE "SAVE A COMPUTER FILE" HALLUCINATION!
+   - Dump translated "postpone" as "save (file)" or "financial savings" across 12 European languages:
+     fr: "sauvegarder" (save file on disk!)
+     it: "salva" (save file on disk!)
+     pt: "salvar" (save file on disk!)
+     ro: "salva" (save file on disk!)
+     bg: "спаси" (save / rescue!)
+     cs: "uložit" (save file to disk!)
+     sk: "uložiť" (save file to disk!)
+     hu: "megtakarítás" (bank savings / economy!)
+     el: "εκτός" (outside / off!)
+     sl: "shrani" (save file!)
+     et: "salvesta" (save / record audio!)
+     lt: "išsaugoti" (save file!)
+   - Calibrated to authentic terms for postponing / rescheduling: fr "reporter, ajourner, différer", it "rimandare, posporre", pt "adiar, postergar", cs "odložit, posunout", sk "odložiť, presunúť", hu "elhalaszt, elnapol", el "αναβάλλω, μεταθέτω", ro "a amâna, a reprograma", sl "preložiti, odgoditi", etc.
+
+3. Word 5040 (quarreling): 11-LANGUAGE FALSE FRIEND "LOGICAL / DEBATE ARGUMENT" BUG!
+   - Dump mistranslated verbal fighting ("quarreling") as a mathematical or logical debate argument across 11 languages:
+     fr: "argument" (false friend: logical premise / proof!)
+     pt: "argumento" (false friend: logical argument!)
+     ro: "argument" (false friend: logical premise!)
+     bg: "аргумент" (false friend: logical point!)
+     cs: "argument" (false friend: logical reason!)
+     sk: "argument" (false friend!)
+     hu: "érv" (false friend: logical argument / reason!)
+     el: "επιχείρημα" (false friend: logical argument!)
+     sl: "argument" (false friend!)
+     et: "argument" (false friend!)
+     lt: "argumentas" (false friend!)
+   - Calibrated to genuine terms for bickering, fighting, and verbal disputes: fr "querelle, dispute, chamaillerie", pt (Brazil) "bate-boca, briga, desentendimento", ro "ceartă, gâlceavă, sfadă", bg "караница, кавга", cs "hádka, svár", sk "hádka, spor", hu "veszekedés, csetepaté", el "καβγάς, διαπληκτισμός", sl "prepir, kreg", et "riid, tüli", lt "kivirčas, ginčas".
+
+4. Word 5030 (landmark): 12-LANGUAGE ANATOMICAL "EYESIGHT / VISUAL SENSE" HOMONYM BUG!
+   - Dump back-translated "landmark" -> "sight" -> anatomical eyesight/vision:
+     fr: "vue" (eyesight)
+     it: "vista" (eyesight)
+     pt: "visão" (eyesight)
+     ro: "vedere" (eyesight)
+     bg: "зрение" (biological sense of sight!)
+     cs: "pohled" (glance)
+     sk: "zrak" (biological sense of sight!)
+     hu: "látvány" (spectacle)
+     el: "θέαμα" (show / spectacle)
+     sl: "vid" (biological sense of sight!)
+     et: "nägemine" (biological eyesight!)
+     lt: "regėjimas" (biological sense of sight!)
+     kk: "бағдаршам" (traffic light!)
+   - Calibrated to authentic terms for prominent monuments, points of reference, and milestones: ru "достопримечательность, ориентир", es "punto de referencia, hito", fr "point de repère, monument emblématique", it "punto di riferimento, monumento simbolo", pt (Brazil) "ponto de referência, marco, monumento", cs "orientační bod, dominanta", sk "orientačný bod, dominanta", hu "tájékozódási pont, nevezetesség", el "αξιοθέατο, ορόσημο", kk "көрнекті орын, бағдар", etc.
+
+5. Word 5033 (accessibility): 13-LANGUAGE "UPTIME / AVAILABILITY" CONFUSION!
+   - Dump translated "accessibility" (a11y / ease of access / barrier-free design) as "availability" (server uptime / item in stock):
+     fr: "disponibilité"
+     it: "disponibilità"
+     pt: "disponibilidade"
+     ro: "disponibilitate"
+     bg: "наличност" (stock in inventory!)
+     hu: "elérhetőség" (contact reachability!)
+     el: "διαθεσιμότητα"
+     sl: "razpoložljivost"
+     et: "saadavus"
+     fi: "saatavuus"
+     th: "ความพร้อมใช้งาน"
+     ko: "가용성"
+     ja: "利用可能性"
+   - Calibrated to authentic terms for accessibility / a11y: ru "доступность, безбарьерность", de "Barrierefreiheit, Zugänglichkeit", es "accesibilidad", fr "accessibilité", it "accessibilità", pt "acessibilidade", cs "přístupnost, bezbariérovost", fi "saavutettavuus, esteettömyys", ko "접근성", ja "アクセシビリティ、利用のしやすさ", zh "无障碍、可访问性".
+
+6. Word 5025 (badge): 8-LANGUAGE "PASSING AN EXAMINATION / MOVING PAST" HOMONYM BUG!
+   - Dump translated "badge" (glossed as "pass") as "to pass an exam" or "walk through":
+     da: "bestå, badge" ("bestå" = pass an exam!)
+     fi: "läpäistä, merkki" ("läpäistä" = pass an exam!)
+     sv: "passera, märke" ("passera" = drive or walk past!)
+     lv: "iziet, nozīmīte" ("iziet" = walk through / go out!)
+     th: "ผ่าน, ตราสัญลักษณ์" ("ผ่าน" = pass!)
+     ko: "통과하다, 배지" ("통과하다" = pass a test / cross a checkpoint!)
+     ja: "合格、バッジ" ("合格" = pass an exam!)
+     kk: "өту, белгі" ("өту" = walk through / pass!)
+   - Calibrated to correct badge / ID tag / emblem terms: da "skilt, navneskilt", fi "merkki, nimilappu", sv "märke, namnbricka", lv "nozīmīte, emblēma", ko "배지, 신분증", ja "バッジ、記章、名札", kk "төсбелгі, айырым белгісі".
+
+7. Word 5007 (contained): ITALIAN "RIPETIBILE" HALLUCINATION & ACTIVE/PASSIVE FLIP!
+   - Dump had Italian "Ripetibile" ("repeatable" - complete hallucination!).
+   - Dump had active participle "содержащий" (containing) in ru, uk, tr, ro, etc. instead of past participle / adjective "contained" (calm, self-restrained / held within / bounded).
+   - Calibrated to: ru "сдержанный, содержащийся, локализованный", it "contenuto, trattenuto, limitato", pt (Brazil) "contido, controlado, moderado", fr "contenu, retenu, maîtrisé", de "beherrscht, enthalten, eingedämmt".
+
+8. Word 5009 (as soon as): CONTAMINATION BY "HARDLY / BARELY / ONLY" CONFLATION!
+   - Dump had added "hardly / barely / only" (едва, лишь, kaum, nur, ledwo, csak, apenas, әрең, тек, etc.) into 15+ languages because of machine translation conflation with "hardly... when".
+   - Calibrated to clean, natural temporal conjunctions: ru "как только, тотчас как", de "sobald, sowie", es "tan pronto como, en cuanto", pt "assim que, logo que", fr "dès que, aussitôt que", pl "jak tylko, gdy tylko", hu "amint, mihelyt", etc.
+
+9. Word 5042 (roundabout): CZECH "CAROUSEL" & BRAZILIAN PORTUGUESE NUANCES!
+   - In Czech: dump translated traffic roundabout as "kolotoč" (playground merry-go-round / fairground carousel!). Calibrated to "kruhový objezd, rondel".
+   - In Portuguese: European Portuguese uses "rotunda", but Brazilian Portuguese natively uses "rotatória, balão". Calibrated to Brazilian Portuguese "rotatória, balão, rotunda".
+
+10. Word 5028 (stakeholder): FRENCH & VIETNAMESE BUSINESS VOCABULARY ERRORS!
+    - In French: dump had "partie intéressée, client". In corporate French, stakeholder is standardly "partie prenante".
+    - In Vietnamese: dump had "cổ đông, khách hàng" ("cổ đông" is SHAREHOLDER, not stakeholder!). Calibrated to "bên liên quan".
+
+11. Word 5032 (flippers): DANISH, KOREAN, JAPANESE TRANSLITERATION FIXES!
+    - Danish dump left English "flippers" -> calibrated to native "svømmefødder".
+    - Korean dump had transliteration "플리퍼" -> calibrated to native "오리발, 물갈퀴".
+    - Japanese dump had transliteration "フリッパー" -> calibrated to native "足ひれ、フィン".
+
+12. Word 5034 (feel left out): NORMALIZED FROM 1ST PERSON TO CANONICAL INFINITIVE!
+    - Dump had inflected 1st person across languages ("чувствую себя", "me siento", "mă simt", "jaučiuosi", "tunnen end").
+    - Calibrated to clean neutral infinitives across all 35 languages: ru "чувствовать себя лишним", es "sentirse excluido", fr "se sentir exclu", etc.
+
+13. Word 5045 (here you go): ELIMINATED STUTTERING MACHINE TRANSLATIONS!
+    - Dump had repeated spoken words ("voilà, voilà", "tessék, tessék", "proszę, proszę", "here you have it").
+    - Calibrated to natural idiomatic spoken forms: fr "voilà, tiens, voici", de "bitte sehr, bitteschön", pt (Brazil) "aqui está, prontinho", es (LatAm) "aquí tienes, toma, acá tienes", etc.
+
+14. Prefix Entries (5011 re-, 5013 mis-, 5014 un-, 5015 non-, 5016 pre-, 5017 sub-, 5018 co-):
+    - Replaced multi-sentence descriptive essays in Arabic, Urdu, Russian, and Czech with concise, clear prefix equivalents and meanings.
+
+All 49 words verified across all 35 target languages + English headword (EXACTLY 36 LOCALES).

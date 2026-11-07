@@ -1,0 +1,88 @@
+Batch 5302-5351 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5302 to 5351) from dump slice 'scripts/dump_5302_5351.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5302_5351_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5302 (concealment):
+   - Machine translation confused "concealment" (hiding, disguising oneself or assets, shielding) with costume disguise in several languages:
+     es: "disfraz" (fancy dress/costume) -> calibrated to "ocultamiento, encubrimiento, camuflaje".
+     fr: "cachotterie" (petty childish secrecy) -> calibrated to "dissimulation, recel, camouflage".
+     tr: "kılık değiştirme" (dressing up in disguise) -> calibrated to "gizleme, saklama, kamufle etme".
+     da: "forklædning", sv: "förklädnad", el: "μεταμφίεση", sl: "preobleka" -> fixed from costume disguise to concealment/secrecy.
+     de: fixed lowercase verb "verbergen" to capitalized nouns: "Verheimlichung, Verbergen, Tarnung".
+
+2. Word 5303 (concession):
+   - Incomplete single-sense translations expanded across all languages to include both political/argumentative concession (yielding/compromise) and commercial/governmental concession (charter/franchise/licence).
+   - German: capitalized "Zugeständnis, Nachgeben, Konzession".
+   - Portuguese (pt-BR): added "concessão, cedência, benefício concedido".
+
+3. Word 5304 (concord) & 5305 (concurrence):
+   - 5304 concord: restored full sense of harmony, peace, and grammatical agreement across Slavic, Romance, and Asian locales.
+   - 5305 concurrence: separated mere "chance coincidence" from legal/formal "concurrence" (assent, simultaneous occurrence, agreement).
+
+4. Word 5307 (conduct):
+   - Dump had mixed part-of-speech bugs: Spanish had verb "dirigir" mixed with noun "conducta"; French had "leadership"; Italian had "leadership".
+   - Calibrated as proper noun entry: conduct, demeanor, execution, management (es: "conducta, comportamiento, dirección", fr: "conduite, comportement, gestion", it: "condotta, comportamento, gestione", pt: "conduta, comportamento, gestão").
+
+5. Word 5308 (confederation):
+   - Major Arabic bug: dump contained duplicate text "اتحاد الاتحاد". Calibrated to proper diplomatic terminology: "كونفدرالية، اتحاد، تحالف".
+
+6. Arabic Definite Article Prefix ("الـ") Systematic Fixes:
+   - Across dozens of entries (5310, 5311, 5312, 5313, 5314, 5315, 5316, 5317, 5318, 5320, 5321, 5322, 5324, 5325, 5328, 5329, 5330, 5331, 5333, 5334):
+     The dump had applied the definite article "الـ" indiscriminately to standard dictionary headwords (e.g. "التكوين، البنية", "الحصر، التقييد", "التأكيد، الإقرار", "المطابقة", "المعارضة", "التجمع", "التخمين", "التكريس", "الاتساق", "التوطيد", "التحالف", "التضييق", "التشاور", "التلوث", "التأمل", "الازدراء", "الخلاف", "التناقض", "النقيض").
+     All entries were systematically calibrated to natural, indefinite grammatical headwords without spurious definite articles.
+
+7. German Noun Capitalization:
+   - Standardized 100% of German nouns to have initial capital letters across the entire batch (e.g., Verheimlichung, Zugeständnis, Eintracht, Übereinstimmung, Verurteilung, Verhalten, Konföderation, Geständnis, Konfiguration, Freiheitsentzug, Bestätigung, Konformität, Konfrontation, Kirchengemeinde, Vermutung, Weihe, Beständigkeit, Trost, Konsolidierung, Konsortium, Wahlkreis, Bestandteil, Verengung, Beratung, Ansteckung, Schadstoff, Kontamination, Betrachtung, Verachtung, Streitpunkt, Eventualität, Widerspruch, Gegenteil, Scharfsinn, Rückfall).
+
+8. Word 5315 (congregation):
+   - Machine translation reduced "congregation" to simple "assembly/meeting".
+   - Calibrated specifically to its primary religious/communal meaning: parish/flock/church community (ru: "община, собрание прихожан, паства", de: "Kirchengemeinde, Versammlung, Pfarrgemeinde", fr: "congrégation, assemblée de fidèles, paroisse", it: "congregazione, comunità parrocchiale, adunanza", cs: "sbor, církevní obec, farníci", ar: "رعية، مصلون، جماعة دينية", fa: "نمازگزاران، اهل کلیسا، جماعت مذهبی", ur: "عبادت گزار، جماعت، مذہبی اجتماع", hi: "धार्मिक सभा, धर्मसंघ, मंडली", kk: "шіркеу қауымы, діни жамағат").
+
+9. Word 5322 (constituency) & 5323 (constituent):
+   - Corrected duality of "constituency" (electoral district vs body of voters) and "constituent" (electoral voter vs component part/ingredient).
+
+10. Irregular Verb Grammatical Agreement (IDs 5336–5344):
+    - Romanian: Inflected 3rd person singular present indicative / imperative forms (rupe, zdrobește, contemplă, vezi, imploră, înconjoară, asediază, licitează, transmite, arde, învăluie, târască, fugi, scufundă) were corrected to standard infinitive forms:
+      5336 bust: "a strica, a sparge, a aresta"
+      5337 behold: "a contempla, a privi, a zări"
+      5338 beseech: "a implora, a ruga fierbinte, a conjura"
+      5339 beset: "a împresura, a asedia, a hărțui"
+      5340 bid: "a oferi un preț, a licita, a porunci"
+      5341 broadcast: "a difuza, a emite, a transmite"
+      5342 burn: "a arde, a pârli, a mistui"
+      5343 creep: "a se târî, a se furișa, a păși tiptil"
+      5344 dive: "a se scufunda, a plonja, a coborî brusc"
+    - Greek: Converted erroneous nouns and 1st-person inflections (σπάσιμο, συντριβή, στοχασμός, περικύκλωση, πολιορκία, προσφορά, διαταγή, εκπομπή, κάψιμο, βουτιά) to proper verbal headwords (σπάω, ατενίζω, ικετεύω, περικυκλώνω, πλειοδοτώ, εκπέμπω, καίω, σέρνομαι, βουτάω).
+
+11. Word 5337 (behold):
+    - Glaring multi-language confusion: Czech, Polish, Turkish, Japanese, Korean, Kazakh had translated "behold" as "to ponder / deliberate / meditate" (cs: "přemýšlet", pl: "rozważać", tr: "düşünmek", ja: "熟考する", ko: "숙고하다", kk: "ойлану") due to confounding Russian "созерцать" with mental reflection!
+    - Calibrated across all locales to its true visual meaning: gaze upon, see, perceive, behold:
+      cs: "spatřit, uzřít, hledět"
+      pl: "ujrzeć, spoglądać na, postrzegać"
+      tr: "bakmak, gözlemlemek, seyretmek"
+      ja: "見守る、注視する、見る"
+      ko: "바라보다, 주시하다, 보다"
+      kk: "көру, көз салу, қарау"
+      hi: "निहारना, देखना, विलोकन करना"
+      ar: "أبصر، عاين، تطلع إلى"
+      fa: "نگریستن، مشاهده کردن، دیدن"
+
+12. Words 5345–5351 (Advanced Verbs):
+    - 5345 refute: corrected nominal forms (el: "διάψευση") to verbs (el: "διαψεύδω, αντικρούω, καταρρίπτω"; ro: "a infirma, a combate, a desminți").
+    - 5346 regain: ro: "a redobândi, a recupera, a recăpăta"; el: "ανακτώ, ξανακερδίζω".
+    - 5347 regenerate: ro: "a regenera, a reînnoi, a reconstitui"; el: "αναγεννώ, αναπλάθω".
+    - 5348 reiterate: ro: "a reitera, a repeta, a reafirma"; el: "επαναλαμβάνω, τονίζω ξανά".
+    - 5349 rejoice: fixed Romanian imperative "bucură-te" and Greek noun "χαρά" to proper infinitive/verbal headwords (ro: "a se bucura, a jubila, a tresălta de bucurie"; el: "χαίρομαι, αγάλλομαι, πανηγυρίζω").
+    - 5350 rejuvenate: ro: "a întineri, a reîntineri, a revitaliza"; el: "αναζωογονώ, ανανεώνω, δίνω νέα νιότη".
+    - 5351 relapse: captured dual nominal & verbal dimensions: recurrence of illness/bad habit vs experiencing a setback (ru: "рецидив, ухудшение, снова впадать", de: "Rückfall, Wiedererkrankung, rückfällig werden", es: "recaída, empeoramiento, recaer", fr: "rechute, récidive, rechuter", ro: "recidivă, cădere repetată, a recidiva").
+
+Regional Nuance Highlights:
+- Brazilian Portuguese (pt-BR): idiomatic gaming/contemporary Brazilian vocabulary applied across all 50 words.
+- Mexican / Latin American Spanish (es): natural LatAm expressions prioritizing regional usage.
+- Natural syntax, correct word order, and appropriate register verified across Indic and Middle Eastern languages: Hindi (hi), Bengali (bn), Urdu (ur), Persian (fa), Arabic (ar), and Kazakh (kk).

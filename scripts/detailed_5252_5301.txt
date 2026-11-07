@@ -1,0 +1,108 @@
+Batch 5252-5301 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5252 to 5301) from dump slice 'scripts/dump_5252_5301.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5252_5301_calibrations.cjs'.
+- Verified syntactic validity with node and validated that all 50 words and 35 target languages are 100% complete.
+- No APK or AAB build scripts were executed.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5255 (imminent):
+   - CATASTROPHIC CROSS-LINGUAL CONFUSION: "Imminent" (impending, about to happen, looming) was conflated with "inevitable" (unavoidable, inescapable) across nearly all languages in the dump (es "inevitable", pt "inevitável", fr "inévitable", it "inevitabile", ja "避けられない", ko "불가피한", ar "حتمي", cs "nevyhnutelný", sk "nevyhnutný", pl "nieuchronny", hu "elkerülhetetlen", el "αναπόφευκτος", da "uundgåelig", fi "väistämätön", sv "oundviklig", hr "neizbježan", lv "neizbēgams", kk "сөзсіз", th "หลีกเลี่ยงไม่ได้").
+   - Calibration: Completely purged the "inevitable" mistranslations and restored accurate impending/looming terms (e.g. es "inminente, próximo", pt "iminente, prestes a ocorrer", de "bevorstehend, unmittelbar bevorstehend, drohend", fr "imminent, proche, menaçant", ru "надвигающийся, близкий, угрожающий", ja "差し迫った、切迫した", ko "임박한, 눈앞에 닥친", ar "وشيك، قريب الحدوث", fa "قریب‌الوقوع، در شرف وقوع", kk "таяу арада болатын, төнген").
+
+2. Word 5262 (impervious):
+   - SYSTEMIC ROOT CONFUSION WITH "IMPERCEPTIBLE": The dump mistranslated "impervious" as "imperceptible / unnoticeable / invisible" across over 15 languages (de "unmerklich", ro "imperceptibil", bg "незабележим", cs "nepostřehnutelný", sk "nepostrehnuteľný", hu "észrevehetetlen", el "ανεπαίσθητος", sl "neopazen", et "märkamatu", lt "nepastebimas", da "umærkelig", fi "huomaamaton", sv "omärkbar", hr "neprimjetan", lv "nemanāms", th "มองไม่เห็น", ar "غير محسوس")!
+   - Calibration: Restored the true physical meaning (waterproof, impermeable, impenetrable) and figurative psychological meaning (unaffected, immune to criticism or pain) in all 35 languages (e.g. de "undurchlässig, unempfindlich, unzugänglich", es "impermeable, impenetrable, inmune", pt "impermeável, impenetrável, imune", ru "непроницаемый, невосприимчивый, устойчивый", hi "अभेद्य, जलरोधी, अप्रभावित", fa "نفوذناپذیر، ناتراوا، آسیب‌ناپذیر", kk "өткізбейтін, бой бермейтін, әсер етпейтін").
+
+3. Word 5264 (implicit):
+   - SYSTEMIC "LATENT" CONFUSION: The dump mistranslated "implicit" as "latent" (dormant, hidden, undeveloped) across nearly all European languages (de "latent, verborgen", fr "latent, caché", pl "utajony, ukryty", it "latente, nascosto", pt "latente, oculto", ro "latent, ascuns", bg "латентен, скрит", cs "latentní, skrytý", sk "latentný, skrytý", hu "lappangó, rejtett", el "λανθάνων, κρυφός", sl "latenten, skrit", et "latentne, varjatud", lt "latentinis, paslėptas", da "latent, skjult", fi "piilevä, piilossa", sv "latent, dold", hr "latentan, skriven", lv "latents, slēpts", ar "كامن، خفي", id "laten, tersembunyi", vi "tiềm ẩn, ẩn giấu", th "แฝงอยู่, ซ่อนเร้น", ko "잠재적인, 숨겨진", ja "潜在的な、隠された").
+   - Calibration: "Implicit" means implied though not plainly expressed (tacit, unspoken) OR absolute and unquestioning (implicit trust). Corrected across all languages to reflect both senses (e.g. de "implizit, stillschweigend; uneingeschränkt", fr "implicite, sous-entendu; absolu", es "implícito, tácito; absoluto", pt "implícito, tácito; incondicional", ru "неявный, подразумеваемый; безоговорочный", pl "domyślny, dorozumiany; bezdyskusyjny", ar "ضمني، مفهوم ضمناً؛ مطلق", fa "ضمنی، تلویحی؛ بی‌چون‌وچرا").
+
+4. Word 5270 (impudent):
+   - MORAL INVERSION (VICE TO VIRTUE): The dump translated "impudent" (shameless, disrespectful, insolent, cheeky) as "bold, brave, daring, courageous" across dozens of languages (de "kühn", fr "audacieux", pl "śmiały", it "audace", pt "ousado", ro "îndrăzneț", bg "дързък", cs "odvážný", sk "odvážny", hu "merész", el "τολμηρός", et "julge", lt "drąsus", da "dristig", fi "rohkea", sv "vågad", hr "smion", lv "pārdrošs", hi "साहसी", ar "جريء", id "berani", vi "táo bạo", th "กล้าหาญ", ko "대담한", ja "大胆な", kk "батыл"). Calling an insolent person "brave/courageous" is an inversion of meaning.
+   - Calibration: Calibrated to insolent, shameless, disrespectful, and cheeky (e.g. de "unverschämt, dreist, frech", fr "insolent, effronté, impudent", es "descarado, insolente, atrevido", pt "descarado, insolente, atrevido", ru "дерзкий, наглый, бесстыдный", hi "धृष्ट, ढीठ, गुस्ताख़", ar "وقح، صفيق، قليل الحياء", fa "پررو، گستاخ، بی‌چشم‌ورو", ur "گستاخ، بے باک، بے حیا", kk "бетсіз, ұятсыз, дөрекі").
+
+5. Word 5278 (inarticulate) vs 5279 (inaudible):
+   - MUDDLED VOCAL CLARITY VS AUDIBILITY: In the dump, "inaudible" was mistranslated as "inarticulate / unartikuliert" in German, French, etc., while "inarticulate" was translated as "speechless / mute / silent" (e.g. de "sprachlos, wortlos").
+   - Calibration: Disentangled speech formulation/articulation (inarticulate = unable to speak clearly, mumbling, tongue-tied, incoherent in speech: de "undeutlich, unverständlich, stammelnd", ru "нечленораздельный, косноязычный, невнятный") from auditory volume (inaudible = unable to be heard, quiet, soundless: de "unhörbar, kaum hörbar, tonlos", ru "неслышный, едва слышимый, беззвучный").
+
+6. Word 5280 (incalculable):
+   - NUMBER AGREEMENT: Corrected plural adjective forms in the dump (pt "incontáveis, inumeráveis", fr "innombrables") to dictionary-standard singular adjectives ("incalculável, inestimável, imensurável"; "incalculable, inestimable, sans nombre").
+
+7. Word 5291 (commotion):
+   - GERMAN CAPITALIZATION & SENSE REFINEMENT: German had lowercase "hektik, aufregung". Capitalized according to German orthography to "Aufruhr, Trubel, Aufregung". In Italian/Portuguese/Japanese/Korean, purged "excitement" (eccitazione, excitação, 興奮, 흥분) and replaced with true disturbance/turmoil (pt "tumulto, alvoroço, agitação", it "trambusto, agitazione, scompiglio", ja "騒動、大騒ぎ、混乱", ko "소동, 동요, 야단법석").
+
+8. Word 5292 (communion):
+   - FALSE FRIEND "COMMUNICATION": Across pt, fr, de, it, hi, kk, the dump translated "communion" as simple "communication" (talking, messaging, sharing news).
+   - Calibration: "Communion" represents intimate spiritual fellowship, deep mental sharing, and the Christian sacrament of the Holy Communion / Eucharist. Calibrated to: de "Gemeinschaft, Verbundenheit; Kommunion, Abendmahl", fr "communion, union intime; sainte cène", pt "comunhão, união espiritual; eucaristia", it "comunione, unione spirituale; eucaristia", ru "общение, единение; причастие", hi "आत्मीयता, आध्यात्मिक मेल; परमप्रसाद", ar "مشاركة وجدانية، تقارب روحي؛ مناولة", kk "рухани бірлік, сырластық; причастие".
+
+9. Word 5293 (commute):
+   - DUAL PART OF SPEECH: The dump arbitrarily assigned verb to some locales and noun to others. Calibrated all locales to clearly present both the journey (daily commute) and the action (to commute regularly between home and work): de "pendeln; täglicher Arbeitsweg, Pendelstrecke", es "viaje diario al trabajo; desplazarse al trabajo", pt "deslocamento diário; ir ao trabalho", ru "ежедневная поездка на работу; ездить на работу".
+
+10. Word 5299 (compulsion):
+    - UKRAINIAN GENDER AGREEMENT: uk dump had "непереборна потяг" (feminine adjective with masculine noun "потяг"). Corrected to "непереборний потяг".
+
+11. Word 5300 (computation):
+    - SYSTEMIC "SCORE-SETTLING / DEBT CLEARING" MISTRANSLATION: In 15+ languages, computation was translated as confrontation / settling accounts / debt clearing / rozrachunek / zúčtovanie / uppgörelse / tilinteko / есеп айырысу.
+    - Calibration: Restored mathematical calculation, computing, and data processing across all languages (de "Berechnung, Rechenvorgang, Datenverarbeitung", pl "obliczanie, kalkulacja, przetwarzanie danych", cs "výpočet, počítání, zpracování dat", sk "výpočet, počítanie, spracovanie údajov", sv "beräkning, kalkylering, databehandling", fi "laskenta, laskutoimitus, tietojenkäsittely", kk "есептеу, есептеп шығару, компьютерлік есептеу", hi "संगणना, परिकलन, हिसाब लगाना").
+
+12. Word 5301 (comrade):
+    - CORPORATE REGISTER CORRECTION: Across many languages, "comrade" was translated as a corporate coworker, employee, or commercial partner (de "Mitarbeiter", fr/pt/es "associé", it "socio", cs/sk "spolupracovník", pl "wspólnik", sv/fi/hr "medarbetare / suradnik / työtoveri").
+    - Calibration: Restored the true meaning of companion, brother-in-arms, fellow political/military member: de "Kamerad, Genosse, Weggefährte", es "camarada, compañero, correligionario", pt "camarada, companheiro, parceiro", fr "camarade, compagnon, compère", it "compagno, camerata, sodale", pl "towarzysz, kamrat, druh", cs "soudruh, kamarád, spolubojovník", ru "товарищ, соратник, единомышленник", kk "жолдас, серік, қарулас", hi "साथी, कॉमरेड, संगी", ar "رفيق، نصير، رفيق سلاح".
+
+Detailed Word-by-Word Register of Audited Words (5252-5301):
+-------------------------------------------------------------
+5252: illustrious (adj) - distinguished, renowned, eminent, celebrated
+5253: immaculate (adj) - spotless, pure, unblemished, free from flaw
+5254: immature (adj) - unripe, childish, emotionally underdeveloped
+5255: imminent (adj) - impending, looming, about to happen (purged 'inevitable')
+5256: impartial (adj) - fair, neutral, objective, unbiased
+5257: impeccable (adj) - faultless, flawless, irreproachable
+5258: impeding (adj/part) - obstructing, hindering, delaying, hampering
+5259: imperative (adj/noun) - vital, urgent, mandatory; duty; grammatical imperative
+5260: imperceptible (adj) - barely noticeable, subtle, indiscernible
+5261: imperial (adj) - relating to an empire/emperor; magnificent, regal
+5262: impervious (adj) - impermeable, waterproof; immune, unaffected (purged 'imperceptible')
+5263: impetuous (adj) - rash, hasty, acting quickly without thought, headlong
+5264: implicit (adj) - implied, tacit; unconditional, absolute (purged 'latent')
+5265: imposing (adj) - grand, stately, commanding, impressive in appearance
+5266: impotent (adj) - powerless, helpless, ineffectual; sterile
+5267: impractical (adj) - unworkable, unrealistic, unfeasible
+5268: improbable (adj) - unlikely, doubtful, improbable
+5269: impromptu (adj/adv/noun) - spontaneous, improvised, offhand, unrehearsed
+5270: impudent (adj) - insolent, disrespectful, cheeky, shameless (purged 'brave/bold')
+5271: impulsive (adj) - acting on sudden whim, hasty, spontaneous
+5272: inaccessible (adj) - unreachable, unobtainable, out of reach
+5273: inaccurate (adj) - incorrect, imprecise, erroneous, containing mistakes
+5274: inadequate (adj) - insufficient, deficient, not good enough
+5275: inadvertent (adj) - accidental, unintentional, heedless
+5276: inane (adj) - silly, empty of meaning, foolish, senseless
+5277: inanimate (adj) - lifeless, non-living, inert
+5278: inarticulate (adj) - unable to express clearly, indistinct, mumbled in speech
+5279: inaudible (adj) - unable to be heard, quiet to the point of silence
+5280: incalculable (adj) - immeasurable, too great to count, unpredictable
+5281: incapable (adj) - unable, lacking fitness or capacity, incompetent
+5282: incessant (adj) - unceasing, non-stop, continuous without interruption
+5283: incidental (adj/noun) - minor accompaniment, secondary, casual; expense
+5284: incisive (adj) - sharp, penetrating, trenchant, analytical and clear
+5285: incoherent (adj) - disjointed, rambling, confusing, lacking consistency
+5286: incompatible (adj) - conflicting, irreconcilable, mismatched
+5287: incompetent (adj/noun) - lacking qualifications/skills, inept; unfit person
+5288: inconceivable (adj) - unimaginable, unthinkable, beyond mental grasp
+5289: inconclusive (adj) - indecisive, leaving doubt, unresolved
+5290: incongruous (adj) - out of place, mismatched, discordantly inappropriate
+5291: commotion (noun) - noisy disturbance, turmoil, tumult, uproar
+5292: communion (noun) - deep spiritual fellowship; Holy Communion (sacrament)
+5293: commute (verb/noun) - travel daily between work/home; daily trip; sentence reduction
+5294: compatibility (noun) - capability of harmonious coexistence; interoperability
+5295: competence (noun) - capability, skill, proficiency; legal authority
+5296: compilation (noun) - assembled collection/anthology; code compiling
+5297: complication (noun) - difficulty, entanglement, medical complication
+5298: comprehension (noun) - understanding, mental grasp, inclusion
+5299: compulsion (noun) - irresistible urge, obsession; coercion, duress
+5300: computation (noun) - mathematical calculation, data processing (purged 'reckoning/score-settling')
+5301: comrade (noun) - companion, fellow member, brother-in-arms (purged 'employee/coworker')

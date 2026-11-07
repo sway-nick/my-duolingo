@@ -1,0 +1,153 @@
+Batch 5202-5251 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5202 to 5251) from dump slice 'scripts/dump_5202_5251.json'.
+- Verified parts of speech, polysemy, false friends, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5202_5251_calibrations.cjs'.
+- Validated complete syntactic correctness and 100% locale coverage (50 words x 35 target languages = 1750 calibrated translations).
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 5216 (reciprocate): CATASTROPHIC "RETALIATION / REVENGE" BUG IN JAPANESE
+   - Dump translated reciprocate in Japanese as `報復する` (hōfuku suru)!
+   - Linguistic Analysis: "報復する" specifically means to retaliate, take revenge, or execute vengeance (e.g. military retaliation or vendetta). Reciprocate in English means to respond to a kind gesture, return feelings, or act mutually ("she reciprocated his feelings", "reciprocate a favor").
+   - Calibration: Fixed to `お返しをする、報いる、応える` (okaeshi o suru, mukuiru, kotaeru).
+
+2. Word 5222 (recourse): MULTI-LOCALE PART-OF-SPEECH CONVERSION (NOUN vs VERB)
+   - In English, "recourse" is strictly a noun ("a source of help in a difficult situation", "the legal right to demand compensation").
+   - Dump translated recourse as an active verb phrase across 20+ languages:
+     ru: "обращаться за помощью"
+     uk: "звертатися за допомогою"
+     es: "buscar ayuda"
+     fr: "demander de l'aide"
+     pl: "szukać pomocy"
+     it: "cercare aiuto"
+     pt: "buscar ajuda"
+     ro: "a cere ajutor"
+     bg: "търся помощ"
+     cs: "vyhledat pomoc"
+     sk: "vyhľadať pomoc"
+     da: "at søge hjælp"
+     sv: "att söka hjälp"
+     hi: "सहायता मांगना"
+     ar: "أن يطلب المساعدة"
+   - Calibrated to correct noun terminology:
+     ru: "обращение за помощью, прибежище, опора"
+     uk: "звернення за допомогою, прибіжище, порятунок"
+     de: "Zuflucht, Rückgriff, Ausweg"
+     es: "recurso, amparo, alternativa"
+     fr: "recours, refuge, expédient"
+     pl: "ucieczka (do czegoś), środek zaradczy, odwołanie"
+     it: "ricorso, rifugio, ripiego"
+     pt: "recurso, apelo, amparo"
+     ro: "recurs, refugiu, soluție"
+     bg: "прибягване, спасителен изход, опора"
+     cs: "útočiště, záchrana, východisko"
+     sk: "útočisko, záchrana, východisko"
+     hu: "folyamodás, menedék, segítség"
+     el: "καταφυγή, προσφυγή"
+     sl: "zatekanje, izhod v sili"
+     et: "abinõu, tagasipöördumine, toetus"
+     lt: "pagalbos ieškojimas, priebėga"
+     da: "udvej, tilflugt"
+     fi: "turvautumiskeino, apukeino"
+     sv: "tillflykt, utväg"
+     hr: "pribjegavanje, utočište"
+     lv: "glābiņš, izeja, patvērums"
+     hi: "सहारा, आश्रय, उपाय"
+     ar: "ملاذ، لجوء، وسيلة"
+     fa: "دادخواهی، پناه، چاره"
+     ur: "سہارا، رجوع، مدد"
+     id: "jalan keluar, bantuan alternatif"
+     vi: "sự nương tựa, phương kế cứu trợ"
+     th: "ที่พึ่ง, ทางออก"
+     ko: "의지, 구제 수단"
+     ja: "頼みの綱、救済手段"
+     zh: "求助、求援途径、追索权"
+     bn: "আশ্রয়, অবলম্বন, উপায়"
+     kk: "көмекке жүгіну, пана, амал"
+
+3. Word 5211 (prejudice): OPPOSITE MEANING & CORRUPTED REGISTER BUGS
+   - Finnish: Dump had `fi: "aiheuttaa vahinkoa, olla ennakkoluuloton"`. "ennakkoluuloton" literally means "open-minded / unbiased" — the EXACT POLAR OPPOSITE of prejudiced! Fixed to `haitata, herättää ennakkoluuloja; ennakkoluulo`.
+   - Bulgarian: Dump had `bg: "наранявам, предразполагам"`. "наранявам" means physical wounding; "предразполагам" means to predispose / put someone at ease! Fixed to `увреждам; предубеждение, предразсъдък`.
+   - French: Dump had `fr: "blesser, nuire"` (physical injury / wound). Fixed to `porter préjudice, biaiser; préjugé`.
+   - Czech & Slovak: Dump had `zranit, předsudek` ("zranit" = injure flesh). Fixed to `poškodit, ovlivnit předsudkem; předsudek`.
+   - Croatian: Dump had `hr: "biti predrasud"` (broken ungrammatical syntax). Fixed to `štetiti; predrasuda`.
+
+4. SYSTEMIC ARABIC SUBJUNCTIVE PARTICLE "أن" ARTIFACT (Words 5210 to 5228):
+   - Machine translation systematically prefixed 19 verbs with the Arabic particle `أن ` ("that he..."):
+     5210 predominate: أن يسود، أن يسيطر -> ساد، غلب، سيطر
+     5211 prejudice: أن يُلحق الضرر، أن يكون متحيزًا -> أضرّ، تحامل على؛ تعصب، انحياز
+     5212 prescribe: أن يصف -> وصف (دواءً)، فرض، أوجب
+     5213 presume: أن يفترض، أن يعتقد -> افترض، رجّح
+     5214 prevail: أن يسود، أن يكتسب اليد العليا -> ساد، انتصر، غلب
+     5215 proclaim: أن يُعلن -> أعلن، صرّح، جهر بـ
+     5216 reciprocate: أن يُبادل -> بادل، رد بالمثل
+     5217 reckon: أن يُفكر، أن يفترض -> اعتبر، حزر، قدّر
+     5218 reclaim: أن يسترد، أن يُعيد -> استرد، استعاد، استصلح
+     5219 recline: أن يستلقي -> استلقى، اتكأ
+     5220 reconcile: أن يُصالح، أن يتفق -> صالَح، وفّق بين
+     5221 reconstruct: أن يُعيد البناء، أن يُعيد -> رمّم، أعاد بناء
+     5222 recourse: أن يطلب المساعدة -> ملاذ، لجوء، وسيلة
+     5223 rectify: أن يُصحح، أن يُصلح -> قوّم، صحّح، أصلح
+     5224 recuperate: أن يتعافى، أن يستعيد -> استرد عافيته، تماثل للشفاء
+     5225 recur: أن يُكرر، أن يعود -> تكرر، عاود الظهور
+     5226 redeem: أن يكفر، أن يفدي -> استرد، كفّر عن، صرف (قسيمة)
+     5227 redress: أن يُعوض، أن يُصحح -> جبر (ضرراً)، أنصف، عوّض
+     5228 refine: أن يُحسن، أن يُنقي -> نقّى، صقّل، حسّن
+   - Purged all 19 occurrences of the artificial particle and calibrated to standard dictionary citation forms.
+
+5. SYSTEMIC DANISH "at" AND SWEDISH "att" ARTIFACT (Words 5210 to 5228):
+   - Removed artificial infinitival particles `at ` in Danish and `att ` in Swedish across all 19 verb entries, establishing clean dictionary headwords.
+
+6. Word 5233 (haggard): LUDICROUS MISTRANSLATIONS IN KAZAKH & SWEDISH
+   - Kazakh: Dump had `kk: "жалқау"` which means LAZY / IDLE! Calling an exhausted, gaunt, emaciated person "lazy" is completely erroneous. Fixed to `жүдеу, қажыған, сұрланған`.
+   - Swedish: Dump had `sv: "uttjatad"` which means "hackneyed / overused (of an old joke or repeated topic)". Calibrated to `tärd, härjad, sliten`.
+
+7. Word 5219 (recline): FALSE FRIEND IN KAZAKH
+   - Kazakh: Dump had `kk: "жалтару"` which means "to evade / dodge / shirk duty". Recline means to lean back / lie down. Fixed to `шалқаю, жантаю, сүйену`.
+
+8. Word 5231 (gruesome): FALSE TRANSLATION IN FRENCH & ARABIC
+   - French: Dump had `étrange, terrible` ("étrange" means odd / curious, completely missing the grisly/macabre sense). Fixed to `macabre, horrifiant, lugubre`.
+   - Arabic: Dump had `غريب، رهيب` ("غريب" means strange/weird). Fixed to `مروع، شنيع، بشع`.
+
+9. Word 5232 (gullible): CONFUSION WITH "CONFIDENT / TRUSTWORTHY"
+   - Portuguese: Dump had `confiante` (means "confident / trustful"). Fixed to `ingênuo, crédulo, fácil de enganar`.
+   - French: Dump had `confiant, naïf` ("confiant" means confident). Fixed to `crédule, naïf, facile à duper`.
+   - Hungarian: Dump had `bizalomgerjesztő, hiszékeny` ("bizalomgerjesztő" means inspiring trust / respectable — the opposite of gullible!). Fixed to `hiszékeny, könnyenhívő`.
+
+10. Word 5238 (heinous): "BEGGAR" FALSE FRIEND IN LATVIAN
+    - Latvian: Dump had `nabags, monstruozs` ("nabags" means beggar / poor person!). Fixed to `briesmīgs, nežēlīgs, nosodāms`.
+    - Lithuanian: Dump had `niekšas, monstriškas` ("niekšas" is a noun meaning scoundrel). Fixed to adjective `pasibaisėtinas, niekšiškas`.
+    - Croatian: Fixed typo `podo` to `gnusan, zlodjelski, odvratan`.
+
+11. Word 5240 (hesitant): VERB FORM IN UKRAINIAN
+    - Ukrainian: Dump had `вагається` (3rd person singular indicative verb "he/she hesitates"). Fixed to proper adjective `нерішучий, вагальний, сумнівний`.
+
+12. Word 5244 (horrendous): NOUN "NIGHTMARE" APPENDED AS ADJECTIVE
+    - Dump literally appended the noun "nightmare" / "night dream" in multiple languages:
+      cs: `noční můra` -> `příšerný, hrůzostrašný`
+      sk: `nočné mory` -> `príšerný, otrasný`
+      hr: `noćna mora` -> `strahovit, užasan`
+      kk: `түнгі түс` -> `зәре ұшырарлық, сұмдық`
+      vi: `ác mộng` -> `kinh hoàng, tệ hại`
+
+13. Word 5246 (hypocritical): "SACRED / PIOUS" INVERTED TRANSLATION
+    - Kazakh: Dump had `екіжүзді, киелі` ("киелі" means holy / sacred!). Fixed to `екіжүзді, жалған`.
+    - Greek: Dump had `υποκριτικός, ευσεβής` ("ευσεβής" means pious / god-fearing!). Fixed to `υποκριτικός, φαρισαϊκός`.
+
+14. Word 5247 (hypothetical): "SHADY / DUBIOUS" BUG IN FINNISH
+    - Finnish: Dump had `arveluttava` which means shady, dubious, suspicious! Fixed to `oletettu, kokeellinen`.
+
+15. Word 5248 (hysterical): FEMININE BIAS IN ITALIAN
+    - Italian: Dump had `isterica` (strictly feminine singular). Fixed to base citation form `isterico, forsennato`.
+
+16. Word 5251 (illiterate): "WITHOUT MAIL" LITERAL MT BUG IN ITALIAN
+    - Italian: Dump had `senza lettere` (literally "without mail letters"). Fixed to `analfabeta, illetterato`.
+
+17. Regional Calibration:
+    - Brazil (pt / pt-BR): Calibrated Word 5226 (redeem) to include gaming/app standard `resgatar` (essential Brazilian app terminology for redeeming codes, rewards, and vouchers; dump had only `expiar`), 5242 (hilarious) to `hilário, comiquíssimo, muito divertido`, 5232 (gullible) to `ingênuo, fácil de enganar`.
+    - Mexico / Latin America (es / es-MX): Calibrated Word 5226 (redeem) to `canjear, redimir, rescatar` (`canjear` is standard Latin American gaming/e-commerce terminology), 5242 to `divertidísimo, muy chistoso`.
+    - Indic & RTL Grammars (hi, ar, fa, ur, bn, kk): Restored proper morphological categories, correct verbal nouns/infinitives, and idiomatic phrasing across all 50 entries.

@@ -1,0 +1,198 @@
+Batch 5152-5201 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 50 words (IDs 5152 to 5201) from dump slice 'scripts/dump_5152_5201.json'.
+- Verified parts of speech, polysemy, false friends, homonyms, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_5152_5201_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+1. Word 5154 (mold): POLYSEMY & DUAL CONFLATION BUG!
+   - Dump conflated fungal growth (mold/mildew) with container/matrix used to cast shapes (mold/mould).
+   - In French, the dump provided only "moule" (baking pan/matrix/mussel), omitting "moisissure" (fungus).
+   - In Hungarian, the dump provided only "forma" (casting mold), omitting "penész" (fungus).
+   - In Greek, the dump provided only "καλούπι" (casting mold), omitting "μούχλα" (fungus).
+   - In Russian, the dump had only "плесень" (fungus), missing the industrial/craft sense of molding.
+   - Fixed: Calibrated across all 35 target languages to comprehensively encompass both fungal organism and industrial shaping matrix/verb (ru: "плесень; форма, лекало; формовать", fr: "moisissure; moule; façonner", de: "Schimmel; Gussform; formen", es: "moho; molde; moldear", pt: "mofo, bolor; molde; moldar").
+
+2. Word 5155 (sneeze): PART-OF-SPEECH ASYMMETRY
+   - Half the dump languages provided only a noun "a sneeze" (it: "starnuto", ro: "strănut", cs: "kýchnutí", hu: "tüsszentés", el: "φτάρνισμα", lt: "čiaudulys"), while others provided only a verb.
+   - Fixed: Harmonized across all 35 languages to cover both the verb and noun forms clearly.
+
+3. Word 5157 (fastener): CATASTROPHIC VERB "CLUTCH / GRASP TIGHTLY" BUG IN ASIAN & SLAVIC LANGUAGES!
+   - Dump translated "fastener" through "fasten" as a verb meaning "to grasp, grip, or hold fast":
+     vi: "nắm chặt" (to grasp tightly!)
+     th: "จับ" (to grasp/catch!)
+     ko: "움켜쥐다" (to clutch tightly!)
+     ja: "掴む" (to grab/grip!)
+     kk: "қысу" (to squeeze/pinch!)
+     ar: "يشبك" (verb: to connect/clip!)
+     hr: "kopčati" (verb: to button/fasten!)
+   - Root Cause: MT parsed "fastener" as an active imperative/infinitive verb of grasping instead of a physical fastener hardware/device (clasps, zippers, snaps, bolts, rivets).
+   - Fixed: Restored noun status across all languages (ru: "застежка, фиксатор, крепежная деталь", de: "Verschluss, Schließe, Befestigungselement", pt: "fecho, prendedor, presilha", vi: "chốt khóa, móc gài, khóa cài", ja: "留め具、ファスナー、止め金具", ko: "조임쇠, 잠금장치, 결속구", kk: "бекіткіш, түймелегіш, қапсырма").
+
+4. Word 5158 (lash out): MASSIVE "JUMP / LEAP INTO THE AIR" MISTRANSLATION ACROSS 8 LANGUAGES!
+   - Dump translated "lash out" (to burst out in sudden anger or attack verbally/physically) as literally jumping:
+     es: "saltar" (to jump!)
+     fr: "bondir" (to leap!)
+     ro: "sări" (to jump!)
+     bg: "скок" (a jump!)
+     sl: "skok" (a jump!)
+     sv: "hoppa" (to jump!)
+     hr: "skočiti" (to jump!)
+     kk: "секіру" (to jump!)
+   - Root Cause: MT confused "lash out" with "leap out / jump out".
+   - Fixed: Calibrated across all locales to sudden verbal/physical outburst of anger or harsh criticism (ru: "набрасываться, срываться, обрушиваться с критикой", de: "um sich schlagen, ausrasten, losgehen auf", es: "arremeter, despotricar, abalanzarse", fr: "s'en prendre à, fustiger, bondir de rage", pt: "atacar verbalmente, agredir, esbravejar", ja: "激しく非難する、感情を爆発させる、食ってかかる").
+
+5. Word 5159 (squid): OCTOPUS CONFUSION IN CZECH
+   - Czech dump had "chobotnice" (which means octopus!). Squid is "oliheň" (or "krakatice" for giant squid).
+   - Fixed: cs calibrated to "oliheň, krakatice", sk to "kalamár, kalmár".
+
+6. Word 5160 (truffle): GREEK CORRUPTION BUG
+   - In Greek, truffle was translated as "ύτανο" (corrupted string).
+   - Fixed: Replaced with proper Greek "τρούφα" (troufa) and enriched to reflect both culinary subterranean fungus and confection.
+
+7. Words 5164, 5167, 5168, 5169 (idiomatic phrases): WIDESPREAD IMPERATIVE MOOD BUGS
+   - Dump translated verbal idioms into second-person imperatives:
+     Word 5164 (keep in touch): pl "utrzymuj kontakt", ro "păstrează legătura", hu "tartsd a kapcsolatot", et "hoia ühendust".
+     Word 5167 (climb the career ladder): ro "urcă pe scara carierei", hu "mássz fel a ranglétrán", el "ανεβείτε την επαγγελματική σας σκάλα", et "roni karjääriredelil".
+     Word 5168 (make ends meet): pl "wiązaj koniec z końcem", hu "járj ki a megélhetésedből" (nonsensical), et "tule ots otsaga kokku".
+     Word 5169 (make up one's mind): pl "podejmij decyzję", it "deciditi", ro "hotărăște-te", hu "dönts!", el "αποφασίστε", et "tee otsus", da "beslut dig", vi "quyết định đi".
+   - Fixed: Converted all verbal idioms into clean, neutral infinitive and reflexive verbal forms across all 35 languages.
+
+8. Words 5171 (vowel) and 5172 (consonant): GERMAN LOWERCASE BUG
+   - German common nouns "vokal" and "konsonant" were uncapitalized.
+   - Fixed: Corrected to "Vokal" and "Konsonant" with descriptive phonetic terms.
+
+9. Word 5174 (awake awoke awoken): KAZAKH TRANSITIVITY BUG
+   - Kazakh was given as "ояту" (causative/transitive: to awaken someone else), whereas "awake" is an intransitive verb.
+   - Fixed: Corrected to "ояну" (to awaken oneself).
+
+10. Word 5181 (mitigate): CATASTROPHIC SYSTEMIC "CULINARY / PHYSICAL TENDERIZING" BUG IN 18+ LOCALES!
+    - MT mistook "mitigate" (to reduce severity, harm, or risk) for physically tenderizing food or fabric:
+      ro: "a înmuia" (to soak bread in liquid or soften physically!)
+      hu: "megpuhít" (to cook until soft or tenderize meat!)
+      it: "ammorbidire" (to soften fabrics/meat!)
+      da: "blødgøre" (to plasticize or soften physically!)
+      lt: "suminkštinti" (to soften physically!)
+      cs: "zjemnit" (to soften/refine)
+      sk: "zjemniť" (to soften)
+      hr: "omekšati" (to soften)
+      sl: "omehčati" (to soften)
+      lv: "mīkstināt" (to soften)
+      hi: "नरम करना" (to make soft)
+      ar: "تليين" (to soften)
+      kk: "жұмсарту" (to soften)
+    - Root Cause: Conflation of "mitigate" with "soften" taken in an absurdly literal culinary/physical sense.
+    - Fixed: Calibrated across all locales to mitigating consequences, harm, and legal/financial risks (ru: "смягчать последствия, уменьшать, облегчать", de: "mildern, abschwächen, abfedern", es: "mitigar, atenuar, paliar", fr: "atténuer, mitiger, tempérer", pt: "mitigar, abrandar, amenizar", ro: "a atenua, a diminua efectele", hu: "enyhít, csillapít, mérsékel").
+
+11. Word 5182 (obscure): DUAL PART OF SPEECH (ADJECTIVE & VERB)
+    - Dump provided only adjectives in French ("obscur"), Polish ("niejasny"), Italian ("oscuro"), Portuguese ("obscuro"), Czech ("nejasný"), etc., despite the headword translation being a verb ("затемнять").
+    - Fixed: Included both key adjective senses (murky, unknown) and verb senses (darken, conceal, overshadow) across all locales.
+
+12. Word 5184 (resilient): SYSTEMIC DIVERGENCE BETWEEN "STUBBORN" AND "STABLE"
+    - Languages were sharply bifurcated between "stubborn/persistent" (bg: упорит, cs: vytrvalý, hu: kitartó, el: επίμονος, sl: vztrajen, lt: atkaklus) and "stable" (da: stabil, fi: vakaa, sv: stabil, hr: stabilan, lv: stabils, ar: مستقر, vi: ổn định, th: มั่นคง, ko: 안정적인, ja: 安定した, kk: тұрақты).
+    - Fixed: Standardized to authentic resilience—the capacity to rebound from adversity, withstand shock, and retain elasticity (ru: "устойчивый, жизнестойкий, упругий", de: "widerstandsfähig, belastbar, unverwüstlich", es: "resiliente, resistente, capaz de recuperarse", fr: "résilient, tenace, rebondissant", pt: "resiliente, flexível, resistente", zh: "适应力强的、有弹性的、能迅速恢复的").
+
+13. Word 5187 (versatile): MASSIVE "WORLDWIDE / GLOBAL" MISTRANSLATION BUG IN 15+ LANGUAGES!
+    - Dump translated "versatile" (multifaceted, adaptable) as "worldwide / global / universal":
+      el: "παγκόσμιος" (global / planetary!)
+      ar: "عالمي" (global / international!)
+      vi: "toàn cầu" (global!)
+      th: "สากล" (international / worldwide!)
+      hu: "egyetemes" (ecumenical / universal!)
+    - Root Cause: MT confused "versatile" with "universal" in the cosmological/geographical sense.
+    - Fixed: Calibrated to adaptable, multifunctional, and multi-talented across all 35 languages (ru: "разносторонний, многофункциональный, гибкий", de: "vielseitig einsetzbar, wandelbar, universell", fr: "polyvalent, versatile, aux multiples talents", es: "versátil, polifacético, multiuso", pt: "versátil, multifuncional, polivalente", ja: "多才な、用途の広い", zh: "多才多艺的、多功能的").
+
+14. Word 5189 (defy): POLAR OPPOSITE & NOUN CONFLATION BUGS!
+    - In French, dump provided "relever un défi" (TO ACCEPT A CHALLENGE - the exact reverse of defying someone!).
+    - In Italian ("sfida"), Portuguese ("desafio"), Hungarian ("kihívás"), Greek ("πρόκληση"), Arabic ("التحدي"), dump translated the noun "a challenge" rather than the transitive verb "to defy / openly disobey".
+    - In Kazakh, dump had "қиындық тудыру" (to cause difficulty!).
+    - Fixed: Calibrated to transitive active verbs meaning to openly disobey, resist, or dare (ru: "бросать вызов, открыто не подчиняться", de: "die Stirn bieten, trotzen, missachten", es: "desafiar, desobedecer abiertamente", fr: "braver, défier, résister ouvertement", pt: "desafiar, desobedecer abertamente", ar: "يتحدى، يجاهر بالعصيان").
+
+15. Word 5190 (abolish): MASSIVE UI DIALOG "CANCEL" BUTTON MISTRANSLATION!
+    - Dump translated "abolish" as the standard UI dialog box "Cancel" button:
+      hu: "mégsem" (dialog box button "Cancel" / "Never mind"!)
+      el: "ακύρωση" (UI button "Cancel"!)
+      sl: "prekliči" (imperative "Cancel"!)
+      et: "tühista" (imperative "Cancel"!)
+      it: "annulla" (imperative "Cancel"!)
+      es: "cancelar" (UI cancel!)
+      pt: "cancelar" (UI cancel!)
+      fr: "annuler" (UI cancel!)
+    - Root Cause: MT algorithm matched "abolish" to computer dialog cancellation.
+    - Fixed: Calibrated to formal legal and historical abolition of laws, institutions, and practices (ru: "упразднять, отменять (закон, обычай)", de: "abschaffen, aufheben", es: "abolir, suprimir, derogar", fr: "abolir, abroger, supprimer", pt: "abolir, extinguir, revogar", hu: "eltöröl, megszüntet törvényt", el: "καταργώ, εξαλείφω", zh: "废除、废止（制度或法律）").
+
+16. Word 5191 (alleviate): SYSTEMIC OPPOSITE / "PROMOTE / ACCELERATE" BUG IN 18+ LANGUAGES!
+    - Dump translated "alleviate" (to lessen pain or burden) as "facilitate, promote, foster, accelerate":
+      es: "facilitar" (to facilitate!)
+      fr: "faciliter" (to facilitate!)
+      it: "facilitare" (to facilitate!)
+      pt: "facilitar" (to facilitate!)
+      ro: "a facilita" (to facilitate!)
+      bg: "улеснявам" (to facilitate!)
+      cs: "usnadnit" (to facilitate!)
+      hu: "elősegít" (to promote / foster!)
+      el: "διευκολύνω" (to facilitate!)
+      et: "hõlbustama" (to facilitate!)
+      sv: "underlätta" (to facilitate!)
+      lv: "veicināt" (to promote / encourage!)
+      ar: "التيسير" (facilitation!)
+      vi: "tạo điều kiện" (to create conditions for / facilitate!)
+      th: "อำนวยความสะดวก" (to provide convenience / facilitate!)
+      ko: "촉진하다" (to promote / accelerate!)
+      ja: "促進する" (to promote / foster!)
+    - Root Cause: MT mistook relief of burden for easing a process (facilitating).
+    - Fixed: Calibrated strictly to easing, soothing, and reducing pain or distress across all locales (ru: "облегчать, смягчать (боль, страдания)", de: "lindern, mildern, erträglicher machen", es: "aliviar, mitigar, calmar", fr: "soulager, apaiser, atténuer", pt: "aliviar, aplacar, amenizar", ro: "a alina, a potoli, a diminua", ja: "和らげる、苦痛を軽減する", ko: "덜어주다, 완화하다").
+
+17. Word 5192 (allocate): "EPIDEMIC SPREAD / FLYER DISTRIBUTION" BUG
+    - Dump translated "allocate" as spreading disease, scattering rumors, or distributing pamphlets:
+      bg: "разпространявам" (spread news / distribute leaflets!)
+      hu: "terjeszt" (spread disease / publish!)
+      et: "levitama" (spread / circulate!)
+      lt: "platinti" (distribute brochures!)
+      lv: "izplatīt" (spread / disseminate!)
+      ko: "배포하다" (distribute leaflets/software!)
+    - Root Cause: Conflation of "allocate" with generic physical "distribution / dissemination".
+    - Fixed: Calibrated to assigning, earmarking, and budgeting resources/duties (ru: "выделять, распределять (ресурсы, бюджет)", de: "zuweisen, zuteilen, bereitstellen", es: "asignar, destinar, adjudicar", fr: "allouer, attribuer, affecter", pt: "alocar, destinar, reservar", zh: "分配、拔付、调配").
+
+18. Word 5194 (ascertain): SYSTEMIC "ESTABLISH AN INSTITUTION" BUG IN 15+ LANGUAGES!
+    - Dump translated "ascertain" (to determine/verify facts) as "clarify and establish / found an institution":
+      da: "præcisere, etablere" (clarify, establish!)
+      fi: "selventää, vahvistaa" (clarify, confirm!)
+      sv: "klargöra, etablera" (clarify, establish!)
+      hr: "razjasniti, uspostaviti" (clarify, establish!)
+      lv: "precizēt, noteikt" (specify, determine!)
+      hi: "स्पष्ट करना, स्थापित करना" (clarify, establish!)
+      ar: "التوضيح، التأسيس" (clarification, foundation!)
+      vi: "làm rõ, thiết lập" (clarify, establish!)
+      th: "ชี้แจง, จัดตั้ง" (clarify, establish!)
+      ko: "명확히 하다, 확립하다" (clarify, establish!)
+      ja: "明確にする、確立する" (clarify, establish!)
+      kk: "нақтылау, орнату" (clarify, install!)
+    - Root Cause: MT parsed "ascertain" as "make certain" -> "establish firmly".
+    - Fixed: Calibrated to finding out with certainty, verifying, and investigating facts (ru: "выяснять, удостоверяться, устанавливать точно", de: "ermitteln, feststellen, in Erfahrung bringen", es: "averiguar, cerciorarse, determinar con certeza", fr: "s'assurer de, vérifier, constater", pt: "averiguar, certificar-se, apurar", ja: "確かめる、突き止める", zh: "查明、查实、弄清楚").
+
+19. Word 5196 (augment): BIOLOGICAL PROLIFERATION CONFLATION
+    - Several languages in the dump translated "augment" (make greater) as cellular multiplication or biological reproduction:
+      es: "multiplicarse" (reflexive biological multiplication!)
+      lt: "daugintis" (to reproduce biologically!)
+      ar: "التكاثر" (biological proliferation!)
+      ko: "증식시키다" (to proliferate cells!)
+      ja: "増殖させる" (to propagate/proliferate cells!)
+    - Fixed: Calibrated to general expansion, supplementation, and increase in size, amount, or strength.
+
+20. Word 5197 (baffle): JIGSAW PUZZLE BUG
+    - In Danish, MT invented a non-existent verb "puslespille" (from the noun "puslespil" = jigsaw puzzle!).
+    - In Swedish, MT used "pussla" (which means assembling jigsaw puzzles or juggling schedules!).
+    - In Croatian, MT provided "zagonetka" (noun: riddle).
+    - In Estonian, MT provided "mõistatama" (to solve riddles / guess).
+    - Fixed: Calibrated to true bewilderment and utter perplexity (ru: "озадачивать, сбивать с толку, ставить в тупик", de: "verblüffen, vor ein Rätsel stellen", es: "desconcertar, dejar perplejo", fr: "déconcerter, désorienter complètement", pt: "desconcertar, deixar perplexo, intrigar", da: "forbløffe, gøre rådvild", sv: "göra svarslös, förbrylla").
+
+21. Word 5199 (culminate): DIPLOMATIC SUMMIT MEETING BUG!
+    - In Danish ("nå et topmøde") and Finnish ("saavuttaa huippukokouksen"), MT translated "summit" as a diplomatic conference of heads of state!
+    - Fixed: Calibrated to reaching a climax or crowning peak (ru: "достигать кульминации, завершаться апогеем", de: "gipfeln in, den Höhepunkt finden", es: "culminar en, tocar techo", fr: "aboutir à, culminer par", da: "nå sit højdepunkt, kulminere med", fi: "huipentua joksikin, saavuttaa huippunsa").
+
+22. Word 5200 (delegate): DUAL NOUN & VERB CALIBRATION
+    - Calibrated across all locales to cover both the verb "to entrust/delegate power" and the noun "a delegate/representative".

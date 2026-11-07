@@ -1,0 +1,188 @@
+Batch 4952-5001 Linguistic Audit and Calibration Report
+====================================================
+
+Summary:
+- Evaluated all 49 words (IDs 4952 to 5001, skipping missing ID 4990) from dump slice 'scripts/dump_4952_5001.json'.
+- Verified parts of speech, polysemy, false friends, homonyms, register, regional nuances, and grammatical agreement across EXACTLY 36 LOCALES (en headword + 35 target languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk).
+- Generated calibrated translations in 'scripts/apply_batch_4952_5001_calibrations.cjs'.
+
+Key Bugs Caught, Homonyms Fixed, and Translations Calibrated:
+------------------------------------------------------------
+
+1. Word 4962 (refuse /rɪˈfjuːz/): CATASTROPHIC HOMOGRAPH / NOUN CONFUSION (GARBAGE/TRASH) IN 15+ LANGUAGES!
+   - Dump translated the verb 'refuse' /rɪˈfjuːz/ (to decline, reject, withhold agreement) as the noun 'refuse' /ˈrɛfjuːs/ (trash, rubbish, debris, garbage) across half of the target languages!
+     ru: "отказывать, мусор"
+     it: "rifiuti, immondizia" (only trash/garbage nouns!)
+     pt: "recusar, lixo"
+     tr: "çöp, atık" (only garbage nouns!)
+     ro: "gunoi, deșeuri" (garbage nouns!)
+     bg: "боклук" (garbage!)
+     cs: "odpadky, smetí" (garbage!)
+     sk: "odpadky, smeti" (garbage!)
+     hu: "szemét, hulladék" (garbage!)
+     el: "απορρίμματα, σκουπίδια" (garbage!)
+     sl: "smeti, odpadki" (garbage!)
+     et: "prügi" (garbage!)
+     lt: "šiukšlės, atliekos" (garbage!)
+     lv: "atteikties, atkritumi"
+     da: "afvise, smide ud"
+     fi: "kieltäytyä, roskata"
+     sv: "vägra, skräpa"
+     hr: "odbiti, smeti"
+     kk: "бас тарту, қоқыс тастау"
+   - Root Cause: Stress/homograph confusion: MT failed to distinguish verb /rɪˈfjuːz/ from noun /ˈrɛfjuːs/.
+   - Calibration: Completely purged all garbage/trash references; calibrated strictly to genuine verbal forms for declining/rejecting across all 35 languages (e.g. ru: "отказываться, отвергать, отклонять", it: "rifiutare, respingere, ricusare", pt: "recusar, negar-se, rejeitar", tr: "reddetmek, geri çevirmek", cs: "odmítnout, zdráhat se, zamítnout").
+
+2. Word 4980 (rid rid rid): BIZARRE MULTI-LOCALE "DELIVERY" HALLUCINATION IN 16 LANGUAGES!
+   - The dump translated the irregular verb 'rid' (to free from, clear of, relieve of; get rid of) as "deliver, send, convey, hand over" in 16 languages!
+     it: "consegnare, liberare" ("consegnare" = deliver!)
+     bg: "да предаде, да освободи" ("да предаде" = hand over!)
+     el: "να παραδώσω, να απελευθερώσω" ("να παραδώσω" = deliver!)
+     sl: "izročiti, osvoboditi" ("izročiti" = deliver / hand over!)
+     et: "vabastama, toimetama" ("toimetama" = deliver!)
+     lv: "piegādāt, atbrīvot" ("piegādāt" = deliver!)
+     da: "levere, befri" ("levere" = deliver!)
+     fi: "toimittaa, vapauttaa" ("toimittaa" = deliver!)
+     sv: "leverera, befria" ("leverera" = deliver!)
+     hr: "isporučiti, osloboditi" ("isporučiti" = deliver!)
+     ar: "تسليم، تحرير" ("تسليم" = delivery!)
+     kk: "жеткізу, босату" ("жеткізу" = deliver!)
+     vi: "giao, giải phóng" ("giao" = deliver!)
+     th: "ส่งมอบ, ปล่อย" ("ส่งมอบ" = deliver!)
+     ko: "전달하다, 해방시키다" ("전달하다" = deliver!)
+     ja: "届ける、解放する" ("届ける" = deliver!)
+   - Root Cause: Hallucinatory cross-lingual association with "dispatch / deliver / rid".
+   - Calibration: Purged all delivery terms; calibrated accurately to "free from, relieve, eliminate, get rid of" across all locales (e.g. ru: "избавлять, освобождать, очищать", it: "liberare, sgombrare, sbarazzare", sv: "befria, göra sig av med, kvitta", ar: "يخلص، يحرر، يتخلص من", kk: "құтылу, арылту, босату").
+
+3. Word 4989 (came out): SYSTEMIC META-LABEL POLLUTION IN 18 LANGUAGES!
+   - The grammatical POS tag "phrasal verb" was literally appended into the user-facing translation strings across 18 languages:
+     ru: "вышел, фразовый глагол"
+     uk: "вийшов, фразове дієслово"
+     it: "è uscito, verbo frasale"
+     tr: "çıktı, deyimsel fiil"
+     sk: "vyšiel, frázové sloveso"
+     sl: "prišel ven, frazni glagol"
+     et: "tuli välja, fraasverb"
+     lt: "išėjo, frazinis veiksmažodis"
+     lv: "iznāca, frāzes darbības vārds"
+     da: "kom ud, fraseudsagnsord"
+     fi: "tuli ulos, fraasiverbi"
+     sv: "kom ut, frasverb"
+     hr: "izašao, frazalni glagol"
+     hi: "बाहर आया, वाक्यांश क्रिया"
+     kk: "шықты, фразалық етістік"
+     id: "keluar, kata kerja frasa"
+     vi: "xuất hiện, cụm động từ"
+     ko: "나왔다, 구동사"
+   - Calibration: Completely scrubbed all grammatical meta-labels; enriched with natural past-tense meanings (emerged, published/released, became known) in all 35 languages.
+
+4. Word 4992 (should): CONTAMINATED HALLUCINATED PHRASE ("IT WOULD BE WORTH IT") IN 18 LANGUAGES!
+   - Machine translation hallucinated a long appended clause "it would be worth it / it would be worth the trouble" and attached it to the modal auxiliary "should" across 18 languages:
+     ro: "ar trebui să fie, ar merita"
+     bg: "така трябва да бъде, струва си"
+     cs: "mělo by to být, stálo by to za to"
+     sk: "malo by to byť, stálo by to za to"
+     hu: "annak kellene lennie, megérné"
+     el: "έτσι θα έπρεπε, θα άξιζε τον κόπο"
+     sl: "tako bi moralo biti, vredno bi bilo"
+     et: "see peaks nii olema, see oleks seda väärt"
+     lt: "taip ir turėtų būti, būtų verta"
+     lv: "vajadzētu, tas būtu tā vērts"
+     da: "burde, det ville være det værd"
+     fi: "pitäisi, se olisi sen arvoista"
+     sv: "borde, det skulle vara värt det"
+     hr: "trebao bi, vrijedilo bi"
+     ar: "ينبغي، سيكون الأمر يستحق العناء"
+     kk: "керек, оған тұрарлық болар еді"
+     vi: "nên, nó sẽ đáng giá"
+     th: "ควร มันคุ้มค่า"
+   - Calibration: Excised all extraneous "worth it" phrasings; standardized to clean modal auxiliaries of advice, duty, and expectation across all 35 locales (e.g. ru: "следует, стоило бы, должен", cs: "měl by, mělo by se, slušelo by se", ar: "ينبغي، يجب، يتعين", sv: "borde, skulle", kk: "керек, қажет, тиіс").
+
+5. Word 4968 (require): ECONOMIC "MARKET DEMAND" (SUPPLY AND DEMAND) ERROR IN 9 LANGUAGES!
+   - Dump translated the verb 'require' (need, demand, call for) as economic market demand (nouns for consumer/economic demand):
+     ro: "cerere" (noun: economic demand)
+     bg: "търсене" (noun: market demand as in supply & demand)
+     sk: "dopyt" (noun: economic demand)
+     hu: "kereslet" (noun: economic demand)
+     el: "ζήτηση" (noun: economic demand)
+     sl: "povpraševanje" (noun: economic demand)
+     et: "nõudlus" (noun: economic demand)
+     lt: "paklausa" (noun: economic demand)
+     it: "richiesta" (noun)
+   - Calibration: Replaced economic demand nouns with genuine action verbs meaning to require, necessitate, or demand (e.g. ro: "a cere, a necesita, a impune", hu: "megkövetelni, igényelni, kívánni", cs: "vyžadovat, požadovat, potřebovat", el: "απαιτώ, χρειάζομαι, επιβάλλω").
+
+6. Word 4971 (settle): IMPERATIVE "CALM DOWN!" MISTRANSLATION ACROSS 11 LANGUAGES!
+   - Dump translated 'settle' as the imperative command "calm down!":
+     it: "calmati" (imperative command)
+     tr: "Sakin ol, sakin ol" (duplicated imperative!)
+     ro: "liniștește-te" (imperative command)
+     bg: "успокои се" (calmed down)
+     hu: "lecsillapodni" (calm down)
+     el: "ηρεμώ" (calm down)
+     sl: "umiri se" (calm down)
+     et: "maha rahunema" (calm down)
+     lt: "nusiraminti" (calm down)
+     lv: "nomierināties, nokārtoties" (calm down)
+     hr: "riješiti se, smiriti se" (calm down)
+   - Calibration: Restored the core senses of 'settle': to establish residence (поселиться, обосноваться), to resolve a conflict or dispute (урегулировать, уладить), and to settle an account across all 35 languages.
+
+7. Word 5001 (as a matter of fact): "STRICTLY SPEAKING" FALSE EQUIVALENCE IN 11 LANGUAGES!
+   - Dump translated the idiom 'as a matter of fact' (actually, in fact, in reality, to tell the truth) as "strictly speaking":
+     da: "strengt taget" (strictly speaking!)
+     fi: "tarkkaan ottaen" (strictly speaking!)
+     sv: "strikt taget" (strictly speaking!)
+     hr: "strogo govoreći" (strictly speaking!)
+     kk: "қатаң айтқанда" (strictly speaking!)
+     vi: "nói đúng ra" (strictly speaking!)
+     th: "พูดอย่างเคร่งครัด" (strictly speaking!)
+     ko: "엄밀히 말하면" (strictly speaking!)
+     ja: "厳密に言えば" (strictly speaking!)
+     ar: "بالمعنى الدقيق للكلمة" (strictly speaking!)
+     lv: "stingri ņemot" (strictly speaking!)
+   - Calibration: Calibrated accurately to expressions of actuality/reality: "фактически, на самом деле, по правде говоря", "in der Tat, tatsächlich", "de hecho, en realidad", "en fait, à vrai dire", "faktiskt, i själva verket", "사실은, 실은", "実は、実際のところ", "事实上、其实", "шындығында, іс жүзінде".
+
+8. Word 4954 (please): DUPLICATION ARTIFACTS AND DUAL-POS CALIBRATION!
+   - Dump had doubled words from generative loop glitch: "per favore per favore", "proszę proszę", "lütfen lütfen", "te rog te rog", "prosím prosím", "παρακαλώ παρακαλώ", "prosim prosim", "palun palun".
+   - Calibration: Removed hallucinated repetitions; preserved and clearly delineated both the polite discourse particle ("пожалуйста", "s'il vous plaît", "por favor") and the transitive verb ("угождать, радовать", "plaire", "complacer, agradar", "erfreuen").
+
+9. Word 4975 (thank): INTERJECTION VS VERB CONFLATION!
+   - In 9 languages, the verb 'to thank' (express gratitude) was translated as conversational "Thank you!" / "Thanks":
+     it: "Grazie", ro: "mulțumesc", bg: "благодаря", sk: "ďakujem", hu: "köszönet" (noun), el: "ευχαριστώ", sl: "hvala", et: "tänan", lt: "ačiū".
+   - Calibration: Standardized to proper verb infinitives alongside recognized expressions of thanking (e.g. ringraziare, a mulțumi, ďakovať, megköszönni, zahvaliti se, dėkoti).
+
+10. Word 4983 (underpants): GENDER RESTRICTION AND PANTIES MISTRANSLATION!
+    - The word 'underpants' was erroneously restricted to female panties ("ملابس داخلية نسائية", "पैंटी", "trusser", "trosor", "pikkuhousut", "gaćice", "팬티", "パンティー").
+    - Calibration: Generalized to underwear / briefs / underpants covering both general and menswear contexts across all locales.
+
+11. Word 4985 (virgin): GENDER ASYMMETRY AND ADJECTIVAL SENSE!
+    - Russian had only male "девственник", Polish had only female "dziewica", Czech/Slovak had only female "panna", Asian locales defaulted solely to female virgin.
+    - Calibration: Balanced with both genders (девственник / девственница; panic / panna; dziewica / prawiczek) and incorporated the metaphorical adjectival sense (virgin forest / untouched / pristine / unberührt / virginal).
+
+12. Word 4995 (good-for-nothing): OPPOSITE MEANING & CALQUE ERRORS!
+    - Estonian had "millekski hea" which means "good for something" (the exact opposite meaning!).
+    - Bulgarian had "добър за нищо" (unnatural literal calque).
+    - Swedish had "duglig för ingenting" (grammatically unidiomatic calque).
+    - Calibration: Fixed Estonian to "kõlbmatu; laiskvorst, muidusööja", Bulgarian to "безполезен; нехранимайко, хаймана", Swedish to "oduglig; odåga, lathund", and added both adjective and noun senses across all locales.
+
+13. Word 4997 (did you get?): DUAL-SENSE COMPREHENSION!
+    - English "did you get?" colloquially means either "did you receive/obtain?" or "did you understand?". The dump was split down the middle with 50% omitting "understand" and 50% omitting "receive".
+    - Calibration: Harmonized both senses across all 35 languages ("ты получил? ты понял?", "¿lo recibiste? ¿entendiste?", "hast du es bekommen? hast du verstanden?", "tu as reçu ? tu as compris ?", etc.).
+
+14. Word 5000 (nephew): KINSHIP ASYMMETRY IN COLLATERAL LINEAGE!
+    - In languages with bifurcated kinship terms for brother's son vs sister's son:
+      - Polish: dump had only "siostrzeniec" (sister's son), omitting "bratanek" (brother's son). Calibrated to "bratanek, siostrzeniec".
+      - Swedish: dump had only "brorson", omitting "systerson". Calibrated to "brorson, systerson".
+      - Finnish: dump had only "veljenpoika", omitting "sisarenpoika". Calibrated to "veljenpoika, sisarenpoika".
+      - Estonian: dump had only "vennapoeg", omitting "õepoeg". Calibrated to "vennapoeg, õepoeg".
+      - Latvian: dump had only "brāļadēls", omitting "māsasdēls". Calibrated to "brāļadēls, māsasdēls".
+      - Hindi / Urdu: paired "भतीजा, भांजा" / "بھتیجا، بھانجا".
+      - Arabic: expanded "ابن أخ" to "ابن الأخ، ابن الأخت".
+
+15. Verb Conjugations and Irregular Verbs:
+    - Words 4979 (cast cast cast), 4980 (rid rid rid), 4981 (burn burnt burnt), 4982 (shine shone shone): Nouns representing burn wounds ("έγκαυμα", "opeklina", "изгаряне") and gloss/sheen ("splendore", "strălucire", "блясък", "lesk", "λάμψη", "sijaj") were corrected to action verbs in the infinitive.
+
+Verification:
+- File 'scripts/apply_batch_4952_5001_calibrations.cjs' validated syntactically and semantically with Node.js.
+- All 49 words present and confirmed matching the dump slice IDs.
+- Exactly 35 target languages present for each entry (total 36 locales including English headword).
+- No builds of APK or AAB executed.
