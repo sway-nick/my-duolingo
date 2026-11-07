@@ -1,0 +1,1891 @@
+Linguistic Audit and Calibration Report for Batch 2002–2051 (50 words)
+Supported Locales: EXACTLY 36 LOCALES (35 target languages + en)
+========================================================================
+
+SUMMARY OF CRITICAL ANOMALIES & SYSTEMIC BUGS FIXED:
+1. Severe Portuguese (pt) Data Offset / Scrambling:
+   - ID 2008 (reduce) had pt="mudança" (shifted from change)
+   - ID 2009 (regular) had pt="passar" (shifted from pass)
+   - ID 2010 (real) had pt="reduzir" (shifted from reduce)
+   - ID 2011 (compare) had pt="normal" (shifted from regular)
+   - ID 2012 (define) had pt="real" (shifted from real)
+   - ID 2017 (set) had pt="incluem" (shifted from include)
+   - ID 2019 (appear) had pt="definir" (shifted from define)
+   - ID 2020 (stay) had pt="tratar" (shifted from treat)
+   - ID 2022 (care) had pt="fique" (shifted from stay)
+   - ID 2023 (late) had pt="esperar" (shifted from expect)
+   - ID 2024 (sick) had pt="cuidado" (shifted from care)
+   - ID 2025 (safe) had pt="atrasado" (shifted from late)
+   - ID 2028 (good) had pt="livre" (shifted from free)
+   - ID 2033 (stupid) had pt="último" (shifted from last)
+   - ID 2034 (clothes) had pt="pano" (shifted from cloth)
+   - ID 2035 (defend) had pt="estúpido na vida" (shifted from stupid)
+   - ID 2038 (less) had pt="compreender" (shifted from realize)
+   - ID 2041 (immediately) had pt="ruptura" (shifted from break)
+   - ID 2042 (probably) had pt="sozinho" (shifted from alone)
+   - ID 2048 (top) had pt="ah" (garbage)
+   - ID 2049 (by) had pt="inteligência" (shifted from intelligence)
+   All Portuguese entries restored with Brazilian nuances (e.g. troco, ruim, burro, roupas, cumeada).
+
+2. Polysemy & False Friend Bugs:
+   - ID 2006 (change): Russian gloss "изменять, сдача" resulted in "сдача" (change / coins) being machine-translated as "surrender/capitulation" in 16 languages (cs: kapitulace, sk: odovzdanie sa, hu: megadás, el: υποταγή, sl: predaja, et: alistumine, lt: pasidavimas, da: overgive, fi: antautua, sv: ge upp, hr: predati se, lv: padoties, vi: đầu hàng, th: ยอมจำนน, ko: 항복하다, ja: 降伏する, kk: берілу). Calibrated to proper change/currency terms across all languages.
+   - ID 2016 (finger): Japanese had "指す" (sasu, verb "to point") instead of the noun "指" (yubi, finger). Calibrated.
+   - ID 2033 (stupid): Russian gloss "тупой по жизни, дебил" caused "тупой" (blunt/dull) to be mistranslated as "boring in life" in Nordic and Asian languages (da: kedelig i livet, fi: tylsä elämässä, sv: tråkig i livet, hr: dosadan u životu, lv: garlaicīgs dzīvē, ja: 人生がつまらない, ko: 인생이 지루한, th: น่าเบื่อในชีวิต). Calibrated to natural insults/adjectives for foolish/stupid.
+   - ID 2034 (clothes): Confused with "cloth" (fabric/rags) in 11 languages (it: stoffa, pt: pano, ro: pânză, bg: плат, cs: tkanina, sk: látka, hu: szövet, el: πανί, sl: krpo, et: riie, lt: audinys). Calibrated to garments/clothes.
+   - ID 2049 (by): Russian gloss "кем, чем, на, ко времени" caused "чем" (instrumental of "что") to be mistranslated as the conjunction "than" (cs: než, sk: než, hu: mint, bg: отколкото, ro: decât, da: end, fi: kuin, sv: än, th: กว่า, kk: қарағанда). Calibrated to proper prepositions.
+   - ID 2051 (watch): In 18 languages, only the noun wristwatch was translated, omitting the verb to watch/observe. Calibrated to include both verb and noun meanings.
+
+========================================================================
+DETAILED WORD-BY-WORD CALIBRATION LOG (2002–2051):
+========================================================================
+
+ID 2002 (throw threw thrown):
+  ru: бросать, кидать
+  uk: кидати, жбурляти
+  de: werfen, schleudern
+  es: tirar, lanzar
+  fr: lancer, jeter
+  pl: rzucać, ciskać
+  it: lanciare, gettare
+  tr: fırlatmak, atmak
+  pt: lançar, atirar, arremessar
+  ro: a arunca, arunca
+  bg: хвърлям, мятам
+  cs: házet, hodit
+  sk: hádzať, hodiť
+  hu: dob, hajít
+  el: ρίχνω, πετώ
+  sl: vreči, metati
+  et: viskama, heitma
+  lt: mesti, sviesti
+  da: kaste, smide
+  fi: heittää
+  sv: kasta, slänga
+  hr: bacati, baciti
+  lv: mest, sviest
+  hi: फेंकना, उछालना
+  ar: يرمي، يلقي
+  fa: پرتاب کردن، انداختن
+  ur: پھینکنا، اچھالنا
+  id: melempar, membuang
+  vi: ném, quăng
+  th: โยน, ขว้าง
+  ko: 던지다
+  ja: 投げる
+  zh: 扔、投掷
+  bn: নিক্ষেপ করা, ছোড়া
+  kk: лақтыру, тастау
+
+ID 2003 (steal stole stolen):
+  ru: воровать, красть
+  uk: красти, викрадати
+  de: stehlen, entwenden
+  es: robar, hurtar
+  fr: voler, dérober
+  pl: kraść, ukraść
+  it: rubare, sottrarre
+  tr: çalmak, aşırmak
+  pt: roubar, furtar
+  ro: a fura, fura
+  bg: крада, открадвам
+  cs: krást, ukrást
+  sk: kradnúť, ukradnúť
+  hu: lop, ellop
+  el: κλέβω
+  sl: krasti, ukrasti
+  et: varastama
+  lt: vogti, pavogti
+  da: stjæle
+  fi: varastaa
+  sv: stjäla
+  hr: krasti, ukrasti
+  lv: zagt, nozagt
+  hi: चुराना, चोरी करना
+  ar: يسرق، يختلس
+  fa: دزدیدن، سرقت کردن
+  ur: چرانا، چوری کرنا
+  id: mencuri, merampas
+  vi: ăn cắp, trộm cắp
+  th: ขโมย, ลักขโมย
+  ko: 훔치다, 절도하다
+  ja: 盗む、くすねる
+  zh: 偷、盗窃
+  bn: চুরি করা, অপহরণ করা
+  kk: ұрлау, жымқыру
+
+ID 2004 (victory):
+  ru: победа, триумф
+  uk: перемога, тріумф
+  de: Sieg, Triumph
+  es: victoria, triunfo
+  fr: victoire, triomphe
+  pl: zwycięstwo, triumf
+  it: vittoria, trionfo
+  tr: zafer, galibiyet
+  pt: vitória, triunfo
+  ro: victorie, triumf
+  bg: победа, триумф
+  cs: vítězství, triumf
+  sk: víťazstvo, triumf
+  hu: győzelem, diadal
+  el: νίκη, θρίαμβος
+  sl: zmaga, slavje
+  et: võit, triumf
+  lt: pergalė, triumfas
+  da: sejr, triumf
+  fi: voitto
+  sv: seger, triumf
+  hr: pobjeda, trijumf
+  lv: uzvara, triumfs
+  hi: जीत, विजय
+  ar: نصر، انتصار، فوز
+  fa: پیروزی، فتح
+  ur: فتح، کامیابی، نصرت
+  id: kemenangan, kejayaan
+  vi: chiến thắng, thắng lợi
+  th: ชัยชนะ
+  ko: 승리, 승전
+  ja: 勝利、白星
+  zh: 胜利、获胜
+  bn: বিজয়, জয়
+  kk: жеңіс, үстемдік
+
+ID 2005 (same):
+  ru: такой же, тот же, одинаковый
+  uk: такий самий, той самий, однаковий
+  de: gleich, derselbe, dieselbe
+  es: mismo, igual, idéntico
+  fr: même, le même, identique
+  pl: ten sam, taki sam, jednakowy
+  it: stesso, lo stesso, uguale
+  tr: aynı, aynısı, farksız
+  pt: mesmo, o mesmo, igual
+  ro: același, aceeași, la fel
+  bg: същият, еднакъв
+  cs: stejný, tentýž
+  sk: rovnaký, ten istý
+  hu: ugyanaz, azonos, egyforma
+  el: ίδιος, ο ίδιος
+  sl: enak, isti
+  et: sama, seesama, ühesugune
+  lt: tas pats, vienodas
+  da: samme, ens
+  fi: sama, samanlainen
+  sv: samma, likadan
+  hr: isti, jednak
+  lv: tas pats, vienāds
+  hi: वही, समान, एक जैसा
+  ar: نفس، عينه، مماثل
+  fa: همان، یکسان، مشابه
+  ur: وہی، ایک جیسا، یکساں
+  id: sama, serupa
+  vi: giống nhau, cùng một
+  th: เหมือนกัน, เดียวกัน
+  ko: 같은, 동일한
+  ja: 同じ、同一の
+  zh: 相同的、同一的、一样的
+  bn: একই, একরূপ
+  kk: бірдей, дәл сондай
+
+ID 2006 (change):
+  ru: изменять, менять, сдача (деньги)
+  uk: змінювати, зміна, решта
+  de: ändern, verändern, Wechselgeld
+  es: cambiar, cambio, vuelto
+  fr: changer, changement, monnaie
+  pl: zmieniać, zmiana, reszta
+  it: cambiare, cambiamento, resto
+  tr: değiştirmek, değişim, bozuk para
+  pt: mudar, mudança, troco
+  ro: a schimba, schimbare, rest (bani)
+  bg: променям, промяна, ресто
+  cs: měnit, změna, drobné (peníze)
+  sk: meniť, zmena, výdavok
+  hu: változtat, változás, visszajáró
+  el: αλλάζω, αλλαγή, ρέστα
+  sl: spremeniti, sprememba, drobiž
+  et: muutma, muutus, tagastusraha
+  lt: keisti, pakeitimas, grąža
+  da: ændre, forandring, byttepenge
+  fi: muuttaa, muutos, vaihtoraha
+  sv: ändra, förändring, växel
+  hr: promijeniti, promjena, sitniš
+  lv: mainīt, pārmaiņa, atlikums
+  hi: बदलना, परिवर्तन, छुट्टे पैसे
+  ar: يغير، تغيير، فكة
+  fa: تغییر دادن، دگرگونی، پول خرد
+  ur: تبدیل کرنا، تبدیلی، بقایا رقم
+  id: mengubah, perubahan, uang kembalian
+  vi: thay đổi, sự biến đổi, tiền lẻ
+  th: เปลี่ยน, การเปลี่ยนแปลง, เงินทอน
+  ko: 바꾸다, 변화, 잔돈
+  ja: 変える、変化、小銭
+  zh: 改变、变化、零钱
+  bn: পরিবর্তন করা, রূপান্তর, ভাংতি টাকা
+  kk: өзгерту, өзгеріс, қайтарым ақша
+
+ID 2007 (pass):
+  ru: проходить, передавать, сдавать (экзамен)
+  uk: проходити, передавати, складати (іспит)
+  de: bestehen, passieren, weitergeben
+  es: pasar, aprobar, transmitir
+  fr: passer, réussir (examen), transmettre
+  pl: przechodzić, mijać, zdać, podawać
+  it: passare, superare (esame), trasmettere
+  tr: geçmek, geçirmek, vermek
+  pt: passar, aprovar, transmitir
+  ro: a trece, a promova, a transmite
+  bg: минавам, преминавам, подавам, вземам изпит
+  cs: projít, předat, složit (zkoušku)
+  sk: prejsť, odovzdať, spraviť (skúšku)
+  hu: átmegy, továbbad, letesz (vizsgát)
+  el: περνώ, προσπερνώ, μεταβιβάζω
+  sl: preiti, podati, opraviti (izpit)
+  et: mööduma, edasi andma, läbima
+  lt: praeiti, perduoti, išlaikyti (egzaminą)
+  da: passere, videregive, bestå
+  fi: ohittaa, siirtää, läpäistä
+  sv: passera, skicka vidare, klara
+  hr: proći, dodati, položiti (ispit)
+  lv: iet garām, padot, nokārtot
+  hi: गुजरना, आगे बढ़ाना, उत्तीर्ण होना
+  ar: يمر، يمرر، يجتاز (امتحان)
+  fa: عبور کردن، پاس دادن، قبول شدن
+  ur: گزرنا، آگے بڑھانا، پاس ہونا
+  id: melewati, meneruskan, lulus
+  vi: vượt qua, chuyển giao, đỗ (kỳ thi)
+  th: ผ่าน, ส่งต่อ, ผ่าน (การสอบ)
+  ko: 지나가다, 건네다, 통과하다
+  ja: 通り過ぎる、渡す、合格する
+  zh: 通过、传递、及格
+  bn: অতিক্রম করা, পার হওয়া, পাস করা
+  kk: өту, беру, тапсыру (емтиханды)
+
+ID 2008 (reduce):
+  ru: уменьшать, сокращать, снижать
+  uk: зменшувати, скорочувати, знижувати
+  de: reduzieren, verringern, mindern
+  es: reducir, disminuir, achicar
+  fr: réduire, diminuer, baisser
+  pl: zmniejszać, redukować, obniżać
+  it: ridurre, diminuire, calare
+  tr: azaltmak, kısmak, düşürmek
+  pt: reduzir, diminuir, abater
+  ro: a reduce, a micșora, a diminua
+  bg: намалявам, съкращавам, снижавам
+  cs: zmenšit, snížit, zredukovat
+  sk: zmenšiť, znížiť, zredukovať
+  hu: csökkent, mérsékel, kisebbít
+  el: μειώνω, ελαττώνω, περιορίζω
+  sl: zmanjšati, skrčiti, omejiti
+  et: vähendama, kahandama, kärpima
+  lt: mažinti, sumažinti, apriboti
+  da: reducere, formindske, sænke
+  fi: vähentää, pienentää, alentaa
+  sv: minska, reducera, sänka
+  hr: smanjiti, reducirati, umanjiti
+  lv: samazināt, mazināt, ierobežot
+  hi: कम करना, घटाना, न्यून करना
+  ar: يقلل، يخفض، ينقص
+  fa: کاهش دادن، کم کردن، کاستن
+  ur: کم کرنا، گھٹانا، محدود کرنا
+  id: mengurangi, menurunkan, memangkas
+  vi: làm giảm, thu nhỏ, cắt giảm
+  th: ลดลง, ทำให้น้อยลง, ย่อ
+  ko: 줄이다, 감소시키다, 낮추다
+  ja: 減らす、削減する、縮小する
+  zh: 减少、缩小、降低
+  bn: কমানো, হ্রাস করা, সংক্ষেপ করা
+  kk: азайту, қысқарту, төмендету
+
+ID 2009 (regular):
+  ru: регулярный, правильный, обычный
+  uk: регулярний, правильний, звичайний
+  de: regelmäßig, vorschriftsmäßig, Stamm-
+  es: regular, habitual, normal
+  fr: régulier, habituel, ordinaire
+  pl: regularny, miarowy, zwykły
+  it: regolare, abituale, normale
+  tr: düzenli, kurala uygun, olağan
+  pt: regular, habitual, periódico
+  ro: regulat, periodic, obișnuit
+  bg: редовен, правилен, обичаен
+  cs: pravidelný, stálý, řádný
+  sk: pravidelný, stály, bežný
+  hu: rendszeres, szabályos, állandó
+  el: τακτικός, κανονικός, σταθερός
+  sl: reden, običajen, pravilen
+  et: korrapärane, regulaarne, tavaline
+  lt: reguliarus, dėsningas, įprastas
+  da: regelmæssig, regulær, fast
+  fi: säännöllinen, tavallinen, kiinteä
+  sv: regelbunden, ordinär, vanlig
+  hr: redovit, stalan, pravilan
+  lv: regulārs, pastāvīgs, parasts
+  hi: नियमित, सामान्य, व्यवस्थित
+  ar: منتظم، دوري، اعتيادي
+  fa: منظم، باقاعده، معمول
+  ur: باقاعدہ، معمول کا، یکساں
+  id: teratur, berkala, biasa
+  vi: đều đặn, thông thường, định kỳ
+  th: สม่ำเสมอ, เป็นประจำ, ปกติ
+  ko: 정기적인, 규칙적인, 평범한
+  ja: 規則正しい、定期的な、通常の
+  zh: 定期的、合乎规则的、普通的
+  bn: নিয়মিত, সুশৃঙ্খল, সাধারণ
+  kk: тұрақты, жүйелі, кәдімгі
+
+ID 2010 (real):
+  ru: настоящий, реальный, подлинный
+  uk: справжній, реальний, дійсний
+  de: echt, tatsächlich, wirklich
+  es: real, verdadero, auténtico
+  fr: vrai, réel, authentique
+  pl: prawdziwy, realny, autentyczny
+  it: reale, vero, autentico
+  tr: gerçek, hakiki, asıl
+  pt: real, verdadeiro, autêntico
+  ro: real, adevărat, autentic
+  bg: истински, реален, автентичен
+  cs: skutečný, opravdový, reálný
+  sk: skutočný, opravdivý, reálny
+  hu: valódi, igazi, valós
+  el: πραγματικός, αληθινός, γνήσιος
+  sl: resničen, pravi, dejanski
+  et: tõeline, tegelik, päris
+  lt: tikras, realus, autentiškas
+  da: ægte, virkelig, faktisk
+  fi: todellinen, aito, tosi
+  sv: verklig, äkta, reell
+  hr: stvaran, pravi, istinit
+  lv: īsts, reāls, patiess
+  hi: असली, वास्तविक, यथार्थ
+  ar: حقيقي، فعلي، واقعي
+  fa: واقعی، حقیقی، اصل
+  ur: اصلی، حقیقی، واقعی
+  id: nyata, asli, sungguhan
+  vi: thật, có thật, thực tế
+  th: จริง, แท้, ของแท้
+  ko: 진짜의, 실제의, 진정한
+  ja: 本物の、実際の、真の
+  zh: 真正的、真实的、实际的
+  bn: আসল, বাস্তব, খাঁটি
+  kk: нақты, шынайы, шын
+
+ID 2011 (compare):
+  ru: сравнивать, сопоставлять
+  uk: порівнювати, зіставляти
+  de: vergleichen, gegenüberstellen
+  es: comparar, cotejar
+  fr: comparer, confronter
+  pl: porównywać, zestawiać
+  it: confrontare, paragonare, comparare
+  tr: karşılaştırmak, kıyaslamak
+  pt: comparar, confrontar
+  ro: a compara, a confrunta
+  bg: сравнявам, съпоставям
+  cs: srovnávat, porovnávat
+  sk: porovnávať, prirovnávať
+  hu: összehasonlít, összevet
+  el: συγκρίνω, παραβάλλω
+  sl: primerjati, soočati
+  et: võrdlema, kõrvutama
+  lt: lyginti, palyginti
+  da: sammenligne, jævnføre
+  fi: verrata, vertailla
+  sv: jämföra, likna vid
+  hr: usporediti, uspoređivati
+  lv: salīdzināt, pretstatīt
+  hi: तुलना करना, मिलान करना
+  ar: يقارن، يوازن
+  fa: مقایسه کردن، سنجیدن
+  ur: موازنہ کرنا، مقابلہ کرنا
+  id: membandingkan, memperbandingkan
+  vi: so sánh, đối chiếu
+  th: เปรียบเทียบ, เทียบเคียง
+  ko: 비교하다, 대조하다
+  ja: 比較する、比べる
+  zh: 比较、对照、比喻
+  bn: তুলনা করা, পরখ করা
+  kk: салыстыру, салғастыру
+
+ID 2012 (define):
+  ru: определять, формулировать
+  uk: визначати, формулювати
+  de: definieren, festlegen, bestimmen
+  es: definir, precisar, delimitar
+  fr: définir, caractériser, préciser
+  pl: definiować, określać, ustalać
+  it: definire, precisare, stabilire
+  tr: tanımlamak, tarif etmek, belirlemek
+  pt: definir, determinar, delimitar
+  ro: a defini, a preciza, a determina
+  bg: дефинирам, определям
+  cs: definovat, vymezit, stanovit
+  sk: definovať, vymedziť, určiť
+  hu: meghatároz, definiál, értelmez
+  el: ορίζω, καθορίζω, προσδιορίζω
+  sl: definirati, določiti, opredeliti
+  et: määratlema, defineerima
+  lt: apibrėžti, nusakyti, nustatyti
+  da: definere, præcisere, afgrænse
+  fi: määritellä, täsmentää
+  sv: definiera, fastställa, avgränsa
+  hr: definirati, odrediti, opisati
+  lv: definēt, noteikt, formulēt
+  hi: परिभाषित करना, अर्थ बताना
+  ar: يحدد، يعرّف، يصف
+  fa: تعریف کردن، مشخص کردن
+  ur: تعریف کرنا، واضح کرنا
+  id: mendefinisikan, menentukan, memberi batasan
+  vi: định nghĩa, xác định rõ
+  th: นิยาม, กำหนดความหมาย
+  ko: 정의하다, 규정하다
+  ja: 定義する、明確にする
+  zh: 定义、阐明、界定
+  bn: সংজ্ঞায়িত করা, নির্ধারণ করা
+  kk: анықтау, сипаттау, айқындау
+
+ID 2013 (assume):
+  ru: предполагать, допускать
+  uk: припускати, вважати
+  de: annehmen, vermuten, voraussetzen
+  es: suponer, asumir, conjeturar
+  fr: supposer, présumer, assumer
+  pl: przypuszczać, zakładać
+  it: supporre, presumere, assumere
+  tr: varsaymak, farz etmek, üstlenmek
+  pt: presumir, supor, assumir
+  ro: a presupune, a bănui, a-și asuma
+  bg: предполагам, допускам
+  cs: předpokládat, domnívat se
+  sk: predpokladať, domnievať sa
+  hu: feltételez, gyanít, felvesz
+  el: υποθέτω, εικάζω, θεωρώ
+  sl: predpostavljati, domnevati
+  et: eeldama, oletama
+  lt: daryti prielaidą, manyti, spėti
+  da: antage, formode, gå ud fra
+  fi: olettaa, otaksua
+  sv: anta, förutsätta, förmoda
+  hr: pretpostaviti, uzeti za pretpostavku
+  lv: pieņemt, uzskatīt, pieļaut
+  hi: मान लेना, कल्पना करना
+  ar: يفترض، يرجح، يتوقع
+  fa: فرض کردن، پنداشتن
+  ur: فرض کرنا، قیاس کرنا
+  id: mengasumsikan, mengira, menganggap
+  vi: cho rằng, giả định, ngộ nhận
+  th: สันนิษฐาน, สมมุติ, คาดการณ์
+  ko: 추정하다, 가정하다, 생각하다
+  ja: 仮定する、思い込む、前提とする
+  zh: 假设、假定、设想
+  bn: ধরে নেওয়া, অনুমান করা
+  kk: болжау, шамалау, жорамалдау
+
+ID 2014 (prove):
+  ru: доказывать, подтверждать
+  uk: доводити, засвідчувати
+  de: beweisen, nachweisen, belegen
+  es: probar, demostrar, acreditar
+  fr: prouver, démontrer, attester
+  pl: dowodzić, udowadniać, potwierdzać
+  it: provare, dimostrare, attestare
+  tr: kanıtlamak, ispatlamak
+  pt: provar, comprovar, demonstrar
+  ro: a dovedi, a demonstra, a proba
+  bg: доказвам, удостоверявам
+  cs: dokázat, prokázat, osvědčit
+  sk: dokázať, preukázať
+  hu: bizonyít, igazol, alátámaszt
+  el: αποδεικνύω, διαπιστώνω
+  sl: dokazati, potrditi
+  et: tõestama, tõendama, näitama
+  lt: įrodyti, pagrįsti, patvirtinti
+  da: bevise, eftervise, påvise
+  fi: todistaa, osoittaa todeksi
+  sv: bevisa, påvisa, styrka
+  hr: dokazati, posvjedočiti
+  lv: pierādīt, apliecināt
+  hi: सिद्ध करना, प्रमाणित करना
+  ar: يثبت، يبرهن، يؤكد
+  fa: اثبات کردن، ثابت کردن
+  ur: ثابت کرنا، تصدیق کرنا
+  id: membuktikan, meyakinkan
+  vi: chứng minh, xác nhận, chứng tỏ
+  th: พิสูจน์, แสดงความจริง
+  ko: 증명하다, 입증하다, 밝히다
+  ja: 証明する、立証する
+  zh: 证明、证实、查明
+  bn: প্রমাণ করা, যাচাই করা
+  kk: дәлелдеу, айғақтау
+
+ID 2015 (include):
+  ru: включать, содержать в себе
+  uk: включати, містити в собі, охоплювати
+  de: einschließen, beinhalten, umfassen
+  es: incluir, contener, abarcar
+  fr: inclure, comprendre, comporter
+  pl: zawierać, obejmować, włączać
+  it: includere, comprendere, racchiudere
+  tr: içermek, dahil etmek, kapsamak
+  pt: incluir, abranger, conter
+  ro: a include, a conține, a cuprinde
+  bg: включвам, съдържам, обхващам
+  cs: zahrnovat, obsahovat, čítat
+  sk: zahŕňať, obsahovať, započítať
+  hu: magában foglal, tartalmaz, bevesz
+  el: περιλαμβάνω, συμπεριλαμβάνω
+  sl: vključevati, vsebovati, obsegati
+  et: sisaldama, hõlmama, kaasama
+  lt: įtraukti, apimti, talpinti
+  da: inkludere, omfatte, medregne
+  fi: sisältää, käsittää, ottaa mukaan
+  sv: inkludera, omfatta, inbegripa
+  hr: uključivati, obuhvaćati, sadržavati
+  lv: ietvert, iekļaut, saturēt
+  hi: शामिल करना, समाविष्ट करना
+  ar: يتضمن، يشمل، يحتوي على
+  fa: شامل شدن، دربرداشتن
+  ur: شامل کرنا، حاوی ہونا
+  id: memasukkan, mengikutsertakan, mencakup
+  vi: bao gồm, đính kèm, tính cả
+  th: รวมเข้า, ประกอบด้วย, ครอบคลุม
+  ko: 포함하다, 동봉하다
+  ja: 含む、包含する、算入する
+  zh: 包括、包含、计入
+  bn: অন্তর্ভুক্ত করা, ধারণ করা
+  kk: қосу, қамту, еңгізу
+
+ID 2016 (finger):
+  ru: палец (руки)
+  uk: палець (руки)
+  de: Finger
+  es: dedo (de la mano)
+  fr: doigt (de la main)
+  pl: palec (u ręki)
+  it: dito (della mano)
+  tr: parmak (el)
+  pt: dedo (da mão)
+  ro: deget (de la mână)
+  bg: пръст (на ръката)
+  cs: prst (na ruce)
+  sk: prst (na ruke)
+  hu: kézujj, ujj
+  el: δάχτυλο (χεριού)
+  sl: prst (na roki)
+  et: sõrm
+  lt: pirštas (rankos)
+  da: finger
+  fi: sormi
+  sv: finger
+  hr: prst (na ruci)
+  lv: pirksts (rokas)
+  hi: उंगली (हाथ की)
+  ar: إصبع (اليد)
+  fa: انگشت (دست)
+  ur: انگلی (ہاتھ کی)
+  id: jari tangan
+  vi: ngón tay
+  th: นิ้วมือ
+  ko: 손가락
+  ja: 指、手の指
+  zh: 手指
+  bn: আঙুল (হাতের)
+  kk: саусақ (қолдың)
+
+ID 2017 (set):
+  ru: набор, комплект, устанавливать, ставить
+  uk: набір, комплект, встановлювати, ставити
+  de: Satz, Reihe, setzen, einstellen
+  es: conjunto, colección, colocar, establecer
+  fr: ensemble, jeu, poser, régler
+  pl: zestaw, komplet, nastawiać, ustalać
+  it: serie, insieme, fissare, collocare
+  tr: takım, set, ayarlamak, yerleştirmek
+  pt: conjunto, aparelho, colocar, configurar
+  ro: set, serie, a fixa, a așeza
+  bg: комплект, набор, настройвам, поставям
+  cs: souprava, sada, nastavit, zasadit
+  sk: súprava, garnitúra, nastaviť, uložiť
+  hu: készlet, garnitúra, elhelyez, beállít
+  el: σύνολο, σετ, ρυθμίζω, τοποθετώ
+  sl: komplet, garnitura, postaviti, naravnati
+  et: komplekt, garnituur, paigaldama, seadistama
+  lt: komplektas, rinkinys, statyti, sureguliuoti
+  da: sæt, samling, indstille, anbringe
+  fi: sarja, laitteisto, asettaa, säätää
+  sv: uppsättning, sats, ställa, anpassa
+  hr: zbirka, garnitura, montirati, uskladiti
+  lv: garnitūra, komplekts, nolikt, saregulēt
+  hi: संग्रह, सेट, तय करना, लगाना
+  ar: طقم، تشكيلة، يثبت، يضبط
+  fa: مجموعه، دست، مشخص کردن، نهادن
+  ur: جوڑا، سیٹ، متعین کرنا، جمانا
+  id: perangkat, grup, memasang, menetapkan
+  vi: bộ, tập hợp, bố trí, chỉnh đặt
+  th: ชุด, หมวดหมู่, กำหนด, ติดตั้ง
+  ko: 세트, 한 벌, 맞추다, 설치하다
+  ja: 一組、コレクション、置く、整える
+  zh: 套装、组、装配、安置
+  bn: সেট, সংগ্রহ, স্থাপন করা, বাঁধা
+  kk: жиынтық, серия, орнату, белгілеу
+
+ID 2018 (treat):
+  ru: обращаться, лечить, угощать
+  uk: ставитися, лікувати, частувати
+  de: behandeln, umgehen mit, bewirten
+  es: tratar, curar, agasajar
+  fr: traiter, soigner, régaler
+  pl: traktować, leczyć, częstować
+  it: trattare, curare, offrire
+  tr: davranmak, tedavi etmek, ısmarlamak
+  pt: tratar, cuidar, mimar
+  ro: a trata, a îngriji, a cinsti
+  bg: отнасям се към, лекувам, черпя
+  cs: zacházet s, léčit, pohostit
+  sk: zaobchádzať, liečiť, hostiť
+  hu: bánik vkivel, gyógyít, megvendégel
+  el: μεταχειρίζομαι, γιατρεύω, κερνώ
+  sl: ravnati z, zdraviti, pogostiti
+  et: kohtlema, ravima, kostitama
+  lt: elgtis su, gydyti, vaišinti
+  da: behandle, pleje, beværte
+  fi: kohdella, lääkitä, tarjota
+  sv: behandla, bota, bjuda på
+  hr: postupati s, liječiti, počastiti
+  lv: izturēties pret, ārstēt, uzcienāt
+  hi: बर्ताव करना, इलाज करना, दावत देना
+  ar: يعامل، يعالج، يضيف
+  fa: رفتار کردن با، درمان کردن، مهمان کردن
+  ur: سلوک کرنا، معالجہ کرنا، کھلانا پلانا
+  id: memperlakukan, mengobati, mentraktir
+  vi: cư xử, trị liệu, khao
+  th: ปฏิบัติต่อ, รักษาโรค, เลี้ยงต้อนรับ
+  ko: 대우하다, 치료하다, 한턱내다
+  ja: 扱う、治療する、もてなす
+  zh: 对待、诊治、请客
+  bn: আচরণ করা, সেবা করা, আপ্যায়ন করা
+  kk: мәміле жасау, емдеу, қонақ ету
+
+ID 2019 (appear):
+  ru: появляться, показываться, казаться
+  uk: з'являтися, виникати, здаватися
+  de: erscheinen, auftauchen, scheinen
+  es: aparecer, mostrarse, figurar
+  fr: apparaître, surgir, sembler
+  pl: pojawiać się, zjawiać się, wydawać się
+  it: apparire, spuntare, parere
+  tr: belirmek, ortaya çıkmak, görünmek
+  pt: aparecer, surgir, parecer
+  ro: a apărea, a se ivi, a părea
+  bg: появявам се, явявам се, изглеждам
+  cs: objevit se, vynořit se, zdát se
+  sk: objaviť sa, vynoriť sa, zdať sa
+  hu: feltűnik, megjelenik, látszik
+  el: εμφανίζομαι, παρουσιάζομαι, φαίνομαι
+  sl: prikazati se, nastati, zdeti se
+  et: ilmuma, esile kerkima, paistma
+  lt: pasirodyti, iškilti, atrodyti
+  da: fremstå, dukke op, synes
+  fi: ilmestyä, näyttäytyä, tuntua
+  sv: framträda, dyka upp, synas
+  hr: pojaviti se, pomoliti se, činiti se
+  lv: parādīties, uzrasties, šķist
+  hi: सामने आना, प्रकट होना, प्रतीत होना
+  ar: يظهر، يبرز، يتراءى
+  fa: پدیدار شدن، آشکار شدن، به نظر رسیدن
+  ur: ظاہر ہونا، نمودار ہونا، معلوم ہونا
+  id: tampak, menjelma, terlihat
+  vi: xuất hiện, trình diện, có vẻ
+  th: ปรากฏขึ้น, โผล่มา, ดูทีท่า
+  ko: 나타나다, 출현하다, 보이다
+  ja: 現れる、姿を現す、思われる
+  zh: 出现、显露、看来
+  bn: প্রকাশ পাওয়া, উদয় হওয়া, প্রতীয়মান হওয়া
+  kk: пайда болу, бой көрсету, сезілу
+
+ID 2020 (stay):
+  ru: оставаться, останавливаться (в отеле)
+  uk: залишатися, зупинятися (в готелі)
+  de: bleiben, sich aufhalten, logieren
+  es: quedarse, hospedarse, permanecer
+  fr: rester, séjourner, loger
+  pl: zostawać, przebywać, nocować
+  it: restare, soggiornare, alloggiare
+  tr: kalmak, konaklamak, durmak
+  pt: ficar, permanecer, hospedar-se
+  ro: a rămâne, a poposi, a se caza
+  bg: оставам, престоявам, отсядам
+  cs: zůstat, přebývat, ubytovat se
+  sk: ostať, prebývať, prenocovať
+  hu: marad, megszáll, időzik
+  el: μένω, παραμένω, φιλοξενούμαι
+  sl: ostati, zadržati se, prenočiti
+  et: jääma, viibima, ööbima
+  lt: pasilikti, užtrukti, apsistoti
+  da: blive, dvæle, opholde sig
+  fi: jäädä, viipyä, majoittua
+  sv: stanna, förbli, övernatta
+  hr: ostati, zadržati se, noćiti
+  lv: palikt, uzturēties, nakšņot
+  hi: ठहरना, रुकना, टिकना
+  ar: يمكث، يبقى، ينزل
+  fa: ماندن، اقامت گزیدن، اطراق کردن
+  ur: ٹھہرنا، قیام پذیر ہونا، رکنا
+  id: tinggal, menetap, menginap
+  vi: ở lại, lưu lại, trọ
+  th: พักอยู่, พำนัก, ยับยั้ง
+  ko: 머무르다, 묵다, 유임하다
+  ja: とどまる、滞在する、泊まる
+  zh: 停留、寄宿、保持
+  bn: থাকা, বসবাস করা, অবস্থান নেওয়া
+  kk: қалу, аялдау, түнеу
+
+ID 2021 (expect):
+  ru: ожидать, рассчитывать, надеяться
+  uk: очікувати, сподіватися, чекати
+  de: erwarten, vorhersehen, entgegensehen
+  es: esperar, aguardar, confiar
+  fr: s'attendre à, escompter, espérer
+  pl: oczekiwać, spodziewać się, liczyć na
+  it: aspettarsi, attendersi, presagire
+  tr: ummak, beklemek, ümit etmek
+  pt: esperar, antecipar, aguardar
+  ro: a aștepta, a spera, a întrezări
+  bg: очаквам, надявам се, предчувствам
+  cs: očekávat, počítat s, předpokládat
+  sk: očakávať, rátať s, dúfať
+  hu: vár, számít rá, remél
+  el: αναμένω, προσδοκώ, ελπίζω
+  sl: pričakovati, računati na, upati
+  et: ootama, lootma, arvestama
+  lt: laukti, tikėtis, numatyti
+  da: forvente, påregne, vente
+  fi: odottaa, otaksua, ennakoida
+  sv: förvänta sig, emotse, räkna med
+  hr: očekivati, nadati se, iščekivati
+  lv: gaidīt, cerēt, rēķināties
+  hi: उम्मीद करना, राह देखना, भरोसा रखना
+  ar: يتوقع، يترقب، يؤمل
+  fa: امید داشتن، توقع بردن، چشم‌داشتن
+  ur: امید لگانا، راہ دیکھنا، متوقع ہونا
+  id: menduga, menantikan, berharap
+  vi: mong đợi, kỳ vọng, đón chờ
+  th: หวังไว้, ตั้งตารอ, คาดการณ์
+  ko: 기대하다, 예기하다, 기다리다
+  ja: 期待する、予期する、見込む
+  zh: 盼望、期待、指望
+  bn: আশা করা, পথ চেয়ে থাকা, সম্ভাবনা দেখা
+  kk: күту, үміт қылу, көз тігу
+
+ID 2022 (care):
+  ru: забота, уход, заботиться
+  uk: турбота, догляд, піклуватися
+  de: Sorge, Pflege, sich kümmern
+  es: cuidado, atención, importar
+  fr: soin, prévenance, se soucier
+  pl: opieka, troska, dbać
+  it: cura, attenzione, premura
+  tr: özen, ilgi, kaygılanmak
+  pt: cuidado, atenção, importar-se
+  ro: grijă, ocrotire, a-i păsa
+  bg: грижа, обгрижване, грижа се
+  cs: péče, starost, pečovat
+  sk: opatera, starostlivosť, starať sa
+  hu: gondoskodás, óvás, törődik
+  el: φροντίδα, περιποίηση, ενδιαφέρομαι
+  sl: skrb, negovanje, marati
+  et: hoolekanne, hoolitsus, hoolima
+  lt: rūpestis, priežiūra, rūpintis
+  da: omsorg, skånsomhed, bekymre sig
+  fi: huolenpito, vaaliminen, välittää
+  sv: omvårdnad, skötsel, bry sig
+  hr: briga, skrbništvo, mariti
+  lv: aprūpe, vērība, gādāt
+  hi: देखभाल, चिंता, परवाह करना
+  ar: رعاية، اعتناء، يكترث
+  fa: مراقبت، غمخواری، اهمیت دادن
+  ur: دیکھ ریکھ، تیمارداری، پروا کرنا
+  id: kepedulian, pemeliharaan, memedulikan
+  vi: chăm nom, ân cần, bận tâm
+  th: ความเอาใจใส่, พยาบาล, แคร์
+  ko: 보살핌, 간호, 염려하다
+  ja: 配慮、手入れ、気にかける
+  zh: 照顾、关怀、介意
+  bn: দেখভাল, শুশ্রূষা, তোয়াক্কা করা
+  kk: қамқорлық, күтім, бағу
+
+ID 2023 (late):
+  ru: поздний, поздно, опоздавший
+  uk: пізній, запізнілий, пізно
+  de: spät, verspätet, unpünktlich
+  es: tardío, atrasado, tarde
+  fr: tardif, en retard, attardé
+  pl: spóźniony, późny, niewczesny
+  it: tardivo, ritardato, in ritardo
+  tr: geç, gecikmiş, son
+  pt: tardio, atrasado, tarde
+  ro: întârziat, tardiv, târziu
+  bg: закъснял, късен, ненавременен
+  cs: pozdní, zpožděný, pozdě
+  sk: neskorý, oneskorený, neskoro
+  hu: kései, megkésett, későn
+  el: αργοπορημένος, όψιμος, αργά
+  sl: pozen, zamujen, pozno
+  et: hiline, hilinenud, hilja
+  lt: pavėlavęs, vėlyvas, vėlai
+  da: forsinket, sen, sent
+  fi: myöhästynyt, myöhäinen, myöhään
+  sv: försenad, sen, sent
+  hr: zakašnjeo, kasan, kasno
+  lv: nokavējies, vēls, vēlu
+  hi: विलंबित, देर से, पछता
+  ar: متأخر، فائت، بعد فوات الأوان
+  fa: دیررس، پس‌افتاده، دیر
+  ur: دیر سے آنے والا، پچھلا، تاخیر سے
+  id: terlambat, terbelakang, kasip
+  vi: trễ hẹn, chậm chạp, muộn
+  th: ล่าช้า, สายเกิน, ช้า
+  ko: 늦은, 지체된, 늦게
+  ja: 遅れた、手遅れの、遅く
+  zh: 迟到的、晚期的、迟缓
+  bn: বিলম্বিত, পেছানো, দেরিতে
+  kk: кешіккен, кеш қалған, кеш
+
+ID 2024 (sick):
+  ru: больной, нездоровый, тошнотворный
+  uk: хворий, недужий, нудотний
+  de: krank, unwohl, übel
+  es: enfermo, mareado, indispuesto
+  fr: malade, nauséeux, souffrant
+  pl: chory, niedomagający, mdły
+  it: malato, indisposto, nauseato
+  tr: hasta, rahatsız, midesi bulanmış
+  pt: doente, nauseado, enfermo
+  ro: bolnav, suferind, grețos
+  bg: болен, неразположен, гадещ се
+  cs: nemocný, chorý, trpící nevolností
+  sk: chorý, nezdravý, nevoľný
+  hu: beteg, rosszulléttel küzdő, gyengélkedő
+  el: άρρωστος, ασθενής, ανακατεμένος
+  sl: bolan, slaboten, slab
+  et: haige, tõbine, iiveldav
+  lt: sergantis, nesveikas, pykinamas
+  da: syg, dårlig, utilpas
+  fi: sairas, pahoinvoiva, kipeä
+  sv: sjuk, illamående, krasslig
+  hr: bolestan, slab, mučan
+  lv: slims, nevesels, nelabumu jūtošs
+  hi: बीमार, अस्वस्थ, जी मिचलाने वाला
+  ar: سقيم، عليل، غثياني
+  fa: ناخوش، ناخوش‌احوال، بدحال
+  ur: بیمار، علیل، متلی زدہ
+  id: sakit, mual, tak sehat
+  vi: ốm yếu, mắc bệnh, buồn nôn
+  th: ป่วยไข้, คลื่นไส้, ไม่สบาย
+  ko: 병든, 메스꺼운, 아픈
+  ja: 病気の、吐き気がする、不調な
+  zh: 生病的、不舒服的、恶心的
+  bn: অসুস্থ, রুগ্ন, বমি-বমি ভাবাপন্ন
+  kk: сырқат, науқас, жүрегі айныған
+
+ID 2025 (safe):
+  ru: безопасный, надёжный, сейф
+  uk: безпечний, надійний, сейф
+  de: sicher, geschützt, Tresor
+  es: seguro, a salvo, caja fuerte
+  fr: sûr, indemne, coffre-fort
+  pl: bezpieczny, pewny, sejf
+  it: sicuro, incolume, cassaforte
+  tr: emniyetli, güvenli, çelik kasa
+  pt: seguro, a salvo, cofre
+  ro: sigur, teafăr, seif
+  bg: безопасен, невредим, сейф
+  cs: bezpečný, spolehlivý, trezor
+  sk: bezpečný, chránený, trezor
+  hu: biztonságos, védett, széf
+  el: ασφαλής, απρόσβλητος, χρηματοκιβώτιο
+  sl: varen, zaščiten, trezor
+  et: ohutu, kindel, seif
+  lt: saugus, apsaugotas, seifas
+  da: sikker, uskadt, pengeskab
+  fi: turvallinen, varma, tallelokero
+  sv: trygg, säker, kassaskåp
+  hr: siguran, zaštićen, sef
+  lv: drošs, neapdraudēts, seifs
+  hi: सुरक्षित, सलामत, तिजोरी
+  ar: آمن، مطمئن، خزنة
+  fa: امن، در امان، گاوصندوق
+  ur: محفوظ، بے گزند، تجوری
+  id: selamat, terlindung, brankas
+  vi: an toàn, lành lặn, két sắt
+  th: ปลอดภัย, ไร้ภัย, ตู้เซฟ
+  ko: 안전한, 무사한, 금고
+  ja: 安全な、無事な、金庫
+  zh: 安全的、无恙的、保险柜
+  bn: নিরাপদ, শঙ্কাহীন, সিন্দুক
+  kk: қауіпсіз, аман-есен, сейф
+
+ID 2026 (free):
+  ru: свободный, бесплатный, освобождать
+  uk: вільний, безкоштовний, визволяти
+  de: frei, kostenlos, freilassen
+  es: libre, gratis, liberar
+  fr: libre, gratuit, relâcher
+  pl: wolny, bezpłatny, uwalniać
+  it: libero, gratis, riscattare
+  tr: serbest, bedava, serbest bırakmak
+  pt: livre, grátis, libertar
+  ro: liber, gratuit, a descătușa
+  bg: свободен, безплатен, освобождавам
+  cs: svobodný, bezplatný, propustit
+  sk: slobodný, bezplatný, vyslobodiť
+  hu: szabad, díjtalan, felment
+  el: ελεύθερος, τζάμπα, αποφυλακίζω
+  sl: svoboden, zastonj, oprostiti
+  et: vaba, tasuta, vabastama
+  lt: laisvas, nemokamas, paleisti
+  da: fri, gratis, frigive
+  fi: vapaa, maksuton, vapauttaa
+  sv: fri, gratis, frige
+  hr: slobodan, besplatan, osloboditi
+  lv: brīvs, bezmaksas, atsvabināt
+  hi: आज़ाद, मुफ़्त, रिहा करना
+  ar: حر، مجاني، يعتق
+  fa: آزاد، رایگان، رها ساختن
+  ur: آزاد، مفت، آزاد کرانا
+  id: bebas, gratis, melepaskan
+  vi: tự do, miễn phí, phóng thích
+  th: อิสระ, ฟรี, ปล่อยให้พ้น
+  ko: 자유로운, 무료의, 해방하다
+  ja: 自由な、無料の、解放する
+  zh: 自由的、免费的、释放
+  bn: মুক্ত, মাগনা, খালাস দেওয়া
+  kk: еркін, тегін, босатып қою
+
+ID 2027 (bad):
+  ru: плохой, скверный, дурной
+  uk: поганий, лихий, кепський
+  de: schlecht, böse, mangelhaft
+  es: malo, pésimo, perjudicial
+  fr: mauvais, méchant, défectueux
+  pl: zły, marny, wadliwy
+  it: cattivo, brutto, scadente
+  tr: kötü, bozuk, yaramaz
+  pt: ruim, mau, péssimo
+  ro: rău, prost, defectuos
+  bg: лош, зъл, некачествен
+  cs: špatný, zlý, mizerný
+  sk: zlý, chybný, nedobrý
+  hu: rossz, silány, hibás
+  el: κακός, ανάποδος, ελαττωματικός
+  sl: slab, zanič, zgrešen
+  et: halb, paha, vigane
+  lt: blogas, prastas, netikęs
+  da: slet, dårlig, mangelfuld
+  fi: huono, kelvoton, kurja
+  sv: dålig, usel, felaktig
+  hr: loš, zločest, pokvaren
+  lv: slikts, nelāgs, sabojāts
+  hi: बुरा, ख़राब, मंदा
+  ar: سيئ، رديء، وخيم
+  fa: بد، نامرغوب، خراب
+  ur: برا، ناقص، ابتر
+  id: buruk, jelek, cacat
+  vi: tồi tệ, dở, xấu
+  th: แย่, ร้าย, เลว
+  ko: 나쁜, 형편없는, 해로운
+  ja: 悪い、不良の、粗悪な
+  zh: 坏的、差的、有害的
+  bn: খারাপ, নিকৃষ্ট, মন্দ
+  kk: жаман, нашар, жарамсыз
+
+ID 2028 (good):
+  ru: хороший, добрый, добротный
+  uk: гарний, добрий, якісний
+  de: gut, gütig, anständig
+  es: bueno, noble, apto
+  fr: bon, bienveillant, convenable
+  pl: dobry, porządny, zacny
+  it: buono, bravo, valido
+  tr: iyi, güzel, hayırlı
+  pt: bom, boa, de qualidade
+  ro: bun, cumsecade, calitativ
+  bg: добър, качествен, благороден
+  cs: dobrý, hodný, zdatný
+  sk: dobrý, láskavý, prospešný
+  hu: jó, derék, jóságos
+  el: καλός, ενάρετος, άξιος
+  sl: dober, ustrezen, prijazen
+  et: hea, tubli, korralik
+  lt: geras, tinkamas, šaunus
+  da: god, brav, fornuftig
+  fi: hyvä, kelpo, kunnollinen
+  sv: god, bra, fin
+  hr: dobar, valjan, uzoran
+  lv: labs, derīgs, teicams
+  hi: अच्छा, भला, श्रेष्ठ
+  ar: طيب، صالح، ممتاز
+  fa: خوب، پسندیده، نیک
+  ur: اچھا، نیک، عمدہ
+  id: baik, bagus, elok
+  vi: tốt, đàng hoàng, lành mạnh
+  th: ดี, ยอดเยี่ยม, มีคุณธรรม
+  ko: 좋은, 훌륭한, 착한
+  ja: 良い、善良な、立派な
+  zh: 好的、善良的、优良的
+  bn: ভালো, সৎ, চমৎকার
+  kk: жақсы, қайырымды, сапалы
+
+ID 2029 (short):
+  ru: короткий, низкий (ростом), краткий
+  uk: короткий, невисокий, стислий
+  de: kurz, klein (von Wuchs), knapp
+  es: corto, bajo (de estatura), breve
+  fr: court, petit (taille), concis
+  pl: krótki, niski (wzrostem), zwięzły
+  it: corto, basso (di statura), breve
+  tr: kısa, alçak boylu, özlü
+  pt: curto, baixo (estatura), sucinto
+  ro: scurt, scund, succint
+  bg: къс, нисък (на ръст), кратък
+  cs: krátký, malý (postavou), stručný
+  sk: krátky, nízky (vzrastom), stručný
+  hu: rövid, alacsony (termetű), tömör
+  el: κοντός, βραχύς, σύντομος
+  sl: kratek, majhen (po rasti), zgoščen
+  et: lühike, madalakasvuline, lakooniline
+  lt: trumpas, neaukštas, glaustas
+  da: kort, lav (af vækst), knap
+  fi: lyhyt, matalakasvuinen, vähäinen
+  sv: kort, lågväxt, summarisk
+  hr: kratak, nizak (rastom), jezgrovit
+  lv: īss, maza auguma, lakonisks
+  hi: छोटा, नाटा, संक्षिप्त
+  ar: قصير، موجز، ضئيل
+  fa: کوتاه، کم‌قد، مختصر
+  ur: چھوٹا، پست قامت، مختصر
+  id: pendek, ringkas, puntung
+  vi: ngắn, thấp bé, vắn tắt
+  th: สั้น, ตัวเตี้ย, สรุป
+  ko: 짧은, 키 작은, 간결한
+  ja: 短い、背が低い、手短な
+  zh: 短的、个子矮的、简略的
+  bn: খাটো, বেঁটে, সংক্ষিপ্ত
+  kk: қысқа, бойы аласа, ықшам
+
+ID 2030 (sing sang sung):
+  ru: петь, распевать
+  uk: співати, наспівувати
+  de: singen, trällern
+  es: cantar, entonar
+  fr: chanter, fredonner
+  pl: śpiewać, nucić
+  it: cantare, intonare
+  tr: şarkı söylemek, ötmek
+  pt: cantar, entoar
+  ro: a cânta, a fredona
+  bg: пея, извивам глас
+  cs: zpívat, prozpukovat
+  sk: spievať, pospevovať si
+  hu: énekel, dalol
+  el: τραγουδώ, ψάλλω
+  sl: peti, prepevati
+  et: laulma, leelotama
+  lt: dainuoti, giedoti
+  da: synge, trille
+  fi: laulaa, hoilata
+  sv: sjunga, kvittra
+  hr: pjevati, popijevati
+  lv: dziedāt, vilkt dziesmu
+  hi: गाना, गुनगुनाना
+  ar: يغني، يشدو، يترنم
+  fa: آواز خواندن، سرودن
+  ur: گانا، ترنم سے سنانا
+  id: menyanyi, berdendang
+  vi: ca hát, ngâm nga
+  th: ร้องเพลง, ขับร้อง
+  ko: 노래하다, 지저귀다
+  ja: 歌う、口ずさむ
+  zh: 唱歌、咏唱
+  bn: গান গাওয়া, গুঞ্জন করা
+  kk: ән айту, шырқау
+
+ID 2031 (last):
+  ru: последний, прошлый, длиться
+  uk: останній, минулий, тривати
+  de: letzter, vergangener, andauern
+  es: último, pasado, perdurar
+  fr: dernier, passé, durer
+  pl: ostatni, zeszły, trwać
+  it: ultimo, scorso, durare
+  tr: sonuncu, geçen, sürmek
+  pt: último, derradeiro, perdurar
+  ro: ultimul, cel din urmă, a dăinui
+  bg: последен, минал, продължавам
+  cs: poslední, minulý, vydržet
+  sk: posledný, minulý, pretrvať
+  hu: utolsó, elmúlt, tartósnak bizonyul
+  el: τελευταίος, περασμένος, κρατώ
+  sl: zadnji, pretekel, trajati
+  et: viimane, eelmine, püsima
+  lt: paskutinis, praėjęs, tverti
+  da: sidste, forrige, række
+  fi: viimeinen, edellinen, riittää
+  sv: sista, förra, förbli
+  hr: zadnji, protekli, potrajati
+  lv: pēdējais, iepriekšējais, pietikt
+  hi: अंतिम, पिछला, चलना (टिकना)
+  ar: أخير، ماض، يستغرق
+  fa: آخرین، پیشین، پاییدن
+  ur: آخری، گزرا ہوا، چلنا (قائم رہنا)
+  id: terakhir, kemarin, bertahan
+  vi: rốt cuộc, vừa qua, trường tồn
+  th: อันดับท้าย, ที่แล้ว, ดำรงอยู่
+  ko: 마지막의, 지난번의, 견디다
+  ja: 最後の、前回の、長持ちする
+  zh: 最后的、上次的、延续
+  bn: অন্তিম, গত, টেকে থাকা
+  kk: ақырғы, өткендегі, шыдау
+
+ID 2032 (deal dealt dealt):
+  ru: иметь дело, торговать, сделка
+  uk: мати справу, торгувати, угода
+  de: handeln, bewältigen, Abkommen
+  es: tratar, pactar, negocio
+  fr: traiter, distribuer, transaction
+  pl: handlować, rozdawać karty, interes
+  it: trattare, commerciare, patto
+  tr: ilgilenmek, ticaret yapmak, uzlaşma
+  pt: negociar, lidar com, trato
+  ro: a negocia, a împărți (cărți), înțelegere
+  bg: търгувам, раздавам (карти), споразумение
+  cs: vyjednávat, mít co do činění, kšeft
+  sk: jednať, obchodovať, dohoda
+  hu: bánik (valamivel), kártyát oszt, ügylet
+  el: πραγματεύομαι, μοιράζω (χαρτιά), δοσοληψία
+  sl: mešetariti, razdeliti (karte), posel
+  et: kauplema, tegemist tegema, tehing
+  lt: prekiauti, dalinti (kortas), susitarimas
+  da: forhandle, give kort, handel
+  fi: käydä kauppaa, jakaa kortteja, kauppa
+  sv: göra affärer, ge (kort), överenskommelse
+  hr: trgovati, dijeliti (karte), pogodba
+  lv: tirgoties, izdalīt (kārtis), vienošanās
+  hi: लेन-देन करना, ताश बांटना, समझौता
+  ar: يتاجر، يوزع (ورق اللعب)، صفقة
+  fa: دادوستد کردن، ورق پخش کردن، توافق
+  ur: لین دین کرنا، پتے بانٹنا، معاملہ
+  id: berdagang, membagikan kartu, kesepakatan
+  vi: buôn bán, chia bài, vụ làm ăn
+  th: เจรจาค้าขาย, แจกไพ่, ข้อตกลง
+  ko: 거래하다, 카드를 돌리다, 협정
+  ja: 取引する、カードを配る、協定
+  zh: 经营、发牌、买卖
+  bn: কারবার করা, তাস বণ্টন করা, চুক্তি
+  kk: саудаласу, карта тарату, келісімшарт
+
+ID 2033 (stupid):
+  ru: глупый, бестолковый, тупой
+  uk: дурний, безглуздий, нетямущий
+  de: dumm, albern, einfältig
+  es: tonto, estúpido, bobo
+  fr: stupide, bête, sot
+  pl: głupi, niemądry, tępawy
+  it: stupido, sciocco, ottuso
+  tr: aptal, ahmak, sersem
+  pt: estúpido, burro, tolo
+  ro: prostesc, tâmpit, nerod
+  bg: глупав, тъп, смотан
+  cs: hloupý, pošetilý, tupý
+  sk: hlúpy, nerozumný, nechápavý
+  hu: buta, balga, ostoba
+  el: ηλίθιος, ανόητος, αγράμματος
+  sl: neumen, teslast, norčav
+  et: rumal, tobe, taipamatu
+  lt: kvailas, neprotingas, bukas
+  da: dum, tåbelig, enfoldig
+  fi: tyhmä, älytön, tomppeli
+  sv: dum, fånig, oklok
+  hr: glup, blesav, ograničen
+  lv: muļķīgs, aprobežots, stulbs
+  hi: मूर्ख, बेवक़ूफ़, अक्ल का अंधा
+  ar: غبي، أحمق، بليد
+  fa: نادان، ابله، احمق
+  ur: احمق، ناسمجھ، بے عقل
+  id: pandir, bodoh, bebal
+  vi: dại dột, ngốc, u mê
+  th: โง่เง่า, เซ่อซ่า, เขลา
+  ko: 멍청한, 우둔한, 바보스러운
+  ja: 愚かな、ばかげた、頭の鈍い
+  zh: 愚蠢的、笨拙的、弱智的
+  bn: বেওকুফ, আহাম্মক, বোকা
+  kk: ақымақ, мисыз, топас
+
+ID 2034 (clothes):
+  ru: одежда, наряд, одеяние
+  uk: одяг, вбрання, гардероб
+  de: Kleidung, Anziehsachen, Gewänder
+  es: ropa, vestimenta, prendas
+  fr: vêtements, habits, fringues
+  pl: ubrania, odzież, stroje
+  it: vestiti, abiti, vestiario
+  tr: giysiler, elbiseler, kılık
+  pt: roupas, vestimentas, trajes
+  ro: haine, îmbrăcăminte, straie
+  bg: дрехи, облекло, одежди
+  cs: oblečení, šatstvo, oděv
+  sk: oblečenie, šatstvo, odev
+  hu: ruházat, ruhák, gúnya
+  el: ρούχα, φορέματα, αμφίεση
+  sl: oblačila, garderoba, obleka
+  et: rõivad, riided, hilbud
+  lt: drabužiai, rūbai, apranga
+  da: tøj, beklædning, klæder
+  fi: vaatteet, asusteet, pukimet
+  sv: kläder, plagg, mundering
+  hr: odjeća, ruho, odijela
+  lv: drēbes, apģērbs, tērpi
+  hi: कपड़े, वस्त्र, पोशाक
+  ar: ملابس، أزياء، كسوة
+  fa: لباس‌ها، جامه، رخت
+  ur: کپڑے، پوشاک، پیراہن
+  id: pakaian, sandang, busana
+  vi: quần áo, trang phục, y phục
+  th: เสื้อผ้า, เครื่องนุ่งห่ม, เครื่องแต่งกาย
+  ko: 옷, 의류, 복장
+  ja: 服、衣服、衣類
+  zh: 衣服、服装、衣物
+  bn: জামাকাপড়, পোশাকআশাক, বস্ত্র
+  kk: киім, киім-кешек, киіз
+
+ID 2035 (defend):
+  ru: защищать, оборонять, отстаивать
+  uk: захищати, обороняти, відстоювати
+  de: verteidigen, abwehren, schützen
+  es: defender, blindar, escudar
+  fr: défendre, protéger, plaider
+  pl: bronić, ochraniać, odpierać
+  it: difendere, tutelare, salvaguardare
+  tr: savunmak, korumak, müdafaa etmek
+  pt: defender, proteger, blindar
+  ro: a apăra, a proteja, a pleda
+  bg: защитавам, отбранявам, закрилям
+  cs: obhajovat, bránit, střežit
+  sk: obhajovať, brániť, chrániť
+  hu: védelmez, oltalmaz, pártol
+  el: υπερασπίζομαι, περιφρουρώ, αμύνομαι
+  sl: braniti, ščititi, zagovarjati
+  et: kaitsma, tõrjuma, eest seisma
+  lt: ginti, apginti, užtarti
+  da: forsvare, værne, advokere
+  fi: puolustaa, suojata, varjella
+  sv: försvara, freda, hävda
+  hr: braniti, štititi, zastupati
+  lv: aizstāvēt, aizsargāt, sargāt
+  hi: रक्षा करना, बचाव करना, पक्ष लेना
+  ar: يدافع عن، يذود، يحامي
+  fa: دفاع کردن، حراست کردن، پشتیبانی کردن
+  ur: مدافعت کرنا، بچانا، حمایت کرنا
+  id: membela, melindungi, memperjuangkan
+  vi: phòng thủ, bảo vệ, biện hộ
+  th: ป้องกัน, พิทักษ์, คุ้มกัน
+  ko: 방어하다, 옹호하다, 지키다
+  ja: 守る、防衛する、弁護する
+  zh: 防守、捍卫、辩护
+  bn: প্রতিহত করা, আত্মরক্ষা করা, বাঁচানো
+  kk: қорғау, қорғану, қалқан болу
+
+ID 2036 (realize):
+  ru: осознавать, понимать, воплощать в жизнь
+  uk: усвідомлювати, збагнути, реалізовувати
+  de: begreifen, einsehen, verwirklichen
+  es: percatarse, comprender, materializar
+  fr: concevoir, appréhender, concrétiser
+  pl: pojmować, uświadamiać sobie, ziszczać
+  it: comprendere, avvedersi, concretizzare
+  tr: kavramak, ayırdına varmak, gerçekleştirmek
+  pt: perceber, dar-se conta, concretizar
+  ro: a conștientiza, a pricepe, a înfăptui
+  bg: осъзнавам, схващам, осъществявам
+  cs: uvědomovat si, pochopit, uskutečnit
+  sk: uvedomiť si, zrátať si, uskutočniť
+  hu: ráébred, átlát, megvalósít
+  el: αντιλαμβάνομαι, κατανοώ, υλοποιώ
+  sl: zavedati se, dojeti, udejanjiti
+  et: taipama, tajuma, teoks tegema
+  lt: suvokti, perprasti, įkūnyti
+  da: indse, begribe, udmønte
+  fi: tajuta, oivaltaa, panna toimeen
+  sv: inse, fatta, förverkliga
+  hr: shvatiti, postati svjestan, ostvariti
+  lv: apjaust, aptvert, īstenot
+  hi: भांपना, समझना, साकार करना
+  ar: يعي، يفطن إلى، يجسد
+  fa: متوجه گشتن، ملتفت شدن، تحقق بخشیدن
+  ur: جان لینا، ادراک کرنا، عملی جامہ پہنانا
+  id: memahami, menginsafi, merelisasikan
+  vi: thấu hiểu, ngộ ra, hiện thực hóa
+  th: สังเหนียก, เข้าใจกระจ่าง, ทำให้สำเร็จ
+  ko: 자각하다, 파악하다, 실현하다
+  ja: 悟る、実感する、具現化する
+  zh: 觉察、领悟、实现
+  bn: অনুধাবন করা, টের পাওয়া, রূপ দেওয়া
+  kk: ұғыну, бағамдау, жүзеге асыру
+
+ID 2037 (fill):
+  ru: наполнять, засыпать, заполнять (бланк)
+  uk: наповнювати, заливати, заповнювати (анкету)
+  de: füllen, anfüllen, ausfüllen (Formular)
+  es: llenar, colmar, rellenar (formulario)
+  fr: remplir, combler, renseigner (formulaire)
+  pl: napełniać, zapychać, wypełniać (druk)
+  it: riempire, colmare, compilare (modulo)
+  tr: doldurmak, tıkamak, yazıp doldurmak
+  pt: encher, lotar, preencher (formulário)
+  ro: a umple, a încărca, a completa (formular)
+  bg: пълня, насипвам, попълвам (бланка)
+  cs: plnit, zahrnout, vyplňovat (formulář)
+  sk: napĺňať, prepchať, vypĺňať (tlačivo)
+  hu: megtölt, eláraszt, kitölt (űrlapot)
+  el: γεμίζω, στοιβάζω, συμπληρώνω (έντυπο)
+  sl: polniti, natlačiti, izpolniti (obrazec)
+  et: täitma, puistama, vormistama (ankeeti)
+  lt: pildyti, kimšti, užpildyti (blanką)
+  da: fylde, proppe, udfylde (blanket)
+  fi: täyttää, pursuta, täydentää (lomake)
+  sv: fylla, packa, fylla i (formulär)
+  hr: puniti, nakrcati, popunjavati (obrazac)
+  lv: pildīt, bērt, aizpildīt (veidlapu)
+  hi: भरना, उड़ेलना, पूरा करना (फ़ॉर्म)
+  ar: يملأ، يشحن، يعبئ (استمارة)
+  fa: پر کردن، لبریز ساختن، تکمیل کردن (فرم)
+  ur: بھرنا، لبالب کرنا، پر کرنا (فارم)
+  id: mengisikan, memadati, mengisi (formulir)
+  vi: rót đầy, trám kín, điền vào (đơn)
+  th: เติมเต็ม, ใส่ให้เต็ม, กรอก (แบบฟอร์ม)
+  ko: 채우다, 메우다, 기입하다 (서식)
+  ja: 満たす、詰め込む、記入する（用紙）
+  zh: 充满、装满、填写（表格）
+  bn: উপচে দেওয়া, ভরাট করা, পূরণ করা (ফরম)
+  kk: толтыру, бастыру, толтырып жазу (сауалнаманы)
+
+ID 2038 (less):
+  ru: меньше, менее, в меньшей степени
+  uk: менше, менш, у меншій мірі
+  de: weniger, geringer, minder
+  es: menos, inferior, en menor grado
+  fr: moins, moindre, moins de
+  pl: mniej, rzadziej, w mniejszym stopniu
+  it: meno, minore, in misura inferiore
+  tr: daha az, eksik, daha düşük derecede
+  pt: menos, inferior, em menor grau
+  ro: mai puțin, mai redus, mai mărunt
+  bg: по-малко, в по-малък размер
+  cs: méně, míň, v menší míře
+  sk: menej, menšie množstvo, v menšej miere
+  hu: kevesebb, csekélyebb, kisebb mértékben
+  el: λιγότερο, ελάχιστα, σε μικρότερο βαθμό
+  sl: manj, manjše, v manjši meri
+  et: vähem, pisemalt, vähemal määral
+  lt: mažiau, menkiau, mažesniu mastu
+  da: færre, mindre, i ringere grad
+  fi: vähemmän, niukemmin, pienemmässä määrin
+  sv: mindre, färre, i mindre utsträckning
+  hr: manje, oskudnije, u manjoj mjeri
+  lv: mazāk, sīkāk, mazākā mērā
+  hi: कम, घटती मात्रा में, कमतर
+  ar: أقل، أخف، بدرجة أدنى
+  fa: کمتر، تقلیل‌یافته، در مقیاس کمتر
+  ur: کم، گھٹ کر، کم تر درجے میں
+  id: berkurang, kurang, lebih sedikit
+  vi: ít hơn, sụt giảm, ít đi
+  th: น้อยลง, ลดทอน, ในระดับต่ำกว่า
+  ko: 덜, 더 적게, 적은 분량
+  ja: より少なく、減って、下回って
+  zh: 较少、更少、次要
+  bn: কম, হ্রস্ব, অল্পমাত্রায়
+  kk: азырақ, кем, төменгі мөлшерде
+
+ID 2039 (break):
+  ru: ломать(ся), делать перерыв, пауза
+  uk: ламати(ся), робити перерву, пауза
+  de: zerbrechen, Pause machen, Unterbrechung
+  es: romper, descansar, receso
+  fr: briser, faire une pause, interruption
+  pl: tłuc, robić przerwę, pauza
+  it: spezzare, interrompere, intervallo
+  tr: kırmak, mola vermek, fasıla
+  pt: quebrar, pausar, intervalo
+  ro: a sparge, a lua o pauză, răgaz
+  bg: чупя, правя почивка, антракт
+  cs: lámat, dát si pauzu, oddech
+  sk: lámať, prerušiť prácu, prestávka
+  hu: törik, szünetet tart, pihenő
+  el: θρυμματίζω, ξαποσταίνω, διακοπή
+  sl: razbiti, vzeti si odmor, premor
+  et: purustama, vaheaega pidama, puhkepaus
+  lt: laužti, daryti pertrauką, poilsis
+  da: knække, tage en pause, afbrud
+  fi: murtaa, pitää tauko, lepohetki
+  sv: spräcka, ta rast, avbrott
+  hr: razbijati, uzeti stanku, predah
+  lv: drupināt, paņemt pauzi, atelpa
+  hi: तोड़ना, विराम लेना, अंतराल
+  ar: يكسر، يأخذ استراحة، هدنة
+  fa: شکستن، زنگ تفریح گرفتن، وقفه
+  ur: توڑنا، وقفہ لینا، درمیانی چھٹی
+  id: mematahkan, beristirahat sejenak, jeda
+  vi: đập vỡ, tạm nghỉ, quãng nghỉ
+  th: ทำให้หัก, พักยก, ช่วงว่าง
+  ko: 부수다, 쉬어가다, 휴게
+  ja: 壊す、休止する、合間
+  zh: 打碎、休息、间歇
+  bn: ভাঙন ধরানো, জিরিয়ে নেওয়া, ক্ষণিক বিরতি
+  kk: сындыру, тынығу, үзіліс
+
+ID 2040 (alone):
+  ru: один, в одиночестве, сам
+  uk: сам, на самоті, самостійно
+  de: allein, für sich, einsam
+  es: solo, desamparado, en solitario
+  fr: tout seul, esseulé, en solitaire
+  pl: sam, pojedynczo, odosobniony
+  it: solitario, da sé, isolato
+  tr: yalnız, bir başına, kimsesiz
+  pt: sozinho, sem ninguém, solitário
+  ro: singuratic, pe cont propriu, izolat
+  bg: сам, усамотен, собственоръчно
+  cs: samotný, o samotě, bez pomoci
+  sk: osamelý, osamote, svojský
+  hu: egymagában, árván, elszigetelten
+  el: ολομόναχος, ερημίτης, χωρίς παρέα
+  sl: osamljen, samcat, brez pomoči
+  et: üksinda, omaette, mahajäetult
+  lt: vienišas, vienui vienas, atskirtas
+  da: forladt, alene, uden andre
+  fi: yksinään, erillään, omillaan
+  sv: ensam, allena, på egen hand
+  hr: samac, bez ikoga, izdvojen
+  lv: vienatnē, vientuļš, viens pats
+  hi: अकेला, तन्हा, बिना किसी के
+  ar: بمفرده، منعزل، منفرداً
+  fa: تک‌وتنها، بی‌کس، منزوی
+  ur: تن تنہا، اکیلا، تنہائی میں
+  id: sendirian, sebatang kara, terasing
+  vi: thui thủi, đơn chiếc, độc hành
+  th: เดียวดาย, ลำพัง, ไร้คู่
+  ko: 홀로, 외딴, 오롯이 혼자
+  ja: 単独で、独力で、孤独な
+  zh: 独自、单独、无伴的
+  bn: একা, সঙ্গীহীন, নিঃসঙ্গ
+  kk: жалғыз, оңаша, өзі ғана
+
+ID 2041 (immediately):
+  ru: немедленно, тотчас, сию секунду
+  uk: негайно, тієї ж миті, зараз же
+  de: augenblicklich, umgehend, auf der Stelle
+  es: enseguida, al instante, de inmediato
+  fr: sur-le-champ, d'emblée, incontinent
+  pl: niezwłocznie, w tej chwili, momentalnie
+  it: seduta stante, prontamente, all'istante
+  tr: derhal, ivedilikle, o anda
+  pt: prontamente, de imediato, num instante
+  ro: neîntârziat, pe loc, numaidecât
+  bg: моментално, незабавно, на секундата
+  cs: bezodkladně, obratem, v mžiku
+  sk: bezodkladne, zaraz, v okamihu
+  hu: nyomban, késedelem nélkül, tüstént
+  el: πάραυτα, ευθύς, ακαριαία
+  sl: nemudoma, hipoma, v trenutku
+  et: otsekohe, viivitamata, silmapilk
+  lt: tuojau pat, nevilkindamas, akimirksniu
+  da: prompte, ufortøvet, øjeblikkeligt
+  fi: empimättä, tuossa tuokiossa, viipymättä
+  sv: på stående fot, bums, ögonblickligen
+  hr: smjesta, trenutačno, bez odgode
+  lv: acumirklī, nekavējoties, tūdaļ
+  hi: झटपट, फौरन, बिना देरी किए
+  ar: للحال، توًا، بغير إبطاء
+  fa: بی‌درنگ، فوراً، درجا
+  ur: فوراً، فی الفور، دم دست
+  id: serta-merta, sekarang juga, lekas
+  vi: ngay tắp lự, tức thì, liền tay
+  th: ฉับพลัน, โดยด่วน, ปัจจุบันทันด่วน
+  ko: 당장에, 지체 없이, 순식간에
+  ja: 即座に、たちまち、間髪をいれず
+  zh: 立刻、当即、火速
+  bn: অবিলম্বে, অনতিবিলম্বে, এইমুহূর্তে
+  kk: іле-шала, кешікпей, көзді ашып-жұмғанша
+
+ID 2042 (probably):
+  ru: вероятно, скорее всего, по-видимому
+  uk: ймовірно, скоріш за все, мабуть
+  de: vermutlich, wohl, mit Wahrscheinlichkeit
+  es: seguramente, con probabilidad, tal vez
+  fr: vraisemblablement, sans doute, probablement
+  pl: najpewniej, prawdopodobnie, widocznie
+  it: plausibilmente, presumibilmente, con ogni probabilità
+  tr: muhtemelen, ihtimal ki, herhalde
+  pt: provavelmente, decerto, com certeza
+  ro: de bună seamă, pesemne, probabil
+  bg: най-вероятно, навярно, очевидно
+  cs: patrně, pravděpodobně, zřejmě
+  sk: najskôr, pravdepodobne, zrejme
+  hu: alighanem, feltehetően, vélhetőleg
+  el: κατά πάσα πιθανότητα, μάλλον, προφανώς
+  sl: najbrž, bržkone, po vsej verjetnosti
+  et: usutavasti, vististi, nähtavasti
+  lt: veikiausiai, turbūt, rodos
+  da: antageligt, formodentlig, rimeligvis
+  fi: kaiketi, luultavasti, mahdollisesti
+  sv: troligen, antagligen, med all säkerhet
+  hr: zacijelo, vjerojatno, po svemu sudeći
+  lv: visticamāk, droši vien, liekas
+  hi: मुमकिन है, शायद, बहुत संभव है कि
+  ar: على الأرجح، غالب الظن، محتمل
+  fa: به احتمال قوی، گمان می‌رود، احتمالاً
+  ur: اغلب امکان ہے کہ، غالباً، شاید
+  id: agaknya, boleh jadi, rupa-rupanya
+  vi: hẳn là, có thể lắm, chắc là
+  th: เป็นไปได้มากว่า, น่ากลัวว่า, คงจะ
+  ko: 십중팔구, 필경, 유력하게
+  ja: たぶん、十中八九、推測するに
+  zh: 很有可能、大概、想必
+  bn: সম্ভবত, মনে হয় যেন, অনুমানে
+  kk: шамасы, сірә, бәлкім
+
+ID 2043 (eventually):
+  ru: в конце концов, со временем, рано или поздно
+  uk: зрештою, врешті-решт, рано чи пізно
+  de: über kurz oder lang, letztendlich, schlussendlich
+  es: con el tiempo, a la larga, tarde o temprano
+  fr: au bout du compte, avec le temps, tôt ou tard
+  pl: ostatecznie, z biegiem czasu, prędzej czy później
+  it: col passare del tempo, infine, prima o poi
+  tr: eninde sonunda, zaman geçtikçe, nihayetinde
+  pt: com o tempo, afinal de contas, mais cedo ou mais tarde
+  ro: mai devreme sau mai târziu, pe parcurs, până la urmă
+  bg: с течение на времето, рано или късно, най-сетне
+  cs: postupem času, dříve či později, na konec
+  sk: s odstupom času, skôr či neskôr, napokon
+  hu: lassanként, előbb-utóbb, végtére
+  el: αργά ή γρήγορα, μακροπρόθεσμα, τελικώς
+  sl: sčasoma, prej ali slej, konec koncev
+  et: pikapeale, varem või hiljem, ajapikku
+  lt: ilgainiui, anksčiau ar vėliau, pagaliau
+  da: hen ad vejen, før eller siden, slutteligt
+  fi: ennen pitkää, aikanaan, loppujen lopuksi
+  sv: omsider, förr eller senare, på sikt
+  hr: vremenom, prije ili kasnije, naposljetku
+  lv: agri vai vēlu, laika gaitā, galarezultātā
+  hi: कालांतर में, देर-सवेर, अंततोगत्वा
+  ar: عاجلاً أم آجلاً، بمرور الأيام، مآله
+  fa: دیر یا زود، عاقبت‌الامر، در درازمدت
+  ur: رفتہ رفتہ، دیر سویر، انجام کار
+  id: lambat laun, lambat-laun, lama-kelamaan
+  vi: sớm muộn gì, theo thời gian, rốt cuộc
+  th: ไม่ช้าก็เร็ว, เมื่อเวลาผ่านไป, ท้ายที่สุด
+  ko: 시일이 걸려, 조만간, 끝내
+  ja: いつかは、ゆくゆくは、遅かれ早かれ
+  zh: 迟早、有朝一日、终归
+  bn: অবশেষে, কালেভদ্রে, দেরিতে হলেও
+  kk: түбі, ерте ме кеш пе, ақыр соңында
+
+ID 2044 (island):
+  ru: остров, островок
+  uk: острів, острівець
+  de: Insel, Eiland
+  es: isla, islote
+  fr: île, îlot
+  pl: wyspa, wysepka
+  it: isola, isolotto
+  tr: ada, adacık
+  pt: ilha, ilhéu
+  ro: insulă, ostrov
+  bg: остров, островче
+  cs: ostrov, ostrůvek
+  sk: ostrov, ostrovček
+  hu: sziget, szigetecske
+  el: νησί, νησίδα
+  sl: otok, otoček
+  et: saar, saareke
+  lt: sala, salelė
+  da: ø, holm
+  fi: saari, luoto
+  sv: ö, holme
+  hr: otok, otočić
+  lv: sala, saliņa
+  hi: द्वीप, टापू
+  ar: جزيرة، أرخبيل
+  fa: جزیره، آبخوست
+  ur: جزیرہ، ٹاپو
+  id: pulau, nusa
+  vi: hòn đảo, hải đảo
+  th: เกาะแก่ง, เกาะ
+  ko: 섬, 도서
+  ja: 島、島嶼
+  zh: 岛屿、小岛
+  bn: দ্বিপ, উপদ্বীপ
+  kk: арал, аралшық
+
+ID 2045 (mountain):
+  ru: гора, горная вершина
+  uk: гора, гірська вершина
+  de: Berg, Gebirge
+  es: montaña, monte
+  fr: montagne, mont
+  pl: góra, szczyt górski
+  it: montagna, monte
+  tr: dağ, doruk
+  pt: montanha, serra
+  ro: munte, pisc
+  bg: планина, планински връх
+  cs: hora, pohoří
+  sk: hora, vrch, pohorie
+  hu: hegy, hegycsúcs
+  el: βουνό, οροσειρά
+  sl: gora, hrib
+  et: mägi, mäeahelik
+  lt: kalnas, kalnagūbris
+  da: bjerg, fjeld
+  fi: vuori, tunturialue
+  sv: berg, fjäll
+  hr: planina, gorski vrh
+  lv: kalns, kalnu grēda
+  hi: पर्वत, पहाड़
+  ar: جبل، طور
+  fa: کوه، کوهستان
+  ur: پہاڑ، کوہ
+  id: gunung, pegunungan
+  vi: ngọn núi, rặng núi
+  th: ภูเขา, เทือกเขา
+  ko: 산, 산악
+  ja: 山、山岳
+  zh: 高山、山脉
+  bn: পর্বত, গিরি
+  kk: тау, тау жотасы
+
+ID 2046 (about):
+  ru: о, относительно, около, приблизительно
+  uk: про, відносно, приблизно, коло
+  de: über, bezüglich, etwa, circa
+  es: acerca de, respecto a, alrededor de
+  fr: à l'égard de, touchant, à peu près
+  pl: odnośnie, względem, w przybliżeniu
+  it: attorno a, in merito a, pressappoco
+  tr: dair, değin, takriben
+  pt: a respeito de, quanto a, por volta de
+  ro: privitor la, în ceea ce privește, cam
+  bg: касаещ, по отношение на, ориентировъчно
+  cs: ohledně, týkající se, zhruba
+  sk: ohľadom, vzťahujúci sa na, zhruba
+  hu: illetően, tekintetében, mintegy
+  el: αναφορικά με, ως προς, κάπου
+  sl: glede na, v zvezi z, okvirno
+  et: puudutav, suunas, laias laastus
+  lt: liečiantis, atžvilgiu, apytiksliai
+  da: angående, rækkende, omtrent
+  fi: koskeva, suhteen, likipitäen
+  sv: rörande, beträffande, runt
+  hr: u pogledu, dotičući, bezmalo
+  lv: attiecībā uz, sakarā ar, apmēram
+  hi: के विषय में, के संदर्भ में, कमोबेश
+  ar: بخصوص، بشأن، زهاء
+  fa: راجع به، پیرامون، حدوداً
+  ur: متعلق، کے باب میں، تخمیناً
+  id: perihal, mengenai, kira-kira
+  vi: liên quan tới, đối với, tầm
+  th: ว่าด้วย, ในแง่ของ, ราว
+  ko: ~에 관하여, 걸쳐, 어림잡아
+  ja: 〜に関して、〜にまつわる、大凡
+  zh: 涉及、关乎、约莫
+  bn: বিষয়বস্তু নিয়ে, সমন্ধে, আন্দাজে
+  kk: жайында, тұрғысынан, шақтап
+
+ID 2047 (intelligence):
+  ru: интеллект, сообразительность, разведданные
+  uk: інтелект, кмітливість, розвідка
+  de: Auffassungsgabe, Scharfsinn, Aufklärungsdienst
+  es: perspicacia, entendimiento, espionaje
+  fr: vivacité d'esprit, entendement, espionnage
+  pl: lotność, bystrość, służby wywiadowcze
+  it: acume, facoltà intellettiva, intelligence
+  tr: zekâ, kavrayış, istihbarat
+  pt: inteligência, tirocínio, serviço secreto
+  ro: perspicacitate, istețime, servicii secrete
+  bg: проницателност, бистър ум, разузнаване
+  cs: bystrost, chápavost, výzvědná služba
+  sk: bystrosť, dôvtip, tajná služba
+  hu: éleselméjűség, felfogóképesség, kémkedés
+  el: ευφυΐα, διάνοια, μυστικές υπηρεσίες
+  sl: bistrost, dojemljivost, obveščevalna dejavnost
+  et: taiplikkus, nupukus, salaluure
+  lt: nuovokumas, protiniai gabumai, žvalgybos duomenys
+  da: skarpsindighed, begavelse, spionage
+  fi: neukkuus, älyllisyys, vakoilu
+  sv: skarpsinne, begåvning, underrättelsetjänst
+  hr: oštroumnost, pronicljivost, obavještajni podaci
+  lv: apķērība, prāta spējas, slepenie dienesti
+  hi: मेधा, तीक्ष्ण बुद्धि, गुप्तचर विभाग
+  ar: نباهة، إدراك، استخبارات
+  fa: تیزهوشی، فراست، اطلاعات امنیتی
+  ur: سوجھ بوجھ، دانائی، مخبری
+  id: ketajaman pikiran, kearifan, dinas rahasia
+  vi: sự sáng dạ, tài trí, cục tình báo
+  th: ไหวพริบ, ปฏิภาณ, การหาข่าวลับ
+  ko: 총명함, 명석함, 첩보
+  ja: 知性、明晰さ、機密情報
+  zh: 聪颖、智商、情报
+  bn: ধীশক্তি, বিচক্ষণতা, গুপ্তচরবৃত্তি
+  kk: зеректік, ұшқыр ой, тыңшылық
+
+ID 2048 (top):
+  ru: вершина, макушка, наивысший
+  uk: верхівка, маківка, найвищий
+  de: Kuppe, Gipfelpunkt, höchster
+  es: cúspide, remate, cimero
+  fr: faîte, cime, le plus élevé
+  pl: wierzch, czubek, czołowy
+  it: sommo, cuspide, primario
+  tr: doruk noktası, baş, en üstteki
+  pt: cumeada, pináculo, de topo
+  ro: pisc, creștet, cel mai de sus
+  bg: теме, било, първенец
+  cs: temeno, špička, špičkový
+  sk: temeno, špic, prvotriedny
+  hu: orom, tetőpont, élen álló
+  el: ακρώρεια, κορυφαίος, ανώτατος
+  sl: teme, vrhunec, vodilni
+  et: ladvik, tipphetk, eesrindlik
+  lt: viršūnėlė, vainikas, pirmaujantis
+  da: bakketop, højestliggende, absolut bedste
+  fi: harja, lakipiste, huipputason
+  sv: hjässa, kulmen, främst
+  hr: tjeme, vršak, vodeći
+  lv: kores smaile, galotne, pārākais
+  hi: चोटी का भाग, कलगी, सर्वोच्च
+  ar: ذروة، سنام، فائق
+  fa: فراز، چکاد، ممتاز
+  ur: اونچا ترین سرا، کنگرہ، چوٹی کا
+  id: puncak tertinggi, pucuk, terkemuka
+  vi: chóp, ngọn, đỉnh cao
+  th: ยอดแหลม, จุดสูงสุด, ระดับท็อป
+  ko: 산꼭대기, 극점, 수위의
+  ja: 頂、てっぺん、最上級の
+  zh: 巅峰、梢、顶级
+  bn: শীর্ষদেশ, চূড়া, সর্বশ্রেষ্ঠ
+  kk: төбе, ұшар басы, бірінші қатардағы
+
+ID 2049 (by):
+  ru: у, около, к (сроку), посредством
+  uk: біля, коло, під (час), через
+  de: nahe bei, heran, bis spätestens, vermittels
+  es: al lado de, para (fecha), a través de
+  fr: aux abords de, d'ici à, au moyen de
+  pl: nieopodal, do (terminu), za pośrednictwem
+  it: accanto a, per (termine), ad opera di
+  tr: bitişiğinde, -e dek, vasıtasıyla
+  pt: ao lado de, para antes de, através de
+  ro: în preajma, până la data de, prin intermediul
+  bg: в близост до, в срок до, посредством
+  cs: poblíž, nejpozději do, za pomoci
+  sk: neďaleko, do (lehoty), prostredníctvom
+  hu: mentén, határidőre, révén
+  el: πλησίον, το αργότερο έως, διαμέσου
+  sl: tik ob, do (roka), prek
+  et: manu, tähtajaks, teel
+  lt: ties, iki (termino), padedant
+  da: tæt ved, senest, vha.
+  fi: äärellä, määräaikaan mennessä, avulla
+  sv: intill, fram till, förmedelst
+  hr: u blizini, zaključno s, putem
+  lv: klāt pie, līdz (termiņam), ar palīdzību
+  hi: के समीप, नियत समय तक, के मार्फ़त
+  ar: إلى جانب، قبل حلول، عن طريق
+  fa: در جوار، تا موعد، از مجرای
+  ur: متصل، بوقت معینہ، کی معرفت
+  id: di sisi, selambat-lambatnya, atas usaha
+  vi: kề bên, chậm nhất là, thông qua
+  th: อยู่ข้าง, ภายในกำหนด, อาศัย
+  ko: 곁에, 기한 내에, 힘입어
+  ja: そばに、期限までに、を介して
+  zh: 紧挨、截至、借由
+  bn: সন্নিধানে, নির্দিষ্ট সময়ের মধ্যে, মারফত
+  kk: қасында, уақытына қарай, себебімен
+
+ID 2050 (middle):
+  ru: середина, центр, срединный
+  uk: середина, середина (центр), посередній
+  de: Mittelpunkt, Innenbereich, intermediär
+  es: punto medio, núcleo, intermedio
+  fr: mi-lieu, zone centrale, médian
+  pl: punkt środkowy, środek ciężkości, pośredni
+  it: nucleo centrale, baricentro, mediano
+  tr: tam orta, göbek, ara
+  pt: ponto central, miolo, mediano
+  ro: punct central, miez, median
+  bg: средина, средище, междинен
+  cs: středobod, nitro, prostřední
+  sk: stredobod, vnútro, stredový
+  hu: belső rész, középmezőny, közép-
+  el: επίκεντρο, ενδιάμεσος χώρος, μεσαίος
+  sl: središčna točka, jedro, polovični
+  et: kesktelg, süda, vahepealne
+  lt: pusiaukelė, šerdis, tarpinis
+  da: midtpunkt, centrum, mellem-
+  fi: puoliväli, sydänosa, keskitason
+  sv: mittpunkt, medelpunkt, mellanliggande
+  hr: središnja točka, srce, prijelazni
+  lv: vidusdaļa, serde, starpposma
+  hi: मध्य बिंदु, केंद्रस्थल, दरमियानी
+  ar: بؤرة، قلب الشيء، أوسط
+  fa: کانون، نقطه مرکزی، بینابینی
+  ur: درمیانی نقطہ، مرکز، منجھلا
+  id: titik tengah, jantung, penengah
+  vi: phần giữa, cốt lõi, nằm ở giữa
+  th: จุดกึ่งกลาง, ใจกลาง, ตอนกลาง
+  ko: 중심점, 한가운데, 중간급의
+  ja: 中心部、真ん中あたり、中間の
+  zh: 正中、中心位置、中等的
+  bn: কেন্দ্রস্থল, অন্তঃস্থল, মাঝারিকি
+  kk: орта шен, кіндік, аралық
+
+ID 2051 (watch):
+  ru: смотреть, наблюдать, наручные часы
+  uk: дивитися, пильнувати, наручний годинник
+  de: zusehen, beaufsichtigen, Armbanduhr
+  es: vigilar, contemplar, reloj de pulsera
+  fr: surveiller, contempler, montre-bracelet
+  pl: przypatrywać się, czuwać, zegarek na rękę
+  it: scrutare, sorvegliare, orologio da polso
+  tr: gözlemek, dikkatle bakmak, kol saati
+  pt: prestar atenção, vigiar, relógio de pulso
+  ro: a scruta, a priveghea, ceasornic
+  bg: следя, стоя нащрек, ръчен часовник
+  cs: vyhlížet, bedlivě sledovat, náramkové hodinky
+  sk: striehnuť, dozerať, náramkové hodinky
+  hu: szemmel tart, őrködik, karóra
+  el: επιτηρώ, εποπτεύω, ρολόι χειρός
+  sl: motriti, paziti na, ročna ura
+  et: silmitsema, valvama, käeuur
+  lt: sekti akimis, budėti, rankinis laikrodukas
+  da: overvåge, spejde, armbåndsur
+  fi: vahtia, tähyillä, rannekello
+  sv: vakta, hålla uppsikt, armbandsur
+  hr: motriti, budno pratiti, ručni sat
+  lv: vērot, vaktēt, rokas pulkstenis
+  hi: ताकना, पहरा देना, कलाई घड़ी
+  ar: يرصد، يحرس، ساعة اليد
+  fa: زیر نظر داشتن، پاسداری کردن، ساعت مچی
+  ur: تاکنا، نگہبانی کرنا، کلائی کی گھڑی
+  id: mengawasi, memantau, jam arloji
+  vi: canh chừng, dòm ngó, đồng hồ đeo tay
+  th: เฝ้าระวัง, จ้องดู, นาฬิกาข้อมือ
+  ko: 주시하다, 감시하다, 손목시계
+  ja: 見張る、注視する、腕時計
+  zh: 监视、守望、腕表
+  bn: দৃষ্টি রাখা, নজর রাখা, হাতঘড়ি
+  kk: көз салу, аңду, қол сағаты
+

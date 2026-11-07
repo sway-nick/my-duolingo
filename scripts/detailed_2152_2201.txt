@@ -1,0 +1,1849 @@
+ID 2152 (plenty of):
+  ru: множество, полно, предостаточно
+  uk: безліч, повно, предосить
+  de: reichlich, jede Menge, viel
+  es: mucho, gran cantidad de, suficiente
+  fr: beaucoup de, plein de, abondance de
+  pl: mnóstwo, dużo, pod dostatkiem
+  it: molto, un sacco di, in abbondanza
+  tr: bolca, bol miktarda, bir sürü
+  pt: bastante, um monte de, de sobra
+  ro: o mulțime de, din belșug, destul
+  bg: изобилие от, много, предостатъчно
+  cs: spousta, hodně, dostatek
+  sk: veľa, kopa, dostatok
+  hu: bőségesen, rengeteg, sok
+  el: άφθονος, πολύς, μπόλικος
+  sl: veliko, obilo, na pretek
+  et: külluslikult, palju, küllaldaselt
+  lt: daug, gausybė, apstu
+  da: masser af, rigeligt med
+  fi: runsaasti, paljon, yllin kyllin
+  sv: gott om, massor av, rikligt med
+  hr: puno, obilje, mnoštvo
+  lv: daudz, papilnam, bagātīgi
+  hi: प्रचुर, बहुत सारा, काफ़ी
+  ar: الكثير من, وفير, وفرة من
+  fa: بسیار, فراوان, مقدار زیادی
+  ur: بہت زیادہ, وافر مقدار میں
+  id: banyak, berlimpah, melimpah
+  vi: nhiều, dồi dào, phong phú
+  th: มากมาย, เหลือเฟือ, จำนวนมาก
+  ko: 많은, 풍부한, 넉넉한
+  ja: たくさんの、豊富な、十分な
+  zh: 大量的、充足的、许多
+  bn: প্রচুর, অনেক, পর্যাপ্ত
+  kk: көп, жеткілікті, мол
+
+ID 2153 (afford):
+  ru: позволить себе, иметь возможность, предоставлять
+  uk: дозволити собі, мати змогу, надавати
+  de: sich leisten, aufbringen, bieten
+  es: permitirse, costearse, permitirse el lujo
+  fr: se permettre, s'offrir, avoir les moyens
+  pl: pozwolić sobie na, móc sobie pozwolić
+  it: permettersi, sostenere la spesa, permettersi il lusso di
+  tr: parası yetmek, gücü yetmek, karşılayabilmek
+  pt: ter condições de, bancar, permitir-se
+  ro: a-și permite, a avea bani pentru
+  bg: позволявам си, имам възможност
+  cs: dovolit si, moci si dovolit
+  sk: dovoliť si, môcť si dovoliť
+  hu: megengedheti magának, telik rá
+  el: αντέχω οικονομικά, έχω τη δυνατότητα
+  sl: privoščiti si, imeti sredstva za
+  et: endale lubama, jaksama osta
+  lt: išgalėti, įstengti, leisti sau
+  da: have råd til, magte
+  fi: olla varaa, pystyä maksamaan
+  sv: ha råd med, mäkta med
+  hr: priuštiti si, moći si priuštiti
+  lv: atļauties, spēt samaksāt
+  hi: ख़र्च उठा पाना, वहन करना, सामर्थ्य होना
+  ar: يتحمل نفقات, يستطيع شراء, يتحمل تكلفة
+  fa: توانایی مالی داشتن, از عهده برآمدن
+  ur: استطاعت رکھنا, خرچ برداشت کرنا
+  id: mampu, sanggup membeli
+  vi: đủ khả năng, có đủ tiền mua
+  th: สามารถจ่ายได้, มีเงินพอซื้อ
+  ko: ~할 여유가 되다, 감당하다
+  ja: ～を買う余裕がある、～する余裕がある
+  zh: 负担得起、买得起、提供
+  bn: সামর্থ্য থাকা, ব্যয়ভার বহন করা
+  kk: қалтасы көтеру, мүмкіндігі болу, шамасы жету
+
+ID 2154 (teaching):
+  ru: преподавание, обучение, учение
+  uk: викладання, навчання, вчення
+  de: Lehre, Unterricht, Unterrichten
+  es: enseñanza, docencia, pedagogía
+  fr: enseignement, pédagogie, précepte
+  pl: nauczanie, wykładanie, nauka
+  it: insegnamento, docenza
+  tr: öğretim, öğretmenlik, eğitim
+  pt: ensino, magistério, docência
+  ro: predare, învățământ, instruire
+  bg: преподаване, обучение
+  cs: výuka, vyučování, učení
+  sk: výučba, vyučovanie, učenie
+  hu: tanítás, oktatás
+  el: διδασκαλία, μάθηση
+  sl: poučevanje, učenje
+  et: õpetamine, õpetus
+  lt: mokymas, dėstymas
+  da: undervisning, belæring
+  fi: opetus, opettaminen
+  sv: undervisning, lärande
+  hr: podučavanje, predavanje, nastava
+  lv: mācīšana, pasniegšana
+  hi: शिक्षण, अध्यापन, सीख
+  ar: تدريس, تعليم
+  fa: تدریس, آموزش
+  ur: تدریس, پڑھانا, تعلیم دینا
+  id: pengajaran, mendidik
+  vi: giảng dạy, dạy học
+  th: การสอน, วิชาชีพครู
+  ko: 가르침, 수업, 교수
+  ja: 指導、教育、教え
+  zh: 教学、讲授、教导
+  bn: শিক্ষাদান, পাঠদান
+  kk: оқыту, сабақ беру, ұстаздық ету
+
+ID 2155 (coverage):
+  ru: освещение (в СМИ), охват, страховое покрытие
+  uk: висвітлення, охоплення, страхове покриття
+  de: Berichterstattung, Abdeckung, Versicherungsschutz
+  es: cobertura, difusión, alcance
+  fr: couverture médiatique, couverture, reportage
+  pl: relacja medialna, zasięg, ubezpieczenie
+  it: copertura, servizio televisivo, portata
+  tr: kapsam, haber yapma, çekim alanı
+  pt: cobertura, alcance, divulgação
+  ro: acoperire, mediatizare, reportaj
+  bg: отразяване, обхват, застрахователно покритие
+  cs: pokrytí, reportáž, zpravodajství
+  sk: pokrytie, mediálne pokrytie, rozsah
+  hu: tudósítás, lefedettség, biztosítási fedezet
+  el: κάλυψη, δημοσιογραφική κάλυψη, εμβέλεια
+  sl: poročanje, pokritost, obseg
+  et: kajastus, leviala, katvus
+  lt: nušvietimas, aprėptis, padengimas
+  da: dækning, mediedækning
+  fi: kattavuus, uutisointi, kuuluvuus
+  sv: bevakning, täckning, mediabevakning
+  hr: pokrivenost, medijsko praćenje, doseg
+  lv: atspoguļojums, pārklājums, apdrošināšanas segums
+  hi: कवरेज, मीडिया कवरेज, विस्तार
+  ar: تغطية إعلامية, نطاق, تغطية
+  fa: پوشش خبری, پوشش بیمه, دامنه
+  ur: کوریج, میڈیا کوریج, احاطہ
+  id: liputan, cakupan, jangkauan
+  vi: đưa tin, phạm vi bao phủ, bảo hiểm
+  th: การรายงานข่าว, ความครอบคลุม, ความคุ้มครอง
+  ko: 보도, 적용 범위, 보장 범위
+  ja: 報道、適用範囲、通信可能エリア
+  zh: 报道、覆盖范围、保险额度
+  bn: সংবাদ পরিবেশন, অন্তর্ভুক্তি, কভারেজ
+  kk: қамту, жариялау, хабар тарату
+
+ID 2156 (russian):
+  ru: русский, русский язык, россиянин
+  uk: російський, російська мова, росіянин
+  de: russisch, Russe, Russisch
+  es: ruso, lengua rusa
+  fr: russe, langue russe
+  pl: rosyjski, język rosyjski
+  it: russo, lingua russa
+  tr: Rus, Rusça
+  pt: russo, língua russa
+  ro: rus, limba rusă
+  bg: руски, руски език, руснак
+  cs: ruský, ruština, Rus
+  sk: ruský, ruština, Rus
+  hu: orosz, orosz nyelv
+  el: ρωσικός, ρωσικά, Ρώσος
+  sl: ruski, ruščina, Rus
+  et: vene, vene keel, venelane
+  lt: rusų, rusų kalba, rusas
+  da: russisk, russer
+  fi: venäläinen, venäjän kieli, venäjä
+  sv: rysk, ryska, ryss
+  hr: ruski, ruski jezik, Rus
+  lv: krievu, krievu valoda, krievs
+  hi: रूसी, रूसी भाषा
+  ar: روسي, اللغة الروسية
+  fa: روسی, زبان روسی
+  ur: روسی, روسی زبان
+  id: Rusia, bahasa Rusia
+  vi: tiếng Nga, người Nga, thuộc về Nga
+  th: ภาษารัสเซีย, ชาวรัสเซีย, เกี่ยวกับรัสเซีย
+  ko: 러시아어, 러시아 사람, 러시아의
+  ja: ロシアの、ロシア語、ロシア人
+  zh: 俄罗斯的、俄语、俄罗斯人
+  bn: রুশ, রাশিয়ান, রুশ ভাষা
+  kk: орыс, орыс тілі, ресейлік
+
+ID 2157 (gender):
+  ru: пол, гендер, род (грамматический)
+  uk: стать, гендер, рід (граматичний)
+  de: Geschlecht, soziales Geschlecht, Genus
+  es: género, sexo
+  fr: genre, sexe
+  pl: płeć, rodzaj (gramatyczny)
+  it: genere, sesso
+  tr: cinsiyet, toplumsal cinsiyet
+  pt: gênero, sexo
+  ro: gen, sex
+  bg: пол, род (граматически)
+  cs: pohlaví, rod (gramatický)
+  sk: pohlavie, rod (gramatický)
+  hu: társadalmi nem, nem
+  el: φύλο, κοινωνικό φύλο, γένος
+  sl: spol, družbeni spol, spol (slovnični)
+  et: sugu, sugu (keeles)
+  lt: lytis, giminė (gramatinė)
+  da: køn, grammatisk køn
+  fi: sukupuoli, suku (kieliopillinen)
+  sv: kön, genus
+  hr: spol, rod (gramatički)
+  lv: dzimums, dzimte
+  hi: लिंग, सामाजिक लिंग
+  ar: نوع اجتماعي, جنس, نوع
+  fa: جنسیت, جنس
+  ur: صنف, جنس
+  id: gender, jenis kelamin
+  vi: giới tính, giống (ngữ pháp)
+  th: เพศ, เพศสภาพ
+  ko: 성별, 성, 젠더
+  ja: 性別、ジェンダー、文法上の性
+  zh: 性别、社会性别、性（语法）
+  bn: লিঙ্গ, সামাজিক লিঙ্গ
+  kk: жыныс, гендер, грамматикалық тек
+
+ID 2158 (unidentified):
+  ru: неопознанный, неидентифицированный, неизвестный
+  uk: неопізнаний, неідентифікований, невідомий
+  de: unidentifiziert, nicht identifiziert, unbekannt
+  es: no identificado, no reconocido
+  fr: non identifié, inconnu
+  pl: niezidentyfikowany, nierozpoznany
+  it: non identificato, sconosciuto
+  tr: tanımlanamayan, kimliği belirsiz
+  pt: não identificado, desconhecido
+  ro: neidentificat, nerecunoscut
+  bg: неидентифициран, неопознат
+  cs: neidentifikovaný, neznámý
+  sk: neidentifikovaný, neznámy
+  hu: azonosítatlan, ismeretlen
+  el: μη ταυτοποιημένος, άγνωστος
+  sl: neidentificiran, neprepoznan
+  et: tuvastamata, tundmatu
+  lt: neatpažintas, neidentifikuotas
+  da: uidentificeret, ukendt
+  fi: tuntematon, tunnistamaton
+  sv: oidentifierad, okänd
+  hr: neidentificiran, nepoznat
+  lv: neidentificēts, neatpazīts
+  hi: अज्ञात, जिसकी पहचान न हुई हो
+  ar: مجهول الهوية, غير محدد, غير معروف
+  fa: شناسایی‌نشده, ناشناس
+  ur: غیر شناخت شدہ, نامعلوم
+  id: tidak teridentifikasi, tak dikenal
+  vi: chưa xác định, không rõ danh tính
+  th: ไม่ระบุตัวตน, ไม่สามารถระบุได้
+  ko: 미확인의, 정체불명의
+  ja: 未確認の、正体不明の
+  zh: 未确认的、未经识别的、身份不明的
+  bn: অশনাক্তকৃত, অজ্ঞাত
+  kk: анықталмаған, белгісіз, танылмаған
+
+ID 2159 (english):
+  ru: английский, английский язык, англичанин
+  uk: англійський, англійська мова, англієць
+  de: englisch, Englisch, Engländer
+  es: inglés, lengua inglesa
+  fr: anglais, langue anglaise
+  pl: angielski, język angielski
+  it: inglese, lingua inglese
+  tr: İngilizce, İngiliz
+  pt: inglês, língua inglesa
+  ro: englezesc, engleză, limba engleză
+  bg: английски, английски език, англичанин
+  cs: anglický, angličtina, Angličan
+  sk: anglický, angličtina, Angličan
+  hu: angol, angol nyelv
+  el: αγγλικός, αγγλικά, Άγγλος
+  sl: angleški, angleščina, Anglež
+  et: inglise, inglise keel, inglane
+  lt: anglų, anglų kalba, anglas
+  da: engelsk, englænder
+  fi: englantilainen, englannin kieli, englanti
+  sv: engelsk, engelska, engelsman
+  hr: engleski, engleski jezik, Englez
+  lv: angļu, angļu valoda, anglis
+  hi: अंग्रेज़ी, अंग्रेज़ी भाषा, अंग्रेज़
+  ar: إنجليزي, اللغة الإنجليزية
+  fa: انگلیسی, زبان انگلیسی
+  ur: انگریزی, انگریزی زبان
+  id: Inggris, bahasa Inggris
+  vi: tiếng Anh, người Anh, thuộc về nước Anh
+  th: ภาษาอังกฤษ, ชาวอังกฤษ, เกี่ยวกับอังกฤษ
+  ko: 영어, 영국인, 영국의
+  ja: 英語、イギリスの、英国人
+  zh: 英语、英国的、英格兰人
+  bn: ইংরেজি, ইংরেজি ভাষা
+  kk: ағылшын, ағылшын тілі
+
+ID 2160 (winner):
+  ru: победитель, призер, лауреат
+  uk: переможець, лауреат, призер
+  de: Gewinner, Sieger
+  es: ganador, vencedor, triunfador
+  fr: gagnant, vainqueur, lauréat
+  pl: zwycięzca, wygrany, laureat
+  it: vincitore, trionfatore
+  tr: kazanan, galip, birinci
+  pt: vencedor, ganhador, campeão
+  ro: câștigător, învingător
+  bg: победител, спечелил
+  cs: vítěz, výherce
+  sk: víťaz, výherca
+  hu: győztes, nyertes
+  el: νικητής, κερδισμένος
+  sl: zmagovalec, dobitnik
+  et: võitja
+  lt: nugalėtojas, laimėtojas
+  da: vinder, sejrherre
+  fi: voittaja
+  sv: vinnare, segrare
+  hr: pobjednik, dobitnik
+  lv: uzvarētājs, laureāts
+  hi: विजेता, जीत हासिल करने वाला
+  ar: فائز, منتصر, رابح
+  fa: برنده, پیروز
+  ur: فاتح, جیتنے والا
+  id: pemenang, juara
+  vi: người chiến thắng, bên thắng
+  th: ผู้ชนะ, ผู้ได้รางวัล
+  ko: 승자, 우승자, 당첨자
+  ja: 勝者、優勝者、当選者
+  zh: 赢家、优胜者、获胜者
+  bn: বিজয়ী, জয়ী
+  kk: жеңімпаз, ұтыс иесі
+
+ID 2161 (rely on):
+  ru: полагаться на, рассчитывать на, зависеть от
+  uk: покладатися на, розраховувати на
+  de: sich verlassen auf, bauen auf
+  es: confiar en, depender de, contar con
+  fr: compter sur, se fier à, dépendre de
+  pl: polegać na, liczyć na
+  it: fare affidamento su, contare su
+  tr: güvenmek, bel bağlamak, dayanmak
+  pt: confiar em, depender de, contar com
+  ro: a se baza pe, a se bizui pe
+  bg: разчитам на, осланям се на
+  cs: spoléhat se na, počítat s
+  sk: spoliehať sa na, rátať s
+  hu: bízik benne, támaszkodik rá, számít rá
+  el: βασίζομαι σε, στηρίζομαι σε
+  sl: zanašati se na, računati na
+  et: lootma, toetuma, lootust panema
+  lt: pasikliauti, pasitikėti
+  da: stole på, forlade sig på
+  fi: luottaa johonkin, tukeutua
+  sv: lita på, förlita sig på
+  hr: osloniti se na, pouzdati se u
+  lv: paļauties uz, uzticēties
+  hi: भरोसा करना, निर्भर होना
+  ar: يعتمد على, يثق بـ
+  fa: اتکا کردن به, اعتماد کردن به, وابسته بودن به
+  ur: بھروسا کرنا, انحصار کرنا
+  id: mengandalkan, mempercayai
+  vi: dựa vào, trông cậy vào
+  th: พึ่งพา, ไว้วางใจ, อาศัย
+  ko: ~에 의지하다, 믿다, 신뢰하다
+  ja: ～を頼りにする、～を信頼する
+  zh: 依靠、指望、信赖
+  bn: নির্ভর করা, ভরসা করা
+  kk: сенім арту, арқа сүйеу, тәуелді болу
+
+ID 2162 (regarding):
+  ru: относительно, касательно, по поводу
+  uk: щодо, стосовно, про
+  de: bezüglich, hinsichtlich, betreffend
+  es: con respecto a, en cuanto a, referente a
+  fr: concernant, à propos de, quant à
+  pl: odnośnie, dotyczący, w sprawie
+  it: riguardo a, per quanto riguarda, inerente a
+  tr: ilişkin, dair, hususunda
+  pt: a respeito de, quanto a, referente a
+  ro: privind, referitor la, în ceea ce privește
+  bg: относно, по отношение на, засягащ
+  cs: týkající se, ohledně, co se týče
+  sk: týkajúci sa, ohľadom, čo sa týka
+  hu: vonatkozóan, illetően, tekintetében
+  el: σχετικά με, όσον αφορά
+  sl: glede, v zvezi z
+  et: seoses, mis puudutab, kohta
+  lt: dėl, apie, ryšium su
+  da: angående, vedrørende, om
+  fi: koskien, mitä tulee, suhteen
+  sv: angående, beträffande, gällande
+  hr: u vezi s, s obzirom na, glede
+  lv: attiecībā uz, par, saistībā ar
+  hi: के संबंध में, के विषय में
+  ar: بشأن, بخصوص, فيما يتعلق بـ
+  fa: در رابطه با, در مورد, دربارهٔ
+  ur: کے بارے میں, کے متعلق
+  id: mengenai, perihal, terkait
+  vi: liên quan đến, về vấn đề
+  th: เกี่ยวกับ, ในเรื่องของ, ตามที่
+  ko: ~에 관하여, ~에 대하여
+  ja: ～に関して、～について
+  zh: 关于、至于、有关
+  bn: সম্পর্কে, ব্যাপারে, সংক্রান্ত
+  kk: қатысты, жөнінде, байланысты
+
+ID 2163 (yours):
+  ru: твой, ваш, принадлежащий тебе
+  uk: твій, ваш, належний тобі
+  de: deiner, deine, deins, Ihrer
+  es: tuyo, el tuyo, suyo
+  fr: le tien, le vôtre
+  pl: twój, wasz, do ciebie należący
+  it: il tuo, il vostro
+  tr: seninki, sizinki
+  pt: seu, o seu, o teu
+  ro: al tău, al vostru
+  bg: твой, ваш, твоят
+  cs: tvůj, váš
+  sk: tvoj, váš
+  hu: a tied, a tiéd, az öné
+  el: δικός σου, δικός σας
+  sl: tvoj, vaš
+  et: sinu oma, teie oma
+  lt: tavo, jūsų, taviškis
+  da: din, din egen, jeres
+  fi: sinun, teidän, omasi
+  sv: din, ditt, er, erat
+  hr: tvoj, vaš
+  lv: tavs, jūsu
+  hi: तुम्हारा, आपका
+  ar: لك, خاصتك, ملكك
+  fa: مال تو, مال شما
+  ur: تمہارا, آپ کا
+  id: milikmu, kepunyaanmu, milik Anda
+  vi: của bạn, của các bạn
+  th: ของคุณ, ของเธอ
+  ko: 당신의 것, 너의 것
+  ja: あなたのもの、君のもの
+  zh: 你的、你们的（东西）
+  bn: তোমার, আপনার
+  kk: сенікі, сіздікі
+
+ID 2164 (indian):
+  ru: индийский, индиец, индеец
+  uk: індійський, індієць, індіанець
+  de: indisch, Inder, Indianer
+  es: indio, indígena, hindú
+  fr: indien, hindou, amérindien
+  pl: indyjski, Hindus, Indianin
+  it: indiano, dell'India, pellerossa
+  tr: Hint, Hintli, Kızılderili
+  pt: indiano, indígena, índio
+  ro: indian, indigen
+  bg: индийски, индиец, индианец
+  cs: indický, Ind, indián
+  sk: indický, Ind, indián
+  hu: indiai, indián
+  el: Ινδός, ινδικός, Ινδιάνος
+  sl: indijski, Indijec, Indijanec
+  et: india, indialane, indiaanlane
+  lt: indų, indas, indėnas
+  da: indisk, inder, indianer
+  fi: intialainen, intiaani
+  sv: indisk, indier, indian
+  hr: indijski, Indijac, Indijanac
+  lv: indiešu, indietis, indiānis
+  hi: भारतीय, हिन्दुस्तानी
+  ar: هندي, من الهند
+  fa: هندی, سرخ‌پوست
+  ur: ہندوستانی, بھارتی
+  id: India, orang India, Indian
+  vi: Ấn Độ, người Ấn Độ, người da đỏ
+  th: อินเดีย, ชาวอินเดีย, อินเดียนแดง
+  ko: 인도의, 인도 사람, 아메리카 인디언
+  ja: インドの、インド人、インディアン
+  zh: 印度的、印度人、印第安人
+  bn: ভারতীয়, ভারতবাসী
+  kk: үнді, үндістандық, үндіс
+
+ID 2165 (February):
+  ru: февраль
+  uk: лютий
+  de: Februar
+  es: febrero
+  fr: février
+  pl: luty
+  it: febbraio
+  tr: Şubat
+  pt: fevereiro
+  ro: februarie
+  bg: февруари
+  cs: únor
+  sk: február
+  hu: február
+  el: Φεβρουάριος
+  sl: februar
+  et: veebruar
+  lt: vasaris
+  da: februar
+  fi: helmikuu
+  sv: februari
+  hr: veljača
+  lv: februāris
+  hi: फ़रवरी
+  ar: فبراير, شهر شباط
+  fa: فوریه
+  ur: فروری
+  id: Februari
+  vi: tháng Hai, tháng 2
+  th: กุมภาพันธ์
+  ko: 2월, 이월
+  ja: 2月、二月
+  zh: 二月
+  bn: ফেব্রুয়ারি
+  kk: ақпан
+
+ID 2166 (constitution):
+  ru: конституция, телосложение, строение
+  uk: конституція, статура, будова
+  de: Verfassung, Grundgesetz, Konstitution
+  es: constitución, complexión
+  fr: constitution, complexion physique
+  pl: konstytucja, budowa ciała
+  it: costituzione, corporatura
+  tr: anayasa, bünye, yapı
+  pt: constituição, compleição
+  ro: constituție, conformație
+  bg: конституция, телосложение
+  cs: ústava, tělesná stavba
+  sk: ústava, telesná stavba
+  hu: alkotmány, testalkat
+  el: σύνταγμα, ιδιοσυγκρασία, σωματική διάπλαση
+  sl: ustava, telesna zgradba
+  et: põhiseadus, kehaehitus
+  lt: konstitucija, kūno sudėjimas
+  da: forfatning, grundlov, konstitution
+  fi: perustuslaki, ruumiinrakenne
+  sv: grundlag, författning, konstitution
+  hr: ustav, tjelesna građa
+  lv: satversme, konstitūcija, ķermeņa uzbūve
+  hi: संविधान, शारीरिक गठन
+  ar: دستور, بنية جسدية
+  fa: قانون اساسی, ساختار بدن
+  ur: آئین, دستور, ساخت
+  id: konstitusi, undang-undang dasar, susunan fisik
+  vi: hiến pháp, thể tạng, cơ địa
+  th: รัฐธรรมนูญ, สภาพร่างกาย
+  ko: 헌법, 체질, 구조
+  ja: 憲法、体質、構成
+  zh: 宪法、体质、构造
+  bn: সংবিধান, গঠন, শারীরিক গঠন
+  kk: конституция, дене бітімі, құрылым
+
+ID 2167 (investor):
+  ru: инвестор, вкладчик
+  uk: інвестор, вкладник
+  de: Investor, Geldgeber, Anleger
+  es: inversionista, inversor
+  fr: investisseur, bailleur de fonds
+  pl: inwestor, udziałowiec
+  it: investitore, finanziatore
+  tr: yatırımcı
+  pt: investidor, aplicador
+  ro: investitor, finanțator
+  bg: инвеститор, вложител
+  cs: investor, vkladatel
+  sk: investor, vkladateľ
+  hu: befektető, tőkés
+  el: επενδυτής
+  sl: vlagatelj, investitor
+  et: investor, investeerija
+  lt: investuotojas, indėlininkas
+  da: investor, anlægger
+  fi: sijoittaja
+  sv: investerare, finansiär
+  hr: investitor, ulagač
+  lv: investors, ieguldītājs
+  hi: निवेशक, पूंजी लगाने वाला
+  ar: مستثمر
+  fa: سرمایه‌گذار
+  ur: سرمایہ کار
+  id: investor, penanam modal
+  vi: nhà đầu tư
+  th: นักลงทุน, ผู้ลงทุน
+  ko: 투자자
+  ja: 投資家
+  zh: 投资者、出资人
+  bn: বিনিয়োগকারী
+  kk: инвестор, салымшы
+
+ID 2168 (abortion):
+  ru: аборт, прерывание беременности
+  uk: аборт, переривання вагітності
+  de: Abtreibung, Schwangerschaftsabbruch
+  es: aborto, interrupción del embarazo
+  fr: avortement, IVG
+  pl: aborcja, przerwanie ciąży
+  it: aborto, interruzione di gravidanza
+  tr: kürtaj, hamileliğin sonlandırılması
+  pt: aborto, interrupção da gravidez
+  ro: avort, întrerupere de sarcină
+  bg: аборт, прекъсване на бременността
+  cs: potrat, umělé přerušení těhotenství
+  sk: potrat, interrupcia
+  hu: terhességmegszakítás, abortusz
+  el: άμβλωση, έκτρωση
+  sl: splav, prekinitev nosečnosti
+  et: abort, raseduse katkestamine
+  lt: abortas, nėštumo nutraukimas
+  da: abort, svangerskabsafbrydelse
+  fi: abortti, raskaudenkeskeytys
+  sv: abort, fosterdrivning
+  hr: pobačaj, prekid trudnoće
+  lv: aborts, grūtniecības pārtraukšana
+  hi: गर्भपात
+  ar: إجهاض, إنهاء الحمل
+  fa: سقط جنین
+  ur: اسقاطِ حمل, حمل گرانا
+  id: aborsi, keguguran
+  vi: phá thai, sảy thai
+  th: การทำแท้ง, การยุติการตั้งครรภ์
+  ko: 낙태, 임신 중절
+  ja: 中絶、妊娠中絶
+  zh: 人工流产、堕胎
+  bn: গর্ভপাত
+  kk: түсік жасату, жасанды түсік
+
+ID 2169 (catholic):
+  ru: католический, католик
+  uk: католицький, католик
+  de: katholisch, Katholik
+  es: católico
+  fr: catholique
+  pl: katolicki, katolik
+  it: cattolico
+  tr: Katolik, katolik
+  pt: católico
+  ro: catolic
+  bg: католически, католик
+  cs: katolický, katolík
+  sk: katolícky, katolík
+  hu: katolikus
+  el: καθολικός
+  sl: katoliški, katoličan
+  et: katoliiklik, katoliiklane
+  lt: katalikiškas, katalikas
+  da: katolsk, katolik
+  fi: katolinen, katolilainen
+  sv: katolsk, katolik
+  hr: katolički, katolik
+  lv: katolisks, katolis
+  hi: कैथोलिक
+  ar: كاثوليكي
+  fa: کاتولیک
+  ur: کیتھولک
+  id: Katolik
+  vi: Công giáo
+  th: คาทอลิก
+  ko: 가톨릭의, 가톨릭교도
+  ja: カトリックの、カトリック教徒
+  zh: 天主教的、天主教徒
+  bn: ক্যাথলিক
+  kk: католиктік, католик
+
+ID 2170 (variable):
+  ru: переменная, переменный, изменчивый
+  uk: змінна, змінний, мінливий
+  de: Variable, veränderlich, variabel
+  es: variable, cambiante
+  fr: variable, changeant
+  pl: zmienna, zmienny
+  it: variabile, mutevole
+  tr: değişken, değişken faktör
+  pt: variável, mutável
+  ro: variabilă, variabil, schimbător
+  bg: променлива, променлив
+  cs: proměnná, proměnlivý
+  sk: premenná, premenlivý
+  hu: változó
+  el: μεταβλητή, μεταβλητός
+  sl: spremenljivka, spremenljiv
+  et: muutuja, muutlik
+  lt: kintamasis, kintantis
+  da: variabel, foranderlig
+  fi: muuttuja, vaihteleva
+  sv: variabel, föränderlig
+  hr: varijabla, promjenjiv
+  lv: mainīgais, mainīgs
+  hi: चर, परिवर्तनशील
+  ar: متغير
+  fa: متغیر, دگرگون‌پذیر
+  ur: متغیر, بدلنے والا
+  id: variabel, peubah
+  vi: biến số, có thể thay đổi
+  th: ตัวแปร, ที่เปลี่ยนแปลงได้
+  ko: 변수, 가변적인
+  ja: 変数、変動しやすい
+  zh: 变量、可变的
+  bn: পরিবর্তনশীল রাশি, চলক
+  kk: айнымалы, құбылмалы
+
+ID 2171 (convention):
+  ru: съезд, конвенция, соглашение, обычай
+  uk: з'їзд, конвенція, угода, звичай
+  de: Tagung, Kongress, Konvention, Abkommen
+  es: convención, congreso, acuerdo
+  fr: convention, congrès, accord
+  pl: zjazd, konwencja, porozumienie, obyczaj
+  it: convenzione, congresso, assemblea
+  tr: kongre, kurultay, sözleşme, gelenek
+  pt: convenção, congresso, acordo
+  ro: convenție, congres, acord
+  bg: конвенция, конгрес, споразумение
+  cs: sjezd, konvence, úmluva, zvyklost
+  sk: zjazd, konvencia, dohoda, zvyklosť
+  hu: kongresszus, egyezmény, szokás
+  el: συνέδριο, σύμβαση, σύμβαση εργασίας
+  sl: konvencija, zborovanje, sporazum
+  et: kokkutulek, konventsioon, kokkulepe
+  lt: suvažiavimas, konvencija, susitarimas
+  da: konference, konvention, overenskomst
+  fi: kokous, kongressi, yleissopimus, tapa
+  sv: kongress, konvention, överenskommelse
+  hr: konvencija, sabor, sporazum, običaj
+  lv: kongress, konvencija, vienošanās
+  hi: सम्मेलन, परिपाटी, समझौता
+  ar: مؤتمر, اتفاقية, عرف
+  fa: همایش, کنوانسیون, رسم
+  ur: کنونشن, اجلاس, معاہدہ, رسم
+  id: konvensi, musyawarah, perjanjian
+  vi: hội nghị, quy ước, hiệp định
+  th: การประชุม, ขนบธรรมเนียม, อนุสัญญา
+  ko: 총회, 협약, 관습
+  ja: 大会、協定、慣習
+  zh: 大会、惯例、公约
+  bn: সম্মেলন, প্রথা, চুক্তি
+  kk: съезд, конвенция, келісім, дәстүр
+
+ID 2172 (jury):
+  ru: присяжные, жюри, суд присяжных
+  uk: присяжні, журі, суд присяжних
+  de: Jury, Geschworene, Preisgericht
+  es: jurado, tribunal de jurado
+  fr: jury, jurés
+  pl: ława przysięgłych, jury
+  it: giuria, giurati
+  tr: jüri, mahkeme heyeti
+  pt: júri, tribunal do júri
+  ro: juriu, comisie de jurizare
+  bg: съдебни заседатели, жури
+  cs: porota, soudní porota
+  sk: porota, súdna porota
+  hu: esküdtszék, zsűri
+  el: ένορκοι, κριτική επιτροπή
+  sl: porota, sodišče prisednikov
+  et: vandekohus, žürii
+  lt: prisiekusieji, žiuri, vertinimo komisija
+  da: nævningeting, jury, dommerkomité
+  fi: valamiehistö, tuomaristo
+  sv: jury, domarnämnd
+  hr: porota, ocjenjivački sud
+  lv: zvērināto tiesa, žūrija
+  hi: जूरी, निर्णायक मंडल
+  ar: هيئة محلفين, لجنة تحكيم
+  fa: هیئت منصفه, داوران
+  ur: جیوری, پنچایت, منصفین
+  id: dewan juri, juri
+  vi: bồi thẩm đoàn, ban giám khảo
+  th: คณะลูกขุน, คณะกรรมการตัดสิน
+  ko: 배심원단, 심사위원단
+  ja: 陪審員団、審査員団
+  zh: 陪审团、评委会
+  bn: বিচারকমণ্ডলী, জুরি
+  kk: алқабилер, қазылар алқасы
+
+ID 2173 (payment):
+  ru: платеж, оплата, выплата
+  uk: платіж, оплата, виплата
+  de: Zahlung, Bezahlung, Vergütung
+  es: pago, abono, remuneración
+  fr: paiement, versement, règlement
+  pl: płatność, zapłata, wpłata
+  it: pagamento, versamento, compenso
+  tr: ödeme, ücret
+  pt: pagamento, remuneração
+  ro: plată, achitare, plată bănească
+  bg: плащане, плащания, възнаграждение
+  cs: platba, úhrada, zaplacení
+  sk: platba, úhrada, vyplatenie
+  hu: fizetés, kifizetés, befizetés
+  el: πληρωμή, καταβολή
+  sl: plačilo, vplačilo
+  et: makse, tasumine
+  lt: mokėjimas, apmokėjimas, įmoka
+  da: betaling, afdrag
+  fi: maksu, maksusuoritus
+  sv: betalning, utbetalning
+  hr: plaćanje, uplata, isplata
+  lv: maksājums, samaksa
+  hi: भुगतान, अदायगी
+  ar: دفع, تسديد, سداد
+  fa: پرداخت, پرداخت وجه
+  ur: ادائیگی, رقم
+  id: pembayaran, pelunasan
+  vi: sự thanh toán, tiền thanh toán
+  th: การชำระเงิน, การจ่ายเงิน
+  ko: 지불, 납부, 결제
+  ja: 支払い、決済、納付
+  zh: 付款、支付、报酬
+  bn: পরিশোধ, মূল্যপ্রদান
+  kk: төлем, ақы төлеу
+
+ID 2174 (amendment):
+  ru: поправка, изменение
+  uk: поправка, зміна
+  de: Änderung, Zusatz, Gesetzesänderung
+  es: enmienda, modificación
+  fr: amendement, modification
+  pl: poprawka, nowelizacja
+  it: emendamento, modifica
+  tr: düzeltme, yasa değişikliği
+  pt: emenda, alteração
+  ro: amendament, modificare
+  bg: поправка, изменение
+  cs: pozměňovací návrh, dodatek
+  sk: pozmeňujúci návrh, dodatok
+  hu: módosítás, kiegészítés
+  el: τροπολογία, τροποποίηση
+  sl: amandma, dopolnilo
+  et: parandus, muudatusettepanek
+  lt: pataisa, pakeitimas
+  da: lovændring, tilføjelse
+  fi: lakimuutos, lisäys
+  sv: tillägg, ändringsförslag, lagändring
+  hr: amandman, dopuna
+  lv: labojums, grozījums
+  hi: संशोधन, सुधार
+  ar: تعديل, تنقيح
+  fa: اصلاحیه, متمم
+  ur: ترمیم, اصلاح
+  id: amandemen, perubahan undang-undang
+  vi: sự sửa đổi, tu chính án
+  th: การแก้ไขเพิ่มเติม, ญัตติขอแก้ไข
+  ko: 수정안, 개정, 수정 조항
+  ja: 修正条項、改正案
+  zh: 修正案、修正条款
+  bn: সংশোধনী, রূপান্তর
+  kk: түзету, өзгерту, түзету енгізу
+
+ID 2175 (complain about):
+  ru: жаловаться на, сетовать на
+  uk: скаржитися на, нарікати на
+  de: sich beschweren über, sich beklagen über
+  es: quejarse de, protestar por
+  fr: se plaindre de, réclamer sur
+  pl: narzekać na, skarżyć się na
+  it: lamentarsi di, protestare per
+  tr: şikayet etmek, yakınmak
+  pt: queixar-se de, reclamar de
+  ro: a se plânge de, a reclama
+  bg: оплаквам се от, недоволствам от
+  cs: stěžovat si na
+  sk: sťažovať sa na
+  hu: panaszkodik valamire, reklamál
+  el: παραπονιέμαι για, διαμαρτύρομαι για
+  sl: pritoževati se nad, tarnati o
+  et: kaebama millegi üle, kurtma
+  lt: skųstis kuo nors, dejuoti
+  da: klage over, brokke sig over
+  fi: valittaa jostakin, reklamoida
+  sv: klaga på, besvära sig över
+  hr: žaliti se na, prigovarati o
+  lv: sūdzēties par, žēloties par
+  hi: शिकायत करना, गिला करना
+  ar: يشتكي من, يتذمر من
+  fa: شکایت کردن از, گلایه کردن از
+  ur: شکایت کرنا, گلہ کرنا
+  id: mengeluh tentang, memprotes
+  vi: phàn nàn về, khiếu nại về
+  th: บ่นเกี่ยวกับ, ร้องเรียนเรื่อง
+  ko: ~에 대해 불평하다, 투덜거리다
+  ja: ～について不満を言う、～を苦情として申し立てる
+  zh: 抱怨、对……提出抱怨
+  bn: অভিযোগ করা, নালিশ করা
+  kk: шағымдану, наразылық білдіру
+
+ID 2176 (nod):
+  ru: кивать, кивок, кивнуть
+  uk: кивати, кивок, кивнути
+  de: nicken, Kopfnicken
+  es: asentir con la cabeza, cabecear, asentimiento
+  fr: hocher la tête, signe de tête
+  pl: kiwać głową, skinienie głową
+  it: annuire, fare un cenno con il capo
+  tr: başını sallamak, başıyla onaylamak
+  pt: acenar com a cabeça, assentir
+  ro: a da din cap, încuviințare
+  bg: кимвам, кимване
+  cs: přikývnout, kývnutí
+  sk: prikývnuť, kývnutie
+  hu: bólint, bólintás
+  el: γνέφω, κουνώ καταφατικά το κεφάλι
+  sl: pokimati, kimanje
+  et: noogutama, noogutus
+  lt: linktelėti, linktelti galva
+  da: nikke, nik
+  fi: nyökätä, nyökkäys
+  sv: nicka, nickning
+  hr: kimnuti glavom, klimanje glavom
+  lv: pamāt ar galvu, mājens ar galvu
+  hi: सिर हिलाकर सहमति देना, सिर हिलाना
+  ar: يومئ برأسه, إيماءة
+  fa: تکان دادن سر به نشانه تأیید, سر تکان دادن
+  ur: سر ہلانا, اثبات میں سر ہلانا
+  id: mengangguk, anggukan kepala
+  vi: gật đầu, sự gật đầu
+  th: พยักหน้า, การพยักหน้า
+  ko: 고개를 끄덕이다, 끄덕임
+  ja: うなずく、会釈する
+  zh: 点头、点头示意
+  bn: মাথা নাড়ানো, মাথা নেড়ে সম্মতি দেওয়া
+  kk: бас изеу, бас шұлғу
+
+ID 2177 (super):
+  ru: супер, великолепный, высшего качества
+  uk: супер, чудовий, надзвичайний
+  de: super, klasse, spitze
+  es: súper, genial, magnífico
+  fr: super, génial, formidable
+  pl: super, świetny, wspaniały
+  it: super, fantastico, magnifico
+  tr: harika, süper, müthiş
+  pt: super, excelente, sensacional
+  ro: super, excelent, grozav
+  bg: супер, чудесен, страхотен
+  cs: super, skvělý, parádní
+  sk: super, skvelý, vynikajúci
+  hu: szuper, remek, kiváló
+  el: σούπερ, εξαιρετικός, καταπληκτικός
+  sl: super, odličen, izjemen
+  et: suurepärane, super, vahva
+  lt: super, puikus, nuostabus
+  da: super, fantastisk, mægtig
+  fi: loistava, super, mahtava
+  sv: super, toppen, kanon
+  hr: super, sjajan, izvrstan
+  lv: lielisks, super, brīnišķīgs
+  hi: शानदार, उत्तम, ज़बरदस्त
+  ar: رائع, ممتاز, فائق
+  fa: عالی, فوق‌العاده, معرکه
+  ur: شاندار, زبردست, اعلیٰ
+  id: super, hebat, luar biasa
+  vi: tuyệt vời, siêu đẳng, xuất sắc
+  th: ยอดเยี่ยม, สุดยอด, เหนือชั้น
+  ko: 대단한, 최고의, 엄청난
+  ja: 素晴らしい、最高の、極上の
+  zh: 极好的、超级的、棒极了
+  bn: অসাধারণ, চমৎকার, দারুণ
+  kk: керемет, тамаша, сұрапыл
+
+ID 2178 (talent):
+  ru: талант, дарование, способность
+  uk: талант, обдарування, хист
+  de: Talent, Begabung
+  es: talento, aptitud, don
+  fr: talent, aptitude, don
+  pl: talent, dar, uzdolnienie
+  it: talento, dote, attitudine
+  tr: yetenek, kabiliyet, maharet
+  pt: talento, aptidão, dom
+  ro: talent, aptitudine, dar
+  bg: талант, дарба, заложба
+  cs: talent, nadání, vlohy
+  sk: talent, nadanie, vlohy
+  hu: tehetség, adottság
+  el: ταλέντο, χάρισμα, κλίση
+  sl: talent, nadarjenost, dar
+  et: anne, talent, võimekus
+  lt: talentas, gabumas, gyslelė
+  da: talent, begavelse, evne
+  fi: lahjakkuus, lahja, taito
+  sv: talang, begåvning, anlag
+  hr: talent, darovitost, nadarenost
+  lv: talants, dotības, dāvana
+  hi: प्रतिभा, हुनर, काबिलियत
+  ar: موهبة, كفاءة
+  fa: استعداد, توانایی ذاتی
+  ur: صلاحیت, ہنر, قابلیت
+  id: bakat, talenta, keahlian
+  vi: tài năng, năng khiếu
+  th: พรสวรรค์, ความสามารถพิเศษ
+  ko: 재능, 역량, 소질
+  ja: 才能、技量、素質
+  zh: 才干、才能、天赋
+  bn: প্রতিভা, মেধা, দক্ষতা
+  kk: дарырын, талант, қабілет
+
+ID 2179 (liberal):
+  ru: либеральный, вольнодумный, щедрый
+  uk: ліберальний, вільнодумний, щедрий
+  de: liberal, freiheitlich, freisinnig
+  es: liberal, progresista, tolerante
+  fr: libéral, tolérant, progressiste
+  pl: liberalny, wolnomyślny
+  it: liberale, progressista, tollerante
+  tr: liberal, özgürlükçü, hoşgörülü
+  pt: liberal, progressista, generoso
+  ro: liberal, tolerant, generos
+  bg: либерален, свободомислещ
+  cs: liberální, snášenlivý, velkorysý
+  sk: liberálny, tolerantný, štedrý
+  hu: liberális, szabadelvű, türelmes
+  el: φιλελεύθερος, προοδευτικός
+  sl: liberalen, svobodomiselec, strpen
+  et: liberaalne, vabameelne
+  lt: liberalus, laisvamaniškas, tolerantiškas
+  da: liberal, frisindet
+  fi: vapaamielinen, liberaali
+  sv: liberal, frisinnad, frikostig
+  hr: liberalan, slobodouman, tolerantan
+  lv: liberāls, brīvdomīgs
+  hi: उदारवादी, उदार, खुले विचारों वाला
+  ar: ليبرالي, متحرر, متسامح
+  fa: آزادی‌خواه, لیبرال, روشن‌فکر
+  ur: روشن خیال, آزاد خیال, فیاض
+  id: liberal, berpandangan terbuka
+  vi: tự do, phóng khoáng, có tư tưởng cởi mở
+  th: เสรีนิยม, เปิดกว้าง, ใจกว้าง
+  ko: 자유주의의, 진보적인, 개방적인
+  ja: 自由主義の、寛大な、進歩的な
+  zh: 自由主义的、开明的、宽容的
+  bn: উদারপন্থী, সংস্কারমুক্ত
+  kk: либералды, еркін ойлы, жомарт
+
+ID 2180 (corporation):
+  ru: корпорация, акционерное общество
+  uk: корпорація, акціонерне товариство
+  de: Konzern, Körperschaft, Unternehmen
+  es: corporación, gran empresa, sociedad anónima
+  fr: corporation, société anonyme, groupe
+  pl: korporacja, spółka akcyjna
+  it: corporazione, società, ente morale
+  tr: şirket, anonim şirket, kurum
+  pt: corporação, grande empresa
+  ro: corporație, societate pe acțiuni
+  bg: корпорация, акционерно дружество
+  cs: korporace, akciová společnost
+  sk: korporácia, akciová spoločnosť
+  hu: vállalat, részvénytársaság, konszern
+  el: ανώνυμη εταιρεία, μεγάλος οργανισμός
+  sl: korporacija, delniška družba
+  et: korporatsioon, aktsiaselts, suurettevõte
+  lt: korporacija, akcinė bendrovė
+  da: selskab, aktieselskab, koncern
+  fi: suuryritys, yhtiö, konserni
+  sv: koncern, storföretag, korporation
+  hr: korporacija, dioničko društvo
+  lv: korporācija, akciju sabiedrība
+  hi: निगम, बड़ी कंपनी
+  ar: مؤسسة, شركة كبرى, هيئة اعتبارية
+  fa: شرکت بزرگ, ابرشرکت, موسسه تجاری
+  ur: کارپوریشن, بڑا ادارہ, انجمن
+  id: perusahaan besar, korporasi
+  vi: tập đoàn, tổng công ty
+  th: บรรษัท, บริษัทจำกัดขนาดใหญ่
+  ko: 기업, 법인, 대기업
+  ja: 大企業、法人、株式会社
+  zh: 公司、企业法人、大集团
+  bn: কর্পোরেশন, সংস্থা, বৃহত্ কোম্পানি
+  kk: корпорация, ірі компания, акционерлік қоғам
+
+ID 2181 (interaction):
+  ru: взаимодействие, общение, интеракция
+  uk: взаємодія, спілкування
+  de: Interaktion, Zusammenspiel, Wechselwirkung
+  es: interacción, comunicación mutua
+  fr: interaction, échange mutuel
+  pl: interakcja, współdziałanie, wzajemne oddziaływanie
+  it: interazione, reciprocità
+  tr: etkileşim, karşılıklı iletişim
+  pt: interação, ação recíproca
+  ro: interacțiune, acțiune reciprocă
+  bg: взаимодействие, междуличностно общуване
+  cs: interakce, vzájemné působení
+  sk: interakcia, vzájomné pôsobenie
+  hu: kölcsönhatás, interakció
+  el: αλληλεπίδραση, συνδιαλλαγή
+  sl: interakcija, medsebojno delovanje
+  et: interaktsioon, vastastikmõju, suhtlus
+  lt: sąveika, tarpusavio ryšys
+  da: interaktion, samspil
+  fi: vuorovaikutus, vuorovaikutussuhde
+  sv: interaktion, samspel, samverkan
+  hr: interakcija, međudjelovanje
+  lv: mijiedarbība, mijiedarbe
+  hi: पारस्परिक क्रिया, अंतःक्रिया, संवाद
+  ar: تفاعل, تبادل
+  fa: تعامل, کنش و واکنش
+  ur: باہمی رابطہ, تعامل
+  id: interaksi, hubungan timbal balik
+  vi: sự tương tác, sự ảnh hưởng lẫn nhau
+  th: ปฏิสัมพันธ์, การมีปฏิสัมพันธ์กัน
+  ko: 상호작용, 소통
+  ja: 相互作用、交流、やり取り
+  zh: 互动、相互影响、相互作用
+  bn: মিথস্ক্রিয়া, পারস্পরিক प्रभाव
+  kk: өзара әрекеттесу, байланыс
+
+ID 2182 (gene):
+  ru: ген
+  uk: ген
+  de: Gen
+  es: gen
+  fr: gène
+  pl: gen
+  it: gene
+  tr: gen
+  pt: gene
+  ro: genă
+  bg: ген
+  cs: gen
+  sk: gén
+  hu: gén
+  el: γονίδιο
+  sl: gen
+  et: geen
+  lt: genas
+  da: gen
+  fi: geeni
+  sv: gen
+  hr: gen
+  lv: gēns
+  hi: जीन, वंशानु
+  ar: جين, مورثة
+  fa: ژن
+  ur: جین, مورثہ
+  id: gen
+  vi: gen, nhân tố di truyền
+  th: ยีน, หน่วยพันธุกรรม
+  ko: 유전자
+  ja: 遺伝子
+  zh: 基因
+  bn: জিন
+  kk: ген
+
+ID 2183 (weird):
+  ru: странный, причудливый, необычный
+  uk: дивний, химерний, незвичайний
+  de: komisch, seltsam, merkwürdig
+  es: raro, extraño, estrafalario
+  fr: bizarre, étrange, insolite
+  pl: dziwny, osobliwy, cudaczny
+  it: strano, bizzarro, insolito
+  tr: tuhaf, garip, acayip
+  pt: estranho, esquisito, bizarro
+  ro: ciudat, bizar, neobișnuit
+  bg: странен, чудат, странноват
+  cs: divný, zvláštní, podivný
+  sk: divný, čudný, zvláštny
+  hu: furcsa, különös, bizarr
+  el: παράξενος, αλλόκοτος, περίεργος
+  sl: čuden, nenavaden, bizaren
+  et: kummaline, veider, imelik
+  lt: keistas, keistokas, keistis
+  da: mærkelig, sær, underlig
+  fi: outo, kummallinen, omituinen
+  sv: konstig, konstigheter, underlig
+  hr: čudan, neobičan, bizaran
+  lv: dīvains, savāds, dīvainis
+  hi: अजीब, विचित्र, अनोखा
+  ar: غريب, شاذ, عجيب
+  fa: عجیب, غیرعادی, عجیب و غریب
+  ur: عجیب, انوکھا, پر اسرار
+  id: aneh, ganjil, janggal
+  vi: kỳ lạ, quái dị, kỳ quặc
+  th: แปลกประหลาด, พิลึก
+  ko: 이상한, 기괴한, 묘한
+  ja: 奇妙な、風変わりな、変な
+  zh: 奇怪的、古怪的、离奇的
+  bn: অদ্ভুত, অদ্ভুতুরে, খাপছাড়া
+  kk: біртүрлі, оғаш, таңқаларлық
+
+ID 2184 (daddy):
+  ru: папочка, папа, папуля
+  uk: татусь, тато, татко
+  de: Papa, Vati, Papi
+  es: papá, papi
+  fr: papa
+  pl: tatuś, tata
+  it: papà, babbo
+  tr: babacığım, baba
+  pt: papai, pai
+  ro: tătic, tată
+  bg: татко, татенце
+  cs: tatínek, táta
+  sk: otecko, ocko
+  hu: apu, apuci, apuka
+  el: μπαμπάς, μπαμπάκας
+  sl: očka, ati
+  et: issi, taat
+  lt: tėtis, tėtukas
+  da: far, farmand
+  fi: isi, isä
+  sv: pappa, farsan
+  hr: tata, tatica
+  lv: tētis, tētuks
+  hi: पापा, पिताजी
+  ar: بابا, والدي
+  fa: بابا, بابایی
+  ur: ابو, پاپا
+  id: papa, ayah
+  vi: bố, ba, cha
+  th: คุณพ่อ, พ่อ, ปะป๊า
+  ko: 아빠
+  ja: パパ、お父さん
+  zh: 爸爸、老爸、爹地
+  bn: বাবা, আব্বু
+  kk: әкетай, әке, көке
+
+ID 2185 (era):
+  ru: эра, эпоха, период
+  uk: ера, епоха, доба
+  de: Ära, Epoche, Zeitalter
+  es: era, época, periodo
+  fr: ère, époque, période
+  pl: era, epoka, czasy
+  it: era, epoca
+  tr: çağ, devir, dönem
+  pt: era, época
+  ro: eră, epocă
+  bg: ера, епоха
+  cs: éra, epocha, období
+  sk: éra, epocha, obdobie
+  hu: korszak, éra
+  el: εποχή, περίοδος
+  sl: doba, era, obdobje
+  et: ajastu, ajajärk, eepoh
+  lt: era, epocha, laikmetis
+  da: æra, tidsalder, epoke
+  fi: aikakausi, aikakauden alku, aikakausi
+  sv: era, epok, tidsålder
+  hr: era, doba, razdoblje
+  lv: ēra, laikmets, posms
+  hi: युग, काल, दौर
+  ar: عصر, حقبة, عهد
+  fa: عصر, دوران, دوره
+  ur: دور, عہد, زمانہ
+  id: era, zaman, masa
+  vi: kỷ nguyên, thời đại
+  th: ยุคสมัย, ยุค
+  ko: 시대, 연대
+  ja: 時代、年代
+  zh: 时代、纪元、年代
+  bn: যুগ, কাল
+  kk: дәуір, заман, кезең
+
+ID 2186 (vs):
+  ru: против, в сравнении с
+  uk: проти, у порівнянні з
+  de: gegen, im Vergleich zu
+  es: contra, frente a
+  fr: contre, par rapport à
+  pl: przeciwko, kontra
+  it: contro, versus
+  tr: karşı, kıyasla
+  pt: contra, em oposição a
+  ro: contra, în comparație cu
+  bg: срещу, против
+  cs: proti, versus
+  sk: proti, verzus
+  hu: ellen, szemben
+  el: εναντίον, σε αντίθεση με
+  sl: proti, v primerjavi z
+  et: vastu, versus
+  lt: prieš, versus
+  da: mod, over for
+  fi: vastaan, versus
+  sv: mot, kontra
+  hr: protiv, nasuprot
+  lv: pret, pretstatā
+  hi: बनाम, के विरुद्ध
+  ar: ضد, في مواجهة
+  fa: در برابر, در مقابل
+  ur: بمقابلہ, خلاف
+  id: melawan, banding
+  vi: đấu với, chống lại
+  th: พบกับ, ต่อสู้กับ, เทียบกับ
+  ko: ~대, 맞서서
+  ja: 対、～に対して
+  zh: 对、与……相对
+  bn: বনাম, বিপক্ষে
+  kk: қарсы, салыстырғанда
+
+ID 2187 (forth):
+  ru: вперед, наружу, дальше
+  uk: вперед, назовні, далі
+  de: vorwärts, hervor, heraus
+  es: adelante, hacia afuera, en adelante
+  fr: en avant, dehors, au jour
+  pl: naprzód, na zewnątrz, dalej
+  it: avanti, fuori, innanzi
+  tr: ileri, dışarı, öne doğru
+  pt: adiante, para frente, para fora
+  ro: înainte, în față, la iveală
+  bg: напред, навън, нататък
+  cs: vpřed, dopředu, ven
+  sk: dopredu, vpred, von
+  hu: előre, kifelé, tovább
+  el: εμπρός, προς τα εμπρός, έξω
+  sl: naprej, ven, dalje
+  et: edasi, esile, välja
+  lt: į priekį, pirmyn, išorėn
+  da: fremad, frem, ud
+  fi: eteenpäin, esiin, julki
+  sv: framåt, fram, vidare
+  hr: naprijed, dalje, prema van
+  lv: uz priekšu, ārā, tālāk
+  hi: आगे, सामने, बाहर
+  ar: إلى الأمام, إلى الخارج
+  fa: به جلو, رو به جلو, بیرون
+  ur: آگے, باہر کی طرف
+  id: ke depan, maju, seterusnya
+  vi: về phía trước, ra ngoài, tới trước
+  th: ไปข้างหน้า, ออกมาข้างนอก
+  ko: 앞으로, 앞으로 나아가
+  ja: 前方へ、外へ、前へ
+  zh: 向前、向外、往后
+  bn: সামনের দিকে, সম্মুখে
+  kk: алға, сыртқа, ілгері
+
+ID 2188 (ought):
+  ru: следует, должен, следовало бы
+  uk: слід, повинен, варто було б
+  de: sollte, müsste
+  es: debería, tendría que
+  fr: devrait, devrait faire
+  pl: powinien, wypadałoby
+  it: dovrebbe, bisognerebbe
+  tr: -meli, -malı, gerek
+  pt: deveria, teria de
+  ro: ar trebui, se cuvine
+  bg: би трябвало, следва да
+  cs: měl by, mělo by se
+  sk: mal by, malo by sa
+  hu: kellene, illene
+  el: θα έπρεπε, οφείλει
+  sl: bi moral, spodobi se
+  et: peaks, tuleks
+  lt: turėtų, derėtų
+  da: burde, bør
+  fi: pitäisi, tulisi
+  sv: borde, torde
+  hr: trebao bi, valjalo bi
+  lv: vajadzētu, pienāktos
+  hi: चाहिए, होना चाहिए
+  ar: ينبغي, يجب أن
+  fa: باید, می‌بایست
+  ur: چاہیے, لازم ہونا
+  id: seharusnya, patut
+  vi: nên, phải
+  th: ควรจะ, น่าจะ
+  ko: ~해야 한다, ~하는 것이 마땅하다
+  ja: ～すべきである、～のはずだ
+  zh: 应该、应当
+  bn: উচিত, কর্তব্য
+  kk: керек, тиіс, жөн болар еді
+
+ID 2189 (trail):
+  ru: тропа, след, идти по следу, тянуться
+  uk: стежка, слід, плентатися, тягнутися
+  de: Pfad, Wanderweg, Spur, nachziehen
+  es: sendero, pista, rastro, seguir la pista
+  fr: sentier, piste, traînée, traîner
+  pl: szlak, ścieżka, trop, wlec się
+  it: sentiero, pista, traccia, trascinarsi
+  tr: patika, iz, takip etmek, sürüklenmek
+  pt: trilha, rastro, rasto, arrastar
+  ro: potecă, urmă, cărare, a târî
+  bg: пътека, следа, диря, влача се
+  cs: stezka, stopa, pěšina, táhnout se
+  sk: chodník, stopa, vlečenie, ťahať sa
+  hu: ösvény, nyom, vonszol, lemarad
+  el: μονοπάτι, ίχνος, σέρνομαι
+  sl: pot, steza, sled, vleči se
+  et: rada, teerada, jälg, lohisema
+  lt: takas, pėdsakas, vilktis
+  da: sti, spor, slæbe sig
+  fi: polku, jälki, laahustaa
+  sv: stig, spår, släpa
+  hr: staza, trag, vući se
+  lv: taka, pēdas, vilkties
+  hi: पगडंडी, निशान, सुराग, पीछे छूटना
+  ar: درب, أثر, مسار, يتبع الأثر
+  fa: ردپا, مسیر, دنباله, کشیده شدن
+  ur: پگڈنڈی, راستہ, نشان, کھوج لگانا
+  id: jejak, jalan setapak, menyeret
+  vi: đường mòn, vệt dấu, kéo lê
+  th: ทางเดิน, ร่องรอย, ลากยาว
+  ko: 오솔길, 자국, 뒤처지다
+  ja: 小道、跡、追跡する、引きずる
+  zh: 小径、踪迹、拖曳、落后
+  bn: পথ, পদচিহ্ন, অনুসরণ করা
+  kk: соқпақ, із, соңынан еру, сүйретілу
+
+ID 2190 (fashion):
+  ru: мода, фасон, стиль, манера
+  uk: мода, фасон, стиль, манера
+  de: Mode, Modetrend, Art und Weise
+  es: moda, estilo, manera
+  fr: mode, style, façon
+  pl: moda, fason, styl
+  it: moda, voga, maniera
+  tr: moda, tarz, usul
+  pt: moda, estilo, voga
+  ro: modă, stil, manieră
+  bg: мода, стил, маниери
+  cs: móda, způsob, styl
+  sk: móda, spôsob, štýl
+  hu: divat, mód, stílus
+  el: μόδα, στυλ, τρόπος
+  sl: moda, slog, način
+  et: mood, stiil, viis
+  lt: mada, fasonas, stilius
+  da: mode, vis, måde
+  fi: muoti, tyyli, tapa
+  sv: mode, stil, manér
+  hr: moda, stil, način
+  lv: mode, stils, veids
+  hi: फ़ैशन, शैली, ढंग
+  ar: موضة, أزياء, نمط
+  fa: مد, سبک, شیوه
+  ur: فیشن, وضع, انداز
+  id: mode, tren gaya, cara
+  vi: thời trang, kiểu cách, cách thức
+  th: แฟชั่น, นิยม, แบบแผน
+  ko: 패션, 유행, 방식
+  ja: ファッション、流行、流儀
+  zh: 时尚、时装、风尚、方式
+  bn: ফ্যাশন, চল, রীতি
+  kk: сән, үлгі, мәнер
+
+ID 2191 (meanwhile):
+  ru: тем временем, между тем, пока
+  uk: тим часом, між тим, поки що
+  de: inzwischen, währenddessen, mittlerweile
+  es: mientras tanto, entretanto
+  fr: pendant ce temps, entre-temps
+  pl: tymczasem, w międzyczasie
+  it: nel frattempo, intanto
+  tr: bu sırada, bu esnada, o arada
+  pt: enquanto isso, entretanto
+  ro: între timp, în acest timp
+  bg: междувременно, през това време
+  cs: mezitím, zatímco
+  sk: medzitým, zatiaľ
+  hu: eközben, időközben, mindeközben
+  el: στο μεταξύ, εν τω μεταξύ
+  sl: medtem, vmes
+  et: vahepeal, samal ajal
+  lt: tuo tarpu, per tą laiką
+  da: i mellemtiden, imens
+  fi: sillä välin, samalla
+  sv: under tiden, medan
+  hr: u međuvremenu, dotle
+  lv: tikmēr, pa to laiku
+  hi: इस बीच, इसी दौरान
+  ar: في هذه الأثناء, في غضون ذلك
+  fa: در این میان, در همین حال
+  ur: اس دوران, اس اثناء میں
+  id: sementara itu, pada saat yang sama
+  vi: trong khi đó, cùng lúc đó
+  th: ในขณะเดียวกัน, ระหว่างนั้น
+  ko: 그동안에, 한편
+  ja: その間に、一方では
+  zh: 与此同时、在此期间
+  bn: ইতিমধ্যে, এই ফাঁকে
+  kk: осы арада, бұл уақытта, әзірше
+
+ID 2192 (barely):
+  ru: едва, еле-еле, с трудом
+  uk: ледве, ледь-ледь, з труднощами
+  de: kaum, gerade noch, mit Mühe
+  es: apenas, a duras penas, escasamente
+  fr: à peine, tout juste, guère
+  pl: ledwo, zaledwie, ledwie
+  it: appena, a stento, a malapena
+  tr: zar zor, ancak, güçlükle
+  pt: mal, quase não, apenas
+  ro: abia, cu greu, de-abia
+  bg: едва, едва-едва, почти не
+  cs: sotva, stěží, jen tak tak
+  sk: sotva, len tak-tak, ťažko
+  hu: alig, aligha, éppen hogy
+  el: μόλις, ίσα-ίσα, μετά βίας
+  sl: komaj, komajda
+  et: vaevu, vaevalt, napilt
+  lt: vos, vargiai, vos ne vos
+  da: knap nok, næppe, med nød og næppe
+  fi: tuskin, hädin tuskin, juuri ja juuri
+  sv: knappt, med nöd och näppe, nätt och jämnt
+  hr: jedva, tek, s mukom
+  lv: tik tikko, tikko, ar grūtībām
+  hi: मुश्किल से, कठिनाई से, शायद ही
+  ar: بالكاد, بجهد جهيد
+  fa: به‌سختی, به‌زحمت, به‌ندرت
+  ur: بمشکل, شاذ و نادر
+  id: hampir tidak, hampir mustahil, nyaris tidak
+  vi: vừa mới, hầu như không, suýt nữa
+  th: แทบจะไม่, แทบไม่ทัน
+  ko: 간신히, 가까스로, 거의 ~않다
+  ja: かろうじて、やっと、ほとんど～ない
+  zh: 仅仅、几乎不、勉强
+  bn: কষ্টে, কোনোমতে, প্রায় না
+  kk: әрең, зорға, әзер
+
+ID 2193 (eliminate):
+  ru: устранять, ликвидировать, исключать
+  uk: усувати, ліквідувати, виключати
+  de: beseitigen, eliminieren, ausschließen
+  es: eliminar, descartar, suprimir
+  fr: éliminer, supprimer, écarter
+  pl: eliminować, usuwać, likwidować
+  it: eliminare, sopprimere, scartare
+  tr: ortadan kaldırmak, elemek, yok etmek
+  pt: eliminar, erradicar, suprimir
+  ro: a elimina, a suprima, a înlătura
+  bg: премахвам, елиминирам, отстранявам
+  cs: odstranit, eliminovat, vyloučit
+  sk: odstrániť, vylúčiť, eliminovať
+  hu: kiküszöböl, megszüntet, kiiktat
+  el: εξαλείφω, καταργώ, αποκλείω
+  sl: odpraviti, izločiti, odpravljati
+  et: kõrvaldama, hävitama, välistama
+  lt: pašalinti, eliminuoti, išbraukti
+  da: eliminere, fjerne, udelukke
+  fi: poistaa, karsia, eliminoida
+  sv: eliminera, undanröja, avlägsna
+  hr: eliminirati, ukloniti, odbaciti
+  lv: likvidēt, novērst, izslēgt
+  hi: हटाना, समाप्त करना, ख़त्म करना
+  ar: يقضي على, يستبعد, يزيل
+  fa: حذف کردن, برطرف کردن, نابود کردن
+  ur: ختم کرنا, نکال باہر کرنا, دور کرنا
+  id: menghilangkan, melenyapkan, menyingkirkan
+  vi: loại trừ, tiêu diệt, khử bỏ
+  th: กำจัด, คัดออก, ตัดออก
+  ko: 제거하다, 배제하다, 없애다
+  ja: 排除する、取り除く、消去する
+  zh: 消除、淘汰、排除
+  bn: দূর করা, বর্জন করা, বাদ দেওয়া
+  kk: жою, аластау, алып тастау
+
+ID 2194 (motion):
+  ru: движение, перемещение, ходатайство (юр.)
+  uk: рух, переміщення, клопотання (юр.)
+  de: Bewegung, Regung, Antrag (jur.)
+  es: movimiento, moción, petición judicial
+  fr: mouvement, proposition, requête judiciaire
+  pl: ruch, poruszenie, wniosek formalny
+  it: movimento, moto, mozione legale
+  tr: hareket, devinim, önerge (hukuki)
+  pt: movimento, moção, requerimento
+  ro: mișcare, propunere, moțiune
+  bg: движение, предложение, ходатайство
+  cs: pohyb, návrh, podání
+  sk: pohyb, návrh, podanie
+  hu: mozgás, indítvány, beadvány
+  el: κίνηση, πρόταση, αίτηση στο δικαστήριο
+  sl: gibanje, premik, predlog
+  et: liikumine, avaldus, taotlus
+  lt: judėjimas, siūlymas, prašymas teismui
+  da: bevægelse, forslag, retslig begæring
+  fi: liike, aloite, oikeudellinen hakemus
+  sv: rörelse, motion, yrkande
+  hr: kretanje, pokret, pravni prijedlog
+  lv: kustība, priekšlikums, pieteikums
+  hi: गति, चाल, प्रस्ताव (अदालती)
+  ar: حركة, مقترح, عريضة قضائية
+  fa: حرکت, پیشنهاد رسمی, لایحه
+  ur: حرکت, جنبش, قانونی تحریک
+  id: gerakan, mosi, permohonan hukum
+  vi: chuyển động, vận động, kiến nghị tư pháp
+  th: การเคลื่อนไหว, ญัตติ, คำร้องต่อศาล
+  ko: 움직임, 동작, 발의, 신청
+  ja: 動き、動作、動議、申立て
+  zh: 运动、动作、动议、诉讼申请
+  bn: গতি, আন্দোলন, প্রস্তাব
+  kk: қозғалыс, өтінішхат, ұсыныс
+
+ID 2195 (implement):
+  ru: внедрять, осуществлять, орудие, инструмент
+  uk: впроваджувати, здійснювати, знаряддя
+  de: umsetzen, durchführen, einführen, Werkzeug
+  es: implementar, poner en práctica, ejecutar
+  fr: mettre en œuvre, appliquer, réaliser
+  pl: wdrażać, realizować, wprowadzać
+  it: attuare, implementare, mettere in atto
+  tr: uygulamak, hayata geçirmek, icra etmek
+  pt: implementar, colocar em prática, executar
+  ro: a implementa, a pune în aplicare
+  bg: внедрявам, осъществявам, изпълнявам
+  cs: zavést, realizovat, uvést v praxi
+  sk: zaviesť, realizovať, uskutočniť
+  hu: végrehajt, bevezet, megvalósít
+  el: εφαρμόζω, υλοποιώ, πραγματοποιώ
+  sl: izvesti, uveljaviti, uresničiti
+  et: rakendama, ellu viima, juurutama
+  lt: įgyvendinti, įdiegti, vykdyti
+  da: gennemføre, implementere, iværksætte
+  fi: panna toimeen, toteuttaa, ottaa käyttöön
+  sv: genomföra, implementera, tillämpa
+  hr: provesti, implementirati, primijeniti
+  lv: ieviest, īstenot, realizēt
+  hi: लागू करना, कार्यान्वित करना, अमल में लाना
+  ar: ينفذ, يطبق, ينجز
+  fa: پیاده‌سازی کردن, اجرا کردن, به کار بستن
+  ur: نافذ کرنا, عمل میں لانا, لاگو کرنا
+  id: menerapkan, mengimplementasikan, melaksanakan
+  vi: thực hiện, triển khai, thi hành
+  th: ดำเนินการ, นำไปปฏิบัติ, ทำให้บรรลุผล
+  ko: 실행하다, 이행하다, 도입하다
+  ja: 実行する、実装する、導入する
+  zh: 实施、贯彻、执行、落实
+  bn: বাস্তবায়ন করা, কার্যকর করা
+  kk: енгізу, жүзеге асыру, іске асыру
+
+ID 2196 (approve):
+  ru: одобрять, утверждать, согласовывать
+  uk: схвалювати, затверджувати, погоджувати
+  de: genehmigen, billigen, gutheißen
+  es: aprobar, autorizar, dar el visto bueno
+  fr: approuver, valider, autoriser
+  pl: zatwierdzać, aprobować, pochwalać
+  it: approvare, autorizzare, accogliere
+  tr: onaylamak, tasvip etmek, uygun bulmak
+  pt: aprovar, referendar, autorizar
+  ro: a aproba, a autoriza, a agrea
+  bg: одобрявам, утвърждавам, съгласувам
+  cs: schválit, schvalovat, uznat
+  sk: schváliť, súhlasiť s, odobriť
+  hu: jóváhagy, helyesel, engedélyez
+  el: εγκρίνω, επικυρώνω, επιδοκιμάζω
+  sl: odobriti, potrditi, soglašati
+  et: heaks kiitma, kinnitama, lubama
+  lt: patvirtinti, pritarti, aprobuoti
+  da: godkende, bifalde, samtykke
+  fi: hyväksyä, puoltaa, kannattaa
+  sv: godkänna, gilla, bifalla
+  hr: odobriti, prihvatiti, potvrditi
+  lv: apstiprināt, atbalstīt, pieņemt
+  hi: स्वीकृत करना, मंज़ूरी देना, अनुमोदन करना
+  ar: يوافق على, يعتمد, يقر
+  fa: تصویب کردن, تأیید کردن, پسندیدن
+  ur: منظور کرنا, توثیق کرنا, پسند کرنا
+  id: menyetujui, mengesahkan, merestui
+  vi: phê duyệt, tán thành, chấp thuận
+  th: อนุมัติ, รับรอง, เห็นพ้อง
+  ko: 승인하다, 찬성하다, 인가하다
+  ja: 承認する、認可する、賛成する
+  zh: 批准、同意、认可
+  bn: অনুমোদন করা, মঞ্জুর করা
+  kk: мақұлдау, бекіту, риза болу
+
+ID 2197 (increased):
+  ru: увеличенный, возросший, повышенный
+  uk: збільшений, підвищений, зрослий
+  de: erhöht, gestiegen, vergrößert
+  es: aumentado, incrementado, mayor
+  fr: augmenté, accru, rehaussé
+  pl: zwiększony, podwyższony, wzrosły
+  it: aumentato, cresciuto, incrementato
+  tr: artmış, artırılmış, çoğalmış
+  pt: aumentado, ampliado, acrescido
+  ro: crescut, mărit, sporit
+  bg: увеличен, нараснал, повишен
+  cs: zvýšený, vzrostlý, rozšířený
+  sk: zvýšený, vzrastnutý, narastený
+  hu: megnövekedett, fokozott, emelkedett
+  el: αυξημένος, μεγαλωμένος
+  sl: povečan, zvišan, narasel
+  et: suurenenud, kasvanud, tõusnud
+  lt: padidėjęs, išaugęs, didesnis
+  da: øget, forhøjet, steget
+  fi: kasvanut, lisääntynyt, suurentunut
+  sv: ökad, förhöjd, stegrad
+  hr: povećan, uvećan, povišen
+  lv: palielināts, pieaudzis, paaugstināts
+  hi: बढ़ा हुआ, अधिक हुआ, संवर्धित
+  ar: متزايد, متصاعد, مزداد
+  fa: افزایش‌یافته, فزاینده, بیشتر شده
+  ur: بڑھا ہوا, اضافہ شدہ
+  id: meningkat, bertambah, dinaikkan
+  vi: được tăng cường, tăng thêm, gia tăng
+  th: เพิ่มขึ้น, สูงขึ้น, ขยายขึ้น
+  ko: 증가한, 늘어난, 증대된
+  ja: 増加した、高まった、増大した
+  zh: 增加的、增强的、上升的
+  bn: বৃদ্ধিপ্রাপ্ত, বর্ধিত
+  kk: ұлғайтылған, артқан, көбейген
+
+ID 2198 (aim at):
+  ru: целиться в, быть нацеленным на, стремиться к
+  uk: цілитися в, бути націленим на, прагнути до
+  de: zielen auf, anvisieren, abzielen auf
+  es: apuntar a, aspirar a, tener como objetivo
+  fr: viser, cibler, avoir pour but
+  pl: celować w, dążyć do, mierzyć w
+  it: mirare a, puntare su, tendere a
+  tr: hedeflemek, nişan almak, yöneltmek
+  pt: mirar em, visar a, ter como alvo
+  ro: a ținti spre, a viza, a aspira la
+  bg: прицелвам се в, насочвам към, целя
+  cs: mířit na, zaměřit se na, zacílit
+  sk: mieriť na, zamerať sa na, cieliť
+  hu: céloz valamire, megcéloz, törekszik rá
+  el: σκοπεύω, στοχεύω σε, αποσκοπώ σε
+  sl: meriti na, ciljati na, stremeti k
+  et: sihtima, suunatud olema, pürgima
+  lt: taikytis į, taikyti, siekti
+  da: sigte mod, stile efter, have som mål
+  fi: tähdätä johonkin, tavoitella, suunnata
+  sv: sikta på, sträva efter, inrikta sig på
+  hr: ciljati na, težiti prema, usmjeriti se na
+  lv: tēmēt uz, tiekties pēc, virzīt uz
+  hi: निशाना लगाना, लक्षित करना, उद्देश्य रखना
+  ar: يصوب نحو, يهدف إلى, يستهدف
+  fa: هدف گرفتن, نشانه‌گیری کردن, معطوف کردن به
+  ur: نشانہ باندھنا, مقصد بنانا, ہدف رکھنا
+  id: membidik, mengarahkan pada, bertujuan
+  vi: nhắm vào, hướng đến, mục tiêu là
+  th: เล็งไปที่, มุ่งเป้าหมายไปที่
+  ko: ~을 겨냥하다, ~을 목표로 삼다
+  ja: ～を狙う、～を目標とする
+  zh: 瞄准、针对、把目标定在
+  bn: লক্ষ্য করা, নিশান করা
+  kk: көздеу, бағытталу, нысанаға алу
+
+ID 2199 (app):
+  ru: приложение (программа), мобильное приложение
+  uk: додаток, застосунок
+  de: App, Anwendungsprogramm
+  es: aplicación, app
+  fr: application, appli
+  pl: aplikacja, apka
+  it: applicazione, app
+  tr: uygulama, mobil uygulama
+  pt: aplicativo, app
+  ro: aplicație, aplicație software
+  bg: приложение, софтуерно приложение
+  cs: aplikace, apka
+  sk: aplikácia, apka
+  hu: alkalmazás, app
+  el: εφαρμογή, εφαρμογή για κινητά
+  sl: aplikacija, mobilna aplikacija
+  et: rakendus, mobiilirakendus, äpp
+  lt: programėlė, aplikacija
+  da: app, applikation
+  fi: sovellus, mobiilisovellus, äppi
+  sv: app, applikation
+  hr: aplikacija, mobilna aplikacija
+  lv: lietotne, mobilā lietotne
+  hi: ऐप, मोबाइल ऐप
+  ar: تطبيق, تطبيق جوال
+  fa: اپلیکیشن, برنامه کاربردی
+  ur: ایپ, موبائل ایپلیکیشن
+  id: aplikasi, aplikasi seluler
+  vi: ứng dụng, phần mềm ứng dụng
+  th: แอป, แอปพลิเคชัน
+  ko: 앱, 어플리케이션
+  ja: アプリ、アプリケーション
+  zh: 应用程序、应用软件、App
+  bn: অ্যাপ, মোবাইল অ্যাপ্লিকেশন
+  kk: қосымша, мобильді қосымша
+
+ID 2200 (perception):
+  ru: восприятие, ощущение, осознание
+  uk: сприйняття, усвідомлення, відчуття
+  de: Wahrnehmung, Auffassung, Sinneswahrnehmung
+  es: percepción, intuición, comprensión
+  fr: perception, discernement, vue
+  pl: postrzeganie, percepcja, wrażenie
+  it: percezione, intuito, sensazione
+  tr: algı, algılama, seziş
+  pt: percepção, discernimento, intuição
+  ro: percepție, pricepere, intuiție
+  bg: възприятие, проницателност, усещане
+  cs: vnímání, postřeh, percepce
+  sk: vnímanie, postreh, vnem
+  hu: érzékelés, felfogás, észlelés
+  el: αντίληψη, διαισθητικότητα
+  sl: zaznava, dojemanje, videnje
+  et: taju, tajumine, arusaam
+  lt: suvokimas, pajautimas, įžvalga
+  da: opfattelse, sansning, indsigt
+  fi: havaintokyky, käsitys, havainto
+  sv: uppfattning, varseblivning, sinnesintryck
+  hr: percepcija, opažanje, poimanje
+  lv: uztvere, izpratne, nojausma
+  hi: अवधारणा, प्रत्यक्ष ज्ञान, अनुभूति
+  ar: إدراك, فهم, حاسة
+  fa: ادراک, بینش, تلقی
+  ur: ادراک, فہم, شعور
+  id: persepsi, pemahaman, sudut pandang
+  vi: nhận thức, sự cảm nhận, trực giác
+  th: การรับรู้, ความเข้าใจ, ญาณทัศนะ
+  ko: 지각, 인식, 통찰력
+  ja: 知覚、認識、見解
+  zh: 感知、见解、认知
+  bn: উপলব্ধি, ইন্দ্রিয়লব্ধ জ্ঞান, ধারণা
+  kk: қабылдау, түйсік, ұғыну
+
+ID 2201 (visitor):
+  ru: посетитель, гость, визитер
+  uk: відвідувач, гість, візитер
+  de: Besucher, Gast, Tourist
+  es: visitante, huésped, invitado
+  fr: visiteur, invité, touriste
+  pl: odwiedzający, gość, wizytator
+  it: visitatore, ospite
+  tr: ziyaretçi, konuk, misafir
+  pt: visitante, hóspede, convidado
+  ro: vizitator, oaspete, musafir
+  bg: посетител, гост
+  cs: návštěvník, host
+  sk: návštevník, hosť
+  hu: látogató, vendég
+  el: επισκέπτης, καλεσμένος
+  sl: obiskovalec, gost
+  et: külastaja, külaline
+  lt: lankytojas, svečias
+  da: besøgende, gæst
+  fi: vierailija, kävijä, vieras
+  sv: besökare, gäst
+  hr: posjetitelj, gost
+  lv: apmeklētājs, viesis
+  hi: आगंतुक, अतिथि, दर्शक
+  ar: زائر, ضيف
+  fa: بازدیدکننده, مهمان
+  ur: زائر, ملاقاتی, مہمان
+  id: pengunjung, tamu
+  vi: khách thăm, người ghé thăm, du khách
+  th: ผู้มาเยือน, แขก, ผู้เยี่ยมชม
+  ko: 방문자, 손님, 관람객
+  ja: 訪問者、来客、観光客
+  zh: 访客、参观者、游客
+  bn: দর্শনার্থী, অভ্যাগত, পরিদর্শক
+  kk: келуші, мейман, қонақ

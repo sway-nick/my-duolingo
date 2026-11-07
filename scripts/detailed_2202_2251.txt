@@ -1,0 +1,1830 @@
+================================================================================
+LINGUISTIC AUDIT & CALIBRATION REPORT: BATCH 2202-2251
+49 Words (ID 2232 skipped) across EXACTLY 36 LOCALES
+================================================================================
+
+EXECUTIVE AUDIT SUMMARY OF KEY BUGS CAUGHT & CALIBRATED:
+
+1. Homonym & Polysemy Blunder: "regime" (ID 2202)
+   - Critical MT error: "regime" was mistranslated as device setting/mode (de: Modus, fr: mode, pl: tryb, it: modalità, pt: modo, ro: mod, hu: mód, el: τρόπος, sl: način, da: tilstand, fi: tila, sv: läge, hr: način, hi: तरीका, ar: نمط, th: โหมด, ko: 모드, ja: モード).
+   - Calibrated to political governance system, regime, and dietary/medical regimen.
+
+2. Adverb vs Quantifier Polysemy: "somewhat" (ID 2207)
+   - Critical MT error: Russian "несколько" misled machine translation into rendering "somewhat" as plural count quantifier "several / a few items" across ~15 languages (fr: quelques, it: Alcuni, ro: unele, bg: някои, cs: nějaký, sk: niektoré, hu: néhány, el: μερικοί, et: mõned, lt: kai kurie, da: flere, fi: useita, sv: flera, lv: vairāki, th: หลายอย่าง, ko: 여러 개, ja: いくつかの, vi: một số, kk: бірнеше).
+   - Calibrated to proper degree adverb "rather, slightly, to some extent" (fr: quelque peu/assez/plutôt, it: alquanto/piuttosto, ro: oarecum/întrucâtva, bg: донякъде, cs: poněkud, hu: némileg/kissé, el: κάπως, et: mõnevõrra, da: noget/en smule, fi: jossain määrin, sv: något/en aning, ja: いくぶん/やや, ko: 다소/약간).
+
+3. Narrow Financial Artifacts: "asset" (ID 2211)
+   - Overly specific accounting translation in dump (ru: актив в балансе, de: Vermögenswert in der Bilanz, fr: actif au bilan, pl: aktywa w bilansie, da: balanceaktiver, fi: taseomaisuuserä, sv: tillgång i balansräkningen, hi: बैलेंस शीट संपत्ति, ar: أصل في الميزانية العمومية, ko: 대차대조표 자산, ja: 貸借対照表資産).
+   - Calibrated to comprehensive asset, resource, virtue, advantage, and property.
+
+4. False Friends:
+   - "relief" (ID 2212): fr & ro had "relief" (terrain topography / embossed sculpture) instead of easing pain/burden (fr: soulagement/répit/secours; ro: ușurare/alinare/ajutor).
+   - "pretend" (ID 2247): ro had "pretinde" (false friend meaning to claim/demand); kk had "жалған сөйлеу" (to lie). Calibrated to genuine pretense/feigning (ro: a se preface, a simula; kk: өтірік істеу, сылтаурату, кейіп таныту).
+
+5. Severe Portuguese Array Shift / Glitches:
+   - "german" (ID 2217): pt had "ir embora" (to leave/go away)! Calibrated to "alemão".
+   - "bible" (ID 2219): pt had "alemão" (German)! Calibrated to "Bíblia".
+   - "portion" (ID 2241): pt had "Papel" (paper/role)! Calibrated to "porção, fatia, quinhão".
+   - "dig" (ID 2245): pt had "escavação" (noun)! Calibrated to verb "cavar, escavar".
+
+6. Dangerous Criminal Execution Mistranslation: "enforcement" (ID 2218)
+   - MT translated law enforcement (e.g. law enforcement, contract enforcement) as capital punishment execution / putting to death across 10+ languages (da: henrettelse, sv: avrättning, et: hukkamine, lt: egzekucija, hr: pogubljenje, vi: hành quyết, th: การประหารชีวิต, ko: 처형, ja: 処刑)!
+   - Calibrated to legal enforcement, execution of duties, compliance, and implementation (da: håndhævelse, sv: upprätthållande/efterlevnad, et: jõustamine, lt: vykdymas/užtikrinimas, hr: provedba/provođenje zakona, vi: sự thực thi, th: การบังคับใช้, ko: 집행/시행, ja: 執行/施行).
+
+7. Russian Polysemy Bleed: "exposure" (ID 2220)
+   - Russian "контакт" misled MT into interpreting "exposure" as communication/address contact (fi: yhteystiedot, ja: 連絡, ko: 연락하다, vi: liên hệ, th: ติดต่อ).
+   - Calibrated to radiation/environmental exposure, uncovering/disclosure, photography exposure (fi: altistuminen/valotus, ja: 露出/暴露, ko: 노출/폭로, vi: sự phơi nhiễm/vạch trần, th: การเปิดเผย/การสัมผัส).
+
+8. Russian Permit Ambiguity: "resolution" (ID 2224)
+   - Russian "разрешение" caused MT to translate "resolution" as "administrative permit / permission" (fr: autorisation, it: permesso, ro: permisiune, cs: povolení, sk: povolenie, hu: engedély, el: άδεια, sl: dovoljenje, et: luba, lt: leidimas, uk: дозвіл).
+   - Calibrated to decision, firmness of purpose, dispute settlement, and screen resolution (fr: résolution/détermination, it: risoluzione/determinazione, etc.).
+
+9. Hallucinated Clause Complement: "whenever" (ID 2229)
+   - MT hallucinated "you want / you wish" across 12 languages (pl, it, pt, ro, bg, cs, sk, hu, el, sl, et, lt: e.g. quando vuoi, sempre que você quiser, oricând vrei, quando пожелаеш, kiedy tylko chcesz).
+   - Calibrated to pure conjunction/adverb: every time that / at whatever time (pl: za każdym razem gdy/kiedykolwiek, it: ogni volta che/ogniqualvolta, pt: sempre que/toda vez que, etc.).
+
+10. Multi-Sense Scope: "faculty" (ID 2235)
+    - Dump mixed teaching staff (ko, ja, th, vi, et, bg) and university division (de, pl, cs, ro). Calibrated to expressively include teaching staff, university division, and mental faculty across all languages.
+
+11. Vulgarity & Multi-Sense: "suck" (ID 2238)
+    - Replaced raw slang/expletives (pt: "é uma merda") with natural, idiomatic options covering both physical suction/drawing and colloquial disappointment ("sugar, chupar, ser muito ruim").
+
+12. Adjective vs Power Plant: "solar" (ID 2244)
+    - Fixed MT turning adjective "solar" into "solar energy / solar power plant" (et, da, fi, sv, lv, vi, th, ko, ja).
+
+13. Part of Speech Normalization: "reply to" (ID 2251)
+    - Replaced noun translations ("answer to") in ro, bg, sk, sl with proper verb forms ("a răspunde la", "отговарям на", "odpovedať na", "odgovoriti na"); replaced "react to" in da, lv, ja, th with "reply/respond to".
+
+14. Regional Nuances:
+    - Brazil (pt / pt-BR): "israelense" (ID 2250, standard Brazilian for modern Israeli vs European israelita), "diretor-executivo, CEO" (ID 2228), "promotor de justiça" (ID 2249), "alemão" (ID 2217), "Bíblia" (ID 2219), "porção, fatia" (ID 2241).
+    - Latin America (es): natural regional terms, "tipo, tío, amigo" (ID 2227), "fiscal" (ID 2249), "fingir" (ID 2247).
+    - Numerals: "twenty" (ID 2246) calibrated to proper words in ko ("스물, 이십") and ja ("二十、にじゅう") instead of digits ("20").
+
+================================================================================
+FULL 36-LOCALE CALIBRATION DATA (35 Target Languages + English Headword)
+================================================================================
+
+=== ID 2202: regime (ru: режим, государственный строй, диетический режим) ===
+  uk: режим, державний лад, розпорядок
+  de: Regime, Herrschaftssystem, Lebensweise
+  es: régimen, sistema de gobierno, pauta
+  fr: régime, régime politique, cure
+  pl: reżim, ustrój, reżym
+  it: regime, sistema di governo, dieta
+  tr: rejim, yönetim biçimi, düzen
+  pt: regime, sistema político, dieta
+  ro: regim, sistem de guvernare, dietă
+  bg: режим, държавно устройство, диета
+  cs: režim, státní zřízení, systém
+  sk: režim, štátne zriadenie, systém
+  hu: rezsim, uralom, étrend
+  el: καθεστώς, πολίτευμα, διατροφή
+  sl: režim, družbeni red, sistem
+  et: režiim, valitsuskord, elukord
+  lt: režimas, valdymo santvarka, tvarka
+  da: regime, styre, kur
+  fi: hallinto, hallitusmuoto, regiimi
+  sv: regim, styre, diet
+  hr: režim, poredak, dijeta
+  lv: režīms, valsts iekārta, diēta
+  hi: शासन, व्यवस्था, निज़ाम
+  ar: نظام حكم, نظام, حمية
+  fa: رژیم، نظام، رژیم غذایی
+  ur: حکومت، نظام، پرہیز
+  id: rezim, tata pemerintahan, pola hidup
+  vi: chế độ, chính thể, chế độ ăn
+  th: ระบอบการปกครอง, ระบอบ, การควบคุมอาหาร
+  ko: 정권, 체제, 제도
+  ja: 政権、体制、レジーム
+  zh: 政权、制度、养生法
+  bn: শাসনব্যবস্থা, রেজিম, খাদ্যবিধি
+  kk: режим, басқару жүйесі, салт
+
+=== ID 2203: merely (ru: просто, лишь, только) ===
+  uk: просто, лише, тільки
+  de: lediglich, nur, bloß
+  es: simplemente, meramente, sólo
+  fr: simplement, seulement, uniquement
+  pl: jedynie, tylko, po prostu
+  it: soltanto, semplicemente, solo
+  tr: sadece, yalnızca, sırf
+  pt: apenas, meramente, simplesmente
+  ro: doar, numai, pur și simplu
+  bg: просто, само, единствено
+  cs: pouze, jen, prostě
+  sk: iba, len, jednoducho
+  hu: csupán, pusztán, csak
+  el: απλώς, μόνο, καθαρά
+  sl: le, samo, zgolj
+  et: üksnes, vaid, ainult
+  lt: tik, tiesiog, vien tik
+  da: blot, kun, bare
+  fi: vain, ainoastaan, pelkästään
+  sv: bara, endast, blott
+  hr: samo, tek, jedino
+  lv: vienīgi, tikai, vienkārši
+  hi: केवल, मात्र, सिर्फ़
+  ar: مجرد, فقط, فحسب
+  fa: صرفاً، فقط، تنها
+  ur: محض، صرف، فقط
+  id: hanya, melulu, semata-mata
+  vi: chỉ, đơn thuần, vẻn vẹn
+  th: เพียงแค่, เท่านั้น, แค่
+  ko: 단지, 그저, 한낱
+  ja: 単に、ただ、わずかに
+  zh: 仅仅、只不过、只是
+  bn: केवल, মাত্র, শুধু
+  kk: тек, тек қана, жай ғана
+
+=== ID 2204: analyst (ru: аналитик, специалист по анализу) ===
+  uk: аналітик, фахівець з аналізу
+  de: Analytiker, Analyst
+  es: analista
+  fr: analyste
+  pl: analityk
+  it: analista
+  tr: analist, çözümleyici
+  pt: analista
+  ro: analist
+  bg: аналитик
+  cs: analytik
+  sk: analytik
+  hu: elemző, analitikus
+  el: αναλυτής
+  sl: analitik
+  et: analüütik
+  lt: analitikas
+  da: analytiker
+  fi: analyytikko
+  sv: analytiker
+  hr: analitičar
+  lv: analītiķis
+  hi: विश्लेषक
+  ar: محلل
+  fa: تحلیلگر، کارشناس
+  ur: تجزیہ کار
+  id: analis, juru analisis
+  vi: nhà phân tích, chuyên viên phân tích
+  th: นักวิเคราะห์
+  ko: 분석가, 애널리스트
+  ja: アナリスト、分析家
+  zh: 分析师、分析员
+  bn: বিশ্লেষক
+  kk: талдаушы, сарапшы
+
+=== ID 2205: disability (ru: инвалидность, нетрудоспособность, ограниченные возможности) ===
+  uk: інвалідність, непрацездатність
+  de: Behinderung, Erwerbsunfähigkeit
+  es: discapacidad, minusvalía
+  fr: handicap, invalidité, incapacité
+  pl: niepełnosprawność, inwalidztwo
+  it: disabilità, invalidità, menomazione
+  tr: engellilik, sakatlık, yetersizlik
+  pt: deficiência, incapacidade, invalidez
+  ro: dizabilitate, handicap, invaliditate
+  bg: увреждане, инвалидност, неспособност
+  cs: zdravotní postižení, invalidita
+  sk: zdravotné postihnutie, invalidita
+  hu: fogyatékosság, rokkantság
+  el: αναπηρία, ανικανότητα
+  sl: invalidnost, nezmožnost, oviranost
+  et: puue, vaegurlus, töövõimetus
+  lt: negalia, neįgalumas
+  da: handicap, funktionsnedsættelse
+  fi: vammaisuus, toimintarajoite, työkyvyttömyys
+  sv: funktionsnedsättning, handikapp
+  hr: invaliditet, nesposobnost
+  lv: invaliditāte, darbnespēja
+  hi: विकलांगता, दिव्यांगता, असमर्थता
+  ar: إعاقة, عجز
+  fa: معلولیت، ناتوانی
+  ur: معذوری، نااہلیت
+  id: disabilitas, cacat, ketidakmampuan
+  vi: khuyết tật, tàn tật
+  th: ความพิการ, ความทุพพลภาพ
+  ko: 장애, 신체 장애
+  ja: 障害、身体障害
+  zh: 残疾、缺陷、障碍
+  bn: প্রতিবন্ধকতা, অক্ষমতা
+  kk: мүгедектік, қабілетсіздік
+
+=== ID 2206: rating (ru: рейтинг, оценка, классификация) ===
+  uk: рейтинг, оцінка, класифікація
+  de: Bewertung, Einstufung, Rating
+  es: calificación, puntuación, clasificación
+  fr: évaluation, classement, note
+  pl: ocena, wskaźnik, ranking
+  it: valutazione, punteggio, rating
+  tr: derecelendirme, puan, reyting
+  pt: avaliação, classificação, pontuação
+  ro: evaluare, cotă, notă
+  bg: рейтинг, оценка, класиране
+  cs: hodnocení, žebříček, sazba
+  sk: hodnotenie, bodovanie, rating
+  hu: értékelés, minősítés, besorolás
+  el: βαθμολογία, αξιολόγηση, τηλεθέαση
+  sl: ocena, uvrstitev, razvrstitev
+  et: reiting, hinnang, hinne
+  lt: reitingas, įvertinimas, rodiklis
+  da: vurdering, bedømmelse, rangering
+  fi: luokitus, arviointi, katsojaluvut
+  sv: betyg, klassificering, rankning
+  hr: ocjena, rejting, bodovanje
+  lv: reitings, vērtējums, atzīme
+  hi: रेटिंग, मूल्यांकन, श्रेणी
+  ar: تصنيف, تقييم, تقدير
+  fa: رتبه‌بندی، ارزیابی، امتیاز
+  ur: درجہ بندی، تشخیص، ریٹنگ
+  id: peringkat, penilaian, rating
+  vi: đánh giá, xếp hạng, phân loại
+  th: อันดับ, เรตติ้ง, การประเมินผล
+  ko: 등급, 평가, 시청률
+  ja: 格付け、評価、視聴率
+  zh: 评级、评分、收视率
+  bn: রেটিং, মূল্যায়ন, মাত্রা
+  kk: рейтинг, бағалау, көрсеткіш
+
+=== ID 2207: somewhat (ru: несколько, отчасти, немного) ===
+  uk: дещо, трохи, певною мірою
+  de: etwas, einigermaßen, gewissermaßen
+  es: algo, un tanto, en parte
+  fr: quelque peu, assez, plutôt
+  pl: nieco, trochę, poniekąd
+  it: alquanto, piuttosto, un po'
+  tr: biraz, bir dereceye kadar, kısmen
+  pt: um tanto, um pouco, algo
+  ro: oarecum, întrucâtva, puțin
+  bg: донякъде, малко, в известна степен
+  cs: poněkud, do jisté míry, trochu
+  sk: poněkud, do istej miery, trochu
+  hu: némileg, kissé, némiképp
+  el: κάπως, λίγο, σε κάποιο βαθμό
+  sl: nekoliko, precej, do neke mere
+  et: mõnevõrra, veidi, teataval määral
+  lt: šiek tiek, tam tikru mastu
+  da: noget, en smule, til en vis grad
+  fi: jossain määrin, hieman, jokseenkin
+  sv: något, en aning, tämligen
+  hr: donekle, pomalo, u nekoj mjeri
+  lv: zināmā mērā, nedaudz, mazliet
+  hi: कुछ हद तक, थोड़ा, कुछ-कुछ
+  ar: إلى حد ما, نوعاً ما, بعض الشيء
+  fa: تاحدی، تا اندازه‌ای، اندکی
+  ur: کچھ حد تک، تھوڑا بہت
+  id: agak, sedikit banyak, lumayan
+  vi: hơi, phần nào, có phần
+  th: ค่อนข้าง, เล็กน้อย, พอสมควร
+  ko: 다소, 약간, 얼마간
+  ja: いくぶん、多少、やや
+  zh: 有点、稍微、多少
+  bn: কিছুটা, কতকটা, কিছু পরিমাণে
+  kk: біраз, біршама, шамалы
+
+=== ID 2208: aside (ru: в сторону, отдельно, реплика в сторону) ===
+  uk: убік, осторонь, набік
+  de: beiseite, zur Seite, abseits
+  es: aparte, a un lado, al margen
+  fr: à part, de côté, aparté
+  pl: na bok, na uboczu, na stronę
+  it: da parte, in disparte, a parte
+  tr: kenara, bir yana, bir kenara
+  pt: de lado, à parte, em separado
+  ro: deoparte, la o parte, separat
+  bg: настрана, отстрани, отделно
+  cs: stranou, bokem, odbočka
+  sk: bokom, nabok, stranou
+  hu: félre, oldalra, félrevonulva
+  el: στην άκρη, κατά μέρος, παράμερα
+  sl: na stran, na bok, vstran
+  et: kõrvale, eemale, lahus
+  lt: į šalį, į šoną, nuošalyje
+  da: til side, afsides, tilbagetrukket
+  fi: syrjään, erilleen, sivuhuomautus
+  sv: åt sidan, avsides, åsido
+  hr: po strani, ustranu, zasebno
+  lv: malā, nostatus, sāņus
+  hi: एक तरफ़, अलग, अलग रखकर
+  ar: جانباً, على حدة, بمفرده
+  fa: کنار، به‌یک‌سو، جداگانه
+  ur: ایک طرف، الگ، علیحدہ
+  id: ke samping, menyisih, di luar itu
+  vi: sang một bên, riêng ra, ngoài ra
+  th: ไปข้างๆ, พักไว้ก่อน, นอกประเด็น
+  ko: 곁에, 제쳐두고, 방백
+  ja: 脇へ、別にして、傍白
+  zh: 在一边、撇开、旁白
+  bn: একপাশে, পৃথকভাবে, স্বগতোক্তি
+  kk: бір шетке, бөлек, шетке
+
+=== ID 2209: existing (ru: существующий, имеющийся, действующий) ===
+  uk: існуючий, наявний, чинний
+  de: bestehend, vorhanden, existierend
+  es: existente, actual, vigente
+  fr: existant, actuel, en vigueur
+  pl: istniejący, obecny, dotychczasowy
+  it: esistente, attuale, vigente
+  tr: mevcut, var olan, halihazırdaki
+  pt: existente, atual, vigente
+  ro: existent, actual, în vigoare
+  bg: съществуващ, настоящ, действащ
+  cs: existující, stávající, platný
+  sk: existujúci, stávajúci, platný
+  hu: létező, meglévő, jelenlegi
+  el: υπάρχων, υφιστάμενος, ισχύων
+  sl: obstoječ, veljaven, sedanji
+  et: olemasolev, kehtiv, praegune
+  lt: esamas, egzistuojantis, dabartinis
+  da: eksisterende, gældende, hidtidig
+  fi: olemassa oleva, nykyinen, vallitseva
+  sv: befintlig, existerande, nuvarande
+  hr: postojeći, aktualan, sadašnji
+  lv: esošs, pastāvošs, spēkā esošs
+  hi: मौजूदा, विद्यमान, वर्तमान
+  ar: موجود, قائم, حالي
+  fa: موجود، فعلی، کنونی
+  ur: موجودہ، برسرِ زمین
+  id: yang ada, berstatus ada, eksis
+  vi: hiện có, hiện hữu, đang tồn tại
+  th: ที่มีอยู่, ซึ่งมีอยู่จริง, ปัจจุบัน
+  ko: 기존의, 현존하는, 현재 있는
+  ja: 既存の、現行の、存在する
+  zh: 现有的、现存的、既有的
+  bn: বিদ্যমান, বর্তমান, প্রচলিত
+  kk: қолданыстағы, бар, қазіргі
+
+=== ID 2210: legislation (ru: законодательство, закон, нормативные акты) ===
+  uk: законодавство, закони, нормативні акти
+  de: Gesetzgebung, Gesetze, Rechtsvorschriften
+  es: legislación, leyes, normativa
+  fr: législation, lois, textes de loi
+  pl: ustawodawstwo, prawodawstwo, legislacja
+  it: legislazione, leggi, normativa
+  tr: mevzuat, yasama, kanunlar
+  pt: legislação, leis, normas legais
+  ro: legislație, legi, acte normative
+  bg: законодателство, закони, нормативна уредба
+  cs: legislativa, zákonodárství, zákony
+  sk: legislatíva, zákonodarstvo, zákony
+  hu: jogszabályok, törvényhozás, törvények
+  el: νομοθεσία, νομοθετήματα
+  sl: zakonodaja, zakoni, pravni red
+  et: seadusandlus, õigusaktid, seadused
+  lt: teisės aktai, įstatymai, įstatymų leidyba
+  da: lovgivning, retsforskrifter
+  fi: lainsäädäntö, lait, säännökset
+  sv: lagstiftning, lagar, bestämmelser
+  hr: zakonodavstvo, pravni propisi, zakoni
+  lv: likumdošana, tiesību akti, likumi
+  hi: कानून, विधान, कानून निर्माण
+  ar: تشريع, قوانين, لوائح
+  fa: قانون‌گذاری، مصوبات قانونی، قوانین
+  ur: قانون سازی، قوانین، ضوابط
+  id: undang-undang, legislasi, peraturan
+  vi: pháp luật, luật pháp, văn bản pháp luật
+  th: กฎหมาย, การออกกฎหมาย, พระราชบัญญัติ
+  ko: 법률, 입법, 법안
+  ja: 法律、立法、法規
+  zh: 立法、法规、法律
+  bn: আইনপ্রণয়ন, আইনসমূহ, বিধিমাল
+  kk: заңнама, заң шығару, заңдар
+
+=== ID 2211: asset (ru: актив, имущество, ценное качество) ===
+  uk: актив, майно, цінність
+  de: Vermögenswert, Aktivum, Vorzug
+  es: activo, recurso, bien
+  fr: atout, actif, ressource
+  pl: atut, aktywa, kapitał
+  it: risorsa, bene, attivo
+  tr: varlık, aktif, değer
+  pt: ativo, patrimônio, bem
+  ro: activ, bun, atuu
+  bg: актив, ценност, придобивка
+  cs: aktivum, přednost, hodnota
+  sk: aktívum, prínos, prednosť
+  hu: vagyontárgy, eszköz, érték
+  el: περιουσιακό στοιχείο, εφόδιο, πλεονέκτημα
+  sl: sredstvo, premoženje, prednost
+  et: vara, väärtus, aktiva
+  lt: turtas, vertybė, pranašumas
+  da: aktiv, formuegode, værdi
+  fi: omaisuus, varat, valttikortti
+  sv: tillgång, resurs, förmån
+  hr: imovina, kapital, vrijednost
+  lv: aktīvs, īpašums, ieguvums
+  hi: संपत्ति, परिसंपत्ति, पूंजी
+  ar: أصل, مورد, ملكية
+  fa: دارایی، سرمایه، نقطه قوت
+  ur: اثاثہ، پونجی، مال
+  id: aset, harta, modal
+  vi: tài sản, của cải, lợi thế
+  th: สินทรัพย์, ทรัพย์สิน, ประโยชน์
+  ko: 자산, 가치 있는 것, 재산
+  ja: 資産、財産、強み
+  zh: 资产、财富、特长
+  bn: সম্পদ, পরিসম্পদ, গুণ
+  kk: актив, мүлік, байлық
+
+=== ID 2212: relief (ru: облегчение, утешение, помощь) ===
+  uk: полегшення, розрада, допомога
+  de: Erleichterung, Linderung, Hilfe
+  es: alivio, desahogo, socorro
+  fr: soulagement, répit, secours
+  pl: ulga, ukojenie, pomoc
+  it: sollievo, conforto, soccorso
+  tr: rahatlama, ferahlama, yardım
+  pt: alívio, consolo, ajuda
+  ro: ușurare, alinare, ajutor
+  bg: облекчение, утеха, помощ
+  cs: úleva, odlehčení, výpomoc
+  sk: úľava, odľahčenie, podpora
+  hu: megkönnyebbülés, enyhülés, segély
+  el: ανακούφιση, ξαλάφρωμα, βοήθεια
+  sl: olajšanje, tolažba, pomoč
+  et: kergendus, leevendus, abi
+  lt: palengvėjimas, atgaiva, pagalba
+  da: lettelse, lindring, nødhjælp
+  fi: helpotus, lievitys, avustus
+  sv: lättnad, lindring, bistånd
+  hr: olakšanje, rasterećenje, pomoć
+  lv: atvieglojums, mierinājums, palīdzība
+  hi: राहत, चैन, सहायता
+  ar: ارتياح, فرج, إغاثة
+  fa: آرامش، تسکین، امداد
+  ur: راحت، سکون، امداد
+  id: kelegaan, bantuan, keringanan
+  vi: sự nhẹ nhõm, cứu trợ, khuây khỏa
+  th: การผ่อนคลาย, ความโล่งอก, การบรรเทาทุกข์
+  ko: 안도, 구제, 위안
+  ja: 安心、安堵、救援
+  zh: 宽慰、解脱、救济
+  bn: স্বস্তি, নিষ্কৃতি, সাহায্য
+  kk: жеңілдеу, жұбаныш, көмек
+
+=== ID 2213: heaven (ru: рай, небеса, небо) ===
+  uk: рай, небеса, небо
+  de: Himmel, Paradies
+  es: cielo, paraíso
+  fr: paradis, cieux, ciel
+  pl: niebo, raj
+  it: paradiso, cielo
+  tr: cennet, gökyüzü
+  pt: paraíso, céu
+  ro: rai, cer, paradis
+  bg: рай, небеса, небе
+  cs: nebe, ráj
+  sk: nebo, raj
+  hu: mennyország, égbolt
+  el: παράδεισος, ουρανός
+  sl: nebesa, raj
+  et: taevas, paradiis
+  lt: dangus, rojus
+  da: himmel, paradis
+  fi: taivas, paratiisi
+  sv: himmel, paradis
+  hr: nebo, raj
+  lv: debesis, paradīze
+  hi: स्वर्ग, जन्नत
+  ar: جنة, سماء, فردوس
+  fa: بهشت، آسمان
+  ur: جنت، بہشت، فلک
+  id: surga, kahyangan
+  vi: thiên đàng, chốn bồng lai
+  th: สวรรค์, แดนสุขาวดี
+  ko: 천국, 하늘, 낙원
+  ja: 天国、極楽、天
+  zh: 天堂、天国、极乐
+  bn: স্বর্গ, বেহেশত
+  kk: жұмақ, бейіш, көк
+
+=== ID 2214: literally (ru: буквально, дословно, в прямом смысле) ===
+  uk: буквально, дослівно, у прямому розумінні
+  de: buchstäblich, wörtlich
+  es: literalmente, al pie de la letra
+  fr: littéralement, au pied de la lettre
+  pl: dosłownie, kropka w kropkę
+  it: letteralmente, testualmente
+  tr: tam anlamıyla, harfi harfine, aynen
+  pt: literalmente, ao pé da letra
+  ro: literalmente, cuvânt cu cuvânt
+  bg: буквално, точно, дословно
+  cs: doslova, doslovně
+  sk: doslova, doslovne
+  hu: szó szerint, betű szerint
+  el: κυριολεκτικά, κατά λέξη
+  sl: dobesedno, dosledno
+  et: sõna-sõnalt, otseses mõttes
+  lt: pažodžiui, tiesiogine prasme
+  da: bogstaveligt, ordret
+  fi: kirjaimellisesti, sanatarkasti
+  sv: bokstavligen, ordagrant
+  hr: doslovno, doslovce
+  lv: burtiski, vārds vārdā
+  hi: सचमुच, शाब्दिक रूप से, वस्तुतः
+  ar: حرفياً, بالمعنى الحرفي
+  fa: تحت‌اللفظی، کلمه‌به‌کلمه، واقعاً
+  ur: لفظ بہ لفظ، حرف بہ حرف
+  id: secara harfiah, persis
+  vi: theo nghĩa đen, từng câu từng chữ
+  th: ตามตัวอักษร, แท้จริง, ตัวต่อตัว
+  ko: 문자 그대로, 말 그대로
+  ja: 文字通りに、文字通り
+  zh: 照字面意义、简直、确实
+  bn: আক্ষরিকভাবে, হুবহু
+  kk: сөзбе-сөз, дәл мағынасында
+
+=== ID 2215: quit (ru: бросать, увольняться, прекращать) ===
+  uk: кидати, звільнятися, припиняти
+  de: aufhören, kündigen, beenden
+  es: dejar, renunciar, dimitir
+  fr: quitter, abandonner, démissionner
+  pl: zrezygnować, rzucić, odejść z pracy
+  it: smettere, lasciare, dare le dimissioni
+  tr: bırakmak, istifa etmek, vazgeçmek
+  pt: desistir, largar, pedir demissão
+  ro: a renunța, a părăsi, a demisiona
+  bg: напускам, спирам, отказвам се
+  cs: skončit, odejít z práce, zanechat
+  sk: skončiť, odísť zo zamestnania, prestať
+  hu: felmond, abbahagy, kilép
+  el: παραιτούμαι, τα παρατώ, σταματώ
+  sl: odnehati, dati odpoved, prenehati
+  et: loobuma, töölt lahkuma, pooleli jätma
+  lt: mesti, pasitraukti, išeiti iš darbo
+  da: stoppe, sige op, holde op
+  fi: lopettaa, irtisanoutua, heittää sikseen
+  sv: sluta, säga upp sig, avsluta
+  hr: napustiti, dati otkaz, prestati
+  lv: atmest, pamest, atkāpties no amata
+  hi: छोड़ना, इस्तीफा देना, बंद करना
+  ar: يترك, يستقيل, يقلع عن
+  fa: رها کردن، استعفا دادن، دست کشیدن
+  ur: چھوڑ دینا، دستبردار ہونا، استعفی دینا
+  id: berhenti, keluar kerja, menghentikan
+  vi: từ bỏ, nghỉ việc, bỏ cuộc
+  th: ลาออก, เลิก, หยุดทำ
+  ko: 그만두다, 포기하다, 사직하다
+  ja: 辞める、やめる、立ち去る
+  zh: 停止、辞职、放弃
+  bn: ত্যাগ করা, ইস্তফা দেওয়া, ছেড়ে দেওয়া
+  kk: тастау, жұмыстан шығу, тоқтату
+
+=== ID 2216: calorie (ru: калория) ===
+  uk: калорія
+  de: Kalorie
+  es: caloría
+  fr: calorie
+  pl: kaloria
+  it: caloria
+  tr: kalori
+  pt: caloria
+  ro: calorie
+  bg: калория
+  cs: kalorie
+  sk: kalória
+  hu: kalória
+  el: θερμίδα
+  sl: kalorija
+  et: kalor
+  lt: kalorija
+  da: kalorie
+  fi: kalori
+  sv: kalori
+  hr: kalorija
+  lv: kalorija
+  hi: कैलोरी
+  ar: سعرة حرارية
+  fa: کالری
+  ur: کیلوری
+  id: kalori
+  vi: calo, ca-lo
+  th: แคลอรี
+  ko: 칼로리
+  ja: カロリー
+  zh: 卡路里、卡
+  bn: ক্যালোরি
+  kk: калория
+
+=== ID 2217: german (ru: немецкий, немец, немецкий язык) ===
+  uk: німецький, німець, німецька мова
+  de: deutsch, Deutsche, Deutsch
+  es: alemán
+  fr: allemand
+  pl: niemiecki, Niemiec
+  it: tedesco
+  tr: Alman, Almanca
+  pt: alemão
+  ro: german, nemțesc
+  bg: немски, германец
+  cs: německý, Němec
+  sk: nemecký, Nemec
+  hu: német
+  el: γερμανικός, Γερμανός
+  sl: nemški, Nemec
+  et: saksa, sakslane
+  lt: vokiečių, vokietis
+  da: tysk, tysker
+  fi: saksalainen, saksa
+  sv: tysk, tyska
+  hr: njemački, Nijemac
+  lv: vācu, vācietis
+  hi: जर्मन, जर्मनी का
+  ar: ألماني
+  fa: آلمانی
+  ur: جرمن، جرمنی کا
+  id: Jerman
+  vi: tiếng Đức, người Đức, thuộc nước Đức
+  th: ชาวเยอรมัน, ภาษาเยอรมัน, เกี่ยวกับเยอรมนี
+  ko: 독일의, 독일어, 독일인
+  ja: ドイツの、ドイツ語、ドイツ人
+  zh: 德国的、德语、德国人
+  bn: জার্মান, জার্মানির
+  kk: неміс, немісше, Германиялық
+
+=== ID 2218: enforcement (ru: обеспечение соблюдения, принудительное применение, исполнение) ===
+  uk: забезпечення виконання, правозастосування, примусове виконання
+  de: Durchsetzung, Vollstreckung, Vollzug
+  es: aplicación, cumplimiento, ejecución
+  fr: mise en application, exécution, respect de la loi
+  pl: egzekwowanie, wdrażanie, stosowanie
+  it: applicazione, esecuzione, imposizione
+  tr: yaptırım, uygulama, yürütme
+  pt: cumprimento, aplicação da lei, fiscalização
+  ro: aplicare, punere în aplicare, executare silită
+  bg: прилагане, налагане, спазване
+  cs: vymáhání, prosazování, uplatňování
+  sk: presadzovanie, vymáhanie, uplatňovanie
+  hu: érvényesítés, betartatás, kikényszerítés
+  el: επιβολή, εφαρμογή, εκτέλεση
+  sl: uveljavljanje, izvajanje, izvrševanje
+  et: jõustamine, kohaldamine, sundtäitmine
+  lt: vykdymas, užtikrinimas, išieškojimas
+  da: håndhævelse, iværksættelse
+  fi: täytäntöönpano, valvonta, toimeenpano
+  sv: upprätthållande, efterlevnad, tillämpning
+  hr: provedba, provođenje zakona, izvršenje
+  lv: izpilde, nodrošināšana, īstenošana
+  hi: प्रवर्तन, लागू करना, अमल
+  ar: إنفاذ, تطبيق القانون, إلزام
+  fa: اجرای قانون، اعمال، تحمیل
+  ur: نفاذ، اطلاق، تعمیل
+  id: penegakan hukum, pemberlakuan
+  vi: sự thực thi, sự thi hành
+  th: การบังคับใช้, การปฏิบัติการตามกฎหมาย
+  ko: 집행, 시행, 강제
+  ja: 執行、施行、強制
+  zh: 执行、强制执行、实施
+  bn: প্রয়োগ, বলবৎকরণ
+  kk: мәжбүрлеп орындату, орындалуын қадағалау, қолданысқа енгізу
+
+=== ID 2219: bible (ru: Библия, Священное Писание) ===
+  uk: Біблія, Святе Письмо
+  de: Bibel, Heilige Schrift
+  es: Biblia, Sagrada Escritura
+  fr: Bible, Sainte Écriture
+  pl: Biblia, Pismo Święte
+  it: Bibbia, Sacra Scrittura
+  tr: İncil, Kitab-ı Mukaddes
+  pt: Bíblia, Sagrada Escritura
+  ro: Biblie, Sfânta Scriptură
+  bg: Библия, Светото писание
+  cs: Bible, Písmo svaté
+  sk: Biblia, Sväté písmo
+  hu: Biblia, Szentírás
+  el: Βίβλος, Αγία Γραφή
+  sl: Biblija, Sveto pismo
+  et: Piibel, Pühakiri
+  lt: Biblija, Šventasis Raštas
+  da: Bibel, Den Hellige Skrift
+  fi: Raamattu, Pyhä Raamattu
+  sv: Bibel, Bibeln
+  hr: Biblija, Sveto pismo
+  lv: Bībele, Svētie Raksti
+  hi: बाइबिल, धर्मग्रंथ
+  ar: الكتاب المقدس, إنجيل
+  fa: کتاب مقدس، انجیل
+  ur: بائبل، عہد نامہ
+  id: Alkitab, Kitab Suci
+  vi: Kinh Thánh
+  th: คัมภีร์ไบเบิล
+  ko: 성경, 바이블
+  ja: 聖書、バイブル
+  zh: 圣经
+  bn: বাইবেল, ধর্মপুস্তক
+  kk: Киелі кітап, Інжіл
+
+=== ID 2220: exposure (ru: воздействие, разоблачение, подвергание) ===
+  uk: вплив, викриття, опромінення
+  de: Exposition, Einwirkung, Entlarvung
+  es: exposición, revelación, desprotección
+  fr: exposition, divulgation, révélation
+  pl: narażenie, ekspozycja, ujawnienie
+  it: esposizione, rivelazione, visibilità
+  tr: maruz kalma, ifşa, sergileme
+  pt: exposição, revelação, vulnerabilidade
+  ro: expunere, dezvăluire, vulnerabilitate
+  bg: излагане, разобличаване, експозиция
+  cs: vystavení, odhalení, expozice
+  sk: vystavenie, odhalenie, expozícia
+  hu: kitettség, felfedés, megvilágítás
+  el: έκθεση, αποκάλυψη, φανέρωση
+  sl: izpostavljenost, razkritje, učinek
+  et: kokkupuude, paljastus, säritus
+  lt: poveikis, atskleidimas, išviešinimas
+  da: udsættelse, afsløring, eksponering
+  fi: altistuminen, paljastaminen, sairausalttius
+  sv: exponering, utsatthet, avslöjande
+  hr: izloženost, razotkrivanje, podložnost
+  lv: pakļaušana, iedarbība, atmaskošana
+  hi: अनावरण, जोखिम, उद्भासन
+  ar: تعرّض, كشف, إظهار
+  fa: مواجهه، افشاگری، قرار گرفتن در معرض
+  ur: سامنا، بے نقاب ہونا، اثر پذیری
+  id: paparan, penyingkapan, kerentanan
+  vi: sự phơi nhiễm, vạch trần, tiếp xúc
+  th: การเปิดเผย, การสัมผัส, การเผชิญสิ่งรบกวน
+  ko: 노출, 폭로, 쐼
+  ja: 露出、暴露、受光
+  zh: 暴露、揭发、曝光
+  bn: উন্মোচন, প্রকাশ, সংস্পর্শ
+  kk: әсерге ұшырау, әшкерелеу, экспозиция
+
+=== ID 2221: angel (ru: ангел) ===
+  uk: ангел, янгол
+  de: Engel
+  es: ángel
+  fr: ange
+  pl: anioł
+  it: angelo
+  tr: melek
+  pt: anjo
+  ro: înger
+  bg: ангел
+  cs: anděl
+  sk: anjel
+  hu: angyal
+  el: άγγελος
+  sl: angel
+  et: ingel
+  lt: angelas
+  da: engel
+  fi: enkeli
+  sv: ängel
+  hr: anđeo
+  lv: eņģelis
+  hi: देवदूत, फ़रिश्ता
+  ar: ملاك
+  fa: فرشته
+  ur: فرشتہ
+  id: malaikat
+  vi: thiên thần
+  th: ทูตสวรรค์, นางฟ้า
+  ko: 천사
+  ja: 天使、エンジェル
+  zh: 天使
+  bn: দেবদূত, ফেরেশতা
+  kk: періште
+
+=== ID 2222: veteran (ru: ветеран, бывалый человек, опытный) ===
+  uk: ветеран, бувалий
+  de: Veteran, Kriegsveteran, altgedient
+  es: veterano, excombatiente
+  fr: vétéran, ancien combattant
+  pl: weteran, kombatant
+  it: veterano, reduce
+  tr: gazi, emektar, deneyimli
+  pt: veterano, ex-combatente
+  ro: veteran, fost luptător
+  bg: ветеран, опитен воин
+  cs: veterán, vysloužilec
+  sk: veterán, vyslúžilec
+  hu: veterán, kiszolgált katona
+  el: βετεράνος, παλαίμαχος
+  sl: veteran, izkušenec
+  et: veteran, erusõjaväelane
+  lt: veteranas, karo dalyvis
+  da: veteran, forhenværende soldat
+  fi: veteraani, kokenut konkari
+  sv: veteran, före detta soldat
+  hr: veteran, bivši borac
+  lv: veterāns, pieredzējis cīnītājs
+  hi: अनुभवी, भूतपूर्व सैनिक
+  ar: محارب قديم, مخضرم
+  fa: کهنه‌سرباز، پیشکسوت
+  ur: سابق فوجی، تجربہ کار
+  id: veteran, pejuang berpengalaman
+  vi: cựu chiến binh, người dày dạn kinh nghiệm
+  th: ทหารผ่านศึก, ผู้ช่ำชอง
+  ko: 퇴역 군인, 베테랑, 전문가
+  ja: 退役軍人、ベテラン、熟練者
+  zh: 退伍军人、老手、老兵
+  bn: অবসরপ্রাপ্ত সেনা, অভিজ্ঞ ব্যক্তি
+  kk: ардагер, байырғы сарбаз
+
+=== ID 2223: protein (ru: белок, протеин) ===
+  uk: білок, протеїн
+  de: Protein, Eiweiß
+  es: proteína
+  fr: protéine
+  pl: białko, proteina
+  it: proteina
+  tr: protein
+  pt: proteína
+  ro: proteină
+  bg: белтък, протеин
+  cs: bílkovina, protein
+  sk: bielkovina, proteín
+  hu: fehérje, protein
+  el: πρωτεΐνη
+  sl: beljakovina, protein
+  et: valk, proteiin
+  lt: baltymas, proteinas
+  da: protein, æggehvidestof
+  fi: proteiini, valkuaisaine
+  sv: protein, äggviteämne
+  hr: bjelančevina, protein
+  lv: olbaltumviela, proteīns
+  hi: प्रोटीन, प्रोभूजिन
+  ar: بروتين
+  fa: پروتئین
+  ur: پروٹین، لحمیات
+  id: protein, zat putih telur
+  vi: chất đạm, prôtêin
+  th: โปรตีน
+  ko: 단백질
+  ja: タンパク質、プロテイン
+  zh: 蛋白质
+  bn: প্রোটিন, আমিষ
+  kk: ақуыз, белок
+
+=== ID 2224: resolution (ru: резолюция, решимость, урегулирование, разрешение экрана) ===
+  uk: резолюція, рішучість, вирішення, роздільна здатність
+  de: Beschluss, Entschlossenheit, Auflösung, Lösung
+  es: resolución, determinación, firmeza
+  fr: résolution, détermination, décision ferme
+  pl: postanowienie, rezolucja, rozstrzygnięcie, rozdzielczość
+  it: risoluzione, determinazione, delibera
+  tr: karar, azim, çözüm, çözünürlük
+  pt: resolução, determinação, deliberação
+  ro: rezoluție, hotărâre, determinare
+  bg: резолюция, решителност, решение, разделителна способност
+  cs: předsevzetí, usnesení, odhodlání, rozlišení
+  sk: predsavzatie, uznesenie, rozhodnosť, rozlíšenie
+  hu: fogadalom, határozat, elhatározottság, felbontás
+  el: απόφαση, ψήφισμα, αποφασιστικότητα, ανάλυση
+  sl: sklep, resolucija, odločnost, ločljivost
+  et: otsus, resolutsioon, kindlameelsus, lahutusvõime
+  lt: pasiryžimas, nutarimas, sprendimas, raiška
+  da: beslutning, resolution, fasthed, opløsning
+  fi: päätös, päätöslauselma, päättäväisyys, erottelukyky
+  sv: beslut, resolution, beslutsamhet, upplösning
+  hr: odluka, rezolucija, odlučnost, razlučivost
+  lv: apņemšanās, rezolūcija, apņēmība, izšķirtspēja
+  hi: संकल्प, प्रस्ताव, दृढ़ निश्चय, समाधान
+  ar: قرار, عزم, دقة العرض, تسوية
+  fa: تصمیم، قطعنامه، وضوح تصویر، حل و فصل
+  ur: قرارداد، عزم، حل، ریزولوشن
+  id: resolusi, kebulatan tekad, pemecahan
+  vi: nghị quyết, quyết tâm, độ phân giải
+  th: ปณิธาน, มติ, ความแน่วแน่, ความละเอียดหน้าจอ
+  ko: 결의, 결심, 해상도, 해결
+  ja: 決意、決議、解像度、解決
+  zh: 决议、决心、分辨率、解决
+  bn: সংকল্প, প্রস্তাব, সমাধান
+  kk: қарар, табандылық, шешім, ажыратымдылық
+
+=== ID 2225: fewer (ru: меньше, меньшее количество) ===
+  uk: менше, менша кількість
+  de: weniger
+  es: menos
+  fr: moins
+  pl: mniej
+  it: meno, minor numero di
+  tr: daha az sayıda, daha az
+  pt: menos, em menor número
+  ro: mai puțini, mai puține
+  bg: по-малко
+  cs: méně
+  sk: menej
+  hu: kevesebb
+  el: λιγότεροι, λιγότερα
+  sl: manj
+  et: vähem
+  lt: mažiau
+  da: færre
+  fi: harvempi, vähemmän
+  sv: färre
+  hr: manje
+  lv: mazāk
+  hi: कम, कम संख्या में
+  ar: عدد أقل, أقل
+  fa: کمتر
+  ur: کم، کم تر تعداد میں
+  id: lebih sedikit
+  vi: ít hơn
+  th: น้อยกว่า
+  ko: 더 적은 수의
+  ja: より少数の、より少ない
+  zh: 更少的
+  bn: কম সংখ্যক, অপেক্ষাকৃত কম
+  kk: азырақ, аздаған сан
+
+=== ID 2226: depression (ru: депрессия, подавленность, впадина) ===
+  uk: депресія, пригніченість, западина
+  de: Depression, Niedergeschlagenheit, Senke
+  es: depresión, desánimo, crisis económica
+  fr: dépression, abattement, creux
+  pl: depresja, przygnębienie, kryzys
+  it: depressione, sconforto, avvallamento
+  tr: depresyon, çöküntü, bunalım
+  pt: depressão, abatimento, crise
+  ro: depresie, depresiune, descurajare
+  bg: депресия, подтиснатост, вдлъбнатина
+  cs: deprese, sklíčenost, pokles
+  sk: depresia, skľúčenosť, pokles
+  hu: depresszió, lehangoltság, válság
+  el: κατάθλιψη, ύφεση, βαθούλωμα
+  sl: depresija, potrtost, gospodarska kriza
+  et: depressioon, masendus, madalrõhkkond
+  lt: depresija, prislėgtumas, nuosmukis
+  da: depression, modløshed, lavning
+  fi: masennus, lama, alankopainanne
+  sv: depression, nedstämdhet, svacka
+  hr: depresija, potištenost, udubina
+  lv: depresija, nomāktība, ieplaka
+  hi: अवसाद, निराशा, मंदी
+  ar: اكتئاب, كساد, انخفاض
+  fa: افسردگی، کسادی، فرورفتگی
+  ur: افسردگی، اداسی، کساد بازاری
+  id: depresi, kemurungan, krisis
+  vi: trầm cảm, suy thoái, chỗ lõm
+  th: ภาวะซึมเศร้า, ความหดหู่, ความตกต่ำทางเศรษฐกิจ
+  ko: 우울증, 불경기, 불황
+  ja: うつ病、不況、意気消沈
+  zh: 抑郁、萧条、凹陷
+  bn: বিষণ্ণতা, মন্দা, অবনমন
+  kk: күйзеліс, торығу, тоқырау
+
+=== ID 2227: dude (ru: чувак, парень) ===
+  uk: чувак, парубок, хлопець
+  de: Typ, Kumpel, Alter
+  es: tipo, tío, amigo
+  fr: mec, gars, pote
+  pl: koleś, facet, gość
+  it: tipo, amico, tizio
+  tr: ahbap, dostum, eleman
+  pt: cara, rapaz, mano
+  ro: tip, bărbat, amice
+  bg: пич, човек, приятел
+  cs: chlápek, kámo, týpek
+  sk: chlapík, kámo, týpek
+  hu: pasi, haver, fickó
+  el: μάγκας, τύπος, ρε συ
+  sl: model, tip, dedec
+  et: kutt, sell, tüüp
+  lt: vyrukas, bičiulis, vaikinas
+  da: fyr, kammerat, mand
+  fi: äijä, kaveri, tyyppi
+  sv: snubbe, kille, polare
+  hr: lik, tip, kompa
+  lv: džeks, vecis, čalis
+  hi: यार, बन्दा, दोस्त
+  ar: يا صاح, شاب, رفيق
+  fa: رفیق، یارو، پسر
+  ur: یار، دوست، بندہ
+  id: bung, cowok, kawan
+  vi: anh bạn, gã, cậu chàng
+  th: นาย, เพื่อนเกลอ, เจ้าหมอนี่
+  ko: 친구, 녀석, 자식
+  ja: やつ、おい、野郎
+  zh: 哥们、老兄、伙计
+  bn: দোস্ত, বন্ধু, ছোকরা
+  kk: жігіт, бауырым, дос
+
+=== ID 2228: ceo (ru: генеральный директор, руководитель компании) ===
+  uk: генеральний директор, керівник
+  de: Geschäftsführer, Vorstandsvorsitzender, CEO
+  es: director ejecutivo, consejero delegado, CEO
+  fr: président-directeur général, directeur général, PDG
+  pl: dyrektor generalny, prezes zarządu, CEO
+  it: amministratore delegato, direttore generale, AD
+  tr: genel müdür, icra kurulu başkanı, CEO
+  pt: diretor-executivo, presidente executivo, CEO
+  ro: director general, director executiv, CEO
+  bg: главен изпълнителен директор, генерален директор
+  cs: generální ředitel, výkonný ředitel
+  sk: generálny riaditeľ, výkonný riaditeľ
+  hu: vezérigazgató, ügyvezető igazgató
+  el: διευθύνων σύμβουλος, γενικός διευθυντής
+  sl: generalni direktor, glavni izvršni direktor
+  et: tegevjuht, peadirektor
+  lt: generalinis direktorius, vykdomasis vadovas
+  da: administrerende direktør, koncernchef, CEO
+  fi: toimitusjohtaja, pääjohtaja
+  sv: verkställande direktör, vd, företagsledare
+  hr: glavni izvršni direktor, generalni direktor
+  lv: ģenerāldirektors, izpilddirektors
+  hi: मुख्य कार्यकारी अधिकारी, सीईओ
+  ar: الرئيس التنفيذي, المدير العام
+  fa: مدیرعامل، رئیس هیئت مدیره
+  ur: چیف ایگزیکٹو، سربراہِ ادارہ
+  id: direktur utama, CEO, pemimpin eksekutif
+  vi: tổng giám đốc, giám đốc điều hành, CEO
+  th: ประธานเจ้าหน้าที่บริหาร, ซีอีโอ
+  ko: 최고경영자, 대표이사, CEO
+  ja: 最高経営責任者、CEO、代表取締役
+  zh: 首席执行官、总裁、CEO
+  bn: প্রধান নির্বাহী কর্মকর্তা, সিইও
+  kk: бас директор, атқарушы директор
+
+=== ID 2229: whenever (ru: всякий раз когда, когда бы ни, в любое время) ===
+  uk: щоразу коли, коли б не, коли завгодно
+  de: wann immer, jedes Mal wenn, sobald
+  es: siempre que, cada vez que, cuando sea
+  fr: chaque fois que, dès que, n'importe quand
+  pl: za każdym razem gdy, kiedykolwiek, ilekroć
+  it: ogni volta che, ogniqualvolta, quando che sia
+  tr: her ne zaman, her seferinde, ne vakit
+  pt: sempre que, toda vez que, a qualquer momento
+  ro: oricând, de fiecare dată când
+  bg: винаги когато, всеки път щом, по всяко време
+  cs: kdykoli, pokaždé když
+  sk: kedykoľvek, zakaždým keď
+  hu: bármikor, valahányszor, ahányszor csak
+  el: όποτε, κάθε φορά που, οποτεδήποτε
+  sl: kadarkoli, vsakič ko
+  et: millal iganes, iga kord kui
+  lt: kada tik, kaskart kai, bet kada
+  da: når som helst, hver gang
+  fi: milloin vain, aina kun, koska tahansa
+  sv: när som helst, varje gång som
+  hr: kad god, svaki put kad
+  lv: ikreiz kad, jebkurā laikā, vienalga kad
+  hi: जब भी, जिस किसी समय, कभी भी
+  ar: كلما, في أي وقت, حيثما
+  fa: هر زمان که، هروقت، هرگاه
+  ur: جب بھی، جس وقت بھی
+  id: kapan pun, setiap kali, sewaktu-waktu
+  vi: bất cứ khi nào, mỗi khi
+  th: เมื่อใดก็ตาม, ทุกครั้งที่
+  ko: ~할 때마다, 언제든지
+  ja: 〜する時はいつでも、いつでも
+  zh: 每当、无论何时
+  bn: যখনই, যে কোনো সময়ে
+  kk: әрқашан, қашан болса да, кез келген уақытта
+
+=== ID 2230: entry (ru: вход, запись, участие, въезд) ===
+  uk: вхід, запис, стаття, в'їзд
+  de: Eintritt, Eingang, Eintrag, Teilnahme
+  es: entrada, ingreso, asiento, registro
+  fr: entrée, inscription, mention, enregistrement
+  pl: wejście, wpis, zgłoszenie, wstęp
+  it: ingresso, voce, annotazione, iscrizione
+  tr: giriş, kayıt, katılım, madde
+  pt: entrada, ingresso, registro, verbete
+  ro: intrare, înscriere, articol, acces
+  bg: вход, запис, статия, участие
+  cs: vstup, záznam, položka, přihláška
+  sk: vstup, zápis, položka, účasť
+  hu: belépés, bejegyzés, nevezés, szócikk
+  el: είσοδος, εγγραφή, συμμετοχή, καταχώριση
+  sl: vstop, vnos, prijava, geslo
+  et: sissepääs, sissekanne, kirje, osavõtt
+  lt: įėjimas, įrašas, registracija, straipsnelis
+  da: indgang, adgang, registrering, opslag
+  fi: sisäänkäynti, merkintä, osallistuminen, hakusana
+  sv: inträde, ingång, post, uppslagsord
+  hr: ulazak, unos, prijava, natuknica
+  lv: ieeja, ieraksts, šķirklis, pieteikums
+  hi: प्रवेश, प्रविष्टि, दाखिला
+  ar: دخول, إدخال, قيد, مشاركة
+  fa: ورود، مدخل، ثبت نام
+  ur: داخلہ، اندراج، مد
+  id: pintu masuk, catatan, keikutsertaan
+  vi: lối vào, mục từ, sự gia nhập
+  th: ทางเข้า, รายการ, การเข้าร่วม
+  ko: 입장, 참가작, 기재 항목
+  ja: 入場、記載項目、エントリー
+  zh: 进入、条目、参赛作品
+  bn: প্রবেশপথ, ভুক্তি, দাখিলা
+  kk: кіру, жазба, тіркеу, қатысу
+
+=== ID 2231: japanese (ru: японский, японец, японский язык) ===
+  uk: японський, японець, японська мова
+  de: japanisch, Japaner, Japanisch
+  es: japonés
+  fr: japonais
+  pl: japoński, Japończyk
+  it: giapponese
+  tr: Japon, Japonca
+  pt: japonês
+  ro: japonez
+  bg: японски, японец
+  cs: japonský, Japonec
+  sk: japonský, Japonec
+  hu: japán
+  el: ιαπωνικός, Ιάπωνας
+  sl: japonski, Japonec
+  et: jaapani, jaapanlane
+  lt: japonų, japonas
+  da: japansk, japaner
+  fi: japanilainen, japani
+  sv: japansk, japan
+  hr: japanski, Japanac
+  lv: japāņu, japānis
+  hi: जापानी
+  ar: ياباني
+  fa: ژاپنی
+  ur: جاپانی
+  id: Jepang
+  vi: tiếng Nhật, người Nhật, thuộc Nhật Bản
+  th: ชาวญี่ปุ่น, ภาษาญี่ปุ่น, เกี่ยวกับญี่ปุ่น
+  ko: 일본의, 일본어, 일본인
+  ja: 日本の、日本語、日本人
+  zh: 日本的、日语、日本人
+  bn: জাপানি
+  kk: жапон, жапонша, Жапониялық
+
+=== ID 2233: assistance (ru: помощь, содействие, поддержка) ===
+  uk: допомога, сприяння, підтримка
+  de: Unterstützung, Hilfe, Beistand
+  es: ayuda, asistencia, auxilio
+  fr: assistance, aide, concours
+  pl: pomoc, wsparcie, asysta
+  it: assistenza, aiuto, sostegno
+  tr: yardım, destek, kolaylık
+  pt: assistência, ajuda, suporte
+  ro: asistență, sprijin, ajutor
+  bg: помощ, съдействие, подкрепа
+  cs: pomoc, asistence, podpora
+  sk: pomoc, asistencia, podpora
+  hu: segítségnyújtás, támogatás, közreműködés
+  el: συνδρομή, βοήθεια, υποστήριξη
+  sl: pomoč, asistenca, podpora
+  et: abi, toetus, abistamine
+  lt: pagalba, parama, palaikymas
+  da: bistand, hjælp, assistance
+  fi: apu, avustus, tuki
+  sv: bistånd, hjälp, assistans
+  hr: pomoć, podrška, asistencija
+  lv: palīdzība, atbalsts, līdzdalība
+  hi: सहायता, मदद, सहयोग
+  ar: مساعدة, عون, مؤازرة
+  fa: کمک، یاری، مساعدت
+  ur: مدد، معاونت، دستگیری
+  id: pertolongan, bantuan, tunjangan
+  vi: sự trợ giúp, giúp đỡ, hỗ trợ
+  th: ความช่วยเหลือ, การอนุเคราะห์
+  ko: 도움, 조력, 원조
+  ja: 援助、助力、手助け
+  zh: 协助、援助、支持
+  bn: সহায়তা, সাহায্য, পৃষ্ঠপোষকতা
+  kk: жәрдем, көмек, қолдау
+
+=== ID 2234: essentially (ru: по сути, в сущности, главным образом) ===
+  uk: по суті, в основному, власне кажучи
+  de: im Wesentlichen, im Grunde, hauptsächlich
+  es: en esencia, básicamente, primordialmente
+  fr: essentiellement, au fond, pour l'essentiel
+  pl: w zasadzie, w istocie, w gruncie rzeczy
+  it: essenzialmente, in sostanza, in fondo
+  tr: aslında, özünde, esasen
+  pt: essencialmente, no fundo, em essência
+  ro: în esență, practic, fundamental
+  bg: по същество, в основата си, главно
+  cs: v podstatě, v zásadě, v jádru
+  sk: v podstate, v zásade, v jadre
+  hu: lényegében, alapjában véve
+  el: ουσιαστικά, κατ' ουσίαν, βασικά
+  sl: v bistvu, v svojem bistvu, načeloma
+  et: sisuliselt, põhiolemuselt, peamiselt
+  lt: iš esmės, iš principo, faktiškai
+  da: i det væsentlige, grundlæggende
+  fi: pohjimmiltaan, olennaisesti, pääasiassa
+  sv: i grund och botten, huvudsakligen
+  hr: u biti, u suštini, u osnovi
+  lv: būtībā, pamatā, pēc būtības
+  hi: मूल रूप से, वास्तव में, वस्तुतः
+  ar: جوهرياً, أساساً, في الواقع
+  fa: اساساً، اصولاً، در اصل
+  ur: بنیادی طور پر، اصلاً، در حقیقت
+  id: pada hakikatnya, dasarnya, intinya
+  vi: về bản chất, cơ bản là, thực chất
+  th: โดยเนื้อแท้, โดยพื้นฐานแล้ว
+  ko: 본질적으로, 근본적으로, 기본적으로
+  ja: 本質的に、基本的に、要するに
+  zh: 本质上、基本上、实质上
+  bn: মূলত, সারমর্মে, বস্তুগতভাবে
+  kk: түптеп келгенде, негізінен, мәні бойынша
+
+=== ID 2235: faculty (ru: преподавательский состав, факультет, способность) ===
+  uk: викладацький склад, факультет, обдарування
+  de: Lehrkörper, Fakultät, geistige Fähigkeit
+  es: profesorado, facultad, aptitud
+  fr: corps enseignant, faculté, aptitude
+  pl: kadra profesorska, wydział, zmysł
+  it: corpo docente, facoltà, capacità
+  tr: öğretim görevlileri, fakülte, yetenek
+  pt: corpo docente, faculdade, capacidade
+  ro: corp profesoral, facultate, aptitudine
+  bg: преподавателски състав, факултет, способност
+  cs: profesorský sbor, fakulta, schopnost
+  sk: učiteľský zbor, fakulta, schopnosť
+  hu: oktatói kar, egyetemi kar, képesség
+  el: διδακτικό προσωπικό, σχολή, φυσική ικανότητα
+  sl: profesorski zbor, fakulteta, dar
+  et: õppejõudkond, teaduskond, võime
+  lt: dėstytojų kolektyvas, fakultetas, gabumas
+  da: lærerkorps, fakultet, evne
+  fi: opettajakunta, tiedekunta, henkinen kyky
+  sv: lärarkår, fakultet, själsförmåga
+  hr: nastavnički zbor, fakultet, nadarenost
+  lv: mācībspēki, fakultāte, dotības
+  hi: शिक्षक वृन्द, संकाय, मानसिक क्षमता
+  ar: أعضاء هيئة التدريس, كلية, ملكة
+  fa: اساتید دانشگاه، دانشکده، قوه ادراک
+  ur: تدریسی عملہ، شعبہ، صلاحیت
+  id: staf pendidik, fakultas, daya pikir
+  vi: ban giảng huấn, ban giảng dạy, khả năng
+  th: คณาจารย์, คณะวิชา, ความสามารถทางจิต
+  ko: 교수단, 학부, 감각 기능
+  ja: 教授陣、教員団、才能
+  zh: 教学人员、全系教师、才智
+  bn: শিক্ষক পরিষদ, অনুষদ, ক্ষমতা
+  kk: профессор-оқытушылар құрамы, факультет, зейін
+
+=== ID 2236: offense (ru: правонарушение, проступок, обида, нападение) ===
+  uk: правопорушення, провина, образа, атака
+  de: Vergehen, Straftat, Beleidigung, Angriff
+  es: delito, infracción, ofensa, ofensiva
+  fr: délit, infraction, offense, attaque
+  pl: wykroczenie, występek, uraza, atak
+  it: reato, infrazione, offesa, attacco
+  tr: kabahat, suç, kırgınlık, taarruz
+  pt: infração, delito, ofensa, ataque
+  ro: contravenție, infracțiune, jignire, atac
+  bg: правонарушение, провинение, обида, нападение
+  cs: přestupek, trestný čin, urážka, útok
+  sk: priestupok, trestný čin, urážka, útok
+  hu: szabálysértés, vétség, sértés, támadás
+  el: αδίκημα, παράβαση, προσβολή, επίθεση
+  sl: prekršek, prestopek, žalitev, napad
+  et: väärtegu, rikkumine, solvang, rünnak
+  lt: nusižengimas, nusikaltimas, įžeidimas, puolimas
+  da: forseelse, overtrædelse, fornærmelse, angreb
+  fi: rikkomus, rikos, loukkaus, hyökkäysvoima
+  sv: förseelse, brott, förnärmelse, anfall
+  hr: prekršaj, prestupak, uvreda, napad
+  lv: pārkāpums, nodarījums, aizskārums, uzbrukums
+  hi: जुर्म, गुनाह, अपराध, आहत
+  ar: جنحة, مخالفة, إهانة, هجوم
+  fa: تخلف، گناه، توهین، حمله
+  ur: قصور، خطا، رنجش، پیش قدمی
+  id: pelanggaran hukum, tindak pidana, rasa tersinggung
+  vi: hành vi phạm tội, xúc phạm, thế công
+  th: การทำผิดกฎหมาย, การล่วงละเมิด, ฝ่ายบุก
+  ko: 위법 행위, 모욕, 공격진
+  ja: 違反、罪、非礼、攻撃陣
+  zh: 罪行、过错、冒犯、攻方
+  bn: আইনভঙ্গ, অপরাধ, আঘাত, আক্রমণ
+  kk: құқық бұзушылық, теріс қылық, реніш, шабуыл
+
+=== ID 2237: killer (ru: убийца, киллер, смертоносный) ===
+  uk: убивця, кілер, смертельний
+  de: Mörder, Killer, tödlich
+  es: asesino, matador, letal
+  fr: tueur, meurtrier, foudroyant
+  pl: zabójca, morderca, morderczy
+  it: killer, assassino, micidiale
+  tr: katil, canavarca olan
+  pt: assassino, matador, arrasador
+  ro: ucigaș, asasin, nimicitor
+  bg: убиец, килър, унищожителен
+  cs: vrah, zabiják, smrtící
+  sk: vrah, zabijak, smrtiaci
+  hu: gyilkos, orgyilkos, halálos
+  el: δολοφόνος, φονιάς, συντριπτικός
+  sl: ubijalec, morilec, poguben
+  et: tapja, mõrvar, tappev
+  lt: žudikas, naikintojas, mirtinas
+  da: drabsmand, morder, dræbende
+  fi: tappaja, murhaaja, suurenmoinen
+  sv: mördare, dråpare, formidabel
+  hr: ubojica, krvnik, ubojit
+  lv: slepkava, nonāvētājs, postošs
+  hi: हत्यारा, कातिल, जानलेवा
+  ar: قاتل, سفاح, مميت
+  fa: قاتل، آدمکش، هلاک‌کننده
+  ur: قاتل، جان لینے والا، ہلاکت خیز
+  id: pembunuh, pembinasa, maut
+  vi: kẻ giết người, sát thủ, chí mạng
+  th: มือสังหาร, ฆาตกร, ตัวฉกาจ
+  ko: 살인자, 킬러, 끝내주는 것
+  ja: 殺人者、暗殺者、破壊的なもの
+  zh: 杀人犯、杀手、极具威力的
+  bn: খুনি, হত্যাকারী, প্রাণঘাতী
+  kk: қылмыскер, кісі өлтіруші, қанішер
+
+=== ID 2238: suck (ru: сосать, втягивать, быть отстойным) ===
+  uk: смоктати, втягувати, бути відстійним
+  de: saugen, einsaugen, scheiße sein
+  es: chupar, sorber, ser pésimo
+  fr: aspirer, téter, être nul
+  pl: ssać, wsysać, być do bani
+  it: succhiare, aspirare, fare schifo
+  tr: emmek, içine çekmek, berbat olmak
+  pt: sugar, chupar, ser muito ruim
+  ro: a suge, a sorbi, a fi jalnic
+  bg: смуча, всмуквам, бивам ужасен
+  cs: sát, vysávat, stát za prd
+  sk: cicať, vsávať, stáť za nič
+  hu: szopogat, beszív, pocsék
+  el: ρουφώ, θηλάζω, είμαι χάλια
+  sl: sesati, vleči vase, biti zanič
+  et: imema, sisse tõmbama, vilets olema
+  lt: čiulpti, siurbti, būti apgailėtinam
+  da: suge, indtage, være elendig
+  fi: imeä, kulauttaa, olla syvältä
+  sv: suga, slurpa, vara värdelös
+  hr: sisati, usisavati, biti grozan
+  lv: sūkt, iesūkt, būt nožēlojamam
+  hi: चूसना, सोखना, बेकार होना
+  ar: يمتص, يرضع, يكون رديئاً
+  fa: مکیدن، بالا کشیدن، افتضاح بودن
+  ur: چوسنا، جذب کرنا، انتہائی برا ہونا
+  id: menghisap, mengisap, payah sekali
+  vi: hút, mút, dở tệ
+  th: ดูดซับ, จ๊วบ, ห่วยแตก
+  ko: 빨아들이다, 핥다, 형편없다
+  ja: すする、吸引する、最悪である
+  zh: 吸入、吮吸、极差劲
+  bn: চোষা, শোষণ করা, অত্যন্ত বাজে হওয়া
+  kk: сору, сіңіру, жарамсыз болу
+
+=== ID 2239: column (ru: колонна, столбец, колонка в газете) ===
+  uk: колона, стовпчик, шпальта
+  de: Spalte, Säule, Rubrik
+  es: columna, renglón, pilar
+  fr: colonne, pilier, rubrique
+  pl: kolumna, słup, rubryka
+  it: colonna, pilastro, rubrica
+  tr: sütun, kolon, köşe yazısı
+  pt: coluna, pilar, crônica
+  ro: coloană, stâlp, rubrică
+  bg: колона, стълб, рубрика
+  cs: sloupec, sloup, rubrika
+  sk: stĺpec, stĺp, rubrika
+  hu: oszlop, rovátka, hírlapi rovat
+  el: στήλη, κολόνα, χρονογράφημα
+  sl: stolpec, stebriček, rubrika
+  et: veerg, sammas, püsirubriik
+  lt: stulpelis, kolona, skiltis
+  da: kolonne, søjle, klumme
+  fi: sarake, pylväs, pakina
+  sv: kolumn, pelare, spalt
+  hr: stupac, kolona, novinska rubrika
+  lv: sleja, kolonna, stabs
+  hi: खंभा, स्तंभ, समाचार स्तम्भ
+  ar: عمود, ركيزة, زاوية صحفية
+  fa: ستون، پایه، یادداشت روزنامه
+  ur: ستون، پشتہ، کالم
+  id: tiang penyangga, lajur, tajuk rencana
+  vi: cột dọc, trụ cột, bài chuyên mục
+  th: เสาหิน, แถวแนวตั้ง, คอลัมน์ข่าว
+  ko: 기둥, 세로줄, 칼럼
+  ja: 柱、円柱、コラム欄
+  zh: 柱子、栏目、专栏
+  bn: স্তম্ভ, খাম, পত্রস্তম্ভ
+  kk: баған, тіреуіш, мақала бөлімі
+
+=== ID 2240: immigrant (ru: иммигрант, переселенец) ===
+  uk: іммігрант, переселенець
+  de: Zuwanderer, Einwanderer, Immigrant
+  es: inmigrante
+  fr: immigré, immigrant
+  pl: imigrant, przybysz
+  it: immigrato, immigrata
+  tr: göçmen, muhacir
+  pt: imigrante
+  ro: imigrant
+  bg: имигрант, заселник
+  cs: imigrant, přistěhovalec
+  sk: imigrant, prisťahovalec
+  hu: bevándorló
+  el: μετανάστης, έποικος
+  sl: priseljenec, priseljenka
+  et: sisserändaja, immigrant
+  lt: imigrantas, ateivis
+  da: indvandrer, tilflytter
+  fi: siirtolainen, maahanmuuttaja
+  sv: invandrare, immigrant
+  hr: useljenik, došljak
+  lv: ieceļotājs, imigrants
+  hi: आप्रवासी, परदेशी
+  ar: مهاجر, وافد
+  fa: مهاجر، کوچنده
+  ur: تارک وطن، مہاجر
+  id: kaum pendatang, imigran
+  vi: người nhập cư, dân cư ngụ
+  th: ผู้ย้ายถิ่นฐาน, ผู้อพยพเข้าเมือง
+  ko: 이민자, 이주민
+  ja: 移住者、移民
+  zh: 外来的、移民
+  bn: অভিবাসী, দেশান্তরী ব্যক্তি
+  kk: көшіп келуші, қоныстанушы
+
+=== ID 2241: portion (ru: порция, часть, доля) ===
+  uk: порція, частина, частка
+  de: Portion, Teil, Anteil
+  es: porción, ración, fragmento
+  fr: portion, part, ration
+  pl: porcja, część, przydział
+  it: porzione, razione, fetta
+  tr: porsiyon, bölüm, hisse
+  pt: porção, fatia, quinhão
+  ro: porție, fâșie, parte
+  bg: порция, дял, къс
+  cs: porce, díl, úsek
+  sk: porcia, dávka, diel
+  hu: adag, ételadag, hányad
+  el: μερίδα, κομμάτι, τμήμα
+  sl: porcija, obrok, kos
+  et: portsjon, toiduannus, tükk
+  lt: porcija, normuotė, dalelė
+  da: portion, måltidsdel, anpart
+  fi: annos, kerta-annos, lohko
+  sv: portion, matportion, stycke
+  hr: porcija, obrok, odrezak
+  lv: porcija, kumoss, daļa
+  hi: खुराक, टुकड़ा, हिस्सा
+  ar: حصة طعام, نصيب, قسط
+  fa: پرس غذا، سهمیه، قطعه
+  ur: روٹی کا ٹکڑا, نوالہ, حصہ
+  id: seporsi, catu makanan, belahan
+  vi: khẩu phần ăn, lát, phần chia
+  th: ส่วนแบ่งอาหาร, จานหนึ่ง, ชิ้นส่วน
+  ko: 1인분, 분량, 할당분
+  ja: 一人前の料理、割当量、分け前
+  zh: 一份食物、份额、局限部分
+  bn: পরিবেশিত খাদ্য, খণ্ডাংশ, ভাগের অংশ
+  kk: тамақ үлесі, бөлшек, сыбаға
+
+=== ID 2242: suicide (ru: самоубийство, суицид) ===
+  uk: самогубство, суїцид
+  de: Selbstmord, Suizid, Freitod
+  es: suicidio
+  fr: suicide
+  pl: samobójstwo, targnięcie się na życie
+  it: suicidio
+  tr: intihar
+  pt: suicídio
+  ro: sinucidere, suicid
+  bg: самоубийство
+  cs: sebevražda
+  sk: samovražda
+  hu: öngyilkosság
+  el: αυτοκτονία
+  sl: samomor
+  et: enesetapp, vabasurm
+  lt: savižudybė
+  da: selvmord
+  fi: itsemurha
+  sv: självmord, suicid
+  hr: samoubojstvo, suicid
+  lv: pašnāvība
+  hi: आत्महत्या, खुदकुशी
+  ar: انتحار
+  fa: خودکشی
+  ur: خودکشی
+  id: bunuh diri
+  vi: sự tự sát, tự vẫn
+  th: การฆ่าตัวตาย, อัตวินิบาตกรรม
+  ko: 자살
+  ja: 自殺、自害
+  zh: 自杀、自绝
+  bn: আত্মহত্যা, আত্মহনন
+  kk: өзіне-өзі қол жұмсау, суицид
+
+=== ID 2243: deficit (ru: дефицит, нехватка, убыток) ===
+  uk: дефіцит, нестача, збиток
+  de: Defizit, Fehlbetrag, Mangel
+  es: déficit, descubierto, carencia
+  fr: déficit, découvert, insuffisance
+  pl: deficyt, niedobór, manko
+  it: deficit, disavanzo, ammanco
+  tr: açık, bütçe açığı, noksan
+  pt: déficit, saldo negativo, escassez
+  ro: deficit, lipsă, scădere
+  bg: дефицит, недостиг, пасив
+  cs: schodek, deficit, nedostatek
+  sk: schodok, deficit, manko
+  hu: hiány, költségvetési hiány, ráfizetés
+  el: έλλειμμα, ανεπάρκεια, χασούρα
+  sl: primanjkljaj, minus, izguba
+  et: puudujääk, defitsiit, miinus
+  lt: deficitas, stygius, trūkumas
+  da: underskud, manko
+  fi: alijäämä, vajaus, tappio
+  sv: underskott, brist, förlust
+  hr: deficit, proračunski manjak, podbačaj
+  lv: deficīts, iztrūkums, robs
+  hi: घाटा, कमी, न्यूनता
+  ar: عجز مالي, نقص, خسارة
+  fa: کسری بودجه، کمبود، نقص
+  ur: خسارہ، کسر، قلت
+  id: defisit, tekor, ketekoran
+  vi: sự thâm hụt, thiếu hụt ngân sách
+  th: การขาดดุล, ยอดขาด, ภาวะไม่พอ
+  ko: 적자, 부족액, 결손
+  ja: 赤字、不足額、欠損
+  zh: 财政赤字、亏损、不足额
+  bn: ঘাটতি, লোকসান, অনাটন
+  kk: тапшылық, кемшілік, жетіспеушілік
+
+=== ID 2244: solar (ru: солнечный) ===
+  uk: сонячний
+  de: solar, Sonnen-
+  es: solar
+  fr: solaire
+  pl: słoneczny
+  it: solare
+  tr: güneş, güneşe ait
+  pt: solar
+  ro: solar
+  bg: слънчев
+  cs: sluneční, solární
+  sk: slnečný, solárny
+  hu: nap-, szoláris
+  el: ηλιακός
+  sl: sončni, solaren
+  et: päikese-, päikeseenergia-
+  lt: saulės, soliarinis
+  da: sol-, solens
+  fi: aurinko-, aurinkoenergia-
+  sv: sol-, solens
+  hr: sunčev, solarni
+  lv: saules-
+  hi: सौर, सूर्य संबंधी
+  ar: شمسي
+  fa: خورشیدی، شمسی
+  ur: شمسی، سورج سے متعلق
+  id: surya, matahari
+  vi: thuộc mặt trời, hệ mặt trời
+  th: เกี่ยวกับดวงอาทิตย์, แสงอาทิตย์
+  ko: 태양의, 태양열의
+  ja: 太陽の、太陽光の
+  zh: 太阳的、日光的
+  bn: সৌর, সূর্য সম্বন্ধীয়
+  kk: күнге қатысты, күн сәулелі
+
+=== ID 2245: dig (ru: копать, рыть, понимать) ===
+  uk: копати, рити, розуміти
+  de: graben, buddeln, kapieren
+  es: cavar, excavar, molar
+  fr: creuser, bêcher, piger
+  pl: kopać, przekopywać, czaić
+  it: scavare, zappare, apprezzare
+  tr: kazmak, çukurlamak, çakmak
+  pt: cavar, escavar, curtir
+  ro: a săpa, a scobi, a pricepe
+  bg: копая, ровя, вдявам
+  cs: kopat, rýt, chápat
+  sk: kopať, ryť, chápať
+  hu: ás, túr, felfog
+  el: σκάβω, ορύσσω, σκαμπάζω
+  sl: kopati, ryti, štekati
+  et: kaevama, uuristama, taipama
+  lt: kasti, rausti, perprasti
+  da: grave, udgrave, fatte
+  fi: kaivaa, kuokkia, digata
+  sv: gräva, hacka, gilla
+  hr: kopati, prekapati, kužiti
+  lv: rakt, urbties, saprast
+  hi: खोदना, खुरचना, पसंद करना
+  ar: يحفر, ينبش, يعجبه
+  fa: حفر کردن، کندن، خوش آمدن
+  ur: کھودنا، بیلچہ چلانا، سمجھنا
+  id: mencangkul, menggali, menyukai
+  vi: đào bới, bới móc, khoái
+  th: ขุดค้น, ชอนไช, เข้าใจลึกซึ้ง
+  ko: 파다, 캐내다, 좋아하다
+  ja: 掘る、探求する、気に入る
+  zh: 掘地、挖掘、喜欢
+  bn: খনন করা, গর্ত করা, পছন্দ করা
+  kk: қазу, шұқу, түсіну
+
+=== ID 2246: twenty (ru: двадцать) ===
+  uk: двадцять
+  de: zwanzig
+  es: veinte
+  fr: vingt
+  pl: dwadzieścia
+  it: venti
+  tr: yirmi
+  pt: vinte
+  ro: douăzeci
+  bg: двадесет
+  cs: dvacet
+  sk: dvadsať
+  hu: húsz
+  el: είκοσι
+  sl: dvajset
+  et: kakskümmend
+  lt: dvidešimt
+  da: tyve
+  fi: kaksikymmentä
+  sv: tjugo
+  hr: dvadeset
+  lv: divdesmit
+  hi: बीस
+  ar: عشرون, عشرين
+  fa: بیست
+  ur: بیس
+  id: dua puluh
+  vi: hai mươi
+  th: ยี่สิบ
+  ko: 스물, 이십
+  ja: 二十、にじゅう
+  zh: 二十
+  bn: কুড়ি, বিশ
+  kk: жиырма
+
+=== ID 2247: pretend (ru: притворяться, симулировать, делать вид) ===
+  uk: прикидатися, вдавати, клеїти дурня
+  de: vorgeben, so tun als ob, vortäuschen
+  es: fingir, aparentar, simular
+  fr: faire semblant, feindre, simuler
+  pl: udawać, pozorować, stwarzać pozory
+  it: fingere, fare finta, simulare
+  tr: -miş gibi yapmak, numara yapmak, taslamak
+  pt: fingir, fazer de conta, aparentar
+  ro: a se preface, a simula, a mima
+  bg: преструвам се, преструвам, симулирам
+  cs: předstírat, hrát divadlo, dělat jako
+  sk: predstierať, robiť sa, simulovať
+  hu: tettet, színlel, úgy tesz mintha
+  el: προσποιούμαι, παριστάνω, υποκρίνομαι
+  sl: pretvarjati se, hiniti, delati se
+  et: teesklema, näitlema, tegema nägu
+  lt: apsimesti, vaidinti, dėti pastangas
+  da: lade som om, foregive, forestille
+  fi: teeskennellä, uskotella, leikkiä
+  sv: låtsas, fingera, simulera
+  hr: pretvarati se, izmotavati se, hiniti
+  lv: izlikties, tēlot, liekuļot
+  hi: दिखावा करना, नाटक करना, ढोंग रचना
+  ar: يتظاهر, يدعي, يزعم
+  fa: وانمود کردن، تظاهر کردن، به دروغ وانمودن
+  ur: دکھاوا کرنا، بہانا کرنا، سوانگ بھرنا
+  id: berpura-pura, berlagak, membual
+  vi: giả vờ, làm bộ, đóng kịch
+  th: แกล้งทำ, เสแสร้ง, ทำเป็นว่า
+  ko: 가장하다, 체하다, 흉내 내다
+  ja: 〜のふりをする、装う、見せかける
+  zh: 假装、佯装、假托
+  bn: ভান করা, ছলনা করা, ভণ্ডামি করা
+  kk: өтірік істеу, сылтаурату, кейіп таныту
+
+=== ID 2248: welfare (ru: благосостояние, социальное обеспечение, пособие) ===
+  uk: добробут, соціальна допомога, благополуччя
+  de: Sozialhilfe, Wohlfahrt, Wohlergehen
+  es: bienestar, asistencia social, subsidio
+  fr: protection sociale, bien-être, aide sociale
+  pl: opieka społeczna, dobrobyt, zasiłek
+  it: assistenza sociale, benessere, sussidio
+  tr: sosyal yardım, refah, esenlik
+  pt: assistência social, bem-estar, previdência
+  ro: asistență socială, bunăstare, ajutor de stat
+  bg: социални помощи, благоденствие, благосъстояние
+  cs: sociální zabezpečení, blahobyt, podpora
+  sk: sociálna starostlivosť, blahobyt, podpora
+  hu: szociális segély, jólét, közjó
+  el: κοινωνική πρόνοια, ευημερία, βοήθημα
+  sl: socialna podpora, blaginja, skrb
+  et: sotsiaalabi, heaolu, hoolekanne
+  lt: socialinė parama, gerovė, pašalpa
+  da: socialhjælp, velfærd, bistand
+  fi: toimeentulotuki, hyvinvointi, sosiaaliturva
+  sv: socialbidrag, välfärd, välmående
+  hr: socijalna skrb, blagostanje, potpora
+  lv: pabalsts, labklājība, sociālā aprūpe
+  hi: समाज कल्याण, भलाई, जनहित
+  ar: رعاية اجتماعية, رفاهية, إعانة
+  fa: رفاه اجتماعی، آسایش، مستمری
+  ur: فلاح و بہبود، سماجی امداد، بہبودی
+  id: santunan sosial, kesejahteraan, nafkah
+  vi: trợ cấp xã hội, phúc lợi, ấm no
+  th: การสงเคราะห์, สวัสดิการสังคม, ความผาสุก
+  ko: 사회복지, 안녕, 생활보호금
+  ja: 社会福祉、幸福、生活保護費
+  zh: 福利救济、安康、社会福利
+  bn: জনকল্যাণ, মঙ্গল, ভাতা
+  kk: әлеуметтік қамсыздандыру, әл-ауқат, жәрдемақы
+
+=== ID 2249: prosecutor (ru: прокурор, обвинитель) ===
+  uk: прокурор, обвинувач
+  de: Staatsanwalt, Ankläger
+  es: fiscal, acusador público
+  fr: procureur, magistrat du parquet
+  pl: prokurator, oskarżyciel
+  it: pubblico ministero, procuratore
+  tr: savcı, iddia makamı
+  pt: promotor de justiça, procurador
+  ro: procuror, acuzator
+  bg: прокурор, обвинител
+  cs: státní zástupce, prokurátor, žalobce
+  sk: prokurátor, žalobca
+  hu: ügyész, vádló
+  el: εισαγγελέας, κατήγορος
+  sl: tožilec, javni tožilec
+  et: prokurör, süüdistaja
+  lt: prokuroras, kaltintojas
+  da: anklager, offentlig anklager
+  fi: syyttäjä, virallinen syyttäjä
+  sv: åklagare, allmän åklagare
+  hr: državni odvjetnik, tužitelj
+  lv: prokurors, apsūdzētājs
+  hi: सरकारी वकील, अभियोजक
+  ar: مدعي عام, وكيل نيابة
+  fa: دادستان، مدعی‌العموم
+  ur: سرکاری وکیل، استغاثہ کار
+  id: penuntut umum, jaksa
+  vi: kiểm sát viên, công tố viên
+  th: พนักงานอัยการ, โจทก์ร่วม
+  ko: 검사, 검찰관
+  ja: 検察官、検事
+  zh: 检察官、公诉人
+  bn: সরকারি আইনজীবী, প্রসিকিউটর
+  kk: прокурор, мемлекеттік айыптаушы
+
+=== ID 2250: israeli (ru: израильский, израильтянин) ===
+  uk: ізраїльський, ізраїльтянин
+  de: israelisch, Israeli
+  es: israelí
+  fr: israélien
+  pl: izraelski, Izraelczyk
+  it: israeliano
+  tr: İsrailli, İsrail-
+  pt: israelense, israelita
+  ro: israelian
+  bg: израелски, израелец
+  cs: izraelský, Izraelec
+  sk: izraelský, Izraelčan
+  hu: izraeli
+  el: ισραηλινός, Ισραηλινός
+  sl: izraelski, Izraelec
+  et: Iisraeli, iisraellane
+  lt: Izraelio, izraelietis
+  da: israelsk, israeler
+  fi: israelilainen
+  sv: israelisk, israel
+  hr: izraelski, Izraelac
+  lv: Izraēlas, izraēlietis
+  hi: इज़रायली, इस्राइली
+  ar: إسرائيلي
+  fa: اسرائیلی
+  ur: اسرائیلی
+  id: Israel, warga Israel
+  vi: thuộc Israel, người Israel
+  th: ชาวอิสราเอล, แห่งอิสราเอล
+  ko: 이스라엘의, 이스라엘인
+  ja: イスラエルの、イスラエル人
+  zh: 以色列的、以色列人
+  bn: ইসরায়েলি
+  kk: израильдік
+
+=== ID 2251: reply to (ru: отвечать на, откликаться на) ===
+  uk: відповідати на, відгукуватися на
+  de: antworten auf, erwidern auf
+  es: responder a, contestar a
+  fr: répondre à, répliquer à
+  pl: odpowiedzieć na, odpisać na
+  it: rispondere a, replicare a
+  tr: -e yanıt vermek, -e cevap yazmak
+  pt: responder a, retrucar a
+  ro: a răspunde la, a replica la
+  bg: отговарям на, отвръщам на
+  cs: odpovědět na, odepsat na
+  sk: odpovedať na, odvetiť na
+  hu: válaszol vmire, felel vmire
+  el: απαντώ σε, αποκρίνομαι σε
+  sl: odgovoriti na, odvrniti na
+  et: vastama millelegi, kostma
+  lt: atsakyti į, atsiliepti į
+  da: svare på, give svar på
+  fi: vastata johonkin, reagoida
+  sv: svara på, besvara
+  hr: odgovoriti na, uzvratiti na
+  lv: atbildēt uz, atsaukties uz
+  hi: का उत्तर देना, जवाब देना
+  ar: يرد على, يجيب على
+  fa: پاسخ دادن به، جواب دادن به
+  ur: جواب دینا، جواب میں کہنا
+  id: membalas kepada, menjawab pada
+  vi: trả lời cho, đáp lại
+  th: ตอบกลับไปยัง, ตอบข้อความถึง
+  ko: ~에 답장하다, ~에 대답하다
+  ja: 〜に返信する、〜に答える
+  zh: 回复、对……作出回应
+  bn: জবাব দেওয়া, উত্তর দেওয়া
+  kk: жауап қайтару, жауап жазу
+

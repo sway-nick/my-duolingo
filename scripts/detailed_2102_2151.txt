@@ -1,0 +1,1849 @@
+ID 2102 (cost cost cost):
+  ru: стоить, обходиться
+  uk: коштувати, обходитися
+  de: kosten, zu stehen kommen
+  es: costar, tener un precio
+  fr: coûter, valoir
+  pl: kosztować, wynosić
+  it: costare, avere un costo
+  tr: mal olmak, tutmak, maliyeti olmak
+  pt: custar, sair por
+  ro: a costa, a avea prețul de
+  bg: струвам, струва ми
+  cs: stát, mít hodnotu
+  sk: stáť, mať cenu
+  hu: kerülni vmibe, kóstálni
+  el: κοστίζω, στοιχίζω
+  sl: stati, veljati
+  et: maksma, väärt olema
+  lt: kainuoti, atsieiti
+  da: koste, beløbe sig til
+  fi: maksaa, olla hintana
+  sv: kosta, gå på
+  hr: koštati, stajati
+  lv: maksāt, izmaksāt
+  hi: कीमत होना, लागत आना
+  ar: كلّف، يكلّف، ثمنه
+  fa: قیمت داشتن، هزینه داشتن
+  ur: لاگت آنا، قیمت ہونا
+  id: berharga, memakan biaya
+  vi: trị giá, tốn, có giá
+  th: มีราคา, มีมูลค่า, ต้องจ่าย
+  ko: 비용이 들다, 값이 나가다
+  ja: 費用がかかる、値が張る
+  zh: 花费, 价值, 需付
+  bn: খরচ হওয়া, দাম হওয়া
+  kk: тұру (бағасы тұру), құны болу
+
+ID 2103 (cut cut cut):
+  ru: резать, стричь, рубить
+  uk: різати, стригти, рубати
+  de: schneiden, kürzen, stutzen
+  es: cortar, recortar, tajar
+  fr: couper, tailler, découper
+  pl: ciąć, ucinać, kosić
+  it: tagliare, recidere, potare
+  tr: kesmek, budamak, dilimlemek
+  pt: cortar, talhar, podar
+  ro: a tăia, a reteza, a scurta
+  bg: режа, отрязвам, порязвам
+  cs: řezat, stříhat, krájet
+  sk: rezať, strihať, krájať
+  hu: vágni, nyírni, metszeni
+  el: κόβω, περικόπτω, ψαλιδίζω
+  sl: rezati, striči, sekati
+  et: lõikama, pügama, raiuma
+  lt: pjauti, kirpti, pjaustyti
+  da: skære, klippe, hugge
+  fi: leikata, silppua, pätkiä
+  sv: skära, klippa, kapa
+  hr: rezati, sjeći, šišati
+  lv: griezt, cirpt, pļaut
+  hi: काटना, छांटना, चीरना
+  ar: قطع، يقطع، يقصّ
+  fa: بریدن، قطع کردن، قیچی کردن
+  ur: کاٹنا، تراشنا، قلم کرنا
+  id: memotong, menggunting, mengiris
+  vi: cắt, thái, xén
+  th: ตัด, หั่น, เฉือน
+  ko: 자르다, 베다, 깎다
+  ja: 切る、削る、刈る
+  zh: 剪, 切, 割
+  bn: কাটা, ছেঁটে ফেলা, চেরা
+  kk: кесу, қию, шабу
+
+ID 2104 (hit hit hit):
+  ru: ударять, попадать, поражать
+  uk: вдаряти, потрапляти, вражати
+  de: schlagen, treffen, stoßen
+  es: golpear, acertar, pegar
+  fr: frapper, toucher, atteindre
+  pl: uderzać, trafiać, pobić
+  it: colpire, battere, centrare
+  tr: vurmak, çarpmak, isabet ettirmek
+  pt: bater, acertar, atingir
+  ro: a lovi, a nimeri, a izbi
+  bg: удрям, уцелвам, поразявам
+  cs: udeřit, trefit, zasáhnout
+  sk: udrieť, trafiť, zasiahnuť
+  hu: megütni, eltalálni, érni
+  el: χτυπώ, πετυχαίνω, πλήττω
+  sl: udariti, zmagati, zadeti
+  et: lööma, tabama, põrkama
+  lt: smogti, trenkti, pataikyti
+  da: slå, ramme, træffe
+  fi: lyödä, iskeä, osua
+  sv: slå, träffa, drabba
+  hr: udariti, pogoditi, mlatnuti
+  lv: sist, trāpīt, triekt
+  hi: मारना, प्रहार करना, टकराना
+  ar: ضرب، يصيب، يرتطم
+  fa: ضربه زدن، برخورد کردن، اصابت کردن
+  ur: مارنا، چوٹ لگانا، نشانہ لگنا
+  id: memukul, mengenai, menabrak
+  vi: đánh, đấm, trúng
+  th: ตี, ต่อย, ชน
+  ko: 치다, 때리다, 맞히다
+  ja: 打つ、当たる、ぶつかる
+  zh: 打, 击中, 碰撞
+  bn: আঘাত করা, মারা, লাগা
+  kk: ұру, соғу, тию
+
+ID 2105 (hurt hurt hurt):
+  ru: ранить, причинять боль, болеть
+  uk: ранити, завдавати болю, боліти
+  de: verletzen, wehtun, schmerzen
+  es: lastimar, doler, herir
+  fr: blesser, faire mal, faire souffrir
+  pl: ranić, boleć, krzywdzić
+  it: ferire, fare male, addolorare
+  tr: incitmek, acıtmak, ağrımak
+  pt: ferir, machucar, doer
+  ro: a răni, a durea, a vătăma
+  bg: наранявам, боля, огорчавам
+  cs: zranit, ublížit, bolet
+  sk: zraniť, ublížiť, bolieť
+  hu: megsérteni, bántani, fájni
+  el: πληγώνω, πονώ, τραυματίζω
+  sl: poškodovati, prizadeti, boleti
+  et: vigastama, haiget tegema, valutama
+  lt: sužeisti, skaudinti, skaudėti
+  da: såre, forvolde smerte, gøre ondt
+  fi: loukata, satuttaa, koskea
+  sv: såra, skada, göra ont
+  hr: raniti, ozlijediti, boljeti
+  lv: ievainot, sāpināt, skaudināt
+  hi: चोट पहुँचाना, दर्द होना, दुखाना
+  ar: جرح، يؤلم، يؤذي
+  fa: صدمه زدن، درد گرفتن، آزار دیدن
+  ur: چوٹ پہنچانا، دکھنا، درد ہونا
+  id: melukai, menyakiti, terasa sakit
+  vi: làm bị thương, làm tổn thương, đau đớn
+  th: ทำให้บาดเจ็บ, ทำให้เจ็บ, ปวด
+  ko: 다치게 하다, 아프다, 해치다
+  ja: 傷つける、痛む、痛める
+  zh: 伤害, 使疼痛, 感觉痛
+  bn: আঘাত পাওয়া, ব্যথা পাওয়া, কষ্ট দেওয়া
+  kk: ауыру, жарақаттау, зақымдау
+
+ID 2106 (set set set):
+  ru: устанавливать, ставить, задавать
+  uk: встановлювати, ставити, задавати
+  de: setzen, einstellen, festlegen
+  es: establecer, fijar, poner, ajustar
+  fr: poser, régler, définir, placer
+  pl: ustawiać, ustalać, stawiać
+  it: impostare, stabilire, collocare
+  tr: ayarlamak, koymak, belirlemek
+  pt: definir, ajustar, pôr, estabelecer
+  ro: a seta, a fixa, a stabili
+  bg: поставям, настройвам, определям
+  cs: nastavit, umístit, stanovit
+  sk: nastaviť, umiestniť, stanoviť
+  hu: beállítani, elhelyezni, kitűzni
+  el: ρυθμίζω, ορίζω, τοποθετώ
+  sl: postaviti, nastaviti, določiti
+  et: seadma, paigaldama, määrama
+  lt: nustatyti, statyti, įdėti
+  da: sætte, indstille, fastsætte
+  fi: asettaa, säätää, pystyttää
+  sv: ställa in, sätta, placera
+  hr: postaviti, namjestiti, odrediti
+  lv: uzstādīt, noteikt, nolikt
+  hi: स्थापित करना, सेट करना, लगाना
+  ar: ضبط، حدّد، وضع
+  fa: تنظیم کردن، قرار دادن، چیدن
+  ur: قائم کرنا، مقرر کرنا، ترتیب دینا
+  id: menyetel, mengatur, menaruh
+  vi: đặt, thiết lập, bố trí
+  th: ตั้งค่า, วาง, กำหนด
+  ko: 설정하다, 두다, 맞추다
+  ja: 設定する、置く、配置する
+  zh: 设置, 放置, 确定
+  bn: স্থাপন করা, ঠিক করা, সাজানো
+  kk: орнату, белгілеу, реттеу
+
+ID 2107 (shut shut shut):
+  ru: закрывать, запирать, захлопывать
+  uk: закривати, зачиняти, замикати
+  de: schließen, zumachen, zusperren
+  es: cerrar, clausurar
+  fr: fermer, clore, enfermer
+  pl: zamykać, zatrzaskiwać
+  it: chiudere, serrare, sprangare
+  tr: kapatmak, yummak, kilitlemek
+  pt: fechar, cerrar, encerrar
+  ro: a închide, a zăvorî
+  bg: затварям, захлопвам
+  cs: zavřít, zavírat, přivřít
+  sk: zavrieť, zatvárať, privrieť
+  hu: becsukni, lezárni, bezárni
+  el: κλείνω, σφαλίζω
+  sl: zapreti, prikleniti
+  et: sulgema, kinni panema
+  lt: uždaryti, užverti, užtrenkti
+  da: lukke, smække i
+  fi: sulkea, panna kiinni
+  sv: stänga, slå igen
+  hr: zatvoriti, zaklopiti
+  lv: aizvērt, aizslēgt
+  hi: बंद करना, बंद होना
+  ar: أغلق، يغلق، أوصد
+  fa: بستن، مسدود کردن
+  ur: بند کرنا، بھیڑنا
+  id: menutup, mengunci
+  vi: đóng lại, khép lại
+  th: ปิด, หุบ, ล็อค
+  ko: 닫다, 잠그다
+  ja: 閉める、閉じる、塞ぐ
+  zh: 关闭, 关上, 合上
+  bn: বন্ধ করা, আটকানো
+  kk: жабу, бекіту
+
+ID 2108 (spread spread spread):
+  ru: распространять, намазывать, расстилать
+  uk: поширювати, намазувати, розстеляти
+  de: verbreiten, ausbreiten, streichen
+  es: extender, esparcir, difundir
+  fr: répandre, étaler, diffuser
+  pl: rozprzestrzeniać, rozsmarowywać, szerzyć
+  it: diffondere, spargere, spalmare
+  tr: yaymak, sürmek, dağıtmak
+  pt: espalhar, estender, difundir
+  ro: a răspândi, a întinde, a difuza
+  bg: разпространявам, разстилам, намазвам
+  cs: šířit, rozprostřít, roztírat
+  sk: šíriť, rozprestrieť, roztierať
+  hu: terjeszteni, kiterjeszteni, kenni
+  el: απλώνω, διαδίδω, σκορπίζω
+  sl: širiti, razprostreti, mazati
+  et: levitama, laotama, määrima
+  lt: skleisti, tepti, platinti
+  da: sprede, udbrede, smøre
+  fi: levittää, levitä, levittäytyä
+  sv: sprida, breda ut, smeta
+  hr: širiti, namazati, rasprostrijeti
+  lv: izplatīt, ziest, izplest
+  hi: फैलाना, प्रसार करना, पोतना
+  ar: نشر، يبسط، يمدّ
+  fa: پخش کردن، گستردن، پراکندن
+  ur: پھیلانا، بکھیرنا، لگانا
+  id: menyebarkan, mengoleskan, meratakan
+  vi: lan truyền, trải rộng, phết
+  th: แผ่, กระจาย, ทา
+  ko: 퍼뜨리다, 펼치다, 바르다
+  ja: 広げる、広まる、塗る
+  zh: 散布, 传播, 涂抹
+  bn: ছড়ানো, বিস্তার করা, মাখানো
+  kk: тарату, жаю, жағу
+
+ID 2109 (quit quit quit):
+  ru: бросать, прекращать, увольняться
+  uk: кидати, припиняти, звільнятися
+  de: aufhören, kündigen, beenden
+  es: renunciar, dejar, abandonar
+  fr: quitter, abandonner, démissionner
+  pl: rzucać, rezygnować, odchodzić
+  it: smettere, licenziarsi, abbandonare
+  tr: bırakmak, istifa etmek, vazgeçmek
+  pt: desistir, largar, demitir-se
+  ro: a renunța, a demisiona, a abandona
+  bg: напускам, прекратявам, отказвам се
+  cs: skončit, zanechat, dát výpověď
+  sk: skončiť, zanechať, dať výpoveď
+  hu: abbahagyni, felmondani, kilépni
+  el: παραιτούμαι, εγκαταλείπω, σταματώ
+  sl: opustiti, odnehati, dati odpoved
+  et: loobuma, maha jätma, töölt lahkuma
+  lt: mesti, atsisakyti, pasitraukti
+  da: stoppe, opsige, forlade
+  fi: lopettaa, irtisanoutua, heittää
+  sv: sluta, säga upp sig, avbryta
+  hr: odustati, dati otkaz, prekinuti
+  lv: pamest, atteikties, aiziet
+  hi: छोड़ना, त्यागना, इस्तीफा देना
+  ar: استقال، ترك، أقلع عن
+  fa: ترک کردن، دست کشیدن، استعفا دادن
+  ur: چھوڑ دینا، استعفیٰ دینا، دستبردار ہونا
+  id: berhenti, keluar, melepaskan
+  vi: từ bỏ, thôi việc, ngưng
+  th: เลิก, ลาออก, ละทิ้ง
+  ko: 그만두다, 포기하다, 퇴사하다
+  ja: やめる、退職する、断念する
+  zh: 辞职, 停止, 放弃
+  bn: ছেড়ে দেওয়া, ইস্তফা দেওয়া, নিবৃত্ত হওয়া
+  kk: тастау, бас тарту, жұмыстан шығу
+
+ID 2110 (split split split):
+  ru: разделять, раскалывать, расщеплять
+  uk: розділяти, розколювати, розщеплювати
+  de: teilen, spalten, aufteilen
+  es: dividir, partir, separar
+  fr: diviser, fendre, séparer
+  pl: dzielić, rozłupywać, rozszczepiać
+  it: dividere, spaccare, scindere
+  tr: bölmek, yarmak, ayrılmak
+  pt: dividir, rachar, repartir
+  ro: a despica, a diviza, a crăpa
+  bg: разделям, разцепвам, пукам
+  cs: rozdělit, štípat, rozpoltit
+  sk: rozdeliť, štiepať, rozštiepiť
+  hu: felosztani, hasítani, megosztani
+  el: διαχωρίζω, σχίζω, διαιρώ
+  sl: razdeliti, cepiti, razpasti
+  et: jaotama, lõhestama, pooleks minema
+  lt: padalinti, skelti, perplėšti
+  da: splitte, dele, flække
+  fi: jakaa, halkaista, pilkkoa
+  sv: dela, splittra, klyva
+  hr: podijeliti, rascijepiti, prepoloviti
+  lv: sadalīt, šķelt, sadalīties
+  hi: विभाजित करना, बांटना, फाड़ना
+  ar: قسم، يشطر، يفلّق
+  fa: تقسیم کردن، دونیم کردن، شکافتن
+  ur: تقسیم کرنا، پھاڑنا، الگ کرنا
+  id: membelah, membagi, memisahkan
+  vi: chia rẽ, chẻ đôi, tách ra
+  th: แยก, ผ่า, แตกแยก
+  ko: 쪼개다, 나누다, 분열하다
+  ja: 分ける、割る、分裂する
+  zh: 劈开, 分开, 分裂
+  bn: ভাগ করা, বিভক্ত করা, চিড়ে ফেলা
+  kk: бөлу, жару, айыру
+
+ID 2111 (build built built):
+  ru: строить, сооружать, возводить
+  uk: будувати, споруджувати, зводити
+  de: bauen, errichten, erschaffen
+  es: construir, edificar, levantar
+  fr: construire, bâtir, édifier
+  pl: budować, wznosić, konstruować
+  it: costruire, fabbricare, edificare
+  tr: inşa etmek, kurmak, yapmak
+  pt: construir, edificar, erguer
+  ro: a construi, a clădi, a edifica
+  bg: строя, изграждам, съграждам
+  cs: stavět, budovat, vytvořit
+  sk: stavať, budovať, konštruovať
+  hu: építeni, felépíteni, megalkotni
+  el: χτίζω, οικοδομώ, κατασκευάζω
+  sl: graditi, zgraditi, sestaviti
+  et: ehitama, rajama, püstitama
+  lt: statyti, statytis, ręsti
+  da: bygge, opføre, konstruere
+  fi: rakentaa, pystyttää, luoda
+  sv: bygga, uppföra, konstruera
+  hr: graditi, izgraditi, podići
+  lv: būvēt, celt, veidot
+  hi: निर्माण करना, बनाना, रचना
+  ar: بنى، يبني، يشيّد
+  fa: ساختن، بنا کردن، آباد کردن
+  ur: تعمیر کرنا، بنانا، کھڑا کرنا
+  id: membangun, mendirikan, menyusun
+  vi: xây dựng, dựng nên, kiến thiết
+  th: สร้าง, ก่อสร้าง, ปลูกสร้าง
+  ko: 짓다, 건설하다, 세우다
+  ja: 建てる、建築する、築く
+  zh: 建造, 建立, 修筑
+  bn: তৈরি করা, নির্মাণ করা, গঠন করা
+  kk: салу, құру, тұрғызу
+
+ID 2112 (lend lent lent):
+  ru: одалживать, давать взаймы
+  uk: позичати, давати в борг
+  de: leihen, verleihen, borgen
+  es: prestar, dejar, facilitar
+  fr: prêter, accorder, octroyer
+  pl: pożyczać, użyczać
+  it: prestare, dare in prestito
+  tr: ödünç vermek, borç vermek
+  pt: emprestar, ceder
+  ro: a împrumuta, a da cu împrumut
+  bg: давам назаем, заемам
+  cs: půjčit, zapůjčit
+  sk: požičať, zapožičať
+  hu: kölcsönadni, folyósítani
+  el: δανείζω, παραχωρώ
+  sl: posoditi, dati na posodo
+  et: laenama, laenuks andma
+  lt: paskolinti, paskolinti pinigų
+  da: låne, udlåne
+  fi: lainata, antaa lainaksi
+  sv: låna ut, utlåna
+  hr: posuditi, dati na zajam
+  lv: aizdot, iznomāt
+  hi: उधार देना, कर्ज देना
+  ar: أقرض، يعير، يسلف
+  fa: قرض دادن، وام دادن
+  ur: ادھار دینا، قرض دینا
+  id: meminjamkan, mengutangkan
+  vi: cho vay, cho mượn
+  th: ให้ยืม, ให้กู้
+  ko: 빌려주다, 대출하다
+  ja: 貸す、貸し出す
+  zh: 借出, 贷与, 借给
+  bn: ধার দেওয়া, ঋণ দেওয়া
+  kk: қарызға беру, бере тұру
+
+ID 2113 (bend bent bent):
+  ru: сгибать, наклонять, гнуться
+  uk: згинати, нахиляти, гнутися
+  de: biegen, beugen, krümmen
+  es: doblar, curvar, inclinar
+  fr: plier, courber, fléchir
+  pl: zginać, wyginać, schylać
+  it: piegare, curvare, flettere
+  tr: bükmek, eğmek, kıvırmak
+  pt: dobrar, curvar, inclinar
+  ro: a îndoi, a curba, a pleca
+  bg: огъвам, извивам, прегъвам
+  cs: ohýbat, křivit, klenout
+  sk: ohýbať, kriviť, zohýbať
+  hu: hajlítani, görbíteni, meghajolni
+  el: λυγίζω, κάμπτω, σκύβω
+  sl: upogniti, kriviti, sklanjati
+  et: painutama, kõverdama, painduma
+  lt: lenkti, sulenkti, linkti
+  da: bøje, krumme, bukke
+  fi: taivuttaa, kaartaa, käyristää
+  sv: böja, kröka, vika
+  hr: savijati, povijati, pognuti
+  lv: locīt, liekt, saliekt
+  hi: मोड़ना, झुकाना, झुकना
+  ar: ثنى، يلوي، يثني طرفاً
+  fa: خم کردن، تا کردن، انحنا دادن
+  ur: موڑنا، جھکانا، خم کرنا
+  id: membengkokkan, membungkuk, menekuk
+  vi: bẻ cong, uốn cong, cúi
+  th: โค้ง, ดัด, ก้มลง
+  ko: 구부리다, 굽히다, 숙이다
+  ja: 曲げる、たわめる、かがめる
+  zh: 弯曲, 屈服, 俯身
+  bn: বাঁকানো, নোয়ানো, ঝুঁকানো
+  kk: ию, бүгу, еңкею
+
+ID 2114 (draw drew drawn):
+  ru: рисовать, чертить, тянуть
+  uk: малювати, креслити, тягти
+  de: zeichnen, ziehen, malen
+  es: dibujar, trazar, sacar
+  fr: dessiner, tracer, tirer
+  pl: rysować, szkicować, ciągnąć
+  it: disegnare, tracciare, estrarre
+  tr: çizmek, resmetmek, çekmek
+  pt: desenhar, traçar, puxar
+  ro: a desena, a schița, a trage
+  bg: рисувам, чертая, дърпам
+  cs: kreslit, rýsovat, táhnout
+  sk: kresliť, rysovať, ťahať
+  hu: rajzolni, húzni, vonzani
+  el: σχεδιάζω, ζωγραφίζω, σύρω
+  sl: risati, vleči, risati skico
+  et: joonistama, tõmbama, maalima
+  lt: piešti, braižyti, traukti
+  da: tegne, trække, afbilde
+  fi: piirtää, vetää, luonnostella
+  sv: rita, teckna, dra
+  hr: crtati, oslikavati, vući
+  lv: zīmēt, vilkt, skicēt
+  hi: चित्र बनाना, खींचना, आरेखित करना
+  ar: رسم، يسحب، يجرّ
+  fa: کشیدن، نقاشی کردن، طرح زدن
+  ur: تصویر بنانا، کھینچنا، اتارنا
+  id: menggambar, melukis, menarik
+  vi: vẽ, họa hình, rút ra
+  th: วาด, วาดรูป, ลาก
+  ko: 그리다, 끌다, 당기다
+  ja: 描く、素描する、引き寄せる
+  zh: 绘画, 勾勒, 抽取
+  bn: আঁকা, চিত্রাঙ্কন করা, টানা
+  kk: сурет салу, тарту, сызу
+
+ID 2115 (ride rode ridden):
+  ru: ехать верхом, кататься, ехать
+  uk: їздити верхи, кататися, їхати
+  de: reiten, fahren
+  es: montar, cabalgar, pasear
+  fr: monter à cheval, chevaucher, rouler
+  pl: jeździć konno, dosiadać, jechać
+  it: cavalcare, guidare, andare a cavallo
+  tr: binmek, ata binmek, sürmek
+  pt: cavalgar, andar de, montar
+  ro: a călări, a rula, a călători
+  bg: яздя, возя се, карам
+  cs: jezdit na koni, jet, svézt se
+  sk: jazdiť na koni, ísť, odviezť sa
+  hu: lovagolni, utazni, biciklizni
+  el: ιππεύω, κάνω βόλτα, εποχούμαι
+  sl: jahati, voziti se, jezditi
+  et: ratsutama, sõitma
+  lt: joti, važinėti, jodinėti
+  da: ride, cykle, køre
+  fi: ratsastaa, kulkea, ajella
+  sv: rida, åka, cykla
+  hr: jahati, voziti se, jahuckati
+  lv: jāt, braukt, vizināties
+  hi: सवारी करना, चढ़ना, घुड़सवारी करना
+  ar: ركب، يمتطي، يسافر راكباً
+  fa: سوار شدن، اسب‌سواری کردن، سواری گرفتن
+  ur: سواری کرنا، چڑھنا، گھوڑے پر سوار ہونا
+  id: menunggangi, naik, bersepeda
+  vi: cưỡi, đi xe, lái xe
+  th: ขี่, ขี่ม้า, โดยสาร
+  ko: 타다, 승마하다, 몰다
+  ja: 乗る、またがる、乗りこなす
+  zh: 骑乘, 乘车, 跨坐
+  bn: চড়া, আরোহণ করা, ঘোড়সওয়ার হওয়া
+  kk: атқа міну, міну, мініп жүру
+
+ID 2116 (shake shook shaken):
+  ru: трясти, встряхивать, дрожать
+  uk: трясти, струшувати, тремтіти
+  de: schütteln, rütteln, zittern
+  es: agitar, sacudir, estremecerse
+  fr: secouer, agiter, trembler
+  pl: potrząsać, trząść, drżeć
+  it: scuotere, agitare, tremare
+  tr: sallamak, çalkalamak, titremek
+  pt: sacudir, agitar, tremer
+  ro: a scutura, a agita, a tremura
+  bg: разклащам, тръскам, треперя
+  cs: třást, protřepat, klepat se
+  sk: triasť, potriasť, chvieť sa
+  hu: rázni, megrázni, remegni
+  el: κουνώ, ταρακουνώ, τρέμω
+  sl: tresti, stresati, zatrepetati
+  et: raputama, väristama, rappuma
+  lt: purtyti, kratyti, drebėti
+  da: ryste, ryste op, skælve
+  fi: ravistaa, ravistella, täristä
+  sv: skaka, skaka om, darra
+  hr: tresti, protresti, drhtati
+  lv: kratīt, purināt, trīcēt
+  hi: हिलाना, झकझोरना, कांपना
+  ar: هزّ، يرجّ، يرتعش
+  fa: تکان دادن، لرزیدن، جنبانیدن
+  ur: ہلانا، جھنجھوڑنا، کانپنا
+  id: mengguncang, mengocok, bergetar
+  vi: lắc, giũ, run rẩy
+  th: เขย่า, สั่น, สั่นสะเทือน
+  ko: 흔들다, 흔들리다, 털다
+  ja: 振る、揺さぶる、震える
+  zh: 摇晃, 震动, 发抖
+  bn: নাড়ানো, ঝাঁকানো, কাঁপা
+  kk: сілку, шайқау, дірілдеу
+
+ID 2117 (shoot shot shot):
+  ru: стрелять, снимать на камеру
+  uk: стріляти, знімати на камеру
+  de: schießen, abfeuern, drehen
+  es: disparar, tirar, filmar
+  fr: tirer, fusiller, filmer
+  pl: strzelać, filmować
+  it: sparare, scoccare, filmare
+  tr: ateş etmek, vurmak, çekim yapmak
+  pt: atirar, disparar, filmar
+  ro: a trage, a împușca, a filma
+  bg: стрелям, произвеждам изстрел, снимам
+  cs: střílet, pálit, natáčet
+  sk: strieľať, páliť, nakrúcať
+  hu: lőni, tüzelni, lefilmezni
+  el: πυροβολώ, ρίχνω, κινηματογραφώ
+  sl: streljati, ustreliti, snemati
+  et: tulistama, laskma, filmima
+  lt: šauti, pyškinti, filmuoti
+  da: skyde, affyre, filme
+  fi: ampua, laukaista, kuvata
+  sv: skjuta, avfyra, filma
+  hr: pucati, opaliti, snimati
+  lv: šaut, nošaut, filmēt
+  hi: गोली मारना, दागना, शूट करना
+  ar: أطلق النار، يصوّب، يصور
+  fa: شلیک کردن، تیراندازی کردن، فیلم گرفتن
+  ur: گولی چلانا، فائر کرنا، فلمانا
+  id: menembak, memotret, merekam
+  vi: bắn súng, phóng, quay phim
+  th: ยิง, ยิงปืน, ถ่ายทำ
+  ko: 쏘다, 사격하다, 촬영하다
+  ja: 撃つ、射つ、撮影する
+  zh: 射击, 开枪, 拍摄
+  bn: গুলি করা, ছোড়া, শুট করা
+  kk: ату, мылтық ату, кино түсіру
+
+ID 2118 (feed fed fed):
+  ru: кормить, питать, снабжать
+  uk: годувати, харчувати, постачати
+  de: füttern, ernähren, einspeisen
+  es: alimentar, dar de comer, nutrir
+  fr: nourrir, alimenter, sustenter
+  pl: karmić, żywić, zasilać
+  it: nutrire, alimentare, dare da mangiare
+  tr: beslemek, yedirmek, doyurmak
+  pt: alimentar, nutrir, sustentar
+  ro: a hrăni, a alimenta, a ospăta
+  bg: храня, изхранвам, захранвам
+  cs: krmit, živit, pást
+  sk: kŕmiť, živiť, napájať
+  hu: etetni, táplálni, etetést végezni
+  el: ταΐζω, τρέφω, διατρέφω
+  sl: hraniti, nahraniti, krmiti
+  et: toitma, söötma, ülal pidama
+  lt: maitinti, šerti, penėti
+  da: fodre, give mad, nære
+  fi: ruokkia, syöttää, ravita
+  sv: mata, föda, livnära
+  hr: hraniti, nakrmiti, napajati
+  lv: barot, pabarot, ēdināt
+  hi: खिलाना, पोषण करना, भोजन कराना
+  ar: أطعم، يغذي، يطعم الحيوانات
+  fa: غذا دادن، خوراک دادن، سیر کردن
+  ur: کھلانا، خوراک دینا، غذا مہیا کرنا
+  id: memberi makan, menyuapi, menutrisi
+  vi: cho ăn, nuôi dưỡng, cung cấp thức ăn
+  th: ให้อาหาร, ป้อน, เลี้ยงดู
+  ko: 먹이다, 공급하다, 기르다
+  ja: 餌をやる、食べさせる、養う
+  zh: 喂养, 供给, 饲养
+  bn: খাওয়ানো, আহার দেওয়া, প্রতিপালন করা
+  kk: тамақтандыру, қоректендіру, жемдеу
+
+ID 2119 (lead led led):
+  ru: вести, возглавлять, приводить
+  uk: вести, очолювати, приводити
+  de: führen, leiten, anführen
+  es: dirigir, encabezar, conducir
+  fr: mener, diriger, guider
+  pl: prowadzić, przewodzić, wieść
+  it: guidare, condurre, capeggiare
+  tr: yönetmek, önderlik etmek, yol göstermek
+  pt: liderar, conduzir, encabeçar
+  ro: a conduce, a ghida, a îndruma
+  bg: водя, ръководя, предвождам
+  cs: vést, řídit, navádět
+  sk: viesť, riadiť, viesť skupinu
+  hu: vezetni, kalauzolni, élen járni
+  el: καθοδηγώ, ηγούμαι, οδηγώ
+  sl: voditi, popeljati, načelovati
+  et: juhtima, viima, eesotsas olema
+  lt: vesti, vadovauti, nukreipti
+  da: lede, føre an, vejlede
+  fi: johtaa, ohjata, viedä
+  sv: leda, anföra, styra
+  hr: voditi, upravljati, predvoditi
+  lv: vadīt, vest, virzīt
+  hi: नेतृत्व करना, आगे चलना, मार्गदर्शन करना
+  ar: قاد، يتصدر، يقود الركب
+  fa: رهبری کردن، هدایت کردن، راه بردن
+  ur: رہنمائی کرنا، قیادت کرنا، آگے چلنا
+  id: memimpin, memandu, mengarahkan
+  vi: dẫn dắt, chỉ huy, đứng đầu
+  th: นำ, ชี้นำ, นำทาง
+  ko: 이끌다, 이끌어가다, 선도하다
+  ja: 導く、率いる、案内する
+  zh: 带头, 引领, 指引
+  bn: পরিচালনা করা, নেতৃত্ব দেওয়া, পথ দেখানো
+  kk: бастау, жетекшілік ету, алда болу
+
+ID 2120 (light lit lit):
+  ru: зажигать, освещать, светить
+  uk: запалювати, освітлювати, світити
+  de: anzünden, beleuchten, entzünden
+  es: encender, iluminar, alumbrar
+  fr: allumer, éclairer, enflammer
+  pl: zapalać, oświetlać, rozświetlać
+  it: accendere, illuminare, rischiarare
+  tr: yakmak, aydınlatmak, ışık tutmak
+  pt: acender, iluminar, clarear
+  ro: a aprinde, a ilumina, a da foc
+  bg: паля, запалвам, осветявам
+  cs: zapálit, rozsvítit, osvětlit
+  sk: zapáliť, rozsvietiť, osvetliť
+  hu: meggyújtani, felgyújtani, megvilágítani
+  el: ανάβω, φωτίζω, πυροδοτώ
+  sl: prižgati, vžgati, razsvetliti
+  et: süütama, põlema panema, valgustama
+  lt: uždegti, įžiebti, apšviesti
+  da: tænde, antænde, oplyse
+  fi: sytyttää, syttyä, valaista
+  sv: tända, sätta fyr på, belysa
+  hr: zapaliti, upaliti, obasjati
+  lv: iedegt, aizdedzināt, apgaismot
+  hi: जलाना, प्रज्वलित करना, रोशन करना
+  ar: أشعل، يوقد، يضيء
+  fa: روشن کردن، آتش زدن، چراغ افروختن
+  ur: جلانا، روشن کرنا، دیا جلانا
+  id: menyalakan, menerangi, menyulut
+  vi: thắp sáng, nhóm lửa, đốt cháy
+  th: จุดไฟ, ส่องสว่าง, จุด
+  ko: 불을 켜다, 밝히다, 불붙이다
+  ja: 点火する、明かりをつける、照らす
+  zh: 点燃, 照亮, 发光
+  bn: জ্বালানো, আলো দেওয়া, প্রজ্জ্বলিত করা
+  kk: жағу, тұтандыру, жарықтандыру
+
+ID 2121 (stick stuck stuck):
+  ru: приклеивать, втыкать, застревать
+  uk: приклеювати, встромляти, застрягати
+  de: kleben, stecken, festhaften
+  es: pegar, clavar, atascarse
+  fr: coller, planter, se coincer
+  pl: przyklejać, wbijać, grzęznąć
+  it: incollare, conficcare, incastrarsi
+  tr: yapıştırmak, saplamak, takılmak
+  pt: colar, enfiar, emperrar
+  ro: a lipi, a înfige, a se împotmoli
+  bg: залепвам, забучвам, засядам
+  cs: lepit, píchnout, uvíznout
+  sk: lepiť, vpichovať, uviaznuť
+  hu: ragasztani, beszúrni, beragadni
+  el: κολλώ, μπήγω, σκαλώνω
+  sl: prilepiti, zapičiti, obtičati
+  et: kleepima, pistma, kinni kiiluma
+  lt: klijuoti, smeigti, užstrigti
+  da: klistre, stikke ind, sidde fast
+  fi: liimata, pistää, juuttua
+  sv: klistra, sticka, fastna
+  hr: lijepiti, zabiti, zapeti
+  lv: pielīmēt, durt, iestrēgt
+  hi: चिपकाना, चुभोना, अटकना
+  ar: ألصق، يغرز، يعلق
+  fa: چسباندن، فرو بردن، گیر افتادن
+  ur: چپکانا، چبھونا، پھنس جانا
+  id: menempelkan, menusukkan, terjebak
+  vi: dán dính, cắm vào, mắc kẹt
+  th: ติดแน่น, เสียบ, ติดแหง็ก
+  ko: 달라붙다, 찌르다, 갇히다
+  ja: くっつける、突き刺す、立ち往生する
+  zh: 粘贴, 扎进, 卡住
+  bn: আটকানো, আটকে যাওয়া, গেঁথে দেওয়া
+  kk: жабыстыру, тығу, тұрып қалу
+
+ID 2122 (dig dug dug):
+  ru: копать, рыть, откапывать
+  uk: копати, рити, розкопувати
+  de: graben, ausgraben, buddeln
+  es: cavar, excavar, desenterrar
+  fr: creuser, bêcher, fouiller
+  pl: kopać, przekopywać, ryć
+  it: scavare, vangare, dissodare
+  tr: kazmak, oymak, deşmek
+  pt: cavar, escavar, desenterrar
+  ro: a săpa, a scobi, a dezgropa
+  bg: копая, ровя, разкопавам
+  cs: kopat, rýt, hloubit
+  sk: kopať, rýpať, hĺbiť
+  hu: ásni, felásni, kiásni
+  el: σκάβω, ανοίγω λάκκο, ορύσσω
+  sl: kopati, prekopavati, rovati
+  et: kaevama, pinnast uuristama
+  lt: kasti, rausti, purenti
+  da: grave, udgrave, udhule
+  fi: kaivaa, kuokkia, kovertaa
+  sv: gräva, spadvända, urholka
+  hr: kopati, prekopati, roviti
+  lv: rakt, ierakt, uzrakt
+  hi: खोदना, गड्ढा खोदना, कुरेदना
+  ar: حفر، ينقب، يستخرج بالحفر
+  fa: کندن، حفر کردن، بیل زدن
+  ur: کھودنا، گڑھا بنانا، مٹی نکالنا
+  id: menggali, mencangkul, mengeruk
+  vi: đào bới, cuốc đất, khai quật
+  th: ขุด, ขุดดิน, เซาะ
+  ko: 파다, 발굴하다, 일구다
+  ja: 掘る、掘削する、掘り出す
+  zh: 挖掘, 翻土, 钻研
+  bn: খনন করা, খোঁড়া, গর্ত করা
+  kk: қазу, қопару, қазып алу
+
+ID 2123 (dream dreamt dreamt):
+  ru: мечтать, видеть во сне, грезить
+  uk: мріяти, снитися, марити
+  de: träumen, phantasieren
+  es: soñar, tener un sueño, fantasear
+  fr: rêver, songer, faire un rêve
+  pl: marzyć, śnić, roić
+  it: sognare, fantasticare
+  tr: rüya görmek, hayal kurmak, düşlemek
+  pt: sonhar, fantasiar
+  ro: a visa, a fantaza
+  bg: сънувам, мечтая, бленувам
+  cs: snít, mít sen, blouznit
+  sk: snívať, mať sen, rojčiť
+  hu: álmodni, álmodozni, ábrándozni
+  el: ονειρεύομαι, φαντασιώνομαι
+  sl: sanjati, sanjariti, v sanjah videti
+  et: unistama, und nägema
+  lt: svajoti, sapnuoti
+  da: drømme, dagdrømme
+  fi: unelmoida, nähdä unta
+  sv: drömma, fantisera
+  hr: sanjati, sanjariti, maštati
+  lv: sapņot, lolot sapni
+  hi: सपने देखना, कल्पना करना, ख्वाब देखना
+  ar: حلم، يرى مناماً، يتمنى
+  fa: خواب دیدن، خیال‌پردازی کردن، در خواب دیدن
+  ur: خواب دیکھنا، تمنا کرنا، سپنے سجانا
+  id: bermimpi, melamun, mengangankan
+  vi: mơ màng, chiêm bao, mơ ước
+  th: ฝัน, นอนหลับฝัน, ใฝ่ฝัน
+  ko: 꿈꾸다, 몽상하다
+  ja: 夢を見る、夢想する
+  zh: 做梦, 梦想, 梦见
+  bn: স্বপ্ন দেখা, কল্পনা করা, অলীক ভাবা
+  kk: түс көру, армандау, қиялдау
+
+ID 2124 (learn learnt learnt):
+  ru: учить, узнавать, осваивать
+  uk: вчити, дізнаватися, опановувати
+  de: lernen, erlernen, erfahren
+  es: aprender, asimilar, enterarse
+  fr: apprendre, s'instruire, assimiler
+  pl: uczyć się, pojmować, dowiadywać się
+  it: imparare, apprendere, venire a sapere
+  tr: öğrenmek, bellemek, bilgi edinmek
+  pt: aprender, instruir-se, saber
+  ro: a învăța, a deprinde, a afla
+  bg: уча, научавам, овладявам
+  cs: učit se, naučit se, dozvědět se
+  sk: učiť sa, naučiť sa, dozvedieť sa
+  hu: tanulni, megtanulni, tudomást szerezni
+  el: μαθαίνω, κατατοπίζομαι
+  sl: učiti se, naučiti se, zvedeti
+  et: õppima, omandama, teada saama
+  lt: mokytis, išmokti, sužinoti
+  da: lære, tilegne sig, erfare
+  fi: oppia, opetella, kuulla
+  sv: lära sig, inhämta, erfara
+  hr: učiti, naučiti, saznati
+  lv: mācīties, apgūt, uzzināt
+  hi: सीखना, कंठस्थ करना, ज्ञान प्राप्त करना
+  ar: تعلّم، يدرس، يكتسب معرفة
+  fa: یاد گرفتن، آموختن، آگاه شدن
+  ur: سیکھنا، حفظ کرنا، علم پانا
+  id: belajar, mempelajari, mengetahui
+  vi: học tập, rèn luyện, tiếp thu
+  th: เรียนรู้, ศึกษา, รับรู้
+  ko: 배우다, 익히다, 터득하다
+  ja: 学ぶ、習得する、知る
+  zh: 学习, 获知, 掌握
+  bn: শেখা, অধ্যয়ন করা, জানা
+  kk: үйрену, білім алу, ұғып алу
+
+ID 2125 (strike struck struck):
+  ru: ударять, бастовать, поражать
+  uk: вдаряти, страйкувати, вражати
+  de: schlagen, streiken, treffen
+  es: golpear, declarar huelga, abatir
+  fr: frapper, faire grève, s'abattre
+  pl: uderzać, strajkować, razić
+  it: colpire, scioperare, percuotere
+  tr: vurmak, grev yapmak, çarpmak
+  pt: golpear, fazer greve, desferir
+  ro: a lovi, a intra în grevă, a izbi
+  bg: удрям, стачкувам, поразявам
+  cs: udeřit, stávkovat, zasáhnout
+  sk: udrieť, štrajkovať, zasiahnuť
+  hu: rásújtani, sztrájkolni, megütni
+  el: χτυπώ, απεργώ, προσβάλλω
+  sl: udariti, stavkati, prizadeti
+  et: lööma, streikima, rabatama
+  lt: smogti, streikuoti, nutrenkti
+  da: slå, strejke, ramme
+  fi: lyödä, lakkoilla, iskeä
+  sv: slå, strejka, drabba
+  hr: udariti, štrajkati, pogoditi
+  lv: triekt, streikot, satriekt
+  hi: प्रहार करना, हड़ताल करना, चोट मारना
+  ar: ضرب، يضرب عن العمل، يباغت
+  fa: ضربه زدن، اعتصاب کردن، کوبیدن
+  ur: مارنا، ہڑتال کرنا، چوٹ لگانا
+  id: menyerang, mogok kerja, menghantam
+  vi: đình công, đánh mạnh, giáng đòn
+  th: ตี, นัดหยุดงาน, ซัด
+  ko: 치다, 파업하다, 부딪치다
+  ja: 打つ、ストライキをする、襲う
+  zh: 打击, 罢工, 击打
+  bn: আঘাত করা, ধর্মঘট করা, হানা দেওয়া
+  kk: соғу, ұру, ереуіл жасау
+
+ID 2126 (slide slid slid):
+  ru: скользить, сдвигаться, плавно двигаться
+  uk: ковзати, зсуватися, плавно рухатися
+  de: gleiten, rutschen, ausrutschen
+  es: deslizarse, resbalar, correr
+  fr: glisser, coulisser, déraper
+  pl: ślizgać się, osuwać się, przesuwać
+  it: scivolare, slittare, sdrucciolare
+  tr: kaymak, kaydırmak, sıvışmak
+  pt: deslizar, escorregar, resvalar
+  ro: a aluneca, a glisa, a scăpa lin
+  bg: плъзгам се, пързалям се, свличам се
+  cs: klouzat, smýkat se, sunout se
+  sk: kĺzať sa, šmýkať sa, posúvať sa
+  hu: csúszni, siklani, lecsúszni
+  el: γλιστρώ, ολισθαίνω, κυλώ
+  sl: drseti, spodrsniti, zdrkavati
+  et: libisema, liuglema, libastuma
+  lt: slysti, čiuožti, nuslysti
+  da: glide, rutsche, glide af
+  fi: liukua, luisua, luistaa
+  sv: glida, slinta, glida undan
+  hr: kliziti, otklizati, smicati se
+  lv: slīdēt, šļūkt, lēzeni kustēties
+  hi: फिसलना, सरकना, खिसकना
+  ar: انزلق، يتزحلق، ينساب
+  fa: سر خوردن، لغزیدن، نرم حرکت کردن
+  ur: پھسلنا، سرکنا، پھسل جانا
+  id: meluncur, tergelincir, menyelinap
+  vi: trượt, lướt, trượt ngã
+  th: เลื่อน, ไถล, ลื่นไถล
+  ko: 미끄러지다, 살그머니 가다
+  ja: 滑る、滑り落ちる、すっと動く
+  zh: 滑动, 滑落, 悄悄溜走
+  bn: পিছলানো, পিছলে যাওয়া, গড়িয়ে যাওয়া
+  kk: сырғу, тайғанау, сырғып кету
+
+ID 2127 (bet bet bet):
+  ru: держать пари, биться об заклад, ставить
+  uk: тримати парі, битися об заклад, ставити
+  de: wetten, tippen, setzen
+  es: apostar, envidar, retar
+  fr: parier, miser, engager
+  pl: zakładać się, obstawiać, stawiać
+  it: scommettere, puntare, rischiare
+  tr: bahse girmek, iddiaya girmek, bahis koymak
+  pt: apostar, arriscar, dar palpite
+  ro: a paria, a miza, a prinde rămășag
+  bg: обзалагам се, залагам, хващам бас
+  cs: vsadit se, sázet, tipovat
+  sk: staviť sa, vsádzať, tipnúť si
+  hu: fogadni, tétet feltenni, megkockáztatni
+  el: στοιχηματίζω, βάζω στοίχημα
+  sl: staviti, staviti na izid
+  et: kihla vedama, panustama, panust tegema
+  lt: lažintis, statyti, lažybose dalyvauti
+  da: vædde, holde på, satse
+  fi: lyödä vetoa, veikata, panna peliin
+  sv: slå vad, satsa, tippa
+  hr: kladiti se, okladiti se, uložiti
+  lv: derēt, likt likmi, saderēt
+  hi: शर्त लगाना, दांव लगाना, बाजी लगाना
+  ar: راهن، يراهن، يضع رهاناً
+  fa: شرط بستن، شرط‌بندی کردن، قمار زدن
+  ur: شرط لگانا، بازی لگانا، داؤ لگانا
+  id: bertaruh, berpasang taruhan
+  vi: đánh cược, cá độ, đặt cọc
+  th: พนัน, พนันขันต่อ, แทง
+  ko: 내기하다, 돈을 걸다, 장담하다
+  ja: 賭ける、勝負する、確信する
+  zh: 打赌, 下注, 敢断定
+  bn: बाजी ধরা, শর্ত লাগানো, পণ রাখা
+  kk: бәс тігу, бәстесу, бәске тігу
+
+ID 2128 (seek sought sought):
+  ru: искать, домогаться, стремиться
+  uk: шукати, прагнути, домагатися
+  de: suchen, erstreben, nachforschen
+  es: buscar, pretender, perseguir
+  fr: chercher, rechercher, solliciter
+  pl: szukać, dążyć do, ubiegać się
+  it: cercare, perseguire, ambire a
+  tr: aramak, çabalamak, talep etmek
+  pt: buscar, procurar, almejar
+  ro: a căuta, a urmări, a râvni
+  bg: търся, стремя се, домогвам се
+  cs: hledat, usilovat, pídit se
+  sk: hľadať, usilovať sa, pachtiť sa
+  hu: keresni, kutatni, törekedni
+  el: αναζητώ, επιδιώκω, προσπαθώ
+  sl: iskati, stremeti, terjati
+  et: otsima, taotlema, püüdlema
+  lt: ieškoti, siekti, dairytis
+  da: søge, stræbe efter, eftertragte
+  fi: etsiä, tavoitella, hakea
+  sv: söka, eftersträva, sträva efter
+  hr: tražiti, tragati, težiti
+  lv: meklēt, tiekties, lūkot
+  hi: खोजना, तलाश करना, मांगना
+  ar: سعى إلى، يبحث عن، يروم
+  fa: جستجو کردن، جویا شدن، طلبیدن
+  ur: تلاش کرنا، جستجو کرنا، طلب کرنا
+  id: mencari, memohon, mengejar
+  vi: tìm kiếm, kiếm tìm, mưu cầu
+  th: ค้นหา, แสวงหา, ปรารถนา
+  ko: 찾다, 구하다, 추구하다
+  ja: 探す、求める、探求する
+  zh: 寻找, 谋求, 探索
+  bn: খোঁজা, সন্ধান করা, অন্বেষণ করা
+  kk: іздеу, табуға тырысу, ұмтылу
+
+ID 2129 (mistake mistook mistaken):
+  ru: ошибаться, путать, заблуждаться
+  uk: помилятися, плутати, обманюватися
+  de: missverstehen, verwechseln, irren
+  es: equivocarse, confundir, errar
+  fr: se méprendre, confondre, commettre une méprise
+  pl: mylić się, popadać w błąd, brać kogoś za innego
+  it: sbagliare, confondere, fraintendere
+  tr: karıştırmak, yanlış anlamak, yanılmak
+  pt: equivocar-se, confundir, errar
+  ro: a greși, a confunda, a lua drept altceva
+  bg: бъркам, греша, взимам погрешно
+  cs: mýlit se, splést si, zaměňovat
+  sk: mýliť sa, pomýliť sa, zamieňať
+  hu: tévedni, összetéveszteni, rosszul értelmezni
+  el: πλανώμαι, μπερδεύω, συγχέω
+  sl: motiti se, zamenjati, narobe razumeti
+  et: eksima, valesti aru saama, segi ajama
+  lt: suklysti, supainioti, klaidingai suprasti
+  da: tage fejl, forveksle, misforstå
+  fi: erehtyä, erehdyksessä luulla, sotkea
+  sv: missta sig, ta fel, förväxla
+  hr: pogriješiti, pobrkati, obmanuti se
+  lv: kļūdīties, sajaukt, pārklausīties
+  hi: गलती करना, भ्रम में पड़ना, गलत समझना
+  ar: أخطأ، يخلط بين، يلتبس عليه
+  fa: اشتباه گرفتن، عوضی گرفتن، اشتباه کردن
+  ur: غلطی کرنا، غلط سمجھنا، بھول کرنا
+  id: salah mengenali, salah duga, keliru
+  vi: hiểu lầm, lầm tưởng, ngộ nhận
+  th: สำคัญผิด, เข้าใจผิด, จำผิด
+  ko: 오인하다, 잘못 알다, 착각하다
+  ja: 見誤る、思い違いをする、間違える
+  zh: 弄错, 误解, 把…错认
+  bn: ভুল করা, ভুল বোঝা, বিভ্রান্ত হওয়া
+  kk: қателесу, шатастыру, қате ойлау
+
+ID 2130 (spin spun spun):
+  ru: кружиться, вращать, прясть
+  uk: кружляти, обертати, прясти
+  de: drehen, sich drehen, spinnen
+  es: girar, hilar, rotar
+  fr: tournoyer, faire tourner, filer
+  pl: kręcić się, obracać, prząść
+  it: ruotare, far girare, filare
+  tr: dönmek, döndürmek, eğirmek
+  pt: rodar, girar, fiar
+  ro: a toarce, a roti, a se învârti
+  bg: въртя се, превъртам, преда
+  cs: točit se, otáčet, příst
+  sk: točiť sa, otáčať, priasť
+  hu: pörögni, forogni, fonalat fonni
+  el: στροβιλίζομαι, περιστρέφομαι, γνέθω
+  sl: vrteti se, sukati, presti
+  et: pöörlema, pööritama, ketrama
+  lt: suktis, sukti, verpti
+  da: snurre, rotere, spinde
+  fi: pyöriä, pyörittää, kehrätä
+  sv: snurra, rotera, spinna
+  hr: vrtjeti se, zavrtjeti, presti
+  lv: griezties, ritināt, vērpt
+  hi: घूमना, घुमाना, सूत कातना
+  ar: دار، يغزل، يدير بسرعة
+  fa: چرخیدن، چرخاندن، تابیدن
+  ur: گھومنا، گھمانا، سوت کاتنا
+  id: memutar, berputar, memintal
+  vi: xoay tròn, lượn sóng, kéo sợi
+  th: หมุนติ้ว, ควง, ปั่นเส้นใย
+  ko: 돌다, 회전시키다, 실을 잣다
+  ja: くるくる回る、回転させる、糸をつむぐ
+  zh: 飞旋, 旋转, 纺纱
+  bn: ঘোরা, চরকি দেওয়া, সুতা কাটা
+  kk: айналу, шыр айналу, иіру
+
+ID 2131 (sweep swept swept):
+  ru: подметать, мести, сметать
+  uk: підмітати, мести, зносити
+  de: fegen, kehren, fegen über
+  es: barrer, escobar, arrasar
+  fr: balayer, enlever, balayer d'un revers
+  pl: zamiatać, wymiatać, zamiatać miotłą
+  it: spazzare, ramazzare, scopare
+  tr: süpürmek, silip süpürmek, taramak
+  pt: varrer, arrastar, limpar com vassoura
+  ro: a mătura, a spulbera, a curăța
+  bg: мета, помитам, измитам
+  cs: zametat, mést, smetat
+  sk: zametať, zamiesť, zmietať
+  hu: söpörni, felsöpörni, elsöpörni
+  el: σκουπίζω, σαρώνω, παρασύρω
+  sl: pomesti, pometati, čistiti
+  et: pühkima, luuaga koristama, riisuma
+  lt: šluoti, nušluoti, išvalyti
+  da: feje, feje væk, rydde
+  fi: lakaista, pyyhkiä, lakaista puhtaaksi
+  sv: sopa, sopa bort, svepa fram
+  hr: mesti, pomesti, prebrisati
+  lv: slaucīt, aizslaucīt, birstēt
+  hi: झाड़ू लगाना, बुहारना, साफ कर देना
+  ar: كنس، يجرف، يزيل بالمكنسة
+  fa: جارو زدن، روبیدن، پاک کردن
+  ur: جھاڑو دینا، سمیٹنا، صاف کر دینا
+  id: menyapu, mengibaskan, melibas
+  vi: quét dọn, quét nhà, cuốn trôi
+  th: กวาด, ปัดเป่า, ปัดกวาด
+  ko: 쓸다, 비질하다, 휩쓸어가다
+  ja: 掃く、ほうきで掃除する、一掃する
+  zh: 打扫, 扫荡, 席卷
+  bn: ঝাঁট দেওয়া, পরিষ্কার করা, উড়িয়ে নিয়ে যাওয়া
+  kk: сыпыру, тазалау, сыпырып алып кету
+
+ID 2132 (upset upset upset):
+  ru: расстраивать, огорчать, опрокидывать
+  uk: засмучувати, розстроювати, перекидати
+  de: verärgern, durcheinanderbringen, umstoßen
+  es: disgustar, afligir, volcar
+  fr: contrarier, bouleverser, renverser
+  pl: martwić, psuć humor, wywracać
+  it: turbare, affliggere, rovesciare
+  tr: üzmek, keyfini kaçırmak, devirmek
+  pt: chatear, aborrecer, derrubar
+  ro: a supăra, a mâhni, a răsturna
+  bg: разстройвам, ядосвам, преобръщам
+  cs: rozrušit, zarmoutit, převrátit
+  sk: rozrušiť, zarmútiť, prevrátiť
+  hu: elszomorítani, felzaklatni, felborítani
+  el: αναστατώνω, στενοχωρώ, ανατρέπω
+  sl: vznemiriti, potolči, prevrniti
+  et: kurvastama, ärritama, kummuli ajama
+  lt: nuliūdinti, išmušti iš vėžių, apversti
+  da: gøre ked af det, bringe i uorden, vælte
+  fi: pahoittaa mieli, huolestuttaa, keikauttaa
+  sv: göra upprörd, oroa, stjälpa
+  hr: rastužiti, uzrujati, preturati
+  lv: apbēdināt, satraukt, apgāzt
+  hi: दुखी करना, परेशान करना, उलट-पुलट करना
+  ar: أحزن، يكدر، يقلب رأساً على عقب
+  fa: ناراحت کردن، آزرده خاطر کردن، واژگون کردن
+  ur: پریشان کرنا، آزردہ کرنا، الٹ پلٹ کرنا
+  id: merisaukan, membuat sedih, menjungkirbalikkan
+  vi: làm phiền lòng, khiến buồn, đảo lộn
+  th: ทำให้อารมณ์เสีย, ทำให้เสียใจ, คว่ำ
+  ko: 속상하게 하다, 흐트러뜨리다, 전복시키다
+  ja: 狼狽させる、取り乱させる、覆す
+  zh: 使心烦意乱, 弄乱, 搞砸
+  bn: ব্যথিত করা, বিমর্ষ করা, ওলটপালট করা
+  kk: көңілін қалдыру, ренжіту, төңкеріп тастау
+
+ID 2133 (french):
+  ru: французский, французский язык
+  uk: французький, французька мова
+  de: französisch, Französisch
+  es: francés, idioma francés
+  fr: français, langue française
+  pl: francuski, język francuski
+  it: francese, lingua francese
+  tr: Fransız, Fransızca
+  pt: francês, língua francesa
+  ro: francez, limba franceză
+  bg: френски, френски език
+  cs: francouzský, francouzština
+  sk: francúzsky, francúzština
+  hu: francia, francia nyelv
+  el: γαλλικός, γαλλικά
+  sl: francoski, francoščina
+  et: prantsuse, prantsuse keel
+  lt: prancūziškas, prancūzų kalba
+  da: fransk, fransk sprog
+  fi: ranskalainen, ranskan kieli
+  sv: fransk, franska
+  hr: francuski, francuski jezik
+  lv: franču, franču valoda
+  hi: फ़्रांसीसी, फ्रेंच भाषा
+  ar: فرنسي، اللغة الفرنسية
+  fa: فرانسوی، زبان فرانسوی
+  ur: فرانسیسی، فرانسیسی زبان
+  id: Prancis, bahasa Prancis
+  vi: tiếng Pháp, thuộc về nước Pháp
+  th: ภาษาฝรั่งเศส, เกี่ยวกับฝรั่งเศส
+  ko: 프랑스의, 프랑스어
+  ja: フランスの、フランス語
+  zh: 法国的, 法语
+  bn: ফরাসি, ফরাসি ভাষা
+  kk: француз, француз тілі
+
+ID 2134 (December):
+  ru: декабрь
+  uk: грудень
+  de: Dezember
+  es: diciembre
+  fr: décembre
+  pl: grudzień
+  it: dicembre
+  tr: aralık
+  pt: dezembro
+  ro: decembrie
+  bg: декември
+  cs: prosinec
+  sk: december
+  hu: december
+  el: Δεκέμβριος
+  sl: december
+  et: detsember
+  lt: gruodis
+  da: december
+  fi: joulukuu
+  sv: december
+  hr: prosinac
+  lv: decembris
+  hi: दिसंबर
+  ar: ديسمبر، كانون الأول
+  fa: دسامبر
+  ur: دسمبر
+  id: Desember
+  vi: tháng Mười Hai, tháng Chạp
+  th: เดือนธันวาคม
+  ko: 12월
+  ja: 12月
+  zh: 十二月
+  bn: ডিসেম্বর
+  kk: желтоқсан
+
+ID 2135 (abuse):
+  ru: злоупотребление, оскорбление, жестокое обращение
+  uk: зловживання, образа, жорстоке поводження
+  de: Missbrauch, Misshandlung, Beschimpfung
+  es: abuso, maltrato, abusar
+  fr: abus, maltraitance, injurier
+  pl: nadużycie, znęcanie się, znieważać
+  it: abuso, maltrattamento, insulto
+  tr: istismar, kötüye kullanma, suistimal
+  pt: abuso, maus-tratos, abusar
+  ro: abuz, maltratare, injurie
+  bg: злоупотреба, малтретиране, ругатня
+  cs: zneužití, týrání, urážka
+  sk: zneužitie, týranie, nadávka
+  hu: bántalmazás, visszaélés, zaklatás
+  el: κακοποίηση, κατάχρηση, προσβολή
+  sl: zloraba, maltretiranje, žalitev
+  et: kuritarvitamine, väärkohtlemine, solvang
+  lt: piktnaudžiavimas, prievarta, užgauliojimas
+  da: misbrug, mishandling, overgreb
+  fi: lääkkeiden väärinkäyttö, pahoinpitely, herjaus
+  sv: missbruk, vanvård, kränkning
+  hr: zloupotreba, zlostavljanje, uvreda
+  lv: ļaunprātīga izmantošana, vardarbība, aizvainojums
+  hi: दुरुपयोग, दुर्व्यवहार, गाली देना
+  ar: إساءة، سوء معاملة، تعاطي غير مشروع
+  fa: سوءاستفاده، بدرفتاری، توهین
+  ur: غلط استعمال، بدسلوکی، ظلم
+  id: penyalahgunaan, perlakuan buruk, pelecehan
+  vi: lạm dụng, ngược đãi, sỉ nhục
+  th: การละเมิด, การทำร้าย, การด่าทอ
+  ko: 남용, 학대, 욕설
+  ja: 乱用、虐待、罵倒
+  zh: 滥用, 虐待, 辱骂
+  bn: অপব্যবহার, দুর্ব্যবহার, শোষণ
+  kk: қиянат, асыра пайдалану, қорлау
+
+ID 2136 (Wednesday):
+  ru: среда
+  uk: середа
+  de: Mittwoch
+  es: miércoles
+  fr: mercredi
+  pl: środa
+  it: mercoledì
+  tr: çarşamba
+  pt: quarta-feira
+  ro: miercuri
+  bg: сряда
+  cs: středa
+  sk: streda
+  hu: szerda
+  el: Τετάρτη
+  sl: sreda
+  et: kolmapäev
+  lt: trečiadienis
+  da: onsdag
+  fi: keskiviikko
+  sv: onsdag
+  hr: srijeda
+  lv: trešdiena
+  hi: बुधवार
+  ar: الأربعاء
+  fa: چهارشنبه
+  ur: بدھ
+  id: Rabu
+  vi: thứ Tư
+  th: วันพุธ
+  ko: 수요일
+  ja: 水曜日
+  zh: 星期三, 周三
+  bn: বুধবার
+  kk: сәрсенбі
+
+ID 2137 (intervention):
+  ru: вмешательство, воздействие, интервенция
+  uk: втручання, інтервенція, дія
+  de: Intervention, Eingriff, Vermittlung
+  es: intervención, injerencia, mediación
+  fr: intervention, interposition, médiation
+  pl: interwencja, wtrącanie się, zabieg
+  it: intervento, intromissione, mediazione
+  tr: müdahale, araya girme, girişim
+  pt: intervenção, ingerência, interferência
+  ro: intervenție, imixtiune, mediere
+  bg: намеса, интервенция, посредничество
+  cs: zásah, intervence, zákrok
+  sk: zásah, intervencia, zákrok
+  hu: beavatkozás, közbelépés, közvetítés
+  el: παρέμβαση, επέμβαση, μεσολάβηση
+  sl: poseg, posredovanje, intervencija
+  et: vahelesegamine, sekkumine, vahendus
+  lt: įsikišimas, intervencija, tarpininkavimas
+  da: indgriben, intervention, mægling
+  fi: väliintulo, toimenpide, väliintuleminen
+  sv: ingripande, intervention, medling
+  hr: intervencija, uplitanje, zahvat
+  lv: iejaukšanās, ārstnieciska iejaukšanās, intervence
+  hi: हस्तक्षेप, मध्यस्थता, दखल
+  ar: تدخل، وساطة، تداخل
+  fa: مداخله، میانجی‌گری، دخالت
+  ur: مداخلت، دخل اندازی، بچ بچاؤ
+  id: intervensi, campur tangan, penengahan
+  vi: sự can thiệp, biện pháp can thiệp
+  th: การแทรกแซง, การยื่นมือเข้าช่วย
+  ko: 개입, 중재, 간섭
+  ja: 介入、干渉、仲裁
+  zh: 干预, 介入, 调停
+  bn: হস্তক্ষেপ, মধ্যস্থতা
+  kk: араласу, қол сұғу, араағайындық
+
+ID 2138 (fourth):
+  ru: четвёртый
+  uk: четвертий
+  de: vierter, vierte, viertes
+  es: cuarto
+  fr: quatrième
+  pl: czwarty
+  it: quarto
+  tr: dördüncü
+  pt: quarto
+  ro: al patrulea, a patra
+  bg: четвърти
+  cs: čtvrtý
+  sk: štvrtý
+  hu: negyedik
+  el: τέταρτος
+  sl: četrti
+  et: neljas
+  lt: ketvirtas
+  da: fjerde
+  fi: neljäs
+  sv: fjärde
+  hr: četvrti
+  lv: ceturtais
+  hi: चौथा
+  ar: رابع، الرابع
+  fa: چهارم
+  ur: چوتھا
+  id: keempat
+  vi: thứ tư
+  th: ที่สี่, ลำดับที่สี่
+  ko: 넷째의, 4번째
+  ja: 第4の、4番目の
+  zh: 第四, 第四个
+  bn: চতুর্থ
+  kk: төртінші
+
+ID 2139 (cop):
+  ru: коп, полицейский, полисмен
+  uk: коп, поліцейський, правоохоронець
+  de: Bulle, Cop, Polizist
+  es: poli, policía, agente
+  fr: flic, policier, agent
+  pl: glina, policjant, funkcjonariusz
+  it: sbirro, poliziotto, agente
+  tr: polis, aynasız, zabita
+  pt: tira, policial, guarda
+  ro: polițist, copoi, om al legii
+  bg: ченге, полицай, патрулен
+  cs: polda, policista, strážník
+  sk: polda, policajt, strážnik
+  hu: zsaru, rendőr, fakabát
+  el: μπάτσος, αστυνομικός
+  sl: policaj, policist, miličnik
+  et: võmm, politseinik, korravalvur
+  lt: faras, policininkas, mentas
+  da: strisser, politibetjent, panser
+  fi: kyttä, poliisi, skoude
+  sv: snut, polis, konstapel
+  hr: pandur, policajac, drot
+  lv: mentiņš, policists, kārtībnieks
+  hi: पुलिसवाला, सिपाही, दरोगा
+  ar: شرطي، بوليس، دركي
+  fa: پلیس، پاسبان، مأمور
+  ur: پولیس والا، سپاہی، حوالدار
+  id: polisi, petugas keamanan, opsir
+  vi: cớm, cảnh sát, viên cảnh sát
+  th: ตำรวจ, คุณตำหนวด
+  ko: 경찰관, 짭새, 순경
+  ja: 警官、おまわりさん、サツ
+  zh: 条子, 警察, 警官
+  bn: পুলিশ, হাবিলদার, পেয়াদা
+  kk: полицей, тәртіп сақшысы
+
+ID 2140 (supreme):
+  ru: верховный, высший, высочайший
+  uk: верховний, найвищий, суверенний
+  de: oberster, höchster, souverän
+  es: supremo, soberano, sumo
+  fr: suprême, souverain, le plus élevé
+  pl: najwyższy, naczelny, suwerenny
+  it: supremo, sommo, sovrano
+  tr: yüce, en yüksek, üstün
+  pt: supremo, soberano, sumo
+  ro: suprem, cel mai înalt, suveran
+  bg: върховен, най-висш, първостепенен
+  cs: nejvyšší, vrchní, svrchovaný
+  sk: najvyšší, vrchný, zvrchovaný
+  hu: legfelsőbb, legfőbb, korlátlan
+  el: ανώτατος, υπέρτατος, ύψιστος
+  sl: vrhovni, najvišji, suveren
+  et: ülim, kõrgeim, suveräänne
+  lt: aukščiausiasis, viršiausias, didingiausias
+  da: øverste, suveræn, højeste
+  fi: korkein, ylin, suvereeni
+  sv: högsta, suverän, förnämst
+  hr: vrhovni, najviši, suveren
+  lv: augstākais, virsējais, dižākais
+  hi: सर्वोच्च, उच्चतम, प्रधान
+  ar: أسمى، أعلى، عليا
+  fa: عالی، عالی‌ترین، برتر
+  ur: اعلیٰ ترین، سب سے بڑا، سپریم
+  id: tertinggi, mahatinggi, berdaulat
+  vi: tối cao, thượng đẳng, cao nhất
+  th: สูงสุด, ขั้นสูงสุด, ยิ่งใหญ่
+  ko: 최고의, 최상의, 지고의
+  ja: 最高の、至高の、絶大な
+  zh: 至高无上的, 最高级别的
+  bn: সর্বোচ্চ, পরম, প্রধান
+  kk: жоғарғы, ең жоғары, асқақ
+
+ID 2141 (growing):
+  ru: растущий, увеличивающийся, возрастающий
+  uk: зростаючий, ростучий, прогресуючий
+  de: wachsend, zunehmend, expandierend
+  es: creciente, en aumento, en desarrollo
+  fr: croissant, grandissant, en essor
+  pl: rosnący, wzrastający, rozwijający się
+  it: crescente, in espansione, in crescita
+  tr: büyüyen, artan, gelişen
+  pt: crescente, em expansão, em crescimento
+  ro: crescător, în creștere, sporit
+  bg: растящ, нарастващ, увеличаващ се
+  cs: rostoucí, narůstající, stoupající
+  sk: rastúci, narastajúci, stúpajúci
+  hu: növekvő, gyarapodó, terjeszkedő
+  el: αυξανόμενος, ανερχόμενος, αναπτυσσόμενος
+  sl: rastoč, naraščajoč, vse večji
+  et: kasvav, suurenev, tõusev
+  lt: augantis, didėjantis, plėtojantis
+  da: voksende, stigende, tiltagende
+  fi: kasvava, lisääntyvä, vaurastuva
+  sv: växande, ökande, tilltagande
+  hr: rastući, narastajući, sve veći
+  lv: augošs, pieaugošs, plaukstošs
+  hi: बढ़ता हुआ, विकासशील, उन्नत होता
+  ar: متزايد، نامٍ، في نمو مستمر
+  fa: در حال رشد، رو به رشد، فزاینده
+  ur: بڑھتا ہوا، ترقی پذیر، بڑھتی ہوئی
+  id: sedang tumbuh, bertambah, kian besar
+  vi: đang phát triển, gia tăng, ngày càng tăng
+  th: กำลังเติบโต, ที่เพิ่มขึ้น, ขยายตัว
+  ko: 자라나는, 증가하는, 성장하는
+  ja: 成長している、増大する、高まる
+  zh: 增长的, 不断扩大的, 渐增的
+  bn: ক্রমবর্ধমান, বাড়ন্ত, বিকাশশীল
+  kk: өсіп келе жатқан, ұлғаюшы, өсудегі
+
+ID 2142 (revenue):
+  ru: выручка, доход, поступления
+  uk: виручка, дохід, надходження
+  de: Umsatz, Einnahmen, Ertrag
+  es: ingresos, recaudación, facturación
+  fr: recettes, chiffre d'affaires, revenu fiscal
+  pl: przychód, obrót, wpływy
+  it: entrate, fatturato, ricavi
+  tr: gelir, hasılat, ciro
+  pt: receita, faturamento, rendimento
+  ro: venituri, încasări, cifră de afaceri
+  bg: приходи, постъпления, оборот
+  cs: výnosy, tržby, příjmy
+  sk: výnosy, tržby, príjmy
+  hu: árbevétel, bevétel, hozam
+  el: έσοδα, εισπράξεις, τζίρος
+  sl: prihodki, izkupiček, dohodki
+  et: laekumised, müügitulu, tulud
+  lt: pajamos, įplaukos, apyvarta
+  da: omsætning, indtægter, provenu
+  fi: liikevaihto, tulovirta, tuotto
+  sv: intäkter, omsättning, statsinkomster
+  hr: prihodi, utržak, primici
+  lv: ieņēmumi, apgrozījums, ienākumi
+  hi: राजस्व, आय, आमदनी
+  ar: إيرادات، عوائد، ريع
+  fa: درآمد، عایدی، بازده مالی
+  ur: محاصل، آمدنی، ریونیو
+  id: pendapatan, penerimaan kas, omzet
+  vi: doanh thu, tiền thu được, ngân thu
+  th: รายได้, รายรับ, ผลกำไร
+  ko: 세입, 수익, 매출액
+  ja: 歳入、売上高、収益
+  zh: 财政收入, 营业额, 营收
+  bn: রাজস্ব, মোট আয়, অর্জিত আয়
+  kk: түсім, табыс, кіріс
+
+ID 2143 (mayor):
+  ru: мэр, градоначальник, глава города
+  uk: мер, міський голова, очільник міста
+  de: Bürgermeister, Oberbürgermeister
+  es: alcalde, corregidor
+  fr: maire, premier magistrat
+  pl: burmistrz, prezydent miasta
+  it: sindaco, primo cittadino
+  tr: belediye başkanı, şehremini
+  pt: prefeito, presidente da câmara
+  ro: primar, edil
+  bg: кмет, градоначалник
+  cs: starosta, primátor
+  sk: starosta, primátor
+  hu: polgármester, elöljáró
+  el: δήμαρχος
+  sl: župan, predstojnik mesta
+  et: linnapea, vallavanem
+  lt: meras, miesto vadovas
+  da: borgmester, stadsdirektør
+  fi: pormestari, kaupunginjohtaja
+  sv: borgmästare, kommunalråd
+  hr: gradonačelnik, načelnik
+  lv: mērs, pilsētas galva
+  hi: महापौर, मेयर, नगरप्रमुख
+  ar: عمدة، رئيس البلدية
+  fa: شهردار
+  ur: میئر، ناظم، بلدیہ سربراہ
+  id: wali kota
+  vi: thị trưởng
+  th: นายกเทศมนตรี
+  ko: 시장, 구청장
+  ja: 市長、町長
+  zh: 市长, 镇长
+  bn: মেয়র, নগরপাল
+  kk: әкім, мэр, қала басшысы
+
+ID 2144 (emotional):
+  ru: эмоциональный, душевный, трогательный
+  uk: емоційний, зворушливий, душевний
+  de: emotional, gefühlvoll, ergreifend
+  es: emocional, emotivo, sentimental
+  fr: émotionnel, émotif, affectif
+  pl: emocjonalny, uczuciowy, poruszający
+  it: emotivo, emozionante, passionale
+  tr: duygusal, hissi, coşkulu
+  pt: emocional, emotivo, sentimental
+  ro: emoțional, emotiv, plin de sentiment
+  bg: емоционален, разчувстван, сантиментален
+  cs: emocionální, citový, dojemný
+  sk: emocionálny, citový, dojemný
+  hu: érzelmi, érzelgős, felkavaró
+  el: συναισθηματικός, συγκινησιακός
+  sl: čustven, dojemljiv, ganljiv
+  et: emotsionaalne, tundeline, meeleliigutav
+  lt: emocinis, jausmingas, jautrus
+  da: følelsesmæssig, emotionel, bevæget
+  fi: emotionaalinen, tunteikas, herkkä
+  sv: känslomässig, emotionell, gripande
+  hr: emotivan, osjećajan, dirnut
+  lv: emocionāls, jūtu pilns, aizkustinošs
+  hi: भावनात्मक, भावुक, मार्मिक
+  ar: عاطفي، وجداني، مشحون بالمشاعر
+  fa: احساسی، عاطفی، پرشور
+  ur: جذباتی، حساس، دل کو چھونے والا
+  id: emosional, menyentuh hati, sentimental
+  vi: cảm xúc, đa cảm, xúc động
+  th: ทางอารมณ์, สะเทือนอารมณ์, อ่อนไหว
+  ko: 감정적인, 정서적인, 감동적인
+  ja: 感情的な、情緒的な、感動的な
+  zh: 情绪化的, 充满情感的, 感情用事的
+  bn: আবেগপ্রবণ, ভাবাবেগপূর্ণ, মর্মস্পর্শী
+  kk: эмоциялық, сезімтал, толғанысты
+
+ID 2145 (ass):
+  ru: задница, жопа, олух
+  uk: дупа, задниця, телепень
+  de: Arsch, Hintern, Vollidiot
+  es: culo, trasero, idiota
+  fr: cul, derrière, abruti
+  pl: dupa, tyłek, osioł
+  it: culo, sedere, cretino
+  tr: göt, kıç, dangalak
+  pt: bunda, traseiro, babaca
+  ro: cur, fund, măgar
+  bg: задник, гъз, глупак
+  cs: zadek, prdel, pitomec
+  sk: zadok, riť, hlupák
+  hu: segg, fenék, tökfej
+  el: κώλος, πισινός, βλάκας
+  sl: rit, zadnjica, butec
+  et: perse, tagumik, lollpea
+  lt: šikna, užpakalis, mulkis
+  da: røv, numse, fjols
+  fi: perse, takamus, pölkky
+  sv: arsle, röv, idiot
+  hr: guzica, stražnjica, budala
+  lv: pakaļa, dibens, pamuļķis
+  hi: पिछवाड़ा, नितंब, बेवकूफ
+  ar: مؤخرة، طيز، أحمق
+  fa: باسن، کون، نادان
+  ur: پچھواڑا، چوتڑ، بیوقوف
+  id: bokong, pantat, tolol
+  vi: mông, đít, tên đần
+  th: ก้น, บั้นท้าย, เจ้าโง่
+  ko: 엉덩이, 똥구멍, 멍청이
+  ja: ケツ、尻、大馬鹿者
+  zh: 屁股, 蠢材, 笨蛋
+  bn: পাছা, নিতম্ব, নির্বোধ
+  kk: көтен, артқы жақ, топас
+
+ID 2146 (fucking):
+  ru: грёбаный, чертовски, ебучий
+  uk: довбаний, бісів, клятий
+  de: verdammt, scheiß, verschissen
+  es: jodido, maldito, jodidamente
+  fr: putain de, foutu, bordélique
+  pl: pieprzony, cholerny, kurewski
+  it: fottuto, maledetto, del cazzo
+  tr: lanet, kahrolası, amına kodumun
+  pt: fodido, maldito, pra caralho
+  ro: naibii, afurisit, futut
+  bg: шибан, проклет, дяволски
+  cs: zasranej, zatracený, kurva
+  sk: skurvený, zatratený, dočista
+  hu: kibaszott, rohadt, istenverte
+  el: γαμημένος, καταραμένος, γαμώ
+  sl: jebeni, prekleti, zaje bani
+  et: kuradima, neetud, perses
+  lt: suknistas, prakeiktas, velniškas
+  da: forbandet, satans, pisse
+  fi: vitun, helevetin, pirunmoinen
+  sv: jävla, förbannad, skit-
+  hr: jebeni, prokleti, vražji
+  lv: sasodīts, nolādēts, piselīgs
+  hi: कमबख्त, साला, बेहद
+  ar: لعين، تافه، بشدة
+  fa: لعنتی، وامانده، شدیداً
+  ur: لعنتی، کمبخت، انتہائی
+  id: keparat, sialan, luar biasa
+  vi: chết tiệt, mẹ kiếp, vãi
+  th: ชิบหาย, บัดซบ, โคตรจะ
+  ko: 빌어먹을, 존나, 망할 놈의
+  ja: クソ、めちゃくちゃ、忌々しい
+  zh: 他妈的, 该死的, 极其
+  bn: চরম, জঘন্য, অভিশপ্ত
+  kk: лағынет атқан, қарғыс атқыр, сұмдық
+
+ID 2147 (via):
+  ru: через, посредством, с помощью
+  uk: через, посередництвом, за допомогою
+  de: über, mittels, via
+  es: por medio de, a través de, vía
+  fr: par l'intermédiaire de, via, au moyen de
+  pl: przez, poprzez, za pośrednictwem
+  it: tramite, via, per mezzo di
+  tr: aracılığıyla, üzerinden, vasıtasıyla
+  pt: por meio de, através de, via
+  ro: prin intermediul, prin, via
+  bg: чрез, посредством, през
+  cs: prostřednictvím, přes, pomocí
+  sk: prostredníctvom, cez, pomocou
+  hu: útján, révén, keresztül
+  el: μέσω, διαμέσου, με τη βοήθεια
+  sl: prek, s pomočjo, skozi
+  et: kaudu, vahendusel, läbi
+  lt: per, tarpininkaujant, dėka
+  da: via, gennem, ved hjælp af
+  fi: kautta, välityksellä, avulla
+  sv: via, genom, medelst
+  hr: putem, preko, posredstvom
+  lv: ar starpniecību, caur, izmantojot
+  hi: के माध्यम से, के जरिए, द्वारा
+  ar: عبر، بواسطة، عن طريق
+  fa: از طریق، به وسیله، از راه
+  ur: کے ذریعے، کی معرفت، کی وساطت سے
+  id: melalui, via, perantara
+  vi: thông qua, qua đường, nhờ vào
+  th: ผ่านทาง, โดย, โดยวิธี
+  ko: ~을 통해, 경유하여, 매개로
+  ja: ～経由で、～を通じて、～を介して
+  zh: 通过, 经由, 凭借
+  bn: মাধ্যমে, দিয়ে, হয়ে
+  kk: арқылы, көмегімен, дәнекерлігімен
+
+ID 2148 (pm):
+  ru: после полудня, вечера, во второй половине дня
+  uk: після полудня, вечора, по обіді
+  de: nachmittags, abends, nach dem Mittag
+  es: de la tarde, de la noche, p. m.
+  fr: de l'après-midi, du soir, après-midi
+  pl: po południu, wieczorem, poobiedni
+  it: del pomeriggio, di sera, pomeridiano
+  tr: öğleden sonra, akşam, p.m.
+  pt: da tarde, da noite, pós-meio-dia
+  ro: după-amiaza, seara, p.m.
+  bg: след обяд, следобед, вечерта
+  cs: odpoledne, večer, polední
+  sk: popoludní, večer, poobede
+  hu: délután, este, délutáni
+  el: μετά μεσημβρίαν, μ.μ., απογευματινός
+  sl: popoldne, zvečer, popoldanski
+  et: pärastlõunal, õhtul, p.m.
+  lt: po pietų, vakare, popiet
+  da: eftermiddag, aften, e.m.
+  fi: iltapäivällä, illalla, ip.
+  sv: på eftermiddagen, på kvällen, e.m.
+  hr: poslijepodne, navečer, popodnevni
+  lv: pēcpusdienā, vakarā, pēcpusdienas
+  hi: दोपहर बाद, शाम को, अपराह्न
+  ar: بعد الظهر، مساءً، فترة ما بعد الزوال
+  fa: بعدازظهر، عصر، شب
+  ur: بعد دوپہر، شام، سہ پہر
+  id: sore hari, malam hari, p.m.
+  vi: buổi chiều, buổi tối, sau giờ ngọ
+  th: ช่วงบ่าย, ตอนค่ำ, หลังเที่ยงวัน
+  ko: 오후, 저녁, 후반부
+  ja: 午後、夕方、夜間
+  zh: 下午, 午后, 晚间
+  bn: অপরাহ্ন, বিকাল, সন্ধ্যা
+  kk: түстен кейін, кешке, түстен соң
+
+ID 2149 (panel):
+  ru: панель, экспертная группа, комиссия
+  uk: панель, експертна група, комісія
+  de: Gremium, Expertenkommission, Panel
+  es: panel, comisión, junta de expertos
+  fr: jury, panel, groupe d'experts
+  pl: panel, grono ekspertów, komitet
+  it: gruppo di esperti, commissione, pannello
+  tr: kurul, uzmanlar heyeti, pano
+  pt: painel, comissão, grupo de peritos
+  ro: comisie, grup de experți, panou
+  bg: експертна група, комисия, съвет
+  cs: panel, skupina odborníků, komise
+  sk: panel, expertná skupina, komisia
+  hu: szakértői csoport, bírálóbizottság, testület
+  el: ομάδα εμπειρογνωμόνων, επιτροπή, πάνελ
+  sl: odbor, skupina strokovnjakov, panel
+  et: ekspertkomisjon, žürii, töörühm
+  lt: ekspertų grupė, komisija, kolegija
+  da: ekspertpanel, dommerkomité, udvalg
+  fi: asiantuntijaraati, paneeli, lautakunta
+  sv: expertpanel, kommitté, nämnd
+  hr: panel, stručno povjerenstvo, odbor
+  lv: komisija, ekspertu kopa, žūrija
+  hi: पैनल, विशेषज्ञ समिति, न्यायिक दल
+  ar: هيئة خبراء، لجنة تحكيم، لوحة
+  fa: میزگرد، هیئت کارشناسان، پنل
+  ur: پینل، ماہرین کا وفد، تختی
+  id: dewan pakar, panel juri, majelis
+  vi: ban chuyên gia, hội đồng xét duyệt, bàng điều khiển
+  th: คณะผู้เชี่ยวชาญ, คณะกรรมการ, แผงประชุม
+  ko: 전문가단, 패널, 심사위원단
+  ja: 判定団、専門家委員会、パネル
+  zh: 专家评审组, 专门委员会, 控制面板
+  bn: বিশেষজ্ঞ দল, প্যানেল, বিচারকমণ্ডলী
+  kk: сарапшылар кеңесі, комиссия, алқа
+
+ID 2150 (democracy):
+  ru: демократия, народовластие
+  uk: демократія, народовладдя
+  de: Demokratie, Volksherrschaft
+  es: democracia, sistema democrático
+  fr: démocratie, gouvernement du peuple
+  pl: demokracja, rządy ludu
+  it: democrazia, governo popolare
+  tr: demokrasi, halk idaresi
+  pt: democracia, regime democrático
+  ro: democrație, guvernare a poporului
+  bg: демокрация, народоовластие
+  cs: demokracie, vláda lidu
+  sk: demokracia, vláda ľudu
+  hu: demokrácia, népuralom
+  el: δημοκρατία, λαοκρατία
+  sl: demokracija, ljudska vlada
+  et: demokraatia, rahvavõim
+  lt: demokratija, liaudies valdžia
+  da: demokrati, folkestyre
+  fi: demokratia, kansanvalta
+  sv: demokrati, folkstyre
+  hr: demokracija, vladavina naroda
+  lv: demokrātija, tautvaldība
+  hi: लोकतंत्र, प्रजातंत्र, जनतंत्र
+  ar: ديمقراطية، حكم الشعب
+  fa: مردم‌سالاری، حکومت مردمی، دموکراسی
+  ur: جمہوریت، عوامی راج
+  id: demokrasi, kedaulatan rakyat
+  vi: chế độ dân chủ, nền dân chủ
+  th: ประชาธิปไตย, ระบอบประชาธิปไตย
+  ko: 민주주의, 민주제
+  ja: 民主主義、民主政治
+  zh: 民主, 民主制度, 民主政体
+  bn: গণতন্ত্র, প্রজাতন্ত্র
+  kk: демократия, халық билігі
+
+ID 2151 (setting):
+  ru: настройка, обстановка, параметр
+  uk: налаштування, обстановка, параметр
+  de: Einstellung, Schauplatz, Umfeld
+  es: configuración, escenario, ajuste
+  fr: paramètre, réglage, décor
+  pl: ustawienie, sceneria, konfiguracja
+  it: impostazione, ambientazione, regolazione
+  tr: ayar, ortam, sahne
+  pt: configuração, cenário, ajuste
+  ro: setare, ambianță, cadru
+  bg: настройка, обстановка, параметър
+  cs: nastavení, prostředí, kulisa
+  sk: nastavenie, prostredie, kontext
+  hu: beállítás, környezet, díszlet
+  el: ρύθμιση, σκηνικό, πλαίσιο
+  sl: nastavitev, prizorišče, okolje
+  et: seadistus, tegevuskoht, olustik
+  lt: nustatymas, aplinka, parametras
+  da: indstilling, miljø, sceneri
+  fi: asetus, miljöö, toimintaympäristö
+  sv: inställning, skådeplats, inramning
+  hr: postavka, ambijent, ozračje
+  lv: iestatījums, darbības vide, noskaņa
+  hi: सेटिंग, पृष्ठभूमि, विन्यास
+  ar: ضبط، إعداد، بيئة المحيط
+  fa: تنظیمات، صحنه، موقعیت مکانی
+  ur: سیٹنگ، ترتیب، پس منظر
+  id: pengaturan, tata letak, latar belakang
+  vi: thiết lập, bối cảnh, dàn cảnh
+  th: การตั้งค่า, ฉากหลัง, บรรยากาศ
+  ko: 환경 설정, 무대, 배경
+  ja: 設定、背景、ロケーション
+  zh: 设定, 环境背景, 参数设置
+  bn: সেটিং, বিন্যাস, পটভূমি
+  kk: баптау, орта, оқиға орны

@@ -1,0 +1,2045 @@
+===============================================================================
+LINGUISTIC AUDIT & CALIBRATION REPORT: BATCH 1952-2001 (50 IRREGULAR VERBS)
+EXACTLY 36 LOCALES (35 TARGET LANGUAGES + EN HEADWORD)
+===============================================================================
+
+EXECUTIVE SUMMARY & SYSTEMIC BUG PATTERNS IDENTIFIED & RESOLVED:
+1. Catastrophic Part-of-Speech Inversions (Nouns instead of Verbs):
+   - ID 1957 "find": HU "lelet", EL "εύρημα" (archaeological discovery/find) -> calibrated to verbs "megtalálni, találni", "βρίσκω, ανακαλύπτω".
+   - ID 1969 "show": RO "spectacol", SL "predstava", EL "επίδειξη", BG "шоу", IT "spettacolo", CS "show", SK "show" -> calibrated to verbs "a arăta", "pokazati", "δείχνω", "показвам", "mostrare", "ukázat".
+   - ID 1971 "run": CS "běh", SK "beh", LT "bėgimas" -> calibrated to infinitives "běžet, běhat", "bežať, behať", "bėgti, bėgioti".
+   - ID 1973 "read": RO "citire", BG "четене", EL "ανάγνωση" -> calibrated to verbs "a citi", "чета", "διαβάζω".
+   - ID 1974 "buy": HU "vétel", EL "αγορά" -> calibrated to verbs "venni, vásárolni", "αγοράζω".
+   - ID 1976 "break": Inverted across 14 languages to noun "break/pause/recess/intermission" (RO "pauză", CS "přerušení", SK "prestávka", BG "почивка", LT "pertrauka", ET "paus", HU "szünet", EL "διακοπή", IT "rottura", DA "pause", SV "pausa", FI "tauko", KK "үзіліс", SL "odmor") -> restored to true verb "to break/fracture/destroy" across all 35 languages.
+   - ID 1978 "drive": False-friend drift/noun in DA "drive", SV "driva", SK "jazda", HU "hajtás" -> calibrated to vehicular drive "køre", "köra", "šoférovať, riadiť", "vezetni".
+   - ID 1979 "fall": Inverted to season "autumn/fall" or noun "fall" in ET "sügis", IT "autunno", CS "podzim", SK "jeseň", BG "падане", LT "kritimas", RO "cădere", SL "padec", EL "πτώση" -> calibrated to verb "to fall/drop" across all 35 languages.
+   - ID 1986 "mean": AR "قصد" (noun intention) -> calibrated to verb "يعني، يقصد".
+   - ID 1988 "rise": RO "creștere", SL "vzpon, rast", SK "vzostup, rast", EL "άνοδος, ανάπτυξη" -> calibrated to verbs "a se ridica, a răsări", "dvigniti se, vstati", "stúpať, vyjsť", "ανεβαίνω, σηκώνομαι, ανατέλλω".
+   - ID 1992 "sleep": Inverted to noun "sleep/slumber" in IT "sonno", BG "сън", LT "miegas", SL "spanje", ET "uni", HU "alvás", EL "ύπνος" -> calibrated to verbs "dormire", "спя", "miegoti", "spati", "magama", "aludni", "κοιμάμαι".
+   - ID 1995 "stand": Inverted to "market stall / display stand / tripod" in RO "stand", CS "stánek", BG "стойка", LT "stendas", HU "állvány", SL "stojalo", EL "στάση" -> restored to verb "to stand / stand up".
+   - ID 1996 "swim": Inverted to noun "swimming" in RO "înot", BG "плуване", HU "úszás", and bizarrely EL "ζάλη" (dizziness!) -> restored to verb "to swim" across all languages.
+   - ID 1999 "wear": Inverted to "wear and tear / attrition" in SK "opotrebovať", BG "износване", EL "φθορά", HU "viselet" -> restored to verb "to wear (clothing)".
+   - ID 2000 "win": Inverted to noun "victory" in BG "победа", SL "zmaga", ET "võit", HU "győzelem", EL "νίκη", and FATAL BUG in UR "نہ تو، نہ ہی" ("neither... nor"!) -> calibrated to verb "جیتنا", "печеля", "zmagati", "võitma", "nyerni", "κερδίζω".
+   - ID 2001 "fly": Inverted to insect "fly / Fliege" in ET "kärbes", EL "μύγα", AR "يطير، ذبابة" -> restored strictly to verb "to fly / soar".
+
+2. Semantic Inversion Bug ("Teach" translated as "Learn"):
+   - ID 1997 "teach": Inverted into "learn" across 11 languages (DE "lernen", FR "apprendre", IT "Imparare", TR "öğrenmek", CS "učit se", SK "učiť sa", SL "učiti se", ET "õppima", LT "mokytis", HU "tanul", EL "μαθαίνω") -> restored to active transitive verb "to teach/instruct" (lehren, enseigner, insegnare, öğretmek, učit, učiť, poučevati, õpetama, mokyti, tanítani, διδάσκω).
+
+3. Imperative Form Pollution in Slavic, Baltic, Uralic, Romance:
+   - Eliminating imperative tokens (e.g. SL "pojdi", "pridi", "pusti", "izberi"; ET "mine", "tule", "anna", "mõtle", "tea", "lase"; BG "ела", "вземете", "донеси", "започнете", "забрави"; RO "vino", "ia"; EL "Έλα"; LT "ateik"; DA "kom", "tag", "giv", "find", "tænk", "vid", "bliv", "skriv", "læs", "køb", "spis", "vælg"). All restored to proper infinitives/base dictionary citations.
+
+4. Automated Prompt Pollution Cleansed:
+   - ID 1960 "tell": stripped literal "communicate information to someone" translations.
+   - ID 1975 "eat": stripped literal "there is to eat" ("je tam k jídlu", "c'è da mangiare", "tam je za jesti", "seal on süüa", "van mit enni", "υπάρχει, για να φας", "іма за ядене", "є, їсти").
+   - ID 1984 "hold": stripped "physically hold" / "držet fyzicky" / "tenir physiquement" / "tenere fisicamente" / "šariirika ruup se pakadna" across >20 languages.
+   - ID 1993 "speak": stripped "speak a language" / "govoriti jezik" / "tala ett språk" / "die Sprache sprechen" / "parler la langue" / "hablar un idioma" across >20 languages.
+
+5. Regional Nuances & Natural Script Grammar:
+   - Portuguese (pt / pt-BR): Brazilian idioms (e.g., pegar, levar, tomar; pôr, colocar, botar; dirigir; ensinar; vestir, usar; ganhar, vencer).
+   - Spanish (es / es-MX): Latin American idioms (e.g., manejar, conducir; pararse; usar, vestir; ganar).
+   - Natural syntax in Hindi (hi), Urdu (ur), Arabic (ar), Persian (fa), Bengali (bn), Kazakh (kk).
+
+===============================================================================
+DETAILED WORD-BY-WORD AUDIT LOG
+===============================================================================
+
+=== ID 1952: go went gone ===
+Headword (EN): go went gone
+Category: Irregular verbs
+RU (Old): идти -> (Calibrated): идти, ехать, ходить
+Target Languages:
+  uk : йти, їхати, ходити  [FIXED: was "йти"]
+  de : gehen, fahren  [FIXED: was "gehen"]
+  es : ir, marchar  [FIXED: was "ir"]
+  fr : aller, partir  [FIXED: was "aller"]
+  pl : iść, jechać  [FIXED: was "Iść"]
+  it : andare, recarsi  [FIXED: was "andare"]
+  tr : gitmek  [FIXED: was "Gitmek"]
+  pt : ir
+  ro : a merge, a se duce  [FIXED: was "merge"]
+  bg : отивам, ходя  [FIXED: was "отида"]
+  cs : jít, jet  [FIXED: was "jít"]
+  sk : ísť, jazdiť  [FIXED: was "ísť"]
+  hu : menni, járni  [FIXED: was "megy"]
+  el : πηγαίνω, πάω  [FIXED: was "πάω"]
+  sl : iti, potovati  [FIXED: was "pojdi"]
+  et : minema, käima  [FIXED: was "mine"]
+  lt : eiti, vykti  [FIXED: was "eiti"]
+  da : gå, rejse  [FIXED: was "gå"]
+  fi : mennä, kulkea  [FIXED: was "mennä"]
+  sv : gå, resa  [FIXED: was "gå"]
+  hr : ići, putovati  [FIXED: was "ići"]
+  lv : iet, braukt  [FIXED: was "iet"]
+  hi : जाना, चलना  [FIXED: was "जाना"]
+  ar : يذهب
+  fa : رفتن
+  ur : جانا
+  id : pergi, berangkat  [FIXED: was "pergi"]
+  vi : đi
+  th : ไป
+  ko : 가다
+  ja : 行く
+  zh : 去、走
+  bn : যাওয়া
+  kk : бару, жүру  [FIXED: was "бару"]
+
+=== ID 1953: see saw seen ===
+Headword (EN): see saw seen
+Category: Irregular verbs
+RU (Old): видеть -> (Calibrated): видеть, смотреть
+Target Languages:
+  uk : бачити, дивитися  [FIXED: was "бачити"]
+  de : sehen, erblicken  [FIXED: was "sehen"]
+  es : ver, mirar  [FIXED: was "ver"]
+  fr : voir, apercevoir  [FIXED: was "voir"]
+  pl : widzieć, zobaczyć  [FIXED: was "Widzieć"]
+  it : vedere, scorgere  [FIXED: was "Vedere"]
+  tr : görmek  [FIXED: was "Görmek"]
+  pt : ver, enxergar  [FIXED: was "ver"]
+  ro : a vedea  [FIXED: was "vedea"]
+  bg : виждам
+  cs : vidět, spatřit  [FIXED: was "vidět"]
+  sk : vidieť, zazrieť  [FIXED: was "vidieť"]
+  hu : látni
+  el : βλέπω
+  sl : videti  [FIXED: was "glej"]
+  et : nägema  [FIXED: was "vaata"]
+  lt : matyti, pamatyti  [FIXED: was "pamatyti"]
+  da : se
+  fi : nähdä
+  sv : se, synas  [FIXED: was "se"]
+  hr : vidjeti
+  lv : redzēt
+  hi : देखना
+  ar : يرى، يبصر  [FIXED: was "يرى"]
+  fa : دیدن
+  ur : دیکھنا
+  id : melihat
+  vi : thấy, nhìn thấy  [FIXED: was "nhìn thấy"]
+  th : เห็น, มองเห็น  [FIXED: was "เห็น"]
+  ko : 보다
+  ja : 見る、見える  [FIXED: was "見る"]
+  zh : 看见、看到  [FIXED: was "看见"]
+  bn : দেখা
+  kk : көру
+
+=== ID 1954: come came come ===
+Headword (EN): come came come
+Category: Irregular verbs
+RU (Old): приходить -> (Calibrated): приходить, приезжать
+Target Languages:
+  uk : приходити, приїжджати  [FIXED: was "приходити"]
+  de : kommen, eintreffen  [FIXED: was "kommen"]
+  es : venir, llegar  [FIXED: was "venir"]
+  fr : venir, arriver  [FIXED: was "venir"]
+  pl : przychodzić, przyjeżdżać  [FIXED: was "przychodzić"]
+  it : venire, arrivare  [FIXED: was "Venire"]
+  tr : gelmek  [FIXED: was "Gelmek"]
+  pt : vir, chegar  [FIXED: was "vir"]
+  ro : a veni, a sosi  [FIXED: was "vino"]
+  bg : идвам, пристигам  [FIXED: was "ела"]
+  cs : přijít, přijet  [FIXED: was "přijít"]
+  sk : prísť, pricestovať  [FIXED: was "prísť"]
+  hu : jönni, megérkezni  [FIXED: was "jön"]
+  el : έρχομαι  [FIXED: was "Έλα"]
+  sl : priti, prihajati  [FIXED: was "pridi"]
+  et : tulema, saabuma  [FIXED: was "tule"]
+  lt : ateiti, atvykti  [FIXED: was "ateik"]
+  da : komme, ankomme  [FIXED: was "kom"]
+  fi : tulla, saapua  [FIXED: was "tulla"]
+  sv : komma, anlända  [FIXED: was "komma"]
+  hr : doći, stići  [FIXED: was "doći"]
+  lv : nākt, ierasties  [FIXED: was "nākt"]
+  hi : आना, पहुँचना  [FIXED: was "आना"]
+  ar : يأتي، يحضر  [FIXED: was "يأتي"]
+  fa : آمدن
+  ur : آنا، تشریف لانا  [FIXED: was "آنا"]
+  id : datang, tiba  [FIXED: was "datang"]
+  vi : đến, tới  [FIXED: was "đến"]
+  th : มา, มาถึง  [FIXED: was "มา"]
+  ko : 오다
+  ja : 来る
+  zh : 来、来到
+  bn : আসা
+  kk : келу
+
+=== ID 1955: take took taken ===
+Headword (EN): take took taken
+Category: Irregular verbs
+RU (Old): брать -> (Calibrated): брать, взять, забирать
+Target Languages:
+  uk : брати, взяти, забирати  [FIXED: was "брати"]
+  de : nehmen, mitnehmen  [FIXED: was "nehmen"]
+  es : tomar, llevar, agarrar  [FIXED: was "tomar, llevar"]
+  fr : prendre, emmener  [FIXED: was "prendre"]
+  pl : brać, wziąć  [FIXED: was "Brać"]
+  it : prendere, cogliere  [FIXED: was "Prendere"]
+  tr : almak, götürmek  [FIXED: was "almak"]
+  pt : pegar, levar, tomar
+  ro : a lua  [FIXED: was "ia"]
+  bg : вземам, хващам  [FIXED: was "вземете"]
+  cs : vzít, brát  [FIXED: was "vzít"]
+  sk : vziať, brať  [FIXED: was "vziať"]
+  hu : venni, elvenni, fogni  [FIXED: was "vesz"]
+  el : παίρνω
+  sl : vzeti, brati  [FIXED: was "vzeti"]
+  et : võtma
+  lt : imti, paimti  [FIXED: was "imti"]
+  da : tage  [FIXED: was "tag"]
+  fi : ottaa, viedä  [FIXED: was "ottaa"]
+  sv : ta, gripa  [FIXED: was "ta"]
+  hr : uzeti, hvatati  [FIXED: was "uzeti"]
+  lv : ņemt, paņemt  [FIXED: was "ņemt"]
+  hi : लेना, ले जाना  [FIXED: was "लेना"]
+  ar : يأخذ
+  fa : گرفتن، برداشتن
+  ur : لینا، لے جانا  [FIXED: was "لینا"]
+  id : mengambil, membawa  [FIXED: was "mengambil"]
+  vi : lấy, mang theo  [FIXED: was "lấy"]
+  th : เอา, รับ  [FIXED: was "เอา"]
+  ko : 가져가다, 취하다  [FIXED: was "가져가다"]
+  ja : 取る、持って行く  [FIXED: was "取る"]
+  zh : 拿、取、带走  [FIXED: was "拿、带"]
+  bn : নেওয়া, গ্রহণ করা  [FIXED: was "নেওয়া"]
+  kk : алу, алып кету  [FIXED: was "алу"]
+
+=== ID 1956: give gave given ===
+Headword (EN): give gave given
+Category: Irregular verbs
+RU (Old): давать -> (Calibrated): давать, дарить, отдавать
+Target Languages:
+  uk : давати, дарувати, віддавати  [FIXED: was "давати"]
+  de : geben, schenken  [FIXED: was "geben"]
+  es : dar, otorgar, regalar  [FIXED: was "dar"]
+  fr : donner, offrir  [FIXED: was "donner"]
+  pl : dawać, podarować  [FIXED: was "dawać"]
+  it : dare, donare  [FIXED: was "Dare"]
+  tr : vermek, hediye etmek  [FIXED: was "vermek"]
+  pt : dar, entregar, presentear  [FIXED: was "dar"]
+  ro : a da, a oferi  [FIXED: was "da"]
+  bg : давам, подарявам  [FIXED: was "давам"]
+  cs : dát, darovat  [FIXED: was "dát"]
+  sk : dať, darovať  [FIXED: was "dať"]
+  hu : adni, ajándékozni  [FIXED: was "ad"]
+  el : δίνω, χαρίζω  [FIXED: was "δίνω"]
+  sl : dati, podariti  [FIXED: was "dati"]
+  et : andma, kinkima  [FIXED: was "anna"]
+  lt : duoti, dovanoti  [FIXED: was "duoti"]
+  da : give, forære  [FIXED: was "giv"]
+  fi : antaa, ojentaa  [FIXED: was "antaa"]
+  sv : ge, ge bort  [FIXED: was "ge"]
+  hr : dati, darovati  [FIXED: was "dati"]
+  lv : dot, dāvināt  [FIXED: was "dot"]
+  hi : देना, प्रदान करना  [FIXED: was "देना"]
+  ar : يعطي، يمنح  [FIXED: was "يعطي"]
+  fa : دادن، بخشیدن  [FIXED: was "دادن"]
+  ur : دینا، عطا کرنا  [FIXED: was "دینا"]
+  id : memberi, memberikan  [FIXED: was "memberi"]
+  vi : cho, tặng  [FIXED: was "cho"]
+  th : ให้, มอบ  [FIXED: was "ให้"]
+  ko : 주다, 부여하다  [FIXED: was "주다"]
+  ja : 与える、あげる  [FIXED: was "与える"]
+  zh : 给、给予、送  [FIXED: was "给"]
+  bn : দেওয়া, দান করা  [FIXED: was "দেওয়া"]
+  kk : беру, сыйлау  [FIXED: was "беру"]
+
+=== ID 1957: find found found ===
+Headword (EN): find found found
+Category: Irregular verbs
+RU (Old): находить -> (Calibrated): находить, обнаружить
+Target Languages:
+  uk : знаходити, виявляти  [FIXED: was "знаходити"]
+  de : finden, entdecken  [FIXED: was "finden"]
+  es : encontrar, hallar  [FIXED: was "encontrar"]
+  fr : trouver, découvrir  [FIXED: was "trouver"]
+  pl : znajdować, odnaleźć  [FIXED: was "znajdować"]
+  it : trovare, scoprire  [FIXED: was "Trovare"]
+  tr : bulmak, keşfetmek  [FIXED: was "bulmak"]
+  pt : encontrar, achar  [FIXED: was "encontrar"]
+  ro : a găsi, a descoperi  [FIXED: was "găsi"]
+  bg : намирам, откривам  [FIXED: was "намирам"]
+  cs : najít, nalézt  [FIXED: was "nalézt"]
+  sk : nájsť, objaviť  [FIXED: was "nájsť"]
+  hu : megtalálni, találni  [FIXED: was "lelet"]
+  el : βρίσκω, ανακαλύπτω  [FIXED: was "εύρημα"]
+  sl : najti, odkriti  [FIXED: was "najti"]
+  et : leidma
+  lt : rasti, atrasti  [FIXED: was "rasti"]
+  da : finde, opdage  [FIXED: was "find"]
+  fi : löytää, havaita  [FIXED: was "löytää"]
+  sv : hitta, finna  [FIXED: was "hitta"]
+  hr : pronaći, naći  [FIXED: was "pronaći"]
+  lv : atrast, atklāt  [FIXED: was "atrast"]
+  hi : पाना, ढूँढना, खोजना  [FIXED: was "खोजना"]
+  ar : يجد، يعثر على  [FIXED: was "يجد"]
+  fa : پیدا کردن، یافتن  [FIXED: was "پیدا کردن"]
+  ur : تلاش کرنا، پانا، ملنا  [FIXED: was "تلاش کرنا، ملنا"]
+  id : menemukan
+  vi : tìm thấy, phát hiện  [FIXED: was "tìm thấy"]
+  th : หา, พบ, ค้นพบ  [FIXED: was "หา"]
+  ko : 찾다, 발견하다  [FIXED: was "찾다"]
+  ja : 見つける、見出す  [FIXED: was "見つける"]
+  zh : 找到、发现  [FIXED: was "找到"]
+  bn : খুঁজে পাওয়া, পাওয়া  [FIXED: was "খুঁজে পাওয়া"]
+  kk : табу, тауып алу  [FIXED: was "табу"]
+
+=== ID 1958: think thought thought ===
+Headword (EN): think thought thought
+Category: Irregular verbs
+RU (Old): думать -> (Calibrated): думать, мыслить, полагать
+Target Languages:
+  uk : думати, вважати, мислити  [FIXED: was "думати"]
+  de : denken, glauben  [FIXED: was "denken"]
+  es : pensar, creer  [FIXED: was "pensar"]
+  fr : penser, réfléchir  [FIXED: was "penser"]
+  pl : myśleć, uważać  [FIXED: was "myśleć"]
+  it : pensare, ritenere  [FIXED: was "pensare"]
+  tr : düşünmek, sanmak  [FIXED: was "düşünmek"]
+  pt : pensar, achar, crer  [FIXED: was "pensar"]
+  ro : a gândi, a crede  [FIXED: was "cred"]
+  bg : мисля, разсъждавам  [FIXED: was "мисля"]
+  cs : myslet, přemýšlet  [FIXED: was "myslet"]
+  sk : myslieť, premýšľať  [FIXED: was "myslieť"]
+  hu : gondolni, gondolkodni  [FIXED: was "gondol"]
+  el : σκέφτομαι, νομίζω  [FIXED: was "νομίζω"]
+  sl : misliti, razmišljati  [FIXED: was "mislim"]
+  et : mõtlema, arvama  [FIXED: was "mõtle"]
+  lt : galvoti, manyti  [FIXED: was "galvoti"]
+  da : tænke, tro  [FIXED: was "tænk"]
+  fi : ajatella, miettiä  [FIXED: was "ajatella"]
+  sv : tänka, tro  [FIXED: was "tänka"]
+  hr : misliti, razmišljati  [FIXED: was "misliti"]
+  lv : domāt, uzskatīt  [FIXED: was "domāt"]
+  hi : सोचना, विचार करना  [FIXED: was "सोचना"]
+  ar : يفكر، يعتقد  [FIXED: was "يفكر"]
+  fa : فکر کردن، پنداشتن  [FIXED: was "فکر کردن"]
+  ur : سوچنا، خیال کرنا  [FIXED: was "سوچنا"]
+  id : berpikir, mengira  [FIXED: was "berpikir"]
+  vi : nghĩ, suy nghĩ  [FIXED: was "nghĩ"]
+  th : คิด, นึก  [FIXED: was "คิด"]
+  ko : 생각하다
+  ja : 考える、思う  [FIXED: was "考える"]
+  zh : 思考、想、认为  [FIXED: was "思考、认为"]
+  bn : ভাবা, চিন্তা করা  [FIXED: was "ভাবা"]
+  kk : ойлау, ой жүгірту  [FIXED: was "ойлау"]
+
+=== ID 1959: know knew known ===
+Headword (EN): know knew known
+Category: Irregular verbs
+RU (Old): знать -> (Calibrated): знать, ведать
+Target Languages:
+  uk : знати, відати  [FIXED: was "знати"]
+  de : wissen, kennen  [FIXED: was "wissen"]
+  es : saber, conocer  [FIXED: was "saber"]
+  fr : savoir, connaître  [FIXED: was "savoir"]
+  pl : wiedzieć, znać  [FIXED: was "wiedzieć"]
+  it : sapere, conoscere  [FIXED: was "Sapere"]
+  tr : bilmek, tanımak  [FIXED: was "Bilmek"]
+  pt : saber, conhecer  [FIXED: was "saber"]
+  ro : a ști, a cunoaște  [FIXED: was "știu"]
+  bg : знам, познавам  [FIXED: was "знам"]
+  cs : vědět, znát  [FIXED: was "vědět"]
+  sk : vedieť, poznať  [FIXED: was "vedieť"]
+  hu : tudni, ismerni  [FIXED: was "tud"]
+  el : ξέρω, γνωρίζω  [FIXED: was "ξέρω"]
+  sl : vedeti, znati  [FIXED: was "vedeti"]
+  et : teadma, tundma  [FIXED: was "tea"]
+  lt : žinoti, pažinti  [FIXED: was "žinoti"]
+  da : vide, kende  [FIXED: was "vid"]
+  fi : tietää, tuntea  [FIXED: was "tietää"]
+  sv : veta, känna till  [FIXED: was "veta"]
+  hr : znati, poznavati  [FIXED: was "znati"]
+  lv : zināt, pazīt  [FIXED: was "zināt"]
+  hi : जानना, मालूम होना  [FIXED: was "जानना"]
+  ar : يعرف، يعلم  [FIXED: was "يعرف"]
+  fa : دانستن، شناختن
+  ur : جاننا، معلوم ہونا  [FIXED: was "جاننا"]
+  id : mengetahui, tahu, kenal  [FIXED: was "mengetahui"]
+  vi : biết, hiểu biết  [FIXED: was "biết"]
+  th : รู้, ทราบ  [FIXED: was "รู้"]
+  ko : 알다
+  ja : 知る、知っている  [FIXED: was "知る"]
+  zh : 知道、认识、了解  [FIXED: was "知道"]
+  bn : জানা, চেনা  [FIXED: was "জানা"]
+  kk : білу, тану  [FIXED: was "білу"]
+
+=== ID 1960: tell told told ===
+Headword (EN): tell told told
+Category: Irregular verbs
+RU (Old): сообщить информацию кому-то -> (Calibrated): рассказывать, говорить, сказать
+Target Languages:
+  uk : розповідати, говорити, казати  [FIXED: was "повідомляти, говорити"]
+  de : erzählen, sagen, mitteilen  [FIXED: was "erzählen, mitteilen"]
+  es : contar, decir, relatar  [FIXED: was "decir, contar"]
+  fr : raconter, dire
+  pl : mówić, powiedzieć, opowiadać  [FIXED: was "mówić, powiedzieć"]
+  it : raccontare, dire
+  tr : anlatmak, söylemek  [FIXED: was "birine bilgi iletmek"]
+  pt : contar, dizer  [FIXED: was "dizer, contar"]
+  ro : a spune, a povesti  [FIXED: was "a comunica informații cuiva"]
+  bg : казвам, разказвам  [FIXED: was "съобщаване на информация на някого"]
+  cs : říct, vyprávět, sdělit  [FIXED: was "sdělit někomu informace"]
+  sk : povedať, rozprávať  [FIXED: was "komunikovať informácie niekomu"]
+  hu : elmondani, mesélni, mondani  [FIXED: was "információt közölni valakivel"]
+  el : λέω, διηγούμαι  [FIXED: was "μεταδίδω πληροφορίες σε κάποιον"]
+  sl : povedati, reči, pripovedovati  [FIXED: was "sporočiti informacije nekomu"]
+  et : rääkima, ütlema, jutustama  [FIXED: was "edastada kellelegi infot"]
+  lt : pasakyti, papasakoti  [FIXED: was "perduoti informaciją kam nors"]
+  da : fortælle, sige  [FIXED: was "kommuniker information til nogen"]
+  fi : kertoa, sanoa  [FIXED: was "välittää tietoa jollekulle"]
+  sv : berätta, säga  [FIXED: was "kommunicera information till någon"]
+  hr : reći, ispričati, kazati  [FIXED: was "prenijeti informacije nekome"]
+  lv : stāstīt, teikt  [FIXED: was "nodot informāciju kādam"]
+  hi : बताना, कहना, सुनाना  [FIXED: was "किसी को जानकारी देना"]
+  ar : يخبر، يقول، يحكي  [FIXED: was "ينقل المعلومات لشخص ما"]
+  fa : گفتن، تعریف کردن  [FIXED: was "گفتن، خبر دادن"]
+  ur : بتانا، کہنا، سنانا  [FIXED: was "بتانا"]
+  id : menceritakan, memberitahu  [FIXED: was "memberitahu, menceritakan"]
+  vi : kể, bảo, nói
+  th : บอก, เล่า  [FIXED: was "สื่อสารข้อมูลให้ผู้อื่น"]
+  ko : 말하다, 이야기하다  [FIXED: was "말하다, 알리다"]
+  ja : 伝える、話す、教える  [FIXED: was "誰かに情報を伝える"]
+  zh : 告诉、讲述、说  [FIXED: was "告诉、告知"]
+  bn : বলা, জানানো, গল্প বলা  [FIXED: was "বলা"]
+  kk : айту, айтып беру  [FIXED: was "біреуге ақпарат жеткізу"]
+
+=== ID 1961: become became become ===
+Headword (EN): become became become
+Category: Irregular verbs
+RU (Old): становиться -> (Calibrated): становиться, стать
+Target Languages:
+  uk : ставати, стати  [FIXED: was "ставати"]
+  de : werden, sich entwickeln zu  [FIXED: was "werden"]
+  es : convertirse, llegar a ser, hacerse  [FIXED: was "convertirse"]
+  fr : devenir
+  pl : stawać się, zostać  [FIXED: was "stawać się"]
+  it : diventare, divenire  [FIXED: was "diventare"]
+  tr : olmak, haline gelmek  [FIXED: was "haline gelmek"]
+  pt : tornar-se, virar, ficar  [FIXED: was "tornar-se"]
+  ro : a deveni  [FIXED: was "deveni"]
+  bg : ставам, превръщам се  [FIXED: was "ставам"]
+  cs : stát se, stávat se  [FIXED: was "stát se"]
+  sk : stať sa, stávať sa  [FIXED: was "stať sa"]
+  hu : válni valamivé, lenni  [FIXED: was "válik"]
+  el : γίνομαι
+  sl : postati
+  et : saama, muutuma  [FIXED: was "saama"]
+  lt : tapti
+  da : blive  [FIXED: was "bliv"]
+  fi : tulla joksikin, muuttua  [FIXED: was "tulla"]
+  sv : bli
+  hr : postati
+  lv : kļūt, tapt  [FIXED: was "kļūt"]
+  hi : बनना, हो जाना  [FIXED: was "बनना"]
+  ar : يصبح، يصير  [FIXED: was "يصبح"]
+  fa : شدن، تبدیل شدن  [FIXED: was "شدن"]
+  ur : بننا، ہو جانا  [FIXED: was "بن جانا"]
+  id : menjadi
+  vi : trở thành, trở nên  [FIXED: was "trở thành"]
+  th : กลายเป็น, เป็น  [FIXED: was "กลายเป็น"]
+  ko : 되다, 변하다  [FIXED: was "되다"]
+  ja : なる
+  zh : 成为、变成  [FIXED: was "变成、成为"]
+  bn : হওয়া, হয়ে ওঠা  [FIXED: was "হয়ে ওঠা"]
+  kk : болу, айналу  [FIXED: was "болу"]
+
+=== ID 1962: leave left left ===
+Headword (EN): leave left left
+Category: Irregular verbs
+RU (Old): уходить, оставлять -> (Calibrated): уходить, покидать, оставлять
+Target Languages:
+  uk : йти, залишати, покидати  [FIXED: was "йти, залишати"]
+  de : verlassen, weggehen, abfahren  [FIXED: was "verlassen, weggehen"]
+  es : salir, marcharse, dejar  [FIXED: was "irse, dejar, abandonar"]
+  fr : partir, quitter, laisser  [FIXED: was "partir"]
+  pl : opuszczać, zostawiać, odchodzić  [FIXED: was "odchodzić, zostawiać"]
+  it : partire, lasciare, abbandonare  [FIXED: was "andarsene"]
+  tr : ayrılmak, bırakmak, terk etmek  [FIXED: was "ayrılmak"]
+  pt : partir, sair, deixar  [FIXED: was "partir, deixar"]
+  ro : a pleca, a părăsi, a lăsa  [FIXED: was "a pleca"]
+  bg : тръгвам, напускам, оставям  [FIXED: was "да си тръгна"]
+  cs : odejít, opustit, nechat  [FIXED: was "odejít"]
+  sk : odísť, opustiť, zanechať  [FIXED: was "odísť"]
+  hu : elmenni, elhagyni, otthagyni  [FIXED: was "elmenni"]
+  el : φεύγω, αφήνω, εγκαταλείπω  [FIXED: was "να φύγω"]
+  sl : oditi, zapustiti, pustiti  [FIXED: was "oditi"]
+  et : lahkuma, jätma, maha jätma  [FIXED: was "lahkuma"]
+  lt : išeiti, palikti  [FIXED: was "išeiti"]
+  da : forlade, tage af sted  [FIXED: was "forlad"]
+  fi : lähteä, jättää  [FIXED: was "lähteä"]
+  sv : lämna, ge sig av  [FIXED: was "lämna"]
+  hr : otići, napustiti, ostaviti  [FIXED: was "otići"]
+  lv : atstāt, pamest, aiziet  [FIXED: was "atstāt"]
+  hi : छोड़ना, निकलना, रवाना होना  [FIXED: was "छोड़ना"]
+  ar : يغادر، يترك، يرحل  [FIXED: was "يغادر"]
+  fa : ترک کردن، جا گذاشتن  [FIXED: was "ترک کردن، گذاشتن"]
+  ur : چھوڑنا، روانہ ہونا
+  id : meninggalkan, pergi  [FIXED: was "pergi, meninggalkan"]
+  vi : rời đi, để lại, bỏ lại  [FIXED: was "rời đi, bỏ đi"]
+  th : ออกไป, ละทิ้ง, ทิ้งไว้  [FIXED: was "ออกไป"]
+  ko : 떠나다, 남기다  [FIXED: was "떠나다"]
+  ja : 去る、離れる、残す  [FIXED: was "去る"]
+  zh : 离开、出发、留下  [FIXED: was "离开、留下"]
+  bn : ছেড়ে যাওয়া, ত্যাগ করা  [FIXED: was "চলে যাওয়া, রেখে যাওয়া"]
+  kk : кету, тастап кету  [FIXED: was "кету"]
+
+=== ID 1963: feel felt felt ===
+Headword (EN): feel felt felt
+Category: Irregular verbs
+RU (Old): чувствовать -> (Calibrated): чувствовать, ощущать
+Target Languages:
+  uk : відчувати, почувати  [FIXED: was "відчувати"]
+  de : fühlen, spüren  [FIXED: was "fühlen"]
+  es : sentir, percibir  [FIXED: was "sentir"]
+  fr : sentir, éprouver, ressentir  [FIXED: was "sentir"]
+  pl : czuć, odczuwać  [FIXED: was "czuć"]
+  it : sentire, provare, percepire  [FIXED: was "Tatto"]
+  tr : hissetmek, sezmek  [FIXED: was "hissetmek"]
+  pt : sentir, perceber  [FIXED: was "sentir"]
+  ro : a simți, a percepe  [FIXED: was "simți"]
+  bg : чувствам, усещам  [FIXED: was "чувствам"]
+  cs : cítit, pociťovat  [FIXED: was "cítit"]
+  sk : cítiť, pociťovať  [FIXED: was "cítiť"]
+  hu : érezni
+  el : νιώθω, αισθάνομαι  [FIXED: was "αφή"]
+  sl : čutiti, občutiti  [FIXED: was "čutiti"]
+  et : tundma  [FIXED: was "tunne"]
+  lt : jausti, pajusti  [FIXED: was "jausti"]
+  da : føle, mærke  [FIXED: was "føle"]
+  fi : tuntea, aistia  [FIXED: was "tuntea"]
+  sv : känna
+  hr : osjećati, čuti  [FIXED: was "osjetiti"]
+  lv : just, sajust  [FIXED: was "just"]
+  hi : महसूस करना, अनुभव करना  [FIXED: was "महसूस करना"]
+  ar : يشعر، يحس  [FIXED: was "يشعر"]
+  fa : احساس کردن، حس کردن  [FIXED: was "احساس کردن"]
+  ur : محسوس کرنا
+  id : merasa, merasakan  [FIXED: was "merasa"]
+  vi : cảm thấy, cảm nhận  [FIXED: was "cảm thấy"]
+  th : รู้สึก
+  ko : 느끼다
+  ja : 感じる、気がする  [FIXED: was "感じる"]
+  zh : 感觉、觉得  [FIXED: was "感觉"]
+  bn : অনুভব করা, টের পাওয়া  [FIXED: was "অনুভব করা"]
+  kk : сезу, сезіну  [FIXED: was "сезіну"]
+
+=== ID 1964: put put put ===
+Headword (EN): put put put
+Category: Irregular verbs
+RU (Old): класть, помещать -> (Calibrated): класть, положить, ставить
+Target Languages:
+  uk : класти, покласти, ставити  [FIXED: was "класти, поміщати"]
+  de : legen, stellen, setzen
+  es : poner, colocar
+  fr : mettre, poser, placer  [FIXED: was "mettre, placer"]
+  pl : kłaść, położyć, umieszczać  [FIXED: was "kłaść, umieszczać"]
+  it : mettere, posare, collocare  [FIXED: was "mettere, collocare"]
+  tr : koymak, yerleştirmek
+  pt : pôr, colocar, botar  [FIXED: was "colocar"]
+  ro : a pune, a așeza  [FIXED: was "pune, plasa"]
+  bg : слагам, поставям
+  cs : dát, položit, umístit  [FIXED: was "dát, umístit"]
+  sk : položiť, dať, umiestniť  [FIXED: was "položiť, umiestniť"]
+  hu : tenni, rakni, helyezni  [FIXED: was "elhelyezni, feltenni"]
+  el : βάζω, τοποθετώ
+  sl : postaviti, dati, položiti  [FIXED: was "postaviti"]
+  et : panema, asetama
+  lt : dėti, padėti  [FIXED: was "padėti, vieta"]
+  da : lægge, sætte, placere  [FIXED: was "læg, placer"]
+  fi : laittaa, asettaa, panna  [FIXED: was "laittaa, asettaa"]
+  sv : sätta, ställa, lägga  [FIXED: was "sätta, placera"]
+  hr : staviti, smjestiti
+  lv : likt, nolikt, novietot  [FIXED: was "nolikt, novietot"]
+  hi : रखना, डालना  [FIXED: was "रखना"]
+  ar : يضع  [FIXED: was "يضع، يضع في مكان"]
+  fa : گذاشتن، قرار دادن
+  ur : رکھنا، ڈالنا  [FIXED: was "رکھنا"]
+  id : menaruh, meletakkan  [FIXED: was "meletakkan, menempatkan"]
+  vi : đặt, để
+  th : วาง, ใส่  [FIXED: was "วาง"]
+  ko : 놓다, 두다  [FIXED: was "놓다"]
+  ja : 置く、入れる  [FIXED: was "置く"]
+  zh : 放、放置、摆  [FIXED: was "放、放置"]
+  bn : রাখা, স্থাপন করা  [FIXED: was "রাখা"]
+  kk : қою, салу  [FIXED: was "қою, орналастыру"]
+
+=== ID 1965: bring brought brought ===
+Headword (EN): bring brought brought
+Category: Irregular verbs
+RU (Old): приносить -> (Calibrated): приносить, приводить, привозить
+Target Languages:
+  uk : приносити, приводити, привозити  [FIXED: was "приносити"]
+  de : bringen, mitbringen  [FIXED: was "bringen"]
+  es : traer, llevar  [FIXED: was "traer"]
+  fr : apporter, amener  [FIXED: was "apporter"]
+  pl : przynosić, przywozić  [FIXED: was "przynosić"]
+  it : portare, recare  [FIXED: was "Portare"]
+  tr : getirmek
+  pt : trazer
+  ro : a aduce  [FIXED: was "aduce"]
+  bg : нося, донасям  [FIXED: was "донеси"]
+  cs : přinést, přivést  [FIXED: was "přinést"]
+  sk : priniesť, priviesť  [FIXED: was "priniesť"]
+  hu : hozni, magával hozni  [FIXED: was "hozni"]
+  el : φέρνω  [FIXED: was "φέρω"]
+  sl : prinesti, privesti  [FIXED: was "prinesti"]
+  et : tooma
+  lt : atnešti, atvežti  [FIXED: was "atnešti"]
+  da : bringe, tage med  [FIXED: was "bring"]
+  fi : tuoda
+  sv : ta med, hämta  [FIXED: was "ta med"]
+  hr : donijeti, dovesti  [FIXED: was "donijeti"]
+  lv : atnest, atvest  [FIXED: was "atnest"]
+  hi : लाना, ले आना  [FIXED: was "लाना"]
+  ar : يجلب، يحضر  [FIXED: was "يحضر"]
+  fa : آوردن
+  ur : لانا
+  id : membawa, membawakan  [FIXED: was "membawa"]
+  vi : mang, đem lại  [FIXED: was "mang"]
+  th : นำมา, เอามา  [FIXED: was "นำมา"]
+  ko : 가져오다, 데려오다  [FIXED: was "가져오다"]
+  ja : 持ってくる、連れてくる  [FIXED: was "持ってくる"]
+  zh : 带来、拿来  [FIXED: was "带来"]
+  bn : আনা, নিয়ে আসা  [FIXED: was "নিয়ে আসা"]
+  kk : әкелу
+
+=== ID 1966: begin began begun ===
+Headword (EN): begin began begun
+Category: Irregular verbs
+RU (Old): начинать -> (Calibrated): начинать, начинаться
+Target Languages:
+  uk : починати, починатися  [FIXED: was "починати"]
+  de : beginnen, anfangen  [FIXED: was "beginnen"]
+  es : empezar, comenzar  [FIXED: was "empezar"]
+  fr : commencer, débuter  [FIXED: was "commencer"]
+  pl : zaczynać, rozpoczynać  [FIXED: was "zaczynać"]
+  it : iniziare, cominciare  [FIXED: was "iniziare"]
+  tr : başlamak, başlatmak  [FIXED: was "başlamak"]
+  pt : começar, iniciar  [FIXED: was "começar"]
+  ro : a începe, a demara  [FIXED: was "începe"]
+  bg : започвам, давам начало  [FIXED: was "започнете"]
+  cs : začít, začínat  [FIXED: was "začít"]
+  sk : začať, začínať  [FIXED: was "začať"]
+  hu : kezdeni, kezdődni  [FIXED: was "elindul"]
+  el : αρχίζω, ξεκινώ  [FIXED: was "ξεκινώ"]
+  sl : začeti, pričenjati  [FIXED: was "začeti"]
+  et : algama, alustama  [FIXED: was "alustama"]
+  lt : pradėti, prasidėti  [FIXED: was "pradėti"]
+  da : begynde, starte  [FIXED: was "begynd"]
+  fi : aloittaa, alkaa  [FIXED: was "aloittaa"]
+  sv : börja, inleda  [FIXED: was "börja"]
+  hr : početi, započeti  [FIXED: was "započeti"]
+  lv : sākt, sākties  [FIXED: was "sākt"]
+  hi : शुरू करना, आरंभ करना  [FIXED: was "शुरू करना"]
+  ar : يبدأ
+  fa : شروع کردن، آغاز کردن  [FIXED: was "شروع کردن"]
+  ur : شروع کرنا، آغاز کرنا  [FIXED: was "شروع کرنا"]
+  id : memulai, berawal  [FIXED: was "memulai"]
+  vi : bắt đầu, khởi đầu  [FIXED: was "bắt đầu"]
+  th : เริ่ม, เริ่มต้น  [FIXED: was "เริ่มต้น"]
+  ko : 시작하다
+  ja : 始める、始まる  [FIXED: was "始める"]
+  zh : 开始、起初  [FIXED: was "开始"]
+  bn : শুরু করা, আরম্ভ করা  [FIXED: was "শুরু করা"]
+  kk : бастау, басталу  [FIXED: was "бастау"]
+
+=== ID 1967: keep kept kept ===
+Headword (EN): keep kept kept
+Category: Irregular verbs
+RU (Old): держать, хранить, сохранять -> (Calibrated): держать, хранить, сохранять
+Target Languages:
+  uk : тримати, зберігати, берігти  [FIXED: was "тримати, зберігати"]
+  de : behalten, aufbewahren, halten  [FIXED: was "behalten, aufbewahren"]
+  es : guardar, conservar, mantener  [FIXED: was "guardar, almacenar, conservar"]
+  fr : garder, conserver, retenir  [FIXED: was "garder, conserver"]
+  pl : trzymać, zachować, przechowywać  [FIXED: was "trzymać, zachować"]
+  it : tenere, conservare, custodire  [FIXED: was "tenere, conservare"]
+  tr : saklamak, tutmak, korumak  [FIXED: was "muhafaza etmek, saklamak"]
+  pt : manter, guardar, conservar  [FIXED: was "manter, guardar"]
+  ro : a păstra, a ține, a conserva  [FIXED: was "a păstra, a depozita, a conserva"]
+  bg : пазя, съхранявам, държа  [FIXED: was "съхранявам, запазвам"]
+  cs : držet, uchovat, zachovat  [FIXED: was "uchovávat, skladovat, konzervovat"]
+  sk : držať, uchovávať, zachovať  [FIXED: was "uchovávať, skladovať, konzervovať"]
+  hu : tartani, megőrizni, megvédeni  [FIXED: was "tárolni, megőrizni"]
+  el : κρατώ, φυλάω, διατηρώ  [FIXED: was "διατηρώ, αποθηκεύω, συντηρώ"]
+  sl : obdržati, hraniti, čuvati  [FIXED: was "hraniti, shranjevati, ohranjati"]
+  et : hoidma, säilitama
+  lt : laikyti, saugoti
+  da : beholde, opbevare, passe på  [FIXED: was "hold, opbevar, gem"]
+  fi : pitää, säilyttää  [FIXED: was "pitää, säilyttää, pelastaa"]
+  sv : behålla, förvara, spara  [FIXED: was "hålla, lagra, spara"]
+  hr : držati, čuvati, zadržati  [FIXED: was "držati, pohraniti, spremiti"]
+  lv : paturēt, glabāt, saglabāt  [FIXED: was "turēt, uzglabāt, saglabāt"]
+  hi : रखना, संभालना, बनाए रखना  [FIXED: was "पकड़ना, सहेजना"]
+  ar : يحفظ، يحتفظ بـ  [FIXED: was "يمسك، يخزن، يحفظ"]
+  fa : نگه داشتن، حفظ کردن  [FIXED: was "نگه داشتن"]
+  ur : رکھنا، سنبھالنا، برقرار رکھنا  [FIXED: was "رکھنا، محفوظ کرنا"]
+  id : menjaga, menyimpan, menahan  [FIXED: was "menjaga, menyimpan"]
+  vi : giữ, lưu trữ, bảo quản  [FIXED: was "giữ, lưu trữ, tiết kiệm"]
+  th : เก็บ, รักษา, ถือไว้  [FIXED: was "ถือ เก็บ เก็บรักษา"]
+  ko : 유지하다, 보관하다, 지키다  [FIXED: was "잡다, 저장하다"]
+  ja : 保つ、取っておく、守る  [FIXED: was "持つ、保管する"]
+  zh : 保持、保留、保存  [FIXED: was "保持、保存"]
+  bn : রাখা, সংরক্ষণ করা
+  kk : сақтау, ұстау  [FIXED: was "ұстау, сақтау"]
+
+=== ID 1968: let let let ===
+Headword (EN): let let let
+Category: Irregular verbs
+RU (Old): позволять -> (Calibrated): позволять, пускать, давать
+Target Languages:
+  uk : дозволяти, пускати, давати  [FIXED: was "дозволяти"]
+  de : lassen, erlauben  [FIXED: was "lassen"]
+  es : dejar, permitir  [FIXED: was "dejar"]
+  fr : laisser, permettre  [FIXED: was "laisser"]
+  pl : pozwalać, dopuszczać  [FIXED: was "pozwalać"]
+  it : lasciare, permettere  [FIXED: was "permettere"]
+  tr : izin vermek, bırakmak  [FIXED: was "izin vermek"]
+  pt : deixar, permitir  [FIXED: was "deixar"]
+  ro : a lăsa, a permite  [FIXED: was "lasă"]
+  bg : позволявам, оставям, пускам  [FIXED: was "нека"]
+  cs : nechat, dovolit  [FIXED: was "nechat"]
+  sk : nechať, dovoliť  [FIXED: was "nechať"]
+  hu : engedni, hagyni  [FIXED: was "hagyd"]
+  el : αφήνω, επιτρέπω  [FIXED: was "αφήνω"]
+  sl : pustiti, dovoliti  [FIXED: was "pusti"]
+  et : laskma, lubama  [FIXED: was "lase"]
+  lt : leisti, paleisti  [FIXED: was "leisti"]
+  da : lade, tillade  [FIXED: was "tillad"]
+  fi : antaa, sallia  [FIXED: was "sallia"]
+  sv : låta, tillåta  [FIXED: was "tillåta"]
+  hr : dopustiti, pustiti  [FIXED: was "dopustiti"]
+  lv : ļaut, atļaut  [FIXED: was "atļaut"]
+  hi : करने देना, अनुमति देना  [FIXED: was "अनुमति देना"]
+  ar : يدع، يسمح  [FIXED: was "يسمح"]
+  fa : گذاشتن، اجازه دادن  [FIXED: was "اجازه دادن"]
+  ur : کرنے دینا، اجازت دینا  [FIXED: was "اجازت دینا"]
+  id : membiarkan, mengizinkan  [FIXED: was "mengizinkan"]
+  vi : để, cho phép  [FIXED: was "cho phép"]
+  th : ให้, ปล่อยให้, อนุญาต  [FIXED: was "อนุญาต"]
+  ko : 허락하다, ~하게 두다  [FIXED: was "허용하다"]
+  ja : させる、許す  [FIXED: was "許す"]
+  zh : 让、允许、听任  [FIXED: was "让、允许"]
+  bn : করতে দেওয়া, অনুমতি দেওয়া  [FIXED: was "অনুমতি দেওয়া"]
+  kk : рұқсат ету, қоя беру  [FIXED: was "рұқсат ету"]
+
+=== ID 1969: show showed shown ===
+Headword (EN): show showed shown
+Category: Irregular verbs
+RU (Old): показывать -> (Calibrated): показывать, проявлять
+Target Languages:
+  uk : показувати, виявляти  [FIXED: was "показувати"]
+  de : zeigen, vorführen  [FIXED: was "zeigen"]
+  es : mostrar, enseñar
+  fr : montrer, exposer  [FIXED: was "montrer"]
+  pl : pokazywać, ukazywać  [FIXED: was "pokazywać"]
+  it : mostrare, far vedere  [FIXED: was "spettacolo"]
+  tr : göstermek, sergilemek  [FIXED: was "göstermek"]
+  pt : mostrar, exibir  [FIXED: was "mostrar"]
+  ro : a arăta, a prezenta  [FIXED: was "spectacol"]
+  bg : показвам, излагам  [FIXED: was "шоу"]
+  cs : ukázat, ukazovat  [FIXED: was "show"]
+  sk : ukázať, ukazovať  [FIXED: was "show"]
+  hu : mutatni, megmutatni  [FIXED: was "megmutat"]
+  el : δείχνω, επιδεικνύω  [FIXED: was "επίδειξη"]
+  sl : pokazati, kazati  [FIXED: was "predstava"]
+  et : näitama
+  lt : rodyti, parodyti  [FIXED: was "rodyti"]
+  da : vise  [FIXED: was "vis"]
+  fi : näyttää, esitellä  [FIXED: was "näyttää"]
+  sv : visa, peka på  [FIXED: was "visa"]
+  hr : pokazati, prikazati  [FIXED: was "pokazati"]
+  lv : rādīt, parādīt  [FIXED: was "parādīt"]
+  hi : दिखाना, प्रदर्शन करना  [FIXED: was "दिखाना"]
+  ar : يعرض، يري، يُظهر  [FIXED: was "يُظهر"]
+  fa : نشان دادن، نمایش دادن  [FIXED: was "نشان دادن"]
+  ur : دکھانا، ظاہر کرنا  [FIXED: was "دکھانا"]
+  id : menunjukkan, memamerkan  [FIXED: was "menunjukkan"]
+  vi : cho xem, hiển thị, trưng bày  [FIXED: was "hiển thị"]
+  th : แสดง, ให้ดู  [FIXED: was "แสดง"]
+  ko : 보여주다, 나타내다  [FIXED: was "보여주다"]
+  ja : 見せる、示す  [FIXED: was "見せる"]
+  zh : 展示、出示、显出  [FIXED: was "展示、显示"]
+  bn : দেখানো, প্রদর্শন করা  [FIXED: was "দেখানো"]
+  kk : көрсету
+
+=== ID 1970: hear heard heard ===
+Headword (EN): hear heard heard
+Category: Irregular verbs
+RU (Old): слышать -> (Calibrated): слышать, услышать
+Target Languages:
+  uk : чути, почути  [FIXED: was "чути"]
+  de : hören, vernehmen  [FIXED: was "hören"]
+  es : oír, escuchar
+  fr : entendre
+  pl : słyszeć, usłyszeć  [FIXED: was "słyszeć"]
+  it : sentire, udire  [FIXED: was "ascoltare"]
+  tr : duymak, işitmek  [FIXED: was "duymak"]
+  pt : ouvir, escutar  [FIXED: was "ouvir"]
+  ro : a auzi  [FIXED: was "auzi"]
+  bg : чувам  [FIXED: was "чуя"]
+  cs : slyšet, zaslechnout  [FIXED: was "slyšet"]
+  sk : počuť, zaslechnúť  [FIXED: was "počuť"]
+  hu : hallani  [FIXED: was "hall"]
+  el : ακούω
+  sl : slišati
+  et : kuulma
+  lt : girdėti, išgirsti  [FIXED: was "girdėti"]
+  da : høre  [FIXED: was "hør"]
+  fi : kuulla
+  sv : höra
+  hr : čuti
+  lv : dzirdēt
+  hi : सुनना
+  ar : يسمع
+  fa : شنیدن
+  ur : سننا
+  id : mendengar
+  vi : nghe, nghe thấy  [FIXED: was "nghe"]
+  th : ได้ยิน, ฟัง  [FIXED: was "ได้ยิน"]
+  ko : 듣다
+  ja : 聞く、聞こえる  [FIXED: was "聞く"]
+  zh : 听见、听到  [FIXED: was "听见"]
+  bn : শোনা
+  kk : есту, тыңдау  [FIXED: was "есту"]
+
+=== ID 1971: run ran run ===
+Headword (EN): run ran run
+Category: Irregular verbs
+RU (Old): бежать -> (Calibrated): бежать, бегать, управлять
+Target Languages:
+  uk : бігти, бігати, керувати  [FIXED: was "бігти"]
+  de : laufen, rennen, betreiben  [FIXED: was "laufen"]
+  es : correr, gestionar  [FIXED: was "correr"]
+  fr : courir, gérer  [FIXED: was "courir"]
+  pl : biegać, biec, prowadzić  [FIXED: was "biegać, zarządzać"]
+  it : correre, gestire  [FIXED: was "correre"]
+  tr : koşmak, işletmek  [FIXED: was "koşmak"]
+  pt : correr, administrar  [FIXED: was "correr"]
+  ro : a alerga, a fugi, a administra  [FIXED: was "alerga"]
+  bg : бягам, тичам, управлявам  [FIXED: was "бягам"]
+  cs : běžet, běhat, řídit  [FIXED: was "běh"]
+  sk : bežať, behať, spravovať  [FIXED: was "beh"]
+  hu : futni, szaladni, működtetni  [FIXED: was "fut"]
+  el : τρέχω, διαχειρίζομαι  [FIXED: was "τρέξιμο"]
+  sl : teči, upravljati  [FIXED: was "teči"]
+  et : jooksma, juhtima  [FIXED: was "jooksma"]
+  lt : bėgti, bėgioti  [FIXED: was "bėgimas"]
+  da : løbe, drive  [FIXED: was "løb"]
+  fi : juosta, hallinnoida  [FIXED: was "juosta"]
+  sv : springa, löpa, driva  [FIXED: was "springa"]
+  hr : trčati, upravljati  [FIXED: was "trčati"]
+  lv : skriet, vadīt  [FIXED: was "skriet"]
+  hi : दौड़ना, भागना, चलाना  [FIXED: was "दौड़ना"]
+  ar : يجري، يركض، يدير  [FIXED: was "يركض"]
+  fa : دویدن، اداره کردن  [FIXED: was "دویدن"]
+  ur : دوڑنا، بھاگنا، چلانا  [FIXED: was "دوڑنا"]
+  id : berlari, menjalankan  [FIXED: was "berlari"]
+  vi : chạy, vận hành  [FIXED: was "chạy"]
+  th : วิ่ง, ดำเนินการ  [FIXED: was "วิ่ง"]
+  ko : 달리다, 뛰다, 운영하다  [FIXED: was "달리다"]
+  ja : 走る、経営する  [FIXED: was "走る"]
+  zh : 跑、跑步、经营  [FIXED: was "跑"]
+  bn : দৌড়ানো, পরিচালনা করা  [FIXED: was "দৌড়ানো"]
+  kk : жүгіру, басқару  [FIXED: was "жүгіру"]
+
+=== ID 1972: write wrote written ===
+Headword (EN): write wrote written
+Category: Irregular verbs
+RU (Old): писать -> (Calibrated): писать, написать, сочинять
+Target Languages:
+  uk : писати, написати, складати  [FIXED: was "писати"]
+  de : schreiben, verfassen  [FIXED: was "schreiben"]
+  es : escribir, redactar  [FIXED: was "escribir"]
+  fr : écrire, rédiger  [FIXED: was "écrire"]
+  pl : pisać, napisać  [FIXED: was "pisać"]
+  it : scrivere, redigere  [FIXED: was "scrivere"]
+  tr : yazmak, kaleme almak  [FIXED: was "yazmak"]
+  pt : escrever, redigir  [FIXED: was "escrever"]
+  ro : a scrie, a redacta  [FIXED: was "scrie"]
+  bg : пиша, съчинявам  [FIXED: was "пиша"]
+  cs : psát, napsat  [FIXED: was "napsat"]
+  sk : písať, napísať  [FIXED: was "písať"]
+  hu : írni, megírni  [FIXED: was "ír"]
+  el : γράφω, συντάσσω  [FIXED: was "γράφω"]
+  sl : pisati, napisati  [FIXED: was "pisati"]
+  et : kirjutama
+  lt : rašyti, parašyti  [FIXED: was "rašyti"]
+  da : skrive, forfatte  [FIXED: was "skriv"]
+  fi : kirjoittaa
+  sv : skriva, författa  [FIXED: was "skriva"]
+  hr : pisati, sastavljati  [FIXED: was "pisati"]
+  lv : rakstīt, uzrakstīt  [FIXED: was "rakstīt"]
+  hi : लिखना, रचना करना  [FIXED: was "लिखना"]
+  ar : يكتب، يؤلف  [FIXED: was "يكتب"]
+  fa : نوشتن، تألیف کردن  [FIXED: was "نوشتن"]
+  ur : لکھنا، تحریر کرنا  [FIXED: was "لکھنا"]
+  id : menulis, mengarang  [FIXED: was "menulis"]
+  vi : viết, soạn thảo  [FIXED: was "viết"]
+  th : เขียน, แต่ง  [FIXED: was "เขียน"]
+  ko : 쓰다, 작성하다  [FIXED: was "쓰다"]
+  ja : 書く、執筆する  [FIXED: was "書く"]
+  zh : 写、写作、书写  [FIXED: was "写"]
+  bn : লেখা, রচনা করা  [FIXED: was "লেখা"]
+  kk : жазу, шығару  [FIXED: was "жазу"]
+
+=== ID 1973: read read read ===
+Headword (EN): read read read
+Category: Irregular verbs
+RU (Old): читать -> (Calibrated): читать, прочесть
+Target Languages:
+  uk : читати, прочитати  [FIXED: was "читати"]
+  de : lesen, vorlesen  [FIXED: was "lesen"]
+  es : leer
+  fr : lire
+  pl : czytać, przeczytać  [FIXED: was "Czytać"]
+  it : leggere  [FIXED: was "Leggere"]
+  tr : okumak  [FIXED: was "Okumak"]
+  pt : ler
+  ro : a citi, a lectura  [FIXED: was "citire"]
+  bg : чета, прочитам  [FIXED: was "четене"]
+  cs : číst, přečíst  [FIXED: was "číst"]
+  sk : čítať, prečítať  [FIXED: was "čítať"]
+  hu : olvasni  [FIXED: was "olvas"]
+  el : διαβάζω  [FIXED: was "ανάγνωση"]
+  sl : brati, prebrati  [FIXED: was "prebrati"]
+  et : lugema
+  lt : skaityti, perskaityti  [FIXED: was "skaityti"]
+  da : læse  [FIXED: was "læs"]
+  fi : lukea
+  sv : läsa
+  hr : čitati, pročitati  [FIXED: was "čitati"]
+  lv : lasīt, pārlasīt  [FIXED: was "lasīt"]
+  hi : पढ़ना
+  ar : يقرأ
+  fa : خواندن، مطالعه کردن  [FIXED: was "خواندن"]
+  ur : پڑھنا، مطالعہ کرنا  [FIXED: was "پڑھنا"]
+  id : membaca
+  vi : đọc
+  th : อ่าน
+  ko : 읽다
+  ja : 読む、読書する  [FIXED: was "読む"]
+  zh : 读、阅读  [FIXED: was "读"]
+  bn : পড়া, পাঠ করা  [FIXED: was "পড়া"]
+  kk : оқу
+
+=== ID 1974: buy bought bought ===
+Headword (EN): buy bought bought
+Category: Irregular verbs
+RU (Old): покупать -> (Calibrated): покупать, купить
+Target Languages:
+  uk : купувати, купити  [FIXED: was "купувати"]
+  de : kaufen, einkaufen  [FIXED: was "kaufen"]
+  es : comprar, adquirir  [FIXED: was "comprar"]
+  fr : acheter, acquérir  [FIXED: was "acheter"]
+  pl : kupować, zakupić  [FIXED: was "kupować"]
+  it : comprare, acquistare  [FIXED: was "acquistare"]
+  tr : satın almak, almak  [FIXED: was "satın almak"]
+  pt : comprar, adquirir  [FIXED: was "comprar"]
+  ro : a cumpăra, a achiziționa  [FIXED: was "cumpăra"]
+  bg : купувам, закупвам  [FIXED: was "купувам"]
+  cs : koupit, nakupovat  [FIXED: was "nakoupit"]
+  sk : kúpiť, nakupovať  [FIXED: was "kúpiť"]
+  hu : venni, vásárolni  [FIXED: was "vétel"]
+  el : αγοράζω  [FIXED: was "αγορά"]
+  sl : kupiti, kupovati  [FIXED: was "kupiti"]
+  et : ostma  [FIXED: was "osta"]
+  lt : pirkti, nusipirkti  [FIXED: was "pirkti"]
+  da : købe  [FIXED: was "køb"]
+  fi : ostaa, hankkia  [FIXED: was "ostaa"]
+  sv : köpa, handla  [FIXED: was "köpa"]
+  hr : kupiti, kupovati  [FIXED: was "kupiti"]
+  lv : pirkt, nopirkt  [FIXED: was "pirkt"]
+  hi : खरीदना, क्रय करना  [FIXED: was "खरीदना"]
+  ar : يشتري
+  fa : خریدن
+  ur : خریدنا
+  id : membeli
+  vi : mua, sắm  [FIXED: was "mua"]
+  th : ซื้อ
+  ko : 사다, 구매하다  [FIXED: was "사다"]
+  ja : 買う、購入する  [FIXED: was "買う"]
+  zh : 买、购买  [FIXED: was "买"]
+  bn : কেনা, ক্রয় করা  [FIXED: was "কেনা"]
+  kk : сатып алу
+
+=== ID 1975: eat ate eaten ===
+Headword (EN): eat ate eaten
+Category: Irregular verbs
+RU (Old): есть, кушать -> (Calibrated): есть, кушать, поедать
+Target Languages:
+  uk : їсти, споживати  [FIXED: was "є, їсти"]
+  de : essen, speisen  [FIXED: was "essen"]
+  es : comer, alimentarse  [FIXED: was "comer"]
+  fr : manger
+  pl : jeść, zjadać  [FIXED: was "jeść"]
+  it : mangiare  [FIXED: was "c'è da mangiare"]
+  tr : yemek, yemek yemek  [FIXED: was "yemek"]
+  pt : comer
+  ro : a mânca  [FIXED: was "există, de mâncat"]
+  bg : ям, храня се  [FIXED: was "има за ядене"]
+  cs : jíst, najíst se  [FIXED: was "je tam k jídlu"]
+  sk : jesť, najesť sa  [FIXED: was "je tam, na jedenie"]
+  hu : enni, étkezni  [FIXED: was "van mit enni"]
+  el : τρώω  [FIXED: was "υπάρχει, για να φας"]
+  sl : jesti  [FIXED: was "tam je za jesti"]
+  et : sööma  [FIXED: was "seal on süüa"]
+  lt : valgyti, suvalgyti  [FIXED: was "yra, valgyti"]
+  da : spise, æde  [FIXED: was "spis"]
+  fi : syödä, aterioida  [FIXED: was "syödä"]
+  sv : äta, inta föda  [FIXED: was "äta"]
+  hr : jesti
+  lv : ēst, paēst  [FIXED: was "ēst"]
+  hi : खाना, भोजन करना  [FIXED: was "खाना"]
+  ar : يأكل
+  fa : خوردن، میل کردن  [FIXED: was "خوردن"]
+  ur : کھانا، نوش جان کرنا  [FIXED: was "کھانا"]
+  id : makan
+  vi : ăn
+  th : กิน, รับประทาน  [FIXED: was "กิน"]
+  ko : 먹다, 식사하다  [FIXED: was "먹다"]
+  ja : 食べる
+  zh : 吃、进食  [FIXED: was "吃"]
+  bn : খাওয়া, আহার করা  [FIXED: was "খাওয়া"]
+  kk : жеу, тамақтану  [FIXED: was "жеу"]
+
+=== ID 1976: break broke broken ===
+Headword (EN): break broke broken
+Category: Irregular verbs
+RU (Old): ломать -> (Calibrated): ломать, разбивать, разрушать
+Target Languages:
+  uk : ламати, розбивати, ламатися  [FIXED: was "ламати"]
+  de : brechen, zerbrechen, kaputtmachen  [FIXED: was "brechen"]
+  es : romper, quebrar, quebrantar  [FIXED: was "romper"]
+  fr : casser, briser, rompre  [FIXED: was "casser"]
+  pl : łamać, psuć, rozbijać  [FIXED: was "łamać, złamać"]
+  it : rompere, spezzare, infrangere  [FIXED: was "rottura"]
+  tr : kırmak, bozmak, parçalamak  [FIXED: was "kırmak"]
+  pt : quebrar, romper, partir  [FIXED: was "quebrar"]
+  ro : a rupe, a sparge, a strica  [FIXED: was "pauză"]
+  bg : чупя, счупвам, развалям  [FIXED: was "почивка"]
+  cs : zlomit, rozbít, lámat  [FIXED: was "přerušení"]
+  sk : zlomiť, rozbiť, lámať  [FIXED: was "prestávka"]
+  hu : törni, eltörni, széttörni  [FIXED: was "szünet"]
+  el : σπάω, ραγίζω  [FIXED: was "διακοπή"]
+  sl : zlomiti, razbiti, polomiti  [FIXED: was "odmor"]
+  et : murdma, lõhkuma, katki tegema  [FIXED: was "paus"]
+  lt : laužti, sulaužyti, sudaužyti  [FIXED: was "pertrauka"]
+  da : brække, knække, ødelægge  [FIXED: was "pause"]
+  fi : rikkoa, särkeä, katketa  [FIXED: was "tauko"]
+  sv : bryta, slå sönder, krossa  [FIXED: was "pausa"]
+  hr : slomiti, razbiti, lomiti  [FIXED: was "lomiti"]
+  lv : lauzt, salauzt, sasist  [FIXED: was "lauzt"]
+  hi : तोड़ना, टूटना, फोड़ना  [FIXED: was "तोड़ना"]
+  ar : يكسر، يحطم  [FIXED: was "يكسر"]
+  fa : شکستن، خراب کردن  [FIXED: was "شکستن"]
+  ur : توڑنا، ٹوٹنا  [FIXED: was "توڑنا"]
+  id : memecahkan, merusak, mematahkan  [FIXED: was "memecahkan, merusak"]
+  vi : làm vỡ, bẻ gãy, phá vỡ  [FIXED: was "phá vỡ"]
+  th : แตก, หัก, พัง  [FIXED: was "ทำลาย"]
+  ko : 깨다, 부수다, 고장 내다  [FIXED: was "깨다"]
+  ja : 壊す、折る、割る  [FIXED: was "壊す"]
+  zh : 打破、弄碎、弄坏  [FIXED: was "打破、弄坏"]
+  bn : ভাঙা, নষ্ট করা  [FIXED: was "ভাঙা"]
+  kk : сындыру, бұзу, сыну  [FIXED: was "үзіліс"]
+
+=== ID 1977: choose chose chosen ===
+Headword (EN): choose chose chosen
+Category: Irregular verbs
+RU (Old): выбирать -> (Calibrated): выбирать, избрать
+Target Languages:
+  uk : вибирати, обрати  [FIXED: was "вибирати"]
+  de : wählen, auswählen  [FIXED: was "wählen"]
+  es : elegir, escoger, seleccionar  [FIXED: was "elegir"]
+  fr : choisir, sélectionner  [FIXED: was "choisir"]
+  pl : wybierać, obierać  [FIXED: was "wybierać"]
+  it : scegliere, selezionare  [FIXED: was "scegliere"]
+  tr : seçmek, tercih etmek  [FIXED: was "seçmek"]
+  pt : escolher, selecionar  [FIXED: was "escolher"]
+  ro : a alege, a selecta  [FIXED: was "alege"]
+  bg : избирам, подбирам  [FIXED: was "избирам"]
+  cs : vybrat, volit  [FIXED: was "vybrat"]
+  sk : vybrať, voliť  [FIXED: was "vybrať"]
+  hu : választani, kiválasztani  [FIXED: was "választ"]
+  el : επιλέγω, διαλέγω  [FIXED: was "επιλέγω"]
+  sl : izbrati, odbrati  [FIXED: was "izberi"]
+  et : valima
+  lt : pasirinkti, rinktis  [FIXED: was "pasirinkti"]
+  da : vælge  [FIXED: was "vælg"]
+  fi : valita
+  sv : välja
+  hr : izabrati, birati  [FIXED: was "odabrati"]
+  lv : izvēlēties
+  hi : चुनना, पसंद करना  [FIXED: was "चुनना"]
+  ar : يختار، ينتقي  [FIXED: was "يختار"]
+  fa : انتخاب کردن، برگزیدن  [FIXED: was "انتخاب کردن"]
+  ur : چننا، منتخب کرنا  [FIXED: was "منتخب کرنا"]
+  id : memilih
+  vi : chọn, lựa chọn  [FIXED: was "chọn"]
+  th : เลือก, คัดเลือก  [FIXED: was "เลือก"]
+  ko : 선택하다, 고르다  [FIXED: was "선택하다"]
+  ja : 選ぶ、選択する  [FIXED: was "選ぶ"]
+  zh : 选择、挑选  [FIXED: was "选择"]
+  bn : বাছাই করা, পছন্দ করা  [FIXED: was "বেছে নেওয়া"]
+  kk : таңдау, іріктеу  [FIXED: was "таңдау"]
+
+=== ID 1978: drive drove driven ===
+Headword (EN): drive drove driven
+Category: Irregular verbs
+RU (Old): водить -> (Calibrated): водить, ехать, управлять автомобилем
+Target Languages:
+  uk : водити, їхати, кермувати  [FIXED: was "водити"]
+  de : fahren, lenken, steuern  [FIXED: was "fahren"]
+  es : manejar, conducir  [FIXED: was "conducir"]
+  fr : conduire, rouler  [FIXED: was "conduire"]
+  pl : prowadzić, kierować  [FIXED: was "prowadzić"]
+  it : guidare, condurre  [FIXED: was "guidare"]
+  tr : sürmek, araba kullanmak  [FIXED: was "sürmek"]
+  pt : dirigir, conduzir  [FIXED: was "dirigir"]
+  ro : a conduce, a șofa  [FIXED: was "conduce"]
+  bg : карам, шофирам  [FIXED: was "карам"]
+  cs : řídit, vézt  [FIXED: was "řídit"]
+  sk : šoférovať, riadiť, jazdiť  [FIXED: was "jazda"]
+  hu : vezetni, autót vezetni  [FIXED: was "hajtás"]
+  el : οδηγώ
+  sl : voziti, šofirati  [FIXED: was "voziti"]
+  et : sõitma, juhtima  [FIXED: was "sõita"]
+  lt : vairuoti, važiuoti  [FIXED: was "vairuoti"]
+  da : køre  [FIXED: was "drive"]
+  fi : ajaa, kuljettaa  [FIXED: was "ajaa"]
+  sv : köra  [FIXED: was "driva"]
+  hr : voziti, upravljati vozilom  [FIXED: was "voziti"]
+  lv : vadīt, braukt  [FIXED: was "braukt"]
+  hi : गाड़ी चलाना, चलाना  [FIXED: was "चलाना"]
+  ar : يقود، يسوق
+  fa : رانندگی کردن
+  ur : گاڑی چلانا، چلانا  [FIXED: was "گاڑی چلانا"]
+  id : mengemudi, menyetir  [FIXED: was "mengemudi"]
+  vi : lái xe, điều khiển  [FIXED: was "lái xe"]
+  th : ขับ, ขับรถ  [FIXED: was "ขับ"]
+  ko : 운전하다, 몰다  [FIXED: was "운전하다"]
+  ja : 運転する、ドライブする  [FIXED: was "運転する"]
+  zh : 开车、驾驶  [FIXED: was "驾驶、开车"]
+  bn : গাড়ি চালানো, চালানো  [FIXED: was "গাড়ি চালানো"]
+  kk : жүргізу, көлік айдау  [FIXED: was "жүргізу"]
+
+=== ID 1979: fall fell fallen ===
+Headword (EN): fall fell fallen
+Category: Irregular verbs
+RU (Old): падать -> (Calibrated): падать, упасть, опускаться
+Target Languages:
+  uk : падати, впасти, опускатися  [FIXED: was "падати"]
+  de : fallen, stürzen  [FIXED: was "fallen"]
+  es : caer, caerse  [FIXED: was "caer"]
+  fr : tomber, chuter  [FIXED: was "tomber"]
+  pl : spadać, upadać  [FIXED: was "spadać"]
+  it : cadere, precipitare  [FIXED: was "autunno"]
+  tr : düşmek
+  pt : cair, desabar  [FIXED: was "cair"]
+  ro : a cădea  [FIXED: was "cădere"]
+  bg : падам  [FIXED: was "падане"]
+  cs : padat, spadnout  [FIXED: was "podzim"]
+  sk : padať, spadnúť  [FIXED: was "jeseň"]
+  hu : esni, leesni  [FIXED: was "esik"]
+  el : πέφτω  [FIXED: was "πτώση"]
+  sl : pasti, padati  [FIXED: was "padec"]
+  et : kukkuma, langema  [FIXED: was "sügis"]
+  lt : kristi, nukristi  [FIXED: was "kritimas"]
+  da : falde
+  fi : kaatua, pudota  [FIXED: was "kaatua"]
+  sv : falla, ramla  [FIXED: was "falla"]
+  hr : pasti, padati  [FIXED: was "pasti"]
+  lv : krist, nokrist  [FIXED: was "krist"]
+  hi : गिरना, पतन होना  [FIXED: was "गिरना"]
+  ar : يسقط، يقع
+  fa : افتادن، سقوط کردن  [FIXED: was "افتادن"]
+  ur : گرنا، گر پڑنا  [FIXED: was "گرنا"]
+  id : jatuh, runtuh  [FIXED: was "jatuh"]
+  vi : ngã, rơi, sụp đổ  [FIXED: was "ngã"]
+  th : ตก, ล้ม, ร่วง  [FIXED: was "ตก"]
+  ko : 떨어지다, 넘어지다  [FIXED: was "떨어지다"]
+  ja : 落ちる、倒れる  [FIXED: was "落ちる"]
+  zh : 掉落、落下、跌倒  [FIXED: was "掉落、跌倒"]
+  bn : পড়ে যাওয়া, পড়া  [FIXED: was "পড়ে যাওয়া"]
+  kk : құлау, түсу  [FIXED: was "құлау"]
+
+=== ID 1980: forget forgot forgotten ===
+Headword (EN): forget forgot forgotten
+Category: Irregular verbs
+RU (Old): забывать -> (Calibrated): забывать, забыть
+Target Languages:
+  uk : забувати, забути  [FIXED: was "забувати"]
+  de : vergessen, verlernen  [FIXED: was "vergessen"]
+  es : olvidar, olvidarse  [FIXED: was "olvidar"]
+  fr : oublier
+  pl : zapominać, zapomnieć  [FIXED: was "zapominać"]
+  it : dimenticare, scordare  [FIXED: was "dimenticare"]
+  tr : unutmak
+  pt : esquecer, esquecer-se  [FIXED: was "esquecer"]
+  ro : a uita  [FIXED: was "uita"]
+  bg : забравям  [FIXED: was "забрави"]
+  cs : zapomenout, zapomínat  [FIXED: was "zapomenout"]
+  sk : zabudnúť, zabúdať  [FIXED: was "zabudnúť"]
+  hu : felejteni, elfelejteni  [FIXED: was "elfelejteni"]
+  el : ξεχνώ, λησμονώ  [FIXED: was "ξεχνώ"]
+  sl : pozabiti  [FIXED: was "pozabi"]
+  et : unustama
+  lt : pamiršti
+  da : glemme
+  fi : unohtaa
+  sv : glömma
+  hr : zaboraviti
+  lv : aizmirst
+  hi : भूलना, विस्मृत करना  [FIXED: was "भूलना"]
+  ar : ينسى
+  fa : فراموش کردن، از یاد بردن  [FIXED: was "فراموش کردن"]
+  ur : بھولنا
+  id : lupa, melupakan  [FIXED: was "lupa"]
+  vi : quên
+  th : ลืม
+  ko : 잊다, 잊어버리다  [FIXED: was "잊다"]
+  ja : 忘れる
+  zh : 忘记、遗忘  [FIXED: was "忘记"]
+  bn : ভুলে যাওয়া, ভোলা  [FIXED: was "ভুলে যাওয়া"]
+  kk : ұмыту
+
+=== ID 1981: forgive forgave forgiven ===
+Headword (EN): forgive forgave forgiven
+Category: Irregular verbs
+RU (Old): прощать -> (Calibrated): прощать, извинять
+Target Languages:
+  uk : вибачати, прощати  [FIXED: was "пробачати, прощати"]
+  de : verzeihen, vergeben  [FIXED: was "verzeihen"]
+  es : perdonar, disculpar  [FIXED: was "perdonar"]
+  fr : pardonner, excuser  [FIXED: was "pardonner"]
+  pl : wybaczać, przebaczać  [FIXED: was "wybaczać"]
+  it : perdonare, scusare  [FIXED: was "perdonare"]
+  tr : affetmek, bağışlamak  [FIXED: was "affetmek"]
+  pt : perdoar, desculpar  [FIXED: was "perdoar"]
+  ro : a ierta, a scuza  [FIXED: was "ierta"]
+  bg : прощавам, извинявам  [FIXED: was "прощавам"]
+  cs : odpustit, prominout  [FIXED: was "odpustit"]
+  sk : odpustiť, prepáčiť  [FIXED: was "odpustiť"]
+  hu : megbocsátani, megbocsát  [FIXED: was "megbocsát"]
+  el : συγχωρώ
+  sl : odpustiti, oprostiti  [FIXED: was "odpustiti"]
+  et : andestama, andeks andma  [FIXED: was "andestama"]
+  lt : atleisti, piedovanoti  [FIXED: was "atleisti"]
+  da : tilgive
+  fi : antaa anteeksi
+  sv : förlåta
+  hr : oprostiti, zaboraviti krivnju  [FIXED: was "oprostiti"]
+  lv : piedot, atlaist  [FIXED: was "piedot"]
+  hi : माफ़ करना, क्षमा करना  [FIXED: was "क्षमा करना"]
+  ar : يسامح، يغفر
+  fa : بخشیدن، عفو کردن  [FIXED: was "بخشیدن"]
+  ur : معاف کرنا، بخش دینا  [FIXED: was "معاف کرنا"]
+  id : memaafkan, mengampuni  [FIXED: was "memaafkan"]
+  vi : tha thứ, tha lỗi  [FIXED: was "tha thứ"]
+  th : ให้อภัย, ยกโทษ  [FIXED: was "ให้อภัย"]
+  ko : 용서하다
+  ja : 許す、勘弁する  [FIXED: was "許す"]
+  zh : 原谅、宽恕  [FIXED: was "原谅"]
+  bn : ক্ষমা করা, মাফ করা  [FIXED: was "ক্ষমা করা"]
+  kk : кешіру, жарылқау  [FIXED: was "кешіру"]
+
+=== ID 1982: grow grew grown ===
+Headword (EN): grow grew grown
+Category: Irregular verbs
+RU (Old): расти -> (Calibrated): расти, вырастать, выращивать
+Target Languages:
+  uk : рости, зростати, вирощувати  [FIXED: was "зростати"]
+  de : wachsen, anbauen  [FIXED: was "wachsen"]
+  es : crecer, cultivar  [FIXED: was "crecer"]
+  fr : grandir, pousser, cultiver  [FIXED: was "grandir"]
+  pl : rosnąć, wyrastać, hodować  [FIXED: was "rosnąć"]
+  it : crescere, coltivare  [FIXED: was "crescere"]
+  tr : büyümek, yetişmek, yetiştirmek  [FIXED: was "büyümek"]
+  pt : crescer, cultivar  [FIXED: was "crescer"]
+  ro : a crește, a cultiva  [FIXED: was "crește"]
+  bg : раста, израствам, отглеждам  [FIXED: was "расте"]
+  cs : růst, vyrůst, pěstovat  [FIXED: was "růst"]
+  sk : rásť, vyrásť, pestovať  [FIXED: was "rásť"]
+  hu : nőni, felnőni, termeszteni  [FIXED: was "nő"]
+  el : μεγαλώνω, αναπτύσσομαι, καλλιεργώ  [FIXED: was "καλλιεργώ"]
+  sl : rasti, gojiti  [FIXED: was "rasti"]
+  et : kasvama, kasvatama  [FIXED: was "kasvama"]
+  lt : augti, išaugti, auginti  [FIXED: was "augti"]
+  da : vokse, dyrke  [FIXED: was "vokse"]
+  fi : kasvaa, viljellä  [FIXED: was "kasvaa"]
+  sv : växa, odla  [FIXED: was "växa"]
+  hr : rasti, uzgajati  [FIXED: was "rasti"]
+  lv : augt, izaugt, audzēt  [FIXED: was "augt"]
+  hi : बढ़ना, उगना, उगाना  [FIXED: was "बढ़ना"]
+  ar : ينمو، يكبر، يزرع  [FIXED: was "ينمو، يزرع"]
+  fa : رشد کردن، بزرگ شدن، کاشتن  [FIXED: was "رشد کردن"]
+  ur : بڑھنا، اگنا، اگانا  [FIXED: was "بڑھنا، اگنا"]
+  id : tumbuh, berkembang, menanam  [FIXED: was "tumbuh"]
+  vi : lớn lên, phát triển, trồng  [FIXED: was "lớn lên"]
+  th : โต, เติบโต, ปลูก  [FIXED: was "เติบโต"]
+  ko : 자라다, 성장하다, 재배하다  [FIXED: was "자라다"]
+  ja : 育つ、成長する、栽培する  [FIXED: was "成長する"]
+  zh : 生长、成长、种植  [FIXED: was "生长、成长"]
+  bn : বেড়ে ওঠা, জন্মানো, বৃদ্ধি পাওয়া  [FIXED: was "বড় হওয়া, বৃদ্ধি পাওয়া"]
+  kk : өсу, үлкею, өсіру  [FIXED: was "өсу"]
+
+=== ID 1983: hide hid hidden ===
+Headword (EN): hide hid hidden
+Category: Irregular verbs
+RU (Old): прятать, скрывать -> (Calibrated): прятать, скрывать, прятаться
+Target Languages:
+  uk : ховати, приховувати, ховатися  [FIXED: was "ховати, приховувати"]
+  de : verstecken, verbergen
+  es : esconder, ocultar
+  fr : cacher, dissimuler
+  pl : chować, ukrywać  [FIXED: was "ukrywać"]
+  it : nascondere, celare
+  tr : saklamak, gizlemek, saklanmak  [FIXED: was "saklamak, gizlemek"]
+  pt : esconder, ocultar  [FIXED: was "esconder"]
+  ro : a ascunde, a tăinui  [FIXED: was "ascunde"]
+  bg : крия, скривам, крия се  [FIXED: was "скрий, прикрий"]
+  cs : schovat, skrývat, ukrýt  [FIXED: was "schovat se, utajit"]
+  sk : schovať, skrývať, ukryť  [FIXED: was "skrývať, ukrývať"]
+  hu : elrejteni, elrejtőzni, bújni  [FIXED: was "elrejteni"]
+  el : κρύβω, αποκρύπτω, κρύβομαι  [FIXED: was "κρύβω, αποκρύπτω"]
+  sl : skriti, skrivati  [FIXED: was "skriti, prikriti"]
+  et : peitma, varjama  [FIXED: was "peita, varjata"]
+  lt : slėpti, paslėpti, slėptis  [FIXED: was "slėpti"]
+  da : skjule, gemme  [FIXED: was "skjule"]
+  fi : piilottaa, kätkeä, piiloutua  [FIXED: was "piiloutua, salata"]
+  sv : dölja, gömma  [FIXED: was "dölja"]
+  hr : sakriti, skrivati  [FIXED: was "sakriti se, prikriti"]
+  lv : slēpt, paslēpt, slēpties  [FIXED: was "slēpt, noslēpt"]
+  hi : छिपाना, छिपना, गुप्त रखना  [FIXED: was "छिपाना, गुप्त रखना"]
+  ar : يخفي، يختبئ
+  fa : پنهان کردن، قایم شدن  [FIXED: was "پنهان کردن"]
+  ur : چھپانا، چھپنا  [FIXED: was "چھپانا"]
+  id : menyembunyikan, bersembunyi  [FIXED: was "menyembunyikan, merahasiakan"]
+  vi : trốn, giấu, che giấu  [FIXED: was "giấu, che giấu"]
+  th : ซ่อน, หลบซ่อน  [FIXED: was "ซ่อน, ปกปิด"]
+  ko : 숨기다, 감추다, 숨다  [FIXED: was "숨기다, 감추다"]
+  ja : 隠す、隠れる  [FIXED: was "隠す"]
+  zh : 隐藏、躲藏
+  bn : লুকানো, আত্মগোপন করা  [FIXED: was "লুকানো"]
+  kk : жасыру, тығу, жасырыну  [FIXED: was "жасыру"]
+
+=== ID 1984: hold held held ===
+Headword (EN): hold held held
+Category: Irregular verbs
+RU (Old): держать физически -> (Calibrated): держать, удерживать, хранить
+Target Languages:
+  uk : тримати, утримувати, зберігати  [FIXED: was "тримати фізично"]
+  de : halten, festhalten
+  es : sostener, sujetar, agarrar  [FIXED: was "sostener, sujetar"]
+  fr : tenir, retenir, maintenir  [FIXED: was "tenir physiquement"]
+  pl : trzymać, utrzymywać, chwytać  [FIXED: was "trzymać fizycznie"]
+  it : tenere, stringere, reggere  [FIXED: was "tenere fisicamente"]
+  tr : tutmak, kavramak, taşımak  [FIXED: was "tutmak, kavramak"]
+  pt : segurar, manter, prender  [FIXED: was "segurar fisicamente"]
+  ro : a ține, a prinde, a menține  [FIXED: was "ține fizic"]
+  bg : държа, задържам  [FIXED: was "държа физически"]
+  cs : držet, udržovat  [FIXED: was "fyzicky držet"]
+  sk : držať, udržiavať  [FIXED: was "držať fyzicky"]
+  hu : tartani, fogni, megtartani  [FIXED: was "fizikailag tart"]
+  el : κρατώ, βαστώ  [FIXED: was "κρατώ σωματικά"]
+  sl : držati, zadržati  [FIXED: was "fizično držati"]
+  et : hoidma, kinni hoidma  [FIXED: was "füüsiliselt hoidma"]
+  lt : laikyti, palaikyti  [FIXED: was "laikyti fiziškai"]
+  da : holde, gribe  [FIXED: was "holde fysisk"]
+  fi : pitää, pidellä  [FIXED: was "pitää fyysisesti"]
+  sv : hålla, gripa  [FIXED: was "hålla fysiskt"]
+  hr : držati, zadržati  [FIXED: was "fizički držati"]
+  lv : turēt, noturēt  [FIXED: was "turēt fiziski"]
+  hi : पकड़ना, थामना, संभालना  [FIXED: was "शारीरिक रूप से पकड़ना"]
+  ar : يمسك، يقبض على  [FIXED: was "يمسك، يحتفظ بـ"]
+  fa : نگه داشتن، در دست داشتن  [FIXED: was "نگه داشتن"]
+  ur : پکڑنا، تھامنا
+  id : memegang, menahan  [FIXED: was "memegang secara fisik"]
+  vi : cầm, nắm, giữ  [FIXED: was "cầm nắm"]
+  th : ถือ, จับ, ยึดไว้  [FIXED: was "ถือไว้ทางกายภาพ"]
+  ko : 잡다, 쥐다, 유지하다  [FIXED: was "물리적으로 붙잡다"]
+  ja : 持つ、握る、保つ  [FIXED: was "物理的に持つ"]
+  zh : 握住、持有、拿着  [FIXED: was "握住、持有"]
+  bn : ধরা, ধরে রাখা  [FIXED: was "ধরে রাখা"]
+  kk : ұстау, ұстап тұру  [FIXED: was "физикалық тұрғыдан ұстау"]
+
+=== ID 1985: lose lost lost ===
+Headword (EN): lose lost lost
+Category: Irregular verbs
+RU (Old): терять, проигрывать -> (Calibrated): терять, проигрывать, лишаться
+Target Languages:
+  uk : втрачати, губити, програвати  [FIXED: was "втрачати, програвати"]
+  de : verlieren, einbüßen  [FIXED: was "verlieren"]
+  es : perder, extraviar
+  fr : perdre, égarer  [FIXED: was "perdre"]
+  pl : tracić, gubić, przegrywać  [FIXED: was "tracić, przegrać"]
+  it : perdere, smarrire  [FIXED: was "perdere"]
+  tr : kaybetmek, yitirmek  [FIXED: was "kaybetmek"]
+  pt : perder, extraviar  [FIXED: was "perder"]
+  ro : a pierde, a rătăci  [FIXED: was "a pierde"]
+  bg : губя, изгубвам, проигравам  [FIXED: was "да губя"]
+  cs : ztratit, prohrát, přijít o  [FIXED: was "prohrát"]
+  sk : stratiť, prehrať, prísť o  [FIXED: was "prehrať"]
+  hu : elveszíteni, veszteni  [FIXED: was "veszíteni"]
+  el : χάνω  [FIXED: was "να χάσω"]
+  sl : izgubiti
+  et : kaotama
+  lt : pamesti, prarasti, pralaimėti  [FIXED: was "prarasti"]
+  da : miste, tabe  [FIXED: was "miste"]
+  fi : menettää, hävitä, kadottaa  [FIXED: was "menettää"]
+  sv : förlora, tappa, mista  [FIXED: was "förlora"]
+  hr : izgubiti, promašiti  [FIXED: was "izgubiti"]
+  lv : zaudēt, pazaudēt  [FIXED: was "zaudēt"]
+  hi : खोना, गँवाना, हारना  [FIXED: was "खोना, हारना"]
+  ar : يخسر، يفقد، يضيع  [FIXED: was "يفقد، يخسر"]
+  fa : از دست دادن، گم کردن، باختن  [FIXED: was "از دست دادن، باختن"]
+  ur : کھونا، گم کرنا، ہارنا  [FIXED: was "کھونا، ہارنا"]
+  id : kehilangan, kalah
+  vi : mất, làm mất, thua  [FIXED: was "thua, mất"]
+  th : หาย, สูญเสีย, แพ้  [FIXED: was "สูญเสีย"]
+  ko : 잃다, 지다, 패하다  [FIXED: was "잃다, 잃어버리다"]
+  ja : 失う、なくす、負ける  [FIXED: was "失う"]
+  zh : 丢失、失去、输掉  [FIXED: was "失去、输掉"]
+  bn : হারানো, খোয়ানো, হেরে যাওয়া  [FIXED: was "হারানো"]
+  kk : жоғалту, ұтылу, айырылу  [FIXED: was "жоғалту"]
+
+=== ID 1986: mean meant meant ===
+Headword (EN): mean meant meant
+Category: Irregular verbs
+RU (Old): означать, иметь в виду, намереваться -> (Calibrated): означать, значить, иметь в виду
+Target Languages:
+  uk : означати, мати на увазі
+  de : bedeuten, meinen, beabsichtigen  [FIXED: was "bedeuten, beabsichtigen"]
+  es : significar, querer decir  [FIXED: was "querer decir, tener en mente, tener la intención"]
+  fr : signifier, vouloir dire
+  pl : znaczyć, oznaczać, mieć na myśli  [FIXED: was "oznaczać, mieć na myśli"]
+  it : significare, intendere, voler dire  [FIXED: was "significare, intendere"]
+  tr : anlamına gelmek, demek istemek  [FIXED: was "kastetmek, anlamına gelmek"]
+  pt : significar, querer dizer, pretender  [FIXED: was "significar, pretender"]
+  ro : a însemna, a semnifica, a intenționa  [FIXED: was "a însemna, a avea în minte, a intenționa"]
+  bg : означавам, имам предвид  [FIXED: was "имам предвид, възнамерявам"]
+  cs : znamenat, mít na mysli  [FIXED: was "znamenat, mít na mysli, zamýšlet"]
+  sk : znamenať, mať na mysli  [FIXED: was "myslieť, mať na mysli, zamýšľať"]
+  hu : jelenteni, szándékozni  [FIXED: was "gondolni, eszébe jutni, szándékozni"]
+  el : σημαίνω, εννοώ  [FIXED: was "εννοώ, έχω κατά νου, σκοπεύω"]
+  sl : pomeniti, imeti v mislih  [FIXED: was "pomeniti, imeti v mislih, nameravati"]
+  et : tähendama, mõtlema  [FIXED: was "silmas pidama, mõtlema, kavatsema"]
+  lt : reikšti, turėti omenyje  [FIXED: was "turėti omenyje, ketinti"]
+  da : betyde, mene  [FIXED: was "betyde, have i tankerne, have til hensigt"]
+  fi : tarkoittaa, aikoa  [FIXED: was "tarkoittaa, pitää mielessä, aikoo"]
+  sv : betyda, mena, avse  [FIXED: was "mena, ha i åtanke, avse"]
+  hr : značiti, misliti  [FIXED: was "misliti, imati na umu, namjeravati"]
+  lv : nozīmēt, domāt  [FIXED: was "domāt, paturēt prātā, iecerēt"]
+  hi : मतलब होना, अर्थ होना, तात्पर्य होना  [FIXED: was "अर्थ होना, इरादा"]
+  ar : يعني، يقصد  [FIXED: was "قصد"]
+  fa : معنی دادن، منظور داشتن
+  ur : مطلب ہونا، مراد لینا
+  id : berarti, bermaksud
+  vi : có nghĩa là, ngụ ý  [FIXED: was "nghĩa là, có ý định"]
+  th : หมายถึง, มีเจตนา  [FIXED: was "ตั้งใจ, มีใจ"]
+  ko : 의미하다, 의도하다
+  ja : 意味する、意図する  [FIXED: was "意図する"]
+  zh : 意味着、意思是、打算  [FIXED: was "意思是、意味着、打算"]
+  bn : অর্থ প্রকাশ করা, বোঝানো  [FIXED: was "মানে হওয়া, বোঝানো"]
+  kk : білдіру, мағына береді  [FIXED: was "білдіру, ойлау, ниет ету"]
+
+=== ID 1987: meet met met ===
+Headword (EN): meet met met
+Category: Irregular verbs
+RU (Old): встречать -> (Calibrated): встречать, знакомиться, собираться
+Target Languages:
+  uk : зустрічати, знайомитися  [FIXED: was "зустрічати"]
+  de : treffen, begegnen, kennenlernen  [FIXED: was "treffen"]
+  es : conocer, encontrarse con, reunirse  [FIXED: was "conocer, reunirse con"]
+  fr : rencontrer, faire la connaissance  [FIXED: was "rencontrer"]
+  pl : spotykać, poznawać
+  it : incontrare, conoscere  [FIXED: was "Incontrare"]
+  tr : buluşmak, tanışmak, karşılaşmak  [FIXED: was "buluşmak, tanışmak"]
+  pt : encontrar, conhecer, reunir-se  [FIXED: was "encontrar"]
+  ro : a întâlni, a cunoaște, a se reuni  [FIXED: was "întâlni"]
+  bg : срещам, запознавам се  [FIXED: was "среща"]
+  cs : potkat, setkat se, poznat  [FIXED: was "setkat se"]
+  sk : stretnúť, spoznať  [FIXED: was "stretnúť sa"]
+  hu : találkozni, megismerni  [FIXED: was "találkozik"]
+  el : συναντώ, γνωρίζω  [FIXED: was "συναντώ"]
+  sl : srečati, spoznati  [FIXED: was "srečati"]
+  et : kohtuma, tutvuma  [FIXED: was "kohtuma"]
+  lt : susitikti, susipažinti  [FIXED: was "susitikti"]
+  da : møde, træffe  [FIXED: was "møde"]
+  fi : tavata, kohdata  [FIXED: was "tavata"]
+  sv : möta, träffa  [FIXED: was "möta"]
+  hr : sresti, upoznati  [FIXED: was "sresti se"]
+  lv : satikt, iepazīties  [FIXED: was "satikties"]
+  hi : मिलना, भेंट करना, जानना  [FIXED: was "मिलना"]
+  ar : يلتقي، يقابل، يتعرف على  [FIXED: was "يلتقي، يقابل"]
+  fa : ملاقات کردن، آشنا شدن  [FIXED: was "ملاقات کردن"]
+  ur : ملنا، ملاقات کرنا  [FIXED: was "ملنا"]
+  id : bertemu, berkenalan  [FIXED: was "bertemu"]
+  vi : gặp, gặp gỡ, làm quen  [FIXED: was "gặp gỡ"]
+  th : พบ, เจอ, ทำความรู้จัก  [FIXED: was "พบ"]
+  ko : 만나다, 모이다  [FIXED: was "만나다"]
+  ja : 会う、出会う  [FIXED: was "会う"]
+  zh : 遇见、结识、会面  [FIXED: was "遇见、会面"]
+  bn : দেখা করা, সাক্ষাৎ করা, পরিচিত হওয়া  [FIXED: was "দেখা করা"]
+  kk : кездесу, танысу  [FIXED: was "кездесу"]
+
+=== ID 1988: rise rose risen ===
+Headword (EN): rise rose risen
+Category: Irregular verbs
+RU (Old): подниматься, расти -> (Calibrated): подниматься, всходить, расти
+Target Languages:
+  uk : підніматися, сходити, рости  [FIXED: was "підніматися, рости"]
+  de : steigen, aufsteigen, aufgehen  [FIXED: was "steigen, wachsen"]
+  es : subir, elevarse, levantarse  [FIXED: was "levantarse, crecer"]
+  fr : s'élever, monter, se lever  [FIXED: was "s’élever, augmenter"]
+  pl : unosić się, wstawać, wzrastać  [FIXED: was "wzrastać, wstawać"]
+  it : salire, sorgere, alzarsi  [FIXED: was "sorgere, crescere"]
+  tr : yükselmek, doğmak, artmak  [FIXED: was "yükselmek, büyümek"]
+  pt : subir, erguer-se, nascer  [FIXED: was "ascender"]
+  ro : a se ridica, a răsări, a crește  [FIXED: was "creștere"]
+  bg : издигам се, изгрявам, раста  [FIXED: was "издигам се, растат"]
+  cs : stoupat, vyjít, zvedat se  [FIXED: was "stoupat, růst"]
+  sk : stúpať, vyjsť, zdvíhať sa  [FIXED: was "vzostup, rast"]
+  hu : emelkedni, felkelni  [FIXED: was "emelkedik, növekszik"]
+  el : ανεβαίνω, σηκώνομαι, ανατέλλω  [FIXED: was "άνοδος, ανάπτυξη"]
+  sl : dvigniti se, vstati, vzhajati  [FIXED: was "vzpon, rast"]
+  et : tõusma, kerkima  [FIXED: was "tõusma, kasvama"]
+  lt : kilti, pakilti, tekėti  [FIXED: was "kilti, augti"]
+  da : stige, hæve sig  [FIXED: was "stige, vokse"]
+  fi : nousta, kohota  [FIXED: was "nousta, kasvaa"]
+  sv : stiga, höja sig, gå upp  [FIXED: was "resa sig, växa"]
+  hr : rasti, dizati se, ustati  [FIXED: was "ustati, rasti"]
+  lv : celties, uzkāpt, aust  [FIXED: was "celties, augt"]
+  hi : उगना, उठना, ऊपर चढ़ना  [FIXED: was "उठना, बढ़ना"]
+  ar : يرتفع، ينهض، يشرق  [FIXED: was "يرتفع، ينهض"]
+  fa : بالا آمدن، طلوع کردن  [FIXED: was "بالا رفتن"]
+  ur : طلوع ہونا، اٹھنا، بلند ہونا  [FIXED: was "اٹھنا، بڑھنا"]
+  id : naik, terbit, bangkit  [FIXED: was "bangkit, tumbuh"]
+  vi : mọc, dâng lên, tăng lên  [FIXED: was "trỗi dậy, lớn lên"]
+  th : ขึ้น, ลอยขึ้น, สูงขึ้น  [FIXED: was "ขึ้น, เติบโต"]
+  ko : 오르다, 일어나다, 떠오르다  [FIXED: was "일어나다, 자라다"]
+  ja : 上がる、昇る、立ち上がる  [FIXED: was "上昇する"]
+  zh : 上升、升起、站起  [FIXED: was "上升、升起"]
+  bn : ওঠা, উদিত হওয়া  [FIXED: was "ওঠা"]
+  kk : көтерілу, шығу  [FIXED: was "көтерілу, өсу"]
+
+=== ID 1989: sell sold sold ===
+Headword (EN): sell sold sold
+Category: Irregular verbs
+RU (Old): продавать -> (Calibrated): продавать, сбывать
+Target Languages:
+  uk : продавати, збувати  [FIXED: was "продавати"]
+  de : verkaufen, veräußern  [FIXED: was "verkaufen"]
+  es : vender, comerciar  [FIXED: was "vender"]
+  fr : vendre
+  pl : sprzedawać, handlować  [FIXED: was "sprzedawać"]
+  it : vendere, smerciare  [FIXED: was "vendere"]
+  tr : satmak
+  pt : vender
+  ro : a vinde  [FIXED: was "vinde"]
+  bg : продавам
+  cs : prodat, prodávat  [FIXED: was "prodat"]
+  sk : predať, predávať  [FIXED: was "predať"]
+  hu : eladni, árulni  [FIXED: was "elad"]
+  el : πουλάω, πωλώ  [FIXED: was "πωλώ"]
+  sl : prodati, prodajati  [FIXED: was "prodati"]
+  et : müüma  [FIXED: was "müüa"]
+  lt : parduoti, prekiauti  [FIXED: was "parduoti"]
+  da : sælge
+  fi : myydä
+  sv : sälja
+  hr : prodati, prodavati  [FIXED: was "prodati"]
+  lv : pārdot, tirgot  [FIXED: was "pārdot"]
+  hi : बेचना, विक्रय करना  [FIXED: was "बेचना"]
+  ar : يبيع  [FIXED: was "يبيع، بيع"]
+  fa : فروختن
+  ur : بیچنا، فروخت کرنا  [FIXED: was "بیچنا"]
+  id : menjual
+  vi : bán
+  th : ขาย
+  ko : 팔다, 판매하다  [FIXED: was "팔다"]
+  ja : 売る、販売する  [FIXED: was "売る"]
+  zh : 卖、销售  [FIXED: was "卖"]
+  bn : বিক্রি করা
+  kk : сату
+
+=== ID 1990: send sent sent ===
+Headword (EN): send sent sent
+Category: Irregular verbs
+RU (Old): отправлять -> (Calibrated): посылать, отправлять
+Target Languages:
+  uk : посилати, відправляти  [FIXED: was "відправляти"]
+  de : schicken, senden  [FIXED: was "schicken"]
+  es : enviar, mandar  [FIXED: was "enviar"]
+  fr : envoyer, expédier  [FIXED: was "envoyer"]
+  pl : wysyłać, słać  [FIXED: was "wysyłać"]
+  it : inviare, spedire, mandare  [FIXED: was "Inviare"]
+  tr : göndermek, yollamak  [FIXED: was "Göndermek"]
+  pt : enviar, mandar  [FIXED: was "enviar"]
+  ro : a trimite, a expedia  [FIXED: was "trimite"]
+  bg : изпращам, пращам  [FIXED: was "изпрати"]
+  cs : poslat, odeslat  [FIXED: was "poslat"]
+  sk : poslať, odoslať  [FIXED: was "poslať"]
+  hu : küldeni, elküldeni  [FIXED: was "elküld"]
+  el : στέλνω, αποστέλλω  [FIXED: was "στέλνω"]
+  sl : poslati, pošiljati  [FIXED: was "pošlji"]
+  et : saatma
+  lt : siųsti, išsiųsti  [FIXED: was "siųsti"]
+  da : sende
+  fi : lähettää
+  sv : skicka, sända  [FIXED: was "skicka"]
+  hr : poslati, slati  [FIXED: was "poslati"]
+  lv : sūtīt, nosūtīt  [FIXED: was "sūtīt"]
+  hi : भेजना, रवाना करना  [FIXED: was "भेजना"]
+  ar : يرسل، يبعث  [FIXED: was "يرسل، إرسال"]
+  fa : فرستادن، ارسال کردن  [FIXED: was "فرستادن"]
+  ur : بھیجنا، روانہ کرنا  [FIXED: was "بھیجنا"]
+  id : mengirim, mengantarkan  [FIXED: was "mengirim"]
+  vi : gửi
+  th : ส่ง, ส่งไป  [FIXED: was "ส่ง"]
+  ko : 보내다, 발송하다  [FIXED: was "보내다"]
+  ja : 送る、発送する  [FIXED: was "送る"]
+  zh : 发送、寄、派  [FIXED: was "发送"]
+  bn : পাঠানো, প্রেরণ করা  [FIXED: was "পাঠানো"]
+  kk : жіберу, жолдау  [FIXED: was "жіберу"]
+
+=== ID 1991: sit sat sat ===
+Headword (EN): sit sat sat
+Category: Irregular verbs
+RU (Old): сидеть -> (Calibrated): сидеть, садиться
+Target Languages:
+  uk : сидіти, сідати  [FIXED: was "сидіти"]
+  de : sitzen, sich setzen  [FIXED: was "sitzen"]
+  es : sentarse, estar sentado  [FIXED: was "sentarse"]
+  fr : s'asseoir, être assis  [FIXED: was "s'asseoir"]
+  pl : siedzieć, siadać  [FIXED: was "siedzieć"]
+  it : sedersi, stare seduto  [FIXED: was "sedersi"]
+  tr : oturmak
+  pt : sentar-se, estar sentado
+  ro : a sta jos, a se așeza  [FIXED: was "sta"]
+  bg : седя, сядам  [FIXED: was "седя"]
+  cs : sedět, sednout si  [FIXED: was "sedět"]
+  sk : sedieť, sadnúť si  [FIXED: was "sedieť"]
+  hu : ülni, leülni  [FIXED: was "ül"]
+  el : κάθομαι  [FIXED: was "καθίζω"]
+  sl : sedeti, sesti  [FIXED: was "sedeti"]
+  et : istuma, istuma minema  [FIXED: was "istuma"]
+  lt : sėdėti, atsisėsti  [FIXED: was "sėdėti"]
+  da : sidde, sætte sig  [FIXED: was "sidde"]
+  fi : istua, istuutua  [FIXED: was "istua"]
+  sv : sitta, sätta sig  [FIXED: was "sitta"]
+  hr : sjediti, sjesti  [FIXED: was "sjediti"]
+  lv : sēdēt, apsēsties  [FIXED: was "sēdēt"]
+  hi : बैठना
+  ar : يجلس  [FIXED: was "يجلس، جلوس"]
+  fa : نشستن
+  ur : بیٹھنا
+  id : duduk
+  vi : ngồi
+  th : นั่ง
+  ko : 앉다
+  ja : 座る、着席する  [FIXED: was "座る"]
+  zh : 坐、就坐  [FIXED: was "坐"]
+  bn : বসা
+  kk : отыру
+
+=== ID 1992: sleep slept slept ===
+Headword (EN): sleep slept slept
+Category: Irregular verbs
+RU (Old): спать -> (Calibrated): спать, засыпать
+Target Languages:
+  uk : спати, засинати  [FIXED: was "спати"]
+  de : schlafen, einschlafen  [FIXED: was "schlafen"]
+  es : dormir, dormirse  [FIXED: was "dormir"]
+  fr : dormir, faire dodo  [FIXED: was "dormir"]
+  pl : spać, zasypiać  [FIXED: was "spać"]
+  it : dormire, riposare  [FIXED: was "sonno"]
+  tr : uyumak, uyku çekmek  [FIXED: was "uyumak"]
+  pt : dormir
+  ro : a dormi  [FIXED: was "dormi"]
+  bg : спя, заспивам  [FIXED: was "сън"]
+  cs : spát, usnout  [FIXED: was "spát"]
+  sk : spať, usnúť  [FIXED: was "spánok"]
+  hu : aludni, elaludni  [FIXED: was "alvás"]
+  el : κοιμάμαι  [FIXED: was "ύπνος"]
+  sl : spati  [FIXED: was "spanje"]
+  et : magama, uinuma  [FIXED: was "uni"]
+  lt : miegoti, užmigti  [FIXED: was "miegas"]
+  da : sove
+  fi : nukkua
+  sv : sova
+  hr : spavati
+  lv : gulēt, iemigt  [FIXED: was "gulēt"]
+  hi : सोना, नींद लेना  [FIXED: was "सोना"]
+  ar : ينام  [FIXED: was "ينام، نوم"]
+  fa : خوابیدن
+  ur : سونا
+  id : tidur
+  vi : ngủ
+  th : นอน, หลับ  [FIXED: was "นอน"]
+  ko : 자다, 잠자다  [FIXED: was "자다"]
+  ja : 眠る、寝る  [FIXED: was "眠る"]
+  zh : 睡觉、睡眠  [FIXED: was "睡觉"]
+  bn : ঘুমানো
+  kk : ұйықтау
+
+=== ID 1993: speak spoke spoken ===
+Headword (EN): speak spoke spoken
+Category: Irregular verbs
+RU (Old): говорить на языке -> (Calibrated): говорить, разговаривать, высказываться
+Target Languages:
+  uk : говорити, розмовляти  [FIXED: was "говорити мовою"]
+  de : sprechen, reden  [FIXED: was "die Sprache sprechen"]
+  es : hablar, platicar  [FIXED: was "hablar un idioma"]
+  fr : parler, s'exprimer  [FIXED: was "parler la langue"]
+  pl : mówić, rozmawiać  [FIXED: was "mówić językiem"]
+  it : parlare, discorrere  [FIXED: was "parlare la lingua"]
+  tr : konuşmak  [FIXED: was "dili konuş"]
+  pt : falar, dialogar  [FIXED: was "falar o idioma"]
+  ro : a vorbi, a conversa  [FIXED: was "vorbește limba"]
+  bg : говоря, разговарям  [FIXED: was "говорете езика"]
+  cs : mluvit, hovořit  [FIXED: was "mluvit jazykem"]
+  sk : hovoriť, rozprávať  [FIXED: was "hovoriť jazykom"]
+  hu : beszélni, szólni  [FIXED: was "beszéli a nyelvet"]
+  el : μιλάω, ομιλώ  [FIXED: was "μιλήστε τη γλώσσα"]
+  sl : govoriti  [FIXED: was "govoriti jezik"]
+  et : rääkima, kõnelema  [FIXED: was "keelt rääkima"]
+  lt : kalbėti, šnekėti  [FIXED: was "kalbėti kalba"]
+  da : tale, snakke  [FIXED: was "tale et sprog"]
+  fi : puhua  [FIXED: was "puhua kieltä"]
+  sv : tala, prata  [FIXED: was "tala ett språk"]
+  hr : govoriti, pričati  [FIXED: was "govoriti jezik"]
+  lv : runāt  [FIXED: was "runāt valodā"]
+  hi : बोलना, बात करना  [FIXED: was "कोई भाषा बोलना"]
+  ar : يتكلم، يتحدث  [FIXED: was "يتحدث، يتكلم بلغة"]
+  fa : صحبت کردن، حرف زدن  [FIXED: was "صحبت کردن"]
+  ur : بولنا، بات کرنا  [FIXED: was "بولنا"]
+  id : berbicara, berkata  [FIXED: was "berbicara suatu bahasa"]
+  vi : nói, phát biểu  [FIXED: was "nói một ngôn ngữ"]
+  th : พูด, กล่าว  [FIXED: was "พูดภาษา"]
+  ko : 말하다, 이야기하다  [FIXED: was "언어를 구사하다"]
+  ja : 話す、しゃべる  [FIXED: was "言語を話す"]
+  zh : 说、说话、讲  [FIXED: was "说、讲"]
+  bn : কথা বলা, বলা  [FIXED: was "কথা বলা"]
+  kk : сөйлеу, айту  [FIXED: was "тілде сөйлеу"]
+
+=== ID 1994: spend spent spent ===
+Headword (EN): spend spent spent
+Category: Irregular verbs
+RU (Old): тратить -> (Calibrated): тратить, расходовать, проводить (время)
+Target Languages:
+  uk : витрачати, проводити (час)  [FIXED: was "витрачати"]
+  de : ausgeben, verbringen  [FIXED: was "ausgeben"]
+  es : gastar, pasar  [FIXED: was "gastar"]
+  fr : dépenser, passer (du temps)  [FIXED: was "dépenser"]
+  pl : wydawać, spędzać  [FIXED: was "wydawać"]
+  it : spendere, trascorrere  [FIXED: was "trascorrere"]
+  tr : harcamak, geçirmek  [FIXED: was "harcamak"]
+  pt : gastar, passar  [FIXED: was "gastar"]
+  ro : a cheltui, a petrece  [FIXED: was "petrece"]
+  bg : харча, изразходвам, прекарвам  [FIXED: was "харча"]
+  cs : utratit, strávit  [FIXED: was "strávit"]
+  sk : míňať, stráviť  [FIXED: was "míňať"]
+  hu : költeni, tölteni  [FIXED: was "tölt"]
+  el : ξοδεύω, περνώ  [FIXED: was "ξοδεύω"]
+  sl : porabiti, preživeti  [FIXED: was "porabiti"]
+  et : kulutama, veetma  [FIXED: was "kulutama"]
+  lt : išleisti, praleisti  [FIXED: was "išleisti"]
+  da : bruge, tilbringe  [FIXED: was "bruge"]
+  fi : kuluttaa, viettää  [FIXED: was "kuluttaa"]
+  sv : spendera, tillbringa  [FIXED: was "spendera"]
+  hr : trošiti, provoditi  [FIXED: was "trošiti"]
+  lv : tērēt, pavadīt  [FIXED: was "tērēt"]
+  hi : खर्च करना, बिताना  [FIXED: was "खर्च करना"]
+  ar : ينفق، يقضي
+  fa : خرج کردن، سپری کردن  [FIXED: was "خرج کردن، گذراندن"]
+  ur : خرچ کرنا، وقت گزارنا  [FIXED: was "خرچ کرنا"]
+  id : menghabiskan, membelanjakan  [FIXED: was "menghabiskan"]
+  vi : tiêu xài, dành (thời gian)  [FIXED: was "tiêu tiền"]
+  th : ใช้จ่าย, ใช้เวลา  [FIXED: was "ใช้จ่าย"]
+  ko : 쓰다, 소비하다, 보내다  [FIXED: was "쓰다"]
+  ja : 費やす、過ごす  [FIXED: was "費やす"]
+  zh : 花费、度过
+  bn : ব্যয় করা, কাটানো  [FIXED: was "খরচ করা"]
+  kk : жұмсау, өткізу  [FIXED: was "жұмсау"]
+
+=== ID 1995: stand stood stood ===
+Headword (EN): stand stood stood
+Category: Irregular verbs
+RU (Old): стоять -> (Calibrated): стоять, вставать
+Target Languages:
+  uk : стояти, вставати  [FIXED: was "стояти"]
+  de : stehen, aufstehen  [FIXED: was "stehen"]
+  es : estar de pie, pararse  [FIXED: was "estar de pie, ponerse de pie"]
+  fr : être debout, se tenir debout  [FIXED: was "être debout, se tenir"]
+  pl : stać, stawać  [FIXED: was "stać, stanowisko"]
+  it : stare in piedi, alzarsi  [FIXED: was "in piedi"]
+  tr : ayakta durmak, dikilmek  [FIXED: was "durmak"]
+  pt : ficar de pé, estar em pé  [FIXED: was "ficar de pé"]
+  ro : a sta în picioare, a se ridica  [FIXED: was "stand"]
+  bg : стоя, изправям се  [FIXED: was "стойка"]
+  cs : stát, postavit se  [FIXED: was "stánek"]
+  sk : stáť, postaviť sa  [FIXED: was "stáť"]
+  hu : állni, felállni  [FIXED: was "állvány"]
+  el : στέκομαι  [FIXED: was "στάση"]
+  sl : stati, vstati  [FIXED: was "stojalo"]
+  et : seisma, tõusma  [FIXED: was "seista"]
+  lt : stovėti, atsistoti  [FIXED: was "stendas"]
+  da : stå, rejse sig  [FIXED: was "stå"]
+  fi : seistä, nousta  [FIXED: was "seistä"]
+  sv : stå, resa sig  [FIXED: was "stå"]
+  hr : stajati, ustati  [FIXED: was "stajati"]
+  lv : stāvēt, piecelties  [FIXED: was "stāvēt"]
+  hi : खड़ा होना
+  ar : يقف  [FIXED: was "يقف، يكون واقفًا"]
+  fa : ایستادن
+  ur : کھڑا ہونا
+  id : berdiri
+  vi : đứng, dựng  [FIXED: was "đứng"]
+  th : ยืน, ตั้งอยู่  [FIXED: was "ยืน"]
+  ko : 서다, 서 있다  [FIXED: was "서다"]
+  ja : 立つ、直立する  [FIXED: was "立つ"]
+  zh : 站立、站着  [FIXED: was "站立"]
+  bn : দাঁড়ানো
+  kk : тұру, тік тұру  [FIXED: was "тұру"]
+
+=== ID 1996: swim swam swum ===
+Headword (EN): swim swam swum
+Category: Irregular verbs
+RU (Old): плавать -> (Calibrated): плавать, плыть
+Target Languages:
+  uk : плавати, плисти  [FIXED: was "плавати"]
+  de : schwimmen
+  es : nadar
+  fr : nager
+  pl : pływać
+  it : nuotare
+  tr : yüzmek
+  pt : nadar
+  ro : a înota  [FIXED: was "înot"]
+  bg : плувам  [FIXED: was "плуване"]
+  cs : plavat
+  sk : plávať
+  hu : úszni  [FIXED: was "úszás"]
+  el : κολυμπώ  [FIXED: was "ζάλη"]
+  sl : plavati
+  et : ujuma  [FIXED: was "ujuda"]
+  lt : plaukti
+  da : svømme
+  fi : uida
+  sv : simma
+  hr : plivati
+  lv : peldēt
+  hi : तैरना
+  ar : يسبح  [FIXED: was "يسبح، سباحة"]
+  fa : شنا کردن
+  ur : تیرنا
+  id : berenang
+  vi : bơi, bơi lội  [FIXED: was "bơi"]
+  th : ว่ายน้ำ
+  ko : 수영하다, 헤엄치다  [FIXED: was "수영하다"]
+  ja : 泳ぐ
+  zh : 游泳
+  bn : সাঁতার কাটা
+  kk : жүзу
+
+=== ID 1997: teach taught taught ===
+Headword (EN): teach taught taught
+Category: Irregular verbs
+RU (Old): учить -> (Calibrated): учить, обучать, преподавать
+Target Languages:
+  uk : вчити, навчати, викладати  [FIXED: was "вчити"]
+  de : lehren, unterrichten, beibringen  [FIXED: was "lernen"]
+  es : enseñar, educar  [FIXED: was "enseñar"]
+  fr : enseigner, instruire  [FIXED: was "apprendre"]
+  pl : uczyć, nauczać
+  it : insegnare, addestrare  [FIXED: was "Imparare"]
+  tr : öğretmek, eğitmek  [FIXED: was "öğrenmek"]
+  pt : ensinar, lecionar  [FIXED: was "ensinar"]
+  ro : a preda, a învăța pe cineva  [FIXED: was "învăţa"]
+  bg : преподавам, уча някого  [FIXED: was "уча"]
+  cs : učit, vyučovat  [FIXED: was "učit se"]
+  sk : učiť, vyučovať  [FIXED: was "učiť sa"]
+  hu : tanítani, oktatni  [FIXED: was "tanul"]
+  el : διδάσκω  [FIXED: was "μαθαίνω"]
+  sl : učiti, poučevati  [FIXED: was "učiti se"]
+  et : õpetama  [FIXED: was "õppima"]
+  lt : mokyti  [FIXED: was "mokytis"]
+  da : undervise, lære fra sig  [FIXED: was "undervise"]
+  fi : opettaa
+  sv : lära ut, undervisa  [FIXED: was "lära ut"]
+  hr : podučavati, učiti druge  [FIXED: was "podučavati"]
+  lv : mācīt, pasniegt  [FIXED: was "mācīt"]
+  hi : सिखाना, पढ़ाना  [FIXED: was "सिखाना"]
+  ar : يعلّم، يدرّس
+  fa : یاد دادن، آموزش دادن  [FIXED: was "آموزش دادن"]
+  ur : سکھانا، پڑھانا  [FIXED: was "سکھانا"]
+  id : mengajar, mendidik  [FIXED: was "mengajar"]
+  vi : dạy, dạy học  [FIXED: was "dạy"]
+  th : สอน, สั่งสอน  [FIXED: was "สอน"]
+  ko : 가르치다
+  ja : 教える、指導する  [FIXED: was "教える"]
+  zh : 教、传授、讲授  [FIXED: was "教"]
+  bn : শেখানো, পাঠদান করা  [FIXED: was "শেখানো"]
+  kk : үйрету, оқыту  [FIXED: was "үйрету"]
+
+=== ID 1998: understand understood understood ===
+Headword (EN): understand understood understood
+Category: Irregular verbs
+RU (Old): понимать -> (Calibrated): понимать, постигать
+Target Languages:
+  uk : розуміти, збагнути  [FIXED: was "розуміти"]
+  de : verstehen, begreifen  [FIXED: was "verstehen"]
+  es : entender, comprender  [FIXED: was "entender"]
+  fr : comprendre, saisir  [FIXED: was "comprendre"]
+  pl : rozumieć, pojmować  [FIXED: was "rozumieć"]
+  it : capire, comprendere  [FIXED: was "capire"]
+  tr : anlamak, kavramak  [FIXED: was "anlamak"]
+  pt : entender, compreender  [FIXED: was "entender"]
+  ro : a înțelege, a pricepe  [FIXED: was "înţelege"]
+  bg : разбирам, схващам  [FIXED: was "разбирам"]
+  cs : rozumět, chápat  [FIXED: was "pochopit"]
+  sk : rozumieť, chápať  [FIXED: was "rozumieť"]
+  hu : érteni, megérteni  [FIXED: was "megérteni"]
+  el : καταλαβαίνω, κατανοώ  [FIXED: was "καταλαβαίνω"]
+  sl : razumeti, dojeti  [FIXED: was "razumeti"]
+  et : mõistma, aru saama  [FIXED: was "mõista"]
+  lt : suprasti, numanyti  [FIXED: was "suprasti"]
+  da : forstå, begribe  [FIXED: was "forstå"]
+  fi : ymmärtää, käsittää  [FIXED: was "ymmärtää"]
+  sv : förstå, begripa  [FIXED: was "förstå"]
+  hr : razumjeti, shvaćati  [FIXED: was "razumjeti"]
+  lv : saprast, izprast  [FIXED: was "saprast"]
+  hi : समझना, जानना  [FIXED: was "समझना"]
+  ar : يفهم، يستوعب
+  fa : فهمیدن، درک کردن  [FIXED: was "فهمیدن"]
+  ur : समझنا  [FIXED: was "سمجھنا"]
+  id : memahami, mengerti  [FIXED: was "memahami"]
+  vi : hiểu, thấu hiểu  [FIXED: was "hiểu"]
+  th : เข้าใจ
+  ko : 이해하다, 알아듣다  [FIXED: was "이해하다"]
+  ja : 理解する、わかる  [FIXED: was "理解する"]
+  zh : 理解、明白、懂得  [FIXED: was "理解"]
+  bn : বোঝা, উপলব্ধি করা  [FIXED: was "বোঝা"]
+  kk : түсіну, ұғу  [FIXED: was "түсіну"]
+
+=== ID 1999: wear wore worn ===
+Headword (EN): wear wore worn
+Category: Irregular verbs
+RU (Old): носить -> (Calibrated): носить (одежду), надевать
+Target Languages:
+  uk : носити (одяг), одягати  [FIXED: was "носити"]
+  de : tragen, anhaben  [FIXED: was "tragen"]
+  es : usar, vestir, llevar puesto  [FIXED: was "tener puesto"]
+  fr : porter, mettre  [FIXED: was "porter"]
+  pl : nosić, mieć na sobie  [FIXED: was "nosić"]
+  it : indossare, portare  [FIXED: was "Indossare"]
+  tr : giymek, takmak  [FIXED: was "giymek"]
+  pt : vestir, usar
+  ro : a purta, a fi îmbrăcat cu  [FIXED: was "purta"]
+  bg : нося (дрехи)  [FIXED: was "износване"]
+  cs : nosit, mít na sobě  [FIXED: was "nosit"]
+  sk : nosiť, mať na sebe  [FIXED: was "opotrebovať"]
+  hu : hordani, viselni  [FIXED: was "viselet"]
+  el : φοράω  [FIXED: was "φθορά"]
+  sl : nositi, imeti oblečeno  [FIXED: was "nositi"]
+  et : kandma
+  lt : dėvėti, vilkėti  [FIXED: was "dėvėti"]
+  da : have på, bære  [FIXED: was "bære"]
+  fi : käyttää, pitää yllään  [FIXED: was "käyttää"]
+  sv : bära, ha på sig  [FIXED: was "bära"]
+  hr : nositi, imati na sebi  [FIXED: was "nositi"]
+  lv : nēsāt, valkāt  [FIXED: was "valkāt"]
+  hi : पहनना, धारण करना  [FIXED: was "पहनना"]
+  ar : يرتدي، يلبس
+  fa : پوشیدن، به تن داشتن
+  ur : پہننا
+  id : memakai, mengenakan  [FIXED: was "memakai"]
+  vi : mặc, mang, đeo  [FIXED: was "mặc"]
+  th : สวม, ใส่, สวมใส่  [FIXED: was "สวมใส่"]
+  ko : 입다, 착용하다  [FIXED: was "입다"]
+  ja : 着る、身につける  [FIXED: was "着る"]
+  zh : 穿、戴
+  bn : পরা, পরিধান করা  [FIXED: was "পরা"]
+  kk : кию, тағу  [FIXED: was "кию"]
+
+=== ID 2000: win won won ===
+Headword (EN): win won won
+Category: Irregular verbs
+RU (Old): выигрывать -> (Calibrated): побеждать, выигрывать
+Target Languages:
+  uk : перемагати, вигравати  [FIXED: was "вигравати"]
+  de : gewinnen, siegen  [FIXED: was "gewinnen"]
+  es : ganar, vencer  [FIXED: was "ganar"]
+  fr : gagner, vaincre  [FIXED: was "gagner"]
+  pl : wygrywać, zwyciężać  [FIXED: was "wygrywać, wygrać"]
+  it : vincere, trionfare  [FIXED: was "vincita"]
+  tr : kazanmak, galip gelmek  [FIXED: was "kazanmak"]
+  pt : ganhar, vencer  [FIXED: was "ganhar"]
+  ro : a câștiga, a învinge  [FIXED: was "câştiga"]
+  bg : печеля, побеждавам  [FIXED: was "победа"]
+  cs : vyhrát, zvítězit  [FIXED: was "vyhrát"]
+  sk : vyhrať, zvíťaziť  [FIXED: was "vyhrať"]
+  hu : nyerni, győzni  [FIXED: was "győzelem"]
+  el : κερδίζω, νικώ  [FIXED: was "νίκη"]
+  sl : zmagati, dobiti  [FIXED: was "zmaga"]
+  et : võitma  [FIXED: was "võit"]
+  lt : laimėti, nugalėti  [FIXED: was "laimėti"]
+  da : vinde, sejre  [FIXED: was "vinde"]
+  fi : voittaa
+  sv : vinna, segra  [FIXED: was "vinna"]
+  hr : pobijediti, dobiti  [FIXED: was "pobijediti"]
+  lv : uzvarēt, laimēt  [FIXED: was "uzvarēt"]
+  hi : जीतना, विजयी होना  [FIXED: was "जीतना"]
+  ar : يفوز، ينتصر
+  fa : برنده شدن، پیروز شدن  [FIXED: was "برنده شدن"]
+  ur : جیتنا، فتح پانا  [FIXED: was "نہ تو، نہ ہی"]
+  id : menang, memenangkan  [FIXED: was "menang"]
+  vi : thắng, chiến thắng  [FIXED: was "thắng"]
+  th : ชนะ, ได้รับชัยชนะ  [FIXED: was "ชนะ"]
+  ko : 이기다, 승리하다  [FIXED: was "이기다"]
+  ja : 勝つ、勝利する  [FIXED: was "勝つ"]
+  zh : 赢、获胜、胜利  [FIXED: was "赢、获胜"]
+  bn : জেতা, জয়লাভ করা  [FIXED: was "জেতা"]
+  kk : жеңу, ұтып алу  [FIXED: was "жеңу"]
+
+=== ID 2001: fly flew flown ===
+Headword (EN): fly flew flown
+Category: Irregular verbs
+RU (Old): летать -> (Calibrated): летать, лететь
+Target Languages:
+  uk : літати, летіти  [FIXED: was "літати"]
+  de : fliegen
+  es : volar
+  fr : voler
+  pl : latać, lecieć  [FIXED: was "latać"]
+  it : volare
+  tr : uçmak
+  pt : voar
+  ro : a zbura  [FIXED: was "zbura"]
+  bg : летя
+  cs : létat, letět  [FIXED: was "létat"]
+  sk : lietať, letieť  [FIXED: was "lietať"]
+  hu : repülni, szállni  [FIXED: was "repül"]
+  el : πετάω  [FIXED: was "μύγα"]
+  sl : leteti
+  et : lendama  [FIXED: was "kärbes"]
+  lt : skristi, skraidyti  [FIXED: was "skristi"]
+  da : flyve
+  fi : lentää
+  sv : flyga
+  hr : letjeti
+  lv : lidot
+  hi : उड़ना
+  ar : يطير، يُحلّق  [FIXED: was "يطير، ذبابة"]
+  fa : پرواز کردن، پریدن  [FIXED: was "پرواز کردن"]
+  ur : اڑنا
+  id : terbang, melayang  [FIXED: was "terbang"]
+  vi : bay
+  th : บิน
+  ko : 날다, 비행하다  [FIXED: was "날다"]
+  ja : 飛ぶ、飛行する  [FIXED: was "飛ぶ"]
+  zh : 飞、飞行
+  bn : ওড়া, উড়ে যাওয়া  [FIXED: was "উড়ে যাওয়া"]
+  kk : ұшу
+

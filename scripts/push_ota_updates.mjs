@@ -656,7 +656,47 @@ async function run() {
 
     // Batch 1802-1851
     { id: 1807, word: 'produce', lang: 'ro', expected: 'a produce, a fabrica, a genera' },
-    { id: 1845, word: 'shape', lang: 'de', expected: 'Form, Gestalt, formen' }
+    { id: 1845, word: 'shape', lang: 'de', expected: 'Form, Gestalt, formen' },
+
+    // Batch 1852-1901
+    { id: 1870, word: 'recycle', lang: 'de', expected: 'recyceln, wiederverwerten' },
+    { id: 1898, word: 'network', lang: 'de', expected: 'Netzwerk, Netz, vernetzen' },
+
+    // Batch 1902-1951
+    { id: 1918, word: 'afternoon', lang: 'de', expected: 'Nachmittag' },
+    { id: 1946, word: 'school', lang: 'de', expected: 'Schule; Fischschwarm' },
+
+    // Batch 1952-2001
+    { id: 1976, word: 'break', lang: 'es', expected: 'romper, quebrar, quebrantar' },
+    { id: 1997, word: 'teach', lang: 'de', expected: 'lehren, unterrichten, beibringen' },
+
+    // Batch 2002-2051
+    { id: 2006, word: 'change', lang: 'cs', expected: 'měnit, změna, drobné (peníze)' },
+    { id: 2033, word: 'stupid', lang: 'de', expected: 'dumm, albern, einfältig' },
+
+    // Batch 2052-2101
+    { id: 2053, word: 'practice', lang: 'pt', expected: 'praticar, exercitar, prática' },
+    { id: 2099, word: 'tear tore torn', lang: 'zh', expected: '撕裂、扯破' },
+
+    // Batch 2102-2151
+    { id: 2107, word: 'shut shut shut', lang: 'it', expected: 'chiudere, serrare, sprangare' },
+    { id: 2109, word: 'quit quit quit', lang: 'it', expected: 'smettere, licenziarsi, abbandonare' },
+
+    // Batch 2152-2201
+    { id: 2157, word: 'gender', lang: 'uk', expected: 'стать, гендер, рід (граматичний)' },
+    { id: 2187, word: 'forth', lang: 'fr', expected: 'en avant, dehors, au jour' },
+
+    // Batch 2202-2251
+    { id: 2202, word: 'regime', lang: 'de', expected: 'Regime, Herrschaftssystem, Lebensweise' },
+    { id: 2207, word: 'somewhat', lang: 'fr', expected: 'quelque peu, assez, plutôt' },
+
+    // Batch 2252-2301
+    { id: 2270, word: 'accomplish', lang: 'et', expected: 'saavutama, korda saatma, teostama' },
+    { id: 2290, word: 'avenue', lang: 'ja', expected: '大通り、並木道、街路' },
+
+    // Batch 2302-2351
+    { id: 2310, word: 'joint', lang: 'de', expected: 'Gelenk, Verbindung, gemeinsam' },
+    { id: 2350, word: 'palm', lang: 'de', expected: 'Handfläche, Palme' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -681,23 +721,23 @@ async function run() {
     return eval('(' + c.slice(start, end).trim().replace(/;\s*$/, '') + ')');
   }
 
-  // Batches 1 to 25 (words 1-1251) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-25 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 26-37 (words 1252-1851, ~600 words)
+  // Batches 1 to 35 (words 1-1751) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-35 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 36-47 (words 1752-2351, ~600 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_1252_1301_calibrations.cjs',
-    'apply_batch_1302_1351_calibrations.cjs',
-    'apply_batch_1352_1401_calibrations.cjs',
-    'apply_batch_1402_1451_calibrations.cjs',
-    'apply_batch_1452_1501_calibrations.cjs',
-    'apply_batch_1502_1551_calibrations.cjs',
-    'apply_batch_1552_1601_calibrations.cjs',
-    'apply_batch_1602_1651_calibrations.cjs',
-    'apply_batch_1652_1701_calibrations.cjs',
-    'apply_batch_1702_1751_calibrations.cjs',
     'apply_batch_1752_1801_calibrations.cjs',
-    'apply_batch_1802_1851_calibrations.cjs'
+    'apply_batch_1802_1851_calibrations.cjs',
+    'apply_batch_1852_1901_calibrations.cjs',
+    'apply_batch_1902_1951_calibrations.cjs',
+    'apply_batch_1952_2001_calibrations.cjs',
+    'apply_batch_2002_2051_calibrations.cjs',
+    'apply_batch_2052_2101_calibrations.cjs',
+    'apply_batch_2102_2151_calibrations.cjs',
+    'apply_batch_2152_2201_calibrations.cjs',
+    'apply_batch_2202_2251_calibrations.cjs',
+    'apply_batch_2252_2301_calibrations.cjs',
+    'apply_batch_2302_2351_calibrations.cjs'
   ];
 
   let mergedCount = 0;

@@ -1,0 +1,1974 @@
+LINGUISTIC AUDIT & CALIBRATION REPORT: BATCH ID 1902-1951 (50 WORDS)
+Supported Locales: EXACTLY 36 LOCALES (35 target languages + English headword)
+Target Languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk
+
+CRITICAL BUGS & HIGH-VALUE RECALIBRATIONS IDENTIFIED AND FIXED:
+1. ID 1918 (afternoon):
+   - Catastrophic Machine Translation Bug: The source Russian translation had "день" (meaning day / afternoon colloquially in "добрый день").
+   - Over 20 languages blindly translated "day" instead of "afternoon":
+     * it had "giorno" -> fixed to "pomeriggio"
+     * ro had "zi" -> fixed to "după-amiază"
+     * bg had "ден" -> fixed to "следобед"
+     * cs had "den" -> fixed to "odpoledne"
+     * sk had "deň" -> fixed to "popoludnie"
+     * hu had "nap" -> fixed to "délután"
+     * el had "ημέρα" -> fixed to "απόγευμα"
+     * sl had "dan" -> fixed to "popoldne"
+     * et had "päev" -> fixed to "pärastlõuna"
+     * lt had "diena" -> fixed to "popietė, popietis"
+     * da had "dag" -> fixed to "eftermiddag"
+     * fi had "päivä" -> fixed to "iltapäivä"
+     * sv had "dag" -> fixed to "eftermiddag"
+     * hr had "dan" -> fixed to "poslijepodne"
+     * lv had "diena" -> fixed to "pēcpusdiena"
+     * hi had "दिन" -> fixed to "दोपहर, अपराह्न"
+     * vi had "ngày" -> fixed to "buổi chiều"
+     * th had "วัน" -> fixed to "ตอนบ่าย, ช่วงบ่าย"
+     * ko had "날" -> fixed to "오후"
+     * ja had "日" -> fixed to "午後、昼下がり"
+     * kk had "күн" -> fixed to "түстен кейін, түс қайта"
+
+2. ID 1944 (parent):
+   - Severe mistranslations:
+     * ur had "باہر، باہر کی طرف" (meaning "outside, outwards"! Completely unrelated!) -> fixed to "والد یا والدہ، سرپرست"
+     * ro had "mamă" (meaning specifically "mother", omitting father/progenitor!) -> fixed to "părinte"
+     * el had "μητρική εταιρεία" (corporate business terminology: "parent company"!) -> fixed to "γονέας"
+     * Many languages had plurals ("parents") instead of singular ("parent: father or mother"):
+       hi had "माता-पिता" -> calibrated to "माता या पिता, अभिभावक"
+       vi had "cha mẹ" -> calibrated to "cha hoặc mẹ, phụ huynh"
+       th had "พ่อแม่" -> calibrated to "ผู้ปกครอง, พ่อหรือแม่"
+       kk had "ата-ана" -> calibrated to "ата-ананың бірі, ата-ана"
+       de had "Elternteil, Vater oder Mutter"
+
+3. ID 1946 (school):
+   - Polysemy failure: "school" (educational institution vs school of fish).
+   - In numerous European languages, the translation contained ONLY "school of fish" and completely omitted the primary meaning "school (educational institution)":
+     * hu had "halraj" -> fixed to "iskola; halraj"
+     * ro had "banc, banc de pești" -> fixed to "școală, colegiu; banc de pești"
+     * da had "fiskestime" -> fixed to "skole; fiskestime"
+     * sv had "fiskstim" -> fixed to "skola; fiskstim"
+     * sl had "jata, jata rib" -> fixed to "šola; jata rib"
+     * et had "parv, kalaparv" -> fixed to "kool; kalaparv"
+     * lt had "žuvų būrys" -> fixed to "mokykla; žuvų būrys"
+   - Calibrated all 35 languages to represent both primary and marine/zoological senses.
+
+4. ID 1947 (shoe):
+   - Homonym / semantic confusion: Across 15+ languages, "shoe" was translated as "boot" (e.g. French "botte", Italian "stivale", Romanian "cizmă", Bulgarian "ботуш", Slovak "čižma", Hungarian "csizma", Greek "μπότα", Slovenian "škorenj", Estonian "saabas", Croatian "čizma", Latvian "zābaks", Thai "รองเท้าบูท", Korean "부츠", Japanese "ブーツ").
+   - Restored authentic translations for "shoe / footwear" (French: chaussure; Italian: scarpa; Romanian: pantof; Slovak: topánka; Hungarian: cipő; etc.).
+
+5. ID 1951 (do did done):
+   - Broken machine translation tokens:
+     * ro had untranslated English token "do" -> calibrated to "a face, a realiza"
+     * et had imperative command "tee" -> calibrated to infinitive "tegema, teostama"
+     * hu had imperative command "csinálj" -> calibrated to infinitive "tenni, csinálni"
+     * it ("Fare") and tr ("Yapmak") had unwanted capitalization -> lowercased to "fare, compiere", "yapmak, etmek"
+
+6. ID 1902 (almost):
+   - ur had "چونکہ، کیونکہ" (meaning "because, since"! Catastrophic translation error!) -> fixed to "تقریباً، قریب قریب"
+   - it had capitalized "Quasi" -> lowercased to "quasi, praticamente"
+
+7. ID 1903 (pretty):
+   - Split polysemy (Adjective "attractive, beautiful" vs Adverb "quite, rather"):
+     * de had "ausreichend" (meaning "sufficient", wrong!) -> fixed to "hübsch, nett; ziemlich, recht"
+     * it had "abbastanza carino" ("pretty cute") -> calibrated to both senses: "carino, bello; piuttosto, abbastanza"
+     * cs had "dost pěkné" -> calibrated to "hezký, pěkný; docela, dost"
+     * sk had "dosť pekné" -> calibrated to "pekný, pekná; celkom, dosť"
+     * hu had "elég jó" -> calibrated to "szép, csinos; eléggé, meglehetősen"
+     * el had "αρκετά καλό" -> calibrated to "όμορφος, συμπαθητικός; αρκετά"
+     * sl had "dovolj lepo" -> calibrated to "lep, privlačen; precej, kar"
+
+8. ID 1909 (able):
+   - Machine translation generated full sentences in 1st person singular:
+     * de had "Ich bin dazu fähig." -> fixed to adjective "fähig, imstande, kompetent"
+     * it had "Sono capace, posso" -> fixed to "capace, in grado, abile"
+     * hu had "képes vagyok, tudok" -> fixed to "képes, ügyes, hozzáértő"
+     * et had "võimeline, ma saan" -> fixed to "võimeline, suuteline, asjatundlik"
+     * lt had "pajėgus, galiu" -> fixed to "pajėgus, sugebantis, gabus"
+     * cs had "schopný, můžu" -> fixed to "schopný, způsobilý, v stavu"
+     * sk had "schopný, môžem" -> fixed to "schopný, spôsobilý, v stave"
+     * bg had "способен, мога" -> fixed to "способен, в състояние, можещ"
+     * ro had "capabil, pot" -> fixed to "capabil, în stare, priceput"
+
+9. ID 1933 (letter):
+   - Dual polysemy: "epistle/mail" (письмо) AND "alphabet character" (буква).
+   - In ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, id, vi, th, ko, ja, kk, the dump only contained one of the two meanings (usually only letter/mail).
+   - Calibrated all 35 languages to include both meanings (e.g. de: "Buchstabe; Brief", ro: "literă; scrisoare", hu: "betű; levél", el: "γράμμα; επιστολή", ja: "文字；手紙", zh: "字母; 信件").
+
+10. ID 1935 (like):
+    - Dual part-of-speech: Verb ("to like / enjoy") vs Preposition / Adverb ("like / similar to / as").
+    - Dump was split in half: half the languages only had the preposition (it, ro, bg, cs, sk, hu, el, sl, et, lt, hr, ko) and half only had the verb (da, fi, sv, lv, ja, kk).
+    - Calibrated all 35 languages to provide both verb and preposition meanings clearly.
+
+11. ID 1936 (live):
+    - Dual pronunciation and meaning: Verb /lɪv/ ("to live / dwell") vs Adjective/Adverb /laɪv/ ("live broadcast / alive").
+    - bg ("на живо"), hu ("élő"), sl ("v živo") only translated the broadcast sense. Calibrated all languages with primary verb + secondary broadcast senses.
+
+12. ID 1937 (love):
+    - Dual part-of-speech: Verb ("to love") vs Noun ("love").
+    - Dump had noun only in cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ro, bg, kk, it ("Amore"), and verb only in uk, es, ko. Calibrated both noun and verb.
+
+13. ID 1923 (dress):
+    - Missing noun / imperative verb bugs: ro had "îmbracă-te" (imperative reflexive verb without noun "rochie"!), cs had "obléknout se" without "šaty", hi had "कपड़े पहनना" without "पोशाक", ko had "옷을 입다" without "드레스, 원피스", ja had "服を着る" without "ドレス", kk had "киіну" without "көйлек".
+    - Calibrated all to provide both noun (dress) and verb (to dress).
+
+14. Capitalization and grammatical cleanliness across all words:
+    - Lowercased common nouns and adjectives across Romance, Slavic, Turkic, Finno-Ugric, Baltic, Germanic (preserving required capitalization for German nouns), East Asian, and RTL languages.
+    - Fixed possessive third-person suffixes in Kazakh:
+      * 1920 (brother): kk was "ағасы" -> calibrated to "аға, іні, бауыр"
+      * 1921 (daughter): kk was "қызы" -> calibrated to "қыз, қыз бала"
+      * 1948 (son): kk was "ұлы" -> calibrated to "ұл, ұлы"
+      * 1950 (wife): kk was "әйелі" -> calibrated to "әйел, зайып"
+
+================================================================================
+FULL AUDIT PER WORD (ID 1902 - 1951)
+================================================================================
+
+ID 1902 (almost):
+  ru: почти, практически
+  uk: майже, практично
+  de: fast, beinahe
+  es: casi, prácticamente
+  fr: presque, quasi
+  pl: prawie, niemal
+  it: quasi, praticamente
+  tr: neredeyse, hemen hemen
+  pt: quase, praticamente
+  ro: aproape, practic
+  bg: почти, практически
+  cs: téměř, skoro
+  sk: takmer, skoro
+  hu: majdnem, szinte
+  el: σχεδόν, πρακτικά
+  sl: skoraj, praktično
+  et: peaaegu, peaaegu et
+  lt: beveik, vos ne
+  da: næsten, omtrent
+  fi: melkein, lähes
+  sv: nästan, närapå
+  hr: gotovo, skoro
+  lv: gandrīz, tikpat kā
+  hi: लगभग, करीब-करीब
+  ar: تقريبًا، كاد
+  fa: تقریباً، نزدیک به
+  ur: تقریباً، قریب قریب
+  id: hampir, nyaris
+  vi: gần như, hầu như
+  th: เกือบ, เกือบจะ
+  ko: 거의, 하마터면
+  ja: ほとんど、もう少しで
+  zh: 几乎, 差不多
+  bn: প্রায়, কাছাকাছি
+  kk: дерлік, шамамен
+
+ID 1903 (pretty):
+  ru: красивый, симпатичный; довольно, достаточно
+  uk: гарний, симпатичний; досить, доволі
+  de: hübsch, nett; ziemlich, recht
+  es: bonito, lindo; bastante
+  fr: joli, mignon; assez, plutôt
+  pl: ładny, ładna; dość, całkiem
+  it: carino, bello; piuttosto, abbastanza
+  tr: güzel, sevimli; oldukça, epey
+  pt: bonito, lindo; bastante
+  ro: drăguț, frumos; destul de, cam
+  bg: хубав, привлекателен; доста, сравнително
+  cs: hezký, pěkný; docela, dost
+  sk: pekný, pekná; celkom, dosť
+  hu: szép, csinos; eléggé, meglehetősen
+  el: όμορφος, συμπαθητικός; αρκετά
+  sl: lep, privlačen; precej, kar
+  et: kena, armas; päris, üsna
+  lt: gražus, dailus; gana, nemažai
+  da: pæn, nydelig; temmelig, ret
+  fi: nätti, sievä; melko, aika
+  sv: söt, vacker; ganska, rätt så
+  hr: lijep, privlačan; prilično, dosta
+  lv: skaists, glīts; diezgan, visai
+  hi: सुंदर, प्यारा; काफी, बहुत कुछ
+  ar: جميل، فاتن؛ إلى حد كبير، تمامًا
+  fa: زیبا، خوشگل؛ نسبتاً، تا حد زیادی
+  ur: خوبصورت، پیارا؛ کافی، خاصا
+  id: cantik, molek; cukup, lumayan
+  vi: xinh đẹp, dễ thương; khá, tương đối
+  th: สวย, น่ารัก; ค่อนข้าง, พอสมควร
+  ko: 예쁜, 귀여운; 꽤, 상당히
+  ja: かわいい、きれいな；かなり、相当
+  zh: 漂亮的, 标致的; 相当, 挺
+  bn: সুন্দর, চিত্তাকর্ষক; বেশ, যথেষ্ট
+  kk: әдемі, сүйкімді; айтарлықтай, біршама
+
+ID 1904 (frog):
+  ru: лягушка
+  uk: жаба
+  de: Frosch
+  es: rana
+  fr: grenouille
+  pl: żaba
+  it: rana
+  tr: kurbağa
+  pt: rã, sapo
+  ro: broască
+  bg: жаба
+  cs: žába
+  sk: žaba
+  hu: béka
+  el: βάτραχος
+  sl: žaba
+  et: konn
+  lt: varlė
+  da: frø
+  fi: sammakko
+  sv: groda
+  hr: žaba
+  lv: varde
+  hi: मेंढक
+  ar: ضفدع
+  fa: قورباغه
+  ur: مینڈک
+  id: katak
+  vi: con ếch
+  th: กบ
+  ko: 개구리
+  ja: カエル
+  zh: 青蛙
+  bn: ব্যাঙ
+  kk: бақа
+
+ID 1905 (avoid):
+  ru: избегать, уклоняться
+  uk: уникати, ухилятися
+  de: vermeiden, ausweichen
+  es: evitar, eludir
+  fr: éviter, esquiver
+  pl: unikać, wystrzegać się
+  it: evitare, schivare
+  tr: kaçınmak, sakınmak
+  pt: evitar, esquivar
+  ro: a evita, a ocoli
+  bg: избягвам, отклонявам се
+  cs: vyhnout se, vyhýbat se
+  sk: vyhnúť sa, vyhýbať sa
+  hu: elkerül, kitér
+  el: αποφεύγω, παρακάμπτω
+  sl: izogibati se, ogniti se
+  et: vältima, hoiduma
+  lt: vengti, išvengti
+  da: undgå, afværge
+  fi: välttää, karttaa
+  sv: undvika, undgå
+  hr: izbjegavati, kloniti se
+  lv: izvairīties, novērst
+  hi: बचना, टालना
+  ar: يتجنب، يتحاشى
+  fa: اجتناب کردن، دور گزیدن
+  ur: بچنا، گریز کرنا
+  id: menghindari, menjauhkan diri
+  vi: tránh, né tránh
+  th: หลีกเลี่ยง, ละเว้น
+  ko: 피하다, 모면하다
+  ja: 避ける、回避する
+  zh: 避免, 避开
+  bn: এড়ানো, পরিহার করা
+  kk: аулақ болу, бой тарту
+
+ID 1906 (suddenly):
+  ru: внезапно, вдруг
+  uk: раптово, зненацька
+  de: plötzlich, unerwartet
+  es: de repente, repentinamente
+  fr: soudainement, tout à coup
+  pl: nagle, niespodziewanie
+  it: all'improvviso, improvvisamente
+  tr: aniden, birdenbire
+  pt: de repente, subitamente
+  ro: brusc, dintr-odată
+  bg: внезапно, неочаквано
+  cs: náhle, najednou
+  sk: náhle, zrazu
+  hu: hirtelen, váratlanul
+  el: ξαφνικά, απρόσμενα
+  sl: nenadoma, hipoma
+  et: äkki, ootamatult
+  lt: staiga, netikėtai
+  da: pludselig, brat
+  fi: yhtäkkiä, äkisti
+  sv: plötsligt, med ens
+  hr: iznenada, odjednom
+  lv: pēkšņi, negaidīti
+  hi: अचानक, यकायक
+  ar: فجأة، على حين غرة
+  fa: ناگهان، به طور ناگهانی
+  ur: اچانک، یکایک
+  id: tiba-tiba, mendadak
+  vi: đột nhiên, bất ngờ
+  th: ทันใดนั้น, กะทันหัน
+  ko: 갑자기, 느닷없이
+  ja: 突然、急に
+  zh: 突然, 忽然
+  bn: হঠাৎ, আচমকা
+  kk: кенеттен, тосыннан
+
+ID 1907 (appreciate):
+  ru: ценить, быть благодарным
+  uk: цінувати, бути вдячним
+  de: schätzen, würdigen, dankbar sein
+  es: apreciar, agradecer, valorar
+  fr: apprécier, être reconnaissant, estimer
+  pl: doceniać, być wdzięcznym
+  it: apprezzare, essere grato
+  tr: takdir etmek, kıymetini bilmek
+  pt: apreciar, valorizar, reconhecer
+  ro: a aprecia, a fi recunoscător
+  bg: оценявам, ценя, признателен съм
+  cs: oceňovat, vážit si, být vděčný
+  sk: oceňovať, vážiť si, byť vďačný
+  hu: értékelni, méltányolni, hálásnak lenni
+  el: εκτιμώ, αναγνωρίζω, είμαι ευγνώμων
+  sl: ceniti, spoštovati, biti hvaležen
+  et: hindama, väärtustama, tänulik olema
+  lt: vertinti, branginti, būti dėkingam
+  da: værdsætte, skønne på, være taknemmelig
+  fi: arvostaa, olla kiitollinen
+  sv: uppskatta, sätta värde på
+  hr: cijeniti, uvažavati, biti zahvalan
+  lv: novērtēt, cienīt, būt pateicīgam
+  hi: सराहना करना, कद्र करना, आभारी होना
+  ar: يقدر، يثمن، يكون ممتنًا
+  fa: قدردانی کردن، ارزش دانستن، سپاسگزار بودن
+  ur: قدر کرنا، داد دینا، شکر گزار ہونا
+  id: menghargai, mengapresiasi, bersyukur
+  vi: đánh giá cao, trân trọng, biết ơn
+  th: ชื่นชม, ซาบซึ้ง, เห็นคุณค่า
+  ko: 진가를 알아보다, 감사하다, 평가하다
+  ja: 高く評価する、感謝する、認める
+  zh: 欣赏, 感激, 赞赏
+  bn: কদর করা, প্রশংসা করা, কৃতজ্ঞ থাকা
+  kk: бағалау, қадірлеу, риза болу
+
+ID 1908 (blame):
+  ru: обвинять, винить; вина
+  uk: звинувачувати, винити; вина
+  de: beschuldigen, tadeln; Schuld
+  es: culpar, acusar; culpa
+  fr: blâmer, accuser; responsabilité
+  pl: winić, obwiniać; wina
+  it: incolpare, rimproverare; colpa
+  tr: suçlamak, kabahat bulmak; suç
+  pt: culpar, acusar; culpa
+  ro: a învinovăți, a acuza; vină
+  bg: обвинявам, виня; вина
+  cs: obviňovat, vinit; vina
+  sk: obviňovať, viniť; vina
+  hu: hibáztatni, vádolni; hiba
+  el: κατηγορώ, ρίχνω το φταίξιμο; φταίξιμο
+  sl: kriviti, očitati; krivda
+  et: süüdistama, ette heitma; süü
+  lt: kaltinti, versti kaltę; kaltė
+  da: bebrejde, skyde skylden på; skyld
+  fi: syyttää, moittia; syy
+  sv: klandra, skylla på; skuld
+  hr: kriviti, okrivljavati; krivnja
+  lv: vainot, pārmest; vaina
+  hi: दोष देना, इल्जाम लगाना; दोष
+  ar: يلوم، يوبخ؛ لوم
+  fa: سرزنش کردن، مقصر دانستن؛ سرزنش
+  ur: الزام دینا، قصوروار ٹھہرانا؛ الزام
+  id: menyalahkan, mencela; kesalahan
+  vi: đổ lỗi, trách móc; lỗi
+  th: ตำหนิ, กล่าวโทษ; ความผิด
+  ko: 비난하다, 탓하다; 비난
+  ja: 責める、非難する；責任
+  zh: 责备, 归咎于; 过错
+  bn: দোষ দেওয়া, অভিযুক্ত করা; দোষ
+  kk: кінәлау, жазғыру; кінә
+
+ID 1909 (able):
+  ru: способный, умеющий, в силах
+  uk: здатний, спроможний, у змозі
+  de: fähig, imstande, kompetent
+  es: capaz, hábil, competente
+  fr: capable, apte, compétent
+  pl: zdolny, mogący, w stanie
+  it: capace, in grado, abile
+  tr: muktedir, yetenekli, yapabilen
+  pt: capaz, hábil, apto
+  ro: capabil, în stare, priceput
+  bg: способен, в състояние, можещ
+  cs: schopný, způsobilý, v stavu
+  sk: schopný, spôsobilý, v stave
+  hu: képes, ügyes, hozzáértő
+  el: ικανός, επιδέξιος, σε θέση
+  sl: sposoben, zmožen, vešč
+  et: võimeline, suuteline, asjatundlik
+  lt: pajėgus, sugebantis, gabus
+  da: dygtig, i stand til, kompetent
+  fi: kykenevä, pystyvä, osaava
+  sv: kapabel, i stånd till, skicklig
+  hr: sposoban, kadar, vješt
+  lv: spējīgs, prasmīgs, varošs
+  hi: सक्षम, योग्य, समर्थ
+  ar: قادر، متمكن، بارع
+  fa: توانا، لایق، قادر
+  ur: قابل، اہل، باصلاحیت
+  id: mampu, sanggup, cakap
+  vi: có khả năng, có năng lực, thạo
+  th: สามารถ, มีความสามารถ, เก่ง
+  ko: 할 수 있는, 유능한, 역량 있는
+  ja: できる、能力がある、有能な
+  zh: 有能力的, 能干的, 胜任的
+  bn: সক্ষম, সমর্থ, যোগ্য
+  kk: қабілетті, шамасы келетін, икемді
+
+ID 1910 (choice):
+  ru: выбор, отбор; отборный
+  uk: вибір, відбір; добірний
+  de: Wahl, Auswahl; erlesen
+  es: elección, opción, selección
+  fr: choix, sélection; d'élite
+  pl: wybór, selekcja; wyborowy
+  it: scelta, selezione; scelto
+  tr: seçim, seçenek, tercih
+  pt: escolha, opção, seleção
+  ro: alegere, opțiune, selecție
+  bg: избор, подбор; първокласен
+  cs: výběr, volba; vybraný
+  sk: výber, voľba; vyberaný
+  hu: választás, választék; kitűnő
+  el: επιλογή, προτίμηση; εκλεκτός
+  sl: izbira, odločitev; izbran
+  et: valik, väljavalik; esmaklassiline
+  lt: pasirinkimas, atranka; rinktinis
+  da: valg, udvalg; udsøgt
+  fi: valinta, vaihtoehto; valio
+  sv: val, urval; utsökt
+  hr: izbor, odabir; probran
+  lv: izvēle, atlase; izlases
+  hi: पसंद, चुनाव, विकल्प
+  ar: خيار، اختيار، انتقاء
+  fa: انتخاب، گزینه، گزینش
+  ur: انتخاب، پسند، چناؤ
+  id: pilihan, seleksi; bermutu
+  vi: sự lựa chọn, tuyển chọn
+  th: ตัวเลือก, ทางเลือก, การคัดสรร
+  ko: 선택, 선택권, 결정
+  ja: 選択、選択肢、選り抜きの
+  zh: 选择, 挑选; 精选的
+  bn: পছন্দ, নির্বাচন; উৎকৃষ্ট
+  kk: таңдау, талғам; таңдаулы
+
+ID 1911 (soon):
+  ru: скоро, вскоре
+  uk: скоро, незабаром
+  de: bald, demnächst
+  es: pronto, dentro de poco
+  fr: bientôt, sous peu
+  pl: wkrótce, niedługo
+  it: presto, a breve
+  tr: yakında, tez zamanda
+  pt: em breve, logo
+  ro: curând, în curând
+  bg: скоро, наскоро
+  cs: brzy, zanedlouho
+  sk: čoskoro, zanedlho
+  hu: hamar, hamarosan
+  el: σύντομα, γρήγορα
+  sl: kmalu, v kratkem
+  et: varsti, peatselt
+  lt: netrukus, greitai
+  da: snart, om lidt
+  fi: pian, kohta
+  sv: snart, inom kort
+  hr: uskoro, ubrzo
+  lv: drīz, tūlīt
+  hi: जल्द ہی, शीघ्र
+  ar: قريبًا، عما قريب
+  fa: به‌زودی، بزودی
+  ur: جلد، عنقریب
+  id: segera, sebentar lagi
+  vi: sớm, chẳng bao lâu
+  th: เร็วๆ นี้, ในไม่ช้า
+  ko: 곧, 머지않아
+  ja: すぐに、間もなく
+  zh: 不久, 很快
+  bn: শীঘ্রই, অল্প সময়ের মধ্যে
+  kk: жақын арада, жақында
+
+ID 1912 (then):
+  ru: затем, тогда, потом
+  uk: потім, тоді, відтак
+  de: dann, damals, danach
+  es: entonces, luego, después
+  fr: alors, ensuite, puis
+  pl: wtedy, potem, następnie
+  it: poi, allora, quindi
+  tr: sonra, o zaman, ardından
+  pt: então, depois, logo
+  ro: apoi, atunci, după aceea
+  bg: тогава, после, след това
+  cs: pak, tehdy, potom
+  sk: potom, vtedy, nato
+  hu: akkor, aztán, majd
+  el: τότε, έπειτα, μετά
+  sl: potem, takrat, nato
+  et: siis, pärast, tollal
+  lt: tada, paskui, tuomet
+  da: så, dengang, derefter
+  fi: sitten, silloin, sen jälkeen
+  sv: sedan, då, därefter
+  hr: zatim, onda, potom
+  lv: tad, pēc tam, tolaik
+  hi: तब, फिर, उसके बाद
+  ar: ثم، حينئذ، بعد ذلك
+  fa: سپس، آن زمان، بعد
+  ur: پھر، تب، اس کے بعد
+  id: lalu, kemudian, saat itu
+  vi: sau đó, khi đó, rồi
+  th: จากนั้น, แล้ว, ตอนนั้น
+  ko: 그러면, 그때, 그 다음에
+  ja: それから、その時、それなら
+  zh: 然后, 那时, 接着
+  bn: তারপর, তখন, এরপর
+  kk: содан кейін, сосын, сол кезде
+
+ID 1913 (anymore):
+  ru: больше не, уже не
+  uk: більше не, вже не
+  de: nicht mehr
+  es: ya no, más
+  fr: plus, ne plus
+  pl: już nie, więcej nie
+  it: non più, più
+  tr: artık, daha fazla değil
+  pt: já não, não mais
+  ro: nu mai, deloc
+  bg: вече не, повече
+  cs: už ne, více
+  sk: už nie, viac
+  hu: már nem, többé nem
+  el: όχι πια, πλέον
+  sl: ne več, nič več
+  et: mitte enam, enam
+  lt: nebe, daugiau ne
+  da: ikke længere, mere
+  fi: ei enää, enää
+  sv: inte längre, mer
+  hr: više ne, nikad više
+  lv: vairs ne, vairs
+  hi: अब और नहीं, अब नहीं
+  ar: لم يعد، ليس بعد الآن
+  fa: دیگر، بیش از این
+  ur: اب مزید نہیں, اب اور نہیں
+  id: tidak lagi, tak lagi
+  vi: không còn nữa, không nữa
+  th: ไม่อีกต่อไป, ไม่...อีกแล้ว
+  ko: 더 이상, 이제는
+  ja: もう〜ない、これ以上〜ない
+  zh: 不再, 再也不
+  bn: আর না, এখন আর নয়
+  kk: енді жоқ, бұдан былай емес
+
+ID 1914 (option):
+  ru: вариант, выбор, опция
+  uk: варіант, вибір, опція
+  de: Option, Wahlmöglichkeit, Alternative
+  es: opción, alternativa
+  fr: option, alternative
+  pl: opcja, możliwość, wariant
+  it: opzione, alternativa, scelta
+  tr: seçenek, tercih, opsiyon
+  pt: opção, alternativa
+  ro: opțiune, variantă, alegere
+  bg: опция, вариант, избор
+  cs: možnost, volba, varianta
+  sk: možnosť, voľba, variant
+  hu: lehetőség, opció, választási lehetőség
+  el: επιλογή, δυνατότητα
+  sl: možnost, izbira, opcija
+  et: valikuvõimalus, variant, valik
+  lt: galimybė, variantas, pasirinkimas
+  da: mulighed, valg, option
+  fi: vaihtoehto, valintamahdollisuus
+  sv: alternativ, valmöjlighet
+  hr: opcija, mogućnost, izbor
+  lv: izvēles iespēja, variants, opcija
+  hi: विकल्प, उपाय
+  ar: خيار، بديل، إمكانية
+  fa: گزینه، انتخاب، آپشن
+  ur: اختیار، متبادل، آپشن
+  id: opsi, pilihan, alternatif
+  vi: tùy chọn, lựa chọn, phương án
+  th: ตัวเลือก, ทางเลือก
+  ko: 선택지, 옵션, 선택 사항
+  ja: 選択肢、オプション
+  zh: 选项, 选择
+  bn: বিকল্প, পছন্দের সুযোগ
+  kk: нұсқа, таңдау, опция
+
+ID 1915 (village):
+  ru: деревня, село
+  uk: село, селище
+  de: Dorf, Ortschaft
+  es: aldea, pueblo
+  fr: village, bourg
+  pl: wieś, wioska
+  it: villaggio, borgo, paese
+  tr: köy, kasaba
+  pt: aldeia, vila, povoado
+  ro: sat, cătun
+  bg: село, селище
+  cs: vesnice, obec, dědina
+  sk: dedina, obec, dedinka
+  hu: falu, község
+  el: χωριό
+  sl: vas, vasica
+  et: küla, asula
+  lt: kaimas, gyvenvietė
+  da: landsby
+  fi: kylä
+  sv: by, landsbygd
+  hr: selo, selce
+  lv: ciems, sādža
+  hi: गाँव, देहात
+  ar: قرية، ضيعة
+  fa: روستا، ده، آبادی
+  ur: گاؤں، دیہات
+  id: desa, kampung
+  vi: ngôi làng, thôn xóm
+  th: หมู่บ้าน, ชนบท
+  ko: 마을, 시골
+  ja: 村、集落
+  zh: 村庄, 乡村
+  bn: গ্রাম, পল্লি
+  kk: ауыл, қыстақ
+
+ID 1916 (result):
+  ru: результат, итог; приводить к результату
+  uk: результат, підсумок; закінчуватися
+  de: Ergebnis, Resultat, Folge
+  es: resultado, consecuencia; resultar
+  fr: résultat, aboutissement, effet
+  pl: wynik, rezultat, skutek
+  it: risultato, esito, conseguenza
+  tr: sonuç, netice; sonuçlanmak
+  pt: resultado, efeito, desfecho
+  ro: rezultat, efect, urmare
+  bg: резултат, следствие
+  cs: výsledek, následek
+  sk: výsledok, následok
+  hu: eredmény, következmény
+  el: αποτέλεσμα, έκβαση
+  sl: rezultat, izid, posledica
+  et: tulemus, tagajärg
+  lt: rezultatas, padarinys
+  da: resultat, udkomme, følge
+  fi: tulos, seuraus
+  sv: resultat, följd
+  hr: rezultat, ishod, posljedica
+  lv: rezultāts, sekas, iznākums
+  hi: परिणाम, नतीजा, फल
+  ar: نتيجة، حاصل، أثر
+  fa: نتیجه، حاصل، پیآمد
+  ur: نتیجہ، انجام، حاصل
+  id: hasil, akibat, konsekuensi
+  vi: kết quả, hậu quả
+  th: ผลลัพธ์, ผล, ผลสรุป
+  ko: 결과, 성과
+  ja: 結果、結末、成果
+  zh: 结果, 成果, 后果
+  bn: ফলাফল, পরিণাম
+  kk: нәтиже, салдар, қорытынды
+
+ID 1917 (strong):
+  ru: сильный, крепкий, прочный
+  uk: сильний, міцний, потужний
+  de: stark, kräftig, robust
+  es: fuerte, robusto, resistente
+  fr: fort, solide, robuste
+  pl: silny, mocny, wytrzymały
+  it: forte, robusto, solido
+  tr: güçlü, kuvvetli, sağlam
+  pt: forte, robusto, resistente
+  ro: puternic, rezistent, viguros
+  bg: силен, здрав, мощен
+  cs: silný, pevný, zdatný
+  sk: silný, pevný, zdatný
+  hu: erős, szilárd, izmos
+  el: ισχυρός, δυνατός, στιβαρός
+  sl: močan, trden, krepak
+  et: tugev, kindel, vastupidav
+  lt: stiprus, tvirtas, galingas
+  da: stærk, kraftig, robust
+  fi: vahva, voimakas, luja
+  sv: stark, kraftig, robust
+  hr: snažan, jak, čvrst
+  lv: stiprs, spēcīgs, izturīgs
+  hi: मजबूत, बलवान, ताकतवर
+  ar: قوي، شديد، متين
+  fa: قوی، نیرومند، محکم
+  ur: مضبوط، طاقتور، قوی
+  id: kuat, kokoh, tangguh
+  vi: mạnh mẽ, vững chắc, khoẻ
+  th: แข็งแรง, แข็งแกร่ง, มีพลัง
+  ko: 강한, 튼튼한, 강력한
+  ja: 強い、頑丈な、力強い
+  zh: 强壮的, 强烈的, 坚固的
+  bn: শক্তিশালী, মজবুত, বলবান
+  kk: күшті, берік, мықты
+
+ID 1918 (afternoon):
+  ru: день, после полудня, послеполуденное время
+  uk: пообідній час, після полудня, день
+  de: Nachmittag
+  es: tarde
+  fr: après-midi
+  pl: popołudnie
+  it: pomeriggio
+  tr: öğleden sonra
+  pt: tarde
+  ro: după-amiază
+  bg: следобед
+  cs: odpoledne
+  sk: popoludnie
+  hu: délután
+  el: απόγευμα
+  sl: popoldne
+  et: pärastlõuna
+  lt: popietė, popietis
+  da: eftermiddag
+  fi: iltapäivä
+  sv: eftermiddag
+  hr: poslijepodne
+  lv: pēcpusdiena
+  hi: दोपहर, अपराह्न, तीसरा पहर
+  ar: بعد الظهر، فترة ما بعد الظهر
+  fa: بعدازظهر، عصر
+  ur: دوپہر، بعد دوپہر
+  id: sore, siang menjelang sore
+  vi: buổi chiều
+  th: ตอนบ่าย, ช่วงบ่าย
+  ko: 오후
+  ja: 午後、昼下がり
+  zh: 下午
+  bn: বিকেল, দুপুর গড়িয়ে
+  kk: түстен кейін, түс қайта
+
+ID 1919 (all):
+  ru: все, весь, всякий
+  uk: всі, весь, усе
+  de: alle, alles, ganz
+  es: todo, todos, todas
+  fr: tout, tous, toute
+  pl: wszyscy, wszystko, cały
+  it: tutto, tutti, tutte
+  tr: hepsi, tüm, bütün
+  pt: tudo, todos, todas
+  ro: tot, toți, toate
+  bg: всички, всичко, цял
+  cs: všichni, všechno, celý
+  sk: všetci, všetko, celý
+  hu: minden, összes, egész
+  el: όλοι, όλα, ολόκληρος
+  sl: vsi, vse, cel
+  et: kõik, terve
+  lt: visi, viskas, visas
+  da: alle, alt, hel
+  fi: kaikki, koko
+  sv: alla, allt, hel
+  hr: svi, sve, cijeli
+  lv: visi, viss, vesels
+  hi: सब, सभी, पूरा
+  ar: كل، جميع، كافة
+  fa: همه، تمام، کلیه
+  ur: سب، تمام، کل
+  id: semua, seluruh, segenap
+  vi: tất cả, toàn bộ, mọi
+  th: ทั้งหมด, ทั้งสิ้น, ทุก
+  ko: 모두, 모든, 전체
+  ja: すべての、全員、全体の
+  zh: 全部, 所有, 整个
+  bn: সব, সমস্ত, সকল
+  kk: бәрі, барлығы, күллі
+
+ID 1920 (brother):
+  ru: брат
+  uk: брат
+  de: Bruder
+  es: hermano
+  fr: frère
+  pl: brat
+  it: fratello
+  tr: erkek kardeş, abi, birader
+  pt: irmão
+  ro: frate
+  bg: брат
+  cs: bratr
+  sk: brat
+  hu: fivér, fiútestvér
+  el: αδελφός, αδερφός
+  sl: brat
+  et: vend
+  lt: brolis
+  da: bror, broder
+  fi: veli
+  sv: bror, broder
+  hr: brat
+  lv: brālis
+  hi: भाई
+  ar: أخ، شقيق
+  fa: برادر
+  ur: بھائی
+  id: saudara laki-laki, abang, adik laki-laki
+  vi: anh em trai, anh trai, em trai
+  th: พี่ชาย, น้องชาย
+  ko: 형제, 형, 오빠, 남동생
+  ja: 兄、弟、兄弟
+  zh: 兄弟, 哥哥, 弟弟
+  bn: ভাই
+  kk: аға, іні, бауыр
+
+ID 1921 (daughter):
+  ru: дочь, дочка
+  uk: дочка, донька
+  de: Tochter
+  es: hija
+  fr: fille
+  pl: córka
+  it: figlia
+  tr: kız çocuğu, kız
+  pt: filha
+  ro: fiică
+  bg: дъщеря
+  cs: dcera
+  sk: dcéra
+  hu: lánygyermek, lány
+  el: κόρη, θυγατέρα
+  sl: hči, hčerka
+  et: tütar
+  lt: dukra, duktė
+  da: datter
+  fi: tytär
+  sv: dotter
+  hr: kći, kćerka
+  lv: meita
+  hi: बेटी, पुत्री
+  ar: ابنة، بنت
+  fa: دختر، فرزند دختر
+  ur: بیٹی، دختر
+  id: anak perempuan, putri
+  vi: con gái
+  th: ลูกสาว
+  ko: 딸
+  ja: 娘
+  zh: 女儿
+  bn: মেয়ে, কন্যা
+  kk: қыз, қыз бала
+
+ID 1922 (dinner):
+  ru: ужин, званый обед
+  uk: вечеря, званий обід
+  de: Abendessen, Festessen
+  es: cena
+  fr: dîner, repas du soir
+  pl: kolacja, obiad
+  it: cena
+  tr: akşam yemeği
+  pt: jantar
+  ro: cină
+  bg: вечеря
+  cs: večeře
+  sk: večera
+  hu: vacsora
+  el: δείπνο, βραδινό
+  sl: večerja
+  et: õhtusöök
+  lt: vakarienė
+  da: aftensmad, middag
+  fi: päivällinen, illallinen
+  sv: middag, kvällsmat
+  hr: večera
+  lv: vakariņas
+  hi: रात का खाना, डिनर
+  ar: عشاء، وجبة العشاء
+  fa: شام
+  ur: رات کا کھانا, عشا
+  id: makan malam
+  vi: bữa tối
+  th: อาหารเย็น, มื้อค่ำ
+  ko: 저녁 식사, 만찬
+  ja: 夕食、ディナー
+  zh: 晚餐, 正餐
+  bn: রাতের খাবার, নৈশভোজ
+  kk: кешкі ас
+
+ID 1923 (dress):
+  ru: платье; одеваться
+  uk: сукня, плаття; одягатися
+  de: Kleid; sich anziehen
+  es: vestido; vestirse
+  fr: robe; s'habiller
+  pl: sukienka; ubierać się
+  it: vestito, abito; vestirsi
+  tr: elbise; giyinmek
+  pt: vestido; vestir-se
+  ro: rochie; a se îmbrăca
+  bg: рокля; обличам се
+  cs: šaty; oblékat se
+  sk: šaty; obliekať sa
+  hu: ruha; felöltözni
+  el: φόρεμα; ντύνομαι
+  sl: obleka; obleči se
+  et: kleit; riietuma
+  lt: suknelė; rengtis
+  da: kjole; klæde sig
+  fi: mekko, leningi; pukeutua
+  sv: klänning; klä sig
+  hr: haljina; odijevati se
+  lv: kleita; ģērbties
+  hi: पोशाक, वस्त्र; कपड़े पहनना
+  ar: فستان، ثوب؛ يرتدي
+  fa: لباس، پیراهن؛ لباس پوشیدن
+  ur: لباس، پوشاک؛ کپڑے پہننا
+  id: gaun, baju; berpakaian
+  vi: váy, đầm; mặc quần áo
+  th: ชุดกระโปรง, เดรส; แต่งตัว
+  ko: 드레스, 원피스; 옷을 입다
+  ja: ドレス、ワンピース；服を着る
+  zh: 连衣裙; 穿衣服
+  bn: পোশাক, জামা; পোশাক পরা
+  kk: көйлек; киіну
+
+ID 1924 (eye):
+  ru: глаз, око; взгляд
+  uk: око; погляд
+  de: Auge; Blick
+  es: ojo; mirada
+  fr: œil; regard
+  pl: oko; spojrzenie
+  it: occhio; sguardo
+  tr: göz; bakış
+  pt: olho; olhar
+  ro: ochi; privire
+  bg: око; поглед
+  cs: oko; zrak
+  sk: oko; zrak
+  hu: szem; tekintet
+  el: μάτι; ματιά
+  sl: oko; pogled
+  et: silm; pilk
+  lt: akis; žvilgsnis
+  da: øje; blik
+  fi: silmä; katse
+  sv: öga; blick
+  hr: oko; pogled
+  lv: acs; skatiens
+  hi: आँख, नेत्र
+  ar: عين؛ بصر
+  fa: چشم، دیده
+  ur: آنکھ، چشم
+  id: mata; pandangan
+  vi: con mắt, mắt
+  th: ตา, สายตา
+  ko: 눈, 안목
+  ja: 目、視線
+  zh: 眼睛, 目光
+  bn: চোখ, আঁখি
+  kk: көз, жанар
+
+ID 1925 (face):
+  ru: лицо; сталкиваться, стоять перед
+  uk: обличчя; стикатися, стояти перед
+  de: Gesicht; gegenüberstehen, trotzen
+  es: cara, rostro; enfrentar
+  fr: visage, figure; faire face à
+  pl: twarz, oblicze; stawiać czoła
+  it: viso, faccia; affrontare
+  tr: yüz, çehre; yüzleşmek
+  pt: rosto, cara; enfrentar
+  ro: față, chip; a înfrunta
+  bg: лице; сблъсквам се
+  cs: tvář, obličej; čelit
+  sk: tvár, tvárička; čeliť
+  hu: arc, ábrázat; szembenéz
+  el: πρόσωπο; αντιμετωπίζω
+  sl: obraz, obličje; soočiti se
+  et: nägu, pale; silmitsi seisma
+  lt: veidas; susidurti
+  da: ansigt; se i øjnene
+  fi: kasvot; kohdata
+  sv: ansikte; möta
+  hr: lice; suočiti se
+  lv: seja; stāties pretī
+  hi: चेहरा, मुख; सामना करना
+  ar: وجه؛ يواجه
+  fa: صورت، چهره؛ روبرو شدن
+  ur: چہرہ، رخ؛ سامنا کرنا
+  id: wajah, muka; menghadapi
+  vi: khuôn mặt, diện mạo; đối mặt
+  th: ใบหน้า, หน้า; เผชิญหน้า
+  ko: 얼굴; 직면하다
+  ja: 顔、表情；直面する
+  zh: 脸, 面部; 面临
+  bn: মুখ, চেহারা; মোকাবিলা করা
+  kk: бет, жүз; бетпе-бет келу
+
+ID 1926 (friend):
+  ru: друг, приятель
+  uk: друг, приятель
+  de: Freund, Bekannter
+  es: amigo, compañero
+  fr: ami, copain
+  pl: przyjaciel, kolega
+  it: amico, compagno
+  tr: arkadaş, dost
+  pt: amigo, colega
+  ro: prieten, amic
+  bg: приятел, другар
+  cs: přítel, kamarád
+  sk: priateľ, kamarát
+  hu: barát, ismerős
+  el: φίλος
+  sl: prijatelj
+  et: sõber
+  lt: draugas, bičiulis
+  da: ven, kammerat
+  fi: ystävä, kaveri
+  sv: vän, kamrat
+  hr: prijatelj, drug
+  lv: draugs, biedrs
+  hi: दोस्त, मित्र
+  ar: صديق، رفيق
+  fa: دوست، رفیق
+  ur: دوست، رفیق
+  id: teman, kawan, sahabat
+  vi: bạn bè, người bạn
+  th: เพื่อน, มิตร
+  ko: 친구, 벗
+  ja: 友人、友達
+  zh: 朋友, 友人
+  bn: বন্ধু, মিত্র
+  kk: дос, жолдас
+
+ID 1927 (hair):
+  ru: волосы, шерсть
+  uk: волосся, шерсть
+  de: Haare, Fell
+  es: pelo, cabello
+  fr: cheveux, poil
+  pl: włosy, sierść
+  it: capelli, peli
+  tr: saç, kıl
+  pt: cabelo, pelo
+  ro: păr, blană
+  bg: коса, косъм
+  cs: vlasy, srst
+  sk: vlasy, srsť
+  hu: haj, szőrzet
+  el: μαλλιά, τρίχες
+  sl: lasje, dlaka
+  et: juuksed, karvad
+  lt: plaukai, kailis
+  da: hår, pels
+  fi: hiukset, karva
+  sv: hår, päls
+  hr: kosa, dlaka
+  lv: mati, spalva
+  hi: बाल, केश
+  ar: شعر، وبر
+  fa: مو، پشم
+  ur: بال، مو
+  id: rambut, bulu
+  vi: tóc, lông
+  th: เส้นผม, ขน
+  ko: 머리카락, 털
+  ja: 髪、毛
+  zh: 头发, 毛发
+  bn: চুল, লোম
+  kk: шаш, қыл, жүн
+
+ID 1928 (head):
+  ru: голова; руководитель, возглавлять
+  uk: голова; керівник, очолювати
+  de: Kopf; Chef, leiten
+  es: cabeza; jefe, dirigir
+  fr: tête; chef, diriger
+  pl: głowa; szef, przewodzić
+  it: testa, capo; dirigere
+  tr: kafa, baş; başkan, yönetmek
+  pt: cabeça; chefe, liderar
+  ro: cap; șef, a conduce
+  bg: глава; началник, ръководя
+  cs: hlava; vedoucí, vést
+  sk: hlava; vedúci, viesť
+  hu: fej; vezető, vezetni
+  el: κεφάλι; επικεφαλής, ηγούμαι
+  sl: glava; vodja, voditi
+  et: pea; juht, juhtima
+  lt: galva; vadovas, vadovauti
+  da: hoved; leder, føre an
+  fi: pää; johtaja, johtaa
+  sv: huvud; ledare, leda
+  hr: glava; vođa, voditi
+  lv: galva; vadītājs, vadīt
+  hi: सिर, मस्तिष्क; प्रमुख, नेतृत्व करना
+  ar: رأس؛ قائد، يرأس
+  fa: سر، کله؛ رئیس، هدایت کردن
+  ur: سر؛ سربراہ، رہنمائی کرنا
+  id: kepala; pemimpin, memimpin
+  vi: đầu; người đứng đầu, chỉ huy
+  th: หัว, ศีรษะ; ผู้นำ, นำ
+  ko: 머리; 우두머리, 이끌다
+  ja: 頭；リーダー、率いる
+  zh: 头, 头部; 负责人, 率领
+  bn: মাথা, মস্তক; প্রধান, পরিচালনা করা
+  kk: бас; басшы, басқару
+
+ID 1929 (here):
+  ru: здесь, сюда, вот
+  uk: тут, сюди, ось
+  de: hier, hierher
+  es: aquí, acá
+  fr: ici, par ici
+  pl: tutaj, tu
+  it: qui, qua
+  tr: burada, buraya
+  pt: aqui, cá
+  ro: aici, încoace
+  bg: тук, насам
+  cs: zde, tady, sem
+  sk: tu, sem, tadiaľto
+  hu: itt, ide
+  el: εδώ
+  sl: tukaj, sem
+  et: siin, siia
+  lt: čia, šen
+  da: her, herhen
+  fi: täällä, tänne
+  sv: här, hit
+  hr: ovdje, ovamo
+  lv: šeit, šurp
+  hi: यहाँ, इधर
+  ar: هنا، إلى هنا
+  fa: اینجا، به اینجا
+  ur: یہاں، ادھر
+  id: di sini, ke sini
+  vi: ở đây, lại đây
+  th: ที่นี่, ตรงนี้
+  ko: 여기, 이곳에
+  ja: ここ、こちら
+  zh: 这里, 此处
+  bn: এখানে, এদিকে
+  kk: мұнда, осында
+
+ID 1930 (house):
+  ru: дом, жилище; вмещать
+  uk: будинок, дім; вміщувати
+  de: Haus, Wohnhaus; unterbringen
+  es: casa, vivienda; albergar
+  fr: maison, demeure; abriter
+  pl: dom, budynek; mieścić
+  it: casa, edificio; ospitare
+  tr: ev, konut; barındırmak
+  pt: casa, moradia; abrigar
+  ro: casă, locuință; a găzdui
+  bg: къща, дом; приютявам
+  cs: dům, obydlí; ubytovat
+  sk: dom, obydlie; ubytovať
+  hu: ház, lakóház; befogad
+  el: σπίτι, κατοικία; στεγάζω
+  sl: hiša, dom; namestiti
+  et: maja, elamu; majutama
+  lt: namas, būstas; apgyvendinti
+  da: hus, bolig; huse
+  fi: talo, rakennus; majoittaa
+  sv: hus, byggnad; inhysa
+  hr: kuća, dom; smjestiti
+  lv: māja, nams; izmitināt
+  hi: घर, मकान; ठहराना
+  ar: بيت، منزل؛ يؤوي
+  fa: خانه، منزل؛ جا دادن
+  ur: گھر، مکان؛ پناہ دینا
+  id: rumah, kediaman; menampung
+  vi: ngôi nhà, tòa nhà; chứa
+  th: บ้าน, เรือน; จัดที่พักให้
+  ko: 집, 주택; 수용하다
+  ja: 家、住宅；収容する
+  zh: 房子, 房屋; 容纳
+  bn: বাড়ি, ঘর; বাসস্থান দেওয়া
+  kk: үй, баспана; орналастыру
+
+ID 1931 (husband):
+  ru: муж, супруг
+  uk: чоловік, подружжя
+  de: Ehemann, Gatte
+  es: marido, esposo
+  fr: mari, époux
+  pl: mąż, małżonek
+  it: marito, sposo
+  tr: koca, eş
+  pt: marido, esposo
+  ro: soț, bărbat
+  bg: съпруг, мъж
+  cs: manžel, muž
+  sk: manžel, muž
+  hu: férj, hitves
+  el: σύζυγος, άνδρας
+  sl: mož, soprog
+  et: abikaasa, mees
+  lt: vyras, sutuoktinis
+  da: mand, ægtemand
+  fi: aviomies, puoliso
+  sv: make, man
+  hr: muž, suprug
+  lv: vīrs, laulātais draugs
+  hi: पति, शौहर
+  ar: زوج
+  fa: شوهر، همسر
+  ur: شوہر، میاں
+  id: suami
+  vi: chồng
+  th: สามี, ผัว
+  ko: 남편
+  ja: 夫、旦那
+  zh: 丈夫, 先生
+  bn: স্বামী
+  kk: күйеу, зайып
+
+ID 1932 (kitchen):
+  ru: кухня
+  uk: кухня
+  de: Küche
+  es: cocina
+  fr: cuisine
+  pl: kuchnia
+  it: cucina
+  tr: mutfak
+  pt: cozinha
+  ro: bucătărie
+  bg: кухня
+  cs: kuchyně
+  sk: kuchyňa
+  hu: konyha
+  el: κουζίνα
+  sl: kuhinja
+  et: köök
+  lt: virtuvė
+  da: køkken
+  fi: keittiö
+  sv: kök
+  hr: kuhinja
+  lv: virtuve
+  hi: रसोई, रसोईघर
+  ar: مطبخ
+  fa: آشپزخانه
+  ur: باورچی خانہ
+  id: dapur
+  vi: nhà bếp, gian bếp
+  th: ห้องครัว, ครัว
+  ko: 부엌, 주방
+  ja: 台所、キッチン
+  zh: 厨房
+  bn: রান্নাঘর
+  kk: ас үй, асхана
+
+ID 1933 (letter):
+  ru: буква; письмо
+  uk: літера, буква; лист
+  de: Buchstabe; Brief
+  es: letra; carta
+  fr: lettre, caractère; courrier
+  pl: litera; list
+  it: lettera; carattere
+  tr: harf; mektup
+  pt: letra; carta
+  ro: literă; scrisoare
+  bg: буква; писмо
+  cs: písmeno; dopis
+  sk: písmeno; list
+  hu: betű; levél
+  el: γράμμα; επιστολή
+  sl: črka; pismo
+  et: täht; kiri
+  lt: raidė; laiškas
+  da: bogstav; brev
+  fi: kirjain; kirje
+  sv: bokstav; brev
+  hr: slovo; pismo
+  lv: burts; vēstule
+  hi: अक्षर; पत्र, चिट्ठी
+  ar: حرف؛ رسالة، خطاب
+  fa: حرف؛ نامه
+  ur: حرف؛ خط، چٹھی
+  id: huruf; surat
+  vi: chữ cái; lá thư
+  th: ตัวอักษร; จดหมาย
+  ko: 글자; 편지
+  ja: 文字；手紙
+  zh: 字母; 信件
+  bn: অক্ষর, বর্ণ; চিঠি
+  kk: әріп; хат
+
+ID 1934 (life):
+  ru: жизнь, существование
+  uk: життя, існування
+  de: Leben, Dasein
+  es: vida, existencia
+  fr: vie, existence
+  pl: życie, żywot
+  it: vita, esistenza
+  tr: hayat, yaşam, ömür
+  pt: vida, existência
+  ro: viață, existență
+  bg: живот, битие
+  cs: život, živobytí
+  sk: život, živobytie
+  hu: élet, létezés
+  el: ζωή, ύπαρξη
+  sl: življenje, bivanje
+  et: elu, eksistents
+  lt: gyvenimas, gyvybė
+  da: liv, tilværelse
+  fi: elämä, olemassaolo
+  sv: liv, tillvaro
+  hr: život, postojanje
+  lv: dzīve, dzīvība
+  hi: जीवन, जिंदगी
+  ar: حياة، عيش
+  fa: زندگی، حیات
+  ur: زندگی، حیات
+  id: hidup, kehidupan
+  vi: cuộc sống, sinh mệnh
+  th: ชีวิต, ความเป็นอยู่
+  ko: 삶, 생명, 인생
+  ja: 人生、生活、生命
+  zh: 生活, 生命, 人生
+  bn: জীবন, প্রাণ
+  kk: өмір, тіршілік
+
+ID 1935 (like):
+  ru: нравиться, любить; как, подобно
+  uk: подобатися; як, подібно до
+  de: mögen, gern haben; wie
+  es: gustar; como, parecido a
+  fr: aimer, apprécier; comme
+  pl: lubić; jak, podobnie jak
+  it: piacere; come, simile a
+  tr: beğenmek, hoşlanmak; gibi
+  pt: gostar; como, parecido com
+  ro: a plăcea; ca, asemenea
+  bg: харесвам; като, подобно на
+  cs: mít rád, líbit se; jako
+  sk: mať rád, páčiť sa; ako
+  hu: szeret, kedvel; mint, hasonlóan
+  el: αρέσω; σαν, όπως
+  sl: imeti rad, biti všeč; kot
+  et: meeldima; nagu, sarnaselt
+  lt: patikti, mėgti; kaip
+  da: kunne lide; som, ligesom
+  fi: pitää, tykätä; kuten, kuin
+  sv: tycka om, gilla; som
+  hr: voljeti, sviđati se; poput, kao
+  lv: patikt, mīlēt; kā, līdzīgi
+  hi: पसंद करना; जैसा, समान
+  ar: يعجب، يحب؛ مثل، كـ
+  fa: دوست داشتن، پسندیدن؛ مانند
+  ur: پسند کرنا؛ جیسا، کی مانند
+  id: suka, gemar; seperti, mirip
+  vi: thích; như, tương tự
+  th: ชอบ; เหมือน, เช่นเดียวกับ
+  ko: 좋아하다; ~처럼, 같은
+  ja: 好きである、好む；〜のように
+  zh: 喜欢; 像, 犹如
+  bn: পছন্দ করা; মতো, সমান
+  kk: ұнату, жақсы көру; сияқты, тәрізді
+
+ID 1936 (live):
+  ru: жить, обитать; прямой эфир, живой
+  uk: жити, мешкати; наживо, живий
+  de: leben, wohnen; live, lebendig
+  es: vivir, habitar; en vivo, en directo
+  fr: vivre, habiter; en direct
+  pl: żyć, mieszkać; na żywo
+  it: vivere, abitare; dal vivo
+  tr: yaşamak, ikamet etmek; canlı
+  pt: viver, morar; ao vivo
+  ro: a trăi, a locui; în direct
+  bg: живея, обитавам; на живо
+  cs: žít, bydlet; naživo
+  sk: žiť, bývať; naživo
+  hu: élni, lakni; élő, egyenes adásban
+  el: ζω, κατοικώ; ζωντανά
+  sl: živeti, bivati; v živo
+  et: elama, asuma; otseülekandes
+  lt: gyventi; tiesiogiai
+  da: leve, bo; direkte
+  fi: elää, asua; suorana
+  sv: leva, bo; direktsänt
+  hr: živjeti, boraviti; uživo
+  lv: dzīvot, mājot; tiešraidē
+  hi: जीना, रहना; सीधा प्रसारण
+  ar: يعيش، يسكن؛ مباشر
+  fa: زندگی کردن؛ زنده، مستقیم
+  ur: جینا، رہنا؛ براہ راست
+  id: hidup, tinggal; langsung
+  vi: sống, cư trú; trực tiếp
+  th: อาศัยอยู่, มีชีวิต; ถ่ายทอดสด
+  ko: 살다, 거주하다; 생방송의
+  ja: 住む、生きる；生の、ライブの
+  zh: 居住, 生活; 直播的
+  bn: বাস করা, থাকা; সরাসরি
+  kk: өмір сүру, тұру; тікелей эфирде
+
+ID 1937 (love):
+  ru: любить; любовь
+  uk: любити, кохати; любов, кохання
+  de: lieben; Liebe
+  es: amar, querer; amor
+  fr: aimer, adorer; amour
+  pl: kochać, uwielbiać; miłość
+  it: amare; amore
+  tr: sevmek, âşık olmak; aşk, sevgi
+  pt: amar; amor
+  ro: a iubi; dragoste, iubire
+  bg: обичам; любов
+  cs: milovat, mít rád; láska
+  sk: milovať, mať rád; láska
+  hu: szeretni; szeretet, szerelem
+  el: αγαπώ; αγάπη
+  sl: ljubiti, imeti rad; ljubezen
+  et: armastama; armastus
+  lt: mylėti; meilė
+  da: elske; kærlighed
+  fi: rakastaa; rakkaus
+  sv: älska; kärlek
+  hr: voljeti, ljubiti; ljubav
+  lv: mīlēt; mīlestība
+  hi: प्यार करना, चाहना; प्यार, प्रेम
+  ar: يحب، يعشق؛ حب، عشق
+  fa: عشق ورزیدن، دوست داشتن؛ عشق
+  ur: پیار کرنا، محبت کرنا؛ محبت، پیار
+  id: mencintai, menyayangi; cinta, kasih
+  vi: yêu, thương; tình yêu
+  th: รัก; ความรัก
+  ko: 사랑하다; 사랑
+  ja: 愛する、大好物である；愛
+  zh: 爱, 热爱; 爱情
+  bn: ভালোবাসা; ভালোবাসা, প্রেম
+  kk: сүю, жақсы көру; махаббат
+
+ID 1938 (map):
+  ru: карта, план местности
+  uk: карта, мапа
+  de: Karte, Landkarte
+  es: mapa, plano
+  fr: carte, plan
+  pl: mapa, plan
+  it: mappa, carta geografica
+  tr: harita, kroki
+  pt: mapa, planta
+  ro: hartă, plan
+  bg: карта, план
+  cs: mapa, plán
+  sk: mapa, plán
+  hu: térkép, tervrajz
+  el: χάρτης
+  sl: zemljevid, karta
+  et: kaart, plaan
+  lt: žemėlapis, planas
+  da: kort, landkort
+  fi: kartta
+  sv: karta
+  hr: karta, zemljovid
+  lv: karte, plāns
+  hi: नक्शा, मानचित्र
+  ar: خريطة
+  fa: نقشه
+  ur: نقشہ
+  id: peta, denah
+  vi: bản đồ, sơ đồ
+  th: แผนที่
+  ko: 지도
+  ja: 地図、マップ
+  zh: 地图
+  bn: মানচিত্র, নকশা
+  kk: карта, карта сызу
+
+ID 1939 (mother):
+  ru: мать, мама
+  uk: мати, мама
+  de: Mutter, Mama
+  es: madre, mamá
+  fr: mère, maman
+  pl: matka, mama
+  it: madre, mamma
+  tr: anne, ana
+  pt: mãe, mamãe
+  ro: mamă
+  bg: майка
+  cs: matka, máma
+  sk: matka, mama
+  hu: anya, édesanya
+  el: μητέρα, μάνα
+  sl: mati, mama
+  et: ema
+  lt: motina, mama
+  da: mor, moder
+  fi: äiti
+  sv: mor, mamma
+  hr: majka, mama
+  lv: māte, mamma
+  hi: माँ, माता
+  ar: أم، والدة
+  fa: مادر، مامان
+  ur: ماں، والدہ
+  id: ibu, bunda
+  vi: mẹ, má
+  th: แม่, มารดา
+  ko: 어머니, 엄마
+  ja: 母、母親
+  zh: 母亲, 妈妈
+  bn: মা, মাতা
+  kk: ана, шеше
+
+ID 1940 (mouth):
+  ru: рот, уста
+  uk: рот, вуста
+  de: Mund
+  es: boca
+  fr: bouche
+  pl: usta, otwór
+  it: bocca
+  tr: ağız
+  pt: boca
+  ro: gură
+  bg: уста
+  cs: ústa, pusa
+  sk: ústa
+  hu: száj
+  el: στόμα
+  sl: usta
+  et: suu
+  lt: burna
+  da: mund
+  fi: suu
+  sv: mun
+  hr: usta
+  lv: mute
+  hi: मुँह, मुख
+  ar: فم
+  fa: دهان، دهن
+  ur: منہ، دہن
+  id: mulut
+  vi: miệng
+  th: ปาก
+  ko: 입, 주둥이
+  ja: 口
+  zh: 嘴, 口
+  bn: মুখ, মুখগহ্বর
+  kk: ауыз
+
+ID 1941 (new):
+  ru: новый, свежий
+  uk: новий, свіжий
+  de: neu, frisch
+  es: nuevo, reciente
+  fr: nouveau, neuf
+  pl: nowy, świeży
+  it: nuovo, recente
+  tr: yeni, taze
+  pt: novo, recente
+  ro: nou, proaspăt
+  bg: нов, пресен
+  cs: nový, svěží
+  sk: nový, svieži
+  hu: új, friss
+  el: νέος, καινούργιος
+  sl: nov, svež
+  et: uus, värske
+  lt: naujas, šviežias
+  da: ny, frisk
+  fi: uusi, tuore
+  sv: ny, färsk
+  hr: nov, svjež
+  lv: jauns, svaigs
+  hi: नया, ताज़ा
+  ar: جديد، حديث
+  fa: جدید، تازه
+  ur: نیا، تازہ
+  id: baru, segar
+  vi: mới, tươi mới
+  th: ใหม่, สดใหม่
+  ko: 새로운, 신규의
+  ja: 新しい、最新の
+  zh: 新的, 新鲜的
+  bn: নতুন, টাটকা
+  kk: жаңа, тың
+
+ID 1942 (next):
+  ru: следующий, будущий, рядом
+  uk: наступний, подальший, поруч
+  de: nächster, kommend, neben
+  es: siguiente, próximo
+  fr: suivant, prochain
+  pl: następny, kolejny
+  it: prossimo, seguente, successivo
+  tr: sonraki, sıradaki, bitişik
+  pt: próximo, seguinte
+  ro: următor, viitor, alăturat
+  bg: следващ, пореден
+  cs: další, následující
+  sk: ďalší, nasledujúci
+  hu: következő, legközelebbi
+  el: επόμενος, διπλανός
+  sl: naslednji, prihodnji
+  et: järgmine, tulevane
+  lt: kitas, sekantis
+  da: næste, efterfølgende
+  fi: seuraava
+  sv: nästa, följande
+  hr: sljedeći, idući
+  lv: nākamais, sekojošais
+  hi: अगला, दूसरा
+  ar: التالي، القادم
+  fa: بعدی، آینده
+  ur: اگلا، آئندہ
+  id: berikutnya, selanjutnya
+  vi: tiếp theo, kế tiếp
+  th: ถัดไป, ต่อไป
+  ko: 다음의, 옆의
+  ja: 次の、隣の
+  zh: 下一个, 接下来的
+  bn: পরবর্তী, পরের
+  kk: келесі, кезекті
+
+ID 1943 (only):
+  ru: только, лишь, единственный
+  uk: тільки, лише, єдиний
+  de: nur, einzig, bloß
+  es: solo, solamente, único
+  fr: seulement, uniquement, seul
+  pl: tylko, wyłącznie, jedyny
+  it: solo, soltanto, unico
+  tr: sadece, yalnızca, tek
+  pt: apenas, somente, único
+  ro: doar, numai, singur
+  bg: само, единствено, единствен
+  cs: jen, pouze, jediný
+  sk: len, iba, jedine
+  hu: csak, csupán, egyetlen
+  el: μόνο, μονάχα, μοναδικός
+  sl: samo, le, edini
+  et: ainult, vaid, ainus
+  lt: tik, vien tik, vienintelis
+  da: kun, blot, eneste
+  fi: vain, ainoastaan, ainoa
+  sv: bara, endast, enda
+  hr: samo, jedino, jedini
+  lv: tikai, vienīgi, vienīgais
+  hi: केवल, सिर्फ, एकमात्र
+  ar: فقط، فحسب، وحيد
+  fa: فقط، تنها، صرفاً
+  ur: صرف، فقط، اکلوتا
+  id: hanya, cuma, satu-satunya
+  vi: chỉ, duy nhất
+  th: เท่านั้น, เพียง, อย่างเดียว
+  ko: 오직, 단지, 유일한
+  ja: だけ、唯一の、単なる
+  zh: 只有, 仅仅, 唯一的
+  bn: শুধুমাত্র, কেবল, একমাত্র
+  kk: тек, ғана, жалғыз
+
+ID 1944 (parent):
+  ru: родитель, отец или мать
+  uk: один із батьків, родитель
+  de: Elternteil, Vater oder Mutter
+  es: progenitor, padre o madre
+  fr: parent, père ou mère
+  pl: rodzic
+  it: genitore
+  tr: ebeveyn, ana baba
+  pt: progenitor, pai ou mãe
+  ro: părinte
+  bg: родител
+  cs: rodič
+  sk: rodič
+  hu: szülő
+  el: γονέας
+  sl: starš
+  et: lapsevanem, vanem
+  lt: tėvas ar motina, gimdytojas
+  da: forælder
+  fi: vanhempi
+  sv: förälder
+  hr: roditelj
+  lv: vecāks
+  hi: माता या पिता, अभिभावक
+  ar: أحد الوالدين، والد أو والدة
+  fa: والد، پدر یا مادر
+  ur: والد یا والدہ، سرپرست
+  id: orang tua, ayah atau ibu
+  vi: cha hoặc mẹ, phụ huynh
+  th: ผู้ปกครอง, พ่อหรือแม่
+  ko: 부모, 어버이
+  ja: 親、保護者
+  zh: 父亲或母亲, 家长
+  bn: পিতা বা মাতা, অভিভাবক
+  kk: ата-ананың бірі, ата-ана
+
+ID 1945 (red):
+  ru: красный, алый, рыжий
+  uk: червоний, рудий
+  de: rot, rötlich
+  es: rojo, colorado
+  fr: rouge, roux
+  pl: czerwony, rudy
+  it: rosso, fulvo
+  tr: kırmızı, al
+  pt: vermelho, ruivo
+  ro: roșu, cărămiziu
+  bg: червен, риж
+  cs: červený, rudý
+  sk: červený, ryšavý
+  hu: piros, vörös
+  el: κόκκινος
+  sl: rdeč, rdečkobarven
+  et: punane, ruuge
+  lt: raudonas, rausvas
+  da: rød, rødhåret
+  fi: punainen
+  sv: röd, rödhårig
+  hr: crven, riđ
+  lv: sarkans, ruds
+  hi: लाल, रक्तिम
+  ar: أحمر
+  fa: قرمز، سرخ
+  ur: سرخ، لال
+  id: merah
+  vi: đỏ, màu đỏ
+  th: สีแดง, แดง
+  ko: 빨간, 붉은색의
+  ja: 赤い、赤色の
+  zh: 红色的, 红的
+  bn: লাল, রক্তবর্ণ
+  kk: қызыл
+
+ID 1946 (school):
+  ru: школа, училище; косяк рыб
+  uk: школа, училище; косяк риб
+  de: Schule; Fischschwarm
+  es: escuela, colegio; cardumen
+  fr: école, établissement; banc de poissons
+  pl: szkoła, uczelnia; ławica ryb
+  it: scuola, istituto; banco di pesci
+  tr: okul, mektep; balık sürüsü
+  pt: escola, colégio; cardume
+  ro: școală, colegiu; banc de pești
+  bg: училище, школа; пасаж от риби
+  cs: škola; hejno ryb
+  sk: škola; kŕdeľ rýb
+  hu: iskola; halraj
+  el: σχολείο; κοπάδι ψαριών
+  sl: šola; jata rib
+  et: kool; kalaparv
+  lt: mokykla; žuvų būrys
+  da: skole; fiskestime
+  fi: koulu; kalaparvi
+  sv: skola; fiskstim
+  hr: škola; jato riba
+  lv: skola; zivju bars
+  hi: स्कूल, विद्यालय; मछलियों का झुंड
+  ar: مدرسة، معهد؛ سرب أسماك
+  fa: مدرسه، آموزشگاه؛ دسته ماهی
+  ur: اسکول، درسگاہ؛ مچھلیوں کا غول
+  id: sekolah; kelompok ikan
+  vi: trường học; đàn cá
+  th: โรงเรียน; ฝูงปลา
+  ko: 학교, 학파; 물고기 떼
+  ja: 学校、学派；魚の群れ
+  zh: 学校, 学派; 鱼群
+  bn: বিদ্যালয়, স্কুল; মাছের ঝাঁক
+  kk: мектеп; балық үйірі
+
+ID 1947 (shoe):
+  ru: туфля, ботинок, обувь
+  uk: туфля, черевик, взуття
+  de: Schuh, Halbschuh
+  es: zapato, calzado
+  fr: chaussure, soulier
+  pl: but, trzewik, półbut
+  it: scarpa, calzatura
+  tr: ayakkabı, pabuç
+  pt: sapato, calçado
+  ro: pantof, încălțăminte
+  bg: обувка
+  cs: bota, polobotka, obuv
+  sk: topánka, poltopánka, obuv
+  hu: cipő, lábbeli
+  el: παπούτσι, υπόδημα
+  sl: čevelj, obuvalo
+  et: king, jalats
+  lt: batas, pusbatis, avalynė
+  da: sko
+  fi: kenkä, jalkine
+  sv: sko, skodon
+  hr: cipela, obuća
+  lv: kurpe, apavs
+  hi: जूता, जूती
+  ar: حذاء، نعل
+  fa: کفش
+  ur: جوتا، پاپوش
+  id: sepatu, alas kaki
+  vi: giày, chiếc giày
+  th: รองเท้า
+  ko: 신발, 구두
+  ja: 靴、シューズ
+  zh: 鞋, 鞋子
+  bn: জুতো, পাদুকা
+  kk: аяқ киім, бәтеңке
+
+ID 1948 (son):
+  ru: сын
+  uk: син
+  de: Sohn
+  es: hijo
+  fr: fils
+  pl: syn
+  it: figlio, figlio maschio
+  tr: oğul, erkek evlat
+  pt: filho
+  ro: fiu, băiat
+  bg: син
+  cs: syn
+  sk: syn
+  hu: fiú, fia, fiúgyermek
+  el: γιος, υιός
+  sl: sin
+  et: poeg
+  lt: sūnus
+  da: søn
+  fi: poika
+  sv: son
+  hr: sin
+  lv: dēls
+  hi: बेटा, पुत्र
+  ar: ابن، ولد
+  fa: پسر، فرزند پسر
+  ur: بیٹا، فرزند
+  id: anak laki-laki, putra
+  vi: con trai
+  th: ลูกชาย, บุตรชาย
+  ko: 아들
+  ja: 息子、男児
+  zh: 儿子
+  bn: ছেলে, পুত্র
+  kk: ұл, ұлы
+
+ID 1949 (story):
+  ru: история, рассказ; этаж
+  uk: історія, оповідання; поверх
+  de: Geschichte, Erzählung; Stockwerk
+  es: historia, relato, cuento; piso
+  fr: histoire, récit; étage
+  pl: historia, opowieść; piętro
+  it: storia, racconto; piano
+  tr: hikâye, öykü; kat
+  pt: história, conto; andar
+  ro: poveste, istorie; etaj
+  bg: история, разказ; етаж
+  cs: příběh, povídka; poschodí
+  sk: príbeh, poviedka; poschodie
+  hu: történet, elbeszélés; emelet
+  el: ιστορία, αφήγημα; όροφος
+  sl: zgodba, pripoved; nadstropje
+  et: lugu, jutustus; korrus
+  lt: pasakojimas, istorija; aukštas
+  da: historie, fortælling; etage
+  fi: tarina, kertomus; kerros
+  sv: berättelse, historia; våning
+  hr: priča, pripovijest; kat
+  lv: stāsts, vēstījums; stāvs
+  hi: कहानी, किस्सा; मंजिल
+  ar: قصة، حكاية؛ طابق
+  fa: داستان، قصه؛ طبقه
+  ur: کہانی، قصہ؛ منزل
+  id: cerita, kisah; lantai
+  vi: câu chuyện, truyện; tầng lầu
+  th: เรื่องราว, นิทาน; ชั้น
+  ko: 이야기, 사연; 층
+  ja: 物語、話；階
+  zh: 故事, 叙述; 楼层
+  bn: গল্প, কাহিনী; তলা
+  kk: әңгіме, хикая; қабат
+
+ID 1950 (wife):
+  ru: жена, супруга
+  uk: дружина, жінка
+  de: Ehefrau, Frau, Gattin
+  es: esposa, mujer
+  fr: femme, épouse
+  pl: żona, małżonka
+  it: moglie, sposa
+  tr: eş, karı, hanım
+  pt: esposa, mulher
+  ro: soție, nevastă
+  bg: съпруга, жена
+  cs: manželka, žena
+  sk: manželka, žena
+  hu: feleség, neje
+  el: σύζυγος, γυναίκα
+  sl: žena, soproga
+  et: naine, abikaasa
+  lt: žmona, sutuoktinė
+  da: kone, hustru
+  fi: vaimo, puoliso
+  sv: fru, hustru
+  hr: supruga, žena
+  lv: sieva, laulātā draudzene
+  hi: पत्नी, बीवी
+  ar: زوجة، قرينة
+  fa: همسر، زن
+  ur: بیوی، اہلیہ
+  id: istri
+  vi: vợ, bà xã
+  th: ภรรยา, เมีย
+  ko: 아내, 부인
+  ja: 妻、女房
+  zh: 妻子, 夫人
+  bn: স্ত্রী, বউ
+  kk: әйел, зайып
+
+ID 1951 (do did done):
+  ru: делать, выполнять
+  uk: робити, виконувати
+  de: tun, machen
+  es: hacer, realizar
+  fr: faire, réaliser
+  pl: robić, czynić
+  it: fare, compiere
+  tr: yapmak, etmek
+  pt: fazer, realizar
+  ro: a face, a realiza
+  bg: правя, върша
+  cs: dělat, činit
+  sk: robiť, konať
+  hu: tenni, csinálni
+  el: κάνω, πράττω
+  sl: delati, narediti
+  et: tegema, teostama
+  lt: daryti, veikti
+  da: gøre, udføre
+  fi: tehdä, suorittaa
+  sv: göra, utföra
+  hr: raditi, činiti
+  lv: darīt, veikt
+  hi: करना, पूरा करना
+  ar: يفعل، يعمل، يقوم بـ
+  fa: انجام دادن، کردن
+  ur: کرنا، انجام دینا
+  id: melakukan, mengerjakan
+  vi: làm, thực hiện
+  th: ทำ, ปฏิบัติ
+  ko: 하다, 행하다
+  ja: する、行う
+  zh: 做, 干, 进行
+  bn: করা, সম্পন্ন করা
+  kk: істеу, жасау

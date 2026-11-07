@@ -1,0 +1,1892 @@
+Linguistic Audit & Calibration Report: Batch ID 2052–2101 (50 words)
+================================================================================
+Total words: 50
+Total locales calibrated: 36 (35 target languages + English headword)
+
+KEY BUGS CAUGHT & RESOLVED:
+1. Portuguese (pt) Index-Shift / Mismatch Cascades:
+   - ID 2053 (practice): Was "relógio" (clock) -> calibrated to "praticar, exercitar, prática".
+   - ID 2054 (decorate): Was "não gosto" (I dislike) -> calibrated to "decorar, enfeitar".
+   - ID 2055 (weight): Was "exercício" (exercise) -> calibrated to "peso, massa".
+   - ID 2057 (suggest): Was "peso" (weight) -> calibrated to "sugerir, propor, recomendar".
+   - ID 2059 (knowledge): Was "sugerir" (suggest) -> calibrated to "conhecimento, saber".
+   - ID 2065 (fry): Was "virar" (turn) -> calibrated to "fritar".
+   - ID 2066 (very): Was "quente" (hot) -> calibrated to "muito".
+   - ID 2068 (famous): Was "muito" (very) -> calibrated to "famoso, célebre".
+   - ID 2072 (left): Was "euro" -> calibrated to "esquerdo, à esquerda".
+   - ID 2076 (average): Was "assento" (seat) -> calibrated to "médio, média".
+   - ID 2080 (sign): Was "fonte" (source) -> calibrated to "assinar, sinal, placa".
+   - ID 2084 (union): Was "exatamente" (exactly) -> calibrated to "sindicato, união".
+   - ID 2086 (audience): Was "sindicato" (union) -> calibrated to "público, plateia, audiência".
+   - ID 2087 (character): Was "juntar" (join) -> calibrated to "personagem, caráter, personalidade".
+   - ID 2091 (minute): Was "objeto" (object) -> calibrated to "minuto".
+
+2. Placeholder Strings & Broken Data:
+   - ID 2088 (word): Vietnamese (vi) had placeholder "translation_vi" -> fixed to "từ, lời nói".
+
+3. Severe Homonym & Part-of-Speech Errors Fixed:
+   - ID 2065 (fry): Czech had "potěr" (fish fry / juvenile fish offspring!) and Greek had "μαρίδα" (whitebait fish!) -> fixed to cooking verbs "smažit, usmažit" (cs) and "τηγανίζω" (el).
+   - ID 2072 (left): Japanese had "左に去った" (left / departed to the left, confusing left with past of leave!) and Bengali had "বাম, চলে গেছে" (departed!) -> calibrated to direction "左の、左に、左" (ja) and "বাম, বামে" (bn).
+   - ID 2073 (jump): Multiple languages translated as bouncing a ball ("rimbalzo", "quicar", "odskočit", "põrge", "atšokti") -> calibrated to jumping / leaping ("saltare", "pular", "skočit", "hüppama", "šokti").
+   - ID 2077 (bite bit bitten): 16 languages translated as noun "a bite / toothmark / morsel" ("morso", "mușcătură", "хапка", "skus", "uhryznutie", "harapás", "δάγκωμα", "ugriz", "hammustus", "įkandimas", "bid", "purenta", "bett", "zalogaj", "kodiens", "한 입") -> calibrated to verbs "to bite".
+   - ID 2081 (drink drank drunk): 15 languages translated as noun "a drink / beverage" ("питие", "pití", "ital", "ποτό", "pijača", "jook", "gėrimas", "drik", "dryck", "piće", "dzēriens", "đồ uống", "เครื่องดื่ม", "음료", "сусын") -> calibrated to verbs "to drink".
+   - ID 2085 (join): 8 languages translated as space docking / boat docking ("andocare", "докинг", "ukotvit", "dokovať", "dokkolás", "pristati", "dokkima", "dokas") -> calibrated to natural "join/unite/connect".
+   - ID 2096 (wake woke woken): 8 languages had imperative "Wake up!" ("trezeşte-te", "събуди се", "probuď se", "zobuď sa", "ξύπνα", "zbudi se", "ärka üles", "svegliati") -> calibrated to standard infinitive verbs.
+   - ID 2097 (blow blew blown): 12 languages translated as "a blow / punch / physical strike" ("lovitură", "удар", "rána", "rana", "πλήγμα", "udarec", "löök", "smūgis", "lyödä", "udariti", "sist", "соққы") -> calibrated to wind/air blowing verbs.
+   - ID 2098 (swear swore sworn): 9 languages translated exclusively as profanity/cursing ("przeklinać", "imprecare", "псувам", "nadávať", "preklinjati", "bande", "kirota", "psovati", "lamāties") -> calibrated to oath-taking with secondary cursing.
+   - ID 2099 (tear tore torn): Chinese had "眼泪" (tear drops) -> calibrated to "撕裂、扯破".
+   - ID 2100 (sink sank sunk): 16 languages translated as drowning a person ("annegare", "îneca", "удавям", "utopit", "megfullad", "πνίγω", "drukne", "hukuttaa", "drunkna", "chết đuối", "익사시키다", "溺れる") -> calibrated to inanimate sinking of ships/objects as specified in notes ("не о живом существе").
+   - ID 2101 (class): 6 languages translated as grades/marks ("not", "баға", "成績", "karakter", "betyg", "điểm") -> calibrated to class/lesson/category.
+
+================================================================================
+FULL 50-WORD CALIBRATION AUDIT TRAIL:
+
+ID 2052 (dislike):
+  ru: неприязнь, не нравиться
+  uk: неприязнь, не подобатися
+  de: Abneigung, nicht mögen
+  es: desagradar, no gustar, aversión
+  fr: ne pas aimer, aversion
+  pl: nie lubić, niechęć
+  it: non piacere, antipatia
+  tr: hoşlanmamak, sevmemek, hoşnutsuzluk
+  pt: não gostar, antipatia, aversão
+  ro: a nu plăcea, antipatie, aversiune
+  bg: неприязън, не харесвам
+  cs: nemít rád, nelíbit se, odpor
+  sk: nemať rád, nepáčiť sa, odpor
+  hu: nem szeret, ellenszenv
+  el: αντιπαθώ, δεν μου αρέσει, αντιπάθεια
+  sl: ne marati, nenaklonjenost
+  et: mitte meeldima, vastumeelsus
+  lt: nemėgti, nemėgimas, antipatija
+  da: ikke bryde sig om, modvilje
+  fi: ei pitää, vastenmielisyys
+  sv: ogilla, motvilja
+  hr: ne voljeti, nesklonost
+  lv: nepatikt, nepatika
+  hi: नापसंद करना, नापसंदगी
+  ar: يكره، لا يحب، نفور
+  fa: دوست نداشتن، بیزاری
+  ur: ناپسند کرنا، ناپسندیدگی
+  id: tidak menyukai, ketidaksukaan
+  vi: không thích, không ưa, ác cảm
+  th: ไม่ชอบ, ความไม่ชอบ
+  ko: 싫어하다, 반감
+  ja: 嫌う、嫌悪
+  zh: 不喜欢、反感、厌恶
+  bn: অপছন্দ করা, অপছন্দ
+  kk: ұнатпау, жек көру
+
+ID 2053 (practice):
+  ru: упражняться, практиковаться, практика
+  uk: практикуватися, тренуватися, практика
+  de: üben, praktizieren, Praxis, Übung
+  es: practicar, ejercitar, práctica
+  fr: s'entraîner, pratiquer, pratique
+  pl: ćwiczyć, praktykować, praktyka
+  it: esercitarsi, praticare, pratica
+  tr: pratik yapmak, alıştırma yapmak, uygulama
+  pt: praticar, exercitar, prática
+  ro: a practica, a exersa, practică
+  bg: практикувам, упражнявам се, практика
+  cs: cvičit, trénovat, praxe
+  sk: cvičiť, trénovať, prax
+  hu: gyakorol, gyakorlat
+  el: ασκούμαι, εξασκούμαι, πρακτική
+  sl: vaditi, izvajati, praksa
+  et: harjutama, praktiseerima, praktika
+  lt: praktikuotis, treniruotis, praktika
+  da: øve sig, praktisere, praksis
+  fi: harjoitella, harjoitus, käytäntö
+  sv: öva, praktisera, praktik
+  hr: vježbati, prakticirati, praksa
+  lv: vingrināties, praktizēt, prakse
+  hi: अभ्यास करना, रियाज़, अभ्यास
+  ar: يمارس، يتدرّب، تمرين، ممارسة
+  fa: تمرین کردن، ورزیدن، تمرین
+  ur: مشق کرنا، ریاض کرنا، مشق
+  id: berlatih, mempraktikkan, latihan
+  vi: luyện tập, rèn luyện, thực hành
+  th: ฝึกซ้อม, ฝึกฝน, การปฏิบัติ
+  ko: 연습하다, 실천하다, 연습
+  ja: 練習する、実践する、練習
+  zh: 练习、实践、训练
+  bn: অনুশীলন করা, চর্চা করা, অনুশীলন
+  kk: жаттығу, тәжірибе жасау
+
+ID 2054 (decorate):
+  ru: украсить, украшать, декорировать
+  uk: прикрашати, декорувати
+  de: schmücken, dekorieren, verzieren
+  es: decorar, adornar
+  fr: décorer, orner
+  pl: dekorować, ozdabiać
+  it: decorare, addobbare
+  tr: süslemek, dekore etmek
+  pt: decorar, enfeitar
+  ro: a decora, a împodobi
+  bg: украсявам, декорирам
+  cs: vyzdobit, dekorovat
+  sk: ozdobiť, vyzdobiť
+  hu: díszít, dekorál
+  el: διακοσμώ, στολίζω
+  sl: okrasiti, dekorirati
+  et: kaunistama, dekoreerima
+  lt: puošti, dekoruoti
+  da: dekorere, pynte
+  fi: koristella, somistaa
+  sv: dekorera, pryda
+  hr: ukrasiti, dekorirati
+  lv: dekorēt, rotāt
+  hi: सजाना, संवारना
+  ar: يزيّن، يزخرف
+  fa: تزیین کردن، آراستن
+  ur: سجانا، آراستہ کرنا
+  id: menghias, mendekorasi
+  vi: trang trí, tô điểm
+  th: ตกแต่ง, ประดับ
+  ko: 장식하다, 꾸미다
+  ja: 飾る、装飾する
+  zh: 装饰、装潢
+  bn: সাজানো, অলঙ্কৃত করা
+  kk: безендіру, әшекейлеу
+
+ID 2055 (weight):
+  ru: вес, масса, тяжесть
+  uk: вага, маса, тягар
+  de: Gewicht, Masse
+  es: peso, masa
+  fr: poids, masse
+  pl: waga, ciężar, masa
+  it: peso, massa
+  tr: ağırlık, kütle
+  pt: peso, massa
+  ro: greutate, masă
+  bg: тегло, маса, тежест
+  cs: hmotnost, váha
+  sk: hmotnosť, váha
+  hu: súly, tömeg
+  el: βάρος, μάζα
+  sl: teža, masa
+  et: kaal, mass
+  lt: svoris, masė
+  da: vægt, masse
+  fi: paino, massa
+  sv: vikt, massa
+  hr: težina, masa
+  lv: svars, masa
+  hi: वज़न, भार, द्रव्यमान
+  ar: وزن، كتلة، ثقل
+  fa: وزن، سنگینی، جرم
+  ur: وزن، بوجھ، کمیت
+  id: berat, bobot, massa
+  vi: cân nặng, trọng lượng, khối lượng
+  th: น้ำหนัก, มวล
+  ko: 무게, 체중, 질량
+  ja: 重さ、体重、重量
+  zh: 重量、体重、分量
+  bn: ওজন, ভার, ভর
+  kk: салмақ, салмақ дәрежесі
+
+ID 2056 (success):
+  ru: успех, удача
+  uk: успіх, удача
+  de: Erfolg
+  es: éxito
+  fr: succès, réussite
+  pl: sukces, powodzenie
+  it: successo, riuscita
+  tr: başarı
+  pt: sucesso, êxito
+  ro: succes, reușită
+  bg: успех
+  cs: úspěch
+  sk: úspech
+  hu: siker
+  el: επιτυχία
+  sl: uspeh
+  et: edu, kordaminek
+  lt: sėkmė
+  da: succes
+  fi: menestys
+  sv: framgång, succé
+  hr: uspjeh
+  lv: panākumi, veiksme
+  hi: सफलता, कामयाबी
+  ar: نجاح، فوز
+  fa: موفقیت، کامیابی
+  ur: کامیابی، کامرانی
+  id: keberhasilan, kesuksesan
+  vi: thành công, thắng lợi
+  th: ความสำเร็จ
+  ko: 성공
+  ja: 成功
+  zh: 成功、成就
+  bn: সাফল্য, সিদ্ধি
+  kk: табыс, жетістік
+
+ID 2057 (suggest):
+  ru: предлагать, советовать, рекомендовать
+  uk: пропонувати, радити, рекомендувати
+  de: vorschlagen, empfehlen, anregen
+  es: sugerir, proponer
+  fr: suggérer, proposer
+  pl: sugerować, proponować
+  it: suggerire, proporre
+  tr: önermek, tavsiye etmek
+  pt: sugerir, propor, recomendar
+  ro: a sugera, a propune, a recomanda
+  bg: предлагам, съветвам, препоръчвам
+  cs: navrhnout, doporučit
+  sk: navrhnúť, odporučiť
+  hu: javasol, ajánl
+  el: προτείνω, υποδεικνύω
+  sl: predlagati, svetovati
+  et: soovitama, ette panema
+  lt: siūlyti, patarti, rekomenduoti
+  da: foreslå, anbefale
+  fi: ehdottaa, suositella
+  sv: föreslå, rekommendera
+  hr: predložiti, sugerirati
+  lv: ieteikt, ierosināt
+  hi: सुझाव देना, सलाह देना
+  ar: يقترح، يوصي، ينصح
+  fa: پیشنهاد دادن، اشاره کردن
+  ur: تجویز کرنا، مشورہ دینا
+  id: menyarankan, mengusulkan
+  vi: gợi ý, đề xuất
+  th: เสนอแนะ, แนะนำ
+  ko: 제안하다, 추천하다
+  ja: 提案する、勧める
+  zh: 建议、提议
+  bn: পরামর্শ দেওয়া, প্রস্তাব করা
+  kk: ұсыну, кеңес беру
+
+ID 2058 (exchange):
+  ru: обмен, обменивать
+  uk: обмін, обмінювати
+  de: Austausch, Wechsel, tauschen
+  es: intercambio, canje, intercambiar
+  fr: échange, échanger
+  pl: wymiana, wymieniać
+  it: scambio, scambiare
+  tr: değiş tokuş, takas, takas etmek
+  pt: intercâmbio, troca, trocar
+  ro: schimb, a schimba
+  bg: обмен, размяна, обменям
+  cs: výměna, směna, vyměnit
+  sk: výmena, zmena, vymeniť
+  hu: csere, átváltás, cserél
+  el: ανταλλαγή, ανταλλάσσω
+  sl: menjava, izmenjava, menjati
+  et: vahetus, vahetama
+  lt: mainai, pasikeitimas, keistis
+  da: udveksling, bytte
+  fi: vaihto, vaihtaa
+  sv: utbyte, växling, byta
+  hr: razmjena, zamjena, mijenjati
+  lv: apmaiņa, maiņa, apmainīt
+  hi: आदान-प्रदान, विनिमय, बदलना
+  ar: تبادل، مقايضة، صرافة
+  fa: تبادل، مبادله، رد و بدل کردن
+  ur: تبادلہ، لین دین
+  id: pertukaran, tukar-menukar
+  vi: trao đổi, đổi
+  th: การแลกเปลี่ยน, แลกเปลี่ยน
+  ko: 교환, 환전, 교환하다
+  ja: 交換、為替、交換する
+  zh: 交换、交流、互换
+  bn: বিনিময়, অদলবদল
+  kk: алмасу, айырбастау
+
+ID 2059 (knowledge):
+  ru: знание, познания
+  uk: знання, пізнання
+  de: Wissen, Kenntnis
+  es: conocimiento, saber
+  fr: connaissance, savoir
+  pl: wiedza, znajomość
+  it: conoscenza, sapere
+  tr: bilgi, ilim
+  pt: conhecimento, saber
+  ro: cunoștințe, știință
+  bg: знание, познания
+  cs: znalost, vědomosti
+  sk: vedomosti, znalosť
+  hu: tudás, ismeret
+  el: γνώση, γνώσεις
+  sl: znanje
+  et: teadmised, teadmine
+  lt: žinios, pažinimas
+  da: viden, kendskab
+  fi: tieto, tietämys
+  sv: kunskap, kännedom
+  hr: znanje
+  lv: zināšanas
+  hi: ज्ञान, जानकारी
+  ar: معرفة، علم، دراية
+  fa: دانش، آگاهی، معرفت
+  ur: علم، واقفیت، معلومات
+  id: pengetahuan, wawasan
+  vi: kiến thức, hiểu biết
+  th: ความรู้
+  ko: 지식, 앎
+  ja: 知識
+  zh: 知识、见闻
+  bn: জ্ঞান, বিদ্যা
+  kk: білім
+
+ID 2060 (hard):
+  ru: жесткий, трудный, усердно
+  uk: твердий, важкий, наполегливо
+  de: hart, schwer, fleißig
+  es: duro, difícil, con fuerza
+  fr: dur, difficile, intensément
+  pl: twardy, trudny, ciężko
+  it: duro, difficile, duramente
+  tr: sert, zor, sıkı
+  pt: duro, difícil, arduamente
+  ro: dur, dificil, greu
+  bg: твърд, труден, упорито
+  cs: tvrdý, těžký, usilovně
+  sk: tvrdý, ťažký, usilovne
+  hu: kemény, nehéz, keményen
+  el: σκληρός, δύσκολος, σκληρά
+  sl: trd, težek, prizadeven
+  et: kõva, raske, usinasti
+  lt: kietas, sunkus, sunkiai
+  da: hård, svær, flittigt
+  fi: kova, vaikea, ahkerasti
+  sv: hård, svår, hårt
+  hr: tvrd, težak, naporno
+  lv: ciets, grūts, cītīgi
+  hi: कठिन, कड़ा, मेहनत से
+  ar: صلب، صعب، بجد
+  fa: سخت، دشوار، به‌سختی
+  ur: سخت، مشکل، محنت سے
+  id: keras, sulit, giat
+  vi: cứng, khó khăn, chăm chỉ
+  th: แข็ง, ยาก, หนัก
+  ko: 단단한, 어려운, 열심히
+  ja: 硬い、難しい、熱心に
+  zh: 坚硬的、困难的、努力地
+  bn: কঠিন, শক্ত, কঠোরভাবে
+  kk: қатты, қиын, тырысып
+
+ID 2061 (unhealthy):
+  ru: нездоровый, вредный для здоровья
+  uk: нездоровий, шкідливий для здоров'я
+  de: ungesund
+  es: poco saludable, insalubre, dañino
+  fr: malsain, mauvais pour la santé
+  pl: niezdrowy
+  it: malsano, poco salutare
+  tr: sağlıksız
+  pt: não saudável, prejudicial à saúde
+  ro: nesănătos
+  bg: нездравословен
+  cs: nezdravý
+  sk: nezdravý
+  hu: egészségtelen
+  el: ανθυγιεινός
+  sl: nezdrav
+  et: ebatervislik
+  lt: nesveikas
+  da: usund
+  fi: epäterveellinen
+  sv: ohälsosam, osund
+  hr: nezdrav
+  lv: neveselīgs
+  hi: अस्वस्थ, सेहत के लिए हानिकारक
+  ar: غير صحي
+  fa: ناسالم، مضر برای سلامتی
+  ur: غیر صحت بخش، مضرت رساں
+  id: tidak sehat
+  vi: không lành mạnh, có hại cho sức khỏe
+  th: ไม่ดีต่อสุขภาพ, สุขภาพไม่ดี
+  ko: 건강에 해로운, 건강하지 못한
+  ja: 不健康な、体に悪い
+  zh: 不健康的、有害健康的
+  bn: অস্বাস্থ্যকর
+  kk: денсаулыққа зиянды, денсаулығы нашар
+
+ID 2062 (ship):
+  ru: корабль, судно, отправлять
+  uk: корабель, судно, відправляти
+  de: Schiff, versenden, transportieren
+  es: barco, buque, enviar
+  fr: bateau, navire, expédier
+  pl: statek, okręt, wysyłać
+  it: nave, imbarcazione, spedire
+  tr: gemi, sevk etmek, göndermek
+  pt: navio, embarcação, enviar
+  ro: navă, vapor, a expedia
+  bg: кораб, превозвам
+  cs: loď, odeslat
+  sk: loď, odoslať
+  hu: hajó, szállít
+  el: πλοίο, καράβι, στέλνω
+  sl: ladja, poslati
+  et: laev, saatma
+  lt: laivas, siųsti
+  da: skib, sende
+  fi: laiva, alus, lähettää
+  sv: skepp, fartyg, skicka
+  hr: brod, otpremiti
+  lv: kuģis, nosūtīt
+  hi: जहाज़, जलपोत, माल भेजना
+  ar: سفينة، يشحن، يرسل
+  fa: کشتی، حمل کردن با کشتی
+  ur: بحری جہاز، روانہ کرنا
+  id: kapal, mengapalkan, mengirim
+  vi: tàu thủy, giao hàng
+  th: เรือเดินสมุทร, ส่งของ
+  ko: 배, 선박, 배송하다
+  ja: 船、輸送する
+  zh: 轮船、运送
+  bn: জাহাজ, জাহাজে পাঠানো
+  kk: кеме, жөнелту
+
+ID 2063 (turn):
+  ru: повернуть, поворот, очередь
+  uk: повернути, поворот, черга
+  de: drehen, abbiegen, Reihe, Zug
+  es: girar, dar vuelta, turno
+  fr: tourner, virer, tour
+  pl: skręcać, obracać, kolejka
+  it: girare, svoltare, turno
+  tr: dönmek, çevirmek, sıra
+  pt: virar, girar, vez, turno
+  ro: a se întoarce, a coti, rând
+  bg: завивам, въртя, ред
+  cs: otočit, zahnout, řada
+  sk: otočiť, zahnúť, rad
+  hu: fordul, fordít, sor
+  el: στρίβω, γυρίζω, σειρά
+  sl: obrniti, zaviti, vrsta
+  et: pöörama, kord
+  lt: pasukti, suktis, eilė
+  da: dreje, vende, tur
+  fi: kääntyä, kääntää, vuoro
+  sv: svänga, vända, tur
+  hr: okrenuti, skrenuti, red
+  lv: pagriezties, griezt, kārta
+  hi: मोड़ना, घूमना, बारी
+  ar: يدور، يلتف، منعطف، دور
+  fa: چرخیدن، پیچیدن، نوبت
+  ur: مڑنا، گھمانا، باری
+  id: berbelok, memutar, giliran
+  vi: rẽ, xoay, lượt
+  th: เลี้ยว, หมุน, คิว
+  ko: 돌다, 돌리다, 차례
+  ja: 曲がる、回す、順番
+  zh: 转向、转动、轮班
+  bn: ঘোরা, ফেরানো, পালা
+  kk: бұрылу, айналу, кезек
+
+ID 2064 (spicy):
+  ru: острый, пряный, пикантный
+  uk: гострий, пряний, пікантний
+  de: scharf, würzig, pikant
+  es: picante, especiado
+  fr: épicé, piquant
+  pl: pikantny, ostry, przyprawiony
+  it: piccante, speziato
+  tr: baharatlı, acı
+  pt: picante, apimentado, temperado
+  ro: picant, condimentat
+  bg: пикантен, лют, подправен
+  cs: kořeněný, pikantní, pálivý
+  sk: korenený, pikantný, pálivý
+  hu: fűszeres, csípős, pikáns
+  el: πικάντικος, καυτερός
+  sl: začinjen, pikanten, pekoč
+  et: vürtsikas, terav, pikantne
+  lt: aštrus, pikantiškas, prieskoniuotas
+  da: krydret, stærk, pikant
+  fi: mausteinen, tulinen, pikantti
+  sv: kryddig, stark, pikant
+  hr: začinjen, ljut, pikantan
+  lv: ass, pikants, ar garšvielām
+  hi: तीखा, मसालेदार, चटपटा
+  ar: حار، متبل، حريف
+  fa: تند، ادویه‌دار
+  ur: مسالہ دار، چٹ پٹا، تیکھا
+  id: pedas, berbumbu
+  vi: cay, cay nồng, đậm đà
+  th: เผ็ด, จัดจ้าน, ใส่เครื่องเทศ
+  ko: 매운, 매콤한, 양념이 들어간
+  ja: 辛い、スパイシーな
+  zh: 辛辣的、加香料的
+  bn: মশলাদার, ঝাল
+  kk: ащы, дәмдеуішті
+
+ID 2065 (fry):
+  ru: жарить, обжаривать
+  uk: смажити, обсмажувати
+  de: braten, frittieren
+  es: freír
+  fr: frire, faire frire
+  pl: smażyć
+  it: friggere
+  tr: kızartmak, tavada pişirmek
+  pt: fritar
+  ro: a prăji
+  bg: пържа, изпържвам
+  cs: smažit, usmažit
+  sk: smažiť, vyprážať
+  hu: süt, olajban süt
+  el: τηγανίζω
+  sl: cvreti, ocvrti
+  et: praadima
+  lt: kepti, kepti riebaluose
+  da: stege, fritere
+  fi: paistaa, friteerata
+  sv: steka, fritera
+  hr: pržiti
+  lv: cept, apcept
+  hi: तलना, भूनना
+  ar: يقلي
+  fa: سرخ کردن
+  ur: تلنا
+  id: menggoreng
+  vi: chiên, rán
+  th: ทอด, ผัด
+  ko: 튀기다, 볶다
+  ja: 炒める、揚げる
+  zh: 煎、炸、炒
+  bn: ভাজা, ভাজাভুজি করা
+  kk: қуыру
+
+ID 2066 (very):
+  ru: очень, весьма
+  uk: дуже, вельми
+  de: sehr
+  es: muy
+  fr: très
+  pl: bardzo
+  it: molto
+  tr: çok
+  pt: muito
+  ro: foarte
+  bg: много
+  cs: velmi
+  sk: veľmi
+  hu: nagyon
+  el: πολύ
+  sl: zelo
+  et: väga
+  lt: labai
+  da: meget
+  fi: erittäin, hyvin
+  sv: mycket
+  hr: vrlo, jako
+  lv: ļoti
+  hi: बहुत, काफ़ी
+  ar: جداً، للغاية
+  fa: خیلی، بسیار
+  ur: بہت، نہایت
+  id: sangat, amat
+  vi: rất, lắm
+  th: มาก, จริงๆ
+  ko: 매우, 아주
+  ja: とても、大変
+  zh: 非常、很
+  bn: খুব, অত্যন্ত
+  kk: өте, аса
+
+ID 2067 (dangerous):
+  ru: опасный, рискованный
+  uk: небезпечний, ризикований
+  de: gefährlich
+  es: peligroso
+  fr: dangereux
+  pl: niebezpieczny, groźny
+  it: pericoloso
+  tr: tehlikeli
+  pt: perigoso
+  ro: periculos
+  bg: опасен
+  cs: nebezpečný
+  sk: nebezpečný
+  hu: veszélyes
+  el: επικίνδυνος
+  sl: nevaren
+  et: ohtlik
+  lt: pavojingas
+  da: farlig
+  fi: vaarallinen
+  sv: farlig
+  hr: opasan
+  lv: bīstams
+  hi: खतरनाक, संकटपूर्ण
+  ar: خطير، مهلك
+  fa: خطرناک
+  ur: خطرناک
+  id: berbahaya
+  vi: nguy hiểm
+  th: อันตราย
+  ko: 위험한
+  ja: 危険な
+  zh: 危险的
+  bn: বিপজ্জনক, ক্ষতিকর
+  kk: қауіпті
+
+ID 2068 (famous):
+  ru: известный, знаменитый
+  uk: відомий, знаменитий
+  de: berühmt, bekannt
+  es: famoso, célebre
+  fr: célèbre, fameux
+  pl: sławny, znany
+  it: famoso, celebre
+  tr: ünlü, meşhur
+  pt: famoso, célebre
+  ro: faimos, celebru
+  bg: известен, прочут
+  cs: slavný, známý
+  sk: slávny, známy
+  hu: híres, neves
+  el: διάσημος, περίφημος
+  sl: slaven, znan
+  et: kuulus, tuntud
+  lt: garsus, žymus
+  da: berømt, kendt
+  fi: kuuluisa, tunnettu
+  sv: berömd, känd
+  hr: slavan, poznat
+  lv: slavens, pazīstams
+  hi: प्रसिद्ध, मशहूर
+  ar: مشهور، ذائع الصيت
+  fa: مشهور، معروف
+  ur: مشہور، نامور
+  id: terkenal, masyhur
+  vi: nổi tiếng
+  th: มีชื่อเสียง, โด่งดัง
+  ko: 유명한
+  ja: 有名な、名高い
+  zh: 著名的、出名的
+  bn: বিখ্যাত, নামকরা
+  kk: әйгілі, белгілі
+
+ID 2069 (rich):
+  ru: богатый, состоятельный
+  uk: багатий, заможний
+  de: reich, wohlhabend
+  es: rico, adinerado
+  fr: riche, fortuné
+  pl: bogaty, zamożny
+  it: ricco, facoltoso
+  tr: zengin, varlıklı
+  pt: rico, abastado
+  ro: bogat, înstărit
+  bg: богат, заможен
+  cs: bohatý, zámožný
+  sk: bohatý, zámožný
+  hu: gazdag, tehetős
+  el: πλούσιος
+  sl: bogat, premožen
+  et: rikas, jõukas
+  lt: turtingas, pasiturintis
+  da: rig, velhavende
+  fi: rikas, varakas
+  sv: rik, förmögen
+  hr: bogat, imućan
+  lv: bagāts, turīgs
+  hi: अमीर, धनी, समृद्ध
+  ar: غني، ثري
+  fa: ثروتمند، پولدار
+  ur: امیر، دولت مند
+  id: kaya, berada
+  vi: giàu có, phong phú
+  th: รวย, มั่งคั่ง
+  ko: 부유한, 부자의
+  ja: 裕福な、金持ちの
+  zh: 富有的、丰富的
+  bn: ধনী, সমৃদ্ধ
+  kk: бай, дәулетті
+
+ID 2070 (euro):
+  ru: евро
+  uk: євро
+  de: Euro
+  es: euro
+  fr: euro
+  pl: euro
+  it: euro
+  tr: avro, euro
+  pt: euro
+  ro: euro
+  bg: евро
+  cs: euro
+  sk: euro
+  hu: euró
+  el: ευρώ
+  sl: evro
+  et: euro
+  lt: euras
+  da: euro
+  fi: euro
+  sv: euro
+  hr: euro
+  lv: eiro
+  hi: यूरो
+  ar: يورو
+  fa: یورو
+  ur: یورو
+  id: euro
+  vi: đồng euro, euro
+  th: ยูโร
+  ko: 유로
+  ja: ユーロ
+  zh: 欧元
+  bn: ইউরো
+  kk: еуро
+
+ID 2071 (really):
+  ru: действительно, на самом деле
+  uk: справді, дійсно
+  de: wirklich, tatsächlich
+  es: realmente, de verdad
+  fr: vraiment, réellement
+  pl: naprawdę, rzeczywiście
+  it: veramente, davvero
+  tr: gerçekten, hakikaten
+  pt: realmente, de verdade
+  ro: cu adevărat, într-adevăr
+  bg: наистина, действително
+  cs: opravdu, skutečně
+  sk: naozaj, skutočne
+  hu: igazán, valóban
+  el: πραγματικά, αληθινά
+  sl: res, zares, resnično
+  et: tõesti, tegelikult
+  lt: tikrai, iš tiesų
+  da: virkelig, sandelig
+  fi: todella, oikeasti
+  sv: verkligen, faktiskt
+  hr: stvarno, doista
+  lv: tiešām, patiešām
+  hi: वास्तव में, सचमुच
+  ar: حقاً، بالفعل
+  fa: واقعاً، حقیقت امر
+  ur: واقعی، سچ مچ
+  id: sungguh, benar-benar
+  vi: thực sự, quả thật
+  th: จริงๆ, อย่างแท้จริง
+  ko: 정말로, 참으로
+  ja: 本当に、実に
+  zh: 确实、真的
+  bn: সত্যিই, আসলেই
+  kk: шынымен, расында
+
+ID 2072 (left):
+  ru: левый, слева, налево
+  uk: лівий, ліворуч, зліва
+  de: links, linke
+  es: izquierdo, a la izquierda
+  fr: gauche, à gauche
+  pl: lewy, po lewej
+  it: sinistro, a sinistra
+  tr: sol, solda
+  pt: esquerdo, à esquerda
+  ro: stâng, la stânga
+  bg: ляв, отляво
+  cs: levý, vlevo
+  sk: ľavý, vľavo
+  hu: bal, balra
+  el: αριστερός, αριστερά
+  sl: levi, na levi
+  et: vasak, vasakul
+  lt: kairys, kairėje
+  da: venstre, til venstre
+  fi: vasen, vasemmalla
+  sv: vänster, till vänster
+  hr: lijevi, slijeva
+  lv: kreisais, pa kreisi
+  hi: बायां, बाईं ओर
+  ar: أيسر، يسار، إلى اليسار
+  fa: چپ، سمت چپ
+  ur: بایاں، بائیں جانب
+  id: kiri, di sebelah kiri
+  vi: bên trái, bên tả
+  th: ซ้าย, ด้านซ้าย
+  ko: 왼쪽의, 왼편에
+  ja: 左の、左に、左
+  zh: 左边的、向左
+  bn: বাম, বামে
+  kk: сол, сол жақ
+
+ID 2073 (jump):
+  ru: прыгать, прыгнуть, прыжок
+  uk: стрибати, стрибнути, стрибок
+  de: springen, hüpfen, Sprung
+  es: saltar, salto
+  fr: sauter, bondir, saut
+  pl: skakać, skoczyć, skok
+  it: saltare, salto
+  tr: zıplamak, atlamak, sıçrama
+  pt: pular, saltar, salto
+  ro: a sări, săritură
+  bg: скачам, скок
+  cs: skočit, skákat, skok
+  sk: skočiť, skákať, skok
+  hu: ugrik, ugrás
+  el: πηδώ, άλμα
+  sl: skočiti, skok
+  et: hüppama, hüpe
+  lt: šokti, pašokti, šuolis
+  da: hoppe, springe, hop
+  fi: hypätä, hyppy
+  sv: hoppa, hopp
+  hr: skočiti, skok
+  lv: lēkt, lēciens
+  hi: कूदना, छलांग
+  ar: يقفز، قفزة
+  fa: پریدن، جهیدن، پرش
+  ur: چھلانگ لگانا، کودنا
+  id: melompat, loncat
+  vi: nhảy, bước nhảy
+  th: กระโดด, การกระโดด
+  ko: 뛰다, 점프하다, 도약
+  ja: 跳ぶ、ジャンプする、跳躍
+  zh: 跳跃、跳
+  bn: লাফানো, লাফ
+  kk: секіру, секіріс
+
+ID 2074 (seat):
+  ru: сиденье, место
+  uk: сидіння, посадкове місце
+  de: Sitz, Sitzplatz
+  es: asiento, plaza
+  fr: siège, place
+  pl: siedzenie, miejsce
+  it: sedile, posto
+  tr: koltuk, oturacak yer
+  pt: assento, banco, lugar
+  ro: scaun, loc
+  bg: седалка, място
+  cs: sedadlo, místo k sezení
+  sk: sedadlo, miesto na sedenie
+  hu: ülés, ülőhely
+  el: κάθισμα, θέση
+  sl: sedež, mesto
+  et: iste, istekoht
+  lt: sėdynė, sėdima vieta
+  da: sæde, siddeplads
+  fi: istuin, istumapaikka
+  sv: säte, sittplats
+  hr: sjedalo, mjesto
+  lv: sēdeklis, sēdvieta
+  hi: सीट, बैठने का स्थान
+  ar: مقعد، مجلس
+  fa: صندلی، نشیمنگاه، جا
+  ur: نشست، بیٹھنے کی جگہ
+  id: kursi, tempat duduk
+  vi: chỗ ngồi, ghế ngồi
+  th: ที่นั่ง, เบาะนั่ง
+  ko: 좌석, 자리
+  ja: 座席、席
+  zh: 座位、座席
+  bn: আসন, বসার জায়গা
+  kk: орындық, орын
+
+ID 2075 (meeting):
+  ru: встреча, собрание, совещание
+  uk: зустріч, збори, нарада
+  de: Treffen, Besprechung, Sitzung
+  es: reunión, encuentro
+  fr: réunion, rencontre
+  pl: spotkanie, zebranie
+  it: riunione, incontro
+  tr: toplantı, buluşma
+  pt: reunião, encontro
+  ro: întâlnire, ședință
+  bg: среща, събрание
+  cs: schůzka, zasedání, setkání
+  sk: stretnutie, schôdza
+  hu: találkozó, megbeszélés
+  el: συνάντηση, σύσκεψη
+  sl: sestanek, srečanje
+  et: koosolek, kohtumine
+  lt: susirinkimas, susitikimas
+  da: møde, samling
+  fi: kokous, tapaaminen
+  sv: möte, sammanträde
+  hr: sastanak, susret
+  lv: sanāksme, tikšanās
+  hi: बैठक, सभा, मुलाक़ात
+  ar: اجتماع، لقاء
+  fa: جلسه، گردهمایی، دیدار
+  ur: ملاقات، اجلاس، بیٹھک
+  id: pertemuan, rapat
+  vi: cuộc họp, buổi gặp mặt
+  th: การประชุม, การพบปะ
+  ko: 회의, 모임, 만남
+  ja: 会議、打ち合わせ、集まり
+  zh: 会议、聚会
+  bn: সভা, বৈঠক
+  kk: кездесу, жиналыс
+
+ID 2076 (average):
+  ru: средний, среднее арифметическое
+  uk: середній, середньостатистичний
+  de: durchschnittlich, Durchschnitt
+  es: promedio, medio
+  fr: moyen, moyenne
+  pl: przeciętny, średni
+  it: medio, media
+  tr: ortalama
+  pt: médio, média
+  ro: mediu, medie
+  bg: среден, средностатистически
+  cs: průměrný, průměr
+  sk: priemerný, priemer
+  hu: átlagos, átlag
+  el: μέσος, μέσος όρος
+  sl: povprečen, povprečje
+  et: keskmine
+  lt: vidutinis, vidurkis
+  da: gennemsnitlig, gennemsnit
+  fi: keskimääräinen, keskiarvo
+  sv: genomsnittlig, medel-
+  hr: prosječan, prosjek
+  lv: vidējs, vidējais rādītājs
+  hi: औसत, सामान्य
+  ar: متوسط، معدل
+  fa: میانگین، متوسط
+  ur: اوسط، درمیانہ
+  id: rata-rata, sedang
+  vi: trung bình, vừa phải
+  th: ค่าเฉลี่ย, ปานกลาง
+  ko: 평균의, 보통의, 평균
+  ja: 平均の、平均的な、平均
+  zh: 平均的、普通水平的
+  bn: গড়, সাধারণ
+  kk: орташа, орташа шама
+
+ID 2077 (bite bit bitten):
+  ru: кусать, укусить
+  uk: кусати, вкусити
+  de: beißen
+  es: morder
+  fr: mordre
+  pl: gryźć, ugryźć
+  it: mordere
+  tr: ısırmak
+  pt: morder
+  ro: a mușca
+  bg: хапя, ухапвам
+  cs: kousat, kousnout
+  sk: hrýzť, pohrýzť
+  hu: harap, megmar
+  el: δαγκώνω
+  sl: ugrizniti, gristi
+  et: hammustama
+  lt: kąsti, įkąsti
+  da: bide
+  fi: purra
+  sv: bita
+  hr: ugristi, ujesti
+  lv: kost, iekost
+  hi: काटना, डसना
+  ar: يعض، يقضم
+  fa: گاز گرفتن
+  ur: کاٹنا، ڈسنا
+  id: menggigit
+  vi: cắn
+  th: กัด
+  ko: 물다, 깨물다
+  ja: 噛む
+  zh: 咬、咬伤
+  bn: কামড়ানো
+  kk: тістеу, шағу
+
+ID 2078 (source):
+  ru: источник, исходник, первоисточник
+  uk: джерело, першоджерело, вихідник
+  de: Quelle, Ursprung
+  es: fuente, origen
+  fr: source, origine
+  pl: źródło, początek
+  it: fonte, sorgente
+  tr: kaynak, menşe
+  pt: fonte, origem
+  ro: sursă, izvor
+  bg: източник, първоизточник
+  cs: zdroj, pramen
+  sk: zdroj, prameň
+  hu: forrás, eredet
+  el: πηγή
+  sl: vir, izvor
+  et: allikas, läte
+  lt: šaltinis
+  da: kilde, oprindelse
+  fi: lähde, alkuperä
+  sv: källa, ursprung
+  hr: izvor, podrijetlo
+  lv: avots, izcelsme
+  hi: स्रोत, उद्गम
+  ar: مصدر، ينبوع
+  fa: منبع، سرچشمه
+  ur: ذریعہ، ماخذ، سرچشمہ
+  id: sumber, asal
+  vi: nguồn, gốc
+  th: แหล่งที่มา, ต้นกำเนิด
+  ko: 원천, 근원, 출처
+  ja: 源、情報源、供給源
+  zh: 源头、来源
+  bn: উৎস, মূল
+  kk: дереккөз, бастау
+
+ID 2079 (lawyer):
+  ru: адвокат, юрист
+  uk: адвокат, юрист
+  de: Rechtsanwalt, Jurist
+  es: abogado, jurista
+  fr: avocat, juriste
+  pl: prawnik, adwokat
+  it: avvocato, legale
+  tr: avukat, hukukçu
+  pt: advogado, jurista
+  ro: avocat, jurist
+  bg: адвокат, юрист
+  cs: právník, advokát
+  sk: právnik, advokát
+  hu: ügyvéd, jogász
+  el: δικηγόρος
+  sl: odvetnik, pravnik
+  et: advokaat, jurist
+  lt: advokatas, teisininkas
+  da: advokat, jurist
+  fi: asianajaja, lakimies
+  sv: advokat, jurist
+  hr: odvjetnik, pravnik
+  lv: advokāts, jurists
+  hi: वकील, अधिवक्ता
+  ar: محامٍ، قانوني
+  fa: وکیل، حقوقدان
+  ur: وکیل، قانون دان
+  id: pengacara, advokat
+  vi: luật sư
+  th: ทนายความ, นักกฎหมาย
+  ko: 변호사, 법률가
+  ja: 弁護士、法律家
+  zh: 律师
+  bn: আইনজীবী, উকিল
+  kk: заңгер, адвокат
+
+ID 2080 (sign):
+  ru: знак, вывеска, подписывать
+  uk: знак, вивіска, підписувати
+  de: Schild, Zeichen, unterschreiben
+  es: señal, letrero, firmar
+  fr: panneau, signe, signer
+  pl: znak, tablica, podpisywać
+  it: cartello, segno, firmare
+  tr: işaret, levha, imzalamak
+  pt: assinar, sinal, placa
+  ro: semn, indicator, a semna
+  bg: знак, табела, подписвам
+  cs: značka, cedule, podepsat
+  sk: značka, nápis, podpísať
+  hu: tábla, jelzés, aláír
+  el: πινακίδα, σημάδι, υπογράφω
+  sl: znak, tabla, podpisati
+  et: märk, silt, allkirjastama
+  lt: ženklas, iškaba, pasirašyti
+  da: skilt, tegn, underskrive
+  fi: kyltti, merkki, allekirjoittaa
+  sv: skylt, tecken, skriva under
+  hr: znak, natpis, potpisati
+  lv: zīme, izkārtne, parakstīt
+  hi: संकेत, चिन्ह, हस्ताक्षर करना
+  ar: لافتة، إشارة، يوقع
+  fa: تابلو، علامت، امضا کردن
+  ur: اشارہ، علامت، دستخط کرنا
+  id: tanda, papan tanda, menandatangani
+  vi: biển báo, dấu hiệu, ký tên
+  th: ป้าย, สัญลักษณ์, เซ็นชื่อ
+  ko: 표지판, 표식, 서명하다
+  ja: 看板、合図、署名する
+  zh: 标志、招牌、签字
+  bn: চিহ্ন, সাইনবোর্ড, স্বাক্ষর করা
+  kk: белгі, маңдайша, қол қою
+
+ID 2081 (drink drank drunk):
+  ru: пить, выпить
+  uk: пити, випивати
+  de: trinken, austrinken
+  es: beber, tomar
+  fr: boire
+  pl: pić, wypić
+  it: bere
+  tr: içmek
+  pt: beber, tomar
+  ro: a bea
+  bg: пия, изпивам
+  cs: pít, napít se
+  sk: piť, vypiť
+  hu: iszik, megiszik
+  el: πίνω
+  sl: piti, popiti
+  et: jooma
+  lt: gerti, išgerti
+  da: drikke
+  fi: juoda
+  sv: dricka
+  hr: piti, popiti
+  lv: dzert, izdzert
+  hi: पीना
+  ar: يشرب
+  fa: نوشیدن، آشامیدن
+  ur: پینا
+  id: meminum, minum
+  vi: uống
+  th: ดื่ม
+  ko: 마시다
+  ja: 飲む
+  zh: 喝、饮
+  bn: পান করা
+  kk: ішу
+
+ID 2082 (exactly):
+  ru: точно, совершенно верно, именно так
+  uk: точно, саме так, достеменно
+  de: genau, exakt
+  es: exactamente, precisamente
+  fr: exactement, précisément
+  pl: dokładnie, właśnie tak
+  it: esattamente, proprio così
+  tr: tam olarak, kesinlikle
+  pt: exatamente, precisamente
+  ro: exact, tocmai
+  bg: точно, именно така
+  cs: přesně, přesně tak
+  sk: presne, práve tak
+  hu: pontosan, éppen úgy
+  el: ακριβώς
+  sl: točno, natanko
+  et: täpselt, just nimelt
+  lt: tiksliai, būtent taip
+  da: præcis, nøjagtig
+  fi: tarkalleen, aivan niin
+  sv: exakt, precis
+  hr: točno, upravo tako
+  lv: precīzi, tieši tā
+  hi: बिल्कुल, ठीक-ठीक
+  ar: بالضبط، تماماً
+  fa: دقیقاً، کاملاً
+  ur: بالکل، ٹھیک ٹھیک
+  id: tepatnya, persis
+  vi: chính xác, hoàn toàn đúng
+  th: อย่างแม่นยำ, แน่นอน
+  ko: 정확히, 꼭
+  ja: 正確に、まさにその通り
+  zh: 恰好、准确地
+  bn: ঠিকভাবে, হুবহু
+  kk: дәл, тура солай
+
+ID 2083 (enough):
+  ru: достаточно, довольный
+  uk: достатньо, доволі
+  de: genug, ausreichend
+  es: suficiente, bastante
+  fr: assez, suffisant
+  pl: dość, wystarczająco
+  it: abbastanza, sufficiente
+  tr: yeterli, kafi
+  pt: suficiente, bastante
+  ro: destul, suficient
+  bg: достатъчно
+  cs: dost, dostatečně
+  sk: dosť, dostatočne
+  hu: elég, elegendő
+  el: αρκετά, επαρκής
+  sl: dovolj
+  et: piisavalt, küllalt
+  lt: pakankamai, gana
+  da: nok, tilstrækkeligt
+  fi: tarpeeksi, riittävästi
+  sv: tillräckligt, nog
+  hr: dovoljno, dosta
+  lv: pietiekami, diezgan
+  hi: पर्याप्त, काफ़ी
+  ar: كافٍ، بما فيه الكفاية
+  fa: کافی، به اندازه کافی
+  ur: کافی، بقدر ضرورت
+  id: cukup, memadai
+  vi: đủ
+  th: พอ, เพียงพอ
+  ko: 충분한, 충분히
+  ja: 十分な、十分に
+  zh: 足够的、充分地
+  bn: যথেষ্ট, প্রচুর
+  kk: жеткілікті, жетерлік
+
+ID 2084 (union):
+  ru: профсоюз, объединение, союз
+  uk: профспілка, об'єднання, союз
+  de: Gewerkschaft, Verband, Union
+  es: sindicato, unión
+  fr: syndicat, union
+  pl: związek zawodowy, unia
+  it: sindacato, unione
+  tr: sendika, birlik
+  pt: sindicato, união
+  ro: sindicat, uniune
+  bg: профсъюз, съюз
+  cs: odbory, svaz, unie
+  sk: odbory, zväz, únia
+  hu: szakszervezet, unió
+  el: συνδικάτο, ένωση
+  sl: sindikat, zveza
+  et: ametiühing, liit
+  lt: profesinė sąjunga, sąjunga
+  da: fagforening, union
+  fi: ammattiliitto, unioni
+  sv: fackförening, union
+  hr: sindikat, savez
+  lv: arodbiedrība, savienība
+  hi: मज़दूर संघ, संघ, यूनियन
+  ar: نقابة عمالية، اتحاد
+  fa: اتحادیه، صنف
+  ur: مزدور انجمن، یونین، اتحاد
+  id: serikat pekerja, persatuan
+  vi: công đoàn, liên minh
+  th: สหภาพแรงงาน, สหภาพ
+  ko: 노동조합, 연합
+  ja: 労働組合、連盟
+  zh: 工会、联盟
+  bn: শ্রমিক ইউনিয়ন, সংঘ
+  kk: кәсіподақ, одақ
+
+ID 2085 (join):
+  ru: присоединиться, объединить, вступать
+  uk: приєднуватися, об'єднувати, вступати
+  de: beitreten, verbinden, anschließen
+  es: unirse, conectar, incorporarse
+  fr: rejoindre, unir, adhérer
+  pl: dołączyć, przyłączyć, połączyć
+  it: unirsi, collegare, entrare in
+  tr: katılmak, birleştirmek, üye olmak
+  pt: juntar-se, unir, associar-se
+  ro: a se alătura, a uni, a adera
+  bg: присъединявам се, съединявам, включвам се
+  cs: připojit se, přidat se, spojit
+  sk: pripojiť sa, pridať sa, spojiť
+  hu: csatlakozik, összeköt, belép
+  el: ενώνομαι, συνδέω, γίνομαι μέλος
+  sl: pridružiti se, povezati
+  et: liituma, ühendama
+  lt: prisijungti, sujungti
+  da: tilslutte sig, samle, deltage
+  fi: liittyä, yhdistää
+  sv: gå med i, ansluta, förena
+  hr: pridružiti se, spojiti
+  lv: pievienoties, apvienot
+  hi: जुड़ना, शामिल होना, मिलाना
+  ar: ينضم، يلتحق، يربط
+  fa: پیوستن، ملحق شدن، وصل کردن
+  ur: شامل ہونا، ملانا، جڑنا
+  id: bergabung, menghubungkan
+  vi: gia nhập, tham gia, kết nối
+  th: เข้าร่วม, รวมเข้าด้วยกัน
+  ko: 참여하다, 가입하다, 연결하다
+  ja: 参加する、加わる、つなぐ
+  zh: 加入、连接、参加
+  bn: যোগদান করা, যুক্ত করা
+  kk: қосылу, бірігу, мүше болу
+
+ID 2086 (audience):
+  ru: аудитория, публика, зрители
+  uk: аудиторія, публіка, глядачі
+  de: Publikum, Zuhörerschaft
+  es: público, audiencia, espectadores
+  fr: public, audience
+  pl: publiczność, widownia
+  it: pubblico, spettatori
+  tr: seyirci, izleyici, dinleyici
+  pt: público, plateia, audiência
+  ro: public, spectatori, audiență
+  bg: публика, зрители, аудитория
+  cs: publikum, diváci
+  sk: publikum, diváci
+  hu: közönség, hallgatóság
+  el: κοινό, ακροατήριο
+  sl: občinstvo, poslušalci
+  et: publik, kuulajaskond
+  lt: auditorija, žiūrovai, publika
+  da: publikum, tilhørere
+  fi: yleisö, kuulijakunta
+  sv: publik, åskådare
+  hr: publika, gledatelji
+  lv: publika, skatītāji, klausītāji
+  hi: दर्शक, श्रोता, श्रोतावर्ग
+  ar: جمهور، حشد، مشاهدون
+  fa: تماشاگران، مخاطبان، حضار
+  ur: سامعین، ناظرین، حاضرین
+  id: penonton, hadirin, khalayak
+  vi: khán giả, thính giả
+  th: ผู้ชม, ผู้ฟัง
+  ko: 청중, 관객
+  ja: 聴衆、観客
+  zh: 观众、听众
+  bn: দর্শক, শ্রোতা
+  kk: көрермендер, аудитория
+
+ID 2087 (character):
+  ru: характер, персонаж, герой
+  uk: характер, персонаж, дійова особа
+  de: Charakter, Figur, Persönlichkeit
+  es: personaje, carácter, personalidad
+  fr: personnage, caractère
+  pl: charakter, postać
+  it: personaggio, carattere
+  tr: karakter, kişilik, kahraman
+  pt: personagem, caráter, personalidade
+  ro: personaj, caracter, fire
+  bg: персонаж, характер, образ
+  cs: postava, charakter, povaha
+  sk: postava, charakter, povaha
+  hu: szereplő, jellem, karakter
+  el: χαρακτήρας, ήρωας
+  sl: lik, značaj, osebnost
+  et: tegelane, iseloom
+  lt: veikėjas, charakteris
+  da: karakter, personlighed, figur
+  fi: hahmo, luonne, persoona
+  sv: karaktär, personlighet, figur
+  hr: lik, karakter, osobnost
+  lv: tēls, raksturs, personība
+  hi: चरित्र, पात्र, स्वभाव
+  ar: شخصية، طبع
+  fa: شخصیت، کاراکتر، نقش
+  ur: کردار، سیرت، شخصیت
+  id: karakter, tokoh, sifat
+  vi: nhân vật, tính cách
+  th: ตัวละคร, อุปนิสัย
+  ko: 인물, 캐릭터, 성격
+  ja: 登場人物、性格、キャラクター
+  zh: 性格、人物、角色
+  bn: চরিত্র, নাট্যপাত্র
+  kk: кейіпкер, мінез, сипат
+
+ID 2088 (word):
+  ru: слово, высказывание
+  uk: слово, вислів
+  de: Wort
+  es: palabra
+  fr: mot, parole
+  pl: słowo, wyraz
+  it: parola
+  tr: kelime, sözcük
+  pt: palavra
+  ro: cuvânt
+  bg: дума
+  cs: slovo
+  sk: slovo
+  hu: szó
+  el: λέξη
+  sl: beseda
+  et: sõna
+  lt: žodis
+  da: ord
+  fi: sana
+  sv: ord
+  hr: riječ
+  lv: vārds
+  hi: शब्द, बोल
+  ar: كلمة، لفظ
+  fa: کلمه، واژه
+  ur: لفظ، بات
+  id: kata
+  vi: từ, lời nói
+  th: คำ, ข้อความ
+  ko: 단어, 낱말
+  ja: 単語、言葉
+  zh: 单词、话语
+  bn: শব্দ, বাণী
+  kk: сөз
+
+ID 2089 (object):
+  ru: объект, предмет, возражать
+  uk: об'єкт, предмет, заперечувати
+  de: Gegenstand, Objekt, widersprechen
+  es: objeto, cosa, objetar
+  fr: objet, chose, s'opposer
+  pl: przedmiot, obiekt, sprzeciwiać się
+  it: oggetto, cosa, obiettare
+  tr: nesne, cisim, itiraz etmek
+  pt: objeto, coisa, objetar
+  ro: obiect, lucru, a obiecta
+  bg: предмет, обект, възразявам
+  cs: předmět, objekt, namítat
+  sk: predmet, objekt, namietať
+  hu: tárgy, objektum, tiltakozik
+  el: αντικείμενο, πράγμα, ενίσταμαι
+  sl: predmet, stvar, ugovarjati
+  et: ese, objekt, vastu väitma
+  lt: daiktas, objektas, prieštarauti
+  da: genstand, objekt, protestere
+  fi: esine, kappale, vastustaa
+  sv: föremål, objekt, invända
+  hr: predmet, objekt, prigovarati
+  lv: priekšmets, objekts, iebilst
+  hi: वस्तु, चीज़, आपत्ति करना
+  ar: شيء، مادة، يعترض
+  fa: شیء، جسم، اعتراض کردن
+  ur: چیز، شے، اعتراض کرنا
+  id: benda, objek, menolak
+  vi: đồ vật, đối tượng, phản đối
+  th: วัตถุ, สิ่งของ, คัดค้าน
+  ko: 물체, 대상, 반대하다
+  ja: 物体、対象、反対する
+  zh: 物体、物品、反对
+  bn: বস্তু, জিনিস, আপত্তি করা
+  kk: нысан, зат, қарсылық білдіру
+
+ID 2090 (time):
+  ru: время, пора, раз
+  uk: час, період, раз
+  de: Zeit, Mal
+  es: tiempo, hora, vez
+  fr: temps, heure, fois
+  pl: czas, pora, raz
+  it: tempo, ora, volta
+  tr: zaman, vakit, kere
+  pt: tempo, hora, vez
+  ro: timp, vreme, oară
+  bg: време, път
+  cs: čas, doba, okamžik
+  sk: čas, doba, raz
+  hu: idő, időpont, alkalom
+  el: χρόνος, ώρα, φορά
+  sl: čas, doba, krat
+  et: aeg, kord
+  lt: laikas, metas, kartas
+  da: tid, gang
+  fi: aika, kerta
+  sv: tid, gång
+  hr: vrijeme, čas, put
+  lv: laiks, brīdis, reize
+  hi: समय, वक़्त, बार
+  ar: وقت، زمن، مرة
+  fa: زمان، وقت، بار
+  ur: وقت، زمانہ، بار
+  id: waktu, saat, kali
+  vi: thời gian, lúc, lần
+  th: เวลา, ครั้ง
+  ko: 시간, 때, 번
+  ja: 時間、時、回
+  zh: 时间、时刻、次
+  bn: সময়, কাল, বার
+  kk: уақыт, мезгіл, рет
+
+ID 2091 (minute):
+  ru: минута
+  uk: хвилина
+  de: Minute
+  es: minuto
+  fr: minute
+  pl: minuta
+  it: minuto
+  tr: dakika
+  pt: minuto
+  ro: minut
+  bg: минута
+  cs: minuta
+  sk: minúta
+  hu: perc
+  el: λεπτό
+  sl: minuta
+  et: minut
+  lt: minutė
+  da: minut
+  fi: minuutti
+  sv: minut
+  hr: minuta
+  lv: minūte
+  hi: मिनट
+  ar: دقيقة
+  fa: دقیقه
+  ur: منٹ
+  id: menit
+  vi: phút
+  th: นาที
+  ko: 분, 잠깐
+  ja: 分、分間
+  zh: 分钟、分
+  bn: মিনিট
+  kk: минут
+
+ID 2092 (enemy):
+  ru: враг, противник
+  uk: ворог, противник
+  de: Feind, Gegner
+  es: enemigo, adversario
+  fr: ennemi, adversaire
+  pl: wróg, przeciwnik
+  it: nemico, avversario
+  tr: düşman, hasım
+  pt: inimigo, adversário
+  ro: inamic, dușman
+  bg: враг, неприятел
+  cs: nepřítel, sok
+  sk: nepriateľ, sok
+  hu: ellenség, ellenfél
+  el: εχθρός
+  sl: sovražnik, nasprotnik
+  et: vaenlane
+  lt: priešas
+  da: fjende, modstander
+  fi: vihollinen, vastustaja
+  sv: fiende, motståndare
+  hr: neprijatelj, protivnik
+  lv: ienaidnieks, pretinieks
+  hi: शत्रु, दुश्मन
+  ar: عدو، خصم
+  fa: دشمن
+  ur: دشمن، حریف
+  id: musuh, lawan
+  vi: kẻ thù, quân địch
+  th: ศัตรู, คู่อริ
+  ko: 적, 원수
+  ja: 敵、かたき
+  zh: 敌人、仇敌
+  bn: শত্রু, বৈরী
+  kk: жау, дұшпан
+
+ID 2093 (hire):
+  ru: нанимать, брать на работу
+  uk: наймати, брати на роботу
+  de: einstellen, anheuern, mieten
+  es: contratar, alquilar
+  fr: embaucher, louer
+  pl: zatrudniać, wynajmować
+  it: assumere, noleggiare
+  tr: işe almak, kiralamak
+  pt: contratar, alugar
+  ro: a angaja, a închiria
+  bg: наемам, вземам на работа
+  cs: najmout, zaměstnat
+  sk: najať, zamestnať
+  hu: felfogad, bérbe vesz
+  el: προσλαμβάνω, νοικιάζω
+  sl: najeti, zaposliti
+  et: palkama, üürima
+  lt: samdyti, įdarbinti
+  da: ansætte, leje
+  fi: palkata, vuokrata
+  sv: anställa, hyra
+  hr: unajmiti, zaposliti
+  lv: nolīgt, noalgot
+  hi: नौकरी पर रखना, किराए पर लेना
+  ar: يوظف، يستأجر
+  fa: استخدام کردن، اجاره کردن
+  ur: ملازم رکھنا، کرائے پر لینا
+  id: mempekerjakan, menyewa
+  vi: thuê, tuyển dụng
+  th: จ้าง, เช่า
+  ko: 고용하다, 세내다
+  ja: 雇う、賃借りする
+  zh: 雇佣、租用
+  bn: নিয়োগ করা, ভাড়া করা
+  kk: жалдау, жұмысқа алу
+
+ID 2094 (hope):
+  ru: надеяться, надежда
+  uk: сподіватися, надіятися, надія
+  de: hoffen, Hoffnung
+  es: esperar, tener esperanza, esperanza
+  fr: espérer, espoir
+  pl: mieć nadzieję, ufać, nadzieja
+  it: sperare, speranza
+  tr: umut etmek, ümit etmek, umut
+  pt: esperar, ter esperança, esperança
+  ro: a spera, speranță
+  bg: надявам се, надежда
+  cs: doufat, naděje
+  sk: dúfať, nádej
+  hu: remél, bízik, remény
+  el: ελπίζω, ελπίδα
+  sl: upati, upanje
+  et: lootma, lootus
+  lt: tikėtis, viltis
+  da: håbe, håb
+  fi: toivoa, toivo
+  sv: hoppas, hopp
+  hr: nadati se, nada
+  lv: cerēt, cerība
+  hi: आशा करना, उम्मीद करना, आशा
+  ar: يأمل، يرجو، أمل
+  fa: امیدوار بودن، امید داشتن، امید
+  ur: امید رکھنا، آس لگانا، امید
+  id: berharap, harapan
+  vi: hy vọng, niềm hy vọng
+  th: หวัง, หวังว่า, ความหวัง
+  ko: 희망하다, 바라다, 희망
+  ja: 望む、希望する、希望
+  zh: 希望、期盼
+  bn: আশা করা, আশা
+  kk: үміттену, үміт
+
+ID 2095 (cruel):
+  ru: жестокий, бессердечный
+  uk: жорстокий, нещадний
+  de: grausam, unbarmherzig
+  es: cruel, despiadado
+  fr: cruel, impitoyable
+  pl: okrutny, bezlitosny
+  it: crudele, spietato
+  tr: zalim, acımasız
+  pt: cruel, impiedoso
+  ro: crud, nemilos
+  bg: жесток, безмилостен
+  cs: krutý, bezohledný
+  sk: krutý, bezcitný
+  hu: kegyetlen, könyörtelen
+  el: σκληρός, απάνθρωπος
+  sl: krut, neusmiljen
+  et: julm, halastamatu
+  lt: žiaurus, negailestingas
+  da: grusom, ubarmhjertig
+  fi: julma, armoton
+  sv: grym, hänsynslös
+  hr: okrutan, nemilosrdan
+  lv: nežēlīgs, cietsirdīgs
+  hi: क्रूर, निर्दयी
+  ar: قاسٍ، ظالم
+  fa: بی‌رحم، ظالم
+  ur: ظالم، سنگدل
+  id: kejam, bengis
+  vi: tàn nhẫn, độc ác
+  th: โหดร้าย, ทารุณ
+  ko: 잔인한, 잔혹한
+  ja: 残酷な、非情な
+  zh: 残忍的、残酷的
+  bn: নিষ্ঠুর, নির্দয়
+  kk: қатыгез, мейірімсіз
+
+ID 2096 (wake woke woken):
+  ru: проснуться, будить, бодрствовать
+  uk: прокидатися, будити
+  de: aufwachen, wecken
+  es: despertar, despertarse
+  fr: se réveiller, réveiller
+  pl: budzić, budzić się
+  it: svegliarsi, svegliare
+  tr: uyanmak, uyandırmak
+  pt: acordar, despertar
+  ro: a se trezi, a trezi
+  bg: събуждам се, будя
+  cs: probudit se, vzbudit
+  sk: prebudiť sa, zobudiť
+  hu: felébred, felébreszt
+  el: ξυπνώ, ξυπνάω
+  sl: zbuditi se, prebuditi
+  et: ärkama, äratama
+  lt: pabusti, žadinti
+  da: vågne, vække
+  fi: herätä, herättää
+  sv: vakna, väcka
+  hr: probuditi se, buditi
+  lv: pamosties, modināt
+  hi: जागना, जगाना
+  ar: يستيقظ، يوقظ
+  fa: بیدار شدن، بیدار کردن
+  ur: جاگنا، جگانا
+  id: bangun, membangunkan
+  vi: thức dậy, đánh thức
+  th: ตื่น, ปลุก
+  ko: 깨어나다, 깨우다
+  ja: 目を覚ます、起こす
+  zh: 醒来、唤醒
+  bn: জেগে ওঠা, জাগানো
+  kk: ояну, ояту
+
+ID 2097 (blow blew blown):
+  ru: дуть, веять, подуть
+  uk: дути, віяти
+  de: wehen, blasen, pusten
+  es: soplar
+  fr: souffler
+  pl: dąć, wiać, dmuchać
+  it: soffiare
+  tr: esmek, üflemek
+  pt: soprar, ventar
+  ro: a sufla, a bate
+  bg: духам, вея
+  cs: foukat, vanout
+  sk: fúkať, viať
+  hu: fúj, lebegtet
+  el: φυσώ, φυσάω
+  sl: pihati, duvati
+  et: puhuma
+  lt: pūsti
+  da: blæse, puste
+  fi: puhaltaa, tuulla
+  sv: blåsa
+  hr: duvati, puhati
+  lv: pūst, vēdināt
+  hi: फूंकना, बहना, हवा चलना
+  ar: يهب، ينفخ
+  fa: وزیدن، دمیدن
+  ur: ہوا چلنا، پھونک مارنا
+  id: meniup, berhembus
+  vi: thổi
+  th: พัด, เป่า
+  ko: 불다, 바람이 불다
+  ja: 吹く、息を吹きかける
+  zh: 吹、刮风
+  bn: বাতাস বওয়া, ফুঁ দেওয়া
+  kk: үрлеу, соғу
+
+ID 2098 (swear swore sworn):
+  ru: клясться, присягать, браниться
+  uk: клястися, присягати, лаятися
+  de: schwören, fluchen
+  es: jurar, maldecir
+  fr: jurer
+  pl: przysięgać, przeklinać
+  it: giurare, imprecare
+  tr: yemin etmek, küfretmek
+  pt: jurar, praguejar
+  ro: a jura, a înjura
+  bg: кълна се, псувам
+  cs: přísahat, klít
+  sk: prisahať, nadávať
+  hu: esküszik, káromkodik
+  el: ορκίζομαι, βρίζω
+  sl: priseči, preklinjati
+  et: vanduma
+  lt: prisiekti, keiktis
+  da: sværge, bande
+  fi: vannoa, kirota
+  sv: svära
+  hr: zakleti se, psovati
+  lv: zvērēt, lamāties
+  hi: कसम खाना, शपथ लेना, गाली देना
+  ar: يقسم، يحلف، يسب
+  fa: قسم خوردن، دشنام دادن
+  ur: قسم کھانا، حلف اٹھانا، گالی دینا
+  id: bersumpah, mengutuk
+  vi: thề, chửi thề
+  th: สาบาน, สบถ
+  ko: 맹세하다, 욕하다
+  ja: 誓う、ののしる
+  zh: 发誓、宣誓、咒骂
+  bn: শপথ করা, দিব্যি দেওয়া, গালি দেওয়া
+  kk: ант ету, қарғану, былапыт сөйлеу
+
+ID 2099 (tear tore torn):
+  ru: рвать, разорвать, раздирать
+  uk: рвати, розривати, шматувати
+  de: zerreißen, reißen
+  es: rasgar, romper, desgarrar
+  fr: déchirer, arracher
+  pl: drzeć, rwać, rozrywać
+  it: strappare, squarciare
+  tr: yırtmak, parçalamak
+  pt: rasgar, romper, despedaçar
+  ro: a rupe, a sfâșia
+  bg: разкъсвам, късам
+  cs: trhat, roztrhnout
+  sk: trhať, roztrhnúť
+  hu: tép, széttép
+  el: σκίζω, διαλύω
+  sl: strgati, raztrgati
+  et: rebima, katki rebima
+  lt: plėšyti, sudraskyti
+  da: rive, flænge
+  fi: repiä, repäistä
+  sv: riva, slita sönder
+  hr: kidati, rastrgati
+  lv: plēst, saplēst
+  hi: फाड़ना, चीरना
+  ar: يمزق، يخرق
+  fa: پاره کردن، دریدن
+  ur: پھاڑنا، چاک کرنا
+  id: merobek, mencabik
+  vi: xé, làm rách
+  th: ฉีก, ฉีกขาด
+  ko: 찢다, 뜯다
+  ja: 引き裂く、破る
+  zh: 撕裂、扯破
+  bn: ছেঁড়া, ফাড়া
+  kk: жырту, айыру
+
+ID 2100 (sink sank sunk):
+  ru: тонуть, погружаться, опускаться на дно
+  uk: тонути, занурюватися
+  de: sinken, untergehen
+  es: hundirse, zozobrar
+  fr: couler, sombrer
+  pl: tonąć, zatonąć
+  it: affondare, inabissarsi
+  tr: batmak, batırmak
+  pt: afundar, submergir
+  ro: a se scufunda
+  bg: потъвам
+  cs: potopit se, klesat ke dnu
+  sk: potopiť sa, klesať
+  hu: elsüllyed
+  el: βουλιάζω, βυθίζομαι
+  sl: potopiti se
+  et: põhja vajuma
+  lt: skęsti, nuskęsti
+  da: synke
+  fi: upota
+  sv: sjunka
+  hr: potonuti
+  lv: nogrimt
+  hi: डूबना, नीचे बैठना
+  ar: يغرق، يغوص
+  fa: غرق شدن، فرو رفتن
+  ur: ڈوبنا، غرق ہونا
+  id: tenggelam, karam
+  vi: chìm, đắm
+  th: จม, ดิ่งลง
+  ko: 가라앉다, 침몰하다
+  ja: 沈む、沈没する
+  zh: 下沉、沉没
+  bn: ডুবে যাওয়া, নিমজ্জিত হওয়া
+  kk: батып кету, бату
+
+ID 2101 (class):
+  ru: сорт, класс, урок
+  uk: клас, урок, сорт
+  de: Klasse, Unterricht, Kategorie
+  es: clase, aula, lección
+  fr: classe, cours, catégorie
+  pl: klasa, lekcja, kategoria
+  it: classe, lezione, categoria
+  tr: sınıf, ders, kategori
+  pt: classe, aula, turma
+  ro: clasă, lecție, categorie
+  bg: клас, урок, категория
+  cs: třída, vyučování, hodina
+  sk: trieda, vyučovanie, hodina
+  hu: osztály, tanóra, kategória
+  el: τάξη, μάθημα, κατηγορία
+  sl: razred, pouk, lekcija
+  et: klass, tund, kategooria
+  lt: klasė, pamoka, rūšis
+  da: klasse, lektion, kategori
+  fi: luokka, oppitunti, ryhmä
+  sv: klass, lektion, kategori
+  hr: razred, sat, kategorija
+  lv: klase, stunda, kategorija
+  hi: कक्षा, श्रेणी, वर्ग
+  ar: صف، فصل، درس، فئة
+  fa: کلاس، درس، رده
+  ur: کلاس، جماعت، سبق
+  id: kelas, pelajaran, golongan
+  vi: lớp học, buổi học, hạng
+  th: ชั้นเรียน, คาบเรียน, หมวดหมู่
+  ko: 학급, 수업, 계층
+  ja: クラス、授業、等級
+  zh: 班级、阶级、课程
+  bn: শ্রেণি, পাঠ, দল
+  kk: сынып, сабақ, топ
