@@ -1,0 +1,1850 @@
+ID 1752 (arrive):
+  ru: приезжать
+  uk: приїжджати
+  de: kommen
+  es: llegar
+  fr: viens
+  pl: przychodzić
+  it: Venire
+  tr: Gelmek
+  pt: chegar
+  ro: vino
+  bg: ела
+  cs: přijít
+  sk: prísť
+  hu: jön
+  el: Έλα
+  sl: pridi
+  et: tule
+  lt: ateik
+  da: ankomme
+  fi: saapua
+  sv: anlända
+  hr: stići
+  lv: ierasties
+  hi: पहुंचना
+  ar: الوصول
+  id: tiba
+  vi: đến
+  th: มาถึง
+  ko: 도착하다
+  ja: 到着する
+  bn: পৌঁছানো
+  fa: رسیدن
+  zh: 到达
+  ur: پہنچنا
+  kk: келу
+
+ID 1753 (slightly):
+  ru: немного
+  uk: трохи
+  de: Ein wenig
+  es: ligeramente
+  fr: Un peu
+  pl: Trochę
+  it: Un po
+  tr: Biraz
+  pt: ligeiramente, um pouco
+  ro: Puțin
+  bg: Малко
+  cs: Trochu
+  sk: Trochu
+  hu: Egy kis
+  el: Λίγο
+  sl: Malo
+  et: Natuke
+  lt: Truputį
+  da: lidt
+  fi: vähän
+  sv: lite
+  hr: malo
+  lv: nedaudz
+  hi: थोड़ा
+  ar: قليلًا، بشكل طفيف
+  id: sedikit
+  vi: một chút
+  th: เล็กน้อย
+  ko: 조금
+  ja: 少し
+  bn: সামান্য
+  fa: کمی
+  zh: 稍微
+  ur: تھوڑا سا
+  kk: аздап
+
+ID 1754 (reveal):
+  ru: раскрывать
+  uk: розкривати
+  de: offenlegen
+  es: revelar
+  fr: divulguer
+  pl: ujawniać
+  it: rivelare
+  tr: ifşa etmek
+  pt: revelar
+  ro: dezvălui
+  bg: разкривам
+  cs: zveřejnit
+  sk: zverejniť
+  hu: nyilvánosságra hozni
+  el: αποκαλύπτω
+  sl: razkriti
+  et: avalikustama
+  lt: atskleisti
+  da: at afsløre
+  fi: paljastaa
+  sv: att avslöja
+  hr: otkriti
+  lv: atklāt
+  hi: प्रकट करना
+  ar: يكشف
+  id: untuk mengungkapkan
+  vi: để tiết lộ
+  th: เพื่อเปิดเผย
+  ko: 드러내다
+  ja: 明らかにする
+  bn: প্রকাশ করা
+  fa: آشکار کردن
+  zh: 揭示、透露
+  ur: ظاہر کرنا
+  kk: ашу
+
+ID 1755 (remember):
+  ru: помнить, вспоминать
+  uk: пам'ятати, згадувати
+  de: erinnern, zurückrufen
+  es: recordar
+  fr: se souvenir, se rappeler
+  pl: pamiętać, wspominać
+  it: ricordare
+  tr: hatırlamak, anımsamak
+  pt: lembrar
+  ro: aminti, reamintește
+  bg: запомни, припомни
+  cs: pamatovat, vzpomínat
+  sk: pamätať, spomínať
+  hu: emlékezni, felidézni
+  el: θυμάμαι
+  sl: spomni se
+  et: mäleta, meenuta
+  lt: prisiminti
+  da: at huske, genkalde sig
+  fi: muistaa, palauttaa mieleen
+  sv: att komma ihåg, återkalla
+  hr: zapamtiti, prisjetiti se
+  lv: atcerēties, atsaukt atmiņā
+  hi: याद रखना, स्मरण करना
+  ar: يتذكر، يسترجع
+  id: mengingat, mengenang
+  vi: để nhớ, hồi tưởng
+  th: เพื่อจดจำ, ระลึก
+  ko: 기억하다, 떠올리다
+  ja: 思い出す
+  bn: মনে রাখা
+  fa: به یاد داشتن
+  zh: 记得、回想起
+  ur: یاد رکھنا
+  kk: есте сақтау, еске түсіру
+
+ID 1756 (various):
+  ru: различные, разные
+  uk: різні
+  de: verschiedene
+  es: varios, diferentes
+  fr: divers, différents
+  pl: różne
+  it: vari, diversi
+  tr: çeşitli, farklı
+  pt: vários
+  ro: diverse, diferite
+  bg: различни
+  cs: různé, odlišné
+  sk: rôzne, odlišné
+  hu: különféle, különböző
+  el: ποικίλος, διαφορετικός
+  sl: različni, drugačni
+  et: mitmesugune, erinev
+  lt: įvairūs, skirtingi
+  da: forskellige
+  fi: erilaisia
+  sv: olika
+  hr: razni, drugačiji
+  lv: dažādi, atšķirīgi
+  hi: विभिन्न, अनेक
+  ar: متنوع، مختلف
+  id: beragam, berbeda
+  vi: khác nhau, đa dạng
+  th: หลากหลาย, แตกต่างกัน
+  ko: 다양한, 다른
+  ja: さまざまな、異なる
+  bn: বিভিন্ন
+  fa: گوناگون
+  zh: 各种各样的
+  ur: مختلف
+  kk: әртүрлі
+
+ID 1757 (rather):
+  ru: весьма, охотнее, точнее
+  uk: дуже, охочіше, точніше
+  de: eher, lieber, ziemlich
+  es: más bien, preferiblemente
+  fr: plutôt, de préférence
+  pl: raczej, chętniej
+  it: piuttosto, alquanto
+  tr: daha ziyade, oldukça
+  pt: em vez disso, de preferência
+  ro: foarte, mai de bunăvoie, mai precis
+  bg: много, по-охотно, по-точно
+  cs: velmi, ochotněji, přesněji
+  sk: veľmi, ochotnejšie, presnejšie
+  hu: nagyon, szívesebben, pontosabban
+  el: πολύ, πιο πρόθυμα, πιο συγκεκριμένα
+  sl: zelo, bolj voljno, natančneje
+  et: väga, meelsamini, täpsemalt
+  lt: labai, noriau, tiksliau
+  da: meget, mere villigt, mere præcist
+  fi: hyvin, halukkaammin, tarkemmin
+  sv: mycket, mer villigt, mer exakt
+  hr: vrlo, spremnije, točnije
+  lv: ļoti, labprātāk, precīzāk
+  hi: बल्कि, अपेक्षाकृत
+  ar: جدًا، برغبة أكبر، بدقة أكبر
+  id: lebih suka, agak
+  vi: thà, đúng hơn
+  th: มาก, เต็มใจมากขึ้น, แม่นยำมากขึ้น
+  ko: 오히려, 꽤
+  ja: むしろ、かなり
+  bn: বরং, বেশ
+  fa: نسبتاً، ترجیحاً
+  zh: 相当、宁愿、更确切地说
+  ur: بلکہ، کافی
+  kk: өте, көбірек ерікті түрде, дәлірек
+
+ID 1758 (response):
+  ru: ответ
+  uk: відповідь
+  de: Antwort
+  es: respuesta
+  fr: répondre
+  pl: odpowiedź
+  it: risposta
+  tr: cevap
+  pt: resposta, responder
+  ro: răspuns
+  bg: отговор
+  cs: odpověď
+  sk: odpoveď
+  hu: válasz
+  el: απάντηση
+  sl: odgovor
+  et: vastus
+  lt: atsakymas
+  da: svar
+  fi: vastaus
+  sv: svar
+  hr: odgovoriti
+  lv: atbilde
+  hi: उत्तर
+  ar: استجابة، ردّ
+  id: jawaban
+  vi: trả lời
+  th: ตอบ
+  ko: 대답
+  ja: 答える
+  bn: উত্তর, প্রতিক্রিয়া
+  fa: پاسخ، واکنش
+  zh: 回应、答复
+  ur: جواب
+  kk: жауап
+
+ID 1759 (sample):
+  ru: образец, выборка, замерять
+  uk: зразок, вибірка, заміряти
+  de: Probenahme, Messung
+  es: muestra, probar
+  fr: échantillon, goûter
+  pl: próbka, próbować
+  it: campione, assaggiare
+  tr: örnek, numune, örneklemek
+  pt: amostra, provar
+  ro: eșantion, eșantionare, a măsura
+  bg: проба, вземане на проби, измерване
+  cs: vzorek, odběr vzorků, měření
+  sk: vzorka, odber vzoriek, merať
+  hu: minta, mintavétel, mérés
+  el: δείγμα, δειγματοληψία, για μέτρηση
+  sl: vzorec, vzorčenje, meriti
+  et: proov, proovivõtt, mõõtmine
+  lt: mėginys, mėginių ėmimas, matavimas
+  da: prøve, måle
+  fi: näyte, mitata
+  sv: prov, mäta
+  hr: uzorak, mjera
+  lv: paraugs, mērs
+  hi: नमूना, माप
+  ar: عينة، يقيس
+  id: sampel, contoh, mengukur
+  vi: mẫu, ví dụ, đo lường
+  th: ตัวอย่าง, การวัด
+  ko: 샘플, 측정하다
+  ja: サンプル、測定
+  bn: নমুনা
+  fa: نمونه، نمونه‌برداری کردن
+  zh: 样本、取样
+  ur: نمونہ
+  kk: үлгі, іріктеу, өлшеу
+
+ID 1760 (message):
+  ru: сообщение
+  uk: повідомлення
+  de: Nachricht
+  es: mensaje
+  fr: message
+  pl: wiadomość
+  it: messaggio
+  tr: mesaj
+  pt: mensagem
+  ro: mesaj
+  bg: съобщение
+  cs: zpráva
+  sk: správa
+  hu: üzenet
+  el: μήνυμα
+  sl: sporočilo
+  et: sõnum
+  lt: žinutė
+  da: besked
+  fi: viesti
+  sv: meddelande
+  hr: poruka
+  lv: ziņojums
+  hi: संदेश
+  ar: رسالة
+  id: pesan
+  vi: tin nhắn
+  th: ข้อความ
+  ko: 메시지
+  ja: メッセージ
+  bn: বার্তা
+  fa: پیام
+  zh: 消息
+  ur: پیغام
+  kk: хабарлама
+
+ID 1761 (camera):
+  ru: камера
+  uk: камера
+  de: Kamera
+  es: cámara
+  fr: caméra
+  pl: kamera
+  it: telecamera
+  tr: kamera
+  pt: câmera
+  ro: cameră
+  bg: камера
+  cs: fotoaparát
+  sk: fotoaparát
+  hu: kamera
+  el: κάμερα
+  sl: kamera
+  et: kaamera
+  lt: kamera
+  da: kamera
+  fi: kamera
+  sv: kamera
+  hr: kamera
+  lv: kamera
+  hi: कैमरा
+  ar: كاميرا
+  id: kamera
+  vi: máy ảnh
+  th: กล้อง
+  ko: 카메라
+  ja: カメラ
+  bn: ক্যামেরা
+  fa: دوربین
+  zh: 相机
+  ur: کیمرہ
+  kk: камера
+
+ID 1762 (office):
+  ru: офис
+  uk: офіс
+  de: Büro
+  es: oficina
+  fr: bureau
+  pl: biuro
+  it: ufficio
+  tr: ofis
+  pt: escritório
+  ro: birou
+  bg: офис
+  cs: kancelář
+  sk: kancelária
+  hu: hivatal
+  el: γραφείο
+  sl: pisarna
+  et: kontor
+  lt: biuras
+  da: kontor
+  fi: toimisto
+  sv: kontor
+  hr: ured
+  lv: birojs
+  hi: कार्यालय
+  ar: مكتب
+  id: kantor
+  vi: văn phòng
+  th: สำนักงาน
+  ko: 사무실
+  ja: オフィス
+  bn: অফিস
+  fa: دفتر، اداره
+  zh: 办公室
+  ur: دفتر
+  kk: кеңсе
+
+ID 1763 (prison):
+  ru: тюрьма
+  uk: в'язниця
+  de: Gefängnis
+  es: prisión
+  fr: prison
+  pl: więzienie
+  it: prigione
+  tr: hapishane
+  pt: cadeia
+  ro: închisoare
+  bg: затвор
+  cs: vězení
+  sk: väzenie
+  hu: börtön
+  el: φυλακή
+  sl: zapor
+  et: vangla
+  lt: kalėjimas
+  da: fængsel
+  fi: vankila
+  sv: fängelse
+  hr: zatvor
+  lv: cietums
+  hi: जेल
+  ar: سجن
+  id: penjara
+  vi: nhà tù
+  th: เรือนจำ
+  ko: 감옥
+  ja: 刑務所
+  bn: কারাগার
+  fa: زندان
+  zh: 监狱
+  ur: جیل
+  kk: түрме
+
+ID 1764 (evening):
+  ru: вечер
+  uk: вечір
+  de: Abend
+  es: noche
+  fr: soirée
+  pl: wieczór
+  it: sera
+  tr: akşam
+  pt: noite
+  ro: seară
+  bg: вечер
+  cs: večer
+  sk: večer
+  hu: este
+  el: απόγευμα
+  sl: večer
+  et: õhtu
+  lt: vakaras
+  da: aften
+  fi: ilta
+  sv: kväll
+  hr: večer
+  lv: vakars
+  hi: शाम
+  ar: مساء
+  id: malam
+  vi: buổi tối
+  th: ตอนเย็น
+  ko: 저녁
+  ja: 夕方
+  bn: সন্ধ্যা
+  fa: عصر، شب
+  zh: 晚上
+  ur: شام
+  kk: кеш
+
+ID 1765 (deliver):
+  ru: доставлять
+  uk: доставляти
+  de: liefern
+  es: entregar
+  fr: livrer
+  pl: dostarczać
+  it: consegnare
+  tr: teslim etmek
+  pt: entregar
+  ro: livra
+  bg: доставям
+  cs: doručit
+  sk: doručiť
+  hu: szállít
+  el: παραδίδω
+  sl: dostaviti
+  et: kohale toimetama
+  lt: pristatyti
+  da: levere
+  fi: toimittaa
+  sv: leverera
+  hr: isporučiti
+  lv: piegādāt
+  hi: पहुंचाना
+  ar: يسلم
+  id: menyampaikan
+  vi: giao hàng
+  th: ส่งมอบ
+  ko: 전달하다
+  ja: 届ける
+  bn: পৌঁছে দেওয়া
+  fa: تحویل دادن، رساندن
+  zh: 递送、交付
+  ur: پہنچانا
+  kk: жеткізу
+
+ID 1766 (slowly):
+  ru: медленно
+  uk: повільно
+  de: langsam
+  es: despacio
+  fr: lentement
+  pl: powoli
+  it: lentamente
+  tr: yavaşça
+  pt: devagar
+  ro: încet
+  bg: бавно
+  cs: pomalu
+  sk: pomaly
+  hu: lassan
+  el: αργά
+  sl: počasi
+  et: aeglaselt
+  lt: lėtai
+  da: langsomt
+  fi: hitaasti
+  sv: långsamt
+  hr: polako
+  lv: lēnām
+  hi: धीरे-धीरे
+  ar: ببطء
+  id: perlahan
+  vi: chậm rãi
+  th: ช้าๆ
+  ko: 천천히
+  ja: ゆっくりと
+  bn: ধীরে
+  fa: آهسته
+  zh: 慢慢地
+  ur: آہستہ آہستہ
+  kk: баяу
+
+ID 1767 (affect):
+  ru: оказывать воздействие
+  uk: впливати
+  de: haben Auswirkungen
+  es: afectar, influir en
+  fr: avoir un impact
+  pl: mieć wpływ
+  it: avere un impatto
+  tr: etki yaratmak
+  pt: ter um impacto
+  ro: avea un impact
+  bg: оказват влияние
+  cs: mít dopad
+  sk: mať vplyv
+  hu: hatással van
+  el: έχουν αντίκτυπο
+  sl: imeti vpliv
+  et: mõju avaldama
+  lt: turėti įtakos
+  da: have en indflydelse
+  fi: vaikuttaa
+  sv: ha en inverkan
+  hr: imati utjecaja
+  lv: ietekmēt
+  hi: प्रभाव डालना
+  ar: يكون له تأثير
+  id: berdampak
+  vi: có tác động
+  th: มีผลกระทบ
+  ko: 영향을 미치다
+  ja: 影響を与える
+  bn: প্রভাবিত করা
+  fa: تأثیر گذاشتن
+  zh: 影响
+  ur: اثر انداز ہونا
+  kk: әсер ету
+
+ID 1768 (concept):
+  ru: концепция
+  uk: концепція
+  de: Konzept
+  es: concepto
+  fr: concept
+  pl: pojęcie
+  it: concetto
+  tr: kavram
+  pt: conceito
+  ro: concept
+  bg: концепция
+  cs: pojem
+  sk: koncept
+  hu: koncepció
+  el: έννοια
+  sl: koncept
+  et: kontseptsioon
+  lt: koncepcija
+  da: koncept
+  fi: käsite
+  sv: koncept
+  hr: koncept
+  lv: koncepcija
+  hi: अवधारणा
+  ar: مفهوم
+  id: konsep
+  vi: khái niệm
+  th: แนวคิด
+  ko: 개념
+  ja: 概念
+  bn: ধারণা
+  fa: مفهوم
+  zh: 概念
+  ur: تصور
+  kk: тұжырымдама
+
+ID 1769 (volume):
+  ru: объем, громкость
+  uk: об'єм, гучність
+  de: Lautstärke
+  es: volumen, sonoridad
+  fr: volume, intensité
+  pl: głośność
+  it: volume, intensità sonora
+  tr: hacim, cilt, ses seviyesi
+  pt: volume
+  ro: volum, intensitate
+  bg: сила на звука, гръмкост
+  cs: hlasitost
+  sk: hlasitosť
+  hu: hangerő
+  el: ένταση
+  sl: glasnost
+  et: helitugevus, valjus
+  lt: garsumas
+  da: lydstyrke, højlydthed
+  fi: äänenvoimakkuus, kovaäänisyys
+  sv: volym, högljuddhet
+  hr: glasnoća
+  lv: skaļums
+  hi: मात्रा, तीव्रता
+  ar: مستوى الصوت، علو الصوت
+  id: volume, keras
+  vi: âm lượng, độ lớn
+  th: ระดับเสียง, ความดัง
+  ko: 음량, 큰 소리
+  ja: 音量、大きさ
+  bn: আয়তন, শব্দের মাত্রা
+  fa: حجم، بلندی صدا
+  zh: 体积、音量
+  ur: حجم، آواز کی بلندی
+  kk: дыбыс деңгейі, қаттылығы
+
+ID 1770 (popular):
+  ru: популярный
+  uk: популярний
+  de: beliebt
+  es: popular
+  fr: populaire
+  pl: popularny
+  it: popolare
+  tr: popüler
+  pt: popular
+  ro: popular
+  bg: популярен
+  cs: populární
+  sk: populárny
+  hu: népszerű
+  el: δημοφιλής
+  sl: priljubljen
+  et: populaarne
+  lt: populiarus
+  da: populær
+  fi: suosittu
+  sv: populär
+  hr: popularan
+  lv: populārs
+  hi: लोकप्रिय
+  ar: شائع
+  id: populer
+  vi: phổ biến
+  th: เป็นที่นิยม
+  ko: 인기 있는
+  ja: 人気のある
+  bn: জনপ্রিয়
+  fa: محبوب
+  zh: 受欢迎的
+  ur: مقبول
+  kk: танымал
+
+ID 1771 (resident):
+  ru: житель
+  uk: житель
+  de: Einwohner
+  es: habitante
+  fr: habitant
+  pl: mieszkaniec
+  it: abitante
+  tr: ikamet eden, sakin
+  pt: habitante
+  ro: locuitor
+  bg: жител
+  cs: obyvatel
+  sk: obyvateľ
+  hu: lakos
+  el: κάτοικος
+  sl: prebivalec
+  et: elanik
+  lt: gyventojas
+  da: beboer
+  fi: asukas
+  sv: invånare
+  hr: stanovnik
+  lv: iedzīvotājs
+  hi: निवासी
+  ar: مقيم
+  id: penduduk
+  vi: cư dân
+  th: ผู้อยู่อาศัย
+  ko: 거주자
+  ja: 住民
+  bn: বাসিন্দা
+  fa: ساکن
+  zh: 居民
+  ur: رہائشی
+  kk: тұрғын
+
+ID 1772 (relation):
+  ru: связь, отношение
+  uk: зв'язок, відношення
+  de: Verbindung, Beziehung
+  es: conexión, relación
+  fr: lien, relation
+  pl: połączenie, relacja
+  it: connessione, relazione
+  tr: bağlantı, ilişki
+  pt: relação, vínculo
+  ro: conexiune, relație
+  bg: връзка, взаимоотношение
+  cs: spojení, vztah
+  sk: spojenie, vzťah
+  hu: kapcsolat
+  el: σύνδεση, σχέση
+  sl: povezava, odnos
+  et: side, suhe
+  lt: ryšys, santykis
+  da: forbindelse, holdning
+  fi: yhteys, asenne
+  sv: koppling, attityd
+  hr: veza, stav
+  lv: saikne, attieksme
+  hi: संबंध, दृष्टिकोण
+  ar: علاقة، صلة
+  id: hubungan, relasi
+  vi: kết nối, thái độ
+  th: การเชื่อมต่อ, ทัศนคติ
+  ko: 연결, 태도
+  ja: 関係、態度
+  bn: সম্পর্ক
+  fa: رابطه، نسبت
+  zh: 关系、联系
+  ur: تعلق
+  kk: байланыс, көзқарас
+
+ID 1773 (writer):
+  ru: писатель
+  uk: письменник
+  de: Schriftsteller
+  es: escritor
+  fr: écrivain
+  pl: pisarz
+  it: scrittore
+  tr: yazar
+  pt: escritor
+  ro: scriitor
+  bg: писател
+  cs: spisovatel
+  sk: spisovateľ
+  hu: író
+  el: συγγραφέας
+  sl: pisatelj
+  et: kirjanik
+  lt: rašytojas
+  da: forfatter
+  fi: kirjoittaja
+  sv: författare
+  hr: pisac
+  lv: rakstnieks
+  hi: लेखक
+  ar: كاتب
+  id: penulis
+  vi: nhà văn
+  th: นักเขียน
+  ko: 작가
+  ja: 作家
+  bn: লেখক
+  fa: نویسنده
+  zh: 作家
+  ur: مصنف
+  kk: жазушы
+
+ID 1774 (positive):
+  ru: позитивный, положительный
+  uk: позитивний, додатний
+  de: positiv
+  es: positivo
+  fr: positif
+  pl: pozytywny
+  it: positivo
+  tr: pozitif
+  pt: positivo
+  ro: pozitiv
+  bg: положителен
+  cs: pozitivní
+  sk: pozitívny
+  hu: pozitív
+  el: θετικός
+  sl: pozitivno
+  et: positiivne
+  lt: teigiamas
+  da: positiv
+  fi: positiivinen
+  sv: positiv
+  hr: pozitivan
+  lv: pozitīvs
+  hi: सकारात्मक
+  ar: إيجابي
+  id: positif
+  vi: tích cực
+  th: ในแง่บวก
+  ko: 긍정적인
+  ja: 肯定的な
+  bn: ইতিবাচক
+  fa: مثبت
+  zh: 积极的、正面的
+  ur: مثبت
+  kk: оң
+
+ID 1775 (willing):
+  ru: готовый, мог бы
+  uk: готовий, міг би
+  de: bereit, könnte
+  es: dispuesto, con ganas
+  fr: prêt, pourrait
+  pl: gotowy, mógłby
+  it: pronto, potrebbe
+  tr: istekli, gönüllü
+  pt: disposto, disposto a
+  ro: gata, ar putea
+  bg: готов, може
+  cs: připravený, mohl
+  sk: pripravený, mohol
+  hu: kész, tudna
+  el: έτοιμος, θα μπορούσε
+  sl: pripravljen, bi lahko
+  et: valmis, võiks
+  lt: pasiruošęs, galėtų
+  da: klar, kunne
+  fi: valmis, voisi
+  sv: redo, kunde
+  hr: spreman, mogao bi
+  lv: gatavs, varētu
+  hi: तैयार, कर सकता है
+  ar: مستعد، يمكن
+  id: bersedia, rela
+  vi: sẵn sàng, có thể
+  th: พร้อม, สามารถ
+  ko: 준비된, 할 수 있는
+  ja: 準備ができている、できる
+  bn: ইচ্ছুক
+  fa: مایل، آماده
+  zh: 愿意的、乐意的
+  ur: آمادہ
+  kk: дайын, мүмкін
+
+ID 1776 (device):
+  ru: устройство
+  uk: пристрій
+  de: Gerät
+  es: dispositivo
+  fr: appareil
+  pl: urządzenie
+  it: dispositivo
+  tr: cihaz
+  pt: dispositivo
+  ro: dispozitiv
+  bg: устройство
+  cs: zařízení
+  sk: zariadenie
+  hu: eszköz
+  el: συσκευή
+  sl: naprava
+  et: seade
+  lt: įrenginys
+  da: enhed
+  fi: laite
+  sv: enhet
+  hr: uređaj
+  lv: ierīce
+  hi: उपकरण
+  ar: جهاز
+  id: perangkat
+  vi: thiết bị
+  th: อุปกรณ์
+  ko: 장치
+  ja: デバイス
+  bn: যন্ত্র
+  fa: دستگاه
+  zh: 设备
+  ur: آلہ
+  kk: құрылғы
+
+ID 1777 (identity):
+  ru: личность
+  uk: особистість
+  de: Persönlichkeit
+  es: identidad
+  fr: personnalité
+  pl: osobowość
+  it: personalità
+  tr: kimlik
+  pt: identidade
+  ro: personalitate
+  bg: личност
+  cs: osobnost
+  sk: osobnosť
+  hu: személyiség
+  el: προσωπικότητα
+  sl: osebnost
+  et: isiksus
+  lt: asmenybė
+  da: personlighed
+  fi: persoonallisuus
+  sv: personlighet
+  hr: osobnost
+  lv: personība
+  hi: पहचान, व्यक्तित्व
+  ar: شخصية
+  id: kepribadian
+  vi: tính cách
+  th: บุคลิกภาพ
+  ko: 성격
+  ja: 性格
+  bn: পরিচয়
+  fa: هویت
+  zh: 身份、特征
+  ur: شناخت
+  kk: тұлға
+
+ID 1778 (however):
+  ru: однако
+  uk: однак
+  de: Jedoch
+  es: sin embargo
+  fr: cependant
+  pl: Jednakże
+  it: Tuttavia
+  tr: Yine de
+  pt: no entanto
+  ro: totuși
+  bg: обаче
+  cs: však
+  sk: avšak
+  hu: viszont
+  el: ωστόσο
+  sl: vendar
+  et: aga
+  lt: tačiau
+  da: dog
+  fi: kuitenkin
+  sv: emellertid
+  hr: međutim
+  lv: tomēr
+  hi: हालाँकि
+  ar: مع ذلك
+  id: namun
+  vi: tuy nhiên
+  th: อย่างไรก็ตาม
+  ko: 그러나
+  ja: しかしながら
+  bn: তবে
+  fa: بااین‌حال
+  zh: 然而、不过
+  ur: تاہم
+  kk: дегенмен
+
+ID 1779 (maintain):
+  ru: поддерживать
+  uk: підтримувати
+  de: Unterstützung
+  es: mantener, conservar
+  fr: soutien
+  pl: wsparcie
+  it: supporto
+  tr: sürdürmek, korumak
+  pt: manter
+  ro: sprijin
+  bg: подкрепа
+  cs: podpora
+  sk: podpora
+  hu: támogatás
+  el: υποστήριξη
+  sl: podpora
+  et: tugi
+  lt: parama
+  da: støtte
+  fi: tukea
+  sv: stöd
+  hr: podrška
+  lv: atbalsts
+  hi: समर्थन
+  ar: يحافظ على، يصون
+  id: mempertahankan, menjaga
+  vi: hỗ trợ
+  th: สนับสนุน
+  ko: 지지
+  ja: 支持する
+  bn: বজায় রাখা
+  fa: حفظ کردن، نگه داشتن
+  zh: 维持、维护
+  ur: برقرار رکھنا
+  kk: қолдау
+
+ID 1780 (attack):
+  ru: атаковать
+  uk: атакувати
+  de: Angriff
+  es: atacar, ataque
+  fr: attaque
+  pl: atak
+  it: attacco
+  tr: saldırmak, saldırı
+  pt: atacar, ataque
+  ro: atac
+  bg: атака
+  cs: útok
+  sk: útok
+  hu: támadás
+  el: επίθεση
+  sl: napad
+  et: rünnak
+  lt: ataka
+  da: angreb
+  fi: hyökkäys
+  sv: attack
+  hr: napad
+  lv: uzbrukums
+  hi: हमला
+  ar: يهاجم، هجوم
+  id: menyerang
+  vi: tấn công
+  th: โจมตี
+  ko: 공격
+  ja: 攻撃する
+  bn: আক্রমণ
+  fa: حمله، حمله کردن
+  zh: 攻击
+  ur: حملہ کرنا
+  kk: шабуыл
+
+ID 1781 (material):
+  ru: материал, вещество
+  uk: матеріал, речовина
+  de: Material, Substanz
+  es: material, sustancia
+  fr: matière, substance
+  pl: materiał, substancja
+  it: materiale, sostanza
+  tr: malzeme, madde
+  pt: material
+  ro: material, substanță
+  bg: материал, вещество
+  cs: materiál, substance
+  sk: materiál, substancia
+  hu: anyag, lényeg
+  el: υλικό, ουσία
+  sl: material, snov
+  et: materjal, aine
+  lt: medžiaga, substancija
+  da: materiale, substans
+  fi: materiaali, substanssi
+  sv: material, substans
+  hr: materijal, tvar
+  lv: materiāls, substance
+  hi: सामग्री, भौतिक
+  ar: مادة، جوهر
+  id: materi, substansi
+  vi: vật chất, chất liệu
+  th: วัตถุ, สาร
+  ko: 물질, 실체
+  ja: 物質、実体
+  bn: উপাদান
+  fa: ماده، مواد
+  zh: 材料、物质
+  ur: مواد
+  kk: материал, зат
+
+ID 1782 (explore):
+  ru: исследовать, изучать,  разведывать
+  uk: досліджувати, вивчати
+  de: erkunden, erforschen
+  es: explorar, investigar
+  fr: explorer, étudier
+  pl: badać, odkrywać
+  it: esplorare, studiare
+  tr: keşfetmek, araştırmak
+  pt: explorar
+  ro: explorare, studiu, recunoaștere
+  bg: изследвам, изучавам, разузнавам
+  cs: prozkoumávat, studovat, zkoumat
+  sk: skúmať, študovať, rekognoskovať
+  hu: felfedez, tanulmányoz, felderít
+  el: εξερευνώ, μελετώ, αναγνωρίζω
+  sl: raziskovati, preučevati, izvidovati
+  et: uurima, luurama
+  lt: tyrinėti, studijuoti, išžvalgyti
+  da: udforske, studere, rekognoscere
+  fi: tutkia, opiskella, tiedustella
+  sv: utforska, studera, rekognosera
+  hr: istraživati, proučavati, izviđati
+  lv: izpētīt, studēt, izlūkot
+  hi: अन्वेषण करना, खोजना
+  ar: استكشاف، دراسة، استطلاع
+  id: menjelajahi, mengeksplorasi
+  vi: khám phá, thám hiểm
+  th: สำรวจ, ศึกษา, สอดแนม
+  ko: 탐험하다, 조사하다
+  ja: 探検する、調査する
+  bn: অনুসন্ধান করা
+  fa: کاوش کردن، بررسی کردن
+  zh: 探索、研究
+  ur: کھوج لگانا، تحقیق کرنا
+  kk: зерттеу, барлау
+
+ID 1783 (freedom):
+  ru: свобода
+  uk: свобода
+  de: Freiheit
+  es: libertad
+  fr: liberté
+  pl: wolność
+  it: libertà
+  tr: özgürlük
+  pt: liberdade
+  ro: libertate
+  bg: свобода
+  cs: svoboda
+  sk: sloboda
+  hu: szabadság
+  el: ελευθερία
+  sl: svoboda
+  et: vabadus
+  lt: laisvė
+  da: frihed
+  fi: vapaus
+  sv: frihet
+  hr: sloboda
+  lv: brīvība
+  hi: स्वतंत्रता
+  ar: حرية
+  id: kebebasan
+  vi: tự do
+  th: เสรีภาพ
+  ko: 자유
+  ja: 自由
+  bn: স্বাধীনতা
+  fa: آزادی
+  zh: 自由
+  ur: آزادی
+  kk: бостандық
+
+ID 1784 (return):
+  ru: возвращаться, вернуть, отдача
+  uk: повертатися, повернення
+  de: zurückkehren, zurückgeben
+  es: regresar, devolver, retorno
+  fr: retour, retourner
+  pl: zwrócić, oddać
+  it: restituisci
+  tr: geri dönmek, iade etmek
+  pt: voltar, devolver, retorno
+  ro: întoarcere, da înapoi
+  bg: връщане
+  cs: vrátit
+  sk: vrátiť
+  hu: vissza, add vissza
+  el: επιστροφή, δώσε πίσω
+  sl: vrniti
+  et: tagasi, anna tagasi
+  lt: grąžinti, atiduoti
+  da: vende tilbage, rekyl
+  fi: palata, vetäytyä
+  sv: återvända, rekyl
+  hr: povratak, trzaj
+  lv: atgriezties, atkāpties
+  hi: लौटना, वापसी
+  ar: يعود، يُعيد، عودة
+  id: kembali, mundur
+  vi: quay lại, trở về
+  th: กลับคืน, ย้อนกลับ, ถอยกลับ
+  ko: 돌아오다, 반동하다
+  ja: 戻る、反動する
+  bn: ফিরে আসা, ফেরত দেওয়া
+  fa: برگشتن، بازگرداندن
+  zh: 返回、归还、回报
+  ur: واپس آنا، لوٹانا
+  kk: қайтару
+
+ID 1785 (reflect):
+  ru: отражать
+  uk: відбивати
+  de: reflektieren
+  es: reflejar
+  fr: refléter
+  pl: odbijać
+  it: riflettere
+  tr: yansıtmak
+  pt: refletir
+  ro: reflecta
+  bg: отразявам
+  cs: odrážet
+  sk: odrážať
+  hu: tükröződik
+  el: κατοπτρίζω
+  sl: odražati
+  et: peegeldama
+  lt: atspindėti
+  da: reflektere
+  fi: pohtia
+  sv: reflektera
+  hr: odražavati
+  lv: pārdomāt
+  hi: प्रतिबिंबित करना
+  ar: يعكس، يتأمّل
+  id: mencerminkan
+  vi: phản ánh
+  th: สะท้อน
+  ko: 반영하다
+  ja: 反映する
+  bn: প্রতিফলিত করা
+  fa: بازتاب دادن، تأمل کردن
+  zh: 反映、反射
+  ur: عکس دکھانا، غور کرنا
+  kk: шағылыстыру
+
+ID 1786 (library):
+  ru: библиотека
+  uk: бібліотека
+  de: Bibliothek
+  es: biblioteca
+  fr: bibliothèque
+  pl: biblioteka
+  it: biblioteca
+  tr: kütüphane
+  pt: biblioteca
+  ro: bibliotecă
+  bg: библиотека
+  cs: knihovna
+  sk: knižnica
+  hu: könyvtár
+  el: βιβλιοθήκη
+  sl: knjižnica
+  et: raamatukogu
+  lt: biblioteka
+  da: bibliotek
+  fi: kirjasto
+  sv: bibliotek
+  hr: knjižnica
+  lv: bibliotēka
+  hi: पुस्तकालय
+  ar: مكتبة
+  id: perpustakaan
+  vi: thư viện
+  th: ห้องสมุด
+  ko: 도서관
+  ja: 図書館
+  bn: গ্রন্থাগার
+  fa: کتابخانه
+  zh: 图书馆
+  ur: کتب خانہ
+  kk: кітапхана
+
+ID 1787 (military):
+  ru: военный
+  uk: військовий
+  de: Militär
+  es: militar
+  fr: militaire
+  pl: wojskowy
+  it: militare
+  tr: askeri
+  pt: militar
+  ro: militar
+  bg: военен
+  cs: válečný
+  sk: vojenský
+  hu: katonai
+  el: στρατιωτικός
+  sl: vojaško
+  et: sõjavägi
+  lt: karinis
+  da: militær
+  fi: armeija
+  sv: militär
+  hr: vojska
+  lv: militārais
+  hi: सैन्य
+  ar: عسكري
+  id: militer
+  vi: quân đội
+  th: ทหาร
+  ko: 군사
+  ja: 軍事
+  bn: সামরিক
+  fa: نظامی
+  zh: 军事的
+  ur: فوجی
+  kk: әскери
+
+ID 1788 (strength):
+  ru: сила
+  uk: сила
+  de: Stärke
+  es: fortaleza
+  fr: force
+  pl: wytrzymałość
+  it: forza
+  tr: kuvvet
+  pt: força
+  ro: rezistenţă
+  bg: сила
+  cs: pevnost
+  sk: sila
+  hu: erő
+  el: δύναμη
+  sl: moč
+  et: tugevus
+  lt: stiprumas
+  da: styrke
+  fi: voima
+  sv: styrka
+  hr: sila
+  lv: spēks
+  hi: बल
+  ar: قوة
+  id: kekuatan
+  vi: lực lượng
+  th: กำลัง
+  ko: 힘
+  ja: 力
+  bn: শক্তি
+  fa: قدرت، نیرو
+  zh: 力量、强度
+  ur: طاقت
+  kk: күш
+
+ID 1789 (actual):
+  ru: действительный, реальный
+  uk: фактичний, справжній
+  de: tatsächlich, echt
+  es: real, efectivo, verdadero
+  fr: réel, véritable
+  pl: prawdziwy, realny
+  it: reale, vero
+  tr: gerçek, fiilî
+  pt: real, verdadeiro
+  ro: real
+  bg: действителен, истински
+  cs: skutečný
+  sk: skutočný
+  hu: tényleges, valódi
+  el: πραγματικός
+  sl: dejanski, resnični
+  et: tegelik, päris
+  lt: tikras
+  da: faktisk, reel
+  fi: todellinen
+  sv: faktisk, verklig
+  hr: stvaran
+  lv: faktisks, reāls
+  hi: वास्तविक, असली
+  ar: فعلي، حقيقي
+  id: nyata, sebenarnya
+  vi: thực tế, thật
+  th: จริง, ของจริง
+  ko: 실제의, 진짜
+  ja: 実際の、現実の
+  bn: প্রকৃত
+  fa: واقعی
+  zh: 实际的、真实的
+  ur: حقیقی
+  kk: нақты
+
+ID 1790 (western):
+  ru: вестерн, западный
+  uk: вестерн, західний
+  de: Western
+  es: occidental, del oeste
+  fr: Occidental
+  pl: Western
+  it: Occidentale
+  tr: Batılı
+  pt: ocidental
+  ro: Vest
+  bg: Западен
+  cs: Západní
+  sk: Západný
+  hu: Nyugati
+  el: Δυτικός
+  sl: Zahodni
+  et: Lääne
+  lt: Vakarų
+  da: vestlig
+  fi: länsimainen
+  sv: västerländsk
+  hr: zapadni
+  lv: rietumu
+  hi: पश्चिमी
+  ar: غربي
+  id: barat
+  vi: phương Tây
+  th: ตะวันตก
+  ko: 서부
+  ja: 西洋の
+  bn: পশ্চিমের
+  fa: غربی، وسترن
+  zh: 西部的、西方的
+  ur: مغربی
+  kk: батыс
+
+ID 1791 (replace):
+  ru: заменять
+  uk: замінювати
+  de: ersetzen
+  es: reemplazar
+  fr: remplacer
+  pl: zastępować
+  it: sostituire
+  tr: değiştirmek, yerine koymak
+  pt: substituir
+  ro: înlocui
+  bg: замени
+  cs: nahradit
+  sk: nahradiť
+  hu: cserélni
+  el: αντικαθιστώ
+  sl: zamenjati
+  et: asendama
+  lt: pakeisti
+  da: erstatte
+  fi: korvata
+  sv: ersätta
+  hr: zamijeniti
+  lv: aizstāt
+  hi: बदलना
+  ar: استبدال
+  id: mengganti
+  vi: thay thế
+  th: แทนที่
+  ko: 교체하다
+  ja: 置き換える
+  bn: প্রতিস্থাপন করা
+  fa: جایگزین کردن
+  zh: 替换、取代
+  ur: بدلنا
+  kk: ауыстыру
+
+ID 1792 (medicine):
+  ru: лекарство
+  uk: ліки
+  de: Medizin
+  es: medicamento
+  fr: médecine
+  pl: medycyna
+  it: medicinale
+  tr: ilaç
+  pt: medicamento, medicina
+  ro: medicament
+  bg: лекарство
+  cs: lék
+  sk: liek
+  hu: gyógyszer
+  el: φάρμακο
+  sl: zdravilo
+  et: ravim
+  lt: vaistas
+  da: medicin
+  fi: lääketiede
+  sv: medicin
+  hr: medicina
+  lv: medicīna
+  hi: दवा
+  ar: دواء
+  id: obat-obatan
+  vi: y học
+  th: ยา
+  ko: 의학
+  ja: 医学
+  bn: ওষুধ
+  fa: دارو، پزشکی
+  zh: 药、医学
+  ur: دوا
+  kk: медицина
+
+ID 1793 (mistake):
+  ru: ошибка
+  uk: помилка
+  de: Fehler
+  es: error
+  fr: erreur
+  pl: błąd
+  it: errore
+  tr: hata
+  pt: erro
+  ro: eroare
+  bg: грешка
+  cs: chyba
+  sk: chyba
+  hu: hiba
+  el: σφάλμα
+  sl: napaka
+  et: viga
+  lt: klaida
+  da: fejl
+  fi: virhe
+  sv: fel
+  hr: pogreška
+  lv: kļūda
+  hi: त्रुटि
+  ar: خطأ
+  id: kesalahan
+  vi: lỗi
+  th: ข้อผิดพลาด
+  ko: 오류
+  ja: 誤り
+  bn: ভুল
+  fa: اشتباه
+  zh: 错误
+  ur: غلطی
+  kk: қате
+
+ID 1794 (context):
+  ru: контекст
+  uk: контекст
+  de: Kontext
+  es: contexto
+  fr: contexte
+  pl: kontekst
+  it: contesto
+  tr: bağlam
+  pt: contexto
+  ro: context
+  bg: контекст
+  cs: kontext
+  sk: kontext
+  hu: kontextus
+  el: συμφραζόμενα
+  sl: kontekst
+  et: kontekst
+  lt: kontekstas
+  da: kontekst
+  fi: konteksti
+  sv: kontext
+  hr: kontekst
+  lv: konteksts
+  hi: संदर्भ
+  ar: سياق
+  id: konteks
+  vi: bối cảnh
+  th: บริบท
+  ko: 맥락
+  ja: 文脈
+  bn: প্রসঙ্গ
+  fa: بافت، زمینه
+  zh: 语境、背景
+  ur: سیاق و سباق
+  kk: контекст
+
+ID 1795 (politics):
+  ru: политика
+  uk: політика
+  de: Politik
+  es: política
+  fr: politique
+  pl: polityka
+  it: politica
+  tr: politika
+  pt: política
+  ro: politică
+  bg: политика
+  cs: politika
+  sk: politika
+  hu: politika
+  el: πολιτική
+  sl: politika
+  et: poliitika
+  lt: politika
+  da: politik
+  fi: politiikka
+  sv: politik
+  hr: politika
+  lv: politika
+  hi: राजनीति
+  ar: سياسة
+  id: politik
+  vi: chính trị
+  th: การเมือง
+  ko: 정치
+  ja: 政治
+  bn: রাজনীতি
+  fa: سیاست
+  zh: 政治
+  ur: سیاست
+  kk: саясат
+
+ID 1796 (consumer):
+  ru: потребитель
+  uk: споживач
+  de: Verbraucher
+  es: consumidor
+  fr: consommateur
+  pl: konsument
+  it: consumatore
+  tr: tüketici
+  pt: consumidor
+  ro: consumator
+  bg: потребител
+  cs: spotřebitel
+  sk: spotrebiteľ
+  hu: fogyasztó
+  el: καταναλωτής
+  sl: potrošnik
+  et: tarbija
+  lt: vartotojas
+  da: forbruger
+  fi: kuluttaja
+  sv: konsument
+  hr: potrošač
+  lv: patērētājs
+  hi: उपभोक्ता
+  ar: مستهلك
+  id: konsumen
+  vi: người tiêu dùng
+  th: ผู้บริโภค
+  ko: 소비자
+  ja: 消費者
+  bn: ভোক্তা
+  fa: مصرف‌کننده
+  zh: 消费者
+  ur: صارف
+  kk: тұтынушы
+
+ID 1797 (majority):
+  ru: большинство
+  uk: більшість
+  de: mehrheitlich
+  es: mayoría
+  fr: majorité
+  pl: większość
+  it: maggioranza
+  tr: çoğunluk
+  pt: maioria
+  ro: majoritate
+  bg: мнозинство
+  cs: většina
+  sk: väčšina
+  hu: többség
+  el: πλειοψηφία
+  sl: večina
+  et: enamus
+  lt: dauguma
+  da: flertal
+  fi: enemmistö
+  sv: majoritet
+  hr: većina
+  lv: vairākums
+  hi: बहुमत
+  ar: أغلبية
+  id: mayoritas
+  vi: đa số
+  th: ส่วนใหญ่
+  ko: 다수
+  ja: 多数派
+  bn: সংখ্যাগরিষ্ঠ
+  fa: اکثریت
+  zh: 大多数
+  ur: اکثریت
+  kk: көпшілік
+
+ID 1798 (original):
+  ru: оригинальный, исходный, первоначальный
+  uk: оригінальний, вихідний
+  de: Original, Initiale
+  es: original, inicial
+  fr: original, initial
+  pl: oryginalny, początkowy
+  it: originale, iniziale
+  tr: orijinal, ilk, özgün
+  pt: original, inicial
+  ro: original, inițial
+  bg: оригинален, начален
+  cs: originál, počáteční, iniciála
+  sk: originál, počiatočný, iniciál
+  hu: eredeti, kezdeti
+  el: πρωτότυπος, αρχικός
+  sl: izvirnik, začetnica, začetno
+  et: originaal, esialgne
+  lt: originalas, inicialas
+  da: original, initial
+  fi: alkuperäinen
+  sv: original, initial
+  hr: izvornik, početni
+  lv: oriģināls, sākotnējais
+  hi: मूल, प्रारंभिक
+  ar: أصلي، أولي
+  id: asli, awal
+  vi: nguyên bản, ban đầu
+  th: ต้นฉบับ, เริ่มต้น
+  ko: 원래의, 초기의
+  ja: 元の、最初の
+  bn: মূল, আসল
+  fa: اصلی، اصل
+  zh: 原始的、原创的
+  ur: اصل
+  kk: түпнұсқа, бастапқы
+
+ID 1799 (record):
+  ru: записывать
+  uk: записувати
+  de: aufzeichnen
+  es: registro, grabar, registrar
+  fr: enregistrer
+  pl: nagrywać
+  it: documentazione
+  tr: kayıt, kaydetmek
+  pt: gravar, registro
+  ro: înregistra
+  bg: запис
+  cs: záznam
+  sk: záznam
+  hu: rekord
+  el: ρεκόρ
+  sl: zapis
+  et: rekord
+  lt: įrašas
+  da: optegnelse
+  fi: rekisteri
+  sv: register
+  hr: zapis
+  lv: ieraksts
+  hi: रिकॉर्ड
+  ar: يسجّل، سجل، رقم قياسي
+  id: merekam, mencatat
+  vi: hồ sơ
+  th: บันทึก
+  ko: 기록
+  ja: 記録
+  bn: রেকর্ড করা
+  fa: ثبت کردن، سابقه
+  zh: 记录、录制
+  ur: ریکارڈ کرنا
+  kk: жазба
+
+ID 1800 (income):
+  ru: доход
+  uk: дохід
+  de: Einkommen
+  es: ingreso, ingresos
+  fr: revenu
+  pl: dochód
+  it: reddito
+  tr: gelir
+  pt: renda
+  ro: venituri
+  bg: доход
+  cs: příjem
+  sk: príjem
+  hu: jövedelem
+  el: εισόδημα
+  sl: dohodek
+  et: sissetulek
+  lt: pajamos
+  da: indkomst
+  fi: tulot
+  sv: inkomst
+  hr: prihod
+  lv: ienākumi
+  hi: आय
+  ar: دخل
+  id: pendapatan
+  vi: thu nhập
+  th: รายได้
+  ko: 소득
+  ja: 収入
+  bn: আয়
+  fa: درآمد
+  zh: 收入
+  ur: آمدنی
+  kk: табыс
+
+ID 1801 (building):
+  ru: здание
+  uk: будівля
+  de: Gebäude
+  es: edificio
+  fr: bâtiment
+  pl: budynek
+  it: edificio
+  tr: bina
+  pt: edifício, construção
+  ro: clădire
+  bg: сграда
+  cs: budova
+  sk: budova
+  hu: épület
+  el: κτίριο
+  sl: stavba
+  et: hoone
+  lt: pastatas
+  da: bygning
+  fi: rakennus
+  sv: byggnad
+  hr: zgrada
+  lv: ēka
+  hi: इमारत
+  ar: مبنى
+  id: bangunan
+  vi: tòa nhà
+  th: อาคาร
+  ko: 건물
+  ja: 建物
+  bn: ভবন
+  fa: ساختمان
+  zh: 建筑物
+  ur: عمارت
+  kk: ғимарат
+

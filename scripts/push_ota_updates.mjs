@@ -622,7 +622,41 @@ async function run() {
     { id: 1339, word: 'possibly', lang: 'fr', expected: 'éventuellement, peut-être, possiblement' },
     { id: 1345, word: 'handle', lang: 'de', expected: 'Griff, Klinke, handhaben' },
     { id: 1345, word: 'handle', lang: 'it', expected: 'maniglia, impugnatura, gestire' },
-    { id: 1350, word: 'advice', lang: 'de', expected: 'Rat, Ratschlag, Empfehlung' }
+    { id: 1350, word: 'advice', lang: 'de', expected: 'Rat, Ratschlag, Empfehlung' },
+
+    // Batch 1352-1401
+    { id: 1383, word: 'score', lang: 'de', expected: 'Punktestand, Spielstand, Treffer, punkten' },
+    { id: 1399, word: 'arm', lang: 'de', expected: 'Arm, Oberarm, bewaffnen' },
+
+    // Batch 1402-1451
+    { id: 1405, word: 'easy', lang: 'ja', expected: '簡単な、易しい、容易な' },
+    { id: 1448, word: 'cool', lang: 'pt', expected: 'fresco, legal, bacana, calmo' },
+
+    // Batch 1452-1501
+    { id: 1486, word: 'peace', lang: 'de', expected: 'Frieden, Ruhe' },
+
+    // Batch 1502-1551
+    { id: 1517, word: 'cell', lang: 'de', expected: 'Zelle, Gefängniszelle, Element' },
+
+    // Batch 1552-1601
+    { id: 1581, word: 'lie lay lain', lang: 'de', expected: 'liegen, ruhen' },
+    { id: 1591, word: 'die', lang: 'sv', expected: 'dö, avlida, omkomma' },
+
+    // Batch 1602-1651
+    { id: 1618, word: 'bar', lang: 'de', expected: 'Bar, Riegel, Stange, Schenke' },
+
+    // Batch 1652-1701
+    { id: 1653, word: 'card', lang: 'it', expected: 'carta, cartolina, tessera' },
+
+    // Batch 1702-1751
+    { id: 1717, word: 'ear', lang: 'de', expected: 'Ohr, Gehör' },
+
+    // Batch 1752-1801
+    { id: 1777, word: 'identity', lang: 'de', expected: 'Identität, Wesen, Eigenart' },
+
+    // Batch 1802-1851
+    { id: 1807, word: 'produce', lang: 'ro', expected: 'a produce, a fabrica, a genera' },
+    { id: 1845, word: 'shape', lang: 'de', expected: 'Form, Gestalt, formen' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -637,412 +671,62 @@ async function run() {
   const words = JSON.parse(fs.readFileSync(WORDS_JSON_PATH, 'utf8'));
   const wordsMap = new Map(words.map(w => [w.id, w]));
 
-  // Read calibrations from batch scripts
-  function loadBatchCalibs(relPath) {
-    const content = fs.readFileSync(path.join(ROOT_DIR, relPath), 'utf8');
-    const start = content.indexOf('const calibrations = [');
-    const end = content.indexOf('let totalPatched = 0;');
-    return eval(content.slice(start + 'const calibrations = '.length, end).trim().replace(/;$/, ''));
+  // Helper to load calibrations from a batch file
+  function loadBatchObj(filename) {
+    const filePath = path.join(ROOT_DIR, 'scripts', filename);
+    const c = fs.readFileSync(filePath, 'utf8');
+    const start = c.indexOf('const calibrations = {') + 'const calibrations = '.length;
+    let end = c.indexOf('let updatedWords = 0;');
+    if (end === -1) end = c.indexOf('module.exports = calibrations;');
+    return eval('(' + c.slice(start, end).trim().replace(/;\s*$/, '') + ')');
   }
 
-  const calib1FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1_50_calibrations.mjs'), 'utf8');
-  const calib1ObjStr = calib1FileContent.slice(calib1FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib1FileContent.indexOf(';\n\nfor (const filePath'));
-  const calibs1 = eval('(' + calib1ObjStr + ')');
+  // Batches 1 to 25 (words 1-1251) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-25 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 26-37 (words 1252-1851, ~600 words)
+  // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
+  const activeBatchFiles = [
+    'apply_batch_1252_1301_calibrations.cjs',
+    'apply_batch_1302_1351_calibrations.cjs',
+    'apply_batch_1352_1401_calibrations.cjs',
+    'apply_batch_1402_1451_calibrations.cjs',
+    'apply_batch_1452_1501_calibrations.cjs',
+    'apply_batch_1502_1551_calibrations.cjs',
+    'apply_batch_1552_1601_calibrations.cjs',
+    'apply_batch_1602_1651_calibrations.cjs',
+    'apply_batch_1652_1701_calibrations.cjs',
+    'apply_batch_1702_1751_calibrations.cjs',
+    'apply_batch_1752_1801_calibrations.cjs',
+    'apply_batch_1802_1851_calibrations.cjs'
+  ];
 
-  const calibs2 = loadBatchCalibs('scripts/apply_batch_51_100_calibrations.cjs');
-  const calibs3 = loadBatchCalibs('scripts/apply_batch_101_150_calibrations.cjs');
-  const calibs4 = loadBatchCalibs('scripts/apply_batch_151_200_calibrations.cjs');
-  const calibs5 = loadBatchCalibs('scripts/apply_batch_201_250_calibrations.cjs');
-  const calibs6 = loadBatchCalibs('scripts/apply_batch_251_300_calibrations.cjs');
-  const calibs7 = loadBatchCalibs('scripts/apply_batch_301_350_calibrations.cjs');
-  const calibs8 = loadBatchCalibs('scripts/apply_batch_351_400_calibrations.cjs');
-  const calibs9 = loadBatchCalibs('scripts/apply_batch_401_450_calibrations.cjs');
-  const calibs10 = loadBatchCalibs('scripts/apply_batch_451_500_calibrations.cjs');
-  const calibs11 = loadBatchCalibs('scripts/apply_batch_501_550_calibrations.cjs');
-  const calibs12 = loadBatchCalibs('scripts/apply_batch_551_600_calibrations.cjs');
-  const calibs13 = loadBatchCalibs('scripts/apply_batch_601_650_calibrations.cjs');
-
-  const calib14FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_651_700_calibrations.cjs'), 'utf8');
-  const calib14ObjStr = calib14FileContent.slice(calib14FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib14FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs14 = eval('(' + calib14ObjStr + ')');
-
-  const calib15FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_701_750_calibrations.cjs'), 'utf8');
-  const calib15ObjStr = calib15FileContent.slice(calib15FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib15FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs15 = eval('(' + calib15ObjStr + ')');
-
-  const calib16FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_751_800_calibrations.cjs'), 'utf8');
-  const calib16ObjStr = calib16FileContent.slice(calib16FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib16FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs16 = eval('(' + calib16ObjStr + ')');
-
-  const calib17FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_801_850_calibrations.cjs'), 'utf8');
-  const calib17ObjStr = calib17FileContent.slice(calib17FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib17FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs17 = eval('(' + calib17ObjStr + ')');
-
-  const calib18FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_851_900_calibrations.cjs'), 'utf8');
-  const calib18ObjStr = calib18FileContent.slice(calib18FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib18FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs18 = eval('(' + calib18ObjStr + ')');
-
-  const calib19FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_901_950_calibrations.cjs'), 'utf8');
-  const calib19ObjStr = calib19FileContent.slice(calib19FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib19FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs19 = eval('(' + calib19ObjStr + ')');
-
-  const calib20FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_951_1000_calibrations.cjs'), 'utf8');
-  const calib20ObjStr = calib20FileContent.slice(calib20FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib20FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs20 = eval('(' + calib20ObjStr + ')');
-
-  const calib21FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1001_1050_calibrations.cjs'), 'utf8');
-  const calib21ObjStr = calib21FileContent.slice(calib21FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib21FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs21 = eval('(' + calib21ObjStr + ')');
-
-  const calib22FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1051_1100_calibrations.cjs'), 'utf8');
-  const calib22ObjStr = calib22FileContent.slice(calib22FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib22FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs22 = eval('(' + calib22ObjStr + ')');
-
-  const calib23FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1102_1151_calibrations.cjs'), 'utf8');
-  const calib23ObjStr = calib23FileContent.slice(calib23FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib23FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs23 = eval('(' + calib23ObjStr + ')');
-
-  const calib24FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1152_1201_calibrations.cjs'), 'utf8');
-  const calib24ObjStr = calib24FileContent.slice(calib24FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib24FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs24 = eval('(' + calib24ObjStr + ')');
-
-  const calib25FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1202_1251_calibrations.cjs'), 'utf8');
-  const calib25ObjStr = calib25FileContent.slice(calib25FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib25FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs25 = eval('(' + calib25ObjStr + ')');
-
-  const calib26FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1252_1301_calibrations.cjs'), 'utf8');
-  const calib26ObjStr = calib26FileContent.slice(calib26FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib26FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs26 = eval('(' + calib26ObjStr + ')');
-
-  const calib27FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1302_1351_calibrations.cjs'), 'utf8');
-  const calib27ObjStr = calib27FileContent.slice(calib27FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib27FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
-  const calibs27 = eval('(' + calib27ObjStr + ')');
-
-  // Batches 1 to 13 (words 1-650) are already hard-baked into words.json in all builds.
-  // We sync their verified sample check words, while maintaining full 36-locale payload
-  // for recent batches 14-27 (words 651-1351) to preserve ample headroom (< 1024 KB).
   let mergedCount = 0;
+  const activeBatchIds = new Set();
 
-  // Merge batch 651-700 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs14)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
+  for (const batchFile of activeBatchFiles) {
+    const batchCalibs = loadBatchObj(batchFile);
+    for (const [idStr, map] of Object.entries(batchCalibs)) {
+      activeBatchIds.add(idStr);
+      const idNum = parseInt(idStr, 10);
+      const localW = wordsMap.get(idNum);
+      if (!fsMap[idStr]) {
+        fsMap[idStr] = {
+          id: idNum,
+          word: localW?.word || '',
+          translations: {}
+        };
       }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 701-750 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs15)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
+      for (const [lang, val] of Object.entries(map)) {
+        if (lang === 'ru') {
+          fsMap[idStr].translation = val;
+        } else {
+          if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+          fsMap[idStr].translations[lang] = val;
+        }
       }
+      delete fsMap[idStr].updatedAt;
+      mergedCount++;
     }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 751-800 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs16)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 801-850 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs17)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 851-900 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs18)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 901-950 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs19)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 951-1000 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs20)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1001-1050 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs21)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1051-1100 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs22)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1102-1151 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs23)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1152-1201 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs24)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1202-1251 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs25)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1252-1301 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs26)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
-
-  // Merge batch 1302-1351 calibrations into fsMap
-  for (const [idStr, map] of Object.entries(calibs27)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(map)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
   }
 
   // Also ensure key sample check words are synchronized
@@ -1084,32 +768,36 @@ async function run() {
     delete fsMap[idStr].updatedAt;
   }
 
-  console.log(`   Merged Batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300, 301-350 calibrations and functional word exclusions into Firestore updates.`);
+  console.log(`   Merged active batches (1252-1851), sample checks (1-1251), and functional exclusions into Firestore updates.`);
 
   // 2. Prune redundant legacy entries to preserve plenty of headroom (< 1024 KB)
   let pruned = 0;
-  const allCalibIds = new Set([
-    ...sampleChecks.map(c => String(c.id)),
-    ...Object.keys(calibs14),
-    ...Object.keys(calibs15),
-    ...Object.keys(calibs16),
-    ...Object.keys(calibs17),
-    ...Object.keys(calibs18),
-    ...Object.keys(calibs19),
-    ...Object.keys(calibs20),
-    ...Object.keys(calibs21),
-    ...Object.keys(calibs22),
-    ...Object.keys(calibs23),
-    ...Object.keys(calibs24),
-    ...Object.keys(calibs25),
-    ...Object.keys(calibs26),
-    ...Object.keys(calibs27),
-    ...functionalIds.map(String)
-  ]);
+  const sampleCheckIdLangs = new Map();
+  for (const c of sampleChecks) {
+    const idStr = String(c.id);
+    if (!sampleCheckIdLangs.has(idStr)) sampleCheckIdLangs.set(idStr, new Set());
+    sampleCheckIdLangs.get(idStr).add(c.lang);
+  }
+
+  const functionalIdStrs = functionalIds.map(String);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
-    if (allCalibIds.has(idStr)) continue;
-    // Any entry outside of calibrated batches is legacy uncalibrated partial data
+    if (activeBatchIds.has(idStr) || functionalIdStrs.includes(idStr)) {
+      // Active batch (recent ~600 words) or functional exclusion: keep full
+      continue;
+    }
+    if (sampleCheckIdLangs.has(idStr)) {
+      // Early baked batch: keep only verified sample check languages to save Firestore space
+      const allowed = sampleCheckIdLangs.get(idStr);
+      if (!allowed.has('ru')) delete entry.translation;
+      if (entry.translations) {
+        for (const lang of Object.keys(entry.translations)) {
+          if (!allowed.has(lang)) delete entry.translations[lang];
+        }
+      }
+      continue;
+    }
+    // Any entry outside active batches and sample checks is pruned
     delete fsMap[idStr];
     pruned++;
   }

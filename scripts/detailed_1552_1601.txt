@@ -1,0 +1,1813 @@
+ID 1552 (bowl):
+  ru: чаша
+  uk: чаша
+  de: Schüssel
+  es: tazón, cuenco
+  fr: bol
+  pl: miska
+  it: ciotola
+  tr: tas
+  pt: tigela
+  ro: castron
+  bg: купа
+  cs: miska
+  sk: miska
+  hu: tál
+  el: λεκάνη
+  sl: skleda
+  et: kauss
+  lt: dubuo
+  da: skål
+  fi: kulho
+  sv: skål
+  hr: zdjela
+  lv: bļoda
+  hi: कटोरा
+  ar: وعاء
+  id: mangkuk
+  vi: bát
+  th: ชาม
+  ko: 그릇
+  ja: ボウル
+  bn: বাটি
+  fa: کاسه
+  zh: 碗
+  ur: پیالہ
+  kk: тостаған
+
+ID 1553 (step):
+  ru: шаг
+  uk: крок
+  de: Schritt
+  es: paso
+  fr: étape
+  pl: krok
+  it: fare un passo
+  tr: adım
+  pt: etapa
+  ro: pas
+  bg: стъпка
+  cs: krok
+  sk: krok
+  hu: lépés
+  el: βήμα
+  sl: korak
+  et: samm
+  lt: žingsnis
+  da: trin
+  fi: askelma
+  sv: steg
+  hr: korak
+  lv: pakāpiens
+  hi: कदम
+  ar: خطوة
+  id: langkah
+  vi: bước
+  th: ขั้น
+  ko: 단계
+  ja: ステップ
+  bn: পদক্ষেপ
+  fa: قدم، مرحله
+  zh: 步骤、步伐
+  ur: قدم
+  kk: қадам
+
+ID 1554 (view):
+  ru: вид
+  uk: вигляд
+  de: Sicht
+  es: vista
+  fr: voir
+  pl: pogląd
+  it: visualizzazione
+  tr: görüş
+  pt: vista, visão, visualizar
+  ro: vedere
+  bg: изглед
+  cs: pohled
+  sk: pohľad
+  hu: kilátás
+  el: θέα
+  sl: pogled
+  et: vaade
+  lt: vaizdas
+  da: udsigt
+  fi: näkymä
+  sv: utsikt
+  hr: pogled
+  lv: skats
+  hi: दृश्य
+  ar: منظر
+  id: pandangan
+  vi: quan điểm
+  th: มุมมอง
+  ko: 보기
+  ja: 眺め
+  bn: দৃশ্য, মতামত
+  fa: نما، دیدگاه
+  zh: 景色、观点
+  ur: منظر، رائے، نظارہ
+  kk: көрініс
+
+ID 1555 (fair):
+  ru: справедливый, ярмарка
+  uk: справедливий, ярмарок
+  de: fair
+  es: justo, feria
+  fr: juste
+  pl: sprawiedliwy, targi
+  it: giusto
+  tr: adil
+  pt: justo, feira
+  ro: corect
+  bg: честно
+  cs: spravedlivý
+  sk: spravodlivý
+  hu: tisztességes
+  el: δίκαιος
+  sl: pošteno
+  et: õiglane
+  lt: sąžiningas
+  da: retfærdig
+  fi: reilu
+  sv: rättvis
+  hr: sajam
+  lv: taisnīgs
+  hi: मेला
+  ar: عادل
+  id: adil, pameran
+  vi: công bằng
+  th: ยุติธรรม
+  ko: 공정한
+  ja: フェア
+  bn: ন্যায্য, মেলা
+  fa: منصفانه، نمایشگاه
+  zh: 公平的、集市
+  ur: منصفانہ، میلہ
+  kk: әділ
+
+ID 1556 (grab):
+  ru: схватить
+  uk: схопити
+  de: greifen
+  es: agarrar
+  fr: saisir
+  pl: złapać
+  it: preda
+  tr: yakalamak
+  pt: pegar
+  ro: apuca
+  bg: грабвам
+  cs: urvat
+  sk: chytiť
+  hu: megragad
+  el: αραπάζω
+  sl: zgrabiti
+  et: haarama
+  lt: griebti
+  da: gribe
+  fi: napata
+  sv: greppa
+  hr: zgrabiti
+  lv: satvert
+  hi: पकड़ना
+  ar: يمسك
+  id: ambil
+  vi: nắm lấy
+  th: คว้า
+  ko: 잡다
+  ja: 掴む
+  bn: আঁকড়ে ধরা
+  fa: قاپیدن، گرفتن
+  zh: 抓住
+  ur: پکڑنا
+  kk: ұстап алу
+
+ID 1557 (size):
+  ru: размер
+  uk: розмір
+  de: Größe
+  es: tamaño
+  fr: taille
+  pl: rozmiar
+  it: misurare
+  tr: boyut
+  pt: tamanho
+  ro: dimensiune
+  bg: размер
+  cs: velikost
+  sk: veľkosť
+  hu: méret
+  el: μέγεθος
+  sl: velikost
+  et: suurus
+  lt: dydis
+  da: størrelse
+  fi: koko
+  sv: storlek
+  hr: veličina
+  lv: izmērs
+  hi: आकार
+  ar: حجم
+  id: ukuran
+  vi: kích thước
+  th: ขนาด
+  ko: 크기
+  ja: サイズ
+  bn: আকার
+  fa: اندازه
+  zh: 尺寸
+  ur: سائز، حجم
+  kk: өлшем
+
+ID 1558 (trip):
+  ru: поездка, путешествие
+  uk: поїздка, подорож
+  de: Reise
+  es: viaje, travesía
+  fr: voyage, périple
+  pl: wycieczka, podróż
+  it: viaggio, percorso
+  tr: gezi, yolculuk
+  pt: viagem
+  ro: călătorie
+  bg: пътуване, пътешествие
+  cs: výlet, cesta
+  sk: výlet, cesta
+  hu: utazás
+  el: ταξίδι
+  sl: potovanje
+  et: reis, teekond
+  lt: kelionė
+  da: tur, rejse
+  fi: matka
+  sv: resa
+  hr: putovanje
+  lv: ceļojums
+  hi: यात्रा
+  ar: رحلة
+  id: perjalanan
+  vi: chuyến đi, hành trình
+  th: การเดินทาง
+  ko: 여행, 여정
+  ja: 旅行、旅
+  bn: ভ্রমণ
+  fa: سفر
+  zh: 旅行
+  ur: سفر
+  kk: сапар, саяхат
+
+ID 1559 (moral):
+  ru: моральный
+  uk: моральний
+  de: Moral
+  es: moral
+  fr: morale
+  pl: moralny
+  it: morale
+  tr: ahlaki
+  pt: moral
+  ro: morală
+  bg: морален
+  cs: morální
+  sk: morálny
+  hu: erkölcsi
+  el: ηθικός
+  sl: moralno
+  et: moraalne
+  lt: moralinis
+  da: moral
+  fi: moraalinen
+  sv: moral
+  hr: moral
+  lv: morāls
+  hi: नैतिक
+  ar: أخلاقي
+  id: moral
+  vi: đạo đức
+  th: คุณธรรม
+  ko: 도덕적인
+  ja: 道徳
+  bn: নৈতিক
+  fa: اخلاقی
+  zh: 道德的
+  ur: اخلاقی
+  kk: моральдық
+
+ID 1560 (point):
+  ru: точка, смысл
+  uk: точка, сенс
+  de: Punkt, Bedeutung
+  es: punto, significado
+  fr: point, signification
+  pl: punkt, znaczenie
+  it: punto, significato
+  tr: nokta, anlam
+  pt: ponto, apontar, sentido
+  ro: punct, sens
+  bg: точка, значение
+  cs: bod, význam
+  sk: bod, význam
+  hu: pont, jelentés
+  el: σημείο, έννοια
+  sl: točka, pomen
+  et: punkt, tähendus
+  lt: taškas, reikšmė
+  da: punkt, betydning
+  fi: piste, merkitys
+  sv: poäng, betydelse
+  hr: poanta, značenje
+  lv: punkts, nozīme
+  hi: बिंदु, अर्थ
+  ar: وجهة نظر
+  id: poin, makna
+  vi: điểm, ý nghĩa
+  th: ประเด็น ความหมาย
+  ko: 요점, 의미
+  ja: 要点、意味
+  bn: বিন্দু, বক্তব্য
+  fa: نقطه، منظور
+  zh: 点、要点
+  ur: نکتہ، نقطہ
+  kk: ұпай, мағына
+
+ID 1561 (chief):
+  ru: главный
+  uk: головний
+  de: hauptsächlich
+  es: principal
+  fr: principal
+  pl: główny
+  it: principale
+  tr: ana
+  pt: principal, chefe
+  ro: principal
+  bg: основен
+  cs: hlavní
+  sk: hlavný
+  hu: fő-
+  el: κύριος
+  sl: glavni
+  et: peamine
+  lt: pagrindinis
+  da: hoved
+  fi: pääasiallinen
+  sv: huvudsaklig
+  hr: glavni
+  lv: galvenais
+  hi: मुख्य
+  ar: رئيسي
+  id: utama
+  vi: chính
+  th: หลัก
+  ko: 주요한
+  ja: 主な
+  bn: প্রধান
+  fa: رئیس، اصلی
+  zh: 首席的、主要的
+  ur: سربراہ، چیف، اہم
+  kk: негізгі
+
+ID 1562 (poor):
+  ru: бедный
+  uk: бідний
+  de: arm
+  es: pobre
+  fr: pauvre
+  pl: biedny, słaby
+  it: povero
+  tr: fakir
+  pt: pobre
+  ro: sărac
+  bg: беден
+  cs: chudý
+  sk: chudobný
+  hu: szegény
+  el: φτωχός
+  sl: reven
+  et: vaene
+  lt: vargšas
+  da: fattig
+  fi: köyhä
+  sv: fattig
+  hr: siromašan
+  lv: nabags
+  hi: गरीब
+  ar: فقير
+  id: miskin
+  vi: nghèo
+  th: ยากจน
+  ko: 가난한
+  ja: 貧しい
+  bn: দরিদ্র
+  fa: فقیر، ضعیف
+  zh: 贫穷的
+  ur: غریب
+  kk: кедей
+
+ID 1563 (sea):
+  ru: море
+  uk: море
+  de: Meer
+  es: mar
+  fr: mer
+  pl: morze
+  it: mare
+  tr: deniz
+  pt: mar
+  ro: mare
+  bg: море
+  cs: moře
+  sk: more
+  hu: tenger
+  el: θάλασσα
+  sl: morje
+  et: meri
+  lt: jūra
+  da: hav
+  fi: meri
+  sv: hav
+  hr: more
+  lv: jūra
+  hi: समुद्र
+  ar: بحر
+  id: laut
+  vi: biển
+  th: ทะเล
+  ko: 바다
+  ja: 海
+  bn: সমুদ্র
+  fa: دریا
+  zh: 海
+  ur: سمندر
+  kk: теңіз
+
+ID 1564 (deny):
+  ru: отрицать
+  uk: заперечувати
+  de: leugnen
+  es: negar, denegar
+  fr: refuser
+  pl: zaprzeczyć
+  it: negare
+  tr: reddetmek
+  pt: negar
+  ro: a nega
+  bg: отричам
+  cs: odmítnout
+  sk: poprieť
+  hu: tagadni
+  el: αρνούμαι
+  sl: zanikati
+  et: eitama
+  lt: neigti
+  da: benægte
+  fi: kieltää
+  sv: förneka
+  hr: poreći
+  lv: noliegt
+  hi: इनकार करना
+  ar: ينكر
+  id: menyangkal
+  vi: phủ nhận
+  th: ปฏิเสธ
+  ko: 부인하다
+  ja: 否定する
+  bn: অস্বীকার করা
+  fa: انکار کردن
+  zh: 否认
+  ur: انکار کرنا
+  kk: жоққа шығару
+
+ID 1565 (lake):
+  ru: озеро
+  uk: озеро
+  de: See
+  es: lago
+  fr: lac
+  pl: jezioro
+  it: lago
+  tr: göl
+  pt: lago
+  ro: lac
+  bg: езеро
+  cs: jezero
+  sk: jazero
+  hu: tó
+  el: λίμνη
+  sl: jezero
+  et: järv
+  lt: ežeras
+  da: sø
+  fi: järvi
+  sv: sjö
+  hr: jezero
+  lv: ezers
+  hi: झील
+  ar: بحيرة
+  id: danau
+  vi: hồ
+  th: ทะเลสาบ
+  ko: 호수
+  ja: 湖
+  bn: হ্রদ
+  fa: دریاچه
+  zh: 湖
+  ur: جھیل
+  kk: көл
+
+ID 1566 (home):
+  ru: дом
+  uk: будинок
+  de: Haus
+  es: casa
+  fr: maison
+  pl: dom
+  it: casa
+  tr: ev
+  pt: casa
+  ro: casă
+  bg: къща
+  cs: dům
+  sk: dom
+  hu: ház
+  el: σπίτι
+  sl: hiša
+  et: maja
+  lt: namas
+  da: hus
+  fi: talo
+  sv: hus
+  hr: kuća
+  lv: māja
+  hi: घर
+  ar: منزل
+  id: rumah
+  vi: nhà
+  th: บ้าน
+  ko: 집
+  ja: 家
+  bn: বাড়ি
+  fa: خانه
+  zh: 家、家庭
+  ur: گھر
+  kk: үй
+
+ID 1567 (tool):
+  ru: инструмент
+  uk: інструмент
+  de: Werkzeug
+  es: herramienta
+  fr: outil
+  pl: narzędzie
+  it: attrezzo
+  tr: alet
+  pt: ferramenta
+  ro: instrument
+  bg: инструмент
+  cs: nástroj
+  sk: nástroj
+  hu: eszköz
+  el: εργαλείο
+  sl: orodje
+  et: tööriist
+  lt: įrankis
+  da: værktøj
+  fi: työkalu
+  sv: verktyg
+  hr: alat
+  lv: instruments
+  hi: उपकरण
+  ar: أداة
+  id: alat
+  vi: công cụ
+  th: เครื่องมือ
+  ko: 도구
+  ja: 道具
+  bn: সরঞ্জাম
+  fa: ابزار
+  zh: 工具
+  ur: اوزار
+  kk: құрал
+
+ID 1568 (pick):
+  ru: выбирать, собирать, забирать
+  uk: вибирати, збирати
+  de: auswählen, sammeln
+  es: elegir, recoger
+  fr: choisir, cueillir
+  pl: wybierać, zbierać
+  it: scegliere, raccogliere
+  tr: seç, topla, götür
+  pt: escolher, pegar, colher
+  ro: alege, colectează, ia
+  bg: избирам, събирам, вземам
+  cs: vybrat, sbírat, odnést
+  sk: vybrať, vyzdvihnúť, odniesť
+  hu: választani, gyűjteni, elvinni
+  el: διαλέγω, συλλέγω, αφαιρώ
+  sl: izbrati, zbrati, odnesti
+  et: vali, kogu, võta kaasa
+  lt: išsirinkti, surinkti, pasiimti
+  da: vælge, samle, tage
+  fi: valita, kerätä, ottaa
+  sv: välja, samla, ta
+  hr: odabrati, skupiti, uzeti
+  lv: izvēlēties, savākt, ņemt
+  hi: चुनना, इकट्ठा करना, लेना
+  ar: يختار، يجمع، يأخذ
+  id: memilih, mengambil
+  vi: chọn, thu thập, lấy
+  th: เลือก รวบรวม หยิบ
+  ko: 고르다, 줍다
+  ja: 選ぶ、集める、取る
+  bn: বেছে নেওয়া, তোলা
+  fa: انتخاب کردن، چیدن
+  zh: 选择、采摘、取走
+  ur: چننا، منتخب کرنا، اٹھانا
+  kk: таңдау, жинау, алу
+
+ID 1569 (test):
+  ru: тест
+  uk: тест
+  de: prüfen
+  es: prueba
+  fr: test
+  pl: test
+  it: test
+  tr: test
+  pt: teste
+  ro: test
+  bg: тест
+  cs: test
+  sk: test
+  hu: teszt
+  el: δοκιμή
+  sl: preizkus
+  et: test
+  lt: testas
+  da: test
+  fi: testi
+  sv: test
+  hr: test
+  lv: pārbaude
+  hi: परीक्षा
+  ar: اختبار
+  id: tes
+  vi: thử nghiệm
+  th: ทดสอบ
+  ko: 시험
+  ja: テスト
+  bn: পরীক্ষা
+  fa: آزمون، آزمایش
+  zh: 测试
+  ur: امتحان، جانچ
+  kk: сынақ
+
+ID 1570 (soul):
+  ru: душа
+  uk: душа
+  de: Seele
+  es: alma
+  fr: âme
+  pl: dusza
+  it: anima
+  tr: ruh
+  pt: alma
+  ro: suflet
+  bg: душа
+  cs: duše
+  sk: duša
+  hu: lélek
+  el: ψυχή
+  sl: duša
+  et: hing
+  lt: siela
+  da: sjæl
+  fi: sielu
+  sv: själ
+  hr: duša
+  lv: dvēsele
+  hi: आत्मा
+  ar: روح
+  id: jiwa
+  vi: linh hồn
+  th: จิตวิญญาณ
+  ko: 영혼
+  ja: 魂
+  bn: আত্মা
+  fa: روح
+  zh: 灵魂
+  ur: روح
+  kk: жан
+
+ID 1571 (law):
+  ru: закон
+  uk: закон
+  de: Gesetz
+  es: ley
+  fr: loi
+  pl: prawo
+  it: legge
+  tr: kanun
+  pt: lei
+  ro: drept
+  bg: закон
+  cs: zákon
+  sk: právo
+  hu: törvény
+  el: νόμος
+  sl: pravo
+  et: seadus
+  lt: įstatymas
+  da: lov
+  fi: laki
+  sv: lag
+  hr: zakon
+  lv: likums
+  hi: कानून
+  ar: قانون
+  id: hukum
+  vi: luật
+  th: กฎหมาย
+  ko: 법
+  ja: 法律
+  bn: আইন
+  fa: قانون
+  zh: 法律
+  ur: قانون
+  kk: заң
+
+ID 1572 (plan):
+  ru: план
+  uk: план
+  de: planen
+  es: plan
+  fr: plan
+  pl: plan
+  it: piano
+  tr: plan
+  pt: plano
+  ro: plan
+  bg: план
+  cs: plán
+  sk: plán
+  hu: terv
+  el: σχέδιο
+  sl: načrt
+  et: plaan
+  lt: planas
+  da: plan
+  fi: suunnitelma
+  sv: plan
+  hr: plan
+  lv: plāns
+  hi: योजना
+  ar: خطة
+  id: rencana
+  vi: kế hoạch
+  th: แผน
+  ko: 계획
+  ja: 計画
+  bn: পরিকল্পনা
+  fa: برنامه، برنامه‌ریزی کردن
+  zh: 计划
+  ur: منصوبہ
+  kk: жоспар
+
+ID 1573 (novel):
+  ru: роман
+  uk: роман
+  de: Roman
+  es: novela
+  fr: roman
+  pl: powieść
+  it: romanzo
+  tr: roman
+  pt: romance
+  ro: roman
+  bg: роман
+  cs: román
+  sk: román
+  hu: regény
+  el: μυθιστόρημα
+  sl: roman
+  et: romaan
+  lt: romanas
+  da: roman
+  fi: romaani
+  sv: roman
+  hr: roman
+  lv: romāns
+  hi: उपन्यास
+  ar: رواية
+  id: novel
+  vi: tiểu thuyết
+  th: นวนิยาย
+  ko: 소설
+  ja: 小説
+  bn: উপন্যাস
+  fa: رمان
+  zh: 小说
+  ur: ناول
+  kk: роман
+
+ID 1574 (white):
+  ru: белый
+  uk: білий
+  de: Weiß
+  es: blanco
+  fr: blanc
+  pl: biały
+  it: bianco
+  tr: beyaz
+  pt: branco
+  ro: alb
+  bg: бял
+  cs: bílý
+  sk: biely
+  hu: fehér
+  el: λευκό
+  sl: bela
+  et: valge
+  lt: balta
+  da: hvid
+  fi: valkoinen
+  sv: vit
+  hr: bijeli
+  lv: balts
+  hi: सफेद
+  ar: أبيض
+  id: putih
+  vi: trắng
+  th: สีขาว
+  ko: 흰색
+  ja: 白い
+  bn: সাদা
+  fa: سفید
+  zh: 白色的
+  ur: سفید
+  kk: ақ
+
+ID 1576 (guest):
+  ru: гость
+  uk: гість
+  de: Gast
+  es: invitado
+  fr: invité
+  pl: gość
+  it: ospite
+  tr: misafir
+  pt: convidado
+  ro: oaspete
+  bg: гост
+  cs: host
+  sk: hosť
+  hu: vendég
+  el: επισκέπτης
+  sl: gost
+  et: külaline
+  lt: svečias
+  da: gæst
+  fi: vieras
+  sv: gäst
+  hr: gost
+  lv: viesis
+  hi: अतिथि
+  ar: ضيف
+  id: tamu
+  vi: khách
+  th: แขก
+  ko: 손님
+  ja: 客
+  bn: অতিথি
+  fa: مهمان
+  zh: 客人
+  ur: مہمان
+  kk: қонақ
+
+ID 1577 (count):
+  ru: считать
+  uk: рахувати
+  de: zählen
+  es: contar
+  fr: compter
+  pl: liczyć
+  it: contare
+  tr: saymak
+  pt: contar
+  ro: conta
+  bg: брой
+  cs: počítat
+  sk: počítať
+  hu: gróf
+  el: κόμης
+  sl: štetje
+  et: krahv
+  lt: skaičiuoti
+  da: optælling
+  fi: laskea
+  sv: räkning
+  hr: broj
+  lv: skaitīt
+  hi: गिनती
+  ar: عدد
+  id: hitung
+  vi: số lượng
+  th: นับ
+  ko: 개수
+  ja: 数える
+  bn: গণনা করা
+  fa: شمردن، حساب کردن
+  zh: 数、计算
+  ur: گننا
+  kk: санау
+
+ID 1578 (stare):
+  ru: смотреть пристально
+  uk: дивитися уважно
+  de: starren
+  es: mirar fijamente
+  fr: regard
+  pl: gapić się
+  it: sguardo
+  tr: bakış
+  pt: encarar, olhar fixamente
+  ro: holbare
+  bg: взира
+  cs: zírat
+  sk: pohľad
+  hu: bámul
+  el: ατενίζω
+  sl: strmeti
+  et: jõllitama
+  lt: spoksoti
+  da: stirre
+  fi: tuijottaa
+  sv: stirra
+  hr: buljiti
+  lv: skatiens
+  hi: घूरना
+  ar: يحدق
+  id: menatap
+  vi: nhìn chằm chằm
+  th: จ้องมอง
+  ko: 응시하다
+  ja: じっと見つめる
+  bn: একদৃষ্টে তাকানো
+  fa: خیره شدن
+  zh: 盯着看
+  ur: گھورنا
+  kk: қарау
+
+ID 1579 (money):
+  ru: деньги
+  uk: гроші
+  de: Geld
+  es: dinero
+  fr: argent
+  pl: pieniądze
+  it: soldi
+  tr: para
+  pt: dinheiro
+  ro: bani
+  bg: пари
+  cs: peníze
+  sk: peniaze
+  hu: pénz
+  el: χρήματα
+  sl: denar
+  et: raha
+  lt: pinigai
+  da: penge
+  fi: raha
+  sv: pengar
+  hr: novac
+  lv: nauda
+  hi: पैसा
+  ar: مال
+  id: uang
+  vi: tiền
+  th: เงิน
+  ko: 돈
+  ja: お金
+  bn: টাকা
+  fa: پول
+  zh: 钱
+  ur: پیسہ
+  kk: ақша
+
+ID 1580 (small):
+  ru: маленький
+  uk: маленький
+  de: klein
+  es: pequeño
+  fr: petit
+  pl: mały
+  it: piccolo
+  tr: küçük
+  pt: pequeno
+  ro: mic
+  bg: малък
+  cs: malý
+  sk: malý
+  hu: kicsi
+  el: μικρό
+  sl: majhen
+  et: väike
+  lt: mažas
+  da: lille
+  fi: pieni
+  sv: liten
+  hr: mali
+  lv: mazs
+  hi: छोटा
+  ar: صغير
+  id: kecil
+  vi: nhỏ
+  th: เล็ก
+  ko: 작은
+  ja: 小さい
+  bn: ছোট
+  fa: کوچک
+  zh: 小的
+  ur: چھوٹا
+  kk: кішкентай
+
+ID 1581 (lie lay lain):
+  ru: класть, лежать
+  uk: лежати
+  de: legen, lügen
+  es: yacer, estar acostado
+  fr: mettre, mentir
+  pl: kłaść, leżeć, kłamać
+  it: mettere, fi
+  tr: koymak, yalan söylemek
+  pt: deitar-se, jazer
+  ro: a pune, a minți
+  bg: слагам, лъжа
+  cs: položit, lhát
+  sk: položiť, klamať
+  hu: tesz, hazud
+  el: βάζω, ψεύδομαι
+  sl: postaviti, lagati
+  et: panema, valetama
+  lt: įdėti, meluoti
+  da: lægge, lyve
+  fi: laittaa, valehdella
+  sv: lägga, ljuga
+  hr: staviti, lagati
+  lv: likt, melot
+  hi: रखना, लेटना
+  ar: يضع، يكذب
+  id: meletakkan, berbohong
+  vi: đặt, nói dối
+  th: วาง, โกหก
+  ko: 놓다, 거짓말하다
+  ja: 置く、横たわる
+  bn: শোয়ানো, শুয়ে থাকা
+  fa: دروغ گفتن، دراز کشیدن
+  zh: 放置、躺
+  ur: لیٹنا، رکھنا
+  kk: қою, өтірік айту
+
+ID 1582 (drink):
+  ru: напиток
+  uk: напій
+  de: trinken
+  es: bebida
+  fr: boire
+  pl: napój
+  it: bere
+  tr: içmek
+  pt: bebida
+  ro: bea
+  bg: питие
+  cs: pití
+  sk: piť
+  hu: ital
+  el: ποτό
+  sl: pijača
+  et: jook
+  lt: gėrimas
+  da: drikke
+  fi: juoda
+  sv: dricka
+  hr: piti
+  lv: dzert
+  hi: पीना
+  ar: يشرب
+  id: minum
+  vi: uống
+  th: ดื่ม
+  ko: 마시다
+  ja: 飲む
+  bn: পানীয়, পান করা
+  fa: نوشیدنی، نوشیدن
+  zh: 饮料
+  ur: مشروب، پینا
+  kk: ішу
+
+ID 1583 (guess):
+  ru: предполагать, догадаться
+  uk: припускати, здогадатися
+  de: annehmen, raten
+  es: asumir, adivinar
+  fr: supposer, deviner
+  pl: zgadywać, przypuszczać
+  it: presumere, ipotizzare
+  tr: varsaymak, tahmin etmek
+  pt: supor, adivinhar
+  ro: a presupune, a ghici
+  bg: да предполагам, да гадая
+  cs: předpokládat, odhadovat
+  sk: predpokladať, hádať
+  hu: feltételezni, találgatni
+  el: να υποθέσω, να μαντέψω
+  sl: domnevati, ugibati
+  et: oletama, arvama
+  lt: spėti, manyti
+  da: antage, gætte
+  fi: olettaa, arvata
+  sv: anta, gissa
+  hr: pretpostaviti, nagađati
+  lv: pieņemt, minēt
+  hi: अनुमान लगाना
+  ar: يفترض، يخمن
+  id: berasumsi, menebak
+  vi: cho rằng, đoán
+  th: สมมติ, เดา
+  ko: 추측하다, 짐작하다
+  ja: 推測する、思い込む
+  bn: অনুমান করা
+  fa: حدس زدن
+  zh: 猜测
+  ur: اندازہ لگانا
+  kk: болжау
+
+ID 1584 (gain):
+  ru: прирост
+  uk: приріст
+  de: Zunahme
+  es: ganancia, aumento
+  fr: augmenter
+  pl: zysk, zyskiwać
+  it: aumento
+  tr: arttırmak
+  pt: ganhar, obter, ganho
+  ro: crește
+  bg: увеличение
+  cs: zvýšení
+  sk: zvýšenie
+  hu: növekedés
+  el: αύξηση
+  sl: povečanje
+  et: suurendama
+  lt: padidėjimas
+  da: øge
+  fi: lisätä
+  sv: öka
+  hr: povećati
+  lv: palielināt
+  hi: बढ़ाना
+  ar: يزيد
+  id: meningkatkan
+  vi: tăng lên
+  th: เพิ่มขึ้น
+  ko: 증가시키다
+  ja: 増える
+  bn: লাভ করা
+  fa: به دست آوردن، افزایش
+  zh: 增长、收益
+  ur: حاصل کرنا، اضافہ ہونا
+  kk: арттыру
+
+ID 1585 (sure):
+  ru: конечно, уверенный
+  uk: звичайно, впевнений
+  de: Natürlich, zuversichtlich
+  es: por supuesto, seguro
+  fr: Bien sûr, confiant
+  pl: pewny, oczywiście
+  it: certo, fiducioso
+  tr: Elbette, kendinden emin.
+  pt: é claro
+  ro: desigur, încrezător
+  bg: разбира се, уверен
+  cs: samozřejmě sebevědomý
+  sk: samozrejme, sebavedomý
+  hu: természetesen, magabiztosan
+  el: φυσικά, σίγουρος
+  sl: seveda, samozavesten
+  et: muidugi, enesekindel
+  lt: žinoma, pasitikintis savimi
+  da: helt sikkert, selvsikker
+  fi: varmasti, luottavainen
+  sv: säkerligen, säker
+  hr: sigurno, samouvjereno
+  lv: noteikti, pārliecināts
+  hi: निश्चित, पक्का
+  ar: بالتأكيد، واثق
+  id: tentu saja, percaya diri
+  vi: chắc chắn, tự tin
+  th: แน่นอน, มั่นใจ
+  ko: 확실히, 자신감 있는
+  ja: 確かに、自信がある
+  bn: নিশ্চিত
+  fa: مطمئن
+  zh: 当然、确定的
+  ur: یقیناً، مطمئن، پُریقین
+  kk: сенімді
+
+ID 1586 (skill):
+  ru: навык
+  uk: навик
+  de: Fähigkeit
+  es: habilidad
+  fr: compétence
+  pl: umiejętność
+  it: abilità
+  tr: yetenek
+  pt: habilidade
+  ro: abilitate
+  bg: умение
+  cs: dovednost
+  sk: zručnosť
+  hu: készség
+  el: επιδεξιότητα
+  sl: spretnost
+  et: oskus
+  lt: įgūdis
+  da: færdighed
+  fi: taito
+  sv: skicklighet
+  hr: vještina
+  lv: prasme
+  hi: कौशल
+  ar: مهارة
+  id: keterampilan
+  vi: kỹ năng
+  th: ทักษะ
+  ko: 기술
+  ja: スキル
+  bn: দক্ষতা
+  fa: مهارت
+  zh: 技能
+  ur: مہارت
+  kk: шеберлік
+
+ID 1587 (press):
+  ru: нажимать
+  uk: натискати
+  de: drücken
+  es: presionar, prensa
+  fr: presse
+  pl: naciskać
+  it: premere
+  tr: basmak
+  pt: pressionar, imprensa
+  ro: presa
+  bg: преса
+  cs: tisk
+  sk: tlač
+  hu: sajtó
+  el: τύπος
+  sl: pritisnite
+  et: vajutage
+  lt: spauda
+  da: presse
+  fi: painaa
+  sv: pressa
+  hr: pritisnuti
+  lv: spiest
+  hi: दबाना
+  ar: يضغط
+  id: menekan
+  vi: ấn
+  th: กด
+  ko: 누르다
+  ja: 押す
+  bn: চাপ দেওয়া
+  fa: فشار دادن، مطبوعات
+  zh: 按、压
+  ur: دبانا، پریس
+  kk: басу
+
+ID 1588 (lie):
+  ru: ложь
+  uk: брехня
+  de: Lüge
+  es: mentir
+  fr: mensonge
+  pl: kłamstwo
+  it: menzogna
+  tr: yalan
+  pt: mentira, mentir
+  ro: minciună
+  bg: лъжа
+  cs: lež
+  sk: lož
+  hu: hazugság
+  el: ψέμα
+  sl: laž
+  et: valetama
+  lt: melas
+  da: lyve
+  fi: valehdella
+  sv: ljuga
+  hr: lagati
+  lv: melot
+  hi: लेटना
+  ar: يكذب
+  id: berbohong
+  vi: nói dối
+  th: โกหก
+  ko: 거짓말하다
+  ja: 嘘をつく
+  bn: শোয়া, মিথ্যা বলা
+  fa: دروغ
+  zh: 谎言
+  ur: جھوٹ
+  kk: өтірік
+
+ID 1589 (broad):
+  ru: широкий
+  uk: широкий
+  de: breit
+  es: ancho
+  fr: large
+  pl: szeroki
+  it: Largo
+  tr: geniş
+  pt: largo
+  ro: larg
+  bg: широк
+  cs: široký
+  sk: široký
+  hu: széles
+  el: ευρύς
+  sl: širok
+  et: lai
+  lt: platus
+  da: bred
+  fi: leveä
+  sv: brett
+  hr: širok
+  lv: plats
+  hi: चौड़ा
+  ar: واسع
+  id: luas
+  vi: rộng
+  th: กว้าง
+  ko: 넓은
+  ja: 広い
+  bn: প্রশস্ত
+  fa: پهن، گسترده
+  zh: 宽广的
+  ur: چوڑا
+  kk: кең
+
+ID 1590 (legal):
+  ru: юридический
+  uk: юридичний
+  de: legal
+  es: legal
+  fr: légal
+  pl: prawny
+  it: legale
+  tr: yasal
+  pt: jurídico
+  ro: juridic
+  bg: правни
+  cs: právní
+  sk: právne
+  hu: jogi
+  el: νομικός
+  sl: pravno
+  et: juriidiline
+  lt: teisinis
+  da: lovlig
+  fi: laillinen
+  sv: lagligt
+  hr: legalan
+  lv: likumīgs
+  hi: कानूनी
+  ar: قانوني
+  id: legal
+  vi: hợp pháp
+  th: ถูกกฎหมาย
+  ko: 합법적인
+  ja: 合法的な
+  bn: আইনগত
+  fa: قانونی
+  zh: 合法的
+  ur: قانونی
+  kk: заңды
+
+ID 1591 (die):
+  ru: умереть
+  uk: померти
+  de: sterben
+  es: morir
+  fr: mourir
+  pl: umierać
+  it: morire
+  tr: ölmek
+  pt: morrer
+  ro: muri
+  bg: умирам
+  cs: zemřít
+  sk: zomrieť
+  hu: meghal
+  el: καλούπι
+  sl: umreti
+  et: surema
+  lt: mirti
+  da: terning
+  fi: kuolla
+  sv: tärning
+  hr: umrijeti
+  lv: mirt
+  hi: मरना
+  ar: يموت
+  id: mati
+  vi: chết
+  th: ตาย
+  ko: 죽다
+  ja: 死ぬ
+  bn: মারা যাওয়া
+  fa: مردن
+  zh: 死
+  ur: مرنا
+  kk: өлу
+
+ID 1592 (kick):
+  ru: пинать
+  uk: штовхати
+  de: Kick
+  es: patear, patada
+  fr: coup
+  pl: kopać, kopnięcie
+  it: calcio
+  tr: tekme atmak
+  pt: chutar, chute
+  ro: lovi cu piciorul
+  bg: ритник
+  cs: kop
+  sk: kopnúť
+  hu: rúgás
+  el: λάκτισμα
+  sl: brcati
+  et: löök
+  lt: spyris
+  da: spark
+  fi: potkaista
+  sv: sparka
+  hr: udariti nogom
+  lv: spēriens
+  hi: लात मारना
+  ar: يركل
+  id: menendang
+  vi: đá
+  th: เตะ
+  ko: 차다
+  ja: 蹴る
+  bn: লাথি মারা
+  fa: لگد زدن
+  zh: 踢
+  ur: لات مارنا
+  kk: тебу
+
+ID 1593 (bit):
+  ru: кусочек, немного
+  uk: шматочок, трохи
+  de: ein Stück, ein bisschen
+  es: un pedazo, un poquito
+  fr: un morceau, un petit peu
+  pl: kawałek, trochę
+  it: un pezzo, un pezzettino
+  tr: bir parça, biraz
+  pt: um pedaço
+  ro: o bucată, puțin
+  bg: парче, малко
+  cs: kousek, trochu
+  sk: kúsok, trochu
+  hu: egy darab, egy kicsit
+  el: ένα κομμάτι, λίγο
+  sl: košček, malo
+  et: tükk, natuke
+  lt: gabalėlis, truputį
+  da: brik, lidt
+  fi: pala, pieni
+  sv: pjäs, lite
+  hr: komad, malo
+  lv: gabaliņš, mazs
+  hi: टुकड़ा, थोड़ा
+  ar: قطعة، قليل
+  id: sepotong, sedikit
+  vi: miếng, một chút
+  th: ชิ้น, เล็กน้อย
+  ko: 조각, 조금
+  ja: 一片、少し
+  bn: একটু, টুকরা
+  fa: کمی، تکه
+  zh: 一点、少量
+  ur: تھوڑا سا، ٹکڑا
+  kk: бөлік, аздап
+
+ID 1594 (green):
+  ru: зеленый
+  uk: зелений
+  de: Grün
+  es: verde
+  fr: vert
+  pl: zielony
+  it: verde
+  tr: yeşil
+  pt: verde
+  ro: verde
+  bg: зелено
+  cs: zelený
+  sk: zelená
+  hu: zöld
+  el: πράσινος
+  sl: zelena
+  et: roheline
+  lt: žalia
+  da: grøn
+  fi: vihreä
+  sv: grönt
+  hr: zeleno
+  lv: zaļš
+  hi: हरा
+  ar: أخضر
+  id: hijau
+  vi: xanh lá cây
+  th: สีเขียว
+  ko: 녹색
+  ja: 緑
+  bn: সবুজ
+  fa: سبز
+  zh: 绿色的
+  ur: سبز
+  kk: жасыл
+
+ID 1595 (block):
+  ru: блокировать
+  uk: блокувати
+  de: Block
+  es: bloquear
+  fr: bloc
+  pl: blokować, blok
+  it: bloccare
+  tr: engellemek
+  pt: bloquear
+  ro: bloc
+  bg: блок
+  cs: blok
+  sk: blok
+  hu: tömb
+  el: φραγμός
+  sl: blok
+  et: plokk
+  lt: blokas
+  da: blok
+  fi: lohko
+  sv: blockera
+  hr: blok
+  lv: bloks
+  hi: ब्लॉक
+  ar: يحجب
+  id: blok
+  vi: chặn
+  th: บล็อก
+  ko: 막다
+  ja: ブロック
+  bn: বাধা দেওয়া, ব্লক
+  fa: مسدود کردن، بلوک
+  zh: 封锁、街区
+  ur: بلاک کرنا، رکاوٹ، حصہ
+  kk: блок
+
+ID 1596 (foot):
+  ru: ступня
+  uk: ступня
+  de: Sohle, einzig, alleinig
+  es: pie
+  fr: seul
+  pl: stopa
+  it: suola
+  tr: ayak tabanı
+  pt: pé
+  ro: unic
+  bg: подметка
+  cs: podrážka
+  sk: podrážka
+  hu: egyetlen
+  el: μόνος
+  sl: podplat
+  et: tald
+  lt: padas
+  da: fod
+  fi: jalka
+  sv: fot
+  hr: stopalo
+  lv: pēda
+  hi: पैर
+  ar: قدم
+  id: kaki
+  vi: chân
+  th: เท้า
+  ko: 발
+  ja: 足
+  bn: পা
+  fa: پا
+  zh: 脚
+  ur: پاؤں
+  kk: фут
+
+ID 1597 (fresh):
+  ru: свежий
+  uk: свіжий
+  de: frisch
+  es: fresco
+  fr: frais
+  pl: świeży
+  it: fresco
+  tr: taze
+  pt: fresco
+  ro: proaspăt
+  bg: прясно
+  cs: čerstvý
+  sk: čerstvé
+  hu: friss
+  el: φρέσκο
+  sl: sveže
+  et: värske
+  lt: šviežias
+  da: frisk
+  fi: tuore
+  sv: färskt
+  hr: svježe
+  lv: svaigs
+  hi: ताज़ा
+  ar: طازج
+  id: segar
+  vi: tươi
+  th: สด
+  ko: 신선한
+  ja: 新鮮な
+  bn: তাজা
+  fa: تازه
+  zh: 新鲜的
+  ur: تازہ
+  kk: жаңа
+
+ID 1598 (offer):
+  ru: предложение
+  uk: пропозиція
+  de: Angebot
+  es: oferta
+  fr: offre
+  pl: oferta
+  it: offerta
+  tr: teklif
+  pt: oferecer
+  ro: oferi
+  bg: оферта
+  cs: nabídka
+  sk: ponuka
+  hu: ajánlat
+  el: προσφορά
+  sl: ponudba
+  et: pakkumine
+  lt: pasiūlymas
+  da: forslag
+  fi: ehdotus
+  sv: förslag
+  hr: prijedlog
+  lv: priekšlikums
+  hi: प्रस्ताव
+  ar: اقتراح
+  id: proposal
+  vi: đề xuất
+  th: ข้อเสนอ
+  ko: 제안
+  ja: 提案
+  bn: প্রস্তাব
+  fa: پیشنهاد، پیشنهاد دادن
+  zh: 提供、提议
+  ur: پیشکش
+  kk: ұсыныс
+
+ID 1599 (kill):
+  ru: убивать
+  uk: вбивати
+  de: töten
+  es: matar
+  fr: tuer
+  pl: zabić
+  it: uccisione
+  tr: öldürmek
+  pt: matar
+  ro: ucide
+  bg: убивам
+  cs: zabít
+  sk: zabiť
+  hu: megöl
+  el: σκοτώνω
+  sl: ubiti
+  et: tapma
+  lt: nužudyti
+  da: dræbe
+  fi: tappaa
+  sv: döda
+  hr: ubiti
+  lv: nogalināt
+  hi: मारना
+  ar: يقتل
+  id: membunuh
+  vi: giết
+  th: ฆ่า
+  ko: 죽이다
+  ja: 殺す
+  bn: হত্যা করা
+  fa: کشتن
+  zh: 杀死
+  ur: مار ڈالنا
+  kk: өлтіру
+
+ID 1600 (apple):
+  ru: яблоко
+  uk: яблуко
+  de: Apfel
+  es: manzana
+  fr: pomme
+  pl: jabłko
+  it: mela
+  tr: elma
+  pt: maçã
+  ro: măr
+  bg: ябълка
+  cs: jablko
+  sk: jablko
+  hu: alma
+  el: μήλο
+  sl: jabolko
+  et: õun
+  lt: obuolys
+  da: æble
+  fi: omena
+  sv: äpple
+  hr: jabuka
+  lv: ābols
+  hi: सेब
+  ar: تفاحة
+  id: apel
+  vi: táo
+  th: แอปเปิล
+  ko: 사과
+  ja: りんご
+  bn: আপেল
+  fa: سیب
+  zh: 苹果
+  ur: سیب
+  kk: алма
+
+ID 1601 (yet):
+  ru: еще
+  uk: ще
+  de: mehr
+  es: todavía, aún, sin embargo
+  fr: plus
+  pl: jeszcze, już, jednak
+  it: Di più
+  tr: Daha
+  pt: ainda, porém
+  ro: Mai mult
+  bg: повече
+  cs: více
+  sk: viac
+  hu: több
+  el: περισσότερο
+  sl: več
+  et: rohkem
+  lt: daugiau
+  da: mere
+  fi: lisää
+  sv: mer
+  hr: više
+  lv: vairāk
+  hi: अधिक
+  ar: أكثر
+  id: lebih banyak
+  vi: nhiều hơn
+  th: เพิ่มเติม
+  ko: 더 많은
+  ja: もっと
+  bn: এখনও
+  fa: هنوز، با این حال
+  zh: 还、尚未
+  ur: ابھی تک، پھر بھی، ابھی
+  kk: тағы
+

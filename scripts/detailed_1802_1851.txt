@@ -1,0 +1,1850 @@
+ID 1802 (journal):
+  ru: журнал
+  uk: журнал
+  de: Magazin
+  es: revista
+  fr: revue
+  pl: magazyn
+  it: rivista
+  tr: dergi
+  pt: diário, periódico
+  ro: revistă
+  bg: списание
+  cs: časopis
+  sk: časopis
+  hu: magazin
+  el: περιοδικό
+  sl: revija
+  et: ajakiri
+  lt: žurnalas
+  da: tidsskrift
+  fi: päiväkirja
+  sv: tidskrift
+  hr: dnevnik
+  lv: žurnāls
+  hi: पत्रिका
+  ar: مجلة
+  id: jurnal
+  vi: tạp chí
+  th: วารสาร
+  ko: 저널
+  ja: 雑誌
+  bn: সাময়িকী
+  fa: مجله، روزنامه
+  zh: 期刊、杂志
+  ur: جریدہ
+  kk: журнал
+
+ID 1803 (respond):
+  ru: отвечать, отреагировать
+  uk: відповідати, відреагувати
+  de: Antwort, Reaktion
+  es: responder, reaccionar
+  fr: répondre, réagir
+  pl: odpowiedzieć, zareagować
+  it: rispondere, reagire
+  tr: yanıtlamak, tepki vermek
+  pt: responder
+  ro: răspunde, reacționează
+  bg: отговор, реакция
+  cs: odpovědět, reagovat
+  sk: odpovedať, reagovať
+  hu: válaszolni, reagálni
+  el: απάντηση, αντίδραση
+  sl: odgovoriti, reagirati
+  et: vastata, reageerida
+  lt: atsakyti, reaguoti
+  da: reagere
+  fi: vastata, reagoida
+  sv: svara, reagera
+  hr: odgovoriti, reagirati
+  lv: atbildēt, reaģēt
+  hi: प्रतिक्रिया देना, उत्तर
+  ar: يستجيب، يتفاعل
+  id: menanggapi, bereaksi
+  vi: đáp lại, phản ứng
+  th: ตอบสนอง, โต้ตอบ
+  ko: 반응하다, 응답하다
+  ja: 反応する、応答する
+  bn: উত্তর দেওয়া
+  fa: پاسخ دادن
+  zh: 回应、回答
+  ur: جواب دینا
+  kk: жауап беру, әрекет ету
+
+ID 1804 (detail):
+  ru: деталь
+  uk: деталь
+  de: Detail
+  es: detalle
+  fr: détail
+  pl: szczegół
+  it: dettaglio
+  tr: detay
+  pt: detalhe
+  ro: detaliu
+  bg: детайл
+  cs: detail
+  sk: detail
+  hu: részlet
+  el: λεπτομέρεια
+  sl: podrobnost
+  et: detail
+  lt: detalė
+  da: detalje
+  fi: yksityiskohta
+  sv: detalj
+  hr: detalj
+  lv: detalizēt
+  hi: विवरण
+  ar: تفاصيل
+  id: detail
+  vi: chi tiết
+  th: รายละเอียด
+  ko: 세부 사항
+  ja: 詳細
+  bn: বিস্তারিত
+  fa: جزئیات
+  zh: 细节
+  ur: تفصیل
+  kk: егжей-тегжейлі
+
+ID 1805 (collect):
+  ru: собирать, коллекционировать, накапливать
+  uk: збирати, накопичувати
+  de: sammeln, anhäufen
+  es: recoger, coleccionar, reunir
+  fr: collectionner, ramasser
+  pl: zbierać, gromadzić
+  it: raccogliere, accumulare
+  tr: toplamak, biriktirmek
+  pt: coletar, reunir
+  ro: aduna, acumula
+  bg: събирам, натрупвам
+  cs: shromažďovat, hromadit
+  sk: zbierať, hromadiť
+  hu: gyűjt, felhalmoz
+  el: συλλέγω, συσσωρεύω
+  sl: zbirati, kopičiti
+  et: koguma, kogunema
+  lt: rinkti, kaupti
+  da: samle, indsamle, akkumulere
+  fi: kerätä, kerryttää
+  sv: samla, ackumulera
+  hr: skupiti, skupljati, akumulirati
+  lv: vākt, uzkrāt
+  hi: एकत्र करना
+  ar: يجمع، يراكم
+  id: mengumpulkan, mengoleksi
+  vi: thu thập, tích lũy
+  th: รวบรวม, สะสม
+  ko: 수집하다, 모으다
+  ja: 集める、蓄積する
+  bn: সংগ্রহ করা
+  fa: جمع‌آوری کردن
+  zh: 收集、收藏、积累
+  ur: جمع کرنا
+  kk: жинау, жинақтау
+
+ID 1806 (league):
+  ru: лига
+  uk: ліга
+  de: Liga
+  es: liga
+  fr: ligue
+  pl: liga
+  it: lega
+  tr: lig
+  pt: liga
+  ro: ligă
+  bg: лига
+  cs: liga
+  sk: liga
+  hu: liga
+  el: σύνδεσμος
+  sl: liga
+  et: liiga
+  lt: lyga
+  da: liga
+  fi: liiga
+  sv: liga
+  hr: liga
+  lv: līga
+  hi: संघ
+  ar: دوري
+  id: liga
+  vi: liên đoàn
+  th: ลีก
+  ko: 리그
+  ja: リーグ
+  bn: লিগ
+  fa: لیگ
+  zh: 联盟
+  ur: لیگ
+  kk: лига
+
+ID 1807 (produce):
+  ru: производить
+  uk: виробляти
+  de: produzieren
+  es: producir
+  fr: produire
+  pl: wytwarzać
+  it: produrre
+  tr: üretmek
+  pt: produzir
+  ro: legume şi fructe
+  bg: продукция
+  cs: produkce
+  sk: produkcia
+  hu: termel
+  el: παράγω
+  sl: pridelek
+  et: toota
+  lt: gaminti
+  da: producere
+  fi: tuottaa
+  sv: producera
+  hr: proizvoditi
+  lv: ražot
+  hi: उत्पादन करना
+  ar: ينتج
+  id: menghasilkan
+  vi: sản xuất
+  th: ผลิต
+  ko: 생산하다
+  ja: 生産する
+  bn: উৎপাদন করা
+  fa: تولید کردن، محصول
+  zh: 生产、农产品
+  ur: پیدا کرنا
+  kk: өндіру
+
+ID 1808 (summer):
+  ru: лето
+  uk: літо
+  de: Sommer
+  es: verano
+  fr: été
+  pl: lato
+  it: estate
+  tr: yaz
+  pt: verão
+  ro: vară
+  bg: лято
+  cs: letní
+  sk: leto
+  hu: nyári
+  el: καλοκαίρι
+  sl: poletje
+  et: suvi
+  lt: vasara
+  da: sommer
+  fi: kesä
+  sv: sommar
+  hr: ljeto
+  lv: vasara
+  hi: गर्मी
+  ar: صيف
+  id: musim panas
+  vi: mùa hè
+  th: ฤดูร้อน
+  ko: 여름
+  ja: 夏
+  bn: গ্রীষ্মকাল
+  fa: تابستان
+  zh: 夏天
+  ur: گرمیوں کا موسم
+  kk: жаз
+
+ID 1809 (already):
+  ru: уже
+  uk: вже
+  de: bereits
+  es: ya
+  fr: déjà
+  pl: już
+  it: Già
+  tr: çoktan
+  pt: já
+  ro: deja
+  bg: вече
+  cs: již
+  sk: už
+  hu: már
+  el: ήδη
+  sl: že
+  et: juba
+  lt: jau
+  da: allerede
+  fi: jo
+  sv: redan
+  hr: već
+  lv: jau
+  hi: पहले से ही
+  ar: بالفعل
+  id: sudah
+  vi: đã
+  th: แล้ว
+  ko: 이미
+  ja: すでに
+  bn: ইতিমধ্যে
+  fa: قبلاً، از قبل
+  zh: 已经
+  ur: پہلے ہی
+  kk: қазірдің өзінде
+
+ID 1810 (primary):
+  ru: начальный
+  uk: основний, первинний
+  de: primär, grundlegend
+  es: primario, principal
+  fr: primaire, principal
+  pl: podstawowy
+  it: primario, principale
+  tr: temel, birincil
+  pt: primário, principal
+  ro: elementar
+  bg: елементарен
+  cs: základní
+  sk: elementárny
+  hu: alapvető
+  el: στοιχειώδης
+  sl: osnovnošolski
+  et: algkooli
+  lt: pradinis
+  da: indledende
+  fi: alkuperäinen
+  sv: initial
+  hr: početni
+  lv: sākotnējais
+  hi: प्राथमिक, मुख्य
+  ar: أولي
+  id: utama, primer, dasar
+  vi: chính, cơ bản, ban đầu
+  th: เริ่มต้น
+  ko: 주요한, 기본적인, 초등의
+  ja: 主要な、初等の
+  bn: প্রাথমিক
+  fa: اصلی، ابتدایی
+  zh: 主要的、初级的
+  ur: اٹھانا، بلند کرنا، اٹھ کھڑا ہونا
+  kk: бастапқы
+
+ID 1811 (decade):
+  ru: десятилетие
+  uk: десятиліття
+  de: Jahrzehnt
+  es: década
+  fr: décennie
+  pl: dekada
+  it: decennio
+  tr: on yıl
+  pt: década
+  ro: deceniu
+  bg: десетилетие
+  cs: desetiletí
+  sk: desaťročie
+  hu: évtized
+  el: δεκαετία
+  sl: desetletje
+  et: kümnendi
+  lt: dešimtmetis
+  da: årti
+  fi: vuosikymmen
+  sv: årtionde
+  hr: desetljeće
+  lv: desmitgade
+  hi: दशक
+  ar: عقد
+  id: dekade
+  vi: thập kỷ
+  th: ทศวรรษ
+  ko: 십년
+  ja: 10年
+  bn: দশক
+  fa: دهه
+  zh: 十年
+  ur: دہائی
+  kk: онжылдық
+
+ID 1812 (nearly):
+  ru: около, почти
+  uk: близько, майже
+  de: ungefähr, fast
+  es: casi
+  fr: environ, presque
+  pl: około, prawie
+  it: circa, quasi
+  tr: neredeyse, yaklaşık
+  pt: quase
+  ro: despre, aproape
+  bg: около, почти
+  cs: o, téměř
+  sk: takmer, asi
+  hu: körülbelül, majdnem
+  el: περίπου, σχεδόν
+  sl: približno, skoraj
+  et: umbes, peaaegu
+  lt: apie, beveik
+  da: omkring, næsten
+  fi: noin, melkein
+  sv: ungefär, nästan
+  hr: otprilike, gotovo
+  lv: apmēram, gandrīz
+  hi: लगभग
+  ar: تقريبًا، يكاد
+  id: tentang, hampir
+  vi: về, gần như
+  th: เกี่ยวกับ, เกือบ
+  ko: 거의
+  ja: 約、ほぼ
+  bn: প্রায়
+  fa: تقریباً
+  zh: 几乎、差不多
+  ur: تقریباً
+  kk: шамамен, дерлік
+
+ID 1813 (instead):
+  ru: вместо
+  uk: замість
+  de: anstatt
+  es: en lugar de, en vez de
+  fr: au lieu de
+  pl: zamiast
+  it: invece di
+  tr: yerine
+  pt: em vez de
+  ro: în loc de
+  bg: вместо
+  cs: místo
+  sk: namiesto
+  hu: helyett
+  el: αντί για
+  sl: namesto
+  et: selle asemel
+  lt: vietoj
+  da: i stedet
+  fi: sen sijaan
+  sv: istället
+  hr: umjesto toga
+  lv: tā vietā
+  hi: इसके बजाय
+  ar: بدلًا من ذلك
+  id: sebagai gantinya
+  vi: thay vì
+  th: แทน
+  ko: 대신에
+  ja: 代わりに
+  bn: পরিবর্তে
+  fa: به‌جای آن
+  zh: 代替、反而
+  ur: اس کے بجائے
+  kk: орнына
+
+ID 1814 (variety):
+  ru: разнообразие
+  uk: різноманітність
+  de: Diversität
+  es: variedad, diversidad
+  fr: diversité
+  pl: różnorodność
+  it: diversità
+  tr: çeşitlilik
+  pt: diversidade
+  ro: diversitate
+  bg: разнообразие
+  cs: rozmanitost
+  sk: rozmanitosť
+  hu: sokféleség
+  el: ποικιλία
+  sl: raznolikost
+  et: mitmekesisus
+  lt: įvairovė
+  da: variation
+  fi: valikoima
+  sv: variation
+  hr: raznolikost
+  lv: dažādība
+  hi: विविधता
+  ar: تنوع
+  id: variasi
+  vi: đa dạng
+  th: ความหลากหลาย
+  ko: 다양성
+  ja: 多様性
+  bn: বৈচিত্র্য
+  fa: تنوع، انواع
+  zh: 多样性、种类
+  ur: تنوع
+  kk: әртүрлілік
+
+ID 1815 (meaning):
+  ru: значение, иметь в виду
+  uk: значення, мати на увазі
+  de: Bedeutung: im Auge behalten
+  es: significado, querer decir
+  fr: sens, signification
+  pl: znaczenie, pamiętać
+  it: cioè, da tenere a mente
+  tr: anlam, kastetmek
+  pt: significado, significar
+  ro: adică, a ține cont
+  bg: значение, да се има предвид
+  cs: význam, mít na paměti
+  sk: význam, mať na pamäti
+  hu: vagyis észben tartani
+  el: που σημαίνει, να έχετε κατά νου
+  sl: kar pomeni, imeti v mislih
+  et: tähendus, meeles pidada
+  lt: reiškia, nepamiršti
+  da: betydning, husk
+  fi: merkitys, pitää mielessä
+  sv: betydelse, kom ihåg
+  hr: značenje, imati na umu
+  lv: nozīme, paturēt prātā
+  hi: अर्थ, ध्यान रखना
+  ar: معنى، يقصد، يعني
+  id: arti, makna
+  vi: ý nghĩa, ghi nhớ
+  th: ความหมาย, จดจำไว้
+  ko: 의미, 명심하다
+  ja: 意味、留意する
+  bn: অর্থ
+  fa: معنی، منظور
+  zh: 意思、含义
+  ur: معنی، مطلب
+  kk: мағынасы, есте сақтау
+
+ID 1816 (violence):
+  ru: насилие
+  uk: насильство
+  de: Gewalt
+  es: violencia
+  fr: violence
+  pl: przemoc
+  it: violenza
+  tr: şiddet
+  pt: violência
+  ro: violenţă
+  bg: насилие
+  cs: násilí
+  sk: násilie
+  hu: erőszak
+  el: βία
+  sl: nasilje
+  et: vägivald
+  lt: smurtas
+  da: vold
+  fi: väkivalta
+  sv: våld
+  hr: nasilje
+  lv: vardarbība
+  hi: हिंसा
+  ar: عنف
+  id: kekerasan
+  vi: bạo lực
+  th: ความรุนแรง
+  ko: 폭력
+  ja: 暴力
+  bn: সহিংসতা
+  fa: خشونت
+  zh: 暴力
+  ur: تشدد
+  kk: зорлық-зомбылық
+
+ID 1817 (directly):
+  ru: напрямую
+  uk: безпосередньо
+  de: direkt
+  es: directamente
+  fr: directement
+  pl: bezpośrednio
+  it: direttamente
+  tr: doğrudan
+  pt: diretamente
+  ro: direct
+  bg: директно
+  cs: přímo
+  sk: priamo
+  hu: közvetlenül
+  el: κατευθείαν
+  sl: neposredno
+  et: otse
+  lt: tiesiogiai
+  da: direkte
+  fi: suoraan
+  sv: direkt
+  hr: izravno
+  lv: tieši
+  hi: सीधे
+  ar: مباشرة
+  id: langsung
+  vi: trực tiếp
+  th: โดยตรง
+  ko: 직접적으로
+  ja: 直接
+  bn: সরাসরি
+  fa: مستقیماً
+  zh: 直接地
+  ur: براہ راست
+  kk: тікелей
+
+ID 1818 (election):
+  ru: выборы
+  uk: вибори
+  de: Wahlen
+  es: elecciones
+  fr: élections
+  pl: wybory
+  it: elezioni
+  tr: seçimler
+  pt: eleições
+  ro: alegeri
+  bg: избори
+  cs: volby
+  sk: voľby
+  hu: választások
+  el: αρχαιρεσίες
+  sl: volitve
+  et: valimised
+  lt: rinkimai
+  da: valg
+  fi: vaalit
+  sv: val
+  hr: izbori
+  lv: vēlēšanas
+  hi: चुनाव
+  ar: انتخابات
+  id: pemilihan
+  vi: bầu cử
+  th: การเลือกตั้ง
+  ko: 선거
+  ja: 選挙
+  bn: নির্বাচন
+  fa: انتخابات
+  zh: 选举
+  ur: انتخابات
+  kk: сайлау
+
+ID 1819 (perform):
+  ru: выполнять, выступать
+  uk: виконувати, виступати
+  de: Aufführen, sich äußern
+  es: actuar, realizar
+  fr: agir, s'exprimer
+  pl: wykonać, wypowiedzieć się
+  it: esibirsi, parlare
+  tr: gerçekleştirmek, oynamak
+  pt: realizar, executar
+  ro: a interpreta, a vorbi
+  bg: изпълнявам, изказвам се
+  cs: vystupovat, promluvit
+  sk: vystupovať, hovoriť
+  hu: fellépni, megszólalni
+  el: εκτελώ, μιλάω ανοιχτά
+  sl: nastopiti, spregovoriti
+  et: esinema, sõna võtma
+  lt: pasirodyti, kalbėti
+  da: udføre, handle
+  fi: suorittaa, toimia
+  sv: utföra, agera
+  hr: izvoditi, djelovati
+  lv: veikt, rīkoties
+  hi: प्रदर्शन करना, कार्य करना
+  ar: يؤدّي، ينفّذ، يقدّم عرضًا
+  id: melakukan, bertindak
+  vi: thực hiện, hành động
+  th: ปฏิบัติ, กระทำ
+  ko: 수행하다, 행동하다
+  ja: 行う、行動する
+  bn: সম্পাদন করা, পরিবেশন করা
+  fa: اجرا کردن، انجام دادن
+  zh: 执行、表演
+  ur: انجام دینا، پرفارم کرنا
+  kk: орындау, әрекет ету
+
+ID 1820 (ground):
+  ru: земля, поверхность, грунт, молотый
+  uk: земля, ґрунт, мелений
+  de: Erde, Oberfläche, Boden
+  es: suelo, terreno, molido
+  fr: terre, surface, sol
+  pl: ziemia, grunt
+  it: terreno, suolo
+  tr: toprak, yüzey, zemin, yer
+  pt: chão, terreno, moído
+  ro: pământ, suprafață, sol
+  bg: земя, повърхност, земна основа
+  cs: země, povrch, zem, přízemí
+  sk: zem, povrch
+  hu: föld, felszín, talaj
+  el: γη, επιφάνεια, έδαφος
+  sl: zemlja, površina, tla
+  et: maa, pind, maapind
+  lt: žemė, paviršius, gruntas
+  da: jord, overflade
+  fi: maa, pinta, maaperä
+  sv: jord, yta, mark
+  hr: zemlja, površina, tlo
+  lv: zeme, virsma, pamats
+  hi: पृथ्वी, सतह, जमीन
+  ar: أرض، سطح
+  id: tanah, dasar, bumi
+  vi: đất, bề mặt, mặt đất
+  th: โลก, พื้นผิว, พื้นดิน
+  ko: 지구, 표면, 땅
+  ja: 地球、地表、地面
+  bn: মাটি
+  fa: زمین، سطح، آسیاب‌شده
+  zh: 地面、土地、研磨的
+  ur: زمین
+  kk: жер, беті
+
+ID 1821 (expression):
+  ru: выражение
+  uk: вираз
+  de: Ausdruck
+  es: expresión
+  fr: expression
+  pl: wyrażenie
+  it: espressione
+  tr: ifade
+  pt: expressão
+  ro: expresie
+  bg: израз
+  cs: výraz
+  sk: výraz
+  hu: kifejezés
+  el: έκφραση
+  sl: izraz
+  et: väljend
+  lt: išraiška
+  da: udtryk
+  fi: ilmaus
+  sv: uttryck
+  hr: izraz
+  lv: izteiksme
+  hi: अभिव्यक्ति
+  ar: تعبير
+  id: ekspresi
+  vi: biểu hiện
+  th: การแสดงออก
+  ko: 표현
+  ja: 表現
+  bn: অভিব্যক্তি
+  fa: عبارت، بیان
+  zh: 表达、表情
+  ur: اظہار
+  kk: өрнек
+
+ID 1822 (important):
+  ru: важный
+  uk: важливий
+  de: wichtig
+  es: importante
+  fr: important
+  pl: ważny
+  it: importante
+  tr: önemli
+  pt: importante
+  ro: important
+  bg: важен
+  cs: důležité
+  sk: dôležité
+  hu: fontos
+  el: σπουδαίος
+  sl: pomembno
+  et: oluline
+  lt: svarbus
+  da: vigtig
+  fi: tärkeä
+  sv: viktigt
+  hr: važno
+  lv: svarīgs
+  hi: महत्वपूर्ण
+  ar: مهم
+  id: penting
+  vi: quan trọng
+  th: สำคัญ
+  ko: 중요한
+  ja: 重要な
+  bn: গুরুত্বপূর্ণ
+  fa: مهم
+  zh: 重要的
+  ur: اہم
+  kk: маңызды
+
+ID 1823 (absolutely):
+  ru: абсолютно
+  uk: абсолютно
+  de: absolut
+  es: absolutamente
+  fr: absolument
+  pl: absolutnie
+  it: assolutamente
+  tr: kesinlikle
+  pt: absolutamente
+  ro: absolut
+  bg: абсолютно
+  cs: absolutně
+  sk: absolútne
+  hu: teljesen
+  el: απολύτως
+  sl: absolutno
+  et: absoluutselt
+  lt: absoliučiai
+  da: absolut
+  fi: ehdottomasti
+  sv: absolut
+  hr: apsolutno
+  lv: absolūti
+  hi: बिल्कुल
+  ar: تمامًا، بصورة مطلقة
+  id: benar-benar
+  vi: hoàn toàn
+  th: อย่างแน่นอน
+  ko: 절대적으로
+  ja: 絶対に
+  bn: একেবারে
+  fa: کاملاً، مطلقاً
+  zh: 绝对地
+  ur: بالکل
+  kk: мүлдем
+
+ID 1824 (challenge):
+  ru: испытание, вызов
+  uk: випробування, виклик
+  de: Test, Herausforderung
+  es: prueba, desafío
+  fr: test, défi
+  pl: test, wyzwanie
+  it: prova, sfida
+  tr: test, meydan okuma
+  pt: desafio, desafiar
+  ro: test, provocare
+  bg: тест, предизвикателство
+  cs: zkouška, výzva
+  sk: skúška, výzva
+  hu: teszt, kihívás
+  el: δοκιμασία, πρόκληση
+  sl: preizkus, izziv
+  et: test, väljakutse
+  lt: išbandymas, iššūkis
+  da: test, udfordre
+  fi: testata, haastaa
+  sv: testa, utmana
+  hr: testirati, izazivati
+  lv: pārbaudīt, izaicināt
+  hi: परीक्षण, चुनौती
+  ar: تحدٍّ، يتحدّى، يواجه
+  id: tantangan, ujian
+  vi: thử nghiệm, thách thức
+  th: ทดสอบ, ท้าทาย
+  ko: 시험하다, 도전하다
+  ja: 試す、挑戦する
+  bn: চ্যালেঞ্জ
+  fa: چالش
+  zh: 挑战
+  ur: چیلنج
+  kk: сынақ, қиындық
+
+ID 1825 (determine):
+  ru: определять
+  uk: визначати
+  de: bestimmen
+  es: determinar
+  fr: déterminer
+  pl: określić
+  it: determinare
+  tr: belirlemek
+  pt: determinar
+  ro: determina
+  bg: определя
+  cs: určit
+  sk: určiť
+  hu: meghatározni
+  el: καθορίζω
+  sl: določiti
+  et: määrama
+  lt: nustatyti
+  da: bestemme
+  fi: määrittää
+  sv: bestämma
+  hr: odrediti
+  lv: noteikt
+  hi: निर्धारित करना, तय करना
+  ar: يحدد
+  id: menentukan
+  vi: xác định
+  th: กำหนด
+  ko: 결정하다
+  ja: 決定する
+  bn: নির্ধারণ করা
+  fa: تعیین کردن
+  zh: 确定、决定
+  ur: تعین کرنا
+  kk: анықтау
+
+ID 1826 (huge):
+  ru: огромный, гигантский
+  uk: величезний, гігантський
+  de: riesig, gigantisch
+  es: enorme, gigantesco
+  fr: énorme, gigantesque
+  pl: ogromny, gigantyczny
+  it: enorme, gigantesco
+  tr: devasa, muazzam
+  pt: enorme
+  ro: uriaș, gigantic
+  bg: огромен, гигантски
+  cs: obrovský, gigantický
+  sk: obrovský, gigantický
+  hu: hatalmas, gigantikus
+  el: τεράστιος, γιγαντιαίος
+  sl: ogromen, velikanski
+  et: tohutu, hiiglaslik
+  lt: milžiniškas, gigantiškas
+  da: enorm, gigantisk
+  fi: valtava, jättimäinen
+  sv: enorm, gigantisk
+  hr: ogroman, gigantski
+  lv: milzīgs, gigantisks
+  hi: विशाल
+  ar: ضخم، هائل
+  id: besar, raksasa
+  vi: khổng lồ, to lớn
+  th: ใหญ่โต, มหึมา
+  ko: 거대한, 엄청난
+  ja: 巨大な
+  bn: বিশাল
+  fa: بسیار بزرگ
+  zh: 巨大的
+  ur: بہت بڑا
+  kk: үлкен, алып
+
+ID 1827 (thirsty):
+  ru: испытывающий жажду
+  uk: відчуває спрагу
+  de: durstig
+  es: sediento
+  fr: soif
+  pl: spragniony
+  it: assetato
+  tr: susuz
+  pt: sedento
+  ro: însetat
+  bg: жаден
+  cs: žíznivý
+  sk: smädný
+  hu: szomjas
+  el: διψασμένος
+  sl: žejen
+  et: janune
+  lt: ištroškęs
+  da: tørstig
+  fi: janoinen
+  sv: törstig
+  hr: žedan
+  lv: izslāpis
+  hi: प्यासा
+  ar: عطشان
+  id: haus
+  vi: khát nước
+  th: กระหายน้ำ
+  ko: 목마른
+  ja: 喉が渇いた
+  bn: তৃষ্ণার্ত
+  fa: تشنه
+  zh: 口渴的
+  ur: پیاسا
+  kk: шөлдеген
+
+ID 1828 (animal):
+  ru: животное
+  uk: тварина
+  de: Tier
+  es: animal
+  fr: animal
+  pl: zwierzę
+  it: animale
+  tr: hayvan
+  pt: animal
+  ro: animal
+  bg: животно
+  cs: zvíře
+  sk: zviera
+  hu: állati
+  el: ζώο
+  sl: žival
+  et: loom
+  lt: gyvūnas
+  da: dyr
+  fi: eläin
+  sv: djur
+  hr: životinja
+  lv: dzīvnieks
+  hi: जानवर
+  ar: حيوان
+  id: hewan
+  vi: động vật
+  th: สัตว์
+  ko: 동물
+  ja: 動物
+  bn: প্রাণী
+  fa: حیوان
+  zh: 动物
+  ur: جانور
+  kk: жануар
+
+ID 1829 (obviously):
+  ru: очевидно
+  uk: очевидно
+  de: offensichtlich
+  es: obviamente
+  fr: évidemment
+  pl: oczywiście
+  it: ovviamente
+  tr: açıkça
+  pt: obviamente
+  ro: evident
+  bg: очевидно
+  cs: samozřejmě
+  sk: samozrejme
+  hu: nyilvánvalóan
+  el: προφανώς
+  sl: očitno
+  et: ilmselgelt
+  lt: akivaizdu
+  da: åbenlys
+  fi: ilmeinen
+  sv: uppenbart
+  hr: očito
+  lv: acīmredzams
+  hi: स्पष्ट
+  ar: من الواضح، بوضوح
+  id: jelas
+  vi: rõ ràng
+  th: ชัดเจน
+  ko: 명백한
+  ja: 明らかな
+  bn: স্পষ্টতই
+  fa: واضح است که
+  zh: 显然
+  ur: ظاہر ہے
+  kk: анық
+
+ID 1830 (much):
+  ru: много
+  uk: багато
+  de: viele
+  es: mucho, mucha
+  fr: beaucoup
+  pl: wiele
+  it: molti
+  tr: çok, fazla
+  pt: muito
+  ro: multe
+  bg: много
+  cs: mnoho
+  sk: veľa
+  hu: sok
+  el: πολοί
+  sl: veliko
+  et: palju
+  lt: daug
+  da: mange
+  fi: monta
+  sv: många
+  hr: mnogo
+  lv: daudzi
+  hi: अनेक
+  ar: كثير
+  id: banyak
+  vi: nhiều
+  th: มากมาย
+  ko: 많은
+  ja: 多くの
+  bn: অনেক
+  fa: زیاد
+  zh: 许多、大量
+  ur: زیادہ
+  kk: көп
+
+ID 1831 (answer):
+  ru: отвечать
+  uk: відповідати
+  de: Antwort
+  es: respuesta, responder
+  fr: répondre
+  pl: odpowiedź
+  it: rispondere
+  tr: cevap vermek
+  pt: responder
+  ro: răspuns
+  bg: отговор
+  cs: odpověď
+  sk: odpoveď
+  hu: válasz
+  el: απάντηση
+  sl: odgovor
+  et: vastus
+  lt: atsakymas
+  da: svar
+  fi: vastaus
+  sv: svar
+  hr: odgovor
+  lv: atbilde
+  hi: उत्तर
+  ar: إجابة، يجيب
+  id: menjawab
+  vi: câu trả lời
+  th: ตอบ
+  ko: 대답
+  ja: ​​ 答え
+  bn: উত্তর দেওয়া
+  fa: پاسخ، پاسخ دادن
+  zh: 回答、答案
+  ur: جواب دینا
+  kk: жауап
+
+ID 1832 (insurance):
+  ru: страхование
+  uk: страхування
+  de: Versicherung
+  es: seguro
+  fr: assurance
+  pl: ubezpieczenie
+  it: assicurazione
+  tr: sigorta
+  pt: seguro
+  ro: asigurare
+  bg: застраховка
+  cs: pojištění
+  sk: poistenie
+  hu: biztosítás
+  el: ασφάλιση
+  sl: zavarovanje
+  et: kindlustus
+  lt: draudimas
+  da: forsikring
+  fi: vakuutus
+  sv: försäkring
+  hr: osiguranje
+  lv: apdrošināšana
+  hi: बीमा
+  ar: تأمين
+  id: asuransi
+  vi: bảo hiểm
+  th: ประกันภัย
+  ko: 보험
+  ja: 保険
+  bn: বীমা
+  fa: بیمه
+  zh: 保险
+  ur: بیمہ
+  kk: сақтандыру
+
+ID 1833 (impact):
+  ru: влияние
+  uk: вплив
+  de: beeinflussen
+  es: influencia
+  fr: influence
+  pl: wpływ
+  it: influenza
+  tr: etki, etkilemek
+  pt: influência
+  ro: influenţa
+  bg: влияние
+  cs: vliv
+  sk: vplyv
+  hu: befolyás
+  el: επιρροή
+  sl: vpliv
+  et: mõju
+  lt: įtaka
+  da: indflydelse
+  fi: vaikutusvalta
+  sv: inflytande
+  hr: utjecaj
+  lv: ietekme
+  hi: प्रभाव
+  ar: تأثير
+  id: pengaruh
+  vi: ảnh hưởng
+  th: อิทธิพล
+  ko: 영향
+  ja: 影響
+  bn: প্রভাব
+  fa: تأثیر
+  zh: 影响、冲击
+  ur: اثر
+  kk: ықпал
+
+ID 1834 (opportunity):
+  ru: возможность
+  uk: можливість
+  de: Gelegenheit
+  es: oportunidad
+  fr: opportunité
+  pl: możliwość
+  it: opportunità
+  tr: fırsat
+  pt: oportunidade
+  ro: oportunitate
+  bg: възможност
+  cs: příležitost
+  sk: príležitosť
+  hu: lehetőség
+  el: ευκαιρία
+  sl: priložnost
+  et: võimalus
+  lt: galimybė
+  da: mulighed
+  fi: mahdollisuus
+  sv: möjlighet
+  hr: prilika
+  lv: iespēja
+  hi: अवसर
+  ar: فرصة
+  id: kesempatan
+  vi: cơ hội
+  th: โอกาส
+  ko: 기회
+  ja: 機会
+  bn: সুযোগ
+  fa: فرصت
+  zh: 机会
+  ur: موقع
+  kk: мүмкіндік
+
+ID 1835 (cash):
+  ru: наличные
+  uk: готівка
+  de: Kasse
+  es: efectivo
+  fr: espèces
+  pl: gotówka
+  it: contanti
+  tr: nakit, para
+  pt: dinheiro
+  ro: numerar
+  bg: пари в брой
+  cs: hotovost
+  sk: hotovosť
+  hu: készpénz
+  el: μετρητά
+  sl: gotovina
+  et: sularaha
+  lt: grynieji pinigai
+  da: kontanter
+  fi: käteinen
+  sv: kontanter
+  hr: gotovina
+  lv: skaidra nauda
+  hi: नकद
+  ar: نقود
+  id: uang tunai
+  vi: tiền mặt
+  th: เงินสด
+  ko: 현금
+  ja: 現金
+  bn: নগদ টাকা
+  fa: پول نقد
+  zh: 现金
+  ur: نقد رقم
+  kk: қолма-қол ақша
+
+ID 1836 (behind):
+  ru: позади
+  uk: позаду
+  de: hinter
+  es: detrás
+  fr: derrière
+  pl: za, z tyłu
+  it: dietro
+  tr: arkasında, geride
+  pt: atrás
+  ro: din spatele
+  bg: зад
+  cs: za
+  sk: za
+  hu: mögött
+  el: πίσω
+  sl: zadaj
+  et: taga
+  lt: už
+  da: bagved
+  fi: takana
+  sv: bakom
+  hr: iza
+  lv: aiz
+  hi: पीछे
+  ar: خلف
+  id: di belakang
+  vi: phía sau
+  th: ข้างหลัง
+  ko: 뒤에
+  ja: 後ろ
+  bn: পেছনে
+  fa: پشت، عقب
+  zh: 在后面
+  ur: پیچھے
+  kk: артта
+
+ID 1837 (annual):
+  ru: ежегодный
+  uk: щорічний
+  de: jährlich
+  es: anual
+  fr: annuel
+  pl: coroczny
+  it: annuale
+  tr: yıllık
+  pt: anual
+  ro: anual
+  bg: годишен
+  cs: výroční
+  sk: ročný
+  hu: évi
+  el: ετήσιος
+  sl: letno
+  et: aastane
+  lt: metinis
+  da: årlig
+  fi: vuosittainen
+  sv: årlig
+  hr: godišnji
+  lv: ikgadējs
+  hi: वार्षिक
+  ar: سنوي
+  id: tahunan
+  vi: hàng năm
+  th: รายปี
+  ko: 연간
+  ja: 年間の
+  bn: বার্ষিক
+  fa: سالانه
+  zh: 每年的
+  ur: سالانہ
+  kk: жылдық
+
+ID 1838 (mind):
+  ru: разум, помни
+  uk: розум, пам’ятай
+  de: Denk daran
+  es: mente, importar, recordar
+  fr: esprit, souviens-toi
+  pl: umysł, pamiętać
+  it: mente, ricorda
+  tr: zihin, önemsemek
+  pt: mente
+  ro: minte, amintește-ți
+  bg: ум, помни
+  cs: mysl, pamatuj si
+  sk: myseľ, pamätaj si
+  hu: emlékezz
+  el: μυαλό, θυμήσου
+  sl: um, zapomni si
+  et: meeles, pea meeles
+  lt: protas, prisimink
+  da: sind, husk
+  fi: mieli, muistaa
+  sv: sinne, kom ihåg
+  hr: um, zapamtiti
+  lv: prāts, atcerēties
+  hi: याद रखना
+  ar: عقل، ذهن، يمانع
+  id: pikiran, ingat
+  vi: tâm trí, nhớ
+  th: จำ, จดจำ
+  ko: 마음, 기억하다
+  ja: 心、思い出す
+  bn: মন
+  fa: ذهن، به خاطر داشتن
+  zh: 头脑、介意
+  ur: ذہن، یاد رکھنا
+  kk: ақыл, есте сақтау
+
+ID 1839 (above):
+  ru: выше над
+  uk: вище над
+  de: oben oben
+  es: encima de, por encima
+  fr: au-dessus
+  pl: powyżej
+  it: sopra sopra
+  tr: yukarıda, üstünde
+  pt: acima, em cima
+  ro: deasupra
+  bg: над над
+  cs: výše výše
+  sk: vyššie vyššie
+  hu: fent fent
+  el: παραπάνω
+  sl: zgoraj zgoraj
+  et: ülalpool
+  lt: aukščiau aukščiau
+  da: ovenfor
+  fi: yllä
+  sv: ovan
+  hr: gore
+  lv: iepriekš
+  hi: ऊपर
+  ar: أعلاه
+  id: di atas
+  vi: ở trên
+  th: ข้างบน
+  ko: 위
+  ja: 上
+  bn: উপরে
+  fa: بالا، بالاتر از
+  zh: 在上方、超过
+  ur: اوپر
+  kk: жоғарыда
+
+ID 1840 (tidy):
+  ru: аккуратный, приводить в порядок, убирать
+  uk: акуратний, прибирати
+  de: ordentlich, aufräumen
+  es: ordenado, arreglar, ordenar
+  fr: ranger, nettoyer
+  pl: schludny, sprzątać
+  it: ordinato, riordinare
+  tr: düzenli, derli toplu
+  pt: arrumar
+  ro: îngrijit, aranjat, curățenie
+  bg: подреден, чист
+  cs: uklidit
+  sk: upratať
+  hu: rendet rakni, takarítani
+  el: τακτοποιώ, καθαρίζω
+  sl: urejeno, pospravljeno, očiščeno
+  et: korrastama, koristama
+  lt: tvarkingas, sutvarkyti, išvalyti
+  da: pæn, rydde op
+  fi: siisti, siivota
+  sv: snyggt, städa upp
+  hr: uredno, pospremiti, očistiti
+  lv: kārtīgs, sakopt
+  hi: साफ-सुथरा
+  ar: أنيق، رتب، نظف
+  id: rapi, merapikan
+  vi: gọn gàng, ngăn nắp
+  th: เรียบร้อย, จัดระเบียบ, ทำความสะอาด
+  ko: 정리하다, 깔끔한
+  ja: 片付ける、きちんとした
+  bn: পরিপাটি, গুছিয়ে রাখা
+  fa: مرتب، مرتب کردن
+  zh: 整洁的、整理
+  ur: صاف ستھرا، ترتیب دینا
+  kk: ұқыпты, ретке келтіру, тазалау
+
+ID 1841 (neat):
+  ru: аккуратный
+  uk: акуратний
+  de: vorsichtig
+  es: pulcro, ordenado
+  fr: prudent
+  pl: ostrożny
+  it: attento
+  tr: düzenli, tertipli
+  pt: arrumado, organizado
+  ro: atent
+  bg: внимателен
+  cs: opatrný
+  sk: opatrný
+  hu: óvatos
+  el: προσεκτικός
+  sl: previden
+  et: ettevaatlik
+  lt: atsargus
+  da: ryddelig
+  fi: siisti
+  sv: snyggt
+  hr: uredan
+  lv: sakopt
+  hi: साफ
+  ar: مرتب
+  id: bersih
+  vi: ngăn nắp
+  th: เรียบร้อย
+  ko: 단정한
+  ja: きちんとした
+  bn: পরিপাটি
+  fa: مرتب، تمیز
+  zh: 整齐的、利落的
+  ur: صاف ستھرا
+  kk: ретке келтіру
+
+ID 1842 (beach):
+  ru: пляж
+  uk: пляж
+  de: Strand
+  es: playa
+  fr: plage
+  pl: plaża
+  it: spiaggia
+  tr: sahil
+  pt: praia
+  ro: plajă
+  bg: плаж
+  cs: pláž
+  sk: pláž
+  hu: strand
+  el: παραλία
+  sl: plaža
+  et: rand
+  lt: paplūdimys
+  da: strand
+  fi: ranta
+  sv: strand
+  hr: plaža
+  lv: pludmale
+  hi: समुद्र तट
+  ar: شاطئ
+  id: pantai
+  vi: bãi biển
+  th: ชายหาด
+  ko: 해변
+  ja: ビーチ
+  bn: সমুদ্রসৈকত
+  fa: ساحل
+  zh: 海滩
+  ur: ساحل
+  kk: жағажай
+
+ID 1843 (street):
+  ru: улица
+  uk: вулиця
+  de: Straße
+  es: calle
+  fr: rue
+  pl: ulica
+  it: strada
+  tr: sokak
+  pt: rua
+  ro: stradă
+  bg: улица
+  cs: ulice
+  sk: ulica
+  hu: utca
+  el: δρόμος
+  sl: ulica
+  et: tänav
+  lt: gatvė
+  da: gade
+  fi: katu
+  sv: gata
+  hr: ulica
+  lv: iela
+  hi: सड़क
+  ar: شارع
+  id: jalan
+  vi: đường phố
+  th: ถนน
+  ko: 거리
+  ja: 通り
+  bn: রাস্তা
+  fa: خیابان
+  zh: 街道
+  ur: گلی، سڑک
+  kk: көше
+
+ID 1844 (heat):
+  ru: нагревать, жара
+  uk: нагрівати, спека
+  de: Hitze
+  es: calor, calentar
+  fr: chaleur
+  pl: gorąco, ogrzewać
+  it: calore
+  tr: ısıtmak, ısı
+  pt: aquecer, calor
+  ro: căldură
+  bg: топлина
+  cs: teplo
+  sk: teplo
+  hu: hőség
+  el: θερμότητα
+  sl: vročina
+  et: kuumus
+  lt: karštis
+  da: varme op, varme
+  fi: lämmittää
+  sv: värma upp, värma
+  hr: zagrijati
+  lv: uzsildīt, uzkarsēt
+  hi: गर्म करना
+  ar: حرارة، يسخّن
+  id: memanaskan, panas
+  vi: làm nóng
+  th: ทำให้ร้อน, ความร้อน
+  ko: 데우다, 열
+  ja: 熱くなる、熱する
+  bn: তাপ, গরম করা
+  fa: گرما، گرم کردن
+  zh: 加热、热量
+  ur: گرمی، گرم کرنا
+  kk: ыстық
+
+ID 1845 (shape):
+  ru: форма, создавать форму
+  uk: форма, створювати форму
+  de: Formular, Formular erstellen
+  es: forma, dar forma
+  fr: forme, façonner
+  pl: kształt, kształtować
+  it: modulo, crea modulo
+  tr: form, form oluştur
+  pt: formulário
+  ro: formular, creați formular
+  bg: форма, създаване на форма
+  cs: formulář, vytvořit formulář
+  sk: formulár, vytvoriť formulár
+  hu: űrlap, űrlap létrehozása
+  el: μορφή, δημιουργία φόρμας
+  sl: obrazec, ustvari obrazec
+  et: vorm, loo vorm
+  lt: forma, sukurti formą
+  da: forme, skabe form
+  fi: muotoilla, luoda muoto
+  sv: forma, skapa form
+  hr: oblikovati, stvoriti oblik
+  lv: veidot, radīt formu
+  hi: आकार बनाना
+  ar: شكل، ابتكر شكلاً
+  id: bentuk, membuat bentuk
+  vi: hình dạng, tạo hình dạng
+  th: รูปร่าง, สร้างรูปร่าง
+  ko: 모양, 모양을 만들다
+  ja: 形を作る
+  bn: আকৃতি
+  fa: شکل، شکل دادن
+  zh: 形状、塑造
+  ur: شکل، شکل دینا
+  kk: пішін, пішін жасау
+
+ID 1846 (big):
+  ru: большой
+  uk: великий
+  de: groß
+  es: grande
+  fr: grand
+  pl: duży
+  it: grande
+  tr: büyük
+  pt: grande
+  ro: mare
+  bg: голям
+  cs: velký
+  sk: veľký
+  hu: nagy
+  el: μεγάλος
+  sl: velik
+  et: suur
+  lt: didelis
+  da: stor
+  fi: suuri
+  sv: stor
+  hr: velik
+  lv: liels
+  hi: बड़ा
+  ar: كبير
+  id: besar
+  vi: lớn
+  th: ใหญ่
+  ko: 큰
+  ja: 大きい
+  bn: বড়
+  fa: بزرگ
+  zh: 大的
+  ur: بڑا
+  kk: үлкен
+
+ID 1847 (sense):
+  ru: смысл, чувства
+  uk: сенс, почуття
+  de: Bedeutung, Gefühle
+  es: sentido, significado
+  fr: signification, sentiments
+  pl: sens, znaczenie, rozsądek
+  it: significato, sentimenti
+  tr: anlam, duyu
+  pt: significado
+  ro: sens, sentimente
+  bg: смисъл, чувства
+  cs: význam, pocity
+  sk: význam, pocity
+  hu: jelentés, érzések
+  el: νόημα, συναισθήματα
+  sl: pomen, občutki
+  et: tähendus, tunded
+  lt: prasmė, jausmai
+  da: betydning, følelser
+  fi: merkitys, tunteet
+  sv: mening, känslor
+  hr: značenje, osjećaji
+  lv: nozīme, sajūtas
+  hi: अर्थ
+  ar: معنى، مشاعر
+  id: arti, perasaan
+  vi: ý nghĩa, cảm xúc
+  th: ความหมาย, ความรู้สึก
+  ko: 의미, 감정
+  ja: 意味、感情
+  bn: বোধ, অর্থ
+  fa: حس، معنا
+  zh: 感觉、意义
+  ur: احساس، معنی
+  kk: мағына, сезімдер
+
+ID 1848 (can):
+  ru: может, умеет,  консервная банка
+  uk: могти, бляшанка
+  de: vielleicht, Dose, Blechdose
+  es: poder, lata
+  fr: pouvoir, boîte de conserve
+  pl: móc, potrafić, puszka
+  it: potere, lattina
+  tr: -ebilmek, teneke kutu
+  pt: poder, saber, lata
+  ro: poate, conservă de tablă
+  bg: може би, може, тенекиена кутия
+  cs: možná, může, plechovka
+  sk: možno, plechovka
+  hu: talán, konzerv, konzervdoboz
+  el: ίσως, κονσέρβα, τενεκεδένιο κουτί
+  sl: morda, pločevinka
+  et: võib-olla, purk, plekkpurk
+  lt: galbūt, skardinė
+  da: dåse, blikdåse
+  fi: tölkki, peltipurkki
+  sv: burk, konservburk, plåtburk
+  hr: konzerva, limena konzerva
+  lv: var, kanna, skārda kārba
+  hi: डिब्बा
+  ar: يستطيع، يمكن، علبة
+  id: bisa, dapat, kaleng
+  vi: lon, có thể, lon thiếc
+  th: กระป๋อง, กระป๋องดีบุก
+  ko: 캔, 통조림 캔
+  ja: 缶、ブリキ缶
+  bn: পারা, ক্যান
+  fa: توانستن، قوطی
+  zh: 能、会、罐头
+  ur: سکنا، ڈبہ
+  kk: мүмкін, істей аламын, қалайы банка
+
+ID 1849 (invite):
+  ru: приглашать
+  uk: запрошувати
+  de: einladen
+  es: invitar
+  fr: inviter
+  pl: zapraszać
+  it: invitare
+  tr: davet etmek
+  pt: convidar
+  ro: invita
+  bg: покани
+  cs: pozvat
+  sk: pozvať
+  hu: meghív
+  el: καλώ
+  sl: povabi
+  et: kutsuma
+  lt: pakviesti
+  da: invitere
+  fi: kutsua
+  sv: bjuda in
+  hr: pozvati
+  lv: uzaicināt
+  hi: आमंत्रित करना
+  ar: يدعو، دعوة
+  id: mengundang
+  vi: mời
+  th: เชิญ
+  ko: 초대하다
+  ja: 招待する
+  bn: আমন্ত্রণ করা
+  fa: دعوت کردن
+  zh: 邀请
+  ur: دعوت دینا
+  kk: шақыру
+
+ID 1850 (pupil):
+  ru: ученик
+  uk: учень
+  de: Student
+  es: alumno
+  fr: étudiant
+  pl: uczeń
+  it: studente
+  tr: öğrenci
+  pt: estudante
+  ro: student
+  bg: студент
+  cs: student
+  sk: študent
+  hu: diák
+  el: φοιτητής
+  sl: študent
+  et: õpilane
+  lt: studentas
+  da: studerende
+  fi: opiskelija
+  sv: student
+  hr: student
+  lv: students
+  hi: छात्र
+  ar: طالب
+  id: siswa
+  vi: học sinh
+  th: นักเรียน
+  ko: 학생
+  ja: 学生
+  bn: শিক্ষার্থী
+  fa: دانش‌آموز، مردمک چشم
+  zh: 学生、小学生
+  ur: طالب علم
+  kk: студент
+
+ID 1851 (charge):
+  ru: заряжать, обязанности, обвинения
+  uk: заряджати, звинувачення
+  de: Anklage, Pflichten, Vorwürfe
+  es: cobrar, cargo, acusación
+  fr: charger, frais, accuser
+  pl: opłata, oskarżać, ładować
+  it: carica, addebitare, accusare
+  tr: ücret, suçlama, yük
+  pt: cobrar, acusar, carga
+  ro: acuzații, îndatoriri
+  bg: обвинение, задължения, обвинения
+  cs: obvinění, povinnosti
+  sk: obvinenia, povinnosti
+  hu: vád, kötelesség
+  el: κατηγορία, καθήκοντα, κατηγορίες
+  sl: obtožba, dolžnosti, obtožbe
+  et: süüdistus, kohustused, süüdistused
+  lt: kaltinimas, pareigos, kaltinimai
+  da: anklage, pligter, beskyldninger
+  fi: syytös, velvollisuudet, syytökset
+  sv: avgift, plikter, anklagelser
+  hr: optužba, dužnosti, optužbe
+  lv: iekasējums, pienākumi, apsūdzības
+  hi: प्रभार, आरोप, चार्ज
+  ar: يتقاضى، يشحن، رسوم، تهمة
+  id: mengenakan biaya, menuduh
+  vi: phí, tính phí, sạc
+  th: ค่าใช้จ่าย, หน้าที่, ข้อกล่าวหา
+  ko: 책임, 의무, 비난
+  ja: 請求、義務、告発
+  bn: চার্জ করা, দায়িত্ব, অভিযোগ
+  fa: شارژ کردن، هزینه، اتهام
+  zh: 收费、负责、指控
+  ur: مقصد، ارادہ، نشانہ
+  kk: заряд, міндеттер, зарядтар
+

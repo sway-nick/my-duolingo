@@ -1,0 +1,1850 @@
+ID 1652 (box):
+  ru: коробка
+  uk: коробка
+  de: Kasten
+  es: caja
+  fr: boîte
+  pl: skrzynka
+  it: scatola
+  tr: kutu
+  pt: caixa
+  ro: cutie
+  bg: кутия
+  cs: krabice
+  sk: krabica
+  hu: doboz
+  el: κουτί
+  sl: škatla
+  et: kast
+  lt: dėžutė
+  da: æske
+  fi: laatikko
+  sv: låda
+  hr: kutija
+  lv: kaste
+  hi: डिब्बा
+  ar: صندوق
+  id: kotak
+  vi: hộp
+  th: กล่อง
+  ko: 상자
+  ja: 箱
+  bn: বাক্স
+  fa: جعبه
+  zh: 盒子
+  ur: ڈبہ
+  kk: қорап
+
+ID 1653 (card):
+  ru: карта, открытка
+  uk: картка, листівка
+  de: Karte, Postkarte
+  es: tarjeta, carta
+  fr: carte, carte postale
+  pl: karta, mapa, pocztówka
+  it: mappa, cartolina
+  tr: harita, kartpostal
+  pt: cartão, carta
+  ro: hartă, carte poștală
+  bg: карта, пощенска картичка
+  cs: mapa, pohlednice
+  sk: mapa, pohľadnica
+  hu: térkép, képeslap
+  el: χάρτης, καρτ ποστάλ
+  sl: zemljevid, razglednica
+  et: kaart, postkaart
+  lt: žemėlapis, atvirukas
+  da: kort, postkort
+  fi: kartta, postikortti
+  sv: karta, vykort
+  hr: karta, razglednica
+  lv: karte, pastkarte
+  hi: नक्शा, पोस्टकार्ड
+  ar: خريطة، بطاقة بريدية
+  id: peta, kartu pos
+  vi: bản đồ, bưu thiếp
+  th: แผนที่, โปสการ์ด
+  ko: 지도, 엽서
+  ja: 地図、はがき
+  bn: কার্ড
+  fa: کارت، کارت پستال
+  zh: 卡片、地图
+  ur: کارڈ
+  kk: карта, ашықхат
+
+ID 1654 (north):
+  ru: север
+  uk: північ
+  de: Norden
+  es: norte
+  fr: nord
+  pl: północ
+  it: nord
+  tr: kuzey
+  pt: norte
+  ro: nord
+  bg: север
+  cs: severní
+  sk: sever
+  hu: északi
+  el: βόρειος
+  sl: sever
+  et: põhja
+  lt: šiaurė
+  da: nord
+  fi: pohjoinen
+  sv: norr
+  hr: sjever
+  lv: ziemeļi
+  hi: उत्तर
+  ar: شمال
+  id: utara
+  vi: phía bắc
+  th: เหนือ
+  ko: 북쪽
+  ja: 北
+  bn: উত্তর
+  fa: شمال
+  zh: 北方
+  ur: شمال
+  kk: солтүстік
+
+ID 1655 (bill):
+  ru: счет, банкнота
+  uk: рахунок, банкнота
+  de: Schein, Banknote
+  es: cuenta, billete
+  fr: billet, billet de banque
+  pl: rachunek, banknot
+  it: banconota
+  tr: fatura, banknot
+  pt: conta
+  ro: bancnotă
+  bg: банкнота
+  cs: bankovka, směnka
+  sk: bankovka, zmenka
+  hu: bankjegy, számla
+  el: χαρτονόμισμα
+  sl: bankovec, račun
+  et: rahatäht
+  lt: kupiūra, banknotas
+  da: pengeseddel
+  fi: seteli
+  sv: sedel
+  hr: novčanica
+  lv: banknote
+  hi: बिल, बैंकनोट
+  ar: فاتورة، ورقة نقدية
+  id: tagihan, uang kertas
+  vi: hóa đơn, tiền giấy
+  th: บิล, ธนบัตร
+  ko: 지폐
+  ja: 紙幣、銀行券
+  bn: বিল, নোট
+  fa: صورتحساب، اسکناس
+  zh: 账单、钞票
+  ur: بل، نوٹ
+  kk: купюра, банкнот
+
+ID 1656 (hot):
+  ru: горячий
+  uk: гарячий
+  de: heiß
+  es: caliente
+  fr: chaud
+  pl: gorący
+  it: caldo
+  tr: sıcak
+  pt: quente
+  ro: fierbinte
+  bg: горещо
+  cs: horký
+  sk: horúci
+  hu: forró
+  el: καυτό
+  sl: vroče
+  et: kuum
+  lt: karšta
+  da: varm
+  fi: kuuma
+  sv: het
+  hr: vruće
+  lv: karsts
+  hi: गर्म
+  ar: ساخن
+  id: panas
+  vi: nóng
+  th: ร้อน
+  ko: 뜨거운
+  ja: 熱い
+  bn: গরম
+  fa: داغ
+  zh: 热的
+  ur: گرم
+  kk: ыстық
+
+ID 1657 (code):
+  ru: код
+  uk: код
+  de: Code
+  es: código
+  fr: code
+  pl: kod
+  it: codice
+  tr: kod
+  pt: código
+  ro: cod
+  bg: код
+  cs: kód
+  sk: kód
+  hu: kód
+  el: κώδικας
+  sl: koda
+  et: kood
+  lt: kodas
+  da: kode
+  fi: koodi
+  sv: kod
+  hr: kod
+  lv: kods
+  hi: कोड
+  ar: رمز
+  id: kode
+  vi: mã
+  th: รหัส
+  ko: 코드
+  ja: コード
+  bn: কোড
+  fa: کد
+  zh: 代码
+  ur: کوڈ
+  kk: код
+
+ID 1658 (field):
+  ru: поле
+  uk: поле
+  de: Feld
+  es: campo
+  fr: champ
+  pl: pole
+  it: campo
+  tr: alan
+  pt: campo
+  ro: domeniu
+  bg: поле
+  cs: pole
+  sk: pole
+  hu: mező
+  el: πεδίο
+  sl: polje
+  et: väli
+  lt: laukas
+  da: felt
+  fi: pelto
+  sv: fält
+  hr: polje
+  lv: lauks
+  hi: क्षेत्र
+  ar: حقل
+  id: lapangan
+  vi: cánh đồng
+  th: ทุ่ง
+  ko: 들판
+  ja: 分野
+  bn: মাঠ, ক্ষেত্র
+  fa: میدان، حوزه
+  zh: 领域、田地
+  ur: میدان
+  kk: өріс
+
+ID 1659 (stick):
+  ru: палка, приклеить, придерживаться
+  uk: палиця, приклеювати
+  de: kleben, anbringen
+  es: palo, pegar, adherirse
+  fr: coller, adhérer
+  pl: patyk, przyklejać
+  it: incollare
+  tr: sopa, yapıştırmak
+  pt: pau, graveto, colar
+  ro: lipi, adera
+  bg: залепвам, лепя, прилепвам
+  cs: přilepit, přilnout
+  sk: nalepiť, prilepiť
+  hu: ragaszt, ragad
+  el: κολλώ, επικολλώ
+  sl: lepiti, prilepiti
+  et: kleepida, liimida
+  lt: klijuoti, priklijuoti
+  da: lim, klæbe
+  fi: tartu, liimaa, kiinnitä
+  sv: klistra, limma, fästa
+  hr: zalijepiti, prilijepiti
+  lv: pielīmēt
+  hi: चिपकाना, गोंद लगाना
+  ar: يلتصق، يلصق
+  id: tongkat, menempel
+  vi: dính, keo, dán
+  th: ติด, กาว, ยึดติด
+  ko: 붙이다, 찌르다
+  ja: くっつく、棒
+  bn: লাঠি, আটকে দেওয়া
+  fa: چوب، چسباندن
+  zh: 棍子、粘住、坚持
+  ur: چھڑی، چپکانا
+  kk: таяқша, желім, жабыстыру
+
+ID 1660 (whole):
+  ru: весь
+  uk: весь
+  de: alle
+  es: todo
+  fr: tous
+  pl: cały, cały zakres
+  it: Tutto
+  tr: Tümü
+  pt: inteiro, todo
+  ro: toate
+  bg: всички
+  cs: vše
+  sk: všetky
+  hu: minden
+  el: όλοι
+  sl: vse
+  et: kõik
+  lt: visi
+  da: hel
+  fi: kokonainen
+  sv: hel
+  hr: cijeli
+  lv: vesels
+  hi: पूरा
+  ar: كامل
+  id: keseluruhan
+  vi: toàn bộ
+  th: ทั้งหมด
+  ko: 전체
+  ja: 全体
+  bn: পুরো
+  fa: تمام، کامل
+  zh: 整个的
+  ur: پورا
+  kk: тұтас
+
+ID 1661 (bus):
+  ru: автобус
+  uk: автобус
+  de: Bus
+  es: autobús
+  fr: bus
+  pl: autobus
+  it: autobus
+  tr: otobüs
+  pt: ônibus
+  ro: autobuz
+  bg: автобус
+  cs: autobus
+  sk: autobus
+  hu: busz
+  el: λεωφορείο
+  sl: avtobus
+  et: buss
+  lt: autobusas
+  da: bus
+  fi: bussi
+  sv: buss
+  hr: autobus
+  lv: autobuss
+  hi: बस
+  ar: حافلة
+  id: bus
+  vi: xe buýt
+  th: รถบัส
+  ko: 버스
+  ja: バス
+  bn: বাস
+  fa: اتوبوس
+  zh: 公共汽车
+  ur: بس
+  kk: автобус
+
+ID 1662 (ago):
+  ru: назад, тому назад
+  uk: тому, назад
+  de: vor, her
+  es: hace, atrás
+  fr: il y a, auparavant
+  pl: temu
+  it: fa, indietro nel tempo
+  tr: önce
+  pt: atrás, há
+  ro: în urmă, în trecut
+  bg: преди, назад
+  cs: před, zpátky
+  sk: pred, naspäť
+  hu: ezelőtt, korábban
+  el: πριν, παλαιότερα
+  sl: nazaj, pred
+  et: tagasi, varem
+  lt: prieš, atgal
+  da: siden, for ... siden
+  fi: sitten
+  sv: sedan, för ... sedan
+  hr: prije, unatrag
+  lv: pirms, atpakaļ
+  hi: पहले, पूर्व
+  ar: إلى الوراء
+  id: yang lalu
+  vi: trước đây, cách đây
+  th: ย้อนเวลากลับไป
+  ko: ~전에, 이전에
+  ja: ～前に、以前に
+  bn: আগে
+  fa: پیش
+  zh: 以前
+  ur: پہلے
+  kk: бұрын
+
+ID 1663 (half):
+  ru: половина
+  uk: половина
+  de: Hälfte
+  es: medio
+  fr: moitié
+  pl: połowa
+  it: metà
+  tr: yarım
+  pt: metade
+  ro: jumătate
+  bg: половината
+  cs: půl
+  sk: polovica
+  hu: fél
+  el: ήμισυ
+  sl: polovica
+  et: pool
+  lt: pusė
+  da: halv
+  fi: puolikas
+  sv: halv
+  hr: polovica
+  lv: puse
+  hi: आधा
+  ar: نصف
+  id: setengah
+  vi: một nửa
+  th: ครึ่งหนึ่ง
+  ko: 절반
+  ja: 半分
+  bn: অর্ধেক
+  fa: نصف
+  zh: 一半
+  ur: آدھا
+  kk: жартылай
+
+ID 1664 (tough):
+  ru: жесткий, крепкий орешек, тяжелый
+  uk: твердий, міцний, важкий
+  de: zäh, hart, schwer
+  es: duro, resistente, difícil
+  fr: dur, coriace, difficile
+  pl: twardy, trudny, mocny
+  it: duro, difficile, tosto
+  tr: sert, çözülmesi zor, ağır
+  pt: duro, difícil, resistente
+  ro: dur, greu de spart, greu
+  bg: жилав, корав орех за счупване, тежък
+  cs: tvrdý, tvrdý oříšek, těžký
+  sk: tvrdý, tvrdý oriešok na rozlúsknutie, ťažký
+  hu: kemény, kemény dió, nehéz
+  el: σκληρό, σκληρό καρύδι στο σπάσιμο, βαρύ
+  sl: trd, trd oreh, težak
+  et: sitke, kõva pähkel puremiseks, raske
+  lt: kietas, sunkiai įveikiamas riešutas, sunkus
+  da: hård, sej nød, tung
+  fi: kova, sitkeä pähkinä, raskas
+  sv: hård, seg nöt, tung
+  hr: tvrd, žilav orah, težak
+  lv: ciets, izturīgs rieksts, smags
+  hi: कठिन, सख्त, भारी
+  ar: صعب، متين، ثقيل
+  id: tangguh, keras, sulit
+  vi: cứng rắn, khó khăn, dai
+  th: แข็ง, ทนทาน, หนัก
+  ko: 단단한, 힘든, 거친
+  ja: 頑丈な、困難な、タフな
+  bn: কঠিন
+  fa: سخت، سرسخت
+  zh: 艰难的、坚韧的
+  ur: بالکل، مکمل طور پر
+  kk: қатты, берік, ауыр
+
+ID 1665 (suit):
+  ru: подходить, костюм
+  uk: підходити, костюм
+  de: Anzug
+  es: traje, convenir
+  fr: costume
+  pl: garnitur
+  it: abito
+  tr: uygun olmak
+  pt: terno, combinar, servir
+  ro: costum
+  bg: костюм
+  cs: oblek
+  sk: oblek
+  hu: öltöny
+  el: κοστούμι
+  sl: obleka
+  et: ülikond
+  lt: kostiumas
+  da: pasform, jakkesæt
+  fi: sopii, puku
+  sv: passa, kostym
+  hr: pristajati, odijelo
+  lv: piemērots, uzvalks
+  hi: फिट, सूट
+  ar: مناسب، ملائم
+  id: pas, cocok
+  vi: vừa vặn, phù hợp
+  th: พอดี, เหมาะ
+  ko: 맞는, 정장
+  ja: 合う、適している
+  bn: স্যুট, মানানসই হওয়া
+  fa: مناسب بودن، کت‌وشلوار
+  zh: 适合、西装
+  ur: موزوں ہونا، سوٹ
+  kk: сәйкес, костюм
+
+ID 1666 (road):
+  ru: дорога
+  uk: дорога
+  de: Straße
+  es: camino
+  fr: route
+  pl: droga
+  it: strada
+  tr: yol
+  pt: estrada
+  ro: drum
+  bg: път
+  cs: silnice
+  sk: cesta
+  hu: út
+  el: δρόμος
+  sl: cesta
+  et: tee
+  lt: kelias
+  da: vej
+  fi: tie
+  sv: väg
+  hr: cesta
+  lv: ceļš
+  hi: सड़क
+  ar: طريق
+  id: jalan
+  vi: đường
+  th: ถนน
+  ko: 도로
+  ja: 道路
+  bn: রাস্তা
+  fa: جاده
+  zh: 道路
+  ur: سڑک
+  kk: жол
+
+ID 1667 (area):
+  ru: область
+  uk: площа, район, ділянка
+  de: Region
+  es: región
+  fr: région
+  pl: region
+  it: regione
+  tr: bölge
+  pt: região
+  ro: regiune
+  bg: регион
+  cs: kraj
+  sk: región
+  hu: régió
+  el: περιοχή
+  sl: regija
+  et: piirkond
+  lt: regionas
+  da: region
+  fi: alue
+  sv: region
+  hr: regija
+  lv: reģions
+  hi: क्षेत्र
+  ar: منطقة
+  id: wilayah
+  vi: khu vực
+  th: ภูมิภาค
+  ko: 지역
+  ja: 地域
+  bn: এলাকা
+  fa: منطقه، مساحت
+  zh: 区域
+  ur: علاقہ
+  kk: аймақ
+
+ID 1668 (open):
+  ru: открыть
+  uk: відкрити
+  de: offen
+  es: abrir, abierto
+  fr: ouvrir
+  pl: otwierać, otwarty
+  it: aprire
+  tr: açmak, açık
+  pt: abrir
+  ro: deschide
+  bg: отворен
+  cs: OTEVŘENO
+  sk: OTVORENÉ
+  hu: nyitott
+  el: ανοιχτό
+  sl: odprto
+  et: avatud
+  lt: atviras
+  da: åben
+  fi: avoin
+  sv: öppen
+  hr: otvoreno
+  lv: atvērts
+  hi: खुला
+  ar: مفتوح
+  id: membuka
+  vi: mở
+  th: เปิด
+  ko: 열린
+  ja: 開いている
+  bn: খোলা
+  fa: باز کردن، باز
+  zh: 打开
+  ur: کھولنا
+  kk: ашық
+
+ID 1669 (clean):
+  ru: чистый
+  uk: чистий
+  de: sauber
+  es: limpio
+  fr: faire le ménage
+  pl: czysty
+  it: pulito
+  tr: temiz
+  pt: limpo, limpar
+  ro: curat
+  bg: чист
+  cs: čistý
+  sk: čistý
+  hu: tiszta
+  el: καθαρός
+  sl: čisto
+  et: puhas
+  lt: švarus
+  da: ren
+  fi: puhdas
+  sv: ren
+  hr: čisto
+  lv: tīrs
+  hi: साफ
+  ar: نظيف
+  id: bersih
+  vi: sạch sẽ
+  th: สะอาด
+  ko: 깨끗한
+  ja: きれいな
+  bn: পরিষ্কার
+  fa: تمیز، تمیز کردن
+  zh: 干净的、清洁
+  ur: صاف
+  kk: таза
+
+ID 1670 (tie):
+  ru: галстук, завязывать
+  uk: краватка, зав'язувати
+  de: Krawatte
+  es: corbata, atar
+  fr: cravate
+  pl: krawat, wiązać
+  it: legare
+  tr: kravat, bağlamak
+  pt: amarrar, gravata
+  ro: cravată
+  bg: вратовръзка
+  cs: kravata
+  sk: kravata
+  hu: nyakkendő
+  el: γραβάτα
+  sl: kravata
+  et: lips
+  lt: kaklaraištis
+  da: slips
+  fi: solmio
+  sv: slips
+  hr: kravata
+  lv: kaklasaite
+  hi: टाई
+  ar: ربطة عنق
+  id: dasi, mengikat
+  vi: cà vạt
+  th: เนคไท
+  ko: 넥타이
+  ja: 結ぶ、ネクタイを締める
+  bn: টাই, বাঁধা
+  fa: کراوات، گره زدن
+  zh: 领带、系上
+  ur: ٹائی، باندھنا
+  kk: байлау
+
+ID 1671 (light):
+  ru: свет, легкий по весу, зажигать
+  uk: світло, легкий, запалювати
+  de: Licht, anzünden, leicht
+  es: luz, ligero, encender
+  fr: léger, à léger
+  pl: światło, lekki, zapalać
+  it: luce, leggero
+  tr: ışık, aydınlatmak, hafif
+  pt: luz, claro, leve
+  ro: ușor, ușor în greutate, a ușura
+  bg: лек, лек по тегло, до лек
+  cs: lehký, na lehký
+  sk: ľahký
+  hu: könnyű, könnyű súlyú, könnyűvé
+  el: ελαφρύς, ελαφρύς σε βάρος, προς ελαφρύς
+  sl: lahek
+  et: kerge, kerge kaaluga, kergeks
+  lt: lengvas
+  da: let, letvægts
+  fi: kevyt
+  sv: lätt, lättviktig
+  hr: lagan
+  lv: viegls, viegls svars
+  hi: हल्का, कम वज़न वाला
+  ar: خفيف، خفيف الوزن
+  id: cahaya, terang, ringan
+  vi: nhẹ, nhẹ cân
+  th: เบา, น้ำหนักเบา
+  ko: 가벼운, 경량의
+  ja: 軽い、軽量
+  bn: আলো, হালকা
+  fa: نور، سبک، روشن کردن
+  zh: 光、轻的、点燃
+  ur: روشنی، ہلکا
+  kk: жеңіл
+
+ID 1672 (role):
+  ru: роль
+  uk: роль
+  de: Rolle
+  es: papel, función
+  fr: rôle
+  pl: rola
+  it: ruolo
+  tr: rol
+  pt: papel
+  ro: rol
+  bg: роля
+  cs: role
+  sk: rola
+  hu: szerep
+  el: ρόλος
+  sl: vloga
+  et: roll
+  lt: vaidmuo
+  da: rolle
+  fi: rooli
+  sv: roll
+  hr: uloga
+  lv: loma
+  hi: भूमिका
+  ar: دور
+  id: peran
+  vi: vai trò
+  th: บทบาท
+  ko: 역할
+  ja: 役割
+  bn: ভূমিকা
+  fa: نقش
+  zh: 角色
+  ur: کردار
+  kk: рөл
+
+ID 1673 (horse):
+  ru: лошадь
+  uk: кінь
+  de: Pferd
+  es: caballo
+  fr: cheval
+  pl: koń
+  it: cavallo
+  tr: at
+  pt: cavalo
+  ro: cal
+  bg: кон
+  cs: kůň
+  sk: kôň
+  hu: ló
+  el: άλογο
+  sl: konj
+  et: hobune
+  lt: arklys
+  da: hest
+  fi: hevonen
+  sv: häst
+  hr: konj
+  lv: zirgs
+  hi: घोड़ा
+  ar: حصان
+  id: kuda
+  vi: ngựa
+  th: ม้า
+  ko: 말
+  ja: 馬
+  bn: ঘোড়া
+  fa: اسب
+  zh: 马
+  ur: گھوڑا
+  kk: жылқы
+
+ID 1674 (blog):
+  ru: блог
+  uk: блог
+  de: Blog
+  es: blog
+  fr: blog
+  pl: blog
+  it: blog
+  tr: blog
+  pt: blog
+  ro: blog
+  bg: блог
+  cs: blogu
+  sk: blogu
+  hu: blog
+  el: ιστολόγιο
+  sl: blog
+  et: blogi
+  lt: tinklaraštis
+  da: blog
+  fi: blogi
+  sv: blogg
+  hr: blog
+  lv: emuārs
+  hi: ब्लॉग
+  ar: مدونة
+  id: blog
+  vi: blog
+  th: บล็อก
+  ko: 블로그
+  ja: ブログ
+  bn: ব্লগ
+  fa: وبلاگ
+  zh: 博客
+  ur: بلاگ
+  kk: блог
+
+ID 1675 (note):
+  ru: примечание
+  uk: примітка
+  de: Notiz
+  es: nota
+  fr: note
+  pl: notatka
+  it: nota
+  tr: Not
+  pt: observação
+  ro: nota
+  bg: бележка
+  cs: poznámka
+  sk: poznámka
+  hu: jegyzet
+  el: σημείωμα
+  sl: opomba
+  et: märkus
+  lt: pastaba
+  da: note
+  fi: muistiinpano
+  sv: anteckning
+  hr: bilješka
+  lv: piezīme
+  hi: नोट
+  ar: ملاحظة
+  id: catatan
+  vi: ghi chú
+  th: บันทึก
+  ko: 메모
+  ja: メモ
+  bn: নোট
+  fa: یادداشت
+  zh: 笔记、备注
+  ur: نوٹ، تبصرہ
+  kk: жазба
+
+ID 1676 (labor):
+  ru: труд
+  uk: праця
+  de: arbeiten
+  es: trabajo, mano de obra
+  fr: travail
+  pl: praca
+  it: lavoro
+  tr: iş
+  pt: trabalho, trabalhar
+  ro: lucru
+  bg: работа
+  cs: práce
+  sk: práca
+  hu: munka
+  el: εργασία
+  sl: delo
+  et: töö
+  lt: darbas
+  da: arbejde
+  fi: työ
+  sv: arbete
+  hr: posao
+  lv: darbs
+  hi: काम
+  ar: عمل
+  id: pekerjaan
+  vi: công việc
+  th: งาน
+  ko: 일
+  ja: 仕事
+  bn: শ্রম
+  fa: کار، زحمت
+  zh: 劳动
+  ur: محنت
+  kk: жұмыс
+
+ID 1677 (as):
+  ru: как, поскольку, в качестве
+  uk: як, оскільки
+  de: da, als
+  es: como, puesto que
+  fr: comme, puisque
+  pl: jak, ponieważ, jako
+  it: come, poiché
+  tr: olarak, çünkü
+  pt: como, já que
+  ro: ca, întrucât, pe măsură ce
+  bg: като, тъй като
+  cs: jako, od té doby
+  sk: ako, keďže
+  hu: mivel
+  el: καθώς, από τότε
+  sl: kot, odkar
+  et: kuna
+  lt: kaip, kadangi
+  da: hvordan, siden, som
+  fi: miten, koska, kuten
+  sv: hur, sedan, som
+  hr: kako, otkad, kao
+  lv: kā, kopš
+  hi: कैसे, चूंकि, जैसे
+  ar: كيف، منذ، كما
+  id: sebagai, seperti, karena
+  vi: như, vì, khi
+  th: อย่างไร, ตั้งแต่, เช่น
+  ko: ~로서, ~처럼
+  ja: ～として、～のように
+  bn: হিসেবে, যেমন
+  fa: به‌عنوان، همان‌طور که
+  zh: 如、因为、作为
+  ur: جیسے، کے طور پر
+  kk: қалай, өйткені, ретінде
+
+ID 1678 (sweet):
+  ru: сладкий
+  uk: солодкий
+  de: süß
+  es: dulce
+  fr: doux
+  pl: słodki
+  it: dolce
+  tr: tatlı
+  pt: doce
+  ro: dulce
+  bg: сладък
+  cs: sladký
+  sk: sladký
+  hu: édes
+  el: γλυκός
+  sl: sladko
+  et: magus
+  lt: saldus
+  da: sød
+  fi: makea
+  sv: söt
+  hr: slatko
+  lv: salds
+  hi: मीठा
+  ar: حلو
+  id: manis
+  vi: ngọt ngào
+  th: หวาน
+  ko: 달콤한
+  ja: 甘い
+  bn: মিষ্টি
+  fa: شیرین
+  zh: 甜的
+  ur: میٹھا
+  kk: тәтті
+
+ID 1679 (order):
+  ru: заказ, порядок
+  uk: замовлення, порядок
+  de: Ordnung, Verfahren
+  es: orden, pedido
+  fr: commande, procédure
+  pl: zamówienie, porządek
+  it: ordine, procedura
+  tr: sipariş, sıra, düzen
+  pt: pedido, ordem
+  ro: ordin, procedură
+  bg: ред, процедура
+  cs: příkaz, postup
+  sk: príkaz, postup
+  hu: végzés, eljárás
+  el: παραγγελία, διαδικασία
+  sl: naročilo, postopek
+  et: korraldus, protseduur
+  lt: tvarka
+  da: orden
+  fi: järjestys
+  sv: ordning
+  hr: red, narudžba
+  lv: kārtība
+  hi: आदेश
+  ar: نظام
+  id: pesanan, perintah
+  vi: thứ tự, trật tự
+  th: คำสั่ง
+  ko: 질서, 순서
+  ja: 秩序
+  bn: আদেশ, অর্ডার
+  fa: سفارش، ترتیب
+  zh: 订单、顺序
+  ur: حکم، ترتیب
+  kk: бұйрық
+
+ID 1680 (rise):
+  ru: рост
+  uk: зростання
+  de: Höhe
+  es: subir, aumento
+  fr: hauteur
+  pl: wschodzić, wzrastać
+  it: altezza
+  tr: yükselmek, artış
+  pt: subir, aumento
+  ro: înălţime
+  bg: височина
+  cs: výška
+  sk: výška
+  hu: magasság
+  el: ύψος
+  sl: višina
+  et: kõrgus
+  lt: aukštis
+  da: vækst
+  fi: kasvu
+  sv: tillväxt
+  hr: rast
+  lv: izaugsme
+  hi: वृद्धि
+  ar: نمو
+  id: pertumbuhan
+  vi: sự phát triển
+  th: การเติบโต
+  ko: 성장
+  ja: 成長
+  bn: ওঠা
+  fa: بالا رفتن، افزایش
+  zh: 上升、增长
+  ur: اٹھنا، اضافہ
+  kk: өсу
+
+ID 1681 (guard):
+  ru: сторожить
+  uk: вартувати
+  de: bewachen
+  es: vigilar, guardia
+  fr: garde
+  pl: pilnować, strażnik
+  it: guardia
+  tr: koruma
+  pt: vigiar, guarda
+  ro: gardă
+  bg: пазач
+  cs: hlídat
+  sk: strážca
+  hu: őr
+  el: φρουρά
+  sl: stražar
+  et: valvur
+  lt: sargas
+  da: vagt
+  fi: vartija
+  sv: vakt
+  hr: čuvar
+  lv: sargs
+  hi: रक्षक
+  ar: حارس
+  id: penjaga
+  vi: người bảo vệ
+  th: ยาม
+  ko: 경비
+  ja: 守る
+  bn: পাহারা দেওয়া
+  fa: نگهبانی دادن، نگهبان
+  zh: 守卫、看守
+  ur: حفاظت کرنا، محافظ
+  kk: күзет
+
+ID 1682 (term):
+  ru: термин, срок
+  uk: термін
+  de: Begriff, Zeitraum
+  es: término, período
+  fr: terme, période
+  pl: termin, okres
+  it: termine, periodo
+  tr: terim, dönem, süre
+  pt: termo
+  ro: termen, perioadă
+  bg: срок, период
+  cs: termín, období
+  sk: termín, obdobie
+  hu: kifejezés, időszak
+  el: όρος, περίοδος
+  sl: izraz, obdobje
+  et: tähtaeg, periood
+  lt: terminas, laikotarpis
+  da: periode
+  fi: termi, jakso
+  sv: period
+  hr: pojam, razdoblje
+  lv: termiņš, periods
+  hi: अवधि
+  ar: مدة
+  id: jangka waktu, periode
+  vi: kỳ hạn, thời kỳ
+  th: ระยะเวลา, ช่วงเวลา
+  ko: 기간
+  ja: 期間
+  bn: শব্দ, মেয়াদ
+  fa: اصطلاح، مدت
+  zh: 术语、期限
+  ur: اصطلاح، مدت
+  kk: мерзім, нүкте
+
+ID 1683 (value):
+  ru: ценить
+  uk: цінувати
+  de: Wert
+  es: valor, valorar
+  fr: valeur
+  pl: wartość, cenić
+  it: valore
+  tr: değer
+  pt: valor, valorizar
+  ro: valoare
+  bg: стойност
+  cs: hodnota
+  sk: hodnota
+  hu: érték
+  el: αξία
+  sl: vrednost
+  et: väärtus
+  lt: vertė
+  da: værdsætte
+  fi: arvostaa
+  sv: uppskatta
+  hr: cijeniti
+  lv: novērtēt
+  hi: मूल्य, महत्त्व देना
+  ar: تقدير
+  id: menghargai
+  vi: đánh giá cao
+  th: ชื่นชม
+  ko: 감사하다
+  ja: 感謝する
+  bn: মূল্য
+  fa: ارزش، ارزش قائل شدن
+  zh: 价值、重视
+  ur: قدر، قیمت
+  kk: бағалау
+
+ID 1684 (main):
+  ru: основной, главный
+  uk: основний, головний
+  de: Haupt-
+  es: principal
+  fr: principal
+  pl: główny, podstawowy
+  it: principale
+  tr: ana, başlıca
+  pt: principal
+  ro: principal
+  bg: главен, основен
+  cs: hlavní, principální
+  sk: hlavný
+  hu: fő
+  el: κύριος
+  sl: glavni, ravnatelj
+  et: peamine
+  lt: pagrindinis
+  da: hoved, principal
+  fi: pää, tärkein
+  sv: huvudsaklig, principiell
+  hr: glavni, vodeći
+  lv: galvenais
+  hi: मुख्य
+  ar: رئيسي
+  id: utama, pokok
+  vi: chính, chủ yếu
+  th: หลัก, สำคัญ
+  ko: 주요한, 주된
+  ja: 主な
+  bn: প্রধান
+  fa: اصلی
+  zh: 主要的
+  ur: اہم، مرکزی
+  kk: негізгі
+
+ID 1685 (large):
+  ru: большой, просторный
+  uk: великий, просторий
+  de: groß, geräumig
+  es: grande, espacioso
+  fr: grand, spacieux
+  pl: duży, przestronny
+  it: grande, spazioso
+  tr: geniş, ferah
+  pt: grande
+  ro: mare, spațios
+  bg: голям, просторен
+  cs: velký, prostorný
+  sk: veľký, priestranný
+  hu: nagy, tágas
+  el: μεγάλο, ευρύχωρο
+  sl: velik, prostoren
+  et: suur, avar
+  lt: didelis, erdvus
+  da: stor, rummelig
+  fi: suuri, tilava
+  sv: stor, rymlig
+  hr: velik, prostran
+  lv: liels, plašs
+  hi: विशाल
+  ar: كبير، واسع
+  id: besar, luas
+  vi: lớn, rộng rãi
+  th: ใหญ่, กว้างขวาง
+  ko: 큰, 넓은
+  ja: 広い
+  bn: বড়
+  fa: بزرگ، وسیع
+  zh: 大的、宽敞的
+  ur: بڑا
+  kk: үлкен, кең
+
+ID 1686 (east):
+  ru: восток
+  uk: схід
+  de: Ost
+  es: Este
+  fr: Est
+  pl: wschód
+  it: Est
+  tr: Doğu
+  pt: leste
+  ro: Orientul
+  bg: Изток
+  cs: Východní
+  sk: Východ
+  hu: Keleti
+  el: Ανατολή
+  sl: Vzhod
+  et: Ida
+  lt: Rytai
+  da: øst
+  fi: itä
+  sv: öster
+  hr: istok
+  lv: austrumi
+  hi: पूर्व
+  ar: شرق
+  id: timur
+  vi: phía đông
+  th: ตะวันออก
+  ko: 동쪽
+  ja: 東
+  bn: পূর্ব
+  fa: شرق
+  zh: 东方
+  ur: مشرق
+  kk: шығыс
+
+ID 1687 (rate):
+  ru: ставка
+  uk: ставка
+  de: Gebot
+  es: tasa, tarifa, ritmo
+  fr: offre
+  pl: stawka, wskaźnik, tempo
+  it: offerta
+  tr: oran, ücret, fiyat
+  pt: taxa, tarifa, avaliar
+  ro: ofertă
+  bg: оферта
+  cs: nabídka
+  sk: ponuka
+  hu: ajánlat
+  el: προσφορά
+  sl: ponudba
+  et: pakkumine
+  lt: pasiūlymas
+  da: hastighed
+  fi: nopeus
+  sv: hastighet
+  hr: stopa
+  lv: ātrums
+  hi: दर
+  ar: معدل
+  id: tingkat
+  vi: tỷ lệ
+  th: อัตรา
+  ko: 비율
+  ja: 割合
+  bn: হার
+  fa: نرخ، میزان
+  zh: 比率、费率
+  ur: شرح
+  kk: баға
+
+ID 1688 (path):
+  ru: путь
+  uk: шлях
+  de: Weg
+  es: camino
+  fr: chemin
+  pl: ścieżka
+  it: sentiero
+  tr: yol
+  pt: caminho
+  ro: cale
+  bg: пътека
+  cs: cesta
+  sk: cesta
+  hu: útvonal
+  el: μονοπάτι
+  sl: pot
+  et: tee
+  lt: kelias
+  da: sti
+  fi: polku
+  sv: stig
+  hr: put
+  lv: ceļš
+  hi: पथ
+  ar: مسار
+  id: jalan
+  vi: con đường
+  th: เส้นทาง
+  ko: 길
+  ja: 道
+  bn: পথ
+  fa: مسیر
+  zh: 路径
+  ur: راستہ
+  kk: жол
+
+ID 1689 (end):
+  ru: конец
+  uk: кінець
+  de: Ende
+  es: fin
+  fr: fin
+  pl: koniec
+  it: FINE
+  tr: son
+  pt: fim
+  ro: Sfârşit
+  bg: край
+  cs: konec
+  sk: koniec
+  hu: vég
+  el: τέλος
+  sl: konec
+  et: lõpp
+  lt: pabaiga
+  da: ende
+  fi: loppu
+  sv: slut
+  hr: kraj
+  lv: gals
+  hi: अंत
+  ar: نهاية
+  id: akhir
+  vi: kết thúc
+  th: สิ้นสุด
+  ko: 끝
+  ja: 終わり
+  bn: শেষ
+  fa: پایان، تمام کردن
+  zh: 结束、末尾
+  ur: اختتام
+  kk: соңы
+
+ID 1690 (chair):
+  ru: стул
+  uk: стілець
+  de: Stuhl
+  es: silla
+  fr: chaise
+  pl: krzesło
+  it: sedia
+  tr: sandalye
+  pt: cadeira
+  ro: scaun
+  bg: стол
+  cs: židle
+  sk: stolička
+  hu: szék
+  el: καρέκλα
+  sl: stol
+  et: tool
+  lt: kėdė
+  da: stol
+  fi: tuoli
+  sv: stol
+  hr: stolica
+  lv: krēsls
+  hi: कुर्सी
+  ar: كرسي
+  id: kursi
+  vi: ghế
+  th: เก้าอี้
+  ko: 의자
+  ja: 椅子
+  bn: চেয়ার
+  fa: صندلی
+  zh: 椅子
+  ur: کرسی
+  kk: орындық
+
+ID 1691 (great):
+  ru: великий, великолепный
+  uk: великий, чудовий
+  de: großartig, prächtig
+  es: grandioso, magnífico
+  fr: Grand, magnifique
+  pl: świetny, wspaniały
+  it: grande, magnifico
+  tr: harika, muhteşem
+  pt: ótimo
+  ro: măreț, magnific
+  bg: страхотен, великолепен
+  cs: skvělý, velkolepý
+  sk: skvelý, veľkolepý
+  hu: nagyszerű
+  el: σπουδαίος, υπέροχος
+  sl: odlično, veličastno
+  et: suurepärane
+  lt: puikus, didingas
+  da: stor, storslået
+  fi: mahtava, upea
+  sv: stor, magnifik
+  hr: sjajan, veličanstven
+  lv: lielisks, krāšņs
+  hi: महान
+  ar: عظيم، رائع
+  id: hebat, megah
+  vi: tuyệt vời, tráng lệ
+  th: ยิ่งใหญ่, งดงาม
+  ko: 위대한, 웅장한
+  ja: 素晴らしい
+  bn: দারুণ, মহান
+  fa: عالی، بزرگ
+  zh: 伟大的、极好的
+  ur: عظیم، شاندار
+  kk: керемет
+
+ID 1692 (final):
+  ru: финальный
+  uk: фінальний
+  de: Finale
+  es: final
+  fr: final
+  pl: końcowy, finał
+  it: finale
+  tr: son, nihai
+  pt: final
+  ro: final
+  bg: окончателен
+  cs: finále
+  sk: konečný
+  hu: végső
+  el: τελικός
+  sl: končno
+  et: lõplik
+  lt: galutinis
+  da: endelig
+  fi: lopullinen
+  sv: slutlig
+  hr: konačni
+  lv: galīgais
+  hi: अंतिम
+  ar: نهائي
+  id: akhir
+  vi: cuối cùng
+  th: สุดท้าย
+  ko: 최종
+  ja: 最後の
+  bn: চূড়ান্ত
+  fa: نهایی
+  zh: 最后的、最终的
+  ur: آخری
+  kk: соңғы
+
+ID 1693 (far):
+  ru: далеко
+  uk: далеко
+  de: weit
+  es: lejos
+  fr: loin
+  pl: daleko
+  it: lontano
+  tr: uzak
+  pt: distante
+  ro: departe
+  bg: далеч
+  cs: daleko
+  sk: ďaleko
+  hu: messze
+  el: μακριά
+  sl: daleč
+  et: kaugel
+  lt: toli
+  da: langt væk
+  fi: kaukana
+  sv: långt borta
+  hr: daleko
+  lv: tālu
+  hi: दूर
+  ar: بعيد
+  id: jauh
+  vi: xa
+  th: ไกล
+  ko: 먼
+  ja: 遠い
+  bn: দূরে
+  fa: دور
+  zh: 远的
+  ur: دور
+  kk: алыс
+
+ID 1694 (text):
+  ru: текст, сообщение
+  uk: текст, повідомлення
+  de: Text, Nachricht
+  es: texto, mensaje
+  fr: texte, message
+  pl: tekst, wiadomość
+  it: testo, messaggio
+  tr: metin, mesaj
+  pt: texto
+  ro: text, mesaj
+  bg: текст, съобщение
+  cs: text, zpráva
+  sk: text, správa
+  hu: szöveg, üzenet
+  el: κείμενο, μήνυμα
+  sl: besedilo, sporočilo
+  et: tekst, sõnum
+  lt: tekstas, žinutė
+  da: sms, besked
+  fi: teksti, viesti
+  sv: sms, meddelande
+  hr: tekst, poruka
+  lv: īsziņa, ziņojums
+  hi: संदेश
+  ar: نص، رسالة
+  id: teks, pesan
+  vi: văn bản, thông điệp
+  th: ข้อความ
+  ko: 문자, 메시지
+  ja: テキスト、メッセージ
+  bn: পাঠ্য, বার্তা
+  fa: متن، پیام
+  zh: 文本、短信
+  ur: متن، پیغام
+  kk: мәтін, хабарлама
+
+ID 1695 (stone):
+  ru: камень
+  uk: камінь
+  de: Stein
+  es: piedra
+  fr: pierre
+  pl: kamień
+  it: calcolo
+  tr: taş
+  pt: pedra
+  ro: piatră
+  bg: камък
+  cs: kámen
+  sk: kameň
+  hu: kő
+  el: πέτρα
+  sl: kamen
+  et: kivi
+  lt: akmuo
+  da: sten
+  fi: kivi
+  sv: sten
+  hr: kamen
+  lv: akmens
+  hi: पत्थर
+  ar: حجر
+  id: batu
+  vi: đá
+  th: หิน
+  ko: 돌
+  ja: 石
+  bn: পাথর
+  fa: سنگ
+  zh: 石头
+  ur: پتھر
+  kk: тас
+
+ID 1696 (alive):
+  ru: живой
+  uk: живий
+  de: lebendig
+  es: vivo
+  fr: vivant
+  pl: żywy
+  it: vivo
+  tr: canlı
+  pt: vivo
+  ro: în viaţă
+  bg: жив
+  cs: naživu
+  sk: živý
+  hu: élő
+  el: ζωντανός
+  sl: živ
+  et: elus
+  lt: gyvas
+  da: levende
+  fi: elossa
+  sv: levande
+  hr: živ
+  lv: dzīvs
+  hi: जीवित
+  ar: حي
+  id: hidup
+  vi: sống
+  th: มีชีวิต
+  ko: 살아있는
+  ja: 生きている
+  bn: জীবিত
+  fa: زنده
+  zh: 活着的
+  ur: زندہ
+  kk: тірі
+
+ID 1697 (crowd):
+  ru: толпа
+  uk: натовп
+  de: Menge
+  es: multitud
+  fr: foule
+  pl: tłum
+  it: folla
+  tr: kalabalık
+  pt: multidão
+  ro: mulţimea
+  bg: тълпа
+  cs: dav
+  sk: dav
+  hu: tömeg
+  el: πλήθος
+  sl: množica
+  et: rahvahulk
+  lt: minia
+  da: menneskemængde
+  fi: väkijoukko
+  sv: folkmassa
+  hr: gomila
+  lv: pūlis
+  hi: भीड़
+  ar: حشد
+  id: kerumunan
+  vi: đám đông
+  th: ฝูงชน
+  ko: 군중
+  ja: 群衆
+  bn: ভিড়
+  fa: جمعیت
+  zh: 人群
+  ur: ہجوم
+  kk: тобыр
+
+ID 1698 (ice):
+  ru: лед
+  uk: лід
+  de: Eis
+  es: hielo
+  fr: glace
+  pl: lód
+  it: ghiaccio
+  tr: buz
+  pt: gelo
+  ro: gheaţă
+  bg: лед
+  cs: led
+  sk: ľad
+  hu: jég
+  el: πάγος
+  sl: led
+  et: jää
+  lt: ledas
+  da: is
+  fi: jää
+  sv: is
+  hr: led
+  lv: ledus
+  hi: बर्फ
+  ar: جليد
+  id: es
+  vi: băng
+  th: น้ำแข็ง
+  ko: 얼음
+  ja: 氷
+  bn: বরফ
+  fa: یخ
+  zh: 冰
+  ur: برف
+  kk: мұз
+
+ID 1699 (early):
+  ru: рано
+  uk: рано
+  de: früh
+  es: temprano
+  fr: tôt
+  pl: wczesny
+  it: Presto
+  tr: erken
+  pt: cedo
+  ro: devreme
+  bg: рано
+  cs: brzy
+  sk: skoro
+  hu: korai
+  el: νωρίς
+  sl: zgodaj
+  et: varakult
+  lt: anksti
+  da: tidlig
+  fi: aikainen
+  sv: tidig
+  hr: rano
+  lv: agrs
+  hi: जल्दी
+  ar: مبكر
+  id: awal
+  vi: sớm
+  th: ต้น
+  ko: 초기
+  ja: 早い
+  bn: আগে, তাড়াতাড়ি
+  fa: زود، اولیه
+  zh: 早、早期的
+  ur: جلدی
+  kk: ерте
+
+ID 1700 (speed):
+  ru: скорость
+  uk: швидкість
+  de: Geschwindigkeit
+  es: velocidad
+  fr: vitesse
+  pl: prędkość
+  it: velocità
+  tr: hız
+  pt: velocidade
+  ro: viteză
+  bg: скорост
+  cs: rychlost
+  sk: rýchlosť
+  hu: sebesség
+  el: ταχύτητα
+  sl: hitrost
+  et: kiirus
+  lt: greitis
+  da: hastighed
+  fi: nopeus
+  sv: hastighet
+  hr: brzina
+  lv: ātrums
+  hi: गति
+  ar: سرعة
+  id: kecepatan
+  vi: tốc độ
+  th: ความเร็ว
+  ko: 속도
+  ja: 速度
+  bn: গতি
+  fa: سرعت
+  zh: 速度
+  ur: رفتار
+  kk: жылдамдық
+
+ID 1701 (wild):
+  ru: дикий
+  uk: дикий
+  de: wild
+  es: salvaje
+  fr: sauvage
+  pl: dziki
+  it: selvaggio
+  tr: vahşi
+  pt: selvagem
+  ro: sălbatic
+  bg: див
+  cs: divoký
+  sk: divoký
+  hu: vad
+  el: άγριος
+  sl: divji
+  et: metsik
+  lt: laukinis
+  da: vild
+  fi: villi
+  sv: vild
+  hr: divlje
+  lv: mežonīgs
+  hi: जंगली
+  ar: بري
+  id: liar
+  vi: hoang dã
+  th: ป่า
+  ko: 야생
+  ja: 野生の
+  bn: বন্য
+  fa: وحشی
+  zh: 野生的
+  ur: جنگلی
+  kk: жабайы
+

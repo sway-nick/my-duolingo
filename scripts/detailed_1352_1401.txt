@@ -1,0 +1,1850 @@
+ID 1352 (species):
+  ru: разновидность, виды
+  uk: різновид, види
+  de: Vielfalt, Arten
+  es: especie, especies
+  fr: variété, types
+  pl: gatunek, gatunki
+  it: varietà, tipi
+  tr: tür, türler
+  pt: variedade, tipos
+  ro: varietate, tipuri
+  bg: разнообразие, видове
+  cs: rozmanitost, druhy
+  sk: odroda, druhy
+  hu: fajta, típusok
+  el: ποικιλία, τύποι
+  sl: sorta, vrste
+  et: sort, tüübid
+  lt: veislė, tipai
+  da: variation, typer
+  fi: vaihtelu, tyypit
+  sv: variation, typer
+  hr: raznolikost, vrste
+  lv: dažādība, veidi
+  hi: विविधता, प्रकार
+  ar: تنوع، أنواع
+  id: variasi, jenis
+  vi: đa dạng, các loại
+  th: หลากหลาย, ประเภท
+  ko: 다양성, 종류
+  ja: 多様性、種類
+  bn: প্রজাতি
+  fa: گونه
+  zh: 物种
+  ur: نوع، اقسام
+  kk: әртүрлілік, түрлер
+
+ID 1353 (sister):
+  ru: сестра
+  uk: сестра
+  de: Schwester
+  es: hermana
+  fr: sœur
+  pl: siostra
+  it: sorella
+  tr: kız kardeş
+  pt: irmã
+  ro: soră
+  bg: сестра
+  cs: sestra
+  sk: sestra
+  hu: nővér
+  el: αδελφή
+  sl: sestra
+  et: õde
+  lt: sesuo
+  da: søster
+  fi: sisko
+  sv: syster
+  hr: sestra
+  lv: māsa
+  hi: बहन
+  ar: أخت
+  id: saudara perempuan
+  vi: chị gái
+  th: น้องสาว
+  ko: 자매
+  ja: 姉妹
+  bn: বোন
+  fa: خواهر
+  zh: 姐妹
+  ur: بہن
+  kk: әпке
+
+ID 1354 (improve):
+  ru: улучшать
+  uk: поліпшувати, покращувати
+  de: verbessern
+  es: mejorar
+  fr: améliorer
+  pl: poprawiać
+  it: migliorare
+  tr: geliştirmek
+  pt: melhorar
+  ro: îmbunătăţi
+  bg: подобри
+  cs: zlepšit
+  sk: zlepšiť
+  hu: javítani
+  el: βελτιώ
+  sl: izboljšati
+  et: parandada
+  lt: pagerinti
+  da: forbedre
+  fi: parantaa
+  sv: förbättra
+  hr: poboljšati
+  lv: uzlabot
+  hi: सुधारना, बेहतर बनाना
+  ar: تحسين
+  id: meningkatkan
+  vi: cải thiện
+  th: ปรับปรุง
+  ko: 개선하다
+  ja: 改善する
+  bn: উন্নত করা
+  fa: بهبود دادن
+  zh: 改善
+  ur: بہتر بنانا
+  kk: жақсарту
+
+ID 1355 (current):
+  ru: текущий
+  uk: поточний
+  de: aktuell
+  es: actual
+  fr: actuel
+  pl: aktualny
+  it: attuale
+  tr: güncel, mevcut, akıntı
+  pt: atual, corrente
+  ro: actual
+  bg: текущ
+  cs: proud
+  sk: prúd
+  hu: jelenlegi
+  el: ρεύμα
+  sl: tok
+  et: praegune
+  lt: srovė
+  da: nuværende
+  fi: nykyinen
+  sv: nuvarande
+  hr: trenutni
+  lv: pašreizējais
+  hi: वर्तमान, धारा
+  ar: حالي
+  id: saat ini
+  vi: hiện tại
+  th: ปัจจุบัน
+  ko: 현재의
+  ja: 現在の
+  bn: বর্তমান
+  fa: فعلی، جریان
+  zh: 当前的
+  ur: موجودہ
+  kk: ағымдағы
+
+ID 1356 (victim):
+  ru: жертва
+  uk: жертва
+  de: opfern
+  es: víctima
+  fr: sacrifier
+  pl: ofiara
+  it: sacrificio
+  tr: kurban
+  pt: vítima
+  ro: sacrificiu
+  bg: жертвоприношение
+  cs: obětovat
+  sk: obeť
+  hu: áldozat
+  el: θυσία
+  sl: žrtvovanje
+  et: ohverdus
+  lt: auka
+  da: offer
+  fi: uhri
+  sv: offer
+  hr: žrtva
+  lv: upuris
+  hi: पीड़ित
+  ar: ضحية
+  id: korban
+  vi: nạn nhân
+  th: เหยื่อ
+  ko: 피해자
+  ja: 被害者
+  bn: শিকার
+  fa: قربانی
+  zh: 受害者
+  ur: متاثرہ شخص
+  kk: құрбан
+
+ID 1357 (employee):
+  ru: сотрудник
+  uk: співробітник
+  de: Mitarbeiter
+  es: empleado
+  fr: employé
+  pl: pracownik
+  it: dipendente
+  tr: çalışan
+  pt: funcionário
+  ro: angajat
+  bg: служител
+  cs: zaměstnanec
+  sk: zamestnanec
+  hu: munkavállaló
+  el: υπάλληλος
+  sl: zaposleni
+  et: töötaja
+  lt: darbuotojas
+  da: medarbejder
+  fi: työntekijä
+  sv: anställd
+  hr: zaposlenik
+  lv: darbinieks
+  hi: कर्मचारी
+  ar: موظف
+  id: karyawan
+  vi: nhân viên
+  th: พนักงาน
+  ko: 직원
+  ja: 従業員
+  bn: কর্মচারী
+  fa: کارمند
+  zh: 员工
+  ur: ملازم
+  kk: қызметкер
+
+ID 1358 (around):
+  ru: вокруг
+  uk: навколо
+  de: um
+  es: alrededor
+  fr: autour
+  pl: wokół
+  it: in giro
+  tr: etrafında
+  pt: em volta
+  ro: în jurul
+  bg: около
+  cs: kolem
+  sk: okolo
+  hu: körül
+  el: γύρω
+  sl: okoli
+  et: ümber
+  lt: aplink
+  da: omkring
+  fi: noin
+  sv: runt
+  hr: oko
+  lv: apkārt
+  hi: आसपास
+  ar: حول
+  id: sekitar
+  vi: xung quanh
+  th: รอบๆ
+  ko: 주변
+  ja: 周囲
+  bn: চারপাশে
+  fa: اطراف
+  zh: 周围
+  ur: اردگرد
+  kk: айналасында
+
+ID 1359 (highly):
+  ru: высоко, весьма, очень
+  uk: високо, надзвичайно
+  de: hoch, sehr
+  es: altamente, muy
+  fr: très, énormément
+  pl: bardzo, wysoce
+  it: molto, moltissimo
+  tr: çok, çok fazla
+  pt: altamente, muito
+  ro: foarte, foarte mult
+  bg: силно, много
+  cs: velmi
+  sk: veľmi
+  hu: nagyon
+  el: πολύ, πάρα πολύ
+  sl: zelo
+  et: väga, väga palju
+  lt: labai, labai daug
+  da: høj, meget
+  fi: korkea, erittäin
+  sv: hög, väldigt
+  hr: visoko, vrlo
+  lv: augsts, ļoti
+  hi: उच्च, बहुत
+  ar: مرتفع، للغاية
+  id: tinggi, sangat
+  vi: cao, rất, rất cao
+  th: สูงมาก, มาก
+  ko: 높은, 매우, 아주
+  ja: 高い、非常に高い
+  bn: অত্যন্ত
+  fa: بسیار
+  zh: 高度地
+  ur: بہت زیادہ
+  kk: жоғары, өте
+
+ID 1360 (presence):
+  ru: присутствие
+  uk: присутність
+  de: Gegenwart
+  es: presencia
+  fr: présence
+  pl: obecność
+  it: presenza
+  tr: mevcudiyet
+  pt: presença
+  ro: prezenţă
+  bg: присъствие
+  cs: přítomnost
+  sk: prítomnosť
+  hu: jelenlét
+  el: παρουσία
+  sl: prisotnost
+  et: kohalolek
+  lt: buvimas
+  da: tilstedeværelse
+  fi: läsnäolo
+  sv: närvaro
+  hr: prisutnost
+  lv: klātbūtne
+  hi: उपस्थिति
+  ar: وجود
+  id: kehadiran
+  vi: sự hiện diện
+  th: การปรากฏตัว
+  ko: 존재
+  ja: 存在
+  bn: উপস্থিতি
+  fa: حضور
+  zh: 存在
+  ur: موجودگی
+  kk: қатысу
+
+ID 1361 (demand):
+  ru: требовать, спрос
+  uk: вимагати, попит
+  de: Nachfrage
+  es: demanda, exigir
+  fr: demande
+  pl: żądać, popyt
+  it: domanda
+  tr: talep etmek, talep
+  pt: exigir, demanda
+  ro: cerere
+  bg: търсене
+  cs: poptávka
+  sk: dopyt
+  hu: kereslet
+  el: ζήτηση
+  sl: povpraševanje
+  et: nõudlus
+  lt: paklausa
+  da: efterspørgsel
+  fi: kysyntä
+  sv: efterfrågan
+  hr: potražnja
+  lv: pieprasījums
+  hi: माँग, माँग करना
+  ar: طلب
+  id: permintaan, tuntutan
+  vi: nhu cầu, yêu cầu
+  th: ความต้องการ
+  ko: 수요
+  ja: 需要、要求
+  bn: দাবি করা, চাহিদা
+  fa: تقاضا، مطالبه کردن
+  zh: 需求
+  ur: مطالبہ، طلب
+  kk: сұраныс
+
+ID 1362 (budget):
+  ru: бюджет
+  uk: бюджет
+  de: Budget
+  es: presupuesto
+  fr: budget
+  pl: budżet
+  it: bilancio
+  tr: bütçe
+  pt: orçamento
+  ro: buget
+  bg: бюджет
+  cs: rozpočet
+  sk: rozpočet
+  hu: költségvetés
+  el: προϋπολογισμός
+  sl: proračun
+  et: eelarve
+  lt: biudžetas
+  da: budget
+  fi: budjetti
+  sv: budget
+  hr: proračun
+  lv: budžets
+  hi: बजट
+  ar: ميزانية
+  id: anggaran
+  vi: ngân sách
+  th: งบประมาณ
+  ko: 예산
+  ja: 予算
+  bn: বাজেট
+  fa: بودجه
+  zh: 预算
+  ur: بجٹ
+  kk: бюджет
+
+ID 1363 (police):
+  ru: полиция
+  uk: поліція
+  de: Polizei
+  es: policía
+  fr: police
+  pl: Policja
+  it: Polizia Stradale
+  tr: polis
+  pt: polícia
+  ro: poliţie
+  bg: полиция
+  cs: POLICIE
+  sk: POLÍCIA
+  hu: rendőrség
+  el: αστυνομία
+  sl: policija
+  et: politsei
+  lt: policija
+  da: politi
+  fi: poliisi
+  sv: polis
+  hr: policija
+  lv: policija
+  hi: पुलिस
+  ar: شرطة
+  id: polisi
+  vi: cảnh sát
+  th: ตำรวจ
+  ko: 경찰
+  ja: 警察
+  bn: পুলিশ
+  fa: پلیس
+  zh: 警察
+  ur: پولیس
+  kk: полиция
+
+ID 1364 (medical):
+  ru: медицинский
+  uk: медичний
+  de: medizinische
+  es: médico
+  fr: médical
+  pl: medyczny
+  it: medico
+  tr: tıbbi
+  pt: médico
+  ro: medical
+  bg: медицински
+  cs: lékařský
+  sk: lekárske
+  hu: orvosi
+  el: ιατρικός
+  sl: medicinski
+  et: meditsiiniline
+  lt: medicininis
+  da: læge
+  fi: lääketieteellinen
+  sv: medicinsk
+  hr: medicinski
+  lv: medicīnas
+  hi: चिकित्सा
+  ar: طبي
+  id: medis
+  vi: y tế
+  th: การแพทย์
+  ko: 의료
+  ja: 医療
+  bn: চিকিৎসা-সংক্রান্ত
+  fa: پزشکی
+  zh: 医疗的
+  ur: طبی
+  kk: медициналық
+
+ID 1365 (hospital):
+  ru: больница
+  uk: лікарня
+  de: Krankenhaus
+  es: hospital
+  fr: hôpital
+  pl: szpital
+  it: Ospedale
+  tr: hastane
+  pt: hospital
+  ro: spital
+  bg: болница
+  cs: NEMOCNICE
+  sk: NEMOCNICA
+  hu: kórház
+  el: νοσοκομείο
+  sl: bolnišnica
+  et: haigla
+  lt: ligoninė
+  da: hospital
+  fi: sairaala
+  sv: sjukhus
+  hr: bolnica
+  lv: slimnīca
+  hi: अस्पताल
+  ar: مستشفى
+  id: rumah sakit
+  vi: bệnh viện
+  th: โรงพยาบาล
+  ko: 병원
+  ja: 病院
+  bn: হাসপাতাল
+  fa: بیمارستان
+  zh: 医院
+  ur: ہسپتال
+  kk: аурухана
+
+ID 1366 (editor):
+  ru: редактор
+  uk: редактор
+  de: Editor
+  es: editor
+  fr: éditeur
+  pl: redaktor
+  it: redattore
+  tr: editör
+  pt: editor
+  ro: editor
+  bg: редактор
+  cs: editor
+  sk: redaktor
+  hu: szerkesztő
+  el: συντάκτης
+  sl: urednik
+  et: toimetaja
+  lt: redaktorius
+  da: redaktør
+  fi: toimittaja
+  sv: redaktör
+  hr: urednik
+  lv: redaktors
+  hi: संपादक
+  ar: محرر
+  id: editor
+  vi: biên tập viên
+  th: บรรณาธิการ
+  ko: 편집자
+  ja: 編集者
+  bn: সম্পাদক
+  fa: ویراستار، سردبیر
+  zh: 编辑
+  ur: مدیر
+  kk: редактор
+
+ID 1367 (center):
+  ru: центр
+  uk: центр
+  de: Center
+  es: centro
+  fr: centre
+  pl: centrum
+  it: centro
+  tr: merkez
+  pt: centro
+  ro: centru
+  bg: център
+  cs: centrum
+  sk: centrum
+  hu: központ
+  el: κέντρο
+  sl: središče
+  et: keskus
+  lt: centras
+  da: center
+  fi: keskus
+  sv: center
+  hr: centar
+  lv: centrs
+  hi: केंद्र
+  ar: مركز
+  id: pusat
+  vi: trung tâm
+  th: ศูนย์กลาง
+  ko: 센터
+  ja: 中心
+  bn: কেন্দ্র
+  fa: مرکز
+  zh: 中心
+  ur: مرکز
+  kk: орталық
+
+ID 1368 (credit):
+  ru: кредит
+  uk: кредит
+  de: Kredit
+  es: crédito
+  fr: crédit
+  pl: kredyt
+  it: credito
+  tr: kredi
+  pt: crédito
+  ro: credit
+  bg: кредит
+  cs: kredit
+  sk: úver
+  hu: hitel
+  el: πίστωση
+  sl: kredit
+  et: krediit
+  lt: kreditas
+  da: kredit
+  fi: luotto
+  sv: kredit
+  hr: kredit
+  lv: kredīts
+  hi: क्रेडिट
+  ar: ائتمان
+  id: kredit
+  vi: tín dụng
+  th: เครดิต
+  ko: 신용
+  ja: 信用
+  bn: ঋণ, কৃতিত্ব
+  fa: اعتبار، وام
+  zh: 信用
+  ur: ادھار، کریڈٹ
+  kk: несие
+
+ID 1369 (previous):
+  ru: предыдущий
+  uk: попередній
+  de: vorherige
+  es: anterior
+  fr: précédent
+  pl: poprzedni
+  it: precedente
+  tr: önceki
+  pt: anterior
+  ro: anterior
+  bg: предишен
+  cs: předchozí
+  sk: predchádzajúci
+  hu: előző
+  el: προηγούμενος
+  sl: prejšnji
+  et: eelmine
+  lt: ankstesnis
+  da: tidligere
+  fi: edellinen
+  sv: tidigare
+  hr: prethodni
+  lv: iepriekšējais
+  hi: पिछला, पूर्व
+  ar: سابق
+  id: sebelumnya
+  vi: trước đó
+  th: ก่อนหน้า
+  ko: 이전의
+  ja: 以前の
+  bn: আগের
+  fa: قبلی
+  zh: 以前的
+  ur: پچھلا
+  kk: алдыңғы
+
+ID 1370 (faith):
+  ru: вера
+  uk: віра
+  de: Glaube
+  es: fe
+  fr: foi
+  pl: wiara
+  it: fede
+  tr: inanç
+  pt: fé
+  ro: credinţă
+  bg: вяра
+  cs: víra
+  sk: viera
+  hu: hit
+  el: πίστη
+  sl: vera
+  et: usk
+  lt: tikėjimas
+  da: tro
+  fi: usko
+  sv: tro
+  hr: vjera
+  lv: ticība
+  hi: आस्था
+  ar: إيمان
+  id: iman
+  vi: đức tin
+  th: ความเชื่อ
+  ko: 신념
+  ja: 信仰
+  bn: বিশ্বাস
+  fa: ایمان
+  zh: 信仰
+  ur: ایمان
+  kk: сенім
+
+ID 1371 (work):
+  ru: работа
+  uk: робота
+  de: Arbeit
+  es: Trabajo
+  fr: Emploi
+  pl: praca, pracować
+  it: Lavoro
+  tr: İş
+  pt: Trabalho
+  ro: Post
+  bg: Работа
+  cs: Práce
+  sk: Práca
+  hu: Munka
+  el: Δουλειά
+  sl: Delo
+  et: Töö
+  lt: Darbas
+  da: arbejde
+  fi: työ
+  sv: arbete
+  hr: posao
+  lv: darbs
+  hi: काम
+  ar: عمل
+  id: pekerjaan
+  vi: công việc
+  th: งาน
+  ko: 일
+  ja: 仕事
+  bn: কাজ
+  fa: کار، کار کردن
+  zh: 工作
+  ur: کام
+  kk: жұмыс
+
+ID 1372 (crazy):
+  ru: сумасшедший, странный
+  uk: божевільний, дивний
+  de: verrückt, seltsam
+  es: loco, extraño
+  fr: fou, bizarre
+  pl: szalony, dziwny
+  it: pazzo, strano
+  tr: çılgın, tuhaf
+  pt: louco, estranho
+  ro: nebun, ciudat
+  bg: луд, странен
+  cs: šílený, divný
+  sk: bláznivý, zvláštny
+  hu: őrült, furcsa
+  el: τρελός, παράξενος
+  sl: noro, čudno
+  et: hull, veider
+  lt: beprotiška, keista
+  da: skør, mærkelig
+  fi: hullu, outo
+  sv: galen, konstig
+  hr: ludo, čudno
+  lv: traks, dīvains
+  hi: पागल, अजीब
+  ar: مجنون، غريب
+  id: gila, aneh
+  vi: điên rồ, kỳ lạ
+  th: บ้า, แปลก
+  ko: 미친, 이상한
+  ja: 狂った、奇妙な
+  bn: পাগল
+  fa: دیوانه
+  zh: 疯狂的
+  ur: پاگل
+  kk: ессіз, таңқаларлық
+
+ID 1373 (court):
+  ru: суд
+  uk: суд
+  de: Gericht
+  es: tribunal, corte
+  fr: tribunal
+  pl: sąd
+  it: Tribunale
+  tr: mahkeme
+  pt: tribunal
+  ro: instanță
+  bg: съд
+  cs: soud
+  sk: súd
+  hu: bíróság
+  el: δικαστήριο
+  sl: sodišče
+  et: kohus
+  lt: teismas
+  da: domstol
+  fi: tuomioistuin
+  sv: domstol
+  hr: sud
+  lv: tiesa
+  hi: न्यायालय
+  ar: محكمة
+  id: pengadilan
+  vi: tòa án
+  th: ศาล
+  ko: 법원
+  ja: 法廷
+  bn: আদালত
+  fa: دادگاه، زمین بازی
+  zh: 法院
+  ur: عدالت
+  kk: сот
+
+ID 1374 (quiet):
+  ru: тихий
+  uk: тихий
+  de: ruhig
+  es: tranquilo
+  fr: calme
+  pl: cichy
+  it: Tranquillo
+  tr: sessiz
+  pt: quieto, silencioso
+  ro: linişti
+  bg: тих
+  cs: klid
+  sk: tichý
+  hu: csendes
+  el: ησυχία
+  sl: tiho
+  et: vaikne
+  lt: tylu
+  da: stille
+  fi: hiljainen
+  sv: tyst
+  hr: tiho
+  lv: kluss
+  hi: शांत
+  ar: هادئ
+  id: tenang
+  vi: yên tĩnh
+  th: เงียบ
+  ko: 조용한
+  ja: 静かな
+  bn: শান্ত
+  fa: ساکت
+  zh: 安静的
+  ur: خاموش
+  kk: тыныш
+
+ID 1375 (dad):
+  ru: папа
+  uk: тато
+  de: Papa
+  es: papá
+  fr: papa
+  pl: tata
+  it: Papà
+  tr: baba
+  pt: pai
+  ro: tată
+  bg: татко
+  cs: táta
+  sk: otec
+  hu: apu
+  el: μπαμπάς
+  sl: oče
+  et: isa
+  lt: tėtis
+  da: far
+  fi: isä
+  sv: pappa
+  hr: tata
+  lv: tētis
+  hi: पिता
+  ar: أب
+  id: ayah
+  vi: bố
+  th: พ่อ
+  ko: 아빠
+  ja: 父
+  bn: বাবা
+  fa: بابا
+  zh: 爸爸
+  ur: ابو
+  kk: әке
+
+ID 1376 (band):
+  ru: группа
+  uk: група
+  de: Gruppe
+  es: grupo
+  fr: groupe
+  pl: grupa
+  it: gruppo
+  tr: grup
+  pt: grupo
+  ro: grup
+  bg: група
+  cs: skupina
+  sk: skupina
+  hu: csoport
+  el: ομάδα
+  sl: skupina
+  et: grupp
+  lt: grupė
+  da: gruppe
+  fi: ryhmä
+  sv: grupp
+  hr: grupa
+  lv: grupa
+  hi: समूह
+  ar: مجموعة
+  id: kelompok
+  vi: nhóm
+  th: กลุ่ม
+  ko: 그룹
+  ja: グループ
+  bn: দল, ব্যান্ড
+  fa: گروه موسیقی، نوار
+  zh: 乐队
+  ur: گروہ، بینڈ
+  kk: топ
+
+ID 1377 (bed):
+  ru: кровать
+  uk: ліжко
+  de: Bett
+  es: cama
+  fr: lit
+  pl: łóżko
+  it: letto
+  tr: yatak
+  pt: cama
+  ro: pat
+  bg: легло
+  cs: postel
+  sk: posteľ
+  hu: ágy
+  el: κρεβάτι
+  sl: postelja
+  et: voodi
+  lt: lova
+  da: seng
+  fi: sänky
+  sv: säng
+  hr: krevet
+  lv: gulta
+  hi: बिस्तर
+  ar: سرير
+  id: tempat tidur
+  vi: giường
+  th: เตียง
+  ko: 침대
+  ja: ベッド
+  bn: বিছানা
+  fa: تختخواب
+  zh: 床
+  ur: بستر
+  kk: төсек
+
+ID 1378 (color):
+  ru: цвет
+  uk: колір
+  de: Farbe
+  es: color
+  fr: couleur
+  pl: kolor
+  it: colore
+  tr: renk
+  pt: cor
+  ro: culoare
+  bg: цвят
+  cs: barva
+  sk: farba
+  hu: szín
+  el: χρώμα
+  sl: barva
+  et: värv
+  lt: spalva
+  da: farve
+  fi: väri
+  sv: färg
+  hr: boja
+  lv: krāsa
+  hi: रंग
+  ar: لون
+  id: warna
+  vi: màu sắc
+  th: สี
+  ko: 색깔
+  ja: 色
+  bn: রং
+  fa: رنگ
+  zh: 颜色
+  ur: رنگ
+  kk: түрлі-түсті
+
+ID 1379 (just):
+  ru: только, просто
+  uk: тільки, просто
+  de: einfach nur
+  es: simplemente, sencillamente
+  fr: tout simplement
+  pl: tylko, właśnie, po prostu
+  it: semplicemente
+  tr: sadece, basitçe
+  pt: apenas, justo
+  ro: doar, pur și simplu
+  bg: просто
+  cs: prostě
+  sk: len, jednoducho
+  hu: csak, egyszerűen
+  el: απλά
+  sl: samo, preprosto
+  et: lihtsalt
+  lt: tiesiog
+  da: kun, lige
+  fi: vain, juuri ja juuri
+  sv: bara, precis
+  hr: samo, upravo
+  lv: tikai, tikko
+  hi: केवल, बस
+  ar: فقط
+  id: hanya, sekadar
+  vi: chỉ
+  th: เท่านั้น, เพียง
+  ko: 단지
+  ja: ただ、ちょうど
+  bn: শুধু, ন্যায়সঙ্গত
+  fa: فقط، همین حالا
+  zh: 只是
+  ur: صرف، ابھی ابھی
+  kk: тек
+
+ID 1380 (user):
+  ru: пользователь
+  uk: користувач
+  de: Benutzer
+  es: usuario
+  fr: utilisateur
+  pl: użytkownik
+  it: utente
+  tr: kullanıcı
+  pt: usuário
+  ro: utilizator
+  bg: потребител
+  cs: uživatel
+  sk: používateľ
+  hu: felhasználó
+  el: μεταχειριζόμενος
+  sl: uporabnik
+  et: kasutaja
+  lt: vartotojas
+  da: bruger
+  fi: käyttäjä
+  sv: användare
+  hr: korisnik
+  lv: lietotājs
+  hi: उपयोगकर्ता
+  ar: مستخدم
+  id: pengguna
+  vi: người dùng
+  th: ผู้ใช้
+  ko: 사용자
+  ja: 使用者
+  bn: ব্যবহারকারী
+  fa: کاربر
+  zh: 用户
+  ur: صارف
+  kk: пайдаланушы
+
+ID 1381 (under):
+  ru: под
+  uk: під
+  de: unter
+  es: bajo
+  fr: sous
+  pl: pod
+  it: Sotto
+  tr: altında
+  pt: sob
+  ro: sub
+  bg: под
+  cs: pod
+  sk: pod
+  hu: alatt
+  el: υπό
+  sl: pod
+  et: all
+  lt: po
+  da: under
+  fi: alle
+  sv: under
+  hr: ispod
+  lv: zem
+  hi: नीचे
+  ar: تحت
+  id: di bawah
+  vi: bên dưới
+  th: ใต้
+  ko: 아래
+  ja: 下に
+  bn: নিচে
+  fa: زیر
+  zh: 在……下面
+  ur: نیچے
+  kk: астында
+
+ID 1382 (while):
+  ru: пока, некоторое время
+  uk: поки що, деякий час
+  de: vorerst, für eine Weile
+  es: mientras, durante un rato
+  fr: pendant que, tandis que
+  pl: podczas gdy, chociaż
+  it: per ora, per un po'
+  tr: iken, sırasında, bir süre
+  pt: enquanto, por um tempo
+  ro: deocamdată, pentru o vreme
+  bg: засега, за известно време
+  cs: prozatím, na chvíli
+  sk: zatiaľ, na chvíľu
+  hu: egyelőre, egy ideig
+  el: προς το παρόν, για λίγο
+  sl: zaenkrat, za nekaj časa
+  et: praegu, mõneks ajaks
+  lt: kol kas, kurį laiką
+  da: mens, et stykke tid
+  fi: sillä aikaa, jonkin aikaa
+  sv: medan, ett tag
+  hr: dok, neko vrijeme
+  lv: kamēr, uz brīdi
+  hi: जबकि, कुछ समय के लिए
+  ar: بينما، لفترة من الوقت
+  id: sementara, selagi
+  vi: trong khi, một lúc
+  th: ขณะ, สักพัก
+  ko: 동안, 잠시 동안
+  ja: しばらくの間
+  bn: যখন, কিছুক্ষণ
+  fa: درحالی‌که، مدتی
+  zh: 当……时
+  ur: جبکہ، کچھ دیر
+  kk: әзірге, біраз уақытқа
+
+ID 1383 (score):
+  ru: счет
+  uk: рахунок
+  de: überprüfen
+  es: marcador, puntuación, anotar
+  fr: vérifier
+  pl: wynik, wynik punktowy
+  it: controllo
+  tr: puan, skor
+  pt: placar, pontuação
+  ro: verifica
+  bg: проверка
+  cs: kontrola
+  sk: skontrolovať
+  hu: ellenőrzés
+  el: έλεγχος
+  sl: preveri
+  et: kontroll
+  lt: čekis
+  da: regning
+  fi: lasku
+  sv: nota
+  hr: račun
+  lv: rēķins
+  hi: बिल
+  ar: فاتورة
+  id: skor, nilai
+  vi: hóa đơn
+  th: บิล
+  ko: 청구서
+  ja: 請求書
+  bn: স্কোর
+  fa: امتیاز، نتیجه
+  zh: 分数
+  ur: اسکور
+  kk: заң жобасы
+
+ID 1384 (raise):
+  ru: поднимать
+  uk: піднімати
+  de: erheben
+  es: aumentar
+  fr: augmenter
+  pl: podnosić, wychowywać
+  it: aumentare
+  tr: artırmak
+  pt: levantar, aumentar
+  ro: ridica
+  bg: повишаване
+  cs: zvýšit
+  sk: zvýšiť
+  hu: emel
+  el: αύξηση
+  sl: dvigniti
+  et: tõsta
+  lt: pakelti
+  da: elevator
+  fi: hissi
+  sv: hiss
+  hr: dizalo
+  lv: lifts
+  hi: उठाना
+  ar: مصعد
+  id: angkat
+  vi: thang máy
+  th: ยก
+  ko: 엘리베이터
+  ja: 持ち上げる
+  bn: তোলা, বাড়ানো
+  fa: بالا بردن
+  zh: 提高
+  ur: اٹھانا، بڑھانا
+  kk: көтеру
+
+ID 1385 (study):
+  ru: изучать
+  uk: вивчати
+  de: Studie
+  es: estudiar
+  fr: étude
+  pl: studiować, nauka, badanie
+  it: studio
+  tr: çalışmak
+  pt: estudar
+  ro: studiu
+  bg: проучване
+  cs: studie
+  sk: štúdium
+  hu: tanulmány
+  el: μελέτη
+  sl: študij
+  et: uuring
+  lt: studijuoti
+  da: studie
+  fi: opiskelu
+  sv: studie
+  hr: studija
+  lv: pētījums
+  hi: अध्ययन
+  ar: دراسة
+  id: belajar
+  vi: nghiên cứu
+  th: ศึกษา
+  ko: 공부
+  ja: 勉強する
+  bn: পড়াশোনা করা
+  fa: مطالعه کردن، درس
+  zh: 学习
+  ur: مطالعہ کرنا
+  kk: зерттеу
+
+ID 1386 (dog):
+  ru: собака
+  uk: собака
+  de: Hund
+  es: perro
+  fr: chien
+  pl: pies
+  it: cane
+  tr: köpek
+  pt: cachorro
+  ro: câine
+  bg: куче
+  cs: pes
+  sk: pes
+  hu: kutya
+  el: σκυλί
+  sl: pes
+  et: koer
+  lt: šuo
+  da: hund
+  fi: koira
+  sv: hund
+  hr: pas
+  lv: suns
+  hi: कुत्ता
+  ar: كلب
+  id: anjing
+  vi: chó
+  th: สุนัข
+  ko: 개
+  ja: 犬
+  bn: কুকুর
+  fa: سگ
+  zh: 狗
+  ur: کتا
+  kk: ит
+
+ID 1387 (idea):
+  ru: идея
+  uk: ідея
+  de: Idee
+  es: idea
+  fr: idée
+  pl: pomysł
+  it: idea
+  tr: fikir
+  pt: ideia
+  ro: idee
+  bg: идея
+  cs: nápad
+  sk: nápad
+  hu: ötlet
+  el: ιδέα
+  sl: ideja
+  et: idee
+  lt: idėja
+  da: idé
+  fi: idea
+  sv: idé
+  hr: ideja
+  lv: ideja
+  hi: विचार
+  ar: فكرة
+  id: ide
+  vi: ý tưởng
+  th: ความคิด
+  ko: 아이디어
+  ja: 考え
+  bn: ধারণা
+  fa: ایده
+  zh: 想法
+  ur: خیال
+  kk: идея
+
+ID 1388 (paper):
+  ru: бумага
+  uk: папір
+  de: Papier
+  es: papel
+  fr: papier
+  pl: papier
+  it: carta
+  tr: kağıt
+  pt: papel
+  ro: hârtie
+  bg: хартия
+  cs: papír
+  sk: papier
+  hu: papír
+  el: χαρτί
+  sl: papir
+  et: paber
+  lt: popierius
+  da: papir
+  fi: paperi
+  sv: papper
+  hr: papir
+  lv: papīrs
+  hi: कागज़
+  ar: ورقة
+  id: kertas
+  vi: giấy
+  th: กระดาษ
+  ko: 종이
+  ja: 紙
+  bn: কাগজ
+  fa: کاغذ، مقاله
+  zh: 纸
+  ur: کاغذ
+  kk: қағаз
+
+ID 1389 (roll):
+  ru: рулон, катится
+  uk: рулон, котиться
+  de: Rolle
+  es: rodar, rollo
+  fr: rouleau, rouleaux
+  pl: rolka, toczyć się
+  it: rotolare
+  tr: rulo, rulolar
+  pt: rolo, rolos
+  ro: rulou, rulouri
+  bg: ролка, ролки
+  cs: válet se, rolovat se
+  sk: rolovať
+  hu: tekercs, tekercsek
+  el: ρολό, ρολά
+  sl: zvitek, zvitki
+  et: rull, rullid
+  lt: ritinėlis, ritinėliai
+  da: rulle, ruller
+  fi: rulla, rullia
+  sv: rulle, rullar
+  hr: rola, role
+  lv: rullis, ruļļi
+  hi: लुढ़कना, लुढ़कते हुए
+  ar: لفة
+  id: gulungan, berguling
+  vi: cuộn, cuộn giấy
+  th: ม้วน
+  ko: 롤, 롤들
+  ja: 転がる
+  bn: গড়ানো, রোল
+  fa: رول، غلتیدن
+  zh: 滚动
+  ur: لپیٹنا، رول
+  kk: орама
+
+ID 1390 (fact):
+  ru: факт
+  uk: факт
+  de: Tatsache
+  es: hecho
+  fr: fait
+  pl: fakt
+  it: fatto
+  tr: hakikat
+  pt: fato
+  ro: fapt
+  bg: факт
+  cs: skutečnost
+  sk: fakt
+  hu: tény
+  el: γεγονός
+  sl: dejstvo
+  et: fakt
+  lt: faktas
+  da: faktum
+  fi: tosiasia
+  sv: faktum
+  hr: činjenica
+  lv: fakts
+  hi: तथ्य
+  ar: حقيقة
+  id: fakta
+  vi: sự thật
+  th: ข้อเท็จจริง
+  ko: 사실
+  ja: 事実
+  bn: তথ্য
+  fa: واقعیت
+  zh: 事实
+  ur: حقیقت
+  kk: факт
+
+ID 1391 (air):
+  ru: воздух
+  uk: повітря
+  de: Luft
+  es: aire
+  fr: air
+  pl: powietrze
+  it: aria
+  tr: hava
+  pt: ar
+  ro: aer
+  bg: въздух
+  cs: vzduch
+  sk: vzduch
+  hu: levegő
+  el: αέρας
+  sl: zrak
+  et: õhk
+  lt: oras
+  da: luft
+  fi: ilma
+  sv: luft
+  hr: zrak
+  lv: gaiss
+  hi: हवा
+  ar: هواء
+  id: udara
+  vi: không khí
+  th: อากาศ
+  ko: 공기
+  ja: 空気
+  bn: বাতাস
+  fa: هوا
+  zh: 空气
+  ur: ہوا
+  kk: ауа
+
+ID 1392 (storm):
+  ru: шторм
+  uk: шторм
+  de: Sturm
+  es: tormenta
+  fr: tempête
+  pl: burza
+  it: tempesta
+  tr: fırtına
+  pt: tempestade
+  ro: furtună
+  bg: буря
+  cs: bouře
+  sk: búrka
+  hu: vihar
+  el: καταιγίδα
+  sl: nevihta
+  et: torm
+  lt: audra
+  da: storm
+  fi: myrsky
+  sv: storm
+  hr: oluja
+  lv: vētra
+  hi: तूफान
+  ar: عاصفة
+  id: badai
+  vi: bão
+  th: พายุ
+  ko: 폭풍
+  ja: 嵐
+  bn: ঝড়
+  fa: طوفان
+  zh: 风暴
+  ur: طوفان
+  kk: дауыл
+
+ID 1393 (ahead):
+  ru: предстоящий, вперед
+  uk: попереду, заздалегідь
+  de: bevorstehend, vorwärts
+  es: adelante, por delante
+  fr: à venir, en avant
+  pl: naprzód, z przodu
+  it: prossimo, avanti
+  tr: yaklaşan, ileriye dönük
+  pt: em breve, adiante
+  ro: viitor, înainte
+  bg: предстоящ, напред
+  cs: nadcházející, vpřed
+  sk: nadchádzajúci, vpred
+  hu: közelgő, előretekintő
+  el: επερχόμενος, προς τα εμπρός
+  sl: prihajajoči, naprej
+  et: eelseisev, edasine
+  lt: artėjantis, į priekį
+  da: kommende, fremad
+  fi: tuleva, eteenpäin
+  sv: kommande, framåt
+  hr: nadolazeći, naprijed
+  lv: gaidāms, uz priekšu
+  hi: आने वाला, आगे
+  ar: قادم
+  id: mendatang, ke depan
+  vi: sắp tới, phía trước
+  th: ที่กำลังจะมาถึง, ข้างหน้า
+  ko: 다가오는, 앞으로
+  ja: 今後の
+  bn: সামনে
+  fa: جلوتر
+  zh: 在前面
+  ur: آگے، آئندہ
+  kk: алдағы, алға
+
+ID 1394 (cost):
+  ru: цена, стоимость, расходы
+  uk: ціна, вартість, витрати
+  de: Preis, Kosten, Ausgaben
+  es: costar, costo, gastos
+  fr: prix, coût, dépenses
+  pl: cena, koszt, wydatki
+  it: prezzo, costo, spese
+  tr: fiyat, maliyet, giderler
+  pt: preço, custo, despesas
+  ro: preț, cost, cheltuieli
+  bg: цена, разход, разходи
+  cs: cena, náklady, výdaje
+  sk: cena, náklady, výdavky
+  hu: ár, költség, kiadások
+  el: τιμή, κόστος, έξοδα
+  sl: cena, stroški, izdatki
+  et: hind, maksumus, kulud
+  lt: kaina, išlaidos
+  da: pris, omkostninger, udgifter
+  fi: hinta, kustannus, kulut
+  sv: pris, kostnad, utgifter
+  hr: cijena, trošak, izdaci
+  lv: cena, izmaksas, izdevumi
+  hi: कीमत, लागत, खर्च
+  ar: سعر، تكلفة، نفقات
+  id: harga, biaya, pengeluaran
+  vi: giá cả, chi phí
+  th: ราคา, ต้นทุน, ค่าใช้จ่าย
+  ko: 가격, 비용, 지출
+  ja: 価格、費用、経費
+  bn: খরচ, মূল্য
+  fa: هزینه، هزینه داشتن
+  zh: 成本
+  ur: قیمت، لاگت
+  kk: баға, құн, шығындар
+
+ID 1395 (shot):
+  ru: выстрел
+  uk: постріл
+  de: Schuss
+  es: disparo
+  fr: tir
+  pl: strzał
+  it: sparo
+  tr: atış
+  pt: tiro, disparo
+  ro: shot
+  bg: изстрел
+  cs: shot
+  sk: výstrel
+  hu: lövés
+  el: βολή
+  sl: strel
+  et: lask
+  lt: šūvis
+  da: skud
+  fi: laukaus
+  sv: skott
+  hr: pucanj
+  lv: šāviens
+  hi: गोली
+  ar: لقطة
+  id: tembakan
+  vi: cú bắn
+  th: ยิง
+  ko: 샷
+  ja: ショット
+  bn: গুলি, শট
+  fa: شلیک، عکس
+  zh: 射击
+  ur: گولی، شاٹ
+  kk: ату
+
+ID 1396 (it):
+  ru: это, оно
+  uk: це, воно
+  de: es, dieses
+  es: eso, ello
+  fr: ce, il, elle
+  pl: to, ono
+  it: esso, essa, ciò
+  tr: o, bu
+  pt: isso, isto, ele
+  ro: acesta, el, ea
+  bg: то, това
+  cs: to, ono, ten
+  sk: to, ono
+  hu: az, ez, ő
+  el: αυτό, εκείνο
+  sl: to, ono
+  et: see, tema
+  lt: tai, šis
+  da: det, den
+  fi: se, tämä
+  sv: det, den
+  hr: to, ono
+  lv: tas, šis
+  hi: यह, वह
+  ar: هذا
+  id: itu, ini
+  vi: nó, cái này
+  th: มัน, สิ่งนี้
+  ko: 그것, 이것
+  ja: それ、これ
+  bn: এটি
+  fa: آن، این
+  zh: 它
+  ur: یہ
+  kk: бұл, ол
+
+ID 1397 (enjoy):
+  ru: наслаждаться
+  uk: насолоджуватися
+  de: genießen
+  es: disfrutar
+  fr: apprécier
+  pl: cieszyć się, korzystać
+  it: Godere
+  tr: Eğlence
+  pt: aproveitar
+  ro: bucură-te
+  bg: наслаждавам се
+  cs: užívejte si
+  sk: užívať si
+  hu: élvez
+  el: απολαμβάνω
+  sl: uživaj
+  et: naudi
+  lt: mėgautis
+  da: nyde
+  fi: nauttia
+  sv: njuta
+  hr: uživati
+  lv: baudīt
+  hi: आनंद लेना
+  ar: يستمتع
+  id: menikmati
+  vi: tận hưởng
+  th: สนุก
+  ko: 즐기다
+  ja: 楽しむ
+  bn: উপভোগ করা
+  fa: لذت بردن
+  zh: 享受
+  ur: لطف اٹھانا
+  kk: ләззат алыңыз
+
+ID 1398 (where):
+  ru: где, куда?
+  uk: де, куди?
+  de: Wohin, wohin?
+  es: dónde, adónde
+  fr: Où, où aller ?
+  pl: gdzie, dokąd?
+  it: Dove, dove andiamo?
+  tr: Nereye, nereye?
+  pt: Onde, para onde?
+  ro: unde, încotro?
+  bg: къде, накъде?
+  cs: kam, kam?
+  sk: kam, kam?
+  hu: hová, hová?
+  el: πού, προς τα πού
+  sl: kam, kam?
+  et: kuhu, kuhu?
+  lt: kur, kur važiuoti?
+  da: hvor, hvorhen?
+  fi: missä, minne?
+  sv: var, vart?
+  hr: gdje, kamo?
+  lv: kur, uz kurieni?
+  hi: कहाँ, किधर?
+  ar: أين، إلى أين؟
+  id: di mana, ke mana?
+  vi: ở đâu, đi đâu?
+  th: ที่ไหน, ไปที่ไหน?
+  ko: 어디로, 어디로?
+  ja: どこへ、どこへ？
+  bn: কোথায়
+  fa: کجا
+  zh: 哪里
+  ur: کہاں
+  kk: қайда, қайда?
+
+ID 1399 (arm):
+  ru: рука
+  uk: рука
+  de: Hand
+  es: brazo
+  fr: main
+  pl: ręka
+  it: mano
+  tr: el
+  pt: braço
+  ro: mână
+  bg: ръка
+  cs: ruka
+  sk: ruka
+  hu: kéz
+  el: χέρι
+  sl: roka
+  et: käsi
+  lt: ranka
+  da: hånd
+  fi: käsi
+  sv: hand
+  hr: ruka
+  lv: roka
+  hi: हाथ
+  ar: يد
+  id: tangan
+  vi: tay
+  th: มือ
+  ko: 손
+  ja: 手
+  bn: বাহু
+  fa: بازو، دست
+  zh: 手臂
+  ur: بازو
+  kk: қол
+
+ID 1400 (fight fought fought):
+  ru: драться, сражаться
+  uk: битися, боротися
+  de: kämpfen, sich messen
+  es: luchar, pelear
+  fr: se battre
+  pl: walczyć, toczyć bitwę
+  it: combattere, lottare
+  tr: savaşmak, mücadele etmek
+  pt: lutar, brigar
+  ro: a lupta
+  bg: да се бия
+  cs: bojovat, utkávat se
+  sk: bojovať, biť sa
+  hu: harcolni, csatázni
+  el: να πολεμήσω
+  sl: boriti se, bojovati
+  et: võitlema, lahingut pidama
+  lt: kovoti, kautis
+  da: kamp, ​​kamp
+  fi: taistelu
+  sv: slåss, strid
+  hr: borba, bitka
+  lv: cīņa, kauja
+  hi: लड़ाई, युद्ध
+  ar: قتال، معركة
+  id: berkelahi, bertarung
+  vi: chiến đấu, trận chiến
+  th: ต่อสู้, การรบ
+  ko: 싸움, 전투
+  ja: 戦う、戦い
+  bn: লড়াই করা
+  fa: جنگیدن
+  zh: 打架
+  ur: لڑنا
+  kk: төбелесу, шайқас
+
+ID 1401 (adult):
+  ru: взрослый
+  uk: дорослий
+  de: Erwachsene
+  es: adulto
+  fr: adulte
+  pl: dorosły
+  it: adulto
+  tr: yetişkin
+  pt: adulto
+  ro: adult
+  bg: възрастен
+  cs: dospělý
+  sk: dospelý
+  hu: felnőtt
+  el: ενήλικας
+  sl: odrasel
+  et: täiskasvanu
+  lt: suaugęs
+  da: voksen
+  fi: aikuinen
+  sv: vuxen
+  hr: odrasla osoba
+  lv: pieaugušais
+  hi: वयस्क
+  ar: بالغ
+  id: dewasa
+  vi: người lớn
+  th: ผู้ใหญ่
+  ko: 성인
+  ja: 大人
+  bn: প্রাপ্তবয়স্ক
+  fa: بزرگسال
+  zh: 成年人
+  ur: بالغ
+  kk: ересек адам
+

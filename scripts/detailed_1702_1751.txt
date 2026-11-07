@@ -1,0 +1,1850 @@
+ID 1702 (site):
+  ru: сайт, плошадка
+  uk: сайт, майданчик
+  de: Webseite, Website
+  es: sitio, ubicación, sitio web
+  fr: site web, site
+  pl: miejsce, lokalizacja
+  it: sito web, sito
+  tr: web sitesi, site
+  pt: site
+  ro: site web, site
+  bg: уебсайт, сайт
+  cs: webové stránky, stránky
+  sk: webová stránka, stránka
+  hu: weboldal, webhely
+  el: ιστοσελίδα, ιστότοπος
+  sl: spletna stran, spletno mesto
+  et: veebisait, sait
+  lt: svetainė
+  da: sted
+  fi: paikka
+  sv: plats
+  hr: mjesto, lokacija
+  lv: vieta
+  hi: स्थान
+  ar: موقع، موقع إلكتروني، مكان
+  id: lokasi, situs
+  vi: địa điểm
+  th: สถานที่
+  ko: 장소
+  ja: 場所
+  bn: সাইট, স্থান
+  fa: مکان، سایت
+  zh: 网站、场地
+  ur: ویب سائٹ، جگہ
+  kk: алаң, платформа
+
+ID 1703 (lady):
+  ru: леди
+  uk: леді
+  de: Dame
+  es: dama
+  fr: dame
+  pl: dama
+  it: signora
+  tr: bayan
+  pt: senhora
+  ro: doamnă
+  bg: дама
+  cs: dáma
+  sk: dáma
+  hu: hölgy
+  el: κυρία
+  sl: dama
+  et: daam
+  lt: ponia
+  da: dame
+  fi: nainen
+  sv: dam
+  hr: dama
+  lv: dāma
+  hi: महिला
+  ar: سيدة
+  id: wanita
+  vi: quý bà
+  th: ผู้หญิง
+  ko: 여자
+  ja: 女性
+  bn: মহিলা
+  fa: بانو
+  zh: 女士
+  ur: خاتون
+  kk: ханым
+
+ID 1704 (thing):
+  ru: вещь
+  uk: річ
+  de: Ding
+  es: cosa
+  fr: chose
+  pl: rzecz
+  it: cosa
+  tr: şey
+  pt: coisa
+  ro: lucru
+  bg: нещо
+  cs: věc
+  sk: vec
+  hu: dolog
+  el: πράγμα
+  sl: stvar
+  et: asi
+  lt: daiktas
+  da: ting
+  fi: asia
+  sv: sak
+  hr: stvar
+  lv: lieta
+  hi: वस्तु
+  ar: شيء
+  id: benda
+  vi: vật
+  th: สิ่งของ
+  ko: 사물
+  ja: 物
+  bn: জিনিস
+  fa: چیز
+  zh: 东西、事情
+  ur: چیز
+  kk: нәрсе
+
+ID 1705 (carry):
+  ru: нести
+  uk: нести
+  de: tragen
+  es: llevar
+  fr: porter
+  pl: nosić
+  it: trasportare
+  tr: taşımak
+  pt: carregar
+  ro: transporta
+  bg: нося
+  cs: nést
+  sk: niesť
+  hu: visz
+  el: μεταφέρω
+  sl: nositi
+  et: kandma
+  lt: nešti
+  da: bære
+  fi: kantaa
+  sv: bära
+  hr: nositi
+  lv: nest
+  hi: ले जाना
+  ar: يحمل
+  id: membawa
+  vi: mang theo
+  th: พกพา
+  ko: 운반하다
+  ja: 運ぶ
+  bn: বহন করা
+  fa: حمل کردن، بردن
+  zh: 携带、搬运
+  ur: لے جانا، اٹھانا
+  kk: алып жүру
+
+ID 1706 (link):
+  ru: связь, ссылка
+  uk: зв'язок, посилання
+  de: Verbindung, Link
+  es: conexión, enlace
+  fr: connexion, lien
+  pl: połączenie, ogniwo
+  it: connessione, collegamento
+  tr: bağlantı, ilişki
+  pt: conexão
+  ro: conexiune, legătură
+  bg: връзка, линк
+  cs: spojení, odkaz
+  sk: spojenie, odkaz
+  hu: kapcsolat, link
+  el: σύνδεση, σύνδεσμος
+  sl: povezava
+  et: ühendus, link
+  lt: ryšys, nuoroda
+  da: forbindelse, link
+  fi: yhteys, linkki
+  sv: koppling, länk
+  hr: veza, link
+  lv: savienojums, saite
+  hi: संबंध, कड़ी
+  ar: اتصال، رابط
+  id: koneksi, tautan
+  vi: kết nối, liên kết
+  th: การเชื่อมต่อ, ลิงก์
+  ko: 연결, 링크
+  ja: つながり、リンク
+  bn: সংযোগ, লিংক
+  fa: پیوند، لینک
+  zh: 链接、联系
+  ur: رابطہ، لنک
+  kk: байланыс, сілтеме
+
+ID 1707 (farm):
+  ru: ферма
+  uk: ферма
+  de: Bauernhof
+  es: granja
+  fr: ferme
+  pl: gospodarstwo
+  it: azienda agricola
+  tr: çiftlik
+  pt: fazenda
+  ro: fermă
+  bg: ферма
+  cs: hospodařit
+  sk: farma
+  hu: farm
+  el: αγρόκτημα
+  sl: kmetija
+  et: talu
+  lt: ūkis
+  da: gård
+  fi: maatila
+  sv: gård
+  hr: farma
+  lv: ferma
+  hi: खेत
+  ar: مزرعة
+  id: pertanian
+  vi: nông trại
+  th: ฟาร์ม
+  ko: 농장
+  ja: 農場
+  bn: খামার
+  fa: مزرعه
+  zh: 农场
+  ur: کھیت، فارم
+  kk: ферма
+
+ID 1708 (floor):
+  ru: пол, этаж
+  uk: підлога, поверх
+  de: Boden
+  es: piso
+  fr: étage
+  pl: podłoga
+  it: pavimento
+  tr: zemin, kat
+  pt: chão, andar
+  ro: podea
+  bg: под
+  cs: podlaha
+  sk: podlaha
+  hu: emelet
+  el: πάτωμα
+  sl: nadstropje
+  et: korrus
+  lt: grindys
+  da: gulv
+  fi: lattia
+  sv: golv
+  hr: kat, pod
+  lv: stāvs
+  hi: फर्श
+  ar: أرضية
+  id: lantai
+  vi: sàn nhà
+  th: พื้น
+  ko: 바닥, 층
+  ja: 床
+  bn: মেঝে, তলা
+  fa: کف، طبقه
+  zh: 地板、楼层
+  ur: فرش، منزل
+  kk: еден
+
+ID 1709 (music):
+  ru: музыка
+  uk: музика
+  de: Musik
+  es: música
+  fr: musique
+  pl: muzyka
+  it: musica
+  tr: müzik
+  pt: música
+  ro: muzică
+  bg: музика
+  cs: hudba
+  sk: hudba
+  hu: zene
+  el: μουσική
+  sl: glasba
+  et: muusika
+  lt: muzika
+  da: musik
+  fi: musiikki
+  sv: musik
+  hr: glazba
+  lv: mūzika
+  hi: संगीत
+  ar: موسيقى
+  id: musik
+  vi: âm nhạc
+  th: ดนตรี
+  ko: 음악
+  ja: 音楽
+  bn: সঙ্গীত
+  fa: موسیقی
+  zh: 音乐
+  ur: موسیقی
+  kk: музыка
+
+ID 1710 (car):
+  ru: машина
+  uk: машина
+  de: Auto
+  es: auto
+  fr: voiture
+  pl: samochód
+  it: auto
+  tr: araba
+  pt: carro
+  ro: mașină
+  bg: кола
+  cs: auto
+  sk: auto
+  hu: autó
+  el: αυτοκίνητο
+  sl: avto
+  et: auto
+  lt: automobilis
+  da: bil
+  fi: auto
+  sv: bil
+  hr: auto
+  lv: automašīna
+  hi: कार
+  ar: سيارة
+  id: mobil
+  vi: xe hơi
+  th: รถยนต์
+  ko: 자동차
+  ja: 車
+  bn: গাড়ি
+  fa: ماشین
+  zh: 汽车
+  ur: گاڑی
+  kk: көлік
+
+ID 1711 (now):
+  ru: сейчас
+  uk: зараз
+  de: Jetzt
+  es: Ahora
+  fr: Maintenant
+  pl: Teraz
+  it: Ora
+  tr: Şimdi
+  pt: agora
+  ro: Acum
+  bg: Сега
+  cs: Teď
+  sk: Teraz
+  hu: Jelenleg
+  el: Τώρα
+  sl: Zdaj
+  et: Nüüd
+  lt: Dabar
+  da: nu
+  fi: nyt
+  sv: nu
+  hr: sada
+  lv: tagad
+  hi: अब
+  ar: الآن
+  id: sekarang
+  vi: bây giờ
+  th: ตอนนี้
+  ko: 지금
+  ja: 今
+  bn: এখন
+  fa: اکنون
+  zh: 现在
+  ur: اب
+  kk: қазір
+
+ID 1712 (wrong):
+  ru: неправильный
+  uk: неправильний
+  de: falsch
+  es: equivocado
+  fr: faux
+  pl: zło
+  it: sbagliato
+  tr: yanlış
+  pt: errado
+  ro: greşit
+  bg: грешно
+  cs: špatně
+  sk: nesprávne
+  hu: rossz
+  el: λανθασμένος
+  sl: narobe
+  et: vale
+  lt: neteisingas
+  da: forkert
+  fi: väärin
+  sv: fel
+  hr: krivo
+  lv: nepareizi
+  hi: गलत
+  ar: خطأ
+  id: salah
+  vi: sai
+  th: ผิด
+  ko: 잘못된
+  ja: 間違っている
+  bn: ভুল
+  fa: اشتباه، نادرست
+  zh: 错误的、不对的
+  ur: غلط
+  kk: қате
+
+ID 1713 (child):
+  ru: ребенок
+  uk: дитина
+  de: Kind
+  es: niño
+  fr: enfant
+  pl: dziecko
+  it: bambino
+  tr: çocuk
+  pt: criança
+  ro: copil
+  bg: дете
+  cs: dítě
+  sk: dieťa
+  hu: gyermek
+  el: παιδί
+  sl: otrok
+  et: laps
+  lt: vaikas
+  da: barn
+  fi: lapsi
+  sv: barn
+  hr: dijete
+  lv: bērns
+  hi: बच्चा
+  ar: طفل
+  id: anak
+  vi: trẻ em
+  th: เด็ก
+  ko: 아이
+  ja: 子供
+  bn: শিশু
+  fa: کودک
+  zh: 孩子
+  ur: بچہ
+  kk: бала
+
+ID 1714 (hit):
+  ru: ударять, попадание, успех
+  uk: ударяти, попадання, успіх
+  de: Treffer, Erfolg
+  es: golpear, golpe, éxito
+  fr: succès
+  pl: trafienie, cios, hit
+  it: colpo, successo
+  tr: vurmak, darbe, başarı
+  pt: bater, acerto, sucesso
+  ro: lovitură, succes
+  bg: хит, успех
+  cs: hit, úspěch
+  sk: hit, zásah, úspech
+  hu: ütés, siker
+  el: χτύπημα, επιτυχία
+  sl: zadetek, uspeh
+  et: löök, edu
+  lt: smūgis, sėkmė
+  da: hit, succes
+  fi: osuma, menestys
+  sv: träffa, framgång
+  hr: pogoditi, pogodi, uspjeh
+  lv: sitiens, panākumi
+  hi: मारना, सफलता
+  ar: يضرب، يصيب، نجاح
+  id: memukul, pukulan, sukses
+  vi: đánh, thành công
+  th: ตี, สำเร็จ
+  ko: 치다, 성공하다
+  ja: ヒット、成功
+  bn: আঘাত করা
+  fa: ضربه زدن، موفقیت
+  zh: 打击、击中、成功
+  ur: مارنا، ضرب
+  kk: соққы, табыс
+
+ID 1715 (dark):
+  ru: темный
+  uk: темний
+  de: dunkel
+  es: oscuro
+  fr: sombre
+  pl: ciemny
+  it: buio
+  tr: karanlık
+  pt: escuro
+  ro: întuneric
+  bg: тъмен
+  cs: tmavý
+  sk: tmavý
+  hu: sötét
+  el: σκοτάδι
+  sl: temno
+  et: tume
+  lt: tamsus
+  da: mørk
+  fi: pimeä
+  sv: mörk
+  hr: tamno
+  lv: tumšs
+  hi: अंधेरा
+  ar: مظلم
+  id: gelap
+  vi: tối
+  th: มืด
+  ko: 어두운
+  ja: 暗い
+  bn: অন্ধকার
+  fa: تاریک
+  zh: 黑暗的
+  ur: اندھیرا
+  kk: қараңғы
+
+ID 1716 (clear):
+  ru: прозрачный
+  uk: прозорий
+  de: transparent
+  es: claro, despejado
+  fr: transparent
+  pl: przezroczysty
+  it: trasparente
+  tr: şeffaf
+  pt: transparente
+  ro: transparent
+  bg: прозрачен
+  cs: průhledný
+  sk: priehľadný
+  hu: átlátszó
+  el: διαφανής
+  sl: prozoren
+  et: läbipaistev
+  lt: skaidrus
+  da: gennemsigtig
+  fi: läpinäkyvä
+  sv: transparent
+  hr: prozirno
+  lv: caurspīdīgs
+  hi: पारदर्शी
+  ar: واضح، صافٍ، يوضّح
+  id: transparan
+  vi: trong suốt
+  th: โปร่งใส
+  ko: 투명한
+  ja: 透明な
+  bn: পরিষ্কার, স্পষ্ট
+  fa: شفاف، روشن
+  zh: 清楚的、透明的
+  ur: صاف، واضح
+  kk: мөлдір
+
+ID 1717 (ear):
+  ru: ухо, колос
+  uk: вухо, колос
+  de: Ähre, Maiskolben
+  es: oreja, oído, espiga
+  fr: épi, épi de maïs
+  pl: kolba kukurydzy
+  it: orecchio, spiga
+  tr: kulak, mısır koçanı
+  pt: orelha, ouvido
+  ro: spic, știulete de porumb
+  bg: кочан, кочан царевица
+  cs: klas, klas kukuřice
+  sk: klas, klas kukurice
+  hu: kalász, kukoricacső
+  el: αυτί, στάχυ καλαμποκιού
+  sl: klas, koruzni klas
+  et: maisitõlvik
+  lt: burbuolė, kukurūzo burbuolė
+  da: øre
+  fi: korva
+  sv: öra
+  hr: uho
+  lv: auss
+  hi: कान
+  ar: أذن
+  id: telinga
+  vi: tai
+  th: หู
+  ko: 귀
+  ja: 耳
+  bn: কান
+  fa: گوش، خوشه
+  zh: 耳朵、穗
+  ur: کان
+  kk: құлақ
+
+ID 1718 (entire):
+  ru: весь
+  uk: весь
+  de: alle
+  es: todo
+  fr: tous
+  pl: Wszystko
+  it: Tutto
+  tr: Tümü
+  pt: inteiro, completo
+  ro: toate
+  bg: всички
+  cs: vše
+  sk: všetky
+  hu: minden
+  el: όλοι
+  sl: vse
+  et: kõik
+  lt: visi
+  da: helhed
+  fi: kokonainen
+  sv: helhet
+  hr: cjelina
+  lv: viss
+  hi: पूरा
+  ar: كامل
+  id: keseluruhan
+  vi: toàn bộ
+  th: ทั้งหมด
+  ko: 전체
+  ja: 全体
+  bn: সম্পূর্ণ
+  fa: تمام
+  zh: 整个的
+  ur: پورا
+  kk: тұтас
+
+ID 1719 (report):
+  ru: отчет
+  uk: звіт
+  de: Bericht
+  es: informe
+  fr: rapport
+  pl: raport
+  it: rapporto
+  tr: rapor
+  pt: relatório
+  ro: raport
+  bg: доклад
+  cs: zpráva
+  sk: správa
+  hu: jelentés
+  el: έκθεση
+  sl: poročilo
+  et: aruanne
+  lt: ataskaita
+  da: rapport
+  fi: raportti
+  sv: rapport
+  hr: izvješće
+  lv: ziņojums
+  hi: रिपोर्ट
+  ar: تقرير
+  id: laporan
+  vi: báo cáo
+  th: รายงาน
+  ko: 보고서
+  ja: 報告
+  bn: প্রতিবেদন
+  fa: گزارش، گزارش دادن
+  zh: 报告
+  ur: رپورٹ
+  kk: есеп
+
+ID 1720 (travel):
+  ru: путешествовать
+  uk: подорожувати
+  de: reisen
+  es: viajar
+  fr: voyage
+  pl: podróż
+  it: viaggio
+  tr: seyahat
+  pt: viajar, viagem
+  ro: voiaj
+  bg: пътуване
+  cs: cestovat
+  sk: cestovanie
+  hu: utazási
+  el: ταξίδι
+  sl: potovanje
+  et: reisimine
+  lt: kelionės
+  da: rejse
+  fi: matka
+  sv: resa
+  hr: putovanje
+  lv: ceļojums
+  hi: यात्रा
+  ar: يسافر، سفر
+  id: perjalanan
+  vi: du lịch
+  th: การเดินทาง
+  ko: 여행
+  ja: 旅行
+  bn: ভ্রমণ করা
+  fa: سفر کردن
+  zh: 旅行
+  ur: سفر کرنا
+  kk: саяхат
+
+ID 1721 (document):
+  ru: документ
+  uk: документ
+  de: dokumentieren
+  es: documento
+  fr: document
+  pl: dokument
+  it: documento
+  tr: belge
+  pt: documento
+  ro: document
+  bg: документ
+  cs: dokument
+  sk: dokument
+  hu: dokumentum
+  el: έγγραφο
+  sl: dokument
+  et: dokument
+  lt: dokumentas
+  da: dokument
+  fi: asiakirja
+  sv: dokument
+  hr: dokument
+  lv: dokuments
+  hi: दस्तावेज़
+  ar: وثيقة
+  id: dokumen
+  vi: tài liệu
+  th: เอกสาร
+  ko: 문서
+  ja: 文書
+  bn: নথি
+  fa: سند، مدرک
+  zh: 文件
+  ur: دستاویز
+  kk: құжат
+
+ID 1722 (always):
+  ru: всегда
+  uk: завжди
+  de: Stets
+  es: Siempre
+  fr: Toujours
+  pl: Zawsze
+  it: Sempre
+  tr: Her zaman
+  pt: sempre
+  ro: Întotdeauna
+  bg: Винаги
+  cs: Vždy
+  sk: Vždy
+  hu: Mindig
+  el: Πάντοτε
+  sl: Vedno
+  et: Alati
+  lt: Visada
+  da: altid
+  fi: aina
+  sv: alltid
+  hr: uvijek
+  lv: vienmēr
+  hi: हमेशा
+  ar: دائماً
+  id: selalu
+  vi: luôn luôn
+  th: เสมอ
+  ko: 항상
+  ja: いつも
+  bn: সবসময়
+  fa: همیشه
+  zh: 总是
+  ur: ہمیشہ
+  kk: әрқашан
+
+ID 1723 (tomorrow):
+  ru: завтра
+  uk: завтра
+  de: Morgen
+  es: Mañana
+  fr: Demain
+  pl: Jutro
+  it: Domani
+  tr: Yarın
+  pt: amanhã
+  ro: Mâine
+  bg: Утре
+  cs: Zítra
+  sk: Zajtra
+  hu: Holnap
+  el: Αύριο
+  sl: Jutri
+  et: Homme
+  lt: Rytoj
+  da: i morgen
+  fi: huomenna
+  sv: imorgon
+  hr: sutra
+  lv: rītdiena
+  hi: कल
+  ar: غداً
+  id: besok
+  vi: ngày mai
+  th: พรุ่งนี้
+  ko: 내일
+  ja: 明日
+  bn: আগামীকাল
+  fa: فردا
+  zh: 明天
+  ur: کل
+  kk: ертең
+
+ID 1724 (battle):
+  ru: боевой, битва
+  uk: бойовий, битва
+  de: Kampf, Schlacht
+  es: combate, batalla
+  fr: combat, bataille
+  pl: walka, bitwa
+  it: combattimento, battaglia
+  tr: savaş, muharebe
+  pt: batalha, combater
+  ro: luptă, bătălie
+  bg: бой, битка
+  cs: boj, bitva
+  sk: boj, bitka
+  hu: harc, csata
+  el: μάχη
+  sl: boj, bitka
+  et: võitlus, lahing
+  lt: kova, mūšis
+  da: kamp, ​​kæmpe
+  fi: taistelu
+  sv: strid
+  hr: borba, bitka
+  lv: cīņa, kauja
+  hi: लड़ाई
+  ar: قتال، معركة
+  id: pertempuran
+  vi: chiến đấu, trận chiến
+  th: การต่อสู้, การรบ
+  ko: 전투, 싸움
+  ja: 戦闘、戦い
+  bn: যুদ্ধ
+  fa: نبرد
+  zh: 战斗、战役
+  ur: جنگ، لڑائی
+  kk: шайқас
+
+ID 1725 (reality):
+  ru: реальность
+  uk: реальність
+  de: Wirklichkeit
+  es: realidad
+  fr: réalité
+  pl: rzeczywistość
+  it: realtà
+  tr: gerçeklik
+  pt: realidade
+  ro: realitate
+  bg: реалност
+  cs: realita
+  sk: realita
+  hu: valóság
+  el: πραγματικότητα
+  sl: resničnost
+  et: reaalsus
+  lt: realybė
+  da: virkelighed
+  fi: todellisuus
+  sv: verklighet
+  hr: stvarnost
+  lv: realitāte
+  hi: वास्तविकता
+  ar: واقع
+  id: kenyataan
+  vi: thực tế
+  th: ความเป็นจริง
+  ko: 현실
+  ja: 現実
+  bn: বাস্তবতা
+  fa: واقعیت
+  zh: 现实
+  ur: حقیقت
+  kk: шындық
+
+ID 1726 (contract):
+  ru: договор
+  uk: договір
+  de: Vereinbarung
+  es: contrato
+  fr: accord
+  pl: porozumienie
+  it: accordo
+  tr: anlaşma
+  pt: acordo
+  ro: acord
+  bg: споразумение
+  cs: dohoda
+  sk: dohoda
+  hu: megállapodás
+  el: συμφωνία
+  sl: sporazum
+  et: kokkulepe
+  lt: susitarimas
+  da: aftale
+  fi: sopimus
+  sv: överenskommelse
+  hr: sporazum
+  lv: vienošanās
+  hi: समझौता
+  ar: اتفاق
+  id: perjanjian
+  vi: thỏa thuận
+  th: ข้อตกลง
+  ko: 합의
+  ja: 合意
+  bn: চুক্তি
+  fa: قرارداد
+  zh: 合同
+  ur: معاہدہ
+  kk: келісім
+
+ID 1727 (involve):
+  ru: вовлекать
+  uk: залучати
+  de: einbeziehen
+  es: involucrar
+  fr: impliquer
+  pl: zaangażować
+  it: coinvolgere
+  tr: dahil etmek, içermek
+  pt: envolver
+  ro: implica
+  bg: включвам
+  cs: zahrnovat
+  sk: zapojiť
+  hu: bevonni
+  el: εμπλέκω
+  sl: vključevati
+  et: kaasama
+  lt: įtraukti
+  da: involvere
+  fi: sisältää
+  sv: involvera
+  hr: uključivati
+  lv: iesaistīt
+  hi: शामिल करना, शामिल होना
+  ar: يشمل
+  id: melibatkan
+  vi: liên quan
+  th: เกี่ยวข้อง
+  ko: 관련시키다
+  ja: 関与する
+  bn: জড়িত করা
+  fa: درگیر کردن، شامل بودن
+  zh: 涉及、使参与
+  ur: شامل کرنا
+  kk: қатыстыру
+
+ID 1728 (spring):
+  ru: весна, пружина
+  uk: весна, пружина
+  de: Frühling
+  es: primavera, resorte, muelle
+  fr: printemps
+  pl: wiosna
+  it: primavera
+  tr: bahar
+  pt: primavera, mola
+  ro: primăvară
+  bg: пролет
+  cs: jaro
+  sk: jar
+  hu: tavaszi
+  el: άνοιξη
+  sl: pomlad
+  et: kevad
+  lt: pavasaris
+  da: forår
+  fi: kevät
+  sv: vår
+  hr: proljeće
+  lv: pavasaris
+  hi: वसंत ऋतु
+  ar: الربيع
+  id: musim semi
+  vi: mùa xuân
+  th: ฤดูใบไม้ผลิ
+  ko: 봄
+  ja: 春
+  bn: বসন্ত, স্প্রিং
+  fa: بهار، فنر
+  zh: 春天、弹簧
+  ur: بہار، چشمہ
+  kk: көктем
+
+ID 1729 (attend):
+  ru: посещать
+  uk: відвідувати, бути присутнім
+  de: besuchen
+  es: asistir, acudir
+  fr: visite
+  pl: odwiedzać
+  it: visita
+  tr: ziyaret etmek
+  pt: frequentar, comparecer
+  ro: vizita
+  bg: посещение
+  cs: návštěva
+  sk: návšteva
+  hu: látogatás
+  el: επίσκεψη
+  sl: obisk
+  et: külastus
+  lt: apsilankymas
+  da: besøg
+  fi: vierailu
+  sv: besök
+  hr: posjet
+  lv: apmeklējums
+  hi: यात्रा
+  ar: يحضر، يشارك في
+  id: menghadiri
+  vi: chuyến thăm
+  th: เยี่ยมชม
+  ko: 방문하다
+  ja: 訪問する
+  bn: উপস্থিত থাকা
+  fa: شرکت کردن، حضور یافتن
+  zh: 参加、出席
+  ur: شرکت کرنا
+  kk: сапар
+
+ID 1730 (cultural):
+  ru: культурный
+  uk: культурний
+  de: kulturell
+  es: cultural
+  fr: culturel
+  pl: kulturalny
+  it: culturale
+  tr: kültürel
+  pt: cultural
+  ro: cultural
+  bg: културен
+  cs: kulturní
+  sk: kultúrne
+  hu: kulturális
+  el: πολιτιστικός
+  sl: kulturni
+  et: kultuuriline
+  lt: kultūrinis
+  da: kulturel
+  fi: kulttuurinen
+  sv: kulturell
+  hr: kulturni
+  lv: kultūras
+  hi: सांस्कृतिक
+  ar: ثقافي
+  id: budaya
+  vi: văn hóa
+  th: วัฒนธรรม
+  ko: 문화적인
+  ja: 文化的な
+  bn: সাংস্কৃতিক
+  fa: فرهنگی
+  zh: 文化的
+  ur: ثقافتی
+  kk: мәдени
+
+ID 1731 (border):
+  ru: граница
+  uk: кордон
+  de: Grenze
+  es: frontera, borde
+  fr: frontière
+  pl: granica
+  it: confine
+  tr: sınır
+  pt: fronteira
+  ro: frontieră
+  bg: граница
+  cs: pohraniční
+  sk: hranica
+  hu: határ
+  el: σύνορο
+  sl: meja
+  et: piir
+  lt: siena
+  da: grænse
+  fi: raja
+  sv: gräns
+  hr: granica
+  lv: robeža
+  hi: सीमा
+  ar: حدود
+  id: perbatasan
+  vi: biên giới
+  th: ชายแดน
+  ko: 국경
+  ja: 国境
+  bn: সীমানা
+  fa: مرز
+  zh: 边界
+  ur: سرحد
+  kk: шекара
+
+ID 1732 (commit):
+  ru: совершить, брать обязательство
+  uk: вчинити, брати зобов’язання
+  de: verpflichten, begehen
+  es: comprometerse, cometer
+  fr: s’engager, commettre
+  pl: zobowiązać się, popełnić
+  it: impegnarsi, commettere
+  tr: üstlenmek, işlemek
+  pt: comprometer-se
+  ro: a se angaja, a-și asuma un angajament
+  bg: поемам ангажимент, обвързвам се
+  cs: zavázat se, převzít závazek
+  sk: zaviazať sa, prijať záväzok
+  hu: elköteleződni, kötelezettséget vállalni
+  el: δεσμεύομαι, αναλαμβάνω μια δέσμευση
+  sl: zavezati se, prevzeti zavezo
+  et: pühenduma, kohustust võtma
+  lt: įsipareigoti, prisiimti įsipareigojimą
+  da: forpligte sig, påtage sig et ansvar
+  fi: sitoutua, ottaa vastuuta
+  sv: åta sig, ta på sig ett ansvar
+  hr: obvezati se, preuzeti odgovornost
+  lv: uzņemties atbildību
+  hi: वचनबद्ध होना, करना
+  ar: الالتزام، تحمل المسؤولية
+  id: berkomitmen, melakukan
+  vi: cam kết, phạm tội
+  th: มุ่งมั่น รับผิดชอบ
+  ko: 저지르다, 전념하다
+  ja: 尽力する、犯す
+  bn: করা, অঙ্গীকার করা
+  fa: مرتکب شدن، متعهد شدن
+  zh: 承诺、犯下
+  ur: بہت، انتہائی، بہت زیادہ
+  kk: міндеттеме алу
+
+ID 1733 (manager):
+  ru: менеджер
+  uk: менеджер
+  de: Manager
+  es: gerente
+  fr: directeur
+  pl: menedżer
+  it: manager
+  tr: müdür
+  pt: gerente
+  ro: manager
+  bg: мениджър
+  cs: manažer
+  sk: manažér
+  hu: menedzser
+  el: διευθυντής
+  sl: vodja
+  et: juht
+  lt: vadovas
+  da: leder
+  fi: johtaja
+  sv: chef
+  hr: menadžer
+  lv: vadītājs
+  hi: प्रबंधक
+  ar: مدير
+  id: manajer
+  vi: người quản lý
+  th: ผู้จัดการ
+  ko: 관리자
+  ja: マネージャー
+  bn: ব্যবস্থাপক
+  fa: مدیر
+  zh: 经理
+  ur: مینیجر
+  kk: менеджер
+
+ID 1734 (achieve):
+  ru: достигать цели приложив усилия
+  uk: досягати, здійснювати
+  de: erreichen, leisten
+  es: lograr, alcanzar
+  fr: atteindre, accomplir
+  pl: osiągnąć, zdołać
+  it: raggiungere, realizzare
+  tr: başarmak, elde etmek
+  pt: alcançar, conquistar
+  ro: a atinge, a realiza
+  bg: постигам, реализирам
+  cs: dosáhnout, uskutečnit
+  sk: dosiahnuť, uskutočniť
+  hu: elér, megvalósít
+  el: πετυχαίνω, κατορθώνω
+  sl: doseči, uresničiti
+  et: saavutama, ellu viima
+  lt: pasiekti, įgyvendinti
+  da: opnå, fuldføre
+  fi: saavuttaa, toteuttaa
+  sv: uppnå, åstadkomma
+  hr: postići, ostvariti
+  lv: sasniegt, īstenot
+  hi: हासिल करना, पाना
+  ar: حقق، أنجز
+  id: mencapai, meraih
+  vi: đạt được, hoàn thành
+  th: บรรลุเป้าหมายด้วยความพยายาม
+  ko: 성취하다, 달성하다
+  ja: 努力して目標を達成する
+  bn: অর্জন করা
+  fa: دست یافتن، به دست آوردن
+  zh: 实现、达成
+  ur: حاصل کرنا
+  kk: күш салу арқылы мақсатқа жету
+
+ID 1735 (nuclear):
+  ru: ядерный
+  uk: ядерний
+  de: Kernenergie
+  es: nuclear
+  fr: nucléaire
+  pl: jądrowy
+  it: nucleare
+  tr: nükleer
+  pt: nuclear
+  ro: nuclear
+  bg: ядрен
+  cs: jaderný
+  sk: jadrový
+  hu: nukleáris
+  el: πυρηνικός
+  sl: jedrsko
+  et: tuuma-
+  lt: branduolinis
+  da: atomkraft
+  fi: ydinvoima
+  sv: kärnkraft
+  hr: nuklearni
+  lv: kodols
+  hi: परमाणु
+  ar: نووي
+  id: nuklir
+  vi: hạt nhân
+  th: นิวเคลียร์
+  ko: 핵
+  ja: 核
+  bn: পারমাণবিক
+  fa: هسته‌ای
+  zh: 核的
+  ur: جوہری
+  kk: ядролық
+
+ID 1736 (bright):
+  ru: яркий
+  uk: яскравий
+  de: hell
+  es: brillante
+  fr: brillant
+  pl: jasny
+  it: luminoso
+  tr: parlak
+  pt: brilhante, claro
+  ro: luminos
+  bg: ярък
+  cs: jasný
+  sk: jasný
+  hu: fényes
+  el: ευφυής
+  sl: svetlo
+  et: särav
+  lt: ryškus
+  da: lys
+  fi: kirkas
+  sv: ljus
+  hr: svijetao
+  lv: spilgts
+  hi: उज्ज्वल
+  ar: مشرق
+  id: cerah
+  vi: sáng sủa
+  th: สว่าง
+  ko: 밝은
+  ja: 明るい
+  bn: উজ্জ্বল
+  fa: روشن، درخشان
+  zh: 明亮的、聪明的
+  ur: روشن
+  kk: жарқын
+
+ID 1737 (location):
+  ru: расположение
+  uk: розташування
+  de: Standort
+  es: ubicación
+  fr: emplacement
+  pl: lokalizacja
+  it: posizione
+  tr: konum
+  pt: localização, local
+  ro: locaţie
+  bg: местоположение
+  cs: umístění
+  sk: miesto
+  hu: elhelyezkedés
+  el: τοποθεσία
+  sl: lokacija
+  et: asukoht
+  lt: vieta
+  da: placering
+  fi: sijainti
+  sv: plats
+  hr: lokacija
+  lv: atrašanās vieta
+  hi: स्थान
+  ar: موقع
+  id: lokasi
+  vi: vị trí
+  th: สถานที่
+  ko: 위치
+  ja: 場所
+  bn: অবস্থান
+  fa: مکان، موقعیت
+  zh: 位置
+  ur: مقام
+  kk: орналасқан жер
+
+ID 1738 (weather):
+  ru: погода
+  uk: погода
+  de: Wetter
+  es: clima
+  fr: météo
+  pl: pogoda
+  it: tempo atmosferico
+  tr: hava durumu
+  pt: clima
+  ro: vreme
+  bg: времето
+  cs: počasí
+  sk: počasie
+  hu: időjárás
+  el: καιρός
+  sl: vreme
+  et: ilm
+  lt: oras
+  da: vejr
+  fi: sää
+  sv: väder
+  hr: vrijeme
+  lv: laikapstākļi
+  hi: मौसम
+  ar: طقس
+  id: cuaca
+  vi: thời tiết
+  th: สภาพอากาศ
+  ko: 날씨
+  ja: 天気
+  bn: আবহাওয়া
+  fa: آب‌وهوا
+  zh: 天气
+  ur: موسم
+  kk: ауа райы
+
+ID 1739 (special):
+  ru: особенный, специальный
+  uk: особливий, спеціальний
+  de: etwas ganz Besonderes
+  es: especial
+  fr: spécial
+  pl: specjalny
+  it: speciale
+  tr: özel
+  pt: especial
+  ro: special
+  bg: специален
+  cs: speciální
+  sk: špeciálny
+  hu: különleges
+  el: ιδιαίτερος
+  sl: poseben
+  et: eriline
+  lt: ypatingas
+  da: speciel, bestemt
+  fi: erityinen, tietty
+  sv: speciell, specifik
+  hr: poseban, određeni
+  lv: īpašs, specifisks
+  hi: विशेष, विशिष्ट
+  ar: خاص، مميز
+  id: khusus, tertentu
+  vi: đặc biệt, riêng biệt
+  th: พิเศษ เฉพาะเจาะจง
+  ko: 특별한, 특정한
+  ja: 特別な、特定の
+  bn: বিশেষ
+  fa: ویژه
+  zh: 特别的、特殊的
+  ur: خاص
+  kk: арнайы, нақты
+
+ID 1740 (discuss):
+  ru: обсуждать
+  uk: обговорювати
+  de: diskutieren
+  es: discutir, debatir
+  fr: discuter
+  pl: omówić
+  it: discutere
+  tr: tartışmak
+  pt: discutir
+  ro: discuta
+  bg: обсъждам
+  cs: diskutovat
+  sk: diskutovať
+  hu: megbeszélni
+  el: συζητώ
+  sl: razpravljati
+  et: arutada
+  lt: aptarti
+  da: diskutere
+  fi: keskustella
+  sv: diskutera
+  hr: raspravljati
+  lv: apspriest
+  hi: चर्चा करना
+  ar: مناقشة
+  id: membahas
+  vi: thảo luận
+  th: อภิปราย
+  ko: 논의하다
+  ja: 話し合う
+  bn: আলোচনা করা
+  fa: بحث کردن
+  zh: 讨论
+  ur: بحث کرنا
+  kk: талқылау
+
+ID 1741 (senior):
+  ru: старший
+  uk: старший
+  de: Senior
+  es: mayor, superior
+  fr: senior
+  pl: senior
+  it: senior
+  tr: kıdemli
+  pt: sênior
+  ro: senior
+  bg: старши
+  cs: senior
+  sk: senior
+  hu: idősebb
+  el: αρχαιότερος
+  sl: višji
+  et: vanem
+  lt: vyresnysis
+  da: senior
+  fi: vanhempi
+  sv: senior
+  hr: viši
+  lv: vecākais
+  hi: वरिष्ठ
+  ar: كبير
+  id: senior
+  vi: người lớn tuổi
+  th: อาวุโส
+  ko: 고위직
+  ja: 上級者
+  bn: জ্যেষ্ঠ
+  fa: ارشد، سالمند
+  zh: 年长的、高级的
+  ur: سینئر، بزرگ
+  kk: аға
+
+ID 1742 (usually):
+  ru: обычно
+  uk: зазвичай
+  de: normalerweise
+  es: generalmente
+  fr: généralement
+  pl: zazwyczaj
+  it: Generalmente
+  tr: genellikle
+  pt: geralmente
+  ro: de obicei
+  bg: обикновено
+  cs: obvykle
+  sk: zvyčajne
+  hu: általában
+  el: συνήθως
+  sl: običajno
+  et: tavaliselt
+  lt: paprastai
+  da: normalt
+  fi: yleensä
+  sv: vanligtvis
+  hr: obično
+  lv: parasti
+  hi: आमतौर पर
+  ar: عادةً
+  id: biasanya
+  vi: thường xuyên
+  th: โดยปกติ
+  ko: 보통
+  ja: 通常
+  bn: সাধারণত
+  fa: معمولاً
+  zh: 通常
+  ur: عام طور پر
+  kk: әдетте
+
+ID 1743 (reading):
+  ru: чтение
+  uk: читання
+  de: Lektüre
+  es: lectura
+  fr: en lisant
+  pl: czytanie
+  it: lettura
+  tr: okuma
+  pt: leitura
+  ro: lectură
+  bg: четене
+  cs: čtení
+  sk: čítanie
+  hu: olvasás
+  el: ανάγνωση
+  sl: branje
+  et: lugemine
+  lt: skaitymas
+  da: læsning
+  fi: lukeminen
+  sv: läsning
+  hr: čitanje
+  lv: lasīšana
+  hi: पढ़ना
+  ar: قراءة
+  id: membaca
+  vi: đọc sách
+  th: การอ่าน
+  ko: 독서
+  ja: 読書
+  bn: পড়া
+  fa: خواندن، مطالعه
+  zh: 阅读
+  ur: پڑھنا
+  kk: оқу
+
+ID 1744 (murder):
+  ru: убийство
+  uk: вбивство
+  de: Mord
+  es: asesinato
+  fr: meurtre
+  pl: morderstwo
+  it: omicidio
+  tr: cinayet
+  pt: assassinato
+  ro: crimă
+  bg: убийство
+  cs: vražda
+  sk: vražda
+  hu: gyilkosság
+  el: δολοφονία
+  sl: umor
+  et: mõrv
+  lt: žmogžudystė
+  da: mord
+  fi: murha
+  sv: mord
+  hr: ubojstvo
+  lv: slepkavība
+  hi: हत्या
+  ar: جريمة قتل
+  id: pembunuhan
+  vi: giết người
+  th: ฆาตกรรม
+  ko: 살인
+  ja: 殺人
+  bn: খুন
+  fa: قتل
+  zh: 谋杀、谋杀案
+  ur: قتل
+  kk: кісі өлтіру
+
+ID 1745 (southern):
+  ru: южный
+  uk: південний
+  de: Süd-
+  es: del sur
+  fr: du sud
+  pl: południowy
+  it: meridionale
+  tr: güney
+  pt: do sul, meridional
+  ro: sudică
+  bg: южен
+  cs: jižní
+  sk: južný
+  hu: déli
+  el: νότιος
+  sl: južni
+  et: lõunaosariikide
+  lt: pietų
+  da: sydlig
+  fi: eteläinen
+  sv: sydlig
+  hr: južni
+  lv: dienvidu
+  hi: दक्षिणी
+  ar: جنوبي
+  id: selatan
+  vi: phía nam
+  th: ภาคใต้
+  ko: 남쪽
+  ja: 南部の
+  bn: দক্ষিণের
+  fa: جنوبی
+  zh: 南方的
+  ur: جنوبی
+  kk: оңтүстік
+
+ID 1746 (survive):
+  ru: выживать
+  uk: виживати
+  de: überleben
+  es: sobrevivir
+  fr: survivre
+  pl: przetrwać
+  it: sopravvivere
+  tr: hayatta kalmak
+  pt: sobreviver
+  ro: supravieţui
+  bg: оцелея
+  cs: přežít
+  sk: prežiť
+  hu: túlélni
+  el: επιζώ
+  sl: preživeti
+  et: ellu jääma
+  lt: išgyventi
+  da: overleve
+  fi: selviytyä
+  sv: överleva
+  hr: preživjeti
+  lv: izdzīvot
+  hi: जीवित रहना
+  ar: البقاء على قيد الحياة
+  id: bertahan hidup
+  vi: sống sót
+  th: รอดชีวิต
+  ko: 살아남다
+  ja: 生き残る
+  bn: বেঁচে থাকা
+  fa: زنده ماندن
+  zh: 幸存
+  ur: زندہ بچنا
+  kk: аман қалу
+
+ID 1747 (ability):
+  ru: способность
+  uk: здатність
+  de: Fähigkeit
+  es: capacidad
+  fr: capacité
+  pl: umiejętność
+  it: capacità
+  tr: yetenek
+  pt: habilidade
+  ro: abilitate
+  bg: способност
+  cs: schopnost
+  sk: schopnosť
+  hu: képesség
+  el: ικανότητα
+  sl: sposobnost
+  et: võime
+  lt: gebėjimas
+  da: evne
+  fi: kyky
+  sv: förmåga
+  hr: sposobnost
+  lv: spēja
+  hi: क्षमता
+  ar: قدرة
+  id: kemampuan
+  vi: khả năng
+  th: ความสามารถ
+  ko: 능력
+  ja: 能力
+  bn: ক্ষমতা
+  fa: توانایی
+  zh: 能力
+  ur: صلاحیت
+  kk: қабілет
+
+ID 1748 (outside):
+  ru: снаружи
+  uk: зовні
+  de: draußen
+  es: afuera
+  fr: dehors
+  pl: poza
+  it: al di fuori
+  tr: dışarıda, dışarı
+  pt: fora
+  ro: exterior
+  bg: отвън
+  cs: mimo
+  sk: vonku
+  hu: kívül
+  el: εκτός
+  sl: zunaj
+  et: väljaspool
+  lt: lauke
+  da: udenfor
+  fi: ulkona
+  sv: utomhus
+  hr: vani
+  lv: ārpusē
+  hi: बाहर
+  ar: في الخارج
+  id: luar
+  vi: bên ngoài
+  th: ภายนอก
+  ko: 외부
+  ja: 外
+  bn: বাইরে
+  fa: بیرون، خارج
+  zh: 外面、外部
+  ur: باہر
+  kk: сыртта
+
+ID 1749 (security):
+  ru: безопасность
+  uk: безпека
+  de: Sicherheit
+  es: seguridad
+  fr: sécurité
+  pl: bezpieczeństwo
+  it: sicurezza
+  tr: emniyet
+  pt: segurança
+  ro: siguranţă
+  bg: безопасност
+  cs: bezpečnost
+  sk: bezpečnosť
+  hu: biztonság
+  el: ασφάλεια
+  sl: varnost
+  et: ohutus
+  lt: saugumas
+  da: sikkerhed
+  fi: turvallisuus
+  sv: säkerhet
+  hr: sigurnost
+  lv: drošība
+  hi: सुरक्षा
+  ar: أمان
+  id: keselamatan
+  vi: an toàn
+  th: ความปลอดภัย
+  ko: 안전
+  ja: 安全
+  bn: নিরাপত্তা
+  fa: امنیت
+  zh: 安全
+  ur: سلامتی، حفاظت
+  kk: қауіпсіздік
+
+ID 1750 (future):
+  ru: будущее
+  uk: майбутнє
+  de: Zukunft
+  es: futuro
+  fr: avenir
+  pl: przyszły
+  it: futuro
+  tr: gelecek
+  pt: futuro
+  ro: viitor
+  bg: бъдеще
+  cs: budoucnost
+  sk: budúcnosť
+  hu: jövőbeli
+  el: μελλοντικός
+  sl: prihodnost
+  et: tulevik
+  lt: ateitis
+  da: fremtid
+  fi: tulevaisuus
+  sv: framtid
+  hr: budućnost
+  lv: nākotne
+  hi: भविष्य
+  ar: مستقبل
+  id: masa depan
+  vi: tương lai
+  th: อนาคต
+  ko: 미래
+  ja: 未来
+  bn: ভবিষ্যৎ
+  fa: آینده
+  zh: 未来
+  ur: مستقبل
+  kk: болашақ
+
+ID 1751 (vision):
+  ru: зрение, прекрасный вид
+  uk: зір, чудовий вигляд
+  de: Vision, Aussicht
+  es: visión, vista
+  fr: vision, belle vue
+  pl: wizja, piękny widok
+  it: visione, bella vista
+  tr: görüş, vizyon, manzara
+  pt: visão
+  ro: viziune, priveliște frumoasă
+  bg: визия, красива гледка
+  cs: vize, krásný výhled
+  sk: vízia, krásny výhľad
+  hu: látvány, gyönyörű kilátás
+  el: όραμα, όμορφη θέα
+  sl: vizija, čudovit razgled
+  et: nägemus, ilus vaade
+  lt: vizija, gražus vaizdas
+  da: syn, smuk udsigt
+  fi: näky, kaunis näköala
+  sv: syn, vacker utsikt
+  hr: prizor, prekrasan pogled
+  lv: skats, skaists skats
+  hi: दृष्टि, सुंदर दृश्य
+  ar: رؤية، بصر، مشهد
+  id: penglihatan, visi
+  vi: tầm nhìn, cảnh đẹp
+  th: ทิวทัศน์ วิวสวย
+  ko: 경치, 아름다운 풍경
+  ja: 景色、美しい眺め
+  bn: দৃষ্টি
+  fa: بینایی، چشم‌انداز
+  zh: 视力、景色
+  ur: نظر، وژن
+  kk: көру, әдемі көрініс
+

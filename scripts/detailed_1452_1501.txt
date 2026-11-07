@@ -1,0 +1,1850 @@
+ID 1452 (sort):
+  ru: сортировать, вид
+  uk: сортувати, вигляд
+  de: Sortieren, Ansicht
+  es: tipo, clasificar, ordenar
+  fr: trier, afficher
+  pl: sortować, rodzaj
+  it: ordina, visualizza
+  tr: sırala, görüntüle
+  pt: ordenar, tipo
+  ro: sortare, vizualizare
+  bg: сортиране, преглед
+  cs: řadit, zobrazit
+  sk: zoradiť, zobraziť
+  hu: rendezés, nézet
+  el: ταξινόμηση, προβολή
+  sl: razvrščanje, ogled
+  et: sorteeri, vaata
+  lt: rūšiuoti, peržiūrėti
+  da: sorter, visning
+  fi: lajitella, katsella
+  sv: sortera, visa
+  hr: sortirati, pogledati
+  lv: kārtot, skatīt
+  hi: क्रमबद्ध करना, देखना
+  ar: فرز، عرض
+  id: menyortir, jenis
+  vi: sắp xếp, xem
+  th: เรียงลำดับ, ดู
+  ko: 정렬, 보기
+  ja: 並べ替える、見る
+  bn: ধরন, সাজানো
+  fa: مرتب کردن، نوع
+  zh: 分类
+  ur: قسم، چھانٹنا
+  kk: сұрыптау, теру
+
+ID 1453 (mile):
+  ru: миля
+  uk: миля
+  de: Meile
+  es: milla
+  fr: mile
+  pl: mila
+  it: miglio
+  tr: mil
+  pt: milha
+  ro: milă
+  bg: миля
+  cs: míle
+  sk: míľa
+  hu: mérföld
+  el: μίλι
+  sl: milja
+  et: miil
+  lt: mylia
+  da: mil
+  fi: maili
+  sv: mile
+  hr: milja
+  lv: jūdze
+  hi: मील
+  ar: ميل
+  id: mil
+  vi: dặm
+  th: ไมล์
+  ko: 마일
+  ja: マイル
+  bn: মাইল
+  fa: مایل
+  zh: 英里
+  ur: میل
+  kk: миль
+
+ID 1454 (below):
+  ru: ниже
+  uk: нижче
+  de: unten
+  es: abajo
+  fr: ci-dessous
+  pl: poniżej
+  it: sotto
+  tr: altında
+  pt: abaixo
+  ro: de mai jos
+  bg: по-долу
+  cs: níže
+  sk: nižšie
+  hu: alatt
+  el: παρακάτω
+  sl: spodaj
+  et: allpool
+  lt: žemiau
+  da: nedenfor
+  fi: alla
+  sv: nedan
+  hr: ispod
+  lv: zemāk
+  hi: नीचे
+  ar: أسفل
+  id: di bawah
+  vi: bên dưới
+  th: ด้านล่าง
+  ko: 아래
+  ja: 下
+  bn: নিচে
+  fa: پایین‌تر از
+  zh: 在下面
+  ur: نیچے
+  kk: төменде
+
+ID 1455 (list):
+  ru: список
+  uk: список
+  de: Liste
+  es: lista
+  fr: liste
+  pl: lista
+  it: lista
+  tr: liste
+  pt: lista
+  ro: listă
+  bg: списък
+  cs: seznam
+  sk: zoznam
+  hu: lista
+  el: λίστα
+  sl: seznam
+  et: nimekiri
+  lt: sąrašas
+  da: liste
+  fi: lista
+  sv: lista
+  hr: popis
+  lv: saraksts
+  hi: सूची
+  ar: قائمة
+  id: daftar
+  vi: danh sách
+  th: รายการ
+  ko: 목록
+  ja: リスト
+  bn: তালিকা
+  fa: فهرست
+  zh: 清单
+  ur: فہرست
+  kk: тізім
+
+ID 1456 (stage):
+  ru: этап, сцена
+  uk: етап, сцена
+  de: Bühne, Szene
+  es: escenario, escena
+  fr: scène
+  pl: scena, etap
+  it: palcoscenico, scena
+  tr: sahne, mekân
+  pt: palco, cena
+  ro: scenă
+  bg: сцена
+  cs: jeviště, scéna
+  sk: javisko, scéna
+  hu: színpad, jelenet
+  el: σκηνή, στάδιο
+  sl: oder, prizorišče
+  et: lava, stseen
+  lt: scena
+  da: scene
+  fi: näyttämö, kohtaus
+  sv: scen
+  hr: pozornica, scena
+  lv: skatuve, aina
+  hi: मंच, दृश्य
+  ar: مسرح، مشهد
+  id: panggung, adegan
+  vi: sân khấu, cảnh
+  th: เวที, ฉาก
+  ko: 무대, 장면
+  ja: 舞台、場面
+  bn: পর্যায়, মঞ্চ
+  fa: مرحله، صحنه
+  zh: 阶段
+  ur: مرحلہ، اسٹیج
+  kk: сахна, көрініс
+
+ID 1457 (nor):
+  ru: ни
+  uk: ні
+  de: NEIN
+  es: ni, tampoco
+  fr: Non
+  pl: ani, ani też
+  it: NO
+  tr: HAYIR
+  pt: não
+  ro: nu
+  bg: не
+  cs: žádný
+  sk: nie
+  hu: nem
+  el: Όχι
+  sl: ne
+  et: ei
+  lt: ne
+  da: nor
+  fi: eikä
+  sv: inte heller
+  hr: niti
+  lv: nedz arī
+  hi: न ही
+  ar: ولا
+  id: juga tidak
+  vi: cũng không
+  th: หรือ
+  ko: 아니오
+  ja: ～でない
+  bn: এবং নয়
+  fa: و نه
+  zh: 也不
+  ur: نہ ہی
+  kk: екеуі де
+
+ID 1458 (pair):
+  ru: пара
+  uk: пара
+  de: Paar
+  es: par
+  fr: paire
+  pl: para
+  it: paio
+  tr: çift
+  pt: par
+  ro: pereche
+  bg: чифт
+  cs: pár
+  sk: pár
+  hu: pár
+  el: ζεύγος
+  sl: par
+  et: paar
+  lt: pora
+  da: par
+  fi: pari
+  sv: par
+  hr: par
+  lv: pāris
+  hi: जोड़ा
+  ar: زوجان
+  id: pasangan
+  vi: cặp đôi
+  th: คู่
+  ko: 커플
+  ja: カップル
+  bn: জোড়া
+  fa: جفت
+  zh: 一对
+  ur: جوڑا
+  kk: жұп
+
+ID 1459 (cup):
+  ru: чашка
+  uk: чашка
+  de: Tasse
+  es: taza
+  fr: tasse
+  pl: filiżanka
+  it: tazza
+  tr: bardak
+  pt: xícara
+  ro: ceaşcă
+  bg: чаша
+  cs: pohár
+  sk: pohár
+  hu: csésze
+  el: φλιτζάνι
+  sl: skodelica
+  et: tass
+  lt: puodelis
+  da: kop
+  fi: kuppi
+  sv: kopp
+  hr: šalica
+  lv: krūze
+  hi: प्याला
+  ar: كوب
+  id: cangkir
+  vi: cốc
+  th: ถ้วย
+  ko: 컵
+  ja: カップ
+  bn: কাপ
+  fa: فنجان
+  zh: 杯子
+  ur: کپ
+  kk: кесе
+
+ID 1460 (table):
+  ru: стол
+  uk: стіл
+  de: Tisch
+  es: mesa
+  fr: tableau
+  pl: tabela
+  it: tavolo
+  tr: masa
+  pt: mesa, tabela
+  ro: masă
+  bg: маса
+  cs: tabulka
+  sk: stôl
+  hu: táblázat
+  el: τραπέζι
+  sl: miza
+  et: laud
+  lt: stalas
+  da: bord
+  fi: pöytä
+  sv: bord
+  hr: stol
+  lv: galds
+  hi: मेज
+  ar: طاولة
+  id: meja
+  vi: bàn
+  th: โต๊ะ
+  ko: 테이블
+  ja: テーブル
+  bn: টেবিল
+  fa: میز
+  zh: 桌子
+  ur: میز
+  kk: үстел
+
+ID 1461 (fun):
+  ru: веселье
+  uk: веселощі
+  de: Spaß
+  es: diversión, divertido
+  fr: amusant
+  pl: zabawa
+  it: divertimento
+  tr: eğlence
+  pt: diversão
+  ro: distracţie
+  bg: забавно
+  cs: zábava
+  sk: zábava
+  hu: szórakozás
+  el: διασκέδαση
+  sl: zabavno
+  et: lõbus
+  lt: linksmybės
+  da: sjov
+  fi: hauskaa
+  sv: kul
+  hr: zabava
+  lv: jautrība
+  hi: मज़ा
+  ar: مرح
+  id: menyenangkan
+  vi: vui vẻ
+  th: สนุก
+  ko: 재미
+  ja: 楽しい
+  bn: মজা
+  fa: سرگرمی
+  zh: 乐趣
+  ur: مزہ
+  kk: көңіл көтеру
+
+ID 1462 (feed):
+  ru: кормить
+  uk: годувати
+  de: füttern
+  es: alimentar
+  fr: alimentation
+  pl: karmić
+  it: foraggio
+  tr: beslemek
+  pt: alimentar
+  ro: hrănire
+  bg: фуражи
+  cs: krmivo
+  sk: krmivo
+  hu: takarmány
+  el: τροφή
+  sl: krma
+  et: sööt
+  lt: pašaras
+  da: foder
+  fi: ruokkia
+  sv: mata
+  hr: nahraniti
+  lv: barot
+  hi: खिलाना
+  ar: إطعام
+  id: memberi makan
+  vi: cho ăn
+  th: ป้อนอาหาร
+  ko: 먹이다
+  ja: 餌を与える
+  bn: খাওয়ানো
+  fa: غذا دادن
+  zh: 喂养
+  ur: کھلانا
+  kk: тамақтандыру
+
+ID 1463 (miss):
+  ru: скучать, опаздывать
+  uk: нудьгувати, спізнюватися
+  de: verpassen, vermissen
+  es: extrañar, faltar, perderse
+  fr: s'ennuyer, être en retard
+  pl: tęsknić, spóźnić się
+  it: mancare, perdere
+  tr: Sıkılmak, geç kalmak
+  pt: sentir falta, perder
+  ro: a te plictisi, a întârzia
+  bg: скучая, закъснявам
+  cs: nudit se, přijít pozdě
+  sk: nudiť sa, meškať
+  hu: unatkozni, késni
+  el: βαριέμαι, αργώ
+  sl: biti dolgčas, zamujati
+  et: igavlema, hiljaks jääma
+  lt: nuobodžiauti, vėluoti
+  da: kede sig, forsinket
+  fi: olla tylsistynyt, myöhässä
+  sv: vara uttråkad, sen
+  hr: dosaditi se, kasniti
+  lv: garlaikoties, kavēt
+  hi: ऊब जाना, देर हो जाना
+  ar: يشعر بالملل، متأخرًا
+  id: merindukan, melewatkan
+  vi: chán nản, muộn
+  th: เบื่อ, สาย
+  ko: 지루해하다, 늦다
+  ja: 退屈する、遅れる
+  bn: মিস করা, অভাব বোধ করা
+  fa: دلتنگ شدن، از دست دادن
+  zh: 想念
+  ur: یاد کرنا، چھوٹ جانا
+  kk: зерігу, кешігу
+
+ID 1464 (drive):
+  ru: водить машину
+  uk: водити машину
+  de: ein Auto fahren
+  es: conducir, manejar
+  fr: conduire une voiture
+  pl: prowadzić samochód
+  it: guidare un'auto
+  tr: araba sürmek
+  pt: dirigir
+  ro: conduce o mașină
+  bg: карам кола
+  cs: řídit auto
+  sk: šoférovať auto
+  hu: autót vezetni
+  el: οδηγώ ένα αυτοκίνητο
+  sl: voziti avto
+  et: autot juhtima
+  lt: vairuoti automobilį
+  da: køre
+  fi: ajaa
+  sv: köra
+  hr: voziti
+  lv: braukt
+  hi: गाड़ी चलाना
+  ar: قيادة
+  id: mengemudi
+  vi: lái xe
+  th: ขับรถ
+  ko: 운전하다
+  ja: 運転する
+  bn: গাড়ি চালানো
+  fa: رانندگی کردن
+  zh: 开车
+  ur: گاڑی چلانا
+  kk: көлік жүргізу
+
+ID 1465 (fix):
+  ru: исправить, фиксировать
+  uk: виправити, фіксувати
+  de: reparieren
+  es: arreglar, reparar
+  fr: réparer
+  pl: naprawiać, ustalać
+  it: correzione
+  tr: düzelt
+  pt: consertar, fixar
+  ro: repara
+  bg: поправи
+  cs: opravit
+  sk: opraviť
+  hu: javít
+  el: διορθώστε
+  sl: popravi
+  et: paranda
+  lt: pataisyti
+  da: reparere
+  fi: korjata
+  sv: fixa
+  hr: popraviti
+  lv: labot
+  hi: ठीक करना
+  ar: إصلاح
+  id: memperbaiki, perbaiki
+  vi: sửa chữa
+  th: ซ่อม, แก้ไข
+  ko: 고치다, 수리하다
+  ja: 修理する、直す
+  bn: ঠিক করা
+  fa: تعمیر کردن، درست کردن
+  zh: 修理
+  ur: ٹھیک کرنا
+  kk: түзету
+
+ID 1466 (radio):
+  ru: радио
+  uk: радіо
+  de: Radio
+  es: radio
+  fr: radio
+  pl: radio
+  it: radio
+  tr: radyo
+  pt: rádio
+  ro: radio
+  bg: радио
+  cs: rádio
+  sk: rádio
+  hu: rádió
+  el: ραδιόφωνο
+  sl: radio
+  et: raadio
+  lt: radijas
+  da: radio
+  fi: radio
+  sv: radio
+  hr: radio
+  lv: radio
+  hi: रेडियो
+  ar: راديو
+  id: radio
+  vi: radio
+  th: วิทยุ
+  ko: 라디오
+  ja: ラジオ
+  bn: রেডিও
+  fa: رادیو
+  zh: 收音机
+  ur: ریڈیو
+  kk: радио
+
+ID 1467 (fan):
+  ru: вентилятор, фанат
+  uk: вентилятор, фанат
+  de: Lüfter
+  es: aficionado, ventilador
+  fr: ventilateur
+  pl: wentylator
+  it: fan
+  tr: fan
+  pt: ventilador, fã
+  ro: ventilator
+  bg: вентилатор
+  cs: větrák
+  sk: ventilátor
+  hu: ventilátor
+  el: ανεμιστήρας
+  sl: ventilator
+  et: ventilaator
+  lt: ventiliatorius
+  da: ventilator
+  fi: tuuletin
+  sv: fläkt, ventilator
+  hr: ventilator, respirator
+  lv: ventilators
+  hi: पंखा, वेंटिलेटर
+  ar: مروحة
+  id: kipas angin, ventilator
+  vi: quạt, máy thông gió
+  th: พัดลม, เครื่องระบายอากาศ
+  ko: 선풍기, 환풍기
+  ja: 扇風機、換気扇
+  bn: পাখা, ভক্ত
+  fa: پنکه، طرفدار
+  zh: 风扇
+  ur: پنکھا، مداح
+  kk: желдеткіш
+
+ID 1468 (reach):
+  ru: достичь точки, уровня, места или цели
+  uk: досягати, добиратися
+  de: erreichen
+  es: alcanzar, llegar a
+  fr: atteindre, parvenir
+  pl: osiągać, docierać do
+  it: raggiungere, arrivare a
+  tr: ulaşmak, erişmek
+  pt: alcançar, atingir
+  ro: a atinge, a ajunge la
+  bg: достигам, стигам до
+  cs: dosáhnout, dospět k
+  sk: dosiahnuť bod, úroveň, miesto alebo cieľ
+  hu: elér, odanyúl
+  el: φτάνω, αγγίζω
+  sl: doseči točko, raven, kraj ali cilj
+  et: punkti, tasemele, kohta või eesmärgini jõudma
+  lt: pasiekti tašką, lygį, vietą ar tikslą
+  da: nå et punkt, niveau, sted eller mål
+  fi: saavuttaa piste, taso, paikka tai tavoite
+  sv: nå en punkt, nivå, plats eller mål
+  hr: dosegnuti točku, razinu, mjesto ili cilj
+  lv: sasniegt punktu, līmeni, vietu vai mērķi
+  hi: पहुंचना
+  ar: الوصول إلى نقطة، مستوى، مكان، أو هدف
+  id: mencapai, menjangkau
+  vi: đạt tới, vươn tới
+  th: ถึงจุด, ระดับ, สถานที่ หรือเป้าหมาย
+  ko: 도달하다, 이르다
+  ja: 達する、届く
+  bn: পৌঁছানো
+  fa: رسیدن
+  zh: 到达
+  ur: پہنچنا
+  kk: нүктеге, деңгейге, орынға немесе мақсатқа жету
+
+ID 1469 (model):
+  ru: модель
+  uk: модель
+  de: Modell
+  es: modelo
+  fr: modèle
+  pl: model
+  it: modello
+  tr: model
+  pt: modelo
+  ro: model
+  bg: модел
+  cs: model
+  sk: model
+  hu: modell
+  el: μοντέλο
+  sl: model
+  et: mudel
+  lt: modelis
+  da: model
+  fi: malli
+  sv: modell
+  hr: model
+  lv: modelis
+  hi: मॉडल
+  ar: نموذج
+  id: model
+  vi: mô hình
+  th: แบบจำลอง
+  ko: 모델
+  ja: モデル
+  bn: মডেল
+  fa: مدل
+  zh: 模型
+  ur: ماڈل
+  kk: модель
+
+ID 1470 (rock):
+  ru: камень, скала
+  uk: камінь, скеля
+  de: Stein, Fels
+  es: piedra, roca
+  fr: pierre, rocher
+  pl: kamień, skała
+  it: pietra, roccia
+  tr: taş, kaya
+  pt: pedra, rocha
+  ro: piatră, stâncă
+  bg: камък, скала
+  cs: kámen, skála
+  sk: kameň, skala
+  hu: kő, szikla
+  el: πέτρα, βράχος
+  sl: kamen, skala
+  et: kivi, kalju
+  lt: akmuo, uola
+  da: sten, klippe
+  fi: kivi, kallio
+  sv: sten, klippa
+  hr: kamen, stijena
+  lv: akmens, klints
+  hi: पत्थर, चट्टान
+  ar: حجر
+  id: batu, karang
+  vi: đá, tảng đá
+  th: หิน, ก้อนหิน
+  ko: 돌, 바위
+  ja: 石、岩
+  bn: পাথর
+  fa: سنگ، صخره
+  zh: 岩石
+  ur: چٹان، پتھر
+  kk: тас
+
+ID 1471 (hand):
+  ru: рука
+  uk: рука
+  de: Hand
+  es: mano
+  fr: main
+  pl: ręka
+  it: mano
+  tr: el
+  pt: mão
+  ro: mână
+  bg: ръка
+  cs: ruka
+  sk: ruka
+  hu: kéz
+  el: χέρι
+  sl: roka
+  et: käsi
+  lt: ranka
+  da: hånd
+  fi: käsi
+  sv: hand
+  hr: ruka
+  lv: roka
+  hi: हाथ
+  ar: يد
+  id: tangan
+  vi: tay
+  th: มือ
+  ko: 손
+  ja: 手
+  bn: হাত
+  fa: دست
+  zh: 手
+  ur: ہاتھ
+  kk: қол
+
+ID 1472 (dead):
+  ru: мертвый
+  uk: мертвий
+  de: tot
+  es: muerto
+  fr: mort
+  pl: martwy
+  it: morto
+  tr: ölü
+  pt: morto
+  ro: mort
+  bg: мъртъв
+  cs: mrtvý
+  sk: mŕtvy
+  hu: halott
+  el: νεκρός
+  sl: mrtev
+  et: surnud
+  lt: miręs
+  da: død
+  fi: kuollut
+  sv: död
+  hr: mrtav
+  lv: miris
+  hi: मृत
+  ar: ميت
+  id: mati
+  vi: chết
+  th: ตาย
+  ko: 죽은
+  ja: 死んだ
+  bn: মৃত
+  fa: مرده
+  zh: 死的
+  ur: مردہ
+  kk: өлі
+
+ID 1473 (store):
+  ru: магазин, склад
+  uk: магазин, склад
+  de: Lager
+  es: tienda, almacén
+  fr: magasin, entrepôt
+  pl: sklep, magazyn
+  it: negozio, magazzino
+  tr: mağaza, depo
+  pt: loja, armazém
+  ro: magazin, depozit
+  bg: магазин, склад
+  cs: obchod, sklad
+  sk: obchod, sklad
+  hu: üzlet, raktár
+  el: κατάστημα, αποθήκη
+  sl: trgovina, skladišče
+  et: pood, ladu
+  lt: parduotuvė, sandėlis
+  da: butik, lager
+  fi: kauppa, varasto
+  sv: butik, lager
+  hr: trgovina, skladište
+  lv: veikals, noliktava
+  hi: दुकान, गोदाम
+  ar: متجر، مستودع
+  id: toko, gudang
+  vi: cửa hàng, kho hàng
+  th: ร้านค้า, โกดัง
+  ko: 가게, 창고
+  ja: 店、倉庫
+  bn: দোকান, সংরক্ষণ করা
+  fa: فروشگاه، انبار
+  zh: 商店
+  ur: دکان، ذخیرہ کرنا
+  kk: дүкен, қойма
+
+ID 1474 (folk):
+  ru: народ, народный
+  uk: народ, народний
+  de: Leute, Volk
+  es: gente
+  fr: les gens, le peuple
+  pl: ludzie, lud
+  it: gente, popolo
+  tr: insanlar, halk
+  pt: gente, povo
+  ro: oameni, oameni populari
+  bg: хора, народ
+  cs: lidé, lid
+  sk: ľudia, ľud
+  hu: emberek, népek
+  el: άνθρωποι, λαός
+  sl: ljudje, ljudstvo
+  et: inimesed, rahvas
+  lt: žmonės, liaudis
+  da: mennesker, folk
+  fi: ihmiset, kansa
+  sv: människor, folk
+  hr: ljudi, narod
+  lv: cilvēki, ļaudis
+  hi: लोग
+  ar: ناس
+  id: orang, kaum
+  vi: người, dân
+  th: ผู้คน, ชาวบ้าน
+  ko: 사람들, 민족
+  ja: 人々、民衆
+  bn: লোকজ
+  fa: مردم، مردمی
+  zh: 民间的
+  ur: لوگ، عوامی
+  kk: адамдар, халық
+
+ID 1475 (hate):
+  ru: ненавидеть
+  uk: ненавидіти
+  de: hassen
+  es: odiar
+  fr: détester
+  pl: nienawidzić
+  it: odio
+  tr: nefret
+  pt: odiar
+  ro: ură
+  bg: омраза
+  cs: nenávist
+  sk: nenávisť
+  hu: gyűlölet
+  el: μισώ
+  sl: sovraštvo
+  et: vihkamine
+  lt: neapykanta
+  da: hader
+  fi: vihata
+  sv: hata
+  hr: mržnja
+  lv: naids
+  hi: नफरत
+  ar: كراهية
+  id: benci
+  vi: ghét
+  th: เกลียด
+  ko: 미워하다
+  ja: 憎む
+  bn: ঘৃণা করা
+  fa: متنفر بودن
+  zh: 讨厌
+  ur: نفرت کرنا
+  kk: жек көру
+
+ID 1476 (river):
+  ru: река
+  uk: річка
+  de: Fluss
+  es: río
+  fr: rivière
+  pl: rzeka
+  it: fiume
+  tr: nehir
+  pt: rio
+  ro: râu
+  bg: река
+  cs: řeka
+  sk: rieka
+  hu: folyó
+  el: ποτάμι
+  sl: reka
+  et: jõgi
+  lt: upė
+  da: flod
+  fi: joki
+  sv: flod
+  hr: rijeka
+  lv: upe
+  hi: नदी
+  ar: نهر
+  id: sungai
+  vi: sông
+  th: แม่น้ำ
+  ko: 강
+  ja: 川
+  bn: নদী
+  fa: رودخانه
+  zh: 河流
+  ur: دریا
+  kk: өзен
+
+ID 1477 (star):
+  ru: звезда
+  uk: зірка
+  de: Stern
+  es: estrella
+  fr: étoile
+  pl: gwiazda
+  it: stella
+  tr: yıldız
+  pt: estrela
+  ro: stea
+  bg: звезда
+  cs: hvězda
+  sk: hviezda
+  hu: csillag
+  el: αστέρι
+  sl: zvezda
+  et: täht
+  lt: žvaigždė
+  da: stjerne
+  fi: tähti
+  sv: stjärna
+  hr: zvijezda
+  lv: zvaigzne
+  hi: तारा
+  ar: نجم
+  id: bintang
+  vi: ngôi sao
+  th: ดาว
+  ko: 별
+  ja: 星
+  bn: তারা
+  fa: ستاره
+  zh: 星星
+  ur: ستارہ
+  kk: жұлдыз
+
+ID 1478 (video):
+  ru: видео
+  uk: відео
+  de: Video
+  es: video
+  fr: vidéo
+  pl: wideo
+  it: video
+  tr: video
+  pt: vídeo
+  ro: video
+  bg: видео
+  cs: video
+  sk: video
+  hu: videó
+  el: βίντεο
+  sl: videoposnetek
+  et: video
+  lt: vaizdo įrašas
+  da: video
+  fi: video
+  sv: video
+  hr: video
+  lv: video
+  hi: वीडियो
+  ar: فيديو
+  id: video
+  vi: video
+  th: วิดีโอ
+  ko: 비디오
+  ja: 動画
+  bn: ভিডিও
+  fa: ویدئو
+  zh: 视频
+  ur: ویڈیو
+  kk: бейне
+
+ID 1479 (girl):
+  ru: девочка
+  uk: дівчинка
+  de: Mädchen
+  es: chica
+  fr: fille
+  pl: dziewczyna
+  it: ragazza
+  tr: kız
+  pt: menina, garota
+  ro: fată
+  bg: момиче
+  cs: dívka
+  sk: dievča
+  hu: lány
+  el: κορίτσι
+  sl: dekle
+  et: tüdruk
+  lt: mergina
+  da: pige
+  fi: tyttö
+  sv: flicka
+  hr: djevojka
+  lv: meitene
+  hi: लड़की
+  ar: فتاة
+  id: gadis
+  vi: cô gái
+  th: เด็กผู้หญิง
+  ko: 소녀
+  ja: 少女
+  bn: মেয়ে
+  fa: دختر
+  zh: 女孩
+  ur: لڑکی
+  kk: қыз
+
+ID 1480 (group):
+  ru: группа
+  uk: група
+  de: Gruppe
+  es: grupo
+  fr: groupe
+  pl: grupa
+  it: gruppo
+  tr: grup
+  pt: grupo
+  ro: grup
+  bg: група
+  cs: skupina
+  sk: skupina
+  hu: csoport
+  el: ομάδα
+  sl: skupina
+  et: grupp
+  lt: grupė
+  da: gruppe
+  fi: ryhmä
+  sv: grupp
+  hr: grupa
+  lv: grupa
+  hi: समूह
+  ar: مجموعة
+  id: grup
+  vi: nhóm
+  th: กลุ่ม
+  ko: 그룹
+  ja: グループ
+  bn: দল
+  fa: گروه
+  zh: 群体
+  ur: گروہ
+  kk: топ
+
+ID 1481 (once):
+  ru: один раз, однажды
+  uk: один раз, одного разу
+  de: es war einmal
+  es: una vez, alguna vez
+  fr: une fois, autrefois
+  pl: raz, pewnego razu
+  it: una volta, un tempo
+  tr: bir zamanlar, bir kez
+  pt: era uma vez, uma vez
+  ro: odată, odată ca niciodată
+  bg: веднъж, имало едно време
+  cs: kdysi, kdysi dávno
+  sk: raz, kedysi dávno
+  hu: egyszer, egyszer volt, hol nem volt
+  el: κάποτε, μια φορά κι έναν καιρό
+  sl: nekoč, nekoč pred davnimi časi
+  et: kord, kunagi ammu
+  lt: kartą, kažkada seniai seniai
+  da: én gang
+  fi: kerran
+  sv: en gång
+  hr: jednom
+  lv: reiz
+  hi: एक बार
+  ar: مرة واحدة
+  id: sekali, dulu
+  vi: một lần
+  th: ครั้งหนึ่ง
+  ko: 한 번
+  ja: 一度
+  bn: একবার
+  fa: یک بار، روزی
+  zh: 一次
+  ur: ایک بار
+  kk: бір рет
+
+ID 1482 (exist):
+  ru: существовать
+  uk: існувати
+  de: existieren
+  es: existir
+  fr: exister
+  pl: istnieć
+  it: esistere
+  tr: var olmak
+  pt: existir
+  ro: exista
+  bg: съществувам
+  cs: existovat
+  sk: existovať
+  hu: létezik
+  el: υπάρχω
+  sl: obstajati
+  et: eksisteerima
+  lt: egzistuoja
+  da: eksisterer
+  fi: olemassa
+  sv: existera
+  hr: postojati
+  lv: eksistēt
+  hi: मौजूद
+  ar: موجود
+  id: ada
+  vi: tồn tại
+  th: มีอยู่
+  ko: 존재하다
+  ja: 存在する
+  bn: অস্তিত্ব থাকা
+  fa: وجود داشتن
+  zh: 存在
+  ur: موجود ہونا
+  kk: бар
+
+ID 1483 (judge):
+  ru: судить
+  uk: судити
+  de: Richter
+  es: juzgar, juez
+  fr: juge
+  pl: sędzia, osądzać
+  it: giudice
+  tr: yargıç
+  pt: avaliar
+  ro: judecător
+  bg: съдия
+  cs: soudce
+  sk: sudca
+  hu: bíró
+  el: δικαστής
+  sl: sodnik
+  et: kohtunik
+  lt: teisėjas
+  da: dommer
+  fi: tuomari
+  sv: domare
+  hr: sudac
+  lv: tiesnesis
+  hi: न्यायाधीश
+  ar: قاضٍ
+  id: menilai, menghakimi
+  vi: thẩm phán
+  th: ผู้พิพากษา
+  ko: 심판자
+  ja: 裁判官
+  bn: বিচারক, বিচার করা
+  fa: قضاوت کردن، قاضی
+  zh: 判断
+  ur: فیصلہ کرنا، جج
+  kk: судья
+
+ID 1484 (task):
+  ru: задача
+  uk: завдання
+  de: Aufgabe
+  es: tarea
+  fr: tâche
+  pl: zadanie
+  it: compito
+  tr: görev
+  pt: tarefa
+  ro: sarcină
+  bg: задача
+  cs: úkol
+  sk: úloha
+  hu: feladat
+  el: έργο
+  sl: naloga
+  et: ülesanne
+  lt: užduotis
+  da: opgave
+  fi: tehtävä
+  sv: uppgift
+  hr: zadatak
+  lv: uzdevums
+  hi: कार्य
+  ar: مهمة
+  id: tugas
+  vi: nhiệm vụ
+  th: งาน
+  ko: 과제
+  ja: 仕事
+  bn: কাজ
+  fa: وظیفه
+  zh: 任务
+  ur: کام، ذمہ داری
+  kk: тапсырма
+
+ID 1485 (state):
+  ru: состояние, штат
+  uk: стан, штат
+  de: Staat
+  es: estado, declarar
+  fr: état
+  pl: stan, kraj związkowy
+  it: stato
+  tr: eyalet
+  pt: estado
+  ro: stat
+  bg: щат
+  cs: stát
+  sk: štát
+  hu: állam
+  el: πολιτεία
+  sl: država
+  et: osariik
+  lt: valstija
+  da: tilstand, betingelse
+  fi: tila, ehto
+  sv: tillstånd, villkor
+  hr: stanje, uvjet
+  lv: stāvoklis
+  hi: स्थिति, अवस्था
+  ar: حالة
+  id: keadaan, kondisi
+  vi: trạng thái, điều kiện
+  th: สภาพ
+  ko: 상태, 조건
+  ja: 状態、状況
+  bn: অবস্থা, রাজ্য
+  fa: وضعیت، ایالت
+  zh: 状态
+  ur: حالت، ریاست
+  kk: жағдай, шарт
+
+ID 1486 (peace):
+  ru: мир
+  uk: мир, спокій
+  de: Welt
+  es: paz
+  fr: monde
+  pl: pokój
+  it: mondo
+  tr: dünya
+  pt: paz
+  ro: lume
+  bg: свят
+  cs: svět
+  sk: svet
+  hu: világ
+  el: κόσμος
+  sl: svet
+  et: maailm
+  lt: pasaulis
+  da: verden
+  fi: maailma
+  sv: värld
+  hr: svijet
+  lv: pasaule
+  hi: दुनिया
+  ar: عالم
+  id: perdamaian
+  vi: thế giới
+  th: โลก
+  ko: 세계
+  ja: 世界
+  bn: শান্তি
+  fa: صلح
+  zh: 和平
+  ur: امن
+  kk: әлем
+
+ID 1487 (lord):
+  ru: господин
+  uk: пан, володар
+  de: Herr
+  es: Señor
+  fr: Monsieur
+  pl: pan
+  it: Signore
+  tr: Sayın
+  pt: senhor
+  ro: domnule
+  bg: господин
+  cs: Pane
+  sk: pán
+  hu: uram
+  el: Κύριε
+  sl: gospod
+  et: härra
+  lt: pone
+  da: herre
+  fi: herra
+  sv: herre
+  hr: gospodar
+  lv: kungs
+  hi: स्वामी
+  ar: سيد
+  id: tuan
+  vi: chúa tể
+  th: เจ้าผู้ครองนคร
+  ko: 군주
+  ja: 主
+  bn: প্রভু
+  fa: ارباب
+  zh: 大人
+  ur: مالک، آقا
+  kk: мырза
+
+ID 1488 (daily):
+  ru: ежедневно
+  uk: щодня
+  de: täglich
+  es: a diario
+  fr: tous les jours
+  pl: codziennie
+  it: quotidiano
+  tr: günlük
+  pt: diariamente, diário
+  ro: zilnic
+  bg: ежедневно
+  cs: denní
+  sk: denne
+  hu: napi
+  el: καθημερινά
+  sl: dnevno
+  et: iga päev
+  lt: kasdien
+  da: daglig
+  fi: päivittäin
+  sv: dagligen
+  hr: svakodnevno
+  lv: katru dienu
+  hi: दैनिक
+  ar: يومي
+  id: harian
+  vi: hàng ngày
+  th: ทุกวัน
+  ko: 매일
+  ja: 毎日の
+  bn: প্রতিদিন
+  fa: روزانه
+  zh: 每天
+  ur: روزانہ
+  kk: күнделікті
+
+ID 1489 (near):
+  ru: около, рядом
+  uk: навколо, поруч
+  de: in der Nähe, neben
+  es: cerca, junto a
+  fr: près de, à côté de
+  pl: blisko, obok
+  it: vicino, accanto a
+  tr: yakınında, yanında
+  pt: perto, ao lado de
+  ro: aproape, lângă
+  bg: близо, до
+  cs: blízko, vedle
+  sk: blízko, vedľa
+  hu: közel, mellette
+  el: κοντά, δίπλα σε
+  sl: blizu, poleg
+  et: lähedal, kõrval
+  lt: šalia, netoli
+  da: nær, ved siden af
+  fi: lähellä, vieressä
+  sv: nära, bredvid
+  hr: blizu, pored
+  lv: tuvu, blakus
+  hi: पास, बगल में
+  ar: قريب، بجانب
+  id: dekat, di sebelah
+  vi: gần, bên cạnh
+  th: ใกล้
+  ko: 가까이, 옆에
+  ja: 近く、隣
+  bn: কাছে
+  fa: نزدیک
+  zh: 附近
+  ur: قریب
+  kk: жанында
+
+ID 1490 (over):
+  ru: над, законченный
+  uk: над, закінчений
+  de: vorbei, erledigt
+  es: sobre, encima de, terminado
+  fr: terminé
+  pl: nad, ponad, zakończony
+  it: finito, terminato
+  tr: bitti, tamamlandı
+  pt: sobre, acima, terminado
+  ro: terminat
+  bg: свършил, завършен
+  cs: konec, hotovo
+  sk: koniec, hotový
+  hu: vége, befejezett
+  el: τελείωσε
+  sl: konec, končano
+  et: läbi, lõpetatud
+  lt: baigtas
+  da: ovenfor, færdig
+  fi: yläpuolella, valmis
+  sv: ovanför, färdig
+  hr: iznad, završeno
+  lv: augšā, pabeigts
+  hi: ऊपर, समाप्त
+  ar: فوق، منتهٍ
+  id: di atas, selesai
+  vi: ở trên, đã hoàn thành
+  th: ข้างบน เสร็จแล้ว
+  ko: 위, 완료됨
+  ja: 上、終わった
+  bn: উপরে, শেষ
+  fa: بالای، تمام‌شده
+  zh: 结束
+  ur: اوپر، ختم
+  kk: жоғарыда, аяқталды
+
+ID 1491 (along):
+  ru: вдоль
+  uk: вздовж
+  de: entlang
+  es: a lo largo de
+  fr: le long de
+  pl: wzdłuż
+  it: lungo
+  tr: birlikte
+  pt: ao longo de
+  ro: de-a lungul
+  bg: покрай
+  cs: podél
+  sk: pozdĺž
+  hu: mentén
+  el: κατά μήκος
+  sl: vzdolž
+  et: mööda
+  lt: kartu
+  da: langs
+  fi: pitkin
+  sv: längs
+  hr: uz
+  lv: gar
+  hi: साथ
+  ar: على طول
+  id: sepanjang
+  vi: dọc theo
+  th: ตาม
+  ko: 따라
+  ja: 沿って
+  bn: বরাবর
+  fa: در امتداد
+  zh: 沿着
+  ur: کے ساتھ ساتھ، ساتھ چلتے ہوئے
+  kk: бойымен
+
+ID 1492 (unit):
+  ru: единица
+  uk: одиниця
+  de: Einheit
+  es: unidad
+  fr: unité
+  pl: jednostka
+  it: unità
+  tr: birim
+  pt: unidade
+  ro: unitate
+  bg: единица
+  cs: jednotka
+  sk: jednotka
+  hu: egység
+  el: μονάδα
+  sl: enota
+  et: ühik
+  lt: vienetas
+  da: enhed
+  fi: yksikkö
+  sv: enhet
+  hr: jedinica
+  lv: vienība
+  hi: इकाई
+  ar: وحدة
+  id: unit
+  vi: đơn vị
+  th: หน่วย
+  ko: 단위
+  ja: 単位
+  bn: একক
+  fa: واحد
+  zh: 单位
+  ur: اکائی
+  kk: бірлік
+
+ID 1493 (act):
+  ru: действовать
+  uk: діяти
+  de: Akt
+  es: actuar, acto
+  fr: acte
+  pl: działać
+  it: atto
+  tr: davranmak
+  pt: agir
+  ro: act
+  bg: акт
+  cs: akt
+  sk: konať
+  hu: törvény
+  el: πράξη
+  sl: dejanje
+  et: tegu
+  lt: aktas
+  da: handling
+  fi: teko
+  sv: handling
+  hr: čin
+  lv: darbība
+  hi: कार्य
+  ar: فعل
+  id: bertindak
+  vi: hành động
+  th: การกระทำ
+  ko: 행위
+  ja: 行為
+  bn: কাজ করা
+  fa: عمل کردن، اقدام
+  zh: 行动
+  ur: عمل کرنا
+  kk: әрекет
+
+ID 1494 (lift):
+  ru: поднимать
+  uk: піднімати
+  de: erheben
+  es: levantar, elevar
+  fr: augmenter
+  pl: podnosić, winda
+  it: aumentare
+  tr: artırmak
+  pt: levantar, erguer
+  ro: ridica
+  bg: повишаване
+  cs: zvýšit
+  sk: zvýšiť
+  hu: emel
+  el: αύξηση
+  sl: dvigniti
+  et: tõsta
+  lt: pakelti
+  da: løft
+  fi: nosto
+  sv: lyft
+  hr: dizati
+  lv: pacelšana
+  hi: उठाना
+  ar: رفع
+  id: mengangkat
+  vi: nâng
+  th: ยก
+  ko: 들어올리다
+  ja: 持ち上げる
+  bn: তোলা
+  fa: بلند کردن، آسانسور
+  zh: 举起
+  ur: اٹھانا
+  kk: көтеру
+
+ID 1495 (key):
+  ru: ключ
+  uk: ключ
+  de: Schlüssel
+  es: llave
+  fr: clé
+  pl: klucz
+  it: chiave
+  tr: anahtar
+  pt: chave
+  ro: cheie
+  bg: ключ
+  cs: klíč
+  sk: kľúč
+  hu: kulcsfontosságú
+  el: κλειδί
+  sl: ključ
+  et: võti
+  lt: raktas
+  da: nøgle
+  fi: avain
+  sv: nyckel
+  hr: ključ
+  lv: atslēga
+  hi: चाबी
+  ar: مفتاح
+  id: kunci
+  vi: chìa khóa
+  th: กุญแจ
+  ko: 열쇠
+  ja: 鍵
+  bn: চাবি
+  fa: کلید
+  zh: 钥匙
+  ur: چابی
+  kk: кілт
+
+ID 1496 (total):
+  ru: общий, суммарный
+  uk: загальний, сумарний
+  de: allgemein, insgesamt
+  es: total
+  fr: général, total
+  pl: ogólny, całkowity
+  it: generale, totale
+  tr: genel, toplam
+  pt: geral, total
+  ro: general, total
+  bg: общо
+  cs: obecné, celkové
+  sk: všeobecné, celkové
+  hu: általános, összesen
+  el: γενικός, συνολικός
+  sl: splošno, skupaj
+  et: üldine, kokku
+  lt: bendras
+  da: fælles, total
+  fi: yhteinen, yhteensä
+  sv: gemensam, total
+  hr: zajedničko, ukupno
+  lv: kopīgs, kopā
+  hi: सामान्य, कुल
+  ar: مشترك، إجمالي
+  id: umum, total
+  vi: chung, tổng cộng
+  th: ทั่วไป ทั้งหมด
+  ko: 공통, 전체
+  ja: 共通の、合計
+  bn: মোট
+  fa: مجموع، کل
+  zh: 总计
+  ur: کل، مجموعی
+  kk: ортақ, жалпы
+
+ID 1497 (share):
+  ru: делиться, совместно пользоваться
+  uk: ділитися, спільний
+  de: teilen, gemeinsam nutzen
+  es: compartir
+  fr: partager, répartir
+  pl: dzielić się, udział
+  it: condividere, quota
+  tr: paylaşmak, pay
+  pt: compartilhar, dividir
+  ro: împărtăși, folosește în comun
+  bg: споделям, използвам съвместно
+  cs: sdílet, používat společně
+  sk: zdieľať, používať spoločne
+  hu: megosztani, közösen használni
+  el: μοιράζομαι, χρησιμοποιώ από κοινού
+  sl: deliti, uporabljati skupaj
+  et: jagama, ühiselt kasutama
+  lt: dalintis, naudoti kartu
+  da: del, brug i fællesskab
+  fi: jakaa, käyttää yhdessä
+  sv: dela, använda gemensamt
+  hr: dijeliti, koristiti zajednički
+  lv: dalīties, lietot kopīgi
+  hi: साझा करना
+  ar: مشاركة، استخدام مشترك
+  id: berbagi, membagikan
+  vi: chia sẻ, sử dụng chung
+  th: แบ่งปัน ใช้ร่วมกัน
+  ko: 공유, 공동 사용
+  ja: 分け合う、共同で使用する
+  bn: ভাগ করে নেওয়া
+  fa: به اشتراک گذاشتن
+  zh: 分享
+  ur: بانٹنا، مشترکہ استعمال کرنا
+  kk: бөлісу, бірлесіп пайдалану
+
+ID 1498 (drug):
+  ru: лекарство, наркотик, не нужное
+  uk: ліки, наркотик, препарат
+  de: Medizin, Droge, unnötig
+  es: droga, medicamento
+  fr: médicament, drogue
+  pl: lek, narkotyk
+  it: farmaco, droga
+  tr: ilaç, uyuşturucu
+  pt: medicamento, droga
+  ro: medicament, drog, inutil
+  bg: лекарство, наркотик, ненужно
+  cs: lék, droga, zbytečné
+  sk: liek, droga, zbytočné
+  hu: gyógyszer, drog, felesleges
+  el: φάρμακο, ναρκωτικό, περιττό
+  sl: zdravilo, droga, nepotrebno
+  et: ravim, mittevajalik
+  lt: vaistas, nereikalingas
+  da: medicin, lægemiddel, unødvendig
+  fi: lääke, huume, tarpeeton
+  sv: medicin, drog, onödig
+  hr: lijek, droga, nepotreban
+  lv: zāles, narkotika, nevajadzīgs
+  hi: दवा, औषधि, अनावश्यक
+  ar: دواء، مخدر، غير ضروري
+  id: obat, narkoba
+  vi: thuốc, dược phẩm
+  th: ยา ไม่จำเป็น
+  ko: 약, 의약품, 불필요한
+  ja: 薬、医薬品、不必要な
+  bn: ওষুধ, মাদক
+  fa: دارو، مواد مخدر
+  zh: 药物
+  ur: دوا، منشیات
+  kk: дәрі, қажет емес
+
+ID 1499 (right):
+  ru: верно, право, прямо
+  uk: вірно, право, прямо
+  de: wahr, richtig, gerade
+  es: derecho, correcto, derecha
+  fr: vrai, juste, droit
+  pl: prawy, właściwy, prawo
+  it: vero, giusto, dritto
+  tr: doğru, haklı, düz
+  pt: Verdadeiro, certo, reto
+  ro: adevărat, corect, drept
+  bg: вярно, правилно, направо
+  cs: pravda, správně, přímo
+  sk: pravda, správne, priamo
+  hu: igaz, helyes, egyenes
+  el: αληθινός, σωστός, ευθύς
+  sl: res, prav, naravnost
+  et: tõsi, õige, otsekohene
+  lt: tiesa, teisinga, tiesi
+  da: sandt, rigtigt, lige
+  fi: tosi, oikea, suora
+  sv: sant, rätt, rakt
+  hr: istinito, ispravno, ravno
+  lv: patiess, pareizs, taisns
+  hi: सही, ठीक, सीधा
+  ar: صحيح، يمين، مستقيم
+  id: benar, tepat, lurus
+  vi: đúng, chính xác, thẳng
+  th: จริง ถูกต้อง ตรง
+  ko: 진실, 옳은, 곧은
+  ja: 正しい、右の
+  bn: সঠিক, অধিকার, ডান
+  fa: درست، حق، راست
+  zh: 正确的
+  ur: درست، حق، دایاں
+  kk: шын, дұрыс, түзу
+
+ID 1500 (land):
+  ru: земля, часть суши, территория
+  uk: земля, приземлятися
+  de: Land, landen
+  es: tierra, terreno, aterrizar
+  fr: terre, terrain, atterrir
+  pl: ziemia, lądować
+  it: terra, atterrare
+  tr: kara, arazi, inmek
+  pt: terra, terreno, pousar
+  ro: pământ, parte de pământ, teritoriu
+  bg: земя, част от земя, територия
+  cs: země, část země, území
+  sk: pozemok, časť zeme, územie
+  hu: föld, földrészlet, terület
+  el: γη, μέρος γης, έδαφος
+  sl: zemlja, del zemlje, ozemlje
+  et: maa, maaosa, territoorium
+  lt: žemė, žemės dalis, teritorija
+  da: land, del af land, territorium
+  fi: maa, osa maata, alue
+  sv: mark, del av land, territorium
+  hr: zemlja, dio zemlje, teritorij
+  lv: zeme, zemes daļa, teritorija
+  hi: भूमि, जमीन
+  ar: أرض، جزء من الأرض، إقليم
+  id: tanah, mendarat
+  vi: đất đai, hạ cánh
+  th: ที่ดิน ส่วนหนึ่งของที่ดิน อาณาเขต
+  ko: 땅, 땅의 일부, 영토
+  ja: 土地、土地の一部、領土
+  bn: জমি
+  fa: زمین، فرود آمدن
+  zh: 土地
+  ur: زمین
+  kk: жер, жердің бір бөлігі, аумақ
+
+ID 1501 (cook):
+  ru: готовить теплом
+  uk: готувати теплом
+  de: mit Hitze kochen
+  es: cocinar
+  fr: cuire à la chaleur
+  pl: gotować
+  it: cuocere con il calore
+  tr: ısı ile pişirin
+  pt: cozinhar
+  ro: gătește cu căldură
+  bg: гответе с топлина
+  cs: vařit s teplem
+  sk: variť s teplom
+  hu: hővel főzzük
+  el: μαγειρέψτε με θερμότητα
+  sl: kuhajte z vročino
+  et: küpseta kuumusega
+  lt: virti su karščiu
+  da: lave mad med varme
+  fi: kypsennä lämmöllä
+  sv: laga mat med värme
+  hr: kuhati s toplinom
+  lv: gatavot ar karstumu
+  hi: गर्मी से पकाना
+  ar: طهي بالحرارة
+  id: memasak dengan panas
+  vi: nấu bằng nhiệt
+  th: ปรุงด้วยความร้อน
+  ko: 열로 요리하다
+  ja: 熱で調理する
+  bn: রান্না করা
+  fa: پختن
+  zh: 做饭
+  ur: کھانا پکانا
+  kk: ыстықпен пісіру
+

@@ -1,0 +1,1850 @@
+ID 1602 (date):
+  ru: дата, свидание
+  uk: дата, побачення
+  de: Datum
+  es: fecha, cita
+  fr: date
+  pl: data, randka
+  it: data
+  tr: tarih
+  pt: data, encontro
+  ro: dată
+  bg: дата
+  cs: datum
+  sk: dátum
+  hu: dátum
+  el: ημερομηνία
+  sl: datum
+  et: kuupäev
+  lt: data
+  da: date, møde
+  fi: treffit, tapaaminen
+  sv: dejt, möte
+  hr: spoj, sastanak
+  lv: randiņš, tikšanās
+  hi: मुलाकात की तारीख
+  ar: موعد، اجتماع
+  id: tanggal, pertemuan
+  vi: hẹn hò, gặp gỡ
+  th: วันที่, การประชุม
+  ko: 데이트, 만남
+  ja: デート、会合
+  bn: তারিখ, সাক্ষাৎ
+  fa: تاریخ، قرار عاشقانه
+  zh: 日期、约会
+  ur: تاریخ، ملاقات، ڈیٹ
+  kk: күн, кездесу
+
+ID 1603 (check):
+  ru: проверять
+  uk: перевіряти
+  de: überprüfen
+  es: revisar, comprobar
+  fr: vérifier
+  pl: sprawdzać
+  it: controllo
+  tr: kontrol etmek
+  pt: verificar
+  ro: verifica
+  bg: проверка
+  cs: kontrola
+  sk: skontrolovať
+  hu: ellenőrzés
+  el: έλεγχος
+  sl: preveri
+  et: kontroll
+  lt: čekis
+  da: tjek
+  fi: tarkistus
+  sv: kolla
+  hr: provjeriti
+  lv: pārbaudīt
+  hi: जाँच
+  ar: فحص
+  id: cek
+  vi: kiểm tra
+  th: ตรวจสอบ
+  ko: 확인
+  ja: チェック
+  bn: পরীক্ষা করা
+  fa: بررسی کردن
+  zh: 检查、核对
+  ur: جانچنا
+  kk: тексеру
+
+ID 1604 (book):
+  ru: книга
+  uk: книга
+  de: Buch
+  es: libro
+  fr: livre
+  pl: książka
+  it: libro
+  tr: kitap
+  pt: livro
+  ro: carte
+  bg: книга
+  cs: rezervovat
+  sk: kniha
+  hu: könyv
+  el: βιβλίο
+  sl: knjiga
+  et: raamat
+  lt: knyga
+  da: bog
+  fi: kirja
+  sv: bok
+  hr: knjiga
+  lv: grāmata
+  hi: पुस्तक
+  ar: كتاب
+  id: buku
+  vi: sách
+  th: หนังสือ
+  ko: 책
+  ja: 本
+  bn: বই
+  fa: کتاب، رزرو کردن
+  zh: 书、预订
+  ur: کتاب
+  kk: кітап
+
+ID 1605 (wish):
+  ru: желание
+  uk: бажання
+  de: Wunsch
+  es: deseo, desear
+  fr: souhait
+  pl: życzenie
+  it: desiderio
+  tr: dilek
+  pt: desejar
+  ro: dorință
+  bg: желание
+  cs: přání
+  sk: želanie
+  hu: kíván
+  el: επιθυμία
+  sl: želja
+  et: soov
+  lt: noras
+  da: ønske
+  fi: halu
+  sv: önskan
+  hr: želja
+  lv: vēlme
+  hi: इच्छा
+  ar: رغبة
+  id: keinginan
+  vi: mong muốn
+  th: ความปรารถนา
+  ko: 욕망
+  ja: 願望
+  bn: ইচ্ছা
+  fa: آرزو
+  zh: 希望、愿望
+  ur: خواہش
+  kk: тілек
+
+ID 1606 (long):
+  ru: длинный, длительный
+  uk: довгий, тривалий
+  de: lang, ausgedehnt
+  es: largo, prolongado
+  fr: long, prolongé
+  pl: długi, przedłużający się
+  it: lungo, prolungato
+  tr: uzun, uzatılmış
+  pt: longo, demorar
+  ro: lung, prelungit
+  bg: дълъг, продължителен
+  cs: dlouhý, prodloužený
+  sk: dlhý, predĺžený
+  hu: hosszú, elnyújtott
+  el: μακρύς, παρατεταμένος
+  sl: dolg, podaljšan
+  et: pikk, pikaajaline
+  lt: ilgas, užsitęsęs
+  da: lang, forlænget
+  fi: pitkä, pitkittynyt
+  sv: lång, utdragen
+  hr: dugo, produljeno
+  lv: garš, ilgstošs
+  hi: लंबा, विलंबित
+  ar: طويل، ممتد
+  id: panjang, berkepanjangan
+  vi: dài, kéo dài
+  th: ยาวนาน, ยืดเยื้อ
+  ko: 긴, 오랜
+  ja: 長い、長引く
+  bn: লম্বা, দীর্ঘ
+  fa: بلند، طولانی
+  zh: 长的、长期的
+  ur: لمبا، طویل
+  kk: ұзақ, ұзартылған
+
+ID 1607 (vote):
+  ru: голосование
+  uk: голосування
+  de: Abstimmung
+  es: votar
+  fr: voter
+  pl: głosować, głos
+  it: votare
+  tr: oy
+  pt: voto
+  ro: vot
+  bg: гласуване
+  cs: hlasování
+  sk: hlasovať
+  hu: szavazás
+  el: ψήφος
+  sl: glasovati
+  et: hääletus
+  lt: balsuoti
+  da: stemme
+  fi: äänestys
+  sv: rösta
+  hr: glasati
+  lv: balsot
+  hi: मतदान
+  ar: تصويت
+  id: suara
+  vi: bỏ phiếu
+  th: ลงคะแนน
+  ko: 투표
+  ja: 投票
+  bn: ভোট
+  fa: رأی دادن، رأی
+  zh: 投票
+  ur: ووٹ دینا
+  kk: дауыс беру
+
+ID 1608 (post):
+  ru: почта, публиковать
+  uk: пошта, публікувати
+  de: E-Mail, Veröffentlichung
+  es: correo, publicar
+  fr: courrier, publier
+  pl: poczta, post, publikować
+  it: posta, pubblicare
+  tr: posta, yayınla
+  pt: postar, correio, cargo
+  ro: poștă, publicare
+  bg: поща, публикуване
+  cs: pošta, publikovat
+  sk: poštou, publikovať
+  hu: postázás, közzététel
+  el: ταχυδρομείο, δημοσίευση
+  sl: pošta, objava
+  et: postitada, avaldada
+  lt: paštu, publikuoti
+  da: sende, udgive
+  fi: lähettää sähköpostia, julkaista
+  sv: posta, publicera
+  hr: poslati poštom, objaviti
+  lv: sūtīt pa pastu, publicēt
+  hi: मेल, प्रकाशित करना
+  ar: بريد، نشر
+  id: surat, terbitkan
+  vi: gửi thư, xuất bản
+  th: จดหมาย, เผยแพร่
+  ko: 게시하다, 우편
+  ja: 郵送する、出版する
+  bn: ডাক, পোস্ট করা
+  fa: پست، ارسال کردن
+  zh: 邮寄、发布
+  ur: ڈاک، پوسٹ، شائع کرنا
+  kk: пошта, жариялау
+
+ID 1609 (bird):
+  ru: птица
+  uk: птах
+  de: Vogel
+  es: pájaro
+  fr: oiseau
+  pl: ptak
+  it: uccello
+  tr: kuş
+  pt: pássaro
+  ro: pasăre
+  bg: птица
+  cs: pták
+  sk: vták
+  hu: madár
+  el: πουλί
+  sl: ptica
+  et: lind
+  lt: paukštis
+  da: fugl
+  fi: lintu
+  sv: fågel
+  hr: ptica
+  lv: putns
+  hi: पक्षी
+  ar: طائر
+  id: burung
+  vi: chim
+  th: นก
+  ko: 새
+  ja: 鳥
+  bn: পাখি
+  fa: پرنده
+  zh: 鸟
+  ur: پرندہ
+  kk: құс
+
+ID 1610 (serve):
+  ru: служить, подавать
+  uk: служити, подавати
+  de: dienen, einreichen
+  es: servir, atender
+  fr: servir, soumettre
+  pl: służyć, podawać
+  it: servire, inviare
+  tr: hizmet etmek, sunmak
+  pt: servir
+  ro: servi, trimite
+  bg: сервирам, поднасям
+  cs: sloužit, předkládat
+  sk: slúžiť, podať
+  hu: szolgálni, benyújtani
+  el: σερβίρω, υποβάλλω
+  sl: služiti, predložiti
+  et: teenima, esitama
+  lt: tarnauti, pateikti
+  da: tjene, indsende
+  fi: palvella, lähettää
+  sv: servera, skicka in
+  hr: poslužiti, podnijeti
+  lv: kalpot, iesniegt
+  hi: सेवा करना, प्रस्तुत करना
+  ar: خدمة، تقديم
+  id: melayani, menyerahkan
+  vi: phục vụ, nộp
+  th: ให้บริการ, ส่ง
+  ko: 봉사하다, 제출하다
+  ja: 奉仕する、服従する
+  bn: পরিবেশন করা, সেবা করা
+  fa: خدمت کردن، سرو کردن
+  zh: 服务、提供
+  ur: خدمت کرنا، پیش کرنا
+  kk: қызмет ету, тапсыру
+
+ID 1611 (fully):
+  ru: полностью
+  uk: повністю
+  de: voll
+  es: completamente
+  fr: pleinement
+  pl: w pełni
+  it: completamente
+  tr: tamamen
+  pt: completamente
+  ro: complet
+  bg: напълно
+  cs: plně
+  sk: plne
+  hu: teljesen
+  el: πλήρως
+  sl: popolnoma
+  et: täielikult
+  lt: visiškai
+  da: fuldstændigt
+  fi: täysin
+  sv: helt och hållet
+  hr: potpuno
+  lv: pilnībā
+  hi: पूरी तरह से
+  ar: تمامًا
+  id: sepenuhnya
+  vi: hoàn toàn
+  th: อย่างสมบูรณ์
+  ko: 완전히
+  ja: 完全に
+  bn: সম্পূর্ণভাবে
+  fa: کاملاً
+  zh: 完全地
+  ur: مکمل طور پر
+  kk: толығымен
+
+ID 1612 (loan):
+  ru: заем
+  uk: позика
+  de: Darlehen
+  es: préstamo
+  fr: prêt
+  pl: pożyczka
+  it: prestito
+  tr: borç
+  pt: empréstimo
+  ro: împrumut
+  bg: заем
+  cs: půjčka
+  sk: pôžička
+  hu: hitel
+  el: δάνειο
+  sl: posojilo
+  et: laen
+  lt: paskola
+  da: lån
+  fi: lainata
+  sv: låna
+  hr: zajam
+  lv: aizdot
+  hi: ऋण
+  ar: قرض
+  id: pinjaman
+  vi: khoản vay
+  th: เงินกู้
+  ko: 대출
+  ja: ローン
+  bn: ঋণ
+  fa: وام
+  zh: 贷款
+  ur: قرض
+  kk: несие
+
+ID 1613 (close):
+  ru: закрывать, близко
+  uk: закривати, близько
+  de: schließen
+  es: cerrar, cercano
+  fr: fermer
+  pl: blisko
+  it: vicino
+  tr: yakın
+  pt: fechar, perto
+  ro: aproape
+  bg: затвори
+  cs: zavřít
+  sk: zavrieť
+  hu: közel
+  el: κοντά
+  sl: blizu
+  et: lähedal
+  lt: arti
+  da: lukke
+  fi: sulkea
+  sv: stänga
+  hr: zatvoriti
+  lv: aizvērt
+  hi: निकट, नज़दीक
+  ar: إغلاق
+  id: tutup, dekat
+  vi: đóng, đóng cửa
+  th: ปิด
+  ko: 가까이, 닫다
+  ja: 閉じる
+  bn: বন্ধ করা, কাছাকাছি
+  fa: بستن، نزدیک
+  zh: 关闭、近的
+  ur: بند کرنا، قریب، بند
+  kk: жабу
+
+ID 1614 (due to):
+  ru: из-за, по причине
+  uk: через, внаслідок
+  de: weil, aus dem Grund
+  es: debido a, por la razón de
+  fr: en raison de, à cause de
+  pl: z powodu
+  it: a causa di, dovuto a
+  tr: çünkü, sebebinden dolayı
+  pt: por causa de
+  ro: din cauza, din motivul
+  bg: поради, поради причината за
+  cs: kvůli, z důvodu
+  sk: kvôli, z dôvodu
+  hu: miatt, amiatt, hogy
+  el: εξαιτίας, για τον λόγο του
+  sl: zaradi
+  et: sest, põhjusel, et
+  lt: dėl, dėl priežasties
+  da: på grund af, af grunden til
+  fi: koska, syystä
+  sv: på grund av, av anledningen till
+  hr: zbog, iz razloga
+  lv: tāpēc, ka, iemesla dēļ
+  hi: के कारण, की वजह से
+  ar: بسبب، نتيجة لـ
+  id: karena, untuk alasan
+  vi: bởi vì, vì lý do
+  th: เพราะว่า, ด้วยเหตุผลของ
+  ko: ~때문에, ~의 이유로
+  ja: ～のために、～の理由で
+  bn: কারণে
+  fa: به دلیلِ
+  zh: 由于、因为
+  ur: کی وجہ سے
+  kk: себебінен, себебі
+
+ID 1615 (well):
+  ru: хорошо, колодец
+  uk: добре, колодязь
+  de: Okay, gut
+  es: bien, pozo
+  fr: D'accord, eh bien
+  pl: dobrze, studnia
+  it: Okay, bene
+  tr: Tamam, peki
+  pt: bem, poço, bom
+  ro: Bine, ei bine
+  bg: Добре, добре
+  cs: Dobře, no
+  sk: Dobre, no
+  hu: Rendben, hát
+  el: Εντάξει, λοιπόν
+  sl: Prav, no
+  et: Olgu, noh
+  lt: Gerai, na
+  da: god, nå
+  fi: hyvä, hyvin
+  sv: bra, väl
+  hr: dobro
+  lv: labs, labi
+  hi: ठीक है, अच्छा
+  ar: حسنًا
+  id: Oke, baiklah
+  vi: Được rồi, vậy thì
+  th: โอเค งั้น
+  ko: 좋아요, 그럼
+  ja: わかりました
+  bn: ভালো, কুয়ো
+  fa: خوب، چاه
+  zh: 好、井
+  ur: اچھی طرح، کنواں، خیریت سے
+  kk: жақсы
+
+ID 1616 (truly):
+  ru: действительно, истинно
+  uk: справді, істинно
+  de: in der Tat, wahrhaftig
+  es: En efecto, verdaderamente
+  fr: en effet, vraiment
+  pl: rzeczywiście, naprawdę
+  it: davvero, veramente
+  tr: gerçekten, doğru
+  pt: de fato
+  ro: într-adevăr, cu adevărat
+  bg: наистина
+  cs: vskutku, skutečně
+  sk: naozaj
+  hu: valóban
+  el: πράγματι, αληθινά
+  sl: res, resnično
+  et: tõepoolest, tõesti
+  lt: tikrai
+  da: virkelig
+  fi: todella
+  sv: verkligen
+  hr: stvarno, istinski
+  lv: tiešām, patiesi
+  hi: वास्तव में, सचमुच
+  ar: حقًا
+  id: sungguh, benar-benar
+  vi: thực sự, thật sự
+  th: จริงๆ, อย่างแท้จริง
+  ko: 정말로
+  ja: 本当に
+  bn: সত্যিই
+  fa: واقعاً، حقیقتاً
+  zh: 确实、真实地
+  ur: واقعی
+  kk: шынымен
+
+ID 1617 (plant):
+  ru: растение, сажать
+  uk: рослина, садити
+  de: Pflanze
+  es: planta, plantar
+  fr: plante
+  pl: roślina, sadzić
+  it: pianta
+  tr: bitki
+  pt: planta, plantar
+  ro: plantă
+  bg: растение
+  cs: rostlina
+  sk: rastlina
+  hu: növény
+  el: φυτό
+  sl: rastlina
+  et: taim
+  lt: augalas
+  da: plante
+  fi: kasvi
+  sv: växt
+  hr: biljka
+  lv: augs
+  hi: पौधा
+  ar: نبات
+  id: tanaman
+  vi: cây trồng
+  th: ปลูก
+  ko: 식물
+  ja: 植物
+  bn: গাছ, রোপণ করা
+  fa: گیاه، کاشتن
+  zh: 植物、种植
+  ur: پودا، پودا لگانا
+  kk: өсімдік
+
+ID 1618 (bar):
+  ru: бар, плитка, батончик
+  uk: бар, плитка, батончик
+  de: Bar, Fliese
+  es: bar, barra
+  fr: bar, carrelage
+  pl: bar, sztabka, batonik
+  it: bar, piastrella
+  tr: bar, karo
+  pt: bar, barra
+  ro: bar, faianță
+  bg: бар, плочка
+  cs: bar, dlaždice
+  sk: bar, dlaždica
+  hu: bár, csempe, bárpult
+  el: μπαρ, πλακάκι
+  sl: bar, ploščica
+  et: baar, plaat
+  lt: baras, plytelė
+  da: bar, flise, slikbar
+  fi: baari, laatta, suklaapatukka
+  sv: kakel, godisbar
+  hr: bar, pločica, čokoladica
+  lv: bārs, flīze, konfekšu bārs
+  hi: बार, टाइल, कैंडी बार
+  ar: بار، بلاطة، لوح حلوى
+  id: batang, bar, palang
+  vi: thanh, gạch, thanh kẹo
+  th: แท่ง, กระเบื้อง, แท่งลูกอม
+  ko: 바, 타일, 캔디바
+  ja: 棒、酒場、横木
+  bn: বার, দণ্ড
+  fa: بار، تخته، تکه
+  zh: 酒吧、条、块
+  ur: بار، سلاخ، ٹکڑا
+  kk: батончик, плитка, кәмпит батончигі
+
+ID 1619 (gift):
+  ru: подарок
+  uk: подарунок
+  de: gegenwärtig
+  es: presente
+  fr: présent
+  pl: prezent, dar
+  it: presente
+  tr: Sunmak
+  pt: presente
+  ro: prezent
+  bg: настояще
+  cs: současnost
+  sk: súčasný
+  hu: jelenlegi
+  el: παρόν
+  sl: sedanji
+  et: olevik
+  lt: dabartis
+  da: gave
+  fi: lahja
+  sv: gåva
+  hr: poklon
+  lv: dāvana
+  hi: उपहार
+  ar: هدية
+  id: hadiah
+  vi: quà tặng
+  th: ของขวัญ
+  ko: 선물
+  ja: 贈り物
+  bn: উপহার
+  fa: هدیه
+  zh: 礼物
+  ur: تحفہ
+  kk: сыйлық
+
+ID 1620 (play):
+  ru: играть, пьеса
+  uk: грати, п'єса
+  de: Spiel
+  es: jugar, obra de teatro
+  fr: jouer
+  pl: grać, sztuka
+  it: giocare
+  tr: oyna
+  pt: jogar, brincar, peça
+  ro: joacă
+  bg: играя, пиеса
+  cs: hrát
+  sk: hrať, divadelná hra
+  hu: játszik, színdarab
+  el: παίζω, θεατρικό έργο
+  sl: igrati, igra
+  et: mängima, näidend
+  lt: žaisti, pjesė
+  da: spille, teaterstykke
+  fi: pelata, leikkiä, näytelmä
+  sv: spela, pjäs
+  hr: igrati, predstava
+  lv: spēlēt, luga
+  hi: खेलना, खेल
+  ar: يلعب، مسرحية
+  id: bermain
+  vi: chơi
+  th: เล่น
+  ko: 놀다
+  ja: 遊ぶ、​​遊ぶ
+  bn: খেলা করা, নাটক
+  fa: بازی کردن، نمایش
+  zh: 玩、演出、戏剧
+  ur: کھیلنا، ڈراما، کھیل
+  kk: ойнау
+
+ID 1621 (human):
+  ru: человек как вид
+  uk: людина як вид
+  de: Der Mensch als Spezies
+  es: ser humano, humano
+  fr: l'homme en tant qu'espèce
+  pl: człowiek jako gatunek
+  it: l'uomo come specie
+  tr: insan bir tür olarak
+  pt: humano, ser humano
+  ro: omul ca specie
+  bg: човекът като вид
+  cs: člověk jako druh
+  sk: človek ako druh
+  hu: az ember mint faj
+  el: ο άνθρωπος ως είδος
+  sl: človek kot vrsta
+  et: inimene kui liik
+  lt: žmogus kaip rūšis
+  da: menneske som art
+  fi: ihminen lajina
+  sv: människan som art
+  hr: čovjek kao vrsta
+  lv: cilvēks kā suga
+  hi: मानव, मनुष्य
+  ar: الإنسان كنوع
+  id: manusia sebagai spesies
+  vi: loài người
+  th: มนุษย์ในฐานะสายพันธุ์
+  ko: 인간이라는 종
+  ja: 人類
+  bn: মানুষ
+  fa: انسان
+  zh: 人类
+  ur: انسان، انسانی
+  kk: түр ретінде адамдар
+
+ID 1622 (lack):
+  ru: недостаток
+  uk: недолік
+  de: Mangel
+  es: falta, carecer de
+  fr: défaut
+  pl: brak, brakować
+  it: difetto
+  tr: kusur
+  pt: falta, carecer de
+  ro: defect
+  bg: недостатък
+  cs: vada
+  sk: chyba
+  hu: hiba
+  el: ελάττωμα
+  sl: napaka
+  et: viga
+  lt: trūkumas
+  da: mangel
+  fi: puute
+  sv: brist
+  hr: nedostatak
+  lv: trūkums
+  hi: कमी
+  ar: نقص
+  id: kekurangan
+  vi: thiếu hụt
+  th: การขาดแคลน
+  ko: 결핍
+  ja: 欠乏
+  bn: অভাব
+  fa: کمبود
+  zh: 缺乏
+  ur: کمی
+  kk: жетіспеушілік
+
+ID 1623 (hour):
+  ru: час
+  uk: година
+  de: Stunde
+  es: hora
+  fr: heure
+  pl: godzina
+  it: ora
+  tr: saat
+  pt: hora
+  ro: oră
+  bg: час
+  cs: hodina
+  sk: hodina
+  hu: óra
+  el: ώρα
+  sl: ura
+  et: tund
+  lt: valanda
+  da: time
+  fi: tunti
+  sv: timme
+  hr: sat
+  lv: stunda
+  hi: घंटा
+  ar: ساعة
+  id: jam
+  vi: giờ
+  th: ชั่วโมง
+  ko: 시간
+  ja: 時間
+  bn: ঘণ্টা
+  fa: ساعت
+  zh: 小时
+  ur: گھنٹہ
+  kk: сағат
+
+ID 1624 (leg):
+  ru: нога до ступни
+  uk: нога до ступні
+  de: Bein zu Fuß
+  es: pierna
+  fr: jambe à pied
+  pl: noga
+  it: gamba al piede
+  tr: bacaktan ayağa
+  pt: perna
+  ro: picior la picior
+  bg: крак до крак
+  cs: noha k patě
+  sk: noha k nohe
+  hu: lábtól talpig
+  el: πόδι με πόδι
+  sl: noga do stopala
+  et: jalg jalale
+  lt: koja iki pėdos
+  da: fod til fod
+  fi: jalka jalkaan
+  sv: fot till fot
+  hr: stopa do stopala
+  lv: pēda pret pēdu
+  hi: पैर से पैर
+  ar: جنبًا إلى جنب
+  id: kaki ke kaki
+  vi: sát cánh bên nhau
+  th: เท้าต่อเท้า
+  ko: 발맞춰
+  ja: 足から足まで
+  bn: পা
+  fa: پا
+  zh: 腿
+  ur: ٹانگ
+  kk: аяғынан аяғына дейін
+
+ID 1625 (case):
+  ru: случай, кейс
+  uk: випадок, кейс
+  de: Fall
+  es: caso
+  fr: cas
+  pl: sprawa
+  it: caso
+  tr: dava
+  pt: caso
+  ro: caz
+  bg: случай
+  cs: věc
+  sk: prípad
+  hu: ügy
+  el: περίπτωση
+  sl: primer
+  et: juhtum
+  lt: byla
+  da: sag
+  fi: kotelo
+  sv: fall
+  hr: slučaj
+  lv: kaste
+  hi: मामला
+  ar: قضية
+  id: kasus
+  vi: trường hợp
+  th: กรณี
+  ko: 경우
+  ja: ケース
+  bn: ঘটনা, মামলা
+  fa: مورد، پرونده
+  zh: 情况、案例
+  ur: معاملہ، کیس
+  kk: қорап
+
+ID 1626 (wine):
+  ru: вино
+  uk: вино
+  de: Wein
+  es: vino
+  fr: vin
+  pl: wino
+  it: vino
+  tr: şarap
+  pt: vinho
+  ro: vin
+  bg: вино
+  cs: víno
+  sk: víno
+  hu: bor
+  el: κρασί
+  sl: vino
+  et: vein
+  lt: vynas
+  da: vin
+  fi: viini
+  sv: vin
+  hr: vino
+  lv: vīns
+  hi: शराब
+  ar: نبيذ
+  id: anggur
+  vi: rượu vang
+  th: ไวน์
+  ko: 와인
+  ja: ワイン
+  bn: ওয়াইন
+  fa: شراب
+  zh: 葡萄酒
+  ur: شراب
+  kk: шарап
+
+ID 1627 (thus):
+  ru: таким образом
+  uk: таким чином
+  de: Daher
+  es: así, de este modo
+  fr: Ainsi
+  pl: Zatem
+  it: Così
+  tr: Böylece
+  pt: Por isso
+  ro: Astfel
+  bg: По този начин
+  cs: Tedy
+  sk: Takto
+  hu: Így
+  el: Ετσι
+  sl: Tako
+  et: Seega
+  lt: Taigi
+  da: således
+  fi: näin
+  sv: således
+  hr: stoga
+  lv: tādējādi
+  hi: इस प्रकार
+  ar: هكذا
+  id: demikian
+  vi: do đó
+  th: ดังนั้น
+  ko: 따라서
+  ja: このように
+  bn: এভাবে
+  fa: بنابراین
+  zh: 因此、这样
+  ur: اس طرح
+  kk: осылайша
+
+ID 1628 (stuff):
+  ru: вещи
+  uk: речі
+  de: Dinge
+  es: cosas, material
+  fr: des choses
+  pl: rzeczy
+  it: cose
+  tr: şeyler
+  pt: coisas
+  ro: lucruri
+  bg: неща
+  cs: věci
+  sk: veci
+  hu: dolgok
+  el: πράγματα
+  sl: stvari
+  et: asjad
+  lt: daiktai
+  da: ting
+  fi: asiat
+  sv: saker
+  hr: stvari
+  lv: lietas
+  hi: चीज़ें
+  ar: أشياء
+  id: hal-hal
+  vi: đồ vật
+  th: สิ่งของ
+  ko: 사물
+  ja: 物
+  bn: জিনিসপত্র
+  fa: چیزها، وسایل
+  zh: 东西、材料
+  ur: چیزیں
+  kk: заттар
+
+ID 1629 (cross):
+  ru: крест
+  uk: хрест
+  de: kreuzen
+  es: cruz
+  fr: croix
+  pl: krzyż, przechodzić
+  it: attraverso
+  tr: geçmek
+  pt: cruzar, cruz
+  ro: cruce
+  bg: кръст
+  cs: kříž
+  sk: kríž
+  hu: kereszt
+  el: σταυρός
+  sl: križ
+  et: rist
+  lt: kryžius
+  da: kryds
+  fi: risti
+  sv: kors
+  hr: križ
+  lv: krusts
+  hi: पार करना
+  ar: صليب
+  id: silang
+  vi: băng qua
+  th: ข้าม
+  ko: 십자가
+  ja: 交差する
+  bn: ক্রস, পার হওয়া
+  fa: صلیب، عبور کردن
+  zh: 十字架、交叉
+  ur: صلیب، پار کرنا
+  kk: крест
+
+ID 1630 (agent):
+  ru: агент
+  uk: агент
+  de: Agent
+  es: agente
+  fr: agent
+  pl: agent
+  it: agente
+  tr: ajan
+  pt: agente
+  ro: agent
+  bg: агент
+  cs: činidlo
+  sk: agent
+  hu: ügynök
+  el: μέσο
+  sl: agent
+  et: agent
+  lt: agentas
+  da: agent
+  fi: agentti
+  sv: agent
+  hr: agent
+  lv: aģents
+  hi: एजेंट
+  ar: وكيل
+  id: agen
+  vi: đại lý
+  th: ตัวแทน
+  ko: 에이전트
+  ja: 代理人
+  bn: প্রতিনিধি
+  fa: نماینده، مأمور
+  zh: 代理人
+  ur: ایجنٹ
+  kk: агент
+
+ID 1631 (old):
+  ru: старый
+  uk: старий
+  de: alt
+  es: viejo
+  fr: vieux
+  pl: stary
+  it: vecchio
+  tr: eskimiş
+  pt: velho
+  ro: vechi
+  bg: стар
+  cs: starý
+  sk: starý
+  hu: régi
+  el: παλιός
+  sl: star
+  et: vana
+  lt: senas
+  da: gammel
+  fi: vanha
+  sv: gammal
+  hr: star
+  lv: vecs
+  hi: पुराना
+  ar: قديم
+  id: tua
+  vi: cũ
+  th: เก่า
+  ko: 오래된
+  ja: 古い
+  bn: বয়স্ক, পুরোনো
+  fa: پیر، قدیمی
+  zh: 老的、旧的
+  ur: بوڑھا، پرانا
+  kk: ескі
+
+ID 1632 (wall):
+  ru: стена
+  uk: стіна
+  de: Wand
+  es: muro
+  fr: mur
+  pl: ściana
+  it: parete
+  tr: duvar
+  pt: parede
+  ro: perete
+  bg: стена
+  cs: zeď
+  sk: stena
+  hu: fal
+  el: τείχος
+  sl: zid
+  et: sein
+  lt: siena
+  da: væg
+  fi: seinä
+  sv: vägg
+  hr: zid
+  lv: siena
+  hi: दीवार
+  ar: جدار
+  id: dinding
+  vi: tường
+  th: กำแพง
+  ko: 벽
+  ja: 壁
+  bn: দেয়াল
+  fa: دیوار
+  zh: 墙
+  ur: دیوار
+  kk: қабырға
+
+ID 1633 (piece):
+  ru: кусок, штука
+  uk: шматок, штука
+  de: Stück, Ding
+  es: pieza, cosa
+  fr: morceau, chose
+  pl: kawałek, sztuka
+  it: pezzo, cosa
+  tr: parça, şey
+  pt: pedaço
+  ro: piesă, lucru
+  bg: парче, нещо
+  cs: kus, věc
+  sk: kus, vec
+  hu: darab, dolog
+  el: κομμάτι, πράγμα
+  sl: kos, stvar
+  et: tükk, asi
+  lt: gabalas, daiktas
+  da: stykke
+  fi: pala
+  sv: pjäs
+  hr: komad
+  lv: gabals
+  hi: टुकड़ा
+  ar: قطعة
+  id: potongan
+  vi: mảnh
+  th: ชิ้น
+  ko: 조각
+  ja: 断片
+  bn: টুকরা
+  fa: تکه، قطعه
+  zh: 块、件
+  ur: ٹکڑا
+  kk: дана
+
+ID 1634 (being):
+  ru: существование, бытие
+  uk: існування, буття
+  de: Existenz, Sein
+  es: existencia, ser
+  fr: existence, être
+  pl: istnienie, bycie
+  it: esistenza, essere
+  tr: varoluş, olmak
+  pt: existência
+  ro: existență, ființă
+  bg: съществуване, битие
+  cs: existence, bytí
+  sk: existencia, bytie
+  hu: létezés, lét
+  el: ύπαρξη, ον
+  sl: obstoj, bitje
+  et: olemasolu, olemine
+  lt: egzistavimas, būtis
+  da: eksistens
+  fi: olemassaolo
+  sv: existens
+  hr: postojanje
+  lv: eksistence
+  hi: अस्तित्व
+  ar: وجود
+  id: keberadaan
+  vi: sự tồn tại
+  th: การดำรงอยู่
+  ko: 존재
+  ja: 存在
+  bn: সত্তা
+  fa: وجود، موجود
+  zh: 存在、生命
+  ur: وجود
+  kk: өмір сүру
+
+ID 1635 (other):
+  ru: другой, другие
+  uk: інший, інші
+  de: ein anderer, andere
+  es: otro, otros
+  fr: un autre, d'autres
+  pl: inny, inni
+  it: un altro, altri
+  tr: başka, diğerleri
+  pt: outro
+  ro: altul, alții
+  bg: друг, други
+  cs: další
+  sk: iný, iní
+  hu: másik, mások
+  el: άλλος, άλλοι
+  sl: drug, drugi
+  et: teine, teised
+  lt: kitas, kiti
+  da: andet, andre
+  fi: muu, muut
+  sv: andra
+  hr: drugi
+  lv: cits, citi
+  hi: अन्य, दूसरे
+  ar: آخر، آخرون
+  id: lainnya, yang lain
+  vi: khác, những người khác
+  th: อื่นๆ
+  ko: 다른, 기타
+  ja: 他の
+  bn: অন্য
+  fa: دیگر
+  zh: 其他的
+  ur: دوسرا
+  kk: басқа
+
+ID 1636 (young):
+  ru: молодой
+  uk: молодий
+  de: jung
+  es: joven
+  fr: jeune
+  pl: młody
+  it: giovane
+  tr: genç
+  pt: jovem
+  ro: tineri
+  bg: млад
+  cs: mladý
+  sk: mladý
+  hu: fiatal
+  el: νέος
+  sl: mlad
+  et: noor
+  lt: jaunas
+  da: ung
+  fi: nuori
+  sv: ung
+  hr: mlad
+  lv: jauns
+  hi: युवा
+  ar: شاب
+  id: muda
+  vi: trẻ
+  th: หนุ่ม
+  ko: 젊은
+  ja: 若い
+  bn: তরুণ
+  fa: جوان
+  zh: 年轻的
+  ur: جوان
+  kk: жас
+
+ID 1637 (each):
+  ru: каждый
+  uk: кожен
+  de: jeder
+  es: cada
+  fr: chaque
+  pl: każdy
+  it: ogni
+  tr: Her
+  pt: cada
+  ro: fiecare
+  bg: всеки
+  cs: každý
+  sk: každý
+  hu: minden
+  el: κάθε
+  sl: vsak
+  et: iga
+  lt: kiekvienas
+  da: hver
+  fi: kukin
+  sv: var och en
+  hr: svaki
+  lv: katrs
+  hi: प्रत्येक
+  ar: كل
+  id: masing-masing
+  vi: mỗi
+  th: แต่ละ
+  ko: 각각
+  ja: それぞれ
+  bn: প্রত্যেক
+  fa: هر
+  zh: 每个
+  ur: ہر ایک
+  kk: әрқайсысы
+
+ID 1638 (also):
+  ru: также
+  uk: також
+  de: Auch
+  es: También
+  fr: Aussi
+  pl: Również
+  it: Anche
+  tr: Ayrıca
+  pt: também
+  ro: Asemenea
+  bg: Също така
+  cs: Také
+  sk: Tiež
+  hu: Is
+  el: Επίσης
+  sl: Tudi
+  et: Samuti
+  lt: Taip pat
+  da: også
+  fi: myös
+  sv: också
+  hr: također
+  lv: arī
+  hi: भी
+  ar: أيضًا
+  id: juga
+  vi: cũng
+  th: ด้วย
+  ko: 또한
+  ja: また
+  bn: এছাড়াও
+  fa: همچنین
+  zh: 也、同样
+  ur: بھی
+  kk: сонымен қатар
+
+ID 1639 (fast):
+  ru: быстрый
+  uk: швидкий
+  de: schnell
+  es: rápido
+  fr: rapide
+  pl: szybki
+  it: veloce
+  tr: hızlı
+  pt: rápido
+  ro: rapid
+  bg: бързо
+  cs: rychle
+  sk: rýchlo
+  hu: gyors
+  el: γρήγορα
+  sl: hitro
+  et: kiire
+  lt: greitas
+  da: hurtigt
+  fi: nopea
+  sv: snabbt
+  hr: brzo
+  lv: ātri
+  hi: तेज़
+  ar: سريع
+  id: cepat
+  vi: nhanh
+  th: เร็ว
+  ko: 빠른
+  ja: 速い
+  bn: দ্রুত
+  fa: سریع
+  zh: 快的
+  ur: تیز
+  kk: жылдам
+
+ID 1640 (push):
+  ru: толкать
+  uk: штовхати
+  de: drücken
+  es: empujar
+  fr: pousser
+  pl: pchać
+  it: spingere
+  tr: itmek
+  pt: empurrar
+  ro: Apăsaţi
+  bg: тласък
+  cs: TAM
+  sk: TAM
+  hu: tol
+  el: Σπρώξτε
+  sl: potisniti
+  et: lükkama
+  lt: stumti
+  da: skub
+  fi: työntö
+  sv: tryck
+  hr: gurati
+  lv: stumt
+  hi: धक्का देना
+  ar: دفع
+  id: dorong
+  vi: đẩy
+  th: ผลัก
+  ko: 밀다
+  ja: 押す
+  bn: ধাক্কা দেওয়া
+  fa: هل دادن
+  zh: 推
+  ur: دھکا دینا
+  kk: итеру
+
+ID 1641 (shop):
+  ru: магазин небольшой, делать покупки
+  uk: магазин, крамниця
+  de: Laden, einkaufen
+  es: tienda, comprar
+  fr: magasin, boutique
+  pl: sklep, robić zakupy
+  it: negozio, bottega
+  tr: dükkan, mağaza, alışveriş
+  pt: loja, fazer compras
+  ro: magazin, a cumpăra
+  bg: магазин, пазарувам
+  cs: Obchod je malý, nakupujte.
+  sk: obchod, nakupovať
+  hu: bolt, vásárol
+  el: κατάστημα, ψωνίζω
+  sl: trgovina, nakupovati
+  et: pood, ostlema
+  lt: parduotuvė, apsipirkti
+  da: butik, handle
+  fi: kauppa, tehdä ostoksia
+  sv: butik, handla
+  hr: trgovina, kupovati
+  lv: veikals, iepirkties
+  hi: दुकान, खरीदारी
+  ar: متجر، يتسوق
+  id: toko, berbelanja
+  vi: cửa hàng, tiệm
+  th: ร้านค้า, ซื้อของ
+  ko: 가게, 상점
+  ja: 店、買い物をする
+  bn: দোকান, কেনাকাটা করা
+  fa: مغازه، خرید کردن
+  zh: 商店、购物
+  ur: دکان، خریداری کرنا
+  kk: дүкен, сатып алу
+
+ID 1642 (pain):
+  ru: боль
+  uk: біль
+  de: Schmerz
+  es: dolor
+  fr: douleur
+  pl: ból
+  it: Dolore
+  tr: ağrı
+  pt: dor
+  ro: durere
+  bg: болка
+  cs: bolest
+  sk: bolesť
+  hu: fájdalom
+  el: πόνος
+  sl: bolečina
+  et: valu
+  lt: skausmas
+  da: smerte
+  fi: kipu
+  sv: smärta
+  hr: bol
+  lv: sāpes
+  hi: दर्द
+  ar: ألم
+  id: sakit
+  vi: đau
+  th: ความเจ็บปวด
+  ko: 고통
+  ja: 痛み
+  bn: ব্যথা
+  fa: درد
+  zh: 疼痛
+  ur: درد
+  kk: ауырсыну
+
+ID 1643 (try):
+  ru: пытаться
+  uk: намагатися
+  de: versuchen
+  es: intentar
+  fr: essayer
+  pl: próbować
+  it: Tentativo
+  tr: denemek
+  pt: tentar
+  ro: încerca
+  bg: опитам
+  cs: pokus
+  sk: skúsiť
+  hu: megpróbál
+  el: δοκιμή
+  sl: poskusi
+  et: proovi
+  lt: pabandyti
+  da: prøv
+  fi: yrittää
+  sv: försök
+  hr: pokušati
+  lv: mēģināt
+  hi: कोशिश करना
+  ar: محاولة
+  id: coba
+  vi: thử
+  th: ลอง
+  ko: 시도하다
+  ja: 試す
+  bn: চেষ্টা করা
+  fa: تلاش کردن، امتحان کردن
+  zh: 尝试
+  ur: کوشش کرنا
+  kk: көріңіз
+
+ID 1644 (warm):
+  ru: теплый
+  uk: теплий
+  de: warm
+  es: cálido
+  fr: chaud
+  pl: ciepły
+  it: Caldo
+  tr: ılık
+  pt: morno, quente
+  ro: cald
+  bg: топло
+  cs: teplý
+  sk: teplý
+  hu: meleg
+  el: ζεστός
+  sl: toplo
+  et: soe
+  lt: šiltas
+  da: varm
+  fi: lämmin
+  sv: varm
+  hr: toplo
+  lv: silts
+  hi: गर्म
+  ar: دافئ
+  id: hangat
+  vi: ấm áp
+  th: อบอุ่น
+  ko: 따뜻한
+  ja: 暖かい
+  bn: উষ্ণ
+  fa: گرم
+  zh: 温暖的
+  ur: گرم
+  kk: жылы
+
+ID 1645 (no):
+  ru: никакой
+  uk: ніякий
+  de: NEIN
+  es: No
+  fr: Non
+  pl: nie, żaden
+  it: NO
+  tr: HAYIR
+  pt: não
+  ro: nu
+  bg: не
+  cs: žádný
+  sk: nie
+  hu: nem
+  el: Όχι
+  sl: ne
+  et: ei
+  lt: ne
+  da: ingen
+  fi: ei mitään
+  sv: ingen
+  hr: ništa
+  lv: neviens
+  hi: कोई नहीं
+  ar: لا شيء
+  id: tidak ada
+  vi: không có
+  th: ไม่มี
+  ko: 없음
+  ja: ない
+  bn: না
+  fa: نه، هیچ
+  zh: 不、没有
+  ur: نہیں
+  kk: жоқ
+
+ID 1646 (enter):
+  ru: входить, ввести, вступать
+  uk: входити, ввести, вступати
+  de: eintreten, beitreten
+  es: entrar, ingresar
+  fr: entrer, saisir
+  pl: wchodzić, dołączać
+  it: entrare, inserire
+  tr: girmek, katılmak
+  pt: entrar
+  ro: a intra, a aduce, a se alătura
+  bg: влизам, внасям, присъединявам се
+  cs: vstoupit, přivést, připojit se
+  sk: vstúpiť, priniesť, pripojiť sa
+  hu: belép, behoz, csatlakozik
+  el: εισέρχομαι, φέρνω μέσα, συμμετέχω
+  sl: vstopiti, prinesti, pridružiti se
+  et: siseneda, sisse tuua, liituda
+  lt: įeiti, įnešti, prisijungti
+  da: træde ind, introducere, slutte sig til
+  fi: astua sisään, esitellä, liittyä
+  sv: gå in, introducera, ansluta sig
+  hr: ući, predstaviti, pridružiti se
+  lv: ienākt, iepazīstināt, pievienoties
+  hi: प्रवेश करना
+  ar: دخول، تعريف، انضمام
+  id: masuk, bergabung
+  vi: vào, giới thiệu, tham gia
+  th: เข้า แนะนำ เข้าร่วม
+  ko: 들어가다, 참가하다
+  ja: 入る、紹介する、参加する
+  bn: প্রবেশ করা
+  fa: وارد شدن، وارد کردن
+  zh: 进入、输入
+  ur: داخل ہونا
+  kk: кіру, таныстыру, қосылу
+
+ID 1647 (sky):
+  ru: небо
+  uk: небо
+  de: Himmel
+  es: cielo
+  fr: ciel
+  pl: niebo
+  it: cielo
+  tr: gökyüzü
+  pt: céu
+  ro: cer
+  bg: небе
+  cs: nebe
+  sk: obloha
+  hu: ég
+  el: ουρανός
+  sl: nebo
+  et: taevas
+  lt: dangus
+  da: himmel
+  fi: taivas
+  sv: himmel
+  hr: nebo
+  lv: debesis
+  hi: आकाश
+  ar: سماء
+  id: langit
+  vi: bầu trời
+  th: ท้องฟ้า
+  ko: 하늘
+  ja: 空
+  bn: আকাশ
+  fa: آسمان
+  zh: 天空
+  ur: آسمان
+  kk: аспан
+
+ID 1648 (ball):
+  ru: мяч
+  uk: м'яч
+  de: Ball
+  es: pelota
+  fr: balle
+  pl: piłka
+  it: palla
+  tr: top
+  pt: bola
+  ro: minge
+  bg: топка
+  cs: míč
+  sk: lopta
+  hu: labda
+  el: μπάλα
+  sl: žoga
+  et: pall
+  lt: kamuolys
+  da: bold
+  fi: pallo
+  sv: boll
+  hr: lopta
+  lv: bumba
+  hi: गेंद
+  ar: كرة
+  id: bola
+  vi: quả bóng
+  th: ลูกบอล
+  ko: 공
+  ja: ボール
+  bn: বল
+  fa: توپ
+  zh: 球
+  ur: گیند
+  kk: доп
+
+ID 1649 (quite):
+  ru: довольно, вполне
+  uk: досить, цілком
+  de: Genau, genug.
+  es: bastante, completamente
+  fr: assez bien
+  pl: dość, całkiem
+  it: abbastanza
+  tr: yeterince
+  pt: bastante
+  ro: destul
+  bg: съвсем, достатъчно
+  cs: docela, dost
+  sk: celkom, dosť
+  hu: elég
+  el: υπεραρκετός
+  sl: precej, dovolj
+  et: päris, piisavalt
+  lt: gana
+  da: helt, nok
+  fi: aivan, tarpeeksi
+  sv: ganska, tillräckligt
+  hr: sasvim, dovoljno
+  lv: diezgan, pietiekami
+  hi: काफी, पर्याप्त
+  ar: هادئ، كافٍ
+  id: cukup, memadai
+  vi: khá, đủ
+  th: ค่อนข้างพอ
+  ko: 꽤, 충분한
+  ja: かなり、十分
+  bn: বেশ
+  fa: نسبتاً، کاملاً
+  zh: 相当、很
+  ur: کافی، بالکل
+  kk: тыныш
+
+ID 1650 (month):
+  ru: месяц
+  uk: місяць
+  de: Monat
+  es: mes
+  fr: mois
+  pl: miesiąc
+  it: mese
+  tr: ay
+  pt: mês
+  ro: lună
+  bg: месец
+  cs: měsíc
+  sk: mesiac
+  hu: hónap
+  el: μήνας
+  sl: mesec
+  et: kuu
+  lt: mėnesį
+  da: måned
+  fi: kuukausi
+  sv: månad
+  hr: mjesec
+  lv: mēnesis
+  hi: महीना
+  ar: شهر
+  id: bulan
+  vi: tháng
+  th: เดือน
+  ko: 달
+  ja: 月
+  bn: মাস
+  fa: ماه
+  zh: 月
+  ur: مہینہ
+  kk: ай
+
+ID 1651 (spot):
+  ru: место, пятно, прыщик, наличный товар
+  uk: місце, пляма, помітити
+  de: Fleck, Punkt, Ort
+  es: lugar, mancha, punto
+  fr: tache, repérer, endroit
+  pl: miejsce, plama, punkt
+  it: posto, macchia
+  tr: leke, nokta, yer
+  pt: lugar, mancha, espinha
+  ro: pată, coș, bunuri disponibile
+  bg: петно, оцветяване, пъпка, налични стоки
+  cs: skvrna, pupínek, dostupné zboží
+  sk: škvrna, fľak, pupienok, dostupný tovar
+  hu: folt, pattanás, elérhető áruk
+  el: κηλίδα, λεκές, σπυράκι, διαθέσιμα αγαθά
+  sl: madež, mozolj, razpoložljivo blago
+  et: plekk, vistrik, saadaolev kaup
+  lt: dėmė, spuogas, turimos prekės
+  da: plet, bums, varer på hånden
+  fi: läiskä, näppylä, käsillä oleva tavara
+  sv: fläck, finna, varor till hands
+  hr: mrlja, mjehur, prištić, roba pri ruci
+  lv: plankums, pūtīte, prece pieejama
+  hi: स्थान, धब्बा
+  ar: بقعة، حبة، بضاعة متوفرة
+  id: titik, tempat, bintik
+  vi: địa điểm, đốm, nhận ra
+  th: จุด สิว สินค้าในมือ
+  ko: 장소, 얼룩
+  ja: 場所、しみ
+  bn: দাগ, জায়গা
+  fa: نقطه، لکه
+  zh: 地点、斑点、痘痘
+  ur: جگہ، دھبہ
+  kk: орын, дақ, безеу, тауар
+
