@@ -1,0 +1,120 @@
+Batch 3952_4001 Calibration Report across 36 locales:
+
+ID 3952 (RU: принять сторону, занять позицию, UK: стати на чийсь бік, зайняти позицію, DE: Partei ergreifen, sich auf eine Seite schlagen, ES: tomar partido, ponerse de un lado)
+ID 3953 (RU: отбросы, подонки, мразь, UK: покидьки, наволоч, мерзота, DE: Abschaum, Dreck, ES: escoria, basura humana)
+ID 3954 (RU: гопник, хулиган, шпана, UK: гопник, хуліган, шпана, DE: Hooligan, Schläger, Rabauke, ES: gamberro, macarra, vándalo)
+ID 3955 (RU: сброд, отребье, шваль, UK: зброд, наволоч, голота, DE: Gesindel, Pöbel, Pack, ES: chusma, gentuza, plebe)
+ID 3956 (RU: соня, соня-засоня, UK: сонко, сплюх, DE: Schlafmütze, Siebenschläfer, ES: dormilón, dormilona)
+ID 3957 (RU: королева драмы, истеричка, позёр, UK: королева драми, істеричка, DE: Dramaqueen, hysterische Person, ES: reina del drama, melodramático)
+ID 3958 (RU: болтун, болтушка, тараторка, UK: базіка, щебетуха, балакун, DE: Plappertasche, Quasselstrippe, ES: charlatán, cotorra, hablador)
+ID 3959 (RU: нахлебник, дармоед, халявщик, UK: нахлібник, дармоїд, паразитуючий, DE: Schmarotzer, Schnorrer, ES: gorrón, aprovechado, parásito)
+ID 3960 (RU: какой угодно, любой из, какой бы ни, UK: який завгодно, будь-який, який би не, DE: welcher auch immer, welcher, egal welcher, ES: cualquiera que, el que sea)
+ID 3961 (RU: тусклый, унылый, притуплённый, неинтересный, UK: тьмяний, нудний, притуплений, DE: langweilig, stumpf, matt, ES: aburrido, soso, desafilado, apagado)
+ID 3962 (RU: август, UK: серпень, DE: August, ES: agosto)
+ID 3963 (RU: прямоугольник, UK: прямокутник, DE: Rechteck, ES: rectángulo)
+ID 3964 (RU: брюки, штаны, UK: штани, брюки, DE: Hose, Hosen, ES: pantalones)
+ID 3965 (RU: картонная коробка, картонная упаковка, картон, UK: картонна коробка, картонна пачка, картон, DE: Karton, Kartonverpackung, ES: cartón, brik, caja de cartón)
+ID 3966 (RU: буханка, батон хлеба, UK: буханець, хлібина, батон, DE: Laib, Brotlaib, ES: hogaza, barra de pan)
+ID 3967 (RU: кувшин, графин, UK: глечик, кухоль, DE: Krug, Kanne, ES: jarra, cántaro)
+ID 3968 (RU: морозильник, морозильная камера, UK: морозильник, морозильна камера, DE: Gefrierschrank, Tiefkühltruhe, ES: congelador)
+ID 3969 (RU: микроволновка, микроволновая печь, UK: мікрохвильовка, мікрохвильова піч, DE: Mikrowelle, Mikrowellenherd, ES: microondas, horno de microondas)
+ID 3970 (RU: понятно, ясно, я понимаю, UK: зрозуміло, ясно, я розумію, DE: ich verstehe, alles klar, aha, ES: ya veo, entiendo, comprendo)
+ID 3971 (RU: пекарь, булочник, UK: пекар, булочник, DE: Bäcker, ES: panadero)
+ID 3972 (RU: слушать, прислушиваться к, UK: слухати, дослухатися до, DE: zuhören, anhören, ES: escuchar, atender a)
+ID 3973 (RU: кассовый аппарат, касса, UK: касовий апарат, каса, DE: Registrierkasse, Kasse, ES: caja registradora)
+ID 3974 (RU: так себе, посредственно, средне, UK: так собі, посередньо, DE: so lala, geht so, mittelmäßig, ES: más o menos, regular, así así)
+ID 3975 (RU: что, кто, где, когда, UK: що, хто, де, коли, DE: was, wer, wo, wann, ES: qué, quién, dónde, cuándo)
+ID 3976 (RU: больше чем, свыше, более, UK: більше ніж, понад, DE: mehr als, über, ES: más de, más que)
+ID 3977 (RU: меньше чем, менее, UK: менше ніж, DE: weniger als, ES: menos de, menor cantidad que)
+ID 3978 (RU: меньше чем, менее, UK: менше ніж, DE: weniger als, ES: menos que, menos de)
+ID 3979 (RU: ваше здоровье!, за здоровье!, спасибо!, UK: будьмо!, за ваше здоров'я!, дякую!, DE: Prost!, zum Wohl!, danke!, ES: ¡salud!, ¡gracias!, ¡hasta luego!)
+ID 3980 (RU: хитрость, коварство, изворотливость, UK: хитрість, підступність, лукавство, DE: Schläue, List, Hinterlist, ES: astucia, picardía, maña)
+ID 3981 (RU: туман, мгла, UK: туман, імла, DE: Nebel, ES: niebla, bruma)
+ID 3982 (RU: древесина, дерево, лес, UK: деревина, дерево, ліс, DE: Holz, Wald, ES: madera, leña, bosque)
+ID 3983 (RU: лопата, совок, сгребать лопатой, UK: лопата, совок, загрібати лопатою, DE: Schaufel, schaufeln, ES: pala, palear)
+ID 3984 (RU: надевать, нацеплять, наносить, UK: одягати, натягати, наносити, DE: anziehen, aufsetzen, anlegen, ES: ponerse, vestirse, colocarse)
+ID 3985 (RU: молния, застёжка-молния, UK: блискавка, застібка-блискавка, DE: Reißverschluss, ES: cremallera, cierre)
+ID 3986 (RU: чистка, очищение, зачищать, очищать, UK: очищення, чистка, вичищати, DE: Säuberung, reinigen, säubern, ES: purga, purgar, limpiar)
+ID 3987 (RU: загрязнять, отравлять, осквернять, UK: забруднювати, отруювати, DE: verschmutzen, verunreinigen, ES: contaminar, polucionar)
+ID 3988 (RU: квартира, апартаменты, UK: квартира, помешкання, DE: Wohnung, Apartment, ES: departamento, apartamento, piso)
+ID 3989 (RU: почтовый индекс, индекс, UK: поштовий індекс, індекс, DE: Postleitzahl, PLZ, ES: código postal)
+ID 3990 (RU: специя, пряность, приправа, UK: спеція, прянощі, приправа, DE: Gewürz, Würze, ES: especia, condimento)
+ID 3991 (RU: бухгалтер, счетовод, UK: бухгалтер, рахівник, DE: Buchhalter, Wirtschaftsprüfer, ES: contador, contable)
+ID 3992 (RU: такой как, как например, UK: такий як, як наприклад, DE: wie etwa, wie zum Beispiel, ES: tal como, como por ejemplo)
+ID 3993 (RU: убедиться, удостовериться, проследить, UK: переконатися, упевнитися, подбати, DE: sicherstellen, sich vergewissern, ES: asegurarse, cerciorarse, verificar)
+ID 3994 (RU: крышка, колпачок, веко, UK: кришка, віко, DE: Deckel, Verschluss, ES: tapa, tapadera)
+ID 3995 (RU: фея, волшебница, сказочный, UK: фея, чарівниця, казковий, DE: Fee, Elfe, feenhaft, ES: hada, mágico)
+ID 3996 (RU: много, куча, множество, UK: багато, сила-силенна, безліч, DE: viel, viele, jede Menge, ES: mucho, un montón de, gran cantidad de)
+ID 3997 (RU: перекус, закуска, снек, UK: перекус, закуска, снек, DE: Snack, Imbiss, Zwischenmahlzeit, ES: tentempié, botana, merienda, refrigerio)
+ID 3998 (RU: хлопья, сухой завтрак, злаки, UK: пластівці, сухий сніданок, злаки, DE: Müsli, Getreideflocken, Zerealie, ES: cereales, cereal de desayuno)
+ID 3999 (RU: тусклый, неяркий, приглушённый, UK: тьмяний, приглушений, невиразний, DE: gedämpft, schwach, dämmrig, ES: tenue, apagado, borroso)
+ID 4000 (RU: руководство, инструкция, ручной, UK: посібник, інструкція, ручний, DE: Handbuch, Anleitung, manuell, ES: manual, instructivo, a mano)
+ID 4001 (RU: твой, ваш, UK: твій, ваш, DE: dein, Ihr, euer, ES: tu, su, vuestro)
+
+================================================================================
+KEY BUGS CAUGHT, HOMONYMS FIXED, AND REGIONAL CALIBRATIONS IN BATCH 3952-4001:
+================================================================================
+
+1. ID 3954 ("yob"):
+   - BUG: Raw dump contained literal translations of Russian "чувак" (buddy/pal) mixed with "гопник", leading MT to produce friendly terms across 15+ locales: IT "amico, gopnik", RO "frate, gopnik", BG "пич, гопник", CS/SK "kámo, gopnik", HU "haver, gopnik", EL "φίλε, γκόπνικ", SL "stari, gopnik", LT "bičiuli, gopnikai", HI "यार, गुंडा", AR "يا صاح، بلطجي".
+   - FIX: Replaced with authentic terms for hooligan/delinquent/lout: IT "teppista, teppistello, vandalo", RO "bădăran, golan, huligan", BG "хулиган, гамен, побойник", CS "chuligán, grázl, výtržník", SK "chuligán, gauner, výtržník", HU "huligán, vagány, pernahajder", EL "χουλιγκάνος, αλήτης, τραμπούκος", HI "लफंगा, गुंडा, उपद्रवी", AR "مشاغب، همجي، بلطجي", KK "бұзақы, сотқар, тентек".
+
+2. ID 3955 ("riffraff"):
+   - BUG: Raw dump translated Russian "нищеброд" literally as "pauper / beggar / poor guy" across most languages, and MT bizarrely hallucinated "chlieb" (bread) in Slovak!
+   - FIX: Corrected across all languages to denote rabble / disreputable dregs of society / scum: SK "chátra, lúza, zberba", CS "chátra, lúza, svoloč", RO "plebe, gloată, plebeji", BG "паплач, сган, утайка", EL "όχλος, κατακάθια, πλέμπα", DA "pøbel, rak, pak", FI "roskaväki, roskajoukkio", HI "आवारा भीड़, नीच लोग, कुलीनहीन भीड़", AR "رعاع، دهماء، أوباش", KK "тобыр, қарақұрым лас, қайыршылар".
+
+3. ID 3957 ("dramaqueen"):
+   - BUG: Raw dump saw Russian "истеричка" and generated literal "hysterical woman" in Greek, Hungarian, Slovenian, etc. (HU "hisztérikus nő", EL "υστερική γυναίκα", SL "histerična ženska", ET "hüsteeriline naine", LT "isteriška moteris").
+   - FIX: Calibrated to idiomatic equivalents for a drama queen / melodramatic attention-seeker across all 35 locales: HU "drámatükör, melodramatikus alak", EL "δραματική προσωπικότητα, υστερικό άτομο", ES "reina del drama, melodramático", PT "rainha do drama, espalhafatoso", HI "बात का बतंगड़ बनाने वाला, नौटंकीबाज", AR "صانع دراما، مبالغ في ردود فعله", KK "көп драма жасайтын адам, даурықпа".
+
+4. ID 3958 ("chatterbox"):
+   - BUG: MT translated as formal "speaker/orator" across several European languages: IT "parlante", RO "vorbitor", BG "говорещ", SK "rečník", HU "beszélő", EL "ομιλητής", SL "govorec", LT "kalbėtojas". In JA, it contained an invisible zero-width space character.
+   - FIX: Calibrated to babbler / chatterbox / blabbermouth: IT "chiacchierone, logorroico", RO "gură-spartă, flecar, vorbăreț", BG "дърдорко, бъбривец, дърдоранка", SK "táradlo, klebetník, rapotačka", HU "cserfes, szószátyár, fecsegő", EL "πολυλογάς, φλύαρος", JA "おしゃべり、おしゃべりな人" (sanitized), KK "мылжың, мылжың бас".
+
+5. ID 3959 ("freeloader"):
+   - BUG: Critical MT hallucinations: KK translated as download manager ("тегін жүктегіш"), LV as unemployed person ("bezdarbnieks"), EL as smuggler ("λαθρέμπορος"), RO as money source ("sursă de bani"), BG as robber ("грабител"), SV as cheapskate ("snåljåp"), FI as unauthorized ("luvaton").
+   - FIX: Restored exact meaning: moocher / parasite / sponge: KK "масыл, жебір, тегін тамақсау", LV "parazīts, liekēdis", EL "παράσιτο, τζαμπατζής", RO "parazit, profitor, trântor", BG "търтей, хрантутник, паразит", SV "snyltare, gratissnyltare", FI "siivelläeläjä, vapaamatkustaja", PT (pt-BR) "aproveitador, encostado, parasita".
+
+6. ID 3960 ("whichever"):
+   - BUG: Czech had "žádný" (none / no one — polar opposite meaning!). IT had capitalized "Qualunque". BG had "всеки" (everyone/each).
+   - FIX: CS "kterýkoli, jakýkoli", IT "qualunque, qualsiasi", BG "който и да е, който и да било".
+
+7. ID 3961 ("dull"):
+   - BUG: Because Russian was "тупой", MT translated it almost exclusively as stupid/moronic/idiot across 14 languages: DA/SV "dum", HR "glup", LV "stulbs", HI "मूर्ख", AR "غبي", ID "bodoh", VI "ngu ngốc", TH "โง่", KO "바보", JA "馬鹿な", KK "ақымақ". IT had verb "smussare", CS had verb "otupit".
+   - FIX: Re-anchored to the core meanings of dull (uninteresting/boring; dim/drab; blunt): DE "langweilig, stumpf, matt", ES "aburrido, soso, desafilado, apagado", IT "noioso, opaco, smussato", CS "nudný, matný, tupý", HI "नीरस, सुस्त, मंद, कुंद", AR "ممل، باهت، غير حاد", JA "退屈な、鈍い、くすんだ", KK "жалықтыратын, күңгірт, өтпейтін".
+
+8. ID 3965 ("carton"):
+   - BUG: Russian "пакет" (as in carton/tetra-pak of milk) misled MT into translating "carton" as shopping bag / tote / sack across 11 languages: DA "taske", FI "kassi", SV "väska", HR "vrećica", LV "soma", HI "थैला", AR "كيس", VI "túi", TH "ถุง", KO "가방", JA "袋".
+   - FIX: Calibrated to cardboard box, carton, tetra-pak packaging: DA "karton, papkasse", FI "kartonki, maitotölkki, pahvilaatikko", SV "kartong, pappkartong", HR "kartonska kutija, tetrapak", LV "kartona kārba, kartons", HI "गत्ते का डिब्बा, कार्टन", AR "علبة كرتون، كرتونة", VI "hộp các-tông, thùng giấy", TH "กล่องกระดาษแข็ง, กล่องนม", KO "판지 상자, 우유갑", JA "紙パック、段ボール箱", KK "картон қорап, картон".
+
+9. ID 3974 ("so-so"):
+   - BUG: HU had "közhelyes" (cliché/trite!), LV had "tāls" (distant!), SK had "taký-taký" (broken calque), KK had "соншалықты" (so much!).
+   - FIX: Calibrated to mediocre / tolerable / fair: HU "úgy-ahogy, elmegy, közepes", LV "tā-tā, ciešami", SK "ani ryba ani rak, tak-tak, ujde to", KK "орташа, аса жақсы емес, әжептәуір".
+
+10. ID 3979 ("cheers"):
+    - BUG: Literal calque of Russian "ваше здоровье, спасибо" produced clinical health wishes in 20 languages: IT "la tua salute, grazie", RO "sănătatea dumneavoastră, vă mulțumesc", BG "вашето здраве, благодаря ви", CS "tvé zdraví, děkuji", SK "tvoje zdravie, ďakujem", EL "την υγειά σου, σε ευχαριστώ", DA "dit helbred, tak", FI "terveytesi, kiitos", SV "din hälsa, tack", AR "صحتك، شكرًا لك", VI "sức khỏe của bạn, cảm ơn", TH "สุขภาพของคุณ ขอบคุณ", KO "건강하세요, 감사합니다", UR "آپ کی صحت کے لیے، شکریہ", KK "денсаулығыңыз, рақмет".
+    - FIX: Calibrated to authentic drinking toasts + Commonwealth informal thanks/goodbye: IT "salute!, cin cin!, grazie!", RO "noroc!, în sănătatea ta!, mersi!", BG "наздраве!, благодаря!", CS "na zdraví!, díky!", SK "na zdravie!, vďaka!", EL "στην υγειά μας!, γεια μας!, ευχαριστώ!", DA "skål!, hej hej!, tak!", FI "kippis!, kiitos!", SV "skål!, tack!", AR "في صحتك!، بصحتك!، شكرًا!", VI "cạn ly!, chúc sức khỏe!, cảm ơn!", KO "건배!, 건배해요!, 고마워요!", KK "денсаулық үшін!, саулық үшін!, рақмет!".
+
+11. ID 3983 ("shovel"):
+    - BUG: Russian "сгребать" was translated as "rake" (the tool) across 22 languages: IT "rastrello", PT "ancinho", RO "greblă", BG "гребло", CS "hrábě", SK "hrable", HU "gereblye", EL "τσουγκράνα", SL "grablje", ET "reha", LT "grėblys", DA "rive", FI "harava", SV "kratta", HR "grablje", LV "grābeklis", HI "रेक", AR "مشط", VI "cào", TH "คราด", KO "갈퀴", JA "熊手", KK "тырма".
+    - FIX: Removed all rake references; calibrated to shovel / shoveling: IT "pala, spalare", PT "pá, escavar com pá", RO "lopată, a da la lopată", CS "lopata, házet lopatou", HU "lapát, lapátol", EL "φτυάρι, φτυαρίζω", HI "बेलचा, फावड़ा, बेलचे से उठाना", JA "シャベル、スコップで掘る", KK "күрек, күрекпен қар күреу".
+
+12. ID 3990 ("spice"):
+    - BUG: Portuguese had "zíper" (copy-paste artifact from ID 3985 zipper).
+    - FIX: PT "especiaria, tempero, condimento".
+
+13. ID 3993 ("make sure"):
+    - BUG: MT rendered as stative "to be sure" ("a fi sigur, να είμαι σίγουρος, být si jistý, biztosnak lenni, biti prepričan, kindel olema, būti tikram") or personal subclauses ("за да съм сигурен").
+    - FIX: Calibrated to active verbs / imperatives meaning to ensure / ascertain / make certain: RO "a se asigura, a verifica", EL "βεβαιώνομαι, σιγουρεύομαι", CS "ujistit se, přesvědčit se, zajistit", HU "meggyőződik, biztosít, gondoskodik", SL "prepričati se, poskrbeti", KK "көз жеткізу, анықтап алу, қаперде ұстау".
+
+14. ID 3995 ("fairy"):
+    - BUG: Russian "сказочный" led MT into translating as "fabulous / wonderful / magnificent / gorgeous" across 17 languages: IT "favolosa", TR "muhteşem", PT "fabuloso", RO "fabulos", CS "báječný", EL "υπέροχο", SL "čudovito", ET "vapustav", DA "fabelagtig", FI "upea", SV "fantastisk", HR "fantastičan", HI "शानदार", AR "رائع", VI "tuyệt vời", TH "วิเศษ", KO "멋진", JA "素晴らしい", KK "керемет".
+    - FIX: Replaced with proper fairy / magical fairytale terms across all 35 languages: IT "fata, fatato", PT "fada, encantado", RO "zână, feeric", CS "víla, kouzelná bytost, pohádkový", EL "νεράιδα, παραμυθένιος", FI "keiju, haltija, satumainen", SV "fe, älva, sagolik", HI "परी, अप्सरा", AR "جنية، حورية", KK "пері, періште, ертегі кейіпкері".
+
+15. ID 3999 ("dim"):
+    - BUG: Czech had infinitive verb "ztlumit" ("to dim"), Swedish left English "dim" unadapted.
+    - FIX: CS "tlumený, matný, temný", SV "dimmig, dunkel, svag".
+
+16. ID 4001 ("your"):
+    - BUG: MT produced the possessive PRONOUN ("yours") rather than the possessive DETERMINER ("your") in FR "à toi", RO "al tău", HU "a tiéd", EL "δικός σου", AR "خاصتك", KO "당신의 것", KK "сіздікі".
+    - FIX: Restored determiner forms: FR "ton, ta, tes, votre, vos", RO "tău, ta, vostru, voastră", HU "te ..., ti ...", EL "σου, σας", AR "خاص بك، كَ، كُم", KO "당신의, 너의, 여러분의", KK "сенің, сіздің".

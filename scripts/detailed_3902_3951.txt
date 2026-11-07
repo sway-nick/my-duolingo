@@ -1,0 +1,79 @@
+Batch 3902-3951 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 3929 (laugh at): CATASTROPHIC PART-OF-SPEECH COLLAPSE ACROSS 22 LOCALES!
+   - Dump translated the phrasal verb "laugh at" (смеяться над, насмехаться) as the noun "laughter/laugh" (смех) in 22 languages:
+     it: risata, ro: râsete, bg: смях, cs: smích, sk: smiech, hu: nevetés, el: γέλιο, sl: smeh, et: naer, lt: juokas, da: latter, fi: nauru, sv: skratt, hr: smijeh, lv: smiekli, hi: हँसी, ar: ضحك, vi: tiếng cười, th: เสียงหัวเราะ, ko: 웃음, ja: 笑い, kk: күлкі.
+   - Root Cause: Headword "laugh" was parsed as a standalone noun, completely ignoring the preposition "at" which forms a transitive phrasal verb meaning "to mock, ridicule, or laugh at someone/something".
+   - Calibration: Systematically replaced in all 35 target languages with proper verb forms governed by correct prepositions:
+     ru: смеяться над, насмехаться над; uk: сміятися з, глузувати з; de: auslachen, lachen über; es: reírse de, burlarse de; fr: se moquer de, rire de; it: ridere di, prendersi gioco di; pt: rir de, caçoar de, zombar de; pl: śmiać się z, wyśmiewać; ro: a râde de, a-și bate joc de; bg: присмивам се на, смея се на; cs: smát se někomu, vysmívat se; sk: smiať sa z, vysmievať sa; hu: kinevet, gúnyolódik; el: κοροϊδεύω, γελάω με; sl: smejati se (komu/čemu), posmehovati se; et: välja naerma, üle naerma; lt: juoktis iš, šaipytis; da: grine ad, gøre grin med; fi: nauraa jollekin, pilkata; sv: skratta åt, håna; hr: rugati se, ismijavati; lv: smieties par, izsmiet; hi: पर हँसना, मज़ाक उड़ाना; ar: يسخر من، يضحك على; fa: به کسی خندیدن، مسخره کردن; ur: پر ہنسنا، مذاق اڑانا; id: menertawakan, mengejek; vi: cười nhạo, chế giễu; th: หัวเราะเยาะ, เยาะเย้ย; ko: 비웃다, 조롱하다; ja: あざ笑う、～を笑いものにする; zh: 嘲笑、取笑、讥笑; bn: উপহাস করা, দেখে হাসা; kk: келемеждеу, мазақтау, күлу.
+
+2. Word 3931 (depart): SYSTEMIC FALSE TRANSLATION AS "RELOCATE / MOVE HOUSE" IN 10+ LOCALES!
+   - Dump translated "depart" (отправляться, отбывать, уезжать) as "to change one's permanent residence / move away" in:
+     cs: odstěhovat se, sk: odsťahovať sa, hu: elköltözni, et: koli ära, da: flytte væk, fi: muuttaa pois, sv: flytta bort, ro: mută-te (imperative!), and as "step aside / get out of the way" in hr: maknuti se, ko: 비켜서다, vi: tránh xa.
+   - Root Cause: Confusion of English "depart" / "move away" with physical relocation of domestic residence or getting out of physical path.
+   - Calibration: Restored authentic transportation and departure terminology for scheduled travel, voyages, and departures across all 35 languages:
+     ru: отправляться, отбывать, уезжать; uk: відправлятися, відбувати, від'їжджати; de: abfahren, abreisen, abfliegen; es: partir, salir, despegar; fr: partir, s'en aller, décoller; pl: odjeżdżać, odlatywać, odchodzić; it: partire, allontanarsi, salpare; tr: hareket etmek, kalkmak, ayrılmak; pt: partir, sair, descolar; ro: a pleca, a porni; bg: заминавам, отпътувам, потеглям; cs: odjet, odletět, odejít; sk: odísť, odcestovať, odletieť; hu: elindul, elutazik, távozik; el: αναχωρώ, φεύγω, αποπλέω; sl: odpotovati, odriniti, oditi; et: väljuma, lahkuma, teele asuma; lt: išvykti, išvažiuoti, pajudėti; da: afgå, afrejse, tage af sted; fi: lähteä, lähteä matkaan; sv: avgå, avresa; hr: otputovati, krenuti, poći; lv: izbraukt, atiet, doties prom; hi: प्रस्थान करना, रवाना होना; ar: يغادر، يرحل، ينطلق; fa: حرکت کردن، عزیمت کردن; ur: روانہ ہونا، رخصت ہونا; id: berangkat, bertolak; vi: khởi hành, xuất phát, rời đi; th: ออกเดินทาง, ออกจาก; ko: 출발하다, 떠나다; ja: 出発する、立ち去る; zh: 出发、启程、动身; bn: প্রস্থান করা, রওনা হওয়া; kk: аттану, жолға шығу, жөнелу.
+
+3. Word 3937 (save up): BIZARRE MISTRANSLATIONS ACROSS SCANDINAVIAN, BALTIC, AND ASIAN LOCALES!
+   - Danish and Swedish had "skat" / "skatt" (meaning "tax" or "treasure")!
+   - Finnish had "hamstrata" (to hoard supplies in panic).
+   - Hindi had "जमाखोरी" (black market hoarding / cartel speculation).
+   - Arabic had "يخزن" (to warehouse / store goods).
+   - Croatian had noun "zaliha" (stock / reserve).
+   - Kazakh had "қазына" (treasure / state treasury).
+   - Turkish (biriktir), Romanian (economisește), Bulgarian (спестявай), and Greek (αποταμίευσε) had bare imperatives.
+   - Root Cause: Confusion of "saving" with taxation, state treasures, and panic stockpiling.
+   - Calibration: Replaced with authentic personal finance expressions for saving up money over time:
+     ru: копить, откладывать (деньги), собирать; uk: збирати, заощаджувати, накопичувати гроші; de: ansparen, Geld zurücklegen, sparen; es: ahorrar, juntar dinero; fr: économiser, mettre de l'argent de côté, thésauriser; pl: odkładać, oszczędzać, ciułać; it: risparmiare, mettere da parte; tr: para biriktirmek, tasarruf etmek; pt: economizar, juntar dinheiro, poupar; ro: a economisi, a strânge bani; bg: спестявам, събирам пари; cs: šetřit si, našetřit si, spořit; sk: šetriť si, našetriť si, sporiť; hu: spórol, gyűjtöget, pénzt megtakarít; el: αποταμιεύω, μαζεύω χρήματα; sl: privarčevati, prihraniti; et: raha koguma, säästma; lt: taupyti, susitaupyti pinigų; da: spare op, samle sammen; fi: säästää rahaa, säästää; sv: spara ihop, lägga undan pengar; hr: uštedjeti, prištedjeti novac; lv: sakrāt, ietaupīt naudu; hi: बचत करना, पैसे जमा करना; ar: يدخر، يوفّر مالاً; fa: پس‌انداز کردن، پول جمع کردن; ur: پیسے جمع کرنا، رقم بچانا; id: menabung, mengumpulkan uang; vi: tiết kiệm tiền, dành dụm; th: ออมเงิน, เก็บหอมรอมริบ; ko: 돈을 모으다, 저축하다; ja: お金をためる、貯金する; zh: 存钱、积攒、攒钱; bn: টাকা জমানো, সঞ্চয় করা; kk: ақша жинау, қор жинау.
+
+4. Word 3917 (template): CULINARY TASTING AND FABRIC SPECIMEN CONFUSION!
+   - Czech had "ochutnat" (literally to taste food with tongue, from "sample" confused with culinary tasting)!
+   - Italian had "campione", Romanian "eşantion", Bulgarian "проба", Slovak "vzorka", Greek "δείγμα", Estonian "proov" (all meaning a small test specimen or cloth swatch rather than a structural template or boilerplate document).
+   - Finnish had "kuviota" (partitive singular of pattern).
+   - Calibration: Replaced with proper technical, document, and drafting template terms:
+     ru: шаблон, макет, образец; uk: шаблон, зразок, макет; de: Vorlage, Schablone, Muster; es: plantilla, modelo; fr: modèle, gabarit, patron; pl: szablon, wzorzec; it: modello, sagoma, dima; tr: şablon, kalıp; pt: modelo, gabarito, padrão; ro: șablon, model; bg: шаблон, образец; cs: šablona, předloha; sk: šablóna, predloha; hu: sablon, minta; el: πρότυπο, προσχέδιο, μήτρα; sl: predloga, šablona; et: mall, šabloon; lt: šablonas, pavyzdys; da: skabelon; fi: malli, malline; sv: mall, schablon; hr: predložak, šablona; lv: veidne, šablons; hi: टेम्पलेट, सांचा, प्रारूप; ar: قالب، نموذج; fa: الگو، قالب; ur: سانچہ، نمونہ; id: templat, pola; vi: mẫu, bản mẫu, khuôn mẫu; th: แม่แบบ, แบบร่าง; ko: 템플릿, 서식, 본보기; ja: テンプレート、ひな形、型板; zh: 模板、样板; bn: টেমপ্লেট, নমুনা; kk: үлгі, шаблон.
+
+5. Word 3926 (messy): GROTESQUE MISTRANSLATIONS IN ITALIAN, HUNGARIAN, AND GREEK!
+   - Italian had "troppo liquido" (too liquid / watery!! completely nonsensical)!
+   - Hungarian had "lucskos" (slushy, soggy, muddy).
+   - Greek had "τσαπατσούλης" (noun: slob person).
+   - Calibration: Calibrated to adjectives denoting untidiness, disorder, and dishevelment:
+     it: disordinato, trasandato, caotico; hu: rendetlen, zűrös, kócos; el: ακατάστατος, ανοργάνωτος; pt: bagunçado, desarrumado, caótico; es: desordenado, caótico, desarreglado; de: unordentlich, chaotisch, unsauber; fr: désordonné, bordélique, en désordre; pl: niechlujny, zabałaganiony, nieuporządkowany; ru: неряшливый, беспорядочный, грязный; kk: ұқыпсыз, былыққан, ретсіз.
+
+6. Word 3915 (in front of): TEMPORAL VS SPATIAL HOMONYMY IN 7 LOCALES!
+   - Translated as temporal "before / earlier" in Italian ("Prima"), Romanian ("înainte"), Bulgarian ("преди"), Slovak ("predtým"), Greek ("προτού"), Slovenian ("prej"), Estonian ("enne").
+   - Calibration: Fixed to spatial prepositions (it: davanti a, di fronte a; ro: în fața, înaintea; bg: пред, отпред; sk: pred, vpredu; el: μπροστά από, ενώπιον; sl: pred, spredaj; et: ees, eespool; ru: перед, впереди; kk: алдында, алдына).
+
+7. Word 3910 (that), 3911 (these), 3912 (those): CONJUNCTIONS VS DEMONSTRATIVES & NUMBER COLLAPSE!
+   - For 3910 ("that"), Romanian had "Că", Czech "Že", Hungarian "Hogy", Greek "Οτι" (all subordinating conjunctions like "I know that..."). Restored demonstrative pronouns (ro: acel, aceea; cs: tamten, ten; hu: az, amaz; el: εκείνος, εκείνη, εκείνο).
+   - For 3912 ("those"), Romanian had "aceste" (these!), Bulgarian had "тези" (these!), Danish had accusative "dem" (them!).
+   - In Kazakh, words 3909 ("this"), 3910 ("that"), 3911 ("these"), 3912 ("those") had all collapsed to singular "бұл"! Differentiated systematically: 3909 -> бұл / осы; 3910 -> сол / анау / ол; 3911 -> бұлар / осылар; 3912 -> аналар / солар.
+
+8. Word 3905 (mend) & 3916 (look for): SYSTEMIC NOUN INFILTRATION IN PLACE OF VERBS!
+   - 3905 (mend): it: riparazione, bg: ремонт, sk: oprava, hu: javítás, el: επισκευή, sl: popravilo, et: remont, lt: remontas were all nouns. Restored to verbs (reparare, rammendare, поправям, кърпя, opraviť, megjavít, επισκευάζω, parandama, taisyti, lopyti).
+   - 3916 (look for): it: ricerca, ro: căutare, bg: търсене, cs: vyhledávání, sk: vyhľadávanie, hu: keresés, el: έρευνα, sl: iskanje, et: otsing, lt: paieška, ar: البحث عن were all nouns. Restored to active search verbs (cercare, a căuta, търся, hledat, hľadať, keres, ψάχνω, iskati, otsima, ieškoti, يبحث عن).
+
+9. Word 3945 (dork): CRITICAL MISTRANSLATION IN ITALIAN!
+   - Italian dump had "sbalzo" (sudden jump / surge / projection). Fixed to "imbranato, allocco, sciocco".
+
+10. Word 3936 (stag): ZOOLOGICAL ACCURACY!
+    - German had "Reh" (roe deer / doe) instead of red deer stag ("Hirsch, Rothirsch").
+
+11. Word 3932 (gonna) & 3906 (drop in): COLLOQUIAL INTENT & PHRASAL VISITING IDIOMS!
+    - 3932 (gonna): Fixed literal physical walking (cs: jít do, sk: idem do, lt: einu į) into intention/future markers (chystat se, буду, chystať sa).
+    - 3906 (drop in): Fixed literal "fall in, jump in" in Latvian ("iekrist, ielēkt") and "fall off / disembark" in Kazakh ("түсіп кету") into authentic casual visiting idioms (lv: iegriezties, ieskriet ciemos, apciemot; kk: кіріп шығу, бас сұғу, соғып кету).
+
+12. Word 3948 (what for), 3949 (so what), 3950 (I mean it):
+    - 3948: Italian had declarative "Per quello" (for that); fixed to interrogative "per che cosa?, a che scopo?, perché?".
+    - 3949: Removed garbled punctuation artifacts (trailing commas and question mark spaces like "Ну и что, ?", "E allora, ?", "Tak co, ?").
+    - 3950: Fixed Greek "Είμαι σοβαρός" (I am a serious person) and Kazakh truncated sentence fragment "мен шынымен де" into complete idiomatic assertions: el: το εννοώ, μιλάω σοβαρά; kk: мен шынымды айтып тұрмын, әзілдеп тұрған жоқпын.
+
+13. Regional Nuances strictly honored:
+    - Brazil (pt / pt-BR): "tênis" (3903), "carteira" (3902), "dar uma passada, dar um pulo" (3906), "esfarelar" (3907), "todo mundo" (3914), "decorar" (3920), "bagunçado" (3926), "juntar dinheiro" (3937), "estou falando sério" (3950).
+    - Latin America / Mexico (es): "tenis, zapatillas" (3903), "billetera" (3902), "pasar de visita" (3906), "ahorrar, juntar dinero" (3937), "tonto, bobo, nerd" (3945).
+    - Natural grammar verified across non-Latin scripts: Hindi (hi), Arabic (ar), Persian/Farsi (fa), Urdu (ur), Kazakh (kk), Bengali (bn).
+
+All 50 words (ID 3902–3951) audited, calibrated, validated, and exported to scripts/apply_batch_3902_3951_calibrations.cjs.

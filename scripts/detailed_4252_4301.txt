@@ -1,0 +1,155 @@
+Batch 4252–4301 Linguistic Audit and Calibration Report
+======================================================
+Batch Range: IDs 4252 through 4301 (50 words)
+Locales Covered: EXACTLY 36 Locales (35 target languages + English headword)
+Target Languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk
+
+1. MAJOR SYSTEMIC MACHINE TRANSLATION BUGS & HOMONYM COLLAPSES CAUGHT
+---------------------------------------------------------------------
+
+1.1. Word 4271 (rasp): CATASTROPHIC HOMONYM COLLAPSE (TOOL -> FILE -> COMPUTER FILE)
+- The raw dump contained a classic multi-hop machine translation hallucination:
+  "rasp" was glossed as "file" (woodworking rasp/file), which subsequent MT engines back-translated as COMPUTER FILE in over 15 languages:
+  German: "Datei" (computer file)
+  French: "fichier" (computer file)
+  Italian: "file" (computer file)
+  Turkish: "dosya" (computer file)
+  Portuguese: "arquivo" (computer file)
+  Bulgarian: "файл" (computer file)
+  Czech: "soubor" (computer file)
+  Slovak: "súbor" (computer file)
+  Slovenian: "datoteka" (computer file)
+  Lithuanian: "failas" (computer file)
+  Vietnamese: "tập tin" (computer file)
+  Korean: "줄을 서다" (stand in line / file into a line!)
+- Calibration: Fully restored authentic woodworking tool and acoustic terminology across all 35 languages:
+  German: Raspel; kratzendes Geräusch
+  French: râpe; son rauque
+  Italian: raspa, scuffina; voce rauca
+  Spanish: escofina, raspador; carraspera
+  Portuguese: grosa, raspadeira; ruído áspero
+  Russian: рашпиль, напильник; скрежет, хрип
+  Ukrainian: рашпіль, терпуг; скрегіт, хрип
+  Polish: tarnik, raszpla; chrypka
+  Czech: rašple; skřípot, chrapot
+  Slovak: rašpľa; škrípanie, chrapot
+  Kazakh: егеу (ірі), рашпиль; қырыл, сықыр
+  Arabic: مِبْرَد خشن؛ صوت خشن أو أجش
+  Farsi: سوهان زبر، چوب‌ساب؛ صدای گوش‌خراش
+
+1.2. Word 4278 (faced): VEHICLE CRASH / TRAFFIC COLLISION HALLUCINATION
+- In Russian, "столкнулся" can mean "encountered / faced a problem". Machine translation incorrectly translated "столкнулся" as a traffic accident / physical vehicular crash across almost all languages:
+  German: "kollidierten" (collided)
+  French: "collision" (car crash)
+  Italian: "si scontrò" (crashed)
+  Turkish: "çarpıştı" (collided)
+  Portuguese: "colidiram" (collided)
+  Romanian: "ciocnit" (crashed)
+  Bulgarian: "сблъсък" (crash)
+  Czech: "srazil se" (collided)
+  Slovak: "zrazil sa" (collided)
+  Hungarian: "ütközött" (collided)
+  Greek: "συγκρούστηκε" (collided)
+  Slovenian: "trčil" (collided)
+  Estonian: "põrkas kokku" (collided)
+  Lithuanian: "susidūrė" (collided)
+  Danish: "kolliderede" (collided)
+  Finnish: "törmäsi" (collided)
+  Swedish: "kolliderade" (collided)
+  Croatian: "sudario se" (collided)
+  Latvian: "sadūrās" (collided)
+  Arabic: "اصطدم" (collided)
+  Vietnamese: "va chạm" (collided)
+  Thai: "ชนกัน" (collided)
+  Korean: "충돌했다" (collided)
+  Japanese: "衝突した" (collided)
+  Kazakh: "соқтығысты" (collided)
+- Calibration: Fully restored the true meanings: "confronted with / faced with a challenge" and "faced (with decorative facing / paneling / masonry surface)".
+
+1.3. Word 4252 (bring up): PHRASAL VERB COLLAPSED TO "INCREASE / LIFT PHYSICALLY"
+- The dump translated "bring up" as "increase prices" or "physically elevate" across 20+ languages:
+  German: "erheben"
+  French: "augmenter"
+  Italian: "aumentare"
+  Turkish: "artırmak"
+  Romanian: "ridica"
+  Bulgarian: "повишаване"
+  Czech: "zvýšit"
+  Slovak: "zvýšiť"
+  Hungarian: "emel"
+  Greek: "αύξηση"
+  Slovenian: "dvigniti"
+  Estonian: "tõsta"
+  Lithuanian: "pakelti"
+  Danish: "hæve"
+  Finnish: "nostaa"
+  Swedish: "höja"
+  Croatian: "podići"
+  Latvian: "paaugstināt"
+  Arabic: "رفع"
+  Vietnamese: "nâng cao"
+  Thai: "ยกขึ้น"
+  Korean: "올리다"
+  Japanese: "上げる"
+  Kazakh: "алу"
+- Calibration: Fully calibrated both genuine meanings of the phrasal verb:
+  1) Raise/rear/nurture children (воспитывать, растить; großziehen, élever, criar, wychowywać, тәрбиелеу);
+  2) Mention or introduce a topic into discussion (поднимать вопрос, упоминать; zur Sprache bringen, aborder, mencionar, poruszyć, сөз қозғау).
+
+1.4. Word 4254 (run out): COLLAPSED TO NOUN "END / FINISH"
+- The dump translated the phrasal verb "run out" as the noun "END" or "FINISH" in almost every language:
+  German: "Ende", French: "fin", Italian: "FINE", Turkish: "son", Romanian: "Sfârşit", Bulgarian: "край", Czech: "konec", Slovak: "koniec", Hungarian: "vég", Greek: "τέλος", Slovenian: "konec", Estonian: "lõpp", Lithuanian: "pabaiga", Finnish: "loppu", Swedish: "slut", Croatian: "kraj", Latvian: "beigas", Arabic: "النهاية", Korean: "끝".
+- Calibration: Calibrated to dynamic verbs expressing depletion, exhaustion of supplies, and expiration of validity:
+  e.g., ausgehen, ablaufen; s'épuiser, expirer; agotarse, acabarse; esgotar-se; wyczerpać się; таусылу, біту; ينفد، ينتهي.
+
+1.5. Word 4264 (call on): PHRASAL VERB COLLAPSED TO "MAKE A PHONE CALL"
+- Over 15 languages translated "call on" as dialing a telephone number ("anrufen", "sunați", "обаждане", "zavolat", "telefonar", "helista", "ringe", "soittaa", "nazovi", "zvanīt", "कॉल", "اتصل", "gọi điện", "โทรหา", "전화하다", "қоңырау шалу").
+- Calibration: "call on someone" means to visit them ("pay a short visit") or to make a formal demand/appeal ("call on nations to act"). Calibrated accurately across all 35 languages.
+
+1.6. Word 4299 (call of) & Word 4300 (ring rang rung): MASSIVE "PHONE CALL" COLLAPSE
+- Word 4299 ("call of", as in "the call of duty", "call of nature", "the call of the wild") was translated across 20+ languages as making a telephone call (de: Anruf, fr: appel, it: chiamata, bg: обаждане, lt: skambutis, da: ring, fi: soita, sv: ring, hr: nazovi, lv: zvanīt, hi: कॉल, ar: اتصل, vi: gọi, th: โทร, ko: 전화하다, ja: 電話する, kk: қоңырау шалыңыз).
+  -> Calibrated to: зов, поклик, призыв, веление; Ruf, Lockruf; richiamo, appello; zew, wołanie; نداء، دعوة; үн, шақыру.
+- Word 4300 ("ring rang rung" - irregular verb: to ring/sound a chime/bell/phone) was also collapsed to the noun "phone call" in over 20 languages.
+  -> Calibrated to the infinitive verb meaning to ring, toll, resonate (звенеть, звонить, оглашать; klingeln, läuten; sonner, tinter; sonar, repicar; suonare; çalmak, çınlamak; шыңғырлау, соғу).
+
+1.7. Word 4289 (let us): MISTRANSLATED AS "LET'S GO!"
+- Danish ("lad os gå"), Finnish ("mennään"), Swedish ("nu kör vi"), Croatian ("idemo"), Latvian ("aiziet"), Vietnamese ("đi thôi"), Thai ("ไปกันเถอะ"), Korean ("가자"), Japanese ("行こう") all translated "let us" as "Let's go / leave!".
+- Calibration: Restored the true grammatical functions of "let us": collective hortative proposal ("let us do...") and permissive request ("allow us to...").
+
+1.8. Word 4290 (hood): GARBAGE & VACUUM TRANSLATIONS
+- Croatian had "napolje" (outdoors!) and Kazakh had "сорғыш" (vacuum/exhaust extractor!).
+- Calibration: Fully captured garment hood (капюшон, Kapuze, capuche, capuz), vehicle bonnet/hood (капот, Motorhaube, capó/cofre), and colloquial neighborhood (район, Viertel, quebrada).
+
+1.9. Word 4293 (good point): URDU RAW TRANSLITERATION BUG
+- In Urdu, the dump contained raw English phonetics "گوڈ پوینٹ" instead of meaningful translation.
+- Calibration: Fixed to natural idiomatic Urdu: "اچھا نکتہ، معقول بات، وزنی دلیل".
+
+1.10. Words 4294, 4295, 4296 (sheep sheep, deer deer, fish fish): IRREGULAR ZERO-PLURAL FORMATTING
+- The dump simply doubled words without syntax or punctuation (e.g. "poisson poisson", "fisk fisk", "oaie oaie", "cừu cừu").
+- Calibration: Formatted uniformly as singular — plural pairs:
+  sheep sheep -> Schaf — Schafe, oveja — ovejas, mouton — moutons, овца — овцы, etc.
+  deer deer -> Hirsch — Hirsche, ciervo — ciervos, cerf — cerfs, олень — олени, etc.
+  fish fish -> Fisch — Fische, pez — peces, poisson — poissons, рыба — рыбы, etc.
+
+
+2. REGIONAL NUANCES & SPECIAL LOCALES
+-------------------------------------
+- Brazil (pt / pt-BR):
+  - Word 4273 (lace): used Brazilian "cadarço" for shoelace (not European Portuguese "atacador").
+  - Word 4257 (work out): added Brazilian "malhar" (gym training) and "dar certo" (succeed/work out well).
+  - Word 4276 (mop): "esfregão, vassoura de pano; passar pano".
+  - Word 4290 (hood): included Brazilian slang "quebrada" alongside "capuz" and "capô".
+- Mexico / Latin America (es):
+  - Word 4273 (lace): added Mexican "agujeta" for shoelace.
+  - Word 4276 (mop): added Mexican / Latin American "trapeador, trapear" alongside "fregona".
+  - Word 4290 (hood): added Mexican automotive "cofre" alongside "capó".
+  - Word 4284 (what gives?): included Latin American "¿qué onda?".
+- RTL & Complex Scripts (hi, ar, fa, ur, kk, bn):
+  - Natural verb conjugations and idiomatic phrasing used throughout without machine truncation.
+  - Urdu & Farsi: Proper Nastaliq-friendly orthography with correct izafat and compound phrasing.
+  - Kazakh: Accurate Cyrillic morphology and natural terminology (тәрбиелеу, таусылу, егеу, шығанақ, орынды ескерту).
+
+3. FILES GENERATED
+------------------
+1. `scripts/apply_batch_4252_4301_calibrations.cjs` - Complete CommonJS dictionary mapping 50 words across 35 target languages (verified via Node.js).
+2. `scripts/detailed_4252_4301.txt` - This detailed calibration log.

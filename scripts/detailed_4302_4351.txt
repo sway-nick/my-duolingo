@@ -1,0 +1,106 @@
+Batch 4302-4351 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught, homonyms fixed, and translations calibrated across EXACTLY 36 LOCALES:
+
+1. Word 4319 (at home): CATASTROPHIC MULTI-LOCALE "HOUSES" PLURAL BUG CAUGHT!
+   - Dump translated prepositional idiom "at home" as plural noun "Houses" in over 13 languages!
+     de: "Häuser" (Houses!)
+     fr: "Maisons" (Houses!)
+     pl: "Domy" (Houses!)
+     it: "Case" (Houses!)
+     ro: "Case" (Houses!)
+     bg: "Къщи" (Houses!)
+     cs: "Domy" (Houses!)
+     sk: "Domy" (Houses!)
+     hu: "Házak" (Houses!)
+     el: "Σπίτια" (Houses!)
+     sl: "Hiše" (Houses!)
+     et: "Majad" (Houses!)
+     lt: "Namai" (Houses!)
+   - Root Cause: MT engine analyzed "home" out of context as plural noun "homes/houses".
+   - Calibration: Completely restored authentic adverbial/prepositional expressions meaning "at home / daheim":
+     de: zu Hause, daheim; fr: à la maison, chez soi; pl: w domu, u siebie; it: a casa, a domicilio; ro: acasă, la domiciliu; bg: вкъщи, у дома; cs: doma, u sebe doma; sk: doma, u seba doma; hu: otthon, itthon; el: στο σπίτι; sl: doma, pri hiši; et: kodus; lt: namuose, namie.
+
+2. Word 4348 (that's): UNIVERSAL "SOMETHING" INFECTION IN 25+ LOCALES!
+   - Dump translated "that's" as "that is something" ("это является чем-то") across nearly every language:
+     ru: это является чем-то; de: Das ist etwas; fr: c'est quelque chose; pl: to jest coś; it: questa è una cosa; tr: Bu bir şey; ro: asta e ceva; bg: това е нещо; cs: tohle je něco; sk: toto je niečo; hu: ez valami; el: αυτό είναι κάτι; sl: to je nekaj; et: see on midagi; lt: tai yra kažkas; da: Det er noget; fi: Se on jotain; sv: Det är något; hr: To je nešto; lv: Tas ir kaut kas; hi: यह कुछ तो है; ar: إنه شيء ما; th: มันเป็นอะไรสักอย่าง; ko: 뭔가 있어요; ja: 何かあります; kk: бұл бірдеңе.
+   - Root Cause: Explanatory gloss "это является чем-то" was taken literally by automated translator as literal phrase meaning instead of contraction syntax.
+   - Calibration: Eradicated phantom "something" and calibrated to natural contractions / demonstrative copula across all 35 target languages:
+     ru: это, то есть, вот это; uk: це, це є, ось це; de: das ist, es ist; es: eso es, es; fr: c'est, cela est; pl: to jest, to; it: è, questo è, quello è; tr: bu, şu, işte bu; pt: isso é, é; ro: asta este, este; bg: това е; cs: to je, tohle je; sk: to je, toto je; hu: ez, az, ez az; el: αυτό είναι; sl: to je; et: see on; lt: tai yra; da: det er; fi: se on; sv: det är; hr: to je; lv: tas ir; hi: यह है, वह है; ar: هذا هو، ذلك هو; fa: آن است، این است; ur: یہ ہے، وہ ہے; id: itu adalah, itu; vi: đó là; th: นั่นคือ, นั่น; ko: 그것은 ~이다, 그건; ja: それは～です、それは; zh: 那是、这是; bn: ওটা হলো, এটা হলো; kk: бұл, бұл болып табылады.
+
+3. Word 4344 (safe travels): LITERAL RUSSIAN CALQUE CASCADE ("GOOD STREET")!
+   - Dump translated Russian "хорошей дороги" literally word-by-word into German as "gute Straße" ("good street / highway"!), Italian "buona strada", Czech "dobrá cesta", Slovak "dobrá cesta", Hungarian "jó út", Greek "καλός δρόμος", Estonian "hea tee", Lithuanian "geras kelias".
+   - In English, "safe travels" is an idiomatic wish for a journey/trip, NOT a wish for pavement/highway quality!
+   - Calibration: Calibrated to idiomatic travel blessing expressions:
+     de: gute Reise, gute Fahrt, komm gut an; it: buon viaggio, fai buon viaggio; cs: šťastnou cestu, bezpečnou cestu; sk: šťastnú cestu, bezpečnú cestu; hu: jó utat, kellemes utazást; el: καλό ταξίδι, ασφαλές ταξίδι; sl: srečno pot, varno pot; et: head teed, turvalist reisi; lt: gero kelio, saugios kelionės; lv: laimīgu ceļu, drošu ceļu; da: god rejse, hav en god tur; fi: hyvää matkaa, turvallista matkaa; sv: trevlig resa, kör försiktigt; hr: sretan put, siguran put; pl: szczęśliwej podróży, szerokiej drogi; es: buen viaje, feliz viaje; pt-BR: boa viagem, faça uma boa viagem; hi: आपकी यात्रा मंगलमय हो; ar: رحلة سعيدة، رافقتك السلامة; kk: ақ жол, жолыңыз болсын.
+
+4. Systematic Urdu Transliteration Bug in 18+ Words:
+   - Dump in Urdu had phonetically transcribed English sounds in Arabic script rather than Urdu translations:
+     Word 4317 butcher -> "بوٹچر" (calibrated to: قصاب، گوشت فروش)
+     Word 4318 fisher -> "فیشر" (calibrated to: ماہی گیر، مچھیرا)
+     Word 4319 at home -> "اٹ ہوم" (calibrated to: گھر پر، گھر میں)
+     Word 4320 aloud -> "الاوڈ" (calibrated to: بلند آواز سے، زور سے)
+     Word 4322 squad assembled -> "سکاڈ اسسمبلڈ" (calibrated to: دستہ جمع ہو گیا، ٹیم اکٹھی ہو گئی)
+     Word 4323 dexterity -> "ڈکسٹریٹی" (calibrated to: چابک دستی، مہارت، ہوشیاری)
+     Word 4324 pretty good -> "پرٹٹی گوڈ" (calibrated to: کافی اچھا، بہت بہتر)
+     Word 4326 greedy -> "گریڈی" (calibrated to: لالچی، حریص، طامع)
+     Word 4327 comfy -> "کومفی" (calibrated to: آرام دہ، پرلطف)
+     Word 4328 mug -> "موگ" (calibrated to: مگ، بڑا پیالہ)
+     Word 4329 decimal -> "ڈکیمال" (calibrated to: اعشاریہ، اعشاری عدد)
+     Word 4330 cozy -> "کوزی" (calibrated to: آرام دہ، پرلطف، پرسکون)
+     Word 4332 countdown -> "کاونٹڈاون" (calibrated to: الٹی گنتی، کاؤنٹ ڈاؤن)
+     Word 4334 apologies -> "اپولوگیس" (calibrated to: معذرت، معافی چاہتا ہوں)
+     Word 4336 bunny -> "بوننی" (calibrated to: خرگوش کا بچہ، خرگوش)
+     Word 4337 handwriting -> "ہانڈوریٹنگ" (calibrated to: ہاتھ کی لکھائی، خطاطی)
+     Word 4338 lamb -> "لامب" (calibrated to: میمنا، بھیڑ کا بچہ، بھیڑ کا گوشت)
+     Word 4342 no problem -> "نو پروبلم" (calibrated to: کوئی مسئلہ نہیں، کوئی بات نہیں)
+     Word 4346 not yet -> "نوٹ یٹ" (calibrated to: ابھی نہیں)
+
+5. Word 4328 (mug): VIOLENT CRIME HOMONYM IN ARABIC!
+   - Dump translated "mug" (drinking vessel) into Arabic as "يسرق" (to mug/rob violently on the street!).
+   - Also fixed Czech "džbánek" (pitcher/jug) to "hrnek, hrneček", and Russian/Ukrainian/Kazakh drinking cup terminology.
+   - Arabic calibrated to: كوب كبير، قدح، فنجان عريض.
+
+6. Word 4326 (greedy): PORTUGUESE FALSE FRIEND & KAZAKH POS CONFUSION!
+   - Dump had Portuguese "ambicioso" (ambitious! Not greedy!). Greedy in Portuguese is "ganancioso, avarento, olho-gordo".
+   - Dump had Kazakh "ашкөздік" (abstract noun "greed" instead of adjective). Calibrated to adjective: ашкөз, тойымсыз.
+   - Dump had Spanish "avaro" (narrowly stingy). Expanded to: codicioso, avaro, voraz.
+
+7. Word 4327 (comfy): BOGUS "CONVENIENT / PRACTICAL" MISTRANSLATIONS!
+   - Dump translated "comfy" as "practical/convenient" in 8 languages:
+     da: praktisk; fi: kätevä; hr: zgodan; hi: सुविधाजनक; ar: مناسب; vi: tiện lợi; th: สะดวก; ko: 편리한.
+   - "Comfy" means comfortable, soft, and pleasant to relax in, NOT "convenient/functional"!
+   - Calibrated: da: behagelig, bekvem; fi: mukava, kotoisa; hr: udoban, ugodan; hi: आरामदायक, सुखद; ar: مريح، ممتع; vi: thoải mái, êm ái; th: นุ่มสบาย, สบายตัว; ko: 편안한, 아늑한.
+
+8. Word 4308 (couldn't): GRAMMAR GLOSS METADATA LEAKS REMOVED!
+   - Dump leaked the grammatical note "модальный глагол / modal verb" directly into user translation strings in 14 languages (de: "konnte nicht, Modalverb", pt: "não podia, verbo modal", sk, sl, et, lt, da, fi, sv, hr, lv, hi).
+   - Cleaned all metadata contamination, leaving strictly natural language verb forms.
+
+9. Word 4312 (be quiet): RUSSIAN COMPARATIVE ADJECTIVE CALQUE!
+   - Russian dump had "тише" (which can be comparative "quieter" or imperative "hush").
+   - Automated MT translated it as comparative adjective in da ("mere stille"), fi ("hiljaisempi"), sv ("tystare"), hr ("tiši"), lv ("klusākam"), ar ("أكثر هدوءًا").
+   - Calibrated to authentic imperative phrases (hush, keep silent, quiet): fi: ole hiljaa, hiljaisuus; sv: var tyst, tystnad; da: vær stille, ti stille; hr: budi tiho, šuti, tišina; lv: esi kluss, klusē; ar: اهدأ، الزم الصمت.
+
+10. Word 4331 (hi there): UNIVERSAL "HELLO EVERYONE" DISTORTION!
+    - Dump translated "hi there" as "hello EVERYONE" in 20+ languages (ru: "всем привет", de: "Hallo zusammen", fr: "Salut tout le monde", pl: "Cześć wszystkim", it: "Ciao a tutti", tr: "herkese selam", pt: "Olá a todos", etc.).
+    - "Hi there" is a standard personal or general friendly greeting ("hello, hi").
+    - Calibrated across all locales: ru: привет, здравствуй; de: Hallo, Servus; fr: salut, bonjour; pl: cześć, witaj; it: ciao, salve; pt-BR: oi, olá, e aí; es: ¡Hola!, ¿qué tal?.
+
+11. Word 4317 (butcher): PART-OF-SPEECH & SHOP/PERSON BUGS!
+    - Greek dump had verb "σφάζω" (to slaughter). Calibrated to noun: χασάπης, κρεοπώλης.
+    - Korean dump had shop "정육점" (butcher shop). Calibrated to person: 정육점 주인, 도축업자.
+
+12. Word 4336 (bunny): FINNISH POSSESSIVE & CZECH ADJECTIVE BUGS!
+    - Finnish dump had "Jänikseni" (with possessive suffix "-ni" = "MY bunny"). Calibrated to: kani, pupu, jänis.
+    - Czech dump had adjective "králičí" (rabbit-related). Calibrated to noun: králíček, zajíček.
+
+13. Word 4338 (lamb): MEAT VS. ANIMAL SEPARATION HARMONIZED!
+    - Arabic dump had adult sheep "خروف" (sheep/ram). Calibrated to: حَمَل، خروف صغير، لحم ضأن.
+    - Estonian dump had adult sheep "lammas". Calibrated to: tall, talleliha, noor lammas.
+    - Polish, Czech, Slovak, Bulgarian dump had only meat; harmonized to include both the young animal and the culinary meat.
+
+14. Regional Nuances strictly enforced:
+    - Brazil (pt-BR): "posto de gasolina", "parquinho", "pisar no acelerador", "pisar no freio", "tirar o lixo", "ganancioso", "gostoso/confortável", "oi, olá, e aí", "boa viagem, faça uma boa viagem", "me deixa, deixa eu".
+    - Latin America / Mexico (es): "señal de tránsito", "gasolinera", "parque infantil", "sacar la basura", "tirar la basura", "¿qué tal?", "¿qué onda?", "buen viaje".
+    - Natural grammatical structures tuned in hi, ar, fa, ur, kk, bn.

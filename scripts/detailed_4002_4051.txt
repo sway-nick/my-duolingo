@@ -1,0 +1,104 @@
+Batch 4002_4051 Linguistic Calibration Report across EXACTLY 36 LOCALES:
+
+CRITICAL BUGS & HOMONYM CORRECTIONS:
+1. ID 4050 (pancake): Severe vulgarity/nonsense corruption fixed in 13 locales:
+   - fr: "Merde" -> "crêpe, pancake"
+   - pl: "Gówno" -> "naleśnik, pancake"
+   - it: "Merda" -> "pancake, crespella"
+   - pt: "Besteira" -> "panqueca"
+   - ro: "Rahat" -> "clătită, pancake"
+   - bg: "Глупости" -> "палачинка"
+   - cs: "Blbost" -> "palačinka, lívanec"
+   - sk: "Blbosť" -> "palacinka, lievanec"
+   - hu: "Szarság" -> "palacsinta"
+   - el: "Σκατά" -> "τηγανίτα, κρέπα, πανκέικ"
+   - sl: "Sranje" -> "palačinka"
+   - et: "Jama" -> "pannkook"
+   - lt: "Šūdas" -> "blynas, lietinis"
+2. ID 4049 (fried egg): Polysemy/homonym collision between "fried egg" (sunny side up) and "scrambled eggs".
+   Multiple languages previously incorrectly listed scrambled eggs:
+   - pt: "ovos mexidos" (scrambled) -> "ovo frito, ovo estalado"
+   - cs: "míchaná vejce" (scrambled) -> "volské oko, smažené vejce"
+   - sk: "miešané vajíčka" (scrambled) -> "volské oko, smažené vajce"
+   - bg: "бъркани яйца" (scrambled) -> "пържено яйце, яйце на очи"
+   - hu: "rántotta" (scrambled) -> "tükörtojás"
+   - sl: "umešana jajca" (scrambled) -> "jajce na oko, ocvrto jajce"
+   - et: "munapuder" (scrambled) -> "härjasilm, praemuna"
+   - lt: "plakta kiaušinienė" (scrambled) -> "keptas kiaušinis"
+3. ID 4002 (groceries): Over-generalized translations as "products" (de: Produkte, es: productos, fr: produits, it: prodotti, ro: produse, cs: produkty, etc.) calibrated to grocery/food shopping terminology (Lebensmittel, comestibles/abarrotes, courses/épicerie, generi alimentari/spesa, cumpărături/băcănie, potraviny, etc.).
+4. ID 4004 (ladder): Over-specified "portable ladder" calqued from Russian "переносная лестница" across all locales stripped down to standard native terms (Leiter, échelle, escalera de mano, drabina, scala a pioli, etc.).
+5. ID 4019 (buckwheat): Greek had "είδος σίκαλης" (type of rye - botany error!) -> calibrated to "φαγόπυρο".
+6. ID 4029 (mushroom): Removed erroneous colloquial/slang polysemy "выскочка / nowicjusz / débutant / parvenit / новоизлюпенец" caused by machine calques of figurative meanings; replaced with accurate culinary noun and verbal "rapid growth/spread" equivalents.
+7. ID 4032 (beet): Hungarian had "cukorrépa" (sugar beet) -> corrected to "cékla" (beetroot/red beet).
+8. ID 4033 (radish): Vietnamese had "củ cải trắng" (daikon/white radish) -> corrected to "củ cải đỏ / củ cải". Korean had general "무" -> calibrated to "래디시, 붉은 무".
+9. Title case normalization: Fixed numerous non-German languages that had inappropriate English-style capitalization on common nouns (da, fi, sv, hr, lv, id, vi).
+10. Regional nuances accurately calibrated:
+    - Brazil (pt / pt-BR):
+      * groceries: "mantimentos, compras de supermercado"
+      * peach: "pêssego"
+      * pineapple: "abacaxi"
+      * zucchini: "abobrinha"
+      * eggplant: "berinjela"
+      * pancake: "panqueca"
+    - Mexico / Latin America (es):
+      * groceries: "abarrotes, comestibles, víveres"
+      * peach: "durazno"
+      * beet: "betabel, remolacha"
+      * zucchini: "calabacita, calabacín"
+      * peas: "chícharos"
+      * pancake: "hot cake, panqueque"
+      * computer: "computadora"
+    - Natural grammar for hi, ar, fa, ur, kk, bn:
+      * Appropriate script, postpositions, and grammatical inflections across Persian, Urdu, Arabic, Hindi, Bengali, and Kazakh.
+
+DETAILED SUMMARY PER WORD (4002–4051):
+ID 4002 (groceries): RU: продукты, бакалея, продовольственные товары | EN: groceries
+ID 4003 (look at): RU: смотреть на, взглянуть на, рассматривать | EN: look at
+ID 4004 (ladder): RU: приставная лестница, стремянка | EN: ladder
+ID 4005 (on): RU: на, по, включённый, работающий | EN: on
+ID 4006 (caviar): RU: икра, осетровая икра | EN: caviar
+ID 4007 (prom): RU: выпускной бал, школьный бал | EN: prom
+ID 4008 (spread): RU: распространять(ся), намазывать, мазь, размах | EN: spread
+ID 4009 (veal): RU: телятина | EN: veal
+ID 4010 (twilight): RU: сумерки, полумрак | EN: twilight
+ID 4011 (serenity): RU: безмятежность, умиротворение, спокойствие | EN: serenity
+ID 4012 (suitcase): RU: чемодан | EN: suitcase
+ID 4013 (handkerchief): RU: носовой платок | EN: handkerchief
+ID 4014 (backpack): RU: рюкзак | EN: backpack
+ID 4015 (necklace): RU: ожерелье, колье | EN: necklace
+ID 4016 (brooch): RU: брошь | EN: brooch
+ID 4017 (yogurt): RU: йогурт | EN: yogurt
+ID 4018 (pasta): RU: паста, макароны | EN: pasta
+ID 4019 (buckwheat): RU: гречка, гречиха | EN: buckwheat
+ID 4020 (pear): RU: груша | EN: pear
+ID 4021 (grape): RU: виноград, виноградина | EN: grape
+ID 4022 (raspberry): RU: малина | EN: raspberry
+ID 4023 (peach): RU: персик | EN: peach
+ID 4024 (pineapple): RU: ананас | EN: pineapple
+ID 4025 (watermelon): RU: арбуз | EN: watermelon
+ID 4026 (cabbage): RU: капуста | EN: cabbage
+ID 4027 (raisin): RU: изюм, изюминка | EN: raisin
+ID 4028 (plum): RU: слива | EN: plum
+ID 4029 (mushroom): RU: гриб, быстро расти, разрастаться | EN: mushroom
+ID 4030 (pumpkin): RU: тыква | EN: pumpkin
+ID 4031 (eggplant): RU: баклажан | EN: eggplant
+ID 4032 (beet): RU: свёкла | EN: beet
+ID 4033 (radish): RU: редис, редиска | EN: radish
+ID 4034 (zucchini): RU: кабачок, цукини | EN: zucchini
+ID 4035 (broccoli): RU: брокколи | EN: broccoli
+ID 4036 (spinach): RU: шпинат | EN: spinach
+ID 4037 (peas): RU: горошек, зелёный горошек | EN: peas
+ID 4038 (avocado): RU: авокадо | EN: avocado
+ID 4039 (grapefruit): RU: грейпфрут | EN: grapefruit
+ID 4040 (kefir): RU: кефир | EN: kefir
+ID 4041 (curd): RU: творог, свернувшееся молоко | EN: curd
+ID 4042 (sour cream): RU: сметана | EN: sour cream
+ID 4043 (mayonnaise): RU: майонез | EN: mayonnaise
+ID 4044 (dill): RU: укроп | EN: dill
+ID 4045 (cupcake): RU: капкейк, кекс в формочке | EN: cupcake
+ID 4046 (sausage): RU: колбаса, сосиска | EN: sausage
+ID 4047 (ham): RU: ветчина, окорок | EN: ham
+ID 4048 (ketchup): RU: кетчуп | EN: ketchup
+ID 4049 (fried egg): RU: яичница, глазунья, жареное яйцо | EN: fried egg
+ID 4050 (pancake): RU: блин, блинчик, оладья | EN: pancake
+ID 4051 (computer): RU: компьютер, ЭВМ | EN: computer

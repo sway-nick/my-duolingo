@@ -818,7 +818,47 @@ async function run() {
 
     // Batch 3802-3851
     { id: 3802, word: 'than', lang: 'fr', expected: 'que, de' },
-    { id: 3851, word: 'hello', lang: 'fr', expected: 'bonjour, salut, allô' }
+    { id: 3851, word: 'hello', lang: 'fr', expected: 'bonjour, salut, allô' },
+
+    // Batch 3852-3901
+    { id: 3852, word: 'okay', lang: 'ro', expected: 'bine, de acord, în regulă' },
+    { id: 3892, word: 'kettle', lang: 'hi', expected: 'केतली' },
+
+    // Batch 3902-3951
+    { id: 3917, word: 'template', lang: 'cs', expected: 'šablona, předloha' },
+    { id: 3929, word: 'laugh at', lang: 'de', expected: 'auslachen, lachen über' },
+
+    // Batch 3952-4001
+    { id: 3954, word: 'yob', lang: 'de', expected: 'Hooligan, Schläger, Rabauke' },
+    { id: 3983, word: 'shovel', lang: 'fr', expected: 'pelle, pelleter' },
+
+    // Batch 4002-4051
+    { id: 4004, word: 'ladder', lang: 'fr', expected: 'échelle' },
+    { id: 4050, word: 'pancake', lang: 'fr', expected: 'crêpe, pancake' },
+
+    // Batch 4052-4101
+    { id: 4066, word: 'beat it', lang: 'de', expected: 'zieh Leine, hau ab, mach dich fort' },
+    { id: 4092, word: 'shed', lang: 'fr', expected: 'perdre, muer, se dépouiller de' },
+
+    // Batch 4102-4151
+    { id: 4102, word: 'dream of', lang: 'de', expected: 'träumen von, schwärmen von' },
+    { id: 4109, word: 'plug in', lang: 'fr', expected: 'brancher, enficher, connecter' },
+
+    // Batch 4152-4201
+    { id: 4153, word: 'look after', lang: 'fr', expected: "s'occuper de, veiller sur, garder" },
+    { id: 4179, word: 'maiden', lang: 'ja', expected: '乙女、少女、処女航海などの「初の」' },
+
+    // Batch 4202-4251
+    { id: 4211, word: 'foot feet', lang: 'fr', expected: 'pied — pieds' },
+    { id: 4239, word: 'come in', lang: 'fr', expected: 'entrer, pénétrer, faire son entrée, arriver' },
+
+    // Batch 4252-4301
+    { id: 4271, word: 'rasp', lang: 'de', expected: 'Raspel; kratzendes Geräusch, Krächzen' },
+    { id: 4278, word: 'faced', lang: 'de', expected: 'konfrontiert, gegenüberstehend; verkleidet' },
+
+    // Batch 4302-4351
+    { id: 4319, word: 'at home', lang: 'de', expected: 'zu Hause, daheim' },
+    { id: 4344, word: 'safe travels', lang: 'de', expected: 'gute Reise, gute Fahrt, komm gut an' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -839,21 +879,21 @@ async function run() {
     return require(filePath);
   }
 
-  // Batches 1 to 67 (words 1-3351) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-67 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 68-77 (words 3352-3851, 498 words)
+  // Batches 1 to 77 (words 1-3851) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-77 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 78-87 (words 3852-4351, 499 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_3352_3401_calibrations.cjs',
-    'apply_batch_3402_3451_calibrations.cjs',
-    'apply_batch_3452_3501_calibrations.cjs',
-    'apply_batch_3502_3551_calibrations.cjs',
-    'apply_batch_3552_3601_calibrations.cjs',
-    'apply_batch_3602_3651_calibrations.cjs',
-    'apply_batch_3652_3701_calibrations.cjs',
-    'apply_batch_3702_3751_calibrations.cjs',
-    'apply_batch_3752_3801_calibrations.cjs',
-    'apply_batch_3802_3851_calibrations.cjs'
+    'apply_batch_3852_3901_calibrations.cjs',
+    'apply_batch_3902_3951_calibrations.cjs',
+    'apply_batch_3952_4001_calibrations.cjs',
+    'apply_batch_4002_4051_calibrations.cjs',
+    'apply_batch_4052_4101_calibrations.cjs',
+    'apply_batch_4102_4151_calibrations.cjs',
+    'apply_batch_4152_4201_calibrations.cjs',
+    'apply_batch_4202_4251_calibrations.cjs',
+    'apply_batch_4252_4301_calibrations.cjs',
+    'apply_batch_4302_4351_calibrations.cjs'
   ];
 
   let mergedCount = 0;

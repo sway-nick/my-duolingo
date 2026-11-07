@@ -1,0 +1,151 @@
+Batch 4152–4201 Linguistic Audit and Calibration Report
+======================================================
+Scope: 50 words/phrases (IDs 4152–4201)
+Coverage: EXACTLY 36 Locales (35 target languages + en headword)
+Target Languages: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk.
+
+KEY SYSTEMIC BUGS CAUGHT & RECTIFIED:
+------------------------------------
+1. "Physically" Gloss Leak in Word 4153 ("look after"):
+   The Russian source gloss "заботиться физически, присматривать" contained the explanatory word "физически" (meaning physical tending/care). Machine translation blindly translated "physically" across 15+ target languages:
+   - RO: "a avea grijă fizic" -> rectified to "a avea grijă de, a supraveghea, a îngriji"
+   - BG: "грижа се физически" -> rectified to "грижа се за, наглеждам, пазя"
+   - HU: "fizikailag gondoskodni" -> rectified to "vigyázni rá, gondoskodni róla, ügyelni rá"
+   - EL: "φροντίζω σωματικά" -> rectified to "φροντίζω, προσέχω, επιβλέπω"
+   - SL: "skrbeti za fizično" -> rectified to "skrbeti za, paziti na, varovati"
+   - ET: "füüsiliselt hoolitseda" -> rectified to "hoolitsema, järele vaatama, valvama"
+   - LT: "rūpintis fiziškai" -> rectified to "prižiūrėti, rūpintis, saugoti"
+   - DA: "omsorg fysisk" -> rectified to "passe på, tage sig af, holde øje med"
+   - FI: "huolehtia fyysisesti" -> rectified to "pitää huolta, vahtia, huolehtia"
+   - SV: "bry sig fysiskt" -> rectified to "se efter, passa, ta hand om"
+   - HR: "fizički se brinuti" -> rectified to "paziti na, čuvati, brinuti se o"
+   - LV: "rūpēties fiziski" -> rectified to "pieskatīt, uzraudzīt, rūpēties par"
+   - AR: "يهتم جسدياً" -> rectified to "يعتني بـ، ينتبه إلى، يحرس"
+   - TH: "ห่วงใยทางร่างกาย" -> rectified to "ดูแล, เฝ้าดู, เลี้ยงดู"
+   - KK: "физикалық тұрғыдан қамқорлық жасау" -> rectified to "қарау, бағу, көз салып жүру"
+   - CS/SK: "pečovat o sebe / starať sa o seba" (take care of ONESELF) -> completely inverted the meaning of transitive "look after"! Rectified to "starat se o, dohlížet na" / "starať sa o, dohliadať na".
+
+2. Conjunction-for-Preposition Bug in Word 4167 ("annoyed about"):
+   MT translated the preposition "about" as causal conjunction "because / because of that" across 14 languages:
+   - DE: "verärgert, weil" -> rectified to "verärgert über etwas, genervt von etwas"
+   - FR: "agacé parce que" -> rectified to "agacé par quelque chose, contrarié par quelque chose"
+   - IT: "infastidito perché" -> rectified to "infastidito da qualcosa, irritato per qualcosa"
+   - PT: "irritado porque" -> rectified to "chateado por causa de, irritado com algo"
+   - RO: "enervat pentru că" -> rectified to "enervat din cauza a ceva, nemulțumit de ceva"
+   - BG: "раздразнен, защото" -> rectified to "раздразнен от нещо, ядосан за нещо"
+   - CS: "naštvaný, protože" -> rectified to "otrávený kvůli něčemu, naštvaný z něčeho"
+   - SK: "naštvaný, pretože" -> rectified to "otrávený kvôli niečomu, nahnevaný z niečoho"
+   - HU: "bosszantott, mert" -> rectified to "bosszús valami miatt, dühös valamiért"
+   - EL: "ενοχλημένος επειδή" -> rectified to "εκνευρισμένος για κάτι, ενοχλημένος με κάτι"
+   - SL: "jezen, ker" -> rectified to "razdražen zaradi nečesa, jezen zaradi nečesa"
+   - ET: "pahane, sest" -> rectified to "ärritunud millegi peale, pahane millegi pärast"
+   - LT: "susierzinęs, nes" -> rectified to "susierzinęs dėl ko nors, piktas dėl ko nors"
+   - KK: "ашуланды, себебі" -> rectified to "бір нәрсе үшін ашулы, ренжулі"
+
+3. Imperative Infection in Word 4158 ("think of"):
+   Russian "вспомнить, придумывать" was misread by MT as imperatives ("вспомни, придумай"), producing command forms in 11 languages:
+   - FR ("Souvenez-vous, inventez"), IT ("ricorda, inventa"), PT ("lembre-se, invente"), RO ("amintește-ți, inventează"), BG ("запомни, измисли"), SK ("pamätaj si, vymysli si"), HU ("emlékezz, találj ki"), EL ("θυμήσου, εφεύρεις"), SL ("zapomni si, izumi"), ET ("mäleta, leiuta"), LT ("prisimink, sugalvok").
+   All restored to proper infinitive / base verbal forms.
+
+4. Critical False Friend in Word 4179 ("maiden"):
+   MT confused "maiden" (young unmarried woman; virgin; inaugural) with "maid" (housemaid, servant, domestic worker):
+   - Hindi: "नौकरानी" (housemaid/servant) -> calibrated to "अविवाहित कन्या, युवती, प्रथम"
+   - Japanese: "メイド" (cosplay maid / maidservant) -> calibrated to "乙女、少女、処女航海などの「初の」"
+   - Arabic: "خادمة" (maidservant) -> calibrated to "عذراء، فتاة بكر، أول / تدشيني"
+   - Kazakh: "пәк" (adjective virgin) -> calibrated to noun "бойжеткен, бикеш, алғашқы"
+   - French: capitalized "Vierge" (Virgin Mary) -> calibrated to "jeune fille, donzelle, inaugural"
+
+5. Hem of Garment Misinterpretation in Word 4173 ("edge"):
+   Because Russian had "кромка", MT translated "edge" as garment hem/border across multiple languages:
+   - DE ("Saum"), FR ("ourlet"), PT ("bainha"), HI ("हेम"), AR ("حاشية"), JA ("裾"), KK ("етек").
+   Calibrated across all 35 languages to represent boundary, brink, cutting edge of blade, and competitive edge/advantage ("have an edge").
+
+6. Live Animal vs. Prepared Meat in Word 4171 ("mutton"):
+   "Mutton" specifically designates the meat of a mature sheep. MT translated it as live animal or lamb:
+   - AR: "حمل" (young lamb animal) -> calibrated to "لحم الضأن، لحم الغنم"
+   - JA: "子羊" (lamb animal) -> calibrated to "マトン、成羊の肉"
+   - KK: "қозы" (young lamb) -> calibrated to "қой еті, ересек қойдың еті"
+   - DE: "Hammel" (live wether) -> calibrated to "Hammelfleisch, Schaffleisch"
+   - PT: "carneiro" (ram animal) -> calibrated to "carne de carneiro, carne de ovelha"
+
+7. Truncated Senses in Word 4172 ("take off"):
+   In JA, dump only had "値下げする" (reduce price)! In AR and KK, removing clothes was completely omitted.
+   Calibrated to all three core semantic fields: remove clothing, aircraft departure/takeoff, and rapid rise to success.
+
+8. Pragmatic Tone in Word 4154 ("look forward to"):
+   VI had "chờ đợi thiếu kiên nhẫn" and TH had "รออย่างใจร้อน", conveying negative impatience or restlessness.
+   Calibrated to positive, eager anticipation: "trông đợi, mong mỏi" in VI and "ตั้งตารอ, เฝ้ารอคอย" in TH.
+
+9. Hostile vs. Neutral Calling in Word 4155 ("shout to"):
+   "Shout to" is calling out to someone over a distance to get their attention, unlike "shout at" (scolding angrily).
+   AR had "يصرخ في وجه شخص ما" (screaming in someone's face) and JA had "誰かに怒鳴る" (yelling angrily at someone).
+   Rectified to calling out / hailing across distance.
+
+10. Part of Speech Errors:
+    - 4152 (care for): DA had noun "omsorg" -> rectified to verbal "drage omsorg for, passe på".
+    - 4159 (short of): BG, EL, SL had 3rd person plural verbs ("изпитват недостиг", "βιώνουν έλλειψη", "doživijo pomanjkanje") -> rectified to adjectival phrases.
+    - 4164 (safe from): TR had indicative verb "korunmaktadır" -> rectified to adjective phrase "...den güvende, korunmuş".
+    - 4165 (free from): KK had noun "бостандық" (freedom) -> rectified to adjective "...-дан ада, құтылған, босатылған".
+    - 4182 (fiscal cliff): Generic "economic crisis" in FR, PT, HI, AR, JA, KK -> calibrated to precise fiscal/budgetary cliff terms (falaise fiscale, abismo fiscal, 財政の崖, фискалдық құз).
+    - 4183 (squat): FR had only "squatter" (illegal building occupation) -> expanded to crouching, squat exercises, and haunches.
+    - 4187 (rusty): Expanded from purely corroded metal to figurative out-of-practice skills across all languages.
+    - 4189 (melon): In AR, "بطيخ" commonly means watermelon; calibrated to "شمّام، بطيخ أصفر" for muskmelon/cantaloupe.
+    - 4193 (barefoot): PT had "pés descalços" -> calibrated to adjective/adverb "descalço".
+    - 4197 (I don't mind): Replaced broken fragments ("macht nichts aus" DE) with natural conversational expressions ("ich habe nichts dagegen, mir macht das nichts aus").
+    - 4199-4201 (do the dishes, do laundry, do chores): Ensured natural domestic verb phrases (e.g. es-MX: lavar los trastes / lavar los platos; pt-BR: lavar a louça, lavar roupa, fazer as tarefas de casa).
+
+AUDIT AND CALIBRATION SUMMARY BY WORD (4152–4201):
+-------------------------------------------------
+4152. care for: Verbs of tending, looking after, and affection/preference in negative/interrogative contexts.
+4153. look after: Stripped bizarre "physically" and reflexive "oneself"; calibrated to watchful care and tending.
+4154. look forward to: Positive eager anticipation; purged irritated impatience nuances.
+4155. shout to: Calling out over distance / hailing; purged hostile screaming/berating nuances.
+4156. hear of: Awareness of existence / hearing about someone/something.
+4157. hear from: Receiving communications, letters, or news directly from someone.
+4158. think of: Purged imperative commands across 11 languages; calibrated to recall, devise, and consider.
+4159. short of: Adjective phrase for deficiency, lacking, and scarcity; normalized grammatical agreement.
+4160. sick of: Idiomatic exasperation (fed up with, tired to death of).
+4161. late for: Arriving behind schedule for an event or engagement.
+4162. bad for: Detrimental, unhealthy, or harmful to someone/something.
+4163. good for: Beneficial, healthy, or suitable for someone/something.
+4164. safe from: Protected, sheltered, or immune from danger.
+4165. free from: Exempt from, rid of, devoid of impurities/burdens.
+4166. annoyed with: Irritated or displeased with a specific person.
+4167. annoyed about: Fixed catastrophic "because" conjunction translations; calibrated to prepositional irritation over an event or situation.
+4168. hop: Single-foot jumping, bounding, and boarding a vehicle quickly.
+4169. farewell: Formal parting, goodbye, and send-off ceremonies.
+4170. who can tell: Idiomatic rhetorical question indicating complete unpredictability.
+4171. mutton: Meat of adult sheep; distinguished clearly from lamb and live sheep.
+4172. take off: Disrobing, aircraft departure, and skyrocketing success.
+4173. edge: Purged "skirt hem" bug; calibrated to perimeter, sharp blade, and competitive edge.
+4174. black dog: Churchillian metaphor for severe depression and dark melancholia.
+4175. idle: Inactive, lazy, unused equipment, and engine idling.
+4176. breathed: Past tense breathing, whispering softly, and sighing.
+4177. either: Dual determiner (either one) and negative adverbial agreement (nor I / me neither).
+4178. puddle: Rainwater pool on pavement/ground.
+4179. maiden: Fixed critical false friend (not housemaid!); young woman, virgin, and inaugural voyage.
+4180. untill recently: Temporal adverbial up to a recent point in time.
+4181. boredom: State of tedium, ennui, and lack of stimulation.
+4182. fiscal cliff: Precise macroeconomic/tax deadline crisis term.
+4183. squat: Haunches crouch, fitness squat, and unlawful dwelling.
+4184. all the same: Adverbial concession (nevertheless) and indifference (makes no difference).
+4185. pup: Puppy, animal pup (seal/wolf), and greenhorn novice.
+4186. I get it: Conversational comprehension and realization.
+4187. rusty: Oxidized metal and neglected, rusty skills.
+4188. how you been: Informal conversational inquiry on recent well-being.
+4189. melon: Muskmelon / cantaloupe; distinguished from watermelon in Arabic and Romance.
+4190. cough: Sudden expulsion of breath from lungs (noun and verb).
+4191. silently: Soundless, quiet, and speechless adverbial execution.
+4192. politely: Courteous, well-mannered conduct.
+4193. barefoot: Without footwear/socks.
+4194. half awake: Semi-conscious transitional state between slumber and wakefulness.
+4195. calmly: Composed, serene, and cool-headed manner.
+4196. patiently: Bearing delay or distress without complaint.
+4197. I don't mind: Polite expression of absence of objection.
+4198. sour: Acidic flavor, curdled/turned dairy, and sullen demeanor.
+4199. do the dishes: Cleaning tableware, plates, and pots after a meal.
+4200. do laundry: Washing textiles and soiled clothes.
+4201. do chores: Routine household tasks, tidying, and domestic maintenance.
+
+All 50 words calibrated and verified across all 35 target languages + en (36 locales total).
+Valid output exported to scripts/apply_batch_4152_4201_calibrations.cjs.

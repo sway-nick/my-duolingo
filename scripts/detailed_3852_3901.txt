@@ -1,0 +1,152 @@
+Batch ID 3852–3901 Linguistic Audit & Calibration Report across EXACTLY 36 LOCALES
+
+=== SUMMARY OF CALIBRATION AUDIT ===
+Batch Range: IDs 3852 to 3901 (50 headwords)
+Source Slice: scripts/dump_3852_3901.json
+Output Artifacts:
+  - scripts/apply_batch_3852_3901_calibrations.cjs (CommonJS module exporting all 35 calibrated target languages)
+  - scripts/detailed_3852_3901.txt (this audit log)
+
+Target Locales (35 + 1 en headword = 36 Locales):
+ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk.
+
+=== KEY BUGS CAUGHT & RESOLVED ===
+
+1. CATASTROPHIC HOMONYM & FALSE FRIEND RESOLUTIONS:
+  - ID 3852 (okay):
+    * Caught severe "fine" homonym confusion where "okay" -> "fine" was mechanically translated as a monetary penalty / legal ticket in 7 languages:
+      - Romanian: "Amenda" (traffic ticket / fine) -> calibrated to "bine, de acord, în regulă".
+      - Slovak: "Pokuta" (penalty fine) -> calibrated to "dobre, v poriadku, fajn".
+      - Greek: "Πρόστιμο" (financial penalty) -> calibrated to "εντάξει, σύμφωνοι, καλά".
+      - Estonian: "Trahv" (fine / penalty) -> calibrated to "hästi, olgu, korras".
+      - Lithuanian: "Bauda" (fine / sanction) -> calibrated to "gerai, sutarta, tvarkoje".
+      - Czech: "Jemné" (fine as delicate / subtle texture) -> calibrated to "dobře, v pořádku, fajn".
+      - Hungarian: "Finom" (fine as delicate / delicious) -> calibrated to "rendben, jól van, oké".
+
+  - ID 3868 (million):
+    * Italian contained a critical error: "consumo" (consumption / fuel consumption) instead of "milione"! Corrected to "milione".
+    * Danish and Swedish had erroneous plural forms ("millioner", "miljoner") instead of base singular ("million", "miljon").
+
+  - ID 3869 (towards):
+    * Mechanical translation treated "towards" as the email header field "To: <recipient>":
+      - Hungarian: "Címzett" (addressee / recipient) -> calibrated to "felé, irányába".
+      - Finnish: "-" (a bare hyphen!) -> calibrated to "kohti, kohti käyvä".
+      - Romanian: "La" -> calibrated to "spre, către, în direcția".
+      - Bulgarian: "До" -> calibrated to "към, в посока на".
+      - Czech: "Na" -> calibrated to "směrem k, k, vůči".
+      - Slovak: "Do" -> calibrated to "smerom k, k, voči".
+      - Greek: "Να" -> calibrated to "προς, κατά".
+      - Estonian: "Kuni" (until / up to) -> calibrated to "poole, suunas".
+      - Kazakh: "дейін" (until / up to) -> calibrated to "қарай, бағытына қарай".
+
+  - ID 3871 (anyone):
+    * "Anyone" (any person / anybody) was confused with determiner "any" (inanimate) or even "nobody":
+      - Czech: "žádný" (meaning nobody / none!) -> calibrated to "kdokoli, kdokoliv".
+      - Italian: "Qualunque" -> calibrated to "chiunque, qualcuno".
+      - Slovak: "akýkoľvek" -> calibrated to "ktokoľvek, niekto".
+      - Hungarian: "bármilyen" -> calibrated to "bárki, akárki".
+      - Finnish: "mistään" (elative case of anything) -> calibrated to "kuka tahansa, joku".
+      - Croatian: "bilo kojem" (locative adjective) -> calibrated to "bilo tko, itko".
+      - Latvian: "jebkuru" (accusative adjective) -> calibrated to "jebkurš, ikviens".
+
+  - ID 3881 (help yourself):
+    * The hospitality idiom "help yourself" (take food/drink freely, make yourself at home) was translated literally as "physically rescue yourself / assist yourself":
+      - Romanian: "ajută-te pe tine însuți" -> calibrated to "servește-te, serviți-vă".
+      - Bulgarian: "помогни си" -> calibrated to "заповядай, почерпи се, вземи си".
+      - Czech: "pomoz si" -> calibrated to "posluž si, nabídni si, poslužte si".
+      - Slovak: "pomôž si" -> calibrated to "poslúž si, ponúkni sa, ponúknite sa".
+      - Hungarian: "segíts magadon" -> calibrated to "szolgáld ki magad, vegyél nyugodtan".
+      - Greek: literal error -> calibrated to "κερνάτε, πάρε μόνος σου, ορίστε".
+      - Slovenian: literal error -> calibrated to "postrezi si, kar vzemi".
+      - Estonian: literal error -> calibrated to "ole lahke, võta julgelt".
+      - Lithuanian: literal error -> calibrated to "vaišinkitės, imkite drąsiai".
+
+  - ID 3892 (kettle):
+    * Conflated water kettle (water boiling vessel) with teapot (brewing tea):
+      - Danish: "Tekande" -> calibrated to "kedel, elkedel".
+      - Finnish: "Teekannu" -> calibrated to "vedenkeitin, pannu".
+      - Swedish: "Tekanna" -> calibrated to "vattenkokare, kittel".
+      - Vietnamese: "Ấm trà" -> calibrated to "ấm đun nước".
+      - Thai: "กาน้ำชา" -> calibrated to "กาต้มน้ำ".
+      - Arabic: "إبريق شاي" -> calibrated to "غلاية, إبريق غلي الماء".
+      - Japanese: "ティーポット" -> calibrated to "やかん、ケトル".
+      - Hindi: calibrated to authentic cognate "केतली" (rather than teapot "चायदानी").
+      - Urdu: calibrated to "کیتلی".
+      - Kazakh: calibrated to "шәйнек, су қайнатқыш".
+
+  - ID 3894 (mosquito):
+    * Kazakh had a hilarious hallucination: "масала" (garam masala curry spice!) instead of the insect "маса". Corrected to "маса".
+    * Brazilian Portuguese: added authentic regional term "pernilongo" alongside "mosquito".
+    * Latin American Spanish: added regional term "zancudo".
+
+  - ID 3899 (smash):
+    * In 10+ languages, "smash" was translated as "defeat / military loss" because Russian had "разгромить" (rout/destroy):
+      - Italian: "sconfitta" (defeat / loss) -> calibrated to "frantumare, spaccare, mandare in frantumi".
+      - Romanian: "învinge" (to defeat) -> calibrated to "a zdrobi, a sfărâma, a sparge".
+      - Bulgarian: "поражение" (defeat) -> calibrated to "разбивам на парчета, разгромявам".
+      - Czech: "porazit" (to defeat) -> calibrated to "roztříštit, rozbít na kousky".
+      - Slovak: "porážka" (defeat) -> calibrated to "roztrieštiť, rozbít na márne kúsky".
+      - Hungarian: "vereség" (defeat) -> calibrated to "szétzúz, darabokra tör".
+      - Greek: "ήττα" (defeat) -> calibrated to "συντρίβω, κομματιάζω, σπάω".
+      - Slovenian: "poraz" (defeat) -> calibrated to "razbiti na drobce, zdrobiti".
+      - Estonian: "lüüasaamine" (defeat) -> calibrated to "purustama, kildudeks peksma".
+      - Lithuanian: "pralaimėjimas" (defeat) -> calibrated to "sutriuškinti, sudaužyti į šukes".
+      - Kazakh: "сынған" (broken - past participle) -> calibrated to active verb "күл-талқан ету, қирату".
+
+  - ID 3901 (incur):
+    * The Russian prompt explanation "нести, навлечь на себя что-то плохое" was literally translated as a full sentence ("to carry and bring something bad upon oneself") in 10 languages:
+      - Danish: "At bære, at bringe noget dårligt over sig selv" -> calibrated to "pådrage sig, påløbe, lide".
+      - Finnish: "Kantaa, aiheuttaa jotain pahaa itselleen" -> calibrated to "vetää päälleen, koitua maksettavaksi, aiheuttaa itselleen".
+      - Swedish: "Att bära, att ådra sig något ont" -> calibrated to "ådra sig, drabbas av, förorsaka sig".
+      - Croatian: "Nositi, donijeti nešto loše na sebe" -> calibrated to "navući na sebe, pretrpjeti (troškove)".
+      - Latvian: "Nest, nodarīt sev ko sliktu" -> calibrated to "uzņemties, izsaukt pār sevi".
+      - Hindi: "अपने ऊपर कुछ बुरा लाना" -> calibrated to "अपने ऊपर लेना, वहन करना, भुगतना".
+      - Arabic: "يحمل، يجلب شيئًا سيئًا على نفسه" -> calibrated to "تكبد, جلب على نفسه, تعرض لـ".
+      - Thai: "แบกรับ นำสิ่งไม่ดีมาสู่ตนเอง" -> calibrated to "ก่อให้เกิด, แบกรับ (ภาระ/ความเสียหาย)".
+      - Japanese: "運ぶ、災いを招く" -> calibrated to "（損害・費用などを）招く、被る、負う".
+      - Kazakh: "алып жүру, өзіне жаман нәрсе әкелу" -> calibrated to "өзіне тарту, ұшырау, залал шегу".
+
+2. GRAMMATICAL CASE & INFLECTION NORMALIZATION:
+  - Croatian / Latvian dictionary lemmas trapped in oblique grammatical cases:
+    * ID 3872 (attorney): HR "odvjetniku" (locative) -> "odvjetnik"; LV "advokātu" (accusative) -> "advokāts".
+    * ID 3873 (health): HR "zdravlju" (locative) -> "zdravlje"; LV "veselību" (accusative) -> "veselība".
+    * ID 3874 (senator): HR "senatoru" (dative/locative) -> "senator"; LV "senatoru" (accusative) -> "senators".
+    * ID 3877 (senate): HR "senatu" (locative) -> "senat"; LV "senātu" (accusative) -> "senāts"; SV "senaten" (definite) -> "senat".
+    * ID 3878 (theater): HR "kazalištu" (locative) -> "kazalište"; LV "teātri" (accusative) -> "teātris".
+    * ID 3879 (congress): HR "kongresu" (locative) -> "kongres"; LV "kongresu" (accusative) -> "kongress".
+    * ID 3880 (christmas): HU "karácsonyi" (adjective) -> "karácsony" (noun).
+  - Part-of-speech alignment for ID 3875 (search for):
+    * Phrasal verb had been nominalized in HR ("pretraživanju"), LV ("meklēšanu"), IT ("ricerca"), JA ("捜索") -> corrected to active verbal forms ("tražiti, tragati za", "meklēt", "cercare, ricercare", "～を探す、捜索する").
+  - Mathematical & multiplicative dual meanings for ID 3886 (times):
+    * FI "Kertokaa" (imperative plural: "tell!") -> corrected to "kertaa, kerrottuna".
+    * DA "Gang" (singular) -> corrected to "gange, multipliceret med".
+    * KK "есе көбейтіңіз" (imperative sentence) -> "рет, мәрте, көбейту".
+
+3. REGIONAL & CULTURAL CALIBRATIONS:
+  - Brazilian Portuguese (pt-BR):
+    * ID 3852: "tudo bem, beleza, certo, ok"
+    * ID 3881: "sirva-se, fique à vontade"
+    * ID 3885: "e aí?, beleza?, como vai?"
+    * ID 3894: added standard Brazilian "pernilongo"
+    * ID 3895: "birrento, ranzinza, irritadiço"
+  - Latin American Spanish (es):
+    * ID 3885: "¿qué tal?, ¿qué pasa?, ¿qué hay?"
+    * ID 3892: added South American "pava" alongside "hervidor"
+    * ID 3894: added Latin American "zancudo"
+    * ID 3895: "cascarrabias, quisquilloso, irritado"
+    * ID 3898: "sombrío, taciturno, cariacontecido"
+  - Indic (hi, bn) & Perso-Arabic / Urdu (ar, fa, ur):
+    * ID 3852: hi "ठीक है, अच्छा", ur "ٹھیک ہے، درست", fa "باشه، قبول", ar "حسناً, موافق", bn "ঠিক আছে, আচ্ছা"
+    * ID 3859: accurate definite article descriptions across non-article languages.
+    * ID 3892: authentic native cognates for water kettle: hi "केतली", ur "کیتلی", fa "کتری", bn "কেতলি".
+    * Natural grammar, idiom, and idiomatic flow verified across all RTL and Indic scripts.
+  - Kazakh (kk):
+    * ID 3894: fixed curry spice "масала" to "маса".
+    * Natural vowel harmony and proper suffixes verified across all Kazakh entries.
+
+=== VERIFICATION ===
+- Node.js syntax check passed.
+- All 50 word IDs (3852 through 3901) validated.
+- Exactly 35 target languages present and populated per word ID (1,750 calibrated translations total).
+- 36 locales total when including English headwords.
+- Zero APK/AAB build executions attempted (Critical Directive Rule #2 strictly maintained).

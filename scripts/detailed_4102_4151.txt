@@ -1,0 +1,94 @@
+Batch 4102-4151 Linguistic Audit and Calibration Report
+====================================================
+
+Key linguistic calibrations and bugs caught across 36 locales:
+
+1. Word 4102 ("dream of"):
+   - Issue in dump: Russian had noun "мечта о" instead of verbal expression "мечтать о, грезить о".
+   - French calibrated to "rêver de, songer à".
+   - Spanish "soñar con", German "träumen von", Portuguese "sonhar com".
+   - Non-Latin script calibration: natural verb collocations in Arabic (يحلم بـ، يطمح إلى), Urdu (کا خواب دیکھنا، حسرت کرنا), Hindi (का सपना देखना), Bengali (স্বপ্ন দেখা), Kazakh (армандау, қиялдау).
+
+2. Word 4103 ("timber"):
+   - Issue in dump: Mixed POS with adjective "древесина, лесной" and German "Bauholz, Holz", French "bois, forêt", Portuguese "madeira, floresta". "Timber" refers specifically to lumber/wood for building or harvested roundwood, not standing forest.
+   - Calibrated across all locales: FR "bois de construction, bois d'œuvre", ES "madera, madera de construcción", PT "madeira, madeira de construção", PL "drewno budowlane, tarcica, drewno", TR "kereste, yapı kerestesi", IT "legname, legname da costruzione".
+
+3. Word 4104 ("adore"):
+   - Issue in dump: 1st person singular "обожаю" in Russian/Ukrainian ("обожнюю") instead of infinitive "обожать, очень любить, благоговеть".
+   - Japanese had "崇拝する" (worship), calibrated to "熱愛する、大好きである".
+   - All 35 target languages aligned to infinitive verb forms expressing deep affection and adoration.
+
+4. Word 4105 ("realise"):
+   - Polysemy addressed: covers both cognitive comprehension ("become aware / understand") and manifestation ("realize a project / achieve / fulfill").
+   - Aligned RU "осознавать, понимать, осуществлять", UK "усвідомлювати, розуміти, здійснювати", DE "begreifen, einsehen, verwirklichen", ES "darse cuenta de, comprender, realizar", FR "se rendre compte, comprendre, réaliser".
+
+5. Word 4106 ("I find it"):
+   - Syntactic pattern calibration: English evaluation structure ("I find it difficult/useful" -> "мне это кажется / я считаю это").
+   - Dump had literal "я нахожу это", Japanese "私はこれを見つける" (I locate this item!), Kazakh "мен оны таптым" (I found it!).
+   - Fixed to evaluative predicates across all languages: JA "私はそれを〜だと思う、感じる", KO "나는 그것이 ~하다고 본다, 느낀다", ES "me parece, lo encuentro, lo considero", FR "je trouve cela, cela me paraît", KK "меніңше бұл, маған солай көрінеді", TR "bana ... geliyor, bunu ... buluyorum".
+
+6. Word 4107 ("abolished"):
+   - Part of speech: passive participle / adjective "упразднённый, отменённый, ликвидированный".
+   - Fixed dump bugs: Urdu had transliterated gibberish "ابولیشڈ" (abolished), Hindi had bare "रद्द", German "abgeschafft, aufgehoben, beseitigt".
+   - Calibrated legal/institutional terms: FR "aboli, supprimé, abrogé", ES "abolido, derogado, suprimido", IT "abolito, abrogato, soppresso", UR "منسوخ، ختم شدہ".
+
+7. Word 4109 ("plug in"):
+   - Phrasal verb with electrical preposition: "включать в розетку, подключать".
+   - Dump had generic "connect" (FR "connecter", PT "conectar", HI "जुड़ना").
+   - Calibrated to authentic electrical wall-socket idiom: FR "brancher, enficher, connecter", ES "enchufar, conectar a la corriente", PT "ligar à tomada, plugar", DE "einstecken, ans Netz anschließen", TR "fişe takmak, bağlamak".
+
+8. Word 4110 ("be going to"):
+   - Critical dump mistranslation: FR had imperative "Préparez-vous, planifiez" (Get ready, plan!), PT had imperative "Prepare-se, planeje", Kazakh had imperative "дайындал, жоспарла".
+   - Fixed to prospective aspect / intentional future auxiliary: FR "aller, avoir l'intention de, s'apprêter à", PT "ir, pretender, estar prestes a", ES "ir a, tener la intención de", DE "vorhaben, beabsichtigen, werden", KK "істемекші болу, жиналу, ниеттену", JA "〜するつもりだ、〜しようとしている".
+
+9. Word 4111 ("on time"):
+   - Catastrophic dump mistranslation: FR had "pendant" (during!), PL had "podczas" (during!), IT had "durante" (during!). Machine translator confused "on time" with "at the time of / during the period of"!
+   - Calibrated to punctuality and scheduled precision: FR "à l'heure, ponctuel, à temps", PL "na czas, punktualnie", IT "in orario, puntuale, in tempo", DE "pünktlich, rechtzeitig", ES "a tiempo, puntual, con puntualidad", PT "na hora certa, a tempo, pontualmente".
+
+10. Word 4112 ("torch"):
+    - Semantic homonymy / regional UK vs US: UK pocket torch (flashlight) vs classical burning stick (beacon/torch) vs slang/arson verb ("torch a building").
+    - Calibrated across all locales: UK/US flashlight and flame distinction preserved: RU "фонарик, факел, поджигать", DE "Taschenlampe, Fackel, in Brand setzen", ES "linterna, antorcha, incendiar", FR "lampe de poche, torche, incendier", IT "torcia, lampadina tascabile, incendiare", PT "lanterna, tocha, incendiar".
+
+11. Dependent Prepositional Patterns (Words 4113 to 4151):
+    Extensive calibration of idiosyncratic adjective and verb prepositions across all 36 locales:
+    - 4113 ("famous for"): "известный чем-то" -> DE "berühmt für", FR "célèbre pour", ES "famoso por", IT "famoso per", TR "ile ünlü", JA "〜で有名な".
+    - 4114 ("insist on"): "настаивать на" -> DE "bestehen auf", FR "insister sur", ES "insistir en", PL "nalegać na", FA "اصرار ورزیدن بر", AR "يصر على".
+    - 4115 ("proud of"): Dump had imperative "Soyez fiers" (FR) and "Tenha orgulho" (PT)! Calibrated to descriptive adjectives: FR "fier de", PT "orgulhoso de", DE "stolz auf", ES "orgulloso de", JA "〜を誇りに思う".
+    - 4116 ("angry with"): "злой на, сердитый на" -> DE "wütend auf, böse auf", FR "en colère contre", ES "enojado con, enfadado con" (incorporating Latin American 'enojado'), PT-BR "bravo com, zangado com", TR "-e kızgın", AR "غاضب من".
+    - 4117 ("tired of"): "уставший от, сытый по горло" -> DE "müde von, überdrüssig", FR "fatigué de, las de", ES "cansado de, harto de", PT "cansado de, farto de, cheio de", CS "unavený z, otrávený čím".
+    - 4118 ("useful for"): "полезный для" -> DE "nützlich für", FR "utile pour, profitable à", ES "útil para", PT "útil para, proveitoso para".
+    - 4119 ("guilty of"): "виновный в" -> DE "schuldig an", FR "coupable de", ES "culpable de", PL "winny czegoś", TR "-den suçlu".
+    - 4120 ("essential for"): "необходимый для, существенный для" -> DE "unerlässlich für", FR "essentiel pour, indispensable à", ES "esencial para, imprescindible para".
+    - 4121 ("separate from"): "отдельный от, отделять от" -> DE "getrennt von", FR "séparé de", ES "separado de", IT "separato da".
+    - 4122 ("typical of"): "типичный для, характерный для" -> DE "typisch für", FR "typique de", ES "típico de", TR "-e özgü, -e has".
+    - 4123 ("capable of"): "способный на" -> DE "fähig zu", FR "capable de, apte à", ES "capaz de", IT "capace di", JA "〜の力量がある".
+    - 4124 ("scared of"): Cleaned dump notes that leaked into Russian text ("испуганный сильно эмоционально сейчас"). Calibrated to "боящийся, напуганный", DE "verängstigt vor", FR "effrayé par, avoir peur de", ES "asustado de, con miedo a".
+    - 4125 ("apologize for"): Dump had imperative "excusez-moi pour" in FR! Calibrated to infinitive: FR "s'excuser de, demander pardon pour", DE "sich entschuldigen für", ES "disculparse por", PT "desculpar-se por".
+    - 4126 ("opposed to"): "выступающий против, враждебный к" -> DE "abgeneigt gegenüber", FR "opposé à", ES "opuesto a", TR "-e muhalif".
+    - 4127 ("known for"): "известный чем-то, славящийся" -> DE "bekannt für", FR "connu pour, réputé pour", ES "conocido por", JA "〜で世に知られる".
+    - 4128 ("cruel to"): "жестокий к, безжалостный к" -> DE "grausam zu", FR "cruel envers, sans pitié pour", ES "cruel con", PT "cruel com", TR "-e karşı acımasız".
+    - 4129 ("experienced in"): "опытный в, сведущий в" -> DE "erfahren in", FR "expérimenté dans", ES "experimentado en", TR "konusunda deneyimli".
+    - 4130 ("jealous of"): "ревнующий, завидующий" (adjective, not verbs) -> DE "eifersüchtig auf, neidisch auf", FR "jaloux de, envieux de", ES "celoso de, envidioso de", TR "-i kıskanan".
+    - 4131 ("rude to"): "грубый с, невежливый к" -> DE "unhöflich zu", FR "impoli avec, malpoli envers", ES "grosero con, descortés con", TR "-e kaba davranan".
+    - 4132 ("ashamed of"): "стыдящийся, пристыженный" -> DE "beschämt über", FR "honteux de", ES "avergonzado de", PT "envergonhado de".
+    - 4133 ("successful in"): "успешный в, преуспевающий в" -> DE "erfolgreich in", FR "prospère dans", ES "exitoso en", TR "konusunda başarılı".
+    - 4134 ("responsible for"): "ответственный за" -> DE "verantwortlich für", FR "responsable de", ES "responsable de", TR "-den sorumlu".
+    - 4135 ("independent of"): "независимый от" -> DE "unabhängig von", FR "indépendant de", ES "independiente de", TR "-den bağımsız".
+    - 4136 ("certain of"): "уверенный в, убеждённый в" -> DE "gewiss über, überzeugt von", FR "sûr de, certain de", ES "seguro de, convencido de".
+    - 4137 ("involved in"): "вовлечённый в, замешанный в, причастный к" -> DE "verwickelt in", FR "impliqué dans, mêlé à", ES "implicado en", TR "-e karışmış, -e bulaşmış".
+    - 4138 ("ready for"): "готовый к" -> DE "bereit für", FR "prêt pour, paré à", ES "listo para", TR "-e hazır".
+    - 4139 ("fit for"): "пригодный для, подходящий для" -> DE "geeignet für, tauglich für", FR "apte à, taillé pour", ES "apto para, idóneo para", TR "için elverişli, uygun".
+    - 4140 ("kind to"): "добрый к, благожелательный к" -> DE "freundlich zu", FR "gentil avec, bienveillant envers", ES "amable con, bondadoso con", TR "-e karşı şefkatli".
+    - 4141 ("sorry for"): Dump had nouns "regrets" (FR) and "arrependimento sobre" (PT)! Calibrated to adjectives/predicates: FR "désolé de, navré pour", PT "arrependido por, condoído de", DE "bekümmert über, leidtuend", ES "apenado por, compadecido de".
+    - 4142 ("full of"): Dump had incomplete "complet" (FR), "voll" (DE), "tam dolu" (TR). Calibrated to full prepositional idioms: FR "plein de, rempli de, débordant de", DE "voller, randvoll mit", ES "lleno de, colmado de", PT "cheio de, repleto de", TR "ile dolu, dolup taşan".
+    - 4143 ("married to"): English "married to" requires specific prepositions per target language: DE "verheiratet mit", FR "marié à, mariée à", ES "casado con, casada con", IT "sposato con", RU "женатый на, замужем за", UK "одружений з, заміжня за".
+    - 4144 ("believe in"): "верить в" -> DE "glauben an", FR "croire en, avoir foi en", ES "creer en, tener fe en", TR "-e iman etmek".
+    - 4145 ("suffer from"): "страдать от, мучиться от" -> DE "leiden an, geplagt sein von", FR "souffrir de, être atteint de", ES "padecer de, aquejarse de", TR "-den mustarip olmak".
+    - 4146 ("fond of"): Dump had nouns "amour, adoration" (FR) and bare "любить" (RU). Calibrated to affective adjectives: RU "любящий, питающий слабость к", FR "friand de, très attaché à", DE "angetan von, vernarrt in", ES "aficionado a, encariñado con", PT "apegado a, fascinado por", TR "-e düşkün, bayılan".
+    - 4147 ("polite to"): Dump had ungrammatical German "höflich mit"! Corrected to "höflich zu, zuvorkommend gegen", FR "poli avec, plein d'égards pour", ES "educado con, cortés con", TR "-e karşı terbiyeli, nazik".
+    - 4148 ("different from"): "отличный от, отличающийся от" -> DE "verschieden von, abweichend von", FR "différent de, dissemblable de", ES "diferente de, distinto de", TR "-den farklı, -den ayrılan".
+    - 4149 ("agree with"): "соглашаться с (человеком)" -> DE "zustimmen, übereinstimmen mit", FR "être d'accord avec, approuver", ES "estar de acuerdo con, coincidir con", TR "-e hak vermek, görüşüne katılmak".
+    - 4150 ("agree on"): "договариваться о (теме/условиях)" -> DE "sich einigen auf, vereinbaren", FR "se mettre d'accord sur, convenir de", ES "ponerse de acuerdo sobre, consensuar", TR "konusunda mutabık kalmak, uzlaşmak".
+    - 4151 ("care about"): "переживать за, заботиться о, волноваться о" -> DE "sich kümmern um, am Herzen liegen", FR "se soucier de, tenir à, avoir à cœur", ES "importarle, preocuparse por", PT "importar-se com, ligar para", TR "-i önemsemek, üstüne titremek".
+
+All 50 words fully validated across all 35 target languages (36 locales total).
