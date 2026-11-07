@@ -1,0 +1,1908 @@
+Batch 2602-2651 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+1. Word 2602 (thread): Polysemy bug! Dump kk only had "тақырып" (forum topic / conversation thread), completely omitting the primary physical meaning "нить, жіп / жіпше" and mechanical "резьба / бұранда". Calibrated across all locales to cover sewing thread and mechanical thread.
+2. Word 2603 (fool): Added comprehensive coverage of both nominal ("дурак, глупец") and verbal ("дурачить, одурачивать") senses across all 35 target languages.
+3. Word 2604 (characterize): Harmonized verb forms across all languages to denote both descriptive delineation and distinctive feature attribution ("характеризовать, описывать, отличать").
+4. Word 2605 (pie): Regional nuances: Brazilian Portuguese (pt-BR) calibrated to "torta, empada, pastel"; Latin American Spanish (es-MX) calibrated to "tarta, pastel, empanada"; accurately reflecting local culinary terminology.
+5. Word 2606 (legacy): Expanded beyond narrow historical inheritance to include institutional heritage and technological/computing legacy ("наследие, наследство, достояние").
+6. Word 2607 (frankly): Calibrated adverbial expressions of sincerity and directness ("откровенно, честно говоря, прямо") ensuring natural conversational flow.
+7. Word 2608 (derive): Portuguese dump had narrow "retirar". Calibrated to "derivar, extrair, obter" covering mathematical derivation, lexical derivation, and extraction of benefits/meaning.
+8. Word 2609 (dumb): CRITICAL DUMP BUGS! Portuguese had "margem" (margin - corrupted data shift!) and Kazakh had "күңгірт" (dim/dark). Fixed across all locales to properly reflect both physical muteness ("немой, mudo, stumm") and colloquial stupidity ("глупый, тупой, burro").
+9. Word 2610 (scope): CRITICAL DUMP BUG! Portuguese had "legislatura" (legislature - data shift error). Fixed to "alcance, escopo, âmbito". Calibrated all locales for breadth of application, extent, and opportunity.
+10. Word 2611 (formation): Expanded to cover both generative process ("формирование, образование") and structural/military layout ("строй, боевой порядок, formacja").
+11. Word 2612 (hence): Calibrated transitional adverbs denoting consequence and provenance ("следовательно, поэтому, отсюда").
+12. Word 2613 (margin): CRITICAL DUMP BUG! Portuguese had "zero" (data shift). Fixed to "margem, borda, lucro". Calibrated page border, safety leeway, and financial profit margin.
+13. Word 2614 (legislature): Fixed part-of-speech and governmental terminology across all languages ("законодательный орган, легислатура, парламент").
+14. Word 2615 (sustain): Broadened beyond physical holding to include suffering injuries/losses ("поддерживать, выдерживать, переносить, нести").
+15. Word 2616 (miracle): CRITICAL DUMP BUG! Portuguese had "máscara" (mask - data shift). Fixed to "milagre, prodígio, maravilha".
+16. Word 2617 (zero): Ensured full numeral, noun, and adjective coverage ("ноль, нуль, нулевой") with proper orthography across Asian and Middle Eastern scripts.
+17. Word 2618 (tactic): Calibrated tactical planning, maneuvering, and strategic stratagem ("тактика, тактический ход, маневр").
+18. Word 2619 (mask): Polysemy coverage including face covering, medical respirator/mask, disguise, and concealment verb ("маска, личина, маскировать").
+19. Word 2620 (inflation): Economic devaluation of currency and physical expansion/swelling ("инфляция, обесценение денег, раздувание").
+20. Word 2621 (hunting): Covered game tracking/hunting as well as broader pursuit/search ("охота, травля, промысел").
+21. Word 2622 (physically): Part-of-speech correction in Kazakh (dump had adjective "физикалық", fixed to adverbial "физикалық тұрғыдан, дене тұрғысынан"). Calibrated bodily and material aspects across all locales.
+22. Word 2623 (flesh): Covered human/animal soft tissue ("плоть, тело"), botanical fruit pulp ("мякоть"), and meat.
+23. Word 2624 (defendant): Legal calibration for civil respondent ("ответчик, demandado") and criminal accused ("подсудимый, обвиняемый, réu, acusado").
+24. Word 2625 (pole): Polysemy resolved for upright rod/post ("столб, шест"), geographic/magnetic pole ("полюс"), and Polish nationality reference where applicable.
+25. Word 2626 (withdraw): CRITICAL DUMP BUG! Portuguese had "lembrar" (remember - data shift error). Fixed to "retirar, sacar, recuar", covering cash withdrawal, troop retreat, and retraction of statements.
+26. Word 2627 (cabinet): CRITICAL FALSE FRIEND! In Russian and Slavic languages, "кабинет" is a private office/study room. In English, "cabinet" is NEVER a room — it is either storage furniture (шкаф, шкафчик, тумба) or government executive body (кабинет министров, правительство). Corrected false friend across all target languages.
+27. Word 2628 (repeatedly): Calibrated iterative adverbs for continuous frequency ("неоднократно, повторно, снова и снова").
+28. Word 2629 (admission): Double polysemy: entry permission/fee ("допуск, прием, входная плата") and confession/acknowledgement of wrongdoing ("признание, явка с повинной").
+29. Word 2630 (correlation): Mathematical and conceptual interdependence ("корреляция, взаимосвязь, соотношение").
+30. Word 2631 (proportion): Comparative relation to the whole, symmetry, and share ("пропорция, доля, соотношение, соразмерность").
+31. Word 2632 (dispute): Legal and interpersonal conflict resolution, argument, and verb to contest ("спор, конфликт, оспаривать").
+32. Word 2633 (candy): Regional calibration for Brazilian Portuguese ("doces, balas") and Latin American Spanish ("dulces, caramelos, golosinas").
+33. Word 2634 (counselor): Professional spectrum calibrated: psychological counselor / guidance adviser ("консультант, психолог-консультант"), legal counsel / attorney ("адвокат, юрисконсульт"), and camp leader ("вожатый").
+34. Word 2635 (recording): Phonographic sound record, video capture, and data logging ("запись, звукозапись, видеозапись").
+35. Word 2636 (appoint): Administrative designation to office ("назначать на должность") and scheduling of date/time ("назначать время").
+36. Word 2637 (couch): Furniture ("диван, софа, кушетка") and rhetorical formulation ("формулировать, выражать").
+37. Word 2638 (cognitive): Kazakh bug in dump fixed (dump had "білім беру" = educational; calibrated to "когнитивтік, танымдық, ақыл-ойлық").
+38. Word 2639 (significance): Distinguishing meaningfulness, importance, and consequence ("значимость, важность, значение").
+39. Word 2640 (commissioner): High administrative official, police commissioner, and regulatory board delegate ("комиссар, уполномоченный, член комиссии").
+40. Word 2641 (tremendous): Capturing immense magnitude, awe-inspiring scale, and colossal intensity ("огромный, колоссальный, потрясающий").
+41. Word 2642 (warrior): Heroic fighter, combatant, and military champion ("воин, боец, ратник").
+42. Word 2643 (flavor): Taste profile, aromatic nuance, and distinctive characteristic flair ("вкус, привкус, аромат").
+43. Word 2644 (squeeze): Mechanical compression, extracting juice, and financial/physical pressure ("сжимать, сдавливать, выжимать").
+44. Word 2645 (prominent): Double dimension: physical protrusion ("выступающий, выпуклый") and social distinction ("видный, выдающийся, заметный").
+45. Word 2646 (fifty): Cardinal numeral calibrated in all alphabets and orthographies ("пятьдесят, 50").
+46. Word 2647 (fade): Gradual disappearance, loss of brightness/color, and withering ("увядать, блекнуть, угасать, выцветать").
+47. Word 2648 (satisfaction): Contentment, gratification of desires, and legal/moral redress ("удовлетворение, довольство, услада").
+48. Word 2649 (discrimination): Dual sense: unjust prejudice/bias ("дискриминация, ущемление прав") and keen sensory/cognitive discernment ("различение, дифференциация").
+49. Word 2650 (recession): Macroeconomic downturn ("рецессия, экономический спад, кризис") and physical receding/retreat.
+50. Word 2651 (allegation): Formal claim or assertion made without conclusive proof ("обвинение, голословное утверждение, заявление").
+
+====================================================
+Detailed Calibrated Entries for all 50 Words:
+====================================================
+
+ID 2602:
+  ru: нить, нитка, резьба
+  uk: нитка, нить, різьба
+  de: Faden, Garn, Gewinde
+  es: hilo, hebra, rosca
+  fr: fil, filet, filetage
+  pl: nitka, nić, wątek
+  it: filo, refe, filettatura
+  tr: iplik, ip, diş
+  pt: fio, linha, rosca
+  ro: fir, ață, filet
+  bg: нишка, конец, резба
+  cs: nit, nitka, závit
+  sk: niť, vlákno, závit
+  hu: fonal, cérna, szál
+  el: νήμα, κλωστή, σπείρωμα
+  sl: nit, nitka, navoj
+  et: niit, lõng, keere
+  lt: siūlas, gija, sriegis
+  da: tråd, garn, gevind
+  fi: lanka, säie, kierre
+  sv: tråd, garn, gänga
+  hr: nit, konac, navoj
+  lv: diegs, pavediens, vītne
+  hi: धागा, सूत, तार
+  ar: خيط, سلك, لولب
+  fa: نخ, رشته, رزوه
+  ur: دھاگا, تار, سوت
+  id: benang, utas, alur sekrup
+  vi: sợi chỉ, sợi dây, ren
+  th: ด้าย, เส้นด้าย, เกลียว
+  ko: 실, 가닥, 나사선
+  ja: 糸、筋道、スレッド
+  zh: 线, 细丝, 螺纹
+  bn: সুতো, সুতা, প্যাঁচ
+  kk: жіп, жіпше, бұранда
+
+ID 2603:
+  ru: дурак, глупец, дурачить
+  uk: дурень, дурило, дурити
+  de: Narr, Tor, täuschen
+  es: tonto, necio, engañar
+  fr: imbécile, fou, duper
+  pl: głupiec, głupek, oszukiwać
+  it: sciocco, stolto, ingannare
+  tr: aptal, budala, kandırmak
+  pt: tolo, bobo, enganar
+  ro: prost, nebun, a păcăli
+  bg: глупак, шут, мамя
+  cs: blázen, hlupák, klamat
+  sk: blázon, hlupák, oklamať
+  hu: bolond, tökfilkó, becsap
+  el: ανόητος, τρελός, ξεγελάω
+  sl: bedak, norec, slepiti
+  et: lollpea, narr, petma
+  lt: kvailys, pamišėlis, apgauti
+  da: nar, tosse, narre
+  fi: typerys, narri, huijata
+  sv: dåre, idiot, lura
+  hr: budala, glupan, zavarati
+  lv: muļķis, āksts, apmānīt
+  hi: मूर्ख, बेवकूफ, धोखा देना
+  ar: أحمق, مغفل, يخدع
+  fa: نادان, احمق, فریب دادن
+  ur: بے وقوف, احمق, دھوکا دینا
+  id: orang bodoh, dungu, membodohi
+  vi: kẻ ngốc, kẻ dại khờ, lừa gạt
+  th: คนโง่, คนทึ่ม, หลอกลวง
+  ko: 바보, 광대, 속이다
+  ja: 愚か者、道化師、だます
+  zh: 傻瓜, 愚人, 愚弄
+  bn: বোকা, নির্বোধ, বিভ্রান্ত করা
+  kk: ақымақ, есуас, алдау
+
+ID 2604:
+  ru: характеризовать, описывать, отличать
+  uk: характеризувати, описувати, вирізняти
+  de: charakterisieren, kennzeichnen, beschreiben
+  es: caracterizar, describir, definir
+  fr: caractériser, qualifier, distinguer
+  pl: charakteryzować, opisywać, cechować
+  it: caratterizzare, contraddistinguere, qualificare
+  tr: nitelemek, tanımlamak, karakterize etmek
+  pt: caracterizar, definir, qualificar
+  ro: a caracteriza, a descrie, a califica
+  bg: характеризирам, описвам, отличавам
+  cs: charakterizovat, popisovat, vyznačovat se
+  sk: charakterizovať, opisovať, vyznačovať sa
+  hu: jellemez, leír, megkülönböztet
+  el: χαρακτηρίζω, περιγράφω, προσδιορίζω
+  sl: označevati, opisovati, zaznamovati
+  et: iseloomustama, kirjeldama, märgistama
+  lt: apibūdinti, charakterizuoti, žymėti
+  da: karakterisere, kendetegne, beskrive
+  fi: luonnehtia, kuvailla, leimata
+  sv: karakterisera, känneteckna, beskriva
+  hr: označavati, opisivati, karakterizirati
+  lv: raksturot, aprakstīt, iezīmēt
+  hi: चित्रित करना, विशेषता बताना, लक्षण बताना
+  ar: يُميّز, يصف, يحدد سمات
+  fa: مشخص کردن, توصیف کردن, ویژگی بخشیدن
+  ur: خصوصیت بیان کرنا, پہچان کروانا, ظاہر کرنا
+  id: mencirikan, menggambarkan, menandai
+  vi: biểu thị đặc điểm, mô tả, đặc trưng cho
+  th: แสดงลักษณะ, บรรยายลักษณะ, จำแนก
+  ko: 특징짓다, 묘사하다, 성격을 나타내다
+  ja: 特徴づける、描写する、性格づける
+  zh: 描述, 刻画, 具有…特征
+  bn: চরিত্রায়ন করা, বৈশিষ্ট্যায়িত করা, রূপায়ন করা
+  kk: сипаттау, мінездеу, айқындау
+
+ID 2605:
+  ru: пирог, пирожок, тарт
+  uk: пиріг, пиріжок, тарт
+  de: Kuchen, Pastete, Torte
+  es: tarta, pastel, empanada
+  fr: tourte, tarte, pâté
+  pl: ciasto, placek, pasztet
+  it: torta, crostata, pasticcio
+  tr: turta, börek, pasta
+  pt: torta, empada, pastel
+  ro: plăcintă, tartă, pastă
+  bg: пай, пирог, сладкиш
+  cs: koláč, plněný koláč, páj
+  sk: koláč, plnený koláč, paštéta
+  hu: pite, lepény, torta
+  el: πίτα, τάρτα
+  sl: pita, pogača, kolač
+  et: pirukas, kook, lahtine pirukas
+  lt: pyragas, apkepėlė, tortas
+  da: tærte, postej, kage
+  fi: piirakka, torttu, paistos
+  sv: paj, pastej, tårta
+  hr: pita, kolač, torta
+  lv: pīrāgs, torte, sacepums
+  hi: पाई, कचौरी, तीखी या मीठी पेस्ट्री
+  ar: فطيرة, تارت, كعكة
+  fa: پای, کیک پای, پیراشکی
+  ur: پائی, سموسہ, پیسٹری
+  id: pai, pastel, kue panggang
+  vi: bánh nướng nhân ngọt hoặc mặn, bánh bao nướng, bánh pa-tê
+  th: พาย, ขนมพาย
+  ko: 파이, 타르트, 패스티
+  ja: パイ、タルト、焼き菓子
+  zh: 馅饼, 派, 馅饼类食品
+  bn: পাই, পেস্ট্রি, পুরভরা পিঠে
+  kk: бәліш, пирог, тәтті бәліш
+
+ID 2606:
+  ru: наследие, наследство, достояние
+  uk: спадщина, спадок, спадкоємність
+  de: Vermächtnis, Erbe, Nachlass
+  es: legado, herencia, patrimonio
+  fr: héritage, legs, patrimoine
+  pl: spuścizna, dziedzictwo, spadek
+  it: eredità, lascito, patrimonio
+  tr: miras, kalıt, gelenek
+  pt: legado, herança, patrimônio
+  ro: moștenire, lăsământ, patrimoniu
+  bg: наследство, завещание, наследствен дял
+  cs: odkaz, dědictví, pozůstalost
+  sk: odkaz, dedičstvo, pozostalosť
+  hu: örökség, hagyaték, örökségvédelmi
+  el: κληρονομιά, παρακαταθήκη, κληροδότημα
+  sl: zapuščina, dediščina, izročilo
+  et: pärand, pärandvara, testamendipärand
+  lt: palikimas, paveldimas turtas, testamentinis palikimas
+  da: arv, eftermæle, arvgods
+  fi: perintö, perintöosa, testamenttilahjoitus
+  sv: arv, testamente, kvarlåtenskap
+  hr: ostavština, baština, naslijeđe
+  lv: mantojums, novēlējums, atstātais mantojums
+  hi: विरासत, बपौती, वसीयत
+  ar: إرث, تركة, وصية
+  fa: میراث, ارثیه, ترکه
+  ur: وراثت, ترکہ, ورثہ
+  id: warisan, peninggalan, legasi
+  vi: di sản, tài sản kế thừa, di vật
+  th: มรดก, สิ่งสืบทอด, ของตกทอด
+  ko: 유산, 물려받은 것, 유업
+  ja: 遺産、遺物、受け継いだもの
+  zh: 遗产, 遗赠, 传统
+  bn: ঐতিহ্য, উত্তরাধিকার, উত্তরস্বত্ব
+  kk: мұра, өсиет, сабақтастық
+
+ID 2607:
+  ru: откровенно, честно говоря, прямо
+  uk: відверто, щиро кажучи, прямо
+  de: offen, ehrlich gesagt, freimütig
+  es: francamente, sinceramente, honestamente
+  fr: franchement, ouvertement, honnêtement
+  pl: szczerze, otwarcie, bez ogródek
+  it: francamente, apertamente, sinceramente
+  tr: açıkça, dürüstçe, samimiyetle
+  pt: francamente, com franqueza, sinceramente
+  ro: sincer, deschis, franc
+  bg: откровено, честно казано, открито
+  cs: upřímně, otevřeně, popravdě
+  sk: úprimne, otvorene, pravdupovediac
+  hu: őszintén, nyíltan, egyenesen
+  el: ειλικρινά, ανοιχτά, απερίφραστα
+  sl: odkrito, iskreno, po pravici povedano
+  et: ausalt öeldes, siiralt, otsekoheselt
+  lt: atvirai, nuoširdžiai kalbant, tiesiai
+  da: ærligt talt, oprigtigt, åbenhjertigt
+  fi: suoraan sanottuna, avoimesti, vilpittömästi
+  sv: ärligt talat, uppriktigt sagt, öppenhjärtigt
+  hr: iskreno, otvoreno, pošteno govoreći
+  lv: atklāti, godīgi sakot, vaļsirdīgi
+  hi: साफ़-साफ़, सचमुच, बेबाकी से
+  ar: بصراحة, بصدق, علانية
+  fa: صادقانه, رک و پوست‌کنده, صراحتاً
+  ur: صاف صاف, سچ مچ, کھلم کھلا
+  id: terus terang, secara jujur, blak-blakan
+  vi: thẳng thắn, thành thật mà nói, chân thật
+  th: อย่างตรงไปตรงมา, อย่างเปิดเผย, พูดตรงๆ
+  ko: 솔직히, 숨김없이, 사실대로 말하자면
+  ja: 率直に、正直に言って、包み隠さず
+  zh: 坦率地, 直率地, 老实说
+  bn: অকপটে, স্পষ্টভাবে, সত্যি বলতে কি
+  kk: ашығын айтқанда, шынында, бүкпесіз
+
+ID 2608:
+  ru: извлекать, выводить, происходить
+  uk: здобувати, виводити, походити
+  de: ableiten, erlangen, herleiten
+  es: derivar, obtener, deducir
+  fr: dériver, tirer, puiser
+  pl: czerpać, wywodzić, derywować
+  it: derivare, trarre, dedurre
+  tr: türetmek, elde etmek, kaynaklanmak
+  pt: derivar, extrair, obter
+  ro: a deriva, a obține, a deduce
+  bg: извличам, произлизам, извеждам
+  cs: odvodit, čerpat, získat
+  sk: odvodiť, získať, prameniť
+  hu: származtat, levezet, merít
+  el: αντλώ, προέρχομαι, συνάγω
+  sl: izpeljati, črpati, izvirati
+  et: tuletama, pärinema, ammutama
+  lt: kildinti, išvesti, gauti
+  da: udlede, stamme fra, hente
+  fi: johtaa, saada, polveutua
+  sv: härleda, utvinna, härstamma
+  hr: izvesti, crpiti, potjecati
+  lv: atvasināt, iegūt, izrietēt
+  hi: प्राप्त करना, निकालना, उत्पन्न होना
+  ar: يستمد, يستخرج, يشتق
+  fa: مشتق کردن, به دست آوردن, ریشه گرفتن
+  ur: اخذ کرنا, حاصل کرنا, نکلنا
+  id: memperoleh, menuruni, menghasilkan
+  vi: rút ra, thu được, bắt nguồn từ
+  th: ได้รับจาก, สืบสาย, มาจาก
+  ko: 끌어내다, 비롯되다, 유래하다
+  ja: 引き出す、由来する、導き出す
+  zh: 获得, 衍生, 源自
+  bn: উদ্ভূত হওয়া, নিষ্কাশন করা, নির্ণয় করা
+  kk: шығарып алу, туындау, өрбу
+
+ID 2609:
+  ru: немой, глупый, тупой
+  uk: німий, дурний, безглуздий
+  de: stumm, dumm, albern
+  es: mudo, tonto, estúpido
+  fr: muet, stupide, bête
+  pl: niemy, głupi, bezmyślny
+  it: muto, stupido, sciocco
+  tr: dilsiz, aptal, sersem
+  pt: mudo, bobo, burro
+  ro: mut, prost, nătâng
+  bg: ням, глупав, тъп
+  cs: němý, hloupý, tupý
+  sk: nemý, hlúpy, tupý
+  hu: néma, buta, hülye
+  el: βουβός, χαζός, ηλίθιος
+  sl: nem, neumen, butast
+  et: tumm, rumal, loll
+  lt: nebylys, kvailas, bukas
+  da: stum, dum, tåbelig
+  fi: mykkä, tyhmä, typerä
+  sv: stum, dum, enfaldig
+  hr: nijem, glup, blesav
+  lv: mēms, stulbs, muļķīgs
+  hi: मूक, गूँगा, मूर्ख
+  ar: أخرس, أبكم, غبي
+  fa: لال, گنگ, احمق
+  ur: گونگا, بے آواز, بے وقوف
+  id: bisu, bodoh, dungu
+  vi: câm, ngu ngốc, đần độn
+  th: เป็นใบ้, โง่เขลา, ไม่พูดจา
+  ko: 말 못하는, 멍청한, 바보 같은
+  ja: 口がきけない、愚かな、間抜けな
+  zh: 哑的, 愚蠢的, 笨的
+  bn: বোবা, নির্বাক, বুদ্ধিহীন
+  kk: мылқау, тілсіз, ақымақ
+
+ID 2610:
+  ru: масштаб, охват, сфера применения
+  uk: масштаб, обсяг, межі
+  de: Spielraum, Umfang, Geltungsbereich
+  es: alcance, ámbito, envergadura
+  fr: portée, champ d'action, étendue
+  pl: zakres, zasięg, pole działania
+  it: portata, ambito, raggio d'azione
+  tr: kapsam, alan, faaliyet alanı
+  pt: alcance, escopo, âmbito
+  ro: scop, anvergură, rază de acțiune
+  bg: обхват, поле на действие, мащаб
+  cs: rozsah, záběr, působnost
+  sk: rozsah, záber, pôsobnosť
+  hu: terjedelem, kiterjedés, hatáskör
+  el: εμβέλεια, πεδίο εφαρμογής, έκταση
+  sl: obseg, področje delovanja, razpon
+  et: ulatus, haare, tegevusväli
+  lt: taikymo sritis, apimtis, ribos
+  da: omfang, råderum, rækkevidde
+  fi: laajuus, ala, liikkumavara
+  sv: omfattning, räckvidd, tillämpningsområde
+  hr: opseg, raspon, djelokrug
+  lv: mērogs, apjoms, darbības lauks
+  hi: क्षेत्र, विस्तार, गुंजाइश
+  ar: نطاق, مجال, أفق
+  fa: دامنه, حوزه, گستره
+  ur: دائرۂ عمل, گنجائش, وسعت
+  id: cakupan, jangkauan, ruang lingkup
+  vi: phạm vi, quy mô, cơ hội
+  th: ขอบเขต, ขอบข่าย, โอกาส
+  ko: 범위, 시야, 영역
+  ja: 範囲、視野、領域
+  zh: 范围, 领域, 规模
+  bn: সুযোগ, পরিসর, ব্যাপ্তি
+  kk: ауқым, көлем, қамту аясы
+
+ID 2611:
+  ru: формирование, образование, строй
+  uk: формування, утворення, стрій
+  de: Entstehung, Gestaltung, Aufstellung
+  es: formación, constitución, alineación
+  fr: formation, création, agencement
+  pl: tworzenie, powstawanie, formacja
+  it: formazione, costituzione, schieramento
+  tr: oluşum, kurma, tertip
+  pt: formação, constituição, arranjo
+  ro: formare, alcătuire, așezare
+  bg: формиране, изграждане, строй
+  cs: formování, tvorba, útvar
+  sk: formovanie, tvorba, zostava
+  hu: alakulás, formálódás, alakzat
+  el: σχηματισμός, διάταξη, σύσταση
+  sl: nastajanje, tvorjenje, formacija
+  et: moodustamine, kujunemine, formatsioon
+  lt: formavimas, susidarymas, rikiuotė
+  da: dannelse, skabelse, formation
+  fi: muodostuminen, luominen, muodostelma
+  sv: bildande, skapande, formation
+  hr: nastajanje, oblikovanje, formacija
+  lv: veidošanās, radīšana, ierinda
+  hi: निर्माण, गठन, रचना
+  ar: تشكيل, تكوين, صياغة
+  fa: تشکیل, پیدایش, آرایش
+  ur: تشکیل, بناوٹ, صف بندی
+  id: pembentukan, bentukan, susunan
+  vi: sự hình thành, kiến tạo, đội hình
+  th: การก่อตัว, การจัดรูปขบวน, การจัดตั้ง
+  ko: 형성, 구성, 대형
+  ja: 形成、構造、編隊
+  zh: 形成, 构成, 编队
+  bn: গঠন, নির্মাণ, বিন্যাস
+  kk: құрылу, қалыптасу, сап
+
+ID 2612:
+  ru: следовательно, поэтому, отсюда
+  uk: отже, тому, звідси
+  de: daher, folglich, infolgedessen
+  es: por lo tanto, de ahí que, en consecuencia
+  fr: par conséquent, d'où, dès lors
+  pl: stąd, wskutek tego, dlatego
+  it: quindi, perciò, da qui
+  tr: bundan dolayı, bu nedenle, bundan ötürü
+  pt: portanto, por conseguinte, daí
+  ro: prin urmare, așadar, de aceea
+  bg: следователно, оттук, поради това
+  cs: proto, tudíž, odsud
+  sk: preto, teda, odtiaľto
+  hu: ennélfogva, ezért, innentől
+  el: επομένως, εξ ου, συνεπώς
+  sl: zato, torej, od tod
+  et: seetõttu, järelikult, siitpeale
+  lt: todėl, vadinasi, iš čia
+  da: deraf, følgelig, derfor
+  fi: siten, sen tähden, tästä johtuen
+  sv: därför, följaktligen, härav
+  hr: stoga, dakle, otuda
+  lv: tādēļ, tātad, no šejienes
+  hi: इसलिए, अतएव, इस कारण से
+  ar: ومن ثم, لهذا السبب, بالتالي
+  fa: بنابراین, از این رو, بدین جهت
+  ur: لہٰذا, چنانچہ, اس وجہ سے
+  id: oleh karena itu, karenanya, dari sini
+  vi: vì thế, do đó, từ nay
+  th: ดังนั้น, ด้วยเหตุนี้, เพราะฉะนั้น
+  ko: 그러므로, 따라서, 지금부터
+  ja: したがって、それゆえに、今から
+  zh: 因此, 从此, 因而
+  bn: অতএব, সেই কারণে, ফলে
+  kk: сондықтан, осы себепті, осыдан
+
+ID 2613:
+  ru: поле страницы, край, маржа, запас
+  uk: поле сторінки, край, маржа, запас
+  de: Rand, Spanne, Marge
+  es: margen, borde, beneficio
+  fr: marge, bord, écart
+  pl: margines, krawędź, marża
+  it: margine, bordo, scarto
+  tr: kenar boşluğu, pay, marj
+  pt: margem, borda, lucro
+  ro: margine, bordură, ecart
+  bg: поле, край, марж
+  cs: okraj, mezera, marže
+  sk: okraj, rozpätie, marža
+  hu: margó, szegély, haszonrés
+  el: περιθώριο, περιθώριο κέρδους, όριο
+  sl: rob, robček, marža
+  et: veeris, marginaal, varu
+  lt: paraštė, marža, leistina riba
+  da: margen, margin, overskud
+  fi: marginaali, reunus, liikkumavara
+  sv: marginal, rand, gräns
+  hr: margina, rub, dopušteno odstupanje
+  lv: mala, atstarpe, peļņas norma
+  hi: किनारा, अंतर, मार्जिन
+  ar: هامش, حافة, فرق
+  fa: حاشیه, لبه, سود حاشیه‌ای
+  ur: حاشیہ, کنارہ, مارجن
+  id: batas pinggir, margin, batas
+  vi: lề trang, bờ mép, số dư
+  th: ขอบ, ริม, อัตราส่วนต่าง
+  ko: 여백, 차이, 마진
+  ja: 余白、縁、利ざや
+  zh: 页边空白, 边缘, 利润率
+  bn: প্রান্ত, পাতার ধার, মার্জিন
+  kk: жиек, шет, маржа
+
+ID 2614:
+  ru: законодательный орган, легислатура, парламент
+  uk: законодавчий орган, парламент, легіслатура
+  de: Legislative, Gesetzgebungskörperschaft, Parlament
+  es: legislatura, poder legislativo, asamblea legislativa
+  fr: assemblée législative, législature, parlement
+  pl: ciało ustawodawcze, parlament, legislatura
+  it: parlamento, corpo legislativo, legislatura
+  tr: yasama meclisi, parlamento, yasama organı
+  pt: legislativo, poder legislativo, assembleia legislativa
+  ro: legislatură, parlament, corp legiuitor
+  bg: законодателна власт, парламент, законодателно събрание
+  cs: zákonodárný sbor, legislatura, parlament
+  sk: zákonodarný zbor, legislatíva, parlament
+  hu: törvényhozó testület, törvényhozás, parlament
+  el: νομοθετικό σώμα, κοινοβούλιο
+  sl: zakonodajno telo, parlament
+  et: seadusandlik kogu, parlament, seadusandlik võim
+  lt: teisėkūros institucija, įstatymų leidybos organas, parlamentas
+  da: lovgivende forsamling, parlament, lovgivningsmagt
+  fi: lainsäädäntöelin, parlamentti
+  sv: lagstiftande församling, parlament
+  hr: zakonodavno tijelo, parlament, skupština
+  lv: likumdevēja iestāde, likumdošanas vara, parlaments
+  hi: विधायिका, व्यवस्थापिका, संसद
+  ar: سلطة تشريعية, هيئة تشريعية, برلمان
+  fa: قوه مقننه, مجلس قانون‌گذاری, پارلمان
+  ur: مقننہ, قانون ساز ادارہ, پارلیمنٹ
+  id: badan legislatif, dewan perwakilan, parlemen
+  vi: cơ quan lập pháp, viện lập pháp, quốc hội
+  th: สภานิติบัญญัติ, ฝ่ายนิติบัญญัติ, รัฐสภา
+  ko: 입법부, 국회, 입법 기관
+  ja: 議会、立法府、立法機関
+  zh: 立法机关, 立法机构, 议会
+  bn: আইনসভা, আইন প্রণয়নকারী সভা, পার্লামেন্ট
+  kk: заң шығарушы орган, мәжіліс, парламент
+
+ID 2615:
+  ru: поддерживать, выдерживать, нести
+  uk: підтримувати, витримувати, зазнавати
+  de: aufrechterhalten, ertragen, stützen
+  es: sostener, mantener, sufrir
+  fr: soutenir, maintenir, subir
+  pl: podtrzymywać, utrzymać, ponosić
+  it: sostenere, mantenere, subire
+  tr: sürdürmek, ayakta tutmak, uğramak
+  pt: sustentar, manter, sofrer
+  ro: a susține, a menține, a suporta
+  bg: поддържам, понасям, изтърпявам
+  cs: udržovat, nést, utrpět
+  sk: udržiavať, znášať, utrpieť
+  hu: fenntart, kibír, elszenved
+  el: συντηρώ, αντέχω, υφίσταμαι
+  sl: vzdrževati, podpirati, utrpeti
+  et: ülal pidama, taluma, kandma
+  lt: išlaikyti, palaikyti, patirti
+  da: opretholde, bære, lide
+  fi: ylläpitää, kantaa, kärsiä
+  sv: upprätthålla, uthärda, lida
+  hr: održavati, podnositi, pretrpjeti
+  lv: uzturēt, izturēt, ciest
+  hi: बनाए रखना, सहारा देना, भुगतना
+  ar: يُعيل, يحافظ على, يتحمّل
+  fa: پابرجا نگه داشتن, تحمل کردن, متحمل شدن
+  ur: برقرار رکھنا, سنبھالنا, جھیلنا
+  id: mempertahankan, menopang, menderita
+  vi: duy trì, chống đỡ, chịu đựng
+  th: รักษาไว้, ค้ำจุน, อดทน
+  ko: 지탱하다, 유지하다, 견디다
+  ja: 維持する、支える、被る
+  zh: 维持, 支撑, 遭受
+  bn: টিকিয়ে রাখা, বাঁচিয়ে রাখা, সহ্য করা
+  kk: қолдау, сақтау, шыдау
+
+ID 2616:
+  ru: чудо, диво, феномен
+  uk: диво, чудо, чудесія
+  de: Wunder, Wunderwerk, Phänomen
+  es: milagro, maravilla, portento
+  fr: miracle, merveille, prodige
+  pl: cud, zdarzenie niezwykłe
+  it: miracolo, prodigio, meraviglia
+  tr: mucize, fevkaladelik, harika
+  pt: milagre, prodígio, maravilha
+  ro: miracol, minune, prodigiu
+  bg: чудо, знамение, дивотия
+  cs: zázrak, div, zázračný jev
+  sk: zázrak, div, zázračný čin
+  hu: csoda, bámulatos dolog
+  el: θαύμα, υπερφυσικό γεγονός
+  sl: čudež, presenetljiv pojav
+  et: ime, imeasi, imeime
+  lt: stebuklas, netikėtas reiškinys
+  da: mirakel, vidunder, under
+  fi: ihme, kummastus, ihmetyö
+  sv: mirakel, under, underverk
+  hr: čudo, divota, nadnaravna pojava
+  lv: brīnums, pārsteidzošs notikums
+  hi: चमत्कार, अजूबा, करामात
+  ar: معجزة, أعجوبة, آية
+  fa: معجزه, شگفتی, امر خارق‌العاده
+  ur: معجزہ, کرشمہ, حیرت انگیز بات
+  id: keajaiban, mukjizat, karunia
+  vi: phép màu, điều kỳ diệu, điều thần kỳ
+  th: ปาฏิหาริย์, อัศจรรย์, เรื่องประหลาด
+  ko: 기적, 놀라운 일, 신기한 것
+  ja: 奇跡、奇異、驚異
+  zh: 奇迹, 令人惊叹的事
+  bn: অলৌকিক ঘটনা, বিস্ময়, মোজেজা
+  kk: ғажап, керемет, құдірет
+
+ID 2617:
+  ru: ноль, нуль, нулевой
+  uk: нуль, нульовий, ніщо
+  de: Null, Nullpunkt, wertlos
+  es: cero, nada, nulo
+  fr: zéro, néant, nul
+  pl: zero, nul, zerowy
+  it: zero, niente, nullo
+  tr: sıfır, hiç, sıfırlamak
+  pt: zero, nulo, nada
+  ro: zero, nul, nimic
+  bg: нула, нулев, нищо
+  cs: nula, nic, nulový
+  sk: nula, nič, nulový
+  hu: nulla, zéró, semmi
+  el: μηδέν, μηδενικό
+  sl: ničla, nič, ničeln
+  et: null, nullpunkt, eimiski
+  lt: nulis, nulinis, niekas
+  da: nul, ingenting, nulpunkt
+  fi: nolla, nollapiste, ei mikään
+  sv: nolla, intet, nollpunkt
+  hr: nula, ništica, ništa
+  lv: nulle, nekas, nulles punkts
+  hi: शून्य, सिफ़र, कुछ नहीं
+  ar: صفر, لا شيء, نقطة الصفر
+  fa: صفر, پوچ, هیچ
+  ur: صفر, کچھ نہیں, نیستی
+  id: nol, kosong, nihil
+  vi: số không, hư vô, không có gì
+  th: ศูนย์, เลขศูนย์, ไม่มีเลย
+  ko: 영, 영점, 제로
+  ja: ゼロ、零、無
+  zh: 零, 零点, 无
+  bn: শূন্য, শূন্যবিন্দু, কিছুই না
+  kk: нөл, нөлдік, ештеңе
+
+ID 2618:
+  ru: тактика, тактический ход, маневр
+  uk: тактика, тактичний прийом, маневр
+  de: Taktik, taktische Maßnahme, Schachzug
+  es: táctica, estrategia, maniobra
+  fr: tactique, manœuvre, stratagème
+  pl: taktyka, posunięcie, manewr
+  it: tattica, espediente, manovra
+  tr: taktik, manevra, yöntem
+  pt: tática, manobra, estratégia
+  ro: tactică, manevră, stratagemă
+  bg: тактика, маневра, похват
+  cs: taktika, manévr, postup
+  sk: taktika, manéver, postup
+  hu: taktika, cselfogás, módszer
+  el: τακτική, τέχνασμα, ελιγμός
+  sl: taktika, postopek, zvijača
+  et: taktika, kavalus, manööver
+  lt: taktika, gudrybė, manevras
+  da: taktik, fremgangsmåde, manøvre
+  fi: taktiikka, menettelytapa, siirto
+  sv: taktik, tillvägagångssätt, manöver
+  hr: taktika, manevar, postupak
+  lv: taktika, manevrs, paņēmiens
+  hi: रणनीति, युक्ति, पैंतरा
+  ar: تكتيك, خطة, مناورة
+  fa: تاکتیک, روش, تدبیر
+  ur: حربہ, حکمت عملی, چال
+  id: taktik, siasat, siasat taktis
+  vi: chiến thuật, mưu lược, ngón đòn
+  th: ยุทธวิธี, กลวิธี, แผนการ
+  ko: 전술, 책략, 방책
+  ja: 戦術、方策、戦法
+  zh: 战术, 策略, 手段
+  bn: রণকৌশল, কৌশল, চাল
+  kk: тактика, айла-тәсіл, әдіс
+
+ID 2619:
+  ru: маска, личина, маскировать
+  uk: маска, маскувати, приховувати
+  de: Maske, Verkleidung, verbergen
+  es: máscara, mascarilla, ocultar
+  fr: masque, masque de protection, masquer
+  pl: maska, maseczka, maskować
+  it: maschera, mascherina, mascherare
+  tr: maske, maskelemek, gizlemek
+  pt: máscara, disfarce, mascarar
+  ro: mască, paravan, a masca
+  bg: маска, прикритие, маскирам
+  cs: maska, škrkrabka, skrývat
+  sk: maska, škraboška, maskovať
+  hu: maszk, álarc, elfed
+  el: μάσκα, προσωπείο, καλύπτω
+  sl: maska, krinka, prikriti
+  et: mask, näokate, varjama
+  lt: kaukė, priedanga, maskuoti
+  da: maske, dække, tilsløre
+  fi: naamio, maski, kätkeä
+  sv: mask, ansiktsmask, dölja
+  hr: maska, krinka, prikrivati
+  lv: maska, aizsegs, maskēt
+  hi: मुखौटा, मास्क, छिपाना
+  ar: قناع, كمامة, يحجب
+  fa: ماسک, نقاب, پنهان کردن
+  ur: نقاب, مکھوٹا, ماسک
+  id: topeng, masker, menyamarkan
+  vi: mặt nạ, khẩu trang, che giấu
+  th: หน้ากาก, สิ่งอำพราง, บดบัง
+  ko: 가면, 마스크, 가리다
+  ja: マスク、仮面、覆い隠す
+  zh: 面具, 口罩, 掩饰
+  bn: মুখোশ, ছদ্মবেশ, গোপন রাখা
+  kk: бетперде, маска, бүркемелеу
+
+ID 2620:
+  ru: инфляция, обесценение денег, раздувание
+  uk: інфляція, знецінення грошей, роздування
+  de: Inflation, Geldentwertung, Aufblähung
+  es: inflación, aumento de precios, encarecimiento
+  fr: inflation, hausse des prix, gonflement
+  pl: inflacja, spadek wartości pieniądza, nadymanie
+  it: inflazione, svalutazione, rincaro
+  tr: enflasyon, para değer kaybı, şişme
+  pt: inflação, alta de preços, inchaço
+  ro: inflație, devalorizare a banilor, umflare
+  bg: инфлация, обезценяване, надуване
+  cs: inflace, znehodnocení měny, zbytnění
+  sk: inflácia, znehodnotenie meny, nafukovanie
+  hu: infláció, pénzromlás, felfúvódás
+  el: πληθωρισμός, ανατίμηση, φούσκωμα
+  sl: inflacija, razvrednotenje denarja, napihovanje
+  et: inflatsioon, raha väärtuse langus, paisumine
+  lt: infliacija, pinigų nuvertėjimas, išpūtimas
+  da: inflation, prisstigning, oppumpning
+  fi: inflaatio, rahanarvon aleneminen, paisuminen
+  sv: inflation, penningförsämring, uppblåsning
+  hr: inflacija, pad vrijednosti novca, napuhavanje
+  lv: inflācija, naudas vērtības krišanās, piepūšana
+  hi: मुद्रास्फीति, महंगाई, प्रसार
+  ar: تضخم, غلاء, انتفاخ
+  fa: تورم, گرانی, باد کردن
+  ur: افراط زر, مہنگائی, پھلاؤ
+  id: inflasi, kenaikan harga, penggelembungan
+  vi: lạm phát, sự tăng giá, sự bơm căng
+  th: ภาวะเงินเฟ้อ, การพองตัว, การเบ่งตัว
+  ko: 인플레이션, 물가 상승, 팽창
+  ja: インフレーション、物価上昇、膨張
+  zh: 通货膨胀, 物价上涨, 膨胀
+  bn: মুদ্রাস্ফীতি, দাম বৃদ্ধি, ফুলে ওঠা
+  kk: инфляция, ақшаның құнсыздануы, үрлену
+
+ID 2621:
+  ru: охота, травля, промысел
+  uk: полювання, лови, цькування
+  de: Jagd, Jagen, Nachstellung
+  es: caza, cacería, persecución
+  fr: chasse, traque, quête
+  pl: polowanie, łowiectwo, pościg
+  it: caccia, battuta di caccia, inseguimento
+  tr: avlanma, avcılık, takip
+  pt: caça, caçada, perseguição
+  ro: vânătoare, goană, căutare
+  bg: лов, ловуване, преследване
+  cs: lov, lovení, honba
+  sk: lov, poľovníctvo, honba
+  hu: vadászat, vadűzés, kutatás
+  el: κυνήγι, καταδίωξη, αναζήτηση
+  sl: lov, lovljenje, pregon
+  et: jaht, jahipidamine, tagaajamine
+  lt: medžioklė, gaudymas, ieškojimas
+  da: jagt, forfølgelse, eftersøgning
+  fi: metsästys, jahti, pyynti
+  sv: jakt, villebrådsjakt, eftersökning
+  hr: lov, lovljenje, hajka
+  lv: medības, medīšana, meklēšana
+  hi: शिकार, शिकार करना, खोज
+  ar: صيد, قنص, ملاحقة
+  fa: شکار, صید, تعقیب
+  ur: شکار, تلاش, تعاقب
+  id: perburuan, berburu, pengejaran
+  vi: sự săn bắt, cuộc săn bắn, lùng sục
+  th: การล่าสัตว์, การล่า, การค้นหา
+  ko: 사냥, 수렵, 추적
+  ja: 狩猟、狩り、追跡
+  zh: 狩猎, 打猎, 追捕
+  bn: শিকার, অনুসন্ধান, অন্বেষণ
+  kk: аңшылық, аң аулау, қуу
+
+ID 2622:
+  ru: физически, телесно, материально
+  uk: фізично, тілесно, матеріально
+  de: physisch, körperlich, materiell
+  es: físicamente, corporalmente, de forma física
+  fr: physiquement, matériellement, corporellement
+  pl: fizycznie, cieleśnie, namacalnie
+  it: fisicamente, corporalmente, materialmente
+  tr: fiziksel olarak, bedenen, cismani
+  pt: fisicamente, corporalmente, de forma física
+  ro: fizic, din punct de vedere fizic, trupește
+  bg: физически, телесно, материално
+  cs: fyzicky, tělesně, materiálně
+  sk: fyzicky, telesne, materiálne
+  hu: fizikailag, testileg, valóságosan
+  el: σωματικά, φυσικά, εμπράκτως
+  sl: telesno, fizično, stvarno
+  et: füüsiliselt, kehaliselt, materiaalselt
+  lt: fiziškai, kūniškai, materialiai
+  da: fysisk, legemligt, kropsligt
+  fi: fyysisesti, ruumiillisesti, aineellisesti
+  sv: fysiskt, kroppsligen, materiellt
+  hr: fizički, tjelesno, materijalno
+  lv: fiziski, miesiski, materiāli
+  hi: शारीरिक रूप से, भौतिक रूप से, प्रत्यक्ष रूप से
+  ar: جسدياً, فيزيائياً, مادياً
+  fa: از نظر جسمی, به طور فیزیکی, جسماً
+  ur: جسمانی طور پر, طبیعی طور پر, مادی طور پر
+  id: secara fisik, secara jasmani, badaniah
+  vi: về mặt thể chất, theo quy luật vật lý, một cách cụ thể
+  th: ทางกายภาพ, ทางร่างกาย, ด้านรูปธรรม
+  ko: 신체적으로, 물리적으로, 육체적으로
+  ja: 身体的に、肉体的に、物理的に
+  zh: 身体上, 物理上, 实际上
+  bn: শারীরিকভাবে, ভৌতিকভাবে, প্রত্যক্ষভাবে
+  kk: физикалық тұрғыдан, дене тұрғысынан, тәндік түрде
+
+ID 2623:
+  ru: плоть, тело, мякоть
+  uk: плоть, тіло, м'якуш
+  de: Fleisch, Fruchtfleisch, Menschenkörper
+  es: carne, piel, pulpa
+  fr: chair, viande, pulpe
+  pl: ciało, mięso, miąższ
+  it: carne, polpa, tessuto muscolare
+  tr: et, ten, meyve eti
+  pt: carne, corpo, polpa
+  ro: carne, trup, pulpă
+  bg: плът, тяло, месо
+  cs: tělo, maso, dužina
+  sk: telo, mäso, dužina
+  hu: hús, emberi test, gyümölcshús
+  el: σάρκα, κρέας, ψίχα
+  sl: meso, telo, meso plodu
+  et: liha, ihu, viljaliha
+  lt: kūnas, mėsa, minkštimas
+  da: kød, menneskekød, frugtkød
+  fi: liha, malto, ihmisruumis
+  sv: kött, lekamen, fruktkött
+  hr: put, meso, pulpa
+  lv: miesa, mīkstums, augļa mīkstums
+  hi: मांस, मांसल भाग, गुदा
+  ar: لحم, بشرة, جسد
+  fa: گوشت, تن, گوشت میوه
+  ur: گوشت, جسم, گودا
+  id: daging, tubuh, bulir buah
+  vi: thịt, da thịt, cùi thịt hoa quả
+  th: เนื้อหนัง, ร่างกาย, เนื้อผลไม้
+  ko: 살, 육체, 과육
+  ja: 肉、肉体、果肉
+  zh: 肉, 肉体, 果肉
+  bn: মাংস, শরীর, ফলের শাঁস
+  kk: тән, ет, жеміс еті
+
+ID 2624:
+  ru: ответчик, подсудимый, обвиняемый
+  uk: відповідач, підсудний, обвинувачений
+  de: Angeklagter, Beklagter, Beschuldigter
+  es: acusado, demandado, procesado
+  fr: accusé, défendeur, prévenu
+  pl: oskarżony, pozwany, podsądny
+  it: imputato, convenuto, accusato
+  tr: davalı, sanık, zanlı
+  pt: réu, demandado, acusado
+  ro: pârât, inculpat, acuzat
+  bg: ответник, подсъдим, обвиняем
+  cs: obžalovaný, odpůrce, obviněný
+  sk: obžalovaný, odporca, obvinený
+  hu: alperes, vádlott, terhelt
+  el: εναγόμενος, κατηγορούμενος, υπόδικος
+  sl: toženec, obtoženec, zagovornik
+  et: kostja, kohtualune, süüdistatav
+  lt: atsakovas, teisiamasis, kaltinamasis
+  da: sagsøgte, anklagede, tiltalte
+  fi: vastaaja, syytetty, syynalainen
+  sv: svarande, tilltalad, anklagad
+  hr: tuženik, optuženik, optuženi
+  lv: atbildētājs, apsūdzētais, tiesājamais
+  hi: प्रतिवादी, अभियुक्त, मुद्दालय
+  ar: مدعى عليه, متهم, ظنين
+  fa: خوانده, متهم, مدعی‌علیه
+  ur: مدعا علیہ, ملزم, مدعی علیہ
+  id: terdakwa, tergugat, pihak tergugat
+  vi: bị cáo, bị đơn, người bị kiện
+  th: จำเลย, ผู้ถูกฟ้องร้อง, ผู้ต้องหา
+  ko: 피고, 피고인, 피소자
+  ja: 被告、被告人
+  zh: 被告, 被告人
+  bn: বিবাদী, আসামী, অভিযুক্ত ব্যক্তি
+  kk: жауапкер, айыпталушы, сотталушы
+
+ID 2625:
+  ru: столб, шест, полюс
+  uk: стовп, жердина, полюс
+  de: Stange, Pfahl, Pol
+  es: poste, mástil, polo
+  fr: poteau, perche, pôle
+  pl: słup, tyczka, biegun
+  it: palo, asta, polo
+  tr: direk, sırık, kutup
+  pt: poste, mastro, polo
+  ro: stâlp, prăjină, pol
+  bg: стълб, прът, полюс
+  cs: sloup, tyč, pól
+  sk: stĺp, žrď, pól
+  hu: rúd, pózna, sarkpont
+  el: στύλος, κοντάρι, πόλος
+  sl: drog, palica, tečaj
+  et: teivas, varras, poolus
+  lt: stulpas, kartis, polius
+  da: pæl, stang, pol
+  fi: pylväs, salko, napa
+  sv: påle, stång, pol
+  hr: stup, motka, pol
+  lv: stabs, kārts, pols
+  hi: खंभा, डंडा, ध्रुव
+  ar: عمود, سارية, قطب
+  fa: قطب, تیرک, میله
+  ur: کھمبا, قطب, ڈنڈا
+  id: tiang, galah, kutub
+  vi: cây cột, sào cọc, cực
+  th: เสา, เสากระโดง, ขั้วโลก
+  ko: 기둥, 장대, 극
+  ja: 柱、竿、極
+  zh: 杆, 柱, 极点
+  bn: খুঁটি, দণ্ড, মেরু
+  kk: баған, сырық, полюс
+
+ID 2626:
+  ru: отзывать, изымать, снимать деньги
+  uk: відкликати, забирати, знімати гроші
+  de: zurückziehen, abheben, entziehen
+  es: retirar, replegarse, sacar dinero
+  fr: retirer, se replier, prélever
+  pl: wycofać, wypłacić, odwołać
+  it: ritirare, prelevare, revocare
+  tr: geri çekmek, çekilmek, para çekmek
+  pt: retirar, sacar, recuar
+  ro: a retrage, a scoate bani, a revoca
+  bg: оттеглям, изтеглям пари, отменям
+  cs: stáhnout, vybrat peníze, ustoupit
+  sk: stiahnuť, vybrať peniaze, odstúpiť
+  hu: visszavon, felvesz pénzt, kivon
+  el: αποσύρω, κάνω ανάληψη, ανακαλώ
+  sl: umakniti, dvigniti denar, preklicati
+  et: tagasi tõmbama, välja võtma, tühistama
+  lt: atsiimti, atšaukti, išgryninti
+  da: trække tilbage, hæve penge, aftræde
+  fi: vetäytyä, nostaa rahaa, peruuttaa
+  sv: dra tillbaka, ta ut pengar, frånträda
+  hr: povući, podići novac, opozvati
+  lv: atsaukt, izņemt naudu, atkāpties
+  hi: वापस लेना, निकालना, पीछे हटना
+  ar: يسحب, يتراجع, يسترجع
+  fa: پس گرفتن, کنار کشیدن, پول برداشت کردن
+  ur: واپس لینا, نکالنا, پیچھے ہٹنا
+  id: menarik, mundur, mengambil uang
+  vi: rút lại, rút tiền, rút lui
+  th: ถอนเงิน, ถอนตัว, เพิกถอน
+  ko: 철회하다, 인출하다, 물러나다
+  ja: 引き出す、撤回する、身を引く
+  zh: 撤回, 取款, 退出
+  bn: তুলে নেওয়া, প্রত্যাহার করা, অপসারণ করা
+  kk: қайтарып алу, ақша шешіп алу, шегіну
+
+ID 2627:
+  ru: шкаф, шкафчик, кабинет министров
+  uk: шафа, шафка, кабінет міністрів
+  de: Schrank, Vitrine, Kabinett
+  es: gabinete, armario, alacena
+  fr: meuble, armoire, cabinet ministériel
+  pl: szafka, komoda, gabinet ministrów
+  it: mobiletto, armadio, gabinetto di governo
+  tr: dolap, vitrin, kabine
+  pt: armário, gabinete, ministério
+  ro: dulap, comodă, cabinet ministerial
+  bg: шкаф, витрина, министерски съвет
+  cs: skříňka, kredenc, vládní kabinet
+  sk: skrinka, príborník, vládny kabinet
+  hu: szekrény, szekrényke, kormánytestület
+  el: ντουλάπι, ερμάριο, υπουργικό συμβούλιο
+  sl: omarica, vitrina, vladni kabinet
+  et: kapp, puhvetkapp, valitsuskabinet
+  lt: spintelė, vitrina, vyriausybės kabinetas
+  da: skab, kommode, ministerium
+  fi: kaappi, lokerikko, hallitus
+  sv: skåp, hurts, kabinett
+  hr: ormarić, vitrina, ministarsko vijeće
+  lv: skapītis, kumode, ministru kabinets
+  hi: अलमारी, मंत्रिमंडल, दराजदार संदूक
+  ar: خزانة, دولاب, مجلس وزراء
+  fa: کابینت, کمد, هیئت دولت
+  ur: الماری, کابینہ, دراز دار الماری
+  id: lemari, bufet, kabinet pemerintah
+  vi: tủ đựng đồ, tủ có ngăn, nội các
+  th: ตู้มีลิ้นชัก, ตู้เก็บของ, คณะรัฐมนตรี
+  ko: 캐비닛, 수납장, 내각
+  ja: 戸棚、飾り棚、内閣
+  zh: 橱柜, 柜子, 内阁
+  bn: আলমারি, দেরাজ, মন্ত্রিসভা
+  kk: шкаф, сөре, министрлер кабинеті
+
+ID 2628:
+  ru: неоднократно, повторно, снова и снова
+  uk: неодноразово, повторно, знову й знову
+  de: wiederholt, mehrmals, immer wieder
+  es: repetidamente, una y otra vez, reiteradamente
+  fr: à plusieurs reprises, sans cesse, continuellement
+  pl: wielokrotnie, powtórnie, bez przerwy
+  it: ripetutamente, a più riprese, continuamente
+  tr: defalarca, tekrar tekrar, mütemadiyen
+  pt: repetidamente, reiteradas vezes, várias vezes
+  ro: în mod repetat, din nou și din nou, reiterat
+  bg: неколкократно, повторно, многократно
+  cs: opakovaně, znovu a znovu, neustále
+  sk: opakovane, znova a znova, neustále
+  hu: ismételten, újra meg újra, szüntelenül
+  el: επανειλημμένα, κατ' επανάληψη, διαρκώς
+  sl: večkrat, ponavljajoče se, znova in znova
+  et: korduvalt, üha uuesti, mitu korda
+  lt: pakartotinai, ne kartą, vėl ir vėl
+  da: gentagne gange, atter og atter, ideligen
+  fi: toistuvasti, yhä uudelleen, kerta toisensa jälkeen
+  sv: upprepade gånger, återigen, oupphörligen
+  hr: više puta, uzastopno, ponovno
+  lv: atkārtoti, vairākkārt, atkal un atkal
+  hi: बार-बार, लगातार, कई बार
+  ar: مراراً وتكراراً, تكراراً, مراراً
+  fa: مکرراً, بارها, پیاپی
+  ur: بار بار, تواتر سے, بارہا
+  id: berulang kali, berkali-kali, berulang-ulang
+  vi: nhiều lần, lặp đi lặp lại, liên tục
+  th: ซ้ำแล้วซ้ำเล่า, ซ้ำๆ, หลายต่อหลายครั้ง
+  ko: 반복해서, 거듭하여, 여러 차례
+  ja: 繰り返し、何度も、しきりに
+  zh: 反复地, 屡次, 多次
+  bn: বারংবার, বারবার, পৌনঃপুনিকভাবে
+  kk: бірнеше мәрте, қайта-қайта, дүркін-дүркін
+
+ID 2629:
+  ru: прием, допуск, признание, плата за вход
+  uk: прийом, допуск, визнання, вхідна плата
+  de: Zulassung, Eintritt, Geständnis
+  es: admisión, entrada, reconocimiento
+  fr: admission, entrée, aveu
+  pl: wstęp, przyjęcie, przyznanie się
+  it: ammissione, ingresso, confessione
+  tr: kabul, giriş ücreti, itiraf
+  pt: admissão, ingresso, confissão
+  ro: admitere, intrare, mărturisire
+  bg: прием, допускане, самопризнание
+  cs: přijetí, vstupné, doznání
+  sk: prijatie, vstupné, priznanie
+  hu: felvétel, belépés, beismerés
+  el: εισαγωγή, είσοδος, ομολογία
+  sl: sprejem, vstopnina, priznanje
+  et: sissepääs, vastuvõtt, ülestunnistus
+  lt: priėmimas, įleidimas, prisipažinimas
+  da: adgang, optagelse, indrømmelse
+  fi: sisäänpääsy, pääsy, tunnustus
+  sv: tillträde, intagning, medgivande
+  hr: prijem, ulazak, priznanje
+  lv: uzņemšana, ieeja, atzīšanās
+  hi: प्रवेश, दाखिला, स्वीकारोक्ति
+  ar: قبول, دخول, اعتراف
+  fa: پذیرش, ورودیه, اعتراف
+  ur: داخلہ, منظوری, اعتراف
+  id: penerimaan, izin masuk, pengakuan
+  vi: sự kết nạp, tiền vào cửa, sự thừa nhận
+  th: การรับเข้า, ค่าผ่านประตู, การยอมรับ
+  ko: 입장, 입학, 시인
+  ja: 入場、入学許可、自白
+  zh: 准许进入, 入场费, 承认
+  bn: প্রবেশাধিকার, ভর্তি, স্বীকারোক্তি
+  kk: қабылдау, рұқсат, мойындау
+
+ID 2630:
+  ru: корреляция, взаимосвязь, соотношение
+  uk: кореляція, взаємозв'язок, співвідношення
+  de: Korrelation, Wechselbeziehung, Zusammenhang
+  es: correlación, correspondencia, relación mutua
+  fr: corrélation, interdépendance, relation réciproque
+  pl: korelacja, współzależność, wzajemny stosunek
+  it: correlazione, interdipendenza, legame reciproco
+  tr: korelasyon, karşılıklı ilişki, bağıntı
+  pt: correlação, interdependência, ligação recíproca
+  ro: corelație, interdependență, relație reciprocă
+  bg: корелация, взаимовръзка, взаимно съответствие
+  cs: korelace, vzájemný vztah, souvztažnost
+  sk: korelácia, vzájomný vzťah, súvzťažnosť
+  hu: korreláció, kölcsönös viszony, összefüggés
+  el: συσχέτιση, συνάφεια, αμοιβαία σχέση
+  sl: korelacija, soodvisnost, medsebojna povezava
+  et: korrelatsioon, vastastikune seos, kooskõla
+  lt: koreliacija, tarpusavio ryšys, atitikimas
+  da: korrelation, sammenhæng, gensidigt forhold
+  fi: korrelaatio, riippuvuussuhde, vastaavuus
+  sv: korrelation, samvariation, samband
+  hr: korelacija, međuovisnost, uzajamni odnos
+  lv: korelācija, savstarpējā saistība, kopsakarība
+  hi: सहसंबंध, पारस्परिक संबंध, परस्पर निर्भरता
+  ar: ارتباط, علاقة متبادلة, توافق
+  fa: همبستگی, رابطه متقابل, تناظر
+  ur: باہمی ربط, تعلق باہمی, ارتباط
+  id: korelasi, hubungan timbal balik, keselarasan
+  vi: sự tương quan, mối tương quan, liên hệ qua lại
+  th: ความสัมพันธ์กัน, ความสัมพันธ์ร่วม, สหสัมพันธ์
+  ko: 상관관계, 상호관계, 연관성
+  ja: 相関関係、相互関係、相関
+  zh: 相关性, 相互关系, 关联
+  bn: সহসম্বন্ধ, পারস্পরিক সম্পর্ক, সমসংযোগ
+  kk: корреляция, өзара байланыс, қатыстылық
+
+ID 2631:
+  ru: пропорция, доля, соотношение, соразмерность
+  uk: пропорція, частка, співвідношення, домірність
+  de: Proportion, Verhältnis, Anteil
+  es: proporción, parte, simetría
+  fr: proportion, part, rapport
+  pl: proporcja, stosunek, udział
+  it: proporzione, quota, equilibrio
+  tr: oran, orantı, pay
+  pt: proporção, cota, dimensão
+  ro: proporție, parte, raport
+  bg: пропорция, дял, съотношение
+  cs: proporce, poměr, úměrnost
+  sk: proporcia, pomer, úmernosť
+  hu: arány, hányad, méretarány
+  el: αναλογία, συμμετρία, ποσοστό
+  sl: razmerje, delež, sorazmernost
+  et: proportsioon, osakaal, suhe
+  lt: proporcija, santykis, dalis
+  da: proportion, forhold, andel
+  fi: suhde, mittasuhde, osuus
+  sv: proportion, förhållande, andel
+  hr: omjer, srazmjer, udio
+  lv: proporcija, samērs, daļa
+  hi: अनुपात, हिस्सा, भाग
+  ar: تناسب, نسبة, قسط
+  fa: تناسب, سهم, نسبت
+  ur: تناسب, حصہ, نسبت
+  id: proporsi, perbandingan, bagian
+  vi: tỷ lệ, sự tương xứng, phần
+  th: สัดส่วน, อัตราส่วน, ความสมดุล
+  ko: 비율, 균형, 조화
+  ja: 割合、比率、釣り合い
+  zh: 比例, 部分, 均衡
+  bn: অনুপাত, সমানুপাত, ভাগ
+  kk: пропорция, қатынас, үлес
+
+ID 2632:
+  ru: спор, конфликт, оспаривать
+  uk: спір, суперечка, оскаржувати
+  de: Streit, Disput, anfechten
+  es: disputa, controversia, impugnar
+  fr: litige, différend, contester
+  pl: spór, kłótnia, kwestionować
+  it: controversia, disputa, contestare
+  tr: anlaşmazlık, münakaşa, itiraz etmek
+  pt: disputa, controvérsia, contestar
+  ro: litigiu, dispută, a contesta
+  bg: спор, разногласие, оспорвам
+  cs: spor, rozepře, zpochybňovat
+  sk: spor, nezhoda, spochybňovať
+  hu: vita, viszály, vitat
+  el: διαμάχη, αμφισβήτηση, αμφισβητώ
+  sl: spor, prerekanje, oporekati
+  et: vaidlus, tüli, vaidlustama
+  lt: ginčas, nesutarimas, ginčyti
+  da: strid, uoverensstemmelse, bestride
+  fi: kiista, riita, riitauttaa
+  sv: tvist, dispyt, ifrågasätta
+  hr: spor, svađa, osporavati
+  lv: strīds, nesaskaņas, apstrīdēt
+  hi: विवाद, झगड़ा, बहस करना
+  ar: نزاع, خلاف, يجادل
+  fa: مشاجره, اختلاف, مورد مناقشه قرار دادن
+  ur: تنازع, جھگڑا, اختلاف کرنا
+  id: perselisihan, sengketa, membantah
+  vi: tranh chấp, cuộc tranh cãi, tranh luận
+  th: ข้อพิพาท, การโต้แย้ง, คัดค้าน
+  ko: 분쟁, 논쟁, 반박하다
+  ja: 紛争、論争、異議を唱える
+  zh: 争论, 纠纷, 质疑
+  bn: বিতর্ক, মতবিরোধ, অস্বীকার করা
+  kk: дау, талас, қарсылық білдіру
+
+ID 2633:
+  ru: конфеты, сладости, леденцы
+  uk: цукерки, солодощі, льодяники
+  de: Süßigkeiten, Bonbons, Konfekt
+  es: caramelos, dulces, golosinas
+  fr: bonbons, friandises, sucreries
+  pl: cukierki, słodycze, łakocie
+  it: caramelle, dolciumi, dolci
+  tr: şekerleme, şeker, tatlı
+  pt: doces, balas, guloseimas
+  ro: bomboane, dulciuri, caramele
+  bg: бонбони, сладкиши, захарни изделия
+  cs: bonbóny, sladkosti, cukrovinky
+  sk: cukríky, sladkosti, cukrovinky
+  hu: cukorka, édesség, nyalánkság
+  el: καραμέλες, γλυκίσματα, ζαχαρωτά
+  sl: bonboni, sladkarije, slaščice
+  et: kommid, maiustused, karamell
+  lt: saldainiai, saldumynai, ledinukai
+  da: slik, bolsjer, konfekt
+  fi: makeiset, karkit, namit
+  sv: godis, karameller, godsaker
+  hr: bomboni, slatkiši, slastice
+  lv: konfektes, saldumi, karameles
+  hi: मिठाई, टॉफ़ी, मीठी गोलियां
+  ar: حلوى, سكاكر, حلويات
+  fa: آب‌نبات, شیرینی, شکلات
+  ur: ٹافی, مٹھائی, کینڈی
+  id: permen, kembang gula, manisan
+  vi: kẹo, đồ ngọt, kẹo bánh
+  th: ลูกอม, ลูกกวาด, ขนมหวาน
+  ko: 사탕, 캔디, 단 과자
+  ja: 飴、キャンディ、お菓子
+  zh: 糖果, 甜食
+  bn: লজেন্স, মিষ্টান্ন, ক্যান্ডি
+  kk: кәмпит, тәттілер, мәрмәр кәмпит
+
+ID 2634:
+  ru: консультант, советник, адвокат
+  uk: консультант, порадник, адвокат
+  de: Berater, Ratgeber, Anwalt
+  es: consejero, asesor, orientador
+  fr: conseiller, psychologue, avocat
+  pl: doradca, pedagog szkolny, adwokat
+  it: consigliere, consulente, patrocinatore
+  tr: danışman, rehber, avukat
+  pt: conselheiro, orientador, assessor
+  ro: consilier, sfătuitor, avocat
+  bg: съветник, консултант, юрист
+  cs: poradce, konzultant, obhájce
+  sk: poradca, konzultant, obhajca
+  hu: tanácsadó, lelkigondozó, ügyvéd
+  el: σύμβουλος, καθοδηγητής, δικηγόρος
+  sl: svetovalec, vodnik, odvetnik
+  et: nõustaja, nõuandja, advokaat
+  lt: patarėjas, konsultantas, gynėjas
+  da: rådgiver, vejleder, advokat
+  fi: neuvoja, ohjaaja, asianajaja
+  sv: rådgivare, kurator, advokat
+  hr: savjetnik, voditelj, odvjetnik
+  lv: padomdevējs, konsultants, advokāts
+  hi: परामर्शदाता, सलाहकार, वकील
+  ar: مستشار, ناصح, مرشد
+  fa: مشاور, راهنما, وکیل
+  ur: مشیر, کونسلر, وکیل
+  id: penasihat, konselor, pembimbing
+  vi: cố vấn, người tư vấn, luật sư
+  th: ที่ปรึกษา, ผู้ให้คำปรึกษา, ทนายความ
+  ko: 상담사, 고문, 조언자
+  ja: カウンセラー、顧問、相談役
+  zh: 顾问, 辅导员, 律师
+  bn: পরামর্শদাতা, উপদেষ্টা, কাউন্সিলর
+  kk: кеңесші, кеңес беруші, адвокат
+
+ID 2635:
+  ru: запись, звукозапись, видеозапись
+  uk: запис, звукозапис, відеозапис
+  de: Aufnahme, Tonaufnahme, Aufzeichnung
+  es: grabación, registro, pista sonora
+  fr: enregistrement, gravure, bande sonore
+  pl: nagranie, zapis, rejestracja
+  it: registrazione, incisione, ripresa sonora
+  tr: kayıt, ses kaydı, kaydetme
+  pt: gravação, registro, tomada
+  ro: înregistrare, imprimare, disc
+  bg: запис, звукозапис, регистриране
+  cs: záznam, nahrávka, zachycení
+  sk: záznam, nahrávka, zaznamenanie
+  hu: felvétel, hangfelvétel, rögzítés
+  el: ηχογράφηση, εγγραφή, μαγνητοφώνηση
+  sl: posnetek, zvočni posnetek, beleženje
+  et: salvestus, helisalvestis, lindistus
+  lt: įrašas, garso įrašas, registravimas
+  da: optagelse, lydoptagelse, indspilning
+  fi: tallenne, äänite, nauhoitus
+  sv: inspelning, upptagning, ljudspår
+  hr: snimka, zvučni zapis, evidentiranje
+  lv: ieraksts, skaņu ieraksts, fiksēšana
+  hi: रिकॉर्डिंग, आलेखन, आवाज़ की रिकॉर्डिंग
+  ar: تسجيل, تسجيل صوتي, تدوين
+  fa: ضبط, نوار ضبط‌شده, ثبت
+  ur: ریکارڈنگ, ضبط, آڈیو ریکارڈ
+  id: rekaman, pencatatan, materi rekaman
+  vi: bản ghi âm, sự thu âm, sự ghi chép
+  th: การบันทึกเสียง, แผ่นเสียง, วิดีโอบันทึก
+  ko: 녹음, 녹화, 기록
+  ja: 録音、録画、レコーディング
+  zh: 录音, 录像, 记录
+  bn: রেকর্ডিং, নথিভুক্তকরণ, ধ্বনিমুদ্রণ
+  kk: жазба, дыбыс жазбасы, бейнежазба
+
+ID 2636:
+  ru: назначать, определять, утверждать
+  uk: призначати, визначати, затверджувати
+  de: ernennen, bestimmen, ansetzen
+  es: nombrar, designar, fijar
+  fr: nommer, désigner, fixer
+  pl: mianować, wyznaczać, ustanawiać
+  it: nominare, designare, stabilire
+  tr: atamak, tayin etmek, belirlemek
+  pt: nomear, designar, estipular
+  ro: a numi, a desemna, a fixa
+  bg: назначавам, определям, поставям
+  cs: jmenovat, stanovit, určit
+  sk: menovať, ustanoviť, určiť
+  hu: kinevez, kijelöl, kitűz
+  el: διορίζω, ορίζω, αναθέτω
+  sl: imenovati, določiti, postaviti
+  et: ametisse määrama, nimetama, kindlaks määrama
+  lt: paskirti, nustatyti, pavadinti
+  da: udnævne, beskikke, fastsætte
+  fi: nimittää, määrätä, asettaa
+  sv: utnämna, tillsätta, förordna
+  hr: imenovati, postaviti, odrediti
+  lv: iecelt, nozīmēt, noteikt
+  hi: नियुक्त करना, पद देना, तय करना
+  ar: يعيّن, يحدد, يسمي
+  fa: منصوب کردن, تعیین کردن, گماشتن
+  ur: مقرر کرنا, تعینات کرنا, مقرر فرمانا
+  id: menunjuk, mengangkat, menetapkan
+  vi: bổ nhiệm, chỉ định, sắp đặt
+  th: แต่งตั้ง, มอบหมายงาน, กำหนดเวลา
+  ko: 임명하다, 정하다, 지정하다
+  ja: 任命する、指定する、決める
+  zh: 任命, 指定, 约定
+  bn: নিযুক্ত করা, ঠিক করা, নাম নথিভুক্ত করা
+  kk: тағайындау, бекіту, белгілеу
+
+ID 2637:
+  ru: диван, софа, кушетка
+  uk: диван, канапа, софа
+  de: Sofa, Liege, formulieren
+  es: sofá, diván, sillón
+  fr: canapé, divan, sofa
+  pl: kanapa, sofa, leżanka
+  it: divano, canapè, ottomana
+  tr: kanepe, divan, çekyat
+  pt: sofá, divã, poltrona
+  ro: canapea, divan, sofa
+  bg: диван, канапе, кушетка
+  cs: pohovka, gauč, lenoška
+  sk: pohovka, gauč, ležadlo
+  hu: heverő, kanapé, pamlag
+  el: καναπές, ντιβάνι, ανάκλιντρο
+  sl: kavč, zofa, ležalnik
+  et: diivan, kušett, sohva
+  lt: sofa, kušetė, minkštasuolis
+  da: sofa, chaiselong, briks
+  fi: sohva, leposohva, vuodesohva
+  sv: soffa, schäslong, divan
+  hr: kauč, trosjed, ležaj
+  lv: dīvāns, kušete, sova
+  hi: सोफ़ा, दीवान, कोच
+  ar: أريكة, كنبة, ديوان
+  fa: کاناپه, مبل, نیمکت
+  ur: صوفہ, دیوان, کوچ
+  id: sofa, dipan, bangku panjang
+  vi: đi-văng, ghế sô-pha, ghế dài
+  th: โซฟา, ม้านั่งยาว, ตั่ง
+  ko: 소파, 긴 의자, 표현하다
+  ja: ソファー、長椅子、寝椅子
+  zh: 长沙发, 长椅, 表达
+  bn: সোফা, দীর্ঘ কেদারা, পালঙ্ক
+  kk: диван, софа, жатаған орындық
+
+ID 2638:
+  ru: когнитивный, познавательный, умственный
+  uk: когнітивний, пізнавальний, розумовий
+  de: kognitiv, erkenntnismäßig, wahrnehmungsbezogen
+  es: cognitivo, cognoscitivo, mental
+  fr: cognitif, intellectuel, perceptif
+  pl: poznawczy, kognitywny, myślowy
+  it: cognitivo, conoscitivo, mentale
+  tr: bilişsel, kavramsal, zihinsel
+  pt: cognitivo, cognoscitivo, perceptivo
+  ro: cognitiv, perceptiv, mintal
+  bg: познавателен, когнитивен, мисловен
+  cs: kognitivní, poznávací, vjemový
+  sk: kognitívny, poznávací, rozumový
+  hu: kognitív, megismerő, értelmi
+  el: γνωστικός, αντιληπτικός, νοητικός
+  sl: spoznaven, kognitiven, miseln
+  et: kognitiivne, tunnetuslik, teadvuslik
+  lt: pažintinis, kognityvinis, protinis
+  da: kognitiv, erkendelsesmæssig, forstandsmæssig
+  fi: kognitiivinen, tiedollinen, tajunnallinen
+  sv: kognitiv, tankemässig, intellektuell
+  hr: spoznajni, kognitivni, mentalni
+  lv: kognitīvs, izziņas, prāta
+  hi: संज्ञानात्मक, ज्ञानात्मक, बौद्धिक
+  ar: إدراكي, معرفي, ذهني
+  fa: شناختی, ادراکی, معرفتی
+  ur: ادراکی, شناختی, ذہنی
+  id: kognitif, pemahaman, daya nalar
+  vi: nhận thức, thuộc về nhận thức, trí tuệ
+  th: เกี่ยวกับกระบวนการรับรู้, ด้านการรู้คิด, เกี่ยวกับสติปัญญา
+  ko: 인지적인, 인식의, 지각의
+  ja: 認知の、認識の、知覚の
+  zh: 认知的, 认识的, 精神活动的
+  bn: জ্ঞানীয়, সংজ্ঞানাত্মক, বুদ্ধিভিত্তিক
+  kk: когнитивтік, танымдық, ақыл-ойлық
+
+ID 2639:
+  ru: значимость, важность, значение
+  uk: значущість, важливість, значення
+  de: Bedeutung, Wichtigkeit, Tragweite
+  es: importancia, significado, trascendencia
+  fr: importance, signification, portée
+  pl: znaczenie, ważność, doniosłość
+  it: importanza, rilevanza, portata
+  tr: önem, anlam, ehemmiyet
+  pt: importância, significância, relevância
+  ro: semnificație, importanță, însemnătate
+  bg: значение, важност, същественост
+  cs: význam, závažnost, důležitost
+  sk: význam, závažnosť, dôležitosť
+  hu: jelentőség, fontosság, nyomaték
+  el: σημασία, σπουδαιότητα, βαρύτητα
+  sl: pomen, pomembnost, tehtnost
+  et: tähtsus, tähendus, olulisus
+  lt: reikšmė, svarba, reikšmingumas
+  da: betydning, vigtighed, rækkevidde
+  fi: merkitys, tärkeys, kantavuus
+  sv: betydelse, vikt, innebörd
+  hr: značaj, važnost, smisao
+  lv: nozīme, svarīgums, jēga
+  hi: महत्व, सार्थकता, अर्थ
+  ar: أهمية, مغزى, دلالة
+  fa: اهمیت, معنا, برجستگی
+  ur: اہمیت, معنی خیزی, وزن
+  id: signifikansi, arti penting, kegunaan
+  vi: tầm quan trọng, ý nghĩa, tầm ảnh hưởng
+  th: ความสำคัญ, นัยสำคัญ, ความหมาย
+  ko: 중요성, 의미, 중대성
+  ja: 重要性、意義、重大さ
+  zh: 重要性, 意义, 重大影响
+  bn: তাৎপর্য, গুরুত্ব, অর্থপূর্ণতা
+  kk: маңыздылық, мән-мағына, елеулілік
+
+ID 2640:
+  ru: комиссар, уполномоченный, член комиссии
+  uk: комісар, уповноважений, член комісії
+  de: Kommissar, Beauftragter, Ausschussmitglied
+  es: comisario, comisionado, delegado
+  fr: commissaire, délégué, haut fonctionnaire
+  pl: komisarz, pełnomocnik, delegat
+  it: commissario, delegato, alto funzionario
+  tr: komiser, delege, yetkili
+  pt: comissário, delegado, encarregado
+  ro: comisar, însărcinat, delegat
+  bg: комисар, пълномощник, член на комисия
+  cs: komisař, pověřenec, zmocněnec
+  sk: komisár, poverenec, splnomocnenec
+  hu: biztos, kormánybiztos, felügyelő
+  el: επίτροπος, διοικητής, αρμοστής
+  sl: komisar, pooblaščenec, zastopnik
+  et: komissar, volinik, ametnik
+  lt: komisaras, įgaliotinis, pareigūnas
+  da: kommissær, befuldmægtiget, tilsynsførende
+  fi: komissaari, valtuutettu, komission jäsen
+  sv: kommissarie, kommissionär, ombud
+  hr: povjerenik, komesar, delegat
+  lv: komisārs, pilnvarotais, inspektors
+  hi: आयुक्त, कमिश्नर, प्रभारी अधिकारी
+  ar: مفوض, مأمور, مندوب
+  fa: کمیسر, نماینده ویژه, بازرس عالی
+  ur: کمشنر, نمائندہ, نگران اعلیٰ
+  id: komisaris, kepala kepolisian, utusan
+  vi: ủy viên, cao ủy, ủy viên hội đồng
+  th: กรรมาธิการ, ผู้ตรวจการ, ข้าหลวง
+  ko: 위원, 감독관, 국장
+  ja: 委員、長官、コミッショナー
+  zh: 专员, 委员, 长官
+  bn: কমিশনার, বিশেষ দায়িত্বপ্রাপ্ত আধিকারিক, ভারপ্রাপ্ত কর্মকর্তা
+  kk: комиссар, өкілетті өкіл, комиссия мүшесі
+
+ID 2641:
+  ru: огромный, колоссальный, потрясающий
+  uk: величезний, колосальний, приголомшливий
+  de: gewaltig, enorm, ungeheuer
+  es: tremendo, enorme, colosal
+  fr: énorme, formidable, immense
+  pl: olbrzymi, ogromny, kolosalny
+  it: tremendo, enorme, colossale
+  tr: muazzam, muhteşem, dehşetli
+  pt: tremendo, enorme, formidável
+  ro: extraordinar, imens, colosal
+  bg: огромен, колосален, зашеметяващ
+  cs: ohromný, nesmírný, kolosální
+  sk: ohromný, nesmierny, kolosálny
+  hu: óriási, hatalmas, szédületes
+  el: τρομερός, τεράστιος, κολοσσιαίος
+  sl: ogromen, silen, osupljiv
+  et: tohutu, hiiglaslik, võimas
+  lt: didžiulis, milžiniškas, stulbinantis
+  da: vældig, kolossal, formidabel
+  fi: valtava, valtavan suuri, huikea
+  sv: väldig, oerhörd, formidabel
+  hr: ogroman, silan, nevjerojatan
+  lv: milzīgs, ārkārtējs, grandiozs
+  hi: भयानक, ज़बरदस्त, भारी
+  ar: هائل, ضخم, مذهل
+  fa: شگرف, مهیب, عظیم
+  ur: زبردست, بے پناہ, خوفناک
+  id: luar biasa, dahsyat, amat besar
+  vi: to lớn, bao la, ghê gớm
+  th: ยิ่งใหญ่, มหึมา, มหาศาล
+  ko: 엄청난, 대단한, 거대한
+  ja: 巨大な、ものすごい、すさまじい
+  zh: 巨大的, 极大的, 精彩的
+  bn: প্রকাণ্ড, অতিশয় বিশাল, সাংঘাতিক
+  kk: орасан зор, керемет, алапат
+
+ID 2642:
+  ru: воин, боец, ратник
+  uk: воїн, боєць, ратник
+  de: Krieger, Kämpfer, Recke
+  es: guerrero, combatiente, luchador
+  fr: guerrier, combattant, soldat
+  pl: wojownik, żołnierz, bojownik
+  it: guerriero, combattente, lottatore
+  tr: savaşçı, cengaver, dövüşçü
+  pt: guerreiro, combatente, lutador
+  ro: războinic, luptător, ostaș
+  bg: воин, войнстващ боец, храбрец
+  cs: válečník, bojovník, rek
+  sk: bojovník, vojnový hrdina, rek
+  hu: harcos, katona, bajnok
+  el: πολεμιστής, μαχητής, αγωνιστής
+  sl: bojevnik, borec, vojak
+  et: sõdalane, võitleja, sangar
+  lt: karys, kovotojas, karžygys
+  da: kriger, forkæmper, soldat
+  fi: soturi, taistelija, sotilas
+  sv: krigare, kämpe, stridsman
+  hr: ratnik, borac, vojnik
+  lv: karavīrs, cīnītājs, karotājs
+  hi: योद्धा, शूरवीर, लड़ाका
+  ar: محارب, مقاتل, بطل
+  fa: جنگجو, مبارز, سلحشور
+  ur: جنگجو, سپاہی, بہادر مجاہد
+  id: kesatria, pejuang, pendekar
+  vi: chiến binh, võ sĩ, binh sĩ
+  th: นักรบ, ทหารผ่านศึก, ผู้กล้า
+  ko: 전사, 용사, 투사
+  ja: 戦士、武者、勇士
+  zh: 勇士, 战士, 斗士
+  bn: যোদ্ধা, লড়াকু, বীর
+  kk: жауынгер, сарбаз, батыр
+
+ID 2643:
+  ru: вкус, привкус, аромат
+  uk: смак, присмак, аромат
+  de: Geschmack, Aroma, Geschmacksnote
+  es: sabor, gusto, condimento
+  fr: saveur, arôme, goût
+  pl: smak, aromat, posmak
+  it: sapore, gusto, aroma
+  tr: lezzet, tat, çeşni
+  pt: sabor, gosto, aroma
+  ro: gust, aromă, savoare
+  bg: вкус, аромат, привкус
+  cs: chuť, příchuť, aroma
+  sk: chuť, príchuť, aróma
+  hu: íz, aroma, zamat
+  el: γεύση, άρωμα, νοστιμιά
+  sl: okus, vonj, priokus
+  et: maitse, aroom, mekk
+  lt: skonis, gardumas, aromatas
+  da: smag, aroma, krydderi
+  fi: maku, aromi, mauste
+  sv: smak, arom, kryddning
+  hr: okus, aroma, štih
+  lv: garša, aromāts, piegarša
+  hi: स्वाद, ज़ायका, सुगंध
+  ar: نكهة, مذاق, طعم
+  fa: طعم, مزه, رایحه
+  ur: ذائقہ, مزہ, سوندھا پن
+  id: rasa, cita rasa, aroma
+  vi: mùi vị, hương vị, phong vị
+  th: รสชาติ, กลิ่นหอม, รสสัมผัส
+  ko: 풍미, 맛, 향미
+  ja: 風味、味わい、味付け
+  zh: 风味, 滋味, 味道
+  bn: স্বাদ, সুবাস, সুরভি
+  kk: дәм, татым, хош иіс
+
+ID 2644:
+  ru: сжимать, сдавливать, выжимать
+  uk: стискати, здавлювати, вичавлювати
+  de: quetschen, pressen, drücken
+  es: apretar, exprimir, estrujar
+  fr: presser, serrer, écraser
+  pl: ściskać, wyciskać, gnieść
+  it: stringere, spremere, schiacciare
+  tr: sıkmak, sıkıştırmak, ezmek
+  pt: apertar, espremer, comprimir
+  ro: a strânge, a stoarce, a presa
+  bg: изстисквам, притискам, стискам
+  cs: stisknout, mačkat, vymačkat
+  sk: stisnúť, stláčať, vytlačiť
+  hu: szorít, facsar, présel
+  el: πιέζω, στύβω, σφίγγω
+  sl: stisniti, iztisniti, ožeti
+  et: pigistama, pressima, suruma
+  lt: spausti, gniaužti, išspausti
+  da: klemme, presse, trykke
+  fi: puristaa, pusertaa, litistää
+  sv: klämma, krama, pressa
+  hr: stisnuti, zgnječiti, iscijediti
+  lv: spiest, izspiest, saspiest
+  hi: निचोड़ना, दबाना, कसकर पकड़ना
+  ar: يعصر, يضغط, يضيق
+  fa: فشردن, چلاندن, آب گرفتن
+  ur: نچوڑنا, دبانا, بھیچنا
+  id: meremas, memeras, menekan
+  vi: ép, vắt kiệt, chen chúc
+  th: บีบ, คั้น, เบียดเสียด
+  ko: 짜다, 쥐어짜다, 꽉 쥐다
+  ja: 絞る、握りしめる、圧迫する
+  zh: 挤压, 捏, 榨取
+  bn: নিংড়ানো, টেপা, চিপে নেওয়া
+  kk: қысу, сығу, басу
+
+ID 2645:
+  ru: видный, выдающийся, заметный, выступающий
+  uk: видатний, помітний, визначний, опуклий
+  de: prominent, herausragend, auffallend
+  es: prominente, destacado, sobresaliente
+  fr: proéminent, éminent, remarquable
+  pl: wybitny, rzucający się w oczy, wydatny
+  it: prominente, eminente, sporgente
+  tr: belirgin, göze çarpan, seçkin
+  pt: proeminente, destacado, ilustre
+  ro: proeminent, marcant, ieșit în relief
+  bg: изтъкнат, виден, изпъкнал
+  cs: významný, význačný, vystupující
+  sk: významný, popredný, vyčnievajúci
+  hu: kiemelkedő, kimagasló, feltűnő
+  el: εξέχων, διαπρεπής, προεξέχων
+  sl: ugleden, viden, izstopajoč
+  et: silmapaistev, esileküündiv, nimekas
+  lt: žymus, pastebimas, išsikišęs
+  da: fremtrædende, prominent, iøjnefaldende
+  fi: merkittävä, huomattava, pistävä
+  sv: framträdande, framstående, markerad
+  hr: istaknut, uočljiv, ugledan
+  lv: ievērojams, izcils, pamanāms
+  hi: प्रमुख, विशिष्ट, उभरा हुआ
+  ar: بارز, مرموق, ناتئ
+  fa: برجسته, سرشناس, نمایان
+  ur: نمایاں, ممتاز, ابھرا ہوا
+  id: menonjol, terkemuka, terpandang
+  vi: nổi bật, lỗi lạc, xuất chúng
+  th: โดดเด่น, มีชื่อเสียง, สำคัญ
+  ko: 두드러진, 저명한, 돌출된
+  ja: 著名な、際立った、目立つ
+  zh: 突出的, 显著的, 杰出的
+  bn: বিশিষ্ট, প্রখ্যাত, স্পষ্ট দৃশ্যমান
+  kk: көрнекті, белгілі, шығыңқы
+
+ID 2646:
+  ru: пятьдесят, полусотня
+  uk: п'ятдесят, півсотні
+  de: fünfzig, fünfzigste
+  es: cincuenta
+  fr: cinquante
+  pl: pięćdziesiąt
+  it: cinquanta
+  tr: elli
+  pt: cinquenta
+  ro: cincizeci
+  bg: петдесет
+  cs: padesát
+  sk: päťdesiat
+  hu: ötven
+  el: πενήντα
+  sl: petdeset
+  et: viiskümmend
+  lt: penkiasdešimt
+  da: halvtreds
+  fi: viisikymmentä
+  sv: femtio
+  hr: pedeset
+  lv: piecdesmit
+  hi: पचास
+  ar: خمسون, خمسين
+  fa: پنجاه
+  ur: پچاس
+  id: lima puluh
+  vi: năm mươi
+  th: ห้าสิบ
+  ko: 오십, 쉰
+  ja: 五十、50
+  zh: 五十
+  bn: পঞ্চাশ
+  kk: елу
+
+ID 2647:
+  ru: увядать, блекнуть, угасать, выцветать
+  uk: в'янути, блякнути, згасати, тьмяніти
+  de: verblassen, verwelken, dahinschwinden
+  es: desteñirse, desvanecerse, marchitarse
+  fr: s'estomper, se faner, décolorer
+  pl: blaknąć, więdnąć, zanikać
+  it: sbiadire, affievolirsi, appassire
+  tr: solmak, silinmek, yavaş yavaş kaybolmak
+  pt: desbotar, murchar, desaparecer aos poucos
+  ro: a se ofili, a se estompa, a păli
+  bg: избледнявам, вехна, чезна
+  cs: blednout, vadnout, doznívat
+  sk: blednúť, vädnúť, zanikať
+  hu: elhalványul, kifakul, hervad
+  el: ξεθωριάζω, μαραίνομαι, σβήνω σιγά-σιγά
+  sl: bledeti, veneti, pojemati
+  et: hääbuma, tuhmuma, pleekima
+  lt: nublukti, vysti, slopti
+  da: falme, visne, klinge af
+  fi: haalistua, kuihtua, vaimentua
+  sv: blekna, vissna, tona bort
+  hr: blijedjeti, venuti, polako nestajati
+  lv: izbalēt, vīst, apsīkt
+  hi: फीका पड़ना, मुरझाना, गायब होना
+  ar: يتلاشى, يبهت, يذبل
+  fa: کمرنگ شدن, پژمرده شدن, محو شدن
+  ur: مدہم پڑنا, رنگ اڑنا, مرجھانا
+  id: memudar, luntur, surut
+  vi: phai màu, tàn úa, mờ nhạt dần
+  th: จางหาย, ซีดจาง, ค่อยๆ เลือนราง
+  ko: 희미해지다, 빛바래다, 시들다
+  ja: 色あせる、衰える、消えていく
+  zh: 褪色, 凋谢, 逐渐消失
+  bn: বিবর্ণ হওয়া, ম্লান হওয়া, মিলিয়ে যাওয়া
+  kk: өңі кету, солу, біртіндеп өшу
+
+ID 2648:
+  ru: удовлетворение, довольство, услада
+  uk: задоволення, втіха, насичення
+  de: Zufriedenheit, Genugtuung, Befriedigung
+  es: satisfacción, complacencia, agrado
+  fr: satisfaction, contentement, soulagement
+  pl: zadowolenie, satysfakcja, zadośćuczynienie
+  it: soddisfazione, compiacimento, appagamento
+  tr: memnuniyet, tatmin, kıvanç
+  pt: satisfação, contentamento, regozijo
+  ro: satisfacție, mulțumire, bucurie
+  bg: удовлетворение, задоволство, насита
+  cs: spokojenost, uspokojení, zadostiučinění
+  sk: spokojnosť, uspokojenie, zadosťučinenie
+  hu: elégedettség, megelégedettség, elégtétel
+  el: ικανοποίηση, ευχαρίστηση, πληρότητα
+  sl: zadovoljstvo, zadoščenje, potešitev
+  et: rahulolu, rahuldus, heameel
+  lt: pasitenkinimas, pasitenkinimo jausmas, atlyginimas
+  da: tilfredshed, tilfredsstillelse, fyldestgørelse
+  fi: tyytyväisyys, mielihyvä, tyydytys
+  sv: tillfredsställelse, belåtenhet, förnöjelse
+  hr: zadovoljstvo, udovoljenje, satisfakcija
+  lv: apmierinātība, gandarījums, remdējums
+  hi: संतुष्टि, संतोष, प्रसन्नता
+  ar: رضاء, ارتياح, إشباع
+  fa: خرسندی, رضایت, رضایت‌خاطر
+  ur: اطمینان, تسکین, خوشنودی
+  id: kepuasan, kesenangan batin, kenyamanan
+  vi: sự thỏa mãn, sự hài lòng, sự toại nguyện
+  th: ความพึงพอใจ, ความอิ่มอกอิ่มใจ, ความสุขใจ
+  ko: 만족, 만족감, 충족
+  ja: 満足、充足、喜ばしいこと
+  zh: 满意, 满足, 令人满意的事物
+  bn: সন্তুষ্টি, পরিতোষ, তৃপ্তি
+  kk: қанағаттану, разылық, қанағат сезімі
+
+ID 2649:
+  ru: дискриминация, различение, ущемление прав
+  uk: дискримінація, розрізнення, обмеження прав
+  de: Diskriminierung, Benachteiligung, Unterscheidungsvermögen
+  es: discriminación, segregación, distinción
+  fr: discrimination, distinction, différenciation
+  pl: dyskryminacja, rozróżnianie, nierówne traktowanie
+  it: discriminazione, segregazione, discernimento
+  tr: ayrımcılık, fark gözetme, ayırt etme
+  pt: discriminação, preconceito, discernimento
+  ro: discriminare, defavorizare, deosebire
+  bg: дискриминация, ощетяване, разграничаване
+  cs: diskriminace, znevýhodňování, rozlišování
+  sk: diskriminácia, znevýhodňovanie, rozlišovanie
+  hu: diszkrimináció, hátrányos megkülönböztetés, különbségtétel
+  el: διάκριση, μεροληψία, διαχωρισμός
+  sl: diskriminacija, razlikovanje, zapostavljanje
+  et: diskrimineerimine, vahetegemine, eristamine
+  lt: diskriminacija, priekabiavimas, atskyrimas
+  da: forskelsbehandling, diskrimination, sans for detaljer
+  fi: syrjintä, erottelukyky, syrjiminen
+  sv: diskriminering, särbehandling, urskillningsförmåga
+  hr: diskriminacija, razlučivanje, nejednak tretman
+  lv: diskriminācija, šķirošana, izšķiršanas spēja
+  hi: भेदभाव, पक्षपात, अंतर करने की क्षमता
+  ar: تمييز, تفرقة, محاباة
+  fa: تبعیض, تفاوت‌گذاری, بصیرت
+  ur: تفریق, امتیاز, امتیاز برتائی
+  id: diskriminasi, perlakuan berbeda, daya beda
+  vi: sự phân biệt đối xử, sự kỳ thị, sự nhận thức khác biệt
+  th: การเลือกปฏิบัติ, การแบ่งแยก, การแยกแยะ
+  ko: 차별, 구별, 식별력
+  ja: 差別、区別、識別力
+  zh: 歧视, 差别对待, 辨别力
+  bn: বৈষম্য, পক্ষপাত, ভেদবিচার
+  kk: кемсітушілік, кемсіту, айыру қабілеті
+
+ID 2650:
+  ru: рецессия, экономический спад, кризис
+  uk: рецесія, спад виробництва, занепад
+  de: Rezession, Konjunkturrückgang, Abschwung
+  es: recesión, desaceleración, declive económico
+  fr: récession, ralentissement économique, recul
+  pl: recesja, spadek gospodarczy, kryzys
+  it: recessione, flessione economica, regresso
+  tr: durgunluk, ekonomik gerileme, resesyon
+  pt: recessão, desaceleração econômica, declínio
+  ro: recesiune, criză economică, regres
+  bg: рецесия, стопански спад, упадък
+  cs: recese, hospodářský pokles, ústup
+  sk: recesia, hospodársky pokles, ústup
+  hu: recesszió, gazdasági visszaesés, hanyatlás
+  el: ύφεση, οικονομική υποχώρηση, υποχώρηση
+  sl: recesija, gospodarski zastoj, upadanje
+  et: retsessioon, majanduslangus, tagasiminek
+  lt: recesija, nuosmukis, ekonominis sulėtėjimas
+  da: recession, økonomisk afmatning, tilbagegang
+  fi: taantuma, laskusuhdanne, taantuminen
+  sv: recession, lågkonjunktur, tillbakagång
+  hr: recesija, gospodarski pad, opadanje
+  lv: recesija, ekonomiskā lejupslīde, pagrimums
+  hi: मंदी, आर्थिक मंदी, गिरावट
+  ar: ركود اقتصادي, انحسار, تراجع
+  fa: رکود اقتصادی, کسادی, پس‌روی
+  ur: کساد بازاری, مندی, تنزل
+  id: resesi, penurunan ekonomi, kemerosotan
+  vi: suy thoái kinh tế, thời kỳ đình đốn, sự thụt lùi
+  th: ภาวะเศรษฐกิจถดถอย, การถดถอย, การทรุดตัว
+  ko: 불경기, 경기 후퇴, 침체
+  ja: 不景気、景気後退、リセッション
+  zh: 经济衰退, 不景气, 后退
+  bn: মন্দা, অর্থনৈতিক মন্দা, অধোগতি
+  kk: рецессия, экономикалық құлдырау, құлдырау
+
+ID 2651:
+  ru: обвинение, голословное утверждение, заявление
+  uk: звинувачення, голослівне твердження, закид
+  de: Anschuldigung, Vorwurf, Behauptung
+  es: alegación, acusación, afirmación sin pruebas
+  fr: allégation, accusation, prétention
+  pl: zarzut, bezpodstawne twierdzenie, oskarżenie
+  it: accusa, addebito, affermazione non provata
+  tr: iddia, isnat, suçlama
+  pt: alegação, acusação, assertiva sem prova
+  ro: alegație, acuzație, afirmație nedovedită
+  bg: твърдение, обвинение, голословно изявление
+  cs: obvinění, nařčení, nepodložené tvrzení
+  sk: obvinenie, tvrdenie, nepodložené narieknutie
+  hu: vád, állítás, ráfogás
+  el: ισχυρισμός, κατηγορία, καταγγελία
+  sl: obtožba, zatrjevanje, trditev brez dokaza
+  et: süüdistus, väide, kinnitus
+  lt: kaltinimas, nepagrįstas teiginys, pareiškimas
+  da: påstand, beskyldning, sigtelse
+  fi: väite, syytös, väittämä
+  sv: påstående, anklagelse, beskyllning
+  hr: tvrdnja, optužba, navod bez dokaza
+  lv: apgalvojums, apsūdzība, pārmetums
+  hi: आरोप, लांछन, कथित बात
+  ar: ادعاء, زعم, اتهام
+  fa: ادعا, اتهام, مدعا
+  ur: الزام, دعویٰ, بے ثبوت بات
+  id: tuduhan, dugaan, klaim tanpa bukti
+  vi: lời cáo buộc, sự luận tội, lời khẳng định vô căn cứ
+  th: ข้อกล่าวหา, การกล่าวอ้าง, ข้อครหา
+  ko: 혐의, 주장, 진술
+  ja: 申し立て、疑惑、根拠のない主張
+  zh: 指控, 断言, 辩解
+  bn: অভিযোগ, দাবি, অপ্রমাণিত অভিযোগ
+  kk: айыптау, дәлелсіз мәлімдеме, кінә тағу

@@ -1,0 +1,72 @@
+Batch 2402-2451 Linguistic Audit and Calibration Report
+====================================================
+
+Key bugs caught and calibrations made:
+1. Word 2402 (educator): Narrow teacher translations expanded. German had simple "Lehrer", French "professeur", Polish "nauczyciel". Calibrated to pedagogical and instructional breadth: Pädagoge/Erzieher, éducateur/pédagogue, pedagog/wychowawca across all locales.
+2. Word 2403 (confront): Dump had narrow passive "résister" in French and "oprzeć się" in Polish. Corrected to active confrontation: "affronter, confronter, faire face à" and "konfrontować, stawiać czoła".
+3. Word 2407 (emphasis): Severe false friend / loanword bug in dump! Portuguese had "sotaque" (which strictly means speech accent/dialect, totally absurd for "put emphasis on safety"). Arabic had "لهجة" (dialect/accent). French had simple "accent". Corrected across all locales to genuine conceptual emphasis: pt: "ênfase, destaque, realce", ar: "توكيد، تشديد، تركيز", es: "énfasis, hincapié, realce", fr: "accent, insistance, emphase".
+4. Word 2409 (raw): Dump omitted technical and industrial senses ("сырьевой, необработанный, исходный" / "en bruto, no procesado" / "brut, non transformé").
+5. Word 2410 (proceed): Dump had aspect error in Russian/Ukrainian with perfective single action. Calibrated to continuous course of action / advance: "продолжать, действовать, приступать".
+6. Word 2412 (snap): Polysemy and part-of-speech expansion: noun vs verb (to snap fingers/shut, break with sound; quick photo snapshot). Dump lacked fastener, breaking, and snapshot dimensions.
+7. Word 2413 (advocate): Dump had noun only ("защитник"). Added verbal senses ("отстаивать, выступать за", "abogar por, defender", "prôner, préconiser") and nuanced distinction between legal attorney vs public champion/advocate.
+8. Word 2414 (burden): Severe translation error in dump: Romanian had "marfă" (cargo/merchandise/goods)! Arabic had "شحنة" (cargo/electrical charge). Completely omitted figurative weight and troublesome responsibility! Calibrated to "povară, sarcină, greutate" (ro), "عبء، حِمل" (ar), "бремя, груз, тяжесть, обуза" (ru).
+9. Word 2416 (unlike): Homonym disaster caught in Kazakh! Dump had "ұнатпау" (to dislike / un-like)! Fixed to proper prepositional contrast: "ұқсамайтын, айырмашылығы, қарағанда".
+10. Word 2418 (lifetime): Dump had narrow life expectancy ("espérance de vie" in French, "długość życia" in Polish, "aspettativa di vita" in Italian). Corrected to full lifespan / lifetime duration / lifelong adjective: "toute la vie, durée de vie; viager", "toda la vida, vida útil; vitalicio", "жизнь, целая жизнь, срок службы; пожизненный".
+11. Word 2421 (gear): Egregious polysemy gap! Dump only included mechanical transmission gears ("шестерня, передача"), completely ignoring everyday equipment/clothing ("снаряжение, экипировка, принадлежности", camping/sports gear: "equipamiento, equipo", "équipement, matériel", "Ausrüstung, Zubehör").
+12. Word 2424 (sheriff): Catastrophic machine translation error in dump! Portuguese had "mecanismo" (mechanism)! Fixed immediately to proper Brazilian/European Portuguese "xerife".
+13. Word 2427 (hopefully): In modern usage, "hopefully" functions primarily as a sentence adverb ("будем надеяться, надеюсь, с надеждой"). Expanded across all locales (es: "con suerte, ojalá", pt: "se Deus quiser, oxalá", de: "hoffentlich").
+14. Word 2429 (incorporate): Italian had "affermare" (to affirm/assert), a complete non sequitur! Corrected to "incorporare, integrare, includere, fondare".
+15. Word 2431 (framework): Severe mistranslations in dump: Arabic had "إطارات" (car tires / picture frames plural) and Kazakh had "кадрлар" (personnel/staff from Russian кадры). Calibrated to architectural/conceptual structure and software frameworks: ar: "إطار عمل، هيكل، منظومة", kk: "құрылым, негіз, жүйе", ru: "каркас, структура, основа, фреймворк".
+16. Word 2433 (chase): Massive dump bug! Portuguese had "armazenamento" (storage)! Corrected to "perseguir, caçar; perseguição, caça".
+17. Word 2435 (assure): Part of speech error in French ("garantie" noun) and Italian ("garanzia" noun). Fixed to verbs "assurer, rassurer, certifier" and "assicurare, rassicurare, garantire".
+18. Word 2436 (utility): Expanded beyond narrow philosophical "полезность" to public utility services ("коммунальные услуги", "servicios públicos", "services publics") and software utilities.
+19. Word 2437 (cookie): Polysemy expansion: culinary baked treat (biscuit, galleta, biscoito, Plätzchen) and computing web cookie (куки, cookie de navegador, ملف تعريف الارتباط).
+20. Word 2444 (testimony): Kazakh dump had "көрсеткіштер" (metrics/KPIs)! Corrected to legal court testimony and evidence: "айғақ, куәлік сөз, жауап".
+21. Word 2446 (stake): French and Italian had "offre" / "offerta" (commercial offer). Kazakh had "баға" (price). Calibrated to genuine stake senses: betting stake/wager ("ставка, пари, mise, apuesta, бәс"), wooden peg/post ("кол, столб, pieu, estaca, қада"), and business ownership stake ("доля, udział, quota, participation, үлес").
+22. Word 2447 (precisely): Dump had fixed dialogue formula "именно так" / "exactement comme ça" / "esattamente così". Calibrated to true adverbial accuracy ("точно, именно, как раз, прецизионно", "précisément, exactement", "precisamente, con precisión").
+23. Word 2450 (glance): Italian had imperative phrase "dai una rapida occhiata" and Polish had imperative "rzuć okiem". Calibrated to noun/infinitive forms across all 35 languages. Kazakh had "көзқарас" (point of view), fixed to "көз тастау, бір қарап өту".
+24. Word 2451 (tissue): Massive homonym and polysemy calibration! Dump only had paper napkin ("салфетка"). Calibrated across all 35 locales to include biological cellular tissue ("ткань (биол.)", "tissu (biol.)", "tejido (biol.)", "Gewebe", "doku", "ऊतक", "نسيج", "بافت", "কলা", "ұлпа/тін") alongside facial/disposable tissue paper.
+25. Regional Latin American / Mexican Spanish (es) and Brazilian Portuguese (pt-BR) terminology audited and verified.
+26. RTL languages (ar, fa, ur) and Indic/Asian scripts (hi, bn, th, ja, zh, ko, kk) validated for grammatical naturalness and orthographic accuracy.
+
+====================================================
+Sample Calibrated Entries:
+====================================================
+
+ID 2407 (emphasis):
+  ru: акцент, упор, ударение, особое внимание
+  es: énfasis, hincapié, realce, acento
+  pt: ênfase, destaque, realce, foco
+  ar: توكيد، تشديد، تركيز
+  kk: екпін, баса назар аудару, мән беру
+
+ID 2421 (gear):
+  ru: снаряжение, экипировка; шестерня, передача
+  es: equipamiento, equipo; engranaje, marcha
+  pt: equipamento, apetrechos; marcha, engrenagem
+  de: Ausrüstung, Zubehör; Gang, Zahnrad, Getriebe
+
+ID 2424 (sheriff):
+  ru: шериф, окружной судья/полицейский
+  pt: xerife
+  es: sheriff, alguacil
+  fa: کلانتر
+
+ID 2431 (framework):
+  ru: каркас, структура, основа, фреймворк
+  ar: إطار عمل، هيكل، منظومة
+  kk: құрылым, негіз, жүйе
+  ur: ڈھانچہ، خاکہ، فریم ورک
+
+ID 2433 (chase):
+  ru: гнаться, преследовать; погоня, преследование
+  pt: perseguir, caçar; perseguição, caça
+  fr: poursuivre, chasser; poursuite, chasse
+
+ID 2451 (tissue):
+  ru: ткань (биол.), бумажная салфетка, носовой платок
+  es: tejido (biol.), pañuelo desechable, servilleta de papel
+  pt: tecido (biol.), lenço de papel, papel toalha
+  hi: ऊतक (जीव विज्ञान), टिशू पेपर, कागज़ी रूमाल
+  ar: نسيج (أحياء)، منديل ورقي
+  kk: ұлпа (биол.), тін, қағаз майлық

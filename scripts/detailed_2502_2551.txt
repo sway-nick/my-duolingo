@@ -1,0 +1,131 @@
+================================================================================
+LINGUISTIC AUDIT & CALIBRATION REPORT: BATCH 2502-2551
+50 Words across EXACTLY 36 LOCALES (35 Target Languages + English Headword)
+================================================================================
+
+EXECUTIVE AUDIT SUMMARY OF KEY BUGS CAUGHT & CALIBRATED:
+
+1. Catastrophic Homonym Confusion: "bye" (ID 2506)
+   - Machine translation catastrophically confused the farewell interjection "bye" with
+     preposition/conjunction "by" or "while":
+     * Danish: "mens" (while) -> calibrated to "hej hej, farvel, vi ses"
+     * Finnish: "samalla kun" (while/at the same time) -> calibrated to "heippa, hei hei, näkemiin"
+     * Swedish: "medan" (while) -> calibrated to "hejdå, adjö, vi ses"
+     * Croatian: "dok" (while) -> calibrated to "bok, doviđenja, ćao"
+     * Latvian: "kamēr" (while) -> calibrated to "atā, uz redzēšanos, čau"
+     * Indonesian: "sementara" (while/temporary) -> calibrated to "sampai jumpa, dadah, selamat tinggal"
+     * Vietnamese: "trong khi" (while) -> calibrated to "tạm biệt, chào nhé, hẹn gặp lại"
+     * Thai: "ขณะที่" (while) -> calibrated to "ลาก่อน, บ๊ายบาย, สวัสดี"
+     * Korean: "동안" (during/while) -> calibrated to "잘 가, 안녕, 또 봐"
+     * Japanese: "一方" (on the one hand/meanwhile) -> calibrated to "さようなら、バイバイ、じゃあね"
+     * Kazakh: "ал" (well/so/take) -> calibrated to "сау бол, қош бол, көріскенше"
+
+2. Landmark vs Directive Translation Failure: "guideline" (ID 2513)
+   - The Russian seed "ориентир" misled machine translation into rendering "guideline" as a physical
+     navigation landmark or historical monument across 18+ languages:
+     * French: "point de repère" -> "directive, ligne directrice, consigne"
+     * Portuguese: "marco" -> "diretriz, orientação, linha de conduta"
+     * Romanian: "reper" -> "directivă, îndrumar, normă"
+     * Bulgarian: "забележителност" (sight/monument) -> "насока, указание, директива"
+     * Czech: "mezník" (milestone) -> "směrnice, pokyn, doporučení"
+     * Slovak: "orientačný bod" (landmark) -> "smernica, pokyn, usmernenie"
+     * Hungarian: "tájékozódási pont" (landmark) -> "irányelv, útmutató, vezérfonal"
+     * Greek: "ορόσημο" (milestone) -> "κατευθυντήρια γραμμή, οδηγία, κανόνας"
+     * Slovenian: "znamenitost" (sight) -> "smernica, navodilo, vodilo"
+     * Estonian: "maamärk" (landmark) -> "suunis, juhis, juhtnöör"
+     * Danish: "vartegn" (landmark) -> "retningslinje, vejledning, rettesnor"
+     * Finnish: "maamerkki" (landmark) -> "toimintaohje, suuntaviiva, suositus"
+     * Swedish: "landmärke" (landmark) -> "riktlinje, handledning, anvisning"
+     * Croatian: "znamenitost" (landmark) -> "smjernica, preporuka, uputa"
+     * Vietnamese: "địa danh" (place name) -> "hướng dẫn, phương châm chỉ đạo, nguyên tắc"
+     * Thai: "สถานที่สำคัญ" (landmark) -> "แนวทางปฏิบัติ, หลักเกณฑ์, ข้อกำหนด"
+     * Korean: "랜드마크" (landmark) -> "지침, 가이드라인, 안내서"
+     * Japanese: "ランドマーク" (landmark) -> "指針、ガイドライン、手引き"
+     * Kazakh: "ескерткіш" (monument/statue!) -> "нұсқаулық, бағдарлама, басшылыққа алынатын ереже"
+
+3. Part-of-Speech Collapse (Adverb -> Noun/Adjective): "publicly" (ID 2509)
+   - "publicly" (adverb) was erroneously rendered as adjective or noun across many locales:
+     * Danish: "offentlig" (adj) -> "offentligt, åbenlyst"
+     * Finnish: "julkinen" (adj) -> "julkisesti, avoimesti"
+     * Swedish: "offentlig" (adj) -> "offentligt, öppet"
+     * Croatian: "javnost" (noun) -> "javno, na vidjelo"
+     * Latvian: "sabiedrība" (noun: society) -> "publiski, atklāti"
+     * Indonesian: "publik" (noun) -> "secara terbuka, di depan umum"
+     * Vietnamese: "công chúng" (noun: the public) -> "công khai, trước công chúng"
+     * Korean: "대중" (noun: the masses) -> "공개적으로, 공공연히"
+     * Japanese: "公衆" (noun: the public) -> "公に、公然と、公開で"
+     * Kazakh: "қоғамдық" (adj: social/public) -> "көпшілік алдында, ашық түрде"
+
+4. Hallucination in Italian: "comprehensive" (ID 2520)
+   - Italian had "ripetere" (to repeat!). Corrected to "esaustivo, completo, globale".
+   - Aligned other locales to ensure comprehensive encompasses exhaustive/thorough scope.
+
+5. Domain Mistranslation: "medication" (ID 2521)
+   - Confused with "medicine" in the sense of the academic medical discipline:
+     * Finnish: "lääketiede" (medical science) -> "lääke, lääkitys, rohto"
+     * Latvian: "medicīna" (medical science) -> "zāles, medikaments, ārstniecības līdzeklis"
+     * Croatian: "medicina" (medical science) -> "lijek, medikament, farmakološka terapija"
+     * Vietnamese: "y học" (medical science) -> "thuốc điều trị, dược phẩm, đơn thuốc"
+     * Korean: "의학" (medical science) -> "약물, 약, 복약"
+     * Japanese: "医学" (medical science) -> "薬、薬剤、医薬品"
+
+6. Verb vs Noun Part-of-Speech Shift: "scare" (ID 2522)
+   - Translated purely as a static noun (fear/horror) in several languages:
+     * Finnish: "pelottelu" -> "pelästyttää, säikäyttää, säikähdys"
+     * Swedish: "skrämsel" -> "skrämma, oroa, skrämsel"
+     * Croatian: "strah" -> "plašiti, prestrašiti, prepast"
+     * Korean: "공포" -> "겁주다, 놀라게 하다, 공포"
+     * Japanese: "恐怖" -> "怖がらせる、おびえさせる、脅威"
+     * Kazakh: "қорқыныш" -> "қорқыту, үркіту, зәресін ұшыру"
+
+7. Unwarranted Pluralization: "logic" (ID 2523)
+   - Portuguese ("lógicas"), Czech ("logiky"), Slovak ("logiky"), Hungarian ("logikák"),
+     Greek ("λογικές"), and Slovenian ("logike") incorrectly adopted plural forms.
+     Calibrated to singular uncountable noun across all target languages.
+
+8. Polysemic Omission: "net" (ID 2528)
+   - MT bifurcated into either purely physical network/internet or purely commercial net/netto:
+     * Polish had only "internet"; Italian, Hungarian, Greek, Lithuanian had only "netto/clean".
+     * Calibrated to provide both physical mesh/network and financial netto profit/amount.
+
+9. Extreme Semantic Failure: "sink" (ID 2534)
+   - Kazakh had "қабық" (bark, peel, or rind!), a total translation error.
+   - Swedish, Romanian, Vietnamese, Thai, Japanese, and Bengali had only verb "to sink" (e.g., 沈む, chìm, จม).
+   - Calibrated both the washbasin/kitchen fixture and the submerge verb in all 35 languages.
+
+10. False Part-of-Speech & Role: "spokesman" (ID 2532)
+    - Hungarian had adjective "reprezentatív" (representative). Corrected to "szóvivő, sajtószóvivő".
+    - Spanish Latin American nuance "vocero" provided alongside European "portavoz".
+
+11. Semantic Scope: "deck" (ID 2537)
+    - Enriched beyond nautical deck to include wooden terrace/decking and a pack of playing cards.
+
+12. Dual Senses: "reflection" (ID 2538)
+    - Several languages had omitted optical reflection (mirror/light), focusing exclusively on
+      philosophical contemplation, or vice versa. Both senses calibrated across all 35 languages.
+
+13. Capacity vs Capability: "capability" (ID 2544)
+    - Japanese ("容量" volume/data size), Korean ("용량" volume/dosage), Arabic ("طاقة استيعابية"
+      carrying capacity), Thai ("ความจุ" storage capacity) mistook capability for holding capacity.
+    - Calibrated to competency, power, faculty, and operational ability.
+
+14. Triple Polysemy: "yield" (ID 2550)
+    - Most locales had only "harvest / crop gathering" (récolte, aratás, suhwak, etc.).
+    - Yield signifies:
+      1) Agricultural/commercial production (output, crop)
+      2) Financial return / interest yield (dividend, return)
+      3) Traffic / interpersonal concession (to yield / give way / surrender)
+    - All three facets calibrated for full linguistic accuracy.
+
+15. Adjective Grammar & Cleanliness: "mere" (ID 2551)
+    - Stripped mid-sentence capitalizations from previous outputs (Tylko, Appena, Doar, Jen, etc.).
+    - Clarified the fundamental adjective definition ("pure, bare, nothing more than") with natural
+      adverbial nuances where syntactically appropriate.
+
+================================================================================
+VERIFICATION SUMMARY:
+- Target locales: EXACTLY 35 target languages verified.
+- Headword: English (36th locale).
+- Zero build scripts executed (strict adherence to Directive #2).
+- Validated with node runtime: 50/50 keys confirmed, 0 missing translations.
+================================================================================

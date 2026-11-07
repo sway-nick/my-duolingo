@@ -1,0 +1,1977 @@
+================================================================================
+LINGUISTIC AUDIT & CALIBRATION REPORT: BATCH ID 2702–2751 (50 WORDS)
+Supported Locales: EXACTLY 36 (en headword + 35 target locales)
+Target locales: ru, uk, de, es, fr, pl, it, tr, pt, ro, bg, cs, sk, hu, el, sl, et, lt, da, fi, sv, hr, lv, hi, ar, fa, ur, id, vi, th, ko, ja, zh, bn, kk
+================================================================================
+
+EXECUTIVE SUMMARY OF MAJOR CRITICAL BUGS DETECTED AND RESOLVED:
+
+1. THE CATASTROPHIC CAR TRUNK / TREE TRUNK BUG (ID 2743 - "barrel"):
+   Machine translation suffered a massive multi-language semantic cascade due to the ambiguity
+   of Russian "ствол" (which means both firearm barrel AND tree trunk) and English "trunk"
+   (which means tree trunk, luggage compartment / boot of a car, and torso):
+   - Over 25 languages erroneously translated "barrel" as either CAR TRUNK (luggage boot) or TREE TRUNK!
+     * Spanish: "tronco" (tree trunk) -> fixed to "barril, tonel, cañón"
+     * French: "tronc" (tree trunk) -> fixed to "tonneau, fût, canon"
+     * Italian: "baule" (car trunk / chest) -> fixed to "botte, barile, canna"
+     * Romanian: "portbagaj" (car trunk) -> fixed to "butoi, butoiaș, țeavă de armă"
+     * Bulgarian: "багажник" (car trunk) -> fixed to "бъчва, варел, цев"
+     * Czech: "kufr" (car trunk / suitcase) -> fixed to "sud, barel, hlaveň"
+     * Slovak: "kmeň" (tree trunk) -> fixed to "sud, barel, hlaveň"
+     * Hungarian: "törzs" (tree trunk / torso) -> fixed to "hordó, fahordó, puskacső"
+     * Greek: "κορμός" (tree trunk) -> fixed to "βαρέλι, κάννη όπλου"
+     * Slovenian: "prtljažnik" (car trunk) -> fixed to "sod, sodček, cev pištole"
+     * Estonian: "pagasiruum" (car trunk) -> fixed to "vaat, tünn, püssitoru"
+     * Lithuanian: "bagažinė" (car trunk) -> fixed to "statinė, vamzdis, barelis"
+     * Danish: "bagagerum" (car trunk) -> fixed to "tønde, fad, geværløb"
+     * Finnish: "tavaratila" (car trunk) -> fixed to "tynnyri, saavi, piippu"
+     * Swedish: "bagageutrymme" (car trunk) -> fixed to "fat, tunna, eldrör"
+     * Croatian: "prtljažnik" (car trunk) -> fixed to "bačva, cijev puške, barel"
+     * Latvian: "bagāžnieks" (car trunk) -> fixed to "muca, stobrs, barels"
+     * Arabic: "صندوق" (trunk/box) -> fixed to "برميل، سبطانة، ماسورة"
+     * Vietnamese: "rương" (chest / trunk) -> fixed to "thùng gỗ, nòng súng, thùng phi"
+     * Thai: "ลำต้น" (tree trunk) -> fixed to "ถังไม้, ลำกล้องปืน, แกลลอน"
+     * Korean: "나무줄기" (tree trunk) -> fixed to "통, 배럴, 총열"
+     * Japanese: "幹" (tree trunk) -> fixed to "樽、バレル、銃身"
+     * Kazakh: "дің" (tree trunk) -> fixed to "бөшке, баррель, қару ұңғысы"
+   - Resolution: Restored accurate authentic dual meanings across all 35 languages:
+     (1) cylindrical vessel / container (barrel/keg/cask: бочка, Fass, barril, botte, etc.)
+     (2) gun barrel (ствол оружия: cañón, canon, canna, lufa, hlaveň, puskacső, etc.)
+     (3) unit of capacity (oil barrel: баррель).
+
+2. THE "TILL" (UNTIL vs TO/FROM) DISASTER (ID 2729 - "till"):
+   Machine translation completely misparsed "till", mistaking it for the preposition "to" or "from",
+   producing punctuation or completely unrelated functional particles:
+   - Finnish: "-" (literally a single hyphen!) -> fixed to "kunnes, asti, kassalipas"
+   - German: "Zu" (to/towards) -> fixed to "bis, bis zu, Kasse, beackern"
+   - French: "à" (to/at) -> fixed to "jusqu'à, en attendant, caisse"
+   - Italian: "A" (to/at) -> fixed to "fino a, fino a quando, cassa"
+   - Czech: "na" (on/onto) -> fixed to "do, dokud ne, pokladna, orat"
+   - Slovak: "k" (towards) -> fixed to "do, kým nie, pokladňa"
+   - Hungarian: "hogy" (conjunction 'that') -> fixed to "-ig, amíg, kassza, művel"
+   - Greek: "να" (subjunctive marker 'to') -> fixed to "μέχρι, ωσότου, ταμείο"
+   - Hindi: "को" (dative/accusative marker) -> fixed to "तक, जब तक, गल्ला"
+   - Korean: "~에" (locative marker 'at/in') -> fixed to "~까지, ~할 때까지, 계산대"
+   - Japanese: "～へ" (directional particle 'towards') -> fixed to "～まで、～するまで、レジ（金銭登録機）"
+   - Kazakh: "дан" (ablative marker 'from') -> fixed to "дейін, шейін, касса"
+   - Lithuanian: "į" (preposition 'into') -> fixed to "iki, pakol, kasa, dirbti žemę"
+   - Romanian: "la" (at/to) -> fixed to "până la, până ce, casă de marcat"
+
+3. THE ELECTRICAL FLOW / TIME COLLISION (ID 2736 - "operating"):
+   Machine translation equated "operating" with "current" (in time, contemporary), and then translated
+   "current" into Slavic/Baltic/Greek languages as ELECTRICAL CURRENT / WATER FLOW:
+   - Czech: "proud" (electrical current / river stream) -> fixed to "provozní, fungující, operační"
+   - Slovak: "prúd" (electric stream) -> fixed to "prevádzkový, fungujúci, operačný"
+   - Greek: "ρεύμα" (electric current) -> fixed to "λειτουργικός, επιχειρησιακός, χειρουργικός"
+   - Slovenian: "tok" (stream / electric flow) -> fixed to "delujoč, operativen, obratovalen"
+   - Lithuanian: "srovė" (electrical current) -> fixed to "veikiantis, darbinis, operacinis"
+   - Romance & Slavic temporal drift: French "actuel", Italian "attuale", Polish "aktualny",
+     Hungarian "jelenlegi", Bulgarian "текущ" -> calibrated to authentic operational and functional senses.
+
+4. THE "ASSERT" vs "APPROVE / ASSENT" MISTRANSLATION CASCADE (ID 2737 - "assert"):
+   Russian "утверждать" has two homonymous meanings:
+   (a) state forcefully / claim / assert
+   (b) approve / endorse / sanction (утвердить план/закон).
+   Machine translation blindly selected "approve / confirm" across 10 European languages:
+   - French: "approuver" (to approve) -> fixed to "affirmer, revendiquer, faire valoir"
+   - Italian: "approvare" (to approve) -> fixed to "affermare, asserire, sostenere"
+   - Romanian: "aproba" (to approve) -> fixed to "a afirma, a susține, a pretinde"
+   - Bulgarian: "одобрявам" (to approve) -> fixed to "твърдя, заявявам, отстоявам"
+   - Czech: "schvalovat" (to approve) -> fixed to "tvrdit, prohlašovat, prosazovat"
+   - Slovak: "schváliť" (to approve) -> fixed to "tvrdiť, vyhlasovať, presadzovať"
+   - Hungarian: "jóváhagy" (to approve) -> fixed to "állít, kijelent, érvényesít"
+   - Greek: "εγκρίνω" (to approve) -> fixed to "ισχυρίζομαι, διαβεβαιώνω, υποστηρίζω"
+   - Slovenian: "odobriti" (to approve) -> fixed to "trditi, zatrjevati, uveljavljati"
+   - Estonian: "heaks kiitma" (to approve) -> fixed to "väitma, kinnitama, nõudma"
+   - Kazakh: "бекіту" (to approve) -> fixed to "мәлімдеу, дәлелдеу, табандылық көрсету"
+
+5. CATASTROPHIC NUMERAL & WEAPON DRIFT (ID 2715 - "fifteen", ID 2709 - "mainstream", ID 2707 - "lens"):
+   - ID 2715 ("fifteen"): Urdu had "غیر معمولی، نمایاں" (extraordinary, prominent)! Completely broken.
+     Corrected to authentic Urdu numeral: "پندرہ، ۱۵".
+   - ID 2709 ("mainstream"): Latvian had "galvenais ierocis" (MAIN WEAPON)!
+     Kazakh had "негізгі ақпарат" (basic information)!
+     Corrected to authentic Latvian "galvenā straume, dominējošais virziens" and Kazakh "негізгі ағым, басты бағыт".
+   - ID 2707 ("lens"): Italian had "terminale" (terminal/endpoint)!
+     Corrected to authentic Italian "lente, obiettivo".
+
+6. THE "MANAGEMENT / ADMINISTRATION" CONFUSION (ID 2722 - "superior"):
+   Machine translation translated "superior" as "management / business administration" in 7 languages:
+   - French: "gestion" -> fixed to "supérieur, meilleur, chef, supérieur hiérarchique"
+   - Italian: "gestione" -> fixed to "superiore, migliore, capo, superiore gerarchico"
+   - Romanian: "management" -> fixed to "superior, mai bun, superior ierarhic, șef"
+   - Bulgarian: "управление" -> fixed to "висш, по-добър, началник, висшестоящ"
+   - Czech: "řízení" -> fixed to "nadřízený, lepší, vyšší, představený"
+   - Slovak: "manažment" -> fixed to "nadriadený, lepší, vyšší, predstavený"
+   - Hungarian: "menedzsment" -> fixed to "felsőbbrendű, felettes, jobb"
+
+7. THE "PHYSICALLY NIMBLE / SUBTLE CLUE" CASCADE (ID 2734 - "prompt"):
+   Machine translation translated "prompt" as acrobatically nimble (agile) and subtle detective clue (hint):
+   - Romanian "agil, indiciu", French "agile, indice", Italian "agile, suggerimento", Czech "hbitý, nápověda",
+     Slovak "obratný", Danish "adræt", Swedish "smidig", Finnish "ketterä", Arabic "رشيق", Kazakh "епті".
+   - Calibrated across all languages to authentic promptness (rapide, punctual, sofortig), verbal encouragement/cueing,
+     and modern AI prompt / command prompt (invite, console/instruction).
+
+8. WILDLIFE & COMPUTER GRAPHICS DRIFT (ID 2740 - "wildlife", ID 2719 - "render", ID 2732 - "server"):
+   - ID 2740 ("wildlife"): Urdu had "معاشی، اقتصادی" (economic, financial)!
+     Latvian had "tuksnesis" (desert)! Corrected to "جنگلی حیات، چرند پرند" and "savvaļas dzīvnieki, savvaļa".
+   - ID 2719 ("render"): Italian ("rendering"), Czech ("vykreslení"), Hungarian ("renderelés"),
+     Bulgarian ("рендериране"), Estonian ("renderdama") narrowed the verb exclusively to 3D computer graphics!
+     Re-anchored to primary linguistic meanings: provide assistance, cause to become (render helpless), perform.
+   - ID 2732 ("server"): Greek had "υπηρέτης" (domestic maid / servant)! Corrected to IT server and dining server.
+
+================================================================================
+DETAILED AUDIT PER WORD (ID 2702–2751):
+================================================================================
+[Word ID 2702]
+ru: превышать, превосходить, выходить за пределы
+uk: перевищувати, перевершувати, виходити за межі
+de: überschreiten, übertreffen, übersteigen
+es: superar, exceder, sobrepasar
+fr: dépasser, excéder, surpasser
+pl: przekraczać, przewyższać, wykraczać poza
+it: superare, eccedere, oltrepassare
+tr: aşmak, geçmek, sınırını aşmak
+pt: ultrapassar, superar, exceder
+ro: a depăși, a întrece, a exceda
+bg: надвишавам, надминавам, превишавам
+cs: překročit, přesáhnout, předčit
+sk: prekročiť, presiahnuť, predstihnúť
+hu: meghalad, túllép, felülmúl
+el: ξεπερνώ, υπερβαίνω, υπερέχω
+sl: preseči, prekoračiti, biti večji od
+et: ületama, ette jõudma, ees olema
+lt: viršyti, pranokti, perspjauti
+da: overskride, overgå, overstige
+fi: ylittää, voittaa, olla suurempi kuin
+sv: överskrida, överträffa, överstiga
+hr: premašiti, prekoračiti, nadmašiti
+lv: pārsniegt, pārspēt, būt lielākam par
+hi: पार करना, से अधिक होना, आगे निकलना
+ar: يتجاوز، يتعدى، يفوق
+fa: فراتر رفتن از، تجاوز کردن از، پیشی گرفتن
+ur: بڑھ جانا، تجاوز کرنا، سبقت لے جانا
+id: melebihi, melampaui, mengungguli
+vi: vượt quá, vượt qua, trội hơn
+th: เกิน, เกินกว่า, เหนือกว่า
+ko: 초과하다, 넘다, 능가하다
+ja: 超える、上回る、超過する
+zh: 超过、超出、胜过
+bn: ছাড়িয়ে যাওয়া, অতিক্রম করা, বেশি হওয়া
+kk: асып түсу, шектен шығу, артық болу
+
+[Word ID 2703]
+ru: главный, основной, директор школы
+uk: головний, основний, директор школи
+de: hauptsächlich, wichtigst, Schulleiter
+es: principal, fundamental, director escolar
+fr: principal, essentiel, directeur d'école
+pl: główny, zasadniczy, dyrektor szkoły
+it: principale, fondamentale, preside
+tr: başlıca, esas, okul müdürü
+pt: principal, fundamental, diretor escolar
+ro: principal, esențial, director de școală
+bg: главен, основен, директор на училище
+cs: hlavní, základní, ředitel školy
+sk: hlavný, základný, riaditeľ školy
+hu: fő-, elsődleges, iskolaigazgató
+el: κύριος, βασικός, διευθυντής σχολείου
+sl: glavni, temeljni, ravnatelj
+et: peamine, põhi-, koolidirektor
+lt: pagrindinis, svarbiausias, mokyklos direktorius
+da: primær, hoved-, skoleleder
+fi: pääasiallinen, tärkein, rehtori
+sv: huvudsaklig, främst, rektor
+hr: glavni, temeljni, ravnatelj
+lv: galvenais, pamat-, skolas direktors
+hi: मुख्य, प्रमुख, प्रधानाचार्य
+ar: رئيسي، أساسي، مدير مدرسة
+fa: اصلی، عمده، مدیر مدرسه
+ur: اہم، بنیادی، پرنسپل
+id: utama, pokok, kepala sekolah
+vi: chính, chủ yếu, hiệu trưởng
+th: สำคัญที่สุด, หลัก, ครูใหญ่
+ko: 주요한, 주된, 교장
+ja: 主な、主要な、校長
+zh: 主要的、最重要的、校长
+bn: প্রধান, মূল, অধ্যক্ষ
+kk: негізгі, басты, мектеп директоры
+
+[Word ID 2704]
+ru: вакцина, прививка
+uk: вакцина, щеплення
+de: Impfstoff, Vakzine
+es: vacuna
+fr: vaccin
+pl: szczepionka
+it: vaccino
+tr: aşı
+pt: vacina
+ro: vaccin
+bg: ваксина
+cs: vakcína, očkovací látka
+sk: vakcína, očkovacia látka
+hu: vakcina, oltóanyag
+el: εμβόλιο
+sl: cepivo, vakcina
+et: vaktsiin, kaitsesüst
+lt: vakcina, skiepai
+da: vaccine
+fi: rokote
+sv: vaccin, ympämne
+hr: cjepivo, vakcina
+lv: vakcīna, pote
+hi: टीका, वैक्सीन
+ar: لقاح، طعم
+fa: واکسن
+ur: ویکسین، حفاظتی ٹیکہ
+id: vaksin
+vi: vắc-xin, vắc xin
+th: วัคซีน
+ko: 백신
+ja: ワクチン
+zh: 疫苗
+bn: টিকা, ভ্যাকসিন
+kk: вакцина, екпе
+
+[Word ID 2705]
+ru: идентификация, опознание, удостоверение личности
+uk: ідентифікація, упізнання, посвідчення особи
+de: Identifizierung, Ausweis, Erkennung
+es: identificación, documento de identidad, credencial
+fr: identification, pièce d'identité, reconnaissance
+pl: identyfikacja, rozpoznanie, dowód tożsamości
+it: identificazione, riconoscimento, documento d'identità
+tr: kimlik tespiti, tanımlama, kimlik
+pt: identificação, documento de identidade
+ro: identificare, act de identitate, recunoaștere
+bg: идентификация, разпознаване, документ за самоличност
+cs: identifikace, ztotožnění, průkaz totožnosti
+sk: identifikácia, rozpoznanie, preukaz totožnosti
+hu: azonosítás, felismerés, személyazonosító okmány
+el: αναγνώριση, ταυτοποίηση, ταυτότητα
+sl: identifikacija, prepoznava, osebni dokument
+et: tuvastamine, identifitseerimine, isikut tõendav dokument
+lt: atpažinimas, identifikavimas, asmens tapatybės dokumentas
+da: identifikation, legitimation, id
+fi: tunnistaminen, identifiointi, henkilöllisyystodistus
+sv: identifiering, identifikation, id-handling
+hr: identifikacija, prepoznavanje, osobna iskaznica
+lv: identificēšana, atpazīšana, personu apliecinošs dokuments
+hi: पहचान, शिनाख्त, पहचान पत्र
+ar: تحديد الهوية، بطاقة هوية، إثبات شخصية
+fa: شناسایی، تشخیص هویت، مدرک شناسایی
+ur: شناخت، پہچان، شناختی دستاویز
+id: identifikasi, pengenalan, tanda pengenal
+vi: nhận dạng, nhận biết, chứng minh thư
+th: การระบุตัวตน, บัตรประชาชน, การพิสูจน์เอกลักษณ์
+ko: 신원 확인, 식별, 신분증
+ja: 識別、身元確認、身分証明書
+zh: 识别、辨认、身分证明
+bn: শনাক্তকরণ, পরিচয়পত্র
+kk: сәйкестендіру, тану, жеке куәлік
+
+[Word ID 2706]
+ru: бык, самец
+uk: бик, бугай
+de: Stier, Bulle
+es: toro
+fr: taureau
+pl: byk
+it: toro
+tr: boğa
+pt: touro
+ro: taur
+bg: бик
+cs: býk
+sk: býk
+hu: bika
+el: ταύρος
+sl: bik
+et: pull, härg
+lt: jautis, bulius
+da: tyr
+fi: härkä, sonni
+sv: tjur
+hr: bik
+lv: bullis, vērsis
+hi: बैल, सांड
+ar: ثور
+fa: گاو نر، ثور
+ur: بیل، سانڈ
+id: banteng, sapi jantan
+vi: bò đực
+th: วัวตัวผู้, กระทิง
+ko: 황소, 수소
+ja: 雄牛、雄ウシ
+zh: 公牛、雄牛
+bn: ষাঁড়, বলদ
+kk: бұқа, өгіз
+
+[Word ID 2707]
+ru: линза, объектив, лупа
+uk: лінза, об'єктив, скло
+de: Linse, Objektiv
+es: lente, objetivo, cristal
+fr: lentille, objectif
+pl: soczewka, obiektyw
+it: lente, obiettivo
+tr: mercek, lens, objektif
+pt: lente, objetiva
+ro: lentilă, obiectiv
+bg: леща, обектив
+cs: čočka, objektiv
+sk: šošovka, objektív
+hu: lencse, objektív
+el: φακός
+sl: leča, objektiv
+et: lääts, objektiiv
+lt: lęšis, objektyvas
+da: linse, objektiv
+fi: linssi, objektiivi
+sv: lins, objektiv
+hr: leća, objektiv
+lv: lēca, objektīvs
+hi: लेंस, ताल
+ar: عدسة
+fa: عدسی، لنز
+ur: عدسہ، لینز
+id: lensa, kaca pembesar
+vi: thấu kính, ống kính
+th: เลนส์, เลนส์แว่นตา
+ko: 렌즈, 수정체
+ja: レンズ、対物レンズ
+zh: 透镜、镜头、镜片
+bn: লেন্স, তাল
+kk: линза, шыны
+
+[Word ID 2708]
+ru: двенадцать, 12
+uk: дванадцять, 12
+de: zwölf, 12
+es: doce, 12
+fr: douze, 12
+pl: dwanaście, 12
+it: dodici, 12
+tr: on iki, 12
+pt: doze, 12
+ro: doisprezece, 12
+bg: дванадесет, 12
+cs: dvanáct, 12
+sk: dvanásť, 12
+hu: tizenkettő, tizenkét, 12
+el: δώδεκα, 12
+sl: dvanajst, 12
+et: kaksteist, 12
+lt: dvylika, 12
+da: tolv, 12
+fi: kaksitoista, 12
+sv: tolv, 12
+hr: dvanaest, 12
+lv: divpadsmit, 12
+hi: बारह, 12
+ar: اثنا عشر، 12
+fa: دوازده، ۱۲
+ur: بارہ، ۱۲
+id: dua belas, 12
+vi: mười hai, 12
+th: สิบสอง, 12
+ko: 열둘, 십이, 12
+ja: 十二、12
+zh: 十二、12
+bn: বারো, ১২
+kk: он екі, 12
+
+[Word ID 2709]
+ru: мейнстрим, основное течение, господствующее направление
+uk: мейнстрім, основна течія, панівний напрям
+de: Mainstream, Hauptströmung, vorherrschender Trend
+es: corriente principal, dominante, convencional
+fr: courant dominant, grand public, général
+pl: główny nurt, powszechny trend
+it: corrente principale, tendenza dominante, mainstream
+tr: ana akım, yaygın eğilim
+pt: corrente principal, convencional, tendência dominante
+ro: curent dominant, convențional, mainstream
+bg: основно течение, доминираща тенденция, мейнстрийм
+cs: hlavní proud, mainstream, většinový trend
+sk: hlavný prúd, mainstream, bežný trend
+hu: fősodor, uralkodó irányzat, mainstream
+el: κύριο ρεύμα, επικρατούσα τάση
+sl: glavni tok, prevladujoča smer
+et: peavool, valdav suund
+lt: pagrindinė srovė, vyraujanti kryptis
+da: mainstream, hovedstrømning
+fi: valtavirta, yleinen suuntaus
+sv: huvudfåra, mainstream, allmän trend
+hr: glavna struja, prevladavajući smjer
+lv: galvenā straume, dominējošais virziens
+hi: मुख्यधारा, प्रचलित प्रवृत्ति
+ar: التيار السائد، الاتجاه العام
+fa: جریان اصلی، گرایش عمده
+ur: مرکزی دھارا، عام رجحان
+id: arus utama, aliran utama
+vi: dòng chính, xu hướng chủ đạo
+th: กระแสหลัก, แนวโน้มหลัก
+ko: 주류, 대세
+ja: 主流、本流
+zh: 主流、主要潮流
+bn: মূলধারা, প্রচলিত ধারা
+kk: негізгі ағым, басты бағыт
+
+[Word ID 2710]
+ru: президентство, пост президента, председательство
+uk: президентство, посада президента, головування
+de: Präsidentschaft, Amtszeit des Präsidenten
+es: presidencia, mandato presidencial
+fr: présidence, mandat présidentiel
+pl: prezydentura, przewodnictwo
+it: presidenza, mandato presidenziale
+tr: başkanlık, cumhurbaşkanlığı dönemi
+pt: presidência, mandato presidencial
+ro: președinție, mandat prezidențial
+bg: президентство, председателство
+cs: prezidentství, předsednictví, úřad prezidenta
+sk: prezidentský úrad, predsedníctvo
+hu: elnökség, elnöki hivatal
+el: προεδρία, προεδρικό αξίωμα
+sl: predsedstvo, mandat predsednika
+et: presidentuur, presidendiaeg
+lt: prezidentūra, prezidento pareigos
+da: præsidentskab, formandskab
+fi: presidenttiys, presidenttikausi
+sv: presidentskap, ordförandeskap
+hr: predsjedništvo, predsjednički mandat
+lv: prezidentūra, prezidenta amats
+hi: राष्ट्रपति पद, अध्यक्षता
+ar: رئاسة، منصب الرئيس
+fa: ریاست‌جمهوری، دوره ریاست‌جمهوری
+ur: صدارت، صدر کا عہدہ
+id: kepresidenan, masa kepresidenan
+vi: chức tổng thống, nhiệm kỳ tổng thống
+th: ตำแหน่งประธานาธิบดี, วาระประธานาธิบดี
+ko: 대통령직, 대통령 임기
+ja: 大統領職、大統領任期
+zh: 总统职位、总统任期
+bn: রাষ্ট্রপতিত্ব, রাষ্ট্রপতির মেয়াদ
+kk: президенттік, президент қызметі
+
+[Word ID 2711]
+ru: честность, порядочность, целостность
+uk: доброчесність, порядність, цілісність
+de: Integrität, Rechtschaffenheit, Unversehrtheit
+es: integridad, honradez, entereza
+fr: intégrité, honnêteté, probité
+pl: uczciwość, prawość, integralność
+it: integrità, onestà, rettitudine
+tr: dürüstlük, bütünlük, doğruluk
+pt: integridade, honestidade, retidão
+ro: integritate, onestitate, corectitudine
+bg: почтеност, честност, цялост
+cs: bezúhonnost, poctivost, celistvost
+sk: bezúhonnosť, poctivosť, celistvosť
+hu: tisztesség, integritás, feddhetetlenség
+el: ακεραιότητα, εντιμότητα
+sl: poštenost, neoporečnost, celovitost
+et: ausus, väärikus, terviklikkus
+lt: sąžiningumas, dorumas, vientisumas
+da: integritet, hæderlighed
+fi: rehellisyys, suoraselkäisyys, eheys
+sv: integritet, ärlighet, oförvitlighet
+hr: poštenje, cjelovitost, integritet
+lv: godīgums, nesavtīgums, integritāte
+hi: ईमानदारी, सत्यनिष्ठा, अखंडता
+ar: نزاهة، استقامة، أمانة
+fa: درستکاری، شرافت، یکپارچگی
+ur: دیانت داری، اخلاقی پختگی، سالمیت
+id: integritas, kejujuran, keutuhan
+vi: tính chính trực, tính liêm chính, sự toàn vẹn
+th: ความซื่อสัตย์สุจริต, ความมีคุณธรรม, ความสมบูรณ์
+ko: 진실성, 성실성, 온전함
+ja: 誠実さ、高潔さ、完全性
+zh: 正直、诚信、完整性
+bn: সততা, ন্যায়নিষ্ঠা, অখণ্ডতা
+kk: адалдық, ар-ождан, тұтастық
+
+[Word ID 2712]
+ru: отчётливый, ясный, отдельный, отличный
+uk: виразний, чіткий, окремий, відмінний
+de: deutlich, eindeutig, verschieden, getrennt
+es: distinto, claro, definido, diferente
+fr: distinct, net, différent, séparé
+pl: wyraźny, odrębny, odmienny
+it: distinto, chiaro, netto, diverso
+tr: belirgin, açık, farklı, ayrı
+pt: distinto, claro, nítido, diferente
+ro: distinct, clar, lămurit, diferit
+bg: отчетлив, ясен, различен, отделен
+cs: zřetelný, jasný, odlišný, oddělený
+sk: zreteľný, jasný, odlišný, samostatný
+hu: kivehető, határozott, megkülönböztethető
+el: διακριτός, ευδιάκριτος, ξεχωριστός
+sl: razločen, izrazit, različen
+et: selge, eristatav, eraldi
+lt: aiškus, ryškus, atskiras, skirtingas
+da: tydelig, markant, særskilt
+fi: selkeä, erillinen, erotettava
+sv: tydlig, distinkt, åtskild
+hr: razgovijetan, očit, poseban
+lv: skaidrs, atšķirīgs, atsevišķs
+hi: स्पष्ट, भिन्न, अलग
+ar: متميز، واضح، منفصل
+fa: متمایز، مشخص، جداگانه
+ur: واضح، نمایاں، الگ، جداگانہ
+id: jelas, nyata, berbeda
+vi: rõ rệt, khác biệt, riêng biệt
+th: ชัดเจน, แตกต่างกัน, เป็นเอกลักษณ์
+ko: 뚜렷한, 분명한, 별개의
+ja: 明白な、はっきりした、明確な
+zh: 清晰的、截然不同的、独特的
+bn: স্বতন্ত্র, স্পষ্ট, আলাদা
+kk: айқын, анық, бөлек, өзгеше
+
+[Word ID 2713]
+ru: предвзятость, предубеждение, смещение
+uk: упередженість, пристрасність, зміщення
+de: Voreingenommenheit, Befangenheit, Verzerrung
+es: sesgo, parcialidad, prejuicio
+fr: parti pris, biais, préjugé
+pl: stronniczość, uprzedzenie, skrzywienie
+it: parzialità, pregiudizio, tendenza
+tr: önyargı, yanlılık, taraflılık
+pt: viés, preconceito, parcialidade
+ro: părtinire, prejudecată, deviere
+bg: предубеждение, пристрастие, уклон
+cs: zaujatost, předpojatost, zkreslení
+sk: predpojatosť, zaujatosť, skreslenie
+hu: elfogultság, előítélet, torzítás
+el: προκατάληψη, μεροληψία
+sl: pristranskost, predsodek
+et: erapoolikus, eelarvamus, hälve
+lt: šališkumas, išankstinis nusistatymas
+da: partiskhed, forudindtagethed
+fi: puolueellisuus, ennakkoluulo, vinouma
+sv: fördom, partiskhet, skevhet
+hr: pristranost, predrasuda
+lv: aizspriedumi, šķībums, neobjektivitāte
+hi: पूर्वाग्रह, पक्षपात, झुकाव
+ar: انحياز، تحيز، محاباة
+fa: سوگیری، جانب‌داری، تعصب
+ur: جانبداری، تعصب، جھکاؤ
+id: keberpihakan, prasangka, bias
+vi: định kiến, sự thiên vị, độ lệch
+th: อคติ, ความลำเอียง
+ko: 편견, 선입견, 치우침
+ja: 偏見、先入観、バイアス
+zh: 偏见、偏向、偏颇
+bn: পক্ষপাতিত্ব, কুসংস্কার, ঝোঁক
+kk: біржақтылық, алалау, бұрмалаушылық
+
+[Word ID 2714]
+ru: гипотеза, предположение
+uk: гіпотеза, припущення
+de: Hypothese, Annahme
+es: hipótesis, conjetura
+fr: hypothèse, conjecture
+pl: hipoteza, przypuszczenie
+it: ipotesi, supposizione
+tr: hipotez, varsayım
+pt: hipótese, suposição
+ro: ipoteză, supoziție
+bg: хипотеза, предположение
+cs: hypotéza, domněnka
+sk: hypotéza, domnienka
+hu: hipotézis, feltevés
+el: υπόθεση, θεωρία
+sl: hipoteza, domneva
+et: hüpotees, oletus
+lt: hipotezė, prielaida
+da: hypotese, antagelse
+fi: hypoteesi, olettamus
+sv: hypotes, antagande
+hr: hipoteza, pretpostavka
+lv: hipotēze, pieņēmums
+hi: परिकल्पना, प्राक्कल्पना
+ar: فرضية، نظرية
+fa: فرضیه، حدس علمی
+ur: مفروضہ، قیاس
+id: hipotesis, dugaan sementara
+vi: giả thuyết, giả định
+th: สมมติฐาน, ข้อสันนิษฐาน
+ko: 가설, 추정
+ja: 仮説、前提
+zh: 假设、假说
+bn: অনুমান, প্রকল্প, হাইপোথিসিস
+kk: болжам, гипотеза
+
+[Word ID 2715]
+ru: пятнадцать, 15
+uk: п'ятнадцять, 15
+de: fünfzehn, 15
+es: quince, 15
+fr: quinze, 15
+pl: piętnaście, 15
+it: quindici, 15
+tr: on beş, 15
+pt: quinze, 15
+ro: cincisprezece, 15
+bg: петнадесет, 15
+cs: patnáct, 15
+sk: pätnásť, 15
+hu: tizenöt, 15
+el: δεκαπέντε, 15
+sl: petnajst, 15
+et: viisteist, 15
+lt: penkiolika, 15
+da: femten, 15
+fi: viisitoista, 15
+sv: femton, 15
+hr: petnaest, 15
+lv: piecpadsmit, 15
+hi: पंद्रह, 15
+ar: خمسة عشر، 15
+fa: پانزده، ۱۵
+ur: پندرہ، ۱۵
+id: lima belas, 15
+vi: mười lăm, 15
+th: สิบห้า, 15
+ko: 열다섯, 십오, 15
+ja: 十五、15
+zh: 十五、15
+bn: পনেরো, ১৫
+kk: он бес, 15
+
+[Word ID 2716]
+ru: номинация, выдвижение кандидатуры, назначение
+uk: номінація, висунення кандидатури, призначення
+de: Nominierung, Ernennung, Kandidatur
+es: nominación, candidatura, designación
+fr: nomination, investiture, désignation
+pl: nominacja, wysunięcie kandydatury
+it: nomina, candidatura, designazione
+tr: aday gösterme, adaylık, atama
+pt: nomeação, indicação, candidatura
+ro: nominalizare, desemnare, candidatură
+bg: номинация, издигане на кандидатура
+cs: nominace, navržení, jmenování
+sk: nominácia, navrhnutie, vymenovanie
+hu: jelölés, kinevezés
+el: υποψηφιότητα, ορισμός, πρόταση
+sl: nominacija, imenovanje, predlaganje
+et: nominatsioon, kandidatuuri ülesseadmine
+lt: nominacija, kandidatūros kėlimas
+da: nominering, indstilling, udnævnelse
+fi: ehdokkuus, nimitys, ehdokkaaksi asettaminen
+sv: nominering, utnämning
+hr: nominacija, imenovanje, predlaganje
+lv: nominācija, izvirzīšana, iecelšana
+hi: नामांकन, नामजदगी
+ar: ترشيح، تعيين
+fa: نامزدی، نامزد کردن، انتصاب
+ur: نامزدگی، نامزد کرنا
+id: nominasi, pencalonan, pengangkatan
+vi: sự đề cử, sự bổ nhiệm
+th: การเสนอชื่อ, การแต่งตั้ง
+ko: 지명, 추천, 후보 임명
+ja: 指名、推薦、ノミネート
+zh: 提名、任命
+bn: মনোনয়ন, নাম প্রস্তাব
+kk: ұсыну, номинация, тағайындау
+
+[Word ID 2717]
+ru: регулировка, корректировка, настройка, адаптация
+uk: регулювання, коригування, налаштування, адаптація
+de: Anpassung, Justierung, Regulierung, Einstellung
+es: ajuste, adaptación, reglaje
+fr: réglage, ajustement, adaptation
+pl: regulacja, dostosowanie, nastawienie
+it: regolazione, aggiustamento, adattamento
+tr: ayarlama, düzenleme, intibak
+pt: ajuste, regulagem, adaptação
+ro: ajustare, reglare, adaptare
+bg: настройка, регулиране, корекция
+cs: úprava, seřízení, přizpůsobení
+sk: úprava, nastavenie, prispôsobenie
+hu: beállítás, igazítás, alkalmazkodás
+el: προσαρμογή, ρύθμιση, διόρθωση
+sl: prilagoditev, naravnava, nastavitev
+et: kohandamine, seadistus, reguleerimine
+lt: reguliavimas, derinimas, prisitaikymas
+da: justering, regulering, tilpasning
+fi: säätö, tarkistus, sopeutuminen
+sv: justering, anpassning, reglering
+hr: podešavanje, prilagodba, usklađivanje
+lv: regulēšana, pielāgošana, iestatīšana
+hi: समायोजन, तालमेल, अनुकूलन
+ar: تعديل، ضبط، مواءمة
+fa: تنظیم، سازگاری، تعدیل
+ur: مطابقت، ترتیب، رد و بدل
+id: penyesuaian, penyetelan, pengaturan
+vi: sự điều chỉnh, sự thích nghi
+th: การปรับตัว, การปรับเปลี่ยน, การแก้ไข
+ko: 조정, 조절, 적응
+ja: 調整、適応、加減
+zh: 调整、调节、适应
+bn: সমন্বয়, নিয়ন্ত্রণ, সামঞ্জস্যবিধান
+kk: реттеу, бейімделу, түзету
+
+[Word ID 2718]
+ru: санкция, штрафная мера, одобрение
+uk: санкція, покарання, схвалення
+de: Sanktion, Strafmaßnahme, Billigung
+es: sanción, penalización, aprobación
+fr: sanction, mesure punitive, approbation
+pl: sankcja, kara, zatwierdzenie
+it: sanzione, penalità, approvazione
+tr: yaptırım, ceza, onay
+pt: sanção, punição, aprovação
+ro: sancțiune, penalizare, aprobare
+bg: санкция, наказателна мярка, одобрение
+cs: sankce, postih, schválení
+sk: sankcia, postih, schválenie
+hu: szankció, büntetőintézkedés, jóváhagyás
+el: κύρωση, ποινή, έγκριση
+sl: sankcija, kazen, potrditev
+et: sanktsioon, karistus, heakskiit
+lt: sankcija, bausmė, pritarimas
+da: sanktion, straffeforanstaltning, godkendelse
+fi: pakote, seuraamus, vahvistus
+sv: sanktion, straffåtgärd, godkännande
+hr: sankcija, kaznena mjera, odobrenje
+lv: sankcija, sods, apstiprinājums
+hi: प्रतिबंध, दंड, मंजूरी
+ar: عقوبة، جزاء، إجازة
+fa: تحریم، مجازات، تصویب
+ur: تعزیر، اقتصادی پابندی، منظوری
+id: sanksi, hukuman, persetujuan
+vi: chế tài, sự trừng phạt, sự phê chuẩn
+th: มาตรการลงโทษ, การอนุมัติ
+ko: 제재, 처벌, 승인
+ja: 制裁、処罰、認可
+zh: 制裁、处罚、批准
+bn: নিষেধাজ্ঞা, দণ্ড, অনুমোদন
+kk: санкция, жаза, мақұлдау
+
+[Word ID 2719]
+ru: оказывать, делать, приводить в состояние, воспроизводить
+uk: надавати, робити, доводити до стану, відтворювати
+de: leisten, erbringen, machen, rendern
+es: prestar, hacer, rendir, representar
+fr: rendre, fournir, faire, restituer
+pl: świadczyć, czynić, renderować, oddawać
+it: rendere, fornire, prestare, visualizzare
+tr: hale getirmek, sunmak, icra etmek
+pt: prestar, tornar, fazer, renderizar
+ro: a reda, a face, a presta, a transforma
+bg: оказвам, правя, предавам, представям
+cs: učinit, poskytnout, prokázat, vykreslit
+sk: urobiť, poskytnúť, spôsobiť, vykresliť
+hu: tesz, nyújt, renderel, megad
+el: καθιστώ, παρέχω, αποδίδω
+sl: napraviti, nuditi, upodobiti
+et: tegema, osutama, kujutama, renderdama
+lt: padaryti, suteikti, atvaizduoti
+da: gøre, yde, levere, gengive
+fi: tehdä joksikin, antaa, tarjota, havainnollistaa
+sv: göra, återge, tillhandahålla, rendera
+hr: učiniti, pružiti, predočiti
+lv: padarīt, sniegt, atveidot
+hi: प्रस्तुत करना, बना देना, सेवा देना
+ar: يقدم، يجعل، يصيغ
+fa: تحویل دادن، موجب شدن، رندر کردن
+ur: بنانا، مہیا کرنا، پیش کرنا
+id: menjadikan, memberikan, merender
+vi: làm cho, cung cấp, kết xuất
+th: ทำให้, ให้, ถอดแบบ
+ko: ~하게 만들다, 제공하다, 렌더링하다
+ja: ～にする、与える、表現する
+zh: 使成为、给予、渲染
+bn: রূপান্তরিত করা, প্রদান করা, উপস্থাপন করা
+kk: ету, көрсету, қызмет ұсыну
+
+[Word ID 2720]
+ru: взаимный, обоюдный, общий
+uk: взаємний, обопільний, спільний
+de: gegenseitig, wechselseitig, gemeinsam
+es: mutuo, recíproco, compartido
+fr: mutuel, réciproque, commun
+pl: wzajemny, obopólny, wspólny
+it: reciproco, mutuo, comune
+tr: karşılıklı, müşterek, ortak
+pt: mútuo, recíproco, conjunto
+ro: reciproc, mutual, comun
+bg: взаимен, споделен, общ
+cs: vzájemný, oboustranný, společný
+sk: vzájomný, obojstranný, spoločný
+hu: kölcsönös, viszonzott, közös
+el: αμοιβαίος, κοινός
+sl: vzajemen, obojestranski, skupen
+et: vastastikune, ühine
+lt: abipusis, tarpusavio, bendras
+da: gensidig, fælles
+fi: keskinäinen, yhteinen, molemminpuolinen
+sv: ömsesidig, gemensam
+hr: uzajaman, obostran, zajednički
+lv: savstarpējs, abpusējs, kopīgs
+hi: पारस्परिक, आपसी, साझा
+ar: متبادل، مشترك
+fa: متقابل، دوطرفه، مشترک
+ur: باہمی، مشترکہ، یکساں
+id: timbal balik, saling, bersama
+vi: tương hỗ, lẫn nhau, chung
+th: ซึ่งกันและกัน, ร่วมกัน
+ko: 상호 간의, 서로의, 공동의
+ja: 相互の、お互いの、共通の
+zh: 相互的、共同的、彼此的
+bn: পারস্পরিক, যৌথ
+kk: өзара, ортақ, бірлескен
+
+[Word ID 2721]
+ru: значимый, содержательный, важный, многозначительный
+uk: значущий, змістовний, важливий, багатозначний
+de: bedeutungsvoll, sinnvoll, aussagekräftig
+es: significativo, con sentido, expresivo
+fr: significatif, porteur de sens, expressif
+pl: znaczący, wymowny, sensowny
+it: significativo, sensato, eloquente
+tr: anlamlı, manalı, önemli
+pt: significativo, relevante, com sentido
+ro: semnificativ, plin de înțeles, elocvent
+bg: смислен, съдържателен, значим
+cs: smysluplný, významný, výmluvný
+sk: zmysluplný, významný, výrečný
+hu: értelmes, sokatmondó, tartalmas
+el: ουσιαστικός, γεμάτος νόημα, σημαδιακός
+sl: pomenljiv, smiseln, pomemben
+et: tähendusrikas, mõttekas, sisukas
+lt: prasmingas, reikšmingas, turiningas
+da: meningsfuld, betydningsfuld, sigende
+fi: merkityksellinen, mielekäs, puhutteleva
+sv: meningsfull, betydelsefull, talande
+hr: smislen, značajan, sadržajan
+lv: jēgpilns, nozīmīgs, izteiksmīgs
+hi: सार्थक, अर्थपूर्ण, महत्वपूर्ण
+ar: ذو مغزى، مفيد، معبر
+fa: معنادار، بااهمیت، گویای مطلب
+ur: بامعنی، بامقصد، معنی خیز
+id: bermakna, berarti, berisi
+vi: có ý nghĩa, giàu ý nghĩa
+th: มีความหมาย, สื่อความหมาย, สำคัญ
+ko: 의미 있는, 뜻깊은, 유의미한
+ja: 意味のある、有意義な、意味深長な
+zh: 有意义的、富含深意的、重要的
+bn: অর্থপূর্ণ, তাৎপর্যপূর্ণ
+kk: мәнді, мағыналы, маңызды
+
+[Word ID 2722]
+ru: превосходящий, высший, начальник, руководитель
+uk: вищий, перевершуючий, керівник, начальник
+de: überlegen, besser, Vorgesetzter
+es: superior, mejor, jefe
+fr: supérieur, meilleur, chef, supérieur hiérarchique
+pl: nadrzędny, wyższy, zwierzchnik, przełożony
+it: superiore, migliore, capo, superiore gerarchico
+tr: üstün, daha iyi, amir, üst
+pt: superior, melhor, chefe, superior hierárquico
+ro: superior, mai bun, superior ierarhic, șef
+bg: висш, по-добър, началник, висшестоящ
+cs: nadřízený, lepší, vyšší, představený
+sk: nadriadený, lepší, vyšší, predstavený
+hu: felsőbbrendű, felettes, jobb
+el: ανώτερος, καλύτερος, προϊστάμενος
+sl: nadrejen, boljši, vzvišen, vodja
+et: kõrgem, parem, ülemus, juhataja
+lt: viršesnis, pranašesnis, vadovas, viršininkas
+da: overlegen, bedre, overordnet, chef
+fi: ylempi, parempi, esimies, päällikkö
+sv: överlägsen, högre, överordnad, chef
+hr: nadmoćan, bolji, nadređeni, šef
+lv: pārāks, augstāks, priekšnieks, vadītājs
+hi: श्रेष्ठ, उच्चतर, वरिष्ठ, उच्चाधिकारी
+ar: متفوق، أسمى، رئيس، مسؤول
+fa: برتر، ارشد، بالاتر، رئیس
+ur: برتر، اعلیٰ، بالا دست، افسر
+id: lebih unggul, atasan, pembesar
+vi: cấp trên, ưu việt, giỏi hơn
+th: เหนือกว่า, ยอดเยี่ยมกว่า, ผู้บังคับบัญชา
+ko: 우수한, 상급의, 상관, 상사
+ja: 優れている、上位の、上司、目上
+zh: 优越的、上级的、上司、长官
+bn: উচ্চতর, উৎকৃষ্ট, ঊর্ধ্বতন কর্মকর্তা
+kk: жоғары, басым, бастық, жетекші
+
+[Word ID 2723]
+ru: коллективный, общий, совместный, коллектив
+uk: колективний, спільний, колектив
+de: kollektiv, gemeinschaftlich, Kollektiv
+es: colectivo, conjunto, cooperativa
+fr: collectif, commun, groupe
+pl: zbiorowy, wspólny, kolektyw
+it: collettivo, comune, cooperativa
+tr: toplu, kolektif, ortaklaşa
+pt: coletivo, conjunto, comum
+ro: colectiv, comun, obștesc
+bg: колективен, общ, сдружение
+cs: kolektivní, společný, souhrnný
+sk: kolektívny, spoločný, družstvo
+hu: közös, kollektív, közösségi
+el: συλλογικός, κοινός, κολεκτίβα
+sl: skupen, kolektiven, skupinski
+et: kollektiivne, ühine, meeskond
+lt: kolektyvinis, bendras, sambūris
+da: kollektiv, fælles, samlet
+fi: yhteinen, kollektiivinen, joukko-
+sv: kollektiv, gemensam, samfälld
+hr: kolektivan, zajednički, skupni
+lv: kolektīvs, kopējs, apvienība
+hi: सामूहिक, साझा, समूह
+ar: جماعي، مشترك، هيئة
+fa: جمعی، دسته‌جمعی، گروهی
+ur: اجتماعی، باہمی، مشترکہ
+id: kolektif, bersama, kelompok
+vi: tập thể, chung
+th: ส่วนรวม, ร่วมกัน, คณะบุคคล
+ko: 집단적인, 공동의, 집단
+ja: 集団の、共同の、集合体
+zh: 集体的、共同的、集体
+bn: যৌথ, দলগত, সমষ্টিগত
+kk: ұжымдық, ортақ, ұжым
+
+[Word ID 2724]
+ru: доктрина, учение, концепция
+uk: доктрина, вчення, концепція
+de: Doktrin, Glaubenslehre, Grundsatz
+es: doctrina, dogma, principio
+fr: doctrine, précepte, dogme
+pl: doktryna, nauka, doktrynerstwo
+it: dottrina, principio, dogma
+tr: öğreti, doktrin, inanç
+pt: doutrina, princípio, dogma
+ro: doctrină, dogmă, învățătură
+bg: доктрина, учение, постулат
+cs: doktrína, nauka, učení
+sk: doktrína, učenie, vierouka
+hu: doktrína, tan, tétel
+el: δόγμα, θεωρία, διδασκαλία
+sl: doktrina, nauk, načelo
+et: doktriin, õpetus, dogma
+lt: doktrina, mokymas, teiginys
+da: doktrin, lære, grundsætning
+fi: oppi, doktriini, aate
+sv: doktrin, lära, troslära
+hr: doktrina, učenje, načelo
+lv: doktrīna, mācība, koncepcija
+hi: सिद्धांत, मत, उपदेश
+ar: مذهب، عقيدة، نظرية
+fa: دکترین، آموزه، آیین
+ur: نظریہ، مسلک، عقیدہ
+id: doktrin, ajaran, paham
+vi: học thuyết, chủ thuyết, giáo lý
+th: ลัทธิ, คำสอน, ข้อกำหนด
+ko: 교리, 신조, 학설
+ja: 教義、教理、ドクトリン
+zh: 教义、学说、主义
+bn: মতবাদ, শাস্ত্র, অনুশাসন
+kk: доктрина, ілім, қағида
+
+[Word ID 2725]
+ru: торговля, коммерция, товарооборот
+uk: торгівля, комерція, товарообіг
+de: Handel, Kommerz, Geschäftsverkehr
+es: comercio, intercambio comercial
+fr: commerce, négoce, échanges
+pl: handel, obrót handlowy, komercja
+it: commercio, traffico commerciale
+tr: ticaret, ticari ilişkiler
+pt: comércio, negócios
+ro: comerț, schimburi comerciale
+bg: търговия, търговски обмен
+cs: obchod, komerce, obchodování
+sk: obchod, komercia, obchodný styk
+hu: kereskedelem, üzlet, forgalom
+el: εμπόριο, συναλλαγές
+sl: trgovina, poslovanje
+et: kaubandus, äritegevus
+lt: prekyba, komercija
+da: handel, samfærdsel
+fi: kaupankäynti, kauppa, liikenimi
+sv: handel, kommers, köpenskap
+hr: trgovina, promet, poslovanje
+lv: tirdzniecība, komercija
+hi: वाणिज्य, व्यापार
+ar: تجارة، تبادل تجاري
+fa: بازرگانی، تجارت، داد و ستد
+ur: تجارت، لین دین
+id: perdagangan, perniagaan
+vi: thương mại, buôn bán
+th: การค้า, การพาณิชย์
+ko: 상업, 통상, 무역
+ja: 商業、通商、貿易
+zh: 商业、贸易
+bn: বাণিজ্য, ব্যবসা-বাণিজ্য
+kk: сауда, коммерция, сауда-саттық
+
+[Word ID 2726]
+ru: робот, автомат
+uk: робот, автомат
+de: Roboter, Automat
+es: robot, autómata
+fr: robot, automate
+pl: robot, automat
+it: robot, automa
+tr: robot, otomat
+pt: robô, autômato
+ro: robot, automat
+bg: робот, автомат
+cs: robot, automat
+sk: robot, automat
+hu: robot, automata
+el: ρομπότ, αυτόματο
+sl: robot, avtomat
+et: robot, automaat
+lt: robotas, automatas
+da: robot, maskine
+fi: robotti, kone
+sv: robot, automat
+hr: robot, automat
+lv: robots, automāts
+hi: रोबोट, यंत्रमानव
+ar: إنسان آلي، روبوت
+fa: ربات، آدم‌آهنی
+ur: روبوٹ، مشینی انسان
+id: robot, manusia mesin
+vi: người máy, rô-bốt
+th: หุ่นยนต์, ระบบอัตโนมัติ
+ko: 로봇, 인조인간
+ja: ロボット、自動機械
+zh: 机器人、机器设备
+bn: রোবট, যন্ত্রমানব
+kk: робот, автоматтандырылған құрылғы
+
+[Word ID 2727]
+ru: соответственно, в указанном порядке
+uk: відповідно, у зазначеному порядку
+de: beziehungsweise, jeweils, in genannter Reihenfolge
+es: respectivamente, en el orden mencionado
+fr: respectivement, dans l'ordre indiqué
+pl: odpowiednio, w wymienionej kolejności
+it: rispettivamente, nell'ordine citato
+tr: sırasıyla, ayrı ayrı
+pt: respectivamente, na devida ordem
+ro: respectiv, în ordinea menționată
+bg: съответно, в посочения ред
+cs: po řadě, v uvedeném pořadí, respektive
+sk: po rade, v uvedenom poradí, príslušne
+hu: illetőleg, a felsorolás szerint
+el: αντίστοιχα, κατά σειρά
+sl: v navedenem vrstnem redu, oziroma
+et: vastavalt, loetletud järjekorras
+lt: atitinkamai, iš eilės
+da: henholdsvis, i nævnte rækkefølge
+fi: vastaavasti, kukin vuorollaan
+sv: respektive, i nämnd ordning
+hr: redom, tim redoslijedom, odnosno
+lv: attiecīgi, minētajā secībā
+hi: क्रमशः, बारी-बारी से
+ar: على التوالي، بالترتيب المذكور
+fa: به‌ترتیب، به‌نوبت
+ur: بالترتیب، بلاتخصیص
+id: masing-masing, secara berurutan
+vi: theo thứ tự lần lượt, tương ứng
+th: ตามลำดับ, ตามลำดับดังกล่าว
+ko: 각각, 순서대로
+ja: それぞれ、各自、順番に
+zh: 分别地、依序
+bn: যথাক্রমে, ক্রমানুসারে
+kk: сәйкесінше, рет-ретімен
+
+[Word ID 2728]
+ru: частица, крупица, песчинка
+uk: частка, частинка, крихта
+de: Teilchen, Partikel, Körnchen
+es: partícula, mota, corpúsculo
+fr: particule, parcelle, brin
+pl: cząstka, drobina, partykuła
+it: particella, frammento, corpuscolo
+tr: parçacık, zerre, edat
+pt: partícula, corpúsculo, partícula elementar
+ro: particulă, fărâmă, corpuscul
+bg: частица, прашинка, частичка
+cs: částice, částečka, drobek
+sk: častica, čiastočka, zrniečko
+hu: részecske, porszem, szemcse
+el: σωματίδιο, μόριο
+sl: delec, delček, drobtina
+et: osake, kübe, piisk
+lt: dalelė, smiltelė, dalelytė
+da: partikel, fnug, gran
+fi: hiukkanen, murunen, partikkeli
+sv: partikel, gnutta, korn
+hr: čestica, djelić, trunka
+lv: daļiņa, kripatiņa, puteklis
+hi: कण, सूक्ष्मांश, टुकड़ा
+ar: جسيم، ذرة، أداة
+fa: ذره، ریزه، جزء خرد
+ur: ذرہ، ریزہ، کَن
+id: partikel, butiran, zarah
+vi: hạt, phần tử, vi hạt
+th: อนุภาค, อณู, เศษชิ้นส่วน
+ko: 입자, 미립자, 소립자
+ja: 粒子、微粒子、小片
+zh: 粒子、颗粒、极小量
+bn: কণা, অণু, বিন্দু
+kk: бөлшек, түйіршік, қылтима
+
+[Word ID 2729]
+ru: до, пока не, касса, возделывать
+uk: до, поки не, каса, обробляти землю
+de: bis, bis zu, Kasse, beackern
+es: hasta, hasta que, caja registradora
+fr: jusqu'à, en attendant, caisse
+pl: do, aż do, dopóki, kasa
+it: fino a, fino a quando, cassa
+tr: -e kadar, dek, kasa, sürmek
+pt: até, até que, caixa
+ro: până la, până ce, casă de marcat
+bg: до, докато, каса
+cs: do, dokud ne, pokladna, orat
+sk: do, kým nie, pokladňa
+hu: -ig, amíg, kassza, művel
+el: μέχρι, ωσότου, ταμείο
+sl: do, dokler ne, blagajna
+et: kuni, saadik, kassa
+lt: iki, pakol, kasa, dirbti žemę
+da: indtil, til, kasseapparat
+fi: kunnes, asti, kassalipas
+sv: tills, till, kassaapparat
+hr: do, dok ne, blagajna
+lv: līdz, iekams, kase
+hi: तक, जब तक, गल्ला
+ar: حتى، إلى حين، درج النقود
+fa: تا، تا زمانی که، صندوق دخل
+ur: تک، جب تک، تجوری
+id: hingga, sampai, laci uang
+vi: cho đến khi, đến tận, ngăn kéo tiền
+th: จนกระทั่ง, จนถึง, ลิ้นชักเก็บเงิน
+ko: ~까지, ~할 때까지, 계산대
+ja: ～まで、～するまで、レジ（金銭登録機）
+zh: 直到、直至、收银机
+bn: পর্যন্ত, যে পর্যন্ত না, ক্যাশবাক্স
+kk: дейін, шейін, касса
+
+[Word ID 2730]
+ru: умеренный, сдержанный, средний, умерять
+uk: помірний, стриманий, середній, пом'якшувати
+de: mäßig, moderat, gemäßigt, abschwächen
+es: moderado, prudente, comedido
+fr: modéré, tempéré, raisonnable, modérer
+pl: umiarkowany, powściągliwy, łagodzić
+it: moderato, controllato, mitigare
+tr: ılımlı, ölçülü, orta düzeyde
+pt: moderado, sensato, comedido
+ro: moderat, cumpătat, temperat
+bg: умерен, въздържан, среден
+cs: mírný, umírněný, střední, tlumit
+sk: mierny, umiernený, stredný, mierniť
+hu: mérsékelt, visszafogott, mértéktartó
+el: μέτριος, συγκρατημένος, μετριοπαθής
+sl: zmeren, umirjen, povprečen
+et: mõõdukas, tasakaalukas, leevendama
+lt: saikingas, nuosaikus, vidutinis
+da: moderat, mådeholden, dæmpe
+fi: maltillinen, kohtuullinen, lieventää
+sv: måttlig, sansad, moderat, mildra
+hr: umjeren, obuzdan, stišati
+lv: mērens, savaldīgs, vidējs
+hi: मध्यम, संयमित, संतुलित
+ar: معتدل، متوسط، متوازن
+fa: معتدل، میانه‌رو، آرام کردن
+ur: معتدل، میانہ رو، دھیما
+id: moderat, sedang, wajar
+vi: vừa phải, ôn hòa, điều độ
+th: ปานกลาง, สายกลาง, บรรเทา
+ko: 온건한, 적당한, 보통의, 완화하다
+ja: 適度な、穏健な、控えめな
+zh: 温和的、适度的、调和
+bn: মাঝারি, পরিমিত, মধ্যপন্থী
+kk: байсалды, байырлы, орташа
+
+[Word ID 2731]
+ru: младенец, грудной ребёнок
+uk: немовля, грудне дитя
+de: Säugling, Kleinkind, Baby
+es: infante, bebé, lactante
+fr: nourrisson, bébé, poupon
+pl: niemowlę, osesek, dzidziuś
+it: neonato, lattante, infante
+tr: bebek, süt çocuğu, sübyan
+pt: bebê, recém-nascido, lactente
+ro: sugar, bebeluș, prunc
+bg: пеленаче, бебе, младенец
+cs: kojenec, nemluvně, batole
+sk: dojča, nemluvňa, bábätko
+hu: csecsemő, kisbaba, poronty
+el: βρέφος, μωρό
+sl: dojenček, novorojenček
+et: imik, beebi, tita
+lt: kūdikis, žinduklis
+da: spædbarn, baby
+fi: vauva, imeväinen, pikkulapsi
+sv: spädbarn, spädbarnsålder
+hr: dojenče, beba, novorođenče
+lv: zīdainis, mazulis
+hi: शिशु, नवजात, दुधमुंहा बच्चा
+ar: رضيع، طفل رضيع
+fa: نوزاد، کودک شیرخوار
+ur: شیر خوار بچہ، نوزائیدہ
+id: bayi, balita, anak susuan
+vi: trẻ sơ sinh, trẻ còn ẵm ngửa
+th: ทารก, เด็กแบเบาะ
+ko: 갓난아기, 유아
+ja: 乳児、幼児、赤ん坊
+zh: 婴儿、幼儿
+bn: শিশু, নবজাতক, দুগ্ধপোষ্য শিশু
+kk: сәби, нәресте, емшектегі бала
+
+[Word ID 2732]
+ru: сервер, официант, подающий
+uk: сервер, офіціант, подавач
+de: Server, Kellner, Aufschläger
+es: servidor, camarero, sacador
+fr: serveur, garçon de café, serveur informatique
+pl: serwer, kelner, serwujący
+it: server, cameriere, battitore
+tr: sunucu, garson, servis atan
+pt: servidor, garçom, sacador
+ro: server, ospătar, servitor
+bg: сървър, сервитьор, подаващ
+cs: server, číšník, podávající
+sk: server, čašník, podávajúci
+hu: szerver, kiszolgáló, felszolgáló
+el: διακομιστής, σέρβερ, σερβιτόρος
+sl: strežnik, natakar, server
+et: server, kelner, pallingulööja
+lt: serveris, padavėjas, serveris
+da: server, tjener, server
+fi: palvelin, tarjoilija, syöttäjä
+sv: server, servitör, servare
+hr: poslužitelj, server, konobar
+lv: serveris, viesmīlis, servētājs
+hi: सर्वर, वेटर, परोसने वाला
+ar: خادم حاسوبي، نادل، ملقي الإرسال
+fa: سرور، پیشخدمت، زننده سرویس
+ur: سرور، بیرہ، خدمت گزار
+id: peladen, server, pelayan
+vi: máy chủ, người phục vụ bàn
+th: เซิร์ฟเวอร์, ผู้เสิร์ฟ, คนเสิร์ฟ
+ko: 서버, 웨이터, 서브 넣는 사람
+ja: サーバー、給仕係、サーバー役
+zh: 服务器、伺服器、服务生
+bn: সার্ভার, পরিবেশক, খাদ্য পরিবেশক
+kk: сервер, даяшы, қызмет етуші
+
+[Word ID 2733]
+ru: радиация, излучение
+uk: радіація, випромінювання
+de: Strahlung, Radioaktivität
+es: radiación, irradiación
+fr: radiation, rayonnement
+pl: promieniowanie, radiacja
+it: radiazione, irraggiamento
+tr: radyasyon, ışıma
+pt: radiação, irradiação
+ro: radiație, iradiere
+bg: радиация, лъчение, облъчване
+cs: záření, radiace
+sk: žiarenie, radiácia
+hu: sugárzás, radiáció
+el: ακτινοβολία
+sl: sevanje, radiacija
+et: kiirgus, radiatsioon
+lt: spinduliavimas, radiacija
+da: stråling, radioaktivitet
+fi: säteily, säteilytys
+sv: strålning, utstrålning
+hr: zračenje, radijacija
+lv: starojums, radiācija
+hi: विकिरण, तापकिरण
+ar: إشعاع، إشعاعات
+fa: تابش، تشعشع، پرتو
+ur: تابکاری، اشعاع
+id: radiasi, pancaran
+vi: bức xạ, phóng xạ
+th: รังสี, การแผ่รังสี
+ko: 방사선, 복사
+ja: 放射線、放射、輻射
+zh: 辐射、放射线
+bn: বিকিরণ, রশ্মিবিকিরণ
+kk: сәулелену, радиация, сәуле шашу
+
+[Word ID 2734]
+ru: быстрый, незамедлительный, подсказывать, подсказка
+uk: швидкий, негайний, підказувати, підказка
+de: prompt, unverzüglich, anregen, Eingabeaufforderung
+es: rápido, puntual, incitar, indicador
+fr: prompt, rapide, inciter, invite
+pl: natychmiastowy, punktualny, podpowiadać, monit
+it: tempestivo, pronto, sollecitare, suggerimento
+tr: çabuk, gecikmesiz, yönlendirmek, komut istemi
+pt: rápido, pronto, induzir, comando
+ro: prompt, promptitudine, a îndemna, mesaj de ghidare
+bg: бърз, незабавен, подсказвам, подтик
+cs: okamžitý, pohotový, vybídnout, nápověda
+sk: okamžitý, pohotový, pobádať, nápoveda
+hu: azonnali, gyors, buzdít, prompt
+el: άμεσος, ταχύς, παρακινώ, προτροπή
+sl: takojšen, hiter, spodbuditi, poziv
+et: viivitamatu, kiire, õhutama, viip
+lt: greitas, neatidėliotinas, paskatinti, užklausa
+da: hurtig, omgående, opfordre, prompt
+fi: nopea, välitön, kehottaa, kehote
+sv: prompt, snabb, uppmana, prompt
+hr: brz, trenutačan, potaknuti, upit
+lv: tūlītējs, ātrs, mudināt, uzvedne
+hi: तत्पर, तुरंत, प्रेरित करना, संकेत
+ar: سريع، فوري، يحث، موجه
+fa: فوری، بی‌درنگ، ترغیب کردن، اعلان
+ur: فوری، بروقت، پرامپٹ، اکسانا
+id: cepat, tanggap, mendorong, petunjuk
+vi: mau lẹ, nhanh chóng, thúc đẩy, câu lệnh
+th: รวดเร็ว, ทันที, กระตุ้น, คำสั่ง
+ko: 즉각적인, 신속한, 촉발하다, 프롬프트
+ja: 迅速な、即座の、促す、指示文
+zh: 敏捷的、迅速的、促使、提示词
+bn: তাৎক্ষণিক, দ্রুত, উৎসাহিত করা, প্রম্পট
+kk: жедел, дереу, түрткі болу, шақыру
+
+[Word ID 2735]
+ru: состав, композиция, сочинение, строение
+uk: склад, композиція, твір, будова
+de: Zusammensetzung, Komposition, Aufbau, Aufsatz
+es: composición, redacción, estructura
+fr: composition, rédaction, structure
+pl: skład, kompozycja, utwór, wypracowanie
+it: composizione, struttura, tema
+tr: bileşim, kompozisyon, yapılış
+pt: composição, redação, estrutura
+ro: compoziție, alcătuire, compunere
+bg: състав, композиция, съчинение
+cs: složení, skladba, kompozice, slohová práce
+sk: zloženie, skladba, kompozícia, sloh
+hu: összetétel, felépítés, fogalmazás
+el: σύνθεση, δομή, έκθεση
+sl: sestava, kompozicija, spis
+et: koostis, kompositsioon, kirjand
+lt: sudėtis, kompozicija, rašinys
+da: sammensætning, komposition, stil
+fi: koostumus, sommittelu, sävellys
+sv: sammansättning, komposition, uppsats
+hr: sastav, kompozicija, sastavak
+lv: sastāvs, kompozīcija, sacerējums
+hi: संरचना, रचना, संघटन, निबंध
+ar: تركيبة، تكوين، مقال
+fa: ترکیب، ساختار، انشا
+ur: بناوٹ، ترکیب، تحریر
+id: komposisi, susunan, karangan
+vi: thành phần, cấu tạo, bài luận
+th: ส่วนประกอบ, โครงสร้าง, การประพันธ์
+ko: 구성, 작문, 작곡
+ja: 構成、組成、作文、楽曲
+zh: 组成、构成、作文、乐曲
+bn: গঠন, উপাদান, রচনা
+kk: құрам, композиция, шығарма
+
+[Word ID 2736]
+ru: действующий, рабочий, операционный, эксплуатационный
+uk: діючий, робочий, операційний, експлуатаційний
+de: operativ, Betriebs-, funktionierend, operierend
+es: operativo, en funcionamiento, de explotación
+fr: opérationnel, de fonctionnement, opératoire
+pl: operacyjny, działający, eksploatacyjny
+it: operativo, in funzione, di esercizio
+tr: çalışan, işletme, faaliyet, operasyonel
+pt: operacional, em operação, cirúrgico
+ro: operațional, în funcțiune, de exploatare
+bg: оперативен, действащ, експлоатационен
+cs: provozní, fungující, operační
+sk: prevádzkový, fungujúci, operačný
+hu: működő, üzemi, műtéti
+el: λειτουργικός, επιχειρησιακός, χειρουργικός
+sl: delujoč, operativen, obratovalen
+et: tegutsev, töötav, operatiivne
+lt: veikiantis, darbinis, operacinis
+da: drifts-, operationel, fungerende
+fi: toimiva, käyttö-, leikkaus-
+sv: fungerande, drifts-, operativ
+hr: operativan, radni, pogonski
+lv: darbības, darba, funkcionējošs
+hi: परिचालन, चालू, क्रियाशील
+ar: تشغيلي، عامل، جراحي
+fa: عملیاتی، فعال، در حال کار
+ur: آپریٹنگ، چلتا ہوا، فعال
+id: beroperasi, bekerja, operasional
+vi: đang hoạt động, vận hành, phẫu thuật
+th: ซึ่งทำงานอยู่, เกี่ยวกับการผ่าตัด, ฝ่ายปฏิบัติการ
+ko: 가동 중인, 운영상의, 수술의
+ja: 稼働している、操業の、手術の
+zh: 运行的、操作的、营业的
+bn: চালু, কার্যরত, পরিচালন
+kk: жұмыс істеп тұрған, пайдаланудағы, операциялық
+
+[Word ID 2737]
+ru: утверждать, заявлять, отстаивать
+uk: стверджувати, заявляти, обстоювати
+de: behaupten, beteuern, durchsetzen
+es: afirmar, aseverar, sostener
+fr: affirmer, revendiquer, faire valoir
+pl: twierdzić, zapewniać, dochodzić swego
+it: affermare, asserire, sostenere
+tr: iddia etmek, öne sürmek, savunmak
+pt: afirmar, asseverar, reivindicar
+ro: a afirma, a susține, a pretinde
+bg: твърдя, заявявам, отстоявам
+cs: tvrdit, prohlašovat, prosazovat
+sk: tvrdiť, vyhlasovať, presadzovať
+hu: állít, kijelent, érvényesít
+el: ισχυρίζομαι, διαβεβαιώνω, υποστηρίζω
+sl: trditi, zatrjevati, uveljavljati
+et: väitma, kinnitama, nõudma
+lt: teigti, tvirtinti, ginti
+da: påstå, hævde, fastholde
+fi: väittää, vakuuttaa, puolustaa
+sv: hävda, påstå, göra gällande
+hr: tvrditi, izjaviti, zastupati
+lv: apgalvot, apliecināt, aizstāvēt
+hi: दावा करना, दृढ़ता से कहना, हक जताना
+ar: يؤكد، يجزم، يثبت
+fa: ادعا کردن، اظهار داشتن، پافشاری کردن
+ur: دعویٰ کرنا، اصرار کرنا، زور دینا
+id: menegaskan, menyatakan, menuntut
+vi: khẳng định, quả quyết, xác nhận
+th: ยืนยัน, แถลงอย่างมั่นใจ
+ko: 주장하다, 확언하다, 단언하다
+ja: 主張する、断言する、言い張る
+zh: 断言、明确肯定、主张
+bn: দাবি করা, দৃঢ়তার সাথে বলা, বজায় রাখা
+kk: мәлімдеу, дәлелдеу, табандылық көрсету
+
+[Word ID 2738]
+ru: дискурс, рассуждение, беседа, трактат
+uk: дискурс, міркування, бесіда, промова
+de: Diskurs, Abhandlung, Vortrag, Rede
+es: discurso, disertación, conversación
+fr: discours, dissertation, entretien
+pl: dyskurs, rozprawa, wywód
+it: discorso, dissertazione, dibattito
+tr: söylem, nutuk, hitap
+pt: discurso, dissertação, fala
+ro: discurs, expunere, cuvântare
+bg: дискурс, беседа, разсъждение
+cs: diskurz, rozprava, pojednání
+sk: diskurz, rozprava, úvaha
+hu: diskurzus, értekezés, beszéd
+el: λόγος, διάλογος, επιστημονική συζήτηση
+sl: diskurz, razprava, govor
+et: diskursus, arutlus, vestlus
+lt: diskursas, samprotavimas, pokalbis
+da: diskurs, afhandling, samtale
+fi: diskurssi, esitelmä, puhe
+sv: diskurs, föredrag, samtal
+hr: diskurs, rasprava, govor
+lv: diskursss, apcerējums, saruna
+hi: प्रवचन, बातचीत, विवेचन
+ar: خطاب، مناقشة، محادثة
+fa: گفتمان، مباحثه، خطابه
+ur: خطاب، مقالہ، گفتگو
+id: wacana, percakapan, khotbah
+vi: bài thuyết trình, diễn ngôn, bài giảng
+th: วาทกรรม, การอภิปราย, สุนทรพจน์
+ko: 담론, 논설, 강연
+ja: 談話、言説、講話
+zh: 话语、论述、谈话
+bn: আলোচনা, বক্তৃতা, নিবন্ধ
+kk: сөз саптау, пайымдау, дискурс
+
+[Word ID 2739]
+ru: свалка, помойка, сбрасывать, выбрасывать
+uk: звалище, смітник, скидати, викидати
+de: Mülldeponie, Müllkippe, abladen, wegwerfen
+es: vertedero, basurero, tirar, descargar
+fr: décharge, dépotoir, déverser, larguer
+pl: wysypisko, śmietnik, zrzucać, wyrzucać
+it: discarica, deposito, scaricare, mollare
+tr: çöplük, dökmek, boşaltmak
+pt: lixão, descarregar, despejar, terminar
+ro: groapă de gunoi, descărcătură, a descărca, a arunca
+bg: сметище, бунище, изхвърлям, стоварвам
+cs: skládka, smetiště, vysypat, shodit
+sk: skládka, smetisko, vysypať, odhodiť
+hu: szeméttelep, szemétdomb, lerak, kidob
+el: χωματερή, σκουπιδότοπος, πετώ, ξεφορτώνω
+sl: smetišče, odlagališče, odvreči, zvaliti
+et: prügila, prügimägi, maha kallama, hülgama
+lt: sąvartynas, šiukšlynas, išpilti, numesti
+da: losseplads, affaldsplads, dumpe, smide ud
+fi: kaatopaikka, roskakori, tyhjentää, hylätä
+sv: soptipp, avstjälpningsplats, dumpa, kasta
+hr: odlagalište otpada, smetlište, istovariti, odbaciti
+lv: izgāztuve, mēslaine, izbērt, pamest
+hi: कूड़ाघर, कचरा फेंकना, ढेर लगाना
+ar: مكب نفايات، مزبلة، يتخلص من، يفرغ
+fa: زباله‌دانی، آشغال‌دانی، خالی کردن، دور انداختن
+ur: کوڑے دان، کچرا کنڈی، پھینک دینا
+id: tempat pembuangan sampah, membuang, mencampakkan
+vi: bãi rác, nơi đổ rác, vứt bỏ, đổ đống
+th: กองขยะ, ที่ทิ้งขยะ, เททิ้ง, ทิ้งขว้าง
+ko: 쓰레기장, 쓰레기 더미, 버리다, 쏟아붓다
+ja: ごみ捨て場、投棄場、投げ捨てる、見捨てる
+zh: 垃圾场、倾倒、甩掉
+bn: আবর্জনার স্তূপ, আস্তাকুঁড়, ফেলে দেওয়া
+kk: қоқыс алаңы, полигон, лақтыру, төгу
+
+[Word ID 2740]
+ru: дикая природа, фауна, дикие животные
+uk: дика природа, фауна, дикі тварини
+de: Tierwelt, freilebende Tiere, Flora und Fauna
+es: vida silvestre, fauna, animales salvajes
+fr: faune, animaux sauvages, flore et faune
+pl: dzika przyroda, fauna, dzikie zwierzęta
+it: fauna selvatica, vita selvatica
+tr: vahşi yaşam, yaban hayatı
+pt: vida selvagem, fauna silvestre, animais selvagens
+ro: viață sălbatică, faună, natură sălbatică
+bg: дива природа, дивеч, фауна
+cs: divočina, divoká zvířata, fauna
+sk: divá príroda, divá zver, fauna
+hu: vadvilág, élővilág, vadon élő állatok
+el: άγρια ζωή, άγρια πανίδα
+sl: prostoživeče živali, divjad, divjina
+et: metsloomad, elusloodus, vaba loodus
+lt: laukinė gamta, laukiniai gyvūnai
+da: vildt, det vilde dyreliv, natur
+fi: villieläimet, luonnonvaraiset eläimet, luonto
+sv: vilda djur, naturliv, fauna
+hr: divlje životinje, divljina, flora i fauna
+lv: savvaļas dzīvnieki, savvaļa, fauna
+hi: वन्यजीव, जंगली जीव, वन्य प्राणी
+ar: حياة برية، حيوانات برية
+fa: حیات وحش، جانوران وحشی
+ur: جنگلی حیات، چرند پرند
+id: margasatwa, satwa liar
+vi: động vật hoang dã, thiên nhiên hoang dã
+th: สัตว์ป่า, สิ่งมีชีวิตในธรรมชาติ
+ko: 야생동물, 야생생물
+ja: 野生生物、野生動物
+zh: 野生动物、野生生物
+bn: বন্যপ্রাণী, বন্য জীবন
+kk: жабайы табиғат, жабайы жануарлар
+
+[Word ID 2741]
+ru: мандат, полномочия, наказ, предписание
+uk: мандат, повноваження, наказ, розпорядження
+de: Mandat, Auftrag, Ermächtigung
+es: mandato, autorización, ordenanza
+fr: mandat, injonction, délégation
+pl: mandat, upoważnienie, nakaz
+it: mandato, incarico, delegazione
+tr: vekalet, yetki, talimat
+pt: mandato, incumbência, autorização
+ro: mandat, împuternicire, dispoziție
+bg: мандат, пълномощие, разпореждане
+cs: mandát, pověření, příkaz
+sk: mandát, splnomocnenie, nariadenie
+hu: mandátum, felhatalmazás, megbízás
+el: εντολή, εξουσιοδότηση, οδηγία
+sl: pooblastilo, mandat, nalog
+et: volitus, mandaat, käsk
+lt: įgaliojimas, mandatas, pavedimas
+da: mandat, bemyndigelse, påbud
+fi: valtuutus, toimeksianto, määräys
+sv: mandat, fullmakt, befallning
+hr: mandat, ovlast, nalog
+lv: pilnvara, mandāts, rīkojums
+hi: शासनादेश, अधिशेष, जनादेश
+ar: تفويض، انتداب، تكليف
+fa: مأموریت، دستور، تفویض اختیار
+ur: مینڈیٹ، حکم نامہ، فرمان
+id: mandat, amanat, wewenang
+vi: nhiệm vụ, ủy thác, sự ủy quyền
+th: อาณัติ, ข้อกำหนด, ภารกิจที่ได้รับมอบหมาย
+ko: 위임, 통치권, 명령
+ja: 信任、権限、委任統治
+zh: 授权、命令、任期
+bn: অনুজ্ঞা, আদেশ, অধিকারপত্র
+kk: мандат, өкілеттік, нұсқау
+
+[Word ID 2742]
+ru: центр города, деловой центр, в центр города
+uk: центр міста, діловий центр, у центр міста
+de: Stadtmitte, Innenstadt, Innenstadtbereich
+es: centro de la ciudad, el centro, casco céntrico
+fr: centre-ville, quartier des affaires, au centre-ville
+pl: centrum miasta, śródmieście, do centrum
+it: centro città, centro cittadino, in centro
+tr: kent merkezi, çarşı, çarşıya
+pt: centro, centro da cidade, centro comercial
+ro: centrul orașului, zonă comercială centrală
+bg: център на града, към центъра
+cs: centrum města, střed města, do centra
+sk: centrum mesta, stred mesta, do centra
+hu: belváros, városközpont, a belvárosba
+el: κέντρο της πόλης, εμπορικό κέντρο
+sl: mestno jedro, center mesta, v mesto
+et: südalinn, kesklinn, linnakeskus
+lt: miesto centras, senamiestis, į centrą
+da: bymidte, centrum, bymidten
+fi: keskusta, kaupungin keskusta, keskustaan
+sv: stadskärna, innerstad, ner på stan
+hr: središte grada, uži centar, gradsko središte
+lv: pilsētas centrs, uz centru
+hi: शहर का केंद्र, मुख्य बाज़ार, मध्य नगर
+ar: وسط المدينة، مركز المدينة
+fa: مرکز شهر، پایین شهر
+ur: شہر کا وسطی حصہ، صدر بازار
+id: pusat kota, daerah perniagaan
+vi: trung tâm thành phố, khu phố buôn bán
+th: ใจกลางเมือง, ย่านการค้า
+ko: 도심, 중심가, 시내
+ja: ダウンタウン、繁華街、都心部
+zh: 市中心、商业区、闹市区
+bn: শহরের কেন্দ্রস্থল, ডাউনটাউন
+kk: қала орталығы, іскерлік орталық
+
+[Word ID 2743]
+ru: бочка, баррель, ствол
+uk: бочка, барель, ствол
+de: Fass, Gewehrlauf, Barrel
+es: barril, tonel, cañón
+fr: tonneau, fût, canon
+pl: beczka, lufa, baryłka
+it: botte, barile, canna
+tr: varil, fıçı, namlu
+pt: barril, tonel, cano da arma
+ro: butoi, butoiaș, țeavă de armă
+bg: бъчва, варел, цев
+cs: sud, barel, hlaveň
+sk: sud, barel, hlaveň
+hu: hordó, fahordó, puskacső
+el: βαρέλι, κάννη όπλου
+sl: sod, sodček, cev pištole
+et: vaat, tünn, püssitoru
+lt: statinė, vamzdis, barelis
+da: tønde, fad, geværløb
+fi: tynnyri, saavi, piippu
+sv: fat, tunna, eldrör
+hr: bačva, cijev puške, barel
+lv: muca, stobrs, barels
+hi: पीपा, बैरल, बंदूक की नली
+ar: برميل، سبطانة، ماسورة
+fa: بشکه، لوله تفنگ
+ur: بیرل، پیپا، بندوق کی نالی
+id: laras senjata, tong, barel
+vi: thùng gỗ, nòng súng, thùng phi
+th: ถังไม้, ลำกล้องปืน, แกลลอน
+ko: 통, 배럴, 총열
+ja: 樽、バレル、銃身
+zh: 桶、木桶、枪管
+bn: পিপা, ব্যারেল, বন্দুকের নল
+kk: бөшке, баррель, қару ұңғысы
+
+[Word ID 2744]
+ru: бездомный, бесприютный, бродяга
+uk: бездомний, безпритульний, бродяга
+de: obdachlos, wohnungslos, heimatlos
+es: sin hogar, desamparado, indigente
+fr: sans-abri, sans logis, clochard
+pl: bezdomny, pozbawiony dachu nad głową
+it: senzatetto, senza fissa dimora
+tr: evsiz, yurtsuz, sokakta yaşayan
+pt: morador de rua, sem-teto, desabrigado
+ro: fără adăpost, persoană fără locuință
+bg: бездомен, скитник, без покрив
+cs: bezdomovec, bez domova, bezpřístřešný
+sk: bezdomovec, bez domova, bezprístrešný
+hu: hajléktalan, otthontalan, fedél nélküli
+el: άστεγος, ανέστιος
+sl: brezdomec, brezdomci, brezdomski
+et: kodutu, peavarjuta
+lt: benamis, neturintis pastogės
+da: hjemløs, husvild
+fi: koditon, asunnoton
+sv: hemlös, bostadslös
+hr: beskućnik, bez doma
+lv: bezpajumtnieks, bezpajumtes
+hi: बेघर, गृहहीन, निराश्रित
+ar: بلا مأوى، مشرد
+fa: بی‌خانمان، کارتن‌خواب، بی‌سرپناه
+ur: بے گھر، خانہ بدوش
+id: tunawisma, gelandangan
+vi: vô gia cư, không nhà cửa
+th: คนไร้บ้าน, คนจรจัด, ไม่มีบ้านอยู่
+ko: 노숙자, 집 없는 사람
+ja: 家のない、ホームレス、路上生活者
+zh: 无家可归的、流浪者
+bn: গৃহহীন, আশ্রয়হীন, ভাসমান
+kk: баспанасыз, үйсіз, тентірек
+
+[Word ID 2745]
+ru: глобус, земной шар, планета
+uk: глобус, земна куля, планета
+de: Globus, Erdkugel, Weltkugel
+es: globo terráqueo, mundo, orbe
+fr: globe, mappemonde, globe terrestre
+pl: globus, kula ziemska, glob
+it: globo, mappamondo, terra
+tr: küre, yerküre, dünya modeli
+pt: globo, globo terrestre, mundo
+ro: glob pământesc, sferă, pământ
+bg: глобус, земно кълбо, сфера
+cs: zeměkoule, glóbus, koule
+sk: zemeguľa, glóbus, guľa
+hu: földgolyó, glóbusz, gömb
+el: υδρόγειος, γήινη σφαίρα, γλόμπος
+sl: globus, zemeljska krogla, krogla
+et: maakera, gloobus, kera
+lt: gaublys, žemės rutulys, rutulys
+da: globus, jordklode, sfære
+fi: maapallo, karttapallo, kumpu
+sv: jordglob, jordklot, klot
+hr: globus, zemaljska kugla, kugla
+lv: globuss, zemeslode, lode
+hi: ग्लोब, पृथ्वी, भूगोलीय गोला
+ar: كرة أرضية، مجسم الكرة الأرضية
+fa: کره زمین، گوی جهان‌نما
+ur: کرہ ارض، ماڈل گلوب
+id: bola dunia, globe, bumi
+vi: quả địa cầu, trái đất, hình cầu
+th: ลูกโลก, ดาวเคราะห์โลก
+ko: 지구본, 지구, 구체
+ja: 地球儀、天球儀、球体
+zh: 地球仪、地球、球体
+bn: গ্লোব, ভূগোলোক, পৃথিবী
+kk: глобус, жер шары, сфера
+
+[Word ID 2746]
+ru: выполнять, осуществлять, казнить, приводить в исполнение
+uk: виконувати, здійснювати, страчувати
+de: ausführen, vollstrecken, hinrichten
+es: ejecutar, llevar a cabo, fusilar
+fr: exécuter, accomplir, mettre à mort
+pl: wykonywać, realizować, dokonywać egzekucji
+it: eseguire, attuare, giustiziare
+tr: icra etmek, yerine getirmek, idam etmek
+pt: executar, efetuar, fuzilar
+ro: a executa, a duce la îndeplinire, a executa prin moarte
+bg: изпълнявам, осъществявам, екзекутирам
+cs: provést, uskutečnit, popravit
+sk: vykonať, uskutočniť, popraviť
+hu: végrehajt, megvalósít, kivégez
+el: εκτελώ, φέρνω σε πέρας, θανατώνω
+sl: izvesti, izvršiti, usmrtiti
+et: täide viima, teostama, hukkama
+lt: vykdyti, įgyvendinti, sušaudyti
+da: eksekvere, udføre, henrette
+fi: toteuttaa, toimeenpanna, teloittaa
+sv: avrätta, verkställa, tillämpa
+hr: provesti, izvršiti, pogubiti
+lv: izpildīt, veikt, sodīt ar nāvi
+hi: कार्यान्वित करना, निष्पादित करना, फांसी देना
+ar: ينفذ، ينجز، يعدم
+fa: اجرا کردن، پیاده‌سازی کردن، اعدام کردن
+ur: نافذ کرنا، عمل میں لانا، پھانسی دینا
+id: mengeksekusi, melaksanakan, menghukum mati
+vi: thi hành, thực hiện, xử tử
+th: ปฏิบัติการ, ประหารชีวิต, ดำเนินการ
+ko: 실행하다, 처형하다, 집행하다
+ja: 実行する、遂行する、死刑にする
+zh: 执行、实施、处死
+bn: সম্পাদন করা, কার্যকর করা, মৃত্যুদণ্ড দেওয়া
+kk: орындау, жүзеге асыру, өлім жазасына кесу
+
+[Word ID 2747]
+ru: ловушка, капкан, западня, улавливать
+uk: пастка, капкан, заманювати в пастку
+de: Falle, Falle stellen, fangen
+es: trampa, trampa para animales, atrapar
+fr: piège, trappe, prendre au piège
+pl: pułapka, potrzask, wpaść w pułapkę
+it: trappola, tranello, intrappolare
+tr: tuzak, kapan, tuzağa düşürmek
+pt: armadilha, alçapão, encurralar
+ro: capcană, cursă, a prinde în capcană
+bg: капан, клопка, примка
+cs: past, léčka, polapit
+sk: pasca, osídlo, chytiť do pasce
+hu: csapda, kelepce, tőrbe csal
+el: παγίδα, ενέδρα, παγιδεύω
+sl: past, zanka, ujeti v past
+et: lõks, püünis, lõksu püüdma
+lt: spąstai, vylius, įvilioti į spąstus
+da: fælde, faldgrube, fange
+fi: ansa, loukku, virittää ansa
+sv: fälla, snara, fånga i fälla
+hr: zamka, stupica, uhvatiti u zamku
+lv: slazds, lamatas, ievilināt slazdā
+hi: जाल, फंदा, धोखे में फंसाना
+ar: فخ، شرك، كمين
+fa: تله، دام، به دام انداختن
+ur: جال، پھندا، جال میں پھنسانا
+id: perangkap, jebakan, menjebak
+vi: cạm bẫy, bẫy sập, đánh bẫy
+th: กับดัก, วางกับดัก, หลุมพราง
+ko: 덫, 함정, 가두다
+ja: 罠、トラップ、罠にかける
+zh: 陷阱、圈套、设圈套捕获
+bn: ফাঁদ, জাল, ফাঁদে ফেলা
+kk: тұзақ, қақпан, тұзаққа түсіру
+
+[Word ID 2748]
+ru: жест, телодвижение, поступок, жестикулировать
+uk: жест, рух тіла, вчинок, жестикулювати
+de: Geste, Handbewegung, Gebärde
+es: gesto, ademán, guiño
+fr: geste, signe, mimique
+pl: gest, ruch, odruch
+it: gesto, cenno, mossa
+tr: jest, el kol hareketi, tavır
+pt: gesto, aceno, postura
+ro: gest, mișcare, semn
+bg: жест, движение, знак
+cs: gesto, posuněk, posunkovat
+sk: gesto, posunok, posunkovať
+hu: gesztus, kézmozdulat, intézkedés
+el: χειρονομία, νεύμα, ένδειξη
+sl: gesta, kretnja, ročna kretnja
+et: žest, viibe, käeliigutus
+lt: gestas, mostas, rankos mostelėjimas
+da: gestus, håndbevægelse, tegn
+fi: ele, viittaus, kädenliike
+sv: gest, handrörelse, vink
+hr: gesta, pokret, mig
+lv: žests, rokas mājiens, kustība
+hi: इशारा, भाव-भंगिमा, हावभाव
+ar: إيماءة، حركة، بادرة
+fa: ایما، اشاره، حرکت دست و سر
+ur: اشارہ، کنایہ، بدنی حرکت
+id: isyarat, gerak tubuh, gestur
+vi: cử chỉ, điệu bộ, cử động
+th: ท่าทาง, อากัปกิริยา, กิริยาท่าทาง
+ko: 몸짓, 손짓, 제스처
+ja: 身振り、手振り、ジェスチャー
+zh: 手势、姿势、表示
+bn: অঙ্গভঙ্গি, ইশারা, ইঙ্গিত
+kk: қимыл, ым-ишара, қол бұлғау
+
+[Word ID 2749]
+ru: получатель, телефонная трубка, приёмник, ресивер
+uk: одержувач, слухавка, приймач, ресивер
+de: Empfänger, Telefonhörer, Empfangsgerät
+es: receptor, destinatario, auricular
+fr: récepteur, destinataire, combiné téléphonique
+pl: odbiorca, słuchawka telefoniczna, odbiornik
+it: ricevitore, destinatario, cornetta
+tr: alıcı, ahize, radyo alıcısı
+pt: receptor, destinatário, fone do telefone
+ro: receptor, destinatar, receptor telefonic
+bg: получател, телефонна слушалка, приемник
+cs: příjemce, sluchátko, přijímač
+sk: príjemca, slúchadlo, prijímač
+hu: fogadó, címzett, telefonkagyló, vevőkészülék
+el: παραλήπτης, ακουστικό τηλεφώνου, δέκτης
+sl: sprejemnik, prejemnik, slušalka
+et: saaja, vastuvõtja, telefonitoru
+lt: gavėjas, imtuvas, telefono ragelis
+da: modtager, telefonrør, modtagerapparat
+fi: vastaanottaja, luuri, vastaanotin
+sv: mottagare, telefonlur, radioapparat
+hr: primatelj, slušalica, prijamnik
+lv: saņēmējs, klausule, uztvērējs
+hi: प्राप्तकर्ता, रिसीवर, टेलीफोन चोंगा
+ar: متلقي، مستقبل، سماعة الهاتف
+fa: گیرنده، گوشی تلفن، دستگاه گیرنده
+ur: وصول کنندہ، ٹیلی فون کا ریسیور، وصولی آلہ
+id: penerima, gagang telepon, pesawat penerima
+vi: người nhận, ống nghe, máy thu
+th: ผู้รับ, หูโทรศัพท์, เครื่องรับ
+ko: 수신자, 전화기 수화기, 수신기
+ja: 受信機、受話器、受け取り人
+zh: 接收器、受话器、接收者
+bn: প্রাপক, গ্রাহক যন্ত্র, টেলিফোনের রিসিভার
+kk: қабылдаушы, телефон тұтқасы, қабылдағыш
+
+[Word ID 2750]
+ru: горизонт, кругозор, небосклон
+uk: горизонт, обрій, кругозір
+de: Horizont, Gesichtskreis, Blickfeld
+es: horizonte, perspectiva, campo visual
+fr: horizon, perspective, champ de vision
+pl: horyzont, widnokrąg, pole widzenia
+it: orizzonte, visuale, prospettiva
+tr: ufuk, görüş alanı, perspektif
+pt: horizonte, linha do horizonte, campo visual
+ro: orizont, zare, perspectivă
+bg: хоризонт, кръгозор, простор
+cs: obzor, horizont, rozhled
+sk: obzor, horizont, rozhľad
+hu: látóhatár, horizont, szemhatár
+el: ορίζοντας, οπτικό πεδίο
+sl: obzorje, horizont, vidik
+et: silmapiir, taevapiir, vaatepiir
+lt: akiratis, horizontas, regėjimo laukas
+da: horisont, synsfelt, kiming
+fi: horisontti, taivaanranta, näköpiiri
+sv: horisont, synrand, synfält
+hr: obzor, vidokrug, horizont
+lv: horizonts, apvārsnis, redzesloks
+hi: क्षितिज, दिगंत, दृष्टिकोण
+ar: أفق، مدى البصر، مجال التفكير
+fa: افق، خط افق، کران
+ur: افق، نظر کی حد، محیط علم
+id: cakrawala, garis horison, wawasan
+vi: chân trời, tầm nhìn, đường chân trời
+th: ขอบฟ้า, เส้นขอบฟ้า, วิสัยทัศน์
+ko: 지평선, 수평선, 시야
+ja: 地平線、水平線、視野
+zh: 地平线、眼界、见识
+bn: দিগন্ত, চক্রবাল, দৃষ্টিসীমা
+kk: көкжиек, көз аясы, өріс
+
+[Word ID 2751]
+ru: диагноз, диагностика
+uk: діагноз, діагностика
+de: Diagnose, Krankheitsbestimmung
+es: diagnóstico, dictamen
+fr: diagnostic, bilan
+pl: diagnoza, rozpoznanie
+it: diagnosi, accertamento
+tr: teşhis, tanı
+pt: diagnóstico, parecer médico
+ro: diagnostic, concluzie medicală
+bg: диагноза, диагностика
+cs: diagnóza, stanovení diagnózy
+sk: diagnóza, stanovenie choroby
+hu: diagnózis, kórmeghatározás
+el: διάγνωση, διαγνωστική
+sl: diagnoza, prepoznava bolezni
+et: diagnoos, haiguse määramine
+lt: diagnozė, ligos nustatymas
+da: diagnose, sygdomsbestemmelse
+fi: diagnoosi, taudinmääritys
+sv: diagnos, fastställande av sjukdom
+hr: dijagnoza, prepoznavanje bolesti
+lv: diagnoze, slimības noteikšana
+hi: निदान, रोग की पहचान, डायग्नोसिस
+ar: تشخيص، فحص مرضي
+fa: تشخیص، آسیب‌شناسی
+ur: تشخیص، جانچ پڑتال
+id: diagnosis, penegakan diagnosis
+vi: chẩn đoán, sự định bệnh
+th: การวินิจฉัยโรค, การตรวจโรค
+ko: 진단, 병명 판정
+ja: 診断、病名判断
+zh: 诊断、病症判断
+bn: রোগনির্ণয়, রোগ নির্ণয়
+kk: диагноз, дертті анықтау
+
+================================================================================
+END OF REPORT
+================================================================================
