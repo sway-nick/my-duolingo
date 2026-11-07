@@ -1058,7 +1058,23 @@ async function run() {
 
     // Batch 6802-6851
     { id: 6847, word: 'May', lang: 'de', expected: 'Mai' },
-    { id: 6834, word: 'lantern', lang: 'fr', expected: 'lanterne' }
+    { id: 6834, word: 'lantern', lang: 'fr', expected: 'lanterne' },
+
+    // Batch 6852-6901
+    { id: 6878, word: 'wear', lang: 'ru', expected: 'носить, надевать, быть одетым в' },
+    { id: 6896, word: 'mean', lang: 'pt', expected: 'significar, querer dizer' },
+
+    // Batch 6902-6951
+    { id: 6945, word: 'per', lang: 'de', expected: 'pro, je' },
+    { id: 6951, word: 'aboard', lang: 'fa', expected: 'سوار بر کشتی، درون هواپیما' },
+
+    // Batch 6952-7001
+    { id: 6953, word: 'outage', lang: 'de', expected: 'Ausfall, Stromausfall' },
+    { id: 7000, word: 'inexhaustible', lang: 'cs', expected: 'nevyčerpatelný, nezdolný' },
+
+    // Batch 7002-7049 (Final batch!)
+    { id: 7009, word: 'monstrous', lang: 'uk', expected: 'чудовищний, потворний, страхітливий' },
+    { id: 7015, word: 'parapet', lang: 'pl', expected: 'barierka, balustrada' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -1089,19 +1105,19 @@ async function run() {
     return out;
   }
 
-  // Batches 1 to 129 (words 1-6451) are hard-baked into words.json in all builds.
-  // We keep verified sample check words for batches 1-129 to ensure verification on readback,
-  // and maintain full 36-locale payload for active batches 130-137 (words 6452-6851, 392 words)
+  // Batches 1 to 133 (words 1-6651) are hard-baked into words.json in all builds.
+  // We keep verified sample check words for batches 1-133 to ensure verification on readback,
+  // and maintain full 36-locale payload for active batches 134-141 (words 6652-7049, 398 words)
   // to ensure dynamic OTA update coverage while staying safely under the 1024 KB Firestore limit.
   const activeBatchFiles = [
-    'apply_batch_6452_6501_calibrations.cjs',
-    'apply_batch_6502_6551_calibrations.cjs',
-    'apply_batch_6552_6601_calibrations.cjs',
-    'apply_batch_6602_6651_calibrations.cjs',
     'apply_batch_6652_6701_calibrations.cjs',
     'apply_batch_6702_6751_calibrations.cjs',
     'apply_batch_6752_6801_calibrations.cjs',
-    'apply_batch_6802_6851_calibrations.cjs'
+    'apply_batch_6802_6851_calibrations.cjs',
+    'apply_batch_6852_6901_calibrations.cjs',
+    'apply_batch_6902_6951_calibrations.cjs',
+    'apply_batch_6952_7001_calibrations.cjs',
+    'apply_batch_7002_7049_calibrations.cjs'
   ];
 
   let mergedCount = 0;
