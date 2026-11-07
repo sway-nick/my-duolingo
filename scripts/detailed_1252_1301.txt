@@ -1,0 +1,1850 @@
+================================================================================
+ID 1252: station
+RU: станция
+  ar: محطة
+  bg: станция
+  bn: স্টেশন
+  cs: stanice
+  da: station
+  de: Station
+  el: σταθμός
+  es: estación
+  et: jaam
+  fa: ایستگاه
+  fi: asema
+  fr: gare
+  hi: स्टेशन
+  hr: stanica
+  hu: állomás
+  id: stasiun
+  it: stazione
+  ja: 駅
+  kk: станция
+  ko: 역
+  lt: stotis
+  lv: stacija
+  pl: stacja
+  pt: estação
+  ro: stație
+  sk: stanica
+  sl: postaja
+  sv: station
+  th: สถานี
+  tr: istasyon
+  uk: станція
+  ur: اسٹیشن
+  vi: nhà ga
+  zh: 车站
+================================================================================
+ID 1253: respect
+RU: уважать, уважение
+  ar: احترام، تقدير
+  bg: уважение
+  bn: সম্মান করা, সম্মান
+  cs: respekt
+  da: respekt, agtelse
+  de: Respekt, respektieren
+  el: σεβασμός
+  es: respetar, respeto
+  et: austus
+  fa: احترام، احترام گذاشتن
+  fi: kunnioitus, arvostus
+  fr: respect
+  hi: आदर, सम्मान
+  hr: poštovanje, uvažavanje
+  hu: tisztelet
+  id: menghormati, rasa hormat
+  it: rispetto
+  ja: 尊敬、敬意
+  kk: құрмет
+  ko: 존중, 존경
+  lt: pagarba
+  lv: cieņa, atzinība
+  pl: szacunek
+  pt: respeitar, respeito
+  ro: respect
+  sk: rešpekt
+  sl: spoštovanje
+  sv: respekt, uppskattning
+  th: ความเคารพ ความนับถือ
+  tr: saygı
+  uk: поважати, повага
+  ur: احترام کرنا، احترام
+  vi: tôn trọng, kính trọng
+  zh: 尊重
+================================================================================
+ID 1254: concern
+RU: беспокойство, забота
+  ar: اهتمام، عناية
+  bg: тревога, безпокойство
+  bn: উদ্বেগ
+  cs: starost, obava
+  da: bekymring, omsorg
+  de: Sorge, Anliegen, betreffen
+  el: ανησυχία
+  es: preocupación, inquietud
+  et: mure
+  fa: نگرانی، مربوط بودن
+  fi: huolenpito, välittäminen
+  fr: inquiétude, souci
+  hi: चिंता, संबंधित होना
+  hr: briga
+  hu: aggodalom
+  id: kekhawatiran, perhatian
+  it: preoccupazione, riguardare
+  ja: 関心、配慮
+  kk: алаңдаушылық, қамқорлық
+  ko: 관심, 배려
+  lt: nerimas, rūpestis
+  lv: bažas, rūpes
+  pl: dotyczyć, niepokój, troska
+  pt: preocupação, preocupar-se
+  ro: îngrijorare
+  sk: obavy, starosti
+  sl: skrb
+  sv: oro, omsorg
+  th: ความห่วงใย ความเอาใจใส่
+  tr: endişe, kaygı
+  uk: занепокоєння, турбота
+  ur: فکر، تشویش
+  vi: quan tâm, chăm sóc
+  zh: 担忧
+================================================================================
+ID 1255: promote
+RU: продвигать
+  ar: يرقّي، يروّج لـ
+  bg: насърчаване
+  bn: উন্নীত করা, প্রচার করা
+  cs: podporovat
+  da: fremme
+  de: fördern, bewerben
+  el: προάγω
+  es: promover
+  et: edendama
+  fa: ترویج کردن، ارتقا دادن
+  fi: edistää
+  fr: promouvoir
+  hi: बढ़ावा देना
+  hr: promicati
+  hu: népszerűsíteni
+  id: mempromosikan
+  it: promuovere
+  ja: 促進する
+  kk: насихаттау
+  ko: 촉진하다
+  lt: reklamuoti
+  lv: veicināt
+  pl: promować
+  pt: promover
+  ro: promova
+  sk: propagovať
+  sl: promovirati
+  sv: främja
+  th: ส่งเสริม
+  tr: tanıtmak, terfi ettirmek
+  uk: просувати
+  ur: ترقی دینا، فروغ دینا
+  vi: thúc đẩy
+  zh: 促进
+================================================================================
+ID 1256: public
+RU: общественный
+  ar: عام
+  bg: обществен
+  bn: জনসাধারণের
+  cs: veřejnost
+  da: offentlig
+  de: öffentlich
+  el: κοινό
+  es: público
+  et: avalik
+  fa: عمومی
+  fi: julkinen
+  fr: publique
+  hi: सार्वजनिक
+  hr: javnost
+  hu: nyilvános
+  id: publik
+  it: pubblico
+  ja: 公衆
+  kk: қоғамдық
+  ko: 공공의
+  lt: viešas
+  lv: sabiedrība
+  pl: publiczny
+  pt: público
+  ro: public
+  sk: verejnosť
+  sl: javno
+  sv: offentlig
+  th: สาธารณะ
+  tr: kamu, halka açık
+  uk: громадський
+  ur: عوامی
+  vi: công cộng
+  zh: 公众的
+================================================================================
+ID 1257: threat
+RU: угроза
+  ar: تهديد
+  bg: заплаха
+  bn: হুমকি
+  cs: ohrožení
+  da: trussel
+  de: Bedrohung, Gefahr
+  el: απειλή
+  es: amenaza
+  et: oht
+  fa: تهدید
+  fi: uhka
+  fr: menace
+  hi: खतरा
+  hr: prijetnja
+  hu: fenyegetés
+  id: ancaman
+  it: minaccia
+  ja: 脅威
+  kk: қауіп
+  ko: 위협
+  lt: grėsmė
+  lv: drauds
+  pl: zagrożenie
+  pt: ameaça
+  ro: ameninţare
+  sk: hrozba
+  sl: grožnja
+  sv: hot
+  th: ภัยคุกคาม
+  tr: tehdit
+  uk: загроза
+  ur: خطرہ
+  vi: mối đe dọa
+  zh: 威胁
+================================================================================
+ID 1258: measure
+RU: мера
+  ar: يقيس، قياس، مقياس
+  bg: мярка
+  bn: পরিমাপ করা, পরিমাপ
+  cs: opatření
+  da: måle
+  de: Maß, messen
+  el: μέτρο
+  es: medida
+  et: mõõtma
+  fa: اندازه، اندازه‌گیری کردن
+  fi: mitata
+  fr: mesure
+  hi: माप, मापना
+  hr: mjera
+  hu: intézkedés
+  id: mengukur, ukuran
+  it: misura
+  ja: 測定する
+  kk: шара
+  ko: 측정하다
+  lt: matas
+  lv: mērs
+  pl: mierzyć, miara
+  pt: medir
+  ro: măsură
+  sk: miera
+  sl: ukrep
+  sv: åtgärd
+  th: มาตรการ
+  tr: ölçü, ölçmek
+  uk: міра
+  ur: پیمائش، اقدام
+  vi: biện pháp
+  zh: 测量
+================================================================================
+ID 1259: mostly
+RU: по большей части
+  ar: في الغالب
+  bg: в по-голямата си част
+  bn: বেশিরভাগ ক্ষেত্রে
+  cs: z větší části
+  da: for det meste
+  de: größtenteils
+  el: ως επί το πλείστον
+  es: principalmente
+  et: enamasti
+  fa: عمدتاً
+  fi: enimmäkseen
+  fr: pour la plupart
+  hi: अधिकतर
+  hr: uglavnom
+  hu: többnyire
+  id: sebagian besar
+  it: per la maggior parte
+  ja: 主に
+  kk: көбінесе
+  ko: 주로
+  lt: didžiąja dalimi
+  lv: pārsvarā
+  pl: w większości
+  pt: na maior parte
+  ro: în cea mai mare parte
+  sk: z väčšej časti
+  sl: večinoma
+  sv: mestadels
+  th: ส่วนใหญ่
+  tr: çoğunlukla
+  uk: здебільшого
+  ur: زیادہ تر
+  vi: chủ yếu
+  zh: 大多
+================================================================================
+ID 1260: together
+RU: вместе
+  ar: معًا
+  bg: заедно
+  bn: একসঙ্গে
+  cs: spolu
+  da: sammen
+  de: zusammen
+  el: μαζί
+  es: juntos
+  et: koos
+  fa: با هم
+  fi: yhdessä
+  fr: ensemble
+  hi: साथ में
+  hr: zajedno
+  hu: együtt
+  id: bersama
+  it: insieme
+  ja: 一緒に
+  kk: бірге
+  ko: 함께
+  lt: kartu
+  lv: kopā
+  pl: razem
+  pt: junto
+  ro: împreună
+  sk: spolu
+  sl: skupaj
+  sv: tillsammans
+  th: ด้วยกัน
+  tr: birlikte
+  uk: разом
+  ur: اکٹھے
+  vi: cùng nhau
+  zh: 一起
+================================================================================
+ID 1261: reaction
+RU: реакция
+  ar: رد فعل
+  bg: реакция
+  bn: প্রতিক্রিয়া
+  cs: reakce
+  da: reaktion
+  de: Reaktion
+  el: αντίδραση
+  es: reacción
+  et: reaktsioon
+  fa: واکنش
+  fi: reaktio
+  fr: réaction
+  hi: प्रतिक्रिया
+  hr: reakcija
+  hu: reakció
+  id: reaksi
+  it: reazione
+  ja: 反応
+  kk: реакция
+  ko: 반응
+  lt: reakcija
+  lv: reakcija
+  pl: reakcja
+  pt: reação
+  ro: reacţie
+  sk: reakcia
+  sl: reakcija
+  sv: reaktion
+  th: ปฏิกิริยา
+  tr: tepki
+  uk: реакція
+  ur: ردعمل
+  vi: phản ứng
+  zh: 反应
+================================================================================
+ID 1262: capital
+RU: капитал, главный, столица
+  ar: رأس المال، العاصمة، رئيسي
+  bg: капитал, основен
+  bn: রাজধানী, মূলধন
+  cs: kapitál, hlavní
+  da: kapital, hoved
+  de: Hauptstadt, Kapital, wichtigster
+  el: κεφάλαιο, κύριο
+  es: capital, mayúscula
+  et: kapital, peamine
+  fa: سرمایه، پایتخت، اصلی
+  fi: pääoma, pää
+  fr: capitale, capital
+  hi: राजधानी, मुख्य
+  hr: kapital, glavni
+  hu: tőke, fő
+  id: modal, utama, ibu kota
+  it: capitale, principale
+  ja: 首都、主要
+  kk: астана, негізгі
+  ko: 자본, 주요 자본
+  lt: kapitalas, pagrindinis
+  lv: kapitāls, galvenais
+  pl: kapitał, główny, stolica
+  pt: capital, principal
+  ro: capitală, principal
+  sk: hlavné mesto, hlavný, kapitál
+  sl: kapital, glavni, prestolnica
+  sv: kapital, huvudsaklig
+  th: เมืองหลวง หลัก เมืองหลวง
+  tr: sermaye, başkent, ana
+  uk: столиця, капітал
+  ur: سرمایہ، دارالحکومت، اہم
+  vi: thủ đô, chính, vốn
+  zh: 资本
+================================================================================
+ID 1263: remind
+RU: напоминать
+  ar: يذكّر
+  bg: напомням
+  bn: মনে করিয়ে দেওয়া
+  cs: připomenout
+  da: minde
+  de: erinnern, mahnen
+  el: υπενθυμίζω
+  es: recordar
+  et: meelde tuletama
+  fa: یادآوری کردن
+  fi: muistuttaa
+  fr: rappeler
+  hi: याद दिलाना
+  hr: podsjetiti
+  hu: emlékeztet
+  id: mengingatkan
+  it: ricordare
+  ja: 思い出させる
+  kk: еске салу
+  ko: 상기시키다
+  lt: priminti
+  lv: atgādināt
+  pl: przypominać
+  pt: lembrar, recordar
+  ro: reaminti
+  sk: pripomenúť
+  sl: opomniti
+  sv: påminna
+  th: เตือน
+  tr: hatırlatmak
+  uk: нагадувати
+  ur: یاد دلانا
+  vi: nhắc nhở
+  zh: 提醒
+================================================================================
+ID 1264: football
+RU: футбол
+  ar: كرة القدم
+  bg: футбол
+  bn: ফুটবল
+  cs: fotbal
+  da: fodbold
+  de: Fußball
+  el: ποδόσφαιρο
+  es: fútbol
+  et: jalgpall
+  fa: فوتبال
+  fi: jalkapallo
+  fr: football
+  hi: फुटबॉल
+  hr: nogomet
+  hu: futball
+  id: sepak bola
+  it: calcio
+  ja: サッカー
+  kk: футбол
+  ko: 축구
+  lt: futbolas
+  lv: futbols
+  pl: piłka nożna
+  pt: futebol
+  ro: fotbal
+  sk: futbal
+  sl: nogomet
+  sv: fotboll
+  th: ฟุตบอล
+  tr: futbol
+  uk: футбол
+  ur: فٹ بال
+  vi: bóng đá
+  zh: 足球
+================================================================================
+ID 1265: natural
+RU: естественный
+  ar: طبيعي
+  bg: естествен
+  bn: প্রাকৃতিক
+  cs: přírodní
+  da: naturlig
+  de: natürlich
+  el: φυσικός
+  es: natural
+  et: loomulik
+  fa: طبیعی
+  fi: luonnollinen
+  fr: naturel
+  hi: प्राकृतिक
+  hr: prirodno
+  hu: természetes
+  id: alami
+  it: naturale
+  ja: 自然な
+  kk: табиғи
+  ko: 자연적인
+  lt: natūralus
+  lv: dabisks
+  pl: naturalny
+  pt: natural
+  ro: natural
+  sk: prírodný
+  sl: naravno
+  sv: naturlig
+  th: ธรรมชาติ
+  tr: doğal
+  uk: природний
+  ur: قدرتی
+  vi: tự nhiên
+  zh: 自然的
+================================================================================
+ID 1266: express
+RU: выражать
+  ar: يعبّر، يُفصح عن
+  bg: експрес
+  bn: প্রকাশ করা
+  cs: vyjádřit
+  da: ekspres
+  de: äußern
+  el: εξπρές
+  es: expresar
+  et: ekspress
+  fa: بیان کردن
+  fi: pikajuna
+  fr: exprimer
+  hi: व्यक्त करना
+  hr: izraziti
+  hu: expressz
+  id: mengungkapkan, menyatakan
+  it: esprimere
+  ja: 表現する
+  kk: экспресс
+  ko: 표현하다
+  lt: ekspresas
+  lv: ekspresis
+  pl: wyrażać
+  pt: expressar
+  ro: expres
+  sk: expres
+  sl: izraziti
+  sv: express
+  th: แสดงออก
+  tr: ifade etmek
+  uk: висловлювати
+  ur: اظہار کرنا
+  vi: biểu đạt
+  zh: 表达
+================================================================================
+ID 1267: coffee
+RU: кофе
+  ar: قهوة
+  bg: кафе
+  bn: কফি
+  cs: káva
+  da: kaffe
+  de: Kaffee
+  el: καφές
+  es: café
+  et: kohv
+  fa: قهوه
+  fi: kahvi
+  fr: café
+  hi: कॉफी
+  hr: kava
+  hu: kávé
+  id: kopi
+  it: caffè
+  ja: コーヒー
+  kk: кофе
+  ko: 커피
+  lt: kava
+  lv: kafija
+  pl: kawa
+  pt: café
+  ro: cafea
+  sk: káva
+  sl: kava
+  sv: kaffe
+  th: กาแฟ
+  tr: Kahve
+  uk: кава
+  ur: کافی
+  vi: cà phê
+  zh: 咖啡
+================================================================================
+ID 1268: morning
+RU: утро
+  ar: صباح
+  bg: сутрин
+  bn: সকাল
+  cs: ráno
+  da: morgen
+  de: Morgen
+  el: πρωί
+  es: mañana
+  et: hommik
+  fa: صبح
+  fi: aamu
+  fr: matin
+  hi: सुबह
+  hr: jutro
+  hu: reggel
+  id: pagi
+  it: Mattina
+  ja: 朝の
+  kk: таңертең
+  ko: 아침
+  lt: rytas
+  lv: rīts
+  pl: poranek
+  pt: manhã
+  ro: dimineaţă
+  sk: ráno
+  sl: jutro
+  sv: morgon
+  th: ตอนเช้า
+  tr: Sabah
+  uk: ранок
+  ur: صبح
+  vi: buổi sáng
+  zh: 早晨
+================================================================================
+ID 1269: welcome
+RU: добро пожаловать
+  ar: يرحّب، أهلًا وسهلًا
+  bg: Добре дошли
+  bn: স্বাগতম
+  cs: Vítejte
+  da: velkommen
+  de: willkommen, begrüßen
+  el: Καλωσόρισμα
+  es: Bienvenido
+  et: Tere tulemast
+  fa: خوش آمدید
+  fi: tervetuloa
+  fr: Accueillir
+  hi: स्वागत
+  hr: dobrodošlica
+  hu: Üdvözöljük
+  id: selamat datang
+  it: Benvenuto
+  ja: 歓迎する
+  kk: қош келдіңіз
+  ko: 환영하다
+  lt: Sveiki atvykę
+  lv: laipni gaidīti
+  pl: witać, powitanie
+  pt: Bem-vindo
+  ro: Bun venit
+  sk: Vitajte
+  sl: Dobrodošli
+  sv: välkommen
+  th: ยินดีต้อนรับ
+  tr: Hoş geldin
+  uk: ласкаво просимо
+  ur: خوش آمدید
+  vi: chào đón
+  zh: 欢迎
+================================================================================
+ID 1270: common
+RU: общий, распространенный
+  ar: عام، شائع
+  bg: често срещан, широко разпространен
+  bn: সাধারণ
+  cs: běžné, rozšířené
+  da: generel, fælles
+  de: häufig, weit verbreitet
+  el: κοινός, διαδεδομένος
+  es: común, generalizado
+  et: levinud, laialt levinud
+  fa: رایج، مشترک
+  fi: yleinen, yhteinen
+  fr: commun, répandu
+  hi: सामान्य, आम
+  hr: općenito, uobičajeno
+  hu: gyakori, elterjedt
+  id: umum, biasa
+  it: comune, diffuso
+  ja: 一般的な、共通の
+  kk: жалпы
+  ko: 일반적인, 공통적인
+  lt: įprastas, plačiai paplitęs
+  lv: vispārīgs, kopīgs
+  pl: powszechny, wspólny
+  pt: comum, generalizado
+  ro: comun, răspândit
+  sk: bežný, rozšírený
+  sl: pogost, razširjen
+  sv: allmän, gemensam
+  th: ทั่วไป ธรรมดา
+  tr: yaygın, ortak
+  uk: загальний, поширений
+  ur: عام
+  vi: chung, phổ biến
+  zh: 常见的
+================================================================================
+ID 1271: policy
+RU: политика
+  ar: سياسة
+  bg: политика
+  bn: নীতি
+  cs: politika
+  da: politik
+  de: Politik
+  el: πολιτική
+  es: política
+  et: poliitika
+  fa: سیاست، خط‌مشی
+  fi: käytäntö
+  fr: politique
+  hi: नीति
+  hr: politika
+  hu: politika
+  id: kebijakan
+  it: politica
+  ja: 方針
+  kk: саясат
+  ko: 정책
+  lt: politika
+  lv: politika
+  pl: polityka
+  pt: política, diretriz
+  ro: politică
+  sk: politika
+  sl: politika
+  sv: policy
+  th: นโยบาย
+  tr: politika
+  uk: політика
+  ur: پالیسی
+  vi: chính sách
+  zh: 政策
+================================================================================
+ID 1272: course
+RU: курс
+  ar: دورة، مساق، مسار
+  bg: добре
+  bn: কোর্স
+  cs: dobře
+  da: kursus
+  de: Kurs, Verlauf, Gang
+  el: Λοιπόν
+  es: curso, recorrido
+  et: hästi
+  fa: دوره، مسیر
+  fi: kurssi
+  fr: Bien
+  hi: पाठ्यक्रम
+  hr: tečaj
+  hu: jól
+  id: kursus
+  it: BENE
+  ja: コース
+  kk: курс
+  ko: 과정
+  lt: gerai
+  lv: kurss
+  pl: kurs, przebieg
+  pt: curso, rumo
+  ro: bine
+  sk: dobre
+  sl: dobro
+  sv: kurs
+  th: หลักสูตร
+  tr: kurs, ders
+  uk: курс
+  ur: کورس
+  vi: khóa học
+  zh: 课程
+================================================================================
+ID 1273: review
+RU: обзор, пересмотр
+  ar: مراجعة
+  bg: преглед, ревизия
+  bn: পর্যালোচনা
+  cs: revize
+  da: gennemgang, revision
+  de: Überprüfung, Rezension, Bewertung
+  el: αναθεώρηση
+  es: revisión, reseña
+  et: läbivaatamine, revisjon
+  fa: مرور، بررسی
+  fi: tarkastelu, tarkistus
+  fr: examen, révision
+  hi: समीक्षा, संशोधन
+  hr: pregled, revizija
+  hu: felülvizsgálat, átdolgozás
+  id: ulasan, revisi
+  it: revisione
+  ja: 見直し、改訂
+  kk: шолу, қайта қарау
+  ko: 검토, 수정
+  lt: peržiūra, pataisymas
+  lv: pārskatīšana
+  pl: przegląd, rewizja
+  pt: revisão, avaliação
+  ro: revizuire
+  sk: preskúmanie, revízia
+  sl: pregled, revizija
+  sv: granskning, revidering
+  th: ทบทวน แก้ไข
+  tr: inceleme, revizyon
+  uk: огляд, перегляд
+  ur: جائزہ
+  vi: xem xét, sửa đổi
+  zh: 审查
+================================================================================
+ID 1274: observe
+RU: наблюдать
+  ar: يلاحظ، يراقب
+  bg: наблюдавам
+  bn: পর্যবেক্ষণ করা
+  cs: pozorovat
+  da: observere
+  de: beobachten
+  el: παρατηρώ
+  es: observar
+  et: jälgima
+  fa: مشاهده کردن
+  fi: tarkkailla
+  fr: observer
+  hi: निरीक्षण करना
+  hr: promatrati
+  hu: megfigyelni
+  id: mengamati
+  it: osservare
+  ja: 観察する
+  kk: бақылау
+  ko: 관찰하다
+  lt: stebėti
+  lv: novērot
+  pl: obserwować
+  pt: observar
+  ro: observa
+  sk: pozorovať
+  sl: opazovati
+  sv: observera
+  th: สังเกต
+  tr: gözlemlemek
+  uk: спостерігати
+  ur: مشاہدہ کرنا
+  vi: quan sát
+  zh: 观察
+================================================================================
+ID 1275: identify
+RU: идентифицировать
+  ar: يحدّد، يتعرّف على
+  bg: идентифицирам
+  bn: শনাক্ত করা
+  cs: identifikovat
+  da: identificere
+  de: identifizieren
+  el: αναγνωρίζω
+  es: identificar
+  et: tuvastada
+  fa: شناسایی کردن
+  fi: tunnistaa
+  fr: identifier
+  hi: पहचानना
+  hr: identificirati
+  hu: azonosítani
+  id: mengidentifikasi
+  it: identificare
+  ja: 特定する
+  kk: анықтау
+  ko: 식별하다
+  lt: atpažinti
+  lv: identificēt
+  pl: zidentyfikować
+  pt: identificar
+  ro: identifica
+  sk: identifikovať
+  sl: prepoznati
+  sv: identifiera
+  th: ระบุ
+  tr: tanımlamak
+  uk: ідентифікувати
+  ur: شناخت کرنا
+  vi: xác định
+  zh: 识别
+================================================================================
+ID 1276: product
+RU: продукт
+  ar: منتج
+  bg: продукт
+  bn: পণ্য
+  cs: produkt
+  da: produkt
+  de: Produkt
+  el: προϊόν
+  es: producto
+  et: toode
+  fa: محصول
+  fi: tuote
+  fr: produit
+  hi: उत्पाद
+  hr: proizvod
+  hu: termék
+  id: produk
+  it: prodotto
+  ja: 製品
+  kk: өнім
+  ko: 제품
+  lt: produktas
+  lv: produkts
+  pl: produkt
+  pt: produto
+  ro: produs
+  sk: produkt
+  sl: izdelek
+  sv: produkt
+  th: ผลิตภัณฑ์
+  tr: ürün
+  uk: продукт
+  ur: مصنوعات
+  vi: sản phẩm
+  zh: 产品
+================================================================================
+ID 1277: social
+RU: социальный
+  ar: اجتماعي
+  bg: социални
+  bn: সামাজিক
+  cs: sociální
+  da: social
+  de: sozial
+  el: κοινωνικός
+  es: social
+  et: sotsiaalne
+  fa: اجتماعی
+  fi: sosiaalinen
+  fr: sociale
+  hi: सामाजिक
+  hr: društveni
+  hu: szociális
+  id: sosial
+  it: sociale
+  ja: 社会的な
+  kk: әлеуметтік
+  ko: 사회적인
+  lt: socialinis
+  lv: sociāls
+  pl: społeczny
+  pt: social
+  ro: social
+  sk: sociálne
+  sl: družabno
+  sv: social
+  th: สังคม
+  tr: sosyal
+  uk: соціальний
+  ur: سماجی
+  vi: xã hội
+  zh: 社会的
+================================================================================
+ID 1278: quickly
+RU: быстро
+  ar: بسرعة
+  bg: бързо
+  bn: দ্রুত
+  cs: rychle
+  da: hurtig
+  de: schnell
+  el: γρήγορα
+  es: rápidamente
+  et: kiire
+  fa: به‌سرعت
+  fi: nopea
+  fr: rapide
+  hi: तेज़
+  hr: brz
+  hu: gyors
+  id: cepat
+  it: veloce
+  ja: 速い
+  kk: тез
+  ko: 빠른
+  lt: greitas
+  lv: ātrs
+  pl: szybko
+  pt: rápido
+  ro: rapid
+  sk: rýchlo
+  sl: hitro
+  sv: snabb
+  th: เร็ว
+  tr: hızlı
+  uk: швидко
+  ur: جلدی
+  vi: nhanh
+  zh: 迅速地
+================================================================================
+ID 1279: across
+RU: через
+  ar: عبر، على الجانب الآخر من
+  bg: през
+  bn: জুড়ে, পার হয়ে
+  cs: přes
+  da: gennem
+  de: über, quer durch
+  el: διά μέσου
+  es: a través de
+  et: läbi
+  fa: از عرض، آن‌سوی
+  fi: läpi
+  fr: à travers
+  hi: के माध्यम से
+  hr: kroz
+  hu: keresztül
+  id: melintasi, di seberang
+  it: Attraverso
+  ja: 通して
+  kk: арқылы
+  ko: ~을 통해
+  lt: per
+  lv: cauri
+  pl: przez, po drugiej stronie
+  pt: através
+  ro: prin
+  sk: cez
+  sl: skozi
+  sv: genom
+  th: ผ่าน
+  tr: karşıdan karşıya, boyunca
+  uk: через
+  ur: پار، دوسری طرف
+  vi: thông qua
+  zh: 穿过
+================================================================================
+ID 1280: physical
+RU: физический
+  ar: جسدي
+  bg: физически
+  bn: শারীরিক
+  cs: fyzikální
+  da: fysisk
+  de: physisch
+  el: φυσικός
+  es: físico
+  et: füüsiline
+  fa: فیزیکی، جسمی
+  fi: fyysinen
+  fr: physique
+  hi: शारीरिक, भौतिक
+  hr: fizički
+  hu: fizikai
+  id: fisik
+  it: fisico
+  ja: 物理的な
+  kk: физикалық
+  ko: 물리적인
+  lt: fizinis
+  lv: fizisks
+  pl: fizyczny
+  pt: físico
+  ro: fizic
+  sk: fyzický
+  sl: fizično
+  sv: fysisk
+  th: ทางกายภาพ
+  tr: fiziksel
+  uk: фізичний
+  ur: جسمانی
+  vi: vật lý
+  zh: 身体的
+================================================================================
+ID 1281: opinion
+RU: мнение
+  ar: رأي
+  bg: мнение
+  bn: মতামত
+  cs: názor
+  da: mening
+  de: Meinung
+  el: γνώμη
+  es: opinión
+  et: arvamus
+  fa: نظر
+  fi: mielipide
+  fr: avis
+  hi: राय
+  hr: mišljenje
+  hu: vélemény
+  id: pendapat
+  it: opinione
+  ja: 意見
+  kk: пікір
+  ko: 의견
+  lt: nuomonė
+  lv: viedoklis
+  pl: opinia
+  pt: opinião
+  ro: opinie
+  sk: názor
+  sl: mnenje
+  sv: åsikt
+  th: ความคิดเห็น
+  tr: fikir
+  uk: думка
+  ur: رائے
+  vi: ý kiến
+  zh: 意见
+================================================================================
+ID 1282: citizen
+RU: гражданин
+  ar: مواطن
+  bg: гражданин
+  bn: নাগরিক
+  cs: občan
+  da: borger
+  de: Bürger
+  el: πολίτης
+  es: ciudadano
+  et: kodanik
+  fa: شهروند
+  fi: kansalainen
+  fr: citoyen
+  hi: नागरिक
+  hr: građanin
+  hu: polgár
+  id: warga negara
+  it: cittadino
+  ja: 市民
+  kk: азамат
+  ko: 시민
+  lt: pilietis
+  lv: pilsonis
+  pl: obywatel
+  pt: cidadão
+  ro: cetăţean
+  sk: občan
+  sl: državljan
+  sv: medborgare
+  th: พลเมือง
+  tr: vatandaş
+  uk: громадянин
+  ur: شہری
+  vi: công dân
+  zh: 公民
+================================================================================
+ID 1283: indeed
+RU: действительно
+  ar: حقًا
+  bg: наистина
+  bn: সত্যিই
+  cs: opravdu
+  da: virkelig
+  de: tatsächlich, in der Tat
+  el: πραγματικά
+  es: efectivamente, de hecho
+  et: tõesti
+  fa: واقعاً
+  fi: todella
+  fr: vraiment
+  hi: वास्तव में
+  hr: stvarno
+  hu: igazán
+  id: sungguh
+  it: Veramente
+  ja: 本当に
+  kk: шынымен
+  ko: 정말로
+  lt: tikrai
+  lv: tiešām
+  pl: Naprawdę
+  pt: realmente
+  ro: într-adevăr
+  sk: naozaj
+  sl: res
+  sv: verkligen
+  th: จริงๆ
+  tr: Gerçekten
+  uk: справді
+  ur: واقعی
+  vi: thực sự
+  zh: 确实
+================================================================================
+ID 1284: powerful
+RU: мощный
+  ar: قوي
+  bg: мощен
+  bn: শক্তিশালী
+  cs: silný
+  da: magtfuld
+  de: mächtig
+  el: ισχυρός
+  es: poderoso
+  et: võimas
+  fa: قدرتمند
+  fi: voimakas
+  fr: puissant
+  hi: शक्तिशाली
+  hr: moćan
+  hu: erős
+  id: kuat
+  it: potente
+  ja: 強力な
+  kk: қуатты
+  ko: 강력한
+  lt: galingas
+  lv: spēcīgs
+  pl: potężny
+  pt: poderoso
+  ro: puternic
+  sk: mocný
+  sl: močan
+  sv: kraftfull
+  th: ทรงพลัง
+  tr: güçlü
+  uk: потужний
+  ur: طاقتور
+  vi: mạnh mẽ
+  zh: 强大的
+================================================================================
+ID 1285: complete
+RU: полный, завершенный
+  ar: كامل، تام
+  bg: завършен
+  bn: সম্পূর্ণ, সম্পন্ন করা
+  cs: kompletní, hotový
+  da: fuld, komplet
+  de: vollständig, abschließen
+  el: ολοκληρωμένος, τελειωμένος
+  es: completo, terminar
+  et: täielik, lõpetatud
+  fa: کامل، تکمیل کردن
+  fi: täysi, täydellinen
+  fr: complet, terminé
+  hi: पूरा, पूरा करना
+  hr: pun, potpun
+  hu: teljes, befejezett
+  id: penuh, lengkap
+  it: completo, finito
+  ja: 完全な
+  kk: толық
+  ko: 완전한, 완벽한
+  lt: baigtas
+  lv: pilnīgs, pabeigts
+  pl: kompletny, skończony
+  pt: completo, finalizado
+  ro: complet, terminat
+  sk: kompletný, hotový
+  sl: popoln, končan
+  sv: fullständig, komplett
+  th: เต็ม, สมบูรณ์
+  tr: tam, tamamlanmış
+  uk: повний, завершений
+  ur: مکمل، مکمل کرنا
+  vi: đầy đủ, hoàn chỉnh
+  zh: 完成的
+================================================================================
+ID 1286: better
+RU: лучше
+  ar: أفضل
+  bg: по-добре
+  bn: আরও ভালো
+  cs: lepší
+  da: bedre
+  de: besser
+  el: καλύτερα
+  es: mejor
+  et: parem
+  fa: بهتر
+  fi: parempi
+  fr: mieux
+  hi: बेहतर
+  hr: bolji
+  hu: jobb
+  id: lebih baik
+  it: Meglio
+  ja: より良い
+  kk: жақсы
+  ko: 더 나은
+  lt: geriau
+  lv: labāks
+  pl: lepszy, lepiej
+  pt: melhor
+  ro: mai bine
+  sk: lepší
+  sl: boljše
+  sv: bättre
+  th: ดีกว่า
+  tr: daha iyi
+  uk: краще
+  ur: بہتر
+  vi: tốt hơn
+  zh: 更好的
+================================================================================
+ID 1287: subject
+RU: предмет изучения, подлежащее
+  ar: موضوع دراسة، خاضع لـ
+  bg: предмет на изследване, подчинен на
+  bn: বিষয়
+  cs: předmět studia, podléhající
+  da: emne for studie, underlagt
+  de: Thema, Fach, Subjekt
+  el: αντικείμενο σπουδών, υπό την επιφύλαξη
+  es: asignatura, tema, sujeto a
+  et: õppeaine, millele järgneb
+  fa: موضوع، درس
+  fi: tutkimuskohde, kohteena
+  fr: matière, sujet
+  hi: अध्ययन का विषय, के अधीन
+  hr: predmet proučavanja, podložan
+  hu: tanulmány tárgya, figyelemmel
+  id: subjek, mata pelajaran
+  it: materia, soggetto
+  ja: 研究対象
+  kk: зерттеу тақырыбы, тақырыбы
+  ko: 연구 대상, ~의 주제
+  lt: studijų dalykas, atsižvelgiant į
+  lv: studiju priekšmets, pakļauts
+  pl: przedmiot, temat, podmiot
+  pt: assunto, tema, sujeito
+  ro: subiect de studiu, supus la
+  sk: predmet štúdia, podliehajúci
+  sl: predmet študija, predmet
+  sv: studieämne, föremål för
+  th: หัวข้อการศึกษา, หัวข้อ
+  tr: konu, ders, tabi olduğu
+  uk: предмет вивчення, підмет
+  ur: مضمون، موضوع
+  vi: môn học, chủ đề
+  zh: 主题
+================================================================================
+ID 1288: recently
+RU: недавно
+  ar: مؤخرًا
+  bg: наскоро
+  bn: সম্প্রতি
+  cs: nedávno
+  da: for nylig
+  de: kürzlich
+  el: πρόσφατα
+  es: recientemente
+  et: hiljuti
+  fa: اخیراً
+  fi: äskettäin
+  fr: récemment
+  hi: हाल ही में
+  hr: nedavno
+  hu: nemrég
+  id: baru-baru ini
+  it: recentemente
+  ja: 最近
+  kk: жақында
+  ko: 최근에
+  lt: neseniai
+  lv: nesen
+  pl: Ostatnio
+  pt: recentemente
+  ro: recent
+  sk: nedávno
+  sl: pred kratkim
+  sv: nyligen
+  th: เมื่อเร็วๆ นี้
+  tr: son zamanlarda
+  uk: нещодавно
+  ur: حال ہی میں
+  vi: gần đây
+  zh: 最近
+================================================================================
+ID 1289: garden
+RU: сад
+  ar: حديقة
+  bg: градина
+  bn: বাগান
+  cs: zahrada
+  da: have
+  de: Garten
+  el: κήπος
+  es: jardín
+  et: aed
+  fa: باغ
+  fi: puutarha
+  fr: jardin
+  hi: बगीचा
+  hr: vrt
+  hu: kert
+  id: taman
+  it: giardino
+  ja: 庭
+  kk: бақ
+  ko: 정원
+  lt: sodas
+  lv: dārzs
+  pl: ogród
+  pt: jardim
+  ro: grădină
+  sk: záhrada
+  sl: vrt
+  sv: trädgård
+  th: สวน
+  tr: bahçe
+  uk: сад
+  ur: باغ
+  vi: vườn
+  zh: 花园
+================================================================================
+ID 1290: disease
+RU: болезнь
+  ar: مرض
+  bg: болест
+  bn: রোগ
+  cs: choroba
+  da: sygdom
+  de: Krankheit
+  el: ασθένεια
+  es: enfermedad
+  et: haigus
+  fa: بیماری
+  fi: sairaus
+  fr: maladie
+  hi: रोग
+  hr: bolest
+  hu: betegség
+  id: penyakit
+  it: malattia
+  ja: 病気
+  kk: ауру
+  ko: 질병
+  lt: liga
+  lv: slimība
+  pl: choroba
+  pt: doença
+  ro: boală
+  sk: choroba
+  sl: bolezen
+  sv: sjukdom
+  th: โรค
+  tr: hastalık
+  uk: хвороба
+  ur: بیماری
+  vi: bệnh tật
+  zh: 疾病
+================================================================================
+ID 1291: function
+RU: функция
+  ar: وظيفة
+  bg: функция
+  bn: কার্য, কাজ করা
+  cs: funkce
+  da: funktion
+  de: Funktion
+  el: λειτουργία
+  es: función
+  et: funktsioon
+  fa: عملکرد، تابع
+  fi: toiminto
+  fr: fonction
+  hi: कार्य
+  hr: funkcija
+  hu: funkció
+  id: fungsi
+  it: funzione
+  ja: 機能
+  kk: функция
+  ko: 기능
+  lt: funkcija
+  lv: funkcija
+  pl: funkcja
+  pt: função
+  ro: funcţie
+  sk: funkcia
+  sl: funkcija
+  sv: funktion
+  th: หน้าที่
+  tr: işlev
+  uk: функція
+  ur: کام، فعل
+  vi: chức năng
+  zh: 功能
+================================================================================
+ID 1292: property
+RU: свойство, имущество
+  ar: ممتلكات
+  bg: имот, актив
+  bn: সম্পত্তি, বৈশিষ্ট্য
+  cs: majetek, aktivum
+  da: ejendom, ejendele
+  de: Eigentum, Vermögen
+  el: περιουσία, περιουσιακό στοιχείο
+  es: propiedad, activo
+  et: vara
+  fa: ویژگی، ملک
+  fi: omaisuus
+  fr: biens, actifs
+  hi: संपत्ति, सामान
+  hr: imovina, posjedi
+  hu: ingatlan, vagyontárgy
+  id: properti, harta, sifat
+  it: proprietà, bene
+  ja: 財産
+  kk: мүлік
+  ko: 재산, 소유물
+  lt: turtas
+  lv: īpašums, mantas
+  pl: nieruchomość, majątek
+  pt: propriedade, ativo
+  ro: proprietate, activ
+  sk: majetok, aktívum
+  sl: premoženje, sredstvo
+  sv: egendom, ägodelar
+  th: ทรัพย์สิน, สิ่งของ
+  tr: mülk, varlık
+  uk: властивість, майно
+  ur: جائیداد، خاصیت
+  vi: tài sản, vật sở hữu
+  zh: 财产
+================================================================================
+ID 1293: direct
+RU: прямой, направлять, управлять
+  ar: مباشر، يوجّه، يدير
+  bg: насочвам, ръководя, управлявам
+  bn: সরাসরি, পরিচালনা করা
+  cs: řídit
+  da: direkte, styre, administrere
+  de: direkt, leiten, anweisen
+  el: κατευθύνω, καθοδηγώ, διαχειρίζομαι
+  es: directo, dirigir, guiar
+  et: suunata, juhtida
+  fa: مستقیم، هدایت کردن
+  fi: suora, ohjaa, hallitse
+  fr: diriger, guider, gérer
+  hi: प्रत्यक्ष, निर्देशित
+  hr: usmjeravati, upravljati
+  hu: irányít
+  id: langsung, mengarahkan
+  it: diretto, dirigere
+  ja: 直接する、管理する
+  kk: бағыттау, басқару
+  ko: 직접하다, 관리하다
+  lt: nukreipti, vadovauti, valdyti
+  lv: tiešs, vadīt
+  pl: bezpośredni, kierować
+  pt: direto, direcionar
+  ro: direcționează, ghidează, gestionează
+  sk: riadiť, viesť
+  sl: usmerjati, voditi, upravljati
+  sv: direkt, styra, hantera
+  th: โดยตรง, จัดการ
+  tr: doğrudan, yönetmek
+  uk: прямий, керувати
+  ur: براہ راست، ہدایت دینا
+  vi: trực tiếp, chỉ đạo
+  zh: 直接的
+================================================================================
+ID 1294: writing
+RU: написание, произведение, письменность
+  ar: كتابة، عمل، لغة مكتوبة
+  bg: писане, работа
+  bn: লেখা
+  cs: psaní, práce
+  da: skrivning, arbejde, skriftsprog
+  de: Schreiben, Schriftstück
+  el: γραφή, εργασία, γράψιμο
+  es: escritura, redacción
+  et: kirjutamine, töö
+  fa: نوشتن، نوشته
+  fi: kirjoittaminen, työ, kirjoitettu kieli
+  fr: écriture, écrit
+  hi: लेखन, कार्य, लिखित भाषा
+  hr: pisanje, rad, pisani jezik
+  hu: írás, munka
+  id: tulisan, penulisan
+  it: scrittura, lavoro
+  ja: 書く、仕事、書き言葉
+  kk: жазу, жұмыс
+  ko: 글쓰기, 필기
+  lt: rašymas, darbas
+  lv: rakstīšana, darbs, rakstu valoda
+  pl: pisanie, tekst
+  pt: escrita, obra
+  ro: scris, muncă
+  sk: písanie, práca
+  sl: pisanje, delo
+  sv: skrivande, arbete, skriftspråk
+  th: การเขียน, งาน, ภาษาเขียน
+  tr: yazma, yazı
+  uk: письмо, твір
+  ur: تحریر
+  vi: viết lách, bài viết
+  zh: 写作
+================================================================================
+ID 1295: online
+RU: онлайн
+  ar: عبر الإنترنت
+  bg: онлайн
+  bn: অনলাইনে
+  cs: online
+  da: online
+  de: online
+  el: διαδικτυακά
+  es: en línea
+  et: võrgus
+  fa: آنلاین
+  fi: verkossa
+  fr: en ligne
+  hi: ऑनलाइन
+  hr: online
+  hu: online
+  id: daring
+  it: online
+  ja: オンライン
+  kk: онлайн
+  ko: 온라인
+  lt: internete
+  lv: tiešsaistē
+  pl: w sieci
+  pt: online
+  ro: online
+  sk: online
+  sl: na spletu
+  sv: online
+  th: ออนไลน์
+  tr: çevrimiçi
+  uk: онлайн
+  ur: آن لائن
+  vi: trực tuyến
+  zh: 在线
+================================================================================
+ID 1296: position
+RU: позиция
+  ar: منصب
+  bg: позиция
+  bn: অবস্থান
+  cs: pozice
+  da: position
+  de: Position
+  el: θέση
+  es: posición
+  et: positsioon
+  fa: موقعیت، جایگاه
+  fi: asema
+  fr: position
+  hi: पद
+  hr: položaj
+  hu: pozíció
+  id: posisi
+  it: posizione
+  ja: 立場
+  kk: лауазым
+  ko: 위치
+  lt: pozicija
+  lv: pozīcija
+  pl: pozycja
+  pt: posição
+  ro: poziţie
+  sk: pozícia
+  sl: položaj
+  sv: position
+  th: ตำแหน่ง
+  tr: konum
+  uk: позиція
+  ur: مقام، پوزیشن
+  vi: vị trí
+  zh: 位置
+================================================================================
+ID 1297: contact
+RU: контакт
+  ar: اتصال
+  bg: контакт
+  bn: যোগাযোগ
+  cs: kontakt
+  da: kontakt
+  de: Kontakt
+  el: επαφή
+  es: contacto
+  et: kontakt
+  fa: تماس، تماس گرفتن
+  fi: kontakti
+  fr: contact
+  hi: संपर्क
+  hr: kontakt
+  hu: érintkezés
+  id: kontak
+  it: contatto
+  ja: 連絡
+  kk: байланыс
+  ko: 연락
+  lt: kontaktas
+  lv: kontakts
+  pl: kontakt
+  pt: contato
+  ro: contact
+  sk: kontakt
+  sl: stik
+  sv: kontakt
+  th: ติดต่อ
+  tr: temas etmek
+  uk: контакт
+  ur: رابطہ
+  vi: liên hệ
+  zh: 联系
+================================================================================
+ID 1298: between
+RU: между
+  ar: بين
+  bg: между
+  bn: মধ্যে
+  cs: mezi
+  da: mellem
+  de: zwischen
+  el: μεταξύ
+  es: entre
+  et: vahel
+  fa: بین
+  fi: välillä
+  fr: entre
+  hi: बीच
+  hr: između
+  hu: között
+  id: antara
+  it: fra
+  ja: 間
+  kk: арасында
+  ko: ~사이에
+  lt: tarp
+  lv: starp
+  pl: między
+  pt: entre
+  ro: între
+  sk: medzi
+  sl: med
+  sv: mellan
+  th: ระหว่าง
+  tr: arasında
+  uk: між
+  ur: کے درمیان
+  vi: giữa
+  zh: 在……之间
+================================================================================
+ID 1299: century
+RU: век
+  ar: قرن
+  bg: век
+  bn: শতাব্দী
+  cs: století
+  da: århundrede
+  de: Jahrhundert
+  el: αιώνας
+  es: siglo
+  et: sajand
+  fa: قرن
+  fi: vuosisata
+  fr: siècle
+  hi: शताब्दी
+  hr: stoljeća
+  hu: század
+  id: abad
+  it: secolo
+  ja: 世紀
+  kk: ғасыр
+  ko: 세기
+  lt: šimtmetis
+  lv: gadsimts
+  pl: wiek
+  pt: século
+  ro: secol
+  sk: storočia
+  sl: stoletje
+  sv: århundrade
+  th: ศตวรรษ
+  tr: yüzyıl
+  uk: століття
+  ur: صدی
+  vi: thế kỷ
+  zh: 世纪
+================================================================================
+ID 1300: examine
+RU: исследовать, осматривать, экзаменовать
+  ar: يفحص، يدرس، يمتحن
+  bg: изследвам, инспектирам
+  bn: পরীক্ষা করা
+  cs: prozkoumat, prohlédnout
+  da: udforske, undersøge
+  de: untersuchen, prüfen, abfragen
+  el: εξετάζω, επιθεωρώ
+  es: examinar, inspeccionar
+  et: uurima, kontrollima
+  fa: بررسی کردن
+  fi: tutkia
+  fr: examiner, inspecter
+  hi: अन्वेषण करना, जांच करना
+  hr: istraživati, ispitivati
+  hu: megvizsgál
+  id: memeriksa, menguji
+  it: esaminare, ispezionare
+  ja: 探る、調べる
+  kk: зерттеу, тексеру
+  ko: 탐구하다, 조사하다
+  lt: apžiūrėti
+  lv: izpētīt
+  pl: badać, egzaminować
+  pt: examinar, inspecionar
+  ro: examinează, inspectează
+  sk: skúmať, kontrolovať
+  sl: pregledati
+  sv: utforska, undersöka
+  th: สำรวจ, ตรวจสอบ
+  tr: incelemek, denetlemek
+  uk: досліджувати, оглядати
+  ur: جانچنا، معائنہ کرنا
+  vi: khám phá, xem xét
+  zh: 检查
+================================================================================
+ID 1301: language
+RU: язык
+  ar: لغة
+  bg: език
+  bn: ভাষা
+  cs: jazyk
+  da: sprog
+  de: Sprache
+  el: γλώσσα
+  es: idioma
+  et: keel
+  fa: زبان
+  fi: kieli
+  fr: langue
+  hi: भाषा
+  hr: jezik
+  hu: nyelv
+  id: bahasa
+  it: lingua
+  ja: 言語
+  kk: тіл
+  ko: 언어
+  lt: kalba
+  lv: valoda
+  pl: język
+  pt: idioma, linguagem
+  ro: limbă
+  sk: jazyk
+  sl: jezik
+  sv: språk
+  th: ภาษา
+  tr: dil
+  uk: мова
+  ur: زبان
+  vi: ngôn ngữ
+  zh: 语言

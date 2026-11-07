@@ -591,7 +591,20 @@ async function run() {
     { id: 1247, word: 'easily', lang: 'fi', expected: 'helposti, vaivattomasti' },
     { id: 1247, word: 'easily', lang: 'hi', expected: 'आसानी से, सरलता से' },
     { id: 1251, word: 'target', lang: 'fr', expected: 'cible, objectif, viser' },
-    { id: 1251, word: 'target', lang: 'it', expected: 'bersaglio, obiettivo, traguardo' }
+    { id: 1251, word: 'target', lang: 'it', expected: 'bersaglio, obiettivo, traguardo' },
+
+    // Batch 1252-1301
+    { id: 1266, word: 'express', lang: 'fi', expected: 'ilmaista, lausua, pika-' },
+    { id: 1266, word: 'express', lang: 'hu', expected: 'kifejez, kinyilvánít, expressz' },
+    { id: 1272, word: 'course', lang: 'cs', expected: 'kurz, chod, průběh' },
+    { id: 1272, word: 'course', lang: 'fr', expected: 'cours, parcours, plat' },
+    { id: 1278, word: 'quickly', lang: 'fr', expected: 'rapidement, vite' },
+    { id: 1278, word: 'quickly', lang: 'it', expected: 'rapidamente, velocemente, presto' },
+    { id: 1287, word: 'subject', lang: 'fr', expected: 'sujet, matière, question' },
+    { id: 1287, word: 'subject', lang: 'cs', expected: 'předmět, téma, podmět' },
+    { id: 1292, word: 'property', lang: 'de', expected: 'Eigenschaft, Eigentum, Immobilie' },
+    { id: 1299, word: 'century', lang: 'sk', expected: 'storočie, vek' },
+    { id: 1299, word: 'century', lang: 'hr', expected: 'stoljeće, vijek' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -678,6 +691,10 @@ async function run() {
   const calib25FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1202_1251_calibrations.cjs'), 'utf8');
   const calib25ObjStr = calib25FileContent.slice(calib25FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib25FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs25 = eval('(' + calib25ObjStr + ')');
+
+  const calib26FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1252_1301_calibrations.cjs'), 'utf8');
+  const calib26ObjStr = calib26FileContent.slice(calib26FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib26FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs26 = eval('(' + calib26ObjStr + ')');
 
   // Merge batch 1-50 calibrations into fsMap
   let mergedCount = 0;
@@ -1003,6 +1020,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1252-1301 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs26)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -1072,6 +1112,7 @@ async function run() {
     ...Object.keys(calibs23),
     ...Object.keys(calibs24),
     ...Object.keys(calibs25),
+    ...Object.keys(calibs26),
     ...functionalIds.map(String)
   ]);
 
