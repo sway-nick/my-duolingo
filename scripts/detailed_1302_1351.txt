@@ -1,0 +1,1850 @@
+ID 1302 (national):
+  ru: национальный
+  uk: національний
+  de: national
+  es: nacional
+  fr: national
+  pl: krajowy
+  it: nazionale
+  tr: ulusal
+  pt: nacional
+  ro: naţional
+  bg: национален
+  cs: národní
+  sk: národný
+  hu: nemzeti
+  el: εθνικός
+  sl: nacionalni
+  et: riiklik
+  lt: nacionalinis
+  da: national
+  fi: kansallinen
+  sv: nationell
+  hr: nacionalni
+  lv: nacionālais
+  hi: राष्ट्रीय
+  ar: وطني
+  id: nasional
+  vi: quốc gia
+  th: ระดับชาติ
+  ko: 국가적인
+  ja: 国の
+  bn: জাতীয়
+  fa: ملی
+  zh: 国家的
+  ur: قومی
+  kk: ұлттық
+
+ID 1303 (flight):
+  ru: полет
+  uk: політ
+  de: Flug
+  es: vuelo
+  fr: vol
+  pl: lot
+  it: volo
+  tr: uçuş
+  pt: voo
+  ro: zbor
+  bg: полет
+  cs: let
+  sk: let
+  hu: repülési
+  el: πτήση
+  sl: let
+  et: lend
+  lt: skrydis
+  da: flyvning
+  fi: lento
+  sv: flyg
+  hr: let
+  lv: lidojums
+  hi: उड़ान
+  ar: رحلة جوية
+  id: penerbangan
+  vi: chuyến bay
+  th: เที่ยวบิน
+  ko: 비행
+  ja: 飛行機
+  bn: উড়ান
+  fa: پرواز
+  zh: 航班
+  ur: پرواز
+  kk: ұшу
+
+ID 1304 (strange):
+  ru: странный
+  uk: дивний
+  de: seltsam
+  es: extraño
+  fr: étrange
+  pl: dziwny
+  it: strano
+  tr: garip
+  pt: estranho
+  ro: ciudat
+  bg: странно
+  cs: zvláštní
+  sk: zvláštny
+  hu: furcsa
+  el: παράξενος
+  sl: čudno
+  et: kummaline
+  lt: keista
+  da: mærkelig
+  fi: outo
+  sv: konstig
+  hr: neobičan
+  lv: dīvains
+  hi: अजीब
+  ar: غريب
+  id: aneh
+  vi: kỳ lạ
+  th: แปลก
+  ko: 이상한
+  ja: 奇妙な
+  bn: অদ্ভুত
+  fa: عجیب
+  zh: 奇怪的
+  ur: عجیب
+  kk: таңқаларлық
+
+ID 1305 (comment):
+  ru: комментарий
+  uk: коментар
+  de: Kommentar
+  es: comentario
+  fr: commentaire
+  pl: komentarz
+  it: commento
+  tr: Yorum
+  pt: comentário
+  ro: comentariu
+  bg: коментар
+  cs: komentář
+  sk: komentár
+  hu: megjegyzés
+  el: σχόλιο
+  sl: komentar
+  et: kommentaar
+  lt: komentaras
+  da: kommentar
+  fi: kommentti
+  sv: kommentar
+  hr: komentar
+  lv: komentārs
+  hi: टिप्पणी
+  ar: تعليق
+  id: komentar
+  vi: bình luận
+  th: ความคิดเห็น
+  ko: 논평
+  ja: コメント
+  bn: মন্তব্য
+  fa: نظر، اظهار نظر
+  zh: 评论
+  ur: تبصرہ
+  kk: түсініктеме
+
+ID 1306 (distance):
+  ru: расстояние
+  uk: відстань
+  de: Distanz
+  es: distancia
+  fr: distance
+  pl: dystans
+  it: distanza
+  tr: mesafe
+  pt: distância
+  ro: distanţă
+  bg: разстояние
+  cs: vzdálenost
+  sk: vzdialenosť
+  hu: távolság
+  el: απόσταση
+  sl: razdalja
+  et: kaugus
+  lt: atstumas
+  da: afstand
+  fi: etäisyys
+  sv: avstånd
+  hr: udaljenost
+  lv: attālums
+  hi: दूरी
+  ar: مسافة
+  id: jarak
+  vi: khoảng cách
+  th: ระยะทาง
+  ko: 거리
+  ja: 距離
+  bn: দূরত্ব
+  fa: فاصله
+  zh: 距离
+  ur: فاصلہ
+  kk: қашықтық
+
+ID 1307 (director):
+  ru: директор, режиссер
+  uk: директор, режисер
+  de: Regisseur, Produzent
+  es: director, realizador
+  fr: réalisateur, producteur
+  pl: dyrektor, reżyser
+  it: regista, produttore
+  tr: yönetmen, direktör
+  pt: diretor, produtor
+  ro: regizor, producător
+  bg: режисьор, продуцент
+  cs: režisér, producent
+  sk: režisér, producent
+  hu: rendező, producer
+  el: σκηνοθέτης, παραγωγός
+  sl: režiser, producent
+  et: režissöör, produtsent
+  lt: režisierius, prodiuseris
+  da: instruktør, producer
+  fi: ohjaaja, tuottaja
+  sv: regissör, ​​producent
+  hr: redatelj, producent
+  lv: režisors, producents
+  hi: निर्देशक, निर्माता
+  ar: مدير، مخرج
+  id: direktur, sutradara
+  vi: đạo diễn, nhà sản xuất
+  th: ผู้กำกับ, โปรดิวเซอร์
+  ko: 감독, 제작자
+  ja: 監督、プロデューサー
+  bn: পরিচালক
+  fa: مدیر، کارگردان
+  zh: 导演
+  ur: ڈائریکٹر
+  kk: режиссер, продюсер
+
+ID 1308 (recall):
+  ru: отзывать, вспоминать
+  uk: відкликати, згадувати
+  de: erinnern, sich erinnern
+  es: recordar, retirar
+  fr: se souvenir, se rappeler
+  pl: przypomnieć sobie, odwołać
+  it: ricordare
+  tr: hatırlamak, anımsamak
+  pt: lembrar, recolher
+  ro: amintește-ți
+  bg: припомни, запомни
+  cs: vzpomenout si
+  sk: spomenúť si, pamätať si
+  hu: felidézni, emlékezni
+  el: θυμάμαι
+  sl: spomni se
+  et: meenutada
+  lt: prisiminti
+  da: tilbagekaldelse
+  fi: muistaminen
+  sv: återkallelse
+  hr: prisjećanje, opoziv
+  lv: atsaukt, atsaukšana
+  hi: याद करना
+  ar: يستدعي، يتذكّر
+  id: ingat, mengingat kembali
+  vi: nhớ lại, hồi tưởng
+  th: เรียกคืน
+  ko: 회상, 기억하다
+  ja: 思い出す
+  bn: মনে করা, প্রত্যাহার করা
+  fa: به یاد آوردن، فراخواندن
+  zh: 回忆
+  ur: یاد کرنا، واپس بلانا
+  kk: кері шақыру
+
+ID 1309 (control):
+  ru: контроль
+  uk: контроль
+  de: Kontrolle
+  es: control
+  fr: contrôle
+  pl: kontrola
+  it: controllare
+  tr: kontrol
+  pt: controle, controlar
+  ro: controla
+  bg: контрол
+  cs: řízení
+  sk: kontrola
+  hu: ellenőrzés
+  el: έλεγχος
+  sl: nadzor
+  et: kontroll
+  lt: kontrolė
+  da: kontrol
+  fi: kontrolli
+  sv: kontroll
+  hr: kontrola
+  lv: kontrole
+  hi: नियंत्रण
+  ar: سيطرة
+  id: kontrol
+  vi: kiểm soát
+  th: ควบคุม
+  ko: 통제
+  ja: 管理
+  bn: নিয়ন্ত্রণ
+  fa: کنترل، کنترل کردن
+  zh: 控制
+  ur: کنٹرول، قابو
+  kk: бақылау
+
+ID 1310 (period):
+  ru: период
+  uk: період
+  de: Zeitraum
+  es: período
+  fr: période
+  pl: okres
+  it: periodo
+  tr: dönem
+  pt: período
+  ro: perioadă
+  bg: период
+  cs: období
+  sk: obdobie
+  hu: időszak
+  el: περίοδος
+  sl: obdobje
+  et: periood
+  lt: laikotarpis
+  da: periode
+  fi: ajanjakso
+  sv: period
+  hr: razdoblje
+  lv: periods
+  hi: अवधि
+  ar: فترة
+  id: periode
+  vi: thời kỳ
+  th: ช่วงเวลา
+  ko: 기간
+  ja: 期間
+  bn: সময়কাল
+  fa: دوره، مدت
+  zh: 时期
+  ur: مدت
+  kk: кезең
+
+ID 1311 (notice):
+  ru: уведомление, заметка
+  uk: повідомлення, помічати
+  de: Benachrichtigung, Hinweis
+  es: aviso, notar, darse cuenta
+  fr: notification, note
+  pl: powiadomienie, notatka
+  it: notifica, nota
+  tr: bildirim, not
+  pt: notificação, nota
+  ro: notificare, notă
+  bg: известие, бележка
+  cs: oznámení, poznámka
+  sk: oznámenie, poznámka
+  hu: értesítés, megjegyzés
+  el: ειδοποίηση, σημείωση
+  sl: obvestilo, opomba
+  et: teade, märkus
+  lt: pranešimas, pastaba
+  da: varsel, note
+  fi: ilmoitus, huomautus
+  sv: meddelande, anteckning
+  hr: obavijest, bilješka
+  lv: paziņojums, piezīme
+  hi: सूचना
+  ar: إشعار، ملاحظة
+  id: pemberitahuan, catatan
+  vi: thông báo, ghi chú
+  th: ประกาศ, บันทึก
+  ko: 통지, 메모
+  ja: 通知、メモ
+  bn: নোটিশ, লক্ষ্য করা
+  fa: اطلاعیه، متوجه شدن
+  zh: 通知
+  ur: اطلاع، نوٹس
+  kk: ескерту, ескертпе
+
+ID 1312 (dollar):
+  ru: доллар
+  uk: долар
+  de: Dollar
+  es: dólar
+  fr: dollar
+  pl: dolar
+  it: dollaro
+  tr: dolar
+  pt: dólar
+  ro: dolar
+  bg: долар
+  cs: dolar
+  sk: dolár
+  hu: dollár
+  el: δολάριο
+  sl: dolar
+  et: dollar
+  lt: doleris
+  da: dollar
+  fi: dollari
+  sv: dollar
+  hr: dolar
+  lv: dolārs
+  hi: डॉलर
+  ar: دولار
+  id: dolar
+  vi: đô la
+  th: ดอลลาร์
+  ko: 달러
+  ja: ドル
+  bn: ডলার
+  fa: دلار
+  zh: 美元
+  ur: ڈالر
+  kk: доллар
+
+ID 1313 (analysis):
+  ru: анализ
+  uk: аналіз
+  de: Analyse
+  es: análisis
+  fr: analyse
+  pl: analiza
+  it: analisi
+  tr: analiz
+  pt: análise
+  ro: analiză
+  bg: анализ
+  cs: analýza
+  sk: analýza
+  hu: elemzés
+  el: ανάλυση
+  sl: analiza
+  et: analüüs
+  lt: analizė
+  da: analyse
+  fi: analyysi
+  sv: analys
+  hr: analiza
+  lv: analīze
+  hi: विश्लेषण
+  ar: تحليل
+  id: analisis
+  vi: phân tích
+  th: การวิเคราะห์
+  ko: 분석
+  ja: 分析
+  bn: বিশ্লেষণ
+  fa: تحلیل
+  zh: 分析
+  ur: تجزیہ
+  kk: талдау
+
+ID 1314 (conflict):
+  ru: конфликт
+  uk: конфлікт
+  de: Konflikt
+  es: conflicto
+  fr: conflit
+  pl: konflikt
+  it: conflitto
+  tr: anlaşmazlık
+  pt: conflito
+  ro: conflict
+  bg: конфликт
+  cs: konflikt
+  sk: konflikt
+  hu: konfliktus
+  el: σύγκρουση
+  sl: konflikt
+  et: konflikt
+  lt: konfliktas
+  da: konflikt
+  fi: konflikti
+  sv: konflikt
+  hr: sukob
+  lv: konflikts
+  hi: संघर्ष
+  ar: صراع
+  id: konflik
+  vi: xung đột
+  th: ความขัดแย้ง
+  ko: 갈등
+  ja: 対立
+  bn: দ্বন্দ্ব
+  fa: درگیری، تعارض
+  zh: 冲突
+  ur: تنازع
+  kk: қақтығыс
+
+ID 1315 (decision):
+  ru: решение
+  uk: рішення
+  de: Lösung
+  es: decisión
+  fr: solution
+  pl: decyzja
+  it: soluzione
+  tr: karar
+  pt: decisão
+  ro: soluţie
+  bg: решение
+  cs: řešení
+  sk: riešenie
+  hu: megoldás
+  el: διάλυμα
+  sl: rešitev
+  et: lahendus
+  lt: sprendimas
+  da: beslutning
+  fi: päätös
+  sv: beslut
+  hr: odluka
+  lv: lēmums
+  hi: निर्णय
+  ar: قرار
+  id: keputusan
+  vi: quyết định
+  th: การตัดสินใจ
+  ko: 결정
+  ja: 決定
+  bn: সিদ্ধান্ত
+  fa: تصمیم
+  zh: 决定
+  ur: فیصلہ
+  kk: шешім
+
+ID 1316 (strike):
+  ru: ударять, забастовка
+  uk: ударяти, страйк
+  de: Treffer, Schlag
+  es: huelga, golpear, atacar
+  fr: frapper
+  pl: uderzać, strajk
+  it: colpire
+  tr: vurmak, grev yapmak
+  pt: golpear, greve
+  ro: lovi, lovitură
+  bg: удар, стачка
+  cs: udeřit
+  sk: udrieť, zasiahnuť
+  hu: ütés
+  el: χτύπημα
+  sl: udariti
+  et: lööma
+  lt: smūgis
+  da: strejke
+  fi: lakko
+  sv: strejk
+  hr: štrajk
+  lv: streiks
+  hi: हड़ताल
+  ar: يضرب، إضراب، يضرب عن العمل
+  id: memukul, mogok kerja
+  vi: đình công, đánh nhau
+  th: การประท้วงหยุดงาน, การประท้วง
+  ko: 파업, 파업하다
+  ja: ストライキ
+  bn: আঘাত করা, ধর্মঘট
+  fa: ضربه زدن، اعتصاب
+  zh: 罢工
+  ur: مارنا، ہڑتال
+  kk: ереуіл
+
+ID 1317 (tonight):
+  ru: сегодня вечером
+  uk: сьогодні ввечері
+  de: heute Abend
+  es: esta noche
+  fr: ce soir
+  pl: dziś wieczorem
+  it: stasera
+  tr: bu akşam
+  pt: hoje à noite
+  ro: în seara asta
+  bg: тази вечер
+  cs: dnes večer
+  sk: dnes večer
+  hu: ma este
+  el: απόψε
+  sl: nocoj
+  et: täna õhtul
+  lt: šįvakar
+  da: i aften
+  fi: tänä iltana
+  sv: ikväll
+  hr: večeras
+  lv: šovakar
+  hi: आज रात
+  ar: الليلة
+  id: malam ini
+  vi: tối nay
+  th: คืนนี้
+  ko: 오늘 밤
+  ja: 今夜
+  bn: আজ রাতে
+  fa: امشب
+  zh: 今晚
+  ur: آج رات
+  kk: бүгін кешке
+
+ID 1318 (doctor):
+  ru: врач
+  uk: лікар
+  de: Arzt
+  es: doctor
+  fr: médecin
+  pl: lekarz
+  it: medico
+  tr: doktor
+  pt: doutor
+  ro: doctor
+  bg: лекар
+  cs: lékař
+  sk: lekár
+  hu: orvos
+  el: γιατρός
+  sl: zdravnik
+  et: arst
+  lt: gydytojas
+  da: læge
+  fi: lääkäri
+  sv: läkare
+  hr: liječnik
+  lv: ārsts
+  hi: डॉक्टर
+  ar: طبيب
+  id: dokter
+  vi: bác sĩ
+  th: แพทย์
+  ko: 의사
+  ja: 医者
+  bn: ডাক্তার
+  fa: پزشک
+  zh: 医生
+  ur: ڈاکٹر
+  kk: дәрігер
+
+ID 1319 (clearly):
+  ru: очевидно, четко
+  uk: очевидно, чітко
+  de: offensichtlich, klar
+  es: obviamente, claramente
+  fr: évidemment, clairement
+  pl: wyraźnie, jasno
+  it: ovviamente, chiaramente
+  tr: açıkça, net bir şekilde
+  pt: obviamente, claramente
+  ro: evident, clar
+  bg: очевидно, ясно
+  cs: zřejmě, jasně
+  sk: zrejme, jasne
+  hu: nyilvánvalóan, egyértelműen
+  el: προφανώς, σαφώς
+  sl: očitno, jasno
+  et: ilmselgelt, selgelt
+  lt: akivaizdu, aišku
+  da: åbenlys, klar
+  fi: ilmeinen, selvä
+  sv: uppenbar, tydlig
+  hr: očit, jasan
+  lv: acīmredzams, skaidrs
+  hi: स्पष्ट
+  ar: واضح، جليّ
+  id: jelas, terang
+  vi: rõ ràng, hiển nhiên
+  th: ชัดเจน
+  ko: 명백한, 분명한
+  ja: 明らかな
+  bn: স্পষ্টভাবে
+  fa: به‌وضوح
+  zh: 清楚地
+  ur: واضح طور پر
+  kk: айқын, анық
+
+ID 1320 (engage):
+  ru: привлекать, заинтересовывать
+  uk: залучати, зацікавлювати
+  de: anziehen, Interesse
+  es: involucrar, atraer
+  fr: attirer, intérêt
+  pl: angażować, przyciągać
+  it: attrarre, interesse
+  tr: ilgilenmek, dahil olmak
+  pt: envolver, engajar
+  ro: atrage, interesează
+  bg: привличам, интересувам
+  cs: přitahovat, zajímat
+  sk: prilákať, zaujať
+  hu: vonz, érdeklődik
+  el: έλκω, ενδιαφέρω
+  sl: pritegniti, zanimati
+  et: köita, huvitada
+  lt: pritraukti, sudominti
+  da: tiltrække, interesse
+  fi: herättää, kiinnostaa
+  sv: attrahera, intressera
+  hr: privlačiti, zanimati
+  lv: piesaistīt, interese
+  hi: आकर्षित करना
+  ar: يشارك، ينخرط، يجذب
+  id: melibatkan, menarik minat
+  vi: thu hút, quan tâm
+  th: ดึงดูด, ความสนใจ
+  ko: 참여시키다, 끌어들이다
+  ja: 引き付ける、興味をそそる
+  bn: যুক্ত করা, আকৃষ্ট করা
+  fa: درگیر کردن، جذب کردن
+  zh: 参与
+  ur: مشغول کرنا، شامل کرنا
+  kk: тарту, қызығушылық
+
+ID 1321 (relate):
+  ru: иметь отношение к, рассказывать
+  uk: стосуватися, розповідати
+  de: beziehen auf, berichten
+  es: relacionarse, relatar
+  fr: raconter, être lié à
+  pl: dotyczyć, opowiadać
+  it: riferire, collegare
+  tr: ilgili olmak, anlatmak
+  pt: relacionar, contar
+  ro: a fi înrudit cu, a povesti despre
+  bg: да бъдеш свързан с, да разказваш за
+  cs: být s něčím příbuzný, vyprávět o
+  sk: byť s niečím príbuzný, rozprávať o
+  hu: rokonságban állni, mesélni róla
+  el: να έχω σχέση με, να μιλήσω για
+  sl: biti v sorodu, pripovedovati o
+  et: seotud olema, millestki rääkima
+  lt: būti susijusiam, papasakoti apie
+  da: forholde sig til, fortælle
+  fi: liittyä, kertoa
+  sv: relatera till, berätta
+  hr: odnositi se na, reći
+  lv: saistīt ar, pateikt
+  hi: संबंधित करना
+  ar: يتعلّق بـ، يروي، يربط
+  id: berhubungan, menceritakan
+  vi: liên quan đến, kể cho
+  th: เกี่ยวข้องกับ, บอก
+  ko: ~와 관련되다, 말하다
+  ja: 関係する、伝える
+  bn: সম্পর্কিত হওয়া
+  fa: ربط داشتن، تعریف کردن
+  zh: 涉及
+  ur: تعلق رکھنا، قصہ سنانا
+  kk: қатыстыру, айту
+
+ID 1322 (increase):
+  ru: увеличивать
+  uk: збільшувати, збільшення
+  de: Zunahme
+  es: aumentar
+  fr: augmenter
+  pl: zwiększać
+  it: aumento
+  tr: arttırmak
+  pt: aumentar, aumento
+  ro: crește
+  bg: увеличение
+  cs: zvýšení
+  sk: zvýšenie
+  hu: növekedés
+  el: αύξηση
+  sl: povečanje
+  et: suurendama
+  lt: padidėjimas
+  da: stigning
+  fi: lisätä
+  sv: öka
+  hr: povećati
+  lv: pieaugums
+  hi: बढ़ाना, बढ़ना
+  ar: زيادة
+  id: meningkatkan
+  vi: tăng lên
+  th: เพิ่มขึ้น
+  ko: 증가시키다
+  ja: 増加する
+  bn: বাড়ানো
+  fa: افزایش دادن، افزایش
+  zh: 增加
+  ur: بڑھانا
+  kk: өсу
+
+ID 1323 (company):
+  ru: компания
+  uk: компанія
+  de: Unternehmen
+  es: compañía
+  fr: entreprise
+  pl: firma
+  it: azienda
+  tr: şirket
+  pt: empresa
+  ro: companie
+  bg: компания
+  cs: společnost
+  sk: spoločnosť
+  hu: vállalat
+  el: εταιρεία
+  sl: podjetje
+  et: ettevõte
+  lt: įmonė
+  da: virksomhed
+  fi: yritys
+  sv: företag
+  hr: tvrtka
+  lv: uzņēmums
+  hi: कंपनी
+  ar: شركة
+  id: perusahaan
+  vi: công ty
+  th: บริษัท
+  ko: 회사
+  ja: 会社
+  bn: কোম্পানি
+  fa: شرکت
+  zh: 公司
+  ur: کمپنی
+  kk: компания
+
+ID 1324 (matter):
+  ru: иметь значение, материя
+  uk: мати значення, матерія
+  de: um der Sache willen
+  es: importar, asunto, materia
+  fr: compter
+  pl: mieć znaczenie, sprawa
+  it: materia
+  tr: önemli olmak, madde
+  pt: importar, matéria
+  ro: a conta
+  bg: да има значение, има значение
+  cs: záležet
+  sk: záležať, záležitosť
+  hu: számítani, számít
+  el: έχω σημασία
+  sl: pomembno
+  et: oluline olema, oluline
+  lt: svarbu
+  da: sag
+  fi: asia
+  sv: materia, angelägenhet
+  hr: stvar
+  lv: jautājums
+  hi: मामला
+  ar: مسألة
+  id: berarti, masalah, materi
+  vi: vấn đề, sự việc
+  th: เรื่อง
+  ko: 문제, 사안
+  ja: 問題
+  bn: বিষয়, গুরুত্বপূর্ণ হওয়া
+  fa: اهمیت داشتن، ماده
+  zh: 事情
+  ur: معاملہ، اہمیت رکھنا
+  kk: мағынасы бар, маңызды
+
+ID 1325 (person):
+  ru: человек
+  uk: людина
+  de: Menschlich
+  es: persona
+  fr: Humain
+  pl: osoba
+  it: Umano
+  tr: İnsan
+  pt: pessoa
+  ro: Uman
+  bg: Човек
+  cs: Člověk
+  sk: Človek
+  hu: Emberi
+  el: Ανθρώπινος
+  sl: Človek
+  et: Inimene
+  lt: Žmogus
+  da: person
+  fi: henkilö
+  sv: person
+  hr: osoba
+  lv: persona
+  hi: व्यक्ति, इंसान
+  ar: شخص
+  id: orang
+  vi: người
+  th: บุคคล
+  ko: 사람
+  ja: 人
+  bn: ব্যক্তি
+  fa: شخص
+  zh: 人
+  ur: شخص
+  kk: адам
+
+ID 1326 (argument):
+  ru: аргумент, спор
+  uk: аргумент, суперечка
+  de: Streit, Auseinandersetzung
+  es: discusión, disputa
+  fr: dispute, conflit
+  pl: argument, spór
+  it: discussione, disputa
+  tr: tartışma, anlaşmazlık
+  pt: argumento, discussão
+  ro: ceartă, dispută
+  bg: спор, аргумент
+  cs: hádka, spor
+  sk: hádka, spor
+  hu: vita, érvelés
+  el: διαφωνία
+  sl: prepir, spor
+  et: vaidlus, argument
+  lt: ginčas, argumentas
+  da: argument, tvist
+  fi: argumentti, kiista
+  sv: argument, tvist
+  hr: svađa, spor
+  lv: arguments, strīds
+  hi: तर्क-वितर्क
+  ar: جدال، خلاف
+  id: argumen, perselisihan
+  vi: tranh luận, tranh chấp
+  th: การโต้แย้ง, ข้อพิพาท
+  ko: 논쟁, 분쟁
+  ja: 議論、論争
+  bn: যুক্তি, তর্ক
+  fa: استدلال، مشاجره
+  zh: 争论
+  ur: دلیل، بحث
+  kk: дау
+
+ID 1327 (client):
+  ru: клиент
+  uk: клієнт
+  de: Kunde
+  es: cliente
+  fr: client
+  pl: klient
+  it: cliente
+  tr: müşteri
+  pt: cliente
+  ro: client
+  bg: клиент
+  cs: klient
+  sk: klient
+  hu: ügyfél
+  el: πελάτης
+  sl: stranka
+  et: klient
+  lt: klientas
+  da: klient
+  fi: asiakas
+  sv: klient
+  hr: klijent
+  lv: klients
+  hi: ग्राहक
+  ar: عميل
+  id: klien
+  vi: khách hàng
+  th: ลูกค้า
+  ko: 고객
+  ja: 顧客
+  bn: গ্রাহক
+  fa: مشتری
+  zh: 客户
+  ur: گاہک
+  kk: клиент
+
+ID 1328 (amount):
+  ru: количество
+  uk: кількість
+  de: Menge
+  es: cantidad
+  fr: quantité
+  pl: ilość
+  it: quantità
+  tr: miktar
+  pt: quantidade
+  ro: cantitate
+  bg: количество
+  cs: množství
+  sk: množstvo
+  hu: mennyiség
+  el: ποσότητα
+  sl: količina
+  et: kogus
+  lt: kiekis
+  da: mængde
+  fi: määrä
+  sv: kvantitet
+  hr: količina
+  lv: daudzums
+  hi: मात्रा
+  ar: كمية
+  id: kuantitas
+  vi: số lượng
+  th: จำนวน
+  ko: 수량
+  ja: 数量
+  bn: পরিমাণ
+  fa: مقدار
+  zh: 数量
+  ur: مقدار
+  kk: саны
+
+ID 1329 (country):
+  ru: страна, родина, сельская местность
+  uk: країна, сільська місцевість
+  de: Land, Heimat, Landschaft
+  es: país, patria, campo
+  fr: pays, patrie, campagne
+  pl: kraj, ojczyzna, wieś
+  it: paese, patria, campagna
+  tr: ülke, vatan, kırsal kesim
+  pt: país, pátria, campo
+  ro: țară, patrie, sat
+  bg: страна, родина, провинция
+  cs: země, vlast, venkov
+  sk: krajina, vlasť, vidiek
+  hu: ország, haza, vidék
+  el: χώρα, πατρίδα, ύπαιθρος
+  sl: država, domovina, podeželje
+  et: maa, kodumaa, maakoht
+  lt: šalis, tėvynė, kaimas
+  da: land, hjemland, landskab
+  fi: maa, kotimaa, maaseutu
+  sv: land, hemland, landsbygd
+  hr: zemlja, domovina, selo
+  lv: valsts, dzimtene, lauki
+  hi: देश, वतन
+  ar: بلد، وطن، ريف
+  id: negara, pedesaan
+  vi: quốc gia, quê hương
+  th: ประเทศ, บ้านเกิด, ชนบท
+  ko: 국가, 고향, 시골
+  ja: 国、故郷、田舎
+  bn: দেশ
+  fa: کشور
+  zh: 国家
+  ur: ملک
+  kk: ел, отан, ауылдық жер
+
+ID 1330 (forest):
+  ru: лес
+  uk: ліс
+  de: Wald
+  es: bosque
+  fr: forêt
+  pl: las
+  it: foresta
+  tr: orman
+  pt: floresta
+  ro: pădure
+  bg: гора
+  cs: les
+  sk: les
+  hu: erdő
+  el: δάσος
+  sl: gozd
+  et: mets
+  lt: miškas
+  da: skov
+  fi: metsä
+  sv: skog
+  hr: šuma
+  lv: mežs
+  hi: जंगल
+  ar: غابة
+  id: hutan
+  vi: rừng
+  th: ป่า
+  ko: 숲
+  ja: 森
+  bn: বন
+  fa: جنگل
+  zh: 森林
+  ur: جنگل
+  kk: орман
+
+ID 1331 (winter):
+  ru: зима
+  uk: зима
+  de: Winter
+  es: invierno
+  fr: hiver
+  pl: zima
+  it: inverno
+  tr: kış
+  pt: inverno
+  ro: iarnă
+  bg: зима
+  cs: zima
+  sk: zima
+  hu: téli
+  el: χειμώνας
+  sl: zima
+  et: talv
+  lt: žiema
+  da: vinter
+  fi: talvi
+  sv: vinter
+  hr: zima
+  lv: ziema
+  hi: सर्दी
+  ar: شتاء
+  id: musim dingin
+  vi: mùa đông
+  th: ฤดูหนาว
+  ko: 겨울
+  ja: 冬
+  bn: শীতকাল
+  fa: زمستان
+  zh: 冬天
+  ur: سردی، موسمِ سرما
+  kk: қыс
+
+ID 1332 (nature):
+  ru: природа
+  uk: природа
+  de: Natur
+  es: naturaleza
+  fr: nature
+  pl: natura
+  it: natura
+  tr: doğa
+  pt: natureza
+  ro: natură
+  bg: природа
+  cs: příroda
+  sk: príroda
+  hu: természet
+  el: φύση
+  sl: narava
+  et: loodus
+  lt: gamta
+  da: natur
+  fi: luonto
+  sv: natur
+  hr: priroda
+  lv: daba
+  hi: प्रकृति
+  ar: طبيعة
+  id: alam
+  vi: thiên nhiên
+  th: ธรรมชาติ
+  ko: 자연
+  ja: 自然
+  bn: প্রকৃতি
+  fa: طبیعت
+  zh: 自然
+  ur: فطرت
+  kk: табиғат
+
+ID 1333 (quarter):
+  ru: четверть
+  uk: чверть
+  de: Quartal
+  es: trimestre, cuarto
+  fr: quart
+  pl: kwartał
+  it: trimestre
+  tr: çeyrek
+  pt: quarto, trimestre
+  ro: trimestru
+  bg: четвърт
+  cs: čtvrtletí
+  sk: štvrťrok
+  hu: negyed
+  el: συνοικία
+  sl: četrtina
+  et: veerand
+  lt: ketvirtis
+  da: kvarter
+  fi: neljännes
+  sv: kvarter
+  hr: četvrtina
+  lv: ceturtdaļa
+  hi: भाग
+  ar: ربع
+  id: kuartal
+  vi: quý
+  th: ไตรมาส
+  ko: 분기
+  ja: 四半期
+  bn: চতুর্থাংশ
+  fa: یک‌چهارم، محله
+  zh: 四分之一
+  ur: چوتھائی
+  kk: тоқсан
+
+ID 1334 (region):
+  ru: область, регион
+  uk: область, регіон
+  de: Gebiet, Region
+  es: área, región
+  fr: zone, région
+  pl: obszar, region
+  it: area, regione
+  tr: alan, bölge
+  pt: área, região
+  ro: zonă, regiune
+  bg: област, регион
+  cs: oblast, region
+  sk: oblasť, región
+  hu: terület, régió
+  el: περιοχή
+  sl: območje, regija
+  et: piirkond
+  lt: sritis, regionas
+  da: område, region
+  fi: alue, seutu
+  sv: område, region
+  hr: područje, regija
+  lv: apgabals, reģions
+  hi: क्षेत्र
+  ar: منطقة، إقليم
+  id: area, wilayah
+  vi: khu vực, vùng miền
+  th: พื้นที่, ภูมิภาค
+  ko: 지역
+  ja: 地域、地方
+  bn: অঞ্চল
+  fa: منطقه
+  zh: 地区
+  ur: علاقہ
+  kk: аймақ
+
+ID 1335 (operate):
+  ru: работать, действовать
+  uk: працювати, діяти
+  de: arbeiten, handeln
+  es: operar, funcionar
+  fr: travail, acte
+  pl: działać, obsługiwać
+  it: lavoro, agire
+  tr: işletmek, çalışmak
+  pt: operar, funcionar
+  ro: muncă, acțiune
+  bg: работа, действие
+  cs: pracovat, jednat
+  sk: pracovať, konať
+  hu: munka, cselekedet
+  el: εργασία, πράξη
+  sl: delo, dejanje
+  et: töö, tegu
+  lt: darbas, veiksmas
+  da: arbejde, handling
+  fi: työ, teko
+  sv: arbete, handling
+  hr: rad, čin
+  lv: darbs, rīcība
+  hi: काम
+  ar: عمل، فعل
+  id: beroperasi, menjalankan
+  vi: công việc, hành động
+  th: งาน, การกระทำ
+  ko: 일하다, 행동하다
+  ja: 仕事、行為
+  bn: পরিচালনা করা, কাজ করা
+  fa: کار کردن، عمل کردن
+  zh: 运作
+  ur: کام کرنا، چلانا
+  kk: жұмыс, әрекет
+
+ID 1336 (consider):
+  ru: обдумывать, учитывать
+  uk: розглядати, вважати
+  de: berücksichtigen
+  es: considerar, sopesar
+  fr: considérer, envisager
+  pl: brać pod uwagę, rozważać
+  it: considerare, tenere conto
+  tr: dikkate almak, saymak
+  pt: considerar
+  ro: lua în considerare
+  bg: обмислям, вземам предвид
+  cs: zvážit, vzít v úvahu
+  sk: zvážiť, vziať do úvahy
+  hu: figyelembe vesz, megfontol
+  el: εξετάζω, λαμβάνω υπόψη
+  sl: upoštevati
+  et: arvestama
+  lt: apsvarstyti, atsižvelgti
+  da: overveje
+  fi: harkita
+  sv: överväga
+  hr: razmotriti
+  lv: apsvērt
+  hi: विचार करना, मानना
+  ar: يفكر، يعتبر
+  id: mempertimbangkan, menganggap
+  vi: xem xét, cân nhắc
+  th: พิจารณา, ไตร่ตรอง
+  ko: 고려하다, 생각하다
+  ja: 考える、検討する
+  bn: বিবেচনা করা
+  fa: در نظر گرفتن
+  zh: 考虑
+  ur: غور کرنا
+  kk: қарастыру, ескеру
+
+ID 1337 (before):
+  ru: до того как
+  uk: до того як
+  de: vor
+  es: antes
+  fr: avant
+  pl: zanim
+  it: Prima
+  tr: önce
+  pt: antes, antes de
+  ro: înainte
+  bg: преди
+  cs: před
+  sk: predtým
+  hu: előtt
+  el: προτού
+  sl: prej
+  et: enne
+  lt: prieš
+  da: før
+  fi: ennen
+  sv: före
+  hr: prije
+  lv: pirms
+  hi: पहले
+  ar: قبل
+  id: sebelum
+  vi: trước đây
+  th: ก่อน
+  ko: 전에
+  ja: 以前
+  bn: আগে
+  fa: قبل از اینکه
+  zh: 在……之前
+  ur: پہلے
+  kk: бұрын
+
+ID 1338 (father):
+  ru: отец
+  uk: батько
+  de: Vater
+  es: padre
+  fr: père
+  pl: ojciec
+  it: padre
+  tr: baba
+  pt: pai
+  ro: tată
+  bg: баща
+  cs: otec
+  sk: otec
+  hu: apa
+  el: πατέρας
+  sl: oče
+  et: isa
+  lt: tėvas
+  da: far
+  fi: isä
+  sv: far
+  hr: otac
+  lv: tēvs
+  hi: पिता
+  ar: أب
+  id: ayah
+  vi: cha
+  th: พ่อ
+  ko: 아버지
+  ja: 父
+  bn: বাবা
+  fa: پدر
+  zh: 父亲
+  ur: والد
+  kk: әке
+
+ID 1339 (possibly):
+  ru: возможно, случайность
+  uk: можливо, імовірно
+  de: vielleicht ein Unfall
+  es: posiblemente, quizá
+  fr: peut-être un accident
+  pl: być może, ewentualnie
+  it: forse un incidente
+  tr: muhtemelen, belki
+  pt: possivelmente
+  ro: poate un accident
+  bg: може би инцидент
+  cs: možná nehoda
+  sk: možno nehoda
+  hu: talán egy baleset
+  el: ίσως ένα ατύχημα
+  sl: morda nesreča
+  et: võib-olla õnnetus
+  lt: galbūt nelaimingas atsitikimas
+  da: måske, ulykke
+  fi: ehkä, onnettomuus
+  sv: kanske, olycka
+  hr: možda, nesreća
+  lv: varbūt, negadījums
+  hi: शायद, दुर्घटना
+  ar: ربما، حادث
+  id: mungkin, kemungkinan
+  vi: có lẽ, tai nạn
+  th: บางที, อุบัติเหตุ
+  ko: 아마도, 사고
+  ja: おそらく、事故
+  bn: সম্ভবত
+  fa: احتمالاً
+  zh: 可能
+  ur: ممکنہ طور پر، شاید
+  kk: мүмкін, апат
+
+ID 1340 (former):
+  ru: бывший, предшествующий
+  uk: колишній, попередній
+  de: ehemalig, vorhergehend
+  es: anterior, precedente
+  fr: ancien, précédent
+  pl: były, poprzedni
+  it: precedente
+  tr: önceki, önce
+  pt: anterior, precedente
+  ro: fost, precedent
+  bg: бивш, предходен
+  cs: bývalý, předcházející
+  sk: bývalý, predchádzajúci
+  hu: korábbi, megelőző
+  el: προηγούμενος
+  sl: prejšnji, predhodni
+  et: endine, eelnev
+  lt: buvęs, ankstesnis
+  da: tidligere, forrige
+  fi: entinen, edellinen
+  sv: tidigare
+  hr: bivši, prethodni
+  lv: bijušais, iepriekšējais
+  hi: पूर्व, पहले का
+  ar: سابق
+  id: mantan, sebelumnya
+  vi: trước đây, trước đó
+  th: ก่อนหน้า, ก่อนหน้านี้
+  ko: 이전의, 전의
+  ja: 以前の、前
+  bn: সাবেক
+  fa: سابق
+  zh: 以前的
+  ur: سابقہ
+  kk: бұрынғы, алдыңғы
+
+ID 1341 (resource):
+  ru: ресурс
+  uk: ресурс
+  de: Ressource
+  es: recurso
+  fr: ressource
+  pl: zasób, źródło
+  it: risorsa
+  tr: kaynak
+  pt: recurso
+  ro: resursă
+  bg: ресурс
+  cs: zdroj
+  sk: zdroj
+  hu: forrás
+  el: πόρος
+  sl: vir
+  et: ressurss
+  lt: išteklius
+  da: ressource
+  fi: resurssi
+  sv: resurs
+  hr: resurs
+  lv: resurss
+  hi: संसाधन
+  ar: مورد
+  id: sumber daya
+  vi: nguồn lực
+  th: ทรัพยากร
+  ko: 자원
+  ja: 資源
+  bn: সম্পদ
+  fa: منبع
+  zh: 资源
+  ur: وسیلہ
+  kk: ресурс
+
+ID 1342 (mention):
+  ru: упомянуть
+  uk: згадати
+  de: erwähnen
+  es: mencionar
+  fr: mention
+  pl: wspomnieć, wzmianka
+  it: menzione
+  tr: değinmek
+  pt: menção
+  ro: menționează
+  bg: споменаване
+  cs: zmínka
+  sk: zmienka
+  hu: említés
+  el: αναφέρω
+  sl: omemba
+  et: mainimine
+  lt: paminėjimas
+  da: omtale
+  fi: maininta
+  sv: omnämnande
+  hr: spomenuti
+  lv: pieminēt
+  hi: उल्लेख करना
+  ar: ذكر
+  id: sebutkan
+  vi: đề cập
+  th: กล่าวถึง
+  ko: 언급하다
+  ja: 言及する
+  bn: উল্লেখ করা
+  fa: ذکر کردن
+  zh: 提及
+  ur: ذکر کرنا
+  kk: атап өту
+
+ID 1343 (trouble):
+  ru: беда
+  uk: біда
+  de: Problem
+  es: problema
+  fr: inquiéter
+  pl: kłopoty
+  it: guaio
+  tr: bela
+  pt: problema, dificuldade
+  ro: necaz
+  bg: проблеми
+  cs: problémy
+  sk: problémy
+  hu: baj
+  el: ταλαιπωρία
+  sl: težave
+  et: häda
+  lt: bėda
+  da: problemer
+  fi: ongelma
+  sv: problem
+  hr: problem
+  lv: nepatikšanas
+  hi: परेशानी
+  ar: مشكلة
+  id: masalah
+  vi: rắc rối
+  th: ปัญหา
+  ko: 문제
+  ja: 問題
+  bn: সমস্যা
+  fa: مشکل
+  zh: 麻烦
+  ur: مصیبت
+  kk: қиындық
+
+ID 1344 (approach):
+  ru: подход, попытки
+  uk: підхід, спроби
+  de: Ansatz, Versuche
+  es: enfoque, acercamiento
+  fr: approche, tentatives
+  pl: podejście, próby
+  it: approccio, tentativi
+  tr: yaklaşım, girişimler
+  pt: abordagem, tentativas
+  ro: abordare, încercări
+  bg: подход, опити
+  cs: přístup, pokusy
+  sk: prístup, pokusy
+  hu: megközelítés, próbálkozások
+  el: προσέγγιση, προσπάθειες
+  sl: pristop, poskusi
+  et: lähenemine, katsed
+  lt: požiūris, bandymai
+  da: tilgang, forsøg
+  fi: lähestymistapa, yritykset
+  sv: tillvägagångssätt, försök
+  hr: pristup, pokušaji
+  lv: pieeja, mēģinājumi
+  hi: तरीका, पास आना
+  ar: اقتراب، محاولات
+  id: pendekatan, upaya
+  vi: tiếp cận, nỗ lực
+  th: วิธีการ, ความพยายาม
+  ko: 접근하다, 시도하다
+  ja: アプローチ、試み
+  bn: পদ্ধতি, এগিয়ে যাওয়া
+  fa: رویکرد، نزدیک شدن
+  zh: 方法
+  ur: طریقہ، قریب آنا
+  kk: тәсіл, әрекеттер
+
+ID 1345 (handle):
+  ru: ручка, держать в руках
+  uk: ручка, тримати в руках
+  de: Stift, in den Händen halten
+  es: asa, manejar
+  fr: poignée, manipuler
+  pl: radzić sobie, uchwyt
+  it: penna, tenere in mano
+  tr: ele almak, idare etmek
+  pt: maçaneta, alça, lidar com
+  ro: stilou, ținut în mână
+  bg: химикалка, дръжте в ръцете си
+  cs: pero, držet v rukou
+  sk: pero, držať v rukách
+  hu: toll, kézben tartva
+  el: στυλό, κρατήστε στα χέρια
+  sl: pero, držite v rokah
+  et: pliiats, hoidke käes
+  lt: rašiklis, laikyti rankose
+  da: pen, holde i hånden
+  fi: kynä, pitää kädessä
+  sv: penna, hålla i handen
+  hr: olovka, držati u ruci
+  lv: pildspalva, turēt rokā
+  hi: संभालना, निपटना
+  ar: قلم، يمسك باليد
+  id: menangani, pegangan
+  vi: bút, cầm trong tay
+  th: ปากกา, ถืออยู่ในมือ
+  ko: 펜, 손에 쥐다
+  ja: ペン、手に持つ
+  bn: হাতল, সামলানো
+  fa: دسته، رسیدگی کردن
+  zh: 处理
+  ur: سنبھالنا، دستہ
+  kk: қалам, қолмен ұстау
+
+ID 1346 (family):
+  ru: семья
+  uk: сім'я
+  de: Familie
+  es: familia
+  fr: famille
+  pl: rodzina
+  it: famiglia
+  tr: aile
+  pt: família
+  ro: familial
+  bg: семейство
+  cs: rodina
+  sk: rodina
+  hu: család
+  el: οικογένεια
+  sl: družina
+  et: perekond
+  lt: šeima
+  da: familie
+  fi: perhe
+  sv: familj
+  hr: obitelj
+  lv: ģimene
+  hi: परिवार
+  ar: عائلة
+  id: keluarga
+  vi: gia đình
+  th: ครอบครัว
+  ko: 가족
+  ja: 家族
+  bn: পরিবার
+  fa: خانواده
+  zh: 家庭
+  ur: خاندان
+  kk: отбасы
+
+ID 1347 (reporter):
+  ru: репортер
+  uk: репортер
+  de: Reporter
+  es: reportero
+  fr: journaliste
+  pl: reporter
+  it: reporter
+  tr: muhabir
+  pt: repórter
+  ro: reporter
+  bg: репортер
+  cs: zpravodaj
+  sk: reportér
+  hu: riporter
+  el: δημοσιογράφος
+  sl: poročevalec
+  et: reporter
+  lt: reporteris
+  da: reporter
+  fi: toimittaja
+  sv: reporter
+  hr: novinar
+  lv: reportieris
+  hi: रिपोर्टर
+  ar: مراسل
+  id: reporter
+  vi: phóng viên
+  th: นักข่าว
+  ko: 기자
+  ja: 記者
+  bn: সাংবাদিক
+  fa: خبرنگار
+  zh: 记者
+  ur: نامہ نگار
+  kk: тілші
+
+ID 1348 (author):
+  ru: автор
+  uk: автор
+  de: Autor
+  es: autor
+  fr: auteur
+  pl: autor
+  it: autore
+  tr: yazar
+  pt: autor
+  ro: autor
+  bg: автор
+  cs: autor
+  sk: autor
+  hu: szerző
+  el: συγγραφέας
+  sl: avtor
+  et: autor
+  lt: autorius
+  da: forfatter
+  fi: kirjoittaja
+  sv: författare
+  hr: autor
+  lv: autors
+  hi: लेखक
+  ar: مؤلف
+  id: penulis
+  vi: tác giả
+  th: ผู้เขียน
+  ko: 저자
+  ja: 著者
+  bn: লেখক
+  fa: نویسنده
+  zh: 作者
+  ur: مصنف
+  kk: автор
+
+ID 1349 (research):
+  ru: исследовать научно
+  uk: дослідити науково
+  de: wissenschaftlich erforschen
+  es: investigación, investigar
+  fr: la recherche scientifique
+  pl: badać, prowadzić badania
+  it: ricerca scientifica
+  tr: araştırma, araştırmak
+  pt: pesquisa científica
+  ro: cercetare științifică
+  bg: научно изследване
+  cs: vědecký výzkum
+  sk: vedecký výskum
+  hu: tudományos kutatás
+  el: επιστημονική έρευνα
+  sl: znanstveno raziskati
+  et: teaduslikult uurida
+  lt: moksliniai tyrimai
+  da: forskning videnskabelig
+  fi: tieteellinen tutkimus
+  sv: forskning vetenskaplig
+  hr: znanstveno istraživanje
+  lv: zinātniski pētīt
+  hi: वैज्ञानिक रूप से शोध करना
+  ar: بحث علمي
+  id: penelitian ilmiah
+  vi: nghiên cứu khoa học
+  th: วิจัยทางวิทยาศาสตร์
+  ko: 과학적으로 연구하다
+  ja: 科学的に研究する
+  bn: গবেষণা করা
+  fa: پژوهش، تحقیق کردن
+  zh: 研究
+  ur: تحقیق کرنا
+  kk: ғылыми зерттеу
+
+ID 1350 (advice):
+  ru: совет
+  uk: порада
+  de: Beratung
+  es: consejo
+  fr: conseil
+  pl: rada
+  it: consiglio
+  tr: tavsiye
+  pt: conselho
+  ro: sfaturi
+  bg: съвет
+  cs: rada
+  sk: rada
+  hu: tanács
+  el: συμβουλή
+  sl: nasvet
+  et: nõuanne
+  lt: patarimas
+  da: rådgivning
+  fi: neuvot
+  sv: råd
+  hr: savjet
+  lv: padoms
+  hi: सलाह
+  ar: نصيحة
+  id: saran
+  vi: lời khuyên
+  th: คำแนะนำ
+  ko: 조언
+  ja: 助言
+  bn: পরামর্শ
+  fa: نصیحت، توصیه
+  zh: 建议
+  ur: مشورہ
+  kk: кеңес
+
+ID 1351 (climate):
+  ru: климат
+  uk: клімат
+  de: Klima
+  es: clima
+  fr: climat
+  pl: klimat
+  it: clima
+  tr: iklim
+  pt: clima
+  ro: climă
+  bg: климат
+  cs: klima
+  sk: podnebie
+  hu: éghajlat
+  el: κλίμα
+  sl: podnebje
+  et: kliima
+  lt: klimatas
+  da: klima
+  fi: ilmasto
+  sv: klimat
+  hr: klima
+  lv: klimats
+  hi: जलवायु
+  ar: مناخ
+  id: iklim
+  vi: khí hậu
+  th: สภาพอากาศ
+  ko: 기후
+  ja: 気候
+  bn: জলবায়ু
+  fa: آب‌وهوا، اقلیم
+  zh: 气候
+  ur: آب و ہوا
+  kk: климат
+

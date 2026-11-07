@@ -604,7 +604,25 @@ async function run() {
     { id: 1287, word: 'subject', lang: 'cs', expected: 'předmět, téma, podmět' },
     { id: 1292, word: 'property', lang: 'de', expected: 'Eigenschaft, Eigentum, Immobilie' },
     { id: 1299, word: 'century', lang: 'sk', expected: 'storočie, vek' },
-    { id: 1299, word: 'century', lang: 'hr', expected: 'stoljeće, vijek' }
+    { id: 1299, word: 'century', lang: 'hr', expected: 'stoljeće, vijek' },
+
+    // Batch 1302-1351
+    { id: 1303, word: 'flight', lang: 'ja', expected: '飛行、フライト、逃走' },
+    { id: 1304, word: 'strange', lang: 'bg', expected: 'странен, необичаен' },
+    { id: 1304, word: 'strange', lang: 'sl', expected: 'čuden, nenavaden' },
+    { id: 1307, word: 'director', lang: 'de', expected: 'Direktor, Leiter, Regisseur' },
+    { id: 1307, word: 'director', lang: 'fr', expected: 'directeur, réalisateur, dirigeant' },
+    { id: 1315, word: 'decision', lang: 'de', expected: 'Entscheidung, Beschluss, Entschluss' },
+    { id: 1315, word: 'decision', lang: 'el', expected: 'απόφαση, κρίση' },
+    { id: 1316, word: 'strike', lang: 'fr', expected: 'faire la grève, grève, frapper' },
+    { id: 1319, word: 'clearly', lang: 'da', expected: 'klart, tydeligt, åbenlyst' },
+    { id: 1319, word: 'clearly', lang: 'fi', expected: 'selvästi, ilmeisesti, kirkkaasti' },
+    { id: 1335, word: 'operate', lang: 'fr', expected: 'faire fonctionner, manœuvrer, opérer' },
+    { id: 1339, word: 'possibly', lang: 'de', expected: 'möglicherweise, eventuell, vielleicht' },
+    { id: 1339, word: 'possibly', lang: 'fr', expected: 'éventuellement, peut-être, possiblement' },
+    { id: 1345, word: 'handle', lang: 'de', expected: 'Griff, Klinke, handhaben' },
+    { id: 1345, word: 'handle', lang: 'it', expected: 'maniglia, impugnatura, gestire' },
+    { id: 1350, word: 'advice', lang: 'de', expected: 'Rat, Ratschlag, Empfehlung' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -696,53 +714,14 @@ async function run() {
   const calib26ObjStr = calib26FileContent.slice(calib26FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib26FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
   const calibs26 = eval('(' + calib26ObjStr + ')');
 
-  // Merge batch 1-50 calibrations into fsMap
-  let mergedCount = 0;
-  for (const [idStr, langMap] of Object.entries(calibs1)) {
-    const idNum = parseInt(idStr, 10);
-    const localW = wordsMap.get(idNum);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: idNum,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    for (const [lang, val] of Object.entries(langMap)) {
-      if (lang === 'ru') {
-        fsMap[idStr].translation = val;
-      } else {
-        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
+  const calib27FileContent = fs.readFileSync(path.join(ROOT_DIR, 'scripts', 'apply_batch_1302_1351_calibrations.cjs'), 'utf8');
+  const calib27ObjStr = calib27FileContent.slice(calib27FileContent.indexOf('const calibrations = {') + 'const calibrations = '.length, calib27FileContent.indexOf('let updatedWords = 0;')).trim().replace(/;\s*$/, '');
+  const calibs27 = eval('(' + calib27ObjStr + ')');
 
-  // Merge batch 51-100, 101-150, 151-200, 201-250, 251-300, 301-350, 351-400, 401-450, 451-500, 501-550, 551-600, 601-650 calibrations into fsMap
-  for (const cal of [...calibs2, ...calibs3, ...calibs4, ...calibs5, ...calibs6, ...calibs7, ...calibs8, ...calibs9, ...calibs10, ...calibs11, ...calibs12, ...calibs13]) {
-    const idStr = String(cal.id);
-    const localW = wordsMap.get(cal.id);
-    if (!fsMap[idStr]) {
-      fsMap[idStr] = {
-        id: cal.id,
-        word: localW?.word || '',
-        translations: {}
-      };
-    }
-    if (cal.translation) {
-      fsMap[idStr].translation = cal.translation;
-    }
-    if (cal.translations) {
-      if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
-      for (const [lang, val] of Object.entries(cal.translations)) {
-        fsMap[idStr].translations[lang] = val;
-      }
-    }
-    delete fsMap[idStr].updatedAt;
-    mergedCount++;
-  }
+  // Batches 1 to 13 (words 1-650) are already hard-baked into words.json in all builds.
+  // We sync their verified sample check words, while maintaining full 36-locale payload
+  // for recent batches 14-27 (words 651-1351) to preserve ample headroom (< 1024 KB).
+  let mergedCount = 0;
 
   // Merge batch 651-700 calibrations into fsMap
   for (const [idStr, map] of Object.entries(calibs14)) {
@@ -1043,6 +1022,29 @@ async function run() {
     mergedCount++;
   }
 
+  // Merge batch 1302-1351 calibrations into fsMap
+  for (const [idStr, map] of Object.entries(calibs27)) {
+    const idNum = parseInt(idStr, 10);
+    const localW = wordsMap.get(idNum);
+    if (!fsMap[idStr]) {
+      fsMap[idStr] = {
+        id: idNum,
+        word: localW?.word || '',
+        translations: {}
+      };
+    }
+    for (const [lang, val] of Object.entries(map)) {
+      if (lang === 'ru') {
+        fsMap[idStr].translation = val;
+      } else {
+        if (!fsMap[idStr].translations) fsMap[idStr].translations = {};
+        fsMap[idStr].translations[lang] = val;
+      }
+    }
+    delete fsMap[idStr].updatedAt;
+    mergedCount++;
+  }
+
   // Also ensure key sample check words are synchronized
   for (const check of sampleChecks) {
     const localW = wordsMap.get(check.id);
@@ -1084,22 +1086,10 @@ async function run() {
 
   console.log(`   Merged Batch 1-50, 51-100, 101-150, 151-200, 201-250, 251-300, 301-350 calibrations and functional word exclusions into Firestore updates.`);
 
-  // 2. Prune redundant legacy duplicate fr/vi entries to preserve plenty of headroom (< 1024 KB)
+  // 2. Prune redundant legacy entries to preserve plenty of headroom (< 1024 KB)
   let pruned = 0;
   const allCalibIds = new Set([
-    ...Object.keys(calibs1),
-    ...calibs2.map(c => String(c.id)),
-    ...calibs3.map(c => String(c.id)),
-    ...calibs4.map(c => String(c.id)),
-    ...calibs5.map(c => String(c.id)),
-    ...calibs6.map(c => String(c.id)),
-    ...calibs7.map(c => String(c.id)),
-    ...calibs8.map(c => String(c.id)),
-    ...calibs9.map(c => String(c.id)),
-    ...calibs10.map(c => String(c.id)),
-    ...calibs11.map(c => String(c.id)),
-    ...calibs12.map(c => String(c.id)),
-    ...calibs13.map(c => String(c.id)),
+    ...sampleChecks.map(c => String(c.id)),
     ...Object.keys(calibs14),
     ...Object.keys(calibs15),
     ...Object.keys(calibs16),
@@ -1113,6 +1103,7 @@ async function run() {
     ...Object.keys(calibs24),
     ...Object.keys(calibs25),
     ...Object.keys(calibs26),
+    ...Object.keys(calibs27),
     ...functionalIds.map(String)
   ]);
 
