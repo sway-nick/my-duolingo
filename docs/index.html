@@ -2972,6 +2972,42 @@
         }
 
         try {
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('demo') === 'blocks' || urlParams.get('demo') === 'test') {
+            const uid = getEffectiveUserId();
+            const progKey = `progress_${uid}`;
+            const curProg = JSON.parse(localStorage.getItem(progKey) || '{}');
+            const batchWords = getActiveConveyorBatch(allWords, curProg, Array.from(favoriteIds || []));
+            if (batchWords && batchWords.length > 0) {
+              const sampleWords = batchWords.slice(0, 2);
+              sampleWords.forEach((w) => {
+                const wid = String(w.id);
+                curProg[wid] = {
+                  ...(curProg[wid] || {}),
+                  seenInCards: true,
+                  roundCardsDone: true,
+                  roundQuizDone: true,
+                  quizCorrect: 4,
+                  roundPairsDone: true,
+                  pairsCorrect: 1,
+                  roundQuizMistakes: 1,
+                  roundBlocksDone: false,
+                  stage: 'test',
+                };
+              });
+              localStorage.setItem(progKey, JSON.stringify(curProg));
+              userSettings.preferredMethod = 'input';
+              saveUserSettings(userSettings);
+              window._pausedRoundState = {
+                category: selectedCategory,
+                method: 'input',
+                wordIndex: 0,
+              };
+            }
+          }
+        } catch (_) {}
+
+        try {
           await renderTab(activeTab);
           updateHeaderUser();
         } catch (err) {

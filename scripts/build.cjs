@@ -178,7 +178,6 @@ function build() {
     'web-app-manifest-192x192.png',
     'web-app-manifest-512x512.png',
     'privacy.html',
-    'test_word_blocks.html',
     '.nojekyll',
     'sw.js',
     'app-ads.txt'
