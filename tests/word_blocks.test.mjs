@@ -147,10 +147,14 @@ test('Word Blocks: All 36 locales have translations for badge and hint', () => {
 
     const hintText = t('train_blocks_hint');
     assert.ok(hintText && hintText.length > 0, `Missing train_blocks_hint for locale ${locale}`);
+
+    const loadingText = t('ad_loading');
+    assert.ok(loadingText && loadingText.length > 0, `Missing ad_loading for locale ${locale}`);
   }
 
   global.localStorage.setItem('myduo_lang', 'ru');
   assert.equal(t('train_blocks_badge'), 'Кубики', 'Badge in Russian should be Кубики');
+  assert.equal(t('ad_loading'), 'Загрузка', 'ad_loading in Russian should be Загрузка');
 
   // Restore
   global.localStorage.setItem('myduo_lang', 'ru');

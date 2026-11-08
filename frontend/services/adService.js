@@ -54,6 +54,21 @@ function mockAdText(key) {
     lang = (getInterfaceLanguage() || 'en').toLowerCase().trim();
   } catch (e) {}
 
+  if (key === 'loading') {
+    const loadingMap = {
+      ru: "Загрузка", uk: "Завантаження", en: "Loading", de: "Laden",
+      es: "Cargando", fr: "Chargement", pl: "Ładowanie", tr: "Yükleniyor",
+      it: "Caricamento", ro: "Încărcare", bg: "Зареждане", hu: "Betöltés",
+      el: "Φόρτωση", da: "Indlæser", lv: "Ielāde", lt: "Įkeliama",
+      pt: "Carregando", sk: "Načítava sa", sl: "Nalaganje", fi: "Ladataan",
+      hr: "Učitavanje", cs: "Načítání", sv: "Laddar", et: "Laadimine",
+      hi: "लोड हो रहा है", bn: "লোড হচ্ছে", ar: "جارٍ التحميل", fa: "در حال بارگذاری",
+      ur: "لوڈ ہو رہا ہے", id: "Memuat", vi: "Đang tải", th: "กำลังโหลด",
+      ko: "로딩 중", ja: "読み込み中", zh: "加载中", kk: "Жүктелуде"
+    };
+    return loadingMap[lang] || loadingMap[lang.split(/[-_]/)[0]] || "Loading";
+  }
+
   const dict = MOCK_AD_I18N[lang] || MOCK_AD_I18N[lang.split(/[-_]/)[0]] || MOCK_AD_I18N.en;
   return (dict && dict[key]) || (MOCK_AD_I18N.en && MOCK_AD_I18N.en[key]) || key;
 }

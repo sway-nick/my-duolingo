@@ -14632,6 +14632,19 @@ export function t(key, params = null) {
       ja: "ブロックから単語を組み立ててください", zh: "用积木拼出单词", kk: "Сөзді текшелерден құрастырыңыз"
     };
     val = map[lang] || map['en'] || "Assemble the word from blocks";
+  } else if (key === 'ad_loading' || key === 'common_loading') {
+    const map = {
+      ru: "Загрузка", uk: "Завантаження", en: "Loading", de: "Laden",
+      es: "Cargando", fr: "Chargement", pl: "Ładowanie", tr: "Yükleniyor",
+      it: "Caricamento", ro: "Încărcare", bg: "Зареждане", hu: "Betöltés",
+      el: "Φόρτωση", da: "Indlæser", lv: "Ielāde", lt: "Įkeliama",
+      pt: "Carregando", sk: "Načítava sa", sl: "Nalaganje", fi: "Ladataan",
+      hr: "Učitavanje", cs: "Načítání", sv: "Laddar", et: "Laadimine",
+      hi: "लोड हो रहा है", bn: "লোড হচ্ছে", ar: "جارٍ التحميل", fa: "در حال بارگذاری",
+      ur: "لوڈ ہو رہا ہے", id: "Memuat", vi: "Đang tải", th: "กำลังโหลด",
+      ko: "로딩 중", ja: "読み込み中", zh: "加载中", kk: "Жүктелуде"
+    };
+    val = map[lang] || map['en'] || "Loading";
   } else if (key === 'fav_toggle') {
     const map = {
       ru: "В избранное", uk: "До обраного", en: "To favorites", de: "Zu Favoriten",

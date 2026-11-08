@@ -1,5 +1,5 @@
 import { getStoryStrings } from './storyTranslations.js?v=386.0';
-import { getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=386.0';
+import { t, getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=386.0';
 import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getWords } from '../../services/api.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
@@ -1726,6 +1726,8 @@ export async function showMilestoneStoryModal(milestone = 0) {
     if (!isTranslationUnlocked) {
       toggleTranslationBtn.disabled = true;
       toggleTranslationBtn.style.opacity = '0.7';
+      const origHtml = toggleTranslationBtn.innerHTML;
+      toggleTranslationBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
       try {
         const adResult = await AdService.showStoryTranslationRewardedAd(storyTitleText);
         if (adResult && (adResult.success || adResult.rewardEarned)) {
@@ -1734,6 +1736,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
           showStoryToast('📺 Посмотрите видео до конца, чтобы открыть перевод');
           toggleTranslationBtn.disabled = false;
           toggleTranslationBtn.style.opacity = '1';
+          toggleTranslationBtn.innerHTML = origHtml;
           return;
         }
       } catch (adErr) {
@@ -1742,6 +1745,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
       } finally {
         toggleTranslationBtn.disabled = false;
         toggleTranslationBtn.style.opacity = '1';
+        toggleTranslationBtn.innerHTML = origHtml;
       }
     }
 

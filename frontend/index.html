@@ -467,7 +467,7 @@
         downloadBtn.addEventListener('click', async () => {
           downloadBtn.disabled = true;
           const prevBtnText = downloadBtn.innerHTML;
-          downloadBtn.innerHTML = '⏳ ' + strings.downloading;
+          downloadBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
 
           // 1. Show Rewarded Ad if online
           if (window.AdService && AdService.isOnline()) {
@@ -1409,7 +1409,7 @@
             btn.addEventListener('click', async () => {
               btn.disabled = true;
               btn.style.transition = 'all 0.3s ease';
-              btn.innerHTML = `<span style="font-size: 16px;">⏳ ${AdService.getI18nText('bonus_xp')}</span>`;
+              btn.innerHTML = `<span style="font-size: 16px;">⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
 
               try {
                 const res = await AdService.showBonusXpRewardedAd(100);
@@ -2044,7 +2044,7 @@
                   downloadBtn.addEventListener('click', async () => {
                     downloadBtn.disabled = true;
                     const prevBtnText = downloadBtn.innerHTML;
-                    downloadBtn.innerHTML = '⏳ ' + strings.downloading;
+                    downloadBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
 
                     // 1. Show Rewarded Ad if online
                     if (window.AdService && AdService.isOnline()) {

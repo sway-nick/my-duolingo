@@ -541,6 +541,8 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     cropTranslateBtn.addEventListener('click', async () => {
       hideError();
       cropTranslateBtn.disabled = true;
+      const prevHtml = cropTranslateBtn.innerHTML;
+      cropTranslateBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
       if (cropDictBtn) cropDictBtn.disabled = true;
       try {
         const adRes = await AdService.showScannerTranslationRewardedAd();
@@ -549,6 +551,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         }
         await runImageScanWithCrop(cropState, 'translate');
       } finally {
+        cropTranslateBtn.innerHTML = prevHtml;
         cropTranslateBtn.disabled = false;
         if (cropDictBtn) cropDictBtn.disabled = false;
       }
@@ -735,6 +738,8 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
       }
       hideError();
       pasteTranslateBtn.disabled = true;
+      const prevHtml = pasteTranslateBtn.innerHTML;
+      pasteTranslateBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
       if (pasteSubmitBtn) pasteSubmitBtn.disabled = true;
       try {
         const adRes = await AdService.showScannerTranslationRewardedAd();
@@ -743,6 +748,7 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
         }
         await runPasteScan(rawText, 'translate');
       } finally {
+        pasteTranslateBtn.innerHTML = prevHtml;
         pasteTranslateBtn.disabled = false;
         if (pasteSubmitBtn) pasteSubmitBtn.disabled = false;
       }

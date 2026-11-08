@@ -2089,7 +2089,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             claimBtn.addEventListener('click', async () => {
               if (handled) return;
               claimBtn.disabled = true;
-              claimBtn.textContent = '...';
+              claimBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
 
               try {
                 const res = await AdService.showShieldRewardedAd();
@@ -2126,7 +2126,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             finalizeMistake(false, -20);
           }, 10000);
 
-        } else if (shieldsLeft > 0 && !isOnline) {
+        } else if (!isOnline) {
           // Rule 3: Graceful Fallback offline -> -10 XP
           feedback.innerHTML = `
             <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
