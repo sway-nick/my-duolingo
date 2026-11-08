@@ -38,9 +38,9 @@ function applyTheme(theme) {
   const effectiveTheme = theme === 'notebook' ? 'light' : theme;
   localStorage.setItem('myduo_theme', effectiveTheme);
   const app = document.querySelector('.mobile-app');
-  document.documentElement.classList.remove('dark-theme', 'notebook-theme');
-  document.body.classList.remove('dark-theme', 'notebook-theme');
-  if (app) app.classList.remove('dark-theme', 'notebook-theme');
+  document.documentElement.classList.remove('dark-theme');
+  document.body.classList.remove('dark-theme');
+  if (app) app.classList.remove('dark-theme');
 
   if (effectiveTheme === 'dark') {
     document.documentElement.classList.add('dark-theme');

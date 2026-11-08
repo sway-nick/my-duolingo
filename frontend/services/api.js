@@ -2002,19 +2002,17 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
         localStorage.setItem(`settings_${fbUid}`, JSON.stringify(mergedSettings));
       }
       if (mergedSettings.theme) {
+        if (mergedSettings.theme === 'notebook') mergedSettings.theme = 'light';
         localStorage.setItem('myduo_theme', mergedSettings.theme);
         if (typeof document !== 'undefined' && typeof document.querySelector === 'function') {
           const app = document.querySelector('.mobile-app');
           if (document.body && document.body.classList) {
-            document.body.classList.remove('dark-theme', 'notebook-theme');
+            document.body.classList.remove('dark-theme');
           }
-          if (app) app.classList.remove('dark-theme', 'notebook-theme');
+          if (app) app.classList.remove('dark-theme');
           if (mergedSettings.theme === 'dark') {
             document.body.classList.add('dark-theme');
             if (app) app.classList.add('dark-theme');
-          } else if (mergedSettings.theme === 'notebook') {
-            document.body.classList.add('notebook-theme');
-            if (app) app.classList.add('notebook-theme');
           }
         }
       }

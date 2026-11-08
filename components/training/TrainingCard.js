@@ -806,24 +806,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const practiceArea = container.querySelector('#practice-area');
 
   if (currentMethod === 'quiz') {
-    function isNotebookThemeActive() {
-      return document.body.classList.contains('notebook-theme') || (localStorage.getItem('myduo_theme') === 'notebook');
-    }
-
     function getQuizOptionStyle(text) {
       const clean = String(text || '').trim();
       const words = clean.split(/\s+/);
       const maxWordLen = Math.max(...words.map((w) => w.replace(/[,\.?!;:]/g, '').length), 0);
       const totalLen = clean.length;
-      const isNotebook = isNotebookThemeActive();
-
-      if (isNotebook) {
-        if (maxWordLen >= 17 || totalLen > 45) return 'font-size: 15px; line-height: 1.12; font-weight: 700;';
-        if (maxWordLen >= 14 || totalLen > 32) return 'font-size: 17px; line-height: 1.15; font-weight: 700;';
-        if (maxWordLen >= 12 || totalLen > 22) return 'font-size: 19.5px; line-height: 1.18; font-weight: 700;';
-        if (maxWordLen >= 9 || totalLen > 14) return 'font-size: 21.5px; line-height: 1.2; font-weight: 700;';
-        return 'font-size: 24px; line-height: 1.22; font-weight: 700;';
-      }
 
       if (maxWordLen >= 17 || totalLen > 55) return 'font-size: 11.5px; line-height: 1.15;';
       if (maxWordLen >= 14 || totalLen > 40) return 'font-size: 12.5px; line-height: 1.18;';
@@ -1427,15 +1414,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const words = clean.split(/\s+/);
         const maxWordLen = Math.max(...words.map((w) => w.replace(/[,\.?!;:]/g, '').length), 0);
         const totalLen = clean.length;
-        const isNotebook = document.body.classList.contains('notebook-theme') || (localStorage.getItem('myduo_theme') === 'notebook');
-
-        if (isNotebook) {
-          if (maxWordLen >= 17 || totalLen > 35) return '15.5px';
-          if (maxWordLen >= 14 || totalLen > 22) return '17.5px';
-          if (maxWordLen >= 11 || totalLen > 15) return '19.5px';
-          if (maxWordLen >= 8 || totalLen > 9) return '21.5px';
-          return '24px';
-        }
 
         if (maxWordLen >= 17 || totalLen > 55) return '12.5px';
         if (maxWordLen >= 14 || totalLen > 40) return '13.5px';

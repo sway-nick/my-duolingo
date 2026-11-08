@@ -367,11 +367,6 @@ body.dark-theme .safe-area-top-fill,
   background: #0f172a !important;
 }
 
-body.notebook-theme .safe-area-top-fill,
-.notebook-theme .safe-area-top-fill {
-  background: #f5eedc !important;
-}
-
 /* Header */
 .mobile-header {
   display: flex;
@@ -1232,15 +1227,6 @@ body:not(.dark-theme) .mode-pill-btn:not(.active):hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.notebook-theme .word-notes-btn {
-  color: #7a9fc0;
-}
-
-.notebook-theme .word-notes-btn:hover {
-  color: #1a3a8f;
-  background: rgba(26, 58, 143, 0.08);
-}
-
 .word-notes-modal-overlay {
   position: fixed;
   top: 0;
@@ -1387,62 +1373,6 @@ body.dark-theme .word-notes-modal-body {
 .dark-theme .word-notes-modal-text,
 body.dark-theme .word-notes-modal-text {
   color: #ffffff;
-}
-
-/* --- Notebook Theme Modal --- */
-.notebook-theme .word-notes-modal-card,
-body.notebook-theme .word-notes-modal-card {
-  background: #fffdf7;
-  color: #1a3a8f;
-  border: 2px solid #7a9fc0;
-  border-radius: 16px 8px 18px 12px;
-  box-shadow: 4px 6px 0px rgba(26, 58, 143, 0.15);
-  padding: 18px 20px;
-}
-
-.notebook-theme .word-notes-modal-title,
-body.notebook-theme .word-notes-modal-title {
-  font-family: 'Caveat', cursive, sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: #1a3a8f;
-}
-
-.notebook-theme .word-notes-modal-icon,
-body.notebook-theme .word-notes-modal-icon {
-  background: #1a3a8f;
-  color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 13px;
-}
-
-.notebook-theme .word-notes-modal-close,
-body.notebook-theme .word-notes-modal-close {
-  background: rgba(26, 58, 143, 0.05);
-  border: 1.5px solid #7a9fc0;
-  color: #1a3a8f;
-}
-
-.notebook-theme .word-notes-modal-close:hover,
-body.notebook-theme .word-notes-modal-close:hover {
-  background: rgba(26, 58, 143, 0.12);
-  color: #152d6e;
-}
-
-.notebook-theme .word-notes-modal-body,
-body.notebook-theme .word-notes-modal-body {
-  background: rgba(26, 58, 143, 0.03);
-  border: 1.5px dashed #b8cfe8;
-  border-radius: 10px;
-}
-
-.notebook-theme .word-notes-modal-text,
-body.notebook-theme .word-notes-modal-text {
-  font-family: 'Caveat', cursive, sans-serif;
-  font-size: 21px;
-  line-height: 1.45;
-  color: #1a3a8f;
-  font-weight: 600;
 }
 
 @keyframes fadeInNotesModal {
@@ -4793,16 +4723,6 @@ textarea:disabled,
   color: #94a3b8 !important;
 }
 
-.notebook-theme input:disabled,
-.notebook-theme select:disabled,
-.notebook-theme textarea:disabled,
-.notebook-theme .search-input:disabled,
-.notebook-theme .search-input[readonly] {
-  background: rgba(26, 58, 143, 0.06) !important;
-  border-color: #b8cfe8 !important;
-  color: #7a9fc0 !important;
-}
-
 /* Auth Modal */
 .modal-backdrop {
   position: fixed;
@@ -5165,12 +5085,6 @@ button.leaderboard-header-chip:hover {
   box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.25);
 }
 
-.notebook-theme .leaderboard-header-chip {
-  background: #fffdf5;
-  border-color: #d4c5a9;
-  color: #2c2518;
-}
-
 .league-timer-badge {
   display: inline-flex;
   align-items: center;
@@ -5327,8 +5241,6 @@ button.leaderboard-header-chip:hover {
   border-color: #334155;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
-
-
 
 .podium-card.is-me {
   box-shadow: 0 0 0 2px #22c55e, 0 4px 12px rgba(34, 197, 94, 0.2);
@@ -5705,8 +5617,6 @@ button.leaderboard-header-chip:hover {
   }
 }
 
-
-
 .pairs-title {
   margin: 0;
   font-size: 16.5px;
@@ -5716,14 +5626,6 @@ button.leaderboard-header-chip:hover {
   align-items: center;
   gap: 5px;
   white-space: nowrap;
-}
-
-.notebook-theme .pairs-title {
-  font-family: 'Caveat', cursive !important;
-  font-size: 21px !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  letter-spacing: 0.5px;
 }
 
 .app-main-content,
@@ -5771,12 +5673,6 @@ button.leaderboard-header-chip:hover {
   body.dark-theme,
   .dark-theme body {
     background: #090d16 !important;
-  }
-
-  html.notebook-theme,
-  body.notebook-theme,
-  .notebook-theme body {
-    background: #e8dec8 !important;
   }
 
   .mobile-app {
@@ -6228,11 +6124,6 @@ button.leaderboard-header-chip:hover {
   animation: micPulseRippleOrange 1.1s infinite !important;
 }
 
-.notebook-theme .speech-listening-text {
-  color: #c2410c;
-  font-weight: 700;
-}
-
 @keyframes speechTextPulse {
   0%, 100% {
     opacity: 0.92;
@@ -6436,454 +6327,6 @@ button.leaderboard-header-chip:hover {
   display: block;
 }
 
-
-/* ============================================================
-   📓 NOTEBOOK THEME — graph paper + ballpoint pen aesthetic
-   ============================================================ */
-
-body.notebook-theme,
-.mobile-app.notebook-theme {
-  --nb-bg: #fdf8f0;
-  --nb-card: #fffdf7;
-  --nb-grid-color: #b8cfe8;
-  --nb-line-color: #d0e4f5;
-  --nb-blue-pen: #1a3a8f;
-  --nb-black-pen: #1a1a2e;
-  --nb-red-pen: #c0392b;
-  --nb-green-pen: #1a7a3a;
-  --nb-border: #7a9fc0;
-  --nb-muted: #5a7a9a;
-  --nb-shadow: 2px 3px 0px rgba(26, 58, 143, 0.12);
-
-  /* Override global vars */
-  --primary-color: #1a3a8f;
-  --primary-hover: #152d6e;
-  --success-color: #1a7a3a;
-  --error-color: #c0392b;
-  --bg-color: var(--nb-bg);
-  --card-bg: var(--nb-card);
-  --text-main: var(--nb-black-pen);
-  --text-muted: var(--nb-muted);
-  --border-color: var(--nb-grid-color);
-
-  font-family: 'Caveat', 'Comic Sans MS', cursive !important;
-  font-size: 18px !important;
-  background-color: #eae3d8 !important; /* Elegant natural desk surface behind notebook sheet */
-}
-
-@media (max-width: 680px) {
-  body.notebook-theme {
-    background-color: var(--nb-bg) !important;
-  }
-}
-
-.notebook-theme .mobile-app {
-  position: relative !important;
-  background-color: var(--nb-bg) !important;
-  font-family: 'Caveat', cursive !important;
-
-  /* Math notebook background — strictly kept INSIDE the notebook sheet */
-  background-image:
-    linear-gradient(rgba(164, 200, 232, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(164, 200, 232, 0.55) 1px, transparent 1px) !important;
-  background-size: 24px 24px !important;
-  border-left: 2px solid var(--nb-border) !important;
-  border-right: 2px solid var(--nb-border) !important;
-  box-shadow: 0 4px 35px rgba(26, 58, 143, 0.15) !important;
-}
-
-/* Header */
-.notebook-theme .mobile-header {
-  background: #fffdf7 !important;
-  border-bottom: 2px solid var(--nb-blue-pen) !important;
-  font-family: 'Caveat', cursive !important;
-  box-shadow: 0 2px 0 var(--nb-grid-color) !important;
-}
-
-.notebook-theme .mobile-header .app-title {
-  font-family: 'Caveat', cursive !important;
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  letter-spacing: 0.5px;
-}
-
-/* Bottom nav — notebook spiral binding */
-.notebook-theme .bottom-nav {
-  background: #fffdf7 !important;
-  border-top: 2px solid var(--nb-blue-pen) !important;
-  font-family: 'Caveat', cursive !important;
-  position: fixed !important;
-}
-
-
-
-.notebook-theme .nav-btn {
-  color: var(--nb-muted) !important;
-  font-family: 'Caveat', cursive !important;
-  font-size: 14px !important;
-}
-
-.notebook-theme .nav-btn.active,
-.notebook-theme .nav-btn:hover {
-  color: var(--nb-blue-pen) !important;
-}
-
-/* Cards — plain cream, NO grid on cards (grid only on page background) */
-.notebook-theme .word-card-container,
-.notebook-theme .stat-card,
-.notebook-theme .curriculum-block,
-.notebook-theme .chart-card,
-.notebook-theme .settings-card,
-.notebook-theme .fav-card,
-.notebook-theme .dict-card,
-.notebook-theme .modal-content,
-.notebook-theme .empty-favorites-box {
-  background: var(--nb-card) !important;
-  background-image: none !important;
-  border: 2px solid var(--nb-blue-pen) !important;
-  border-radius: 4px 14px 6px 12px !important;
-  box-shadow: var(--nb-shadow) !important;
-  font-family: 'Caveat', cursive !important;
-}
-
-/* Training word */
-.notebook-theme .training-word,
-.notebook-theme .training-word-text {
-  font-family: 'Caveat', cursive !important;
-  font-size: 42px !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  letter-spacing: 1px;
-}
-
-.notebook-theme .card-translation {
-  font-family: 'Caveat', cursive !important;
-  color: var(--nb-black-pen) !important;
-  font-size: 26px !important;
-}
-
-/* Quiz options */
-.notebook-theme .quiz-option {
-  background: var(--nb-card) !important;
-  border: 2px solid var(--nb-blue-pen) !important;
-  border-radius: 3px 10px 5px 8px !important;
-  color: var(--nb-blue-pen) !important;
-  font-family: 'Caveat', cursive !important;
-  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.15) !important;
-  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
-}
-
-.notebook-theme .quiz-option-inner {
-  font-family: 'Caveat', cursive !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  letter-spacing: 0.2px;
-}
-
-.notebook-theme .quiz-option:hover:not(:disabled) {
-  background: rgba(26, 58, 143, 0.06) !important;
-  transform: translate(-1px, -1px) !important;
-  box-shadow: 3px 3px 0 rgba(26, 58, 143, 0.2) !important;
-}
-
-.notebook-theme .quiz-option.correct {
-  background: rgba(26, 122, 58, 0.1) !important;
-  border: 2.5px solid var(--nb-green-pen) !important;
-  color: var(--nb-green-pen) !important;
-  border-radius: 3px 10px 5px 8px !important;
-}
-
-.notebook-theme .quiz-option.wrong {
-  background: rgba(192, 57, 43, 0.08) !important;
-  border: 2.5px solid var(--nb-red-pen) !important;
-  color: var(--nb-red-pen) !important;
-  border-radius: 3px 10px 5px 8px !important;
-  text-decoration: line-through;
-}
-
-/* Primary buttons */
-.notebook-theme .primary-button,
-.notebook-theme .btn-blue,
-.notebook-theme .check-button {
-  background: var(--nb-blue-pen) !important;
-  border: 2px solid #0f2660 !important;
-  border-radius: 4px 12px 6px 10px !important;
-  font-family: 'Caveat', cursive !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  box-shadow: 2px 2px 0 rgba(15, 38, 96, 0.3) !important;
-}
-
-.notebook-theme .primary-button:hover {
-  transform: translate(-1px, -1px) !important;
-  box-shadow: 3px 3px 0 rgba(15, 38, 96, 0.35) !important;
-}
-
-.notebook-theme .btn-green {
-  background: var(--nb-green-pen) !important;
-  border-color: #145c2b !important;
-}
-
-/* Mic button */
-.notebook-theme .speech-mic-btn {
-  background: linear-gradient(135deg, var(--nb-blue-pen), #2a4fa0) !important;
-  border: 3px solid #0f2660 !important;
-  border-radius: 50% !important;
-  box-shadow: 3px 3px 0 rgba(15, 38, 96, 0.25) !important;
-  font-size: 36px !important;
-}
-
-/* Flashcard */
-.notebook-theme .flashcard-box {
-  background: var(--nb-card) !important;
-  border: 2px solid var(--nb-blue-pen) !important;
-  border-radius: 4px 16px 8px 14px !important;
-  box-shadow: var(--nb-shadow) !important;
-  font-family: 'Caveat', cursive !important;
-}
-
-/* Inputs */
-.notebook-theme .answer-input,
-.notebook-theme .search-input,
-.notebook-theme .filter-select,
-.notebook-theme .settings-select,
-.notebook-theme .form-group input {
-  background: var(--nb-card) !important;
-  border: 2px solid var(--nb-blue-pen) !important;
-  border-radius: 3px 8px 4px 6px !important;
-  color: var(--nb-black-pen) !important;
-  font-family: 'Caveat', cursive !important;
-  font-size: 18px !important;
-  box-shadow: inset 1px 1px 0 rgba(26, 58, 143, 0.08) !important;
-}
-
-.notebook-theme .answer-input:focus,
-.notebook-theme .search-input:focus {
-  border-color: var(--nb-blue-pen) !important;
-  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.2) !important;
-  outline: none !important;
-}
-
-/* Mode pills */
-.notebook-theme .mode-switch-pills {
-  background: rgba(184, 207, 232, 0.3) !important;
-  border: 1.5px solid var(--nb-border) !important;
-  border-radius: 4px 12px 6px 10px !important;
-}
-
-.notebook-theme .mode-pill-glider {
-  background: var(--nb-blue-pen) !important;
-  border-radius: 3px 10px 5px 8px !important;
-}
-
-.notebook-theme .mode-pill-btn {
-  font-family: 'Caveat', cursive !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  color: var(--nb-muted) !important;
-}
-
-.notebook-theme .mode-pill-btn.active {
-  color: #fff !important;
-}
-
-/* Category badge */
-.notebook-theme .category-badge,
-.notebook-theme .total-words-badge {
-  background: rgba(26, 58, 143, 0.08) !important;
-  border: 1.5px solid var(--nb-blue-pen) !important;
-  color: var(--nb-blue-pen) !important;
-  font-family: 'Caveat', cursive !important;
-  font-size: 15px !important;
-  line-height: 1 !important;
-  padding: 3px 8px !important;
-  border-radius: 4px 8px 4px 7px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  max-width: fit-content !important;
-  white-space: nowrap !important;
-  box-sizing: border-box !important;
-}
-
-/* Sound button */
-.notebook-theme .sound-button-sm,
-.notebook-theme .word-side-icon-btn {
-  background: rgba(26, 58, 143, 0.08) !important;
-  border: 1.5px solid var(--nb-border) !important;
-  border-radius: 50% !important;
-  color: var(--nb-blue-pen) !important;
-}
-
-/* Leaderboard / stats */
-.notebook-theme .stat-label {
-  font-family: 'Caveat', cursive !important;
-  color: var(--nb-muted) !important;
-  font-size: 18px !important;
-}
-
-.notebook-theme .stat-value {
-  font-family: 'Caveat', cursive !important;
-  color: var(--nb-blue-pen) !important;
-  font-size: 28px !important;
-  font-weight: 700 !important;
-}
-
-/* Pairs game cards */
-.notebook-theme .pairs-card {
-  background: var(--nb-card) !important;
-  border: 2px solid var(--nb-blue-pen) !important;
-  border-radius: 4px 12px 6px 10px !important;
-  font-family: 'Caveat', cursive !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.12) !important;
-}
-
-.notebook-theme .pairs-card-inner {
-  font-family: 'Caveat', cursive !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  letter-spacing: 0.2px;
-}
-
-/* Dictionary & Favorites Cards Typography in Notebook theme */
-.notebook-theme .dict-card h3,
-.notebook-theme .fav-word {
-  font-family: 'Caveat', cursive !important;
-  font-size: 22.5px !important;
-  font-weight: 700 !important;
-  color: var(--nb-blue-pen) !important;
-  line-height: 1.2 !important;
-  margin: 4px 0 2px !important;
-}
-
-.notebook-theme .dict-translation,
-.notebook-theme .fav-translation {
-  font-family: 'Caveat', cursive !important;
-  font-size: 20px !important;
-  font-weight: 600 !important;
-  color: var(--nb-black-pen) !important;
-  line-height: 1.25 !important;
-  margin: 2px 0 4px !important;
-}
-
-.notebook-theme .dict-notes,
-.notebook-theme .fav-card .dict-notes {
-  font-family: 'Caveat', cursive !important;
-  font-size: 15px !important;
-  color: var(--nb-blue-pen) !important;
-  opacity: 0.88 !important;
-  line-height: 1.25 !important;
-  margin-top: 4px !important;
-}
-
-.notebook-theme .pairs-card.selected {
-  background: rgba(26, 58, 143, 0.1) !important;
-  border-color: var(--nb-blue-pen) !important;
-}
-
-.notebook-theme .pairs-card.matched {
-  background: rgba(26, 122, 58, 0.1) !important;
-  border-color: var(--nb-green-pen) !important;
-  color: var(--nb-green-pen) !important;
-}
-
-/* Theme toggle button */
-.notebook-theme .theme-toggle-btn {
-  background: rgba(26, 58, 143, 0.1) !important;
-  border: 1.5px solid var(--nb-border) !important;
-  color: var(--nb-blue-pen) !important;
-}
-
-/* Profile badge */
-.notebook-theme .header-profile-badge {
-  background: rgba(26, 58, 143, 0.08) !important;
-  border: 1.5px solid var(--nb-border) !important;
-  font-family: 'Caveat', cursive !important;
-}
-
-/* Theme option buttons in settings */
-.notebook-theme .theme-option-btn,
-.notebook-theme .voice-option-btn,
-.notebook-theme .sound-option-btn {
-  background: var(--nb-card) !important;
-  border: 2px solid var(--nb-border) !important;
-  border-radius: 4px 10px 5px 8px !important;
-  color: var(--nb-muted) !important;
-  font-family: 'Caveat', cursive !important;
-  font-size: 16px !important;
-}
-
-.notebook-theme .theme-option-btn.active,
-.notebook-theme .voice-option-btn.active,
-.notebook-theme .sound-option-btn.active {
-  background: rgba(26, 58, 143, 0.12) !important;
-  border-color: var(--nb-blue-pen) !important;
-  color: var(--nb-blue-pen) !important;
-  font-weight: 700 !important;
-}
-
-/* Progress bar */
-.notebook-theme .progress-fill,
-.notebook-theme .category-fill {
-  background: linear-gradient(90deg, var(--nb-blue-pen), #3a5fb0) !important;
-}
-
-/* XP badge */
-.notebook-theme .xp-badge {
-  background: rgba(26, 58, 143, 0.12) !important;
-  border: 1.5px solid var(--nb-blue-pen) !important;
-  color: var(--nb-blue-pen) !important;
-  font-family: 'Caveat', cursive !important;
-  font-weight: 700 !important;
-}
-
-/* Word of the day gold card — keep gold but add notebook feel */
-/* Word of the Day card — always keeps its original design, unaffected by notebook theme fonts */
-.notebook-theme .wotd-standalone-wrapper,
-.notebook-theme .wotd-standalone-wrapper * {
-  font-family: inherit !important;
-}
-
-.notebook-theme .wotd-card .embossed-text,
-.notebook-theme .wotd-card .flashcard-flip-prompt,
-.notebook-theme .wotd-card .flashcard-word,
-.notebook-theme .wotd-card .flashcard-translation,
-.notebook-theme .wotd-card .flashcard-transcription,
-.notebook-theme .wotd-card .wotd-card-badge {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-}
-
-.notebook-theme .wotd-card .flashcard-face {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  border-radius: var(--radius-lg, 16px) !important;
-}
-
-/* Success/error colors override */
-.notebook-theme .correct-answer-banner {
-  background: rgba(26, 122, 58, 0.12) !important;
-  border: 2px solid var(--nb-green-pen) !important;
-  color: var(--nb-green-pen) !important;
-  font-family: 'Caveat', cursive !important;
-}
-
-.notebook-theme .wrong-answer-banner {
-  background: rgba(192, 57, 43, 0.10) !important;
-  border: 2px solid var(--nb-red-pen) !important;
-  color: var(--nb-red-pen) !important;
-  font-family: 'Caveat', cursive !important;
-}
-
-/* Scrollbar */
-.notebook-theme ::-webkit-scrollbar {
-  width: 6px;
-}
-.notebook-theme ::-webkit-scrollbar-thumb {
-  background: var(--nb-border);
-  border-radius: 3px;
-}
-
 /* Hamburger Drawer Styles */
 .drawer-overlay {
   position: fixed;
@@ -6990,16 +6433,6 @@ body.notebook-theme,
 .dark-theme .leaderboard-drawer-header {
   background: #0f172a;
   border-bottom-color: #334155;
-}
-
-.notebook-theme .leaderboard-drawer {
-  background: #fffdf8;
-  border-right-color: #e2d9cc;
-}
-
-.notebook-theme .leaderboard-drawer-header {
-  background: #fffdf8;
-  border-bottom-color: #e2d9cc;
 }
 
 .drawer-header {
@@ -7201,23 +6634,6 @@ body.notebook-theme,
   background: rgba(22, 163, 74, 0.08);
 }
 
-/* Notebook Theme specific overrides for drawer */
-.notebook-theme .burger-drawer {
-  background: #fcfbf7;
-  border-left: 1.5px solid var(--nb-border);
-}
-
-.notebook-theme .burger-drawer .nav-tab:hover,
-.notebook-theme .burger-drawer .drawer-share-action-btn:hover {
-  background: #f0ede4;
-  color: var(--nb-text);
-}
-
-.notebook-theme .burger-drawer .nav-tab.active {
-  background: #f0ede4;
-  color: #c26a38;
-}
-
 /* Dark Theme overrides for drawer */
 .dark-theme .burger-drawer {
   background: #0f172a;
@@ -7377,77 +6793,6 @@ body.notebook-theme,
   background: #1e293b;
 }
 
-.notebook-theme .header-burger-btn {
-  background: #fffdf7;
-  border: 2px solid var(--nb-blue-pen);
-  box-shadow: var(--nb-shadow);
-}
-
-.notebook-theme .header-burger-btn:hover {
-  background: #f0ede4;
-}
-
-/* Scale up small fonts in Notebook theme for readability */
-.notebook-theme small,
-.notebook-theme .user-status-text,
-.notebook-theme .xp-badge-text,
-.notebook-theme .drawer-email,
-.notebook-theme .drawer-username,
-.notebook-theme .dict-translation,
-.notebook-theme .fav-translation,
-.notebook-theme .word-transcription,
-.notebook-theme .card-transcription,
-.notebook-theme .word-example,
-.notebook-theme .settings-option-subtitle,
-.notebook-theme .settings-info-text {
-  font-size: 1.25em !important;
-}
-
-.notebook-theme .dropdown-item,
-.notebook-theme .custom-dropdown-trigger,
-.notebook-theme .train-left-badge {
-  font-size: 19px !important;
-  font-family: 'Caveat', cursive !important;
-}
-
-.notebook-theme .mode-pill-btn {
-  font-family: 'Caveat', cursive !important;
-  font-size: 21px !important;
-}
-
-.notebook-theme .podium-name,
-.notebook-theme .row-name,
-.notebook-theme .my-bar-name {
-  font-family: 'Caveat', cursive !important;
-  font-size: 19px !important;
-}
-
-.notebook-theme .podium-xp,
-.notebook-theme .row-xp,
-.notebook-theme .my-bar-xp,
-.notebook-theme .my-rank-badge,
-.notebook-theme .row-rank {
-  font-family: 'Caveat', cursive !important;
-  font-size: 18px !important;
-}
-
-.notebook-theme #leaderboard-type-trigger,
-.notebook-theme #leaderboard-type-label {
-  font-family: 'Caveat', cursive !important;
-  font-size: 23px !important;
-}
-
-.notebook-theme .league-timer-badge,
-.notebook-theme #leaderboard-timer-badge {
-  font-family: 'Caveat', cursive !important;
-  font-size: 18px !important;
-}
-
-.notebook-theme .my-bar-status {
-  font-family: 'Caveat', cursive !important;
-  font-size: 16px !important;
-}
-
 /* Canonical Mobile Header Standards - Strict Section 1 Compliance */
 .mobile-header {
   display: flex !important;
@@ -7494,12 +6839,6 @@ body.notebook-theme,
   color: rgba(255, 255, 255, 0.85) !important;
 }
 
-.notebook-theme .flashcard-notes {
-  color: var(--nb-blue-pen) !important;
-  opacity: 0.85;
-  font-family: 'Caveat', cursive !important;
-}
-
 .dict-notes {
   font-size: 13.5px;
   font-weight: 500;
@@ -7513,12 +6852,6 @@ body.notebook-theme,
 .dark-theme .dict-card .dict-notes,
 .dark-theme .fav-card .dict-notes {
   color: #cbd5e1 !important;
-}
-
-.notebook-theme .dict-notes {
-  color: var(--nb-blue-pen) !important;
-  opacity: 0.85;
-  font-family: 'Caveat', cursive !important;
 }
 
 /* App Maintenance: Clear Cache Button (Green in all themes) */
@@ -8373,8 +7706,6 @@ body.dark-theme #clear-app-cache-btn:hover {
   border-color: #334155;
   color: #f8fafc;
 }
-
-
 
 .scanner-group-cat-btn {
   display: inline-flex;
@@ -9293,17 +8624,6 @@ body.dark-theme #clear-app-cache-btn:hover {
   border: 1px solid #475569;
 }
 
-/* Notebook theme overrides for Share Modal */
-.notebook-theme .share-modal-card {
-  background: #fcfbf7;
-  border: 1.5px solid var(--nb-border, #dcd7cb);
-}
-
-.notebook-theme .share-link-box {
-  background: #f0ede4;
-  border-color: var(--nb-border, #dcd7cb);
-}
-
 /* Centered modals with blurred backdrop */
 .modal-overlay {
   position: fixed;
@@ -9318,8 +8638,6 @@ body.dark-theme #clear-app-cache-btn:hover {
   padding: 16px;
   box-sizing: border-box;
 }
-
-
 
 /* ========================================================
    VIP WORD PASS — 3D MATTE GOLD CARD
@@ -9732,7 +9050,6 @@ body.dark-theme #clear-app-cache-btn:hover {
   .wotd-tilt-container, #wotd-flashcard-3d.card-flipper, .bank-card.matte-gold .heart-icon { transition: none !important; }
   .bank-card.matte-gold .card-idle-shine { animation: none !important; }
 }
-
 
 .bank-card.matte-gold .card-fav .heart-svg {
   display: block;
@@ -10896,21 +10213,6 @@ html.is-rtl {
   box-shadow: 0 4px 0 #854d0e !important;
 }
 
-/* Notebook theme overrides */
-.notebook-theme .wb-slot.wb-slot-filled {
-  background: #fffdf8 !important;
-  border-color: var(--nb-blue-pen) !important;
-  color: var(--nb-blue-pen) !important;
-  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.25) !important;
-}
-
-.notebook-theme .wb-tile {
-  background: #fffdf8 !important;
-  border-color: var(--nb-blue-pen) !important;
-  color: var(--nb-blue-pen) !important;
-  box-shadow: 2px 2px 0 rgba(26, 58, 143, 0.2) !important;
-}
-
 /* ========================================================
    CHALLENGE (VIDEO CONTEST) MODAL
    ======================================================== */
@@ -11265,8 +10567,4 @@ html.is-rtl {
 [data-theme='dark'] .challenge-secondary-btn:hover {
   background: rgba(255, 255, 255, 0.14);
 }
-
-
-
-
 
