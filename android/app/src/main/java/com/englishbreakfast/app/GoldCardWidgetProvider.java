@@ -370,15 +370,19 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
             }
 
             // When widget is resized to 4x1, height is typically 40..80dp. For 4x2, it's 100..180dp.
-            // If unknown (0), default to full 4x2 (isCompact1Row = false).
+            // When widget is expanded to 4x3 or 4x4+, height is >= 180dp.
+            // If unknown (0), default to standard 4x2 (isCompact1Row = false, isLarge = false).
             boolean isCompact1Row = currentHeightDp > 0 && currentHeightDp < 90;
+            boolean isLarge = (currentHeightDp >= 180) || (maxHeight >= 180);
 
             float density = context.getResources().getDisplayMetrics().density;
             if (isCompact1Row) {
-                // 4x1: standard base sizes
+                // 4x1: standard base sizes (compact single row)
                 // English: 20sp, Translation reduced by 1: 18sp
                 views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 20f);
                 views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 18f);
+                views.setInt(R.id.widget_word_english, "setMaxLines", 2);
+                views.setInt(R.id.widget_word_translation, "setMaxLines", 2);
                 views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 28f);
                 views.setTextViewTextSize(R.id.widget_btn_next, TypedValue.COMPLEX_UNIT_SP, 28f);
                 int padBottom4x1 = Math.round(2f * density);
@@ -391,11 +395,33 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 views.setViewVisibility(R.id.widget_btn_play_pause, View.GONE);
                 views.setViewVisibility(R.id.widget_fav_counter, View.GONE);
                 views.setViewVisibility(R.id.widget_rank_badge, View.GONE);
+            } else if (isLarge) {
+                // Large widget (4x3, 4x4+): expanded card with ample vertical space
+                // Allow up to 6 lines for translation so multi-word definitions never cut off with "..."
+                views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 23f);
+                views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 21f);
+                views.setInt(R.id.widget_word_english, "setMaxLines", 4);
+                views.setInt(R.id.widget_word_translation, "setMaxLines", 6);
+                views.setTextViewTextSize(R.id.widget_fav_counter, TypedValue.COMPLEX_UNIT_SP, 15f);
+                views.setTextViewTextSize(R.id.widget_rank_badge, TypedValue.COMPLEX_UNIT_SP, 14f);
+                views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 31f);
+                views.setTextViewTextSize(R.id.widget_btn_next, TypedValue.COMPLEX_UNIT_SP, 31f);
+
+                int padIcon = Math.round(10f * density);
+                views.setViewPadding(R.id.widget_btn_speaker, padIcon, padIcon, padIcon, padIcon);
+                views.setViewPadding(R.id.widget_btn_heart, padIcon, padIcon, padIcon, padIcon);
+                views.setViewPadding(R.id.widget_btn_play_pause, padIcon, padIcon, padIcon, padIcon);
+
+                int padBottom4x2 = Math.round(7f * density);
+                views.setViewPadding(R.id.widget_btn_prev, 0, 0, 0, padBottom4x2);
+                views.setViewPadding(R.id.widget_btn_next, 0, 0, 0, padBottom4x2);
             } else {
-                // 4x2: all elements balanced
+                // 4x2: all elements balanced (standard 2 lines)
                 // English: 23sp (+1 from 22sp), Translation is 1 less: 22sp
                 views.setTextViewTextSize(R.id.widget_word_english, TypedValue.COMPLEX_UNIT_SP, 23f);
                 views.setTextViewTextSize(R.id.widget_word_translation, TypedValue.COMPLEX_UNIT_SP, 22f);
+                views.setInt(R.id.widget_word_english, "setMaxLines", 2);
+                views.setInt(R.id.widget_word_translation, "setMaxLines", 2);
                 views.setTextViewTextSize(R.id.widget_fav_counter, TypedValue.COMPLEX_UNIT_SP, 15f);
                 views.setTextViewTextSize(R.id.widget_rank_badge, TypedValue.COMPLEX_UNIT_SP, 14f);
                 views.setTextViewTextSize(R.id.widget_btn_prev, TypedValue.COMPLEX_UNIT_SP, 31f);
