@@ -3,8 +3,8 @@
 # min_api: 24
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: e8fd139da90fc15bc9e8cd0dc3e54c5ac254075fdd9333b3181010bdd73afdaa
-# pg_map_hash: SHA-256 e8fd139da90fc15bc9e8cd0dc3e54c5ac254075fdd9333b3181010bdd73afdaa
+# pg_map_id: 7323da05b262c44bda48b3d29e4c4ca2226df6804881d5e31d8e958bfeac45c2
+# pg_map_hash: SHA-256 7323da05b262c44bda48b3d29e4c4ca2226df6804881d5e31d8e958bfeac45c2
 _COROUTINE.ArtificialStackFrames -> R8$$REMOVED$$CLASS$$0:
 # {"id":"sourceFile","fileName":"CoroutineDebugging.kt"}
 _COROUTINE.CoroutineDebuggingKt -> R8$$REMOVED$$CLASS$$1:
@@ -80728,13 +80728,13 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$P5xzceo2IjVPISiGSIrc9hWQoFA(int,android.content.Context):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
-    1:11:void cancelRotation(android.content.Context):586:586 -> cancelRotation
-    12:18:void cancelRotation(android.content.Context):589:589 -> cancelRotation
-    19:23:void cancelRotation(android.content.Context):590:590 -> cancelRotation
-    24:34:void cancelRotation(android.content.Context):591:591 -> cancelRotation
-    35:38:void cancelRotation(android.content.Context):597:597 -> cancelRotation
-    39:43:void cancelRotation(android.content.Context):598:598 -> cancelRotation
-    44:47:void cancelRotation(android.content.Context):600:600 -> cancelRotation
+    1:11:void cancelRotation(android.content.Context):612:612 -> cancelRotation
+    12:18:void cancelRotation(android.content.Context):615:615 -> cancelRotation
+    19:23:void cancelRotation(android.content.Context):616:616 -> cancelRotation
+    24:34:void cancelRotation(android.content.Context):617:617 -> cancelRotation
+    35:38:void cancelRotation(android.content.Context):623:623 -> cancelRotation
+    39:43:void cancelRotation(android.content.Context):624:624 -> cancelRotation
+    44:47:void cancelRotation(android.content.Context):626:626 -> cancelRotation
     1:4:void $r8$lambda$SXq5oZ9-uYRYuXoD3RqmhD611qQ(int,android.content.Context):0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$Z5VUm2M5X210npYaTDK4iOBNvQg(android.content.Context,java.lang.String,com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0):0:0 -> e
@@ -80745,10 +80745,10 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/b;Ljava/util/concurrent/atomic/AtomicBoolean;ILandroid/content/Context;)V"}
     1:4:void $r8$lambda$v-1rdCf48IUoeu6Nz9mjLM9IOnk(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
-    1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):526:526 -> getPendingIntent
-    8:10:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):527:527 -> getPendingIntent
-    11:19:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):528:528 -> getPendingIntent
-    20:24:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):533:533 -> getPendingIntent
+    1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):552:552 -> getPendingIntent
+    8:10:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):553:553 -> getPendingIntent
+    11:19:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):554:554 -> getPendingIntent
+    20:24:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):559:559 -> getPendingIntent
     1:4:void $r8$lambda$zWXyiMQHdVpMNz53a1FmuiNOZa4(int,android.content.Context):0:0 -> h
       # {"id":"com.android.tools.r8.synthesized"}
     1:1:void handleWidgetAction(android.content.Context,java.lang.String):194:194 -> handleWidgetAction
@@ -80777,10 +80777,10 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     58:59:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):215:216 -> handleWidgetAction
     60:60:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):218:218 -> handleWidgetAction
     61:61:void handleWidgetAction(android.content.Context,java.lang.String,java.lang.Runnable):220:220 -> handleWidgetAction
-    5:8:boolean hasActiveWidgets(android.content.Context):539:539 -> hasActiveWidgets
-    9:15:boolean hasActiveWidgets(android.content.Context):540:540 -> hasActiveWidgets
-    16:19:boolean hasActiveWidgets(android.content.Context):541:541 -> hasActiveWidgets
-    20:25:boolean hasActiveWidgets(android.content.Context):542:542 -> hasActiveWidgets
+    5:8:boolean hasActiveWidgets(android.content.Context):565:565 -> hasActiveWidgets
+    9:15:boolean hasActiveWidgets(android.content.Context):566:566 -> hasActiveWidgets
+    16:19:boolean hasActiveWidgets(android.content.Context):567:567 -> hasActiveWidgets
+    20:25:boolean hasActiveWidgets(android.content.Context):568:568 -> hasActiveWidgets
     3:8:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):99:99 -> lambda$onReceive$0
     9:12:void lambda$onReceive$0(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):101:101 -> lambda$onReceive$0
     1:4:void lambda$onReceive$1(android.content.Context,java.lang.String,java.lang.Runnable):110:110 -> lambda$onReceive$1
@@ -80846,17 +80846,17 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     7:12:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):33:33 -> onUpdate
     13:16:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]):35:35 -> onUpdate
     1:12:void playNextContinuousWord(android.content.Context,int):137:137 -> playNextContinuousWord
-    4:9:void scheduleNextRotation(android.content.Context):550:550 -> scheduleNextRotation
-    10:13:void scheduleNextRotation(android.content.Context):551:551 -> scheduleNextRotation
-    14:24:void scheduleNextRotation(android.content.Context):555:555 -> scheduleNextRotation
-    25:31:void scheduleNextRotation(android.content.Context):558:558 -> scheduleNextRotation
-    32:36:void scheduleNextRotation(android.content.Context):559:559 -> scheduleNextRotation
-    37:47:void scheduleNextRotation(android.content.Context):560:560 -> scheduleNextRotation
-    48:51:void scheduleNextRotation(android.content.Context):566:566 -> scheduleNextRotation
-    52:69:void scheduleNextRotation(android.content.Context):568:568 -> scheduleNextRotation
-    70:75:void scheduleNextRotation(android.content.Context):573:573 -> scheduleNextRotation
-    76:80:void scheduleNextRotation(android.content.Context):575:575 -> scheduleNextRotation
-    81:84:void scheduleNextRotation(android.content.Context):580:580 -> scheduleNextRotation
+    4:9:void scheduleNextRotation(android.content.Context):576:576 -> scheduleNextRotation
+    10:13:void scheduleNextRotation(android.content.Context):577:577 -> scheduleNextRotation
+    14:24:void scheduleNextRotation(android.content.Context):581:581 -> scheduleNextRotation
+    25:31:void scheduleNextRotation(android.content.Context):584:584 -> scheduleNextRotation
+    32:36:void scheduleNextRotation(android.content.Context):585:585 -> scheduleNextRotation
+    37:47:void scheduleNextRotation(android.content.Context):586:586 -> scheduleNextRotation
+    48:51:void scheduleNextRotation(android.content.Context):592:592 -> scheduleNextRotation
+    52:69:void scheduleNextRotation(android.content.Context):594:594 -> scheduleNextRotation
+    70:75:void scheduleNextRotation(android.content.Context):599:599 -> scheduleNextRotation
+    76:80:void scheduleNextRotation(android.content.Context):601:601 -> scheduleNextRotation
+    81:84:void scheduleNextRotation(android.content.Context):606:606 -> scheduleNextRotation
     6:7:void startContinuousPlay(android.content.Context):118:118 -> startContinuousPlay
     8:13:void startContinuousPlay(android.content.Context):119:119 -> startContinuousPlay
     14:15:void startContinuousPlay(android.content.Context):120:120 -> startContinuousPlay
@@ -80877,105 +80877,125 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     19:24:void updateAllWidgets(android.content.Context):323:323 -> updateAllWidgets
     25:32:void updateAllWidgets(android.content.Context):324:324 -> updateAllWidgets
     33:36:void updateAllWidgets(android.content.Context):327:327 -> updateAllWidgets
-    1:8:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):333:333 -> updateAppWidget
-    9:14:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):335:335 -> updateAppWidget
-    15:17:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):336:336 -> updateAppWidget
-    18:25:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):337:337 -> updateAppWidget
-    26:28:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):338:338 -> updateAppWidget
-    29:30:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):340:340 -> updateAppWidget
-    31:39:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):342:342 -> updateAppWidget
-    40:43:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):344:344 -> updateAppWidget
-    44:47:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):345:345 -> updateAppWidget
-    48:54:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):348:348 -> updateAppWidget
-    55:66:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):349:349 -> updateAppWidget
-    67:71:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):353:353 -> updateAppWidget
-    72:77:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):354:354 -> updateAppWidget
-    78:82:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):356:356 -> updateAppWidget
-    83:87:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):357:357 -> updateAppWidget
-    88:91:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):360:360 -> updateAppWidget
-    92:110:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):361:361 -> updateAppWidget
-    111:120:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):362:362 -> updateAppWidget
-    121:147:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):363:363 -> updateAppWidget
-    148:159:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):376:376 -> updateAppWidget
-    160:166:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):380:380 -> updateAppWidget
-    167:173:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):381:381 -> updateAppWidget
-    174:180:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):382:382 -> updateAppWidget
-    181:188:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):383:383 -> updateAppWidget
-    189:192:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):384:384 -> updateAppWidget
-    193:200:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):385:385 -> updateAppWidget
-    201:208:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):386:386 -> updateAppWidget
-    209:213:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):389:389 -> updateAppWidget
-    214:218:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):390:390 -> updateAppWidget
-    219:223:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):391:391 -> updateAppWidget
-    224:228:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):392:392 -> updateAppWidget
-    229:234:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):393:393 -> updateAppWidget
-    235:241:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):397:397 -> updateAppWidget
-    242:248:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):398:398 -> updateAppWidget
-    249:255:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):399:399 -> updateAppWidget
-    256:262:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):400:400 -> updateAppWidget
-    263:269:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
-    270:277:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):402:402 -> updateAppWidget
-    278:281:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):405:405 -> updateAppWidget
-    282:289:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):406:406 -> updateAppWidget
-    290:297:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):407:407 -> updateAppWidget
-    298:308:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):408:408 -> updateAppWidget
-    309:312:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):411:411 -> updateAppWidget
-    313:320:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):412:412 -> updateAppWidget
-    321:328:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):413:413 -> updateAppWidget
-    329:338:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):416:416 -> updateAppWidget
-    339:343:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):419:419 -> updateAppWidget
-    344:348:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):422:422 -> updateAppWidget
-    349:350:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
-    351:359:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):425:425 -> updateAppWidget
-    360:363:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
-    364:370:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):420:420 -> updateAppWidget
-    371:378:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):430:430 -> updateAppWidget
-    379:382:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):431:431 -> updateAppWidget
-    383:388:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):432:432 -> updateAppWidget
-    389:413:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):434:434 -> updateAppWidget
-    414:419:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):435:435 -> updateAppWidget
-    420:425:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):437:437 -> updateAppWidget
-    426:435:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):440:440 -> updateAppWidget
-    436:441:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):447:447 -> updateAppWidget
-    442:451:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):445:445 -> updateAppWidget
-    452:456:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):454:454 -> updateAppWidget
-    457:460:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):455:455 -> updateAppWidget
-    461:468:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):456:456 -> updateAppWidget
-    469:476:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):459:459 -> updateAppWidget
-    477:481:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):461:461 -> updateAppWidget
-    482:487:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):463:463 -> updateAppWidget
-    488:494:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):452:452 -> updateAppWidget
-    495:504:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):468:468 -> updateAppWidget
-    505:521:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):470:470 -> updateAppWidget
-    522:529:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):471:471 -> updateAppWidget
-    530:536:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):474:474 -> updateAppWidget
-    537:542:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):475:475 -> updateAppWidget
-    543:548:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):478:478 -> updateAppWidget
-    549:553:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):481:481 -> updateAppWidget
-    554:559:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):485:485 -> updateAppWidget
-    560:563:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):487:487 -> updateAppWidget
-    564:568:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):488:488 -> updateAppWidget
-    569:574:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):489:489 -> updateAppWidget
-    575:579:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):491:491 -> updateAppWidget
-    580:588:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):497:497 -> updateAppWidget
-    589:591:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):498:498 -> updateAppWidget
-    592:605:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):499:499 -> updateAppWidget
-    606:609:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):500:500 -> updateAppWidget
-    610:614:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):501:501 -> updateAppWidget
-    615:622:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):504:504 -> updateAppWidget
-    623:627:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):505:505 -> updateAppWidget
-    628:632:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):506:506 -> updateAppWidget
-    633:637:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):507:507 -> updateAppWidget
-    638:642:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):508:508 -> updateAppWidget
-    643:647:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):509:509 -> updateAppWidget
-    648:652:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):510:510 -> updateAppWidget
-    653:665:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):513:513 -> updateAppWidget
-    666:678:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):514:514 -> updateAppWidget
-    679:691:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):515:515 -> updateAppWidget
-    692:704:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):516:516 -> updateAppWidget
-    705:719:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):517:517 -> updateAppWidget
-    720:725:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):519:519 -> updateAppWidget
-    726:729:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):521:521 -> updateAppWidget
+    3:10:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):333:333 -> updateAppWidget
+    11:16:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):335:335 -> updateAppWidget
+    17:19:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):336:336 -> updateAppWidget
+    20:27:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):337:337 -> updateAppWidget
+    28:30:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):338:338 -> updateAppWidget
+    31:32:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):340:340 -> updateAppWidget
+    33:41:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):342:342 -> updateAppWidget
+    42:45:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):344:344 -> updateAppWidget
+    46:49:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):345:345 -> updateAppWidget
+    50:56:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):348:348 -> updateAppWidget
+    57:68:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):349:349 -> updateAppWidget
+    69:73:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):353:353 -> updateAppWidget
+    74:79:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):354:354 -> updateAppWidget
+    80:84:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):356:356 -> updateAppWidget
+    85:89:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):357:357 -> updateAppWidget
+    90:93:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):360:360 -> updateAppWidget
+    94:112:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):361:361 -> updateAppWidget
+    113:122:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):362:362 -> updateAppWidget
+    123:155:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):363:363 -> updateAppWidget
+    156:165:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):378:378 -> updateAppWidget
+    166:169:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):379:379 -> updateAppWidget
+    170:176:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):382:382 -> updateAppWidget
+    177:183:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):383:383 -> updateAppWidget
+    184:188:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):384:384 -> updateAppWidget
+    189:193:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):385:385 -> updateAppWidget
+    194:200:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):386:386 -> updateAppWidget
+    201:208:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):387:387 -> updateAppWidget
+    209:212:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):388:388 -> updateAppWidget
+    213:220:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):389:389 -> updateAppWidget
+    221:228:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):390:390 -> updateAppWidget
+    229:233:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):393:393 -> updateAppWidget
+    234:238:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):394:394 -> updateAppWidget
+    239:243:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):395:395 -> updateAppWidget
+    244:248:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):396:396 -> updateAppWidget
+    249:269:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):397:397 -> updateAppWidget
+    270:274:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):401:401 -> updateAppWidget
+    275:281:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):402:402 -> updateAppWidget
+    282:287:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):403:403 -> updateAppWidget
+    288:293:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):404:404 -> updateAppWidget
+    294:298:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):405:405 -> updateAppWidget
+    299:303:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):406:406 -> updateAppWidget
+    304:308:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):407:407 -> updateAppWidget
+    309:315:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):408:408 -> updateAppWidget
+    316:319:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):410:410 -> updateAppWidget
+    320:327:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):411:411 -> updateAppWidget
+    328:335:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):412:412 -> updateAppWidget
+    336:345:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):413:413 -> updateAppWidget
+    346:349:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):415:415 -> updateAppWidget
+    350:357:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):416:416 -> updateAppWidget
+    358:366:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):417:417 -> updateAppWidget
+    367:371:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):421:421 -> updateAppWidget
+    372:378:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):422:422 -> updateAppWidget
+    379:383:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):423:423 -> updateAppWidget
+    384:388:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):424:424 -> updateAppWidget
+    389:393:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):425:425 -> updateAppWidget
+    394:398:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):426:426 -> updateAppWidget
+    399:403:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):427:427 -> updateAppWidget
+    404:410:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):428:428 -> updateAppWidget
+    411:414:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):431:431 -> updateAppWidget
+    415:422:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):432:432 -> updateAppWidget
+    423:430:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):433:433 -> updateAppWidget
+    431:440:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):434:434 -> updateAppWidget
+    441:444:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):437:437 -> updateAppWidget
+    445:452:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):438:438 -> updateAppWidget
+    453:460:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):439:439 -> updateAppWidget
+    461:470:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):442:442 -> updateAppWidget
+    471:475:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):445:445 -> updateAppWidget
+    476:480:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):448:448 -> updateAppWidget
+    481:482:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):449:449 -> updateAppWidget
+    483:491:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):451:451 -> updateAppWidget
+    492:495:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):449:449 -> updateAppWidget
+    496:504:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):446:446 -> updateAppWidget
+    505:512:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):456:456 -> updateAppWidget
+    513:516:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):457:457 -> updateAppWidget
+    517:522:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):458:458 -> updateAppWidget
+    523:547:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):460:460 -> updateAppWidget
+    548:553:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):461:461 -> updateAppWidget
+    554:561:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):463:463 -> updateAppWidget
+    562:573:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):466:466 -> updateAppWidget
+    574:579:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):473:473 -> updateAppWidget
+    580:591:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):471:471 -> updateAppWidget
+    592:596:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):480:480 -> updateAppWidget
+    597:600:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):481:481 -> updateAppWidget
+    601:608:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):482:482 -> updateAppWidget
+    609:616:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):485:485 -> updateAppWidget
+    617:621:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):487:487 -> updateAppWidget
+    622:627:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):489:489 -> updateAppWidget
+    628:636:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):478:478 -> updateAppWidget
+    637:646:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):494:494 -> updateAppWidget
+    647:663:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):496:496 -> updateAppWidget
+    664:671:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):497:497 -> updateAppWidget
+    672:678:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):500:500 -> updateAppWidget
+    679:684:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):501:501 -> updateAppWidget
+    685:692:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):504:504 -> updateAppWidget
+    693:699:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):507:507 -> updateAppWidget
+    700:705:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):511:511 -> updateAppWidget
+    706:709:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):513:513 -> updateAppWidget
+    710:714:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):514:514 -> updateAppWidget
+    715:720:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):515:515 -> updateAppWidget
+    721:727:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):517:517 -> updateAppWidget
+    728:736:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):523:523 -> updateAppWidget
+    737:739:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):524:524 -> updateAppWidget
+    740:753:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):525:525 -> updateAppWidget
+    754:757:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):526:526 -> updateAppWidget
+    758:762:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):527:527 -> updateAppWidget
+    763:770:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):530:530 -> updateAppWidget
+    771:775:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):531:531 -> updateAppWidget
+    776:780:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):532:532 -> updateAppWidget
+    781:785:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):533:533 -> updateAppWidget
+    786:790:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):534:534 -> updateAppWidget
+    791:795:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):535:535 -> updateAppWidget
+    796:800:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):536:536 -> updateAppWidget
+    801:813:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):539:539 -> updateAppWidget
+    814:826:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):540:540 -> updateAppWidget
+    827:839:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):541:541 -> updateAppWidget
+    840:852:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):542:542 -> updateAppWidget
+    853:869:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):543:543 -> updateAppWidget
+    870:874:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):545:545 -> updateAppWidget
+    875:878:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):547:547 -> updateAppWidget
 com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.a:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
