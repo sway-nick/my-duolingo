@@ -115,14 +115,6 @@ export function openChallengeModal() {
           <div class="challenge-slogan">${escapeHtml(d.actionSlogan)}</div>
         </div>
       </div>
-
-      <div class="challenge-modal-footer">
-        <a href="mailto:${escapeHtml(d.email)}?subject=${encodeURIComponent('English Breakfast Challenge Video')}" class="challenge-primary-btn" id="challenge-send-email-btn">
-          <span class="btn-icon">✉️</span>
-          <span>${escapeHtml(d.sendEmailBtn)}</span>
-        </a>
-        <button type="button" class="challenge-secondary-btn" id="challenge-dismiss-btn">${escapeHtml(d.closeBtn)}</button>
-      </div>
     </div>
   `;
 
@@ -137,9 +129,6 @@ export function openChallengeModal() {
 
   const closeBtn = overlay.querySelector('#challenge-close-btn');
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-  const dismissBtn = overlay.querySelector('#challenge-dismiss-btn');
-  if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
 
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {

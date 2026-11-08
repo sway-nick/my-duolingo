@@ -10296,7 +10296,7 @@ html.is-rtl {
 }
 
 .challenge-modal-body {
-  padding: 16px 20px;
+  padding: 16px 20px 22px;
   overflow-y: auto;
   scrollbar-width: thin;
   display: flex;
@@ -10306,16 +10306,16 @@ html.is-rtl {
 }
 
 .challenge-hero-box {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(249, 115, 22, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.09) 0%, rgba(217, 119, 6, 0.06) 100%);
   border-radius: 14px;
   padding: 14px 16px;
-  border: 1px solid rgba(249, 115, 22, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .challenge-subtitle {
   font-size: 16px;
   font-weight: 800;
-  color: #ea580c;
+  color: #d97706;
   margin: 0 0 6px 0;
 }
 
@@ -10391,7 +10391,7 @@ html.is-rtl {
 .challenge-ideas-closing {
   font-size: 13px;
   font-weight: 700;
-  color: #ea580c;
+  color: #d97706;
   margin: 10px 0 0 0;
 }
 
@@ -10427,7 +10427,7 @@ html.is-rtl {
 }
 
 .challenge-confirm-box {
-  border-left: 3px solid #f97316;
+  border-left: 3px solid #3b82f6;
 }
 
 .challenge-confirm-title {
@@ -10462,56 +10462,9 @@ html.is-rtl {
 .challenge-slogan {
   font-size: 16px;
   font-weight: 800;
-  color: #ea580c;
+  color: #d97706;
 }
 
-.challenge-modal-footer {
-  display: flex;
-  gap: 10px;
-  padding: 14px 20px;
-  border-top: 1px solid var(--border-subtle, #f1f5f9);
-  flex-shrink: 0;
-}
-
-.challenge-primary-btn {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: #16a34a;
-  color: #ffffff !important;
-  font-size: 15px;
-  font-weight: 700;
-  padding: 12px 18px;
-  border-radius: 12px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.15s;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
-}
-
-.challenge-primary-btn:hover {
-  background: #15803d;
-  transform: translateY(-1px);
-}
-
-.challenge-secondary-btn {
-  background: rgba(100, 116, 139, 0.12);
-  color: var(--text-main, #334155);
-  font-size: 15px;
-  font-weight: 600;
-  padding: 12px 18px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.challenge-secondary-btn:hover {
-  background: rgba(100, 116, 139, 0.2);
-}
 
 /* Dark theme overrides for Challenge modal */
 .dark-theme .challenge-modal-card,
@@ -10522,9 +10475,7 @@ html.is-rtl {
 }
 
 .dark-theme .challenge-modal-header,
-[data-theme='dark'] .challenge-modal-header,
-.dark-theme .challenge-modal-footer,
-[data-theme='dark'] .challenge-modal-footer {
+[data-theme='dark'] .challenge-modal-header {
   border-color: #334155;
 }
 
@@ -10557,14 +10508,5 @@ html.is-rtl {
   color: #94a3b8;
 }
 
-.dark-theme .challenge-secondary-btn,
-[data-theme='dark'] .challenge-secondary-btn {
-  background: rgba(255, 255, 255, 0.08);
-  color: #e2e8f0;
-}
 
-.dark-theme .challenge-secondary-btn:hover,
-[data-theme='dark'] .challenge-secondary-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-}
 

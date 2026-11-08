@@ -7,10 +7,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "en": {
     "title": "🎬 CHALLENGE!",
     "menuTitle": "Challenge",
-    "subtitle": "Got a funny idea? Love making videos? Show us what you've got!",
+    "subtitle": "Got a funny idea? Love making videos or creating AI clips? Show us what you've got!",
     "intro": "We're inviting all English Breakfast players to join our creative video contest! Create a short, funny and entertaining video in English. It can be anything that makes people smile!",
     "goldenCardTitle": "🌟 Featured on the Golden Card!",
-    "goldenCardText": "The English Breakfast team will select the best, funniest and most creative videos! Winning videos will be featured directly on the Golden Card in the English Breakfast app and on our social media pages!",
+    "goldenCardText": "The English Breakfast team will select the best, funniest and most creative videos! Winning videos will be featured directly on the Golden Card in the English Breakfast app. Share your video in the app and on social media!",
     "ideasTitle": "🐱 What can your video be about?",
     "ideas": [
       "Our ginger cat hero and his funny adventures.",
@@ -49,10 +49,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "ru": {
     "title": "🎬 ЧЕЛЛЕНДЖ!",
     "menuTitle": "Челлендж",
-    "subtitle": "Есть смешная идея? Любишь снимать видео? Покажи, на что способен!",
+    "subtitle": "Есть смешная идея? Любишь снимать видео или умеешь сделать ролик с помощью ИИ? Покажи нам, на что способен!",
     "intro": "Мы приглашаем всех игроков English Breakfast принять участие в творческом видео-конкурсе! Создай короткое, забавное и увлекательное видео на английском языке — всё, что может вызвать улыбку!",
     "goldenCardTitle": "🌟 Показ на Золотой карте!",
-    "goldenCardText": "Команда English Breakfast выберет самые лучшие, смешные и креативные ролики! Видео победителей будут показаны прямо на Золотой карте в приложении English Breakfast и на наших страницах в социальных сетях!",
+    "goldenCardText": "Команда English Breakfast выберет самые лучшие, смешные и креативные ролики! Видео победителей будут показаны прямо на Золотой карте в приложении English Breakfast. Поделись своим роликом в приложении в социальных сетях!",
     "ideasTitle": "🐱 О чём может быть твоё видео?",
     "ideas": [
       "Наш рыжий кот-герой и его забавные приключения.",
@@ -91,10 +91,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "uk": {
     "title": "🎬 ЧЕЛЕНДЖ!",
     "menuTitle": "Челендж",
-    "subtitle": "Маєш смішну ідею? Любиш знімати відео? Покажи, на що здатний!",
+    "subtitle": "Є кумедна ідея? Любиш знімати відео чи вмієш створити ролик за допомогою ШІ? Покажи нам, на що здатний!",
     "intro": "Ми запрошуємо всіх гравців English Breakfast взяти участь у творчому відео-конкурсі! Створи коротке, кумедне та захоплююче відео англійською мовою — все, що змусить людей посміхнутися!",
     "goldenCardTitle": "🌟 Показ на Золотій карті!",
-    "goldenCardText": "Команда English Breakfast обере найкращі, найсмішніші та найкреативніші ролики! Відео переможців будуть показані прямо на Золотій карті в додатку English Breakfast та на наших сторінках у соцмережах!",
+    "goldenCardText": "Команда English Breakfast вибере найкращі, найкумедніші та найкреативніші ролики! Відео переможців будуть показані просто на Золотій карті в додатку English Breakfast. Поділися своїм роликом у додатку в соціальних мережах!",
     "ideasTitle": "🐱 Про що може бути твоє відео?",
     "ideas": [
       "Наш рудий кіт-герой та його кумедні пригоди.",
@@ -133,10 +133,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "de": {
     "title": "🎬 CHALLENGE!",
     "menuTitle": "Challenge",
-    "subtitle": "Hast du eine lustige Idee? Liebst du es, Videos zu machen? Zeig uns, was du drauf hast!",
+    "subtitle": "Hast du eine lustige Idee? Liebst du es, Videos zu drehen oder KI-Clips zu erstellen? Zeig uns, was du drauf hast!",
     "intro": "Wir laden alle English Breakfast-Spieler zu unserem kreativen Videowettbewerb ein! Erstelle ein kurzes, lustiges und unterhaltsames Video auf Englisch – alles, was Menschen zum Lächeln bringt!",
     "goldenCardTitle": "🌟 Auf der Goldenen Karte präsentiert!",
-    "goldenCardText": "Das English Breakfast-Team wählt die besten, lustigsten und kreativsten Videos aus! Die Gewinner-Videos werden direkt auf der Goldenen Karte in der English Breakfast-App und auf unseren Social-Media-Kanälen gezeigt!",
+    "goldenCardText": "Das English Breakfast-Team wählt die besten, lustigsten und kreativsten Videos aus! Die Siegervideos werden direkt auf der Goldenen Karte in der English Breakfast-App präsentiert. Teile dein Video in der App in den sozialen Medien!",
     "ideasTitle": "🐱 Worum kann es in deinem Video gehen?",
     "ideas": [
       "Unser roter Kater-Held und seine lustigen Abenteuer.",
@@ -175,10 +175,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "es": {
     "title": "🎬 ¡CHALLENGE!",
     "menuTitle": "Desafío",
-    "subtitle": "¿Tienes una idea divertida? ¿Te encanta hacer videos? ¡Muéstranos lo que tienes!",
+    "subtitle": "¿Tienes una idea divertida? ¿Te encanta hacer videos o crear clips con IA? ¡Muéstranos lo que tienes!",
     "intro": "¡Invitamos a todos los jugadores de English Breakfast a unirse a nuestro concurso creativo de videos! Crea un video corto, divertido y entretenido en inglés. ¡Cualquier cosa que haga sonreír a la gente!",
     "goldenCardTitle": "🌟 ¡Destacado en la Carta Dorada!",
-    "goldenCardText": "¡El equipo de English Breakfast elegirá los mejores, más divertidos y creativos videos! ¡Los videos ganadores se mostrarán directamente en la Carta Dorada de la app English Breakfast y en nuestras redes sociales!",
+    "goldenCardText": "¡El equipo de English Breakfast seleccionará los mejores, más divertidos y creativos videos! Los videos ganadores se mostrarán directamente en la Tarjeta Dorada en la app de English Breakfast. ¡Comparte tu video en la app en las redes sociales!",
     "ideasTitle": "🐱 ¿De qué puede tratar tu video?",
     "ideas": [
       "Nuestro héroe gato pelirrojo y sus divertidas aventuras.",
@@ -217,10 +217,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "fr": {
     "title": "🎬 CHALLENGE !",
     "menuTitle": "Défi",
-    "subtitle": "Une idée drôle ? Vous aimez faire des vidéos ? Montrez-nous votre talent !",
+    "subtitle": "Vous avez une idée drôle ? Vous aimez faire des vidéos ou créer des clips avec l'IA ? Montrez-nous ce que vous savez faire !",
     "intro": "Nous invitons tous les joueurs d'English Breakfast à rejoindre notre concours créatif de vidéos ! Créez une courte vidéo drôle et divertissante en anglais. Tout ce qui fait sourire !",
     "goldenCardTitle": "🌟 Présenté sur la Carte Dorée !",
-    "goldenCardText": "L'équipe d'English Breakfast sélectionnera les vidéos les plus drôles et créatives ! Les vidéos gagnantes seront diffusées directement sur la Carte Dorée de l'application English Breakfast et sur nos réseaux sociaux !",
+    "goldenCardText": "L'équipe d'English Breakfast sélectionnera les vidéos les meilleures, les plus drôles et les plus créatives ! Les vidéos gagnantes seront présentées directement sur la Carte d'Or dans l'application English Breakfast. Partagez votre vidéo dans l'application sur les réseaux sociaux !",
     "ideasTitle": "🐱 De quoi peut parler votre vidéo ?",
     "ideas": [
       "Notre héros chat roux et ses aventures amusantes.",
@@ -259,10 +259,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "pt": {
     "title": "🎬 CHALLENGE!",
     "menuTitle": "Desafio",
-    "subtitle": "Tem uma ideia engraçada? Adora criar vídeos? Mostre seu talento!",
+    "subtitle": "Tem uma ideia engraçada? Adora gravar vídeos ou criar clipes com IA? Mostre o que você sabe fazer!",
     "intro": "Convidamos todos os jogadores do English Breakfast a participar do nosso concurso criativo de vídeos! Crie um vídeo curto, engraçado e divertido em inglês. Vale tudo o que fizer as pessoas sorrirem!",
     "goldenCardTitle": "🌟 Destaque no Card Dourado!",
-    "goldenCardText": "A equipe do English Breakfast vai escolher os melhores, mais engraçados e criativos vídeos! Os vídeos vencedores serão exibidos diretamente no Card Dourado do app English Breakfast e em nossas redes sociais!",
+    "goldenCardText": "A equipe do English Breakfast selecionará os melhores, mais engraçados e mais criativos vídeos! Os vencedores serão exibidos diretamente no Cartão de Ouro no app English Breakfast. Compartilhe seu vídeo no aplicativo nas redes sociais!",
     "ideasTitle": "🐱 Sobre o que pode ser o seu vídeo?",
     "ideas": [
       "Nosso herói gato ruivo e suas aventuras divertidas.",
@@ -301,10 +301,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "it": {
     "title": "🎬 CHALLENGE!",
     "menuTitle": "Sfida",
-    "subtitle": "Hai un'idea divertente? Ti piace fare video? Mostraci di cosa sei capace!",
+    "subtitle": "Hai un'idea divertente? Ti piace fare video o creare clip con l'IA? Mostraci di cosa sei capace!",
     "intro": "Invitiamo tutti i giocatori di English Breakfast a partecipare al nostro concorso video creativo! Crea un video breve, divertente e coinvolgente in inglese. Qualsiasi cosa che strappi un sorriso!",
     "goldenCardTitle": "🌟 In primo piano sulla Carta Dorata!",
-    "goldenCardText": "Il team di English Breakfast selezionerà i video migliori, più divertenti e creativi! I video vincitori saranno mostrati direttamente sulla Carta Dorata nell'app English Breakfast e sui nostri canali social!",
+    "goldenCardText": "Il team di English Breakfast selezionerà i video migliori, più divertenti e creativi! I video vincitori saranno mostrati direttamente sulla Carta Dorata nell'app English Breakfast. Condividi il tuo video nell'app sui social media!",
     "ideasTitle": "🐱 Di cosa può parlare il tuo video?",
     "ideas": [
       "Il nostro gatto rosso eroe e le sue divertenti avventure.",
@@ -343,10 +343,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "pl": {
     "title": "🎬 WYZWANIE!",
     "menuTitle": "Wyzwanie",
-    "subtitle": "Masz zabawny pomysł? Lubisz kręcić wideo? Pokaż, na co cię stać!",
+    "subtitle": "Masz zabawny pomysł? Uwielbiasz kręcić filmy lub tworzyć klipy z AI? Pokaż nam, na co cię stać!",
     "intro": "Zapraszamy wszystkich graczy English Breakfast do udziału w naszym kreatywnym konkursie wideo! Stwórz krótkie, zabawne i wciągające wideo po angielsku. Cokolwiek, co wywoła uśmiech!",
     "goldenCardTitle": "🌟 Wyróżnienie na Złotej Karcie!",
-    "goldenCardText": "Zespół English Breakfast wybierze najlepsze, najzabawniejsze i najbardziej kreatywne filmy! Zwycięskie wideo zostaną pokazane bezpośrednio na Złotej Karcie w aplikacji English Breakfast i w naszych mediach społecznościowych!",
+    "goldenCardText": "Zespół English Breakfast wybierze najlepsze, najzabawniejsze i najbardziej kreatywne filmy! Zwycięskie materiały pojawią się bezpośrednio na Złotej Karcie w aplikacji English Breakfast. Podziel się swoim filmem w aplikacji w mediach społecznościowych!",
     "ideasTitle": "🐱 O czym może być twoje wideo?",
     "ideas": [
       "Nasz rudy kot-bohater i jego zabawne przygody.",
@@ -385,10 +385,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "tr": {
     "title": "🎬 MEYDAN OKUMA!",
     "menuTitle": "Meydan Okuma",
-    "subtitle": "Komik bir fikrin mi var? Video çekmeyi sever misin? Bize yeteneğini göster!",
+    "subtitle": "Komik bir fikrin mi var? Video çekmeyi veya yapay zeka ile klip oluşturmayı seviyor musun? Bize yeteneğini göster!",
     "intro": "Tüm English Breakfast oyuncularını yaratıcı video yarışmamıza davet ediyoruz! İngilizce kısa, komik ve eğlenceli bir video oluşturun. İnsanları gülümseten her şey serbest!",
     "goldenCardTitle": "🌟 Altın Kart'ta Gösterim!",
-    "goldenCardText": "English Breakfast ekibi en iyi, en komik ve en yaratıcı videoları seçecek! Kazanan videolar doğrudan English Breakfast uygulamasındaki Altın Kart'ta ve sosyal medya hesaplarımızda yayınlanacak!",
+    "goldenCardText": "English Breakfast ekibi en iyi, en komik ve en yaratıcı videoları seçecek! Kazanan videolar doğrudan English Breakfast uygulamasındaki Altın Kart'ta gösterilecek. Videonu uygulamada ve sosyal medyada paylaş!",
     "ideasTitle": "🐱 Videon ne hakkında olabilir?",
     "ideas": [
       "Kızıl kedi kahramanımız ve eğlenceli maceraları.",
@@ -427,10 +427,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "kk": {
     "title": "🎬 ЧЕЛЛЕНДЖ!",
     "menuTitle": "Челлендж",
-    "subtitle": "Қызықты идеяңыз бар ма? Видео түсіргенді ұнатасыз ба? Қолыңыздан не келетінін көрсетіңіз!",
+    "subtitle": "Күлкілі идеяң бар ма? Видео түсіруді немесе ЖИ арқылы ролик жасауды ұнатасың ба? Бізге шеберлігіңді көрсет!",
     "intro": "Барлық English Breakfast ойыншыларын шығармашылық видео байқауымызға қатысуға шақырамыз! Ағылшын тілінде қысқа, көңілді әрі қызықты видео жасаңыз — күлкі сыйлайтын кез келген нәрсе!",
     "goldenCardTitle": "🌟 Алтын картада көрсетілім!",
-    "goldenCardText": "English Breakfast тобы ең үздік, күлкілі әрі креативті видеоларды таңдайды! Жеңімпаздардың видеолары тікелей English Breakfast қосымшасындағы Алтын картада және әлеуметтік желілерімізде көрсетіледі!",
+    "goldenCardText": "English Breakfast тобы ең үздік, көңілді және креативті видеоларды таңдайды! Жеңімпаздардың видеолары English Breakfast қосымшасындағы Алтын картада көрсетіледі. Өз ролигіңді қосымшада және әлеуметтік желілерде бөліс!",
     "ideasTitle": "🐱 Видеоңыз не туралы болуы мүмкін?",
     "ideas": [
       "Біздің сары мысық кейіпкеріміз бен оның қызықты оқиғалары.",
@@ -469,10 +469,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "zh": {
     "title": "🎬 创意挑战赛！",
     "menuTitle": "创意挑战",
-    "subtitle": "有个搞笑的点子？热爱制作视频？快来大展身手！",
+    "subtitle": "有个有趣的想法？喜欢拍摄视频或使用AI制作短片？向我们展示你的才华吧！",
     "intro": "我们邀请所有 English Breakfast 玩家参与创意短视频大赛！用英语制作一段简短、有趣、引人入胜的视频，任何能带给大家笑容的创意都欢迎！",
     "goldenCardTitle": "🌟 登顶黄金卡片展播！",
-    "goldenCardText": "English Breakfast 官方团队将精选出最佳、最搞笑、最具创意的视频！优胜视频将直接在 English Breakfast 应用内的【黄金卡片】及我们的官方社交媒体页面精彩呈现！",
+    "goldenCardText": "English Breakfast团队将选出最棒、最搞笑和最具创意的视频！获奖视频将直接在English Breakfast应用的黄金卡上展示。在应用内和社交媒体上分享你的视频吧！",
     "ideasTitle": "🐱 你的视频可以拍什么？",
     "ideas": [
       "我们的主角小橘猫及其搞笑冒险日常。",
@@ -511,10 +511,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "ja": {
     "title": "🎬 チャレンジ！",
     "menuTitle": "チャレンジ",
-    "subtitle": "面白いアイデアがある？動画作りが好き？あなたの才能を見せてください！",
+    "subtitle": "面白いアイデアはありますか？動画制作やAIクリップ作成が好きですか？あなたの腕前を見せてください！",
     "intro": "English Breakfastのすべてのプレイヤーの皆さんを、クリエイティブな動画コンテストにご招待します！英語で短く、面白く、楽しい動画を作ってください。笑顔になれるものなら何でもOKです！",
     "goldenCardTitle": "🌟 ゴールドカードに掲載！",
-    "goldenCardText": "English Breakfastチームが最も面白くクリエイティブな作品を選定します！選ばれた動画はEnglish Breakfastアプリの【ゴールドカード】および公式SNSで直接紹介されます！",
+    "goldenCardText": "English Breakfastチームが最も優れ、面白く、クリエイティブな動画を選定します！受賞動画はEnglish Breakfastアプリのゴールデンカードで紹介されます。アプリやSNSで動画をシェアしましょう！",
     "ideasTitle": "🐱 どんなテーマの動画が良いですか？",
     "ideas": [
       "看板キャラクターの茶トラ猫と彼の楽しい大冒険。",
@@ -553,10 +553,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "ko": {
     "title": "🎬 챌린지!",
     "menuTitle": "챌린지",
-    "subtitle": "재미있는 아이디어가 있나요? 영상 제작을 좋아하시나요? 실력을 보여주세요!",
+    "subtitle": "재미있는 아이디어가 있나요? 영상 제작이나 AI 클립 제작을 좋아하시나요? 실력을 보여주세요!",
     "intro": "English Breakfast의 모든 플레이어를 크리에이티브 영상 콘테스트에 초대합니다! 영어로 짧고 유쾌하며 재미있는 영상을 만들어 보세요. 사람들을 미소 짓게 만드는 어떤 것이든 환영합니다!",
     "goldenCardTitle": "🌟 골든 카드에 방영!",
-    "goldenCardText": "English Breakfast 팀이 가장 재미있고 창의적인 영상을 선정합니다! 우승작은 English Breakfast 앱의 [골든 카드]와 공식 소셜 미디어 채널에 직접 방영됩니다!",
+    "goldenCardText": "English Breakfast 팀이 가장 훌륭하고 재미있고 창의적인 비디오를 선정합니다! 선정된 영상은 English Breakfast 앱의 골든 카드에 직접 소개됩니다. 앱과 소셜 미디어에 당신의 영상을 공유해보세요!",
     "ideasTitle": "🐱 어떤 주제로 영상을 만들 수 있나요?",
     "ideas": [
       "우리의 치즈 고양이 주인공과 유쾌한 모험.",
@@ -595,10 +595,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "ar": {
     "title": "🎬 التحدي!",
     "menuTitle": "التحدي",
-    "subtitle": "هل لديك فكرة مضحكة؟ هل تحب صناعة الفيديوهات؟ أرنا إبداعك!",
+    "subtitle": "هل لديك فكرة مضحكة؟ هل تحب تصوير مقاطع الفيديو أو إنشائها بالذكاء الاصطناعي؟ أرنا ما لديك!",
     "intro": "ندعو جميع لاعبي English Breakfast للانضمام إلى مسابقة الفيديو الإبداعية! أنشئ مقطع فيديو قصير ومضحك وممتع باللغة الإنجليزية. أي شيء يرسم الابتسامة على وجوه الناس!",
     "goldenCardTitle": "🌟 عرض مميز على البطاقة الذهبية!",
-    "goldenCardText": "سيختار فريق English Breakfast أفضل الفيديوهات وأكثرها إبداعاً وفكاهة! سيتم عرض الفيديوهات الفائزة مباشرة على البطاقة الذهبية داخل تطبيق English Breakfast وعلى صفحاتنا في وسائل التواصل الاجتماعي!",
+    "goldenCardText": "سيختار فريق English Breakfast أفضل ومقاطع الفيديو الأكثر تسلية وإبداعًا! ستُعرض المقاطع الفائزة مباشرة على البطاقة الذهبية في تطبيق English Breakfast. شارك مقطع الفيديو الخاص بك في التطبيق على وسائل التواصل الاجتماعي!",
     "ideasTitle": "🐱 عن ماذا يمكن أن يكون الفيديو؟",
     "ideas": [
       "بطلنا القط البرتقالي ومغامراته الممتعة والمضحكة.",
@@ -637,10 +637,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "fa": {
     "title": "🎬 چالش ویدیو!",
     "menuTitle": "چالش",
-    "subtitle": "ایده بامزه‌ای داری؟ از ساختن ویدیو لذت می‌بری؟ استعدادت رو به ما نشون بده!",
+    "subtitle": "ایده خنده‌داری داری؟ عاشق ساختن ویدیو یا ساخت کلیپ با هوش مصنوعی هستی؟ به ما نشان بده چه بلدی!",
     "intro": "ما از تمام بازیکنان English Breakfast دعوت می‌کنیم در مسابقه خلاقانه ویدیو شرکت کنند! یک ویدیوی کوتاه، خنده‌دار و سرگرم‌کننده به زبان انگلیسی بسازید. هر چیزی که لبخند به لب مردم بیاورد!",
     "goldenCardTitle": "🌟 نمایش ویژه در کارت طلایی!",
-    "goldenCardText": "تیم English Breakfast بهترین، خنده‌دارترین و خلاقانه‌ترین ویدیوها را انتخاب خواهد کرد! ویدیوهای برگزیده مستقیماً روی کارت طلایی در برنامه English Breakfast و شبکه‌های اجتماعی ما نمایش داده می‌شوند!",
+    "goldenCardText": "تیم English Breakfast بهترین، خنده‌دارترین و خلاقانه‌ترین ویدیوها را انتخاب خواهد کرد! ویدیوهای برنده مستقیماً روی کارت طلایی در اپلیکیشن English Breakfast نمایش داده می‌شوند. ویدیوی خود را در اپلیکیشن و در شبکه‌های اجتماعی به اشتراک بگذارید!",
     "ideasTitle": "🐱 ویدیوی شما درباره چه چیزی می‌تواند باشد؟",
     "ideas": [
       "گربه نارنجی قهرمان ما و ماجراجویی‌های بامزه‌اش.",
@@ -679,10 +679,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "ur": {
     "title": "🎬 چیلنج!",
     "menuTitle": "چیلنج",
-    "subtitle": "کیا کوئی دلچسپ خیال ہے؟ ویڈیو بنانا پسند ہے؟ اپنا ہنر دکھائیں!",
+    "subtitle": "کیا کوئی دلچسپ خیال ہے؟ ویڈیو بنانا یا AI کلپس بنانا پسند ہے؟ ہمیں دکھائیں کہ آپ کیا کر سکتے ہیں!",
     "intro": "ہم تمام English Breakfast پلیئرز کو اپنی تخلیقی ویڈیو مقابلے میں شرکت کی دعوت دیتے ہیں! انگریزی میں ایک مختصر، مزاحیہ اور تفریحی ویڈیو بنائیں — ہر وہ چیز جو چہروں پر مسکراہٹ لائے!",
     "goldenCardTitle": "🌟 گولڈن کارڈ پر خصوصی نمائش!",
-    "goldenCardText": "English Breakfast ٹیم بہترین، سب سے مزاحیہ اور تخلیقی ویڈیوز منتخب کرے گی! جیتنے والی ویڈیوز براہ راست English Breakfast ایپ کے گولڈن کارڈ اور ہمارے سوشل میڈیا پر دکھائی جائیں گی!",
+    "goldenCardText": "English Breakfast کی ٹیم بہترین، سب سے پرلطف اور تخلیقی ویڈیوز منتخب کرے گی! جیتنے والی ویڈیوز English Breakfast ایپ میں گولڈن کارڈ پر دکھائی جائیں گی۔ اپنی ویڈیو ایپ میں اور سوشل میڈیا پر شیئر کریں!",
     "ideasTitle": "🐱 آپ کی ویڈیو کس بارے میں ہو سکتی ہے؟",
     "ideas": [
       "ہمارا سنہری بلا ہیرو اور اس کے مزاحیہ کارنامے۔",
@@ -721,10 +721,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "hi": {
     "title": "🎬 वीडियो चैलेंज!",
     "menuTitle": "चैलेंज",
-    "subtitle": "क्या आपके पास कोई मजेदार आइडिया है? वीडियो बनाना पसंद है? अपना हुनर दिखाएं!",
+    "subtitle": "क्या कोई मजेदार विचार है? वीडियो बनाना या AI क्लिप बनाना पसंद है? हमें दिखाएं कि आप क्या कर सकते हैं!",
     "intro": "हम सभी English Breakfast खिलाड़ियों को हमारे क्रिएटिव वीडियो कॉन्टेस्ट में भाग लेने के लिए आमंत्रित करते हैं! अंग्रेजी में एक छोटा, मजेदार और मनोरंजक वीडियो बनाएं — जो भी लोगों के चेहरे पर मुस्कान ला सके!",
     "goldenCardTitle": "🌟 गोल्डन कार्ड पर फीचर!",
-    "goldenCardText": "English Breakfast टीम सबसे बेहतरीन, मजेदार और रचनात्मक वीडियो चुनेगी! विजेता वीडियो सीधे English Breakfast ऐप के गोल्डन कार्ड और हमारे सोशल मीडिया पेजों पर दिखाए जाएंगे!",
+    "goldenCardText": "English Breakfast टीम सर्वश्रेष्ठ, सबसे मजेदार और सबसे रचनात्मक वीडियो चुनेगी! जीतने वाले वीडियो सीधे English Breakfast ऐप में गोल्डन कार्ड पर दिखाए जाएंगे। ऐप में और सोशल मीडिया पर अपना वीडियो साझा करें!",
     "ideasTitle": "🐱 आपका वीडियो किस बारे में हो सकता है?",
     "ideas": [
       "हमारा भूरा बिल्ली हीरो और उसके मजेदार एडवेंचर्स।",
@@ -763,10 +763,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "bn": {
     "title": "🎬 ক্রিয়েটিভ চ্যালেঞ্জ!",
     "menuTitle": "চ্যালেঞ্জ",
-    "subtitle": "কোনো মজার আইডিয়া আছে? ভিডিও বানাতে ভালোবাসেন? আপনার প্রতিভা দেখান!",
+    "subtitle": "কোনো মজার ভাবনা আছে? ভিডিও বানাতে ভালোবাসেন বা এআই দিয়ে ক্লিপ তৈরি করতে পারেন? আমাদের দেখান আপনি কী পারেন!",
     "intro": "আমরা English Breakfast-এর সকল খেলোয়াড়কে আমাদের সৃজনশীল ভিডিও প্রতিযোগিতায় যোগ দেওয়ার আমন্ত্রণ জানাচ্ছি! ইংরেজিতে একটি ছোট, মজার ও বিনোদনমূলক ভিডিও তৈরি করুন। যা মানুষের মুখে হাসি ফোটাতে পারে!",
     "goldenCardTitle": "🌟 গোল্ডেন কার্ডে প্রদর্শন!",
-    "goldenCardText": "English Breakfast টিম সবচেয়ে সেরা, মজার এবং সৃজনশীল ভিডিওগুলো নির্বাচন করবে! বিজয়ী ভিডিওগুলো সরাসরি English Breakfast অ্যাপের গোল্ডেন কার্ডে এবং আমাদের সোশ্যাল মিডিয়া পেজে প্রদর্শিত হবে!",
+    "goldenCardText": "English Breakfast টিম সেরা, সবচেয়ে মজার এবং সৃজনশীল ভিডিও নির্বাচন করবে! বিজয়ী ভিডিওগুলি সরাসরি English Breakfast অ্যাপের গোল্ডেন কার্ডে প্রদর্শিত হবে। অ্যাপে এবং সোশ্যাল মিডিয়ায় আপনার ভিডিও শেয়ার করুন!",
     "ideasTitle": "🐱 আপনার ভিডিও কী নিয়ে হতে পারে?",
     "ideas": [
       "আমাদের লালচে বিড়াল হিরো এবং তার মজার অ্যাডভেঞ্চার।",
@@ -805,10 +805,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "id": {
     "title": "🎬 TANTANGAN VIDEO!",
     "menuTitle": "Tantangan",
-    "subtitle": "Punya ide lucu? Suka bikin video? Tunjukkan kreativitasmu!",
+    "subtitle": "Punya ide lucu? Suka membuat video atau membuat klip dengan AI? Tunjukkan kemampuanmu!",
     "intro": "Kami mengundang semua pemain English Breakfast untuk bergabung dalam kontes video kreatif kami! Buat video pendek, lucu, dan menghibur dalam bahasa Inggris. Apa pun yang bisa membuat orang tersenyum!",
     "goldenCardTitle": "🌟 Tampil di Golden Card!",
-    "goldenCardText": "Tim English Breakfast akan memilih video terbaik, terlucu, dan paling kreatif! Video pemenang akan ditampilkan langsung di Golden Card di dalam aplikasi English Breakfast dan media sosial kami!",
+    "goldenCardText": "Tim English Breakfast akan memilih video terbaik, paling lucu, dan kreatif! Video pemenang akan ditampilkan langsung di Kartu Emas di aplikasi English Breakfast. Bagikan videomu di aplikasi dan di media sosial!",
     "ideasTitle": "🐱 Tentang apa videomu?",
     "ideas": [
       "Pahlawan kucing oranye kami dan petualangannya yang lucu.",
@@ -847,10 +847,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "vi": {
     "title": "🎬 THỬ THÁCH VIDEO!",
     "menuTitle": "Thử thách",
-    "subtitle": "Bạn có ý tưởng hài hước? Thích làm video? Hãy thể hiện tài năng!",
+    "subtitle": "Bạn có ý tưởng hài hước? Thích làm video hoặc tạo clip bằng AI? Hãy cho chúng tôi thấy tài năng của bạn!",
     "intro": "Chúng tôi mời tất cả người chơi English Breakfast tham gia cuộc thi video sáng tạo! Hãy tạo một video ngắn, hài hước và thú vị bằng tiếng Anh. Bất cứ điều gì mang lại nụ cười!",
     "goldenCardTitle": "🌟 Xuất hiện trên Thẻ Vàng!",
-    "goldenCardText": "Đội ngũ English Breakfast sẽ chọn ra những video xuất sắc, hài hước và sáng tạo nhất! Các video chiến thắng sẽ được phát trực tiếp trên Thẻ Vàng trong ứng dụng English Breakfast và mạng xã hội của chúng tôi!",
+    "goldenCardText": "Đội ngũ English Breakfast sẽ chọn ra những video hay nhất, vui nhộn nhất và sáng tạo nhất! Các video chiến thắng sẽ xuất hiện trực tiếp trên Thẻ Vàng trong ứng dụng English Breakfast. Hãy chia sẻ video của bạn trong ứng dụng trên mạng xã hội!",
     "ideasTitle": "🐱 Video của bạn có thể về điều gì?",
     "ideas": [
       "Chú mèo vàng anh hùng và những cuộc phiêu lưu vui nhộn.",
@@ -889,10 +889,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "th": {
     "title": "🎬 ชาเลนจ์วิดีโอ!",
     "menuTitle": "ชาเลนจ์",
-    "subtitle": "มีไอเดียฮาๆ ใช่ไหม? ชอบทำคลิปวิดีโอใช่หรือเปล่า? มาโชว์ของกันเลย!",
+    "subtitle": "มีไอเดียสนุกๆ ไหม? ชอบทำวิดีโอหรือสร้างคลิปด้วย AI หรือไม่? โชว์ฝีมือให้เราดูเลย!",
     "intro": "เราขอเชิญชวนผู้เล่น English Breakfast ทุกคนเข้าร่วมการประกวดคลิปวิดีโอสุดสร้างสรรค์! สร้างคลิปสั้น สนุกสนาน และตลกเป็นภาษาอังกฤษ อะไรก็ได้ที่ทำให้ทุกคนยิ้มได้!",
     "goldenCardTitle": "🌟 ฉายบนการ์ดทองคำ!",
-    "goldenCardText": "ทีมงาน English Breakfast จะคัดเลือกวิดีโอที่ดีที่สุด ตลกที่สุด และสร้างสรรค์ที่สุด! คลิปที่ชนะจะได้ฉายบนการ์ดทองคำในแอป English Breakfast และโซเชียลมีเดียของเรา!",
+    "goldenCardText": "ทีมงาน English Breakfast จะคัดเลือกวิดีโอที่ดีที่สุด สนุกที่สุด และสร้างสรรค์ที่สุด! วิดีโอที่ชนะจะได้รับเลือกให้อยู่บน Golden Card ในแอป English Breakfast แชร์วิดีโอของคุณในแอปและบนโซเชียลมีเดีย!",
     "ideasTitle": "🐱 วิดีโอของคุณสามารถเกี่ยวกับอะไรได้บ้าง?",
     "ideas": [
       "ฮีโร่เจ้าเหมียวสีส้มและการผจญภัยสุดป่วนของเขา",
@@ -931,10 +931,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "cs": {
     "title": "🎬 VÝZVA!",
     "menuTitle": "Výzva",
-    "subtitle": "Máš vtipný nápad? Rád točíš videa? Ukaž, co v tobě je!",
+    "subtitle": "Máš vtipný nápad? Rád točíš videa nebo umíš vytvořit klip pomocí AI? Ukaž nám, co v tobě je!",
     "intro": "Zveme všechny hráče English Breakfast do naší kreativní videosoutěže! Vytvoř krátké, vtipné a zábavné video v angličtině. Cokolwiek, co vykouzlí úsměv na tváři!",
     "goldenCardTitle": "🌟 Prezentace na Zlaté kartě!",
-    "goldenCardText": "Tým English Breakfast vybere nejlepší, nejvtipnější a nejkreativnější videa! Vítězná videa se budou promítat přímo na Zlaté kartě v aplikaci English Breakfast a na našich sociálních sítích!",
+    "goldenCardText": "Tým English Breakfast vybere ty nejlepší, nejvtipnější a nejkreativnější videa! Vítězná videa se zobrazí přímo na Zlaté kartě v aplikaci English Breakfast. Sdílej své video v aplikaci na sociálních sítích!",
     "ideasTitle": "🐱 O čem může být tvé video?",
     "ideas": [
       "Náš zrzavý kocour-hrdina a jeho veselá dobrodružství.",
@@ -973,10 +973,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "sk": {
     "title": "🎬 VÝZVA!",
     "menuTitle": "Výzva",
-    "subtitle": "Máš vtipný nápad? Rád nakrúcaš videá? Ukáž, čo v tebe je!",
+    "subtitle": "Máš vtipný nápad? Rád tvoríš videá alebo vieš vyrobiť klip pomocou AI? Ukáž nám, čo dokážeš!",
     "intro": "Pozývame všetkých hráčov English Breakfast zapojiť sa do našej kreatívnej videosúťaže! Vytvor krátke, vtipné a pútavé video v angličtine. Čokoľvek, čo vyčarí úsmev na tvári!",
     "goldenCardTitle": "🌟 Prezentácia na Zlatej karte!",
-    "goldenCardText": "Tím English Breakfast vyberie tie najlepšie, najvtipnejšie a najkreatívnejšie videá! Víťazné videá sa budú premietať priamo na Zlatej karte v aplikácii English Breakfast a na našich sociálnych sieťach!",
+    "goldenCardText": "Tím English Breakfast vyberie tie najlepšie, najvtipnejšie a najkreatívnejšie videá! Víťazné videá sa objavia priamo na Zlatej karte v aplikácii English Breakfast. Zdieľaj svoje video v aplikácii na sociálnych sieťach!",
     "ideasTitle": "🐱 O čom môže byť tvoje video?",
     "ideas": [
       "Náš ryšavý kocúr-hrdina a jeho veselé dobrodružstvá.",
@@ -1015,10 +1015,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "ro": {
     "title": "🎬 PROVOCARE!",
     "menuTitle": "Provocare",
-    "subtitle": "Ai o idee amuzantă? Îți place să creezi videoclipuri? Arată-ne ce poți!",
+    "subtitle": "Ai o idee amuzantă? Îți place să faci videoclipuri sau să creezi clipuri cu AI? Arată-ne ce poți!",
     "intro": "Invităm toți jucătorii English Breakfast să participe la concursul nostru creativ de videoclipuri! Creează un video scurt, amuzant și captivant în limba engleză. Orice aduce un zâmbet!",
     "goldenCardTitle": "🌟 Difuzat pe Cardul de Aur!",
-    "goldenCardText": "Echipa English Breakfast va alege cele mai bune, amuzante și creative clipuri! Videoclipurile câștigătoare vor fi difuzate direct pe Cardul de Aur în aplicația English Breakfast și pe rețelele noastre sociale!",
+    "goldenCardText": "Echipa English Breakfast va selecta cele mai bune, mai amuzante și mai creative videoclipuri! Videoclipurile câștigătoare vor fi prezentate direct pe Cardul de Aur în aplicația English Breakfast. Distribuie videoclipul tău în aplicație pe rețelele sociale!",
     "ideasTitle": "🐱 Despre ce poate fi videoclipul tău?",
     "ideas": [
       "Eroul nostru motan roșcat și aventurile sale comice.",
@@ -1057,10 +1057,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "bg": {
     "title": "🎬 ПРЕДИЗВИКАТЕЛСТВО!",
     "menuTitle": "Предизвикателство",
-    "subtitle": "Имаш забавна идея? Обичаш да снимаш видеа? Покажи на какво си способен!",
+    "subtitle": "Имаш забавна идея? Обичаш да правиш видеа или можеш да създадеш клип с AI? Покажи ни на какво си способен!",
     "intro": "Каним всички играчи на English Breakfast да се включат в нашия творчески видеоконкурс! Създай кратко, забавно и завладяващо видео на английски език. Всичко, което носи усмивки!",
     "goldenCardTitle": "🌟 Излъчване на Златната карта!",
-    "goldenCardText": "Екипът на English Breakfast ще избере най-добрите, най-забавните и креативни видеа! Победителите ще бъдат показвани директно на Златната карта в приложението и в нашите социални мрежи!",
+    "goldenCardText": "Екипът на English Breakfast ще избере най-добрите, най-забавните и креативни видеа! Печелившите ще бъдат показани директно на Златната карта в приложението English Breakfast. Сподели своето видео в приложението в социалните мрежи!",
     "ideasTitle": "🐱 За какво може да бъде твоето видео?",
     "ideas": [
       "Нашият риж котарак-герой и неговите комични приключения.",
@@ -1099,10 +1099,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "hu": {
     "title": "🎬 KIHÍVÁS!",
     "menuTitle": "Kihívás",
-    "subtitle": "Van egy vicces ötleted? Szeretsz videózni? Mutasd meg, mit tudsz!",
+    "subtitle": "Van egy vicces ötleted? Szeretsz videózni vagy AI-klipeket készíteni? Mutasd meg, mit tudsz!",
     "intro": "Meghívjuk az English Breakfast összes játékosát kreatív videóversenyünkre! Készíts egy rövid, vicces és szórakoztató angol nyelvű videót. Bármit, ami mosolyt csal az arcokra!",
     "goldenCardTitle": "🌟 Vetítés az Arany Kártyán!",
-    "goldenCardText": "Az English Breakfast csapata kiválasztja a legjobb, legviccesebb és legkreatívabb videókat! A nyertes videók közvetlenül az English Breakfast app Arany Kártyáján és a közösségi média oldalainkon jelennek meg!",
+    "goldenCardText": "Az English Breakfast csapata kiválasztja a legjobb, legviccesebb és legkreatívabb videókat! A nyertes videók közvetlenül az Arany Kártyán jelennek meg az English Breakfast alkalmazásban. Oszd meg a videódat az alkalmazásban a közösségi médiában!",
     "ideasTitle": "🐱 Miről szólhat a videód?",
     "ideas": [
       "Vörös cica hősünk és az ő mókás kalandjai.",
@@ -1141,10 +1141,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "el": {
     "title": "🎬 ΠΡΟΚΛΗΣΗ!",
     "menuTitle": "Πρόκληση",
-    "subtitle": "Έχεις μια αστεία ιδέα; Σου αρέσει να φτιάχνεις βίντεο; Δείξε μας τι αξίζεις!",
+    "subtitle": "Έχεις μια αστεία ιδέα; Σου αρέσει να φτιάχνεις βίντεο ή κλιπ με AI; Δείξε μας τι μπορείς να κάνεις!",
     "intro": "Προσκαλούμε όλους τους παίκτες του English Breakfast να συμμετάσχουν στον δημιουργικό μας διαγωνισμό βίντεο! Δημιούργησε ένα σύντομο, αστείο και διασκεδαστικό βίντεο στα αγγλικά!",
     "goldenCardTitle": "🌟 Προβολή στη Χρυσή Κάρτα!",
-    "goldenCardText": "Η ομάδα του English Breakfast θα επιλέξει τα καλύτερα, πιο αστεία και δημιουργικά βίντεο! Τα βίντεο που θα κερδίσουν θα προβληθούν απευθείας στη Χρυσή Κάρτα της εφαρμογής και στα κοινωνικά μας δίκτυα!",
+    "goldenCardText": "Η ομάδα του English Breakfast θα επιλέξει τα καλύτερα, πιο αστεία και δημιουργικά βίντεο! Τα νικητήρια βίντεο θα προβληθούν απευθείας στη Χρυσή Κάρτα στην εφαρμογή English Breakfast. Μοιράσου το βίντεό σου στην εφαρμογή στα μέσα κοινωνικής δικτύωσης!",
     "ideasTitle": "🐱 Ποιο μπορεί να είναι το θέμα του βίντεο;",
     "ideas": [
       "Ο πορτοκαλί μας γάτος-ήρωας και οι ξεκαρδιστικές του περιπέτειες.",
@@ -1183,10 +1183,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "sv": {
     "title": "🎬 UTMANING!",
     "menuTitle": "Utmaning",
-    "subtitle": "Har du en rolig idé? Älskar du att skapa videor? Visa vad du går för!",
+    "subtitle": "Har du en rolig idé? Älskar du att skapa videor eller göra AI-klipp? Visa oss vad du kan!",
     "intro": "Vi bjuder in alla English Breakfast-spelare till vår kreativa videotävling! Skapa en kort, rolig och underhållande video på engelska. Vad som helst som får folk att le!",
     "goldenCardTitle": "🌟 Visas på Guldkortet!",
-    "goldenCardText": "English Breakfast-teamet kommer att välja ut de bästa, roligaste och mest kreativa videorna! Vinnande videor visas direkt på Guldkortet i appen och på våra sociala medier!",
+    "goldenCardText": "English Breakfast-teamet väljer ut de bästa, roligaste och mest kreativa videorna! Vinnande videor visas direkt på Guldkortet i English Breakfast-appen. Dela din video i appen på sociala medier!",
     "ideasTitle": "🐱 Vad kan din video handla om?",
     "ideas": [
       "Vår röda katthjälte och hans roliga äventyr.",
@@ -1225,10 +1225,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "da": {
     "title": "🎬 UDFORDRING!",
     "menuTitle": "Udfordring",
-    "subtitle": "Har du en sjov idé? Elsker du at lave videoer? Vis os hvad du kan!",
+    "subtitle": "Har du en sjov idé? Elsker du at lave videoer eller AI-klip? Vis os, hvad du kan!",
     "intro": "Vi inviterer alle English Breakfast-spillere til vores kreative videokonkurrence! Lav en kort, sjov og underholdende video på engelsk. Alt hvad der bringer et smil frem!",
     "goldenCardTitle": "🌟 Vises på Guldkortet!",
-    "goldenCardText": "English Breakfast-teamet udvælger de bedste, sjoveste og mest kreative videoer! Vinderne vises direkte på Guldkortet i appen og på vores sociale medier!",
+    "goldenCardText": "English Breakfast-teamet udvælger de bedste, sjoveste og mest kreative videoer! Vinderne vises direkte på Guldkortet i English Breakfast-appen. Del din video i appen på de sociale medier!",
     "ideasTitle": "🐱 Hvad kan din video handle om?",
     "ideas": [
       "Vores røde kattehelt og hans sjove eventyr.",
@@ -1267,10 +1267,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "fi": {
     "title": "🎬 HAASTE!",
     "menuTitle": "Haaste",
-    "subtitle": "Onko sinulla hauska idea? Tykkäätkö videoiden teosta? Näytä mihin pystyt!",
+    "subtitle": "Onko sinulla hauska idea? Rakastatko videoiden tekemistä tai tekoälyleikkeiden luomista? Näytä meille taitosi!",
     "intro": "Kutsumme kaikki English Breakfast -pelaajat mukaan luovaan videokilpailuumme! Luo lyhyt, hauska ja viihdyttävä video englanniksi. Mitä tahansa, mikä saa hymyn huulille!",
     "goldenCardTitle": "🌟 Esillä Kultaisessa kortissa!",
-    "goldenCardText": "English Breakfast -tiimi valitsee parhaat, hauskimmat ja luovimmat videot! Voittajavideot esitetään suoraan English Breakfast -sovelluksen Kultaisessa kortissa ja sosiaalisessa mediassamme!",
+    "goldenCardText": "English Breakfast -tiimi valitsee parhaat, hauskimmat ja luovimmat videot! Voittajavideot esitellään suoraan Kultakortilla English Breakfast -sovelluksessa. Jaa videosi sovelluksessa sosiaalisessa mediassa!",
     "ideasTitle": "🐱 Mistä videosi voisi kertoa?",
     "ideas": [
       "Punainen kissasankarimme ja hänen hauskat seikkailunsa.",
@@ -1309,10 +1309,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "hr": {
     "title": "🎬 IZAZOV!",
     "menuTitle": "Izazov",
-    "subtitle": "Imaš smiješnu ideju? Voliš snimati videozapise? Pokaži što znaš!",
+    "subtitle": "Imaš smiješnu ideju? Voliš snimati videozapise ili stvarati isječke s AI? Pokaži nam što znaš!",
     "intro": "Pozivamo sve igrače English Breakfasta da se pridruže našem kreativnom video natjecanju! Stvori kratak, smiješan i zabavan video na engleskom jeziku. Bilo što što će izmamiti osmijeh!",
     "goldenCardTitle": "🌟 Prikaz na Zlatnoj kartici!",
-    "goldenCardText": "Tim English Breakfasta odabrat će najbolje, najsmješnije i najkreativnije videozapise! Pobjednički videozapisi bit će prikazani izravno na Zlatnoj kartici u aplikaciji i na našim društvenim mrežama!",
+    "goldenCardText": "Tim English Breakfast odabrat će najbolje, najsmješnije i najkreativnije videozapise! Pobjednički videozapisi bit će prikazani izravno na Zlatnoj kartici u aplikaciji English Breakfast. Podijeli svoj video u aplikaciji na društvenim mrežama!",
     "ideasTitle": "🐱 O čemu može biti tvoj video?",
     "ideas": [
       "Naš crveni mačak-heroj i njegove zabavne avanture.",
@@ -1351,10 +1351,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "sl": {
     "title": "🎬 IZZIV!",
     "menuTitle": "Izziv",
-    "subtitle": "Imaš zabavno idejo? Rad ustvarjaš videoposnetke? Pokaži, kaj znaš!",
+    "subtitle": "Imaš zabavno idejo? Rad ustvarjaš videoposnetke ali klipe z umetno inteligenco? Pokaži nam, kaj znaš!",
     "intro": "Vse igralce English Breakfast vabimo k sodelovanju v našem ustvarjalnem video natečaju! Ustvari kratek, zabaven in privlačen video v angleščini. Karkoli, kar nariše nasmeh na obraz!",
     "goldenCardTitle": "🌟 Prikaz na Zlati kartici!",
-    "goldenCardText": "Ekipa English Breakfast bo izbrala najboljše, najbolj zabavne in ustvarjalne videoposnetke! Zmagovalni videoposnetki bodo predvajani neposredno na Zlati kartici v aplikaciji in na naših družbenih omrežjih!",
+    "goldenCardText": "Ekipa English Breakfast bo izbrala najboljše, najbolj zabavne in ustvarjalne videe! Zmagovalni posnetki bodo prikazani neposredno na Zlati kartici v aplikaciji English Breakfast. Deli svoj video v aplikaciji na družbenih omrežjih!",
     "ideasTitle": "🐱 O čem lahko govori tvoj video?",
     "ideas": [
       "Naš rdeči mačji junak in njegove zabavne dogodivščine.",
@@ -1393,10 +1393,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "lv": {
     "title": "🎬 IZAICINĀJUMS!",
     "menuTitle": "Izaicinājums",
-    "subtitle": "Vai tev ir jautra ideja? Patīk veidot video? Parādi savu talantu!",
+    "subtitle": "Tev ir jautra ideja? Patīk veidot video vai radīt klipus ar AI? Parādi, ko spēj!",
     "intro": "Mēs aicinām visus English Breakfast spēlētājus piedalīties mūsu radošajā video konkursā! Izveido īsu, jautru un aizraujošu video angļu valodā. Jebko, kas liek pasmaidīt!",
     "goldenCardTitle": "🌟 Rādīts uz Zelta kartes!",
-    "goldenCardText": "English Breakfast komanda izvēlēsies labākos, smieklīgākos un radošākos video! Uzvarētāju video tiks demonstrēti tieši uz Zelta kartes English Breakfast lietotnē un mūsu sociālajos tīklos!",
+    "goldenCardText": "English Breakfast komanda atlasīs labākos, smieklīgākos un radošākos video! Uzvarētāju video tiks parādīti tieši Zelta kartē English Breakfast lietotnē. Dalies ar savu video lietotnē un sociālajos tīklos!",
     "ideasTitle": "🐱 Par ko var būt tavs video?",
     "ideas": [
       "Mūsu rudais runcis-varonis un viņa jautrie piedzīvojumi.",
@@ -1435,10 +1435,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "lt": {
     "title": "🎬 IŠŠŪKIS!",
     "menuTitle": "Iššūkis",
-    "subtitle": "Turi juokingą idėją? Mėgsti filmuoti? Parodyk, ką sugebi!",
+    "subtitle": "Turi linksmą idėją? Mėgsti kurti vaizdo įrašus arba AI klipus? Parodyk, ką sugebi!",
     "intro": "Kviečiame visus English Breakfast žaidėjus dalyvauti mūsų kūrybiniame vaizdo įrašų konkurse! Sukurk trumpą, linksmą ir įtraukiantį vaizdo įrašą anglų kalba. Bet ką, kas kelia šypseną!",
     "goldenCardTitle": "🌟 Rodoma ant Auksinės kortelės!",
-    "goldenCardText": "English Breakfast komanda atrinks geriausius, juokingiausius ir kūrybiškiausius vaizdo įrašus! Nugalėtojų darbai bus rodomi tiesiogiai ant Auksinės kortelės English Breakfast programėlėje ir mūsų socialiniuose tinkluose!",
+    "goldenCardText": "English Breakfast komanda atrinks geriausius, linksmiausius ir kūrybiškiausius vaizdo įrašus! Nugalėtojų darbai bus rodomi tiesiogiai Auksinėje kortelėje English Breakfast programėlėje. Pasidalyk savo vaizdo įrašu programėlėje ir socialiniuose tinkluose!",
     "ideasTitle": "🐱 Apie ką gali būti tavo vaizdo įrašas?",
     "ideas": [
       "Mūsų rusvas katinas-didvyris ir jo linksmi nuotykiai.",
@@ -1477,10 +1477,10 @@ export const CHALLENGE_TRANSLATIONS = {
   "et": {
     "title": "🎬 VÄLJAKUTSE!",
     "menuTitle": "Väljakutse",
-    "subtitle": "On sul naljakas idee? Meeldib videoid teha? Näita, milleks oled võimeline!",
+    "subtitle": "Kas sul on naljakas idee? Meeldib teha videoid või luua klippe tehisintellektiga? Näita meile, mida suudad!",
     "intro": "Kutsume kõiki English Breakfasti mängijaid osalema meie loovas videokonkursis! Loo lühike, naljakas ja kaasahaarav ingliskeelne video. Kõik, mis toob naeratuse näole!",
     "goldenCardTitle": "🌟 Esitlus Kuldsell kaardil!",
-    "goldenCardText": "English Breakfasti meeskond valib välja parimad, naljakamad ja loovamad videod! Võitjate videoid näidatakse otse English Breakfasti äpi Kuldsell kaardil ja meie sotsiaalmeedias!",
+    "goldenCardText": "English Breakfasti meeskond valib parimad, naljakamad ja loovamad videod! Võiduvideoid näidatakse otse Kuldkaardil English Breakfasti rakenduses. Jaga oma videot rakenduses sotsiaalmeedias!",
     "ideasTitle": "🐱 Millest sinu video võiks rääkida?",
     "ideas": [
       "Meie oranž kassikangelane ja tema lõbusad seiklused.",
@@ -1519,12 +1519,17 @@ export const CHALLENGE_TRANSLATIONS = {
 };
 
 /**
- * Returns challenge translations for the specified locale, falling back to English.
- * @param {string} lang
- * @returns {object}
+ * Helper to get the Challenge translation data for the given locale.
+ * Falls back to English if the locale is not found.
  */
-export function getChallengeTranslation(lang) {
-  if (!lang) return CHALLENGE_TRANSLATIONS['en'];
-  const clean = String(lang).toLowerCase().split('-')[0].trim();
-  return CHALLENGE_TRANSLATIONS[clean] || CHALLENGE_TRANSLATIONS['en'];
+export function getChallengeTranslation(locale) {
+  const norm = (locale || 'en').toLowerCase().trim();
+  if (CHALLENGE_TRANSLATIONS[norm]) {
+    return CHALLENGE_TRANSLATIONS[norm];
+  }
+  const prefix = norm.split('-')[0];
+  if (CHALLENGE_TRANSLATIONS[prefix]) {
+    return CHALLENGE_TRANSLATIONS[prefix];
+  }
+  return CHALLENGE_TRANSLATIONS['en'];
 }
