@@ -68,11 +68,11 @@ test('Collections: months and days_of_week are complete in words.json', async ()
   assert.equal(dayWords.length, 7, 'all 7 days present in dictionary');
 });
 
-test('Collections: all 12 thematic collections have 100% of their words in dictionary', async () => {
+test('Collections: all 13 thematic collections have 100% of their words in dictionary', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionWords } = await import('../frontend/services/collectionsService.js');
 
   const thematicCols = BUILTIN_COLLECTIONS_DEF.filter((c) => c.id !== 'my_favorites');
-  assert.equal(thematicCols.length, 12, '12 thematic collections defined');
+  assert.equal(thematicCols.length, 13, '13 thematic collections defined');
 
   for (const col of thematicCols) {
     const words = getCollectionWords(col.id, wordsData);
@@ -199,7 +199,7 @@ test('i18n: Japanese interface language returns Japanese translation from words.
   }
 });
 
-test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic collections', async () => {
+test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 10 thematic collections', async () => {
   const {
     BUILTIN_COLLECTIONS_WITH_GEAR,
     getCollectionWords,
@@ -210,8 +210,8 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic
     addWordToCollection,
   } = await import('../frontend/services/collectionsService.js');
 
-  const expectedIds = ['colors', 'body_parts', 'sport', 'food', 'clothes', 'animals', 'verbs', 'adjectives', 'phrasal_verbs'];
-  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.size, 9);
+  const expectedIds = ['colors', 'body_parts', 'sport', 'food', 'clothes', 'animals', 'verbs', 'adjectives', 'phrasal_verbs', 'it_terms'];
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.size, 10);
   for (const id of expectedIds) {
     assert.ok(BUILTIN_COLLECTIONS_WITH_GEAR.has(id), `gear enabled for ${id}`);
   }
@@ -253,12 +253,12 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 9 thematic
   resetBuiltinCollection('colors');
 });
 
-test('Collections: all 13 built-in collections have names in all 36 supported locales', async () => {
+test('Collections: all 14 built-in collections have names in all 36 supported locales', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const locales = SUPPORTED_LOCALE_CODES;
 
-  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 13, '13 built-in collections');
+  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 14, '14 built-in collections');
 
   for (const col of BUILTIN_COLLECTIONS_DEF) {
     for (const loc of locales) {
