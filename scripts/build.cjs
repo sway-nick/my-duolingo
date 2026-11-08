@@ -193,6 +193,7 @@ function build() {
   // 3. Sync frontend assets & modules to root for direct root hosting
   copyRecursiveSync('./frontend/components', './components');
   copyRecursiveSync('./frontend/services', './services');
+  copyRecursiveSync('./frontend/config', './config');
   copyRecursiveSync('./frontend/assets', './assets');
   if (fs.existsSync('./frontend/.well-known')) {
     copyRecursiveSync('./frontend/.well-known', './.well-known');
