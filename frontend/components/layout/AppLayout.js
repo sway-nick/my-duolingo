@@ -2,6 +2,7 @@ import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar 
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=386.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
 import { openShareDialog } from '../modals/ShareModal.js?v=386.0';
+import { openChallengeModal } from '../modals/ChallengeModal.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { isEmailVerified } from '../../services/firebase.js?v=386.0';
 import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=386.0';
@@ -332,6 +333,12 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             <span class="drawer-item-text">${t('settings')}</span>
             <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${shouldShowSyncBadge() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
           </button>
+          <button type="button" class="drawer-share-action-btn" id="drawer-challenge-btn" title="${t('challenge_menu_item') || 'CHALLENGE'}">
+            <span class="tab-icon">
+              <span style="font-size: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">🎬</span>
+            </span>
+            <span class="drawer-item-text">${t('challenge_menu_item') || 'CHALLENGE'}</span>
+          </button>
           <button type="button" class="drawer-share-action-btn" id="drawer-share-btn" title="${t('share_title')}">
             <span class="tab-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -391,6 +398,16 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
       e.stopPropagation();
       closeDrawer();
       openShareDialog();
+    });
+  }
+
+  // Bind Challenge Button
+  const challengeBtn = app.querySelector('#drawer-challenge-btn');
+  if (challengeBtn) {
+    challengeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeDrawer();
+      openChallengeModal();
     });
   }
 

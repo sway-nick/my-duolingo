@@ -287,6 +287,25 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
     assert.ok(FAIRY_TALE_SURVEY_TRANSLATIONS[locale].starLabels?.length >= 5, `FAIRY_TALE_SURVEY_TRANSLATIONS.${locale} must have all 5 starLabels`);
   }
 
+  // 7. Verify Challenge Video Contest translations support all 36 locales
+  const { CHALLENGE_TRANSLATIONS } = await import('../frontend/components/modals/challengeTranslations.js');
+  assert.equal(Object.keys(CHALLENGE_TRANSLATIONS).length, 36, 'CHALLENGE_TRANSLATIONS must have exactly 36 locales');
+  for (const locale of REQUIRED_33_LOCALES) {
+    const item = CHALLENGE_TRANSLATIONS[locale];
+    assert.ok(item, `CHALLENGE_TRANSLATIONS must contain locale '${locale}'`);
+    assert.ok(item.title && item.title.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have title`);
+    assert.ok(item.menuTitle && item.menuTitle.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have menuTitle`);
+    assert.ok(item.subtitle && item.subtitle.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have subtitle`);
+    assert.ok(item.intro && item.intro.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have intro`);
+    assert.ok(item.goldenCardTitle && item.goldenCardTitle.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have goldenCardTitle`);
+    assert.ok(item.goldenCardText && item.goldenCardText.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have goldenCardText`);
+    assert.ok(Array.isArray(item.ideas) && item.ideas.length >= 3, `CHALLENGE_TRANSLATIONS.${locale} must have ideas`);
+    assert.ok(Array.isArray(item.rules) && item.rules.length >= 5, `CHALLENGE_TRANSLATIONS.${locale} must have rules`);
+    assert.ok(item.email === 'lipniagovnik@gmail.com', `CHALLENGE_TRANSLATIONS.${locale} must have correct email`);
+    assert.ok(Array.isArray(item.confirmations) && item.confirmations.length >= 3, `CHALLENGE_TRANSLATIONS.${locale} must have confirmations`);
+    assert.ok(item.actionSlogan && item.actionSlogan.trim().length > 0, `CHALLENGE_TRANSLATIONS.${locale} must have actionSlogan`);
+  }
+
   const { MILESTONE_STORIES } = await import('../frontend/components/modals/MilestoneStoryModal.js');
   assert.equal(Object.keys(MILESTONE_STORIES).length, 38, 'MILESTONE_STORIES must include all 38 stories');
   for (let i = 0; i < 38; i++) {
