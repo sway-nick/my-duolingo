@@ -2215,6 +2215,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               <h2 class="flashcard-translation">${escapeHtml(getWordTranslation(currentWord))}</h2>
               ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${escapeHtml(getWordNotes(currentWord))}</p>` : ''}
             </div>
+            <div class="flashcard-face-bottom">
+              <span class="flashcard-flip-prompt">${t('train_flip_card_hint')}</span>
+            </div>
           </div>
         </div>
       </div>
