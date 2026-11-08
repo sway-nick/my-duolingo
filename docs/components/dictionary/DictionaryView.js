@@ -1090,20 +1090,27 @@ function openDocScannerModal(words = [], onWordsSaved = () => {}) {
     const paragraphs = textToRender.split(/\n\s*\n|\r?\n/).map((p) => p.trim()).filter(Boolean);
     readerBody.innerHTML = paragraphs
       .map((para) => {
-        const tokensHtml = para.replace(/[a-zA-Z]+(?:'[a-zA-Z]+)?/g, (match) => {
-          const lower = match.toLowerCase();
-          let entry = lemmaLookup.get(lower);
-          if (!entry && lower.length > 3) {
-            const stripped = lower.replace(/(?:ing|ed|es|s)$/, '');
-            if (stripped.length >= 3) entry = lemmaLookup.get(stripped);
-          }
-          const cls = entry
-            ? entry.type === 'existing'
-              ? 'scanner-reader-word in-dict'
-              : 'scanner-reader-word is-lemma'
-            : 'scanner-reader-word';
-          return `<span class="${cls}" data-word="${escapeHtml(lower)}">${escapeHtml(match)}</span>`;
-        });
+        const parts = para.split(/([a-zA-Z]+(?:'[a-zA-Z]+)?)/g);
+        const tokensHtml = parts
+          .map((part) => {
+            if (!part) return '';
+            if (/^[a-zA-Z]+(?:'[a-zA-Z]+)?$/.test(part)) {
+              const lower = part.toLowerCase();
+              let entry = lemmaLookup.get(lower);
+              if (!entry && lower.length > 3) {
+                const stripped = lower.replace(/(?:ing|ed|es|s)$/, '');
+                if (stripped.length >= 3) entry = lemmaLookup.get(stripped);
+              }
+              const cls = entry
+                ? entry.type === 'existing'
+                  ? 'scanner-reader-word in-dict'
+                  : 'scanner-reader-word is-lemma'
+                : 'scanner-reader-word';
+              return `<span class="${cls}" data-word="${escapeHtml(lower)}">${escapeHtml(part)}</span>`;
+            }
+            return escapeHtml(part);
+          })
+          .join('');
         return `<p class="scanner-reader-paragraph">${tokensHtml}</p>`;
       })
       .join('');
