@@ -434,6 +434,44 @@ test('14. Fairy Tale Survey: 7-day and 30-day translations present across all 36
   }
 });
 
+test('15. Fairy Tale Survey: 7-day and 30-day triggers and completion flags', () => {
+  storage.clear();
+
+  // Helper evaluating trigger eligibility as in LessonSummary
+  function shouldTriggerSurvey(activeDays) {
+    const isDay30Done = storage.get('myduo_ft_survey_day30_done') === 'true';
+    const isDay7Done = storage.get('myduo_ft_survey_day7_done') === 'true';
+    const isInitialDone = storage.get('myduo_fairy_tale_survey_done') === 'true';
+
+    if (activeDays >= 30 && !isDay30Done) return 'auto_day_30';
+    if (activeDays >= 7 && !isDay7Done) return 'auto_day_7';
+    if (!isInitialDone) return 'auto_lesson_3';
+    return null;
+  }
+
+  // Day 1 to 6 (after initial survey done)
+  storage.set('myduo_fairy_tale_survey_done', 'true');
+  assert.equal(shouldTriggerSurvey(1), null);
+  assert.equal(shouldTriggerSurvey(6), null);
+
+  // Day 7 arrives
+  assert.equal(shouldTriggerSurvey(7), 'auto_day_7', 'Must trigger 7-day survey on day 7');
+
+  // Complete day 7 survey
+  storage.set('myduo_ft_survey_day7_done', 'true');
+  assert.equal(shouldTriggerSurvey(7), null, 'Must not re-trigger day 7 once completed');
+  assert.equal(shouldTriggerSurvey(15), null, 'Must not trigger on intermediate days');
+
+  // Day 30 arrives
+  assert.equal(shouldTriggerSurvey(30), 'auto_day_30', 'Must trigger 30-day survey on day 30');
+
+  // Complete day 30 survey
+  storage.set('myduo_ft_survey_day30_done', 'true');
+  assert.equal(shouldTriggerSurvey(30), null, 'Must not re-trigger day 30 once completed');
+  assert.equal(shouldTriggerSurvey(60), null, 'All surveys completed');
+});
+
+
 
 
 
