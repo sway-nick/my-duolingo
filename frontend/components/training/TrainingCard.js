@@ -609,7 +609,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                       ? `
               <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
               <div class="train-left-badge">
-                🧩 ${t('dict_stage_test')} • ${t('train_blocks_badge')}: <strong>${blocksIndex + 1}/${totalBlocksCount}</strong>
+                🧩 ${t('train_blocks_badge')}: <strong>${blocksIndex + 1}/${totalBlocksCount}</strong>
               </div>
               <div class="word-header-row">
                 <div class="training-word-container">

@@ -14605,17 +14605,17 @@ export function t(key, params = null) {
     val = map[lang] || map['en'] || "Pronounce word";
   } else if (key === 'train_blocks_badge') {
     const map = {
-      ru: "Кубики-слова", uk: "Кубики-слова", en: "Word Blocks", de: "Wort-Bausteine",
-      es: "Bloques de palabras", fr: "Blocs de mots", pl: "Klocki słowne", tr: "Kelime Blokları",
-      it: "Blocchi di parole", ro: "Blocuri de cuvinte", bg: "Кубчета с думи", hu: "Szókockák",
-      el: "Κύβοι λέξεων", da: "Ordbrikker", lv: "Vārdu klucīši", lt: "Žodžių kaladėlės",
-      pt: "Blocos de palavras", sk: "Slovné kocky", sl: "Besedne kocke", fi: "Sanapalat",
-      hr: "Kockice riječi", cs: "Slovní kostky", sv: "Ordklossar", et: "Sõnaklotsid",
-      hi: "शब्द ब्लॉक", bn: "শব্দ ব্লক", ar: "مكعبات الكلمات", fa: "مکعب‌های کلمات",
-      ur: "لفظی بلاکس", id: "Balok Kata", vi: "Khối từ", th: "บล็อกคำศัพท์",
-      ko: "단어 블록", ja: "ワードブロック", zh: "单词积木", kk: "Сөз текшелері"
+      ru: "Кубики", uk: "Кубики", en: "Blocks", de: "Bausteine",
+      es: "Bloques", fr: "Blocs", pl: "Klocki", tr: "Bloklar",
+      it: "Blocchi", ro: "Blocuri", bg: "Кубчета", hu: "Kockák",
+      el: "Κύβοι", da: "Brikker", lv: "Klucīši", lt: "Kaladėlės",
+      pt: "Blocos", sk: "Kocky", sl: "Kocke", fi: "Palat",
+      hr: "Kockice", cs: "Kostky", sv: "Klossar", et: "Klotsid",
+      hi: "ब्लॉक", bn: "ব্লক", ar: "مكعبات", fa: "مکعب‌ها",
+      ur: "بلاکس", id: "Balok", vi: "Khối", th: "บล็อก",
+      ko: "블록", ja: "ブロック", zh: "积木", kk: "Текшелер"
     };
-    val = map[lang] || map['en'] || "Word Blocks";
+    val = map[lang] || map['en'] || "Blocks";
   } else if (key === 'train_blocks_hint') {
     const map = {
       ru: "Соберите слово из кубиков", uk: "Зберіть слово з кубиків", en: "Assemble the word from blocks",
