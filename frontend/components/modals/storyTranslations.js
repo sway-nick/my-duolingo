@@ -115,7 +115,7 @@ export const STORY_TRANSLATIONS = {
       "— Звучит отлично. Во сколько начало?",
       "— В семь. Встретимся в половине седьмого?",
       "— Можно чуть позже? Я заканчиваю работу в шесть.",
-      "— Конечно. Давай встретимся в четверть седьмого.",
+      "— Конечно. Давай встретимся без четверти семь.",
       "— Отлично. Я куплю билеты."
     ],
     "badge450": "🏆 Рубеж: 450 слов",
@@ -581,7 +581,7 @@ export const STORY_TRANSLATIONS = {
       "— Чудово. О котрій початок?",
       "— О сьомій. Зустрінемося о пів на сьому?",
       "— Можемо трохи пізніше? Я закінчую роботу о шостій.",
-      "— Звісно. Зустріньмося о шостій п’ятнадцять.",
+      "— Звісно. Зустріньмося за чверть до сьомої.",
       "— Чудово. Я куплю квитки."
     ],
     "badge450": "🏆 Рубіж: 450 слів",
@@ -1047,7 +1047,7 @@ export const STORY_TRANSLATIONS = {
       "— Sounds good. What time does it start?",
       "— At seven. Shall we meet at half past six?",
       "— Can we meet a little later? I finish work at six.",
-      "— Sure. Let's meet at quarter past six.",
+      "— Sure. Let's meet at quarter to seven.",
       "— Perfect. I'll book the tickets."
     ],
     "badge450": "🏆 Milestone: 450 Words",
@@ -1513,7 +1513,7 @@ export const STORY_TRANSLATIONS = {
       "— Klingt gut. Wann fängt er an?",
       "— Um sieben. Treffen wir uns um halb sieben?",
       "— Können wir uns etwas später treffen? Ich arbeite bis sechs.",
-      "— Klar. Treffen wir uns um Viertel nach sechs.",
+      "— Klar. Treffen wir uns um Viertel vor sieben.",
       "— Perfekt. Ich buche die Karten."
     ],
     "badge450": "🏆 Meilenstein: 450 Wörter",
@@ -1979,7 +1979,7 @@ export const STORY_TRANSLATIONS = {
       "— Suena bien. ¿A qué hora empieza?",
       "— A las siete. ¿Quedamos a las seis y media?",
       "— ¿Podemos quedar un poco más tarde? Salgo del trabajo a las seis.",
-      "— Claro. Quedamos a las seis y cuarto.",
+      "— Claro. Quedamos a las siete menos cuarto.",
       "— Perfecto. Yo compro las entradas."
     ],
     "badge450": "🏆 Hito: 450 palabras",
@@ -2445,7 +2445,7 @@ export const STORY_TRANSLATIONS = {
       "— Ça me dit bien. Il commence à quelle heure ?",
       "— À sept heures. On se retrouve à six heures et demie ?",
       "— On peut se retrouver un peu plus tard ? Je finis le travail à six heures.",
-      "— Bien sûr. Disons six heures et quart.",
+      "— Bien sûr. Disons sept heures moins le quart.",
       "— Parfait. Je prends les billets."
     ],
     "badge450": "🏆 Étape : 450 mots",
@@ -2911,7 +2911,7 @@ export const STORY_TRANSLATIONS = {
       "— Brzmi dobrze. O której się zaczyna?",
       "— O siódmej. Spotkamy się o wpół do siódmej?",
       "— Możemy trochę później? Kończę pracę o szóstej.",
-      "— Jasne. Spotkajmy się o szóstej piętnaście.",
+      "— Jasne. Spotkajmy się za piętnaście siódma.",
       "— Świetnie. Kupię bilety."
     ],
     "badge450": "🏆 Kamień milowy: 450 słów",
@@ -3377,7 +3377,7 @@ export const STORY_TRANSLATIONS = {
       "— Kulağa güzel geliyor. Saat kaçta başlıyor?",
       "— Saat yedide. Altı buçukta buluşalım mı?",
       "— Biraz daha geç buluşabilir miyiz? İşim altıda bitiyor.",
-      "— Tabii. Altıyı çeyrek geçe buluşalım.",
+      "— Tabii. Yediye çeyrek kala buluşalım.",
       "— Harika. Biletleri ben alırım."
     ],
     "badge450": "🏆 Hedef: 450 Kelime",
@@ -3843,7 +3843,7 @@ export const STORY_TRANSLATIONS = {
       "— Sembra bello. A che ora inizia?",
       "— Alle sette. Ci vediamo alle sei e mezza?",
       "— Possiamo vederci un po' più tardi? Finisco di lavorare alle sei.",
-      "— Certo. Vediamoci alle sei e un quarto.",
+      "— Certo. Vediamoci alle sette meno un quarto.",
       "— Perfetto. Prenoto i biglietti."
     ],
     "badge450": "🏆 Traguardo: 450 parole",
@@ -4309,7 +4309,7 @@ export const STORY_TRANSLATIONS = {
       "— Sună bine. La ce oră începe?",
       "— La șapte. Ne întâlnim la șase și jumătate?",
       "— Putem să ne întâlnim puțin mai târziu? Termin serviciul la șase.",
-      "— Sigur. Ne vedem la șase și un sfert.",
+      "— Sigur. Ne vedem la șapte fără un sfert.",
       "— Perfect. Cumpăr eu biletele."
     ],
     "badge450": "🏆 Etapă: 450 cuvinte",
@@ -4775,7 +4775,7 @@ export const STORY_TRANSLATIONS = {
       "— Звучи добре. В колко започва?",
       "— В седем. Да се срещнем в шест и половина?",
       "— Може ли малко по-късно? Приключвам работа в шест.",
-      "— Разбира се. Да се срещнем в шест и петнайсет.",
+      "— Разбира се. Да се срещнем в седем без петнайсет.",
       "— Чудесно. Аз ще купя билетите."
     ],
     "badge450": "🏆 Рубеж: 450 думи",
@@ -5241,7 +5241,7 @@ export const STORY_TRANSLATIONS = {
       "— Jól hangzik. Mikor kezdődik?",
       "— Hétkor. Találkozzunk fél hétkor?",
       "— Lehetne egy kicsit később? Hatkor végzek a munkával.",
-      "— Persze. Találkozzunk negyed hétkor.",
+      "— Persze. Találkozzunk háromnegyed hétkor.",
       "— Tökéletes. Megveszem a jegyeket."
     ],
     "badge450": "🏆 Mérföldkő: 450 szó",
@@ -5707,7 +5707,7 @@ export const STORY_TRANSLATIONS = {
       "— Ακούγεται ωραίο. Τι ώρα αρχίζει;",
       "— Στις επτά. Να συναντηθούμε στις έξι και μισή;",
       "— Μπορούμε λίγο αργότερα; Σχολάω στις έξι.",
-      "— Βέβαια. Ας συναντηθούμε στις έξι και τέταρτο.",
+      "— Βέβαια. Ας συναντηθούμε στις επτά παρά τέταρτο.",
       "— Τέλεια. Θα κλείσω τα εισιτήρια."
     ],
     "badge450": "🏆 Ορόσημο: 450 λέξεις",
@@ -6173,7 +6173,7 @@ export const STORY_TRANSLATIONS = {
       "— Det lyder godt. Hvornår begynder den?",
       "— Klokken syv. Skal vi mødes halv syv?",
       "— Kan vi mødes lidt senere? Jeg har fri klokken seks.",
-      "— Selvfølgelig. Lad os mødes kvart over seks.",
+      "— Selvfølgelig. Lad os mødes kvart i syv.",
       "— Perfekt. Jeg bestiller billetterne."
     ],
     "badge450": "🏆 Milepæl: 450 ord",
@@ -6639,7 +6639,7 @@ export const STORY_TRANSLATIONS = {
       "— Izklausās labi. Cikos tā sākas?",
       "— Septiņos. Tiekamies pusē septiņos?",
       "— Vai varam tikties nedaudz vēlāk? Es beidzu darbu sešos.",
-      "— Protams. Tiekamies sešos piecpadsmit.",
+      "— Protams. Tiekamies bez piecpadsmit septiņos.",
       "— Lieliski. Es nopirkšu biļetes."
     ],
     "badge450": "🏆 Pavērsiens: 450 vārdu",
@@ -7105,7 +7105,7 @@ export const STORY_TRANSLATIONS = {
       "— Skamba gerai. Kada jis prasideda?",
       "— Septintą. Susitinkame pusę septynių?",
       "— Galime susitikti šiek tiek vėliau? Darbą baigiu šeštą.",
-      "— Žinoma. Susitikime šeštą penkiolika.",
+      "— Žinoma. Susitikime be penkiolikos septynias.",
       "— Puiku. Aš nupirksiu bilietus."
     ],
     "badge450": "🏆 Gairė: 450 žodžių",
@@ -7571,7 +7571,7 @@ export const STORY_TRANSLATIONS = {
       "— Sounds good. What time does it start?",
       "— At seven. Shall we meet at half past six?",
       "— Can we meet a little later? I finish work at six.",
-      "— Sure. Let's meet at quarter past six.",
+      "— Claro. Vamos nos encontrar às quinze para as sete.",
       "— Perfect. I'll book the tickets."
     ],
     "badge450": "🏆 Marco: 450 palavras",
@@ -8037,7 +8037,7 @@ export const STORY_TRANSLATIONS = {
       "— To znie dobre. O koľkej sa začína?",
       "— O siedmej. Stretneme sa o pol siedmej?",
       "— Môžeme sa stretnúť trochu neskôr? V práci končím o šiestej.",
-      "— Jasné. Stretnime sa o štvrť na sedem.",
+      "— Jasné. Stretnime sa o tri štvrte na sedem.",
       "— Výborne. Kúpim lístky."
     ],
     "badge450": "🏆 Míľnik: 450 slov",
@@ -8503,7 +8503,7 @@ export const STORY_TRANSLATIONS = {
       "— Sliši se dobro. Kdaj se začne?",
       "— Ob sedmih. Se dobiva ob pol sedmih?",
       "— Lahko malo pozneje? Z delom končam ob šestih.",
-      "— Seveda. Dobiva se ob šestih in petnajst.",
+      "— Seveda. Dobiva se ob petnajst do sedmih.",
       "— Odlično. Jaz bom kupil vstopnici."
     ],
     "badge450": "🏆 Mejnik: 450 besed",
@@ -8969,7 +8969,7 @@ export const STORY_TRANSLATIONS = {
       "— Kuulostaa hyvältä. Mihin aikaan se alkaa?",
       "— Seitsemältä. Tavataanko puoli seitsemältä?",
       "— Voimmeko tavata vähän myöhemmin? Pääsen töistä kuudelta.",
-      "— Toki. Tavataan varttia yli kuusi.",
+      "— Toki. Tavataan varttia vaille seitsemän.",
       "— Täydellistä. Varaan liput."
     ],
     "badge450": "🏆 Virstanpylväs: 450 sanaa",
@@ -9435,7 +9435,7 @@ export const STORY_TRANSLATIONS = {
       "— Zvuči dobro. U koliko počinje?",
       "— U sedam. Da se nađemo u pola sedam?",
       "— Možemo li se naći malo kasnije? Završavam posao u šest.",
-      "— Naravno. Nađimo se u šest i petnaest.",
+      "— Naravno. Nađimo se u petnaest do sedam.",
       "— Savršeno. Ja ću kupiti karte."
     ],
     "badge450": "🏆 Prekretnica: 450 riječi",
@@ -9901,7 +9901,7 @@ export const STORY_TRANSLATIONS = {
       "— To zní dobře. V kolik začíná?",
       "— V sedm. Sejdeme se v půl sedmé?",
       "— Můžeme se sejít o něco později? Končím v práci v šest.",
-      "— Jasně. Sejdeme se v šest patnáct.",
+      "— Jasně. Sejdeme se ve tři čtvrtě na sedm.",
       "— Skvělé. Koupím lístky."
     ],
     "badge450": "🏆 Milník: 450 slov",
@@ -10367,7 +10367,7 @@ export const STORY_TRANSLATIONS = {
       "— Det låter bra. När börjar den?",
       "— Klockan sju. Ska vi ses halv sju?",
       "— Kan vi ses lite senare? Jag slutar jobbet klockan sex.",
-      "— Absolut. Vi ses kvart över sex.",
+      "— Absolut. Vi ses kvart i sju.",
       "— Perfekt. Jag bokar biljetterna."
     ],
     "badge450": "🏆 Milstolpe: 450 ord",
@@ -10833,7 +10833,7 @@ export const STORY_TRANSLATIONS = {
       "— Kõlab hästi. Mis kell see algab?",
       "— Kell seitse. Kas saame kokku pool seitse?",
       "— Kas võiksime veidi hiljem kohtuda? Lõpetan töö kell kuus.",
-      "— Muidugi. Kohtume veerand seitse.",
+      "— Muidugi. Kohtume kolmveerand seitse.",
       "— Suurepärane. Ma broneerin piletid."
     ],
     "badge450": "🏆 Teetähis: 450 sõna",
@@ -11299,7 +11299,7 @@ export const STORY_TRANSLATIONS = {
       "— अच्छा लग रहा है। वह कितने बजे शुरू होती है?",
       "— सात बजे। क्या हम साढ़े छह बजे मिलें?",
       "— क्या हम थोड़ी देर से मिल सकते हैं? मेरा काम छह बजे खत्म होता है।",
-      "— ज़रूर। सवा छह बजे मिलते हैं।",
+      "— ज़रूर। पौने सात बजे मिलते हैं।",
       "— बढ़िया। मैं टिकट बुक कर दूँगा।"
     ],
     "badge450": "🏆 मील का पत्थर: 450 शब्द",
@@ -11765,7 +11765,7 @@ export const STORY_TRANSLATIONS = {
       "— ভালো শোনাচ্ছে। কখন শুরু হবে?",
       "— সাতটায়। আমরা কি সাড়ে ছয়টায় দেখা করব?",
       "— একটু পরে দেখা করা যাবে? আমার কাজ ছয়টায় শেষ হয়।",
-      "— অবশ্যই। সোয়া ছয়টায় দেখা করি।",
+      "— অবশ্যই। পৌने সাতটায় দেখা করি।",
       "— দারুণ। আমি টিকিট বুক করব।"
     ],
     "badge450": "🏆 মাইলফলক: 450 শব্দ",
@@ -12231,7 +12231,7 @@ export const STORY_TRANSLATIONS = {
       "— يبدو رائعًا. متى يبدأ؟",
       "— في السابعة. هل نلتقي في السادسة والنصف؟",
       "— هل يمكن أن نلتقي بعد ذلك بقليل؟ أنتهي من العمل في السادسة.",
-      "— بالتأكيد. لنلتقِ في السادسة والربع.",
+      "— بالتأكيد. لنلتقِ في السابعة إلا ربعاً.",
       "— ممتاز. سأحجز التذاكر."
     ],
     "badge450": "🏆 إنجاز: 450 كلمة",
@@ -12697,7 +12697,7 @@ export const STORY_TRANSLATIONS = {
       "— خوب به نظر می‌رسد. چه ساعتی شروع می‌شود؟",
       "— ساعت هفت. ساعت شش و نیم همدیگر را ببینیم؟",
       "— می‌توانیم کمی دیرتر همدیگر را ببینیم؟ کارم ساعت شش تمام می‌شود.",
-      "— حتماً. ساعت شش و پانزده دقیقه قرار می‌گذاریم.",
+      "— حتماً. ساعت یک ربع به هفت قرار می‌گذاریم.",
       "— عالی است. من بلیت‌ها را می‌خرم."
     ],
     "badge450": "🏆 نقطه عطف: 450 کلمه",
@@ -13163,7 +13163,7 @@ export const STORY_TRANSLATIONS = {
       "— اچھا لگتا ہے۔ یہ کتنے بجے شروع ہوتی ہے؟",
       "— سات بجے۔ کیا ہم ساڑھے چھ بجے ملیں؟",
       "— کیا ہم تھوڑی دیر بعد مل سکتے ہیں؟ میرا کام چھ بجے ختم ہوتا ہے۔",
-      "— ضرور۔ سوا چھ بجے ملتے ہیں۔",
+      "— ضرور۔ پونے سات بجے ملتے ہیں۔",
       "— بہترین۔ میں ٹکٹ بک کر دوں گا۔"
     ],
     "badge450": "🏆 سنگ میل: 450 الفاظ",
@@ -13629,7 +13629,7 @@ export const STORY_TRANSLATIONS = {
       "— Kedengarannya bagus. Mulai pukul berapa?",
       "— Pukul tujuh. Bagaimana kalau kita bertemu pukul setengah tujuh?",
       "— Bisa agak lebih malam? Aku selesai kerja pukul enam.",
-      "— Tentu. Kita bertemu pukul enam lewat lima belas.",
+      "— Tentu. Kita bertemu pukul tujuh kurang seperempat.",
       "— Sempurna. Aku akan pesan tiketnya."
     ],
     "badge450": "🏆 Pencapaian: 450 Kata",
@@ -14095,7 +14095,7 @@ export const STORY_TRANSLATIONS = {
       "— Nghe hay đấy. Phim bắt đầu lúc mấy giờ?",
       "— Bảy giờ. Chúng ta gặp nhau lúc sáu giờ rưỡi nhé?",
       "— Có thể gặp muộn hơn một chút không? Tôi tan làm lúc sáu giờ.",
-      "— Được chứ. Vậy gặp lúc sáu giờ mười lăm nhé.",
+      "— Được chứ. Vậy gặp lúc bảy giờ kém mười lăm nhé.",
       "— Tuyệt. Tôi sẽ đặt vé."
     ],
     "badge450": "🏆 Cột mốc: 450 từ",
@@ -14561,7 +14561,7 @@ export const STORY_TRANSLATIONS = {
       "— ฟังดูดีนะ เริ่มกี่โมง?",
       "— หนึ่งทุ่ม เจอกันหกโมงครึ่งไหม?",
       "— เจอกันช้ากว่านั้นหน่อยได้ไหม? ฉันเลิกงานหกโมง",
-      "— ได้เลย งั้นเจอกันหกโมงสิบห้า",
+      "— ได้เลย งั้นเจอกันหกโมงสี่สิบห้า",
       "— เยี่ยมเลย ฉันจะจองตั๋ว"
     ],
     "badge450": "🏆 ก้าวสำคัญ: 450 คำ",
@@ -15027,7 +15027,7 @@ export const STORY_TRANSLATIONS = {
       "— 좋네. 몇 시에 시작해?",
       "— 7시야. 6시 30분에 만날까?",
       "— 조금 늦게 만나도 될까? 나는 6시에 일이 끝나.",
-      "— 물론이지. 6시 15분에 만나자.",
+      "— 물론이지. 6시 45분에 만나자.",
       "— 좋아. 내가 표를 예매할게."
     ],
     "badge450": "🏆 이정표: 450단어",
@@ -15493,7 +15493,7 @@ export const STORY_TRANSLATIONS = {
       "— いいね。何時に始まるの？",
       "— 7時だよ。6時半に会わない？",
       "— もう少し遅くてもいい？仕事が6時に終わるんだ。",
-      "— もちろん。6時15分に会おう。",
+      "— もちろん。6時45分に会おう。",
       "— いいね。チケットを予約しておくよ。"
     ],
     "badge450": "🏆 マイルストーン：450単語",
@@ -15959,7 +15959,7 @@ export const STORY_TRANSLATIONS = {
       "— 听起来不错。几点开始？",
       "— 七点。我们六点半见面好吗？",
       "— 能不能晚一点？我六点才下班。",
-      "— 当然。那我们六点一刻见。",
+      "— 当然。那我们差一刻七点见。",
       "— 太好了。我来订票。"
     ],
     "badge450": "🏆 里程碑：450个单词",
@@ -16425,7 +16425,7 @@ export const STORY_TRANSLATIONS = {
       "— Жақсы екен. Ол сағат нешеде басталады?",
       "— Жетіде. Алты жарымда кездесеміз бе?",
       "— Сәл кешірек кездессек бола ма? Жұмыстан алтыда шығамын.",
-      "— Әрине. Алты он бесте кездесейік.",
+      "— Әрине. Жетіге он бес минут қалғанда кездесейік.",
       "— Керемет. Билеттерді мен аламын."
     ],
     "badge450": "🏆 Меже: 450 сөз",

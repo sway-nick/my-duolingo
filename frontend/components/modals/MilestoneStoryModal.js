@@ -194,7 +194,7 @@ export const MILESTONE_STORIES = {
       "— Sounds good. What time does it start?",
       "— At seven. Shall we meet at half past six?",
       "— Can we meet a little later? I finish work at six.",
-      "— Sure. Let's meet at quarter past six.",
+      "— Sure. Let's meet at quarter to seven.",
       "— Perfect. I'll book the tickets."
     ]
   },

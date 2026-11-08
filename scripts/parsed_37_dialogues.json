@@ -1223,67 +1223,67 @@
     "locales": {
       "ru": {
         "title": "В ресторане",
-        "content": "— Добрый вечер. У вас есть столик на двоих?\n— Да. Вы бронировали?\n— Нет. Это проблема?\n— Нисколько. Прошу за мной.\n— Можно нам меню, пожалуйста?\n— Конечно. Сегодня многие заказывают курицу.\n— Отлично. Мне её, пожалуйста, и воду.\n— Конечно. Сейчас вернусь."
+        "content": "— Добрый вечер. У вас есть столик на двоих?\n— Да. Вы бронировали?\n— Нет. Это проблема?\n— Нисколько. Прошу за мной.\n— Можно нам меню, пожалуйста?\n— Конечно. Сегодня многие заказывают курицу.\n— Конечно. Давай встретимся без четверти семь.\n— Конечно. Сейчас вернусь."
       },
       "uk": {
         "title": "У ресторані",
-        "content": "— Добрий вечір. У вас є столик на двох?\n— Так. Ви бронювали?\n— Ні. Це проблема?\n— Зовсім ні. Прошу за мною.\n— Можна нам меню, будь ласка?\n— Звісно. Сьогодні курку замовляють найчастіше.\n— Чудово. Мені її, будь ласка, і воду.\n— Звичайно. Зараз повернуся."
+        "content": "— Добрий вечір. У вас є столик на двох?\n— Так. Ви бронювали?\n— Ні. Це проблема?\n— Зовсім ні. Прошу за мною.\n— Можна нам меню, будь ласка?\n— Звісно. Сьогодні курку замовляють найчастіше.\n— Звісно. Зустріньмося за чверть до сьомої.\n— Звичайно. Зараз повернуся."
       },
       "en": {
         "title": "At the Restaurant",
-        "content": "— Good evening. Do you have a table for two?\n— Yes. Do you have a reservation?\n— No, we don't. Is that a problem?\n— Not at all. Please follow me.\n— Could we see the menu, please?\n— Of course. The chicken is very popular today.\n— Great. I'll have that, and water, please.\n— Certainly. I'll be back in a moment."
+        "content": "— Good evening. Do you have a table for two?\n— Yes. Do you have a reservation?\n— No, we don't. Is that a problem?\n— Not at all. Please follow me.\n— Could we see the menu, please?\n— Of course. The chicken is very popular today.\n— Sure. Let's meet at quarter to seven.\n— Certainly. I'll be back in a moment."
       },
       "de": {
         "title": "Im Restaurant",
-        "content": "— Guten Abend. Haben Sie einen Tisch für zwei?\n— Ja. Haben Sie reserviert?\n— Nein. Ist das ein Problem?\n— Überhaupt nicht. Folgen Sie mir bitte.\n— Könnten wir bitte die Speisekarte bekommen?\n— Natürlich. Das Hähnchen ist heute sehr beliebt.\n— Prima. Ich nehme das und bitte ein Wasser.\n— Gern. Ich bin gleich zurück."
+        "content": "— Guten Abend. Haben Sie einen Tisch für zwei?\n— Ja. Haben Sie reserviert?\n— Nein. Ist das ein Problem?\n— Überhaupt nicht. Folgen Sie mir bitte.\n— Könnten wir bitte die Speisekarte bekommen?\n— Natürlich. Das Hähnchen ist heute sehr beliebt.\n— Klar. Treffen wir uns um Viertel vor sieben.\n— Gern. Ich bin gleich zurück."
       },
       "es": {
         "title": "En el restaurante",
-        "content": "— Buenas noches. ¿Tiene una mesa para dos?\n— Sí. ¿Tienen reserva?\n— No. ¿Hay algún problema?\n— Ninguno. Síganme, por favor.\n— ¿Nos trae la carta, por favor?\n— Claro. El pollo es muy popular hoy.\n— Perfecto. Tomaré eso y agua, por favor.\n— Enseguida. Ahora vuelvo."
+        "content": "— Buenas noches. ¿Tiene una mesa para dos?\n— Sí. ¿Tienen reserva?\n— No. ¿Hay algún problema?\n— Ninguno. Síganme, por favor.\n— ¿Nos trae la carta, por favor?\n— Claro. El pollo es muy popular hoy.\n— Claro. Quedamos a las siete menos cuarto.\n— Enseguida. Ahora vuelvo."
       },
       "fr": {
         "title": "Au restaurant",
-        "content": "— Bonsoir. Vous avez une table pour deux ?\n— Oui. Vous avez réservé ?\n— Non. C'est un problème ?\n— Pas du tout. Suivez-moi, s'il vous plaît.\n— On pourrait avoir le menu, s'il vous plaît ?\n— Bien sûr. Le poulet est très demandé aujourd'hui.\n— Très bien. Je vais prendre ça et de l'eau.\n— Avec plaisir. Je reviens tout de suite."
+        "content": "— Bonsoir. Vous avez une table pour deux ?\n— Oui. Vous avez réservé ?\n— Non. C'est un problème ?\n— Pas du tout. Suivez-moi, s'il vous plaît.\n— On pourrait avoir le menu, s'il vous plaît ?\n— Bien sûr. Le poulet est très demandé aujourd'hui.\n— Bien sûr. Disons sept heures moins le quart.\n— Avec plaisir. Je reviens tout de suite."
       },
       "pl": {
         "title": "W restauracji",
-        "content": "— Dobry wieczór. Czy mają państwo stolik dla dwóch osób?\n— Tak. Czy mają państwo rezerwację?\n— Nie. Czy to problem?\n— Żaden. Proszę za mną.\n— Czy możemy prosić o menu?\n— Oczywiście. Kurczak jest dziś bardzo popularny.\n— Świetnie. Poproszę to danie i wodę.\n— Oczywiście. Zaraz wracam."
+        "content": "— Dobry wieczór. Czy mają państwo stolik dla dwóch osób?\n— Tak. Czy mają państwo rezerwację?\n— Nie. Czy to problem?\n— Żaden. Proszę za mną.\n— Czy możemy prosić o menu?\n— Oczywiście. Kurczak jest dziś bardzo popularny.\n— Jasne. Spotkajmy się za piętnaście siódma.\n— Oczywiście. Zaraz wracam."
       },
       "tr": {
         "title": "Restoranda",
-        "content": "— İyi akşamlar. İki kişilik masanız var mı?\n— Evet. Rezervasyonunuz var mı?\n— Hayır. Sorun olur mu?\n— Hiç sorun değil. Lütfen beni takip edin.\n— Menüyü alabilir miyiz?\n— Tabii. Bugün tavuk çok tercih ediliyor.\n— Harika. Ben ondan ve bir su alayım.\n— Elbette. Hemen geliyorum."
+        "content": "— İyi akşamlar. İki kişilik masanız var mı?\n— Evet. Rezervasyonunuz var mı?\n— Hayır. Sorun olur mu?\n— Hiç sorun değil. Lütfen beni takip edin.\n— Menüyü alabilir miyiz?\n— Tabii. Bugün tavuk çok tercih ediliyor.\n— Tabii. Yediye çeyrek kala buluşalım.\n— Elbette. Hemen geliyorum."
       },
       "it": {
         "title": "Al ristorante",
-        "content": "— Buonasera. Avete un tavolo per due?\n— Sì. Avete una prenotazione?\n— No. È un problema?\n— Assolutamente no. Seguitemi, per favore.\n— Possiamo avere il menù, per favore?\n— Certo. Il pollo oggi è molto richiesto.\n— Perfetto. Prendo quello e dell'acqua, grazie.\n— Certamente. Torno subito."
+        "content": "— Buonasera. Avete un tavolo per due?\n— Sì. Avete una prenotazione?\n— No. È un problema?\n— Assolutamente no. Seguitemi, per favore.\n— Possiamo avere il menù, per favore?\n— Certo. Il pollo oggi è molto richiesto.\n— Certo. Vediamoci alle sette meno un quarto.\n— Certamente. Torno subito."
       },
       "ro": {
         "title": "La restaurant",
-        "content": "— Bună seara. Aveți o masă pentru două persoane?\n— Da. Aveți rezervare?\n— Nu. Este o problemă?\n— Nicidecum. Poftiți după mine.\n— Ne puteți aduce meniul, vă rog?\n— Desigur. Puiul este foarte apreciat astăzi.\n— Perfect. Voi comanda asta și apă, vă rog.\n— Sigur. Revin imediat."
+        "content": "— Bună seara. Aveți o masă pentru două persoane?\n— Da. Aveți rezervare?\n— Nu. Este o problemă?\n— Nicidecum. Poftiți după mine.\n— Ne puteți aduce meniul, vă rog?\n— Desigur. Puiul este foarte apreciat astăzi.\n— Sigur. Ne vedem la șapte fără un sfert.\n— Sigur. Revin imediat."
       },
       "bg": {
         "title": "В ресторанта",
-        "content": "— Добър вечер. Имате ли маса за двама?\n— Да. Имате ли резервация?\n— Не. Това проблем ли е?\n— Ни най-малко. Моля, последвайте ме.\n— Може ли да видим менюто?\n— Разбира се. Днес пилешкото е много популярно.\n— Чудесно. Ще поръчам това и вода, моля.\n— Разбира се. Веднага се връщам."
+        "content": "— Добър вечер. Имате ли маса за двама?\n— Да. Имате ли резервация?\n— Не. Това проблем ли е?\n— Ни най-малко. Моля, последвайте ме.\n— Може ли да видим менюто?\n— Разбира се. Днес пилешкото е много популярно.\n— Разбира се. Да се срещнем в седем без петнайсет.\n— Разбира се. Веднага се връщам."
       },
       "hu": {
         "title": "Az étteremben",
-        "content": "— Jó estét! Van egy asztaluk két főre?\n— Igen. Van foglalásuk?\n— Nincs. Ez gond?\n— Egyáltalán nem. Kérem, kövessenek.\n— Megkaphatnánk az étlapot?\n— Természetesen. Ma a csirke nagyon népszerű.\n— Remek. Azt kérem, és egy vizet.\n— Rendben. Mindjárt jövök."
+        "content": "— Jó estét! Van egy asztaluk két főre?\n— Igen. Van foglalásuk?\n— Nincs. Ez gond?\n— Egyáltalán nem. Kérem, kövessenek.\n— Megkaphatnánk az étlapot?\n— Természetesen. Ma a csirke nagyon népszerű.\n— Persze. Találkozzunk háromnegyed hétkor.\n— Rendben. Mindjárt jövök."
       },
       "el": {
         "title": "Στο εστιατόριο",
-        "content": "— Καλησπέρα. Έχετε τραπέζι για δύο;\n— Ναι. Έχετε κράτηση;\n— Όχι. Είναι πρόβλημα;\n— Καθόλου. Παρακαλώ, ακολουθήστε με.\n— Μπορούμε να έχουμε το μενού, παρακαλώ;\n— Βεβαίως. Το κοτόπουλο έχει μεγάλη ζήτηση σήμερα.\n— Τέλεια. Θα πάρω αυτό και ένα νερό.\n— Βεβαίως. Επιστρέφω αμέσως."
+        "content": "— Καλησπέρα. Έχετε τραπέζι για δύο;\n— Ναι. Έχετε κράτηση;\n— Όχι. Είναι πρόβλημα;\n— Καθόλου. Παρακαλώ, ακολουθήστε με.\n— Μπορούμε να έχουμε το μενού, παρακαλώ;\n— Βεβαίως. Το κοτόπουλο έχει μεγάλη ζήτηση σήμερα.\n— Βέβαια. Ας συναντηθούμε στις επτά παρά τέταρτο.\n— Βεβαίως. Επιστρέφω αμέσως."
       },
       "da": {
         "title": "På restauranten",
-        "content": "— God aften. Har I et bord til to?\n— Ja. Har I bestilt bord?\n— Nej. Er det et problem?\n— Slet ikke. Følg med mig.\n— Må vi få menukortet?\n— Selvfølgelig. Kyllingen er meget populær i dag.\n— Fint. Jeg tager den og et glas vand.\n— Selvfølgelig. Jeg kommer straks tilbage."
+        "content": "— God aften. Har I et bord til to?\n— Ja. Har I bestilt bord?\n— Nej. Er det et problem?\n— Slet ikke. Følg med mig.\n— Må vi få menukortet?\n— Selvfølgelig. Kyllingen er meget populær i dag.\n— Selvfølgelig. Lad os mødes kvart i syv.\n— Selvfølgelig. Jeg kommer straks tilbage."
       },
       "lv": {
         "title": "Restorānā",
-        "content": "— Labvakar. Vai jums ir galdiņš diviem?\n— Jā. Vai jums ir rezervācija?\n— Nē. Vai tā ir problēma?\n— Nebūt ne. Lūdzu, sekojiet man.\n— Vai varam saņemt ēdienkarti?\n— Protams. Vistas ēdiens šodien ir ļoti iecienīts.\n— Lieliski. Es ņemšu to un ūdeni, lūdzu.\n— Protams. Tūlīt atgriezīšos."
+        "content": "— Labvakar. Vai jums ir galdiņš diviem?\n— Jā. Vai jums ir rezervācija?\n— Nē. Vai tā ir problēma?\n— Nebūt ne. Lūdzu, sekojiet man.\n— Vai varam saņemt ēdienkarti?\n— Protams. Vistas ēdiens šodien ir ļoti iecienīts.\n— Protams. Tiekamies bez piecpadsmit septiņos.\n— Protams. Tūlīt atgriezīšos."
       },
       "lt": {
         "title": "Restorane",
-        "content": "— Labas vakaras. Ar turite staliuką dviem?\n— Taip. Ar turite rezervaciją?\n— Ne. Ar tai problema?\n— Visai ne. Prašom sekti paskui mane.\n— Ar galėtume gauti meniu?\n— Žinoma. Šiandien vištienos patiekalai labai populiarūs.\n— Puiku. Imu šį patiekalą ir vandens.\n— Žinoma. Tuoj grįšiu."
+        "content": "— Labas vakaras. Ar turite staliuką dviem?\n— Taip. Ar turite rezervaciją?\n— Ne. Ar tai problema?\n— Visai ne. Prašom sekti paskui mane.\n— Ar galėtume gauti meniu?\n— Žinoma. Šiandien vištienos patiekalai labai populiarūs.\n— Žinoma. Susitikime be penkiolikos septynias.\n— Žinoma. Tuoj grįšiu."
       },
       "pt-br": {
         "title": "No Restaurante",
@@ -1291,79 +1291,79 @@
       },
       "sk": {
         "title": "V reštaurácii",
-        "content": "— Dobrý večer. Máte stôl pre dvoch?\n— Áno. Máte rezerváciu?\n— Nie. Je to problém?\n— Vôbec nie. Poďte, prosím, za mnou.\n— Mohli by sme dostať jedálny lístok?\n— Samozrejme. Kuracie mäso je dnes veľmi obľúbené.\n— Výborne. Dám si to a vodu, prosím.\n— Iste. Hneď sa vrátim."
+        "content": "— Dobrý večer. Máte stôl pre dvoch?\n— Áno. Máte rezerváciu?\n— Nie. Je to problém?\n— Vôbec nie. Poďte, prosím, za mnou.\n— Mohli by sme dostať jedálny lístok?\n— Samozrejme. Kuracie mäso je dnes veľmi obľúbené.\n— Jasné. Stretnime sa o tri štvrte na sedem.\n— Iste. Hneď sa vrátim."
       },
       "sl": {
         "title": "V restavraciji",
-        "content": "— Dober večer. Imate mizo za dva?\n— Da. Imata rezervacijo?\n— Ne. Je to težava?\n— Sploh ne. Prosim, sledita mi.\n— Lahko dobiva jedilni list?\n— Seveda. Piščanec je danes zelo priljubljen.\n— Odlično. Vzel bom to in vodo, prosim.\n— Seveda. Takoj se vrnem."
+        "content": "— Dober večer. Imate mizo za dva?\n— Da. Imata rezervacijo?\n— Ne. Je to težava?\n— Sploh ne. Prosim, sledita mi.\n— Lahko dobiva jedilni list?\n— Seveda. Piščanec je danes zelo priljubljen.\n— Seveda. Dobiva se ob petnajst do sedmih.\n— Seveda. Takoj se vrnem."
       },
       "fi": {
         "title": "Ravintolassa",
-        "content": "— Hyvää iltaa. Onko teillä pöytää kahdelle?\n— On. Onko teillä pöytävaraus?\n— Ei ole. Onko se ongelma?\n— Ei suinkaan. Seuratkaa minua.\n— Saisimmeko ruokalistan, kiitos?\n— Tietysti. Kana on tänään hyvin suosittua.\n— Hienoa. Otan tuon ja vettä, kiitos.\n— Tietenkin. Palaan pian."
+        "content": "— Hyvää iltaa. Onko teillä pöytää kahdelle?\n— On. Onko teillä pöytävaraus?\n— Ei ole. Onko se ongelma?\n— Ei suinkaan. Seuratkaa minua.\n— Saisimmeko ruokalistan, kiitos?\n— Tietysti. Kana on tänään hyvin suosittua.\n— Toki. Tavataan varttia vaille seitsemän.\n— Tietenkin. Palaan pian."
       },
       "hr": {
         "title": "U restoranu",
-        "content": "— Dobra večer. Imate li stol za dvoje?\n— Da. Imate li rezervaciju?\n— Nemamo. Je li to problem?\n— Nipošto. Molim vas, pođite za mnom.\n— Možemo li dobiti jelovnik?\n— Naravno. Piletina je danas vrlo popularna.\n— Odlično. Uzet ću to i vodu, molim.\n— Svakako. Odmah se vraćam."
+        "content": "— Dobra večer. Imate li stol za dvoje?\n— Da. Imate li rezervaciju?\n— Nemamo. Je li to problem?\n— Nipošto. Molim vas, pođite za mnom.\n— Možemo li dobiti jelovnik?\n— Naravno. Piletina je danas vrlo popularna.\n— Naravno. Nađimo se u petnaest do sedam.\n— Svakako. Odmah se vraćam."
       },
       "cs": {
         "title": "V restauraci",
-        "content": "— Dobrý večer. Máte stůl pro dva?\n— Ano. Máte rezervaci?\n— Nemáme. Je to problém?\n— Vůbec ne. Pojďte prosím za mnou.\n— Mohli bychom dostat jídelní lístek?\n— Samozřejmě. Kuře je dnes velmi oblíbené.\n— Skvělé. Dám si to a vodu, prosím.\n— Jistě. Hned se vrátím."
+        "content": "— Dobrý večer. Máte stůl pro dva?\n— Ano. Máte rezervaci?\n— Nemáme. Je to problém?\n— Vůbec ne. Pojďte prosím za mnou.\n— Mohli bychom dostat jídelní lístek?\n— Samozřejmě. Kuře je dnes velmi oblíbené.\n— Jasně. Sejdeme se ve tři čtvrtě na sedm.\n— Jistě. Hned se vrátím."
       },
       "sv": {
         "title": "På restaurangen",
-        "content": "— God kväll. Har ni ett bord för två?\n— Ja. Har ni bokat?\n— Nej. Är det ett problem?\n— Inte alls. Följ med mig.\n— Kan vi få menyn, tack?\n— Självklart. Kycklingen är mycket populär i dag.\n— Toppen. Jag tar den och ett glas vatten.\n— Absolut. Jag kommer strax tillbaka."
+        "content": "— God kväll. Har ni ett bord för två?\n— Ja. Har ni bokat?\n— Nej. Är det ett problem?\n— Inte alls. Följ med mig.\n— Kan vi få menyn, tack?\n— Självklart. Kycklingen är mycket populär i dag.\n— Absolut. Vi ses kvart i sju.\n— Absolut. Jag kommer strax tillbaka."
       },
       "et": {
         "title": "Restoranis",
-        "content": "— Tere õhtust. Kas teil on lauda kahele?\n— Jah. Kas teil on broneering?\n— Ei ole. Kas see on probleem?\n— Üldse mitte. Palun tulge minuga kaasa.\n— Kas me saaksime menüü?\n— Muidugi. Kana on täna väga populaarne.\n— Suurepärane. Ma võtan selle ja vett, palun.\n— Loomulikult. Tulen kohe tagasi."
+        "content": "— Tere õhtust. Kas teil on lauda kahele?\n— Jah. Kas teil on broneering?\n— Ei ole. Kas see on probleem?\n— Üldse mitte. Palun tulge minuga kaasa.\n— Kas me saaksime menüü?\n— Muidugi. Kana on täna väga populaarne.\n— Muidugi. Kohtume kolmveerand seitse.\n— Loomulikult. Tulen kohe tagasi."
       },
       "hi": {
         "title": "रेस्तराँ में",
-        "content": "— शुभ संध्या। क्या दो लोगों के लिए मेज़ है?\n— जी हाँ। क्या आपने बुकिंग की है?\n— नहीं। क्या यह समस्या है?\n— बिल्कुल नहीं। कृपया मेरे साथ आइए।\n— क्या हमें मेन्यू मिल सकता है?\n— ज़रूर। आज चिकन बहुत पसंद किया जा रहा है।\n— बढ़िया। मैं वही और पानी लूँगा।\n— ज़रूर। मैं अभी वापस आता हूँ।"
+        "content": "— शुभ संध्या। क्या दो लोगों के लिए मेज़ है?\n— जी हाँ। क्या आपने बुकिंग की है?\n— नहीं। क्या यह समस्या है?\n— बिल्कुल नहीं। कृपया मेरे साथ आइए।\n— क्या हमें मेन्यू मिल सकता है?\n— ज़रूर। आज चिकन बहुत पसंद किया जा रहा है।\n— ज़रूर। पौने सात बजे मिलते हैं।\n— ज़रूर। मैं अभी वापस आता हूँ।"
       },
       "bn": {
         "title": "রেস্তোরাঁয়",
-        "content": "— শুভ সন্ধ্যা। দুজনের জন্য কি টেবিল আছে?\n— হ্যাঁ। আপনাদের কি বুকিং আছে?\n— না। এতে কি সমস্যা হবে?\n— একদম না। দয়া করে আমার সঙ্গে আসুন।\n— আমরা কি মেনু পেতে পারি?\n— অবশ্যই। আজ চিকেনের চাহিদা খুব বেশি।\n— দারুণ। আমি সেটাই আর পানি নেব।\n— নিশ্চয়ই। আমি এখনই ফিরে আসছি।"
+        "content": "— শুভ সন্ধ্যা। দুজনের জন্য কি টেবিল আছে?\n— হ্যাঁ। আপনাদের কি বুকিং আছে?\n— না। এতে কি সমস্যা হবে?\n— একদম না। দয়া করে আমার সঙ্গে আসুন।\n— আমরা কি মেনু পেতে পারি?\n— অবশ্যই। আজ চিকেনের চাহিদা খুব বেশি।\n— অবশ্যই। পৌনে সাতটায় দেখা করি।\n— নিশ্চয়ই। আমি এখনই ফিরে আসছি।"
       },
       "ar": {
         "title": "في المطعم",
-        "content": "— مساء الخير. هل لديكم طاولة لشخصين؟\n— نعم. هل لديكم حجز؟\n— لا. هل هذه مشكلة؟\n— إطلاقًا. تفضلا معي.\n— هل يمكننا رؤية قائمة الطعام؟\n— بالتأكيد. الدجاج مشهور جدًا اليوم.\n— رائع. سأطلب ذلك وماءً، من فضلك.\n— بالتأكيد. سأعود حالًا."
+        "content": "— مساء الخير. هل لديكم طاولة لشخصين؟\n— نعم. هل لديكم حجز؟\n— لا. هل هذه مشكلة؟\n— إطلاقًا. تفضلا معي.\n— هل يمكننا رؤية قائمة الطعام؟\n— بالتأكيد. الدجاج مشهور جدًا اليوم.\n— بالتأكيد. لنلتقِ في السابعة إلا ربعاً.\n— بالتأكيد. سأعود حالًا."
       },
       "fa": {
         "title": "در رستوران",
-        "content": "— عصر بخیر. میز دو نفره دارید؟\n— بله. رزرو دارید؟\n— نه. مشکلی است؟\n— اصلاً. لطفاً دنبال من بیایید.\n— می‌توانیم منو را ببینیم؟\n— حتماً. غذای مرغ امروز خیلی طرفدار دارد.\n— عالی است. همان را با یک آب سفارش می‌دهم.\n— حتماً. همین الان برمی‌گردم."
+        "content": "— عصر بخیر. میز دو نفره دارید؟\n— بله. رزرو دارید؟\n— نه. مشکلی است؟\n— اصلاً. لطفاً دنبال من بیایید.\n— می‌توانیم منو را ببینیم؟\n— حتماً. غذای مرغ امروز خیلی طرفدار دارد.\n— حتماً. ساعت یک ربع به هفت قرار می‌گذاریم.\n— حتماً. همین الان برمی‌گردم."
       },
       "ur": {
         "title": "ریستوران میں",
-        "content": "— شام بخیر۔ کیا دو افراد کے لیے میز ہے؟\n— جی ہاں۔ کیا آپ کی بکنگ ہے؟\n— نہیں۔ کیا یہ مسئلہ ہے؟\n— بالکل نہیں۔ براہِ کرم میرے ساتھ آئیے۔\n— کیا ہمیں مینیو مل سکتا ہے؟\n— ضرور۔ آج چکن بہت پسند کیا جا رہا ہے۔\n— اچھا۔ میں وہی اور پانی لوں گا۔\n— ضرور۔ میں ابھی واپس آتا ہوں۔"
+        "content": "— شام بخیر۔ کیا دو افراد کے لیے میز ہے؟\n— جی ہاں۔ کیا آپ کی بکنگ ہے؟\n— نہیں۔ کیا یہ مسئلہ ہے؟\n— بالکل نہیں۔ براہِ کرم میرے ساتھ آئیے۔\n— کیا ہمیں مینیو مل سکتا ہے؟\n— ضرور۔ آج چکن بہت پسند کیا جا رہا ہے۔\n— ضرور۔ پونے سات بجے ملتے ہیں۔\n— ضرور۔ میں ابھی واپس آتا ہوں۔"
       },
       "id": {
         "title": "Di Restoran",
-        "content": "— Selamat malam. Ada meja untuk dua orang?\n— Ada. Apakah Anda sudah memesan tempat?\n— Belum. Apakah itu masalah?\n— Tidak sama sekali. Silakan ikut saya.\n— Boleh kami melihat menunya?\n— Tentu. Ayam adalah menu yang populer hari ini.\n— Bagus. Saya pesan itu dan air putih.\n— Baik. Saya segera kembali."
+        "content": "— Selamat malam. Ada meja untuk dua orang?\n— Ada. Apakah Anda sudah memesan tempat?\n— Belum. Apakah itu masalah?\n— Tidak sama sekali. Silakan ikut saya.\n— Boleh kami melihat menunya?\n— Tentu. Ayam adalah menu yang populer hari ini.\n— Tentu. Kita bertemu pukul tujuh kurang seperempat.\n— Baik. Saya segera kembali."
       },
       "vi": {
         "title": "Ở nhà hàng",
-        "content": "— Chào buổi tối. Nhà hàng còn bàn cho hai người không?\n— Có ạ. Anh chị đã đặt bàn chưa?\n— Chưa. Có vấn đề gì không?\n— Không ạ. Mời anh chị đi theo tôi.\n— Cho chúng tôi xem thực đơn được không?\n— Tất nhiên. Món gà hôm nay rất được ưa chuộng.\n— Tuyệt. Tôi gọi món đó và một chai nước.\n— Vâng. Tôi sẽ quay lại ngay."
+        "content": "— Chào buổi tối. Nhà hàng còn bàn cho hai người không?\n— Có ạ. Anh chị đã đặt bàn chưa?\n— Chưa. Có vấn đề gì không?\n— Không ạ. Mời anh chị đi theo tôi.\n— Cho chúng tôi xem thực đơn được không?\n— Tất nhiên. Món gà hôm nay rất được ưa chuộng.\n— Được chứ. Vậy gặp lúc bảy giờ kém mười lăm nhé.\n— Vâng. Tôi sẽ quay lại ngay."
       },
       "th": {
         "title": "ที่ร้านอาหาร",
-        "content": "— สวัสดีตอนเย็น มีโต๊ะสำหรับสองคนไหมคะ?\n— มีค่ะ ได้จองไว้ไหมคะ?\n— ยังไม่ได้จองค่ะ มีปัญหาไหม?\n— ไม่มีปัญหาค่ะ เชิญตามมาเลย\n— ขอเมนูหน่อยได้ไหมคะ?\n— ได้ค่ะ วันนี้เมนูไก่เป็นที่นิยมมาก\n— ดีเลย ฉันขอเมนูนั้นกับน้ำเปล่าค่ะ\n— ได้ค่ะ เดี๋ยวกลับมานะคะ"
+        "content": "— สวัสดีตอนเย็น มีโต๊ะสำหรับสองคนไหมคะ?\n— มีค่ะ ได้จองไว้ไหมคะ?\n— ยังไม่ได้จองค่ะ มีปัญหาไหม?\n— ไม่มีปัญหาค่ะ เชิญตามมาเลย\n— ขอเมนูหน่อยได้ไหมคะ?\n— ได้ค่ะ วันนี้เมนูไก่เป็นที่นิยมมาก\n— ได้เลย งั้นเจอกันหกโมงสี่สิบห้า\n— ได้ค่ะ เดี๋ยวกลับมานะคะ"
       },
       "ko": {
         "title": "식당에서",
-        "content": "— 안녕하세요. 두 명 자리 있나요?\n— 네. 예약하셨나요?\n— 아니요. 괜찮을까요?\n— 물론이죠. 이쪽으로 오세요.\n— 메뉴판을 볼 수 있을까요?\n— 물론입니다. 오늘은 치킨 요리가 인기가 많아요.\n— 좋아요. 그걸로 하고 물도 주세요.\n— 알겠습니다. 곧 돌아오겠습니다."
+        "content": "— 안녕하세요. 두 명 자리 있나요?\n— 네. 예약하셨나요?\n— 아니요. 괜찮을까요?\n— 물론이죠. 이쪽으로 오세요.\n— 메뉴판을 볼 수 있을까요?\n— 물론입니다. 오늘은 치킨 요리가 인기가 많아요.\n— 물론이지. 6시 45분에 만나자.\n— 알겠습니다. 곧 돌아오겠습니다."
       },
       "ja": {
         "title": "レストランで",
-        "content": "— こんばんは。二人用の席はありますか？\n— はい。ご予約はありますか？\n— いいえ。大丈夫ですか？\n— もちろんです。こちらへどうぞ。\n— メニューを見せていただけますか？\n— もちろんです。今日はチキン料理が人気です。\n— では、それとお水をお願いします。\n— かしこまりました。すぐ戻ります。"
+        "content": "— こんばんは。二人用の席はありますか？\n— はい。ご予約はありますか？\n— いいえ。大丈夫ですか？\n— もちろんです。こちらへどうぞ。\n— メニューを見せていただけますか？\n— もちろんです。今日はチキン料理が人気です。\n— もちろん。6時45分に会おう。\n— かしこまりました。すぐ戻ります。"
       },
       "zh": {
         "title": "在餐厅",
-        "content": "— 晚上好。有两个人的桌子吗？\n— 有。请问您预订了吗？\n— 没有。可以吗？\n— 当然可以。请跟我来。\n— 可以给我们看看菜单吗？\n— 当然。今天鸡肉很受欢迎。\n— 好的，我要这个，再来一杯水。\n— 没问题，我马上回来。"
+        "content": "— 晚上好。有两个人的桌子吗？\n— 有。请问您预订了吗？\n— 没有。可以吗？\n— 当然可以。请跟我来。\n— 可以给我们看看菜单吗？\n— 当然。今天鸡肉很受欢迎。\n— 当然。那我们差一刻七点见。\n— 没问题，我马上回来。"
       },
       "kk": {
         "title": "Мейрамханада",
-        "content": "— Қайырлы кеш. Екі адамға үстел бар ма?\n— Иә. Алдын ала тапсырыс бердіңіздер ме?\n— Жоқ. Бұл мәселе емес пе?\n— Әрине, мәселе жоқ. Артымнан жүріңіздер.\n— Мәзірді көрсете аласыз ба?\n— Әрине. Бүгін тауық етіне сұраныс жоғары.\n— Керемет. Маған соны және су беріңіз.\n— Жақсы. Қазір ораламын."
+        "content": "— Қайырлы кеш. Екі адамға үстел бар ма?\n— Иә. Алдын ала тапсырыс бердіңіздер ме?\n— Жоқ. Бұл мәселе емес пе?\n— Әрине, мәселе жоқ. Артымнан жүріңіздер.\n— Мәзірді көрсете аласыз ба?\n— Әрине. Бүгін тауық етіне сұраныс жоғары.\n— Әрине. Жетіге он бес минут қалғанда кездесейік.\n— Жақсы. Қазір ораламын."
       }
     }
   },
