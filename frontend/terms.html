@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - English Breakfast</title>
+  <link rel="icon" type="image/png" href="./assets/favicon-96x96.png" sizes="96x96">
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #ff6a00;
+      --border-color: #334155;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 32px 24px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .lang-switcher select {
+      background: var(--bg-color);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .updated {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 19px;
+      margin-top: 26px;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+    p, li {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    strong {
+      color: var(--text-main);
+    }
+    .footer {
+      margin-top: 36px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <h1>🍳 English Breakfast</h1>
+      </div>
+      <div class="lang-switcher">
+        <select id="langSelect" onchange="changeLang(this.value)">
+          <option value="en">English</option>
+          <option value="ru">Русский</option>
+          <option value="uk">Українська</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="content"></div>
+
+    <div class="footer">
+      <div>&copy; 2026 Sway Digital Lab (Individual Entrepreneur Mykola Lypniahov). All rights reserved.</div>
+      <div><a href="./privacy.html">Privacy Policy</a></div>
+    </div>
+  </div>
+
+  <script>
+    const TERMS_DATA = {
+      en: {
+        title: "Terms of Service",
+        updated: "Last Updated: November 2026",
+        intro: "These Terms of Service (\"Terms\") govern your access to and use of the <strong>English Breakfast</strong> mobile application, widgets, and services provided by Sway Digital Lab / Individual Entrepreneur Mykola Lypniahov (\"we\", \"our\", or \"us\").",
+        sections: [
+          {
+            title: "1. Acceptance of Terms",
+            text: "By downloading, installing, or using English Breakfast, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, please do not use the application."
+          },
+          {
+            title: "2. Educational Use and License",
+            text: "English Breakfast grants you a personal, worldwide, revocable, non-exclusive, non-transferable license to use the app for your personal, non-commercial language learning. You may not extract vocabulary data or distribute source assets without prior written consent."
+          },
+          {
+            title: "3. User Accounts and Fair Play",
+            text: "You can train as a guest or sign in via Google to sync scores and compete in weekly leagues. Fair play is required: automated score manipulation or hacking local storage will result in leaderboard ban."
+          },
+          {
+            title: "4. Monetization and Advertising",
+            text: "The application is supported by advertising (Google AdMob, Unity Ads, Start.io). Rewarded videos are optional and grant bonus XP (+100 XP) or mistake shields. Interstitials are suppressed during your initial 7-day grace period."
+          },
+          {
+            title: "5. Intellectual Property",
+            text: "All vocabulary lists, audio, phonetics, cat memes, and designs are the exclusive property of Sway Digital Lab."
+          },
+          {
+            title: "6. Disclaimer and Limitation of Liability",
+            text: "English Breakfast is provided \"AS IS\". To the maximum extent permitted by law, we are not liable for any indirect or consequential damages arising from app usage."
+          },
+          {
+            title: "7. Contact",
+            text: "For questions, contact us at: <a href=\"mailto:lipniagovnikola@gmail.com\">lipniagovnikola@gmail.com</a>."
+          }
+        ]
+      },
+      ru: {
+        title: "Условия использования",
+        updated: "Дата обновления: Ноябрь 2026 г.",
+        intro: "Настоящие Условия регулируют использование мобильного приложения <strong>English Breakfast</strong>, виджетов и сервисов Sway Digital Lab / ФОП Липнягов Н.П.",
+        sections: [
+          {
+            title: "1. Принятие условий",
+            text: "Устанавливая или запуская English Breakfast, вы соглашаетесь с настоящими Условиями и Политикой конфиденциальности."
+          },
+          {
+            title: "2. Назначение и лицензия",
+            text: "Приложение предназначено для индивидуального некоммерческого изучения английского языка. Запрещается извлечение данных словаря и несанкционированное распространение материалов."
+          },
+          {
+            title: "3. Рейтинги и честная игра",
+            text: "Участвовать в лигах можно как гость или через аккаунт Google. Накрутка очков XP и взлом локального хранилища влекут исключение из таблицы лидеров."
+          },
+          {
+            title: "4. Реклама и вознаграждения",
+            text: "Приложение поддерживается показом рекламы (AdMob, Unity Ads, Start.io). Просмотр видео за вознаграждение доброволен (+100 XP, щиты защиты). В первые 7 дней для новых пользователей межстраничная реклама отключена."
+          },
+          {
+            title: "5. Интеллектуальная собственность",
+            text: "Все базы слов, алгоритмы интервального повторения, дизайн и графика защищены авторским правом."
+          },
+          {
+            title: "6. Контакты",
+            text: "По всем вопросам: <a href=\"mailto:lipniagovnikola@gmail.com\">lipniagovnikola@gmail.com</a>."
+          }
+        ]
+      },
+      uk: {
+        title: "Умови використання",
+        updated: "Останнє оновлення: Листопад 2026 р.",
+        intro: "Ці Умови регулюють використання додатку <strong>English Breakfast</strong>, віджетів і сервісів Sway Digital Lab / ФОП Ліпнягов М.П.",
+        sections: [
+          {
+            title: "1. Прийняття умов",
+            text: "Встановлюючи додаток, ви погоджуєтеся з цими Умовами та Політикою конфіденційності."
+          },
+          {
+            title: "2. Ліцензія на використання",
+            text: "Додаток надається для особистого некомерційного вивчення англійської мови."
+          },
+          {
+            title: "3. Чесна гра в лігах",
+            text: "Накрутка балів XP або модифікація файлів гри веде до виключення з таблиці лідерів."
+          },
+          {
+            title: "4. Реклама та винагороди",
+            text: "Додаток фінансується за рахунок реклами. Перегляд відео за винагороду є добровільним. Діє 7-денний пільговий період без міжсторінкової реклами."
+          },
+          {
+            title: "5. Контакти",
+            text: "Контакт розробника: <a href=\"mailto:lipniagovnikola@gmail.com\">lipniagovnikola@gmail.com</a>."
+          }
+        ]
+      }
+    };
+
+    function render(lang) {
+      const data = TERMS_DATA[lang] || TERMS_DATA.en;
+      let html = '<h2>' + data.title + '</h2>';
+      html += '<div class="updated">' + data.updated + '</div>';
+      html += '<p>' + data.intro + '</p>';
+      data.sections.forEach(s => {
+        html += '<h2>' + s.title + '</h2><p>' + s.text + '</p>';
+      });
+      document.getElementById('content').innerHTML = html;
+    }
+
+    function changeLang(lang) {
+      localStorage.setItem('terms_lang', lang);
+      render(lang);
+    }
+
+    const saved = localStorage.getItem('terms_lang') || (navigator.language.startsWith('ru') ? 'ru' : navigator.language.startsWith('uk') ? 'uk' : 'en');
+    document.getElementById('langSelect').value = saved;
+    render(saved);
+  </script>
+</body>
+</html>

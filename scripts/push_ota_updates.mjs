@@ -918,7 +918,7 @@ async function run() {
 
     // Batch 5052-5101
     { id: 5053, word: 'preposition', lang: 'fr', expected: 'préposition' },
-    { id: 5065, word: 'a piece of cake', lang: 'fr', expected: "du gâteau, un jeu d'enfant, simple comme bonjour" },
+    { id: 5065, word: 'a piece of cake', lang: 'fr', expected: "du gâteau" },
 
     // Batch 5102-5151
     { id: 5128, word: 'set off', lang: 'fr', expected: 'se mettre en route, partir; déclencher, faire exploser; faire ressortir' },
@@ -1050,7 +1050,8 @@ async function run() {
 
     // Batch 6702-6751
     { id: 6717, word: 'bind bound bound', lang: 'da', expected: 'binde, samle, forpligte' },
-    { id: 6747, word: 'better safe than sorry', lang: 'kk', expected: 'сақтансаң сақтайды, өкінгенше сақтанған жөн' },
+    { id: 6747, word: 'better safe than sorry', lang: 'kk', expected: 'сақтансаң сақтайды' },
+    { id: 6747, word: 'better safe than sorry', lang: 'ru', expected: 'бережёного Бог бережёт' },
 
     // Batch 6752-6801
     { id: 6752, word: 'false', lang: 'fi', expected: 'väärä, virheellinen, epätosi' },
@@ -1074,7 +1075,17 @@ async function run() {
 
     // Batch 7002-7049 (Final batch!)
     { id: 7009, word: 'monstrous', lang: 'uk', expected: 'чудовищний, потворний, страхітливий' },
-    { id: 7015, word: 'parapet', lang: 'pl', expected: 'barierka, balustrada' }
+    { id: 7015, word: 'parapet', lang: 'pl', expected: 'barierka, balustrada' },
+
+    // Curated & Sanitized Manual Corrections
+    { id: 633, word: 'clock', lang: 'ru', expected: 'настенные часы, засекать время' },
+    { id: 3856, word: 'god', lang: 'ru', expected: 'Бог, божество' },
+    { id: 600, word: 'salary', lang: 'ru', expected: 'зарплата, оклад' },
+    { id: 491, word: 'wage', lang: 'ru', expected: 'зарплата, ставка' },
+    { id: 2145, word: 'ass', lang: 'ru', expected: 'задница, олух' },
+    { id: 2146, word: 'fucking', lang: 'ru', expected: 'грёбаный, чертовски, чёртов' },
+    { id: 3081, word: 'bullshit', lang: 'ru', expected: 'чушь, ерунда, бред' },
+    { id: 3832, word: 'shit', lang: 'ru', expected: 'дерьмо, чёрт' }
   ];
 
   // 1. Fetch current Firestore shared/vocabulary_updates
@@ -1188,7 +1199,41 @@ async function run() {
     delete fsMap[idStr].updatedAt;
   }
 
-  console.log(`   Merged active batches (1252-1851), sample checks (1-1251), and functional exclusions into Firestore updates.`);
+  // Merge curated manual corrections and sanitized words (full 36 locales)
+  const curatedIds = [
+    491,  // wage
+    600,  // salary
+    633,  // clock
+    3856, // god
+    2145, // ass
+    2146, // fucking
+    2283, // bitch
+    2547, // crap
+    3069, // asshole
+    3074, // bastard
+    3081, // bullshit
+    3832, // shit
+    4270, // fuck away
+    4279, // fart
+    5063, // go bananas
+    5064, // when pigs fly
+    5065, // a piece of cake
+    5170  // time flies
+  ];
+  for (const id of curatedIds) {
+    const localW = wordsMap.get(id);
+    if (!localW) continue;
+    const idStr = String(id);
+    fsMap[idStr] = {
+      id: localW.id,
+      word: localW.word,
+      translation: localW.translation,
+      translations: { ...(localW.translations || {}) }
+    };
+    delete fsMap[idStr].updatedAt;
+  }
+
+  console.log(`   Merged active batches, sample checks, functional exclusions, and curated corrections into Firestore updates.`);
 
   // 2. Prune redundant legacy entries to preserve plenty of headroom (< 1024 KB)
   let pruned = 0;
@@ -1200,10 +1245,11 @@ async function run() {
   }
 
   const functionalIdStrs = functionalIds.map(String);
+  const curatedIdStrs = curatedIds.map(String);
 
   for (const [idStr, entry] of Object.entries(fsMap)) {
-    if (activeBatchIds.has(idStr) || functionalIdStrs.includes(idStr)) {
-      // Active batch (recent ~600 words) or functional exclusion: keep full
+    if (activeBatchIds.has(idStr) || functionalIdStrs.includes(idStr) || curatedIdStrs.includes(idStr)) {
+      // Active batch, functional exclusion, or curated correction: keep full
       continue;
     }
     if (sampleCheckIdLangs.has(idStr)) {
