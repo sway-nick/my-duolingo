@@ -26,7 +26,7 @@ globalThis.window = {
 };
 
 // Import modules
-const { getIsoWeekKey, getRecentWeekKeys } = await import('../frontend/services/weekKey.js');
+const { getIsoWeekKey, getRecentWeekKeys, getIsoMonthKey, getTimeUntilMonthEnd } = await import('../frontend/services/weekKey.js');
 const {
   commitXpDeltaFirestore,
   reconcileWeeklyXpFirestore,
@@ -36,7 +36,16 @@ const {
   deleteAllUserFirestoreData,
   hasPendingLeaderboardIncrements
 } = await import('../frontend/services/firebase.js');
-const { fetchUserDataFromCloud, addWeeklyXP, getUserWeeklyXP, getLeaderboard } = await import('../frontend/services/api.js');
+const {
+  fetchUserDataFromCloud,
+  addWeeklyXP,
+  getUserWeeklyXP,
+  getUserMonthlyXP,
+  getLeaderboard,
+  getCachedLeaderboard,
+  checkAndApplyMonthlyLeaderboardReset,
+  resetMonthlyLeaderboard
+} = await import('../frontend/services/api.js');
 
 test('1. ISO week key at boundary conditions (UTC)', () => {
   // Sunday 2026-12-27 23:59:59.999Z -> 2026-W52
@@ -358,3 +367,82 @@ test('8. getLeaderboard caches data for 30 minutes without re-querying network',
   await getLeaderboard(wKey, 'week', true);
   assert.ok(fetchCount > initialFetchCount, 'Force refresh must query network');
 });
+
+test('9. Monthly reset: beginning of month resets Общий зачет for all players and bots to 0', () => {
+  storage.clear();
+  const testUid = 'UserMonthlyResetTest123456';
+  localStorage.setItem('myduo_current_user', JSON.stringify({
+    id: testUid,
+    email: 'champion@example.com',
+    name: 'Champion'
+  }));
+
+  // Simulate previous month (2026-10) with cached data and user XP
+  localStorage.setItem('myduo_leaderboard_month_key', '2026-10');
+  localStorage.setItem(`xp_${testUid}_month_2026-10`, '1450');
+  localStorage.setItem('cache_leaderboard_all', JSON.stringify([
+    { userId: testUid, name: 'Champion', xp: 1450, isCurrentUser: true },
+    { userId: 'bot_1', name: 'Alex Smith', xp: 980, isBot: true }
+  ]));
+  localStorage.setItem('cache_leaderboard_time_all', String(Date.now()));
+
+  // Transition to 2026-11 (November 1st)
+  const nov1 = new Date('2026-11-01T00:00:00.000Z');
+  const wasReset = checkAndApplyMonthlyLeaderboardReset(nov1);
+  assert.equal(wasReset, true, 'Monthly reset must trigger when transitioning to 2026-11');
+  assert.equal(localStorage.getItem('myduo_leaderboard_month_key'), '2026-11');
+  assert.equal(localStorage.getItem('cache_leaderboard_all'), null, 'Old month cache must be purged');
+  assert.equal(getUserMonthlyXP(testUid, '2026-11'), 0, 'User score in new month must start at 0');
+
+  // Verify getCachedLeaderboard in new month returns 0 for user and 0 for bots
+  const board = getCachedLeaderboard(null, 'all');
+  assert.equal(board.period, 'all');
+  const me = board.data.find(p => p.isCurrentUser);
+  assert.ok(me, 'Current user must be in all-time leaderboard');
+  assert.equal(me.xp, 0, 'User XP in Общий зачет must be 0 after monthly reset');
+
+  const bot1 = board.data.find(p => p.userId === 'bot_1');
+  assert.ok(bot1, 'Bot must be present');
+  assert.equal(bot1.xp, 0, 'Bot XP in Общий зачет must be 0 after monthly reset');
+});
+
+test('10. Monthly score accumulates during current month after reset', () => {
+  storage.clear();
+  const testUid = 'UserMonthlyGainTest123456';
+  localStorage.setItem('myduo_current_user', JSON.stringify({
+    id: testUid,
+    email: 'climber@example.com',
+    name: 'Climber'
+  }));
+
+  // Perform reset for active month
+  resetMonthlyLeaderboard('2026-11');
+  assert.equal(getUserMonthlyXP(testUid, '2026-11'), 0);
+
+  // User completes rounds and earns +25 XP
+  addWeeklyXP(25, testUid, '2026-W45');
+  assert.equal(getUserMonthlyXP(testUid, '2026-11'), 25, 'Monthly XP must increase by 25');
+
+  // Add another +15 XP
+  addWeeklyXP(15, testUid, '2026-W45');
+  assert.equal(getUserMonthlyXP(testUid, '2026-11'), 40, 'Monthly XP must reach 40');
+
+  const board = getCachedLeaderboard('2026-W45', 'all');
+  const me = board.data.find(p => p.isCurrentUser);
+  assert.equal(me.xp, 40, 'Общий зачет must reflect current month accumulated XP');
+});
+
+test('11. getTimeUntilMonthEnd calculates accurate countdown to 1st of next month', () => {
+  // Test mid-month: 2026-11-20 12:00:00 UTC (November has 30 days -> 10 days and 12 hours left)
+  const midNov = new Date('2026-11-20T12:00:00.000Z');
+  const tMid = getTimeUntilMonthEnd(midNov);
+  assert.equal(tMid.days, 10, 'Must have 10 full days left');
+  assert.equal(tMid.hours, 12, 'Must have 12 hours left');
+
+  // Test 1 hour before next month: 2026-11-30 23:00:00 UTC
+  const endNov = new Date('2026-11-30T23:00:00.000Z');
+  const tEnd = getTimeUntilMonthEnd(endNov);
+  assert.equal(tEnd.days, 0);
+  assert.equal(tEnd.hours, 1);
+});
+

@@ -1,5 +1,5 @@
 import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=386.0';
-import { getRecentWeekKeys } from '../../services/weekKey.js?v=386.0';
+import { getRecentWeekKeys, getTimeUntilMonthEnd } from '../../services/weekKey.js?v=386.0';
 import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=386.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
@@ -363,6 +363,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   try {
     const currentUser = getCurrentUser();
     const weekTime = getTimeUntilSundayEnd();
+    const monthTime = getTimeUntilMonthEnd();
 
     // 1. Instant 0ms cached data load
     let initialPlayers = [];
@@ -391,11 +392,13 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   const hText = t('lead_hours_short');
   const mText = t('lead_minutes_short');
 
+  const activeTimer = currentPeriod === 'all' ? monthTime : weekTime;
+
   container.innerHTML = `
     <div class="leaderboard-page" style="position: relative;">
       <!-- Single Sticky Header Group (Header + Podium) Flush to Mobile Header -->
       <div class="leaderboard-sticky-group">
-        <div class="leaderboard-top-row ${currentPeriod === 'all' ? 'no-timer' : ''}">
+        <div class="leaderboard-top-row">
           <div class="custom-dropdown" id="leaderboard-type-dropdown">
             <button type="button" class="leaderboard-header-chip leaderboard-dropdown-chip" id="leaderboard-type-trigger" aria-haspopup="listbox" aria-expanded="false">
               <span id="leaderboard-type-label" style="white-space: nowrap; text-align: left; overflow: hidden; text-overflow: ellipsis;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
@@ -406,12 +409,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
               <div class="dropdown-item ${currentPeriod === 'all' ? 'selected' : ''}" data-value="all" style="white-space: nowrap;">🌎 ${t('lead_all_time')}</div>
             </div>
           </div>
-          ${currentPeriod === 'all' ? '' : `
           <div class="leaderboard-header-chip leaderboard-timer-chip" id="leaderboard-timer-badge">
             <span style="font-size: 13.5px; line-height: 1;">⏳</span>
-            <span>${weekTime.days > 0 ? `${weekTime.days}${dText} ` : ''}${weekTime.hours}${hText}</span>
+            <span>${activeTimer.days > 0 ? `${activeTimer.days}${dText} ` : ''}${activeTimer.hours}${hText}</span>
           </div>
-          `}
         </div>
 
         <div id="leaderboard-podium-container">
@@ -491,6 +492,7 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
   // Clean up previous event listeners to prevent duplicate execution
   if (container._xpHandler) window.removeEventListener('myduo:xp_changed', container._xpHandler);
   if (container._leaderboardHandler) window.removeEventListener('myduo:leaderboard_updated', container._leaderboardHandler);
+  if (container._monthResetHandler) window.removeEventListener('myduo:leaderboard_month_reset', container._monthResetHandler);
   if (container._visibilityHandler) document.removeEventListener('visibilitychange', container._visibilityHandler);
   if (container._globalClickHandler) document.removeEventListener('click', container._globalClickHandler);
 
@@ -612,8 +614,10 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
 
   window.addEventListener('myduo:xp_changed', handleLiveUpdate);
   window.addEventListener('myduo:leaderboard_updated', handleLiveUpdate);
+  window.addEventListener('myduo:leaderboard_month_reset', handleLiveUpdate);
   container._xpHandler = handleLiveUpdate;
   container._leaderboardHandler = handleLiveUpdate;
+  container._monthResetHandler = handleLiveUpdate;
 
   // 4. When user tabs back to the app, immediately refresh
   const handleVisibility = () => {

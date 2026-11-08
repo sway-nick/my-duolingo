@@ -34,5 +34,32 @@ export function getIsoWeekStartMs(weekKey = getIsoWeekKey()) {
   return monTarget.getTime();
 }
 
+// Standard ISO-8601 Month Key in UTC (YYYY-MM)
+export function getIsoMonthKey(d = new Date()) {
+  const date = d instanceof Date ? d : new Date(d);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+export function getIsoMonthStartMs(monthKey = getIsoMonthKey()) {
+  const match = String(monthKey || '').match(/^(\d{4})-(\d{2})$/);
+  if (!match) return 0;
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10) - 1;
+  return Date.UTC(year, month, 1, 0, 0, 0, 0);
+}
+
+export function getTimeUntilMonthEnd(now = new Date()) {
+  const d = now instanceof Date ? now : new Date(now);
+  const nextMonthStart = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1, 0, 0, 0, 0));
+  const diffMs = Math.max(0, nextMonthStart.getTime() - d.getTime());
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  return { days, hours, mins, totalMs: diffMs };
+}
+
+
 
 

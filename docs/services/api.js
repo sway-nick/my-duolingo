@@ -23,7 +23,7 @@ import {
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
 } from './firebase.js?v=386.0';
-import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=386.0';
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs, getIsoMonthKey, getTimeUntilMonthEnd } from './weekKey.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
 
 async function getHealth() {
@@ -686,6 +686,144 @@ function getUserWeeklyXP(userId = null, weekKey = null) {
   return Math.max(0, xp);
 }
 
+function getUserMonthlyXP(userId = null, monthKey = null) {
+  const uId = userId || getEffectiveUserId();
+  const mKey = monthKey || getIsoMonthKey();
+  const key = `xp_${uId}_month_${mKey}`;
+
+  let xp = typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+  if (xp != null) {
+    return Math.max(0, Number(xp || 0));
+  }
+
+  // Check deterministic user ID
+  const user = getCurrentUser();
+  if (user && user.email && typeof localStorage !== 'undefined') {
+    const detId = getDeterministicUserId(user.email);
+    if (detId && detId !== uId) {
+      const detXp = localStorage.getItem(`xp_${detId}_month_${mKey}`);
+      if (detXp != null) {
+        const val = Math.max(0, Number(detXp));
+        localStorage.setItem(key, String(val));
+        return val;
+      }
+    }
+  }
+
+  // Check firebaseUid
+  if (user && user.firebaseUid && user.firebaseUid !== uId && typeof localStorage !== 'undefined') {
+    const fbXp = localStorage.getItem(`xp_${user.firebaseUid}_month_${mKey}`);
+    if (fbXp != null) {
+      const val = Math.max(0, Number(fbXp));
+      localStorage.setItem(key, String(val));
+      return val;
+    }
+  }
+
+  // Check guest ID
+  const guestId = getGuestId();
+  if (guestId && guestId !== uId && typeof localStorage !== 'undefined') {
+    const guestXp = localStorage.getItem(`xp_${guestId}_month_${mKey}`);
+    if (guestXp != null) {
+      const val = Math.max(0, Number(guestXp));
+      localStorage.setItem(key, String(val));
+      return val;
+    }
+  }
+
+  // Fallback: If this is current month, check current weekly XP if week falls in this month
+  const curMonth = getIsoMonthKey();
+  if (mKey === curMonth) {
+    const curWeek = getIsoWeekKey();
+    const curWeekXp = getUserWeeklyXP(uId, curWeek);
+    if (curWeekXp > 0 && typeof localStorage !== 'undefined') {
+      localStorage.setItem(key, String(curWeekXp));
+      return curWeekXp;
+    }
+  }
+
+  return 0;
+}
+
+function checkAndApplyMonthlyLeaderboardReset(now = new Date()) {
+  const currentMonthKey = getIsoMonthKey(now);
+  const lastActiveMonth = typeof localStorage !== 'undefined'
+    ? localStorage.getItem('myduo_leaderboard_month_key')
+    : null;
+
+  if (!lastActiveMonth) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('myduo_leaderboard_month_key', currentMonthKey);
+    }
+    return false;
+  }
+
+  if (lastActiveMonth !== currentMonthKey) {
+    if (typeof localStorage !== 'undefined') {
+      // 1. Purge all cached all-time / monthly leaderboard entries
+      localStorage.removeItem('cache_leaderboard_all');
+      localStorage.removeItem('cache_leaderboard_time_all');
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith('cache_leaderboard_all') || k.startsWith('cache_leaderboard_time_all'))) {
+          localStorage.removeItem(k);
+        }
+      }
+
+      // 2. Reset user's monthly XP to 0 for the new month
+      const currentUserId = getEffectiveUserId();
+      const guestId = getGuestId();
+      localStorage.setItem(`xp_${currentUserId}_month_${currentMonthKey}`, '0');
+      if (guestId && guestId !== currentUserId) {
+        localStorage.setItem(`xp_${guestId}_month_${currentMonthKey}`, '0');
+      }
+
+      // 3. Mark force zero bots for the reset moment of this month
+      localStorage.setItem(`myduo_leaderboard_force_zero_bots_${currentMonthKey}`, '1');
+
+      // 4. Mark the new active month
+      localStorage.setItem('myduo_leaderboard_month_key', currentMonthKey);
+    }
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('myduo:leaderboard_month_reset', {
+        detail: { currentMonthKey, previousMonthKey: lastActiveMonth }
+      }));
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+function resetMonthlyLeaderboard(monthKey = null) {
+  const mKey = monthKey || getIsoMonthKey();
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('cache_leaderboard_all');
+    localStorage.removeItem('cache_leaderboard_time_all');
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith('cache_leaderboard_all') || k.startsWith('cache_leaderboard_time_all'))) {
+        localStorage.removeItem(k);
+      }
+    }
+    const currentUserId = getEffectiveUserId();
+    const guestId = getGuestId();
+    localStorage.setItem(`xp_${currentUserId}_month_${mKey}`, '0');
+    if (guestId && guestId !== currentUserId) {
+      localStorage.setItem(`xp_${guestId}_month_${mKey}`, '0');
+    }
+    localStorage.setItem('myduo_leaderboard_month_key', mKey);
+    localStorage.setItem(`myduo_leaderboard_force_zero_bots_${mKey}`, '1');
+  }
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('myduo:leaderboard_month_reset', {
+      detail: { currentMonthKey: mKey }
+    }));
+  }
+}
+
 function addWeeklyXP(delta, userId = null, weekKey = null) {
   const uId = userId || getEffectiveUserId();
   const wKey = weekKey || getIsoWeekKey();
@@ -695,6 +833,26 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   const next = Math.max(0, current + delta);
   const effectiveDelta = next - current;
   localStorage.setItem(key, String(next));
+
+  // Also update monthly score
+  const mKey = getIsoMonthKey();
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(`myduo_leaderboard_force_zero_bots_${mKey}`);
+    const currentMonthXp = getUserMonthlyXP(uId, mKey);
+    const nextMonthXp = Math.max(0, currentMonthXp + delta);
+    localStorage.setItem(`xp_${uId}_month_${mKey}`, String(nextMonthXp));
+
+    const user = getCurrentUser();
+    if (user && user.email) {
+      const detId = getDeterministicUserId(user.email);
+      if (detId && detId !== uId) {
+        localStorage.setItem(`xp_${detId}_month_${mKey}`, String(nextMonthXp));
+      }
+    }
+    if (user && user.firebaseUid && user.firebaseUid !== uId) {
+      localStorage.setItem(`xp_${user.firebaseUid}_month_${mKey}`, String(nextMonthXp));
+    }
+  }
 
   // Sync to backend asynchronously via atomic commit increment
   const user = getCurrentUser();
@@ -941,6 +1099,10 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   };
 
   if (period === 'all') {
+    checkAndApplyMonthlyLeaderboardReset();
+    const mKey = getIsoMonthKey();
+    const isBotZero = typeof localStorage !== 'undefined' && localStorage.getItem(`myduo_leaderboard_force_zero_bots_${mKey}`) === '1';
+
     let rawList = [];
     try {
       const raw = localStorage.getItem('cache_leaderboard_all') || localStorage.getItem(`cache_leaderboard_${wKey}`);
@@ -962,24 +1124,31 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
       userId: bot.userId,
       name: bot.name,
       avatar: bot.avatar,
-      xp: Math.max(10, Math.floor(bot.xp * 3.5)),
+      xp: isBotZero ? 0 : (bot.xp === 0 ? 0 : Math.floor(bot.xp * 3.5)),
       isBot: true,
     }));
     const combined = [...realPlayers, ...dynamicBots];
 
-    let totalLocalXP = 0;
-    try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith(`xp_${currentUserId}_`)) {
-          totalLocalXP += Number(localStorage.getItem(k) || 0);
+    let userScore = 0;
+    const explicitMonthly = typeof localStorage !== 'undefined' ? localStorage.getItem(`xp_${currentUserId}_month_${mKey}`) : null;
+    if (explicitMonthly != null) {
+      userScore = Math.max(0, Number(explicitMonthly || 0));
+    } else {
+      let totalLocalXP = 0;
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(`xp_${currentUserId}_`) && !k.includes('_month_')) {
+            totalLocalXP += Number(localStorage.getItem(k) || 0);
+          }
         }
-      }
-    } catch (e) {}
+      } catch (e) {}
+      userScore = totalLocalXP;
+    }
 
     const myIdx = combined.findIndex(isMe);
     if (myIdx >= 0) {
-      combined[myIdx].xp = Math.max(Number(combined[myIdx].xp || 0), totalLocalXP);
+      combined[myIdx].xp = userScore;
       combined[myIdx].userId = currentUserId;
       combined[myIdx].name = userName;
       if (userAvatar) combined[myIdx].avatar = userAvatar;
@@ -989,7 +1158,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
         userId: currentUserId,
         name: userName,
         avatar: userAvatar,
-        xp: totalLocalXP,
+        xp: userScore,
         isCurrentUser: true,
       });
     }
@@ -1083,8 +1252,11 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
   const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
 
   if (period === 'all') {
-    const allCacheTimeKey = 'cache_leaderboard_time_all';
-    const lastFetchedAll = parseInt(localStorage.getItem(allCacheTimeKey) || '0', 10);
+    checkAndApplyMonthlyLeaderboardReset();
+    const mKey = getIsoMonthKey();
+    const isBotZero = typeof localStorage !== 'undefined' && localStorage.getItem(`myduo_leaderboard_force_zero_bots_${mKey}`) === '1';
+    const allCacheTimeKey = `cache_leaderboard_time_all_${mKey}`;
+    const lastFetchedAll = parseInt(localStorage.getItem(allCacheTimeKey) || localStorage.getItem('cache_leaderboard_time_all') || '0', 10);
     const isAllFresh = (Date.now() - lastFetchedAll) < LEADERBOARD_CACHE_TTL;
     if (!force && isAllFresh) {
       const cached = getCachedLeaderboard(wKey, 'all');
@@ -1111,7 +1283,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
             userId: p.userId,
             name: p.name,
             avatar: p.avatar,
-            xp: Number(p.xp || 0),
+            xp: isBotZero ? 0 : Number(p.xp || 0),
             isCurrentUser: p.isCurrentUser
           }));
         }
@@ -1121,16 +1293,23 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
     }
 
     if (fsPlayers && Array.isArray(fsPlayers) && fsPlayers.length > 0) {
-        let totalLocalXP = 0;
-        try {
-          const prefix = `xp_${currentUserId}_`;
-          for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k && k.startsWith(prefix)) {
-              totalLocalXP += Number(localStorage.getItem(k) || 0);
+        let userScore = 0;
+        const explicitMonthly = typeof localStorage !== 'undefined' ? localStorage.getItem(`xp_${currentUserId}_month_${mKey}`) : null;
+        if (explicitMonthly != null) {
+          userScore = Math.max(0, Number(explicitMonthly || 0));
+        } else {
+          let totalLocalXP = 0;
+          try {
+            const prefix = `xp_${currentUserId}_`;
+            for (let i = 0; i < localStorage.length; i++) {
+              const k = localStorage.key(i);
+              if (k && k.startsWith(prefix) && !k.includes('_month_')) {
+                totalLocalXP += Number(localStorage.getItem(k) || 0);
+              }
             }
-          }
-        } catch (e) {}
+          } catch (e) {}
+          userScore = totalLocalXP;
+        }
 
         const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
         const fbUid = currentUser?.firebaseUid || null;
@@ -1142,17 +1321,17 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
         ));
 
         if (myIdx >= 0) {
-          fsPlayers[myIdx].xp = Math.max(Number(fsPlayers[myIdx].xp || 0), totalLocalXP);
+          fsPlayers[myIdx].xp = userScore;
           fsPlayers[myIdx].userId = currentUserId;
           fsPlayers[myIdx].name = userName;
           if (userAvatar) fsPlayers[myIdx].avatar = userAvatar;
           fsPlayers[myIdx].isCurrentUser = true;
-        } else if (totalLocalXP > 0) {
+        } else if (userScore > 0) {
           fsPlayers.push({
             userId: currentUserId,
             name: userName,
             avatar: userAvatar,
-            xp: totalLocalXP,
+            xp: userScore,
             isCurrentUser: true,
           });
         }
@@ -1161,14 +1340,16 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
           userId: bot.userId,
           name: bot.name,
           avatar: bot.avatar,
-          xp: Math.max(10, Math.floor(bot.xp * 3.5)),
+          xp: isBotZero ? 0 : (bot.xp === 0 ? 0 : Math.floor(bot.xp * 3.5)),
           isBot: true,
         }));
         const combined = [...fsPlayers, ...dynamicBots];
         sortLeaderboardEntries(combined);
 
         localStorage.setItem('cache_leaderboard_all', JSON.stringify(combined));
+        localStorage.setItem(`cache_leaderboard_all_${mKey}`, JSON.stringify(combined));
         localStorage.setItem(allCacheTimeKey, String(Date.now()));
+        localStorage.setItem('cache_leaderboard_time_all', String(Date.now()));
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('myduo:leaderboard_updated', { detail: { data: combined, period: 'all' } }));
         }
@@ -4559,6 +4740,11 @@ export {
   formatCompactXp,
   getIsoWeekKey,
   getRecentWeekKeys,
+  getIsoMonthKey,
+  getTimeUntilMonthEnd,
+  checkAndApplyMonthlyLeaderboardReset,
+  getUserMonthlyXP,
+  resetMonthlyLeaderboard,
   fetchUserDataFromCloud,
   pushUserDataToCloud,
   transcribeAudio,
