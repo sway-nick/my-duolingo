@@ -10749,6 +10749,13 @@ html.is-rtl {
   cursor: default;
 }
 
+.wb-slot.wb-slot-wrong {
+  border: 2px solid #ef4444 !important;
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  box-shadow: 0 4px 0 #b91c1c !important;
+}
+
 .wb-slot.wb-slot-punctuation {
   border: none !important;
   background: transparent !important;
@@ -10863,6 +10870,14 @@ html.is-rtl {
   border-color: #60a5fa;
   color: #f8fafc;
   box-shadow: 0 4px 0 rgba(96, 165, 250, 0.3);
+}
+
+.dark-theme .wb-slot.wb-slot-wrong,
+[data-theme='dark'] .wb-slot.wb-slot-wrong {
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #fca5a5 !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 4px 0 rgba(239, 68, 68, 0.4) !important;
 }
 
 .dark-theme .wb-tile,

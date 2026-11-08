@@ -182,22 +182,18 @@ export function renderWordBlocksExercise(container, wordObj, allWords, onWordSol
       } else if (s.isLocked) {
         slotEl.classList.add('wb-slot-locked', 'wb-slot-green');
         slotEl.textContent = s.char;
+      } else if (s.status === 'wrong') {
+        const tObj = tiles.find((tile) => tile.id === s.currentTileId);
+        slotEl.classList.add('wb-slot-wrong');
+        slotEl.textContent = tObj ? tObj.letter : '';
       } else if (s.currentTileId) {
         const tObj = tiles.find((tile) => tile.id === s.currentTileId);
         slotEl.classList.add('wb-slot-filled');
         slotEl.textContent = tObj ? tObj.letter : '';
-        slotEl.setAttribute('role', 'button');
-        slotEl.setAttribute('tabindex', '0');
-        slotEl.setAttribute('aria-label', `Remove letter ${tObj ? tObj.letter : ''}`);
       } else {
         slotEl.classList.add('wb-slot-empty');
         slotEl.textContent = '';
       }
-
-      slotEl.addEventListener('click', (e) => {
-        e.preventDefault();
-        onSlotClick(s);
-      });
 
       slotsRowEl.appendChild(slotEl);
     });
@@ -240,149 +236,66 @@ export function renderWordBlocksExercise(container, wordObj, allWords, onWordSol
     if (isChecking || isCompleted) return;
     if (tile.isPlaced || tile.isGray || tile.isLocked) return;
 
-    // Find first unlocked & empty slot
-    const targetSlot = slots.find((s) => !s.isLocked && !s.isPunctuation && s.currentTileId === null);
+    // Find first unlocked & non-punctuation slot
+    const targetSlot = slots.find((s) => !s.isLocked && !s.isPunctuation);
     if (!targetSlot) return;
 
+    // Put tile in slot
     targetSlot.currentTileId = tile.id;
     tile.isPlaced = true;
 
-    renderSlots();
-    renderPool();
+    // Immediate check: is this letter correct for this position?
+    // "неправильная буква в Кубиках должна отваливаться сама буквально сразу после ее установки"
+    const isCorrect = (tile.letter === targetSlot.char);
 
-    // Check if all letter slots are filled
-    const allFilled = slots.every((s) => s.isLocked || s.isPunctuation || s.currentTileId !== null);
-    if (allFilled) {
-      triggerCheck();
-    }
-  }
-
-  function onSlotClick(slot) {
-    if (isChecking || isCompleted) return;
-    if (slot.isLocked || slot.isPunctuation) return;
-    if (!slot.currentTileId) return;
-
-    const tile = tiles.find((t) => t.id === slot.currentTileId);
-    if (tile) {
-      tile.isPlaced = false;
-    }
-    slot.currentTileId = null;
-
-    renderSlots();
-    renderPool();
-  }
-
-  function triggerCheck() {
-    if (isChecking || isCompleted) return;
-    isChecking = true;
-
-    // Collect letters for non-punctuation slots
-    const targetLetters = [];
-    const guessLetters = [];
-    const activeSlotIndices = [];
-
-    slots.forEach((s, idx) => {
-      if (s.isPunctuation) return;
-      activeSlotIndices.push(idx);
-      targetLetters.push(s.char);
-      if (s.isLocked) {
-        guessLetters.push(s.char);
-      } else {
-        const tObj = tiles.find((t) => t.id === s.currentTileId);
-        guessLetters.push(tObj ? tObj.letter : '');
-      }
-    });
-
-    const evaluated = evaluateWordleStatuses(guessLetters, targetLetters);
-    const isAllCorrect = evaluated.every((st) => st === 'green');
-
-    if (isAllCorrect) {
-      // SUCCESS!
-      isCompleted = true;
-      slots.forEach((s) => {
-        s.isLocked = true;
-        s.status = 'green';
-        if (s.currentTileId) {
-          const tObj = tiles.find((t) => t.id === s.currentTileId);
-          if (tObj) tObj.isLocked = true;
-        }
-      });
+    if (isCorrect) {
+      // 1. CORRECT: locks green immediately in slot
+      targetSlot.isLocked = true;
+      targetSlot.status = 'green';
+      tile.isLocked = true;
 
       renderSlots();
       renderPool();
 
-      // Bounce animation in sequence
-      const slotEls = slotsRowEl.querySelectorAll('.wb-slot');
-      slotEls.forEach((el, idx) => {
-        el.classList.add('wb-bounce');
-        el.style.animationDelay = `${idx * 60}ms`;
-      });
-
-      if (AudioService && typeof AudioService.playSuccessSound === 'function') {
-        AudioService.playSuccessSound();
+      // Check if word is complete
+      const allDone = slots.every((s) => s.isLocked || s.isPunctuation);
+      if (allDone) {
+        finishWordSuccess();
       }
-      if (AudioService && typeof AudioService.playWord === 'function') {
-        AudioService.playWord(rawWord);
-      }
-
-      setTimeout(() => {
-        isChecking = false;
-        if (typeof onWordSolved === 'function') {
-          onWordSolved(wordObj);
-        }
-      }, 1200);
-
     } else {
-      // INCORRECT
+      // 2. INCORRECT: shakes and drops back immediately!
+      isChecking = true;
       failedAttempts++;
+      targetSlot.status = 'wrong';
 
-      // Shake wrong slots
+      renderSlots();
+      renderPool();
+
+      // Shake animation on incorrect slot
       const slotEls = slotsRowEl.querySelectorAll('.wb-slot');
-      activeSlotIndices.forEach((slotIdx, guessIdx) => {
-        const status = evaluated[guessIdx];
-        if (status !== 'green' && slotEls[slotIdx]) {
-          slotEls[slotIdx].classList.add('wb-shake');
-        }
-      });
+      if (slotEls[targetSlot.index]) {
+        slotEls[targetSlot.index].classList.add('wb-shake');
+      }
 
       if (AudioService && typeof AudioService.playErrorSound === 'function') {
         AudioService.playErrorSound();
       }
 
       setTimeout(() => {
-        // 1. Lock newly confirmed green positions
-        activeSlotIndices.forEach((slotIdx, guessIdx) => {
-          const status = evaluated[guessIdx];
-          const s = slots[slotIdx];
-          if (status === 'green' && !s.isLocked) {
-            s.isLocked = true;
-            s.status = 'green';
-            const tObj = tiles.find((t) => t.id === s.currentTileId);
-            if (tObj) tObj.isLocked = true;
-          }
-        });
+        // Return tile back to pool
+        targetSlot.currentTileId = null;
+        targetSlot.status = null;
+        tile.isPlaced = false;
 
-        // 2. Return non-green tiles to pool with yellow / gray tags
-        activeSlotIndices.forEach((slotIdx, guessIdx) => {
-          const status = evaluated[guessIdx];
-          const s = slots[slotIdx];
-          if (status !== 'green') {
-            const tObj = tiles.find((t) => t.id === s.currentTileId);
-            if (tObj) {
-              tObj.isPlaced = false;
-              if (status === 'yellow') {
-                tObj.isYellow = true;
-              } else if (status === 'gray') {
-                tObj.isGray = true;
-              }
-            }
-            s.currentTileId = null;
-            s.status = null;
-          }
-        });
+        // Mark tile: yellow if in word, gray if absent / trap
+        if (letterChars.includes(tile.letter)) {
+          tile.isYellow = true;
+        } else {
+          tile.isGray = true;
+        }
 
-        // 3. Brute force protection:
-        // "После каждых 2 неудачных проверок автоматически открывается одна буква (первая незаблокированная позиция)"
+        // Brute force protection:
+        // "После каждых 2 неудачных проверок автоматически открывается одна буква"
         if (failedAttempts % 2 === 0) {
           revealFirstUnlockedPosition();
         }
@@ -391,24 +304,39 @@ export function renderWordBlocksExercise(container, wordObj, allWords, onWordSol
         renderSlots();
         renderPool();
 
-        // Check if revealing completed the full word
-        const nowComplete = slots.every((s) => s.isLocked || s.isPunctuation);
-        if (nowComplete) {
-          isCompleted = true;
-          if (AudioService && typeof AudioService.playSuccessSound === 'function') {
-            AudioService.playSuccessSound();
-          }
-          if (AudioService && typeof AudioService.playWord === 'function') {
-            AudioService.playWord(rawWord);
-          }
-          setTimeout(() => {
-            if (typeof onWordSolved === 'function') {
-              onWordSolved(wordObj);
-            }
-          }, 1200);
+        // Check if hint finished the word
+        const allDoneAfterHint = slots.every((s) => s.isLocked || s.isPunctuation);
+        if (allDoneAfterHint) {
+          finishWordSuccess();
         }
-      }, 450);
+      }, 380);
     }
+  }
+
+  function finishWordSuccess() {
+    if (isCompleted) return;
+    isCompleted = true;
+
+    // Bounce animation in sequence
+    const slotEls = slotsRowEl.querySelectorAll('.wb-slot');
+    slotEls.forEach((el, idx) => {
+      el.classList.add('wb-bounce');
+      el.style.animationDelay = `${idx * 60}ms`;
+    });
+
+    if (AudioService && typeof AudioService.playSuccessSound === 'function') {
+      AudioService.playSuccessSound();
+    }
+    if (AudioService && typeof AudioService.playWord === 'function') {
+      AudioService.playWord(rawWord);
+    }
+
+    setTimeout(() => {
+      isChecking = false;
+      if (typeof onWordSolved === 'function') {
+        onWordSolved(wordObj);
+      }
+    }, 1100);
   }
 
   function revealFirstUnlockedPosition() {

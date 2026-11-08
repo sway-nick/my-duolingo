@@ -784,7 +784,7 @@
         }
         categoryWords.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
 
-        const userProgress = getUserProgress();
+        let userProgress = getUserProgress();
         const favList = getUserFavorites();
         const favSet = new Set(favList.map(String));
         favoriteIds = favSet;
@@ -2338,7 +2338,11 @@
           blocksIndex,
           totalBlocksCount,
           onBlocksWordSolved: async (solvedWord) => {
-            await saveProgress(solvedWord.id, true, 'blocks');
+            try {
+              await saveProgress(solvedWord.id, true, 'blocks');
+            } catch (err) {
+              console.error('Failed to save blocks progress:', err);
+            }
             userProgress = getUserProgress();
             const remaining = activeWords.filter((w) => isWordProblematicForBlocks(w, userProgress[w.id] || userProgress[String(w.id)]));
             if (remaining.length === 0) {
