@@ -11266,19 +11266,6 @@ html.is-rtl {
   background: rgba(255, 255, 255, 0.14);
 }
 
-/* Notebook theme overrides */
-.notebook-theme .challenge-modal-card {
-  background: #fffdf8 !important;
-  border-color: var(--nb-blue-pen) !important;
-  box-shadow: 4px 6px 0 rgba(26, 58, 143, 0.25) !important;
-}
-
-.notebook-theme .challenge-modal-title,
-.notebook-theme .challenge-section-title {
-  color: var(--nb-blue-pen) !important;
-  font-family: 'Playfair Display', Georgia, serif !important;
-}
-
 
 
 
