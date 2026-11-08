@@ -36,6 +36,7 @@ import {
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
 import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=386.0';
+import { renderWordBlocksExercise } from '../exercises/WordBlocksExercise.js?v=386.0';
 
 const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
@@ -422,7 +423,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
     favCollectionTitle = '',
+    isBlocksMode = false,
+    blocksWord = null,
+    blocksIndex = 0,
+    totalBlocksCount = 0,
+    onBlocksWordSolved = () => {},
   } = options;
+
+  const activeTargetWord = (isBlocksMode && blocksWord) ? blocksWord : currentWord;
 
   const effectiveFavTitle = favCollectionTitle || (isFavPractice ? getCollectionTitle(getActiveCollectionId()) : '') || t('train_favs_chip');
 
@@ -452,12 +460,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
   }
 
-  let favorited = isFavorite;
-
   const progressMap = getUserProgress() || {};
   const currentProg = progressMap[currentWord?.id] || {};
   const favList = (typeof getUserFavorites === 'function' ? getUserFavorites() : []) || [];
   const favSet = new Set(favList.map(String));
+  let favorited = isFavorite;
+  if (isBlocksMode && blocksWord) {
+    favorited = favSet.has(String(blocksWord.id));
+  }
   const isReviewWord = isWordMastered(currentProg) || favSet.has(String(currentWord?.id));
 
   const rawQuizStage = isReviewWord
@@ -505,7 +515,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     cardsBadgeText = t('conveyor_in_learning', { current: currentDisplay, total: targetCount });
   }
 
-  const wordNotes = getWordNotes(currentWord);
+  const wordNotes = getWordNotes(activeTargetWord);
   const hasNotes = Boolean(wordNotes && String(wordNotes).trim().length > 0);
   const notesBtnHtml = hasNotes
     ? `<button type="button" class="word-notes-btn" id="word-notes-btn" title="${t('word_notes_title') || 'Примечание'}" aria-label="${t('word_notes_title') || 'Примечание'}">
@@ -594,7 +604,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               </div>
             `
                 : isInputMode
-                  ? `
+                  ? (
+                    isBlocksMode
+                      ? `
+              <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
+              <div class="train-left-badge">
+                🧩 ${t('dict_stage_test')} • ${t('train_blocks_badge')}: <strong>${blocksIndex + 1}/${totalBlocksCount}</strong>
+              </div>
+              <div class="word-header-row">
+                <div class="training-word-container">
+                  <h2 class="training-word" style="font-size: 20px; margin: 0; color: var(--text-main); line-height: 1.25;">
+                    ${getWordTranslation(activeTargetWord)}
+                  </h2>
+                  ${notesBtnHtml}
+                </div>
+                <button type="button" class="favorite-button ${favorited ? 'is-favorite' : ''}" id="fav-toggle-btn" title="Add to Favorites">
+                  ${favorited ? '❤️' : '🤍'}
+                </button>
+              </div>
+            `
+                      : `
               <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
               <div class="train-left-badge">
                 ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
@@ -611,6 +640,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                 </button>
               </div>
             `
+                  )
                   : `
               ${quizStage === 0 || quizStage === 1 || quizStage === 3 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
               <div class="train-left-badge">
@@ -734,7 +764,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const speakTrigger = container.querySelector('#speak-word-trigger');
   const soundBtn = container.querySelector('#speak-sound-btn');
-  const handleSpeak = () => speakWord(currentWord.word, currentWord.id);
+  const handleSpeak = () => speakWord(activeTargetWord.word, activeTargetWord.id);
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
@@ -768,8 +798,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       favorited = !favorited;
       favBtn.textContent = favorited ? '❤️' : '🤍';
       favBtn.classList.toggle('is-favorite', favorited);
-      await toggleFavoriteApi(currentWord.id, favorited);
-      onFavoriteToggle(currentWord.id, favorited);
+      await toggleFavoriteApi(activeTargetWord.id, favorited);
+      onFavoriteToggle(activeTargetWord.id, favorited);
     });
   }
 
@@ -1682,7 +1712,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     setupPairsRound();
   } else if (currentMethod === 'input') {
-    practiceArea.innerHTML = `
+    if (isBlocksMode) {
+      renderWordBlocksExercise(
+        practiceArea,
+        activeTargetWord,
+        allWords,
+        (solvedWord) => {
+          if (typeof onBlocksWordSolved === 'function') {
+            onBlocksWordSolved(solvedWord);
+          }
+        },
+        { blocksIndex, totalBlocksCount }
+      );
+    } else {
+      practiceArea.innerHTML = `
       <div class="input-form-row">
         <div class="answer-input" id="answer-input" contenteditable="true" role="textbox" aria-placeholder="${t('train_input_placeholder')}" spellcheck="false" autocomplete="off" autocapitalize="none"></div>
         <button type="button" class="check-button" id="check-answer-btn">${t('train_check')}</button>
@@ -2142,6 +2185,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     });
 
     focusAndPlaceCaret(input);
+    }
   } else {
     const startFlipped = Boolean(isFavPractice && window.__favsAutoplayRunning);
     const cardHtml = `
@@ -2528,8 +2572,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         favBack.innerHTML = getCardFavIconHtml(favorited);
         favBack.classList.toggle('is-favorite', favorited);
       }
-      await toggleFavoriteApi(currentWord.id, favorited);
-      onFavoriteToggle(currentWord.id, favorited);
+      await toggleFavoriteApi(activeTargetWord.id, favorited);
+      onFavoriteToggle(activeTargetWord.id, favorited);
     };
 
     const favFrontBtn = practiceArea.querySelector('#fc-fav-front');

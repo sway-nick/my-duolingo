@@ -14603,6 +14603,35 @@ export function t(key, params = null) {
       th: "ออกเสียงคำ", ko: "단어 발음 듣기", ja: "単語を発音する"
     };
     val = map[lang] || map['en'] || "Pronounce word";
+  } else if (key === 'train_blocks_badge') {
+    const map = {
+      ru: "Кубики-слова", uk: "Кубики-слова", en: "Word Blocks", de: "Wort-Bausteine",
+      es: "Bloques de palabras", fr: "Blocs de mots", pl: "Klocki słowne", tr: "Kelime Blokları",
+      it: "Blocchi di parole", ro: "Blocuri de cuvinte", bg: "Кубчета с думи", hu: "Szókockák",
+      el: "Κύβοι λέξεων", da: "Ordbrikker", lv: "Vārdu klucīši", lt: "Žodžių kaladėlės",
+      pt: "Blocos de palavras", sk: "Slovné kocky", sl: "Besedne kocke", fi: "Sanapalat",
+      hr: "Kockice riječi", cs: "Slovní kostky", sv: "Ordklossar", et: "Sõnaklotsid",
+      hi: "शब्द ब्लॉक", bn: "শব্দ ব্লক", ar: "مكعبات الكلمات", fa: "مکعب‌های کلمات",
+      ur: "لفظی بلاکس", id: "Balok Kata", vi: "Khối từ", th: "บล็อกคำศัพท์",
+      ko: "단어 블록", ja: "ワードブロック", zh: "单词积木", kk: "Сөз текшелері"
+    };
+    val = map[lang] || map['en'] || "Word Blocks";
+  } else if (key === 'train_blocks_hint') {
+    const map = {
+      ru: "Соберите слово из кубиков", uk: "Зберіть слово з кубиків", en: "Assemble the word from blocks",
+      de: "Bilde das Wort aus den Bausteinen", es: "Arma la palabra con los bloques", fr: "Assemblez le mot avec les blocs",
+      pl: "Ułóż słowo z klocków", tr: "Kelimeyi bloklardan oluşturun", it: "Componi la parola con i blocchi",
+      ro: "Formează cuvântul din blocuri", bg: "Сглобете думата от кубчета", hu: "Rakd ki a szót a kockákból",
+      el: "Συναρμολογήστε τη λέξη από τους κύβους", da: "Saml ordet fra brikkerne", lv: "Salieciet vārdu no klucīšiem",
+      lt: "Sudėkite žodį iš kaladėlių", pt: "Monte a palavra com os blocos", sk: "Zložte slovo z kociek",
+      sl: "Sestavite besedo iz kock", fi: "Kokoa sana paloista", hr: "Sastavite riječ od kockica",
+      cs: "Sestavte slovo z kostek", sv: "Bygg ordet från klossarna", et: "Pange sõna klotsidest kokku",
+      hi: "ब्लॉक से शब्द बनाएं", bn: "ব্লক দিয়ে শব্দটি তৈরি করুন", ar: "قم بتجميع الكلمة من المكعبات",
+      fa: "کلمه را از مکعب‌ها بسازید", ur: "بلاکس سے لفظ بنائیں", id: "Susun kata dari balok",
+      vi: "Ghép từ các khối", th: "ประกอบคำจากบล็อก", ko: "블록으로 단어를 완성하세요",
+      ja: "ブロックから単語を組み立ててください", zh: "用积木拼出单词", kk: "Сөзді текшелерден құрастырыңыз"
+    };
+    val = map[lang] || map['en'] || "Assemble the word from blocks";
   } else if (key === 'fav_toggle') {
     const map = {
       ru: "В избранное", uk: "До обраного", en: "To favorites", de: "Zu Favoriten",

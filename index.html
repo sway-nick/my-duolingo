@@ -208,7 +208,7 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted, getMasteredWordsCount } from './services/api.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, isWordProblematicForBlocks, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted, getMasteredWordsCount, saveProgress } from './services/api.js?v=386.0';
       import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=386.0';
@@ -2279,7 +2279,24 @@
           }
         }
 
-        const currentWord = activeWords[currentWordIndex % activeWords.length];
+        const problemWordsForBlocks = (currentMethod === 'input' && !isFavPracticeActive)
+          ? activeWords.filter((w) => isWordProblematicForBlocks(w, userProgress[w.id] || userProgress[String(w.id)]))
+          : [];
+
+        const isBlocksStage = currentMethod === 'input' && problemWordsForBlocks.length > 0;
+        if (isBlocksStage) {
+          if (!window._totalBlocksForRound || window._totalBlocksForRound < problemWordsForBlocks.length) {
+            window._totalBlocksForRound = problemWordsForBlocks.length;
+          }
+        } else if (currentMethod !== 'input') {
+          window._totalBlocksForRound = null;
+        }
+
+        const totalBlocksCount = window._totalBlocksForRound || problemWordsForBlocks.length;
+        const blocksIndex = Math.max(0, totalBlocksCount - problemWordsForBlocks.length);
+        const currentBlocksWord = isBlocksStage ? problemWordsForBlocks[0] : null;
+
+        const currentWord = currentBlocksWord || activeWords[currentWordIndex % activeWords.length];
 
         const isFav =
           Boolean(currentWord) &&
@@ -2316,6 +2333,20 @@
           availableModes,
           isFavPractice: isFavPracticeActive,
           favCollectionTitle: isFavPracticeActive ? (window._activePracticeCollectionTitle || getCollectionTitle(getActiveCollectionId())) : '',
+          isBlocksMode: isBlocksStage,
+          blocksWord: currentBlocksWord,
+          blocksIndex,
+          totalBlocksCount,
+          onBlocksWordSolved: async (solvedWord) => {
+            await saveProgress(solvedWord.id, true, 'blocks');
+            userProgress = getUserProgress();
+            const remaining = activeWords.filter((w) => isWordProblematicForBlocks(w, userProgress[w.id] || userProgress[String(w.id)]));
+            if (remaining.length === 0) {
+              window._totalBlocksForRound = null;
+              currentWordIndex = 0;
+            }
+            renderTrainingTab();
+          },
           onCategoryBadgeClick: () => {
             renderCategorySelectorScreen();
           },

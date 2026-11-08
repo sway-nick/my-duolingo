@@ -1441,12 +1441,18 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     prog.roundQuizDone = false;
     prog.roundPairsDone = false;
     prog.roundTestDone = false;
+    prog.roundBlocksDone = false;
+    delete prog.roundQuizMistakes;
+    delete prog.roundPairsMistakes;
     prog.stage = 'quiz';
     prog.quizCorrect = 0;
     prog.lastReviewedAt = Date.now();
   } else if (method === 'cards_repeat_round') {
     prog.seenInCards = true;
     prog.roundCardsDone = true;
+    prog.roundBlocksDone = false;
+    delete prog.roundQuizMistakes;
+    delete prog.roundPairsMistakes;
     prog.stage = 'quiz';
     prog.quizCorrect = 0;
     prog.pairsCorrect = 0;
@@ -1497,6 +1503,8 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       xpDelta = (options && options.skipXp) ? 0 : 1; // +1 XP (or 0 if fallback) for correct quiz answer
     } else {
       prog.error = (prog.error || 0) + 1;
+      prog.quizMistakes = (prog.quizMistakes || 0) + 1;
+      prog.roundQuizMistakes = (prog.roundQuizMistakes || 0) + 1;
       xpDelta = -5; // -5 XP for wrong quiz answer
     }
   } else if (method === 'pairs') {
@@ -1516,8 +1524,13 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
       }
     } else {
       prog.error = (prog.error || 0) + 1;
+      prog.pairsMistakes = (prog.pairsMistakes || 0) + 1;
+      prog.roundPairsMistakes = (prog.roundPairsMistakes || 0) + 1;
       xpDelta = -5; // -5 XP for mistake in pairs
     }
+  } else if (method === 'blocks') {
+    prog.roundBlocksDone = true;
+    xpDelta = 0; // No XP bonus or penalty for word blocks prep stage
   } else if (method === 'input') {
     if (isCorrect) {
       if (options && options.secondChanceFix) {
@@ -2716,11 +2729,14 @@ function clearActiveConveyorBatch(categoryWordsOrKey = null, preserveProgress = 
 
     Object.entries(local).forEach(([id, p]) => {
       if (targetIds && !targetIds.has(String(id))) return;
-      if (p.roundCardsDone || p.roundQuizDone || p.roundPairsDone || p.roundTestDone) {
+      if (p.roundCardsDone || p.roundQuizDone || p.roundPairsDone || p.roundTestDone || p.roundBlocksDone) {
         delete p.roundCardsDone;
         delete p.roundQuizDone;
         delete p.roundPairsDone;
         delete p.roundTestDone;
+        delete p.roundBlocksDone;
+        delete p.roundQuizMistakes;
+        delete p.roundPairsMistakes;
         changed = true;
       }
     });
@@ -2798,6 +2814,21 @@ function getQueueForTest(words, progress, favorites = null) {
       p.roundTestDone !== true
     );
   });
+}
+
+function isWordProblematicForBlocks(word, prog) {
+  if (!word || !prog) return false;
+  if (prog.roundBlocksDone === true) return false;
+  if (isWordMastered(prog)) return false;
+  const hadRoundMistake = (prog.roundQuizMistakes && prog.roundQuizMistakes > 0) ||
+                          (prog.roundPairsMistakes && prog.roundPairsMistakes > 0);
+  const hadGeneralMistake = (prog.quizMistakes && prog.quizMistakes > 0) ||
+                            (prog.pairsMistakes && prog.pairsMistakes > 0);
+  const hadAnyMistakeInCurrentProgress = Boolean(
+    prog.error && prog.error > 0 &&
+    ((prog.quizCorrect && prog.quizCorrect > 0) || (prog.pairsCorrect && prog.pairsCorrect > 0))
+  );
+  return Boolean(hadRoundMistake || hadGeneralMistake || hadAnyMistakeInCurrentProgress);
 }
 
 async function getUserStats(customWords = null) {
@@ -4404,6 +4435,7 @@ const ApiService = {
   getQueueForQuiz,
   getQueueForPairs,
   getQueueForTest,
+  isWordProblematicForBlocks,
   prepareTrainingBatch,
   getActiveConveyorBatch,
   clearActiveConveyorBatch,
@@ -4500,6 +4532,7 @@ export {
   getQueueForQuiz,
   getQueueForPairs,
   getQueueForTest,
+  isWordProblematicForBlocks,
   prepareTrainingBatch,
   getActiveConveyorBatch,
   clearActiveConveyorBatch,
