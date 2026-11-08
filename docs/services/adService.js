@@ -83,6 +83,29 @@ class AdServiceImpl {
     return `${year}-${month}-${day}`;
   }
 
+  canShowDailyInterstitial() {
+    if (this.isGracePeriodActive()) {
+      return false;
+    }
+    try {
+      if (typeof localStorage === 'undefined') return true;
+      const todayKey = this.getTodayDateKey();
+      const lastDate = localStorage.getItem('ad_interstitial_last_date');
+      return lastDate !== todayKey;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  markDailyInterstitialShown() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const todayKey = this.getTodayDateKey();
+        localStorage.setItem('ad_interstitial_last_date', todayKey);
+      }
+    } catch (e) {}
+  }
+
   canClaimDailyBonus() {
     try {
       if (typeof localStorage === 'undefined') return true;
@@ -115,7 +138,7 @@ class AdServiceImpl {
 
   constructor() {
     this.initialized = false;
-    this.maxShieldsPerRound = 3;
+    this.maxShieldsPerRound = Infinity;
     this.shieldsUsedInRound = 0;
     this.isShieldAdPrepared = false;
     this.isInterstitialPrepared = false;
@@ -218,21 +241,21 @@ class AdServiceImpl {
    */
   resetRoundShields() {
     this.shieldsUsedInRound = 0;
-    console.log('🛡️ Round shields reset. Available: 3/3');
+    console.log('🛡️ Round shields reset. Unlimited available.');
   }
 
   /**
    * Get remaining shields in current training round
    */
   getShieldsRemaining() {
-    return Math.max(0, this.maxShieldsPerRound - this.shieldsUsedInRound);
+    return Infinity;
   }
 
   /**
    * Check if user can use a shield (has remaining shields and network available)
    */
   canUseShield() {
-    return this.getShieldsRemaining() > 0 && this.isOnline();
+    return this.isOnline();
   }
 
   /**
@@ -294,7 +317,7 @@ class AdServiceImpl {
    * Preload Interstitial Ad in background so it displays with 0ms delay when a round finishes
    */
   async preloadInterstitial() {
-    if (this.isGracePeriodActive()) return false;
+    if (!this.canShowDailyInterstitial()) return false;
     if (this.isPreparingInterstitial || this.isInterstitialPrepared) return false;
     const AdMob = this.getNativeAdMob();
     if (!AdMob || !this.isNative() || !this.isOnline()) return false;
@@ -446,7 +469,7 @@ class AdServiceImpl {
       return { success: false, rewardEarned: false, isOffline: true };
     }
 
-    if (this.getShieldsRemaining() <= 0) {
+    if (!this.canUseShield()) {
       return { success: false, rewardEarned: false, isOffline: false };
     }
 
@@ -897,7 +920,7 @@ class AdServiceImpl {
    * Displays with 0ms delay if preloaded, and queues next preload in background
    */
   async showRoundFinishInterstitial() {
-    if (this.isGracePeriodActive()) {
+    if (!this.canShowDailyInterstitial()) {
       return false;
     }
     this.roundsCompletedSinceLastAd++;
@@ -923,6 +946,7 @@ class AdServiceImpl {
 
         await AdMob.showInterstitial();
         this.isInterstitialPrepared = false;
+        this.markDailyInterstitialShown();
 
         if (typeof window !== 'undefined' && window.trackEvent) {
           window.trackEvent('ad_interstitial_shown');
@@ -952,6 +976,7 @@ class AdServiceImpl {
     }
 
     console.log('ℹ️ [Web Simulator] Round finish interstitial shown');
+    this.markDailyInterstitialShown();
     if (typeof window !== 'undefined' && window.trackEvent) {
       window.trackEvent('ad_interstitial_shown');
     }
@@ -972,7 +997,7 @@ class AdServiceImpl {
    * 2. Unlimited daily frequency (no arbitrary daily cap).
    */
   async showCollectionsExitInterstitial() {
-    if (this.isGracePeriodActive()) {
+    if (!this.canShowDailyInterstitial()) {
       return false;
     }
     if (!this.isOnline()) return false;
@@ -1012,6 +1037,7 @@ class AdServiceImpl {
 
         await AdMob.showInterstitial();
         this.isInterstitialPrepared = false;
+        this.markDailyInterstitialShown();
 
         stats.count = (stats.count || 0) + 1;
         stats.lastShown = now;
@@ -1043,6 +1069,7 @@ class AdServiceImpl {
     }
 
     console.log('ℹ️ [Web Simulator] Collections exit interstitial shown');
+    this.markDailyInterstitialShown();
     stats.count = (stats.count || 0) + 1;
     stats.lastShown = now;
     stats.date = todayStr;
@@ -1064,7 +1091,7 @@ class AdServiceImpl {
    * 3. Unlimited daily frequency (no daily cap).
    */
   async showTrainingEarlyExitInterstitial() {
-    if (this.isGracePeriodActive()) {
+    if (!this.canShowDailyInterstitial()) {
       return false;
     }
     if (!this.isOnline()) return false;
@@ -1098,6 +1125,7 @@ class AdServiceImpl {
 
         await AdMob.showInterstitial();
         this.isInterstitialPrepared = false;
+        this.markDailyInterstitialShown();
 
         try {
           localStorage.setItem(STORAGE_KEY_EARLY_EXIT, String(now));
@@ -1124,6 +1152,7 @@ class AdServiceImpl {
     }
 
     console.log('ℹ️ [Web Simulator] Training early exit interstitial shown');
+    this.markDailyInterstitialShown();
     try {
       localStorage.setItem(STORAGE_KEY_EARLY_EXIT, String(now));
     } catch (e) {}
@@ -1139,7 +1168,7 @@ class AdServiceImpl {
    * Protected with a 60-second cooldown so it never spams or causes accidental clicks.
    */
   async showTransitionInterstitial(minCooldownSeconds = 60) {
-    if (this.isGracePeriodActive()) {
+    if (!this.canShowDailyInterstitial()) {
       return false;
     }
     if (!this.isOnline()) return false;
@@ -1163,6 +1192,7 @@ class AdServiceImpl {
 
         await AdMob.showInterstitial();
         this.isInterstitialPrepared = false;
+        this.markDailyInterstitialShown();
 
         if (typeof window !== 'undefined' && window.trackEvent) {
           window.trackEvent('ad_interstitial_transition_shown');
@@ -1192,6 +1222,7 @@ class AdServiceImpl {
     }
 
     console.log('ℹ️ [Web Simulator] Transition interstitial shown');
+    this.markDailyInterstitialShown();
     if (typeof window !== 'undefined' && window.trackEvent) {
       window.trackEvent('ad_interstitial_transition_shown');
     }

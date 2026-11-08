@@ -2038,17 +2038,17 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           onFavoriteToggle(currentWord.id, true);
         }
 
-        const shieldsLeft = typeof AdService !== 'undefined' ? AdService.getShieldsRemaining() : 0;
         const isOnline = typeof AdService !== 'undefined' ? AdService.isOnline() : true;
+        const canUseShield = typeof AdService !== 'undefined' ? AdService.canUseShield() : isOnline;
 
-        if (shieldsLeft > 0 && isOnline) {
+        if (canUseShield && isOnline) {
           // Just-in-time preload for Rewarded Shield ad on mistake
           try {
             if (typeof AdService !== 'undefined' && typeof AdService.prepareRewarded === 'function') {
               AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
             }
           } catch (_) {}
-          // Rule 2: Offer Shield via Rewarded Ad (3 shields max per round)
+          // Offer Shield via Rewarded Ad (Unlimited shields)
           feedback.innerHTML = `
             <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
             <div style="font-size: 32px; font-weight: 800; color: var(--error-color, #dc2626); letter-spacing: 0.5px; line-height: 1.2;">
@@ -2058,9 +2058,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               <button type="button" class="primary-button btn-orange" id="btn-claim-ad-shield" style="min-height: 44px; height: 44px; padding: 0 16px; font-size: 14px; font-weight: 700; width: 100%; max-width: 290px; box-shadow: 0 4px 14px rgba(230,81,0,0.3); border-radius: 12px; cursor: pointer;">
                 ${t('train_shield_btn')}
               </button>
-              <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">
-                ${(t('train_shield_remaining') || 'Осталось спасений: {n}/3').replace('{n}', shieldsLeft)}
-              </div>
               <button type="button" class="btn-text-subtle" id="btn-skip-ad-shield" style="background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px; text-decoration: underline;">
                 ${t('train_shield_continue')}
               </button>

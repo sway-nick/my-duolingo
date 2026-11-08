@@ -98,20 +98,19 @@ test('6. Minimum Boundary: Weekly XP never drops below 0 despite multiple -20 XP
 
 test('7. AdService: Shield limits and round lifecycle', () => {
   AdService.resetRoundShields();
-  assert.equal(AdService.getShieldsRemaining(), 3, 'Initial shields in round must be 3');
+  assert.equal(AdService.getShieldsRemaining(), Infinity, 'Shields are unlimited');
+  assert.equal(AdService.canUseShield(), true, 'Can use shield when online');
 
   AdService.shieldsUsedInRound++;
-  assert.equal(AdService.getShieldsRemaining(), 2, '2 shields remaining');
+  assert.equal(AdService.getShieldsRemaining(), Infinity, 'Remains unlimited after use');
+  assert.equal(AdService.canUseShield(), true, 'Can still use shield after use');
 
-  AdService.shieldsUsedInRound++;
-  assert.equal(AdService.getShieldsRemaining(), 1, '1 shield remaining');
-
-  AdService.shieldsUsedInRound++;
-  assert.equal(AdService.getShieldsRemaining(), 0, '0 shields remaining');
-  assert.equal(AdService.canUseShield(), false, 'Cannot use shield when 0 remain');
+  AdService.shieldsUsedInRound += 5;
+  assert.equal(AdService.getShieldsRemaining(), Infinity, 'Remains unlimited after multiple uses');
+  assert.equal(AdService.canUseShield(), true, 'Can still use shield after multiple uses');
 
   AdService.resetRoundShields();
-  assert.equal(AdService.getShieldsRemaining(), 3, 'Resets back to 3 shields for new round');
+  assert.equal(AdService.shieldsUsedInRound, 0, 'Resets shieldsUsedInRound counter');
 });
 
 test('8. AdService Config: Verifies correct AdMob App ID and Ad Unit IDs', () => {
@@ -122,91 +121,95 @@ test('8. AdService Config: Verifies correct AdMob App ID and Ad Unit IDs', () =>
   assert.equal(AD_CONFIG.UNITS.BANNER_FAVORITES, 'ca-app-pub-9917058160362744/5957710665');
 });
 
-test('8b. AdService Interstitial: Preload and round completion lifecycle', async () => {
+test('8b. AdService Interstitial: Preload and round completion lifecycle (1 per day limit)', async () => {
   assert.equal(typeof AdService.preloadInterstitial, 'function', 'preloadInterstitial must be exposed');
   assert.equal(typeof AdService.showRoundFinishInterstitial, 'function', 'showRoundFinishInterstitial must be exposed');
+  assert.equal(typeof AdService.canShowDailyInterstitial, 'function', 'canShowDailyInterstitial must be exposed');
 
   // Bypass grace period for cooldown lifecycle testing
   global.localStorage.setItem('myduo_first_install_time', '0');
+  global.localStorage.removeItem('ad_interstitial_last_date');
 
   // Initial state: 0 rounds completed
   AdService.roundsCompletedSinceLastAd = 0;
   AdService.lastInterstitialTime = Date.now();
 
-  // Round 1 (triggers interstitial after every round)
+  // Round 1 (triggers interstitial)
+  assert.equal(AdService.canShowDailyInterstitial(), true, 'Allowed before daily show');
   const res1 = await AdService.showRoundFinishInterstitial();
   assert.equal(res1, true, 'Round 1 displays interstitial');
   assert.equal(AdService.roundsCompletedSinceLastAd, 0, 'Rounds counter resets after show');
+  assert.equal(AdService.canShowDailyInterstitial(), false, 'Daily limit reached after showing');
 
-  // Round 2 (triggers interstitial again on next round)
+  // Round 2 on same day (blocked by 1 per day limit)
   const res2 = await AdService.showRoundFinishInterstitial();
-  assert.equal(res2, true, 'Round 2 displays interstitial');
-  assert.equal(AdService.roundsCompletedSinceLastAd, 0, 'Rounds counter resets after show');
+  assert.equal(res2, false, 'Second interstitial on same day is blocked by 1 per day limit');
+
+  // Next day simulation: reset daily date
+  global.localStorage.setItem('ad_interstitial_last_date', '2020-01-01');
+  assert.equal(AdService.canShowDailyInterstitial(), true, 'Allowed again on next day');
+  const res3 = await AdService.showRoundFinishInterstitial();
+  assert.equal(res3, true, 'Next day displays interstitial');
   assert.ok(AdService.lastInterstitialTime > 0, 'Timestamp is updated');
 });
 
-test('8c. AdService Collections Exit Interstitial: Capped at min 3-minute cooldown and unlimited daily frequency', async () => {
+test('8c. AdService Collections Exit Interstitial: Capped at 1 per day', async () => {
   assert.equal(typeof AdService.showCollectionsExitInterstitial, 'function', 'showCollectionsExitInterstitial must be exposed');
 
   // Bypass grace period for cooldown testing
   global.localStorage.setItem('myduo_first_install_time', '0');
   global.localStorage.removeItem('ad_col_exit_interstitial_stats');
+  global.localStorage.removeItem('ad_interstitial_last_date');
 
   // First show: succeeds
   const res1 = await AdService.showCollectionsExitInterstitial();
   assert.equal(res1, true, 'First collections exit shows ad');
 
-  // Immediate second show: blocked by 3-minute cooldown
+  // Immediate second show: blocked by 1/day limit (and cooldown)
   const res2 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res2, false, 'Immediate second show is blocked by 3-minute cooldown');
+  assert.equal(res2, false, 'Second show on same day is blocked by daily limit');
 
-  // Fast-forward 3 minutes (modify lastShown in storage)
-  const raw = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats'));
+  // Even after cooldown, still blocked on same day
+  const raw = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats') || '{}');
   raw.lastShown = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw));
 
-  // Second show after 3 minutes: succeeds
   const res3 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res3, true, 'Second show after 3 minutes succeeds');
+  assert.equal(res3, false, 'Still blocked on same day despite cooldown passed');
 
-  // Fast-forward another 3 minutes: succeeds again (unlimited daily frequency, no artificial 2/day cap)
-  const raw2 = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats'));
-  raw2.lastShown = Date.now() - (181 * 1000);
-  global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw2));
-
+  // Next day simulation: allowed again
+  global.localStorage.setItem('ad_interstitial_last_date', '2020-01-01');
   const res4 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res4, true, 'Third show after another 3 minutes succeeds (unlimited daily frequency)');
+  assert.equal(res4, true, 'Next day collections exit succeeds');
 });
 
-test('8d. AdService Training Early Exit Interstitial: 3-minute cooldown and unlimited daily frequency', async () => {
+test('8d. AdService Training Early Exit Interstitial: Capped at 1 per day', async () => {
   assert.equal(typeof AdService.showTrainingEarlyExitInterstitial, 'function', 'showTrainingEarlyExitInterstitial must be exposed');
 
   // Bypass grace period for cooldown testing
   global.localStorage.setItem('myduo_first_install_time', '0');
   global.localStorage.removeItem('ad_training_early_exit_last_time');
+  global.localStorage.removeItem('ad_interstitial_last_date');
 
   // First show: succeeds
   const res1 = await AdService.showTrainingEarlyExitInterstitial();
   assert.equal(res1, true, 'First early exit shows ad');
 
-  // Immediate second show: blocked by 3-minute cooldown
+  // Immediate second show: blocked by daily limit
   const res2 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res2, false, 'Immediate second show is blocked by 3-minute cooldown');
+  assert.equal(res2, false, 'Second early exit on same day is blocked by daily limit');
 
-  // Fast-forward 3 minutes in storage
+  // Even after cooldown passed, blocked on same day
   const stored1 = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_training_early_exit_last_time', String(stored1));
 
-  // Second show after 3 minutes: succeeds
   const res3 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res3, true, 'Second show after 3 minutes succeeds');
+  assert.equal(res3, false, 'Still blocked on same day despite cooldown passed');
 
-  // Fast-forward another 3 minutes: succeeds again (no daily cap, unlimited per day!)
-  const stored2 = Date.now() - (181 * 1000);
-  global.localStorage.setItem('ad_training_early_exit_last_time', String(stored2));
-
+  // Next day: succeeds
+  global.localStorage.setItem('ad_interstitial_last_date', '2020-01-01');
   const res4 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res4, true, 'Third show after another 3 minutes succeeds (unlimited daily frequency)');
+  assert.equal(res4, true, 'Next day early exit succeeds');
 });
 
 test('8e. AdService Bonus XP Rewarded Ad: All 36 locales translated (including pt-BR, es-MX, hi)', async () => {
@@ -267,6 +270,7 @@ test('8f. AdService 7-Day Grace Period: Interstitials suppressed for new users, 
 
   // Case 2: Past 7 days -> Grace period expired -> Normal interstitials
   global.localStorage.setItem('myduo_first_install_time', String(Date.now() - (8 * 86400000)));
+  global.localStorage.removeItem('ad_interstitial_last_date');
   assert.equal(AdService.isGracePeriodActive(), false, '8-day old user is outside grace period');
   AdService.roundsCompletedSinceLastAd = 1;
   const resNormal = await AdService.showRoundFinishInterstitial();
