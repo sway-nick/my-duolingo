@@ -4483,7 +4483,9 @@ async function submitSurveyFeedbackApi(data = {}) {
       language: lang,
       deviceType: typeof navigator !== 'undefined' ? (navigator.userAgentData?.platform || navigator.platform || 'Android') : 'Android',
       os: 'Android/Web',
-      appVersion: '1.0.34'
+      appVersion: '1.0.34',
+      activeDays: data.activeDays !== undefined ? data.activeDays : 1,
+      stage: data.stage || 'manual'
     };
 
     fetch(`${GAS_SCANNER_URL}?route=feedback`, {
@@ -4498,7 +4500,9 @@ async function submitSurveyFeedbackApi(data = {}) {
       window.trackEvent('survey_feedback_recorded', {
         rating: data.rating,
         feature: data.feature,
-        hasText: Boolean(data.text)
+        hasText: Boolean(data.text),
+        activeDays: payload.activeDays,
+        stage: payload.stage
       });
     }
   } catch (e) {

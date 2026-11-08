@@ -127,14 +127,41 @@ export function renderLessonSummary(container, results) {
         const ftDelayedUntil = typeof localStorage !== 'undefined' ? Number(localStorage.getItem('myduo_ft_survey_delayed_until') || 0) : 0;
         const isFtDelayed = Date.now() < ftDelayedUntil;
 
-        if (!isSurveyDone && !isFtDelayed && completedCount >= 3) {
+        // Active days tracking (real days of opening/using the app, never resets)
+        StorageService.recordActiveDay();
+        const activeDays = StorageService.getActiveDaysCount();
+        const isDay30Done = typeof localStorage !== 'undefined' && localStorage.getItem('myduo_ft_survey_day30_done') === 'true';
+        const isDay7Done = typeof localStorage !== 'undefined' && localStorage.getItem('myduo_ft_survey_day7_done') === 'true';
+
+        let triggeredSurvey = false;
+
+        if (activeDays >= 30 && !isDay30Done) {
+            if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('myduo_ft_survey_day30_shown')) {
+                sessionStorage.setItem('myduo_ft_survey_day30_shown', 'true');
+                triggeredSurvey = true;
+                setTimeout(() => {
+                    showFairyTaleSurveyModal('auto_day_30');
+                }, 850);
+            }
+        } else if (activeDays >= 7 && !isDay7Done) {
+            if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('myduo_ft_survey_day7_shown')) {
+                sessionStorage.setItem('myduo_ft_survey_day7_shown', 'true');
+                triggeredSurvey = true;
+                setTimeout(() => {
+                    showFairyTaleSurveyModal('auto_day_7');
+                }, 850);
+            }
+        } else if (!isSurveyDone && !isFtDelayed && completedCount >= 3) {
             if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('myduo_ft_survey_auto_shown')) {
                 sessionStorage.setItem('myduo_ft_survey_auto_shown', 'true');
+                triggeredSurvey = true;
                 setTimeout(() => {
                     showFairyTaleSurveyModal('auto_lesson_3');
                 }, 850);
             }
-        } else if (isSurveyDone) {
+        }
+
+        if (!triggeredSurvey && isSurveyDone) {
             const streak = StorageService.getStreak() || 0;
             checkAndPromptReviewFunnel('summary', { streak, accuracy });
         }

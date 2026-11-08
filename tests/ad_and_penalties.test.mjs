@@ -34,6 +34,8 @@ import {
 } from '../frontend/services/api.js';
 import { getEffectiveUserId } from '../frontend/services/authService.js';
 import { AdService, AD_CONFIG } from '../frontend/services/adService.js';
+import { StorageService } from '../frontend/services/storageService.js';
+import { FAIRY_TALE_SURVEY_TRANSLATIONS } from '../frontend/components/modals/FairyTaleSurveyModal.js';
 
 test('1. Input Mode: Standard major mistake applies -20 XP penalty', async () => {
   storage.clear();
@@ -393,6 +395,45 @@ test('12. Favorites / Collections Interstitial Guard: Never shows on entering Fa
     '#go-repeat-favs-btn must NOT set window._showHubScreen = false before switching to favorites tab'
   );
 });
+
+test('13. Active Days Tracker: Increments exactly once per calendar day and persists', () => {
+  storage.clear();
+  assert.equal(StorageService.getActiveDaysCount(), 1, 'Default active days is 1');
+
+  // First call today sets date and maintains count 1
+  const count1 = StorageService.recordActiveDay();
+  assert.equal(count1, 1, 'First recordActiveDay on fresh install returns 1');
+  assert.equal(StorageService.getActiveDaysCount(), 1);
+
+  // Calling multiple times today does NOT increment
+  const count2 = StorageService.recordActiveDay();
+  assert.equal(count2, 1, 'Subsequent recordActiveDay on the same day stays 1');
+  assert.equal(StorageService.getActiveDaysCount(), 1);
+
+  // Simulate a new calendar day
+  storage.set('myduo_last_active_date', '2026-01-01');
+  const count3 = StorageService.recordActiveDay();
+  assert.equal(count3, 2, 'recordActiveDay on a new calendar day increments count to 2');
+  assert.equal(StorageService.getActiveDaysCount(), 2);
+});
+
+test('14. Fairy Tale Survey: 7-day and 30-day translations present across all 36 locales', () => {
+  const supportedLocales = [
+    'ru', 'uk', 'en', 'de', 'es', 'es-mx', 'fr', 'pl', 'tr', 'it', 'ro', 'bg',
+    'hu', 'el', 'da', 'lv', 'lt', 'pt', 'pt-br', 'sk', 'sl', 'fi', 'hr', 'cs',
+    'sv', 'et', 'hi', 'bn', 'ar', 'fa', 'ur', 'id', 'vi', 'th', 'ko', 'ja', 'zh', 'kk'
+  ];
+
+  for (const loc of supportedLocales) {
+    const t = FAIRY_TALE_SURVEY_TRANSLATIONS[loc];
+    assert.ok(t, `Locale ${loc} must exist in FAIRY_TALE_SURVEY_TRANSLATIONS`);
+    assert.ok(typeof t.day7Title === 'string' && t.day7Title.length > 0, `Locale ${loc} must have day7Title`);
+    assert.ok(typeof t.day7Subtitle === 'string' && t.day7Subtitle.length > 0, `Locale ${loc} must have day7Subtitle`);
+    assert.ok(typeof t.day30Title === 'string' && t.day30Title.length > 0, `Locale ${loc} must have day30Title`);
+    assert.ok(typeof t.day30Subtitle === 'string' && t.day30Subtitle.length > 0, `Locale ${loc} must have day30Subtitle`);
+  }
+});
+
 
 
 

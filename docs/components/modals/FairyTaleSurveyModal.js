@@ -1,6 +1,7 @@
 import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { openGooglePlayStore } from './ReviewFunnelModal.js?v=386.0';
 import { submitSurveyFeedbackApi } from '../../services/api.js?v=386.0';
+import { StorageService } from '../../services/storageService.js?v=386.0';
 
 export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
   "en": {
@@ -32,7 +33,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Tell us what went wrong or what feature you need...",
     "negBtnSend": "✉️ Send Feedback",
     "negSentToast": "Thank you! We will carefully review your feedback ❤️",
-    "btnClose": "Done"
+    "btnClose": "Done",
+    "day7Title": "7 Days with English Breakfast! 🎉",
+    "day7Subtitle": "You've been practicing for a full week! How is your learning going? Share your feedback.",
+    "day30Title": "1 Month with English Breakfast! 🏆",
+    "day30Subtitle": "A whole month together! Help us make your learning experience even better."
   },
   "ru": {
     "congratsTitle": "Поздравляем! Заберите бонусную японскую сказку 🎁",
@@ -63,7 +68,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Напишите, что пошло не так или чего вам не хватает...",
     "negBtnSend": "✉️ Отправить отзыв",
     "negSentToast": "Спасибо! Мы обязательно учтём ваш отзыв ❤️",
-    "btnClose": "Готово"
+    "btnClose": "Готово",
+    "day7Title": "7 дней с English Breakfast! 🎉",
+    "day7Subtitle": "Вы занимаетесь уже целую неделю! Поделитесь впечатлениями, чтобы помочь нам стать лучше.",
+    "day30Title": "1 месяц с English Breakfast! 🏆",
+    "day30Subtitle": "Целый месяц вместе! Помогите нам сделать обучение ещё удобнее и эффективнее."
   },
   "uk": {
     "congratsTitle": "Вітаємо! Заберіть бонусну японську казку 🎁",
@@ -94,7 +103,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Напишіть, що пішло не так або чого вам бракує...",
     "negBtnSend": "✉️ Надіслати відгук",
     "negSentToast": "Дякуємо! Ми обов’язково врахуємо ваш відгук ❤️",
-    "btnClose": "Готово"
+    "btnClose": "Готово",
+    "day7Title": "7 днів з English Breakfast! 🎉",
+    "day7Subtitle": "Ви навчаєтесь уже цілий тиждень! Поділіться враженнями, щоб допомогти нам стати кращими.",
+    "day30Title": "1 місяць з English Breakfast! 🏆",
+    "day30Subtitle": "Цілий місяць разом! Допоможіть нам зробити навчання ще зручнішим та ефективнішим."
   },
   "de": {
     "congratsTitle": "Herzlichen Glückwunsch! Hol dir dein Bonus-Märchen 🎁",
@@ -125,7 +138,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Sag uns, was nicht geklappt hat oder was du vermisst...",
     "negBtnSend": "✉️ Feedback senden",
     "negSentToast": "Vielen Dank! Wir prüfen dein Feedback sorgfältig ❤️",
-    "btnClose": "Fertig"
+    "btnClose": "Fertig",
+    "day7Title": "7 Tage mit English Breakfast! 🎉",
+    "day7Subtitle": "Du lernst schon seit einer ganzen Woche! Wie gefällt es dir? Teile dein Feedback mit uns.",
+    "day30Title": "1 Monat mit English Breakfast! 🏆",
+    "day30Subtitle": "Ein ganzer Monat zusammen! Hilf uns, dein Lernerlebnis noch besser zu machen."
   },
   "es": {
     "congratsTitle": "¡Felicidades! Consigue tu cuento japonés de regalo 🎁",
@@ -156,7 +173,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Cuéntanos qué falló o qué función te gustaría tener...",
     "negBtnSend": "✉️ Enviar opinión",
     "negSentToast": "¡Muchas gracias! Tendremos en cuenta tus comentarios ❤️",
-    "btnClose": "Listo"
+    "btnClose": "Listo",
+    "day7Title": "¡7 días con English Breakfast! 🎉",
+    "day7Subtitle": "¡Llevas practicando una semana entera! ¿Cómo va tu aprendizaje? Comparte tu opinión.",
+    "day30Title": "¡1 mes con English Breakfast! 🏆",
+    "day30Subtitle": "¡Un mes entero juntos! Ayúdanos a hacer tu experiencia de aprendizaje aún mejor."
   },
   "es-mx": {
     "congratsTitle": "¡Felicidades! Consigue tu cuento japonés de regalo 🎁",
@@ -187,7 +208,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Cuéntanos qué falló o qué te gustaría ver...",
     "negBtnSend": "✉️ Enviar comentarios",
     "negSentToast": "¡Muchas gracias! Tomaremos muy en cuenta tus sugerencias ❤️",
-    "btnClose": "Listo"
+    "btnClose": "Listo",
+    "day7Title": "¡7 días con English Breakfast! 🎉",
+    "day7Subtitle": "¡Llevas practicando una semana entera! ¿Cómo va tu aprendizaje? Comparte tu opinión.",
+    "day30Title": "¡1 mes con English Breakfast! 🏆",
+    "day30Subtitle": "¡Un mes entero juntos! Ayúdanos a hacer tu experiencia de aprendizaje aún mejor."
   },
   "fr": {
     "congratsTitle": "Félicitations ! Obtenez votre conte japonais en bonus 🎁",
@@ -218,7 +243,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Indiquez-nous ce qui ne va pas ou ce qu'il vous manque...",
     "negBtnSend": "✉️ Envoyer mon avis",
     "negSentToast": "Merci beaucoup ! Nous étudierons votre retour avec attention ❤️",
-    "btnClose": "Terminé"
+    "btnClose": "Terminé",
+    "day7Title": "7 jours avec English Breakfast ! 🎉",
+    "day7Subtitle": "Vous apprenez depuis une semaine entière ! Comment ça se passe ? Partagez vos impressions.",
+    "day30Title": "1 mois avec English Breakfast ! 🏆",
+    "day30Subtitle": "Tout un mois ensemble ! Aidez-nous à rendre votre apprentissage encore plus agréable."
   },
   "pl": {
     "congratsTitle": "Gratulacje! Odbierz bonusową japońską baśń 🎁",
@@ -249,7 +278,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Napisz, co poszło nie tak lub jakiej opcji Ci brakuje...",
     "negBtnSend": "✉️ Wyślij opinię",
     "negSentToast": "Dziękujemy! Uważnie przeanalizujemy Twoją wiadomość ❤️",
-    "btnClose": "Gotowe"
+    "btnClose": "Gotowe",
+    "day7Title": "7 dni z English Breakfast! 🎉",
+    "day7Subtitle": "Uczysz się już cały tydzień! Jak wrażenia? Podziel się swoją opinią, aby pomóc nam ulepszyć aplikację.",
+    "day30Title": "1 miesiąc z English Breakfast! 🏆",
+    "day30Subtitle": "Cały miesiąc razem! Pomóż nam uczynić Twoją naukę jeszcze lepszą i skuteczniejszą."
   },
   "tr": {
     "congratsTitle": "Tebrikler! Bonus Japon masalınızı alın 🎁",
@@ -280,7 +313,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Neyin aksadığını veya hangi özelliğe ihtiyaç duyduğunu yaz...",
     "negBtnSend": "✉️ Geri Bildirim Gönder",
     "negSentToast": "Teşekkürler! Geri bildirimini dikkatle inceleyeceğiz ❤️",
-    "btnClose": "Tamam"
+    "btnClose": "Tamam",
+    "day7Title": "English Breakfast ile 7 Gün! 🎉",
+    "day7Subtitle": "Tam bir haftadır pratik yapıyorsunuz! Nasıl gidiyor? Bize görüşlerinizi bildirin.",
+    "day30Title": "English Breakfast ile 1 Ay! 🏆",
+    "day30Subtitle": "Birlikte koskoca bir ay! Deneyiminizi daha da iyileştirmemize yardımcı olun."
   },
   "it": {
     "congratsTitle": "Congratulazioni! Riscatta la favola giapponese bonus 🎁",
@@ -311,7 +348,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Raccontaci cosa non ha funzionato o cosa vorresti aggiungere...",
     "negBtnSend": "✉️ Invia commento",
     "negSentToast": "Grazie mille! Leggeremo attentamente la tua proposta ❤️",
-    "btnClose": "Fatto"
+    "btnClose": "Fatto",
+    "day7Title": "7 giorni con English Breakfast! 🎉",
+    "day7Subtitle": "Ti alleni da un'intera settimana! Come sta andando? Condividi la tua opinione.",
+    "day30Title": "1 mese con English Breakfast! 🏆",
+    "day30Subtitle": "Un intero mese insieme! Aiutaci a rendere la tua esperienza di studio ancora migliore."
   },
   "ro": {
     "congratsTitle": "Felicitări! Ia-ți povestea japoneză bonus 🎁",
@@ -342,7 +383,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Spune-ne ce nu a mers bine sau ce funcție ți-ar plăcea...",
     "negBtnSend": "✉️ Trimite părerea ta",
     "negSentToast": "Îți mulțumim! Vom ține cont de sugestia ta ❤️",
-    "btnClose": "Gata"
+    "btnClose": "Gata",
+    "day7Title": "7 zile cu English Breakfast! 🎉",
+    "day7Subtitle": "Exersezi de o săptămână întreagă! Cum ți se pare? Împărtășește-ne impresiile tale.",
+    "day30Title": "1 lună cu English Breakfast! 🏆",
+    "day30Subtitle": "O lună întreagă împreună! Ajută-ne să facem învățarea și mai eficientă."
   },
   "bg": {
     "congratsTitle": "Поздравления! Вземи своята бонус японска приказка 🎁",
@@ -373,7 +418,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Напиши какво не ти хареса или какво ти липсва...",
     "negBtnSend": "✉️ Изпрати отзив",
     "negSentToast": "Благодарим ти! Ще разгледаме внимателно обратната връзка ❤️",
-    "btnClose": "Готово"
+    "btnClose": "Готово",
+    "day7Title": "7 дни с English Breakfast! 🎉",
+    "day7Subtitle": "Учите вече цяла седмица! Как върви? Споделете впечатленията си, за да станем още по-добри.",
+    "day30Title": "1 месец с English Breakfast! 🏆",
+    "day30Subtitle": "Цял месец заедно! Помогнете ни да направим обучението ви още по-удобно."
   },
   "hu": {
     "congratsTitle": "Gratulálunk! Vedd át a bónusz japán mesét 🎁",
@@ -404,7 +453,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Írd meg, mi nem működött jól, vagy mi hiányzik...",
     "negBtnSend": "✉️ Visszajelzés küldése",
     "negSentToast": "Köszönjük! Alaposan átnézzük az üzenetedet ❤️",
-    "btnClose": "Kész"
+    "btnClose": "Kész",
+    "day7Title": "7 nap az English Breakfasttel! 🎉",
+    "day7Subtitle": "Már egy hete gyakorolsz! Hogy tetszik? Oszd meg véleményed, hogy még jobbá válhassunk.",
+    "day30Title": "1 hónap az English Breakfasttel! 🏆",
+    "day30Subtitle": "Egy egész hónap együtt! Segíts, hogy a tanulási élmény még hatékonyabb legyen."
   },
   "el": {
     "congratsTitle": "Συγχαρητήρια! Πάρτε το μπόνους ιαπωνικό παραμύθι 🎁",
@@ -435,7 +488,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Γράψτε μας τι δεν πήγε καλά ή τι θα θέλατε να προστεθεί...",
     "negBtnSend": "✉️ Αποστολή πρότασης",
     "negSentToast": "Ευχαριστούμε! Θα εξετάσουμε προσεκτικά τα σχόλιά σας ❤️",
-    "btnClose": "Τέλος"
+    "btnClose": "Τέλος",
+    "day7Title": "7 μέρες με το English Breakfast! 🎉",
+    "day7Subtitle": "Εξασκείστε εδώ και μία ολόκληρη εβδομάδα! Πώς σας φαίνεται; Μοιραστείτε τις εντυπώσεις σας.",
+    "day30Title": "1 μήνας με το English Breakfast! 🏆",
+    "day30Subtitle": "Ένας ολόκληρος μήνας μαζί! Βοηθήστε μας να κάνουμε τη μάθηση ακόμα καλύτερη."
   },
   "da": {
     "congratsTitle": "Tillykke! Få dit bonus japanske eventyr 🎁",
@@ -466,7 +523,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Fortæl os, hvad der gik galt eller hvad du savner...",
     "negBtnSend": "✉️ Send feedback",
     "negSentToast": "Tusind tak! Vi kigger grundigt på det ❤️",
-    "btnClose": "Færdig"
+    "btnClose": "Færdig",
+    "day7Title": "7 dage med English Breakfast! 🎉",
+    "day7Subtitle": "Du har øvet dig i en hel uge! Hvordan går det? Del din feedback med os.",
+    "day30Title": "1 måned med English Breakfast! 🏆",
+    "day30Subtitle": "En hel måned sammen! Hjælp os med at gøre din læring endnu bedre."
   },
   "lv": {
     "congratsTitle": "Apsveicam! Saņem savu bonusa japāņu pasaku 🎁",
@@ -497,7 +558,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Uzraksti, kas nepatika vai kādas funkcijas pietrūkst...",
     "negBtnSend": "✉️ Nosūtīt atsauksmi",
     "negSentToast": "Liels paldies! Mēs rūpīgi izskatīsim ieteikumu ❤️",
-    "btnClose": "Gatavs"
+    "btnClose": "Gatavs",
+    "day7Title": "7 dienas ar English Breakfast! 🎉",
+    "day7Subtitle": "Mācāties jau veselu nedēļu! Kā veicas? Dalieties ar savu viedokli, lai palīdzētu mums augt.",
+    "day30Title": "1 mēnesis ar English Breakfast! 🏆",
+    "day30Subtitle": "Vesels mēnesis kopā! Palīdziet mums padarīt mācīšanos vēl ērtāku un noderīgāku."
   },
   "lt": {
     "congratsTitle": "Sveikiname! Atsiimk bonusinę japonų pasaką 🎁",
@@ -528,7 +593,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Parašyk, kas nepatiko arba ko pritrūko...",
     "negBtnSend": "✉️ Siųsti atsiliepimą",
     "negSentToast": "Labai ačiū! Būtinai atsižvelgsime į tavo nuomonę ❤️",
-    "btnClose": "Atlikta"
+    "btnClose": "Atlikta",
+    "day7Title": "7 dienos su English Breakfast! 🎉",
+    "day7Subtitle": "Mokotės jau visą savaitę! Kaip sekasi? Pasidalykite atsiliepimu, kad taptume geresni.",
+    "day30Title": "1 mėnuo su English Breakfast! 🏆",
+    "day30Subtitle": "Visas mėnuo kartu! Padėkite mums padaryti jūsų mokymąsi dar patogesnį."
   },
   "pt": {
     "congratsTitle": "Parabéns! Resgate o seu conto bônus japonês 🎁",
@@ -559,7 +628,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Diga-nos o que deu errado ou qual recurso faz falta...",
     "negBtnSend": "✉️ Enviar feedback",
     "negSentToast": "Muito obrigado! Vamos analisar sua mensagem com carinho ❤️",
-    "btnClose": "Concluir"
+    "btnClose": "Concluir",
+    "day7Title": "7 dias com English Breakfast! 🎉",
+    "day7Subtitle": "Já pratica há uma semana inteira! O que está achando? Compartilhe seu feedback.",
+    "day30Title": "1 mês com English Breakfast! 🏆",
+    "day30Subtitle": "Um mês inteiro juntos! Ajude-nos a tornar seu aprendizado ainda melhor."
   },
   "pt-br": {
     "congratsTitle": "Parabéns! Resgate seu conto japonês bônus 🎁",
@@ -590,7 +663,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Conta pra gente o que não funcionou bem ou o que você sente falta...",
     "negBtnSend": "✉️ Enviar sugestão",
     "negSentToast": "Muito obrigado! Vamos analisar sua sugestão com todo carinho ❤️",
-    "btnClose": "Pronto"
+    "btnClose": "Pronto",
+    "day7Title": "7 dias com English Breakfast! 🎉",
+    "day7Subtitle": "Você já está praticando há uma semana inteira! O que está achando? Compartilhe seu feedback.",
+    "day30Title": "1 mês com English Breakfast! 🏆",
+    "day30Subtitle": "Um mês inteiro juntos! Ajude-nos a deixar o seu aprendizado ainda melhor."
   },
   "sk": {
     "congratsTitle": "Gratulujeme! Získaj bonusovú japonskú rozprávku 🎁",
@@ -621,7 +698,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Napíš nám, čo nefungovalo alebo čo ti v aplikácii chýba...",
     "negBtnSend": "✉️ Odoslať spätnú väzbu",
     "negSentToast": "Ďakujeme! Tvoj podnet si dôkladne prejdeme ❤️",
-    "btnClose": "Hotovo"
+    "btnClose": "Hotovo",
+    "day7Title": "7 dní s English Breakfast! 🎉",
+    "day7Subtitle": "Učíte sa už celý týždeň! Ako sa vám darí? Podeľte sa o svoje dojmy.",
+    "day30Title": "1 mesiac s English Breakfast! 🏆",
+    "day30Subtitle": "Celý mesiac spolu! Pomôžte nám zlepšiť vaše učenie."
   },
   "sl": {
     "congratsTitle": "Čestitke! Prevzemi svojo bonus japonsko pravljico 🎁",
@@ -652,7 +733,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Napiši nam, kaj ni bilo v redu ali kaj pogrešaš...",
     "negBtnSend": "✉️ Pošlji mnenje",
     "negSentToast": "Hvala! Tvoj predlog bomo skrbno pregledali ❤️",
-    "btnClose": "Končano"
+    "btnClose": "Končano",
+    "day7Title": "7 dni z English Breakfast! 🎉",
+    "day7Subtitle": "Vadite že cel teden! Kako vam gre? Delite svoje vtise in nam pomagajte postati boljši.",
+    "day30Title": "1 mesec z English Breakfast! 🏆",
+    "day30Subtitle": "Cel mesec skupaj! Pomagajte nam vaše učenje narediti še boljše."
   },
   "fi": {
     "congratsTitle": "Onnittelut! Lunasta japanilainen bonussatusi 🎁",
@@ -683,7 +768,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Kerro, mikä ei toiminut tai mitä ominaisuutta kaipaat...",
     "negBtnSend": "✉️ Lähetä palaute",
     "negSentToast": "Kiitos paljon! Otamme palautteesi huomioon ❤️",
-    "btnClose": "Valmis"
+    "btnClose": "Valmis",
+    "day7Title": "7 päivää English Breakfastin kanssa! 🎉",
+    "day7Subtitle": "Olet harjoitellut jo kokonaisen viikon! Miten sujuu? Jaa mielipiteesi kanssamme.",
+    "day30Title": "1 kuukausi English Breakfastin kanssa! 🏆",
+    "day30Subtitle": "Kokonainen kuukausi yhdessä! Auta meitä tekemään oppimiskokemuksestasi vielä parempi."
   },
   "hr": {
     "congratsTitle": "Čestitamo! Preuzmi svoju bonus japansku bajku 🎁",
@@ -714,7 +803,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Napiši nam što nije radilo kako treba ili što ti nedostaje...",
     "negBtnSend": "✉️ Pošalji povratnu informaciju",
     "negSentToast": "Hvala ti! Pažljivo ćemo proučiti tvoj prijedlog ❤️",
-    "btnClose": "Gotovo"
+    "btnClose": "Gotovo",
+    "day7Title": "7 dana uz English Breakfast! 🎉",
+    "day7Subtitle": "Vježbate već cijeli tjedan! Kako vam ide? Podijelite svoje dojmove s nama.",
+    "day30Title": "1 mjesec uz English Breakfast! 🏆",
+    "day30Subtitle": "Cijeli mjesec zajedno! Pomozite nam poboljšati vaše učenje."
   },
   "cs": {
     "congratsTitle": "Gratulujeme! Vyzvedni si bonusovou japonskou pohádku 🎁",
@@ -745,7 +838,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Napiš nám, co nefungovalo nebo co ti v aplikaci chybí...",
     "negBtnSend": "✉️ Odeslat zpětnou vazbu",
     "negSentToast": "Děkujeme! Tvůj podnět si pečlivě projdeme ❤️",
-    "btnClose": "Hotovo"
+    "btnClose": "Hotovo",
+    "day7Title": "7 dní s English Breakfast! 🎉",
+    "day7Subtitle": "Učíte se už celý týden! Jak se vám daří? Podělte se o své dojmy.",
+    "day30Title": "1 měsíc s English Breakfast! 🏆",
+    "day30Subtitle": "Celý měsíc spolu! Pomozte nám udělat výuku ještě příjemnější a efektivnější."
   },
   "sv": {
     "congratsTitle": "Grattis! Hämta din japanska bonussaga 🎁",
@@ -776,7 +873,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Berätta vad som inte fungerade eller vad du saknar...",
     "negBtnSend": "✉️ Skicka feedback",
     "negSentToast": "Tack så mycket! Vi kommer att gå igenom dina synpunkter noga ❤️",
-    "btnClose": "Klart"
+    "btnClose": "Klart",
+    "day7Title": "7 dagar med English Breakfast! 🎉",
+    "day7Subtitle": "Du har övat i en hel vecka! Hur går det? Dela din feedback med oss.",
+    "day30Title": "1 månad med English Breakfast! 🏆",
+    "day30Subtitle": "En hel månad tillsammans! Hjälp oss att göra ditt lärande ännu bättre."
   },
   "et": {
     "congratsTitle": "Palju õnne! Võta oma jaapani boonusmuinasjutt 🎁",
@@ -807,7 +908,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Kirjuta, mis ei toiminud hästi või millisest funktsioonist puudust tundsid...",
     "negBtnSend": "✉️ Saada tagasiside",
     "negSentToast": "Suur aitäh! Vaatame su ettepaneku kindlasti läbi ❤️",
-    "btnClose": "Valmis"
+    "btnClose": "Valmis",
+    "day7Title": "7 päeva English Breakfastiga! 🎉",
+    "day7Subtitle": "Oled õppinud juba terve nädala! Kuidas läheb? Jaga oma tagasisidet.",
+    "day30Title": "1 kuu English Breakfastiga! 🏆",
+    "day30Subtitle": "Terve kuu koos! Aita meil muuta õppimine veelgi paremaks."
   },
   "hi": {
     "congratsTitle": "बधाई हो! अपनी बोनस जापानी लोककथा प्राप्त करें 🎁",
@@ -838,7 +943,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "बताएं क्या कमी लगी या आपको कौन सा नया फीचर चाहिए...",
     "negBtnSend": "✉️ सुझाव भेजें",
     "negSentToast": "धन्यवाद! हम आपके सुझाव पर गंभीरता से काम करेंगे ❤️",
-    "btnClose": "हो गया"
+    "btnClose": "हो गया",
+    "day7Title": "English Breakfast के साथ 7 दिन! 🎉",
+    "day7Subtitle": "आप पूरे एक सप्ताह से अभ्यास कर रहे हैं! कैसा चल रहा है? अपनी राय साझा करें।",
+    "day30Title": "English Breakfast के साथ 1 महीना! 🏆",
+    "day30Subtitle": "पूरा एक महीना साथ! सीखने के अनुभव को और बेहतर बनाने में हमारी मदद करें।"
   },
   "bn": {
     "congratsTitle": "অভিনন্দন! আপনার বোনাস জাপানি রূপকথা সংগ্রহ করুন 🎁",
@@ -869,7 +978,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "কোথায় সমস্যা হয়েছে বা কোন ফিচারটি প্রয়োজন তা লিখুন...",
     "negBtnSend": "✉️ মতামত পাঠান",
     "negSentToast": "ধন্যবাদ! আমরা আপনার মূল্যবান মতামত গুরুত্ব সহকারে পর্যালোচনা করব ❤️",
-    "btnClose": "সম্পন্ন"
+    "btnClose": "সম্পন্ন",
+    "day7Title": "English Breakfast এর সাথে ৭ দিন! 🎉",
+    "day7Subtitle": "আপনি পুরো এক সপ্তাহ ধরে অনুশীলন করছেন! কেমন লাগছে? আপনার মতামত জানান।",
+    "day30Title": "English Breakfast এর সাথে ১ মাস! 🏆",
+    "day30Subtitle": "পুরো এক মাস একসঙ্গে! আপনার শেখার অভিজ্ঞতা আরও ভালো করতে সাহায্য করুন।"
   },
   "ar": {
     "congratsTitle": "تهانينا! احصل على القصة اليابانية الإضافية 🎁",
@@ -900,7 +1013,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "أخبرنا بما يمكن تحسينه أو المزايا التي تنقصك...",
     "negBtnSend": "✉️ إرسال الملاحظات",
     "negSentToast": "شكراً جزيلاً! سنأخذ رأيك بعين الاعتبار والاهتمام ❤️",
-    "btnClose": "تم"
+    "btnClose": "تم",
+    "day7Title": "7 أيام مع English Breakfast! 🎉",
+    "day7Subtitle": "لقد تدربت لمدة أسبوع كامل! كيف تجد التجربة؟ شاركنا رأيك لمساعدتنا على التحسين.",
+    "day30Title": "شهر واحد مع English Breakfast! 🏆",
+    "day30Subtitle": "شهر كامل معًا! ساعدنا في جعل تجربة تعلمك أفضل وأكثر فائدة."
   },
   "fa": {
     "congratsTitle": "تبریک! داستان ژاپنی هدیه خود را دریافت کنید 🎁",
@@ -931,7 +1048,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "هر گونه ایراد یا قابلیتی که نیاز دارید را برای ما بنویسید...",
     "negBtnSend": "✉️ ارسال نظر",
     "negSentToast": "متشکریم! حتماً پیشنهاد شما را بررسی خواهیم کرد ❤️",
-    "btnClose": "انجام شد"
+    "btnClose": "انجام شد",
+    "day7Title": "۷ روز با English Breakfast! 🎉",
+    "day7Subtitle": "یک هفته تمام است که تمرین می‌کنید! یادگیری چطور پیش می‌رود؟ نظر خود را با ما در میان بگذارید.",
+    "day30Title": "۱ ماه با English Breakfast! 🏆",
+    "day30Subtitle": "یک ماه کامل همراه هم! به ما کمک کنید تا تجربه یادگیری شما را بهتر کنیم."
   },
   "ur": {
     "congratsTitle": "مبارک ہو! اپنی بونس جاپانی کہانی حاصل کریں 🎁",
@@ -962,7 +1083,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "ہمیں بتائیں کیا مسئلہ پیش آیا یا کس فیچر کی ضرورت ہے...",
     "negBtnSend": "✉️ رائے بھیجیں",
     "negSentToast": "شکریہ! ہم آپ کی رائے پر توجہ دیں گے ❤️",
-    "btnClose": "مکمل"
+    "btnClose": "مکمل",
+    "day7Title": "English Breakfast کے ساتھ 7 دن! 🎉",
+    "day7Subtitle": "آپ کو مشق کرتے ہوئے پورا ایک ہفتہ ہو گیا ہے! کیسا جا رہا ہے؟ اپنی رائے سے آگاہ کریں۔",
+    "day30Title": "English Breakfast کے ساتھ 1 مہینہ! 🏆",
+    "day30Subtitle": "پورا ایک مہینہ ساتھ! اپنے سیکھنے کے عمل کو مزید بہتر بنانے میں ہماری مدد کریں۔"
   },
   "id": {
     "congratsTitle": "Selamat! Klaim dongeng Jepang bonusmu 🎁",
@@ -993,7 +1118,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Tuliskan kendala yang kamu alami atau fitur yang kamu inginkan...",
     "negBtnSend": "✉️ Kirim Masukan",
     "negSentToast": "Terima kasih! Kami akan mempelajari saranmu dengan teliti ❤️",
-    "btnClose": "Selesai"
+    "btnClose": "Selesai",
+    "day7Title": "7 Hari bersama English Breakfast! 🎉",
+    "day7Subtitle": "Anda sudah belajar selama seminggu penuh! Bagaimana perkembangannya? Berikan masukan Anda.",
+    "day30Title": "1 Bulan bersama English Breakfast! 🏆",
+    "day30Subtitle": "Sebulan penuh bersama! Bantu kami membuat pengalaman belajar Anda semakin hebat."
   },
   "vi": {
     "congratsTitle": "Chúc mừng! Nhận ngay truyện cổ tích Nhật Bản tặng thêm 🎁",
@@ -1024,7 +1153,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Hãy cho chúng tôi biết lỗi gặp phải hoặc tính năng bạn muốn có...",
     "negBtnSend": "✉️ Gửi góp ý",
     "negSentToast": "Xin cảm ơn! Chúng tôi sẽ xem xét kỹ lưỡng ý kiến của bạn ❤️",
-    "btnClose": "Xong"
+    "btnClose": "Xong",
+    "day7Title": "7 ngày cùng English Breakfast! 🎉",
+    "day7Subtitle": "Bạn đã luyện tập trọn vẹn một tuần! Tiến độ thế nào rồi? Hãy chia sẻ cảm nghĩ của bạn.",
+    "day30Title": "1 tháng cùng English Breakfast! 🏆",
+    "day30Subtitle": "Tròn một tháng đồng hành! Hãy giúp chúng tôi nâng cao chất lượng trải nghiệm học tập của bạn."
   },
   "th": {
     "congratsTitle": "ยินดีด้วย! รับนิทานญี่ปุ่นตอนพิเศษเป็นของขวัญ 🎁",
@@ -1055,7 +1188,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "บอกเราได้เลยว่าติดปัญหาตรงไหนหรืออยากให้มีฟังก์ชันอะไรเพิ่ม...",
     "negBtnSend": "✉️ ส่งข้อเสนอแนะ",
     "negSentToast": "ขอบคุณมาก! เราจะนำไปพิจารณาอย่างตั้งใจ ❤️",
-    "btnClose": "เสร็จสิ้น"
+    "btnClose": "เสร็จสิ้น",
+    "day7Title": "7 วันกับ English Breakfast! 🎉",
+    "day7Subtitle": "คุณฝึกฝนมาครบหนึ่งสัปดาห์แล้ว! เป็นอย่างไรบ้าง? แชร์ความคิดเห็นของคุณกับเราได้เลย",
+    "day30Title": "1 เดือนกับ English Breakfast! 🏆",
+    "day30Subtitle": "ครบหนึ่งเดือนเต็มที่เราอยู่ด้วยกัน! ช่วยเราพัฒนาการเรียนรู้ของคุณให้ดียิ่งขึ้น"
   },
   "ko": {
     "congratsTitle": "축하합니다! 보너스 일본 전래동화를 받아가세요 🎁",
@@ -1086,7 +1223,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "아쉬웠던 점이나 필요한 기능을 적어주세요...",
     "negBtnSend": "✉️ 의견 보내기",
     "negSentToast": "감사합니다! 소중한 의견 꼼꼼히 검토하겠습니다 ❤️",
-    "btnClose": "완료"
+    "btnClose": "완료",
+    "day7Title": "English Breakfast와 함께한 7일! 🎉",
+    "day7Subtitle": "벌써 일주일 동안 꾸준히 학습하셨네요! 학습은 어떠신가요? 소중한 의견을 들려주세요.",
+    "day30Title": "English Breakfast와 함께한 1달! 🏆",
+    "day30Subtitle": "한 달 동안 함께해 주셔서 감사합니다! 더 나은 학습 경험을 만들 수 있도록 도와주세요."
   },
   "ja": {
     "congratsTitle": "おめでとうございます！特典の日本の昔話を受け取ろう 🎁",
@@ -1117,7 +1258,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "不満な点や追加してほしい機能をご記入ください...",
     "negBtnSend": "✉️ 意見を送信する",
     "negSentToast": "ありがとうございます！いただいたご意見を真摯に受け止めます ❤️",
-    "btnClose": "完了"
+    "btnClose": "完了",
+    "day7Title": "English Breakfastと7日間！🎉",
+    "day7Subtitle": "1週間しっかり学習を続けられましたね！進み具合はいかがですか？ご意見をお聞かせください。",
+    "day30Title": "English Breakfastと1ヶ月！🏆",
+    "day30Subtitle": "1ヶ月間一緒に学んでいただき感謝します！より良い学習体験のためにご意見をお寄せください。"
   },
   "zh": {
     "congratsTitle": "恭喜！领取您的专属奖励日本神话故事 🎁",
@@ -1148,7 +1293,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "请写下您觉得不满意的地方，或您希望增加的功能...",
     "negBtnSend": "✉️ 发送改进建议",
     "negSentToast": "非常感谢！我们会认真研究您的每一条建议 ❤️",
-    "btnClose": "完成"
+    "btnClose": "完成",
+    "day7Title": "加入 English Breakfast 7天！🎉",
+    "day7Subtitle": "您已经坚持学习了一整周！学习进度如何？欢迎分享您的反馈。",
+    "day30Title": "加入 English Breakfast 1个月！🏆",
+    "day30Subtitle": "整整相伴一个月！请帮助我们为您带来更好的学习体验。"
   },
   "kk": {
     "congratsTitle": "Құттықтаймыз! Бонустық жапон ертегісін алыңыз 🎁",
@@ -1179,7 +1328,11 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
     "negPlaceholder": "Ненің дұрыс болмағанын немесе қандай мүмкіндік жетіспейтінін жазыңыз...",
     "negBtnSend": "✉️ Ұсынысты жіберу",
     "negSentToast": "Рақмет! Пікіріңізді мұқият оқып шығамыз ❤️",
-    "btnClose": "Дайын"
+    "btnClose": "Дайын",
+    "day7Title": "English Breakfast-пен 7 күн! 🎉",
+    "day7Subtitle": "Бір апта бойы үздіксіз оқып келесіз! Оқу қалай өтуде? Бізге пікіріңізді білдіріңіз.",
+    "day30Title": "English Breakfast-пен 1 ай! 🏆",
+    "day30Subtitle": "Бір ай бойы біргеміз! Оқуды одан әрі ыңғайлы етуге көмектесіңіз."
   }
 };
 
@@ -1206,6 +1359,18 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         if (Date.now() < delayedUntil) return;
       }
     } catch (e) {}
+  } else if (triggerSource === 'auto_day_7') {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        if (localStorage.getItem('myduo_ft_survey_day7_done') === 'true') return;
+      }
+    } catch (e) {}
+  } else if (triggerSource === 'auto_day_30') {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        if (localStorage.getItem('myduo_ft_survey_day30_done') === 'true') return;
+      }
+    } catch (e) {}
   }
 
   const existing = document.querySelector('#fairy-tale-survey-overlay');
@@ -1213,8 +1378,18 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
 
   isSurveyActive = true;
   const strings = getFairyTaleStrings();
-  const isAutoLesson = triggerSource === 'auto_lesson_3';
-  const displayTitle = isAutoLesson && strings.congratsTitle ? strings.congratsTitle : strings.title;
+  let displayTitle = strings.title;
+  let displaySubtitle = strings.subtitle;
+  if (triggerSource === 'auto_lesson_3') {
+    displayTitle = strings.congratsTitle || strings.title;
+    displaySubtitle = strings.subtitle;
+  } else if (triggerSource === 'auto_day_7') {
+    displayTitle = strings.day7Title || strings.title;
+    displaySubtitle = strings.day7Subtitle || strings.subtitle;
+  } else if (triggerSource === 'auto_day_30') {
+    displayTitle = strings.day30Title || strings.title;
+    displaySubtitle = strings.day30Subtitle || strings.subtitle;
+  }
 
   if (window.trackScreen) window.trackScreen('survey_fairy_tale_q1', 'FairyTaleSurveyModal');
   if (window.trackEvent) window.trackEvent('survey_fairy_tale_opened', { source: triggerSource });
@@ -1434,7 +1609,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
       </div>
 
       <h2 class="fts-title">${displayTitle}</h2>
-      <p class="fts-subtitle">${strings.subtitle}</p>
+      <p class="fts-subtitle">${displaySubtitle}</p>
 
       <!-- Question 1: Rating -->
       <div class="fts-q-block">
@@ -1476,18 +1651,24 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
 
   // Close X
   overlay.querySelector('#fts-close-survey')?.addEventListener('click', () => {
-    if (window.trackEvent) window.trackEvent('survey_fairy_tale_dismissed');
+    if (window.trackEvent) window.trackEvent('survey_fairy_tale_dismissed', { source: triggerSource });
     try {
       if (typeof localStorage !== 'undefined') {
-        const dismissCount = Number(localStorage.getItem('myduo_ft_survey_dismiss_count') || 0);
-        if (dismissCount >= 1) {
-          // Closed for the second time -> never ask again
-          localStorage.setItem('myduo_fairy_tale_survey_done', 'true');
-          localStorage.removeItem('myduo_ft_survey_delayed_until');
+        if (triggerSource === 'auto_day_7') {
+          localStorage.setItem('myduo_ft_survey_day7_done', 'true');
+        } else if (triggerSource === 'auto_day_30') {
+          localStorage.setItem('myduo_ft_survey_day30_done', 'true');
         } else {
-          // First dismissal -> ask once later after 7 days
-          localStorage.setItem('myduo_ft_survey_dismiss_count', '1');
-          localStorage.setItem('myduo_ft_survey_delayed_until', String(Date.now() + 7 * 24 * 60 * 60 * 1000));
+          const dismissCount = Number(localStorage.getItem('myduo_ft_survey_dismiss_count') || 0);
+          if (dismissCount >= 1) {
+            // Closed for the second time -> never ask again
+            localStorage.setItem('myduo_fairy_tale_survey_done', 'true');
+            localStorage.removeItem('myduo_ft_survey_delayed_until');
+          } else {
+            // First dismissal -> ask once later after 7 days
+            localStorage.setItem('myduo_ft_survey_dismiss_count', '1');
+            localStorage.setItem('myduo_ft_survey_delayed_until', String(Date.now() + 7 * 24 * 60 * 60 * 1000));
+          }
         }
       }
     } catch (e) {}
@@ -1568,7 +1749,13 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
     const featureListStr = Array.from(selectedFeatures).join(',');
 
     // Record survey completion and unlock story 0
-    localStorage.setItem('myduo_fairy_tale_survey_done', 'true');
+    if (triggerSource === 'auto_day_7') {
+      localStorage.setItem('myduo_ft_survey_day7_done', 'true');
+    } else if (triggerSource === 'auto_day_30') {
+      localStorage.setItem('myduo_ft_survey_day30_done', 'true');
+    } else {
+      localStorage.setItem('myduo_fairy_tale_survey_done', 'true');
+    }
     localStorage.setItem('myduo_survey_rating', String(selectedStars));
     localStorage.setItem('myduo_survey_feature', featureListStr);
     localStorage.setItem('myduo_story_0_unlocked', 'true');
@@ -1577,11 +1764,17 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
       window.dispatchEvent(new CustomEvent('storyUnlocked', { detail: { storyId: 0 } }));
     } catch (e) {}
 
+    const activeDaysCount = (typeof StorageService !== 'undefined' && StorageService.getActiveDaysCount)
+      ? StorageService.getActiveDaysCount()
+      : Number(localStorage.getItem('myduo_active_days_count') || 1);
+
     if (window.trackEvent) {
       window.trackEvent('survey_fairy_tale_submitted', {
         rating: selectedStars,
         features: Array.from(selectedFeatures),
-        feature: featureListStr
+        feature: featureListStr,
+        source: triggerSource,
+        activeDays: activeDaysCount
       });
     }
 
@@ -1589,7 +1782,9 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
       submitSurveyFeedbackApi({
         rating: selectedStars,
         feature: featureListStr,
-        text: ''
+        text: '',
+        activeDays: activeDaysCount,
+        stage: triggerSource
       });
     } catch (e) {}
 
@@ -1651,7 +1846,9 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
             submitSurveyFeedbackApi({
               rating: selectedStars,
               feature: Array.from(selectedFeatures).join(','),
-              text: text
+              text: text,
+              activeDays: activeDaysCount,
+              stage: triggerSource
             });
           } catch (e) {}
         }

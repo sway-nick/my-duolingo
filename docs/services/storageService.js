@@ -84,6 +84,46 @@ class StorageServiceImpl {
     this._set('hearts_data', { hearts: this.getMaxHearts(), lastHeartLostTime: null });
   }
 
+  // Active Days Tracking (Total unique days app was opened/used, never resets)
+  getActiveDaysData() {
+    const data = this._get('active_days_data', { count: 0, lastDate: null });
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const legacyDate = localStorage.getItem('myduo_last_active_date');
+        if (legacyDate !== null && legacyDate !== undefined) {
+          data.lastDate = legacyDate;
+        }
+        const legacyCount = Number(localStorage.getItem('myduo_active_days_count'));
+        if (legacyCount > (data.count || 0)) {
+          data.count = legacyCount;
+        }
+      }
+    } catch (e) {}
+    return data;
+  }
+  getActiveDaysCount() {
+    const data = this.getActiveDaysData();
+    return Math.max(1, Number(data.count) || 1);
+  }
+  recordActiveDay() {
+    const data = this.getActiveDaysData();
+    const today = new Date().toISOString().split('T')[0];
+    if (data.lastDate === today) {
+      return Math.max(1, Number(data.count) || 1);
+    }
+    const current = Number(data.count) || 0;
+    data.count = current + 1;
+    data.lastDate = today;
+    this._set('active_days_data', data);
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('myduo_active_days_count', String(data.count));
+        localStorage.setItem('myduo_last_active_date', today);
+      }
+    } catch (e) {}
+    return data.count;
+  }
+
   // Streak
   getStreakData() {
     return this._get('streak_data', { streak: 0, lastStudyDate: null });

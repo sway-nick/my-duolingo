@@ -226,10 +226,17 @@
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
       import { showMilestoneStoryModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
+      import { StorageService } from './services/storageService.js?v=386.0';
       import { AdService } from './services/adService.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
       window.showMilestoneStoryModal = showMilestoneStoryModal;
+      window.StorageService = StorageService;
+
+      // Track active unique day of usage (never resets)
+      try {
+        StorageService.recordActiveDay();
+      } catch (e) {}
 
       // Initialize AdMob service
       try {
