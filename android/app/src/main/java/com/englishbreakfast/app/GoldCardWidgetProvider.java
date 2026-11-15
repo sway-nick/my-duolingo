@@ -30,6 +30,11 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
+            // A widget that actually sits on the home screen has launcher-assigned dimensions:
+            // make sure it is never treated as a stale "ghost" id.
+            if (WidgetDataManager.hasPlacedDimensions(context, appWidgetId)) {
+                WidgetDataManager.onWidgetPinnedOrInteracted(context, appWidgetId, null);
+            }
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
         scheduleNextRotation(context);
@@ -194,6 +199,22 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
         handleWidgetAction(context, action, null);
     }
 
+    /**
+     * Plays the current widget word and releases the broadcast receiver (goAsync) only
+     * after playback completes, so the OS does not freeze the process mid-speech when
+     * the main app is closed.
+     */
+    private static void playCurrentWordKeepingReceiverAlive(Context context, final Runnable onAudioDone) {
+        WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
+        if (curWord != null && curWord.word != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
+            try {
+                WidgetAudioPlayer.playWord(context, curWord.word, onAudioDone);
+                return;
+            } catch (Exception ignored) {}
+        }
+        if (onAudioDone != null) onAudioDone.run();
+    }
+
     public static void handleWidgetAction(Context context, String action, final Runnable onAudioDone) {
         if (action == null) {
             if (onAudioDone != null) onAudioDone.run();
@@ -232,13 +253,7 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 }
                 WidgetDataManager.nextWord(context);
                 updateAllWidgets(context);
-                if (onAudioDone != null) onAudioDone.run();
-                {
-                    WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                    if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
-                        WidgetAudioPlayer.playWord(context, curWord.word, null);
-                    }
-                }
+                playCurrentWordKeepingReceiverAlive(context, onAudioDone);
                 break;
 
             case ACTION_PREV:
@@ -247,26 +262,14 @@ public class GoldCardWidgetProvider extends AppWidgetProvider {
                 }
                 WidgetDataManager.prevWord(context);
                 updateAllWidgets(context);
-                if (onAudioDone != null) onAudioDone.run();
-                {
-                    WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                    if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
-                        WidgetAudioPlayer.playWord(context, curWord.word, null);
-                    }
-                }
+                playCurrentWordKeepingReceiverAlive(context, onAudioDone);
                 break;
 
             case ACTION_SPEAK:
                 if (WidgetDataManager.isContinuousPlayActive(context)) {
                     stopContinuousPlay(context);
                 }
-                if (onAudioDone != null) onAudioDone.run();
-                {
-                    WidgetDataManager.WidgetWord curWord = WidgetDataManager.getCurrentWord(context);
-                    if (curWord != null && !curWord.word.isEmpty() && !"fav_empty".equals(curWord.id)) {
-                        WidgetAudioPlayer.playWord(context, curWord.word, null);
-                    }
-                }
+                playCurrentWordKeepingReceiverAlive(context, onAudioDone);
                 break;
 
             case ACTION_TOGGLE_FAV:

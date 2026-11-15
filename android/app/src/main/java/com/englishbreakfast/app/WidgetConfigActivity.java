@@ -27,6 +27,8 @@ public class WidgetConfigActivity extends Activity {
 
         // Initialize and update the RemoteViews for the launcher
         if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            // Launcher is configuring a freshly placed widget: register it as real (not a ghost)
+            WidgetDataManager.onWidgetPinnedOrInteracted(this, appWidgetId, null);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             GoldCardWidgetProvider.updateAppWidget(this, appWidgetManager, appWidgetId);
         }

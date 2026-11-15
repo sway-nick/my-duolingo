@@ -20,7 +20,11 @@ execSync('node scripts/build.cjs', { cwd: ROOT_SOURCE, stdio: 'inherit' });
 
 // Sync changes to android project frontend & native source files
 console.log('\n[2/5] Synchronizing frontend and native Android sources to android project...');
-fs.cpSync(path.join(ROOT_SOURCE, 'frontend'), path.join(ANDROID_PROJECT, 'frontend'), { recursive: true, force: true });
+fs.cpSync(path.join(ROOT_SOURCE, 'frontend'), path.join(ANDROID_PROJECT, 'frontend'), {
+  recursive: true,
+  force: true,
+  filter: (src) => !src.replace(/\\/g, '/').includes('/frontend/assets/audio'),
+});
 fs.cpSync(path.join(ROOT_SOURCE, 'android/app/src/main/java'), path.join(ANDROID_PROJECT, 'android/app/src/main/java'), { recursive: true, force: true });
 fs.cpSync(path.join(ROOT_SOURCE, 'android/app/src/main/res'), path.join(ANDROID_PROJECT, 'android/app/src/main/res'), { recursive: true, force: true });
 const syncPairs = [

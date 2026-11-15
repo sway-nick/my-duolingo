@@ -1,6 +1,6 @@
-import { speakWord } from '../../services/audioService.js?v=386.0';
-import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings } from '../../services/api.js?v=386.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
+import { speakWord, triggerHaptic } from '../../services/audioService.js?v=386.0';
+import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings, saveUserWordOverride, getLoadedWordsSnapshot } from '../../services/api.js?v=386.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getUserWordOverride } from '../../services/i18n.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
 
 function compressImageFile(file, maxDimension = 2048, quality = 0.88) {
@@ -1606,7 +1606,7 @@ function renderWordCardHtml(w, isFav, prog, activeLang) {
   }
 
   const transText = getWordTranslation(w, activeLang);
-  const noteText = getWordNotes(w, activeLang);
+  const noteText = getWordNotes(w, activeLang, { hideItNotes: true });
 
   return `
     <div class="dict-card ${isMastered ? 'mastered' : ''}" data-id="${w.id}">
@@ -1633,7 +1633,119 @@ function renderWordCardHtml(w, isFav, prog, activeLang) {
 }
 
 
-function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) {
+/**
+ * Attaches a ~500ms long-press gesture detector to card/word elements inside `rootEl`.
+ * Cancels cleanly on >10px scroll/swipe movement and suppresses the subsequent click event
+ * once triggered so speak/flip/card clicks do not fire underneath the opened modal.
+ */
+function attachWordLongPress(rootEl, cardSelector, onLongPress, delayMs = 500) {
+  if (!rootEl || typeof onLongPress !== 'function') return () => {};
+  if (typeof rootEl._wordLongPressCleanup === 'function') {
+    rootEl._wordLongPressCleanup();
+  }
+
+  let timer = null;
+  let startX = 0;
+  let startY = 0;
+  let activeTarget = null;
+  let lastPointerType = '';
+  let suppressClickUntil = 0;
+
+  const clearTimer = () => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    activeTarget = null;
+  };
+
+  const onPointerDown = (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (!e.target || typeof e.target.closest !== 'function') return;
+
+    const targetEl = cardSelector ? e.target.closest(cardSelector) : rootEl;
+    if (!targetEl || !rootEl.contains(targetEl)) return;
+
+    const hitInteractive = e.target.closest(
+      'button, a, input, select, textarea, [data-no-longpress="true"], .sound-btn, #speak-sound-btn, .dict-speak-btn, .dict-fav-btn, .dict-add-coll-btn, .fav-btn, .flashcard-fav-btn, .card-fav-btn, .dict-note-toggle, .notes-btn'
+    );
+    if (hitInteractive && hitInteractive !== targetEl && !hitInteractive.matches('#speak-word-trigger')) {
+      return;
+    }
+
+    clearTimer();
+    lastPointerType = e.pointerType || '';
+    activeTarget = targetEl;
+    startX = typeof e.clientX === 'number' ? e.clientX : 0;
+    startY = typeof e.clientY === 'number' ? e.clientY : 0;
+
+    timer = setTimeout(() => {
+      const firedEl = activeTarget;
+      timer = null;
+      activeTarget = null;
+      if (!firedEl) return;
+      suppressClickUntil = Date.now() + 750;
+      try { triggerHaptic('medium'); } catch (err) {}
+      onLongPress(firedEl, e);
+    }, delayMs);
+  };
+
+  const onPointerMove = (e) => {
+    if (!timer) return;
+    const dx = (typeof e.clientX === 'number' ? e.clientX : 0) - startX;
+    const dy = (typeof e.clientY === 'number' ? e.clientY : 0) - startY;
+    if (Math.hypot(dx, dy) > 10) {
+      clearTimer();
+    }
+  };
+
+  const onPointerCancelOrUp = () => {
+    clearTimer();
+  };
+
+  const onContextMenu = (e) => {
+    if (lastPointerType !== 'mouse' && (timer || Date.now() < suppressClickUntil)) {
+      e.preventDefault();
+    }
+  };
+
+  const onClickCapture = (e) => {
+    if (Date.now() < suppressClickUntil) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+      suppressClickUntil = 0;
+    }
+  };
+
+  rootEl.addEventListener('pointerdown', onPointerDown, { passive: true });
+  rootEl.addEventListener('pointermove', onPointerMove, { passive: true });
+  rootEl.addEventListener('pointerup', onPointerCancelOrUp, { passive: true });
+  rootEl.addEventListener('pointercancel', onPointerCancelOrUp, { passive: true });
+  rootEl.addEventListener('contextmenu', onContextMenu);
+  rootEl.addEventListener('click', onClickCapture, true);
+
+  const cleanup = () => {
+    clearTimer();
+    rootEl.removeEventListener('pointerdown', onPointerDown);
+    rootEl.removeEventListener('pointermove', onPointerMove);
+    rootEl.removeEventListener('pointerup', onPointerCancelOrUp);
+    rootEl.removeEventListener('pointercancel', onPointerCancelOrUp);
+    rootEl.removeEventListener('contextmenu', onContextMenu);
+    rootEl.removeEventListener('click', onClickCapture, true);
+    if (rootEl._wordLongPressCleanup === cleanup) {
+      delete rootEl._wordLongPressCleanup;
+    }
+  };
+  rootEl._wordLongPressCleanup = cleanup;
+  return cleanup;
+}
+
+function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}, options = {}) {
+  const editWordObj = (options && options.editWord && typeof options.editWord === 'object') ? options.editWord : null;
+  if (!initialWord && editWordObj && editWordObj.word) {
+    initialWord = String(editWordObj.word);
+  }
   const modalEl = document.createElement('div');
   modalEl.id = 'add-word-modal-overlay';
   modalEl.style.cssText = 'position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; backdrop-filter: blur(4px);';
@@ -1850,45 +1962,73 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     });
   }
 
+  let lastMatchedWord = '';
+
+  function findExistingWord(typed) {
+    if (!typed) return null;
+    if (editWordObj && editWordObj.word && editWordObj.word.trim().toLowerCase() === typed) {
+      return editWordObj;
+    }
+    const listMatch = Array.isArray(words)
+      ? words.find((w) => w.word && w.word.trim().toLowerCase() === typed)
+      : null;
+    if (listMatch) return listMatch;
+    const snap = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+    return Array.isArray(snap)
+      ? snap.find((w) => w.word && w.word.trim().toLowerCase() === typed) || null
+      : null;
+  }
+
+  function ensureCategoryOption(catValue) {
+    if (!catValue) return;
+    if (!Array.from(catSelect.options).some((o) => o.value === catValue)) {
+      const opt = document.createElement('option');
+      opt.value = catValue;
+      opt.textContent = catValue;
+      catSelect.appendChild(opt);
+    }
+  }
+
   function syncCategoryForInput() {
     const typed = wordInput.value.trim().toLowerCase();
     const tokenCount = typed.split(/\s+/).filter(Boolean).length;
-    if (tokenCount > 1) {
-      if (!Array.from(catSelect.options).some((o) => o.value === 'Pattern')) {
-        const opt = document.createElement('option');
-        opt.value = 'Pattern';
-        opt.textContent = 'Pattern';
-        catSelect.appendChild(opt);
-      }
+    const existing = findExistingWord(typed);
+    if (tokenCount > 1 && !existing) {
+      ensureCategoryOption('Pattern');
       catSelect.value = 'Pattern';
       catSelect.disabled = true;
       catSelect.style.opacity = '0.75';
       catSelect.style.cursor = 'not-allowed';
     } else {
-      const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
-      if (!existing) {
-        catSelect.disabled = false;
-        catSelect.style.opacity = '1';
-        catSelect.style.cursor = 'default';
-      }
+      catSelect.disabled = false;
+      catSelect.style.opacity = '1';
+      catSelect.style.cursor = 'default';
     }
   }
 
   function checkDuplicate() {
     const typed = wordInput.value.trim().toLowerCase();
-    const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === typed);
+    const existing = findExistingWord(typed);
+    if (!existing) lastMatchedWord = '';
     if (existing) {
+      const existingOverride = typeof getUserWordOverride === 'function' ? getUserWordOverride(existing) : null;
       const existingTrans = getWordTranslation(existing) || existing.translation || '';
-      const existingNotes = getWordNotes(existing) || '';
+      const existingNotes = getWordNotes(existing, null, { hideItNotes: true }) || '';
+      const existingCat = (existingOverride && existingOverride.category) || existing.user_category || existing.category || (existingCats[0] || 'Elementary');
       noticeBox.style.display = 'block';
-      noticeBox.innerHTML = t('dict_word_already_exists_notice', { trans: escapeHtml(existingTrans), cat: escapeHtml(existing.category) });
-      transInput.value = existingTrans;
-      transInput.disabled = true;
-      transInput.setAttribute('readonly', 'true');
-      notesInput.value = existingNotes;
-      catSelect.value = existing.category || (existingCats[0] || 'Elementary');
-      catSelect.disabled = true;
-      if (suggestionsBox) suggestionsBox.style.display = 'none';
+      noticeBox.innerHTML = t('dict_word_already_exists_notice', { trans: escapeHtml(existingTrans), cat: escapeHtml(existingCat) });
+      transInput.disabled = false;
+      transInput.removeAttribute('readonly');
+      catSelect.disabled = false;
+      catSelect.style.opacity = '1';
+      catSelect.style.cursor = 'default';
+      if (lastMatchedWord !== typed) {
+        lastMatchedWord = typed;
+        transInput.value = existingTrans;
+        notesInput.value = existingNotes;
+        ensureCategoryOption(existingCat);
+        catSelect.value = existingCat;
+      }
       submitBtn.textContent = updateNoteText;
       updateCounters();
     } else {
@@ -1972,12 +2112,12 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     errorBox.style.display = 'none';
 
     const word = wordInput.value.trim().toLowerCase();
-    const existing = words.find((w) => w.word && w.word.trim().toLowerCase() === word);
-    const translation = existing 
-      ? (existing.translation || transInput.value.trim().toLowerCase()) 
+    const existing = findExistingWord(word);
+    const translation = existing
+      ? transInput.value.trim()
       : transInput.value.trim().toLowerCase();
     const category = existing
-      ? (existing.category || 'Elementary')
+      ? (catSelect.value.trim() || existing.category || 'Elementary')
       : (word.split(/\s+/).filter(Boolean).length > 1 ? 'Pattern' : catSelect.value.trim());
     const notes = notesInput.value.trim();
 
@@ -2034,32 +2174,84 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}) 
     submitBtn.innerHTML = `<span class="hourglass-flip">⏳</span> ${checkingBtnText}`;
 
     try {
-      const res = await addCustomWord({ word, translation, category, notes });
-      if (window.trackEvent) {
-        window.trackEvent('custom_word_create', { word: word, category: category });
-      }
-      cleanup();
-
-      // Automatically add newly created word to creator's Favorites ❤️
-      if (res && res.word && res.word.id) {
-        try {
-          await toggleFavoriteApi(res.word.id, true);
-        } catch (e) {
-          console.warn('Auto-favorite on create failed:', e);
+      if (existing) {
+        const activeLang = getInterfaceLanguage();
+        await saveUserWordOverride({
+          id: existing.id,
+          word: existing.word || word,
+          translation,
+          category,
+          notes,
+          lang: activeLang
+        });
+        const applyLocalFields = (target) => {
+          if (!target) return;
+          if (translation) {
+            if (!target.user_translations || typeof target.user_translations !== 'object') {
+              target.user_translations = {};
+            }
+            target.user_translations[activeLang] = translation;
+            if (target._origTranslation === undefined) target._origTranslation = target.translation;
+            target.translation = translation;
+          }
+          if (category) {
+            if (target._origCategory === undefined) target._origCategory = target.category;
+            target.user_category = category;
+            target.category = category;
+          }
+          if (notes) {
+            if (target._origNotes === undefined) target._origNotes = target.notes;
+            target.user_note = notes;
+            target.notes = notes;
+          } else {
+            delete target.user_note;
+            target.notes = target._origNotes !== undefined ? target._origNotes : '';
+          }
+        };
+        applyLocalFields(existing);
+        if (editWordObj && editWordObj !== existing) {
+          applyLocalFields(editWordObj);
         }
-      }
+        if (window.trackEvent) {
+          window.trackEvent('personal_word_override_save', { word: existing.word || word, category });
+        }
+        cleanup();
+        onWordSaved(existing);
+      } else {
+        const res = await addCustomWord({ word, translation, category, notes });
+        if (window.trackEvent) {
+          window.trackEvent('custom_word_create', { word: word, category: category });
+        }
+        cleanup();
 
-      onWordSaved(res.word);
+        // Automatically add newly created word to creator's Favorites ❤️
+        if (res && res.word && res.word.id) {
+          try {
+            await toggleFavoriteApi(res.word.id, true);
+          } catch (e) {
+            console.warn('Auto-favorite on create failed:', e);
+          }
+        }
+
+        onWordSaved(res.word);
+      }
     } catch (err) {
       submitBtn.disabled = false;
-      submitBtn.textContent = saveBtnText;
+      submitBtn.textContent = existing ? updateNoteText : saveBtnText;
       errorBox.style.display = 'block';
       errorBox.textContent = err.message || t('dict_err_save_word');
     }
   });
 
+  if (editWordObj) {
+    wordInput.readOnly = true;
+    wordInput.style.opacity = '0.85';
+    wordInput.style.cursor = 'not-allowed';
+    checkDuplicate();
+  }
+
   setTimeout(() => {
-    if (initialWord) transInput.focus();
+    if (initialWord || editWordObj) transInput.focus();
     else wordInput.focus();
   }, 100);
 }
@@ -2089,11 +2281,7 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
     });
   let allCategories = ['All', ...uniqueCats];
 
-  const savedDictCat = localStorage.getItem('myduo_dict_category') || 'Elementary';
-  let currentCategory = savedDictCat;
-  if (currentCategory !== 'All' && !uniqueCats.includes(currentCategory)) {
-    currentCategory = uniqueCats.includes('Elementary') ? 'Elementary' : 'All';
-  }
+  let currentCategory = 'All';
 
   function getCatDisplayName(cat) {
     return cat === 'All' ? t('dict_filter_all') : cat;
@@ -2439,6 +2627,28 @@ function renderDictionaryView(words = [], containerSelector = '#app-content', op
   });
 
   filterAndResetList();
+
+  const dictGridEl = typeof document !== 'undefined' ? document.getElementById('dict-grid') : null;
+  if (dictGridEl) {
+    attachWordLongPress(dictGridEl, '.dict-card', (cardEl) => {
+      const cardId = cardEl.dataset?.wordId || cardEl.dataset?.id ||
+        cardEl.querySelector('[data-id]')?.dataset?.id ||
+        cardEl.querySelector('[data-word-id]')?.dataset?.wordId || '';
+      const cardWord = cardEl.dataset?.word ||
+        cardEl.querySelector('[data-word]')?.dataset?.word ||
+        cardEl.querySelector('.dict-card-word, .dict-word')?.textContent?.trim() || '';
+      const loadedWords = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+      const foundWord = loadedWords.find((w) =>
+        (cardId && w && String(w.id) === String(cardId)) ||
+        (cardWord && w && w.word && w.word.trim().toLowerCase() === String(cardWord).trim().toLowerCase())
+      );
+      if (foundWord) {
+        openAddWordModal(loadedWords, foundWord.word, () => {
+          filterAndResetList();
+        }, { editWord: foundWord });
+      }
+    });
+  }
 }
 
-export { renderDictionaryView, openAddWordModal, openDocScannerModal };
+export { renderDictionaryView, openAddWordModal, openDocScannerModal, attachWordLongPress };

@@ -16,15 +16,17 @@ import {
   saveUserDeletedFavoritesFirestore,
   saveUserNotesFirestore,
   loadUserNotesFirestore,
+  saveUserWordOverridesFirestore,
   saveUserCustomWordsFirestore,
   fetchSharedVocabularyUpdatesFirestore,
+  fetchTopFavoritedWordsFirestore,
   saveUserAnalyticsFirestore,
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
 } from './firebase.js?v=386.0';
 import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs, getIsoMonthKey, getTimeUntilMonthEnd } from './weekKey.js?v=386.0';
-import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
+import { getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -119,7 +121,7 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v391_cat1_fix';
+const WORDS_CACHE_VERSION = 'v401_it_idioms_7217_36loc';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
 
@@ -132,8 +134,8 @@ function getActiveLang() {
 }
 
 function isLangCompatibleWithCache(cachedLang, targetLang) {
-  const normCached = (cachedLang === 'en' || !cachedLang) ? 'ru' : cachedLang;
-  const normTarget = (targetLang === 'en' || !targetLang) ? 'ru' : targetLang;
+  const normCached = cachedLang || 'ru';
+  const normTarget = targetLang || 'ru';
   return normCached === normTarget;
 }
 
@@ -159,7 +161,7 @@ function projectWordsForActiveLanguage(words, activeLang) {
       }
     }
     if (w.all_notes && typeof w.all_notes === 'object') {
-      if (isBaseLang) {
+      if (lang === 'ru') {
         delete w.all_notes;
       } else {
         const activeNote = w.all_notes[lang];
@@ -185,12 +187,13 @@ try {
     !rawCache.includes('РїР»С‰Р°РґСЊ')
   ) {
     const initialCache = JSON.parse(rawCache || '[]');
-    if (Array.isArray(initialCache) && initialCache.length >= 6886) {
+    if (Array.isArray(initialCache) && initialCache.length >= 7217) {
       projectWordsForActiveLanguage(initialCache, currentLang);
       cachedWordsList = initialCache;
       _cachedWordsActiveLang = currentLang;
       try {
         applyMultilingualTranslations(cachedWordsList);
+        applyUserNotes(cachedWordsList);
       } catch (e) {}
     }
   } else if (cacheVer !== WORDS_CACHE_VERSION) {
@@ -296,8 +299,181 @@ function saveUserNote(wordId, wordText, noteText) {
   return notes;
 }
 
+/**
+ * Returns the currently loaded in-memory word list snapshot (read-only reference).
+ */
+function getLoadedWordsSnapshot() {
+  return Array.isArray(cachedWordsList) ? cachedWordsList : [];
+}
+
+/**
+ * Returns the map of per-user word overrides (translation, category, notes) from localStorage.
+ */
+function getUserWordOverridesLocal() {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem('myduo_user_word_overrides');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+      }
+    }
+  } catch (e) {}
+  return {};
+}
+
+/**
+ * Applies the user's personal overrides (translation, category, notes) onto word objects in memory.
+ */
+function applyUserWordOverrides(words) {
+  if (!Array.isArray(words)) return;
+  const overrides = getUserWordOverridesLocal();
+  if (!overrides || Object.keys(overrides).length === 0) return;
+  const activeLang = getActiveLang();
+
+  words.forEach((w) => {
+    if (!w) return;
+    const wId = w.id ? String(w.id) : '';
+    const wText = w.word ? String(w.word).toLowerCase().trim() : '';
+    const ov = (wId && overrides[wId]) || (wText && overrides[wText]);
+    if (!ov || typeof ov !== 'object') return;
+
+    if (ov.translations && typeof ov.translations === 'object') {
+      w.user_translations = { ...(w.user_translations || {}), ...ov.translations };
+      if (typeof ov.translations[activeLang] === 'string' && ov.translations[activeLang].trim()) {
+        if (w._origTranslation === undefined) w._origTranslation = w.translation;
+        w.translation = ov.translations[activeLang].trim();
+      }
+    } else if (typeof ov.translation === 'string' && ov.translation.trim()) {
+      w.user_translation = ov.translation.trim();
+      if (w._origTranslation === undefined) w._origTranslation = w.translation;
+      w.translation = ov.translation.trim();
+    }
+
+    if (typeof ov.category === 'string' && ov.category.trim()) {
+      if (w._origCategory === undefined) w._origCategory = w.category;
+      w.user_category = ov.category.trim();
+      w.category = ov.category.trim();
+    }
+
+    if (typeof ov.notes === 'string') {
+      if (w._origNotes === undefined) w._origNotes = w.notes;
+      const cleanNote = ov.notes.trim();
+      if (cleanNote) {
+        w.user_note = cleanNote;
+        w.notes = cleanNote;
+      }
+    }
+  });
+}
+
+/**
+ * Saves personal edits (translation, category, notes) for a word strictly to the current
+ * user's local storage and personal Firestore space (/users/{uid}/data/word_overrides & notes).
+ * Never mutates the global/shared vocabulary.
+ */
+async function saveUserWordOverride({ id, word, translation, category, notes, lang } = {}) {
+  const wId = id !== undefined && id !== null ? String(id).trim() : '';
+  const cleanWord = word ? String(word).trim().toLowerCase() : '';
+  const storageKey = wId || cleanWord;
+  if (!storageKey) return { ok: false, override: null };
+
+  const activeLang = lang || getActiveLang();
+  const overrides = getUserWordOverridesLocal();
+  const prev = (wId && overrides[wId]) || (cleanWord && overrides[cleanWord]) || {};
+
+  const nextEntry = {
+    word: cleanWord || prev.word || '',
+    translations: {
+      ...(prev.translations && typeof prev.translations === 'object' ? prev.translations : {})
+    },
+    updatedAt: Date.now()
+  };
+
+  if (typeof translation === 'string') {
+    const cleanTrans = translation.trim();
+    if (cleanTrans) {
+      nextEntry.translation = cleanTrans;
+      nextEntry.translations[activeLang] = cleanTrans;
+    } else {
+      delete nextEntry.translation;
+      delete nextEntry.translations[activeLang];
+    }
+  } else if (prev.translation) {
+    nextEntry.translation = prev.translation;
+  }
+
+  if (typeof category === 'string') {
+    const cleanCat = category.trim();
+    if (cleanCat) nextEntry.category = cleanCat;
+  } else if (prev.category) {
+    nextEntry.category = prev.category;
+  }
+
+  if (typeof notes === 'string') {
+    const cleanNotes = notes.trim();
+    if (cleanNotes) nextEntry.notes = cleanNotes;
+  } else if (typeof prev.notes === 'string' && prev.notes.trim()) {
+    nextEntry.notes = prev.notes.trim();
+  }
+
+  overrides[storageKey] = nextEntry;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('myduo_user_word_overrides', JSON.stringify(overrides));
+    }
+  } catch (e) {}
+
+  // Keep myduo_user_notes synchronized for notes lookups
+  if (typeof notes === 'string') {
+    const notesMap = getUserNotesLocal();
+    const cleanNote = notes.trim();
+    if (cleanNote) {
+      if (wId) notesMap[wId] = cleanNote;
+      if (cleanWord) notesMap[cleanWord] = cleanNote;
+    } else {
+      if (wId) delete notesMap[wId];
+      if (cleanWord) delete notesMap[cleanWord];
+    }
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('myduo_user_notes', JSON.stringify(notesMap));
+      }
+    } catch (e) {}
+    const uIdNotes = (typeof getCurrentUser === 'function' && getCurrentUser()?.uid) ||
+      (typeof getEffectiveUserId === 'function' ? getEffectiveUserId() : '');
+    if (uIdNotes && uIdNotes !== 'anonymous') {
+      saveUserNotesFirestore(uIdNotes, notesMap).catch(() => {});
+    }
+  }
+
+  const uId = (typeof getCurrentUser === 'function' && getCurrentUser()?.uid) ||
+    (typeof getEffectiveUserId === 'function' ? getEffectiveUserId() : '');
+  if (uId && uId !== 'anonymous') {
+    saveUserWordOverridesFirestore(uId, overrides).catch(() => {});
+  }
+
+  if (cachedWordsList && Array.isArray(cachedWordsList)) {
+    cachedWordsList.forEach((item) => {
+      if (!item) return;
+      const itemId = item.id ? String(item.id) : '';
+      const itemWord = item.word ? String(item.word).trim().toLowerCase() : '';
+      if ((wId && itemId === wId) || (cleanWord && itemWord === cleanWord)) {
+        if (typeof notes === 'string' && !notes.trim()) {
+          delete item.user_note;
+          item.notes = item._origNotes !== undefined ? item._origNotes : '';
+        }
+      }
+    });
+    applyUserNotes(cachedWordsList);
+  }
+
+  return { ok: true, override: nextEntry };
+}
+
 function applyUserNotes(words) {
   if (!Array.isArray(words)) return;
+  applyUserWordOverrides(words);
   const userNotes = getUserNotesLocal();
   if (!userNotes || Object.keys(userNotes).length === 0) return;
   words.forEach((w) => {
@@ -490,7 +666,7 @@ async function getWords(forceRefresh = false) {
         const hasValidLangData =
           !hasCorruptedTranslation &&
           Array.isArray(localCached) &&
-          localCached.length >= 6886 &&
+          localCached.length >= 7217 &&
           (isBaseLang || localCached.some((w) => w && w.translations && w.translations[currentLang]));
 
         if (hasValidLangData) {
@@ -588,7 +764,7 @@ async function registerUser(email, password, name) {
     preferredMethod: 'cards',
   };
   localStorage.setItem(`settings_${deterministicId}`, JSON.stringify(initialSettings));
-  localStorage.setItem('myduo_dict_category', 'Elementary');
+  localStorage.setItem('myduo_dict_category', 'All');
 
   return {
     success: true,
@@ -1610,10 +1786,29 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     if (typeof window !== 'undefined' && (method === 'quiz' || method === 'pairs' || method === 'input')) {
       window._favPracticeCompletedNonCardWord = true;
     }
-    if (isCorrect) {
+    if (method === 'blocks') {
+      prog.roundBlocksDone = true;
+    } else if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
+      if (method === 'input') {
+        prog.needsTestRepeat = false;
+      }
     } else {
       prog.error = (prog.error || 0) + 1;
+      if (method === 'quiz') {
+        prog.quizMistakes = (prog.quizMistakes || 0) + 1;
+        prog.roundQuizMistakes = (prog.roundQuizMistakes || 0) + 1;
+        prog.roundBlocksDone = false;
+      } else if (method === 'pairs') {
+        prog.pairsMistakes = (prog.pairsMistakes || 0) + 1;
+        prog.roundPairsMistakes = (prog.roundPairsMistakes || 0) + 1;
+        prog.roundBlocksDone = false;
+      } else if (method === 'input') {
+        prog.inputMistakes = (prog.inputMistakes || 0) + 1;
+        prog.roundInputMistakes = (prog.roundInputMistakes || 0) + 1;
+        prog.needsTestRepeat = true;
+        prog.roundBlocksDone = false;
+      }
     }
     xpDelta = 0; // Practice in Favorites does NOT change XP at all
   } else if (method === 'cards_learn') {
@@ -1625,6 +1820,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     prog.roundBlocksDone = false;
     delete prog.roundQuizMistakes;
     delete prog.roundPairsMistakes;
+    delete prog.roundInputMistakes;
     prog.stage = 'quiz';
     prog.quizCorrect = 0;
     prog.lastReviewedAt = Date.now();
@@ -1634,6 +1830,7 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     prog.roundBlocksDone = false;
     delete prog.roundQuizMistakes;
     delete prog.roundPairsMistakes;
+    delete prog.roundInputMistakes;
     prog.stage = 'quiz';
     prog.quizCorrect = 0;
     prog.pairsCorrect = 0;
@@ -1743,10 +1940,12 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     } else {
       prog.error = (prog.error || 0) + 1;
       prog.inputMistakes = (prog.inputMistakes || 0) + 1;
-      // Mistake occurred: word MUST be repeated in this round!
+      prog.roundInputMistakes = (prog.roundInputMistakes || 0) + 1;
+      // Mistake occurred: word MUST be drilled in Word Blocks & repeated in this round!
       prog.needsTestRepeat = true;
       prog.mastered = false;
       prog.roundTestDone = false;
+      prog.roundBlocksDone = false;
       if (prog.inputMistakes >= 2) {
         await toggleFavoriteApi(wordId, true);
         autoFavorited = true;
@@ -2024,7 +2223,11 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
         }
       }
       if (mergedSettings.voiceAccent) {
-        localStorage.setItem('myduo_voice_accent', mergedSettings.voiceAccent);
+        const isUkDownloaded = localStorage.getItem('myduo_cat_downloaded_uk_elementary') === 'true'
+          || localStorage.getItem('myduo_pack_uk_downloaded') === 'true';
+        const resolvedAccent = (mergedSettings.voiceAccent === 'uk' && !isUkDownloaded) ? 'us' : mergedSettings.voiceAccent;
+        mergedSettings.voiceAccent = resolvedAccent;
+        localStorage.setItem('myduo_voice_accent', resolvedAccent);
       }
       if (typeof mergedSettings.sfxMuted !== 'undefined') {
         localStorage.setItem('myduo_sfx_muted', String(mergedSettings.sfxMuted));
@@ -2032,7 +2235,6 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (Array.isArray(mergedSettings.downloadedCategories)) {
         mergedSettings.downloadedCategories.forEach(cat => {
           localStorage.setItem(`myduo_cat_downloaded_us_${cat}`, 'true');
-          localStorage.setItem(`myduo_cat_downloaded_uk_${cat}`, 'true');
         });
       }
     }
@@ -2046,6 +2248,36 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       saveUserNotesFirestore(uId, mergedNotes).catch(() => {});
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
         applyUserNotes(cachedWordsList);
+      }
+    }
+
+    // 1b. Merge Personal Word Overrides
+    const cloudOverrides = (fullDoc?.wordOverrides && typeof fullDoc.wordOverrides === 'object' && !Array.isArray(fullDoc.wordOverrides)) ? fullDoc.wordOverrides : {};
+    const localOverrides = getUserWordOverridesLocal();
+    const mergedOverrides = { ...localOverrides };
+    Object.keys(cloudOverrides).forEach((k) => {
+      const cOv = cloudOverrides[k];
+      if (!cOv || typeof cOv !== 'object') return;
+      const lOv = localOverrides[k];
+      if (!lOv || ((cOv.updatedAt || 0) >= (lOv.updatedAt || 0))) {
+        mergedOverrides[k] = {
+          ...lOv,
+          ...cOv,
+          translations: { ...(lOv?.translations || {}), ...(cOv.translations || {}) }
+        };
+      } else {
+        mergedOverrides[k] = {
+          ...cOv,
+          ...lOv,
+          translations: { ...(cOv.translations || {}), ...(lOv?.translations || {}) }
+        };
+      }
+    });
+    if (Object.keys(mergedOverrides).length > 0) {
+      localStorage.setItem('myduo_user_word_overrides', JSON.stringify(mergedOverrides));
+      saveUserWordOverridesFirestore(uId, mergedOverrides).catch(() => {});
+      if (cachedWordsList && Array.isArray(cachedWordsList)) {
+        applyUserWordOverrides(cachedWordsList);
       }
     }
 
@@ -2138,6 +2370,11 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
       const localNotes = getUserNotesLocal();
       if (Object.keys(localNotes).length > 0) {
         saveUserNotesFirestore(firestoreUid, localNotes).catch(() => {});
+      }
+
+      const localOverrides = getUserWordOverridesLocal();
+      if (Object.keys(localOverrides).length > 0) {
+        saveUserWordOverridesFirestore(firestoreUid, localOverrides).catch(() => {});
       }
 
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
@@ -2583,7 +2820,7 @@ function syncFavoritesToNativeWidget(wordsList = null) {
         transcription: w.transcription || w.transcription_ipa || '',
         translation: typeof getWordTranslation === 'function' ? getWordTranslation(w) : (w.translation || w.translation_ru || ''),
         level: w.category || w.level || 'ELEMENTARY',
-        example: (w.example || w.notes || '').trim(),
+        example: (w.example || getWordNotes(w, null, { hideItNotes: true }) || '').trim(),
         isFavorite: true
       }));
     } else {
@@ -2612,7 +2849,7 @@ function syncFavoritesToNativeWidget(wordsList = null) {
         transcription: w.transcription || w.transcription_ipa || '',
         translation: typeof getWordTranslation === 'function' ? getWordTranslation(w) : (w.translation || w.translation_ru || ''),
         level: w.category || w.level || 'ELEMENTARY',
-        example: (w.example || w.notes || '').trim(),
+        example: (w.example || getWordNotes(w, null, { hideItNotes: true }) || '').trim(),
         isFavorite: false
       }));
     }
@@ -2908,7 +3145,7 @@ function clearActiveConveyorBatch(categoryWordsOrKey = null, preserveProgress = 
 
     Object.entries(local).forEach(([id, p]) => {
       if (targetIds && !targetIds.has(String(id))) return;
-      if (p.roundCardsDone || p.roundQuizDone || p.roundPairsDone || p.roundTestDone || p.roundBlocksDone) {
+      if (p.roundCardsDone || p.roundQuizDone || p.roundPairsDone || p.roundTestDone || p.roundBlocksDone || p.roundInputMistakes) {
         delete p.roundCardsDone;
         delete p.roundQuizDone;
         delete p.roundPairsDone;
@@ -2916,6 +3153,7 @@ function clearActiveConveyorBatch(categoryWordsOrKey = null, preserveProgress = 
         delete p.roundBlocksDone;
         delete p.roundQuizMistakes;
         delete p.roundPairsMistakes;
+        delete p.roundInputMistakes;
         changed = true;
       }
     });
@@ -3000,12 +3238,17 @@ function isWordProblematicForBlocks(word, prog) {
   if (prog.roundBlocksDone === true) return false;
   if (isWordMastered(prog)) return false;
   const hadRoundMistake = (prog.roundQuizMistakes && prog.roundQuizMistakes > 0) ||
-                          (prog.roundPairsMistakes && prog.roundPairsMistakes > 0);
+                          (prog.roundPairsMistakes && prog.roundPairsMistakes > 0) ||
+                          (prog.roundInputMistakes && prog.roundInputMistakes > 0);
   const hadGeneralMistake = (prog.quizMistakes && prog.quizMistakes > 0) ||
-                            (prog.pairsMistakes && prog.pairsMistakes > 0);
+                            (prog.pairsMistakes && prog.pairsMistakes > 0) ||
+                            (prog.inputMistakes && prog.inputMistakes > 0);
   const hadAnyMistakeInCurrentProgress = Boolean(
     prog.error && prog.error > 0 &&
-    ((prog.quizCorrect && prog.quizCorrect > 0) || (prog.pairsCorrect && prog.pairsCorrect > 0))
+    ((prog.quizCorrect && prog.quizCorrect > 0) ||
+     (prog.pairsCorrect && prog.pairsCorrect > 0) ||
+     (prog.inputCorrect && prog.inputCorrect > 0) ||
+     prog.needsTestRepeat === true)
   );
   return Boolean(hadRoundMistake || hadGeneralMistake || hadAnyMistakeInCurrentProgress);
 }
@@ -3238,20 +3481,73 @@ function resetWordsProgressForPractice(words) {
   return localProg;
 }
 
+// Baseline snapshot of words most frequently added to Favorites by real players in Firestore
+// (id -> number of distinct real players who favorited the word).
+// Updated dynamically once per 24h in the background via fetchTopFavoritedWordsFirestore().
+const REAL_PLAYERS_TOP_FAVORITE_COUNTS = {
+  '5': 19, '15': 17, '10': 14, '18': 14, '19': 14, '60': 14, '93': 13, '4': 11, '22': 11,
+  '3': 10, '51': 10, '97': 10, '27': 9, '36': 9, '8': 8, '45': 8, '48': 8, '96': 8,
+  '44': 7, '76': 7, '34': 6, '42': 6, '43': 6, '59': 6, '61': 6, '68': 6, '110': 6,
+  '127': 6, '137': 6, '40': 5, '41': 5, '52': 5, '77': 5, '79': 5, '82': 5, '99': 5,
+  '100': 5, '138': 5, '158': 5, '185': 5, '46': 4, '53': 4, '57': 4, '72': 4, '90': 4,
+  '105': 4, '108': 4, '139': 4, '154': 4, '254': 4, '520': 4, '32': 3, '35': 3, '37': 3,
+  '54': 3, '63': 3, '66': 3, '78': 3, '102': 3, '104': 3, '129': 3, '133': 3, '226': 3,
+  '261': 3, '383': 3, '430': 3, '463': 3, '478': 3, '494': 3, '504': 3, '1370': 3,
+  '1555': 3, '1834': 3, '2057': 3, '4542': 3, '4709': 3, '4810': 3, '4959': 3, '14': 2,
+  '20': 2, '21': 2, '23': 2, '28': 2, '55': 2, '70': 2, '74': 2, '75': 2, '80': 2,
+  '81': 2, '83': 2
+};
+
+// Range size of top-favorited words from which the Golden Card Word of the Day rotates daily
+const WOTD_TOP_FAVORITES_RANGE = 60;
+const WOTD_TOP_FAVORITES_CACHE_KEY = 'myduo_wotd_top_favorites_v1';
+
+const WOTD_STOP_WORDS = new Set([
+  'with', 'from', 'into', 'than', 'then', 'that', 'this', 'them', 'they',
+  'over', 'some', 'such', 'what', 'when', 'were', 'have', 'been', 'will',
+  'your', 'more', 'most', 'only', 'also', 'very', 'just', 'much', 'quite',
+  'being', 'unless', 'neither', 'except', 'each', 'both', 'same', 'other',
+  'another', 'between', 'through', 'during', 'before', 'after', 'above',
+  'below', 'under', 'again', 'further', 'once', 'here', 'there', 'where',
+  'why', 'how', 'all', 'any', 'few', 'own', 'too', 'can', 'should', 'now'
+]);
+
+function getMergedTopFavoriteCounts() {
+  const merged = { ...REAL_PLAYERS_TOP_FAVORITE_COUNTS };
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem(WOTD_TOP_FAVORITES_CACHE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.counts && typeof parsed.counts === 'object') {
+          for (const [wid, cnt] of Object.entries(parsed.counts)) {
+            const num = Number(cnt) || 0;
+            if (num > 0) {
+              merged[wid] = Math.max(merged[wid] || 0, num);
+            }
+          }
+        }
+      }
+    }
+  } catch (e) {}
+  return merged;
+}
+
 function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
   if (!wordsList || wordsList.length === 0) return null;
 
   // 1. Filter quality words of the day:
   // - No patterns (category includes 'pattern')
   // - No irregular verbs (category includes 'irregular')
-  // - No words shorter than 4 letters
-  // - No words longer than 13 letters
-  // - Exclude phrases with spaces/slashes and pure service words
+  // - No narrow IT / Idioms categories
+  // - No words shorter than 4 letters or longer than 13 letters
+  // - Exclude phrases with spaces/slashes and pure service/stop words
   const eligible = wordsList.filter((w) => {
-    if (!w) return false;
+    if (!w || isExcludedFromConveyor(w)) return false;
     const cat = String(w.category || '').toLowerCase().trim();
     if (cat.includes('pattern')) return false;
     if (cat.includes('irregular')) return false;
+    if (cat.includes('it') || cat.includes('idiom')) return false;
 
     const text = String(w.word || '').trim();
     if (!text || text.includes(' ') || text.includes('/')) return false;
@@ -3261,36 +3557,53 @@ function getGlobalWordOfTheDay(wordsList, cloudWordId = null) {
     if (text.length < 4 || text.length > 13) return false;
 
     const lower = text.toLowerCase();
-    if (['with', 'from', 'into', 'than', 'then', 'that', 'this', 'them', 'they'].includes(lower)) return false;
+    if (WOTD_STOP_WORDS.has(lower)) return false;
     return true;
   });
 
-  const pool = eligible.length > 0 ? eligible : wordsList;
+  const basePool = eligible.length > 0 ? eligible : wordsList;
 
-  // 2. Sort words strictly by ID ascending so the ordering is 100% identical on all devices
-  const sorted = [...pool].sort((a, b) => {
+  // 2. Select the top range (Top 60) of words most frequently added to Favorites by real players
+  const favCounts = getMergedTopFavoriteCounts();
+  const favoritedCandidates = basePool
+    .filter((w) => (favCounts[String(w.id)] || 0) > 0)
+    .sort((a, b) => {
+      const cntDiff = (favCounts[String(b.id)] || 0) - (favCounts[String(a.id)] || 0);
+      if (cntDiff !== 0) return cntDiff;
+      return (Number(a.id) || 0) - (Number(b.id) || 0);
+    })
+    .slice(0, WOTD_TOP_FAVORITES_RANGE);
+
+  const activePool = favoritedCandidates.length > 0 ? favoritedCandidates : basePool;
+
+  // 3. Sort active top-favorites pool by ID ascending, then build a deterministic shuffled cycle
+  //    so that consecutive UTC days step through the entire top-favorites range without repeats
+  //    and never get stuck on a single word.
+  const sorted = [...activePool].sort((a, b) => {
     const idA = Number(a.id) || 0;
     const idB = Number(b.id) || 0;
     if (idA !== idB) return idA - idB;
     return String(a.word || '').localeCompare(String(b.word || ''));
   });
 
-  // 3. Standardized UTC calendar date (YYYY-MM-DD)
-  const now = new Date();
-  const y = now.getUTCFullYear();
-  const m = String(now.getUTCMonth() + 1).padStart(2, '0');
-  const d = String(now.getUTCDate()).padStart(2, '0');
-  const todayStr = `${y}-${m}-${d}`;
-
-  // 4. Uniform 32-bit hash for daily rotation
-  let hash = 2166136261;
-  for (let i = 0; i < todayStr.length; i++) {
-    hash ^= todayStr.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
+  const cycle = [...sorted];
+  let seed = 2166136261;
+  for (let i = cycle.length - 1; i > 0; i--) {
+    seed ^= (Number(cycle[i].id) || i) + i * 16777619;
+    seed = Math.imul(seed, 16777619) >>> 0;
+    const j = seed % (i + 1);
+    const tmp = cycle[i];
+    cycle[i] = cycle[j];
+    cycle[j] = tmp;
   }
 
-  const idx = Math.abs(hash >>> 0) % sorted.length;
-  return sorted[idx];
+  // 4. Standardized UTC calendar day number (increments by +1 every 24h at 00:00 UTC)
+  const now = new Date();
+  const utcMidnightMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const utcDayNumber = Math.floor(utcMidnightMs / 86400000);
+
+  const idx = Math.abs(utcDayNumber) % cycle.length;
+  return cycle[idx];
 }
 
 async function transcribeAudio(audioBlob, mimeType, expectedWord) {
@@ -3411,7 +3724,56 @@ async function transcribePingAudio(audioBlob, mimeType, expectedWord) {
   });
 }
 
+let _wotdFavoritesSyncInFlight = false;
+
 async function getCloudWordOfTheDayId(userId) {
+  try {
+    if (typeof localStorage !== 'undefined' && !_wotdFavoritesSyncInFlight) {
+      const now = new Date();
+      const todayUtc = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}-${String(now.getUTCDate()).padStart(2, '0')}`;
+      let needsSync = true;
+      try {
+        const raw = localStorage.getItem(WOTD_TOP_FAVORITES_CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.dateUtc === todayUtc && parsed.counts) {
+            needsSync = false;
+          }
+        }
+      } catch (e) {}
+
+      if (needsSync && typeof fetchTopFavoritedWordsFirestore === 'function') {
+        _wotdFavoritesSyncInFlight = true;
+        Promise.resolve()
+          .then(() => fetchTopFavoritedWordsFirestore(45))
+          .then((cloudCounts) => {
+            if (cloudCounts && typeof cloudCounts === 'object' && Object.keys(cloudCounts).length > 0) {
+              const merged = { ...REAL_PLAYERS_TOP_FAVORITE_COUNTS };
+              for (const [wid, cnt] of Object.entries(cloudCounts)) {
+                const num = Number(cnt) || 0;
+                if (num > 0) {
+                  merged[wid] = Math.max(merged[wid] || 0, num);
+                }
+              }
+              try {
+                localStorage.setItem(
+                  WOTD_TOP_FAVORITES_CACHE_KEY,
+                  JSON.stringify({
+                    dateUtc: todayUtc,
+                    updatedAt: Date.now(),
+                    counts: merged,
+                  })
+                );
+              } catch (e) {}
+            }
+          })
+          .catch(() => {})
+          .finally(() => {
+            _wotdFavoritesSyncInFlight = false;
+          });
+      }
+    }
+  } catch (e) {}
   return null;
 }
 
@@ -4641,6 +5003,9 @@ const ApiService = {
   getCloudWordOfTheDayId,
   trackRoundCompleted,
   sendUserAnalyticsDebounced,
+  getLoadedWordsSnapshot,
+  getUserWordOverridesLocal,
+  saveUserWordOverride,
 };
 
 async function submitSurveyFeedbackApi(data = {}) {
@@ -4751,6 +5116,9 @@ export {
   trackRoundCompleted,
   sendUserAnalyticsDebounced,
   getUserNotesLocal,
+  getLoadedWordsSnapshot,
+  getUserWordOverridesLocal,
+  saveUserWordOverride,
   saveUserNote,
   submitSurveyFeedbackApi,
   isExcludedFromConveyor,

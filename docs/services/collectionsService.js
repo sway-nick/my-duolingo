@@ -1,5 +1,5 @@
 import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
-import { getInterfaceLanguage, getWordTranslation } from './i18n.js?v=386.0';
+import { getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
 
 const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
 const STORAGE_KEY_ACTIVE_COLLECTION = 'myduo_active_collection_id';
@@ -19,10 +19,440 @@ export const BUILTIN_COLLECTIONS_WITH_GEAR = new Set([
   'idioms',
 ]);
 
+export const DOWNLOADABLE_PACK_COLLECTIONS = new Set([
+  'verbs',
+  'adjectives',
+  'phrasal_verbs',
+  'it_terms',
+  'idioms',
+]);
+
+export function isCollectionPackDownloaded(collectionId) {
+  if (!DOWNLOADABLE_PACK_COLLECTIONS.has(collectionId)) return true;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem(`myduo_pack_downloaded_${collectionId}`) === 'true';
+    }
+  } catch (e) {}
+  return false;
+}
+
+export function markCollectionPackDownloaded(collectionId) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(`myduo_pack_downloaded_${collectionId}`, 'true');
+    }
+  } catch (e) {}
+}
+
+export const DOWNLOADABLE_PACK_I18N = {
+  ru: {
+    downloadBtn: 'Скачать',
+    downloading: 'Скачивание...',
+    itDesc: '187 ключевых IT-терминов с понятными объяснениями и озвучкой произношения.',
+    idiomsDesc: '150 популярных английских идиом и поговорок с объяснением смысла и озвучкой.',
+    verbsDesc: '100 самых популярных английских глаголов для повседневного общения с переводом и озвучкой.',
+    adjectivesDesc: '100 базовых и выразительных прилагательных для точного описания с переводом и озвучкой.',
+    phrasalVerbsDesc: '100 востребованных фразовых глаголов с понятными объяснениями, переводом и озвучкой.',
+    watchAdHint: 'Откроется навсегда после короткого видео',
+  },
+  uk: {
+    downloadBtn: 'Завантажити',
+    downloading: 'Завантаження...',
+    itDesc: '187 ключових IT-термінів із зрозумілими поясненнями та озвученням вимови.',
+    idiomsDesc: '150 популярних англійських ідіом та приказок із поясненням змісту та озвученням.',
+    verbsDesc: '100 найпопулярніших англійських дієслів для щоденного спілкування з перекладом та озвученням.',
+    adjectivesDesc: '100 базових і виразних прикметників для точного опису з перекладом та озвученням.',
+    phrasalVerbsDesc: '100 затребуваних фразових дієслів із зрозумілими поясненнями, перекладом та озвученням.',
+    watchAdHint: 'Відкриється назавжди після короткого відео',
+  },
+  en: {
+    downloadBtn: 'Download',
+    downloading: 'Downloading...',
+    itDesc: '187 essential IT terms with clear explanations and audio pronunciation.',
+    idiomsDesc: '150 popular English idioms and proverbs with meaning explanations and audio.',
+    verbsDesc: '100 most popular English verbs for everyday communication with translations and audio.',
+    adjectivesDesc: '100 essential and expressive adjectives for vivid descriptions with translations and audio.',
+    phrasalVerbsDesc: '100 high-frequency phrasal verbs with clear explanations, translations and audio.',
+    watchAdHint: 'Unlocks permanently after a short video',
+  },
+  de: {
+    downloadBtn: 'Herunterladen',
+    downloading: 'Wird heruntergeladen...',
+    itDesc: '187 wichtige IT-Begriffe mit klaren Erklärungen und Audio-Aussprache.',
+    idiomsDesc: '150 beliebte englische Redewendungen und Sprichwörter mit Bedeutungserklärungen.',
+    verbsDesc: 'Die 100 beliebtesten englischen Verben für den Alltag mit Übersetzung und Audio.',
+    adjectivesDesc: '100 grundlegende und ausdrucksstarke Adjektive mit Übersetzung und Audio.',
+    phrasalVerbsDesc: '100 häufige Phrasal Verbs mit klaren Erklärungen, Übersetzung und Audio.',
+    watchAdHint: 'Wird nach einem kurzen Video dauerhaft freigeschaltet',
+  },
+  es: {
+    downloadBtn: 'Descargar',
+    downloading: 'Descargando...',
+    itDesc: '187 términos clave de TI con explicaciones claras y pronunciación en audio.',
+    idiomsDesc: '150 modismos y proverbios populares en inglés con explicación de su significado.',
+    verbsDesc: 'Los 100 verbos más populares del inglés para el día a día con traducción y audio.',
+    adjectivesDesc: '100 adjetivos esenciales y expresivos para describir con precisión, con traducción y audio.',
+    phrasalVerbsDesc: '100 phrasal verbs muy usados con explicaciones claras, traducción y audio.',
+    watchAdHint: 'Se desbloquea para siempre tras un breve video',
+  },
+  'es-mx': {
+    downloadBtn: 'Descargar',
+    downloading: 'Descargando...',
+    itDesc: '187 términos clave de TI con explicaciones claras y pronunciación en audio.',
+    idiomsDesc: '150 modismos y proverbios populares en inglés con explicación de su significado.',
+    verbsDesc: 'Los 100 verbos más populares del inglés para el día a día con traducción y audio.',
+    adjectivesDesc: '100 adjetivos esenciales y expresivos para describir con precisión, con traducción y audio.',
+    phrasalVerbsDesc: '100 phrasal verbs muy usados con explicaciones claras, traducción y audio.',
+    watchAdHint: 'Se desbloquea para siempre tras un breve video',
+  },
+  fr: {
+    downloadBtn: 'Télécharger',
+    downloading: 'Téléchargement...',
+    itDesc: '187 termes IT essentiels avec des explications claires et la prononciation audio.',
+    idiomsDesc: '150 expressions idiomatiques et proverbes anglais populaires avec explications.',
+    verbsDesc: 'Les 100 verbes anglais les plus courants pour le quotidien avec traduction et audio.',
+    adjectivesDesc: '100 adjectifs essentiels et expressifs pour des descriptions précises avec traduction et audio.',
+    phrasalVerbsDesc: '100 verbes à particule indispensables avec explications claires, traduction et audio.',
+    watchAdHint: 'Débloqué définitivement après une courte vidéo',
+  },
+  pl: {
+    downloadBtn: 'Pobierz',
+    downloading: 'Pobieranie...',
+    itDesc: '187 kluczowych terminów IT z przystępnymi wyjaśnieniami i wymową audio.',
+    idiomsDesc: '150 popularnych angielskich idiomów i przysłów z wyjaśnieniem znaczenia.',
+    verbsDesc: '100 najpopularniejszych angielskich czasowników na co dzień z tłumaczeniem i lektorem.',
+    adjectivesDesc: '100 podstawowych i wyrazistych przymiotników do trafnych opisów z tłumaczeniem i lektorem.',
+    phrasalVerbsDesc: '100 często używanych czasowników frazowych z jasnymi objaśnieniami, tłumaczeniem i lektorem.',
+    watchAdHint: 'Odblokowuje się na stałe po krótkim wideo',
+  },
+  tr: {
+    downloadBtn: 'İndir',
+    downloading: 'İndiriliyor...',
+    itDesc: 'Açık açıklamalar ve sesli telaffuz ile 187 temel bilişim (IT) terimi.',
+    idiomsDesc: 'Anlam açıklamaları ve seslendirmeyle 150 popüler İngilizce deyim ve atasözü.',
+    verbsDesc: 'Günlük iletişim için çeviri ve seslendirmeyle en popüler 100 İngilizce fiil.',
+    adjectivesDesc: 'Net betimlemeler için çeviri ve seslendirmeyle 100 temel ve güçlü sıfat.',
+    phrasalVerbsDesc: 'Açık anlatım, çeviri ve seslendirmeyle en çok kullanılan 100 deyimsel fiil.',
+    watchAdHint: 'Kısa bir videodan sonra kalıcı olarak açılır',
+  },
+  it: {
+    downloadBtn: 'Scarica',
+    downloading: 'Scaricamento...',
+    itDesc: '187 termini IT essenziali con spiegazioni chiare e pronuncia audio.',
+    idiomsDesc: '150 modi di dire e proverbi inglesi popolari con spiegazione del significato.',
+    verbsDesc: 'I 100 verbi inglesi più usati nella vita quotidiana con traduzione e audio.',
+    adjectivesDesc: '100 aggettivi essenziali ed espressivi per descrivere con precisione, con traduzione e audio.',
+    phrasalVerbsDesc: '100 phrasal verbs molto richiesti con spiegazioni chiare, traduzione e audio.',
+    watchAdHint: 'Si sblocca per sempre dopo un breve video',
+  },
+  ro: {
+    downloadBtn: 'Descarcă',
+    downloading: 'Se descarcă...',
+    itDesc: '187 de termeni IT esențiali cu explicații clare și pronunție audio.',
+    idiomsDesc: '150 de expresii idiomatice și proverbe englezești populare cu explicații.',
+    verbsDesc: 'Cele mai populare 100 de verbe englezești pentru conversația zilnică, cu traducere și audio.',
+    adjectivesDesc: '100 de adjective esențiale și expresive pentru descrieri precise, cu traducere și audio.',
+    phrasalVerbsDesc: '100 de verbe frazale frecvente cu explicații clare, traducere și audio.',
+    watchAdHint: 'Se deblochează permanent după un scurt videoclip',
+  },
+  bg: {
+    downloadBtn: 'Изтегли',
+    downloading: 'Изтегляне...',
+    itDesc: '187 ключови ИТ термина с ясни обяснения и аудио произношение.',
+    idiomsDesc: '150 популярни английски идиома и поговорки с обяснение на значението.',
+    verbsDesc: '100-те най-популярни английски глагола за ежедневно общуване с превод и озвучаване.',
+    adjectivesDesc: '100 основни и изразителни прилагателни за точно описание с превод и озвучаване.',
+    phrasalVerbsDesc: '100 търсени фразови глагола с ясни обяснения, превод и озвучаване.',
+    watchAdHint: 'Отключва се завинаги след кратко видео',
+  },
+  hu: {
+    downloadBtn: 'Letöltés',
+    downloading: 'Letöltés...',
+    itDesc: '187 alapvető IT-kifejezés érthető magyarázattal és kiejtéssel.',
+    idiomsDesc: '150 népszerű angol szólás és közmondás jelentésmagyarázattal.',
+    verbsDesc: 'A 100 legnépszerűbb angol ige a mindennapi kommunikációhoz fordítással és hanggal.',
+    adjectivesDesc: '100 alapvető és kifejező melléknév pontos leírásokhoz fordítással és hanggal.',
+    phrasalVerbsDesc: '100 gyakori vonzatos ige érthető magyarázatokkal, fordítással és hanggal.',
+    watchAdHint: 'Egy rövid videó után örökre feloldódik',
+  },
+  el: {
+    downloadBtn: 'Λήψη',
+    downloading: 'Λήψη...',
+    itDesc: '187 βασικοί όροι πληροφορικής (IT) με σαφείς επεξηγήσεις και ηχητική προφορά.',
+    idiomsDesc: '150 δημοφιλείς αγγλικοί ιδιωματισμοί και παροιμίες με επεξήγηση σημασίας.',
+    verbsDesc: 'Τα 100 πιο δημοφιλή αγγλικά ρήματα για καθημερινή επικοινωνία με μετάφραση και ήχο.',
+    adjectivesDesc: '100 βασικά και εκφραστικά επίθετα για ακριβείς περιγραφές με μετάφραση και ήχο.',
+    phrasalVerbsDesc: '100 συνηθισμένα phrasal verbs με σαφείς εξηγήσεις, μετάφραση και ήχο.',
+    watchAdHint: 'Ξεκλειδώνει μόνιμα μετά από ένα σύντομο βίντεο',
+  },
+  da: {
+    downloadBtn: 'Download',
+    downloading: 'Downloader...',
+    itDesc: '187 vigtige IT-begreber med klare forklaringer og lydudtale.',
+    idiomsDesc: '150 populære engelske talemåder og ordsprog med betydningsforklaring.',
+    verbsDesc: 'De 100 mest populære engelske verber til hverdagen med oversættelse og lyd.',
+    adjectivesDesc: '100 vigtige og udtryksfulde adjektiver til præcise beskrivelser med oversættelse og lyd.',
+    phrasalVerbsDesc: '100 hyppige phrasal verbs med klare forklaringer, oversættelse og lyd.',
+    watchAdHint: 'Låses permanent op efter en kort video',
+  },
+  lv: {
+    downloadBtn: 'Lejupielādēt',
+    downloading: 'Lejupielādē...',
+    itDesc: '187 svarīgi IT termini ar skaidriem paskaidrojumiem un audio izrunu.',
+    idiomsDesc: '150 populāras angļu valodas idiomas un sakāmvārdi ar nozīmes skaidrojumu.',
+    verbsDesc: '100 populārākie angļu darbības vārdi ikdienas saziņai ar tulkojumu un izrunu.',
+    adjectivesDesc: '100 būtiski un izteiksmīgi īpašības vārdi precīzam aprakstam ar tulkojumu un izrunu.',
+    phrasalVerbsDesc: '100 bieži lietoti frāzu darbības vārdi ar skaidrojumiem, tulkojumu un izrunu.',
+    watchAdHint: 'Atbloķējas uz visiem laikiem pēc īsa video',
+  },
+  lt: {
+    downloadBtn: 'Atsisiųsti',
+    downloading: 'Atsisiunčiama...',
+    itDesc: '187 svarbiausi IT terminai su aiškiais paaiškinimais ir garso tarimu.',
+    idiomsDesc: '150 populiarių anglų kalbos idiomų ir patarlių su reikšmės paaiškinimu.',
+    verbsDesc: '100 populiariausių anglų veiksmažodžių kasdieniam bendravimui su vertimu ir įgarsinimu.',
+    adjectivesDesc: '100 pagrindinių ir išraiškingų būdvardžių tiksliam apibūdinimui su vertimu ir įgarsinimu.',
+    phrasalVerbsDesc: '100 dažnų frazinių veiksmažodžių su aiškiais paaiškinimais, vertimu ir įgarsinimu.',
+    watchAdHint: 'Visam laikui atrakinama po trumpo vaizdo įrašo',
+  },
+  pt: {
+    downloadBtn: 'Baixar',
+    downloading: 'Baixando...',
+    itDesc: '187 termos essenciais de TI com explicações claras e pronúncia em áudio.',
+    idiomsDesc: '150 expressões idiomáticas e provérbios populares em inglês com explicação.',
+    verbsDesc: 'Os 100 verbos ingleses mais populares para o dia a dia com tradução e áudio.',
+    adjectivesDesc: '100 adjetivos essenciais e expressivos para descrições precisas com tradução e áudio.',
+    phrasalVerbsDesc: '100 phrasal verbs muito usados com explicações claras, tradução e áudio.',
+    watchAdHint: 'Desbloqueia para sempre após um vídeo curto',
+  },
+  'pt-br': {
+    downloadBtn: 'Baixar',
+    downloading: 'Baixando...',
+    itDesc: '187 termos essenciais de TI com explicações claras e pronúncia em áudio.',
+    idiomsDesc: '150 expressões idiomáticas e provérbios populares em inglês com explicação.',
+    verbsDesc: 'Os 100 verbos em inglês mais populares para o dia a dia com tradução e áudio.',
+    adjectivesDesc: '100 adjetivos essenciais e expressivos para descrições precisas com tradução e áudio.',
+    phrasalVerbsDesc: '100 phrasal verbs mais usados com explicações claras, tradução e áudio.',
+    watchAdHint: 'Desbloqueia para sempre após um vídeo curto',
+  },
+  sk: {
+    downloadBtn: 'Stiahnuť',
+    downloading: 'Sťahuje sa...',
+    itDesc: '187 kľúčových IT pojmov so zrozumiteľným vysvetlením a výslovnosťou.',
+    idiomsDesc: '150 obľúbených anglických idiómov a prísloví s vysvetlením významu.',
+    verbsDesc: '100 najobľúbenejších anglických slovies na každý deň s prekladom a zvukom.',
+    adjectivesDesc: '100 základných a výstižných prídavných mien na presný opis s prekladom a zvukom.',
+    phrasalVerbsDesc: '100 žiadaných frázových slovies so zrozumiteľným vysvetlením, prekladom a zvukom.',
+    watchAdHint: 'Odomkne sa navždy po krátkom videu',
+  },
+  sl: {
+    downloadBtn: 'Prenesi',
+    downloading: 'Prenašanje...',
+    itDesc: '187 ključnih IT-izrazov z jasnimi razlagami in zvočno izgovorjavo.',
+    idiomsDesc: '150 priljubljenih angleških idiomov in pregovorov z razlago pomena.',
+    verbsDesc: '100 najbolj priljubljenih angleških glagolov za vsakdanjo rabo s prevodom in zvokom.',
+    adjectivesDesc: '100 osnovnih in izraznih pridevnikov za natančne opise s prevodom in zvokom.',
+    phrasalVerbsDesc: '100 pogostih fraznih glagolov z jasnimi razlagami, prevodom in zvokom.',
+    watchAdHint: 'Trajno se odklene po kratkem videu',
+  },
+  fi: {
+    downloadBtn: 'Lataa',
+    downloading: 'Ladataan...',
+    itDesc: '187 keskeistä IT-termiä selkeillä selityksillä ja ääntämyksellä.',
+    idiomsDesc: '150 suosittua englannin idiomia ja sananlaskua merkityksen selityksellä.',
+    verbsDesc: '100 suosituinta englannin verbiä arkipäivän viestintään käännöksellä ja ääntämyksellä.',
+    adjectivesDesc: '100 keskeistä ja ilmeikästä adjektiivia tarkkaan kuvailuun käännöksellä ja ääntämyksellä.',
+    phrasalVerbsDesc: '100 yleistä fraasiverbiä selkeillä selityksillä, käännöksellä ja ääntämyksellä.',
+    watchAdHint: 'Avautuu pysyvästi lyhyen videon jälkeen',
+  },
+  hr: {
+    downloadBtn: 'Preuzmi',
+    downloading: 'Preuzimanje...',
+    itDesc: '187 ključnih IT pojmova s jasnim objašnjenjima i zvučnim izgovorom.',
+    idiomsDesc: '150 popularnih engleskih idioma i poslovica s objašnjenjem značenja.',
+    verbsDesc: '100 najpopularnijih engleskih glagola za svakodnevnu komunikaciju s prijevodom i zvukom.',
+    adjectivesDesc: '100 osnovnih i izražajnih pridjeva za precizne opise s prijevodom i zvukom.',
+    phrasalVerbsDesc: '100 traženih fraznih glagola s jasnim objašnjenjima, prijevodom i zvukom.',
+    watchAdHint: 'Trajno se otključava nakon kratkog videa',
+  },
+  cs: {
+    downloadBtn: 'Stáhnout',
+    downloading: 'Stahování...',
+    itDesc: '187 klíčových IT pojmů se srozumitelným vysvětlením a výslovností.',
+    idiomsDesc: '150 oblíbených anglických idiomů a přísloví s vysvětlením významu.',
+    verbsDesc: '100 nejoblíbenějších anglických sloves pro každodenní komunikaci s překladem a zvukem.',
+    adjectivesDesc: '100 základních a výstižných přídavných jmen pro přesný popis s překladem a zvukem.',
+    phrasalVerbsDesc: '100 žádaných frázových sloves s jasným vysvětlením, překladem a zvukem.',
+    watchAdHint: 'Odemkne se navždy po krátkém videu',
+  },
+  sv: {
+    downloadBtn: 'Ladda ner',
+    downloading: 'Laddar ner...',
+    itDesc: '187 viktiga IT-termer med tydliga förklaringar och ljuduttal.',
+    idiomsDesc: '150 populära engelska idiom och ordspråk med betydelseförklaring.',
+    verbsDesc: 'De 100 mest populära engelska verben för vardagen med översättning och ljud.',
+    adjectivesDesc: '100 viktiga och uttrycksfulla adjektiv för träffsäkra beskrivningar med översättning och ljud.',
+    phrasalVerbsDesc: '100 vanliga partikelverb med tydliga förklaringar, översättning och ljud.',
+    watchAdHint: 'Låses upp permanent efter en kort video',
+  },
+  et: {
+    downloadBtn: 'Laadi alla',
+    downloading: 'Allalaadimine...',
+    itDesc: '187 olulist IT-terminit selgete selgituste ja hääldusega.',
+    idiomsDesc: '150 populaarset inglise idioomi ja vanasõna tähenduse selgitusega.',
+    verbsDesc: '100 populaarseimat inglise tegusõna igapäevaseks suhtluseks koos tõlke ja hääldusega.',
+    adjectivesDesc: '100 olulist ja ilmekat omadussõna täpseks kirjeldamiseks koos tõlke ja hääldusega.',
+    phrasalVerbsDesc: '100 enimkasutatavat ühendverbi selgete selgituste, tõlke ja hääldusega.',
+    watchAdHint: 'Avaneb püsivalt pärast lühikest videot',
+  },
+  hi: {
+    downloadBtn: 'डाउनलोड करें',
+    downloading: 'डाउनलोड हो रहा है...',
+    itDesc: 'आसान व्याख्या और ऑडियो उच्चारण के साथ 187 प्रमुख IT शब्द।',
+    idiomsDesc: 'अर्थ की व्याख्या और ऑडियो के साथ 150 लोकप्रिय अंग्रेज़ी मुहावरे और कहावतें।',
+    verbsDesc: 'रोज़मर्रा की बातचीत के लिए अनुवाद और ऑडियो के साथ 100 सबसे लोकप्रिय अंग्रेज़ी क्रियाएँ।',
+    adjectivesDesc: 'सटीक वर्णन के लिए अनुवाद और ऑडियो के साथ 100 आवश्यक और प्रभावशाली विशेषण।',
+    phrasalVerbsDesc: 'स्पष्ट व्याख्या, अनुवाद और ऑडियो के साथ 100 उपयोगी फ़्रेज़ल वर्ब्स।',
+    watchAdHint: 'एक छोटे वीडियो के बाद हमेशा के लिए अनलॉक हो जाएगा',
+  },
+  bn: {
+    downloadBtn: 'ডাউনলোড করুন',
+    downloading: 'ডাউনলোড হচ্ছে...',
+    itDesc: 'সহজ ব্যাখ্যা ও অডিও উচ্চারণসহ ১৮৭টি গুরুত্বপূর্ণ IT শব্দ।',
+    idiomsDesc: 'অর্থের ব্যাখ্যা ও অডিওসহ ১৫০টি জনপ্রিয় ইংরেজি বাগধারা ও প্রবাদ।',
+    verbsDesc: 'দৈনন্দিন কথোপকথনের জন্য অনুবাদ ও অডিওসহ ১০০টি সবচেয়ে জনপ্রিয় ইংরেজি ক্রিয়া।',
+    adjectivesDesc: 'সঠিক বর্ণনার জন্য অনুবাদ ও অডিওসহ ১০০টি প্রয়োজনীয় ও প্রাণবন্ত বিশেষণ।',
+    phrasalVerbsDesc: 'স্পষ্ট ব্যাখ্যা, অনুবাদ ও অডিওসহ ১০০টি বহুল ব্যবহৃত ফ্রেজাল ভার্ব।',
+    watchAdHint: 'একটি সংক্ষিপ্ত ভিডিওর পর স্থায়ীভাবে আনলক হবে',
+  },
+  ar: {
+    downloadBtn: 'تنزيل',
+    downloading: 'جارٍ التنزيل...',
+    itDesc: '187 مصطلحاً أساسياً في تقنية المعلومات (IT) مع شرح واضح ونطق صوتي.',
+    idiomsDesc: '150 من أشهر التعابير الاصطلاحية والأمثال الإنجليزية مع شرح المعنى والنطق.',
+    verbsDesc: '100 من أشهر الأفعال الإنجليزية للتواصل اليومي مع الترجمة والنطق الصوتي.',
+    adjectivesDesc: '100 صفة أساسية ومعبّرة للوصف الدقيق مع الترجمة والنطق الصوتي.',
+    phrasalVerbsDesc: '100 فعل مركب شائع مع شروحات واضحة وترجمة ونطق صوتي.',
+    watchAdHint: 'يُفتح بشكل دائم بعد فيديو قصير',
+  },
+  fa: {
+    downloadBtn: 'دانلود',
+    downloading: 'در حال دانلود...',
+    itDesc: '۱۸۷ اصطلاح کلیدی فناوری اطلاعات (IT) با توضیحات روشن و تلفظ صوتی.',
+    idiomsDesc: '۱۵۰ اصطلاح و ضرب‌المثل پرکاربرد انگلیسی همراه با توضیح معنا و تلفظ.',
+    verbsDesc: '۱۰۰ فعل پرکاربرد انگلیسی برای مکالمه روزمره با ترجمه و تلفظ صوتی.',
+    adjectivesDesc: '۱۰۰ صفت ضروری و گویا برای توصیف دقیق با ترجمه و تلفظ صوتی.',
+    phrasalVerbsDesc: '۱۰۰ فعل عبارتی پرطرفدار با توضیح روشن، ترجمه و تلفظ صوتی.',
+    watchAdHint: 'پس از یک ویدیوی کوتاه برای همیشه باز می‌شود',
+  },
+  ur: {
+    downloadBtn: 'ڈاؤن لوڈ کریں',
+    downloading: 'ڈاؤن لوڈ ہو رہا ہے...',
+    itDesc: 'واضح تشریح اور آڈیو تلفظ کے ساتھ 187 اہم آئی ٹی (IT) اصطلاحات۔',
+    idiomsDesc: 'مفہوم کی وضاحت اور آڈیو کے ساتھ 150 مشہور انگریزی محاورے اور ضرب الامثال۔',
+    verbsDesc: 'روزمرہ گفتگو کے لیے ترجمے اور آڈیو کے ساتھ 100 مقبول ترین انگریزی افعال۔',
+    adjectivesDesc: 'درست بیان کے لیے ترجمے اور آڈیو کے ساتھ 100 بنیادی اور مؤثر صفات۔',
+    phrasalVerbsDesc: 'واضح تشریح، ترجمے اور آڈیو کے ساتھ 100 اہم فریزل وربز۔',
+    watchAdHint: 'ایک مختصر ویڈیو کے بعد ہمیشہ کے لیے کھل جائے گا',
+  },
+  id: {
+    downloadBtn: 'Unduh',
+    downloading: 'Mengunduh...',
+    itDesc: '187 istilah TI penting dengan penjelasan jelas dan audio pelafalan.',
+    idiomsDesc: '150 idiom dan peribahasa bahasa Inggris populer dengan penjelasan makna.',
+    verbsDesc: '100 kata kerja bahasa Inggris paling populer untuk percakapan sehari-hari dengan terjemahan dan audio.',
+    adjectivesDesc: '100 kata sifat penting dan ekspresif untuk deskripsi tepat dengan terjemahan dan audio.',
+    phrasalVerbsDesc: '100 phrasal verb yang sering dipakai dengan penjelasan jelas, terjemahan, dan audio.',
+    watchAdHint: 'Terbuka permanen setelah video singkat',
+  },
+  vi: {
+    downloadBtn: 'Tải xuống',
+    downloading: 'Đang tải xuống...',
+    itDesc: '187 thuật ngữ CNTT quan trọng kèm giải thích dễ hiểu và phát âm chuẩn.',
+    idiomsDesc: '150 thành ngữ và tục ngữ tiếng Anh phổ biến kèm giải thích ý nghĩa.',
+    verbsDesc: '100 động từ tiếng Anh phổ biến nhất cho giao tiếp hằng ngày kèm nghĩa và phát âm.',
+    adjectivesDesc: '100 tính từ thiết yếu và giàu sắc thái để miêu tả chuẩn xác kèm nghĩa và phát âm.',
+    phrasalVerbsDesc: '100 cụm động từ thông dụng kèm giải thích dễ hiểu, nghĩa tiếng Việt và phát âm.',
+    watchAdHint: 'Mở khóa vĩnh viễn sau một video ngắn',
+  },
+  th: {
+    downloadBtn: 'ดาวน์โหลด',
+    downloading: 'กำลังดาวน์โหลด...',
+    itDesc: '187 คำศัพท์ไอทีสำคัญพร้อมคำอธิบายที่เข้าใจง่ายและเสียงอ่าน',
+    idiomsDesc: '150 สำนวนและสุภาษิตภาษาอังกฤษยอดนิยมพร้อมคำอธิบายความหมาย',
+    verbsDesc: '100 คำกริยาภาษาอังกฤษยอดนิยมสำหรับการสื่อสารประจำวัน พร้อมคำแปลและเสียงอ่าน',
+    adjectivesDesc: '100 คำคุณศัพท์พื้นฐานที่สื่อความหมายชัดเจน พร้อมคำแปลและเสียงอ่าน',
+    phrasalVerbsDesc: '100 กริยาวลีที่ใช้บ่อย พร้อมคำอธิบายเข้าใจง่าย คำแปล และเสียงอ่าน',
+    watchAdHint: 'ปลดล็อกถาวรหลังดูวิดีโอสั้นๆ',
+  },
+  ko: {
+    downloadBtn: '다운로드',
+    downloading: '다운로드 중...',
+    itDesc: '명확한 설명과 원어민 발음이 포함된 핵심 IT 용어 187개.',
+    idiomsDesc: '의미 설명과 음성 발음이 포함된 인기 영어 관용구 및 속담 150선.',
+    verbsDesc: '일상 대화에 꼭 필요한 인기 영어 동사 100개를 번역과 음성으로 학습하세요.',
+    adjectivesDesc: '정확한 묘사를 위한 핵심 형용사 100개를 번역과 음성으로 학습하세요.',
+    phrasalVerbsDesc: '자주 쓰이는 구동사 100개를 쉬운 설명, 번역, 음성과 함께 익히세요.',
+    watchAdHint: '짧은 광고 시청 후 영구적으로 잠금 해제됩니다',
+  },
+  ja: {
+    downloadBtn: 'ダウンロード',
+    downloading: 'ダウンロード中...',
+    itDesc: '分かりやすい解説と音声発音付きの重要IT用語187語。',
+    idiomsDesc: '意味の解説と音声付きの定番英語イディオム＆ことわざ150選。',
+    verbsDesc: '日常会話でよく使う人気の英語動詞100語を、日本語訳と音声付きで学べます。',
+    adjectivesDesc: '的確な表現に役立つ基本＆豊かな形容詞100語を、日本語訳と音声付きで収録。',
+    phrasalVerbsDesc: '頻出の句動詞100語を、わかりやすい解説・日本語訳・音声付きで学べます。',
+    watchAdHint: '短い動画の視聴後に永久に解放されます',
+  },
+  zh: {
+    downloadBtn: '下载',
+    downloading: '正在下载...',
+    itDesc: '187 个核心 IT 术语，配有清晰释义与标准发音。',
+    idiomsDesc: '150 个常用英语习语与谚语，配有含义解析与发音。',
+    verbsDesc: '精选 100 个日常高频英语动词，配有中文释义和标准发音。',
+    adjectivesDesc: '100 个核心且富有表现力的形容词，配有中文释义和标准发音。',
+    phrasalVerbsDesc: '100 个常用短语动词，配有清晰讲解、中文释义和标准发音。',
+    watchAdHint: '观看简短视频后永久解锁',
+  },
+  kk: {
+    downloadBtn: 'Жүктеп алу',
+    downloading: 'Жүктелуде...',
+    itDesc: 'Түсінікті түсіндірмесі мен дыбысталуы бар 187 негізгі IT термині.',
+    idiomsDesc: 'Мағынасы түсіндірілген және дыбысталған 150 танымал ағылшын идиомасы мен мақалы.',
+    verbsDesc: 'Күнделікті сөйлесуге арналған аудармасы мен дыбысы бар ең танымал 100 ағылшын етістігі.',
+    adjectivesDesc: 'Дәл сипаттауға арналған аудармасы мен дыбысы бар 100 негізгі және мәнерлі сын есім.',
+    phrasalVerbsDesc: 'Түсінікті анықтамасы, аудармасы және дыбысы бар 100 жиі қолданылатын фразалық етістік.',
+    watchAdHint: 'Қысқа видеодан кейін біржола ашылады',
+  },
+};
+
+export function getDownloadablePackStrings(lang = null) {
+  const currentLang = (lang || getInterfaceLanguage() || 'ru').toLowerCase().trim();
+  return DOWNLOADABLE_PACK_I18N[currentLang] || DOWNLOADABLE_PACK_I18N[currentLang.split('-')[0]] || DOWNLOADABLE_PACK_I18N.en;
+}
+
 function getBuiltinOverrides() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_BUILTIN_OVERRIDES);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = raw ? JSON.parse(raw) : {};
+    if (localStorage.getItem('myduo_it_idioms_override_clean_v1') !== '1') {
+      let changed = false;
+      if (Array.isArray(parsed.it_terms) && parsed.it_terms.length > 0 && parsed.it_terms.length < 187) {
+        delete parsed.it_terms;
+        changed = true;
+      }
+      if (Array.isArray(parsed.idioms) && parsed.idioms.length > 0 && parsed.idioms.length < 150) {
+        delete parsed.idioms;
+        changed = true;
+      }
+      localStorage.setItem('myduo_it_idioms_override_clean_v1', '1');
+      if (changed) {
+        localStorage.setItem(STORAGE_KEY_BUILTIN_OVERRIDES, JSON.stringify(parsed));
+      }
+    }
+    return parsed;
   } catch (e) {
     return {};
   }
@@ -233,7 +663,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "ur": "رنگ",
           "kk": "Түстер"
     },
-    wordKeys: ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown', 'grey', 'gold', 'silver'],
+    wordKeys: [
+      'red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown',
+      'grey', 'beige', 'silver', 'navy', 'olive', 'coral', 'peach', 'bronze', 'cream', 'golden'
+    ],
   },
   {
     id: 'numbers',
@@ -284,6 +717,53 @@ export const BUILTIN_COLLECTIONS_DEF = [
     ],
   },
   {
+    id: 'ordinal_numbers',
+    isBuiltin: true,
+    icon: '🥇',
+    name: {
+          "ru": "Порядковые числа",
+          "uk": "Порядкові числівники",
+          "en": "Ordinal numbers",
+          "de": "Ordnungszahlen",
+          "es": "Números ordinales",
+          "fr": "Nombres ordinaux",
+          "pl": "Liczebniki porządkowe",
+          "tr": "Sıra sayıları",
+          "it": "Numeri ordinali",
+          "ro": "Numere ordinale",
+          "bg": "Редни числителни",
+          "hu": "Sorszámnevek",
+          "el": "Τακτικοί αριθμοί",
+          "da": "Ordenstal",
+          "lv": "Kārtas skaitļa vārdi",
+          "lt": "Kelintiniai skaitvardžiai",
+          "pt": "Números ordinais",
+          "sk": "Radové číslovky",
+          "sl": "Vrstilni števniki",
+          "fi": "Järjestysluvut",
+          "hr": "Redni brojevi",
+          "cs": "Řadové číslovky",
+          "sv": "Ordningstal",
+          "et": "Järgarvud",
+          "hi": "क्रमवाचक संख्याएं",
+          "ar": "الأعداد الترتيبية",
+          "id": "Bilangan bertingkat",
+          "vi": "Số thứ tự",
+          "th": "เลขลำดับที่",
+          "ko": "서수",
+          "ja": "序数",
+          "bn": "ক্রমবাচক সংখ্যা",
+          "fa": "اعداد ترتیبی",
+          "zh": "序数词",
+          "ur": "ترتیبی اعداد",
+          "kk": "Реттік сан есімдер"
+    },
+    wordKeys: [
+      'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth',
+      'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth', 'twentieth'
+    ],
+  },
+  {
     id: 'body_parts',
     isBuiltin: true,
     icon: '🫀',
@@ -328,7 +808,9 @@ export const BUILTIN_COLLECTIONS_DEF = [
     wordKeys: [
       'head', 'arm', 'leg', 'hand', 'foot', 'feet', 'eye', 'ear', 'nose', 'mouth',
       'heart', 'finger', 'tooth', 'teeth', 'hair', 'face', 'back', 'shoulder', 'neck',
-      'brain', 'skin', 'blood', 'bone', 'knee', 'chest', 'stomach', 'lip', 'tongue', 'throat'
+      'brain', 'skin', 'blood', 'bone', 'knee', 'chest', 'stomach', 'lip', 'tongue', 'throat',
+      'chin', 'cheek', 'forehead', 'eyebrow', 'jaw', 'wrist', 'elbow', 'ankle', 'heel', 'toe',
+      'thumb', 'palm', 'nail', 'hip', 'lung', 'liver', 'muscle', 'nerve', 'skull', 'beard', 'belly'
     ],
   },
   {
@@ -374,9 +856,9 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "kk": "Спорт"
     },
     wordKeys: [
-      'football', 'basketball', 'tennis', 'baseball', 'run', 'running', 'swimming', 'swim',
-      'ball', 'match', 'team', 'game', 'player', 'coach', 'champion', 'championship',
-      'fitness', 'gym', 'race', 'score', 'stadium', 'athlete', 'sport'
+      'football', 'basketball', 'tennis', 'baseball', 'hockey', 'golf', 'skiing', 'run', 'running', 'swimming',
+      'swim', 'ball', 'match', 'team', 'game', 'player', 'coach', 'champion', 'championship', 'tournament',
+      'fitness', 'gym', 'workout', 'race', 'score', 'goal', 'medal', 'stadium', 'athlete', 'sport'
     ],
   },
   {
@@ -425,7 +907,9 @@ export const BUILTIN_COLLECTIONS_DEF = [
       'bread', 'water', 'tea', 'coffee', 'milk', 'meat', 'cheese', 'pizza', 'fish', 'sugar',
       'egg', 'eggs', 'fruit', 'vegetable', 'soup', 'rice', 'apple', 'banana', 'orange',
       'chicken', 'butter', 'cake', 'salt', 'juice', 'beer', 'wine', 'potato', 'tomato',
-      'meal', 'lunch', 'dinner', 'breakfast', 'snack', 'restaurant'
+      'meal', 'lunch', 'dinner', 'breakfast', 'snack', 'restaurant',
+      'beef', 'pork', 'salad', 'sandwich', 'pasta', 'sauce', 'oil', 'pepper', 'onion',
+      'garlic', 'carrot', 'lemon', 'grape', 'pear', 'honey', 'chocolate'
     ],
   },
   {
@@ -472,7 +956,11 @@ export const BUILTIN_COLLECTIONS_DEF = [
     },
     wordKeys: [
       'shirt', 'shoes', 'shoe', 'pants', 'dress', 'coat', 'hat', 'jacket', 'socks', 'suit',
-      'boots', 'skirt', 'jeans', 't-shirt', 'wear', 'belt', 'gloves', 'scarf', 'cap', 'uniform', 'tie'
+      'boots', 'skirt', 'jeans', 't-shirt', 'wear', 'belt', 'gloves', 'scarf', 'cap', 'uniform', 'tie',
+      'sweater', 'trousers', 'underwear', 'sneakers', 'slippers', 'sock', 'glove', 'boot',
+      'pocket', 'button', 'sleeve', 'collar', 'zipper', 'outfit', 'costume', 'clothing',
+      'cloth', 'fabric', 'cotton', 'wool', 'silk', 'leather', 'fur', 'bag', 'purse',
+      'wallet', 'watch', 'ring', 'necklace'
     ],
   },
   {
@@ -520,7 +1008,10 @@ export const BUILTIN_COLLECTIONS_DEF = [
     wordKeys: [
       'dog', 'cat', 'bird', 'horse', 'fish', 'bear', 'lion', 'wolf', 'elephant', 'tiger',
       'monkey', 'mouse', 'rabbit', 'duck', 'sheep', 'cow', 'pig', 'animal', 'pet', 'snake',
-      'fox', 'deer', 'eagle', 'whale', 'dolphin', 'shark'
+      'fox', 'deer', 'eagle', 'whale', 'dolphin', 'shark',
+      'frog', 'turtle', 'bee', 'spider', 'fly', 'mosquito', 'insect', 'bug', 'chicken', 'hen',
+      'turkey', 'goat', 'bat', 'rat', 'owl', 'crow', 'seal', 'crab', 'bull', 'lamb',
+      'dove', 'salmon', 'trout', 'squid'
     ],
   },
   {
@@ -627,7 +1118,12 @@ export const BUILTIN_COLLECTIONS_DEF = [
       'true', 'clear', 'full', 'whole', 'real', 'hard', 'poor', 'best', 'special',
       'simple', 'fine', 'sure', 'dark', 'short', 'major', 'happy', 'serious', 'ready',
       'hot', 'cold', 'beautiful', 'bright', 'clean', 'deep', 'fast', 'heavy', 'kind',
-      'nice', 'rich', 'safe', 'sweet', 'warm'
+      'nice', 'rich', 'safe', 'sweet', 'warm',
+      'possible', 'local', 'national', 'personal', 'private', 'common', 'general', 'main',
+      'single', 'open', 'closed', 'wrong', 'final', 'natural', 'modern', 'popular', 'famous',
+      'foreign', 'similar', 'available', 'necessary', 'useful', 'helpful', 'effective',
+      'successful', 'powerful', 'dangerous', 'difficult', 'impossible', 'expensive', 'cheap',
+      'quick', 'slow', 'quiet', 'loud', 'soft', 'wet', 'dry', 'dirty', 'empty'
     ],
   },
   {
@@ -677,7 +1173,16 @@ export const BUILTIN_COLLECTIONS_DEF = [
       'go on', 'find out', 'set up', 'take off', 'pick up', 'put on', 'look at', 'look after',
       'carry on', 'bring up', 'run out', 'break down', 'check in', 'check out', 'calm down',
       'come back', 'figure out', 'get along', 'hang out', 'hold on', 'keep up', 'make up',
-      'point out', 'run into', 'show up', 'slow down', 'work out', 'look for', 'give up'
+      'point out', 'run into', 'show up', 'slow down', 'work out', 'look for', 'give up',
+      'give back', 'bring back', 'stand up', 'sit down', 'go out', 'go back', 'try on',
+      'call back', 'call off', 'grow up', 'deal with', 'come across', 'break up', 'call on',
+      'run away', 'hurry up', 'pay back', 'look out', 'cheer up', 'look up to', 'look over',
+      'let go', 'end up', 'catch up', 'get rid of', 'fill out', 'keep on', 'come on',
+      'get back', 'get out', 'take back', 'break out', 'cut off', 'turn up', 'turn down',
+      'put away', 'throw away', 'throw out', 'look into', 'go through', 'set off', 'move on',
+      'lash out', 'look back', 'stand out', 'drop out', 'drop off', 'come over', 'head out',
+      'drop in', 'save up', 'plug in', 'look forward to', 'rely on', 'depend on', 'focus on',
+      'concentrate on', 'insist on', 'wait for', 'search for', 'apply for', 'ask for', 'care for'
     ],
   },
   {
@@ -1056,7 +1561,57 @@ export const BUILTIN_COLLECTIONS_DEF = [
       "when pigs fly",
       "wrap up",
       "you can say that again",
-      "your guess is as good as mine"
+      "your guess is as good as mine",
+      "easy come easy go",
+      "all that glitters is not gold",
+      "it is what it is",
+      "no big deal",
+      "better safe than sorry",
+      "the sooner the better",
+      "it never hurts to ask",
+      "you can't please everyone",
+      "it slipped my mind",
+      "make up one's mind",
+      "keep in touch",
+      "climb the career ladder",
+      "best is yet to come",
+      "to take something for granted",
+      "feel left out",
+      "go bananas",
+      "take your time",
+      "keep the change",
+      "not too shabby",
+      "i second that",
+      "inside out",
+      "black dog",
+      "take a side",
+      "never mind",
+      "no doubt",
+      "i mean it",
+      "beat it",
+      "who cares",
+      "all the same",
+      "take risks",
+      "comfort zone",
+      "spread rumours",
+      "play truant",
+      "straight a student",
+      "worth it",
+      "serve as a lifeline",
+      "play a dominant role",
+      "pursue happiness",
+      "feel at peace",
+      "heart warming",
+      "vivid memory",
+      "digital detox",
+      "gap year",
+      "as a matter of fact",
+      "by the way",
+      "right away",
+      "before too long",
+      "in advance",
+      "on time",
+      "no way"
     ]
   }
 ];
@@ -1413,13 +1968,17 @@ export function getAllCollectionsSummary(allWords = []) {
 export function syncCollectionToAndroidWidget(collectionId = null, allWords = []) {
   if (typeof window === 'undefined') return;
   const targetId = collectionId || getActiveCollectionId() || 'my_favorites';
-  let words = getCollectionWords(targetId, allWords);
+  // Fallback to the cached dictionary so the widget is never synced with an empty deck
+  const effectiveAllWords = (Array.isArray(allWords) && allWords.length > 0)
+    ? allWords
+    : (Array.isArray(_cachedAllWords) ? _cachedAllWords : []);
+  let words = getCollectionWords(targetId, effectiveAllWords);
   const title = getCollectionTitle(targetId);
   const hasFavs = words.length > 0;
 
-  if (words.length === 0 && Array.isArray(allWords) && allWords.length > 0) {
+  if (words.length === 0 && effectiveAllWords.length > 0) {
     // Curated starter words if collection/favorites is empty
-    words = allWords.slice(0, 50);
+    words = effectiveAllWords.slice(0, 50);
   } else if (words.length > 100) {
     // Cap at 100 words for Android widget to prevent SharedPreferences memory bloat and ANR
     words = words.slice(0, 100);
@@ -1437,7 +1996,7 @@ export function syncCollectionToAndroidWidget(collectionId = null, allWords = []
           transcription: String(w.transcription || ''),
           translation: String(getWordTranslation(w) || w.translation || ''),
           level: String(w.category || w.level || title || 'ELEMENTARY'),
-          example: String(w.example || w.notes || '').trim(),
+          example: String(w.example || getWordNotes(w, null, { hideItNotes: targetId !== 'it_terms' }) || '').trim(),
           isFavorite: hasFavs,
         })),
       };

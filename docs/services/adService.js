@@ -98,27 +98,37 @@ class AdServiceImpl {
     return `${year}-${month}-${day}`;
   }
 
-  canShowDailyInterstitial() {
+  canShowHourlyInterstitial() {
     if (this.isGracePeriodActive()) {
       return false;
     }
     try {
       if (typeof localStorage === 'undefined') return true;
-      const todayKey = this.getTodayDateKey();
-      const lastDate = localStorage.getItem('ad_interstitial_last_date');
-      return lastDate !== todayKey;
+      const raw = localStorage.getItem('ad_interstitial_last_time');
+      if (!raw) return true;
+      const lastTime = Number(raw);
+      if (!lastTime || isNaN(lastTime)) return true;
+      const ONE_HOUR_MS = 60 * 60 * 1000;
+      return (Date.now() - lastTime) >= ONE_HOUR_MS;
     } catch (e) {
       return true;
     }
   }
 
-  markDailyInterstitialShown() {
+  markHourlyInterstitialShown() {
     try {
       if (typeof localStorage !== 'undefined') {
-        const todayKey = this.getTodayDateKey();
-        localStorage.setItem('ad_interstitial_last_date', todayKey);
+        localStorage.setItem('ad_interstitial_last_time', String(Date.now()));
       }
     } catch (e) {}
+  }
+
+  canShowDailyInterstitial() {
+    return this.canShowHourlyInterstitial();
+  }
+
+  markDailyInterstitialShown() {
+    this.markHourlyInterstitialShown();
   }
 
   canClaimDailyBonus() {
@@ -684,11 +694,14 @@ class AdServiceImpl {
             adStartedPlaying = true;
           }));
 
-          const prepared = await this.prepareRewarded('REWARDED_PACKS');
+          let prepared = await this.prepareRewarded('REWARDED_PACKS');
           if (!prepared) {
-            console.warn('⚠️ Could not prepare REWARDED_PACKS ad');
-            safeResolve({ success: false, rewardEarned: false, isOffline: false });
-            return;
+            prepared = await this.prepareRewarded('REWARDED_SHIELD');
+            if (!prepared) {
+              console.warn('⚠️ Could not prepare REWARDED_PACKS or REWARDED_SHIELD ad');
+              safeResolve({ success: false, rewardEarned: false, isOffline: false });
+              return;
+            }
           }
 
           AdMob.showRewardVideoAd()

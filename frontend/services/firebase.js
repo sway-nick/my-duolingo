@@ -1745,6 +1745,39 @@ export async function loadUserNotesFirestore(userId) {
   return {};
 }
 
+/**
+ * Persists the user's personal word overrides (translation, category, notes)
+ * to Firestore at /users/{uid}/data/word_overrides inside wordsJson.
+ */
+export async function saveUserWordOverridesFirestore(userId, overridesMap) {
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return false;
+  try {
+    const headers = await getAuthHeaders();
+    if (!headers || !headers.Authorization) return false;
+    const url = getFirestoreUrl(`users/${uid}/data/word_overrides`);
+    const payload = {
+      fields: {
+        wordsJson: {
+          stringValue: JSON.stringify(overridesMap && typeof overridesMap === 'object' ? overridesMap : {})
+        }
+      }
+    };
+    const res = await firestoreFetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers
+      },
+      body: JSON.stringify(payload)
+    });
+    return Boolean(res && res.ok !== false);
+  } catch (err) {
+    console.warn('Firestore word overrides save failed:', err);
+    return false;
+  }
+}
+
 export async function saveUserCustomWordsFirestore(userId, wordsArray) {
   if (!userId) return;
   const uid = getEffectiveFirestoreUid(userId);
@@ -1837,6 +1870,60 @@ export async function saveSharedVocabularyUpdatesFirestore(newUpdatesMap) {
       })
     });
   } catch (e) {}
+}
+
+export async function fetchTopFavoritedWordsFirestore(maxPlayers = 45) {
+  try {
+    const players = await getAllTimeLeaderboardFirestore(maxPlayers);
+    if (!Array.isArray(players) || players.length === 0) return null;
+
+    const uids = Array.from(
+      new Set(
+        players
+          .map(p => (p && p.userId ? String(p.userId).trim() : ''))
+          .filter(uid => uid && !uid.startsWith('guest'))
+      )
+    ).slice(0, maxPlayers);
+
+    if (uids.length === 0) return null;
+
+    const config = getFirebaseConfig();
+    const base = getFirestoreBase();
+    const favCounts = {};
+
+    const batchSize = 15;
+    for (let i = 0; i < uids.length; i += batchSize) {
+      const batch = uids.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (uid) => {
+          try {
+            const url = `${base}/users/${encodeURIComponent(uid)}?key=${config.apiKey}`;
+            const res = await fetch(url);
+            if (!res.ok) return;
+            const doc = await res.json();
+            const favValues =
+              doc?.fields?.favorites?.arrayValue?.values ||
+              doc?.fields?.favorite_words?.arrayValue?.values ||
+              [];
+            if (!Array.isArray(favValues) || favValues.length === 0) return;
+            const seenForPlayer = new Set();
+            for (const v of favValues) {
+              const wid = String(v?.stringValue || v?.integerValue || '').trim();
+              if (wid && /^\d+$/.test(wid) && !seenForPlayer.has(wid)) {
+                seenForPlayer.add(wid);
+                favCounts[wid] = (favCounts[wid] || 0) + 1;
+              }
+            }
+          } catch (e) {}
+        })
+      );
+    }
+
+    return Object.keys(favCounts).length > 0 ? favCounts : null;
+  } catch (err) {
+    console.warn('fetchTopFavoritedWordsFirestore warning:', err);
+    return null;
+  }
 }
 
 function toFirestoreValue(val) {
@@ -2000,6 +2087,7 @@ export async function loadFullUserDataFirestore(userId) {
       let hasExplicitFavDoc = false;
       let notes = {};
       let customWords = [];
+      let wordOverrides = {};
       let weeklyXpMap = {};
 
       // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words, progress, weekly_xp_*)
@@ -2036,6 +2124,15 @@ export async function loadFullUserDataFirestore(userId) {
                 try {
                   const parsed = JSON.parse(doc.fields.wordsJson.stringValue);
                   if (Array.isArray(parsed)) customWords = parsed;
+                } catch (e) {}
+              }
+            } else if (docName === 'word_overrides') {
+              if (doc.fields?.wordsJson?.stringValue) {
+                try {
+                  const parsed = JSON.parse(doc.fields.wordsJson.stringValue);
+                  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                    wordOverrides = parsed;
+                  }
                 } catch (e) {}
               }
             } else if (docName === 'progress') {
@@ -2119,6 +2216,7 @@ export async function loadFullUserDataFirestore(userId) {
         settings,
         notes,
         customWords,
+        wordOverrides,
         weeklyXpMap
       };
     } catch (err) {

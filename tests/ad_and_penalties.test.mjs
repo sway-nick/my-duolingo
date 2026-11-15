@@ -123,95 +123,100 @@ test('8. AdService Config: Verifies correct AdMob App ID and Ad Unit IDs', () =>
   assert.equal(AD_CONFIG.UNITS.BANNER_FAVORITES, 'ca-app-pub-9917058160362744/5957710665');
 });
 
-test('8b. AdService Interstitial: Preload and round completion lifecycle (1 per day limit)', async () => {
+test('8b. AdService Interstitial: Preload and round completion lifecycle (1 per hour limit)', async () => {
   assert.equal(typeof AdService.preloadInterstitial, 'function', 'preloadInterstitial must be exposed');
   assert.equal(typeof AdService.showRoundFinishInterstitial, 'function', 'showRoundFinishInterstitial must be exposed');
+  assert.equal(typeof AdService.canShowHourlyInterstitial, 'function', 'canShowHourlyInterstitial must be exposed');
   assert.equal(typeof AdService.canShowDailyInterstitial, 'function', 'canShowDailyInterstitial must be exposed');
 
   // Bypass grace period for cooldown lifecycle testing
   global.localStorage.setItem('myduo_first_install_time', '0');
-  global.localStorage.removeItem('ad_interstitial_last_date');
+  global.localStorage.removeItem('ad_interstitial_last_time');
 
   // Initial state: 0 rounds completed
   AdService.roundsCompletedSinceLastAd = 0;
   AdService.lastInterstitialTime = Date.now();
 
   // Round 1 (triggers interstitial)
-  assert.equal(AdService.canShowDailyInterstitial(), true, 'Allowed before daily show');
+  assert.equal(AdService.canShowHourlyInterstitial(), true, 'Allowed before hourly show');
   const res1 = await AdService.showRoundFinishInterstitial();
   assert.equal(res1, true, 'Round 1 displays interstitial');
   assert.equal(AdService.roundsCompletedSinceLastAd, 0, 'Rounds counter resets after show');
-  assert.equal(AdService.canShowDailyInterstitial(), false, 'Daily limit reached after showing');
+  assert.equal(AdService.canShowHourlyInterstitial(), false, 'Hourly limit reached after showing');
 
-  // Round 2 on same day (blocked by 1 per day limit)
+  // Round 2 within same hour (blocked by 1 per hour limit)
   const res2 = await AdService.showRoundFinishInterstitial();
-  assert.equal(res2, false, 'Second interstitial on same day is blocked by 1 per day limit');
+  assert.equal(res2, false, 'Second interstitial within same hour is blocked by 1 per hour limit');
 
-  // Next day simulation: reset daily date
-  global.localStorage.setItem('ad_interstitial_last_date', '2020-01-01');
-  assert.equal(AdService.canShowDailyInterstitial(), true, 'Allowed again on next day');
+  // After 30 minutes (still blocked by 1 per hour limit)
+  global.localStorage.setItem('ad_interstitial_last_time', String(Date.now() - 30 * 60 * 1000));
+  assert.equal(AdService.canShowHourlyInterstitial(), false, 'Still blocked after 30 minutes');
+
+  // Next hour simulation (>1 hour elapsed)
+  global.localStorage.setItem('ad_interstitial_last_time', String(Date.now() - 61 * 60 * 1000));
+  assert.equal(AdService.canShowHourlyInterstitial(), true, 'Allowed again after 1 hour');
   const res3 = await AdService.showRoundFinishInterstitial();
-  assert.equal(res3, true, 'Next day displays interstitial');
+  assert.equal(res3, true, 'Next hour displays interstitial');
   assert.ok(AdService.lastInterstitialTime > 0, 'Timestamp is updated');
 });
 
-test('8c. AdService Collections Exit Interstitial: Capped at 1 per day', async () => {
+test('8c. AdService Collections Exit Interstitial: Capped at 1 per hour', async () => {
   assert.equal(typeof AdService.showCollectionsExitInterstitial, 'function', 'showCollectionsExitInterstitial must be exposed');
 
   // Bypass grace period for cooldown testing
   global.localStorage.setItem('myduo_first_install_time', '0');
   global.localStorage.removeItem('ad_col_exit_interstitial_stats');
-  global.localStorage.removeItem('ad_interstitial_last_date');
+  global.localStorage.removeItem('ad_interstitial_last_time');
 
   // First show: succeeds
   const res1 = await AdService.showCollectionsExitInterstitial();
   assert.equal(res1, true, 'First collections exit shows ad');
 
-  // Immediate second show: blocked by 1/day limit (and cooldown)
+  // Immediate second show: blocked by 1/hour limit (and cooldown)
   const res2 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res2, false, 'Second show on same day is blocked by daily limit');
+  assert.equal(res2, false, 'Second show within same hour is blocked by hourly limit');
 
-  // Even after cooldown, still blocked on same day
+  // Even after 3-minute cooldown, still blocked within the same hour
   const raw = JSON.parse(global.localStorage.getItem('ad_col_exit_interstitial_stats') || '{}');
   raw.lastShown = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_col_exit_interstitial_stats', JSON.stringify(raw));
 
   const res3 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res3, false, 'Still blocked on same day despite cooldown passed');
+  assert.equal(res3, false, 'Still blocked within same hour despite 3-minute cooldown passed');
 
-  // Next day simulation: allowed again
-  global.localStorage.setItem('ad_interstitial_last_date', '2020-01-01');
+  // Next hour simulation (>1 hour elapsed): allowed again
+  global.localStorage.setItem('ad_interstitial_last_time', String(Date.now() - 61 * 60 * 1000));
   const res4 = await AdService.showCollectionsExitInterstitial();
-  assert.equal(res4, true, 'Next day collections exit succeeds');
+  assert.equal(res4, true, 'Next hour collections exit succeeds');
 });
 
-test('8d. AdService Training Early Exit Interstitial: Capped at 1 per day', async () => {
+test('8d. AdService Training Early Exit Interstitial: Capped at 1 per hour', async () => {
   assert.equal(typeof AdService.showTrainingEarlyExitInterstitial, 'function', 'showTrainingEarlyExitInterstitial must be exposed');
 
   // Bypass grace period for cooldown testing
   global.localStorage.setItem('myduo_first_install_time', '0');
   global.localStorage.removeItem('ad_training_early_exit_last_time');
-  global.localStorage.removeItem('ad_interstitial_last_date');
+  global.localStorage.removeItem('ad_interstitial_last_time');
 
   // First show: succeeds
   const res1 = await AdService.showTrainingEarlyExitInterstitial();
   assert.equal(res1, true, 'First early exit shows ad');
 
-  // Immediate second show: blocked by daily limit
+  // Immediate second show: blocked by hourly limit
   const res2 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res2, false, 'Second early exit on same day is blocked by daily limit');
+  assert.equal(res2, false, 'Second early exit within same hour is blocked by hourly limit');
 
-  // Even after cooldown passed, blocked on same day
+  // Even after 3-minute cooldown passed, blocked within the same hour
   const stored1 = Date.now() - (181 * 1000);
   global.localStorage.setItem('ad_training_early_exit_last_time', String(stored1));
 
   const res3 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res3, false, 'Still blocked on same day despite cooldown passed');
+  assert.equal(res3, false, 'Still blocked within same hour despite 3-minute cooldown passed');
 
-  // Next day: succeeds
-  global.localStorage.setItem('ad_interstitial_last_date', '2020-01-01');
+  // Next hour (>1 hour elapsed): succeeds
+  global.localStorage.setItem('ad_interstitial_last_time', String(Date.now() - 61 * 60 * 1000));
   const res4 = await AdService.showTrainingEarlyExitInterstitial();
-  assert.equal(res4, true, 'Next day early exit succeeds');
+  assert.equal(res4, true, 'Next hour early exit succeeds');
 });
 
 test('8e. AdService Bonus XP Rewarded Ad: All 36 locales translated (including pt-BR, es-MX, hi)', async () => {
@@ -272,7 +277,7 @@ test('8f. AdService 7-Day Grace Period: Interstitials suppressed for new users, 
 
   // Case 2: Past 7 days -> Grace period expired -> Normal interstitials
   global.localStorage.setItem('myduo_first_install_time', String(Date.now() - (8 * 86400000)));
-  global.localStorage.removeItem('ad_interstitial_last_date');
+  global.localStorage.removeItem('ad_interstitial_last_time');
   assert.equal(AdService.isGracePeriodActive(), false, '8-day old user is outside grace period');
   AdService.roundsCompletedSinceLastAd = 1;
   const resNormal = await AdService.showRoundFinishInterstitial();

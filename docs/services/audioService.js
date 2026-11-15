@@ -251,14 +251,28 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
 
 function getSavedVoiceAccent() {
   try {
+    let resolved = 'us';
     const direct = localStorage.getItem('myduo_voice_accent');
-    if (direct) return direct;
-    const gender = localStorage.getItem('myduo_voice_gender');
-    if (gender === 'male' || gender === 'uk') return 'uk';
-    const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
-    const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
-    const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
-    return settings.voiceAccent || (settings.voiceGender === 'male' ? 'uk' : 'us');
+    if (direct) {
+      resolved = direct;
+    } else {
+      const gender = localStorage.getItem('myduo_voice_gender');
+      if (gender === 'male' || gender === 'uk') {
+        resolved = 'uk';
+      } else {
+        const user = JSON.parse(localStorage.getItem('myduo_current_user') || 'null');
+        const userId = user && user.id ? String(user.id) : (localStorage.getItem('myduo_guest_device_id') || 'guest');
+        const settings = JSON.parse(localStorage.getItem(`settings_${userId}`) || '{}');
+        resolved = settings.voiceAccent || (settings.voiceGender === 'male' ? 'uk' : 'us');
+      }
+    }
+    if (resolved === 'uk' || resolved === 'gb' || resolved === 'male') {
+      if (!isCategoryAudioDownloaded('uk', 'Elementary') && !isVoicePackDownloaded('uk')) {
+        return 'us';
+      }
+      return 'uk';
+    }
+    return 'us';
   } catch (e) {
     return 'us';
   }
@@ -462,7 +476,7 @@ function assignBlobToAudio(audioEl, blob) {
  * Plays audio from CacheStorage blob if available offline, otherwise downloads from the
  * first reachable CDN mirror (and caches it for next time)
  */
-async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail) {
+async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail, isStale = () => false, timeoutMs = 7000) {
   const hasCache = typeof window !== 'undefined' && 'caches' in window;
   try {
     let cache = null;
@@ -471,22 +485,46 @@ async function playAudioWithCacheFallback(targetAudio, cdnUrl, onFail) {
       cache = await caches.open(AUDIO_CACHE_NAME);
       resp = await cache.match(cdnUrl);
     }
+    if (isStale()) return;
     if (!resp) {
-      const fetched = await fetchAudioFromMirrors(cdnUrl);
-      if (!fetched) { onFail(); return; }
-      if (cache) {
+      const fetched = await fetchAudioFromMirrors(cdnUrl, timeoutMs);
+      if (fetched && cache) {
         try { await cache.put(cdnUrl, fetched.clone()); } catch (e) {}
       }
+      // A newer word was requested while we were downloading: never play this stale audio
+      if (isStale()) return;
+      if (!fetched) { onFail(); return; }
       resp = fetched;
     }
     const blob = await resp.blob();
+    if (isStale()) return;
     assignBlobToAudio(targetAudio, blob);
     targetAudio.currentTime = 0;
     trackPlayingAudio(targetAudio);
     const p = targetAudio.play();
-    if (p !== undefined) p.catch(() => onFail());
+    if (p !== undefined) p.catch((err) => { if (!isStale() && !(err && err.name === 'AbortError')) onFail(); });
   } catch (e) {
-    onFail();
+    if (!isStale()) onFail();
+  }
+}
+
+/**
+ * Background warm-up of CacheStorage for words that are not bundled in the APK, so the first
+ * playback in a quiz does not wait for a network round-trip.
+ */
+const _warmingAudioUrls = new Set();
+async function warmAudioCache(cdnUrl) {
+  if (!cdnUrl || typeof window === 'undefined' || !('caches' in window)) return;
+  if (_warmingAudioUrls.has(cdnUrl)) return;
+  _warmingAudioUrls.add(cdnUrl);
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    if (await cache.match(cdnUrl)) return;
+    const fetched = await fetchAudioFromMirrors(cdnUrl, 5000);
+    if (fetched) await cache.put(cdnUrl, fetched);
+  } catch (e) {
+  } finally {
+    _warmingAudioUrls.delete(cdnUrl);
   }
 }
 
@@ -672,13 +710,15 @@ function preloadWordAudio(text, voiceAccentOverride = null) {
   try {
     const accent = voiceAccentOverride || getSavedVoiceAccent();
     const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
-    const { local, cleanQuery } = getAudioUrls(text, isUk);
+    const { local, cdn, cleanQuery } = getAudioUrls(text, isUk);
     const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
 
     if (audioCache.has(cacheKey)) return;
 
     const audio = new Audio();
     audio.preload = 'auto';
+    // Word is not bundled in the APK -> warm CacheStorage from CDN in the background
+    audio.addEventListener('error', () => { warmAudioCache(cdn); }, { once: true });
     audio.src = local;
 
     if (audioCache.size > 80) {
@@ -714,8 +754,72 @@ function getSharedWordAudioPlayer() {
   return sharedWordAudioPlayer;
 }
 
+// Every speakWord() call gets its own generation number. Any asynchronous step of an older
+// request (CDN download, remote TTS URL, fallback chain) checks it before playing, so a word that
+// finished downloading late can never be heard on top of the next quiz word.
+let speakGeneration = 0;
+// If studio audio has not started within this time after the request, it is abandoned and the
+// word is spoken with instant device TTS instead (no "word heard 3-7 seconds later" effect).
+const SPEAK_MAX_LATENCY_MS = 2500;
+let nativeWordTtsActive = false;
+
+/**
+ * Drops word audio that is still being fetched (not yet audible), e.g. when the quiz moves to the
+ * next card. Audio that is already playing is left to finish naturally.
+ */
+function cancelPendingWordSpeech() {
+  speakGeneration += 1;
+}
+
+/**
+ * Stops whatever word audio is currently audible (studio mp3, Web Speech, native TTS started by
+ * speakWord) without touching SFX.
+ */
+function stopWordPlayback() {
+  if (typeof window === 'undefined') return;
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+  if (nativeWordTtsActive) {
+    nativeWordTtsActive = false;
+    try {
+      if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopSpeech === 'function') {
+        window.AndroidAudioBridge.stopSpeech();
+      }
+    } catch (e) {}
+  }
+  if (currentPlayingWordAudio) {
+    try {
+      currentPlayingWordAudio.pause();
+    } catch (e) {}
+  }
+  if (sharedWordAudioPlayer) {
+    try {
+      sharedWordAudioPlayer.pause();
+    } catch (e) {}
+  }
+}
+
 function speakWithSpeechSynthesis(text, lang, isTurtleMode, gender) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  if (typeof window === 'undefined') return;
+  // Android WebView usually has no Web Speech voices: prefer the native TTS bridge
+  if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.speakText === 'function') {
+    try {
+      const started = window.AndroidAudioBridge.speakText(
+        text,
+        lang || 'en-US',
+        'tts_word_' + Date.now(),
+        isTurtleMode ? 0.6 : 0.9
+      );
+      if (started) {
+        nativeWordTtsActive = true;
+        return;
+      }
+    } catch (e) {}
+  }
+  if (!('speechSynthesis' in window)) return;
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -748,20 +852,11 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     return false;
   }
 
-  // 1. Unconditionally kill any robotic voice and previous audio to guarantee only 1 voice plays
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    try {
-      window.speechSynthesis.cancel();
-    } catch (e) {}
-  }
-
-  const player = getSharedWordAudioPlayer();
-  if (player) {
-    try {
-      player.pause();
-      player.currentTime = 0;
-    } catch (e) {}
-  }
+  // 1. New request: invalidate all pending async playback of previous words and silence them
+  speakGeneration += 1;
+  const gen = speakGeneration;
+  const isStale = () => gen !== speakGeneration;
+  stopWordPlayback();
 
   // 2. Track consecutive clicks for Turtle Mode (🐢 slow speed on every 3rd playback: 3, 6, 9...)
   try {
@@ -787,98 +882,75 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const { local, cdn, primary, fallback, cleanQuery } = getAudioUrls(text, isUk);
   const cacheKey = `${cleanQuery}_${isUk ? 'uk' : 'us'}`;
   const cachedAudio = audioCache.get(cacheKey);
-  if (cachedAudio) {
-    if (player) {
-      try { player.pause(); } catch (e) {}
-    }
-    try {
-      cachedAudio.playbackRate = isTurtleMode ? 0.62 : 1.0;
-      trackPlayingAudio(cachedAudio);
-      
-      let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
-      cachedAudio.onerror = () => {
-        if (fallbackStage === 0) {
-          fallbackStage = 1;
-          playAudioWithCacheFallback(cachedAudio, cdn, () => cachedAudio.onerror());
-        } else if (fallbackStage === 1) {
-          fallbackStage = 2;
-          cachedAudio.src = primary;
-          cachedAudio.currentTime = 0;
-          trackPlayingAudio(cachedAudio);
-          cachedAudio.play().catch(() => cachedAudio.onerror());
-        } else if (fallbackStage === 2) {
-          fallbackStage = 3;
-          cachedAudio.src = fallback;
-          cachedAudio.currentTime = 0;
-          trackPlayingAudio(cachedAudio);
-          cachedAudio.play().catch(() => cachedAudio.onerror());
-        } else {
-          speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-        }
-      };
+  const player = getSharedWordAudioPlayer();
 
-      const playPromise = cachedAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          if (err && err.name === 'AbortError') return;
-          if (fallbackStage === 0) {
-            fallbackStage = 1;
-            playAudioWithCacheFallback(cachedAudio, cdn, () => cachedAudio.onerror());
-          }
-        });
-      }
-    } catch (e) {
-      speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-    }
-    return isTurtleMode;
-  }
-
-  if (!player) {
+  const ttsFallback = () => {
+    if (isStale()) return;
     speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+  };
+
+  const target = cachedAudio || player;
+  if (!target) {
+    ttsFallback();
     return isTurtleMode;
   }
+
+  // 3. Latency watchdog: slow studio audio is replaced by instant TTS instead of playing late
+  let audioStarted = false;
+  target.addEventListener('playing', () => { audioStarted = true; }, { once: true });
+  setTimeout(() => {
+    if (isStale() || audioStarted) return;
+    speakGeneration += 1; // abandon the slow chain of this request
+    try { target.pause(); } catch (e) {}
+    speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+  }, SPEAK_MAX_LATENCY_MS);
+
+  // 4. Fallback chain: 0 = local (APK) -> 1 = CacheStorage / CDN mirrors -> 2 = Google TTS ->
+  //    3 = Youdao -> 4 = device TTS. Each stage fails at most once (play() rejection and the
+  //    'error' event of the same stage don't skip a stage).
+  let stage = 0;
+  const failAt = (s) => (err) => {
+    if (err && err.name === 'AbortError') return;
+    if (stage !== s || isStale()) return;
+    stage = s + 1;
+    runStage();
+  };
+  const playRemote = (url) => {
+    target.src = url;
+    target.currentTime = 0;
+    trackPlayingAudio(target);
+    const p = target.play();
+    if (p !== undefined) p.catch(failAt(stage));
+  };
+  const runStage = () => {
+    if (isStale()) return;
+    target.onerror = failAt(stage);
+    if (stage === 1) {
+      playAudioWithCacheFallback(target, cdn, failAt(1), isStale, 2000);
+    } else if (stage === 2) {
+      playRemote(primary);
+    } else if (stage === 3) {
+      playRemote(fallback);
+    } else if (stage >= 4) {
+      target.onerror = null;
+      ttsFallback();
+    }
+  };
 
   try {
-    player.playbackRate = isTurtleMode ? 0.62 : 1.0;
-    player.src = local;
-    player.currentTime = 0;
-    trackPlayingAudio(player);
-
-    let fallbackStage = 0; // 0 = local, 1 = cdn, 2 = primary, 3 = fallback, 4 = speech synthesis
-
-    player.onerror = () => {
-      if (fallbackStage === 0) {
-        fallbackStage = 1;
-        playAudioWithCacheFallback(player, cdn, () => player.onerror());
-      } else if (fallbackStage === 1) {
-        fallbackStage = 2;
-        player.src = primary;
-        player.currentTime = 0;
-        trackPlayingAudio(player);
-        player.play().catch(() => player.onerror());
-      } else if (fallbackStage === 2) {
-        fallbackStage = 3;
-        player.src = fallback;
-        player.currentTime = 0;
-        trackPlayingAudio(player);
-        player.play().catch(() => player.onerror());
-      } else {
-        speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
-      }
-    };
-
-    const playPromise = player.play();
+    target.playbackRate = isTurtleMode ? 0.62 : 1.0;
+    if (target === player) {
+      player.src = local;
+    }
+    try { target.currentTime = 0; } catch (e) {}
+    trackPlayingAudio(target);
+    target.onerror = failAt(0);
+    const playPromise = target.play();
     if (playPromise !== undefined) {
-      playPromise.catch((err) => {
-        if (err && err.name === 'AbortError') return;
-        if (fallbackStage === 0) {
-          fallbackStage = 1;
-          playAudioWithCacheFallback(player, cdn, () => player.onerror());
-        }
-      });
+      playPromise.catch(failAt(0));
     }
   } catch (e) {
-    speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
+    ttsFallback();
   }
 
   return isTurtleMode;
@@ -1077,6 +1149,14 @@ function primeAudioForAutoplay() {
 }
 
 function stopAllAudio() {
+  // Invalidate any pending (still downloading) word playback so it can't start later
+  speakGeneration += 1;
+  if (currentPlayingWordAudio) {
+    try {
+      currentPlayingWordAudio.pause();
+    } catch (e) {}
+  }
+  nativeWordTtsActive = false;
   if (activeAutoplayAudio) {
     try {
       activeAutoplayAudio.pause();
@@ -1195,6 +1275,16 @@ function speakTextInLangAsync(text, langCode = 'ru') {
     // Sanitize punctuation for TTS: do NOT pronounce signs (commas, brackets, dashes, slashes, etc.)
     // Convert brackets, slashes, and standalone dashes into commas/dots so TTS naturally breathes and pauses without vocalizing sign names
     let clean = String(text);
+    // 0. Normalize dotted a.m./p.m. and hour-word + AM/PM so TTS treats it as a single time unit without sentence-break pause
+    clean = clean.replace(/\b([ap])\.\s*m\.?/gi, (_, ap) => `${ap.toUpperCase()}M`);
+    const ttsHourMap = {
+      one: '1', two: '2', three: '3', four: '4', five: '5', six: '6',
+      seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12',
+    };
+    clean = clean.replace(
+      /\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(AM|PM)\b/gi,
+      (_, word, period) => `${ttsHourMap[word.toLowerCase()]} ${period.toUpperCase()}`,
+    );
     // 1. Remove quotes and decorative marks
     clean = clean.replace(/["'«»`“”„]/g, '');
     // 2. Replace slashes, semicolons, colons, vertical bars with commas for natural pause (avoids saying "дробь" / "слэш")
@@ -1231,7 +1321,7 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       uk: 'uk-UA',
       en: 'en-US',
       de: 'de-DE',
-      es: 'es-ES',
+      es: 'es-MX',
       fr: 'fr-FR',
       pl: 'pl-PL',
       tr: 'tr-TR',
@@ -1241,10 +1331,9 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       hu: 'hu-HU',
       el: 'el-GR',
       da: 'da-DK',
-      ga: 'ga-IE',
       lv: 'lv-LV',
       lt: 'lt-LT',
-      pt: 'pt-PT',
+      pt: 'pt-BR',
       sk: 'sk-SK',
       sl: 'sl-SI',
       fi: 'fi-FI',
@@ -1252,7 +1341,18 @@ function speakTextInLangAsync(text, langCode = 'ru') {
       cs: 'cs-CZ',
       sv: 'sv-SE',
       et: 'et-EE',
-      mt: 'mt-MT',
+      hi: 'hi-IN',
+      bn: 'bn-BD',
+      ar: 'ar-SA',
+      fa: 'fa-IR',
+      ur: 'ur-PK',
+      id: 'id-ID',
+      vi: 'vi-VN',
+      th: 'th-TH',
+      ko: 'ko-KR',
+      ja: 'ja-JP',
+      zh: 'zh-CN',
+      kk: 'kk-KZ',
     };
     const normLang = String(langCode || 'ru').toLowerCase().trim();
     const fullLang = BCP47_LANG_MAP[normLang] || (normLang.includes('-') ? normLang : `${normLang}-${normLang.toUpperCase()}`);
@@ -1790,6 +1890,7 @@ function updateMediaSessionStatus(isPlaying, currentWord = null, translationText
 const playAudio = speakWord;
 
 export const AudioService = {
+  cancelPendingWordSpeech,
   speakWord,
   speakWordAsync,
   speakTextInLangAsync,
@@ -1836,6 +1937,7 @@ export default AudioService;
 
 export {
   speakWord,
+  cancelPendingWordSpeech,
   speakWordAsync,
   speakTextInLangAsync,
   stopAllAudio,

@@ -11,9 +11,16 @@ import {
   BUILTIN_COLLECTIONS_WITH_GEAR,
   isBuiltinCollectionOverridden,
   resetBuiltinCollection,
+  isCollectionPackDownloaded,
+  getDownloadablePackStrings,
 } from '../../services/collectionsService.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
 import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
+import { getTimeTrainerStrings } from './TimeTrainerView.js?v=386.0';
+import {
+  getMicroRulesStrings,
+  getTenseConstructionsStrings,
+} from './grammarUiTranslations.js?v=386.0';
 import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 
@@ -178,6 +185,9 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
 
   const lang = getInterfaceLanguage();
   const storyStrings = getStoryStrings(lang);
+  const timeStrings = getTimeTrainerStrings(lang);
+  const microStrings = getMicroRulesStrings(lang);
+  const tenseStrings = getTenseConstructionsStrings(lang);
   let unlockedStoriesCount = 0;
   try {
     const masteredWords = getMasteredWordsCount();
@@ -223,6 +233,39 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
+        <!-- 4. Time Listening Lab Folder Tile -->
+        <div class="col-tile col-tile-time" data-col-id="time_trainer" role="button" tabindex="0">
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">🕒</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(timeStrings.folderTitle || 'Время')}</h3>
+            <span class="col-tile-count">${escapeHtml(timeStrings.folderSubtitle || '6 режимов')}</span>
+          </div>
+        </div>
+
+        <!-- 5. Grammar Micro-rules Folder Tile -->
+        <div class="col-tile col-tile-microrules" data-col-id="grammar_microrules" role="button" tabindex="0">
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">📖</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(microStrings.folderTitle || 'Микроправила')}</h3>
+            <span class="col-tile-count">${escapeHtml(microStrings.folderSubtitle || '156 правил по шагам')}</span>
+          </div>
+        </div>
+
+        <!-- 6. Tense Constructions Folder Tile -->
+        <div class="col-tile col-tile-tenses" data-col-id="tense_constructions" role="button" tabindex="0">
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">⏳</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(tenseStrings.folderTitle || 'Временные конструкции')}</h3>
+            <span class="col-tile-count">${escapeHtml(tenseStrings.folderSubtitle || '16 конструкций и матрица')}</span>
+          </div>
+        </div>
+
         <!-- 3. User Custom Collections -->
         ${summary.customCollections
           .map(
@@ -243,17 +286,24 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
         <!-- 4. Thematic Built-in Collections (2 per row) -->
         ${summary.builtinCollections
           .map(
-            (col) => `
+            (col) => {
+              const isDownloaded = isCollectionPackDownloaded(col.id);
+              const packStrings = !isDownloaded ? getDownloadablePackStrings(lang) : null;
+              const countSubtitle = isDownloaded
+                ? wordLabel(col.count)
+                : `🎬 ${escapeHtml(packStrings.downloadBtn)}`;
+              return `
           <div class="col-tile ${activeColId === col.id ? 'is-active-col' : ''}" data-col-id="${escapeHtml(col.id)}" role="button" tabindex="0">
             <div class="col-tile-icon-box">
               <span class="col-tile-icon">${escapeHtml(col.icon)}</span>
             </div>
             <div class="col-tile-content">
               <h3 class="col-tile-name">${escapeHtml(col.title)}</h3>
-              <span class="col-tile-count">${wordLabel(col.count)}</span>
+              <span class="col-tile-count">${countSubtitle}</span>
             </div>
           </div>
-        `
+        `;
+            }
           )
           .join('')}
       </div>

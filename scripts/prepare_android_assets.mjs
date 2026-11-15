@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { BUILTIN_COLLECTIONS_DEF } from '../frontend/services/collectionsService.js';
+import { BUILTIN_COLLECTIONS_DEF, DOWNLOADABLE_PACK_COLLECTIONS } from '../frontend/services/collectionsService.js';
 
 const ROOT_SOURCE = 'c:/projects/my-duolingo';
 const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
 
 export function prepareAndroidAssets() {
-  console.log('--- 1. Loading words.json & filtering Elementary + all Standard Built-in Collections ---');
+  console.log('--- 1. Loading words.json & filtering Elementary + core Built-in Collections (excluding downloadable packs) ---');
   const wordsPath = path.join(ROOT_SOURCE, 'frontend/assets/data/words.json');
   const words = JSON.parse(fs.readFileSync(wordsPath, 'utf8'));
 
@@ -16,10 +16,10 @@ export function prepareAndroidAssets() {
       .replace(/\s+/g, '_') + '.mp3';
   }
 
-  // Collect all word keys from standard built-in collections (numbers, verbs, colors, food, clothes, etc.)
+  // Collect all word keys from core built-in collections (excluding on-demand downloadable packs: it_terms, idioms)
   const collectionWordsSet = new Set();
   BUILTIN_COLLECTIONS_DEF.forEach(col => {
-    if (col.wordKeys) {
+    if (col.wordKeys && !DOWNLOADABLE_PACK_COLLECTIONS.has(col.id)) {
       col.wordKeys.forEach(k => collectionWordsSet.add(k.toLowerCase().trim()));
     }
   });
@@ -99,7 +99,24 @@ export function prepareAndroidAssets() {
     console.log('Public audio directory cleaned.');
   }
 
-  console.log('✅ Android asset preparation complete: Ready for lightweight ~35MB APK build.');
+  // Also filter local android/app/src/main/assets/public/assets/audio in ROOT_SOURCE
+  const localAndroidAudioDir = path.join(ROOT_SOURCE, 'android/app/src/main/assets/public/assets/audio');
+  if (fs.existsSync(localAndroidAudioDir)) {
+    const localUkDir = path.join(localAndroidAudioDir, 'uk');
+    if (fs.existsSync(localUkDir)) {
+      fs.rmSync(localUkDir, { recursive: true, force: true });
+    }
+    const localUsDir = path.join(localAndroidAudioDir, 'us');
+    if (fs.existsSync(localUsDir)) {
+      for (const file of fs.readdirSync(localUsDir)) {
+        if (!targetFileNames.has(file)) {
+          fs.unlinkSync(path.join(localUsDir, file));
+        }
+      }
+    }
+  }
+
+  console.log('✅ Android asset preparation complete: Ready for lightweight APK/AAB build.');
 }
 
 prepareAndroidAssets();

@@ -736,12 +736,21 @@ public class MainActivity extends BridgeActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 AppWidgetManager appWidgetManager = getSystemService(AppWidgetManager.class);
                                 if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported()) {
-                                    ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
+                                    final ComponentName provider = new ComponentName(MainActivity.this, GoldCardWidgetProvider.class);
                                     int[] existingIds = appWidgetManager.getAppWidgetIds(provider);
                                     if (!WidgetDataManager.hasRealInstalledWidgets(MainActivity.this, existingIds)) {
                                         WidgetDataManager.markPrePinGhostIds(MainActivity.this, existingIds);
                                     }
-                                    appWidgetManager.requestPinAppWidget(provider, null, null);
+                                    // @JavascriptInterface runs on the JavaBridge thread; many OEM launchers
+                                    // only show the system pin sheet when requested from the UI thread.
+                                    runOnUiThread(() -> {
+                                        try {
+                                            GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+                                            appWidgetManager.requestPinAppWidget(provider, null, null);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
                                     return true;
                                 }
                             }

@@ -2,7 +2,7 @@ import { getUserSettings, saveUserSettings, getWords, getIsoWeekKey } from '../.
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=386.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
 import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=386.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted } from '../../services/audioService.js?v=386.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isCategoryAudioDownloaded, isVoicePackDownloaded } from '../../services/audioService.js?v=386.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=386.0';
 import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js?v=386.0';
@@ -188,7 +188,12 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   // Synchronous initial values from local storage/helpers
   let isSfxMutedVal = isSfxMuted();
+  const isUkDownloadedNow = () => isCategoryAudioDownloaded('uk', 'Elementary') || isVoicePackDownloaded('uk');
   let currentAccent = getSavedVoiceAccent();
+  if (currentAccent === 'uk' && !isUkDownloadedNow()) {
+    currentAccent = 'us';
+    setSavedVoiceAccent('us');
+  }
   let currentSettingsObj = {};
 
   // Auto-save status element
@@ -318,25 +323,74 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   function updateVoiceButtons() {
     if (ukVoiceBtn && usVoiceBtn) {
-      ukVoiceBtn.classList.toggle('active', currentAccent === 'uk');
-      usVoiceBtn.classList.toggle('active', currentAccent === 'us');
+      const effectiveUk = currentAccent === 'uk' && isUkDownloadedNow();
+      ukVoiceBtn.classList.toggle('active', effectiveUk);
+      usVoiceBtn.classList.toggle('active', !effectiveUk);
     }
   }
   updateVoiceButtons();
 
   if (ukVoiceBtn && usVoiceBtn) {
-    ukVoiceBtn.addEventListener('click', () => {
-      currentAccent = 'uk';
-      setSavedVoiceAccent('uk');
-      updateVoiceButtons();
-      speakWord('Hello', null, 'en-GB', 'uk', true);
-      triggerAutoSave();
-      if (window.trackEvent) {
-        window.trackEvent('settings_accent_change', { accent: 'uk' });
+    ukVoiceBtn.addEventListener('click', async () => {
+      if (isUkDownloadedNow()) {
+        currentAccent = 'uk';
+        setSavedVoiceAccent('uk');
+        updateVoiceButtons();
+        speakWord('Hello', null, 'en-GB', 'uk', true);
+        triggerAutoSave();
+        if (window.trackEvent) {
+          window.trackEvent('settings_accent_change', { accent: 'uk' });
+        }
+        // Verify cache in background; if evicted, prompt download and keep US active until downloaded
+        if (typeof window.showAccentDownloadModalIfNeeded === 'function') {
+          const modalOpened = await window.showAccentDownloadModalIfNeeded('uk', {
+            onSuccess: () => {
+              currentAccent = 'uk';
+              setSavedVoiceAccent('uk');
+              updateVoiceButtons();
+              speakWord('Hello', null, 'en-GB', 'uk', true);
+              triggerAutoSave();
+            },
+            onCancel: () => {
+              currentAccent = 'us';
+              setSavedVoiceAccent('us');
+              updateVoiceButtons();
+              triggerAutoSave();
+            },
+          });
+          if (modalOpened) {
+            currentAccent = 'us';
+            setSavedVoiceAccent('us');
+            updateVoiceButtons();
+          }
+        }
+        return;
       }
-      // Show download modal for UK Elementary audio pack if not yet downloaded
+
+      // UK audio pack is not downloaded yet: keep US accent active/green until download completes
+      currentAccent = 'us';
+      setSavedVoiceAccent('us');
+      updateVoiceButtons();
+
       if (typeof window.showAccentDownloadModalIfNeeded === 'function') {
-        window.showAccentDownloadModalIfNeeded('uk');
+        await window.showAccentDownloadModalIfNeeded('uk', {
+          onSuccess: () => {
+            currentAccent = 'uk';
+            setSavedVoiceAccent('uk');
+            updateVoiceButtons();
+            speakWord('Hello', null, 'en-GB', 'uk', true);
+            triggerAutoSave();
+            if (window.trackEvent) {
+              window.trackEvent('settings_accent_change', { accent: 'uk' });
+            }
+          },
+          onCancel: () => {
+            currentAccent = 'us';
+            setSavedVoiceAccent('us');
+            updateVoiceButtons();
+            triggerAutoSave();
+          },
+        });
       }
     });
 
@@ -613,7 +667,11 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         updateSfxButtons();
       }
       if (remoteSettings.voiceAccent) {
-        currentAccent = remoteSettings.voiceAccent;
+        const validAccent = (remoteSettings.voiceAccent === 'uk' && !isUkDownloadedNow())
+          ? 'us'
+          : remoteSettings.voiceAccent;
+        currentAccent = validAccent;
+        setSavedVoiceAccent(validAccent);
         updateVoiceButtons();
       }
     }

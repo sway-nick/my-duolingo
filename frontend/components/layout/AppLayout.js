@@ -130,12 +130,17 @@ function updateSyncBadges(issueActive = false) {
   }
 }
 
+function formatFullXp(xp) {
+  const num = Math.max(0, Math.round(Number(xp) || 0));
+  return String(num).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
+}
+
 function renderHeaderRightActions(user) {
   const xp = getUserWeeklyXP();
   const rank = getUserWeeklyRank();
   const rankBadge = getHeaderRankBadge(rank, xp);
 
-  const formattedXp = formatCompactXp(xp);
+  const formattedXp = formatFullXp(xp);
   const iconHtml = rankBadge.isIcon
     ? `<span class="xp-badge-icon" id="header-xp-icon">${rankBadge.content}</span>`
     : `<span class="xp-badge-level" id="header-xp-icon">${rankBadge.content}</span>`;
@@ -143,7 +148,7 @@ function renderHeaderRightActions(user) {
   const xpBadgeHtml = `
     <button class="header-xp-badge" id="header-xp-btn" title="${rankBadge.title}. ${t('header_rank_click_hint') || 'Нажмите, чтобы открыть рейтинг'}">
       ${iconHtml}
-      <span class="xp-badge-text"><span id="header-xp-val">${formattedXp}</span>&nbsp;XP</span>
+      <span class="xp-badge-text"><span id="header-xp-val">${formattedXp}</span></span>
     </button>
   `;
 
@@ -323,16 +328,6 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             </span>
             <span class="drawer-item-text">${t('stats')}</span>
           </button>
-          <button class="nav-tab" data-tab="settings" title="${t('settings')}" style="position: relative;">
-            <span class="tab-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-              </svg>
-            </span>
-            <span class="drawer-item-text">${t('settings')}</span>
-            <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${shouldShowSyncBadge() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
-          </button>
           <button type="button" class="drawer-share-action-btn" id="drawer-challenge-btn" title="${t('challenge_menu_item') || 'CHALLENGE'}">
             <span class="tab-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -355,6 +350,16 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
               </svg>
             </span>
             <span class="drawer-item-text">${t('share_title')}</span>
+          </button>
+          <button class="nav-tab" data-tab="settings" title="${t('settings')}" style="position: relative;">
+            <span class="tab-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </span>
+            <span class="drawer-item-text">${t('settings')}</span>
+            <span class="sync-status-badge" id="drawer-settings-sync-badge" style="display: ${shouldShowSyncBadge() ? 'block' : 'none'}; top: 12px; right: 14px;"></span>
           </button>
         </div>
 
@@ -955,7 +960,7 @@ if (typeof window !== 'undefined') {
     const newXp = e.detail && typeof e.detail.xp !== 'undefined' ? e.detail.xp : getUserWeeklyXP();
 
     if (xpValEl) {
-      xpValEl.textContent = formatCompactXp(newXp);
+      xpValEl.textContent = formatFullXp(newXp);
     }
 
     const rank = getUserWeeklyRank();

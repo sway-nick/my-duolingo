@@ -12924,7 +12924,7 @@ const translations = {
     scan_toggle_variant_title: "切换备选翻译",
     scan_edit_trans_manual_title: "手动编辑翻译",
     dict_word_placeholder: "例如：serendipity",
-    dict_trans_placeholder: "例如：意外发现的美好事物",
+    dict_trans_placeholder: "例如：幸运的巧合",
     dict_variants_label: "推荐备选释义：",
     dict_notes_placeholder: "例如：词根记忆或个人搭配例句",
     dict_searching_trans: "正在智能查询地道翻译...",
@@ -13578,7 +13578,7 @@ const translations = {
     dict_title: "Сөздік",
     dict_search: "Сөздіктен іздеу...",
     dict_add_word: "Сөз қосу",
-    dict_filter_all: "Барлығы ({count})",
+    dict_filter_all: "Барлық сөздер",
     dict_filter_learning: "Үйренуде ({count})",
     dict_filter_mastered: "Жатталған ({count})",
     dict_empty: "Сөздік әлі бос",
@@ -14690,6 +14690,33 @@ export function t(key, params = null) {
   return val;
 }
 
+let _cachedWordOverridesRaw = null;
+let _cachedWordOverridesMap = {};
+
+/**
+ * Returns the user's personal override ({ translation, translations, category, notes })
+ * for a given word object from localStorage (`myduo_user_word_overrides`), if any.
+ */
+export function getUserWordOverride(wordObj) {
+  if (!wordObj) return null;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem('myduo_user_word_overrides') || '';
+      if (raw !== _cachedWordOverridesRaw) {
+        _cachedWordOverridesRaw = raw;
+        _cachedWordOverridesMap = raw ? JSON.parse(raw) : {};
+      }
+      if (_cachedWordOverridesMap && typeof _cachedWordOverridesMap === 'object') {
+        const wId = wordObj.id ? String(wordObj.id) : '';
+        const wText = wordObj.word ? String(wordObj.word).trim().toLowerCase() : '';
+        const ov = (wId && _cachedWordOverridesMap[wId]) || (wText && _cachedWordOverridesMap[wText]);
+        if (ov && typeof ov === 'object') return ov;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
 export function getWordTranslation(wordObj, explicitLang) {
   if (!wordObj) return '';
   const lang = explicitLang || getInterfaceLanguage();
@@ -14702,6 +14729,24 @@ export function getWordTranslation(wordObj, explicitLang) {
     if (rawWord && clean === rawWord) return true;
     return false;
   };
+
+  // 0. Personal user translation override (strictly per-user)
+  const personalOverride = getUserWordOverride(wordObj);
+  if (personalOverride) {
+    const ovLangTrans = personalOverride.translations && personalOverride.translations[lang];
+    if (typeof ovLangTrans === 'string' && ovLangTrans.trim() && !ovLangTrans.includes('\ufffd')) {
+      return ovLangTrans.trim();
+    }
+    if (!personalOverride.translations && typeof personalOverride.translation === 'string' && personalOverride.translation.trim() && !personalOverride.translation.includes('\ufffd')) {
+      return personalOverride.translation.trim();
+    }
+  }
+  if (wordObj.user_translations && typeof wordObj.user_translations[lang] === 'string' && wordObj.user_translations[lang].trim() && !wordObj.user_translations[lang].includes('\ufffd')) {
+    return wordObj.user_translations[lang].trim();
+  }
+  if (!wordObj.user_translations && typeof wordObj.user_translation === 'string' && wordObj.user_translation.trim() && !wordObj.user_translation.includes('\ufffd')) {
+    return wordObj.user_translation.trim();
+  }
 
   // 1. Localized translation for active interface language
   if (wordObj.translations && wordObj.translations[lang]) {
@@ -14730,10 +14775,46 @@ export function getWordTranslation(wordObj, explicitLang) {
 let _cachedUserNotesRaw = null;
 let _cachedUserNotesObj = {};
 
-export function getWordNotes(wordObj, explicitLang) {
+const IT_TERM_WORD_KEYS_SET = new Set([
+  "abstraction", "accuracy", "affordance", "aggregation", "agile", "algorithm", "alignment",
+  "analytics", "anomaly", "architecture", "argument", "array", "assessment", "asset",
+  "asynchronous", "attribution", "authentication", "authorization", "avatar", "backend",
+  "backlog", "badge", "banner", "benchmark", "blocker", "boilerplate", "bottleneck",
+  "branch", "breakpoint", "bug", "burnout", "button", "cache", "candidate", "canvas",
+  "capacity", "carousel", "challenge", "checkout", "churn", "classification", "client",
+  "cohort", "commit", "compensation", "compiler", "concurrency", "container", "contrast",
+  "conversion", "correlation", "dashboard", "database", "dataset", "deadline", "debugger",
+  "deliverable", "dependency", "deploy", "deployment", "deprecated", "dimension", "dropdown",
+  "encapsulation", "endpoint", "environment", "epic", "estimation", "event", "exception",
+  "experience", "feature", "feedback", "firewall", "font", "footer", "framework", "frontend",
+  "fullstack", "funnel", "gateway", "gradient", "grid", "header", "hierarchy", "hotfix",
+  "hypothesis", "icon", "impediment", "incident", "index", "inference", "inheritance",
+  "interaction", "interface", "interpreter", "interview", "issue", "kanban", "lakehouse",
+  "latency", "layout", "legacy", "library", "logging", "metric", "microservice", "middleware",
+  "migration", "milestone", "mockup", "modal", "model", "module", "monolith", "navigation",
+  "offer", "onboarding", "package", "palette", "parameter", "patch", "payload", "pipeline",
+  "polymorphism", "popup", "postmortem", "precision", "prediction", "probation", "production",
+  "promotion", "protocol", "prototype", "proxy", "query", "queue", "recall", "recruiter",
+  "refactor", "regression", "repository", "requirement", "resolution", "responsive",
+  "retention", "retrospective", "roadmap", "rollback", "runtime", "salary", "scaffolding",
+  "schema", "scrum", "security", "segmentation", "server", "serverless", "sidebar", "slider",
+  "spacing", "sprint", "stack", "staging", "stakeholder", "standup", "streaming",
+  "synchronous", "syntax", "telemetry", "throughput", "thumbnail", "ticket", "toggle",
+  "tooltip", "trade-off", "typography", "usability", "vector", "velocity", "version",
+  "viewport", "vulnerability", "warehouse", "waterfall", "whitespace", "wireframe"
+]);
+
+export function isItTermWord(wordObj) {
+  if (!wordObj) return false;
+  if (wordObj.it_note === true || String(wordObj.category || '').trim() === 'IT') return true;
+  const wText = wordObj.word ? String(wordObj.word).toLowerCase().trim() : '';
+  return Boolean(wText && IT_TERM_WORD_KEYS_SET.has(wText));
+}
+
+export function getWordNotes(wordObj, explicitLang, options = {}) {
   if (!wordObj) return '';
 
-  // 1. Personal user note has highest priority
+  // 1. Personal user note has highest priority (always shown even if hideItNotes is true)
   if (typeof wordObj.user_note === 'string' && wordObj.user_note.trim().length > 0) {
     return wordObj.user_note.trim();
   }
@@ -14752,6 +14833,11 @@ export function getWordNotes(wordObj, explicitLang) {
         return personalNote.trim();
       }
     } catch (e) {}
+  }
+
+  // 2. Isolate IT collection notes from the general Dictionary and general Training
+  if (options && options.hideItNotes && isItTermWord(wordObj)) {
+    return '';
   }
 
   const lang = explicitLang || getInterfaceLanguage();

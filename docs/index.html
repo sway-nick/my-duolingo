@@ -212,24 +212,28 @@
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=386.0';
       import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=386.0';
-      import { t, getInterfaceLanguage, getWordTranslation, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=386.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=386.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=386.0';
       import { renderStatsView } from './components/stats/StatsView.js?v=386.0';
       import { renderSettingsView } from './components/settings/SettingsView.js?v=386.0';
       import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=386.0';
       import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=386.0';
       import { renderStoriesView } from './components/favorites/StoriesView.js?v=386.0';
+      import { renderTimeTrainerView } from './components/favorites/TimeTrainerView.js?v=386.0';
+      import { renderMicroRulesView } from './components/favorites/MicroRulesView.js?v=386.0';
+      import { renderTenseConstructionsView } from './components/favorites/TenseConstructionsView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
       import { renderLeaderboardView, renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } from './components/leaderboard/LeaderboardView.js?v=386.0';
       import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
       import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
-      import { showMilestoneStoryModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
+      import { showMilestoneStoryModal, showMilestoneUnlockedModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
       import { StorageService } from './services/storageService.js?v=386.0';
       import { AdService } from './services/adService.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
       window.showMilestoneStoryModal = showMilestoneStoryModal;
+      window.showMilestoneUnlockedModal = showMilestoneUnlockedModal;
       window.StorageService = StorageService;
 
       // Track active unique day of usage (never resets)
@@ -386,7 +390,7 @@
         try {
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
-          if (typeof syncFavoritesToAndroidWidget === 'function') { syncFavoritesToAndroidWidget(); }
+          if (typeof window.syncFavoritesToAndroidWidget === 'function') { window.syncFavoritesToAndroidWidget(); }
         } catch (e) {
           console.warn('Failed to load favorites:', e);
         }
@@ -410,12 +414,17 @@
       }
 
       // Expose a global function so SettingsView can trigger the "download UK Elementary audio" modal
-      window.showAccentDownloadModalIfNeeded = async function(accent) {
+      window.showAccentDownloadModalIfNeeded = async function(accent, callbacks = {}) {
         if (accent !== 'uk') return false;
         // Elementary is the bundled category — check if its UK audio pack is downloaded
         const ELEMENTARY_CAT = 'Elementary';
         const verifyWords = allWords.filter((w) => (w.category || '').toLowerCase().trim() === ELEMENTARY_CAT.toLowerCase());
-        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT) && await verifyCategoryAudioInCache(accent, ELEMENTARY_CAT, verifyWords)) return false;
+        if (isCategoryAudioDownloaded(accent, ELEMENTARY_CAT) && await verifyCategoryAudioInCache(accent, ELEMENTARY_CAT, verifyWords)) {
+          if (callbacks && typeof callbacks.onSuccess === 'function') {
+            callbacks.onSuccess();
+          }
+          return false;
+        }
 
         const catWords = allWords.filter((w) => {
           const wCat = (w.category || '').toLowerCase().trim();
@@ -468,7 +477,12 @@
         const descEl = modal.querySelector('#cat-modal-desc');
         const actionsWrap = modal.querySelector('#cat-modal-actions');
 
-        cancelBtn.addEventListener('click', () => { modal.remove(); });
+        cancelBtn.addEventListener('click', () => {
+          modal.remove();
+          if (callbacks && typeof callbacks.onCancel === 'function') {
+            callbacks.onCancel();
+          }
+        });
 
         downloadBtn.addEventListener('click', async () => {
           downloadBtn.disabled = true;
@@ -499,6 +513,9 @@
               if (progressText) progressText.textContent = `${percent}%`;
             });
             modal.remove();
+            if (callbacks && typeof callbacks.onSuccess === 'function') {
+              callbacks.onSuccess();
+            }
           } catch (err) {
             console.warn('UK accent download failed:', err);
             if (actionsWrap) actionsWrap.style.display = 'flex';
@@ -599,11 +616,10 @@
           const mastered = getMasteredWordsCount();
           const currentPassedMilestone = Math.floor(mastered / 50) * 50;
           const rawSaved = localStorage.getItem('myduo_milestone_highest_unlocked');
-          const savedHighest = rawSaved !== null ? Number(rawSaved) : -1;
 
-          // If first time or saved highest is less than current mastered progress,
-          // sync up to current progress so we NEVER backfill/catch-up past milestones.
-          if (savedHighest < currentPassedMilestone) {
+          // Initialize baseline ONLY on first run when myduo_milestone_highest_unlocked is not yet set,
+          // so new milestones crossed during training are detected and announced at round completion.
+          if (rawSaved === null) {
             localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
             for (let m = 50; m <= currentPassedMilestone; m += 50) {
               localStorage.setItem(`myduo_milestone_story_${m}_shown`, 'true');
@@ -612,19 +628,37 @@
         } catch (_) {}
       }
 
-      function checkMilestoneStoryTrigger(delay = 800) {
+      function recordMilestoneProgressIfNeeded() {
         try {
           initMilestoneBaseline();
           const mastered = getMasteredWordsCount();
           const currentPassedMilestone = Math.floor(mastered / 50) * 50;
           const savedHighest = Number(localStorage.getItem('myduo_milestone_highest_unlocked')) || 0;
+          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1850) {
+            localStorage.setItem('myduo_pending_milestone_unlock', String(currentPassedMilestone));
+          }
+        } catch (_) {}
+      }
+
+      function checkMilestoneStoryTrigger(delay = 600) {
+        try {
+          initMilestoneBaseline();
+          const mastered = getMasteredWordsCount();
+          const currentPassedMilestone = Math.floor(mastered / 50) * 50;
+          const savedHighest = Number(localStorage.getItem('myduo_milestone_highest_unlocked')) || 0;
+          const pendingMilestone = Number(localStorage.getItem('myduo_pending_milestone_unlock')) || 0;
+          const targetMilestone = Math.max(
+            currentPassedMilestone > savedHighest ? currentPassedMilestone : 0,
+            pendingMilestone > savedHighest ? pendingMilestone : 0
+          );
 
           // Trigger ONLY if the user just crossed a brand new milestone > savedHighest
-          if (currentPassedMilestone > savedHighest && currentPassedMilestone <= 1850) {
-            localStorage.setItem('myduo_milestone_highest_unlocked', String(currentPassedMilestone));
-            localStorage.setItem(`myduo_milestone_story_${currentPassedMilestone}_shown`, 'true');
+          if (targetMilestone >= 50 && targetMilestone > savedHighest && targetMilestone <= 1850) {
+            localStorage.setItem('myduo_milestone_highest_unlocked', String(targetMilestone));
+            localStorage.removeItem('myduo_pending_milestone_unlock');
+            localStorage.setItem(`myduo_milestone_story_${targetMilestone}_shown`, 'true');
             setTimeout(() => {
-              showMilestoneStoryModal(currentPassedMilestone);
+              showMilestoneUnlockedModal(targetMilestone);
             }, delay);
           }
         } catch (_) {}
@@ -1248,6 +1282,9 @@
                 pushUserDataToCloud(null, null, true);
               } catch (e) {}
               playFanfareSound();
+              checkMilestoneStoryTrigger(600);
+            } else if (localStorage.getItem('myduo_pending_milestone_unlock')) {
+              checkMilestoneStoryTrigger(600);
             }
             preloadWordAudio(wotd.word);
             const favList = getUserFavorites();
@@ -1265,7 +1302,7 @@
             const wotdTier = (wotd.category || wotd.level || wotd.tier || 'ELEMENTARY').toUpperCase();
             const rawTrans = String(wotd.transcription || '').replace(/[\[\]]/g, '').replace(/^\/+|\/+$/g, '').trim();
             const wotdCleanTranscription = rawTrans ? `/${rawTrans}/` : '';
-            const wotdExample = (wotd.example || wotd.notes || '').trim();
+            const wotdExample = (wotd.example || getWordNotes(wotd, null, { hideItNotes: true }) || '').trim();
             const wotdExampleHtml = wotdExample ? `<div class="example-line">«${wotdExample}»</div>` : '';
 
             wotdHtml = `
@@ -2231,6 +2268,31 @@
           (currentMethod === 'input' && testQueue.length <= 1) ||
           (currentMethod === 'quiz' && quizQueue.length <= 1);
 
+        const getBlocksWordsForInput = (progMap) => {
+          if (currentMethod !== 'input') return [];
+          const list = isFavPracticeActive
+            ? activeWords.filter((w) => {
+                const p = progMap[w.id] || progMap[String(w.id)];
+                return Boolean(
+                  p &&
+                    ((p.roundQuizMistakes || 0) > 0 ||
+                      (p.roundPairsMistakes || 0) > 0 ||
+                      (p.roundInputMistakes || 0) > 0) &&
+                    p.roundBlocksDone !== true,
+                );
+              })
+            : activeWords.filter((w) => isWordProblematicForBlocks(w, progMap[w.id] || progMap[String(w.id)]));
+
+          if (window._priorityBlocksWordId != null) {
+            const pIdx = list.findIndex((w) => String(w.id) === String(window._priorityBlocksWordId));
+            if (pIdx > 0) {
+              const [priorityWord] = list.splice(pIdx, 1);
+              list.unshift(priorityWord);
+            }
+          }
+          return list;
+        };
+
         if (isFavPracticeActive && currentWordIndex >= activeWords.length) {
           if (window.__favsAutoplayRunning) {
             // Endless loop mode for background player: wrap to first word and continue
@@ -2238,25 +2300,45 @@
             renderTrainingTab();
             return;
           }
-          try { pushUserDataToCloud(null, null, true); } catch (e) {}
-          playFanfareSound();
-          if (window._favPracticeCompletedNonCardWord && currentMethod !== 'cards') {
-            window._favPracticeCompletedNonCardWord = false;
-            try {
-              AdService.showCollectionsExitInterstitial().catch(() => {});
-            } catch (e) {}
+          if (currentMethod === 'cards') {
+            favoritePracticeMethod = 'quiz';
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
           }
-          favoritePracticeWords = null;
-          favoritePracticeMethod = 'cards';
-          window._activePracticeCollectionId = null;
-          window._activePracticeCollectionTitle = null;
-          currentWordIndex = 0;
-          activeTab = 'favorites';
-          window._activeTab = 'favorites';
-          const tabs = document.querySelectorAll('.nav-tab');
-          tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
-          renderTab('favorites', true);
-          return;
+          if (currentMethod === 'quiz') {
+            favoritePracticeMethod = 'pairs';
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          }
+          if (currentMethod === 'pairs') {
+            favoritePracticeMethod = 'input';
+            currentWordIndex = 0;
+            renderTrainingTab();
+            return;
+          }
+          if (currentMethod === 'input' && getBlocksWordsForInput(userProgress).length === 0) {
+            try { pushUserDataToCloud(null, null, true); } catch (e) {}
+            playFanfareSound();
+            if (window._favPracticeCompletedNonCardWord) {
+              window._favPracticeCompletedNonCardWord = false;
+              try {
+                AdService.showCollectionsExitInterstitial().catch(() => {});
+              } catch (e) {}
+            }
+            favoritePracticeWords = null;
+            favoritePracticeMethod = 'cards';
+            window._activePracticeCollectionId = null;
+            window._activePracticeCollectionTitle = null;
+            currentWordIndex = 0;
+            activeTab = 'favorites';
+            window._activeTab = 'favorites';
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
+            renderTab('favorites', true);
+            return;
+          }
         }
 
         if (!isFavPracticeActive && currentMethod === 'input' && currentWordIndex >= activeWords.length) {
@@ -2285,9 +2367,7 @@
           }
         }
 
-        const problemWordsForBlocks = (currentMethod === 'input' && !isFavPracticeActive)
-          ? activeWords.filter((w) => isWordProblematicForBlocks(w, userProgress[w.id] || userProgress[String(w.id)]))
-          : [];
+        const problemWordsForBlocks = getBlocksWordsForInput(userProgress);
 
         const isBlocksStage = currentMethod === 'input' && problemWordsForBlocks.length > 0;
         if (isBlocksStage) {
@@ -2344,16 +2424,21 @@
           blocksIndex,
           totalBlocksCount,
           onBlocksWordSolved: async (solvedWord) => {
+            if (window._priorityBlocksWordId != null && String(window._priorityBlocksWordId) === String(solvedWord.id)) {
+              window._priorityBlocksWordId = null;
+            }
             try {
-              await saveProgress(solvedWord.id, true, 'blocks');
+              await saveProgress(solvedWord.id, true, 'blocks', { isFavPractice: isFavPracticeActive });
             } catch (err) {
               console.error('Failed to save blocks progress:', err);
             }
             userProgress = getUserProgress();
-            const remaining = activeWords.filter((w) => isWordProblematicForBlocks(w, userProgress[w.id] || userProgress[String(w.id)]));
+            const remaining = getBlocksWordsForInput(userProgress);
             if (remaining.length === 0) {
               window._totalBlocksForRound = null;
-              currentWordIndex = 0;
+              if (!isFavPracticeActive && currentWordIndex >= activeWords.length) {
+                currentWordIndex = 0;
+              }
             }
             renderTrainingTab();
           },
@@ -2428,6 +2513,8 @@
             incrementGuestTrainingCount();
             updateHeaderUser();
 
+            window._priorityBlocksWordId = (opts && opts.triggerBlocksWordId) ? opts.triggerBlocksWordId : null;
+
             if (isFavPracticeActive && currentMethod !== 'cards') {
               window._favPracticeCompletedNonCardWord = true;
             }
@@ -2439,7 +2526,7 @@
               });
             }
 
-            if (currentMethod === 'input' && (isSingleRemainingWord || unfinishedInQueue.length <= 1)) {
+            if (!(opts && opts.repeatSoon) && currentMethod === 'input' && (isSingleRemainingWord || unfinishedInQueue.length <= 1)) {
               window._trainingRoundJustCompleted = true;
             }
 
@@ -2453,12 +2540,14 @@
               currentWordIndex = 0;
             } else if (currentMethod === 'pairs' && !isFavPracticeActive) {
               currentWordIndex = 0;
+            } else if (currentMethod === 'pairs' && isFavPracticeActive) {
+              currentWordIndex += 5;
             } else {
               currentWordIndex += 1;
             }
 
-            // Check Milestone Story trigger (100 to 800 words)
-            checkMilestoneStoryTrigger(800);
+            // Record 50-word milestone progress; notification modal will display on main Hub screen after round finishes
+            recordMilestoneProgressIfNeeded();
 
             renderTrainingTab();
           },
@@ -2568,6 +2657,26 @@
               : getCollectionWords(targetId, allWords);
 
             if (practiceList && practiceList.length > 0) {
+              try {
+                const progKey = `progress_${getEffectiveUserId()}`;
+                const progMap = getUserProgress();
+                let progChanged = false;
+                practiceList.forEach((w) => {
+                  const wid = w && w.id != null ? String(w.id) : null;
+                  const p = wid ? (progMap[w.id] || progMap[wid]) : null;
+                  if (p) {
+                    p.roundQuizMistakes = 0;
+                    p.roundPairsMistakes = 0;
+                    p.roundInputMistakes = 0;
+                    p.roundBlocksDone = false;
+                    p.needsTestRepeat = false;
+                    progChanged = true;
+                  }
+                });
+                if (progChanged) {
+                  localStorage.setItem(progKey, JSON.stringify(progMap));
+                }
+              } catch (e) {}
               favoritePracticeWords = [...practiceList];
               favoritePracticeMethod = 'cards';
             } else {
@@ -2595,6 +2704,42 @@
               window._isInsideCollectionCards = true;
               window._currentOpenCollectionId = colId;
               renderStoriesView('#app-content', {
+                onBack: () => {
+                  window._isInsideCollectionCards = false;
+                  window._currentOpenCollectionId = null;
+                  renderTab('favorites');
+                }
+              });
+              return;
+            }
+            if (colId === 'time_trainer') {
+              window._isInsideCollectionCards = true;
+              window._currentOpenCollectionId = colId;
+              renderTimeTrainerView('#app-content', {
+                onBack: () => {
+                  window._isInsideCollectionCards = false;
+                  window._currentOpenCollectionId = null;
+                  renderTab('favorites');
+                }
+              });
+              return;
+            }
+            if (colId === 'grammar_microrules') {
+              window._isInsideCollectionCards = true;
+              window._currentOpenCollectionId = colId;
+              renderMicroRulesView('#app-content', {
+                onBack: () => {
+                  window._isInsideCollectionCards = false;
+                  window._currentOpenCollectionId = null;
+                  renderTab('favorites');
+                }
+              });
+              return;
+            }
+            if (colId === 'tense_constructions') {
+              window._isInsideCollectionCards = true;
+              window._currentOpenCollectionId = colId;
+              renderTenseConstructionsView('#app-content', {
                 onBack: () => {
                   window._isInsideCollectionCards = false;
                   window._currentOpenCollectionId = null;
@@ -2714,7 +2859,7 @@
         try {
           const cacheVer = localStorage.getItem('myduo_words_cache_ver');
           const cachedRaw = localStorage.getItem('myduo_cached_words');
-          if (cachedRaw && cacheVer === 'v386_clean_translations') {
+          if (cachedRaw && (cacheVer === 'v401_it_idioms_7217_36loc' || cacheVer === 'v386_clean_translations')) {
             const parsed = JSON.parse(cachedRaw);
             if (Array.isArray(parsed) && parsed.length >= 6886) {
               allWords = parsed;
@@ -3159,6 +3304,14 @@
               } else {
                 renderTrainingTab();
               }
+              return true;
+            }
+
+            // Priority 4.3: If inside Tense Constructions Matrix tab, return to the Tense Constructions list tab first
+            const tcMatrixActive = document.querySelector('.tc-tab-btn.is-active[data-tab-mode="matrix"]');
+            const tcListTabBtn = document.querySelector('.tc-tab-btn[data-tab-mode="list"]');
+            if (activeTab === 'favorites' && tcMatrixActive && tcListTabBtn) {
+              tcListTabBtn.click();
               return true;
             }
 

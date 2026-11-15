@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Mock localStorage and window for Node test environment
 const storage = new Map();
@@ -27,6 +29,9 @@ import {
   saveProgress,
   getUserProgress,
   clearActiveConveyorBatch,
+  getUserWeeklyXP,
+  addWeeklyXP,
+  getEffectiveUserId,
 } from '../frontend/services/api.js';
 import { t } from '../frontend/services/i18n.js';
 import { SUPPORTED_LOCALE_CODES } from '../frontend/config/locales.js';
@@ -102,6 +107,16 @@ test('Word Blocks: isWordProblematicForBlocks identification', () => {
     true
   );
 
+  // 3b. Mistake in Test (input) -> true
+  assert.equal(
+    isWordProblematicForBlocks(word, { roundInputMistakes: 1 }),
+    true
+  );
+  assert.equal(
+    isWordProblematicForBlocks(word, { inputMistakes: 1 }),
+    true
+  );
+
   // 4. General error in current progress -> true
   assert.equal(
     isWordProblematicForBlocks(word, { error: 1, quizCorrect: 2 }),
@@ -130,10 +145,28 @@ test('Word Blocks: saveProgress and clearActiveConveyorBatch lifecycle', async (
   assert.ok(prog, 'Progress record must exist');
   assert.equal(prog.roundBlocksDone, true, 'roundBlocksDone must be true');
 
+  // Mistake in Test (input) after Shield ad resets roundBlocksDone and queues Word Blocks immediately
+  await saveProgress(wordId, false, 'input', { shieldUsed: true });
+  const afterTestMistake = getUserProgress()[wordId];
+  assert.equal(afterTestMistake.roundBlocksDone, false, 'Test mistake must reset roundBlocksDone to false');
+  assert.equal(afterTestMistake.roundInputMistakes, 1, 'Test mistake must increment roundInputMistakes');
+  assert.equal(
+    isWordProblematicForBlocks({ id: wordId, word: 'apple' }, afterTestMistake),
+    true,
+    'Word must be flagged for Word Blocks immediately after Test mistake'
+  );
+
+  // Solving Word Blocks again clears queue for this mistake while preserving needsTestRepeat
+  await saveProgress(wordId, true, 'blocks');
+  const afterBlocksFix = getUserProgress()[wordId];
+  assert.equal(afterBlocksFix.roundBlocksDone, true, 'Solving Word Blocks must set roundBlocksDone back to true');
+  assert.equal(afterBlocksFix.needsTestRepeat, true, 'needsTestRepeat must remain true so Test re-checks typing');
+
   // Reset batch
   clearActiveConveyorBatch([ { id: wordId } ]);
   const updatedProg = getUserProgress()[wordId];
   assert.equal(updatedProg?.roundBlocksDone, undefined, 'roundBlocksDone must be cleared on batch reset');
+  assert.equal(updatedProg?.roundInputMistakes, undefined, 'roundInputMistakes must be cleared on batch reset');
 });
 
 test('Word Blocks: All 36 locales have translations for badge and hint', () => {
@@ -158,4 +191,77 @@ test('Word Blocks: All 36 locales have translations for badge and hint', () => {
 
   // Restore
   global.localStorage.setItem('myduo_lang', 'ru');
+});
+
+test('Favorites & Collections: saveProgress tracks Quiz, Pairs, and Test mistakes for Word Blocks without XP change', async () => {
+  const userId = getEffectiveUserId();
+  const baseXp = getUserWeeklyXP(userId);
+  addWeeklyXP(100, userId);
+  const expectedXp = baseXp + 100;
+
+  const quizWordId = 'fav_wb_quiz_1';
+  const pairsWordId = 'fav_wb_pairs_2';
+  const inputWordId = 'fav_wb_input_3';
+
+  const resQuiz = await saveProgress(quizWordId, false, 'quiz', { isFavPractice: true });
+  assert.equal(resQuiz.roundQuizMistakes, 1, 'Quiz mistake in isFavPractice must increment roundQuizMistakes');
+  assert.equal(resQuiz.roundBlocksDone, false, 'Quiz mistake in isFavPractice must set roundBlocksDone = false');
+  assert.equal(getUserWeeklyXP(userId), expectedXp, 'isFavPractice Quiz must not change XP');
+
+  const resPairs = await saveProgress(pairsWordId, false, 'pairs', { isFavPractice: true });
+  assert.equal(resPairs.roundPairsMistakes, 1, 'Pairs mistake in isFavPractice must increment roundPairsMistakes');
+  assert.equal(resPairs.roundBlocksDone, false, 'Pairs mistake in isFavPractice must set roundBlocksDone = false');
+  assert.equal(getUserWeeklyXP(userId), expectedXp, 'isFavPractice Pairs must not change XP');
+
+  const resInput = await saveProgress(inputWordId, false, 'input', { isFavPractice: true });
+  assert.equal(resInput.roundInputMistakes, 1, 'Test mistake in isFavPractice must increment roundInputMistakes');
+  assert.equal(resInput.needsTestRepeat, true, 'Test mistake in isFavPractice must set needsTestRepeat = true');
+  assert.equal(resInput.roundBlocksDone, false, 'Test mistake in isFavPractice must set roundBlocksDone = false');
+  assert.equal(getUserWeeklyXP(userId), expectedXp, 'isFavPractice Test must not change XP');
+
+  const solvedBlocks = await saveProgress(quizWordId, true, 'blocks', { isFavPractice: true });
+  assert.equal(solvedBlocks.roundBlocksDone, true, 'Solving Word Blocks in isFavPractice must mark roundBlocksDone = true');
+  assert.equal(getUserWeeklyXP(userId), expectedXp, 'Solving Word Blocks in isFavPractice must not change XP');
+});
+
+test('Favorites & Collections: remaining counter, forward stage progression, and Word Blocks flow', () => {
+  const trainingCardCode = fs.readFileSync(
+    path.resolve(process.cwd(), 'frontend/components/training/TrainingCard.js'),
+    'utf8'
+  );
+  const indexHtmlCode = fs.readFileSync(
+    path.resolve(process.cwd(), 'frontend/index.html'),
+    'utf8'
+  ).replace(/\r\n/g, '\n');
+
+  // Counter uses currentWordIndex for both Quiz and Test when isFavPractice is active
+  const matches = trainingCardCode.match(/isFavPractice \? Math\.max\(1, activeWords\.length - currentWordIndex\) : activeWords\.length/g) || [];
+  assert.equal(matches.length, 2, 'TrainingCard must compute remaining words from currentWordIndex in both Quiz and Test for isFavPractice');
+
+  // Pairs in isFavPractice takes sequential slice starting at currentWordIndex and advances by 5
+  assert.ok(
+    trainingCardCode.includes('activeWords.slice(currentWordIndex, currentWordIndex + TARGET_PAIRS_COUNT)'),
+    'Pairs in isFavPractice must take sequential slice from currentWordIndex'
+  );
+  assert.ok(
+    indexHtmlCode.includes("else if (currentMethod === 'pairs' && isFavPracticeActive) {\n              currentWordIndex += 5;\n            }"),
+    'Pairs completion in isFavPracticeActive must advance currentWordIndex by 5'
+  );
+
+  // Stage progression in isFavPracticeActive: cards -> quiz -> pairs -> input -> exit only after input & blocks
+  assert.ok(
+    indexHtmlCode.includes("if (currentMethod === 'cards') {\n            favoritePracticeMethod = 'quiz';") &&
+    indexHtmlCode.includes("if (currentMethod === 'quiz') {\n            favoritePracticeMethod = 'pairs';") &&
+    indexHtmlCode.includes("if (currentMethod === 'pairs') {\n            favoritePracticeMethod = 'input';") &&
+    indexHtmlCode.includes("if (currentMethod === 'input' && getBlocksWordsForInput(userProgress).length === 0)"),
+    'Favorites/Collections practice must advance cards -> quiz -> pairs -> input and only exit after input + Word Blocks'
+  );
+
+  // Word Blocks triggers on Quiz, Pairs, and Test mistakes in isFavPracticeActive
+  assert.ok(
+    indexHtmlCode.includes('(p.roundQuizMistakes || 0) > 0') &&
+    indexHtmlCode.includes('(p.roundPairsMistakes || 0) > 0') &&
+    indexHtmlCode.includes('(p.roundInputMistakes || 0) > 0'),
+    'getBlocksWordsForInput in isFavPracticeActive must check roundQuizMistakes, roundPairsMistakes, and roundInputMistakes'
+  );
 });

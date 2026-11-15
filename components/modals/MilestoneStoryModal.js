@@ -895,7 +895,7 @@ if (typeof window !== 'undefined') {
   });
 }
 
-async function getOrBuildDictionary(activeLang) {
+export async function getOrBuildDictionary(activeLang) {
   const currentLang = activeLang || getInterfaceLanguage();
   if (_wordLookupMap && _dictMapLang === currentLang && _wordLookupMap.size > 0) {
     return _wordLookupMap;
@@ -1083,6 +1083,110 @@ export function showStoryToast(message) {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 250);
   }, 2200);
+}
+
+export const UNLOCKED_STORY_MODAL_I18N = {
+  ru: { msg: 'Вы открыли новый текст «{title}» в Избранном' },
+  uk: { msg: 'Ви відкрили новий текст «{title}» в Обраному' },
+  en: { msg: 'You unlocked a new story "{title}" in Favorites' },
+  de: { msg: 'Du hast einen neuen Text „{title}“ unter Favoriten freigeschaltet' },
+  es: { msg: 'Has desbloqueado un nuevo texto «{title}» en Favoritos' },
+  fr: { msg: 'Vous avez débloqué un nouveau texte « {title} » dans les Favoris' },
+  pl: { msg: 'Odblokowano nowy tekst „{title}” w Ulubionych' },
+  tr: { msg: 'Favoriler\'de yeni bir metin açtınız: "{title}"' },
+  it: { msg: 'Hai sbloccato un nuovo testo «{title}» nei Preferiti' },
+  ro: { msg: 'Ai deblocat un text nou „{title}” în Favorite' },
+  bg: { msg: 'Отключихте нов текст „{title}“ в Любими' },
+  hu: { msg: 'Új szöveget oldottál fel a Kedvencek között: „{title}”' },
+  el: { msg: 'Ξεκλειδώσατε ένα νέο κείμενο «{title}» στα Αγαπημένα' },
+  da: { msg: 'Du har låst op for en ny tekst "{title}" i Favoritter' },
+  lv: { msg: 'Jūs atbloķējāt jaunu tekstu “{title}” sadaļā Izlase' },
+  lt: { msg: 'Atrakinote naują tekstą „{title}“ skiltyje Mėgstamiausi' },
+  pt: { msg: 'Você desbloqueou um novo texto "{title}" nos Favoritos' },
+  sk: { msg: 'Odomkli ste nový text „{title}“ v Obľúbených' },
+  sl: { msg: 'Odklenili ste novo besedilo »{title}« med Priljubljenimi' },
+  fi: { msg: 'Avasit uuden tekstin ”{title}” Suosikeissa' },
+  hr: { msg: 'Otključali ste novi tekst „{title}” u Favoritima' },
+  cs: { msg: 'Odemkli jste nový text „{title}“ v Oblíbených' },
+  sv: { msg: 'Du har låst upp en ny text "{title}" i Favoriter' },
+  et: { msg: 'Avasite uue teksti „{title}” Lemmikutes' },
+  hi: { msg: 'आपने पसंदीदा में नया पाठ "{title}" अनलॉक किया है' },
+  bn: { msg: 'আপনি পছন্দের তালিকায় নতুন পাঠ "{title}" আনলক করেছেন' },
+  ar: { msg: 'لقد فتحت نصًا جديدًا "{title}" في المفضلة' },
+  fa: { msg: 'شما متن جدید «{title}» را در بخش علاقه‌مندی‌ها باز کردید' },
+  ur: { msg: 'آپ نے پسندیدہ میں نیا متن "{title}" ان لاک کر لیا ہے' },
+  id: { msg: 'Anda membuka teks baru "{title}" di Favorit' },
+  vi: { msg: 'Bạn đã mở khóa bài đọc mới "{title}" trong mục Yêu thích' },
+  th: { msg: 'คุณปลดล็อกบทอ่านใหม่ "{title}" ในรายการโปรดแล้ว' },
+  ko: { msg: '즐겨찾기에서 새 텍스트 "{title}"을(를) 잠금 해제했습니다' },
+  ja: { msg: 'お気に入りで新しいテキスト「{title}」が解放されました' },
+  zh: { msg: '您已在收藏夹中解锁新文章《{title}》' },
+  kk: { msg: 'Сіз Таңдаулыларда жаңа «{title}» мәтінін аштыңыз' }
+};
+
+export function showMilestoneUnlockedModal(milestone = 50) {
+  const existing = document.querySelector('#milestone-unlocked-notice-modal');
+  if (existing) existing.remove();
+
+  const currentMilestone = Number.isFinite(Number(milestone)) ? Number(milestone) : 50;
+  const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[50];
+  if (!storyData) return;
+
+  const lang = (getInterfaceLanguage() || 'ru').toLowerCase().split(/[-_]/)[0];
+  const strings = getStoryStrings(lang);
+  const noticeStrings = UNLOCKED_STORY_MODAL_I18N[lang] || UNLOCKED_STORY_MODAL_I18N.ru;
+  const isRtl = lang === 'ar' || lang === 'fa' || lang === 'ur';
+
+  const storyTitleText = strings[storyData.titleKey] || storyData.title || '';
+  const badgeText = strings[storyData.badgeKey] || `🏆 ${currentMilestone}`;
+  const fullMessage = noticeStrings.msg.replace('{title}', storyTitleText);
+
+  const escapeHtml = (str) =>
+    String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+  const modal = document.createElement('div');
+  modal.id = 'milestone-unlocked-notice-modal';
+  modal.className = 'modal-overlay';
+  modal.dir = isRtl ? 'rtl' : 'ltr';
+  modal.style.cssText = 'position: fixed; inset: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; background: rgba(10, 15, 29, 0.78); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 16px; box-sizing: border-box;';
+
+  modal.innerHTML = `
+    <div class="modal-content" style="position: relative; text-align: center; max-width: 350px; width: 100%; padding: 26px 20px 22px; border-radius: 22px; box-sizing: border-box; background: var(--bg-card, #1e293b); border: 1.5px solid rgba(251, 191, 36, 0.35); box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55); animation: scaleUp 0.22s ease;">
+      <button type="button" id="milestone-notice-close-btn" aria-label="Close" style="position: absolute; top: 10px; inset-inline-end: 10px; background: rgba(255, 255, 255, 0.08); border: none; color: #94a3b8; width: 32px; height: 32px; min-width: 32px; border-radius: 50%; font-size: 20px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;">&times;</button>
+      <div style="font-size: 46px; margin-bottom: 10px; line-height: 1;">📖</div>
+      <div style="display: inline-block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #f59e0b; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 12px; border-radius: 999px; margin-bottom: 12px;">
+        ${escapeHtml(badgeText)}
+      </div>
+      <h3 style="font-size: 16.5px; font-weight: 700; line-height: 1.45; margin: 0 0 20px; color: var(--text-main, #f8fafc);">
+        ${escapeHtml(fullMessage)}
+      </h3>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" class="primary-button btn-green" id="milestone-notice-read-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
+          📖 ${escapeHtml(strings.readStoryBtn || 'Читать')}
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const closeNotice = () => {
+    modal.remove();
+  };
+
+  modal.querySelector('#milestone-notice-close-btn')?.addEventListener('click', closeNotice);
+  modal.querySelector('#milestone-notice-read-btn')?.addEventListener('click', () => {
+    closeNotice();
+    showMilestoneStoryModal(currentMilestone);
+  });
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeNotice();
+  });
 }
 
 /**

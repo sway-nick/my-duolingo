@@ -1494,9 +1494,9 @@ body.dark-theme .word-notes-modal-text {
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
-  min-height: 58px;
-  max-height: 82px;
-  height: 66px;
+  min-height: 68px;
+  max-height: 88px;
+  height: 76px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2114,6 +2114,10 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite svg {
   max-width: 100%;
 }
 
+.flashcard-3d:not(.wotd-card) .flashcard-back .flashcard-translation:only-child {
+  margin-bottom: 25px;
+}
+
 .dark-theme .flashcard-translation {
   color: #f8fafc;
 }
@@ -2138,6 +2142,14 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite svg {
 .flashcard-face-bottom {
   text-align: center;
   width: 100%;
+}
+
+.flashcard-3d:not(.wotd-card) .flashcard-face-bottom {
+  min-height: 38px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .flashcard-flip-prompt {

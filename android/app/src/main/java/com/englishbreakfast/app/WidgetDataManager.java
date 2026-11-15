@@ -13,6 +13,7 @@ public class WidgetDataManager {
 
     private static final String PREF_NAME = "widget_gold_card_prefs";
     private static final String KEY_WORDS_JSON = "key_words_json";
+    private static final String KEY_COLLECTION_ID = "key_collection_id";
     private static final String KEY_CURRENT_INDEX = "key_current_index";
     private static final String KEY_IS_FLIPPED = "key_is_flipped";
     private static final String KEY_PENDING_UNFAVS = "key_pending_unfavs";
@@ -81,6 +82,8 @@ public class WidgetDataManager {
         try {
             SharedPreferences prefs = getPrefs(context);
             boolean hasFavs = false;
+            String newCollectionId = null;
+            int newWordsLen = 0;
             String trimmed = wordsJson.trim();
             if (trimmed.startsWith("{")) {
                 JSONObject root = new JSONObject(trimmed);
@@ -89,18 +92,33 @@ public class WidgetDataManager {
                     // Safety check: Never wipe out existing widget words with an empty payload!
                     return;
                 }
+                newWordsLen = wordsArr.length();
                 hasFavs = root.optBoolean("hasFavorites", false);
+                newCollectionId = root.optString("collectionId", "");
             } else if (trimmed.startsWith("[")) {
                 JSONArray arr = new JSONArray(trimmed);
                 if (arr.length() == 0) {
                     return;
                 }
+                newWordsLen = arr.length();
                 hasFavs = arr.length() > 0;
             }
-            prefs.edit()
+            String prevCollectionId = prefs.getString(KEY_COLLECTION_ID, "");
+            int curIdx = prefs.getInt(KEY_CURRENT_INDEX, 0);
+            SharedPreferences.Editor editor = prefs.edit()
                 .putString(KEY_WORDS_JSON, wordsJson)
-                .putBoolean(KEY_HAS_FAVORITES, hasFavs)
-                .apply();
+                .putBoolean(KEY_HAS_FAVORITES, hasFavs);
+            if (newCollectionId != null && !newCollectionId.isEmpty()) {
+                editor.putString(KEY_COLLECTION_ID, newCollectionId);
+                if (!newCollectionId.equals(prevCollectionId)) {
+                    editor.putInt(KEY_CURRENT_INDEX, 0);
+                    editor.putBoolean(KEY_IS_FLIPPED, false);
+                }
+            }
+            if (newWordsLen > 0 && (curIdx < 0 || curIdx >= newWordsLen)) {
+                editor.putInt(KEY_CURRENT_INDEX, 0);
+            }
+            editor.apply();
             invalidateCache();
         } catch (Exception e) {
             e.printStackTrace();
@@ -618,6 +636,22 @@ public class WidgetDataManager {
         }
     }
 
+    static boolean hasPlacedDimensions(Context context, int appWidgetId) {
+        try {
+            android.appwidget.AppWidgetManager mgr = android.appwidget.AppWidgetManager.getInstance(context);
+            if (mgr == null) return false;
+            android.os.Bundle opts = mgr.getAppWidgetOptions(appWidgetId);
+            if (opts == null) return false;
+            int minW = opts.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
+            int maxW = opts.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 0);
+            int minH = opts.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0);
+            int maxH = opts.getInt(android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0);
+            return minW > 0 || maxW > 0 || minH > 0 || maxH > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static synchronized boolean hasRealInstalledWidgets(Context context, int[] systemIds) {
         if (context == null) return false;
         SharedPreferences prefs = getPrefs(context);
@@ -631,14 +665,19 @@ public class WidgetDataManager {
 
         if (!prefs.getBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, false)) {
             Set<String> initialGhosts = new HashSet<>();
+            boolean foundPlaced = false;
             for (int id : systemIds) {
-                initialGhosts.add(String.valueOf(id));
+                if (hasPlacedDimensions(context, id)) {
+                    foundPlaced = true;
+                } else {
+                    initialGhosts.add(String.valueOf(id));
+                }
             }
             prefs.edit()
                 .putStringSet(KEY_GHOST_WIDGET_IDS, initialGhosts)
                 .putBoolean(KEY_WIDGET_GHOST_MIGRATED_V2, true)
                 .apply();
-            return false;
+            return foundPlaced;
         }
 
         Set<String> savedGhosts = prefs.getStringSet(KEY_GHOST_WIDGET_IDS, new HashSet<>());
@@ -647,7 +686,11 @@ public class WidgetDataManager {
         for (int id : systemIds) {
             String idStr = String.valueOf(id);
             if (savedGhosts.contains(idStr)) {
-                activeGhosts.add(idStr);
+                if (hasPlacedDimensions(context, id)) {
+                    hasRealWidget = true;
+                } else {
+                    activeGhosts.add(idStr);
+                }
             } else {
                 hasRealWidget = true;
             }

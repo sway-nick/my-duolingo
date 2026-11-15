@@ -9,9 +9,14 @@ import {
   getCollectionWords,
   isBuiltinCollectionOverridden,
   resetBuiltinCollection,
+  isCollectionPackDownloaded,
+  markCollectionPackDownloaded,
+  getDownloadablePackStrings,
 } from '../../services/collectionsService.js?v=386.0';
+import { AdService } from '../../services/adService.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
+import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=386.0';
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -103,6 +108,80 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       },
     });
   };
+
+  if (!isCollectionPackDownloaded(collectionId)) {
+    const packStrings = getDownloadablePackStrings();
+    const PACK_META = {
+      it_terms: { icon: '💻', desc: packStrings.itDesc, count: 187 },
+      idioms: { icon: '💬', desc: packStrings.idiomsDesc, count: 150 },
+      verbs: { icon: '⚡', desc: packStrings.verbsDesc, count: 100 },
+      adjectives: { icon: '🌟', desc: packStrings.adjectivesDesc, count: 100 },
+      phrasal_verbs: { icon: '🔄', desc: packStrings.phrasalVerbsDesc, count: 100 },
+    };
+    const meta = PACK_META[collectionId] || PACK_META.idioms;
+    const packIcon = meta.icon;
+    const packDesc = meta.desc;
+    const totalCount = Array.isArray(favoriteWords) ? favoriteWords.length : meta.count;
+
+    container.innerHTML = `
+      <div class="favorites-page">
+        ${backBtnHtml}
+        <div class="page-header" style="margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <h2 style="font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -0.2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0;">${escapeHtml(displayTitle)}: ${totalCount}</h2>
+        </div>
+
+        <div class="empty-favorites-box" style="padding: 32px 22px; text-align: center; border-radius: 18px;">
+          <span class="empty-icon" style="font-size: 52px; display: block; margin-bottom: 12px; line-height: 1;">${packIcon}</span>
+          <h3 style="margin: 0 0 10px; font-size: 18px; font-weight: 800;">${escapeHtml(displayTitle)}</h3>
+          <p style="color: var(--text-muted); font-size: 14.5px; line-height: 1.5; max-width: 340px; margin: 0 auto 22px;">
+            ${escapeHtml(packDesc)}
+          </p>
+          <button type="button" id="download-collection-pack-btn" class="primary-button btn-orange" style="min-height: 48px; padding: 0 28px; font-size: 15.5px; font-weight: 800; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);">
+            <span style="font-size: 18px;">🎬</span>
+            <span id="download-pack-btn-label">${escapeHtml(packStrings.downloadBtn)}</span>
+          </button>
+          <p style="color: var(--text-muted); font-size: 12px; margin: 12px 0 0; opacity: 0.85;">
+            ${escapeHtml(packStrings.watchAdHint)}
+          </p>
+        </div>
+      </div>
+    `;
+
+    container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
+      if (onBack) onBack();
+    });
+
+    const dlBtn = container.querySelector('#download-collection-pack-btn');
+    dlBtn?.addEventListener('click', async () => {
+      if (dlBtn.disabled) return;
+      dlBtn.disabled = true;
+      dlBtn.style.opacity = '0.75';
+      const prevHtml = dlBtn.innerHTML;
+      dlBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
+
+      try {
+        const adRes = await AdService.showLanguagePackRewardedAd(displayTitle);
+        if (!adRes || (!adRes.rewardEarned && !adRes.isOffline)) {
+          dlBtn.innerHTML = prevHtml;
+          dlBtn.disabled = false;
+          dlBtn.style.opacity = '1';
+          return;
+        }
+
+        dlBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
+        await new Promise((r) => setTimeout(r, 450));
+        markCollectionPackDownloaded(collectionId);
+        renderFavoritesView(favoriteWords, containerSelector, options);
+      } catch (err) {
+        console.warn('Collection pack download failed:', err);
+        dlBtn.innerHTML = prevHtml;
+        dlBtn.disabled = false;
+        dlBtn.style.opacity = '1';
+      }
+    });
+
+    return;
+  }
 
   if (!favoriteWords || favoriteWords.length === 0) {
     container.innerHTML = `
@@ -235,7 +314,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
             <div class="fav-card-body">
               <h3 class="fav-word">${escapeHtml(word.word)}</h3>
               <p class="fav-translation">${escapeHtml(getWordTranslation(word))}</p>
-              ${getWordNotes(word) ? `<p class="dict-notes">${escapeHtml(getWordNotes(word))}</p>` : ''}
+              ${(() => {
+                const n = getWordNotes(word, null, { hideItNotes: collectionId !== 'it_terms' });
+                return n ? `<p class="dict-notes">${escapeHtml(n)}</p>` : '';
+              })()}
             </div>
           </div>
         `;
@@ -400,6 +482,37 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           renderFavoritesView([], containerSelector, options);
         }
         return;
+      }
+    });
+
+    attachWordLongPress(favGrid, '.fav-card', (cardEl) => {
+      const id = cardEl.getAttribute('data-id');
+      const wordList = Array.isArray(allWords) && allWords.length > 0 ? allWords : favoriteWords;
+      const wordObj =
+        wordList.find((w) => w && String(w.id) === String(id)) ||
+        favoriteWords.find((w) => w && String(w.id) === String(id));
+      if (wordObj) {
+        openAddWordModal(
+          wordList,
+          wordObj.word,
+          (savedWord) => {
+            if (savedWord) {
+              const favMatch = favoriteWords.find((w) => w && String(w.id) === String(id));
+              if (favMatch && favMatch !== savedWord) {
+                Object.assign(favMatch, {
+                  translation: savedWord.translation,
+                  user_translations: savedWord.user_translations,
+                  category: savedWord.category,
+                  user_category: savedWord.user_category,
+                  notes: savedWord.notes,
+                  user_note: savedWord.user_note,
+                });
+              }
+            }
+            renderFavoritesView(favoriteWords, containerSelector, options);
+          },
+          { editWord: wordObj }
+        );
       }
     });
   }

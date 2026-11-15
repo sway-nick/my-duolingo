@@ -1,5 +1,6 @@
 import {
   speakWord,
+  cancelPendingWordSpeech,
   speakWordAsync,
   speakTextInLangAsync,
   stopAllAudio,
@@ -32,11 +33,13 @@ import {
   clearActiveConveyorBatch,
   transcribeAudio,
   transcribePingAudio,
+  getLoadedWordsSnapshot,
 } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
 import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=386.0';
 import { renderWordBlocksExercise } from '../exercises/WordBlocksExercise.js?v=386.0';
+import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=386.0';
 
 const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
@@ -397,6 +400,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     window.__activePairsTimerInterval = null;
   }
 
+  // New card: drop the previous word's audio that is still downloading so it can't start
+  // playing late on top of this word (already audible audio is left to finish).
+  try { cancelPendingWordSpeech(); } catch (e) {}
+  const renderToken = (window.__trainingRenderToken = (window.__trainingRenderToken || 0) + 1);
+
   if (currentWord && currentWord.word) {
     preloadWordAudio(currentWord.word);
   }
@@ -458,6 +466,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     activeWords.slice(0, 3).forEach((w) => {
       if (w && w.word) preloadWordAudio(w.word);
     });
+    // Warm up the next two words of the round so their audio is ready before they appear
+    for (let k = 1; k <= 2; k++) {
+      const nw = activeWords[(currentWordIndex + k) % activeWords.length];
+      if (nw && nw.word) preloadWordAudio(nw.word);
+    }
   }
 
   const progressMap = getUserProgress() || {};
@@ -515,7 +528,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     cardsBadgeText = t('conveyor_in_learning', { current: currentDisplay, total: targetCount });
   }
 
-  const wordNotes = getWordNotes(activeTargetWord);
+  const isItCollectionPractice = Boolean(
+    isFavPractice && typeof window !== 'undefined' && window._activePracticeCollectionId === 'it_terms'
+  );
+  const wordNotes = getWordNotes(activeTargetWord, null, { hideItNotes: !isItCollectionPractice });
   const hasNotes = Boolean(wordNotes && String(wordNotes).trim().length > 0);
   const notesBtnHtml = hasNotes
     ? `<button type="button" class="word-notes-btn" id="word-notes-btn" title="${t('word_notes_title') || 'Примечание'}" aria-label="${t('word_notes_title') || 'Примечание'}">
@@ -626,7 +642,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                       : `
               <button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>
               <div class="train-left-badge">
-                ✍️ ${t('train_left')}: <strong>${activeWords.length}</strong>
+                ✍️ ${t('train_left')}: <strong>${isFavPractice ? Math.max(1, activeWords.length - currentWordIndex) : activeWords.length}</strong>
               </div>
               <div class="word-header-row">
                 <div class="training-word-container">
@@ -644,7 +660,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   : `
               ${quizStage === 0 || quizStage === 1 || quizStage === 3 ? `<button type="button" class="favorite-button" id="speak-sound-btn" title="Speak word" style="right: auto; left: -4px;">🔊</button>` : ''}
               <div class="train-left-badge">
-                🎯 ${t('train_left')}: <strong>${activeWords.length}</strong>
+                🎯 ${t('train_left')}: <strong>${isFavPractice ? Math.max(1, activeWords.length - currentWordIndex) : activeWords.length}</strong>
               </div>
               <div class="word-header-row">
                 ${
@@ -768,6 +784,33 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (speakTrigger && !isPairsMode) speakTrigger.addEventListener('click', handleSpeak);
   if (soundBtn && !isPairsMode) soundBtn.addEventListener('click', handleSpeak);
 
+  const wordContainer = container.querySelector('.training-word-container');
+  if (wordContainer && !isPairsMode && activeTargetWord) {
+    attachWordLongPress(wordContainer, null, (_targetEl, ev) => {
+      if (ev && ev.target && typeof ev.target.closest === 'function' && ev.target.closest('#flashcard-3d')) {
+        return;
+      }
+      const loadedWords = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+      const modalWords = loadedWords.length > 0 ? loadedWords : [activeTargetWord];
+      openAddWordModal(modalWords, activeTargetWord.word, (savedWord) => {
+        if (savedWord && savedWord !== activeTargetWord) {
+          Object.assign(activeTargetWord, {
+            translation: savedWord.translation,
+            user_translations: savedWord.user_translations,
+            category: savedWord.category,
+            user_category: savedWord.user_category,
+            notes: savedWord.notes,
+            user_note: savedWord.user_note,
+          });
+        }
+        const catPill = wordContainer.querySelector('[data-word-category], .word-cat-badge, .cat-badge');
+        if (catPill && activeTargetWord.category) {
+          catPill.textContent = sanitizeCategory(activeTargetWord.category);
+        }
+      }, { editWord: activeTargetWord });
+    });
+  }
+
   const shouldAutoSpeak = !window.__favsAutoplayRunning && !isAccessibilityMuted && (
     (currentMethod === 'cards' && !isFavPractice) ||
     (currentMethod === 'quiz' && quizStage <= 1)
@@ -776,6 +819,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (shouldAutoSpeak) {
     setTimeout(() => {
       try {
+        // Card may already be replaced by the next one within these 100ms
+        if (window.__trainingRenderToken !== renderToken) return;
         if (!window.__favsAutoplayRunning && !isAccessibilityMuted) {
           speakWord(currentWord.word, currentWord.id);
         }
@@ -1273,6 +1318,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
     // 1. Сначала берем слова из текущей очереди Пар (activeWords)
     if (activeWords && activeWords.length > 0) {
+      if (isFavPractice) {
+        const sequentialSlice = activeWords.slice(currentWordIndex, currentWordIndex + TARGET_PAIRS_COUNT);
+        for (const w of sequentialSlice) {
+          if (roundWords.length >= TARGET_PAIRS_COUNT) break;
+          if (!usedIds.has(String(w.id))) {
+            roundWords.push(w);
+            usedIds.add(String(w.id));
+          }
+        }
+      }
       const activeOthers = shuffleArray(activeWords.filter((w) => !usedIds.has(String(w.id))));
       for (const w of activeOthers) {
         if (roundWords.length >= TARGET_PAIRS_COUNT) break;
@@ -2045,19 +2100,26 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           let handled = false;
           let autoSkipTimer = null;
 
-          const finalizeMistake = (shieldUsed, penaltyOverride) => {
+          const finalizeMistake = async (shieldUsed, penaltyOverride) => {
             if (handled) return;
             handled = true;
-            if (autoSkipTimer) clearTimeout(autoSkipTimer);
+            if (autoSkipTimer) {
+              clearTimeout(autoSkipTimer);
+              autoSkipTimer = null;
+            }
 
-            saveProgress(currentWord.id, false, 'input', {
-              shieldUsed,
-              penaltyOverride,
-              isSingleRemaining: isSingleWordMode,
-              isFavPractice,
-            }).catch((e) => console.warn(e));
+            try {
+              await saveProgress(currentWord.id, false, 'input', {
+                shieldUsed,
+                penaltyOverride,
+                isSingleRemaining: isSingleWordMode,
+                isFavPractice,
+              });
+            } catch (e) {
+              console.warn(e);
+            }
 
-            onNext({ repeatSoon: true });
+            onNext({ repeatSoon: true, triggerBlocksWordId: currentWord.id });
           };
 
           const claimBtn = feedback.querySelector('#btn-claim-ad-shield');
@@ -2066,6 +2128,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           if (claimBtn) {
             claimBtn.addEventListener('click', async () => {
               if (handled) return;
+              if (autoSkipTimer) {
+                clearTimeout(autoSkipTimer);
+                autoSkipTimer = null;
+              }
               claimBtn.disabled = true;
               claimBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
 
@@ -2084,13 +2150,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
                   try { playSuccessSound(); } catch (e) {}
                   setTimeout(() => {
                     finalizeMistake(true, 0);
-                  }, 1200);
+                  }, 600);
                   return;
                 }
               } catch (e) {
                 console.warn(e);
               }
-              finalizeMistake(false, -20);
+              await finalizeMistake(false, -20);
             });
           }
 
@@ -2116,13 +2182,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `;
 
-          saveProgress(currentWord.id, false, 'input', {
+          const savePromise = saveProgress(currentWord.id, false, 'input', {
             isOfflineFallback: true,
             isSingleRemaining: isSingleWordMode,
             isFavPractice,
           }).catch((e) => console.warn(e));
 
-          onNextAfterSpeech(() => onNext({ repeatSoon: true }), 4200, 7000);
+          onNextAfterSpeech(async () => {
+            await savePromise;
+            onNext({ repeatSoon: true, triggerBlocksWordId: currentWord.id });
+          }, 4200, 7000);
 
         } else {
           // Rule 1 & 2: Shields exhausted -> standard -20 XP without ad delay
@@ -2136,13 +2205,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
           `;
 
-          saveProgress(currentWord.id, false, 'input', {
+          const savePromise = saveProgress(currentWord.id, false, 'input', {
             penaltyOverride: -20,
             isSingleRemaining: isSingleWordMode,
             isFavPractice,
           }).catch((e) => console.warn(e));
 
-          onNextAfterSpeech(() => onNext({ repeatSoon: true }), 4200, 7000);
+          onNextAfterSpeech(async () => {
+            await savePromise;
+            onNext({ repeatSoon: true, triggerBlocksWordId: currentWord.id });
+          }, 4200, 7000);
         }
       }
     };
@@ -2191,7 +2263,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${escapeHtml(getWordTranslation(currentWord))}</h2>
-              ${getWordNotes(currentWord) ? `<p class="flashcard-notes">${escapeHtml(getWordNotes(currentWord))}</p>` : ''}
+              ${(() => {
+                const fcNote = getWordNotes(currentWord, null, { hideItNotes: !isItCollectionPractice });
+                return fcNote ? `<p class="flashcard-notes">${escapeHtml(fcNote)}</p>` : '';
+              })()}
             </div>
             <div class="flashcard-face-bottom">
               <span class="flashcard-flip-prompt">${t('train_flip_card_hint')}</span>
@@ -2254,6 +2329,14 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     let isLockedSwipe = false;
     let hasSwiped = false;
     let rafId = null;
+    let fcLongPressTimer = null;
+    let fcLongPressFired = false;
+    const clearFcLongPress = () => {
+      if (fcLongPressTimer) {
+        clearTimeout(fcLongPressTimer);
+        fcLongPressTimer = null;
+      }
+    };
 
     function applyCardTransform() {
       if (!flashcardWrapper || !isLockedSwipe) return;
@@ -2266,6 +2349,8 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (target.closest('.flashcard-sound-btn') || target.closest('.flashcard-fav-btn') || target.closest('#speech-diag-trigger-btn')) {
         return false;
       }
+      clearFcLongPress();
+      fcLongPressFired = false;
       isTouchActive = true;
       isLockedSwipe = false;
       targetDx = 0;
@@ -2280,6 +2365,46 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         flashcardWrapper.style.transition = 'none';
         flashcardWrapper.style.willChange = 'transform, opacity';
       }
+      fcLongPressTimer = setTimeout(() => {
+        fcLongPressTimer = null;
+        if (!isTouchActive || isLockedSwipe) return;
+        fcLongPressFired = true;
+        isTouchActive = false;
+        try { triggerHaptic('medium'); } catch (e) {}
+        const loadedWords = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+        const modalWords = loadedWords.length > 0 ? loadedWords : [currentWord];
+        openAddWordModal(modalWords, currentWord.word, (savedWord) => {
+          if (savedWord && savedWord !== currentWord) {
+            Object.assign(currentWord, {
+              translation: savedWord.translation,
+              user_translations: savedWord.user_translations,
+              category: savedWord.category,
+              user_category: savedWord.user_category,
+              notes: savedWord.notes,
+              user_note: savedWord.user_note,
+            });
+          }
+          if (flashcard) {
+            const transEl = flashcard.querySelector('.flashcard-translation');
+            if (transEl) transEl.textContent = getWordTranslation(currentWord);
+            const backBody = flashcard.querySelector('.flashcard-back .flashcard-face-body');
+            if (backBody) {
+              const fcNote = getWordNotes(currentWord, null, { hideItNotes: !isItCollectionPractice });
+              let noteEl = backBody.querySelector('.flashcard-notes');
+              if (fcNote) {
+                if (!noteEl) {
+                  noteEl = document.createElement('p');
+                  noteEl.className = 'flashcard-notes';
+                  backBody.appendChild(noteEl);
+                }
+                noteEl.textContent = fcNote;
+              } else if (noteEl) {
+                noteEl.remove();
+              }
+            }
+          }
+        }, { editWord: currentWord });
+      }, 500);
       return true;
     }
 
@@ -2288,11 +2413,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       targetDx = clientX - startX;
       targetDy = clientY - startY;
 
+      if (fcLongPressTimer && Math.hypot(targetDx, targetDy) > 10) {
+        clearFcLongPress();
+      }
+
       if (!isLockedSwipe) {
         const absX = Math.abs(targetDx);
         const absY = Math.abs(targetDy);
         if (absY > 8 && absY > absX * 1.1) {
           // Vertical scroll - abandon swipe
+          clearFcLongPress();
           isTouchActive = false;
           if (flashcardWrapper) {
             flashcardWrapper.style.transition = 'transform 0.2s ease';
@@ -2301,6 +2431,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           return;
         }
         if (absX > 6) {
+          clearFcLongPress();
           isLockedSwipe = true;
         }
       }
@@ -2381,6 +2512,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     };
 
     async function onEnd() {
+      clearFcLongPress();
       if (!isTouchActive) return;
       isTouchActive = false;
       if (rafId) {
@@ -2444,6 +2576,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     }
 
     function onCancel() {
+      clearFcLongPress();
       if (!isTouchActive) return;
       isTouchActive = false;
       isLockedSwipe = false;
@@ -2500,9 +2633,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           onCancel();
         }
       });
+      flashcard.addEventListener('contextmenu', (e) => {
+        if (fcLongPressTimer || fcLongPressFired) {
+          e.preventDefault();
+        }
+      });
     }
 
     flashcard.addEventListener('click', (e) => {
+      if (fcLongPressFired) {
+        fcLongPressFired = false;
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       if (hasSwiped) {
         hasSwiped = false;
         return;

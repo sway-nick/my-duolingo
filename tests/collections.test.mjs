@@ -68,11 +68,11 @@ test('Collections: months and days_of_week are complete in words.json', async ()
   assert.equal(dayWords.length, 7, 'all 7 days present in dictionary');
 });
 
-test('Collections: all 14 thematic collections have 100% of their words in dictionary', async () => {
+test('Collections: all 15 thematic collections have 100% of their words in dictionary', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionWords } = await import('../frontend/services/collectionsService.js');
 
   const thematicCols = BUILTIN_COLLECTIONS_DEF.filter((c) => c.id !== 'my_favorites');
-  assert.equal(thematicCols.length, 14, '14 thematic collections defined');
+  assert.equal(thematicCols.length, 15, '15 thematic collections defined');
 
   for (const col of thematicCols) {
     const words = getCollectionWords(col.id, wordsData);
@@ -218,6 +218,7 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 11 themati
   assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('months'), false, 'months has no gear');
   assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('days_of_week'), false, 'days_of_week has no gear');
   assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('numbers'), false, 'numbers has no gear');
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.has('ordinal_numbers'), false, 'ordinal_numbers has no gear');
 
   // Verify builtin override & reset
   const defaultColors = getCollectionWords('colors', wordsData);
@@ -253,12 +254,12 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 11 themati
   resetBuiltinCollection('colors');
 });
 
-test('Collections: all 15 built-in collections have names in all 36 supported locales', async () => {
+test('Collections: all 16 built-in collections have names in all 36 supported locales', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const locales = SUPPORTED_LOCALE_CODES;
 
-  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 15, '15 built-in collections');
+  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 16, '16 built-in collections');
 
   for (const col of BUILTIN_COLLECTIONS_DEF) {
     for (const loc of locales) {
@@ -418,7 +419,7 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   const { getCollectionWords, setActiveCollectionId, getActiveCollectionId, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const colorWords = getCollectionWords('colors', wordsData);
 
-  assert.equal(colorWords.length, 13);
+  assert.equal(colorWords.length, 20);
   assert.equal(colorWords.some((w) => w.word === 'red'), true);
   assert.equal(colorWords.some((w) => w.word === 'blue'), true);
   assert.equal(colorWords.some((w) => w.word === 'green'), true);
@@ -454,8 +455,8 @@ test('Collections: Clicking "Repeat" in collection (e.g. colors) enters repeat p
   assert.equal(activeTab, 'training');
   assert.equal(favoritePracticeMethod, 'cards');
 
-  // 2. Contains all 13 color words
-  assert.equal(favoritePracticeWords.length, 13);
+  // 2. Contains all 20 color words
+  assert.equal(favoritePracticeWords.length, 20);
 
   // 3. Practice collection metadata is set to "Цвета" / colors
   assert.equal(activePracticeCollectionId, 'colors');
@@ -596,4 +597,618 @@ test('FavoritesView: collection words are NOT favorited by default (🤍) unless
   assert.equal((container.innerHTML.match(/class="[^"]*remove-fav-btn[^"]*"[^>]*>❤️/g) || []).length, 1, 'In my_favorites, cards show ❤️');
   assert.equal((container.innerHTML.match(/🤍/g) || []).length, 0, 'In my_favorites, no 🤍');
 });
+
+test('Collections: IT (187) and Idioms (100) have 36-locale notes and downloadable pack flow', async () => {
+  const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
+  const {
+     getCollectionWords,
+    DOWNLOADABLE_PACK_I18N,
+    isCollectionPackDownloaded,
+    markCollectionPackDownloaded,
+  } = await import('../frontend/services/collectionsService.js');
+  const { renderFavoritesView } = await import('../frontend/components/favorites/FavoritesView.js');
+
+  const { UNLOCKED_STORY_MODAL_I18N } = await import('../frontend/components/modals/MilestoneStoryModal.js');
+  for (const loc of SUPPORTED_LOCALE_CODES) {
+    assert.ok(UNLOCKED_STORY_MODAL_I18N[loc], `UNLOCKED_STORY_MODAL_I18N missing locale ${loc}`);
+    assert.ok(UNLOCKED_STORY_MODAL_I18N[loc].msg && UNLOCKED_STORY_MODAL_I18N[loc].msg.includes('{title}'), `UNLOCKED_STORY_MODAL_I18N.msg missing {title} for ${loc}`);
+  }
+
+  for (const loc of SUPPORTED_LOCALE_CODES) {
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc], `DOWNLOADABLE_PACK_I18N missing locale ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].downloadBtn, `downloadBtn missing for ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].itDesc, `itDesc missing for ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].idiomsDesc, `idiomsDesc missing for ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].verbsDesc, `verbsDesc missing for ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].adjectivesDesc, `adjectivesDesc missing for ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].phrasalVerbsDesc, `phrasalVerbsDesc missing for ${loc}`);
+  }
+
+  const itWords = getCollectionWords('it_terms', wordsData);
+  const idiomWords = getCollectionWords('idioms', wordsData);
+  assert.equal(itWords.length, 187);
+  assert.equal(idiomWords.length, 150);
+
+  const expectedExpandedCounts = {
+    colors: 20,
+    body_parts: 50,
+    food: 50,
+    clothes: 50,
+    animals: 50,
+    adjectives: 100,
+    phrasal_verbs: 100,
+    idioms: 150,
+  };
+  for (const [colId, expectedLen] of Object.entries(expectedExpandedCounts)) {
+    const colWords = getCollectionWords(colId, wordsData);
+    assert.equal(
+      colWords.length,
+      expectedLen,
+      `Collection "${colId}" expected ${expectedLen} words, got ${colWords.length}`
+    );
+  }
+
+  const { getWordNotes } = await import('../frontend/services/i18n.js');
+  const phrasalWords = getCollectionWords('phrasal_verbs', wordsData);
+  assert.equal(phrasalWords.length, 100);
+
+  for (const w of [...itWords, ...idiomWords, ...phrasalWords]) {
+    assert.ok(w.notes, `Word ${w.word} missing Russian notes`);
+    assert.ok(w.all_notes, `Word ${w.word} missing all_notes`);
+    for (const loc of SUPPORTED_LOCALE_CODES) {
+      const noteText = getWordNotes(w, loc);
+      assert.ok(
+        typeof noteText === 'string' && noteText.trim().length > 0,
+        `Word "${w.word}" missing translated note for locale "${loc}"`
+      );
+    }
+  }
+
+  // Verify IT notes are isolated when hideItNotes: true (Dictionary / general Training), while Idiom & Phrasal Verb notes remain visible
+  for (const w of itWords) {
+    assert.equal(getWordNotes(w, 'ru', { hideItNotes: true }), '', `IT note for "${w.word}" must be hidden when hideItNotes is true`);
+    assert.ok(getWordNotes(w, 'ru', { hideItNotes: false }).length > 0, `IT note for "${w.word}" must be visible inside IT collection`);
+  }
+  for (const w of [...idiomWords, ...phrasalWords]) {
+    assert.ok(getWordNotes(w, 'ru', { hideItNotes: true }).length > 0, `Note for "${w.word}" must remain visible in general Dictionary`);
+  }
+
+  global.localStorage.clear();
+  assert.equal(isCollectionPackDownloaded('it_terms'), false);
+  assert.equal(isCollectionPackDownloaded('idioms'), false);
+  assert.equal(isCollectionPackDownloaded('verbs'), false);
+  assert.equal(isCollectionPackDownloaded('adjectives'), false);
+  assert.equal(isCollectionPackDownloaded('phrasal_verbs'), false);
+  assert.equal(isCollectionPackDownloaded('months'), true);
+
+  const container = { innerHTML: '', querySelector: () => null, querySelectorAll: () => [] };
+  global.document.querySelector = (sel) => (sel === '#app-content' ? container : null);
+
+  // Before download -> shows Download button with video icon 🎬
+  renderFavoritesView(itWords, '#app-content', {
+    collectionId: 'it_terms',
+    collectionTitle: 'IT и разработка',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.ok(container.innerHTML.includes('id="download-collection-pack-btn"'), 'Must render download button before pack is downloaded');
+  assert.ok(container.innerHTML.includes('🎬'), 'Download button must include video icon 🎬');
+
+  // After download -> renders normal collection cards
+  markCollectionPackDownloaded('it_terms');
+  assert.equal(isCollectionPackDownloaded('it_terms'), true);
+  renderFavoritesView(itWords, '#app-content', {
+    collectionId: 'it_terms',
+    collectionTitle: 'IT и разработка',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid after pack is downloaded');
+});
+
+test('ReviewFunnelModal: 36 locales coverage and 2-button flow', async () => {
+  const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
+  const { REVIEW_TRANSLATIONS, openReviewFunnelModal } = await import('../frontend/components/modals/ReviewFunnelModal.js');
+
+  for (const loc of SUPPORTED_LOCALE_CODES) {
+    assert.ok(REVIEW_TRANSLATIONS[loc], `Review translations missing locale ${loc}`);
+    assert.ok(REVIEW_TRANSLATIONS[loc].step1Yes, `step1Yes missing for ${loc}`);
+    assert.ok(REVIEW_TRANSLATIONS[loc].step1No, `step1No missing for ${loc}`);
+    assert.ok(!REVIEW_TRANSLATIONS[loc].step1No.includes('👎'), `step1No must not have thumbs down icon for ${loc}`);
+  }
+
+  assert.equal(REVIEW_TRANSLATIONS.ru.step1Yes, '👍 Всё нравится');
+  assert.equal(REVIEW_TRANSLATIONS.ru.step1No, 'Есть замечания');
+});
+
+test('Personal Word Overrides: saveUserWordOverride, i18n lookup, and openAddWordModal edit mode', async () => {
+  const prevDoc = global.document;
+  global.localStorage.clear();
+  global.localStorage.setItem('myduo_interface_lang', 'ru');
+  global.localStorage.setItem('myduo_lang_manual', 'true');
+
+  const createMockEl = (tagName = 'div', attrs = {}) => {
+    const _attrs = { ...attrs };
+    const _listeners = {};
+    const _children = [];
+    const el = {
+      tagName: tagName.toUpperCase(),
+      id: attrs.id || '',
+      className: attrs.class || '',
+      type: attrs.type || '',
+      value: attrs.value !== undefined ? attrs.value : '',
+      disabled: Boolean(attrs.disabled),
+      readOnly: Boolean(attrs.readonly),
+      style: {},
+      dataset: {},
+      options: [],
+      textContent: '',
+      _innerHTML: '',
+      _listeners,
+      _children,
+      _byId: new Map(),
+      _byClass: new Map(),
+      get innerHTML() {
+        return this._innerHTML;
+      },
+      set innerHTML(html) {
+        this._innerHTML = String(html);
+        this._children.length = 0;
+        this._byId.clear();
+        this._byClass.clear();
+        const tagRe = /<([a-zA-Z0-9-]+)([^>]*)>/g;
+        let m;
+        while ((m = tagRe.exec(this._innerHTML)) !== null) {
+          const tag = m[1].toLowerCase();
+          const attrStr = m[2];
+          if (tag === 'option') continue;
+          const idM = /\bid=["']([^"']+)["']/.exec(attrStr);
+          const clsM = /\bclass=["']([^"']+)["']/.exec(attrStr);
+          const typeM = /\btype=["']([^"']+)["']/.exec(attrStr);
+          const valM = /\bvalue=["']([^"']*)["']/.exec(attrStr);
+          const child = createMockEl(tag, {
+            id: idM ? idM[1] : '',
+            class: clsM ? clsM[1] : '',
+            type: typeM ? typeM[1] : '',
+            value: valM ? valM[1] : '',
+            disabled: /\bdisabled\b/.test(attrStr),
+            readonly: /\breadonly\b/.test(attrStr),
+          });
+          if (child.id) this._byId.set(child.id, child);
+          if (child.className) {
+            child.className.split(/\s+/).filter(Boolean).forEach((c) => {
+              if (!this._byClass.has(c)) this._byClass.set(c, child);
+            });
+          }
+          this._children.push(child);
+        }
+        const selRe = /<select[^>]*\bid=["']([^"']+)["'][^>]*>([\s\S]*?)<\/select>/g;
+        let sm;
+        while ((sm = selRe.exec(this._innerHTML)) !== null) {
+          const selEl = this._byId.get(sm[1]);
+          if (selEl) {
+            selEl.options = [];
+            const optRe = /<option[^>]*value=["']([^"']*)["'][^>]*>([\s\S]*?)<\/option>/g;
+            let om;
+            while ((om = optRe.exec(sm[2])) !== null) {
+              selEl.options.push({ value: om[1], textContent: om[2].trim() });
+            }
+            if (selEl.options.length > 0 && !selEl.value) {
+              selEl.value = selEl.options[0].value;
+            }
+          }
+        }
+      },
+      setAttribute(k, v) {
+        _attrs[k] = String(v);
+        if (k === 'readonly') this.readOnly = true;
+        if (k === 'disabled') this.disabled = true;
+      },
+      removeAttribute(k) {
+        delete _attrs[k];
+        if (k === 'readonly') this.readOnly = false;
+        if (k === 'disabled') this.disabled = false;
+      },
+      getAttribute(k) {
+        return _attrs[k] ?? null;
+      },
+      appendChild(child) {
+        if (this.tagName === 'SELECT' && child) {
+          this.options.push(child);
+        }
+        this._children.push(child);
+        if (child && child.id) this._byId.set(child.id, child);
+        return child;
+      },
+      remove() {},
+      focus() {},
+      closest() {
+        return null;
+      },
+      contains() {
+        return true;
+      },
+      classList: {
+        add() {},
+        remove() {},
+        toggle() {},
+        contains() {
+          return false;
+        },
+      },
+      addEventListener(type, fn) {
+        if (!_listeners[type]) _listeners[type] = [];
+        _listeners[type].push(fn);
+      },
+      removeEventListener(type, fn) {
+        if (_listeners[type]) {
+          _listeners[type] = _listeners[type].filter((f) => f !== fn);
+        }
+      },
+      async dispatchEvent(ev) {
+        const list = _listeners[ev.type] || [];
+        for (const fn of list) {
+          await fn(ev);
+        }
+      },
+      querySelector(sel) {
+        if (!sel) return null;
+        if (sel.startsWith('#')) return this._byId.get(sel.slice(1)) || null;
+        if (sel.startsWith('.')) return this._byClass.get(sel.slice(1)) || null;
+        return this._children.find((c) => c.tagName.toLowerCase() === sel.toLowerCase()) || null;
+      },
+      querySelectorAll() {
+        return [];
+      },
+    };
+    return el;
+  };
+
+  try {
+    const bodyEl = createMockEl('body');
+    const docHandlers = {};
+    global.document = {
+      documentElement: { dir: 'ltr', lang: 'ru', classList: { add() {}, remove() {}, toggle() {} } },
+      body: bodyEl,
+      createElement: (tag) => createMockEl(tag),
+      getElementById: (id) => bodyEl._byId.get(id) || bodyEl._children.find((c) => c.id === id) || null,
+      querySelector: () => null,
+      querySelectorAll: () => [],
+      addEventListener: (t, fn) => {
+        if (!docHandlers[t]) docHandlers[t] = [];
+        docHandlers[t].push(fn);
+      },
+      removeEventListener: () => {},
+    };
+
+    const { saveUserWordOverride } = await import('../frontend/services/api.js');
+    const { getUserWordOverride, getWordTranslation, getWordNotes } = await import('../frontend/services/i18n.js');
+    const { openAddWordModal } = await import('../frontend/components/dictionary/DictionaryView.js');
+
+    const sampleWord = {
+      id: 'w_personal_1',
+      word: 'apple',
+      translation: 'яблоко',
+      translations: { ru: 'яблоко', de: 'Apfel' },
+      category: 'Elementary',
+      notes: '',
+    };
+
+    // 1. Direct saveUserWordOverride persists personal translation, category, notes without mutating other langs
+    await saveUserWordOverride({
+      id: sampleWord.id,
+      word: sampleWord.word,
+      translation: 'домашнее яблоко',
+      category: 'Food',
+      notes: 'любимый фрукт',
+      lang: 'ru',
+    });
+
+    const rawOverrides = JSON.parse(global.localStorage.getItem('myduo_user_word_overrides'));
+    assert.ok(rawOverrides[sampleWord.id], 'Override stored by word id');
+    assert.equal(rawOverrides[sampleWord.id].translations.ru, 'домашнее яблоко');
+    assert.equal(rawOverrides[sampleWord.id].category, 'Food');
+    assert.equal(rawOverrides[sampleWord.id].notes, 'любимый фрукт');
+
+    const rawNotes = JSON.parse(global.localStorage.getItem('myduo_user_notes'));
+    assert.equal(rawNotes[sampleWord.id], 'любимый фрукт');
+
+    const ov = getUserWordOverride(sampleWord);
+    assert.ok(ov);
+    assert.equal(getWordTranslation(sampleWord, 'ru'), 'домашнее яблоко', 'Active lang returns personal override');
+    assert.equal(getWordTranslation(sampleWord, 'de'), 'Apfel', 'Other lang keeps original built-in translation');
+    assert.equal(getWordNotes(sampleWord, 'ru'), 'любимый фрукт', 'Note lookup returns personal note');
+
+    // 2. openAddWordModal in edit mode keeps translation and category editable and saves personal edits
+    let callbackSavedWord = null;
+    openAddWordModal(
+      [sampleWord],
+      sampleWord.word,
+      (saved) => {
+        callbackSavedWord = saved;
+      },
+      { editWord: sampleWord }
+    );
+
+    const modalEl = bodyEl._children.find((c) => c.id === 'add-word-modal-overlay');
+    assert.ok(modalEl, 'Add/Edit word modal overlay must mount');
+
+    const inputs = modalEl._children.filter((c) => c.tagName === 'INPUT');
+    const wordInput = inputs[0];
+    const transInput = inputs[1];
+    const notesInput =
+      modalEl._children.find((c) => c.tagName === 'TEXTAREA') || inputs[2];
+    const catSelect = modalEl._children.find((c) => c.tagName === 'SELECT');
+
+    assert.ok(wordInput && transInput && catSelect && notesInput, 'Modal fields present');
+    assert.equal(wordInput.readOnly, true, 'Word input is read-only when editing an existing card');
+    assert.equal(transInput.disabled, false, 'Translation input must remain editable in edit mode');
+    assert.equal(transInput.readOnly, false, 'Translation input must not have readonly in edit mode');
+    assert.equal(catSelect.disabled, false, 'Category select must remain editable in edit mode');
+    assert.equal(transInput.value, 'домашнее яблоко');
+    assert.equal(catSelect.value, 'Food');
+    assert.equal(notesInput.value, 'любимый фрукт');
+
+    // Simulate user editing translation, category, and note and submitting
+    transInput.value = 'антоновка';
+    catSelect.value = 'Fruits';
+    notesInput.value = 'кислый сорт';
+
+    const formEl = modalEl._children.find((c) => c.tagName === 'FORM');
+    const submitBtn = modalEl._children.find(
+      (c) => c.tagName === 'BUTTON' && (c.id.includes('submit') || c.id.includes('save') || c.type === 'submit')
+    );
+    if (formEl && formEl._listeners.submit?.length) {
+      await formEl.dispatchEvent({ type: 'submit', preventDefault() {} });
+    } else if (submitBtn && submitBtn._listeners.click?.length) {
+      await submitBtn.dispatchEvent({ type: 'click', preventDefault() {} });
+    } else {
+      assert.fail('Modal must attach either form submit or submit button click listener');
+    }
+
+    assert.ok(callbackSavedWord, 'onWordSaved callback must fire after saving personal edit');
+    assert.equal(getWordTranslation(sampleWord, 'ru'), 'антоновка');
+    assert.equal(sampleWord.category, 'Fruits');
+    assert.equal(getWordNotes(sampleWord, 'ru'), 'кислый сорт');
+  } finally {
+    global.document = prevDoc;
+    global.localStorage.clear();
+  }
+});
+
+test('TimeTrainerView has translations for all 36 supported locales and valid mode question generation', async () => {
+  const {
+    TIME_TRAINER_TRANSLATIONS,
+    TIME_TRAINER_MODES,
+    generateTimeQuestion
+  } = await import('../frontend/components/favorites/TimeTrainerView.js');
+  const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+
+  const requiredKeys = [
+    'folderTitle', 'folderSubtitle', 'hubTitle', 'hubSubtitle', 'backBtn',
+    'modeAmTitle', 'modeAmDesc', 'modePmTitle', 'modePmDesc',
+    'modeHalvesTitle', 'modeHalvesDesc', 'modeQuartersTitle', 'modeQuartersDesc',
+    'modeTenTitle', 'modeTenDesc', 'modeFiveTitle', 'modeFiveDesc',
+    'listenPrompt', 'replayHint', 'doneTitle', 'scoreLabel', 'playAgainBtn', 'changeModeBtn'
+  ];
+
+  assert.equal(SUPPORTED_LOCALE_CODES.length, 36);
+  for (const code of SUPPORTED_LOCALE_CODES) {
+    const bundle = TIME_TRAINER_TRANSLATIONS[code];
+    assert.ok(bundle, `Missing TimeTrainerView translations for locale "${code}"`);
+    for (const key of requiredKeys) {
+      assert.equal(typeof bundle[key], 'string', `Missing key "${key}" for locale "${code}"`);
+      assert.ok(bundle[key].trim().length > 0, `Empty key "${key}" for locale "${code}"`);
+    }
+  }
+
+  const expectedModes = ['am_hours', 'pm_hours', 'halves', 'quarters', 'ten_mins', 'five_mins'];
+  assert.deepEqual(TIME_TRAINER_MODES.map(m => m.id), expectedModes);
+
+  for (const mode of TIME_TRAINER_MODES) {
+    const q = generateTimeQuestion(mode.id);
+    assert.ok(typeof q.displayTime === 'string' && q.displayTime.length > 0, `Missing displayTime for ${mode.id}`);
+    assert.ok(typeof q.spokenText === 'string' && q.spokenText.length > 0, `Missing spokenText for ${mode.id}`);
+    assert.equal(q.choices.length, 4, `Expected 4 choices for ${mode.id}`);
+    assert.equal(new Set(q.choices).size, 4, `Choices must be unique for ${mode.id}`);
+    assert.ok(q.choices.includes(q.displayTime), `Choices must include displayTime for ${mode.id}`);
+  }
+
+  for (let i = 0; i < 40; i++) {
+    const qAm = generateTimeQuestion('am_hours');
+    const qPm = generateTimeQuestion('pm_hours');
+    assert.ok(!/[ap]\.m\./i.test(qAm.spokenText), `am_hours spokenText must not contain dotted a.m.: ${qAm.spokenText}`);
+    assert.ok(!/[ap]\.m\./i.test(qPm.spokenText), `pm_hours spokenText must not contain dotted p.m.: ${qPm.spokenText}`);
+  }
+
+  const hubSource = fs.readFileSync(path.resolve('frontend/components/favorites/CollectionsHubView.js'), 'utf8');
+  const indexSource = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
+  assert.ok(hubSource.includes('data-col-id="time_trainer"'), 'CollectionsHubView must include time_trainer tile');
+  assert.ok(indexSource.includes("colId === 'time_trainer'"), 'index.html must route time_trainer tile');
+  assert.ok(indexSource.includes('renderTimeTrainerView('), 'index.html must invoke renderTimeTrainerView');
+});
+
+test('MicroRules and TenseConstructions cover all 36 supported locales, progressive rules, and full tense structures', async () => {
+  const {
+    MICRO_RULES_I18N,
+    TENSE_CONSTRUCTIONS_I18N,
+    GRAMMAR_TOPICS_I18N,
+    getMicroRulesStrings,
+    getTenseConstructionsStrings,
+    getTopicTitle,
+  } = await import('../frontend/components/favorites/grammarUiTranslations.js');
+  const {
+    MICRO_RULES,
+    getLocalizedMicroRule,
+  } = await import('../frontend/components/favorites/microRulesData.js');
+  const {
+    TENSE_CONSTRUCTIONS,
+    getLocalizedTenseConstruction,
+  } = await import('../frontend/components/favorites/tenseConstructionsData.js');
+  const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+
+  assert.equal(SUPPORTED_LOCALE_CODES.length, 36);
+
+  const requiredMicroUiKeys = [
+    'folderTitle', 'folderSubtitle', 'hubTitle', 'hubSubtitle', 'backBtn',
+    'allLevels', 'modeList', 'modeCards', 'searchPlaceholder', 'progressLabel',
+    'markDoneBtn', 'doneBadge', 'examplesHeading', 'prevBtn', 'nextBtn',
+    'showMoreBtn', 'noResults', 'ruleLabel', 'listenHint', 'unlockRuleBtn',
+    'quizHeading', 'quizDoneBadge',
+  ];
+
+  const requiredTenseUiKeys = [
+    'folderTitle', 'folderSubtitle', 'hubTitle', 'hubSubtitle', 'backBtn',
+    'tabList', 'tabMatrix', 'filterAll', 'filterSimple', 'filterContinuous',
+    'filterPerfect', 'filterPerfectContinuous', 'filterSpecial',
+    'purposeHeading', 'formulaHeading', 'posLabel', 'negLabel', 'quesLabel',
+    'auxLabel', 'markersHeading', 'examplesHeading', 'markDoneBtn', 'doneBadge',
+    'progressLabel', 'matrixHint', 'presentRow', 'pastRow', 'futureRow',
+    'markersRow', 'simpleSubtitle', 'continuousSubtitle', 'perfectSubtitle',
+    'perfectContinuousSubtitle', 'specialSubtitle', 'quizHeading', 'quizDoneBadge',
+  ];
+
+  for (const loc of [...SUPPORTED_LOCALE_CODES, 'es-mx', 'pt-br']) {
+    const mUi = getMicroRulesStrings(loc);
+    const tUi = getTenseConstructionsStrings(loc);
+    const topBag = GRAMMAR_TOPICS_I18N[loc];
+    assert.ok(mUi && topBag, `Missing grammar UI/topic strings for locale "${loc}"`);
+    for (const k of requiredMicroUiKeys) {
+      assert.equal(typeof mUi[k], 'string', `MICRO_RULES_I18N["${loc}"]["${k}"] must exist`);
+      assert.ok(mUi[k].trim().length > 0, `MICRO_RULES_I18N["${loc}"]["${k}"] must be non-empty`);
+    }
+    for (const k of requiredTenseUiKeys) {
+      assert.equal(typeof tUi[k], 'string', `TENSE_CONSTRUCTIONS_I18N["${loc}"]["${k}"] must exist`);
+      assert.ok(tUi[k].trim().length > 0, `TENSE_CONSTRUCTIONS_I18N["${loc}"]["${k}"] must be non-empty`);
+    }
+  }
+
+  assert.ok(MICRO_RULES.length >= 150, `Expected >= 150 consolidated micro-rules, got ${MICRO_RULES.length}`);
+  const levelOrder = { A1: 1, A2: 2, B1: 3, B2: 4 };
+  let prevRank = 0;
+
+  const normEn = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+  const assertQuizValidAndDistinct = (item, label, minCount = 2) => {
+    assert.ok(Array.isArray(item.quiz) && item.quiz.length >= minCount, `${label} must have >= ${minCount} mini-quiz questions`);
+    const exampleNorms = new Set((item.examples || []).map((ex) => normEn(ex.en)));
+    const seenCompleted = new Set();
+    for (const q of item.quiz) {
+      assert.ok(q.blanked && q.blanked.includes('___'), `${label} quiz blanked must include ___`);
+      assert.ok(Array.isArray(q.options) && q.options.length === 4, `${label} quiz must have 4 options`);
+      assert.equal(new Set(q.options).size, 4, `${label} quiz options must be unique`);
+      assert.ok(q.options.includes(q.answer), `${label} quiz options must contain answer`);
+      const fullSentence = q.blanked.replace('___', q.answer);
+      const fullNorm = normEn(fullSentence);
+      assert.ok(!exampleNorms.has(fullNorm), `${label} quiz must not repeat card example: "${fullSentence}"`);
+      assert.ok(!seenCompleted.has(fullNorm), `${label} quiz must not have duplicate sentences: "${fullSentence}"`);
+      seenCompleted.add(fullNorm);
+    }
+  };
+
+  for (let i = 0; i < MICRO_RULES.length; i++) {
+    const r = MICRO_RULES[i];
+    assert.equal(r.id, i + 1, `Micro-rule sequential id check at ${i}`);
+    const rank = levelOrder[r.level];
+    assert.ok(rank && rank >= prevRank, `Micro-rules must progress A1->A2->B1->B2 (broken at id=${r.id}, level=${r.level})`);
+    prevRank = rank;
+    assert.ok(Array.isArray(r.examples) && r.examples.length >= 3 && r.examples.length <= 5, `Rule ${r.id} must have 3-5 examples`);
+    assert.ok(getTopicTitle(r.topic, 'ru').trim().length > 0, `Missing topic title for "${r.topic}"`);
+
+    assertQuizValidAndDistinct(r, `Rule ${r.id}`, 5);
+    assert.ok(!/\s(в|на|с|к|о|у|и|а|но|по|из|от|до|за|для|при|без)$/iu.test(r.title.ru || '') || /[/&]\s*\S+$/u.test(r.title.ru || ''), `Rule ${r.id} ru title must not end with dangling preposition: "${r.title.ru}"`);
+    assert.ok(!/\s(in|on|at|to|for|of|with|by|from|and|or|but|the|a|an)$/i.test(r.title.en || '') || /[/&+]\s*\S+$/i.test(r.title.en || '') || /(plenty of|used to|forward to|supposed to|about to|because of)$/i.test(r.title.en || ''), `Rule ${r.id} en title must not end with dangling preposition: "${r.title.en}"`);
+    if (r.id === 1) {
+      for (const q of r.quiz) {
+        assert.ok(q.answer !== 'in' && q.answer !== 'is', `Rule 1 (Noun) must test a noun, got "${q.answer}"`);
+      }
+    }
+
+    for (const loc of SUPPORTED_LOCALE_CODES) {
+      const locRule = getLocalizedMicroRule(r, loc);
+      assert.ok(locRule.title && locRule.title.trim().length > 0, `Rule ${r.id} missing title for "${loc}"`);
+      assert.ok(!locRule.title.includes('\uFFFD'), `Rule ${r.id} title has U+FFFD for "${loc}"`);
+      assert.ok(locRule.rule && locRule.rule.trim().length > 0, `Rule ${r.id} missing text for "${loc}"`);
+      assert.ok(!locRule.rule.includes('\uFFFD'), `Rule ${r.id} has U+FFFD for "${loc}"`);
+      assert.equal(locRule.examples.length, r.examples.length);
+      for (const ex of locRule.examples) {
+        assert.ok(ex.en && ex.en.trim().length > 0, `Rule ${r.id} empty en example`);
+        assert.ok(ex.tr && ex.tr.trim().length > 0, `Rule ${r.id} missing example tr for "${loc}"`);
+        assert.ok(!ex.tr.includes('\uFFFD'), `Rule ${r.id} example tr has U+FFFD for "${loc}"`);
+      }
+      assert.ok(locRule.quiz.length >= 5, `Rule ${r.id} localized quiz length >= 5 for "${loc}"`);
+    }
+  }
+
+  assert.equal(TENSE_CONSTRUCTIONS.length, 16, 'Expected 16 tense constructions (12 active + 4 special)');
+  for (const tc of TENSE_CONSTRUCTIONS) {
+    assert.ok(tc.formula?.pos && tc.formula?.neg && tc.formula?.ques && tc.formula?.aux, `Tense ${tc.id} incomplete formula`);
+    assert.ok(Array.isArray(tc.markers) && tc.markers.length >= 3, `Tense ${tc.id} must have markers`);
+    assert.ok(Array.isArray(tc.examples) && tc.examples.length >= 3 && tc.examples.length <= 5, `Tense ${tc.id} must have 3-5 examples`);
+    assertQuizValidAndDistinct(tc, `Tense ${tc.id}`, 6);
+
+    for (const loc of SUPPORTED_LOCALE_CODES) {
+      const locTc = getLocalizedTenseConstruction(tc, loc);
+      assert.ok(locTc.subtitle && locTc.subtitle.trim().length > 0, `Tense ${tc.id} missing subtitle for "${loc}"`);
+      assert.ok(locTc.purpose && locTc.purpose.trim().length > 0, `Tense ${tc.id} missing purpose for "${loc}"`);
+      assert.ok(!locTc.purpose.includes('\uFFFD'), `Tense ${tc.id} purpose has U+FFFD for "${loc}"`);
+      assert.equal(locTc.examples.length, tc.examples.length);
+      for (const ex of locTc.examples) {
+        assert.ok(ex.en && ex.en.trim().length > 0, `Tense ${tc.id} empty en example`);
+        assert.ok(ex.tr && ex.tr.trim().length > 0, `Tense ${tc.id} missing example tr for "${loc}"`);
+        assert.ok(ex.note && ex.note.trim().length > 0, `Tense ${tc.id} missing example note for "${loc}"`);
+      }
+      assert.ok(locTc.quiz.length >= 6, `Tense ${tc.id} localized quiz length >= 6 for "${loc}"`);
+    }
+  }
+
+  const hubSource = fs.readFileSync(path.resolve('frontend/components/favorites/CollectionsHubView.js'), 'utf8');
+  const indexSource = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
+  const microViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/MicroRulesView.js'), 'utf8');
+  const tenseViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/TenseConstructionsView.js'), 'utf8');
+  assert.ok(hubSource.includes('data-col-id="grammar_microrules"'), 'CollectionsHubView must include grammar_microrules tile');
+  assert.ok(hubSource.includes('data-col-id="tense_constructions"'), 'CollectionsHubView must include tense_constructions tile');
+  assert.ok(indexSource.includes("colId === 'grammar_microrules'"), 'index.html must route grammar_microrules');
+  assert.ok(indexSource.includes("colId === 'tense_constructions'"), 'index.html must route tense_constructions');
+  assert.ok(indexSource.includes('renderMicroRulesView('), 'index.html must invoke renderMicroRulesView');
+  assert.ok(indexSource.includes('renderTenseConstructionsView('), 'index.html must invoke renderTenseConstructionsView');
+  assert.ok(microViewSource.includes('myduo_microrules_unlocked'), 'MicroRulesView must persist unlocked rule IDs');
+  assert.ok(microViewSource.includes('myduo_microrules_quiz_done'), 'MicroRulesView must persist mini-quiz completion');
+  assert.ok(microViewSource.includes('addWeeklyXP(5)'), 'MicroRulesView must award +5 XP on mini-quiz pass');
+  assert.ok(microViewSource.includes('showLanguagePackRewardedAd'), 'MicroRulesView must trigger rewarded ad to unlock rules');
+  assert.ok(microViewSource.includes('btn-orange'), 'MicroRulesView unlock button must have orange class');
+  assert.ok(microViewSource.includes('data-unlock-rule'), 'MicroRulesView must render data-unlock-rule trigger');
+  assert.ok(!microViewSource.includes('class="mr-ex-heading"') && !microViewSource.includes('class="mr-ex-list"'), 'MicroRulesView must not render examples block');
+  assert.ok(!microViewSource.includes('data-mr-mode'), 'MicroRulesView must not render mode tabs (list only)');
+  assert.ok(!microViewSource.includes('mr-search-input'), 'MicroRulesView must not render search input');
+  assert.ok(!microViewSource.includes("const levels = ['all'"), 'MicroRulesView must not render All (320) button');
+  assert.ok(!microViewSource.includes('class="mr-hint"'), 'MicroRulesView must not render listen hint banner');
+  assert.ok(!microViewSource.includes('class="mr-hero-sub"'), 'MicroRulesView must not render hero subtitle');
+  assert.ok(microViewSource.includes('data-toggle-expand'), 'MicroRulesView must support collapsing/reopening studied rules without ads');
+  assert.ok(microViewSource.includes('mr-ref-table'), 'MicroRulesView must render reference tables when present');
+  for (const tid of [13, 14, 16, 18, 27, 31, 39, 49]) {
+    const ruleObj = MICRO_RULES.find((r) => r.id === tid);
+    assert.ok(ruleObj?.table && Array.isArray(ruleObj.table.rows) && ruleObj.table.rows.length >= 2, `Rule ${tid} must have a reference table`);
+  }
+  assert.ok(tenseViewSource.includes('myduo_tenses_quiz_done'), 'TenseConstructionsView must persist mini-quiz completion');
+  assert.ok(tenseViewSource.includes('addWeeklyXP(5)'), 'TenseConstructionsView must award +5 XP on mini-quiz pass');
+  assert.ok(!tenseViewSource.includes('class="tc-hero-sub"'), 'TenseConstructionsView must not render hero subtitle');
+  assert.ok(!tenseViewSource.includes('class="tc-examples-list"'), 'TenseConstructionsView must not render examples block');
+  assert.ok(tenseViewSource.includes('overflow-x: auto') && tenseViewSource.includes('overflow-x: hidden'), 'TenseConstructionsView must constrain page width and scroll matrix horizontally');
+  assert.ok(tenseViewSource.includes('myduo_tenses_unlocked') && tenseViewSource.includes('showLanguagePackRewardedAd') && tenseViewSource.includes('data-unlock-tense'), 'TenseConstructionsView must lock tenses behind rewarded ad on first open');
+  assert.ok(tenseViewSource.includes('data-toggle-expand'), 'TenseConstructionsView must collapse studied tenses and reopen without ads');
+
+  for (const vidDir of ['frontend/assets/video', 'docs/assets/video']) {
+    if (fs.existsSync(vidDir)) {
+      const onboardingFiles = fs.readdirSync(vidDir).filter((f) => /onboarding/i.test(f));
+      assert.deepEqual(onboardingFiles, [], `Onboarding video files must not exist in ${vidDir}`);
+    }
+  }
+});
+
+
+
 
