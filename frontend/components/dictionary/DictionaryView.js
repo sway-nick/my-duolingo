@@ -1751,7 +1751,7 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}, 
   modalEl.style.cssText = 'position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; backdrop-filter: blur(4px);';
 
   const standardCats = ['Elementary', 'Intermediate', 'Advanced', 'Irregular verbs', 'Pattern'];
-  const existingCats = Array.from(new Set([...standardCats, ...words.map((w) => String(w.category || '').trim()).filter(Boolean)]));
+  const existingCats = Array.from(new Set([...standardCats, ...words.map((w) => sanitizeCategory(w.category)).filter(Boolean)]));
   existingCats.sort();
   if (existingCats.length === 0) existingCats.push('Elementary');
 
@@ -1766,9 +1766,9 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}, 
   const checkingBtnText = t('dict_checking_btn');
 
   modalEl.innerHTML = `
-    <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: left;">
+    <div style="background: var(--card-bg, #1a2234); border: 1px solid var(--border-color, #2e3a52); border-radius: 16px; padding: 22px; max-width: 440px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto; text-align: start;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); text-align: left;">${titleText}</h3>
+        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); text-align: start;">${titleText}</h3>
         <button type="button" id="add-word-close-btn" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); padding: 2px 6px; line-height: 1;">✕</button>
       </div>
 

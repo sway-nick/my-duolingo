@@ -183,7 +183,7 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const proRingClass = isProActive() ? ' pro-avatar-ring' : '';
   let avatarHtml = '';
   if (avatar) {
-    avatarHtml = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img${proRingClass}" referrerpolicy="no-referrer" />`;
+    avatarHtml = `<img src="${avatar}" alt="${t('settings_avatar_edit_tooltip') || 'Avatar'}" class="drawer-avatar-img${proRingClass}" referrerpolicy="no-referrer" />`;
   } else {
     const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
     avatarHtml = `<div class="drawer-avatar-placeholder${proRingClass}">${initial}</div>`;
@@ -198,9 +198,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
 
       <div class="safe-area-top-fill" aria-hidden="true"></div>
       <header class="mobile-header">
-        <div class="brand" id="brand-logo" style="cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="${t('header_brand_title') || 'Перейти на главную (режим Тест)'}">
+        <div class="brand" id="brand-logo" dir="ltr" style="direction: ltr; unicode-bidi: isolate; cursor: pointer; flex: 1 1 auto; min-width: 0; max-width: calc(100% - 130px); overflow: hidden; display: flex; align-items: center;" title="${t('header_brand_title') || 'Перейти на главную (режим Тест)'}">
           <!-- SVG Cup-with-Book Logo -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" style="display: block; width: 100%; max-width: 180px; height: 38px; min-width: 130px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 56" direction="ltr" style="direction: ltr; unicode-bidi: isolate; display: block; width: 100%; max-width: 180px; height: 38px; min-width: 130px;">
             <!-- Steam lines (More wavy) -->
             <path d="M12,16 C7,12 17,8 12,4" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
             <path d="M22,16 C17,12 27,8 22,2" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
@@ -221,11 +221,11 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
             <!-- Center Spine Line -->
             <line x1="22" y1="20" x2="22" y2="30" stroke="#FF6A00" stroke-width="1.8"/>
             <!-- EN Text -->
-            <text x="22" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle">EN</text>
+            <text x="22" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#FFF" text-anchor="middle" direction="ltr" style="direction: ltr; unicode-bidi: isolate;">EN</text>
             <!-- Brand Text (English Breakfast) -->
-            <text x="56" y="27" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="20.5" fill="var(--text-main)">English <tspan fill="#FF6A00">Breakfast</tspan></text>
+            <text x="56" y="27" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="20.5" fill="var(--text-main)" text-anchor="start" direction="ltr" style="direction: ltr; unicode-bidi: isolate;">English <tspan fill="#FF6A00">Breakfast</tspan></text>
             <!-- Subtitle (Vocabulary + inline Demo) -->
-            <text x="56" y="49" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="16" fill="var(--text-muted)">Vocabulary<tspan id="header-user-status" fill="#ea580c" font-weight="700" font-size="14.5">${user ? '' : ` • 🎁 ${guestCount}/${GUEST_WORD_LIMIT}`}</tspan></text>
+            <text x="56" y="49" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="16" fill="var(--text-muted)" text-anchor="start" direction="ltr" style="direction: ltr; unicode-bidi: isolate;">Vocabulary<tspan id="header-user-status" fill="#ea580c" font-weight="700" font-size="14.5">${user ? '' : ` • 🎁 ${guestCount}/${GUEST_WORD_LIMIT}`}</tspan></text>
           </svg>
         </div>
         
@@ -763,12 +763,25 @@ export function updateDrawerTranslations() {
     }
   });
 
+  const challengeBtn = drawer.querySelector('#drawer-challenge-btn');
+  if (challengeBtn) {
+    const textEl = challengeBtn.querySelector('.drawer-item-text');
+    const challengeLabel = t('challenge_menu_item') || 'Challenge';
+    if (textEl) textEl.textContent = challengeLabel;
+    challengeBtn.title = challengeLabel;
+  }
+
   const feedbackBtn = drawer.querySelector('#drawer-feedback-btn');
   if (feedbackBtn) {
-    feedbackBtn.innerHTML = `
-      <span class="drawer-feedback-icon">💡</span>
-      <span class="drawer-feedback-title">${t('feedback_title')}</span>
-    `;
+    const titleEl = feedbackBtn.querySelector('.drawer-feedback-title');
+    if (titleEl) {
+      titleEl.textContent = t('feedback_title');
+    } else {
+      feedbackBtn.innerHTML = `
+        <span class="drawer-feedback-icon">💡</span>
+        <span class="drawer-feedback-title">${t('feedback_title')}</span>
+      `;
+    }
   }
 
   const shareBtn = drawer.querySelector('#drawer-share-btn');
@@ -778,15 +791,43 @@ export function updateDrawerTranslations() {
     shareBtn.title = t('share_title');
   }
 
+  const profileBtn = drawer.querySelector('#drawer-profile-btn');
+  if (profileBtn) profileBtn.title = t('settings');
+  const avatarBtn = drawer.querySelector('#drawer-avatar-btn');
+  if (avatarBtn) avatarBtn.title = t('settings');
+
+  const closeBtn = drawer.querySelector('#drawer-close-btn');
+  if (closeBtn) {
+    const closeLabel = t('modal_close') || t('word_notes_close') || 'Close';
+    closeBtn.setAttribute('aria-label', closeLabel);
+    closeBtn.title = closeLabel;
+  }
+
+  const lbCloseBtn = document.querySelector('#leaderboard-drawer-close-btn');
+  if (lbCloseBtn) {
+    const closeLabel = t('modal_close') || t('word_notes_close') || 'Close';
+    lbCloseBtn.setAttribute('aria-label', closeLabel);
+    lbCloseBtn.title = closeLabel;
+  }
+
+  const brandLogo = document.querySelector('#brand-logo');
+  if (brandLogo) {
+    brandLogo.title = t('header_brand_title') || 'English Breakfast';
+  }
+
   const lbHeading = document.querySelector('#leaderboard-drawer-heading');
   if (lbHeading) {
     lbHeading.textContent = t('leaderboard');
   }
+
+  updateDrawerProfile();
 }
 
 if (typeof window !== 'undefined') {
   window.addEventListener('myduo:lang_changed', () => {
     updateDrawerTranslations();
+    updateHeaderUser();
+    renderMondayWinnersTicker();
   });
 }
 
@@ -904,7 +945,7 @@ function updateDrawerProfile() {
   const proRingClass = isProActive() ? ' pro-avatar-ring' : '';
   if (avatarWrapper) {
     if (avatar) {
-      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Avatar" class="drawer-avatar-img${proRingClass}" referrerpolicy="no-referrer" />`;
+      avatarWrapper.innerHTML = `<img src="${avatar}" alt="${t('settings_avatar_edit_tooltip') || 'Avatar'}" class="drawer-avatar-img${proRingClass}" referrerpolicy="no-referrer" />`;
     } else {
       const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
       avatarWrapper.innerHTML = `<div class="drawer-avatar-placeholder${proRingClass}">${initial}</div>`;
@@ -913,12 +954,16 @@ function updateDrawerProfile() {
 
   const usernameEl = drawer.querySelector('.drawer-username');
   if (usernameEl) {
-    usernameEl.textContent = user ? (user.name || (user.email ? user.email.split('@')[0] : 'User')) : 'Guest (Demo)';
+    usernameEl.textContent = user ? (user.name || (user.email ? user.email.split('@')[0] : 'User')) : (t('drawer_guest_user') || 'Guest (Demo)');
   }
 
   const emailEl = drawer.querySelector('.drawer-email');
   if (emailEl) {
-    emailEl.textContent = user ? (user.email || '') : `Progress: ${guestCount}/${GUEST_WORD_LIMIT} words`;
+    emailEl.textContent = user
+      ? (user.email || '')
+      : (t('drawer_guest_progress') || 'Progress: {current}/{limit} words')
+          .replace('{current}', guestCount)
+          .replace('{limit}', GUEST_WORD_LIMIT);
   }
 }
 
@@ -978,7 +1023,7 @@ if (typeof window !== 'undefined') {
       xpIconEl.textContent = rankBadge.content;
       xpIconEl.className = rankBadge.isIcon ? 'xp-badge-icon' : 'xp-badge-level';
       if (xpBtnEl) {
-        xpBtnEl.title = `${rankBadge.title}. Click to open weekly league`;
+        xpBtnEl.title = `${rankBadge.title}. ${t('header_rank_click_hint') || 'Click to open weekly league'}`;
       }
     }
 

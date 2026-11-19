@@ -348,7 +348,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
             return `
           <div class="fav-card" data-id="${word.id}">
             <div class="fav-card-top">
-              <span class="category-badge">${word.category || t('cat_general') || 'Общие'}</span>
+              <span class="category-badge">${(!word.category || word.category === 'Общие') ? (t('cat_general') || 'Elementary') : word.category}</span>
               <div class="fav-card-actions">
                 <button type="button" class="fav-audio-btn" data-word="${escapeHtml(word.word)}" data-id="${word.id}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">🔊</button>
                 ${

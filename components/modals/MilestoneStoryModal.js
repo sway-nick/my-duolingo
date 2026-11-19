@@ -1418,12 +1418,13 @@ export async function showMilestoneStoryModal(milestone = 0) {
       }
       .story-paragraph {
         margin: 0 0 16px;
+        direction: ltr;
         text-align: left;
         text-indent: 26px;
       }
       .story-translation-para {
         margin: 0 0 14px;
-        text-align: left;
+        text-align: start;
         text-indent: 26px;
       }
       .story-word-token {

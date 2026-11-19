@@ -2,6 +2,7 @@
 // Uses direct native Google Identity & Firestore REST APIs (100% reliable in all WebViews with zero CDN dependency)
 
 import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=386.0';
+import { isProActive } from './proState.js?v=386.0';
 
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc",
@@ -1035,9 +1036,11 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
 
   const weekStartMs = getIsoWeekStartMs(weekKey);
 
+  const proStatus = Boolean(isProActive());
+
   const writes = [
     // 1. Weekly leaderboard player doc:
-    // Update metadata, weekKey, weekStartMs and apply atomic increment on xp with server timestamp
+    // Update metadata, weekKey, weekStartMs, isPro and apply atomic increment on xp with server timestamp
     {
       update: {
         name: weeklyDocPath,
@@ -1047,11 +1050,12 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
           avatar: { stringValue: cleanAvatar },
           weekKey: { stringValue: String(weekKey) },
           weekStartMs: { integerValue: String(weekStartMs) },
-          expireAt: { timestampValue: expireAtIso }
+          expireAt: { timestampValue: expireAtIso },
+          isPro: { booleanValue: proStatus }
         }
       },
       updateMask: {
-        fieldPaths: ['userId', 'name', 'avatar', 'weekKey', 'weekStartMs', 'expireAt']
+        fieldPaths: ['userId', 'name', 'avatar', 'weekKey', 'weekStartMs', 'expireAt', 'isPro']
       },
       updateTransforms: [
         {
@@ -1086,18 +1090,19 @@ async function sendCommitXpDeltaSingle(userId, weekKey, weeklyDelta, userName, u
     },
     // 3. All-time global leaderboard doc:
     // ALWAYS includes totalXp transform (even when delta <= 0, totalDelta = 0)
-    // so leaderboard_alltime document contains totalXp upon creation
+    // so leaderboard_alltime document contains totalXp upon creation and preserves isPro
     {
       update: {
         name: alltimeDocPath,
         fields: {
           userId: { stringValue: String(uid) },
           name: { stringValue: cleanName },
-          avatar: { stringValue: cleanAvatar }
+          avatar: { stringValue: cleanAvatar },
+          isPro: { booleanValue: proStatus }
         }
       },
       updateMask: {
-        fieldPaths: ['userId', 'name', 'avatar']
+        fieldPaths: ['userId', 'name', 'avatar', 'isPro']
       },
       updateTransforms: [
         {
@@ -1307,11 +1312,12 @@ export async function reconcileAllTimeXpFirestore(userId, userName, userAvatar) 
             userId: { stringValue: String(uid) },
             name: { stringValue: cleanName },
             avatar: { stringValue: cleanAvatar },
-            totalXp: { integerValue: String(initialTotalXp) }
+            totalXp: { integerValue: String(initialTotalXp) },
+            isPro: { booleanValue: Boolean(isProActive()) }
           }
         },
         updateMask: {
-          fieldPaths: ['userId', 'name', 'avatar', 'totalXp']
+          fieldPaths: ['userId', 'name', 'avatar', 'totalXp', 'isPro']
         },
         updateTransforms: [
           {
@@ -1344,11 +1350,12 @@ export async function reconcileAllTimeXpFirestore(userId, userName, userAvatar) 
             fields: {
               userId: { stringValue: String(uid) },
               name: { stringValue: cleanName },
-              avatar: { stringValue: cleanAvatar }
+              avatar: { stringValue: cleanAvatar },
+              isPro: { booleanValue: Boolean(isProActive()) }
             }
           },
           updateMask: {
-            fieldPaths: ['userId', 'name', 'avatar']
+            fieldPaths: ['userId', 'name', 'avatar', 'isPro']
           },
           updateTransforms: [
             {

@@ -1475,7 +1475,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         border-radius: 16px;
         padding: 14px 14px 16px;
         margin-bottom: 14px;
-        text-align: left;
+        text-align: start;
       }
       .fts-q-title {
         font-size: 14px;
@@ -1823,7 +1823,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
         <h3 class="fts-title">${strings.negTitle}</h3>
         <p class="fts-subtitle" style="font-size: 14.5px; margin-bottom: 16px;">${strings.negSub}</p>
 
-        <div class="fts-neg-feedback-box" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; margin-bottom: 6px; text-align: left;">
+        <div class="fts-neg-feedback-box" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px; margin-bottom: 6px; text-align: start;">
           <div style="font-size: 13.5px; font-weight: 700; color: #f1f5f9; margin-bottom: 8px;">${strings.negAsk}</div>
           <textarea id="fts-neg-input" rows="3" style="width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; padding: 10px; font-size: 13.5px; resize: none; font-family: inherit; line-height: 1.4;" placeholder="${strings.negPlaceholder}"></textarea>
           <button type="button" id="fts-btn-send-feedback" style="margin-top: 10px; width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none; color: #ffffff; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);">${strings.negBtnSend}</button>

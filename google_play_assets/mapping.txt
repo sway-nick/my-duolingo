@@ -3,8 +3,8 @@
 # min_api: 24
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: 2ab39a8936e26d56d396f2c9e93cdc7f66e4089beabd394bdacb2d187c95bbb3
-# pg_map_hash: SHA-256 2ab39a8936e26d56d396f2c9e93cdc7f66e4089beabd394bdacb2d187c95bbb3
+# pg_map_id: 2cb00054c40efdf051a03839a58112b25ca10bbe57b9cb223f3cb8f3f7444b71
+# pg_map_hash: SHA-256 2cb00054c40efdf051a03839a58112b25ca10bbe57b9cb223f3cb8f3f7444b71
 _COROUTINE.ArtificialStackFrames -> R8$$REMOVED$$CLASS$$0:
 # {"id":"sourceFile","fileName":"CoroutineDebugging.kt"}
 _COROUTINE.CoroutineDebuggingKt -> R8$$REMOVED$$CLASS$$1:
@@ -84725,212 +84725,246 @@ com.englishbreakfast.app.BackgroundAudioService$PlaybackActionListener -> com.en
 com.englishbreakfast.app.BillingPlugin -> com.englishbreakfast.app.BillingPlugin:
 # {"id":"sourceFile","fileName":"BillingPlugin.java"}
     1:4:void <init>():30:30 -> <init>
-    5:7:void <init>():33:33 -> <init>
-    8:9:void <init>():34:34 -> <init>
-    10:11:void <init>():35:35 -> <init>
-    12:14:void <init>():36:36 -> <init>
-    1:8:void acknowledge(com.getcapacitor.PluginCall):300:300 -> acknowledge
-    9:15:void acknowledge(com.getcapacitor.PluginCall):301:301 -> acknowledge
-    16:31:void acknowledge(com.getcapacitor.PluginCall):307:307 -> acknowledge
-    32:36:void acknowledge(com.getcapacitor.PluginCall):302:302 -> acknowledge
-    37:42:void acknowledge(com.getcapacitor.PluginCall):303:303 -> acknowledge
-    43:46:void acknowledge(com.getcapacitor.PluginCall):304:304 -> acknowledge
-    1:4:void $r8$lambda$2-yRb_0yTysjOxlZxntzayKmu10(com.getcapacitor.PluginCall):0:0 -> c
+    5:6:void <init>():33:33 -> <init>
+    7:13:void <init>():34:34 -> <init>
+    14:21:void <init>():35:35 -> <init>
+    22:23:void <init>():36:36 -> <init>
+    24:25:void <init>():37:37 -> <init>
+    26:28:void <init>():38:38 -> <init>
+    1:8:void acknowledge(com.getcapacitor.PluginCall):361:361 -> acknowledge
+    9:15:void acknowledge(com.getcapacitor.PluginCall):362:362 -> acknowledge
+    16:31:void acknowledge(com.getcapacitor.PluginCall):368:368 -> acknowledge
+    32:36:void acknowledge(com.getcapacitor.PluginCall):363:363 -> acknowledge
+    37:42:void acknowledge(com.getcapacitor.PluginCall):364:364 -> acknowledge
+    43:46:void acknowledge(com.getcapacitor.PluginCall):365:365 -> acknowledge
+    1:4:void $r8$lambda$6CByEvw8SrIldeLJ1UWi-NPAGE4(com.englishbreakfast.app.BillingPlugin,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$6k-pvq-zZiqd_fed8HxWW9X4nPw(com.getcapacitor.PluginCall):0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$BLZaoOApCZPhGO4VfEGsrtMfvvg(com.englishbreakfast.app.BillingPlugin,java.lang.String,g.AppCompatActivity,com.getcapacitor.PluginCall):0:0 -> e
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/BillingPlugin;Ljava/lang/String;Lg/j;Lcom/getcapacitor/PluginCall;)V"}
-    2:5:void ensureClient():39:39 -> ensureClient
-    6:13:void ensureClient():40:40 -> ensureClient
-    14:17:void ensureClient():41:41 -> ensureClient
-    18:21:void ensureClient():43:43 -> ensureClient
-    22:25:void ensureClient():44:44 -> ensureClient
-    26:29:void ensureClient():45:45 -> ensureClient
-    30:33:void ensureClient():42:42 -> ensureClient
-    34:42:void ensureClient():47:47 -> ensureClient
-    43:46:void ensureClient():49:49 -> ensureClient
+    2:5:void ensureClient():41:41 -> ensureClient
+    6:13:void ensureClient():42:42 -> ensureClient
+    14:17:void ensureClient():43:43 -> ensureClient
+    18:21:void ensureClient():45:45 -> ensureClient
+    22:25:void ensureClient():46:46 -> ensureClient
+    26:29:void ensureClient():47:47 -> ensureClient
+    30:33:void ensureClient():44:44 -> ensureClient
+    34:42:void ensureClient():49:49 -> ensureClient
+    43:46:void ensureClient():51:51 -> ensureClient
     1:4:void $r8$lambda$EXHj7PUn_pf6fY1WAFzf-zS4ITI(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String):0:0 -> f
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$Mdb_5aJ-MzFMn9JQv8xscNhmMGk(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):0:0 -> g
+    1:4:void $r8$lambda$N09BkVuEh01p9yFibt-xzs6Msz8(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
-    1:8:void getProductDetails(com.getcapacitor.PluginCall):98:98 -> getProductDetails
-    9:24:void getProductDetails(com.getcapacitor.PluginCall):99:99 -> getProductDetails
+    1:8:void getProductDetails(com.getcapacitor.PluginCall):127:127 -> getProductDetails
+    9:24:void getProductDetails(com.getcapacitor.PluginCall):128:128 -> getProductDetails
     1:4:void $r8$lambda$NNYzQs-_CUGabH5Lxk4PGxB4SUs(com.getcapacitor.PluginCall):0:0 -> h
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$Rey4y4yIF_TA5Zb4z2wptlXl1wE(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):0:0 -> i
+    1:4:void $r8$lambda$TcCaw0Zo8TDDJSHXS3L6aKAoWL4(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String):0:0 -> i
       # {"id":"com.android.tools.r8.synthesized"}
-    1:16:void init(com.getcapacitor.PluginCall):82:82 -> init
-    1:4:void $r8$lambda$crLjmIN9VQXA2I9D-HcWoefIHW4(com.getcapacitor.PluginCall):0:0 -> j
+    1:16:void init(com.getcapacitor.PluginCall):111:111 -> init
+    1:4:void $r8$lambda$c12Ry6clOPojoWJ_zTyWDeffjsw(com.getcapacitor.PluginCall):0:0 -> j
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$gUic6_n8gR7qtIBtXANWVvdBX2I(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> k
+    1:4:void $r8$lambda$crLjmIN9VQXA2I9D-HcWoefIHW4(com.getcapacitor.PluginCall):0:0 -> k
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$qNbe3SoF6gKaORo_SQJ_bC8AZ7g(com.getcapacitor.PluginCall):0:0 -> l
+    1:4:void $r8$lambda$g8DdcOofu9ZXSeQjmmSC6IFs1mo(com.getcapacitor.PluginCall):0:0 -> l
       # {"id":"com.android.tools.r8.synthesized"}
-    1:5:void lambda$acknowledge$11(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):313:313 -> lambda$acknowledge$11
-    6:19:void lambda$acknowledge$11(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):314:314 -> lambda$acknowledge$11
-    20:23:void lambda$acknowledge$11(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):315:315 -> lambda$acknowledge$11
-    1:4:void lambda$acknowledge$12(java.lang.String,com.getcapacitor.PluginCall):309:309 -> lambda$acknowledge$12
-    5:8:void lambda$acknowledge$12(java.lang.String,com.getcapacitor.PluginCall):310:310 -> lambda$acknowledge$12
-    9:12:void lambda$acknowledge$12(java.lang.String,com.getcapacitor.PluginCall):311:311 -> lambda$acknowledge$12
-    13:23:void lambda$acknowledge$12(java.lang.String,com.getcapacitor.PluginCall):312:312 -> lambda$acknowledge$12
-    1:5:void lambda$acknowledge$13(com.getcapacitor.PluginCall):319:319 -> lambda$acknowledge$13
-    6:11:void lambda$acknowledge$13(com.getcapacitor.PluginCall):320:320 -> lambda$acknowledge$13
-    12:15:void lambda$acknowledge$13(com.getcapacitor.PluginCall):321:321 -> lambda$acknowledge$13
-    3:8:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):111:111 -> lambda$getProductDetails$2
-    9:16:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):113:113 -> lambda$getProductDetails$2
-    17:24:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):114:114 -> lambda$getProductDetails$2
-    25:30:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):119:119 -> lambda$getProductDetails$2
-    31:32:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):120:120 -> lambda$getProductDetails$2
-    33:34:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):121:121 -> lambda$getProductDetails$2
-    35:39:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):123:123 -> lambda$getProductDetails$2
-    40:48:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):124:124 -> lambda$getProductDetails$2
-    49:52:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):126:126 -> lambda$getProductDetails$2
-    53:59:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):127:127 -> lambda$getProductDetails$2
-    60:68:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):129:129 -> lambda$getProductDetails$2
-    69:77:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):130:130 -> lambda$getProductDetails$2
-    78:86:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):131:131 -> lambda$getProductDetails$2
-    87:91:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):133:133 -> lambda$getProductDetails$2
-    92:98:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):134:134 -> lambda$getProductDetails$2
-    99:103:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):135:135 -> lambda$getProductDetails$2
-    104:110:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):136:136 -> lambda$getProductDetails$2
-    111:117:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):137:137 -> lambda$getProductDetails$2
-    118:126:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):138:138 -> lambda$getProductDetails$2
-    127:131:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):139:139 -> lambda$getProductDetails$2
-    132:134:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):140:140 -> lambda$getProductDetails$2
-    135:139:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):142:142 -> lambda$getProductDetails$2
-    140:143:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):143:143 -> lambda$getProductDetails$2
-    144:165:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):115:115 -> lambda$getProductDetails$2
-    1:4:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):101:101 -> lambda$getProductDetails$3
-    5:10:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):102:102 -> lambda$getProductDetails$3
-    11:14:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):103:103 -> lambda$getProductDetails$3
-    15:18:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):104:104 -> lambda$getProductDetails$3
-    19:22:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):105:105 -> lambda$getProductDetails$3
-    23:30:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):106:106 -> lambda$getProductDetails$3
-    31:34:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):107:107 -> lambda$getProductDetails$3
-    35:45:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):109:109 -> lambda$getProductDetails$3
-    1:6:void lambda$getProductDetails$4(com.getcapacitor.PluginCall):146:146 -> lambda$getProductDetails$4
-    1:5:void lambda$init$0(com.getcapacitor.PluginCall):84:84 -> lambda$init$0
-    6:11:void lambda$init$0(com.getcapacitor.PluginCall):85:85 -> lambda$init$0
-    12:15:void lambda$init$0(com.getcapacitor.PluginCall):86:86 -> lambda$init$0
-    1:5:void lambda$init$1(com.getcapacitor.PluginCall):89:89 -> lambda$init$1
-    6:11:void lambda$init$1(com.getcapacitor.PluginCall):90:90 -> lambda$init$1
-    12:15:void lambda$init$1(com.getcapacitor.PluginCall):91:91 -> lambda$init$1
-    3:8:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):178:178 -> lambda$purchase$5
-    9:16:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):180:180 -> lambda$purchase$5
-    17:24:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):181:181 -> lambda$purchase$5
-    25:30:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):187:187 -> lambda$purchase$5
-    31:32:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):188:188 -> lambda$purchase$5
-    33:34:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):189:189 -> lambda$purchase$5
-    35:38:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):190:190 -> lambda$purchase$5
-    39:43:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):182:182 -> lambda$purchase$5
-    44:50:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):183:183 -> lambda$purchase$5
-    51:54:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):184:184 -> lambda$purchase$5
-    1:12:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):165:165 -> lambda$purchase$6
-    13:18:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):166:166 -> lambda$purchase$6
-    19:22:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):168:168 -> lambda$purchase$6
-    23:28:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):169:169 -> lambda$purchase$6
-    29:32:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):170:170 -> lambda$purchase$6
-    33:36:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):171:171 -> lambda$purchase$6
-    37:40:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):172:172 -> lambda$purchase$6
-    41:48:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):173:173 -> lambda$purchase$6
-    49:52:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):174:174 -> lambda$purchase$6
-    53:63:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):176:176 -> lambda$purchase$6
-    1:5:void lambda$purchase$7(com.getcapacitor.PluginCall):195:195 -> lambda$purchase$7
-    6:12:void lambda$purchase$7(com.getcapacitor.PluginCall):196:196 -> lambda$purchase$7
-    13:16:void lambda$purchase$7(com.getcapacitor.PluginCall):197:197 -> lambda$purchase$7
-    1:5:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):291:291 -> lambda$queryPurchases$10
-    6:15:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):292:292 -> lambda$queryPurchases$10
-    16:19:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):293:293 -> lambda$queryPurchases$10
-    1:5:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):279:279 -> lambda$queryPurchases$8
-    6:13:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):280:280 -> lambda$queryPurchases$8
-    14:29:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):281:281 -> lambda$queryPurchases$8
-    30:37:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):282:282 -> lambda$queryPurchases$8
-    38:42:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):285:285 -> lambda$queryPurchases$8
-    43:47:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):286:286 -> lambda$queryPurchases$8
-    48:51:void lambda$queryPurchases$8(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):287:287 -> lambda$queryPurchases$8
-    1:6:void lambda$queryPurchases$9(com.getcapacitor.PluginCall):275:275 -> lambda$queryPurchases$9
-    7:10:void lambda$queryPurchases$9(com.getcapacitor.PluginCall):276:276 -> lambda$queryPurchases$9
-    11:14:void lambda$queryPurchases$9(com.getcapacitor.PluginCall):277:277 -> lambda$queryPurchases$9
-    15:25:void lambda$queryPurchases$9(com.getcapacitor.PluginCall):278:278 -> lambda$queryPurchases$9
-    1:8:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):204:204 -> launchFlow
-    9:17:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):206:206 -> launchFlow
-    18:23:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):207:207 -> launchFlow
-    24:26:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):208:208 -> launchFlow
-    27:30:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):211:211 -> launchFlow
-    31:42:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):212:212 -> launchFlow
-    43:46:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):213:213 -> launchFlow
-    47:48:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):215:215 -> launchFlow
-    49:54:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):216:216 -> launchFlow
-    55:60:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):217:217 -> launchFlow
-    61:62:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):218:218 -> launchFlow
-    63:67:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):219:219 -> launchFlow
-    68:74:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):220:220 -> launchFlow
-    75:79:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):221:221 -> launchFlow
-    80:84:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):220:220 -> launchFlow
-    85:88:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):222:222 -> launchFlow
-    1:4:void $r8$lambda$sLFNMsU8_LJAGYsOvMEhjsTW01g(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String):0:0 -> m
+    1:5:void lambda$acknowledge$12(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):374:374 -> lambda$acknowledge$12
+    6:19:void lambda$acknowledge$12(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):375:375 -> lambda$acknowledge$12
+    20:23:void lambda$acknowledge$12(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):376:376 -> lambda$acknowledge$12
+    1:4:void lambda$acknowledge$13(java.lang.String,com.getcapacitor.PluginCall):370:370 -> lambda$acknowledge$13
+    5:8:void lambda$acknowledge$13(java.lang.String,com.getcapacitor.PluginCall):371:371 -> lambda$acknowledge$13
+    9:12:void lambda$acknowledge$13(java.lang.String,com.getcapacitor.PluginCall):372:372 -> lambda$acknowledge$13
+    13:23:void lambda$acknowledge$13(java.lang.String,com.getcapacitor.PluginCall):373:373 -> lambda$acknowledge$13
+    1:5:void lambda$acknowledge$14(com.getcapacitor.PluginCall):380:380 -> lambda$acknowledge$14
+    6:11:void lambda$acknowledge$14(com.getcapacitor.PluginCall):381:381 -> lambda$acknowledge$14
+    12:15:void lambda$acknowledge$14(com.getcapacitor.PluginCall):382:382 -> lambda$acknowledge$14
+    3:8:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):140:140 -> lambda$getProductDetails$2
+    9:16:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):142:142 -> lambda$getProductDetails$2
+    17:24:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):143:143 -> lambda$getProductDetails$2
+    25:30:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):148:148 -> lambda$getProductDetails$2
+    31:32:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):149:149 -> lambda$getProductDetails$2
+    33:34:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):150:150 -> lambda$getProductDetails$2
+    35:39:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):152:152 -> lambda$getProductDetails$2
+    40:48:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):153:153 -> lambda$getProductDetails$2
+    49:52:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):155:155 -> lambda$getProductDetails$2
+    53:59:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):156:156 -> lambda$getProductDetails$2
+    60:68:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):158:158 -> lambda$getProductDetails$2
+    69:77:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):159:159 -> lambda$getProductDetails$2
+    78:86:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):160:160 -> lambda$getProductDetails$2
+    87:91:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):162:162 -> lambda$getProductDetails$2
+    92:98:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):163:163 -> lambda$getProductDetails$2
+    99:103:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):164:164 -> lambda$getProductDetails$2
+    104:110:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):165:165 -> lambda$getProductDetails$2
+    111:117:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):166:166 -> lambda$getProductDetails$2
+    118:126:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):167:167 -> lambda$getProductDetails$2
+    127:131:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):168:168 -> lambda$getProductDetails$2
+    132:134:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):169:169 -> lambda$getProductDetails$2
+    135:139:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):171:171 -> lambda$getProductDetails$2
+    140:143:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):172:172 -> lambda$getProductDetails$2
+    144:165:void lambda$getProductDetails$2(com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):144:144 -> lambda$getProductDetails$2
+    1:4:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):130:130 -> lambda$getProductDetails$3
+    5:10:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):131:131 -> lambda$getProductDetails$3
+    11:14:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):132:132 -> lambda$getProductDetails$3
+    15:18:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):133:133 -> lambda$getProductDetails$3
+    19:22:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):134:134 -> lambda$getProductDetails$3
+    23:30:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):135:135 -> lambda$getProductDetails$3
+    31:34:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):136:136 -> lambda$getProductDetails$3
+    35:45:void lambda$getProductDetails$3(java.lang.String,com.getcapacitor.PluginCall):138:138 -> lambda$getProductDetails$3
+    1:6:void lambda$getProductDetails$4(com.getcapacitor.PluginCall):175:175 -> lambda$getProductDetails$4
+    1:5:void lambda$init$0(com.getcapacitor.PluginCall):113:113 -> lambda$init$0
+    6:11:void lambda$init$0(com.getcapacitor.PluginCall):114:114 -> lambda$init$0
+    12:15:void lambda$init$0(com.getcapacitor.PluginCall):115:115 -> lambda$init$0
+    1:5:void lambda$init$1(com.getcapacitor.PluginCall):118:118 -> lambda$init$1
+    6:11:void lambda$init$1(com.getcapacitor.PluginCall):119:119 -> lambda$init$1
+    12:15:void lambda$init$1(com.getcapacitor.PluginCall):120:120 -> lambda$init$1
+    1:17:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):239:239 -> lambda$launchFlow$8
+    18:25:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):241:241 -> lambda$launchFlow$8
+    26:31:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):242:242 -> lambda$launchFlow$8
+    32:37:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):243:243 -> lambda$launchFlow$8
+    38:41:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):246:246 -> lambda$launchFlow$8
+    42:53:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):247:247 -> lambda$launchFlow$8
+    54:57:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):248:248 -> lambda$launchFlow$8
+    58:59:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):250:250 -> lambda$launchFlow$8
+    60:65:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):251:251 -> lambda$launchFlow$8
+    66:71:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):252:252 -> lambda$launchFlow$8
+    72:73:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):254:254 -> lambda$launchFlow$8
+    74:81:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):255:255 -> lambda$launchFlow$8
+    82:90:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):257:257 -> lambda$launchFlow$8
+    91:96:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):259:259 -> lambda$launchFlow$8
+    97:99:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):261:261 -> lambda$launchFlow$8
+    100:102:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):263:263 -> lambda$launchFlow$8
+    103:109:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):264:264 -> lambda$launchFlow$8
+    110:113:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):265:265 -> lambda$launchFlow$8
+    114:115:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):268:268 -> lambda$launchFlow$8
+    116:120:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):269:269 -> lambda$launchFlow$8
+    121:124:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):270:270 -> lambda$launchFlow$8
+    125:127:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):271:271 -> lambda$launchFlow$8
+    128:143:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):272:272 -> lambda$launchFlow$8
+    144:147:void lambda$launchFlow$8(com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):273:273 -> lambda$launchFlow$8
+    3:8:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):207:207 -> lambda$purchase$5
+    9:16:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):209:209 -> lambda$purchase$5
+    17:24:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):210:210 -> lambda$purchase$5
+    25:30:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):218:218 -> lambda$purchase$5
+    31:32:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):219:219 -> lambda$purchase$5
+    33:34:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):220:220 -> lambda$purchase$5
+    35:38:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):221:221 -> lambda$purchase$5
+    39:43:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):211:211 -> lambda$purchase$5
+    44:50:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):212:212 -> lambda$purchase$5
+    51:59:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):213:213 -> lambda$purchase$5
+    60:82:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):214:214 -> lambda$purchase$5
+    83:86:void lambda$purchase$5(com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):215:215 -> lambda$purchase$5
+    1:12:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):194:194 -> lambda$purchase$6
+    13:18:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):195:195 -> lambda$purchase$6
+    19:22:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):197:197 -> lambda$purchase$6
+    23:28:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):198:198 -> lambda$purchase$6
+    29:32:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):199:199 -> lambda$purchase$6
+    33:36:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):200:200 -> lambda$purchase$6
+    37:40:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):201:201 -> lambda$purchase$6
+    41:48:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):202:202 -> lambda$purchase$6
+    49:52:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):203:203 -> lambda$purchase$6
+    53:63:void lambda$purchase$6(java.lang.String,android.app.Activity,com.getcapacitor.PluginCall):205:205 -> lambda$purchase$6
+    1:5:void lambda$purchase$7(com.getcapacitor.PluginCall):226:226 -> lambda$purchase$7
+    6:12:void lambda$purchase$7(com.getcapacitor.PluginCall):227:227 -> lambda$purchase$7
+    13:18:void lambda$purchase$7(com.getcapacitor.PluginCall):228:228 -> lambda$purchase$7
+    19:25:void lambda$purchase$7(com.getcapacitor.PluginCall):229:229 -> lambda$purchase$7
+    26:29:void lambda$purchase$7(com.getcapacitor.PluginCall):230:230 -> lambda$purchase$7
+    1:6:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):336:336 -> lambda$queryPurchases$10
+    7:10:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):337:337 -> lambda$queryPurchases$10
+    11:14:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):338:338 -> lambda$queryPurchases$10
+    15:25:void lambda$queryPurchases$10(com.getcapacitor.PluginCall):339:339 -> lambda$queryPurchases$10
+    1:5:void lambda$queryPurchases$11(com.getcapacitor.PluginCall):352:352 -> lambda$queryPurchases$11
+    6:15:void lambda$queryPurchases$11(com.getcapacitor.PluginCall):353:353 -> lambda$queryPurchases$11
+    16:19:void lambda$queryPurchases$11(com.getcapacitor.PluginCall):354:354 -> lambda$queryPurchases$11
+    1:5:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):340:340 -> lambda$queryPurchases$9
+    6:13:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):341:341 -> lambda$queryPurchases$9
+    14:29:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):342:342 -> lambda$queryPurchases$9
+    30:37:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):343:343 -> lambda$queryPurchases$9
+    38:42:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):346:346 -> lambda$queryPurchases$9
+    43:47:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):347:347 -> lambda$queryPurchases$9
+    48:51:void lambda$queryPurchases$9(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):348:348 -> lambda$queryPurchases$9
+    1:9:void launchFlow(android.app.Activity,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall):236:236 -> launchFlow
+    1:4:void $r8$lambda$gUic6_n8gR7qtIBtXANWVvdBX2I(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String,android.app.Activity,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> m
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$tDTRiTcxuTj5YuQDZwCioUJJLSI(com.getcapacitor.PluginCall):0:0 -> n
+    1:4:void $r8$lambda$i_EampyBS9hrXxCHi0LZnM3zycs(com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult):0:0 -> n
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void $r8$lambda$wIN4_lCTjeFm90ReCvtF7zMYYhM(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall):0:0 -> o
+    1:4:void $r8$lambda$pGkk6OFd5hR0aXz4OuctAFHj7D0(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,com.android.billingclient.api.BillingResult,java.util.List):0:0 -> o
       # {"id":"com.android.tools.r8.synthesized"}
-    1:4:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):228:228 -> onPurchasesUpdated
-    5:19:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):230:230 -> onPurchasesUpdated
-    20:24:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):231:231 -> onPurchasesUpdated
-    25:41:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):233:233 -> onPurchasesUpdated
-    42:45:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):234:234 -> onPurchasesUpdated
-    46:52:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):235:235 -> onPurchasesUpdated
-    53:57:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):241:241 -> onPurchasesUpdated
-    58:62:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):242:242 -> onPurchasesUpdated
-    63:67:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):243:243 -> onPurchasesUpdated
-    68:71:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):245:245 -> onPurchasesUpdated
-    72:76:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):247:247 -> onPurchasesUpdated
-    77:81:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):248:248 -> onPurchasesUpdated
-    82:89:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):249:249 -> onPurchasesUpdated
-    90:97:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):250:250 -> onPurchasesUpdated
-    98:103:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):251:251 -> onPurchasesUpdated
-    104:111:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):252:252 -> onPurchasesUpdated
-    112:117:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):253:253 -> onPurchasesUpdated
-    118:120:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):255:255 -> onPurchasesUpdated
-    121:124:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):257:257 -> onPurchasesUpdated
-    125:128:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):262:262 -> onPurchasesUpdated
-    129:130:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):264:264 -> onPurchasesUpdated
-    131:138:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):265:265 -> onPurchasesUpdated
-    139:143:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):266:266 -> onPurchasesUpdated
-    144:147:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):267:267 -> onPurchasesUpdated
-    1:4:void $r8$lambda$xb_RV35gVe6SnmGDZ-TDzf0kwFM(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> p
+    1:4:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):280:280 -> onPurchasesUpdated
+    5:21:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):282:282 -> onPurchasesUpdated
+    22:26:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):283:283 -> onPurchasesUpdated
+    27:43:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):285:285 -> onPurchasesUpdated
+    44:47:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):286:286 -> onPurchasesUpdated
+    48:54:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):287:287 -> onPurchasesUpdated
+    55:59:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):293:293 -> onPurchasesUpdated
+    60:64:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):294:294 -> onPurchasesUpdated
+    65:69:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):295:295 -> onPurchasesUpdated
+    70:73:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):297:297 -> onPurchasesUpdated
+    74:78:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):299:299 -> onPurchasesUpdated
+    79:83:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):300:300 -> onPurchasesUpdated
+    84:91:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):301:301 -> onPurchasesUpdated
+    92:99:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):302:302 -> onPurchasesUpdated
+    100:105:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):303:303 -> onPurchasesUpdated
+    106:113:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):304:304 -> onPurchasesUpdated
+    114:119:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):305:305 -> onPurchasesUpdated
+    120:122:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):307:307 -> onPurchasesUpdated
+    123:125:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):309:309 -> onPurchasesUpdated
+    126:129:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):310:310 -> onPurchasesUpdated
+    130:133:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):315:315 -> onPurchasesUpdated
+    134:135:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):317:317 -> onPurchasesUpdated
+    136:143:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):318:318 -> onPurchasesUpdated
+    144:152:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):320:320 -> onPurchasesUpdated
+    153:158:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):322:322 -> onPurchasesUpdated
+    159:161:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):324:324 -> onPurchasesUpdated
+    162:164:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):326:326 -> onPurchasesUpdated
+    165:173:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):327:327 -> onPurchasesUpdated
+    174:177:void onPurchasesUpdated(com.android.billingclient.api.BillingResult,java.util.List):328:328 -> onPurchasesUpdated
+    1:4:void $r8$lambda$qNbe3SoF6gKaORo_SQJ_bC8AZ7g(com.getcapacitor.PluginCall):0:0 -> p
       # {"id":"com.android.tools.r8.synthesized"}
-    1:8:void purchase(com.getcapacitor.PluginCall):152:152 -> purchase
-    9:14:void purchase(com.getcapacitor.PluginCall):153:153 -> purchase
-    15:20:void purchase(com.getcapacitor.PluginCall):155:155 -> purchase
-    21:24:void purchase(com.getcapacitor.PluginCall):158:158 -> purchase
-    25:30:void purchase(com.getcapacitor.PluginCall):159:159 -> purchase
-    31:48:void purchase(com.getcapacitor.PluginCall):163:163 -> purchase
-    1:5:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):327:327 -> purchaseToJS
-    6:9:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):328:328 -> purchaseToJS
-    10:33:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):329:329 -> purchaseToJS
-    34:42:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):330:330 -> purchaseToJS
-    43:57:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):331:331 -> purchaseToJS
-    58:66:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):332:332 -> purchaseToJS
-    67:75:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):333:333 -> purchaseToJS
-    76:84:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):334:334 -> purchaseToJS
-    85:89:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):335:335 -> purchaseToJS
-    90:93:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):336:336 -> purchaseToJS
-    94:102:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):337:337 -> purchaseToJS
-    103:108:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):339:339 -> purchaseToJS
-    109:114:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):341:341 -> purchaseToJS
-    1:4:void -$$Nest$fputisConnecting(com.englishbreakfast.app.BillingPlugin):0:0 -> q
+    1:8:void purchase(com.getcapacitor.PluginCall):181:181 -> purchase
+    9:14:void purchase(com.getcapacitor.PluginCall):182:182 -> purchase
+    15:20:void purchase(com.getcapacitor.PluginCall):184:184 -> purchase
+    21:24:void purchase(com.getcapacitor.PluginCall):187:187 -> purchase
+    25:30:void purchase(com.getcapacitor.PluginCall):188:188 -> purchase
+    31:45:void purchase(com.getcapacitor.PluginCall):192:192 -> purchase
+    1:5:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):388:388 -> purchaseToJS
+    6:9:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):389:389 -> purchaseToJS
+    10:33:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):390:390 -> purchaseToJS
+    34:42:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):391:391 -> purchaseToJS
+    43:57:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):392:392 -> purchaseToJS
+    58:66:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):393:393 -> purchaseToJS
+    67:75:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):394:394 -> purchaseToJS
+    76:84:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):395:395 -> purchaseToJS
+    85:89:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):396:396 -> purchaseToJS
+    90:93:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):397:397 -> purchaseToJS
+    94:102:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):398:398 -> purchaseToJS
+    103:108:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):400:400 -> purchaseToJS
+    109:114:com.getcapacitor.JSObject purchaseToJS(com.android.billingclient.api.Purchase):402:402 -> purchaseToJS
+    1:4:void $r8$lambda$xb_RV35gVe6SnmGDZ-TDzf0kwFM(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String,com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> q
       # {"id":"com.android.tools.r8.synthesized"}
-    1:16:void queryPurchases(com.getcapacitor.PluginCall):273:273 -> queryPurchases
-    1:3:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):52:52 -> withConnectedClient
-    4:11:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):53:53 -> withConnectedClient
-    12:15:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):54:54 -> withConnectedClient
-    16:19:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):57:57 -> withConnectedClient
-    20:24:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):58:58 -> withConnectedClient
-    25:26:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):61:61 -> withConnectedClient
-    27:37:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):62:62 -> withConnectedClient
+    1:16:void queryPurchases(com.getcapacitor.PluginCall):334:334 -> queryPurchases
+    1:3:java.util.List -$$Nest$fgetpendingErrorCallbacks(com.englishbreakfast.app.BillingPlugin):0:0 -> r
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:3:java.util.List -$$Nest$fgetpendingReadyCallbacks(com.englishbreakfast.app.BillingPlugin):0:0 -> s
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:4:void -$$Nest$fputisConnecting(com.englishbreakfast.app.BillingPlugin):0:0 -> t
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:3:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):54:54 -> withConnectedClient
+    4:11:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):55:55 -> withConnectedClient
+    12:15:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):56:56 -> withConnectedClient
+    16:17:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):60:61 -> withConnectedClient
+    18:24:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):61:61 -> withConnectedClient
+    25:27:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):62:62 -> withConnectedClient
+    28:31:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):63:63 -> withConnectedClient
+    32:36:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):65:65 -> withConnectedClient
+    37:41:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):66:66 -> withConnectedClient
+    42:45:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):67:67 -> withConnectedClient
+    46:48:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):68:68 -> withConnectedClient
+    49:50:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):70:70 -> withConnectedClient
+    51:51:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):71:71 -> withConnectedClient
+    52:62:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):73:73 -> withConnectedClient
+    63:64:void withConnectedClient(java.lang.Runnable,java.lang.Runnable):71:71 -> withConnectedClient
 com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.a:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
@@ -84949,6 +84983,19 @@ com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda0 -> com.englishb
 com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.b:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
+    com.englishbreakfast.app.BillingPlugin com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$915759e2caece4b005e68fa5e8d28a9e8a3965f2d3445deedbd74062c3500506$0.f$0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    com.getcapacitor.PluginCall com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$915759e2caece4b005e68fa5e8d28a9e8a3965f2d3445deedbd74062c3500506$0.f$1 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.lang.String com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$915759e2caece4b005e68fa5e8d28a9e8a3965f2d3445deedbd74062c3500506$0.f$2 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:void <init>(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:void onProductDetailsResponse(com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> onProductDetailsResponse
+      # {"id":"com.android.tools.r8.synthesized"}
+com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.c:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
       # {"id":"com.android.tools.r8.synthesized"}
     com.getcapacitor.PluginCall com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$9baa2936e39bac7ae4527e6a180b959da910d07fd31e07962f3b544afdc678d3$1.f$0 -> b
@@ -84957,7 +85004,7 @@ com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda10 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
     1:42:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda2 -> com.englishbreakfast.app.c:
+com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.d:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.BillingPlugin com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$2f71b2ef27b3f29c0d4d8579aa827ddbf122b5153b84e9770dbf961151a58328$0.f$0 -> a
@@ -84972,27 +85019,49 @@ com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda2 -> com.englishb
       # {"id":"com.android.tools.r8.synthesized"}
     1:14:void onProductDetailsResponse(com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> onProductDetailsResponse
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda8 -> com.englishbreakfast.app.d:
+com.englishbreakfast.app.BillingPlugin$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.e:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
-    com.englishbreakfast.app.BillingPlugin com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$915759e2caece4b005e68fa5e8d28a9e8a3965f2d3445deedbd74062c3500506$0.f$0 -> a
+    int $r8$classId -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    com.getcapacitor.PluginCall com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$915759e2caece4b005e68fa5e8d28a9e8a3965f2d3445deedbd74062c3500506$0.f$1 -> b
+    com.englishbreakfast.app.BillingPlugin com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$6d1d612b11c65e366e5711084f52e4517a23c01e2ada2768971ff19a6f60770d$0.f$0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
-    java.lang.String com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$915759e2caece4b005e68fa5e8d28a9e8a3965f2d3445deedbd74062c3500506$0.f$2 -> c
+    com.getcapacitor.PluginCall com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$6d1d612b11c65e366e5711084f52e4517a23c01e2ada2768971ff19a6f60770d$0.f$3 -> c
       # {"id":"com.android.tools.r8.synthesized"}
-    1:10:void <init>(com.englishbreakfast.app.BillingPlugin,com.getcapacitor.PluginCall,java.lang.String):0:0 -> <init>
+    java.lang.String com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$6d1d612b11c65e366e5711084f52e4517a23c01e2ada2768971ff19a6f60770d$0.f$1 -> d
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
-    1:10:void onProductDetailsResponse(com.android.billingclient.api.BillingResult,com.android.billingclient.api.QueryProductDetailsResult):0:0 -> onProductDetailsResponse
+    android.app.Activity com.englishbreakfast.app.BillingPlugin$$InternalSyntheticLambda$1$6d1d612b11c65e366e5711084f52e4517a23c01e2ada2768971ff19a6f60770d$0.f$2 -> e
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:1:void <init>(com.englishbreakfast.app.BillingPlugin,com.android.billingclient.api.ProductDetails,com.getcapacitor.PluginCall,android.app.Activity):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    2:2:void <init>(com.englishbreakfast.app.BillingPlugin,java.lang.String,g.AppCompatActivity,com.getcapacitor.PluginCall):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/BillingPlugin;Ljava/lang/String;Lg/j;Lcom/getcapacitor/PluginCall;)V"}
+    1:36:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.BillingPlugin$1 -> com.englishbreakfast.app.BillingPlugin$1:
 # {"id":"sourceFile","fileName":"BillingPlugin.java"}
-    1:10:void <init>(com.englishbreakfast.app.BillingPlugin,java.lang.Runnable,java.lang.Runnable):62:62 -> <init>
-    1:6:void onBillingServiceDisconnected():75:75 -> onBillingServiceDisconnected
-    1:5:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):65:65 -> onBillingSetupFinished
-    6:11:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):66:66 -> onBillingSetupFinished
-    12:17:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):67:67 -> onBillingSetupFinished
-    18:23:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):69:69 -> onBillingSetupFinished
+    1:6:void <init>(com.englishbreakfast.app.BillingPlugin):73:73 -> <init>
+    1:3:void onBillingServiceDisconnected():94:94 -> onBillingServiceDisconnected
+    4:8:void onBillingServiceDisconnected():95:95 -> onBillingServiceDisconnected
+    9:19:void onBillingServiceDisconnected():96:96 -> onBillingServiceDisconnected
+    20:28:void onBillingServiceDisconnected():97:97 -> onBillingServiceDisconnected
+    29:37:void onBillingServiceDisconnected():98:98 -> onBillingServiceDisconnected
+    38:39:void onBillingServiceDisconnected():99:100 -> onBillingServiceDisconnected
+    40:53:void onBillingServiceDisconnected():100:100 -> onBillingServiceDisconnected
+    54:59:void onBillingServiceDisconnected():102:102 -> onBillingServiceDisconnected
+    60:61:void onBillingServiceDisconnected():99:99 -> onBillingServiceDisconnected
+    1:10:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):77:77 -> onBillingSetupFinished
+    11:13:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):78:78 -> onBillingSetupFinished
+    14:18:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):79:79 -> onBillingSetupFinished
+    19:40:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):80:80 -> onBillingSetupFinished
+    41:49:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):81:81 -> onBillingSetupFinished
+    50:58:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):82:82 -> onBillingSetupFinished
+    59:60:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):83:84 -> onBillingSetupFinished
+    61:73:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):84:84 -> onBillingSetupFinished
+    74:78:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):86:86 -> onBillingSetupFinished
+    79:80:void onBillingSetupFinished(com.android.billingclient.api.BillingResult):83:83 -> onBillingSetupFinished
 com.englishbreakfast.app.BootReceiver -> com.englishbreakfast.app.BootReceiver:
 # {"id":"sourceFile","fileName":"BootReceiver.java"}
     1:4:void <init>():10:10 -> <init>
@@ -85034,10 +85103,10 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
       # {"id":"com.android.tools.r8.synthesized"}
     1:4:void $r8$lambda$Z5VUm2M5X210npYaTDK4iOBNvQg(android.content.Context,java.lang.String,com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0):0:0 -> e
       # {"id":"com.android.tools.r8.synthesized"}
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Ljava/lang/String;Lcom/englishbreakfast/app/u;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Ljava/lang/String;Lcom/englishbreakfast/app/v;)V"}
     1:4:void $r8$lambda$lu_WrMhGfw2RZYjE6QfFMHF7zZQ(com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda6,java.util.concurrent.atomic.AtomicBoolean,int,android.content.Context):0:0 -> f
       # {"id":"com.android.tools.r8.synthesized"}
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/f;Ljava/util/concurrent/atomic/AtomicBoolean;ILandroid/content/Context;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/englishbreakfast/app/g;Ljava/util/concurrent/atomic/AtomicBoolean;ILandroid/content/Context;)V"}
     1:4:void $r8$lambda$v-1rdCf48IUoeu6Nz9mjLM9IOnk(java.util.concurrent.atomic.AtomicBoolean,android.content.BroadcastReceiver$PendingResult):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
     1:7:android.app.PendingIntent getPendingIntent(android.content.Context,java.lang.String,int):555:555 -> getPendingIntent
@@ -85294,7 +85363,7 @@ com.englishbreakfast.app.GoldCardWidgetProvider -> com.englishbreakfast.app.Gold
     853:869:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):546:546 -> updateAppWidget
     870:874:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):548:548 -> updateAppWidget
     875:878:void updateAppWidget(android.content.Context,android.appwidget.AppWidgetManager,int):550:550 -> updateAppWidget
-com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.e:
+com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.f:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -85307,7 +85376,7 @@ com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda0 -> com
       # {"id":"com.android.tools.r8.synthesized"}
     1:38:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda6 -> com.englishbreakfast.app.f:
+com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda6 -> com.englishbreakfast.app.g:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int com.englishbreakfast.app.GoldCardWidgetProvider$$InternalSyntheticLambda$1$ffae28b82b6e31257ed341db11b8e3e6c3b83a7d53b4d28c286123c99d61fa70$0.f$0 -> a
@@ -85320,7 +85389,7 @@ com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda6 -> com
       # {"id":"com.android.tools.r8.synthesized"}
     1:10:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda7 -> com.englishbreakfast.app.g:
+com.englishbreakfast.app.GoldCardWidgetProvider$$ExternalSyntheticLambda7 -> com.englishbreakfast.app.h:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -85640,7 +85709,7 @@ com.englishbreakfast.app.MainActivity -> com.englishbreakfast.app.MainActivity:
       # {"id":"com.android.tools.r8.synthesized"}
     1:5:boolean -$$Nest$misTrustedOrigin(com.englishbreakfast.app.MainActivity):0:0 -> z
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.h:
+com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.i:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -85651,7 +85720,7 @@ com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda0 -> com.englishbr
       # {"id":"com.android.tools.r8.synthesized"}
     1:24:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.j:
+com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.k:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -85664,7 +85733,7 @@ com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda1 -> com.englishbr
       # {"id":"com.android.tools.r8.synthesized"}
     1:22:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.i:
+com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.j:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity com.englishbreakfast.app.MainActivity$$InternalSyntheticLambda$1$f45d638c74bd65d85a04176fe78165fc35c8f7fdeb9269d1549255def861833c$0.f$0 -> a
@@ -85673,7 +85742,7 @@ com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda10 -> com.englishb
       # {"id":"com.android.tools.r8.synthesized"}
     1:6:void onInit(int):0:0 -> onInit
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.k:
+com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.l:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -85686,7 +85755,7 @@ com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda5 -> com.englishbr
       # {"id":"com.android.tools.r8.synthesized"}
     1:30:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda8 -> com.englishbreakfast.app.l:
+com.englishbreakfast.app.MainActivity$$ExternalSyntheticLambda8 -> com.englishbreakfast.app.m:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity com.englishbreakfast.app.MainActivity$$InternalSyntheticLambda$1$bf726acbd12485b9787aa66cc5ea493321c994b778258cc941ce7558303ecd2f$0.f$0 -> a
@@ -85809,7 +85878,7 @@ com.englishbreakfast.app.MainActivity$11 -> com.englishbreakfast.app.MainActivit
     22:32:void recognizeText(java.lang.String,java.lang.String):1160:1160 -> recognizeText
     33:36:void recognizeText(java.lang.String,java.lang.String):1232:1232 -> recognizeText
     37:45:void recognizeText(java.lang.String,java.lang.String):1157:1157 -> recognizeText
-com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.m:
+com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.n:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$11 com.englishbreakfast.app.MainActivity$11$$InternalSyntheticLambda$1$137bfa19ec49263245db4f543cb975a1eea022c35d6062439b8f9d0d9ab6440b$0.f$0 -> a
@@ -85826,7 +85895,7 @@ com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda0 -> com.englis
       # {"id":"com.android.tools.r8.synthesized"}
     1:14:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.n:
+com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.o:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$11 com.englishbreakfast.app.MainActivity$11$$InternalSyntheticLambda$1$51469a99f8cb1a9badc9c4a0f9dbe28f223648bec0e6cf8a2141fa64fb78e3ce$0.f$0 -> a
@@ -85839,7 +85908,7 @@ com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda1 -> com.englis
       # {"id":"com.android.tools.r8.synthesized"}
     1:12:void onSuccess(java.lang.Object):0:0 -> onSuccess
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda2 -> com.englishbreakfast.app.o:
+com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda2 -> com.englishbreakfast.app.p:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$11 com.englishbreakfast.app.MainActivity$11$$InternalSyntheticLambda$1$51469a99f8cb1a9badc9c4a0f9dbe28f223648bec0e6cf8a2141fa64fb78e3ce$1.f$0 -> a
@@ -85854,12 +85923,12 @@ com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda2 -> com.englis
       # {"id":"com.android.tools.r8.synthesized"}
     1:12:void onQueryPurchasesResponse(com.android.billingclient.api.BillingResult,java.util.List):0:0 -> onQueryPurchasesResponse
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.p:
+com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.q:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:9:int compare(java.lang.Object,java.lang.Object):0:0 -> compare
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.q:
+com.englishbreakfast.app.MainActivity$11$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.s:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -85891,7 +85960,7 @@ com.englishbreakfast.app.MainActivity$2 -> com.englishbreakfast.app.MainActivity
     1:37:void run():178:178 -> run
     38:43:void run():179:179 -> run
     44:68:void run():180:180 -> run
-com.englishbreakfast.app.MainActivity$2$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.s:
+com.englishbreakfast.app.MainActivity$2$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.t:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$2 com.englishbreakfast.app.MainActivity$2$$InternalSyntheticLambda$1$8c3e04dd22da2db14a593f9e9a2f34dfdbdee9deaa1f312a7666e1afa2a959b9$0.f$0 -> a
@@ -85920,7 +85989,7 @@ com.englishbreakfast.app.MainActivity$3 -> com.englishbreakfast.app.MainActivity
     66:71:void lambda$handleOnBackPressed$0(java.lang.String):245:245 -> lambda$handleOnBackPressed$0
     72:76:void lambda$handleOnBackPressed$0(java.lang.String):247:247 -> lambda$handleOnBackPressed$0
     77:89:void lambda$handleOnBackPressed$0(java.lang.String):248:248 -> lambda$handleOnBackPressed$0
-com.englishbreakfast.app.MainActivity$3$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.t:
+com.englishbreakfast.app.MainActivity$3$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.u:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$3 com.englishbreakfast.app.MainActivity$3$$InternalSyntheticLambda$1$cc8b93a4cdd490645d9a797123bfae8cb38e899f55ab1c255e051e87900bceb2$0.f$0 -> a
@@ -85987,7 +86056,7 @@ com.englishbreakfast.app.MainActivity$4 -> com.englishbreakfast.app.MainActivity
     147:156:void lambda$setWindowThemeColor$0(java.lang.String):357:357 -> lambda$setWindowThemeColor$0
     1:9:void setWindowThemeColor(java.lang.String):338:338 -> setWindowThemeColor
     10:21:void setWindowThemeColor(java.lang.String):339:339 -> setWindowThemeColor
-com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.u:
+com.englishbreakfast.app.MainActivity$4$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.v:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86027,7 +86096,7 @@ com.englishbreakfast.app.MainActivity$5 -> com.englishbreakfast.app.MainActivity
     10:21:void signInWithGoogle():406:406 -> signInWithGoogle
     1:9:void signOutGoogle():424:424 -> signOutGoogle
     10:21:void signOutGoogle():425:425 -> signOutGoogle
-com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.v:
+com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.w:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$5 com.englishbreakfast.app.MainActivity$5$$InternalSyntheticLambda$1$354bfb71910331adfa8e6cb4d55f173c468a4bb94e4202d1e95be35f06c7ef75$0.f$0 -> a
@@ -86039,7 +86108,7 @@ com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda0 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
     1:8:void onComplete(com.google.android.gms.tasks.Task):0:0 -> onComplete
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.w:
+com.englishbreakfast.app.MainActivity$5$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.x:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86070,7 +86139,7 @@ com.englishbreakfast.app.MainActivity$7 -> com.englishbreakfast.app.MainActivity
     21:40:void onNextWord():580:580 -> onNextWord
     1:20:void onTogglePlay():569:569 -> onTogglePlay
     21:40:void onTogglePlay():570:570 -> onTogglePlay
-com.englishbreakfast.app.MainActivity$7$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.x:
+com.englishbreakfast.app.MainActivity$7$$ExternalSyntheticLambda0 -> com.englishbreakfast.app.y:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86154,7 +86223,7 @@ com.englishbreakfast.app.MainActivity$8 -> com.englishbreakfast.app.MainActivity
     10:21:void stopSpeech():699:699 -> stopSpeech
     1:9:void updateNotification(java.lang.String,java.lang.String,boolean):612:612 -> updateNotification
     10:20:void updateNotification(java.lang.String,java.lang.String,boolean):613:613 -> updateNotification
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.y:
+com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda1 -> com.englishbreakfast.app.z:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86165,7 +86234,7 @@ com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda1 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
     1:18:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.z:
+com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.a0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$b4fb515caf6b7d93eb61a434ab28aedac2800e1cc26a61820283c87a177935d3$0.f$0 -> a
@@ -86182,7 +86251,7 @@ com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda4 -> com.english
       # {"id":"com.android.tools.r8.synthesized"}
     1:14:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.a0:
+com.englishbreakfast.app.MainActivity$8$$ExternalSyntheticLambda5 -> com.englishbreakfast.app.b0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$8 com.englishbreakfast.app.MainActivity$8$$InternalSyntheticLambda$1$e99f6486ff6fdbc8be41363cf3c0fdf86f49764a3e84b1cc37204d9a511f606b$0.f$0 -> a
@@ -86397,7 +86466,7 @@ com.englishbreakfast.app.MainActivity$9 -> com.englishbreakfast.app.MainActivity
     22:25:void syncUserRank(int):830:830 -> syncUserRank
     1:9:void triggerOvertakenAlert(java.lang.String):836:836 -> triggerOvertakenAlert
     10:21:void triggerOvertakenAlert(java.lang.String):837:837 -> triggerOvertakenAlert
-com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.b0:
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.c0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86408,25 +86477,22 @@ com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda10 -> com.englis
       # {"id":"com.android.tools.r8.synthesized"}
     1:18:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.c0:
+com.englishbreakfast.app.MainActivity$9$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.d0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
       # {"id":"com.android.tools.r8.synthesized"}
     com.englishbreakfast.app.MainActivity$9 com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$0 -> b
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$1 -> c
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$2 -> d
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
     java.lang.String com.englishbreakfast.app.MainActivity$9$$InternalSyntheticLambda$1$f1f283a2ecefa808bc5cf061fba9e568df39fd5bc0edcd9b29176887af434b34$0.f$3 -> e
-      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
       # {"id":"com.android.tools.r8.synthesized"}
-    1:14:void <init>(int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.String):0:0 -> <init>
+    1:14:void <init>(com.englishbreakfast.app.MainActivity$9,java.lang.String,java.lang.String,java.lang.String,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    1:60:void run():0:0 -> run
+    1:30:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
 com.englishbreakfast.app.R -> com.englishbreakfast.app.R:
     1:4:void <init>():0:0 -> <init>
@@ -86687,7 +86753,7 @@ com.englishbreakfast.app.WidgetAudioPlayer -> com.englishbreakfast.app.WidgetAud
     39:42:void stopPlayback():366:366 -> stopPlayback
     43:45:void stopPlayback():368:368 -> stopPlayback
     46:49:void stopPlayback():371:371 -> stopPlayback
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.d0:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.englishbreakfast.app.e0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86698,7 +86764,7 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda10 -> com.eng
       # {"id":"com.android.tools.r8.synthesized"}
     1:24:void onCompletion(android.media.MediaPlayer):0:0 -> onCompletion
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.englishbreakfast.app.e0:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.englishbreakfast.app.f0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int $r8$classId -> a
@@ -86713,7 +86779,7 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda11 -> com.eng
       # {"id":"com.android.tools.r8.synthesized"}
     1:48:boolean onError(android.media.MediaPlayer,int,int):0:0 -> onError
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.f0:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda12 -> com.englishbreakfast.app.g0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     int com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$ff570ca91726d12b86641ae287d127bbac7768a70f5bc45329a41c4a9c726739$4.f$0 -> a
@@ -86730,12 +86796,12 @@ com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda12 -> com.eng
       # {"id":"com.android.tools.r8.synthesized"}
     1:14:void run():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.g0:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda3 -> com.englishbreakfast.app.h0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:4:void onCompletion(android.media.MediaPlayer):0:0 -> onCompletion
       # {"id":"com.android.tools.r8.synthesized"}
-com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.h0:
+com.englishbreakfast.app.WidgetAudioPlayer$$ExternalSyntheticLambda4 -> com.englishbreakfast.app.i0:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     java.lang.Runnable com.englishbreakfast.app.WidgetAudioPlayer$$InternalSyntheticLambda$1$109f19453e4e189a776a66d7fca7722cc86702b145d4093e536cfdb90dfb80ab$0.f$0 -> a
@@ -179307,13 +179373,13 @@ com.google.android.gms.internal.ads.zzbve -> com.google.android.gms.internal.ads
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
     com.google.android.gms.internal.ads.zzbum zzc -> e
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-    1:1:void <init>(int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.String):0:0 -> <init>
-      # {"id":"com.android.tools.r8.synthesized"}
-    2:2:void <init>(com.google.android.gms.internal.ads.zzbum,java.lang.String,com.google.android.gms.internal.ads.zzbut,com.google.android.gms.internal.ads.zzbus):0:0 -> <init>
+    1:1:void <init>(com.google.android.gms.internal.ads.zzbum,java.lang.String,com.google.android.gms.internal.ads.zzbut,com.google.android.gms.internal.ads.zzbus):0:0 -> <init>
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/google/android/gms/internal/ads/au;Ljava/lang/String;Lcom/google/android/gms/internal/ads/gu;Lcom/google/android/gms/internal/ads/fu;)V"}
-    3:3:void com.google.android.gms.internal.ads.zzdtt.<init>(com.google.android.gms.internal.ads.zzdua,java.lang.String,com.google.android.gms.internal.ads.zzcef,com.google.android.gms.ads.internal.zzb):0:0 -> <init>
+    2:2:void com.google.android.gms.internal.ads.zzdtt.<init>(com.google.android.gms.internal.ads.zzdua,java.lang.String,com.google.android.gms.internal.ads.zzcef,com.google.android.gms.ads.internal.zzb):0:0 -> <init>
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/google/android/gms/internal/ads/ih0;Ljava/lang/String;Lcom/google/android/gms/internal/ads/l00;Lcom/google/android/gms/ads/internal/zzb;)V"}
-    4:4:void <init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int):0:0 -> <init>
+    3:3:void <init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    4:4:void <init>(java.lang.Object,java.lang.Object,java.lang.String,java.lang.Object,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
     1:2:com.google.common.util.concurrent.ListenableFuture zzb(java.lang.Object):1:1 -> a
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Ljava/lang/Object;)Lu3/e;"}
@@ -397016,11 +397082,11 @@ com.google.android.gms.internal.mlkit_common.zzsd -> d3.wf:
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
     java.lang.String zzd -> e
       # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/Object;"}
-    1:1:void d3.zzsd.<init>(int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.String):0:0 -> <init>
+    1:1:void d3.zzsd.<init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    2:2:void d3.zzsd.<init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int):0:0 -> <init>
+    2:2:void d3.zzsd.<init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int,boolean):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    3:3:void d3.zzsd.<init>(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int,boolean):0:0 -> <init>
+    3:3:void d3.zzsd.<init>(java.lang.Object,java.lang.Object,java.lang.String,java.lang.Object,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
     4:4:void d3.zzsd.<init>(java.lang.Object,java.lang.String,java.lang.String,java.lang.Object,int):0:0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}

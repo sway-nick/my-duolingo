@@ -209,7 +209,11 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
         throw new Error(res?.error || t('auth_err_failed'));
       }
     } catch (err) {
-      errorBox.textContent = err.message || t('auth_err_failed');
+      let errMsg = (err && err.code === 'auth/weak-password') ? t('auth_err_password_length') : (err && err.message ? err.message : '');
+      if (errMsg && /[А-Яа-яЁё]/.test(errMsg) && t('auth_btn_login') !== 'Войти') {
+        errMsg = t('auth_err_failed');
+      }
+      errorBox.textContent = errMsg || t('auth_err_failed');
       errorBox.style.display = 'block';
     } finally {
       submitBtn.disabled = false;
@@ -290,7 +294,11 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
         throw new Error(res?.error || t('auth_err_failed'));
       }
     } catch (err) {
-      errorBox.textContent = err.message || t('auth_err_failed');
+      let errMsg = (err && err.code === 'auth/weak-password') ? t('auth_err_password_length') : (err && err.message ? err.message : '');
+      if (errMsg && /[А-Яа-яЁё]/.test(errMsg) && t('auth_btn_login') !== 'Войти') {
+        errMsg = t('auth_err_failed');
+      }
+      errorBox.textContent = errMsg || t('auth_err_failed');
       errorBox.style.display = 'block';
     } finally {
       submitBtn.disabled = false;
@@ -561,7 +569,11 @@ function renderAuthModal(onSuccessCallback, initialMode = 'login') {
         }
       }
     } catch (err) {
-      errorBox.textContent = err.message || t('auth_err_failed');
+      let errMsg = (err && err.code === 'auth/weak-password') ? t('auth_err_password_length') : (err && err.message ? err.message : '');
+      if (errMsg && /[А-Яа-яЁё]/.test(errMsg) && t('auth_btn_login') !== 'Войти') {
+        errMsg = t('auth_err_failed');
+      }
+      errorBox.textContent = errMsg || t('auth_err_failed');
       errorBox.style.display = 'block';
     } finally {
       submitBtn.disabled = false;

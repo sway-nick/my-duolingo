@@ -53,9 +53,9 @@ export function openAddWordsToCollectionModal({ collection, allWords = [], onSav
             type="text"
             id="add-words-search-input"
             placeholder="${escapeHtml(t('col_search_placeholder') || 'Поиск по словарю...')}"
-            style="width: 100%; padding: 10px 14px 10px 38px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; box-sizing: border-box;"
+            style="width: 100%; padding: 10px 14px 10px 38px; padding-inline-start: 38px; padding-inline-end: 14px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; box-sizing: border-box;"
           />
-          <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.6; pointer-events: none;">🔍</span>
+          <span style="position: absolute; inset-inline-start: 12px; top: 50%; transform: translateY(-50%); opacity: 0.6; pointer-events: none;">🔍</span>
         </div>
       </div>
 

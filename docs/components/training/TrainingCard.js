@@ -45,7 +45,7 @@ import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryV
 
 const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
-  if (!cat) return t('cat_general') || 'Общие';
+  if (!cat || String(cat).trim() === 'Общие') return t('cat_general') || 'Elementary';
   const raw = String(cat);
   const cached = _sanitizedCategoryCache.get(raw);
   if (cached !== undefined) return cached;
@@ -442,7 +442,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
   const activeTargetWord = (isBlocksMode && blocksWord) ? blocksWord : currentWord;
 
-  const effectiveFavTitle = favCollectionTitle || (isFavPractice ? getCollectionTitle(getActiveCollectionId()) : '') || t('train_favs_chip');
+  const dynamicPracticeTitle = (isFavPractice && typeof window !== 'undefined' && window._activePracticeCollectionId)
+    ? getCollectionTitle(window._activePracticeCollectionId)
+    : '';
+  const effectiveFavTitle = dynamicPracticeTitle || favCollectionTitle || (isFavPractice ? getCollectionTitle(getActiveCollectionId()) : '') || t('train_favs_chip');
 
   const isSingleWordMode = Boolean(
     isSingleRemaining ||
@@ -453,13 +456,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     try {
       if (typeof AdService !== 'undefined') {
         AdService.resetRoundShields();
-      }
-    } catch (_) {}
-  } else if (currentWordIndex === 2) {
-    // Just-In-Time preload: User is actively engaged and reached 3rd word in round
-    try {
-      if (typeof AdService !== 'undefined' && typeof AdService.preloadInterstitial === 'function') {
-        AdService.preloadInterstitial().catch(() => {});
       }
     } catch (_) {}
   }
@@ -2058,11 +2054,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const isFinalCard = (isSingleWordMode && isCorrect) || (isLastWord && isCorrect && activeWords.length <= 1);
         if (isFinalCard) {
           window._trainingRoundJustCompleted = true;
-          try {
-            if (typeof AdService !== 'undefined' && typeof AdService.preloadInterstitial === 'function') {
-              AdService.preloadInterstitial().catch(() => {});
-            }
-          } catch (_) {}
         }
         onNextAfterSpeech(onNext, minDelay, maxWait);
       } else {

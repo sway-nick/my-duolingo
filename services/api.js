@@ -27,7 +27,7 @@ import {
   loadFullUserDataFirestore
 } from './firebase.js?v=386.0';
 import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs, getIsoMonthKey, getTimeUntilMonthEnd } from './weekKey.js?v=386.0';
-import { getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
+import { t, applyInterfaceDirection, getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -80,14 +80,14 @@ function getFirestoreUserId(userId = null) {
 }
 
 const MOCK_WORDS = [
-  { id: '1', word: 'apple', transcription: '[Л€Г¦p.Й™l]', translation: 'СЏР±Р»РѕРєРѕ', category: 'Р•РґР° Рё РЅР°РїРёС‚РєРё', level: 'A1' },
-  { id: '2', word: 'book', transcription: '[bКЉk]', translation: 'РєРЅРёРіР°', category: 'РћР±СѓС‡РµРЅРёРµ', level: 'A1' },
-  { id: '3', word: 'journey', transcription: '[Л€dК’ЙњЛђ.ni]', translation: 'РїСѓС‚РµС€РµСЃС‚РІРёРµ', category: 'РџСѓС‚РµС€РµСЃС‚РІРёСЏ', level: 'B1' },
-  { id: '4', word: 'courage', transcription: '[Л€kКЊr.ЙЄdК’]', translation: 'СЃРјРµР»РѕСЃС‚СЊ', category: 'Р­РјРѕС†РёРё', level: 'B2' },
-  { id: '5', word: 'sunrise', transcription: '[Л€sКЊn.raЙЄz]', translation: 'СЂР°СЃСЃРІРµС‚', category: 'РџСЂРёСЂРѕРґР°', level: 'A2' },
-  { id: '6', word: 'freedom', transcription: '[ˈfriː.dəm]', translation: 'свобода', category: 'Общие', level: 'B1' },
-  { id: '7', word: 'adventure', transcription: '[Й™dЛ€ven.tКѓЙ™r]', translation: 'РїСЂРёРєР»СЋС‡РµРЅРёРµ', category: 'РџСѓС‚РµС€РµСЃС‚РІРёСЏ', level: 'B1' },
-  { id: '8', word: 'friendship', transcription: '[Л€frend.КѓЙЄp]', translation: 'РґСЂСѓР¶Р±Р°', category: 'РћС‚РЅРѕС€РµРЅРёСЏ', level: 'A2' },
+  { id: '1', word: 'apple', transcription: '[ˈæp.əl]', translation: 'яблоко', category: 'Elementary', level: 'A1' },
+  { id: '2', word: 'book', transcription: '[bʊk]', translation: 'книга', category: 'Elementary', level: 'A1' },
+  { id: '3', word: 'journey', transcription: '[ˈdʒɜː.ni]', translation: 'путешествие', category: 'Intermediate', level: 'B1' },
+  { id: '4', word: 'courage', transcription: '[ˈkʌr.ɪdʒ]', translation: 'смелость', category: 'Advanced', level: 'B2' },
+  { id: '5', word: 'sunrise', transcription: '[ˈsʌn.raɪz]', translation: 'рассвет', category: 'Elementary', level: 'A2' },
+  { id: '6', word: 'freedom', transcription: '[ˈfriː.dəm]', translation: 'свобода', category: 'Elementary', level: 'B1' },
+  { id: '7', word: 'adventure', transcription: '[ədˈven.tʃər]', translation: 'приключение', category: 'Intermediate', level: 'B1' },
+  { id: '8', word: 'friendship', transcription: '[ˈfrend.ʃɪp]', translation: 'дружба', category: 'Elementary', level: 'A2' },
 ];
 
 let pendingProgressQueue = [];
@@ -504,11 +504,19 @@ async function syncRemoteVocabularyUpdates(force = false) {
       _lastVocabUpdatesSyncAt = Date.now();
       if (!updates || Object.keys(updates).length === 0) return false;
 
-      if (!cachedWordsList || !Array.isArray(cachedWordsList)) {
+      const currentLang = getActiveLang();
+
+      if (!cachedWordsList || !Array.isArray(cachedWordsList) || !isLangCompatibleWithCache(_cachedWordsActiveLang, currentLang)) {
         try {
-          cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+          const cachedLang = localStorage.getItem('myduo_cached_words_lang') || 'ru';
+          if (isLangCompatibleWithCache(cachedLang, currentLang)) {
+            cachedWordsList = JSON.parse(localStorage.getItem('myduo_cached_words') || '[]');
+            _cachedWordsActiveLang = currentLang;
+          } else {
+            return false;
+          }
         } catch (e) {
-          cachedWordsList = [];
+          return false;
         }
       }
       if (cachedWordsList.length === 0) return false;
@@ -519,8 +527,6 @@ async function syncRemoteVocabularyUpdates(force = false) {
         wordMap.set(String(w.id), i);
         if (w.word) wordMap.set(String(w.word).toLowerCase().trim(), i);
       });
-
-      const currentLang = getActiveLang();
 
       Object.keys(updates).forEach((idKey) => {
         const u = updates[idKey];
@@ -727,6 +733,9 @@ async function getWords(forceRefresh = false) {
         localStorage.setItem('myduo_words_cache_ver', WORDS_CACHE_VERSION);
         localStorage.setItem('myduo_cached_words_lang', currentLang);
       } catch (e) {}
+      if (forceRefresh) {
+        syncRemoteVocabularyUpdates(true).catch(() => {});
+      }
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('myduo_words_updated', { detail: wordData }));
       }
@@ -795,7 +804,7 @@ async function loginUser(email, password) {
 
   return {
     success: false,
-    error: 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРѕР№РґРёС‚Рµ С‡РµСЂРµР· Email РёР»Рё Google.',
+    error: t('auth_err_failed') || 'User not found. Please log in with Email or Google.',
   };
 }
 
@@ -1033,7 +1042,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 
   // Sync to backend asynchronously via atomic commit increment
   const user = getCurrentUser();
-  const userName = user && user.name ? user.name : 'Р“РѕСЃС‚СЊ';
+  const userName = user && user.name ? user.name : (t('lead_guest_name') || 'Guest');
   const avatar = localStorage.getItem(`avatar_${uId}`) || (user && user.avatar) || '';
 
   if (effectiveDelta !== 0) {
@@ -1045,7 +1054,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: next, delta } }));
 
-    // Trigger celebration when reaching prize podium (top 4: 1st=рџ’Ћ, 2nd=рџҐ‡, 3rd=рџҐ€, 4th=рџҐ‰)
+    // Trigger celebration when reaching prize podium (top 4: 1st=💎, 2nd=🥇, 3rd=🥈, 4th=🥉)
     if (newRank && newRank <= 4 && delta > 0 && typeof sessionStorage !== 'undefined') {
       const bestCelebrated = Number(sessionStorage.getItem(`myduo_celebrated_rank_${wKey}_${uId}`) || 999);
       if (newRank < bestCelebrated || (!oldRank || oldRank > 4)) {
@@ -1062,7 +1071,7 @@ function addWeeklyXP(delta, userId = null, weekKey = null) {
 
 async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
   if (!userId) return;
-  const cleanName = name || 'Р“РѕСЃС‚СЊ';
+  const cleanName = name || (t('lead_guest_name') || 'Guest');
   const cleanAvatar = avatar || '';
   const cleanXp = Math.max(0, Number(xp || 0));
 
@@ -1263,7 +1272,7 @@ function getCachedLeaderboard(weekKey = null, period = 'week') {
   const currentUser = getCurrentUser();
   const currentUserId = getEffectiveUserId();
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
-  const userName = currentUser && currentUser.name ? currentUser.name : 'Р’С‹ (Р“РѕСЃС‚СЊ)';
+  const userName = currentUser && currentUser.name ? currentUser.name : (t('lead_guest_name') || 'Guest');
 
   const fbUid = currentUser?.firebaseUid ? String(currentUser.firebaseUid) : null;
   const detId = currentUser?.email ? getDeterministicUserId(currentUser.email) : null;
@@ -1424,7 +1433,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
   const currentUserId = getEffectiveUserId();
   const currentUser = getCurrentUser();
   const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
-  const userName = currentUser && currentUser.name ? currentUser.name : 'Р“РѕСЃС‚СЊ';
+  const userName = currentUser && currentUser.name ? currentUser.name : (t('lead_guest_name') || 'Guest');
   const fsUid = getFirestoreUserId(currentUserId);
   const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
 
@@ -1461,7 +1470,8 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
             name: p.name,
             avatar: p.avatar,
             xp: isBotZero ? 0 : Number(p.xp || 0),
-            isCurrentUser: p.isCurrentUser
+            isCurrentUser: p.isCurrentUser,
+            isPro: Boolean(p.isPro),
           }));
         }
       } catch (wErr) {
@@ -1503,6 +1513,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
           fsPlayers[myIdx].name = userName;
           if (userAvatar) fsPlayers[myIdx].avatar = userAvatar;
           fsPlayers[myIdx].isCurrentUser = true;
+          fsPlayers[myIdx].isPro = isProActive();
         } else if (userScore > 0) {
           fsPlayers.push({
             userId: currentUserId,
@@ -1510,6 +1521,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
             avatar: userAvatar,
             xp: userScore,
             isCurrentUser: true,
+            isPro: isProActive(),
           });
         }
 
@@ -1588,6 +1600,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
         validFsPlayers[myIdx].name = userName;
         if (userAvatar) validFsPlayers[myIdx].avatar = userAvatar;
         validFsPlayers[myIdx].isCurrentUser = true;
+        validFsPlayers[myIdx].isPro = isProActive();
         // Purge any accidental duplicates of current user in validFsPlayers
         for (let i = validFsPlayers.length - 1; i >= 0; i--) {
           if (i !== myIdx && isMe(validFsPlayers[i])) {
@@ -1601,6 +1614,7 @@ async function getLeaderboard(weekKey = null, period = 'week', force = false) {
           avatar: userAvatar,
           xp: userXP,
           isCurrentUser: true,
+          isPro: isProActive(),
         });
       }
 
@@ -1646,7 +1660,7 @@ if (typeof window !== 'undefined') {
     const wKey = getIsoWeekKey();
     const currentXp = getUserWeeklyXP(uId, wKey);
     const user = getCurrentUser();
-    const userName = user && user.name ? user.name : 'Р“РѕСЃС‚СЊ';
+    const userName = user && user.name ? user.name : (t('lead_guest_name') || 'Guest');
     const avatar = (e.detail && typeof e.detail.avatar !== 'undefined')
       ? e.detail.avatar
       : localStorage.getItem(`avatar_${uId}`) || '';
@@ -2219,6 +2233,9 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       if (mergedSettings.interfaceLang) {
         const oldLang = localStorage.getItem('myduo_interface_lang');
         localStorage.setItem('myduo_interface_lang', mergedSettings.interfaceLang);
+        try {
+          applyInterfaceDirection(mergedSettings.interfaceLang);
+        } catch (e) {}
         if (oldLang !== mergedSettings.interfaceLang && typeof window !== 'undefined') {
           window.dispatchEvent(new Event('myduo:lang_changed'));
         }
@@ -2350,7 +2367,7 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
     const weeklyXp = getUserWeeklyXP(uId, wKey);
     const settings = JSON.parse(localStorage.getItem(`settings_${uId}`) || '{}');
     const avatar = localStorage.getItem(`avatar_${uId}`) || '';
-    const userName = user && user.name ? user.name : (user.email.split('@')[0] || 'РЈС‡Р°СЃС‚РЅРёРє');
+    const userName = user && user.name ? user.name : (user.email.split('@')[0] || t('lead_student_default') || 'Student');
 
     // 100% Cloud Firestore sync using Firebase UID
     hasPendingCloudSync = false;
@@ -2841,7 +2858,7 @@ function syncFavoritesToNativeWidget(wordsList = null) {
       const catWords = (allWords || []).filter(w => {
         const wCat = (w.category || w.level || '').toLowerCase().trim();
         const sCat = selectedCat.toLowerCase().trim();
-        return sCat === 'all' || sCat === 'РІСЃРµ РєР°С‚РµРіРѕСЂРёРё' || wCat === sCat;
+        return sCat === 'all' || sCat === 'все категории' || wCat === sCat;
       });
 
       // Pick a diverse daily sliding window of 100 words to cover the full dictionary without SharedPreferences bloat
@@ -3405,7 +3422,7 @@ async function getUserSettings() {
 
 async function saveUserSettings(settings) {
   const userId = getEffectiveUserId();
-  const cat = (settings.category && settings.category !== 'All' && settings.category !== 'Р’СЃРµ РєР°С‚РµРіРѕСЂРёРё')
+  const cat = (settings.category && settings.category !== 'All' && settings.category !== 'Все категории')
     ? settings.category
     : 'Elementary';
 
@@ -4031,7 +4048,7 @@ async function sendUserAnalytics(isClosing = false, customStatus = null) {
   try {
     const currentUser = getCurrentUser();
     const email = currentUser && currentUser.email ? currentUser.email : 'guest';
-    const name = currentUser && currentUser.name ? currentUser.name : 'Р“РѕСЃС‚СЊ';
+    const name = currentUser && currentUser.name ? currentUser.name : (t('lead_guest_name') || 'Guest');
 
     const env = getClientEnvironmentMetrics();
     const geo = await fetchGeoLocation();
@@ -5071,6 +5088,22 @@ async function submitSurveyFeedbackApi(data = {}) {
 
 export default ApiService;
 
+function syncProToLeaderboard() {
+  const currentUserId = getEffectiveUserId();
+  const fsUid = getFirestoreUserId(currentUserId);
+  const currentUser = getCurrentUser();
+  const isAuth = currentUser && currentUser.id && !String(currentUser.id).startsWith('guest') && fsUid;
+  if (!isAuth) return;
+  const wKey = getIsoWeekKey();
+  const userName = currentUser && currentUser.name ? currentUser.name : 'Гость';
+  const userAvatar = localStorage.getItem(`avatar_${currentUserId}`) || (currentUser && currentUser.avatar) || '';
+  commitXpDeltaFirestore(fsUid, wKey, 0, userName, userAvatar).catch(() => {});
+  reconcileAllTimeXpFirestore(fsUid, userName, userAvatar).catch(() => {});
+}
+if (typeof window !== 'undefined') {
+  window.syncProToLeaderboard = syncProToLeaderboard;
+}
+
 export {
   ApiService,
   suggestTranslations,
@@ -5136,6 +5169,7 @@ export {
   saveUserWordOverride,
   saveUserNote,
   submitSurveyFeedbackApi,
+  syncProToLeaderboard,
   isExcludedFromConveyor,
   FUNCTIONAL_GRAMMAR_WORDS,
 };

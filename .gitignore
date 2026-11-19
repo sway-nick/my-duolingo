@@ -50,3 +50,8 @@ __pycache__/
 
 # Reports
 reports/
+
+# Secrets & Credentials
+.secrets/
+*credentials*.json
+ga-*.json

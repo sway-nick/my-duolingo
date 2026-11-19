@@ -14275,23 +14275,24 @@ if (typeof document !== 'undefined') {
   } catch (e) {}
 }
 
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('myduo:lang_changed', () => {
+    try {
+      applyInterfaceDirection(getInterfaceLanguage());
+    } catch (e) {}
+  });
+}
+
 export function setInterfaceLanguage(lang) {
   if (!lang) return;
   try {
     localStorage.setItem('myduo_lang_manual', 'true');
     localStorage.setItem('myduo_interface_lang', lang);
   } catch (e) {}
-  if (typeof document !== 'undefined' && document.documentElement) {
-    if (lang === 'ar' || lang === 'fa') {
-      document.documentElement.setAttribute('dir', 'rtl');
-      document.documentElement.setAttribute('lang', 'ar');
-    } else {
-      document.documentElement.setAttribute('dir', 'ltr');
-      document.documentElement.setAttribute('lang', lang);
-    applyInterfaceDirection(lang);
-    }
+  applyInterfaceDirection(lang);
+  if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+    window.dispatchEvent(new Event('myduo:lang_changed'));
   }
-  window.dispatchEvent(new Event('myduo:lang_changed'));
 }
 
 export const SPEECH_PROMPTS = {
@@ -14321,12 +14322,16 @@ export const SPEECH_PROMPTS = {
     hr: "Slušam! Govorite sada...",
     sv: "Lyssnar! Tala nu...",
     hi: 'सुन रहा हूँ! अब बोलिए...',
+    bn: 'শুনছি! এখন বলুন...',
     ar: 'أستمع! تحدث الآن...',
+    fa: 'گوش می‌دهم! اکنون صحبت کنید...',
+    ur: 'سن رہا ہوں! اب بولیں...',
     id: 'Mendengarkan! Bicara sekarang...',
     vi: 'Đang nghe! Hãy nói ngay...',
     th: 'กำลังฟัง! พูดเลย...',
     ko: '듣고 있어요! 지금 말하세요...',
     ja: '聞いています！今話してください...',
+    zh: '正在聆听！请说话...',
     kk: 'Тыңдап тұрмын! Сөйлеңіз...'
   },
   evaluating: {
@@ -14355,12 +14360,16 @@ export const SPEECH_PROMPTS = {
     hr: "AI procjenjuje izgovor...",
     sv: "AI bedömer uttalet...",
     hi: 'एआई उच्चारण का मूल्यांकन कर रहा है...',
+    bn: 'AI উচ্চারণ মূল্যায়ন করছে...',
     ar: 'الذكاء الاصطناعي يقيّم النطق...',
+    fa: 'هوش مصنوعی در حال ارزیابی تلفظ است...',
+    ur: 'AI تلفظ کا جائزہ لے رہا ہے...',
     id: 'AI sedang mengevaluasi pengucapan...',
     vi: 'AI đang đánh giá phát âm...',
     th: 'AI กำลังประเมินการออกเสียง...',
     ko: 'AI가 발음을 평가하고 있습니다...',
     ja: 'AIが発音を評価しています...',
+    zh: 'AI 正在评估发音...',
     kk: 'ЖИ айтылуды бағалауда...'
   },
   retry: {
@@ -14389,12 +14398,16 @@ export const SPEECH_PROMPTS = {
     hr: "Glas nije prepoznat. Dodirnite 🎙️ za ponovni pokušaj",
     sv: "Röst kändes inte igen. Tryck på 🎙️ för att försöka igen",
     hi: 'आवाज पहचानी नहीं गई। पुनः प्रयास करने के लिए 🎙️ दबाएं',
+    bn: 'কণ্ঠস্বর চেনা যায়নি। আবার চেষ্টা করতে 🎙️ চাপুন',
     ar: 'لم يتم التعرف على الصوت. اضغط على 🎙️ للمحاولة مرة أخرى',
+    fa: 'صدا تشخیص داده نشد. برای تلاش مجدد روی 🎙️ بزنید',
+    ur: 'آواز کی شناخت نہیں ہو سکی۔ دوبارہ کوشش کے لیے 🎙️ دبائیں',
     id: 'Suara tidak dikenali. Ketuk 🎙️ untuk coba lagi',
     vi: 'Không nhận dạng được giọng nói. Nhấn 🎙️ để thử lại',
     th: 'ไม่รู้จักเสียง กด 🎙️ เพื่อลองใหม่',
     ko: '음성을 인식하지 못했습니다. 🎙️를 눌러 다시 시도하세요',
     ja: '音声を認識できませんでした。🎙️をタップしてやり直してください',
+    zh: '未识别到语音，请点击 🎙️ 重试',
     kk: 'Дауыс танылмады. Қайталау үшін 🎙️ басыңыз'
   },
   tap_to_speak: {
@@ -14423,12 +14436,16 @@ export const SPEECH_PROMPTS = {
     hr: "Dodirnite mikrofon i izgovorite riječ",
     sv: "Tryck på mikrofonen och säg ordet",
     hi: 'माइक्रोफ़ोन पर टैप करें और शब्द बोलें',
+    bn: 'মাইক্রোফোনে ট্যাপ করুন এবং শব্দটি বলুন',
     ar: 'اضغط على الميكروفون وانطق الكلمة',
+    fa: 'روی میکروفون بزنید و کلمه را بگویید',
+    ur: 'مائیکروفون پر ٹیپ کریں اور لفظ بولیں',
     id: 'Ketuk mikrofon dan ucapkan katanya',
     vi: 'Nhấn vào micrô và nói từ',
     th: 'แตะไมโครโฟนแล้วพูดคำศัพท์',
     ko: '마이크를 탭하고 단어를 말하세요',
     ja: 'マイクをタップして単語を話してください',
+    zh: '点击麦克风并说出单词',
     kk: 'Микрофонды басып, сөзді айтыңыз'
   },
   review_repeat: {
@@ -14457,12 +14474,16 @@ export const SPEECH_PROMPTS = {
     hr: "Ponovi (1-3)",
     sv: "Repetera (1-3)",
     hi: 'दोहराएं (1-3)',
+    bn: 'পুনরাবৃত্তি',
     ar: 'تكرار',
+    fa: 'تکرار',
+    ur: 'دہرائیں',
     id: 'Ulangi (1-3)',
     vi: 'Lặp lại (1-3)',
     th: 'ทำซ้ำ (1-3)',
     ko: '복습하기',
     ja: '復習 (1-3)',
+    zh: '重复复习',
     kk: 'Қайталау'
   },
   review_know: {
@@ -14491,12 +14512,16 @@ export const SPEECH_PROMPTS = {
     hr: "Znam (4-5)",
     sv: "Vet (4-5)",
     hi: 'मुझे पता है (4-5)',
+    bn: 'আমি জানি',
     ar: 'أعرف',
+    fa: 'می‌دانم',
+    ur: 'میں جانتا ہوں',
     id: 'Tahu (4-5)',
     vi: 'Đã biết (4-5)',
     th: 'รู้แล้ว (4-5)',
     ko: '알아요',
     ja: '知っている (4-5)',
+    zh: '已掌握',
     kk: 'Білемін'
   },
 };
@@ -14540,22 +14565,22 @@ export function t(key, params = null) {
     const map = {
       ru: "Слушать", uk: "Слухати", en: "Listen", de: "Anhören", es: "Escuchar",
       fr: "Écouter", pl: "Słuchaj", tr: "Dinle", it: "Ascolta", ro: "Ascultă",
-      bg: "Слушай", hu: "Hallgatás", el: "Ακούστε", da: "Lyt", ga: "Éist",
-      lv: "Klausīties", lt: "Klausytis", sr: "Слушај", pt: "Ouvir", sk: "Počúvať",
+      bg: "Слушай", hu: "Hallgatás", el: "Ακούστε", da: "Lyt",
+      lv: "Klausīties", lt: "Klausytis", pt: "Ouvir", sk: "Počúvať",
       sl: "Poslušaj", fi: "Kuuntele", hr: "Slušaj", cs: "Poslouchat", sv: "Lyssna",
-      et: "Kuula", mt: "Isma'", nl: "Luisteren",
-      hi: "सुनें", ar: "استماع", id: "Dengarkan", vi: "Nghe", th: "ฟัง", ko: "듣기", ja: "再生"
+      et: "Kuula", hi: "सुनें", bn: "শুনুন", ar: "استماع", fa: "گوش دادن", ur: "سنیں",
+      id: "Dengarkan", vi: "Nghe", th: "ฟัง", ko: "듣기", ja: "再生", zh: "收听", kk: "Тыңдау"
     };
     val = map[lang] || map['en'] || "Listen";
   } else if (key === 'fav_autoplay_stop') {
     const map = {
       ru: "Пауза", uk: "Пауза", en: "Stop", de: "Stopp", es: "Parar",
       fr: "Arrêter", pl: "Stop", tr: "Durdur", it: "Stop", ro: "Stop",
-      bg: "Стоп", hu: "Állj", el: "Διακοπή", da: "Stop", ga: "Stad",
-      lv: "Apturēt", lt: "Sustabdyti", sr: "Стоп", pt: "Parar", sk: "Stop",
+      bg: "Стоп", hu: "Állj", el: "Διακοπή", da: "Stop",
+      lv: "Apturēt", lt: "Sustabdyti", pt: "Parar", sk: "Stop",
       sl: "Ustavi", fi: "Pysäytä", hr: "Stop", cs: "Stop", sv: "Stopp",
-      et: "Peata", mt: "Ieqaf", nl: "Stop",
-      hi: "रोकें", ar: "إيقاف", id: "Berhenti", vi: "Dừng", th: "หยุด", ko: "정지", ja: "停止"
+      et: "Peata", hi: "रोकें", bn: "থামান", ar: "إيقاف", fa: "توقف", ur: "روکیں",
+      id: "Berhenti", vi: "Dừng", th: "หยุด", ko: "정지", ja: "停止", zh: "暂停", kk: "Тоқтату"
     };
     val = map[lang] || map['en'] || "Stop";
   } else if (key === 'conveyor_in_learning') {
@@ -14585,12 +14610,17 @@ export function t(key, params = null) {
       sv: "I inlärning {current}/{total}",
       hr: "U učenju {current}/{total}",
       hi: "सीखने में {current}/{total}",
+      bn: "শেখা হচ্ছে {current}/{total}",
       ar: "قيد التعلم {current}/{total}",
+      fa: "در حال یادگیری {current}/{total}",
+      ur: "سیکھنے میں {current}/{total}",
       id: "Sedang dipelajari {current}/{total}",
       vi: "Đang học {current}/{total}",
       th: "กำลังเรียนรู้ {current}/{total}",
       ko: "학습 중 {current}/{total}",
-      ja: "学習中 {current}/{total}"
+      ja: "学習中 {current}/{total}",
+      zh: "学习中 {current}/{total}",
+      kk: "Үйренуде {current}/{total}"
     };
     val = map[lang] || map['en'] || "In learning {current}/{total}";
   } else if (key === 'sound_on') {
@@ -14599,9 +14629,11 @@ export function t(key, params = null) {
       es: "Pronunciar palabra", fr: "Prononcer le mot", pl: "Wymów słowo", it: "Pronuncia parola",
       tr: "Kelimeyi seslendir", pt: "Pronunciar palavra", ro: "Pronunță cuvântul", bg: "Произнеси думата",
       cs: "Vyslovit slovo", sk: "Vysloviť slovo", hu: "Szó kiejtése", el: "Προφορά λέξης",
-      da: "Udtal ord", fi: "Lausu sana", sv: "Uttala ord", nl: "Woord uitspreken",
-      hi: "शब्द का उच्चारण करें", ar: "نطق الكلمة", id: "Ucapkan kata", vi: "Phát âm từ",
-      th: "ออกเสียงคำ", ko: "단어 발음 듣기", ja: "単語を発音する"
+      da: "Udtal ord", lv: "Izrunāt vārdu", lt: "Ištarti žodį", sl: "Izgovori besedo",
+      fi: "Lausu sana", hr: "Izgovori riječ", sv: "Uttala ord", et: "Häälda sõna",
+      hi: "शब्द का उच्चारण करें", bn: "শব্দটি উচ্চারণ করুন", ar: "نطق الكلمة", fa: "تلفظ کلمه",
+      ur: "لفظ کا تلفظ سنیں", id: "Ucapkan kata", vi: "Phát âm từ",
+      th: "ออกเสียงคำ", ko: "단어 발음 듣기", ja: "単語を発音する", zh: "朗读单词", kk: "Сөзді дыбыстау"
     };
     val = map[lang] || map['en'] || "Pronounce word";
   } else if (key === 'train_blocks_badge') {
@@ -14652,30 +14684,35 @@ export function t(key, params = null) {
       es: "A favoritos", fr: "Aux favoris", pl: "Do ulubionych", it: "Ai preferiti",
       tr: "Favorilere", pt: "Aos favoritos", ro: "La favorite", bg: "Към любими",
       cs: "Do oblíbených", sk: "Do obľúbených", hu: "Kedvencekhez", el: "Στα αγαπημένα",
-      da: "Til favoritter", fi: "Suosikkeihin", sv: "Till favoriter", nl: "Naar favorieten",
-      hi: "पसंदीदा में जोड़ें", ar: "إلى المفضلة", id: "Ke favorit", vi: "Vào mục yêu thích",
-      th: "เพิ่มในรายการโปรด", ko: "즐겨찾기에 추가", ja: "お気に入りへ"
+      da: "Til favoritter", lv: "Uz izlases", lt: "Į mėgstamiausius", sl: "Med priljubljene",
+      fi: "Suosikkeihin", hr: "U favorite", sv: "Till favoriter", et: "Lemmikutesse",
+      hi: "पसंदीदा में जोड़ें", bn: "পছন্দে যোগ করুন", ar: "إلى المفضلة", fa: "افزودن به علاقه‌مندی‌ها",
+      ur: "پسندیدہ میں شامل کریں", id: "Ke favorit", vi: "Vào mục yêu thích",
+      th: "เพิ่มในรายการโปรด", ko: "즐겨찾기에 추가", ja: "お気に入りへ", zh: "加入收藏", kk: "Таңдаулыға қосу"
     };
     val = map[lang] || map['en'] || "To favorites";
   } else if (key === 'modal_close') {
-    const map = { ru: 'Закрыть', uk: 'Закрити', en: 'Close', pt: 'Fechar', es: 'Cerrar', de: 'Schließen', fr: 'Fermer', it: 'Chiudi', pl: 'Zamknij', tr: 'Kapat' };
+    const map = {
+      ru: 'Закрыть', uk: 'Закрити', en: 'Close', de: 'Schließen', es: 'Cerrar',
+      fr: 'Fermer', pl: 'Zamknij', tr: 'Kapat', it: 'Chiudi', ro: 'Închide',
+      bg: 'Затвори', hu: 'Bezárás', el: 'Κλείσιμο', da: 'Luk', lv: 'Aizvērt',
+      lt: 'Uždaryti', pt: 'Fechar', sk: 'Zavrieť', sl: 'Zapri', fi: 'Sulje',
+      hr: 'Zatvori', cs: 'Zavřít', sv: 'Stäng', et: 'Sulge',
+      hi: 'बंद करें', bn: 'বন্ধ করুন', ar: 'إغلاق', fa: 'بستن', ur: 'بند کریں',
+      id: 'Tutup', vi: 'Đóng', th: 'ปิด', ko: '닫기', ja: '閉じる', zh: '关闭', kk: 'Жабу'
+    };
     val = map[lang] || 'Close';
   } else if (key === 'word_notes_title') {
-    if (lang === 'ru') val = 'Примечание';
-    else if (lang === 'uk') val = 'Примітка';
-    else if (lang === 'de') val = 'Hinweis';
-    else if (lang === 'es' || lang === 'pt' || lang === 'it') val = 'Nota';
-    else if (lang === 'fr') val = 'Remarque';
-    else if (lang === 'pl') val = 'Uwaga';
-    else if (lang === 'tr') val = 'Not';
-    else if (lang === 'ja') val = 'メモ';
-    else if (lang === 'ko') val = '메모';
-    else if (lang === 'hi') val = 'टिप्पणी';
-    else if (lang === 'ar' || lang === 'fa') val = 'ملاحظة';
-    else if (lang === 'id') val = 'Catatan';
-    else if (lang === 'vi') val = 'Ghi chú';
-    else if (lang === 'th') val = 'บันทึก';
-    else val = 'Note';
+    const map = {
+      ru: 'Примечание', uk: 'Примітка', en: 'Note', de: 'Hinweis', es: 'Nota',
+      fr: 'Remarque', pl: 'Uwaga', tr: 'Not', it: 'Nota', ro: 'Notă',
+      bg: 'Бележка', hu: 'Megjegyzés', el: 'Σημείωση', da: 'Bemærkning', lv: 'Piezīme',
+      lt: 'Pastaba', pt: 'Nota', sk: 'Poznámka', sl: 'Opomba', fi: 'Huomautus',
+      hr: 'Bilješka', cs: 'Poznámka', sv: 'Anteckning', et: 'Märkus',
+      hi: 'टिप्पणी', bn: 'টীকা', ar: 'ملاحظة', fa: 'یادداشت', ur: 'نوٹ',
+      id: 'Catatan', vi: 'Ghi chú', th: 'บันทึก', ko: '메모', ja: 'メモ', zh: '备注', kk: 'Ескертпе'
+    };
+    val = map[lang] || 'Note';
   } else {
     val = (translations['en'] && translations['en'][key]) || key;
   }
@@ -14883,8 +14920,10 @@ const CATEGORY_LOCALIZATIONS = {
     fi: { title: "Perussanasto", desc: "Yleisimmät ja tärkeimmät jokapäiväisen englannin sanat" },
     sv: { title: "Grundordförråd", desc: "De vanligaste och viktigaste orden i vardagsengelska" },
     hr: { title: "Temeljni rječnik", desc: "Najčešće i najvažnije riječi svakodnevnog engleskog" },
-    mt: { title: "Vokabolarju Bażiku", desc: "L-aktar kliem frekwenti u essenzjali tal-Ingliż ta' kuljum" },    hi: { title: "बुनियादी शब्दावली", desc: "दैनिक अंग्रेजी के सबसे आम और महत्वपूर्ण शब्द" },
+    hi: { title: "बुनियादी शब्दावली", desc: "दैनिक अंग्रेजी के सबसे आम और महत्वपूर्ण शब्द" },
+    bn: { title: "প্রাথমিক শব্দভাণ্ডার", desc: "দৈনন্দিন ইংরেজির সবচেয়ে বেশি ব্যবহৃত এবং অপরিহার্য শব্দসমূহ" },
     ar: { title: "المفردات الأساسية", desc: "أهم الكلمات وأكثرها شيوعاً في اللغة الإنجليزية اليومية" },
+    fa: { title: "واژگان پایه", desc: "پرکاربردترین و ضروری‌ترین کلمات انگلیسی روزمره" },
     id: { title: "Kosakata Dasar", desc: "Kata-kata bahasa Inggris sehari-hari yang paling sering digunakan dan penting" },
     vi: { title: "Từ vựng cơ bản", desc: "Những từ tiếng Anh thông dụng và cần thiết nhất hàng ngày" },
     th: { title: "คำศัพท์พื้นฐาน", desc: "คำศัพท์ภาษาอังกฤษในชีวิตประจำวันที่มีประโยชน์และพบบ่อยที่สุด" },
@@ -14892,8 +14931,7 @@ const CATEGORY_LOCALIZATIONS = {
     ja: { title: "基本単語", desc: "日常会話で最も頻出する重要英単語" },
     zh: { title: "基础词汇", desc: "日常英语中最常用、最核心的必备词汇" },
     ur: { title: "بنیادی الفاظ", desc: "روزمرہ کی ضروری اور عام انگریزی الفاظ" },
-
-
+    kk: { title: "Базалық лексика", desc: "Күнделікті ағылшын тіліндегі ең жиі қолданылатын және қажетті сөздер" },
   },
   irregular: {
     ru: { title: "Неправильные глаголы", desc: "Ключевые формы и значения всех неправильных глаголов" },
@@ -14920,15 +14958,18 @@ const CATEGORY_LOCALIZATIONS = {
     fi: { title: "Epäsäännölliset verbit", desc: "Epäsäännöllisten verbien keskeiset muodot ja merkitykset" },
     sv: { title: "Oregelbundna verb", desc: "Viktiga former och betydelser för oregelbundna verb" },
     hr: { title: "Nepravilni glagoli", desc: "Ključni oblici i značenja nepravilnih glagola" },
-    mt: { title: "Verbi Irregolari", desc: "Forom u tifsiriet ewlenin tal-verbi irregolari" },    hi: { title: "अनियमित क्रियाएं", desc: "सभी अंग्रेजी अनियमित क्रियाओं के मुख्य रूप और अर्थ" },
+    hi: { title: "अनियमित क्रियाएं", desc: "सभी अंग्रेजी अनियमित क्रियाओं के मुख्य रूप और अर्थ" },
+    bn: { title: "অনিয়মিত ক্রিয়াপদ", desc: "ইংরেজির সকল অনিয়মিত ক্রিয়াপদের মূল রূপ ও অর্থ" },
     ar: { title: "الأفعال الشاذة", desc: "الأشكال الرئيسية ومعاني جميع الأفعال غير القياسية في اللغة الإنجليزية" },
+    fa: { title: "افعال بی‌قاعده", desc: "شکل‌های کلیدی و معانی تمام افعال بی‌قاعده انگلیسی" },
     id: { title: "Kata Kerja Tidak Beraturan", desc: "Bentuk utama dan arti dari semua kata kerja tidak beraturan bahasa Inggris" },
     vi: { title: "Động từ bất quy tắc", desc: "Các dạng chính và ý nghĩa của tất cả động từ bất quy tắc trong tiếng Anh" },
     th: { title: "กริยาไม่ปกติ", desc: "รูปสำคัญและความหมายของกริยาไม่ปกติภาษาอังกฤษทั้งหมด" },
     ko: { title: "불규칙 동사", desc: "모든 영어 불규칙 동사의 주요 형태와 의미" },
     ja: { title: "不規則動詞", desc: "すべての英語不規則動詞の重要変化形と意味" },
-
-
+    zh: { title: "不规则动词", desc: "所有英语不规则动词的核心变形与含义" },
+    ur: { title: "بے قاعدہ افعال", desc: "انگریزی کے تمام اہم بے قاعدہ افعال کی شکلیں اور معانی" },
+    kk: { title: "Бұрыс етістіктер", desc: "Барлық ағылшын бұрыс етістіктерінің негізгі формалары мен мағыналары" },
   },
   pattern: {
     ru: { title: "Разговорные паттерны", desc: "Устойчивые фразы, речевые связки и идиоматические конструкции" },
@@ -14955,8 +14996,10 @@ const CATEGORY_LOCALIZATIONS = {
     fi: { title: "Keskustelumallit", desc: "Yleiset fraasit, puheen liitosilmaukset ja idiomit" },
     sv: { title: "Konversationsmönster", desc: "Vanliga fraser, samtalsbindningar och idiom" },
     hr: { title: "Razgovorni obrasci", desc: "Uobičajene fraze, govorni veznici i idiomi" },
-    mt: { title: "Mudelli ta' Konversazzjoni", desc: "Frażijiet komuni, konnetturi tat-taħdit u espressjonijiet idjomiċi" },    hi: { title: "बातचीत के पैटर्न", desc: "सामान्य वाक्यांश, संवादात्मक संयोजन और मुहावरे" },
+    hi: { title: "बातचीत के पैटर्न", desc: "सामान्य वाक्यांश, संवादात्मक संयोजन और मुहावरे" },
+    bn: { title: "কথোপকথনের প্যাটার্ন", desc: "সাধারণ বাক্যাংশ, কথোপকথনের শব্দবন্ধ এবং বাগধারা" },
     ar: { title: "أنماط المحادثة", desc: "العبارات الشائعة والمتلازمات اللفظية والتعابير الاصطلاحية" },
+    fa: { title: "الگوهای مکالمه", desc: "عبارات رایج، ترکیب‌های محاوره‌ای و اصطلاحات" },
     id: { title: "Pola Percakapan", desc: "Frasa umum, kolokasi percakapan dan idiom" },
     vi: { title: "Mẫu câu giao tiếp", desc: "Các cụm từ thông dụng, cách diễn đạt hội thoại và thành ngữ" },
     th: { title: "รูปแบบบทสนทนา", desc: "วลีที่ใช้บ่อย การเชื่อมประโยค และสำนวนภาษาอังกฤษ" },
@@ -14964,9 +15007,7 @@ const CATEGORY_LOCALIZATIONS = {
     ja: { title: "会話パターン", desc: "よく使われる定型フレーズ、コロケーション、慣用句" },
     zh: { title: "日常口语表达", desc: "常用表达、地道搭配与高频习语结构" },
     ur: { title: "گفتگو کے سانچے", desc: "عام فقرات، روزمرہ بول چال اور محاورات" },
-    ur: { title: "بے قاعدہ افعال", desc: "انگریزی کے تمام اہم بے قاعدہ افعال کی شکلیں اور معانی" },
-
-
+    kk: { title: "Сөйлесу үлгілері", desc: "Тұрақты тіркестер, сөйлеу байланыстары және идиомалар" },
   },
   intermediate: {
     ru: { title: "Средний уровень", desc: "Слова для свободного общения, работы и чтения статей" },
@@ -14993,8 +15034,10 @@ const CATEGORY_LOCALIZATIONS = {
     fi: { title: "Keskitaso", desc: "Sanat sujuvaan keskusteluun, työhön ja lukemiseen" },
     sv: { title: "Medelnivå", desc: "Ord för flytande samtal, arbete och läsning" },
     hr: { title: "Srednja razina", desc: "Riječi za tečan razgovor, posao i čitanje" },
-    mt: { title: "Livell Intermedju", desc: "Kliem għal konversazzjoni fluwenti, xogħol u qari" },    hi: { title: "मध्यम स्तर", desc: "धाराप्रवाह बातचीत, काम और अध्ययन के लिए शब्दावली" },
+    hi: { title: "मध्यम स्तर", desc: "धाराप्रवाह बातचीत, काम और अध्ययन के लिए शब्दावली" },
+    bn: { title: "মধ্যবর্তী স্তর", desc: "সাবলীল কথোপকথন, কাজ এবং পড়ার জন্য শব্দভাণ্ডার" },
     ar: { title: "المستوى المتوسط", desc: "مفردات للتحدث بطلاقة والعمل والقراءة" },
+    fa: { title: "سطح متوسط", desc: "واژگان برای مکالمه روان، کار و مطالعه" },
     id: { title: "Tingkat Menengah", desc: "Kosakata untuk percakapan lancar, pekerjaan, dan membaca" },
     vi: { title: "Trình độ trung cấp", desc: "Từ vựng để giao tiếp lưu loát, làm việc và đọc hiểu" },
     th: { title: "ระดับกลาง", desc: "คำศัพท์สำหรับการสนทนาอย่างคล่องแคล่ว การทำงาน และการอ่าน" },
@@ -15002,8 +15045,7 @@ const CATEGORY_LOCALIZATIONS = {
     ja: { title: "中級語彙", desc: "流暢な会話、仕事、読書のための実践的英単語" },
     zh: { title: "中级进阶词汇", desc: "适用于流畅对话、职场沟通与文章阅读的实用词汇" },
     ur: { title: "درمیانہ درجہ", desc: "روانی سے گفتگو، کام اور مطالعہ کے لیے الفاظ" },
-
-
+    kk: { title: "Орта деңгей", desc: "Еркін сөйлесу, жұмыс және мақалалар оқуға арналған сөздер" },
   },
   advanced: {
     ru: { title: "Продвинутый уровень", desc: "Редкая, нюансная и академическая лексика высокого уровня" },
@@ -15030,8 +15072,10 @@ const CATEGORY_LOCALIZATIONS = {
     fi: { title: "Edistynyt taso", desc: "Monipuolinen, vivahteikas ja akateeminen sanasto" },
     sv: { title: "Avancerad nivå", desc: "Nyanserat, uttrycksfullt och akademiskt ordförråd" },
     hr: { title: "Napredna razina", desc: "Nijansiran, izražajan i akademski vokabular visoke razine" },
-    mt: { title: "Livell Avvanzat", desc: "Lessiku sfumat, espressiv u akkademiku ta' livell għoli" },    hi: { title: "उन्नत स्तर", desc: "गहरी, सूक्ष्म और शैक्षणिक उन्नत शब्दावली" },
+    hi: { title: "उन्नत स्तर", desc: "गहरी, सूक्ष्म और शैक्षणिक उन्नत शब्दावली" },
+    bn: { title: "উন্নত স্তর", desc: "সূক্ষ্ম, প্রকাশভঙ্গিময় এবং একাডেমিক উন্নত শব্দভাণ্ডার" },
     ar: { title: "المستوى المتقدم", desc: "مفردات متقدمة وأكاديمية دقيقة ومعبرة" },
+    fa: { title: "سطح پیشرفته", desc: "واژگان پیشرفته، دقیق و دانشگاهی" },
     id: { title: "Tingkat Lanjut", desc: "Kosakata tingkat lanjut bernuansa ekspresif dan akademis" },
     vi: { title: "Trình độ nâng cao", desc: "Từ vựng nâng cao giàu sắc thái và mang tính học thuật" },
     th: { title: "ระดับสูง", desc: "คำศัพท์ขั้นสูงเชิงวิชาการที่ลึกซึ้งและสื่อความหมายเฉพาะเจาะจง" },
@@ -15039,8 +15083,7 @@ const CATEGORY_LOCALIZATIONS = {
     ja: { title: "上級語彙", desc: "ニュアンス豊かで表現力のある学術・高度語彙" },
     zh: { title: "高级精通词汇", desc: "更丰富、细腻且具学术深度的进阶高阶词汇" },
     ur: { title: "اعلیٰ سطح", desc: "جامع، باریک اور اعلیٰ علمی الفاظ کا ذخیرہ" },
-
-
+    kk: { title: "Жоғары деңгей", desc: "Сирек, мағынасы терең және академиялық жоғары деңгейлі лексика" },
   },
 };
 
@@ -15060,15 +15103,21 @@ export function getCategoryDetails(rawCategory) {
   }
 
   // Fallback for custom user categories added to Google Sheet
-  const fallbackDesc = lang === 'ru' 
+  const fallbackDesc = lang === 'ru'
     ? `Слова из категории «${rawCategory}»`
     : lang === 'uk'
       ? `Слова з категорії «${rawCategory}»`
-      : lang === 'pt'
-        ? `Palavras da categoria «${rawCategory}»`
-        : lang === 'hi'
-          ? `श्रेणी "${rawCategory}" के शब्द`
-          : `Words from "${rawCategory}" category`;
+      : lang === 'ar'
+        ? `كلمات من فئة «${rawCategory}»`
+        : lang === 'fa'
+          ? `کلمات از دسته‌بندی «${rawCategory}»`
+          : lang === 'ur'
+            ? `زمرہ «${rawCategory}» کے الفاظ`
+            : lang === 'pt'
+              ? `Palavras da categoria «${rawCategory}»`
+              : lang === 'hi'
+                ? `श्रेणी "${rawCategory}" के शब्द`
+                : `Words from "${rawCategory}" category`;
   return { title: rawCategory || 'Category', desc: fallbackDesc };
 }
 
@@ -15081,13 +15130,21 @@ const UK_VOICE_MODAL_I18N = {
     retryBtn: "Повторить",
     downloading: "Загрузка аудиофайлов..."
   },
-  ur: {
-    title: "آڈیو فائلیں ڈاؤن لوڈ کریں",
-    formatDesc: (t, c, s) => `زمرہ "<strong>${t}</strong>" کی مشق کے لیے آڈیو فائلیں ڈاؤن لوڈ کرنا ضروری ہیں (${c} الفاظ، ~${s} MB)۔ کیا ابھی ڈاؤن لوڈ کریں؟`,
-    downloadBtn: (s) => `📥 ڈاؤن لوڈ کریں (~${s} MB)`,
-    cancelBtn: "منسوخ",
-    retryBtn: "دوبارہ کوشش کریں",
-    downloading: "آڈیو فائلیں ڈاؤن لوڈ ہو رہی ہیں..."
+  bn: {
+    title: "ব্রিটিশ উচ্চারণ",
+    desc: "ব্রিটিশ অ্যাকসেন্ট ব্যবহার করার জন্য ভয়েস ফাইল ডাউনলোড করতে হবে (প্রাথমিক শব্দভাণ্ডার এবং অনিয়মিত ক্রিয়াপদ, ~23 MB)। এখন ডাউনলোড করবেন?",
+    downloadBtn: "📥 ডাউনলোড করুন (~23 MB)",
+    cancelBtn: "বাতিল",
+    retryBtn: "পুনরায় চেষ্টা করুন",
+    downloading: "অডিও ফাইল ডাউনলোড হচ্ছে..."
+  },
+  fa: {
+    title: "تلفظ بریتانیایی",
+    desc: "برای استفاده از لهجه بریتانیایی، باید فایل‌های صوتی (واژگان پایه و افعال بی‌قاعده، ~23 MB) را دانلود کنید. اکنون دانلود شود؟",
+    downloadBtn: "📥 دانلود (~23 MB)",
+    cancelBtn: "لغو",
+    retryBtn: "تلاش مجدد",
+    downloading: "در حال دانلود فایل‌های صوتی..."
   },
   ur: {
     title: "برطانوی تلفظ",
@@ -15616,7 +15673,30 @@ const CAT_VOICE_MODAL_I18N = {
     retryBtn: "重试",
     downloading: "正在下载音频文件..."
   },
-
+  bn: {
+    title: "অডিও ফাইল ডাউনলোড করুন",
+    formatDesc: (t, c, s) => `«<strong>${t}</strong>» বিভাগটি অনুশীলনের জন্য অডিও ফাইল (${c}টি শব্দ, ~${s} MB) ডাউনলোড করতে হবে। এখন ডাউনলোড করবেন?`,
+    downloadBtn: (s) => `📥 ডাউনলোড করুন (~${s} MB)`,
+    cancelBtn: "বাতিল",
+    retryBtn: "পুনরায় চেষ্টা করুন",
+    downloading: "অডিও ফাইল ডাউনলোড হচ্ছে..."
+  },
+  fa: {
+    title: "دانلود فایل‌های صوتی",
+    formatDesc: (t, c, s) => `برای تمرین دسته‌بندی «<strong>${t}</strong>»، باید فایل‌های صوتی (${c} کلمه، ~${s} MB) را دانلود کنید. اکنون دانلود شود؟`,
+    downloadBtn: (s) => `📥 دانلود (~${s} MB)`,
+    cancelBtn: "لغو",
+    retryBtn: "تلاش مجدد",
+    downloading: "در حال دانلود فایل‌های صوتی..."
+  },
+  ur: {
+    title: "آڈیو فائلیں ڈاؤن لوڈ کریں",
+    formatDesc: (t, c, s) => `زمرہ "<strong>${t}</strong>" کی مشق کے لیے آڈیو فائلیں ڈاؤن لوڈ کرنا ضروری ہیں (${c} الفاظ، ~${s} MB)۔ کیا ابھی ڈاؤن لوڈ کریں؟`,
+    downloadBtn: (s) => `📥 ڈاؤن لوڈ کریں (~${s} MB)`,
+    cancelBtn: "منسوخ",
+    retryBtn: "دوبارہ کوشش کریں",
+    downloading: "آڈیو فائلیں ڈاؤن لوڈ ہو رہی ہیں..."
+  },
   kk: {
     title: "Аудиофайлдарды жүктеу",
     formatDesc: (t, c, s) => `«<strong>${t}</strong>» санатын жаттықтыру үшін аудиофайлдарды жүктеп алу қажет (${c} сөз, ~${s} МБ). Қазір жүктейсіз бе?`,

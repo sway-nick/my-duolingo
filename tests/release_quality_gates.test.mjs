@@ -428,3 +428,39 @@ test('Gate 6: Google Analytics & Firebase Production Configuration Integrity', (
     'analyticsService.js must bridge events to native AndroidAnalyticsBridge'
   );
 });
+
+test('Gate 7: Arabic & RTL Layout, SVG Logo Direction, and Dynamic Drawer Localization Integrity', async () => {
+  // 1. Verify AppLayout SVG brand logo enforces LTR direction so SVG <text x="56"> never overlaps the cup in RTL
+  const layoutPath = path.join(ROOT_DIR, 'frontend/components/layout/AppLayout.js');
+  const layoutCode = fs.readFileSync(layoutPath, 'utf-8');
+  assert.ok(
+    layoutCode.includes('id="brand-logo" dir="ltr"') &&
+      layoutCode.includes('viewBox="0 0 270 56" direction="ltr"') &&
+      layoutCode.includes('text-anchor="start" direction="ltr"'),
+    'AppLayout brand logo and SVG text must explicitly declare direction="ltr" and text-anchor="start"'
+  );
+
+  // 2. Verify updateDrawerTranslations updates #drawer-challenge-btn (challenge_menu_item) on language switch
+  const updateFnIdx = layoutCode.indexOf('export function updateDrawerTranslations()');
+  assert.ok(updateFnIdx >= 0, 'updateDrawerTranslations must be defined in AppLayout.js');
+  const updateFnBody = layoutCode.slice(updateFnIdx, updateFnIdx + 2200);
+  assert.ok(
+    updateFnBody.includes('#drawer-challenge-btn') && updateFnBody.includes("t('challenge_menu_item')"),
+    'updateDrawerTranslations must update #drawer-challenge-btn with challenge_menu_item'
+  );
+
+  // 3. Verify index.html myduo:lang_changed also updates #drawer-challenge-btn and checks data-lang on WOTD anti-flicker guard
+  const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'frontend/index.html'), 'utf-8');
+  assert.ok(
+    indexHtml.includes('#drawer-challenge-btn') && indexHtml.includes("existingFlashcard.getAttribute('data-lang') === getInterfaceLanguage()"),
+    'index.html must update #drawer-challenge-btn on lang_changed and verify data-lang on WOTD anti-flicker guard'
+  );
+
+  // 4. Verify SPEECH_PROMPTS covers all 36 locales
+  const { SPEECH_PROMPTS } = await import('../frontend/services/i18n.js');
+  for (const [key, map] of Object.entries(SPEECH_PROMPTS)) {
+    for (const loc of REQUIRED_33_LOCALES) {
+      assert.ok(map[loc] && map[loc].trim().length > 0, `SPEECH_PROMPTS.${key} must include locale '${loc}'`);
+    }
+  }
+});

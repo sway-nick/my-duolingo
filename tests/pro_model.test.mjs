@@ -110,34 +110,40 @@ test('PRO Quotas: test learned count, micro-rules, tense thresholds, and pattern
 
 test('AdService + PRO: interstitials disabled, banner disabled, 3 free daily shields', async () => {
   installMockLocalStorage();
-  // Set install time > 7 days ago so grace period is inactive
-  globalThis.localStorage.setItem('myduo_first_install_time', String(Date.now() - 10 * 86400 * 1000));
-  assert.equal(AdService.canShowHourlyInterstitial(), true);
-
-  setEntitlement({ active: true, source: 'play', verifiedAt: Date.now() });
-  assert.equal(AdService.canShowHourlyInterstitial(), false);
-
-  // Banner suppressed when PRO
-  AdService.isBannerActive = false;
-  await AdService.showBottomBanner();
-  assert.equal(AdService.isBannerActive, false);
-
-  // 3 free shields work even when offline
-  const origIsOnline = AdService.isOnline;
-  AdService.isOnline = () => false;
+  const origDisabled = AdService.interstitialsDisabled;
+  AdService.interstitialsDisabled = false;
   try {
-    for (let i = 0; i < 3; i++) {
-      const res = await AdService.showShieldRewardedAd();
-      assert.equal(res.rewardEarned, true);
-      assert.equal(res.source, 'pro_free');
+    // Set install time > 7 days ago so grace period is inactive
+    globalThis.localStorage.setItem('myduo_first_install_time', String(Date.now() - 10 * 86400 * 1000));
+    assert.equal(AdService.canShowHourlyInterstitial(), true);
+
+    setEntitlement({ active: true, source: 'play', verifiedAt: Date.now() });
+    assert.equal(AdService.canShowHourlyInterstitial(), false);
+
+    // Banner suppressed when PRO
+    AdService.isBannerActive = false;
+    await AdService.showBottomBanner();
+    assert.equal(AdService.isBannerActive, false);
+
+    // 3 free shields work even when offline
+    const origIsOnline = AdService.isOnline;
+    AdService.isOnline = () => false;
+    try {
+      for (let i = 0; i < 3; i++) {
+        const res = await AdService.showShieldRewardedAd();
+        assert.equal(res.rewardEarned, true);
+        assert.equal(res.source, 'pro_free');
+      }
+      // 4th shield falls back to normal offline check
+      const res4 = await AdService.showShieldRewardedAd();
+      assert.equal(res4.rewardEarned, false);
+      assert.equal(res4.isOffline, true);
+    } finally {
+      AdService.isOnline = origIsOnline;
+      clearEntitlement();
     }
-    // 4th shield falls back to normal offline check
-    const res4 = await AdService.showShieldRewardedAd();
-    assert.equal(res4.rewardEarned, false);
-    assert.equal(res4.isOffline, true);
   } finally {
-    AdService.isOnline = origIsOnline;
-    clearEntitlement();
+    AdService.interstitialsDisabled = origDisabled;
   }
 });
 

@@ -9203,6 +9203,39 @@ html.is-rtl {
   text-align: right;
 }
 
+/* Header and Brand SVG Logo must remain LTR so SVG coordinates and right-side burger drawer stay aligned */
+[dir="rtl"] .mobile-header {
+  direction: ltr !important;
+}
+
+[dir="rtl"] #brand-logo,
+[dir="rtl"] #brand-logo svg,
+[dir="rtl"] #brand-logo svg text {
+  direction: ltr !important;
+  unicode-bidi: isolate;
+}
+
+[dir="rtl"] #drawer-settings-sync-badge {
+  right: auto !important;
+  left: 14px !important;
+}
+
+[dir="rtl"] .drawer-app-version {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Word of the Day Golden Bank Card keeps its English bank-card geometry in LTR while back translation renders RTL */
+[dir="rtl"] .wotd-card .bank-card {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir="rtl"] .wotd-card .card-back .translation,
+[dir="rtl"] .wotd-card .card-back .example-line {
+  direction: rtl;
+}
+
 /* English learning content and phonetics must remain LTR */
 [dir="rtl"] .training-word-text,
 [dir="rtl"] .flashcard-word,
@@ -9224,12 +9257,14 @@ html.is-rtl {
 [dir="rtl"] .share-modal-card,
 [dir="rtl"] .podium-modal-card,
 [dir="rtl"] .avatar-picker-modal-card,
-[dir="rtl"] .auth-modal-card {
+[dir="rtl"] .auth-modal-card,
+[dir="rtl"] .challenge-modal-card {
   text-align: right;
   direction: rtl;
 }
 
-[dir="rtl"] #privacy-content-scroll ul {
+[dir="rtl"] #privacy-content-scroll ul,
+[dir="rtl"] .challenge-list {
   padding-right: 20px;
   padding-left: 0;
 }

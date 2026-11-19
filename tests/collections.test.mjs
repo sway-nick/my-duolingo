@@ -1234,7 +1234,9 @@ test('MicroRules and TenseConstructions cover all 36 supported locales, progress
   assert.ok(!microViewSource.includes('class="mr-ex-heading"') && !microViewSource.includes('class="mr-ex-list"'), 'MicroRulesView must not render examples block');
   assert.ok(!microViewSource.includes('data-mr-mode'), 'MicroRulesView must not render mode tabs (list only)');
   assert.ok(!microViewSource.includes('mr-search-input'), 'MicroRulesView must not render search input');
-  assert.ok(microViewSource.includes("const levels = ['all'"), 'MicroRulesView must render All button');
+  assert.ok(microViewSource.includes("const levels = ['A1', 'A2', 'B1', 'B2']"), 'MicroRulesView must render A1, A2, B1, B2 level buttons without All button');
+  assert.ok(microViewSource.includes('myduo_microrules_level'), 'MicroRulesView must persist selected level');
+  assert.ok(microViewSource.includes('PAGE_SIZE = 10'), 'MicroRulesView must paginate by 10 items');
   assert.ok(!microViewSource.includes('class="mr-hint"'), 'MicroRulesView must not render listen hint banner');
   assert.ok(!microViewSource.includes('class="mr-hero-sub"'), 'MicroRulesView must not render hero subtitle');
   assert.ok(microViewSource.includes('data-toggle-expand'), 'MicroRulesView must support collapsing/reopening studied rules without ads');

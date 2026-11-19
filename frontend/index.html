@@ -61,9 +61,9 @@
           if (!userLang && navigator.languages && navigator.languages.length > 0) {
             userLang = (navigator.languages[0] || '').toLowerCase().split(/[-_]/)[0];
           }
-          if (userLang === 'ar' || userLang === 'fa') {
+          if (userLang === 'ar' || userLang === 'fa' || userLang === 'ur') {
             document.documentElement.setAttribute('dir', 'rtl');
-            document.documentElement.setAttribute('lang', 'ar');
+            document.documentElement.setAttribute('lang', userLang);
             document.documentElement.classList.add('is-rtl');
           } else {
             document.documentElement.setAttribute('dir', 'ltr');
@@ -152,7 +152,7 @@
 
   <body>
     <div id="app"></div>
-    <div id="app-splash-screen" style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; z-index: 999999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; outline: none; border: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;">
+    <div id="app-splash-screen" dir="ltr" style="direction: ltr; position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; z-index: 999999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; outline: none; border: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;">
       <div class="splash-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; transform: translateY(-45px);">
         <div style="margin-bottom: 12px; outline: none; border: none; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 58" width="68" height="68" style="animation: splashPulse 1.4s ease-in-out infinite; display: block; outline: none; border: none; pointer-events: none; -webkit-tap-highlight-color: transparent;">
@@ -918,25 +918,6 @@
             }
             if (currentMethod !== prevMethod) {
               currentWordIndex = 0;
-              // Interstitial ad strictly between Quiz and Pairs
-              if ((prevMethod === 'quiz' || (prevMethod === 'cards' && quizQueue.length === 0)) && currentMethod === 'pairs') {
-                content.innerHTML = `
-                  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
-                    <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
-                      <div class="cat-loader-bar"></div>
-                      <div class="cat-loader-paws">
-                        <span class="cat-paw-print">🐾</span>
-                        <span class="cat-paw-print">🐾</span>
-                        <span class="cat-paw-print">🐾</span>
-                        <span class="cat-paw-print">🐾</span>
-                      </div>
-                    </div>
-                  </div>
-                `;
-                try {
-                  await AdService.showRoundFinishInterstitial();
-                } catch (e) {}
-              }
             }
           }
 
@@ -948,11 +929,6 @@
           }
           if (!window._showHubScreen) {
             currentTrainingMethod = currentMethod;
-            if (currentMethod === 'quiz') {
-              try {
-                AdService.preloadInterstitial().catch(() => {});
-              } catch (e) {}
-            }
           }
         }
 
@@ -1033,12 +1009,7 @@
           const exitFavsBtn = content.querySelector('#exit-favs-btn');
           if (exitFavsBtn) {
             exitFavsBtn.addEventListener('click', () => {
-              if (window._favPracticeCompletedNonCardWord) {
-                window._favPracticeCompletedNonCardWord = false;
-                try {
-                  AdService.showCollectionsExitInterstitial().catch(() => {});
-                } catch (e) {}
-              }
+              window._favPracticeCompletedNonCardWord = false;
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
               window._activePracticeCollectionId = null;
@@ -1104,9 +1075,6 @@
               goQuizBtn.addEventListener('click', () => {
                 userSettings.preferredMethod = 'quiz';
                 saveUserSettings(userSettings);
-                try {
-                  AdService.preloadInterstitial().catch(() => {});
-                } catch (e) {}
                 currentWordIndex = 0;
                 renderTrainingTab();
               });
@@ -1115,57 +1083,21 @@
           }
 
           if (!window._showHubScreen && currentMethod === 'cards' && pairsQueue.length > 0) {
-            content.innerHTML = `
-              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
-                <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
-                  <div class="cat-loader-bar"></div>
-                  <div class="cat-loader-paws">
-                    <span class="cat-paw-print">🐾</span>
-                    <span class="cat-paw-print">🐾</span>
-                    <span class="cat-paw-print">🐾</span>
-                    <span class="cat-paw-print">🐾</span>
-                  </div>
-                </div>
-              </div>
-            `;
-            (async () => {
-              try {
-                await AdService.showRoundFinishInterstitial();
-              } catch (e) {}
-              currentMethod = 'pairs';
-              userSettings.preferredMethod = 'pairs';
-              saveUserSettings(userSettings);
-              currentWordIndex = 0;
-              renderTrainingTab();
-            })();
+            currentMethod = 'pairs';
+            userSettings.preferredMethod = 'pairs';
+            saveUserSettings(userSettings);
+            currentWordIndex = 0;
+            renderTrainingTab();
             return;
           }
 
-          // If words completed Quiz -> show interstitial ad and immediately launch Pairs mode without extra button
+          // If words completed Quiz -> launch Pairs mode without extra button
           if (!window._showHubScreen && currentMethod === 'quiz' && pairsQueue.length > 0) {
-            content.innerHTML = `
-              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; padding: 40px 20px; width: 100%;">
-                <div class="cat-paw-loader" style="position: relative; width: 100%; max-width: 370px; height: 56px; margin: 0 auto;">
-                  <div class="cat-loader-bar"></div>
-                  <div class="cat-loader-paws">
-                    <span class="cat-paw-print">🐾</span>
-                    <span class="cat-paw-print">🐾</span>
-                    <span class="cat-paw-print">🐾</span>
-                    <span class="cat-paw-print">🐾</span>
-                  </div>
-                </div>
-              </div>
-            `;
-            (async () => {
-              try {
-                await AdService.showRoundFinishInterstitial();
-              } catch (e) {}
-              currentMethod = 'pairs';
-              userSettings.preferredMethod = 'pairs';
-              saveUserSettings(userSettings);
-              currentWordIndex = 0;
-              renderTrainingTab();
-            })();
+            currentMethod = 'pairs';
+            userSettings.preferredMethod = 'pairs';
+            saveUserSettings(userSettings);
+            currentWordIndex = 0;
+            renderTrainingTab();
             return;
           }
 
@@ -1327,7 +1259,7 @@
               <div class="wotd-bonus-section" style="margin-top: 18px; width: 100%; max-width: 340px; margin-left: auto; margin-right: auto; box-sizing: border-box;">
                 <div class="flashcard-3d-wrapper wotd-standalone-wrapper">
                   <div class="wotd-tilt-container" id="wotd-tilt-container">
-                    <div class="card-flipper wotd-card" id="wotd-flashcard-3d" title="${t('train_flip_card_hint')}">
+                    <div class="card-flipper wotd-card" id="wotd-flashcard-3d" data-lang="${getInterfaceLanguage()}" title="${t('train_flip_card_hint')}">
 
                       <!-- SVG Градиенты для объемного рубинового кабошона и золотого ободка сердечка -->
                       <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
@@ -1524,7 +1456,7 @@
           const existingFlashcard = content.querySelector('#wotd-flashcard-3d');
           const existingWord = existingFlashcard?.querySelector('.word')?.textContent?.trim();
 
-          if (isHubScreen && wotd && existingHub && existingFlashcard && existingWord === wotd.word && !isTrainingRoundJustCompleted) {
+          if (isHubScreen && wotd && existingHub && existingFlashcard && existingWord === wotd.word && existingFlashcard.getAttribute('data-lang') === getInterfaceLanguage() && !isTrainingRoundJustCompleted) {
             const favButtons = existingFlashcard.querySelectorAll('#wotd-fav-front, #wotd-fav-back');
             favButtons.forEach((btn) => {
               btn.classList.toggle('is-active', isWotdFav);
@@ -2003,11 +1935,6 @@
                 renderCategorySelectorScreen();
                 return;
               }
-              if (nextMode === 'pairs') {
-                try {
-                  await AdService.showRoundFinishInterstitial();
-                } catch (e) {}
-              }
               window._showHubScreen = false;
               if (nextMode === 'cards') {
                 window._explicitCardsOpened = true;
@@ -2111,9 +2038,6 @@
             playFanfareSound();
             if (window._favPracticeCompletedNonCardWord) {
               window._favPracticeCompletedNonCardWord = false;
-              try {
-                AdService.showCollectionsExitInterstitial().catch(() => {});
-              } catch (e) {}
             }
             favoritePracticeWords = null;
             favoritePracticeMethod = 'cards';
@@ -2250,19 +2174,9 @@
             }
             if (isFavPracticeActive) {
               favoritePracticeMethod = newMethod;
-              if (newMethod !== 'cards') {
-                try {
-                  AdService.preloadInterstitial().catch(() => {});
-                } catch (e) {}
-              }
             } else {
               userSettings.preferredMethod = newMethod;
               saveUserSettings(userSettings);
-              if (newMethod === 'quiz') {
-                try {
-                  AdService.preloadInterstitial().catch(() => {});
-                } catch (e) {}
-              }
             }
             currentWordIndex = 0;
             renderTrainingTab();
@@ -2502,9 +2416,6 @@
             tabHistory.push(tabName);
           }
         }
-        // Interstitial strictly upon EXITING Collection practice after completing at least 1 word in non-Cards mode,
-        // NEVER when entering Collections, NEVER when entering Stats (where Banner is shown), and NEVER without practicing a non-Cards word.
-        // Capped at: max 2 times per day, not more than once per hour.
         const isFavPracticeActiveOnTabSwitch = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
         if (
           ((activeTab === 'favorites' && tabName && tabName !== 'favorites') ||
@@ -2512,20 +2423,6 @@
           window._favPracticeCompletedNonCardWord
         ) {
           window._favPracticeCompletedNonCardWord = false;
-          if (tabName !== 'stats') {
-            try {
-              AdService.showCollectionsExitInterstitial().catch(() => {});
-            } catch (e) {}
-          }
-        }
-        // Interstitial upon early exit from Quiz, Pairs, or Test in training round
-        // (Never for Cards, Never when entering Stats where Banner is shown, 60m cooldown, unlimited daily frequency)
-        if (activeTab === 'training' && !window._showHubScreen && !isFavPracticeActiveOnTabSwitch && !window._activePracticeCollectionId && tabName !== 'training' && tabName !== 'stats') {
-          if (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
-            try {
-              AdService.showTrainingEarlyExitInterstitial().catch(() => {});
-            } catch (e) {}
-          }
         }
         if (activeTab === 'favorites' && tabName === 'training') {
           favoritePracticeWords = null;
@@ -2956,6 +2853,9 @@
         window.addEventListener('myduo:lang_changed', () => {
           const activeLang = getInterfaceLanguage();
           userSettings.interfaceLang = activeLang;
+          if (window._activePracticeCollectionId && typeof getCollectionTitle === 'function') {
+            window._activePracticeCollectionTitle = getCollectionTitle(window._activePracticeCollectionId);
+          }
           if (allWords && Array.isArray(allWords)) {
             allWords.forEach((w) => {
               if (w) {
@@ -2986,17 +2886,35 @@
                 tabEl.title = t(key);
               }
             });
+            const challengeBtn = drawer.querySelector('#drawer-challenge-btn');
+            if (challengeBtn) {
+              const textEl = challengeBtn.querySelector('.drawer-item-text');
+              const challengeLabel = t('challenge_menu_item') || 'Challenge';
+              if (textEl) textEl.textContent = challengeLabel;
+              challengeBtn.title = challengeLabel;
+            }
+            const shareBtn = drawer.querySelector('#drawer-share-btn');
+            if (shareBtn) {
+              const textEl = shareBtn.querySelector('.drawer-item-text');
+              if (textEl) textEl.textContent = t('share_title');
+              shareBtn.title = t('share_title');
+            }
             const feedbackBtn = drawer.querySelector('#drawer-feedback-btn');
             if (feedbackBtn) {
-              feedbackBtn.innerHTML = `
-                <span class="drawer-feedback-icon">💡</span>
-                <span class="drawer-feedback-title">${t('feedback_title')}</span>
-              `;
+              const titleEl = feedbackBtn.querySelector('.drawer-feedback-title');
+              if (titleEl) {
+                titleEl.textContent = t('feedback_title');
+              } else {
+                feedbackBtn.innerHTML = `
+                  <span class="drawer-feedback-icon">💡</span>
+                  <span class="drawer-feedback-title">${t('feedback_title')}</span>
+                `;
+              }
             }
 
             const closeBtn = drawer.querySelector('#drawer-close-btn');
             if (closeBtn) {
-              closeBtn.ariaLabel = t('word_notes_close') || 'Close';
+              closeBtn.ariaLabel = t('modal_close') || t('word_notes_close') || 'Close';
             }
           }
           updateHeaderUser();
@@ -3010,18 +2928,7 @@
             if (tabName === 'training') {
               const isFavPracticeActiveOnTrainingClick = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               if (isFavPracticeActiveOnTrainingClick || window._activePracticeCollectionId) {
-                if (window._favPracticeCompletedNonCardWord) {
-                  window._favPracticeCompletedNonCardWord = false;
-                  try {
-                    AdService.showCollectionsExitInterstitial().catch(() => {});
-                  } catch (e) {}
-                }
-              } else if (activeTab === 'training' && !window._showHubScreen) {
-                if (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
-                  try {
-                    AdService.showTrainingEarlyExitInterstitial().catch(() => {});
-                  } catch (e) {}
-                }
+                window._favPracticeCompletedNonCardWord = false;
               }
               favoritePracticeWords = null;
               window._showHubScreen = true;
@@ -3042,16 +2949,7 @@
             try {
               const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               if (activeTab === 'favorites' || isFavPracticeRunning || window._activePracticeCollectionId) {
-                if (window._favPracticeCompletedNonCardWord) {
-                  window._favPracticeCompletedNonCardWord = false;
-                  try {
-                    AdService.showCollectionsExitInterstitial().catch(() => {});
-                  } catch (e) {}
-                }
-              } else if (activeTab === 'training' && !window._showHubScreen && (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input')) {
-                try {
-                  AdService.showTrainingEarlyExitInterstitial().catch(() => {});
-                } catch (e) {}
+                window._favPracticeCompletedNonCardWord = false;
               }
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';
@@ -3248,16 +3146,7 @@
             const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
             if (activeTab === 'training' && (!window._showHubScreen || isFavPracticeRunning)) {
               if (isFavPracticeRunning || window._activePracticeCollectionId) {
-                if (window._favPracticeCompletedNonCardWord) {
-                  window._favPracticeCompletedNonCardWord = false;
-                  try {
-                    AdService.showCollectionsExitInterstitial().catch(() => {});
-                  } catch (e) {}
-                }
-              } else if (currentTrainingMethod === 'cards' || currentTrainingMethod === 'quiz' || currentTrainingMethod === 'pairs' || currentTrainingMethod === 'input') {
-                try {
-                  AdService.showTrainingEarlyExitInterstitial().catch(() => {});
-                } catch (e) {}
+                window._favPracticeCompletedNonCardWord = false;
               }
               favoritePracticeWords = null;
               favoritePracticeMethod = 'cards';

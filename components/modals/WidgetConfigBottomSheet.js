@@ -203,7 +203,7 @@ export function openWidgetConfigBottomSheet() {
           } catch (e) {}
         }
       } else {
-        alert('Зажмите свободное место на рабочем столе и выберите «Виджеты» → English Breakfast.');
+        alert(t('widget_install_fallback_alert') || 'Зажмите свободное место на рабочем столе и выберите «Виджеты» → English Breakfast.');
       }
       closeSheet();
     });

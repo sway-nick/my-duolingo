@@ -122,10 +122,13 @@ function renderPodiumCard(player, rank, period = 'week') {
 
   const rawAvatar = player.avatar || '';
   const avatarSrc = sanitizeAvatarUrl(rawAvatar);
-  const rawPlayerName = (player && player.name != null) ? String(player.name) : t('lead_student_default');
+  const isMe = !!player.isCurrentUser;
+  const isLegacyGuestName = player && typeof player.name === 'string' && /^(Р’С‹ \(Р“РѕСЃС‚СЊ\)|Р“РѕСЃС‚СЊ|Вы \(Гость\)|Гость)$/.test(player.name.trim());
+  const rawPlayerName = (isMe && isLegacyGuestName)
+    ? (t('lead_guest_name') || 'Guest')
+    : ((player && player.name != null) ? String(player.name) : t('lead_student_default'));
   const playerName = escapeHtml(rawPlayerName);
   const initial = escapeHtml(rawPlayerName.trim().charAt(0).toUpperCase() || '👤');
-  const isMe = !!player.isCurrentUser;
 
   return `
     <div class="podium-card ${rankClass} ${isMe ? 'is-me' : ''}">
@@ -275,7 +278,10 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
             const rank = idx + 5;
             const isMe = p.isCurrentUser;
             const avatarSrc = sanitizeAvatarUrl(p.avatar || '');
-            const rawPName = (p && p.name != null) ? String(p.name) : t('lead_student_default');
+            const isLegacyGuestName = p && typeof p.name === 'string' && /^(Р’С‹ \(Р“РѕСЃС‚СЊ\)|Р“РѕСЃС‚СЊ|Вы \(Гость\)|Гость)$/.test(p.name.trim());
+            const rawPName = (isMe && isLegacyGuestName)
+              ? (t('lead_guest_name') || 'Guest')
+              : ((p && p.name != null) ? String(p.name) : t('lead_student_default'));
             const pName = escapeHtml(rawPName);
             const initial = escapeHtml(rawPName.trim().charAt(0).toUpperCase() || '👤');
 
@@ -402,8 +408,8 @@ async function renderLeaderboardView(containerSelector = '#app-content', options
         <div class="leaderboard-top-row">
           <div class="custom-dropdown" id="leaderboard-type-dropdown">
             <button type="button" class="leaderboard-header-chip leaderboard-dropdown-chip" id="leaderboard-type-trigger" aria-haspopup="listbox" aria-expanded="false">
-              <span id="leaderboard-type-label" style="white-space: nowrap; text-align: left; overflow: hidden; text-overflow: ellipsis;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
-              <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-left: 6px; transition: transform 0.2s ease;">▼</span>
+              <span id="leaderboard-type-label" style="white-space: nowrap; text-align: start; overflow: hidden; text-overflow: ellipsis;">${currentPeriod === 'all' ? '🌎 ' + t('lead_all_time') : t('lead_title')}</span>
+              <span class="dropdown-arrow" style="font-size: 9px; flex-shrink: 0; margin-inline-start: 6px; transition: transform 0.2s ease;">▼</span>
             </button>
             <div class="custom-dropdown-menu" id="leaderboard-type-menu" role="listbox" style="z-index: 130; width: 100%; min-width: 190px;">
               <div class="dropdown-item ${currentPeriod === 'week' ? 'selected' : ''}" data-value="week" style="white-space: nowrap;">${t('lead_title')}</div>

@@ -81,6 +81,9 @@ class ProServiceImpl {
         if (typeof window.setAnalyticsUserProperty === 'function') {
           window.setAnalyticsUserProperty('is_pro', isProActive() ? 'true' : 'false');
         }
+        if (typeof window.syncProToLeaderboard === 'function') {
+          window.syncProToLeaderboard();
+        }
       } catch (_) {}
     });
   }
@@ -267,7 +270,7 @@ class ProServiceImpl {
       const res = await Billing.purchase(params);
       if (!res || res.status === 'cancelled') {
         if (typeof window !== 'undefined' && window.trackEvent) {
-          window.trackEvent('pro_purchase_cancelled');
+          window.trackEvent('pro_purchase_cancelled', { code: res?.responseCode ?? 1 });
         }
         return { status: 'cancelled' };
       }
@@ -276,6 +279,15 @@ class ProServiceImpl {
           window.trackEvent('pro_purchase_pending');
         }
         return { status: 'pending' };
+      }
+      if (res.status === 'already_owned') {
+        const reval = await this.revalidate();
+        if (reval) {
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('pro_purchase_success', { restored_existing: true });
+          }
+          return { status: 'purchased' };
+        }
       }
       if (res.status === 'purchased') {
         await this._grantFromPlayPurchase({
@@ -290,15 +302,25 @@ class ProServiceImpl {
         return { status: 'purchased' };
       }
       if (typeof window !== 'undefined' && window.trackEvent) {
-        window.trackEvent('pro_purchase_error');
+        window.trackEvent('pro_purchase_error', {
+          code: res?.responseCode ?? -1,
+          reason: String(res?.debugMessage || 'unknown_error').slice(0, 100),
+        });
       }
-      return { status: 'error' };
+      return {
+        status: 'error',
+        responseCode: res?.responseCode ?? -1,
+        debugMessage: res?.debugMessage,
+      };
     } catch (err) {
       console.warn('ProService purchase failed:', err);
       if (typeof window !== 'undefined' && window.trackEvent) {
-        window.trackEvent('pro_purchase_error');
+        window.trackEvent('pro_purchase_error', {
+          code: -1,
+          reason: String(err?.message || err || 'exception').slice(0, 100),
+        });
       }
-      return { status: 'error' };
+      return { status: 'error', responseCode: -1, debugMessage: String(err?.message || err) };
     }
   }
 

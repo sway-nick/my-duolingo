@@ -45,7 +45,7 @@ export function openPrivacyModal() {
       const items = section.bullets.map(b => 
         `<li style="margin-bottom: 6px;"><strong style="color: var(--text-main);">${b.bold}</strong> ${b.text}</li>`
       ).join('');
-      bulletsHtml = `<ul style="margin: 0 0 16px; padding-left: 20px; color: var(--text-muted);">${items}</ul>`;
+      bulletsHtml = `<ul style="margin: 0 0 16px; padding-inline-start: 20px; padding-inline-end: 0; color: var(--text-muted);">${items}</ul>`;
     }
 
     let contactHtml = '';

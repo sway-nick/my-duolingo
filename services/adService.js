@@ -100,6 +100,9 @@ class AdServiceImpl {
   }
 
   canShowHourlyInterstitial() {
+    if (this.interstitialsDisabled) {
+      return false;
+    }
     if (isProActive()) {
       return false;
     }
@@ -128,6 +131,9 @@ class AdServiceImpl {
   }
 
   canShowDailyInterstitial() {
+    if (this.interstitialsDisabled) {
+      return false;
+    }
     return this.canShowHourlyInterstitial();
   }
 
@@ -166,6 +172,7 @@ class AdServiceImpl {
   }
 
   constructor() {
+    this.interstitialsDisabled = true; // Interstitial ads permanently removed from all blocks for all players
     this.initialized = false;
     this.maxShieldsPerRound = Infinity;
     this.shieldsUsedInRound = 0;
@@ -354,7 +361,7 @@ class AdServiceImpl {
    * Preload Interstitial Ad in background so it displays with 0ms delay when a round finishes
    */
   async preloadInterstitial() {
-    if (!this.canShowDailyInterstitial()) return false;
+    if (this.interstitialsDisabled || !this.canShowDailyInterstitial()) return false;
     if (this.isPreparingInterstitial || this.isInterstitialPrepared) return false;
     const AdMob = this.getNativeAdMob();
     if (!AdMob || !this.isNative() || !this.isOnline()) return false;
@@ -971,7 +978,7 @@ class AdServiceImpl {
    * Displays with 0ms delay if preloaded, and queues next preload in background
    */
   async showRoundFinishInterstitial() {
-    if (!this.canShowDailyInterstitial()) {
+    if (this.interstitialsDisabled || !this.canShowDailyInterstitial()) {
       return false;
     }
     this.roundsCompletedSinceLastAd++;
@@ -1048,7 +1055,7 @@ class AdServiceImpl {
    * 2. Unlimited daily frequency (no arbitrary daily cap).
    */
   async showCollectionsExitInterstitial() {
-    if (!this.canShowDailyInterstitial()) {
+    if (this.interstitialsDisabled || !this.canShowDailyInterstitial()) {
       return false;
     }
     if (!this.isOnline()) return false;
@@ -1142,7 +1149,7 @@ class AdServiceImpl {
    * 3. Unlimited daily frequency (no daily cap).
    */
   async showTrainingEarlyExitInterstitial() {
-    if (!this.canShowDailyInterstitial()) {
+    if (this.interstitialsDisabled || !this.canShowDailyInterstitial()) {
       return false;
     }
     if (!this.isOnline()) return false;
@@ -1219,7 +1226,7 @@ class AdServiceImpl {
    * Protected with a 60-second cooldown so it never spams or causes accidental clicks.
    */
   async showTransitionInterstitial(minCooldownSeconds = 60) {
-    if (!this.canShowDailyInterstitial()) {
+    if (this.interstitialsDisabled || !this.canShowDailyInterstitial()) {
       return false;
     }
     if (!this.isOnline()) return false;

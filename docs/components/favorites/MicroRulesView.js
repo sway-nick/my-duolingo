@@ -24,7 +24,10 @@ const STORAGE_KEY_DONE = 'myduo_microrules_done';
 const STORAGE_KEY_UNLOCKED = 'myduo_microrules_unlocked';
 const STORAGE_KEY_QUIZ_DONE = 'myduo_microrules_quiz_done';
 const STORAGE_KEY_CARD_IDX = 'myduo_microrules_card_idx';
+const STORAGE_KEY_LEVEL = 'myduo_microrules_level';
 const RTL_LOCALES = new Set(['ar', 'fa', 'ur']);
+const PAGE_SIZE = 10;
+const levels = ['A1', 'A2', 'B1', 'B2'];
 
 let cachedDataMod = null;
 
@@ -89,6 +92,22 @@ function loadSavedCardIndex() {
 function saveCardIndex(idx) {
   try {
     localStorage.setItem(STORAGE_KEY_CARD_IDX, String(idx));
+  } catch (_) {}
+}
+
+function loadSavedLevel() {
+  try {
+    const val = localStorage.getItem(STORAGE_KEY_LEVEL);
+    if (val && levels.includes(val)) return val;
+  } catch (_) {}
+  return 'A1';
+}
+
+function saveLevel(lvl) {
+  try {
+    if (levels.includes(lvl)) {
+      localStorage.setItem(STORAGE_KEY_LEVEL, lvl);
+    }
   } catch (_) {}
 }
 
@@ -643,6 +662,67 @@ function getStylesHtml() {
         color: var(--text-main);
         font-weight: 600;
       }
+      .mr-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 18px;
+        margin-bottom: 6px;
+        flex-wrap: wrap;
+      }
+      .mr-page-btn {
+        min-width: 38px;
+        height: 38px;
+        padding: 0 10px;
+        border-radius: 11px;
+        border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25));
+        background: var(--card-bg, rgba(30, 41, 59, 0.85));
+        color: var(--text-main);
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
+      }
+      .mr-page-btn:active:not(:disabled) {
+        transform: scale(0.96);
+      }
+      .mr-page-btn:hover:not(:disabled) {
+        border-color: var(--mr-accent);
+      }
+      .mr-page-btn.is-active {
+        background: var(--mr-accent);
+        border-color: var(--mr-accent);
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(194, 65, 12, 0.35);
+      }
+      body.dark-theme .mr-page-btn.is-active,
+      .dark-theme .mr-page-btn.is-active,
+      [data-theme="dark"] .mr-page-btn.is-active {
+        color: #0f172a;
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+      }
+      .mr-page-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+      .mr-page-btn.mr-page-nav {
+        font-size: 18px;
+        font-weight: 800;
+        padding: 0 12px;
+      }
+      .mr-page-info {
+        text-align: center;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-top: 6px;
+        font-variant-numeric: tabular-nums;
+      }
     </style>
   `;
 }
@@ -721,8 +801,8 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
 
   const { MICRO_RULES, getLocalizedMicroRule, getTopicTitle } = cachedDataMod;
 
-  let activeLevel = 'all';
-  let pageLimit = 30;
+  let activeLevel = loadSavedLevel();
+  let currentPage = 1;
   const doneSet = loadDoneSet();
   const unlockedSet = loadUnlockedSet();
   const quizDoneSet = loadQuizDoneSet();
@@ -751,7 +831,6 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   }
 
   function getFilteredRules() {
-    if (activeLevel === 'all') return MICRO_RULES;
     return MICRO_RULES.filter((item) => item.level === activeLevel);
   }
 
@@ -1076,6 +1155,25 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     }
   }
 
+  function scrollToTop() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    const targetEl = container.querySelector('.mr-controls') || container.querySelector('.mr-topbar');
+    if (!targetEl || typeof targetEl.getBoundingClientRect !== 'function') return;
+    const headerEl = document.querySelector('.mobile-header');
+    const safeTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0;
+    const headerBottom = headerEl && typeof headerEl.getBoundingClientRect === 'function'
+      ? Math.max(headerEl.getBoundingClientRect().bottom, headerEl.getBoundingClientRect().height + safeTop)
+      : (60 + safeTop);
+    const targetTop = Math.max(0, window.scrollY + targetEl.getBoundingClientRect().top - headerBottom - 8);
+    if (typeof window.scrollTo === 'function') {
+      try {
+        window.scrollTo({ top: targetTop, behavior: 'smooth' });
+      } catch (_) {
+        window.scrollTo(0, targetTop);
+      }
+    }
+  }
+
   function updateDynamicContent() {
     const bodyEl = container.querySelector('#mr-dynamic-body');
     if (!bodyEl) return;
@@ -1086,34 +1184,85 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       return;
     }
 
-    const shown = filtered.slice(0, pageLimit);
-    const remaining = filtered.length - shown.length;
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = Math.min(startIndex + PAGE_SIZE, filtered.length);
+    const shown = filtered.slice(startIndex, endIndex);
+
     const isProNow = isProActive();
     let lockedCounter = 0;
+    for (let i = 0; i < startIndex; i++) {
+      const item = filtered[i];
+      if (!isProNow && !unlockedSet.has(item.id)) {
+        lockedCounter++;
+      }
+    }
+
     const cardsHtml = shown.map((item) => {
       const isItemUnlocked = isProNow || unlockedSet.has(item.id);
       const rank = isItemUnlocked ? 0 : lockedCounter++;
       return renderRuleCardHtml(item, rank);
     }).join('');
+
+    const pageButtons = [];
+    for (let p = 1; p <= totalPages; p++) {
+      pageButtons.push(`
+        <button
+          type="button"
+          class="mr-page-btn ${p === currentPage ? 'is-active' : ''}"
+          data-mr-page="${p}"
+          aria-label="Page ${p}"
+          aria-current="${p === currentPage ? 'page' : 'false'}"
+        >${p}</button>
+      `);
+    }
+
+    const paginationHtml = totalPages > 1 ? `
+      <div class="mr-pagination">
+        <button
+          type="button"
+          class="mr-page-btn mr-page-nav"
+          data-mr-page="${currentPage - 1}"
+          ${currentPage <= 1 ? 'disabled' : ''}
+          aria-label="${escapeHtml(s.prevBtn || 'Previous')}"
+        >‹</button>
+        ${pageButtons.join('')}
+        <button
+          type="button"
+          class="mr-page-btn mr-page-nav"
+          data-mr-page="${currentPage + 1}"
+          ${currentPage >= totalPages ? 'disabled' : ''}
+          aria-label="${escapeHtml(s.nextBtn || 'Next')}"
+        >›</button>
+      </div>
+      <div class="mr-page-info">
+        ${startIndex + 1}–${endIndex} / ${filtered.length}
+      </div>
+    ` : '';
+
     bodyEl.innerHTML = `
       <div class="mr-list">
         ${cardsHtml}
-        ${remaining > 0 ? `
-          <button type="button" class="mr-more-btn" id="mr-show-more-btn">
-            ${escapeHtml(String(s.showMoreBtn || 'Show more ({count})').replace('{count}', String(remaining)))}
-          </button>
-        ` : ''}
       </div>
+      ${paginationHtml}
     `;
     bindCardListeners(bodyEl);
 
-    bodyEl.querySelector('#mr-show-more-btn')?.addEventListener('click', () => {
-      pageLimit += 40;
-      updateDynamicContent();
+    bodyEl.querySelectorAll('[data-mr-page]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const targetPage = Number(btn.getAttribute('data-mr-page'));
+        if (!targetPage || targetPage === currentPage || targetPage < 1 || targetPage > totalPages) return;
+        currentPage = targetPage;
+        updateDynamicContent();
+        scrollToTop();
+      });
     });
   }
 
-  const levels = ['all', 'A1', 'A2', 'B1', 'B2'];
   const progressText = String(s.progressLabel || '{done} / {total}')
     .replace('{done}', String(doneSet.size))
     .replace('{total}', String(MICRO_RULES.length));
@@ -1134,7 +1283,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         <div class="mr-levels">
           ${levels.map((lv) => `
             <button type="button" class="mr-level-btn ${lv === activeLevel ? 'is-active' : ''}" data-mr-level="${lv}">
-              ${escapeHtml(lv === 'all' ? (s.filterAll || 'Все') : lv)}
+              ${escapeHtml(lv)}
             </button>
           `).join('')}
         </div>
@@ -1151,12 +1300,16 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
 
   container.querySelectorAll('[data-mr-level]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      activeLevel = btn.getAttribute('data-mr-level') || 'all';
-      pageLimit = 30;
+      const newLevel = btn.getAttribute('data-mr-level') || 'A1';
+      if (newLevel === activeLevel) return;
+      activeLevel = newLevel;
+      saveLevel(activeLevel);
+      currentPage = 1;
       container.querySelectorAll('[data-mr-level]').forEach((b) =>
         b.classList.toggle('is-active', b === btn)
       );
       updateDynamicContent();
+      scrollToTop();
     });
   });
 

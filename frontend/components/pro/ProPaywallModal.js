@@ -163,6 +163,11 @@ export function showProPaywall({ reason = 'settings', wordsNeeded = 0 } = {}) {
         }
         if (res.status === 'pending') {
           showStatus(s.pro_pending, false);
+          return;
+        }
+        if (res.status === 'error') {
+          showStatus(s.pro_restore_none, false);
+          return;
         }
       } finally {
         if (!closed && buyBtn.isConnected) {
