@@ -120,6 +120,7 @@ async function run() {
   let updatedCount = 0;
   let newlyAddedCount = 0;
   const finalWords = [];
+  const seenObjects = new Set();
 
   for (let r = 1; r < rows.length; r++) {
     const row = rows[r];
@@ -130,6 +131,7 @@ async function run() {
     const cleanWordKey = rawWord.toLowerCase();
 
     let targetWordObj = (rawId ? wordMap.get('id:' + rawId) : null) || wordMap.get('word:' + cleanWordKey);
+    const isExisting = Boolean(targetWordObj);
 
     if (!targetWordObj) {
       targetWordObj = {
@@ -151,15 +153,18 @@ async function run() {
     if (!targetWordObj.all_notes) targetWordObj.all_notes = {};
 
     let hasChange = false;
-    if (rawWord && targetWordObj.word !== rawWord) {
+    if (!isExisting && rawWord && targetWordObj.word !== rawWord) {
       targetWordObj.word = rawWord;
       hasChange = true;
     }
+    // Non-destructive sync: only fill missing translations/notes from Google Sheets,
+    // never overwrite curated local entries in words.json (ar, ko, IT, Idioms, etc.).
     TARGET_LANGS.forEach(lang => {
       const idx = colIndices[lang];
       if (idx !== undefined && row[idx]) {
         const val = String(row[idx]).trim();
-        if (val && targetWordObj.translations[lang] !== val) {
+        const existingTr = String(targetWordObj.translations[lang] || '').trim();
+        if (val && !existingTr) {
           targetWordObj.translations[lang] = val;
           hasChange = true;
         }
@@ -167,8 +172,10 @@ async function run() {
       const nIdx = notesColIndices[lang];
       if (nIdx !== undefined && row[nIdx]) {
         const nVal = String(row[nIdx]).trim();
-        if (nVal && targetWordObj.all_notes[lang] !== nVal) {
+        const existingNote = String(targetWordObj.all_notes[lang] || '').trim();
+        if (nVal && !existingNote) {
           targetWordObj.all_notes[lang] = nVal;
+          hasChange = true;
         }
       }
     });
@@ -183,8 +190,22 @@ async function run() {
     }
 
     if (hasChange) updatedCount++;
-    finalWords.push(targetWordObj);
+    if (!seenObjects.has(targetWordObj)) {
+      seenObjects.add(targetWordObj);
+      finalWords.push(targetWordObj);
+    }
   }
+
+  // Preserve all local-only words (e.g., IT, Idioms, curated additions) not present in Google Sheets
+  let preservedLocalOnly = 0;
+  for (const w of existingWords) {
+    if (!seenObjects.has(w)) {
+      seenObjects.add(w);
+      finalWords.push(w);
+      preservedLocalOnly++;
+    }
+  }
+  console.log(`   - Preserved local-only words: ${preservedLocalOnly}`);
 
   console.log(`📊 Result:`);
   console.log(`   - Existing words updated: ${updatedCount}`);
