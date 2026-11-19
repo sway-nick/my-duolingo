@@ -1,9 +1,15 @@
 import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
+import { isProActive } from './proState.js?v=386.0';
 
 const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
 const STORAGE_KEY_ACTIVE_COLLECTION = 'myduo_active_collection_id';
 const STORAGE_KEY_BUILTIN_OVERRIDES = 'myduo_builtin_collections_overrides';
+export const IDIOMS_UNLOCK_STEP = 10;
+export const PARTIAL_UNLOCK_COLLECTIONS = {
+  idioms: { storageKey: 'myduo_idioms_unlocked_count', step: 10 },
+  phrasal_verbs: { storageKey: 'myduo_phrasal_verbs_unlocked_count', step: 20 },
+};
 
 export const BUILTIN_COLLECTIONS_WITH_GEAR = new Set([
   'colors',
@@ -27,8 +33,53 @@ export const DOWNLOADABLE_PACK_COLLECTIONS = new Set([
   'idioms',
 ]);
 
+export function getCollectionUnlockStep(collectionId) {
+  return PARTIAL_UNLOCK_COLLECTIONS[collectionId]?.step || 0;
+}
+
+export function getCollectionUnlockedCount(collectionId) {
+  const cfg = PARTIAL_UNLOCK_COLLECTIONS[collectionId];
+  if (!cfg || isProActive()) return Infinity;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = parseInt(localStorage.getItem(cfg.storageKey) || '0', 10);
+      if (Number.isFinite(raw) && raw > 0) return raw;
+    }
+  } catch (e) {}
+  return 0;
+}
+
+export function unlockMoreCollectionItems(collectionId, step) {
+  const cfg = PARTIAL_UNLOCK_COLLECTIONS[collectionId];
+  if (!cfg) return Infinity;
+  const current = getCollectionUnlockedCount(collectionId);
+  if (!Number.isFinite(current)) return current;
+  const next = current + Math.max(1, Number(step) || cfg.step);
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(cfg.storageKey, String(next));
+    }
+  } catch (e) {}
+  return next;
+}
+
+export function getIdiomsUnlockedCount() {
+  return getCollectionUnlockedCount('idioms');
+}
+
+export function unlockMoreIdioms(step = IDIOMS_UNLOCK_STEP) {
+  return unlockMoreCollectionItems('idioms', step);
+}
+
 export function isCollectionPackDownloaded(collectionId) {
+  if (collectionId === 'it_terms') {
+    return isProActive();
+  }
   if (!DOWNLOADABLE_PACK_COLLECTIONS.has(collectionId)) return true;
+  if (isProActive()) return true;
+  if (PARTIAL_UNLOCK_COLLECTIONS[collectionId]) {
+    return getCollectionUnlockedCount(collectionId) > 0;
+  }
   try {
     if (typeof localStorage !== 'undefined') {
       return localStorage.getItem(`myduo_pack_downloaded_${collectionId}`) === 'true';
@@ -38,6 +89,12 @@ export function isCollectionPackDownloaded(collectionId) {
 }
 
 export function markCollectionPackDownloaded(collectionId) {
+  if (PARTIAL_UNLOCK_COLLECTIONS[collectionId]) {
+    if (getCollectionUnlockedCount(collectionId) <= 0) {
+      unlockMoreCollectionItems(collectionId);
+    }
+    return;
+  }
   try {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(`myduo_pack_downloaded_${collectionId}`, 'true');
@@ -49,7 +106,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   ru: {
     downloadBtn: 'Скачать',
     downloading: 'Скачивание...',
-    itDesc: '187 ключевых IT-терминов с понятными объяснениями и озвучкой произношения.',
+    itDesc: '200 ключевых IT-терминов с понятными объяснениями и озвучкой произношения.',
     idiomsDesc: '150 популярных английских идиом и поговорок с объяснением смысла и озвучкой.',
     verbsDesc: '100 самых популярных английских глаголов для повседневного общения с переводом и озвучкой.',
     adjectivesDesc: '100 базовых и выразительных прилагательных для точного описания с переводом и озвучкой.',
@@ -59,7 +116,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   uk: {
     downloadBtn: 'Завантажити',
     downloading: 'Завантаження...',
-    itDesc: '187 ключових IT-термінів із зрозумілими поясненнями та озвученням вимови.',
+    itDesc: '200 ключових IT-термінів із зрозумілими поясненнями та озвученням вимови.',
     idiomsDesc: '150 популярних англійських ідіом та приказок із поясненням змісту та озвученням.',
     verbsDesc: '100 найпопулярніших англійських дієслів для щоденного спілкування з перекладом та озвученням.',
     adjectivesDesc: '100 базових і виразних прикметників для точного опису з перекладом та озвученням.',
@@ -69,7 +126,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   en: {
     downloadBtn: 'Download',
     downloading: 'Downloading...',
-    itDesc: '187 essential IT terms with clear explanations and audio pronunciation.',
+    itDesc: '200 essential IT terms with clear explanations and audio pronunciation.',
     idiomsDesc: '150 popular English idioms and proverbs with meaning explanations and audio.',
     verbsDesc: '100 most popular English verbs for everyday communication with translations and audio.',
     adjectivesDesc: '100 essential and expressive adjectives for vivid descriptions with translations and audio.',
@@ -79,7 +136,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   de: {
     downloadBtn: 'Herunterladen',
     downloading: 'Wird heruntergeladen...',
-    itDesc: '187 wichtige IT-Begriffe mit klaren Erklärungen und Audio-Aussprache.',
+    itDesc: '200 wichtige IT-Begriffe mit klaren Erklärungen und Audio-Aussprache.',
     idiomsDesc: '150 beliebte englische Redewendungen und Sprichwörter mit Bedeutungserklärungen.',
     verbsDesc: 'Die 100 beliebtesten englischen Verben für den Alltag mit Übersetzung und Audio.',
     adjectivesDesc: '100 grundlegende und ausdrucksstarke Adjektive mit Übersetzung und Audio.',
@@ -89,7 +146,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   es: {
     downloadBtn: 'Descargar',
     downloading: 'Descargando...',
-    itDesc: '187 términos clave de TI con explicaciones claras y pronunciación en audio.',
+    itDesc: '200 términos clave de TI con explicaciones claras y pronunciación en audio.',
     idiomsDesc: '150 modismos y proverbios populares en inglés con explicación de su significado.',
     verbsDesc: 'Los 100 verbos más populares del inglés para el día a día con traducción y audio.',
     adjectivesDesc: '100 adjetivos esenciales y expresivos para describir con precisión, con traducción y audio.',
@@ -99,7 +156,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   'es-mx': {
     downloadBtn: 'Descargar',
     downloading: 'Descargando...',
-    itDesc: '187 términos clave de TI con explicaciones claras y pronunciación en audio.',
+    itDesc: '200 términos clave de TI con explicaciones claras y pronunciación en audio.',
     idiomsDesc: '150 modismos y proverbios populares en inglés con explicación de su significado.',
     verbsDesc: 'Los 100 verbos más populares del inglés para el día a día con traducción y audio.',
     adjectivesDesc: '100 adjetivos esenciales y expresivos para describir con precisión, con traducción y audio.',
@@ -109,7 +166,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   fr: {
     downloadBtn: 'Télécharger',
     downloading: 'Téléchargement...',
-    itDesc: '187 termes IT essentiels avec des explications claires et la prononciation audio.',
+    itDesc: '200 termes IT essentiels avec des explications claires et la prononciation audio.',
     idiomsDesc: '150 expressions idiomatiques et proverbes anglais populaires avec explications.',
     verbsDesc: 'Les 100 verbes anglais les plus courants pour le quotidien avec traduction et audio.',
     adjectivesDesc: '100 adjectifs essentiels et expressifs pour des descriptions précises avec traduction et audio.',
@@ -119,7 +176,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   pl: {
     downloadBtn: 'Pobierz',
     downloading: 'Pobieranie...',
-    itDesc: '187 kluczowych terminów IT z przystępnymi wyjaśnieniami i wymową audio.',
+    itDesc: '200 kluczowych terminów IT z przystępnymi wyjaśnieniami i wymową audio.',
     idiomsDesc: '150 popularnych angielskich idiomów i przysłów z wyjaśnieniem znaczenia.',
     verbsDesc: '100 najpopularniejszych angielskich czasowników na co dzień z tłumaczeniem i lektorem.',
     adjectivesDesc: '100 podstawowych i wyrazistych przymiotników do trafnych opisów z tłumaczeniem i lektorem.',
@@ -129,7 +186,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   tr: {
     downloadBtn: 'İndir',
     downloading: 'İndiriliyor...',
-    itDesc: 'Açık açıklamalar ve sesli telaffuz ile 187 temel bilişim (IT) terimi.',
+    itDesc: 'Açık açıklamalar ve sesli telaffuz ile 200 temel bilişim (IT) terimi.',
     idiomsDesc: 'Anlam açıklamaları ve seslendirmeyle 150 popüler İngilizce deyim ve atasözü.',
     verbsDesc: 'Günlük iletişim için çeviri ve seslendirmeyle en popüler 100 İngilizce fiil.',
     adjectivesDesc: 'Net betimlemeler için çeviri ve seslendirmeyle 100 temel ve güçlü sıfat.',
@@ -139,7 +196,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   it: {
     downloadBtn: 'Scarica',
     downloading: 'Scaricamento...',
-    itDesc: '187 termini IT essenziali con spiegazioni chiare e pronuncia audio.',
+    itDesc: '200 termini IT essenziali con spiegazioni chiare e pronuncia audio.',
     idiomsDesc: '150 modi di dire e proverbi inglesi popolari con spiegazione del significato.',
     verbsDesc: 'I 100 verbi inglesi più usati nella vita quotidiana con traduzione e audio.',
     adjectivesDesc: '100 aggettivi essenziali ed espressivi per descrivere con precisione, con traduzione e audio.',
@@ -149,7 +206,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   ro: {
     downloadBtn: 'Descarcă',
     downloading: 'Se descarcă...',
-    itDesc: '187 de termeni IT esențiali cu explicații clare și pronunție audio.',
+    itDesc: '200 de termeni IT esențiali cu explicații clare și pronunție audio.',
     idiomsDesc: '150 de expresii idiomatice și proverbe englezești populare cu explicații.',
     verbsDesc: 'Cele mai populare 100 de verbe englezești pentru conversația zilnică, cu traducere și audio.',
     adjectivesDesc: '100 de adjective esențiale și expresive pentru descrieri precise, cu traducere și audio.',
@@ -159,7 +216,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   bg: {
     downloadBtn: 'Изтегли',
     downloading: 'Изтегляне...',
-    itDesc: '187 ключови ИТ термина с ясни обяснения и аудио произношение.',
+    itDesc: '200 ключови ИТ термина с ясни обяснения и аудио произношение.',
     idiomsDesc: '150 популярни английски идиома и поговорки с обяснение на значението.',
     verbsDesc: '100-те най-популярни английски глагола за ежедневно общуване с превод и озвучаване.',
     adjectivesDesc: '100 основни и изразителни прилагателни за точно описание с превод и озвучаване.',
@@ -169,7 +226,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   hu: {
     downloadBtn: 'Letöltés',
     downloading: 'Letöltés...',
-    itDesc: '187 alapvető IT-kifejezés érthető magyarázattal és kiejtéssel.',
+    itDesc: '200 alapvető IT-kifejezés érthető magyarázattal és kiejtéssel.',
     idiomsDesc: '150 népszerű angol szólás és közmondás jelentésmagyarázattal.',
     verbsDesc: 'A 100 legnépszerűbb angol ige a mindennapi kommunikációhoz fordítással és hanggal.',
     adjectivesDesc: '100 alapvető és kifejező melléknév pontos leírásokhoz fordítással és hanggal.',
@@ -179,7 +236,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   el: {
     downloadBtn: 'Λήψη',
     downloading: 'Λήψη...',
-    itDesc: '187 βασικοί όροι πληροφορικής (IT) με σαφείς επεξηγήσεις και ηχητική προφορά.',
+    itDesc: '200 βασικοί όροι πληροφορικής (IT) με σαφείς επεξηγήσεις και ηχητική προφορά.',
     idiomsDesc: '150 δημοφιλείς αγγλικοί ιδιωματισμοί και παροιμίες με επεξήγηση σημασίας.',
     verbsDesc: 'Τα 100 πιο δημοφιλή αγγλικά ρήματα για καθημερινή επικοινωνία με μετάφραση και ήχο.',
     adjectivesDesc: '100 βασικά και εκφραστικά επίθετα για ακριβείς περιγραφές με μετάφραση και ήχο.',
@@ -189,7 +246,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   da: {
     downloadBtn: 'Download',
     downloading: 'Downloader...',
-    itDesc: '187 vigtige IT-begreber med klare forklaringer og lydudtale.',
+    itDesc: '200 vigtige IT-begreber med klare forklaringer og lydudtale.',
     idiomsDesc: '150 populære engelske talemåder og ordsprog med betydningsforklaring.',
     verbsDesc: 'De 100 mest populære engelske verber til hverdagen med oversættelse og lyd.',
     adjectivesDesc: '100 vigtige og udtryksfulde adjektiver til præcise beskrivelser med oversættelse og lyd.',
@@ -199,7 +256,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   lv: {
     downloadBtn: 'Lejupielādēt',
     downloading: 'Lejupielādē...',
-    itDesc: '187 svarīgi IT termini ar skaidriem paskaidrojumiem un audio izrunu.',
+    itDesc: '200 svarīgi IT termini ar skaidriem paskaidrojumiem un audio izrunu.',
     idiomsDesc: '150 populāras angļu valodas idiomas un sakāmvārdi ar nozīmes skaidrojumu.',
     verbsDesc: '100 populārākie angļu darbības vārdi ikdienas saziņai ar tulkojumu un izrunu.',
     adjectivesDesc: '100 būtiski un izteiksmīgi īpašības vārdi precīzam aprakstam ar tulkojumu un izrunu.',
@@ -209,7 +266,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   lt: {
     downloadBtn: 'Atsisiųsti',
     downloading: 'Atsisiunčiama...',
-    itDesc: '187 svarbiausi IT terminai su aiškiais paaiškinimais ir garso tarimu.',
+    itDesc: '200 svarbiausi IT terminai su aiškiais paaiškinimais ir garso tarimu.',
     idiomsDesc: '150 populiarių anglų kalbos idiomų ir patarlių su reikšmės paaiškinimu.',
     verbsDesc: '100 populiariausių anglų veiksmažodžių kasdieniam bendravimui su vertimu ir įgarsinimu.',
     adjectivesDesc: '100 pagrindinių ir išraiškingų būdvardžių tiksliam apibūdinimui su vertimu ir įgarsinimu.',
@@ -219,7 +276,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   pt: {
     downloadBtn: 'Baixar',
     downloading: 'Baixando...',
-    itDesc: '187 termos essenciais de TI com explicações claras e pronúncia em áudio.',
+    itDesc: '200 termos essenciais de TI com explicações claras e pronúncia em áudio.',
     idiomsDesc: '150 expressões idiomáticas e provérbios populares em inglês com explicação.',
     verbsDesc: 'Os 100 verbos ingleses mais populares para o dia a dia com tradução e áudio.',
     adjectivesDesc: '100 adjetivos essenciais e expressivos para descrições precisas com tradução e áudio.',
@@ -229,7 +286,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   'pt-br': {
     downloadBtn: 'Baixar',
     downloading: 'Baixando...',
-    itDesc: '187 termos essenciais de TI com explicações claras e pronúncia em áudio.',
+    itDesc: '200 termos essenciais de TI com explicações claras e pronúncia em áudio.',
     idiomsDesc: '150 expressões idiomáticas e provérbios populares em inglês com explicação.',
     verbsDesc: 'Os 100 verbos em inglês mais populares para o dia a dia com tradução e áudio.',
     adjectivesDesc: '100 adjetivos essenciais e expressivos para descrições precisas com tradução e áudio.',
@@ -239,7 +296,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   sk: {
     downloadBtn: 'Stiahnuť',
     downloading: 'Sťahuje sa...',
-    itDesc: '187 kľúčových IT pojmov so zrozumiteľným vysvetlením a výslovnosťou.',
+    itDesc: '200 kľúčových IT pojmov so zrozumiteľným vysvetlením a výslovnosťou.',
     idiomsDesc: '150 obľúbených anglických idiómov a prísloví s vysvetlením významu.',
     verbsDesc: '100 najobľúbenejších anglických slovies na každý deň s prekladom a zvukom.',
     adjectivesDesc: '100 základných a výstižných prídavných mien na presný opis s prekladom a zvukom.',
@@ -249,7 +306,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   sl: {
     downloadBtn: 'Prenesi',
     downloading: 'Prenašanje...',
-    itDesc: '187 ključnih IT-izrazov z jasnimi razlagami in zvočno izgovorjavo.',
+    itDesc: '200 ključnih IT-izrazov z jasnimi razlagami in zvočno izgovorjavo.',
     idiomsDesc: '150 priljubljenih angleških idiomov in pregovorov z razlago pomena.',
     verbsDesc: '100 najbolj priljubljenih angleških glagolov za vsakdanjo rabo s prevodom in zvokom.',
     adjectivesDesc: '100 osnovnih in izraznih pridevnikov za natančne opise s prevodom in zvokom.',
@@ -259,7 +316,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   fi: {
     downloadBtn: 'Lataa',
     downloading: 'Ladataan...',
-    itDesc: '187 keskeistä IT-termiä selkeillä selityksillä ja ääntämyksellä.',
+    itDesc: '200 keskeistä IT-termiä selkeillä selityksillä ja ääntämyksellä.',
     idiomsDesc: '150 suosittua englannin idiomia ja sananlaskua merkityksen selityksellä.',
     verbsDesc: '100 suosituinta englannin verbiä arkipäivän viestintään käännöksellä ja ääntämyksellä.',
     adjectivesDesc: '100 keskeistä ja ilmeikästä adjektiivia tarkkaan kuvailuun käännöksellä ja ääntämyksellä.',
@@ -269,7 +326,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   hr: {
     downloadBtn: 'Preuzmi',
     downloading: 'Preuzimanje...',
-    itDesc: '187 ključnih IT pojmova s jasnim objašnjenjima i zvučnim izgovorom.',
+    itDesc: '200 ključnih IT pojmova s jasnim objašnjenjima i zvučnim izgovorom.',
     idiomsDesc: '150 popularnih engleskih idioma i poslovica s objašnjenjem značenja.',
     verbsDesc: '100 najpopularnijih engleskih glagola za svakodnevnu komunikaciju s prijevodom i zvukom.',
     adjectivesDesc: '100 osnovnih i izražajnih pridjeva za precizne opise s prijevodom i zvukom.',
@@ -279,7 +336,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   cs: {
     downloadBtn: 'Stáhnout',
     downloading: 'Stahování...',
-    itDesc: '187 klíčových IT pojmů se srozumitelným vysvětlením a výslovností.',
+    itDesc: '200 klíčových IT pojmů se srozumitelným vysvětlením a výslovností.',
     idiomsDesc: '150 oblíbených anglických idiomů a přísloví s vysvětlením významu.',
     verbsDesc: '100 nejoblíbenějších anglických sloves pro každodenní komunikaci s překladem a zvukem.',
     adjectivesDesc: '100 základních a výstižných přídavných jmen pro přesný popis s překladem a zvukem.',
@@ -289,7 +346,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   sv: {
     downloadBtn: 'Ladda ner',
     downloading: 'Laddar ner...',
-    itDesc: '187 viktiga IT-termer med tydliga förklaringar och ljuduttal.',
+    itDesc: '200 viktiga IT-termer med tydliga förklaringar och ljuduttal.',
     idiomsDesc: '150 populära engelska idiom och ordspråk med betydelseförklaring.',
     verbsDesc: 'De 100 mest populära engelska verben för vardagen med översättning och ljud.',
     adjectivesDesc: '100 viktiga och uttrycksfulla adjektiv för träffsäkra beskrivningar med översättning och ljud.',
@@ -299,7 +356,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   et: {
     downloadBtn: 'Laadi alla',
     downloading: 'Allalaadimine...',
-    itDesc: '187 olulist IT-terminit selgete selgituste ja hääldusega.',
+    itDesc: '200 olulist IT-terminit selgete selgituste ja hääldusega.',
     idiomsDesc: '150 populaarset inglise idioomi ja vanasõna tähenduse selgitusega.',
     verbsDesc: '100 populaarseimat inglise tegusõna igapäevaseks suhtluseks koos tõlke ja hääldusega.',
     adjectivesDesc: '100 olulist ja ilmekat omadussõna täpseks kirjeldamiseks koos tõlke ja hääldusega.',
@@ -309,7 +366,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   hi: {
     downloadBtn: 'डाउनलोड करें',
     downloading: 'डाउनलोड हो रहा है...',
-    itDesc: 'आसान व्याख्या और ऑडियो उच्चारण के साथ 187 प्रमुख IT शब्द।',
+    itDesc: 'आसान व्याख्या और ऑडियो उच्चारण के साथ 200 प्रमुख IT शब्द।',
     idiomsDesc: 'अर्थ की व्याख्या और ऑडियो के साथ 150 लोकप्रिय अंग्रेज़ी मुहावरे और कहावतें।',
     verbsDesc: 'रोज़मर्रा की बातचीत के लिए अनुवाद और ऑडियो के साथ 100 सबसे लोकप्रिय अंग्रेज़ी क्रियाएँ।',
     adjectivesDesc: 'सटीक वर्णन के लिए अनुवाद और ऑडियो के साथ 100 आवश्यक और प्रभावशाली विशेषण।',
@@ -329,7 +386,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   ar: {
     downloadBtn: 'تنزيل',
     downloading: 'جارٍ التنزيل...',
-    itDesc: '187 مصطلحاً أساسياً في تقنية المعلومات (IT) مع شرح واضح ونطق صوتي.',
+    itDesc: '200 مصطلح أساسي في تقنية المعلومات (IT) مع شرح واضح ونطق صوتي.',
     idiomsDesc: '150 من أشهر التعابير الاصطلاحية والأمثال الإنجليزية مع شرح المعنى والنطق.',
     verbsDesc: '100 من أشهر الأفعال الإنجليزية للتواصل اليومي مع الترجمة والنطق الصوتي.',
     adjectivesDesc: '100 صفة أساسية ومعبّرة للوصف الدقيق مع الترجمة والنطق الصوتي.',
@@ -349,7 +406,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   ur: {
     downloadBtn: 'ڈاؤن لوڈ کریں',
     downloading: 'ڈاؤن لوڈ ہو رہا ہے...',
-    itDesc: 'واضح تشریح اور آڈیو تلفظ کے ساتھ 187 اہم آئی ٹی (IT) اصطلاحات۔',
+    itDesc: 'واضح تشریح اور آڈیو تلفظ کے ساتھ 200 اہم آئی ٹی (IT) اصطلاحات۔',
     idiomsDesc: 'مفہوم کی وضاحت اور آڈیو کے ساتھ 150 مشہور انگریزی محاورے اور ضرب الامثال۔',
     verbsDesc: 'روزمرہ گفتگو کے لیے ترجمے اور آڈیو کے ساتھ 100 مقبول ترین انگریزی افعال۔',
     adjectivesDesc: 'درست بیان کے لیے ترجمے اور آڈیو کے ساتھ 100 بنیادی اور مؤثر صفات۔',
@@ -359,7 +416,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   id: {
     downloadBtn: 'Unduh',
     downloading: 'Mengunduh...',
-    itDesc: '187 istilah TI penting dengan penjelasan jelas dan audio pelafalan.',
+    itDesc: '200 istilah TI penting dengan penjelasan jelas dan audio pelafalan.',
     idiomsDesc: '150 idiom dan peribahasa bahasa Inggris populer dengan penjelasan makna.',
     verbsDesc: '100 kata kerja bahasa Inggris paling populer untuk percakapan sehari-hari dengan terjemahan dan audio.',
     adjectivesDesc: '100 kata sifat penting dan ekspresif untuk deskripsi tepat dengan terjemahan dan audio.',
@@ -369,7 +426,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   vi: {
     downloadBtn: 'Tải xuống',
     downloading: 'Đang tải xuống...',
-    itDesc: '187 thuật ngữ CNTT quan trọng kèm giải thích dễ hiểu và phát âm chuẩn.',
+    itDesc: '200 thuật ngữ CNTT quan trọng kèm giải thích dễ hiểu và phát âm chuẩn.',
     idiomsDesc: '150 thành ngữ và tục ngữ tiếng Anh phổ biến kèm giải thích ý nghĩa.',
     verbsDesc: '100 động từ tiếng Anh phổ biến nhất cho giao tiếp hằng ngày kèm nghĩa và phát âm.',
     adjectivesDesc: '100 tính từ thiết yếu và giàu sắc thái để miêu tả chuẩn xác kèm nghĩa và phát âm.',
@@ -379,7 +436,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   th: {
     downloadBtn: 'ดาวน์โหลด',
     downloading: 'กำลังดาวน์โหลด...',
-    itDesc: '187 คำศัพท์ไอทีสำคัญพร้อมคำอธิบายที่เข้าใจง่ายและเสียงอ่าน',
+    itDesc: '200 คำศัพท์ไอทีสำคัญพร้อมคำอธิบายที่เข้าใจง่ายและเสียงอ่าน',
     idiomsDesc: '150 สำนวนและสุภาษิตภาษาอังกฤษยอดนิยมพร้อมคำอธิบายความหมาย',
     verbsDesc: '100 คำกริยาภาษาอังกฤษยอดนิยมสำหรับการสื่อสารประจำวัน พร้อมคำแปลและเสียงอ่าน',
     adjectivesDesc: '100 คำคุณศัพท์พื้นฐานที่สื่อความหมายชัดเจน พร้อมคำแปลและเสียงอ่าน',
@@ -389,7 +446,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   ko: {
     downloadBtn: '다운로드',
     downloading: '다운로드 중...',
-    itDesc: '명확한 설명과 원어민 발음이 포함된 핵심 IT 용어 187개.',
+    itDesc: '명확한 설명과 원어민 발음이 포함된 핵심 IT 용어 200개.',
     idiomsDesc: '의미 설명과 음성 발음이 포함된 인기 영어 관용구 및 속담 150선.',
     verbsDesc: '일상 대화에 꼭 필요한 인기 영어 동사 100개를 번역과 음성으로 학습하세요.',
     adjectivesDesc: '정확한 묘사를 위한 핵심 형용사 100개를 번역과 음성으로 학습하세요.',
@@ -399,7 +456,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   ja: {
     downloadBtn: 'ダウンロード',
     downloading: 'ダウンロード中...',
-    itDesc: '分かりやすい解説と音声発音付きの重要IT用語187語。',
+    itDesc: '分かりやすい解説と音声発音付きの重要IT用語200語。',
     idiomsDesc: '意味の解説と音声付きの定番英語イディオム＆ことわざ150選。',
     verbsDesc: '日常会話でよく使う人気の英語動詞100語を、日本語訳と音声付きで学べます。',
     adjectivesDesc: '的確な表現に役立つ基本＆豊かな形容詞100語を、日本語訳と音声付きで収録。',
@@ -409,7 +466,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   zh: {
     downloadBtn: '下载',
     downloading: '正在下载...',
-    itDesc: '187 个核心 IT 术语，配有清晰释义与标准发音。',
+    itDesc: '200 个核心 IT 术语，配有清晰释义与标准发音。',
     idiomsDesc: '150 个常用英语习语与谚语，配有含义解析与发音。',
     verbsDesc: '精选 100 个日常高频英语动词，配有中文释义和标准发音。',
     adjectivesDesc: '100 个核心且富有表现力的形容词，配有中文释义和标准发音。',
@@ -419,7 +476,7 @@ export const DOWNLOADABLE_PACK_I18N = {
   kk: {
     downloadBtn: 'Жүктеп алу',
     downloading: 'Жүктелуде...',
-    itDesc: 'Түсінікті түсіндірмесі мен дыбысталуы бар 187 негізгі IT термині.',
+    itDesc: 'Түсінікті түсіндірмесі мен дыбысталуы бар 200 негізгі IT термині.',
     idiomsDesc: 'Мағынасы түсіндірілген және дыбысталған 150 танымал ағылшын идиомасы мен мақалы.',
     verbsDesc: 'Күнделікті сөйлесуге арналған аудармасы мен дыбысы бар ең танымал 100 ағылшын етістігі.',
     adjectivesDesc: 'Дәл сипаттауға арналған аудармасы мен дыбысы бар 100 негізгі және мәнерлі сын есім.',
@@ -439,7 +496,7 @@ function getBuiltinOverrides() {
     const parsed = raw ? JSON.parse(raw) : {};
     if (localStorage.getItem('myduo_it_idioms_override_clean_v1') !== '1') {
       let changed = false;
-      if (Array.isArray(parsed.it_terms) && parsed.it_terms.length > 0 && parsed.it_terms.length < 187) {
+      if (Array.isArray(parsed.it_terms) && parsed.it_terms.length > 0 && parsed.it_terms.length < 200) {
         delete parsed.it_terms;
         changed = true;
       }
@@ -1414,7 +1471,20 @@ export const BUILTIN_COLLECTIONS_DEF = [
         "warehouse",
         "waterfall",
         "whitespace",
-        "wireframe"
+        "wireframe",
+      "webhook",
+      "idempotency",
+      "serialization",
+      "sharding",
+      "observability",
+      "throttling",
+      "containerization",
+      "backpressure",
+      "orchestration",
+      "partitioning",
+      "canary",
+      "deadlock",
+      "sandbox"
     ]
   },
   {
@@ -1735,7 +1805,7 @@ export function addWordToCollection(collectionId, wordId, allWords = []) {
     const currentFavs = getUserFavorites().map(String);
     const idStr = String(wordId);
     if (!currentFavs.includes(idStr)) {
-      toggleFavoriteApi(wordId, true);
+      return toggleFavoriteApi(wordId, true);
     }
     return;
   }

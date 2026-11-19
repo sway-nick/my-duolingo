@@ -23,7 +23,7 @@ function getCategoryMeta(catName) {
   return null;
 }
 
-async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content') {
+async function renderStatsView(allWordsOrContainer = '#app-content', maybeContainer = '#app-content', options = {}) {
   let allWords = [];
   let containerSelector = '#app-content';
 
@@ -34,8 +34,20 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
     containerSelector = allWordsOrContainer;
   }
 
+  const {
+    currentCategory = 'Elementary',
+    onSelectCategory = null,
+  } = options || {};
+
   const container = document.querySelector(containerSelector);
   if (!container) return;
+
+  const isSameLevel = (a, b) => {
+    const ma = getCategoryMeta(a);
+    const mb = getCategoryMeta(b);
+    if (ma && mb) return ma.order === mb.order;
+    return String(a || '').toLowerCase().trim() === String(b || '').toLowerCase().trim();
+  };
 
   try {
     const stats = await getUserStats(allWords);
@@ -52,8 +64,9 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         const meta = getCategoryMeta(cat.category);
         if (!meta) return; // Strict guard: never render categories below Pattern
         const percent = cat.total > 0 ? Math.round((cat.learned / cat.total) * 100) : 0;
+        const isSelected = isSameLevel(cat.category, currentCategory);
         const cardHtml = `
-          <div class="category-card">
+          <div class="category-card is-clickable ${isSelected ? 'is-selected-level' : ''}" data-category="${cat.category}" role="button" tabindex="0">
             <div class="category-info-row">
               <div class="cat-name-box">
                 <span class="cat-badge ${meta.badgeClass}">${meta.badgeText}</span>
@@ -289,6 +302,24 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
         ${chartHtml}
       </div>
     `;
+
+    // Level & special course selection click handlers
+    if (typeof onSelectCategory === 'function') {
+      container.querySelectorAll('.category-card.is-clickable[data-category]').forEach((card) => {
+        const handleSelect = () => {
+          const chosenCat = card.getAttribute('data-category');
+          if (!chosenCat || isSameLevel(chosenCat, currentCategory)) return;
+          onSelectCategory(chosenCat);
+        };
+        card.addEventListener('click', handleSelect);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleSelect();
+          }
+        });
+      });
+    }
 
     // Responsive width adjustment for chart
     const chartWrapper = container.querySelector('#stats-chart-wrapper');

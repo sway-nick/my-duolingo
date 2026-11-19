@@ -425,7 +425,7 @@ export const REVIEW_TRANSLATIONS = {
   ar: {
     step1Title: 'هل يعجبك English Breakfast؟',
     step1Sub: 'ملاحظاتك تساعدنا على تحسين التطبيق كل يوم.',
-    step1Yes: '👍 كل شيء يعجبني',
+    step1Yes: '👍 يعجبني جداً!',
     step1No: 'لدي ملاحظات',
     step1Later: 'اسألني لاحقاً',
     step2PosTitle: 'شكراً جزيلاً من القلب! 💖',

@@ -89,6 +89,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(BillingPlugin.class);
         super.onCreate(savedInstanceState);
 
         // 1. Enable modern edge-to-edge drawing so status bar and navigation bar are colored with main theme background
@@ -302,7 +303,7 @@ public class MainActivity extends BridgeActivity {
         if (bridge != null && bridge.getWebView() != null) {
             bridge.getWebView().post(() -> {
                 bridge.getWebView().evaluateJavascript(
-                    "(function() { if (typeof window.syncPendingWidgetFavorites === 'function') { window.syncPendingWidgetFavorites(); } if (typeof window.syncCurrentWidgetRank === 'function') { window.syncCurrentWidgetRank(); } })()", null);
+                    "(function() { if (typeof window.syncPendingWidgetFavorites === 'function') { window.syncPendingWidgetFavorites(); } if (typeof window.syncCurrentWidgetRank === 'function') { window.syncCurrentWidgetRank(); } if (window.ProService && typeof window.ProService.revalidate === 'function') { window.ProService.revalidate(); } })()", null);
             });
         }
     }

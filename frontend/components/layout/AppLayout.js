@@ -6,6 +6,7 @@ import { openChallengeModal } from '../modals/ChallengeModal.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { isEmailVerified } from '../../services/firebase.js?v=386.0';
 import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=386.0';
+import { isProActive } from '../../services/proState.js?v=386.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -179,12 +180,13 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
   const guestCount = getGuestTrainingCount();
 
   const avatar = getUserAvatar();
+  const proRingClass = isProActive() ? ' pro-avatar-ring' : '';
   let avatarHtml = '';
   if (avatar) {
-    avatarHtml = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img" referrerpolicy="no-referrer" />`;
+    avatarHtml = `<img src="${avatar}" alt="Аватар" class="drawer-avatar-img${proRingClass}" referrerpolicy="no-referrer" />`;
   } else {
     const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
-    avatarHtml = `<div class="drawer-avatar-placeholder">${initial}</div>`;
+    avatarHtml = `<div class="drawer-avatar-placeholder${proRingClass}">${initial}</div>`;
   }
   const username = user ? user.name : (t('drawer_guest_user') || 'Гость (Демо)');
   const email = user ? '' : (t('drawer_guest_progress') || 'Прогресс: {current}/{limit} слов')
@@ -882,6 +884,12 @@ function bindHeaderActionButtons(container) {
       closeDrawer();
     };
   }
+  if (typeof window !== 'undefined' && !window.__ebDrawerProListener) {
+    window.__ebDrawerProListener = true;
+    window.addEventListener('eb:pro-changed', () => {
+      try { updateDrawerProfile(); } catch (_) {}
+    });
+  }
 }
 
 function updateDrawerProfile() {
@@ -893,12 +901,13 @@ function updateDrawerProfile() {
   if (!drawer) return;
 
   const avatarWrapper = drawer.querySelector('.drawer-avatar-wrapper');
+  const proRingClass = isProActive() ? ' pro-avatar-ring' : '';
   if (avatarWrapper) {
     if (avatar) {
-      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Avatar" class="drawer-avatar-img" referrerpolicy="no-referrer" />`;
+      avatarWrapper.innerHTML = `<img src="${avatar}" alt="Avatar" class="drawer-avatar-img${proRingClass}" referrerpolicy="no-referrer" />`;
     } else {
       const initial = user && user.name != null ? String(user.name).trim().charAt(0).toUpperCase() || '👤' : '👤';
-      avatarWrapper.innerHTML = `<div class="drawer-avatar-placeholder">${initial}</div>`;
+      avatarWrapper.innerHTML = `<div class="drawer-avatar-placeholder${proRingClass}">${initial}</div>`;
     }
   }
 

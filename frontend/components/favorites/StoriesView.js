@@ -3,6 +3,10 @@ import { showMilestoneStoryModal, showStoryToast, MILESTONE_STORIES } from '../m
 import { showFairyTaleSurveyModal, getFairyTaleStrings } from '../modals/FairyTaleSurveyModal.js?v=386.0';
 import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { isProActive } from '../../services/proState.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
+import { getProStrings } from '../../services/proI18n.js?v=386.0';
+import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
 
 export function renderStoriesView(containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -11,7 +15,9 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
   const { onBack = () => {} } = options;
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
+  const sPro = getProStrings(lang);
   const masteredWords = getMasteredWordsCount();
+  const isPro = isProActive();
 
   const escapeHtml = (str) =>
     String(str || '')
@@ -22,12 +28,12 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       .replace(/'/g, '&#39;');
 
   const allMilestones = Object.keys(MILESTONE_STORIES).map(Number).sort((a, b) => a - b);
-  const unlockedMilestones = allMilestones.filter(m => masteredWords >= m);
+  const unlockedMilestones = allMilestones.filter(m => isPro || masteredWords >= m);
 
   const storyCardsHtml = allMilestones.map(m => {
     const story = MILESTONE_STORIES[m];
     if (!story) return '';
-    const isUnlocked = masteredWords >= m;
+    const isUnlocked = isPro || masteredWords >= m;
     const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
     const title = strings[story.titleKey] || story.title;
     let badge = strings[story.badgeKey] || `🏆 ${m} слов`;
@@ -57,7 +63,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
             ${statusBadge}
           </div>
           ${story.coverImage ? `
-            <div class="story-card-cover-wrapper" style="margin: 8px 0 12px 0; border-radius: 12px; overflow: hidden; max-height: 160px; text-align: center; background: rgba(15, 23, 42, 0.6);">
+            <div class="story-card-cover-wrapper" style="margin: 8px 0 12px 0; border-radius: 12px; overflow: hidden; max-height: 160px; text-align: center;">
               <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: auto; max-width: 100%; height: 160px; object-fit: contain; display: inline-block; margin: 0 auto;" />
             </div>
           ` : ''}
@@ -66,12 +72,16 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       `;
     } else {
       const lockLabel = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', m);
+      const wordsNeeded = Math.max(0, m - masteredWords);
+      const proHint = String(sPro.pro_unlock_learn_or_pro || '').replace('{n}', String(wordsNeeded));
       return `
-        <div class="story-list-card is-locked" data-milestone="${m}" data-locked="true" role="button" tabindex="0">
+        <div class="story-list-card is-locked" data-milestone="${m}" data-words-needed="${wordsNeeded}" data-locked="true" role="button" tabindex="0">
           <div class="story-card-top">
             <span class="story-card-status status-locked">🔒 ${escapeHtml(lockLabel)}</span>
+            <span class="story-card-status" style="background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;">⭐ ${escapeHtml(sPro.pro_badge || 'PRO')}</span>
           </div>
           <h3 class="story-card-title story-title-locked"${m === 0 ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
+          ${proHint ? `<p style="margin:6px 0 0;font-size:12px;line-height:1.35;color:var(--text-muted,#94a3b8);">${escapeHtml(proHint)}</p>` : ''}
         </div>
       `;
     }
@@ -104,7 +114,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       .stories-view-title {
         font-size: 24px;
         font-weight: 800;
-        color: #f8fafc;
+        color: var(--text-main, #0f172a);
         margin: 0 0 6px;
         display: flex;
         align-items: center;
@@ -112,23 +122,23 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       }
       .stories-view-subtitle {
         font-size: 14px;
-        color: #94a3b8;
+        color: var(--text-muted, #64748b);
         margin: 0 0 12px;
         line-height: 1.4;
       }
       .stories-view-progress {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--card-bg, #ffffff);
+        border: 1px solid var(--border-color, #e2e8f0);
         border-radius: 12px;
         padding: 8px 14px;
         font-size: 13px;
-        color: #e2e8f0;
+        color: var(--text-main, #0f172a);
         display: inline-flex;
         align-items: center;
         gap: 8px;
       }
       .stories-view-progress strong {
-        color: #fbbf24;
+        color: #d97706;
       }
       .stories-list-grid {
         display: flex;
@@ -136,25 +146,40 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         gap: 14px;
       }
       .story-list-card {
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        border: 1.5px solid rgba(245, 158, 11, 0.3);
+        background: var(--card-bg, #ffffff);
+        border: 1.5px solid rgba(245, 158, 11, 0.35);
         border-radius: 18px;
         padding: 16px 18px;
+        box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.05));
         transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
         cursor: pointer;
       }
+      .story-card-cover-wrapper {
+        background: var(--bg-hover, #f1f5f9);
+      }
+      body.dark-theme .story-list-card,
+      .dark-theme .story-list-card,
+      [data-theme='dark'] .story-list-card {
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-color: rgba(245, 158, 11, 0.3);
+      }
+      body.dark-theme .story-card-cover-wrapper,
+      .dark-theme .story-card-cover-wrapper,
+      [data-theme='dark'] .story-card-cover-wrapper {
+        background: rgba(15, 23, 42, 0.6);
+      }
       .story-list-card.is-unlocked:hover {
-        border-color: rgba(251, 191, 36, 0.6);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        border-color: rgba(245, 158, 11, 0.7);
+        box-shadow: var(--shadow-md, 0 8px 24px rgba(15, 23, 42, 0.1));
         transform: translateY(-2px);
       }
       .story-list-card.is-locked {
-        opacity: 0.62;
-        border-color: rgba(148, 163, 184, 0.2);
-        cursor: default;
+        opacity: 0.72;
+        border-color: var(--border-color, #e2e8f0);
+        cursor: pointer;
       }
       .story-list-card.is-locked:hover {
-        border-color: rgba(148, 163, 184, 0.35);
+        border-color: rgba(148, 163, 184, 0.55);
       }
       .story-card-top {
         display: flex;
@@ -166,14 +191,20 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
-        color: #fcd34d;
-        background: rgba(245, 158, 11, 0.15);
+        color: #b45309;
+        background: rgba(245, 158, 11, 0.14);
         padding: 3px 8px;
         border-radius: 9999px;
       }
+      body.dark-theme .story-card-badge,
+      .dark-theme .story-card-badge,
+      [data-theme='dark'] .story-card-badge {
+        color: #fcd34d;
+        background: rgba(245, 158, 11, 0.15);
+      }
       .story-badge-locked {
-        color: #94a3b8;
-        background: rgba(148, 163, 184, 0.12);
+        color: var(--text-muted, #64748b);
+        background: rgba(148, 163, 184, 0.14);
       }
       .story-card-status {
         font-size: 11.5px;
@@ -182,27 +213,33 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         border-radius: 9999px;
       }
       .status-unlocked {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
+        background: rgba(16, 185, 129, 0.12);
+        color: #059669;
         border: 1px solid rgba(16, 185, 129, 0.3);
       }
+      body.dark-theme .status-unlocked,
+      .dark-theme .status-unlocked,
+      [data-theme='dark'] .status-unlocked {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+      }
       .status-locked {
-        background: rgba(148, 163, 184, 0.12);
-        color: #94a3b8;
-        border: 1px solid rgba(148, 163, 184, 0.22);
+        background: rgba(148, 163, 184, 0.14);
+        color: var(--text-muted, #64748b);
+        border: 1px solid rgba(148, 163, 184, 0.28);
       }
       .story-card-title {
         font-size: 17px;
         font-weight: 800;
-        color: #f8fafc;
+        color: var(--text-main, #0f172a);
         margin: 0;
       }
       .story-title-locked {
-        color: #94a3b8;
+        color: var(--text-muted, #64748b);
       }
       .story-card-preview {
         font-size: 13.5px;
-        color: #94a3b8;
+        color: var(--text-muted, #64748b);
         margin: 0 0 12px;
         font-style: italic;
         line-height: 1.4;
@@ -214,7 +251,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
       .story-card-btn {
         background: rgba(245, 158, 11, 0.15);
         border: 1px solid rgba(245, 158, 11, 0.4);
-        color: #fde68a;
+        color: #b45309;
         font-size: 13.5px;
         font-weight: 700;
         padding: 7px 14px;
@@ -224,6 +261,11 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         align-items: center;
         gap: 6px;
         transition: all 0.15s ease;
+      }
+      body.dark-theme .story-card-btn,
+      .dark-theme .story-card-btn,
+      [data-theme='dark'] .story-card-btn {
+        color: #fde68a;
       }
       .story-card-btn:hover {
         background: #f59e0b;
@@ -241,6 +283,9 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     </style>
 
     <div class="stories-view-page">
+      <div style="margin-bottom: 12px;">
+        <button type="button" id="stories-back-btn" class="eb-back-pill-btn">‹ ${getSpokenEnglishStrings(lang).backBtn || 'Назад'}</button>
+      </div>
       <div class="stories-list-grid">
         ${storyCardsHtml}
       </div>
@@ -268,13 +313,23 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     });
   });
 
-  // Story click bindings for locked cards (show feedback toast)
+  // Story click bindings for locked cards (open PRO paywall with wordsNeeded)
   container.querySelectorAll('.story-list-card.is-locked').forEach(card => {
     card.addEventListener('click', () => {
-      const raw = card.getAttribute('data-milestone');
-      const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
-      const lockMsg = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', milestone);
-      showStoryToast(`🔒 ${lockMsg}`);
+      const wordsNeeded = Number(card.getAttribute('data-words-needed') || 0);
+      ProService.openPaywall('stories', { wordsNeeded });
     });
   });
+
+  if (typeof window !== 'undefined') {
+    if (window._storiesProChangedHandler) {
+      window.removeEventListener('eb:pro-changed', window._storiesProChangedHandler);
+    }
+    window._storiesProChangedHandler = () => {
+      if (document.body.contains(container) && container.querySelector('.stories-view-page')) {
+        renderStoriesView(containerSelector, options);
+      }
+    };
+    window.addEventListener('eb:pro-changed', window._storiesProChangedHandler);
+  }
 }

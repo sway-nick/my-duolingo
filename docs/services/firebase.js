@@ -2230,3 +2230,118 @@ export async function loadFullUserDataFirestore(userId) {
   return loadPromise;
 }
 
+export async function redeemPromoCodeFirestore(userId, codeHash) {
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return { ok: false, reason: 'not_authenticated' };
+  const cleanHash = String(codeHash || '').trim().toLowerCase();
+  if (!/^[a-f0-9]{64}$/.test(cleanHash)) return { ok: false, reason: 'invalid' };
+
+  const config = getFirebaseConfig();
+  if (!config || !config.apiKey) return { ok: false, reason: 'unavailable' };
+
+  const authHeaders = getAuthHeaders();
+  if (!authHeaders.Authorization) return { ok: false, reason: 'not_authenticated' };
+
+  try {
+    const promoUrl = getFirestoreUrl(`/promo_codes/${encodeURIComponent(cleanHash)}`);
+    const checkRes = await firestoreFetch(promoUrl, { headers: authHeaders });
+    if (!checkRes.ok) {
+      return { ok: false, reason: 'invalid' };
+    }
+    const promoDoc = await checkRes.json();
+    const fields = promoDoc?.fields || {};
+    const isActive = Boolean(fields.active?.booleanValue);
+    const uses = Number(fields.uses?.integerValue ?? 0);
+    const maxUses = Number(fields.maxUses?.integerValue ?? 0);
+    const expiresAtStr = fields.expiresAt?.timestampValue || null;
+    if (!isActive || uses >= maxUses) {
+      return { ok: false, reason: 'invalid' };
+    }
+    if (expiresAtStr && Date.now() >= Date.parse(expiresAtStr)) {
+      return { ok: false, reason: 'expired' };
+    }
+
+    const projectId = config.projectId || DEFAULT_FIREBASE_CONFIG.projectId;
+    const dbDocPrefix = `projects/${projectId}/databases/(default)/documents`;
+    const promoPath = `${dbDocPrefix}/promo_codes/${encodeURIComponent(cleanHash)}`;
+    const redemptionPath = `${dbDocPrefix}/promo_redemptions/${encodeURIComponent(cleanHash)}_${encodeURIComponent(uid)}`;
+    const entitlementPath = `${dbDocPrefix}/users/${encodeURIComponent(uid)}/entitlements/pro`;
+
+    const writes = [
+      {
+        transform: {
+          document: promoPath,
+          fieldTransforms: [
+            { fieldPath: 'uses', increment: { integerValue: '1' } }
+          ]
+        },
+        currentDocument: { exists: true }
+      },
+      {
+        update: {
+          name: redemptionPath,
+          fields: {
+            uid: { stringValue: String(uid) },
+            codeHash: { stringValue: cleanHash }
+          }
+        },
+        currentDocument: { exists: false },
+        updateTransforms: [
+          { fieldPath: 'redeemedAt', setToServerValue: 'REQUEST_TIME' }
+        ]
+      },
+      {
+        update: {
+          name: entitlementPath,
+          fields: {
+            source: { stringValue: 'promo' },
+            codeHash: { stringValue: cleanHash }
+          }
+        },
+        currentDocument: { exists: false },
+        updateTransforms: [
+          { fieldPath: 'grantedAt', setToServerValue: 'REQUEST_TIME' }
+        ]
+      }
+    ];
+
+    const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
+    const commitRes = await firestoreFetch(commitUrl, {
+      method: 'POST',
+      headers: authHeaders,
+      body: JSON.stringify({ writes })
+    });
+
+    if (!commitRes.ok) {
+      return { ok: false, reason: 'invalid' };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.warn('redeemPromoCodeFirestore error:', err);
+    return { ok: false, reason: 'error' };
+  }
+}
+
+export async function fetchProEntitlementFirestore(userId) {
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return null;
+  const authHeaders = getAuthHeaders();
+  if (!authHeaders.Authorization) return null;
+  try {
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/entitlements/pro`);
+    const res = await firestoreFetch(url, { headers: authHeaders });
+    if (!res.ok) return null;
+    const doc = await res.json();
+    const fields = doc?.fields;
+    if (!fields) return null;
+    return {
+      active: true,
+      source: fields.source?.stringValue === 'promo' ? 'promo' : 'play',
+      tokenHash: fields.codeHash?.stringValue || null,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+

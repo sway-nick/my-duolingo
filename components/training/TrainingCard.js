@@ -22,6 +22,8 @@ import {
   primeAudioForAutoplay,
   triggerHaptic,
 } from '../../services/audioService.js?v=386.0';
+import { isProActive, getFreeShieldsLeft } from '../../services/proState.js?v=386.0';
+import { getProStrings } from '../../services/proI18n.js?v=386.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -2073,14 +2075,20 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
 
         const isOnline = typeof AdService !== 'undefined' ? AdService.isOnline() : true;
         const canUseShield = typeof AdService !== 'undefined' ? AdService.canUseShield() : isOnline;
+        const proFreeShields = isProActive() ? getFreeShieldsLeft() : 0;
 
-        if (canUseShield && isOnline) {
+        if ((canUseShield && isOnline) || proFreeShields > 0) {
           // Just-in-time preload for Rewarded Shield ad on mistake
-          try {
-            if (typeof AdService !== 'undefined' && typeof AdService.prepareRewarded === 'function') {
-              AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
-            }
-          } catch (_) {}
+          if (proFreeShields <= 0) {
+            try {
+              if (typeof AdService !== 'undefined' && typeof AdService.prepareRewarded === 'function') {
+                AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
+              }
+            } catch (_) {}
+          }
+          const shieldBtnLabel = proFreeShields > 0
+            ? `🛡️ ${escapeHtml(String(getProStrings(getInterfaceLanguage()).pro_shields_left || 'PRO Shield ({n}/3)').replace('{n}', String(proFreeShields)))}`
+            : t('train_shield_btn');
           // Offer Shield via Rewarded Ad (Unlimited shields)
           feedback.innerHTML = `
             <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">${t('train_correct_label')}</div>
@@ -2089,7 +2097,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             </div>
             <div class="test-shield-offer-box" style="margin-top: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%;">
               <button type="button" class="primary-button btn-orange" id="btn-claim-ad-shield" style="min-height: 44px; height: 44px; padding: 0 16px; font-size: 14px; font-weight: 700; width: 100%; max-width: 290px; box-shadow: 0 4px 14px rgba(230,81,0,0.3); border-radius: 12px; cursor: pointer;">
-                ${t('train_shield_btn')}
+                ${shieldBtnLabel}
               </button>
               <button type="button" class="btn-text-subtle" id="btn-skip-ad-shield" style="background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px; text-decoration: underline;">
                 ${t('train_shield_continue')}
@@ -2255,21 +2263,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           </div>
 
           <div class="flashcard-face flashcard-back">
-            <div class="flashcard-face-top">
-              <button type="button" class="flashcard-sound-btn" id="fc-sound-back" title="${t('train_listen_audio')}">${FC_SOUND_ICON_HTML}</button>
-              <button type="button" class="flashcard-fav-btn ${favorited ? 'is-favorite' : ''}" id="fc-fav-back" title="${t('train_to_favorites')}">
-                ${getCardFavIconHtml(favorited)}
-              </button>
-            </div>
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${escapeHtml(getWordTranslation(currentWord))}</h2>
               ${(() => {
                 const fcNote = getWordNotes(currentWord, null, { hideItNotes: !isItCollectionPractice });
                 return fcNote ? `<p class="flashcard-notes">${escapeHtml(fcNote)}</p>` : '';
               })()}
-            </div>
-            <div class="flashcard-face-bottom">
-              <span class="flashcard-flip-prompt">${t('train_flip_card_hint')}</span>
             </div>
           </div>
         </div>

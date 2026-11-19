@@ -1,6 +1,9 @@
 import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, clearAllFavoritesApi, getUserFavorites } from '../../services/api.js?v=386.0';
-import { t, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
+import { t, getWordTranslation, getWordNotes, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
+import { getProStrings } from '../../services/proI18n.js?v=386.0';
+import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
 import {
   removeWordFromCollection,
   syncCollectionToAndroidWidget,
@@ -12,8 +15,12 @@ import {
   isCollectionPackDownloaded,
   markCollectionPackDownloaded,
   getDownloadablePackStrings,
+  getCollectionUnlockStep,
+  getCollectionUnlockedCount,
+  unlockMoreCollectionItems,
 } from '../../services/collectionsService.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
+import { isProActive } from '../../services/proState.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
 import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=386.0';
@@ -53,11 +60,12 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
 
+  const backLabel = getSpokenEnglishStrings(getInterfaceLanguage()).backBtn || 'Назад';
   const backBtnHtml = onBack
     ? `
-    <button type="button" id="fav-view-back-btn" style="background: none; border: none; font-size: 15px; font-weight: 600; color: var(--primary-color); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 4px 0; margin-bottom: 6px;">
-      <span>‹</span> <span>${escapeHtml(t('fav_hub_btn') || 'Назад к коллекциям')}</span>
-    </button>
+    <div style="margin-bottom: 10px;">
+      <button type="button" id="fav-view-back-btn" class="eb-back-pill-btn">‹ ${escapeHtml(backLabel)}</button>
+    </div>
   `
     : '';
 
@@ -109,10 +117,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     });
   };
 
-  if (!isCollectionPackDownloaded(collectionId)) {
+  if (collectionId !== 'it_terms' && !isCollectionPackDownloaded(collectionId)) {
     const packStrings = getDownloadablePackStrings();
     const PACK_META = {
-      it_terms: { icon: '💻', desc: packStrings.itDesc, count: 187 },
+      it_terms: { icon: '💻', desc: packStrings.itDesc, count: 200 },
       idioms: { icon: '💬', desc: packStrings.idiomsDesc, count: 150 },
       verbs: { icon: '⚡', desc: packStrings.verbsDesc, count: 100 },
       adjectives: { icon: '🌟', desc: packStrings.adjectivesDesc, count: 100 },
@@ -122,6 +130,9 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     const packIcon = meta.icon;
     const packDesc = meta.desc;
     const totalCount = Array.isArray(favoriteWords) ? favoriteWords.length : meta.count;
+    const isItProLocked = collectionId === 'it_terms' && !isProActive();
+    const partialStep = getCollectionUnlockStep(collectionId);
+    const sPro = isItProLocked ? getProStrings(getInterfaceLanguage()) : null;
 
     container.innerHTML = `
       <div class="favorites-page">
@@ -136,13 +147,22 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           <p style="color: var(--text-muted); font-size: 14.5px; line-height: 1.5; max-width: 340px; margin: 0 auto 22px;">
             ${escapeHtml(packDesc)}
           </p>
-          <button type="button" id="download-collection-pack-btn" class="primary-button btn-orange" style="min-height: 48px; padding: 0 28px; font-size: 15.5px; font-weight: 800; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);">
-            <span style="font-size: 18px;">🎬</span>
-            <span id="download-pack-btn-label">${escapeHtml(packStrings.downloadBtn)}</span>
-          </button>
-          <p style="color: var(--text-muted); font-size: 12px; margin: 12px 0 0; opacity: 0.85;">
-            ${escapeHtml(packStrings.watchAdHint)}
-          </p>
+          ${isItProLocked ? `
+            <button type="button" id="open-it-pro-btn" class="primary-button btn-orange" style="min-height: 48px; padding: 0 28px; font-size: 15.5px; font-weight: 800; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);">
+              <span style="font-size: 18px;">⭐</span>
+              <span>${escapeHtml(sPro.pro_buy || 'PRO')}</span>
+            </button>
+          ` : `
+            <button type="button" id="download-collection-pack-btn" class="primary-button btn-orange" style="min-height: 48px; padding: 0 28px; font-size: 15.5px; font-weight: 800; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);">
+              <span style="font-size: 18px;">🎬</span>
+              <span id="download-pack-btn-label">${escapeHtml(partialStep > 0 ? `${packStrings.downloadBtn} (+${partialStep})` : packStrings.downloadBtn)}</span>
+            </button>
+            ${partialStep <= 0 ? `
+              <p style="color: var(--text-muted); font-size: 12px; margin: 12px 0 0; opacity: 0.85;">
+                ${escapeHtml(packStrings.watchAdHint)}
+              </p>
+            ` : ''}
+          `}
         </div>
       </div>
     `;
@@ -150,6 +170,24 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
       if (onBack) onBack();
     });
+
+    if (isItProLocked) {
+      container.querySelector('#open-it-pro-btn')?.addEventListener('click', () => {
+        ProService.openPaywall('it_terms');
+      });
+      if (typeof window !== 'undefined') {
+        if (window._favItProChangedHandler) {
+          window.removeEventListener('eb:pro-changed', window._favItProChangedHandler);
+        }
+        window._favItProChangedHandler = () => {
+          if (typeof document !== 'undefined' && document.body?.contains(container) && container.querySelector('#open-it-pro-btn')) {
+            renderFavoritesView(favoriteWords, containerSelector, options);
+          }
+        };
+        window.addEventListener('eb:pro-changed', window._favItProChangedHandler);
+      }
+      return;
+    }
 
     const dlBtn = container.querySelector('#download-collection-pack-btn');
     dlBtn?.addEventListener('click', async () => {
@@ -160,12 +198,14 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       dlBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
 
       try {
-        const adRes = await AdService.showLanguagePackRewardedAd(displayTitle);
-        if (!adRes || (!adRes.rewardEarned && !adRes.isOffline)) {
-          dlBtn.innerHTML = prevHtml;
-          dlBtn.disabled = false;
-          dlBtn.style.opacity = '1';
-          return;
+        if (!isProActive()) {
+          const adRes = await AdService.showLanguagePackRewardedAd(displayTitle);
+          if (!adRes || (!adRes.rewardEarned && !adRes.isOffline)) {
+            dlBtn.innerHTML = prevHtml;
+            dlBtn.disabled = false;
+            dlBtn.style.opacity = '1';
+            return;
+          }
         }
 
         dlBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
@@ -239,15 +279,28 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     return;
   }
 
+  const isPro = isProActive();
+  const isItPreview = collectionId === 'it_terms' && !isPro && favoriteWords.length > 5;
+  const partialStep = getCollectionUnlockStep(collectionId);
+  const isPartialPack = partialStep > 0 && !isPro;
+  const partialUnlockedCount = isItPreview
+    ? Math.min(favoriteWords.length, 5)
+    : (isPartialPack ? Math.min(favoriteWords.length, getCollectionUnlockedCount(collectionId)) : favoriteWords.length);
+  const visibleWords = (isItPreview || isPartialPack) ? favoriteWords.slice(0, partialUnlockedCount) : favoriteWords;
+  const hasMoreToUnlock = isPartialPack && partialUnlockedCount < favoriteWords.length;
+  const sProMore = (hasMoreToUnlock || isItPreview) ? getProStrings(getInterfaceLanguage()) : null;
+  const packStringsMore = (hasMoreToUnlock || isItPreview) ? getDownloadablePackStrings() : null;
+
   const heartIconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff" stroke="none" aria-hidden="true" style="flex-shrink: 0;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
   const trashIconSvg = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
   const repeatBtnText = (t('fav_practice_btn') || '').replace(/^🔥\s*/, '');
+  const headerCountText = (hasMoreToUnlock || isItPreview) ? `${partialUnlockedCount} / ${favoriteWords.length}` : `${favoriteWords.length}`;
 
   container.innerHTML = `
     <div class="favorites-page">
       ${backBtnHtml}
       <div class="page-header" style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-        <h2 style="font-size: 19px; font-weight: 700; margin: 0; white-space: nowrap; letter-spacing: -0.2px; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0;">${escapeHtml(displayTitle)}: ${favoriteWords.length}</h2>
+        <h2 style="font-size: 19px; font-weight: 700; margin: 0; white-space: nowrap; letter-spacing: -0.2px; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0;">${escapeHtml(displayTitle)}: ${headerCountText}</h2>
       </div>
 
       <!-- 50% / 50% Actions Row -->
@@ -289,7 +342,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       </div>
 
       <div class="favorites-grid" id="favorites-grid">
-        ${favoriteWords
+        ${visibleWords
           .map((word) => {
             const isFav = isMyFavorites ? true : favSet.has(String(word.id));
             return `
@@ -324,6 +377,37 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           })
           .join('')}
       </div>
+      ${hasMoreToUnlock ? `
+        <div id="idioms-unlock-more-box" class="empty-favorites-box" style="margin-top: 16px; padding: 20px 16px; text-align: center; border-radius: 16px;">
+          <p style="margin: 0 0 12px; font-size: 14px; font-weight: 700; color: var(--text-main);">
+            🔒 ${partialUnlockedCount} / ${favoriteWords.length}
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            <button type="button" id="unlock-more-idioms-btn" class="primary-button btn-orange" style="min-height: 44px; padding: 0 20px; font-size: 14.5px; font-weight: 800; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+              <span>🎬</span>
+              <span>${escapeHtml(packStringsMore.downloadBtn)} (+${Math.min(partialStep, favoriteWords.length - partialUnlockedCount)})</span>
+            </button>
+            <button type="button" id="open-idioms-pro-btn" class="primary-button btn-orange" style="min-height: 44px; padding: 0 20px; font-size: 14.5px; font-weight: 800; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #ea580c);">
+              <span>⭐</span>
+              <span>${escapeHtml(sProMore.pro_buy || 'PRO')}</span>
+            </button>
+          </div>
+        </div>
+      ` : ''}
+      ${isItPreview ? `
+        <div id="it-pro-preview-box" class="empty-favorites-box" style="margin-top: 16px; padding: 22px 16px; text-align: center; border-radius: 16px;">
+          <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700; color: var(--text-main);">
+            🔒 ${partialUnlockedCount} / ${favoriteWords.length}
+          </p>
+          <p style="margin: 0 auto 14px; font-size: 13.5px; line-height: 1.45; color: var(--text-muted); max-width: 340px;">
+            ${escapeHtml(packStringsMore.itDesc)}
+          </p>
+          <button type="button" id="open-it-pro-btn" class="primary-button btn-orange" style="min-height: 46px; padding: 0 24px; font-size: 15px; font-weight: 800; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);">
+            <span style="font-size: 17px;">⭐</span>
+            <span>${escapeHtml(sProMore.pro_buy || 'PRO')}</span>
+          </button>
+        </div>
+      ` : ''}
     </div>
   `;
 
@@ -348,11 +432,71 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
   // Bind practice button
   container.querySelector('#start-fav-practice-btn')?.addEventListener('click', () => {
-    const currentWords = (favoriteWords && favoriteWords.length > 0)
-      ? favoriteWords
+    const currentWords = (visibleWords && visibleWords.length > 0)
+      ? visibleWords
       : getCollectionWords(collectionId, allWords);
     onStartFavoritePractice(currentWords);
   });
+
+  if (hasMoreToUnlock) {
+    const moreBtn = container.querySelector('#unlock-more-idioms-btn');
+    moreBtn?.addEventListener('click', async () => {
+      if (moreBtn.disabled) return;
+      moreBtn.disabled = true;
+      moreBtn.style.opacity = '0.75';
+      const prevHtml = moreBtn.innerHTML;
+      moreBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
+      try {
+        const adRes = await AdService.showLanguagePackRewardedAd(displayTitle);
+        if (!adRes || (!adRes.rewardEarned && !adRes.isOffline)) {
+          moreBtn.innerHTML = prevHtml;
+          moreBtn.disabled = false;
+          moreBtn.style.opacity = '1';
+          return;
+        }
+        unlockMoreCollectionItems(collectionId, partialStep);
+        renderFavoritesView(favoriteWords, containerSelector, options);
+      } catch (err) {
+        console.warn('Partial pack unlock failed:', err);
+        moreBtn.innerHTML = prevHtml;
+        moreBtn.disabled = false;
+        moreBtn.style.opacity = '1';
+      }
+    });
+
+    container.querySelector('#open-idioms-pro-btn')?.addEventListener('click', () => {
+      ProService.openPaywall(collectionId);
+    });
+
+    if (typeof window !== 'undefined') {
+      if (window._favIdiomsProChangedHandler) {
+        window.removeEventListener('eb:pro-changed', window._favIdiomsProChangedHandler);
+      }
+      window._favIdiomsProChangedHandler = () => {
+        if (typeof document !== 'undefined' && document.body?.contains(container) && container.querySelector('#idioms-unlock-more-box')) {
+          renderFavoritesView(favoriteWords, containerSelector, options);
+        }
+      };
+      window.addEventListener('eb:pro-changed', window._favIdiomsProChangedHandler);
+    }
+  }
+
+  if (isItPreview) {
+    container.querySelector('#open-it-pro-btn')?.addEventListener('click', () => {
+      ProService.openPaywall('it_terms');
+    });
+    if (typeof window !== 'undefined') {
+      if (window._favItProChangedHandler) {
+        window.removeEventListener('eb:pro-changed', window._favItProChangedHandler);
+      }
+      window._favItProChangedHandler = () => {
+        if (typeof document !== 'undefined' && document.body?.contains(container) && container.querySelector('#it-pro-preview-box')) {
+          renderFavoritesView(favoriteWords, containerSelector, options);
+        }
+      };
+      window.addEventListener('eb:pro-changed', window._favItProChangedHandler);
+    }
+  }
 
   // Bind clear all favorites button
   container.querySelector('#clear-all-favs-btn')?.addEventListener('click', async () => {

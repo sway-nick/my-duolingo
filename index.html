@@ -32,6 +32,13 @@
             }
           } catch (e) {}
         };
+        window.setAnalyticsUserProperty = function(name, value) {
+          try {
+            if (window.AndroidAnalyticsBridge && typeof window.AndroidAnalyticsBridge.setUserProperty === 'function') {
+              window.AndroidAnalyticsBridge.setUserProperty(String(name), value != null ? String(value) : null);
+            }
+          } catch (e) {}
+        };
       })();
     </script>
     <script>
@@ -222,6 +229,8 @@
       import { renderTimeTrainerView } from './components/favorites/TimeTrainerView.js?v=386.0';
       import { renderMicroRulesView } from './components/favorites/MicroRulesView.js?v=386.0';
       import { renderTenseConstructionsView } from './components/favorites/TenseConstructionsView.js?v=386.0';
+      import { renderGrammarHubView } from './components/favorites/GrammarHubView.js?v=386.0';
+      import { renderSpokenEnglishView } from './components/favorites/SpokenEnglishView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
       import { renderLeaderboardView, renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } from './components/leaderboard/LeaderboardView.js?v=386.0';
@@ -230,6 +239,8 @@
       import { showMilestoneStoryModal, showMilestoneUnlockedModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
       import { StorageService } from './services/storageService.js?v=386.0';
       import { AdService } from './services/adService.js?v=386.0';
+      import { ProService } from './services/proService.js?v=386.0';
+      import { showProPaywall } from './components/pro/ProPaywallModal.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
 
       window.showMilestoneStoryModal = showMilestoneStoryModal;
@@ -241,9 +252,16 @@
         StorageService.recordActiveDay();
       } catch (e) {}
 
-      // Initialize AdMob service
+      // Initialize AdMob service & PRO Billing service
       try {
         AdService.init().catch(() => {});
+        ProService.init().catch(() => {});
+        window.addEventListener('eb:pro-paywall', (ev) => {
+          showProPaywall({
+            reason: ev?.detail?.reason || 'settings',
+            wordsNeeded: ev?.detail?.wordsNeeded || 0,
+          }).catch(() => {});
+        });
         syncRemoteVideos().catch(() => {});
 
         // Eagerly prefetch completed week leaderboard on Monday so meme cut is ready instantly
@@ -1920,239 +1938,9 @@
           }
 
           function renderCategorySelectorScreen() {
-            window._isCategorySelectOpen = true;
-            if (window.trackScreen) {
-              window.trackScreen('category_selector', 'CategoryModal');
+            if (typeof window._openGrammarHubScreen === 'function') {
+              window._openGrammarHubScreen();
             }
-            const content = document.querySelector('#app-content');
-            if (!content) return;
-
-            // Dynamically extract all unique categories directly from allWords (Google Sheets)
-            const rawCategories = Array.from(
-              new Set(allWords.map((w) => sanitizeCategory(w.category)).filter(Boolean))
-            );
-
-            // Smart sort: foundational levels first, then any custom categories alphabetically
-            const categoriesList = rawCategories.sort((a, b) => {
-              const getOrderIndex = (catName) => {
-                const clean = String(catName || '').toLowerCase().trim();
-                if (clean.includes('elementary')) return 0;
-                if (clean.includes('irregular')) return 1;
-                if (clean.includes('pattern')) return 2;
-                if (clean.includes('intermediate')) return 3;
-                if (clean.includes('advanced')) return 4;
-                return 999;
-              };
-              const diff = getOrderIndex(a) - getOrderIndex(b);
-              if (diff !== 0) return diff;
-              return a.localeCompare(b);
-            });
-
-            const currentCat = userSettings.category || 'Elementary';
-
-            const tilesHtml = categoriesList.map((catKey) => {
-              const details = getCategoryDetails(catKey);
-              const catWords = allWords.filter(
-                (w) => sanitizeCategory(w.category) === sanitizeCategory(catKey)
-              );
-              const count = catWords.length;
-              const isCurrent = sanitizeCategory(currentCat) === sanitizeCategory(catKey);
-
-              return `
-                <div class="dict-card category-tile-card ${isCurrent ? 'active' : ''}" data-category="${catKey}">
-                  <div class="dict-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span class="category-badge">${catKey}</span>
-                    <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">${count} ${t('words')}</span>
-                  </div>
-                  <div class="dict-card-body">
-                    <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 700;">${details.title}</h3>
-                    <p class="dict-translation" style="margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.35;">${details.desc}</p>
-                  </div>
-                </div>
-              `;
-            }).join('');
-
-            content.innerHTML = `
-              <div class="category-select-page" style="width: 100%; max-width: 600px; margin: 0 auto; padding: 10px 4px 24px; box-sizing: border-box;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                  <div>
-                    <h2 style="margin: 0; font-size: 20px; font-weight: 800; line-height: 1.2;">${t('train_categories_title')}</h2>
-                  </div>
-                  <button type="button" id="cat-select-back-btn" class="cat-select-circle-btn" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; border: 1.5px solid var(--border-color, #334155); background: var(--bg-hover, #1e293b); color: var(--text-muted, #94a3b8); display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; box-sizing: border-box; flex-shrink: 0; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);" aria-label="${t('modal_close')}">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-
-                <div class="dictionary-grid category-tiles-grid" style="width: 100%;">
-                  ${tilesHtml}
-                </div>
-              </div>
-            `;
-
-            content.querySelector('#cat-select-back-btn')?.addEventListener('click', (e) => {
-              e.stopPropagation();
-              window._isCategorySelectOpen = false;
-              renderTrainingTab();
-            });
-
-            content.querySelectorAll('.category-tile-card').forEach((card) => {
-              card.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const chosenCat = card.getAttribute('data-category');
-                if (!chosenCat) return;
-
-                const normCat = String(chosenCat || '').toLowerCase().trim();
-                const isBundled = normCat.includes('elementary') && !['uk', 'gb', 'male'].includes(getSavedVoiceAccent ? getSavedVoiceAccent() : 'us');
-
-                // 1. Only Elementary (US) is pre-packaged in the APK -> Open immediately
-                if (isBundled) {
-                  window._isCategorySelectOpen = false;
-                  window._showHubScreen = false;
-                  favoritePracticeWords = null;
-                  clearActiveConveyorBatch();
-                  window._pausedRoundState = null;
-                  userSettings.category = chosenCat;
-                  userSettings.preferredMethod = 'cards';
-                  window._explicitCardsOpened = true;
-                  window._trainingRoundJustCompleted = false;
-                  saveUserSettings(userSettings);
-                  currentWordIndex = 0;
-                  renderTrainingTab();
-                  return;
-                }
-
-                // 2. For "Разговорные паттерны" and below: verify if audio is downloaded
-                const currentAccent = getSavedVoiceAccent ? getSavedVoiceAccent() : 'us';
-                const verifyCatWords = allWords.filter(
-                  (w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat)
-                );
-                const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat)
-                  && await verifyCategoryAudioInCache(currentAccent, chosenCat, verifyCatWords);
-
-                if (!isDownloaded) {
-                  const details = getCategoryDetails(chosenCat);
-                  const catWords = allWords.filter(
-                    (w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat)
-                  );
-                  const count = catWords.length;
-                  const sizeMb = Math.max(1, Math.round((count * 8) / 1024));
-                  const strings = getCategoryVoiceModalStrings(details.title, count, sizeMb);
-
-                  const modal = document.createElement('div');
-                  modal.className = 'modal-overlay';
-                  modal.id = 'cat-voice-download-modal';
-                  modal.style.cssText = 'position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 16px; box-sizing: border-box;';
-                  modal.innerHTML = `
-                    <div class="modal-content" style="text-align: center; max-width: 350px; width: 100%; padding: 26px 20px; border-radius: 20px; box-sizing: border-box; animation: scaleUp 0.2s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-                      <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">📥</div>
-                      <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
-                        ${strings.title}
-                      </h3>
-                      <p id="cat-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
-                        ${strings.desc}
-                      </p>
-                      <div id="cat-progress-wrap" style="display: none; margin-bottom: 16px;">
-                        <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
-                          <div id="cat-progress-bar" style="background: var(--btn-orange-bg, #f97316); height: 100%; width: 0%; transition: width 0.15s ease;"></div>
-                        </div>
-                        <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
-                      </div>
-                      <div id="cat-modal-actions" style="display: flex; flex-direction: column; gap: 8px;">
-                        <button class="primary-button btn-orange" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
-                          ${strings.downloadBtn}
-                        </button>
-                        <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%; border-radius: 12px;">
-                          ${strings.cancelBtn}
-                        </button>
-                      </div>
-                    </div>
-                  `;
-                  document.body.appendChild(modal);
-
-                  const downloadBtn = modal.querySelector('#cat-modal-download-btn');
-                  const cancelBtn = modal.querySelector('#cat-modal-cancel-btn');
-                  const progressWrap = modal.querySelector('#cat-progress-wrap');
-                  const progressBar = modal.querySelector('#cat-progress-bar');
-                  const progressText = modal.querySelector('#cat-progress-text');
-                  const descEl = modal.querySelector('#cat-modal-desc');
-                  const actionsWrap = modal.querySelector('#cat-modal-actions');
-
-                  cancelBtn.addEventListener('click', () => {
-                    modal.remove();
-                  });
-
-                  downloadBtn.addEventListener('click', async () => {
-                    downloadBtn.disabled = true;
-                    const prevBtnText = downloadBtn.innerHTML;
-                    downloadBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
-
-                    // 1. Show Rewarded Ad if online
-                    if (window.AdService && AdService.isOnline()) {
-                      try {
-                        const adRes = await AdService.showLanguagePackRewardedAd(details.title || chosenCat);
-                        // If ad was shown but dismissed early without reward
-                        if (adRes && adRes.success && !adRes.rewardEarned) {
-                          downloadBtn.disabled = false;
-                          downloadBtn.innerHTML = prevBtnText;
-                          return;
-                        }
-                      } catch (adErr) {
-                        console.warn('Category voice ad error (proceeding gracefully):', adErr);
-                      }
-                    }
-
-                    if (actionsWrap) actionsWrap.style.display = 'none';
-                    progressWrap.style.display = 'block';
-                    if (descEl) descEl.style.display = 'none';
-                    try {
-                      await downloadCategoryVoicePack(currentAccent, chosenCat, catWords, (percent) => {
-                        if (progressBar) progressBar.style.width = `${percent}%`;
-                        if (progressText) progressText.textContent = `${percent}%`;
-                      });
-
-                      modal.remove();
-                      window._isCategorySelectOpen = false;
-                      window._showHubScreen = false;
-                      favoritePracticeWords = null;
-                      clearActiveConveyorBatch();
-                      window._pausedRoundState = null;
-                      userSettings.category = chosenCat;
-                      userSettings.preferredMethod = 'cards';
-                      window._explicitCardsOpened = true;
-                      window._trainingRoundJustCompleted = false;
-                      saveUserSettings(userSettings);
-                      currentWordIndex = 0;
-                      renderTrainingTab();
-                    } catch (err) {
-                      console.warn('Category voice download failed:', err);
-                      if (actionsWrap) actionsWrap.style.display = 'flex';
-                      downloadBtn.disabled = false;
-                      cancelBtn.style.display = 'block';
-                      if (descEl) descEl.style.display = 'block';
-                      downloadBtn.textContent = strings.retryBtn;
-                    }
-                  });
-                  return;
-                }
-
-                // If already downloaded:
-                window._isCategorySelectOpen = false;
-                window._showHubScreen = false;
-                favoritePracticeWords = null;
-                clearActiveConveyorBatch();
-                window._pausedRoundState = null;
-                userSettings.category = chosenCat;
-                userSettings.preferredMethod = 'cards';
-                window._explicitCardsOpened = true;
-                window._trainingRoundJustCompleted = false;
-                saveUserSettings(userSettings);
-                currentWordIndex = 0;
-                renderTrainingTab();
-              });
-            });
           }
 
           const continueCardsBtn = content.querySelector('#go-continue-cards-btn');
@@ -2556,6 +2344,156 @@
 
       let tabHistory = ['training'];
 
+      async function selectCategoryWithVoiceCheck(chosenCat, onSelected) {
+        if (!chosenCat) return;
+        const normCat = String(chosenCat || '').toLowerCase().trim();
+        const currentAccent = getSavedVoiceAccent ? getSavedVoiceAccent() : 'us';
+        const isBundled = normCat.includes('elementary') && !['uk', 'gb', 'male'].includes(currentAccent);
+
+        const applySelection = () => {
+          favoritePracticeWords = null;
+          clearActiveConveyorBatch();
+          window._pausedRoundState = null;
+          userSettings.category = chosenCat;
+          saveUserSettings(userSettings);
+          currentWordIndex = 0;
+          if (typeof onSelected === 'function') onSelected(chosenCat);
+        };
+
+        if (isBundled) {
+          applySelection();
+          return;
+        }
+
+        const normChosen = normCat.replace(/\s*[•\-–—]?\s*[a-c][1-2].*$/i, '').trim();
+        const catWords = allWords.filter((w) => {
+          const wCat = String(w.category || '').toLowerCase().trim();
+          return wCat === normCat || wCat.includes(normChosen);
+        });
+        const isDownloaded = isCategoryAudioDownloaded(currentAccent, chosenCat)
+          && await verifyCategoryAudioInCache(currentAccent, chosenCat, catWords);
+
+        if (isDownloaded) {
+          applySelection();
+          return;
+        }
+
+        const details = getCategoryDetails(chosenCat);
+        const count = catWords.length;
+        const sizeMb = Math.max(1, Math.round((count * 8) / 1024));
+        const strings = getCategoryVoiceModalStrings(details.title, count, sizeMb);
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.id = 'cat-voice-download-modal';
+        modal.style.cssText = 'position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 16px; box-sizing: border-box;';
+        modal.innerHTML = `
+          <div class="modal-content" style="text-align: center; max-width: 350px; width: 100%; padding: 26px 20px; border-radius: 20px; box-sizing: border-box; animation: scaleUp 0.2s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <div style="font-size: 44px; margin-bottom: 10px; line-height: 1;">📥</div>
+            <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 10px; color: var(--text-main);">
+              ${strings.title}
+            </h3>
+            <p id="cat-modal-desc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 18px;">
+              ${strings.desc}
+            </p>
+            <div id="cat-progress-wrap" style="display: none; margin-bottom: 16px;">
+              <div style="background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; margin-bottom: 6px;">
+                <div id="cat-progress-bar" style="background: var(--btn-orange-bg, #f97316); height: 100%; width: 0%; transition: width 0.15s ease;"></div>
+              </div>
+              <span id="cat-progress-text" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">0%</span>
+            </div>
+            <div id="cat-modal-actions" style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="primary-button btn-orange" id="cat-modal-download-btn" style="min-height: 44px; font-size: 15px; font-weight: 700; width: 100%; border-radius: 12px;">
+                ${strings.downloadBtn}
+              </button>
+              <button class="secondary-button" id="cat-modal-cancel-btn" style="min-height: 38px; font-size: 14px; width: 100%; border-radius: 12px;">
+                ${strings.cancelBtn}
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        const downloadBtn = modal.querySelector('#cat-modal-download-btn');
+        const cancelBtn = modal.querySelector('#cat-modal-cancel-btn');
+        const progressWrap = modal.querySelector('#cat-progress-wrap');
+        const progressBar = modal.querySelector('#cat-progress-bar');
+        const progressText = modal.querySelector('#cat-progress-text');
+        const descEl = modal.querySelector('#cat-modal-desc');
+        const actionsWrap = modal.querySelector('#cat-modal-actions');
+
+        cancelBtn.addEventListener('click', () => {
+          modal.remove();
+        });
+
+        downloadBtn.addEventListener('click', async () => {
+          downloadBtn.disabled = true;
+          const prevBtnText = downloadBtn.innerHTML;
+          downloadBtn.innerHTML = `<span>⏳ ${t('ad_loading') || 'Загрузка'}</span>`;
+
+          if (window.AdService && AdService.isOnline()) {
+            try {
+              const adRes = await AdService.showLanguagePackRewardedAd(details.title || chosenCat);
+              if (adRes && adRes.success && !adRes.rewardEarned) {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = prevBtnText;
+                return;
+              }
+            } catch (adErr) {
+              console.warn('Category voice ad error (proceeding gracefully):', adErr);
+            }
+          }
+
+          if (actionsWrap) actionsWrap.style.display = 'none';
+          progressWrap.style.display = 'block';
+          if (descEl) descEl.style.display = 'none';
+          try {
+            await downloadCategoryVoicePack(currentAccent, chosenCat, catWords, (percent) => {
+              if (progressBar) progressBar.style.width = `${percent}%`;
+              if (progressText) progressText.textContent = `${percent}%`;
+            });
+            modal.remove();
+            applySelection();
+          } catch (err) {
+            console.warn('Category voice download failed:', err);
+            if (actionsWrap) actionsWrap.style.display = 'flex';
+            downloadBtn.disabled = false;
+            cancelBtn.style.display = 'block';
+            if (descEl) descEl.style.display = 'block';
+            downloadBtn.textContent = strings.retryBtn;
+          }
+        });
+      }
+
+      window._openGrammarHubScreen = function openGrammarHubScreen() {
+        window._isCategorySelectOpen = true;
+        window._currentGrammarSection = null;
+        if (window.trackScreen) {
+          window.trackScreen('grammar_hub', 'GrammarHub');
+        }
+        const openSection = (sectionId) => {
+          window._currentGrammarSection = sectionId;
+          const backToHub = () => openGrammarHubScreen();
+          if (sectionId === 'milestone_stories') {
+            renderStoriesView('#app-content', { onBack: backToHub });
+          } else if (sectionId === 'grammar_microrules') {
+            renderMicroRulesView('#app-content', { onBack: backToHub });
+          } else if (sectionId === 'tense_constructions') {
+            renderTenseConstructionsView('#app-content', { onBack: backToHub });
+          } else if (sectionId === 'spoken_english') {
+            renderSpokenEnglishView('#app-content', { onBack: backToHub });
+          }
+        };
+        renderGrammarHubView('#app-content', {
+          onBack: () => {
+            window._isCategorySelectOpen = false;
+            window._currentGrammarSection = null;
+            renderTrainingTab();
+          },
+          onOpenSection: openSection,
+        });
+      };
+
       async function renderTab(tabName, skipHistoryPush = false) {
         if (!skipHistoryPush && tabName) {
           if (tabName === 'training') {
@@ -2636,9 +2574,21 @@
         }
 
         if (tabName === 'training') {
+          window._isCategorySelectOpen = false;
+          window._currentGrammarSection = null;
           await renderTrainingTab();
         } else if (tabName === 'stats') {
-          await renderStatsView(allWords, '#app-content');
+          const renderLevelTab = async () => {
+            await renderStatsView(allWords, '#app-content', {
+              currentCategory: userSettings.category || 'Elementary',
+              onSelectCategory: (chosenCat) => {
+                selectCategoryWithVoiceCheck(chosenCat, () => {
+                  renderLevelTab();
+                });
+              },
+            });
+          };
+          await renderLevelTab();
         } else if (tabName === 'favorites') {
           const startPracticeHandler = async (practiceWords, colId = null, colTitle = null) => {
             window._explicitCardsOpened = true;
@@ -2883,6 +2833,20 @@
         try {
           const favList = getUserFavorites();
           favoriteIds = new Set(favList.map(String));
+        } catch (e) {}
+
+        try {
+          if (typeof window.setAnalyticsUserProperty === 'function') {
+            window.setAnalyticsUserProperty('interface_lang', getInterfaceLanguage() || 'ru');
+            window.setAnalyticsUserProperty('is_pro', ProService.isPro() ? 'true' : 'false');
+          }
+          window.addEventListener('myduo:lang_changed', () => {
+            try {
+              if (typeof window.setAnalyticsUserProperty === 'function') {
+                window.setAnalyticsUserProperty('interface_lang', getInterfaceLanguage() || 'ru');
+              }
+            } catch (_) {}
+          });
         } catch (e) {}
 
         window.addEventListener('myduo:auth_changed', async (e) => {
@@ -3203,6 +3167,7 @@
 
             // Priority 2: Close any open modal dialogs or overlays
             const modalSelectors = [
+              '#eb-pro-paywall-modal',
               '#milestone-story-modal-overlay',
               '#privacy-policy-modal-overlay',
               '#doc-scanner-modal-overlay',
@@ -3247,7 +3212,7 @@
             if (rootModals.length > 0) {
               const topModal = rootModals[rootModals.length - 1];
               const closeBtn = topModal.querySelector(
-                '#story-close-btn, #privacy-back-btn, #privacy-close-btn, ' +
+                '#eb-pro-close-btn, #story-close-btn, #privacy-back-btn, #privacy-close-btn, ' +
                 '#scanner-close-btn, .scanner-close-btn, ' +
                 '#add-word-close-btn, #add-word-cancel-btn, ' +
                 '#word-notes-close-btn, .word-notes-modal-close, ' +
@@ -3267,9 +3232,14 @@
               return true;
             }
 
-            // Priority 3: If Category Selection view is open, close it and return to Training Hub
+            // Priority 3: If Grammar Hub or a Grammar sub-section is open, step back cleanly
             if (window._isCategorySelectOpen) {
+              if (window._currentGrammarSection && typeof window._openGrammarHubScreen === 'function') {
+                window._openGrammarHubScreen();
+                return true;
+              }
               window._isCategorySelectOpen = false;
+              window._currentGrammarSection = null;
               renderTrainingTab();
               return true;
             }

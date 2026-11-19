@@ -19,6 +19,8 @@
 
 # Preserve Application Components
 -keep class com.englishbreakfast.app.** { *; }
+-keep class com.englishbreakfast.app.BillingPlugin { *; }
+-keep class com.android.billingclient.** { *; }
 
 # Preserve Google Sign-In & Auth
 -keep class com.google.android.gms.auth.api.signin.** { *; }

@@ -10,8 +10,11 @@ import {
   playSuccessSound,
   playErrorSound,
 } from '../../services/audioService.js?v=386.0';
-import { addWeeklyXP } from '../../services/api.js?v=386.0';
+import { addWeeklyXP, getUserProgress } from '../../services/api.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
+import { isProActive, getTestLearnedCount, getMicroRuleQuota, PRO_LIMITS } from '../../services/proState.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
+import { getProStrings } from '../../services/proI18n.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { formatQuizBlankedHtml, bindQuizWordPopover, closeQuizWordPopover } from './quizWordPopover.js?v=386.0';
 
@@ -110,10 +113,13 @@ function getStylesHtml() {
         --mr-a1-color: #15803d;
         --mr-b1-color: #b45309;
         --mr-b2-color: #7e22ce;
-        padding: 4px 16px 28px;
+        padding: 4px 16px calc(max(52px, var(--safe-bottom, env(safe-area-inset-bottom, 0px))) + 20px);
+        width: 100%;
         max-width: 720px;
+        min-width: 0;
         margin: 0 auto;
         box-sizing: border-box;
+        overflow-x: hidden;
       }
       body.dark-theme .mr-page,
       .dark-theme .mr-page,
@@ -250,12 +256,18 @@ function getStylesHtml() {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        width: 100%;
+        min-width: 0;
       }
       .mr-card {
         background: var(--card-bg, rgba(30, 41, 59, 0.85));
         border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.22));
         border-radius: 16px;
         padding: 15px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
       }
       .mr-card.is-done {
         border-color: rgba(16, 185, 129, 0.45);
@@ -515,13 +527,13 @@ function getStylesHtml() {
         font-size: 12px;
         color: var(--text-muted);
         margin-top: 2px;
-        margin-bottom: 8px;
         line-height: 1.35;
       }
       .mr-quiz-opts {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 6px;
+        margin-top: 8px;
         direction: ltr;
       }
       .mr-quiz-opt {
@@ -648,6 +660,19 @@ const COLLAPSE_BTN_I18N = {
   zh: '收起', kk: 'Жию',
 };
 
+const LEARN_BTN_I18N = {
+  ru: 'Учить', uk: 'Вчити', en: 'Learn', de: 'Lernen',
+  es: 'Aprender', 'es-mx': 'Aprender', fr: 'Apprendre', pl: 'Ucz się',
+  tr: 'Öğren', it: 'Impara', ro: 'Învață', bg: 'Учи',
+  hu: 'Tanulás', el: 'Μάθε', da: 'Lær', lv: 'Mācīties',
+  lt: 'Mokytis', pt: 'Aprender', 'pt-br': 'Aprender', sk: 'Učiť sa',
+  sl: 'Uči se', fi: 'Opi', hr: 'Uči', cs: 'Učit se',
+  sv: 'Lär', et: 'Õpi', hi: 'सीखें', bn: 'শিখুন',
+  ar: 'تعلّم', fa: 'یادگیری', ur: 'سیکھیں', id: 'Pelajari',
+  vi: 'Học', th: 'เรียน', ko: '학습', ja: '学ぶ',
+  zh: '学习', kk: 'Үйрену',
+};
+
 function stripDuplicateTopicPrefix(title, topicLabel) {
   if (!title || !topicLabel) return title || topicLabel || '';
   const tTrim = String(title).trim();
@@ -666,6 +691,9 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   if (!container) return;
 
   const { onBack = () => {} } = options;
+  if (typeof window !== 'undefined' && window.trackScreen) {
+    window.trackScreen('micro_rules', 'MicroRulesView');
+  }
   const rawLang = (getInterfaceLanguage() || 'ru').toLowerCase();
   const baseLang = rawLang.split('-')[0];
   const isRtl = RTL_LOCALES.has(baseLang);
@@ -693,7 +721,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
 
   const { MICRO_RULES, getLocalizedMicroRule, getTopicTitle } = cachedDataMod;
 
-  let activeLevel = 'A1';
+  let activeLevel = 'all';
   let pageLimit = 30;
   const doneSet = loadDoneSet();
   const unlockedSet = loadUnlockedSet();
@@ -723,22 +751,36 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   }
 
   function getFilteredRules() {
+    if (activeLevel === 'all') return MICRO_RULES;
     return MICRO_RULES.filter((item) => item.level === activeLevel);
   }
 
-  function renderRuleCardHtml(item) {
+  function renderRuleCardHtml(item, lockedRank = 0) {
     const loc = getLocalizedMicroRule(item, rawLang);
     const topicLabel = getTopicTitle(item.topic, rawLang);
-    const isUnlocked = unlockedSet.has(item.id);
+    const isPro = isProActive();
+    const isUnlocked = isPro || unlockedSet.has(item.id);
     const isDone = isUnlocked && doneSet.has(item.id);
     const isQuizDone = isUnlocked && quizDoneSet.has(item.id);
-    const isExpanded = !isDone || expandedDoneSet.has(item.id);
+    const isExpanded = expandedDoneSet.has(item.id);
     const solvedSet = solvedQuestions.get(item.id);
     const ruleHeading = String(s.ruleLabel || '#{num}').replace('{num}', String(item.id));
     const displayTitle = stripDuplicateTopicPrefix(loc.title || topicLabel, topicLabel);
     const collapseBtnLabel = COLLAPSE_BTN_I18N[rawLang] || COLLAPSE_BTN_I18N[baseLang] || COLLAPSE_BTN_I18N.en;
+    const learnBtnLabel = LEARN_BTN_I18N[rawLang] || LEARN_BTN_I18N[baseLang] || LEARN_BTN_I18N.en;
 
     if (!isUnlocked) {
+      const learnedCount = getTestLearnedCount(getUserProgress());
+      const quota = getMicroRuleQuota(learnedCount);
+      const remainingAdSlots = Math.max(0, quota - unlockedSet.size);
+      const canUnlockWithAd = lockedRank < remainingAdSlots;
+      const extraSlots = lockedRank - remainingAdSlots + 1;
+      const wordsNeeded = Math.max(
+        1,
+        extraSlots * PRO_LIMITS.MICRO_WORDS_PER_UNLOCK - (learnedCount % PRO_LIMITS.MICRO_WORDS_PER_UNLOCK)
+      );
+      const sPro = getProStrings(rawLang);
+      const hintText = String(sPro.pro_unlock_learn_or_pro || '').replace('{n}', String(wordsNeeded));
       return `
         <article class="mr-card is-locked" data-rule-id="${item.id}">
           <div class="mr-card-top">
@@ -751,26 +793,35 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           </div>
 
           <h3 class="mr-rule-title">${escapeHtml(displayTitle)}</h3>
-          <button type="button" class="mr-unlock-btn btn-orange" data-unlock-rule="${item.id}">
-            <span>🎬</span>
-            <span>${escapeHtml(s.unlockRuleBtn || 'Открыть правило')}</span>
-          </button>
+          ${canUnlockWithAd ? `
+            <button type="button" class="mr-unlock-btn btn-orange" data-unlock-rule="${item.id}">
+              <span>🎬</span>
+              <span>${escapeHtml(s.unlockRuleBtn || 'Открыть правило')}</span>
+            </button>
+          ` : `
+            <p style="margin:6px 0 10px;font-size:13px;line-height:1.4;color:var(--text-muted,#94a3b8);">${escapeHtml(hintText)}</p>
+            <button type="button" class="mr-unlock-btn btn-orange" data-open-pro="micro_rules" data-words-needed="${wordsNeeded}" style="background:linear-gradient(135deg,#f59e0b,#ea580c);">
+              <span>⭐</span>
+              <span>${escapeHtml(sPro.pro_buy || 'PRO')}</span>
+            </button>
+          `}
         </article>
       `;
     }
 
-    if (isDone && !isExpanded) {
+    if (!isExpanded) {
       return `
-        <article class="mr-card is-done is-collapsed" data-rule-id="${item.id}" data-toggle-expand="${item.id}" role="button" tabindex="0">
+        <article class="mr-card ${isDone ? 'is-done' : ''} is-collapsed" data-rule-id="${item.id}" data-toggle-expand="${item.id}" role="button" tabindex="0">
           <div class="mr-card-top">
             <div class="mr-meta-badges">
               <span class="mr-num-badge">${escapeHtml(ruleHeading)}</span>
               <span class="mr-level-pill" style="${getLevelStyle(item.level)}">${escapeHtml(item.level)}</span>
               <span class="mr-topic-pill">${escapeHtml(topicLabel)}</span>
             </div>
-            <button type="button" class="mr-done-btn is-done" data-toggle-done="${item.id}">
-              ${escapeHtml(s.doneBadge)}
-            </button>
+            ${isDone
+              ? `<button type="button" class="mr-done-btn is-done" data-toggle-done="${item.id}">${escapeHtml(s.doneBadge)}</button>`
+              : `<span class="mr-done-btn">${escapeHtml(learnBtnLabel)}</span>`
+            }
           </div>
           <div class="mr-collapsed-row">
             <h3 class="mr-rule-title">${escapeHtml(displayTitle)}</h3>
@@ -788,7 +839,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
             <span class="mr-topic-pill">${escapeHtml(topicLabel)}</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
-            ${isDone ? `<button type="button" class="mr-expand-btn is-collapse" data-toggle-expand="${item.id}" aria-label="${escapeHtml(collapseBtnLabel)}">▴</button>` : ''}
+            <button type="button" class="mr-expand-btn is-collapse" data-toggle-expand="${item.id}" aria-label="${escapeHtml(collapseBtnLabel)}">▴</button>
             <button type="button" class="mr-done-btn ${isDone ? 'is-done' : ''}" data-toggle-done="${item.id}">
               ${escapeHtml(isDone ? s.doneBadge : s.markDoneBtn)}
             </button>
@@ -846,23 +897,47 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
             </div>
           </div>
         ` : ''}
-        ${isDone ? `
-          <div class="mr-card-footer">
-            <button type="button" class="mr-expand-btn" data-toggle-expand="${item.id}">
-              ${escapeHtml(collapseBtnLabel)} ▴
-            </button>
-          </div>
-        ` : ''}
+        <div class="mr-card-footer">
+          <button type="button" class="mr-expand-btn" data-toggle-expand="${item.id}">
+            ${escapeHtml(collapseBtnLabel)} ▴
+          </button>
+        </div>
       </article>
     `;
   }
 
+  function scrollRuleCardToTop(ruleId) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    const cardEl = container.querySelector(`.mr-card[data-rule-id="${ruleId}"]`);
+    if (!cardEl || typeof cardEl.getBoundingClientRect !== 'function') return;
+    const headerEl = document.querySelector('.mobile-header');
+    const safeTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0;
+    const headerBottom = headerEl && typeof headerEl.getBoundingClientRect === 'function'
+      ? Math.max(headerEl.getBoundingClientRect().bottom, headerEl.getBoundingClientRect().height + safeTop)
+      : (60 + safeTop);
+    const targetTop = Math.max(0, window.scrollY + cardEl.getBoundingClientRect().top - headerBottom - 12);
+    if (typeof window.scrollTo === 'function') {
+      window.scrollTo(0, targetTop);
+    }
+  }
+
   function bindCardListeners(rootEl) {
+    rootEl.querySelectorAll('[data-open-pro]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const wordsNeeded = Number(btn.getAttribute('data-words-needed') || 0);
+        ProService.openPaywall(btn.getAttribute('data-open-pro') || 'micro_rules', { wordsNeeded });
+      });
+    });
+
     rootEl.querySelectorAll('[data-unlock-rule]').forEach((btn) => {
       btn.addEventListener('click', async () => {
         if (btn.disabled) return;
         const id = Number(btn.getAttribute('data-unlock-rule'));
         if (!id) return;
+        if (!isProActive() && unlockedSet.size >= getMicroRuleQuota(getTestLearnedCount(getUserProgress()))) {
+          ProService.openPaywall('micro_rules');
+          return;
+        }
         const ruleObj = MICRO_RULES.find((r) => r.id === id);
         const locTitle = ruleObj
           ? (getLocalizedMicroRule(ruleObj, rawLang).title || getTopicTitle(ruleObj.topic, rawLang))
@@ -896,18 +971,21 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         e.stopPropagation();
         const id = Number(btn.getAttribute('data-toggle-done'));
         if (!id) return;
-        if (doneSet.has(id)) {
-          doneSet.delete(id);
+        const markingDone = !doneSet.has(id);
+        if (markingDone) {
+          doneSet.add(id);
           expandedDoneSet.delete(id);
         } else {
-          doneSet.add(id);
+          doneSet.delete(id);
           expandedDoneSet.delete(id);
         }
         saveDoneSet(doneSet);
         updateProgressPill();
         const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
         updateDynamicContent();
-        if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+        if (markingDone) {
+          scrollRuleCardToTop(id);
+        } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
           window.scrollTo(0, prevScrollY);
         }
       });
@@ -917,13 +995,11 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       btn.addEventListener('click', () => {
         const id = Number(btn.getAttribute('data-toggle-expand'));
         if (!id) return;
-        if (expandedDoneSet.has(id)) expandedDoneSet.delete(id);
-        else expandedDoneSet.add(id);
-        const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+        const expanding = !expandedDoneSet.has(id);
+        if (expanding) expandedDoneSet.add(id);
+        else expandedDoneSet.delete(id);
         updateDynamicContent();
-        if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
-          window.scrollTo(0, prevScrollY);
-        }
+        scrollRuleCardToTop(id);
       });
     });
 
@@ -955,6 +1031,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           try { playSuccessSound(); } catch (_) {}
           try { triggerHaptic('selection'); } catch (_) {}
 
+          let justCompletedRule = false;
           if (solvedSet.size >= item.quiz.length && !quizDoneSet.has(ruleId)) {
             quizDoneSet.add(ruleId);
             saveQuizDoneSet(quizDoneSet);
@@ -963,12 +1040,18 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
               saveDoneSet(doneSet);
             }
             expandedDoneSet.delete(ruleId);
+            justCompletedRule = true;
             try { addWeeklyXP(5); } catch (_) {}
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('microrule_completed', { rule_id: ruleId });
+            }
             updateProgressPill();
           }
           const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
           updateDynamicContent();
-          if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+          if (justCompletedRule) {
+            scrollRuleCardToTop(ruleId);
+          } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
             window.scrollTo(0, prevScrollY);
           }
         } else {
@@ -1005,9 +1088,16 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
 
     const shown = filtered.slice(0, pageLimit);
     const remaining = filtered.length - shown.length;
+    const isProNow = isProActive();
+    let lockedCounter = 0;
+    const cardsHtml = shown.map((item) => {
+      const isItemUnlocked = isProNow || unlockedSet.has(item.id);
+      const rank = isItemUnlocked ? 0 : lockedCounter++;
+      return renderRuleCardHtml(item, rank);
+    }).join('');
     bodyEl.innerHTML = `
       <div class="mr-list">
-        ${shown.map(renderRuleCardHtml).join('')}
+        ${cardsHtml}
         ${remaining > 0 ? `
           <button type="button" class="mr-more-btn" id="mr-show-more-btn">
             ${escapeHtml(String(s.showMoreBtn || 'Show more ({count})').replace('{count}', String(remaining)))}
@@ -1023,7 +1113,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     });
   }
 
-  const levels = ['A1', 'A2', 'B1', 'B2'];
+  const levels = ['all', 'A1', 'A2', 'B1', 'B2'];
   const progressText = String(s.progressLabel || '{done} / {total}')
     .replace('{done}', String(doneSet.size))
     .replace('{total}', String(MICRO_RULES.length));
@@ -1044,7 +1134,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         <div class="mr-levels">
           ${levels.map((lv) => `
             <button type="button" class="mr-level-btn ${lv === activeLevel ? 'is-active' : ''}" data-mr-level="${lv}">
-              ${escapeHtml(lv)}
+              ${escapeHtml(lv === 'all' ? (s.filterAll || 'Все') : lv)}
             </button>
           `).join('')}
         </div>
@@ -1061,7 +1151,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
 
   container.querySelectorAll('[data-mr-level]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      activeLevel = btn.getAttribute('data-mr-level') || 'A1';
+      activeLevel = btn.getAttribute('data-mr-level') || 'all';
       pageLimit = 30;
       container.querySelectorAll('[data-mr-level]').forEach((b) =>
         b.classList.toggle('is-active', b === btn)

@@ -15,9 +15,12 @@ import {
   playSuccessSound,
   playErrorSound,
 } from '../../services/audioService.js?v=386.0';
-import { addWeeklyXP } from '../../services/api.js?v=386.0';
+import { addWeeklyXP, getUserProgress } from '../../services/api.js?v=386.0';
 import { getInterfaceLanguage, t } from '../../services/i18n.js?v=386.0';
 import AdService from '../../services/adService.js?v=386.0';
+import { isProActive, getTestLearnedCount, PRO_LIMITS } from '../../services/proState.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
+import { getProStrings } from '../../services/proI18n.js?v=386.0';
 import { formatQuizBlankedHtml, bindQuizWordPopover, closeQuizWordPopover } from './quizWordPopover.js?v=386.0';
 
 export { TENSE_CONSTRUCTIONS_I18N, getTenseConstructionsStrings };
@@ -104,7 +107,7 @@ function getStylesHtml() {
         --tc-a1-color: #15803d;
         --tc-b1-color: #b45309;
         --tc-b2-color: #7e22ce;
-        padding: 4px 16px 28px;
+        padding: 4px 16px calc(max(52px, var(--safe-bottom, env(safe-area-inset-bottom, 0px))) + 20px);
         width: 100%;
         max-width: 720px;
         min-width: 0;
@@ -233,6 +236,10 @@ function getStylesHtml() {
         border-radius: 18px;
         padding: 16px;
         scroll-margin-top: 84px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
       }
@@ -445,6 +452,10 @@ function getStylesHtml() {
         vertical-align: top;
         text-align: left;
       }
+      .tc-matrix-table td.is-done {
+        box-shadow: inset 0 0 0 1.5px rgba(16, 185, 129, 0.85);
+        background: rgba(16, 185, 129, 0.08);
+      }
       .tc-matrix-table th {
         background: rgba(37, 99, 235, 0.12);
         color: var(--text-main);
@@ -509,6 +520,10 @@ function getStylesHtml() {
       .tc-special-chip-btn:hover {
         border-color: var(--tc-accent);
       }
+      .tc-special-chip-btn.is-done {
+        border-color: rgba(16, 185, 129, 0.75);
+        background: rgba(16, 185, 129, 0.08);
+      }
       .tc-quiz-section {
         margin-top: 14px;
         padding-top: 12px;
@@ -567,13 +582,13 @@ function getStylesHtml() {
         font-size: 12px;
         color: var(--text-muted);
         margin-top: 2px;
-        margin-bottom: 8px;
         line-height: 1.35;
       }
       .tc-quiz-opts {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 6px;
+        margin-top: 8px;
         direction: ltr;
       }
       .tc-quiz-opt {
@@ -682,6 +697,19 @@ const COLLAPSE_BTN_I18N = {
   zh: '收起', kk: 'Жию',
 };
 
+const LEARN_BTN_I18N = {
+  ru: 'Учить', uk: 'Вчити', en: 'Learn', de: 'Lernen',
+  es: 'Aprender', 'es-mx': 'Aprender', fr: 'Apprendre', pl: 'Ucz się',
+  tr: 'Öğren', it: 'Impara', ro: 'Învață', bg: 'Учи',
+  hu: 'Tanulás', el: 'Μάθε', da: 'Lær', lv: 'Mācīties',
+  lt: 'Mokytis', pt: 'Aprender', 'pt-br': 'Aprender', sk: 'Učiť sa',
+  sl: 'Uči se', fi: 'Opi', hr: 'Uči', cs: 'Učit se',
+  sv: 'Lär', et: 'Õpi', hi: 'सीखें', bn: 'শিখুন',
+  ar: 'تعلّم', fa: 'یادگیری', ur: 'سیکھیں', id: 'Pelajari',
+  vi: 'Học', th: 'เรียน', ko: '학습', ja: '学ぶ',
+  zh: '学习', kk: 'Үйрену',
+};
+
 export function renderTenseConstructionsView(containerSelector = '#app-content', options = {}) {
   const container = typeof containerSelector === 'string'
     ? document.querySelector(containerSelector)
@@ -696,6 +724,7 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
   const mrStrings = getMicroRulesStrings(rawLang);
   const unlockBtnLabel = mrStrings?.unlockRuleBtn || 'Открыть правило';
   const collapseBtnLabel = COLLAPSE_BTN_I18N[rawLang] || COLLAPSE_BTN_I18N[baseLang] || COLLAPSE_BTN_I18N.en;
+  const learnBtnLabel = LEARN_BTN_I18N[rawLang] || LEARN_BTN_I18N[baseLang] || LEARN_BTN_I18N.en;
 
   let activeTab = 'list';
   let activeGroup = 'all';
@@ -707,6 +736,28 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
   const collapsedOpenSet = new Set();
   const solvedQuestions = new Map();
   let audioSeq = 0;
+
+  function scrollTenseCardToTop(id, smooth = false) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    const escapedId = typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(id) : id;
+    const card = container.querySelector(`[data-tense-card="${escapedId}"]`);
+    if (!card || typeof card.getBoundingClientRect !== 'function') return;
+    const headerEl = document.querySelector('.mobile-header, header, .app-header, .top-bar');
+    const safeTop = typeof getComputedStyle === 'function'
+      ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0)
+      : 0;
+    const headerBottom = headerEl && typeof headerEl.getBoundingClientRect === 'function'
+      ? Math.max(headerEl.getBoundingClientRect().bottom, headerEl.getBoundingClientRect().height + safeTop)
+      : (64 + safeTop);
+    const targetTop = Math.max(0, window.scrollY + card.getBoundingClientRect().top - headerBottom - 12);
+    if (typeof window.scrollTo === 'function') {
+      if (smooth) {
+        window.scrollTo({ top: targetTop, behavior: 'smooth' });
+      } else {
+        window.scrollTo(0, targetTop);
+      }
+    }
+  }
 
   function playExample(enText, btnEl) {
     const seq = ++audioSeq;
@@ -730,14 +781,21 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
 
   function renderCardHtml(item) {
     const loc = getLocalizedTenseConstruction(item, rawLang);
-    const isUnlocked = unlockedSet.has(item.id);
+    const isPro = isProActive();
+    const isUnlocked = isPro || unlockedSet.has(item.id);
     const isDone = isUnlocked && doneSet.has(item.id);
     const isQuizDone = isUnlocked && quizDoneSet.has(item.id);
-    const isExpanded = isDone ? expandedDoneSet.has(item.id) : !collapsedOpenSet.has(item.id);
+    const isExpanded = expandedDoneSet.has(item.id);
     const solvedSet = solvedQuestions.get(item.id);
     const isHighlighted = focusedId === item.id;
 
     if (!isUnlocked) {
+      const learnedCount = getTestLearnedCount(getUserProgress());
+      const threshold = PRO_LIMITS.TENSE_THRESHOLDS[item.id] ?? 0;
+      const canUnlockWithAd = learnedCount >= threshold;
+      const wordsNeeded = Math.max(0, threshold - learnedCount);
+      const sPro = getProStrings(rawLang);
+      const hintText = String(sPro.pro_unlock_learn_or_pro || '').replace('{n}', String(wordsNeeded));
       return `
         <article class="tc-card is-locked ${isHighlighted ? 'is-highlighted' : ''}" data-tense-card="${escapeHtml(item.id)}">
           <div class="tc-card-head" style="margin-bottom:6px;">
@@ -750,10 +808,18 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
             <span aria-label="Locked" style="font-size:15px;">🔒</span>
           </div>
           <p class="tc-card-sub" style="margin:0 0 10px;">${escapeHtml(loc.subtitle)}</p>
-          <button type="button" class="tc-unlock-btn btn-orange" data-unlock-tense="${escapeHtml(item.id)}">
-            <span>🎬</span>
-            <span>${escapeHtml(unlockBtnLabel)}</span>
-          </button>
+          ${canUnlockWithAd ? `
+            <button type="button" class="tc-unlock-btn btn-orange" data-unlock-tense="${escapeHtml(item.id)}">
+              <span>🎬</span>
+              <span>${escapeHtml(unlockBtnLabel)}</span>
+            </button>
+          ` : `
+            <p style="margin:0 0 10px;font-size:13px;line-height:1.4;color:var(--text-muted,#94a3b8);">${escapeHtml(hintText)}</p>
+            <button type="button" class="tc-unlock-btn btn-orange" data-open-pro="tenses" data-words-needed="${wordsNeeded}" style="background:linear-gradient(135deg,#f59e0b,#ea580c);">
+              <span>⭐</span>
+              <span>${escapeHtml(sPro.pro_buy || 'PRO')}</span>
+            </button>
+          `}
         </article>
       `;
     }
@@ -768,9 +834,10 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
                 <span class="tc-level-badge" style="${getLevelBadgeColor(item.level)}">${escapeHtml(item.level)}</span>
               </div>
             </div>
-            <button type="button" class="tc-done-btn ${isDone ? 'is-done' : ''}" data-toggle-done="${escapeHtml(item.id)}">
-              ${escapeHtml(isDone ? s.doneBadge : s.markDoneBtn)}
-            </button>
+            ${isDone
+              ? `<button type="button" class="tc-done-btn is-done" data-toggle-done="${escapeHtml(item.id)}">${escapeHtml(s.doneBadge)}</button>`
+              : `<span class="tc-done-btn">${escapeHtml(learnBtnLabel)}</span>`
+            }
           </div>
           <p class="tc-card-sub" style="margin:0;">${escapeHtml(loc.subtitle)}</p>
         </article>
@@ -787,9 +854,10 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
             <button type="button" class="tc-expand-btn is-collapse" data-toggle-expand="${escapeHtml(item.id)}" aria-label="${escapeHtml(collapseBtnLabel)}">▴</button>
-            <button type="button" class="tc-done-btn ${isDone ? 'is-done' : ''}" data-toggle-done="${escapeHtml(item.id)}">
-              ${escapeHtml(isDone ? s.doneBadge : s.markDoneBtn)}
-            </button>
+            ${isDone
+              ? `<button type="button" class="tc-done-btn is-done" data-toggle-done="${escapeHtml(item.id)}">${escapeHtml(s.doneBadge)}</button>`
+              : `<span class="tc-done-btn">${escapeHtml(learnBtnLabel)}</span>`
+            }
           </div>
         </div>
         <p class="tc-card-sub" style="margin:0 0 12px;">${escapeHtml(loc.subtitle)}</p>
@@ -907,11 +975,11 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
                   const id = `${r.time}_${a.key}`;
                   const item = byId.get(id);
                   if (!item) return '<td></td>';
-                  const mark = doneSet.has(id) ? ' ✓' : '';
+                  const isDone = doneSet.has(id);
                   return `
-                    <td>
+                    <td class="${isDone ? 'is-done' : ''}">
                       <button type="button" class="tc-matrix-cell-btn" data-open-tense="${escapeHtml(id)}">
-                        <span class="tc-matrix-cell-title">${escapeHtml(item.title)}${mark}</span>
+                        <span class="tc-matrix-cell-title">${escapeHtml(item.title)}</span>
                         <span class="tc-matrix-cell-formula">${escapeHtml(item.formula.pos)}</span>
                       </button>
                     </td>
@@ -932,8 +1000,8 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       <div class="tc-section-label">${escapeHtml(s.filterSpecial)} · ${escapeHtml(s.specialSubtitle)}</div>
       <div class="tc-special-grid">
         ${specials.map((sp) => `
-          <button type="button" class="tc-special-chip-btn" data-open-tense="${escapeHtml(sp.id)}">
-            <span class="tc-matrix-cell-title">${escapeHtml(sp.title)}${doneSet.has(sp.id) ? ' ✓' : ''}</span>
+          <button type="button" class="tc-special-chip-btn ${doneSet.has(sp.id) ? 'is-done' : ''}" data-open-tense="${escapeHtml(sp.id)}">
+            <span class="tc-matrix-cell-title">${escapeHtml(sp.title)}</span>
             <span class="tc-matrix-cell-formula">${escapeHtml(sp.formula.pos)}</span>
           </button>
         `).join('')}
@@ -1001,6 +1069,9 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       btn.addEventListener('click', () => {
         activeTab = btn.getAttribute('data-tab-mode') || 'list';
         focusedId = null;
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('tense_tab_switch', { tab: activeTab });
+        }
         render();
       });
     });
@@ -1013,11 +1084,24 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       });
     });
 
+    container.querySelectorAll('[data-open-pro]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const wordsNeeded = Number(btn.getAttribute('data-words-needed') || 0);
+        ProService.openPaywall(btn.getAttribute('data-open-pro') || 'tenses', { wordsNeeded });
+      });
+    });
+
     container.querySelectorAll('[data-unlock-tense]').forEach((btn) => {
       btn.addEventListener('click', async () => {
         if (btn.disabled) return;
         const id = btn.getAttribute('data-unlock-tense');
         if (!id) return;
+        const threshold = PRO_LIMITS.TENSE_THRESHOLDS[id] ?? 0;
+        const learned = getTestLearnedCount(getUserProgress());
+        if (!isProActive() && learned < threshold) {
+          ProService.openPaywall('tenses', { wordsNeeded: threshold - learned });
+          return;
+        }
         const item = TENSE_CONSTRUCTIONS.find((tObj) => tObj.id === id);
         btn.disabled = true;
         const prevHtml = btn.innerHTML;
@@ -1049,17 +1133,20 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
         e.stopPropagation();
         const id = btn.getAttribute('data-toggle-done');
         if (!id) return;
-        if (doneSet.has(id)) {
-          doneSet.delete(id);
+        const markingDone = !doneSet.has(id);
+        if (markingDone) {
+          doneSet.add(id);
           expandedDoneSet.delete(id);
         } else {
-          doneSet.add(id);
+          doneSet.delete(id);
           expandedDoneSet.delete(id);
         }
         saveDoneIds(doneSet);
         const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
         render();
-        if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+        if (markingDone) {
+          scrollTenseCardToTop(id, false);
+        } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
           window.scrollTo(0, prevScrollY);
         }
       });
@@ -1069,18 +1156,10 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-toggle-expand');
         if (!id) return;
-        if (doneSet.has(id)) {
-          if (expandedDoneSet.has(id)) expandedDoneSet.delete(id);
-          else expandedDoneSet.add(id);
-        } else {
-          if (collapsedOpenSet.has(id)) collapsedOpenSet.delete(id);
-          else collapsedOpenSet.add(id);
-        }
-        const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+        if (expandedDoneSet.has(id)) expandedDoneSet.delete(id);
+        else expandedDoneSet.add(id);
         render();
-        if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
-          window.scrollTo(0, prevScrollY);
-        }
+        scrollTenseCardToTop(id, false);
       });
     });
 
@@ -1098,30 +1177,12 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
         focusedId = id;
         activeTab = 'list';
         activeGroup = 'all';
-        if (doneSet.has(id)) expandedDoneSet.add(id);
-        else collapsedOpenSet.delete(id);
+        expandedDoneSet.add(id);
         render();
-        const scrollToCard = () => {
-          const card = container.querySelector(`[data-tense-card="${CSS.escape ? CSS.escape(id) : id}"]`);
-          if (!card) return;
-          const headerEl = typeof document !== 'undefined'
-            ? document.querySelector('header, .app-header, .top-bar')
-            : null;
-          const headerHeight = headerEl && typeof headerEl.getBoundingClientRect === 'function'
-            ? headerEl.getBoundingClientRect().height
-            : 64;
-          const offset = headerHeight + 16;
-          if (typeof window !== 'undefined' && typeof window.scrollTo === 'function' && typeof card.getBoundingClientRect === 'function') {
-            const targetTop = Math.max(0, window.scrollY + card.getBoundingClientRect().top - offset);
-            window.scrollTo({ top: targetTop, behavior: 'smooth' });
-          } else if (typeof card.scrollIntoView === 'function') {
-            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        };
         if (typeof requestAnimationFrame === 'function') {
-          requestAnimationFrame(scrollToCard);
+          requestAnimationFrame(() => scrollTenseCardToTop(id, true));
         } else {
-          scrollToCard();
+          scrollTenseCardToTop(id, true);
         }
       });
     });
@@ -1147,11 +1208,15 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
           try { playSuccessSound(); } catch (_) {}
           try { triggerHaptic('selection'); } catch (_) {}
 
+          let justCompletedTense = false;
           if (solvedSet.size >= item.quiz.length) {
             if (!quizDoneSet.has(tenseId)) {
               quizDoneSet.add(tenseId);
               saveQuizDoneSet(quizDoneSet);
               try { addWeeklyXP(5); } catch (_) {}
+              if (typeof window !== 'undefined' && window.trackEvent) {
+                window.trackEvent('tense_completed', { tense_id: tenseId });
+              }
             }
             if (!doneSet.has(tenseId)) {
               doneSet.add(tenseId);
@@ -1159,10 +1224,13 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
             }
             expandedDoneSet.delete(tenseId);
             collapsedOpenSet.delete(tenseId);
+            justCompletedTense = true;
           }
           const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
           render();
-          if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+          if (justCompletedTense) {
+            scrollTenseCardToTop(tenseId, false);
+          } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
             window.scrollTo(0, prevScrollY);
           }
         } else {

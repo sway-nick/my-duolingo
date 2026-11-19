@@ -598,7 +598,7 @@ test('FavoritesView: collection words are NOT favorited by default (🤍) unless
   assert.equal((container.innerHTML.match(/🤍/g) || []).length, 0, 'In my_favorites, no 🤍');
 });
 
-test('Collections: IT (187) and Idioms (100) have 36-locale notes and downloadable pack flow', async () => {
+test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadable pack flow', async () => {
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const {
      getCollectionWords,
@@ -626,7 +626,7 @@ test('Collections: IT (187) and Idioms (100) have 36-locale notes and downloadab
 
   const itWords = getCollectionWords('it_terms', wordsData);
   const idiomWords = getCollectionWords('idioms', wordsData);
-  assert.equal(itWords.length, 187);
+  assert.equal(itWords.length, 200);
   assert.equal(idiomWords.length, 150);
 
   const expectedExpandedCounts = {
@@ -673,6 +673,8 @@ test('Collections: IT (187) and Idioms (100) have 36-locale notes and downloadab
     assert.ok(getWordNotes(w, 'ru', { hideItNotes: true }).length > 0, `Note for "${w.word}" must remain visible in general Dictionary`);
   }
 
+  const { setEntitlement, clearEntitlement } = await import('../frontend/services/proState.js');
+  clearEntitlement();
   global.localStorage.clear();
   assert.equal(isCollectionPackDownloaded('it_terms'), false);
   assert.equal(isCollectionPackDownloaded('idioms'), false);
@@ -684,18 +686,57 @@ test('Collections: IT (187) and Idioms (100) have 36-locale notes and downloadab
   const container = { innerHTML: '', querySelector: () => null, querySelectorAll: () => [] };
   global.document.querySelector = (sel) => (sel === '#app-content' ? container : null);
 
-  // Before download -> shows Download button with video icon 🎬
+  // Ad-unlocked pack (idioms) before download -> shows Download button with video icon 🎬
+  renderFavoritesView(idiomWords, '#app-content', {
+    collectionId: 'idioms',
+    collectionTitle: 'Идиомы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.ok(container.innerHTML.includes('id="download-collection-pack-btn"'), 'Must render download button before ad pack is downloaded');
+  assert.ok(container.innerHTML.includes('🎬'), 'Download button must include video icon 🎬');
+
+  // After 1st ad unlock -> renders first 10 idioms + unlock-more-idioms-btn (+10)
+  markCollectionPackDownloaded('idioms');
+  assert.equal(isCollectionPackDownloaded('idioms'), true);
+  renderFavoritesView(idiomWords, '#app-content', {
+    collectionId: 'idioms',
+    collectionTitle: 'Идиомы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid after 1st idioms unlock');
+  assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Must render +10 unlock button when more idioms remain');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Free tier must unlock exactly 10 idioms per ad');
+
+  // Phrasal verbs -> unlocks 20 per ad, or all in PRO
+  markCollectionPackDownloaded('phrasal_verbs');
+  assert.equal(isCollectionPackDownloaded('phrasal_verbs'), true);
+  renderFavoritesView(phrasalWords, '#app-content', {
+    collectionId: 'phrasal_verbs',
+    collectionTitle: 'Фразовые глаголы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 20, 'Free tier must unlock exactly 20 phrasal verbs per ad');
+  assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Must render +20 unlock button when more phrasal verbs remain');
+
+  // IT collection shows 5 preview cards in free tier + PRO paywall button (cannot be unlocked via ad/localStorage flag)
+  markCollectionPackDownloaded('it_terms');
+  assert.equal(isCollectionPackDownloaded('it_terms'), false, 'it_terms must stay locked for non-PRO even if localStorage flag exists');
   renderFavoritesView(itWords, '#app-content', {
     collectionId: 'it_terms',
     collectionTitle: 'IT и разработка',
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.ok(container.innerHTML.includes('id="download-collection-pack-btn"'), 'Must render download button before pack is downloaded');
-  assert.ok(container.innerHTML.includes('🎬'), 'Download button must include video icon 🎬');
+  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render 5-card preview grid for it_terms when not PRO');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 5, 'Free tier must show exactly 5 preview cards for it_terms');
+  assert.ok(container.innerHTML.includes('id="open-it-pro-btn"'), 'Must render PRO paywall button for it_terms when not PRO');
+  assert.ok(!container.innerHTML.includes('id="download-collection-pack-btn"'), 'Must not render ad download button for PRO-only it_terms');
 
-  // After download -> renders normal collection cards
-  markCollectionPackDownloaded('it_terms');
+  // When PRO is active -> it_terms renders full words grid immediately without PRO button
+  setEntitlement({ active: true, source: 'play' });
   assert.equal(isCollectionPackDownloaded('it_terms'), true);
   renderFavoritesView(itWords, '#app-content', {
     collectionId: 'it_terms',
@@ -703,7 +744,10 @@ test('Collections: IT (187) and Idioms (100) have 36-locale notes and downloadab
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid after pack is downloaded');
+  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid for it_terms when PRO is active');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, itWords.length, 'PRO tier must render all it_terms cards');
+  assert.ok(!container.innerHTML.includes('id="open-it-pro-btn"'), 'Must not render PRO paywall button when PRO is active');
+  clearEntitlement();
 });
 
 test('ReviewFunnelModal: 36 locales coverage and 2-button flow', async () => {
@@ -1165,14 +1209,20 @@ test('MicroRules and TenseConstructions cover all 36 supported locales, progress
     }
   }
 
-  const hubSource = fs.readFileSync(path.resolve('frontend/components/favorites/CollectionsHubView.js'), 'utf8');
+  const grammarHubSource = fs.readFileSync(path.resolve('frontend/components/favorites/GrammarHubView.js'), 'utf8');
+  const collectionsHubSource = fs.readFileSync(path.resolve('frontend/components/favorites/CollectionsHubView.js'), 'utf8');
   const indexSource = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
   const microViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/MicroRulesView.js'), 'utf8');
   const tenseViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/TenseConstructionsView.js'), 'utf8');
-  assert.ok(hubSource.includes('data-col-id="grammar_microrules"'), 'CollectionsHubView must include grammar_microrules tile');
-  assert.ok(hubSource.includes('data-col-id="tense_constructions"'), 'CollectionsHubView must include tense_constructions tile');
-  assert.ok(indexSource.includes("colId === 'grammar_microrules'"), 'index.html must route grammar_microrules');
-  assert.ok(indexSource.includes("colId === 'tense_constructions'"), 'index.html must route tense_constructions');
+  assert.ok(grammarHubSource.includes('data-grammar-id="grammar_microrules"'), 'GrammarHubView must include grammar_microrules tile');
+  assert.ok(grammarHubSource.includes('data-grammar-id="tense_constructions"'), 'GrammarHubView must include tense_constructions tile');
+  assert.ok(grammarHubSource.includes('data-grammar-id="milestone_stories"'), 'GrammarHubView must include milestone_stories tile');
+  assert.ok(grammarHubSource.includes('data-grammar-id="spoken_english"'), 'GrammarHubView must include spoken_english tile');
+  assert.ok(!collectionsHubSource.includes('data-col-id="grammar_microrules"'), 'CollectionsHubView must not include grammar_microrules');
+  assert.ok(!collectionsHubSource.includes('data-col-id="tense_constructions"'), 'CollectionsHubView must not include tense_constructions');
+  assert.ok(!collectionsHubSource.includes('data-col-id="milestone_stories"'), 'CollectionsHubView must not include milestone_stories');
+  assert.ok(indexSource.includes('grammar_microrules'), 'index.html must route grammar_microrules');
+  assert.ok(indexSource.includes('tense_constructions'), 'index.html must route tense_constructions');
   assert.ok(indexSource.includes('renderMicroRulesView('), 'index.html must invoke renderMicroRulesView');
   assert.ok(indexSource.includes('renderTenseConstructionsView('), 'index.html must invoke renderTenseConstructionsView');
   assert.ok(microViewSource.includes('myduo_microrules_unlocked'), 'MicroRulesView must persist unlocked rule IDs');
@@ -1184,7 +1234,7 @@ test('MicroRules and TenseConstructions cover all 36 supported locales, progress
   assert.ok(!microViewSource.includes('class="mr-ex-heading"') && !microViewSource.includes('class="mr-ex-list"'), 'MicroRulesView must not render examples block');
   assert.ok(!microViewSource.includes('data-mr-mode'), 'MicroRulesView must not render mode tabs (list only)');
   assert.ok(!microViewSource.includes('mr-search-input'), 'MicroRulesView must not render search input');
-  assert.ok(!microViewSource.includes("const levels = ['all'"), 'MicroRulesView must not render All (320) button');
+  assert.ok(microViewSource.includes("const levels = ['all'"), 'MicroRulesView must render All button');
   assert.ok(!microViewSource.includes('class="mr-hint"'), 'MicroRulesView must not render listen hint banner');
   assert.ok(!microViewSource.includes('class="mr-hero-sub"'), 'MicroRulesView must not render hero subtitle');
   assert.ok(microViewSource.includes('data-toggle-expand'), 'MicroRulesView must support collapsing/reopening studied rules without ads');

@@ -1,4 +1,5 @@
 import { getInterfaceLanguage } from './i18n.js?v=386.0';
+import { isProActive, consumeFreeShield, getFreeShieldsLeft } from './proState.js?v=386.0';
 /**
  * Google AdMob Integration Service
  * Manages Rewarded Ads, Interstitials, Banners and Shield mechanisms
@@ -99,6 +100,9 @@ class AdServiceImpl {
   }
 
   canShowHourlyInterstitial() {
+    if (isProActive()) {
+      return false;
+    }
     if (this.isGracePeriodActive()) {
       return false;
     }
@@ -236,6 +240,14 @@ class AdServiceImpl {
    * Initialize AdMob SDK
    */
   async init() {
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function' && !this._proBannerListenerBound) {
+      this._proBannerListenerBound = true;
+      window.addEventListener('eb:pro-changed', (ev) => {
+        if (ev?.detail?.active) {
+          this.hideBottomBanner().catch(() => {});
+        }
+      });
+    }
     if (this.initialized) return;
     const AdMob = this.getNativeAdMob();
 
@@ -488,6 +500,17 @@ class AdServiceImpl {
   async showShieldRewardedAd() {
     if (typeof window !== 'undefined' && window.trackEvent) {
       window.trackEvent('ad_shield_requested');
+    }
+
+    if (isProActive() && consumeFreeShield()) {
+      this.shieldsUsedInRound++;
+      return {
+        success: true,
+        rewardEarned: true,
+        isOffline: false,
+        source: 'pro_free',
+        shieldsLeft: getFreeShieldsLeft(),
+      };
     }
 
     if (!this.isOnline()) {
@@ -1268,6 +1291,10 @@ class AdServiceImpl {
    * Show Bottom Banner (Stats & Leaderboard)
    */
   async showBottomBanner() {
+    if (isProActive()) {
+      await this.hideBottomBanner().catch(() => {});
+      return;
+    }
     if (this.isBannerActive || !this.isOnline()) return;
     const AdMob = this.getNativeAdMob();
 

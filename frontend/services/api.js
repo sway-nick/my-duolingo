@@ -1,4 +1,5 @@
 import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
+import { isProActive, PRO_LIMITS, isPatternText } from './proState.js?v=386.0';
 import { 
   syncLeaderboardScoreFirestore, 
   commitXpDeltaFirestore,
@@ -2614,9 +2615,17 @@ async function toggleFavoriteApi(wordId, isFavorite) {
   const shouldBeFavorite = typeof isFavorite === 'boolean' ? isFavorite : !favs.includes(wordIdStr);
 
   if (shouldBeFavorite) {
-    unrecordDeletedFavorite(wordIdStr, userId);
     if (!favs.includes(wordIdStr)) {
+      if (!isProActive() && favs.length >= PRO_LIMITS.FREE_FAVORITES_MAX) {
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('eb:pro-paywall', { detail: { reason: 'favorites_limit' } }));
+        }
+        return { blocked: 'favorites_limit' };
+      }
+      unrecordDeletedFavorite(wordIdStr, userId);
       favs.push(wordIdStr);
+    } else {
+      unrecordDeletedFavorite(wordIdStr, userId);
     }
   } else {
     recordDeletedFavorite(wordIdStr, userId);
@@ -4152,6 +4161,12 @@ try {
 
 async function addCustomWord({ word, translation, category, notes }) {
   const cleanW = String(word || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
+  if (!isProActive() && isPatternText(cleanW)) {
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('eb:pro-paywall', { detail: { reason: 'custom_pattern' } }));
+    }
+    return { blocked: 'custom_pattern' };
+  }
   let cleanTrans = String(translation || '').replace(/[\u00ad\u200b\ufeff]/g, '').trim();
   const cleanCat = String(category || 'Общие').trim();
   const cleanNotes = String(notes || '').trim();
@@ -4592,7 +4607,7 @@ async function enrichAndTranslateScanResult(data, lang = 'en', fallbackFullText 
 
     if (isWrongLanguage) {
       if (localTr) {
-        item.translation = localTr.split(',')[0].trim();
+        item.translation = localTr.split(/[,،]/)[0].trim();
       } else {
         indicesNeedingTranslation.push(i);
       }
@@ -4808,7 +4823,7 @@ async function clientSideExtractTextLemmas(rawText, lang = 'ru') {
     return {
       word: item.word,
       original: item.original,
-      translation: localTr ? localTr.split(',')[0].trim() : '',
+      translation: localTr ? localTr.split(/[,،]/)[0].trim() : '',
       transcription: localEntry?.transcription || '',
       level: levelGuess,
       category: cat,

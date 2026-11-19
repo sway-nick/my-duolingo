@@ -4,6 +4,7 @@ import { speakWord } from '../../services/audioService.js?v=386.0';
 import { toggleFavoriteApi, getUserFavorites, getWords } from '../../services/api.js?v=386.0';
 import { AdService } from '../../services/adService.js?v=386.0';
 import { checkAndPromptReviewFunnel } from './ReviewFunnelModal.js?v=386.0';
+import { QUIZ_WORDS_MAP } from '../favorites/quizWordsTranslations.js?v=386.0';
 
 export const MILESTONE_STORIES = {
   "0": {
@@ -755,7 +756,7 @@ export const FUNCTION_WORDS_MAP = {
   "biwa": {"ru":"Бива (озеро)","uk":"Біва (озеро)","en":"Biwa","de":"Biwa","es":"Biwa","fr":"Biwa","pl":"Biwa","tr":"Biwa","it":"Biwa","ro":"Biwa","bg":"Бива (езеро)","hu":"Biwa","el":"Μπίβα (λίμνη)","da":"Biwa","lv":"Biwa","lt":"Biwa","pt":"Biwa","sk":"Biwa","sl":"Biwa","fi":"Biwa","hr":"Biwa","cs":"Biwa","sv":"Biwa","et":"Biwa","hi":"बीवा (झील)","bn":"বিওয়া (হ্রদ)","ar":"بيوا (بحيرة)","fa":"بیوا","ur":"بیوا","id":"Biwa","vi":"Biwa","th":"บิวะ (ทะเลสาบ)","ko":"비와호","ja":"琵琶湖","zh":"琵琶湖","kk":"Бива (көл)"},
   "brighton": {"ru":"Брайтон (город)","uk":"Брайтон (місто)","en":"Brighton","de":"Brighton","es":"Brighton","fr":"Brighton","pl":"Brighton","tr":"Brighton","it":"Brighton","ro":"Brighton","bg":"Брайтън","hu":"Brighton","el":"Μπράιτον","da":"Brighton","lv":"Brighton","lt":"Brighton","pt":"Brighton","sk":"Brighton","sl":"Brighton","fi":"Brighton","hr":"Brighton","cs":"Brighton","sv":"Brighton","et":"Brighton","hi":"ब्राइटन","bn":"ব্রাইটন","ar":"برايتون","fa":"برایتون","ur":"برائٹن","id":"Brighton","vi":"Brighton","th":"ไบรตัน","ko":"브라이턴","ja":"ブライトン","zh":"布莱顿","kk":"Брайтон"},
   "daniel": {"ru":"Даниэль (имя)","uk":"Даніель (ім'я)","en":"Daniel","de":"Daniel","es":"Daniel","fr":"Daniel","pl":"Daniel","tr":"Daniel","it":"Daniel","ro":"Daniel","bg":"Даниел","hu":"Daniel","el":"Ντάνιελ","da":"Daniel","lv":"Daniel","lt":"Daniel","pt":"Daniel","sk":"Daniel","sl":"Daniel","fi":"Daniel","hr":"Daniel","cs":"Daniel","sv":"Daniel","et":"Daniel","hi":"डैनियल","bn":"ড্যানিয়েল","ar":"دانيال","fa":"دانیال","ur":"ڈینیل","id":"Daniel","vi":"Daniel","th":"แดเนียล","ko":"대니얼","ja":"ダニエル","zh":"丹尼尔","kk":"Даниэль"},
-  "emma": {"ru":"Эмма (имя)","uk":"Емма (ім'я)","en":"Emma","de":"Emma","es":"Emma","fr":"Emma","pl":"Emma","tr":"Emma","it":"Emma","ro":"Emma","bg":"Ема","hu":"Emma","el":"Έμμα","da":"Emma","lv":"Emma","lt":"Emma","pt":"Emma","sk":"Emma","sl":"Emma","fi":"Emma","hr":"Emma","cs":"Emma","sv":"Emma","et":"Emma","hi":"एम्मा","bn":"এমা","ar":"إيما","fa":"اما","ur":"ایما","id":"Emma","vi":"Emma","th":"เอ็มม่า","ko":"엠マ","ja":"エマ","zh":"艾玛","kk":"Эмма"},
+  "emma": {"ru":"Эмма (имя)","uk":"Емма (ім'я)","en":"Emma","de":"Emma","es":"Emma","fr":"Emma","pl":"Emma","tr":"Emma","it":"Emma","ro":"Emma","bg":"Ема","hu":"Emma","el":"Έμμα","da":"Emma","lv":"Emma","lt":"Emma","pt":"Emma","sk":"Emma","sl":"Emma","fi":"Emma","hr":"Emma","cs":"Emma","sv":"Emma","et":"Emma","hi":"एम्मा","bn":"এমা","ar":"إيما","fa":"اما","ur":"ایما","id":"Emma","vi":"Emma","th":"เอ็มม่า","ko":"엠마","ja":"エマ","zh":"艾玛","kk":"Эмма"},
   "fujiwara": {"ru":"Фудзивара","uk":"Фудзівара","en":"Fujiwara","de":"Fujiwara","es":"Fujiwara","fr":"Fujiwara","pl":"Fujiwara","tr":"Fujiwara","it":"Fujiwara","ro":"Fujiwara","bg":"Фудживара","hu":"Fujiwara","el":"Φουτζιβάρα","da":"Fujiwara","lv":"Fujiwara","lt":"Fujiwara","pt":"Fujiwara","sk":"Fujiwara","sl":"Fujiwara","fi":"Fujiwara","hr":"Fujiwara","cs":"Fujiwara","sv":"Fujiwara","et":"Fujiwara","hi":"फुजिवारा","bn":"ফুজিওয়ারা","ar":"فوجيوارا","fa":"فوجی‌وارا","ur":"فوجیوارا","id":"Fujiwara","vi":"Fujiwara","th":"ฟูจิวาระ","ko":"후지와라","ja":"藤原","zh":"藤原","kk":"Фудзивара"},
   "hidesato": {"ru":"Хидэсато","uk":"Хідесато","en":"Hidesato","de":"Hidesato","es":"Hidesato","fr":"Hidesato","pl":"Hidesato","tr":"Hidesato","it":"Hidesato","ro":"Hidesato","bg":"Хидесато","hu":"Hidesato","el":"Χιντεσάτο","da":"Hidesato","lv":"Hidesato","lt":"Hidesato","pt":"Hidesato","sk":"Hidesato","sl":"Hidesato","fi":"Hidesato","hr":"Hidesato","cs":"Hidesato","sv":"Hidesato","et":"Hidesato","hi":"हिदेसातो","bn":"হিদেসাতো","ar":"هيديساتو","fa":"هیده‌ساتو","ur":"ہیدیساتو","id":"Hidesato","vi":"Hidesato","th":"ฮิเดซาโตะ","ko":"히데사토","ja":"秀郷","zh":"秀乡","kk":"Хидэсато"},
   "japan": {"ru":"Япония","uk":"Японія","en":"Japan","de":"Japan","es":"Japan","fr":"Japan","pl":"Japan","tr":"Japan","it":"Japan","ro":"Japan","bg":"Япония","hu":"Japan","el":"Ιαπωνία","da":"Japan","lv":"Japan","lt":"Japan","pt":"Japan","sk":"Japan","sl":"Japan","fi":"Japan","hr":"Japan","cs":"Japan","sv":"Japan","et":"Japan","hi":"जापान","bn":"জাপান","ar":"اليابان","fa":"ژاپن","ur":"جاپان","id":"Japan","vi":"Japan","th":"ญี่ปุ่น","ko":"일본","ja":"日本","zh":"日本","kk":"Жапония"},
@@ -785,7 +786,7 @@ export const FUNCTION_WORDS_MAP = {
   "check-out": {"en":"check-out","ru":"выезд (из отеля), расчет","uk":"виїзд (з готелю), розрахунок","de":"Abreise, Check-out","es":"salida, check-out","fr":"départ, check-out","pl":"wymeldowanie","it":"partenza, check-out","tr":"çıkış, check-out","pt":"saída, check-out","ro":"plecare, check-out","bg":"напускане на хотел","cs":"odhlášení z hotelu","sk":"odhlásenie","hu":"kijelentkezés","el":"αναχώρηση από ξενοδοχείο","sl":"odjava iz hotela","et":"hotellist väljaregistreerimine","lt":"išsiregistravimas","da":"udtjekning","fi":"uloskirjautuminen","sv":"utcheckning","hr":"odjava iz hotela","lv":"izrakstīšanās","hi":"होटल से रवानगी","ar":"تسجيل المغادرة","id":"proses keluar hotel","vi":"trả phòng","th":"เช็คเอาท์","ko":"체크아웃, 퇴실","ja":"チェックアウト","bn":"হোটেল ত্যাগ","fa":"تصفیه حساب و خروج","zh":"结账退房","ur":"ہوٹل سے روانگی","kk":"қонақүйден шығу"},
   "creep": {"en":"creep, crawl","ru":"ползти, мурашки","uk":"повзти, мурашки","de":"kriechen, schleichen","es":"arrastrarse","fr":"ramper","pl":"czołgać się","it":"strisciare","tr":"sürünmek","pt":"arrastar-se","ro":"a se târî","bg":"пълзя","cs":"plížit se, lézt","sk":"plaziť sa","hu":"kúszik, mászik","el":"έρπω","sl":"plaziti se","et":"roomama","lt":"šliaužti","da":"krybe","fi":"ryömiä","sv":"krypa","hr":"puzati","lv":"rāpot","hi":"रेंगना","ar":"زحف","id":"merayap","vi":"bò, rón rén","th":"คลาน","ko":"기어가다, 소름 끼치다","ja":"這う、ぞっとする","bn":"হামাগুড়ি দেওয়া","fa":"خزیدن","zh":"爬行，毛骨悚然","ur":"رینگنا","kk":"өрмелеу, жорғалау"},
   "dauntlessly": {"en":"dauntlessly","ru":"бесстрашно, неустрашимо","uk":"безстрашно, неустрашимо","de":"furchtlos","es":"intrépidamente","fr":"intrépidement","pl":"nieustraszenie","it":"intrepidamente","tr":"korkusuzca","pt":"intrépida e bravamente","ro":"neînfricat","bg":"безстрашно","cs":"neohroženě","sk":"neohrozene","hu":"rettenthetetlenül","el":"ατρόμητα","sl":"neustrašno","et":"kartmatult","lt":"be baimės","da":"frygtløst","fi":"pelottomasti","sv":"oförskräckt","hr":"neustrašivo","lv":"bezbailīgi","hi":"निडर होकर","ar":"بجسارة, بلا خوف","id":"dengan gagah berani","vi":"can đảm, bất khuất","th":"อย่างไม่เกรงกลัว","ko":"용감하게, 굽히지 않고","ja":"恐れずに、勇敢に","bn":"নির্ভয়ে","fa":"بی‌باکانه","zh":"勇敢地，大无畏地","ur":"بے خوفی سے","kk":"қорықпай, ержүректікпен"},
-  "deliciously": {"en":"deliciously","ru":"восхитительно, очень вкусно","uk":"чудово, дуже смачно","de":"köstlich","es":"deliciosamente","fr":"délicieusement","pl":"pysznie, wyśmienicie","it":"deliziosamente","tr":"lezzetli bir şekilde","pt":"deliciosamente","ro":"delicios","bg":"вкусно","cs":"lahodně","sk":"lahodne","hu":"ízletesen","el":"νόστιμα","sl":"okusno","et":"maitsvalt","lt":"skaniai","da":"lækkert","fi":"herkullisesti","sv":"läckert","hr":"ukusno","lv":"gardi","hi":"स्वादिष्ट रूप से","ar":"بشهية, بلذة","id":"dengan lezat","vi":"thơm ngon","th":"อย่างเอร็ดอร่อย","ko":"맛있게","ja":"とても美味しく","bn":"সুস্বাদুভাবে","fa":"به طرز لذیذی","zh":"美味地","ur":"مزیدار انداز میں","kk":"өте дәмді"},
+  "deliciously": {"en":"deliciously","ru":"восхитительно, очень вкусно","uk":"чудово, дуже смачно","de":"köstlich","es":"deliciosamente","fr":"délicieusement","pl":"pysznie, wyśmienicie","it":"deliziosamente","tr":"lezzetli bir şekilde","pt":"deliciosamente","ro":"delicios","bg":"вкусно","cs":"lahodně","sk":"lahodne","hu":"ízletesen","el":"νόστιμα","sl":"okusno","et":"maitsvalt","lt":"skaniai","da":"lækkert","fi":"herkullisesti","sv":"läckert","hr":"ukusno","lv":"gardi","hi":"स्वादिष्ट रूप से","ar":"بلذة، بشكل لذيذ","id":"dengan lezat","vi":"thơm ngon","th":"อย่างเอร็ดอร่อย","ko":"맛있게","ja":"とても美味しく","bn":"সুস্বাদুভাবে","fa":"به طرز لذیذی","zh":"美味地","ur":"مزیدار انداز میں","kk":"өте дәмді"},
   "everything": {"en":"everything","ru":"всё, все","uk":"все","de":"alles","es":"todo","fr":"tout","pl":"wszystko","it":"tutto","tr":"her şey","pt":"tudo","ro":"totul, tot","bg":"всичко","cs":"všechno, vše","sk":"všetko","hu":"minden","el":"όλα","sl":"vse","et":"kõik","lt":"viskas","da":"alt","fi":"kaikki","sv":"allt","hr":"sve","lv":"viss","hi":"सब कुछ","ar":"كل شيء","id":"semuanya","vi":"mọi thứ","th":"ทุกอย่าง","ko":"모든 것","ja":"すべて","bn":"সবকিছু","fa":"همه چیز","zh":"一切，每件事","ur":"سب کچھ","kk":"бәрі, барлығы"},
   "eat": {"en":"eat","ru":"есть, кушать","uk":"їсти, куштувати","de":"essen","es":"comer","fr":"manger","pl":"jeść","it":"mangiare","tr":"yemek yemek","pt":"comer","ro":"a mânca","bg":"ям","cs":"jíst","sk":"jesť","hu":"enni","el":"τρώω","sl":"jesti","et":"sööma","lt":"valgyti","da":"spise","fi":"syödä","sv":"äta","hr":"jesti","lv":"ēst","hi":"खाना","ar":"أكل","id":"makan","vi":"ăn","th":"กิน, ทาน","ko":"먹다","ja":"食べる","bn":"খাওয়া","fa":"خوردن","zh":"吃","ur":"کھانا","kk":"жеу"},
   "explain": {"en":"explain","ru":"объяснять","uk":"пояснювати","de":"erklären","es":"explicar","fr":"expliquer","pl":"wyjaśniać","it":"spiegare","tr":"açıklamak","pt":"explicar","ro":"a explica","bg":"обяснявам","cs":"vysvětlit","sk":"vysvetliť","hu":"elmagyaráz","el":"εξηγώ","sl":"razložiti","et":"selgitama","lt":"paaiškinti","da":"forklare","fi":"selittää","sv":"förklara","hr":"objasniti","lv":"paskaidrot","hi":"समझाना","ar":"شرح","id":"menjelaskan","vi":"giải thích","th":"อธิบาย","ko":"설명하다","ja":"説明する","bn":"ব্যাখ্যা করা","fa":"توضیح دادن","zh":"解释，说明","ur":"وضاحت کرنا","kk":"түсіндіру"},
@@ -795,7 +796,7 @@ export const FUNCTION_WORDS_MAP = {
   "henceforth": {"en":"henceforth","ru":"впредь, с этого времени","uk":"відтепер, надалі","de":"fortan, von nun an","es":"de ahora en adelante","fr":"dorénavant","pl":"odtąd","it":"d'ora in poi","tr":"bundan böyle","pt":"de agora em diante","ro":"de acum înainte","bg":"отсега нататък","cs":"napříště, od nynějška","sk":"odteraz","hu":"ezentúl","el":"στο εξής","sl":"odslej","et":"edaspidi","lt":"nuo šiol","da":"fremover","fi":"tästedes","sv":"hädanefter","hr":"ubuduće","lv":"turpmāk","hi":"अब से, भविष्य में","ar":"من الآن فصاعدا","id":"mulai sekarang","vi":"kể từ nay","th":"นับแต่นี้เป็นต้นไป","ko":"이제부터는","ja":"これ以降","bn":"এখন থেকে","fa":"از این پس","zh":"从此以后","ur":"اب سے آگے","kk":"бұдан былай"},
   "hung": {"en":"hung, was hanging","ru":"висел, повесил","uk":"висів, повісив","de":"hing, hing auf","es":"colgó, colgaba","fr":"pendait, accroché","pl":"wisiał","it":"pendeva, ha appeso","tr":"asıldı, astı","pt":"pendurou, estava pendurado","ro":"atârna, a agățat","bg":"висеше","cs":"visel, pověsil","sk":"visel, zavesil","hu":"lógott, akasztott","el":"κρεμόταν","sl":"visel","et":"rippus","lt":"kabojo","da":"hang","fi":"riippui","sv":"hängde","hr":"visio je","lv":"karājās","hi":"लटका हुआ था","ar":"علق, تدلى","id":"tergantung, menggantung","vi":"treo, lơ lửng","th":"แขวนอยู่","ko":"걸려 있었다","ja":"ぶら下がっていた","bn":"ঝুলে ছিল","fa":"آویزان بود","zh":"悬挂，垂挂","ur":"لٹکا ہوا تھا","kk":"ілулі тұрды"},
   "man": {"en":"man, human","ru":"человек, мужчина","uk":"чоловік, людина","de":"Mann, Mensch","es":"hombre","fr":"homme","pl":"mężczyzna, człowiek","it":"uomo","tr":"adam, insan","pt":"homem","ro":"bărbat, om","bg":"мъж, човек","cs":"muž, člověk","sk":"muž, človek","hu":"férfi, ember","el":"άνδρας, άνθρωπος","sl":"moški, človek","et":"mees, inimene","lt":"vyras, žmogus","da":"mand","fi":"mies","sv":"man","hr":"čovjek, muškarac","lv":"vīrietis, cilvēks","hi":"आदमी, पुरुष","ar":"رجل, إنسان","id":"pria, orang","vi":"người đàn ông","th":"ผู้ชาย","ko":"남자, 사람","ja":"男、人間","bn":"মানুষ, পুরুষ","fa":"مرد, انسان","zh":"男人，人","ur":"آدمی، مرد","kk":"ер адам, кісі"},
-  "oh": {"en":"oh!","ru":"о!, ой!","uk":"о!, ой!","de":"oh!, ach!","es":"¡oh!","fr":"oh !","pl":"o!, ach!","it":"oh!","tr":"ah!, ey!","pt":"ó!, oh!","ro":"o!, vai!","bg":"о!, ох!","cs":"ó!, ach!","sk":"ó!, ach!","hu":"ó!, jaj!","el":"ω!","sl":"o!, ah!","et":"oo!, oh!","lt":"o!, oi!","da":"åh!, oh!","fi":"voi!, oi!","sv":"åh!, o!","hr":"o!, oh!","lv":"ak!, ak vai!","hi":"ओह!","ar":"يا!, أوه!","id":"oh!","vi":"ôi!","th":"โอ้!","ko":"오!, 아!","ja":"ああ！、おお！","bn":"ওহ!","fa":"اوه!","zh":"哦！，哎呀！","ur":"اوہ!","kk":"о!, ой!"},
+  "oh": {"en":"oh!","ru":"о!, ой!","uk":"о!, ой!","de":"oh!, ach!","es":"¡oh!","fr":"oh !","pl":"o!, ach!","it":"oh!","tr":"ah!, ey!","pt":"ó!, oh!","ro":"o!, vai!","bg":"о!, ох!","cs":"ó!, ach!","sk":"ó!, ach!","hu":"ó!, jaj!","el":"ω!","sl":"o!, ah!","et":"oo!, oh!","lt":"o!, oi!","da":"åh!, oh!","fi":"voi!, oi!","sv":"åh!, o!","hr":"o!, oh!","lv":"ak!, ak vai!","hi":"ओह!","ar":"آه!، أوه!","id":"oh!","vi":"ôi!","th":"โอ้!","ko":"오!, 아!","ja":"ああ！、おお！","bn":"ওহ!","fa":"اوه!","zh":"哦！，哎呀！","ur":"اوہ!","kk":"о!, ой!"},
   "practise": {"en":"practise","ru":"практиковать, упражняться","uk":"практикувати, вправлятися","de":"üben, praktizieren","es":"practicar","fr":"pratiquer, s’entraîner","pl":"ćwiczyć, praktykować","it":"esercitarsi, praticare","tr":"pratik yapmak","pt":"praticar, exercitar","ro":"a practica","bg":"практикувам","cs":"procvičovat","sk":"precvičovať","hu":"gyakorol","el":"εξασκούμαι","sl":"vaditi","et":"harjutama","lt":"praktikuotis","da":"øve","fi":"harjoitella","sv":"öva","hr":"vježbati","lv":"trenēties","hi":"अभ्यास करना","ar":"ممارسة","id":"berlatih","vi":"luyện tập","th":"ฝึกฝน","ko":"연습하다","ja":"練習する","bn":"অনুশীলন করা","fa":"تمرین کردن","zh":"练习，实习","ur":"مشق کرنا","kk":"жаттығу, тәжірибе жасау"},
   "promised": {"en":"promised","ru":"обещал, обещанный","uk":"обіцяв, обіцяний","de":"versprach","es":"prometió","fr":"promis","pl":"obiecał","it":"ha promesso","tr":"söz verdi","pt":"prometeu","ro":"a promis","bg":"обеща","cs":"slíbil","sk":"sľúbil","hu":"megígérte","el":"υποσχέθηκε","sl":"obljubil","et":"lubas","lt":"pažadėjo","da":"lovede","fi":"lupasi","sv":"lovade","hr":"obećao je","lv":"apsolīja","hi":"वादा किया","ar":"وعد","id":"berjanji","vi":"đã hứa","th":"สัญญาแล้ว","ko":"약속했다","ja":"約束した","bn":"প্রতিশ্রুতি দিয়েছিল","fa":"قول داد","zh":"答应，承诺","ur":"وعدہ کیا","kk":"уәде берді"},
   "rainy": {"en":"rainy","ru":"дождливый","uk":"дощовий","de":"regnerisch","es":"lluvioso","fr":"pluvieux","pl":"deszczowy","it":"piovoso","tr":"yağmurlu","pt":"chuvoso","ro":"ploios","bg":"дъждовен","cs":"deštivý","sk":"daždivý","hu":"esős","el":"βροχερός","sl":"deževen","et":"vihmane","lt":"lietingas","da":"regnfuld","fi":"sateinen","sv":"regnig","hr":"kišovit","lv":"lietains","hi":"बरसाती","ar":"ماطر","id":"berhujan","vi":"có mưa","th":"ฝนตก","ko":"비 내리는","ja":"雨の降る","bn":"বৃষ্টিবহুল","fa":"بارانی","zh":"下雨的，多雨的","ur":"بارانی","kk":"жаңбырлы"},
@@ -870,6 +871,12 @@ const IRREGULAR_VERBS_MAP = {
   'worries': 'worry', 'worry': 'worry', 'promised': 'promise',
   'terrified': 'terrify', 'sallied': 'sally', 'spanning': 'span',
   'shipping': 'ship', 'restarting': 'restart',
+  'blew': 'blow', 'bought': 'buy', 'broke': 'break', 'drove': 'drive', 'eaten': 'eat',
+  'forgot': 'forget', 'fought': 'fight', 'hid': 'hide', 'laid': 'lay', 'lent': 'lend',
+  'lit': 'light', 'rang': 'ring', 'ridden': 'ride', 'rode': 'ride', 'risen': 'rise',
+  'rung': 'ring', 'sang': 'sing', 'shut': 'shut', 'sped': 'speed', 'stole': 'steal',
+  'swept': 'sweep', 'taught': 'teach', 'wept': 'weep', 'wore': 'wear', 'worn': 'wear',
+  'mice': 'mouse', 'geese': 'goose', 'worse': 'bad',
 };
 
 const SPELLING_VARIANTS_MAP = {
@@ -956,12 +963,28 @@ export function resolveWord(rawWord, dictMap, lang) {
   }
 
   // 2. Direct function / story words map (pronouns, contractions, names, function words across all 36 locales)
+  const baseLang = String(lang || 'ru').toLowerCase().split('-')[0];
   if (FUNCTION_WORDS_MAP[clean]) {
     const entry = FUNCTION_WORDS_MAP[clean];
-    const trans = entry[lang] || (lang === 'ru' ? entry['ru'] : '') || (lang === 'en' ? entry['en'] : '') || '';
+    const trans = entry[lang] || entry[baseLang] || (lang === 'ru' ? entry['ru'] : '') || (lang === 'en' ? entry['en'] : '') || '';
     return {
       id: null,
       word: clean,
+      transcription: '',
+      translation: trans,
+      isFromDict: false,
+      rawObj: null
+    };
+  }
+
+  // 2b. Quiz & grammar popover words map (all 36 locales, not added to flashcards)
+  if (QUIZ_WORDS_MAP[clean]) {
+    const entry = QUIZ_WORDS_MAP[clean];
+    const trans = entry[lang] || entry[baseLang] || entry['en'] || '';
+    return {
+      id: null,
+      word: clean,
+      baseForm: entry.base || '',
       transcription: '',
       translation: trans,
       isFromDict: false,
@@ -1015,10 +1038,12 @@ export function resolveWord(rawWord, dictMap, lang) {
 
   // 6. Irregular verbs & inflections
   if (IRREGULAR_VERBS_MAP[clean] && dictMap.has(IRREGULAR_VERBS_MAP[clean])) {
-    const w = dictMap.get(IRREGULAR_VERBS_MAP[clean]);
+    const baseWord = IRREGULAR_VERBS_MAP[clean];
+    const w = dictMap.get(baseWord);
     return {
       id: w.id,
       word: clean,
+      baseForm: baseWord !== clean ? baseWord : '',
       transcription: w.transcription || '',
       translation: getTrans(w),
       isFromDict: true,
@@ -1026,19 +1051,31 @@ export function resolveWord(rawWord, dictMap, lang) {
     };
   }
 
-  // 7. Regular morphology: plurals & 3rd person -s/-es/-ies, -ed, -ing
+  // 7. Regular morphology: plurals & 3rd person -s/-es/-ies/-ves, -ed/-ied, -ing, -ly
   const candidates = [];
   if (clean.endsWith('ies')) candidates.push(clean.slice(0, -3) + 'y');
+  if (clean.endsWith('ves')) {
+    candidates.push(clean.slice(0, -3) + 'f');
+    candidates.push(clean.slice(0, -3) + 'fe');
+  }
   if (clean.endsWith('s') && !clean.endsWith('ss')) candidates.push(clean.slice(0, -1));
   if (clean.endsWith('es')) candidates.push(clean.slice(0, -2));
   if (clean.endsWith('ing')) {
     candidates.push(clean.slice(0, -3));
     candidates.push(clean.slice(0, -3) + 'e');
+    if (clean.length > 5 && clean[clean.length - 4] === clean[clean.length - 5]) {
+      candidates.push(clean.slice(0, -4));
+    }
   }
+  if (clean.endsWith('ied')) candidates.push(clean.slice(0, -3) + 'y');
   if (clean.endsWith('ed')) {
     candidates.push(clean.slice(0, -2));
     candidates.push(clean.slice(0, -1));
+    if (clean.length > 4 && clean[clean.length - 3] === clean[clean.length - 4]) {
+      candidates.push(clean.slice(0, -3));
+    }
   }
+  if (clean.endsWith('ly')) candidates.push(clean.slice(0, -2));
 
   for (const cand of candidates) {
     if (dictMap.has(cand)) {
@@ -1046,6 +1083,7 @@ export function resolveWord(rawWord, dictMap, lang) {
       return {
         id: w.id,
         word: clean,
+        baseForm: cand !== clean ? cand : '',
         transcription: w.transcription || '',
         translation: getTrans(w),
         isFromDict: true,

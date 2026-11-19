@@ -9,6 +9,9 @@ import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js
 import { deleteCurrentUserAccount } from '../../services/firebase.js?v=386.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
+import { getProStrings } from '../../services/proI18n.js?v=386.0';
+import { getFreeShieldsLeft, isProActive } from '../../services/proState.js?v=386.0';
 
 if (typeof window !== 'undefined') {
   window.openWidgetConfigBottomSheet = openWidgetConfigBottomSheet;
@@ -61,8 +64,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <div class="profile-avatar-wrapper" id="change-avatar-trigger" title="${t('settings_avatar_choose_tooltip')}">
           ${
             avatar
-              ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img" referrerpolicy="no-referrer" />`
-              : `<div class="profile-avatar-placeholder">${escapeHtml(displayName.trim().charAt(0).toUpperCase() || '👤')}</div>`
+              ? `<img src="${avatar}" alt="Avatar" class="profile-avatar-img${isProActive() ? ' pro-avatar-ring' : ''}" referrerpolicy="no-referrer" />`
+              : `<div class="profile-avatar-placeholder${isProActive() ? ' pro-avatar-ring' : ''}">${escapeHtml(displayName.trim().charAt(0).toUpperCase() || '👤')}</div>`
           }
           <div class="avatar-edit-badge" title="${t('settings_avatar_edit_tooltip')}">🎭</div>
         </div>
@@ -166,6 +169,40 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${t('settings_configure_widget') || 'Настроить виджет'}
         </button>
       </div>
+
+      ${(() => {
+        const isNativeApp = Boolean(typeof window !== 'undefined' && window.Capacitor && ((typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) || (typeof window.Capacitor.getPlatform === 'function' && window.Capacitor.getPlatform() !== 'web')));
+        const isDebug = typeof localStorage !== 'undefined' && localStorage.getItem('myduo_debug_mode') === 'true';
+        const isProNow = ProService.isPro();
+        if (!isNativeApp && !isProNow && !isDebug) return '';
+        const sPro = getProStrings(getInterfaceLanguage());
+        const promoEnabled = typeof localStorage === 'undefined' || localStorage.getItem('eb_promo_codes_enabled') !== 'false';
+        return `
+        <div class="settings-card" id="settings-pro-section" style="padding: 16px 14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:${isProNow ? '0' : '10px'};">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;font-size:11px;">${escapeHtml(sPro.pro_badge)}</span>
+              <h3 class="settings-card-title" style="margin:0;">${escapeHtml(sPro.pro_title)}</h3>
+            </div>
+          </div>
+          ${isProNow ? '' : `
+            <button type="button" class="theme-option-btn active" id="btn-settings-open-pro" style="width:100%;justify-content:center;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;border:none;margin-bottom:8px;">
+              ⭐ ${escapeHtml(sPro.pro_buy)}
+            </button>
+            <button type="button" class="theme-option-btn" id="btn-settings-restore-pro" style="width:100%;justify-content:center;font-size:13px;">
+              ${escapeHtml(sPro.pro_restore)}
+            </button>
+            ${promoEnabled ? `
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <input type="text" id="eb-settings-promo-input" placeholder="${escapeHtml(sPro.pro_promo_placeholder)}" autocomplete="off" style="flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--border-color,rgba(148,163,184,0.3));background:var(--bg-main,transparent);color:var(--text-main);font-size:13px;" />
+                <button type="button" class="theme-option-btn" id="eb-settings-promo-btn" style="padding:8px 12px;font-size:13px;white-space:nowrap;">${escapeHtml(sPro.pro_promo_apply)}</button>
+              </div>
+            ` : ''}
+            <div id="eb-settings-pro-msg" style="display:none;margin-top:8px;font-size:12px;font-weight:600;"></div>
+          `}
+        </div>
+        `;
+      })()}
 
       ${(typeof localStorage !== 'undefined' && localStorage.getItem('myduo_debug_mode') === 'true') ? `
       <!-- Monday Cat Meme Demo (Debug only) -->
@@ -657,6 +694,57 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       }
     });
   }
+
+  // Bind PRO section buttons
+  const proMsgEl = container.querySelector('#eb-settings-pro-msg');
+  const showProMsg = (text, isOk = false) => {
+    if (!proMsgEl) return;
+    proMsgEl.style.display = 'block';
+    proMsgEl.style.color = isOk ? '#22c55e' : '#f87171';
+    proMsgEl.textContent = text;
+  };
+
+  container.querySelector('#btn-settings-open-pro')?.addEventListener('click', () => {
+    ProService.openPaywall('settings');
+  });
+
+  const restoreProBtn = container.querySelector('#btn-settings-restore-pro');
+  restoreProBtn?.addEventListener('click', async () => {
+    if (restoreProBtn.disabled) return;
+    restoreProBtn.disabled = true;
+    const sPro = getProStrings(getInterfaceLanguage());
+    try {
+      const res = await ProService.restore();
+      if (res.restored) {
+        showProMsg(sPro.pro_thanks, true);
+        renderSettingsView(containerSelector, onUserChange);
+      } else {
+        showProMsg(sPro.pro_restore_none, false);
+      }
+    } finally {
+      if (restoreProBtn.isConnected) restoreProBtn.disabled = false;
+    }
+  });
+
+  const promoBtn = container.querySelector('#eb-settings-promo-btn');
+  const promoInput = container.querySelector('#eb-settings-promo-input');
+  promoBtn?.addEventListener('click', async () => {
+    if (promoBtn.disabled) return;
+    const code = promoInput?.value || '';
+    const sPro = getProStrings(getInterfaceLanguage());
+    promoBtn.disabled = true;
+    try {
+      const res = await ProService.redeemPromoCode(code);
+      if (res.ok) {
+        showProMsg(sPro.pro_promo_ok, true);
+        setTimeout(() => renderSettingsView(containerSelector, onUserChange), 600);
+      } else {
+        showProMsg(sPro.pro_promo_bad, false);
+      }
+    } finally {
+      if (promoBtn.isConnected) promoBtn.disabled = false;
+    }
+  });
 
   // Asynchronously fetch full settings from server / cloud and update local state if present
   getUserSettings().then((remoteSettings) => {

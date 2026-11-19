@@ -7,8 +7,8 @@ android {
         applicationId "com.englishbreakfast.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 39
-        versionName "1.0.38"
+        versionCode 43
+        versionName "1.0.42"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -71,6 +71,7 @@ dependencies {
     implementation 'com.unity3d.ads:unity-ads:4.12.5'
     implementation 'com.google.ads.mediation:unity:4.12.5.0'
     implementation 'io.start:admob-mediation:3.0.2'
+    implementation 'com.android.billingclient:billing:8.0.0'
 }
 
 apply from: 'capacitor.build.gradle'

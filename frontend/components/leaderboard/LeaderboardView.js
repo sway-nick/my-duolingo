@@ -4,6 +4,7 @@ import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=3
 import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=386.0';
+import { isProActive } from '../../services/proState.js?v=386.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 
@@ -197,8 +198,8 @@ function renderPodiumCard(player, rank, period = 'week') {
         }
         ${
           avatarSrc
-            ? `<img src="${avatarSrc}" alt="${player.name}" class="podium-avatar-img" referrerpolicy="no-referrer" />`
-            : `<div class="podium-avatar-placeholder">${initial}</div>`
+            ? `<img src="${avatarSrc}" alt="${player.name}" class="podium-avatar-img${(player.isPro || (player.isCurrentUser && isProActive())) ? ' pro-avatar-ring' : ''}" referrerpolicy="no-referrer" />`
+            : `<div class="podium-avatar-placeholder${(player.isPro || (player.isCurrentUser && isProActive())) ? ' pro-avatar-ring' : ''}">${initial}</div>`
         }
       </div>
       <div class="podium-info">
@@ -284,8 +285,8 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
               <div class="row-avatar-wrapper">
                 ${
                   avatarSrc
-                    ? `<img src="${avatarSrc}" alt="${pName}" class="row-avatar-img" referrerpolicy="no-referrer" />`
-                    : `<div class="row-avatar-placeholder">${initial}</div>`
+                    ? `<img src="${avatarSrc}" alt="${pName}" class="row-avatar-img${(p.isPro || (isMe && isProActive())) ? ' pro-avatar-ring' : ''}" referrerpolicy="no-referrer" />`
+                    : `<div class="row-avatar-placeholder${(p.isPro || (isMe && isProActive())) ? ' pro-avatar-ring' : ''}">${initial}</div>`
                 }
               </div>
               <div class="row-name" style="display: flex; align-items: center; gap: 6px;">
@@ -323,8 +324,8 @@ function buildLeaderboardBodyHtml(players, currentUser, period = 'week') {
           <span class="my-rank-badge" style="flex-shrink: 0; padding: 2px 5px; font-size: 12px;">#${myRank || '-'}</span>
           ${
             myAvatar
-              ? `<img src="${myAvatar}" class="my-bar-avatar" alt="${t('lead_guest_name') || 'Вы'}" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%;" />`
-              : `<div class="my-bar-avatar-placeholder" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%; font-size: 14px;">${myInitial}</div>`
+              ? `<img src="${myAvatar}" class="my-bar-avatar${isProActive() ? ' pro-avatar-ring' : ''}" alt="${t('lead_guest_name') || 'Вы'}" referrerpolicy="no-referrer" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%;" />`
+              : `<div class="my-bar-avatar-placeholder${isProActive() ? ' pro-avatar-ring' : ''}" style="flex-shrink: 0; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%; font-size: 14px;">${myInitial}</div>`
           }
           <div style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
             <div class="my-bar-name" style="font-weight: 700; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">

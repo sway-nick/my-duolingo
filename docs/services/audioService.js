@@ -361,6 +361,7 @@ const AUDIO_MIN_VALID_BYTES = 1000;
 // A pack is considered installed only if at least this share of its files is really in CacheStorage.
 const AUDIO_PACK_SUCCESS_THRESHOLD = 0.98;
 const mirrorFailStreak = new Map();
+const missingCdnUrls = new Set();
 
 function getAudioUrls(text, isUk) {
   const cleanQuery = text.replace(/[^\w\s'-]/g, ' ').replace(/\s+/g, ' ').trim() || text.trim();
@@ -424,17 +425,24 @@ function getOrderedMirrors() {
  * block page of an ISP / captive portal). Returns a clean audio/mpeg Response or null.
  */
 async function fetchAudioFromMirrors(cdnUrl, timeoutMs = 7000) {
+  if (missingCdnUrls.has(cdnUrl)) return null;
   const path = cdnUrl.startsWith(CDN_AUDIO_BASE) ? cdnUrl.slice(CDN_AUDIO_BASE.length) : null;
   const bases = path !== null ? getOrderedMirrors() : [null];
+  let confirmed404Count = 0;
   for (const base of bases) {
     const url = base === null ? cdnUrl : base + path;
     let timer = null;
     let ok = false;
+    let is404 = false;
     try {
       const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
       if (ctrl) timer = setTimeout(() => ctrl.abort(), timeoutMs);
       const resp = await fetch(url, { mode: 'cors', signal: ctrl ? ctrl.signal : undefined });
-      if (resp && resp.ok) {
+      if (resp && resp.status === 404) {
+        is404 = true;
+        confirmed404Count += 1;
+        if (base !== null) mirrorFailStreak.delete(base);
+      } else if (resp && resp.ok) {
         const type = (resp.headers.get('content-type') || '').toLowerCase();
         if (!type.includes('text/') && !type.includes('json')) {
           const blob = await resp.blob();
@@ -453,6 +461,14 @@ async function fetchAudioFromMirrors(cdnUrl, timeoutMs = 7000) {
       // network error / timeout / CORS: try the next mirror
     }
     if (timer) clearTimeout(timer);
+    if (is404) {
+      // Mirror is reachable and confirmed file does not exist on CDN — don't stall across 4 mirrors
+      if (confirmed404Count >= 1) {
+        missingCdnUrls.add(cdnUrl);
+        return null;
+      }
+      continue;
+    }
     if (!ok && base !== null) mirrorFailStreak.set(base, (mirrorFailStreak.get(base) || 0) + 1);
   }
   return null;
@@ -758,10 +774,24 @@ function getSharedWordAudioPlayer() {
 // request (CDN download, remote TTS URL, fallback chain) checks it before playing, so a word that
 // finished downloading late can never be heard on top of the next quiz word.
 let speakGeneration = 0;
+let activeSpeakWatchdogId = null;
 // If studio audio has not started within this time after the request, it is abandoned and the
 // word is spoken with instant device TTS instead (no "word heard 3-7 seconds later" effect).
 const SPEAK_MAX_LATENCY_MS = 2500;
 let nativeWordTtsActive = false;
+
+function abortAudioElement(el) {
+  if (!el) return;
+  try {
+    el.onerror = null;
+    el.pause();
+    try { el.currentTime = 0; } catch (_) {}
+    if (el === sharedWordAudioPlayer) {
+      el.removeAttribute('src');
+      if (typeof el.load === 'function') el.load();
+    }
+  } catch (e) {}
+}
 
 /**
  * Drops word audio that is still being fetched (not yet audible), e.g. when the quiz moves to the
@@ -776,6 +806,10 @@ function cancelPendingWordSpeech() {
  * speakWord) without touching SFX.
  */
 function stopWordPlayback() {
+  if (activeSpeakWatchdogId) {
+    clearTimeout(activeSpeakWatchdogId);
+    activeSpeakWatchdogId = null;
+  }
   if (typeof window === 'undefined') return;
   if ('speechSynthesis' in window) {
     try {
@@ -791,14 +825,10 @@ function stopWordPlayback() {
     } catch (e) {}
   }
   if (currentPlayingWordAudio) {
-    try {
-      currentPlayingWordAudio.pause();
-    } catch (e) {}
+    abortAudioElement(currentPlayingWordAudio);
   }
-  if (sharedWordAudioPlayer) {
-    try {
-      sharedWordAudioPlayer.pause();
-    } catch (e) {}
+  if (sharedWordAudioPlayer && sharedWordAudioPlayer !== currentPlayingWordAudio) {
+    abortAudioElement(sharedWordAudioPlayer);
   }
 }
 
@@ -884,24 +914,60 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   const cachedAudio = audioCache.get(cacheKey);
   const player = getSharedWordAudioPlayer();
 
+  const target = cachedAudio || player;
+
+  // 3. Latency watchdog: slow studio audio is replaced by instant TTS instead of playing late.
+  //    MUST be cleared both when HTMLAudio playback starts AND when Stage 4 ttsFallback runs
+  //    (otherwise the watchdog fires mid-sentence and restarts TTS from the beginning!).
+  let audioStarted = false;
+  const speakStartedAt = Date.now();
+  const clearWatchdogAndListeners = () => {
+    if (activeSpeakWatchdogId) {
+      clearTimeout(activeSpeakWatchdogId);
+      activeSpeakWatchdogId = null;
+    }
+    if (target) {
+      target.removeEventListener('playing', markAudioStarted);
+      target.removeEventListener('timeupdate', markAudioStarted);
+    }
+  };
+  const markAudioStarted = () => {
+    if (isStale()) {
+      clearWatchdogAndListeners();
+      return;
+    }
+    audioStarted = true;
+    clearWatchdogAndListeners();
+  };
+
   const ttsFallback = () => {
-    if (isStale()) return;
+    if (isStale() || audioStarted) return;
+    audioStarted = true;
+    clearWatchdogAndListeners();
     speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
   };
 
-  const target = cachedAudio || player;
   if (!target) {
     ttsFallback();
     return isTurtleMode;
   }
 
-  // 3. Latency watchdog: slow studio audio is replaced by instant TTS instead of playing late
-  let audioStarted = false;
-  target.addEventListener('playing', () => { audioStarted = true; }, { once: true });
-  setTimeout(() => {
-    if (isStale() || audioStarted) return;
+  target.addEventListener('playing', markAudioStarted);
+  target.addEventListener('timeupdate', markAudioStarted);
+  activeSpeakWatchdogId = setTimeout(() => {
+    activeSpeakWatchdogId = null;
+    if (isStale() || audioStarted) {
+      clearWatchdogAndListeners();
+      return;
+    }
+    if (target.currentTime > 0 && !target.paused && !target.ended) {
+      markAudioStarted();
+      return;
+    }
+    audioStarted = true;
     speakGeneration += 1; // abandon the slow chain of this request
-    try { target.pause(); } catch (e) {}
+    clearWatchdogAndListeners();
+    abortAudioElement(target);
     speakWithSpeechSynthesis(text, targetLang, isTurtleMode, isUk ? 'uk' : 'us');
   }, SPEAK_MAX_LATENCY_MS);
 
@@ -911,22 +977,30 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
   let stage = 0;
   const failAt = (s) => (err) => {
     if (err && err.name === 'AbortError') return;
-    if (stage !== s || isStale()) return;
+    if (stage !== s || isStale() || audioStarted) return;
     stage = s + 1;
     runStage();
   };
   const playRemote = (url) => {
+    const remainingMs = SPEAK_MAX_LATENCY_MS - (Date.now() - speakStartedAt);
+    if (remainingMs < 800) {
+      target.onerror = null;
+      ttsFallback();
+      return;
+    }
     target.src = url;
     target.currentTime = 0;
     trackPlayingAudio(target);
     const p = target.play();
-    if (p !== undefined) p.catch(failAt(stage));
+    if (p !== undefined) {
+      p.then(() => { if (!isStale()) markAudioStarted(); }).catch(failAt(stage));
+    }
   };
   const runStage = () => {
-    if (isStale()) return;
+    if (isStale() || audioStarted) return;
     target.onerror = failAt(stage);
     if (stage === 1) {
-      playAudioWithCacheFallback(target, cdn, failAt(1), isStale, 2000);
+      playAudioWithCacheFallback(target, cdn, failAt(1), isStale, 1200);
     } else if (stage === 2) {
       playRemote(primary);
     } else if (stage === 3) {
@@ -947,7 +1021,7 @@ function speakWord(text, wordId = null, lang = null, voiceAccentOverride = null,
     target.onerror = failAt(0);
     const playPromise = target.play();
     if (playPromise !== undefined) {
-      playPromise.catch(failAt(0));
+      playPromise.then(() => { if (!isStale()) markAudioStarted(); }).catch(failAt(0));
     }
   } catch (e) {
     ttsFallback();

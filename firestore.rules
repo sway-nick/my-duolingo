@@ -49,6 +49,25 @@ service cloud.firestore {
     // 4. Shared Vocabulary Updates: /shared/vocabulary_updates
     //    - Read: allowed for all
     //    - Write: admin UID 'wB3NVAmBarXHSBrtEzDCriS0XBy2' only
+    //
+    // 5. Promo Codes: /promo_codes/{codeHash}
+    //    - codeHash: SHA-256 hex string (64 lowercase hex chars)
+    //    - Fields: active (bool), uses (int), maxUses (int), expiresAt (optional timestamp/null)
+    //    - Read: get allowed for authenticated users; list denied
+    //    - Create/Delete: admin UID 'wB3NVAmBarXHSBrtEzDCriS0XBy2' only
+    //    - Update: admin OR atomic batch redemption (+1 uses, active, uses < maxUses, not expired, redemption doc created in same batch)
+    //
+    // 6. Promo Redemptions: /promo_redemptions/{redemptionId}
+    //    - redemptionId: '{codeHash}_{uid}'
+    //    - Fields: uid (string), codeHash (string, 64 hex chars), redeemedAt (timestamp == request.time)
+    //    - Read: get allowed for owner matching redemptionId; list denied
+    //    - Create: authenticated owner in atomic batch incrementing promo_codes/{codeHash}.uses by 1
+    //    - Update/Delete: denied
+    //
+    // 7. User PRO Entitlements: /users/{userId}/entitlements/{docId}
+    //    - docId: 'pro'
+    //    - Fields: source ('promo'), codeHash (64 hex chars), grantedAt (timestamp == request.time)
+    //    - Read: owner only; Create: owner only with valid promo_redemptions existsAfter; Update/Delete: denied
     // ===============================================================
 
     function isAuthenticated() {
@@ -57,6 +76,47 @@ service cloud.firestore {
 
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && request.auth.uid == 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
+    }
+
+    function isValidPromoRedemptionUpdate(codeHash) {
+      return isAuthenticated()
+        && resource.data.active == true
+        && resource.data.uses is int
+        && resource.data.maxUses is int
+        && resource.data.uses < resource.data.maxUses
+        && (!('expiresAt' in resource.data) || resource.data.expiresAt == null || request.time < resource.data.expiresAt)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['uses'])
+        && request.resource.data.uses == resource.data.uses + 1
+        && !exists(/databases/$(database)/documents/promo_redemptions/$(codeHash + '_' + request.auth.uid))
+        && existsAfter(/databases/$(database)/documents/promo_redemptions/$(codeHash + '_' + request.auth.uid));
+    }
+
+    function isValidPromoRedemptionCreate(redemptionId) {
+      return isAuthenticated()
+        && request.resource.data.keys().hasOnly(['uid', 'codeHash', 'redeemedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.codeHash is string
+        && request.resource.data.codeHash.matches('^[a-f0-9]{64}$')
+        && redemptionId == request.resource.data.codeHash + '_' + request.auth.uid
+        && request.resource.data.redeemedAt == request.time
+        && !exists(/databases/$(database)/documents/promo_redemptions/$(redemptionId))
+        && getAfter(/databases/$(database)/documents/promo_codes/$(request.resource.data.codeHash)).data.uses
+           == get(/databases/$(database)/documents/promo_codes/$(request.resource.data.codeHash)).data.uses + 1;
+    }
+
+    function isValidPromoEntitlementCreate(userId, docId) {
+      return isOwner(userId)
+        && docId == 'pro'
+        && request.resource.data.keys().hasOnly(['source', 'codeHash', 'grantedAt'])
+        && request.resource.data.source == 'promo'
+        && request.resource.data.codeHash is string
+        && request.resource.data.codeHash.matches('^[a-f0-9]{64}$')
+        && request.resource.data.grantedAt == request.time
+        && existsAfter(/databases/$(database)/documents/promo_redemptions/$(request.resource.data.codeHash + '_' + userId));
     }
 
     function getPrevUpdatedAtMillis() {
@@ -144,6 +204,12 @@ service cloud.firestore {
       allow list: if false;
       allow write: if isOwner(userId);
 
+      match /entitlements/{docId} {
+        allow read: if isOwner(userId);
+        allow create: if isValidPromoEntitlementCreate(userId, docId);
+        allow update, delete: if false;
+      }
+
       match /{subcollection}/{docId} {
         allow read, delete: if isOwner(userId)
           && subcollection in ['progress', 'settings', 'data', 'sessions', 'analytics'];
@@ -160,6 +226,22 @@ service cloud.firestore {
     match /shared/vocabulary_updates {
       allow read: if true;
       allow write: if isAuthenticated() && request.auth.uid == 'wB3NVAmBarXHSBrtEzDCriS0XBy2';
+    }
+
+    // 5. Experimental PRO Promo Codes
+    match /promo_codes/{codeHash} {
+      allow get: if isAuthenticated();
+      allow list: if false;
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || isValidPromoRedemptionUpdate(codeHash);
+    }
+
+    // 6. Experimental PRO Promo Redemptions
+    match /promo_redemptions/{redemptionId} {
+      allow get: if isAuthenticated() && redemptionId.matches('^[a-f0-9]{64}_' + request.auth.uid + '$');
+      allow list: if false;
+      allow create: if isValidPromoRedemptionCreate(redemptionId);
+      allow update, delete: if false;
     }
 
     // Default deny for all other paths

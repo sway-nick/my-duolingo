@@ -2114,10 +2114,6 @@ body:not(.dark-theme) .flashcard-fav-btn.is-favorite svg {
   max-width: 100%;
 }
 
-.flashcard-3d:not(.wotd-card) .flashcard-back .flashcard-translation:only-child {
-  margin-bottom: 25px;
-}
-
 .dark-theme .flashcard-translation {
   color: #f8fafc;
 }
@@ -2964,6 +2960,51 @@ body.dark-theme .stat-icon-wrap.amber { color: #fb923c; }
 .dark-theme .category-card {
   background: rgba(255, 255, 255, 0.025);
   border-color: rgba(255, 255, 255, 0.06);
+}
+
+.category-card.is-clickable {
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease, background 0.15s ease;
+}
+
+.category-card.is-clickable:active {
+  transform: scale(0.99);
+}
+
+.category-card.is-selected-level {
+  border: 2px solid #22c55e !important;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.18);
+  background: rgba(34, 197, 94, 0.06);
+}
+
+.dark-theme .category-card.is-selected-level {
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.eb-back-pill-btn {
+  background: var(--card-bg, #ffffff);
+  border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.28));
+  color: var(--text-main, #0f172a);
+  border-radius: 12px;
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  transition: transform 0.12s ease;
+}
+
+.eb-back-pill-btn:active {
+  transform: scale(0.97);
+}
+
+.dark-theme .eb-back-pill-btn {
+  background: var(--card-bg, rgba(30, 41, 59, 0.85));
+  border-color: var(--border-color, rgba(148, 163, 184, 0.25));
+  color: var(--text-main, #f8fafc);
 }
 
 .category-card:last-child {
@@ -10344,7 +10385,7 @@ html.is-rtl {
   border-radius: 14px;
   padding: 16px;
   box-shadow: 0 8px 24px rgba(202, 138, 4, 0.35);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72);
   border: 1px solid rgba(253, 224, 71, 0.4);
 }
 
@@ -10370,9 +10411,10 @@ html.is-rtl {
 
 .challenge-golden-text {
   font-size: 14px;
+  font-weight: 600;
   line-height: 1.45;
   margin: 0;
-  color: #fef9c3;
+  color: #ffffff;
 }
 
 .challenge-section-box {
@@ -10518,6 +10560,11 @@ html.is-rtl {
 .dark-theme .challenge-final-text,
 [data-theme='dark'] .challenge-final-text {
   color: #94a3b8;
+}
+
+.pro-avatar-ring {
+  border: 2.5px solid #f59e0b !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35), 0 0 12px rgba(245, 158, 11, 0.4) !important;
 }
 
 

@@ -71,6 +71,7 @@ export function openChallengeModal() {
             <h4 class="challenge-golden-title">${escapeHtml(d.goldenCardTitle)}</h4>
           </div>
           <p class="challenge-golden-text">${escapeHtml(d.goldenCardText)}</p>
+          ${d.proPrizeText ? `<p class="challenge-golden-text" style="margin-top:10px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,0.38);border:1px solid rgba(254,240,138,0.45);font-weight:700;color:#ffffff;">⭐ ${escapeHtml(d.proPrizeText)}</p>` : ''}
         </div>
 
         <!-- Ideas Section -->

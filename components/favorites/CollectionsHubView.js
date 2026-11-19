@@ -13,16 +13,14 @@ import {
   resetBuiltinCollection,
   isCollectionPackDownloaded,
   getDownloadablePackStrings,
+  getCollectionUnlockStep,
+  getCollectionUnlockedCount,
 } from '../../services/collectionsService.js?v=386.0';
 import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
-import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
 import { getTimeTrainerStrings } from './TimeTrainerView.js?v=386.0';
-import {
-  getMicroRulesStrings,
-  getTenseConstructionsStrings,
-} from './grammarUiTranslations.js?v=386.0';
-import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { isProActive } from '../../services/proState.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
 
 export function renderCollectionsHubView(allWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -184,17 +182,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
   };
 
   const lang = getInterfaceLanguage();
-  const storyStrings = getStoryStrings(lang);
   const timeStrings = getTimeTrainerStrings(lang);
-  const microStrings = getMicroRulesStrings(lang);
-  const tenseStrings = getTenseConstructionsStrings(lang);
-  let unlockedStoriesCount = 0;
-  try {
-    const masteredWords = getMasteredWordsCount();
-    const allMilestones = Array.from({ length: 37 }, (_, i) => i * 50);
-    unlockedStoriesCount = allMilestones.filter(m => masteredWords >= m).length;
-  } catch (_) {}
-  const storiesCountLabel = `${unlockedStoriesCount} / 37`;
 
   container.innerHTML = `
     <div class="collections-hub-page">
@@ -222,18 +210,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
-        <!-- 3. Milestone Texts Folder Tile (Below, Row 2) -->
-        <div class="col-tile col-tile-stories" data-col-id="milestone_stories" role="button" tabindex="0">
-          <div class="col-tile-icon-box">
-            <span class="col-tile-icon">📖</span>
-          </div>
-          <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(storyStrings.storiesFolderTitle || 'Тексты')}</h3>
-            <span class="col-tile-count">${escapeHtml(storiesCountLabel)}</span>
-          </div>
-        </div>
-
-        <!-- 4. Time Listening Lab Folder Tile -->
+        <!-- 3. Time Listening Lab Folder Tile -->
         <div class="col-tile col-tile-time" data-col-id="time_trainer" role="button" tabindex="0">
           <div class="col-tile-icon-box">
             <span class="col-tile-icon">🕒</span>
@@ -241,28 +218,6 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           <div class="col-tile-content">
             <h3 class="col-tile-name">${escapeHtml(timeStrings.folderTitle || 'Время')}</h3>
             <span class="col-tile-count">${escapeHtml(timeStrings.folderSubtitle || '6 режимов')}</span>
-          </div>
-        </div>
-
-        <!-- 5. Grammar Micro-rules Folder Tile -->
-        <div class="col-tile col-tile-microrules" data-col-id="grammar_microrules" role="button" tabindex="0">
-          <div class="col-tile-icon-box">
-            <span class="col-tile-icon">📖</span>
-          </div>
-          <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(microStrings.folderTitle || 'Микроправила')}</h3>
-            <span class="col-tile-count">${escapeHtml(microStrings.folderSubtitle || '156 правил по шагам')}</span>
-          </div>
-        </div>
-
-        <!-- 6. Tense Constructions Folder Tile -->
-        <div class="col-tile col-tile-tenses" data-col-id="tense_constructions" role="button" tabindex="0">
-          <div class="col-tile-icon-box">
-            <span class="col-tile-icon">⏳</span>
-          </div>
-          <div class="col-tile-content">
-            <h3 class="col-tile-name">${escapeHtml(tenseStrings.folderTitle || 'Временные конструкции')}</h3>
-            <span class="col-tile-count">${escapeHtml(tenseStrings.folderSubtitle || '16 конструкций и матрица')}</span>
           </div>
         </div>
 
@@ -287,11 +242,29 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
         ${summary.builtinCollections
           .map(
             (col) => {
+              const isPro = isProActive();
+              const isItProLocked = col.id === 'it_terms' && !isPro;
+              const unlockStep = getCollectionUnlockStep(col.id);
+              const isPartial = unlockStep > 0 && !isPro;
+              const partialUnlocked = isPartial ? Math.min(col.count, getCollectionUnlockedCount(col.id)) : col.count;
               const isDownloaded = isCollectionPackDownloaded(col.id);
-              const packStrings = !isDownloaded ? getDownloadablePackStrings(lang) : null;
-              const countSubtitle = isDownloaded
-                ? wordLabel(col.count)
-                : `🎬 ${escapeHtml(packStrings.downloadBtn)}`;
+              const packStrings = !isDownloaded && !isItProLocked ? getDownloadablePackStrings(lang) : null;
+              let countSubtitle;
+              if (isItProLocked) {
+                countSubtitle = '⭐ PRO';
+              } else if (isPartial) {
+                if (partialUnlocked === 0) {
+                  countSubtitle = `🎬 ${escapeHtml(packStrings.downloadBtn)} (+${unlockStep})`;
+                } else if (partialUnlocked < col.count) {
+                  countSubtitle = `${partialUnlocked} / ${col.count}`;
+                } else {
+                  countSubtitle = wordLabel(col.count);
+                }
+              } else {
+                countSubtitle = isDownloaded
+                  ? wordLabel(col.count)
+                  : `🎬 ${escapeHtml(packStrings.downloadBtn)}`;
+              }
               return `
           <div class="col-tile ${activeColId === col.id ? 'is-active-col' : ''}" data-col-id="${escapeHtml(col.id)}" role="button" tabindex="0">
             <div class="col-tile-icon-box">
@@ -360,6 +333,10 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
       try {
         if (navigator.vibrate) navigator.vibrate(40);
       } catch (_) {}
+      if (colData.col.id === 'it_terms' && !isProActive()) {
+        ProService.openPaywall('it_terms');
+        return;
+      }
       openCollectionActionsModal(colData.col, colData.isCustom);
     }, 500);
   });

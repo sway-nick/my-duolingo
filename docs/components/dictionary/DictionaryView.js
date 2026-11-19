@@ -2219,6 +2219,11 @@ function openAddWordModal(words = [], initialWord = '', onWordSaved = () => {}, 
         onWordSaved(existing);
       } else {
         const res = await addCustomWord({ word, translation, category, notes });
+        if (res && res.blocked === 'custom_pattern') {
+          submitBtn.disabled = false;
+          submitBtn.textContent = saveBtnText;
+          return;
+        }
         if (window.trackEvent) {
           window.trackEvent('custom_word_create', { word: word, category: category });
         }

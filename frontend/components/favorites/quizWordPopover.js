@@ -235,7 +235,9 @@ export function bindQuizWordPopover(rootEl, rawLang) {
       const meaningEl = pop.querySelector('.quiz-word-popover-meaning');
       const speakBtn = pop.querySelector('.quiz-word-popover-speak');
 
-      wordEl.textContent = resolved.word;
+      wordEl.textContent = resolved.baseForm && resolved.baseForm !== resolved.word
+        ? `${resolved.word} (${resolved.baseForm})`
+        : resolved.word;
       transEl.textContent = resolved.transcription ? `/${resolved.transcription.replace(/^\/|\/$/g, '')}/` : '';
       transEl.style.display = transEl.textContent ? 'block' : 'none';
       meaningEl.textContent = resolved.translation || resolved.word;
