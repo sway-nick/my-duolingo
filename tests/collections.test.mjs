@@ -754,12 +754,15 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'tricky_sounds page 1 renders 10 words (5 pairs)');
+  assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 5, 'tricky_sounds page 1 renders 5 side-by-side pair cards (10 words)');
+  assert.equal((container.innerHTML.match(/class="pair-side pair-side-a"/g) || []).length, 5, 'tricky_sounds renders 5 left halves');
+  assert.equal((container.innerHTML.match(/class="pair-side pair-side-b"/g) || []).length, 5, 'tricky_sounds renders 5 right halves');
+  assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 10, 'tricky_sounds renders 10 audio buttons (1 per word)');
   assert.ok(container.innerHTML.includes('1–10 / 100'), 'tricky_sounds shows 1–10 / 100');
-  assert.ok(container.innerHTML.includes('class="pair-box"'), 'tricky_sounds renders side-by-side pair comparison box');
-  assert.ok(container.innerHTML.includes('class="pair-contrast"'), 'tricky_sounds renders IPA contrast hint');
+  assert.ok(container.innerHTML.includes('class="pair-contrast-pill"'), 'tricky_sounds renders IPA contrast pill');
   assert.ok(container.innerHTML.includes('/æ/ ≠ /e/'), 'tricky_sounds shows /æ/ ≠ /e/ for bad/bed');
-  assert.ok(container.innerHTML.includes('pair-listen-btn'), 'tricky_sounds renders partner audio button');
+  assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'tricky_sounds renders transcription for each word');
+  assert.ok(!container.innerHTML.includes('//'), 'transcriptions must not contain double slashes //');
 
   renderFavoritesView(confusingWords, '#app-content', {
     collectionId: 'confusing_words',
@@ -767,10 +770,12 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'confusing_words page 1 renders 10 words (5 pairs)');
+  assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 5, 'confusing_words page 1 renders 5 side-by-side pair cards (10 words)');
+  assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 10, 'confusing_words renders 10 audio buttons');
   assert.ok(container.innerHTML.includes('1–10 / 100'), 'confusing_words shows 1–10 / 100');
-  assert.ok(container.innerHTML.includes('class="pair-box"'), 'confusing_words renders pair comparison box');
-  assert.ok(container.innerHTML.includes('class="pair-partner-tr"'), 'confusing_words renders partner translation for contrast');
+  assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'confusing_words renders transcription for each word');
+  assert.ok(container.innerHTML.includes('class="pair-side-tr"'), 'confusing_words renders translation for each word');
+  assert.ok(!container.innerHTML.includes('//'), 'confusing_words transcriptions must not contain double slashes //');
 });
 
 test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadable pack flow', async () => {

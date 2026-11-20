@@ -18,6 +18,235 @@ export const MILESTONE_STORIES = {
     "author": "Yei Theodora Ozaki",
     "coverImage": "assets/images/my_lord_bag_of_rice.webp",
     "hideFullTranslation": true,
+    "audioUrl": "assets/audio/stories/my_lord_bag_of_rice.mp3",
+    "remoteAudioUrls": [
+      "https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/stories/my_lord_bag_of_rice.mp3",
+      "https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio/stories/my_lord_bag_of_rice.mp3",
+      "https://sway-nick.github.io/my-duolingo/assets/audio/stories/my_lord_bag_of_rice.mp3"
+    ],
+    "audioDuration": 768.09,
+    "paragraphTimings": [
+          {
+                "pIndex": 0,
+                "start": 2.59,
+                "end": 17.83
+          },
+          {
+                "pIndex": 1,
+                "start": 17.83,
+                "end": 67.29
+          },
+          {
+                "pIndex": 2,
+                "start": 67.29,
+                "end": 92.49
+          },
+          {
+                "pIndex": 3,
+                "start": 92.49,
+                "end": 136.85
+          },
+          {
+                "pIndex": 4,
+                "start": 136.85,
+                "end": 139.58
+          },
+          {
+                "pIndex": 5,
+                "start": 139.58,
+                "end": 147.38
+          },
+          {
+                "pIndex": 6,
+                "start": 147.38,
+                "end": 153.49
+          },
+          {
+                "pIndex": 7,
+                "start": 153.49,
+                "end": 159.21
+          },
+          {
+                "pIndex": 8,
+                "start": 159.21,
+                "end": 163.35
+          },
+          {
+                "pIndex": 9,
+                "start": 163.35,
+                "end": 172.65
+          },
+          {
+                "pIndex": 10,
+                "start": 172.65,
+                "end": 234.01
+          },
+          {
+                "pIndex": 11,
+                "start": 234.01,
+                "end": 295.24
+          },
+          {
+                "pIndex": 12,
+                "start": 295.24,
+                "end": 334.98
+          },
+          {
+                "pIndex": 13,
+                "start": 334.98,
+                "end": 349.7
+          },
+          {
+                "pIndex": 14,
+                "start": 349.7,
+                "end": 361.35
+          },
+          {
+                "pIndex": 15,
+                "start": 361.35,
+                "end": 378.07
+          },
+          {
+                "pIndex": 16,
+                "start": 378.07,
+                "end": 384.39
+          },
+          {
+                "pIndex": 17,
+                "start": 384.39,
+                "end": 391.96
+          },
+          {
+                "pIndex": 18,
+                "start": 391.96,
+                "end": 404.55
+          },
+          {
+                "pIndex": 19,
+                "start": 404.55,
+                "end": 412.67
+          },
+          {
+                "pIndex": 20,
+                "start": 412.67,
+                "end": 438.46
+          },
+          {
+                "pIndex": 21,
+                "start": 438.46,
+                "end": 463
+          },
+          {
+                "pIndex": 22,
+                "start": 463,
+                "end": 489.72
+          },
+          {
+                "pIndex": 23,
+                "start": 489.72,
+                "end": 538.77
+          },
+          {
+                "pIndex": 24,
+                "start": 538.77,
+                "end": 546.64
+          },
+          {
+                "pIndex": 25,
+                "start": 546.64,
+                "end": 558.52
+          },
+          {
+                "pIndex": 26,
+                "start": 558.52,
+                "end": 569.72
+          },
+          {
+                "pIndex": 27,
+                "start": 569.72,
+                "end": 598.37
+          },
+          {
+                "pIndex": 28,
+                "start": 598.37,
+                "end": 623.12
+          },
+          {
+                "pIndex": 29,
+                "start": 623.12,
+                "end": 639.37
+          },
+          {
+                "pIndex": 30,
+                "start": 639.37,
+                "end": 642.45
+          },
+          {
+                "pIndex": 31,
+                "start": 642.45,
+                "end": 645.36
+          },
+          {
+                "pIndex": 32,
+                "start": 645.36,
+                "end": 648.11
+          },
+          {
+                "pIndex": 33,
+                "start": 648.11,
+                "end": 650.7
+          },
+          {
+                "pIndex": 34,
+                "start": 650.7,
+                "end": 652.88
+          },
+          {
+                "pIndex": 35,
+                "start": 652.88,
+                "end": 660.51
+          },
+          {
+                "pIndex": 36,
+                "start": 660.51,
+                "end": 672.78
+          },
+          {
+                "pIndex": 37,
+                "start": 672.78,
+                "end": 698.25
+          },
+          {
+                "pIndex": 38,
+                "start": 698.25,
+                "end": 705.72
+          },
+          {
+                "pIndex": 39,
+                "start": 705.72,
+                "end": 722.15
+          },
+          {
+                "pIndex": 40,
+                "start": 722.15,
+                "end": 733.04
+          },
+          {
+                "pIndex": 41,
+                "start": 733.04,
+                "end": 743.05
+          },
+          {
+                "pIndex": 42,
+                "start": 743.05,
+                "end": 754.61
+          },
+          {
+                "pIndex": 43,
+                "start": 754.61,
+                "end": 768.09
+          }
+    ],
     "paragraphs": [
       "Long, long ago there lived, in Japan a brave warrior known to all as Tawara Toda, or “My Lord Bag of Rice.” His true name was Fujiwara Hidesato, and there is a very interesting story of how he came to change his name.",
       "One day he sallied forth in search of adventures, for he had the nature of a warrior and could not bear to be idle. So he buckled on his two swords, took his huge bow, much taller than himself, in his hand, and slinging his quiver on his back started out. He had not gone far when he came to the bridge of Seta-no-Karashi spanning one end of the beautiful Lake Biwa. No sooner had he set foot on the bridge than he saw lying right across his path a huge serpent-dragon. Its body was so big that it looked like the trunk of a large pine tree and it took up the whole width of the bridge. One of its huge claws rested on the parapet of one side of the bridge, while its tail lay right against the other. The monster seemed to be asleep, and as it breathed, fire and smoke came out of its nostrils.",
@@ -1825,12 +2054,23 @@ export async function showMilestoneStoryModal(milestone = 0) {
         transform: translateX(-50%) translateY(0);
       }
     
+      .story-audio-sticky-wrap {
+        flex-shrink: 0;
+        position: relative;
+        z-index: 30;
+        padding: 10px 16px 10px;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.88) 100%);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+      }
       .story-audio-player-bar {
-        background: rgba(30, 41, 59, 0.75);
-        border: 1px solid rgba(245, 158, 11, 0.35);
+        background: rgba(30, 41, 59, 0.85);
+        border: 1px solid rgba(245, 158, 11, 0.4);
         border-radius: 16px;
-        padding: 10px 14px;
-        margin-bottom: 16px;
+        padding: 9px 13px;
+        margin-bottom: 0;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -1955,15 +2195,15 @@ export async function showMilestoneStoryModal(milestone = 0) {
         <button class="milestone-story-close" id="story-close-btn" aria-label="Close">&times;</button>
       </div>
 
-      <div class="milestone-story-body" id="story-modal-body">
-        ${story.audioUrl ? `
+      ${story.audioUrl ? `
+        <div class="story-audio-sticky-wrap">
           <div class="story-audio-player-bar" id="story-audio-player-bar">
             <button type="button" class="story-audio-play-btn" id="story-audio-play-btn" aria-label="Play/Pause">
               <span id="story-audio-play-icon">▶</span>
             </button>
             <div class="story-audio-info">
               <div class="story-audio-title-row">
-                <span class="story-audio-label" id="story-audio-label">🎧 ${escapeHtml(strings.audioNarrator || 'Слушать сказку целиком')}</span>
+                <span class="story-audio-label" id="story-audio-label">🎧 ${escapeHtml(strings.audioNarrator || 'Слушать')}</span>
                 <span class="story-audio-time" id="story-audio-time">0:00 / ${Math.floor((story.audioDuration || 391) / 60)}:${String(Math.floor((story.audioDuration || 391) % 60)).padStart(2, '0')}</span>
               </div>
               <div class="story-audio-progress-track" id="story-audio-progress-track">
@@ -1971,7 +2211,10 @@ export async function showMilestoneStoryModal(milestone = 0) {
               </div>
             </div>
           </div>
-        ` : ''}
+        </div>
+      ` : ''}
+
+      <div class="milestone-story-body" id="story-modal-body">
 
         <!-- Floating Popover over the tapped word -->
         <div class="story-floating-popover" id="story-popover">
@@ -2350,21 +2593,20 @@ export async function showMilestoneStoryModal(milestone = 0) {
             isStoryAudioPlaying = false;
             playBtn.disabled = false;
             if (playIcon) playIcon.textContent = '▶';
-            if (audioLabel) audioLabel.textContent = strings.audioNarrator || 'Слушать сказку целиком';
+            if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать'}`;
           });
 
           await storyAudio.play();
           isStoryAudioPlaying = true;
           playBtn.disabled = false;
           if (playIcon) playIcon.textContent = '⏸';
-          if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать сказку целиком'}`;
+          if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать'}`;
         } catch (err) {
           storyAudio = null;
           isStoryAudioPlaying = false;
           playBtn.disabled = false;
           if (playIcon) playIcon.textContent = '▶';
-          if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать сказку целиком'}`;
-          if (audioLabel) audioLabel.textContent = strings.audioNarrator || 'Слушать сказку целиком';
+          if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать'}`;
         }
         return;
       }

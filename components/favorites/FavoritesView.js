@@ -402,47 +402,83 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   const headerCountText = (hasMoreToUnlock || isItPreview) ? `${partialUnlockedCount} / ${favoriteWords.length}` : `${favoriteWords.length}`;
 
   const isPairCol = isPairCollection(collectionId);
-  const pairWordMap = new Map();
-  if (isPairCol) {
-    const src = (Array.isArray(allWords) && allWords.length > 0) ? allWords : favoriteWords;
-    src.forEach((w) => {
-      if (w && w.word) pairWordMap.set(String(w.word).toLowerCase().trim(), w);
-    });
-  }
-  const buildPairBoxHtml = (word) => {
-    if (!isPairCol) return '';
-    const info = getPairInfo(collectionId, word.word);
-    if (!info) return '';
-    const partner = pairWordMap.get(info.partner);
-    const partnerTr = partner ? getWordTranslation(partner) : '';
+  const formatIpa = (tr) => {
+    const clean = String(tr || '').trim().replace(/^\/+|\/+$/g, '').replace(/^\[+|\]+$/g, '').trim();
+    return clean ? `[${clean}]` : '';
+  };
+
+  const renderPairCardsHtml = () => {
     const isSoundCol = collectionId === 'tricky_sounds';
-    const ownIpa = word.transcription ? `/${escapeHtml(word.transcription)}/` : '';
-    const partnerIpa = partner && partner.transcription ? `/${escapeHtml(partner.transcription)}/` : '';
-    return `
-              <div class="pair-box" dir="ltr">
-                ${isSoundCol && info.contrast ? `<div class="pair-contrast">${escapeHtml(info.contrast)}</div>` : ''}
-                <div class="pair-row">
-                  <span class="pair-vs">⇄</span>
-                  <button type="button" class="sound-button-sm pair-listen-btn" data-word="${escapeHtml(info.partner)}" data-id="${partner ? partner.id : ''}">
-                    🔊 <b>${escapeHtml(info.partner)}</b>${isSoundCol && partnerIpa ? ` <span class="pair-ipa">${partnerIpa}</span>` : ''}
-                  </button>
-                </div>
-                ${isSoundCol && ownIpa ? `<div class="pair-own-ipa">${escapeHtml(word.word)} ${ownIpa}</div>` : ''}
-                ${!isSoundCol && partnerTr ? `<div class="pair-partner-tr">${escapeHtml(info.partner)} — ${escapeHtml(partnerTr)}</div>` : ''}
-              </div>`;
+    const pairCards = [];
+    for (let i = 0; i < wordsToRender.length; i += 2) {
+      const wordA = wordsToRender[i];
+      const wordB = wordsToRender[i + 1];
+      if (!wordA) continue;
+      const pairNum = Math.floor((startIndex + i) / 2) + 1;
+      const info = getPairInfo(collectionId, wordA.word);
+      const contrast = info?.contrast || '';
+
+      const renderSide = (w, sideClass) => {
+        if (!w) return `<div class="pair-side ${sideClass}"></div>`;
+        const isFav = favSet.has(String(w.id));
+        const ipa = formatIpa(w.transcription);
+        const tr = getWordTranslation(w);
+        return `
+          <div class="pair-side ${sideClass}" data-id="${w.id}">
+            <div class="pair-side-top">
+              <span class="pair-side-word" dir="ltr">${escapeHtml(w.word)}</span>
+              <div class="pair-side-actions">
+                <button type="button" class="fav-audio-btn pair-audio-btn" data-word="${escapeHtml(w.word)}" data-id="${w.id}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">🔊</button>
+                <button type="button" class="fav-action-btn fav-toggle-btn fav-icon-btn pair-fav-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? (t('fav_remove_tooltip') || 'Удалить из избранного') : (t('fav_toggle') || 'В избранное')}">${isFav ? '❤️' : '🤍'}</button>
+              </div>
+            </div>
+            ${ipa ? `<div class="pair-side-ipa" dir="ltr">${escapeHtml(ipa)}</div>` : ''}
+            <div class="pair-side-tr">${escapeHtml(tr)}</div>
+          </div>
+        `;
+      };
+
+      pairCards.push(`
+        <div class="fav-card pair-card" data-id="${wordA.id}">
+          <div class="pair-card-head">
+            ${isSoundCol && contrast
+              ? `<span class="pair-contrast-pill" dir="ltr">${escapeHtml(contrast)}</span>`
+              : `<span class="pair-contrast-pill pair-contrast-twins" dir="ltr">A ⇄ B</span>`}
+            <span class="pair-num">#${pairNum}</span>
+          </div>
+          <div class="pair-grid-row">
+            ${renderSide(wordA, 'pair-side-a')}
+            <span class="pair-vs-mid" aria-hidden="true">${isSoundCol ? '≠' : '⇄'}</span>
+            ${renderSide(wordB, 'pair-side-b')}
+          </div>
+        </div>
+      `);
+    }
+    return pairCards.join('');
   };
 
   container.innerHTML = `
     <style>
-      .pair-box { margin-top: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(37, 99, 235, 0.07); border: 1px dashed rgba(37, 99, 235, 0.35); text-align: left; }
-      .pair-contrast { font-size: 12px; font-weight: 800; color: var(--primary-color, #2563eb); letter-spacing: 0.3px; margin-bottom: 6px; }
-      .pair-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-      .pair-vs { font-size: 16px; font-weight: 800; color: var(--text-muted, #64748b); }
-      .pair-listen-btn { border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.35)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); border-radius: 10px; padding: 5px 10px; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-      .pair-listen-btn:active { transform: scale(0.97); }
-      .pair-ipa, .pair-own-ipa { font-size: 12px; color: var(--text-muted, #64748b); font-weight: 600; }
-      .pair-own-ipa { margin-top: 5px; }
-      .pair-partner-tr { margin-top: 6px; font-size: 12.5px; color: var(--text-muted, #64748b); font-weight: 600; }
+      .pair-card { padding: 12px 12px 13px !important; }
+      .pair-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+      .pair-contrast-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.3px; background: rgba(37, 99, 235, 0.11); color: var(--primary-color, #2563eb); }
+      .pair-contrast-twins { background: rgba(139, 92, 246, 0.12); color: #7c3aed; }
+      body.dark-theme .pair-contrast-twins, .dark-theme .pair-contrast-twins, [data-theme="dark"] .pair-contrast-twins { background: rgba(167, 139, 250, 0.18); color: #c4b5fd; }
+      .pair-num { font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); }
+      .pair-grid-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: stretch; width: 100%; box-sizing: border-box; }
+      .pair-vs-mid { align-self: center; font-size: 15px; font-weight: 800; color: var(--text-muted, #64748b); user-select: none; padding: 0 1px; }
+      .pair-side { display: flex; flex-direction: column; min-width: 0; padding: 9px 9px 10px; border-radius: 12px; box-sizing: border-box; }
+      .pair-side-a { background: var(--bg-hover, #f1f5f9); border: 1px solid var(--border-color, rgba(148, 163, 184, 0.22)); }
+      .pair-side-b { background: rgba(37, 99, 235, 0.07); border: 1px solid rgba(37, 99, 235, 0.24); }
+      body.dark-theme .pair-side-a, .dark-theme .pair-side-a, [data-theme="dark"] .pair-side-a { background: rgba(255, 255, 255, 0.05); border-color: rgba(148, 163, 184, 0.18); }
+      body.dark-theme .pair-side-b, .dark-theme .pair-side-b, [data-theme="dark"] .pair-side-b { background: rgba(56, 189, 248, 0.10); border-color: rgba(56, 189, 248, 0.28); }
+      .pair-side-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 4px; margin-bottom: 3px; }
+      .pair-side-word { font-size: 15.5px; font-weight: 800; color: var(--text-main, #0f172a); line-height: 1.2; overflow-wrap: anywhere; word-break: break-word; min-width: 0; }
+      .pair-side-actions { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; }
+      .pair-audio-btn, .pair-fav-btn { width: 28px !important; height: 28px !important; min-width: 28px !important; min-height: 28px !important; padding: 0 !important; font-size: 14px !important; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; }
+      .pair-side-ipa { font-size: 12px; font-weight: 600; color: var(--text-muted, #64748b); margin-bottom: 5px; line-height: 1.2; overflow-wrap: anywhere; }
+      .pair-side-tr { font-size: 12.5px; font-weight: 600; color: var(--primary-color, #2563eb); line-height: 1.32; overflow-wrap: anywhere; word-break: break-word; }
+      body.dark-theme .pair-side-tr, .dark-theme .pair-side-tr, [data-theme="dark"] .pair-side-tr { color: var(--primary-color, #38bdf8); }
       .col-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 18px; margin-bottom: 6px; flex-wrap: wrap; }
       .col-page-btn { min-width: 38px; height: 38px; padding: 0 10px; border-radius: 11px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
       .col-page-btn:active:not(:disabled) { transform: scale(0.96); }
@@ -499,7 +535,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       </div>
 
       <div class="favorites-grid" id="favorites-grid">
-        ${wordsToRender
+        ${isPairCol ? renderPairCardsHtml() : wordsToRender
           .map((word) => {
             const isFav = isMyFavorites ? true : favSet.has(String(word.id));
             return `
@@ -528,7 +564,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
                 const n = getWordNotes(word, null, { hideItNotes: collectionId !== 'it_terms' });
                 return n ? `<p class="dict-notes">${escapeHtml(n)}</p>` : '';
               })()}
-              ${buildPairBoxHtml(word)}
             </div>
           </div>
         `;
