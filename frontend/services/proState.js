@@ -7,6 +7,7 @@ export const PRO_KEYS = {
   ENTITLEMENT: 'eb_pro_entitlement_v1',
   SHIELDS: 'eb_pro_shields_v1',
   PROMO_REDEEMED: 'eb_pro_promo_redeemed_v1',
+  FORCE_FREE: 'eb_debug_force_free_v1',
 };
 
 export const PRO_LIMITS = {
@@ -92,11 +93,33 @@ function isNativeEnv() {
   }
 }
 
+export function isDebugForceFree() {
+  try {
+    if (typeof localStorage === 'undefined') return false;
+    return localStorage.getItem(PRO_KEYS.FORCE_FREE) === 'true';
+  } catch (_) {
+    return false;
+  }
+}
+
+export function setDebugForceFree(enabled) {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    if (enabled) {
+      localStorage.setItem(PRO_KEYS.FORCE_FREE, 'true');
+    } else {
+      localStorage.removeItem(PRO_KEYS.FORCE_FREE);
+    }
+  } catch (_) {}
+  dispatchProChanged(isProActive());
+}
+
 export function getEntitlement() {
   return readJsonStorage(PRO_KEYS.ENTITLEMENT);
 }
 
 export function isProActive(nowMs = Date.now()) {
+  if (isDebugForceFree()) return false;
   const ent = getEntitlement();
   if (!ent || ent.active !== true) return false;
 

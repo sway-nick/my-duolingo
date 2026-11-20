@@ -33,7 +33,7 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
   const storyCardsHtml = allMilestones.map(m => {
     const story = MILESTONE_STORIES[m];
     if (!story) return '';
-    const isUnlocked = isPro || masteredWords >= m;
+    const isUnlocked = isPro || (!story.isProOnly && (m === 0 || masteredWords >= m));
     const isCompleted = localStorage.getItem(`myduo_milestone_story_${m}_completed`) === 'true';
     const title = strings[story.titleKey] || story.title;
     let badge = strings[story.badgeKey] || `🏆 ${m} слов`;
@@ -67,20 +67,29 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
               <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: auto; max-width: 100%; height: 160px; object-fit: contain; display: inline-block; margin: 0 auto;" />
             </div>
           ` : ''}
-          <h3 class="story-card-title"${m === 0 ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
+          <h3 class="story-card-title"${(m === 0 || m === 1) ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
         </div>
       `;
     } else {
-      const lockLabel = (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', m);
+      const lockLabel = story.isProOnly
+        ? (strings.statusLockedPro || 'Только в PRO')
+        : (strings.statusLocked || 'Откроется на {count} словах').replace('{count}', m);
       const wordsNeeded = Math.max(0, m - masteredWords);
-      const proHint = String(sPro.pro_unlock_learn_or_pro || '').replace('{n}', String(wordsNeeded));
+      const proHint = story.isProOnly
+        ? (strings.proStoryHint || 'Эксклюзивная сказка для подписчиков PRO')
+        : String(sPro.pro_unlock_learn_or_pro || '').replace('{n}', String(wordsNeeded));
       return `
-        <div class="story-list-card is-locked" data-milestone="${m}" data-words-needed="${wordsNeeded}" data-locked="true" role="button" tabindex="0">
+        <div class="story-list-card is-locked" data-milestone="${m}" data-words-needed="${wordsNeeded}" data-pro-only="${story.isProOnly ? 'true' : 'false'}" data-locked="true" role="button" tabindex="0">
           <div class="story-card-top">
             <span class="story-card-status status-locked">🔒 ${escapeHtml(lockLabel)}</span>
             <span class="story-card-status" style="background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;">⭐ ${escapeHtml(sPro.pro_badge || 'PRO')}</span>
           </div>
-          <h3 class="story-card-title story-title-locked"${m === 0 ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
+          ${story.coverImage ? `
+            <div class="story-card-cover-wrapper" style="margin: 8px 0 12px 0; border-radius: 12px; overflow: hidden; max-height: 160px; text-align: center;">
+              <img src="${story.coverImage}" alt="${escapeHtml(title)}" style="width: auto; max-width: 100%; height: 160px; object-fit: contain; display: inline-block; margin: 0 auto;" />
+            </div>
+          ` : ''}
+          <h3 class="story-card-title story-title-locked"${(m === 0 || m === 1) ? ' style="text-align: center;"' : ''}>${titleHtml}</h3>
           ${proHint ? `<p style="margin:6px 0 0;font-size:12px;line-height:1.35;color:var(--text-muted,#94a3b8);">${escapeHtml(proHint)}</p>` : ''}
         </div>
       `;
@@ -316,8 +325,13 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
   // Story click bindings for locked cards (open PRO paywall with wordsNeeded)
   container.querySelectorAll('.story-list-card.is-locked').forEach(card => {
     card.addEventListener('click', () => {
-      const wordsNeeded = Number(card.getAttribute('data-words-needed') || 0);
-      ProService.openPaywall('stories', { wordsNeeded });
+      const isProOnly = card.getAttribute('data-pro-only') === 'true';
+      if (isProOnly) {
+        ProService.openPaywall('aladdin_story_pro');
+      } else {
+        const wordsNeeded = Number(card.getAttribute('data-words-needed') || 0);
+        ProService.openPaywall('stories', { wordsNeeded });
+      }
     });
   });
 

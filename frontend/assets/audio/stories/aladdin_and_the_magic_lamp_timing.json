@@ -1,0 +1,98 @@
+{
+  "title": "Aladdin and the Magic Lamp",
+  "voice": "en-US-ChristopherNeural",
+  "rate": "-2%",
+  "totalDuration": 391.01,
+  "paragraphs": [
+    {
+      "pIndex": 0,
+      "start": 2.63,
+      "end": 25.65
+    },
+    {
+      "pIndex": 1,
+      "start": 25.65,
+      "end": 47.69
+    },
+    {
+      "pIndex": 2,
+      "start": 47.69,
+      "end": 67.19
+    },
+    {
+      "pIndex": 3,
+      "start": 67.19,
+      "end": 103.75
+    },
+    {
+      "pIndex": 4,
+      "start": 103.75,
+      "end": 125.71
+    },
+    {
+      "pIndex": 5,
+      "start": 125.71,
+      "end": 149.2
+    },
+    {
+      "pIndex": 6,
+      "start": 149.2,
+      "end": 168.01
+    },
+    {
+      "pIndex": 7,
+      "start": 168.01,
+      "end": 178.28
+    },
+    {
+      "pIndex": 8,
+      "start": 178.28,
+      "end": 196.54
+    },
+    {
+      "pIndex": 9,
+      "start": 196.54,
+      "end": 216.94
+    },
+    {
+      "pIndex": 10,
+      "start": 216.94,
+      "end": 244.42
+    },
+    {
+      "pIndex": 11,
+      "start": 244.42,
+      "end": 264.0
+    },
+    {
+      "pIndex": 12,
+      "start": 264.0,
+      "end": 287.32
+    },
+    {
+      "pIndex": 13,
+      "start": 287.32,
+      "end": 309.31
+    },
+    {
+      "pIndex": 14,
+      "start": 309.31,
+      "end": 336.84
+    },
+    {
+      "pIndex": 15,
+      "start": 336.84,
+      "end": 358.65
+    },
+    {
+      "pIndex": 16,
+      "start": 358.65,
+      "end": 377.44
+    },
+    {
+      "pIndex": 17,
+      "start": 377.44,
+      "end": 391.01
+    }
+  ]
+}

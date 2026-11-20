@@ -139,6 +139,48 @@ test('8b-0. AdService Interstitial Ads Disabled: Permanently disabled for all us
   assert.equal(preloadRes, false);
 });
 
+test('8b-1. AdService Pagination Interstitial: Shown for free users on page switch, skipped for PRO and offline', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { setEntitlement, clearEntitlement } = await import('../frontend/services/proState.js');
+
+  assert.equal(typeof AdService.showPaginationInterstitial, 'function', 'showPaginationInterstitial must be exposed');
+  assert.equal(typeof AdService.preloadPaginationInterstitial, 'function', 'preloadPaginationInterstitial must be exposed');
+
+  clearEntitlement();
+  const prevOnline = AdService.isOnline;
+  try {
+    // 1. Free tier + online -> shows interstitial
+    AdService.isOnline = () => true;
+    const freeRes = await AdService.showPaginationInterstitial('collection_tricky_sounds');
+    assert.equal(freeRes, true, 'Free user must see pagination interstitial when online');
+
+    // 2. PRO tier -> skipped
+    setEntitlement({ active: true, source: 'play' });
+    const proRes = await AdService.showPaginationInterstitial('collection_tricky_sounds');
+    assert.equal(proRes, false, 'PRO user must never see pagination interstitial');
+    clearEntitlement();
+
+    // 3. Offline -> skipped gracefully without blocking navigation
+    AdService.isOnline = () => false;
+    const offlineRes = await AdService.showPaginationInterstitial('micro_rules');
+    assert.equal(offlineRes, false, 'Offline user skips pagination interstitial gracefully');
+  } finally {
+    AdService.isOnline = prevOnline;
+    clearEntitlement();
+  }
+
+  // Verify all 3 paginated views invoke showPaginationInterstitial
+  for (const rel of [
+    'frontend/components/favorites/FavoritesView.js',
+    'frontend/components/favorites/SpokenEnglishView.js',
+    'frontend/components/favorites/MicroRulesView.js',
+  ]) {
+    const src = fs.readFileSync(path.resolve(rel), 'utf8');
+    assert.ok(src.includes('AdService.showPaginationInterstitial('), `${rel} must call AdService.showPaginationInterstitial`);
+  }
+});
+
 test('8b. AdService Interstitial: Preload and round completion lifecycle (1 per hour limit)', async () => {
   assert.equal(typeof AdService.preloadInterstitial, 'function', 'preloadInterstitial must be exposed');
   assert.equal(typeof AdService.showRoundFinishInterstitial, 'function', 'showRoundFinishInterstitial must be exposed');

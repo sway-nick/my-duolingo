@@ -91,6 +91,13 @@ export function prepareAndroidAssets() {
     }
   });
 
+  // Ensure story narration audio is NOT prepackaged into APK/AAB (downloaded on-demand & cached for PRO)
+  const destStoriesDir = path.join(androidAudioDir, 'stories');
+  if (fs.existsSync(destStoriesDir)) {
+    fs.rmSync(destStoriesDir, { recursive: true, force: true });
+    console.log('✅ Removed stories audio folder from Android package (stories audio is downloaded on-demand & cached).');
+  }
+
   // Clean Android public assets/audio so stale files are not retained
   console.log('--- 2. Cleaning android public assets/audio before cap sync ---');
   const publicAudioDir = path.join(ANDROID_PROJECT, 'android/app/src/main/assets/public/assets/audio');

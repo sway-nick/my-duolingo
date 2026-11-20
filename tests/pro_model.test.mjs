@@ -267,3 +267,20 @@ test('ProService: clears promo entitlement on logout while preserving play entit
     globalThis.window = origWindow;
   }
 });
+
+test('PRO State: setDebugForceFree overrides active Play PRO without erasing entitlement', async () => {
+  const { isDebugForceFree, setDebugForceFree } = await import('../frontend/services/proState.js');
+  installMockLocalStorage();
+  setEntitlement({ active: true, source: 'play', verifiedAt: Date.now() });
+  assert.equal(isProActive(), true);
+  assert.equal(isDebugForceFree(), false);
+
+  setDebugForceFree(true);
+  assert.equal(isDebugForceFree(), true);
+  assert.equal(isProActive(), false, 'Force Free must disable PRO across the app');
+
+  setDebugForceFree(false);
+  assert.equal(isDebugForceFree(), false);
+  assert.equal(isProActive(), true, 'Disabling Force Free restores original Play PRO');
+  clearEntitlement();
+});

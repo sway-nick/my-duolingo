@@ -68,11 +68,11 @@ test('Collections: months and days_of_week are complete in words.json', async ()
   assert.equal(dayWords.length, 7, 'all 7 days present in dictionary');
 });
 
-test('Collections: all 15 thematic collections have 100% of their words in dictionary', async () => {
+test('Collections: all 17 thematic collections have 100% of their words in dictionary', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionWords } = await import('../frontend/services/collectionsService.js');
 
   const thematicCols = BUILTIN_COLLECTIONS_DEF.filter((c) => c.id !== 'my_favorites');
-  assert.equal(thematicCols.length, 15, '15 thematic collections defined');
+  assert.equal(thematicCols.length, 17, '17 thematic collections defined');
 
   for (const col of thematicCols) {
     const words = getCollectionWords(col.id, wordsData);
@@ -254,12 +254,12 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 11 themati
   resetBuiltinCollection('colors');
 });
 
-test('Collections: all 16 built-in collections have names in all 36 supported locales', async () => {
+test('Collections: all 18 built-in collections have names in all 36 supported locales', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const locales = SUPPORTED_LOCALE_CODES;
 
-  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 16, '16 built-in collections');
+  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 18, '18 built-in collections');
 
   for (const col of BUILTIN_COLLECTIONS_DEF) {
     for (const loc of locales) {
@@ -598,6 +598,181 @@ test('FavoritesView: collection words are NOT favorited by default (🤍) unless
   assert.equal((container.innerHTML.match(/🤍/g) || []).length, 0, 'In my_favorites, no 🤍');
 });
 
+test('Collections: IT, Verbs, Adjectives, Phrasal Verbs, Idioms, Tricky Sounds, and Confusing Words paginate by 10 words per page', async () => {
+  const { renderFavoritesView, PAGINATED_COLLECTIONS, loadSavedCollectionPage, saveSavedCollectionPage } = await import('../frontend/components/favorites/FavoritesView.js');
+  const { markCollectionPackDownloaded } = await import('../frontend/services/collectionsService.js');
+
+  assert.deepEqual(
+    Array.from(PAGINATED_COLLECTIONS).sort(),
+    ['adjectives', 'confusing_words', 'idioms', 'it_terms', 'phrasal_verbs', 'tricky_sounds', 'verbs'].sort(),
+    'PAGINATED_COLLECTIONS must contain exactly the 7 target collections'
+  );
+
+  const container = {
+    innerHTML: '',
+    querySelector(sel) {
+      if (sel === '.mobile-header') return null;
+      return null;
+    },
+    querySelectorAll() {
+      return [];
+    }
+  };
+  global.document = {
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    querySelector(sel) {
+      if (sel === '#app-content') return container;
+      return null;
+    },
+    querySelectorAll() {
+      return [];
+    },
+    documentElement: {
+      getPropertyValue: () => '0px'
+    }
+  };
+  global.getComputedStyle = () => ({
+    getPropertyValue: () => '0px'
+  });
+
+  const generateWords = (count) => Array.from({ length: count }, (_, i) => ({
+    id: 1000 + i,
+    word: `word_${i + 1}`,
+    translation: `перевод_${i + 1}`,
+    category: 'Test'
+  }));
+
+  const sample25Verbs = generateWords(25);
+  global.localStorage.clear();
+  markCollectionPackDownloaded('verbs');
+
+  // Verbs with 25 items -> exactly 10 on page 1, 3 pages total
+  renderFavoritesView(sample25Verbs, '#app-content', {
+    collectionId: 'verbs',
+    collectionTitle: 'Популярные глаголы',
+    allWords: sample25Verbs,
+    favoriteIds: []
+  });
+
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for verbs');
+  assert.ok(container.innerHTML.includes('1–10 / 25'), 'Page info must show 1–10 / 25 on page 1');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Page 1 must render exactly 10 cards');
+
+  // Persistence: simulate user clicking or saving page 2
+  saveSavedCollectionPage('verbs', 2);
+  assert.equal(loadSavedCollectionPage('verbs'), 2, 'Must persist page 2 in storage for verbs');
+
+  // Re-rendering without explicit _currentPage must restore saved page 2
+  renderFavoritesView(sample25Verbs, '#app-content', {
+    collectionId: 'verbs',
+    collectionTitle: 'Популярные глаголы',
+    allWords: sample25Verbs,
+    favoriteIds: []
+  });
+  assert.ok(container.innerHTML.includes('11–20 / 25'), 'Must automatically restore saved page 2 (11–20 / 25)');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Restored page 2 must render 10 cards');
+
+  // Page 3 -> exactly 5 items (21 to 25)
+  renderFavoritesView(sample25Verbs, '#app-content', {
+    collectionId: 'verbs',
+    collectionTitle: 'Популярные глаголы',
+    allWords: sample25Verbs,
+    favoriteIds: [],
+    _currentPage: 3
+  });
+
+  assert.ok(container.innerHTML.includes('21–25 / 25'), 'Page info must show 21–25 / 25 on page 3');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 5, 'Page 3 must render remaining 5 cards');
+});
+
+test('Pagination state persistence across phone restarts: Collections, Spoken English, and MicroRules', async () => {
+  const { loadSavedCollectionPage, saveSavedCollectionPage } = await import('../frontend/components/favorites/FavoritesView.js');
+  const { loadSavedSpokenPage, saveSavedSpokenPage, loadSavedSpokenCategory, saveSavedSpokenCategory } = await import('../frontend/components/favorites/SpokenEnglishView.js');
+  const { loadSavedMicroRulesPage, saveSavedMicroRulesPage } = await import('../frontend/components/favorites/MicroRulesView.js');
+
+  global.localStorage.clear();
+
+  saveSavedCollectionPage('it_terms', 4);
+  saveSavedCollectionPage('idioms', 7);
+  saveSavedCollectionPage('adjectives', 3);
+  saveSavedCollectionPage('phrasal_verbs', 5);
+  saveSavedCollectionPage('verbs', 2);
+  saveSavedCollectionPage('tricky_sounds', 3);
+  saveSavedCollectionPage('confusing_words', 4);
+
+  assert.equal(loadSavedCollectionPage('it_terms'), 4);
+  assert.equal(loadSavedCollectionPage('idioms'), 7);
+  assert.equal(loadSavedCollectionPage('adjectives'), 3);
+  assert.equal(loadSavedCollectionPage('phrasal_verbs'), 5);
+  assert.equal(loadSavedCollectionPage('verbs'), 2);
+  assert.equal(loadSavedCollectionPage('tricky_sounds'), 3);
+  assert.equal(loadSavedCollectionPage('confusing_words'), 4);
+  assert.equal(loadSavedCollectionPage('unknown_collection'), 1);
+
+  saveSavedSpokenCategory('drops');
+  saveSavedSpokenPage('drops', 2);
+  saveSavedSpokenPage('all', 3);
+
+  assert.equal(loadSavedSpokenCategory(), 'drops');
+  assert.equal(loadSavedSpokenPage('drops'), 2);
+  assert.equal(loadSavedSpokenPage('all'), 3);
+  assert.equal(loadSavedSpokenPage('reductions'), 1);
+
+  saveSavedMicroRulesPage('A1', 2);
+  saveSavedMicroRulesPage('B1', 3);
+
+  assert.equal(loadSavedMicroRulesPage('A1'), 2);
+  assert.equal(loadSavedMicroRulesPage('B1'), 3);
+  assert.equal(loadSavedMicroRulesPage('A2'), 1);
+});
+
+test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), IPA/partner comparison UI, and 10-card pagination', async () => {
+  const { getCollectionWords, isCollectionPackDownloaded } = await import('../frontend/services/collectionsService.js');
+  const { TRICKY_SOUNDS_PAIRS, CONFUSING_WORDS_PAIRS } = await import('../frontend/services/confusablePairsData.js');
+  const { renderFavoritesView } = await import('../frontend/components/favorites/FavoritesView.js');
+
+  assert.equal(TRICKY_SOUNDS_PAIRS.length, 50, 'tricky_sounds has 50 minimal pairs');
+  assert.equal(CONFUSING_WORDS_PAIRS.length, 50, 'confusing_words has 50 look-alike pairs');
+  assert.equal(isCollectionPackDownloaded('tricky_sounds'), true, 'tricky_sounds is immediately available');
+  assert.equal(isCollectionPackDownloaded('confusing_words'), true, 'confusing_words is immediately available');
+
+  const trickyWords = getCollectionWords('tricky_sounds', wordsData);
+  const confusingWords = getCollectionWords('confusing_words', wordsData);
+  assert.equal(trickyWords.length, 100, 'tricky_sounds resolves all 100 words from dictionary');
+  assert.equal(confusingWords.length, 100, 'confusing_words resolves all 100 words from dictionary');
+  assert.equal(new Set(trickyWords.map((w) => w.word.toLowerCase())).size, 100, 'tricky_sounds has 100 unique words');
+  assert.equal(new Set(confusingWords.map((w) => w.word.toLowerCase())).size, 100, 'confusing_words has 100 unique words');
+
+  const container = { innerHTML: '', querySelector: () => null, querySelectorAll: () => [] };
+  global.document.querySelector = (sel) => (sel === '#app-content' ? container : null);
+  global.localStorage.clear();
+
+  renderFavoritesView(trickyWords, '#app-content', {
+    collectionId: 'tricky_sounds',
+    collectionTitle: 'Ловушки на слух',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'tricky_sounds page 1 renders 10 words (5 pairs)');
+  assert.ok(container.innerHTML.includes('1–10 / 100'), 'tricky_sounds shows 1–10 / 100');
+  assert.ok(container.innerHTML.includes('class="pair-box"'), 'tricky_sounds renders side-by-side pair comparison box');
+  assert.ok(container.innerHTML.includes('class="pair-contrast"'), 'tricky_sounds renders IPA contrast hint');
+  assert.ok(container.innerHTML.includes('/æ/ ≠ /e/'), 'tricky_sounds shows /æ/ ≠ /e/ for bad/bed');
+  assert.ok(container.innerHTML.includes('pair-listen-btn'), 'tricky_sounds renders partner audio button');
+
+  renderFavoritesView(confusingWords, '#app-content', {
+    collectionId: 'confusing_words',
+    collectionTitle: 'Коварные близнецы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'confusing_words page 1 renders 10 words (5 pairs)');
+  assert.ok(container.innerHTML.includes('1–10 / 100'), 'confusing_words shows 1–10 / 100');
+  assert.ok(container.innerHTML.includes('class="pair-box"'), 'confusing_words renders pair comparison box');
+  assert.ok(container.innerHTML.includes('class="pair-partner-tr"'), 'confusing_words renders partner translation for contrast');
+});
+
 test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadable pack flow', async () => {
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const {
@@ -708,6 +883,21 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid after 1st idioms unlock');
   assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Must render +10 unlock button when more idioms remain');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Free tier must unlock exactly 10 idioms per ad');
+  assert.ok(!container.innerHTML.includes('<div class="col-pagination">'), 'With only 10 idioms (page 1 of 1), pagination bar must not be rendered');
+
+  // Second ad unlock for idioms -> 20 idioms unlocked -> pagination bar appears alongside unlock button without conflict!
+  const { unlockMoreCollectionItems } = await import('../frontend/services/collectionsService.js');
+  unlockMoreCollectionItems('idioms', 10);
+  renderFavoritesView(idiomWords, '#app-content', {
+    collectionId: 'idioms',
+    collectionTitle: 'Идиомы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Page 1 renders 10 idioms');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must appear when 20 idioms are unlocked');
+  assert.ok(container.innerHTML.includes('1–10 / 20'), 'Pagination info shows 1–10 / 20');
+  assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Unlock button remains accessible below pagination bar');
 
   // Phrasal verbs -> unlocks 20 per ad, or all in PRO
   markCollectionPackDownloaded('phrasal_verbs');
@@ -718,7 +908,9 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 20, 'Free tier must unlock exactly 20 phrasal verbs per ad');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Free tier page 1 must render 10 phrasal verbs with pagination');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for phrasal_verbs');
+  assert.ok(container.innerHTML.includes('1–10 / 20'), 'Pagination info must show 1–10 / 20');
   assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Must render +20 unlock button when more phrasal verbs remain');
 
   // IT collection shows 5 preview cards in free tier + PRO paywall button (cannot be unlocked via ad/localStorage flag)
@@ -745,7 +937,9 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
     favoriteIds: [],
   });
   assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid for it_terms when PRO is active');
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, itWords.length, 'PRO tier must render all it_terms cards');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'PRO tier page 1 must render 10 it_terms cards with pagination');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for it_terms in PRO');
+  assert.ok(container.innerHTML.includes(`1–10 / ${itWords.length}`), 'Pagination info must show total it_terms count');
   assert.ok(!container.innerHTML.includes('id="open-it-pro-btn"'), 'Must not render PRO paywall button when PRO is active');
   clearEntitlement();
 });
@@ -1213,6 +1407,7 @@ test('MicroRules and TenseConstructions cover all 36 supported locales, progress
   const collectionsHubSource = fs.readFileSync(path.resolve('frontend/components/favorites/CollectionsHubView.js'), 'utf8');
   const indexSource = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
   const microViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/MicroRulesView.js'), 'utf8');
+  const spokenViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/SpokenEnglishView.js'), 'utf8');
   const tenseViewSource = fs.readFileSync(path.resolve('frontend/components/favorites/TenseConstructionsView.js'), 'utf8');
   assert.ok(grammarHubSource.includes('data-grammar-id="grammar_microrules"'), 'GrammarHubView must include grammar_microrules tile');
   assert.ok(grammarHubSource.includes('data-grammar-id="tense_constructions"'), 'GrammarHubView must include tense_constructions tile');
@@ -1228,7 +1423,9 @@ test('MicroRules and TenseConstructions cover all 36 supported locales, progress
   assert.ok(microViewSource.includes('myduo_microrules_unlocked'), 'MicroRulesView must persist unlocked rule IDs');
   assert.ok(microViewSource.includes('myduo_microrules_quiz_done'), 'MicroRulesView must persist mini-quiz completion');
   assert.ok(microViewSource.includes('addWeeklyXP(5)'), 'MicroRulesView must award +5 XP on mini-quiz pass');
-  assert.ok(microViewSource.includes('showLanguagePackRewardedAd'), 'MicroRulesView must trigger rewarded ad to unlock rules');
+  assert.ok(microViewSource.includes('showPaginationInterstitial'), 'MicroRulesView must trigger interstitial ad to unlock rules and switch pages');
+  assert.ok(!microViewSource.includes('showLanguagePackRewardedAd'), 'MicroRulesView must not use expensive rewarded ad inside paginated view');
+  assert.ok(!spokenViewSource.includes('showLanguagePackRewardedAd'), 'SpokenEnglishView must not use expensive rewarded ad inside paginated view');
   assert.ok(microViewSource.includes('btn-orange'), 'MicroRulesView unlock button must have orange class');
   assert.ok(microViewSource.includes('data-unlock-rule'), 'MicroRulesView must render data-unlock-rule trigger');
   assert.ok(!microViewSource.includes('class="mr-ex-heading"') && !microViewSource.includes('class="mr-ex-list"'), 'MicroRulesView must not render examples block');

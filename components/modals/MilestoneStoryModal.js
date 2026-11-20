@@ -1,3 +1,5 @@
+import { isProActive } from '../../services/proState.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=386.0';
 import { getStoryStrings } from './storyTranslations.js?v=386.0';
 import { t, getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=386.0';
 import { speakWord } from '../../services/audioService.js?v=386.0';
@@ -61,6 +63,136 @@ export const MILESTONE_STORIES = {
       "The roll of silk, too, never grew shorter, though time after time long pieces were cut off to make the warrior a new suit of clothes to go to Court in at the New Year.",
       "The cooking pot was wonderful, too. No matter what was put into it, it cooked deliciously whatever was wanted without any firing—truly a very economical saucepan.",
       "The fame of Hidesato’s fortune spread far and wide, and as there was no need for him to spend money on rice or silk or firing, he became very rich and prosperous, and was henceforth known as My Lord Bag of Rice."
+    ]
+  },
+  "1": {
+    "milestone": 1,
+    "titleKey": "storyTitle1",
+    "translationKey": "storyFull1",
+    "badgeKey": "badge1",
+    "title": "Aladdin and the Magic Lamp",
+    "coverImage": "assets/images/aladdin_and_the_magic_lamp.webp",
+    "hideFullTranslation": true,
+    "isBonus": true,
+    "isProOnly": true,
+    "audioUrl": "assets/audio/stories/aladdin_and_the_magic_lamp.mp3",
+    "remoteAudioUrls": [
+      "https://cdn.jsdelivr.net/gh/sway-nick/my-duolingo@main/docs/assets/audio/stories/aladdin_and_the_magic_lamp.mp3",
+      "https://raw.githubusercontent.com/sway-nick/my-duolingo/main/docs/assets/audio/stories/aladdin_and_the_magic_lamp.mp3",
+      "https://sway-nick.github.io/my-duolingo/assets/audio/stories/aladdin_and_the_magic_lamp.mp3"
+    ],
+    "audioDuration": 391.01,
+    "paragraphTimings": [
+          {
+                "pIndex": 0,
+                "start": 2.63,
+                "end": 25.65
+          },
+          {
+                "pIndex": 1,
+                "start": 25.65,
+                "end": 47.69
+          },
+          {
+                "pIndex": 2,
+                "start": 47.69,
+                "end": 67.19
+          },
+          {
+                "pIndex": 3,
+                "start": 67.19,
+                "end": 103.75
+          },
+          {
+                "pIndex": 4,
+                "start": 103.75,
+                "end": 125.71
+          },
+          {
+                "pIndex": 5,
+                "start": 125.71,
+                "end": 149.2
+          },
+          {
+                "pIndex": 6,
+                "start": 149.2,
+                "end": 168.01
+          },
+          {
+                "pIndex": 7,
+                "start": 168.01,
+                "end": 178.28
+          },
+          {
+                "pIndex": 8,
+                "start": 178.28,
+                "end": 196.54
+          },
+          {
+                "pIndex": 9,
+                "start": 196.54,
+                "end": 216.94
+          },
+          {
+                "pIndex": 10,
+                "start": 216.94,
+                "end": 244.42
+          },
+          {
+                "pIndex": 11,
+                "start": 244.42,
+                "end": 264
+          },
+          {
+                "pIndex": 12,
+                "start": 264,
+                "end": 287.32
+          },
+          {
+                "pIndex": 13,
+                "start": 287.32,
+                "end": 309.31
+          },
+          {
+                "pIndex": 14,
+                "start": 309.31,
+                "end": 336.84
+          },
+          {
+                "pIndex": 15,
+                "start": 336.84,
+                "end": 358.65
+          },
+          {
+                "pIndex": 16,
+                "start": 358.65,
+                "end": 377.44
+          },
+          {
+                "pIndex": 17,
+                "start": 377.44,
+                "end": 391.01
+          }
+    ],
+    "paragraphs": [
+          "A long time ago, in a busy city in the East, there lived a poor boy named Aladdin. His father had died when Aladdin was very young, so he lived alone with his mother. They had very little money, and his mother worked hard every day spinning cotton to buy food. Aladdin was a kind boy, but he preferred playing in the streets with his friends instead of working.",
+          "One day, a tall stranger arrived in the city. He was actually a wicked sorcerer from a faraway land, but he had a clever plan. He approached Aladdin in the market and smiled warmly. \"My dear boy!\" he said. \"I am your father’s brother. I have traveled for many years to find you and help your family.\"",
+          "Aladdin was surprised, and his mother was overjoyed. The stranger bought Aladdin fine new clothes and gave his mother gold coins. The next morning, the sorcerer asked Aladdin to walk with him outside the city. They walked for hours until they reached a quiet valley between two high mountains.",
+          "The sorcerer built a small fire, threw some strange powder into it, and spoke magic words. Suddenly, the ground shook, and a heavy stone slab appeared with a brass ring in the center. \"Under this stone is a secret cave,\" the sorcerer said. \"Only you can enter it. Go down the stairs, walk through the halls of gold and jewels, and do not touch anything. At the very end, you will find an old oil lamp. Bring it to me.\" Before Aladdin went down, the sorcerer slipped a magic ring onto Aladdin’s finger for protection.",
+          "Aladdin climbed down into the cave. It was breathtaking. Trees were covered with sparkling rubies, emeralds, and diamonds. Aladdin remembered the warning, though he did put a few shining fruits from the trees into his pockets, thinking they were just pretty glass. At the end of the cave, he found the dusty old lamp.",
+          "When Aladdin returned to the entrance, the stairs were too steep to climb while holding the lamp. \"Give me the lamp first, and then I will pull you out!\" the sorcerer shouted angrily. Aladdin was afraid the man would leave him behind, so he refused. Furious, the sorcerer spoke another spell, and the heavy stone slammed shut, trapping Aladdin in the dark.",
+          "For two days, Aladdin sat in the darkness, crying and praying. Accidentally, he rubbed the magic ring on his finger. Instantly, a huge genie appeared in a cloud of smoke. \"I am the Genie of the Ring,\" the spirit boomed. \"What is your wish?\"",
+          "\"Take me home to my mother!\" Aladdin cried. In the blink of an eye, Aladdin was standing in his own house, still holding the old lamp.",
+          "When Aladdin’s mother saw the dirty lamp, she decided to clean it so they could sell it for food. As soon as she rubbed it, a giant, powerful genie burst out of the spout, filling the whole room. \"I am the Genie of the Lamp!\" he thundered. \"Your wish is my command.\"",
+          "Aladdin quickly asked for a feast. Immediately, silver plates filled with delicious food appeared on the table. From that day on, Aladdin and his mother were never hungry again. Aladdin sold the silver plates and used the lamp wisely, growing into a polite, educated, and handsome young man.",
+          "Years later, Aladdin saw the Sultan’s daughter, Princess Jasmine, riding through the city. She was the most beautiful woman he had ever seen, and he fell deeply in love with her. Aladdin sent his mother to the Sultan’s palace with a bowl full of the sparkling jewels he had taken from the cave. The Sultan was amazed by the gift, but he demanded one more thing: Aladdin had to build a magnificent palace for the princess in a single night.",
+          "Aladdin rubbed the magic lamp, and by the next morning, a palace of white marble and gold stood across from the Sultan’s home. The Sultan kept his promise, and Aladdin and Jasmine were married in a grand celebration. They lived happily together, and the people of the city loved Aladdin for his generosity.",
+          "However, far away in his homeland, the wicked sorcerer discovered that Aladdin was still alive and had the magic lamp. Filled with rage, he traveled back to the city and disguised himself as an old merchant. Walking past Aladdin’s palace while Aladdin was away hunting, he shouted, \"New lamps for old! Trade your old lamps for shiny new ones!\"",
+          "Princess Jasmine heard him from the window. She did not know the secret of Aladdin’s dusty old lamp, so she sent a servant to trade it for a bright new one. The moment the sorcerer held the magic lamp, he laughed cruelly and rubbed it. He ordered the genie to carry the entire palace—with the princess inside—to a distant desert in Africa.",
+          "When Aladdin returned, his palace and his wife were gone. The Sultan was furious and gave Aladdin forty days to find his daughter. Heartbroken, Aladdin wandered into the countryside. As he washed his hands in a river, he accidentally rubbed the magic ring he still wore. The Genie of the Ring appeared. He could not undo the work of the more powerful Genie of the Lamp, but he could take Aladdin to the palace.",
+          "In a flash, Aladdin arrived in the desert and sneaked into the palace through a window. Jasmine was overjoyed to see him. Together, they made a plan. That evening, the princess invited the sorcerer to dinner and secretly poured a strong sleeping potion into his cup. The sorcerer drank it and fell into a deep sleep.",
+          "Aladdin quickly stepped out from behind a curtain, took the magic lamp from the sorcerer’s belt, and rubbed it. The Genie of the Lamp appeared, delighted to serve his true master again. Aladdin wished for the palace to be returned to its rightful place, leaving the wicked sorcerer behind in the desert forever.",
+          "The next morning, the Sultan looked out his window and saw the marble palace shining in the sun once more. Aladdin and Jasmine were reunited with their family, and they lived in peace and happiness for the rest of their lives."
     ]
   },
   "50": {
@@ -697,6 +829,33 @@ export const MILESTONE_STORIES = {
 
 // Comprehensive grammatical words, pronouns, contractions, and story vocabulary across all 36 locales
 export const FUNCTION_WORDS_MAP = {
+  "aladdin": {"cs":"Aladin","de":"Aladin","en":"Aladdin","es":"Aladino","fr":"Aladdin","pl":"Aladyn","tr":"Alaaddin","it":"Aladino","ro":"Aladin","bg":"Аладин","hu":"Aladdin","el":"Αλαντίν","da":"Aladdin","lv":"Aladins","lt":"Aladinas","pt":"Aladim","sk":"Aladin","sl":"Aladin","fi":"Aladdin","hr":"Aladin","sv":"Aladdin","et":"Aladin","hi":"अलादीन","bn":"আলাদিন","ar":"علاء الدين","fa":"علاءالدین","ur":"علاؤ الدین","id":"Aladdin","vi":"Aladdin","th":"อะลาดิน","ko":"알라딘","ja":"アラジン","zh":"阿拉丁","kk":"Аладдин","ru":"Аладдин","uk":"Аладдін"},
+  "jasmine": {"cs":"Jasmína","de":"Jasmin","en":"Jasmine","es":"Jazmín","fr":"Jasmine","pl":"Dżasmina","tr":"Jasmine","it":"Jasmine","ro":"Iasmina","bg":"Жасмин","hu":"Jázmin","el":"Τζάσμιν","da":"Jasmine","lv":"Jasmīna","lt":"Džesmina","pt":"Jasmine","sk":"Jazmína","sl":"Jasmīna","fi":"Jasmine","hr":"Jasmina","sv":"Jasmine","et":"Jasmine","hi":"जैस्मीन","bn":"জেসমিন","ar":"ياسمين","fa":"یاسمین","ur":"یاسمین","id":"Jasmine","vi":"Jasmine","th":"จัสมิน","ko":"자스민","ja":"ジャスミン","zh":"茉莉公主","kk":"Жасмин","ru":"Жасмин (принцесса)","uk":"Жасмін (принцеса)"},
+  "sultan": {"cs":"sultán","de":"Sultan","en":"sultan, ruler","es":"sultán","fr":"sultan","pl":"sułtan","tr":"sultan","it":"sultano","ro":"sultan","bg":"султан","hu":"szultán","el":"σουλτάνος","da":"sultan","lv":"sultāns","lt":"sultonas","pt":"sultão","sk":"sultán","sl":"sultan","fi":"sultaani","hr":"sultan","sv":"sultan","et":"sultan","hi":"सुल्तान","bn":"সুলতান","ar":"سلطان","fa":"سلطان","ur":"سلطان","id":"sultan","vi":"quốc vương, sultan","th":"สุลต่าน","ko":"술탄, 군주","ja":"スルタン、君主","zh":"苏丹（国王）","kk":"сұлтан","ru":"султан, правитель","uk":"султан, правитель"},
+  "genie": {"cs":"džin","de":"Dschinn, Geist","en":"genie, spirit","es":"genio","fr":"génie","pl":"dżin","tr":"cin","it":"genio","ro":"duh, geniu","bg":"джин","hu":"dzsinn","el":"τζίνι","da":"geni, ånd","lv":"džins","lt":"džinas","pt":"gênio","sk":"džin","sl":"duh, džin","fi":"henki, dzinni","hr":"duh, džin","sv":"ande, djinn","et":"džinn","hi":"जिन्न","bn":"জিন","ar":"جني","fa":"جن, غول چراغ","ur":"جن","id":"jin","vi":"thần đèn","th":"ยักษ์จีนี่","ko":"지니, 요정","ja":"魔人、ジーニー","zh":"精灵，神灯魔灵","kk":"жын","ru":"джинн, дух","uk":"джин, дух"},
+  "wicked": {"cs":"zlý, zkažený","de":"böse, gemein","en":"wicked, evil","es":"malvado","fr":"malfaisant, méchant","pl":"niegodziwy, zły","tr":"kötü, hain","it":"malvagio","ro":"rău, ticălos","bg":"зъл, коварен","hu":"gonosz","el":"μοχθηρός","da":"ondskabsfuld","lv":"ļauns","lt":"piktas, klastingas","pt":"malvado","sk":"zlý, podlý","sl":"hudoben","fi":"ilkeä, paha","hr":"zao, podmukao","sv":"ondskefull","et":"õel, kuri","hi":"दुष्ट, कपटी","bn":"দুষ্ট","ar":"شرير","fa":"بدجنس, خبیث","ur":"بدکار، شریر","id":"jahat","vi":"độc ác","th":"ชั่วร้าย","ko":"사악한, 짓궂은","ja":"邪悪な、意地悪な","zh":"邪恶的，心术不正的","kk":"зұлым, зұлымдық","ru":"злой, коварный","uk":"злий, підступний"},
+  "faraway": {"cs":"daleký","de":"weit entfernt","en":"faraway, distant","es":"lejano","fr":"lointain","pl":"daleki","tr":"uzak","it":"lontano","ro":"îndepărtat","bg":"далечен","hu":"távoli","el":"μακρινός","da":"fjerntliggende","lv":"tāls","lt":"tolimas","pt":"distante, longínquo","sk":"ďaleký","sl":"daleč","fi":"kaukainen","hr":"dalek","sv":"avlägsen","et":"kauge","hi":"दूर का, सुदूर","bn":"দূরবর্তী","ar":"بعيد","fa":"دور دست","ur":"دور دراز","id":"jauh","vi":"xa xôi","th":"ห่างไกล","ko":"먼, 아득한","ja":"遠い、はるかな","zh":"遥远的","kk":"алыс, шалғай","ru":"далекий, дальний","uk":"далекий"},
+  "overjoyed": {"cs":"přesťastný","de":"überglücklich","en":"overjoyed, delighted","es":"encantado, rebosante de alegría","fr":"fou de joie","pl":"niezmiernie uradowany","tr":"sevinçten havalara uçmuş","it":"al settimo cielo","ro":"nespus de bucuros","bg":"превъзбуден от радост","hu":"madarat lehetett volna vele fogatni","el":"πανευτυχής","da":"overvældet af glæde","lv":"ārkārtīgi priecīgs","lt":"be galo laimingas","pt":"radiante de alegria","sk":"nesmierne šťastný","sl":"presrečen","fi":"ikionnellinen","hr":"presretan","sv":"överlycklig","et":"ülirõõmus","hi":"अत्यधिक प्रसन्न","bn":"আনন্দে আত্মহারা","ar":"مغتبط للغاية","fa":"بی‌نهایت خوشحال","ur":"بے حد خوش","id":"sangat gembira","vi":"vui mừng khôn xiết","th":"ยินดีอย่างยิ่ง","ko":"매우 기뻐하는","ja":"大喜びして","zh":"狂喜的，极高兴的","kk":"қуанышы қойнына сыймаған","ru":"вне себя от радости","uk":"в нестямі від радості"},
+  "breathtaking": {"cs":"úchvatný, dechberoucí","de":"atemberaubend","en":"breathtaking, stunning","es":"impresionante","fr":"époustouflant","pl":"zapierający dech","tr":"nefes kesici","it":"mozzafiato","ro":"uluitor","bg":"спиращ дъха","hu":"lélegzetelállító","el":"συναρπαστικός","da":"betagende","lv":"aizraujošs","lt":"gniaužiantis kvapą","pt":"de tirar o fôlego","sk":"dychberúci","sl":"dih jemajoč","fi":"henkeäsalpaava","hr":"očaravajući","sv":"hänförande","et":"hingemattev","hi":"आश्चर्यजनक, दिलकश","bn":"বিস্ময়কর","ar":"يخطف الأنفاس","fa":"حیرت‌انگیز, نفس‌گیر","ur":"دم بخود کر دینے والا","id":"menakjubkan","vi":"ngoạn mục, hấp dẫn","th":"น่าทึ่งจนแทบหยุดหายใจ","ko":"숨이 멎을 듯한","ja":"息をのむような","zh":"惊人的，壮观的","kk":"таңдай қақтырарлық","ru":"захватывающий дух, потрясающий","uk":"захоплюючий дух, приголомшливий"},
+  "rubies": {"cs":"rubíny","de":"Rubine","en":"rubies (gemstones)","es":"rubíes","fr":"rubis","pl":"rubiny","tr":"yakar taşlar, yakutlar","it":"rubini","ro":"rubine","bg":"рубини","hu":"rubinok","el":"ρουμπίνια","da":"rubiner","lv":"rubīni","lt":"rubinai","pt":"rubis","sk":"rubíny","sl":"rubini","fi":"rubiinit","hr":"rubini","sv":"rubiner","et":"rubiinid","hi":"माणिक्य","bn":"চুনি, পদ্মরাগমণি","ar":"ياقوت","fa":"یاقوت‌ها","ur":"یاقوت","id":"batu delima, rubi","vi":"hồng ngọc","th":"ทับทิม","ko":"루비들","ja":"ルビー","zh":"红宝石","kk":"лағыл тастар","ru":"рубины","uk":"рубіни"},
+  "emeralds": {"cs":"smaragdy","de":"Smaragde","en":"emeralds (gemstones)","es":"esmeraldas","fr":"émeraudes","pl":"szmaragdy","tr":"zümrütler","it":"smeraldi","ro":"smaralde","bg":"изумруди","hu":"smaragdok","el":"σμαράγδια","da":"smaragder","lv":"smaragdi","lt":"smaragdai","pt":"esmeraldas","sk":"smaragdy","sl":"smaragdi","fi":"smaragdit","hr":"smaragdi","sv":"smaragder","et":"smaragdid","hi":"पन्ने (रत्न)","bn":"পান্না","ar":"زمرد","fa":"زمردها","ur":"زمرد","id":"zamrud","vi":"ngọc lục bảo","th":"มรกต","ko":"에메랄드들","ja":"エメラルド","zh":"祖母绿，绿宝石","kk":"зүбәржаттар","ru":"изумруды","uk":"смарагди"},
+  "jewels": {"cs":"klenoty, drahokamy","de":"Juwelen","en":"jewels, gems","es":"joyas","fr":"joyaux","pl":"klejnoty","tr":"mücevherler","it":"gioielli","ro":"bijuterii, nestemate","bg":"скъпоценности","hu":"drágakövek","el":"κοσμήματα","da":"juveler","lv":"dārgakmeņi","lt":"brangakmeniai","pt":"joias","sk":"klenoty","sl":"dragulji","fi":"jalokivet","hr":"dragulji","sv":"juveler","et":"juveelid","hi":"जवाहरात, रत्न","bn":"রত্নাবলী","ar":"جواهر","fa":"جواهرات","ur":"جواہرات","id":"permata","vi":"châu báu, ngọc ngà","th":"อัญมณี","ko":"보석들","ja":"宝石、宝飾品","zh":"珠宝，宝石","kk":"асыл тастар","ru":"драгоценности","uk":"коштовності"},
+  "slab": {"cs":"kamenná deska","de":"Platte, Steinplatte","en":"slab, stone block","es":"losa, placa","fr":"dalle (de pierre)","pl":"płyta kamienna","tr":"levha, taş plaka","it":"lastra (di pietra)","ro":"placă de piatră","bg":"каменна плоча","hu":"kőlap","el":"πλάκα","da":"stenplade","lv":"akmens plāksne","lt":"akmens plokštė","pt":"laje de pedra","sk":"kamenná doska","sl":"kamnita plošča","fi":"kivilaatta","hr":"kamena ploča","sv":"stenplatta","et":"kiviplaat","hi":"शिला, पटिया","bn":"পাথরের ফলক","ar":"لوح حجري","fa":"تخته سنگ","ur":"پتھر کی سل","id":"lempeng batu","vi":"phiến đá","th":"แผ่นหิน","ko":"석판, 판석","ja":"石板、厚板","zh":"石板，厚板","kk":"тас тақта","ru":"плита (каменная)","uk":"плита (кам'яна)"},
+  "shouted": {"cs":"vykřikl","de":"schrie, rief","en":"shouted, yelled","es":"gritó","fr":"cria","pl":"krzyknął","tr":"bağırdı","it":"ha gridato","ro":"a strigat","bg":"извика","hu":"kiáltott","el":"φώναξε","da":"råbte","lv":"iekliedzās","lt":"sušuko","pt":"gritou","sk":"zavolal, skríkol","sl":"zavpil","fi":"huusi","hr":"povikao je","sv":"ropade","et":"hüüdis","hi":"चिल्लाया","bn":"চিৎকার করে উঠল","ar":"صرخ","fa":"فریاد زد","ur":"چلایا","id":"berteriak","vi":"đã hét lên","th":"ตะโกน","ko":"소리쳤다","ja":"叫んだ","zh":"大喊，呼喊","kk":"айқайлады","ru":"закричал","uk":"закричав"},
+  "angrily": {"cs":"hněvivě","de":"wütend, zornig","en":"angrily","es":"con enojo, furiosamente","fr":"avec colère","pl":"gniewnie","tr":"öfkeyle","it":"con rabbia","ro":"cu mânie","bg":"гневно","hu":"dühösen","el":"θυμωμένα","da":"vredt","lv":"dusmīgi","lt":"piktai","pt":"com raiva, zangado","sk":"nahnevane","sl":"jezno","fi":"vihaisesti","hr":"ljutito","sv":"argt","et":"vihaselt","hi":"क्रोध से","bn":"ক্রোধভরে","ar":"بغضب","fa":"با خشم","ur":"غصے سے","id":"dengan marah","vi":"một cách giận dữ","th":"อย่างโกรธเคือง","ko":"화내며, 성나서","ja":"怒って","zh":"愤怒地，气愤地","kk":"ашуланып, ызаланып","ru":"сердито, гневно","uk":"сердито, гнівно"},
+  "furious": {"cs":"rozzuřený","de":"wütend, rasend","en":"furious, enraged","es":"furioso","fr":"furieux","pl":"wściekły","tr":"öfkeden kudurmuş","it":"furioso","ro":"furios","bg":"яростен","hu":"dühöngő","el":"έξαλλος","da":"rasende","lv":"nikns, saniknots","lt":"įsiutęs","pt":"furioso","sk":"zúrivý","sl":"besen","fi":"raivostunut","hr":"bijesan","sv":"rasande","et":"raevunud","hi":"आगबबूला, अत्यंत क्रुद्ध","bn":"ক্ষিপ্ত, ক্ষোভে উন্মত্ত","ar":"غاضب جدا","fa":"بسیار خشمگین","ur":"طیش میں","id":"sangat murka","vi":"cực kỳ tức giận","th":"เดือดดาล","ko":"몹시 화가 난, 분노한","ja":"激怒した","zh":"狂怒的，暴怒的","kk":"қаһарланған, ашуға мінген","ru":"в ярости, разъяренный","uk":"розлючений, оскаженілий"},
+  "blink": {"cs":"mrknutí, okamžik","de":"Augenblick, Blinzeln","en":"blink, moment","es":"pestañeo, instante","fr":"clin d’œil","pl":"mrugnięcie, okamgnienie","tr":"göz açıp kapama","it":"battito di ciglia","ro":"clipire, clipă","bg":"мигване, миг","hu":"szempillantás","el":"ριπή οφθαλμού","da":"blink, øjeblik","lv":"mirklis","lt":"mirksnis","pt":"piscar de olhos","sk":"žmurknutie, okamih","sl":"trenutek, pomežik","fi":"silmänräpäys","hr":"treptaj oka","sv":"blinkning, ögonblick","et":"silmapilk","hi":"पलक झपकना","bn":"পলক","ar":"غمضة عين","fa":"پلک زدن, چشم بر هم زدن","ur":"پلک جھپکنا","id":"kejap mata","vi":"cái chớp mắt","th":"พริบตา","ko":"눈 깜짝할 사이","ja":"まばたき、一瞬","zh":"眨眼，瞬间","kk":"қас қаққанша, көз ілеспес сәт","ru":"миг, мгновение (blink of an eye)","uk":"мить, кліпання"},
+  "spout": {"cs":"hubice, nálevka","de":"Tülle, Schnauze","en":"spout (of a lamp/kettle)","es":"pico, boquilla","fr":"bec (de lampe)","pl":"dzióbek","tr":"emzik, lamba ağzı","it":"beccuccio","ro":"cioc (de lampă)","bg":"чучур, носле","hu":"csőr, kiöntő","el":"στόμιο","da":"tud","lv":"snīpis","lt":"snapelis","pt":"bico (da lâmpada)","sk":"hubica, hrdlo","sl":"drsnik, izliv","fi":"nokka","hr":"lijevak, kljun","sv":"pip","et":"tila","hi":"टोंटी","bn":"নল","ar":"فوهة","fa":"لوله, دهانه","ur":"ٹونٹی","id":"corong","vi":"vòi (đèn)","th":"พวยกา, พวยตะเกียง","ko":"주둥이 (램프의)","ja":"注ぎ口（ランプの口）","zh":"喷嘴，壶嘴（灯嘴）","kk":"шүмек (шамның)","ru":"носик (лампы)","uk":"носик (лампи)"},
+  "generosity": {"cs":"štědrost","de":"Großzügigkeit","en":"generosity","es":"generosidad","fr":"générosité","pl":"hojność","tr":"cömertlik","it":"generosità","ro":"generozitate","bg":"щедрост","hu":"nagylelkűség","el":"γενναιοδωρία","da":"gavmildhed","lv":"dāsnums","lt":"dosnumas","pt":"generosidade","sk":"štedrosť","sl":"velikodušnost","fi":"anteliaisuus","hr":"velikodušnost","sv":"generositet","et":"heldus","hi":"उदारता","bn":"উদারতা","ar":"سخاء, كرم","fa":"سخاوت, بخشندگی","ur":"سخاوت","id":"kedermawanan","vi":"sự hào phóng","th":"ความโอบอ้อมอารี","ko":"관대함, 후함","ja":"寛大さ、気前のよさ","zh":"慷慨，大方","kk":"жомарттық, кеңпейілдік","ru":"щедрость, великодушие","uk":"щедрість, великодушність"},
+  "disguised": {"cs":"přestrojený","de":"verkleidet","en":"disguised","es":"disfrazado","fr":"déguisé","pl":"przebrany","tr":"kılık değiştirmiş","it":"travestito","ro":"deghizat","bg":"маскиран","hu":"álruhás","el":"μεταμφιεσμένος","da":"forklædt","lv":"pārģērbies","lt":"persirengęs","pt":"disfarçado","sk":"prestrojený","sl":"preoblečen","fi":"valepukuinen","hr":"prerušen","sv":"förklädd","et":"maskeeritud","hi":"वेष बदले हुए","bn":"ছদ্মবেশী","ar":"متنكر","fa":"تغییر قیافه داده","ur":"بھیس بدلے ہوئے","id":"menyamar","vi":"cải trang","th":"ปลอมตัว","ko":"변장한","ja":"変装した","zh":"伪装的，假扮的","kk":"кейпін өзгерткен","ru":"замаскировался, переодетый","uk":"замаскувався, переодягнений"},
+  "trade": {"cs":"vyměnit, směnit","de":"tauschen, handeln","en":"trade, exchange","es":"intercambiar","fr":"échanger, troquer","pl":"wymieniać, handlować","tr":"takas etmek","it":"scambiare","ro":"a schimba, a negocia","bg":"разменям, търгувам","hu":"elcserél","el":"ανταλλάσσω","da":"bytte","lv":"mainīt, tirgoties","lt":"keistis, prekiauti","pt":"trocar, negociar","sk":"vymieňať","sl":"menjati","fi":"vaihtaa","hr":"zamijeniti, trgovati","sv":"byta","et":"vahetama","hi":"अदला-बदली करना","bn":"বিনিময় করা","ar":"مقايضة, تجارة","fa":"مبادله کردن, تجارت","ur":"تبادلہ کرنا","id":"menukar, berdagang","vi":"trao đổi, đổi lấy","th":"แลกเปลี่ยน","ko":"교환하다, 거래하다","ja":"交換する、取引する","zh":"交换，以旧换新","kk":"айырбастау, алмастыру","ru":"обменивать, менять","uk":"обмінювати, міняти"},
+  "africa": {"cs":"Afrika","de":"Afrika","en":"Africa","es":"África","fr":"Afrique","pl":"Afryka","tr":"Afrika","it":"Africa","ro":"Africa","bg":"Африка","hu":"Afrika","el":"Αφρική","da":"Afrika","lv":"Āfrika","lt":"Afrika","pt":"África","sk":"Afrika","sl":"Afrika","fi":"Afrikka","hr":"Afrika","sv":"Afrika","et":"Aafrika","hi":"अफ़्रीका","bn":"আফ্রিকা","ar":"إفريقيا","fa":"آفریقا","ur":"افریقہ","id":"Afrika","vi":"Châu Phi","th":"แอฟริกา","ko":"아프리카","ja":"アフリカ","zh":"非洲","kk":"Африка","ru":"Африка","uk":"Африка"},
+  "heartbroken": {"cs":"se zlomeným srdcem","de":"untrostbar, gebrochenen Herzens","en":"heartbroken","es":"con el corazón roto","fr":"le cœur brisé","pl":"ze złamanym sercem","tr":"kalbi kırık","it":"con il cuore spezzato","ro":"cu inima frântă","bg":"със съкрушено сърце","hu":"megtört szívű","el":"συντετριμμένος","da":"med knust hjerte","lv":"ar salauztu sirdi","lt":"sudaužyta širdimi","pt":"de coração partido","sk":"so zlomeným srdcom","sl":"zlomljenega srca","fi":"sydän murtuneena","hr":"slomljena srca","sv":"med brustet hjärta","et":"murtud südamega","hi":"हताश, दिल टूटा हुआ","bn":"মর্মাহত","ar":"منفطر القلب","fa":"دل‌شکسته","ur":"شکستہ دل","id":"patah hati","vi":"đau lòng, tan nát cõi lòng","th":"ใจสลาย","ko":"비탄에 잠긴, 가슴이 찢어지는","ja":"ひどく悲嘆に暮れた","zh":"心碎的，悲痛欲绝的","kk":"жүрегі жараланған, қайғыдан қан жұтқан","ru":"с разбитым сердцем, убитый горем","uk":"із розбитим серцем, убитий горем"},
+  "potion": {"cs":"lektvar","de":"Zaubertrank","en":"potion, draught","es":"poción","fr":"potion","pl":"mikstura, eliksir","tr":"iksir","it":"pozione","ro":"poțiune, leac","bg":"отвара, зелие","hu":"bájital","el":"μαγικό φίλτρο","da":"eliksir, mikstur","lv":"dzira","lt":"gėralas, eliksyras","pt":"poção","sk":"elixír, odvar","sl":"napoj","fi":"rohto, juoma","hr":"napitak","sv":"dryck, trolldryck","et":"nõiajook","hi":"जादुई काढ़ा","bn":"জাদুময় পানীয়","ar":"جرعة سحرية","fa":"معجون, داروی بیهوشی","ur":"جادوئی شربت","id":"ramuan","vi":"độc dược, thuốc mê","th":"ยานอนหลับ, ยาพิษวิเศษ","ko":"마법의 물약","ja":"妙薬、魔法の薬","zh":"魔药，药水","kk":"сиқырлы сусын","ru":"зелье, снадобье","uk":"зілля, напій"},
+  "rightful": {"cs":"oprávněný","de":"rechtmäßig","en":"rightful, lawful","es":"legítimo","fr":"légitime","pl":"prawowity","tr":"haklı, meşru","it":"legittimo","ro":"legitim, de drept","bg":"законен, правомерен","hu":"jogos, törvényes","el":"νόμιμος","da":"retmæssig","lv":"likumīgs","lt":"teisėtas","pt":"legítimo","sk":"oprávnený, zákonitý","sl":"upravičen","fi":"oikeutettu","hr":"zakonit, pravi","sv":"rättmätig","et":"seaduslik","hi":"उचित, वैध","bn":"ন্যায্য","ar":"شرعي","fa":"برحق, قانونی","ur":"حق بجانب","id":"yang sah, berhak","vi":"chính đáng, hợp pháp","th":"อันชอบธรรม","ko":"적법한, 마땅한","ja":"正当な、当然の","zh":"合法的，正当的","kk":"заңды, құқылы","ru":"законный, причитающийся по праву","uk":"законний, належний за правом"},
+  "threw": {"en":"threw, tossed","ru":"бросил, кинул","uk":"кинув, жбурнув","de":"warf","es":"lanzó, tiró","fr":"lança, jeta","pl":"rzucił","it":"ha lanciato, gettò","tr":"attı, fırlattı","pt":"jogou, lançou","ro":"a aruncat","bg":"хвърли","cs":"hodil","sk":"hodil","hu":"dobott","el":"έριξε","da":"kastede","fi":"heitti","sv":"kastade","hr":"bacio je","sl":"vrgel","et":"viskas","lt":"metė","lv":"meta, pameta","hi":"फेंका","ar":"رمى, ألقى","id":"melempar","vi":"đã ném","th":"ขว้างแล้ว","ko":"던졌다","ja":"投げた","bn":"নিক্ষেপ করেছিল","fa":"انداخت, پرتاب کرد","zh":"扔，抛","ur":"پھینکا","kk":"лақтырды"},
+  "reunited": {"cs":"znovu sjednoceni","de":"wiedervereint","en":"reunited","es":"reunidos","fr":"réunis","pl":"ponownie zjednoczeni","tr":"yeniden kavuştu","it":"ricongiunti","ro":"reuniți","bg":"събрани отново","hu":"újra egyesült","el":"επανενώθηκαν","da":"genforenet","lv":"atkal apvienoti","lt":"vėl susijungę","pt":"reunidos","sk":"znova spojení","sl":"ponovno združeni","fi":"jälleen yhdessä","hr":"ponovno ujedinjeni","sv":"återförenade","et":"taasühinenud","hi":"पुनर्मिलन हुआ","bn":"পুনর্মিলিত","ar":"اجتمع شملهم","fa":"دوباره به هم رسیدند","ur":"دوبارہ مل گئے","id":"bersatu kembali","vi":"được đoàn tụ","th":"กลับมาพบกันอีกครั้ง","ko":"재회한","ja":"再会した","zh":"重聚，团聚","kk":"қайта қауышты","ru":"воссоединились","uk":"возз'єдналися"},
+
   "a": {"cs":"člen (jeden)","de":"Artikel (ein/eine)","en":"article (one/any)","es":"artículo (un/una)","fr":"article (un/une)","ru":"артикль (один, какой-то)","uk":"артикль (один, якийсь)","pl":"rodzajnik (jeden)","tr":"harf-i tarif (bir)","it":"articolo (un/uno/una)","ro":"articol (un/o)","bg":"член (един)","hu":"névelő (egy)","el":"άρθρο (ένας/μία)","da":"artikel (en/et)","lv":"artikuls (viens)","lt":"artikelis (vienas)","pt":"artigo (um/uma)","sk":"člen (jeden)","sl":"člen (en)","fi":"artikkeli (yksi)","hr":"član (jedan)","sv":"artikel (en/ett)","et":"artikkel (üks)","hi":"उपपद (एक/कोई)","bn":"আর্টিকেল (একটি/কোনো)","ar":"أداة نكرة (واحد/أي)","fa":"حرف تعریف (یک)","ur":"حرف تنکیر (ایک)","id":"kata sandang (sebuah)","vi":"mạo từ (một)","th":"คำนำหน้านาม (หนึ่ง)","ko":"관사 (어떤 하나의)","ja":"冠詞（ひとつの）","zh":"冠词（一个）","kk":"артикль (бір)"},
   "an": {"cs":"člen (jeden)","de":"Artikel (ein/eine)","en":"article (one/any)","es":"artículo (un/una)","fr":"article (un/une)","ru":"артикль (один, какой-то)","uk":"артикль (один, якийсь)","pl":"rodzajnik (jeden)","tr":"harf-i tarif (bir)","it":"articolo (un/uno/una)","ro":"articol (un/o)","bg":"член (един)","hu":"névelő (egy)","el":"άρθρο (ένας/μία)","da":"artikel (en/et)","lv":"artikuls (viens)","lt":"artikelis (vienas)","pt":"artigo (um/uma)","sk":"člen (jeden)","sl":"člen (en)","fi":"artikkeli (yksi)","hr":"član (jedan)","sv":"artikel (en/ett)","et":"artikkel (üks)","hi":"उपपद (एक/कोई)","bn":"আর্টিকেল (একটি/কোনো)","ar":"أداة نكرة (واحد/أي)","fa":"حرف تعریف (یک)","ur":"حرف تنکیر (ایک)","id":"kata sandang (sebuah)","vi":"mạo từ (một)","th":"คำนำหน้านาม (หนึ่ง)","ko":"관사 (어떤 하나의)","ja":"冠詞（ひとつの）","zh":"冠词（一个）","kk":"артикль (бір)"},
   "the": {"cs":"člen (ten/ta/to)","de":"Artikel (der/die/das)","en":"article (the)","es":"artículo (el/la/los/las)","fr":"article (le/la/les)","ru":"артикль (этот, конкретный)","uk":"артикль (цей, конкретний)","pl":"rodzajnik (ten/ta/to)","tr":"harf-i tarif (belirli)","it":"articolo (il/la/lo)","ro":"articol (hotărât)","bg":"определителен член (този)","hu":"névelő (a/az)","el":"άρθρο (ο/η/το)","da":"artikel (den/det)","lv":"noteiktais artikuls","lt":"žymimasis artikelis","pt":"artigo (o/a/os/as)","sk":"člen (ten/tá/to)","sl":"določni člen (ta)","fi":"määräävä artikkeli","hr":"član (taj/ta/to)","sv":"bestämd artikel (den/det)","et":"määrav artikkel","hi":"निश्चयवाचक उपपद (वही/खास)","bn":"নির্দিষ্ট আর্টিকেল (টি/টা)","ar":"أداة تعريف (الـ)","fa":"حرف تعریف مشخص","ur":"حرف تعریف (وہ/خاص)","id":"kata sandang penentu","vi":"mạo từ xác định","th":"คำนำหน้านามชี้เฉพาะ","ko":"정관사 (그)","ja":"定冠詞（その）","zh":"定冠词（这/那）","kk":"анықтауыш артикль"},
@@ -819,7 +978,7 @@ const IRREGULAR_VERBS_MAP = {
   'has': 'have', 'had': 'have', 'having': 'have',
   'does': 'do', 'did': 'do', 'doing': 'do', 'done': 'do',
   'goes': 'go', 'went': 'go', 'gone': 'go', 'going': 'go',
-  'said': 'say', 'says': 'say', 'saying': 'say',
+  'said': 'say', 'spoke': 'speak', 'spoken': 'speak', 'threw': 'throw', 'thrown': 'throw', 'says': 'say', 'saying': 'say',
   'gave': 'give', 'given': 'give', 'gives': 'give', 'giving': 'give',
   'came': 'come', 'comes': 'come', 'coming': 'come',
   'drank': 'drink', 'drunk': 'drink', 'drinks': 'drink', 'drinking': 'drink',
@@ -1239,6 +1398,11 @@ export async function showMilestoneStoryModal(milestone = 0) {
   const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[0];
   const story = storyData;
 
+  if (storyData.isProOnly && !isProActive()) {
+    ProService.openPaywall('aladdin_story_pro');
+    return;
+  }
+
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
 
@@ -1270,6 +1434,15 @@ export async function showMilestoneStoryModal(milestone = 0) {
   overlay.id = 'milestone-story-modal-overlay';
   overlay.className = 'milestone-story-modal-overlay';
 
+  // Full translation HTML
+  const translatedParas = strings[storyData.translationKey] || [];
+  const translationParagraphsHtml = Array.isArray(translatedParas)
+    ? translatedParas.map(tp => `<p class="story-translation-para">${tp}</p>`).join('')
+    : `<p class="story-translation-para">${translatedParas}</p>`;
+  const translationParagraphs = Array.isArray(translatedParas)
+    ? translatedParas
+    : (translatedParas ? [translatedParas] : []);
+
   // Build story HTML tokens
   const paragraphsHtml = storyData.paragraphs.map((p, pIdx) => {
     const normalizedP = p.replace(/[\u2018\u2019\u02BC\u02BB]/g, "'");
@@ -1281,17 +1454,15 @@ export async function showMilestoneStoryModal(milestone = 0) {
       }
       return `<span class="story-word-token" data-word="${token}" data-pidx="${pIdx}" data-tidx="${tIdx}">${token}</span>`;
     }).join('');
-    return `<p class="story-paragraph">${tokensHtml}</p>`;
+    const paraTranslation = (storyData.hideFullTranslation && translationParagraphs[pIdx]) ? translationParagraphs[pIdx] : '';
+    const transBtnHtml = paraTranslation
+      ? ` <button type="button" class="story-para-trans-btn" data-pidx="${pIdx}" aria-label="Translate paragraph">🌐</button>`
+      : '';
+    const transBoxHtml = paraTranslation
+      ? `<div class="story-para-translation-box" id="story-para-trans-${pIdx}" style="display: none;">${escapeHtml(paraTranslation)}</div>`
+      : '';
+    return `<p class="story-paragraph" data-pidx="${pIdx}">${tokensHtml}${transBtnHtml}</p>${transBoxHtml}`;
   }).join('');
-
-  // Full translation HTML
-  const translatedParas = strings[storyData.translationKey] || [];
-  const translationParagraphsHtml = Array.isArray(translatedParas)
-    ? translatedParas.map(tp => `<p class="story-translation-para">${tp}</p>`).join('')
-    : `<p class="story-translation-para">${translatedParas}</p>`;
-  const translationParagraphs = Array.isArray(translatedParas)
-    ? translatedParas
-    : (translatedParas ? [translatedParas] : []);
 
   const badgeText = strings[storyData.badgeKey] || strings.badge || `🏆 ${currentMilestone} слов`;
   const storyTitleText = strings[storyData.titleKey] || storyData.title;
@@ -1653,6 +1824,129 @@ export async function showMilestoneStoryModal(milestone = 0) {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
       }
+    
+      .story-audio-player-bar {
+        background: rgba(30, 41, 59, 0.75);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        border-radius: 16px;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      }
+      .story-audio-play-btn {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: #0f172a;
+        font-size: 17px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+        transition: transform 0.15s ease, filter 0.15s ease;
+        padding: 0;
+      }
+      .story-audio-play-btn:active {
+        transform: scale(0.92);
+      }
+      .story-audio-info {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .story-audio-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .story-audio-label {
+        color: #f8fafc;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .story-audio-time {
+        color: #94a3b8;
+        font-variant-numeric: tabular-nums;
+        font-size: 11.5px;
+      }
+      .story-audio-progress-track {
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 9999px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+      .story-audio-progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        border-radius: 9999px;
+        transition: width 0.1s linear;
+      }
+      .story-paragraph {
+        transition: background 0.25s ease, border-color 0.25s ease, padding 0.25s ease;
+      }
+      .story-paragraph.active-reading-para {
+        background: rgba(245, 158, 11, 0.12);
+        border-left: 3px solid #f59e0b;
+        padding-left: 10px;
+        border-radius: 0 8px 8px 0;
+      }
+      .story-para-trans-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+        padding: 0;
+        margin-left: 5px;
+        vertical-align: middle;
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-radius: 6px;
+        background: rgba(56, 189, 248, 0.1);
+        font-size: 13px;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0.75;
+        transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      }
+      .story-para-trans-btn:hover,
+      .story-para-trans-btn.is-active {
+        opacity: 1;
+        background: rgba(245, 158, 11, 0.22);
+        border-color: rgba(245, 158, 11, 0.55);
+      }
+      .story-para-trans-btn:active {
+        transform: scale(0.9);
+      }
+      .story-para-translation-box {
+        margin: -6px 0 16px 0;
+        padding: 10px 14px;
+        background: rgba(15, 23, 42, 0.55);
+        border-left: 3px solid #38bdf8;
+        border-radius: 4px 10px 10px 4px;
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: #cbd5e1;
+        font-style: italic;
+      }
     </style>
 
     <div class="milestone-story-card" role="dialog" aria-modal="true">
@@ -1662,6 +1956,22 @@ export async function showMilestoneStoryModal(milestone = 0) {
       </div>
 
       <div class="milestone-story-body" id="story-modal-body">
+        ${story.audioUrl ? `
+          <div class="story-audio-player-bar" id="story-audio-player-bar">
+            <button type="button" class="story-audio-play-btn" id="story-audio-play-btn" aria-label="Play/Pause">
+              <span id="story-audio-play-icon">▶</span>
+            </button>
+            <div class="story-audio-info">
+              <div class="story-audio-title-row">
+                <span class="story-audio-label" id="story-audio-label">🎧 ${escapeHtml(strings.audioNarrator || 'Слушать сказку целиком')}</span>
+                <span class="story-audio-time" id="story-audio-time">0:00 / ${Math.floor((story.audioDuration || 391) / 60)}:${String(Math.floor((story.audioDuration || 391) % 60)).padStart(2, '0')}</span>
+              </div>
+              <div class="story-audio-progress-track" id="story-audio-progress-track">
+                <div class="story-audio-progress-fill" id="story-audio-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        ` : ''}
 
         <!-- Floating Popover over the tapped word -->
         <div class="story-floating-popover" id="story-popover">
@@ -1906,6 +2216,196 @@ export async function showMilestoneStoryModal(milestone = 0) {
     }
   });
 
+  // Per-paragraph 🌐 translation toggle buttons
+  overlay.querySelectorAll('.story-para-trans-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pIdx = btn.getAttribute('data-pidx');
+      const box = overlay.querySelector(`#story-para-trans-${pIdx}`);
+      if (!box) return;
+      const isVisible = box.style.display !== 'none';
+      if (isVisible) {
+        box.style.display = 'none';
+        btn.classList.remove('is-active');
+      } else {
+        box.style.display = 'block';
+        btn.classList.add('is-active');
+      }
+    });
+  });
+
+  // Audio Player Controller for stories with narration
+  let storyAudio = null;
+  let isStoryAudioPlaying = false;
+  let storyAudioUrlObject = null;
+
+  const playBtn = overlay.querySelector('#story-audio-play-btn');
+  const playIcon = overlay.querySelector('#story-audio-play-icon');
+  const audioTime = overlay.querySelector('#story-audio-time');
+  const progressFill = overlay.querySelector('#story-audio-progress-fill');
+  const progressTrack = overlay.querySelector('#story-audio-progress-track');
+  const audioLabel = overlay.querySelector('#story-audio-label');
+
+  function formatTime(sec) {
+    if (!Number.isFinite(sec)) return '0:00';
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  function updateActiveParagraph(currentTime) {
+    if (!story.paragraphTimings || !Array.isArray(story.paragraphTimings)) return;
+    const pElements = overlay.querySelectorAll('.story-paragraph');
+    story.paragraphTimings.forEach(t => {
+      const pEl = pElements[t.pIndex];
+      if (!pEl) return;
+      if (currentTime >= t.start && currentTime < t.end) {
+        if (!pEl.classList.contains('active-reading-para')) {
+          overlay.querySelectorAll('.story-paragraph.active-reading-para').forEach(el => el.classList.remove('active-reading-para'));
+          pEl.classList.add('active-reading-para');
+          const bodyRect = storyBody.getBoundingClientRect();
+          const pRect = pEl.getBoundingClientRect();
+          if (pRect.top < bodyRect.top + 60 || pRect.bottom > bodyRect.bottom - 40) {
+            pEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      }
+    });
+  }
+
+  async function resolveAudioSource() {
+    const cacheName = 'myduo_story_audio_v1';
+    const localPath = story.audioUrl;
+    const candidates = [
+      localPath,
+      ...(story.remoteAudioUrls || [])
+    ];
+
+    if ('caches' in window) {
+      try {
+        const cache = await caches.open(cacheName);
+        const cached = await cache.match(localPath);
+        if (cached) {
+          const blob = await cached.blob();
+          storyAudioUrlObject = URL.createObjectURL(blob);
+          return storyAudioUrlObject;
+        }
+      } catch (_) {}
+    }
+
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url, { method: 'GET' });
+        if (res.ok) {
+          const blob = await res.blob();
+          const ct = (res.headers?.get?.('content-type') || blob.type || '').toLowerCase();
+          if (blob.size > 1000 && !ct.includes('text/html')) {
+            if ('caches' in window) {
+              try {
+                const cache = await caches.open(cacheName);
+                await cache.put(localPath, new Response(blob.slice(0), {
+                  headers: { 'Content-Type': 'audio/mpeg' }
+                }));
+              } catch (_) {}
+            }
+            storyAudioUrlObject = URL.createObjectURL(blob);
+            return storyAudioUrlObject;
+          }
+        }
+      } catch (_) {}
+    }
+
+    return story.remoteAudioUrls?.[0] || localPath;
+  }
+
+  if (playBtn && story.audioUrl) {
+    playBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (!storyAudio) {
+        playBtn.disabled = true;
+        if (playIcon) playIcon.textContent = '⏳';
+        if (audioLabel) audioLabel.textContent = strings.audioLoading || 'Загрузка аудио...';
+
+        try {
+          const src = await resolveAudioSource();
+          storyAudio = new Audio(src);
+
+          storyAudio.addEventListener('timeupdate', () => {
+            const cur = storyAudio.currentTime || 0;
+            const dur = storyAudio.duration || story.audioDuration || 391;
+            const pct = Math.min(100, Math.max(0, (cur / dur) * 100));
+            if (progressFill) progressFill.style.width = `${pct}%`;
+            if (audioTime) audioTime.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+            updateActiveParagraph(cur);
+          });
+
+          storyAudio.addEventListener('ended', () => {
+            isStoryAudioPlaying = false;
+            if (playIcon) playIcon.textContent = '▶';
+            if (progressFill) progressFill.style.width = '0%';
+            overlay.querySelectorAll('.story-paragraph.active-reading-para').forEach(el => el.classList.remove('active-reading-para'));
+          });
+
+          storyAudio.addEventListener('error', () => {
+            isStoryAudioPlaying = false;
+            playBtn.disabled = false;
+            if (playIcon) playIcon.textContent = '▶';
+            if (audioLabel) audioLabel.textContent = strings.audioNarrator || 'Слушать сказку целиком';
+          });
+
+          await storyAudio.play();
+          isStoryAudioPlaying = true;
+          playBtn.disabled = false;
+          if (playIcon) playIcon.textContent = '⏸';
+          if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать сказку целиком'}`;
+        } catch (err) {
+          storyAudio = null;
+          isStoryAudioPlaying = false;
+          playBtn.disabled = false;
+          if (playIcon) playIcon.textContent = '▶';
+          if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать сказку целиком'}`;
+          if (audioLabel) audioLabel.textContent = strings.audioNarrator || 'Слушать сказку целиком';
+        }
+        return;
+      }
+
+      if (isStoryAudioPlaying) {
+        storyAudio.pause();
+        isStoryAudioPlaying = false;
+        if (playIcon) playIcon.textContent = '▶';
+      } else {
+        storyAudio.play();
+        isStoryAudioPlaying = true;
+        if (playIcon) playIcon.textContent = '⏸';
+      }
+    });
+
+    if (progressTrack) {
+      progressTrack.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!storyAudio || !storyAudio.duration) return;
+        const rect = progressTrack.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const pct = Math.max(0, Math.min(1, clickX / rect.width));
+        storyAudio.currentTime = pct * storyAudio.duration;
+      });
+    }
+  }
+
+  function stopStoryAudio() {
+    if (storyAudio) {
+      try {
+        storyAudio.pause();
+        storyAudio.currentTime = 0;
+      } catch (_) {}
+      storyAudio = null;
+    }
+    if (storyAudioUrlObject) {
+      try { URL.revokeObjectURL(storyAudioUrlObject); } catch (_) {}
+      storyAudioUrlObject = null;
+    }
+  }
+
   // Click outside word popover to dismiss it
   overlay.querySelector(".milestone-story-card")?.addEventListener('click', (e) => {
     if (!e.target.closest('.story-word-token') && !e.target.closest('#story-popover')) {
@@ -1918,6 +2418,7 @@ export async function showMilestoneStoryModal(milestone = 0) {
   });
 
   function closeModal() {
+    stopStoryAudio();
     overlay.remove();
     if (currentMilestone >= 50) {
       try {

@@ -1295,6 +1295,88 @@ class AdServiceImpl {
   }
 
   /**
+   * Preload Interstitial Ad for pagination transitions (free tier only)
+   */
+  async preloadPaginationInterstitial() {
+    if (isProActive() || !this.isOnline()) return false;
+    if (this.isPreparingInterstitial || this.isInterstitialPrepared) return false;
+    const AdMob = this.getNativeAdMob();
+    if (!AdMob || !this.isNative()) return false;
+    const adId = this.getUnitId('INTERSTITIAL_ROUND');
+    if (!adId) return false;
+
+    this.isPreparingInterstitial = true;
+    try {
+      await AdMob.prepareInterstitial({ adId });
+      this.isInterstitialPrepared = true;
+      console.log('✅ AdMob Pagination Interstitial preloaded');
+      return true;
+    } catch (err) {
+      console.warn('⚠️ AdMob Pagination Interstitial preload unavailable:', err);
+      this.isInterstitialPrepared = false;
+      return false;
+    } finally {
+      this.isPreparingInterstitial = false;
+    }
+  }
+
+  /**
+   * Show Interstitial Ad on pagination page change for Free-tier users.
+   * Bypassed completely for PRO users and never blocks navigation on ad error / offline.
+   */
+  async showPaginationInterstitial(context = 'pagination') {
+    if (isProActive()) return false;
+    if (!this.isOnline()) return false;
+    if (this._isShowingPaginationInterstitial) return false;
+
+    this._isShowingPaginationInterstitial = true;
+    try {
+      const AdMob = this.getNativeAdMob();
+      if (AdMob && this.isNative()) {
+        try {
+          const adId = this.getUnitId('INTERSTITIAL_ROUND');
+          if (!adId) return false;
+
+          if (!this.isInterstitialPrepared) {
+            await AdMob.prepareInterstitial({ adId });
+            this.isInterstitialPrepared = true;
+          }
+
+          await AdMob.showInterstitial();
+          this.isInterstitialPrepared = false;
+          this.lastInterstitialTime = Date.now();
+
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('ad_interstitial_pagination_shown', { context });
+          }
+
+          setTimeout(() => {
+            this.preloadPaginationInterstitial().catch(() => {});
+          }, 1500);
+
+          return true;
+        } catch (err) {
+          console.warn('AdMob pagination interstitial failed to load/show:', err);
+          this.isInterstitialPrepared = false;
+          setTimeout(() => {
+            this.preloadPaginationInterstitial().catch(() => {});
+          }, 3000);
+          return false;
+        }
+      }
+
+      console.log(`ℹ️ [Web Simulator] Pagination interstitial shown (${context})`);
+      this.lastInterstitialTime = Date.now();
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('ad_interstitial_pagination_shown', { context });
+      }
+      return true;
+    } finally {
+      this._isShowingPaginationInterstitial = false;
+    }
+  }
+
+  /**
    * Show Bottom Banner (Stats & Leaderboard)
    */
   async showBottomBanner() {

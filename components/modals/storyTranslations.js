@@ -1,6 +1,3 @@
-// Single Source of Truth for Milestone Story Translations
-// Exactly 36 official locales supported (milestones 0 to 1850, every 50 words)
-
 export const STORY_TRANSLATIONS = {
   "ru": {
     "btnShowTranslation": "Показать перевод",
@@ -22,6 +19,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Бонус",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Сказка",
+    "storyTitle1": "Аладдин и волшебная лампа",
+    "storyFull1": [
+      "Давным-давно в одном шумном восточном городе жил бедный мальчик по имени Аладдин. Его отец умер, когда Аладдин был совсем маленьким, поэтому он жил вдвоём с матерью. Денег у них было совсем мало, и мать каждый день усердно пряла хлопок, чтобы купить еды. Аладдин был добрым мальчиком, но вместо работы он предпочитал играть на улицах со своими друзьями.",
+      "Однажды в город прибыл высокий чужеземец. На самом деле он был злым колдуном из далёких краёв, но задумал хитрый план. Он подошёл к Аладдину на рынке и тепло улыбнулся. «Мой дорогой мальчик! — сказал он. — Я брат твоего отца. Я странствовал много лет, чтобы отыскать тебя и помочь вашей семье».",
+      "Аладдин удивился, а его мать была вне себя от радости. Чужеземец купил Аладдину прекрасную новую одежду и дал его матери золотые монеты. На следующее утро колдун попросил Аладдина прогуляться с ним за город. Они шли несколько часов, пока не достигли тихой долины между двумя высокими горами.",
+      "Колдун развёл небольшой костёр, бросил в него какой-то странный порошок и произнёс волшебные слова. Внезапно земля задрожала, и показалась тяжёлая каменная плита с медным кольцом посередине. «Под этим камнем скрыта тайная пещера, — сказал колдун. — Войти туда можешь только ты. Спустись по ступеням, пройди через залы, полные золота и драгоценных камней, и ничего не трогай. В самом конце ты найдёшь старую масляную лампу. Принеси её мне». Прежде чем Аладдин спустился, колдун надел ему на палец волшебное кольцо для защиты.",
+      "Аладдин спустился в пещеру. Она была неописуемо прекрасна. Деревья там были усыпаны сверкающими рубинами, изумрудами и алмазами. Аладдин помнил о предупреждении, хотя и положил в карманы несколько сияющих плодов с деревьев, решив, что это просто красивые стекляшки. В самом конце пещеры он нашёл старую пыльную лампу.",
+      "Когда Аладдин вернулся ко входу, ступени оказались слишком крутыми, чтобы подняться по ним, держа в руках лампу. «Сначала отдай мне лампу, а потом я вытащу тебя!» — сердито крикнул колдун. Аладдин испугался, что тот бросит его внизу, и отказался. В ярости колдун произнёс новое заклинание, и тяжёлый камень с грохотом захлопнулся, заперев Аладдина в темноте.",
+      "Два дня Аладдин просидел во мраке, плача и молясь. Случайно он потёр волшебное кольцо на своём пальце. В тот же миг в облаке дыма явился огромный джинн. «Я джинн кольца, — прогремел дух. — Каково твоё желание?»",
+      "«Отнеси меня домой, к матери!» — воскликнул Аладдин. В мгновение ока он уже стоял в собственном доме, всё ещё сжимая в руках старую лампу.",
+      "Увидев грязную лампу, мать Аладдина решила почистить её, чтобы продать и купить еды. Как только она потёрла её, из носика с грохотом вырвался исполинский могущественный джинн, заполнив собой всю комнату. «Я джинн лампы! — прогремел он. — Твоё желание — закон для меня».",
+      "Аладдин тут же попросил роскошный пир. Тотчас на столе появились серебряные блюда, полные вкуснейших кушаний. С того дня Аладдин и его мать больше никогда не знали голода. Аладдин продавал серебряные блюда и мудро пользовался лампой, вырастая вежливым, образованным и статным юношей.",
+      "Спустя годы Аладдин увидел дочь султана, принцессу Жасмин, проезжавшую по городу. Она была прекраснейшей женщиной, которую он когда-либо видел, и он всем сердцем полюбил её. Аладдин отправил свою мать во дворец султана с чашей, полной сверкающих драгоценных камней, которые он вынес из пещеры. Султан был поражён этим даром, но потребовал ещё одного: Аладдин должен был за одну ночь возвести для принцессы великолепный дворец.",
+      "Аладдин потёр волшебную лампу, и уже к следующему утру напротив дома султана вырос дворец из белого мрамора и золота. Султан сдержал своё слово, и Аладдин с Жасмин поженились, устроив пышное празднество. Они жили счастливо вместе, а жители города любили Аладдина за его щедрость.",
+      "Однако далеко на своей родине злой колдун узнал, что Аладдин всё ещё жив и владеет волшебной лампой. Охваченный яростью, он отправился обратно в город и переоделся старым торговцем. Проходя мимо дворца Аладдина, когда тот уехал на охоту, он громко кричал: «Новые лампы за старые! Меняйте старые лампы на блестящие новые!»",
+      "Принцесса Жасмин услышала его из окна. Она не знала тайны пыльной старой лампы Аладдина и потому послала слугу обменять её на сияющую новую. Едва колдун взял волшебную лампу в руки, как жестоко расхохотался и потёр её. Он приказал джинну перенести весь дворец вместе с принцессой внутри в далёкую пустыню в Африке.",
+      "Когда Аладдин вернулся, ни дворца, ни жены уже не было. Султан разгневался и дал Аладдину сорок дней на то, чтобы отыскать его дочь. С разбитым сердцем Аладдин побрёл за город. Омывая руки в реке, он случайно потёр волшебное кольцо, которое всё ещё носил. Явился джинн кольца. Он не мог отменить чары более могущественного джинна лампы, но мог перенести Аладдина ко дворцу.",
+      "В одно мгновение Аладдин оказался в пустыне и пробрался во дворец через окно. Жасмин была безмерно счастлива его видеть. Вместе они придумали план. Тем же вечером принцесса пригласила колдуна на ужин и тайком подлила в его кубок сильное сонное зелье. Колдун выпил его и погрузился в глубокий сон.",
+      "Аладдин быстро вышел из-за занавеси, снял с пояса колдуна волшебную лампу и потёр её. Явился джинн лампы, счастливый вновь служить своему истинному хозяину. Аладдин пожелал, чтобы дворец вернулся на своё прежнее место, а злой колдун навсегда остался в пустыне.",
+      "На следующее утро султан выглянул в окно и вновь увидел сияющий на солнце мраморный дворец. Аладдин и Жасмин воссоединились со своей семьёй и жили в мире и счастье до конца своих дней."
+    ],
     "badge50": "🏆 Рубеж: 50 слов",
     "storyTitle50": "Знакомство",
     "storyFull50": [
@@ -466,7 +485,11 @@ export const STORY_TRANSLATIONS = {
       "— Да, я буду останавливаться в отеле через дорогу.",
       "— Как долго ты пробудешь там к пятнице?",
       "— К пятнице я буду там уже два дня. Потом отправлюсь домой."
-    ]
+    ],
+    "statusLockedPro": "Только в PRO",
+    "proStoryHint": "Эксклюзивная сказка для подписчиков PRO",
+    "audioNarrator": "Слушать сказку целиком",
+    "audioLoading": "Загрузка аудио..."
   },
   "uk": {
     "btnShowTranslation": "Показати переклад",
@@ -488,6 +511,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Бонус",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Казка",
+    "storyTitle1": "Аладдін і чарівна лампа",
+    "storyFull1": [
+      "Давним-давно в одному гамірному східному місті жив бідний хлопець на ім'я Аладдін. Його батько помер, коли Аладдін був зовсім маленьким, тож він жив удвох із матір'ю. Грошей у них було обмаль, і мати щодня тяжко працювала, прядучи бавовну, щоб купити їжі. Аладдін був добрим хлопцем, але замість роботи волів бавитися на вулицях зі своїми друзями.",
+      "Одного дня до міста прибув високий чужинець. Насправді то був лихий чаклун із далекого краю, але він задумав хитрий план. Він підійшов до Аладдіна на базарі й привітно усміхнувся. «Мій любий хлопче! — мовив він. — Я брат твого батька. Я мандрував багато років, щоб знайти тебе й допомогти вашій родині».",
+      "Аладдін здивувався, а його мати не тямила себе від радості. Чужинець купив Аладдінові гарний новий одяг і дав його матері золоті монети. Наступного ранку чаклун попросив Аладдіна прогулятися з ним за місто. Вони йшли кілька годин, аж поки не дісталися тихої долини між двома високими горами.",
+      "Чаклун розклав невелике багаття, кинув у нього якийсь дивний порошок і промовив чарівні слова. Раптом земля здригнулася, і з'явилася важка кам'яна плита з мідним кільцем посередині. «Під цим каменем схована таємна печера, — сказав чаклун. — Увійти туди можеш тільки ти. Спустися сходами, пройди крізь зали золота й самоцвітів та нічого не чіпай. На самому кінці ти знайдеш стару олійну лампу. Принеси її мені». Перш ніж Аладдін спустився вниз, чаклун надів йому на палець чарівний перстень для захисту.",
+      "Аладдін спустився в печеру. Вона була неймовірної краси. Дерева там рясніли сяйливими рубінами, смарагдами й діамантами. Аладдін пам'ятав про застереження, хоча й поклав до кишень кілька блискучих плодів із дерев, подумавши, що то просто гарні скельця. Наприкінці печери він знайшов стару запилену лампу.",
+      "Коли Аладдін повернувся до входу, сходи виявилися надто стрімкими, щоб підійматися ними, тримаючи лампу. «Спершу віддай мені лампу, а тоді я витягну тебе!» — сердито гукнув чаклун. Аладдін злякався, що той покине його напризволяще, тому відмовився. Розлючений чаклун прошепотів інше закляття, і важкий камінь із гуркотом зачинився, замкнувши Аладдіна в темряві.",
+      "Два дні Аладдін сидів у пітьмі, плачучи та молячись. Випадково він потер чарівний перстень на своєму пальці. Тієї ж миті в хмарі диму з'явився величезний джин. «Я Джин Персня, — прогримів дух. — Яке твоє бажання?»",
+      "«Віднеси мене додому, до матері!» — вигукнув Аладдін. В одну мить Аладдін уже стояв у власній оселі, досі тримаючи в руках стару лампу.",
+      "Побачивши брудну лампу, мати Аладдіна вирішила почистити її, щоб продати й купити їжі. Щойно вона її потерла, з носика вирвався велетенський могутній джин, заповнивши всю кімнату. «Я Джин Лампи! — загримів він. — Твоє бажання — мій наказ».",
+      "Аладдін одразу попросив пишний бенкет. Негайно на столі з'явилися срібні тарелі, повні смачних страв. Відтоді Аладдін та його мати більше ніколи не голодували. Аладдін продавав срібні тарелі й мудро користувався лампою, виростаючи чемним, освіченим і вродливим юнаком.",
+      "Через роки Аладдін побачив дочку султана, принцесу Жасмін, яка проїжджала містом. Вона була найвродливішою жінкою з усіх, кого він коли-небудь бачив, і він палко її покохав. Аладдін послав свою матір до султанового палацу з чашею, повною сяйливих коштовностей, узятих ним із печери. Султан був вражений дарунком, але зажадав іще одного: Аладдін мав за одну ніч збудувати для принцеси розкішний палац.",
+      "Аладдін потер чарівну лампу, і вже наступного ранку навпроти султанової оселі височів палац із білого мармуру та золота. Султан дотримав свого слова, і Аладдін із Жасмін побралися на гучному святі. Вони жили щасливо разом, а мешканці міста любили Аладдіна за його щедрість.",
+      "Проте далеко на своїй батьківщині лихий чаклун дізнався, що Аладдін досі живий і має чарівну лампу. Сповнений люті, він приїхав назад до міста й перевдягнувся старим купцем. Проходячи повз палац Аладдіна, коли той поїхав на полювання, він гукав: «Нові лампи за старі! Міняйте старі лампи на блискучі нові!»",
+      "Принцеса Жасмін почула його з вікна. Вона не знала таємниці запиленої старої лампи Аладдіна, тому послала слугу обміняти її на яскраву нову. Щойно чаклун узяв до рук чарівну лампу, він жорстоко розсміявся й потер її. Він наказав джинові перенести весь палац — разом із принцесою всередині — у далеку пустелю в Африці.",
+      "Коли Аладдін повернувся, ані палацу, ані дружини вже не було. Султан розгнівався й дав Аладдінові сорок днів, щоб знайти його доньку. З розбитим серцем Аладдін подався за місто. Омиваючи руки в річці, він ненароком потер чарівний перстень, який досі носив. З'явився Джин Персня. Він не міг скасувати діло могутнішого Джина Лампи, але міг перенести Аладдіна до палацу.",
+      "Умить Аладдін опинився в пустелі й прокрався до палацу крізь вікно. Жасмін невимовно зраділа, побачивши його. Разом вони склали план. Того вечора принцеса запросила чаклуна на вечерю й потай підлила в його кубок міцного снодійного зілля. Чаклун випив його й поринув у глибокий сон.",
+      "Аладдін швидко вийшов з-за завіси, забрав чарівну лампу з пояса чаклуна й потер її. З'явився Джин Лампи, радий знову служити своєму справжньому володареві. Аладдін забажав, щоб палац повернувся на своє законне місце, назавжди залишивши лихого чаклуна в пустелі.",
+      "Наступного ранку султан визирнув у вікно й знову побачив мармуровий палац, що сяяв на сонці. Аладдін і Жасмін возз'єдналися зі своєю родиною та жили в мирі й щасті до кінця своїх днів."
+    ],
     "badge50": "🏆 Рубіж: 50 слів",
     "storyTitle50": "Знайомство",
     "storyFull50": [
@@ -932,7 +977,11 @@ export const STORY_TRANSLATIONS = {
       "— Так, я зупинюся в готелі через дорогу.",
       "— Як довго ти пробудеш там до п’ятниці?",
       "— До п’ятниці я пробуду там уже два дні. Потім вирушу додому."
-    ]
+    ],
+    "statusLockedPro": "Тільки в PRO",
+    "proStoryHint": "Ексклюзивна казка для передплатників PRO",
+    "audioNarrator": "Слухати казку цілком",
+    "audioLoading": "Завантаження аудіо..."
   },
   "en": {
     "btnShowTranslation": "Show translation",
@@ -954,6 +1003,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Fairy Tale",
+    "storyTitle1": "Aladdin and the Magic Lamp",
+    "storyFull1": [
+      "A long time ago, in a busy city in the East, there lived a poor boy named Aladdin. His father had died when Aladdin was very young, so he lived alone with his mother. They had very little money, and his mother worked hard every day spinning cotton to buy food. Aladdin was a kind boy, but he preferred playing in the streets with his friends instead of working.",
+      "One day, a tall stranger arrived in the city. He was actually a wicked sorcerer from a faraway land, but he had a clever plan. He approached Aladdin in the market and smiled warmly. \"My dear boy!\" he said. \"I am your father’s brother. I have traveled for many years to find you and help your family.\"",
+      "Aladdin was surprised, and his mother was overjoyed. The stranger bought Aladdin fine new clothes and gave his mother gold coins. The next morning, the sorcerer asked Aladdin to walk with him outside the city. They walked for hours until they reached a quiet valley between two high mountains.",
+      "The sorcerer built a small fire, threw some strange powder into it, and spoke magic words. Suddenly, the ground shook, and a heavy stone slab appeared with a brass ring in the center. \"Under this stone is a secret cave,\" the sorcerer said. \"Only you can enter it. Go down the stairs, walk through the halls of gold and jewels, and do not touch anything. At the very end, you will find an old oil lamp. Bring it to me.\" Before Aladdin went down, the sorcerer slipped a magic ring onto Aladdin’s finger for protection.",
+      "Aladdin climbed down into the cave. It was breathtaking. Trees were covered with sparkling rubies, emeralds, and diamonds. Aladdin remembered the warning, though he did put a few shining fruits from the trees into his pockets, thinking they were just pretty glass. At the end of the cave, he found the dusty old lamp.",
+      "When Aladdin returned to the entrance, the stairs were too steep to climb while holding the lamp. \"Give me the lamp first, and then I will pull you out!\" the sorcerer shouted angrily. Aladdin was afraid the man would leave him behind, so he refused. Furious, the sorcerer spoke another spell, and the heavy stone slammed shut, trapping Aladdin in the dark.",
+      "For two days, Aladdin sat in the darkness, crying and praying. Accidentally, he rubbed the magic ring on his finger. Instantly, a huge genie appeared in a cloud of smoke. \"I am the Genie of the Ring,\" the spirit boomed. \"What is your wish?\"",
+      "\"Take me home to my mother!\" Aladdin cried. In the blink of an eye, Aladdin was standing in his own house, still holding the old lamp.",
+      "When Aladdin’s mother saw the dirty lamp, she decided to clean it so they could sell it for food. As soon as she rubbed it, a giant, powerful genie burst out of the spout, filling the whole room. \"I am the Genie of the Lamp!\" he thundered. \"Your wish is my command.\"",
+      "Aladdin quickly asked for a feast. Immediately, silver plates filled with delicious food appeared on the table. From that day on, Aladdin and his mother were never hungry again. Aladdin sold the silver plates and used the lamp wisely, growing into a polite, educated, and handsome young man.",
+      "Years later, Aladdin saw the Sultan’s daughter, Princess Jasmine, riding through the city. She was the most beautiful woman he had ever seen, and he fell deeply in love with her. Aladdin sent his mother to the Sultan’s palace with a bowl full of the sparkling jewels he had taken from the cave. The Sultan was amazed by the gift, but he demanded one more thing: Aladdin had to build a magnificent palace for the princess in a single night.",
+      "Aladdin rubbed the magic lamp, and by the next morning, a palace of white marble and gold stood across from the Sultan’s home. The Sultan kept his promise, and Aladdin and Jasmine were married in a grand celebration. They lived happily together, and the people of the city loved Aladdin for his generosity.",
+      "However, far away in his homeland, the wicked sorcerer discovered that Aladdin was still alive and had the magic lamp. Filled with rage, he traveled back to the city and disguised himself as an old merchant. Walking past Aladdin’s palace while Aladdin was away hunting, he shouted, \"New lamps for old! Trade your old lamps for shiny new ones!\"",
+      "Princess Jasmine heard him from the window. She did not know the secret of Aladdin’s dusty old lamp, so she sent a servant to trade it for a bright new one. The moment the sorcerer held the magic lamp, he laughed cruelly and rubbed it. He ordered the genie to carry the entire palace—with the princess inside—to a distant desert in Africa.",
+      "When Aladdin returned, his palace and his wife were gone. The Sultan was furious and gave Aladdin forty days to find his daughter. Heartbroken, Aladdin wandered into the countryside. As he washed his hands in a river, he accidentally rubbed the magic ring he still wore. The Genie of the Ring appeared. He could not undo the work of the more powerful Genie of the Lamp, but he could take Aladdin to the palace.",
+      "In a flash, Aladdin arrived in the desert and sneaked into the palace through a window. Jasmine was overjoyed to see him. Together, they made a plan. That evening, the princess invited the sorcerer to dinner and secretly poured a strong sleeping potion into his cup. The sorcerer drank it and fell into a deep sleep.",
+      "Aladdin quickly stepped out from behind a curtain, took the magic lamp from the sorcerer’s belt, and rubbed it. The Genie of the Lamp appeared, delighted to serve his true master again. Aladdin wished for the palace to be returned to its rightful place, leaving the wicked sorcerer behind in the desert forever.",
+      "The next morning, the Sultan looked out his window and saw the marble palace shining in the sun once more. Aladdin and Jasmine were reunited with their family, and they lived in peace and happiness for the rest of their lives."
+    ],
     "badge50": "🏆 Milestone: 50 Words",
     "storyTitle50": "Meeting Someone New",
     "storyFull50": [
@@ -1398,7 +1469,11 @@ export const STORY_TRANSLATIONS = {
       "— Yes, I'll be staying at a hotel across the street.",
       "— How long will you have been there by Friday?",
       "— By Friday, I’ll have been there for two days. Then I’ll be heading home."
-    ]
+    ],
+    "statusLockedPro": "PRO Exclusive",
+    "proStoryHint": "Exclusive fairy tale for PRO members",
+    "audioNarrator": "Listen to Full Story",
+    "audioLoading": "Loading audio..."
   },
   "de": {
     "btnShowTranslation": "Übersetzung anzeigen",
@@ -1420,6 +1495,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Märchen",
+    "storyTitle1": "Aladin und die Wunderlampe",
+    "storyFull1": [
+      "Vor langer Zeit lebte in einer geschäftigen Stadt im Morgenland ein armer Junge namens Aladin. Sein Vater war gestorben, als Aladin noch sehr klein war, und so lebte er allein mit seiner Mutter. Sie hatten nur sehr wenig Geld, und seine Mutter arbeitete jeden Tag hart und spann Baumwolle, um Essen kaufen zu können. Aladin war ein gutherziger Junge, doch statt zu arbeiten, spielte er lieber mit seinen Freunden auf den Straßen.",
+      "Eines Tages kam ein hochgewachsener Fremder in die Stadt. In Wahrheit war er ein böser Zauberer aus einem fernen Land, der einen gerissenen Plan gefasst hatte. Auf dem Markt trat er auf Aladin zu und lächelte freundlich. „Mein lieber Junge!“, sagte er. „Ich bin der Bruder deines Vaters. Viele Jahre bin ich gereist, um dich zu finden und deiner Familie zu helfen.“",
+      "Aladin war überrascht, und seine Mutter war überglücklich. Der Fremde kaufte Aladin feine neue Kleider und schenkte seiner Mutter Goldmünzen. Am nächsten Morgen bat der Zauberer Aladin, mit ihm vor die Stadt zu gehen. Sie wanderten stundenlang, bis sie ein stilles Tal zwischen zwei hohen Bergen erreichten.",
+      "Der Zauberer entfachte ein kleines Feuer, streute ein seltsames Pulver hinein und sprach Zauberworte. Plötzlich bebte die Erde, und eine schwere Steinplatte mit einem Messingring in der Mitte erschien. „Unter diesem Stein liegt eine geheime Höhle“, sagte der Zauberer. „Nur du kannst sie betreten. Steig die Treppen hinab, geh durch die Hallen voller Gold und Edelsteine und rühre nichts an. Ganz am Ende wirst du eine alte Öllampe finden. Bring sie mir.“ Bevor Aladin hinabstieg, streifte ihm der Zauberer zum Schutz einen magischen Ring an den Finger.",
+      "Aladin stieg in die Höhle hinab. Sie war atemberaubend. Die Bäume hingen voller funkelnder Rubine, Smaragde und Diamanten. Aladin erinnerte sich an die Warnung, steckte aber doch ein paar glänzende Früchte von den Bäumen in seine Taschen, weil er sie für bloßes hübsches Glas hielt. Am Ende der Höhle fand er die staubige alte Lampe.",
+      "Als Aladin zum Eingang zurückkehrte, waren die Stufen zu steil, um mit der Lampe in der Hand hinaufzuklettern. „Gib mir zuerst die Lampe, dann ziehe ich dich heraus!“, rief der Zauberer zornig. Aladin fürchtete, der Mann würde ihn im Stich lassen, und weigerte sich. Wütend sprach der Zauberer einen weiteren Zauberspruch, und der schwere Stein fiel krachend zu und schloss Aladin in der Dunkelheit ein.",
+      "Zwei Tage lang saß Aladin im Finstern, weinte und betete. Aus Versehen rieb er an dem magischen Ring an seinem Finger. Augenblicklich erschien in einer Rauchwolke ein gewaltiger Dschinn. „Ich bin der Geist des Ringes“, dröhnte die Gestalt. „Was ist dein Wunsch?“",
+      "„Bring mich heim zu meiner Mutter!“, rief Aladin. Im Handumdrehen stand Aladin in seinem eigenen Haus und hielt noch immer die alte Lampe in der Hand.",
+      "Als Aladins Mutter die schmutzige Lampe sah, beschloss sie, sie zu putzen, damit sie sie gegen Essen verkaufen konnten. Kaum hatte sie darüber gerieben, fuhr ein riesiger, mächtiger Dschinn aus der Tülle und füllte das ganze Zimmer aus. „Ich bin der Geist der Lampe!“, donnerte er. „Dein Wunsch ist mir Befehl.“",
+      "Aladin bat rasch um ein Festmahl. Sofort erschienen silberne Platten voller köstlicher Speisen auf dem Tisch. Von diesem Tag an mussten Aladin und seine Mutter nie wieder hungern. Aladin verkaufte die silbernen Platten und nutzte die Lampe mit Bedacht, sodass er zu einem höflichen, gebildeten und stattlichen jungen Mann heranwuchs.",
+      "Jahre später sah Aladin die Tochter des Sultans, Prinzessin Jasmin, durch die Stadt reiten. Sie war die schönste Frau, die er je gesehen hatte, und er verliebte sich tief in sie. Aladin schickte seine Mutter mit einer Schale voller funkelnder Edelsteine, die er aus der Höhle mitgenommen hatte, zum Palast des Sultans. Der Sultan staunte über das Geschenk, verlangte jedoch noch eines: Aladin müsse in einer einzigen Nacht einen prächtigen Palast für die Prinzessin erbauen.",
+      "Aladin rieb die magische Lampe, und schon am nächsten Morgen stand gegenüber dem Heim des Sultans ein Palast aus weißem Marmor und Gold. Der Sultan hielt sein Versprechen, und Aladin und Jasmin feierten eine prunkvolle Hochzeit. Sie lebten glücklich zusammen, und die Bewohner der Stadt liebten Aladin für seine Großzügigkeit.",
+      "Doch weit weg in seiner Heimat erfuhr der böse Zauberer, dass Aladin noch am Leben war und die magische Lampe besaß. Voller Zorn reiste er in die Stadt zurück und verkleidete sich als alter Händler. Als er an Aladins Palast vorbeiging, während dieser auf der Jagd war, rief er laut: „Neue Lampen gegen alte! Tauscht eure alten Lampen gegen glänzende neue!“",
+      "Prinzessin Jasmin hörte ihn vom Fenster aus. Sie kannte das Geheimnis von Aladins staubiger alter Lampe nicht und schickte einen Diener hinab, um sie gegen eine strahlende neue einzutauschen. Kaum hielt der Zauberer die magische Lampe in den Händen, lachte er grausam und rieb sie. Er befahl dem Dschinn, den gesamten Palast — samt der Prinzessin darin — in eine ferne Wüste in Afrika zu tragen.",
+      "Als Aladin zurückkehrte, waren sein Palast und seine Frau verschwunden. Der Sultan war außer sich vor Wut und gab Aladin vierzig Tage Zeit, seine Tochter zu finden. Mit gebrochenem Herzen irrte Aladin hinaus aufs Land. Als er sich in einem Fluss die Hände wusch, rieb er versehentlich den magischen Ring, den er noch immer trug. Der Geist des Ringes erschien. Er konnte das Werk des mächtigeren Geistes der Lampe nicht ungeschehen machen, doch er konnte Aladin zum Palast bringen.",
+      "Im Nu gelangte Aladin in die Wüste und schlich sich durch ein Fenster in den Palast. Jasmin war überglücklich, ihn zu sehen. Gemeinsam schmiedeten sie einen Plan. An jenem Abend lud die Prinzessin den Zauberer zum Essen ein und goss ihm heimlich einen starken Schlaftrank in seinen Becher. Der Zauberer trank ihn aus und fiel in einen tiefen Schlaf.",
+      "Aladin trat rasch hinter einem Vorhang hervor, nahm dem Zauberer die magische Lampe vom Gürtel und rieb sie. Der Geist der Lampe erschien, hoch erfreut, wieder seinem wahren Herrn zu dienen. Aladin wünschte sich, dass der Palast an seinen rechtmäßigen Platz zurückkehre, und ließ den bösen Zauberer für immer in der Wüste zurück.",
+      "Am nächsten Morgen blickte der Sultan aus seinem Fenster und sah den Marmorpalast wieder im Sonnenlicht erstrahlen. Aladin und Jasmin waren wieder mit ihrer Familie vereint, und sie lebten den Rest ihres Lebens in Frieden und Glück."
+    ],
     "badge50": "🏆 Meilenstein: 50 Wörter",
     "storyTitle50": "Jemanden kennenlernen",
     "storyFull50": [
@@ -1864,7 +1961,11 @@ export const STORY_TRANSLATIONS = {
       "— Ja, ich werde in einem Hotel auf der anderen Straßenseite übernachten.",
       "— Wie lange wirst du bis Freitag dort gewesen sein?",
       "— Bis Freitag werde ich zwei Tage dort gewesen sein. Danach mache ich mich auf den Heimweg."
-    ]
+    ],
+    "statusLockedPro": "Nur in PRO",
+    "proStoryHint": "Exklusives Märchen für PRO-Mitglieder",
+    "audioNarrator": "Ganze Geschichte anhören",
+    "audioLoading": "Audio wird geladen..."
   },
   "es": {
     "btnShowTranslation": "Mostrar traducción",
@@ -1886,6 +1987,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bono",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Cuento de hadas",
+    "storyTitle1": "Aladino y la lámpara maravillosa",
+    "storyFull1": [
+      "Hace mucho tiempo, en una bulliciosa ciudad de Oriente, vivía un muchacho pobre llamado Aladino. Su padre había muerto cuando Aladino era muy pequeño, así que vivía solo con su madre. Tenían muy poco dinero, y su madre trabajaba duro cada día hilando algodón para poder comprar comida. Aladino era un chico bondadoso, pero prefería jugar en las calles con sus amigos en lugar de trabajar.",
+      "Un día llegó a la ciudad un forastero alto. En realidad era un malvado hechicero de tierras lejanas, pero traía un astuto plan. Se acercó a Aladino en el mercado y le sonrió con calidez. «¡Mi querido muchacho! —dijo—. Soy el hermano de tu padre. He viajado durante muchos años para encontrarte y ayudar a tu familia».",
+      "Aladino se sorprendió y su madre se llenó de alegría. El forastero le compró a Aladino ropas nuevas y finas, y le dio a su madre monedas de oro. A la mañana siguiente, el hechicero invitó a Aladino a caminar con él fuera de la ciudad. Anduvieron durante horas hasta llegar a un valle tranquilo entre dos altas montañas.",
+      "El hechicero encendió una pequeña hoguera, arrojó en ella un polvo extraño y pronunció palabras mágicas. De pronto, la tierra tembló y apareció una pesada losa de piedra con una argolla de bronce en el centro. «Bajo esta piedra hay una cueva secreta —dijo el hechicero—. Solo tú puedes entrar. Baja las escaleras, cruza los salones de oro y joyas y no toques nada. Al final del todo encontrarás una vieja lámpara de aceite. Tráemela». Antes de que Aladino bajara, el hechicero le puso un anillo mágico en el dedo para protegerlo.",
+      "Aladino bajó a la cueva. Era un lugar maravilloso. Los árboles estaban cubiertos de rubíes, esmeraldas y diamantes resplandecientes. Aladino recordó la advertencia, aunque se guardó en los bolsillos algunos frutos brillantes de los árboles, pensando que eran solo bonitos cristales. Al fondo de la cueva encontró la vieja lámpara polvorienta.",
+      "Cuando Aladino regresó a la entrada, los escalones eran demasiado empinados para subir sosteniendo la lámpara. «¡Dame primero la lámpara y luego te sacaré!», gritó el hechicero enojado. Aladino temió que aquel hombre lo dejara abandonado allí abajo, así que se negó. Furioso, el hechicero pronunció otro conjuro y la pesada piedra se cerró de golpe, dejando a Aladino atrapado en la oscuridad.",
+      "Durante dos días, Aladino permaneció sentado en las tinieblas, llorando y rezando. Sin querer, frotó el anillo mágico de su dedo. Al instante, un genio enorme apareció en medio de una nube de humo. «Soy el Genio del Anillo —retumbó el espíritu—. ¿Cuál es tu deseo?»",
+      "«¡Llévame a casa con mi madre!», exclamó Aladino. En un abrir y cerrar de ojos, Aladino se encontró de pie en su propia casa, sosteniendo todavía la vieja lámpara.",
+      "Cuando la madre de Aladino vio la lámpara sucia, decidió limpiarla para poder venderla y comprar comida. Apenas la frotó, un genio gigante y poderoso brotó por el pico, llenando toda la habitación. «¡Soy el Genio de la Lámpara! —tronó—. Tus deseos son órdenes para mí».",
+      "Aladino pidió enseguida un banquete. De inmediato aparecieron sobre la mesa bandejas de plata colmadas de manjares deliciosos. Desde aquel día, Aladino y su madre jamás volvieron a pasar hambre. Aladino vendió las bandejas de plata y usó la lámpara con sabiduría, convirtiéndose en un joven cortés, instruido y apuesto.",
+      "Años después, Aladino vio pasar por la ciudad a la hija del sultán, la princesa Jasmín. Era la mujer más hermosa que había visto jamás, y se enamoró profundamente de ella. Aladino envió a su madre al palacio del sultán con un cuenco lleno de las joyas brillantes que había traído de la cueva. El sultán quedó maravillado con el obsequio, pero exigió una cosa más: Aladino debía construir un palacio magnífico para la princesa en una sola noche.",
+      "Aladino frotó la lámpara mágica y, a la mañana siguiente, frente a la morada del sultán se alzaba un palacio de mármol blanco y oro. El sultán cumplió su promesa, y Aladino y Jasmín se casaron en una gran celebración. Vivieron muy felices juntos, y la gente de la ciudad quería a Aladino por su generosidad.",
+      "Sin embargo, muy lejos, en su tierra natal, el malvado hechicero descubrió que Aladino seguía vivo y conservaba la lámpara mágica. Lleno de rabia, viajó de vuelta a la ciudad y se disfrazó de viejo mercader. Pasando frente al palacio de Aladino mientras este había salido de caza, gritó: «¡Lámparas nuevas por viejas! ¡Cambien sus lámparas viejas por otras nuevas y relucientes!»",
+      "La princesa Jasmín lo escuchó desde la ventana. No conocía el secreto de la vieja lámpara polvorienta de Aladino, así que envió a un sirviente a cambiarla por una nueva y brillante. En cuanto el hechicero tuvo la lámpara mágica en sus manos, rio con crueldad y la frotó. Ordenó al genio trasladar el palacio entero —con la princesa dentro— a un lejano desierto de África.",
+      "Al regresar Aladino, su palacio y su esposa habían desaparecido. El sultán montó en cólera y dio a Aladino cuarenta días para encontrar a su hija. Desconsolado, Aladino vagó por el campo. Mientras se lavaba las manos en un río, frotó sin querer el anillo mágico que aún llevaba puesto. Apareció el Genio del Anillo. No podía deshacer la obra del más poderoso Genio de la Lámpara, pero sí podía llevar a Aladino hasta el palacio.",
+      "En un instante, Aladino llegó al desierto y se coló en el palacio por una ventana. Jasmín se llenó de alegría al verlo. Juntos tramaron un plan. Esa noche, la princesa invitó a cenar al hechicero y vertió en secreto una fuerte pócima para dormir en su copa. El hechicero la bebió y cayó en un profundo sueño.",
+      "Aladino salió rápidamente de detrás de una cortina, tomó la lámpara mágica del cinturón del hechicero y la frotó. Apareció el Genio de la Lámpara, encantado de servir de nuevo a su verdadero amo. Aladino deseó que el palacio regresara a su legítimo lugar, dejando al malvado hechicero abandonado en el desierto para siempre.",
+      "A la mañana siguiente, el sultán miró por la ventana y vio brillar una vez más al sol el palacio de mármol. Aladino y Jasmín se reunieron con su familia, y vivieron en paz y felicidad por el resto de sus días."
+    ],
     "badge50": "🏆 Hito: 50 palabras",
     "storyTitle50": "Conocer a alguien",
     "storyFull50": [
@@ -2330,7 +2453,11 @@ export const STORY_TRANSLATIONS = {
       "— Sí, me alojaré en un hotel al otro lado de la calle.",
       "— ¿Cuánto tiempo llevarás allí el viernes?",
       "— Para el viernes, llevaré allí dos días. Después volveré a casa."
-    ]
+    ],
+    "statusLockedPro": "Solo en PRO",
+    "proStoryHint": "Cuento de hadas exclusivo para miembros PRO",
+    "audioNarrator": "Escuchar el cuento completo",
+    "audioLoading": "Cargando audio..."
   },
   "fr": {
     "btnShowTranslation": "Afficher la traduction",
@@ -2352,6 +2479,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Conte de fées",
+    "storyTitle1": "Aladdin et la lampe magique",
+    "storyFull1": [
+      "Il y a bien longtemps, dans une ville animée d’Orient, vivait un pauvre garçon nommé Aladin. Son père était mort alors qu’Aladin était tout petit, si bien qu’il vivait seul avec sa mère. Ils avaient très peu d’argent, et sa mère travaillait dur chaque jour à filer le coton pour acheter de quoi manger. Aladin était un garçon bon, mais il préférait jouer dans les rues avec ses amis plutôt que de travailler.",
+      "Un jour, un grand étranger arriva dans la ville. C’était en vérité un méchant sorcier venu d’un pays lointain, qui avait ourdi un plan habile. Il s’approcha d’Aladin au marché et lui sourit chaleureusement. « Mon cher enfant ! dit-il. Je suis le frère de ton père. J’ai voyagé pendant de longues années pour te retrouver et venir en aide à ta famille. »",
+      "Aladin fut surpris, et sa mère fut transportée de joie. L’étranger acheta à Aladin de beaux habits neufs et donna des pièces d’or à sa mère. Le lendemain matin, le sorcier demanda à Aladin de se promener avec lui hors de la ville. Ils marchèrent pendant des heures jusqu’à atteindre une vallée paisible entre deux hautes montagnes.",
+      "Le sorcier alluma un petit feu, y jeta une poudre étrange et prononça des paroles magiques. Soudain, la terre trembla, et une lourde dalle de pierre apparut, munie d’un anneau de bronze au centre. « Sous cette pierre se cache une caverne secrète, dit le sorcier. Toi seul peux y entrer. Descends les marches, traverse les salles d’or et de pierreries, et ne touche à rien. Tout au fond, tu trouveras une vieille lampe à huile. Apporte-la-moi. » Avant qu’Aladin ne descende, le sorcier lui glissa au doigt un anneau magique pour le protéger.",
+      "Aladin descendit dans la caverne. Le spectacle était à couper le souffle. Des arbres étaient couverts de rubis, d’émeraudes et de diamants étincelants. Aladin se souvint de la mise en garde, même s’il mit dans ses poches quelques fruits lumineux cueillis aux arbres, croyant qu’il ne s’agissait que de jolis morceaux de verre. Au fond de la caverne, il trouva la vieille lampe poussiéreuse.",
+      "Lorsque Aladin revint à l’entrée, les marches étaient trop raides pour qu’il puisse remonter en tenant la lampe. « Donne-moi d’abord la lampe, et ensuite je te hisserai dehors ! » cria le sorcier avec colère. Aladin craignit que l’homme ne l’abandonne là, et il refusa. Furieux, le sorcier prononça un autre sortilège, et la lourde pierre se referma avec fracas, emprisonnant Aladin dans le noir.",
+      "Pendant deux jours, Aladin resta assis dans les ténèbres, à pleurer et à prier. Par mégarde, il frotta l’anneau magique qu’il portait au doigt. Aussitôt, un immense génie apparut dans un nuage de fumée. « Je suis le Génie de l’Anneau, fit retentir l’esprit d’une voix tonnante. Quel est ton souhait ? »",
+      "« Ramène-moi chez moi, auprès de ma mère ! » s’écria Aladin. En un clin d’œil, Aladin se retrouva debout dans sa propre maison, tenant toujours la vieille lampe à la main.",
+      "Quand la mère d’Aladin vit la lampe sale, elle décida de la nettoyer afin de pouvoir la vendre et acheter de la nourriture. Dès qu’elle la frotta, un génie gigantesque et puissant jaillit du bec, emplissant toute la pièce. « Je suis le Génie de la Lampe ! tonna-t-il. Tes désirs sont des ordres. »",
+      "Aladin demanda aussitôt un festin. Sur-le-champ, des plats d’argent chargés de mets délicieux apparurent sur la table. À partir de ce jour, Aladin et sa mère ne connurent plus jamais la faim. Aladin vendit les plats d’argent et se servit de la lampe avec sagesse, devenant un jeune homme poli, instruit et beau.",
+      "Des années plus tard, Aladin vit passer à cheval dans la ville la fille du sultan, la princesse Jasmine. C’était la plus belle femme qu’il eût jamais vue, et il en tomba éperdument amoureux. Aladin envoya sa mère au palais du sultan avec une coupe pleine des pierres étincelantes qu’il avait rapportées de la caverne. Le sultan fut émerveillé par ce présent, mais il exigea une chose de plus : Aladin devait bâtir en une seule nuit un palais magnifique pour la princesse.",
+      "Aladin frotta la lampe magique, et dès le lendemain matin, un palais de marbre blanc et d’or se dressait en face de la demeure du sultan. Le sultan tint sa promesse, et Aladin et Jasmine s’unirent lors d’une grandiose célébration. Ils vécurent heureux ensemble, et les habitants de la ville aimaient Aladin pour sa générosité.",
+      "Cependant, très loin dans son pays, le méchant sorcier découvrit qu’Aladin était toujours en vie et possédait la lampe magique. Fou de rage, il revint dans la ville et se déguisa en vieux marchand. Passant devant le palais d’Aladin tandis que celui-ci était parti à la chasse, il cria : « Qui veut échanger de vieilles lampes contre des neuves ! Des lampes neuves et brillantes contre vos vieilles lampes ! »",
+      "La princesse Jasmine l’entendit depuis la fenêtre. Elle ignorait le secret de la vieille lampe poussiéreuse d’Aladin et envoya donc un serviteur l’échanger contre une lampe neuve et éclatante. Dès que le sorcier tint la lampe magique entre ses mains, il eut un rire cruel et la frotta. Il ordonna au génie de transporter le palais tout entier — avec la princesse à l’intérieur — dans un désert lointain en Afrique.",
+      "À son retour, Aladin constata que son palais et son épouse avaient disparu. Le sultan, furieux, accorda à Aladin quarante jours pour retrouver sa fille. Le cœur brisé, Aladin erra dans la campagne. En se lavant les mains dans une rivière, il frotta par hasard l’anneau magique qu’il portait toujours. Le Génie de l’Anneau apparut. Il ne pouvait défaire l’œuvre du Génie de la Lampe, plus puissant que lui, mais il pouvait conduire Aladin jusqu’au palais.",
+      "En un éclair, Aladin arriva dans le désert et se glissa dans le palais par une fenêtre. Jasmine fut folle de joie en le revoyant. Ensemble, ils mirent au point un stratagème. Ce soir-là, la princesse invita le sorcier à dîner et versa secrètement un puissant somnifère dans sa coupe. Le sorcier le but et sombra dans un profond sommeil.",
+      "Aladin sortit vivement de derrière un rideau, prit la lampe magique à la ceinture du sorcier et la frotta. Le Génie de la Lampe apparut, ravi de servir de nouveau son véritable maître. Aladin souhaita que le palais fût ramené à sa juste place, abandonnant à jamais le méchant sorcier dans le désert.",
+      "Le lendemain matin, le sultan regarda par sa fenêtre et vit de nouveau le palais de marbre resplendir au soleil. Aladin et Jasmine furent réunis avec leur famille, et ils vécurent dans la paix et le bonheur jusqu’à la fin de leurs jours."
+    ],
     "badge50": "🏆 Étape : 50 mots",
     "storyTitle50": "Faire connaissance",
     "storyFull50": [
@@ -2796,7 +2945,11 @@ export const STORY_TRANSLATIONS = {
       "— Oui, je séjournerai dans un hôtel de l'autre côté de la rue.",
       "— Depuis combien de temps seras-tu là vendredi ?",
       "— Vendredi, cela fera deux jours que je serai là. Ensuite, je rentrerai chez moi."
-    ]
+    ],
+    "statusLockedPro": "Exclusif PRO",
+    "proStoryHint": "Conte de fées exclusif pour les membres PRO",
+    "audioNarrator": "Écouter l'histoire complète",
+    "audioLoading": "Chargement de l'audio..."
   },
   "pl": {
     "btnShowTranslation": "Pokaż tłumaczenie",
@@ -2818,6 +2971,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Baśń",
+    "storyTitle1": "Aladyn i cudowna lampa",
+    "storyFull1": [
+      "Dawno temu, w gwarnym mieście na Wschodzie, mieszkał ubogi chłopiec imieniem Aladyn. Jego ojciec zmarł, gdy Aladyn był jeszcze bardzo mały, więc chłopiec żył sam z matką. Mieli bardzo mało pieniędzy, a matka każdego dnia ciężko pracowała, przędąc bawełnę, by kupić jedzenie. Aladyn był dobrym chłopcem, ale zamiast pracować, wolał bawić się na ulicach z kolegami.",
+      "Pewnego dnia do miasta przybył wysoki nieznajomy. W rzeczywistości był to zły czarownik z dalekiej krainy, który uknuł przebiegły plan. Podszedł do Aladyna na targu i uśmiechnął się serdecznie. „Mój drogi chłopcze! — powiedział. — Jestem bratem twego ojca. Wędrowałem przez wiele lat, by cię odnaleźć i pomóc waszej rodzinie”.",
+      "Aladyn bardzo się zdziwił, a jego matka nie posiadała się z radości. Nieznajomy kupił Aladynowi piękne nowe ubranie, a matce podarował złote monety. Następnego ranka czarownik poprosił Aladyna, aby poszedł z nim na spacer za miasto. Szli całymi godzinami, aż dotarli do cichej doliny między dwiema wysokimi górami.",
+      "Czarownik rozpalił niewielkie ognisko, wsypał do niego dziwny proszek i wymówił magiczne zaklęcia. Nagle ziemia zadrżała i ukazała się ciężka kamienna płyta z mosiężnym pierścieniem pośrodku. „Pod tym kamieniem kryje się tajemna jaskinia — rzekł czarownik. — Tylko ty możesz do niej wejść. Zejdź po schodach, przejdź przez sale pełne złota i klejnotów i niczego nie dotykaj. Na samym końcu znajdziesz starą lampę oliwną. Przynieś ją do mnie”. Zanim Aladyn zszedł na dół, czarownik wsunął mu na palec magiczny pierścień dla ochrony.",
+      "Aladyn zszedł w głąb jaskini. Jej widok zapierał dech w piersiach. Drzewa obsypane były skrzącymi się rubinami, szmaragdami i diamentami. Aladyn pamiętał o przestrodze, choć schował do kieszeni kilka lśniących owoców z drzew, sądząc, że to tylko ładne szkiełka. Na końcu jaskini odnalazł zakurzoną starą lampę.",
+      "Gdy Aladyn wrócił do wejścia, schody okazały się zbyt strome, by wspiąć się po nich z lampą w dłoni. „Oddaj mi najpierw lampę, a potem cię wyciągnę!” — krzyknął gniewnie czarownik. Aladyn obawiał się, że tamten porzuci go na dole, więc odmówił. Rozwścieczony czarownik rzucił kolejne zaklęcie i ciężki głaz zatrzasnął się z hukiem, więżąc Aladyna w ciemności.",
+      "Przez dwa dni Aladyn siedział w mroku, płacząc i modląc się. Przypadkiem potarł magiczny pierścień na palcu. Natychmiast w kłębach dymu pojawił się potężny dżin. „Jestem Dżinem Pierścienia — zagrzmiał duch. — Jakie jest twoje życzenie?”",
+      "„Zabierz mnie do domu, do matki!” — zawołał Aladyn. W mgnieniu oka Aladyn stał już we własnym domu, wciąż trzymając w dłoni starą lampę.",
+      "Gdy matka Aladyna ujrzała brudną lampę, postanowiła ją wyczyścić, aby mogli ją sprzedać i kupić jedzenie. Ledwie ją potarła, z dzióbka wystrzelił ogromny, potężny dżin, wypełniając całą izbę. „Jestem Dżinem Lampy! — zagrzmiał. — Twoje życzenie jest dla mnie rozkazem”.",
+      "Aladyn czym prędzej poprosił o ucztę. Natychmiast na stole pojawiły się srebrne półmiski pełne wyśmienitych potraw. Od tamtego dnia Aladyn i jego matka już nigdy nie cierpieli głodu. Aladyn sprzedawał srebrne naczynia i mądrze korzystał z lampy, wyrastając na uprzejmego, wykształconego i przystojnego młodzieńca.",
+      "Po latach Aladyn zobaczył przejeżdżającą przez miasto córkę sułtana, księżniczkę Dżasminę. Była najpiękniejszą kobietą, jaką kiedykolwiek widział, i zakochał się w niej bez pamięci. Aladyn posłał swą matkę do pałacu sułtana z misą pełną lśniących klejnotów wyniesionych z jaskini. Sułtan był oczarowany podarkiem, lecz zażądał jeszcze jednego: Aladyn musiał w ciągu jednej nocy wznieść dla księżniczki wspaniały pałac.",
+      "Aladyn potarł magiczną lampę i już następnego ranka naprzeciw siedziby sułtana stał pałac z białego marmuru i złota. Sułtan dotrzymał słowa, a Aladyn i Dżasmina wzięli ślub podczas hucznego wesela. Żyli razem szczęśliwie, a mieszkańcy miasta kochali Aladyna za jego hojność.",
+      "Tymczasem daleko w swojej ojczyźnie zły czarownik odkrył, że Aladyn nadal żyje i ma magiczną lampę. Pałając gniewem, wrócił do miasta i przebrał się za starego kupca. Przechodząc obok pałacu Aladyna, gdy ten wyjechał na polowanie, wołał głośno: „Nowe lampy za stare! Wymieńcie swoje stare lampy na błyszczące nowe!”",
+      "Księżniczka Dżasmina usłyszała go z okna. Nie znała tajemnicy zakurzonej starej lampy Aladyna, wysłała więc sługę, by wymienił ją na lśniącą nową. Gdy tylko czarownik ujął magiczną lampę w dłonie, zaśmiał się okrutnie i potarł ją. Rozkazał dżinowi przenieść cały pałac — wraz z księżniczką w środku — na odległą pustynię w Afryce.",
+      "Kiedy Aladyn powrócił, nie było już ani jego pałacu, ani żony. Sułtan wpadł w gniew i dał Aladynowi czterdzieści dni na odnalezienie córki. Ze złamanym sercem Aladyn wyruszył za miasto. Gdy mył ręce w rzece, przypadkiem potarł magiczny pierścień, który wciąż nosił. Ukazał się Dżin Pierścienia. Nie potrafił cofnąć czynu potężniejszego Dżina Lampy, ale mógł zanieść Aladyna do pałacu.",
+      "W jednej chwili Aladyn znalazł się na pustyni i wślizgnął się do pałacu przez okno. Dżasmina ogromnie ucieszyła się na jego widok. Razem ułożyli plan. Tego wieczoru księżniczka zaprosiła czarownika na wieczerzę i potajemnie dolała mu do pucharu silnego napoju nasennego. Czarownik wypił go i zapadł w głęboki sen.",
+      "Aladyn szybko wyszedł zza zasłony, zabrał magiczną lampę z pasa czarownika i potarł ją. Pojawił się Dżin Lampy, szczęśliwy, że znów może służyć swemu prawdziwemu panu. Aladyn zapragnął, by pałac powrócił na swoje dawne miejsce, pozostawiając złego czarownika na pustyni na zawsze.",
+      "Następnego ranka sułtan wyjrzał przez okno i znów ujrzał marmurowy pałac lśniący w słońcu. Aladyn i Dżasmina połączyli się z rodziną i żyli w pokoju oraz szczęściu do końca swoich dni."
+    ],
     "badge50": "🏆 Kamień milowy: 50 słów",
     "storyTitle50": "Poznawanie nowych osób",
     "storyFull50": [
@@ -3262,7 +3437,11 @@ export const STORY_TRANSLATIONS = {
       "— Tak, zatrzymam się w hotelu po drugiej stronie ulicy.",
       "— Jak długo będziesz tam w piątek?",
       "— Do piątku będę tam już dwa dni. Potem ruszę do domu."
-    ]
+    ],
+    "statusLockedPro": "Tylko w PRO",
+    "proStoryHint": "Ekskluzywna baśń dla subskrybentów PRO",
+    "audioNarrator": "Posłuchaj całej baśni",
+    "audioLoading": "Wczytywanie dźwięku..."
   },
   "tr": {
     "btnShowTranslation": "Çeviriyi göster",
@@ -3284,6 +3463,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Masal",
+    "storyTitle1": "Alaaddin ve Sihirli Lamba",
+    "storyFull1": [
+      "Bir varmış, bir yokmuş; çok eski zamanlarda Doğu’nun kalabalık bir şehrinde Alaaddin adında yoksul bir çocuk yaşarmış. Babası o daha çok küçükken öldüğü için annesiyle birlikte yapayalnız kalmış. Çok az paraları varmış; annesi her gün yiyecek alabilmek için pamuk eğirerek var gücüyle çalışırmış. Alaaddin iyi kalpli bir çocukmuş ama çalışmak yerine sokaklarda arkadaşlarıyla oyun oynamayı severmiş.",
+      "Günlerden bir gün şehre uzun boylu bir yabancı gelmiş. Aslında uzak diyarlardan gelen kötü kalpli bir büyücüymüş ama aklında kurnazca bir plan varmış. Çarşıda Alaaddin’in yanına yaklaşmış ve sıcacık gülümsemiş. \"Canım oğlum!\" demiş. \"Ben babanın kardeşiyim. Seni bulup ailene yardım etmek için yıllardır yol tepip durdum.\"",
+      "Alaaddin buna çok şaşırmış, annesi ise sevinçten havalara uçmuş. Yabancı, Alaaddin’e güzel yeni giysiler almış ve annesine de altın paralar vermiş. Ertesi sabah büyücü, Alaaddin’den kendisiyle birlikte şehir dışına yürümesini istemiş. İki yüksek dağın arasındaki sessiz bir vadiye varana kadar saatlerce yürümüşler.",
+      "Büyücü küçük bir ateş yakmış, içine tuhaf bir toz serpmiş ve büyülü sözler fısıldamış. Birden yer sarsılmış ve ortasında pirinç bir halka bulunan ağır bir taş levha ortaya çıkmış. \"Bu taşın altında gizli bir mağara var,\" demiş büyücü. \"Oraya yalnızca sen girebilirsin. Merdivenlerden aşağı in, altın ve mücevherlerle dolu salonlardan geç ve hiçbir şeye dokunma. En sonda eski bir yağ lambası bulacaksın. Onu bana getir.\" Alaaddin aşağı inmeden önce büyücü, korunması için onun parmağına sihirli bir yüzük takmış.",
+      "Alaaddin mağaranın derinliklerine inmiş. Gördüğü manzara nefes kesiciymiş. Ağaçlar ışıl ışıl yakutlar, zümrütler ve elmaslarla kaplıymış. Alaaddin uyarıyı aklında tutmuş ama yalnızca süslü birer cam parçası sandığı o parıldayan meyvelerden birkaçını cebine atmaktan da kendini alamamış. Mağaranın en sonunda tozlu, eski lambayı bulmuş.",
+      "Alaaddin girişe döndüğünde, elinde lambayı tutarken tırmanamayacağı kadar dik merdivenlerle karşılaşmış. \"Önce lambayı bana ver, sonra seni yukarı çekeyim!\" diye öfkeyle bağırmış büyücü. Alaaddin adamın kendisini orada bırakıp gideceğinden korktuğu için bunu reddetmiş. Küplere binen büyücü başka bir büyü okumuş ve ağır taş gürültüyle kapanarak Alaaddin’i karanlığın içine hapsetmiş.",
+      "Alaaddin iki gün boyunca zifiri karanlıkta oturmuş, ağlamış ve dua etmiş. Tam o sırada farkında olmadan parmağındaki sihirli yüzüğü ovuşturmuş. Bir anda duman bulutunun içinden devasa bir cin çıkıvermiş. \"Ben Yüzüğün Cini’yim,\" diye gürlemiş ruh. \"Dileğin nedir?\"",
+      "\"Beni eve, annemin yanına götür!\" diye haykırmış Alaaddin. Göz açıp kapayıncaya kadar Alaaddin, elinde hâlâ o eski lambayı tutar hâlde kendi evinin ortasında dikiliyormuş.",
+      "Alaaddin’in annesi kirli lambayı görünce, satıp yiyecek alabilmeleri için onu temizlemeye karar vermiş. Lambayı ovar ovmaz, emziğinden bütün odayı dolduran dev gibi, kudretli bir cin fırlamış. \"Ben Lambanın Cini’yim!\" diye gürlemiş. \"Dileğin benim için emirdir.\"",
+      "Alaaddin hemen güzel bir ziyafet sofrası istemiş. Anında masanın üzerinde nefis yemeklerle dolu gümüş tabaklar belirmiş. O günden sonra Alaaddin ile annesi bir daha hiç aç kalmamış. Alaaddin gümüş tabakları satmış ve lambayı akıllıca kullanmış; böylece terbiyeli, bilgili ve yakışıklı bir delikanlı olup çıkmış.",
+      "Yıllar sonra Alaaddin, Sultan’ın kızı Prenses Yasemin’i şehirde at sürerken görmüş. O güne dek gördüğü en güzel kadınmış ve ona derin bir aşkla bağlanmış. Alaaddin, mağaradan aldığı ışıl ışıl mücevherlerle dolu bir kâseyle annesini Sultan’ın sarayına göndermiş. Sultan bu hediyeye hayran kalmış ama bir şart daha koşmuş: Alaaddin bir tek gecede prenses için görkemli bir saray inşa etmeliymiş.",
+      "Alaaddin sihirli lambayı ovmuş ve ertesi sabah Sultan’ın sarayının tam karşısında beyaz mermerden ve altından bir saray yükselivermiş. Sultan sözünü tutmuş; Alaaddin ile Yasemin muhteşem bir düğünle evlenmişler. Birlikte mutluluk içinde yaşamışlar, şehir halkı da cömertliği yüzünden Alaaddin’i çok sevmiş.",
+      "Ne var ki uzaklardaki memleketinde bulunan kötü kalpli büyücü, Alaaddin’in hâlâ hayatta olduğunu ve sihirli lambaya sahip olduğunu öğrenmiş. Öfkeden deliye dönerek şehre geri dönmüş ve yaşlı bir tüccar kılığına girmiş. Alaaddin avdayken sarayın önünden geçip şöyle bağırmaya başlamış: \"Eski lambalara karşılık yeni lambalar! Eski lambalarınızı pırıl pırıl yenileriyle değiştirin!\"",
+      "Prenses Yasemin pencereden onun sesini duymuş. Alaaddin’in tozlu eski lambasının sırrını bilmediği için, bir hizmetkârını gönderip onu parlak yeni bir lambayla değiştirmiş. Büyücü sihirli lambayı eline alır almaz acımasızca kahkaha atmış ve lambayı ovmuş. Cine, bütün sarayı —içindeki prensesle birlikte— Afrika’daki uzak bir çöle taşımasını emretmiş.",
+      "Alaaddin geri döndüğünde sarayı da karısı da yerinde yokmuş. Sultan küplere binmiş ve kızını bulması için Alaaddin’e kırk gün mühlet vermiş. Kalbi kırık Alaaddin kırlara doğru yürümüş. Bir nehirde ellerini yıkarken, parmağında hâlâ duran sihirli yüzüğü kazara ovmuş. Yüzüğün Cini belirmiş. Kendisinden daha güçlü olan Lambanın Cini’nin yaptığını bozamazmış ama Alaaddin’i sarayın olduğu yere götürebilirmiş.",
+      "Alaaddin bir anda çöle ulaşmış ve bir pencereden gizlice sarayın içine süzülmüş. Yasemin onu görünce sevinçten havalara uçmuş. Birlikte bir plan yapmışlar. O akşam prenses büyücüyü yemeğe davet etmiş ve gizlice kadehine güçlü bir uyku iksiri dökmüş. Büyücü içkiyi içip derin bir uykuya dalmış.",
+      "Alaaddin hızla bir perdenin arkasından çıkıp büyücünün kuşağından sihirli lambayı almış ve ovmuş. Gerçek efendisine yeniden hizmet etmekten büyük mutluluk duyan Lambanın Cini ortaya çıkmış. Alaaddin, sarayın eski yerine geri dönmesini dilemiş ve kötü büyücüyü sonsuza dek çölde bırakmış.",
+      "Ertesi sabah Sultan penceresinden dışarı baktığında mermer sarayın bir kez daha güneşin altında parladığını görmüş. Alaaddin ile Yasemin ailelerine yeniden kavuşmuş ve ömürlerinin sonuna kadar huzur ve mutluluk içinde yaşamışlar."
+    ],
     "badge50": "🏆 Hedef: 50 Kelime",
     "storyTitle50": "Yeni Biriyle Tanışmak",
     "storyFull50": [
@@ -3728,7 +3929,11 @@ export const STORY_TRANSLATIONS = {
       "— Evet, caddenin karşısındaki bir otelde kalıyor olacağım.",
       "— Cuma gününe kadar orada ne kadar kalmış olacaksın?",
       "— Cuma gününe kadar orada iki gün kalmış olacağım. Sonra eve doğru yola çıkacağım."
-    ]
+    ],
+    "statusLockedPro": "Yalnızca PRO",
+    "proStoryHint": "PRO üyelerine özel masal",
+    "audioNarrator": "Masalın tamamını dinle",
+    "audioLoading": "Ses yükleniyor..."
   },
   "it": {
     "btnShowTranslation": "Mostra traduzione",
@@ -3750,6 +3955,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Fiaba",
+    "storyTitle1": "Aladino e la lampada meravigliosa",
+    "storyFull1": [
+      "Tanto tempo fa, in una vivace città d’Oriente, viveva un ragazzo povero di nome Aladino. Suo padre era morto quando lui era molto piccolo, perciò viveva solo con la madre. Avevano pochissimo denaro e la madre lavorava duramente ogni giorno filando il cotone per comprare da mangiare. Aladino era un ragazzo buono, ma preferiva giocare per le strade con i suoi amici invece di lavorare.",
+      "Un giorno giunse in città un forestiero alto. In realtà era un malvagio stregone venuto da una terra lontana, ma aveva in mente un piano astuto. Si avvicinò ad Aladino al mercato e gli sorrise cordialmente. «Mio caro ragazzo!» disse. «Sono il fratello di tuo padre. Ho viaggiato per molti anni per trovarti e aiutare la tua famiglia.»",
+      "Aladino rimase sorpreso e sua madre fu colma di gioia. Lo straniero comprò ad Aladino dei bei vestiti nuovi e donò alla madre delle monete d’oro. La mattina seguente, lo stregone chiese ad Aladino di fare una passeggiata con lui fuori città. Camminarono per ore finché non giunsero in una valle silenziosa tra due alte montagne.",
+      "Lo stregone accese un piccolo fuoco, vi gettò una polvere strana e pronunciò parole magiche. D’un tratto la terra tremò e comparve una pesante lastra di pietra con un anello di ottone al centro. «Sotto questa pietra c’è una grotta segreta» disse lo stregone. «Solo tu puoi entrarvi. Scendi le scale, attraversa le sale piene d’oro e di gioielli e non toccare nulla. Proprio in fondo troverai una vecchia lampada a olio. Portamela.» Prima che Aladino scendesse, lo stregone gli infilò al dito un anello magico per proteggerlo.",
+      "Aladino scese nella grotta. Era uno spettacolo mozzafiato. Gli alberi erano coperti di rubini, smeraldi e diamanti scintillanti. Aladino si ricordò dell’avvertimento, anche se si mise in tasca qualche frutto splendente colto dagli alberi, credendo che fosse soltanto bel vetro colorato. In fondo alla grotta trovò la vecchia lampada impolverata.",
+      "Quando Aladino tornò all’ingresso, i gradini erano troppo ripidi per poterli risalire tenendo in mano la lampada. «Dammi prima la lampada, e poi ti tirerò fuori!» gridò lo stregone infuriato. Aladino temette che l’uomo lo avrebbe abbandonato lì sotto, così rifiutò. Furioso, lo stregone pronunciò un altro incantesimo e la pesante pietra si richiuse di colpo, imprigionando Aladino nel buio.",
+      "Per due giorni Aladino restò seduto nell’oscurità, piangendo e pregando. Per caso strofinò l’anello magico che portava al dito. All’istante, in una nuvola di fumo, apparve un genio enorme. «Sono il Genio dell’Anello» tuonò lo spirito. «Qual è il tuo desiderio?»",
+      "«Portami a casa da mia madre!» esclamò Aladino. In un batter d’occhio, Aladino si ritrovò in piedi dentro casa propria, stringendo ancora tra le mani la vecchia lampada.",
+      "Quando la madre di Aladino vide la lampada sporca, decise di pulirla per poterla vendere e comprare del cibo. Non appena la strofinò, dal beccuccio proruppe un genio gigantesco e potente, riempiendo l’intera stanza. «Sono il Genio della Lampada!» rimbombò. «I tuoi desideri sono ordini per me.»",
+      "Aladino chiese subito un banchetto. Immediatamente comparvero sulla tavola piatti d’argento colmi di cibi prelibati. Da quel giorno, Aladino e sua madre non patirono mai più la fame. Aladino vendette i piatti d’argento e usò la lampada con saggezza, crescendo fino a diventare un giovane cortese, istruito e di bell’aspetto.",
+      "Anni dopo, Aladino vide la figlia del Sultano, la principessa Jasmine, cavalcare attraverso la città. Era la donna più bella che avesse mai visto e se ne innamorò perdutamente. Aladino mandò sua madre al palazzo del Sultano con una coppa piena dei gioielli scintillanti che aveva preso nella grotta. Il Sultano rimase sbalordito dal dono, ma pretese un’altra cosa: Aladino doveva costruire in una sola notte un magnifico palazzo per la principessa.",
+      "Aladino strofinò la lampada magica e, il mattino seguente, di fronte alla dimora del Sultano si ergeva un palazzo di marmo bianco e oro. Il Sultano mantenne la promessa e Aladino e Jasmine si sposarono con una grande festa. Vissero felici insieme e gli abitanti della città amavano Aladino per la sua generosità.",
+      "Tuttavia, lontano, nella sua terra natale, il malvagio stregone scoprì che Aladino era ancora vivo e possedeva la lampada magica. Pieno di rabbia, tornò in città e si travestì da vecchio mercante. Passando davanti al palazzo di Aladino mentre questi era fuori a caccia, gridava: «Lampade nuove per vecchie! Scambiate le vostre vecchie lampade con altre nuove e lucenti!»",
+      "La principessa Jasmine lo udì dalla finestra. Non conosceva il segreto della vecchia lampada impolverata di Aladino, così mandò un servitore a scambiarla con una nuova e brillante. Appena lo stregone ebbe tra le mani la lampada magica, rise crudelmente e la strofinò. Ordinò al genio di trasportare l’intero palazzo — con la principessa dentro — in un lontano deserto dell’Africa.",
+      "Quando Aladino tornò, il suo palazzo e sua moglie erano spariti. Il Sultano andò su tutte le furie e concesse ad Aladino quaranta giorni per ritrovare sua figlia. Col cuore spezzato, Aladino vagò per la campagna. Mentre si lavava le mani in un fiume, strofinò per sbaglio l’anello magico che portava ancora al dito. Apparve il Genio dell’Anello. Non poteva annullare l’opera del più potente Genio della Lampada, ma poteva portare Aladino fino al palazzo.",
+      "In un lampo Aladino giunse nel deserto e s’introdusse di nascosto nel palazzo da una finestra. Jasmine fu felicissima di rivederlo. Insieme idearono un piano. Quella sera la principessa invitò lo stregone a cena e gli versò di nascosto una potente pozione soporifera nella coppa. Lo stregone la bevve e cadde in un sonno profondo.",
+      "Aladino uscì rapidamente da dietro una tenda, prese la lampada magica dalla cintura dello stregone e la strofinò. Apparve il Genio della Lampada, lieto di servire nuovamente il suo vero padrone. Aladino desiderò che il palazzo venisse riportato al suo giusto posto, lasciando per sempre il malvagio stregone nel deserto.",
+      "La mattina dopo, il Sultano guardò fuori dalla finestra e vide il palazzo di marmo risplendere ancora una volta al sole. Aladino e Jasmine si riunirono alla loro famiglia e vissero in pace e felicità per il resto della loro vita."
+    ],
     "badge50": "🏆 Traguardo: 50 parole",
     "storyTitle50": "Conoscere qualcuno",
     "storyFull50": [
@@ -4194,7 +4421,11 @@ export const STORY_TRANSLATIONS = {
       "— Sì, soggiornerò in un hotel dall'altra parte della strada.",
       "— Da quanto tempo sarai lì venerdì?",
       "— Entro venerdì saranno due giorni che sarò lì. Poi mi rimetterò in viaggio verso casa."
-    ]
+    ],
+    "statusLockedPro": "Solo con PRO",
+    "proStoryHint": "Fiaba esclusiva per i membri PRO",
+    "audioNarrator": "Ascolta l'intera storia",
+    "audioLoading": "Caricamento audio..."
   },
   "ro": {
     "btnShowTranslation": "Afișează traducerea",
@@ -4216,6 +4447,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Poveste",
+    "storyTitle1": "Aladin și lampa fermecată",
+    "storyFull1": [
+      "Cu mult timp în urmă, într-un oraș aglomerat din Orient, trăia un băiat sărac pe nume Aladdin. Tatăl lui murise pe când Aladdin era foarte mic, așa că el locuia singur cu mama sa. Aveau foarte puțini bani, iar mama lui muncea din greu în fiecare zi, torcând bumbac ca să cumpere de mâncare. Aladdin era un băiat bun la suflet, dar prefera să se joace pe ulițe cu prietenii săi în loc să muncească.",
+      "Într-o zi, un străin înalt sosi în oraș. Era, de fapt, un vrăjitor rău dintr-un ținut îndepărtat, care avea un plan viclean. Se apropie de Aladdin în piață și îi zâmbi cu căldură. „Dragul meu băiat!”, spuse el. „Eu sunt fratele tatălui tău. Am călătorit ani de zile ca să te găsesc și să-ți ajut familia.”",
+      "Aladdin rămase uimit, iar mama lui fu nespus de fericită. Străinul îi cumpără lui Aladdin haine noi și frumoase și îi dădu mamei sale galbeni de aur. În dimineața următoare, vrăjitorul îl rugă pe Aladdin să meargă cu el la plimbare în afara orașului. Merseră ore în șir până ajunseră într-o vale liniștită, între doi munți înalți.",
+      "Vrăjitorul aprinse un foc mic, aruncă în el o pulbere ciudată și rosti cuvinte magice. Deodată, pământul se cutremură și apăru o lespede grea de piatră, cu un inel de alamă în mijloc. „Sub această piatră se află o peșteră tainică”, spuse vrăjitorul. „Numai tu poți intra în ea. Coboară treptele, străbate sălile pline de aur și nestemate și nu atinge nimic. Chiar la capăt vei găsi o lampă veche cu ulei. Adu-mi-o mie.” Înainte ca Aladdin să coboare, vrăjitorul îi puse pe deget un inel fermecat, ca să-l ocrotească.",
+      "Aladdin coborî în peșteră. Priveliștea îi tăia răsuflarea. Copacii erau încărcați cu rubine, smaralde și diamante scânteietoare. Aladdin își aminti de avertisment, însă tot puse în buzunare câteva fructe strălucitoare din copaci, crezând că sunt doar niște bucăți frumoase de sticlă. La capătul peșterii, găsi lampa veche și prăfuită.",
+      "Când Aladdin se întoarse la intrare, treptele erau prea abrupte ca să le urce ținând lampa în mână. „Dă-mi mai întâi lampa, și apoi te voi trage afară!”, strigă vrăjitorul mânios. Aladdin se temu că omul îl va lăsa acolo, așa că refuză. Furios, vrăjitorul rosti o altă vrajă, iar lespedea grea se trânti la loc, închizându-l pe Aladdin în întuneric.",
+      "Timp de două zile, Aladdin șezu în beznă, plângând și rugându-se. Din întâmplare, frecă inelul fermecat de pe deget. Într-o clipită, un duh uriaș se ivi dintr-un nor de fum. „Eu sunt Duhul Inelului”, tună spiritul. „Care îți este dorința?”",
+      "„Du-mă acasă, la mama mea!”, strigă Aladdin. Într-o clipire, Aladdin se trezi stând în propria casă, ținând încă lampa cea veche în mână.",
+      "Când mama lui Aladdin văzu lampa murdară, hotărî să o curețe, ca să o poată vinde pentru a cumpăra mâncare. De îndată ce o frecă, un duh uriaș și puternic țâșni din ciocul lămpii, umplând întreaga încăpere. „Eu sunt Duhul Lămpii!”, tună el. „Dorința ta este poruncă pentru mine.”",
+      "Aladdin ceru degrabă un ospăț. Îndată, pe masă apărură platouri de argint pline cu bucate alese. Din acea zi, Aladdin și mama lui nu mai suferiră niciodată de foame. Aladdin vându platourile de argint și folosi lampa cu înțelepciune, crescând și devenind un tânăr politicos, învățat și chipeș.",
+      "Ani mai târziu, Aladdin o zări pe fiica Sultanului, prințesa Iasmina, trecând călare prin oraș. Era cea mai frumoasă femeie pe care o văzuse vreodată, iar el se îndrăgosti adânc de ea. Aladdin își trimise mama la palatul Sultanului cu un bol plin de nestematele strălucitoare pe care le luase din peșteră. Sultanul fu uimit de dar, dar mai ceru un singur lucru: Aladdin trebuia să ridice un palat măreț pentru prințesă într-o singură noapte.",
+      "Aladdin frecă lampa fermecată și, până a doua zi dimineață, un palat din marmură albă și aur se înălța chiar în fața reședinței Sultanului. Sultanul își ținu cuvântul, iar Aladdin și Iasmina se căsătoriră într-o sărbătoare fastuoasă. Trăiră fericiți împreună, iar oamenii din oraș îl iubeau pe Aladdin pentru dărnicia lui.",
+      "Însă, departe, în țara lui de baștină, vrăjitorul cel rău află că Aladdin era încă în viață și că avea lampa fermecată. Cuprins de furie, porni înapoi spre oraș și se deghiză într-un negustor bătrân. Trecând pe lângă palatul lui Aladdin în timp ce acesta era plecat la vânătoare, el strigă: „Lămpi noi pe lămpi vechi! Dați-vă lămpile vechi pe unele noi și strălucitoare!”",
+      "Prințesa Iasmina îl auzi de la fereastră. Ea nu știa taina lămpii vechi și prăfuite a lui Aladdin, așa că trimise o slujnică să o schimbe pe una nouă și lucioasă. În clipa în care vrăjitorul luă lampa fermecată în mână, râse cu cruzime și o frecă. Îi porunci duhului să ducă întregul palat — cu prințesa înăuntru — într-un deșert îndepărtat din Africa.",
+      "Când Aladdin se întoarse, palatul și soția lui dispăruseră. Sultanul era furios și îi dădu lui Aladdin patruzeci de zile ca să-i găsească fiica. Cu inima frântă, Aladdin rătăci prin împrejurimi, dincolo de oraș. Pe când își spăla mâinile într-un râu, frecă din greșeală inelul fermecat pe care îl purta încă pe deget. Duhul Inelului apăru. Nu putea desface lucrarea Duhului Lămpii, care era mult mai puternic, dar îl putea duce pe Aladdin la palat.",
+      "Într-o clipită, Aladdin ajunse în deșert și se furișă în palat printr-o fereastră. Iasmina fu nespus de bucuroasă să-l vadă. Împreună, puseră la cale un plan. În acea seară, prințesa îl pofti pe vrăjitor la cină și îi turnă pe furiș în cupă o poțiune puternică de somn. Vrăjitorul o bău și căzu într-un somn adânc.",
+      "Aladdin ieși repede de după o perdea, luă lampa fermecată de la brâul vrăjitorului și o frecă. Duhul Lămpii se ivi, încântat să-și slujească din nou adevăratul stăpân. Aladdin își dori ca palatul să fie întors la locul lui de drept, lăsându-l pe vrăjitorul cel rău în deșert pentru totdeauna.",
+      "În dimineața următoare, Sultanul privi pe fereastră și văzu încă o dată palatul de marmură strălucind în lumina soarelui. Aladdin și Iasmina se reîntâlniră cu familia lor și trăiră în pace și fericire până la sfârșitul vieții."
+    ],
     "badge50": "🏆 Etapă: 50 cuvinte",
     "storyTitle50": "Să cunoști pe cineva",
     "storyFull50": [
@@ -4660,7 +4913,11 @@ export const STORY_TRANSLATIONS = {
       "— Da, voi sta la un hotel de peste drum.",
       "— De cât timp vei fi acolo până vineri?",
       "— Până vineri voi fi acolo de două zile. Apoi voi porni spre casă."
-    ]
+    ],
+    "statusLockedPro": "Doar în PRO",
+    "proStoryHint": "Poveste exclusivă pentru membrii PRO",
+    "audioNarrator": "Ascultă întreaga poveste",
+    "audioLoading": "Se încarcă audio..."
   },
   "bg": {
     "btnShowTranslation": "Показване на превода",
@@ -4682,6 +4939,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Бонус",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Приказка",
+    "storyTitle1": "Аладин и вълшебната лампа",
+    "storyFull1": [
+      "Много отдавна в един оживен град на Изтока живеело бедно момче на име Аладин. Баща му бил починал, когато Аладин бил съвсем малък, затова той живеел сам с майка си. Имали съвсем малко пари и майка му се трудела усърдно всеки ден, като предяла памук, за да купува храна. Аладин бил добродушно момче, но предпочитал да играе по улиците с приятелите си, вместо да работи.",
+      "Един ден в града пристигнал висок непознат. Всъщност той бил зъл магьосник от далечна земя, но имал хитър план. Приближил се до Аладин на пазара и му се усмихнал топло. „Скъпо мое момче! — казал той. — Аз съм брат на баща ти. Пътувах много години, за да те намеря и да помогна на семейството ти.“",
+      "Аладин се изненадал, а майка му била извън себе си от радост. Непознатият купил на Аладин хубави нови дрехи и дал на майка му златни монети. На следващата сутрин магьосникът помолил Аладин да се разходят извън града. Вървели часове наред, докато стигнали до тиха долина между две високи планини.",
+      "Магьосникът наклал малък огън, хвърлил в него някакъв странен прах и изрекъл вълшебни думи. Внезапно земята се разтърсила и се появила тежка каменна плоча с месингова халка по средата. „Под този камък има тайна пещера — казал магьосникът. — Само ти можеш да влезеш в нея. Слез по стълбите, мини през залите със злато и скъпоценности и не докосвай нищо. В самия край ще намериш стара маслена лампа. Донеси ми я.“ Преди Аладин да слезе, магьосникът му сложил вълшебен пръстен на пръста за закрила.",
+      "Аладин слязъл в пещерата. Гледката била спираща дъха. Дърветата били отрупани с искрящи рубини, изумруди и диаманти. Аладин помнел предупреждението, но все пак пъхнал в джобовете си няколко блестящи плода от дърветата, мислейки, че са просто красиви стъкълца. В края на пещерата намерил прашната стара лампа.",
+      "Когато Аладин се върнал до входа, стълбите били твърде стръмни, за да ги изкачи, докато държи лампата. „Дай ми първо лампата, а после ще те издърпам навън!“ — извикал ядосано магьосникът. Аладин се уплашил, че човекът ще го остави долу, затова отказал. Разгневен, магьосникът изрекъл друго заклинание и тежкият камък се затръшнал, затваряйки Аладин в мрака.",
+      "Два дни Аладин седял в тъмнината, плачел и се молел. Без да иска, той потъркал вълшебния пръстен на пръста си. В същия миг в облак дим се появил огромен джин. „Аз съм Джинът на пръстена — прогърмял духът. — Какво е желанието ти?“",
+      "„Отведи ме у дома при майка ми!“ — извикал Аладин. И за миг Аладин вече стоял в собствения си дом, стискайки все още старата лампа.",
+      "Когато майката на Аладин видяла мръсната лампа, решила да я изчисти, за да я продадат за храна. Щом я потъркала, от чучура изскочил великански, могъщ джин и изпълнил цялата стая. „Аз съм Джинът на лампата! — прогърмял той. — Твоето желание е заповед за мен.“",
+      "Аладин бързо поискал пиршество. На мига върху масата се появили сребърни блюда, отрупани с вкусни гозби. От този ден нататък Аладин и майка му никога повече не гладували. Аладин продал сребърните блюда и използвал лампата мъдро, като израснал възпитан, образован и красив млад мъж.",
+      "Години по-късно Аладин видял дъщерята на султана, принцеса Жасмин, да язди през града. Тя била най-красивата жена, която някога бил виждал, и той се влюбил дълбоко в нея. Аладин изпратил майка си в двореца на султана с купа, пълна с искрящите скъпоценности, които бил взел от пещерата. Султанът останал поразен от дара, но поставил още едно условие: Аладин трябвало да построи великолепен дворец за принцесата само за една нощ.",
+      "Аладин потъркал вълшебната лампа и до следващата сутрин срещу дома на султана се издигал дворец от бял мрамор и злато. Султанът удържал на думата си и Аладин и Жасмин се оженили на пищно тържество. Те живели щастливо заедно, а жителите на града обичали Аладин заради неговата щедрост.",
+      "Ала далеч в родната си земя злият магьосник узнал, че Аладин е все още жив и притежава вълшебната лампа. Изпълнен с ярост, той се върнал в града и се преоблякъл като стар търговец. Докато минавал покрай двореца на Аладин, когато той бил на лов, магьосникът занареждал: „Нови лампи за стари! Разменете старите си лампи за блестящи нови!“",
+      "Принцеса Жасмин го чула от прозореца. Тя не знаела тайната на прашната стара лампа на Аладин, затова пратила слугиня да я размени за нова и блестяща. В мига, в който магьосникът хванал вълшебната лампа, той се изсмял жестоко и я потъркал. Заповядал на джина да пренесе целия дворец — с принцесата вътре — в далечна пустиня в Африка.",
+      "Когато Аладин се върнал, дворецът и съпругата му били изчезнали. Султанът побеснял и дал на Аладин четиридесет дни да намери дъщеря му. Съкрушен, Аладин заскитал из полята край града. Докато миел ръцете си в една река, той случайно потъркал вълшебния пръстен, който все още носел. Появил се Джинът на пръстена. Той не можел да развали стореното от по-могъщия Джин на лампата, но можел да отведе Аладин до двореца.",
+      "За миг Аладин се озовал в пустинята и се промъкнал в двореца през един прозорец. Жасмин била безкрайно щастлива да го види. Двамата заедно измислили план. Същата вечер принцесата поканила магьосника на вечеря и тайно сипала силно приспивателно питие в чашата му. Магьосникът го изпил и потънал в дълбок сън.",
+      "Аладин бързо изскочил иззад една завеса, взел вълшебната лампа от пояса на магьосника и я потъркал. Появил се Джинът на лампата, възхитен да служи отново на истинския си господар. Аладин пожелал дворецът да бъде върнат на законното му място, оставяйки злия магьосник завинаги в пустинята.",
+      "На следващата сутрин султанът погледнал през прозореца си и видял мраморния дворец да блести отново на слънцето. Аладин и Жасмин се събрали отново със семейството си и живели в мир и щастие до края на дните си."
+    ],
     "badge50": "🏆 Рубеж: 50 думи",
     "storyTitle50": "Запознанство",
     "storyFull50": [
@@ -5126,7 +5405,11 @@ export const STORY_TRANSLATIONS = {
       "— Да, ще бъда в хотел отсреща.",
       "— Колко време ще си бил там до петък?",
       "— До петък ще съм бил там два дни. После ще тръгна към дома."
-    ]
+    ],
+    "statusLockedPro": "Само в PRO",
+    "proStoryHint": "Ексклузивна приказка за абонати на PRO",
+    "audioNarrator": "Чуй цялата приказка",
+    "audioLoading": "Зареждане на аудио..."
   },
   "hu": {
     "btnShowTranslation": "Fordítás megjelenítése",
@@ -5148,6 +5431,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bónusz",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Tündérmese",
+    "storyTitle1": "Aladdin és a csodalámpa",
+    "storyFull1": [
+      "Réges-régen, Kelet egyik nyüzsgő városában élt egy szegény fiú, akit Aladdinnak hívtak. Az apja meghalt, amikor Aladdin még egészen kicsi volt, így egyedül élt az édesanyjával. Nagyon kevés pénzük volt, és az édesanyja mindennap keményen dolgozott: gyapotot font, hogy ételt tudjon venni. Aladdin jószívű fiú volt, de a munka helyett inkább az utcán játszott a barátaival.",
+      "Egy napon magas idegen érkezett a városba. Valójában egy messzi földről jött gonosz varázsló volt, aki ravasz tervet eszelt ki. A piacon odalépett Aladdinhoz, és barátságosan rámosolygott. „Kedves fiam!” – mondta. „Én apád fivére vagyok. Sok éven át utaztam, hogy megtaláljalak téged, és segítsek a családodon.”",
+      "Aladdin elcsodálkozott, az édesanyja pedig határtalanul boldog volt. Az idegen szép új ruhákat vett Aladdinnak, az édesanyjának pedig aranypénzeket adott. Másnap reggel a varázsló megkérte Aladdint, hogy sétáljon ki vele a városból. Órákon át gyalogoltak, míg végül egy csendes völgybe értek két magas hegy között.",
+      "A varázsló kis tüzet rakott, különös port szórt belé, és varázsigéket mormolt. Hirtelen megremegett a föld, és egy nehéz kőlap tűnt elő, közepén sárgaréz karikával. „E kő alatt egy titkos barlang rejtőzik” – mondta a varázsló. „Csak te léphetsz be oda. Menj le a lépcsőn, haladj át az arannyal és drágakövekkel teli termeken, és ne érj semmihez! A legvégén találsz majd egy régi olajlámpát. Hozd el nekem!” Mielőtt Aladdin lement volna, a varázsló egy varázsgyűrűt húzott az ujjára védelmül.",
+      "Aladdin lemászott a barlangba. Lélegzetelállító látvány fogadta. A fákon szikrázó rubinok, smaragdok és gyémántok csillogtak. Aladdin emlékezett a figyelmeztetésre, mégis a zsebébe tett néhány fénylő gyümölcsöt a fákról, mert azt hitte, csak szép üveggolyók. A barlang végében rátalált a poros, régi lámpára.",
+      "Amikor Aladdin visszatért a bejárathoz, a lépcső túl meredek volt ahhoz, hogy felmásszon rajta, miközben a lámpát tartja. „Add ide előbb a lámpát, aztán felhúzlak!” – kiáltotta dühösen a varázsló. Aladdin attól tartott, hogy a férfi otthagyja őt, ezért nemet mondott. A varázsló éktelen haragra gerjedt, újabb varázsigét mondott, a nehéz kőlap pedig lecsapódott, sötétségbe zárva Aladdint.",
+      "Két napon át ült Aladdin a sötétben, sírva és imádkozva. Véletlenül megdörzsölte az ujján lévő varázsgyűrűt. Abban a szempillantásban egy hatalmas dzsinn jelent meg füstfelhő közepette. „Én vagyok a Gyűrű Dzsinnje” – dörögte a szellem. „Mi a kívánságod?”",
+      "„Vigyél haza az édesanyámhoz!” – kiáltotta Aladdin. Egy szempillantás alatt Aladdin máris a saját házában állt, kezében még mindig a régi lámpával.",
+      "Amikor Aladdin édesanyja meglátta a piszkos lámpát, úgy döntött, megtisztítja, hogy eladhassák élelemért. Amint megdörzsölte, egy óriási, hatalmas erejű dzsinn tört elő a lámpa csőréből, betöltve az egész szobát. „Én vagyok a Lámpa Dzsinnje!” – mennydörögte. „Kívánságod számomra parancs.”",
+      "Aladdin gyorsan lakomát kért. Azonnal ínycsiklandó ételekkel megrakott ezüsttálak jelentek meg az asztalon. Attól a naptól fogva Aladdin és az édesanyja soha többé nem éheztek. Aladdin eladta az ezüsttálakat, és bölcsen használta a lámpát; idővel illedelmes, művelt és jóképű fiatalemberré cseperedett.",
+      "Évekkel később Aladdin meglátta a szultán lányát, Jázmin hercegnőt, amint végiglovagolt a városon. Ő volt a legszebb asszony, akit valaha látott, és Aladdin mélyen beleszeretett. Elküldte az édesanyját a szultán palotájába egy tálnyi ragyogó drágakővel, amelyeket még a barlangból hozott. A szultánt lenyűgözte az ajándék, de még egy feltételt szabott: Aladdinnak egyetlen éjszaka alatt pompás palotát kellett építenie a hercegnő számára.",
+      "Aladdin megdörzsölte a varázslámpát, és másnap reggelre fehér márványból és aranyból készült palota állt a szultán otthonával szemben. A szultán megtartotta az ígéretét, és Aladdin meg Jázmin fényes ünnepség keretében összeházasodtak. Boldogan éltek együtt, a város népe pedig szerette Aladdint a nagylelkűségéért.",
+      "Ám messze, a saját hazájában a gonosz varázsló megtudta, hogy Aladdin még életben van, és nála van a varázslámpa. Haragtól tajtékozva visszautazott a városba, és öreg kereskedőnek álcázta magát. Amikor Aladdin épp vadászni volt, a varázsló elhaladt a palota előtt, és így kiáltozott: „Új lámpát a régiért! Cseréljék el régi lámpáikat fényes újakra!”",
+      "Jázmin hercegnő meghallotta őt az ablakból. Nem ismerte Aladdin poros, régi lámpájának titkát, ezért leküldött egy szolgát, hogy cserélje el egy szép új lámpára. Abban a pillanatban, hogy a varázsló kézbe kapta a varázslámpát, kegyetlenül felnevetett és megdörzsölte. Megparancsolta a dzsinnnek, hogy vigye el az egész palotát – a hercegnővel együtt – Afrika egyik távoli sivatagába.",
+      "Amikor Aladdin hazatért, a palotája és a felesége eltűnt. A szultán magánkívül volt a dühtől, és negyven napot adott Aladdinnak, hogy megtalálja a lányát. Megtört szívvel bolyongott Aladdin a vidéken. Miközben megmosta a kezét egy folyóban, véletlenül megdörzsölte az ujján hordott varázsgyűrűt. Megjelent a Gyűrű Dzsinnje. A nála hatalmasabb Lámpa Dzsinnjének művét nem tudta semmissé tenni, de el tudta vinni Aladdint a palotához.",
+      "Aladdin egy szempillantás alatt a sivatagban termett, és egy ablakon át besurrant a palotába. Jázmin határtalanul megörült, amikor meglátta. Együtt tervet szőttek. Aznap este a hercegnő vacsorára hívta a varázslót, és titokban erős altatóbájitalt öntött a serlegébe. A varázsló kiitta, és mély álomba merült.",
+      "Aladdin gyorsan előlépett egy függöny mögül, leemelte a varázslámpát a varázsló övéről, és megdörzsölte. Megjelent a Lámpa Dzsinnje, boldogan, hogy újra igaz urát szolgálhatja. Aladdin azt kívánta, hogy a palota kerüljön vissza méltó helyére, a gonosz varázslót pedig hagyják örökre a sivatagban.",
+      "Másnap reggel a szultán kinézett az ablakán, és látta, hogy a márványpalota ismét ott ragyog a napfényben. Aladdin és Jázmin újra egyesültek a családjukkal, és békében, boldogságban éltek életük végéig."
+    ],
     "badge50": "🏆 Mérföldkő: 50 szó",
     "storyTitle50": "Ismerkedés",
     "storyFull50": [
@@ -5592,7 +5897,11 @@ export const STORY_TRANSLATIONS = {
       "— Igen, az utca túloldalán lévő szállodában fogok lakni.",
       "— Péntekig mennyi ideje leszel ott?",
       "— Péntekre már két napja leszek ott. Utána elindulok haza."
-    ]
+    ],
+    "statusLockedPro": "Csak PRO-val",
+    "proStoryHint": "Exkluzív tündérmese PRO tagoknak",
+    "audioNarrator": "Hallgasd meg a teljes mesét",
+    "audioLoading": "Hang betöltése..."
   },
   "el": {
     "btnShowTranslation": "Εμφάνιση μετάφρασης",
@@ -5614,6 +5923,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Μπόνους",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Παραμύθι",
+    "storyTitle1": "Ο Αλαντίν και το μαγικό λυχνάρι",
+    "storyFull1": [
+      "Πολύ παλιά, σε μια πολύβουη πόλη της Ανατολής, ζούσε ένα φτωχό αγόρι που το έλεγαν Αλαντίν. Ο πατέρας του είχε πεθάνει όταν ο Αλαντίν ήταν πολύ μικρός, κι έτσι ζούσε μόνος με τη μητέρα του. Είχαν ελάχιστα χρήματα και η μητέρα του δούλευε σκληρά κάθε μέρα γνέθοντας βαμβάκι για να αγοράζει φαγητό. Ο Αλαντίν ήταν καλόκαρδο παιδί, αλλά προτιμούσε να παίζει στους δρόμους με τους φίλους του αντί να εργάζεται.",
+      "Μια μέρα, έφτασε στην πόλη ένας ψηλός ξένος. Στην πραγματικότητα ήταν ένας κακός μάγος από μια μακρινή χώρα, που είχε ένα πονηρό σχέδιο. Πλησίασε τον Αλαντίν στην αγορά και του χαμογέλασε ζεστά. «Αγαπημένε μου ανιψιέ!» του είπε. «Είμαι ο αδελφός του πατέρα σου. Ταξίδεψα πολλά χρόνια για να σε βρω και να βοηθήσω την οικογένειά σου.»",
+      "Ο Αλαντίν ξαφνιάστηκε και η μητέρα του πέταξε από τη χαρά της. Ο ξένος αγόρασε στον Αλαντίν όμορφα καινούργια ρούχα και έδωσε στη μητέρα του χρυσά νομίσματα. Το επόμενο πρωί, ο μάγος ζήτησε από τον Αλαντίν να περπατήσουν μαζί έξω από την πόλη. Περπάτησαν ώρες πολλές, ώσπου έφτασαν σε μια ήσυχη κοιλάδα ανάμεσα σε δύο ψηλά βουνά.",
+      "Ο μάγος άναψε μια μικρή φωτιά, έριξε μέσα μια παράξενη σκόνη και πρόφερε μαγικά λόγια. Ξαφνικά, η γη σείστηκε και φανερώθηκε μια βαριά πέτρινη πλάκα με έναν χάλκινο κρίκο στη μέση. «Κάτω από αυτή την πέτρα υπάρχει μια μυστική σπηλιά», είπε ο μάγος. «Μόνο εσύ μπορείς να μπεις. Κατέβα τα σκαλιά, πέρασε μέσα από τις αίθουσες με το χρυσάφι και τα πετράδια και μην αγγίξεις τίποτα. Στο βάθος θα βρεις ένα παλιό λυχνάρι. Φέρε το σε μένα.» Προτού κατέβει ο Αλαντίν, ο μάγος τού πέρασε στο δάχτυλο ένα μαγικό δαχτυλίδι για προστασία.",
+      "Ο Αλαντίν κατέβηκε στη σπηλιά. Το θέαμα του έκοψε την ανάσα. Τα δέντρα ήταν γεμάτα λαμπερά ρουμπίνια, σμαράγδια και διαμάντια. Ο Αλαντίν θυμήθηκε την προειδοποίηση, αν και έβαλε στις τσέπες του μερικά αστραφτερά φρούτα από τα δέντρα, νομίζοντας πως ήταν απλώς όμορφα γυαλάκια. Στο βάθος της σπηλιάς βρήκε το σκονισμένο παλιό λυχνάρι.",
+      "Όταν ο Αλαντίν γύρισε στην είσοδο, τα σκαλιά ήταν πολύ απότομα για να τα ανέβει κρατώντας το λυχνάρι. «Δώσε μου πρώτα το λυχνάρι, κι ύστερα θα σε τραβήξω έξω!» φώναξε θυμωμένα ο μάγος. Ο Αλαντίν φοβήθηκε πως ο άντρας θα τον εγκατέλειπε εκεί κάτω, κι έτσι αρνήθηκε. Έξαλλος, ο μάγος είπε ένα άλλο ξόρκι και η βαριά πέτρα έκλεισε με πάταγο, παγιδεύοντας τον Αλαντίν στο σκοτάδι.",
+      "Επί δύο μέρες, ο Αλαντίν καθόταν στο σκοτάδι, κλαίγοντας και προσευχόμενος. Κατά λάθος έτριψε το μαγικό δαχτυλίδι στο δάχτυλό του. Αμέσως, μέσα από ένα σύννεφο καπνού, ξεπρόβαλε ένα πελώριο τζίνι. «Είμαι το Τζίνι του Δαχτυλιδιού», βρόντηξε το πνεύμα. «Ποια είναι η επιθυμία σου;»",
+      "«Πήγαινέ με σπίτι, στη μητέρα μου!» φώναξε ο Αλαντίν. Εν ριπή οφθαλμού, ο Αλαντίν στεκόταν στο ίδιο του το σπίτι, κρατώντας ακόμα το παλιό λυχνάρι.",
+      "Όταν η μητέρα του Αλαντίν είδε το βρόμικο λυχνάρι, αποφάσισε να το καθαρίσει για να το πουλήσουν και να αγοράσουν φαγητό. Μόλις το έτριψε, ένα γιγάντιο, πανίσχυρο τζίνι πετάχτηκε από το στόμιο, γεμίζοντας ολόκληρο το δωμάτιο. «Είμαι το Τζίνι του Λυχναριού!» βρόντηξε. «Η επιθυμία σου είναι διαταγή μου.»",
+      "Ο Αλαντίν ζήτησε αμέσως ένα πλούσιο γεύμα. Ευθύς εμφανίστηκαν στο τραπέζι ασημένιοι δίσκοι γεμάτοι λαχταριστά εδέσματα. Από εκείνη τη μέρα, ο Αλαντίν και η μητέρα του δεν πείνασαν ποτέ ξανά. Ο Αλαντίν πούλησε τους ασημένιους δίσκους και χρησιμοποίησε το λυχνάρι με σύνεση, μεγαλώνοντας σε έναν ευγενικό, μορφωμένο και όμορφο νεαρό.",
+      "Χρόνια αργότερα, ο Αλαντίν είδε την κόρη του Σουλτάνου, την πριγκίπισσα Γιασμίν, να περνά καβάλα από την πόλη. Ήταν η πιο όμορφη γυναίκα που είχε δει ποτέ του και την ερωτεύτηκε βαθιά. Ο Αλαντίν έστειλε τη μητέρα του στο παλάτι του Σουλτάνου με μια γαβάθα γεμάτη από τα λαμπερά πετράδια που είχε πάρει από τη σπηλιά. Ο Σουλτάνος θαύμασε το δώρο, αλλά ζήτησε ακόμα ένα πράγμα: έπρεπε ο Αλαντίν να χτίσει ένα μεγαλοπρεπές παλάτι για την πριγκίπισσα μέσα σε μία μόνο νύχτα.",
+      "Ο Αλαντίν έτριψε το μαγικό λυχνάρι και, μέχρι το επόμενο πρωί, ένα παλάτι από λευκό μάρμαρο και χρυσάφι υψωνόταν απέναντι από το σπίτι του Σουλτάνου. Ο Σουλτάνος κράτησε την υπόσχεσή του, και ο Αλαντίν με τη Γιασμίν παντρεύτηκαν σε μια λαμπρή γιορτή. Έζησαν ευτυχισμένοι μαζί, και οι κάτοικοι της πόλης αγαπούσαν τον Αλαντίν για τη γενναιοδωρία του.",
+      "Ωστόσο, μακριά στην πατρίδα του, ο κακός μάγος ανακάλυψε πως ο Αλαντίν ζούσε ακόμα και είχε το μαγικό λυχνάρι. Γεμάτος οργή, ταξίδεψε πίσω στην πόλη και μεταμφιέστηκε σε γέρο έμπορο. Περνώντας έξω από το παλάτι του Αλαντίν, την ώρα που εκείνος έλειπε στο κυνήγι, φώναζε: «Καινούργια λυχνάρια για παλιά! Ανταλλάξτε τα παλιά σας λυχνάρια με αστραφτερά καινούργια!»",
+      "Η πριγκίπισσα Γιασμίν τον άκουσε από το παράθυρο. Δεν γνώριζε το μυστικό του σκονισμένου παλιού λυχναριού του Αλαντίν, κι έτσι έστειλε έναν υπηρέτη να το ανταλλάξει με ένα λαμπερό καινούργιο. Τη στιγμή που ο μάγος έπιασε στα χέρια του το μαγικό λυχνάρι, γέλασε σκληρά και το έτριψε. Διέταξε το τζίνι να μεταφέρει ολόκληρο το παλάτι —μαζί με την πριγκίπισσα μέσα— σε μια μακρινή έρημο στην Αφρική.",
+      "Όταν επέστρεψε ο Αλαντίν, το παλάτι του και η γυναίκα του είχαν χαθεί. Ο Σουλτάνος έγινε έξω φρενών και έδωσε στον Αλαντίν σαράντα μέρες για να βρει την κόρη του. Συντετριμμένος, ο Αλαντίν περιπλανήθηκε στην εξοχή. Καθώς έπλενε τα χέρια του σε ένα ποτάμι, έτριψε κατά λάθος το μαγικό δαχτυλίδι που φορούσε ακόμα. Εμφανίστηκε το Τζίνι του Δαχτυλιδιού. Δεν μπορούσε να αναιρέσει το έργο του ισχυρότερου Τζινιού του Λυχναριού, αλλά μπορούσε να πάει τον Αλαντίν στο παλάτι.",
+      "Αστραπιαία, ο Αλαντίν έφτασε στην έρημο και τρύπωσε στο παλάτι από ένα παράθυρο. Η Γιασμίν πλημμύρισε από χαρά που τον είδε. Μαζί κατέστρωσαν ένα σχέδιο. Εκείνο το βράδυ, η πριγκίπισσα κάλεσε τον μάγο σε δείπνο και έριξε κρυφά στο ποτήρι του ένα δυνατό υπνωτικό φίλτρο. Ο μάγος το ήπιε και έπεσε σε βαθύ ύπνο.",
+      "Ο Αλαντίν βγήκε γρήγορα πίσω από μια κουρτίνα, πήρε το μαγικό λυχνάρι από τη ζώνη του μάγου και το έτριψε. Το Τζίνι του Λυχναριού φανερώθηκε, καταχαρούμενο που υπηρετούσε ξανά τον αληθινό του αφέντη. Ο Αλαντίν ευχήθηκε να επιστρέψει το παλάτι στη νόμιμη θέση του, αφήνοντας τον κακό μάγο για πάντα πίσω στην έρημο.",
+      "Το επόμενο πρωί, ο Σουλτάνος κοίταξε έξω από το παράθυρό του και είδε το μαρμάρινο παλάτι να λάμπει ξανά στον ήλιο. Ο Αλαντίν και η Γιασμίν έσμιξαν πάλι με την οικογένειά τους, και έζησαν με ειρήνη και ευτυχία σε όλη την υπόλοιπη ζωή τους."
+    ],
     "badge50": "🏆 Ορόσημο: 50 λέξεις",
     "storyTitle50": "Γνωρίζοντας κάποιον",
     "storyFull50": [
@@ -6058,7 +6389,11 @@ export const STORY_TRANSLATIONS = {
       "— Ναι, θα μένω σε ένα ξενοδοχείο απέναντι.",
       "— Πόσο καιρό θα βρίσκεσαι εκεί μέχρι την Παρασκευή;",
       "— Μέχρι την Παρασκευή θα είμαι εκεί για δύο μέρες. Μετά θα πάρω τον δρόμο της επιστροφής."
-    ]
+    ],
+    "statusLockedPro": "Μόνο στο PRO",
+    "proStoryHint": "Αποκλειστικό παραμύθι για μέλη PRO",
+    "audioNarrator": "Ακούστε ολόκληρο το παραμύθι",
+    "audioLoading": "Φόρτωση ήχου..."
   },
   "da": {
     "btnShowTranslation": "Vis oversættelse",
@@ -6080,6 +6415,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Eventyr",
+    "storyTitle1": "Aladdin og den fortryllede lampe",
+    "storyFull1": [
+      "For længe siden, i en travl by i Østen, boede der en fattig dreng ved navn Aladdin. Hans far var død, da Aladdin var helt lille, så han boede alene med sin mor. De havde kun ganske få penge, og hans mor sled hårdt hver dag med at spinde bomuld for at kunne købe mad. Aladdin var en godhjertet dreng, men han foretrak at lege på gaderne med sine venner frem for at arbejde.",
+      "En dag ankom en høj fremmed til byen. Han var i virkeligheden en ond troldmand fra et fjernt land, og han havde en snedig plan. Han gik hen til Aladdin på markedet og smilede varmt. »Min kære dreng!« sagde han. »Jeg er din fars bror. Jeg har rejst i mange år for at finde dig og hjælpe din familie.«",
+      "Aladdin blev forbavset, og hans mor blev ude af sig selv af glæde. Den fremmede købte fine nye klæder til Aladdin og gav hans mor guldmønter. Næste morgen bad troldmanden Aladdin om at gå en tur med sig uden for byen. De gik i timevis, indtil de nåede en stille dal mellem to høje bjerge.",
+      "Troldmanden tændte et lille bål, kastede noget mærkeligt pulver ind i flammerne og fremsagde magiske ord. Pludselig rystede jorden, og en tung stenplade kom til syne med en messingring i midten. »Under denne sten er der en hemmelig hule,« sagde troldmanden. »Kun du kan træde ind i den. Gå ned ad trappen, gå gennem salene af guld og ædelstene, og rør ikke ved noget. Helt i enden finder du en gammel olielampe. Bring den til mig.« Før Aladdin gik ned, satte troldmanden en magisk ring på Aladdins finger til beskyttelse.",
+      "Aladdin klatrede ned i hulen. Det var et betagende syn. Træerne var dækket af funklende rubiner, smaragder og diamanter. Aladdin huskede advarslen, men han puttede alligevel et par strålende frugter fra træerne i sine lommer, da han troede, det blot var smukt glas. I enden af hulen fandt han den støvede gamle lampe.",
+      "Da Aladdin vendte tilbage til indgangen, var trappen alt for stejl til, at han kunne klatre op, mens han holdt lampen. »Giv mig lampen først, så trækker jeg dig op!« råbte troldmanden vredt. Aladdin var bange for, at manden ville efterlade ham dernede, så han nægtede. Rasende fremsagde troldmanden endnu en besværgelse, og den tunge sten smækkede i og spærrede Aladdin inde i mørket.",
+      "I to dage sad Aladdin i mørket, græd og bad. Ved et tilfælde gned han den magiske ring på sin finger. Øjeblikkeligt viste en kæmpestor ånd sig i en sky af røg. »Jeg er Ringens Ånd,« tordnede ånden. »Hvad er dit ønske?«",
+      "»Bring mig hjem til min mor!« råbte Aladdin. På et øjeblik stod Aladdin i sit eget hus med den gamle lampe stadig i hånden.",
+      "Da Aladdins mor så den snavsede lampe, besluttede hun sig for at pudse den, så de kunne sælge den og købe mad. Så snart hun gned på den, brusede en gigantisk, mægtig ånd ud af tuden og fyldte hele stuen. »Jeg er Lampens Ånd!« tordnede han. »Dit ønske er min lov.«",
+      "Aladdin bad straks om et festmåltid. Straks stod der sølvfade fulde af lækker mad på bordet. Fra den dag sultede Aladdin og hans mor aldrig mere. Aladdin solgte sølvfadene og brugte lampen med omtanke, og han voksede op til at blive en høflig, dannet og smuk ung mand.",
+      "Flere år senere så Aladdin sultanens datter, prinsesse Jasmin, ride gennem byen. Hun var den smukkeste kvinde, han nogensinde havde set, og han forelskede sig dybt i hende. Aladdin sendte sin mor til sultanens palads med en skål fuld af de funklende ædelstene, han havde taget med fra hulen. Sultanen blev dybt imponeret over gaven, men han krævede én ting mere: Aladdin måtte bygge et storslået palads til prinsessen på en enkelt nat.",
+      "Aladdin gned på den magiske lampe, og næste morgen stod et palads af hvidt marmor og guld over for sultanens hjem. Sultanen holdt sit løfte, og Aladdin og Jasmin blev gift ved en storslået fest. De levede lykkeligt sammen, og byens folk elskede Aladdin for hans gavmildhed.",
+      "Men langt borte i sit hjemland opdagede den onde troldmand, at Aladdin stadig var i live og ejede den magiske lampe. Fyldt af raseri rejste han tilbage til byen og forklædte sig som en gammel kræmmer. Mens han gik forbi Aladdins palads, mens Aladdin var ude på jagt, råbte han: »Nye lamper for gamle! Byt jeres gamle lamper til skinnende nye!«",
+      "Prinsesse Jasmin hørte ham fra vinduet. Hun kendte ikke hemmeligheden bag Aladdins støvede gamle lampe, så hun sendte en tjener ud for at bytte den til en blank ny. I samme øjeblik troldmanden holdt den magiske lampe i hånden, lo han grusomt og gned på den. Han befalede ånden at bære hele paladset – med prinsessen indeni – til en fjern ørken i Afrika.",
+      "Da Aladdin vendte tilbage, var både hans palads og hans hustru borte. Sultanen var rasende og gav Aladdin fyrre dage til at finde sin datter. Sønderknust vandrede Aladdin ud på landet. Da han vaskede sine hænder i en flod, kom han ved et uheld til at gnide på den magiske ring, han stadig bar. Ringens Ånd viste sig. Han kunne ikke ophæve det, den langt mægtigere Lampens Ånd havde gjort, men han kunne bringe Aladdin til paladset.",
+      "Som et lyn ankom Aladdin til ørkenen og sneg sig ind i paladset gennem et vindue. Jasmin blev overlykkelig over at se ham. Sammen lagde de en plan. Samme aften inviterede prinsessen troldmanden til middag og hældte i al hemmelighed en stærk sovedrik i hans bæger. Troldmanden drak den og faldt i en dyb søvn.",
+      "Aladdin trådte hurtigt frem bag et forhæng, tog den magiske lampe fra troldmandens bælte og gned på den. Lampens Ånd viste sig, henrykt over igen at tjene sin rette herre. Aladdin ønskede, at paladset skulle føres tilbage til sin retmæssige plads, og efterlod den onde troldmand i ørkenen for evigt.",
+      "Næste morgen kiggede sultanen ud ad sit vindue og så marmorpaladset stråle i solen endnu en gang. Aladdin og Jasmin blev genforenet med deres familie, og de levede i fred og lykke resten af deres dage."
+    ],
     "badge50": "🏆 Milepæl: 50 ord",
     "storyTitle50": "At møde en ny person",
     "storyFull50": [
@@ -6524,7 +6881,11 @@ export const STORY_TRANSLATIONS = {
       "— Ja, jeg bor på et hotel på den anden side af gaden.",
       "— Hvor længe har du været der på fredag?",
       "— På fredag har jeg været der i to dage. Derefter tager jeg hjem."
-    ]
+    ],
+    "statusLockedPro": "Kun i PRO",
+    "proStoryHint": "Eksklusivt eventyr for PRO-medlemmer",
+    "audioNarrator": "Lyt til hele historien",
+    "audioLoading": "Indlæser lyd..."
   },
   "lv": {
     "btnShowTranslation": "Rādīt tulkojumu",
@@ -6546,6 +6907,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonuss",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Pasaka",
+    "storyTitle1": "Aladins un burvju lampa",
+    "storyFull1": [
+      "Sensenos laikos kādā rosīgā Austrumu pilsētā dzīvoja nabaga zēns vārdā Aladins. Viņa tēvs bija miris, kad Aladins vēl bija pavisam mazs, tāpēc viņš dzīvoja viens pats ar māti. Naudas viņiem bija pavisam maz, un māte katru dienu smagi strādāja, vērpjot kokvilnu, lai nopirktu pārtiku. Aladins bija labsirdīgs zēns, taču strādāšanas vietā viņam labāk patika ielās rotaļāties ar draugiem.",
+      "Kādu dienu pilsētā ieradās kāds gara auguma svešinieks. Patiesībā viņš bija ļauns burvis no tālas zemes, un viņam bija viltīgs plāns. Viņš tirgū pienāca pie Aladina un sirsnīgi pasmaidīja. „Mans dārgais zēn!” viņš sacīja. „Es esmu tava tēva brālis. Daudzus gadus esmu ceļojis, lai tevi atrastu un palīdzētu tavai ģimenei.”",
+      "Aladins bija pārsteigts, bet viņa māte — neizsakāmi laimīga. Svešinieks nopirka Aladinam skaistas jaunas drēbes un iedeva viņa mātei zelta monētas. Nākamajā rītā burvis palūdza Aladinu pastaigāties ar viņu ārpus pilsētas. Viņi gāja stundām ilgi, līdz nonāca klusā ielejā starp diviem augstiem kalniem.",
+      "Burvis iekūra nelielu ugunskuru, iebēra tajā kādu dīvainu pulveri un izrunāja buramvārdus. Pēkšņi zeme nodrebēja, un atklājās smaga akmens plāksne ar misiņa gredzenu vidū. „Zem šī akmens ir slepena ala,” teica burvis. „Tikai tu drīksti tajā ieiet. Nokāp pa kāpnēm, ej cauri zelta un dārgakmeņu zālēm un nekam nepieskaries. Pašā galā tu atradīsi vecu eļļas lampu. Atnes to man.” Pirms Aladins devās lejup, burvis uzvilka viņam pirkstā burvju gredzenu aizsardzībai.",
+      "Aladins nokāpa alā. Skats bija elpu aizraujošs. Kokos mirdzēja rubīni, smaragdi un dimanti. Aladins atcerējās brīdinājumu, tomēr iebāza kabatās dažus spožus koku augļus, domādams, ka tie ir tikai skaisti stikla gabaliņi. Alas galā viņš atrada putekļaino veco lampu.",
+      "Kad Aladins atgriezās pie ieejas, kāpnes bija pārāk stāvas, lai kāptu augšup, turot rokā lampu. „Vispirms padod man lampu, tad es tevi izvilkšu!” dusmīgi uzsauca burvis. Aladins nobijās, ka vīrs viņu pametīs alā, tāpēc atteicās. Saniknots burvis izrunāja vēl vienu burvestību, un smagais akmens aizcirtās ciet, ieslogot Aladinu tumsā.",
+      "Divas dienas Aladins sēdēja tumsā, raudādams un lūgdamies. Nejauši viņš paberzēja burvju gredzenu savā pirkstā. Tūdaļ dūmu mākonī parādījās milzīgs džins. „Es esmu Gredzena Džins,” nodārdēja gars. „Kāda ir tava vēlēšanās?”",
+      "„Aizved mani mājās pie mātes!” iekliedzās Aladins. Acs mirklī Aladins jau stāvēja savā mājā, joprojām turot rokā veco lampu.",
+      "Kad Aladina māte ieraudzīja netīro lampu, viņa nolēma to notīrīt, lai varētu pārdot un nopirkt ēdienu. Tiklīdz viņa to paberzēja, no lampas snīpja izšāvās milzīgs, varens džins, piepildot visu istabu. „Es esmu Lampas Džins!” viņš nodārdēja. „Tava vēlēšanās man ir likums.”",
+      "Aladins tūlīt palūdza mielastu. Tai pašā mirklī uz galda parādījās sudraba šķīvji, pilni gardiem ēdieniem. Kopš tās dienas Aladins un viņa māte vairs nekad necieta badu. Aladins pārdeva sudraba šķīvjus un gudri izmantoja lampu, izaugot par pieklājīgu, izglītotu un izskatīgu jaunekli.",
+      "Pēc vairākiem gadiem Aladins ieraudzīja sultāna meitu, princesi Jasmīnu, jājam cauri pilsētai. Viņa bija skaistākā sieviete, kādu viņš jebkad bija redzējis, un viņš dziļi iemīlējās. Aladins nosūtīja māti uz sultāna pili ar bļodu, kas bija pilna ar alā paņemtajiem mirdzošajiem dārgakmeņiem. Sultāns bija pārsteigts par dāvanu, taču pieprasīja vēl vienu lietu: Aladinam vienas nakts laikā bija jāuzceļ grezna pils princesei.",
+      "Aladins paberzēja burvju lampu, un līdz nākamajam rītam pretim sultāna mājoklim jau slējās baltā marmora un zelta pils. Sultāns turēja savu solījumu, un Aladins ar Jasmīnu apprecējās krāšņās svinībās. Viņi dzīvoja saticīgi un laimīgi, un pilsētas ļaudis mīlēja Aladinu par viņa dāsnumu.",
+      "Tomēr tālu savā dzimtenē ļaunais burvis uzzināja, ka Aladins joprojām ir dzīvs un viņam pieder burvju lampa. Dusmu pārņemts, viņš devās atpakaļ uz pilsētu un pārģērbās par vecu tirgotāju. Iedams garām Aladina pilij, kamēr pats Aladins bija devies medībās, viņš sauca: „Jaunas lampas pret vecām! Mainiet savas vecās lampas pret spožām jaunām!”",
+      "Princese Jasmīna izdzirdēja viņu pa logu. Viņa nezināja Aladina putekļainās vecās lampas noslēpumu, tāpēc nosūtīja kalpu iemainīt to pret mirdzošu jaunu. Tiklīdz burvis turēja rokās burvju lampu, viņš ļauni iesmējās un paberzēja to. Viņš pavēlēja džinam aiznest visu pili — ar visu princesi tajā — uz tālu tuksnesi Āfrikā.",
+      "Kad Aladins atgriezās, viņa pils un sieva bija pazudušas. Sultāns bija nikns un deva Aladinam četrdesmit dienas, lai atrastu viņa meitu. Salauztu sirdi Aladins klīda pa laukiem. Mazgādams rokas upē, viņš nejauši paberzēja burvju gredzenu, kas joprojām bija pirkstā. Parādījās Gredzena Džins. Viņš nevarēja atcelt varenākā Lampas Džina darbu, taču spēja aizvest Aladinu līdz pilij.",
+      "Vienā mirklī Aladins nonāca tuksnesī un pa logu ielavījās pilī. Jasmīna bija bezgala laimīga viņu redzēt. Kopā viņi izkala plānu. Tajā vakarā princese ielūdza burvi vakariņās un slepus ielēja viņa kausā spēcīgu miega dziru. Burvis to izdzēra un iegrima dziļā miegā.",
+      "Aladins ātri iznāca no aizkariem, paņēma burvju lampu no burvja jostas un paberzēja to. Parādījās Lampas Džins, priecīgs atkal kalpot savam īstajam saimniekam. Aladins vēlējās, lai pils atgrieztos savā likumīgajā vietā, atstājot ļauno burvi tuksnesī uz mūžiem.",
+      "Nākamajā rītā sultāns paskatījās pa logu un ieraudzīja marmora pili atkal mirdzam saulē. Aladins un Jasmīna atkal apvienojās ar savu ģimeni, un viņi dzīvoja mierā un laimē visu atlikušo mūžu."
+    ],
     "badge50": "🏆 Pavērsiens: 50 vārdu",
     "storyTitle50": "Iepazīšanās",
     "storyFull50": [
@@ -6990,7 +7373,11 @@ export const STORY_TRANSLATIONS = {
       "— Jā, es dzīvošu viesnīcā otrpus ielai.",
       "— Cik ilgi tu tur būsi līdz piektdienai?",
       "— Līdz piektdienai es tur būšu pavadījis divas dienas. Pēc tam došos mājup."
-    ]
+    ],
+    "statusLockedPro": "Tikai PRO",
+    "proStoryHint": "Ekskluzīva pasaka PRO lietotājiem",
+    "audioNarrator": "Klausīties visu pasaku",
+    "audioLoading": "Ielādē audio..."
   },
   "lt": {
     "btnShowTranslation": "Rodyti vertimą",
@@ -7012,6 +7399,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Premija",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Pasaka",
+    "storyTitle1": "Aladinas ir stebuklingoji lempa",
+    "storyFull1": [
+      "Labai seniai viename šurmulingame Rytų mieste gyveno neturtingas berniukas vardu Aladinas. Jo tėvas mirė, kai Aladinas buvo dar visai mažas, todėl jis gyveno vienas su motina. Pinigų jie turėjo labai mažai, ir motina kasdien sunkiai dirbo verpdama medvilnę, kad galėtų nupirkti maisto. Aladinas buvo geraširdis vaikas, bet užuot dirbęs, jis mieliau gatvėse žaisdavo su draugais.",
+      "Vieną dieną į miestą atvyko aukštas nepažįstamasis. Iš tiesų tai buvo piktas burtininkas iš tolimo krašto, turėjęs klastingą planą. Turguje jis priėjo prie Aladino ir šiltai nusišypsojo. „Mano mielas berniuk! – tarė jis. – Aš esu tavo tėvo brolis. Daugybę metų keliavau, kad surasčiau tave ir padėčiau tavo šeimai.“",
+      "Aladinas nustebo, o jo motina be galo apsidžiaugė. Nepažįstamasis nupirko Aladinui gražių naujų drabužių ir davė jo motinai auksinių monetų. Kitą rytą burtininkas pakvietė Aladiną pasivaikščioti už miesto. Jie ėjo ištisas valandas, kol pasiekė tylų slėnį tarp dviejų aukštų kalnų.",
+      "Burtininkas sukūrė nedidelį laužą, įbėrė į jį kažkokių keistų miltelių ir ištarė stebuklingus žodžius. Staiga žemė sudrebėjo ir pasirodė sunki akmeninė plokštė su žalvariniu žiedu viduryje. „Po šiuo akmeniu yra slapta ola, – pasakė burtininkas. – Tik tu gali į ją įeiti. Nusileisk laiptais, pereik per aukso ir brangenybių menes ir nieko neliesk. Pačiame gale rasi seną aliejinę lempą. Atnešk ją man.“ Prieš Aladinui leidžiantis žemyn, burtininkas užmovė jam ant piršto stebuklingą žiedą apsaugai.",
+      "Aladinas nusileido į olą. Vaizdas buvo gniaužiantis kvapą. Medžiai buvo nusėti žėrinčiais rubinais, smaragdais ir deimantais. Aladinas prisiminė perspėjimą, vis dėlto įsikišo į kišenes kelis švytinčius medžių vaisius, manydamas, kad tai tiesiog gražūs stikliukai. Olos gale jis rado dulkėtą seną lempą.",
+      "Kai Aladinas sugrįžo prie įėjimo, laiptai pasirodė per statūs, kad galėtų užlipti laikydamas lempą. „Pirma duok man lempą, o tada aš tave ištrauksiu!“ – piktai sušuko burtininkas. Aladinas išsigando, kad vyras paliks jį čia, todėl atsisakė. Įtūžęs burtininkas ištarė dar vieną burtažodį, ir sunkus akmuo užsitrenkė, įkalindamas Aladiną tamsoje.",
+      "Dvi dienas Aladinas sėdėjo tamsoje, verkė ir meldėsi. Netyčia jis patrynė stebuklingąjį žiedą ant savo piršto. Akimirksniu dūmų debesyje pasirodė milžiniškas džinas. „Aš esu Žiedo Džinas, – nugriaudėjo dvasia. – Koks tavo noras?“",
+      "„Nugabenk mane namo pas motiną!“ – sušuko Aladinas. Mirksniu Aladinas jau stovėjo savo namuose, vis dar laikydamas senąją lempą.",
+      "Kai Aladino motina pamatė purviną lempą, ji nusprendė ją nušveisti, kad galėtų parduoti ir nusipirkti maisto. Vos tik ją patrynė, iš lempos snapelio išsiveržė milžiniškas, galingas džinas, užpildydamas visą kambarį. „Aš esu Lempos Džinas! – sugriaudėjo jis. – Tavo noras man yra įsakymas.“",
+      "Aladinas mikliai paprašė puotos. Tuojau pat ant stalo atsirado sidabriniai padėklai, pilni gardžių valgių. Nuo tos dienos Aladinas su motina daugiau niekada nebadavo. Aladinas pardavė sidabrinius padėklus ir išmintingai naudojosi lempa, kol užaugo į mandagų, išsilavinusį ir dailų jaunuolį.",
+      "Po daugelio metų Aladinas išvydo sultono dukrą, princesę Jasminą, jojančią per miestą. Ji buvo gražiausia moteris, kokią jis kada nors buvo matęs, ir jis karštai ją pamilo. Aladinas nusiuntė motiną į sultono rūmus su dubeniu, pilnu žėrinčių brangakmenių, kuriuos buvo parsinešęs iš olos. Sultoną dovana pribloškė, tačiau jis pareikalavo dar vieno dalyko: per vieną naktį Aladinas turėjo pastatyti princesei didingus rūmus.",
+      "Aladinas patrynė stebuklingąją lempą, ir jau kitą rytą priešais sultono namus stovėjo balto marmuro ir aukso rūmai. Sultonas tesėjo savo pažadą, ir Aladinas su Jasmina susituokė per iškilmingą šventę. Jie gyveno laimingai kartu, o miesto žmonės mylėjo Aladiną už jo dosnumą.",
+      "Tačiau toli savo tėvynėje piktasis burtininkas sužinojo, kad Aladinas vis dar gyvas ir turi stebuklingąją lempą. Apimtas įniršio, jis parvyko į miestą ir persirengė senu pirkliu. Eidamas pro Aladino rūmus, kol pats Aladinas buvo išvykęs į medžioklę, jis šaukė: „Naujos lempos už senas! Išmainykite savo senas lempas į blizgančias naujas!“",
+      "Princesė Jasmina išgirdo jį pro langą. Ji nežinojo dulkėtos senosios Aladino lempos paslapties, tad pasiuntė tarną išmainyti ją į naują ir žvilgančią. Vos tik burtininkas paėmė į rankas stebuklingąją lempą, jis žiauriai nusijuokė ir ją patrynė. Jis įsakė džinui nunešti visus rūmus – su princese viduje – į tolimą dykumą Afrikoje.",
+      "Kai Aladinas sugrįžo, jo rūmų ir žmonos nebebuvo. Sultonas įsiuto ir davė Aladinui keturiasdešimt dienų surasti jo dukrą. Sudaužyta širdimi Aladinas klaidžiojo po užmiesčio laukus. Plaudamas rankas upėje, jis netyčia patrynė stebuklingąjį žiedą, kurį tebemūvėjo. Pasirodė Žiedo Džinas. Jis negalėjo panaikinti galingesnio Lempos Džino darbo, bet galėjo nunešti Aladiną į rūmus.",
+      "Žaibo greičiu Aladinas atsidūrė dykumoje ir pro langą įsėlino į rūmus. Jasmina be galo apsidžiaugė jį pamačiusi. Kartu jie sukūrė planą. Tą vakarą princesė pakvietė burtininką vakarienės ir slapta įpylė į jo taurę stipraus migdomojo gėrimo. Burtininkas jį išgėrė ir nugrimzdo į gilų miegą.",
+      "Aladinas greitai išėjo iš už užuolaidos, paėmė stebuklingąją lempą nuo burtininko diržo ir ją patrynė. Pasirodė Lempos Džinas, laimingas vėl galėdamas tarnauti tikrajam savo šeimininkui. Aladinas palinkėjo, kad rūmai būtų grąžinti į teisėtą vietą, o piktasis burtininkas liktų dykumoje visiems laikams.",
+      "Kitą rytą sultonas pažvelgė pro savo langą ir vėl išvydo saulėje spindinčius marmuro rūmus. Aladinas ir Jasmina vėl susitiko su savo šeima ir gyveno taikoje bei laimėje visą likusį gyvenimą."
+    ],
     "badge50": "🏆 Gairė: 50 žodžių",
     "storyTitle50": "Pažintis su nauju žmogumi",
     "storyFull50": [
@@ -7456,7 +7865,11 @@ export const STORY_TRANSLATIONS = {
       "— Taip, gyvensiu viešbutyje kitoje gatvės pusėje.",
       "— Kiek laiko ten būsi iki penktadienio?",
       "— Iki penktadienio ten būsiu praleidęs dvi dienas. Tada vyksiu namo."
-    ]
+    ],
+    "statusLockedPro": "Tik su PRO",
+    "proStoryHint": "Išskirtinė pasaka PRO nariams",
+    "audioNarrator": "Klausytis visos pasakos",
+    "audioLoading": "Įkeliamas garsas..."
   },
   "pt": {
     "btnShowTranslation": "Mostrar tradução",
@@ -7478,6 +7891,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bônus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Conto de fadas",
+    "storyTitle1": "Aladim e a Lâmpada Mágica",
+    "storyFull1": [
+      "Há muito tempo, em uma movimentada cidade do Oriente, vivia um menino pobre chamado Aladim. Seu pai havia morrido quando Aladim ainda era muito pequeno, por isso ele morava sozinho com sua mãe. Eles tinham pouquíssimo dinheiro, e sua mãe trabalhava duro todos os dias fiando algodão para comprar comida. Aladim era um garoto bondoso, mas preferia brincar nas ruas com os amigos em vez de trabalhar.",
+      "Um dia, um estranho alto chegou à cidade. Na verdade, ele era um feiticeiro perverso de uma terra distante, mas tinha um plano astuto. Aproximou-se de Aladim no mercado e sorriu com simpatia. “Meu querido menino!”, disse ele. “Sou irmão do seu pai. Viajei durante muitos anos para encontrar você e ajudar a sua família.”",
+      "Aladim ficou surpreso, e sua mãe transbordou de alegria. O estranho comprou roupas novas e finas para Aladim e deu moedas de ouro à mãe dele. Na manhã seguinte, o feiticeiro chamou Aladim para caminhar com ele fora da cidade. Andaram por horas até chegarem a um vale silencioso entre duas montanhas altas.",
+      "O feiticeiro acendeu uma pequena fogueira, jogou um pó estranho nas chamas e pronunciou palavras mágicas. De repente, o chão tremeu, e surgiu uma pesada laje de pedra com uma argola de bronze no centro. “Debaixo desta pedra há uma caverna secreta”, disse o feiticeiro. “Só você pode entrar nela. Desça as escadas, atravesse os salões de ouro e joias e não toque em nada. Bem lá no fundo, você encontrará uma velha lamparina a óleo. Traga-a para mim.” Antes de Aladim descer, o feiticeiro colocou um anel mágico no dedo do rapaz para protegê-lo.",
+      "Aladim desceu até a caverna. A visão era de tirar o fôlego. As árvores estavam cobertas de rubis, esmeraldas e diamantes cintilantes. Aladim lembrou-se do aviso, embora tenha colocado alguns frutos brilhantes das árvores nos bolsos, achando que fossem apenas pedacinhos de vidro bonito. No fundo da caverna, encontrou a velha lamparina empoeirada.",
+      "Quando Aladim voltou à entrada, os degraus eram íngremes demais para subir segurando a lamparina. “Dê-me a lamparina primeiro, e depois eu puxo você para fora!”, gritou o feiticeiro, irritado. Aladim teve medo de que o homem o abandonasse ali dentro, por isso recusou. Furioso, o feiticeiro lançou outro feitiço, e a pesada pedra fechou-se com estrondo, prendendo Aladim na escuridão.",
+      "Durante dois dias, Aladim ficou sentado no escuro, chorando e rezando. Sem querer, acabou esfregando o anel mágico em seu dedo. No mesmo instante, um gênio imenso apareceu em uma nuvem de fumaça. “Eu sou o Gênio do Anel”, trovejou o espírito. “Qual é o seu desejo?”",
+      "“Leve-me para casa, para junto da minha mãe!”, clamou Aladim. Em um piscar de olhos, Aladim estava em sua própria casa, ainda segurando a velha lamparina.",
+      "Quando a mãe de Aladim viu a lamparina suja, decidiu limpá-la para que pudessem vendê-la e comprar comida. Assim que a esfregou, um gênio gigante e poderoso irrompeu pelo bico da lamparina, preenchendo o cômodo inteiro. “Eu sou o Gênio da Lamparina!”, retumbou ele. “O seu desejo é uma ordem para mim.”",
+      "Aladim logo pediu um banquete. Imediatamente, travessas de prata repletas de comidas deliciosas surgiram sobre a mesa. Daquele dia em diante, Aladim e sua mãe nunca mais passaram fome. Aladim vendeu as travessas de prata e usou a lamparina com sabedoria, tornando-se um jovem educado, instruído e bonito.",
+      "Anos mais tarde, Aladim viu a filha do sultão, a princesa Jasmine, cavalgando pela cidade. Ela era a mulher mais bela que ele já tinha visto, e ele se apaixonou perdidamente por ela. Aladim enviou sua mãe ao palácio do sultão levando uma tigela cheia das joias cintilantes que trouxera da caverna. O sultão ficou maravilhado com o presente, mas fez mais uma exigência: Aladim teria de construir um palácio magnífico para a princesa em uma única noite.",
+      "Aladim esfregou a lamparina mágica e, na manhã seguinte, um palácio de mármore branco e ouro erguia-se diante da morada do sultão. O sultão cumpriu sua promessa, e Aladim e Jasmine se casaram em uma grande celebração. Eles viveram felizes juntos, e o povo da cidade amava Aladim por sua generosidade.",
+      "Contudo, lá longe em sua terra natal, o feiticeiro perverso descobriu que Aladim ainda estava vivo e possuía a lamparina mágica. Tomado pela fúria, viajou de volta à cidade e disfarçou-se de velho mercador. Passando diante do palácio de Aladim enquanto este estava fora caçando, gritava: “Lamparinas novas por velhas! Troquem suas lamparinas velhas por novas e reluzentes!”",
+      "A princesa Jasmine o ouviu da janela. Ela não conhecia o segredo da velha lamparina empoeirada de Aladim, então mandou um criado trocá-la por uma nova e brilhante. No instante em que segurou a lamparina mágica, o feiticeiro riu com crueldade e a esfregou. Ordenou ao gênio que levasse o palácio inteiro — com a princesa dentro — para um deserto distante na África.",
+      "Quando Aladim retornou, seu palácio e sua esposa haviam desaparecido. O sultão ficou furioso e deu a Aladim quarenta dias para encontrar sua filha. Com o coração partido, Aladim vagou pelos campos. Ao lavar as mãos em um rio, esfregou sem querer o anel mágico que ainda usava. O Gênio do Anel apareceu. Ele não podia desfazer a obra do Gênio da Lamparina, que era muito mais poderoso, mas podia levar Aladim até o palácio.",
+      "Em um instante, Aladim chegou ao deserto e entrou sorrateiramente no palácio por uma janela. Jasmine ficou radiante ao vê-lo. Juntos, armaram um plano. Naquela noite, a princesa convidou o feiticeiro para jantar e despejou em segredo uma forte poção do sono na taça dele. O feiticeiro bebeu tudo e caiu em sono profundo.",
+      "Aladim saiu depressa de trás de uma cortina, tirou a lamparina mágica do cinto do feiticeiro e a esfregou. O Gênio da Lamparina surgiu, encantado por servir novamente ao seu verdadeiro mestre. Aladim desejou que o palácio fosse devolvido ao seu devido lugar, deixando o feiticeiro perverso para trás no deserto para sempre.",
+      "Na manhã seguinte, o sultão olhou pela janela e viu o palácio de mármore brilhando ao sol mais uma vez. Aladim e Jasmine reuniram-se novamente com sua família e viveram em paz e felicidade pelo resto de suas vidas."
+    ],
     "badge50": "🏆 Marco: 50 palavras",
     "storyTitle50": "Meeting Someone New",
     "storyFull50": [
@@ -7922,7 +8357,11 @@ export const STORY_TRANSLATIONS = {
       "— Yes, I'll be staying at a hotel across the street.",
       "— How long will you have been there by Friday?",
       "— By Friday, I’ll have been there for two days. Then I’ll be heading home."
-    ]
+    ],
+    "statusLockedPro": "Exclusivo PRO",
+    "proStoryHint": "Conto de fadas exclusivo para assinantes PRO",
+    "audioNarrator": "Ouvir a história completa",
+    "audioLoading": "Carregando áudio..."
   },
   "sk": {
     "btnShowTranslation": "Zobraziť preklad",
@@ -7944,6 +8383,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Rozprávka",
+    "storyTitle1": "Aladin a čarovná lampa",
+    "storyFull1": [
+      "Kedysi dávno žil v jednom rušnom východnom meste chudobný chlapec menom Aladin. Jeho otec zomrel, keď bol Aladin ešte veľmi malý, a tak býval sám so svojou matkou. Peňazí mali pramálo a matka každý deň ťažko pracovala — priadla bavlnu, aby im mohla kúpiť jedlo. Aladin bol dobrák od kosti, no namiesto roboty sa radšej na ulici hrával s kamarátmi.",
+      "Jedného dňa prišiel do mesta vysoký cudzinec. V skutočnosti to bol zlý čarodejník z ďalekej krajiny, ktorý mal ľstivý plán. Na trhu sa prihovoril Aladinovi a milo sa naňho usmial. „Milý chlapče!“ povedal. „Som brat tvojho otca. Dlhé roky som putoval, aby som ťa našiel a pomohol tvojej rodine.“",
+      "Aladin zostal zaskočený a jeho matka bola celá bez seba od radosti. Cudzinec kúpil Aladinovi pekné nové šaty a jeho matke dal zlaté mince. Na druhé ráno čarodejník požiadal Aladina, aby sa s ním prešiel za mesto. Kráčali celé hodiny, až prišli do tichého údolia medzi dvoma vysokými vrchmi.",
+      "Čarodejník rozložil malý oheň, hodil doň akýsi čudný prášok a vyslovil čarovné slová. Zem sa zrazu zachvela a objavila sa ťažká kamenná doska s mosadzným kruhom uprostred. „Pod týmto kameňom je tajná jaskyňa,“ riekol čarodejník. „Vstúpiť do nej smieš iba ty. Zíď po schodoch, prejdi sieňami plnými zlata a drahokamov a ničoho sa nedotýkaj. Na samom konci nájdeš starú olejovú lampu. Prines mi ju.“ Skôr než Aladin zišiel dolu, nastokol mu čarodejník na prst čarovný prsteň na ochranu.",
+      "Aladin zostúpil do jaskyne. Bol to pohľad, ktorý vyrážal dych. Stromy boli obsypané ligotavými rubínmi, smaragdmi a diamantmi. Aladin si spomenul na varovanie, no predsa si do vreciek vložil zopár žiarivých plodov zo stromov, mysliac si, že sú to len pekné sklíčka. Na konci jaskyne našiel zaprášenú starú lampu.",
+      "Keď sa Aladin vrátil k vchodu, schody boli príliš strmé na to, aby po nich vyliezol s lampou v ruke. „Najprv mi podaj lampu, a potom ťa vytiahnem!“ skríkol nahnevane čarodejník. Aladin sa bál, že ho muž v jaskyni nechá napospas osudu, a tak odmietol. Rozzúrený čarodejník vyslovil ďalšie zaklínadlo a ťažký kameň sa s buchotom zavrel, čím Aladina uväznil v tme.",
+      "Dva dni sedel Aladin v temnote, plakal a modlil sa. Nechtiac si pritom pošúchal čarovný prsteň na prste. V tej chvíli sa v oblaku dymu zjavil obrovský džin. „Som Džin Prsteňa,“ zahrmel duch. „Aké je tvoje želanie?“",
+      "„Vezmi ma domov k mojej matke!“ zvolal Aladin. V okamihu stál Aladin vo vlastnom dome a v ruke stále zvieral starú lampu.",
+      "Keď Aladinova matka uvidela špinavú lampu, rozhodla sa ju vyčistiť, aby ju mohli predať a kúpiť si jedlo. Len čo ju pošúchala, z hubice lampy vyrazil obrovský, mocný džin a zaplnil celú izbu. „Som Džin Lampy!“ zahrmel. „Tvoje želanie je mojím rozkazom.“",
+      "Aladin rýchlo poprosil o hostinu. Na stole sa ihneď objavili strieborné misy plné lahodných pokrmov. Od toho dňa už Aladin a jeho matka nikdy nehladovali. Aladin strieborné misy predal a lampu používal múdro, takže z neho vyrástol zdvorilý, vzdelaný a urastený mladý muž.",
+      "Po rokoch uvidel Aladin sultánovu dcéru, princeznú Jasmínu, ako jazdí mestom. Bola to najkrajšia žena, akú kedy videl, a hlboko sa do nej zaľúbil. Aladin poslal svoju matku do sultánovho paláca s misou plnou trblietavých drahokamov, ktoré si kedysi vzal z jaskyne. Sultána dar očaril, no žiadal ešte jednu vec: Aladin musel za jedinú noc postaviť pre princeznú veľkolepý palác.",
+      "Aladin pošúchal čarovnú lampu a do druhého rána stál oproti sultánovmu sídlu palác z bieleho mramoru a zlata. Sultán svoj sľub dodržal a Aladin s Jasmínou mali veľkolepú svadbu. Žili spolu šťastne a ľudia v meste Aladina milovali pre jeho štedrosť.",
+      "Lenže ďaleko vo svojej domovine sa zlý čarodejník dozvedel, že Aladin je stále nažive a má čarovnú lampu. Plný zúrivosti sa vrátil do mesta a preobliekol sa za starého kupca. Keď prechádzal popri Aladinovom paláci, kým bol Aladin na poľovačke, vykrikoval: „Nové lampy za staré! Vymeňte svoje staré lampy za lesklé nové!“",
+      "Princezná Jasmína ho začula z okna. Nepoznala tajomstvo Aladinovej zaprášenej starej lampy, a tak poslala sluhu, aby ju vymenil za novú a lesklú. Len čo sa čarodejník zmocnil čarovnej lampy, kruto sa rozosmial a pošúchal ju. Rozkázal džinovi, aby preniesol celý palác — aj s princeznou vnútri — do ďalekej púšte v Afrike.",
+      "Keď sa Aladin vrátil, jeho palác aj manželka boli preč. Sultán sa rozzúril a dal Aladinovi štyridsať dní na to, aby našiel jeho dcéru. So zlomeným srdcom sa Aladin túlal po kraji. Keď si v rieke umýval ruky, náhodou pošúchal čarovný prsteň, ktorý stále nosil. Zjavil sa Džin Prsteňa. Nedokázal zvrátiť dielo mocnejšieho Džina Lampy, no mohol Aladina preniesť k palácu.",
+      "Aladin sa v mihu oka ocitol v púšti a cez okno sa vkradol do paláca. Jasmína bola bez seba od radosti, keď ho uvidela. Spoločne vymysleli plán. V ten večer pozvala princezná čarodejníka na večeru a tajne mu do čaše naliala silný uspávací odvar. Čarodejník ho vypil a upadol do hlbokého spánku.",
+      "Aladin rýchlo vykročil spoza závesu, vzal čarovnú lampu z čarodejníkovho opasku a pošúchal ju. Zjavil sa Džin Lampy, nadšený, že môže opäť slúžiť svojmu pravému pánovi. Aladin si želal, aby sa palác vrátil na svoje právoplatné miesto, a zlého čarodejníka navždy zanechal v púšti.",
+      "Na druhé ráno sa sultán pozrel z okna a uvidel, ako sa mramorový palác opäť ligoce v slnečných lúčoch. Aladin a Jasmína sa opäť stretli so svojou rodinou a žili v mieri a šťastí po celý zvyšok života."
+    ],
     "badge50": "🏆 Míľnik: 50 slov",
     "storyTitle50": "Zoznámenie sa",
     "storyFull50": [
@@ -8388,7 +8849,11 @@ export const STORY_TRANSLATIONS = {
       "— Áno, budem bývať v hoteli na druhej strane ulice.",
       "— Ako dlho tam budeš do piatka?",
       "— V piatok tam už budem dva dni. Potom sa vydám domov."
-    ]
+    ],
+    "statusLockedPro": "Iba v PRO",
+    "proStoryHint": "Exkluzívna rozprávka pre predplatiteľov PRO",
+    "audioNarrator": "Vypočuť si celú rozprávku",
+    "audioLoading": "Načítava sa zvuk..."
   },
   "sl": {
     "btnShowTranslation": "Prikaži prevod",
@@ -8410,6 +8875,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Pravljica",
+    "storyTitle1": "Aladin in čudežna svetilka",
+    "storyFull1": [
+      "Nekoč davno je v živahnem mestu na Vzhodu živel reven deček po imenu Aladin. Oče mu je umrl, ko je bil Aladin še zelo majhen, zato je živel sam z materjo. Imela sta zelo malo denarja in mati je vsak dan trdo delala ter predla bombaž, da je lahko kupila hrano. Aladin je bil dobrosrčen deček, vendar se je raje kot za delo odločal za igro na ulicah s svojimi prijatelji.",
+      "Nekega dne je v mesto prispel visok tujec. V resnici je bil hudoben čarovnik iz daljne dežele, ki pa je imel zvit načrt. Na tržnici je stopil k Aladinu in se mu toplo nasmehnil. „Moj dragi deček!“ je rekel. „Sem brat tvojega očeta. Dolga leta sem potoval, da bi te našel in pomagal tvoji družini.“",
+      "Aladin je bil presenečen, njegova mati pa presrečna. Tujec je Aladinu kupil lepa nova oblačila in njegovi materi podaril zlate kovance. Naslednje jutro je čarovnik prosil Aladina, naj gre z njim na sprehod izven mesta. Hodila sta več ur, dokler nista prispela v tiho dolino med dvema visokima gorama.",
+      "Čarovnik je zakuril majhen ogenj, vrgel vanj nenavaden prah in izrekel čarobne besede. Nenadoma so se tla zatresla in pojavila se je težka kamnita plošča z medeninastim obročem na sredini. „Pod tem kamnom je skrivna jama,“ je rekel čarovnik. „Samo ti lahko vstopiš vanjo. Spusti se po stopnicah, pojdi skozi dvorane zlata in draguljev in se ničesar ne dotikaj. Čisto na koncu boš našel staro oljno svetilko. Prinesi mi jo.“ Preden se je Aladin spustil v jamo, mu je čarovnik za zaščito nataknil čarobni prstan.",
+      "Aladin se je spustil v jamo. Prizor mu je vzel dih. Drevesa so bila polna bleščečih rubinov, smaragdov in diamantov. Aladin se je spomnil opozorila, čeprav si je v žepe natlačil nekaj sijočih sadežev z dreves, saj je mislil, da so le lepo steklo. Na koncu jame je našel prašno staro svetilko.",
+      "Ko se je Aladin vrnil k vhodu, so bile stopnice prestrme, da bi lahko splezal gor, medtem ko je držal svetilko. „Najprej mi daj svetilko, potem pa te bom potegnil ven!“ je jezno zakričal čarovnik. Aladin se je bal, da ga bo mož zapustil, zato je odklonil. Besen je čarovnik izrekel nov urok in težak kamen se je z treskom zaprl ter ujel Aladina v temo.",
+      "Dva dni je Aladin sedel v temi, jokal in molil. Po naključju je podrgel čarobni prstan na svojem prstu. V trenutku se je v oblaku dima pojavil ogromen duh. „Sem Duh prstana,“ je zagrmel duh. „Kakšna je tvoja želja?“",
+      "„Odpelji me domov k materi!“ je zavpil Aladin. Kot bi mignil, je Aladin stal v svoji hiši in še vedno držal staro svetilko.",
+      "Ko je Aladinova mati zagledala umazano svetilko, se je odločila, da jo bo očistila, da bi jo lahko prodala za hrano. Takoj ko jo je podrgla, je iz dulca švignil velikanski, mogočni duh in napolnil vso sobo. „Sem Duh svetilke!“ je zagrmel. „Tvoja želja je moj ukaz.“",
+      "Aladin je hitro zaprosil za pojedino. Takoj so se na mizi pojavili srebrni krožniki, polni okusnih jedi. Od tistega dne Aladin in njegova mati nista bila nikoli več lačna. Aladin je prodajal srebrne krožnike in modro uporabljal svetilko ter odrasel v vljudnega, izobraženega in čednega mladeniča.",
+      "Leta pozneje je Aladin videl sultanovo hčer, princeso Jasmino, kako je jezdila skozi mesto. Bila je najlepša ženska, kar jih je kdaj videl, in globoko se je zaljubil vanjo. Aladin je poslal svojo mater v sultanovo palačo s skledo, polno bleščečih draguljev, ki jih je vzel iz jame. Sultan je bil nad darilom osupel, vendar je zahteval še eno stvar: Aladin je moral v eni sami noči za princeso zgraditi veličastno palačo.",
+      "Aladin je podrgel čarobno svetilko in do naslednjega jutra je nasproti sultanovega doma stala palača iz belega marmorja in zlata. Sultan je držal obljubo in Aladin ter Jasmina sta se poročila na velikem slavju. Srečno sta živela skupaj, prebivalci mesta pa so Aladina ljubili zaradi njegove radodarnosti.",
+      "Toda daleč stran v svoji domovini je hudobni čarovnik odkril, da je Aladin še živ in da ima čarobno svetilko. Poln besa se je vrnil v mesto in se preoblekel v starega trgovca. Ko je šel mimo Aladinove palače, medtem ko je bil Aladin na lovu, je vzklikal: „Nove svetilke za stare! Zamenjajte svoje stare svetilke za sijoče nove!“",
+      "Princesa Jasmina ga je slišala z okna. Ni poznala skrivnosti Aladinove prašne stare svetilke, zato je poslala služabnika, naj jo zamenja za bleščečo novo. V trenutku, ko je čarovnik prijel čarobno svetilko, se je kruto zasmejal in jo podrgel. Duhu je ukazal, naj celotno palačo – s princeso vred – odnese v daljno puščavo v Afriki.",
+      "Ko se je Aladin vrnil, sta njegovi palača in žena izginili. Sultan je bil besen in je dal Aladinu štirideset dni časa, da najde njegovo hčer. Strtega srca je Aladin taval po podeželju. Ko si je v reki umival roke, je po naključju podrgel čarobni prstan, ki ga je še vedno nosil. Pojavil se je Duh prstana. Ni mogel izničiti dela mogočnejšega Duha svetilke, lahko pa je Aladina odpeljal do palače.",
+      "V hipu je Aladin prispel v puščavo in se skozi okno pretihotapil v palačo. Jasmina je bila presrečna, ko ga je zagledala. Skupaj sta skovala načrt. Tistega večera je princesa povabila čarovnika na večerjo in mu v čašo na skrivaj vlila močan uspavalni napoj. Čarovnik ga je izpil in padel v globok spanec.",
+      "Aladin je hitro stopil izza zavese, vzel čarobno svetilko s čarovnikovega pasu in jo podrgel. Pojavil se je Duh svetilke, vesel, da lahko znova služi svojemu pravemu gospodarju. Aladin si je zaželel, naj se palača vrne na svoje pravo mesto, hudobnega čarovnika pa za vedno pusti v puščavi.",
+      "Naslednje jutro je sultan pogledal skozi okno in zagledal marmorno palačo, ki je znova sijala na soncu. Aladin in Jasmina sta se ponovno združila s svojo družino ter do konca življenja živela v miru in sreči."
+    ],
     "badge50": "🏆 Mejnik: 50 besed",
     "storyTitle50": "Spoznavanje",
     "storyFull50": [
@@ -8854,7 +9341,11 @@ export const STORY_TRANSLATIONS = {
       "— Da, v hotelu na drugi strani ulice.",
       "— Kako dolgo boš tam do petka?",
       "— Do petka bom tam že dva dni. Potem se bom odpravil domov."
-    ]
+    ],
+    "statusLockedPro": "Samo v PRO",
+    "proStoryHint": "Ekskluzivna pravljica za naročnike PRO",
+    "audioNarrator": "Poslušaj celo pravljico",
+    "audioLoading": "Nalaganje zvoka..."
   },
   "fi": {
     "btnShowTranslation": "Näytä käännös",
@@ -8876,6 +9367,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Satu",
+    "storyTitle1": "Aladdin ja taikalamppu",
+    "storyFull1": [
+      "Kauan sitten vilkkaassa itämaisessa kaupungissa eli köyhä poika nimeltä Aladdin. Hänen isänsä oli kuollut Aladdinin ollessa hyvin pieni, joten hän asui kahdestaan äitinsä kanssa. Heillä oli vain vähän rahaa, ja hänen äitinsä raatoi joka päivä kehräten puuvillaa ostaakseen ruokaa. Aladdin oli hyväsydäminen poika, mutta hän leikki mieluummin kaduilla ystäviensä kanssa kuin teki työtä.",
+      "Eräänä päivänä kaupunkiin saapui pitkä muukalainen. Todellisuudessa hän oli kaukaisesta maasta tullut ilkeä velho, jolla oli ovela suunnitelma. Hän lähestyi Aladdinia torilla ja hymyili lämpimästi. ”Rakas poikani!” hän sanoi. ”Olen isäsi veli. Olen matkustanut monta vuotta löytääkseni sinut ja auttaakseni perhettäsi.”",
+      "Aladdin oli hämmästynyt, ja hänen äitinsä oli riemuissaan. Muukalainen osti Aladdinille hienot uudet vaatteet ja antoi hänen äidilleen kultakolikoita. Seuraavana aamuna velho pyysi Aladdinia kävelemään kanssaan kaupungin ulkopuolelle. He kävelivät tuntikausia, kunnes saapuivat hiljaiseen laaksoon kahden korkean vuoren välissä.",
+      "Velho sytytti pienen nuotion, heitti siihen outoa jauhetta ja lausui taikasanoja. Yhtäkkiä maa järisi, ja esiin ilmestyi raskas kivilaatta, jonka keskellä oli messinkirengas. ”Tämän kiven alla on salainen luola”, velho sanoi. ”Vain sinä voit astua sinne. Laskeudu portaat alas, kulje kullan ja jalokivien salien läpi äläkä koske mihinkään. Aivan perältä löydät vanhan öljylampun. Tuo se minulle.” Ennen kuin Aladdin laskeutui alas, velho pujotti hänen sormeensa taikasormuksen suojaksi.",
+      "Aladdin kiipesi alas luolaan. Näky oli henkeäsalpaava. Puut olivat täynnä kimaltelevia rubiineja, smaragdeja ja timantteja. Aladdin muisti varoituksen, vaikka hän pistikin taskuihinsa muutamia puiden hohtavia hedelmiä luullen niitä vain kauniiksi lasiksi. Luolan perältä hän löysi pölyisen vanhan lampun.",
+      "Kun Aladdin palasi sisäänkäynnille, portaat olivat liian jyrkät kiivettäväksi lampun kanssa. ”Anna minulle ensin lamppu, niin vedän sinut ylös!” velho huusi vihaisesti. Aladdin pelkäsi miehen jättävän hänet jälkeensä, joten hän kieltäytyi. Raivostuneena velho lausui toisen loitsun, ja raskas kivi paiskautui kiinni jättäen Aladdinin pimeyteen.",
+      "Kaksi päivää Aladdin istui pimeässä itkien ja rukoillen. Vahingossa hän hieraisi sormessaan olevaa taikasormusta. Samassa savupilvestä ilmestyi valtava henki. ”Olen Sormuksen Henki”, henki jylisi. ”Mikä on toiveesi?”",
+      "”Vie minut kotiin äitini luo!” Aladdin huusi. Silmänräpäyksessä Aladdin seisoi omassa talossaan pitäen yhä vanhaa lamppua kädessään.",
+      "Kun Aladdinin äiti näki likaisen lampun, hän päätti puhdistaa sen, jotta he voisivat myydä sen ruokaa varten. Heti kun hän hieraisi sitä, nokasta syöksyi ulos jättiläismäinen, mahtava henki, joka täytti koko huoneen. ”Olen Lampun Henki!” se jyrisi. ”Toiveesi on käskyni.”",
+      "Aladdin pyysi nopeasti juhla-ateriaa. Välittömästi pöydälle ilmestyi hopealautasia täynnä herkullista ruokaa. Siitä päivästä lähtien Aladdin ja hänen äitinsä eivät enää koskaan nähneet nälkää. Aladdin myi hopealautaset ja käytti lamppua viisaasti kasvaen kohteliaaksi, sivistyneeksi ja komeaksi nuoreksi mieheksi.",
+      "Vuosia myöhemmin Aladdin näki sulttaanin tyttären, prinsessa Jasminen, ratsastavan kaupungin halki. Tämä oli kaunein nainen, jonka hän oli koskaan nähnyt, ja hän rakastui tähän syvästi. Aladdin lähetti äitinsä sulttaanin palatsiin mukanaan maljallinen luolasta ottamiaan kimaltelevia jalokiviä. Sulttaani hämmästyi lahjasta, mutta vaati vielä yhtä asiaa: Aladdinin oli rakennettava prinsessalle upea palatsi yhdessä yössä.",
+      "Aladdin hieraisi taikalamppua, ja seuraavaan aamuun mennessä sulttaanin kodin vastapäätä kohosi valkoisesta marmorista ja kullasta tehty palatsi. Sulttaani piti lupauksensa, ja Aladdinin ja Jasminen häitä juhlittiin suurin menoin. He elivät onnellisina yhdessä, ja kaupungin asukkaat rakastivat Aladdinia hänen anteliaisuutensa vuoksi.",
+      "Kaukana kotimaassaan ilkeä velho sai kuitenkin selville, että Aladdin oli yhä elossa ja että tällä oli taikalamppu. Raivon vallassa hän matkusti takaisin kaupunkiin ja naamioitui vanhaksi kauppiaaksi. Kävellessään Aladdinin palatsin ohi Aladdinin ollessa metsästämässä hän huusi: ”Uusia lamppuja vanhoista! Vaihtakaa vanhat lamppunne kiiltäviin uusiin!”",
+      "Prinsessa Jasmine kuuli hänet ikkunasta. Hän ei tiennyt Aladdinin pölyisen vanhan lampun salaisuutta, joten hän lähetti palvelijan vaihtamaan sen kirkkaaseen uuteen. Heti kun velho sai taikalampun käsiinsä, hän nauroi julmasti ja hieraisi sitä. Hän käski henkeä kuljettamaan koko palatsin – prinsessa mukanaan – kaukaiseen autiomaahan Afrikkaan.",
+      "Kun Aladdin palasi, hänen palatsinsa ja vaimonsa olivat kadonneet. Sulttaani raivostui ja antoi Aladdinille neljäkymmentä päivää aikaa löytää tyttärensä. Sydän murtuneena Aladdin vaelsi maaseudulle. Pestessään käsiään joessa hän hieraisi vahingossa taikasormusta, jota yhä piti sormessaan. Sormuksen Henki ilmestyi. Se ei voinut kumota mahtavamman Lampun Hengen työtä, mutta se pystyi viemään Aladdinin palatsiin.",
+      "Silmänräpäyksessä Aladdin saapui autiomaahan ja hiipi palatsiin ikkunan kautta. Jasmine oli riemuissaan nähdessään hänet. Yhdessä he laativat suunnitelman. Sinä iltana prinsessa kutsui velhon päivälliselle ja kaatoi salaa vahvaa unijuomaa tämän pikariin. Velho joi sen ja vaipui syvään uneen.",
+      "Aladdin astui nopeasti esiin verhon takaa, otti taikalampun velhon vyöltä ja hieraisi sitä. Lampun Henki ilmestyi iloisena saadessaan jälleen palvella oikeaa mestariaan. Aladdin toivoi palatsin palaavan oikealle paikalleen ja ilkeän velhon jäävän autiomaahan ikuisesti.",
+      "Seuraavana aamuna sulttaani katsoi ulos ikkunastaan ja näki marmoripalatsin jälleen hohtavan auringossa. Aladdin ja Jasmine pääsivät jälleen yhteen perheensä kanssa, ja he elivät rauhassa ja onnessa koko loppuelämänsä."
+    ],
     "badge50": "🏆 Virstanpylväs: 50 sanaa",
     "storyTitle50": "Uuteen ihmiseen tutustuminen",
     "storyFull50": [
@@ -9320,7 +9833,11 @@ export const STORY_TRANSLATIONS = {
       "— Kyllä, asun hotellissa kadun toisella puolella.",
       "Kuinka kauan olet ollut siellä perjantaihin mennessä?",
       "— Perjantaihin mennessä olen ollut siellä kaksi päivää. Sen jälkeen lähden kotiin."
-    ]
+    ],
+    "statusLockedPro": "Vain PRO:ssa",
+    "proStoryHint": "Ainutlaatuinen satu PRO-tilaajille",
+    "audioNarrator": "Kuuntele koko satu",
+    "audioLoading": "Ladataan ääntä..."
   },
   "hr": {
     "btnShowTranslation": "Prikaži prijevod",
@@ -9342,6 +9859,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Bajka",
+    "storyTitle1": "Aladin i čarobna svjetiljka",
+    "storyFull1": [
+      "Davno, u živahnome gradu na Istoku, živio je siromašan dječak po imenu Aladin. Otac mu je umro dok je Aladin bio sasvim malen, pa je živio sam s majkom. Imali su vrlo malo novca, a majka je svakoga dana naporno radila predući pamuk kako bi kupila hranu. Aladin je bio dobar dječak, ali se radije igrao na ulicama s prijateljima nego što je radio.",
+      "Jednoga dana u grad je stigao visok stranac. Zapravo je bio opaki čarobnjak iz daleke zemlje, ali je imao lukav naum. Prišao je Aladinu na tržnici i srdačno mu se nasmiješio. „Moj dragi dječače!“ reče. „Ja sam brat tvojega oca. Putovao sam mnogo godina kako bih te pronašao i pomogao tvojoj obitelji.“",
+      "Aladin se iznenadio, a majka mu je bila presretna. Stranac je Aladinu kupio lijepu novu odjeću, a njegovoj majci dao zlatnike. Sljedećega jutra čarobnjak je zamolio Aladina da pođe s njim u šetnju izvan grada. Hodali su satima dok nisu stigli do tihe doline između dviju visokih planina.",
+      "Čarobnjak je zapalio malu vatru, bacio u nju nekakav neobičan prah i izgovorio čarobne riječi. Odjednom se tlo zatreslo i pojavila se teška kamena ploča s mjedenim prstenom u sredini. „Ispod ovoga kamena nalazi se tajna špilja“, reče čarobnjak. „Samo ti možeš ući u nju. Siđi niz stube, prođi kroz dvorane zlata i dragulja i ništa ne diraj. Na samome kraju pronaći ćeš staru uljanu svjetiljku. Donesi mi je.“ Prije nego što je Aladin sišao, čarobnjak mu je radi zaštite nataknuo čarobni prsten na prst.",
+      "Aladin se spustio u špilju. Prizor je oduzimao dah. Stabla su bila prepuna blistavih rubina, smaragda i dijamanata. Aladin se sjetio upozorenja, iako je u džepove stavio nekoliko sjajnih plodova sa stabala misleći da su samo lijepo staklo. Na kraju špilje pronašao je prašnjavu staru svjetiljku.",
+      "Kada se Aladin vratio do ulaza, stube su bile prestrme da bi se popeo držeći svjetiljku. „Prvo mi daj svjetiljku, pa ću te izvući!“ ljutito je povikao čarobnjak. Aladin se bojao da će ga taj čovjek ostaviti unutra, pa je odbio. Bijesan, čarobnjak je izgovorio drugu čaroliju, a teški se kamen uz tresak zatvorio i zarobio Aladina u tami.",
+      "Dva je dana Aladin sjedio u mraku, plakao i molio se. Slučajno je protrljao čarobni prsten na svome prstu. Istoga se trena u oblaku dima pojavio golem duh. „Ja sam Duh prstena“, zagrmio je duh. „Koja je tvoja želja?“",
+      "„Odvedi me kući mojoj majci!“ povikao je Aladin. U tren oka Aladin je stajao u svojoj kući, još uvijek držeći staru svjetiljku.",
+      "Kad je Aladinova majka ugledala prljavu svjetiljku, odlučila ju je očistiti kako bi je mogli prodati za hranu. Čim ju je protrljala, iz grlića je suknuo golem, moćan duh i ispunio cijelu sobu. „Ja sam Duh svjetiljke!“ zagrmio je. „Tvoja je želja moja zapovijed.“",
+      "Aladin je brzo zatražio gozbu. Odmah su se na stolu pojavili srebrni tanjuri puni slasne hrane. Od toga dana Aladin i njegova majka više nikada nisu bili gladni. Aladin je prodavao srebrne tanjure i mudro koristio svjetiljku te odrastao u pristojna, obrazovana i naočita mladića.",
+      "Godinama poslije Aladin je vidio sultanovu kćer, princezu Jasminu, kako jaše kroz grad. Bila je najljepša žena koju je ikada vidio i duboko se zaljubio u nju. Aladin je poslao svoju majku u sultanovu palaču sa zdjelom punom blistavih dragulja koje je uzeo iz špilje. Sultan je bio zadivljen darom, ali je zatražio još nešto: Aladin je morao u jednoj jedinoj noći sagraditi veličanstvenu palaču za princezu.",
+      "Aladin je protrljao čarobnu svjetiljku i do sljedećega jutra nasuprot sultanovu domu stajala je palača od bijeloga mramora i zlata. Sultan je održao obećanje, a Aladin i Jasmina vjenčali su se uz veliku svečanost. Sretno su živjeli zajedno, a stanovnici grada voljeli su Aladina zbog njegove velikodušnosti.",
+      "Međutim, daleko u svojoj domovini, opaki je čarobnjak otkrio da je Aladin još uvijek živ i da ima čarobnu svjetiljku. Obuzet bijesom, vratio se u grad i prerušio u staroga trgovca. Prolazeći pokraj Aladinove palače dok je Aladin bio u lovu, vikao je: „Nove svjetiljke za stare! Zamijenite svoje stare svjetiljke za sjajne nove!“",
+      "Princeza Jasmina čula ga je s prozora. Nije znala tajnu Aladinove prašnjave stare svjetiljke, pa je poslala slugu da je zamijeni za blistavu novu. Čim je čarobnjak uzeo čarobnu svjetiljku u ruke, okrutno se nasmijao i protrljao je. Zapovjedio je duhu da cijelu palaču – s princezom unutra – prenese u daleku pustinju u Africi.",
+      "Kad se Aladin vratio, njegove palače i žene više nije bilo. Sultan je bio bijesan i dao je Aladinu četrdeset dana da pronađe njegovu kćer. Slomljena srca, Aladin je lutao seoskim krajevima. Dok je prao ruke u rijeci, slučajno je protrljao čarobni prsten koji je još nosio. Pojavio se Duh prstena. Nije mogao poništiti djelo moćnijega Duha svjetiljke, ali je mogao odvesti Aladina do palače.",
+      "U tren oka Aladin je stigao u pustinju i kroz prozor se ušuljao u palaču. Jasmina je bila presretna kad ga je ugledala. Zajedno su skovali plan. Te je večeri princeza pozvala čarobnjaka na večeru i potajno mu u pehar ulila snažan napitak za spavanje. Čarobnjak ga je popio i utonuo u dubok san.",
+      "Aladin je brzo iskoračio iza zastora, uzeo čarobnu svjetiljku s čarobnjakova pojasa i protrljao je. Pojavio se Duh svjetiljke, presretan što ponovno služi svome pravome gospodaru. Aladin je poželio da se palača vrati na svoje pravo mjesto, ostavivši opakoga čarobnjaka zauvijek u pustinji.",
+      "Sljedećega jutra sultan je pogledao kroz prozor i ugledao mramornu palaču kako ponovno blista na suncu. Aladin i Jasmina ponovno su se ujedinili sa svojom obitelji te su do kraja života živjeli u miru i sreći."
+    ],
     "badge50": "🏆 Prekretnica: 50 riječi",
     "storyTitle50": "Upoznavanje",
     "storyFull50": [
@@ -9786,7 +10325,11 @@ export const STORY_TRANSLATIONS = {
       "— Da, odsjest ću u hotelu preko puta.",
       "— Koliko ćeš dugo biti tamo do petka?",
       "— Do petka ću tamo biti već dva dana. Zatim ću krenuti kući."
-    ]
+    ],
+    "statusLockedPro": "Samo u PRO",
+    "proStoryHint": "Ekskluzivna bajka za PRO članove",
+    "audioNarrator": "Poslušajte cijelu bajku",
+    "audioLoading": "Učitavanje zvuka..."
   },
   "cs": {
     "btnShowTranslation": "Zobrazit překlad",
@@ -9808,6 +10351,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Pohádka",
+    "storyTitle1": "Aladin a kouzelná lampa",
+    "storyFull1": [
+      "Kdysi dávno žil v rušném městě na Východě chudý chlapec jménem Aladin. Jeho otec zemřel, když byl Aladin ještě velmi malý, a tak žil sám se svou matkou. Měli pramálo peněz a matka každý den tvrdě pracovala a předla bavlnu, aby mohla koupit jídlo. Aladin byl dobrosrdečný chlapec, ale místo práce si raději hrával na ulicích se svými kamarády.",
+      "Jednoho dne přišel do města vysoký cizinec. Ve skutečnosti to byl zlý čaroděj z daleké země, ale měl chytrý plán. Přistoupil na tržišti k Aladinovi a vřele se usmál. „Můj milý chlapče!“ řekl. „Jsem bratr tvého otce. Putoval jsem mnoho let, abych tě našel a pomohl tvé rodině.“",
+      "Aladin byl překvapený a jeho matka byla štěstím bez sebe. Cizinec koupil Aladinovi krásné nové šaty a jeho matce dal zlaté mince. Příštího rána požádal čaroděj Aladina, aby se s ním prošel za město. Šli dlouhé hodiny, až došli do tichého údolí mezi dvěma vysokými horami.",
+      "Čaroděj rozdělal malý oheň, vhodil do něj jakýsi podivný prášek a pronesl kouzelná slova. Najednou se země zachvěla a objevila se těžká kamenná deska s mosazným kruhem uprostřed. „Pod tímto kamenem je tajná jeskyně,“ řekl čaroděj. „Jen ty do ní můžeš vstoupit. Sejdi po schodech, projdi síněmi zlata a drahokamů a ničeho se nedotýkej. Úplně na konci najdeš starou olejovou lampu. Přines mi ji.“ Než Aladin sestoupil dolů, navlékl mu čaroděj na prst kouzelný prsten pro ochranu.",
+      "Aladin slezl do jeskyně. Byla dechberoucí. Stromy byly obsypány třpytivými rubíny, smaragdy a diamanty. Aladin si pamatoval varování, přesto si však do kapes strčil několik zářivých plodů ze stromů, protože si myslel, že je to jen hezké sklo. Na konci jeskyně našel zaprášenou starou lampu.",
+      "Když se Aladin vrátil ke vchodu, schody byly příliš strmé na to, aby po nich vylezl s lampou v ruce. „Nejdřív mi podej lampu, a pak tě vytáhnu!“ vykřikl čaroděj zlostně. Aladin se bál, že ho ten muž nechá uvnitř, a tak odmítl. Rozzuřený čaroděj pronesl další zaklínadlo a těžký kámen se s rachotem zavřel a uvěznil Aladina ve tmě.",
+      "Dva dny seděl Aladin v temnotě, plakal a modlil se. Náhodou přitom třel kouzelný prsten na svém prstu. Okamžitě se v oblaku dýmu zjevil obrovský džin. „Jsem Džin prstenu,“ zahřměl duch. „Jaké je tvé přání?“",
+      "„Odnes mě domů k mamince!“ zvolal Aladin. V mžiku oka stál Aladin ve svém vlastním domě a stále držel starou lampu.",
+      "Když Aladinova matka uviděla špinavou lampu, rozhodla se ji vyčistit, aby ji mohli prodat na jídlo. Jakmile ji začala třít, z hubice vyrazil obří, mocný džin a zaplnil celou místnost. „Jsem Džin lampy!“ zahřměl. „Tvé přání je mým rozkazem.“",
+      "Aladin si rychle vyžádal hostinu. Na stole se ihned objevily stříbrné podnosy plné lahodného jídla. Od toho dne už Aladin a jeho matka nikdy nehladověli. Aladin prodával stříbrné podnosy a lampu používal moudře, až vyrostl ve zdvořilého, vzdělaného a pohledného mladého muže.",
+      "O několik let později spatřil Aladin sultánovu dceru, princeznu Jasmínu, jak projíždí městem. Byla to nejkrásnější žena, jakou kdy viděl, a hluboce se do ní zamiloval. Aladin poslal svou matku do sultánova paláce s mísou plnou třpytivých drahokamů, které si vzal z jeskyně. Sultán byl darem ohromen, ale požadoval ještě jednu věc: Aladin musel za jedinou noc postavit pro princeznu velkolepý palác.",
+      "Aladin třel kouzelnou lampu a do druhého rána stál naproti sultánovu sídlu palác z bílého mramoru a zlata. Sultán dodržel svůj slib a Aladin s Jasmínou se vzali na veliké slavnosti. Žili spolu šťastně a obyvatelé města Aladina milovali pro jeho štědrost.",
+      "Daleko ve své vlasti však zlý čaroděj zjistil, že Aladin je stále naživu a má kouzelnou lampu. Plný hněvu se vrátil do města a přestrojil se za starého kupce. Když kráčel kolem Aladinova paláce v době, kdy byl Aladin na lovu, volal: „Nové lampy za staré! Vyměňte své staré lampy za zářivě nové!“",
+      "Princezna Jasmína ho zaslechla z okna. Neznala tajemství Aladinovy zaprášené staré lampy, a tak poslala sluhu, aby ji vyměnil za blyštivou novou. Ve chvíli, kdy čaroděj držel kouzelnou lampu v ruce, krutě se zasmál a třel ji. Přikázal džinovi, aby celý palác – i s princeznou uvnitř – přenesl do daleké pouště v Africe.",
+      "Když se Aladin vrátil, jeho palác i žena byli pryč. Sultán byl rozzuřený a dal Aladinovi čtyřicet dní na to, aby našel jeho dceru. Se zlomeným srdcem bloudil Aladin po krajině. Když si v řece umýval ruce, nechtěně třel kouzelný prsten, který stále nosil. Zjevil se Džin prstenu. Nemohl zvrátit dílo mocnějšího Džina lampy, ale dokázal Aladina k paláci přenést.",
+      "V jediném okamžiku se Aladin ocitl v poušti a oknem se vplížil do paláce. Jasmína byla bez sebe radostí, když ho uviděla. Společně vymysleli plán. Ten večer pozvala princezna čaroděje na večeři a tajně mu do poháru vlila silný uspávací nápoj. Čaroděj ho vypil a upadl do hlubokého spánku.",
+      "Aladin rychle vystoupil zpoza závěsu, vzal kouzelnou lampu z čarodějova opasku a třel ji. Zjevil se Džin lampy, šťastný, že může opět sloužit svému pravému pánovi. Aladin si přál, aby se palác vrátil na své právoplatné místo a zlý čaroděj zůstal v poušti navždy.",
+      "Druhého rána vyhlédl sultán z okna a spatřil mramorový palác, jak se znovu třpytí ve slunci. Aladin a Jasmína se opět shledali se svou rodinou a žili v míru a štěstí po zbytek svých dnů."
+    ],
     "badge50": "🏆 Milník: 50 slov",
     "storyTitle50": "Seznamování",
     "storyFull50": [
@@ -10252,7 +10817,11 @@ export const STORY_TRANSLATIONS = {
       "— Ano, budu bydlet v hotelu na druhé straně ulice.",
       "— Jak dlouho tam budeš do pátku?",
       "— V pátek už tam budu dva dny. Potom se vydám domů."
-    ]
+    ],
+    "statusLockedPro": "Pouze v PRO",
+    "proStoryHint": "Exkluzivní pohádka pro předplatitele PRO",
+    "audioNarrator": "Poslechnout si celou pohádku",
+    "audioLoading": "Načítání zvuku..."
   },
   "sv": {
     "btnShowTranslation": "Visa översättning",
@@ -10274,6 +10843,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Saga",
+    "storyTitle1": "Aladdin och den magiska lampan",
+    "storyFull1": [
+      "För länge sedan, i en livlig stad i Österlandet, bodde en fattig pojke som hette Aladdin. Hans far hade dött när Aladdin var mycket liten, så han bodde ensam med sin mor. De hade väldigt lite pengar, och hans mor arbetade hårt varje dag med att spinna bomull för att kunna köpa mat. Aladdin var en snäll pojke, men han föredrog att leka på gatorna med sina vänner i stället för att arbeta.",
+      "En dag kom en lång främling till staden. I själva verket var han en ond trollkarl från ett land långt borta, och han hade en slug plan. Han gick fram till Aladdin på marknaden och log varmt. ”Min käre gosse!” sade han. ”Jag är din fars bror. Jag har rest i många år för att finna dig och hjälpa er familj.”",
+      "Aladdin blev förvånad, och hans mor blev överlycklig. Främlingen köpte fina nya kläder åt Aladdin och gav hans mor guldmynt. Nästa morgon bad trollkarlen Aladdin att följa med på en promenad utanför staden. De vandrade i timmar tills de nådde en stilla dal mellan två höga berg.",
+      "Trollkarlen gjorde upp en liten eld, kastade ett sällsamt pulver i den och uttalade magiska ord. Plötsligt skakade marken, och en tung stenplatta med en mässingsring i mitten visade sig. ”Under den här stenen finns en hemlig grotta”, sade trollkarlen. ”Endast du kan gå in i den. Gå nerför trappan, vandra genom salarna av guld och ädelstenar och rör ingenting. Längst in kommer du att finna en gammal oljelampa. Hämta den till mig.” Innan Aladdin steg ner trädde trollkarlen en magisk ring på Aladdins finger till skydd.",
+      "Aladdin klättrade ner i grottan. Synen var hisnande. Träden var täckta av gnistrande rubiner, smaragder och diamanter. Aladdin kom ihåg varningen, men han stoppade ändå några lysande frukter från träden i fickorna eftersom han trodde att de bara var vackert glas. Längst in i grottan fann han den dammiga gamla lampan.",
+      "När Aladdin återvände till ingången var trappan för brant att klättra uppför medan han höll i lampan. ”Ge mig lampan först, så drar jag upp dig sedan!” skrek trollkarlen argt. Aladdin var rädd att mannen skulle lämna honom kvar, så han vägrade. Rasande uttalade trollkarlen ännu en besvärjelse, och den tunga stenen slog igen och stängde in Aladdin i mörkret.",
+      "I två dagar satt Aladdin i mörkret, grät och bad. Av en händelse råkade han gnida på den magiska ringen på sitt finger. Genast dök en väldig ande upp i ett rökmoln. ”Jag är Ringens Ande”, dundrade anden. ”Vad är din önskan?”",
+      "”För mig hem till min mor!” ropade Aladdin. I ett ögonblick stod Aladdin i sitt eget hus, fortfarande med den gamla lampan i handen.",
+      "När Aladdins mor fick se den smutsiga lampan bestämde hon sig för att putsa den så att de kunde sälja den och köpa mat. Så fort hon gned den for en jättelik, mäktig ande ut ur pipen och fyllde hela rummet. ”Jag är Lampans Ande!” dundrade han. ”Din önskan är min lag.”",
+      "Aladdin bad genast om en festmåltid. Genast dök silverfat fyllda med utsökt mat upp på bordet. Från den dagen gick Aladdin och hans mor aldrig hungriga igen. Aladdin sålde silverfaten och använde lampan vist, och växte upp till en artig, bildad och ståtlig ung man.",
+      "Åratal senare såg Aladdin sultanens dotter, prinsessan Jasmin, rida genom staden. Hon var den vackraste kvinna han någonsin hade sett, och han blev djupt förälskad i henne. Aladdin skickade sin mor till sultanens palats med en skål full av de gnistrande ädelstenar han hade tagit från grottan. Sultanen häpnade över gåvan, men ställde ännu ett krav: Aladdin måste bygga ett storslaget palats åt prinsessan på en enda natt.",
+      "Aladdin gned den magiska lampan, och nästa morgon stod ett palats av vit marmor och guld mitt emot sultanens hem. Sultanen höll sitt löfte, och Aladdin och Jasmin gifte sig under stor festyra. De levde lyckliga tillsammans, och stadens invånare älskade Aladdin för hans givmildhet.",
+      "Långt borta i sitt hemland upptäckte emellertid den onde trollkarlen att Aladdin fortfarande levde och ägde den magiska lampan. Fylld av raseri reste han tillbaka till staden och klädde ut sig till en gammal köpman. Medan han gick förbi Aladdins palats när Aladdin var ute på jakt ropade han: ”Nya lampor mot gamla! Byt era gamla lampor mot blanka nya!”",
+      "Prinsessan Jasmin hörde honom från fönstret. Hon kände inte till hemligheten med Aladdins dammiga gamla lampa, så hon skickade en tjänare för att byta den mot en skinande ny. I samma stund som trollkarlen höll den magiska lampan i sin hand skrattade han grymt och gned den. Han befallde anden att bära hela palatset – med prinsessan inuti – till en avlägsen öken i Afrika.",
+      "När Aladdin återvände var både hans palats och hans hustru borta. Sultanen blev ursinnig och gav Aladdin fyrtio dagar på sig att finna hans dotter. Med brustet hjärta vandrade Aladdin ut på landsbygden. När han tvättade händerna i en flod råkade han gnida på den magiska ringen som han fortfarande bar. Ringens Ande visade sig. Han kunde inte göra ogjort det som den mäktigare Lampans Ande hade utfört, men han kunde föra Aladdin till palatset.",
+      "På ett ögonblick anlände Aladdin till öknen och smög in i palatset genom ett fönster. Jasmin blev överlycklig av att se honom. Tillsammans gjorde de upp en plan. Den kvällen bjöd prinsessan trollkarlen på middag och hällde i hemlighet en stark sömndryck i hans bägare. Trollkarlen drack den och föll i djup sömn.",
+      "Aladdin steg snabbt fram bakom ett draperi, tog den magiska lampan från trollkarlens bälte och gned den. Lampans Ande visade sig, överlycklig över att få tjäna sin rätte herre igen. Aladdin önskade att palatset skulle föras tillbaka till sin rätta plats och att den onde trollkarlen skulle lämnas kvar i öknen för alltid.",
+      "Nästa morgon tittade sultanen ut genom sitt fönster och såg marmorpalatset glänsa i solen på nytt. Aladdin och Jasmin återförenades med sin familj, och de levde i frid och lycka i resten av sina dagar."
+    ],
     "badge50": "🏆 Milstolpe: 50 ord",
     "storyTitle50": "Att träffa någon ny",
     "storyFull50": [
@@ -10718,7 +11309,11 @@ export const STORY_TRANSLATIONS = {
       "— Ja, jag kommer att bo på ett hotell på andra sidan gatan.",
       "— Hur länge kommer du att ha varit där på fredag?",
       "— På fredag har jag varit där i två dagar. Sedan åker jag hem."
-    ]
+    ],
+    "statusLockedPro": "Endast i PRO",
+    "proStoryHint": "Exklusiv saga för PRO-medlemmar",
+    "audioNarrator": "Lyssna på hela sagan",
+    "audioLoading": "Laddar ljud..."
   },
   "et": {
     "btnShowTranslation": "Näita tõlget",
@@ -10740,6 +11335,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Boonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Muinasjutt",
+    "storyTitle1": "Aladin ja imelamp",
+    "storyFull1": [
+      "Ammusel ajal elas ühes elavas Idamaa linnas vaene poiss nimega Aladdin. Tema isa oli surnud, kui Aladdin oli veel päris väike, nii et ta elas kahekesi oma emaga. Neil oli väga vähe raha ja ema rügas iga päev puuvilla kedrates, et toitu osta. Aladdin oli lahke südamega poiss, kuid töö tegemise asemel mängis ta meelsamini tänavatel oma sõpradega.",
+      "Ühel päeval saabus linna pikka kasvu võõras. Tegelikult oli ta kaugelt maalt pärit kuri võlur, kellel oli kaval plaan. Ta astus turul Aladdini juurde ja naeratas soojalt. „Mu kallis poiss!“ ütles ta. „Mina olen su isa vend. Olen rännanud pikki aastaid, et sind leida ja teie peret aidata.“",
+      "Aladdin oli üllatunud ja tema ema oli üliõnnelik. Võõras ostis Aladdinile peened uued rõivad ja andis emale kuldmünte. Järgmisel hommikul palus võlur Aladdinil endaga linnast välja jalutama tulla. Nad kõndisid tunde, kuni jõudsid vaiksesse orgu kahe kõrge mäe vahel.",
+      "Võlur tegi väikese lõkke, viskas sellesse imelikku pulbrit ja lausus võlusõnad. Äkki vappus maa ning nähtavale ilmus raske kiviplaat, mille keskel oli pronksrõngas. „Selle kivi all on salajane koobas,“ ütles võlur. „Ainult sina saad sinna siseneda. Mine trepist alla, kõnni läbi kulla- ja kalliskivisaalide ning ära puuduta midagi. Päris lõpust leiad vana õlilambi. Too see mulle.“ Enne kui Aladdin alla laskus, libistas võlur kaitseks tema sõrme võlusõrmuse.",
+      "Aladdin ronis koopasse alla. Vaatepilt oli hingemattev. Puud olid kaetud sätendavate rubiinide, smaragdide ja teemantidega. Aladdin mäletas hoiatust, kuid pistis siiski mõned puude säravad viljad taskusse, pidades neid lihtsalt ilusaks klaasiks. Koopa lõpust leidis ta tolmuse vana lambi.",
+      "Kui Aladdin sissepääsu juurde tagasi jõudis, oli trepp liiga järsk, et lampi käes hoides üles ronida. „Anna mulle kõigepealt lamp ja siis ma tõmban su välja!“ hüüdis võlur vihaselt. Aladdin kartis, et mees jätab ta koopasse maha, ning keeldus. Maruvihasena lausus võlur uue loitsu ja raske kivi prantsatas kinni, jättes Aladdini pimedusse vangi.",
+      "Kaks päeva istus Aladdin pimeduses, nuttes ja palvetades. Kogemata hõõrus ta oma sõrmes olevat võlusõrmust. Silmapilkselt ilmus suitsupilvest tohutu džinn. „Mina olen Sõrmuse Vaim,“ kõmistas vaim. „Mis on sinu soov?“",
+      "„Vii mind koju ema juurde!“ hüüdis Aladdin. Ühe silmapilguga seisis Aladdin omaenda kodus, vana lamp endiselt käes.",
+      "Kui Aladdini ema määrdunud lampi nägi, otsustas ta selle puhtaks küürida, et nad saaksid selle toidu ostmiseks maha müüa. Niipea kui ta lampi hõõrus, purskus tilast välja hiiglaslik, vägev džinn, kes täitis kogu toa. „Mina olen Lambi Vaim!“ müristas ta. „Sinu soov on mulle käsuks.“",
+      "Aladdin palus kiiresti pidusööki. Otsekohe ilmusid lauale maitsvate roogadega täidetud hõbevaagnad. Sellest päevast peale ei tundnud Aladdin ja tema ema enam kunagi nälga. Aladdin müüs hõbevaagnaid ja kasutas lampi targasti, sirgudes viisakaks, haritud ja nägusaks noormeheks.",
+      "Aastaid hiljem nägi Aladdin sultani tütart, printsess Jasmiini, läbi linna ratsutamas. Ta oli kauneim naine, keda Aladdin eales näinud oli, ja noormees armus temasse sügavalt. Aladdin saatis oma ema sultani paleesse kausiga, mis oli täis koopast toodud sätendavaid kalliskive. Sultan oli kingitusest hämmastunud, kuid esitas veel ühe nõudmise: Aladdin pidi ehitama printsessile üheainsa ööga uhke palee.",
+      "Aladdin hõõrus võlulampi ja järgmiseks hommikuks seisis sultani kodu vastas valgest marmorist ja kullast palee. Sultan pidas oma sõna ning Aladdin ja Jasmiin abiellusid suurejoonelisel pidustusel. Nad elasid koos õnnelikult ja linnarahvas armastas Aladdini tema helduse pärast.",
+      "Kuid kaugel oma kodumaal sai kuri võlur teada, et Aladdin on endiselt elus ja võlulamp on tema käes. Raevust pulbitsedes rändas ta linna tagasi ja maskeeris end vanaks kaupmeheks. Kui Aladdin oli jahil, kõndis võlur tema paleest mööda ja hüüdis: „Uued lambid vanade vastu! Vahetage oma vanad lambid läikivate uute vastu!“",
+      "Printsess Jasmiin kuulis teda aknast. Ta ei teadnud Aladdini tolmuse vana lambi saladust, mistõttu saatis teenri seda särava uue vastu vahetama. Sel hetkel, kui võlur võlulambi enda kätte sai, naeris ta julmalt ja hõõrus seda. Ta käskis vaimul kanda kogu palee – koos printsessiga – kaugesse Aafrika kõrbe.",
+      "Kui Aladdin naasis, olid nii tema palee kui ka naine kadunud. Sultan oli marus ja andis Aladdinile nelikümmend päeva oma tütre leidmiseks. Murtud südamega eksles Aladdin maal ringi. Jões käsi pestes hõõrus ta kogemata võlusõrmust, mida ta ikka veel kandis. Ilmus Sõrmuse Vaim. Tema ei saanud tühistada vägevama Lambi Vaimu tegu, kuid ta sai viia Aladdini palee juurde.",
+      "Silmapilguga jõudis Aladdin kõrbe ja hiilis akna kaudu paleesse. Jasmiin oli teda nähes üliõnnelik. Koos pidasid nad plaani. Tol õhtul kutsus printsess võluri õhtusöögile ja valas salaja tema karikasse tugevat unerohtu. Võlur jõi selle ära ja vajus sügavasse unne.",
+      "Aladdin astus kiiresti kardina tagant välja, võttis võluri vöölt võlulambi ja hõõrus seda. Ilmus Lambi Vaim, kel oli rõõm taas oma tõelist isandat teenida. Aladdin soovis, et palee viidaks tagasi oma õigele kohale ja kuri võlur jääks igaveseks kõrbesse maha.",
+      "Järgmisel hommikul vaatas sultan aknast välja ja nägi marmorpaleed taas päikese käes säramas. Aladdin ja Jasmiin said oma perega taas kokku ning nad elasid rahus ja õnnes kogu oma ülejäänud elu."
+    ],
     "badge50": "🏆 Teetähis: 50 sõna",
     "storyTitle50": "Uue inimesega tutvumine",
     "storyFull50": [
@@ -11184,7 +11801,11 @@ export const STORY_TRANSLATIONS = {
       "— Jah, ööbin teisel pool tänavat asuvas hotellis.",
       "— Kui kaua oled sa reedeks seal olnud?",
       "— Reedeks olen seal olnud kaks päeva. Seejärel asun koduteele."
-    ]
+    ],
+    "statusLockedPro": "Ainult PRO-s",
+    "proStoryHint": "Eksklusiivne muinasjutt PRO liikmetele",
+    "audioNarrator": "Kuula kogu muinasjuttu",
+    "audioLoading": "Heli laadimine..."
   },
   "hi": {
     "btnShowTranslation": "अनुवाद दिखाएं",
@@ -11206,6 +11827,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 बोनस",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 परीकथा",
+    "storyTitle1": "अलादीन और जादुई चिराग",
+    "storyFull1": [
+      "बहुत समय पहले, पूरब के एक व्यस्त शहर में अलादीन नाम का एक गरीब लड़का रहता था। जब अलादीन बहुत छोटा था, तभी उसके पिता की मृत्यु हो गई थी, इसलिए वह अपनी माँ के साथ अकेला रहता था। उनके पास बहुत कम पैसे थे, और उसकी माँ भोजन खरीदने के लिए हर दिन रुई कातकर कड़ी मेहनत करती थी। अलादीन एक नेक दिल लड़का था, लेकिन काम करने के बजाय उसे अपने दोस्तों के साथ गलियों में खेलना ज़्यादा पसंद था।",
+      "एक दिन, शहर में एक लंबा अजनबी आया। असल में वह किसी दूर देश का एक दुष्ट जादूगर था, लेकिन उसके पास एक चालाकी भरी योजना थी। वह बाज़ार में अलादीन के पास आया और गर्मजोशी से मुस्कुराया। “मेरे प्यारे बच्चे!” उसने कहा। “मैं तुम्हारे पिता का भाई हूँ। मैं तुम्हें खोजने और तुम्हारे परिवार की मदद करने के लिए कई सालों से यात्रा कर रहा हूँ।”",
+      "अलादीन हैरान रह गया और उसकी माँ खुशी से फूली न समाई। अजनबी ने अलादीन को सुंदर नए कपड़े खरीदकर दिए और उसकी माँ को सोने के सिक्के दिए। अगली सुबह, जादूगर ने अलादीन से शहर के बाहर अपने साथ टहलने चलने को कहा। वे घंटों चलते रहे, जब तक कि वे दो ऊँचे पहाड़ों के बीच एक शांत घाटी में नहीं पहुँच गए।",
+      "जादूगर ने एक छोटी सी आग जलाई, उसमें कोई अजीब सा चूर्ण डाला और जादुई मंत्र बोले। अचानक धरती हिलने लगी और एक भारी पत्थर की शिला प्रकट हुई, जिसके बीच में पीतल का एक छल्ला लगा था। “इस पत्थर के नीचे एक गुप्त गुफा है,” जादूगर ने कहा। “इसमें केवल तुम ही प्रवेश कर सकते हो। सीढ़ियों से नीचे जाओ, सोने और जवाहरात से भरे कमरों से होकर गुज़रो और किसी भी चीज़ को हाथ मत लगाना। बिल्कुल अंत में तुम्हें एक पुराना तेल का चिराग़ मिलेगा। उसे मेरे पास ले आना।” अलादीन के नीचे जाने से पहले, जादूगर ने सुरक्षा के लिए उसकी उंगली में एक जादुई अंगूठी पहना दी।",
+      "अलादीन गुफा के अंदर उतरा। वहाँ का नज़ारा साँसें थाम लेने वाला था। पेड़ चमकते हुए माणिक, पन्ने और हीरों से लदे हुए थे। अलादीन को चेतावनी याद थी, फिर भी उसने पेड़ों से कुछ चमकदार फल तोड़कर अपनी जेबों में रख लिए, यह सोचकर कि वे बस सुंदर काँच के टुकड़े हैं। गुफा के अंत में उसे वह धूल भरा पुराना चिराग़ मिल गया।",
+      "जब अलादीन प्रवेश द्वार पर लौटा, तो हाथ में चिराग़ पकड़े हुए उन खड़ी सीढ़ियों पर चढ़ना बहुत मुश्किल था। “पहले मुझे चिराग़ दे दो, फिर मैं तुम्हें बाहर खींच लूँगा!” जादूगर ने गुस्से से चिल्लाकर कहा। अलादीन को डर था कि वह आदमी उसे अंदर ही छोड़कर चला जाएगा, इसलिए उसने मना कर दिया। क्रोधित होकर जादूगर ने एक और मंत्र पढ़ा, और भारी पत्थर धड़ाम से बंद हो गया, जिससे अलादीन अंधेरे में कैद हो गया।",
+      "दो दिनों तक अलादीन अंधेरे में बैठा रोता और प्रार्थना करता रहा। अनजाने में ही उससे अपनी उंगली में पहनी जादुई अंगूठी रगड़ी गई। तुरंत ही धुएँ के एक बादल में एक विशाल जिन्न प्रकट हुआ। “मैं अंगूठी का जिन्न हूँ,” उस प्रेत ने गरजकर कहा। “तुम्हारी क्या इच्छा है?”",
+      "“मुझे घर मेरी माँ के पास ले चलो!” अलादीन चिल्लाया। पलक झपकते ही अलादीन अपने ही घर में खड़ा था, और उसके हाथ में अब भी वह पुराना चिराग़ था।",
+      "जब अलादीन की माँ ने वह गंदा चिराग़ देखा, तो उसने उसे साफ करने का फैसला किया ताकि वे उसे बेचकर खाना खरीद सकें। जैसे ही उसने चिराग़ को रगड़ा, उसकी टोंटी से एक विशाल, शक्तिशाली जिन्न बाहर निकला और पूरे कमरे में छा गया। “मैं चिराग़ का जिन्न हूँ!” वह गरजा। “तुम्हारी इच्छा ही मेरा आदेश है।”",
+      "अलादीन ने तुरंत एक शानदार दावत माँगी। पल भर में ही स्वादिष्ट भोजन से सजी चाँदी की थालियाँ मेज़ पर प्रकट हो गईं। उस दिन के बाद से अलादीन और उसकी माँ फिर कभी भूखे नहीं रहे। अलादीन ने चाँदी की थालियाँ बेचीं और चिराग़ का समझदारी से इस्तेमाल किया, और वह बड़ा होकर एक विनम्र, शिक्षित और सुंदर युवक बन गया।",
+      "बरसों बाद, अलादीन ने सुल्तान की बेटी, राजकुमारी जैस्मीन को शहर से गुज़रते हुए देखा। वह अब तक की उसकी देखी सबसे सुंदर स्त्री थी, और उसे उससे गहरा प्रेम हो गया। अलादीन ने अपनी माँ को गुफा से लाए गए चमकते जवाहरात से भरा एक कटोरा लेकर सुल्तान के महल भेजा। सुल्तान उस उपहार से चकित रह गया, लेकिन उसने एक और शर्त रख दी: अलादीन को एक ही रात में राजकुमारी के लिए एक भव्य महल बनवाना होगा।",
+      "अलादीन ने जादुई चिराग़ को रगड़ा, और अगली सुबह तक सुल्तान के महल के ठीक सामने सफेद संगमरमर और सोने का एक महल खड़ा था। सुल्तान ने अपना वचन निभाया, और बड़े धूमधाम से अलादीन और जैस्मीन का विवाह हो गया। वे साथ मिलकर खुशी-खुशी रहने लगे, और शहर के लोग अलादीन की उदारता के कारण उससे बहुत प्रेम करते थे।",
+      "हालाँकि, अपने दूर देश में उस दुष्ट जादूगर को पता चल गया कि अलादीन अभी भी ज़िंदा है और जादुई चिराग़ उसी के पास है। क्रोध से भरकर वह वापस शहर आया और एक बूढ़े व्यापारी का वेश धारण कर लिया। जब अलादीन शिकार पर गया हुआ था, तब वह अलादीन के महल के पास से गुज़रते हुए चिल्लाने लगा, “पुराने के बदले नए चिराग़! अपने पुराने चिराग़ देकर चमकते नए चिराग़ ले लो!”",
+      "राजकुमारी जैस्मीन ने खिड़की से उसकी आवाज़ सुनी। उसे अलादीन के धूल भरे पुराने चिराग़ का रहस्य नहीं पता था, इसलिए उसने एक सेवक को भेजकर उसे एक चमकदार नए चिराग़ से बदलवा दिया। जिस पल जादूगर के हाथ में वह जादुई चिराग़ आया, वह क्रूरता से हँसा और उसने उसे रगड़ा। उसने जिन्न को आदेश दिया कि पूरे महल को—राजकुमारी समेत—अफ्रीका के किसी दूरदराज़ के रेगिस्तान में ले जाए।",
+      "जब अलादीन लौटा, तो उसका महल और उसकी पत्नी दोनों गायब थे। सुल्तान बेहद क्रोधित हुआ और उसने अलादीन को अपनी बेटी को खोजने के लिए चालीस दिन की मोहलत दी। टूटे हुए दिल के साथ अलादीन ग्रामीण इलाकों में भटकने लगा। जब वह एक नदी में अपने हाथ धो रहा था, तो अनजाने में उससे वही जादुई अंगूठी रगड़ी गई जो वह अब भी पहने हुए था। अंगूठी का जिन्न प्रकट हुआ। वह चिराग़ के अधिक शक्तिशाली जिन्न के किए को तो नहीं बदल सकता था, लेकिन वह अलादीन को उस महल तक पहुँचा सकता था।",
+      "पल भर में अलादीन रेगिस्तान में पहुँच गया और एक खिड़की के रास्ते चुपके से महल में घुस गया। जैस्मीन उसे देखकर खुशी से झूम उठी। दोनों ने मिलकर एक योजना बनाई। उस शाम, राजकुमारी ने जादूगर को रात्रिभोज पर आमंत्रित किया और चुपके से उसके प्याले में नींद की तेज़ दवा मिला दी। जादूगर ने उसे पी लिया और गहरी नींद में सो गया।",
+      "अलादीन जल्दी से पर्दे के पीछे से बाहर निकला, उसने जादूगर की कमर से जादुई चिराग़ निकाला और उसे रगड़ा। चिराग़ का जिन्न प्रकट हुआ, जो अपने सच्चे मालिक की फिर से सेवा करने के लिए बेहद प्रसन्न था। अलादीन ने इच्छा जताई कि महल को वापस उसके असली स्थान पर पहुँचा दिया जाए, और वह दुष्ट जादूगर हमेशा के लिए रेगिस्तान में ही पीछे छूट जाए।",
+      "अगली सुबह, सुल्तान ने अपनी खिड़की से बाहर देखा तो पाया कि संगमरमर का महल एक बार फिर धूप में चमक रहा था। अलादीन और जैस्मीन अपने परिवार से फिर से मिल गए, और वे अपने पूरे जीवन शांति और खुशी के साथ रहे।"
+    ],
     "badge50": "🏆 मील का पत्थर: 50 शब्द",
     "storyTitle50": "किसी नए व्यक्ति से मिलना",
     "storyFull50": [
@@ -11650,7 +12293,11 @@ export const STORY_TRANSLATIONS = {
       "— हाँ, मैं सड़क के उस पार एक होटल में ठहरूँगा।",
       "— शुक्रवार तक तुम्हें वहाँ आए कितना समय हो चुका होगा?",
       "— शुक्रवार तक मुझे वहाँ दो दिन हो चुके होंगे। फिर मैं घर के लिए रवाना हो जाऊँगा।"
-    ]
+    ],
+    "statusLockedPro": "केवल PRO में",
+    "proStoryHint": "PRO सदस्यों के लिए विशेष परीकथा",
+    "audioNarrator": "पूरी कहानी सुनें",
+    "audioLoading": "ऑडियो लोड हो रहा है..."
   },
   "bn": {
     "btnShowTranslation": "অনুবাদ দেখুন",
@@ -11672,6 +12319,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 বোনাস",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 রূপকথা",
+    "storyTitle1": "আলাদিন ও জাদুর প্রদীপ",
+    "storyFull1": [
+      "অনেক কাল আগে, প্রাচ্যের এক ব্যস্ত শহরে আলাদিন নামে এক গরিব ছেলে বাস করত। আলাদিন যখন খুব ছোট ছিল, তখনই তার বাবা মারা যান, তাই সে তার মায়ের সাথে একাই থাকত। তাদের কাছে খুব সামান্যই টাকা ছিল, আর তার মা খাবার কেনার জন্য প্রতিদিন সুতো কেটে কঠোর পরিশ্রম করতেন। আলাদিন ভালো স্বভাবের ছেলে ছিল, কিন্তু কাজ করার চেয়ে বন্ধুদের সাথে রাস্তায় খেলাধুলা করতেই সে বেশি ভালোবাসত।",
+      "একদিন, শহরে এক লম্বা আগন্তুক এল। আসলে সে ছিল দূর দেশের এক দুষ্ট জাদুকর, তবে তার মাথায় ছিল এক চতুর ফন্দি। সে বাজারে আলাদিনের কাছে এগিয়ে এল এবং আন্তরিকভাবে হাসল। “আমার প্রিয় বাছা!” সে বলল। “আমি তোমার বাবার ভাই। তোমাদের খুঁজে বের করতে আর তোমাদের পরিবারকে সাহায্য করতে আমি বহু বছর ধরে ভ্রমণ করে এসেছি।”",
+      "আলাদিন অবাক হলো, আর তার মা আনন্দে আত্মহারা হয়ে গেলেন। আগন্তুকটি আলাদিনকে সুন্দর নতুন জামাকাপড় কিনে দিল এবং তার মাকে সোনার মোহর দিল। পরদিন সকালে, জাদুকর আলাদিনকে তার সাথে শহরের বাইরে হাঁটতে যাওয়ার জন্য অনুরোধ করল। তারা ঘণ্টার পর ঘণ্টা হাঁটতে হাঁটতে দুটি উঁচু পাহাড়ের মাঝখানে এক নির্জন উপত্যকায় পৌঁছাল।",
+      "জাদুকর একটি ছোট আগুন জ্বালাল, তাতে অদ্ভুত এক ধরনের গুঁড়ো ছুড়ে দিল এবং জাদুমন্ত্র উচ্চারণ করল। হঠাৎ মাটি কেঁপে উঠল, আর মাঝখানে পিতলের আংটা লাগানো এক ভারী পাথরের স্ল্যাব ভেসে উঠল। “এই পাথরের নিচে একটি গোপন গুহা আছে,” জাদুকর বলল। “কেবল তুমিই এর ভেতরে ঢুকতে পারবে। সিঁড়ি বেয়ে নিচে নামো, সোনা ও মণিমাণিক্যে ভরা কক্ষগুলোর ভেতর দিয়ে হেঁটে যাও, আর কোনো কিছু স্পর্শ কোরো না। একেবারে শেষ প্রান্তে একটি পুরনো তেলের প্রদীপ পাবে। ওটা আমার কাছে নিয়ে এসো।” আলাদিন নিচে নামার আগে, জাদুকর সুরক্ষার জন্য তার আঙুলে একটি জাদুর আংটি পরিয়ে দিল।",
+      "আলাদিন গুহার ভেতরে নেমে এল। দৃশ্যটি ছিল শ্বাসরুদ্ধকর। গাছগুলো ঝকঝকে চুনি, পান্না আর হীরে দিয়ে ঢাকা ছিল। আলাদিনের সেই সাবধানবাণীর কথা মনে ছিল, তবুও সে গাছ থেকে কয়েকটি উজ্জ্বল ফল পেড়ে পকেটে ভরে রাখল, এই ভেবে যে ওগুলো কেবলই সুন্দর কাঁচের টুকরো। গুহার শেষ প্রান্তে গিয়ে সে সেই ধুলোমাখা পুরনো প্রদীপটি খুঁজে পেল।",
+      "আলাদিন যখন প্রবেশপথে ফিরে এল, তখন হাতে প্রদীপ ধরে ওই খাড়া সিঁড়ি বেয়ে ওঠা তার পক্ষে সম্ভব ছিল না। “আগে প্রদীপটি আমাকে দাও, তারপর আমি তোমাকে টেনে তুলব!” জাদুকর রেগে চিৎকার করে বলল। আলাদিন ভয় পেল যে লোকটি হয়তো তাকে ভেতরেই ফেলে চলে যাবে, তাই সে রাজি হলো না। প্রচণ্ড ক্রোধে জাদুকর আরেকটি মন্ত্র পড়ল, আর ভারী পাথরটি সশব্দে বন্ধ হয়ে আলাদিনকে অন্ধকারে বন্দি করে ফেলল।",
+      "দুই দিন ধরে আলাদিন অন্ধকারে বসে কাঁদল আর প্রার্থনা করল। অসাবধানতাবশত তার আঙুলের জাদুর আংটিটিতে ঘষা লাগল। মুহূর্তের মধ্যেই ধোঁয়ার কুণ্ডলীর ভেতর থেকে এক বিশাল দৈত্য বেরিয়ে এল। “আমি আংটির দৈত্য,” দৈত্যটি গম্ভীর স্বরে গর্জন করে উঠল। “তোমার ইচ্ছা কী?”",
+      "“আমাকে বাড়ি আমার মায়ের কাছে নিয়ে চলো!” আলাদিন আর্তনাদ করে উঠল। চোখের পলকে আলাদিন নিজের ঘরে এসে দাঁড়াল, তখনো তার হাতে সেই পুরনো প্রদীপটি ধরা ছিল।",
+      "আলাদিনের মা যখন নোংরা প্রদীপটি দেখলেন, তিনি সেটি পরিষ্কার করার সিদ্ধান্ত নিলেন যাতে ওটা বিক্রি করে খাবার কেনা যায়। যেইমাত্র তিনি প্রদীপটি ঘষলেন, তার নল থেকে এক বিশাল, শক্তিশালী দৈত্য বেরিয়ে এসে পুরো ঘর ভরিয়ে ফেলল। “আমি প্রদীপের দৈত্য!” সে বজ্রকণ্ঠে বলল। “তোমার ইচ্ছাই আমার আদেশ।”",
+      "আলাদিন চটপট এক রাজকীয় ভোজের আবদার করল। তৎক্ষণাৎ টেবিলে সুস্বাদু খাবারে ভরা রুপোর থালা সাজানো হয়ে গেল। সেদিন থেকে আলাদিন এবং তার মা আর কখনো অভুক্ত থাকেননি। আলাদিন রুপোর থালাগুলো বিক্রি করত এবং প্রদীপটি বুদ্ধিমত্তার সাথে ব্যবহার করত; ধীরে ধীরে সে এক ভদ্র, শিক্ষিত এবং সুদর্শন যুবকে পরিণত হলো।",
+      "বহু বছর পর, আলাদিন সুলতানের কন্যা, রাজকুমারী জেসমিনকে শহরের ভেতর দিয়ে ঘোড়ায় চড়ে যেতে দেখল। সে ছিল তার দেখা সবচেয়ে সুন্দরী নারী, আর আলাদিন গভীরভাবে তার প্রেমে পড়ে গেল। আলাদিন গুহা থেকে আনা ঝলমলে মণিমাণিক্য ভরা একটি বাটি দিয়ে তার মাকে সুলতানের প্রাসাদে পাঠাল। সুলতান এই উপহার দেখে বিস্মিত হলেন, তবে তিনি আরও একটি শর্ত দিলেন: আলাদিনকে এক রাতের মধ্যেই রাজকুমারীর জন্য একটি জাঁকজমকপূর্ণ প্রাসাদ তৈরি করতে হবে।",
+      "আলাদিন জাদুর প্রদীপটি ঘষল, আর পরদিন সকাল হতেই সুলতানের বাড়ির উল্টো দিকে সাদা মার্বেল ও সোনার তৈরি এক প্রাসাদ দাঁড়িয়ে গেল। সুলতান তার কথা রাখলেন, এবং মহা ধুমধামের সাথে আলাদিন ও জেসমিনের বিয়ে হলো। তারা একসাথে সুখে বসবাস করতে লাগল, আর শহরের মানুষ আলাদিনের উদারতার জন্য তাকে খুব ভালোবাসত।",
+      "কিন্তু, বহু দূরে নিজের দেশে বসে সেই দুষ্ট জাদুকর জানতে পারল যে আলাদিন এখনো বেঁচে আছে এবং জাদুর প্রদীপটি তারই কাছে। রাগে অন্ধ হয়ে সে শহরে ফিরে এল এবং এক বৃদ্ধ সওদাগরের ছদ্মবেশ ধারণ করল। আলাদিন যখন শিকারে বাইরে ছিল, তখন তার প্রাসাদের পাশ দিয়ে হাঁটতে হাঁটতে সে হাঁক ছাড়ল, “পুরনোর বদলে নতুন প্রদীপ! আপনাদের পুরনো প্রদীপ বদলে ঝকঝকে নতুন প্রদীপ নিন!”",
+      "রাজকুমারী জেসমিন জানালা থেকে তার ডাক শুনতে পেল। সে আলাদিনের ধুলোমাখা পুরনো প্রদীপটির গোপন রহস্য জানত না, তাই সেটি বদলে একটি ঝকঝকে নতুন প্রদীপ আনার জন্য একজন ভৃত্যকে পাঠাল। যে মুহূর্তে জাদুকর জাদুর প্রদীপটি হাতে পেল, সে নিষ্ঠুরভাবে হেসে উঠল এবং সেটি ঘষল। সে দৈত্যকে আদেশ দিল যেন পুরো প্রাসাদটি—ভেতরে থাকা রাজকুমারী সমেত—আফ্রিকার এক দূর মরুভূমিতে উড়িয়ে নিয়ে যায়।",
+      "আলাদিন ফিরে এসে দেখল, তার প্রাসাদ এবং তার স্ত্রী কেউই নেই। সুলতান প্রচণ্ড রেগে গেলেন এবং নিজের মেয়েকে খুঁজে বের করার জন্য আলাদিনকে চল্লিশ দিন সময় দিলেন। ভগ্নহৃদয়ে আলাদিন গ্রামাঞ্চলে ঘুরে বেড়াতে লাগল। একটি নদীতে হাত ধোয়ার সময়, অসাবধানতাবশত তার হাতে তখনো পরা থাকা জাদুর আংটিটিতে ঘষা লাগল। আংটির দৈত্য উপস্থিত হলো। সে আরও শক্তিশালী প্রদীপের দৈত্যের কাজ উল্টে দিতে পারল না বটে, তবে আলাদিনকে সেই প্রাসাদে পৌঁছে দিতে পারল।",
+      "নিমেষের মধ্যে আলাদিন মরুভূমিতে পৌঁছে গেল এবং একটি জানালা দিয়ে চুপিচুপি প্রাসাদের ভেতরে ঢুকে পড়ল। জেসমিন তাকে দেখে আনন্দে আত্মহারা হয়ে উঠল। দুজনে মিলে একটি পরিকল্পনা করল। সেদিন সন্ধ্যায়, রাজকুমারী জাদুকরকে নৈশভোজে আমন্ত্রণ জানাল এবং গোপনে তার পেয়ালায় কড়া ঘুমের ওষুধ মিশিয়ে দিল। জাদুকর তা পান করে গভীর ঘুমে তলিয়ে গেল।",
+      "আলাদিন দ্রুত পর্দার আড়াল থেকে বেরিয়ে এল, জাদুকরের কোমরবন্ধ থেকে জাদুর প্রদীপটি নিল এবং সেটি ঘষল। প্রদীপের দৈত্য উপস্থিত হলো, পুনরায় তার প্রকৃত মনিবের সেবা করতে পেরে সে দারুণ আনন্দিত হলো। আলাদিন ইচ্ছা প্রকাশ করল যেন প্রাসাদটি তার সঠিক স্থানে ফিরে যায় এবং সেই দুষ্ট জাদুকর চিরতরে মরুভূমিতেই পড়ে থাকে।",
+      "পরদিন সকালে, সুলতান তার জানালা দিয়ে বাইরে তাকিয়ে দেখলেন মার্বেলের প্রাসাদটি আবার রোদে ঝলমল করছে। আলাদিন এবং জেসমিন তাদের পরিবারের সাথে পুনরায় মিলিত হলো, এবং তারা জীবনের বাকি দিনগুলো শান্তি ও সুখে কাটাল।"
+    ],
     "badge50": "🏆 মাইলফলক: 50 শব্দ",
     "storyTitle50": "নতুন কারও সঙ্গে পরিচয়",
     "storyFull50": [
@@ -12116,7 +12785,11 @@ export const STORY_TRANSLATIONS = {
       "— হ্যাঁ, রাস্তার ওপারের একটি হোটেলে থাকব।",
       "— শুক্রবারের মধ্যে সেখানে তোমার কত দিন হয়ে যাবে?",
       "— শুক্রবারের মধ্যে সেখানে আমার দুই দিন হয়ে যাবে। তারপর আমি বাড়ির পথে রওনা হব।"
-    ]
+    ],
+    "statusLockedPro": "শুধুমাত্র PRO-তে",
+    "proStoryHint": "PRO সদস্যদের জন্য বিশেষ রূপকথা",
+    "audioNarrator": "সম্পূর্ণ গল্প শুনুন",
+    "audioLoading": "অডিও লোড হচ্ছে..."
   },
   "ar": {
     "btnShowTranslation": "عرض الترجمة",
@@ -12138,6 +12811,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 مكافأة",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 حكاية خرافية",
+    "storyTitle1": "علاء الدين والمصباح السحري",
+    "storyFull1": [
+      "في قديم الزمان، وفي مدينةٍ نابضةٍ بالحياة في بلاد الشرق، عاش صبيٌ فقيرٌ يُدعى علاء الدين. كان أبوه قد توفي عندما كان علاء الدين صغيراً جداً، فعاش وحيداً مع أمه. لم يكن لديهما سوى القليل من المال، وكانت أمه تكدّ كل يومٍ في غزل القطن لتشتري الطعام. كان علاء الدين صبياً طيّب القلب، لكنه كان يفضّل اللعب في الأزقّة مع أصدقائه بدلاً من العمل.",
+      "وفي يومٍ من الأيام، وصل إلى المدينة غريبٌ طويل القامة. كان في الحقيقة ساحراً شريراً من بلادٍ بعيدة، لكنه كان يُخفي خطةً ماكرة. اقترب من علاء الدين في السوق وابتسم له بودٍ وقال: «يا بنيّ العزيز! أنا أخو أبيك، وقد جُبتُ الآفاق سنواتٍ طويلةً لأجدك وأساعد عائلتك».",
+      "دُهش علاء الدين، وغمرت الفرحة قلب أمه. اشترى الغريب لعلاء الدين ثياباً فاخرةً جديدة، وأعطى أمه دنانير ذهبية. وفي صباح اليوم التالي، طلب الساحر من علاء الدين أن يرافقه في نزهةٍ خارج المدينة. سارا لساعاتٍ طويلة حتى بلغا وادياً هادئاً يقع بين جبلين شاهقين.",
+      "أشعل الساحر ناراً صغيرة، ونثر فيها مسحوقاً غريباً، وتمتم بكلماتٍ سحرية. وفجأةً اهتزّت الأرض، وظهرت بلاطةٌ حجريةٌ ثقيلة في وسطها حلقةٌ من النحاس. قال الساحر: «تحت هذه الصخرة مغارةٌ سرّية لا يستطيع دخولها سواك. انزل السلالم، وامشِ عبر قاعات الذهب والجواهر، وإيّاك أن تلمس شيئاً. وفي أقصى المغارة ستجد مصباحاً زيتياً قديماً؛ أَحضِره إليّ». وقبل أن ينزل علاء الدين، وضع الساحر في إصبعه خاتماً سحرياً ليحميه.",
+      "هبط علاء الدين إلى داخل المغارة، فبهره المشهد الذي يأخذ بالألباب؛ إذ كانت الأشجار مثقلةً بالياقوت والزمرّد والألماس المتلألئ. تذكّر علاء الدين التحذير، غير أنه التقط بضع ثمراتٍ برّاقة من الأشجار ووضعها في جيوبه ظنّاً منه أنها مجرّد زجاجٍ جميل. وفي نهاية المغارة، عثر على المصباح القديم المغطّى بالغبار.",
+      "وحين عاد علاء الدين إلى المدخل، كانت السلالم شديدة الانحدار بحيث لم يستطع تسلّقها وهو يحمل المصباح. صاح الساحر غاضباً: «أعطني المصباح أولاً، ثم أرفعك!» خاف علاء الدين أن يتركه الرجل وحيداً في الداخل، فرفض. استشاط الساحر غضباً، ونطق بتعويذةٍ أخرى، فانطبقت الصخرة الثقيلة بقوة، لتحبس علاء الدين في الظلام الدامس.",
+      "مكث علاء الدين يومين في العتمة يبكي ويتضرّع. وبينما هو كذلك، فرك عن غير قصدٍ الخاتم السحري الذي في إصبعه. وفي لمح البصر، ظهر ماردٌ عظيمٌ وسط سحابةٍ من الدخان، ودوّى صوته قائلاً: «أنا خادم الخاتم، فما هي أمنيتك؟»",
+      "صرخ علاء الدين: «خُذني إلى بيتي، إلى أمي!» وفي طرفة عين، وجد علاء الدين نفسه واقفاً داخل منزله، وهو لا يزال ممسكاً بالمصباح القديم.",
+      "عندما رأت أم علاء الدين المصباح المتسخ، عزمت على تنظيفه حتى يتمكنا من بيعه وشراء الطعام. وما إن شرعت في فركه حتى اندفع من فوهته ماردٌ عملاقٌ جبارٌ ملأ الغرفة بأكملها، ورعد بصوته: «أنا خادم المصباح! أمرك مطاع، ورغبتك نافذة».",
+      "طلب علاء الدين على الفور وليمةً فاخرة. وفي الحال ظهرت على المائدة أطباقٌ من الفضة عامرةً بأشهى المأكولات. ومنذ ذلك اليوم، لم يعرف علاء الدين وأمه الجوع أبداً. باع علاء الدين الأطباق الفضية واستخدم المصباح بحكمة، حتى شبّ وأصبح شاباً مهذباً ومثقفاً ووسيماً.",
+      "وبعد سنوات، لمح علاء الدين ابنة السلطان، الأميرة ياسمين، وهي تجوب المدينة. كانت أجمل امرأةٍ رآها في حياته، فوقع في حبها بجنون. أرسل علاء الدين أمه إلى قصر السلطان ومعها وعاءٌ مملوءٌ بالجواهر المتلألئة التي أخذها من المغارة. انبهر السلطان بالهدية، لكنه اشترط أمراً آخر: أن يبني علاء الدين قصراً مهيباً للأميرة في ليلةٍ واحدة.",
+      "فرك علاء الدين المصباح السحري، وما إن أشرق صباح اليوم التالي حتى كان قصرٌ من الرخام الأبيض والذهب يشمخ قبالة قصر السلطان. وفى السلطان بوعده، وتزوّج علاء الدين وياسمين في احتفالٍ مهيب. وعاشا معاً في سعادة، وأحبّ أهل المدينة علاء الدين لجوده وكرمه.",
+      "غير أن الساحر الشرير اكتشف، وهو في موطنه البعيد، أن علاء الدين ما زال على قيد الحياة وأن المصباح السحري بحوزته. فامتلأ غيظاً، وعاد إلى المدينة متنكّراً في هيئة تاجرٍ عجوز. وأخذ يمرّ بجانب قصر علاء الدين أثناء خروج علاء الدين للصيد، وينادي: «مصابيح جديدة مقابل القديمة! استبدلوا مصابيحكم القديمة بأخرى جديدةٍ برّاقة!»",
+      "سمعته الأميرة ياسمين من النافذة. ولم تكن تعلم سرّ مصباح علاء الدين القديم المغبرّ، فأرسلت خادماً لاستبداله بمصباحٍ جديدٍ لامع. وما إن أمسك الساحر بالمصباح السحري حتى ضحك بقسوة وفركه، وأمر المارد بأن يحمل القصر بأكمله — والأميرة بداخله — إلى صحراء نائية في أفريقيا.",
+      "حين عاد علاء الدين، لم يجد لا قصره ولا زوجته. استشاط السلطان غضباً وأمهل علاء الدين أربعين يوماً للعثور على ابنته. هام علاء الدين في الأرياف مكسور الفؤاد. وعندما همّ بغسل يديه في أحد الأنهار، فرك دون قصدٍ الخاتم السحري الذي كان لا يزال يرتديه. ظهر خادم الخاتم، ولم يكن بوسعه أن يبطل عمل خادم المصباح الأقوى منه، لكنه استطاع أن ينقل علاء الدين إلى القصر.",
+      "في لمح البصر، وصل علاء الدين إلى الصحراء وتسلّل إلى داخل القصر عبر إحدى النوافذ. غمرت السعادة قلب ياسمين حين رأته، ووضعا معاً خطةً محكمة. في ذلك المساء، دعت الأميرة الساحر إلى العشاء، ودسّت خلسةً في كأسه شَراباً منوّماً قوياً. شرب الساحر الكأس، وسرعان ما غطّ في نومٍ عميق.",
+      "خرج علاء الدين مسرعاً من خلف الستار، وانتزع المصباح السحري من حزام الساحر وفركه. فظهر خادم المصباح سعيداً بالعودة إلى خدمة سيده الحقيقي. تمنى علاء الدين أن يعود القصر إلى مكانه الأصلي، وأن يُترك الساحر الشرير في الصحراء إلى الأبد.",
+      "وفي صباح اليوم التالي، أطلّ السلطان من نافذته فرأى القصر الرخامي يتلألأ تحت أشعة الشمس من جديد. والتأم شمل علاء الدين وياسمين مع عائلتيهما، وعاشا في سلامٍ وهناءٍ طوال ما تبقى من حياتهما."
+    ],
     "badge50": "🏆 إنجاز: 50 كلمة",
     "storyTitle50": "التعرّف إلى شخص جديد",
     "storyFull50": [
@@ -12582,7 +13277,11 @@ export const STORY_TRANSLATIONS = {
       "— نعم، سأقيم في فندق على الجانب الآخر من الشارع.",
       "— كم المدة التي ستكون قد قضيتها هناك بحلول يوم الجمعة؟",
       "— بحلول يوم الجمعة سأكون قد قضيت هناك يومين. وبعد ذلك سأتجه إلى المنزل."
-    ]
+    ],
+    "statusLockedPro": "حصريًا في PRO",
+    "proStoryHint": "حكاية خرافية حصرية لأعضاء PRO",
+    "audioNarrator": "استمع إلى القصة كاملة",
+    "audioLoading": "جارٍ تحميل الصوت..."
   },
   "fa": {
     "btnShowTranslation": "نمایش ترجمه",
@@ -12604,6 +13303,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 پاداش",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 افسانه",
+    "storyTitle1": "علاءالدین و چراغ جادو",
+    "storyFull1": [
+      "روزگاری دراز پیش از این، در شهری پرهیاهو در مشرق‌زمین، پسر فقیری به نام علاءالدین زندگی می‌کرد. پدرش زمانی که علاءالدین بسیار کوچک بود درگذشته بود و به همین دلیل او تنها با مادرش روزگار می‌گذراند. آن‌ها پول بسیار کمی داشتند و مادرش هر روز سخت کار می‌کرد و پنبه می‌ریسید تا لقمه نانی بخرد. علاءالدین پسر مهربانی بود، اما ترجیح می‌داد به جای کار کردن، در کوچه‌ها با دوستانش بازی کند.",
+      "روزی، مردی بلندقامت و غریبه وارد شهر شد. او در واقع جادوگری بدذات از سرزمینی دورافتاده بود که نقشه‌ای زیرکانه در سر داشت. در بازار به علاءالدین نزدیک شد و لبخندی گرم زد. گفت: «پسر عزیزم! من برادر پدرت هستم. سال‌های زیادی سفر کرده‌ام تا تو را پیدا کنم و به خانواده‌ات کمک کنم.»",
+      "علاءالدین شگفت‌زده شد و مادرش از شادی در پوست خود نمی‌گنجید. مرد غریبه برای علاءالدین لباس‌های نو و فاخر خرید و به مادرش سکه‌های طلا داد. صبح روز بعد، جادوگر از علاءالدین خواست با او به بیرون از شهر قدم بزند. آن‌ها ساعت‌ها راه رفتند تا اینکه به دره‌ای آرام در میان دو کوه بلند رسیدند.",
+      "جادوگر آتش کوچکی برافروخت، پودر عجیبی در آن ریخت و وردهایی جادویی بر زبان راند. ناگهان زمین لرزید و تخته‌سنگی سنگین با حلقه‌ای برنجی در میانش پدیدار شد. جادوگر گفت: «زیر این سنگ غاری پنهان است که تنها تو می‌توانی وارد آن شوی. از پله‌ها پایین برو، از تالارهای پر از طلا و جواهر بگذر و به هیچ چیز دست نزن. در انتهای غار، چراغ روغنی کهنه‌ای خواهی یافت. آن را برای من بیاور.» پیش از آنکه علاءالدین پایین برود، جادوگر برای محافظت از او انگشتری جادویی به انگشتش کرد.",
+      "علاءالدین به درون غار پایین رفت. منظره‌ای حیرت‌انگیز پیش رویش بود؛ درختانی که با یاقوت‌ها، زمردها و الماس‌های درخشان پوشیده شده بودند. علاءالدین هشدار جادوگر را به یاد داشت، اما به گمان اینکه آن میوه‌های تابان تنها شیشه‌های زیبایی هستند، چندتایی از آن‌ها را در جیب‌هایش گذاشت. سرانجام در انتهای غار، همان چراغ کهنه و غبارآلود را پیدا کرد.",
+      "وقتی علاءالدین به ورودی غار بازگشت، پله‌ها آن‌قدر تند و شیب‌دار بودند که با در دست داشتن چراغ نمی‌توانست از آن‌ها بالا برود. جادوگر با خشم فریاد زد: «اول چراغ را به من بده، بعد تو را بیرون می‌کشم!» علاءالدین ترسید که آن مرد رهایش کند، پس نپذیرفت. جادوگر خشمگین شد، ورد دیگری خواند و تخته‌سنگ سنگین با صدایی مهیب بسته شد و علاءالدین را در تاریکی حبس کرد.",
+      "علاءالدین دو روز تمام در تاریکی نشست، گریه کرد و دعا خواند. ناگهان دستش به طور اتفاقی به انگشتر جادویی خورد و آن را مالید. در همان دم، غول عظیم‌الجثه‌ای میان ابری از دود ظاهر شد. روح جادویی با صدایی غران گفت: «من غول انگشتر هستم. آرزویت چیست؟»",
+      "علاءالدین فریاد زد: «مرا به خانه و نزد مادرم ببر!» در چشم بر هم زدنی، علاءالدین در خانه خودش ایستاده بود، در حالی که هنوز چراغ کهنه را در دست داشت.",
+      "وقتی مادر علاءالدین چراغ کثیف را دید، تصمیم گرفت آن را تمیز کند تا بتوانند بفروشندش و غذا بخرند. به محض اینکه مادر دست بر چراغ کشید، غولی بزرگ و پرقدرت از لوله چراغ بیرون جست و تمام اتاق را پر کرد. با صدایی رعدآسا گفت: «من غول چراغ هستم! آرزوی تو فرمان من است.»",
+      "علاءالدین بی‌درنگ درخواست ضیافتی مفصل کرد. همان لحظه، ظرف‌های نقره‌ای پر از غذاهای لذیذ روی میز پدیدار شدند. از آن روز به بعد، علاءالدین و مادرش دیگر هرگز گرسنه نماندند. علاءالدین ظرف‌های نقره‌ای را فروخت و از چراغ به دانایی بهره برد، تا آنکه به جوانی خوش‌برخورد، فرهیخته و برازنده تبدیل شد.",
+      "سال‌ها بعد، علاءالدین دختر سلطان، شاهدخت یاسمین را دید که سوار بر اسب از میان شهر می‌گذشت. او زیباترین زنی بود که علاءالدین تا آن روز دیده بود و یک دل نه، صد دل عاشقش شد. علاءالدین مادرش را با کاسه‌ای پر از جواهرات درخشانی که از غار آورده بود به کاخ سلطان فرستاد. سلطان از این هدیه حیرت‌زده شد، اما شرط دیگری گذاشت: علاءالدین باید در یک شب کاخی باشکوه برای شاهدخت می‌ساخت.",
+      "علاءالدین چراغ جادو را مالید و صبح روز بعد، کاخی از مرمر سفید و طلا روبه‌روی سرای سلطان قد برافراشت. سلطان به عهد خود وفا کرد و علاءالدین و یاسمین در جشنی باشکوه با هم پیمان زناشویی بستند. آن‌ها در خوشبختی در کنار هم زیستند و مردم شهر علاءالدین را به خاطر بخشندگی‌اش دوست داشتند.",
+      "اما در سرزمین دوردست خود، جادوگر بدذات دریافت که علاءالدین هنوز زنده است و چراغ جادو را در اختیار دارد. آکنده از خشم به شهر بازگشت و خود را به شکل بازرگانی پیر درآورد. هنگامی که علاءالدین به شکار رفته بود، جادوگر از برابر کاخ او گذشت و فریاد زد: «چراغ نو به جای چراغ کهنه! چراغ‌های کهنه‌تان را با چراغ‌های نو و براق عوض کنید!»",
+      "شاهدخت یاسمین از پشت پنجره صدایش را شنید. او از راز چراغ کهنه و غبارآلود علاءالدین بی‌خبر بود، پس خدمتکاری را فرستاد تا آن را با یک چراغ نو و درخشان عوض کند. لحظه‌ای که جادوگر چراغ جادو را به دست گرفت، قهقهه‌ای بی‌رحمانه زد و آن را مالید. به غول دستور داد تمام کاخ را، با شاهدخت در درونش، به بیابانی دورافتاده در آفریقا ببرد.",
+      "وقتی علاءالدین بازگشت، نه از کاخش اثری بود و نه از همسرش. سلطان خشمگین شد و به علاءالدین چهل روز مهلت داد تا دخترش را پیدا کند. علاءالدین دل‌شکسته سر به صحرا و دشت گذاشت. هنگامی که دستانش را در رودخانه‌ای می‌شست، به طور تصادفی انگشتر جادویی را که هنوز در دست داشت مالید. غول انگشتر ظاهر شد. او نمی‌توانست کار غول نیرومندترِ چراغ را باطل کند، اما می‌توانست علاءالدین را به کاخ برساند.",
+      "در چشم بر هم زدنی، علاءالدین به بیابان رسید و پنهانی از پنجره‌ای وارد کاخ شد. یاسمین با دیدن او غرق در شادی گشت. آن‌ها با هم نقشه‌ای کشیدند. آن شب، شاهدخت جادوگر را به شام دعوت کرد و پنهانی داروی خواب‌آور نیرومندی در جام او ریخت. جادوگر آن را نوشید و به خوابی عمیق فرو رفت.",
+      "علاءالدین به سرعت از پشت پرده بیرون آمد، چراغ جادو را از کمر جادوگر برداشت و آن را مالید. غول چراغ ظاهر شد و از اینکه دوباره به ارباب حقیقی خود خدمت می‌کرد، شادمان بود. علاءالدین آرزو کرد که کاخ به جای اصلی خود بازگردد و جادوگر بدذات برای همیشه در بیابان رها شود.",
+      "صبح روز بعد، سلطان از پنجره به بیرون نگریست و بار دیگر کاخ مرمرین را دید که در پرتو آفتاب می‌درخشید. علاءالدین و یاسمین دوباره به آغوش خانواده‌شان بازگشتند و تا پایان عمر در آرامش و خوشبختی زیستند."
+    ],
     "badge50": "🏆 نقطه عطف: 50 کلمه",
     "storyTitle50": "آشنایی با یک فرد جدید",
     "storyFull50": [
@@ -13048,7 +13769,11 @@ export const STORY_TRANSLATIONS = {
       "— بله، در هتلی در آن سوی خیابان می‌مانم.",
       "— تا جمعه چند روز آنجا بوده‌ای؟",
       "— تا جمعه دو روز آنجا بوده‌ام. بعد راهی خانه می‌شوم."
-    ]
+    ],
+    "statusLockedPro": "فقط در PRO",
+    "proStoryHint": "افسانه اختصاصی برای اعضای PRO",
+    "audioNarrator": "شنیدن کل داستان",
+    "audioLoading": "در حال بارگیری صدا..."
   },
   "ur": {
     "btnShowTranslation": "ترجمہ دیکھیں",
@@ -13070,6 +13795,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 بونس",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 پریوں کی کہانی",
+    "storyTitle1": "علاؤ الدین اور جادوئی چراغ",
+    "storyFull1": [
+      "بہت زمانہ پہلے مشرق کے ایک گنجان آباد شہر میں علاؤالدین نامی ایک غریب لڑکا رہتا تھا۔ اس کے والد کا انتقال اس وقت ہو گیا تھا جب وہ بہت چھوٹا تھا، اس لیے وہ اپنی ماں کے ساتھ اکیلا رہتا تھا۔ ان کے پاس بہت کم پیسے تھے، اور اس کی ماں کھانا خریدنے کے لیے ہر روز روئی کات کر سخت محنت کرتی تھی۔ علاؤالدین ایک نیک دل لڑکا تھا، لیکن وہ کام کرنے کے بجائے گلیوں میں اپنے دوستوں کے ساتھ کھیلنا زیادہ پسند کرتا تھا۔",
+      "ایک دن، ایک لمبا تڑنگا اجنبی شہر میں آیا۔ وہ دراصل دور دیس کا ایک بدکردار جادوگر تھا، لیکن اس کے پاس ایک چالاک منصوبہ تھا۔ وہ بازار میں علاؤالدین کے پاس آیا اور گرمجوشی سے مسکرایا۔ اس نے کہا، \"میرے پیارے بیٹے! میں تمہارے والد کا بھائی ہوں۔ میں تمہیں ڈھونڈنے اور تمہارے خاندان کی مدد کرنے کے لیے برسوں کا سفر طے کر کے آیا ہوں۔\"",
+      "علاءالدین حیران رہ گیا اور اس کی ماں خوشی سے پھولے نہ سمائی۔ اجنبی نے علاؤالدین کو عمدہ نئے کپڑے خرید کر دیے اور اس کی ماں کو سونے کے سکے دیے۔ اگلی صبح، جادوگر نے علاؤالدین سے کہا کہ وہ اس کے ساتھ شہر سے باہر چہل قدمی کے لیے چلے۔ وہ گھنٹوں چلتے رہے یہاں تک کہ دو اونچے پہاڑوں کے درمیان ایک خاموش وادی میں پہنچ گئے۔",
+      "جادوگر نے ایک چھوٹی سی آگ جلائی، اس میں کوئی عجیب سا سفوف ڈالا اور جادو کے الفاظ پڑھے۔ اچانک زمین لرز اٹھی اور ایک بھاری پتھر کی سل نمودار ہوئی جس کے بیچ میں پیتل کا ایک حلقہ لگا تھا۔ جادوگر نے کہا، \"اس پتھر کے نیچے ایک خفیہ غار ہے۔ اس میں صرف تم داخل ہو سکتے ہو۔ سیڑھیوں سے نیچے اترو، سونے اور جواہرات سے بھرے ہالوں سے گزرو، اور کسی چیز کو ہاتھ مت لگانا۔ بالکل آخر میں تمہیں تیل کا ایک پرانا چراغ ملے گا۔ وہ میرے پاس لے آنا۔\" علاؤالدین کے نیچے اترنے سے پہلے، جادوگر نے حفاظت کے لیے اس کی انگلی میں ایک جادوئی انگوٹھی پہنا دی۔",
+      "علاءالدین غار کے اندر اترا۔ وہ منظر سحر انگیز تھا۔ درخت چمکتے ہوئے یاقوت، زمرد اور ہیروں سے لدے ہوئے تھے۔ علاؤالدین کو جادوگر کی تنبیہ یاد تھی، تاہم اس نے درختوں سے کچھ چمکدار پھل یہ سمجھ کر اپنی جیبوں میں ڈال لیے کہ وہ محض خوبصورت شیشے کے ٹکڑے ہیں۔ غار کے آخر میں اسے وہ مٹی سے اٹا پرانا چراغ مل گیا۔",
+      "جب علاؤالدین داخلی راستے پر واپس آیا تو چراغ ہاتھ میں پکڑے ہوئے ان ڈھلوان سیڑھیوں پر چڑھنا بہت مشکل تھا۔ جادوگر نے غصے سے چیخ کر کہا، \"پہلے مجھے چراغ دو، پھر میں تمہیں باہر کھینچوں گا!\" علاؤالدین کو ڈر تھا کہ یہ شخص اسے یہیں چھوڑ کر چلا جائے گا، اس لیے اس نے انکار کر دیا۔ غصے سے آگ بگولا ہو کر جادوگر نے ایک اور منتر پڑھا، اور وہ بھاری پتھر دھماکے سے بند ہو گیا، جس سے علاؤالدین اندھیرے میں قید ہو گیا۔",
+      "دو دن تک علاؤالدین اندھیرے میں بیٹھا روتا اور دعائیں مانگتا رہا۔ غلطی سے اس کا ہاتھ اپنی انگلی کی جادوئی انگوٹھی پر رگڑا گیا۔ فوراً ہی دھوئیں کے بادل میں سے ایک دیو ہیکل جن نمودار ہوا۔ اس پراسرار وجود نے گرجدار آواز میں کہا، \"میں انگوٹھی کا جن ہوں۔ تمہاری کیا خواہش ہے؟\"",
+      "علاءالدین نے پکارا، \"مجھے گھر میری ماں کے پاس لے چلو!\" پلک جھپکتے ہی علاؤالدین اپنے ہی گھر میں کھڑا تھا، اور پرانا چراغ اب بھی اس کے ہاتھ میں تھا۔",
+      "جب علاؤالدین کی ماں نے گندا چراغ دیکھا تو اس نے سوچا کہ اسے صاف کر کے بیچ دیں گے تاکہ کھانا خرید سکیں۔ جونہی اس نے چراغ کو رگڑا، اس کی نالی سے ایک دیو قامت اور طاقتور جن باہر نکلا اور پورے کمرے میں چھا گیا۔ اس نے گرج کر کہا، \"میں چراغ کا جن ہوں! آپ کی خواہش میرا حکم ہے۔\"",
+      "علاءالدین نے فوراً ایک شاندار دعوت کا مطالبہ کیا۔ اسی لمحے میز پر لذیذ کھانوں سے بھری چاندی کی طشتریاں سج گئیں۔ اس دن کے بعد سے علاؤالدین اور اس کی ماں کو پھر کبھی بھوک نہیں ستائی۔ علاؤالدین نے چاندی کی طشتریاں بیچ دیں اور چراغ کو سمجھداری سے استعمال کیا، اور بڑا ہو کر ایک شائستہ، تعلیم یافتہ اور وجیہہ نوجوان بن گیا۔",
+      "برسوں بعد علاؤالدین نے سلطان کی بیٹی، شہزادی یاسمین کو شہر سے گزرتے ہوئے دیکھا۔ وہ اس کی زندگی میں دیکھی گئی سب سے خوبصورت خاتون تھی، اور وہ اس کی گہری محبت میں گرفتار ہو گیا۔ علاؤالدین نے اپنی ماں کو سلطان کے محل میں ان چمکدار جواہرات سے بھرا پیالہ دے کر بھیجا جو وہ غار سے لایا تھا۔ سلطان اس تحفے کو دیکھ کر حیران رہ گیا، مگر اس نے ایک اور شرط رکھی: علاؤالدین کو ایک ہی رات میں شہزادی کے لیے ایک شاندار محل تعمیر کرنا ہوگا۔",
+      "علاءالدین نے جادوئی چراغ رگڑا، اور اگلی صبح تک سلطان کے محل کے عین سامنے سفید سنگ مرمر اور سونے کا ایک محل کھڑا تھا۔ سلطان نے اپنا وعدہ پورا کیا، اور علاؤالدین اور یاسمین کی شادی بڑی دھوم دھام سے ہوئی۔ وہ ہنسی خوشی ساتھ رہنے لگے، اور شہر کے لوگ علاؤالدین کی سخاوت کی وجہ سے اس سے بے حد محبت کرتے تھے۔",
+      "تاہم، دور اپنے وطن میں، اس بدکار جادوگر کو معلوم ہو گیا کہ علاؤالدین اب بھی زندہ ہے اور جادوئی چراغ اسی کے پاس ہے۔ غصے سے بھرا ہوا وہ واپس شہر آیا اور ایک بوڑھے تاجر کا بھیس بدل لیا۔ جب علاؤالدین شکار پر گیا ہوا تھا تو وہ اس کے محل کے پاس سے گزرتے ہوئے چلایا، \"پرانے چراغوں کے بدلے نئے چراغ لے لو! اپنے پرانے چراغ دے کر چمکتے ہوئے نئے چراغ لے لو!\"",
+      "شہزادی یاسمین نے کھڑکی سے اس کی آواز سنی۔ وہ علاؤالدین کے مٹیالے پرانے چراغ کا راز نہیں جانتی تھی، اس لیے اس نے ایک خادمہ کو بھیج کر اسے ایک چمکدار نئے چراغ سے بدلوا دیا۔ جس لمحے جادوگر نے جادوئی چراغ ہاتھ میں تھاما، اس نے ظالمانہ قہقہہ لگایا اور اسے رگڑا۔ اس نے جن کو حکم دیا کہ وہ شہزادی سمیت پورا محل افریقہ کے ایک دور دراز صحرا میں لے جائے۔",
+      "جب علاؤالدین واپس لوٹا تو اس کا محل اور اس کی بیوی غائب تھے۔ سلطان آگ بگولا ہو گیا اور اس نے علاؤالدین کو اپنی بیٹی ڈھونڈنے کے لیے چالیس دن کی مہلت دی۔ دل برداشتہ ہو کر علاؤالدین دیہات کی طرف نکل پڑا۔ جب وہ ایک دریا میں اپنے ہاتھ دھو رہا تھا تو اتفاق سے اس کی انگلی میں موجود جادوئی انگوٹھی رگڑی گئی۔ انگوٹھی کا جن حاضر ہوا۔ وہ چراغ کے زیادہ طاقتور جن کا کیا ہوا عمل تو نہیں پلٹ سکتا تھا، لیکن وہ علاؤالدین کو محل تک پہنچا سکتا تھا۔",
+      "لمحہ بھر میں علاؤالدین صحرا میں پہنچ گیا اور کھڑکی کے راستے چپکے سے محل میں داخل ہو گیا۔ یاسمین اسے دیکھ کر بے حد خوش ہوئی۔ دونوں نے مل کر ایک منصوبہ بنایا۔ اس شام شہزادی نے جادوگر کو رات کے کھانے پر بلایا اور چپکے سے اس کے پیالے میں نیند کی تیز دوا ملا دی۔ جادوگر نے وہ پی لیا اور گہری نیند سو گیا۔",
+      "علاءالدین تیزی سے پردے کے پیچھے سے نکلا، جادوگر کی کمر سے جادوئی چراغ لیا اور اسے رگڑا۔ چراغ کا جن حاضر ہوا اور اپنے حقیقی آقا کی دوبارہ خدمت کر کے بے حد خوش ہوا۔ علاؤالدین نے خواہش کی کہ محل کو اس کی اصل جگہ پر واپس پہنچا دیا جائے، اور اس بدکار جادوگر کو ہمیشہ کے لیے صحرا میں اکیلا چھوڑ دیا جائے۔",
+      "اگلی صبح جب سلطان نے کھڑکی سے باہر دیکھا تو سنگ مرمر کا محل ایک بار پھر دھوپ میں چمک رہا تھا۔ علاؤالدین اور یاسمین اپنے خاندان سے دوبارہ مل گئے، اور وہ زندگی بھر امن اور خوشی کے ساتھ رہتے رہے۔"
+    ],
     "badge50": "🏆 سنگ میل: 50 الفاظ",
     "storyTitle50": "نئے شخص سے ملاقات",
     "storyFull50": [
@@ -13514,7 +14261,11 @@ export const STORY_TRANSLATIONS = {
       "— جی ہاں، میں سڑک کے پار ایک ہوٹل میں ٹھہروں گا۔",
       "— جمعہ تک تمہیں وہاں کتنے دن ہو چکے ہوں گے؟",
       "— جمعہ تک مجھے وہاں دو دن ہو چکے ہوں گے۔ پھر میں گھر روانہ ہو جاؤں گا۔"
-    ]
+    ],
+    "statusLockedPro": "صرف PRO میں",
+    "proStoryHint": "PRO ارکان کے لیے خصوصی پریوں کی کہانی",
+    "audioNarrator": "پوری کہانی سنیں",
+    "audioLoading": "آڈیو لوڈ ہو رہا ہے..."
   },
   "id": {
     "btnShowTranslation": "Tampilkan terjemahan",
@@ -13536,6 +14287,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Bonus",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Dongeng",
+    "storyTitle1": "Aladdin dan Lampu Ajaib",
+    "storyFull1": [
+      "Dahulu kala, di sebuah kota yang ramai di Timur, hiduplah seorang anak laki-laki miskin bernama Aladdin. Ayahnya telah meninggal saat Aladdin masih sangat kecil, sehingga ia tinggal berdua saja dengan ibunya. Mereka memiliki sangat sedikit uang, dan ibunya bekerja keras setiap hari memintal kapas untuk membeli makanan. Aladdin adalah anak yang baik hati, namun ia lebih suka bermain di jalanan bersama teman-temannya daripada bekerja.",
+      "Suatu hari, seorang asing yang bertubuh tinggi tiba di kota itu. Ia sebenarnya adalah seorang penyihir jahat dari negeri yang jauh, tetapi ia memiliki rencana yang cerdik. Ia menghampiri Aladdin di pasar dan tersenyum hangat. \"Anakku tersayang!\" katanya. \"Aku adalah saudara ayahmu. Aku telah melakukan perjalanan bertahun-tahun untuk mencarimu dan membantu keluargamu.\"",
+      "Aladdin terkejut, dan ibunya sangat bersukacita. Orang asing itu membelikan Aladdin pakaian baru yang bagus dan memberi ibunya kepingan emas. Keesokan paginya, penyihir itu mengajak Aladdin berjalan bersamanya ke luar kota. Mereka berjalan berjam-jam hingga tiba di sebuah lembah yang sunyi di antara dua gunung tinggi.",
+      "Penyihir itu menyalakan api kecil, melemparkan bubuk aneh ke dalamnya, lalu mengucapkan mantra sihir. Seketika, tanah bergetar, dan sebuah lempengan batu berat muncul dengan cincin kuningan di tengahnya. \"Di bawah batu ini ada gua rahasia,\" kata penyihir itu. \"Hanya kau yang bisa memasukinya. Turunlah menuruni tangga, lewati aula-aula emas dan permata, dan jangan menyentuh apa pun. Di ujung paling dalam, kau akan menemukan lampu minyak tua. Bawalah lampu itu kepadaku.\" Sebelum Aladdin turun, penyihir itu menyematkan sebuah cincin ajaib ke jari Aladdin untuk perlindungan.",
+      "Aladdin menuruni tangga ke dalam gua. Pemandangannya sungguh menakjubkan. Pepohonan dipenuhi buah batu rubi, zamrud, dan berlian yang berkilauan. Aladdin teringat peringatan itu, meskipun ia sempat memasukkan beberapa buah berkilau dari pohon itu ke dalam sakunya karena mengira itu hanyalah kaca yang indah. Di ujung gua, ia menemukan lampu tua yang berdebu.",
+      "Ketika Aladdin kembali ke pintu masuk, tangga itu terlalu curam untuk dipanjat sambil memegang lampu. \"Berikan lampunya padaku dulu, baru aku akan menarikmu keluar!\" teriak penyihir itu dengan marah. Aladdin takut pria itu akan meninggalkannya, sehingga ia menolak. Murka, penyihir itu merapal mantra lain, dan batu berat itu terbanting menutup, mengurung Aladdin di dalam kegelapan.",
+      "Selama dua hari, Aladdin duduk di dalam kegelapan sambil menangis dan berdoa. Tanpa sengaja, ia menggosok cincin ajaib di jarinya. Seketika, sesosok jin raksasa muncul di tengah kepulan asap. \"Akulah Jin Cincin,\" seru roh itu menggelegar. \"Apakah permintaanmu?\"",
+      "\"Bawa aku pulang ke ibuku!\" teriak Aladdin. Dalam sekejap mata, Aladdin sudah berdiri di dalam rumahnya sendiri, masih menggenggam lampu tua itu.",
+      "Ketika ibu Aladdin melihat lampu yang kotor itu, ia memutuskan untuk membersihkannya agar mereka bisa menjualnya untuk membeli makanan. Begitu ia menggosoknya, sesosok jin raksasa yang perkasa melesat keluar dari cerat lampu, memenuhi seluruh ruangan. \"Akulah Jin Lampu!\" suaranya menggelegar bagai guntur. \"Permintaanmu adalah perintah bagiku.\"",
+      "Aladdin segera meminta sebuah jamuan makan. Seketika itu juga, piring-piring perak yang penuh dengan makanan lezat terhidang di atas meja. Sejak hari itu, Aladdin dan ibunya tidak pernah kelaparan lagi. Aladdin menjual piring-piring perak tersebut dan menggunakan lampu itu dengan bijak, hingga tumbuh menjadi pemuda yang santun, berpendidikan, dan tampan.",
+      "Bertahun-tahun kemudian, Aladdin melihat putri Sultan, Putri Yasmin, berkuda melintasi kota. Ia adalah wanita tercantik yang pernah dilihatnya, dan Aladdin jatuh cinta kepadanya dengan sepenuh hati. Aladdin mengutus ibunya ke istana Sultan dengan membawa semangkuk penuh permata berkilauan yang ia ambil dari gua. Sultan terpesona oleh hadiah itu, tetapi ia mengajukan satu syarat lagi: Aladdin harus membangun sebuah istana megah untuk sang putri dalam satu malam saja.",
+      "Aladdin menggosok lampu ajaibnya, dan keesokan paginya, sebuah istana dari marmer putih dan emas berdiri tegak di seberang kediaman Sultan. Sultan menepati janjinya, dan Aladdin serta Yasmin dinikahkan dalam sebuah perayaan yang megah. Mereka hidup bahagia bersama, dan rakyat kota mencintai Aladdin karena kemurahan hatinya.",
+      "Namun, jauh di tanah airnya, si penyihir jahat mengetahui bahwa Aladdin masih hidup dan memiliki lampu ajaib tersebut. Diliputi amarah, ia melakukan perjalanan kembali ke kota itu dan menyamar sebagai seorang pedagang tua. Sambil berjalan melewati istana Aladdin saat Aladdin sedang pergi berburu, ia berseru, \"Lampu baru tukar yang lama! Tukarkan lampu tuamu dengan lampu baru yang berkilau!\"",
+      "Putri Yasmin mendengarnya dari jendela. Ia tidak mengetahui rahasia di balik lampu tua Aladdin yang berdebu, sehingga ia menyuruh seorang pelayan untuk menukarnya dengan lampu baru yang mengilap. Begitu si penyihir menggenggam lampu ajaib itu, ia tertawa kejam lalu menggosoknya. Ia memerintahkan sang jin untuk memindahkan seluruh istana—beserta sang putri di dalamnya—ke sebuah gurun terpencil di Afrika.",
+      "Ketika Aladdin pulang, istana beserta istrinya telah lenyap. Sultan murka dan memberi Aladdin waktu empat puluh hari untuk menemukan putrinya. Dengan hati hancur, Aladdin mengembara ke pedesaan. Saat mencuci tangannya di sungai, ia tanpa sengaja menggosok cincin ajaib yang masih dikenakannya. Jin Cincin pun muncul. Ia tidak dapat membatalkan sihir Jin Lampu yang jauh lebih kuat, tetapi ia bisa mengantarkan Aladdin ke istana itu.",
+      "Dalam sekejap, Aladdin tiba di gurun dan menyelinap masuk ke dalam istana melalui jendela. Yasmin sangat bahagia melihatnya. Bersama-sama, mereka menyusun sebuah rencana. Malam itu, sang putri mengundang penyihir tersebut untuk makan malam dan diam-diam menuangkan ramuan tidur yang kuat ke dalam cangkirnya. Penyihir itu meminumnya lalu jatuh tertidur lelap.",
+      "Aladdin bergegas keluar dari balik tirai, mengambil lampu ajaib dari ikat pinggang penyihir itu, dan menggosoknya. Jin Lampu pun muncul, senang dapat kembali melayani tuan sejatinya. Aladdin berharap agar istana dikembalikan ke tempat asalnya, meninggalkan si penyihir jahat sendirian di tengah gurun untuk selamanya.",
+      "Keesokan paginya, Sultan memandang ke luar jendela dan melihat istana marmer itu kembali berkilau diterpa sinar matahari. Aladdin dan Yasmin dipersatukan kembali dengan keluarga mereka, dan mereka hidup dalam kedamaian serta kebahagiaan sepanjang sisa hidup mereka."
+    ],
     "badge50": "🏆 Pencapaian: 50 Kata",
     "storyTitle50": "Berkenalan dengan Orang Baru",
     "storyFull50": [
@@ -13980,7 +14753,11 @@ export const STORY_TRANSLATIONS = {
       "— Ya, aku akan menginap di hotel di seberang jalan.",
       "— Pada hari Jumat, sudah berapa lama kamu berada di sana?",
       "— Pada hari Jumat, aku sudah berada di sana selama dua hari. Setelah itu aku akan pulang."
-    ]
+    ],
+    "statusLockedPro": "Hanya di PRO",
+    "proStoryHint": "Dongeng eksklusif untuk anggota PRO",
+    "audioNarrator": "Dengarkan cerita lengkap",
+    "audioLoading": "Memuat audio..."
   },
   "vi": {
     "btnShowTranslation": "Hiện bản dịch",
@@ -14002,6 +14779,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Thưởng",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Truyện cổ tích",
+    "storyTitle1": "Aladdin và cây đèn thần",
+    "storyFull1": [
+      "Ngày xửa ngày xưa, tại một thành phố sầm uất ở phương Đông, có một cậu bé nghèo tên là Aladdin. Cha cậu mất từ khi cậu còn rất nhỏ, nên cậu sống nương tựa cùng mẹ. Hai mẹ con rất túng thiếu, mẹ cậu ngày ngày phải làm việc vất vả, kéo sợi bông để đổi lấy miếng ăn. Aladdin vốn là một cậu bé tốt bụng, nhưng cậu lại thích rong chơi trên phố cùng bạn bè hơn là làm việc.",
+      "Một ngày nọ, có một người lạ mặt cao lớn đặt chân đến thành phố. Thực chất lão là một tên phù thủy gian ác từ phương xa tới, nhưng lại mang theo một âm mưu xảo quyệt. Lão tiến lại gần Aladdin ngoài chợ và nở nụ cười hiền hậu. \"Cháu yêu quý của ta!\" lão cất tiếng. \"Ta chính là chú ruột của cháu, em trai của cha cháu đây. Ta đã lặn lội nhiều năm trời để tìm cháu và giúp đỡ gia đình ta.\"",
+      "Aladdin vô cùng kinh ngạc, còn mẹ cậu thì mừng rỡ khôn xiết. Người lạ mặt mua cho Aladdin những bộ quần áo mới đẹp đẽ và tặng mẹ cậu nhiều đồng tiền vàng. Sáng hôm sau, tên phù thủy rủ Aladdin cùng đi dạo ra khỏi thành phố. Họ đi bộ suốt nhiều giờ liền cho đến khi tới một thung lũng vắng lặng nằm giữa hai ngọn núi cao.",
+      "Tên phù thủy nhóm một đống lửa nhỏ, ném vào đó thứ bột kỳ lạ rồi lẩm bẩm những câu thần chú. Bỗng nhiên, mặt đất rung chuyển, và một phiến đá nặng nề hiện ra với chiếc vòng bằng đồng thau ở chính giữa. \"Bên dưới tảng đá này là một hang động bí mật,\" tên phù thủy nói. \"Chỉ có cháu mới bước vào được thôi. Hãy đi xuống cầu thang, bước qua những đại sảnh đầy vàng bạc châu báu, và tuyệt đối không được chạm vào bất cứ thứ gì. Ở tận cuối hang, cháu sẽ thấy một cây đèn dầu cũ kỹ. Hãy mang nó về cho ta.\" Trước khi Aladdin bước xuống, tên phù thủy đeo vào ngón tay cậu một chiếc nhẫn thần để phòng thân.",
+      "Aladdin leo xuống hang động. Cảnh tượng bên trong đẹp đến nín thở. Những tán cây trĩu nặng hồng ngọc, ngọc lục bảo và kim cương lấp lánh. Aladdin vẫn ghi nhớ lời dặn, dù cậu có nhặt vài trái cây sáng lấp lánh trên cành bỏ vào túi vì cứ ngỡ đó chỉ là thủy tinh đẹp mắt. Ở cuối hang động, cậu tìm thấy cây đèn cũ phủ đầy bụi.",
+      "Khi Aladdin quay trở lại cửa hang, bậc thang quá dốc khiến cậu không thể vừa cầm đèn vừa leo lên nổi. \"Đưa cây đèn cho ta trước, rồi ta sẽ kéo cháu lên!\" tên phù thủy giận dữ quát. Aladdin sợ lão sẽ bỏ mặc mình ở lại nên nhất quyết không chịu. Nổi cơn thịnh nộ, tên phù thủy đọc một câu thần chú khác, và phiến đá nặng nề sập xuống đóng kín, nhốt chặt Aladdin trong bóng tối.",
+      "Suốt hai ngày ròng rã, Aladdin ngồi trong bóng tối, vừa khóc vừa cầu nguyện. Vô tình, cậu chạm tay cọ xát vào chiếc nhẫn thần trên ngón tay mình. Ngay lập tức, một vị thần khổng lồ hiện ra trong làn khói dày đặc. \"Ta là Thần Nhẫn,\" giọng vị thần vang rền. \"Điều ước của ngươi là gì?\"",
+      "\"Hãy đưa con về nhà với mẹ con!\" Aladdin khẩn cầu. Chỉ trong chớp mắt, Aladdin đã thấy mình đứng ngay trong ngôi nhà của mình, tay vẫn nắm chặt cây đèn cũ.",
+      "Khi mẹ Aladdin nhìn thấy cây đèn bám bẩn, bà quyết định lau chùi nó cho sạch để đem bán lấy tiền mua thức ăn. Bà vừa mới chà nhẹ lên thân đèn, một vị thần khổng lồ đầy uy lực liền từ vòi đèn phóng ra, choán đầy cả căn phòng. \"Ta là Thần Đèn!\" giọng ngài vang như sấm dậy. \"Ý muốn của người là mệnh lệnh của ta.\"",
+      "Aladdin lập tức xin một bữa tiệc thịnh soạn. Ngay tức khắc, những chiếc đĩa bạc chất đầy cao lương mỹ vị hiện ra trên bàn. Kể từ ngày đó, Aladdin và mẹ không bao giờ phải chịu đói nữa. Aladdin đem bán những chiếc đĩa bạc và sử dụng cây đèn một cách khôn ngoan, dần trưởng thành thành một chàng trai lễ phép, học thức và khôi ngô tuấn tú.",
+      "Nhiều năm sau, Aladdin tình cờ trông thấy con gái của Quốc vương là Công chúa Jasmine cưỡi kiệu đi qua thành phố. Nàng là người phụ nữ xinh đẹp nhất mà chàng từng gặp, và chàng đã đem lòng yêu nàng sâu đậm. Aladdin sai mẹ mang một chiếc bát đầy ắp những viên ngọc lấp lánh lấy từ hang động năm xưa vào cung dâng lên Quốc vương. Quốc vương hết sức kinh ngạc trước món quà, nhưng ngài đòi hỏi thêm một điều: Aladdin phải xây dựng một cung điện tráng lệ cho công chúa chỉ trong vòng một đêm.",
+      "Aladdin xoa nhẹ cây đèn thần, và đến sáng hôm sau, một cung điện bằng đá cẩm thạch trắng và vàng ròng đã sừng sững mọc lên đối diện hoàng cung của Quốc vương. Quốc vương giữ đúng lời hứa, và Aladdin cùng Jasmine thành hôn trong một lễ cưới linh đình. Hai người sống bên nhau hạnh phúc, còn dân chúng trong thành đều hết mực yêu mến tấm lòng hào hiệp của Aladdin.",
+      "Thế nhưng, ở tận quê nhà xa xôi, tên phù thủy gian ác phát hiện ra Aladdin vẫn còn sống và đang giữ cây đèn thần. Lòng đầy căm phẫn, lão quay trở lại thành phố và cải trang thành một lão thương nhân già nua. Nhân lúc Aladdin đi săn vắng, lão đi ngang qua cung điện của chàng và rao lớn: \"Đổi đèn cũ lấy đèn mới đây! Hãy đổi những cây đèn cũ kỹ lấy đèn mới sáng loáng nào!\"",
+      "Công chúa Jasmine từ trên cửa sổ nghe thấy tiếng rao. Nàng không hề hay biết bí mật của cây đèn cũ bám bụi của Aladdin, nên đã sai người hầu đem đổi lấy một chiếc đèn mới sáng bóng. Ngay khoảnh khắc cầm được cây đèn thần trong tay, tên phù thủy cười vang độc ác rồi chà xát lên thân đèn. Lão ra lệnh cho Thần Đèn mang toàn bộ cung điện — cùng với nàng công chúa bên trong — đến một sa mạc hẻo lánh tận châu Phi.",
+      "Khi Aladdin trở về, cung điện cùng người vợ yêu dấu đã biến mất không dấu vết. Quốc vương vô cùng giận dữ, ban cho Aladdin thời hạn bốn mươi ngày để tìm lại con gái ngài. Trái tim tan nát, Aladdin lang thang ra vùng đồng quê. Khi rửa tay bên dòng sông, chàng vô tình cọ vào chiếc nhẫn thần vẫn đeo trên tay. Thần Nhẫn liền hiện ra. Ngài không thể hóa giải phép thuật của Thần Đèn vốn quyền năng hơn nhiều, nhưng có thể đưa Aladdin tới nơi có cung điện.",
+      "Trong nháy mắt, Aladdin đã đặt chân tới sa mạc và lẻn vào trong cung điện qua lối cửa sổ. Jasmine mừng rỡ vỡ òa khi gặp lại chàng. Hai vợ chồng cùng nhau bàn bạc một kế hoạch. Tối hôm ấy, công chúa mời tên phù thủy dùng bữa tối và bí mật rót một thứ thuốc ngủ cực mạnh vào chén rượu của lão. Tên phù thủy uống cạn và nhanh chóng chìm vào giấc ngủ say.",
+      "Aladdin vội bước ra từ sau tấm rèm, rút cây đèn thần khỏi thắt lưng tên phù thủy rồi xoa nhẹ. Thần Đèn hiện ra, vô cùng hoan hỉ khi được phụng sự người chủ nhân chân chính của mình một lần nữa. Aladdin ước cho cung điện trở về đúng vị trí ban đầu, bỏ mặc tên phù thủy độc ác lại giữa sa mạc vĩnh viễn.",
+      "Sáng hôm sau, Quốc vương nhìn ra ngoài cửa sổ và thấy cung điện bằng đá cẩm thạch một lần nữa tỏa sáng rực rỡ dưới ánh mặt trời. Aladdin và Jasmine đoàn tụ cùng gia đình, và họ sống trong bình yên, hạnh phúc đến trọn đời."
+    ],
     "badge50": "🏆 Cột mốc: 50 từ",
     "storyTitle50": "Làm quen với người mới",
     "storyFull50": [
@@ -14446,7 +15245,11 @@ export const STORY_TRANSLATIONS = {
       "— Đúng vậy, tôi sẽ ở khách sạn bên kia đường.",
       "— Đến thứ Sáu bạn đã ở đó được bao lâu?",
       "— Đến thứ Sáu, tôi sẽ ở đó được hai ngày. Sau đó tôi sẽ lên đường về nhà."
-    ]
+    ],
+    "statusLockedPro": "Chỉ có trong PRO",
+    "proStoryHint": "Truyện cổ tích độc quyền dành cho thành viên PRO",
+    "audioNarrator": "Nghe toàn bộ câu chuyện",
+    "audioLoading": "Đang tải âm thanh..."
   },
   "th": {
     "btnShowTranslation": "แสดงคำแปล",
@@ -14468,6 +15271,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 โบนัส",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 นิทาน",
+    "storyTitle1": "อะลาดินกับตะเกียงวิเศษ",
+    "storyFull1": [
+      "กาลครั้งหนึ่งนานมาแล้ว ในเมืองอันพลุกพล่านแห่งดินแดนตะวันออก มีเด็กชายยากจนผู้หนึ่งนามว่าอาลาดิน บิดาของเขาสิ้นใจตั้งแต่เขายังเล็กมาก เขาจึงอาศัยอยู่กับมารดาเพียงลำพัง สองแม่ลูกมีเงินทองอยู่น้อยนิด มารดาของเขาต้องตรากตรำทำงานปั่นฝ้ายทุกวันเพื่อแลกเงินมาซื้ออาหาร อาลาดินเป็นเด็กจิตใจดี แต่เขากลับชอบออกไปวิ่งเล่นตามท้องถนนกับเพื่อน ๆ มากกว่าการทำงาน",
+      "อยู่มาวันหนึ่ง มีชายแปลกหน้าร่างสูงใหญ่เดินทางมายังเมืองนี้ แท้จริงแล้วเขาคือพ่อมดผู้ชั่วร้ายจากดินแดนอันไกลโพ้น แต่เขามีแผนการอันแยบยล เขาเดินเข้าไปหาอาลาดินในตลาดแล้วส่งยิ้มให้อย่างอบอุ่น \"หลานรักของอา!\" เขาเอ่ยขึ้น \"อาเป็นน้องชายของพ่อเจ้า อาเดินทางรอนแรมมาหลายปีเพื่อตามหาเจ้าและช่วยเหลือครอบครัวของเจ้า\"",
+      "อาลาดินประหลาดใจยิ่งนัก ส่วนมารดาของเขาก็ดีใจจนล้นพ้น ชายแปลกหน้าซื้อเสื้อผ้าใหม่เนื้อดีให้อาลาดินและมอบเหรียญทองให้แก่มารดาของเขา รุ่งเช้าวันถัดมา พ่อมดชวนอาลาดินเดินออกไปนอกเมืองด้วยกัน ทั้งสองเดินเท้าอยู่นานหลายชั่วโมงจนกระทั่งมาถึงหุบเขาอันเงียบสงบระหว่างภูเขาสูงสองลูก",
+      "พ่อมดก่อกองไฟเล็ก ๆ ขึ้น โยนผงประหลาดลงไปในกองไฟ แล้วร่ายมนตร์คาถา ทันใดนั้น แผ่นดินก็สั่นสะเทือน และแผ่นหินขนาดใหญ่ที่มีห่วงทองเหลืองอยู่ตรงกลางก็ปรากฏขึ้น \"ใต้แผ่นหินนี้มีถ้ำลับซ่อนอยู่\" พ่อมดกล่าว \"มีเพียงเจ้าเท่านั้นที่เข้าไปได้ จงเดินลงบันไดไป เดินผ่านโถงทองคำและอัญมณี และอย่าแตะต้องสิ่งใดเป็นอันขาด ที่ปลายสุดของถ้ำ เจ้าจะพบตะเกียงน้ำมันเก่า ๆ ใบหนึ่ง จงนำมันมาให้ข้า\" ก่อนที่อาลาดินจะก้าวลงไป พ่อมดได้สวมแหวนวิเศษลงบนนิ้วของอาลาดินเพื่อคุ้มครองภัย",
+      "อาลาดินปีนลงไปในถ้ำ ภาพเบื้องหน้างดงามจนแทบหยุดหายใจ ต้นไม้ในถ้ำปกคลุมไปด้วยทับทิม มรกต และเพชรที่ส่องประกายระยิบระยับ อาลาดินยังคงจำคำเตือนได้ แต่เขาก็เก็บผลไม้อันแวววาวจากต้นไม้ใส่กระเป๋าเสื้อไว้เล็กน้อย เพราะคิดว่ามันเป็นเพียงแก้วสวย ๆ เท่านั้น ที่ปลายสุดของถ้ำ เขาได้พบกับตะเกียงเก่าคร่ำคร่าที่เต็มไปด้วยฝุ่น",
+      "เมื่ออาลาดินกลับมายังปากถ้ำ บันไดนั้นสูงชันเกินกว่าจะปีนขึ้นมาพร้อมกับถือตะเกียงไปด้วยได้ \"ส่งตะเกียงมาให้ข้าก่อน แล้วข้าจะดึงเจ้าขึ้นมา!\" พ่อมดตะโกนอย่างเกรี้ยวกราด อาลาดินกลัวว่าชายผู้นั้นจะทิ้งตนไว้ข้างล่าง จึงปฏิเสธ พ่อมดโกรธจัดจึงร่ายคาถาอีกบทหนึ่ง แผ่นหินหนักก็เลื่อนปิดลงมาดังสนั่น ขังอาลาดินไว้ในความมืดมิด",
+      "เป็นเวลาถึงสองวัน ที่อาลาดินนั่งร้องไห้และสวดภาวนาอยู่ในความมืด โดยไม่ตั้งใจ มือของเขาไปถูเข้ากับแหวนวิเศษที่นิ้ว ทันใดนั้น ยักษ์จินนี่ร่างมหึมาก็ปรากฏตัวขึ้นท่ามกลางกลุ่มควัน \"ข้าคือยักษ์แห่งแหวน\" วิญญาณวิเศษเอ่ยด้วยเสียงกึกก้อง \"เจ้าปรารถนาสิ่งใด?\"",
+      "\"พาข้ากลับบ้านไปหาแม่ของข้าที!\" อาลาดินร้องขอ เพียงชั่วพริบตา อาลาดินก็มายืนอยู่ในบ้านของตนเอง โดยที่มือยังคงถือตะเกียงเก่าใบนั้นอยู่",
+      "เมื่อมารดาของอาลาดินเห็นตะเกียงสกปรกใบนั้น นางจึงคิดจะขัดถูให้สะอาดเพื่อนำไปขายแลกอาหาร ทันทีที่นางถูตะเกียง ยักษ์จินนี่ร่างยักษ์ผู้ทรงพลังก็พุ่งพรวดออกมาจากพวยตะเกียงจนคับแน่นเต็มห้อง \"ข้าคือยักษ์แห่งตะเกียง!\" เขาคำรามก้องดุจเสียงฟ้าร้อง \"ความปรารถนาของท่านคือคำบัญชาของข้า\"",
+      "อาลาดินรีบขออาหารมื้อใหญ่ในทันที ทันใดนั้น จานเงินที่เต็มไปด้วยอาหารเลิศรสก็ปรากฏขึ้นบนโต๊ะ นับตั้งแต่วันนั้นเป็นต้นมา อาลาดินและมารดาก็ไม่เคยต้องอดอยากอีกเลย อาลาดินนำจานเงินไปขายและใช้ตะเกียงวิเศษอย่างชาญฉลาด จนเติบโตขึ้นเป็นชายหนุ่มผู้สุภาพอ่อนโยน มีความรู้ และรูปงาม",
+      "หลายปีต่อมา อาลาดินได้เห็นพระราชธิดาของสุลต่าน นามว่าเจ้าหญิงจัสมิน เสด็จผ่านมาในเมือง นางเป็นสตรีที่งดงามที่สุดเท่าที่เขาเคยพบเห็น และเขาก็ตกหลุมรักนางอย่างสุดซึ้ง อาลาดินส่งมารดาไปยังพระราชวังของสุลต่านพร้อมกับชามที่บรรจุอัญมณีแวววาวซึ่งเขานำมาจากในถ้ำ สุลต่านทรงอัศจรรย์ใจกับของกำนัลนั้นยิ่งนัก แต่พระองค์ทรงเรียกร้องอีกหนึ่งสิ่ง นั่นคืออาลาดินต้องสร้างพระราชวังอันวิจิตรตระการตาให้แก่เจ้าหญิงภายในคืนเดียว",
+      "อาลาดินถูตะเกียงวิเศษ และเมื่อรุ่งเช้ามาถึง พระราชวังที่สร้างจากหินอ่อนสีขาวและทองคำก็ตั้งตระหง่านอยู่ตรงข้ามกับพระราชวังของสุลต่าน สุลต่านทรงรักษาคำมั่นสัญญา อาลาดินและจัสมินจึงได้อภิเษกสมรสกันในงานเฉลิมฉลองอันยิ่งใหญ่ ทั้งสองครองคู่กันอย่างมีความสุข และชาวเมืองต่างรักใคร่อาลาดินในความมีน้ำใจอันกว้างขวางของเขา",
+      "ทว่า ณ ดินแดนบ้านเกิดอันแสนไกล พ่อมดผู้ชั่วร้ายล่วงรู้ว่าอาลาดินยังมีชีวิตอยู่และครอบครองตะเกียงวิเศษไว้ เขาเต็มไปด้วยความโกรธแค้น จึงเดินทางกลับมายังเมืองนี้แล้วปลอมตัวเป็นพ่อค้าชรา ขณะเดินผ่านพระราชวังของอาลาดินในเวลาที่อาลาดินออกไปล่าสัตว์ เขาก็ร้องตะโกนขึ้นว่า \"แลกตะเกียงเก่าเป็นตะเกียงใหม่จ้า! นำตะเกียงเก่าของท่านมาแลกตะเกียงใหม่เงาวับได้เลย!\"",
+      "เจ้าหญิงจัสมินทรงได้ยินเสียงร้องนั้นจากทางหน้าต่าง นางไม่ทรงล่วงรู้ความลับของตะเกียงเก่าคร่ำคร่าของอาลาดิน จึงทรงรับสั่งให้คนรับใช้นำไปแลกกับตะเกียงใหม่ที่แวววาว ทันทีที่พ่อมดได้ครอบครองตะเกียงวิเศษ เขาก็หัวเราะอย่างโหดเหี้ยมแล้วถูตะเกียง จากนั้นจึงสั่งให้ยักษ์จินนี่หอบหิ้วพระราชวังทั้งหลัง—พร้อมด้วยเจ้าหญิงที่ประทับอยู่ภายใน—ไปยังทะเลทรายอันห่างไกลในแอฟริกา",
+      "เมื่ออาลาดินกลับมา พระราชวังและชายาของเขาก็หายไปเสียแล้ว สุลต่านทรงพิโรธยิ่งนักและทรงให้เวลาอาลาดินสี่สิบวันในการตามหาพระราชธิดากลับคืนมา อาลาดินเดินโซซัดโซเซออกไปยังชนบทด้วยหัวใจที่แตกสลาย ขณะที่เขากำลังล้างมืออยู่ในแม่น้ำ เขาก็เผลอถูแหวนวิเศษที่ยังคงสวมอยู่บนนิ้วโดยไม่ได้ตั้งใจ ยักษ์แห่งแหวนจึงปรากฏกายขึ้น แม้เขาไม่อาจลบล้างฤทธิ์ของยักษ์แห่งตะเกียงผู้ทรงพลังกว่าได้ แต่เขาสามารถพาอาลาดินไปยังพระราชวังนั้นได้",
+      "เพียงชั่วพริบตา อาลาดินก็มาถึงกลางทะเลทรายและแอบลอบเข้าไปในพระราชวังทางหน้าต่าง จัสมินดีใจอย่างหาที่สุดไม่ได้เมื่อได้พบเขา ทั้งสองจึงร่วมกันวางแผน ค่ำวันนั้น เจ้าหญิงทรงเชิญพ่อมดมาร่วมโต๊ะเสวยและแอบเทยานอนหลับฤทธิ์แรงลงในถ้วยของเขา พ่อมดดื่มเข้าไปแล้วก็หลับสนิทลงในทันที",
+      "อาลาดินรีบก้าวออกมาจากหลังม่าน คว้าตะเกียงวิเศษจากเข็มขัดของพ่อมดแล้วถูมัน ยักษ์แห่งตะเกียงปรากฏตัวขึ้นด้วยความยินดีที่ได้กลับมารับใช้เจ้านายที่แท้จริงอีกครั้ง อาลาดินอธิษฐานขอให้พระราชวังกลับคืนสู่ที่ตั้งอันสมควรของมัน และทิ้งพ่อมดผู้ชั่วร้ายไว้เบื้องหลังกลางทะเลทรายตลอดกาล",
+      "เช้าวันรุ่งขึ้น สุลต่านทอดพระเนตรออกไปนอกหน้าต่างและทรงเห็นพระราชวังหินอ่อนส่องประกายต้องแสงอาทิตย์อีกครั้ง อาลาดินและจัสมินได้กลับมาอยู่พร้อมหน้ากับครอบครัว และทั้งสองก็ใช้ชีวิตอย่างสงบสุขและเปี่ยมด้วยความสุขตราบจนสิ้นอายุขัย"
+    ],
     "badge50": "🏆 ก้าวสำคัญ: 50 คำ",
     "storyTitle50": "ทำความรู้จักกับคนใหม่",
     "storyFull50": [
@@ -14912,7 +15737,11 @@ export const STORY_TRANSLATIONS = {
       "— ใช่ ฉันจะพักที่โรงแรมฝั่งตรงข้ามถนน",
       "— ถึงวันศุกร์คุณจะอยู่ที่นั่นมากี่วันแล้ว?",
       "— ถึงวันศุกร์ ฉันจะอยู่ที่นั่นครบสองวันแล้ว จากนั้นฉันจะเดินทางกลับบ้าน"
-    ]
+    ],
+    "statusLockedPro": "เฉพาะ PRO เท่านั้น",
+    "proStoryHint": "นิทานพิเศษสำหรับสมาชิก PRO",
+    "audioNarrator": "ฟังนิทานฉบับเต็ม",
+    "audioLoading": "กำลังโหลดเสียง..."
   },
   "ko": {
     "btnShowTranslation": "번역 보기",
@@ -14934,6 +15763,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 보너스",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 동화",
+    "storyTitle1": "알라딘과 요술램프",
+    "storyFull1": [
+      "아주 먼 옛날, 동방의 어느 번화한 도시에 알라딘이라는 가난한 소년이 살고 있었습니다. 알라딘이 아주 어렸을 때 아버지가 돌아가셨기 때문에, 그는 어머니와 단둘이 살았습니다. 집안 형편이 몹시 어려워, 어머니는 양식을 구하기 위해 매일같이 무명실을 뽑으며 힘겹게 일했습니다. 알라딘은 마음씨 착한 아이였지만, 일하는 것보다는 거리에서 친구들과 어울려 노는 것을 더 좋아했습니다.",
+      "어느 날, 키가 큰 낯선 남자가 그 도시에 나타났습니다. 사실 그는 머나먼 나라에서 온 사악한 마법사였지만, 교활한 계략을 품고 있었습니다. 그는 시장에서 알라딘에게 다가가 다정하게 미소 지었습니다. \"사랑하는 조카야!\" 그가 말했습니다. \"나는 네 아버지의 동생이란다. 너를 찾아내어 너희 가족을 도와주려고 여러 해 동안 길을 떠나왔노라.\"",
+      "알라딘은 깜짝 놀랐고, 그의 어머니는 기쁨을 감추지 못했습니다. 낯선 남자는 알라딘에게 멋진 새 옷을 사 주고, 어머니에게는 금화를 건넸습니다. 다음 날 아침, 마법사는 알라딘에게 성 밖으로 함께 산책하러 가자고 청했습니다. 두 사람은 몇 시간이나 걸은 끝에 높은 두 산 사이에 자리한 고요한 골짜기에 다다랐습니다.",
+      "마법사는 작은 불을 피우고 그 안에 기묘한 가루를 뿌린 뒤 주문을 외웠습니다. 그러자 갑자기 땅이 흔들리더니, 한가운데에 놋쇠 고리가 달린 커다란 돌판이 나타났습니다. \"이 돌 아래에 비밀 동굴이 있단다.\" 마법사가 말했습니다. \"오직 너만이 그 안에 들어갈 수 있어. 계단을 따라 내려가 황금과 보석이 가득한 방들을 지나가되, 그 무엇에도 손을 대서는 안 된다. 맨 끝자락에 가면 낡은 기름 램프가 하나 있을 테니, 그것을 내게 가져오너라.\" 알라딘이 내려가기 전, 마법사는 몸을 보호해 줄 것이라며 알라딘의 손가락에 마법 반지를 끼워 주었습니다.",
+      "알라딘은 동굴 속으로 내려갔습니다. 눈앞에 펼쳐진 광경은 숨이 멎을 듯 아름다웠습니다. 나무마다 반짝이는 루비와 에메랄드, 다이아몬드가 주렁주렁 열려 있었습니다. 알라딘은 경고를 기억하고 있었지만, 그 빛나는 열매들을 그저 예쁜 유리 조각으로 여기고 주머니에 몇 개 집어넣었습니다. 동굴 맨 끝에 이르자, 그는 먼지가 소복이 쌓인 낡은 램프를 발견했습니다.",
+      "알라딘이 입구로 되돌아왔을 때, 램프를 든 채로는 가파른 계단을 기어오를 수가 없었습니다. \"먼저 램프부터 이리 넘겨라, 그러면 내가 끌어올려 주마!\" 마법사가 화를 내며 소리쳤습니다. 알라딘은 그 남자가 자기를 버려두고 갈까 두려워 거절했습니다. 격분한 마법사가 또 다른 주문을 외우자, 무거운 돌판이 쾅 하고 닫히면서 알라딘을 어둠 속에 가두어 버렸습니다.",
+      "이틀 동안 알라딘은 캄캄한 어둠 속에 주저앉아 울며 기도했습니다. 그러다 무심코 손가락에 낀 마법 반지를 문질렀습니다. 그 순간, 자욱한 연기 속에서 거대한 지니가 나타났습니다. \"나는 반지의 요정이다.\" 그 영혼이 우렁찬 목소리로 말했습니다. \"네 소원이 무엇이냐?\"",
+      "\"어머니가 계신 집으로 데려다주세요!\" 알라딘이 외쳤습니다. 눈 깜짝할 사이에 알라딘은 낡은 램프를 손에 쥔 채 자기 집 안에 서 있었습니다.",
+      "알라딘의 어머니는 더러운 램프를 보자, 그것을 깨끗이 닦아서 팔아 먹을 것을 사야겠다고 마음먹었습니다. 어머니가 램프를 문지르자마자, 주둥이에서 거대하고 힘센 지니가 솟구쳐 나와 온 방 안을 가득 채웠습니다. \"나는 램프의 요정이다!\" 지니가 천둥 같은 목소리로 외쳤습니다. \"당신의 소원이 곧 나의 명령입니다.\"",
+      "알라딘은 얼른 진수성찬을 차려 달라고 청했습니다. 곧바로 맛있는 음식이 수북이 담긴 은쟁반들이 식탁 위에 나타났습니다. 그날 이후로 알라딘과 어머니는 다시는 굶주리지 않게 되었습니다. 알라딘은 은쟁반을 팔아 살림을 꾸리고 램프를 현명하게 쓰며, 예의 바르고 교양 있으며 늠름한 청년으로 자라났습니다.",
+      "세월이 흘러 알라딘은 술탄의 딸인 자스민 공주가 말을 타고 도심을 지나는 모습을 보게 되었습니다. 그녀는 알라딘이 평생 본 적 없는 가장 아름다운 여인이었고, 그는 첫눈에 깊은 사랑에 빠졌습니다. 알라딘은 동굴에서 가져온 반짝이는 보석들을 그릇에 가득 담아 어머니 편에 술탄의 궁전으로 보냈습니다. 술탄은 그 선물에 탄복했지만 한 가지 조건을 더 내걸었습니다. 하룻밤 사이에 공주를 위한 웅장한 궁전을 지어야 한다는 것이었습니다.",
+      "알라딘이 마법 램프를 문지르자, 이튿날 아침 술탄의 거처 맞은편에 하얀 대리석과 황금으로 지어진 궁전이 우뚝 서 있었습니다. 술탄은 약속을 지켰고, 알라딘과 자스민은 성대한 축하 속에서 혼례를 올렸습니다. 두 사람은 오래도록 행복하게 살았으며, 도시의 백성들은 알라딘의 너그러운 성품을 깊이 사랑했습니다.",
+      "하지만 머나먼 고향에 있던 사악한 마법사는 알라딘이 아직 살아 있으며 마법 램프까지 손에 넣었다는 사실을 알게 되었습니다. 분노에 휩싸인 그는 도시로 돌아와 낡은 상인 노인으로 변장했습니다. 알라딘이 사냥을 나간 틈을 타 궁전 앞을 지나가며 그는 목청껏 외쳤습니다. \"헌 램프를 새 램프로 바꿔 드립니다! 낡은 램프를 반짝이는 새 램프로 바꾸세요!\"",
+      "자스민 공주가 창가에서 그 소리를 들었습니다. 알라딘의 먼지 쌓인 낡은 램프에 담긴 비밀을 알지 못했던 공주는, 시종을 보내 그것을 번쩍이는 새 램프와 바꾸어 오게 했습니다. 마법사는 마법 램프를 손에 넣자마자 잔인하게 웃음을 터뜨리며 램프를 문질렀습니다. 그리고 지니에게 공주가 있는 궁전 통째로 멀고 먼 아프리카의 사막 한가운데로 옮기라고 명령했습니다.",
+      "사냥에서 돌아온 알라딘은 궁전과 아내가 감쪽같이 사라진 것을 보았습니다. 대노한 술탄은 알라딘에게 마흔 날 안에 딸을 찾아오라고 명했습니다. 상심한 알라딘은 시골 들판을 정처 없이 헤매었습니다. 강가에서 손을 씻던 중, 그는 여전히 손가락에 끼고 있던 마법 반지를 우연히 문질렀습니다. 그러자 반지의 요정이 나타났습니다. 반지의 요정은 훨씬 강력한 램프의 요정이 해 놓은 일을 되돌릴 수는 없었지만, 알라딘을 궁전이 있는 곳으로 데려다줄 수는 있었습니다.",
+      "순식간에 사막에 도착한 알라딘은 창문을 통해 몰래 궁전 안으로 숨어들었습니다. 자스민은 그를 보고 기쁨의 눈물을 흘렸습니다. 두 사람은 함께 계략을 꾸몄습니다. 그날 저녁, 공주는 마법사를 만찬에 초대해 그의 술잔에 몰래 독한 수면제를 탔습니다. 마법사는 그것을 마시고 깊은 잠에 빠져들었습니다.",
+      "알라딘은 재빨리 휘장 뒤에서 걸어 나와 마법사의 허리띠에서 마법 램프를 빼앗아 문질렀습니다. 램프의 요정이 나타나 진정한 주인을 다시 섬기게 된 것을 기뻐했습니다. 알라딘은 사악한 마법사를 영원히 사막에 남겨 둔 채 궁전을 원래 있던 자리로 되돌려 놓아 달라고 소원을 빌었습니다.",
+      "다음 날 아침, 술탄은 창밖을 내다보다가 햇살 아래 다시금 찬란하게 빛나는 대리석 궁전을 보았습니다. 알라딘과 자스민은 가족들과 다시 재회하였고, 평생토록 평화와 행복 속에서 살았습니다."
+    ],
     "badge50": "🏆 이정표: 50단어",
     "storyTitle50": "새로운 사람과 인사하기",
     "storyFull50": [
@@ -15378,7 +16229,11 @@ export const STORY_TRANSLATIONS = {
       "— 네, 길 건너편 호텔에 묵을 거예요.",
       "— 금요일이면 그곳에 온 지 얼마나 되는 거예요?",
       "— 금요일이면 그곳에 온 지 이틀이 될 거예요. 그다음에는 집으로 돌아갈 거예요."
-    ]
+    ],
+    "statusLockedPro": "PRO 전용",
+    "proStoryHint": "PRO 회원을 위한 독점 동화",
+    "audioNarrator": "이야기 전체 듣기",
+    "audioLoading": "오디오 로딩 중..."
   },
   "ja": {
     "btnShowTranslation": "翻訳を表示",
@@ -15400,6 +16255,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 ボーナス",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 おとぎ話",
+    "storyTitle1": "アラジンと魔法のランプ",
+    "storyFull1": [
+      "むかしむかし、東方の栄えた都に、アラジンという貧しい少年が暮らしていました。アラジンがまだとても幼いころに父親が亡くなったため、彼は母親と二人きりで生きていました。二人の暮らしは苦しく、母親は食べ物を買うために毎日せっせと綿を紡いで働いていました。アラジンは心のやさしい少年でしたが、働くことよりも通りに出て友だちと遊ぶほうが好きでした。",
+      "ある日のこと、背の高い見知らぬ男が都へやって来ました。その正体は遠い国から来た邪悪な魔法使いでしたが、胸にずる賢い企みを秘めていました。男は市場でアラジンに近づき、穏やかに微笑みかけました。「ああ、可愛い坊や！」と彼は言いました。「私はお前のお父さんの弟なのだよ。お前を見つけ出し、家族を助けるために何年も旅をしてきたのだ。」",
+      "アラジンは驚き、母親は飛び上がるほど喜びました。見知らぬ男はアラジンに上等な新しい服を買い与え、母親には金貨を渡しました。翌朝、魔法使いはアラジンを誘って都の外へと散歩に出かけました。二人は何時間も歩き続け、やがて高い二つの山に挟まれた静かな谷へとたどり着きました。",
+      "魔法使いは小さな焚き火を起こし、不思議な粉をくべて魔法の呪文を唱えました。すると突然地面が揺れ、真ん中に真鍮の輪がついた重い石板が現れました。「この石の下には秘密の洞窟がある」と魔法使いは言いました。「中に入れるのはお前だけだ。階段を下り、黄金や宝石の広間を抜けていくが、決して何にも触れてはならん。いちばん奥に古い油ランプがある。それを私のところへ持って来るのだ。」アラジンが下りる前に、魔法使いはお守りにと、魔法の指輪をアラジンの指にはめました。",
+      "アラジンは洞窟の中へと下りていきました。そこは息を呑むほど美しい場所でした。木々にはきらめくルビーやエメラルド、ダイヤモンドがたわわに実っていました。アラジンは戒めを覚えていましたが、美しいガラス玉だと思い込み、木になっていた光り輝く果実をいくつかポケットにしまいました。洞窟の奥で、彼は埃をかぶった古いランプを見つけました。",
+      "アラジンが入口まで戻って来ると、階段が急すぎて、ランプを手にしたままでは登ることができませんでした。「先にランプをよこせ。そうしたら引き上げてやる！」と魔法使いが怒鳴りました。アラジンは男に置き去りにされるのではないかと恐れ、渡すのを拒みました。激怒した魔法使いが別の呪文を唱えると、重い石板が音を立てて閉まり、アラジンは暗闇の中に閉じ込められてしまいました。",
+      "二日間、アラジンは暗闇に座り込み、泣きながら祈り続けました。そのとき、ふとした拍子に指にはめていた魔法の指輪をこすってしまいました。するとたちまち、煙の雲の中から巨大な精霊（ジーニー）が姿を現しました。「私は指輪の精霊だ」とその声は響き渡りました。「お前の望みは何だ？」",
+      "「母さんのいる家へ連れて帰ってくれ！」とアラジンは叫びました。瞬く間に、アラジンは古いランプを握りしめたまま、自分の家の中に立っていました。",
+      "アラジンの母親はその汚れたランプを見ると、きれいにして売れば食べ物が買えるだろうと思いました。ところが彼女がランプをこすった途端、注ぎ口から巨大で力強い精霊が飛び出し、部屋いっぱいに広がりました。「私はランプの精霊だ！」と彼は雷のように轟かせました。「あなたの望みこそ、私の命令です。」",
+      "アラジンはすかさずご馳走を頼みました。するとたちまち、美味しい料理を山盛りにした銀の皿が食卓に並びました。その日以来、アラジンと母親は二度と飢えることはありませんでした。アラジンは銀の皿を売り払い、ランプを賢く使いながら、礼儀正しく教養のあるりりしい青年へと成長していきました。",
+      "それから何年もの月日が流れ、アラジンはスルタンの娘であるジャスミン姫が都を馬で通る姿を目にしました。彼女はこの世で見たこともないほど美しい女性で、アラジンはたちまち深い恋に落ちました。アラジンは洞窟から持ち帰ったきらめく宝石を鉢いっぱいに盛り、母親に持たせてスルタンの宮殿へ遣わしました。スルタンはその贈り物に驚嘆しましたが、もう一つ条件を出しました。たった一晩のうちに、姫のために壮麗な宮殿を建てよというのです。",
+      "アラジンが魔法のランプをこすると、翌朝には白い大理石と黄金で造られた宮殿がスルタンの宮殿の向かいにそびえ立っていました。スルタンは約束を守り、アラジンとジャスミンは盛大な祝宴の中で結ばれました。二人は仲睦まじく暮らし、都の人々も気前よく親切なアラジンを心から慕いました。",
+      "ところが、はるか遠くの故郷で、あの邪悪な魔法使いはアラジンがまだ生きており、魔法のランプを手に入れていることを知りました。怒りに燃えた彼は再び都へと旅をし、年老いた商人に変装しました。アラジンが狩りに出かけて留守にしている間に宮殿の前を通りかかると、彼は声を張り上げて叫びました。「古いランプと新しいランプを取り替えますよ！ 古いランプをぴかぴかの新しいランプと交換しませんか！」",
+      "窓辺からその声を聞いたジャスミン姫は、アラジンの埃まみれの古いランプに秘められた力を知らなかったため、召使いに命じてぴかぴかの新しいランプと交換させてしまいました。魔法のランプを手にした瞬間、魔法使いは冷酷に笑いながらランプをこすりました。そして精霊に、姫を乗せたまま宮殿ごと、はるか遠いアフリカの砂漠へと運ぶよう命じたのです。",
+      "戻ってきたアラジンの目の前から、宮殿も愛する妻も消え去っていました。スルタンは激怒し、四十日のうちに娘を見つけ出すようアラジンに命じました。心を打ち砕かれたアラジンは、郊外へとさまよい出ました。川で手を洗っていたとき、彼はまだ指にはめていた魔法の指輪をうっかりこすってしまいました。すると指輪の精霊が現れました。指輪の精霊には、より強大な力を持つランプの精霊の仕業を打ち消すことはできませんでしたが、アラジンを宮殿のもとへ運ぶことはできました。",
+      "一瞬にして砂漠へ降り立ったアラジンは、窓からこっそり宮殿の中へ忍び込みました。ジャスミンは彼を見て天にも昇るほど喜びました。二人は力を合わせて策を練りました。その晩、姫は魔法使いを夕食に招き、彼の杯に強力な眠り薬を密かに注ぎ入れました。それを飲み干した魔法使いは、深い眠りに落ちました。",
+      "アラジンはカーテンの陰から素早く飛び出すと、魔法使いの腰帯から魔法のランプを奪い取ってこすりました。現れたランプの精霊は、再び真の主人に仕えられることを大層喜びました。アラジンは、邪悪な魔法使いを永遠に砂漠へ置き去りにしたまま、宮殿をもとのあるべき場所へ戻してほしいと願いました。",
+      "翌朝、スルタンが窓の外を眺めると、大理石の宮殿が再び陽光を受けてまばゆく輝いていました。アラジンとジャスミンは家族と再びめぐり合い、生涯にわたって平和で幸せな日々を送りました。"
+    ],
     "badge50": "🏆 マイルストーン：50単語",
     "storyTitle50": "初めて会う人との会話",
     "storyFull50": [
@@ -15844,7 +16721,11 @@ export const STORY_TRANSLATIONS = {
       "— はい、通りの向かい側にあるホテルに泊まります。",
       "— 金曜日までに、そこに何日いることになりますか？",
       "— 金曜日で、そこに来てから2日になります。その後、家に帰ります。"
-    ]
+    ],
+    "statusLockedPro": "PRO限定",
+    "proStoryHint": "PRO会員限定のおとぎ話",
+    "audioNarrator": "物語の全文を聴く",
+    "audioLoading": "音声を読み込み中..."
   },
   "zh": {
     "btnShowTranslation": "显示翻译",
@@ -15866,6 +16747,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 奖励",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 童话",
+    "storyTitle1": "阿拉丁与神灯",
+    "storyFull1": [
+      "很久很久以前，在东方一座繁华的城市里，住着一个名叫阿拉丁的穷孩子。阿拉丁很小的时候父亲就去世了，因此他与母亲相依为命。母子俩手头十分拮据，母亲每天都要辛勤地纺棉线，好换钱买些食物。阿拉丁是个心地善良的男孩，可他偏偏不喜欢干活，只爱在街上和小伙伴们玩耍。",
+      "有一天，一个身材高大的陌生人来到了这座城市。他其实是来自遥远国度的邪恶魔法师，怀着一个狡猾的图谋。他在集市上走近阿拉丁，露出亲切温暖的笑容。“我亲爱的孩子！”他说道，“我是你父亲的弟弟。我跋涉了许多个年头，就是为了找到你，帮衬你们一家。”",
+      "阿拉丁又惊又喜，他的母亲更是高兴得合不拢嘴。陌生人给阿拉丁买了崭新体面的衣服，还送给他的母亲许多金币。第二天清晨，魔法师请阿拉丁陪他一起去城外散步。他们走了好几个小时，终于来到两座高山之间一处寂静的山谷。",
+      "魔法师点起一小堆篝火，往里面撒了一些奇异的粉末，口中念起魔法咒语。霎时间，大地剧烈震动，一块沉重的石板出现在眼前，石板正中嵌着一个黄铜拉环。“石头底下是一座秘密山洞，”魔法师说道，“只有你能进去。沿着台阶走下去，穿过摆满黄金和珠宝的大厅，切记不要触碰任何东西。在最尽头，你会看到一盏旧油灯。把它给我拿回来。”在阿拉丁下去之前，魔法师将一枚魔法戒指套在阿拉丁的手指上，用来保护他的安全。",
+      "阿拉丁顺着台阶爬进了山洞。里面的景象令人叹为观止，树上挂满了璀璨夺目的红宝石、祖母绿和钻石。阿拉丁牢记着魔法师的警告，不过他还是从树上摘了几颗闪亮的果子塞进口袋，只当那是好看的彩色玻璃。在山洞的尽头，他找到了那盏积满灰尘的旧油灯。",
+      "当阿拉丁回到洞口时，台阶实在太陡了，他手里拿着灯根本爬不上去。“先把灯递给我，我再拉你出来！”魔法师怒气冲冲地大喊。阿拉丁生怕这人把自己扔在洞里不管，便拒绝了。魔法师恼羞成怒，又念起另一道咒语，沉重的石板轰然合拢，将阿拉丁困在了黑暗之中。",
+      "整整两天，阿拉丁坐在黑暗里哭泣祈祷。无意之中，他摩擦到了手指上的魔法戒指。瞬间，一团浓烟升腾而起，一个巨大的精灵出现在他面前。“我是戒指精灵，”那精灵声如洪钟地说道，“你有什么愿望？”",
+      "“带我回家回到我母亲身边！”阿拉丁呼喊道。一眨眼的工夫，阿拉丁便站在了自己家中，手里依然紧握着那盏旧油灯。",
+      "阿拉丁的母亲看到这盏脏兮兮的油灯，便想把它擦干净拿去卖钱买吃的。可她刚一擦拭灯身，一个身材魁梧、法力无边的巨人精灵便从灯嘴里喷涌而出，挤满了整间屋子。“我是神灯精灵！”他如雷霆般轰鸣道，“您的愿望就是我的命令。”",
+      "阿拉丁急忙要了一桌丰盛的酒席。话音刚落，盛满美味佳肴的银盘便出现在餐桌上。从那天起，阿拉丁和母亲再也没有挨过饿。阿拉丁变卖了银盘，并明智地运用神灯，渐渐成长为一位谦逊有礼、饱读诗书又英俊潇洒的青年。",
+      "多年以后，阿拉丁看见苏丹的女儿茉莉公主骑马穿过城池。她是阿拉丁生平见过最美丽的女子，他立刻深深爱上了她。阿拉丁派母亲端着一碗从山洞里带回来的闪亮珠宝前往王宫拜见苏丹。苏丹对这份厚礼惊叹不已，却又提出了一个条件：阿拉丁必须在一夜之间为公主建起一座富丽堂皇的宫殿。",
+      "阿拉丁擦亮神灯，到了第二天清晨，一座由白玉大理石与黄金筑成的宫殿便矗立在了苏丹王宫的对面。苏丹信守诺言，阿拉丁与茉莉公主在盛大的庆典中喜结连理。夫妻俩幸福地生活在一起，城里的百姓也因阿拉丁的慷慨仁厚而无比爱戴他。",
+      "然而，远在故乡的邪恶魔法师却得知阿拉丁不仅还活着，还拥有那盏神灯。他满腔怒火地重返这座城市，乔装成一名年迈的商人。趁着阿拉丁外出打猎之际，他走过阿拉丁的宫殿门前，高声吆喝着：“旧灯换新灯啦！用你们的旧灯换闪亮的新灯啦！”",
+      "茉莉公主在窗边听见了叫卖声。她并不知道阿拉丁那盏积灰的旧油灯里藏着的秘密，便打发仆人拿去换了一盏光亮的新灯。魔法师一拿到神灯，立刻发出残忍的狂笑并擦拭起来。他命令精灵把整座宫殿——连同身处其中的公主一起——搬到遥远的非洲沙漠里去。",
+      "当阿拉丁回来时，他的宫殿和爱妻都已消失得无影无踪。苏丹震怒之下，限阿拉丁在四十天内找回自己的女儿。心碎的阿拉丁一路徘徊到了乡野之间。在河边洗手时，他无意中擦到了依然戴在手上的魔法戒指。戒指精灵随即现身。他无法破解法力更为强大的神灯精灵所施下的法术，却可以把阿拉丁送到宫殿所在的地方。",
+      "转瞬之间，阿拉丁便来到了沙漠之中，并顺着一扇窗户悄悄潜入了宫殿。茉莉公主见到他喜出望外。夫妻俩商议好了一个计策。那天晚上，公主邀请魔法师共进晚餐，趁其不备将一剂药力极强的安眠药倒进了他的酒杯。魔法师一饮而尽，很快便沉沉睡去。",
+      "阿拉丁迅速从帘幕后走了出来，从魔法师的腰带上取下神灯并擦拭起来。神灯精灵现身了，能再次效忠真正的主人令他欣喜若狂。阿拉丁许愿让宫殿重返原本属于它的地方，把邪恶的魔法师永远留在了荒漠之中。",
+      "第二天早晨，苏丹向窗外望去，只见那座大理石宫殿再一次在阳光下熠熠生辉。阿拉丁和茉莉公主与家人团聚，从此过上了安宁幸福的生活，直到终老。"
+    ],
     "badge50": "🏆 里程碑：50个单词",
     "storyTitle50": "认识新朋友",
     "storyFull50": [
@@ -16310,7 +17213,11 @@ export const STORY_TRANSLATIONS = {
       "— 会，我会住在街对面的一家酒店。",
       "— 到星期五时，你在那儿待了多久？",
       "— 到星期五时，我在那里就已经待了两天了。然后我就要回家了。"
-    ]
+    ],
+    "statusLockedPro": "PRO 专属",
+    "proStoryHint": "PRO 会员专属童话",
+    "audioNarrator": "收听完整故事",
+    "audioLoading": "正在加载音频..."
   },
   "kk": {
     "btnShowTranslation": "Аудармасын көрсету",
@@ -16332,6 +17239,28 @@ export const STORY_TRANSLATIONS = {
     "badge0": "🏆 Бонус",
     "storyTitle0": "Japanese Fairy Tales by Yei Theodora Ozaki",
     "storyFull0": [],
+    "badge1": "🏆 Ертегі",
+    "storyTitle1": "Аладдин және сиқырлы шам",
+    "storyFull1": [
+      "Ертеде, Шығыстағы қайнаған тіршілікті үлкен қалада Аладдин есімді кедей бала өмір сүріпті. Аладдин тым жас кезінде әкесі дүниеден өтіп, ол анасымен ғана тұратын. Олардың қаражаты өте аз болғандықтан, анасы тамақ сатып алу үшін күн сайын мақта иіріп, тынымсыз еңбек ететін. Аладдин мейірімді бала болғанымен, жұмыс істегеннен гөрі көшеде достарымен ойнап жүргенді жақсы көретін.",
+      "Бір күні қалаға бойшаң бөгде адам келеді. Шын мәнінде ол алыс өлкеден келген зұлым сиқыршы еді, әрі көкейінде қулыққа толы жоспары бар болатын. Ол базарда Аладдиннің жанына келіп, жылы жымия сөз қатты: «Қымбатты балам! Мен сенің әкеңнің туған бауырымын. Сені тауып, отбасыңа қолұшын беру үшін талай жыл жол жүріп келдім».",
+      "Аладдин қатты таңғалды, ал анасының қуанышында шек болмады. Бөгде адам Аладдинге сәнді жаңа киімдер сатып әперіп, анасына алтын теңгелер ұсынды. Келесі күні таңертең сиқыршы Аладдинді қала сыртына серуендеп қайтуға шақырды. Екеуі сағаттап жаяу жүріп, ақыры екі биік таудың ортасындағы тып-тыныш алқапқа жетті.",
+      "Сиқыршы шағын от жағып, оған біртүрлі ұнтақ септі де, сиқырлы сөздерді сыбырлады. Кенет жер сілкініп, ортасында жез сақинасы бар ауыр тас тақта пайда болды. «Бұл тастың астында құпия үңгір бар, — деді сиқыршы. — Оған тек сен ғана кіре аласың. Баспалдақпен төмен түс, алтын мен асыл тастарға толы залдардан өт, бірақ ештеңеге тиіспе. Ең түкпірінде ескі май шам жатыр. Соны маған алып кел». Аладдин төмен түспес бұрын, сиқыршы қорғаныш болсын деп оның саусағына сиқырлы жүзік тағып қойды.",
+      "Аладдин үңгірдің ішіне түсті. Мұндағы көрініс көз жауын алатындай ғажап еді. Ағаштар жарқыраған лағыл, зүбәржат және гауһар тастармен көмкеріліпті. Аладдин ескертуді есінде сақтағанымен, ағаштардағы жылтыраған жемістерді жай ғана әдемі әйнек екен деп ойлап, бірнешеуін қалтасына салып алды. Үңгірдің түбінен ол шаң басқан ескі шамды тапты.",
+      "Аладдин кіреберіске қайта оралғанда, қолындағы шаммен тік баспалдақтан өрмелеп шығу тым қиын болды. «Алдымен шамды маған бер, содан кейін сені тартып шығарамын!» — деп айғайлады сиқыршы ашулана. Аладдин әлгі адам өзін осында тастап кете ме деп қорқып, шамды беруден бас тартты. Қаһарына мінген сиқыршы тағы бір дуа оқығанда, ауыр тас тарс етіп жабылып, Аладдинді қараңғы қапаста қалдырды.",
+      "Екі күн бойы Аладдин қараңғыда отырып, жылап, дұға етумен болды. Абайсызда ол саусағындағы сиқырлы жүзікті уқалап қалды. Сол сәтте будақтаған түтін ішінен алып жын пайда болды. «Мен — Жүзіктің Жынымын, — деп гүрілдеді тылсым рух. — Тілегің не?»",
+      "«Мені үйіме, анамның жанына жеткіз!» — деп айғайлады Аладдин. Көзді ашып-жұмғанша Аладдин қолындағы ескі шамын ұстаған күйі өз үйінде тұр екен.",
+      "Аладдиннің анасы кір басқан шамды көрген соң, оны сатып тамақ алу үшін тазалап қоймақ болды. Анасы шамды ысқылай бастағаны сол еді, оның шүмегінен алып әрі құдіретті жын атып шығып, бүкіл бөлмені алып кетті. «Мен — Шамның Жынымын! — деп күркіреді ол. — Сіздің тілегіңіз — мен үшін бұйрық».",
+      "Аладдин кідірместен мол дастарқан жаюды сұрады. Сол мезетте үстел үстінде дәмді тағамдарға толы күміс табақтар пайда болды. Сол күннен бастап Аладдин мен анасы енді ешқашан аштық көрмеді. Аладдин күміс табақтарды сатып, шамды ақылмен пайдалана отырып, әдепті, білімді әрі келбетті бозбала болып өсті.",
+      "Арада жылдар өткен соң, Аладдин қала көшесімен ат мініп өтіп бара жатқан сұлтанның қызы Жасмин ханшайымды көріп қалды. Ол Аладдин өмірінде көрген ең сұлу ару еді, сөйтіп бозбала оған шын ғашық болып қалды. Аладдин анасын үңгірден әкелген жарқыраған асыл тастарға толы тостағанмен сұлтан сарайына аттандырды. Сұлтан сыйлыққа таңғалды, бірақ тағы бір шарт қойды: Аладдин бір түннің ішінде ханшайымға арнап сәулетті сарай тұрғызуы тиіс болды.",
+      "Аладдин сиқырлы шамды сипап қалды да, келесі күні таңертең сұлтан сарайының қарсысында ақ мәрмәр мен алтыннан соғылған зәулім сарай бой көтерді. Сұлтан уәдесінде тұрып, Аладдин мен Жасминнің дүбірлі тойы өтті. Екеуі бақытты ғұмыр кешті, ал қала халқы Аладдинді жомарттығы үшін ерекше жақсы көрді.",
+      "Алайда алыстағы туған жерінде отырған зұлым сиқыршы Аладдиннің әлі тірі екенін және сиқырлы шамның соның қолында екенін біліп қойды. Ашуға булыққан ол қалаға қайта келіп, кәрі саудагер кейпіне енді. Аладдин аңға кеткен кезде оның сарайының жанынан өтіп бара жатып: «Ескі шамды жаңасына ауыстырамын! Ескі шамдарыңызды жылтыраған жаңа шамға айырбастаңыздар!» — деп жар салды.",
+      "Жасмин ханшайым бұл дауысты терезеден естіп қалды. Ол Аладдиннің шаң басқан ескі шамының құпиясын білмейтін, сондықтан қызметшісіне оны жарқыраған жаңа шамға айырбастап келуді бұйырды. Сиқыршы сиқырлы шамды қолына алған сәтте қатыгездікпен қарқылдап күліп, оны ысқылап жіберді. Ол жынға бүкіл сарайды — ішіндегі ханшайыммен қоса — Африкадағы алыс шөлге апарып тастауды бұйырды.",
+      "Аладдин қайтып оралғанда, сарайы да, жары да жоқ болып шықты. Қатты ашуланған сұлтан Аладдинге қызын табуға қырық күн мұрсат берді. Жүрегі қарс айырылған Аладдин елсіз далаға қаңғырып кетті. Өзенде қолын жуып отырып, ол саусағында әлі күнге дейін тағулы тұрған сиқырлы жүзікті байқаусызда уқалап қалды. Жүзіктің Жыны пайда болды. Ол әлдеқайда құдіретті Шам Жынының ісін жоя алмаса да, Аладдинді сол сарайға жеткізіп сала алатын еді.",
+      "Көзді ашып-жұмғанша Аладдин шөл далаға тап болып, терезе арқылы сарайға жасырын кірді. Жасмин оны көргенде төбесі көкке жеткендей қуанды. Екеуі бірігіп жоспар құрды. Сол кеште ханшайым сиқыршыны кешкі асқа шақырып, оның тостағанына білдіртпей күшті ұйықтататын дәрі құйып жіберді. Сиқыршы оны ішіп, терең ұйқыға кетті.",
+      "Аладдин перденің артынан жылдам шығып, сиқыршының белбеуінен сиқырлы шамды суырып алды да, оны сипады. Шамның Жыны өзінің нағыз иесіне қайта қызмет етуге қуана отырып лезде жетіп келді. Аладдин зұлым сиқыршыны шөл далада мәңгілікке қалдырып, сарайды өзінің бұрынғы орнына қайтаруды тіледі.",
+      "Келесі күні таңертең сұлтан терезеден сыртқа қарап, күн нұрына шомылып жарқырап тұрған мәрмәр сарайды қайта көрді. Аладдин мен Жасмин өз отбасымен қайта қауышып, өмірлерінің соңына дейін бейбітшілік пен бақытта өмір сүрді."
+    ],
     "badge50": "🏆 Меже: 50 сөз",
     "storyTitle50": "Жаңа адаммен танысу",
     "storyFull50": [
@@ -16776,7 +17705,11 @@ export const STORY_TRANSLATIONS = {
       "— Иә, көшенің арғы бетіндегі қонақүйде боламын.",
       "— Жұмаға дейін ол жерде қанша уақыт болған боласың?",
       "— Жұмаға қарай ол жерде екі күн болған боламын. Содан кейін үйге қарай жолға шығамын."
-    ]
+    ],
+    "statusLockedPro": "Тек PRO нұсқасында",
+    "proStoryHint": "PRO жазылушыларына арналған эксклюзивті ертегі",
+    "audioNarrator": "Ертегіні толық тыңдау",
+    "audioLoading": "Аудио жүктелуде..."
   }
 };
 

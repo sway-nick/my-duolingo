@@ -11,7 +11,7 @@ import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
 import { ProService } from '../../services/proService.js?v=386.0';
 import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { getFreeShieldsLeft, isProActive } from '../../services/proState.js?v=386.0';
+import { getFreeShieldsLeft, isProActive, isDebugForceFree, setDebugForceFree } from '../../services/proState.js?v=386.0';
 
 if (typeof window !== 'undefined') {
   window.openWidgetConfigBottomSheet = openWidgetConfigBottomSheet;
@@ -173,17 +173,19 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       ${(() => {
         const isNativeApp = Boolean(typeof window !== 'undefined' && window.Capacitor && ((typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) || (typeof window.Capacitor.getPlatform === 'function' && window.Capacitor.getPlatform() !== 'web')));
         const isDebug = typeof localStorage !== 'undefined' && localStorage.getItem('myduo_debug_mode') === 'true';
+        const isForceFree = isDebugForceFree();
         const isProNow = ProService.isPro();
-        if (!isNativeApp && !isProNow && !isDebug) return '';
+        if (!isNativeApp && !isProNow && !isDebug && !isForceFree) return '';
         const sPro = getProStrings(getInterfaceLanguage());
         const promoEnabled = typeof localStorage === 'undefined' || localStorage.getItem('eb_promo_codes_enabled') !== 'false';
         return `
         <div class="settings-card" id="settings-pro-section" style="padding: 16px 14px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:${isProNow ? '0' : '10px'};">
+          <div id="settings-pro-header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:${isProNow ? '0' : '10px'};cursor:pointer;user-select:none;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;font-size:11px;">${escapeHtml(sPro.pro_badge)}</span>
               <h3 class="settings-card-title" style="margin:0;">${escapeHtml(sPro.pro_title)}</h3>
             </div>
+            ${isForceFree ? `<span style="padding:2px 8px;border-radius:999px;background:rgba(239,68,68,0.16);color:#ef4444;font-weight:800;font-size:10.5px;letter-spacing:0.3px;">FREE TEST</span>` : ''}
           </div>
           ${isProNow ? '' : `
             <button type="button" class="theme-option-btn active" id="btn-settings-open-pro" style="width:100%;justify-content:center;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;border:none;margin-bottom:8px;">
@@ -696,6 +698,29 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   }
 
   // Bind PRO section buttons
+  const proHeaderEl = container.querySelector('#settings-pro-header');
+  if (proHeaderEl) {
+    let proTapCount = 0;
+    let proTapTimer = null;
+    proHeaderEl.addEventListener('click', () => {
+      proTapCount++;
+      if (proTapTimer) clearTimeout(proTapTimer);
+      proTapTimer = setTimeout(() => {
+        proTapCount = 0;
+      }, 2500);
+      if (proTapCount >= 7) {
+        proTapCount = 0;
+        clearTimeout(proTapTimer);
+        const nextForceFree = !isDebugForceFree();
+        setDebugForceFree(nextForceFree);
+        try {
+          if (navigator.vibrate) navigator.vibrate(40);
+        } catch (_) {}
+        renderSettingsView(containerSelector, onUserChange, allWords);
+      }
+    });
+  }
+
   const proMsgEl = container.querySelector('#eb-settings-pro-msg');
   const showProMsg = (text, isOk = false) => {
     if (!proMsgEl) return;

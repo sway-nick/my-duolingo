@@ -25,6 +25,7 @@ const STORAGE_KEY_UNLOCKED = 'myduo_microrules_unlocked';
 const STORAGE_KEY_QUIZ_DONE = 'myduo_microrules_quiz_done';
 const STORAGE_KEY_CARD_IDX = 'myduo_microrules_card_idx';
 const STORAGE_KEY_LEVEL = 'myduo_microrules_level';
+const STORAGE_KEY_PAGE_PREFIX = 'myduo_microrules_page_';
 const RTL_LOCALES = new Set(['ar', 'fa', 'ur']);
 const PAGE_SIZE = 10;
 const levels = ['A1', 'A2', 'B1', 'B2'];
@@ -108,6 +109,23 @@ function saveLevel(lvl) {
     if (levels.includes(lvl)) {
       localStorage.setItem(STORAGE_KEY_LEVEL, lvl);
     }
+  } catch (_) {}
+}
+
+export function loadSavedMicroRulesPage(lvl = 'A1') {
+  try {
+    if (typeof localStorage === 'undefined') return 1;
+    const raw = localStorage.getItem(STORAGE_KEY_PAGE_PREFIX + lvl);
+    const val = parseInt(raw, 10);
+    if (Number.isFinite(val) && val >= 1) return val;
+  } catch (_) {}
+  return 1;
+}
+
+export function saveSavedMicroRulesPage(lvl = 'A1', page = 1) {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(STORAGE_KEY_PAGE_PREFIX + lvl, String(page));
   } catch (_) {}
 }
 
@@ -802,7 +820,10 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   const { MICRO_RULES, getLocalizedMicroRule, getTopicTitle } = cachedDataMod;
 
   let activeLevel = loadSavedLevel();
-  let currentPage = 1;
+  let currentPage = options._currentPage !== undefined
+    ? Number(options._currentPage)
+    : loadSavedMicroRulesPage(activeLevel);
+  if (!Number.isFinite(currentPage) || currentPage < 1) currentPage = 1;
   const doneSet = loadDoneSet();
   const unlockedSet = loadUnlockedSet();
   const quizDoneSet = loadQuizDoneSet();
@@ -1027,13 +1048,11 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         btn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
 
         try {
-          const adRes = await AdService.showLanguagePackRewardedAd(locTitle);
-          if (adRes && (adRes.rewardEarned || adRes.success)) {
-            unlockedSet.add(id);
-            saveUnlockedSet(unlockedSet);
-            updateDynamicContent();
-            return;
-          }
+          await AdService.showPaginationInterstitial('micro_rules_unlock');
+          unlockedSet.add(id);
+          saveUnlockedSet(unlockedSet);
+          updateDynamicContent();
+          return;
         } catch (err) {
           console.warn('Micro-rule ad unlock error:', err);
         }
@@ -1187,6 +1206,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
     if (currentPage > totalPages) currentPage = totalPages;
     if (currentPage < 1) currentPage = 1;
+    saveSavedMicroRulesPage(activeLevel, currentPage);
 
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = Math.min(startIndex + PAGE_SIZE, filtered.length);
@@ -1251,12 +1271,22 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     `;
     bindCardListeners(bodyEl);
 
+    if (totalPages > 1 && !isProActive()) {
+      AdService.preloadPaginationInterstitial().catch(() => {});
+    }
+
     bodyEl.querySelectorAll('[data-mr-page]').forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         if (btn.disabled) return;
         const targetPage = Number(btn.getAttribute('data-mr-page'));
         if (!targetPage || targetPage === currentPage || targetPage < 1 || targetPage > totalPages) return;
+        if (!isProActive()) {
+          try {
+            await AdService.showPaginationInterstitial('micro_rules');
+          } catch (_) {}
+        }
         currentPage = targetPage;
+        saveSavedMicroRulesPage(activeLevel, currentPage);
         updateDynamicContent();
         scrollToTop();
       });
@@ -1304,7 +1334,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       if (newLevel === activeLevel) return;
       activeLevel = newLevel;
       saveLevel(activeLevel);
-      currentPage = 1;
+      currentPage = loadSavedMicroRulesPage(activeLevel);
       container.querySelectorAll('[data-mr-level]').forEach((b) =>
         b.classList.toggle('is-active', b === btn)
       );

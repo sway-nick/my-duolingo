@@ -1,6 +1,7 @@
 import { getUserFavorites, toggleFavoriteApi } from './api.js?v=386.0';
 import { getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
 import { isProActive } from './proState.js?v=386.0';
+import { getPairWordKeys } from './confusablePairsData.js?v=386.0';
 
 const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
 const STORAGE_KEY_ACTIVE_COLLECTION = 'myduo_active_collection_id';
@@ -1683,6 +1684,94 @@ export const BUILTIN_COLLECTIONS_DEF = [
       "on time",
       "no way"
     ]
+  },
+  {
+    id: 'tricky_sounds',
+    isBuiltin: true,
+    icon: '🎧',
+    name: {
+          "ru": "Ловушки на слух",
+          "uk": "Пастки для слуху",
+          "en": "Tricky Sounds",
+          "de": "Klangfallen",
+          "es": "Trampas del oído",
+          "fr": "Pièges d'oreille",
+          "pl": "Pułapki słuchowe",
+          "tr": "Kulak Tuzakları",
+          "it": "Trappole dell'orecchio",
+          "ro": "Capcane auditive",
+          "bg": "Капани за слуха",
+          "hu": "Fülcsapdák",
+          "el": "Παγίδες ακοής",
+          "da": "Lydfælder",
+          "lv": "Dzirdes lamatas",
+          "lt": "Klausos spąstai",
+          "pt": "Armadilhas de som",
+          "sk": "Sluchové pasce",
+          "sl": "Slušne pasti",
+          "fi": "Kuulon ansat",
+          "hr": "Slušne zamke",
+          "cs": "Sluchové pasti",
+          "sv": "Hörselfällor",
+          "et": "Kuulmislõksud",
+          "hi": "सुनने के जाल",
+          "ar": "فخاخ السمع",
+          "id": "Jebakan Pendengaran",
+          "vi": "Bẫy thính giác",
+          "th": "กับดักเสียง",
+          "ko": "발음 함정",
+          "ja": "聞き分けトラップ",
+          "bn": "শোনার ফাঁদ",
+          "fa": "تله‌های شنیداری",
+          "zh": "听音陷阱",
+          "ur": "سماعت کے جال",
+          "kk": "Есту тұзақтары"
+    },
+    wordKeys: getPairWordKeys('tricky_sounds'),
+  },
+  {
+    id: 'confusing_words',
+    isBuiltin: true,
+    icon: '👯',
+    name: {
+          "ru": "Коварные близнецы",
+          "uk": "Підступні близнюки",
+          "en": "Look-Alike Twins",
+          "de": "Fiese Zwillinge",
+          "es": "Gemelos traicioneros",
+          "fr": "Faux jumeaux",
+          "pl": "Podstępne bliźniaki",
+          "tr": "Sinsi İkizler",
+          "it": "Gemelli ingannevoli",
+          "ro": "Gemeni înșelători",
+          "bg": "Коварни близнаци",
+          "hu": "Alattomos ikrek",
+          "el": "Ύπουλοι δίδυμοι",
+          "da": "Lumske tvillinger",
+          "lv": "Viltīgie dvīņi",
+          "lt": "Klastingi dvyniai",
+          "pt": "Gêmeos traiçoeiros",
+          "sk": "Zákerné dvojčatá",
+          "sl": "Zahrbtni dvojčki",
+          "fi": "Salakavalat kaksoset",
+          "hr": "Podmukli blizanci",
+          "cs": "Záludná dvojčata",
+          "sv": "Lömska tvillingar",
+          "et": "Salakavalad kaksikud",
+          "hi": "धोखेबाज़ जुड़वाँ",
+          "ar": "التوائم الماكرة",
+          "id": "Kembar Menjebak",
+          "vi": "Cặp song sinh dễ nhầm",
+          "th": "ฝาแฝดจอมลวง",
+          "ko": "헷갈리는 쌍둥이",
+          "ja": "まぎらわしい双子",
+          "bn": "ধোঁকাবাজ যমজ",
+          "fa": "دوقلوهای فریبکار",
+          "zh": "易混淆的双胞胎",
+          "ur": "دھوکے باز جڑواں",
+          "kk": "Алдамшы егіздер"
+    },
+    wordKeys: getPairWordKeys('confusing_words'),
   }
 ];
 

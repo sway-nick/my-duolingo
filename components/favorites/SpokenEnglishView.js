@@ -6,9 +6,46 @@ import { AdService } from '../../services/adService.js?v=386.0';
 import { isProActive } from '../../services/proState.js?v=386.0';
 import { ProService } from '../../services/proService.js?v=386.0';
 import { getProStrings } from '../../services/proI18n.js?v=386.0';
+import { getMicroRulesStrings } from './grammarUiTranslations.js?v=386.0';
 
+const PAGE_SIZE = 10;
 const STORAGE_KEY_SPOKEN_AD_UNLOCKED = 'myduo_spoken_ad_unlocked';
 const STORAGE_KEY_SPOKEN_UNLOCKED_COUNT = 'myduo_spoken_unlocked_count';
+const STORAGE_KEY_SPOKEN_PAGE_PREFIX = 'myduo_spoken_page_';
+const STORAGE_KEY_SPOKEN_CAT = 'myduo_spoken_cat';
+
+export function loadSavedSpokenPage(cat = 'all') {
+  try {
+    if (typeof localStorage === 'undefined') return 1;
+    const raw = localStorage.getItem(STORAGE_KEY_SPOKEN_PAGE_PREFIX + cat);
+    const val = parseInt(raw, 10);
+    if (Number.isFinite(val) && val >= 1) return val;
+  } catch (_) {}
+  return 1;
+}
+
+export function saveSavedSpokenPage(cat = 'all', page = 1) {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(STORAGE_KEY_SPOKEN_PAGE_PREFIX + cat, String(page));
+  } catch (_) {}
+}
+
+export function loadSavedSpokenCategory() {
+  try {
+    if (typeof localStorage === 'undefined') return 'all';
+    const val = localStorage.getItem(STORAGE_KEY_SPOKEN_CAT);
+    if (['all', 'reductions', 'drops', 'texting', 'phrases'].includes(val)) return val;
+  } catch (_) {}
+  return 'all';
+}
+
+export function saveSavedSpokenCategory(cat) {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(STORAGE_KEY_SPOKEN_CAT, cat);
+  } catch (_) {}
+}
 
 export function getSpokenUnlockedLimit() {
   const total = SPOKEN_ENGLISH_ITEMS.length;
@@ -37,19 +74,54 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+function getPageNumbers(current, total) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (current <= 4) {
+    return [1, 2, 3, 4, 5, '...', total];
+  }
+  if (current >= total - 3) {
+    return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  }
+  return [1, '...', current - 1, current, current + 1, '...', total];
+}
+
 export function renderSpokenEnglishView(containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
   const { onBack = () => {} } = options;
   const lang = getInterfaceLanguage();
+  const isRtl = ['ar', 'fa', 'ur'].includes(lang);
   const s = getSpokenEnglishStrings(lang);
   const sPro = getProStrings(lang);
-  const activeCategoryInit = options._activeCategory || 'all';
+  const mrStrings = getMicroRulesStrings(lang);
+  const prevLabel = mrStrings.prevBtn || 'Previous';
+  const nextLabel = mrStrings.nextBtn || 'Next';
+
+  const activeCategoryInit = options._activeCategory || loadSavedSpokenCategory();
   if (typeof window !== 'undefined' && window.trackScreen) {
     window.trackScreen('spoken_english', 'SpokenEnglishView');
   }
   let activeCategory = activeCategoryInit;
+  let currentPage = options._currentPage !== undefined
+    ? Number(options._currentPage)
+    : loadSavedSpokenPage(activeCategory);
+  if (!Number.isFinite(currentPage) || currentPage < 1) currentPage = 1;
+
+  function scrollToTop() {
+    try {
+      const pageEl = container.querySelector('.spoken-page') || container;
+      if (pageEl && typeof pageEl.scrollIntoView === 'function') {
+        pageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch (_) {
+      window.scrollTo(0, 0);
+    }
+  }
 
   function render() {
     const isPro = isProActive();
@@ -70,6 +142,16 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
 
     const visibleItems = filteredItems.filter(({ index }) => index < unlockedLimit);
 
+    const totalPages = Math.max(1, Math.ceil(visibleItems.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    saveSavedSpokenPage(activeCategory, currentPage);
+    saveSavedSpokenCategory(activeCategory);
+
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = Math.min(startIndex + PAGE_SIZE, visibleItems.length);
+    const pageItems = visibleItems.slice(startIndex, endIndex);
+
     const filterChipsHtml = ['all', 'reductions', 'drops', 'texting', 'phrases']
       .map((cat) => `
         <button type="button" class="spoken-filter-chip ${activeCategory === cat ? 'is-active' : ''}" data-spoken-cat="${cat}">
@@ -78,7 +160,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       `)
       .join('');
 
-    const cardsHtml = visibleItems.map(({ item, index }) => {
+    const cardsHtml = pageItems.map(({ item, index }) => {
       const loc = getLocalizedSpokenItem(item, lang);
       const badgeLabel = catLabels[item.category] || item.category;
       return `
@@ -113,6 +195,45 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         </article>
       `;
     }).join('');
+
+    const pageNumbers = getPageNumbers(currentPage, totalPages);
+    const pageButtons = pageNumbers.map((p) => {
+      if (p === '...') {
+        return `<span class="spoken-page-ellipsis">…</span>`;
+      }
+      return `
+        <button
+          type="button"
+          class="spoken-page-btn ${p === currentPage ? 'is-active' : ''}"
+          data-spoken-page="${p}"
+          aria-label="Page ${p}"
+          aria-current="${p === currentPage ? 'page' : 'false'}"
+        >${p}</button>
+      `;
+    });
+
+    const paginationHtml = totalPages > 1 ? `
+      <div class="spoken-pagination">
+        <button
+          type="button"
+          class="spoken-page-btn spoken-page-nav"
+          data-spoken-page="${currentPage - 1}"
+          ${currentPage <= 1 ? 'disabled' : ''}
+          aria-label="${escapeHtml(prevLabel)}"
+        >‹</button>
+        ${pageButtons.join('')}
+        <button
+          type="button"
+          class="spoken-page-btn spoken-page-nav"
+          data-spoken-page="${currentPage + 1}"
+          ${currentPage >= totalPages ? 'disabled' : ''}
+          aria-label="${escapeHtml(nextLabel)}"
+        >›</button>
+      </div>
+      <div class="spoken-page-info">
+        ${visibleItems.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleItems.length}` : ''}
+      </div>
+    ` : '';
 
     let gateBoxHtml = '';
     if (!isPro && unlockedLimit < total) {
@@ -165,6 +286,16 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-example-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
         .spoken-example-en { font-size: 13.5px; font-weight: 700; color: var(--text-main, #0f172a); overflow-wrap: anywhere; min-width: 0; }
         .spoken-example-tr { margin-top: 3px; font-size: 12.5px; color: var(--text-muted, #64748b); overflow-wrap: anywhere; }
+        .spoken-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 18px; margin-bottom: 6px; flex-wrap: wrap; }
+        .spoken-page-btn { min-width: 38px; height: 38px; padding: 0 10px; border-radius: 11px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
+        .spoken-page-btn:active:not(:disabled) { transform: scale(0.96); }
+        .spoken-page-btn:hover:not(:disabled) { border-color: var(--primary-color, #2563eb); }
+        .spoken-page-btn.is-active { background: var(--primary-color, #2563eb); border-color: var(--primary-color, #2563eb); color: #ffffff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
+        body.dark-theme .spoken-page-btn.is-active, .dark-theme .spoken-page-btn.is-active, [data-theme="dark"] .spoken-page-btn.is-active { background: var(--primary-color, #38bdf8); border-color: var(--primary-color, #38bdf8); color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
+        .spoken-page-btn:disabled { opacity: 0.3; cursor: default; }
+        .spoken-page-btn.spoken-page-nav { font-size: 18px; font-weight: 800; }
+        .spoken-page-ellipsis { min-width: 28px; height: 38px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; user-select: none; }
+        .spoken-page-info { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); margin-bottom: 12px; }
         .spoken-gate-box { width: 100%; box-sizing: border-box; margin-top: 16px; padding: 20px 16px; border-radius: 16px; background: var(--card-bg, #ffffff); border: 1.5px solid rgba(245, 158, 11, 0.35); text-align: center; }
         .spoken-gate-counter { margin: 0 0 10px; font-size: 14px; font-weight: 800; color: var(--text-main, #0f172a); }
         .spoken-gate-actions { display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto 10px; }
@@ -172,7 +303,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-pro-btn { background: linear-gradient(135deg, #f59e0b, #ea580c); }
         .spoken-gate-hint { margin: 0; font-size: 12.5px; color: var(--text-muted, #64748b); }
       </style>
-      <div class="spoken-page">
+      <div class="spoken-page" dir="${isRtl ? 'rtl' : 'ltr'}">
         <div class="spoken-header">
           <button type="button" id="spoken-back-btn" class="spoken-back-btn">‹ ${escapeHtml(s.backBtn)}</button>
           <h2 class="spoken-title">${escapeHtml(s.hubTitle)}</h2>
@@ -180,6 +311,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         <p class="spoken-sub">${escapeHtml(s.hubSubtitle)}</p>
         <div class="spoken-filters">${filterChipsHtml}</div>
         <div class="spoken-list">${cardsHtml}</div>
+        ${paginationHtml}
         ${gateBoxHtml}
       </div>
     `;
@@ -188,9 +320,37 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
 
     container.querySelectorAll('[data-spoken-cat]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        activeCategory = btn.getAttribute('data-spoken-cat') || 'all';
+        const cat = btn.getAttribute('data-spoken-cat') || 'all';
+        if (cat === activeCategory) return;
+        activeCategory = cat;
         options._activeCategory = activeCategory;
+        saveSavedSpokenCategory(activeCategory);
+        currentPage = loadSavedSpokenPage(activeCategory);
+        options._currentPage = currentPage;
         render();
+        scrollToTop();
+      });
+    });
+
+    if (totalPages > 1 && !isProActive()) {
+      AdService.preloadPaginationInterstitial().catch(() => {});
+    }
+
+    container.querySelectorAll('[data-spoken-page]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (btn.disabled) return;
+        const targetPage = Number(btn.getAttribute('data-spoken-page'));
+        if (!targetPage || targetPage === currentPage || targetPage < 1 || targetPage > totalPages) return;
+        if (!isProActive()) {
+          try {
+            await AdService.showPaginationInterstitial('spoken_english');
+          } catch (_) {}
+        }
+        currentPage = targetPage;
+        options._currentPage = currentPage;
+        saveSavedSpokenPage(activeCategory, currentPage);
+        render();
+        scrollToTop();
       });
     });
 
@@ -209,17 +369,19 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       const prev = adBtn.innerHTML;
       adBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
       try {
-        const res = await AdService.showLanguagePackRewardedAd(s.hubTitle);
-        if (!res || (!res.rewardEarned && !res.isOffline)) {
-          adBtn.innerHTML = prev;
-          adBtn.disabled = false;
-          return;
-        }
+        await AdService.showPaginationInterstitial('spoken_english_unlock');
         const nextLimit = Math.min(SPOKEN_ENGLISH_ITEMS.length, getSpokenUnlockedLimit() + 10);
         try {
           localStorage.setItem(STORAGE_KEY_SPOKEN_UNLOCKED_COUNT, String(nextLimit));
         } catch (e) {}
+        if (activeCategory === 'all') {
+          const newPage = Math.max(1, Math.ceil(nextLimit / PAGE_SIZE));
+          currentPage = newPage;
+          options._currentPage = newPage;
+          saveSavedSpokenPage(activeCategory, newPage);
+        }
         render();
+        scrollToTop();
       } catch (err) {
         console.warn('Spoken English ad unlock error:', err);
         adBtn.innerHTML = prev;
