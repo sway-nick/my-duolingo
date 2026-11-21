@@ -173,7 +173,7 @@ test('Word Blocks: All 36 locales have translations for badge and hint', () => {
   assert.equal(SUPPORTED_LOCALE_CODES.length, 36, 'Project must have exactly 36 locales');
 
   for (const locale of SUPPORTED_LOCALE_CODES) {
-    global.localStorage.setItem('myduo_lang', locale);
+    global.localStorage.setItem('myduo_interface_lang', locale);
 
     const badgeText = t('train_blocks_badge');
     assert.ok(badgeText && badgeText.length > 0, `Missing train_blocks_badge for locale ${locale}`);
@@ -185,12 +185,12 @@ test('Word Blocks: All 36 locales have translations for badge and hint', () => {
     assert.ok(loadingText && loadingText.length > 0, `Missing ad_loading for locale ${locale}`);
   }
 
-  global.localStorage.setItem('myduo_lang', 'ru');
+  global.localStorage.setItem('myduo_interface_lang', 'ru');
   assert.equal(t('train_blocks_badge'), 'Кубики', 'Badge in Russian should be Кубики');
   assert.equal(t('ad_loading'), 'Загрузка', 'ad_loading in Russian should be Загрузка');
 
   // Restore
-  global.localStorage.setItem('myduo_lang', 'ru');
+  global.localStorage.setItem('myduo_interface_lang', 'ru');
 });
 
 test('Favorites & Collections: saveProgress tracks Quiz, Pairs, and Test mistakes for Word Blocks without XP change', async () => {
