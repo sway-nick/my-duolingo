@@ -863,7 +863,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
           ${renderFallbackSummary()}
 
           <div style="font-size:11px;color:var(--text-muted);text-align:center;">
-            GA4 обновлён: ${escapeHtml(updatedStr)}
+            Обновлено: ${escapeHtml(updatedStr)} · Доход: ${ga4.revenueSource === 'admob' ? 'AdMob + Unity' : 'GA4'}
           </div>
         `;
 

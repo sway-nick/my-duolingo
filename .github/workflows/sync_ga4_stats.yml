@@ -23,5 +23,7 @@ jobs:
           GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
           GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          ADMOB_OAUTH_JSON: ${{ secrets.ADMOB_OAUTH_JSON }}
+          ADMOB_PUBLISHER_ID: pub-9917058160362744
           FIREBASE_PROJECT_ID: english-breakfast-181ba
         run: node scripts/sync_ga4_report.mjs

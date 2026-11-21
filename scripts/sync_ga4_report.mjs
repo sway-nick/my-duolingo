@@ -16,8 +16,120 @@
 import crypto from 'node:crypto';
 
 const DEFAULT_FIREBASE_PROJECT_ID = 'english-breakfast-181ba';
+const DEFAULT_ADMOB_PUBLISHER_ID = 'pub-9917058160362744';
 const TOP_COUNTRIES_LIMIT = 80;
 const PAID_CHANNEL_RE = /paid|display|cross-network|affiliate|cpc|ppc/i;
+
+function toAdMobDate(d) {
+  return {
+    year: d.getUTCFullYear(),
+    month: d.getUTCMonth() + 1,
+    day: d.getUTCDate(),
+  };
+}
+
+function parseIsoToAdMobDate(isoStr) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(isoStr || '').trim());
+  if (!m) return { year: 2024, month: 1, day: 1 };
+  return { year: Number(m[1]), month: Number(m[2]), day: Number(m[3]) };
+}
+
+async function getAdMobAccessToken(oauthConfig) {
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: oauthConfig.client_id,
+      client_secret: oauthConfig.client_secret,
+      refresh_token: oauthConfig.refresh_token,
+      grant_type: 'refresh_token',
+    }),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`AdMob OAuth refresh failed (${res.status}): ${text}`);
+  }
+  const data = await res.json();
+  if (!data.access_token) throw new Error('AdMob OAuth response missing access_token');
+  return data.access_token;
+}
+
+async function fetchAdMobCountryRevenue(publisherId, accessToken, startDateObj, endDateObj) {
+  const url = `https://admob.googleapis.com/v1/accounts/${encodeURIComponent(publisherId)}/mediationReport:generate`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      reportSpec: {
+        dateRange: {
+          startDate: startDateObj,
+          endDate: endDateObj,
+        },
+        dimensions: ['COUNTRY'],
+        metrics: ['ESTIMATED_EARNINGS'],
+        localizationSettings: {
+          currencyCode: 'USD',
+        },
+      },
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`AdMob mediationReport failed (${res.status}): ${text}`);
+  }
+
+  const items = await res.json();
+  const revByCountry = new Map();
+  let totalUsd = 0;
+
+  for (const item of Array.isArray(items) ? items : []) {
+    const row = item?.row;
+    if (!row) continue;
+    const rawCode = row.dimensionValues?.COUNTRY?.value;
+    const code = normalizeCountryCode(rawCode, '');
+    const micros = Number(row.metricValues?.ESTIMATED_EARNINGS?.microsValue || 0);
+    const usd = micros / 1_000_000;
+    revByCountry.set(code, (revByCountry.get(code) || 0) + usd);
+    totalUsd += usd;
+  }
+
+  return { revByCountry, totalUsd: Math.round(totalUsd * 100) / 100 };
+}
+
+function applyAdMobRevenueToPeriod(periodData, admobResult) {
+  if (!periodData || !admobResult) return;
+  const { revByCountry, totalUsd } = admobResult;
+  const seen = new Set();
+
+  for (const c of periodData.countries || []) {
+    if (c.code === 'OTHER') continue;
+    seen.add(c.code);
+    const usd = revByCountry.get(c.code) || 0;
+    c.adRevenue = Math.round(usd * 100) / 100;
+  }
+
+  // Add any country with AdMob revenue that wasn't in GA4 rows
+  for (const [code, usd] of revByCountry.entries()) {
+    if (seen.has(code) || usd <= 0) continue;
+    periodData.countries.push({
+      code,
+      name: code === 'ZZ' ? 'Other / Unknown' : code,
+      totalUsers: 0,
+      newPaid: 0,
+      newOrganic: 0,
+      uninstalls: 0,
+      activeUsers: 0,
+      proPurchases: 0,
+      adRevenue: Math.round(usd * 100) / 100,
+    });
+  }
+
+  periodData.totals.adRevenue = totalUsd;
+}
 
 function base64UrlEncode(input) {
   const buf = Buffer.isBuffer(input) ? input : Buffer.from(String(input), 'utf8');
@@ -379,6 +491,7 @@ async function main() {
   const payload = {
     generatedAt: new Date().toISOString(),
     allTimeStart,
+    revenueSource: 'ga4',
     periods: {
       today,
       yesterday,
@@ -386,6 +499,41 @@ async function main() {
       allTime,
     },
   };
+
+  // Optional: Override adRevenue with exact AdMob + Unity Ads Mediation Report API data
+  const admobOauthRaw = String(process.env.ADMOB_OAUTH_JSON || '').trim();
+  const admobPublisherId = String(process.env.ADMOB_PUBLISHER_ID || DEFAULT_ADMOB_PUBLISHER_ID).trim();
+  if (admobOauthRaw) {
+    try {
+      const admobOauth = JSON.parse(admobOauthRaw);
+      console.log(`[AdMob Sync] Refreshing OAuth token for ${admobPublisherId}...`);
+      const admobToken = await getAdMobAccessToken(admobOauth);
+
+      const now = new Date();
+      const todayDate = toAdMobDate(now);
+      const yest = new Date(now.getTime() - 86400000);
+      const yestDate = toAdMobDate(yest);
+      const d7 = new Date(now.getTime() - 7 * 86400000);
+      const d7Date = toAdMobDate(d7);
+      const allStartDate = parseIsoToAdMobDate(allTimeStart);
+
+      const [amToday, amYest, am7d, amAll] = await Promise.all([
+        fetchAdMobCountryRevenue(admobPublisherId, admobToken, todayDate, todayDate),
+        fetchAdMobCountryRevenue(admobPublisherId, admobToken, yestDate, yestDate),
+        fetchAdMobCountryRevenue(admobPublisherId, admobToken, d7Date, yestDate),
+        fetchAdMobCountryRevenue(admobPublisherId, admobToken, allStartDate, todayDate),
+      ]);
+
+      applyAdMobRevenueToPeriod(today, amToday);
+      applyAdMobRevenueToPeriod(yesterday, amYest);
+      applyAdMobRevenueToPeriod(last7d, am7d);
+      applyAdMobRevenueToPeriod(allTime, amAll);
+      payload.revenueSource = 'admob';
+      console.log(`[AdMob Sync] Exact AdMob+Unity revenue merged: today=$${amToday.totalUsd}, yesterday=$${amYest.totalUsd}, 7d=$${am7d.totalUsd}, allTime=$${amAll.totalUsd}`);
+    } catch (err) {
+      console.warn('[AdMob Sync] Failed, keeping GA4 adRevenue fallback:', err.message);
+    }
+  }
 
   console.log(
     `[GA4 Sync] Built report: yesterday active=${yesterday.totals.activeUsers}, newPaid=${yesterday.totals.newPaid}, newOrg=${yesterday.totals.newOrganic}, uninstalls=${yesterday.totals.uninstalls}, pro=${yesterday.totals.proPurchases}, adRev=$${yesterday.totals.adRevenue} (${yesterday.countries.length} countries)`
