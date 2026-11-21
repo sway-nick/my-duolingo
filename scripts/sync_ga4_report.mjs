@@ -16,7 +16,7 @@
 import crypto from 'node:crypto';
 
 const DEFAULT_FIREBASE_PROJECT_ID = 'english-breakfast-181ba';
-const TOP_COUNTRIES_LIMIT = 40;
+const TOP_COUNTRIES_LIMIT = 80;
 const PAID_CHANNEL_RE = /paid|display|cross-network|affiliate|cpc|ppc/i;
 
 function base64UrlEncode(input) {
@@ -283,8 +283,8 @@ async function fetchPeriodData(propertyId, accessToken, dateRange, allTimeMap) {
     const top = list.slice(0, TOP_COUNTRIES_LIMIT);
     const rest = list.slice(TOP_COUNTRIES_LIMIT);
     const other = {
-      code: 'ZZ',
-      name: 'Other',
+      code: 'OTHER',
+      name: 'Other countries',
       totalUsers: 0,
       newPaid: 0,
       newOrganic: 0,

@@ -686,7 +686,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   function getCountryLabel(code, fallbackName) {
     const c = String(code || '').trim().toUpperCase();
-    if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return 'Другие';
+    if (c === 'OTHER') return 'Прочие страны';
+    if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return 'Не определено';
     if (countryDisplayNames) {
       try {
         const localized = countryDisplayNames.of(c);
@@ -698,7 +699,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
 
   function countryCodeToFlag(code) {
     const c = String(code || '').trim().toUpperCase();
-    if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return '🌍';
+    if (c === 'OTHER') return '🌍';
+    if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return '❔';
     return String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65, 0x1f1e6 + c.charCodeAt(1) - 65);
   }
 
