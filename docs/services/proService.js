@@ -86,6 +86,13 @@ class ProServiceImpl {
         }
       } catch (_) {}
     });
+    if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && this._initialized && !this.isPro() && isNative()) {
+          this.revalidate().catch(() => {});
+        }
+      });
+    }
   }
 
   isPro() {

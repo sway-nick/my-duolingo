@@ -836,6 +836,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   if (notesBtn && hasNotes) {
     notesBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('word_notes_open', {
+          word: activeTargetWord?.word || '',
+          word_id: activeTargetWord?.id || '',
+        });
+      }
       showWordNotesModal(wordNotes);
     });
   }
@@ -2075,14 +2081,6 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         const proFreeShields = isProActive() ? getFreeShieldsLeft() : 0;
 
         if ((canUseShield && isOnline) || proFreeShields > 0) {
-          // Just-in-time preload for Rewarded Shield ad on mistake
-          if (proFreeShields <= 0) {
-            try {
-              if (typeof AdService !== 'undefined' && typeof AdService.prepareRewarded === 'function') {
-                AdService.prepareRewarded('REWARDED_SHIELD').catch(() => {});
-              }
-            } catch (_) {}
-          }
           const shieldBtnLabel = proFreeShields > 0
             ? `🛡️ ${escapeHtml(String(getProStrings(getInterfaceLanguage()).pro_shields_left || 'PRO Shield ({n}/3)').replace('{n}', String(proFreeShields)))}`
             : t('train_shield_btn');
@@ -2818,6 +2816,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
               isFlipped = false;
               flashcard.classList.remove('is-flipped');
             }
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('fav_autoplay_stop');
+            }
           } else {
             primeAudioForAutoplay();
             window.__favsAutoplayRunning = true;
@@ -2828,6 +2829,11 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             updateMediaSessionStatus(true, currentWord, translation);
             newAutoplayBtn.classList.add('is-playing');
             newAutoplayBtn.innerHTML = getFavsAutoplayBtnContent(true);
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('fav_autoplay_start', {
+                words_count: Array.isArray(activeWords) ? activeWords.length : 0,
+              });
+            }
             runAutoplayCycle();
           }
         });

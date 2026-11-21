@@ -1558,6 +1558,16 @@ export function showMilestoneUnlockedModal(milestone = 50) {
   const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[50];
   if (!storyData) return;
 
+  if (typeof window !== 'undefined' && window.trackScreen) {
+    window.trackScreen('modal_milestone_unlocked', 'MilestoneUnlockedModal', { milestone: currentMilestone });
+  }
+  if (typeof window !== 'undefined' && window.trackEvent) {
+    window.trackEvent('milestone_story_unlocked_shown', {
+      milestone: currentMilestone,
+      title: storyData.title || '',
+    });
+  }
+
   const lang = (getInterfaceLanguage() || 'ru').toLowerCase().split(/[-_]/)[0];
   const strings = getStoryStrings(lang);
   const noticeStrings = UNLOCKED_STORY_MODAL_I18N[lang] || UNLOCKED_STORY_MODAL_I18N.ru;
@@ -1607,6 +1617,12 @@ export function showMilestoneUnlockedModal(milestone = 50) {
 
   modal.querySelector('#milestone-notice-close-btn')?.addEventListener('click', closeNotice);
   modal.querySelector('#milestone-notice-read-btn')?.addEventListener('click', () => {
+    if (typeof window !== 'undefined' && window.trackEvent) {
+      window.trackEvent('milestone_story_unlocked_read', {
+        milestone: currentMilestone,
+        title: storyData.title || '',
+      });
+    }
     closeNotice();
     showMilestoneStoryModal(currentMilestone);
   });
@@ -1626,10 +1642,30 @@ export async function showMilestoneStoryModal(milestone = 0) {
   const currentMilestone = Number.isFinite(Number(milestone)) ? Number(milestone) : 0;
   const storyData = MILESTONE_STORIES[currentMilestone] || MILESTONE_STORIES[0];
   const story = storyData;
+  const storySlug = currentMilestone === 1
+    ? 'aladdin'
+    : currentMilestone === 0
+      ? 'japanese_fairy_tale'
+      : `milestone_${currentMilestone}`;
 
   if (storyData.isProOnly && !isProActive()) {
     ProService.openPaywall('aladdin_story_pro');
     return;
+  }
+
+  if (typeof window !== 'undefined' && window.trackScreen) {
+    window.trackScreen(`story_reader_${storySlug}`, 'MilestoneStoryModal', {
+      milestone: currentMilestone,
+      story_id: storySlug,
+    });
+  }
+  if (typeof window !== 'undefined' && window.trackEvent) {
+    window.trackEvent('story_opened', {
+      milestone: currentMilestone,
+      story_id: storySlug,
+      title: storyData.title || '',
+      is_pro: isProActive(),
+    });
   }
 
   const lang = getInterfaceLanguage();
@@ -2381,6 +2417,15 @@ export async function showMilestoneStoryModal(milestone = 0) {
       // Position popover floating over the word
       positionPopoverAboveToken(tokenEl);
 
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('story_word_click', {
+          milestone: currentMilestone,
+          story_id: storySlug,
+          word: resolved.word,
+          from_dict: Boolean(resolved.isFromDict),
+        });
+      }
+
       // Speak word audio
       speakWord(resolved.word, resolved.id);
     });
@@ -2403,6 +2448,15 @@ export async function showMilestoneStoryModal(milestone = 0) {
     const newFav = !wasFav;
     try {
       await toggleFavoriteApi(wId, newFav);
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('story_word_favorite', {
+          milestone: currentMilestone,
+          story_id: storySlug,
+          word: activeResolvedWord.word,
+          word_id: wId,
+          active: newFav,
+        });
+      }
       if (newFav) {
         favSet.add(wId);
         updateHeartVisual(true);
@@ -2447,6 +2501,12 @@ export async function showMilestoneStoryModal(milestone = 0) {
 
     isTranslationShown = !isTranslationShown;
     if (isTranslationShown) {
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('story_full_translation_shown', {
+          milestone: currentMilestone,
+          story_id: storySlug,
+        });
+      }
       translationBlock.style.display = 'block';
       translationBtnLabel.textContent = strings.btnHideTranslation;
       // Scroll to translation smoothly
@@ -2473,6 +2533,13 @@ export async function showMilestoneStoryModal(milestone = 0) {
       } else {
         box.style.display = 'block';
         btn.classList.add('is-active');
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('story_paragraph_translate', {
+            milestone: currentMilestone,
+            story_id: storySlug,
+            paragraph_index: Number(pIdx),
+          });
+        }
       }
     });
   });
@@ -2587,6 +2654,13 @@ export async function showMilestoneStoryModal(milestone = 0) {
             if (playIcon) playIcon.textContent = '▶';
             if (progressFill) progressFill.style.width = '0%';
             overlay.querySelectorAll('.story-paragraph.active-reading-para').forEach(el => el.classList.remove('active-reading-para'));
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('story_audio_completed', {
+                milestone: currentMilestone,
+                story_id: storySlug,
+                title: storyData.title || '',
+              });
+            }
           });
 
           storyAudio.addEventListener('error', () => {
@@ -2601,6 +2675,13 @@ export async function showMilestoneStoryModal(milestone = 0) {
           playBtn.disabled = false;
           if (playIcon) playIcon.textContent = '⏸';
           if (audioLabel) audioLabel.textContent = `🎧 ${strings.audioNarrator || 'Слушать'}`;
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('story_audio_play', {
+              milestone: currentMilestone,
+              story_id: storySlug,
+              title: storyData.title || '',
+            });
+          }
         } catch (err) {
           storyAudio = null;
           isStoryAudioPlaying = false;
@@ -2615,10 +2696,24 @@ export async function showMilestoneStoryModal(milestone = 0) {
         storyAudio.pause();
         isStoryAudioPlaying = false;
         if (playIcon) playIcon.textContent = '▶';
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('story_audio_pause', {
+            milestone: currentMilestone,
+            story_id: storySlug,
+            current_time: Math.round(storyAudio.currentTime || 0),
+          });
+        }
       } else {
         storyAudio.play();
         isStoryAudioPlaying = true;
         if (playIcon) playIcon.textContent = '⏸';
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('story_audio_resume', {
+            milestone: currentMilestone,
+            story_id: storySlug,
+            current_time: Math.round(storyAudio.currentTime || 0),
+          });
+        }
       }
     });
 

@@ -75,16 +75,16 @@ function escapeHtml(str) {
 }
 
 function getPageNumbers(current, total) {
-  if (total <= 7) {
+  if (total <= 5) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
-  if (current <= 4) {
-    return [1, 2, 3, 4, 5, '...', total];
+  if (current <= 3) {
+    return [1, 2, 3, '...', total];
   }
-  if (current >= total - 3) {
-    return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  if (current >= total - 2) {
+    return [1, '...', total - 2, total - 1, total];
   }
-  return [1, '...', current - 1, current, current + 1, '...', total];
+  return [1, '...', current, '...', total];
 }
 
 export function renderSpokenEnglishView(containerSelector = '#app-content', options = {}) {
@@ -266,10 +266,12 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-filters { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 4px; margin-bottom: 12px; width: 100%; box-sizing: border-box; }
         .spoken-filter-chip { border: 1px solid var(--border-color, #e2e8f0); background: var(--card-bg, #ffffff); color: var(--text-muted, #64748b); border-radius: 999px; padding: 6px 11px; font-size: 12px; font-weight: 700; cursor: pointer; max-width: 100%; }
         .spoken-filter-chip.is-active { background: var(--primary-color, #2563eb); border-color: var(--primary-color, #2563eb); color: #ffffff; }
+        body.dark-theme .spoken-filter-chip.is-active, .dark-theme .spoken-filter-chip.is-active, [data-theme="dark"] .spoken-filter-chip.is-active { background: #38bdf8; border-color: #38bdf8; color: #0f172a; }
         .spoken-list { display: flex; flex-direction: column; gap: 12px; width: 100%; min-width: 0; }
         .spoken-card { width: 100%; min-width: 0; box-sizing: border-box; background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 12px 14px; box-shadow: var(--shadow-sm, 0 4px 12px rgba(15,23,42,0.05)); }
         .spoken-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
         .spoken-cat-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: rgba(37, 99, 235, 0.1); color: var(--primary-color, #2563eb); }
+        body.dark-theme .spoken-cat-badge, .dark-theme .spoken-cat-badge, [data-theme="dark"] .spoken-cat-badge { background: rgba(56, 189, 248, 0.16); color: #38bdf8; }
         .spoken-num { font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); flex-shrink: 0; }
         .spoken-pair-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center; margin-bottom: 10px; width: 100%; min-width: 0; }
         .spoken-formal-box, .spoken-native-box { background: var(--bg-hover, #f1f5f9); border-radius: 12px; padding: 8px 10px; min-width: 0; box-sizing: border-box; }
@@ -277,6 +279,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-mini-label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted, #64748b); margin-bottom: 2px; }
         .spoken-formal-text { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted, #64748b); overflow-wrap: anywhere; word-break: break-word; }
         .spoken-meaning-text { display: block; margin-top: 3px; font-size: 12px; font-weight: 700; color: var(--primary-color, #2563eb); overflow-wrap: anywhere; word-break: break-word; }
+        body.dark-theme .spoken-meaning-text, .dark-theme .spoken-meaning-text, [data-theme="dark"] .spoken-meaning-text { color: #38bdf8; }
         .spoken-arrow { font-size: 14px; font-weight: 800; color: var(--text-muted, #64748b); flex-shrink: 0; }
         .spoken-native-line { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0; }
         .spoken-native-text { font-size: 14.5px; font-weight: 800; color: var(--text-main, #0f172a); overflow-wrap: anywhere; word-break: break-word; min-width: 0; }
@@ -286,15 +289,16 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-example-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
         .spoken-example-en { font-size: 13.5px; font-weight: 700; color: var(--text-main, #0f172a); overflow-wrap: anywhere; min-width: 0; }
         .spoken-example-tr { margin-top: 3px; font-size: 12.5px; color: var(--text-muted, #64748b); overflow-wrap: anywhere; }
-        .spoken-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 18px; margin-bottom: 6px; flex-wrap: wrap; }
-        .spoken-page-btn { min-width: 38px; height: 38px; padding: 0 10px; border-radius: 11px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
+        .spoken-pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; margin-bottom: 6px; flex-wrap: nowrap; }
+        .spoken-page-btn { min-width: 34px; height: 36px; padding: 0 7px; border-radius: 10px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; flex-shrink: 0; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
         .spoken-page-btn:active:not(:disabled) { transform: scale(0.96); }
         .spoken-page-btn:hover:not(:disabled) { border-color: var(--primary-color, #2563eb); }
+        body.dark-theme .spoken-page-btn:hover:not(:disabled), .dark-theme .spoken-page-btn:hover:not(:disabled), [data-theme="dark"] .spoken-page-btn:hover:not(:disabled) { border-color: #38bdf8; }
         .spoken-page-btn.is-active { background: var(--primary-color, #2563eb); border-color: var(--primary-color, #2563eb); color: #ffffff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
-        body.dark-theme .spoken-page-btn.is-active, .dark-theme .spoken-page-btn.is-active, [data-theme="dark"] .spoken-page-btn.is-active { background: var(--primary-color, #38bdf8); border-color: var(--primary-color, #38bdf8); color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
+        body.dark-theme .spoken-page-btn.is-active, .dark-theme .spoken-page-btn.is-active, [data-theme="dark"] .spoken-page-btn.is-active { background: #38bdf8; border-color: #38bdf8; color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
         .spoken-page-btn:disabled { opacity: 0.3; cursor: default; }
         .spoken-page-btn.spoken-page-nav { font-size: 18px; font-weight: 800; }
-        .spoken-page-ellipsis { min-width: 28px; height: 38px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; user-select: none; }
+        .spoken-page-ellipsis { min-width: 18px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; flex-shrink: 0; user-select: none; }
         .spoken-page-info { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); margin-bottom: 12px; }
         .spoken-gate-box { width: 100%; box-sizing: border-box; margin-top: 16px; padding: 20px 16px; border-radius: 16px; background: var(--card-bg, #ffffff); border: 1.5px solid rgba(245, 158, 11, 0.35); text-align: center; }
         .spoken-gate-counter { margin: 0 0 10px; font-size: 14px; font-weight: 800; color: var(--text-main, #0f172a); }
@@ -322,6 +326,9 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       btn.addEventListener('click', () => {
         const cat = btn.getAttribute('data-spoken-cat') || 'all';
         if (cat === activeCategory) return;
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('spoken_category_select', { category: cat });
+        }
         activeCategory = cat;
         options._activeCategory = activeCategory;
         saveSavedSpokenCategory(activeCategory);
@@ -332,15 +339,14 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       });
     });
 
-    if (totalPages > 1 && !isProActive()) {
-      AdService.preloadPaginationInterstitial().catch(() => {});
-    }
-
     container.querySelectorAll('[data-spoken-page]').forEach((btn) => {
       btn.addEventListener('click', async () => {
         if (btn.disabled) return;
         const targetPage = Number(btn.getAttribute('data-spoken-page'));
         if (!targetPage || targetPage === currentPage || targetPage < 1 || targetPage > totalPages) return;
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('spoken_page_change', { page: targetPage, category: activeCategory });
+        }
         if (!isProActive()) {
           try {
             await AdService.showPaginationInterstitial('spoken_english');
@@ -358,7 +364,15 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const text = btn.getAttribute('data-speak-text');
-        if (text) speakWord(text);
+        if (text) {
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('spoken_audio_play', {
+              text: String(text).slice(0, 60),
+              category: activeCategory,
+            });
+          }
+          speakWord(text);
+        }
       });
     });
 
@@ -374,6 +388,9 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         try {
           localStorage.setItem(STORAGE_KEY_SPOKEN_UNLOCKED_COUNT, String(nextLimit));
         } catch (e) {}
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('spoken_ad_unlock', { unlocked_limit: nextLimit });
+        }
         if (activeCategory === 'all') {
           const newPage = Math.max(1, Math.ceil(nextLimit / PAGE_SIZE));
           currentPage = newPage;

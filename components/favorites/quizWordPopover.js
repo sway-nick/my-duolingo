@@ -264,6 +264,13 @@ export function bindQuizWordPopover(rootEl, rawLang) {
       pop.style.top = `${top}px`;
       pop.style.visibility = 'visible';
 
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('grammar_quiz_word_click', {
+          word: resolved.word,
+          from_dict: Boolean(resolved.isFromDict),
+        });
+      }
+
       speakWordNow(resolved.word);
     });
   });

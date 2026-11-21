@@ -1304,12 +1304,17 @@ export function renderTimeTrainerView(containerSelector = '#app-content', option
         .tt-progress-pill {
           font-size: 13px;
           font-weight: 800;
-          color: var(--primary-color, #38bdf8);
+          color: var(--primary-color, #2563eb);
           background: rgba(56, 189, 248, 0.12);
           border: 1px solid rgba(56, 189, 248, 0.3);
           padding: 6px 12px;
           border-radius: 999px;
           font-variant-numeric: tabular-nums;
+        }
+        body.dark-theme .tt-progress-pill,
+        .dark-theme .tt-progress-pill,
+        [data-theme="dark"] .tt-progress-pill {
+          color: #38bdf8;
         }
         .tt-hero {
           margin-bottom: 16px;

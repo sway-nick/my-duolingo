@@ -1080,6 +1080,9 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       btn.addEventListener('click', () => {
         activeGroup = btn.getAttribute('data-group-id') || 'all';
         focusedId = null;
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('tense_group_filter', { group: activeGroup });
+        }
         render();
       });
     });
@@ -1111,6 +1114,9 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
           if (adRes && (adRes.rewardEarned || adRes.success)) {
             unlockedSet.add(id);
             saveUnlockedSet(unlockedSet);
+            if (typeof window !== 'undefined' && window.trackEvent) {
+              window.trackEvent('tense_ad_unlock', { tense_id: id });
+            }
             const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
             render();
             if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
@@ -1142,6 +1148,9 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
           expandedDoneSet.delete(id);
         }
         saveDoneIds(doneSet);
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('tense_toggle_done', { tense_id: id, done: markingDone });
+        }
         const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
         render();
         if (markingDone) {
@@ -1156,8 +1165,14 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-toggle-expand');
         if (!id) return;
-        if (expandedDoneSet.has(id)) expandedDoneSet.delete(id);
-        else expandedDoneSet.add(id);
+        if (expandedDoneSet.has(id)) {
+          expandedDoneSet.delete(id);
+        } else {
+          expandedDoneSet.add(id);
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('tense_expand', { tense_id: id });
+          }
+        }
         render();
         scrollTenseCardToTop(id, false);
       });
@@ -1174,6 +1189,9 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-open-tense');
         if (!id) return;
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('tense_matrix_select', { tense_id: id });
+        }
         focusedId = id;
         activeTab = 'list';
         activeGroup = 'all';

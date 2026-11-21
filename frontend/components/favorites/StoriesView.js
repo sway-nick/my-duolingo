@@ -12,6 +12,10 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
+  if (typeof window !== 'undefined' && window.trackScreen) {
+    window.trackScreen('stories_hub', 'StoriesView');
+  }
+
   const { onBack = () => {} } = options;
   const lang = getInterfaceLanguage();
   const strings = getStoryStrings(lang);
@@ -109,13 +113,18 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
         border: none;
         font-size: 15px;
         font-weight: 600;
-        color: var(--primary-color, #38bdf8);
+        color: var(--primary-color, #2563eb);
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 4px;
         padding: 4px 0;
         margin-bottom: 12px;
+      }
+      body.dark-theme .stories-view-back,
+      .dark-theme .stories-view-back,
+      [data-theme="dark"] .stories-view-back {
+        color: #38bdf8;
       }
       .stories-view-header {
         margin-bottom: 20px;
@@ -314,6 +323,16 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
     card.addEventListener('click', (e) => {
       const raw = card.getAttribute('data-milestone');
       const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
+      const storyId = milestone === 1 ? 'aladdin' : milestone === 0 ? 'japanese_fairy_tale' : `milestone_${milestone}`;
+      const storyObj = MILESTONE_STORIES[milestone];
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('story_card_click', {
+          milestone,
+          story_id: storyId,
+          title: storyObj?.title || '',
+          unlocked: true,
+        });
+      }
       if (milestone === 0 && localStorage.getItem('myduo_fairy_tale_survey_done') !== 'true') {
         showFairyTaleSurveyModal('story_tile');
         return;
@@ -325,11 +344,22 @@ export function renderStoriesView(containerSelector = '#app-content', options = 
   // Story click bindings for locked cards (open PRO paywall with wordsNeeded)
   container.querySelectorAll('.story-list-card.is-locked').forEach(card => {
     card.addEventListener('click', () => {
+      const raw = card.getAttribute('data-milestone');
+      const milestone = raw !== null && raw !== '' ? Number(raw) : 0;
       const isProOnly = card.getAttribute('data-pro-only') === 'true';
+      const wordsNeeded = Number(card.getAttribute('data-words-needed') || 0);
+      const storyId = milestone === 1 ? 'aladdin' : milestone === 0 ? 'japanese_fairy_tale' : `milestone_${milestone}`;
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('story_locked_click', {
+          milestone,
+          story_id: storyId,
+          is_pro_only: isProOnly,
+          words_needed: wordsNeeded,
+        });
+      }
       if (isProOnly) {
         ProService.openPaywall('aladdin_story_pro');
       } else {
-        const wordsNeeded = Number(card.getAttribute('data-words-needed') || 0);
         ProService.openPaywall('stories', { wordsNeeded });
       }
     });

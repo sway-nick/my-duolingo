@@ -270,7 +270,19 @@ class AdServiceImpl {
   }
 
   /**
-   * Initialize AdMob SDK
+   * Ensure AdMob SDK + Google UMP (GDPR) consent flow have finished before sending ad requests
+   */
+  async ensureInitialized() {
+    if (this.initialized) return;
+    if (this._initPromise) {
+      await this._initPromise.catch(() => {});
+      return;
+    }
+    await this.init().catch(() => {});
+  }
+
+  /**
+   * Initialize Google UMP (GDPR) consent flow and AdMob SDK
    */
   async init() {
     if (typeof window !== 'undefined' && typeof window.addEventListener === 'function' && !this._proBannerListenerBound) {
@@ -282,27 +294,58 @@ class AdServiceImpl {
       });
     }
     if (this.initialized) return;
-    const AdMob = this.getNativeAdMob();
+    if (this._initPromise) return this._initPromise;
 
-    if (AdMob && this.isNative()) {
-      try {
-        await AdMob.initialize({
-          requestTrackingAuthorization: true,
-          testingDevices: [
-            'EMULATOR',
-            '88fdb90c-2abb-45e2-b323-35336fbe2ddc',
-            '88FDB90C-2ABB-45E2-B323-35336FBE2DDC'
-          ],
-          initializeForTesting: false
-        });
+    this._initPromise = (async () => {
+      const AdMob = this.getNativeAdMob();
+
+      if (AdMob && this.isNative()) {
+        try {
+          // 1. Google UMP (GDPR / EEA / UK) consent flow MUST run before AdMob requests
+          if (typeof AdMob.requestConsentInfo === 'function') {
+            try {
+              const consentInfo = await AdMob.requestConsentInfo();
+              console.log('ℹ️ AdMob UMP consent info:', consentInfo?.status, 'canRequestAds:', consentInfo?.canRequestAds);
+              if (
+                consentInfo &&
+                consentInfo.isConsentFormAvailable &&
+                consentInfo.status === 'REQUIRED' &&
+                typeof AdMob.showConsentForm === 'function'
+              ) {
+                const formRes = await AdMob.showConsentForm();
+                console.log('✅ AdMob UMP consent form completed:', formRes?.status);
+              }
+            } catch (consentErr) {
+              console.warn('⚠️ AdMob UMP consent flow warning (continuing init):', consentErr);
+            }
+          }
+
+          await AdMob.initialize({
+            requestTrackingAuthorization: true,
+            testingDevices: [
+              'EMULATOR',
+              '88fdb90c-2abb-45e2-b323-35336fbe2ddc',
+              '88FDB90C-2ABB-45E2-B323-35336FBE2DDC'
+            ],
+            initializeForTesting: false
+          });
+          this.initialized = true;
+          console.log('✅ Google AdMob initialized on Android');
+        } catch (err) {
+          console.warn('⚠️ AdMob native init error:', err);
+        }
+      } else {
         this.initialized = true;
-        console.log('✅ Google AdMob initialized on Android');
-      } catch (err) {
-        console.warn('⚠️ AdMob native init error:', err);
+        console.log('ℹ️ AdMob running in Web/Simulator mode');
       }
-    } else {
-      this.initialized = true;
-      console.log('ℹ️ AdMob running in Web/Simulator mode');
+    })();
+
+    try {
+      await this._initPromise;
+    } finally {
+      if (!this.initialized) {
+        this._initPromise = null;
+      }
     }
   }
 
@@ -339,41 +382,30 @@ class AdServiceImpl {
   }
 
   /**
-   * Prepare rewarded ad for display
+   * Prepare rewarded ad for display (production units only; test units only when this.useTestAds === true)
    */
   async prepareRewarded(unitType = 'REWARDED_SHIELD') {
     const AdMob = this.getNativeAdMob();
     if (!AdMob || !this.isNative() || !this.isOnline()) return false;
 
+    await this.ensureInitialized();
+
     const primaryId = this.getUnitId(unitType);
-    const testId = AD_CONFIG.TEST_UNITS[unitType] || AD_CONFIG.TEST_UNITS.REWARDED_SHIELD;
+    if (!primaryId) return false;
 
-    if (primaryId) {
-      try {
-        await AdMob.prepareRewardVideoAd({ adId: primaryId });
-        if (unitType === 'REWARDED_SHIELD') {
-          this.isShieldAdPrepared = true;
-        }
-        return true;
-      } catch (e) {
-        console.warn(`AdMob rewarded unit ${primaryId} unavailable (no fill / region / network), trying test unit:`, e);
+    try {
+      await AdMob.prepareRewardVideoAd({ adId: primaryId });
+      if (unitType === 'REWARDED_SHIELD') {
+        this.isShieldAdPrepared = true;
       }
-    }
-
-    if (testId && testId !== primaryId) {
-      try {
-        await AdMob.prepareRewardVideoAd({ adId: testId });
-        if (unitType === 'REWARDED_SHIELD') {
-          this.isShieldAdPrepared = true;
-        }
-        console.log(`✅ AdMob fallback to test unit ${testId} prepared`);
-        return true;
-      } catch (e) {
-        console.warn(`AdMob test unit ${testId} unavailable:`, e);
+      return true;
+    } catch (e) {
+      if (unitType === 'REWARDED_SHIELD') {
+        this.isShieldAdPrepared = false;
       }
+      console.warn(`AdMob rewarded unit ${primaryId} unavailable (no fill / region / network):`, e);
+      return false;
     }
-
-    return false;
   }
 
   /**
@@ -473,6 +505,7 @@ class AdServiceImpl {
           const onDismiss = () => {
             setTimeout(() => {
               console.log('📺 AdMob Double XP ad dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              this.isShieldAdPrepared = false;
               if (rewardGranted || adStartedPlaying) {
                 safeResolve({ success: true, rewardEarned: true, isOffline: false });
               } else {
@@ -483,6 +516,7 @@ class AdServiceImpl {
 
           const onFailed = async (err) => {
             console.warn('❌ AdMob Double XP ad failed to show, falling back to mock ad:', err);
+            this.isShieldAdPrepared = false;
             const mockRes = await this.showWebMockRewardedAd(`⚡ ${mockAdText('bonus_xp') || mockAdText('double_xp')} (+${bonusAmount} XP)`, false);
             safeResolve(mockRes);
           };
@@ -502,18 +536,21 @@ class AdServiceImpl {
             adStartedPlaying = true;
           }));
 
-          const prepared = await this.prepareRewarded('REWARDED_SHIELD');
-          if (!prepared) {
-            console.warn('⚠️ Could not prepare Double XP rewarded ad natively, falling back to mock ad');
-            const mockRes = await this.showWebMockRewardedAd(`⚡ ${mockAdText('bonus_xp') || mockAdText('double_xp')} (+${bonusAmount} XP)`, false);
-            safeResolve(mockRes);
-            return;
+          if (!this.isShieldAdPrepared) {
+            const prepared = await this.prepareRewarded('REWARDED_SHIELD');
+            if (!prepared) {
+              console.warn('⚠️ Could not prepare Double XP rewarded ad natively, falling back to mock ad');
+              const mockRes = await this.showWebMockRewardedAd(`⚡ ${mockAdText('bonus_xp') || mockAdText('double_xp')} (+${bonusAmount} XP)`, false);
+              safeResolve(mockRes);
+              return;
+            }
           }
 
           AdMob.showRewardVideoAd()
             .then((res) => {
               console.log('🏆 AdMob Double XP showRewardVideoAd native promise resolved:', res);
               rewardGranted = true;
+              this.isShieldAdPrepared = false;
               safeResolve({ success: true, rewardEarned: true, isOffline: false });
             })
             .catch((err) => {
@@ -602,10 +639,9 @@ class AdServiceImpl {
           const onDismiss = () => {
             setTimeout(() => {
               console.log('📺 AdMob Rewarded video dismissed, reward =', rewardGranted, 'adStarted =', adStartedPlaying);
+              this.isShieldAdPrepared = false;
               if (rewardGranted || adStartedPlaying) {
                 this.shieldsUsedInRound++;
-                this.isShieldAdPrepared = false;
-                this.preloadShieldAd().catch(() => {});
                 safeResolve({ success: true, rewardEarned: true, isOffline: false });
               } else {
                 safeResolve({ success: false, rewardEarned: false, isOffline: false });
@@ -649,7 +685,6 @@ class AdServiceImpl {
               rewardGranted = true;
               this.shieldsUsedInRound++;
               this.isShieldAdPrepared = false;
-              this.preloadShieldAd().catch(() => {});
               safeResolve({ success: true, rewardEarned: true, isOffline: false });
             })
             .catch((err) => {
@@ -1360,6 +1395,7 @@ class AdServiceImpl {
       const AdMob = this.getNativeAdMob();
       if (AdMob && this.isNative()) {
         try {
+          await this.ensureInitialized();
           const adId = this.getUnitId('INTERSTITIAL_ROUND');
           if (!adId) return false;
 
@@ -1376,17 +1412,10 @@ class AdServiceImpl {
             window.trackEvent('ad_interstitial_pagination_shown', { context });
           }
 
-          setTimeout(() => {
-            this.preloadPaginationInterstitial().catch(() => {});
-          }, 1500);
-
           return true;
         } catch (err) {
           console.warn('AdMob pagination interstitial failed to load/show:', err);
           this.isInterstitialPrepared = false;
-          setTimeout(() => {
-            this.preloadPaginationInterstitial().catch(() => {});
-          }, 3000);
           return false;
         }
       }
@@ -1415,6 +1444,7 @@ class AdServiceImpl {
 
     if (AdMob && this.isNative()) {
       try {
+        await this.ensureInitialized();
         const adId = this.getUnitId('BANNER_FAVORITES');
         if (!adId) return;
         await AdMob.showBanner({

@@ -1051,6 +1051,9 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           await AdService.showPaginationInterstitial('micro_rules_unlock');
           unlockedSet.add(id);
           saveUnlockedSet(unlockedSet);
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('microrule_ad_unlock', { rule_id: id, level: activeLevel });
+          }
           updateDynamicContent();
           return;
         } catch (err) {
@@ -1078,6 +1081,9 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           expandedDoneSet.delete(id);
         }
         saveDoneSet(doneSet);
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('microrule_toggle_done', { rule_id: id, done: markingDone });
+        }
         updateProgressPill();
         const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
         updateDynamicContent();
@@ -1094,8 +1100,14 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         const id = Number(btn.getAttribute('data-toggle-expand'));
         if (!id) return;
         const expanding = !expandedDoneSet.has(id);
-        if (expanding) expandedDoneSet.add(id);
-        else expandedDoneSet.delete(id);
+        if (expanding) {
+          expandedDoneSet.add(id);
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('microrule_expand', { rule_id: id, level: activeLevel });
+          }
+        } else {
+          expandedDoneSet.delete(id);
+        }
         updateDynamicContent();
         scrollRuleCardToTop(id);
       });
@@ -1271,15 +1283,14 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     `;
     bindCardListeners(bodyEl);
 
-    if (totalPages > 1 && !isProActive()) {
-      AdService.preloadPaginationInterstitial().catch(() => {});
-    }
-
     bodyEl.querySelectorAll('[data-mr-page]').forEach((btn) => {
       btn.addEventListener('click', async () => {
         if (btn.disabled) return;
         const targetPage = Number(btn.getAttribute('data-mr-page'));
         if (!targetPage || targetPage === currentPage || targetPage < 1 || targetPage > totalPages) return;
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('microrule_page_change', { level: activeLevel, page: targetPage });
+        }
         if (!isProActive()) {
           try {
             await AdService.showPaginationInterstitial('micro_rules');
@@ -1332,6 +1343,9 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     btn.addEventListener('click', () => {
       const newLevel = btn.getAttribute('data-mr-level') || 'A1';
       if (newLevel === activeLevel) return;
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('microrule_level_select', { level: newLevel });
+      }
       activeLevel = newLevel;
       saveLevel(activeLevel);
       currentPage = loadSavedMicroRulesPage(activeLevel);
