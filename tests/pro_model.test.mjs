@@ -193,33 +193,57 @@ test('Free-tier gates: 100 Favorites limit and custom pattern block (bypassed in
   installMockLocalStorage();
   clearEntitlement();
 
-  // Seed 100 favorites for guest user
-  const seed = Array.from({ length: 100 }, (_, i) => `w_${i}`);
-  globalThis.localStorage.setItem('favs_guest', JSON.stringify(seed));
+  const origFetch = globalThis.fetch;
+  globalThis.fetch = async (_url, options = {}) => {
+    const body = options.body ? JSON.parse(options.body) : {};
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        success: true,
+        data: {
+          word: {
+            id: `custom_mock_${Date.now()}`,
+            word: body.word,
+            translation: body.translation,
+            category: body.category || 'Общие',
+            notes: body.notes || '',
+          },
+        },
+      }),
+    };
+  };
 
-  const blockedFav = await toggleFavoriteApi('w_101', true);
-  assert.deepEqual(blockedFav, { blocked: 'favorites_limit' });
-  assert.equal(getUserFavorites().length, 100);
+  try {
+    // Seed 100 favorites for guest user
+    const seed = Array.from({ length: 100 }, (_, i) => `w_${i}`);
+    globalThis.localStorage.setItem('favs_guest', JSON.stringify(seed));
 
-  // Custom pattern blocked in free mode
-  const blockedPattern = await addCustomWord({ word: 'look forward to', translation: 'ждать', category: 'Pattern', notes: '' });
-  assert.deepEqual(blockedPattern, { blocked: 'custom_pattern' });
+    const blockedFav = await toggleFavoriteApi('w_101', true);
+    assert.deepEqual(blockedFav, { blocked: 'favorites_limit' });
+    assert.equal(getUserFavorites().length, 100);
 
-  // Single word allowed in free mode
-  const okWord = await addCustomWord({ word: 'serendipity', translation: 'интуиция', category: 'Общие', notes: 'good word' });
-  assert.equal(okWord?.blocked, undefined);
-  assert.equal(okWord?.word?.word, 'serendipity');
+    // Custom pattern blocked in free mode
+    const blockedPattern = await addCustomWord({ word: 'look forward to', translation: 'ждать', category: 'Pattern', notes: '' });
+    assert.deepEqual(blockedPattern, { blocked: 'custom_pattern' });
 
-  // PRO unlocks > 100 favorites and custom patterns
-  setEntitlement({ active: true, source: 'play', verifiedAt: Date.now() });
-  await toggleFavoriteApi('w_101', true);
-  assert.equal(getUserFavorites().length, 101);
+    // Single word allowed in free mode
+    const okWord = await addCustomWord({ word: 'serendipity', translation: 'интуиция', category: 'Общие', notes: 'good word' });
+    assert.equal(okWord?.blocked, undefined);
+    assert.equal(okWord?.word?.word, 'serendipity');
 
-  const okPattern = await addCustomWord({ word: 'break a leg', translation: 'удачи', category: 'Pattern', notes: '' });
-  assert.equal(okPattern?.blocked, undefined);
-  assert.equal(okPattern?.word?.word, 'break a leg');
+    // PRO unlocks > 100 favorites and custom patterns
+    setEntitlement({ active: true, source: 'play', verifiedAt: Date.now() });
+    await toggleFavoriteApi('w_101', true);
+    assert.equal(getUserFavorites().length, 101);
 
-  clearEntitlement();
+    const okPattern = await addCustomWord({ word: 'break a leg', translation: 'удачи', category: 'Pattern', notes: '' });
+    assert.equal(okPattern?.blocked, undefined);
+    assert.equal(okPattern?.word?.word, 'break a leg');
+  } finally {
+    globalThis.fetch = origFetch;
+    clearEntitlement();
+  }
 });
 
 test('ProService: rejects short promo codes (<12 chars) and exposes openPaywall', async () => {
