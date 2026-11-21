@@ -2351,4 +2351,145 @@ export async function fetchProEntitlementFirestore(userId) {
   }
 }
 
+export async function recordSiteVisitFirestore() {
+  if (typeof window === 'undefined') return { recorded: false };
+  try {
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('eb_visit_counted_session') === '1') {
+      return { recorded: false, reason: 'already_counted_in_session' };
+    }
+
+    const isAndroidApp = Boolean(
+      window.androidBridge ||
+      (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) ||
+      (window.Capacitor && typeof window.Capacitor.getPlatform === 'function' && window.Capacitor.getPlatform() === 'android') ||
+      (typeof document !== 'undefined' && document.documentElement && document.documentElement.classList.contains('is-android-app'))
+    );
+
+    const uniqueKey = isAndroidApp ? 'eb_app_visitor_unique_v1' : 'eb_web_visitor_unique_v1';
+    let isNewUnique = true;
+    try {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem(uniqueKey) === '1') {
+        isNewUnique = false;
+      }
+    } catch (_) {}
+
+    const config = getFirebaseConfig();
+    const projectId = config.projectId || DEFAULT_FIREBASE_CONFIG.projectId;
+    const statsDocPath = `projects/${projectId}/databases/(default)/documents/site_stats/global`;
+
+    const webVisitInc = isAndroidApp ? '0' : '1';
+    const webUniqueInc = (!isAndroidApp && isNewUnique) ? '1' : '0';
+    const appVisitInc = isAndroidApp ? '1' : '0';
+    const appUniqueInc = (isAndroidApp && isNewUnique) ? '1' : '0';
+
+    const writes = [
+      {
+        transform: {
+          document: statsDocPath,
+          fieldTransforms: [
+            { fieldPath: 'totalVisits', increment: { integerValue: webVisitInc } },
+            { fieldPath: 'uniqueVisitors', increment: { integerValue: webUniqueInc } },
+            { fieldPath: 'appVisits', increment: { integerValue: appVisitInc } },
+            { fieldPath: 'appUniqueVisitors', increment: { integerValue: appUniqueInc } },
+            { fieldPath: 'updatedAt', setToServerValue: 'REQUEST_TIME' }
+          ]
+        }
+      }
+    ];
+
+    const commitUrl = `${getFirestoreBase()}:commit?key=${config.apiKey}`;
+    const res = await firestoreFetch(commitUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ writes })
+    });
+
+    if (!res.ok) {
+      return { recorded: false, status: res.status };
+    }
+
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('eb_visit_counted_session', '1');
+      }
+      if (isNewUnique && typeof localStorage !== 'undefined') {
+        localStorage.setItem(uniqueKey, '1');
+      }
+    } catch (_) {}
+
+    return { recorded: true, isAndroidApp, isNewUnique };
+  } catch (err) {
+    return { recorded: false, error: err?.message || String(err) };
+  }
+}
+
+export async function getSiteStatsSummaryFirestore() {
+  const result = {
+    webTotalVisits: 0,
+    webUniqueVisitors: 0,
+    appTotalVisits: 0,
+    appUniqueVisitors: 0,
+    lastVisitIso: null,
+    totalPlayers: 0,
+    active24h: 0,
+    active7d: 0,
+    active30d: 0,
+    weeklyPlayers: 0,
+    weekKey: getIsoWeekKey()
+  };
+
+  try {
+    const statsUrl = getFirestoreUrl('/site_stats/global');
+    const statsRes = await firestoreFetch(statsUrl, { method: 'GET' });
+    if (statsRes.ok) {
+      const doc = await statsRes.json();
+      const f = doc?.fields || {};
+      result.webTotalVisits = Number(f.totalVisits?.integerValue || 0);
+      result.webUniqueVisitors = Number(f.uniqueVisitors?.integerValue || 0);
+      result.appTotalVisits = Number(f.appVisits?.integerValue || 0);
+      result.appUniqueVisitors = Number(f.appUniqueVisitors?.integerValue || 0);
+      result.lastVisitIso = f.updatedAt?.timestampValue || doc?.updateTime || null;
+    }
+  } catch (_) {}
+
+  try {
+    let pageToken = '';
+    const now = Date.now();
+    for (let page = 0; page < 15; page++) {
+      const q = `?pageSize=120${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`;
+      const url = getFirestoreUrl(`/leaderboard_alltime${q}`);
+      const res = await firestoreFetch(url, { method: 'GET' });
+      if (!res.ok) break;
+      const data = await res.json();
+      const docs = data?.documents || [];
+      result.totalPlayers += docs.length;
+      for (const d of docs) {
+        const tsStr = d?.fields?.updatedAt?.timestampValue || d?.updateTime;
+        const ts = tsStr ? Date.parse(tsStr) : 0;
+        if (ts > 0) {
+          const age = now - ts;
+          if (age <= 86400000) result.active24h++;
+          if (age <= 7 * 86400000) result.active7d++;
+          if (age <= 30 * 86400000) result.active30d++;
+        }
+      }
+      if (!data?.nextPageToken) break;
+      pageToken = data.nextPageToken;
+    }
+  } catch (_) {}
+
+  try {
+    const wk = result.weekKey;
+    const wkUrl = getFirestoreUrl(`/leaderboards/${encodeURIComponent(wk)}/players?pageSize=120`);
+    const wkRes = await firestoreFetch(wkUrl, { method: 'GET' });
+    if (wkRes.ok) {
+      const wkData = await wkRes.json();
+      result.weeklyPlayers = (wkData?.documents || []).length;
+    }
+  } catch (_) {}
+
+  return result;
+}
+
+
 

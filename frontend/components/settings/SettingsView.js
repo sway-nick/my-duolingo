@@ -6,7 +6,7 @@ import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setS
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=386.0';
 import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js?v=386.0';
-import { deleteCurrentUserAccount } from '../../services/firebase.js?v=386.0';
+import { deleteCurrentUserAccount, getSiteStatsSummaryFirestore } from '../../services/firebase.js?v=386.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
 import { ProService } from '../../services/proService.js?v=386.0';
@@ -216,10 +216,13 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
       </div>
       ` : ''}
 
-      <div class="settings-footer">
+      <div class="settings-footer" id="settings-footer-area">
         <button type="button" id="open-privacy-btn" class="settings-privacy-btn">
           ${t('settings_privacy_policy')}
         </button>
+        <div id="settings-secret-stats-trigger" style="margin-top: 6px; font-size: 11px; color: var(--text-muted, #94a3b8); opacity: 0.55; user-select: none; cursor: pointer; padding: 4px 12px; display: inline-block;">
+          English Breakfast v386.0
+        </div>
       </div>
 
     </div>
@@ -667,7 +670,100 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
   if (openPrivacyBtn) {
     openPrivacyBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       openPrivacyModal();
+    });
+  }
+
+  function openSiteStatsModal() {
+    const existing = document.querySelector('#eb-site-stats-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-backdrop';
+    modal.id = 'eb-site-stats-modal';
+    modal.style.zIndex = '100000';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width: 360px; width: 92%; padding: 20px 18px; border-radius: 18px; box-sizing: border-box; text-align: left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <h3 style="margin:0;font-size:17px;font-weight:800;color:var(--text-main);">📊 Статистика посещений</h3>
+          <button type="button" id="eb-site-stats-close-x" style="background:none;border:none;font-size:20px;line-height:1;color:var(--text-muted);cursor:pointer;padding:2px 6px;">✕</button>
+        </div>
+        <div id="eb-site-stats-body" style="font-size:13.5px;color:var(--text-main);display:flex;flex-direction:column;gap:10px;">
+          <div style="text-align:center;padding:18px 0;color:var(--text-muted);">Загрузка данных из Firestore...</div>
+        </div>
+        <button type="button" class="primary-button btn-green" id="eb-site-stats-close-btn" style="width:100%;margin-top:16px;min-height:40px;height:40px;border-radius:12px !important;font-weight:700;cursor:pointer;">
+          Закрыть
+        </button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const close = () => modal.remove();
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) close();
+    });
+    modal.querySelector('#eb-site-stats-close-x')?.addEventListener('click', close);
+    modal.querySelector('#eb-site-stats-close-btn')?.addEventListener('click', close);
+
+    getSiteStatsSummaryFirestore().then((s) => {
+      const bodyEl = modal.querySelector('#eb-site-stats-body');
+      if (!bodyEl) return;
+      const lastStr = s.lastVisitIso
+        ? new Date(s.lastVisitIso).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+        : '—';
+      bodyEl.innerHTML = `
+        <div style="padding:11px 13px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));">
+          <div style="font-weight:800;font-size:12.5px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px;">🌐 Сайт (sway-nick.github.io)</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Уникальных гостей:</span><strong>${s.webUniqueVisitors}</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Всего визитов (сессий):</span><strong>${s.webTotalVisits}</strong></div>
+        </div>
+
+        <div style="padding:11px 13px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));">
+          <div style="font-weight:800;font-size:12.5px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px;">📱 Android-приложение</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Уникальных устройств:</span><strong>${s.appUniqueVisitors}</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Всего сессий:</span><strong>${s.appTotalVisits}</strong></div>
+        </div>
+
+        <div style="padding:11px 13px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));">
+          <div style="font-weight:800;font-size:12.5px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px;">🏆 Игроки в базе (Таблица лидеров)</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Всего зарегистрировано:</span><strong>${s.totalPlayers}</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Активных за 24 часа:</span><strong style="color:#22c55e;">${s.active24h}</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Активных за 7 дней:</span><strong>${s.active7d}</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Активных за 30 дней:</span><strong>${s.active30d}</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>В турнире (${escapeHtml(s.weekKey)}):</span><strong>${s.weeklyPlayers}</strong></div>
+        </div>
+
+        <div style="font-size:11.5px;color:var(--text-muted);text-align:center;margin-top:2px;">
+          Последний визит: ${escapeHtml(lastStr)}
+        </div>
+      `;
+    }).catch(() => {
+      const bodyEl = modal.querySelector('#eb-site-stats-body');
+      if (bodyEl) bodyEl.innerHTML = `<div style="text-align:center;color:#ef4444;padding:12px 0;">Не удалось загрузить статистику</div>`;
+    });
+  }
+
+  // Secret 5-tap trigger in Settings footer to view live Visitor & Player Statistics
+  const statsFooterArea = container.querySelector('#settings-footer-area');
+  if (statsFooterArea) {
+    let statsTapCount = 0;
+    let statsTapTimer = null;
+    statsFooterArea.addEventListener('click', (e) => {
+      if (e.target && e.target.closest && e.target.closest('#open-privacy-btn')) return;
+      statsTapCount++;
+      if (statsTapTimer) clearTimeout(statsTapTimer);
+      statsTapTimer = setTimeout(() => {
+        statsTapCount = 0;
+      }, 2500);
+      if (statsTapCount >= 5) {
+        statsTapCount = 0;
+        clearTimeout(statsTapTimer);
+        try {
+          if (navigator.vibrate) navigator.vibrate(40);
+        } catch (_) {}
+        openSiteStatsModal();
+      }
     });
   }
 

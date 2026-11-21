@@ -242,14 +242,16 @@
       import { ProService } from './services/proService.js?v=386.0';
       import { showProPaywall } from './components/pro/ProPaywallModal.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
+      import { recordSiteVisitFirestore } from './services/firebase.js?v=386.0';
 
       window.showMilestoneStoryModal = showMilestoneStoryModal;
       window.showMilestoneUnlockedModal = showMilestoneUnlockedModal;
       window.StorageService = StorageService;
 
-      // Track active unique day of usage (never resets)
+      // Track active unique day of usage (never resets) & site visit counter
       try {
         StorageService.recordActiveDay();
+        recordSiteVisitFirestore().catch(() => {});
       } catch (e) {}
 
       // Initialize AdMob service & PRO Billing service
@@ -2270,6 +2272,9 @@
         const isBundled = normCat.includes('elementary') && !['uk', 'gb', 'male'].includes(currentAccent);
 
         const applySelection = () => {
+          if (window.trackEvent) {
+            window.trackEvent('category_change', { category: chosenCat, source: 'level_tab' });
+          }
           favoritePracticeWords = null;
           clearActiveConveyorBatch();
           window._pausedRoundState = null;
@@ -2366,11 +2371,17 @@
           if (actionsWrap) actionsWrap.style.display = 'none';
           progressWrap.style.display = 'block';
           if (descEl) descEl.style.display = 'none';
+          if (window.trackEvent) {
+            window.trackEvent('voice_pack_download_start', { category: chosenCat, accent: currentAccent });
+          }
           try {
             await downloadCategoryVoicePack(currentAccent, chosenCat, catWords, (percent) => {
               if (progressBar) progressBar.style.width = `${percent}%`;
               if (progressText) progressText.textContent = `${percent}%`;
             });
+            if (window.trackEvent) {
+              window.trackEvent('voice_pack_download_complete', { category: chosenCat, accent: currentAccent });
+            }
             modal.remove();
             applySelection();
           } catch (err) {

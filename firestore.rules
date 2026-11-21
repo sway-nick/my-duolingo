@@ -68,6 +68,13 @@ service cloud.firestore {
     //    - docId: 'pro'
     //    - Fields: source ('promo'), codeHash (64 hex chars), grantedAt (timestamp == request.time)
     //    - Read: owner only; Create: owner only with valid promo_redemptions existsAfter; Update/Delete: denied
+    //
+    // 8. Site Visit Counter: /site_stats/global
+    //    - Fields: totalVisits (int), uniqueVisitors (int), appVisits (int), appUniqueVisitors (int), updatedAt (timestamp == request.time)
+    //    - Read: get allowed for all; list denied
+    //    - Create: each counter int in [0, 1], updatedAt == request.time
+    //    - Update: each counter monotonic increment by +0 or +1, updatedAt == request.time
+    //    - Delete: denied
     // ===============================================================
 
     function isAuthenticated() {
@@ -160,6 +167,24 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
     }
 
+    function isValidSiteStatsCreate() {
+      return request.resource.data.keys().hasOnly(['totalVisits', 'uniqueVisitors', 'appVisits', 'appUniqueVisitors', 'updatedAt'])
+        && request.resource.data.totalVisits is int && request.resource.data.totalVisits >= 0 && request.resource.data.totalVisits <= 1
+        && request.resource.data.uniqueVisitors is int && request.resource.data.uniqueVisitors >= 0 && request.resource.data.uniqueVisitors <= 1
+        && request.resource.data.appVisits is int && request.resource.data.appVisits >= 0 && request.resource.data.appVisits <= 1
+        && request.resource.data.appUniqueVisitors is int && request.resource.data.appUniqueVisitors >= 0 && request.resource.data.appUniqueVisitors <= 1
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    function isValidSiteStatsUpdate() {
+      return request.resource.data.keys().hasOnly(['totalVisits', 'uniqueVisitors', 'appVisits', 'appUniqueVisitors', 'updatedAt'])
+        && request.resource.data.totalVisits is int && request.resource.data.totalVisits >= resource.data.totalVisits && request.resource.data.totalVisits <= resource.data.totalVisits + 1
+        && request.resource.data.uniqueVisitors is int && request.resource.data.uniqueVisitors >= resource.data.uniqueVisitors && request.resource.data.uniqueVisitors <= resource.data.uniqueVisitors + 1
+        && request.resource.data.appVisits is int && request.resource.data.appVisits >= resource.data.appVisits && request.resource.data.appVisits <= resource.data.appVisits + 1
+        && request.resource.data.appUniqueVisitors is int && request.resource.data.appUniqueVisitors >= resource.data.appUniqueVisitors && request.resource.data.appUniqueVisitors <= resource.data.appUniqueVisitors + 1
+        && request.resource.data.updatedAt == request.time;
+    }
+
     // 1. Weekly Leaderboard
     match /leaderboards/{weekKey}/players/{userId} {
       allow get: if true;
@@ -242,6 +267,15 @@ service cloud.firestore {
       allow list: if false;
       allow create: if isValidPromoRedemptionCreate(redemptionId);
       allow update, delete: if false;
+    }
+
+    // 8. Site Visit Counter
+    match /site_stats/global {
+      allow get: if true;
+      allow list: if false;
+      allow create: if isValidSiteStatsCreate();
+      allow update: if isValidSiteStatsUpdate();
+      allow delete: if false;
     }
 
     // Default deny for all other paths
