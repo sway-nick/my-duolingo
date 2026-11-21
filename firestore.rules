@@ -75,6 +75,11 @@ service cloud.firestore {
     //    - Create: each counter int in [0, 1], updatedAt == request.time
     //    - Update: each counter monotonic increment by +0 or +1, updatedAt == request.time
     //    - Delete: denied
+    //
+    // 9. GA4 Country Statistics Report: /site_stats/ga4_report
+    //    - Aggregated, non-PII GA4 country statistics written exclusively by backend Service Account (GitHub Actions / Admin privileges)
+    //    - Read: get allowed for all; list denied
+    //    - Create/Update/Delete: denied for all clients
     // ===============================================================
 
     function isAuthenticated() {
@@ -276,6 +281,13 @@ service cloud.firestore {
       allow create: if isValidSiteStatsCreate();
       allow update: if isValidSiteStatsUpdate();
       allow delete: if false;
+    }
+
+    // 9. GA4 Country Statistics Report (backend Service Account write-only)
+    match /site_stats/ga4_report {
+      allow get: if true;
+      allow list: if false;
+      allow create, update, delete: if false;
     }
 
     // Default deny for all other paths

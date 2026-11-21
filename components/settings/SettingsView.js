@@ -6,7 +6,7 @@ import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setS
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=386.0';
 import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js?v=386.0';
-import { deleteCurrentUserAccount, getSiteStatsSummaryFirestore } from '../../services/firebase.js?v=386.0';
+import { deleteCurrentUserAccount, getSiteStatsSummaryFirestore, getGa4CountryReportFirestore } from '../../services/firebase.js?v=386.0';
 import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
 import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
 import { ProService } from '../../services/proService.js?v=386.0';
@@ -675,6 +675,18 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
+  function countryCodeToFlag(code) {
+    const c = String(code || '').trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return '🌍';
+    return String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65, 0x1f1e6 + c.charCodeAt(1) - 65);
+  }
+
+  function formatUsd(val) {
+    const n = Number(val || 0);
+    if (!Number.isFinite(n) || n === 0) return '$0';
+    return n >= 100 ? `$${Math.round(n)}` : `$${n.toFixed(2)}`;
+  }
+
   function openSiteStatsModal() {
     const existing = document.querySelector('#eb-site-stats-modal');
     if (existing) existing.remove();
@@ -684,15 +696,34 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     modal.id = 'eb-site-stats-modal';
     modal.style.zIndex = '100000';
     modal.innerHTML = `
-      <div class="modal-content" style="max-width: 360px; width: 92%; padding: 20px 18px; border-radius: 18px; box-sizing: border-box; text-align: left;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-          <h3 style="margin:0;font-size:17px;font-weight:800;color:var(--text-main);">📊 Статистика посещений</h3>
+      <style>
+        .eb-ga4-tabs { display:flex; gap:5px; margin-bottom:10px; }
+        .eb-ga4-tab { flex:1; padding:7px 4px; border-radius:10px; border:1px solid var(--border-color, rgba(148,163,184,0.28)); background:var(--card-bg, transparent); color:var(--text-muted); font-size:11.5px; font-weight:700; white-space:nowrap; cursor:pointer; }
+        .eb-ga4-tab.is-active { background:var(--primary-color, #2563eb); border-color:var(--primary-color, #2563eb); color:#ffffff; }
+        body.dark-theme .eb-ga4-tab.is-active, .dark-theme .eb-ga4-tab.is-active, [data-theme="dark"] .eb-ga4-tab.is-active { background:#38bdf8; border-color:#38bdf8; color:#0f172a; }
+        .eb-ga4-table-wrap { width:100%; overflow-x:auto; max-height:52vh; overflow-y:auto; border-radius:12px; border:1px solid var(--border-color, rgba(148,163,184,0.22)); }
+        .eb-ga4-table { width:100%; border-collapse:collapse; font-size:12px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+        .eb-ga4-table th { position:sticky; top:0; z-index:2; background:var(--card-bg, #ffffff); color:var(--text-muted); font-weight:700; font-size:11px; text-align:right; padding:8px 6px; border-bottom:1px solid var(--border-color, rgba(148,163,184,0.24)); }
+        body.dark-theme .eb-ga4-table th, .dark-theme .eb-ga4-table th, [data-theme="dark"] .eb-ga4-table th { background:#1e293b; }
+        .eb-ga4-table th:first-child, .eb-ga4-table td:first-child { text-align:left; padding-left:9px; position:sticky; left:0; background:inherit; }
+        .eb-ga4-table th:first-child { z-index:3; }
+        .eb-ga4-table td { text-align:right; padding:7px 6px; border-bottom:1px solid var(--border-color, rgba(148,163,184,0.12)); color:var(--text-main); }
+        .eb-ga4-table tbody tr { background:var(--card-bg, #ffffff); }
+        body.dark-theme .eb-ga4-table tbody tr, .dark-theme .eb-ga4-table tbody tr, [data-theme="dark"] .eb-ga4-table tbody tr { background:#111827; }
+        .eb-ga4-table tbody tr.is-total-row { font-weight:800; background:rgba(37,99,235,0.08); }
+        body.dark-theme .eb-ga4-table tbody tr.is-total-row, .dark-theme .eb-ga4-table tbody tr.is-total-row, [data-theme="dark"] .eb-ga4-table tbody tr.is-total-row { background:rgba(56,189,248,0.14); }
+        .eb-ga4-table tbody tr.is-total-row td:first-child { background:inherit; }
+        .eb-ga4-table td:last-child, .eb-ga4-table th:last-child { padding-right:9px; }
+      </style>
+      <div class="modal-content" style="max-width: 560px; width: 96%; padding: 18px 14px; border-radius: 18px; box-sizing: border-box; text-align: left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h3 style="margin:0;font-size:17px;font-weight:800;color:var(--text-main);">📊 Статистика по странам (GA4)</h3>
           <button type="button" id="eb-site-stats-close-x" style="background:none;border:none;font-size:20px;line-height:1;color:var(--text-muted);cursor:pointer;padding:2px 6px;">✕</button>
         </div>
-        <div id="eb-site-stats-body" style="font-size:13.5px;color:var(--text-main);display:flex;flex-direction:column;gap:10px;">
-          <div style="text-align:center;padding:18px 0;color:var(--text-muted);">Загрузка данных из Firestore...</div>
+        <div id="eb-site-stats-body" style="font-size:13px;color:var(--text-main);display:flex;flex-direction:column;gap:10px;">
+          <div style="text-align:center;padding:22px 0;color:var(--text-muted);">Загрузка аналитики...</div>
         </div>
-        <button type="button" class="primary-button btn-green" id="eb-site-stats-close-btn" style="width:100%;margin-top:16px;min-height:40px;height:40px;border-radius:12px !important;font-weight:700;cursor:pointer;">
+        <button type="button" class="primary-button btn-green" id="eb-site-stats-close-btn" style="width:100%;margin-top:14px;min-height:40px;height:40px;border-radius:12px !important;font-weight:700;cursor:pointer;">
           Закрыть
         </button>
       </div>
@@ -706,38 +737,122 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     modal.querySelector('#eb-site-stats-close-x')?.addEventListener('click', close);
     modal.querySelector('#eb-site-stats-close-btn')?.addEventListener('click', close);
 
-    getSiteStatsSummaryFirestore().then((s) => {
+    Promise.allSettled([getGa4CountryReportFirestore(), getSiteStatsSummaryFirestore()]).then(([ga4Res, siteRes]) => {
       const bodyEl = modal.querySelector('#eb-site-stats-body');
       if (!bodyEl) return;
-      const lastStr = s.lastVisitIso
-        ? new Date(s.lastVisitIso).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+
+      const ga4 = ga4Res.status === 'fulfilled' ? ga4Res.value : null;
+      const s = siteRes.status === 'fulfilled' ? siteRes.value : null;
+
+      const renderFallbackSummary = () => {
+        if (!s) return '';
+        return `
+          <div style="padding:10px 12px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));font-size:12px;">
+            <div style="font-weight:800;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.3px;">🏆 Игроки в Firestore</div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;">
+              <span>Всего: <strong>${s.totalPlayers}</strong></span>
+              <span>24ч: <strong style="color:#22c55e;">${s.active24h}</strong></span>
+              <span>7д: <strong>${s.active7d}</strong></span>
+              <span>30д: <strong>${s.active30d}</strong></span>
+              <span>${escapeHtml(s.weekKey)}: <strong>${s.weeklyPlayers}</strong></span>
+            </div>
+          </div>
+        `;
+      };
+
+      if (!ga4 || !ga4.periods) {
+        bodyEl.innerHTML = `
+          <div style="padding:12px 13px;border-radius:12px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);line-height:1.45;font-size:12.5px;">
+            <div style="font-weight:800;margin-bottom:6px;">⏳ Отчёт GA4 ещё не синхронизирован</div>
+            <div style="color:var(--text-muted);">
+              Добавь в GitHub Secrets репозитория <code>GA4_PROPERTY_ID</code> и <code>GA4_SERVICE_ACCOUNT_JSON</code>, затем запусти workflow <strong>Sync GA4 Country Stats to Firestore</strong> во вкладке Actions.
+            </div>
+          </div>
+          ${renderFallbackSummary()}
+        `;
+        return;
+      }
+
+      let activePeriod = 'yesterday';
+      const updatedStr = ga4.updatedAt
+        ? new Date(ga4.updatedAt).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
         : '—';
-      bodyEl.innerHTML = `
-        <div style="padding:11px 13px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));">
-          <div style="font-weight:800;font-size:12.5px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px;">🌐 Сайт (sway-nick.github.io)</div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Уникальных гостей:</span><strong>${s.webUniqueVisitors}</strong></div>
-          <div style="display:flex;justify-content:space-between;"><span>Всего визитов (сессий):</span><strong>${s.webTotalVisits}</strong></div>
-        </div>
 
-        <div style="padding:11px 13px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));">
-          <div style="font-weight:800;font-size:12.5px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px;">📱 Android-приложение</div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Уникальных устройств:</span><strong>${s.appUniqueVisitors}</strong></div>
-          <div style="display:flex;justify-content:space-between;"><span>Всего сессий:</span><strong>${s.appTotalVisits}</strong></div>
-        </div>
+      const renderPeriod = () => {
+        const p = ga4.periods[activePeriod] || ga4.periods.yesterday || ga4.periods.today;
+        const tot = p?.totals || {};
+        const rows = Array.isArray(p?.countries) ? p.countries : [];
 
-        <div style="padding:11px 13px;border-radius:12px;background:var(--bg-secondary, rgba(148,163,184,0.1));border:1px solid var(--border-color, rgba(148,163,184,0.2));">
-          <div style="font-weight:800;font-size:12.5px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.3px;">🏆 Игроки в базе (Таблица лидеров)</div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Всего зарегистрировано:</span><strong>${s.totalPlayers}</strong></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Активных за 24 часа:</span><strong style="color:#22c55e;">${s.active24h}</strong></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Активных за 7 дней:</span><strong>${s.active7d}</strong></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Активных за 30 дней:</span><strong>${s.active30d}</strong></div>
-          <div style="display:flex;justify-content:space-between;"><span>В турнире (${escapeHtml(s.weekKey)}):</span><strong>${s.weeklyPlayers}</strong></div>
-        </div>
+        const rowsHtml = rows.map((r) => `
+          <tr>
+            <td title="${escapeHtml(r.name || r.code)}">${countryCodeToFlag(r.code)} <strong>${escapeHtml(r.code === 'ZZ' ? 'Другие' : r.code)}</strong></td>
+            <td>${Number(r.totalUsers || 0)}</td>
+            <td style="color:#38bdf8;">${Number(r.newPaid || 0)}</td>
+            <td style="color:#22c55e;">${Number(r.newOrganic || 0)}</td>
+            <td style="${Number(r.uninstalls || 0) > 0 ? 'color:#f87171;' : 'color:var(--text-muted);'}">${Number(r.uninstalls || 0)}</td>
+            <td><strong>${Number(r.activeUsers || 0)}</strong></td>
+            <td style="${Number(r.proPurchases || 0) > 0 ? 'color:#f59e0b;font-weight:700;' : 'color:var(--text-muted);'}">${Number(r.proPurchases || 0)}</td>
+            <td>${escapeHtml(formatUsd(r.adRevenue))}</td>
+          </tr>
+        `).join('');
 
-        <div style="font-size:11.5px;color:var(--text-muted);text-align:center;margin-top:2px;">
-          Последний визит: ${escapeHtml(lastStr)}
-        </div>
-      `;
+        bodyEl.innerHTML = `
+          <div class="eb-ga4-tabs">
+            <button type="button" class="eb-ga4-tab ${activePeriod === 'today' ? 'is-active' : ''}" data-ga4-period="today">Сегодня</button>
+            <button type="button" class="eb-ga4-tab ${activePeriod === 'yesterday' ? 'is-active' : ''}" data-ga4-period="yesterday">Вчера</button>
+            <button type="button" class="eb-ga4-tab ${activePeriod === 'last7d' ? 'is-active' : ''}" data-ga4-period="last7d">7 дней</button>
+            <button type="button" class="eb-ga4-tab ${activePeriod === 'allTime' ? 'is-active' : ''}" data-ga4-period="allTime">Всё время</button>
+          </div>
+
+          <div class="eb-ga4-table-wrap">
+            <table class="eb-ga4-table">
+              <thead>
+                <tr>
+                  <th>Страна</th>
+                  <th>Всего</th>
+                  <th title="Новые с рекламы">+Рекл</th>
+                  <th title="Новые органика">+Орг</th>
+                  <th title="Удалили приложение (app_remove)">Удал.</th>
+                  <th title="Активные пользователи">Актив.</th>
+                  <th title="Покупки PRO">PRO</th>
+                  <th title="Доход от рекламы (USD)">Рекл.$</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="is-total-row">
+                  <td>Итого</td>
+                  <td>${Number(tot.totalUsers || 0)}</td>
+                  <td style="color:#38bdf8;">${Number(tot.newPaid || 0)}</td>
+                  <td style="color:#22c55e;">${Number(tot.newOrganic || 0)}</td>
+                  <td style="color:#f87171;">${Number(tot.uninstalls || 0)}</td>
+                  <td>${Number(tot.activeUsers || 0)}</td>
+                  <td style="color:#f59e0b;">${Number(tot.proPurchases || 0)}</td>
+                  <td>${escapeHtml(formatUsd(tot.adRevenue))}</td>
+                </tr>
+                ${rowsHtml || `<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:14px;">Нет данных за период</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+
+          ${renderFallbackSummary()}
+
+          <div style="font-size:11px;color:var(--text-muted);text-align:center;">
+            GA4 обновлён: ${escapeHtml(updatedStr)}
+          </div>
+        `;
+
+        bodyEl.querySelectorAll('[data-ga4-period]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const next = btn.getAttribute('data-ga4-period');
+            if (next && next !== activePeriod) {
+              activePeriod = next;
+              renderPeriod();
+            }
+          });
+        });
+      };
+
+      renderPeriod();
     }).catch(() => {
       const bodyEl = modal.querySelector('#eb-site-stats-body');
       if (bodyEl) bodyEl.innerHTML = `<div style="text-align:center;color:#ef4444;padding:12px 0;">Не удалось загрузить статистику</div>`;

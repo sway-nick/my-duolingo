@@ -1,0 +1,27 @@
+name: Sync GA4 Country Stats to Firestore
+
+on:
+  schedule:
+    # Run every 3 hours (UTC)
+    - cron: '15 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-ga4-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run GA4 to Firestore sync
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_PROJECT_ID: english-breakfast-181ba
+        run: node scripts/sync_ga4_report.mjs

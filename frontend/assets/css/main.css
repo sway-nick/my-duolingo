@@ -10622,26 +10622,27 @@ html.is-rtl {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   margin-top: 18px;
   margin-bottom: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .col-page-btn {
-  min-width: 38px;
-  height: 38px;
-  padding: 0 10px;
-  border-radius: 11px;
+  min-width: 34px;
+  height: 36px;
+  padding: 0 7px;
+  border-radius: 10px;
   border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25));
   background: var(--card-bg, #ffffff);
   color: var(--text-main, #0f172a);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  flex-shrink: 0;
   transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
 }
 .col-page-btn:active:not(:disabled) {
@@ -10649,6 +10650,11 @@ html.is-rtl {
 }
 .col-page-btn:hover:not(:disabled) {
   border-color: var(--primary-color, #2563eb);
+}
+body.dark-theme .col-page-btn:hover:not(:disabled),
+.dark-theme .col-page-btn:hover:not(:disabled),
+[data-theme="dark"] .col-page-btn:hover:not(:disabled) {
+  border-color: #38bdf8;
 }
 .col-page-btn.is-active {
   background: var(--primary-color, #2563eb);
@@ -10659,8 +10665,8 @@ html.is-rtl {
 body.dark-theme .col-page-btn.is-active,
 .dark-theme .col-page-btn.is-active,
 [data-theme="dark"] .col-page-btn.is-active {
-  background: var(--primary-color, #38bdf8);
-  border-color: var(--primary-color, #38bdf8);
+  background: #38bdf8;
+  border-color: #38bdf8;
   color: #0f172a;
   box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
 }
@@ -10673,14 +10679,15 @@ body.dark-theme .col-page-btn.is-active,
   font-weight: 800;
 }
 .col-page-ellipsis {
-  min-width: 28px;
-  height: 38px;
+  min-width: 18px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--text-muted, #64748b);
   font-weight: 800;
   font-size: 14px;
+  flex-shrink: 0;
   user-select: none;
 }
 .col-page-info {

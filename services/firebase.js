@@ -2491,5 +2491,24 @@ export async function getSiteStatsSummaryFirestore() {
   return result;
 }
 
+export async function getGa4CountryReportFirestore() {
+  try {
+    const url = getFirestoreUrl('/site_stats/ga4_report');
+    const res = await firestoreFetch(url, { method: 'GET' });
+    if (!res.ok) return null;
+    const doc = await res.json();
+    const f = doc?.fields || {};
+    const rawJson = f.reportJson?.stringValue;
+    if (!rawJson) return null;
+    const parsed = JSON.parse(rawJson);
+    return {
+      ...parsed,
+      updatedAt: f.updatedAt?.timestampValue || doc?.updateTime || parsed.generatedAt || null,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
 
 

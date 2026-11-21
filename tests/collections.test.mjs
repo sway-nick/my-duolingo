@@ -759,8 +759,7 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
   assert.equal((container.innerHTML.match(/class="pair-side pair-side-b"/g) || []).length, 5, 'tricky_sounds renders 5 right halves');
   assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 10, 'tricky_sounds renders 10 audio buttons (1 per word)');
   assert.ok(container.innerHTML.includes('1–10 / 100'), 'tricky_sounds shows 1–10 / 100');
-  assert.ok(container.innerHTML.includes('class="pair-contrast-pill"'), 'tricky_sounds renders IPA contrast pill');
-  assert.ok(container.innerHTML.includes('/æ/ ≠ /e/'), 'tricky_sounds shows /æ/ ≠ /e/ for bad/bed');
+  assert.ok(!container.innerHTML.includes('class="pair-card-head"'), 'tricky_sounds omits redundant pair header row');
   assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'tricky_sounds renders transcription for each word');
   assert.ok(!container.innerHTML.includes('//'), 'transcriptions must not contain double slashes //');
 

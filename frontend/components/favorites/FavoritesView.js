@@ -5,7 +5,7 @@ import { ProService } from '../../services/proService.js?v=386.0';
 import { getProStrings } from '../../services/proI18n.js?v=386.0';
 import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
 import { getMicroRulesStrings } from './grammarUiTranslations.js?v=386.0';
-import { isPairCollection, getPairInfo } from '../../services/confusablePairsData.js?v=386.0';
+import { isPairCollection } from '../../services/confusablePairsData.js?v=386.0';
 import {
   removeWordFromCollection,
   syncCollectionToAndroidWidget,
@@ -57,16 +57,16 @@ export function saveSavedCollectionPage(colId, page = 1) {
 }
 
 function getPageNumbers(current, total) {
-  if (total <= 7) {
+  if (total <= 5) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
-  if (current <= 4) {
-    return [1, 2, 3, 4, 5, '...', total];
+  if (current <= 3) {
+    return [1, 2, 3, '...', total];
   }
-  if (current >= total - 3) {
-    return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  if (current >= total - 2) {
+    return [1, '...', total - 2, total - 1, total];
   }
-  return [1, '...', current - 1, current, current + 1, '...', total];
+  return [1, '...', current, '...', total];
 }
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
@@ -255,6 +255,9 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         dlBtn.innerHTML = `<span>⏳ ${escapeHtml(t('ad_loading') || 'Загрузка')}</span>`;
         await new Promise((r) => setTimeout(r, 450));
         markCollectionPackDownloaded(collectionId);
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('collection_pack_download', { collection_id: collectionId });
+        }
         renderFavoritesView(favoriteWords, containerSelector, options);
       } catch (err) {
         console.warn('Collection pack download failed:', err);
@@ -408,15 +411,11 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   };
 
   const renderPairCardsHtml = () => {
-    const isSoundCol = collectionId === 'tricky_sounds';
     const pairCards = [];
     for (let i = 0; i < wordsToRender.length; i += 2) {
       const wordA = wordsToRender[i];
       const wordB = wordsToRender[i + 1];
       if (!wordA) continue;
-      const pairNum = Math.floor((startIndex + i) / 2) + 1;
-      const info = getPairInfo(collectionId, wordA.word);
-      const contrast = info?.contrast || '';
 
       const renderSide = (w, sideClass) => {
         if (!w) return `<div class="pair-side ${sideClass}"></div>`;
@@ -440,15 +439,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
       pairCards.push(`
         <div class="fav-card pair-card" data-id="${wordA.id}">
-          <div class="pair-card-head">
-            ${isSoundCol && contrast
-              ? `<span class="pair-contrast-pill" dir="ltr">${escapeHtml(contrast)}</span>`
-              : `<span class="pair-contrast-pill pair-contrast-twins" dir="ltr">A ⇄ B</span>`}
-            <span class="pair-num">#${pairNum}</span>
-          </div>
           <div class="pair-grid-row">
             ${renderSide(wordA, 'pair-side-a')}
-            <span class="pair-vs-mid" aria-hidden="true">${isSoundCol ? '≠' : '⇄'}</span>
             ${renderSide(wordB, 'pair-side-b')}
           </div>
         </div>
@@ -459,14 +451,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
   container.innerHTML = `
     <style>
-      .pair-card { padding: 12px 12px 13px !important; }
-      .pair-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
-      .pair-contrast-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.3px; background: rgba(37, 99, 235, 0.11); color: var(--primary-color, #2563eb); }
-      .pair-contrast-twins { background: rgba(139, 92, 246, 0.12); color: #7c3aed; }
-      body.dark-theme .pair-contrast-twins, .dark-theme .pair-contrast-twins, [data-theme="dark"] .pair-contrast-twins { background: rgba(167, 139, 250, 0.18); color: #c4b5fd; }
-      .pair-num { font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); }
-      .pair-grid-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: stretch; width: 100%; box-sizing: border-box; }
-      .pair-vs-mid { align-self: center; font-size: 15px; font-weight: 800; color: var(--text-muted, #64748b); user-select: none; padding: 0 1px; }
+      .pair-card { padding: 10px 10px 11px !important; }
+      .pair-grid-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; align-items: stretch; width: 100%; box-sizing: border-box; }
       .pair-side { display: flex; flex-direction: column; min-width: 0; padding: 9px 9px 10px; border-radius: 12px; box-sizing: border-box; }
       .pair-side-a { background: var(--bg-hover, #f1f5f9); border: 1px solid var(--border-color, rgba(148, 163, 184, 0.22)); }
       .pair-side-b { background: rgba(37, 99, 235, 0.07); border: 1px solid rgba(37, 99, 235, 0.24); }
@@ -478,16 +464,17 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       .pair-audio-btn, .pair-fav-btn { width: 28px !important; height: 28px !important; min-width: 28px !important; min-height: 28px !important; padding: 0 !important; font-size: 14px !important; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; }
       .pair-side-ipa { font-size: 12px; font-weight: 600; color: var(--text-muted, #64748b); margin-bottom: 5px; line-height: 1.2; overflow-wrap: anywhere; }
       .pair-side-tr { font-size: 12.5px; font-weight: 600; color: var(--primary-color, #2563eb); line-height: 1.32; overflow-wrap: anywhere; word-break: break-word; }
-      body.dark-theme .pair-side-tr, .dark-theme .pair-side-tr, [data-theme="dark"] .pair-side-tr { color: var(--primary-color, #38bdf8); }
-      .col-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 18px; margin-bottom: 6px; flex-wrap: wrap; }
-      .col-page-btn { min-width: 38px; height: 38px; padding: 0 10px; border-radius: 11px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
+      body.dark-theme .pair-side-tr, .dark-theme .pair-side-tr, [data-theme="dark"] .pair-side-tr { color: #38bdf8; }
+      .col-pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; margin-bottom: 6px; flex-wrap: nowrap; }
+      .col-page-btn { min-width: 34px; height: 36px; padding: 0 7px; border-radius: 10px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; flex-shrink: 0; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
       .col-page-btn:active:not(:disabled) { transform: scale(0.96); }
       .col-page-btn:hover:not(:disabled) { border-color: var(--primary-color, #2563eb); }
+      body.dark-theme .col-page-btn:hover:not(:disabled), .dark-theme .col-page-btn:hover:not(:disabled), [data-theme="dark"] .col-page-btn:hover:not(:disabled) { border-color: #38bdf8; }
       .col-page-btn.is-active { background: var(--primary-color, #2563eb); border-color: var(--primary-color, #2563eb); color: #ffffff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
-      body.dark-theme .col-page-btn.is-active, .dark-theme .col-page-btn.is-active, [data-theme="dark"] .col-page-btn.is-active { background: var(--primary-color, #38bdf8); border-color: var(--primary-color, #38bdf8); color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
+      body.dark-theme .col-page-btn.is-active, .dark-theme .col-page-btn.is-active, [data-theme="dark"] .col-page-btn.is-active { background: #38bdf8; border-color: #38bdf8; color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
       .col-page-btn:disabled { opacity: 0.3; cursor: default; }
       .col-page-btn.col-page-nav { font-size: 18px; font-weight: 800; }
-      .col-page-ellipsis { min-width: 28px; height: 38px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; user-select: none; }
+      .col-page-ellipsis { min-width: 18px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; flex-shrink: 0; user-select: none; }
       .col-page-info { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); margin-bottom: 12px; }
     </style>
     <div class="favorites-page">
@@ -630,15 +617,14 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     }
   };
 
-  if (isPaginated && totalPages > 1 && !isProActive()) {
-    AdService.preloadPaginationInterstitial().catch(() => {});
-  }
-
   container.querySelectorAll('[data-col-page]').forEach((btn) => {
     btn.addEventListener('click', async () => {
       if (btn.disabled) return;
       const targetPage = Number(btn.getAttribute('data-col-page'));
       if (!targetPage || targetPage === currentPage || targetPage < 1 || targetPage > totalPages) return;
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('collection_page_change', { collection_id: collectionId, page: targetPage });
+      }
       if (!isProActive()) {
         try {
           await AdService.showPaginationInterstitial(`collection_${collectionId}`);
@@ -680,6 +666,12 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         await AdService.showPaginationInterstitial(`collection_${collectionId}_unlock`);
         unlockMoreCollectionItems(collectionId, partialStep);
         const newCount = getCollectionUnlockedCount(collectionId);
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('collection_pack_unlock_more', {
+            collection_id: collectionId,
+            unlocked_count: newCount,
+          });
+        }
         const newPage = Math.max(1, Math.ceil(newCount / PAGE_SIZE));
         options._currentPage = newPage;
         saveSavedCollectionPage(collectionId, newPage);
