@@ -675,6 +675,27 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
+  const countryDisplayNames = (() => {
+    try {
+      if (typeof Intl !== 'undefined' && typeof Intl.DisplayNames === 'function') {
+        return new Intl.DisplayNames([getInterfaceLanguage() || 'ru', 'ru', 'en'], { type: 'region' });
+      }
+    } catch (_) {}
+    return null;
+  })();
+
+  function getCountryLabel(code, fallbackName) {
+    const c = String(code || '').trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return 'Другие';
+    if (countryDisplayNames) {
+      try {
+        const localized = countryDisplayNames.of(c);
+        if (localized && localized !== c) return localized;
+      } catch (_) {}
+    }
+    return fallbackName || c;
+  }
+
   function countryCodeToFlag(code) {
     const c = String(code || '').trim().toUpperCase();
     if (!/^[A-Z]{2}$/.test(c) || c === 'ZZ') return '🌍';
@@ -705,7 +726,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         .eb-ga4-table { width:100%; border-collapse:collapse; font-size:12px; font-variant-numeric:tabular-nums; white-space:nowrap; }
         .eb-ga4-table th { position:sticky; top:0; z-index:2; background:var(--card-bg, #ffffff); color:var(--text-muted); font-weight:700; font-size:11px; text-align:right; padding:8px 6px; border-bottom:1px solid var(--border-color, rgba(148,163,184,0.24)); }
         body.dark-theme .eb-ga4-table th, .dark-theme .eb-ga4-table th, [data-theme="dark"] .eb-ga4-table th { background:#1e293b; }
-        .eb-ga4-table th:first-child, .eb-ga4-table td:first-child { text-align:left; padding-left:9px; position:sticky; left:0; background:inherit; }
+        .eb-ga4-table th:first-child, .eb-ga4-table td:first-child { text-align:left; padding-left:9px; position:sticky; left:0; background:inherit; max-width:140px; overflow:hidden; text-overflow:ellipsis; }
         .eb-ga4-table th:first-child { z-index:3; }
         .eb-ga4-table td { text-align:right; padding:7px 6px; border-bottom:1px solid var(--border-color, rgba(148,163,184,0.12)); color:var(--text-main); }
         .eb-ga4-table tbody tr { background:var(--card-bg, #ffffff); }
@@ -783,9 +804,11 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         const tot = p?.totals || {};
         const rows = Array.isArray(p?.countries) ? p.countries : [];
 
-        const rowsHtml = rows.map((r) => `
+        const rowsHtml = rows.map((r) => {
+          const countryLabel = getCountryLabel(r.code, r.name);
+          return `
           <tr>
-            <td title="${escapeHtml(r.name || r.code)}">${countryCodeToFlag(r.code)} <strong>${escapeHtml(r.code === 'ZZ' ? 'Другие' : r.code)}</strong></td>
+            <td title="${escapeHtml(countryLabel)}">${countryCodeToFlag(r.code)} <strong>${escapeHtml(countryLabel)}</strong></td>
             <td>${Number(r.totalUsers || 0)}</td>
             <td style="color:#38bdf8;">${Number(r.newPaid || 0)}</td>
             <td style="color:#22c55e;">${Number(r.newOrganic || 0)}</td>
@@ -794,7 +817,8 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
             <td style="${Number(r.proPurchases || 0) > 0 ? 'color:#f59e0b;font-weight:700;' : 'color:var(--text-muted);'}">${Number(r.proPurchases || 0)}</td>
             <td>${escapeHtml(formatUsd(r.adRevenue))}</td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
 
         bodyEl.innerHTML = `
           <div class="eb-ga4-tabs">
