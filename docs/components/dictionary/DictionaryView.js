@@ -1581,6 +1581,12 @@ function formatWordCount(count) {
     if (mod10 >= 2 && mod10 <= 4) return `${count} ${t('word_2')}`;
     return `${count} ${t('words')}`;
   }
+  if (lang === 'ko') {
+    return `${count}개 ${t('words')}`;
+  }
+  if (count === 1) {
+    return `${count} ${t('word_1') || t('words')}`;
+  }
   return `${count} ${t('words')}`;
 }
 

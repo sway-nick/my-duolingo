@@ -2958,9 +2958,9 @@ function getQueueForCards(words, progress, favorites = null) {
     return !favSet.has(String(w.id)) && (!p || !isWordMastered(p));
   });
 
-  const targetCount = Math.min(10, totalUnmastered.length);
+  const targetCount = Math.min(5, totalUnmastered.length);
 
-  // If target quota (10 unmastered words) is already selected, Cards intake is done!
+  // If target quota (5 unmastered words) is already selected, Cards intake is done!
   if (pickedInRound.length >= targetCount && targetCount > 0) {
     return [];
   }
@@ -2985,10 +2985,10 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
 
   const favSet = new Set((favorites || []).map(String));
 
-  // 1. Gather up to 10 base words (ONLY NEW / UNMASTERED words, NEVER Favorites!):
+  // 1. Gather up to 5 base words (ONLY NEW / UNMASTERED words, NEVER Favorites!):
   let baseWords = [];
   if (Array.isArray(pickedWords) && pickedWords.length > 0) {
-    baseWords = pickedWords.slice(0, 10);
+    baseWords = pickedWords.slice(0, 5);
   } else {
     // Filter out any word that is in favorites or already mastered
     const candidateNewWords = categoryWords.filter((w) => {
@@ -3009,10 +3009,10 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
     });
     unstarted.sort((a, b) => (Number(b.zipf) || 0) - (Number(a.zipf) || 0));
 
-    // Combine to form baseWords (up to 10)
+    // Combine to form baseWords (up to 5)
     const baseWordsSet = new Set();
     for (const w of [...pendingInRound, ...unstarted]) {
-      if (baseWords.length >= 10) break;
+      if (baseWords.length >= 5) break;
       const idStr = String(w.id);
       if (!baseWordsSet.has(idStr)) {
         baseWordsSet.add(idStr);
@@ -3022,7 +3022,7 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
 
     // If still empty (e.g. all non-favorite words are mastered), fallback to any unmastered words
     if (baseWords.length === 0) {
-      const remainingUnmastered = candidateNewWords.slice(0, 10);
+      const remainingUnmastered = candidateNewWords.slice(0, 5);
       baseWords.push(...remainingUnmastered);
     }
   }
@@ -3037,7 +3037,7 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
   // STRICTLY within categoryWords! Words from other categories must NEVER be mixed into the conveyor.
   const reviewWordPool = categoryWords.filter((w) => !isExcludedFromConveyor(w));
 
-  // 2. Pick up to 5 oldest Favorites (LRU by lastReviewedAt / lastPracticed ascending)
+  // 2. Pick up to 3 oldest Favorites (LRU by lastReviewedAt / lastPracticed ascending)
   let injectedFavs = [];
   if (favorites && favorites.length > 0) {
     const candidateFavs = reviewWordPool.filter((w) => {
@@ -3050,14 +3050,14 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
       const tB = pB ? (pB.lastReviewedAt || pB.lastPracticed || 0) : 0;
       return tA - tB;
     });
-    injectedFavs = candidateFavs.slice(0, 5);
+    injectedFavs = candidateFavs.slice(0, 3);
   }
 
   const combinedIds = new Set([...baseIds, ...injectedFavs.map((w) => String(w.id))]);
 
   // 3. Pick oldest Mastered words (LRU by lastReviewedAt / lastPracticed / masteredAt ascending)
-  // Quota: 5 words + shortfall from favorites if favorites < 5 (total review words up to 10)
-  const neededMastered = Math.max(0, 10 - injectedFavs.length);
+  // Quota: 2 words + shortfall from favorites if favorites < 3 (total review words up to 5)
+  const neededMastered = Math.max(0, 5 - injectedFavs.length);
   let injectedMastered = [];
   if (neededMastered > 0) {
     const candidateMastered = reviewWordPool.filter((w) => {
@@ -3076,8 +3076,8 @@ function prepareTrainingBatch(categoryWords, userProgress, favorites = [], picke
 
   const bonusWords = [...injectedFavs, ...injectedMastered];
 
-  // Up to 20 words in conveyor: up to 10 base (new words) + up to 10 review (5 favs + 5 mastered)
-  return [...baseWords, ...bonusWords].slice(0, 20);
+  // Up to 10 words in conveyor: up to 5 base (new words) + up to 5 review (3 favs + 2 mastered)
+  return [...baseWords, ...bonusWords].slice(0, 10);
 }
 
 function getCategoryBatchKey(categoryWords) {

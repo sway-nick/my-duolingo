@@ -2430,11 +2430,11 @@ export const STORY_TRANSLATIONS = {
     "badge850": "🏆 Hito: 850 palabras",
     "storyTitle850": "Conocer a un vecino nuevo",
     "storyFull850": [
-      "— Hola, creo que somos vecinos. Me he mudado al piso de al lado.",
+      "— Hola, creo que somos vecinos. Me mudé al departamento de al lado.",
       "— ¡Ah, bienvenido! Soy Sara.",
       "— Encantado. Soy Ben.",
       "— ¿Necesitas ayuda con esas cajas?",
-      "— Qué amable, gracias. Me quedan algunas en el coche.",
+      "— Qué amable, gracias. Me quedan algunas en el auto.",
       "— No pasa nada. Te ayudo a subirlas.",
       "— ¡Gracias! Meteré las cajas y después prepararé café.",
       "— Me parece bien. Pásate luego si necesitas algo."
@@ -2600,11 +2600,11 @@ export const STORY_TRANSLATIONS = {
     "storyFull1550": [
       "— ¿Qué vas a hacer este fin de semana?",
       "— Voy a visitar a mi tía fuera de la ciudad.",
-      "— ¿Vas a ir en coche?",
+      "— ¿Vas a ir en auto?",
       "— No, vamos a ir en tren.",
-      "— ¿Qué vais a hacer allí?",
+      "— ¿Qué van a hacer allá?",
       "— Vamos a cocinar juntos y a pasear junto al lago.",
-      "— Qué bien. ¿Vas a pasar la noche allí?",
+      "— Qué bien. ¿Vas a pasar la noche allá?",
       "— Sí, voy a volver el domingo."
     ],
     "badge1600": "🏆 Hito: 1600 palabras",

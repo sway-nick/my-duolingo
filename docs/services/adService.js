@@ -151,6 +151,32 @@ class AdServiceImpl {
     }
   }
 
+  getDailyRoundsCompleted() {
+    try {
+      if (typeof localStorage === 'undefined') return 0;
+      const todayKey = this.getTodayDateKey();
+      const savedDate = localStorage.getItem('daily_rounds_completed_date');
+      if (savedDate !== todayKey) return 0;
+      return Math.max(0, parseInt(localStorage.getItem('daily_rounds_completed_count') || '0', 10) || 0);
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  recordDailyRoundCompleted() {
+    try {
+      if (typeof localStorage === 'undefined') return 2;
+      const todayKey = this.getTodayDateKey();
+      const prevCount = this.getDailyRoundsCompleted();
+      const nextCount = prevCount + 1;
+      localStorage.setItem('daily_rounds_completed_date', todayKey);
+      localStorage.setItem('daily_rounds_completed_count', String(nextCount));
+      return nextCount;
+    } catch (e) {
+      return 2;
+    }
+  }
+
   markDailyBonusClaimed() {
     try {
       if (typeof localStorage !== 'undefined') {

@@ -81,7 +81,7 @@ export const SPOKEN_ENGLISH_I18N = {
   },
   "es": {
     "grammarHubTitle": "Gramática",
-    "grammarHubSubtitle": "Textos, microrreglas, tiempos y español/inglés hablado real",
+    "grammarHubSubtitle": "Textos, microrreglas, tiempos e inglés hablado real",
     "folderTitle": "Inglés vivo",
     "folderSubtitle": "200 formas reales y abreviaturas",
     "hubTitle": "Inglés vivo",

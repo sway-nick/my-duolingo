@@ -1221,7 +1221,12 @@
           if (isHubScreen && wotd) {
             if (isTrainingRoundJustCompleted) {
               window._trainingRoundJustCompleted = false;
-              if (AdService.canClaimDailyBonus()) { window._canClaimRoundBonus = true; }
+              const roundsToday = typeof AdService.recordDailyRoundCompleted === 'function'
+                ? AdService.recordDailyRoundCompleted()
+                : 2;
+              if (roundsToday >= 2 && AdService.canClaimDailyBonus()) {
+                window._canClaimRoundBonus = true;
+              }
               clearActiveConveyorBatch();
               window._pausedRoundState = null;
               if (window.trackEvent) {

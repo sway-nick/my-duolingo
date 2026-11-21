@@ -332,6 +332,11 @@ test('8e. AdService Bonus XP Rewarded Ad: All 36 locales translated (including p
 
   // Daily limit lifecycle verification
   global.localStorage.removeItem('daily_bonus_xp_last_date');
+  global.localStorage.removeItem('daily_rounds_completed_date');
+  global.localStorage.removeItem('daily_rounds_completed_count');
+  assert.equal(AdService.getDailyRoundsCompleted(), 0, '0 rounds completed initially today');
+  assert.equal(AdService.recordDailyRoundCompleted(), 1, '1st round completed today returns 1 (< 2)');
+  assert.equal(AdService.recordDailyRoundCompleted(), 2, '2nd round completed today returns 2 (>= 2, unlocks bonus)');
   assert.equal(AdService.canClaimDailyBonus(), true, 'Bonus available on clean state');
   AdService.markDailyBonusClaimed();
   assert.equal(AdService.canClaimDailyBonus(), false, 'Bonus not available once claimed today');

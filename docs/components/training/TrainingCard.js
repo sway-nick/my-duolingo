@@ -521,7 +521,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
     }).length;
 
-    const targetCount = Math.min(10, totalUnmastered.length || 10);
+    const targetCount = Math.min(5, totalUnmastered.length || 5);
     const currentDisplay = Math.min(pickedCount, targetCount);
     cardsBadgeText = t('conveyor_in_learning', { current: currentDisplay, total: targetCount });
   }
@@ -550,6 +550,12 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       if (lastDigit === 1) return `${cnt} ${t('word_1')}`;
       if (lastDigit >= 2 && lastDigit <= 4) return `${cnt} ${t('word_2')}`;
       return `${cnt} ${t('words')}`;
+    }
+    if (lang === 'ko') {
+      return `${cnt}개 ${t('words')}`;
+    }
+    if (cnt === 1) {
+      return `${cnt} ${t('word_1') || t('words')}`;
     }
     return `${cnt} ${t('words')}`;
   }
@@ -2455,7 +2461,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           const p = freshProg[w.id] || freshProg[String(w.id)];
           return !favSet.has(String(w.id)) && p && p.roundCardsDone === true && !isWordMastered(p);
         }).length;
-        const targetCount = Math.min(10, totalUnmastered.length || 10);
+        const targetCount = Math.min(5, totalUnmastered.length || 5);
         if (pickedCount >= targetCount && targetCount > 0) {
           clearActiveConveyorBatch(catWords, true);
           getActiveConveyorBatch(catWords, freshProg, favList);
