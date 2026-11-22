@@ -77,8 +77,8 @@ function speakNewsSentenceDirect(text, speedRate = 0.85, runId) {
 
     const safetyMs = Math.max(4000, Math.round((cleanText.length * 140) / Math.max(0.45, rate)) + 2500);
 
-    // 1. Native Android TTS (instant, 0ms delay, no MP3/CDN fallback race)
-    if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.speakText === 'function') {
+    // 1. Native Android TTS (uses non-overloaded speakTextWithRate so speechRate is guaranteed to apply on Android WebView)
+    if (window.AndroidAudioBridge && (typeof window.AndroidAudioBridge.speakTextWithRate === 'function' || typeof window.AndroidAudioBridge.speakText === 'function')) {
       const utteranceId = `news_tts_${runId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
       window.onNativeTtsComplete = (doneId) => {
         if (!doneId || doneId === utteranceId) {
@@ -88,7 +88,9 @@ function speakNewsSentenceDirect(text, speedRate = 0.85, runId) {
       };
       activeNewsTtsTimer = setTimeout(finish, safetyMs);
       try {
-        const started = window.AndroidAudioBridge.speakText(cleanText, langCode, utteranceId, rate);
+        const started = typeof window.AndroidAudioBridge.speakTextWithRate === 'function'
+          ? window.AndroidAudioBridge.speakTextWithRate(cleanText, langCode, utteranceId, rate)
+          : window.AndroidAudioBridge.speakText(cleanText, langCode, utteranceId, rate);
         if (started) return;
       } catch (err) {
         console.warn('News native TTS failed:', err);
@@ -140,8 +142,8 @@ export function stopDailyNewsAudio() {
     window.onNativeTtsComplete = null;
     window.__activeNewsUtterance = null;
     try {
-      if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopSpeaking === 'function') {
-        window.AndroidAudioBridge.stopSpeaking();
+      if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopSpeech === 'function') {
+        window.AndroidAudioBridge.stopSpeech();
       }
     } catch (_) {}
   }
@@ -910,7 +912,7 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
                   type="button"
                   class="news-speed-btn"
                   data-article-idx="${idx}"
-                  data-speed="0.85"
+                  data-speed="0.8"
                   aria-label="Audio speed"
                 >1.0x</button>
                 <button
@@ -951,12 +953,12 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
       });
     });
 
-    // Bind speed toggle buttons (actual 0.85 shown as "1.0x", actual 0.5 shown as "0.85x")
+    // Bind speed toggle buttons (actual 0.80 shown as "1.0x", actual 0.50 shown as "0.85x")
     contentEl.querySelectorAll('.news-speed-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const cur = parseFloat(btn.getAttribute('data-speed') || '0.85');
-        const next = cur > 0.65 ? 0.5 : 0.85;
+        const cur = parseFloat(btn.getAttribute('data-speed') || '0.8');
+        const next = cur > 0.65 ? 0.5 : 0.8;
         btn.setAttribute('data-speed', String(next));
         btn.textContent = next === 0.5 ? '0.85x' : '1.0x';
       });
@@ -994,8 +996,9 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
           card.querySelectorAll('.news-sentence.is-speaking').forEach((el) => el.classList.remove('is-speaking'));
           sentEl.classList.add('is-speaking');
           const text = (sentEl.textContent || '').trim();
+          const liveSpeed = parseFloat(speedBtn?.getAttribute('data-speed') || '0.8') || 0.8;
           if (text) {
-            await speakNewsSentenceDirect(text, speed, runId);
+            await speakNewsSentenceDirect(text, liveSpeed, runId);
           }
         }
 

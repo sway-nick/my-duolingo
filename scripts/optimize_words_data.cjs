@@ -56,7 +56,9 @@ function optimizeWordsData() {
   }
 
   const fullMinified = JSON.stringify(cleanedFull);
-  fs.writeFileSync(WORDS_PATH, fullMinified, 'utf8');
+  if (fullMinified !== raw) {
+    fs.writeFileSync(WORDS_PATH, fullMinified, 'utf8');
+  }
 
   console.log(
     `[optimize_words_data] Done: words.json=${(Buffer.byteLength(fullMinified) / 1024 / 1024).toFixed(2)} MiB (${Buffer.byteLength(fullMinified)} bytes)`
