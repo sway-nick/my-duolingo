@@ -80,6 +80,21 @@ service cloud.firestore {
     //    - Aggregated, non-PII GA4 country statistics written exclusively by backend Service Account (GitHub Actions / Admin privileges)
     //    - Read: get allowed for all; list denied
     //    - Create/Update/Delete: denied for all clients
+    //
+    // 10. Daily News Cache: /daily_news/{regionId}
+    //     - regionId: 2-letter uppercase ISO country code ('^[A-Z]{2}$') or one of the 36 supported locale codes
+    //     - Written exclusively by backend Service Account (GitHub Actions / Admin SDK)
+    //     - Read: get allowed for valid country codes or supported locale codes (no auth required for local Google Play Billing Pro); list denied
+    //     - Create/Update/Delete: denied for all clients
+    //
+    // 11. Daily News Active Locales: /news_active_locales/{pairId}
+    //     - pairId: '{COUNTRY}_{locale}' matching '^[A-Z]{2}_[a-z]{2}$' (e.g. KZ_ru, UA_ru, UA_uk, US_en)
+    //     - Fields:
+    //       * country: string (matching '^[A-Z]{2}$')
+    //       * locale: string (one of the 36 supported locale codes)
+    //       * lastActiveAt: timestamp (must equal request.time)
+    //     - Read/List/Delete: denied for all clients (Admin SDK only)
+    //     - Create/Update: allowed for valid country+locale pair matching pairId with strict schema and server timestamp
     // ===============================================================
 
     function isAuthenticated() {
@@ -190,6 +205,23 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
     }
 
+    function isSupportedNewsLocale(locale) {
+      return locale in ['ar', 'bn', 'bg', 'zh', 'hr', 'cs', 'da', 'en', 'et', 'fi', 'fr', 'de', 'el', 'hi', 'hu', 'id', 'it', 'ja', 'kk', 'ko', 'lv', 'lt', 'fa', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'es', 'sv', 'th', 'tr', 'uk', 'ur', 'vi'];
+    }
+
+    function isValidNewsActiveLocaleWrite(pairId) {
+      return pairId.matches('^[A-Z]{2}_[a-z]{2}$')
+        && request.resource.data.keys().hasOnly(['country', 'locale', 'lastActiveAt'])
+        && request.resource.data.keys().hasAll(['country', 'locale', 'lastActiveAt'])
+        && request.resource.data.country is string
+        && request.resource.data.country.matches('^[A-Z]{2}$')
+        && request.resource.data.locale is string
+        && isSupportedNewsLocale(request.resource.data.locale)
+        && pairId == request.resource.data.country + '_' + request.resource.data.locale
+        && request.resource.data.lastActiveAt is timestamp
+        && request.resource.data.lastActiveAt == request.time;
+    }
+
     // 1. Weekly Leaderboard
     match /leaderboards/{weekKey}/players/{userId} {
       allow get: if true;
@@ -288,6 +320,18 @@ service cloud.firestore {
       allow get: if true;
       allow list: if false;
       allow create, update, delete: if false;
+    }
+
+    // 10. Daily News Cache (backend Service Account write-only)
+    match /daily_news/{regionId} {
+      allow get: if regionId.matches('^[A-Z]{2}$') || isSupportedNewsLocale(regionId);
+      allow list, create, update, delete: if false;
+    }
+
+    // 11. Daily News Active Locales (client heartbeat, Admin SDK read-only)
+    match /news_active_locales/{pairId} {
+      allow get, list, delete: if false;
+      allow create, update: if isValidNewsActiveLocaleWrite(pairId);
     }
 
     // Default deny for all other paths

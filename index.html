@@ -231,6 +231,7 @@
       import { renderTenseConstructionsView } from './components/favorites/TenseConstructionsView.js?v=386.0';
       import { renderGrammarHubView } from './components/favorites/GrammarHubView.js?v=386.0';
       import { renderSpokenEnglishView } from './components/favorites/SpokenEnglishView.js?v=386.0';
+      import { renderDailyNewsView, stopDailyNewsAudio, closeNewsWordPopover } from './components/favorites/DailyNewsView.js?v=386.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
       import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
       import { renderLeaderboardView, renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } from './components/leaderboard/LeaderboardView.js?v=386.0';
@@ -1469,6 +1470,13 @@
               btn.classList.toggle('is-active', isWotdFav);
               btn.classList.toggle('is-off', !isWotdFav);
             });
+            try {
+              const now = new Date();
+              const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+              if (localStorage.getItem('eb_daily_news_seen_date') === todayKey) {
+                content.querySelector('.hub-news-unread-dot')?.remove();
+              }
+            } catch (_) {}
 
             const curBonusBtn = content.querySelector('#go-double-xp-btn');
             if (window._canClaimRoundBonus && canClaimDailyBonus && !curBonusBtn) {
@@ -1567,6 +1575,27 @@
                   }
                 </div>
                 ${wotdHtml}
+                ${isHubScreen ? `
+                  <div class="hub-news-fab-row" style="width: 100%; max-width: 340px; margin: 10px auto 0; display: flex; justify-content: flex-end; align-items: center;">
+                    <button
+                      type="button"
+                      id="hub-daily-news-fab"
+                      aria-label="Daily News"
+                      style="position: relative; width: 60px; height: 60px; padding: 0; border: none; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.28)); transition: transform 0.16s ease;"
+                    >
+                      <img src="assets/icons/daily_news_globe.webp" alt="NEWS" style="width: 58px; height: 58px; object-fit: contain; pointer-events: none; display: block;" />
+                      ${(() => {
+                        try {
+                          const now = new Date();
+                          const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                          const seen = localStorage.getItem('eb_daily_news_seen_date') === todayKey;
+                          if (seen) return '';
+                        } catch (_) {}
+                        return '<span class="hub-news-unread-dot" style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 2px solid var(--card-bg, #ffffff); box-shadow: 0 2px 6px rgba(239,68,68,0.5);"></span>';
+                      })()}
+                    </button>
+                  </div>
+                ` : ''}
                 ${bonusXpBtnHtml ? `
                   <div class="hub-bonus-wrap" style="width: 100%; max-width: 340px; margin: 14px auto 0;">
                     ${bonusXpBtnHtml}
@@ -1577,6 +1606,24 @@
           `;
 
           attachBonusBtnListener(content.querySelector('#go-double-xp-btn'));
+
+          const hubNewsFab = content.querySelector('#hub-daily-news-fab');
+          if (hubNewsFab) {
+            hubNewsFab.addEventListener('click', () => {
+              if (window.trackEvent) {
+                window.trackEvent('hub_daily_news_fab_click', { locale: getInterfaceLanguage() });
+              }
+              window._isCategorySelectOpen = true;
+              window._currentGrammarSection = null;
+              renderDailyNewsView('#app-content', {
+                onBack: () => {
+                  window._isCategorySelectOpen = false;
+                  window._currentGrammarSection = null;
+                  renderTrainingTab();
+                },
+              });
+            });
+          }
 
           if (wotd && isHubScreen) {
             const tiltContainer = content.querySelector('#wotd-tilt-container');
@@ -2467,6 +2514,7 @@
         } catch (e) {}
 
         if (tabName !== 'training') {
+          try { stopDailyNewsAudio(); closeNewsWordPopover(); } catch (e) {}
           try { pushUserDataToCloud(null, null, true); } catch (e) {}
           favoritePracticeWords = null;
           favoritePracticeMethod = 'cards';
@@ -3148,6 +3196,7 @@
 
             // Priority 3: If Grammar Hub or a Grammar sub-section is open, step back cleanly
             if (window._isCategorySelectOpen) {
+              try { stopDailyNewsAudio(); closeNewsWordPopover(); } catch (e) {}
               if (window._currentGrammarSection && typeof window._openGrammarHubScreen === 'function') {
                 window._openGrammarHubScreen();
                 return true;
