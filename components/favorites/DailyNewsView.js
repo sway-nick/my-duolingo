@@ -17,10 +17,13 @@ import {
 import {
   speakWordAsync,
   stopAllAudio,
+  getSavedVoiceAccent,
   triggerHaptic,
 } from '../../services/audioService.js?v=386.0';
 
 let activeNewsAudioRunId = 0;
+let activeNewsTtsTimer = null;
+let activeNewsTtsResolve = null;
 let activeNewsPopoverOutside = null;
 let activeNewsPopoverScroll = null;
 let activeProUnsub = null;
@@ -34,11 +37,122 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+/**
+ * Direct TTS playback for full news sentences (skips word MP3/CDN lookups that cause
+ * double-trigger stuttering on long sentences). Uses native AndroidAudioBridge.speakText
+ * on Android APK and Web SpeechSynthesis on browsers.
+ */
+function speakNewsSentenceDirect(text, speedRate = 0.85, runId) {
+  return new Promise((resolve) => {
+    const cleanText = String(text || '').trim();
+    if (!cleanText || typeof window === 'undefined' || runId !== activeNewsAudioRunId) {
+      resolve();
+      return;
+    }
+
+    const accent = typeof getSavedVoiceAccent === 'function' ? getSavedVoiceAccent() : 'us';
+    const isUk = accent === 'uk' || accent === 'gb' || accent === 'male';
+    const langCode = isUk ? 'en-GB' : 'en-US';
+    const rate = Number(speedRate) || 0.85;
+
+    let done = false;
+    let resumeInterval = null;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (activeNewsTtsTimer) {
+        clearTimeout(activeNewsTtsTimer);
+        activeNewsTtsTimer = null;
+      }
+      if (resumeInterval) {
+        clearInterval(resumeInterval);
+        resumeInterval = null;
+      }
+      if (activeNewsTtsResolve === finish) {
+        activeNewsTtsResolve = null;
+      }
+      resolve();
+    };
+    activeNewsTtsResolve = finish;
+
+    const safetyMs = Math.max(4000, Math.round((cleanText.length * 140) / Math.max(0.45, rate)) + 2500);
+
+    // 1. Native Android TTS (instant, 0ms delay, no MP3/CDN fallback race)
+    if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.speakText === 'function') {
+      const utteranceId = `news_tts_${runId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      window.onNativeTtsComplete = (doneId) => {
+        if (!doneId || doneId === utteranceId) {
+          window.onNativeTtsComplete = null;
+          setTimeout(finish, 140);
+        }
+      };
+      activeNewsTtsTimer = setTimeout(finish, safetyMs);
+      try {
+        const started = window.AndroidAudioBridge.speakText(cleanText, langCode, utteranceId, rate);
+        if (started) return;
+      } catch (err) {
+        console.warn('News native TTS failed:', err);
+      }
+      // If native bridge returned false, fall through to Web SpeechSynthesis
+      window.onNativeTtsComplete = null;
+      if (activeNewsTtsTimer) {
+        clearTimeout(activeNewsTtsTimer);
+        activeNewsTtsTimer = null;
+      }
+    }
+
+    // 2. Web SpeechSynthesis fallback (browser / desktop)
+    if ('speechSynthesis' in window) {
+      try {
+        try { window.speechSynthesis.cancel(); } catch (_) {}
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = langCode;
+        utterance.rate = rate;
+        window.__activeNewsUtterance = utterance;
+        utterance.onend = () => setTimeout(finish, 120);
+        utterance.onerror = () => finish();
+
+        resumeInterval = setInterval(() => {
+          if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        }, 250);
+        activeNewsTtsTimer = setTimeout(finish, safetyMs);
+        window.speechSynthesis.speak(utterance);
+        return;
+      } catch (_) {}
+    }
+
+    finish();
+  });
+}
+
 export function stopDailyNewsAudio() {
   activeNewsAudioRunId++;
+  if (activeNewsTtsTimer) {
+    clearTimeout(activeNewsTtsTimer);
+    activeNewsTtsTimer = null;
+  }
+  if (typeof window !== 'undefined') {
+    window.onNativeTtsComplete = null;
+    window.__activeNewsUtterance = null;
+    try {
+      if (window.AndroidAudioBridge && typeof window.AndroidAudioBridge.stopSpeaking === 'function') {
+        window.AndroidAudioBridge.stopSpeaking();
+      }
+    } catch (_) {}
+  }
   try {
     stopAllAudio();
   } catch (_) {}
+  if (activeNewsTtsResolve) {
+    const fn = activeNewsTtsResolve;
+    activeNewsTtsResolve = null;
+    try { fn(); } catch (_) {}
+  }
   if (typeof document !== 'undefined') {
     document.querySelectorAll('.news-sentence.is-speaking').forEach((el) => {
       el.classList.remove('is-speaking');
@@ -616,6 +730,39 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
         cursor: pointer;
         box-shadow: 0 6px 16px rgba(234, 88, 12, 0.35);
       }
+      .news-card.is-pro-locked {
+        position: relative;
+        border: 1.5px solid rgba(245, 158, 11, 0.45);
+        cursor: pointer;
+      }
+      .news-card-locked-body {
+        filter: blur(4.5px);
+        user-select: none;
+        pointer-events: none;
+        opacity: 0.72;
+        max-height: 82px;
+        overflow: hidden;
+      }
+      .news-card-lock-footer {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .news-card-unlock-btn {
+        width: 100%;
+        min-height: 42px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #f59e0b, #ea580c);
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 5px 14px rgba(234, 88, 12, 0.3);
+      }
       .daily-news-loading {
         text-align: center;
         padding: 36px 16px;
@@ -635,17 +782,13 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
             <img src="assets/icons/daily_news_globe.webp" alt="" style="width:30px;height:30px;object-fit:contain;vertical-align:middle;" />
             <span>${escapeHtml(strings.pageTitle)}</span>
           </h2>
-          <span class="daily-news-pro-pill">⭐ ${escapeHtml(strings.proBadge)}</span>
         </div>
         <p class="daily-news-subtitle">${escapeHtml(strings.pageSubtitle)}</p>
         <div id="daily-news-date-slot"></div>
       </div>
 
       <div id="daily-news-content">
-        ${isPro
-          ? `<div class="daily-news-loading">${escapeHtml(strings.loadingText)}</div>`
-          : renderProGateHtml(strings, isRtl)
-        }
+        <div class="daily-news-loading">${escapeHtml(strings.loadingText)}</div>
       </div>
     </div>
   `;
@@ -653,18 +796,14 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
   container.querySelector('#daily-news-back-btn')?.addEventListener('click', handleBack);
 
   if (!isPro) {
-    container.querySelector('#news-pro-unlock-btn')?.addEventListener('click', () => {
-      showProPaywall({ reason: 'daily_news' });
-    });
     activeProUnsub = ProService.onChange((nowPro) => {
       if (nowPro && document.querySelector('#daily-news-content')) {
         renderDailyNewsView(containerSelector, options);
       }
     });
-    return;
   }
 
-  // Load news + built-in fallback dictionary in parallel
+  // Load news + built-in fallback dictionary in parallel (1st story free for all; 2nd & 3rd unlocked in PRO)
   let dictMap = null;
   const dictPromise = getOrBuildDictionary(locale)
     .then((m) => {
@@ -708,10 +847,35 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
     const cardsHtml = articles
       .map((article, idx) => {
         const cat = getCategoryMeta(article.category, strings);
-        const titleSentences = splitIntoSentences(article.title);
+        const isLockedCard = !isPro && idx > 0;
         const paragraphs = Array.isArray(article.paragraphs)
           ? article.paragraphs
           : [String(article.body || '')].filter(Boolean);
+
+        if (isLockedCard) {
+          return `
+            <article class="news-card is-pro-locked" data-article-idx="${idx}" data-locked="true" role="button" tabindex="0">
+              <div class="news-card-top">
+                <div class="news-card-meta-left">
+                  <span class="news-cat-pill ${cat.cls}">${cat.icon} ${escapeHtml(cat.label)}</span>
+                  ${shortDateLabel ? `<span class="news-card-date">${escapeHtml(shortDateLabel)}</span>` : ''}
+                </div>
+                <span class="daily-news-pro-pill">🔒 ${escapeHtml(strings.proBadge)}</span>
+              </div>
+              <h3 class="news-card-title" dir="ltr">${escapeHtml(article.title)}</h3>
+              <div class="news-card-body news-card-locked-body" dir="ltr" aria-hidden="true">
+                <p class="news-card-paragraph">${escapeHtml(paragraphs[0] || '')}</p>
+              </div>
+              <div class="news-card-lock-footer">
+                <button type="button" class="news-card-unlock-btn" data-news-unlock="true">
+                  ⭐ ${escapeHtml(strings.proLockCta)}
+                </button>
+              </div>
+            </article>
+          `;
+        }
+
+        const titleSentences = splitIntoSentences(article.title);
 
         let sentenceCounter = 0;
         const titleHtml = titleSentences
@@ -748,7 +912,7 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
                   data-article-idx="${idx}"
                   data-speed="0.85"
                   aria-label="Audio speed"
-                >0.85x</button>
+                >1.0x</button>
                 <button
                   type="button"
                   class="news-listen-btn"
@@ -779,14 +943,22 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
       <div class="daily-news-list">${cardsHtml}</div>
     `;
 
-    // Bind speed toggle buttons
+    // Bind locked PRO cards (articles 2 & 3 for free users)
+    contentEl.querySelectorAll('.news-card.is-pro-locked, [data-news-unlock="true"]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showProPaywall({ reason: 'daily_news' });
+      });
+    });
+
+    // Bind speed toggle buttons (actual 0.85 shown as "1.0x", actual 0.5 shown as "0.85x")
     contentEl.querySelectorAll('.news-speed-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const cur = parseFloat(btn.getAttribute('data-speed') || '0.85');
-        const next = cur < 0.95 ? 1.0 : 0.85;
+        const next = cur > 0.65 ? 0.5 : 0.85;
         btn.setAttribute('data-speed', String(next));
-        btn.textContent = next === 1.0 ? '1.0x' : '0.85x';
+        btn.textContent = next === 0.5 ? '0.85x' : '1.0x';
       });
     });
 
@@ -823,7 +995,7 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
           sentEl.classList.add('is-speaking');
           const text = (sentEl.textContent || '').trim();
           if (text) {
-            await speakWordAsync(text, null, speed);
+            await speakNewsSentenceDirect(text, speed, runId);
           }
         }
 

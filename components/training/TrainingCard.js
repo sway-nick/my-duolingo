@@ -25,6 +25,10 @@ import {
 import { isProActive, getFreeShieldsLeft } from '../../services/proState.js?v=386.0';
 import { getProStrings } from '../../services/proI18n.js?v=386.0';
 import {
+  isCustomKeyboardEnabled,
+  renderEnglishKeyboard,
+} from './EnglishKeyboard.js?v=386.0';
+import {
   saveProgress,
   toggleFavoriteApi,
   getUserFavorites,
@@ -1213,14 +1217,16 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       });
 
       practiceArea.innerHTML = `
-        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 400px; margin: 0 auto; padding: 10px 0;">
-          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 10px; width: 100%;">
+        <div class="consonants-quiz-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 440px; margin: 0 auto; padding: 10px 0;">
+          <div class="consonants-word-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 6px; width: 100%;">
             ${wordsHtml}
           </div>
+          <div id="consonants-kb-mount" style="width: 100%;"></div>
         </div>
       `;
 
       const inputs = Array.from(practiceArea.querySelectorAll('.consonant-input'));
+      const kbMount = practiceArea.querySelector('#consonants-kb-mount');
 
       // Fail-safe: if a word somehow has 0 input boxes, fallback to standard quiz or advance cleanly
       if (inputs.length === 0) {
@@ -1232,19 +1238,116 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         return;
       }
 
-      function focusNext(currentIndex) {
-        const nextInput = inputs.find(
-          (input) => parseInt(input.getAttribute('data-index')) > currentIndex,
-        );
-        if (nextInput) {
-          nextInput.focus();
+      let activeConsonantInput = inputs[0];
+
+      function setActiveConsonantInput(target) {
+        if (!target || target.classList.contains('correct')) return;
+        activeConsonantInput = target;
+        inputs.forEach((inp) => inp.classList.toggle('is-kb-active', inp === target));
+        if (!isCustomKeyboardEnabled()) {
+          try { target.focus(); } catch (_) {}
         }
       }
 
-      if (inputs.length > 0) {
+      function applyConsonantsKeyboardMode() {
+        const customOn = isCustomKeyboardEnabled();
+        inputs.forEach((inp) => {
+          if (inp.classList.contains('correct')) return;
+          if (customOn) {
+            inp.setAttribute('readonly', 'true');
+            inp.setAttribute('inputmode', 'none');
+          } else {
+            inp.removeAttribute('readonly');
+            inp.setAttribute('inputmode', 'text');
+          }
+        });
+        const firstUnsolved = inputs.find((inp) => !inp.classList.contains('correct'));
+        if (firstUnsolved) {
+          setActiveConsonantInput(activeConsonantInput && !activeConsonantInput.classList.contains('correct') ? activeConsonantInput : firstUnsolved);
+        }
+      }
+
+      function focusNext(currentIndex) {
+        const nextInput = inputs.find(
+          (input) => parseInt(input.getAttribute('data-index')) > currentIndex && !input.classList.contains('correct'),
+        ) || inputs.find((input) => !input.classList.contains('correct'));
+        if (nextInput) {
+          setActiveConsonantInput(nextInput);
+        }
+      }
+
+      applyConsonantsKeyboardMode();
+
+      if (inputs.length > 0 && !isCustomKeyboardEnabled()) {
         setTimeout(() => {
           if (inputs[0]) inputs[0].focus();
         }, 200);
+      }
+
+      inputs.forEach((inp) => {
+        inp.addEventListener('click', () => {
+          if (!inp.classList.contains('correct')) {
+            setActiveConsonantInput(inp);
+          }
+        });
+      });
+
+      const handleCustomConsonantChar = (ch) => {
+        if (!/^[a-z]$/i.test(ch)) return;
+        const target = (activeConsonantInput && !activeConsonantInput.classList.contains('correct'))
+          ? activeConsonantInput
+          : inputs.find((inp) => !inp.classList.contains('correct'));
+        if (!target) return;
+        target.value = ch.toLowerCase();
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+
+      const handleCustomConsonantBackspace = () => {
+        const target = (activeConsonantInput && !activeConsonantInput.classList.contains('correct'))
+          ? activeConsonantInput
+          : inputs.find((inp) => !inp.classList.contains('correct'));
+        if (!target) return;
+        if (target.value) {
+          target.value = '';
+          return;
+        }
+        const curIdx = inputs.indexOf(target);
+        for (let i = curIdx - 1; i >= 0; i--) {
+          if (!inputs[i].classList.contains('correct')) {
+            setActiveConsonantInput(inputs[i]);
+            inputs[i].value = '';
+            break;
+          }
+        }
+      };
+
+      if (kbMount) {
+        renderEnglishKeyboard(kbMount, {
+          showSymbolsRow: false,
+          onChar: handleCustomConsonantChar,
+          onBackspace: handleCustomConsonantBackspace,
+          onToggleMode: () => applyConsonantsKeyboardMode(),
+        });
+      }
+
+      // Allow physical keyboard typing on desktop when built-in keyboard is active
+      if (typeof document !== 'undefined') {
+        const onDocKeyDown = (e) => {
+          if (!practiceArea.isConnected || !inputs[0]?.isConnected) {
+            document.removeEventListener('keydown', onDocKeyDown);
+            return;
+          }
+          if (!isCustomKeyboardEnabled()) return;
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+          if (/^[a-zA-Z]$/.test(e.key)) {
+            e.preventDefault();
+            handleCustomConsonantChar(e.key);
+          } else if (e.key === 'Backspace') {
+            e.preventDefault();
+            handleCustomConsonantBackspace();
+          }
+        };
+        document.addEventListener('keydown', onDocKeyDown);
       }
 
       inputs.forEach((input) => {
@@ -1774,12 +1877,30 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
         <button type="button" class="check-button" id="check-answer-btn">${t('train_check')}</button>
       </div>
       <div id="input-feedback" class="input-feedback" style="display: none; margin-top: 10px; font-weight: 600; text-align: center; font-size: 15px;"></div>
+      <div id="input-kb-mount" style="width: 100%;"></div>
     `;
 
     const input = practiceArea.querySelector('#answer-input');
     const checkBtn = practiceArea.querySelector('#check-answer-btn');
     const feedback = practiceArea.querySelector('#input-feedback');
+    const inputKbMount = practiceArea.querySelector('#input-kb-mount');
     let hasSecondChance = false;
+
+    function applyInputKeyboardMode() {
+      const customOn = isCustomKeyboardEnabled();
+      if (customOn) {
+        input.setAttribute('contenteditable', 'false');
+        input.setAttribute('inputmode', 'none');
+        input.classList.add('is-custom-kb');
+        try { input.blur(); } catch (_) {}
+      } else {
+        input.setAttribute('contenteditable', 'true');
+        input.setAttribute('inputmode', 'text');
+        input.classList.remove('is-custom-kb');
+      }
+    }
+
+    applyInputKeyboardMode();
 
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') return;
@@ -1997,7 +2118,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
           `;
 
           checkBtn.textContent = t('train_fix_penalty');
-          placeCaretAtEnd(input);
+          if (!isCustomKeyboardEnabled()) {
+            placeCaretAtEnd(input);
+          }
           return;
         } else {
           isManyMistakes = true;
@@ -2008,6 +2131,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       input.setAttribute('contenteditable', 'false');
       input.classList.add('disabled');
       checkBtn.disabled = true;
+      if (inputKbMount) inputKbMount.style.display = 'none';
 
       // 1. INSTANT UI FEEDBACK & SPEECH (0ms delay)
       speakWord(currentWord.word, currentWord.id);
@@ -2234,7 +2358,60 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     });
 
-    focusAndPlaceCaret(input);
+    const handleCustomInputChar = (ch) => {
+      if (checkBtn.disabled) return;
+      const cur = (input.textContent || '').replace(/<[^>]*>?/gm, '');
+      if (cur.length >= 40) return;
+      input.textContent = cur + ch;
+    };
+
+    const handleCustomInputBackspace = () => {
+      if (checkBtn.disabled) return;
+      const cur = (input.textContent || '').replace(/<[^>]*>?/gm, '');
+      if (!cur) return;
+      input.textContent = cur.slice(0, -1);
+    };
+
+    if (inputKbMount) {
+      renderEnglishKeyboard(inputKbMount, {
+        showSymbolsRow: true,
+        onChar: handleCustomInputChar,
+        onBackspace: handleCustomInputBackspace,
+        onToggleMode: (nowCustom) => {
+          applyInputKeyboardMode();
+          if (!nowCustom) {
+            focusAndPlaceCaret(input);
+          }
+        },
+      });
+    }
+
+    // Physical keyboard support on desktop when built-in keyboard is active
+    if (typeof document !== 'undefined') {
+      const onInputDocKeyDown = (e) => {
+        if (!input.isConnected) {
+          document.removeEventListener('keydown', onInputDocKeyDown);
+          return;
+        }
+        if (!isCustomKeyboardEnabled() || checkBtn.disabled) return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleCheck();
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          handleCustomInputBackspace();
+        } else if (/^[a-zA-Z'\- ]$/.test(e.key)) {
+          e.preventDefault();
+          handleCustomInputChar(e.key.toLowerCase());
+        }
+      };
+      document.addEventListener('keydown', onInputDocKeyDown);
+    }
+
+    if (!isCustomKeyboardEnabled()) {
+      focusAndPlaceCaret(input);
+    }
     }
   } else {
     const startFlipped = Boolean(isFavPractice && window.__favsAutoplayRunning);

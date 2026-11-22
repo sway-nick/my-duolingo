@@ -476,11 +476,10 @@ function writeCachedEdition(country, edition) {
 }
 
 /**
- * Reports that an active PRO user in `country` uses interface language `locale` (once per day),
+ * Reports that an active reader in `country` uses interface language `locale` (once per day),
  * so the hourly generator fetches `country`'s regional news and builds `glossaries[locale]` at 6:00 AM.
  */
 export function pingActiveNewsLocale(rawLocale, explicitCountry = null) {
-  if (!isProActive()) return Promise.resolve(false);
   const locale = normalizeNewsLocale(rawLocale);
   const country = explicitCountry || detectUserNewsCountry(locale);
   const today = getLocalDateKey();

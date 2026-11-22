@@ -1575,31 +1575,29 @@
                   }
                 </div>
                 ${wotdHtml}
-                ${isHubScreen ? `
-                  <div class="hub-news-fab-row" style="width: 100%; max-width: 340px; margin: 10px auto 0; display: flex; justify-content: flex-end; align-items: center;">
-                    <button
-                      type="button"
-                      id="hub-daily-news-fab"
-                      aria-label="Daily News"
-                      style="position: relative; width: 60px; height: 60px; padding: 0; border: none; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.28)); transition: transform 0.16s ease;"
-                    >
-                      <img src="assets/icons/daily_news_globe.webp" alt="NEWS" style="width: 58px; height: 58px; object-fit: contain; pointer-events: none; display: block;" />
-                      ${(() => {
-                        try {
-                          const now = new Date();
-                          const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-                          const seen = localStorage.getItem('eb_daily_news_seen_date') === todayKey;
-                          if (seen) return '';
-                        } catch (_) {}
-                        return '<span class="hub-news-unread-dot" style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 2px solid var(--card-bg, #ffffff); box-shadow: 0 2px 6px rgba(239,68,68,0.5);"></span>';
-                      })()}
-                    </button>
-                  </div>
-                ` : ''}
                 ${bonusXpBtnHtml ? `
                   <div class="hub-bonus-wrap" style="width: 100%; max-width: 340px; margin: 14px auto 0;">
                     ${bonusXpBtnHtml}
                   </div>
+                ` : ''}
+                ${isHubScreen ? `
+                  <button
+                    type="button"
+                    id="hub-daily-news-fab"
+                    aria-label="Daily News"
+                    style="position: fixed; right: max(18px, calc(50% - 200px)); bottom: calc(max(var(--safe-bottom, 0px), env(safe-area-inset-bottom, 0px)) + 16px); z-index: 90; width: 62px; height: 62px; padding: 0; border: none; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.35)); transition: transform 0.16s ease;"
+                  >
+                    <img src="assets/icons/daily_news_globe.webp" alt="NEWS" style="width: 60px; height: 60px; object-fit: contain; pointer-events: none; display: block;" />
+                    ${(() => {
+                      try {
+                        const now = new Date();
+                        const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                        const seen = localStorage.getItem('eb_daily_news_seen_date') === todayKey;
+                        if (seen) return '';
+                      } catch (_) {}
+                      return '<span class="hub-news-unread-dot" style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 2px solid var(--card-bg, #ffffff); box-shadow: 0 2px 6px rgba(239,68,68,0.5);"></span>';
+                    })()}
+                  </button>
                 ` : ''}
               </div>
             </div>
