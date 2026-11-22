@@ -1,0 +1,33 @@
+name: Generate Daily News (Active PRO Regions)
+
+on:
+  schedule:
+    # Runs every hour at :05 UTC and generates news only for active PRO countries
+    # where local time is 06:00–07:59 AM and today's edition does not exist yet.
+    - cron: '5 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_countries:
+        description: 'Optional comma-separated COUNTRY:lang+lang (e.g. KZ:ru+kk,UA:uk+ru,US:en)'
+        required: false
+        default: ''
+
+jobs:
+  generate-daily-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate regional daily news for active countries
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_PROJECT_ID: english-breakfast-181ba
+          FORCE_COUNTRIES: ${{ github.event.inputs.force_countries || '' }}
+        run: node scripts/generate_daily_news.mjs
