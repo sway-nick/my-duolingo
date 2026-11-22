@@ -312,11 +312,8 @@ async function generateArticlesWithGemini(country, targetLocales, headlines, api
   ].join('\n');
 
   let lastErr = null;
-  const isVertexExpressKey = String(apiKey || '').trim().startsWith('AQ.');
   for (const model of GEMINI_MODELS) {
-    const url = isVertexExpressKey
-      ? `https://aiplatform.googleapis.com/v1/publishers/google/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`
-      : `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     try {
       const res = await fetch(url, {
         method: 'POST',
