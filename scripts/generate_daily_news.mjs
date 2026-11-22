@@ -526,9 +526,9 @@ async function main() {
   const projectId = process.env.FIREBASE_PROJECT_ID || DEFAULT_FIREBASE_PROJECT_ID;
   let accessToken = null;
   if (!dryRun) {
-    const saRaw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    const saRaw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON || process.env.GA4_SERVICE_ACCOUNT_JSON;
     if (!saRaw) {
-      throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is required (or pass --dry-run).');
+      throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON or GA4_SERVICE_ACCOUNT_JSON is required (or pass --dry-run).');
     }
     const sa = JSON.parse(saRaw);
     accessToken = await getGoogleAccessToken(sa);
