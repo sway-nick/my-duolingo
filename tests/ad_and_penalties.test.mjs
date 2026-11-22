@@ -181,6 +181,25 @@ test('8b-1. AdService Pagination Interstitial: Shown for free users on page swit
   }
 });
 
+test('8b-2. AdService Pagination Interstitial: Shown once per page button, never repeated, skips page 1', async () => {
+  global.localStorage.removeItem('myduo_ad_shown_pages_v1');
+  global.localStorage.removeItem('eb_pro_entitlement_v1');
+  global.localStorage.removeItem('eb_pro_debug_force_free_v1');
+
+  // Page 1 is initial page -> never shows ad
+  assert.equal(await AdService.showPaginationInterstitial('collection_phrasal_verbs', 1), false, 'Page 1 must not trigger pagination ad');
+
+  // First open of page 2 -> shows ad
+  assert.equal(await AdService.showPaginationInterstitial('collection_phrasal_verbs', 2), true, 'First open of page 2 must show ad');
+
+  // Second open of page 2 -> skipped permanently
+  assert.equal(await AdService.showPaginationInterstitial('collection_phrasal_verbs', 2), false, 'Second open of page 2 must NOT repeat ad');
+
+  // First open of page 3 -> shows ad
+  assert.equal(await AdService.showPaginationInterstitial('collection_phrasal_verbs', 3), true, 'First open of page 3 must show ad');
+  assert.equal(await AdService.showPaginationInterstitial('collection_phrasal_verbs', 3), false, 'Second open of page 3 must NOT repeat ad');
+});
+
 test('8b. AdService Interstitial: Preload and round completion lifecycle (1 per hour limit)', async () => {
   assert.equal(typeof AdService.preloadInterstitial, 'function', 'preloadInterstitial must be exposed');
   assert.equal(typeof AdService.showRoundFinishInterstitial, 'function', 'showRoundFinishInterstitial must be exposed');

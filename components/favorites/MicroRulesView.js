@@ -724,6 +724,23 @@ function getStylesHtml() {
         color: #0f172a;
         box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
       }
+      .mr-page-btn.is-ad-gated:not(.is-active):not(:disabled) {
+        position: relative;
+        background: linear-gradient(135deg, #f59e0b, #ea580c);
+        border-color: #ea580c;
+        color: #ffffff;
+        box-shadow: 0 2px 7px rgba(234, 88, 12, 0.32);
+      }
+      .mr-page-btn.is-ad-gated:not(.is-active):not(:disabled)::after {
+        content: '🔒';
+        position: absolute;
+        top: -5px;
+        right: -4px;
+        font-size: 9.5px;
+        line-height: 1;
+        pointer-events: none;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+      }
       .mr-page-btn:disabled {
         opacity: 0.3;
         cursor: default;
@@ -1239,12 +1256,14 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       return renderRuleCardHtml(item, rank);
     }).join('');
 
+    const mrAdCtx = `micro_rules_${activeLevel}`;
     const pageButtons = [];
     for (let p = 1; p <= totalPages; p++) {
+      const isAdGated = p !== currentPage && AdService.willShowPaginationAd(mrAdCtx, p);
       pageButtons.push(`
         <button
           type="button"
-          class="mr-page-btn ${p === currentPage ? 'is-active' : ''}"
+          class="mr-page-btn ${p === currentPage ? 'is-active' : (isAdGated ? 'is-ad-gated' : '')}"
           data-mr-page="${p}"
           aria-label="Page ${p}"
           aria-current="${p === currentPage ? 'page' : 'false'}"
@@ -1293,7 +1312,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         }
         if (!isProActive()) {
           try {
-            await AdService.showPaginationInterstitial('micro_rules');
+            await AdService.showPaginationInterstitial(`micro_rules_${activeLevel}`, targetPage);
           } catch (_) {}
         }
         currentPage = targetPage;

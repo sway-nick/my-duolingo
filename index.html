@@ -72,7 +72,7 @@
           }
         } catch (e) {}
         try {
-          var t = localStorage.getItem('myduo_theme') || 'light';
+          var t = localStorage.getItem('myduo_theme') || 'dark';
           var isWide = typeof window !== 'undefined' && window.innerWidth > 680;
           var initBg = t === 'dark' ? (isWide ? '#090d16' : '#0f172a') : (isWide ? '#e2e8f0' : '#f8fafc');
           if (t === 'dark') {

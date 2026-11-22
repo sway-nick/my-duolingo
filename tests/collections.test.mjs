@@ -754,11 +754,11 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 5, 'tricky_sounds page 1 renders 5 side-by-side pair cards (10 words)');
-  assert.equal((container.innerHTML.match(/class="pair-side pair-side-a"/g) || []).length, 5, 'tricky_sounds renders 5 left halves');
-  assert.equal((container.innerHTML.match(/class="pair-side pair-side-b"/g) || []).length, 5, 'tricky_sounds renders 5 right halves');
-  assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 10, 'tricky_sounds renders 10 audio buttons (1 per word)');
-  assert.ok(container.innerHTML.includes('1–10 / 100'), 'tricky_sounds shows 1–10 / 100');
+  assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 6, 'tricky_sounds page 1 renders 6 side-by-side pair cards (12 words)');
+  assert.equal((container.innerHTML.match(/class="pair-side pair-side-a"/g) || []).length, 6, 'tricky_sounds renders 6 left halves');
+  assert.equal((container.innerHTML.match(/class="pair-side pair-side-b"/g) || []).length, 6, 'tricky_sounds renders 6 right halves');
+  assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 12, 'tricky_sounds renders 12 audio buttons (1 per word)');
+  assert.ok(container.innerHTML.includes('1–12 / 100'), 'tricky_sounds shows 1–12 / 100');
   assert.ok(!container.innerHTML.includes('class="pair-card-head"'), 'tricky_sounds omits redundant pair header row');
   assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'tricky_sounds renders transcription for each word');
   assert.ok(!container.innerHTML.includes('//'), 'transcriptions must not contain double slashes //');
@@ -769,9 +769,9 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 5, 'confusing_words page 1 renders 5 side-by-side pair cards (10 words)');
-  assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 10, 'confusing_words renders 10 audio buttons');
-  assert.ok(container.innerHTML.includes('1–10 / 100'), 'confusing_words shows 1–10 / 100');
+  assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 6, 'confusing_words page 1 renders 6 side-by-side pair cards (12 words)');
+  assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 12, 'confusing_words renders 12 audio buttons');
+  assert.ok(container.innerHTML.includes('1–12 / 100'), 'confusing_words shows 1–12 / 100');
   assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'confusing_words renders transcription for each word');
   assert.ok(container.innerHTML.includes('class="pair-side-tr"'), 'confusing_words renders translation for each word');
   assert.ok(!container.innerHTML.includes('//'), 'confusing_words transcriptions must not contain double slashes //');
@@ -815,7 +815,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
     clothes: 50,
     animals: 50,
     adjectives: 100,
-    phrasal_verbs: 100,
+    phrasal_verbs: 240,
     idioms: 150,
   };
   for (const [colId, expectedLen] of Object.entries(expectedExpandedCounts)) {
@@ -829,7 +829,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
 
   const { getWordNotes } = await import('../frontend/services/i18n.js');
   const phrasalWords = getCollectionWords('phrasal_verbs', wordsData);
-  assert.equal(phrasalWords.length, 100);
+  assert.equal(phrasalWords.length, 240);
 
   for (const w of [...itWords, ...idiomWords, ...phrasalWords]) {
     assert.ok(w.notes, `Word ${w.word} missing Russian notes`);
@@ -856,68 +856,56 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   clearEntitlement();
   global.localStorage.clear();
   assert.equal(isCollectionPackDownloaded('it_terms'), false);
-  assert.equal(isCollectionPackDownloaded('idioms'), false);
+  assert.equal(isCollectionPackDownloaded('idioms'), true);
   assert.equal(isCollectionPackDownloaded('verbs'), false);
   assert.equal(isCollectionPackDownloaded('adjectives'), false);
-  assert.equal(isCollectionPackDownloaded('phrasal_verbs'), false);
+  assert.equal(isCollectionPackDownloaded('phrasal_verbs'), true);
   assert.equal(isCollectionPackDownloaded('months'), true);
 
   const container = { innerHTML: '', querySelector: () => null, querySelectorAll: () => [] };
   global.document.querySelector = (sel) => (sel === '#app-content' ? container : null);
 
-  // Ad-unlocked pack (idioms) before download -> shows Download button with video icon 🎬
-  renderFavoritesView(idiomWords, '#app-content', {
-    collectionId: 'idioms',
-    collectionTitle: 'Идиомы',
+  // Ad-unlocked pack (verbs) before download -> shows Download button with video icon 🎬
+  const verbsWords = getCollectionWords('verbs', wordsData);
+  renderFavoritesView(verbsWords, '#app-content', {
+    collectionId: 'verbs',
+    collectionTitle: 'Глаголы',
     allWords: wordsData,
     favoriteIds: [],
   });
   assert.ok(container.innerHTML.includes('id="download-collection-pack-btn"'), 'Must render download button before ad pack is downloaded');
   assert.ok(container.innerHTML.includes('🎬'), 'Download button must include video icon 🎬');
 
-  // After 1st ad unlock -> renders first 10 idioms + unlock-more-idioms-btn (+10)
-  markCollectionPackDownloaded('idioms');
-  assert.equal(isCollectionPackDownloaded('idioms'), true);
+  // Idioms -> opens directly with 10-per-page pagination & ad-gated orange buttons (no download gate)
   renderFavoritesView(idiomWords, '#app-content', {
     collectionId: 'idioms',
     collectionTitle: 'Идиомы',
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid after 1st idioms unlock');
-  assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Must render +10 unlock button when more idioms remain');
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Free tier must unlock exactly 10 idioms per ad');
-  assert.ok(!container.innerHTML.includes('<div class="col-pagination">'), 'With only 10 idioms (page 1 of 1), pagination bar must not be rendered');
-
-  // Second ad unlock for idioms -> 20 idioms unlocked -> pagination bar appears alongside unlock button without conflict!
-  const { unlockMoreCollectionItems } = await import('../frontend/services/collectionsService.js');
-  unlockMoreCollectionItems('idioms', 10);
-  renderFavoritesView(idiomWords, '#app-content', {
-    collectionId: 'idioms',
-    collectionTitle: 'Идиомы',
-    allWords: wordsData,
-    favoriteIds: [],
-  });
+  assert.ok(!container.innerHTML.includes('id="download-collection-pack-btn"'), 'Idioms must open directly without download gate');
+  assert.ok(!container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Idioms must not render +10 unlock button');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Page 1 renders 10 idioms');
-  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must appear when 20 idioms are unlocked');
-  assert.ok(container.innerHTML.includes('1–10 / 20'), 'Pagination info shows 1–10 / 20');
-  assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Unlock button remains accessible below pagination bar');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for idioms');
+  assert.ok(container.innerHTML.includes('1–10 / 150'), 'Pagination info shows 1–10 / 150');
+  assert.ok(container.innerHTML.includes('is-ad-gated'), 'Unvisited idiom pages must be marked is-ad-gated for free users');
 
-  // Phrasal verbs -> unlocks 20 per ad, or all in PRO
-  markCollectionPackDownloaded('phrasal_verbs');
-  assert.equal(isCollectionPackDownloaded('phrasal_verbs'), true);
+  // Phrasal verbs -> opens directly with 4 mind-map cards (16 verbs) per page & ad-gated orange buttons
   renderFavoritesView(phrasalWords, '#app-content', {
     collectionId: 'phrasal_verbs',
     collectionTitle: 'Фразовые глаголы',
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Free tier page 1 must render 10 phrasal verbs with pagination');
+  assert.ok(!container.innerHTML.includes('id="download-collection-pack-btn"'), 'Phrasal verbs must open directly without download gate');
+  assert.ok(!container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Phrasal verbs must not render +20 unlock button');
+  assert.equal((container.innerHTML.match(/class="fav-card pv-map-card"/g) || []).length, 4, 'Free tier page 1 must render 4 phrasal verb mind-map cards');
+  assert.equal((container.innerHTML.match(/class="pv-branch-card"/g) || []).length, 16, 'Free tier page 1 must render 16 phrasal verb branches');
   assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for phrasal_verbs');
-  assert.ok(container.innerHTML.includes('1–10 / 20'), 'Pagination info must show 1–10 / 20');
-  assert.ok(container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Must render +20 unlock button when more phrasal verbs remain');
+  assert.ok(container.innerHTML.includes('1–16 / 240'), 'Pagination info must show 1–16 / 240');
+  assert.ok(container.innerHTML.includes('is-ad-gated'), 'Unvisited phrasal verb pages must be marked is-ad-gated for free users');
 
-  // IT collection shows 5 preview cards in free tier + PRO paywall button (cannot be unlocked via ad/localStorage flag)
+  // IT collection shows 6 preview cards in free tier + PRO paywall button (cannot be unlocked via ad/localStorage flag)
   markCollectionPackDownloaded('it_terms');
   assert.equal(isCollectionPackDownloaded('it_terms'), false, 'it_terms must stay locked for non-PRO even if localStorage flag exists');
   renderFavoritesView(itWords, '#app-content', {
@@ -926,8 +914,8 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
     allWords: wordsData,
     favoriteIds: [],
   });
-  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render 5-card preview grid for it_terms when not PRO');
-  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 5, 'Free tier must show exactly 5 preview cards for it_terms');
+  assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render 6-card preview grid for it_terms when not PRO');
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 6, 'Free tier must show exactly 6 preview cards for it_terms');
   assert.ok(container.innerHTML.includes('id="open-it-pro-btn"'), 'Must render PRO paywall button for it_terms when not PRO');
   assert.ok(!container.innerHTML.includes('id="download-collection-pack-btn"'), 'Must not render ad download button for PRO-only it_terms');
 

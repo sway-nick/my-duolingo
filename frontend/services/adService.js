@@ -1382,13 +1382,62 @@ class AdServiceImpl {
   }
 
   /**
+   * Check whether a pagination interstitial was already shown once for (context, pageKey).
+   */
+  hasShownPaginationAd(context, pageKey) {
+    if (pageKey === null || pageKey === undefined) return false;
+    try {
+      if (typeof localStorage === 'undefined') return false;
+      const raw = localStorage.getItem('myduo_ad_shown_pages_v1');
+      if (!raw) return false;
+      const list = JSON.parse(raw);
+      return Array.isArray(list) && list.includes(`${context}::${pageKey}`);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /**
+   * Mark (context, pageKey) as having already shown its one-time pagination interstitial.
+   */
+  markPaginationAdShown(context, pageKey) {
+    if (pageKey === null || pageKey === undefined) return;
+    try {
+      if (typeof localStorage === 'undefined') return;
+      const key = `${context}::${pageKey}`;
+      const raw = localStorage.getItem('myduo_ad_shown_pages_v1');
+      const list = raw ? JSON.parse(raw) : [];
+      const set = new Set(Array.isArray(list) ? list : []);
+      set.add(key);
+      localStorage.setItem('myduo_ad_shown_pages_v1', JSON.stringify(Array.from(set)));
+    } catch (_) {}
+  }
+
+  /**
+   * Returns true if clicking (context, pageKey) will trigger a one-time pagination interstitial.
+   * Always false for PRO users, page 1, or pages that have already shown their ad.
+   */
+  willShowPaginationAd(context, pageKey) {
+    if (isProActive()) return false;
+    if (pageKey === null || pageKey === undefined) return false;
+    if (Number(pageKey) === 1) return false;
+    return !this.hasShownPaginationAd(context, pageKey);
+  }
+
+  /**
    * Show Interstitial Ad on pagination page change for Free-tier users.
+   * When pageKey is provided, shows at most ONCE per (context, pageKey) and skips page 1.
    * Bypassed completely for PRO users and never blocks navigation on ad error / offline.
    */
-  async showPaginationInterstitial(context = 'pagination') {
+  async showPaginationInterstitial(context = 'pagination', pageKey = null) {
     if (isProActive()) return false;
     if (!this.isOnline()) return false;
     if (this._isShowingPaginationInterstitial) return false;
+
+    if (pageKey !== null && pageKey !== undefined) {
+      if (Number(pageKey) === 1) return false;
+      if (this.hasShownPaginationAd(context, pageKey)) return false;
+    }
 
     this._isShowingPaginationInterstitial = true;
     try {
@@ -1407,9 +1456,12 @@ class AdServiceImpl {
           await AdMob.showInterstitial();
           this.isInterstitialPrepared = false;
           this.lastInterstitialTime = Date.now();
+          if (pageKey !== null && pageKey !== undefined) {
+            this.markPaginationAdShown(context, pageKey);
+          }
 
           if (typeof window !== 'undefined' && window.trackEvent) {
-            window.trackEvent('ad_interstitial_pagination_shown', { context });
+            window.trackEvent('ad_interstitial_pagination_shown', { context, page: pageKey ?? undefined });
           }
 
           return true;
@@ -1420,10 +1472,13 @@ class AdServiceImpl {
         }
       }
 
-      console.log(`ℹ️ [Web Simulator] Pagination interstitial shown (${context})`);
+      console.log(`ℹ️ [Web Simulator] Pagination interstitial shown (${context}${pageKey != null ? ` p.${pageKey}` : ''})`);
       this.lastInterstitialTime = Date.now();
+      if (pageKey !== null && pageKey !== undefined) {
+        this.markPaginationAdShown(context, pageKey);
+      }
       if (typeof window !== 'undefined' && window.trackEvent) {
-        window.trackEvent('ad_interstitial_pagination_shown', { context });
+        window.trackEvent('ad_interstitial_pagination_shown', { context, page: pageKey ?? undefined });
       }
       return true;
     } finally {

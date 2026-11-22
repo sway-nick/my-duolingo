@@ -115,12 +115,12 @@ function initApp() {
     };
     
     const settings = StorageService.getSettings() || {};
-    applyTheme(settings.theme || 'light');
+    applyTheme(settings.theme || 'dark');
 
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             StorageService.updateSettings({ theme: newTheme });
             applyTheme(newTheme);

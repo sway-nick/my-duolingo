@@ -75,16 +75,17 @@ function escapeHtml(str) {
 }
 
 function getPageNumbers(current, total) {
-  if (total <= 5) {
+  const windowSize = 5;
+  if (total <= windowSize) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
-  if (current <= 3) {
-    return [1, 2, 3, '...', total];
+  let start = Math.max(1, current - 2);
+  let end = start + windowSize - 1;
+  if (end > total) {
+    end = total;
+    start = Math.max(1, end - windowSize + 1);
   }
-  if (current >= total - 2) {
-    return [1, '...', total - 2, total - 1, total];
-  }
-  return [1, '...', current, '...', total];
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
 
 export function renderSpokenEnglishView(containerSelector = '#app-content', options = {}) {
@@ -196,15 +197,17 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       `;
     }).join('');
 
+    const spokenAdCtx = `spoken_english_${activeCategory}`;
     const pageNumbers = getPageNumbers(currentPage, totalPages);
     const pageButtons = pageNumbers.map((p) => {
       if (p === '...') {
         return `<span class="spoken-page-ellipsis">…</span>`;
       }
+      const isAdGated = p !== currentPage && AdService.willShowPaginationAd(spokenAdCtx, p);
       return `
         <button
           type="button"
-          class="spoken-page-btn ${p === currentPage ? 'is-active' : ''}"
+          class="spoken-page-btn ${p === currentPage ? 'is-active' : (isAdGated ? 'is-ad-gated' : '')}"
           data-spoken-page="${p}"
           aria-label="Page ${p}"
           aria-current="${p === currentPage ? 'page' : 'false'}"
@@ -231,7 +234,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         >›</button>
       </div>
       <div class="spoken-page-info">
-        ${visibleItems.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleItems.length}` : ''}
+        ${visibleItems.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleItems.length} · ${currentPage} / ${totalPages}` : ''}
       </div>
     ` : '';
 
@@ -250,7 +253,6 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
               <span>${escapeHtml(sPro.pro_buy || 'PRO')}</span>
             </button>
           </div>
-          <p class="spoken-gate-hint">${escapeHtml(String(s.proRemainingHint || '').replace('{n}', String(proRemaining)))}</p>
         </div>
       `;
     }
@@ -296,6 +298,8 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         body.dark-theme .spoken-page-btn:hover:not(:disabled), .dark-theme .spoken-page-btn:hover:not(:disabled), [data-theme="dark"] .spoken-page-btn:hover:not(:disabled) { border-color: #38bdf8; }
         .spoken-page-btn.is-active { background: var(--primary-color, #2563eb); border-color: var(--primary-color, #2563eb); color: #ffffff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
         body.dark-theme .spoken-page-btn.is-active, .dark-theme .spoken-page-btn.is-active, [data-theme="dark"] .spoken-page-btn.is-active { background: #38bdf8; border-color: #38bdf8; color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
+        .spoken-page-btn.is-ad-gated:not(.is-active):not(:disabled) { position: relative; background: linear-gradient(135deg, #f59e0b, #ea580c); border-color: #ea580c; color: #ffffff; box-shadow: 0 2px 7px rgba(234, 88, 12, 0.32); }
+        .spoken-page-btn.is-ad-gated:not(.is-active):not(:disabled)::after { content: '🔒'; position: absolute; top: -5px; right: -4px; font-size: 9.5px; line-height: 1; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
         .spoken-page-btn:disabled { opacity: 0.3; cursor: default; }
         .spoken-page-btn.spoken-page-nav { font-size: 18px; font-weight: 800; }
         .spoken-page-ellipsis { min-width: 18px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; flex-shrink: 0; user-select: none; }
@@ -349,7 +353,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         }
         if (!isProActive()) {
           try {
-            await AdService.showPaginationInterstitial('spoken_english');
+            await AdService.showPaginationInterstitial(`spoken_english_${activeCategory}`, targetPage);
           } catch (_) {}
         }
         currentPage = targetPage;

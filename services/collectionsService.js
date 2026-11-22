@@ -7,10 +7,7 @@ const STORAGE_KEY_CUSTOM_COLLECTIONS = 'myduo_custom_collections';
 const STORAGE_KEY_ACTIVE_COLLECTION = 'myduo_active_collection_id';
 const STORAGE_KEY_BUILTIN_OVERRIDES = 'myduo_builtin_collections_overrides';
 export const IDIOMS_UNLOCK_STEP = 10;
-export const PARTIAL_UNLOCK_COLLECTIONS = {
-  idioms: { storageKey: 'myduo_idioms_unlocked_count', step: 10 },
-  phrasal_verbs: { storageKey: 'myduo_phrasal_verbs_unlocked_count', step: 20 },
-};
+export const PARTIAL_UNLOCK_COLLECTIONS = {};
 
 export const BUILTIN_COLLECTIONS_WITH_GEAR = new Set([
   'colors',
@@ -29,9 +26,7 @@ export const BUILTIN_COLLECTIONS_WITH_GEAR = new Set([
 export const DOWNLOADABLE_PACK_COLLECTIONS = new Set([
   'verbs',
   'adjectives',
-  'phrasal_verbs',
   'it_terms',
-  'idioms',
 ]);
 
 export function getCollectionUnlockStep(collectionId) {
@@ -111,7 +106,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 популярных английских идиом и поговорок с объяснением смысла и озвучкой.',
     verbsDesc: '100 самых популярных английских глаголов для повседневного общения с переводом и озвучкой.',
     adjectivesDesc: '100 базовых и выразительных прилагательных для точного описания с переводом и озвучкой.',
-    phrasalVerbsDesc: '100 востребованных фразовых глаголов с понятными объяснениями, переводом и озвучкой.',
+    phrasalVerbsDesc: '240 востребованных фразовых глаголов с понятными объяснениями, переводом и озвучкой.',
     watchAdHint: 'Откроется навсегда после короткого видео',
   },
   uk: {
@@ -121,7 +116,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 популярних англійських ідіом та приказок із поясненням змісту та озвученням.',
     verbsDesc: '100 найпопулярніших англійських дієслів для щоденного спілкування з перекладом та озвученням.',
     adjectivesDesc: '100 базових і виразних прикметників для точного опису з перекладом та озвученням.',
-    phrasalVerbsDesc: '100 затребуваних фразових дієслів із зрозумілими поясненнями, перекладом та озвученням.',
+    phrasalVerbsDesc: '240 затребуваних фразових дієслів із зрозумілими поясненнями, перекладом та озвученням.',
     watchAdHint: 'Відкриється назавжди після короткого відео',
   },
   en: {
@@ -131,7 +126,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 popular English idioms and proverbs with meaning explanations and audio.',
     verbsDesc: '100 most popular English verbs for everyday communication with translations and audio.',
     adjectivesDesc: '100 essential and expressive adjectives for vivid descriptions with translations and audio.',
-    phrasalVerbsDesc: '100 high-frequency phrasal verbs with clear explanations, translations and audio.',
+    phrasalVerbsDesc: '240 high-frequency phrasal verbs with clear explanations, translations and audio.',
     watchAdHint: 'Unlocks permanently after a short video',
   },
   de: {
@@ -141,7 +136,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 beliebte englische Redewendungen und Sprichwörter mit Bedeutungserklärungen.',
     verbsDesc: 'Die 100 beliebtesten englischen Verben für den Alltag mit Übersetzung und Audio.',
     adjectivesDesc: '100 grundlegende und ausdrucksstarke Adjektive mit Übersetzung und Audio.',
-    phrasalVerbsDesc: '100 häufige Phrasal Verbs mit klaren Erklärungen, Übersetzung und Audio.',
+    phrasalVerbsDesc: '240 häufige Phrasal Verbs mit klaren Erklärungen, Übersetzung und Audio.',
     watchAdHint: 'Wird nach einem kurzen Video dauerhaft freigeschaltet',
   },
   es: {
@@ -151,7 +146,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 modismos y proverbios populares en inglés con explicación de su significado.',
     verbsDesc: 'Los 100 verbos más populares del inglés para el día a día con traducción y audio.',
     adjectivesDesc: '100 adjetivos esenciales y expresivos para describir con precisión, con traducción y audio.',
-    phrasalVerbsDesc: '100 phrasal verbs muy usados con explicaciones claras, traducción y audio.',
+    phrasalVerbsDesc: '240 phrasal verbs muy usados con explicaciones claras, traducción y audio.',
     watchAdHint: 'Se desbloquea para siempre tras un breve video',
   },
   'es-mx': {
@@ -161,7 +156,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 modismos y proverbios populares en inglés con explicación de su significado.',
     verbsDesc: 'Los 100 verbos más populares del inglés para el día a día con traducción y audio.',
     adjectivesDesc: '100 adjetivos esenciales y expresivos para describir con precisión, con traducción y audio.',
-    phrasalVerbsDesc: '100 phrasal verbs muy usados con explicaciones claras, traducción y audio.',
+    phrasalVerbsDesc: '240 phrasal verbs muy usados con explicaciones claras, traducción y audio.',
     watchAdHint: 'Se desbloquea para siempre tras un breve video',
   },
   fr: {
@@ -171,7 +166,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 expressions idiomatiques et proverbes anglais populaires avec explications.',
     verbsDesc: 'Les 100 verbes anglais les plus courants pour le quotidien avec traduction et audio.',
     adjectivesDesc: '100 adjectifs essentiels et expressifs pour des descriptions précises avec traduction et audio.',
-    phrasalVerbsDesc: '100 verbes à particule indispensables avec explications claires, traduction et audio.',
+    phrasalVerbsDesc: '240 verbes à particule indispensables avec explications claires, traduction et audio.',
     watchAdHint: 'Débloqué définitivement après une courte vidéo',
   },
   pl: {
@@ -181,7 +176,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 popularnych angielskich idiomów i przysłów z wyjaśnieniem znaczenia.',
     verbsDesc: '100 najpopularniejszych angielskich czasowników na co dzień z tłumaczeniem i lektorem.',
     adjectivesDesc: '100 podstawowych i wyrazistych przymiotników do trafnych opisów z tłumaczeniem i lektorem.',
-    phrasalVerbsDesc: '100 często używanych czasowników frazowych z jasnymi objaśnieniami, tłumaczeniem i lektorem.',
+    phrasalVerbsDesc: '240 często używanych czasowników frazowych z jasnymi objaśnieniami, tłumaczeniem i lektorem.',
     watchAdHint: 'Odblokowuje się na stałe po krótkim wideo',
   },
   tr: {
@@ -191,7 +186,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: 'Anlam açıklamaları ve seslendirmeyle 150 popüler İngilizce deyim ve atasözü.',
     verbsDesc: 'Günlük iletişim için çeviri ve seslendirmeyle en popüler 100 İngilizce fiil.',
     adjectivesDesc: 'Net betimlemeler için çeviri ve seslendirmeyle 100 temel ve güçlü sıfat.',
-    phrasalVerbsDesc: 'Açık anlatım, çeviri ve seslendirmeyle en çok kullanılan 100 deyimsel fiil.',
+    phrasalVerbsDesc: 'Açık anlatım, çeviri ve seslendirmeyle en çok kullanılan 240 deyimsel fiil.',
     watchAdHint: 'Kısa bir videodan sonra kalıcı olarak açılır',
   },
   it: {
@@ -201,7 +196,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 modi di dire e proverbi inglesi popolari con spiegazione del significato.',
     verbsDesc: 'I 100 verbi inglesi più usati nella vita quotidiana con traduzione e audio.',
     adjectivesDesc: '100 aggettivi essenziali ed espressivi per descrivere con precisione, con traduzione e audio.',
-    phrasalVerbsDesc: '100 phrasal verbs molto richiesti con spiegazioni chiare, traduzione e audio.',
+    phrasalVerbsDesc: '240 phrasal verbs molto richiesti con spiegazioni chiare, traduzione e audio.',
     watchAdHint: 'Si sblocca per sempre dopo un breve video',
   },
   ro: {
@@ -211,7 +206,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 de expresii idiomatice și proverbe englezești populare cu explicații.',
     verbsDesc: 'Cele mai populare 100 de verbe englezești pentru conversația zilnică, cu traducere și audio.',
     adjectivesDesc: '100 de adjective esențiale și expresive pentru descrieri precise, cu traducere și audio.',
-    phrasalVerbsDesc: '100 de verbe frazale frecvente cu explicații clare, traducere și audio.',
+    phrasalVerbsDesc: '240 de verbe frazale frecvente cu explicații clare, traducere și audio.',
     watchAdHint: 'Se deblochează permanent după un scurt videoclip',
   },
   bg: {
@@ -221,7 +216,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 популярни английски идиома и поговорки с обяснение на значението.',
     verbsDesc: '100-те най-популярни английски глагола за ежедневно общуване с превод и озвучаване.',
     adjectivesDesc: '100 основни и изразителни прилагателни за точно описание с превод и озвучаване.',
-    phrasalVerbsDesc: '100 търсени фразови глагола с ясни обяснения, превод и озвучаване.',
+    phrasalVerbsDesc: '240 търсени фразови глагола с ясни обяснения, превод и озвучаване.',
     watchAdHint: 'Отключва се завинаги след кратко видео',
   },
   hu: {
@@ -231,7 +226,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 népszerű angol szólás és közmondás jelentésmagyarázattal.',
     verbsDesc: 'A 100 legnépszerűbb angol ige a mindennapi kommunikációhoz fordítással és hanggal.',
     adjectivesDesc: '100 alapvető és kifejező melléknév pontos leírásokhoz fordítással és hanggal.',
-    phrasalVerbsDesc: '100 gyakori vonzatos ige érthető magyarázatokkal, fordítással és hanggal.',
+    phrasalVerbsDesc: '240 gyakori vonzatos ige érthető magyarázatokkal, fordítással és hanggal.',
     watchAdHint: 'Egy rövid videó után örökre feloldódik',
   },
   el: {
@@ -241,7 +236,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 δημοφιλείς αγγλικοί ιδιωματισμοί και παροιμίες με επεξήγηση σημασίας.',
     verbsDesc: 'Τα 100 πιο δημοφιλή αγγλικά ρήματα για καθημερινή επικοινωνία με μετάφραση και ήχο.',
     adjectivesDesc: '100 βασικά και εκφραστικά επίθετα για ακριβείς περιγραφές με μετάφραση και ήχο.',
-    phrasalVerbsDesc: '100 συνηθισμένα phrasal verbs με σαφείς εξηγήσεις, μετάφραση και ήχο.',
+    phrasalVerbsDesc: '240 συνηθισμένα phrasal verbs με σαφείς εξηγήσεις, μετάφραση και ήχο.',
     watchAdHint: 'Ξεκλειδώνει μόνιμα μετά από ένα σύντομο βίντεο',
   },
   da: {
@@ -251,7 +246,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 populære engelske talemåder og ordsprog med betydningsforklaring.',
     verbsDesc: 'De 100 mest populære engelske verber til hverdagen med oversættelse og lyd.',
     adjectivesDesc: '100 vigtige og udtryksfulde adjektiver til præcise beskrivelser med oversættelse og lyd.',
-    phrasalVerbsDesc: '100 hyppige phrasal verbs med klare forklaringer, oversættelse og lyd.',
+    phrasalVerbsDesc: '240 hyppige phrasal verbs med klare forklaringer, oversættelse og lyd.',
     watchAdHint: 'Låses permanent op efter en kort video',
   },
   lv: {
@@ -261,7 +256,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 populāras angļu valodas idiomas un sakāmvārdi ar nozīmes skaidrojumu.',
     verbsDesc: '100 populārākie angļu darbības vārdi ikdienas saziņai ar tulkojumu un izrunu.',
     adjectivesDesc: '100 būtiski un izteiksmīgi īpašības vārdi precīzam aprakstam ar tulkojumu un izrunu.',
-    phrasalVerbsDesc: '100 bieži lietoti frāzu darbības vārdi ar skaidrojumiem, tulkojumu un izrunu.',
+    phrasalVerbsDesc: '240 bieži lietoti frāzu darbības vārdi ar skaidrojumiem, tulkojumu un izrunu.',
     watchAdHint: 'Atbloķējas uz visiem laikiem pēc īsa video',
   },
   lt: {
@@ -271,7 +266,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 populiarių anglų kalbos idiomų ir patarlių su reikšmės paaiškinimu.',
     verbsDesc: '100 populiariausių anglų veiksmažodžių kasdieniam bendravimui su vertimu ir įgarsinimu.',
     adjectivesDesc: '100 pagrindinių ir išraiškingų būdvardžių tiksliam apibūdinimui su vertimu ir įgarsinimu.',
-    phrasalVerbsDesc: '100 dažnų frazinių veiksmažodžių su aiškiais paaiškinimais, vertimu ir įgarsinimu.',
+    phrasalVerbsDesc: '240 dažnų frazinių veiksmažodžių su aiškiais paaiškinimais, vertimu ir įgarsinimu.',
     watchAdHint: 'Visam laikui atrakinama po trumpo vaizdo įrašo',
   },
   pt: {
@@ -281,7 +276,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 expressões idiomáticas e provérbios populares em inglês com explicação.',
     verbsDesc: 'Os 100 verbos ingleses mais populares para o dia a dia com tradução e áudio.',
     adjectivesDesc: '100 adjetivos essenciais e expressivos para descrições precisas com tradução e áudio.',
-    phrasalVerbsDesc: '100 phrasal verbs muito usados com explicações claras, tradução e áudio.',
+    phrasalVerbsDesc: '240 phrasal verbs muito usados com explicações claras, tradução e áudio.',
     watchAdHint: 'Desbloqueia para sempre após um vídeo curto',
   },
   'pt-br': {
@@ -291,7 +286,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 expressões idiomáticas e provérbios populares em inglês com explicação.',
     verbsDesc: 'Os 100 verbos em inglês mais populares para o dia a dia com tradução e áudio.',
     adjectivesDesc: '100 adjetivos essenciais e expressivos para descrições precisas com tradução e áudio.',
-    phrasalVerbsDesc: '100 phrasal verbs mais usados com explicações claras, tradução e áudio.',
+    phrasalVerbsDesc: '240 phrasal verbs mais usados com explicações claras, tradução e áudio.',
     watchAdHint: 'Desbloqueia para sempre após um vídeo curto',
   },
   sk: {
@@ -301,7 +296,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 obľúbených anglických idiómov a prísloví s vysvetlením významu.',
     verbsDesc: '100 najobľúbenejších anglických slovies na každý deň s prekladom a zvukom.',
     adjectivesDesc: '100 základných a výstižných prídavných mien na presný opis s prekladom a zvukom.',
-    phrasalVerbsDesc: '100 žiadaných frázových slovies so zrozumiteľným vysvetlením, prekladom a zvukom.',
+    phrasalVerbsDesc: '240 žiadaných frázových slovies so zrozumiteľným vysvetlením, prekladom a zvukom.',
     watchAdHint: 'Odomkne sa navždy po krátkom videu',
   },
   sl: {
@@ -311,7 +306,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 priljubljenih angleških idiomov in pregovorov z razlago pomena.',
     verbsDesc: '100 najbolj priljubljenih angleških glagolov za vsakdanjo rabo s prevodom in zvokom.',
     adjectivesDesc: '100 osnovnih in izraznih pridevnikov za natančne opise s prevodom in zvokom.',
-    phrasalVerbsDesc: '100 pogostih fraznih glagolov z jasnimi razlagami, prevodom in zvokom.',
+    phrasalVerbsDesc: '240 pogostih fraznih glagolov z jasnimi razlagami, prevodom in zvokom.',
     watchAdHint: 'Trajno se odklene po kratkem videu',
   },
   fi: {
@@ -321,7 +316,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 suosittua englannin idiomia ja sananlaskua merkityksen selityksellä.',
     verbsDesc: '100 suosituinta englannin verbiä arkipäivän viestintään käännöksellä ja ääntämyksellä.',
     adjectivesDesc: '100 keskeistä ja ilmeikästä adjektiivia tarkkaan kuvailuun käännöksellä ja ääntämyksellä.',
-    phrasalVerbsDesc: '100 yleistä fraasiverbiä selkeillä selityksillä, käännöksellä ja ääntämyksellä.',
+    phrasalVerbsDesc: '240 yleistä fraasiverbiä selkeillä selityksillä, käännöksellä ja ääntämyksellä.',
     watchAdHint: 'Avautuu pysyvästi lyhyen videon jälkeen',
   },
   hr: {
@@ -331,7 +326,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 popularnih engleskih idioma i poslovica s objašnjenjem značenja.',
     verbsDesc: '100 najpopularnijih engleskih glagola za svakodnevnu komunikaciju s prijevodom i zvukom.',
     adjectivesDesc: '100 osnovnih i izražajnih pridjeva za precizne opise s prijevodom i zvukom.',
-    phrasalVerbsDesc: '100 traženih fraznih glagola s jasnim objašnjenjima, prijevodom i zvukom.',
+    phrasalVerbsDesc: '240 traženih fraznih glagola s jasnim objašnjenjima, prijevodom i zvukom.',
     watchAdHint: 'Trajno se otključava nakon kratkog videa',
   },
   cs: {
@@ -341,7 +336,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 oblíbených anglických idiomů a přísloví s vysvětlením významu.',
     verbsDesc: '100 nejoblíbenějších anglických sloves pro každodenní komunikaci s překladem a zvukem.',
     adjectivesDesc: '100 základních a výstižných přídavných jmen pro přesný popis s překladem a zvukem.',
-    phrasalVerbsDesc: '100 žádaných frázových sloves s jasným vysvětlením, překladem a zvukem.',
+    phrasalVerbsDesc: '240 žádaných frázových sloves s jasným vysvětlením, překladem a zvukem.',
     watchAdHint: 'Odemkne se navždy po krátkém videu',
   },
   sv: {
@@ -351,7 +346,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 populära engelska idiom och ordspråk med betydelseförklaring.',
     verbsDesc: 'De 100 mest populära engelska verben för vardagen med översättning och ljud.',
     adjectivesDesc: '100 viktiga och uttrycksfulla adjektiv för träffsäkra beskrivningar med översättning och ljud.',
-    phrasalVerbsDesc: '100 vanliga partikelverb med tydliga förklaringar, översättning och ljud.',
+    phrasalVerbsDesc: '240 vanliga partikelverb med tydliga förklaringar, översättning och ljud.',
     watchAdHint: 'Låses upp permanent efter en kort video',
   },
   et: {
@@ -361,7 +356,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 populaarset inglise idioomi ja vanasõna tähenduse selgitusega.',
     verbsDesc: '100 populaarseimat inglise tegusõna igapäevaseks suhtluseks koos tõlke ja hääldusega.',
     adjectivesDesc: '100 olulist ja ilmekat omadussõna täpseks kirjeldamiseks koos tõlke ja hääldusega.',
-    phrasalVerbsDesc: '100 enimkasutatavat ühendverbi selgete selgituste, tõlke ja hääldusega.',
+    phrasalVerbsDesc: '240 enimkasutatavat ühendverbi selgete selgituste, tõlke ja hääldusega.',
     watchAdHint: 'Avaneb püsivalt pärast lühikest videot',
   },
   hi: {
@@ -371,7 +366,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: 'अर्थ की व्याख्या और ऑडियो के साथ 150 लोकप्रिय अंग्रेज़ी मुहावरे और कहावतें।',
     verbsDesc: 'रोज़मर्रा की बातचीत के लिए अनुवाद और ऑडियो के साथ 100 सबसे लोकप्रिय अंग्रेज़ी क्रियाएँ।',
     adjectivesDesc: 'सटीक वर्णन के लिए अनुवाद और ऑडियो के साथ 100 आवश्यक और प्रभावशाली विशेषण।',
-    phrasalVerbsDesc: 'स्पष्ट व्याख्या, अनुवाद और ऑडियो के साथ 100 उपयोगी फ़्रेज़ल वर्ब्स।',
+    phrasalVerbsDesc: 'स्पष्ट व्याख्या, अनुवाद और ऑडियो के साथ 240 उपयोगी फ़्रेज़ल वर्ब्स।',
     watchAdHint: 'एक छोटे वीडियो के बाद हमेशा के लिए अनलॉक हो जाएगा',
   },
   bn: {
@@ -391,7 +386,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 من أشهر التعابير الاصطلاحية والأمثال الإنجليزية مع شرح المعنى والنطق.',
     verbsDesc: '100 من أشهر الأفعال الإنجليزية للتواصل اليومي مع الترجمة والنطق الصوتي.',
     adjectivesDesc: '100 صفة أساسية ومعبّرة للوصف الدقيق مع الترجمة والنطق الصوتي.',
-    phrasalVerbsDesc: '100 فعل مركب شائع مع شروحات واضحة وترجمة ونطق صوتي.',
+    phrasalVerbsDesc: '240 فعل مركب شائع مع شروحات واضحة وترجمة ونطق صوتي.',
     watchAdHint: 'يُفتح بشكل دائم بعد فيديو قصير',
   },
   fa: {
@@ -401,7 +396,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '۱۵۰ اصطلاح و ضرب‌المثل پرکاربرد انگلیسی همراه با توضیح معنا و تلفظ.',
     verbsDesc: '۱۰۰ فعل پرکاربرد انگلیسی برای مکالمه روزمره با ترجمه و تلفظ صوتی.',
     adjectivesDesc: '۱۰۰ صفت ضروری و گویا برای توصیف دقیق با ترجمه و تلفظ صوتی.',
-    phrasalVerbsDesc: '۱۰۰ فعل عبارتی پرطرفدار با توضیح روشن، ترجمه و تلفظ صوتی.',
+    phrasalVerbsDesc: '۲۴۰ فعل عبارتی پرطرفدار با توضیح روشن، ترجمه و تلفظ صوتی.',
     watchAdHint: 'پس از یک ویدیوی کوتاه برای همیشه باز می‌شود',
   },
   ur: {
@@ -411,7 +406,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: 'مفہوم کی وضاحت اور آڈیو کے ساتھ 150 مشہور انگریزی محاورے اور ضرب الامثال۔',
     verbsDesc: 'روزمرہ گفتگو کے لیے ترجمے اور آڈیو کے ساتھ 100 مقبول ترین انگریزی افعال۔',
     adjectivesDesc: 'درست بیان کے لیے ترجمے اور آڈیو کے ساتھ 100 بنیادی اور مؤثر صفات۔',
-    phrasalVerbsDesc: 'واضح تشریح، ترجمے اور آڈیو کے ساتھ 100 اہم فریزل وربز۔',
+    phrasalVerbsDesc: 'واضح تشریح، ترجمے اور آڈیو کے ساتھ 240 اہم فریزل وربز۔',
     watchAdHint: 'ایک مختصر ویڈیو کے بعد ہمیشہ کے لیے کھل جائے گا',
   },
   id: {
@@ -421,7 +416,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 idiom dan peribahasa bahasa Inggris populer dengan penjelasan makna.',
     verbsDesc: '100 kata kerja bahasa Inggris paling populer untuk percakapan sehari-hari dengan terjemahan dan audio.',
     adjectivesDesc: '100 kata sifat penting dan ekspresif untuk deskripsi tepat dengan terjemahan dan audio.',
-    phrasalVerbsDesc: '100 phrasal verb yang sering dipakai dengan penjelasan jelas, terjemahan, dan audio.',
+    phrasalVerbsDesc: '240 phrasal verb yang sering dipakai dengan penjelasan jelas, terjemahan, dan audio.',
     watchAdHint: 'Terbuka permanen setelah video singkat',
   },
   vi: {
@@ -431,7 +426,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 thành ngữ và tục ngữ tiếng Anh phổ biến kèm giải thích ý nghĩa.',
     verbsDesc: '100 động từ tiếng Anh phổ biến nhất cho giao tiếp hằng ngày kèm nghĩa và phát âm.',
     adjectivesDesc: '100 tính từ thiết yếu và giàu sắc thái để miêu tả chuẩn xác kèm nghĩa và phát âm.',
-    phrasalVerbsDesc: '100 cụm động từ thông dụng kèm giải thích dễ hiểu, nghĩa tiếng Việt và phát âm.',
+    phrasalVerbsDesc: '240 cụm động từ thông dụng kèm giải thích dễ hiểu, nghĩa tiếng Việt và phát âm.',
     watchAdHint: 'Mở khóa vĩnh viễn sau một video ngắn',
   },
   th: {
@@ -441,7 +436,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 สำนวนและสุภาษิตภาษาอังกฤษยอดนิยมพร้อมคำอธิบายความหมาย',
     verbsDesc: '100 คำกริยาภาษาอังกฤษยอดนิยมสำหรับการสื่อสารประจำวัน พร้อมคำแปลและเสียงอ่าน',
     adjectivesDesc: '100 คำคุณศัพท์พื้นฐานที่สื่อความหมายชัดเจน พร้อมคำแปลและเสียงอ่าน',
-    phrasalVerbsDesc: '100 กริยาวลีที่ใช้บ่อย พร้อมคำอธิบายเข้าใจง่าย คำแปล และเสียงอ่าน',
+    phrasalVerbsDesc: '240 กริยาวลีที่ใช้บ่อย พร้อมคำอธิบายเข้าใจง่าย คำแปล และเสียงอ่าน',
     watchAdHint: 'ปลดล็อกถาวรหลังดูวิดีโอสั้นๆ',
   },
   ko: {
@@ -451,7 +446,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '의미 설명과 음성 발음이 포함된 인기 영어 관용구 및 속담 150선.',
     verbsDesc: '일상 대화에 꼭 필요한 인기 영어 동사 100개를 번역과 음성으로 학습하세요.',
     adjectivesDesc: '정확한 묘사를 위한 핵심 형용사 100개를 번역과 음성으로 학습하세요.',
-    phrasalVerbsDesc: '자주 쓰이는 구동사 100개를 쉬운 설명, 번역, 음성과 함께 익히세요.',
+    phrasalVerbsDesc: '자주 쓰이는 구동사 240개를 쉬운 설명, 번역, 음성과 함께 익히세요.',
     watchAdHint: '짧은 광고 시청 후 영구적으로 잠금 해제됩니다',
   },
   ja: {
@@ -461,7 +456,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '意味の解説と音声付きの定番英語イディオム＆ことわざ150選。',
     verbsDesc: '日常会話でよく使う人気の英語動詞100語を、日本語訳と音声付きで学べます。',
     adjectivesDesc: '的確な表現に役立つ基本＆豊かな形容詞100語を、日本語訳と音声付きで収録。',
-    phrasalVerbsDesc: '頻出の句動詞100語を、わかりやすい解説・日本語訳・音声付きで学べます。',
+    phrasalVerbsDesc: '頻出の句動詞240語を、わかりやすい解説・日本語訳・音声付きで学べます。',
     watchAdHint: '短い動画の視聴後に永久に解放されます',
   },
   zh: {
@@ -471,7 +466,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: '150 个常用英语习语与谚语，配有含义解析与发音。',
     verbsDesc: '精选 100 个日常高频英语动词，配有中文释义和标准发音。',
     adjectivesDesc: '100 个核心且富有表现力的形容词，配有中文释义和标准发音。',
-    phrasalVerbsDesc: '100 个常用短语动词，配有清晰讲解、中文释义和标准发音。',
+    phrasalVerbsDesc: '240 个常用短语动词，配有清晰讲解、中文释义和标准发音。',
     watchAdHint: '观看简短视频后永久解锁',
   },
   kk: {
@@ -481,7 +476,7 @@ export const DOWNLOADABLE_PACK_I18N = {
     idiomsDesc: 'Мағынасы түсіндірілген және дыбысталған 150 танымал ағылшын идиомасы мен мақалы.',
     verbsDesc: 'Күнделікті сөйлесуге арналған аудармасы мен дыбысы бар ең танымал 100 ағылшын етістігі.',
     adjectivesDesc: 'Дәл сипаттауға арналған аудармасы мен дыбысы бар 100 негізгі және мәнерлі сын есім.',
-    phrasalVerbsDesc: 'Түсінікті анықтамасы, аудармасы және дыбысы бар 100 жиі қолданылатын фразалық етістік.',
+    phrasalVerbsDesc: 'Түсінікті анықтамасы, аудармасы және дыбысы бар 240 жиі қолданылатын фразалық етістік.',
     watchAdHint: 'Қысқа видеодан кейін біржола ашылады',
   },
 };
@@ -1227,20 +1222,72 @@ export const BUILTIN_COLLECTIONS_DEF = [
           "kk": "Тіркесті етістіктер"
     },
     wordKeys: [
-      'have to', 'get in', 'get on', 'turn on', 'turn off', 'wake up', 'get up', 'come in',
-      'go on', 'find out', 'set up', 'take off', 'pick up', 'put on', 'look at', 'look after',
-      'carry on', 'bring up', 'run out', 'break down', 'check in', 'check out', 'calm down',
-      'come back', 'figure out', 'get along', 'hang out', 'hold on', 'keep up', 'make up',
-      'point out', 'run into', 'show up', 'slow down', 'work out', 'look for', 'give up',
-      'give back', 'bring back', 'stand up', 'sit down', 'go out', 'go back', 'try on',
-      'call back', 'call off', 'grow up', 'deal with', 'come across', 'break up', 'call on',
-      'run away', 'hurry up', 'pay back', 'look out', 'cheer up', 'look up to', 'look over',
-      'let go', 'end up', 'catch up', 'get rid of', 'fill out', 'keep on', 'come on',
-      'get back', 'get out', 'take back', 'break out', 'cut off', 'turn up', 'turn down',
-      'put away', 'throw away', 'throw out', 'look into', 'go through', 'set off', 'move on',
-      'lash out', 'look back', 'stand out', 'drop out', 'drop off', 'come over', 'head out',
-      'drop in', 'save up', 'plug in', 'look forward to', 'rely on', 'depend on', 'focus on',
-      'concentrate on', 'insist on', 'wait for', 'search for', 'apply for', 'ask for', 'care for'
+      // 1-10: Core everyday families
+      'look for', 'look at', 'look after', 'look out',
+      'turn on', 'turn off', 'turn up', 'turn down',
+      'go on', 'go out', 'go back', 'go through',
+      'get up', 'get in', 'get out', 'get on',
+      'come in', 'come back', 'come across', 'come over',
+      'break down', 'break up', 'break out', 'break in',
+      'take off', 'take back', 'take over', 'take up',
+      'put on', 'put away', 'put off', 'put out',
+      'give up', 'give back', 'give in', 'give away',
+      'make up', 'make out', 'make for', 'make over',
+      // 11-20
+      'run out', 'run into', 'run away', 'run over',
+      'call back', 'call off', 'call on', 'call out',
+      'drop in', 'drop off', 'drop out', 'drop by',
+      'set up', 'set off', 'set out', 'set back',
+      'bring up', 'bring back', 'bring about', 'bring out',
+      'check in', 'check out', 'check up', 'check over',
+      'keep up', 'keep on', 'keep out', 'keep away',
+      'stand up', 'stand out', 'stand by', 'stand for',
+      'throw away', 'throw out', 'throw up', 'throw in',
+      'work out', 'work on', 'work with', 'work for',
+      // 21-30
+      'pick up', 'pick out', 'pick on', 'pick at',
+      'hold on', 'hold up', 'hold back', 'hold out',
+      'cut off', 'cut down', 'cut out', 'cut in',
+      'pull over', 'pull out', 'pull through', 'pull off',
+      'pass out', 'pass away', 'pass on', 'pass by',
+      'fall apart', 'fall behind', 'fall for', 'fall out',
+      'hang out', 'hang up', 'hang on', 'hang around',
+      'pay back', 'pay off', 'pay for', 'pay up',
+      'fill out', 'fill in', 'fill up', 'fill with',
+      'carry on', 'carry out', 'carry away', 'carry over',
+      // 31-40
+      'show up', 'show off', 'show around', 'show out',
+      'back up', 'back down', 'back out', 'back off',
+      'blow up', 'blow out', 'blow away', 'blow over',
+      'clear up', 'clear out', 'clear away', 'clear off',
+      'close down', 'close in', 'close off', 'close up',
+      'count on', 'count in', 'count out', 'count down',
+      'do over', 'do without', 'do up', 'do away with',
+      'draw up', 'draw back', 'draw in', 'draw out',
+      'eat out', 'eat up', 'eat in', 'eat away',
+      'hand in', 'hand out', 'hand over', 'hand back',
+      // 41-50
+      'grow up', 'grow out of', 'grow apart', 'grow into',
+      'head out', 'head back', 'head for', 'head off',
+      'knock out', 'knock down', 'knock over', 'knock off',
+      'lay off', 'lay out', 'lay down', 'lay in',
+      'let down', 'let in', 'let out', 'let off',
+      'live on', 'live up to', 'live through', 'live off',
+      'move on', 'move in', 'move out', 'move over',
+      'shut down', 'shut up', 'shut off', 'shut out',
+      'play along', 'play down', 'play around', 'play back',
+      'read out', 'read over', 'read through', 'read into',
+      // 51-60
+      'send back', 'send out', 'send off', 'send for',
+      'sit down', 'sit back', 'sit up', 'sit out',
+      'speak up', 'speak out', 'speak for', 'speak of',
+      'stay up', 'stay in', 'stay out', 'stay away',
+      'step up', 'step down', 'step back', 'step in',
+      'stick to', 'stick out', 'stick up', 'stick around',
+      'talk over', 'talk into', 'talk back', 'talk out of',
+      'think over', 'think through', 'think ahead', 'think back',
+      'write down', 'write back', 'write off', 'write up',
+      'watch out', 'watch over', 'watch for', 'watch back'
     ],
   },
   {

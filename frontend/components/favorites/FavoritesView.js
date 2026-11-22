@@ -57,16 +57,17 @@ export function saveSavedCollectionPage(colId, page = 1) {
 }
 
 function getPageNumbers(current, total) {
-  if (total <= 5) {
+  const windowSize = 5;
+  if (total <= windowSize) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
-  if (current <= 3) {
-    return [1, 2, 3, '...', total];
+  let start = Math.max(1, current - 2);
+  let end = start + windowSize - 1;
+  if (end > total) {
+    end = total;
+    start = Math.max(1, end - windowSize + 1);
   }
-  if (current >= total - 2) {
-    return [1, '...', total - 2, total - 1, total];
-  }
-  return [1, '...', current, '...', total];
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
 
 function renderFavoritesView(favoriteWords = [], containerSelector = '#app-content', options = {}) {
@@ -327,16 +328,20 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   }
 
   const isPro = isProActive();
-  const isItPreview = collectionId === 'it_terms' && !isPro && favoriteWords.length > 5;
+  const isItPreview = collectionId === 'it_terms' && !isPro && favoriteWords.length > 6;
   const partialStep = getCollectionUnlockStep(collectionId);
   const isPartialPack = partialStep > 0 && !isPro;
   const partialUnlockedCount = isItPreview
-    ? Math.min(favoriteWords.length, 5)
+    ? Math.min(favoriteWords.length, 6)
     : (isPartialPack ? Math.min(favoriteWords.length, getCollectionUnlockedCount(collectionId)) : favoriteWords.length);
   const visibleWords = (isItPreview || isPartialPack) ? favoriteWords.slice(0, partialUnlockedCount) : favoriteWords;
   const hasMoreToUnlock = isPartialPack && partialUnlockedCount < favoriteWords.length;
   const sProMore = (hasMoreToUnlock || isItPreview) ? getProStrings(getInterfaceLanguage()) : null;
   const packStringsMore = (hasMoreToUnlock || isItPreview) ? getDownloadablePackStrings() : null;
+
+  const isPhrasalCol = collectionId === 'phrasal_verbs';
+  const isPairCol = isPairCollection(collectionId);
+  const effectivePageSize = isPhrasalCol ? 16 : (isPairCol ? 12 : PAGE_SIZE);
 
   const isPaginated = PAGINATED_COLLECTIONS.has(collectionId);
   let currentPage = options._currentPage !== undefined
@@ -344,7 +349,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     : (isPaginated ? loadSavedCollectionPage(collectionId) : 1);
   if (!Number.isFinite(currentPage) || currentPage < 1) currentPage = 1;
 
-  const totalPages = isPaginated ? Math.max(1, Math.ceil(visibleWords.length / PAGE_SIZE)) : 1;
+  const totalPages = isPaginated ? Math.max(1, Math.ceil(visibleWords.length / effectivePageSize)) : 1;
   if (currentPage > totalPages) currentPage = totalPages;
   if (currentPage < 1) currentPage = 1;
 
@@ -352,23 +357,25 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     saveSavedCollectionPage(collectionId, currentPage);
   }
 
-  const startIndex = isPaginated ? (currentPage - 1) * PAGE_SIZE : 0;
-  const endIndex = isPaginated ? Math.min(startIndex + PAGE_SIZE, visibleWords.length) : visibleWords.length;
+  const startIndex = isPaginated ? (currentPage - 1) * effectivePageSize : 0;
+  const endIndex = isPaginated ? Math.min(startIndex + effectivePageSize, visibleWords.length) : visibleWords.length;
   const wordsToRender = isPaginated ? visibleWords.slice(startIndex, endIndex) : visibleWords;
 
   const mrStrings = getMicroRulesStrings(getInterfaceLanguage());
   const prevLabel = mrStrings.prevBtn || 'Previous';
   const nextLabel = mrStrings.nextBtn || 'Next';
 
+  const paginationCtx = `collection_${collectionId}`;
   const pageNumbers = getPageNumbers(currentPage, totalPages);
   const pageButtons = pageNumbers.map((p) => {
     if (p === '...') {
       return `<span class="col-page-ellipsis">…</span>`;
     }
+    const isAdGated = p !== currentPage && AdService.willShowPaginationAd(paginationCtx, p);
     return `
       <button
         type="button"
-        class="col-page-btn ${p === currentPage ? 'is-active' : ''}"
+        class="col-page-btn ${p === currentPage ? 'is-active' : (isAdGated ? 'is-ad-gated' : '')}"
         data-col-page="${p}"
         aria-label="Page ${p}"
         aria-current="${p === currentPage ? 'page' : 'false'}"
@@ -395,7 +402,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       >›</button>
     </div>
     <div class="col-page-info">
-      ${visibleWords.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleWords.length}` : ''}
+      ${visibleWords.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleWords.length} · ${currentPage} / ${totalPages}` : ''}
     </div>
   ` : '';
 
@@ -404,7 +411,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   const repeatBtnText = (t('fav_practice_btn') || '').replace(/^🔥\s*/, '');
   const headerCountText = (hasMoreToUnlock || isItPreview) ? `${partialUnlockedCount} / ${favoriteWords.length}` : `${favoriteWords.length}`;
 
-  const isPairCol = isPairCollection(collectionId);
   const formatIpa = (tr) => {
     const clean = String(tr || '').trim().replace(/^\/+|\/+$/g, '').replace(/^\[+|\]+$/g, '').trim();
     return clean ? `[${clean}]` : '';
@@ -449,8 +455,150 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     return pairCards.join('');
   };
 
+  const renderPhrasalMindMapsHtml = () => {
+    // Build fast lookup for base verb translations from allWords
+    const baseWordMap = new Map();
+    if (Array.isArray(allWords)) {
+      for (const w of allWords) {
+        const key = String(w?.word || '').trim().toLowerCase();
+        if (key && !key.includes(' ') && !baseWordMap.has(key)) {
+          baseWordMap.set(key, w);
+        }
+      }
+    }
+
+    // Group wordsToRender into clusters by root verb (max 4 branches per Mind-Map card)
+    const groups = [];
+    const singles = [];
+    const byRoot = new Map();
+    for (const w of wordsToRender) {
+      const parts = String(w.word || '').trim().split(/\s+/);
+      const root = (parts[0] || '').toLowerCase();
+      if (!byRoot.has(root)) byRoot.set(root, []);
+      byRoot.get(root).push(w);
+    }
+    for (const [root, list] of byRoot.entries()) {
+      if (list.length >= 2) {
+        for (let i = 0; i < list.length; i += 4) {
+          const chunk = list.slice(i, i + 4);
+          if (chunk.length >= 2) {
+            groups.push({ root, items: chunk });
+          } else {
+            singles.push(...chunk);
+          }
+        }
+      } else {
+        singles.push(...list);
+      }
+    }
+
+    const renderBranch = (w) => {
+      const isFav = favSet.has(String(w.id));
+      const tr = getWordTranslation(w);
+      const raw = String(w.word || '').trim();
+      const spIdx = raw.indexOf(' ');
+      const verbPart = spIdx > 0 ? raw.slice(0, spIdx) : raw;
+      const particlePart = spIdx > 0 ? raw.slice(spIdx + 1) : '';
+      return `
+        <div class="pv-branch-card" data-id="${w.id}">
+          <div class="pv-branch-top">
+            <span class="pv-branch-word" dir="ltr">${escapeHtml(verbPart)} <span class="pv-particle">${escapeHtml(particlePart)}</span></span>
+            <div class="pv-branch-actions">
+              <button type="button" class="fav-audio-btn pair-audio-btn" data-word="${escapeHtml(w.word)}" data-id="${w.id}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">🔊</button>
+              <button type="button" class="fav-action-btn fav-toggle-btn fav-icon-btn pair-fav-btn ${isFav ? 'active' : ''}" data-id="${w.id}" title="${isFav ? (t('fav_remove_tooltip') || 'Удалить из избранного') : (t('fav_toggle') || 'В избранное')}">${isFav ? '❤️' : '🤍'}</button>
+            </div>
+          </div>
+          <div class="pv-branch-tr">${escapeHtml(tr)}</div>
+        </div>
+      `;
+    };
+
+    const upArrowsSvg = `
+      <svg class="pv-arrows-svg" viewBox="0 0 320 30" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 142 28 Q 108 22 76 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 73 12 L 75 5 L 82 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 178 28 Q 212 22 244 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 238 7 L 245 5 L 247 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    const downArrows2Svg = `
+      <svg class="pv-arrows-svg" viewBox="0 0 320 30" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 142 2 Q 108 8 76 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 73 18 L 75 25 L 82 23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 178 2 Q 212 8 244 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 238 23 L 245 25 L 247 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    const downArrow1Svg = `
+      <svg class="pv-arrows-svg" viewBox="0 0 320 26" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 160 2 L 160 21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 155 16 L 160 22 L 165 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    const mapCardsHtml = groups.map(({ root, items }) => {
+      const topItems = items.slice(0, 2);
+      const bottomItems = items.slice(2, 4);
+      const baseWordObj = baseWordMap.get(root);
+      const baseTr = baseWordObj ? getWordTranslation(baseWordObj) : '';
+      const shortBaseTr = baseTr ? baseTr.split(',')[0].trim() : '';
+
+      return `
+        <div class="fav-card pv-map-card">
+          <div class="pv-branch-row">
+            ${topItems.map(renderBranch).join('')}
+          </div>
+          ${upArrowsSvg}
+          <div class="pv-center-wrap">
+            <button type="button" class="pv-center-pill fav-audio-btn" data-word="${escapeHtml(root)}" title="${t('fav_listen_tooltip') || 'Слушать произношение'}">
+              <span class="pv-center-verb" dir="ltr">${escapeHtml(root.toUpperCase())}</span>
+              ${shortBaseTr ? `<span class="pv-center-tr">${escapeHtml(shortBaseTr)}</span>` : ''}
+            </button>
+          </div>
+          ${bottomItems.length > 0 ? `
+            ${bottomItems.length === 2 ? downArrows2Svg : downArrow1Svg}
+            <div class="pv-branch-row ${bottomItems.length === 1 ? 'is-single' : ''}">
+              ${bottomItems.map(renderBranch).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+
+    const singlesHtml = singles.length > 0 ? `
+      <div class="pv-singles-grid">
+        ${singles.map(renderBranch).join('')}
+      </div>
+    ` : '';
+
+    return mapCardsHtml + singlesHtml;
+  };
+
   container.innerHTML = `
     <style>
+      .pv-map-card { padding: 12px 10px 13px !important; display: flex; flex-direction: column; align-items: stretch; }
+      .pv-branch-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; width: 100%; box-sizing: border-box; }
+      .pv-branch-row.is-single { grid-template-columns: minmax(0, 240px); justify-content: center; }
+      .pv-branch-card { display: flex; flex-direction: column; min-width: 0; padding: 9px 9px 10px; border-radius: 12px; background: var(--bg-hover, #f1f5f9); border: 1px solid var(--border-color, rgba(148, 163, 184, 0.24)); box-sizing: border-box; }
+      body.dark-theme .pv-branch-card, .dark-theme .pv-branch-card, [data-theme="dark"] .pv-branch-card { background: rgba(255, 255, 255, 0.05); border-color: rgba(148, 163, 184, 0.18); }
+      .pv-branch-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 3px; margin-bottom: 4px; }
+      .pv-branch-word { font-size: 14.5px; font-weight: 800; color: var(--text-main, #0f172a); line-height: 1.2; overflow-wrap: anywhere; min-width: 0; }
+      .pv-particle { color: var(--primary-color, #2563eb); }
+      body.dark-theme .pv-particle, .dark-theme .pv-particle, [data-theme="dark"] .pv-particle { color: #38bdf8; }
+      .pv-branch-actions { display: inline-flex; align-items: center; gap: 1px; flex-shrink: 0; }
+      .pv-branch-tr { font-size: 12.5px; font-weight: 600; color: var(--text-muted, #475569); line-height: 1.32; overflow-wrap: anywhere; word-break: break-word; }
+      body.dark-theme .pv-branch-tr, .dark-theme .pv-branch-tr, [data-theme="dark"] .pv-branch-tr { color: #cbd5e1; }
+      .pv-arrows-svg { width: 100%; height: 26px; display: block; color: rgba(100, 116, 139, 0.55); pointer-events: none; }
+      body.dark-theme .pv-arrows-svg, .dark-theme .pv-arrows-svg, [data-theme="dark"] .pv-arrows-svg { color: rgba(56, 189, 248, 0.55); }
+      .pv-center-wrap { display: flex; justify-content: center; margin: 2px 0; }
+      .pv-center-pill { width: auto !important; height: auto !important; min-width: 118px; padding: 8px 20px !important; border-radius: 16px !important; background: linear-gradient(135deg, #2563eb, #1d4ed8) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; cursor: pointer; transition: transform 0.12s ease; }
+      .pv-center-pill:active { transform: scale(0.96); }
+      body.dark-theme .pv-center-pill, .dark-theme .pv-center-pill, [data-theme="dark"] .pv-center-pill { background: linear-gradient(135deg, #38bdf8, #0284c7) !important; color: #0f172a !important; box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35); }
+      .pv-center-verb { font-size: 18px; font-weight: 900; letter-spacing: 1.4px; line-height: 1.15; }
+      .pv-center-tr { font-size: 11px; font-weight: 700; opacity: 0.88; line-height: 1.15; }
+      .pv-singles-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; width: 100%; box-sizing: border-box; }
       .pair-card { padding: 10px 10px 11px !important; }
       .pair-grid-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; align-items: stretch; width: 100%; box-sizing: border-box; }
       .pair-side { display: flex; flex-direction: column; min-width: 0; padding: 9px 9px 10px; border-radius: 12px; box-sizing: border-box; }
@@ -472,6 +620,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       body.dark-theme .col-page-btn:hover:not(:disabled), .dark-theme .col-page-btn:hover:not(:disabled), [data-theme="dark"] .col-page-btn:hover:not(:disabled) { border-color: #38bdf8; }
       .col-page-btn.is-active { background: var(--primary-color, #2563eb); border-color: var(--primary-color, #2563eb); color: #ffffff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
       body.dark-theme .col-page-btn.is-active, .dark-theme .col-page-btn.is-active, [data-theme="dark"] .col-page-btn.is-active { background: #38bdf8; border-color: #38bdf8; color: #0f172a; box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35); }
+      .col-page-btn.is-ad-gated:not(.is-active):not(:disabled) { position: relative; background: linear-gradient(135deg, #f59e0b, #ea580c); border-color: #ea580c; color: #ffffff; box-shadow: 0 2px 7px rgba(234, 88, 12, 0.32); }
+      .col-page-btn.is-ad-gated:not(.is-active):not(:disabled)::after { content: '🔒'; position: absolute; top: -5px; right: -4px; font-size: 9.5px; line-height: 1; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
       .col-page-btn:disabled { opacity: 0.3; cursor: default; }
       .col-page-btn.col-page-nav { font-size: 18px; font-weight: 800; }
       .col-page-ellipsis { min-width: 18px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; flex-shrink: 0; user-select: none; }
@@ -484,13 +634,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       </div>
 
       <!-- 50% / 50% Actions Row -->
-      <div class="col-top-actions-row" style="display: grid; grid-template-columns: ${!isMyFavorites ? '1fr 1fr' : '1fr'}; gap: 8px; width: 100%; margin-bottom: 12px; box-sizing: border-box;">
+      <div class="col-top-actions-row" style="display: grid; grid-template-columns: ${(!isMyFavorites && !isPairCol && !isPhrasalCol) ? '1fr 1fr' : '1fr'}; gap: 8px; width: 100%; margin-bottom: 12px; box-sizing: border-box;">
         <button type="button" id="header-set-widget-btn" class="secondary-button ${isWidgetActive ? 'is-active-widget-btn' : ''}" style="width: 100%; min-width: 0; height: 42px; min-height: 42px; font-size: 14px; font-weight: 600; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; cursor: pointer; ${isWidgetActive ? 'border: 1.5px solid #22c55e; color: #16a34a; background: rgba(34, 197, 94, 0.12);' : ''}">
           <span style="font-size: 15px;">${isWidgetActive ? '✓' : '📱'}</span>
           <span>${escapeHtml(t('col_pill_widget') || 'Виджет')}</span>
         </button>
         ${
-          !isMyFavorites
+          (!isMyFavorites && !isPairCol && !isPhrasalCol)
             ? `
           <button type="button" id="header-add-words-btn" class="secondary-button" style="width: 100%; min-width: 0; height: 42px; min-height: 42px; font-size: 14px; font-weight: 600; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; cursor: pointer;">
             <span style="font-size: 15px;">➕</span>
@@ -522,7 +672,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       </div>
 
       <div class="favorites-grid" id="favorites-grid">
-        ${isPairCol ? renderPairCardsHtml() : wordsToRender
+        ${isPairCol ? renderPairCardsHtml() : (isPhrasalCol ? renderPhrasalMindMapsHtml() : wordsToRender
           .map((word) => {
             const isFav = isMyFavorites ? true : favSet.has(String(word.id));
             return `
@@ -555,7 +705,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           </div>
         `;
           })
-          .join('')}
+          .join(''))}
       </div>
       ${paginationHtml}
       ${hasMoreToUnlock ? `
@@ -627,7 +777,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       }
       if (!isProActive()) {
         try {
-          await AdService.showPaginationInterstitial(`collection_${collectionId}`);
+          await AdService.showPaginationInterstitial(`collection_${collectionId}`, targetPage);
         } catch (_) {}
       }
       options._currentPage = targetPage;

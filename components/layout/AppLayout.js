@@ -32,7 +32,7 @@ function getSavedTheme() {
     localStorage.setItem('myduo_theme', 'light');
     return 'light';
   }
-  return saved || 'light';
+  return saved || 'dark';
 }
 
 function applyTheme(theme) {
