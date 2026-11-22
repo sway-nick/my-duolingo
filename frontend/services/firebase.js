@@ -2510,5 +2510,69 @@ export async function getGa4CountryReportFirestore() {
   }
 }
 
+export async function fetchDailyNewsFirestore(countryOrLocale) {
+  try {
+    const raw = String(countryOrLocale || 'US').trim();
+    const cleanId = /^[a-zA-Z]{2}$/.test(raw) ? raw.toUpperCase() : raw.toLowerCase().split(/[-_]/)[0];
+    const url = getFirestoreUrl(`/daily_news/${encodeURIComponent(cleanId)}`);
+    const res = await firestoreFetch(url, { method: 'GET' });
+    if (!res.ok) return null;
+    const doc = await res.json();
+    const f = doc?.fields || {};
+    const rawJson = f.articlesJson?.stringValue;
+    if (!rawJson) return null;
+    const articles = JSON.parse(rawJson);
+    if (!Array.isArray(articles) || articles.length === 0) return null;
+    return {
+      country: f.country?.stringValue || cleanId,
+      locale: f.locale?.stringValue || '',
+      date: f.date?.stringValue || '',
+      generatedAt: f.generatedAt?.timestampValue || f.generatedAt?.stringValue || doc?.updateTime || null,
+      articles,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+export async function reportActiveNewsLocaleFirestore(country, locale) {
+  try {
+    const cleanCountry = String(country || 'US').trim().toUpperCase().slice(0, 2);
+    const cleanLocale = String(locale || 'en').toLowerCase().split(/[-_]/)[0];
+    if (!/^[A-Z]{2}$/.test(cleanCountry) || !/^[a-z]{2}$/.test(cleanLocale)) return false;
+    const pairId = `${cleanCountry}_${cleanLocale}`;
+    const config = getFirebaseConfig();
+    const base = getFirestoreBase();
+    const docPath = `projects/${config.projectId}/databases/(default)/documents/news_active_locales/${encodeURIComponent(pairId)}`;
+    const url = `${base}:commit?key=${encodeURIComponent(config.apiKey)}`;
+    const res = await firestoreFetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        writes: [
+          {
+            update: {
+              name: docPath,
+              fields: {
+                country: { stringValue: cleanCountry },
+                locale: { stringValue: cleanLocale },
+              },
+            },
+            updateTransforms: [
+              {
+                fieldPath: 'lastActiveAt',
+                setToServerValue: 'REQUEST_TIME',
+              },
+            ],
+          },
+        ],
+      }),
+    });
+    return res.ok;
+  } catch (_) {
+    return false;
+  }
+}
+
 
 

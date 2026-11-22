@@ -694,6 +694,11 @@ public class MainActivity extends BridgeActivity {
                     }
 
                     @JavascriptInterface
+                    public boolean speakTextWithRate(final String text, final String langCode, final String utteranceId, final float speechRate) {
+                        return speakText(text, langCode, utteranceId, speechRate);
+                    }
+
+                    @JavascriptInterface
                     public void stopSpeech() {
                         if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
