@@ -656,7 +656,8 @@ test('Collections: IT, Verbs, Adjectives, Phrasal Verbs, Idioms, Tricky Sounds, 
   });
 
   assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for verbs');
-  assert.ok(container.innerHTML.includes('1–10 / 25'), 'Page info must show 1–10 / 25 on page 1');
+  assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'Pagination must not show page info counter under buttons');
+  assert.ok(container.innerHTML.includes('class="col-page-btn is-active"'), 'Page 1 button must be active');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Page 1 must render exactly 10 cards');
 
   // Persistence: simulate user clicking or saving page 2
@@ -670,7 +671,8 @@ test('Collections: IT, Verbs, Adjectives, Phrasal Verbs, Idioms, Tricky Sounds, 
     allWords: sample25Verbs,
     favoriteIds: []
   });
-  assert.ok(container.innerHTML.includes('11–20 / 25'), 'Must automatically restore saved page 2 (11–20 / 25)');
+  assert.ok(container.innerHTML.includes('data-col-page="2"') && container.innerHTML.includes('is-active'), 'Must automatically restore saved page 2');
+  assert.ok(container.innerHTML.includes('word_11'), 'Restored page 2 must render item 11');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Restored page 2 must render 10 cards');
 
   // Page 3 -> exactly 5 items (21 to 25)
@@ -682,7 +684,7 @@ test('Collections: IT, Verbs, Adjectives, Phrasal Verbs, Idioms, Tricky Sounds, 
     _currentPage: 3
   });
 
-  assert.ok(container.innerHTML.includes('21–25 / 25'), 'Page info must show 21–25 / 25 on page 3');
+  assert.ok(container.innerHTML.includes('word_21'), 'Page 3 must render item 21');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 5, 'Page 3 must render remaining 5 cards');
 });
 
@@ -758,7 +760,8 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
   assert.equal((container.innerHTML.match(/class="pair-side pair-side-a"/g) || []).length, 6, 'tricky_sounds renders 6 left halves');
   assert.equal((container.innerHTML.match(/class="pair-side pair-side-b"/g) || []).length, 6, 'tricky_sounds renders 6 right halves');
   assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 12, 'tricky_sounds renders 12 audio buttons (1 per word)');
-  assert.ok(container.innerHTML.includes('1–12 / 100'), 'tricky_sounds shows 1–12 / 100');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'tricky_sounds renders pagination bar');
+  assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'tricky_sounds must not show page info counter');
   assert.ok(!container.innerHTML.includes('class="pair-card-head"'), 'tricky_sounds omits redundant pair header row');
   assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'tricky_sounds renders transcription for each word');
   assert.ok(!container.innerHTML.includes('//'), 'transcriptions must not contain double slashes //');
@@ -771,7 +774,8 @@ test('Pair collections (tricky_sounds & confusing_words): 100 words (50 pairs), 
   });
   assert.equal((container.innerHTML.match(/class="fav-card pair-card"/g) || []).length, 6, 'confusing_words page 1 renders 6 side-by-side pair cards (12 words)');
   assert.equal((container.innerHTML.match(/class="fav-audio-btn pair-audio-btn"/g) || []).length, 12, 'confusing_words renders 12 audio buttons');
-  assert.ok(container.innerHTML.includes('1–12 / 100'), 'confusing_words shows 1–12 / 100');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'confusing_words renders pagination bar');
+  assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'confusing_words must not show page info counter');
   assert.ok(container.innerHTML.includes('class="pair-side-ipa"'), 'confusing_words renders transcription for each word');
   assert.ok(container.innerHTML.includes('class="pair-side-tr"'), 'confusing_words renders translation for each word');
   assert.ok(!container.innerHTML.includes('//'), 'confusing_words transcriptions must not contain double slashes //');
@@ -887,7 +891,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   assert.ok(!container.innerHTML.includes('id="unlock-more-idioms-btn"'), 'Idioms must not render +10 unlock button');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'Page 1 renders 10 idioms');
   assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for idioms');
-  assert.ok(container.innerHTML.includes('1–10 / 150'), 'Pagination info shows 1–10 / 150');
+  assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'Idioms pagination must not show page info counter');
   assert.ok(container.innerHTML.includes('is-ad-gated'), 'Unvisited idiom pages must be marked is-ad-gated for free users');
 
   // Phrasal verbs -> opens directly with 4 mind-map cards (16 verbs) per page & ad-gated orange buttons
@@ -902,7 +906,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   assert.equal((container.innerHTML.match(/class="fav-card pv-map-card"/g) || []).length, 4, 'Free tier page 1 must render 4 phrasal verb mind-map cards');
   assert.equal((container.innerHTML.match(/class="pv-branch-card"/g) || []).length, 16, 'Free tier page 1 must render 16 phrasal verb branches');
   assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for phrasal_verbs');
-  assert.ok(container.innerHTML.includes('1–16 / 240'), 'Pagination info must show 1–16 / 240');
+  assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'Phrasal verbs pagination must not show page info counter');
   assert.ok(container.innerHTML.includes('is-ad-gated'), 'Unvisited phrasal verb pages must be marked is-ad-gated for free users');
 
   // IT collection shows 6 preview cards in free tier + PRO paywall button (cannot be unlocked via ad/localStorage flag)
@@ -931,7 +935,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   assert.ok(container.innerHTML.includes('id="favorites-grid"'), 'Must render normal words grid for it_terms when PRO is active');
   assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'PRO tier page 1 must render 10 it_terms cards with pagination');
   assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for it_terms in PRO');
-  assert.ok(container.innerHTML.includes(`1–10 / ${itWords.length}`), 'Pagination info must show total it_terms count');
+  assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'Pagination must not show page info counter under buttons');
   assert.ok(!container.innerHTML.includes('id="open-it-pro-btn"'), 'Must not render PRO paywall button when PRO is active');
   clearEntitlement();
 });

@@ -401,9 +401,6 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         aria-label="${escapeHtml(nextLabel)}"
       >›</button>
     </div>
-    <div class="col-page-info">
-      ${visibleWords.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleWords.length} · ${currentPage} / ${totalPages}` : ''}
-    </div>
   ` : '';
 
   const heartIconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff" stroke="none" aria-hidden="true" style="flex-shrink: 0;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
@@ -613,7 +610,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       .pair-side-ipa { font-size: 12px; font-weight: 600; color: var(--text-muted, #64748b); margin-bottom: 5px; line-height: 1.2; overflow-wrap: anywhere; }
       .pair-side-tr { font-size: 12.5px; font-weight: 600; color: var(--primary-color, #2563eb); line-height: 1.32; overflow-wrap: anywhere; word-break: break-word; }
       body.dark-theme .pair-side-tr, .dark-theme .pair-side-tr, [data-theme="dark"] .pair-side-tr { color: #38bdf8; }
-      .col-pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; margin-bottom: 6px; flex-wrap: nowrap; }
+      .col-pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; margin-bottom: 14px; flex-wrap: nowrap; }
       .col-page-btn { min-width: 34px; height: 36px; padding: 0 7px; border-radius: 10px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; flex-shrink: 0; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
       .col-page-btn:active:not(:disabled) { transform: scale(0.96); }
       .col-page-btn:hover:not(:disabled) { border-color: var(--primary-color, #2563eb); }

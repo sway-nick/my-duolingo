@@ -233,9 +233,6 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
           aria-label="${escapeHtml(nextLabel)}"
         >›</button>
       </div>
-      <div class="spoken-page-info">
-        ${visibleItems.length > 0 ? `${startIndex + 1}–${endIndex} / ${visibleItems.length} · ${currentPage} / ${totalPages}` : ''}
-      </div>
     ` : '';
 
     let gateBoxHtml = '';
@@ -291,7 +288,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-example-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
         .spoken-example-en { font-size: 13.5px; font-weight: 700; color: var(--text-main, #0f172a); overflow-wrap: anywhere; min-width: 0; }
         .spoken-example-tr { margin-top: 3px; font-size: 12.5px; color: var(--text-muted, #64748b); overflow-wrap: anywhere; }
-        .spoken-pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; margin-bottom: 6px; flex-wrap: nowrap; }
+        .spoken-pagination { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 18px; margin-bottom: 14px; flex-wrap: nowrap; }
         .spoken-page-btn { min-width: 34px; height: 36px; padding: 0 7px; border-radius: 10px; border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.25)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; flex-shrink: 0; transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease; }
         .spoken-page-btn:active:not(:disabled) { transform: scale(0.96); }
         .spoken-page-btn:hover:not(:disabled) { border-color: var(--primary-color, #2563eb); }

@@ -686,7 +686,7 @@ function getStylesHtml() {
         justify-content: center;
         gap: 6px;
         margin-top: 18px;
-        margin-bottom: 6px;
+        margin-bottom: 14px;
         flex-wrap: wrap;
       }
       .mr-page-btn {
@@ -1288,9 +1288,6 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           ${currentPage >= totalPages ? 'disabled' : ''}
           aria-label="${escapeHtml(s.nextBtn || 'Next')}"
         >›</button>
-      </div>
-      <div class="mr-page-info">
-        ${startIndex + 1}–${endIndex} / ${filtered.length}
       </div>
     ` : '';
 
