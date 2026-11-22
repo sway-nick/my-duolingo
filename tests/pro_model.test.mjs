@@ -147,7 +147,7 @@ test('AdService + PRO: interstitials disabled, banner disabled, 3 free daily shi
   }
 });
 
-test('PRO I18N: all 36 locales + pt-br & es-mx have all 20 keys and placeholders', () => {
+test('PRO I18N: all 36 locales + pt-br & es-mx have all 22 keys and placeholders', () => {
   const requiredKeys = [
     'pro_title',
     'pro_badge',
@@ -169,6 +169,8 @@ test('PRO I18N: all 36 locales + pt-br & es-mx have all 20 keys and placeholders
     'pro_shields_left',
     'pro_discount',
     'pro_thanks',
+    'pro_sim_free_on',
+    'pro_sim_free_off',
   ];
 
   const expectedLocales = [...SUPPORTED_LOCALE_CODES, 'pt-br', 'es-mx'];

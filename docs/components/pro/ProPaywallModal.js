@@ -2,6 +2,8 @@ import { ProService } from '../../services/proService.js?v=386.0';
 import { getProStrings } from '../../services/proI18n.js?v=386.0';
 import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
 import { RTL_LOCALES } from '../../config/locales.js?v=386.0';
+import { showToast } from '../layout/AppLayout.js?v=386.0';
+import { isDebugForceFree, setDebugForceFree } from '../../services/proState.js?v=386.0';
 
 function escapeHtml(str) {
   return String(str ?? '')
@@ -66,7 +68,7 @@ export function showProPaywall({ reason = 'settings', wordsNeeded = 0 } = {}) {
       <div class="eb-pro-modal-card" style="width:100%;max-width:420px;background:var(--card-bg,#ffffff);color:var(--text-main,#0f172a);border:1px solid var(--border-color,rgba(148,163,184,0.28));border-radius:20px;padding:22px 20px;box-shadow:0 24px 48px rgba(0,0,0,0.28);position:relative;max-height:90vh;overflow-y:auto;">
         <button type="button" id="eb-pro-close-btn" aria-label="Close" style="position:absolute;top:12px;${isRtl ? 'left' : 'right'}:12px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(148,163,184,0.2);color:var(--text-main,#0f172a);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
 
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div id="eb-pro-modal-header" style="display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;user-select:none;">
           <span style="display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;font-size:12px;letter-spacing:0.6px;">${escapeHtml(s.pro_badge)}</span>
           <h2 style="margin:0;font-size:20px;font-weight:800;line-height:1.25;color:var(--text-main,#0f172a);">${escapeHtml(s.pro_title)}</h2>
         </div>
@@ -122,6 +124,32 @@ export function showProPaywall({ reason = 'settings', wordsNeeded = 0 } = {}) {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) finish('closed');
     });
+
+    const modalHeaderEl = overlay.querySelector('#eb-pro-modal-header');
+    if (modalHeaderEl) {
+      let modalTapCount = 0;
+      let modalTapTimer = null;
+      modalHeaderEl.addEventListener('click', (e) => {
+        modalTapCount++;
+        if (modalTapTimer) clearTimeout(modalTapTimer);
+        modalTapTimer = setTimeout(() => {
+          modalTapCount = 0;
+        }, 2500);
+        if (modalTapCount >= 5) {
+          e.preventDefault();
+          e.stopPropagation();
+          modalTapCount = 0;
+          clearTimeout(modalTapTimer);
+          const nextForceFree = !isDebugForceFree();
+          setDebugForceFree(nextForceFree);
+          try {
+            if (navigator.vibrate) navigator.vibrate(40);
+          } catch (_) {}
+          showToast(nextForceFree ? s.pro_sim_free_on : s.pro_sim_free_off);
+          finish('sim_toggled');
+        }
+      });
+    }
 
     const buyBtn = overlay.querySelector('#eb-pro-buy-btn');
     const restoreBtn = overlay.querySelector('#eb-pro-restore-btn');

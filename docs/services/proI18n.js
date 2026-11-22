@@ -20,7 +20,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Выучи ещё {n} слов в Тесте или открой максимум возможностей с PRO-версией!",
     "pro_shields_left": "PRO-щит ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Спасибо! PRO-версия активна навсегда."
+    "pro_thanks": "Спасибо! PRO-версия активна навсегда.",
+    "pro_sim_free_on": "🛠️ Симуляция бесплатной версии: ВКЛ",
+    "pro_sim_free_off": "⭐ PRO-версия восстановлена"
   },
   "uk": {
     "pro_title": "English Breakfast PRO",
@@ -42,7 +44,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Вивчи ще {n} слів у Тесті або відкрий максимум можливостей із PRO-версією!",
     "pro_shields_left": "PRO-щит ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Дякуємо! PRO-версія активна назавжди."
+    "pro_thanks": "Дякуємо! PRO-версія активна назавжди.",
+    "pro_sim_free_on": "🛠️ Симуляція безкоштовної версії: УВІМК",
+    "pro_sim_free_off": "⭐ PRO-версію відновлено"
   },
   "en": {
     "pro_title": "English Breakfast PRO",
@@ -64,7 +68,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Learn {n} more words in Test or unlock everything with PRO!",
     "pro_shields_left": "PRO Shield ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Thank you! PRO is active forever."
+    "pro_thanks": "Thank you! PRO is active forever.",
+    "pro_sim_free_on": "🛠️ Free mode simulation: ON",
+    "pro_sim_free_off": "⭐ PRO mode restored"
   },
   "de": {
     "pro_title": "English Breakfast PRO",
@@ -86,7 +92,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Lerne noch {n} Wörter im Test oder schalte alles mit PRO frei!",
     "pro_shields_left": "PRO-Schutz ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Vielen Dank! PRO ist für immer aktiv."
+    "pro_thanks": "Vielen Dank! PRO ist für immer aktiv.",
+    "pro_sim_free_on": "🛠️ Gratis-Modus-Simulation: EIN",
+    "pro_sim_free_off": "⭐ PRO-Modus wiederhergestellt"
   },
   "es": {
     "pro_title": "English Breakfast PRO",
@@ -108,7 +116,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "¡Aprende {n} palabras más en Prueba o desbloquea todo con PRO!",
     "pro_shields_left": "Escudo PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "¡Gracias! PRO está activo para siempre."
+    "pro_thanks": "¡Gracias! PRO está activo para siempre.",
+    "pro_sim_free_on": "🛠️ Simulación de versión gratuita: ACTIVADA",
+    "pro_sim_free_off": "⭐ Modo PRO restaurado"
   },
   "es-mx": {
     "pro_title": "English Breakfast PRO",
@@ -130,7 +140,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "¡Aprende {n} palabras más en Prueba o desbloquea todo con PRO!",
     "pro_shields_left": "Escudo PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "¡Gracias! PRO está activo para siempre."
+    "pro_thanks": "¡Gracias! PRO está activo para siempre.",
+    "pro_sim_free_on": "🛠️ Simulación de versión gratuita: ACTIVADA",
+    "pro_sim_free_off": "⭐ Modo PRO restaurado"
   },
   "fr": {
     "pro_title": "English Breakfast PRO",
@@ -152,7 +164,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Apprenez encore {n} mots dans le Test ou débloquez tout avec PRO !",
     "pro_shields_left": "Bouclier PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Merci ! PRO est activé pour toujours."
+    "pro_thanks": "Merci ! PRO est activé pour toujours.",
+    "pro_sim_free_on": "🛠️ Simulation de la version gratuite : ACTIVÉE",
+    "pro_sim_free_off": "⭐ Mode PRO rétabli"
   },
   "pl": {
     "pro_title": "English Breakfast PRO",
@@ -174,7 +188,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Naucz się jeszcze {n} słów w Teście lub odblokuj wszystko z PRO!",
     "pro_shields_left": "Tarcza PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Dziękujemy! PRO jest aktywne na zawsze."
+    "pro_thanks": "Dziękujemy! PRO jest aktywne na zawsze.",
+    "pro_sim_free_on": "🛠️ Symulacja darmowej wersji: WŁĄCZONA",
+    "pro_sim_free_off": "⭐ Przywrócono tryb PRO"
   },
   "tr": {
     "pro_title": "English Breakfast PRO",
@@ -196,7 +212,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Test aşamasında {n} kelime daha öğrenin veya PRO ile her şeyin kilidini açın!",
     "pro_shields_left": "PRO Kalkanı ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Teşekkürler! PRO sonsuza dek aktif."
+    "pro_thanks": "Teşekkürler! PRO sonsuza dek aktif.",
+    "pro_sim_free_on": "🛠️ Ücretsiz sürüm simülasyonu: AÇIK",
+    "pro_sim_free_off": "⭐ PRO modu geri yüklendi"
   },
   "it": {
     "pro_title": "English Breakfast PRO",
@@ -218,7 +236,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Impara altre {n} parole nel Test o sblocca tutto con PRO!",
     "pro_shields_left": "Scudo PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Grazie! PRO è attivo per sempre."
+    "pro_thanks": "Grazie! PRO è attivo per sempre.",
+    "pro_sim_free_on": "🛠️ Simulazione versione gratuita: ATTIVA",
+    "pro_sim_free_off": "⭐ Modalità PRO ripristinata"
   },
   "ro": {
     "pro_title": "English Breakfast PRO",
@@ -240,7 +260,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Învață încă {n} cuvinte la Test sau deblochează totul cu PRO!",
     "pro_shields_left": "Scut PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Mulțumim! PRO este activ pentru totdeauna."
+    "pro_thanks": "Mulțumim! PRO este activ pentru totdeauna.",
+    "pro_sim_free_on": "🛠️ Simulare versiune gratuită: ACTIVATĂ",
+    "pro_sim_free_off": "⭐ Modul PRO restabilit"
   },
   "bg": {
     "pro_title": "English Breakfast PRO",
@@ -262,7 +284,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Научи още {n} думи в Тест или отключи всичко с PRO!",
     "pro_shields_left": "PRO щит ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Благодарим ви! PRO е активен завинаги."
+    "pro_thanks": "Благодарим ви! PRO е активен завинаги.",
+    "pro_sim_free_on": "🛠️ Симулация на безплатна версия: ВКЛ",
+    "pro_sim_free_off": "⭐ PRO режимът е възстановен"
   },
   "hu": {
     "pro_title": "English Breakfast PRO",
@@ -284,7 +308,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Tanulj meg még {n} szót a Tesztben, vagy oldj fel mindent a PRO-val!",
     "pro_shields_left": "PRO pajzs ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Köszönjük! A PRO örökre aktív."
+    "pro_thanks": "Köszönjük! A PRO örökre aktív.",
+    "pro_sim_free_on": "🛠️ Ingyenes verzió szimulációja: BE",
+    "pro_sim_free_off": "⭐ PRO mód visszaállítva"
   },
   "el": {
     "pro_title": "English Breakfast PRO",
@@ -306,7 +332,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Μάθετε {n} ακόμα λέξεις στο Τεστ ή ξεκλειδώστε τα πάντα με το PRO!",
     "pro_shields_left": "Ασπίδα PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Ευχαριστούμε! Το PRO είναι ενεργό για πάντα."
+    "pro_thanks": "Ευχαριστούμε! Το PRO είναι ενεργό για πάντα.",
+    "pro_sim_free_on": "🛠️ Προσομοίωση δωρεάν έκδοσης: ΕΝΕΡΓΗ",
+    "pro_sim_free_off": "⭐ Η λειτουργία PRO αποκαταστάθηκε"
   },
   "da": {
     "pro_title": "English Breakfast PRO",
@@ -328,7 +356,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Lær {n} flere ord i Test, eller lås op for alt med PRO!",
     "pro_shields_left": "PRO-skjold ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Tak! PRO er aktiv for altid."
+    "pro_thanks": "Tak! PRO er aktiv for altid.",
+    "pro_sim_free_on": "🛠️ Simulering af gratis version: TIL",
+    "pro_sim_free_off": "⭐ PRO-tilstand gendannet"
   },
   "lv": {
     "pro_title": "English Breakfast PRO",
@@ -350,7 +380,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Iemācies vēl {n} vārdus Testā vai atbloķē visu ar PRO!",
     "pro_shields_left": "PRO vairogs ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Paldies! PRO versija ir aktīva uz visiem laikiem."
+    "pro_thanks": "Paldies! PRO versija ir aktīva uz visiem laikiem.",
+    "pro_sim_free_on": "🛠️ Bezmaksas versijas simulācija: IESLĒGTA",
+    "pro_sim_free_off": "⭐ PRO režīms atjaunots"
   },
   "lt": {
     "pro_title": "English Breakfast PRO",
@@ -372,7 +404,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Išmokite dar {n} žodžių Teste arba atrakinkite viską su PRO!",
     "pro_shields_left": "PRO skydas ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Ačiū! PRO yra aktyvuota visam laikui."
+    "pro_thanks": "Ačiū! PRO yra aktyvuota visam laikui.",
+    "pro_sim_free_on": "🛠️ Nemokamos versijos simuliacija: ĮJUNGTA",
+    "pro_sim_free_off": "⭐ PRO režimas atkurtas"
   },
   "pt": {
     "pro_title": "English Breakfast PRO",
@@ -394,7 +428,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Aprenda mais {n} palavras no Teste ou desbloqueie tudo com o PRO!",
     "pro_shields_left": "Escudo PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Obrigado! O PRO está ativo para sempre."
+    "pro_thanks": "Obrigado! O PRO está ativo para sempre.",
+    "pro_sim_free_on": "🛠️ Simulação da versão gratuita: ATIVADA",
+    "pro_sim_free_off": "⭐ Modo PRO restaurado"
   },
   "pt-br": {
     "pro_title": "English Breakfast PRO",
@@ -416,7 +452,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Aprenda mais {n} palavras no Teste ou desbloqueie tudo com o PRO!",
     "pro_shields_left": "Escudo PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Obrigado! O PRO está ativo para sempre."
+    "pro_thanks": "Obrigado! O PRO está ativo para sempre.",
+    "pro_sim_free_on": "🛠️ Simulação da versão gratuita: ATIVADA",
+    "pro_sim_free_off": "⭐ Modo PRO restaurado"
   },
   "sk": {
     "pro_title": "English Breakfast PRO",
@@ -438,7 +476,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Nauč sa ešte {n} slov v Teste alebo odomkni všetko s PRO!",
     "pro_shields_left": "PRO štít ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Ďakujeme! PRO verzia je aktívna navždy."
+    "pro_thanks": "Ďakujeme! PRO verzia je aktívna navždy.",
+    "pro_sim_free_on": "🛠️ Simulácia bezplatnej verzie: ZAPNUTÁ",
+    "pro_sim_free_off": "⭐ Režim PRO obnovený"
   },
   "sl": {
     "pro_title": "English Breakfast PRO",
@@ -460,7 +500,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Nauči se še {n} besed v Testu ali odkleni vse s PRO!",
     "pro_shields_left": "PRO ščit ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Hvala! PRO je aktiven za vedno."
+    "pro_thanks": "Hvala! PRO je aktiven za vedno.",
+    "pro_sim_free_on": "🛠️ Simulacija brezplačne različice: VKLOPLJENA",
+    "pro_sim_free_off": "⭐ Način PRO obnovljen"
   },
   "fi": {
     "pro_title": "English Breakfast PRO",
@@ -482,7 +524,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Opi vielä {n} sanaa Testissä tai avaa kaikki PRO-versiolla!",
     "pro_shields_left": "PRO-kilpi ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Kiitos! PRO on aktiivinen ikuisesti."
+    "pro_thanks": "Kiitos! PRO on aktiivinen ikuisesti.",
+    "pro_sim_free_on": "🛠️ Ilmaisversion simulaatio: PÄÄLLÄ",
+    "pro_sim_free_off": "⭐ PRO-tila palautettu"
   },
   "hr": {
     "pro_title": "English Breakfast PRO",
@@ -504,7 +548,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Nauči još {n} riječi u Testu ili otključaj sve uz PRO!",
     "pro_shields_left": "PRO štit ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Hvala vam! PRO je aktivan zauvijek."
+    "pro_thanks": "Hvala vam! PRO je aktivan zauvijek.",
+    "pro_sim_free_on": "🛠️ Simulacija besplatne verzije: UKLJUČENA",
+    "pro_sim_free_off": "⭐ PRO način vraćen"
   },
   "cs": {
     "pro_title": "English Breakfast PRO",
@@ -526,7 +572,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Nauč se ještě {n} slov v Testu nebo odemkni vše s PRO!",
     "pro_shields_left": "PRO štít ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Děkujeme! PRO je aktivní navždy."
+    "pro_thanks": "Děkujeme! PRO je aktivní navždy.",
+    "pro_sim_free_on": "🛠️ Simulace bezplatné verze: ZAPNUTA",
+    "pro_sim_free_off": "⭐ Režim PRO obnoven"
   },
   "sv": {
     "pro_title": "English Breakfast PRO",
@@ -548,7 +596,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Lär dig {n} fler ord i Test eller lås upp allt med PRO!",
     "pro_shields_left": "PRO-sköld ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Tack! PRO är aktivt för alltid."
+    "pro_thanks": "Tack! PRO är aktivt för alltid.",
+    "pro_sim_free_on": "🛠️ Simulering av gratisversion: PÅ",
+    "pro_sim_free_off": "⭐ PRO-läge återställt"
   },
   "et": {
     "pro_title": "English Breakfast PRO",
@@ -570,7 +620,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Õpi Testis veel {n} sõna või ava kõik PRO-ga!",
     "pro_shields_left": "PRO kilp ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Aitäh! PRO on igavesti aktiivne."
+    "pro_thanks": "Aitäh! PRO on igavesti aktiivne.",
+    "pro_sim_free_on": "🛠️ Tasuta versiooni simulatsioon: SEES",
+    "pro_sim_free_off": "⭐ PRO-režiim taastatud"
   },
   "hi": {
     "pro_title": "English Breakfast PRO",
@@ -592,7 +644,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "टेस्ट में {n} और शब्द सीखें या PRO के साथ सब कुछ अनलॉक करें!",
     "pro_shields_left": "PRO शील्ड ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "धन्यवाद! PRO हमेशा के लिए सक्रिय है।"
+    "pro_thanks": "धन्यवाद! PRO हमेशा के लिए सक्रिय है।",
+    "pro_sim_free_on": "🛠️ मुफ़्त संस्करण सिमुलेशन: चालू",
+    "pro_sim_free_off": "⭐ PRO मोड पुनर्स्थापित"
   },
   "bn": {
     "pro_title": "English Breakfast PRO",
@@ -614,7 +668,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "পরীক্ষায় আরও {n}টি শব্দ শিখুন বা PRO দিয়ে সবকিছু আনলক করুন!",
     "pro_shields_left": "PRO শিল্ড ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "ধন্যবাদ! PRO আজীবনের জন্য সক্রিয়।"
+    "pro_thanks": "ধন্যবাদ! PRO আজীবনের জন্য সক্রিয়।",
+    "pro_sim_free_on": "🛠️ ফ্রি সংস্করণ সিমুলেশন: চালু",
+    "pro_sim_free_off": "⭐ PRO মোড পুনরুদ্ধার করা হয়েছে"
   },
   "ar": {
     "pro_title": "English Breakfast PRO",
@@ -636,7 +692,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "تعلم {n} من الكلمات الإضافية في الاختبار أو افتح كل المزايا مع PRO!",
     "pro_shields_left": "درع PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "شكراً لك! PRO مفعل مدى الحياة."
+    "pro_thanks": "شكراً لك! PRO مفعل مدى الحياة.",
+    "pro_sim_free_on": "🛠️ محاكاة الإصدار المجاني: مفعّلة",
+    "pro_sim_free_off": "⭐ تم استعادة وضع PRO"
   },
   "fa": {
     "pro_title": "English Breakfast PRO",
@@ -658,7 +716,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "در بخش تست {n} کلمه دیگر یاد بگیرید یا همه امکانات را با PRO باز کنید!",
     "pro_shields_left": "سپر PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "متشکریم! PRO برای همیشه فعال است."
+    "pro_thanks": "متشکریم! PRO برای همیشه فعال است.",
+    "pro_sim_free_on": "🛠️ شبیه‌سازی نسخه رایگان: روشن",
+    "pro_sim_free_off": "⭐ حالت PRO بازیابی شد"
   },
   "ur": {
     "pro_title": "English Breakfast PRO",
@@ -680,7 +740,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "ٹیسٹ میں مزید {n} الفاظ سیکھیں یا PRO کے ساتھ سب کچھ ان لاک کریں!",
     "pro_shields_left": "PRO شیلڈ ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "شکریہ! PRO ہمیشہ کے لیے فعال ہے۔"
+    "pro_thanks": "شکریہ! PRO ہمیشہ کے لیے فعال ہے۔",
+    "pro_sim_free_on": "🛠️ مفت ورژن سمولیشن: آن",
+    "pro_sim_free_off": "⭐ PRO موڈ بحال ہو گیا"
   },
   "id": {
     "pro_title": "English Breakfast PRO",
@@ -702,7 +764,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Pelajari {n} kata lagi di Ujian atau buka semuanya dengan PRO!",
     "pro_shields_left": "Perisai PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Terima kasih! PRO aktif selamanya."
+    "pro_thanks": "Terima kasih! PRO aktif selamanya.",
+    "pro_sim_free_on": "🛠️ Simulasi versi gratis: AKTIF",
+    "pro_sim_free_off": "⭐ Mode PRO dipulihkan"
   },
   "vi": {
     "pro_title": "English Breakfast PRO",
@@ -724,7 +788,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Học thêm {n} từ trong bài Kiểm tra hoặc mở khóa mọi thứ với PRO!",
     "pro_shields_left": "Khiên PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Cảm ơn bạn! PRO đã được kích hoạt vĩnh viễn."
+    "pro_thanks": "Cảm ơn bạn! PRO đã được kích hoạt vĩnh viễn.",
+    "pro_sim_free_on": "🛠️ Mô phỏng bản miễn phí: BẬT",
+    "pro_sim_free_off": "⭐ Đã khôi phục chế độ PRO"
   },
   "th": {
     "pro_title": "English Breakfast PRO",
@@ -746,7 +812,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "เรียนรู้อีก {n} คำในแบบทดสอบ หรือปลดล็อกทุกอย่างด้วย PRO!",
     "pro_shields_left": "โล่ PRO ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "ขอบคุณ! PRO ใช้งานได้ตลอดชีพ"
+    "pro_thanks": "ขอบคุณ! PRO ใช้งานได้ตลอดชีพ",
+    "pro_sim_free_on": "🛠️ การจำลองเวอร์ชันฟรี: เปิด",
+    "pro_sim_free_off": "⭐ กู้คืนโหมด PRO แล้ว"
   },
   "ko": {
     "pro_title": "English Breakfast PRO",
@@ -768,7 +836,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "테스트에서 {n}개 단어를 더 학습하거나 PRO로 모든 기능을 잠금 해제하세요!",
     "pro_shields_left": "PRO 방패 ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "감사합니다! 평생 PRO가 활성화되었습니다."
+    "pro_thanks": "감사합니다! 평생 PRO가 활성화되었습니다.",
+    "pro_sim_free_on": "🛠️ 무료 버전 시뮬레이션: 켜짐",
+    "pro_sim_free_off": "⭐ PRO 모드 복원됨"
   },
   "ja": {
     "pro_title": "English Breakfast PRO",
@@ -790,7 +860,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "テストであと{n}単語を覚えるか、PROですべてをアンロック！",
     "pro_shields_left": "PROシールド ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "ありがとうございます！PROが永久に有効化されました。"
+    "pro_thanks": "ありがとうございます！PROが永久に有効化されました。",
+    "pro_sim_free_on": "🛠️ 無料版シミュレーション: オン",
+    "pro_sim_free_off": "⭐ PROモードが復元されました"
   },
   "zh": {
     "pro_title": "English Breakfast PRO",
@@ -812,7 +884,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "在测试中再学 {n} 个单词，或升级 PRO 解锁全部特权！",
     "pro_shields_left": "PRO 护盾 ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "感谢支持！PRO 已永久激活。"
+    "pro_thanks": "感谢支持！PRO 已永久激活。",
+    "pro_sim_free_on": "🛠️ 免费版模拟：已开启",
+    "pro_sim_free_off": "⭐ 已恢复 PRO 模式"
   },
   "kk": {
     "pro_title": "English Breakfast PRO",
@@ -834,7 +908,9 @@ export const PRO_I18N = {
     "pro_unlock_learn_or_pro": "Тест бөлімінде тағы {n} сөз үйреніңіз немесе PRO арқылы барлығын ашыңыз!",
     "pro_shields_left": "PRO қорғанысы ({n}/3)",
     "pro_discount": "-{p}%",
-    "pro_thanks": "Рақмет! PRO нұсқасы мәңгіге белсенді."
+    "pro_thanks": "Рақмет! PRO нұсқасы мәңгіге белсенді.",
+    "pro_sim_free_on": "🛠️ Тегін нұсқа симуляциясы: ҚОСУЛЫ",
+    "pro_sim_free_off": "⭐ PRO режимі қалпына келтірілді"
   }
 };
 

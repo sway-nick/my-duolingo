@@ -1,7 +1,7 @@
 import { getUserSettings, saveUserSettings, getWords, getIsoWeekKey } from '../../services/api.js?v=386.0';
 import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=386.0';
 import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
-import { applyTheme, getSavedTheme } from '../layout/AppLayout.js?v=386.0';
+import { applyTheme, getSavedTheme, showToast } from '../layout/AppLayout.js?v=386.0';
 import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isCategoryAudioDownloaded, isVoicePackDownloaded } from '../../services/audioService.js?v=386.0';
 import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=386.0';
 import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=386.0';
@@ -182,7 +182,7 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
         <div class="settings-card" id="settings-pro-section" style="padding: 16px 14px;">
           <div id="settings-pro-header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:${isProNow ? '0' : '10px'};cursor:pointer;user-select:none;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;font-size:11px;">${escapeHtml(sPro.pro_badge)}</span>
+              <span id="settings-pro-badge" style="padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-weight:800;font-size:11px;">${escapeHtml(sPro.pro_badge)}</span>
               <h3 class="settings-card-title" style="margin:0;">${escapeHtml(sPro.pro_title)}</h3>
             </div>
             ${isForceFree ? `<span style="padding:2px 8px;border-radius:999px;background:rgba(239,68,68,0.16);color:#ef4444;font-weight:800;font-size:10.5px;letter-spacing:0.3px;">FREE TEST</span>` : ''}
@@ -934,27 +934,46 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     });
   }
 
-  // Bind PRO section buttons
+  // Bind PRO section buttons & secret 5-tap simulation toggle
+  const triggerProForceFreeToggle = () => {
+    const nextForceFree = !isDebugForceFree();
+    setDebugForceFree(nextForceFree);
+    try {
+      if (navigator.vibrate) navigator.vibrate(40);
+    } catch (_) {}
+    const sProToast = getProStrings(getInterfaceLanguage());
+    showToast(nextForceFree ? sProToast.pro_sim_free_on : sProToast.pro_sim_free_off);
+    renderSettingsView(containerSelector, onUserChange);
+  };
+
   const proHeaderEl = container.querySelector('#settings-pro-header');
   if (proHeaderEl) {
     let proTapCount = 0;
     let proTapTimer = null;
-    proHeaderEl.addEventListener('click', () => {
+    proHeaderEl.addEventListener('click', (e) => {
       proTapCount++;
       if (proTapTimer) clearTimeout(proTapTimer);
       proTapTimer = setTimeout(() => {
         proTapCount = 0;
       }, 2500);
-      if (proTapCount >= 7) {
+      if (proTapCount >= 5) {
+        e.preventDefault();
+        e.stopPropagation();
         proTapCount = 0;
         clearTimeout(proTapTimer);
-        const nextForceFree = !isDebugForceFree();
-        setDebugForceFree(nextForceFree);
-        try {
-          if (navigator.vibrate) navigator.vibrate(40);
-        } catch (_) {}
-        renderSettingsView(containerSelector, onUserChange, allWords);
+        triggerProForceFreeToggle();
       }
+    });
+  }
+
+  if (typeof window !== 'undefined' && !window.__ebSettingsProListener) {
+    window.__ebSettingsProListener = true;
+    window.addEventListener('eb:pro-changed', () => {
+      try {
+        if (window._activeTab === 'settings' || document.querySelector('#settings-pro-section')) {
+          renderSettingsView(containerSelector, onUserChange);
+        }
+      } catch (_) {}
     });
   }
 
