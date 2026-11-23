@@ -20,6 +20,8 @@ import {
   parseRssHeadlines,
   normalizeGeneratedArticles,
   parseForcedCountriesSpec,
+  buildGeminiPrompt,
+  getExistingNewsDoc,
 } from '../scripts/generate_daily_news.mjs';
 
 test('NEWS_I18N covers all 36 supported locales with Finance category and complete UI strings', () => {
@@ -195,4 +197,25 @@ test('getStarterDemoEdition returns 1 Tech + 1 Finance + 1 Positive with multi-l
   assert.equal(ed.articles.length, 3);
   assert.deepEqual(ed.articles.map((a) => a.category), ['tech', 'finance', 'positive']);
   assert.ok(Object.keys(ed.articles[1].glossaries.ru).length > 10);
+});
+
+test('buildGeminiPrompt injects previous day stories into deduplication block', () => {
+  const headlines = [
+    { topic: 'technology', title: 'Fresh Headline 1', sourceName: 'Wire' },
+    { topic: 'business', title: 'Fresh Headline 2', sourceName: 'Wire' },
+  ];
+  const previousArticles = [
+    { title: 'Yesterday Starship Launch Story' },
+    { title: 'Yesterday Grand Theft Auto Debut' },
+  ];
+
+  const promptWithDeduplication = buildGeminiPrompt('MX', ['es'], headlines, previousArticles);
+  assert.ok(promptWithDeduplication.includes('DEDUPLICATION'));
+  assert.ok(promptWithDeduplication.includes('Yesterday Starship Launch Story'));
+  assert.ok(promptWithDeduplication.includes('Yesterday Grand Theft Auto Debut'));
+  assert.ok(promptWithDeduplication.includes('Strictly DO NOT repeat'));
+
+  const promptWithoutPrevious = buildGeminiPrompt('MX', ['es'], headlines, []);
+  assert.ok(!promptWithoutPrevious.includes('DEDUPLICATION'));
+  assert.ok(promptWithoutPrevious.includes('Pick 3 completely fresh and engaging stories.'));
 });

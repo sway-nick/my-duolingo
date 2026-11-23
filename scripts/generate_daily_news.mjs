@@ -308,7 +308,7 @@ export function normalizeGeneratedArticles(rawArticles, targetLocales = ['en']) 
     .filter(Boolean);
 }
 
-async function generateArticlesWithGemini(country, targetLocales, headlines, apiKey) {
+export function buildGeminiPrompt(country, targetLocales, headlines, previousArticles = []) {
   const cfg = COUNTRY_NEWS_CONFIG[country] || { name: country };
   const headlinesText = headlines
     .slice(0, 21)
@@ -319,21 +319,42 @@ async function generateArticlesWithGemini(country, targetLocales, headlines, api
     .map((loc) => `"${loc}": ${LOCALE_LANGUAGE_NAMES[loc] || loc}`)
     .join(', ');
 
-  const prompt = [
+  const previousTitles = (previousArticles || [])
+    .map((a) => String(a?.title || '').trim())
+    .filter(Boolean);
+
+  const prevBlock = previousTitles.length > 0
+    ? [
+        '',
+        `IMPORTANT - DEDUPLICATION (PREVIOUS STORIES TO EXCLUDE):`,
+        `The following stories were ALREADY featured in yesterday's edition for ${country}. Strictly DO NOT repeat or cover the same events, companies, or topics:`,
+        ...previousTitles.map((t, idx) => `  ${idx + 1}. "${t}"`),
+      ].join('\n')
+    : '';
+
+  return [
     `You are an editor for the English learning app "English Breakfast".`,
     `Below are today's regional news headlines for ${cfg.name} (${country}):`,
     headlinesText,
+    prevBlock,
     '',
     'Task:',
     '1. Strictly EXCLUDE politics, wars, elections, government conflicts, crime, violence, disasters, and panic.',
-    '2. Pick EXACTLY 3 stories: 1 top Technology ("tech"), 1 top Finance/Business ("finance" — neutral/constructive company, market, startup, or economy news), and 1 top Positive/Science ("positive").',
-    '3. For each story, write a short, engaging original digest in natural learner-friendly English (A2–B1 level, 2 short paragraphs, 75–115 words total). Do NOT copy full copyrighted articles.',
-    `4. For each story, include a "glossaries" object containing contextual word-by-word translations for these active interface languages: { ${langSpec} }. For each language, translate ~20–30 non-trivial lowercase English words used in that story's title and paragraphs.`,
-    '5. Include "sourceName" (just the publication name as plain text, NO URLs).',
+    previousTitles.length > 0
+      ? '2. Strictly DO NOT repeat or cover the same events/stories featured yesterday (listed above). Pick 3 COMPLETELY FRESH stories.'
+      : '2. Pick 3 completely fresh and engaging stories.',
+    '3. Pick EXACTLY 3 stories: 1 top Technology ("tech"), 1 top Finance/Business ("finance" — neutral/constructive company, market, startup, or economy news), and 1 top Positive/Science ("positive").',
+    '4. For each story, write a short, engaging original digest in natural learner-friendly English (A2–B1 level, 2 short paragraphs, 75–115 words total). Do NOT copy full copyrighted articles.',
+    `5. For each story, include a "glossaries" object containing contextual word-by-word translations for these active interface languages: { ${langSpec} }. For each language, translate ~20–30 non-trivial lowercase English words used in that story's title and paragraphs.`,
+    '6. Include "sourceName" (just the publication name as plain text, NO URLs).',
     '',
     'Return ONLY valid JSON matching this exact schema:',
     '{ "articles": [ { "category": "tech"|"finance"|"positive", "title": "...", "paragraphs": ["...", "..."], "sourceName": "...", "glossaries": { "ru": { "word": "translation" } } } ] }',
-  ].join('\n');
+  ].filter(Boolean).join('\n');
+}
+
+async function generateArticlesWithGemini(country, targetLocales, headlines, apiKey, previousArticles = []) {
+  const prompt = buildGeminiPrompt(country, targetLocales, headlines, previousArticles);
 
   let lastErr = null;
   for (const model of GEMINI_MODELS) {
@@ -446,14 +467,25 @@ async function fetchActiveCountryLocalesFromFirestore(projectId, accessToken) {
   return grouped;
 }
 
-async function getExistingNewsDate(projectId, accessToken, country) {
+export async function getExistingNewsDoc(projectId, accessToken, country) {
   const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/databases/(default)/documents/daily_news/${encodeURIComponent(country)}`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!res.ok) return null;
   const doc = await res.json();
-  return doc?.fields?.date?.stringValue || null;
+  const date = doc?.fields?.date?.stringValue || null;
+  let articles = [];
+  try {
+    const raw = doc?.fields?.articlesJson?.stringValue || '[]';
+    articles = JSON.parse(raw);
+  } catch (_) {}
+  return { date, articles };
+}
+
+export async function getExistingNewsDate(projectId, accessToken, country) {
+  const doc = await getExistingNewsDoc(projectId, accessToken, country);
+  return doc?.date || null;
 }
 
 async function writeDailyNewsToFirestore(projectId, accessToken, country, dateKey, articles) {
@@ -584,12 +616,20 @@ async function main() {
       continue;
     }
 
-    if (!dryRun && !isForced) {
-      const existingDate = await getExistingNewsDate(projectId, accessToken, country);
-      if (existingDate === localTime.dateKey) {
+    let previousArticles = [];
+    if (!dryRun && accessToken) {
+      const existingDoc = await getExistingNewsDoc(projectId, accessToken, country);
+      if (!isForced && existingDoc?.date === localTime.dateKey) {
         console.log(`[${country}] Already generated for ${localTime.dateKey}, skipping.`);
         continue;
       }
+      if (Array.isArray(existingDoc?.articles)) {
+        previousArticles = existingDoc.articles;
+      }
+    }
+
+    if (previousArticles.length > 0) {
+      console.log(`[${country}] Found ${previousArticles.length} previous stories for deduplication.`);
     }
 
     console.log(`[${country}] Fetching regional RSS (Tech + Business + Science)...`);
@@ -600,7 +640,7 @@ async function main() {
     }
 
     console.log(`[${country}] Generating 3 English stories + glossaries (${targetLocales.join(', ')}) via Gemini...`);
-    const articles = await generateArticlesWithGemini(country, targetLocales, headlines, apiKey);
+    const articles = await generateArticlesWithGemini(country, targetLocales, headlines, apiKey, previousArticles);
 
     if (dryRun) {
       console.log(`[${country}] DRY RUN (${localTime.dateKey}):`, JSON.stringify(articles, null, 2));
