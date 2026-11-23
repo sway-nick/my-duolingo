@@ -69,6 +69,19 @@ export const LOCALE_LANGUAGE_NAMES = {
   vi: 'Vietnamese',
 };
 
+// Baseline active countries (core markets + active ad campaign regions: Mexico, Colombia & LATAM) generated daily
+export const DEFAULT_ACTIVE_COUNTRIES = {
+  US: ['en'],
+  UA: ['uk', 'ru'],
+  KZ: ['ru', 'kk'],
+  MX: ['es'],
+  CO: ['es'],
+  AR: ['es'],
+  CL: ['es'],
+  PE: ['es'],
+  BR: ['pt'],
+};
+
 // ISO-2 Country -> Regional Google News RSS parameters & local timezone offset (hours)
 export const COUNTRY_NEWS_CONFIG = {
   AE: { hl: 'ar', gl: 'AE', ceid: 'AE:ar', tz: 4, name: 'United Arab Emirates' },
@@ -84,7 +97,9 @@ export const COUNTRY_NEWS_CONFIG = {
   BY: { hl: 'ru', gl: 'BY', ceid: 'BY:ru', tz: 3, name: 'Belarus' },
   CA: { hl: 'en-CA', gl: 'CA', ceid: 'CA:en', tz: -5, name: 'Canada' },
   CH: { hl: 'de', gl: 'CH', ceid: 'CH:de', tz: 1, name: 'Switzerland' },
+  CL: { hl: 'es-419', gl: 'CL', ceid: 'CL:es-419', tz: -3, name: 'Chile' },
   CN: { hl: 'zh-CN', gl: 'CN', ceid: 'CN:zh-Hans', tz: 8, name: 'China' },
+  CO: { hl: 'es-419', gl: 'CO', ceid: 'CO:es-419', tz: -5, name: 'Colombia' },
   CZ: { hl: 'cs', gl: 'CZ', ceid: 'CZ:cs', tz: 1, name: 'Czechia' },
   DE: { hl: 'de', gl: 'DE', ceid: 'DE:de', tz: 1, name: 'Germany' },
   DK: { hl: 'da', gl: 'DK', ceid: 'DK:da', tz: 1, name: 'Denmark' },
@@ -118,6 +133,7 @@ export const COUNTRY_NEWS_CONFIG = {
   MD: { hl: 'ro', gl: 'MD', ceid: 'MD:ro', tz: 2, name: 'Moldova' },
   MX: { hl: 'es-419', gl: 'MX', ceid: 'MX:es-419', tz: -6, name: 'Mexico' },
   NL: { hl: 'nl', gl: 'NL', ceid: 'NL:nl', tz: 1, name: 'Netherlands' },
+  PE: { hl: 'es-419', gl: 'PE', ceid: 'PE:es-419', tz: -5, name: 'Peru' },
   PK: { hl: 'ur', gl: 'PK', ceid: 'PK:ur', tz: 5, name: 'Pakistan' },
   PL: { hl: 'pl', gl: 'PL', ceid: 'PL:pl', tz: 1, name: 'Poland' },
   PT: { hl: 'pt-PT', gl: 'PT', ceid: 'PT:pt-150', tz: 0, name: 'Portugal' },
@@ -406,7 +422,10 @@ async function getGoogleAccessToken(serviceAccount) {
  */
 async function fetchActiveCountryLocalesFromFirestore(projectId, accessToken) {
   const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/databases/(default)/documents/news_active_locales?pageSize=200`;
-  const grouped = new Map([['US', new Set(['en'])]]);
+  const grouped = new Map();
+  for (const [c, langs] of Object.entries(DEFAULT_ACTIVE_COUNTRIES)) {
+    grouped.set(c, new Set(langs));
+  }
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -474,7 +493,7 @@ async function cleanupStaleNewsDocs(projectId, accessToken, activeCountriesSet) 
       for (const doc of data?.documents || []) {
         const docName = String(doc?.name || '');
         const docId = docName.split('/').pop();
-        if (!docId || docId === 'US' || docId === 'US_en') continue;
+        if (!docId || DEFAULT_ACTIVE_COUNTRIES[docId] || DEFAULT_ACTIVE_COUNTRIES[docId.split('_')[0]]) continue;
         const country = collection === 'daily_news' ? docId : docId.split('_')[0];
         if (activeCountriesSet.has(country) && collection === 'daily_news') continue;
         const ts =
@@ -544,7 +563,7 @@ async function main() {
       ? forcedMap
       : accessToken
         ? await fetchActiveCountryLocalesFromFirestore(projectId, accessToken)
-        : new Map([['US', new Set(['en'])]]);
+        : new Map(Object.entries(DEFAULT_ACTIVE_COUNTRIES).map(([c, ls]) => [c, new Set(ls)]));
 
   console.log(
     'Candidate active countries:',

@@ -13,6 +13,7 @@ import {
 import {
   LOCALE_LANGUAGE_NAMES,
   COUNTRY_NEWS_CONFIG,
+  DEFAULT_ACTIVE_COUNTRIES,
   isMorningWindowForCountry,
   isEligibleGenerationTimeForCountry,
   getLocalTimeForOffset,
@@ -42,6 +43,25 @@ test('LOCALE_LANGUAGE_NAMES covers all 36 supported locales', () => {
   for (const code of SUPPORTED_LOCALE_CODES) {
     assert.ok(LOCALE_LANGUAGE_NAMES[code], `Missing language name for "${code}"`);
   }
+});
+
+test('DEFAULT_ACTIVE_COUNTRIES covers core markets and active ad campaigns (Mexico, Colombia, LATAM)', () => {
+  const adCountries = ['MX', 'CO', 'AR', 'CL', 'PE', 'BR', 'UA', 'KZ', 'US'];
+  for (const c of adCountries) {
+    assert.ok(DEFAULT_ACTIVE_COUNTRIES[c], `Missing ${c} in DEFAULT_ACTIVE_COUNTRIES`);
+    assert.ok(COUNTRY_NEWS_CONFIG[c], `Missing ${c} in COUNTRY_NEWS_CONFIG`);
+    assert.ok(COUNTRY_NEWS_CONFIG[c].hl, `Missing hl for ${c}`);
+    assert.ok(COUNTRY_NEWS_CONFIG[c].gl, `Missing gl for ${c}`);
+    assert.ok(COUNTRY_NEWS_CONFIG[c].ceid, `Missing ceid for ${c}`);
+    assert.ok(typeof COUNTRY_NEWS_CONFIG[c].tz === 'number', `Missing tz for ${c}`);
+  }
+  // LATAM timezone detection
+  assert.equal(detectUserNewsCountry('es', { timeZone: 'America/Bogota' }), 'CO');
+  assert.equal(detectUserNewsCountry('es', { timeZone: 'America/Mexico_City' }), 'MX');
+  assert.equal(detectUserNewsCountry('es', { timeZone: 'America/Santiago' }), 'CL');
+  assert.equal(detectUserNewsCountry('es', { timeZone: 'America/Lima' }), 'PE');
+  assert.equal(detectUserNewsCountry('es', { timeZone: 'America/Argentina/Buenos_Aires' }), 'AR');
+  assert.equal(detectUserNewsCountry('pt', { timeZone: 'America/Sao_Paulo' }), 'BR');
 });
 
 test('detectUserNewsCountry separates country (by timezone) from interface language', () => {
