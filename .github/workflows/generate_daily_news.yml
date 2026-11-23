@@ -2,9 +2,10 @@ name: Generate Daily News (Active PRO Regions)
 
 on:
   schedule:
-    # Runs every hour at :05 UTC and generates news only for active PRO countries
-    # where local time is 06:00–07:59 AM and today's edition does not exist yet.
-    - cron: '5 * * * *'
+    # Runs hourly (at :17 to bypass peak queue delays on GitHub Actions).
+    # Generates news for active PRO countries from 06:00 AM local time onwards
+    # whenever today's edition does not exist yet.
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       force_countries:

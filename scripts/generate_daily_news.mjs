@@ -6,7 +6,8 @@
  * (e.g. ru, uk, kk, de, en).
  *
  * For each active COUNTRY (recorded in Firestore `news_active_locales/{COUNTRY}_{locale}` within 14 days):
- *   - Runs only during 06:00–07:59 local time of that country (unless forced via FORCE_COUNTRIES / --countries)
+ *   - Runs starting at 06:00 AM local time of that country whenever today's edition does not exist yet
+ *     (or forced via FORCE_COUNTRIES / --countries)
  *   - Fetches Google News RSS for that country (TECHNOLOGY, BUSINESS, SCIENCE)
  *   - Makes 1 Gemini API call per country to pick 1 top Tech + 1 top Finance + 1 top Positive/Science story
  *     (strictly excluding politics, wars, crime, disasters), write learner-friendly English digests,
@@ -150,6 +151,13 @@ export function isMorningWindowForCountry(country, now = new Date()) {
   const cfg = COUNTRY_NEWS_CONFIG[country] || COUNTRY_NEWS_CONFIG.US;
   const { hour } = getLocalTimeForOffset(cfg.tz, now);
   return hour === 6 || hour === 7;
+}
+
+export function isEligibleGenerationTimeForCountry(country, now = new Date()) {
+  const cfg = COUNTRY_NEWS_CONFIG[country] || COUNTRY_NEWS_CONFIG.US;
+  const { hour } = getLocalTimeForOffset(cfg.tz, now);
+  // Eligible starting from 06:00 AM local time throughout the day if today's edition is missing
+  return hour >= 6;
 }
 
 function decodeXmlEntities(str) {
@@ -552,8 +560,8 @@ async function main() {
     const isForced = forcedMap.has(country) || forceAll;
     const targetLocales = Array.from(localesSet).slice(0, 4);
 
-    if (!isForced && !isMorningWindowForCountry(country)) {
-      console.log(`[${country}] Skipping — local hour is ${localTime.hour}:00 (target 06:00–07:59).`);
+    if (!isForced && !isEligibleGenerationTimeForCountry(country)) {
+      console.log(`[${country}] Skipping — local hour is ${localTime.hour}:00 (waiting for >= 06:00 AM).`);
       continue;
     }
 
