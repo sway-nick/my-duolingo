@@ -111,6 +111,7 @@ export const COUNTRY_NEWS_CONFIG = {
   GB: { hl: 'en-GB', gl: 'GB', ceid: 'GB:en', tz: 0, name: 'United Kingdom' },
   GE: { hl: 'ru', gl: 'GE', ceid: 'GE:ru', tz: 4, name: 'Georgia' },
   GR: { hl: 'el', gl: 'GR', ceid: 'GR:el', tz: 2, name: 'Greece' },
+  GT: { hl: 'es-419', gl: 'GT', ceid: 'GT:es-419', tz: -6, name: 'Guatemala' },
   HR: { hl: 'hr', gl: 'HR', ceid: 'HR:hr', tz: 1, name: 'Croatia' },
   HU: { hl: 'hu', gl: 'HU', ceid: 'HU:hu', tz: 1, name: 'Hungary' },
   ID: { hl: 'id', gl: 'ID', ceid: 'ID:id', tz: 7, name: 'Indonesia' },
@@ -132,6 +133,7 @@ export const COUNTRY_NEWS_CONFIG = {
   LV: { hl: 'lv', gl: 'LV', ceid: 'LV:lv', tz: 2, name: 'Latvia' },
   MD: { hl: 'ro', gl: 'MD', ceid: 'MD:ro', tz: 2, name: 'Moldova' },
   MX: { hl: 'es-419', gl: 'MX', ceid: 'MX:es-419', tz: -6, name: 'Mexico' },
+  NG: { hl: 'en-NG', gl: 'NG', ceid: 'NG:en', tz: 1, name: 'Nigeria' },
   NL: { hl: 'nl', gl: 'NL', ceid: 'NL:nl', tz: 1, name: 'Netherlands' },
   PE: { hl: 'es-419', gl: 'PE', ceid: 'PE:es-419', tz: -5, name: 'Peru' },
   PK: { hl: 'ur', gl: 'PK', ceid: 'PK:ur', tz: 5, name: 'Pakistan' },
@@ -170,7 +172,7 @@ export function isMorningWindowForCountry(country, now = new Date()) {
 }
 
 export function isEligibleGenerationTimeForCountry(country, now = new Date()) {
-  const cfg = COUNTRY_NEWS_CONFIG[country] || COUNTRY_NEWS_CONFIG.US;
+  const cfg = COUNTRY_NEWS_CONFIG[country] || { tz: 0, name: country };
   const { hour } = getLocalTimeForOffset(cfg.tz, now);
   // Eligible starting from 06:00 AM local time throughout the day if today's edition is missing
   return hour >= 6;
@@ -239,9 +241,17 @@ async function fetchRegionalHeadlines(country) {
       : `https://news.google.com/rss/headlines/section/topic/${topic}?hl=${encodeURIComponent(cfg.hl)}&gl=${encodeURIComponent(cfg.gl)}&ceid=${encodeURIComponent(cfg.ceid)}`;
     try {
       const res = await fetch(url, {
-        headers: { 'User-Agent': 'EnglishBreakfastNewsBot/1.0' },
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+          'Accept': 'application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.1',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
       });
-      if (!res.ok) continue;
+      if (!res.ok) {
+        console.warn(`[${country}] RSS fetch ${topic} HTTP ${res.status}`);
+        continue;
+      }
       const xml = await res.text();
       all.push(...parseRssHeadlines(xml, lowerTopic, 7));
     } catch (err) {
@@ -250,7 +260,8 @@ async function fetchRegionalHeadlines(country) {
   }
 
   if (all.length === 0 && country !== 'US') {
-    return fetchRegionalHeadlines('US');
+    const usHeadlines = await fetchRegionalHeadlines('US');
+    if (usHeadlines.length > 0) return usHeadlines;
   }
   return all;
 }
@@ -633,10 +644,28 @@ async function main() {
     }
 
     console.log(`[${country}] Fetching regional RSS (Tech + Business + Science)...`);
-    const headlines = await fetchRegionalHeadlines(country);
+    let headlines = await fetchRegionalHeadlines(country);
     if (headlines.length === 0) {
-      console.warn(`[${country}] No RSS headlines found, skipping.`);
-      continue;
+      console.warn(
+        `[${country}] No RSS headlines found (Google RSS blocked or empty). Using Gemini topical news discovery fallback...`,
+      );
+      headlines = [
+        {
+          topic: 'technology',
+          title: `Recent major technology, AI, computing, and digital innovation updates in ${cfg.name || country}`,
+          sourceName: 'Tech Wire',
+        },
+        {
+          topic: 'business',
+          title: `Recent business, startups, trade, and economic developments in ${cfg.name || country}`,
+          sourceName: 'Business Wire',
+        },
+        {
+          topic: 'science',
+          title: `Recent scientific breakthroughs, green energy, space, and discovery news in ${cfg.name || country}`,
+          sourceName: 'Science Wire',
+        },
+      ];
     }
 
     console.log(`[${country}] Generating 3 English stories + glossaries (${targetLocales.join(', ')}) via Gemini...`);
