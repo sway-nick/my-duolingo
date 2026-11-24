@@ -74,7 +74,7 @@
         try {
           var t = localStorage.getItem('myduo_theme') || 'dark';
           var isWide = typeof window !== 'undefined' && window.innerWidth > 680;
-          var initBg = t === 'dark' ? (isWide ? '#090d16' : '#0f172a') : (isWide ? '#e2e8f0' : '#f8fafc');
+          var initBg = t === 'dark' ? (isWide ? '#09131d' : '#0f1c2a') : (isWide ? '#eaf3fc' : '#f8fbff');
           if (t === 'dark') {
             document.documentElement.classList.add('dark-theme');
           }
@@ -142,11 +142,12 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="EnglishBreakfast" />
     <link rel="manifest" href="./site.webmanifest" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#0f1c2a" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./assets/css/main.css?v=386.0" />
+    <link rel="stylesheet" href="./assets/css/arctic-glass.css?v=386.0" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
@@ -244,6 +245,7 @@
       import { showProPaywall } from './components/pro/ProPaywallModal.js?v=386.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
       import { recordSiteVisitFirestore } from './services/firebase.js?v=386.0';
+      import { isWeb100WordsLimitReached, showWebPlayStoreFunnelModal, renderWebLimitCard, incrementWebTrainedCount } from './components/modals/WebPlayStoreFunnelModal.js?v=386.0';
 
       window.showMilestoneStoryModal = showMilestoneStoryModal;
       window.showMilestoneUnlockedModal = showMilestoneUnlockedModal;
@@ -692,6 +694,13 @@
         preloadNextWotdVideo();
         const content = document.querySelector('#app-content');
         if (!content) return;
+
+        // 0. Check if Web 100-words funnel limit has been reached
+        if (isWeb100WordsLimitReached()) {
+          renderWebLimitCard(content);
+          showWebPlayStoreFunnelModal();
+          return;
+        }
 
         // Check if Guest limit (100 words) has been reached
         if (isGuestLimitReached()) {
@@ -2267,7 +2276,14 @@
           },
           onNext: (opts = {}) => {
             incrementGuestTrainingCount();
+            incrementWebTrainedCount();
             updateHeaderUser();
+
+            if (isWeb100WordsLimitReached()) {
+              showWebPlayStoreFunnelModal();
+              renderTrainingTab();
+              return;
+            }
 
             window._priorityBlocksWordId = (opts && opts.triggerBlocksWordId) ? opts.triggerBlocksWordId : null;
 
