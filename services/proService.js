@@ -305,6 +305,7 @@ class ProServiceImpl {
         });
         if (typeof window !== 'undefined' && window.trackEvent) {
           window.trackEvent('pro_purchase_success');
+          window.trackEvent('in_app_purchase', { product_id: PRO_PRODUCT_ID, value: 19.6, currency: 'USD' });
         }
         return { status: 'purchased' };
       }

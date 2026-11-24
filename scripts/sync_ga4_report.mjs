@@ -348,6 +348,57 @@ async function fetchPeriodData(propertyId, accessToken, dateRange, allTimeMap) {
     console.warn(`[GA4] app_remove report failed for ${dateRange.startDate}..${dateRange.endDate}:`, err.message);
   }
 
+  // 4. PRO Purchases direct event check (pro_purchase_success, in_app_purchase, or purchase)
+  try {
+    const proEventReport = await runGa4Report(propertyId, accessToken, {
+      dateRanges: [dateRange],
+      dimensions: [{ name: 'countryId' }],
+      metrics: [{ name: 'eventCount' }],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'eventName',
+          inListFilter: {
+            values: ['pro_purchase_success', 'in_app_purchase', 'purchase'],
+          },
+        },
+      },
+      limit: '250',
+    });
+    for (const row of proEventReport.rows || []) {
+      const code = normalizeCountryCode(row.dimensionValues?.[0]?.value, '');
+      const count = Number(row.metricValues?.[0]?.value || 0);
+      const entry = ensureCountryEntry(byCountry, code, '');
+      entry.proPurchases = Math.max(entry.proPurchases, count);
+    }
+  } catch (err) {
+    console.warn(
+      `[GA4] pro purchases inListFilter report failed for ${dateRange.startDate}..${dateRange.endDate}:`,
+      err.message,
+    );
+    try {
+      const fallbackReport = await runGa4Report(propertyId, accessToken, {
+        dateRanges: [dateRange],
+        dimensions: [{ name: 'countryId' }],
+        metrics: [{ name: 'eventCount' }],
+        dimensionFilter: {
+          filter: {
+            fieldName: 'eventName',
+            stringFilter: { matchType: 'EXACT', value: 'pro_purchase_success' },
+          },
+        },
+        limit: '250',
+      });
+      for (const row of fallbackReport.rows || []) {
+        const code = normalizeCountryCode(row.dimensionValues?.[0]?.value, '');
+        const count = Number(row.metricValues?.[0]?.value || 0);
+        const entry = ensureCountryEntry(byCountry, code, '');
+        entry.proPurchases = Math.max(entry.proPurchases, count);
+      }
+    } catch (fallbackErr) {
+      console.warn(`[GA4] pro purchases fallback report also failed:`, fallbackErr.message);
+    }
+  }
+
   // Compute totals across all countries
   const totals = {
     totalUsers: 0,
