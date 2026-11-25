@@ -172,10 +172,8 @@ export function isMorningWindowForCountry(country, now = new Date()) {
 }
 
 export function isEligibleGenerationTimeForCountry(country, now = new Date()) {
-  const cfg = COUNTRY_NEWS_CONFIG[country] || { tz: 0, name: country };
-  const { hour } = getLocalTimeForOffset(cfg.tz, now);
-  // Eligible starting from 06:00 AM local time throughout the day if today's edition is missing
-  return hour >= 6;
+  // Global single run: all active countries are eligible
+  return true;
 }
 
 function decodeXmlEntities(str) {

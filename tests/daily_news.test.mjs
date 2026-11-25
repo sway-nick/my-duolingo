@@ -139,13 +139,11 @@ test('isMorningWindowForCountry triggers only during 06:00–07:59 local time', 
   assert.equal(getLocalTimeForOffset(5.5, utc0100).hour, 6);
 });
 
-test('isEligibleGenerationTimeForCountry allows generation from 06:00 AM onwards throughout the day', () => {
-  // 01:30 UTC -> KZ (UTC+5) is 06:30 (true, >= 6), UA (UTC+2) is 03:30 (false, < 6)
+test('isEligibleGenerationTimeForCountry allows generation globally', () => {
   const utc0130 = new Date('2026-11-22T01:30:00Z');
   assert.equal(isEligibleGenerationTimeForCountry('KZ', utc0130), true);
-  assert.equal(isEligibleGenerationTimeForCountry('UA', utc0130), false);
+  assert.equal(isEligibleGenerationTimeForCountry('UA', utc0130), true);
 
-  // 07:30 UTC -> UA (UTC+2) is 09:30 (true, >= 6, recovers even if morning window was missed)
   const utc0730 = new Date('2026-11-22T07:30:00Z');
   assert.equal(isEligibleGenerationTimeForCountry('UA', utc0730), true);
   assert.equal(isMorningWindowForCountry('UA', utc0730), false);
