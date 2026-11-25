@@ -147,7 +147,18 @@ export const COUNTRY_NEWS_CONFIG = {
   SK: { hl: 'sk', gl: 'SK', ceid: 'SK:sk', tz: 1, name: 'Slovakia' },
   TH: { hl: 'th', gl: 'TH', ceid: 'TH:th', tz: 7, name: 'Thailand' },
   TR: { hl: 'tr', gl: 'TR', ceid: 'TR:tr', tz: 3, name: 'Turkey' },
-  UA: { hl: 'uk', gl: 'UA', ceid: 'UA:uk', tz: 2, name: 'Ukraine' },
+  UA: {
+    hl: 'uk',
+    gl: 'UA',
+    ceid: 'UA:uk',
+    tz: 2,
+    name: 'Ukraine',
+    searchTopics: {
+      technology: 'Україна технології гаджети "штучний інтелект" інновації стартап -війна -дрон -дрони -зброя -ракет -обстріл -удар -росія -рф -військ -путін -вибух when:3d',
+      business: 'Україна бізнес інвестиції стартап економіка ринки -війна -зброя -санкції -обстріл -удар -руйнування when:3d',
+      science: 'Україна наука відкриття космос екологія медицина -війна -зброя -дрон when:3d',
+    },
+  },
   US: { hl: 'en-US', gl: 'US', ceid: 'US:en', tz: -5, name: 'United States' },
   UZ: { hl: 'ru', gl: 'UZ', ceid: 'UZ:ru', tz: 5, name: 'Uzbekistan' },
   VN: { hl: 'vi', gl: 'VN', ceid: 'VN:vi', tz: 7, name: 'Vietnam' },
@@ -174,6 +185,34 @@ export function isMorningWindowForCountry(country, now = new Date()) {
 export function isEligibleGenerationTimeForCountry(country, now = new Date()) {
   // Global single run: all active countries are eligible
   return true;
+}
+
+// Multilingual regex strictly matching military, weapons, war, drones, attacks, casualties, and politics
+export const WAR_AND_POLITICS_STOPWORDS_REGEX = new RegExp(
+  '\\b(' +
+  // English
+  'drone|drones|uav|uavs|missile|missiles|rocket|rockets|war|warfare|military|militarism|militant|' +
+  'weapon|weapons|weaponry|explosive|explosives|bomb|bombs|bombing|ammunition|ammo|artillery|' +
+  'shelling|airfield|tank|tanks|armored|armoured|warship|warships|battleship|corvette|submarine|torpedo|' +
+  'gun|guns|pistol|pistols|rifle|rifles|firearm|firearms|shooting|shooter|casualt|casualties|' +
+  'troops|soldier|soldiers|army|armies|combat|battlefield|frontline|invasion|sanction|sanctions|' +
+  'pentagon|nato|shahed' +
+  ')\\b|(' +
+  // Ukrainian & Russian stems (matches prefix/suffix inflections)
+  'дрон|дрони|дронів|дрона|бпла|безпілотник|безпилотник|' +
+  'війн|войн|воєнн|военн|військ|войск|збро|оружи|вооружен|' +
+  'ракет|вибух|взрыв|вибухівк|взрывчатк|снаряд|артилер|боєприпас|боеприпас|бомб|' +
+  'танк|танки|бронетехнік|бронетехник|корабел|корабл|корвет|підводн|подводн|субмарин|' +
+  'пістолет|пистолет|гвинтівк|винтовк|автомат|стрілянин|стрельб|поранен|ранен|загибл|погиб|жертв|' +
+  'обстріл|обстрел|удар|атака|атакув|штурм|фронт|мобілізац|мобилизац|' +
+  'санкці|санкци|нато|nato|пентагон|міноборон|миноборон|генштаб|шахед|шахід' +
+  ')',
+  'i'
+);
+
+export function containsWarOrPoliticsContent(text) {
+  if (!text || typeof text !== 'string') return false;
+  return WAR_AND_POLITICS_STOPWORDS_REGEX.test(text);
 }
 
 function decodeXmlEntities(str) {
@@ -210,6 +249,12 @@ export function parseRssHeadlines(xmlText, topic, maxItems = 8) {
       cleanTitle = cleanTitle.slice(0, -(sourceName.length + 3)).trim();
     }
     const snippet = decodeXmlEntities(descMatch?.[1] || '').slice(0, 260);
+
+    // Strictly filter out war, weapons, military, drones, casualties, and political conflict
+    if (containsWarOrPoliticsContent(cleanTitle) || containsWarOrPoliticsContent(snippet)) {
+      continue;
+    }
+
     items.push({
       topic,
       title: cleanTitle,
@@ -264,6 +309,8 @@ async function fetchRegionalHeadlines(country) {
   return all;
 }
 
+export const BANNED_OUTPUT_KEYWORDS_REGEX = /\b(drone|drones|uav|uavs|missile|missiles|rocket|rockets|war|warfare|military|weapon|weapons|weaponry|explosive|explosives|bomb|bombs|bombing|ammunition|artillery|tank|tanks|warship|warships|corvette|gun|guns|pistol|pistols|rifle|rifles|troops|soldier|soldiers|casualt|casualties|sanction|sanctions)\b/i;
+
 export function normalizeGeneratedArticles(rawArticles, targetLocales = ['en']) {
   if (!Array.isArray(rawArticles)) return [];
   const validCategories = new Set(['tech', 'finance', 'positive']);
@@ -291,6 +338,12 @@ export function normalizeGeneratedArticles(rawArticles, targetLocales = ['en']) 
       const title = String(a?.title || '').trim();
       const sourceName = String(a?.sourceName || 'News Digest').trim().slice(0, 60);
       if (!title || paragraphs.length === 0) return null;
+
+      const combinedText = `${title} ${paragraphs.join(' ')}`;
+      if (BANNED_OUTPUT_KEYWORDS_REGEX.test(combinedText)) {
+        console.warn(`[SAFETY] Dropping generated article "${title}" because it contains banned military/war keyword.`);
+        return null;
+      }
 
       const glossaries = {};
       if (a?.glossaries && typeof a.glossaries === 'object') {
@@ -348,7 +401,16 @@ export function buildGeminiPrompt(country, targetLocales, headlines, previousArt
     prevBlock,
     '',
     'Task:',
-    '1. Strictly EXCLUDE politics, wars, elections, government conflicts, crime, violence, disasters, and panic.',
+    '1. STRICT ZERO TOLERANCE FOR WAR, WEAPONS & POLITICS:',
+    '   English Breakfast is a peaceful educational app for learners of all ages.',
+    '   Strictly and absolutely NEVER select, reference, or write about:',
+    '   - War, military operations, conflicts, armed forces, troops, or soldiers.',
+    '   - Weapons of any kind: drones, UAVs, missiles, rockets, explosives, bombs, guns, pistols, rifles, tanks, warships.',
+    '   - Defense procurement, military budgets, artillery, or ammunition.',
+    '   - Casualties, bombings, shelling, strikes, crime, violence, or disasters.',
+    '   - Elections, government disputes, geopolitical sanctions, or politics.',
+    '   Even if a news item mentions "drones" or "military technology" in a technology or business context, REJECT IT ENTIRELY.',
+    '   Select ONLY 100% peaceful civilian stories (consumer gadgets, AI tools, software, space exploration, medicine, battery tech, clean energy, local positive culture, startups).',
     previousTitles.length > 0
       ? '2. Strictly DO NOT repeat or cover the same events/stories featured yesterday (listed above). Pick 3 COMPLETELY FRESH stories.'
       : '2. Pick 3 completely fresh and engaging stories.',

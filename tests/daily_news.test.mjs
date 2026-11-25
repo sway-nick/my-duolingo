@@ -22,6 +22,9 @@ import {
   parseForcedCountriesSpec,
   buildGeminiPrompt,
   getExistingNewsDoc,
+  containsWarOrPoliticsContent,
+  WAR_AND_POLITICS_STOPWORDS_REGEX,
+  BANNED_OUTPUT_KEYWORDS_REGEX,
 } from '../scripts/generate_daily_news.mjs';
 
 test('NEWS_I18N covers all 36 supported locales with Finance category and complete UI strings', () => {
@@ -217,3 +220,61 @@ test('buildGeminiPrompt injects previous day stories into deduplication block', 
   assert.ok(!promptWithoutPrevious.includes('DEDUPLICATION'));
   assert.ok(promptWithoutPrevious.includes('Pick 3 completely fresh and engaging stories.'));
 });
+
+test('containsWarOrPoliticsContent filters out war, drones, weapons, missiles in multiple languages', () => {
+  assert.equal(containsWarOrPoliticsContent('UK Discovers Fake Explosives for Drones'), true);
+  assert.equal(containsWarOrPoliticsContent('Безпілотники атакували одразу декілька НПЗ'), true);
+  assert.equal(containsWarOrPoliticsContent('Удар по російському корвету "Меркурій"'), true);
+  assert.equal(containsWarOrPoliticsContent('Британія закупила вибухівку для ударних дронів'), true);
+  assert.equal(containsWarOrPoliticsContent('Росія закуповує танки у Китаї'), true);
+  assert.equal(containsWarOrPoliticsContent('Стрілянина біля торгового центру, є поранені'), true);
+  assert.equal(containsWarOrPoliticsContent('Новые ракеты и военные учения армии'), true);
+
+  // Peaceful tech / business headlines must be allowed:
+  assert.equal(containsWarOrPoliticsContent('New Solar Battery Reaches Record Efficiency'), false);
+  assert.equal(containsWarOrPoliticsContent('Google Pixel 11: новини, оновлення та особливості'), false);
+  assert.equal(containsWarOrPoliticsContent('Казахстанский стартап привлек миллион долларов на развитие ИИ'), false);
+});
+
+test('parseRssHeadlines automatically drops war and drone items from feed', () => {
+  const sampleXml = `
+    <rss><channel>
+      <item>
+        <title><![CDATA[Британія закупила вибухівку для ударних дронів ЗСУ - РБК-Україна]]></title>
+        <source>РБК-Україна</source>
+        <description><![CDATA[Деталі постачання безпілотників]]></description>
+      </item>
+      <item>
+        <title><![CDATA[Next-Gen Smartphone Displays Promise Zero Glare - Tech Daily]]></title>
+        <source>Tech Daily</source>
+        <description><![CDATA[Innovative screen crystals reduce glare]]></description>
+      </item>
+    </channel></rss>
+  `;
+  const items = parseRssHeadlines(sampleXml, 'technology', 5);
+  assert.equal(items.length, 1);
+  assert.equal(items[0].title, 'Next-Gen Smartphone Displays Promise Zero Glare');
+});
+
+test('normalizeGeneratedArticles drops articles containing banned war or military keywords', () => {
+  const badArticle = [
+    {
+      category: 'tech',
+      title: 'Army Unveils Advanced Recon Drone',
+      paragraphs: ['A new military drone was deployed today for defense operations.'],
+      sourceName: 'Defense News',
+      glossaries: { en: { drone: 'flying robot' } }
+    },
+    {
+      category: 'tech',
+      title: 'New Solar Powered Bicycle',
+      paragraphs: ['Engineers created an electric bicycle powered by clean solar panels.'],
+      sourceName: 'Clean Tech',
+      glossaries: { en: { bicycle: 'two wheeled vehicle' } }
+    }
+  ];
+  const out = normalizeGeneratedArticles(badArticle, ['en']);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].title, 'New Solar Powered Bicycle');
+});
+
